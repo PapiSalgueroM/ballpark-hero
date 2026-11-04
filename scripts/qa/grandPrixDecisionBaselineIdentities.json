@@ -1,0 +1,626 @@
+[
+  {
+    "file": "src/test/grandPrixBoss.test.ts",
+    "title": "GP_ENGINE_AVAILABLE: a new career can reach a complete first race",
+    "fullName": "GP_ENGINE_AVAILABLE: a new career can reach a complete first race",
+    "status": "passed"
+  },
+  {
+    "file": "src/test/grandPrixBoss.test.ts",
+    "title": "GP_WORLD: creates ten fictional teams, twenty exclusive seats and twelve playable rounds",
+    "fullName": "Grand Prix Boss first-race engine GP_WORLD: creates ten fictional teams, twenty exclusive seats and twelve playable rounds",
+    "status": "passed"
+  },
+  {
+    "file": "src/test/grandPrixBoss.test.ts",
+    "title": "GP_SEED: the same seed has the same complete world despite different clock and global random values",
+    "fullName": "Grand Prix Boss first-race engine GP_SEED: the same seed has the same complete world despite different clock and global random values",
+    "status": "passed"
+  },
+  {
+    "file": "src/test/grandPrixBoss.test.ts",
+    "title": "GP_UPGRADE: improving one car area charges the quoted cost and keeps committed funds",
+    "fullName": "Grand Prix Boss first-race engine GP_UPGRADE: improving one car area charges the quoted cost and keeps committed funds",
+    "status": "passed"
+  },
+  {
+    "file": "src/test/grandPrixBoss.test.ts",
+    "title": "GP_RESERVE: repeated upgrade attempts preserve the money needed to enter the first race",
+    "fullName": "Grand Prix Boss first-race engine GP_RESERVE: repeated upgrade attempts preserve the money needed to enter the first race",
+    "status": "passed"
+  },
+  {
+    "file": "src/test/grandPrixBoss.test.ts",
+    "title": "GP_GRID: qualifying records twenty distinct contracted drivers without paying race money or points",
+    "fullName": "Grand Prix Boss first-race engine GP_GRID: qualifying records twenty distinct contracted drivers without paying race money or points",
+    "status": "passed"
+  },
+  {
+    "file": "src/test/grandPrixBoss.test.ts",
+    "title": "GP_SETUPS: duplicate or foreign driver orders refuse without changing the saved grid",
+    "fullName": "Grand Prix Boss first-race engine GP_SETUPS: duplicate or foreign driver orders refuse without changing the saved grid",
+    "status": "passed"
+  },
+  {
+    "file": "src/test/grandPrixBoss.test.ts",
+    "title": "GP_CLASSIFICATION: the first complete race reconciles every driver and constructor point",
+    "fullName": "Grand Prix Boss first-race engine GP_CLASSIFICATION: the first complete race reconciles every driver and constructor point",
+    "status": "passed"
+  },
+  {
+    "file": "src/test/grandPrixBoss.test.ts",
+    "title": "GP_SETTLEMENT: a race pays its shown prize and deducts one entry cost and both drivers wages",
+    "fullName": "Grand Prix Boss first-race engine GP_SETTLEMENT: a race pays its shown prize and deducts one entry cost and both drivers wages",
+    "status": "passed"
+  },
+  {
+    "file": "src/test/grandPrixBoss.test.ts",
+    "title": "GP_DUPLICATE: repeating a finished race action cannot pay or score it again",
+    "fullName": "Grand Prix Boss first-race engine GP_DUPLICATE: repeating a finished race action cannot pay or score it again",
+    "status": "passed"
+  },
+  {
+    "file": "src/test/grandPrixBoss.test.ts",
+    "title": "GP_RESUME: a JSON save at a real decision boundary resumes the exact same race",
+    "fullName": "Grand Prix Boss first-race engine GP_RESUME: a JSON save at a real decision boundary resumes the exact same race",
+    "status": "passed"
+  },
+  {
+    "file": "src/test/grandPrixBoss.test.ts",
+    "title": "GP_INVALID_SAVE: future versions and malformed identities refuse while the raw input stays held",
+    "fullName": "Grand Prix Boss first-race engine GP_INVALID_SAVE: future versions and malformed identities refuse while the raw input stays held",
+    "status": "passed"
+  },
+  {
+    "file": "src/test/grandPrixBoss.test.ts",
+    "title": "GP_SCORE: zero, half and perfect twelve-round seasons earn the disclosed zero-to-one-hundred score",
+    "fullName": "Grand Prix Boss first-race engine GP_SCORE: zero, half and perfect twelve-round seasons earn the disclosed zero-to-one-hundred score",
+    "status": "passed"
+  },
+  {
+    "file": "src/test/grandPrixBossFocusSave.test.tsx",
+    "title": "GP_HOOK_FOCUS_SAVE: persists the real free focus choice before publishing it and survives reload",
+    "fullName": "Grand Prix Boss focus persistence integration GP_HOOK_FOCUS_SAVE: persists the real free focus choice before publishing it and survives reload",
+    "status": "passed"
+  },
+  {
+    "file": "src/test/grandPrixBossFocusSave.test.tsx",
+    "title": "GP_HOOK_FOCUS_QUOTA: preserves focus cash and observer generation when saving is refused",
+    "fullName": "Grand Prix Boss focus persistence integration GP_HOOK_FOCUS_QUOTA: preserves focus cash and observer generation when saving is refused",
+    "status": "passed"
+  },
+  {
+    "file": "src/test/grandPrixBossHistoryTies.test.ts",
+    "title": "GP_HISTORY_DRIVER_TIE: refuses a foreign equal-honors champion behind a known owned contender",
+    "fullName": "Grand Prix Boss canonical archived title ties GP_HISTORY_DRIVER_TIE: refuses a foreign equal-honors champion behind a known owned contender",
+    "status": "passed"
+  },
+  {
+    "file": "src/test/grandPrixBossHistoryTies.test.ts",
+    "title": "GP_HISTORY_TEAM_TIE: refuses a foreign equal-honors constructor behind the known owned team",
+    "fullName": "Grand Prix Boss canonical archived title ties GP_HISTORY_TEAM_TIE: refuses a foreign equal-honors constructor behind the known owned team",
+    "status": "passed"
+  },
+  {
+    "file": "src/test/grandPrixBossLifecycle.test.ts",
+    "title": "GP_LIFECYCLE_METADATA: exposes saved focuses and original baselines without moving the initial world",
+    "fullName": "Grand Prix Boss lifecycle C GP_LIFECYCLE_METADATA: exposes saved focuses and original baselines without moving the initial world",
+    "status": "passed"
+  },
+  {
+    "file": "src/test/grandPrixBossLifecycle.test.ts",
+    "title": "GP_LIFECYCLE_FOCUS: saves a free owned focus change through the existing action door",
+    "fullName": "Grand Prix Boss lifecycle C GP_LIFECYCLE_FOCUS: saves a free owned focus change through the existing action door",
+    "status": "passed"
+  },
+  {
+    "file": "src/test/grandPrixBossLifecycle.test.ts",
+    "title": "GP_LIFECYCLE_FOCUS_WINDOWS: refuses foreign malformed and active-round requests but permits review",
+    "fullName": "Grand Prix Boss lifecycle C GP_LIFECYCLE_FOCUS_WINDOWS: refuses foreign malformed and active-round requests but permits review",
+    "status": "passed"
+  },
+  {
+    "file": "src/test/grandPrixBossLifecycle.test.ts",
+    "title": "GP_LIFECYCLE_YOUTH: a focused next-age26 year differs from balanced growth on the same world",
+    "fullName": "Grand Prix Boss lifecycle C GP_LIFECYCLE_YOUTH: a focused next-age26 year differs from balanced growth on the same world",
+    "status": "passed"
+  },
+  {
+    "file": "src/test/grandPrixBossLifecycle.test.ts",
+    "title": "GP_LIFECYCLE_PEAK: next-age27 uses one weakest or selected skill with stable ties",
+    "fullName": "Grand Prix Boss lifecycle C GP_LIFECYCLE_PEAK: next-age27 uses one weakest or selected skill with stable ties",
+    "status": "passed"
+  },
+  {
+    "file": "src/test/grandPrixBossLifecycle.test.ts",
+    "title": "GP_LIFECYCLE_VETERAN: next-age33 loses pace unless a pace focus preserves it",
+    "fullName": "Grand Prix Boss lifecycle C GP_LIFECYCLE_VETERAN: next-age33 loses pace unless a pace focus preserves it",
+    "status": "passed"
+  },
+  {
+    "file": "src/test/grandPrixBossLifecycle.test.ts",
+    "title": "GP_LIFECYCLE_POTENTIAL: grows only below potential and keeps older above-potential skills",
+    "fullName": "Grand Prix Boss lifecycle C GP_LIFECYCLE_POTENTIAL: grows only below potential and keeps older above-potential skills",
+    "status": "passed"
+  },
+  {
+    "file": "src/test/grandPrixBossLifecycle.test.ts",
+    "title": "GP_LIFECYCLE_ONCE: age development cash and history settle once and survive reload",
+    "fullName": "Grand Prix Boss lifecycle C GP_LIFECYCLE_ONCE: age development cash and history settle once and survive reload",
+    "status": "passed"
+  },
+  {
+    "file": "src/test/grandPrixBossLifecycle.test.ts",
+    "title": "GP_LIFECYCLE_RETIRE: quotes two retiring seats once and preserves their actual archived identities",
+    "fullName": "Grand Prix Boss lifecycle C GP_LIFECYCLE_RETIRE: quotes two retiring seats once and preserves their actual archived identities",
+    "status": "passed"
+  },
+  {
+    "file": "src/test/grandPrixBossLifecycle.test.ts",
+    "title": "GP_LIFECYCLE_PAID: honors old multi-year and future prepaid terms beyond the old age ceiling",
+    "fullName": "Grand Prix Boss lifecycle C GP_LIFECYCLE_PAID: honors old multi-year and future prepaid terms beyond the old age ceiling",
+    "status": "passed"
+  },
+  {
+    "file": "src/test/grandPrixBossLifecycle.test.ts",
+    "title": "GP_LIFECYCLE_MARKET: removes retirement review offers while allowing a below40 current-year hire",
+    "fullName": "Grand Prix Boss lifecycle C GP_LIFECYCLE_MARKET: removes retirement review offers while allowing a below40 current-year hire",
+    "status": "passed"
+  },
+  {
+    "file": "src/test/grandPrixBossLifecycle.test.ts",
+    "title": "GP_LIFECYCLE_CARRY: archives the paid old car then carries a positive part rather than all progress",
+    "fullName": "Grand Prix Boss lifecycle C GP_LIFECYCLE_CARRY: archives the paid old car then carries a positive part rather than all progress",
+    "status": "passed"
+  },
+  {
+    "file": "src/test/grandPrixBossLifecycle.test.ts",
+    "title": "GP_LIFECYCLE_AI: foreign investment changes real qualifying clocks without charging owned cash",
+    "fullName": "Grand Prix Boss lifecycle C GP_LIFECYCLE_AI: foreign investment changes real qualifying clocks without charging owned cash",
+    "status": "passed"
+  },
+  {
+    "file": "src/test/grandPrixBossLifecycle.test.ts",
+    "title": "GP_LIFECYCLE_SAVE: normalizes only the complete old metadata boundary and preserves every old field",
+    "fullName": "Grand Prix Boss lifecycle C GP_LIFECYCLE_SAVE: normalizes only the complete old metadata boundary and preserves every old field",
+    "status": "passed"
+  },
+  {
+    "file": "src/test/grandPrixBossLifecycle.test.ts",
+    "title": "GP_LIFECYCLE_PLAN: reloads the same rookie transaction and refuses forged supplied prices or people",
+    "fullName": "Grand Prix Boss lifecycle C GP_LIFECYCLE_PLAN: reloads the same rookie transaction and refuses forged supplied prices or people",
+    "status": "passed"
+  },
+  {
+    "file": "src/test/grandPrixBossLifecyclePage.test.tsx",
+    "title": "GP_C_PAGE_FOCUS: dispatches free owned focus choices only in actual engine windows",
+    "fullName": "Grand Prix Boss C management page decisions GP_C_PAGE_FOCUS: dispatches free owned focus choices only in actual engine windows",
+    "status": "passed"
+  },
+  {
+    "file": "src/test/grandPrixBossLifecyclePage.test.tsx",
+    "title": "GP_C_PAGE_REPLACEMENTS: displays canonical prospects and publishes the exact next-year transaction",
+    "fullName": "Grand Prix Boss C management page decisions GP_C_PAGE_REPLACEMENTS: displays canonical prospects and publishes the exact next-year transaction",
+    "status": "passed"
+  },
+  {
+    "file": "src/test/grandPrixBossLifecyclePage.test.tsx",
+    "title": "GP_C_PAGE_RULES: explains lifecycle decisions in real first and reopened rules without changing the team",
+    "fullName": "Grand Prix Boss C management page decisions GP_C_PAGE_RULES: explains lifecycle decisions in real first and reopened rules without changing the team",
+    "status": "passed"
+  },
+  {
+    "file": "src/test/grandPrixBossManagementPage.test.tsx",
+    "title": "GP_MANAGEMENT_SIGN: displays an actual offer and dispatches its IDs and current revision",
+    "fullName": "Grand Prix Boss management decisions and saved seasons GP_MANAGEMENT_SIGN: displays an actual offer and dispatches its IDs and current revision",
+    "status": "passed"
+  },
+  {
+    "file": "src/test/grandPrixBossManagementPage.test.tsx",
+    "title": "GP_MANAGEMENT_RENEW: exposes a real next-year renewal without charging it again in the plan",
+    "fullName": "Grand Prix Boss management decisions and saved seasons GP_MANAGEMENT_RENEW: exposes a real next-year renewal without charging it again in the plan",
+    "status": "passed"
+  },
+  {
+    "file": "src/test/grandPrixBossManagementPage.test.tsx",
+    "title": "GP_MANAGEMENT_NEXT_YEAR: shows the actual plan and advances only after the hook publishes it",
+    "fullName": "Grand Prix Boss management decisions and saved seasons GP_MANAGEMENT_NEXT_YEAR: shows the actual plan and advances only after the hook publishes it",
+    "status": "passed"
+  },
+  {
+    "file": "src/test/grandPrixBossManagementPage.test.tsx",
+    "title": "GP_MANAGEMENT_GUARDS: refuses unfunded and protected decisions and holds a rejected transition",
+    "fullName": "Grand Prix Boss management decisions and saved seasons GP_MANAGEMENT_GUARDS: refuses unfunded and protected decisions and holds a rejected transition",
+    "status": "passed"
+  },
+  {
+    "file": "src/test/grandPrixBossManagementPage.test.tsx",
+    "title": "GP_MANAGEMENT_HISTORY: reads archived champions and races with honest legacy coverage",
+    "fullName": "Grand Prix Boss management decisions and saved seasons GP_MANAGEMENT_HISTORY: reads archived champions and races with honest legacy coverage",
+    "status": "passed"
+  },
+  {
+    "file": "src/test/grandPrixBossManagementPage.test.tsx",
+    "title": "GP_MANAGEMENT_REVIEW_CARDS: preserves actual finished participants after a paid review signing",
+    "fullName": "Grand Prix Boss management decisions and saved seasons GP_MANAGEMENT_REVIEW_CARDS: preserves actual finished participants after a paid review signing",
+    "status": "passed"
+  },
+  {
+    "file": "src/test/grandPrixBossMarket.test.ts",
+    "title": "GP_MARKET_PUBLIC_QUOTES: shows exact one-season wages fees buyout and reserve before hiring",
+    "fullName": "Grand Prix Boss paid driver market GP_MARKET_PUBLIC_QUOTES: shows exact one-season wages fees buyout and reserve before hiring",
+    "status": "passed"
+  },
+  {
+    "file": "src/test/grandPrixBossMarket.test.ts",
+    "title": "GP_MARKET_SIGN: replaces one exclusive seat and charges the displayed deal once",
+    "fullName": "Grand Prix Boss paid driver market GP_MARKET_SIGN: replaces one exclusive seat and charges the displayed deal once",
+    "status": "passed"
+  },
+  {
+    "file": "src/test/grandPrixBossMarket.test.ts",
+    "title": "GP_MARKET_NEW_WAGES: actual new wages determine remaining reserve and the next settlement",
+    "fullName": "Grand Prix Boss paid driver market GP_MARKET_NEW_WAGES: actual new wages determine remaining reserve and the next settlement",
+    "status": "passed"
+  },
+  {
+    "file": "src/test/grandPrixBossMarket.test.ts",
+    "title": "GP_MARKET_BUYOUT: prices actual unserved seasons and does not erase a future-start deal",
+    "fullName": "Grand Prix Boss paid driver market GP_MARKET_BUYOUT: prices actual unserved seasons and does not erase a future-start deal",
+    "status": "passed"
+  },
+  {
+    "file": "src/test/grandPrixBossMarket.test.ts",
+    "title": "GP_MARKET_FUNDS: exact committed-money boundary passes and one euro short holds the old save",
+    "fullName": "Grand Prix Boss paid driver market GP_MARKET_FUNDS: exact committed-money boundary passes and one euro short holds the old save",
+    "status": "passed"
+  },
+  {
+    "file": "src/test/grandPrixBossMarket.test.ts",
+    "title": "GP_MARKET_REROUND: review hiring starts next season and preserves actual settled employers",
+    "fullName": "Grand Prix Boss paid driver market GP_MARKET_REROUND: review hiring starts next season and preserves actual settled employers",
+    "status": "passed"
+  },
+  {
+    "file": "src/test/grandPrixBossMarket.test.ts",
+    "title": "GP_MARKET_RENEW: renews an expiring seat for next year and refuses another renewal fee",
+    "fullName": "Grand Prix Boss paid driver market GP_MARKET_RENEW: renews an expiring seat for next year and refuses another renewal fee",
+    "status": "passed"
+  },
+  {
+    "file": "src/test/grandPrixBossMarket.test.ts",
+    "title": "GP_MARKET_EXCLUSIVITY: foreign duplicate missing and nonowned identities cannot take a seat",
+    "fullName": "Grand Prix Boss paid driver market GP_MARKET_EXCLUSIVITY: foreign duplicate missing and nonowned identities cannot take a seat",
+    "status": "passed"
+  },
+  {
+    "file": "src/test/grandPrixBossMarket.test.ts",
+    "title": "GP_MARKET_WINDOWS: later rounds grids races and intermediate results refuse market phase",
+    "fullName": "Grand Prix Boss paid driver market GP_MARKET_WINDOWS: later rounds grids races and intermediate results refuse market phase",
+    "status": "passed"
+  },
+  {
+    "file": "src/test/grandPrixBossMarket.test.ts",
+    "title": "GP_MARKET_REPLAY: stale repeats refuse and returning a driver to market creates no cash",
+    "fullName": "Grand Prix Boss paid driver market GP_MARKET_REPLAY: stale repeats refuse and returning a driver to market creates no cash",
+    "status": "passed"
+  },
+  {
+    "file": "src/test/grandPrixBossMarket.test.ts",
+    "title": "GP_MARKET_SAVE: derives old fields and rejects hostile saved quotes and contract timing",
+    "fullName": "Grand Prix Boss paid driver market GP_MARKET_SAVE: derives old fields and rejects hostile saved quotes and contract timing",
+    "status": "passed"
+  },
+  {
+    "file": "src/test/grandPrixBossMarket.test.ts",
+    "title": "GP_MARKET_HOLDS: no market action preserves the actual qualified seed-one race outcome",
+    "fullName": "Grand Prix Boss paid driver market GP_MARKET_HOLDS: no market action preserves the actual qualified seed-one race outcome",
+    "status": "passed"
+  },
+  {
+    "file": "src/test/grandPrixBossMarketSave.test.tsx",
+    "title": "GP_HOOK_MARKET_SIGN: commits a quoted seat and names its season before another decision",
+    "fullName": "Grand Prix Boss market persistence integration GP_HOOK_MARKET_SIGN: commits a quoted seat and names its season before another decision",
+    "status": "passed"
+  },
+  {
+    "file": "src/test/grandPrixBossMarketSave.test.tsx",
+    "title": "GP_HOOK_MARKET_QUOTA: a refused contract save preserves the displayed team and observer generation",
+    "fullName": "Grand Prix Boss market persistence integration GP_HOOK_MARKET_QUOTA: a refused contract save preserves the displayed team and observer generation",
+    "status": "passed"
+  },
+  {
+    "file": "src/test/grandPrixBossMarketSave.test.tsx",
+    "title": "GP_HOOK_MARKET_UNCERTAIN: landed unconfirmed contract bytes stale the observer and cannot be repeated",
+    "fullName": "Grand Prix Boss market persistence integration GP_HOOK_MARKET_UNCERTAIN: landed unconfirmed contract bytes stale the observer and cannot be repeated",
+    "status": "passed"
+  },
+  {
+    "file": "src/test/grandPrixBossMarketSave.test.tsx",
+    "title": "GP_HOOK_MARKET_RENEW: saves next-year wages without replaying the completed season claim",
+    "fullName": "Grand Prix Boss market persistence integration GP_HOOK_MARKET_RENEW: saves next-year wages without replaying the completed season claim",
+    "status": "passed"
+  },
+  {
+    "file": "src/test/grandPrixBossPage.test.tsx",
+    "title": "GP_PAGE_AVAILABLE: the actual playable page module exists",
+    "fullName": "Grand Prix Boss management page GP_PAGE_AVAILABLE: the actual playable page module exists",
+    "status": "passed"
+  },
+  {
+    "file": "src/test/grandPrixBossPage.test.tsx",
+    "title": "GP_PAGE_START: shows a fictional-world start without silently creating a career",
+    "fullName": "Grand Prix Boss management page GP_PAGE_START: shows a fictional-world start without silently creating a career",
+    "status": "passed"
+  },
+  {
+    "file": "src/test/grandPrixBossPage.test.tsx",
+    "title": "GP_PAGE_HUB: offers the six management screens and the next race",
+    "fullName": "Grand Prix Boss management page GP_PAGE_HUB: offers the six management screens and the next race",
+    "status": "passed"
+  },
+  {
+    "file": "src/test/grandPrixBossPage.test.tsx",
+    "title": "GP_PAGE_UPGRADE: sends the displayed revision and preserves the quoted engine price",
+    "fullName": "Grand Prix Boss management page GP_PAGE_UPGRADE: sends the displayed revision and preserves the quoted engine price",
+    "status": "passed"
+  },
+  {
+    "file": "src/test/grandPrixBossPage.test.tsx",
+    "title": "GP_PAGE_ORDERS: sends one native strategy order for each contracted driver",
+    "fullName": "Grand Prix Boss management page GP_PAGE_ORDERS: sends one native strategy order for each contracted driver",
+    "status": "passed"
+  },
+  {
+    "file": "src/test/grandPrixBossPage.test.tsx",
+    "title": "GP_PAGE_STANDINGS: shows separate driver and team championships from held totals",
+    "fullName": "Grand Prix Boss management page GP_PAGE_STANDINGS: shows separate driver and team championships from held totals",
+    "status": "passed"
+  },
+  {
+    "file": "src/test/grandPrixBossPage.test.tsx",
+    "title": "GP_PAGE_BACK: returns focus to the management tile after closing a screen",
+    "fullName": "Grand Prix Boss management page GP_PAGE_BACK: returns focus to the management tile after closing a screen",
+    "status": "passed"
+  },
+  {
+    "file": "src/test/grandPrixBossPage.test.tsx",
+    "title": "GP_PAGE_MOVED_EMPTY: offers reload when another tab starts the previously empty team",
+    "fullName": "Grand Prix Boss management page GP_PAGE_MOVED_EMPTY: offers reload when another tab starts the previously empty team",
+    "status": "passed"
+  },
+  {
+    "file": "src/test/grandPrixBossPage.test.tsx",
+    "title": "GP_PAGE_PROTECTED_SAVE: preserves unsupported-save controls and offers reload",
+    "fullName": "Grand Prix Boss management page GP_PAGE_PROTECTED_SAVE: preserves unsupported-save controls and offers reload",
+    "status": "passed"
+  },
+  {
+    "file": "src/test/grandPrixBossRollover.test.ts",
+    "title": "GP_ROLLOVER_COMMIT: pays one quoted sponsor and renewal transaction while entering year two",
+    "fullName": "Grand Prix Boss atomic next season and history GP_ROLLOVER_COMMIT: pays one quoted sponsor and renewal transaction while entering year two",
+    "status": "passed"
+  },
+  {
+    "file": "src/test/grandPrixBossRollover.test.ts",
+    "title": "GP_ROLLOVER_CONTRACTS: renews expiry once and decrements active remaining terms once",
+    "fullName": "Grand Prix Boss atomic next season and history GP_ROLLOVER_CONTRACTS: renews expiry once and decrements active remaining terms once",
+    "status": "passed"
+  },
+  {
+    "file": "src/test/grandPrixBossRollover.test.ts",
+    "title": "GP_ROLLOVER_PREPAID: review signings and explicit renewals keep their paid one-year deals",
+    "fullName": "Grand Prix Boss atomic next season and history GP_ROLLOVER_PREPAID: review signings and explicit renewals keep their paid one-year deals",
+    "status": "passed"
+  },
+  {
+    "file": "src/test/grandPrixBossRollover.test.ts",
+    "title": "GP_ROLLOVER_CHAMPIONS: snapshots actual title credit before a review replacement changes the seats",
+    "fullName": "Grand Prix Boss atomic next season and history GP_ROLLOVER_CHAMPIONS: snapshots actual title credit before a review replacement changes the seats",
+    "status": "passed"
+  },
+  {
+    "file": "src/test/grandPrixBossRollover.test.ts",
+    "title": "GP_ROLLOVER_CALENDAR: makes twelve new deterministic rounds and keeps paid progress",
+    "fullName": "Grand Prix Boss atomic next season and history GP_ROLLOVER_CALENDAR: makes twelve new deterministic rounds and keeps paid progress",
+    "status": "passed"
+  },
+  {
+    "file": "src/test/grandPrixBossRollover.test.ts",
+    "title": "GP_ROLLOVER_YEAR_TWO: the next actual race charges the new contracts and exact commitments",
+    "fullName": "Grand Prix Boss atomic next season and history GP_ROLLOVER_YEAR_TWO: the next actual race charges the new contracts and exact commitments",
+    "status": "passed"
+  },
+  {
+    "file": "src/test/grandPrixBossRollover.test.ts",
+    "title": "GP_ROLLOVER_TAIL: fourteen played seasons retain twelve immutable snapshots and older title totals",
+    "fullName": "Grand Prix Boss atomic next season and history GP_ROLLOVER_TAIL: fourteen played seasons retain twelve immutable snapshots and older title totals",
+    "status": "passed"
+  },
+  {
+    "file": "src/test/grandPrixBossRollover.test.ts",
+    "title": "GP_ROLLOVER_REPLAY: old revision and repeated rollover never pay or archive twice",
+    "fullName": "Grand Prix Boss atomic next season and history GP_ROLLOVER_REPLAY: old revision and repeated rollover never pay or archive twice",
+    "status": "passed"
+  },
+  {
+    "file": "src/test/grandPrixBossRollover.test.ts",
+    "title": "GP_ROLLOVER_PHASE: current qualifying race and intermediate result cannot collect a new year",
+    "fullName": "Grand Prix Boss atomic next season and history GP_ROLLOVER_PHASE: current qualifying race and intermediate result cannot collect a new year",
+    "status": "passed"
+  },
+  {
+    "file": "src/test/grandPrixBossRollover.test.ts",
+    "title": "GP_ROLLOVER_FUNDS: exactly funded next-year commitments pass and one euro short refuses",
+    "fullName": "Grand Prix Boss atomic next season and history GP_ROLLOVER_FUNDS: exactly funded next-year commitments pass and one euro short refuses",
+    "status": "passed"
+  },
+  {
+    "file": "src/test/grandPrixBossRollover.test.ts",
+    "title": "GP_ROLLOVER_LEGACY: missing history starts known tracking without inventing earlier seasons",
+    "fullName": "Grand Prix Boss atomic next season and history GP_ROLLOVER_LEGACY: missing history starts known tracking without inventing earlier seasons",
+    "status": "passed"
+  },
+  {
+    "file": "src/test/grandPrixBossRollover.test.ts",
+    "title": "GP_ROLLOVER_BAD_LEDGER: malformed or partial present history is preserved and refused",
+    "fullName": "Grand Prix Boss atomic next season and history GP_ROLLOVER_BAD_LEDGER: malformed or partial present history is preserved and refused",
+    "status": "passed"
+  },
+  {
+    "file": "src/test/grandPrixBossRollover.test.ts",
+    "title": "GP_ROLLOVER_ARCHIVED_IDENTITIES: snapshots survive a synthetic active-roster replacement",
+    "fullName": "Grand Prix Boss atomic next season and history GP_ROLLOVER_ARCHIVED_IDENTITIES: snapshots survive a synthetic active-roster replacement",
+    "status": "passed"
+  },
+  {
+    "file": "src/test/grandPrixBossRolloverSave.test.tsx",
+    "title": "GP_HOOK_ROLLOVER_SAVE: starts the next year durably without replaying the completed season claim",
+    "fullName": "Grand Prix Boss season rollover persistence GP_HOOK_ROLLOVER_SAVE: starts the next year durably without replaying the completed season claim",
+    "status": "passed"
+  },
+  {
+    "file": "src/test/grandPrixBossRolloverSave.test.tsx",
+    "title": "GP_HOOK_ROLLOVER_QUOTA: keeps the review and old observer generation until a saved retry succeeds",
+    "fullName": "Grand Prix Boss season rollover persistence GP_HOOK_ROLLOVER_QUOTA: keeps the review and old observer generation until a saved retry succeeds",
+    "status": "passed"
+  },
+  {
+    "file": "src/test/grandPrixBossSave.test.tsx",
+    "title": "GP_SAVE_AVAILABLE: a durable team save hook is implemented",
+    "fullName": "GP_SAVE_AVAILABLE: a durable team save hook is implemented",
+    "status": "passed"
+  },
+  {
+    "file": "src/test/grandPrixBossSave.test.tsx",
+    "title": "GP_SAVE_EMPTY: opening empty storage does not create a team or record a completion",
+    "fullName": "Grand Prix Boss durable team save GP_SAVE_EMPTY: opening empty storage does not create a team or record a completion",
+    "status": "passed"
+  },
+  {
+    "file": "src/test/grandPrixBossSave.test.tsx",
+    "title": "GP_SAVE_LOAD: adopts before reading and restores exact career bytes without rewriting",
+    "fullName": "Grand Prix Boss durable team save GP_SAVE_LOAD: adopts before reading and restores exact career bytes without rewriting",
+    "status": "passed"
+  },
+  {
+    "file": "src/test/grandPrixBossSave.test.tsx",
+    "title": "GP_SAVE_START: starts only after the complete canonical new team is durably readable",
+    "fullName": "Grand Prix Boss durable team save GP_SAVE_START: starts only after the complete canonical new team is durably readable",
+    "status": "passed"
+  },
+  {
+    "file": "src/test/grandPrixBossSave.test.tsx",
+    "title": "GP_SAVE_OCCUPIED_START: a save arriving after an empty read is never overwritten by Start",
+    "fullName": "Grand Prix Boss durable team save GP_SAVE_OCCUPIED_START: a save arriving after an empty read is never overwritten by Start",
+    "status": "passed"
+  },
+  {
+    "file": "src/test/grandPrixBossSave.test.tsx",
+    "title": "GP_SAVE_QUOTA_START: a refused initial write leaves no team and can retry the same seed",
+    "fullName": "Grand Prix Boss durable team save GP_SAVE_QUOTA_START: a refused initial write leaves no team and can retry the same seed",
+    "status": "passed"
+  },
+  {
+    "file": "src/test/grandPrixBossSave.test.tsx",
+    "title": "GP_SAVE_QUOTA_ACTION: a refused paid upgrade keeps the old money and retries exactly once",
+    "fullName": "Grand Prix Boss durable team save GP_SAVE_QUOTA_ACTION: a refused paid upgrade keeps the old money and retries exactly once",
+    "status": "passed"
+  },
+  {
+    "file": "src/test/grandPrixBossSave.test.tsx",
+    "title": "GP_SAVE_NOOP: a storage write returning without saving cannot publish or charge an upgrade",
+    "fullName": "Grand Prix Boss durable team save GP_SAVE_NOOP: a storage write returning without saving cannot publish or charge an upgrade",
+    "status": "passed"
+  },
+  {
+    "file": "src/test/grandPrixBossSave.test.tsx",
+    "title": "GP_SAVE_DUPLICATE: two clicks carrying one displayed revision persist and charge only once",
+    "fullName": "Grand Prix Boss durable team save GP_SAVE_DUPLICATE: two clicks carrying one displayed revision persist and charge only once",
+    "status": "passed"
+  },
+  {
+    "file": "src/test/grandPrixBossSave.test.tsx",
+    "title": "GP_SAVE_MOVED: the actual foreign fence write covers the old tab and refuses its action",
+    "fullName": "Grand Prix Boss durable team save GP_SAVE_MOVED: the actual foreign fence write covers the old tab and refuses its action",
+    "status": "passed"
+  },
+  {
+    "file": "src/test/grandPrixBossSave.test.tsx",
+    "title": "GP_SAVE_BAD_RAW: unsupported, invalid and malformed envelope bytes remain preserved",
+    "fullName": "Grand Prix Boss durable team save GP_SAVE_BAD_RAW: unsupported, invalid and malformed envelope bytes remain preserved",
+    "status": "passed"
+  },
+  {
+    "file": "src/test/grandPrixBossSave.test.tsx",
+    "title": "GP_SAVE_UNREADABLE: a failed storage read is distinct from an empty save and Start stays refused",
+    "fullName": "Grand Prix Boss durable team save GP_SAVE_UNREADABLE: a failed storage read is distinct from an empty save and Start stays refused",
+    "status": "passed"
+  },
+  {
+    "file": "src/test/grandPrixBossSave.test.tsx",
+    "title": "GP_SAVE_CONFIRMATION: a landed but unreadable upgrade locks the old view until a fresh page reads it",
+    "fullName": "Grand Prix Boss durable team save GP_SAVE_CONFIRMATION: a landed but unreadable upgrade locks the old view until a fresh page reads it",
+    "status": "passed"
+  },
+  {
+    "file": "src/test/grandPrixBossSave.test.tsx",
+    "title": "GP_SAVE_COMPLETE: one durable final claim records one unscored completion across duplicate action and remount",
+    "fullName": "Grand Prix Boss durable team save GP_SAVE_COMPLETE: one durable final claim records one unscored completion across duplicate action and remount",
+    "status": "passed"
+  },
+  {
+    "file": "src/test/grandPrixBossSave.test.tsx",
+    "title": "GP_SAVE_FINAL_QUOTA: a refused final save emits no completion and retry settles only once",
+    "fullName": "Grand Prix Boss durable team save GP_SAVE_FINAL_QUOTA: a refused final save emits no completion and retry settles only once",
+    "status": "passed"
+  },
+  {
+    "file": "src/test/grandPrixBossSave.test.tsx",
+    "title": "GP_SAVE_FINAL_CONFIRMATION: an uncertain final claim stays unplayed in the old view and is not emitted again on remount",
+    "fullName": "Grand Prix Boss durable team save GP_SAVE_FINAL_CONFIRMATION: an uncertain final claim stays unplayed in the old view and is not emitted again on remount",
+    "status": "passed"
+  },
+  {
+    "file": "src/test/grandPrixBossStarterBalance.test.ts",
+    "title": "GP_STARTER_OWNERSHIP: starts team four with its two published wage commitments",
+    "fullName": "Grand Prix Boss measured starting-team opportunity GP_STARTER_OWNERSHIP: starts team four with its two published wage commitments",
+    "status": "passed"
+  },
+  {
+    "file": "src/test/grandPrixBossStarterBalance.test.ts",
+    "title": "GP_STARTER_NATURAL_FREQUENCY: tyre-aware new teams regularly compete for actual points",
+    "fullName": "Grand Prix Boss measured starting-team opportunity GP_STARTER_NATURAL_FREQUENCY: tyre-aware new teams regularly compete for actual points",
+    "status": "passed"
+  },
+  {
+    "file": "src/test/grandPrixBossStarterBalance.test.ts",
+    "title": "GP_STARTER_NATURAL_STRATEGY: race calls make a measured difference in actual points",
+    "fullName": "Grand Prix Boss measured starting-team opportunity GP_STARTER_NATURAL_STRATEGY: race calls make a measured difference in actual points",
+    "status": "passed"
+  },
+  {
+    "file": "src/test/grandPrixBossStarterBalance.test.ts",
+    "title": "GP_STARTER_SEASON_POINTS: a careful full season earns meaningful championship points",
+    "fullName": "Grand Prix Boss measured starting-team opportunity GP_STARTER_SEASON_POINTS: a careful full season earns meaningful championship points",
+    "status": "passed"
+  },
+  {
+    "file": "src/test/grandPrixBossStarterBalance.test.ts",
+    "title": "GP_STARTER_SEASON_STRATEGY: careful season calls beat the held unsuitable plan",
+    "fullName": "Grand Prix Boss measured starting-team opportunity GP_STARTER_SEASON_STRATEGY: careful season calls beat the held unsuitable plan",
+    "status": "passed"
+  },
+  {
+    "file": "src/test/grandPrixBossStarterBalance.test.ts",
+    "title": "GP_STARTER_SEASON_INVESTMENT: real affordable upgrades improve full-season point returns",
+    "fullName": "Grand Prix Boss measured starting-team opportunity GP_STARTER_SEASON_INVESTMENT: real affordable upgrades improve full-season point returns",
+    "status": "passed"
+  },
+  {
+    "file": "src/test/grandPrixBossStarterBalance.test.ts",
+    "title": "GP_STARTER_OLD_SAVE: the captured team-six career loads unchanged and plays its held race",
+    "fullName": "Grand Prix Boss measured starting-team opportunity GP_STARTER_OLD_SAVE: the captured team-six career loads unchanged and plays its held race",
+    "status": "passed"
+  }
+]

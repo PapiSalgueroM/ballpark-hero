@@ -5,7 +5,7 @@ import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
 import { useGrandPrixBoss } from '@/hooks/useGrandPrixBoss';
 import { useRevealScroll } from '@/hooks/useRevealScroll';
-import { seasonScore, type CarArea, type Compound, type GrandPrixAction, type GrandPrixCareer, type GrandPrixFocus, type Pace } from '@/lib/grandPrixBoss';
+import { seasonScore, type CarArea, type Compound, type GrandPrixAction, type GrandPrixCareer, type GrandPrixFocus, type GrandPrixRaceEntry, type Pace } from '@/lib/grandPrixBoss';
 
 type Panel = 'Next race' | 'Drivers' | 'Car' | 'Finances' | 'Standings' | 'History';
 const PANELS: Panel[] = ['Next race', 'Drivers', 'Car', 'Finances', 'Standings', 'History'];
@@ -34,6 +34,7 @@ function Rules() {
       <li>History keeps saved seasons, champions and your race results. Recorded totals stay saved when older details leave the latest twelve-season list. Older saves tell you when their records begin.</li>
     </ol>
     <div><h3 className="font-bold">A two-driver example</h3><p>One driver stays on worn tyres while the other pits for fresh hard tyres. Compare their positions and wear at the next decision. This is a game example, not a real race result.</p></div>
+    <p>At each saved checkpoint, gaps compare elapsed time with the leading active driver. Retired drivers show the laps they completed. In the market, compare the incoming driver's current age, potential and skills before checking the quote.</p>
     <div><h3 className="font-bold">A retirement replacement example</h3><p>A driver's term ends and retirement is listed in the plan. Compare the quoted prospect's age, skills and potential, then check the replacement fee and next season's reserve. Starting next season pays that saved quote and puts the prospect in the seat. A paid future term keeps its driver.</p></div>
     <p>The top ten score 25, 18, 15, 12, 10, 8, 6, 4, 2 and 1. Ties use wins, podiums, then a fixed driver or team order.</p>
     <p>Your local season score gives 80 points for championship points compared with a perfect two-car season, and 20 for bringing both cars home. Every action is saved before the screen advances. If saving is refused, your current team stays on screen.</p>
@@ -66,6 +67,7 @@ function Drivers({ career, dispatch, blocked }: { career: GrandPrixCareer; dispa
   const outgoing = seats.find(driver => driver.id === outgoingId) ?? seats[0];
   const offers = career.marketOffers.filter(offer => offer.outgoingDriverId === outgoing.id && offer.incomingDriverId !== outgoing.id);
   const offer = offers.find(value => value.incomingDriverId === incomingId) ?? offers[0];
+  const incoming = offer && career.drivers.find(driver => driver.id === offer.incomingDriverId);
   return <div className="space-y-4">
     <h3 className="font-bold">Your two seats</h3>
     {seats.map(driver => {
@@ -99,6 +101,14 @@ function Drivers({ career, dispatch, blocked }: { career: GrandPrixCareer; dispa
           return <option key={driver.id} value={driver.id}>{driver.name}, pace {driver.skills.pace}</option>;
         })}</select></label>
       </div>
+      {incoming && <section aria-label="Incoming driver profile" className="space-y-3 rounded-lg border border-border bg-background p-3">
+        <h4 className="break-words font-bold">{incoming.name}</h4>
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+          <Stat title="Age">{incoming.age}</Stat><Stat title="Potential">{incoming.potential}</Stat>
+          <Stat title="Pace">{incoming.skills.pace}</Stat><Stat title="Consistency">{incoming.skills.consistency}</Stat>
+          <Stat title="Tyre care">{incoming.skills.tyreCare}</Stat><Stat title="Wet">{incoming.skills.wet}</Stat>
+        </div>
+      </section>}
       <div className="grid grid-cols-2 gap-3 rounded-lg border border-border p-3">
         <Stat title="Wage per race" testId="gp-offer-wage">{money(offer.wagePerRace)}</Stat>
         <Stat title="Signing fee" testId="gp-offer-signing-fee">{money(offer.signingFee)}</Stat>
@@ -164,6 +174,13 @@ function Race({ career, dispatch, blocked }: { career: GrandPrixCareer; dispatch
   const track = career.calendar[career.round];
   const race = career.race;
   const entries = race?.entries.slice().sort((a, b) => Number(a.status === 'retired') - Number(b.status === 'retired') || b.completedLaps - a.completedLaps || a.elapsedMs - b.elapsedMs || a.driverId.localeCompare(b.driverId)) ?? [];
+  const timing = (entry: GrandPrixRaceEntry) => {
+    if (!race || race.lap === 0) return null;
+    if (entry.status === 'retired') return 'Retired after ' + entry.completedLaps + (entry.completedLaps === 1 ? ' lap' : ' laps');
+    const leader = entries.find(row => row.status !== 'retired');
+    if (!leader) return null;
+    return 'Gap to leader: ' + (entry.driverId === leader.driverId ? 'Leader' : '+' + ((entry.elapsedMs - leader.elapsedMs) / 1000).toFixed(3) + 's');
+  };
   const result = career.results.find(row => row.roundId === track.id);
   const complete = career.phase === 'raceResult' || career.phase === 'seasonReview';
   const nextLap = [12, 26, 40].find(lap => lap > (race?.lap ?? 0)) ?? 40;
@@ -197,11 +214,13 @@ function Race({ career, dispatch, blocked }: { career: GrandPrixCareer; dispatch
       const classified = result?.classification.find(row => row.driverId === driver.id);
       const position = complete && classified ? classified.position : entries.findIndex(row => row.driverId === driver.id) + 1;
       const status = complete && classified ? classified.status : entry?.status;
+      const detail = entry ? timing(entry) : null;
       const choice = choices[driver.id] ?? {};
       const change = (patch: Partial<typeof choice>) => setChoices(old => ({ ...old, [driver.id]: { ...old[driver.id], ...patch } }));
       return <section key={driver.id} className="rounded-xl border border-border bg-card p-3">
         <div className="flex items-start justify-between gap-3"><h4 className="min-w-0 break-words font-bold">{driver.name}</h4><p className="shrink-0 text-sm font-bold tabular-nums">{entry ? status === 'retired' ? 'Retired' : 'P' + position : 'Not qualified'}</p></div>
         {entry && <p className="mt-1 text-xs text-muted-foreground">{label(entry.compound)} tyres, {Math.round(entry.tyreWear)}% wear, {entry.stops} stops</p>}
+        {detail && <p className="mt-1 text-sm font-semibold tabular-nums">{detail}</p>}
         {!complete && entry && <div className="mt-3 grid grid-cols-2 gap-2">
           <label className="min-w-0 text-xs">{career.phase === 'grid' ? 'Tyres' : 'Pit choice'}
             {career.phase === 'grid' ? <select aria-label={'Tyres for ' + driver.name} className={select} disabled={blocked} value={choice.compound ?? entry.compound} onChange={event => change({ compound: event.target.value as Compound })}>{['soft', 'medium', 'hard', 'wet'].map(tyre => <option key={tyre} value={tyre}>{label(tyre)}</option>)}</select>
@@ -241,7 +260,7 @@ function Race({ career, dispatch, blocked }: { career: GrandPrixCareer; dispatch
       {!career.nextSeasonPlan.affordable && <p className="text-sm">You need more cash to cover next season's reserve.</p>}
     </div>}
     <button type="button" className={button + ' w-full bg-primary text-primary-foreground'} disabled={blocked || career.phase === 'seasonReview' && !career.nextSeasonPlan?.affordable} onClick={run}>{action}</button>
-    {race && <details><summary className="min-h-11 cursor-pointer py-3 text-sm font-semibold">Whole field</summary><ol className="max-h-72 space-y-1 overflow-y-auto text-sm">{entries.map((entry, index) => <li key={entry.driverId} className="flex justify-between gap-3 border-b border-border py-2"><span>{index + 1}. {career.drivers.find(driver => driver.id === entry.driverId)!.name}</span><span className="shrink-0 tabular-nums">{entry.status === 'retired' ? 'Retired' : entry.completedLaps + ' laps'}</span></li>)}</ol></details>}
+    {race && <details><summary className="min-h-11 cursor-pointer py-3 text-sm font-semibold">Whole field</summary><ol className="max-h-72 space-y-1 overflow-y-auto text-sm">{entries.map((entry, index) => <li key={entry.driverId} className="flex justify-between gap-3 border-b border-border py-2"><span className="min-w-0 break-words">{index + 1}. {career.drivers.find(driver => driver.id === entry.driverId)!.name}</span><span className="max-w-[60%] shrink-0 text-right tabular-nums">{timing(entry) ?? (entry.status === 'retired' ? 'Retired' : entry.completedLaps + ' laps')}</span></li>)}</ol></details>}
   </div>;
 }
 
