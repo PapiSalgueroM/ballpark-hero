@@ -88,8 +88,8 @@ describe('US free agency signing review', () => {
       const view = mount(input.sport);
       fireEvent.click(sign(view));
       const opening = { bytes: localStorage.getItem(input.sport.saveKey), writes: [...writes.writes], tape: [...draws.tape], campCalls: camp.mock.calls.length };
-      const back = within(view.container).queryByRole('button', { name: 'Back to offers' });
-      const reviewText = view.container.querySelector('[data-fa-sign-review]')?.textContent ?? null;
+      const back = within(view.baseElement).queryByRole('button', { name: 'Back to offers' });
+      const reviewText = view.baseElement.querySelector('[data-fa-sign-review]')?.textContent ?? null;
       if (back) fireEvent.click(back);
       const row = { sport: input.sport.slug, before: input.bytes, offer: input.offer, opening, reviewText, backAvailable: !!back,
         afterBack: { bytes: localStorage.getItem(input.sport.saveKey), writes: [...writes.writes], tape: [...draws.tape], campCalls: camp.mock.calls.length },
@@ -136,7 +136,7 @@ describe('US free agency signing review', () => {
       const callsAtReview = onSign.mock.calls.map(args => [...args]);
       const next = mutate(w), nextBefore = structuredClone(next);
       view.rerender(<FreeAgencyPanel window={next} {...props} />);
-      const confirm = within(view.container).queryByRole('button', { name: 'Confirm signing' });
+      const confirm = within(view.baseElement).queryByRole('button', { name: 'Confirm signing' });
       if (confirm) fireEvent.click(confirm);
       const row = { kind, callsAtReview, calls: onSign.mock.calls.map(args => [...args]), pushes: onPush.mock.calls.length,
         writes: [...writes.writes], tape: [...draws.tape], inputHeld: JSON.stringify(next) === JSON.stringify(nextBefore) };
@@ -161,7 +161,7 @@ describe('US free agency signing review', () => {
       const view = mount(input.sport);
       fireEvent.click(sign(view));
       const opening = localStorage.getItem(input.sport.saveKey);
-      const confirm = within(view.container).queryByRole('button', { name: 'Confirm signing' });
+      const confirm = within(view.baseElement).queryByRole('button', { name: 'Confirm signing' });
       if (confirm) act(() => { fireEvent.click(confirm); fireEvent.click(confirm); });
       signedResults.push({ sport: input.sport.slug, saved: JSON.parse(localStorage.getItem(input.sport.saveKey) ?? 'null'), tape: [...draws.tape] });
       observations.push({ sport: input.sport.slug, before: input.bytes, opening, hadConfirm: !!confirm,

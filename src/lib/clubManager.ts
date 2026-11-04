@@ -1364,7 +1364,7 @@ export interface CMPlayer {
 
 /** Round 505: a second position in progress. weeksTotal is what it was
  *  quoted at, so a progress bar can be drawn off the two numbers. */
-export interface Retraining { to: Position; weeksLeft: number; weeksTotal: number; }
+export interface Retraining { to: Position; weeksLeft: number; weeksTotal: number; paused?: unknown; }
 
 /* ---------- Round 127: squad roles and playing time promises ---------- */
 
@@ -7297,8 +7297,20 @@ export function retrainRefusal(p: CMPlayer | undefined, to: Position): string | 
  * down. A real footballer starts with no second position, so everything a
  * squad carries here was earned in this save.
  */
-export function startRetraining(career: CareerState, playerId: string, to: Position): CareerState | null {
+export function startRetraining(career: CareerState, playerId: string, to: Position, paused?: boolean): CareerState | null {
   const p = career.squad.find(x => x.id === playerId);
+  if (paused !== undefined) {
+    const r = p?.retraining;
+    if (typeof paused !== 'boolean' || !r || retrainRefusal({ ...p!, retraining: undefined }, to)
+      || r.to !== to || !Number.isSafeInteger(r.weeksLeft) || r.weeksLeft < 1
+      || !Number.isSafeInteger(r.weeksTotal) || r.weeksTotal < r.weeksLeft
+      || Object.keys(r).some(key => !['to', 'weeksLeft', 'weeksTotal', 'paused'].includes(key))
+      || ('paused' in r && typeof r.paused !== 'boolean')) return null;
+    if (paused ? r.paused === true : !('paused' in r)) return career;
+    const { paused: _paused, ...course } = r;
+    return { ...career, squad: career.squad.map(x => x === p
+      ? { ...x, retraining: { ...course, ...(paused ? { paused: true } : {}) } } : x) };
+  }
   if (retrainRefusal(p, to)) return null;
   const weeksTotal = retrainWeeks(career, p!, to);
   return {
@@ -18361,7 +18373,7 @@ function tickWeek(state: CareerState, playedIds: Set<string> | null): void {
     /* Round 505: a week of work on a second position. At zero it joins
        his list, the oldest one beyond two making way, and the papers say
        so. Hashed off nothing: no draw, so the week's stream is untouched. */
-    if (p.retraining) {
+    if (p.retraining && (!('paused' in p.retraining) || p.retraining.paused === false)) {
       const weeksLeft = p.retraining.weeksLeft - 1;
       if (weeksLeft <= 0) {
         const to = p.retraining.to;
