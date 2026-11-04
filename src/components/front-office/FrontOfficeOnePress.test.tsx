@@ -304,6 +304,7 @@ for (const kind of KINDS) {
           let presses = 0;
           while (read().phase === 'draft' && presses < 12) {
             fireEvent.click(screen.getAllByText(/· age \d+/)[0]);
+            fireEvent.click(screen.getByRole('button', { name: 'Confirm draft', exact: true }));
             presses += 1;
           }
           const hub = read();
