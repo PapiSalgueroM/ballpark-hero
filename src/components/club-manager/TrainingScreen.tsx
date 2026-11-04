@@ -17,7 +17,7 @@ interface TrainingScreenProps {
   career: CareerState;
   onSetPlan: (plan: TrainingPlan) => void;
   /** Round 505: put a man to work on a second position, and call it off. */
-  onRetrain: (playerId: string, to: Position, paused?: boolean) => void;
+  onRetrain: (playerId: string, to: Position, paused?: boolean, replace?: Position) => void;
   onStopRetrain: (playerId: string) => void;
 }
 
@@ -81,8 +81,9 @@ function PlayerRow({ p, career }: { p: CMPlayer; career: CareerState }) {
  * own (retrainWeeks), so what the chip promises is what the tick delivers.
  * A refusal is printed, never swallowed.
  */
-function RetrainCard({ career, onRetrain, onStopRetrain }: { career: CareerState; onRetrain: (id: string, to: Position, paused?: boolean) => void; onStopRetrain: (id: string) => void }) {
+function RetrainCard({ career, onRetrain, onStopRetrain }: { career: CareerState; onRetrain: (id: string, to: Position, paused?: boolean, replace?: Position) => void; onStopRetrain: (id: string) => void }) {
   const [pickId, setPickId] = useState('');
+  const [replacement, setReplacement] = useState<Position | ''>('');
   const pickRef = useRef<HTMLSelectElement>(null);
   const [refusal, setRefusal] = useState<string | null>(null);
   const targetsRef = useRevealScroll<HTMLDivElement>(`retrain:${pickId}`, { enabled: !!pickId, skipFirst: false });
@@ -92,6 +93,7 @@ function RetrainCard({ career, onRetrain, onStopRetrain }: { career: CareerState
     .filter(p => p.position !== 'GK' && !p.retraining)
     .sort((a, b) => b.rating - a.rating);
   const picked = pool.find(p => p.id === pickId) ?? null;
+  const secondaries = picked ? heldPositions(picked).filter(pos => pos !== picked.position) : [];
   const targets: Position[] = picked
     ? ALL_POSITIONS.filter(pos => pos !== 'GK' && !heldPositions(picked).includes(pos))
     : [];
@@ -99,10 +101,12 @@ function RetrainCard({ career, onRetrain, onStopRetrain }: { career: CareerState
 
   const start = (to: Position) => {
     if (!picked) return;
-    const why = retrainRefusal(picked, to);
+    const why = retrainRefusal(picked, to, replacement || undefined);
     if (why) { setRefusal(why); return; }
-    onRetrain(picked.id, to);
+    if (replacement) onRetrain(picked.id, to, undefined, replacement);
+    else onRetrain(picked.id, to);
     setPickId('');
+    setReplacement('');
     setRefusal(null);
     pickRef.current?.focus({ preventScroll: true });
   };
@@ -118,6 +122,12 @@ function RetrainCard({ career, onRetrain, onStopRetrain }: { career: CareerState
       )}
       {learning.map(p => {
         const r = p.retraining!;
+        const hasReplacement = Object.prototype.hasOwnProperty.call(r, 'replace');
+        const replace = (r as { replace?: unknown }).replace;
+        const learned = p.secondaryPositions;
+        const unavailableReplacement = hasReplacement && (typeof replace !== 'string' || !Array.isArray(learned)
+          || learned.length !== MAX_SECONDARY_POSITIONS || new Set(learned).size !== MAX_SECONDARY_POSITIONS
+          || learned.some(pos => pos === p.position || !ALL_POSITIONS.includes(pos)) || !learned.includes(replace as Position));
         const pct = Math.round((100 * (r.weeksTotal - r.weeksLeft)) / Math.max(1, r.weeksTotal));
         return (
           <div key={p.id} className="py-1.5 border-b border-border/30 last:border-0" data-cm-retraining={p.id} data-cm-retraining-to={r.to}>
@@ -141,7 +151,10 @@ function RetrainCard({ career, onRetrain, onStopRetrain }: { career: CareerState
             <div className="mt-1 h-1.5 rounded-full bg-secondary overflow-hidden" role="progressbar" aria-valuenow={pct} aria-valuemin={0} aria-valuemax={100}>
               <div className="h-full rounded-full bg-primary" style={{ width: `${Math.max(3, pct)}%` }} />
             </div>
-            {Object.prototype.hasOwnProperty.call(r, 'paused') && typeof r.paused !== 'boolean' ? (
+            {hasReplacement && !unavailableReplacement && <p className="mt-1 text-[10px] text-muted-foreground">Replaces {replace as Position} when training finishes. Current positions stay until then.</p>}
+            {unavailableReplacement ? (
+              <p className="mt-1 text-[10px] text-amber-400">This course has an unavailable replacement position. Progress is held. Stop the course and choose again.</p>
+            ) : Object.prototype.hasOwnProperty.call(r, 'paused') && typeof r.paused !== 'boolean' ? (
               <p className="mt-1 text-[10px] text-amber-400">This course has an unknown pause setting. Progress is held; Pause and Resume are unavailable. Stop still cancels the whole course.</p>
             ) : (
               <button type="button" aria-label={`${r.paused === true ? 'Resume' : 'Pause'} retraining for ${p.name}`}
@@ -161,7 +174,7 @@ function RetrainCard({ career, onRetrain, onStopRetrain }: { career: CareerState
           ref={pickRef}
           data-cm-retrain-pick="1"
           value={pickId}
-          onChange={e => { setPickId(e.target.value); setRefusal(null); }}
+          onChange={e => { setPickId(e.target.value); setReplacement(''); setRefusal(null); }}
           className="flex-1 min-w-0 bg-secondary border border-border rounded px-1.5 py-1.5 text-[11px] text-foreground"
           aria-label="Player to retrain"
         >
@@ -177,12 +190,26 @@ function RetrainCard({ career, onRetrain, onStopRetrain }: { career: CareerState
           <p className="text-[9px] text-muted-foreground mb-1">
             {lastName(picked.name)} plays {heldPositions(picked).join(', ')}. Pick what he learns next{picked.age > 30 ? ', and he is past thirty, so it takes half as long again' : ''}:
           </p>
+          {secondaries.length === MAX_SECONDARY_POSITIONS && (
+            <label className="mb-2 block text-[10px] text-muted-foreground">
+              Replace on completion
+              <select aria-label="Position to replace when training finishes" data-cm-retrain-replace
+                value={replacement} onChange={e => { setReplacement(e.target.value as Position | ''); setRefusal(null); }}
+                className="mt-1 block min-h-11 w-full rounded border border-border bg-secondary px-2 text-[11px] text-foreground">
+                <option value="">Oldest learned position ({secondaries[0]})</option>
+                {secondaries.map(pos => <option key={pos} value={pos}>{pos}</option>)}
+              </select>
+            </label>
+          )}
           <p className="text-[10px] text-muted-foreground mb-1">
             Fit points remove his out-of-position cost in {formation.name}; a minus adds a cost. His OVR and your XI stay as they are.
           </p>
           <div className="flex flex-wrap gap-1">
             {targets.map(to => {
-              const secondaryPositions = [...(picked.secondaryPositions ?? []).filter(pos => pos !== to && pos !== picked.position), to].slice(-MAX_SECONDARY_POSITIONS);
+              const held = (picked.secondaryPositions ?? []).filter(pos => pos !== to && pos !== picked.position);
+              const secondaryPositions = replacement
+                ? [...held.filter(pos => pos !== replacement), to]
+                : [...held, to].slice(-MAX_SECONDARY_POSITIONS);
               const trained = { ...picked, secondaryPositions };
               const replaced = (picked.secondaryPositions ?? []).filter(pos => !secondaryPositions.includes(pos));
               const changes = formation.slots.flatMap((slot, index) => {
@@ -216,7 +243,7 @@ function RetrainCard({ career, onRetrain, onStopRetrain }: { career: CareerState
       )}
 
       <p className="text-[9px] text-muted-foreground mt-1.5">
-        A position next to one he holds is the quickest, another on the same line takes longer, and crossing lines takes longest; past thirty it is half as long again, a better training ground shortens all of it, and nothing goes under {RETRAIN_MIN_WEEKS} weeks. One man learns one position at a time, keeps {MAX_SECONDARY_POSITIONS} at most, and keepers stay keepers. Every second position in this squad was earned here: the real data gives each man one. Pause keeps the remaining weeks and his current positions; Resume continues from there. Completion can replace the oldest second position, while Stop discards the course. Pausing does not rest him from matches or change normal training. For example, pause a near-complete ST course to keep learned RW cover until you are ready to finish it.
+        A position next to one he holds is the quickest, another on the same line takes longer, and crossing lines takes longest; past thirty it is half as long again, a better training ground shortens all of it, and nothing goes under {RETRAIN_MIN_WEEKS} weeks. One man learns one position at a time, keeps {MAX_SECONDARY_POSITIONS} at most, and keepers stay keepers. Every second position in this squad was earned here: the real data gives each man one. Pause keeps the remaining weeks and his current positions; Resume continues from there. At the limit, choose which learned position completion replaces; Oldest keeps the existing choice. Stop discards the course and its choice. Pausing does not rest him from matches or change normal training. For example, replace CM when ST training finishes to keep earned RW cover.
       </p>
     </div>
   );
