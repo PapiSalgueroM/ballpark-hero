@@ -1,0 +1,111 @@
+name: Identify the first PR470 veteran preparation failure
+on:
+  push:
+    branches: [codex/pr470-veteran-prep-diagnostic-20261103]
+permissions:
+  contents: read
+concurrency:
+  group: pr470-veteran-prep-diagnostic-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      SIM_NETWORK: offline
+      ENGINES: chromium
+      TZ: UTC
+      SEO_SPLIT_BASE_REF: HEAD
+      PROBE_HEAD: 'a21b15f0c4829861ad914334858e936970b95426'
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: 'a21b15f0c4829861ad914334858e936970b95426'
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Retain the actual source and exact first preparation body
+        run: |
+          set -euo pipefail
+          export QA_DIAG="$RUNNER_TEMP/pr470-veteran-prep-diagnostic"
+          mkdir -p "$QA_DIAG"
+          echo "QA_DIAG=$QA_DIAG" >> "$GITHUB_ENV"
+          test "$(git rev-parse HEAD)" = "$PROBE_HEAD"
+          test "$(git hash-object .github/workflows/career-veteran-offers.yml)" = 81f947e88c6c72fb08aedb2e1e99cc7051d5c4b8
+          git rev-parse HEAD HEAD^{tree} > "$QA_DIAG/source.txt"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$QA_DIAG/source-before.sha256"
+          cp .github/workflows/career-veteran-offers.yml "$QA_DIAG/original-workflow.yml"
+          python3 - <<'PY'
+          import os, pathlib
+          out=pathlib.Path(os.environ["QA_DIAG"])
+          text=(out/"original-workflow.yml").read_text()
+          header="      - name: Exact source and locked dependency preparation\n        run: |\n"
+          assert text.count(header)==1
+          start=text.index(header)+len(header)
+          end=text.index("\n      - name:",start)
+          lines=text[start:end].split("\n")
+          assert all(line.startswith("          ") for line in lines)
+          body="\n".join(line[10:] for line in lines)+"\n"
+          (out/"preparation-original.sh").write_text(body)
+          expression="$"+"{{ github.event.pull_request.head.sha || github.sha }}"
+          assert body.count(expression)==1
+          resolved=body.replace(expression,os.environ["PROBE_HEAD"])
+          assert resolved.replace(os.environ["PROBE_HEAD"],expression,1)==body
+          (out/"preparation-resolved.sh").write_text(resolved)
+          (out/"scope.txt").write_text("Exact original preparation, with its original PR expression resolved to the actual PR470 head. Only ERR/xtrace observation is added. No product repair, waiver, type, build or gameplay qualification.\n")
+          PY
+      - name: Run the unchanged first preparation with its native exit
+        timeout-minutes: 20
+        run: |
+          set -euo pipefail
+          cat > "$QA_DIAG/error-trap.sh" <<'TRAP'
+          set -E
+          trap 'status=$?; printf "exit=%s\nline=%s\ncommand=%s\n" "$status" "$LINENO" "$BASH_COMMAND" >> "$QA_DIAG/failed-command.txt"; exit "$status"' ERR
+          TRAP
+          cat "$QA_DIAG/error-trap.sh" "$QA_DIAG/preparation-resolved.sh" > "$QA_DIAG/preparation-observed.sh"
+          export PS4='+ preparation line ${LINENO}: '
+          set +e
+          bash --noprofile --norc -e -o pipefail -x "$QA_DIAG/preparation-observed.sh" > "$QA_DIAG/preparation.stdout.log" 2> "$QA_DIAG/preparation.stderr.log"
+          native=$?
+          set -e
+          printf '%s\n' "$native" > "$QA_DIAG/preparation.exit"
+          exit "$native"
+      - name: Always retain source closure and the original preparation artifacts
+        if: always()
+        run: |
+          set -euo pipefail
+          test -n "$QA_DIAG"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$QA_DIAG/source-after.sha256"
+          git diff --binary HEAD > "$QA_DIAG/source-diff.txt"
+          git status --porcelain=v1 --untracked-files=all > "$QA_DIAG/status-after.txt"
+          if [[ -d career-veteran-offers-artifacts ]]; then
+            mkdir -p "$QA_DIAG/original-artifacts"
+            cp -a career-veteran-offers-artifacts/. "$QA_DIAG/original-artifacts/"
+          fi
+          cmp "$QA_DIAG/source-before.sha256" "$QA_DIAG/source-after.sha256"
+          test ! -s "$QA_DIAG/source-diff.txt"
+      - name: Independently bound this diagnostic evidence
+        if: always()
+        id: artifact
+        run: |
+          set -euo pipefail
+          test -d "$QA_DIAG"
+          test "$(du -sb "$QA_DIAG" | cut -f1)" -lt 150000000
+          echo 'ready=true' >> "$GITHUB_OUTPUT"
+      - uses: actions/upload-artifact@v4
+        if: ${{ always() && steps.artifact.outputs.ready == 'true' }}
+        with:
+          name: pr470-veteran-prep-diagnostic-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/pr470-veteran-prep-diagnostic
+          if-no-files-found: error
+          retention-days: 3
+          compression-level: 6
