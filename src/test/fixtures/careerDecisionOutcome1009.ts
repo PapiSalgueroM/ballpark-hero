@@ -4,6 +4,8 @@ import { MLB_CAREER_SPORT } from '@/lib/mlbCareerSport';
 import { NHL_CAREER_SPORT } from '@/lib/nhlCareerSport';
 import { defaultAppearance } from '@/lib/soccerCareerAppearance';
 import { pushHeadlines } from '@/lib/careerSocial';
+import { startSummer, answerSummerCard, seekSummerCard } from '@/lib/usCareerSummer';
+import { talkDeckFilter } from '@/lib/usCareerRetirementFlow';
 import { nbaEraTeamIds } from '@/lib/nbaMyCareer';
 import type { UsCareerCore, UsCareerEvent, UsCareerSport } from '@/lib/usCareerSport';
 
@@ -134,3 +136,50 @@ export function nativeTradeDecisionFixture() {
   }
   throw new Error('No deterministic third-season NBA salary matching card reached the real deck');
 }
+
+/* The built app uses the current summer. The one-card exports above remain the
+   mounted ordinary-path fixtures; native walks use the real binding below. */
+const nativeDecisionSports: Record<string, UsCareerSport> = {
+  nba: NBA_CAREER_SPORT, nfl: NFL_CAREER_SPORT, mlb: MLB_CAREER_SPORT, nhl: NHL_CAREER_SPORT,
+};
+
+function withCurrentSummer(fixture: ReturnType<typeof nativeDecisionFixture> | ReturnType<typeof nativeTradeDecisionFixture>) {
+  const { slug, quality } = fixture, sport = nativeDecisionSports[slug], roll = fixture.tape[0];
+  const season = advanceDecisionSeason(slug, fixture.initial, quality, () => roll);
+  for (let salt = 0; salt < 4096; salt++) {
+    const initial = copyCareer(fixture.initial), probe = copyCareer(season);
+    initial.summerSalt = probe.summerSalt = `native-decision-${salt}`;
+    const offered = startSummer(probe, sport, () => roll, talkDeckFilter(probe, sport.hall));
+    if (offered?.id !== fixture.eventId) continue;
+    const tape: number[] = [];
+    const pending = advanceDecisionSeason(slug, initial, quality, () => { tape.push(roll); return roll; });
+    const event = startSummer(pending, sport, () => { tape.push(roll); return roll; }, talkDeckFilter(pending, sport.hall));
+    if (event?.id !== fixture.eventId) continue;
+    const after = copyCareer(pending), choiceTape: number[] = [];
+    const preset = 'choiceTape' in fixture ? fixture.choiceTape : [];
+    const choiceRng = () => { const value = preset[choiceTape.length] ?? .5; choiceTape.push(value); return value; };
+    const next = answerSummerCard(after, sport, event, fixture.optionIndex, choiceRng, talkDeckFilter(after, sport.hall)).next;
+    const nextQuality = next ? quality : sport.rollTeamQuality(quality, choiceRng);
+    const cursor = copyCareer(after), followUps = [];
+    let currentQuality = nextQuality, card = seekSummerCard(cursor, sport, talkDeckFilter(cursor, sport.hall));
+    for (let slot = 0; card && slot < sport.summer.cards; slot++) {
+      const eventId = card.id, choice = card.options[0].label, values: number[] = [];
+      const rng = () => { values.push(.5); return .5; };
+      const more = answerSummerCard(cursor, sport, card, 0, rng, talkDeckFilter(cursor, sport.hall)).next;
+      if (!more) currentQuality = sport.rollTeamQuality(currentQuality, rng);
+      followUps.push({ eventId, choice, optionIndex: 0, choiceTape: values,
+        appliedBytes: decisionSave(cursor, currentQuality, more ? 'event' : 'season') });
+      card = seekSummerCard(cursor, sport, talkDeckFilter(cursor, sport.hall));
+    }
+    if (card) throw new Error('The real summer exceeded its declared card bound');
+    return { ...fixture, initial, tape, choiceTape, before: pending, after, eventTitle: event.title,
+      choice: event.options[fixture.optionIndex].label, pendingBytes: decisionSave(pending, quality, 'event'),
+      appliedBytes: decisionSave(after, nextQuality, next ? 'event' : 'season'), followUps,
+      finishedBytes: decisionSave(cursor, currentQuality) };
+  }
+  throw new Error(`No current ${slug} summer offered the real ${fixture.eventId} fixture first`);
+}
+
+export const nativeSummerDecisionFixture = (slug: string, expanded = false) =>
+  withCurrentSummer(nativeDecisionFixture(slug, expanded));
+export const nativeSummerTradeDecisionFixture = () => withCurrentSummer(nativeTradeDecisionFixture());
