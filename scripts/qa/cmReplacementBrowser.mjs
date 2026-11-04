@@ -37,7 +37,7 @@ function controls({ page, width, save, key, actions }) {
     assert.deepEqual(after, before, 'CM_REPLACEMENT_APP_NO_JUMP:' + label);
     return action;
   };
-  return { press, native };
+  return { press, native, prepare };
 }
 
 async function journey(args, completion) {
@@ -45,7 +45,7 @@ async function journey(args, completion) {
   const x = fixture.expected, key = x.key, actions = [];
   assert.equal(engine.SAVE_KEY, key); assert.equal(x.kind, completion ? 'completion' : 'choice');
   const read = async () => JSON.parse(await save(key));
-  const { press, native } = controls({ page, width, save, key, actions });
+  const { press, native, prepare } = controls({ page, width, save, key, actions });
   const resume = async () => {
     const bytes = await save(key), button = page.getByRole('button', { name: 'Resume Career', exact: true });
     const hub = page.locator('[data-cm-hub]');
@@ -56,9 +56,18 @@ async function journey(args, completion) {
     assert.equal(await save(key), bytes, 'CM_REPLACEMENT_APP_LANDING_PRESERVES_SAVE_BYTES');
   };
   const home = async () => {
-    await press(page.getByRole('tab', { name: 'Home', exact: true }));
+    const bytes = await save(key), tabs = page.locator('[data-cm-hub]').getByRole('tablist');
+    const homeTab = tabs.getByRole('tab', { name: 'Home', exact: true });
+    if (width >= 768 && (await homeTab.getAttribute('aria-selected')) !== 'true') {
+      assert.equal(await tabs.getByRole('tab').first().innerText(), 'Home');
+      await prepare(tabs.getByRole('tab', { selected: true }));
+      await page.keyboard.press('Home');
+      await tabs.getByRole('tab', { name: 'Home', exact: true, selected: true }).waitFor({ state: 'visible' });
+      assert.equal(await homeTab.evaluate(node => document.activeElement === node), true, 'CM_REPLACEMENT_APP_ROVING_HOME_FOCUS');
+    } else await press(homeTab);
     const back = page.getByRole('button', { name: 'Club home', exact: true });
     if (await back.isVisible()) await press(back);
+    assert.equal(await save(key), bytes, 'CM_REPLACEMENT_APP_HOME_NAVIGATION_READONLY');
   };
   const training = async () => {
     await home(); await press(page.getByRole('button').filter({ has: page.getByText('Training', { exact: true }) }));
