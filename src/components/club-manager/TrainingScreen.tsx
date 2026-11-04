@@ -141,7 +141,7 @@ function RetrainCard({ career, onRetrain, onStopRetrain }: { career: CareerState
             <div className="mt-1 h-1.5 rounded-full bg-secondary overflow-hidden" role="progressbar" aria-valuenow={pct} aria-valuemin={0} aria-valuemax={100}>
               <div className="h-full rounded-full bg-primary" style={{ width: `${Math.max(3, pct)}%` }} />
             </div>
-            {'paused' in r && typeof r.paused !== 'boolean' ? (
+            {Object.prototype.hasOwnProperty.call(r, 'paused') && typeof r.paused !== 'boolean' ? (
               <p className="mt-1 text-[10px] text-amber-400">This course has an unknown pause setting. Progress is held; Pause and Resume are unavailable. Stop still cancels the whole course.</p>
             ) : (
               <button type="button" aria-label={`${r.paused === true ? 'Resume' : 'Pause'} retraining for ${p.name}`}

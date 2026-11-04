@@ -18373,7 +18373,7 @@ function tickWeek(state: CareerState, playedIds: Set<string> | null): void {
     /* Round 505: a week of work on a second position. At zero it joins
        his list, the oldest one beyond two making way, and the papers say
        so. Hashed off nothing: no draw, so the week's stream is untouched. */
-    if (p.retraining && (!('paused' in p.retraining) || p.retraining.paused === false)) {
+    if (p.retraining && (!Object.prototype.hasOwnProperty.call(p.retraining, 'paused') || p.retraining.paused === false)) {
       const weeksLeft = p.retraining.weeksLeft - 1;
       if (weeksLeft <= 0) {
         const to = p.retraining.to;

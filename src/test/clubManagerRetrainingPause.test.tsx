@@ -75,7 +75,7 @@ function step(c: CareerState, seed: number) {
 
 describe('Club Manager retraining pause', () => {
   it('keeps earned weeks and the older learned wing fit through a paid paused week', () => {
-    const { c, id, slot } = fixture(), before = copy(c), at = tape.length;
+    const { c, id, slot } = fixture(), before = structuredClone(c), at = tape.length;
     const paused = toggle(c, id, 'ST', true), toggleDraws = tape.length - at;
     const a = step(paused ?? c, 5320101), b = step(c, 5320101);
     const available = (state: CareerState) => ({ ...state, squad: state.squad.map(p => ({ ...p, injuryWeeks: 0, suspendedMatches: 0 })) });
@@ -100,7 +100,7 @@ describe('Club Manager retraining pause', () => {
 
   it('resumes the existing counter without restarting and completes by the original replacement rule', () => {
     const { c, id, slot } = fixture(); Object.assign(player(c, id).retraining!, { paused: true });
-    const before = copy(c), at = tape.length, resumed = toggle(c, id, 'ST', false);
+    const before = structuredClone(c), at = tape.length, resumed = toggle(c, id, 'ST', false);
     const twice = resumed ? toggle(resumed, id, 'ST', false) : null;
     const changedDraws = tape.length - at, run = step(resumed ?? c, 5320102);
     const ordinaryCourse = copy(course(c, id)!); delete ordinaryCourse.paused;
@@ -194,12 +194,43 @@ describe('Club Manager retraining pause', () => {
     const beforeStart = JSON.stringify(blank), startAt = tape.length, started = E.startRetraining(blank, id, 'ST');
     const startDraws = tape.length - startAt;
     const stopped = E.stopRetraining(c, id), stoppedExpected = structuredClone(c); delete player(stoppedExpected, id).retraining;
+    const fence = await import('@/lib/saveFence'), { TrainingScreen } = await import('@/components/club-manager/TrainingScreen');
+    const scalarCourses = ['future', 42].map((value, index) => {
+      const input = copy(c); (player(input, id) as unknown as { retraining: unknown }).retraining = value;
+      localStorage.clear(); fence.saveFence.adopt(E.SAVE_KEY);
+      const wrote = E.saveCareer(input), scalarBytes = localStorage.getItem(E.SAVE_KEY), readAt = tape.length,
+        loadedScalar = E.loadCareer(), scalarReadDraws = tape.length - readAt;
+      let run: ReturnType<typeof step> | null = null, tickError: string | null = null,
+        renderError: string | null = null, renderedRows = 0;
+      try { run = step(input, 5320110 + index); } catch (error) { tickError = String(error); }
+      try {
+        const view = render(<TrainingScreen career={input} onSetPlan={() => { throw new Error('Unexpected scalar plan edit'); }}
+          onRetrain={() => { throw new Error('Unexpected scalar course edit'); }}
+          onStopRetrain={() => { throw new Error('Unexpected scalar Stop'); }} />);
+        renderedRows = view.container.querySelectorAll('[data-cm-retraining]').length;
+      } catch (error) { renderError = String(error); } finally { cleanup(); }
+      return { value, input, wrote, scalarBytes, loadedScalar, afterRead: localStorage.getItem(E.SAVE_KEY),
+        scalarReadDraws, run, tickError, renderError, renderedRows };
+    });
     const pending = copy(c); Object.assign(player(pending, id).retraining!, { paused: true });
-    const fence = await import('@/lib/saveFence'); localStorage.clear(); fence.saveFence.adopt(E.SAVE_KEY);
+    localStorage.clear(); fence.saveFence.adopt(E.SAVE_KEY);
     expect(E.saveCareer(pending), 'SETUP existing writer acknowledges the controlled course').toBe(true);
     const bytes = localStorage.getItem(E.SAVE_KEY), at = tape.length, loaded = E.loadCareer(), readDraws = tape.length - at;
     raw('ordinary', { legacy: a, explicitFalse: b, blank, started, startDraws, stopped, pending,
-      loaded, bytes, afterRead: localStorage.getItem(E.SAVE_KEY), readDraws });
+      loaded, bytes, afterRead: localStorage.getItem(E.SAVE_KEY), readDraws, scalarCourses });
+    for (const row of scalarCourses) {
+      expect(row.tickError, 'CM_RETRAIN_SCALAR_COMPAT').toBeNull();
+      expect(row.renderError, 'CM_RETRAIN_SCALAR_COMPAT').toBeNull();
+      expect(row.renderedRows, 'CM_RETRAIN_SCALAR_COMPAT').toBe(1);
+      expect(row.wrote, 'CM_RETRAIN_SCALAR_COMPAT').toBe(true);
+      expect(row.loadedScalar && player(row.loadedScalar, id).retraining, 'CM_RETRAIN_SCALAR_COMPAT').toBe(row.value);
+      expect(row.afterRead, 'CM_RETRAIN_SCALAR_COMPAT').toBe(row.scalarBytes);
+      expect(row.scalarReadDraws, 'CM_RETRAIN_SCALAR_COMPAT').toBe(0);
+      const expectedCourse = typeof row.value === 'string'
+        ? { '0': 'f', '1': 'u', '2': 't', '3': 'u', '4': 'r', '5': 'e', weeksLeft: null }
+        : { weeksLeft: null };
+      expect(row.run && player(row.run.state, id).retraining, 'CM_RETRAIN_SCALAR_COMPAT').toStrictEqual(expectedCourse);
+    }
     expect(course(a.state, id)).toStrictEqual({ ...course(legacy, id), weeksLeft: 1 });
     expect(course(b.state, id)).toStrictEqual({ ...course(explicitFalse, id), weeksLeft: 1 });
     expect(b.draws).toStrictEqual(a.draws); expect(b.nextDraw).toBe(a.nextDraw);
