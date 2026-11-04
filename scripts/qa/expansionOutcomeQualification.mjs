@@ -26,7 +26,7 @@ const products=[
   'src/components/hub/HubExperience.tsx',
   'src/components/hub/HubExperience.module.css',
 ];
-const git=(...args)=>execFileSync('git',args);
+const git=(...args)=>execFileSync('git',args,{maxBuffer:8*1024*1024});
 const sha=b=>createHash('sha256').update(b).digest('hex');
 const fixed=new Map(products.map(p=>[p,fs.readFileSync(p)]));
 const originals=new Map(products.map(p=>[p,git('show','978e9f7081a36c6ab105adf92d7696b715e6122d:'+p)]));
