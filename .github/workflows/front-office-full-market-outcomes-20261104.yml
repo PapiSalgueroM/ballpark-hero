@@ -4,6 +4,7 @@ on:
     branches: [codex/front-office-full-market-outcomes-20261104]
 permissions:
   contents: read
+  actions: write
 env:
   CI: '1'
   SIM_NETWORK: offline
@@ -12,9 +13,18 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 25
     steps:
+      - name: Stop superseded full-history checkout
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          status=$(gh api repos/PapiSalgueroM/ballpark-hero/actions/runs/41900101151 --jq .status)
+          if [[ "$status" != completed ]]; then gh api --method POST repos/PapiSalgueroM/ballpark-hero/actions/runs/41900101151/cancel; fi
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 0
+          fetch-depth: 10
+          filter: blob:none
           persist-credentials: false
       - uses: actions/setup-node@v4
         with:
