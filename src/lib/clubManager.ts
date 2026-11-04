@@ -21666,8 +21666,9 @@ export function matchFacts(career: CareerState): MatchFacts | null {
        the second); balanced adds exactly zero. */
     const t1 = tacticEdge(career, fx, xi, instructionsOf(career), 1);
     const t2 = tacticEdge(career, fx, xi, instructionsOf(career), 2);
-    const lamMe = clamp(1.25 + (mine - oppS) * 0.055 + ment.atk + homeAtk + duty.atk + (t1 && t2 ? (t1.atk + t2.atk) / 2 : 0), 0.12, 4.2) * k;
-    const lamOpp = clamp(1.25 + (oppS - mine) * 0.055 + ment.def + oppAtk + duty.def + (t1 && t2 ? (t1.def + t2.def) / 2 : 0), 0.12, 4.2) * k;
+    const geometry = positionEdge(xi, career.mentality, career);
+    const lamMe = clamp(1.25 + (mine - oppS) * 0.055 + ment.atk + homeAtk + duty.atk + (t1 && t2 ? (t1.atk + t2.atk) / 2 : 0) + (geometry?.atk ?? 0), 0.12, 4.2) * k;
+    const lamOpp = clamp(1.25 + (oppS - mine) * 0.055 + ment.def + oppAtk + duty.def + (t1 && t2 ? (t1.def + t2.def) / 2 : 0) + (geometry?.conceded ?? 0), 0.12, 4.2) * k;
     let pWin = 0, pDraw = 0, pLoss = 0;
     for (let a = 0; a <= 9; a++) {
       for (let b = 0; b <= 9; b++) {
