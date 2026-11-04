@@ -21663,16 +21663,15 @@ export function matchFacts(career: CareerState): MatchFacts | null {
     const geometry = positionEdge(xi, career.mentality, career);
     const lamMe = clamp(1.25 + (mine - oppS) * 0.055 + ment.atk + homeAtk + duty.atk + (t1 && t2 ? (t1.atk + t2.atk) / 2 : 0) + (geometry?.atk ?? 0), 0.12, 4.2) * k;
     const lamOpp = clamp(1.25 + (oppS - mine) * 0.055 + ment.def + oppAtk + duty.def + (t1 && t2 ? (t1.def + t2.def) / 2 : 0) + (geometry?.conceded ?? 0), 0.12, 4.2) * k;
-    let pWin = 0, pDraw = 0, pLoss = 0;
+    const mass = [0, 0, 0];
     for (let a = 0, pa = Math.exp(-lamMe); a <= 9; a++, pa *= lamMe / a) {
       for (let b = 0, pb = Math.exp(-lamOpp); b <= 9; b++, pb *= lamOpp / b) {
-        const p = pa * pb;
-        if (a > b) pWin += p; else if (a === b) pDraw += p; else pLoss += p;
+        mass[a > b ? 0 : a === b ? 1 : 2] += pa * pb;
       }
     }
-    const total = pWin + pDraw + pLoss;
-    let win = Math.round((pWin / total) * 100);
-    let draw = Math.round((pDraw / total) * 100);
+    const total = mass[0] + mass[1] + mass[2];
+    let win = Math.round((mass[0] / total) * 100);
+    let draw = Math.round((mass[1] / total) * 100);
     let loss = 100 - win - draw;
     if (loss < 0) { draw += loss; loss = 0; }
 
