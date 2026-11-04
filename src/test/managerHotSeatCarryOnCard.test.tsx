@@ -11,7 +11,8 @@
 import { act, cleanup, fireEvent, render } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
-import ManagerHotSeatBoard, { CarryOnCard } from '@/components/manager-hot-seat/ManagerHotSeatBoard';
+import ManagerHotSeatBoard from '@/components/manager-hot-seat/ManagerHotSeatBoard';
+import { CarryOnCard } from '@/components/manager-hot-seat/ManagerHotSeatCarryOnCard';
 import { clearCareer, loadCareer, saveCareer, startCareer } from '@/lib/clubManager';
 import { activeSlot, parkedKey, summarize, switchSlot } from '@/lib/clubManagerSlots';
 import { backupKeysOf } from '@/lib/brokenSaveRecovery';
@@ -179,11 +180,11 @@ describe('Manager Hot Seat: the offer waits on the menu', () => {
   });
   afterEach(() => { vi.unstubAllGlobals(); });
 
-  it('a finished free run that kept the job reopens on its verdict with the offer', () => {
+  it('a finished free run that kept the job reopens on its verdict with the offer', async () => {
     localStorage.setItem(FREE_KEY, freeRecord(kept, { kind: 'survived' }));
     const view = board();
     fireEvent.click(view.getByRole('button', { name: `See the Club Manager offer for ${kept.setup.club}` }));
-    act(() => { vi.advanceTimersByTime(50); });
+    await act(async () => { vi.advanceTimersByTime(50); });
     expect(view.getByTestId('hot-seat-verdict')).toBeTruthy();
     expect(view.getByTestId('hot-seat-carry-on')).toBeTruthy();
   }, 120000);
