@@ -10,7 +10,7 @@ type Engine = typeof import('@/lib/clubManager');
 type Course = { to: Position; weeksLeft: number; weeksTotal: number; paused?: boolean; replace?: unknown };
 type Start = (career: CareerState, id: string, to: Position, paused?: boolean, replace?: Position) => CareerState | null;
 let E: Engine, draws: number;
-const copy = <T,>(value: T): T => JSON.parse(JSON.stringify(value));
+const copy = <T,>(value: T): T => structuredClone(value);
 beforeEach(async () => {
   draws = 0;
   let seed = 6410000;
