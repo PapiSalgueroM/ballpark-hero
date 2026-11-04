@@ -135,17 +135,19 @@ describe('Club Manager recorded training exposure', () => {
       c = m.cm.finishSeason(c).state;
       const p = player(c, id);
       Object.assign(p, { age: 20, rating: 70, potential: 80, apps: 30, contractYears: 5 });
+      c = m.cm.setTransferStatus(c, id, 'blocked');
       const legacy = copy(c); delete (player(legacy, id) as CMPlayer & { trainingExposure?: unknown }).trainingExposure;
       return { c, legacy, id, expected };
     });
     const { c, legacy, id, expected } = season.value;
     const recorded = await summer(c, 7102), finalPlanOnly = await summer(legacy, 7102);
     const actual = player(recorded.value, id), old = player(finalPlanOnly.value, id);
-    expect(recorded.draws).toStrictEqual(finalPlanOnly.draws);
-    expect(recorded.nextDraw).toBe(finalPlanOnly.nextDraw);
     raw('late-flip', { id, expected, actualHistory: history(player(c, id)), currentPlan: c.training,
       recorded: actual, finalPlanOnly: old, draws: recorded.draws, nextDraw: recorded.nextDraw,
+      referenceDraws: finalPlanOnly.draws, referenceNextDraw: finalPlanOnly.nextDraw,
       seasonDraws: season.draws, seasonNextDraw: season.nextDraw });
+    expect(recorded.draws).toStrictEqual(finalPlanOnly.draws);
+    expect(recorded.nextDraw).toBe(finalPlanOnly.nextDraw);
     expect(actual.rating, 'CM_TRAINING_LATE_FLIP_SUMMER').toBeLessThan(old.rating);
     expect(history(player(c, id)), 'CM_TRAINING_LATE_FLIP_SUMMER').toStrictEqual(exposure(c, expected));
     expect(history(actual), 'CM_TRAINING_LATE_FLIP_SUMMER').toBeUndefined();

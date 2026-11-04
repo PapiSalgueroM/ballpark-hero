@@ -20353,16 +20353,16 @@ export function setTrainingPlan(career: CareerState, plan: TrainingPlan): Career
   return { ...career, training: { ...plan } };
 }
 
-export const INTENSITY_INFO: Record<TrainingIntensity, { label: string; desc: string; emoji: string }> = {
-  light: { label: 'Light', desc: 'Fresh legs on match day, with slower development.', emoji: '\u{1F6CC}' },
-  normal: { label: 'Normal', desc: 'The safe middle. Steady development, normal fatigue.', emoji: '\u{2699}\uFE0F' },
-  double: { label: 'Double', desc: 'They improve fastest and they pay for it in tired legs and knocks.', emoji: '\u{1F525}' },
+export const INTENSITY_INFO: Record<TrainingIntensity, { label: string }> = {
+  light: { label: 'Light' },
+  normal: { label: 'Normal' },
+  double: { label: 'Double' },
 };
 
-export const FOCUS_INFO: Record<TrainingFocus, { label: string; desc: string; emoji: string }> = {
-  firstTeam: { label: 'First team', desc: 'Sessions built around the senior XI. The kids get left behind.', emoji: '\u{1F454}' },
-  balanced: { label: 'Balanced', desc: 'Everyone gets the same session. Nothing is wasted, nothing is special.', emoji: '\u{2696}\uFE0F' },
-  youth: { label: 'Youth', desc: 'The whole week is about the teenagers. Your senior players stagnate.', emoji: '\u{1F476}' },
+export const FOCUS_INFO: Record<TrainingFocus, { label: string }> = {
+  firstTeam: { label: 'First team' },
+  balanced: { label: 'Balanced' },
+  youth: { label: 'Youth' },
 };
 
 /** Round 963: the fastest anybody grows, the top of developmentRate's clamp. */
