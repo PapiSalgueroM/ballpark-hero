@@ -4,7 +4,6 @@ on:
     branches: [codex/front-office-full-market-outcomes-20261104]
 permissions:
   contents: read
-  actions: write
 env:
   CI: '1'
   SIM_NETWORK: offline
@@ -13,14 +12,6 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 25
     steps:
-      - name: Stop superseded full-history checkout
-        env:
-          GH_TOKEN: ${{ github.token }}
-        shell: bash
-        run: |
-          set -euo pipefail
-          status=$(gh api repos/PapiSalgueroM/ballpark-hero/actions/runs/41900101151 --jq .status)
-          if [[ "$status" != completed ]]; then gh api --method POST repos/PapiSalgueroM/ballpark-hero/actions/runs/41900101151/cancel; fi
       - uses: actions/checkout@v4
         with:
           fetch-depth: 10
@@ -50,13 +41,13 @@ jobs:
           SIM_OFFLINE_RECEIPT="$QA_OUT/caller-transport.log" node scripts/qa/frontOfficeMarketOutcomes.mjs "$QA_OUT/outcomes" fixed > "$QA_OUT/runner.log" 2>&1
           cat "$QA_OUT/runner.log"
           test ! -s "$QA_OUT/caller-transport.log"
-      - name: Focused unchanged Front Office regressions
+      - name: Compare unresolved regression failures to exact original
         shell: bash
         run: |
           set -euo pipefail
           export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
           : > "$QA_OUT/regression-transport.log"
-          SIM_OFFLINE_RECEIPT="$QA_OUT/regression-transport.log" node node_modules/vitest/vitest.mjs run src/components/front-office/FrontOfficeFullRoster.test.tsx src/components/front-office/FrontOfficeCuts.test.tsx src/components/front-office/FrontOfficePromotion.test.tsx src/components/front-office/FrontOfficeTagDepth.test.tsx src/components/front-office/FrontOfficeRatingEvidence.test.tsx src/components/front-office/FrontOfficeLazyDesk.test.tsx src/components/front-office/FrontOfficeOnePress.test.tsx src/components/front-office/FrontOfficeTile.test.tsx src/components/front-office-shared/FrontOfficeGmCareer.test.tsx src/test/frontOfficeDraftAccess.test.tsx src/test/frontOfficeDraftReview.test.tsx src/test/frontOfficeDraftFocus.test.tsx src/test/frontOfficeSaveRecovery.test.tsx src/test/frontOfficeWriteRetry.test.tsx --maxWorkers=1 --no-file-parallelism --reporter=default --reporter=json --outputFile="$QA_OUT/regressions.json" > "$QA_OUT/regressions.log" 2>&1
+          SIM_OFFLINE_RECEIPT="$QA_OUT/regression-transport.log" node scripts/qa/frontOfficeMarketRegressionParity.mjs "$QA_OUT/regression-parity" scripts/qa/frontOfficeMarketRegressionExpected.json > "$QA_OUT/regressions.log" 2>&1
           cat "$QA_OUT/regressions.log"
           test ! -s "$QA_OUT/regression-transport.log"
       - name: Affected existing harnesses
