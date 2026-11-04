@@ -50,7 +50,10 @@ function setup() {
   opener.focus();
   expect(document.activeElement).toBe(opener);
   focus.mockClear();
-  return { bytes, writes, focus, opener, target, shown, page, stored: storage(), scroll: [window.scrollX, window.scrollY] };
+  const area = screen.getByRole('combobox', { name: 'Prospect position' }).parentElement!.parentElement!;
+  vi.spyOn(area, 'getBoundingClientRect').mockReturnValue({ x: 0, y: 0, top: 0, right: 390, bottom: 612.375, left: 0, width: 390, height: 612.375, toJSON: () => ({}) });
+  vi.spyOn(opener, 'getBoundingClientRect').mockReturnValue({ x: 0, y: 0, top: 0, right: 390, bottom: 44, left: 0, width: 390, height: 44, toJSON: () => ({}) });
+  return { bytes, writes, focus, opener, target, shown, page, area, stored: storage(), scroll: [window.scrollX, window.scrollY] };
 }
 function unchanged(before: ReturnType<typeof setup>) {
   expect(localStorage.getItem(KEY)).toBe(before.bytes);
@@ -70,14 +73,17 @@ describe('NFL draft review keyboard focus', () => {
     const review = screen.getByRole('region', { name: 'Draft review' }), active = document.activeElement as HTMLElement;
     raw('entry', { activeInsideReview: review.contains(active), activeTag: active.tagName, saveHeld: localStorage.getItem(KEY) === before.bytes,
       writes: before.writes.mock.calls.length, draws: vi.mocked(Math.random).mock.calls.length, selected: before.target.name, pageBefore: before.page, shownBefore: before.shown,
-      scrollHeld: window.scrollX === before.scroll[0] && window.scrollY === before.scroll[1] });
+      scrollHeld: window.scrollX === before.scroll[0] && window.scrollY === before.scroll[1], reviewHeight: before.area.style.height, reviewOverflow: before.area.style.overflowY });
     expect(review.contains(active), 'FO_DRAFT_REVIEW_ENTRY_FOCUS').toBe(true);
+    expect(before.area.style.height, 'FO_DRAFT_REVIEW_HEIGHT_HELD').toBe('612.375px');
+    expect(before.area.style.overflowY).toBe('auto');
     const call = before.focus.mock.contexts.lastIndexOf(active);
     expect(call).toBeGreaterThanOrEqual(0); expect(before.focus.mock.calls[call]?.[0]?.preventScroll).toBe(true);
     unchanged(before);
     fireEvent.click(within(review).getByRole('button', { name: 'Back' }));
     expect(screen.getByRole('combobox', { name: 'Prospect position' })).toHaveValue('QB');
     expect(screen.getByText('Page 2 of 2', { exact: true }).textContent).toBe(before.page);
+    expect(before.area.style.height).toBe(''); expect(before.area.style.overflowY).toBe('');
     expect(names()).toEqual(before.shown); unchanged(before);
   });
 
@@ -89,8 +95,9 @@ describe('NFL draft review keyboard focus', () => {
     raw('back', { activeOpenedProspect: document.activeElement === returned, activeTag: document.activeElement?.tagName,
       saveHeld: localStorage.getItem(KEY) === before.bytes, writes: before.writes.mock.calls.length, draws: vi.mocked(Math.random).mock.calls.length,
       selected: before.target.name, pageAfter: screen.getByText('Page 2 of 2', { exact: true }).textContent, shownAfter: names(),
-      scrollHeld: window.scrollX === before.scroll[0] && window.scrollY === before.scroll[1] });
+      scrollHeld: window.scrollX === before.scroll[0] && window.scrollY === before.scroll[1], returnedHeight: before.area.style.height, returnedOverflow: before.area.style.overflowY });
     expect(document.activeElement, 'FO_DRAFT_REVIEW_BACK_FOCUS').toBe(returned);
+    expect(before.area.style.height).toBe(''); expect(before.area.style.overflowY).toBe('');
     const call = before.focus.mock.contexts.lastIndexOf(returned);
     expect(call).toBeGreaterThanOrEqual(0); expect(before.focus.mock.calls[call]?.[0]?.preventScroll).toBe(true);
     expect(returned).not.toBe(screen.getByText('Focus Prospect 36', { selector: 'span' }).closest('button'));

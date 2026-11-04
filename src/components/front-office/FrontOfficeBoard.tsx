@@ -217,6 +217,7 @@ export default function FrontOfficeBoard() {
   const [draftReview, setDraftReview] = useState<string | null>(null);
   const draftArea = useRef<HTMLDivElement>(null);
   const draftOpener = useRef<string | null>(null);
+  const draftHeight = useRef(0);
   useLayoutEffect(() => {
     const area = draftArea.current;
     if (!area) { draftOpener.current = null; return; }
@@ -1680,7 +1681,7 @@ export default function FrontOfficeBoard() {
     const reviewed = draftClass.find(pr => pr.id === draftReview);
     const current = reviewed ? my.players.filter(p => p.pos === reviewed.pos) : [];
     return (
-      <div ref={draftArea} className="space-y-4">
+      <div ref={draftArea} style={{ height: draftReview ? draftHeight.current : undefined, overflowY: draftReview ? 'auto' : undefined }} className="space-y-4">
         {saveNotice}
         <CelebrationStyles />
         <div className="rounded-2xl border border-border bg-card p-4 text-center">
@@ -1790,7 +1791,7 @@ export default function FrontOfficeBoard() {
             <button
               key={pr.id}
               data-draft-prospect={pr.id}
-              onClick={() => { draftOpener.current = pr.id; setDraftReview(pr.id); }}
+              onClick={() => { draftHeight.current = draftArea.current?.getBoundingClientRect().height ?? 0; draftOpener.current = pr.id; setDraftReview(pr.id); }}
               className="flex items-center justify-between rounded-lg border border-border bg-card px-3 py-2 text-left hover:border-primary/60"
             >
               <span>
