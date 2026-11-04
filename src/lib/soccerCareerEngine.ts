@@ -11,7 +11,7 @@ import { programmeEffects, prepareSoccerProgramme, settleSoccerProgramme, interr
 import { canAcceptLoyaltyOffer, loyaltySigningWage, commitLoyaltySigning, settleLoyaltySeason, closeLoyaltyForRetirement, closeLoyaltyForExpiry, clearLoyaltyChoice, repairLoyalty, loyaltyUncutWage, followLoyaltyWage, endLoyaltyCut, type SoccerLoyaltyState } from './soccerCareerLoyalty';
 import type { SoccerProgrammeState, SoccerProgrammeReceipt } from './soccerCareerProgramme';
 import { announceSoccerFarewell, farewellSeasonComplete, readSoccerFarewell, type SoccerFarewellPlan } from './soccerCareerFarewell';
-import { clearTransferBrief, previewTransferBrief, readTransferBrief, storeTransferBriefResult, transferBriefCandidates, type SoccerTransferBrief, type TransferBriefPreview } from './soccerCareerTransferBrief';
+import { clearTransferBrief, previewTransferBrief, readTransferBrief, storeTransferBriefResult, transferBriefCandidates, type SoccerTransferBrief, type TransferBriefPreview, type TransferBriefMinimum } from './soccerCareerTransferBrief';
 import { prepareLeagueWorld, projectLeagueWorldClubs, recordLeagueWorldSeason, settleLeagueWorld, leagueWorldChampions, clubKeyOf, type CareerLeagueWorld, type LeagueWorldSeason } from './soccerCareerLeagueWorld';
 import { settleCareerAmbition, type CareerSeasonAmbition, type SeasonAmbitionResult } from './soccerCareerAmbitions';
 import { recentClubForm } from './soccerCareerSelection';
@@ -4855,12 +4855,13 @@ function transferBriefPool(state: CareerState, clubs: ClubData[]): ClubData[] {
     .filter(club => tiers.includes(club.tier) && clubKeyOf(club.name) !== clubKeyOf(state.currentClub));
 }
 
-export function transferBriefPreview(state: CareerState, clubs: ClubData[]): TransferBriefPreview {
-  return previewTransferBrief(state, transferBriefPool(state, clubs), projectLeagueApps);
+export function transferBriefPreview(state: CareerState, clubs: ClubData[], minimumApps?: TransferBriefMinimum): TransferBriefPreview {
+  return previewTransferBrief(state, transferBriefPool(state, clubs), projectLeagueApps, minimumApps);
 }
 
 export function requestTransferDecision(prev: CareerState, clubs: ClubData[]): CareerState {
   const brief = readTransferBrief(prev, projectLeagueApps);
+  if (prev.transferBrief !== undefined && !brief) return prev;
   if (brief?.result) return prev;
   if (prev.phase !== 'transfer_window' || !prev.transferSituation
     || !['no_interest', 'one_offer', 'dream_club'].includes(prev.transferSituation.type)) return prev;
@@ -4875,6 +4876,7 @@ export function requestTransferDecision(prev: CareerState, clubs: ClubData[]): C
   }
   const pool = transferBriefPool(prev, clubs);
   const candidates = transferBriefCandidates(prev, pool, projectLeagueApps);
+  if (brief.minimumApps && candidates.length === 0) return prev;
   const option = previewTransferBrief(prev, pool, projectLeagueApps).options.find(row => row.id === brief.priority)!;
   /* Release AW: the same rule as requestTransfer above. The coin is drawn first, as the plain request draws
      it, and a club that broke its appearance promise answers whatever it shows. */

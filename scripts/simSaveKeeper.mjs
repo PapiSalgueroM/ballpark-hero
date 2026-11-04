@@ -113,6 +113,11 @@
  * on two more played saves: seed 2 is a veteran's hub, seed 3 a transfer
  * window with a brief filed.
  *
+ * PROJECTED APPEARANCE MINIMUM: transferBrief now uses `preserves`. An unreadable
+ * part is not acted on or replaced: editing, clearing and requesting hold the
+ * whole source state and consume no career draws. Other parts keep their own
+ * declared policies, including `absent` and its overwrite requirement.
+ *
  * RELEASE AX (2026-10-11). The Press room of the other lane's Rounds 1230 to
  * 1234 is a fifth part of the Soccer Career save one level down, pressRoom
  * with version 1. Its row says `absent` too, and it had to be MADE true: as
@@ -479,7 +484,7 @@ const V = K.SAVE_VERSIONS;
    reader cannot verify, and a part it cannot verify is read as ABSENT (`other: 'absent'`). The reader does not
    read it and never throws on it, the game behaves as if the part were not there, and the next honest write
    of that part overwrites it:
-     transferBrief        no brief is held; a new brief can be filed in the same window.
+     transferBrief        preserves the unreadable source and refuses edit, clear and request (the current policy).
      agentReview          the once a season review is offered again (one more use that season).
      internationalReturn  the once a season comeback is judged as if it had not been used.
      farewellSeason       no plan is held and the card is judged as on the same save without the part, so it
@@ -494,7 +499,7 @@ const V = K.SAVE_VERSIONS;
 const PART_VERSIONS = {
   '/soccer-career': [
     { at: ['programme', 'version'], current: 1, other: 'refuses', reader: 'the season plan reader (stateOf, src/lib/soccerCareerProgramme.ts)' },
-    { at: ['transferBrief', 'version'], current: 1, other: 'absent', reader: 'readTransferBrief (src/lib/soccerCareerTransferBrief.ts)' },
+    { at: ['transferBrief', 'version'], current: 1, other: 'preserves', reader: 'readTransferBrief (src/lib/soccerCareerTransferBrief.ts)' },
     { at: ['agentReview', 'version'], current: 1, other: 'absent', reader: 'readAgentReview (src/lib/soccerAgentReview.ts)' },
     { at: ['internationalReturn', 'version'], current: 1, other: 'absent', reader: 'readInternationalReturn (src/lib/soccerInternationalReturn.ts)' },
     { at: ['farewellSeason', 'version'], current: 1, other: 'absent', reader: 'readSoccerFarewell (src/lib/soccerCareerFarewell.ts)' },
@@ -600,7 +605,13 @@ const withVersion = (raw, at, n) => {
         const why = [part.current - 1, part.current + 1].map(n => noWindow(() => judge(withVersion(holder, part.at, n)))).find(answer => answer !== null);
         if (why !== undefined) { fail(`${e.path}: PART_VERSIONS says ${part.reader} reads ${known} as absent with another number, but ${why}`); continue; }
       }
-      ok(`${e.path}: ${found.length} of ${fleet[e.path].length} real saves hold ${part.current} at ${known}, a PART of the save; ${part.reader} ${part.other === 'absent' ? 'reads the part as absent with' : part.other} another number there (asked: one down ${down ? 'read' : 'refused'}, one up ${up ? 'read' : 'refused'}${part.other === 'absent' ? '; then the game behaves as with no part and a new write overwrites it' : ''}), and the keeper makes no copy before a step of it`);
+      if (part.other === 'preserves') {
+        const judge = real.partPreserved?.[e.path]?.[known];
+        if (!judge) { fail(`${e.path}: PRESERVED_PART_WRITE: PART_VERSIONS names ${known} as preserved but scripts/lib/realSaves.mjs has no action check (partPreserved)`); continue; }
+        const answers = [part.current - 1, part.current + 1].map(n => noWindow(() => judge(withVersion(holder, part.at, n))));
+        if (answers.some(answer => answer !== null)) { fail(`${e.path}: PRESERVED_PART_WRITE: ${known} with another version must be kept without an action or draw, but ${answers.map(String).join('; ')}`); continue; }
+      }
+      ok(`${e.path}: ${found.length} of ${fleet[e.path].length} real saves hold ${part.current} at ${known}, a PART of the save; ${part.reader} ${part.other === 'absent' ? 'reads the part as absent with' : part.other === 'preserves' ? 'refuses and preserves the part with' : part.other} another number there (asked: one down ${down ? 'read' : 'refused'}, one up ${up ? 'read' : 'refused'}${part.other === 'absent' ? '; then the game behaves as with no part and a new write overwrites it' : part.other === 'preserves' ? '; then edit, clear and request keep the whole source state and serialized bytes with zero draws' : ''}), and the keeper makes no copy before a step of it`);
       heldHere += 1;
     }
     heldRows += heldHere;

@@ -2,6 +2,7 @@ import type { CareerState, ClubData, ContractOffer } from './soccerCareerEngine'
 import { clubKeyOf } from './soccerCareerLeagueWorld';
 
 export type TransferBriefPriority = 'minutes' | 'level' | 'home';
+export type TransferBriefMinimum = 0 | 18 | 26;
 export interface TransferBriefContext {
   club: string; seasonCount: number; lastYear: number; overall: number; age: number; nationality: string;
 }
@@ -17,6 +18,7 @@ export interface SoccerTransferBrief {
   version: 1;
   priority: TransferBriefPriority;
   context: TransferBriefContext;
+  minimumApps?: 18 | 26;
   result?: TransferBriefResult;
 }
 export type TransferBriefProjection = (overall: number, tier: number, club: string, seasonsAtClub: number) => TransferBriefBand;
@@ -27,6 +29,8 @@ export interface TransferBriefOption {
 export interface TransferBriefPreview {
   eligible: boolean; selected: TransferBriefPriority | null; result: TransferBriefResult | null;
   options: TransferBriefOption[];
+  minimumApps?: 18 | 26;
+  blockedReason?: string;
 }
 
 const PRIORITIES: TransferBriefPriority[] = ['minutes', 'level', 'home'];
@@ -37,6 +41,7 @@ const object = (value: unknown): value is Record<string, unknown> => !!value && 
 const text = (value: unknown): value is string => typeof value === 'string' && value.trim().length > 0;
 const count = (value: unknown): value is number => Number.isSafeInteger(value) && (value as number) >= 0;
 const finite = (value: unknown): value is number => typeof value === 'number' && Number.isFinite(value);
+const validMinimum = (value: unknown): value is TransferBriefMinimum => value === 0 || value === 18 || value === 26;
 const keys = (value: Record<string, unknown>, required: string[], optional: string[] = []) =>
   required.every(key => Object.prototype.hasOwnProperty.call(value, key))
   && Object.keys(value).every(key => required.includes(key) || optional.includes(key));
@@ -90,7 +95,8 @@ function currentWindow(career: CareerState): boolean {
 export function readTransferBrief(career: CareerState, project?: TransferBriefProjection): SoccerTransferBrief | null {
   const value: unknown = career.transferBrief;
   const context = contextOf(career);
-  if (!object(value) || !keys(value, ['version', 'priority', 'context'], ['result'])
+  if (!object(value) || !keys(value, ['version', 'priority', 'context'], ['result', 'minimumApps'])
+    || ('minimumApps' in value && value.minimumApps !== 18 && value.minimumApps !== 26)
     || value.version !== 1 || !PRIORITIES.includes(value.priority as TransferBriefPriority)
     || !object(value.context) || !keys(value.context, ['club', 'seasonCount', 'lastYear', 'overall', 'age', 'nationality'])
     || !context
@@ -105,28 +111,34 @@ export function readTransferBrief(career: CareerState, project?: TransferBriefPr
       if (clubKeyOf(offer.club.name) === clubKeyOf(career.currentClub)
         || (value.priority === 'home' && offer.club.country !== career.nationality) || !project) return null;
       const band = project(career.overall, offer.club.tier, offer.club.name, 0);
-      if (!validBand(band) || band.min !== value.result.projection!.min || band.max !== value.result.projection!.max) return null;
+      if (!validBand(band) || band.min !== value.result.projection!.min || band.max !== value.result.projection!.max
+        || band.min < ((value.minimumApps as 18 | 26 | undefined) ?? 0)) return null;
     }
   } else if (!currentWindow(career)) return null;
   return value as unknown as SoccerTransferBrief;
 }
 
-export function setTransferBrief(career: CareerState, priority: TransferBriefPriority | null): CareerState {
+export function setTransferBrief(career: CareerState, priority: TransferBriefPriority | null, minimumApps?: TransferBriefMinimum): CareerState {
   const held = readTransferBrief(career);
-  if (held?.result) return career;
+  if ((career.transferBrief !== undefined && !held) || held?.result || (minimumApps !== undefined && !validMinimum(minimumApps))) return career;
   if (priority === null) {
     if (!held) return career;
     const next = { ...career };
     delete next.transferBrief;
     return next;
   }
-  const context = contextOf(career);
-  if (!currentWindow(career) || !context || !PRIORITIES.includes(priority) || held?.priority === priority) return career;
-  return { ...career, transferBrief: { version: 1, priority, context } };
+  const context = contextOf(career), minimum = minimumApps ?? held?.minimumApps ?? 0;
+  if (!currentWindow(career) || !context || !PRIORITIES.includes(priority)
+    || (held?.priority === priority && (held.minimumApps ?? 0) === minimum)) return career;
+  return { ...career, transferBrief: { version: 1, priority, context, ...(minimum ? { minimumApps: minimum } : {}) } };
 }
 
-function candidatesFor(career: CareerState, priority: TransferBriefPriority, eligible: readonly ClubData[], project: TransferBriefProjection): ClubData[] {
-  const clubs = eligible.filter(club => validClub(club) && clubKeyOf(club.name) !== clubKeyOf(career.currentClub));
+function candidatesFor(career: CareerState, priority: TransferBriefPriority, eligible: readonly ClubData[], project: TransferBriefProjection, minimumApps: TransferBriefMinimum = 0): ClubData[] {
+  let clubs = eligible.filter(club => validClub(club) && clubKeyOf(club.name) !== clubKeyOf(career.currentClub));
+  if (minimumApps) clubs = clubs.filter(club => {
+    const band = project(career.overall, club.tier, club.name, 0);
+    return validBand(band) && band.min >= minimumApps;
+  });
   if (priority === 'home') return clubs.filter(club => club.country === career.nationality);
   if (priority === 'level') {
     const tier = Math.min(...clubs.map(club => club.tier));
@@ -144,17 +156,21 @@ function poolBand(career: CareerState, clubs: readonly ClubData[], project: Tran
 }
 export function transferBriefCandidates(career: CareerState, eligible: readonly ClubData[], project: TransferBriefProjection): ClubData[] {
   const brief = readTransferBrief(career);
-  return brief && !brief.result ? candidatesFor(career, brief.priority, eligible, project) : [];
+  return brief && !brief.result ? candidatesFor(career, brief.priority, eligible, project, brief.minimumApps) : [];
 }
-export function previewTransferBrief(career: CareerState, eligible: readonly ClubData[], project: TransferBriefProjection): TransferBriefPreview {
+export function previewTransferBrief(career: CareerState, eligible: readonly ClubData[], project: TransferBriefProjection, minimumApps?: TransferBriefMinimum): TransferBriefPreview {
   const held = readTransferBrief(career, project);
+  if ((career.transferBrief !== undefined && !held) || (minimumApps !== undefined && !validMinimum(minimumApps))) {
+    return { eligible: false, selected: null, result: null, options: [], blockedReason: 'This saved transfer brief cannot be read. It has been kept unchanged; no search was sent.' };
+  }
+  const minimum = minimumApps ?? held?.minimumApps ?? 0;
   const clubs = eligible.filter(club => validClub(club) && clubKeyOf(club.name) !== clubKeyOf(career.currentClub));
   return { eligible: currentWindow(career) && contextOf(career) !== null, selected: held?.priority ?? null,
     result: held?.result ?? null, options: PRIORITIES.map(id => {
-      const matches = candidatesFor(career, id, clubs, project);
+      const matches = candidatesFor(career, id, clubs, project, minimum);
       return { id, label: LABELS[id], eligibleCount: clubs.length, matchingCount: matches.length,
         tiers: [...new Set(matches.map(club => club.tier))].sort((a, b) => a - b), projection: poolBand(career, matches, project) };
-    }) };
+    }), ...(minimum ? { minimumApps: minimum } : {}) };
 }
 export function transferBriefResult(career: CareerState, project?: TransferBriefProjection): TransferBriefResult | null {
   return readTransferBrief(career, project)?.result ?? null;

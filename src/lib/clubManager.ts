@@ -21628,12 +21628,6 @@ export interface MatchFacts {
   firstLeg?: { mine: number; theirs: number; home: boolean };
 }
 
-function poissonPmf(lambda: number, k: number): number {
-  let p = Math.exp(-lambda);
-  for (let i = 1; i <= k; i++) p *= lambda / i;
-  return p;
-}
-
 /**
  * Everything the pre-match screen shows, computed from the save's own state:
  * real form from results this world actually simulated, real head-to-head
@@ -21666,18 +21660,18 @@ export function matchFacts(career: CareerState): MatchFacts | null {
        the second); balanced adds exactly zero. */
     const t1 = tacticEdge(career, fx, xi, instructionsOf(career), 1);
     const t2 = tacticEdge(career, fx, xi, instructionsOf(career), 2);
-    const lamMe = clamp(1.25 + (mine - oppS) * 0.055 + ment.atk + homeAtk + duty.atk + (t1 && t2 ? (t1.atk + t2.atk) / 2 : 0), 0.12, 4.2) * k;
-    const lamOpp = clamp(1.25 + (oppS - mine) * 0.055 + ment.def + oppAtk + duty.def + (t1 && t2 ? (t1.def + t2.def) / 2 : 0), 0.12, 4.2) * k;
-    let pWin = 0, pDraw = 0, pLoss = 0;
-    for (let a = 0; a <= 9; a++) {
-      for (let b = 0; b <= 9; b++) {
-        const p = poissonPmf(lamMe, a) * poissonPmf(lamOpp, b);
-        if (a > b) pWin += p; else if (a === b) pDraw += p; else pLoss += p;
+    const { atk = 0, conceded = 0 } = positionEdge(xi, career.mentality, career) ?? {};
+    const lamMe = clamp(1.25 + (mine - oppS) * 0.055 + ment.atk + homeAtk + duty.atk + (t1 && t2 ? (t1.atk + t2.atk) / 2 : 0) + atk, 0.12, 4.2) * k;
+    const lamOpp = clamp(1.25 + (oppS - mine) * 0.055 + ment.def + oppAtk + duty.def + (t1 && t2 ? (t1.def + t2.def) / 2 : 0) + conceded, 0.12, 4.2) * k;
+    const mass = [0, 0, 0];
+    for (let a = 0, pa = Math.exp(-lamMe); a <= 9; a++, pa *= lamMe / a) {
+      for (let b = 0, pb = Math.exp(-lamOpp); b <= 9; b++, pb *= lamOpp / b) {
+        mass[a > b ? 0 : a === b ? 1 : 2] += pa * pb;
       }
     }
-    const total = pWin + pDraw + pLoss;
-    let win = Math.round((pWin / total) * 100);
-    let draw = Math.round((pDraw / total) * 100);
+    const total = mass[0] + mass[1] + mass[2];
+    let win = Math.round((mass[0] / total) * 100);
+    let draw = Math.round((mass[1] / total) * 100);
     let loss = 100 - win - draw;
     if (loss < 0) { draw += loss; loss = 0; }
 
@@ -21706,7 +21700,7 @@ export function matchFacts(career: CareerState): MatchFacts | null {
       }
     }
 
-    const myDanger = [...career.squad]
+    const myDanger = career.squad
       .filter(p => isAvailable(p) && p.position !== 'GK')
       .sort((a, b) => (b.seasonGoals - a.seasonGoals) || (b.rating - a.rating))
       .slice(0, 2)
@@ -21715,28 +21709,27 @@ export function matchFacts(career: CareerState): MatchFacts | null {
       .filter(p => groupOf(p.p) === 'ATT' || groupOf(p.p) === 'MID')
       .slice(0, 2)
       .map(p => p.n);
+    const clubForm = career.clubForm ?? Object.create(null);
+    const ctx = secondLegContext(career, w, 0, 0);
 
     return {
       compLabel: fx.compLabel,
       competition: fx.competition,
       opponent: fx.opponent,
       home: fx.home,
-      myForm: career.clubForm?.[career.clubName] ?? career.form ?? [],
-      oppForm: career.clubForm?.[fx.opponent] ?? [],
+      myForm: clubForm[career.clubName] ?? career.form ?? [],
+      oppForm: clubForm[fx.opponent] ?? [],
       myPos,
       oppPos,
       oppLeagueName,
       odds: { win, draw, loss },
-      h2h: [...(career.h2h ?? [])].filter(h => h.opp === fx.opponent).slice(-6).reverse(),
+      h2h: (career.h2h ?? []).filter(h => h.opp === fx.opponent).slice(-6).reverse(),
       myDanger,
       oppDanger,
       myStrength: Math.round(mine),
       oppStrength: Math.round(oppS),
       /* Round 781: the first leg, when tonight settles a two legged tie. */
-      ...(() => {
-        const ctx = secondLegContext(career, w, 0, 0);
-        return ctx ? { firstLeg: { mine: ctx.leg1Mine, theirs: ctx.leg1Theirs, home: ctx.leg1Home } } : {};
-      })(),
+      ...(ctx ? { firstLeg: { mine: ctx.leg1Mine, theirs: ctx.leg1Theirs, home: ctx.leg1Home } } : {}),
     };
   }
   return null;
