@@ -138,9 +138,14 @@ describe('Club Manager retraining replacement choice UI', () => {
   it('holds an unavailable saved replacement safely while leaving Stop available', async () => {
     const { c, id } = fixture(), at = draws;
     const { TrainingScreen } = await import('@/components/club-manager/TrainingScreen');
-    const rows = [null, 'future-role', { v: 99 }, 'LW', 'ST'].map(value => {
+    const variants: (Partial<Course> & Record<string, unknown>)[] = [
+      { replace: null }, { replace: 'future-role' }, { replace: { v: 99 } }, { replace: 'LW' }, { replace: 'ST' },
+      { replace: 'CM', future: 99 }, { replace: 'CM', weeksLeft: 0 }, { replace: 'CM', weeksTotal: 0 },
+      { replace: 'CM', to: 'RW' },
+    ];
+    const rows = variants.map(fields => {
       const input = copy(c);
-      (player(input, id) as unknown as { retraining: Course }).retraining = { to: 'ST', weeksLeft: 1, weeksTotal: 9, replace: value };
+      (player(input, id) as unknown as { retraining: Course }).retraining = { to: 'ST', weeksLeft: 1, weeksTotal: 9, ...fields };
       const calls: string[] = [];
       const view = render(<TrainingScreen career={input} onSetPlan={() => { throw new Error('Unexpected plan edit'); }}
         onRetrain={() => calls.push('pause')} onStopRetrain={playerId => calls.push(playerId)} />);
@@ -148,7 +153,7 @@ describe('Club Manager retraining replacement choice UI', () => {
       const toggle = screen.queryByRole('button', { name: /^(Pause|Resume) retraining/ });
       const stop = screen.queryByRole('button', { name: 'Stop' });
       if (stop) fireEvent.click(stop);
-      const row = { value, warning, toggle: !!toggle, calls, positions: player(input, id).secondaryPositions };
+      const row = { fields, warning, toggle: !!toggle, calls, positions: player(input, id).secondaryPositions };
       view.unmount(); return row;
     });
     raw('unknown', { rows, extraDraws: draws - at });
