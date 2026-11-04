@@ -457,7 +457,26 @@ try {
         playingEventSeason = true;
         await activate(page.getByRole('button', { name: /Play the 2034 season/ }), profile.input, 30);
         await activate(page.locator('[data-season-reveal]').getByRole('button', { name: 'Continue', exact: true }), profile.input, 30);
-        const pending = page.locator('[data-career-event]'); await pending.waitFor(); await activity; await settle(page);
+        const pending = page.locator('[data-career-event]');
+        const beforeCall = await protectedState(page), callSave = JSON.parse(beforeCall.storage[sport.saveKey]);
+        const callYear = sport.intl?.pendingYear(callSave.c) ?? null;
+        result.pendingSetup = { phase: callSave.phase, seasons: callSave.c.seasons.length, callYear };
+        if (callYear !== null) {
+          assert.equal(callSave.phase, 'event'); assert.equal(callSave.c.seasons.length, 4);
+          const intl = await sport.intl.load(), expected = JSON.parse(JSON.stringify(callSave));
+          const summer = JSON.stringify(expected.c.summer), answer = intl.answer(expected.c, 'rest');
+          assert(answer && !answer.row.went, 'The real international helper accepts resting this summer');
+          assert.equal(answer.row.year, callYear); assert.equal(sport.intl.pendingYear(expected.c), null);
+          assert.equal(JSON.stringify(expected.c.summer), summer, 'Resting preserves the dealt Summer queue');
+          await activate(page.getByRole('button', { name: /^Rest this summer/ }), profile.input, 30);
+          await pending.waitFor(); await settle(page);
+          const afterCall = await protectedState(page);
+          assert.equal(afterCall.storage[sport.saveKey], JSON.stringify(expected), 'Native Rest writes exactly the real helper result and retains the event phase');
+          assert.equal(afterCall.draws, beforeCall.draws, 'The keyed international answer consumes no season RNG');
+          result.pendingSetup.before = callSave;
+          result.pendingSetup.after = JSON.parse(afterCall.storage[sport.saveKey]);
+        }
+        await pending.waitFor(); await activity; await settle(page);
         playingEventSeason = false;
         assert.equal(result.eventSetupWrites.length, 1, 'Playing one real season records one existing activity');
         const activityBody = result.eventSetupWrites[0].body;

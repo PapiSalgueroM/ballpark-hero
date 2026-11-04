@@ -25,7 +25,7 @@ export const reviewFixtures: ReviewFixture[] = [
     postseason: { Games: '19', 'Points per game': '26.1', 'Rebounds per game': '5.8', 'Assists per game': '7.4' } },
   { slug: 'nfl', pos: 'QB', games: 16, gamesLabel: 'Games',
     fields: { passYds: 4123, passTd: 31, ints: 8, tackles: 999, poGames: 3, poLine: '811 yds, 6 TD, 1 INT' },
-    regular: { 'Passing yards': '4123', 'Passing touchdowns': '31', 'Interceptions thrown': '8' },
+    regular: { 'Passing yards': '4,123', 'Passing touchdowns': '31', 'Interceptions thrown': '8' },
     postseason: { Games: '3', Performance: '811 yds, 6 TD, 1 INT' } },
   { slug: 'nfl', pos: 'EDGE', games: 15, gamesLabel: 'Games',
     fields: { sacks: 13.5, tackles: 62, forcedFum: 4, passYds: 999, poGames: 2, poLine: '3 sacks, 11 tackles' },
