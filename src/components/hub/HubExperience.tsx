@@ -1,5 +1,5 @@
-import { useRef, useState, type CSSProperties } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useId, useLayoutEffect, useRef, useState, type CSSProperties } from 'react';
+import { Link, useLocation, useNavigate, useNavigationType, useSearchParams } from 'react-router-dom';
 import { ArrowUpRight, CalendarDays, Gamepad2, Search, Shuffle, X } from 'lucide-react';
 import type { GameDef } from '@/data/gameRegistry';
 import { describeSave, savedGames } from '@/data/continueSaves';
@@ -35,8 +35,37 @@ function readContinuations(games: GameDef[]) {
 
 export default function HubExperience({ hub, games }: { hub: SportHub; games: GameDef[] }) {
   const navigate = useNavigate();
-  const [filter, setFilter] = useState<HubFilter>('all');
-  const [query, setQuery] = useState('');
+  const [searchParams, setSearchParams] = useSearchParams();
+  const location = useLocation(), navigationType = useNavigationType(), owner = useId(), incomingSearch = searchParams.toString();
+  const latestSearch = useRef(incomingSearch), sequence = useRef(0);
+  const [librarySearch, setLibrarySearch] = useState(incomingSearch);
+  useLayoutEffect(() => {
+    const issued = location.state?.dukbHubLibrary;
+    if (navigationType === 'REPLACE' && issued?.owner === owner && Number.isInteger(issued.sequence)
+      && issued.sequence > 0 && issued.sequence <= sequence.current && issued.search === incomingSearch) return;
+    latestSearch.current = incomingSearch;
+    setLibrarySearch(incomingSearch);
+  }, [location.key, location.state, navigationType, owner, incomingSearch]);
+  const libraryParams = new URLSearchParams(librarySearch);
+  const requestedFilter = libraryParams.get('filter');
+  const filter: HubFilter = requestedFilter === 'daily' || requestedFilter === 'sim' ? requestedFilter : 'all';
+  const query = libraryParams.get('q') ?? '';
+  const setLibrary = (nextFilter: HubFilter | undefined, nextQuery?: string) => {
+    const next = new URLSearchParams(latestSearch.current);
+    if (nextFilter !== undefined) {
+      if (nextFilter === 'all') next.delete('filter'); else next.set('filter', nextFilter);
+    }
+    if (nextQuery !== undefined) {
+      if (nextQuery) next.set('q', nextQuery); else next.delete('q');
+    }
+    const value = next.toString();
+    latestSearch.current = value;
+    setLibrarySearch(value);
+    const state = location.state && Object.getPrototypeOf(location.state) === Object.prototype ? location.state : {};
+    setSearchParams(next, { replace: true, preventScrollReset: true, state: { ...state, dukbHubLibrary: { owner, sequence: ++sequence.current, search: value } } });
+  };
+  const setFilter = (nextFilter: HubFilter) => setLibrary(nextFilter);
+  const setQuery = (nextQuery: string) => setLibrary(undefined, nextQuery);
   const searchRef = useRef<HTMLInputElement>(null);
   const [continuations] = useState<Record<string, string>>(() => readContinuations(games));
   const arena = arenas[hub.route as keyof typeof arenas] ?? arenas['/soccer'];
@@ -123,7 +152,7 @@ export default function HubExperience({ hub, games }: { hub: SportHub; games: Ga
           <p className={styles.sectionNote}>{hub.quick.blurb}</p>
           <div className={styles.gameGrid}>{quick.map(game => card(game))}</div>
         </section>}
-        {visible.length === 0 && <div className={styles.empty}><Search aria-hidden="true" /><h3>No games match that search.</h3><p>Try a shorter name, or see the full collection.</p><button onClick={() => { setQuery(''); setFilter('all'); searchRef.current?.focus({ preventScroll: true }); }}>Show all {hub.navLabel} games</button></div>}
+        {visible.length === 0 && <div className={styles.empty}><Search aria-hidden="true" /><h3>No games match that search.</h3><p>Try a shorter name, or see the full collection.</p><button onClick={() => { setLibrary('all', ''); searchRef.current?.focus({ preventScroll: true }); }}>Show all {hub.navLabel} games</button></div>}
       </section>
     </div>
   );

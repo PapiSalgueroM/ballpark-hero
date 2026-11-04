@@ -172,6 +172,12 @@ export default function StadiumTycoon() {
         </div>
 
         {g.gearSaveBlocked && <p role="alert" data-no-prerender className="mb-3 rounded-xl border border-destructive/40 bg-destructive/10 p-3 text-xs">Title equipment could not be saved, so no new equipment was added. Your existing pairs are safe. Allow device storage before earning another title.</p>}
+        {g.ticketSaveFailed && (
+          <div role="alert" data-tycoon-save-notice data-no-prerender className="mb-3 rounded-xl border border-destructive/40 bg-destructive/10 p-3 text-xs">
+            <p>Stadium progress is not saved on this device. Keep this page open and retry.</p>
+            <button type="button" onClick={g.retryTicketSave} className="mt-2 min-h-11 min-w-11 rounded-full border border-destructive/50 px-3 font-bold">Retry save</button>
+          </div>
+        )}
         <StadiumRoom g={g} visible={room === 'stadium'} onNeedsYou={setStadiumNeedsYou} />
         <LeagueRoom g={g} visible={room === 'league'} />
         {academyOpened && (
@@ -778,7 +784,7 @@ function StadiumRoom({ g, visible, onNeedsYou }: { g: ReturnType<typeof useStadi
         </div>
         )}
 
-        {panel === 'tickets' && <TicketPolicyCard state={s} onSelect={g.doSetTicketPolicy} saveFailed={g.ticketSaveFailed} onRetrySave={g.retryTicketSave} />}
+        {panel === 'tickets' && <TicketPolicyCard state={s} onSelect={g.doSetTicketPolicy} saveFailed={g.ticketSaveFailed} onRetrySave={g.retryTicketSave} showSaveNotice={false} />}
 
         {/* Round 162: the payroll. Staff earn every second, forever, and the
             tiers escalate the way an idle game should: each one about five

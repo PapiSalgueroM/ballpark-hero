@@ -32,7 +32,7 @@ import type { GmLotteryCardProps } from './GmLotteryCard';
 export type EarnedDraftScreenStage = 'lottery' | 'clock' | 'over';
 
 /** The lottery card's first frame at 390 px wide, so the box the chunk lands in does not jump. */
-export const LOTTERY_CARD_MIN_HEIGHT = 553;
+export const LOTTERY_CARD_MIN_HEIGHT = 573;
 
 /* Module level only (gmLazyPanel.tsx's one rule). */
 const LotteryCard = lazyPart<GmLotteryCardProps>(() => import('./GmLotteryCard'), LOTTERY_CARD_MIN_HEIGHT);
@@ -114,7 +114,7 @@ export function GmEarnedDraftScreen({
       {/* The stage, and the help drawn over it so the box holds its size. */}
       <div data-gm-draft-stage className={cn('relative', blocks.length > 0 && 'min-h-[16rem]')}>
         <div aria-hidden={open || undefined} className={cn('space-y-4', open && 'invisible')}>
-          {stage === 'lottery' && lottery && <LotteryCard {...lottery} />}
+          {stage === 'lottery' && lottery && <LotteryCard {...lottery} minHeight={LOTTERY_CARD_MIN_HEIGHT} />}
 
           {stage === 'clock' && (
             <>

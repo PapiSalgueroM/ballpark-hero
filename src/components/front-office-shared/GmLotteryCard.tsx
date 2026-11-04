@@ -37,13 +37,14 @@ export interface GmLotteryCardProps {
   seen?: boolean;
   onContinue?: () => void;
   continueLabel?: string;
+  minHeight?: number;
 }
 
-export function GmLotteryCard({ order, myClub, labelOf, rules, lottery, seen = false, onContinue, continueLabel }: GmLotteryCardProps) {
+export function GmLotteryCard({ order, myClub, labelOf, rules, lottery, seen = false, onContinue, continueLabel, minHeight }: GmLotteryCardProps) {
   const view = lotteryNight(order, myClub, labelOf);
   const drawn = order.lottery !== null;
   return (
-    <div data-gm-lottery={drawn ? 'drawn' : 'plain'}>
+    <div data-gm-lottery={drawn ? 'drawn' : 'plain'} style={minHeight === undefined ? undefined : { minHeight }}>
       <LotteryReveal
         rows={view.rows}
         ruleLine={lotteryNightRule(order, lottery)}

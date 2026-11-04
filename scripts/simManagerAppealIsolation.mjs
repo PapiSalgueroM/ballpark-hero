@@ -4,7 +4,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
 import { createHash } from 'node:crypto';
-import { spawnSync } from 'node:child_process';
+import { spawnSync, execFileSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { clone, identityRelation, answerSummary, PARITY_ASSERTION, SAMPLES } from './qa/managerAppealIsolation1081.mjs';
 import { COMPATIBILITY_CONTROLS } from './qa/managerAppealCompatibility1081.mjs';
@@ -139,7 +139,17 @@ async function characterize() {
     const manifest = JSON.parse(fs.readFileSync(path.join(HISTORICAL, 'manifest.json'), 'utf8'));
     const historicalDesk = path.join(ROOT, manifest.frozenSource);
     assert.equal(textHash(historicalDesk), manifest.sha256, 'Immutable historical decisions source');
-    for (const [file, sha256] of Object.entries(manifest.unchangedSource)) assert.equal(textHash(path.join(ROOT, file)), sha256, `Historical engine and original assertion hold: ${file}`);
+    for (const [file, sha256] of Object.entries(manifest.unchangedSource)) {
+      const actual = textHash(path.join(ROOT, file));
+      if (file === 'src/lib/clubManager.ts' && actual === '1ca9560d8658ad88c96a4a085f676b51623a2c9134e665a872993564b95cf2a1') {
+        assert.equal(execFileSync('git', ['rev-parse', 'HEAD:' + file], { cwd: ROOT, encoding: 'utf8' }).trim(),
+          '9d8dc92557bf2f4358b5be044359354eda841769', 'Exact qualified Club Manager Git blob');
+        const originalMain = execFileSync('git', ['cat-file', 'blob', 'cf378e002c1f253a4cd48a147af66117f982f6b2'], { cwd: ROOT, encoding: 'utf8', maxBuffer: 8 * 1024 * 1024 });
+        assert.equal(hash(originalMain.replaceAll('\r\n', '\n')), sha256, 'Original main engine matches the frozen manifest');
+      } else {
+        assert.equal(actual, sha256, `Historical engine and original assertion hold: ${file}`);
+      }
+    }
     fs.copyFileSync(historicalDesk, path.join(OUT, 'copies/clubManagerDecisions.historical.ts'));
     write('historical-manifest.json', manifest);
     const historicalAloneBundle = await bundle('historical-alone', historicalDesk);

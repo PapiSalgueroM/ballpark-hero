@@ -27,6 +27,7 @@ import type { MatchFacts, LiveChange, Duty, SetPieceKey, Formation } from '@/lib
 import { tacticsImpl, type TeamInstructions } from '@/lib/clubManagerTacticsCore';
 import { carryShape } from '@/lib/clubManagerCarry';
 import type { Position } from '@/types/game';
+import { readCustomShape, type CustomShapePoint } from '@/lib/clubManagerPositions';
 import type { TransferStatus, FacilityKind, TrainingPlan, SquadRole, TalkTone, DealExtras } from '@/lib/clubManager';
 import type { NextFixtureInfo, TableRow, CustomClubSpec, ManagerSpec, ManagerEdit, BoardObjective } from '@/lib/clubManager';
 import { simToWeek as runSimToWeek, startMidSeason, joinClubNow } from '@/lib/clubManagerCalendar';
@@ -270,6 +271,10 @@ export function useClubManager() {
      the engine's own words (doorRefusal, loanOutRefusal), or null when it went
      through. A refused press used to be a dead button. */
   const [deskNote, setDeskNote] = useState<string | null>(null);
+  const [positionBlockedFor, setPositionBlockedFor] = useState<CareerState | null>(null);
+  const positionNotice = career && positionBlockedFor === career
+    ? 'This match could not continue. Its saved positioning data needs review. Your saved data has been kept.'
+    : null;
 
   // Persist the career on every change.
   useEffect(() => {
@@ -746,38 +751,85 @@ export function useClubManager() {
     setPhase('hub');
   }, []);
 
+  const setCustomShape = useCallback((formationIndex: number, points: readonly CustomShapePoint[] | null): boolean => {
+    const now = careerRef.current;
+    if (phase !== 'hub' || !holdsActiveSlot() || !now || now.live || now.retired || now.sacked || now.wilderness) return false;
+    if (!Number.isSafeInteger(formationIndex) || formationIndex < 0 || formationIndex !== now.formationIndex) return false;
+    const formation = FORMATIONS[formationIndex];
+    if (!formation || formation.slots.length !== 11) return false;
+    const hasShape = Object.prototype.hasOwnProperty.call(now, 'customShape');
+    if (hasShape && !readCustomShape(now.customShape, formationIndex, formation.slots)) return false;
+    let next: CareerState;
+    if (points === null) {
+      if (!hasShape) return false;
+      next = { ...now };
+      delete next.customShape;
+    } else {
+      const shape = readCustomShape({ v: 1, formationIndex, points }, formationIndex, formation.slots);
+      if (!shape) return false;
+      next = { ...now, customShape: { v: 1, formationIndex, points: shape.points.map(point => ({ x: point.x, y: point.y })) } };
+    }
+    if (!persist(next)) return false;
+    careerRef.current = next;
+    setCareer(next);
+    return true;
+  }, [phase, holdsActiveSlot, persist]);
+
   /* ---------- tactics ---------- */
   const saveMatchPlan = useCallback((slot: number, name: string) => {
-    if (phase !== 'hub' || !holdsActiveSlot()) return false;
-    if (!career || savePlan(career, slot, name) === career) return false;
-    setCareer(prev => prev ? savePlan(prev, slot, name) : prev);
+    const now = careerRef.current;
+    if (phase !== 'hub' || !holdsActiveSlot() || !now || now.retired) return false;
+    const next = savePlan(now, slot, name);
+    if (next === now || !persist(next)) return false;
+    careerRef.current = next;
+    setCareer(next);
     return true;
-  }, [career, phase, holdsActiveSlot]);
+  }, [phase, holdsActiveSlot, persist]);
 
   const applyMatchPlan = useCallback((slot: number) => {
-    if (phase !== 'hub' || !holdsActiveSlot()) return false;
-    if (!career || applyPlan(career, slot) === career) return false;
-    setCareer(prev => prev ? applyPlan(prev, slot) : prev);
+    const now = careerRef.current;
+    if (phase !== 'hub' || !holdsActiveSlot() || !now || now.retired) return false;
+    const hasShape = Object.prototype.hasOwnProperty.call(now, 'customShape');
+    if (hasShape) {
+      const formation = Number.isSafeInteger(now.formationIndex) && now.formationIndex >= 0 ? FORMATIONS[now.formationIndex] : undefined;
+      if (!formation || !readCustomShape(now.customShape, now.formationIndex, formation.slots)) return false;
+    }
+    const next = applyPlan(now, slot);
+    if (next === now) return false;
+    if (!persist(next)) return false;
+    careerRef.current = next;
+    setCareer(next);
     return true;
-  }, [career, phase, holdsActiveSlot]);
+  }, [phase, holdsActiveSlot, persist]);
 
   const deleteMatchPlan = useCallback((slot: number) => {
-    if (phase !== 'hub' || !holdsActiveSlot()) return false;
-    if (!career || deletePlan(career, slot) === career) return false;
-    setCareer(prev => prev ? deletePlan(prev, slot) : prev);
+    const now = careerRef.current;
+    if (phase !== 'hub' || !holdsActiveSlot() || !now || now.retired) return false;
+    const next = deletePlan(now, slot);
+    if (next === now || !persist(next)) return false;
+    careerRef.current = next;
+    setCareer(next);
     return true;
-  }, [career, phase, holdsActiveSlot]);
+  }, [phase, holdsActiveSlot, persist]);
 
-  const setFormationIndex = useCallback((idx: number) => {
-    setCareer(prev => {
-      if (!prev) return prev;
-      const to = FORMATIONS[idx];
-      if (!to || idx === prev.formationIndex) return prev;
-      const from = FORMATIONS[prev.formationIndex] ?? FORMATIONS[0];
-      const { xiIds, xiDuties } = carryAcross(prev, from, to);
-      return { ...prev, formationIndex: idx, xiIds, xiDuties };
-    });
-  }, []);
+  const setFormationIndex = useCallback((idx: number): boolean => {
+    const now = careerRef.current;
+    if (phase !== 'hub' || !holdsActiveSlot() || !now || now.retired || now.sacked || now.wilderness) return false;
+    if (!Number.isSafeInteger(idx) || idx < 0) return false;
+    const to = FORMATIONS[idx];
+    if (!to || idx === now.formationIndex) return false;
+    const from = FORMATIONS[now.formationIndex] ?? FORMATIONS[0];
+    const hasShape = Object.prototype.hasOwnProperty.call(now, 'customShape');
+    if (hasShape && (now.live || !Number.isSafeInteger(now.formationIndex) || now.formationIndex < 0
+      || FORMATIONS[now.formationIndex] !== from || !readCustomShape(now.customShape, now.formationIndex, from.slots))) return false;
+    const { xiIds, xiDuties } = carryAcross(now, from, to);
+    const next = { ...now, formationIndex: idx, xiIds, xiDuties };
+    if (hasShape) delete next.customShape;
+    if (!persist(next)) return false;
+    careerRef.current = next;
+    setCareer(next);
+    return true;
+  }, [phase, holdsActiveSlot, persist]);
 
   /* ---------- Round 505: duties, set pieces and the second position ---------- */
   /** The duty on a slot of the current shape, or null to clear it. The engine refuses one the slot's line does not offer. */
@@ -858,6 +910,7 @@ export function useClubManager() {
     if (!career) return;
     if (heldForTactics(() => { runEntry(skipHalftime); })) return;
     const res = playNextEntry(career, { skipHalftime, ...cmVarGameAsk(CM_VAR_LIVE) });
+    if (res.blocked === 'position-state-invalid') { setPositionBlockedFor(career); return; }
     setCareer(res.state);
     /* Round 119: the match stops at the interval now. Everything this game has
        built for eleven rounds happens between fixtures; this is the one moment
@@ -914,6 +967,7 @@ export function useClubManager() {
     if (!career) return;
     if (heldForTactics(() => { simToWeek(targetWeek); })) return;
     const run = runSimToWeek(career, targetWeek, cmVarGameAsk(CM_VAR_LIVE));
+    if (run.halt === 'position-state-invalid') { setPositionBlockedFor(career); return; }
     if (run.halt === 'window') {
       setCareer(run.state);
       setActiveTab('transfers');
@@ -1272,6 +1326,7 @@ export function useClubManager() {
     if (!career) return;
     if (heldForTactics(() => { secondHalf(); })) return;
     const res = resumeMatch(career);
+    if (res.blocked === 'position-state-invalid') { setPositionBlockedFor(career); return; }
     setCareer(res.state);
     if (res.report) {
       // Round 157: a finished match counts toward today, mid-season included.
@@ -1380,7 +1435,7 @@ export function useClubManager() {
 
   return {
     simToWeek,
-    saveFailed, saveMoved, deskNote, clearDeskNote: () => setDeskNote(null),
+    saveFailed, saveMoved, deskNote, clearDeskNote: () => setDeskNote(null), positionNotice,
     tacticsFailed, retryTactics: () => { reloadToRetryChunk(); },
     bootError, bootNoun, retryBoot,
     startWait, retryStart, startWithoutList,
@@ -1390,7 +1445,7 @@ export function useClubManager() {
     phase, career, report, summary, activeTab, setActiveTab, pendingClub,
     market, nextFx, tableRows, myPosition, facts,
     resume, startNew, retire, chooseClub, confirmClub, confirmCustomClub,
-    setFormationIndex, setMentality, setTeamInstructions, setXiSlot, swapXiSlots, autoPick,
+    setCustomShape, setFormationIndex, setMentality, setTeamInstructions, setXiSlot, swapXiSlots, autoPick,
     saveMatchPlan, applyMatchPlan, deleteMatchPlan,
     setSlotDuty, assignSetPiece, autoPickSetPieces, setShootoutOrder: setShootoutOrderIds, retrain, stopRetrain,
     play, quickPlay, continueFromReport, nextSeason,

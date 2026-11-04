@@ -32,6 +32,7 @@ import { figureLook } from '@/components/pitch-motion/look';
 import { scorerMark } from '@/lib/clubManagerScorerLine';
 import type { GoalMarks } from '@/lib/clubManagerScorerLine';
 import { cmVarEventWaiting, cmVarPlayWaiting, cmVarCanAnnounce, cmVarPlayedReviewIds, cmVarLabel, cmVarKindsOf } from '@/lib/clubManagerVar';
+import { readCustomShape, type CustomShapePoint } from '@/lib/clubManagerPositions';
 import { ClubManagerVarReview } from '@/components/club-manager/ClubManagerVarReview';
 import { inFixtureOrder, mineFirstOfReport, myClubFirst, pitchInitials, pitchName } from '@/lib/cmMatchDisplay';
 import { LiveTacticsPanel } from '@/components/club-manager/LiveTacticsPanel';
@@ -96,6 +97,7 @@ type Side = 'me' | 'opp';
 interface Man {
   key: string;
   slot: FormationSlot;
+  base?: CustomShapePoint;
   /** Last name, or '' for an opposition with no named eleven. */
   label: string;
   name?: string;
@@ -121,6 +123,7 @@ interface LiveSimScreenProps {
   live: LiveMatch | null;
   report: MatchWeekReport | null;
   clubColor: string;
+  positionNotice?: string | null;
   onSub: (outId: string, inId: string) => void;
   onShape: (m: Mentality) => void;
   onTalk: (tone: TalkTone | null) => void;
@@ -279,7 +282,12 @@ function menAt(career: CareerState, live: LiveMatch | null, report: MatchWeekRep
   const theirs: Man[] = [];
   /* The shape the eleven kicked off in, whatever the tactics tab says now. Round 1522: or the one a change during
      the match put them in by this minute (the order myOnPitchAt hands back reads in it). */
-  const myFormation = FORMATIONS[(live ? liveShapeAt(live, mineAt + 1).formationIndex : undefined) ?? live?.formationIndex ?? career.formationIndex] ?? FORMATIONS[0];
+  const myShape = live ? liveShapeAt(live, mineAt + 1) : null;
+  const myIndex = myShape?.formationIndex ?? live?.formationIndex ?? career.formationIndex;
+  const myFormation = FORMATIONS[myIndex] ?? FORMATIONS[0];
+  const customShape = live?.positionRules === 1 && myShape && myShape.formationIndex === myIndex
+    && Number.isSafeInteger(myIndex) && myIndex >= 0 && FORMATIONS[myIndex] === myFormation
+    ? readCustomShape(myShape.customShape, myIndex, myFormation.slots) : null;
   if (live) {
     /* Round 548: minute + 1, so a change made AT the minute on the clock is on
        the pitch rather than one minute late. Tapping a dot pauses the clock, so
@@ -299,7 +307,7 @@ function menAt(career: CareerState, live: LiveMatch | null, report: MatchWeekRep
       const slot = myFormation.slots[i];
       if (!slot || goneIds.has(id)) return;
       const p = career.squad.find(q => q.id === id);
-      mine.push({ key: `m${i}`, slot, label: p ? pitchName(p.name) : slot.label, name: p?.name, number: numbers.get(id) ?? i + 1, id, side: 'me' });
+      mine.push({ key: `m${i}`, slot, ...(customShape ? { base: customShape.points[i] } : {}), label: p ? pitchName(p.name) : slot.label, name: p?.name, number: numbers.get(id) ?? i + 1, id, side: 'me' });
     });
     const oppFormation = FORMATIONS[live.oppFormationIndex ?? DEFAULT_OPP_FORMATION] ?? FORMATIONS[DEFAULT_OPP_FORMATION];
     if (live.oppXi) {
@@ -443,7 +451,7 @@ export function stagePitchInput(
   const men = menAt(career, live, report, minute, plus, mineAt);
   const mentality: Mentality = live?.mentality ?? career.mentality;
   const figure = (m: Man): PitchFigure => {
-    const f: PitchFigure = { key: m.key, line: pitchLineOf(m.slot), slot: slotPosition(m.slot, m.side === 'me' ? mentality : 'balanced') };
+    const f: PitchFigure = { key: m.key, line: pitchLineOf(m.slot), slot: slotPosition(m.slot, m.side === 'me' ? mentality : 'balanced', m.base) };
     if (m.name !== undefined) f.name = m.name;
     return f;
   };
@@ -611,7 +619,7 @@ function LiveStats({ stats, counts, clubName, opponent, mineFirst }: { stats: Ma
 }
 
 export function LiveSimScreen({
-  career, live, report, clubColor, onSub, onShape, onTalk, onSecondHalf, onExit, onStartSecondHalf, onStartExtraTime, onChange, onMark,
+  career, live, report, clubColor, positionNotice, onSub, onShape, onTalk, onSecondHalf, onExit, onStartSecondHalf, onStartExtraTime, onChange, onMark,
 }: LiveSimScreenProps) {
   /* The clock and the stage come off the save, so a match closed at the 30th
      minute opens again at the 30th. No randomness in here. */
@@ -1727,6 +1735,7 @@ export function LiveSimScreen({
         <div ref={stageBox} role="dialog" aria-label={`${career.clubName} against ${opponent}, the match`} tabIndex={-1} data-cm-live-stagebox="1" className="cm-stagebox bg-background text-foreground outline-none">
           <div className="cm-stage">
             <div className="cm-stage-main">
+              {positionNotice && <div role="alert" data-cm-live-position-notice="1" className="shrink-0 border-b border-destructive/60 bg-destructive/10 px-3 py-2 text-xs text-foreground">{positionNotice}</div>}
               {/* The strip: Back, the help, both clubs and the score, the clock. Two rows on a phone. */}
               <div data-cm-live-strip="1" className="cm-strip">
                 <button
@@ -1815,6 +1824,7 @@ export function LiveSimScreen({
                   {motion.mine.map(d => {
                     const m = manOf.get(d.key);
                     if (!m) return null;
+                    const inputSlot = m.base ? pitchInput.mine.find(figure => figure.key === d.key)?.slot : undefined;
                     const captain = !!m.id && m.id === captainId;
                     const up = above.has(d.key);
                     return (
@@ -1822,6 +1832,8 @@ export function LiveSimScreen({
                         key={d.key}
                         type="button"
                         data-cm-dot={m.id ?? ''}
+                        data-cm-stage-x={inputSlot?.x}
+                        data-cm-stage-y={inputSlot?.y}
                         data-cm-captain={captain ? '1' : undefined}
                         aria-label={`${m.name ?? m.label}${captain ? ', captain' : ''}. Tap to bring somebody on or change the shape.`}
                         disabled={!canChange || !m.id}
