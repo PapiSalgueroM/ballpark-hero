@@ -1,0 +1,99 @@
+name: Master list sixth replacement qualification
+on:
+  push:
+    branches: [codex/master-list-sixth-replacement-qualification-20261104]
+permissions:
+  contents: read
+env:
+  CI: '1'
+  SIM_NETWORK: offline
+jobs:
+  qualification:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 4
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - name: Pin joined source and materialize exact physical controls
+        run: |
+          set -euo pipefail
+          OUT="$RUNNER_TEMP/master-list-sixth-replacement-qualification"
+          mkdir -p "$OUT/logs" "$OUT/transport" "$OUT/outcomes/source-old/src/lib" "$OUT/outcomes/source-old/src/components/club-manager" "$OUT/outcomes/source-old/src/hooks" "$OUT/outcomes/source-control"
+          echo "QA_OUT=$OUT" >> "$GITHUB_ENV"
+          test "$(git rev-parse HEAD^)" = aea490127f9864dd11918563af7994bb213b606b
+          test "$(git rev-parse HEAD^^{tree})" = b0a8067b10d9abf509ffc89bf7479f5424e4e05d
+          test "$(git diff --name-status HEAD^ HEAD)" = $'A\t.github/workflows/master-list-sixth-replacement-qualification-20261104.yml\nA\tscripts/qa/cmRetrainingReplacementQualification.mjs'
+          test "$(git rev-parse HEAD:src/lib/clubManager.ts)" = e3c9bcf0aec0f1e1caeb27d38d506d591d694237
+          test "$(git rev-parse HEAD:src/components/club-manager/TrainingScreen.tsx)" = 1247042a9e57c9bd89958959dff8c1490f633313
+          test "$(git rev-parse HEAD:src/hooks/useClubManager.ts)" = fe8d97dbfabaea602968e9cca25d4930895093e1
+          test "$(git rev-parse HEAD:src/test/clubManagerRetrainingReplacement.test.ts)" = ae0d2a2f0cb57c71f9c467fde3a2776ea5561f4d
+          test "$(git rev-parse HEAD:src/test/clubManagerRetrainingReplacementUi.test.tsx)" = cb6a7e3a57e67e8dde5f53a29b89395e691a13f0
+          test "$(git rev-parse HEAD:scripts/qa/cmRetrainingReplacementQualification.mjs)" = 9fce24780a2f83e9dfab6b5085877d21d7f33d28
+          git fetch --no-tags --depth=1 origin f505c2580a7e65c6e176e2b5d6b7da24f1dd2bf9
+          git cat-file blob 45493aa7b0ccea080a6dd75a879000c07fd8c9ac > "$OUT/outcomes/source-old/src/lib/clubManager.ts"
+          git cat-file blob cb2b02e885e01e4fe4248a16b4aade76046da486 > "$OUT/outcomes/source-old/src/components/club-manager/TrainingScreen.tsx"
+          git cat-file blob 32a058a2cbe7888a218f527538d6b687184f21ac > "$OUT/outcomes/source-old/src/hooks/useClubManager.ts"
+          git cat-file blob 6ddbf628bfcf57eedea6a72dc803d17b31bd9c1e > "$OUT/outcomes/source-control/TrainingScreen.duplicate.tsx"
+          git rev-parse HEAD HEAD^{tree} > "$OUT/source.txt"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$OUT/source-before.sha256"
+          git status --porcelain=v1 --untracked-files=all > "$OUT/status-before.txt"
+          test ! -s "$OUT/status-before.txt"
+          cp .github/workflows/master-list-sixth-replacement-qualification-20261104.yml "$OUT/workflow.yml"
+          cp scripts/qa/cmRetrainingReplacementQualification.mjs "$OUT/runner.mjs"
+          cp src/test/clubManagerRetrainingReplacement{.test.ts,Ui.test.tsx} "$OUT/"
+          npm ci --no-audit --no-fund > "$OUT/logs/install.log" 2>&1
+          git diff --exit-code HEAD -- package.json package-lock.json bun.lockb
+      - name: Proper application type check
+        run: |
+          set -euo pipefail
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json > "$QA_OUT/logs/types.log" 2>&1
+          echo 0 > "$QA_OUT/types-exit.txt"
+      - name: Fixed original restored and effective physical controls
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          : > "$QA_OUT/transport/caller.log"
+          export SIM_OFFLINE_RECEIPT="$QA_OUT/transport/caller.log"
+          set +e
+          node scripts/qa/cmRetrainingReplacementQualification.mjs "$QA_OUT/outcomes" > "$QA_OUT/logs/qualification.log" 2>&1
+          native=$?
+          set -e
+          echo "$native" > "$QA_OUT/native-exit.txt"
+          test "$native" = 0
+          test ! -s "$QA_OUT/transport/caller.log"
+      - name: Always require entire fixed source and status recovery
+        if: always()
+        run: |
+          set -euo pipefail
+          test -n "${QA_OUT:-}"
+          git diff --exit-code HEAD > "$QA_OUT/source-diff.txt"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$QA_OUT/source-after.sha256"
+          cmp "$QA_OUT/source-before.sha256" "$QA_OUT/source-after.sha256"
+          git status --porcelain=v1 --untracked-files=all > "$QA_OUT/status-after.txt"
+          cmp "$QA_OUT/status-before.txt" "$QA_OUT/status-after.txt"
+          sha256sum --check "$QA_OUT/source-before.sha256" > "$QA_OUT/source-held.log"
+      - name: Bound all expanded evidence under existing 150 MB limit
+        id: artifact
+        if: always()
+        run: |
+          set -euo pipefail
+          test -n "${QA_OUT:-}"
+          du -sb "$QA_OUT" > "$QA_OUT/expanded-bytes.txt"
+          test "$(du -sb "$QA_OUT" | cut -f1)" -lt 150000000
+          echo 'ready=true' >> "$GITHUB_OUTPUT"
+      - uses: actions/upload-artifact@v4
+        if: ${{ always() && steps.artifact.outputs.ready == 'true' }}
+        with:
+          name: master-list-sixth-replacement-qualification
+          path: ${{ runner.temp }}/master-list-sixth-replacement-qualification
+          if-no-files-found: error
+          retention-days: 7
