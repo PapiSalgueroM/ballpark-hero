@@ -1,0 +1,249 @@
+name: Isolated PED overall and runner qualification
+on:
+  push:
+    branches: [codex/popular-ped-overall-20261104]
+permissions:
+  contents: read
+concurrency:
+  group: sc-ped-overall-${{ github.ref }}
+  cancel-in-progress: false
+env:
+  CI: '1'
+  SIM_NETWORK: offline
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      ENGINES: chromium
+      SEO_SPLIT_BASE_REF: HEAD
+      SWEEP_OFFLINE: '1'
+      PLAYWRIGHT_BROWSERS_PATH: /home/runner/.cache/ms-playwright
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          filter: blob:none
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - name: Hold the exact joined application and source scope
+        run: |
+          set -euo pipefail
+          OUT="$RUNNER_TEMP/sc-ped-overall"
+          mkdir -p "$OUT/logs" "$OUT/units" "$OUT/raw" "$OUT/transport"
+          echo "QA_OUT=$OUT" >> "$GITHUB_ENV"
+          export QA_OUT="$OUT"
+          git rev-parse HEAD HEAD^{tree} > "$OUT/source.txt"
+          git diff --name-status HEAD^ HEAD > "$OUT/changed-paths.txt"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';import {execFileSync} from 'node:child_process';
+          const out=process.env.QA_OUT,core='9644a63a71a7f9d166f08fb3d0572985a8b007cf',base='6194f1dad597a063e490926ee1c295a746f91cf6',ref=x=>execFileSync('git',['rev-parse',x]).toString().trim();
+          const pins={'src/lib/soccerCareerEngine.ts':'63f61a713f12462fc69ca38fd2a062ec82886e33','src/test/soccerCareerCreationRoll.test.tsx':'000223ea3776740becd8ae6afe0c4ff31ba4579c','scripts/runAllSims.mjs':'7ba1658dcc8757cdda5a13ffa967f10db5880f36'};
+          assert.equal(process.env.GITHUB_REPOSITORY,'PapiSalgueroM/ballpark-hero');assert.equal(ref('HEAD'),process.env.GITHUB_SHA);
+          assert.equal(ref('HEAD^'),core);assert.equal(ref('HEAD^^{tree}'),'5cdfd8e695d5f5ec4689615e3996d58d29027ced');assert.equal(ref(core+'^'),base);
+          assert.equal(fs.readFileSync(out+'/changed-paths.txt','utf8'),'A\t.github/workflows/sc-ped-overall-qualification-20261104.yml\n');
+          const diff=execFileSync('git',['diff','--name-status',base,core]).toString();fs.writeFileSync(out+'/product-paths.txt',diff);
+          assert.deepEqual(diff.trim().split('\n').sort(),Object.keys(pins).map(p=>'M\t'+p).sort());
+          for(const [file,pin]of Object.entries(pins)){assert.equal(ref('HEAD:'+file),pin);assert.equal(execFileSync('git',['hash-object',file]).toString().trim(),pin);}
+          const config=fs.readFileSync('vitest.config.ts','utf8');for(const match of config.matchAll(/process\.env\.([A-Z_]+)/g))assert.ok(!process.env[match[1]],'No inherited alias:'+match[1]);
+          fs.writeFileSync(out+'/association.json',JSON.stringify({source:process.env.GITHUB_SHA,releaseCore:core,base,pins,scope:'Only the isolated failed-PED-test cached-overall refresh, retained thirteen-case regression and separately qualified runner stdout flush. Original98-to75 report remains unreproduced. Proper types, whole-original control, full body/RNG holds, normal build, twenty readers and sixteen unchanged caps. No full-suite or live claim.'},null,2)+'\n');
+          execFileSync('git',['show',base+':src/lib/soccerCareerEngine.ts'],{maxBuffer:16777216});
+          NODE
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$OUT/source-before.sha256"
+          test "$(wc -l < "$OUT/source-before.sha256")" -eq 5677
+          git status --porcelain=v1 --untracked-files=all > "$OUT/status-before.txt"
+          test ! -s "$OUT/status-before.txt"
+          cp .github/workflows/sc-ped-overall-qualification-20261104.yml "$OUT/workflow.yml"
+      - name: Install held application and existing QA tools
+        run: |
+          set -euo pipefail
+          npm ci --no-audit --no-fund 2>&1 | tee "$QA_OUT/logs/npm-ci.log"
+          git diff --exit-code -- package.json package-lock.json
+          npm install --prefix "$RUNNER_TEMP/flagship-release-tools" --package-lock=false --no-audit --no-fund playwright@1.64.0 2>&1 | tee "$QA_OUT/logs/playwright-install.log"
+          test ! -e node_modules/playwright
+          test ! -e node_modules/playwright-core
+          ln -s "$RUNNER_TEMP/flagship-release-tools/node_modules/playwright" node_modules/playwright
+          ln -s "$RUNNER_TEMP/flagship-release-tools/node_modules/playwright-core" node_modules/playwright-core
+          "$RUNNER_TEMP/flagship-release-tools/node_modules/.bin/playwright" install --with-deps chromium 2>&1 | tee "$QA_OUT/logs/chromium-install.log"
+          python3 -m pip install --target "$RUNNER_TEMP/flagship-release-python" fonttools pillow 2>&1 | tee "$QA_OUT/logs/python-install.log"
+          echo "PYTHONPATH=$RUNNER_TEMP/flagship-release-python" >> "$GITHUB_ENV"
+      - name: Proper joined application types
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          : > "$QA_OUT/transport/types.log"
+          SIM_OFFLINE_RECEIPT="$QA_OUT/transport/types.log" node_modules/.bin/tsc --noEmit -p tsconfig.app.json > "$QA_OUT/logs/types.log" 2>&1
+          test ! -s "$QA_OUT/transport/types.log"
+      - name: Thirteen cases whole-old one owned failure and exact restoration
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';import crypto from 'node:crypto';import {spawnSync,execFileSync} from 'node:child_process';
+          const out=process.env.QA_OUT,file='src/test/soccerCareerCreationRoll.test.tsx',engine='src/lib/soccerCareerEngine.ts',sha=b=>crypto.createHash('sha256').update(b).digest('hex');
+          const owned='Soccer Career rating98 diagnostic rating98 diagnostic PED removal updates stored and displayed overall after its five-point skill cost',marker='SC_RATING98_PED_STORED_OVR',runs=[];
+          function run(name,red=false){
+            const report=out+'/units/'+name+'.json',raw=out+'/raw/'+name+'.json',receipt=out+'/transport/'+name+'.log';fs.writeFileSync(receipt,'');
+            const child=spawnSync(process.execPath,['node_modules/vitest/vitest.mjs','run',file,'--maxWorkers=1','--minWorkers=1','--reporter=default','--reporter=json','--outputFile='+report],{env:{...process.env,SC_CREATION_ROLL_RAW:raw,SIM_OFFLINE_RECEIPT:receipt},encoding:'utf8',timeout:240000,maxBuffer:33554432});
+            const log=(child.stdout||'')+'\n'+(child.stderr||'');fs.writeFileSync(out+'/logs/'+name+'.log',log);fs.writeFileSync(out+'/units/'+name+'.exit',String(child.status));
+            assert.equal(child.error,undefined);assert.equal(child.signal,null);assert.doesNotMatch(log,/Unhandled (?:Error|Rejection)|Vitest caught \d+ unhandled|uncaughtException|unhandledRejection|Failed to resolve import|Transform failed|Cannot find module|No test files found/);
+            const r=JSON.parse(fs.readFileSync(report)),rows=r.testResults.flatMap(x=>x.assertionResults);
+            assert.equal(r.testResults.length,1);assert(r.testResults[0].name.replaceAll('\\','/').endsWith('/'+file));assert(!r.testResults[0].testExecError);
+            assert.equal(rows.length,13);assert.equal(new Set(rows.map(x=>x.fullName)).size,13);assert.equal(child.status,red?1:0);assert.equal(r.success,!red);
+            assert.equal(r.numPassedTests,red?12:13);assert.equal(r.numFailedTests,red?1:0);assert.equal(r.numPendingTests,0);if(Object.hasOwn(r,'numTodoTests'))assert.equal(r.numTodoTests,0);
+            for(const row of rows){const fail=red&&row.fullName===owned;assert.equal(row.status,fail?'failed':'passed');if(fail)assert(row.failureMessages.length>0&&row.failureMessages.every(m=>m.includes('AssertionError')&&m.includes(marker)));else assert.deepEqual(row.failureMessages,[]);}
+            const counters={};for(const k of ['numRuntimeErrorTestSuites','numUnhandledErrors']){counters[k]=Object.hasOwn(r,k)?r[k]:null;if(counters[k]!==null)assert.equal(counters[k],0);}assert.equal(fs.statSync(receipt).size,0);
+            assert(fs.existsSync(raw));const bytes=fs.readFileSync(raw),data=JSON.parse(bytes);runs.push({name,nativeExit:child.status,passed:r.numPassedTests,failed:r.numFailedTests,counters,missingCounters:'UNKNOWN',rawSHA256:sha(bytes),rows:rows.map(x=>({name:x.fullName,status:x.status}))});return{bytes,data};
+          }
+          const held=fs.readFileSync(engine);assert.equal(sha(held),'f91756faf4f061b169da84b16b826ca418907c1b5cf89aa4f861b7b4f8398a9b');
+          const fixed=run('fixed'),oldBytes=execFileSync('git',['show','6194f1dad597a063e490926ee1c295a746f91cf6:'+engine],{maxBuffer:16777216});assert(!oldBytes.equals(held));
+          let old,error;try{fs.writeFileSync(engine,oldBytes);assert.equal(sha(fs.readFileSync(engine)),sha(oldBytes));old=run('whole-old',true);}catch(e){error=e;}finally{fs.writeFileSync(engine,held);assert(fs.readFileSync(engine).equals(held));}
+          const restored=run('restored');assert(fixed.bytes.equals(restored.bytes),'Restored complete RAW bytes equal fixed');if(error)throw error;
+          const key='rating98-ped-loss',f=fixed.data[key],o=old.data[key];assert(f&&o);assert.equal(f.derivedOverall,93);assert.equal(o.derivedOverall,93);
+          assert.equal(Object.keys(f.skills).length,7);assert(Object.values(f.skills).every(v=>v===93));assert.deepEqual(f.skills,o.skills);
+          for(const row of[f,o])assert.equal(row.before.overall,98);
+          assert.equal(o.after.overall,98);assert.equal(o.displayedOverall,98);assert.equal(o.savedOverall,98);assert.equal(o.storedOverallMatchesSkills,false);
+          assert.equal(f.after.overall,93);assert.equal(f.displayedOverall,93);assert.equal(f.savedOverall,93);assert.equal(f.storedOverallMatchesSkills,true);assert.deepEqual(f.draws,o.draws);
+          const normalized=JSON.parse(JSON.stringify(old.data));normalized[key].after.overall=93;normalized[key].displayedOverall=93;normalized[key].savedOverall=93;normalized[key].storedOverallMatchesSkills=true;
+          assert.equal(JSON.stringify(normalized),JSON.stringify(fixed.data),'Whole RAW body, seven skills, normal non-PED paths and RNG differ only at four declared cached-overall observations');
+          fs.writeFileSync(out+'/unit-admission.json',JSON.stringify({uniqueHealthyCases:13,runs,control:{oldEngineSHA256:sha(oldBytes),fixedEngineSHA256:sha(held),sourceChanged:true,restoredExact:true,rawRestoredExact:true,wholeBodyAndRNGEqualAfterFourDeclaredValues:true},limits:'Controlled failed-PED fixture. The reported98-to75 event remains unreproduced. Restoration rows are not additional unique cases.'},null,2)+'\n');
+          NODE
+      - name: Normal build, twenty readers and all unchanged page caps
+        timeout-minutes: 25
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          classify_receipt() {
+            local name="$1" receipt="$2"
+            local allowed='^\[SIM_OFFLINE_BLOCK\] external browser route continue https://fonts\.(googleapis|gstatic)\.com$'
+            if [[ "$name" == sweep-weight ]]; then
+              allowed="$allowed|^\[SIM_OFFLINE_BLOCK\] external browser route continue https://flagcdn\.com$"
+            elif [[ "$name" != build ]]; then
+              if [[ -s "$receipt" ]]; then cat "$receipt"; return 1; fi
+              return 0
+            fi
+            local status=0
+            grep -Ev "$allowed" "$receipt" || status=$?
+            if [[ "$status" == 1 ]]; then return 0; fi
+            return 1
+          }
+          run_gate() {
+            local name="$1"
+            shift
+            local receipt="$QA_OUT/transport/$name.log"
+            : > "$receipt"
+            SIM_OFFLINE_RECEIPT="$receipt" "$@" 2>&1 | tee "$QA_OUT/logs/$name.log"
+            if ! classify_receipt "$name" "$receipt"; then
+              echo "Unexpected blocked transport in $name" >&2
+              return 1
+            fi
+            # Every refusal is retained and counted, never credited as zero transport.
+            if [[ -s "$receipt" ]]; then
+              wc -l "$receipt" | tee "$QA_OUT/logs/$name-blocked-attempts.txt"
+            fi
+          }
+          # First-release guard outcomes are retained separately; this job builds the new source and checks its output.
+          run_gate build npm run build
+          find dist -type f -print0 | sort -z | xargs -0 sha256sum > "$QA_OUT/dist-before.sha256"
+          tar -czf "$QA_OUT/completed-dist.tar.gz" dist
+          sha256sum "$QA_OUT/completed-dist.tar.gz" > "$QA_OUT/completed-dist.tar.gz.sha256"
+          tar -tzf "$QA_OUT/completed-dist.tar.gz" > "$QA_OUT/completed-dist-members.txt"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import path from 'node:path';import crypto from 'node:crypto';import assert from 'node:assert/strict';
+          const out=process.env.QA_OUT,rows=[],root=path.resolve('dist'),hash=bytes=>crypto.createHash('sha256').update(bytes).digest('hex');
+          function walk(folder){for(const entry of fs.readdirSync(folder,{withFileTypes:true})){const file=path.join(folder,entry.name);if(entry.isDirectory())walk(file);else{assert(entry.isFile());const bytes=fs.readFileSync(file);rows.push({file:path.relative(root,file).replaceAll('\\','/'),bytes:bytes.length,sha256:hash(bytes)});}}}
+          walk(root);rows.sort((a,b)=>a.file<b.file?-1:a.file>b.file?1:0);assert(rows.length>0);
+          const source=fs.readFileSync(out+'/source.txt','utf8').trim().split('\n'),tar=fs.readFileSync(out+'/completed-dist.tar.gz');
+          fs.writeFileSync(out+'/dist-manifest.json',JSON.stringify(rows,null,2)+'\n');
+          fs.writeFileSync(out+'/completed-dist-association.json',JSON.stringify({source:source[0],tree:source[1],applicationCore:'9644a63a71a7f9d166f08fb3d0572985a8b007cf',fileCount:rows.length,distDigest:hash(JSON.stringify(rows)),tarBytes:tar.length,tarSHA256:hash(tar),meaning:'Actual complete payload census, no fixed file count. The normal build completed before archiving; all readers and caps must still pass before this job qualifies.'},null,2)+'\n');
+          console.log('Completed dist: '+rows.length+' actual payload files retained with hashes.');
+          NODE
+          export BASE=http://127.0.0.1:4173
+          export SWEEP_BASE="$BASE"
+          export SWEEP_OFFLINE=1
+          export SIM_OFFLINE_RECEIPT="$QA_OUT/transport/server.log"
+          : > "$SIM_OFFLINE_RECEIPT"
+          node scripts/lib/hostLikeServer.mjs dist 4173 > "$QA_OUT/logs/server.log" 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid" 2>/dev/null || true' EXIT
+          ready=0
+          for attempt in $(seq 1 40); do
+            if curl --fail --silent "$BASE/" > /dev/null; then ready=1; break; fi
+            kill -0 "$server_pid"
+            sleep 1
+          done
+          test "$ready" = 1
+          readers=(
+            simAdsense simBrand simHeadTags simHiddenPages simHubs
+            simIndexNow simIndexing simInternalLinks simNoRivalNames simPrerender
+            simPrerenderBoot simRetiredRoutes simSchema simSitemap simSnapshotAssets
+            simSiteSearch simGuideHeadings simHarnessAnchors
+          )
+          for reader in "${readers[@]}"; do
+            run_gate "$reader" node "scripts/$reader.mjs"
+          done
+          run_gate simSeoTitles node scripts/simSeoTitles.mjs
+          run_gate simSeoMetaSplit env SEO_SPLIT_ONLY=/soccer-career node scripts/simSeoMetaSplit.mjs
+          run_gate sweep-weight node scripts/sweepWeight.mjs
+          test ! -s "$QA_OUT/transport/server.log"
+      - name: Retain full source holds and transport evidence
+        if: always()
+        run: |
+          set -euo pipefail
+          test -n "$QA_OUT"
+          dist_hold=0
+          if [[ -f "$QA_OUT/dist-before.sha256" ]]; then
+            find dist -type f -print0 | sort -z | xargs -0 sha256sum > "$QA_OUT/dist-after.sha256"
+            cmp "$QA_OUT/dist-before.sha256" "$QA_OUT/dist-after.sha256" || dist_hold=$?
+            sha256sum --check "$QA_OUT/dist-before.sha256" > "$QA_OUT/dist-held.log" || dist_hold=$?
+          else
+            echo "No completed-build inventory exists. No dist hold credit." > "$QA_OUT/dist-hold-unknown.txt"
+          fi
+          git diff --exit-code HEAD > "$QA_OUT/source-diff.txt"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$QA_OUT/source-after.sha256"
+          if [[ -f "$QA_OUT/source-before.sha256" ]]; then
+            cmp "$QA_OUT/source-before.sha256" "$QA_OUT/source-after.sha256"
+            sha256sum --check "$QA_OUT/source-before.sha256" > "$QA_OUT/source-held.log"
+          else
+            echo "No qualified before inventory was produced." > "$QA_OUT/source-hold-unknown.txt"
+            exit 1
+          fi
+          git status --porcelain=v1 --untracked-files=all > "$QA_OUT/status-after.txt"
+          cmp "$QA_OUT/status-before.txt" "$QA_OUT/status-after.txt"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          const out=process.env.QA_OUT;
+          const rows=fs.existsSync(out+'/transport')?fs.readdirSync(out+'/transport').sort().map(file=>{
+            const text=fs.readFileSync(out+'/transport/'+file,'utf8'),lines=text.split('\n').filter(Boolean);
+            return {file,blockedAttempts:lines.length,
+              fontBlockedAttempts:lines.filter(line=>/^\[SIM_OFFLINE_BLOCK\] external browser route continue https:\/\/fonts\.(googleapis|gstatic)\.com$/.test(line)).length,
+              flagBlockedAttempts:lines.filter(line=>line==='[SIM_OFFLINE_BLOCK] external browser route continue https://flagcdn.com').length};
+          }):[];
+          fs.writeFileSync(out+'/transport-summary.json',JSON.stringify({
+            receipts:rows,meaning:'Blocked attempts are retained. Empty Node receipts are not a browser or provider availability claim.'
+          },null,2)+'\n');
+          NODE
+          test "$dist_hold" -eq 0
+      - name: Bound retained focused evidence
+        id: artifact
+        if: always()
+        run: |
+          set -euo pipefail
+          test -d "$QA_OUT"
+          test "$(du -sb "$QA_OUT" | cut -f1)" -lt 150000000
+          echo "ready=true" >> "$GITHUB_OUTPUT"
+      - uses: actions/upload-artifact@v4
+        if: ${{ always() && steps.artifact.outputs.ready == 'true' }}
+        with:
+          name: sc-ped-overall-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/sc-ped-overall
+          if-no-files-found: error
+          retention-days: 14
+          compression-level: 6
+
