@@ -1,0 +1,61 @@
+name: Prior navigation readiness physical control
+on:
+  push:
+    branches: [codex/master-list-fifth-readiness-control-20261104]
+permissions:
+  contents: read
+env:
+  CI: '1'
+  SIM_NETWORK: offline
+  PLAYWRIGHT_BROWSERS_PATH: /home/runner/.cache/ms-playwright
+jobs:
+  readiness:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - name: Hold source and install unchanged browser tools
+        run: |
+          set -euo pipefail
+          OUT="$RUNNER_TEMP/fifth-readiness-control"
+          mkdir -p "$OUT/logs"
+          echo "QA_OUT=$OUT" >> "$GITHUB_ENV"
+          test "$(git rev-parse HEAD^)" = 5fdffc69efe6ca359f3f26b9b22c1e27222e60ed
+          git rev-parse HEAD HEAD^{tree} > "$OUT/source.txt"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$OUT/source-before.sha256"
+          npm ci --no-audit --no-fund > "$OUT/logs/install.log" 2>&1
+          npm install --prefix "$RUNNER_TEMP/scroll-control-tools" --package-lock=false --no-audit --no-fund playwright@1.64.0 > "$OUT/logs/playwright.log" 2>&1
+          test ! -e node_modules/playwright
+          test ! -e node_modules/playwright-core
+          ln -s "$RUNNER_TEMP/scroll-control-tools/node_modules/playwright" node_modules/playwright
+          ln -s "$RUNNER_TEMP/scroll-control-tools/node_modules/playwright-core" node_modules/playwright-core
+          "$RUNNER_TEMP/scroll-control-tools/node_modules/.bin/playwright" install --with-deps chromium > "$OUT/logs/chromium.log" 2>&1
+      - name: Healthy observer, physical no-op, restored observer
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          : > "$QA_OUT/caller-transport.log"
+          SIM_OFFLINE_RECEIPT="$QA_OUT/caller-transport.log" node scripts/qa/nativeScrollReadyControl.mjs "$QA_OUT/control" > "$QA_OUT/logs/control.log" 2>&1
+          test ! -s "$QA_OUT/caller-transport.log"
+      - name: Always preserve source and locks
+        if: always()
+        run: |
+          set -euo pipefail
+          git diff --exit-code HEAD > "$QA_OUT/source-diff.txt"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$QA_OUT/source-after.sha256"
+          cmp "$QA_OUT/source-before.sha256" "$QA_OUT/source-after.sha256"
+          test -z "$(git status --porcelain=v1 --untracked-files=all)"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: fifth-readiness-control-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/fifth-readiness-control
+          if-no-files-found: error
+          retention-days: 14
