@@ -21,6 +21,7 @@ concurrency:
   cancel-in-progress: false
 jobs:
   verify:
+    if: ${{ github.event_name != 'pull_request' || github.head_ref == 'codex/career-veteran-offers' }}
     runs-on: ubuntu-latest
     timeout-minutes: 120
     defaults:
