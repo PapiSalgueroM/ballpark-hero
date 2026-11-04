@@ -35,6 +35,7 @@ function Rules() {
     </ol>
     <div><h3 className="font-bold">A two-driver example</h3><p>One driver stays on worn tyres while the other pits for fresh hard tyres. Compare their positions and wear at the next decision. This is a game example, not a real race result.</p></div>
     <p>At each saved checkpoint, gaps compare elapsed time with the leading active driver. Retired drivers show the laps they completed. In the market, compare the incoming driver's current age, potential and skills before checking the quote.</p>
+    <p>Open Whole field after a checkpoint to compare saved tyres, wear and pit stops. Your picks take effect when you run the next interval.</p>
     <div><h3 className="font-bold">A retirement replacement example</h3><p>A driver's term ends and retirement is listed in the plan. Compare the quoted prospect's age, skills and potential, then check the replacement fee and next season's reserve. Starting next season pays that saved quote and puts the prospect in the seat. A paid future term keeps its driver.</p></div>
     <p>The top ten score 25, 18, 15, 12, 10, 8, 6, 4, 2 and 1. Ties use wins, podiums, then a fixed driver or team order.</p>
     <p>Your local season score gives 80 points for championship points compared with a perfect two-car season, and 20 for bringing both cars home. Every action is saved before the screen advances. If saving is refused, your current team stays on screen.</p>
@@ -260,7 +261,7 @@ function Race({ career, dispatch, blocked }: { career: GrandPrixCareer; dispatch
       {!career.nextSeasonPlan.affordable && <p className="text-sm">You need more cash to cover next season's reserve.</p>}
     </div>}
     <button type="button" className={button + ' w-full bg-primary text-primary-foreground'} disabled={blocked || career.phase === 'seasonReview' && !career.nextSeasonPlan?.affordable} onClick={run}>{action}</button>
-    {race && <details><summary className="min-h-11 cursor-pointer py-3 text-sm font-semibold">Whole field</summary><ol className="max-h-72 space-y-1 overflow-y-auto text-sm">{entries.map((entry, index) => <li key={entry.driverId} className="flex justify-between gap-3 border-b border-border py-2"><span className="min-w-0 break-words">{index + 1}. {career.drivers.find(driver => driver.id === entry.driverId)!.name}</span><span className="max-w-[60%] shrink-0 text-right tabular-nums">{timing(entry) ?? (entry.status === 'retired' ? 'Retired' : entry.completedLaps + ' laps')}</span></li>)}</ol></details>}
+    {race && <details><summary className="min-h-11 cursor-pointer py-3 text-sm font-semibold">Whole field</summary><ol className="max-h-72 space-y-1 overflow-y-auto text-sm">{entries.map((entry, index) => <li key={entry.driverId} className="border-b border-border py-2"><div className="flex justify-between gap-3"><span className="min-w-0 break-words">{index + 1}. {career.drivers.find(driver => driver.id === entry.driverId)!.name}</span><span className="max-w-[60%] shrink-0 text-right tabular-nums">{timing(entry) ?? (entry.status === 'retired' ? 'Retired' : entry.completedLaps + ' laps')}</span></div>{race.lap > 0 && entry.status !== 'retired' && <p className="mt-1 text-xs text-muted-foreground">{label(entry.compound)} tyres, {Math.round(entry.tyreWear)}% wear, {entry.stops} stops</p>}</li>)}</ol></details>}
   </div>;
 }
 

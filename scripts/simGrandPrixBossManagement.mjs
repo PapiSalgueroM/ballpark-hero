@@ -200,19 +200,36 @@ const decisionSpans = [
   {
     "before": "<span>{index + 1}. {career.drivers.find(driver => driver.id === entry.driverId)!.name}</span><span className=\"shrink-0 tabular-nums\">{entry.status === 'retired' ? 'Retired' : entry.completedLaps + ' laps'}</span>",
     "after": "<span className=\"min-w-0 break-words\">{index + 1}. {career.drivers.find(driver => driver.id === entry.driverId)!.name}</span><span className=\"max-w-[60%] shrink-0 text-right tabular-nums\">{timing(entry) ?? (entry.status === 'retired' ? 'Retired' : entry.completedLaps + ' laps')}</span>"
+  },
+  {
+    "before": "    <p>At each saved checkpoint, gaps compare elapsed time with the leading active driver. Retired drivers show the laps they completed. In the market, compare the incoming driver's current age, potential and skills before checking the quote.</p>\n",
+    "after": "    <p>At each saved checkpoint, gaps compare elapsed time with the leading active driver. Retired drivers show the laps they completed. In the market, compare the incoming driver's current age, potential and skills before checking the quote.</p>\n    <p>Open Whole field after a checkpoint to compare saved tyres, wear and pit stops. Your picks take effect when you run the next interval.</p>\n"
+  },
+  {
+    "before": "    {race && <details><summary className=\"min-h-11 cursor-pointer py-3 text-sm font-semibold\">Whole field</summary><ol className=\"max-h-72 space-y-1 overflow-y-auto text-sm\">{entries.map((entry, index) => <li key={entry.driverId} className=\"flex justify-between gap-3 border-b border-border py-2\"><span className=\"min-w-0 break-words\">{index + 1}. {career.drivers.find(driver => driver.id === entry.driverId)!.name}</span><span className=\"max-w-[60%] shrink-0 text-right tabular-nums\">{timing(entry) ?? (entry.status === 'retired' ? 'Retired' : entry.completedLaps + ' laps')}</span></li>)}</ol></details>}",
+    "after": "    {race && <details><summary className=\"min-h-11 cursor-pointer py-3 text-sm font-semibold\">Whole field</summary><ol className=\"max-h-72 space-y-1 overflow-y-auto text-sm\">{entries.map((entry, index) => <li key={entry.driverId} className=\"border-b border-border py-2\"><div className=\"flex justify-between gap-3\"><span className=\"min-w-0 break-words\">{index + 1}. {career.drivers.find(driver => driver.id === entry.driverId)!.name}</span><span className=\"max-w-[60%] shrink-0 text-right tabular-nums\">{timing(entry) ?? (entry.status === 'retired' ? 'Retired' : entry.completedLaps + ' laps')}</span></div>{race.lap > 0 && entry.status !== 'retired' && <p className=\"mt-1 text-xs text-muted-foreground\">{label(entry.compound)} tyres, {Math.round(entry.tyreWear)}% wear, {entry.stops} stops</p>}</li>)}</ol></details>}"
   }
 ];
 function decisionPredecessor(text) {
   let inverse = text;
   const edits = [];
+  let fieldCompatibility = null;
   for (const { before, after } of decisionSpans.slice().reverse()) {
     assert.equal(inverse.split(after).length - 1, 1, 'Unique decision information provenance span');
     assert.equal(executed(inverse).split(after).length - 1, 1, 'Executed decision information provenance span');
     const offset = inverse.indexOf(after);
     inverse = inverse.slice(0, offset) + before + inverse.slice(offset + after.length);
     edits.push({ offset, before, after });
+    if (edits.length === 2) {
+      const previous = Buffer.from(inverse);
+      const previousGit = createHash('sha1').update('blob ' + previous.length + '\0').update(previous).digest('hex');
+      assert.equal(previous.length, 37112, 'Exact previous decision Page byte count after the two field inverses');
+      assert.equal(sha(previous), 'f2bf041677d3604c9137e617288a26172e56c8bcf67ab4c44483d900f9e999f7', 'Exact previous decision Page SHA after the two field inverses');
+      assert.equal(previousGit, 'fa4e7b08c93f80c3a3cea4dcae1c4c2d9d1122f8', 'Exact previous decision Page Git after the two field inverses');
+      fieldCompatibility = { inverseEdits: 2, bytes: previous.length, sha256: sha(previous), git: previousGit };
+    }
   }
-  assert.equal(edits.length, 8);
+  assert.equal(edits.length, 10);
   const predecessor = Buffer.from(inverse);
   const predecessorGit = createHash('sha1').update('blob ' + predecessor.length + '\0').update(predecessor).digest('hex');
   assert.equal(predecessorGit, '9e922cf92192016fa25e7cc0e2fa8a5a92a0e2a1', 'Exact qualified Page before decision information');
@@ -222,7 +239,7 @@ function decisionPredecessor(text) {
     restored = restored.slice(0, offset) + after + restored.slice(offset + before.length);
   }
   assert.equal(restored, text, 'Complete actual decision Page provenance restoration');
-  return { source: inverse, proof: { edits, currentSha256: sha(Buffer.from(text)),
+  return { source: inverse, proof: { edits, fieldCompatibility, currentSha256: sha(Buffer.from(text)),
     predecessorSha256: sha(predecessor), predecessorGit, restoredSha256: sha(Buffer.from(restored)) } };
 }
 const decisionCompatibility = decisionPredecessor(source);
@@ -232,7 +249,7 @@ assert.equal(pageCompatibility.inverseSha256, '1474ae6a5e7c5ca99cc56e43c53502af4
 const testCompatibility = compatibilityInverse(fs.readFileSync(path.join(root, TEST), 'utf8').replace(/\r\n?/g, '\n'), [olderFixtureSpan]);
 assert.equal(testCompatibility.inverseSha256, '77a3d05742e9621ab6146bfbfe3f5b33f1853b99a12008b66134f0387c351922', 'Exact six-case test before labelled older-fixture compatibility');
 fs.writeFileSync(path.join(out, 'compatibility-provenance.json'), JSON.stringify({
-  scope: 'Eight decision information spans invert to the exact qualified Page, then the original eight lifecycle spans invert to the focus-fixed Page. Only provenance uses these predecessors; every current/copy/control child uses the actual Page. One labelled older-fixture test adaptation, no product or test mutation.',
+  scope: 'Two field display spans invert to the exact previous decision Page, then the held eight decision spans invert to the qualified predecessor and the original eight lifecycle spans invert to the focus-fixed Page. Current, healthy-copy, targeted-mutant and restored-copy children use the actual Page. The original-entry and original-historical-cards arms intentionally retain their exact whole-before-management Page. One labelled older-fixture test adaptation, no product or test mutation.',
   currentPageSha256: sha(held.get(PAGE)), currentTestSha256: sha(held.get(TEST)), decisionCompatibility: decisionCompatibility.proof, pageCompatibility, testCompatibility,
   engineInputSha256: sha(held.get('src/lib/grandPrixBoss.ts')), hookInputSha256: sha(held.get('src/hooks/useGrandPrixBoss.ts')),
   engineHookScope: 'Observed actual inputs held by every child. The exact joined source pins belong to focused qualification; no old whole-engine or hook pin is substituted here.',
