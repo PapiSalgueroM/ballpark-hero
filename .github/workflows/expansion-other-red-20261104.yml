@@ -1,0 +1,99 @@
+name: Expansion test-first outcomes
+on:
+  push:
+    branches: [codex/expansion-other-red-20261104]
+permissions:
+  contents: read
+env:
+  CI: '1'
+  SIM_NETWORK: offline
+jobs:
+  baseline:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 8
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - name: Hold the test-only source and install held dependencies
+        run: |
+          set -euo pipefail
+          OUT="$RUNNER_TEMP/expansion-other-red"
+          mkdir -p "$OUT/logs" "$OUT/raw/us" "$OUT/raw/fo" "$OUT/raw/payroll" "$OUT/raw/hub" "$OUT/transport"
+          echo "QA_OUT=$OUT" >> "$GITHUB_ENV"
+          export QA_OUT="$OUT"
+          test "$(git rev-parse HEAD^)" = e82788040fbaaa2062d8885d4e1943be886e94c3
+          test "$(git rev-parse HEAD^^{tree})" = 7294c50ee9bed9bfa6fd8680ee46a9df3615ea86
+          git rev-parse HEAD HEAD^{tree} > "$OUT/source.txt"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$OUT/source-before.sha256"
+          git status --porcelain=v1 --untracked-files=all > "$OUT/status-before.txt"
+          test ! -s "$OUT/status-before.txt"
+          cp .github/workflows/expansion-other-red-20261104.yml "$OUT/workflow.yml"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';import {execFileSync} from 'node:child_process';
+          const git=(...a)=>execFileSync('git',a).toString().trim();
+          const allowed=["A\t.github/workflows/expansion-other-red-20261104.yml","A\tsrc/test/frontOfficeDraftAccess.test.tsx","A\tsrc/test/hubGamePicks.test.tsx","A\tsrc/test/tycoonPayrollBatch.test.tsx","A\tsrc/test/usCareerFreePractice.test.tsx"];
+          assert.deepEqual(git('diff','--name-status','028a58d8e85e0c2761a46e8471e52aada20e910d','HEAD').split('\n').sort(),allowed);
+          for(const[file,pin]of [["src/components/us-career/UsCareerPractice.tsx","1a18dbbb0ceeb2b7b7da60b16c11844a300c08d5"],["src/components/career/TrainingGround.tsx","a446d7524160d55b9e8a5a116e438b5d1986a1b8"],["src/components/career/drills/ZonePickDrill.tsx","63c5f0af4a02f2e8fce26b8e49cfd40c87182d6b"],["src/components/career/drills/GateTapDrill.tsx","887691384f37095b18de054a3e7a66c0a60cb03d"],["src/components/front-office/FrontOfficeBoard.tsx","6016c7c42eed81af36d3cab2e1eb4c1b3e9990f2"],["src/test/usCareerFreePractice.test.tsx","6611c431569a7ff75390e2a2ca3955be4a65b2fd"],["src/test/frontOfficeDraftAccess.test.tsx","673959bd8edeb776faf36793da3e949c8047592e"],["src/test/tycoonPayrollBatch.test.tsx","7246c2a2b3adb5bae228bd7b76027c29963a2783"],["src/test/hubGamePicks.test.tsx","8dbb56b28d037e141479b53b101523da34962eaa"]])assert.equal(git('hash-object',file),pin,file);
+          assert.equal(process.env.NO_DOUBLE_SWAP,undefined);fs.writeFileSync(process.env.QA_OUT+'/expected.json',JSON.stringify([{"fullName":"US free practice after banking NBA repeats a banked drill without another reward or save","status":"failed","marker":"US_FREE_PRACTICE_NBA_REPEAT","raw":"nba-repeat.json"},{"fullName":"US free practice after banking NFL repeats a banked drill without another reward or save","status":"failed","marker":"US_FREE_PRACTICE_NFL_REPEAT","raw":"nfl-repeat.json"},{"fullName":"US free practice after banking NBA reopens all four free drills with private randomness and unchanged career bytes","status":"failed","marker":"US_FREE_PRACTICE_NBA_ALL_DRILLS","raw":"nba-all-drills.json"},{"fullName":"US free practice after banking NFL reopens all four free drills with private randomness and unchanged career bytes","status":"failed","marker":"US_FREE_PRACTICE_NFL_ALL_DRILLS","raw":"nfl-all-drills.json"},{"fullName":"US free practice after banking MLB keeps the existing post-bank lock without writes or random draws","status":"passed","marker":null,"raw":"mlb-lock.json"},{"fullName":"US free practice after banking NHL keeps the existing post-bank lock without writes or random draws","status":"passed","marker":null,"raw":"nhl-lock.json"},{"fullName":"NFL draft prospect access reaches all forty prospects through eighteen-row pages without changing the draft","status":"failed","marker":"FO_DRAFT_PROSPECT_ALL_PAGES","raw":"pages.json"},{"fullName":"NFL draft prospect access drafts a filtered prospect beyond the first page and preserves exact rival picks and draws","status":"failed","marker":"FO_DRAFT_PROSPECT_POSITION_ACCESS","raw":"filtered-pick.json"},{"fullName":"NFL draft prospect access resets a later page when the position changes and keeps empty groups safe","status":"failed","marker":"FO_DRAFT_PROSPECT_EMPTY_POSITION","raw":"empty-and-reset.json"},{"fullName":"NFL draft prospect access holds the scouting directors grades and order without exposing true ratings","status":"passed","marker":null,"raw":"scout-held.json"},{"fullName":"Stadium payroll batches holds one hire, unrelated fields, input and global draws","status":"passed"},{"fullName":"Stadium payroll batches buys five steward levels at their existing escalating prices","status":"failed","marker":"PAYROLL_FIVE_REAL_HIRES"},{"fullName":"Stadium payroll batches buys only three affordable steward levels from341","status":"failed","marker":"PAYROLL_AFFORDABLE_HIRES"},{"fullName":"Stadium payroll batches holds the existing staff cap and exact unaffordable no-ops","status":"passed"},{"fullName":"Stadium payroll batches quotes, hires and persists the affordable payroll batch from1000","status":"failed","marker":"PAYROLL_REAL_PAGE_CONTROL"},{"fullName":"Stadium payroll batches quotes, hires and persists the affordable payroll batch from341","status":"failed","marker":"PAYROLL_REAL_PAGE_CONTROL"},{"fullName":"Sport hub picks and Home pins from /soccer and restores the exact Home destination","status":"failed","marker":"HUB_PICK_BUTTON"},{"fullName":"Sport hub picks and Home pins from /pro-basketball and restores the exact Home destination","status":"failed","marker":"HUB_PICK_BUTTON"},{"fullName":"Sport hub picks and Home pins from /pro-football and restores the exact Home destination","status":"failed","marker":"HUB_PICK_BUTTON"},{"fullName":"Sport hub picks and Home unpins only the selected hub game and keeps the existing Home pick","status":"failed","marker":"HUB_UNPIN_CONTROL"},{"fullName":"Sport hub picks and Home uses the existing honest this-visit warning when a hub pin cannot be saved","status":"failed","marker":"HUB_PICK_FAILED_STORAGE_CONTROL"}],null,2)+'\n');
+          NODE
+          npm ci --no-audit --no-fund > "$OUT/logs/install.log" 2>&1
+          git diff --exit-code HEAD -- package.json package-lock.json bun.lockb
+      - name: Proper app types before outcome credit
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          : > "$QA_OUT/transport/types.log"
+          SIM_OFFLINE_RECEIPT="$QA_OUT/transport/types.log" node_modules/.bin/tsc --noEmit -p tsconfig.app.json > "$QA_OUT/logs/types.log" 2>&1
+          test ! -s "$QA_OUT/transport/types.log"
+      - name: Classify actual owned missing-feature assertions
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          export US_FREE_PRACTICE_RAW="$QA_OUT/raw/us" FO_DRAFT_PROSPECT_RAW="$QA_OUT/raw/fo" TYCOON_PAYROLL_RAW="$QA_OUT/raw/payroll" HUB_GAME_PICKS_RAW="$QA_OUT/raw/hub"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';import {spawnSync} from 'node:child_process';
+          const out=process.env.QA_OUT,receipt=out+'/transport/units.log';fs.writeFileSync(receipt,'');
+          const p=spawnSync(process.execPath,['node_modules/vitest/vitest.mjs','run',...["src/test/usCareerFreePractice.test.tsx","src/test/frontOfficeDraftAccess.test.tsx","src/test/tycoonPayrollBatch.test.tsx","src/test/hubGamePicks.test.tsx"],'--maxWorkers=1','--no-file-parallelism','--reporter=default','--reporter=json','--outputFile='+out+'/units.json'],{env:{...process.env,SIM_OFFLINE_RECEIPT:receipt},encoding:'utf8',timeout:420000,maxBuffer:32*1024*1024});
+          const log=(p.stdout||'')+'\n'+(p.stderr||'');fs.writeFileSync(out+'/logs/units.log',log);fs.writeFileSync(out+'/units.exit.json',JSON.stringify({status:p.status,signal:p.signal,error:p.error?String(p.error):null})+'\n');
+          assert(!p.error&&p.signal===null,'Native completion');assert.equal(p.status,1);assert.equal(fs.statSync(receipt).size,0);assert(!/Unhandled\s+(?:Error|Rejection)|Vitest caught [1-9]|uncaughtException|unhandledRejection/i.test(log));
+          const j=JSON.parse(fs.readFileSync(out+'/units.json')),want=JSON.parse(fs.readFileSync(out+'/expected.json')),rows=j.testResults.flatMap(s=>s.assertionResults);
+          if(j.numRuntimeErrors!==undefined)assert.equal(j.numRuntimeErrors,0);
+          assert.deepEqual([j.numTotalTests,j.numPassedTests,j.numFailedTests,j.numPendingTests,j.numTodoTests],[21,5,16,0,0]);assert.equal(rows.length,21);assert.equal(j.testResults.length,4);
+          assert.deepEqual(rows.map(r=>r.fullName).sort(),want.map(r=>r.fullName).sort());
+          for(const r of rows){const e=want.find(e=>e.fullName===r.fullName);assert.equal(r.status,e.status,r.fullName);if(e.status==='failed'){const m=r.failureMessages.join('\n');assert(m.includes('AssertionError')&&m.includes(e.marker),r.fullName);assert(!/TypeError|SyntaxError|ReferenceError|Cannot find module|is not a function/.test(m));}}
+          const census={us:6,fo:4,payroll:6,hub:5};for(const[folder,count]of Object.entries(census)){const paths=fs.readdirSync(out+'/raw/'+folder);assert.equal(paths.length,count,folder);for(const path of paths)JSON.parse(fs.readFileSync(out+'/raw/'+folder+'/'+path));}
+          fs.writeFileSync(out+'/owned-red-admission.json',JSON.stringify({status:'expected-owned-red',total:21,heldPass:5,ownedFail:16,nativeExit:1,runtimeErrors:j.numRuntimeErrors??'UNKNOWN',raw:census,scope:'Actual test-first assertions only. No fixed product/build/browser credit.'},null,2)+'\n');
+          NODE
+      - name: Always require full source and offline holds
+        if: always()
+        run: |
+          set -euo pipefail
+          git diff --exit-code HEAD > "$QA_OUT/source-diff.txt"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$QA_OUT/source-after.sha256"
+          cmp "$QA_OUT/source-before.sha256" "$QA_OUT/source-after.sha256"
+          git status --porcelain=v1 --untracked-files=all > "$QA_OUT/status-after.txt"
+          cmp "$QA_OUT/status-before.txt" "$QA_OUT/status-after.txt"
+          for receipt in "$QA_OUT"/transport/*.log; do test ! -s "$receipt"; done
+      - name: Bound evidence
+        if: always()
+        id: artifact
+        run: |
+          set -euo pipefail
+          test "$(du -sb "$QA_OUT" | cut -f1)" -lt 50000000
+          echo 'ready=true' >> "$GITHUB_OUTPUT"
+      - uses: actions/upload-artifact@v4
+        if: ${{ always() && steps.artifact.outputs.ready == 'true' }}
+        with:
+          name: expansion-other-red
+          path: ${{ runner.temp }}/expansion-other-red
+          if-no-files-found: error
+          retention-days: 7
