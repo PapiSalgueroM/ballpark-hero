@@ -11,7 +11,7 @@ const out=path.resolve(arg('--out')),dist=path.resolve(arg('--dist')),root=proce
 assert.match(core,/^[a-f0-9]{40}$/);await fs.mkdir(out,{recursive:true});assert.equal((await fs.readdir(out)).length,0);
 const sha=b=>crypto.createHash('sha256').update(b).digest('hex');
 const git=(...args)=>execFileSync('git',args,{encoding:'utf8'}).trim();
-const featurePaths=["src/lib/soccerCareerEngine.ts","src/lib/clubManager.ts","src/lib/soccerCareerProgramme.ts","src/lib/soccerCareerSave.ts","src/pages/SoccerCareer.tsx","src/pages/ClubManager.tsx","src/lib/clubManagerTactics.ts","src/lib/clubManagerMatchPlans.ts","src/lib/clubManagerMatchPlansCore.ts","src/hooks/useClubManager.ts","src/components/soccer-career/SoccerCareerProgramme.tsx","src/components/club-manager/TrainingScreen.tsx"];
+const featurePaths=["src/lib/soccerCareerEngine.ts","src/lib/clubManager.ts","src/lib/soccerCareerProgramme.ts","src/lib/soccerCareerSave.ts","src/pages/SoccerCareer.tsx","src/pages/ClubManager.tsx","src/lib/clubManagerTactics.ts","src/lib/clubManagerMatchPlans.ts","src/lib/clubManagerMatchPlansCore.ts","src/hooks/useClubManager.ts","src/components/soccer-career/SoccerCareerProgramme.tsx","src/components/club-manager/TrainingScreen.tsx","src/components/manager-hot-seat/ManagerHotSeatBoard.tsx","src/components/manager-hot-seat/ManagerHotSeatCarryOnCard.tsx"];
 const pins={};for(const file of featurePaths){pins[file]=git('rev-parse',core+':'+file);assert.equal(git('hash-object',file),pins[file],file);}
 const tracked=git('ls-files','-z').split('\0').filter(Boolean).sort();
 const source=async()=>Object.fromEntries(await Promise.all(tracked.map(async file=>[file,sha(await fs.readFile(file))])));

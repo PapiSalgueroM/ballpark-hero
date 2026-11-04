@@ -56,7 +56,7 @@ export async function runPrimaryRole({page,width,base,fixture,engine:E,photo,tap
   const idle=()=>page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
   const scroll=()=>page.evaluate(()=>[scrollX,scrollY]);
   const native=async(label,control,action)=>{
-    await control.scrollIntoViewIfNeeded();await idle();const before=await scroll();
+    await control.scrollIntoViewIfNeeded();if(width<768)await control.tap({trial:true});else await control.click({trial:true});await idle();const before=await scroll();
     if(action)await action();else await tap(control);await idle();const after=await scroll();
     assert.deepEqual(after,before,label+' document scroll held');return {label,before,after};
   };
