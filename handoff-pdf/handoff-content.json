@@ -1,0 +1,691 @@
+{
+  "title": "DoUKnowBall - Development Handoff",
+  "date": "2026-11-04",
+  "pages": [
+    {
+      "title": "Handoff: master-list work",
+      "subtitle": "DoUKnowBall | 4 November 2026 | Release state verified at 17:05 UTC",
+      "blocks": [
+        {
+          "type": "callout",
+          "label": "Resume here",
+          "text": "The fourth batch is published. The fifth batch has final source candidates and retained evidence, but is not integrated, fully qualified, merged or published. Finish the fifth batch before starting another round."
+        },
+        {
+          "type": "h",
+          "text": "What Anthony wants"
+        },
+        {
+          "type": "p",
+          "text": "Keep improving the master list, with Soccer Career and Club Manager receiving the most work. Also improve the other popular games and get completed changes live. The current request is a handoff PDF, so implementation has stopped for this handoff."
+        },
+        {
+          "type": "h",
+          "text": "State at the handoff"
+        },
+        {
+          "type": "table",
+          "headers": [
+            "Area",
+            "Confirmed state"
+          ],
+          "rows": [
+            [
+              "Live site",
+              "Fourth batch, application merge 02a7ade4. Published entry index-BIyfy2al.js."
+            ],
+            [
+              "GitHub main",
+              "81e614f2, documentation closure after the fourth release. Fresh connector read confirmed this head."
+            ],
+            [
+              "Fifth scope",
+              "Conditional Soccer Career loan purchases; Club Manager course pause/resume; NBA/NFL signing review."
+            ],
+            [
+              "Fifth evidence",
+              "Original baseline admitted. First candidate: 13/15 outcome cases passed; beta build passed. Final CM compatibility and test corrections still need qualification."
+            ],
+            [
+              "Next action",
+              "Integrate the final CM UI/test with the safe engine, then run fixed/original/restored outcomes and a final normal build."
+            ]
+          ],
+          "widths": [
+            95,
+            405
+          ]
+        },
+        {
+          "type": "h",
+          "text": "Start with these files"
+        },
+        {
+          "type": "bullets",
+          "items": [
+            "Repository: AGENTS.md, then docs/SHIP-PIPELINE.md, then docs/PROJECT-STATE.md. Verify current remote heads before trusting moving state.",
+            "Local resume pins and QA: C:/Users/antho/dukb-handoff/2026-11-04/handoff-pdf/resume-snapshot/",
+            "Current work and evidence: C:/Users/antho/dukb-handoff/2026-11-04/masterlist-fifth/"
+          ]
+        },
+        {
+          "type": "p",
+          "text": "The expansion book has 409 cards across 20 games. It is a design reference, not a completion count or release approval. This fifth batch advances partial cards only."
+        }
+      ]
+    },
+    {
+      "title": "What is actually live",
+      "subtitle": "Do not repeat the fourth batch or describe the fifth as released",
+      "blocks": [
+        {
+          "type": "h",
+          "text": "Fourth batch shipped"
+        },
+        {
+          "type": "bullets",
+          "items": [
+            "Soccer Career, further partial SC-16/20: an earned secondary role from two actual same-club seasons can become primary. Course/flexibility is consumed; ratings, skills, contract terms and history are preserved.",
+            "Club Manager, further partial CM-31: one current player can use existing Light training for the next paid week, record its growth exposure, then return to the standing plan.",
+            "Optional match-plan preview and successful Hot Seat carry-on UI now sit behind genuine loading boundaries. All 16 caps stayed unchanged."
+          ]
+        },
+        {
+          "type": "h",
+          "text": "Release proof"
+        },
+        {
+          "type": "p",
+          "text": "Application PR 487 merged as 02a7ade4a0b8dc9a218106dbc3798fd1eca848b5. Documentation PR 488 merged as 81e614f2e4716927cb8955e852a8b1bf37346b43."
+        },
+        {
+          "type": "p",
+          "text": "Fourth qualification: 14 new fixed passes, 11 intended original failures plus 3 held passes, 14 restored passes; 199 adjacent tests in 16 files and 6 affected sims. Build: 20 output readers and all 16 caps passed. Compiled and public journeys each passed 9 contexts at 320, 390 and 1280 widths."
+        },
+        {
+          "type": "p",
+          "text": "Public verification run 41850780094 read 1,224 asset bodies across 99 unique assets, including 19 critical assets. Source and completed output inventories held. The deployment API still said pending, but the actual public bundle and journeys were verified."
+        },
+        {
+          "type": "code",
+          "text": "Published entry: index-BIyfy2al.js\nSHA256: d81db3d8f52956f8a9d7b556267f36b538e632a2456de90c0eaf4791df1c8007"
+        },
+        {
+          "type": "h",
+          "text": "Open reports must remain honest"
+        },
+        {
+          "type": "bullets",
+          "items": [
+            "Original Soccer Career report: player had 98 OVR and now 75 OVR. Still unreproduced. A prior cached PED-rating repair is separate and must not be presented as proof this report is fixed.",
+            "Fantasy Draft report: AI won without drafting a defense. No resolution is established by this handoff. Inspect current code and existing ledger before claiming a fix.",
+            "Club Manager request: create a custom formation and tactical philosophy. Existing fourth work includes match-plan infrastructure, but this handoff does not certify the full request complete.",
+            "Historical unfiltered, full-fleet and strict NFL parity failures remain unresolved and unwaived. No all-suite-green claim is justified."
+          ]
+        },
+        {
+          "type": "p",
+          "text": "Durable fourth release record: C:/Users/antho/dukb-handoff/2026-11-04/masterlist-fourth/RELEASE-COMPLETE.json"
+        }
+      ]
+    },
+    {
+      "title": "Soccer Career: conditional loan purchase",
+      "subtitle": "Fifth batch | Further partial SC-14/12 | Source-ready, not released",
+      "blocks": [
+        {
+          "type": "h",
+          "text": "Player-visible change"
+        },
+        {
+          "type": "p",
+          "text": "The existing unconditional purchase stays available. Two opt-in agreements require 18 or 26 actual league appearances before the existing permanent move can complete. Completion retains the current two-year deal and existing weekly wage."
+        },
+        {
+          "type": "h",
+          "text": "Approved compatibility contract"
+        },
+        {
+          "type": "bullets",
+          "items": [
+            "Only conditional agreements add loanBuy.minimumLeagueApps?: 18 | 26. The existing ready value remains a boolean.",
+            "Use actual recorded leagueApps. It must be a safe integer from zero through total appearances. The completed programme ledger, season record, selected choice and threshold tag must agree.",
+            "Recheck sealed proof when completing. Missing, contradictory or mismatched conditional proof refuses the move without resetting the source state.",
+            "Absent metadata keeps legacy unconditional behavior exactly, including old receipt-less ready:true saves. A known conditional receipt with its tag deleted refuses.",
+            "Unknown or null threshold metadata is preserved and refused. Queue/cancel must not silently rewrite unreadable metadata.",
+            "A severe-injury year may stop at rehab before contract decrement or loan review. Preserve the existing loan, borrower and contract years at that early boundary. Do not promise immediate parent return."
+          ]
+        },
+        {
+          "type": "h",
+          "text": "Scope held"
+        },
+        {
+          "type": "p",
+          "text": "Only soccerCareerProgramme.ts and SoccerCareerProgramme.tsx change. The career engine and save codec stay unchanged. No new random-call sites, coefficients, real data, invented multi-season fields or active-save reset."
+        },
+        {
+          "type": "h",
+          "text": "Evidence and remaining work"
+        },
+        {
+          "type": "p",
+          "text": "Individual original baseline 41859699971 used test f9dbd0f6 and produced four intended assertion failures plus two held passes. Combined baseline 41860268698 later used the final six-case SC test. First integrated fixed run 41864591130 passed all six SC cases."
+        },
+        {
+          "type": "p",
+          "text": "Both held SC RAW files were byte-identical baseline to first fixed: refused-state and legacy-default, including full outputs and draw tapes. Final closure still requires the exact final test's original 4-failure/2-pass arm, restored 6-pass arm and RAW equality."
+        },
+        {
+          "type": "bullets",
+          "items": [
+            "Author effective physical threshold/proof fault controls. No durable SC control specification exists yet.",
+            "Run the final native journey in the actual compiled App at all three widths, pass the real codec argument and review screenshots.",
+            "Native module respects actual rehab interruptions and never overrides browser RNG."
+          ]
+        },
+        {
+          "type": "code",
+          "text": "Final helper fd41aa55 | UI 52b55fdb\nTest 4fb3e84f | Native journey cf75158b\nFull pins and durable paths: pages 9 and 10."
+        }
+      ]
+    },
+    {
+      "title": "Club Manager: pause a position course",
+      "subtitle": "Fifth batch | Further partial CM-32 | Critical final compatibility correction",
+      "blocks": [
+        {
+          "type": "h",
+          "text": "Player-visible change"
+        },
+        {
+          "type": "p",
+          "text": "Pause and resume an existing matching secondary-position course while keeping earned weeks. Pausing preserves course progress and learned roles. Resuming removes the pause flag. Existing Stop still cancels the entire course."
+        },
+        {
+          "type": "h",
+          "text": "Reducer and save contract"
+        },
+        {
+          "type": "bullets",
+          "items": [
+            "startRetraining(career,id,to,paused?) keeps its original behavior when paused is undefined. A boolean only toggles a valid existing same-target course.",
+            "The optional Retraining.paused value is unknown at the reader boundary so future metadata remains lossless. Absent or false keeps ordinary paid progression. True or an unknown own pause value freezes course/learned-role progression only.",
+            "Invalid players, courses, targets, stale already-held targets, invalid counts, extra future course fields and nonboolean toggle arguments refuse safely.",
+            "No changes to fitness, growth, recovery, position limits, RNG sites or coefficients. Existing Light recovery remains intact."
+          ]
+        },
+        {
+          "type": "callout",
+          "label": "Do not ship the beta engine/UI",
+          "text": "The first passing build used engine eb56141f and UI c8713633. Their new 'in' checks throw on primitive course values accepted by the old reader. Final engine 63dec52c and UI cb2b02e8 replace two read sites with safe own-property checks. That final successor is not yet build-qualified."
+        },
+        {
+          "type": "h",
+          "text": "Tests and real results"
+        },
+        {
+          "type": "p",
+          "text": "The five-case test has four owned changes and one held ordinary case. It checks actual learned-role retention and an actual XI fit-strength difference, not copied model math. New held vectors also cover loadable primitive string/number courses."
+        },
+        {
+          "type": "p",
+          "text": "First integrated run had two CM expected-state failures. JSON cloning dropped pre-existing undefined keys; final test cbe2093a changes those expectations to structuredClone. Product reducer behavior was not changed to satisfy the snapshots."
+        },
+        {
+          "type": "h",
+          "text": "Required physical control"
+        },
+        {
+          "type": "p",
+          "text": "Restore only the two safe reads to the unsafe beta strings; assert exact beta engine/UI hashes. The held ordinary case must fail CM_RETRAIN_SCALAR_COMPAT with captured 'in' TypeErrors from the actual tick and render paths. Restore the exact final source, pass again and compare full ordinary RAW. Do not weaken the generic owned-failure classifier."
+        },
+        {
+          "type": "p",
+          "text": "Native module covers pause, existing Light recovery, a real paid January window, resume and exact reload bytes. Scalar compatibility and unknown metadata remain unit scope. No fifth native runtime result exists yet."
+        }
+      ]
+    },
+    {
+      "title": "NBA/NFL: review before signing",
+      "subtitle": "Fifth batch | Owner-priority adaptation of PL-16 | Source-ready, not released",
+      "blocks": [
+        {
+          "type": "h",
+          "text": "Player-visible change"
+        },
+        {
+          "type": "p",
+          "text": "NBA and NFL free-agent offers open a review before signing. Back closes the review without writing. Confirm uses the existing signing path once, provided the actual selected offer and terms are still current. Other sports retain immediate signing."
+        },
+        {
+          "type": "h",
+          "text": "Exact safety contract"
+        },
+        {
+          "type": "bullets",
+          "items": [
+            "FreeAgencyPanel accepts reviewSigning?: boolean, default false. UsCareerBoard opts in only for sport.slug nba/nfl.",
+            "The dialog keeps the underlying offer list mounted. Opening and Back perform no write, RNG draw or signing callback.",
+            "Capture current window identity, selected offer object identity and cloned scalar offer terms. Confirm rejects a replaced, mutated, withdrawn or reused offer/index.",
+            "Consume the pending request before invoking the original callback. Preserve the existing signing model and save fence.",
+            "Review-heading focus and return to the connected opener use preventScroll. The native check prepares the same pointer action before recording exact scroll equality."
+          ]
+        },
+        {
+          "type": "h",
+          "text": "Tests and evidence"
+        },
+        {
+          "type": "p",
+          "text": "The four new cases have three owned changes and one held legacy case. Exact cross-arm comparison covers the entire confirm-once.json.signedResults child: both sports' complete saved frames and full action draw tapes. Legacy-immediate RAW must match exactly."
+        },
+        {
+          "type": "p",
+          "text": "Individual original baseline 41857902619 produced three intended AssertionErrors and one held pass. First integrated fixed outcomes passed all four US cases. The complete final fixed/original/restored runner still needs admission."
+        },
+        {
+          "type": "p",
+          "text": "Final test d804e0e9 changes only three review-dialog queries from container to baseElement for real portal content. Outcomes, markers, RAW payloads and counts stay unchanged. Existing SecondTab regression changes only NBA/NFL actions to include the real Confirm."
+        },
+        {
+          "type": "h",
+          "text": "Native plan"
+        },
+        {
+          "type": "p",
+          "text": "Six contexts: NBA and NFL at 320/390/1280. Each uses actual constructors and FA helpers with an explicitly fictional 98-rated starter. Check review, exact Back bytes/focus/scroll, reopen, whole-frame Confirm and reload. No browser clock or RNG override."
+        },
+        {
+          "type": "code",
+          "text": "Panel 1d32d94e | Board ed647f81\nExisting SecondTab 2b323d35\nNew test d804e0e9 | Native journey a30d48d3"
+        },
+        {
+          "type": "p",
+          "text": "This is a decision-and-consequence improvement. It does not complete PL-05 event history and does not create a new NBA chapter in the book."
+        }
+      ]
+    },
+    {
+      "title": "Retained evidence: what passed and what did not",
+      "subtitle": "Original ZIPs are already acquired, hash-checked and retained locally",
+      "blocks": [
+        {
+          "type": "table",
+          "headers": [
+            "Run / source",
+            "Actual result"
+          ],
+          "rows": [
+            [
+              "41860268698 / 8a128463",
+              "Combined original baseline admitted: 15 cases, 11 intended AssertionErrors, 4 held passes and all 15 RAW files. Source/status held."
+            ],
+            [
+              "41864591130 / 95dae548",
+              "First integrated outcomes failed: 13/15 fixed cases passed. Two CM expected clones failed. Runner stopped here, so no original/restored, regression or sim credit on this run."
+            ],
+            [
+              "41864595585 / fd01d526",
+              "First beta build succeeded: proper types, normal frozen-host Bun build, all 20 output readers and all 16 unchanged caps. Not final-safe-CM qualification."
+            ]
+          ],
+          "widths": [
+            157,
+            343
+          ]
+        },
+        {
+          "type": "h",
+          "text": "Original artifact identities"
+        },
+        {
+          "type": "table",
+          "headers": [
+            "Retained folder / artifact",
+            "Bytes / SHA256"
+          ],
+          "rows": [
+            [
+              "baseline-qualified / 13339731723",
+              "975862\nd4a71b409582ab7f4c233552fd77ed3cc14f617a94f5025dba88c323a7fd6ff4"
+            ],
+            [
+              "outcomes-first / 13340603734",
+              "1007106\n624971cad3504e1dc9d365aa9fee4994962adc4ac6013bac30821c27cfc6cac6"
+            ],
+            [
+              "build-first / 13342396472",
+              "7733096\n2705189f968efc3d208ab40730c9c5a4d1b66fc18bcfc5cb745d0d4374955ae8"
+            ]
+          ],
+          "widths": [
+            157,
+            343
+          ]
+        },
+        {
+          "type": "p",
+          "text": "Each folder is under C:/Users/antho/dukb-handoff/2026-11-04/masterlist-fifth/ and contains original.zip plus extracted evidence. Preserve failed originals. A failed expired download was retained separately if a response file existed."
+        },
+        {
+          "type": "h",
+          "text": "Earlier baseline records"
+        },
+        {
+          "type": "bullets",
+          "items": [
+            "US run 41857902619, artifact 13337793231: 592641 bytes; 3 owned failures and 1 held pass.",
+            "SC run 41859699971, artifact 13339755606: 624338 bytes; 4 owned failures and 2 held passes.",
+            "CM first run 41859228887, artifact 13338263565: 926529 bytes. Owned failures were correct, but the held Stop expectation used a JSON clone. Retained as failed evidence, not admission."
+          ]
+        },
+        {
+          "type": "h",
+          "text": "Capacity risk"
+        },
+        {
+          "type": "p",
+          "text": "Beta CM displayed 648.5 KiB but Math.round stayed 648, with less than roughly 50 gzip bytes to the unchanged cutoff. NFL displayed 499.0 KiB, SC 838.0 KiB. Final safe CM reads add source bytes: measure the final build. Do not raise any cap or claim beta spare capacity proves final compliance."
+        },
+        {
+          "type": "p",
+          "text": "All run IDs link to https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/{run-id}."
+        }
+      ]
+    },
+    {
+      "title": "Resume checklist: qualify the final candidate",
+      "subtitle": "Complete these in order; fix actual failures without weakening the gates",
+      "blocks": [
+        {
+          "type": "h",
+          "text": "1. Integrate exact final source"
+        },
+        {
+          "type": "p",
+          "text": "Start from beta product core bee7c808, tree 16e8bf37. Safe-engine tree 68215430 contains final engine 63dec52c, but still needs final UI cb2b02e8 and CM test cbe2093a integrated. Hold final SC UI 52b55fdb, US portal test d804e0e9 and all pins on page 9. No final integrated commit exists."
+        },
+        {
+          "type": "h",
+          "text": "2. Run outcome closure and real controls"
+        },
+        {
+          "type": "bullets",
+          "items": [
+            "Fixed: all 15 cases pass. Whole-original arm: exactly 11 owned AssertionErrors plus 4 held passes. Restored arm: all 15 pass. Check all 15 RAW files and exact full-state/tape holds.",
+            "Final held RAW: sc/refused-state.json, sc/legacy-default.json, cm/ordinary.json, us/legacy-immediate.json. Compare complete payloads, no field masks.",
+            "US confirm-once.json.signedResults must contain both subjects and deep-match across arms.",
+            "Add effective CM unsafe-read and SC threshold/proof source-fault controls. Assert edits changed code, restore exactly, retain causal evidence.",
+            "Then run the 16 adjacent regression files and 6 affected sims from the exported templates. Check actual output, runtime errors and source/status restoration."
+          ]
+        },
+        {
+          "type": "h",
+          "text": "3. Run the final host-shaped build"
+        },
+        {
+          "type": "code",
+          "text": "node_modules/.bin/tsc --noEmit -p tsconfig.app.json\nnpm run build"
+        },
+        {
+          "type": "p",
+          "text": "Use the existing normal frozen-host Bun environment: Bun 1.4.4, router 7.18.4, Vite 5.4.19, Rollup 4.24.0. After the build finishes, run all 20 output readers and all 16 unchanged caps. Never run output readers against a half-written dist."
+        },
+        {
+          "type": "h",
+          "text": "4. Native compiled App and visual review"
+        },
+        {
+          "type": "p",
+          "text": "Use the completed final Bun payload. Run 12 contexts: Soccer Career, Club Manager, NBA Career and NFL Career at 320/390/1280. Require source/output/fixture holds, exact response bodies, strict no-scroll assertions, expected deliberate transport classifications and all 12 screenshots reviewed."
+        },
+        {
+          "type": "p",
+          "text": "Fix the exported build template's SC module argument: scLoanConditionJourney.mjs is stale; use scripts/qa/scConditionalLoanJourney.mjs. The driver must pass codec. Root producer/driver are prepared templates, not runtime-admitted."
+        },
+        {
+          "type": "h",
+          "text": "If CM cap fails"
+        },
+        {
+          "type": "p",
+          "text": "Audit-only fallback: move pure liveFeed/liveShapeAt/squadNumbers presentation into a module used by lazy LiveSimScreen. First verify all consumers across the full source. Keep simulation-used liveStatsAt in the engine. No extraction is authored or savings measured."
+        }
+      ]
+    },
+    {
+      "title": "Shipping and operating constraints",
+      "subtitle": "Existing authorization covers merge and publish; preserve the evidence chain",
+      "blocks": [
+        {
+          "type": "h",
+          "text": "Remote-only application workflow"
+        },
+        {
+          "type": "bullets",
+          "items": [
+            "The local C:/Users/antho/ballpark-hero workspace is old and dirty. Do not run local application, Node/helper/parser/browser/build/Git commands or edit local app/index files.",
+            "Native PowerShell text, JSON, hash and archive operations outside the repo are allowed. Local docs/WORKBOARD.md is append only.",
+            "Use the GitHub connector for Git mutations and isolated GitHub Actions for runtime. A final clean PR starts from verified main and contains permanent app/test/doc changes only. Keep temporary QA/workflows off main.",
+            "Original successful artifact ZIPs are acquired once, size/SHA checked before extraction and retained. Do not re-download already acquired successful originals. Signed URLs expire quickly."
+          ]
+        },
+        {
+          "type": "h",
+          "text": "Final release steps"
+        },
+        {
+          "type": "bullets",
+          "items": [
+            "Create a clean PR containing 7 app files, 3 new tests, the existing SecondTab adaptation and current release docs. Reconcile scope if a necessary structural cap fix is added.",
+            "Merge the qualified application PR. Landing on main updates the Lovable preview only.",
+            "Verify every changed application body in the host matches exact qualified source. Call deploy_project for Lovable project c29d224f-a662-4a15-b809-d86fa3b3f0ad. Never invoke the Lovable AI agent.",
+            "Run public source-bound journeys and compare actual served entry/critical asset bodies to the final built artifact. Cover all four routes and 12 contexts. A pending API status alone neither proves nor disproves publication.",
+            "Update PROJECT-STATE, WORKBOARD, EXPANSION-IMPLEMENTATION-LEDGER and the fifth plan; append only to the local Workboard; write a fifth RELEASE-COMPLETE record only after actual public proof."
+          ]
+        },
+        {
+          "type": "h",
+          "text": "Non-negotiable product rules"
+        },
+        {
+          "type": "bullets",
+          "items": [
+            "Do not add real sports data without the data-guardian process and two-source verification. No club/league marks, player photos, invented real-person quotes or rival product names in shipped files.",
+            "No new database/provider work, dependency-lock changes, coefficients, RNG sites, active-save resets or cap increases in this batch.",
+            "Use SUPABASE_URL and SUPABASE_PUBLISHABLE_KEY from the existing client. Lovable's VITE_SUPABASE_* values point to a deleted project.",
+            "Preserve save compatibility, legal footer, instructions and re-openable help, small tiles/back navigation and no page jumps. No em or en dashes in copy, comments, commits or messages."
+          ]
+        },
+        {
+          "type": "p",
+          "text": "GitHub Actions/Pages degradation was observed at 16:16 UTC. It was a historical service-status observation, not a reason to bypass a gate. Recheck current status if runs stall."
+        }
+      ]
+    },
+    {
+      "title": "Exact final source pins",
+      "subtitle": "Git blob SHA values | These supersede earlier candidates",
+      "blocks": [
+        {
+          "type": "table",
+          "headers": [
+            "Repository-relative path",
+            "Final Git blob SHA"
+          ],
+          "rows": [
+            [
+              "src/lib/soccerCareerProgramme.ts",
+              "fd41aa55933a692c2d4b1f72f91e1ff6273d4b57"
+            ],
+            [
+              "src/components/soccer-career/SoccerCareerProgramme.tsx",
+              "52b55fdb1667476d99ccf82f885f0bd644ec3689"
+            ],
+            [
+              "src/lib/clubManager.ts",
+              "63dec52cb0d1becf7a2d8e921114d02987178118"
+            ],
+            [
+              "src/hooks/useClubManager.ts",
+              "32a058a2cbe7888a218f527538d6b687184f21ac"
+            ],
+            [
+              "src/components/club-manager/TrainingScreen.tsx",
+              "cb2b02e885e01e4fe4248a16b4aade76046da486"
+            ],
+            [
+              "src/components/us-career/FreeAgencyPanel.tsx",
+              "1d32d94e38245f2b919a7762f90076991b562a9f"
+            ],
+            [
+              "src/components/us-career/UsCareerBoard.tsx",
+              "ed647f81e2ec2378609bf7e22a92c4ed130420db"
+            ],
+            [
+              "src/test/soccerProgrammeConditionalLoan.test.tsx",
+              "4fb3e84fcb39d4382efcf51bdd7786e2a1309044"
+            ],
+            [
+              "src/test/clubManagerRetrainingPause.test.tsx",
+              "cbe2093a2c1bbbf3e5b866157d18e923b97481b1"
+            ],
+            [
+              "src/test/usCareerSigningReview.test.tsx",
+              "d804e0e96a7e5a6ef0ebb9b0af947d1e62178fe0"
+            ],
+            [
+              "src/test/usCareerMarketSecondTab.test.tsx",
+              "2b323d359d87de80811902f568259bbc6cc8c499"
+            ]
+          ],
+          "widths": [
+            270,
+            230
+          ]
+        },
+        {
+          "type": "h",
+          "text": "Native module pins"
+        },
+        {
+          "type": "table",
+          "headers": [
+            "Module",
+            "Final Git blob SHA"
+          ],
+          "rows": [
+            [
+              "scConditionalLoanJourney.mjs",
+              "cf75158b98c1b03664780f21bbab3b5b335649c5"
+            ],
+            [
+              "cmRetrainingPauseJourney.mjs",
+              "7fe544568bbd6e370c2f02ff0a52d50a505da163"
+            ],
+            [
+              "usSigningReviewJourney.mjs",
+              "a30d48d3605ca6a8917451bec83f2db39a9c5883"
+            ]
+          ],
+          "widths": [
+            270,
+            230
+          ]
+        },
+        {
+          "type": "h",
+          "text": "Remote continuity"
+        },
+        {
+          "type": "code",
+          "text": "Repo: PapiSalgueroM/ballpark-hero\nClaim branch: codex/master-list-fifth-20261104\nClaim head: 573f7cd04a6de6f14798fdad2566512d3e393104\nBeta core: bee7c80844193949ab668a6c94188e2a590b5b0f\nBeta tree: 16e8bf37105930f8f22670e7390da4ca41f3d18d\nSafe engine tree: 68215430ca09a56643c12589c91eb8b928fdb7a4"
+        },
+        {
+          "type": "p",
+          "text": "A tree object is not a release or branch head. Final safe engine tree is incomplete as an integrated candidate. Fetch and verify exact blobs before committing; a >1 MB connector file read may return empty text, so use durable full source and verified hunks."
+        }
+      ]
+    },
+    {
+      "title": "Durable files and broader priorities",
+      "subtitle": "A fresh session can resume without relying on this chat's ephemeral stores",
+      "blocks": [
+        {
+          "type": "h",
+          "text": "Local file map"
+        },
+        {
+          "type": "code",
+          "text": "Fifth root:\nC:/Users/antho/dukb-handoff/2026-11-04/masterlist-fifth/\n\nResume root:\nC:/Users/antho/dukb-handoff/2026-11-04/handoff-pdf/resume-snapshot/"
+        },
+        {
+          "type": "table",
+          "headers": [
+            "Under fifth root",
+            "Use"
+          ],
+          "rows": [
+            [
+              "career/product/src/; career/test-first/src/",
+              "Final SC full product and test sources."
+            ],
+            [
+              "manager/product/src/; manager/test-first/src/",
+              "Final safe CM full product and test sources."
+            ],
+            [
+              "other/product/src/; other/test-first/src/",
+              "Final NBA/NFL product, SecondTab adaptation and new test."
+            ],
+            [
+              "career/scripts/qa/; manager/scripts/qa/; other/qa-browser/",
+              "Final source-owned native journey modules."
+            ],
+            [
+              "Family PRODUCT-HUNKS.json / TEST-FIRST.json",
+              "Pins, exact change spans, inverses and case contracts. Preserve predecessor folders."
+            ],
+            [
+              "baseline-qualified/; outcomes-first/; build-first/",
+              "Already verified original ZIPs and extracted runtime evidence."
+            ]
+          ],
+          "widths": [
+            218,
+            282
+          ]
+        },
+        {
+          "type": "p",
+          "text": "Resume root includes RESUME-PINS.json, the round plan, the outcome runner and case specification, regression list, root fixture producer/browser driver, all three native modules, and build/outcome templates. Older public templates are reference only and must be rebound to the final fifth artifact and all four routes. Placeholder templates are not ready-to-run release approvals."
+        },
+        {
+          "type": "h",
+          "text": "Anthony's reported priorities"
+        },
+        {
+          "type": "p",
+          "text": "User-supplied page totals: Soccer Career 35k; home 19k; Club Manager 10.9k; soccer 3.4k; NBA My Career 3.1k; Pro Basketball 2.3k; Pro Football 2.1k; NFL My Career and Stadium Tycoon 1.9k each; Front Office 1.4k. These are reported historical figures, not a new analytics query."
+        },
+        {
+          "type": "p",
+          "text": "Search priorities also include college-grid, build-your-xi, mlb-my-career, hockey-higher-lower, fight-career, nfl-career, ufc, soccer-grid, budget-builder, nba-starting-5, nhl-my-career, perfect-season-nhl, nba-connections, conquest, missing-xi, career, fantasy-draft, nba-higher-lower, football-grid, nba-grid, nfl-higher-lower, soccer-conquest and mlb-front-office."
+        },
+        {
+          "type": "h",
+          "text": "Source of scope"
+        },
+        {
+          "type": "p",
+          "text": "C:/Users/antho/Downloads/DoUKnowBall_Game_Expansion_Masterplan.txt\n444117 bytes; SHA256 fda0f7eef07d41f2ba91e89dff3542fef98cd3bd9aabcbe02f70b649797d357a. Preserve the book and ledger. Broader popular-game work remains requested; this handoff establishes no fifth-batch improvements outside the four named routes."
+        },
+        {
+          "type": "p",
+          "text": "Do not call the 409-card master list complete. Finish and publish this fifth batch with exact evidence, then choose the next scoped changes with Soccer Career and Club Manager first."
+        }
+      ]
+    }
+  ]
+}
