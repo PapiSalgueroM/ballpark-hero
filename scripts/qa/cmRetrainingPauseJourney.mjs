@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { waitForScrollIdle } from './nativeScrollReady.mjs';
 
 const copy = value => JSON.parse(JSON.stringify(value));
 const BASE = { intensity: 'double', focus: 'youth' };
@@ -73,6 +74,7 @@ export async function runRetrainingPause({ page, width, base, fixture, engine, p
   const idle = () => page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
   const scroll = () => page.evaluate(() => ({ x: scrollX, y: scrollY }));
   const native = async (control, action) => {
+    await waitForScrollIdle(page);
     await control.scrollIntoViewIfNeeded();
     if (width < 768) await control.tap({ trial: true }); else await control.click({ trial: true });
     await idle(); const before = await scroll();

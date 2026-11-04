@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { waitForScrollIdle } from './nativeScrollReady.mjs';
 
 const clone = value => JSON.parse(JSON.stringify(value));
 
@@ -72,6 +73,7 @@ export async function runUsSigning({ page, width, base, fixture, photo, tap, got
   await opener.waitFor({ state: 'visible' });
   assert.equal(await opener.count(), 1);
   assert.equal(await read(), fixture.raw, 'US_NATIVE_COLD_LOAD_BYTES');
+  await waitForScrollIdle(page);
   await opener.scrollIntoViewIfNeeded();
   if (width === 1280) { await opener.click({ trial: true }); await opener.focus(); }
   else await opener.tap({ trial: true });
