@@ -468,7 +468,7 @@ try {
           assert(answer && !answer.row.went, 'The real international helper accepts resting this summer');
           assert.equal(answer.row.year, callYear); assert.equal(sport.intl.pendingYear(expected.c), null);
           assert.equal(JSON.stringify(expected.c.summer), summer, 'Resting preserves the dealt Summer queue');
-          await activate(page.getByRole('button', { name: /^Rest this summer/ }), profile.input, 30);
+          await activate(page.getByRole('button', { name: /Rest this summer/ }), profile.input, 30);
           await pending.waitFor(); await settle(page);
           const afterCall = await protectedState(page);
           assert.equal(afterCall.storage[sport.saveKey], JSON.stringify(expected), 'Native Rest writes exactly the real helper result and retains the event phase');
