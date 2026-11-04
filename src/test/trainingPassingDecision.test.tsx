@@ -69,14 +69,14 @@ function setup(position: 'CM' | 'GK' | 'ST' = 'CM', spent = false, keepAvailable
     storage: () => localStorage.getItem(KEY), inputHeld: () => C.serializeSoccerCareerSave(initial) === before };
 }
 type Setup = ReturnType<typeof setup>;
-async function openReading(s: Setup) {
+async function openReading(s: Setup, beforeStart?: () => void) {
   const tile = s.view.queryByRole('button', { name: /Read the pass/ });
   if (!tile) return { opened: false, instructions: '', example: '' };
   fireEvent.click(tile);
   const start = await s.view.findByRole('button', { name: 'Start reading session' });
   const instructions = s.view.container.textContent ?? '';
   const example = s.view.queryByText(/three correct.*60.*four.*80/i)?.textContent ?? '';
-  fireEvent.click(start);
+  beforeStart?.(); fireEvent.click(start);
   return { opened: true, instructions, example };
 }
 async function finishReading(s: Setup, answers: string[]) {
@@ -144,15 +144,14 @@ describe('Soccer untimed passing decisions', () => {
   });
 
   it('locks the first read, explains the open lane and holds score while rules and time change', async () => {
-    const s = setup(), entry = await openReading(s);
+    const s = setup(), entry = await openReading(s, () => { vi.useFakeTimers(); });
     let firstScore: string | null = null, afterTime: string | null = null, feedback: string | null = null,
       blockedSecond = false, helperPreserved = false, allOptionLabels: string[][] = [];
     if (entry.opened) {
       const score = () => s.view.queryByLabelText('Reading session score')?.textContent ?? null;
       firstScore = score();
-      vi.useFakeTimers();
       act(() => { vi.advanceTimersByTime(90000); });
-      afterTime = score(); vi.useRealTimers();
+      afterTime = score();
       const group = s.view.getByRole('group', { name: /^Decision 1 of 5:/ });
       act(() => {
         fireEvent.click(within(group).getByRole('button', { name: 'Force the centre pass' }));
@@ -174,7 +173,7 @@ describe('Soccer untimed passing decisions', () => {
         fireEvent.click(within(question).getByRole('button', { name: choose[i][[1, 0, 2, 1, 2][i]] }));
         fireEvent.click(s.view.getByRole('button', { name: i === 4 ? 'See session score' : 'Next decision' }));
       }
-      await s.view.findByText('session score');
+      s.view.getByText('session score'); vi.useRealTimers();
     }
     raw('first-read', snapshot(s, { entry, firstScore, afterTime, feedback, blockedSecond, helperPreserved, allOptionLabels }));
     expect(s.view.container.querySelector('[data-training-score]')?.textContent, 'SC_READING_FIRST_LOCK').toBe('80');
