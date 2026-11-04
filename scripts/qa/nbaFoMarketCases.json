@@ -1,0 +1,229 @@
+{
+  "status": "DRAFT: four temporary source arms only; starts and finishes at original NBA app9790. Reviewed typed test8987 held. Not yet executed.",
+  "sourceBaseObserved": "ae17830b9daee522ac5ea738f2e36b93e888ad04",
+  "prerequisite": "Execute only in isolated QA from the unchanged test/docs parent679599f after peer review. Actual original admission41930515709 is frozen. The four-arm temporary candidate/control changes must restore every original source byte before exit; this does not authorize an NBA product commit or publish.",
+  "path": "src/test/nbaFrontOfficeMarketAccess.test.tsx",
+  "bytes": 14160,
+  "git": "8987f39786d523be495e1bacf3b7731e5c16bc57",
+  "sha256": "534d088807fe731ac8c5158a3ca275f11eedc2cec26ecc4cefdf23ddeaccc45f",
+  "book": {
+    "card": "PL-16",
+    "title": "Give every complex screen a decision and a consequence",
+    "credit": "Further partial owner-priority adaptation for /nba-front-office only. No new NBA My Career chapter and no whole-card or master-list completion."
+  },
+  "limits": [
+    "Only future product proposal: remove the one market row slice(0, 20). Keep internal scroll, sort and tie order, signing/waiver/cap/15-player rules and all model helpers unchanged.",
+    "Only isolated remote QA may temporarily remove and reinsert the exact one market row cap across four arms, restoring all original tracked bytes before exit. No NBA product commit or publish, local application/runtime/build/browser/parser commands, new real sports data, provider/database/lock/coefficient/RNG-site work or active-save reset.",
+    "Test mocks only nonproduct completion/activity/share/reveal-scroll integrations. Real initializer, actual board JSON save reader, nbaSign, rotation and nbaNoteArrivals remain unmocked.",
+    "Unit tests own exact action tapes and write counts. Actual 320/390/1280 scrolling/keyboard/focus/layout and served asset bodies remain future native/public gates.",
+    "Do not use the NFL/NHL isFrontOfficeSave validator for NBA. The actual NBA board owns its JSON/ensureNbaLeagueIds/nbaCleanStats/readGmDesk load path."
+  ],
+  "pins": {
+    "src/components/nba-front-office/NbaFrontOfficeBoard.tsx": "9790f2cdb506f7feda1ed80304fe0864017878c6",
+    "src/lib/nbaFrontOffice.ts": "c1a4fd8c65f45ca251d6b6a5fe12f35c1bb3c217",
+    "src/lib/nbaRotation.ts": "acd7dbb36dda24f640647613e0daf63caff7d7cf",
+    "src/lib/nbaGmDesk.ts": "e43dcf727afae26b4040bec9f7999b5faaa19c55",
+    "src/lib/gmContracts.ts": "d51c6fe3b58b079c95b88d9b296c622d7181727e",
+    "src/lib/gmDesk.ts": "732b2dd3546f383326ba24b9b65cb634e997d02c",
+    "src/lib/entityIds.ts": "5d7791d0f0d573d1c25ef567b2102f29996f7d6e",
+    "src/lib/frontOfficeCuts.ts": "d835672cb11b2283270ffdfadf35d17abe78b228"
+  },
+  "counts": {
+    "total": 3,
+    "expectedOriginalOwnedFailures": 2,
+    "expectedOriginalHeldPasses": 1,
+    "expectedFixedPassed": 3,
+    "expectedRestoredPassed": 3
+  },
+  "cases": [
+    {
+      "fullName": "NBA Front Office complete free agent market shows every saved free agent beyond twenty and thirty with the actual tail rating evidence",
+      "baseline": "failed",
+      "marker": "NBA_FO_MARKET_COMPLETE_POOL",
+      "rawFile": "complete-pool.json"
+    },
+    {
+      "fullName": "NBA Front Office complete free agent market signs a player beyond thirty through the real model with rotation and arrival metadata then reloads the full save",
+      "baseline": "failed",
+      "marker": "NBA_FO_MARKET_TAIL_SIGN",
+      "rawFile": "tail-sign.json"
+    },
+    {
+      "fullName": "NBA Front Office complete free agent market preserves original head signing automatic saves and cap full roster and same season waiver refusals",
+      "baseline": "passed",
+      "marker": null,
+      "rawFile": "legacy-guards.json"
+    }
+  ],
+  "fixture": {
+    "constructor": "initNbaLeague(seeded(73)); real constructed league retains other clubs, schedule, stats, cap and tax fields.",
+    "controlled": "DEN has14 fictional complete players (15 for the full guard),33 complete fictional free agents in reversed saved order; OVR98 down to66 determines independent UI IDs1 through33.",
+    "target": "nba-market-access-fa-31, rating68, salary3, years2. Actual sign is the15th roster player, with32remaining free agents.",
+    "evidence": "Only rank33 has real-shape evidence, opening estimate79 distinct from current66; box-score-proxy, prior-only and unmeasured-prior are each observed through actual board notes and partial marker.",
+    "rotation": "Eight valid explicitly preferred own IDs8,7,6,5,4,3,2,1 survive tail signing and reload. Held legacy head vector also keeps absent automatic rotation absent.",
+    "desk": "Tail vectors cover gm absent and real openNbaDesk. Real nbaSign plus nbaNoteArrivals supplies full saved-frame reference. Independent expected arrival is {since:2026,how:signing,mid:true}; other desk blocks stay held. No invented Bird-tier interpretation.",
+    "defaults": "Persist-order complete frame seeds mandate, trust70, firedfalse, pressTilt0, seasonTradeLinenull, postseasonnull; draftAiBatchesLeft omitted. gm omitted for the legacy vector."
+  },
+  "rawEnv": "NBA_FO_MARKET_ACCESS_RAW",
+  "rawFiles": [
+    "complete-pool.json",
+    "tail-sign.json",
+    "legacy-guards.json"
+  ],
+  "heldRawExact": [
+    "legacy-guards.json"
+  ],
+  "crossArmValues": [
+    {
+      "file": "tail-sign.json",
+      "path": [
+        "observations",
+        "rows"
+      ],
+      "count": 2,
+      "child": "reference",
+      "equality": "Compare each complete reference child, including accepted result, full saved league/frame/desk/rotation, exact serialized bytes and every action RNG draw. Both desk modes are mandatory."
+    }
+  ],
+  "importTape": "vi.hoisted seeds module evaluation, then restores immediately. Complete moduleDraws is retained separately in all RAW. Compare it exactly across all arms; beforeEach owns normal action tapes.",
+  "restoredRawExact": "All three complete RAW files, byte for byte. RAW precedes both owned business assertions, including when the original has no tail row.",
+  "controls": [
+    "Whole original with the frozen new test must produce exactly the two owned missing-pool/tail AssertionErrors and held legacy pass with all three RAW files.",
+    "Reinsert the exact row truncation into a held copy, assert its real source span changes exactly once and rendered IDs reduce from33 to20 before admitting the owned failure. This single product fault equals the one-line whole-original body; do not claim two distinct fault mechanisms.",
+    "Restore all source bytes and all three RAW files exactly. Preserve every complete reference child and the entire held legacy RAW across original/fixed/restored."
+  ],
+  "admission": {
+    "verifiedBase": "ae17830b9daee522ac5ea738f2e36b93e888ad04",
+    "qaParent": "679599f4977553f68cfb1d294816a50c229d0b7d",
+    "scope": "Verified released sixth main is separate from measured immediate test-only QA parent. No claim that the test parent itself is released."
+  },
+  "typeCompatibilityPredecessor": {
+    "run": 41927916585,
+    "head": "166049a692e44b739e2ba9f5cf6086f49ee4f16f",
+    "artifact": 13368664194,
+    "size": 543210,
+    "sha256": "6bed1767a91b696c53f6b79ca56739d1806dc05df1324f771118d49517be7a88",
+    "result": "Proper app types failed at two Object.hasOwn fixture presence checks before gameplay. Native prototype own-property call replacement has exact whole-file inverse; no baseline credit."
+  },
+  "outcomes": {
+    "mode": "temporary-fixed-original-row-fault-restored",
+    "verifiedBase": "ae17830b9daee522ac5ea738f2e36b93e888ad04",
+    "qaParent": "679599f4977553f68cfb1d294816a50c229d0b7d",
+    "qaParentTree": "9f5e94da5340791b0514f8bbaabff086626ff6d7",
+    "originalRun": 41930515709,
+    "originalHead": "a4c4f71f3a13dd86ac61e6df835fb1250e344fb4",
+    "originalTree": "d3a0b5c6cf25d28a873b8437036e6407ea66819f",
+    "originalManifestSHA256": "3dac1ccf00d552ef55e8f5e9151fcd3d60f379f37adb70c3bc5f0e83e15bd9ec",
+    "originalAdmission": {
+      "status": "admitted-original-only",
+      "releaseBase": "ae17830b9daee522ac5ea738f2e36b93e888ad04",
+      "testCore": "679599f4977553f68cfb1d294816a50c229d0b7d",
+      "qaHead": "a4c4f71f3a13dd86ac61e6df835fb1250e344fb4",
+      "qaTree": "d3a0b5c6cf25d28a873b8437036e6407ea66819f",
+      "run": 41930515709,
+      "job": 126925923417,
+      "artifact": {
+        "id": 13372325319,
+        "bytes": 2025261,
+        "sha256": "b6b4f7c4c024fbc2127a60476ae273c5028be9fb342bce9a871d48f97b92e04d",
+        "acquisitions": 1,
+        "checkedBeforeExtraction": true,
+        "path": "original-qualified/original.zip"
+      },
+      "test": {
+        "git": "8987f39786d523be495e1bacf3b7731e5c16bc57",
+        "bytes": 14160,
+        "sha256": "534d088807fe731ac8c5158a3ca275f11eedc2cec26ecc4cefdf23ddeaccc45f"
+      },
+      "result": {
+        "status": "admitted-original",
+        "head": "a4c4f71f3a13dd86ac61e6df835fb1250e344fb4",
+        "tree": "d3a0b5c6cf25d28a873b8437036e6407ea66819f",
+        "child": {
+          "command": [
+            "/opt/hostedtoolcache/node/24.22.1/x64/bin/node",
+            "node_modules/vitest/vitest.mjs",
+            "run",
+            "src/test/nbaFrontOfficeMarketAccess.test.tsx",
+            "--maxWorkers=1",
+            "--minWorkers=1",
+            "--reporter=json",
+            "--outputFile=/home/runner/work/_temp/nba-fo-market-original/original-vitest.json"
+          ],
+          "exit": 1,
+          "signal": null,
+          "error": null
+        },
+        "counts": {
+          "total": 3,
+          "ownedFailures": 2,
+          "heldPasses": 1,
+          "pending": 0
+        },
+        "raw": [
+          {
+            "file": "complete-pool.json",
+            "bytes": 893326,
+            "sha256": "33d9f58d95a97103c2e93ba04c84b1b8ce7e5c34e422fb25b39de9561bf95bf9"
+          },
+          {
+            "file": "tail-sign.json",
+            "bytes": 2511687,
+            "sha256": "e4cbef5175bf1f21924abfec742e506b21936c89acdb97462a0ef6493dd234f1"
+          },
+          {
+            "file": "legacy-guards.json",
+            "bytes": 4084720,
+            "sha256": "62fde002b6bf9d5f36d65e024e4a4a01fb373aa6035af9be730034c745ec5737"
+          }
+        ],
+        "moduleDraws": [
+          0.45872433991983935,
+          0.7799852688610417,
+          0.21241546907687137,
+          0.06679493847004597
+        ],
+        "rawCases": {
+          "completePool": 3,
+          "tailReferenceArms": 2,
+          "heldHeadArms": 2,
+          "heldRefusals": 3
+        },
+        "offline": {
+          "receipt": "/home/runner/work/_temp/nba-fo-market-original/transport/original.log",
+          "blockedAttempts": 0
+        },
+        "sourceHeld": true,
+        "productNeverMutated": true,
+        "exactFinalSource": true,
+        "statusAfter": "",
+        "originalAdmissionLog": "nbaFoMarketOriginal: 3 actual cases, 2 owned AssertionErrors and 1 held pass; all3 full RAW files, complete action/import tapes and unchanged source admitted. Original only.\n",
+        "types": "{\"command\":\"node_modules/.bin/tsc --noEmit -p tsconfig.app.json\",\"exit\":0}\n"
+      },
+      "limits": [
+        "No NBA product commit or fixed/restored claim yet.",
+        "Proper application TSC0, exactly2 owned missing20-tail failures and1 held compatibility pass.",
+        "All source/lock/offline/status held. Actual unit fixture, not naturally reached career or native/public proof.",
+        "Seventh SC App release remains separate; no publish claim, broader historical failure waivers or master-card completion."
+      ]
+    },
+    "recordedRaw": [
+      {
+        "file": "complete-pool.json",
+        "bytes": 893326,
+        "sha256": "33d9f58d95a97103c2e93ba04c84b1b8ce7e5c34e422fb25b39de9561bf95bf9"
+      },
+      {
+        "file": "tail-sign.json",
+        "bytes": 2511687,
+        "sha256": "e4cbef5175bf1f21924abfec742e506b21936c89acdb97462a0ef6493dd234f1"
+      },
+      {
+        "file": "legacy-guards.json",
+        "bytes": 4084720,
+        "sha256": "62fde002b6bf9d5f36d65e024e4a4a01fb373aa6035af9be730034c745ec5737"
+      }
+    ],
+    "limits": "Source-only QA preparation. Runtime may temporarily remove one actual row-cap span; original source must be restored before exit. Whole original and reinstated row fault are the same one mechanism. No separate198case/harness/build/browser/public work in this runner."
+  }
+}
