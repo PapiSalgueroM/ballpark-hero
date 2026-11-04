@@ -1,0 +1,125 @@
+name: Sixth original-input native keyboard replay
+on:
+  push:
+    branches: [codex/master-list-sixth-completion-replay-20261104]
+permissions:
+  contents: read
+  actions: read
+env:
+  CI: '1'
+  SIM_NETWORK: offline
+  PLAYWRIGHT_BROWSERS_PATH: /home/runner/.cache/ms-playwright
+jobs:
+  observe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          filter: blob:none
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - name: Bind additive replay source and retained failed original
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          OUT="$RUNNER_TEMP/master-list-sixth-positive"
+          REF="$RUNNER_TEMP/retained-sixth-second"
+          mkdir -p "$OUT/logs" "$OUT/transport" "$REF"
+          echo "QA_OUT=$OUT" >> "$GITHUB_ENV"
+          echo "QA_REF=$REF" >> "$GITHUB_ENV"
+          export QA_OUT="$OUT" QA_REF="$REF"
+          test "$(git rev-parse HEAD^)" = 742746cf46502feff0b72f755e70ae5815143b59
+          test "$(git rev-parse HEAD^^{tree})" = bda8eb977b3d26ab922c6506a6fd62fa6fa7f27b
+          test "$(git diff --name-status HEAD^ HEAD)" = $'A\t.github/workflows/master-list-sixth-completion-replay-20261104.yml'
+          git diff --exit-code 83a6cc668d29c80941d852fa1b8b5c5ca35ea83f HEAD -- src public index.html package.json package-lock.json bun.lock bun.lockb vite.config.ts > "$OUT/app-source-bridge.txt"
+          git rev-parse HEAD HEAD^{tree} > "$OUT/source.txt"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$OUT/source-before.sha256"
+          git status --porcelain=v1 --untracked-files=all > "$OUT/status-before.txt"
+          test ! -s "$OUT/status-before.txt"
+          cp .github/workflows/master-list-sixth-completion-replay-20261104.yml "$OUT/workflow.yml"
+          curl --fail --location --silent --show-error -H "Authorization: Bearer $GH_TOKEN" -H 'Accept: application/vnd.github+json' https://api.github.com/repos/PapiSalgueroM/ballpark-hero/actions/artifacts/13364542787 --output "$OUT/reference-meta.json"
+          curl --fail --location --silent --show-error -H "Authorization: Bearer $GH_TOKEN" -H 'Accept: application/vnd.github+json' https://api.github.com/repos/PapiSalgueroM/ballpark-hero/actions/jobs/126874847323 --output "$OUT/reference-job.json"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const out=process.env.QA_OUT,m=JSON.parse(fs.readFileSync(out+'/reference-meta.json')),j=JSON.parse(fs.readFileSync(out+'/reference-job.json'));
+          assert.equal(m.id,13364542787);assert.equal(m.expired,false);assert.equal(m.size_in_bytes,15487654);assert.equal(m.digest,'sha256:f98bf94103302c59806ddff4b98c0cb4a938833052b6aac113679e1a70d062a1');assert.equal(m.workflow_run.id,41915755939);assert.equal(m.workflow_run.head_sha,'83a6cc668d29c80941d852fa1b8b5c5ca35ea83f');
+          assert.equal(j.id,126874847323);assert.equal(j.run_id,41915755939);assert.equal(j.head_sha,m.workflow_run.head_sha);assert.equal(j.status,'completed');assert.equal(j.conclusion,'failure');
+          NODE
+          curl --fail --location --silent --show-error -H "Authorization: Bearer $GH_TOKEN" -H 'Accept: application/vnd.github+json' https://api.github.com/repos/PapiSalgueroM/ballpark-hero/actions/artifacts/13364542787/zip --output "$REF/original.zip"
+          test "$(stat -c%s "$REF/original.zip")" = 15487654
+          echo "f98bf94103302c59806ddff4b98c0cb4a938833052b6aac113679e1a70d062a1  $REF/original.zip" | sha256sum --check
+          unzip -q "$REF/original.zip" -d "$REF/extracted"
+          echo "0437cc098e1aa8b596b6e3f4cd9b54643b34c8c55514fa12dad885bf213e3f0b  $REF/extracted/completed-dist.tar.gz" | sha256sum --check
+          test "$(stat -c%s "$REF/extracted/completed-dist.tar.gz")" = 6978488
+          echo "126809e62fb780ef94d89144cc9f9755d4b593281c49a476846235819dde8318  $REF/extracted/dist-before.sha256" | sha256sum --check
+          cp "$REF/extracted/dist-before.sha256" "$OUT/dist-before.sha256"
+          cp "$REF/extracted/cm-fixtures/manifest.json" "$OUT/reference-cm-fixture-manifest.json"
+          test "$(wc -l < "$OUT/dist-before.sha256")" = 847
+          tar -xzf "$REF/extracted/completed-dist.tar.gz" -C "$GITHUB_WORKSPACE"
+          sha256sum --check "$OUT/dist-before.sha256" > "$OUT/reference-dist-held.log"
+      - name: Install existing browser QA tools without rebuilding
+        run: |
+          set -euo pipefail
+          npm ci --no-audit --no-fund > "$QA_OUT/logs/npm-ci.log" 2>&1
+          npm install --prefix "$RUNNER_TEMP/top-games-focus-tools" --package-lock=false --no-audit --no-fund playwright@1.64.0 > "$QA_OUT/logs/playwright-install.log" 2>&1
+          test ! -e node_modules/playwright
+          test ! -e node_modules/playwright-core
+          ln -s "$RUNNER_TEMP/top-games-focus-tools/node_modules/playwright" node_modules/playwright
+          ln -s "$RUNNER_TEMP/top-games-focus-tools/node_modules/playwright-core" node_modules/playwright-core
+          "$RUNNER_TEMP/top-games-focus-tools/node_modules/.bin/playwright" install --with-deps chromium > "$QA_OUT/logs/chromium-install.log" 2>&1
+          git diff --exit-code HEAD -- package.json package-lock.json bun.lock bun.lockb
+      - name: Replay only desktop completion with the native tabstop correction
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          node --check scripts/qa/cmReplacementCompletionReplay.mjs
+          node --check scripts/qa/cmReplacementCompletionReplayRunner.mjs
+          : > "$QA_OUT/transport/server.log"
+          SIM_OFFLINE_RECEIPT="$QA_OUT/transport/server.log" node scripts/lib/hostLikeServer.mjs dist 4174 > "$QA_OUT/logs/server.log" 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid" 2>/dev/null || true' EXIT
+          ready=0
+          for attempt in $(seq 1 40); do if curl --fail --silent http://127.0.0.1:4174/ > /dev/null; then ready=1; break; fi; kill -0 "$server_pid"; sleep 1; done
+          test "$ready" = 1
+          : > "$QA_OUT/transport/replay.log"
+          SIM_OFFLINE_RECEIPT="$QA_OUT/transport/replay.log" node scripts/qa/cmReplacementCompletionReplayRunner.mjs --out "$QA_OUT/replay" --fixtures "$QA_REF/extracted/cm-fixtures" --dist dist --base-url http://127.0.0.1:4174 > "$QA_OUT/logs/replay.log" 2>&1
+          test ! -s "$QA_OUT/transport/replay.log"
+          test ! -s "$QA_OUT/transport/server.log"
+      - name: Always retain source status and original completed file holds
+        if: always()
+        run: |
+          set -euo pipefail
+          git diff --exit-code HEAD > "$QA_OUT/source-diff.txt"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$QA_OUT/source-after.sha256"
+          cmp "$QA_OUT/source-before.sha256" "$QA_OUT/source-after.sha256"
+          sha256sum --check "$QA_OUT/source-before.sha256" > "$QA_OUT/source-held.log"
+          git status --porcelain=v1 --untracked-files=all > "$QA_OUT/status-after.txt"
+          cmp "$QA_OUT/status-before.txt" "$QA_OUT/status-after.txt"
+          find dist -type f -print0 | sort -z | xargs -0 sha256sum > "$QA_OUT/dist-after.sha256"
+          cmp "$QA_OUT/dist-before.sha256" "$QA_OUT/dist-after.sha256"
+          sha256sum --check "$QA_OUT/dist-before.sha256" > "$QA_OUT/dist-held.log"
+      - name: Bound retained original-input replay evidence
+        id: artifact
+        if: always()
+        run: |
+          set -euo pipefail
+          test -d "$QA_OUT"
+          test "$(du -sb "$QA_OUT" | cut -f1)" -lt 50000000
+          echo "ready=true" >> "$GITHUB_OUTPUT"
+      - uses: actions/upload-artifact@v4
+        if: ${{ always() && steps.artifact.outputs.ready == 'true' }}
+        with:
+          name: master-list-sixth-positive-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/master-list-sixth-positive
+          if-no-files-found: error
+          retention-days: 14
+          compression-level: 6
