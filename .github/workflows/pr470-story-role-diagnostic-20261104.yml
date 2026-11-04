@@ -1,0 +1,135 @@
+name: StoryRole two-frame raw diagnosis
+on:
+  push:
+    branches: [codex/pr470-story-role-diagnostic-20261104]
+permissions:
+  contents: read
+concurrency:
+  group: story-role-diagnostic-${{ github.ref }}
+  cancel-in-progress: false
+env:
+  CI: '1'
+  SIM_NETWORK: offline
+jobs:
+  story-role:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: joined
+            source: 42ef023a2a36afea43c4b7d4b9e64cac098d95cf
+            tree: 7a1a1d72582f366712484f3824ede9e91d6b573b
+            parent: cfdbb34b755098a2ee6961a9fc05e61cd7202fdf
+          - name: main-reference
+            source: dea549ac59402de3335365226d21e91de4fa447e
+            tree: bb1f7280181e9d55d66c5413f0ab42915b7f33bd
+            parent: 7412fef3023f94f41de5251f024e227e027920b7
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      FRAME: '${{ matrix.name }}'
+      FRAME_SOURCE: '${{ matrix.source }}'
+      FRAME_TREE: '${{ matrix.tree }}'
+      FRAME_PARENT: '${{ matrix.parent }}'
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ matrix.source }}
+          fetch-depth: 2
+          filter: blob:none
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - name: Hold source and materialize the unchanged harness references
+        run: |
+          set -euo pipefail
+          export QA_OUT="$RUNNER_TEMP/story-role-$FRAME"
+          mkdir -p "$QA_OUT/logs" "$QA_OUT/raw" "$QA_OUT/transport"
+          echo "QA_OUT=$QA_OUT" >> "$GITHUB_ENV"
+          trap 'printf "line=%s command=%s\n" "$LINENO" "$BASH_COMMAND" >> "$QA_OUT/logs/preflight-error.log"' ERR
+          test "$(git rev-parse HEAD)" = "$FRAME_SOURCE"
+          test "$(git rev-parse HEAD^{tree})" = "$FRAME_TREE"
+          test "$(git rev-parse HEAD^)" = "$FRAME_PARENT"
+          printf 'M\tscripts/qa/careerTransferBriefKit.mjs\n' > "$QA_OUT/expected-paths.txt"
+          git diff --name-status HEAD^ HEAD > "$QA_OUT/changed-paths.txt"
+          cmp "$QA_OUT/expected-paths.txt" "$QA_OUT/changed-paths.txt"
+          test "$(git hash-object scripts/simCareerStoryRole.mjs)" = 9aa7ba3e27b8d5d8a6ce96c069c786e435813cd8
+          git status --porcelain=v1 --untracked-files=all > "$QA_OUT/status-before.txt"
+          test ! -s "$QA_OUT/status-before.txt"
+          git rev-parse HEAD HEAD^{tree} HEAD^ > "$QA_OUT/source.txt"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$QA_OUT/source-before.sha256"
+          cp scripts/simCareerStoryRole.mjs "$QA_OUT/executed-harness.mjs"
+          for ref in de39ef18d2187ca98ccc57d4ef7ebc33c0f6bd6a 4ae7a5342cab46cb0c906bc8fea8bc555b908ce1; do
+            git fetch --no-tags --depth=1 origin "$ref" >> "$QA_OUT/logs/history.log" 2>&1
+            git rev-parse "$ref" "$ref^{tree}" >> "$QA_OUT/references.txt"
+            git ls-tree -r --format='%(objectname)' "$ref" src | git cat-file --batch > /dev/null
+          done
+          test "$(git rev-parse de39ef18d2187ca98ccc57d4ef7ebc33c0f6bd6a^{tree})" = 487b8f9274808bd3d2a7990b2172035989b1fdee
+          test "$(git rev-parse 4ae7a5342cab46cb0c906bc8fea8bc555b908ce1^{tree})" = f32ca47cf9f99b2faa4218022e609bbe62c157b7
+          git fetch --no-tags --depth=1 origin "$GITHUB_SHA" >> "$QA_OUT/logs/history.log" 2>&1
+          git show "$GITHUB_SHA:.github/workflows/pr470-story-role-diagnostic-20261104.yml" > "$QA_OUT/workflow.yml"
+      - name: Install held dependencies
+        run: |
+          set -euo pipefail
+          npm ci --no-audit --no-fund > "$QA_OUT/logs/install.log" 2>&1
+          git diff --exit-code HEAD -- package.json package-lock.json
+      - name: Run only the original StoryRole harness and preserve its actual exit
+        timeout-minutes: 10
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          export CAREER_STORY_ROLE_ARTIFACTS="$QA_OUT/raw"
+          unset CAREER_STORY_ROLE_CONTROL CAREER_STORY_ROLE_IMPORT_ONLY CAREER_STORY_ROLE_CHAIN_REF
+          : > "$QA_OUT/transport/story-role.log"
+          set +e
+          SIM_OFFLINE_RECEIPT="$QA_OUT/transport/story-role.log" node scripts/simCareerStoryRole.mjs 2>&1 | tee "$QA_OUT/logs/story-role.log"
+          codes=("${PIPESTATUS[@]}")
+          printf '%s\n' "${codes[0]}" > "$QA_OUT/story-role.exit"
+          printf '%s\n' "${codes[1]}" > "$QA_OUT/tee.exit"
+          set -e
+          test "${codes[1]}" = 0
+          test ! -s "$QA_OUT/transport/story-role.log"
+          test "${codes[0]}" = 0
+      - name: Always retain walks loaded sources logs and source closure
+        if: always()
+        run: |
+          set -euo pipefail
+          test -n "$QA_OUT"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$QA_OUT/source-after.sha256"
+          git diff --binary HEAD > "$QA_OUT/source-diff.txt"
+          git status --porcelain=v1 --untracked-files=all > "$QA_OUT/status-after.txt"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import crypto from 'node:crypto';import assert from 'node:assert/strict';
+          const out=process.env.QA_OUT,root=out+'/raw/healthy';
+          const required=['full-119102-original.json.gz','full-119102-current.json.gz','full-119102-attributed.json.gz','original-source.json','candidate-source.json','attribution-edits.json','report.json'];
+          const rows=required.map(file=>{const p=root+'/'+file;if(!fs.existsSync(p))return{file,missing:true};const b=fs.readFileSync(p);return{file,bytes:b.length,sha256:crypto.createHash('sha256').update(b).digest('hex')};});
+          const native=fs.existsSync(out+'/story-role.exit')?fs.readFileSync(out+'/story-role.exit','utf8').trim():null;
+          fs.writeFileSync(out+'/diagnosis.json',JSON.stringify({frame:process.env.FRAME,source:process.env.FRAME_SOURCE,tree:process.env.FRAME_TREE,nativeExit:native,required:rows,meaning:'Unchanged StoryRole diagnostic only. Original, current and attributed seed119102 walks in each of two frames provide six walks in total. Complete raw folders retained. A failure or missing walk earns no passing outcome or aggregate credit.'},null,2)+'\n');
+          assert(rows.every(r=>!r.missing),'Required existing diagnostic outputs must be physically retained');
+          NODE
+          cmp "$QA_OUT/source-before.sha256" "$QA_OUT/source-after.sha256"
+          sha256sum --check "$QA_OUT/source-before.sha256" > "$QA_OUT/source-held.log"
+          test ! -s "$QA_OUT/source-diff.txt"
+          test ! -s "$QA_OUT/status-after.txt"
+          test ! -s "$QA_OUT/transport/story-role.log"
+      - name: Bound retained evidence independently
+        id: artifact
+        if: always()
+        run: |
+          set -euo pipefail
+          test -d "$QA_OUT"
+          test "$(du -sb "$QA_OUT" | cut -f1)" -lt 150000000
+          echo ready=true >> "$GITHUB_OUTPUT"
+      - uses: actions/upload-artifact@v4
+        if: ${{ always() && steps.artifact.outputs.ready == 'true' }}
+        with:
+          name: story-role-${{ matrix.name }}-${{ github.run_id }}
+          path: ${{ env.QA_OUT }}
+          if-no-files-found: error
+          retention-days: 7
+          compression-level: 6
