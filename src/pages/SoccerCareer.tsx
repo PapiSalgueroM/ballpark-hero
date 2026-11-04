@@ -1935,6 +1935,26 @@ export default function SoccerCareer() {
         )}
         <GameSeoContent
           pageHasOwnH1
+          reportGameContext={{
+            careerRating: {
+              phase: career?.phase ?? "creation",
+              age: career?.age ?? null,
+              position: career && POSITIONS.some(p => p.value === career.position) ? career.position : null,
+              overall: career?.overall ?? null,
+              derivedOverall: career && POSITIONS.some(p => p.value === career.position) ? calcOverall(career, career.position) : null,
+              skills: career ? {
+                pace: career.pace, shooting: career.shooting, passing: career.passing,
+                dribbling: career.dribbling, defending: career.defending,
+                physical: career.physical, reflexes: career.reflexes,
+              } : null,
+              seasonCount: career?.seasons.length ?? 0,
+              lastSeason: career?.seasons.length ? {
+                year: career.seasons[career.seasons.length - 1].year,
+                ovr: career.seasons[career.seasons.length - 1].ovr ?? null,
+              } : null,
+              saveFailed, saveMoved, saveError,
+            },
+          }}
           title="Soccer Career Simulator | DoUKnowBall"
           description="Live out your soccer dream in a season by season career simulator. Create a player, join a youth academy, develop skills, sign contracts, win trophies, and compete for the Ballon d'Or."
           howToPlay={[
