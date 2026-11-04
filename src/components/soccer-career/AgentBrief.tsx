@@ -2,7 +2,7 @@ import { useRef, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogDescription, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { projectLeagueApps, transferBriefPreview, type CareerState, type ClubData } from '@/lib/soccerCareerEngine';
-import { readTransferBrief, setTransferBrief, type TransferBriefPriority } from '@/lib/soccerCareerTransferBrief';
+import { readTransferBrief, setTransferBrief, type TransferBriefPriority, type TransferBriefMinimum } from '@/lib/soccerCareerTransferBrief';
 /* Release AW: a club that broke its appearance promise always answers a transfer request (the season plan's
    rule, kept on the brief's path too), so the rules below may not promise a coin toss to that player. */
 import { programmePromiseBroken } from '@/lib/soccerCareerProgramme';
@@ -22,17 +22,20 @@ export default function AgentBrief({ career, clubs, onCareer }: {
   const [open, setOpen] = useState(false);
   const [help, setHelp] = useState(true);
   const [priority, setPriority] = useState<TransferBriefPriority | null>(null);
+  const [minimumApps, setMinimumApps] = useState<TransferBriefMinimum>(0);
   const trigger = useRef<HTMLButtonElement>(null);
   const heading = useRef<HTMLHeadingElement>(null);
   const saving = useRef(false);
-  const preview = transferBriefPreview(career, clubs);
+  const preview = transferBriefPreview(career, clubs, open && !help ? minimumApps : undefined);
   const brief = readTransferBrief(career, projectLeagueApps);
+  if (preview.blockedReason) return <p role="alert" className="rounded-xl border border-border p-3 text-sm">{preview.blockedReason}</p>;
   if (!preview.eligible) return null;
 
   const changeOpen = (next: boolean) => {
     if (next) {
       saving.current = false;
       setPriority(brief?.priority ?? null);
+      setMinimumApps(brief?.minimumApps ?? 0);
       try { setHelp(localStorage.getItem(HELP_KEY) !== '1'); } catch { setHelp(true); }
     }
     setOpen(next);
@@ -44,7 +47,7 @@ export default function AgentBrief({ career, clubs, onCareer }: {
   const save = (next: TransferBriefPriority | null) => {
     if (saving.current) return;
     saving.current = true;
-    onCareer(previous => setTransferBrief(previous, next));
+    onCareer(previous => setTransferBrief(previous, next, minimumApps));
     changeOpen(false);
   };
   const selected = preview.options.find(option => option.id === brief?.priority);
@@ -52,6 +55,8 @@ export default function AgentBrief({ career, clubs, onCareer }: {
   return <div data-transfer-brief-selection className="rounded-xl border border-border bg-card p-3 text-sm">
     <p className="font-semibold">Transfer search: {selected?.label ?? 'Normal search'}</p>
     <p className="mt-1 text-xs text-muted-foreground">Choose a target before requesting a transfer. A brief lasts for this window.</p>
+    {brief?.minimumApps && <p className="mt-1 text-xs">Minimum: {brief.minimumApps} projected league appearances. Not guaranteed starts.</p>}
+    {brief?.minimumApps && selected?.matchingCount === 0 && <p role="status" className="mt-2 text-xs text-amber-400">No eligible club meets this projected appearance minimum. Lower the minimum or use normal search before requesting a move.</p>}
     <Dialog open={open} onOpenChange={changeOpen}>
       <DialogTrigger asChild>
         <Button ref={trigger} data-transfer-brief-open variant="outline" className="mt-3 min-h-11 w-full whitespace-normal">Set transfer priority</Button>
@@ -68,7 +73,14 @@ export default function AgentBrief({ career, clubs, onCareer }: {
             <p>Minutes uses the same league appearance bands as the season engine. Club level uses the game's tiers, with tier 1 the highest. Home uses your nationality country.</p>
             <p>Example: two eligible clubs project 8 to 16 and 20 to 30 league games. Minutes targets the second club. Injuries and selection can still change your season.</p>
             <p>No matching clubs means no offer. A saved response cannot be rolled again by reloading. Club-arranged sales and loans still follow the club's decision.</p>
+            <p>A minimum uses the bottom of the projected league-appearance band. A band of 20 to 30 does not meet a 26-appearance minimum; 26 to 34 does. A higher minimum can mean a lower club level or no matches. It is not a contract promise.</p>
+            <p>If no club meets an active minimum, no request is sent, even after a broken appearance promise. Your existing offer stays unchanged and no response is rolled.</p>
           </div> : <div data-transfer-brief-preview className="space-y-2">
+            <label className="block space-y-1 font-semibold">Minimum projected league appearances
+              <select aria-label="Minimum projected league appearances" value={minimumApps} onChange={event => setMinimumApps(Number(event.target.value) as TransferBriefMinimum)} className="min-h-11 w-full rounded-lg border border-border bg-background px-3 text-xs">
+                <option value="0">Any</option><option value="18">18 or more</option><option value="26">26 or more</option>
+              </select>
+            </label>
             {preview.options.map(option => <Button key={option.id} type="button" data-transfer-priority={option.id} variant="outline"
               aria-pressed={priority === option.id} onClick={() => setPriority(option.id)}
               className={`h-auto min-h-11 w-full flex-col items-start whitespace-normal p-3 text-left text-xs ${priority === option.id ? 'border-emerald-500 bg-emerald-500/10' : ''}`}>
@@ -76,7 +88,7 @@ export default function AgentBrief({ career, clubs, onCareer }: {
               <span className="mt-1 font-normal text-muted-foreground">{descriptions[option.id]}</span>
               <span className="mt-1 font-normal">{option.matchingCount} matching club{option.matchingCount === 1 ? '' : 's'}{option.projection ? ` · about ${option.projection.min} to ${option.projection.max} league games` : ''}</span>
             </Button>)}
-            <p className="pt-1 text-muted-foreground">{preview.options[0]?.eligibleCount ?? 0} eligible clubs before your priority. These are projections, not offers or guaranteed starts.</p>
+            <p className="pt-1 text-muted-foreground">{preview.options[0]?.eligibleCount ?? 0} eligible clubs before your priority and minimum. These are projections, not offers or guaranteed starts.</p>
           </div>}
         </div>
         <div className="flex shrink-0 gap-2">

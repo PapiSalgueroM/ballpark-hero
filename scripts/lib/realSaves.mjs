@@ -419,15 +419,33 @@ export const partReads = {
  */
 const sameAnswer = (a, b) => JSON.stringify(a) === JSON.stringify(b);
 const without = (s, key) => { const o = { ...s }; delete o[key]; return o; };
-export const partAbsent = {
+/* A preserved part is not an absent part: the source survives every refused action. */
+export const partPreserved = {
   '/soccer-career': {
     'transferBrief.version': raw => {
-      const s = parseSoccerCareerSave(raw);
-      if (BRIEF.readTransferBrief(s, SOC.projectLeagueApps) !== null) return 'the brief is still read';
-      const next = BRIEF.setTransferBrief(s, 'level');
-      if (next === s || !BRIEF.readTransferBrief(next, SOC.projectLeagueApps) || next.transferBrief.version !== 1) return 'a new brief did not overwrite the unreadable one';
-      return null;
+      const s = parseSoccerCareerSave(raw), before = JSON.stringify(s), serialized = serializeSoccerCareerSave(s);
+      if (BRIEF.readTransferBrief(s, SOC.projectLeagueApps) !== null) return 'the unreadable brief is still read';
+      const real = Math.random, draws = [];
+      Math.random = () => { const value = real(); draws.push(value); return value; };
+      try {
+        const shown = SOC.transferBriefPreview(s, SOC.FALLBACK_CLUBS);
+        if (shown.eligible || !shown.blockedReason) return 'the preview does not explain the refusal';
+        for (const [name, action] of [
+          ['edit', () => BRIEF.setTransferBrief(s, 'level', 26)],
+          ['clear', () => BRIEF.setTransferBrief(s, null)],
+          ['request', () => SOC.requestTransferDecision(s, SOC.FALLBACK_CLUBS)],
+        ]) {
+          if (action() !== s || JSON.stringify(s) !== before || serializeSoccerCareerSave(s) !== serialized) return name + ' replaced or changed the unreadable source';
+        }
+        if (draws.length !== 0) return 'refused actions consumed career draws: ' + JSON.stringify(draws);
+        return null;
+      } finally { Math.random = real; }
     },
+  },
+};
+
+export const partAbsent = {
+  '/soccer-career': {
     'agentReview.version': raw => {
       const s = parseSoccerCareerSave(raw);
       if (AGENT.readAgentReview(s) !== null) return 'the receipt is still read';
@@ -557,6 +575,7 @@ export const partAbsent = {
  *   accepts  { '/route': raw => boolean } for the games with a pure loader
  *   partReads { '/route': { 'part.path': raw => boolean } } for the games that keep a version number on a part of the save
  *   partAbsent { '/route': { 'part.path': raw => null | string } } for the parts a reader treats as absent when it cannot verify them
+ *   partPreserved { '/route': { 'part.path': raw => null | string } } for parts whose unreadable source refuses actions unchanged
  * Throws when an engine refuses to start; a caller prints and exits.
  */
 export async function buildRealSaves({ root, tmpDir, seeds = [0, 1, 2, 3] }) {
@@ -580,5 +599,5 @@ export async function buildRealSaves({ root, tmpDir, seeds = [0, 1, 2, 3] }) {
     const one = mod.makeSaves(seed, rebuildClubs);
     for (const [route, raw] of Object.entries(one)) (fleet[route] ??= []).push(raw);
   }
-  return { fleet, accepts: mod.accepts, partReads: mod.partReads, partAbsent: mod.partAbsent };
+  return { fleet, accepts: mod.accepts, partReads: mod.partReads, partAbsent: mod.partAbsent, partPreserved: mod.partPreserved };
 }

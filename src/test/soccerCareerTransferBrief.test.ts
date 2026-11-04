@@ -212,7 +212,7 @@ describe('Agent destination brief result validation', () => {
 });
 
 describe('Agent destination brief actual requests', () => {
-  it.each(['absent', 'invalid', 'stale', 'loan'] as const)('preserves the entire old page result and draw vector for %s input', kind => {
+  it.each(['absent', 'invalid', 'stale', 'loan'] as const)('uses the expected full result and draw policy for %s input', kind => {
     let state = career();
     if (kind === 'invalid') state = withRaw(state, { version: 1, priority: 'home', context: null, unknown: 'held' });
     if (kind === 'stale') { state = setTransferBrief(state, 'home'); state = { ...state, overall: 78 }; }
@@ -221,7 +221,11 @@ describe('Agent destination brief actual requests', () => {
     for (const values of [tape, [0.8]]) {
       const old = run(() => oldPageRequest(state), values);
       const current = run(() => requestTransferDecision(state, clubs), values);
-      expect(current).toEqual(old);
+      // Unreadable metadata stays put; absent and loan-only states keep the original request path.
+      if (kind === 'invalid' || kind === 'stale') {
+        expect(current.value).toBe(state);
+        expect(current.draws).toEqual([]);
+      } else expect(current).toEqual(old);
       expect(current.value.transferBrief).toBe(state.transferBrief);
       expect(state).toEqual(before);
     }

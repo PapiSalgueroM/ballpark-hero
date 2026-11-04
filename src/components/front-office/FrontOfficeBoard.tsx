@@ -1,4 +1,4 @@
-import { lazy, Suspense, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { lazy, Suspense, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { Briefcase, ChevronLeft, Crown, RotateCcw, ShieldHalf } from 'lucide-react';
 import ShareButtons from '@/components/game/ShareButtons';
 import { FO_TEAMS, FO_TEAM_MAP } from '@/data/frontOfficePlayers';
@@ -215,6 +215,19 @@ export default function FrontOfficeBoard() {
   const [draftPosition, setDraftPosition] = useState('all');
   const [draftPage, setDraftPage] = useState(0);
   const [draftReview, setDraftReview] = useState<string | null>(null);
+  const draftArea = useRef<HTMLDivElement>(null);
+  const draftOpener = useRef<string | null>(null);
+  const draftHeight = useRef(0);
+  useLayoutEffect(() => {
+    const area = draftArea.current;
+    if (!area) { draftOpener.current = null; return; }
+    if (draftReview) area.querySelector<HTMLElement>('[aria-label="Draft review"]')?.focus({ preventScroll: true });
+    else {
+      Array.from(area.querySelectorAll<HTMLButtonElement>('[data-draft-prospect]'))
+        .find(button => button.dataset.draftProspect === draftOpener.current)?.focus({ preventScroll: true });
+      draftOpener.current = null;
+    }
+  }, [draftReview]);
   useEffect(() => { setDraftPosition('all'); setDraftPage(0); setDraftReview(null); }, [phase, league, draftClass]);
   /* Round 515: draft night. Transient on the board and never persisted, the
      Round 186 rule for reveals: reload mid reveal and the save opens on the
@@ -1668,7 +1681,7 @@ export default function FrontOfficeBoard() {
     const reviewed = draftClass.find(pr => pr.id === draftReview);
     const current = reviewed ? my.players.filter(p => p.pos === reviewed.pos) : [];
     return (
-      <div className="space-y-4">
+      <div ref={draftArea} style={{ overflowAnchor: 'none', height: draftReview ? draftHeight.current : undefined, overflowY: draftReview ? 'auto' : undefined }} className="space-y-4">
         {saveNotice}
         <CelebrationStyles />
         <div className="rounded-2xl border border-border bg-card p-4 text-center">
@@ -1749,7 +1762,7 @@ export default function FrontOfficeBoard() {
           </div>
         )}
         {!draftDone && picksLeft > 0 && my.picks.length > 0 && draftClass.length > 0 && <>
-        {reviewed ? <section aria-label="Draft review" className="rounded-xl border border-border p-3 space-y-2 text-sm">
+        {reviewed ? <section aria-label="Draft review" tabIndex={-1} className="rounded-xl border border-border p-3 space-y-2 text-sm">
           <h3 className="font-bold">{reviewed.name}</h3>
           <p>{reviewed.pos} · age {reviewed.age}</p><p>Scouted grade {gradeOf(reviewed)}</p>
           <p className="font-bold">Your {reviewed.pos} roster</p>
@@ -1777,7 +1790,8 @@ export default function FrontOfficeBoard() {
           {shownProspects.map(pr => (
             <button
               key={pr.id}
-              onClick={() => setDraftReview(pr.id)}
+              data-draft-prospect={pr.id}
+              onClick={() => { draftHeight.current = draftArea.current?.getBoundingClientRect().height ?? 0; draftOpener.current = pr.id; setDraftReview(pr.id); }}
               className="flex items-center justify-between rounded-lg border border-border bg-card px-3 py-2 text-left hover:border-primary/60"
             >
               <span>
