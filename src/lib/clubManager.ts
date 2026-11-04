@@ -1364,7 +1364,7 @@ export interface CMPlayer {
 
 /** Round 505: a second position in progress. weeksTotal is what it was
  *  quoted at, so a progress bar can be drawn off the two numbers. */
-export interface Retraining { to: Position; weeksLeft: number; weeksTotal: number; paused?: unknown; }
+export interface Retraining { to: Position; weeksLeft: number; weeksTotal: number; paused?: unknown; replace?: Position; }
 
 /* ---------- Round 127: squad roles and playing time promises ---------- */
 
@@ -7281,13 +7281,30 @@ export function retrainWeeks(state: CareerState, p: CMPlayer, to: Position): num
 }
 
 /** Why a retraining cannot start, in the words the screen would use, or null when it can. */
-export function retrainRefusal(p: CMPlayer | undefined, to: Position): string | null {
+export function retrainRefusal(p: CMPlayer | undefined, to: Position, replace?: Position): string | null {
   if (!p) return 'He is not in your squad.';
   if (p.position === 'GK' || to === 'GK') return 'Keepers stay keepers, and nobody else goes in goal.';
   if (!ALL_POSITIONS.includes(to)) return 'That is not a position.';
+  if (replace !== undefined && (!Array.isArray(p.secondaryPositions)
+    || p.secondaryPositions.length !== MAX_SECONDARY_POSITIONS
+    || new Set(p.secondaryPositions).size !== MAX_SECONDARY_POSITIONS
+    || p.secondaryPositions.some(pos => !ALL_POSITIONS.includes(pos) || pos === p.position)
+    || !p.secondaryPositions.includes(replace))) return 'Choose one of his two learned positions to replace when training finishes.';
   if (heldPositions(p).includes(to)) return `He already plays ${to}.`;
   if (p.retraining) return `He is already learning ${p.retraining.to}. Stop that first if you want him on something else.`;
   return null;
+}
+
+export function validRetrainingCourse(p: CMPlayer, to: Position): boolean {
+  const r = p.retraining;
+  if (!r) return false;
+  const tagged = Object.prototype.hasOwnProperty.call(r, 'replace');
+  return (!tagged || r.replace !== undefined)
+    && !retrainRefusal({ ...p, retraining: undefined }, to, tagged ? r.replace : undefined)
+    && r.to === to && Number.isSafeInteger(r.weeksLeft) && r.weeksLeft >= 1
+    && Number.isSafeInteger(r.weeksTotal) && r.weeksTotal >= r.weeksLeft
+    && !Object.keys(r).some(key => !['to', 'weeksLeft', 'weeksTotal', 'paused', 'replace'].includes(key))
+    && (!('paused' in r) || typeof r.paused === 'boolean');
 }
 
 /**
@@ -7297,25 +7314,21 @@ export function retrainRefusal(p: CMPlayer | undefined, to: Position): string | 
  * down. A real footballer starts with no second position, so everything a
  * squad carries here was earned in this save.
  */
-export function startRetraining(career: CareerState, playerId: string, to: Position, paused?: boolean): CareerState | null {
+export function startRetraining(career: CareerState, playerId: string, to: Position, paused?: boolean, replace?: Position): CareerState | null {
   const p = career.squad.find(x => x.id === playerId);
   if (paused !== undefined) {
     const r = p?.retraining;
-    if (typeof paused !== 'boolean' || !r || retrainRefusal({ ...p!, retraining: undefined }, to)
-      || r.to !== to || !Number.isSafeInteger(r.weeksLeft) || r.weeksLeft < 1
-      || !Number.isSafeInteger(r.weeksTotal) || r.weeksTotal < r.weeksLeft
-      || Object.keys(r).some(key => !['to', 'weeksLeft', 'weeksTotal', 'paused'].includes(key))
-      || ('paused' in r && typeof r.paused !== 'boolean')) return null;
-    if (paused ? r.paused === true : !('paused' in r)) return career;
-    const { paused: _paused, ...course } = r;
+    if (typeof paused !== 'boolean' || !p || !validRetrainingCourse(p, to) || replace !== undefined) return null;
+    if (paused ? r!.paused === true : !('paused' in r!)) return career;
+    const { paused: _paused, ...course } = r!;
     return { ...career, squad: career.squad.map(x => x === p
       ? { ...x, retraining: { ...course, ...(paused ? { paused: true } : {}) } } : x) };
   }
-  if (retrainRefusal(p, to)) return null;
+  if (retrainRefusal(p, to, replace)) return null;
   const weeksTotal = retrainWeeks(career, p!, to);
   return {
     ...career,
-    squad: career.squad.map(x => (x.id === playerId ? { ...x, retraining: { to, weeksLeft: weeksTotal, weeksTotal } } : x)),
+    squad: career.squad.map(x => (x.id === playerId ? { ...x, retraining: { to, weeksLeft: weeksTotal, weeksTotal, ...(replace !== undefined ? { replace } : {}) } } : x)),
   };
 }
 
@@ -18319,11 +18332,14 @@ function tickWeek(state: CareerState, playedIds: Set<string> | null): void {
     /* Round 505: a week of work on a second position. At zero it joins
        his list, the oldest one beyond two making way, and the papers say
        so. Hashed off nothing: no draw, so the week's stream is untouched. */
-    if (p.retraining && (!Object.prototype.hasOwnProperty.call(p.retraining, 'paused') || p.retraining.paused === false)) {
+    const replacement = p.retraining && Object.prototype.hasOwnProperty.call(p.retraining, 'replace');
+    if (p.retraining && (!Object.prototype.hasOwnProperty.call(p.retraining, 'paused') || p.retraining.paused === false)
+      && (!replacement || validRetrainingCourse(p, p.retraining.to))) {
       const weeksLeft = p.retraining.weeksLeft - 1;
       if (weeksLeft <= 0) {
         const to = p.retraining.to;
-        out.secondaryPositions = [...(p.secondaryPositions ?? []).filter(pos => pos !== to && pos !== p.position), to].slice(-MAX_SECONDARY_POSITIONS);
+        out.secondaryPositions = [...(p.secondaryPositions ?? []).filter(pos => pos !== to && pos !== p.position
+          && (!replacement || pos !== p.retraining!.replace)), to].slice(-MAX_SECONDARY_POSITIONS);
         delete out.retraining;
         learned.push(`🎯 ${p.name} is comfortable at ${to} now. ${p.retraining.weeksTotal} weeks of work on the training ground and it has stuck.`);
       } else {
