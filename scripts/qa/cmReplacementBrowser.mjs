@@ -16,13 +16,14 @@ function controls({ page, width, save, key, actions }) {
     assert.equal(await control.count(), 1, 'One intended native control');
     if (width < 768) await control.tap(); else await page.keyboard.press('Enter');
   };
-  const prepare = async control => {
+  const prepare = async (control, reverse = false) => {
     assert.equal(await control.count(), 1); await control.waitFor({ state: 'visible' });
     await waitForScrollIdle(page); await control.scrollIntoViewIfNeeded();
     await control.click({ trial: true });
     if (width >= 768) {
       for (let n = 0; !(await control.evaluate(node => document.activeElement === node)); n++) {
-        assert(n < 160, 'CM_REPLACEMENT_DESKTOP_TAB_TARGET'); await page.keyboard.press('Tab');
+        assert(n < 160, 'CM_REPLACEMENT_DESKTOP_TAB_TARGET');
+        if (reverse) await page.keyboard.press('Shift+Tab'); else await page.keyboard.press('Tab');
       }
     }
     await waitForScrollIdle(page);
@@ -60,7 +61,7 @@ async function journey(args, completion) {
     const homeTab = tabs.getByRole('tab', { name: 'Home', exact: true });
     if (width >= 768 && (await homeTab.getAttribute('aria-selected')) !== 'true') {
       assert.equal(await tabs.getByRole('tab').first().innerText(), 'Home');
-      await prepare(tabs.getByRole('tab', { selected: true }));
+      await prepare(tabs.locator('[role="tab"][tabindex="0"]'), true);
       await page.keyboard.press('Home');
       await tabs.getByRole('tab', { name: 'Home', exact: true, selected: true }).waitFor({ state: 'visible' });
       assert.equal(await homeTab.evaluate(node => document.activeElement === node), true, 'CM_REPLACEMENT_APP_ROVING_HOME_FOCUS');
