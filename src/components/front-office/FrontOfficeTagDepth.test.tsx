@@ -184,6 +184,7 @@ describe('NFL Front Office: the depth chart and the franchise tag on the board',
       const btn = [...document.querySelectorAll('button')].find(x => x.textContent?.includes(next.name) && x.textContent.includes(String(next.grade)))!;
       expect(btn, `pick ${i + 1}: no button for ${next.name}`).toBeTruthy();
       fireEvent.click(btn);
+      fireEvent.click(screen.getByRole('button', { name: /^Confirm draft$/ }));
     }
     const after = read();
     expect(after.league.season).toBe(season + 1);
@@ -214,6 +215,7 @@ describe('NFL Front Office: the depth chart and the franchise tag on the board',
       const btn = [...document.querySelectorAll('button')].find(x => x.textContent?.includes(next.name) && x.textContent.includes(String(next.grade)))!;
       expect(btn, `pick ${i + 1}: no button for ${next.name}`).toBeTruthy();
       fireEvent.click(btn);
+      fireEvent.click(screen.getByRole('button', { name: /^Confirm draft$/ }));
     }
     const after = read();
     expect(after.league.season).toBe(season + 1);

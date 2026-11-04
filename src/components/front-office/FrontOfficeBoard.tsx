@@ -2318,7 +2318,7 @@ export default function FrontOfficeBoard() {
           <p className="mb-2 text-center text-xs text-muted-foreground">Free agents (cap room ${room}M). Cut players land here too, but a man you cut waits until next season.</p>
           {fullBlock && <p data-market-full className="mb-2 text-center text-[10px] text-destructive">{fullBlock}</p>}
           <div className="grid max-h-96 grid-cols-1 gap-1 overflow-y-auto sm:grid-cols-2">
-            {[...league.freeAgents].sort((a, b) => b.ovr - a.ovr).slice(0, 24).map(p => {
+            {[...league.freeAgents].sort((a, b) => b.ovr - a.ovr).map(p => {
               /* Round 631: the engine's own refusal, so the button is never
                  live when pressing it would do nothing. */
               const refusal = signRefusal(my, p.id);
@@ -2344,7 +2344,7 @@ export default function FrontOfficeBoard() {
               );
             })}
           </div>
-          {draftLegend([...league.freeAgents].sort((a, b) => b.ovr - a.ovr).slice(0, 24))}
+          {draftLegend([...league.freeAgents].sort((a, b) => b.ovr - a.ovr))}
         </div>
       )}
 

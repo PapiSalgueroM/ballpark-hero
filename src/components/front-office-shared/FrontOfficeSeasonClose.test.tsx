@@ -251,7 +251,10 @@ for (const c of CASES) {
       render(<Board />);
       fireEvent.click(screen.getByText('Go to the draft'));
       expect(screen.getByText(c.draftHeading)).toBeTruthy();
-      for (let i = 0; i < c.picks; i += 1) fireEvent.click(screen.getAllByText(/· age \d+/)[0]);
+      for (let i = 0; i < c.picks; i += 1) {
+        fireEvent.click(screen.getAllByText(/· age \d+/)[0]);
+        if (c.env === 'FO_BOARD_NFL') fireEvent.click(screen.getByRole('button', { name: /^Confirm draft$/ }));
+      }
       expect(read().phase).toBe('hub');
       expect(read().league.season).toBe(2027);
       /* Round 828: on full rosters the offseason refilled every club and cut
