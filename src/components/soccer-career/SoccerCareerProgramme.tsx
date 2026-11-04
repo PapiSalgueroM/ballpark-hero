@@ -1,7 +1,7 @@
 import { useLayoutEffect, useRef, useState } from "react";
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
 import type { CareerState } from "@/lib/soccerCareerEngine";
-import { programmeOptions, chooseProgramme, cancelProgramme } from "@/lib/soccerCareerProgramme";
+import { programmeOptions, programmeNegotiationOffers, chooseProgramme, cancelProgramme } from "@/lib/soccerCareerProgramme";
 
 type Mode = "help" | "list" | "detail";
 type ProgrammeId = ReturnType<typeof programmeOptions>[number]["id"];
@@ -11,7 +11,10 @@ const control = "min-h-11 min-w-11 rounded-lg px-3 text-xs font-bold focus-visib
 export default function SoccerCareerProgramme({ career, onChange, onClose }: {
   career: CareerState; onChange: (career: CareerState) => void; onClose: () => void;
 }) {
-  const views = programmeOptions(career);
+  const [offerIndex, setOfferIndex] = useState(0);
+  const offers = programmeNegotiationOffers(career);
+  const offer = offers[offerIndex] ?? offers[0];
+  const views = programmeOptions(career, offer);
   const [mode, setMode] = useState<Mode>("help");
   const [selected, setSelected] = useState<ProgrammeId | null>(null);
   const opener = useRef<HTMLElement | null>(document.activeElement as HTMLElement);
@@ -86,6 +89,7 @@ export default function SoccerCareerProgramme({ career, onChange, onClose }: {
         {mode === "help" ? <div data-programme-rules className="space-y-3">
           <p>Pick a tile, read its effect and tradeoff, then choose an available option. Each plan belongs to the club and season shown in its detail.</p>
           <p>Some choices need a transfer offer, a loan, an injury return or the captain's armband. An unavailable choice explains what is missing.</p>
+          <p>Contract counteroffer lets you pick the actual offer to negotiate. Each club gets one proposal a year. Other offers keep their terms, and choosing a proposal does not sign the contract.</p>
           <p>A plan is not a guaranteed result. The detail shows your current choice and the outcome your career actually kept. Opening, reading or closing this screen does not change your career.</p>
           <p>Loyalty contracts use the first permanent offer shown in the plan. Cash keeps the higher weekly wage. Loyalty cuts it by 10% and pays the quoted amount only after the full recorded term. For example, EUR 10,000 a week for two years becomes EUR 9,000 a week plus EUR 156,000 at completion. Leaving after one season means EUR 468,000 salary and no payout. A loan keeps the parent club's rights; a permanent move, early expiry or retirement forfeits unpaid loyalty pay. Existing performance bonuses stay separate.</p>
           <p>Use Cancel plan when it is offered to remove a queued choice. A completed deal or recorded season cannot be undone here.</p>
@@ -104,6 +108,13 @@ export default function SoccerCareerProgramme({ career, onChange, onClose }: {
             {item.choice && <span className="mt-2 block text-xs text-primary">Choice recorded</span>}
           </button>)}
         </div> : view ? <section data-programme-detail={view.id} className="space-y-3">
+          {view.id === "negotiation" && offers.length > 0 && <label className="block space-y-1 text-xs">
+            <span className="font-bold">Offer to negotiate</span>
+            <select aria-label="Offer to negotiate" value={offers.indexOf(offer)} onChange={event => setOfferIndex(Number(event.target.value))}
+              className={control + " w-full min-w-0 border border-border bg-background"}>
+              {offers.map((item, index) => <option key={index} value={index}>{item.club.name}: EUR {item.wage.toLocaleString("en-US")} a week, {item.contractYears} {item.contractYears === 1 ? "year" : "years"}</option>)}
+            </select>
+          </label>}
           <p>{view.description}</p>
           <p data-programme-context className="rounded-lg bg-muted/30 p-3 text-xs">{view.context}</p>
           <div data-programme-current className="rounded-lg border border-border p-3 text-xs" aria-live="polite">
@@ -117,7 +128,7 @@ export default function SoccerCareerProgramme({ career, onChange, onClose }: {
               <p className="mt-1 text-xs text-muted-foreground" data-programme-tradeoff>{choice.tradeoff}</p>
               {!choice.eligible && <p className="mt-2 text-xs text-muted-foreground" data-programme-disabled-reason>{choice.reason}</p>}
               <button type="button" data-programme-choice={choice.id} className={control + " mt-2 w-full bg-primary text-primary-foreground disabled:opacity-50"}
-                disabled={!choice.eligible || choice.id === view.choice} onClick={() => apply(chooseProgramme(career, view.id, choice.id))}>
+                disabled={!choice.eligible || choice.id === view.choice} onClick={() => apply(chooseProgramme(career, view.id, choice.id, view.id === "negotiation" ? offer : undefined))}>
                 {choice.id === view.choice ? "Current choice" : "Choose " + choice.label}
               </button>
             </div>)}

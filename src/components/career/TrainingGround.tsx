@@ -33,10 +33,12 @@ export interface TrainingExtra {
   screen: (back: () => void) => ReactNode;
 }
 
-export default function TrainingGround<Id extends string>({ sport, available, onComplete, onClose, extras = [], bankedNote, instructions }: {
+export default function TrainingGround<Id extends string>({ sport, available, onComplete, onClose, extras = [], bankedNote, instructions, allowFreePractice = false }: {
   sport: TrainingSport<Id>;
   /** false once this season's session has been banked */
   available: boolean;
+  /** Only the career callers that offer unscored replays opt in. */
+  allowFreePractice?: boolean;
   onComplete: (drill: Id, score: number) => void;
   onClose: () => void;
   extras?: TrainingExtra[];
@@ -47,6 +49,13 @@ export default function TrainingGround<Id extends string>({ sport, available, on
   const [drill, setDrill] = useState<Id>(sport.drills[0].id);
   const [score, setScore] = useState(0);
   const [banked, setBanked] = useState(false);
+  const [practiceOnly, setPracticeOnly] = useState(allowFreePractice && !available);
+  const practiceRandom = useRef(0x4e424146);
+  const nextRandom = () => {
+    if (!practiceOnly) return Math.random();
+    practiceRandom.current = (Math.imul(practiceRandom.current, 1664525) + 1013904223) >>> 0;
+    return practiceRandom.current / 4294967296;
+  };
   const [showRules, setShowRules] = useState(false);
 
   const skin = sport.drills.find(d => d.id === drill) ?? sport.drills[0];
@@ -67,8 +76,8 @@ export default function TrainingGround<Id extends string>({ sport, available, on
 
   const cone = useConeRun(done, clock);
   const burst = useBurstTap(playing && skin.kind === "burst", done, clock);
-  const zone = useZonePick(playing && skin.kind === "zones" && skin.mode === "save", done, clock);
-  const gate = useGateTap(done, clock);
+  const zone = useZonePick(playing && skin.kind === "zones" && skin.mode === "save", done, clock, nextRandom);
+  const gate = useGateTap(done, clock, nextRandom);
 
   const openDrill = (d: Id) => {
     attemptRef.current += 1;
@@ -76,6 +85,7 @@ export default function TrainingGround<Id extends string>({ sport, available, on
     cone.reset(); burst.reset(); zone.reset(); gate.reset();
     setShowRules(false);
     setDrill(d);
+    setPracticeOnly(allowFreePractice && (!available || banked));
     setScreen("drill");
   };
   const toMenu = () => {
@@ -88,7 +98,7 @@ export default function TrainingGround<Id extends string>({ sport, available, on
   const close = () => { attemptRef.current += 1; clock.clearAll(); onClose(); };
 
   const tier = trainingTier(score);
-  const tierText = sport.tierLine(tier, skin.stat);
+  const tierText = practiceOnly ? 'Practice only. No career boost.' : sport.tierLine(tier, skin.stat);
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-3 bg-black/70 backdrop-blur-sm animate-fade-in" onClick={close}>
@@ -115,7 +125,7 @@ export default function TrainingGround<Id extends string>({ sport, available, on
         {screen === "menu" && (
           <div className="p-4 space-y-3">
             {extras.map(e => <Fragment key={e.id}>{e.tile(() => setScreen(e.id))}</Fragment>)}
-            {!available ? (
+            {!available && !allowFreePractice ? (
               <div className="rounded-xl border border-border bg-muted/10 p-6 text-center space-y-1">
                 <div className="text-3xl">{sport.shut.emoji}</div>
                 <div className="text-sm font-bold">{sport.shut.title}</div>
@@ -123,6 +133,7 @@ export default function TrainingGround<Id extends string>({ sport, available, on
               </div>
             ) : (
               <>
+                {allowFreePractice && (!available || banked) && <p role="status" className="text-xs font-bold text-center">Practice only. No career boost.</p>}
                 <p className="text-[11px] text-muted-foreground text-center">{sport.rule}</p>
                 {sport.note && (
                   <p className="text-[11px] text-muted-foreground text-center" {...{ [`data-training-${sport.note.marker}-rule`]: true }}>
@@ -162,19 +173,23 @@ export default function TrainingGround<Id extends string>({ sport, available, on
                 <div data-training-score className={`text-5xl font-black tabular-nums ${tier === 2 ? "text-emerald-400" : tier === 1 ? "text-sky-400" : "text-amber-400"}`}>{score}</div>
                 <div className="text-[10px] uppercase tracking-widest font-bold text-muted-foreground">{sport.scoreLabel}</div>
               </div>
-              <p className="text-sm font-bold" role={bankedNote && banked ? 'status' : undefined}>{banked && bankedNote ? bankedNote : tierText}</p>
+              <p className="text-sm font-bold" role={bankedNote && banked || practiceOnly ? 'status' : undefined}>{banked && bankedNote && !practiceOnly ? bankedNote : tierText}</p>
             </div>
-            {!banked ? (
+            {!banked && (!allowFreePractice || available && !practiceOnly) ? (
               <button
-                onClick={() => { setBanked(true); onComplete(drill, score); }}
+                onClick={() => { if (allowFreePractice && (!available || practiceOnly)) return; setBanked(true); onComplete(drill, score); }}
                 className="w-full h-11 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-black text-sm font-black">
                 {sport.bank}
               </button>
             ) : (
-              <button onClick={close} data-training-banked className={`w-full h-11 rounded-lg bg-muted/40 hover:bg-muted/60 text-sm font-black ${feedback.banked}`}>
+              <button onClick={close} data-training-banked={banked ? true : undefined} className={`w-full h-11 rounded-lg bg-muted/40 hover:bg-muted/60 text-sm font-black ${feedback.banked}`}>
                 {sport.done}
               </button>
             )}
+            {allowFreePractice && (banked || !available) && <div className="grid grid-cols-2 gap-2">
+              <button onClick={e => { e.currentTarget.closest<HTMLElement>('[role="dialog"]')?.focus({ preventScroll: true }); openDrill(drill); }} className="min-h-11 rounded-lg border border-border text-sm font-bold">Try again</button>
+              <button onClick={e => { e.currentTarget.closest<HTMLElement>('[role="dialog"]')?.focus({ preventScroll: true }); toMenu(); }} className="min-h-11 rounded-lg border border-border text-sm font-bold">Choose a drill</button>
+            </div>}
           </div>
         )}
       </div>

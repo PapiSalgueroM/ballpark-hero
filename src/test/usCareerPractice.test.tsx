@@ -123,10 +123,15 @@ describe('US career practice on the actual boards', () => {
     view.unmount();
     const reloaded = mount(row);
     fireEvent.click(reloaded.getByRole('button', { name: 'View practice' }));
-    await reloaded.findByText('Already trained this season');
+    await reloaded.findByRole('button', { name: 'Practice rules' }, { timeout: 10000 });
     const locked = reloaded.getByRole('dialog');
-    expect(locked).toHaveTextContent('Already trained this season');
-    expect(within(locked).queryByRole('button', { name: row.burst })).toBeNull();
+    if (row.sport.slug === 'nba' || row.sport.slug === 'nfl') {
+      expect(locked).toHaveTextContent('Practice only. No career boost.');
+      expect(within(locked).getByRole('button', { name: row.burst })).toBeEnabled();
+    } else {
+      expect(locked).toHaveTextContent('Already trained this season');
+      expect(within(locked).queryByRole('button', { name: row.burst })).toBeNull();
+    }
     expect(localStorage.getItem(row.sport.saveKey)).toBe(banked);
     expect(localStorage.getItem('unrelated-practice-fixture')).toBe('keep this save');
   });

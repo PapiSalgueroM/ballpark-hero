@@ -86,29 +86,43 @@ function latestSenior(career: CareerState) {
 function compatible(primary: string, target: string): boolean {
   return target !== primary && GROUPS.some(group => group.includes(primary) && group.includes(target));
 }
-function actualOffer(career: CareerState): { offer: ContractOffer; replace: (state: CareerState, offer: ContractOffer) => void } | null {
+type ActualOffer = { offer: ContractOffer; replace: (state: CareerState, offer: ContractOffer) => void };
+function actualOffers(career: CareerState): ActualOffer[] {
   const situation = career.transferSituation;
   if (situation && ['one_offer', 'dream_club', 'request_result'].includes(situation.type) && 'offer' in situation && situation.offer) {
-    return { offer: situation.offer, replace: (state, offer) => { state.transferSituation = { ...situation, offer }; } };
+    return [{ offer: situation.offer, replace: (state, offer) => { state.transferSituation = { ...situation, offer }; } }];
   }
-  if (situation?.type === 'bidding_war') return { offer: situation.offerA, replace: (state, offer) => { state.transferSituation = { ...situation, offerA: offer }; } };
+  if (situation?.type === 'bidding_war') return (['offerA', 'offerB'] as const).map((key): ActualOffer => ({
+    offer: situation[key], replace: (state, offer) => { state.transferSituation = { ...situation, [key]: offer }; },
+  }));
   if ((situation?.type === 'contract_expiry' || situation?.type === 'frozen_out') && situation.offers.length) {
-    return { offer: situation.offers[0], replace: (state, offer) => { state.transferSituation = { ...situation, offers: [offer, ...situation.offers.slice(1)] }; } };
+    return situation.offers.map((offer, index): ActualOffer => ({
+      offer, replace: (state, next) => { state.transferSituation = { ...situation, offers: situation.offers.map((old, i) => i === index ? next : old) }; },
+    }));
   }
-  if (career.phase === 'contract_offer' && career.pendingOffers.length) return { offer: career.pendingOffers[0], replace: (state, offer) => { state.pendingOffers = [offer, ...career.pendingOffers.slice(1)]; } };
-  return null;
+  if (career.phase === 'contract_offer') return career.pendingOffers.map((offer, index): ActualOffer => ({
+    offer, replace: (state, next) => { state.pendingOffers = career.pendingOffers.map((old, i) => i === index ? next : old); },
+  }));
+  return [];
+}
+function actualOffer(career: CareerState, target?: ContractOffer): ActualOffer | null {
+  const entries = actualOffers(career);
+  return target === undefined ? entries[0] ?? null : entries.find(entry => entry.offer === target) ?? null;
+}
+export function programmeNegotiationOffers(career: CareerState): ContractOffer[] {
+  return actualOffers(career).map(entry => entry.offer).filter(validOffer);
 }
 function validOffer(offer: ContractOffer): boolean {
   return text(offer.club?.name) && finite(offer.wage) && offer.wage > 0 && count(offer.contractYears) && offer.contractYears >= 1 && !offer.isLoan;
 }
-function allowed(career: CareerState, id: ProgrammeId, choice: string): string | null {
+function allowed(career: CareerState, id: ProgrammeId, choice: string, target?: ContractOffer): string | null {
   const year = nextProgrammeYear(career);
   if (career.programme !== undefined && !stateOf(career)) return 'The saved programme is invalid. No new choice was applied.';
   if (career.retired || !text(career.currentClub) || year === null) return 'A saved active club season is needed.';
   if (!IDS.includes(id)) return 'That programme is unavailable.';
   if (id === 'negotiation') {
     if (!['transfer_window', 'contract_offer'].includes(career.phase)) return 'Open the contract window first.';
-    const found = actualOffer(career);
+    const found = actualOffer(career, target);
     if (!found || !validOffer(found.offer)) return 'A permanent contract offer is needed.';
     if (stateOf(career)?.negotiated?.some(row => row.year === year && row.club === found.offer.club.name)) return 'This club has already received your counteroffer this year.';
     if (choice === 'shorter' && found.offer.contractYears < 2) return 'This offer already lasts one year.';
@@ -162,19 +176,19 @@ export function programmeEffects(career: CareerState): ProgrammeEffects {
   return effects;
 }
 
-export function chooseProgramme(prev: CareerState, id: ProgrammeId, choice: string): CareerState {
+export function chooseProgramme(prev: CareerState, id: ProgrammeId, choice: string, target?: ContractOffer): CareerState {
   if (id === 'loyalty') {
     const found = actualOffer(prev);
     return found && validOffer(found.offer) && (choice === 'cash' || choice === 'loyalty')
       ? chooseLoyalty(prev, found.offer, Math.round(found.offer.wage * agentWageMult(prev.agentId)), choice) : prev;
   }
-  if (allowed(prev, id, choice)) return prev;
+  if (allowed(prev, id, choice, target)) return prev;
   const year = nextProgrammeYear(prev)!;
   const current = stateOf(prev);
   const programme: SoccerProgrammeState = current ? { ...current, receipts: [...current.receipts] } : { version: 1, receipts: [] };
   const state = { ...prev, programme };
   if (id === 'negotiation') {
-    const found = actualOffer(prev)!;
+    const found = actualOffer(prev, target)!;
     const rating = latestSenior(prev)?.rating;
     const accepted = choice === 'shorter' || (finite(rating) && rating >= 7.5 && rating <= 10) || (finite(prev.overall) && prev.overall >= 85 && prev.overall <= 99);
     if (accepted) {
@@ -310,25 +324,25 @@ const DEFINITIONS: { id: ProgrammeId; title: string; description: string; choice
   { id: 'position', title: 'Second position', description: 'Train a compatible second position over two consecutive played seasons at this club.', choices: [] },
   { id: 'set_pieces', title: 'Set piece duty', description: 'Own a season duty. Recorded duty goals are part of your existing total.', choices: [['penalties', 'Penalty duty', '4% more expected goals. 20% of actual goals are allocated to penalties, rounded down.', 'The duty does not add goals after simulation.'], ['free_kicks', 'Free kick duty', '4% more expected goals. 15% of actual goals are allocated to free kicks, rounded down.', 'The duty does not add goals after simulation.']] },
   { id: 'promise', title: 'Manager promise', description: 'Agree a league appearance target and hold the next recorded season to it.', choices: [['rotation', 'Regular rotation', '18 league appearances promised; 4% more planned appearances.', 'A fit shortfall costs 5 morale. Availability can excuse it.'], ['starter', 'Starting role', '26 league appearances promised; 8% more planned appearances.', 'A fit shortfall costs 5 morale. Availability can excuse it.']] },
-  { id: 'negotiation', title: 'Contract counteroffer', description: 'Negotiate the first permanent offer shown in your contract window, once per club each year.', choices: [['wage', 'Ask for more pay', 'If accepted, the offered weekly wage rises 10%, with the same contract length.', 'The simulation accepts only with a last senior rating of at least 7.5 or overall of at least 85. A rejected ask uses your chance. Current pay changes only on signing.'], ['shorter', 'Shorter commitment', 'The offered contract loses one year.', 'The offered wage falls 5%. This pay-cut proposal is accepted; one-year offers cannot be shortened.']] },
+  { id: 'negotiation', title: 'Contract counteroffer', description: 'Choose a permanent offer in your contract window to negotiate, once per club each year.', choices: [['wage', 'Ask for more pay', 'If accepted, the offered weekly wage rises 10%, with the same contract length.', 'The simulation accepts only with a last senior rating of at least 7.5 or overall of at least 85. A rejected ask uses your chance. Current pay changes only on signing.'], ['shorter', 'Shorter commitment', 'The offered contract loses one year.', 'The offered wage falls 5%. This pay-cut proposal is accepted; one-year offers cannot be shortened.']] },
   { id: 'bonuses', title: 'Performance bonus', description: 'Agree a bonus worth four current weekly wages, paid once on recorded results. An injury does not erase a target already earned.', choices: [['appearances', 'Appearance clause', 'Earn the quoted bonus with 24 recorded league appearances.', 'No target, no bonus.'], ['goals', 'Goal clause', 'Earn the quoted bonus with 15 recorded goals.', 'No target, no bonus.'], ['assists', 'Assist clause', 'Earn the quoted bonus with 10 recorded assists.', 'No target, no bonus.']] },
   { id: 'adaptation', title: 'New club adaptation', description: 'Choose how to handle your first season after a club change.', choices: [['settle', 'Settle in first', '5 morale after a played year.', '5% fewer planned appearances.'], ['integrate', 'Push for a place', '4% more planned appearances.', 'Injury chance rises by 1 percentage point.']] },
   { id: 'fitness', title: 'Return to fitness', description: 'Choose your next-season workload after a recorded serious injury.', choices: [['managed', 'Managed return', 'Injury chance falls by 3 percentage points.', '10% fewer planned appearances.'], ['full', 'Full workload', '4% more planned appearances.', 'Injury chance rises by 3 percentage points.']] },
   { id: 'captain', title: 'Captain duties', description: 'Turn the current club armband into a leadership approach.', choices: [['calm', 'Keep the team calm', '20% lower expected yellow and red card rates.', '2% fewer planned appearances.'], ['rally', 'Lead from the front', '4% more planned appearances.', '10% more expected yellow cards.']] },
   { id: 'loan', title: 'Loan option to stay', description: 'Arrange a permanent deal at your loan club after a played season.', choices: [['buy', 'Make the move permanent', 'A two-year deal at the same weekly wage replaces the normal loan return.', 'The parent-club return is cancelled. An interrupted year cannot complete the deal.']] },
 ];
-export function programmeOptions(career: CareerState): ProgrammeView[] {
+export function programmeOptions(career: CareerState, negotiationTarget?: ContractOffer): ProgrammeView[] {
   const plan = planOf(career);
   const latest = stateOf(career)?.receipts.slice(-1)[0];
   const year = nextProgrammeYear(career);
   const views: ProgrammeView[] = DEFINITIONS.map(definition => {
     const choices = definition.id === 'position' ? (GROUPS.find(group => group.includes(career.position)) ?? []).filter(position => position !== career.position).map(position => [position, `Train ${position}`, 'After two consecutive played training seasons, future planned appearances rise 3% at this club.', 'During training, planned appearances and expected goals fall 3%. Primary position stays unchanged.'] as [string, string, string, string]) : definition.choices;
-    const offeredClub = definition.id === 'negotiation' ? actualOffer(career)?.offer.club?.name : null;
+    const offeredClub = definition.id === 'negotiation' ? actualOffer(career, negotiationTarget)?.offer.club?.name : null;
     const negotiated = definition.id === 'negotiation' ? stateOf(career)?.negotiated?.slice().reverse().find(row => row.year === year && row.club === offeredClub) : null;
     const outcome = latest?.outcomes[definition.id];
     const negotiationOutcome = negotiated ? `${negotiated.year} offer at ${negotiated.club}: ${negotiated.accepted ? 'Counteroffer accepted. The displayed offer contains the new terms.' : 'Wage counteroffer rejected by the simulation rule. The original offer is unchanged.'}` : null;
     const context = `${year ?? 'Unknown year'} at ${offeredClub || career.currentClub || 'unknown club'}. Simulation choices; final injuries, bans and selection still apply.${definition.id === 'position' && !choices.length ? ' No compatible second position is available for this position.' : ''}`;
-    return { id: definition.id, title: definition.title, description: definition.description, context, choices: choices.map(([id, label, effect, tradeoff]) => { const reason = allowed(career, definition.id, id); const loss = definition.id === 'loan' && career.loan ? loyaltyForfeitEuros(career, career.currentClub) : 0; return { id, label, effect, tradeoff: loss > 0 ? tradeoff + ' Any loyalty pay still unpaid at the permanent signing is forfeited; EUR ' + loss.toLocaleString('en-US') + ' is currently pending at the parent club.' : tradeoff, eligible: !reason, ...(reason ? { reason } : {}) }; }), choice: plan?.choices[definition.id] ?? (negotiated?.mode ?? null), outcome: negotiationOutcome ?? (outcome && latest ? `${latest.year} at ${latest.club}: ${outcome}` : null), canCancel: career.phase === 'playing' && !!plan?.choices[definition.id] };
+    return { id: definition.id, title: definition.title, description: definition.description, context, choices: choices.map(([id, label, effect, tradeoff]) => { const reason = allowed(career, definition.id, id, definition.id === 'negotiation' ? negotiationTarget : undefined); const loss = definition.id === 'loan' && career.loan ? loyaltyForfeitEuros(career, career.currentClub) : 0; return { id, label, effect, tradeoff: loss > 0 ? tradeoff + ' Any loyalty pay still unpaid at the permanent signing is forfeited; EUR ' + loss.toLocaleString('en-US') + ' is currently pending at the parent club.' : tradeoff, eligible: !reason, ...(reason ? { reason } : {}) }; }), choice: plan?.choices[definition.id] ?? (negotiated?.mode ?? null), outcome: negotiationOutcome ?? (outcome && latest ? `${latest.year} at ${latest.club}: ${outcome}` : null), canCancel: career.phase === 'playing' && !!plan?.choices[definition.id] };
   });
   const candidate = actualOffer(career);
   const found = candidate && validOffer(candidate.offer) ? candidate : null;

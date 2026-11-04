@@ -17,15 +17,15 @@ const ZONES = [
   { id: 3, w: 0.24 }, { id: 4, w: 0.20 }, { id: 5, w: 0.24 },
 ];
 
-function keeperPick(): number {
-  const r = Math.random();
+function keeperPick(random: () => number): number {
+  const r = random();
   let acc = 0;
   for (const z of ZONES) { acc += z.w; if (r < acc) return z.id; }
   return 4;
 }
 
 /** `saving` is true while the save version of this drill is the one on screen. */
-export function useZonePick(saving: boolean, finish: (score: number) => void, clock: PracticeClock) {
+export function useZonePick(saving: boolean, finish: (score: number) => void, clock: PracticeClock, random: () => number = Math.random) {
   // pick mode
   const [penNo, setPenNo] = useState(0);
   const [goals, setGoals] = useState(0);
@@ -55,10 +55,10 @@ export function useZonePick(saving: boolean, finish: (score: number) => void, cl
   const takePen = (zone: number) => {
     if (clock.isPaused()) return;
     if (lastPen) return; // wait for the reveal to clear
-    const dive = keeperPick();
+    const dive = keeperPick(random);
     let outcome: 'made' | 'stopped' | 'over';
     let scored = false;
-    if (zone <= 2 && Math.random() < 0.12) {
+    if (zone <= 2 && random() < 0.12) {
       outcome = 'over';
     } else if (zone === dive) {
       outcome = 'stopped';
@@ -82,9 +82,9 @@ export function useZonePick(saving: boolean, finish: (score: number) => void, cl
   const gkNextShot = () => {
     setGkLast(null);
     setGkShot(null);
-    const shot = keeperPick();
-    const honest = Math.random() < 0.65;
-    const tell = honest ? shot : keeperPick();
+    const shot = keeperPick(random);
+    const honest = random() < 0.65;
+    const tell = honest ? shot : keeperPick(random);
     setGkTell(tell);
     gkTimer.current = clock.timeout(() => {
       setGkTell(null);
