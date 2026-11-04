@@ -1,0 +1,127 @@
+name: Master list sixth CM adjacent regressions
+on:
+  push:
+    branches: [codex/master-list-sixth-cm-adjacent-20261104]
+permissions:
+  contents: read
+env:
+  CI: '1'
+  SIM_NETWORK: offline
+jobs:
+  adjacent:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - name: Pin immutable core and all eight unchanged test files
+        run: |
+          set -euo pipefail
+          OUT="$RUNNER_TEMP/master-list-sixth-cm-adjacent"
+          mkdir -p "$OUT/logs" "$OUT/transport"
+          echo "QA_OUT=$OUT" >> "$GITHUB_ENV"
+          test "$(git rev-parse HEAD^)" = aea490127f9864dd11918563af7994bb213b606b
+          test "$(git rev-parse HEAD^^{tree})" = b0a8067b10d9abf509ffc89bf7479f5424e4e05d
+          test "$(git diff --name-status HEAD^ HEAD)" = $'A\t.github/workflows/master-list-sixth-cm-adjacent-20261104.yml'
+          test "$(git rev-parse HEAD:src/lib/clubManager.ts)" = e3c9bcf0aec0f1e1caeb27d38d506d591d694237
+          test "$(git rev-parse HEAD:src/components/club-manager/TrainingScreen.tsx)" = 1247042a9e57c9bd89958959dff8c1490f633313
+          test "$(git rev-parse HEAD:src/hooks/useClubManager.ts)" = fe8d97dbfabaea602968e9cca25d4930895093e1
+          test "$(git rev-parse HEAD:src/test/clubManagerPositions.test.ts)" = a075328b1967a6aebb2bddf30014eb308f682084
+          test "$(git rev-parse HEAD:src/test/clubManagerPositionIntegration.test.ts)" = c1eabe3e33ffc37aafbb4f34d4a3435d47fdf9b0
+          test "$(git rev-parse HEAD:src/test/clubManagerPositionLive.test.ts)" = b8174f45778f49e59cccfe0428daf4c4b5d7ec3d
+          test "$(git rev-parse HEAD:src/test/clubManagerPositionPersistence.test.tsx)" = d71d8486dad8da7bdc5904e43ef2c4641651e301
+          test "$(git rev-parse HEAD:src/test/clubManagerPositionBlocked.test.tsx)" = 0f9c4de7514f0a7515d21e3abc37f9a4764309ec
+          test "$(git rev-parse HEAD:src/test/clubManagerRetrainingPreview.test.tsx)" = 4b31819d37baadb3a4bc0fce2e8124216a9404cf
+          test "$(git rev-parse HEAD:src/test/clubManagerRetrainingPause.test.tsx)" = cbe2093a2c1bbbf3e5b866157d18e923b97481b1
+          test "$(git rev-parse HEAD:src/test/clubManagerTrainingExposure.test.ts)" = f714e7a3c2c235c419838071fee2c4e640b11701
+          git rev-parse HEAD HEAD^{tree} > "$OUT/source.txt"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$OUT/source-before.sha256"
+          git status --porcelain=v1 --untracked-files=all > "$OUT/status-before.txt"
+          test ! -s "$OUT/status-before.txt"
+          cp .github/workflows/master-list-sixth-cm-adjacent-20261104.yml "$OUT/workflow.yml"
+          npm ci --no-audit --no-fund > "$OUT/logs/install.log" 2>&1
+          git diff --exit-code HEAD -- package.json package-lock.json bun.lockb
+      - name: Execute exactly eight unfiltered existing files once
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          : > "$QA_OUT/transport/units.log"
+          export SIM_OFFLINE_RECEIPT="$QA_OUT/transport/units.log"
+          set +e
+          node_modules/.bin/vitest run src/test/clubManagerPositions.test.ts src/test/clubManagerPositionIntegration.test.ts src/test/clubManagerPositionLive.test.ts src/test/clubManagerPositionPersistence.test.tsx src/test/clubManagerPositionBlocked.test.tsx src/test/clubManagerRetrainingPreview.test.tsx src/test/clubManagerRetrainingPause.test.tsx src/test/clubManagerTrainingExposure.test.ts --reporter=json --outputFile="$QA_OUT/report.json" > "$QA_OUT/logs/units.log" 2>&1
+          native=$?
+          set -e
+          echo "$native" > "$QA_OUT/native-exit.txt"
+          test "$native" = 0
+          node --input-type=module <<'JS'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          import path from 'node:path';
+          const out=process.env.QA_OUT,expected=["src/test/clubManagerPositions.test.ts","src/test/clubManagerPositionIntegration.test.ts","src/test/clubManagerPositionLive.test.ts","src/test/clubManagerPositionPersistence.test.tsx","src/test/clubManagerPositionBlocked.test.tsx","src/test/clubManagerRetrainingPreview.test.tsx","src/test/clubManagerRetrainingPause.test.tsx","src/test/clubManagerTrainingExposure.test.ts"];
+          const report=JSON.parse(fs.readFileSync(path.join(out,'report.json'),'utf8'));
+          const files=report.testResults??[];
+          const actual=files.map(file=>path.relative(process.cwd(),file.name).replaceAll('\\','/')).sort();
+          assert.deepEqual(actual,[...expected].sort(),'Exactly eight existing files, no extra or duplicate file');
+          const runtimeCounters={};
+          for(const key of ['numRuntimeErrorTestSuites','numUnhandledErrors']){
+            runtimeCounters[key]=key in report?report[key]:'UNKNOWN';
+            if(key in report)assert.equal(report[key],0,key);
+          }
+          const strip=value=>value.replace(/\u001b\[[0-?]*[ -/]*[@-~]/g,'');
+          const log=strip(fs.readFileSync(path.join(out,'logs/units.log'),'utf8'));
+          assert(!/Unhandled Errors|Unhandled Rejection|Uncaught Exception|Failed Suites|Failed to collect/.test(log),'No runtime/setup banner');
+          let count=0;const groups=new Map(),summary=[];
+          for(const file of files){
+            assert.equal(file.status,'passed',file.name);
+            assert.equal(strip(file.message??''),'',file.name+' no suite error');
+            const rows=file.assertionResults??[];assert(rows.length>0,file.name+' actually executes cases');
+            for(const row of rows){
+              assert.equal(row.status,'passed',row.fullName+' no failure/skip/pending credit');
+              assert.equal((row.failureMessages??[]).length,0,row.fullName);
+              const key=path.relative(process.cwd(),file.name)+' :: '+row.fullName;
+              groups.set(key,(groups.get(key)??0)+1);
+            }
+            count+=rows.length;summary.push({file:path.relative(process.cwd(),file.name).replaceAll('\\','/'),cases:rows.length,passed:rows.length});
+          }
+          if('numTotalTests'in report)assert.equal(report.numTotalTests,count);
+          if('numPassedTests'in report)assert.equal(report.numPassedTests,count);
+          for(const key of ['numFailedTests','numPendingTests','numTodoTests'])if(key in report)assert.equal(report[key],0,key);
+          assert.equal(fs.statSync(path.join(out,'transport/units.log')).size,0,'No offline transport attempts');
+          fs.writeFileSync(path.join(out,'admission.json'),JSON.stringify({status:'passed',files:8,cases:count,passed:count,failed:0,pending:0,native:0,byFile:summary,duplicateFullNameGroups:[...groups].filter(([,n])=>n>1),runtimeCounters,scope:'Eight existing CM regression files only on immutable aea490. No test edits, selection filters, duplicate new11 execution, new type/build/browser/full-fleet claim.'},null,2)+'\n');
+          console.log('CM adjacent: eight files, '+count+' actual passing cases, no failed/pending rows.');
+          JS
+      - name: Always hold complete source and status
+        if: always()
+        run: |
+          set -euo pipefail
+          test -n "${QA_OUT:-}"
+          git diff --exit-code HEAD > "$QA_OUT/source-diff.txt"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$QA_OUT/source-after.sha256"
+          cmp "$QA_OUT/source-before.sha256" "$QA_OUT/source-after.sha256"
+          git status --porcelain=v1 --untracked-files=all > "$QA_OUT/status-after.txt"
+          cmp "$QA_OUT/status-before.txt" "$QA_OUT/status-after.txt"
+          sha256sum --check "$QA_OUT/source-before.sha256" > "$QA_OUT/source-held.log"
+      - name: Bound retained evidence
+        id: artifact
+        if: always()
+        run: |
+          set -euo pipefail
+          test -n "${QA_OUT:-}"
+          test "$(du -sb "$QA_OUT" | cut -f1)" -lt 50000000
+          echo 'ready=true' >> "$GITHUB_OUTPUT"
+      - uses: actions/upload-artifact@v4
+        if: ${{ always() && steps.artifact.outputs.ready == 'true' }}
+        with:
+          name: master-list-sixth-cm-adjacent
+          path: ${{ runner.temp }}/master-list-sixth-cm-adjacent
+          if-no-files-found: error
+          retention-days: 7
