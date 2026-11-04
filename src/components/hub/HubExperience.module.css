@@ -51,7 +51,10 @@
 .featuredCard::before { content: ''; position: absolute; right: -20px; bottom: -55px; width: 135px; height: 135px; border: 1px solid hsl(var(--border)); border-radius: 50%; box-shadow: 0 0 0 22px hsl(var(--background) / .3), 0 0 0 23px hsl(var(--border)); z-index: -1; }
 .gameIcon { display: grid; place-items: center; flex: 0 0 42px; height: 42px; font-size: 25px; border-radius: 10px; background: hsl(var(--background)); }
 .featuredCard .gameIcon { flex-basis: 56px; height: 56px; font-size: 34px; }
-.gameCopy { min-width: 0; }
+.gameCopy { min-width: 0; flex: 1; }
+.cardActions { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 8px; margin-top: 10px; }
+.cardActions .gameAction, .cardActions .resumeLine { margin-top: 0; min-width: 0; }
+.pickButton { position: relative; z-index: 1; margin-left: auto; }
 .gameCopy h3 { font-size: 14px; line-height: 1.2; font-weight: 700; }
 .featuredCard h3 { font-size: 23px; letter-spacing: -.035em; }
 .gameLink { display: inline-flex; align-items: center; min-height: 44px; }

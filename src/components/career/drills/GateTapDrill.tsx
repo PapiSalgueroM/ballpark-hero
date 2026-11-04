@@ -9,7 +9,7 @@ import type { GateTapSkin } from '@/lib/careerTraining';
 const GATE_COUNT = 8;
 const gateWindowFor = (n: number) => Math.max(650, 1400 - n * 100);
 
-export function useGateTap(finish: (score: number) => void, clock: PracticeClock) {
+export function useGateTap(finish: (score: number) => void, clock: PracticeClock, random: () => number = Math.random) {
   const [gateNo, setGateNo] = useState(0);
   const [gateHits, setGateHits] = useState(0);
   const [litGate, setLitGate] = useState<number | null>(null);
@@ -30,7 +30,7 @@ export function useGateTap(finish: (score: number) => void, clock: PracticeClock
   };
 
   const lightGate = (n: number) => {
-    const g = Math.floor(Math.random() * 6);
+    const g = Math.floor(random() * 6);
     setLitGate(g);
     setGateWindow(gateWindowFor(n));
     gateTimer.current = clock.timeout(() => {

@@ -1308,6 +1308,8 @@ export interface CMPlayer {
    * a save made before this existed, and repaired by ensureAcademy.
    */
   potential?: number;
+  /** Paid training weeks recorded here, never inferred from earlier play. */
+  trainingExposure?: TrainingExposure;
   /** Round 116: he came through your academy or your scouting network. */
   academyGrad?: boolean;
   /**
@@ -1583,6 +1585,14 @@ export type TrainingFocus = 'firstTeam' | 'balanced' | 'youth';
 export interface TrainingPlan {
   intensity: TrainingIntensity;
   focus: TrainingFocus;
+}
+
+export interface TrainingExposure {
+  v: 1;
+  club: string;
+  season: number;
+  /** Light, normal, double; within each: first team, balanced, youth. */
+  counts: number[];
 }
 
 /** Round 70: one board demand for the season. Round 140: more of them.
@@ -18321,6 +18331,8 @@ function tickWeek(state: CareerState, playedIds: Set<string> | null): void {
   const plan = state.training ?? DEFAULT_TRAINING;
   const { recoveryMod, flat } = weekRecoveryOf(state);
   const knockRisk = plan.intensity === 'double' ? 0.005 : 0;
+  const policy = (plan.intensity === 'light' ? 0 : plan.intensity === 'double' ? 6 : 3)
+    + (plan.focus === 'firstTeam' ? 0 : plan.focus === 'youth' ? 2 : 1);
   /* Round 505: anyone who finished learning a second position this week. */
   const learned: string[] = [];
   state.squad = state.squad.map(p => {
@@ -18329,6 +18341,15 @@ function tickWeek(state: CareerState, playedIds: Set<string> | null): void {
     let injuryWeeks = Math.max(0, p.injuryWeeks - 1);
     if (knockRisk > 0 && injuryWeeks === 0 && Math.random() < knockRisk) injuryWeeks = injurySpell(state, ri(1, 3));
     const out: CMPlayer = { ...p, fitness, injuryWeeks };
+    const previous = readTrainingExposure(p.trainingExposure);
+    if (p.trainingExposure === undefined || previous) {
+      const counts = previous && previous.club === state.clubName && previous.season === state.season
+        ? [...previous.counts] : Array(9).fill(0) as number[];
+      if (Number.isSafeInteger(counts.reduce((sum, n) => sum + n, 0) + 1)) {
+        counts[policy] += 1;
+        out.trainingExposure = { v: 1, club: state.clubName, season: state.season, counts };
+      }
+    }
     /* Round 505: a week of work on a second position. At zero it joins
        his list, the oldest one beyond two making way, and the papers say
        so. Hashed off nothing: no draw, so the week's stream is untouched. */
@@ -20332,16 +20353,16 @@ export function setTrainingPlan(career: CareerState, plan: TrainingPlan): Career
   return { ...career, training: { ...plan } };
 }
 
-export const INTENSITY_INFO: Record<TrainingIntensity, { label: string; desc: string; emoji: string }> = {
-  light: { label: 'Light', desc: 'Fresh legs on match day, but nobody gets any better.', emoji: '\u{1F6CC}' },
-  normal: { label: 'Normal', desc: 'The safe middle. Steady development, normal fatigue.', emoji: '\u{2699}\uFE0F' },
-  double: { label: 'Double', desc: 'They improve fastest and they pay for it in tired legs and knocks.', emoji: '\u{1F525}' },
+export const INTENSITY_INFO: Record<TrainingIntensity, { label: string }> = {
+  light: { label: 'Light' },
+  normal: { label: 'Normal' },
+  double: { label: 'Double' },
 };
 
-export const FOCUS_INFO: Record<TrainingFocus, { label: string; desc: string; emoji: string }> = {
-  firstTeam: { label: 'First team', desc: 'Sessions built around the senior XI. The kids get left behind.', emoji: '\u{1F454}' },
-  balanced: { label: 'Balanced', desc: 'Everyone gets the same session. Nothing is wasted, nothing is special.', emoji: '\u{2696}\uFE0F' },
-  youth: { label: 'Youth', desc: 'The whole week is about the teenagers. Your senior players stagnate.', emoji: '\u{1F476}' },
+export const FOCUS_INFO: Record<TrainingFocus, { label: string }> = {
+  firstTeam: { label: 'First team' },
+  balanced: { label: 'Balanced' },
+  youth: { label: 'Youth' },
 };
 
 /** Round 963: the fastest anybody grows, the top of developmentRate's clamp. */
@@ -20384,6 +20405,35 @@ export function developmentRate(p: CMPlayer, career: CareerState): number {
      in the same place for the same reason. The training ground lifts the
      whole squad, the coach lifts his half of the pitch. */
   return clamp(headroom * minutes * intensity * focus * staff * trainingGroundGrowthMult(career) * coachGrowthMult(career, p.position), 0.1, DEVELOPMENT_RATE_MAX);
+}
+
+function readTrainingExposure(value: unknown): TrainingExposure | null {
+  const h = value as TrainingExposure | null;
+  return h && typeof h === 'object' && !Array.isArray(h) && h.v === 1 && Object.keys(h).length === 4
+    && typeof h.club === 'string' && Number.isSafeInteger(h.season) && h.season >= 1
+    && Array.isArray(h.counts) && h.counts.length === 9 && Object.keys(h.counts).length === 9
+    && Array.from(h.counts).every(n => Number.isSafeInteger(n) && n >= 0)
+    && Number.isSafeInteger(h.counts.reduce((sum, n) => sum + n, 0)) ? h : null;
+}
+
+/** The mix actually charged to this player. No history means the legacy current-plan forecast. */
+export function recordedTraining(p: CMPlayer, career: CareerState): { weeks: number; rate: number } {
+  const h = readTrainingExposure(p.trainingExposure);
+  const counts = h && h.club === career.clubName && h.season === career.season ? h.counts : null;
+  const weeks = counts?.reduce((sum, n) => sum + n, 0) ?? 0;
+  if (!weeks) return { weeks: 0, rate: developmentRate(p, career) };
+  let total = 0;
+  for (let i = 0; i < 9; i++) {
+    if (!counts![i]) continue;
+    const training: TrainingPlan = {
+      intensity: (['light', 'normal', 'double'] as const)[Math.floor(i / 3)],
+      focus: (['firstTeam', 'balanced', 'youth'] as const)[i % 3],
+    };
+    const rate = developmentRate(p, { ...career, training });
+    if (counts![i] === weeks) return { weeks, rate };
+    total += rate * counts![i];
+  }
+  return { weeks, rate: total / weeks };
 }
 
 /**
@@ -22475,7 +22525,7 @@ function agePlayer(p: CMPlayer, career: CareerState, random?: () => number): CMP
   if (drift < 0) drift = Math.round(drift * declineScale(p.position));
   const potential = p.potential ?? rollPotential(ceilingBase(p), p.age, random);
   if (drift > 0) {
-    drift = Math.round(drift * developmentRate(p, career));
+    drift = Math.round(drift * recordedTraining(p, career).rate);
     drift = Math.min(drift, Math.max(0, potential - p.rating));
   }
   // Round 70: market value tracks the rating drift (each rating point is
@@ -22487,7 +22537,7 @@ function agePlayer(p: CMPlayer, career: CareerState, random?: () => number): CMP
   }
   const ceiling = worldRosterView(career) || worldSeedOf(career) !== undefined ? Math.max(95, Math.min(99, p.rating)) : 95;
   const rating = clamp(p.rating + drift, 40, ceiling);
-  return {
+  const out: CMPlayer = {
     ...p,
     age,
     rating,
@@ -22519,6 +22569,9 @@ function agePlayer(p: CMPlayer, career: CareerState, random?: () => number): CMP
     lastTen: [],
     wantsOut: undefined,
   };
+  const h = readTrainingExposure(p.trainingExposure);
+  if (h && h.club === career.clubName && h.season === career.season) delete out.trainingExposure;
+  return out;
 }
 
 /**

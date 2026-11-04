@@ -38,7 +38,7 @@ import {
   clubNameOptions, ordinal, SINGLE_LEG_BELOW, YOUR_CLUB,
   newTycoon, newLeague, goalBonus, winBonus, BOOST_CHARGE_SEC, BOOST_DURATION_SEC, WINDFALL_SEC,
   GOLDEN_CATCH_SEC, offlineRateOf, offlineCapHoursOf, TYCOON_SAVE_KEY, swayMult,
-  STAFF, staffLevelOf, staffCostOf, canHire, totalStaffLevels,
+  STAFF, staffLevelOf, staffCostOf, canHire, payrollPurchase, totalStaffLevels,
   ACHIEVEMENTS, ACH_BONUS, achMult, goldenActive, GOLDEN_INFO,
   LEGACY_PERKS, perkLevelOf, perkCostOf, canBuyPerk, legacyPointsOf,
   totalPerkLevels, pointsForSale, HYPE_MULT, AWAY_MATCHDAY_SEC, SET_PIECE_WINDOW_SEC, type TycoonLeague,
@@ -756,11 +756,13 @@ function StadiumRoom({ g, visible, onNeedsYou }: { g: ReturnType<typeof useStadi
           ))}
         </div>
 
-        {panel === 'upgrades' && (<>
-        <div role="group" aria-label="Upgrade quantity" className="flex gap-2 mb-2">
-          {([1, 5] as const).map(amount => <button key={amount} aria-pressed={buyAmount === amount} onClick={() => setBuyAmount(amount)} className={cn('min-h-11 rounded-lg border px-3 text-xs font-bold', buyAmount === amount ? 'border-primary bg-primary/10' : 'border-border')}>{amount === 1 ? '1 level' : 'Up to 5 levels'}</button>)}
+        {(panel === 'upgrades' || panel === 'payroll') && (<>
+        <div role="group" aria-label={panel === 'payroll' ? 'Payroll quantity' : 'Upgrade quantity'} className="flex gap-2 mb-2">
+          {([1, 5] as const).map(amount => <button key={amount} aria-pressed={buyAmount === amount} onClick={() => setBuyAmount(amount)} className={cn('min-h-11 rounded-lg border px-3 text-xs font-bold', buyAmount === amount ? 'border-primary bg-primary/10' : 'border-border')}>{panel === 'payroll' ? amount === 1 ? '1 hire' : 'Up to 5 hires' : amount === 1 ? '1 level' : 'Up to 5 levels'}</button>)}
         </div>
-        {buyAmount === 5 && <p className="text-[10px] text-muted-foreground mb-2">Each level costs more. Buy up to five you can afford, stopping at the level cap.</p>}
+        {buyAmount === 5 && <p className="text-[10px] text-muted-foreground mb-2">{panel === 'payroll' ? 'Each hire costs more. Hire up to five you can afford, stopping at the staff cap.' : 'Each level costs more. Buy up to five you can afford, stopping at the level cap.'}</p>}
+        </>)}
+        {panel === 'upgrades' && (<>
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 pb-4">
           {TRACKS.map(t => {
             const lvl = levelOf(s, t.id);
@@ -803,12 +805,13 @@ function StadiumRoom({ g, visible, onNeedsYou }: { g: ReturnType<typeof useStadi
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pb-4">
           {STAFF.map(t => {
             const lvl = staffLevelOf(s, t.id);
-            const cost = staffCostOf(s, t.id);
-            const ok = canHire(s, t.id);
+            const batch = buyAmount === 5 ? payrollPurchase(s, t.id, 5) : null;
+            const cost = batch ? batch.cost : staffCostOf(s, t.id);
+            const ok = batch ? batch.quantity > 0 : canHire(s, t.id);
             return (
               <button
                 key={t.id}
-                onClick={() => g.doHire(t.id)}
+                onClick={() => g.doHire(t.id, buyAmount)}
                 disabled={!ok}
                 className={cn(
                   'relative rounded-xl border p-2.5 text-left transition-all active:scale-[0.97]',
@@ -822,8 +825,8 @@ function StadiumRoom({ g, visible, onNeedsYou }: { g: ReturnType<typeof useStadi
                 </div>
                 <div className="text-[9px] text-muted-foreground mt-1 leading-snug min-h-[22px]">{t.blurb}</div>
                 <div className="flex items-center justify-between mt-1">
-                  <span className={cn('text-[11px] font-bold tabular-nums', ok ? 'text-gold' : 'text-muted-foreground')}>{fmtMoney(cost)}</span>
-                  <span className="text-[9px] text-emerald-400 tabular-nums">+{fmtRate(t.rate)}/s</span>
+                  <span className={cn('text-[11px] font-bold tabular-nums', ok ? 'text-gold' : 'text-muted-foreground')}>{batch ? batch.quantity > 0 ? `Hire ${batch.quantity} · ${fmtMoney(cost)} total` : lvl >= t.maxLevel ? 'Max staff' : 'Save for the next hire' : fmtMoney(cost)}</span>
+                  <span className="text-[9px] text-emerald-400 tabular-nums">+{fmtRate(t.rate * (batch?.quantity ?? 1))}/s base</span>
                 </div>
               </button>
             );

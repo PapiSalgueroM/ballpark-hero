@@ -177,6 +177,17 @@ export function hire(s: TycoonState, id: string): TycoonState {
   };
 }
 
+/** Quote the affordable hires using each level's existing price. */
+export function payrollPurchase(s: TycoonState, id: string, amount: 1 | 5): { state: TycoonState; quantity: number; cost: number } {
+  let state = s, quantity = 0, cost = 0;
+  while (quantity < amount && canHire(state, id)) {
+    cost += staffCostOf(state, id);
+    state = hire(state, id);
+    quantity++;
+  }
+  return { state, quantity, cost };
+}
+
 export function totalStaffLevels(s: TycoonState): number {
   return STAFF.reduce((sum, t) => sum + staffLevelOf(s, t.id), 0);
 }
