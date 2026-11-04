@@ -21660,9 +21660,9 @@ export function matchFacts(career: CareerState): MatchFacts | null {
        the second); balanced adds exactly zero. */
     const t1 = tacticEdge(career, fx, xi, instructionsOf(career), 1);
     const t2 = tacticEdge(career, fx, xi, instructionsOf(career), 2);
-    const geometry = positionEdge(xi, career.mentality, career);
-    const lamMe = clamp(1.25 + (mine - oppS) * 0.055 + ment.atk + homeAtk + duty.atk + (t1 && t2 ? (t1.atk + t2.atk) / 2 : 0) + (geometry?.atk ?? 0), 0.12, 4.2) * k;
-    const lamOpp = clamp(1.25 + (oppS - mine) * 0.055 + ment.def + oppAtk + duty.def + (t1 && t2 ? (t1.def + t2.def) / 2 : 0) + (geometry?.conceded ?? 0), 0.12, 4.2) * k;
+    const { atk = 0, conceded = 0 } = positionEdge(xi, career.mentality, career) ?? {};
+    const lamMe = clamp(1.25 + (mine - oppS) * 0.055 + ment.atk + homeAtk + duty.atk + (t1 && t2 ? (t1.atk + t2.atk) / 2 : 0) + atk, 0.12, 4.2) * k;
+    const lamOpp = clamp(1.25 + (oppS - mine) * 0.055 + ment.def + oppAtk + duty.def + (t1 && t2 ? (t1.def + t2.def) / 2 : 0) + conceded, 0.12, 4.2) * k;
     const mass = [0, 0, 0];
     for (let a = 0, pa = Math.exp(-lamMe); a <= 9; a++, pa *= lamMe / a) {
       for (let b = 0, pb = Math.exp(-lamOpp); b <= 9; b++, pb *= lamOpp / b) {
@@ -21700,7 +21700,7 @@ export function matchFacts(career: CareerState): MatchFacts | null {
       }
     }
 
-    const myDanger = [...career.squad]
+    const myDanger = career.squad
       .filter(p => isAvailable(p) && p.position !== 'GK')
       .sort((a, b) => (b.seasonGoals - a.seasonGoals) || (b.rating - a.rating))
       .slice(0, 2)
@@ -21709,6 +21709,7 @@ export function matchFacts(career: CareerState): MatchFacts | null {
       .filter(p => groupOf(p.p) === 'ATT' || groupOf(p.p) === 'MID')
       .slice(0, 2)
       .map(p => p.n);
+    const ctx = secondLegContext(career, w, 0, 0);
 
     return {
       compLabel: fx.compLabel,
@@ -21721,16 +21722,13 @@ export function matchFacts(career: CareerState): MatchFacts | null {
       oppPos,
       oppLeagueName,
       odds: { win, draw, loss },
-      h2h: [...(career.h2h ?? [])].filter(h => h.opp === fx.opponent).slice(-6).reverse(),
+      h2h: (career.h2h ?? []).filter(h => h.opp === fx.opponent).slice(-6).reverse(),
       myDanger,
       oppDanger,
       myStrength: Math.round(mine),
       oppStrength: Math.round(oppS),
       /* Round 781: the first leg, when tonight settles a two legged tie. */
-      ...(() => {
-        const ctx = secondLegContext(career, w, 0, 0);
-        return ctx ? { firstLeg: { mine: ctx.leg1Mine, theirs: ctx.leg1Theirs, home: ctx.leg1Home } } : {};
-      })(),
+      ...(ctx ? { firstLeg: { mine: ctx.leg1Mine, theirs: ctx.leg1Theirs, home: ctx.leg1Home } } : {}),
     };
   }
   return null;

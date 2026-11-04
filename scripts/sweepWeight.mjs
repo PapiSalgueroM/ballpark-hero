@@ -326,7 +326,7 @@ for (const [route, budget] of BUDGETS) {
   let total = 0;
   for (const f of files) total += gzSize(path.join(ROOT, 'dist/assets', f));
   const kb = Math.round(total / 1024);
-  measured.push({ route, kb, exact: (total / 1024).toFixed(1), budget, files: files.size });
+  measured.push({ route, kb, exact: (total / 1024).toFixed(1), budget, files: files.size, bytes: total });
   fetched.set(route, [...files].sort());
   if (kb > budget) fail(`${route}: ${kb}K of gzipped JavaScript against a budget of ${budget}K`);
   /* A budget nobody is near is a budget nobody is keeping. If a page comes
@@ -357,7 +357,7 @@ for (const [route, budget] of BUDGETS) {
   await ctx.close();
 }
 for (const m of measured) {
-  console.log(`   ${m.route.padEnd(18)} ${String(m.kb).padStart(4)}K gz over ${String(m.files).padStart(3)} files (budget ${m.budget}K, ${m.exact}K to the tenth)`);
+  console.log(`   ${m.route.padEnd(18)} ${String(m.kb).padStart(4)}K gz over ${String(m.files).padStart(3)} files (budget ${m.budget}K, ${m.exact}K to the tenth, ${m.bytes} bytes)`);
 }
 
 console.log('2) The two things Round 210 moved off the critical path stay off it');
