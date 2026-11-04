@@ -1,0 +1,52 @@
+{
+  "sourceBase": "a4d6eaa2cb0d57b8bcbb301fd35f757b60bf0a41",
+  "scope": "Source-only bounded legacy NFL draft-driver maintenance. No product changes, no assertion/digest/tape/seed/limit changes, no NHL/NBA/MLB driver change and no waiver.",
+  "priorThreeFileParityRun": 41901795657,
+  "priorThreeFileParity": "Parent admitted fixed/original/restored: exact173 cases154pass19same assertions. This source packet has not run.",
+  "files": [
+    {
+      "path": "src/components/front-office/FrontOfficeOnePress.test.tsx",
+      "originalBlob": "9ea74e99847c522999ff133eefac39862ff442c0",
+      "edits": [
+        {
+          "before": "            fireEvent.click(screen.getAllByText(/· age \\d+/)[0]);\n            presses += 1;",
+          "after": "            fireEvent.click(screen.getAllByText(/· age \\d+/)[0]);\n            fireEvent.click(screen.getByRole('button', { name: 'Confirm draft', exact: true }));\n            presses += 1;",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "path": "src/components/front-office/FrontOfficeTagDepth.test.tsx",
+      "originalBlob": "f3b36b57f1bc8754007f41d56f929f3093ab1ef0",
+      "edits": [
+        {
+          "before": "      fireEvent.click(btn);\n    }\n    const after = read();",
+          "after": "      fireEvent.click(btn);\n      fireEvent.click(screen.getByRole('button', { name: 'Confirm draft', exact: true }));\n    }\n    const after = read();",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "path": "src/components/front-office-shared/FrontOfficeGmCareer.test.tsx",
+      "originalBlob": "1475cfecce22b84f57ee4bdd4d076a800d8334d3",
+      "edits": [
+        {
+          "before": "    if (rows.length) { fireEvent.click(rows[0]); continue; }",
+          "after": "    if (rows.length) { fireEvent.click(rows[0]); fireEvent.click(screen.getByRole('button', { name: 'Confirm draft', exact: true })); continue; }",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "path": "src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx",
+      "originalBlob": "22b4c92137b412fec816a104f49d39ff2e59bd8c",
+      "edits": [
+        {
+          "before": "      for (let i = 0; i < c.picks; i += 1) fireEvent.click(screen.getAllByText(/· age \\d+/)[0]);",
+          "after": "      for (let i = 0; i < c.picks; i += 1) {\n        fireEvent.click(screen.getAllByText(/· age \\d+/)[0]);\n        if (c.env === 'FO_BOARD_NFL') fireEvent.click(screen.getByRole('button', { name: 'Confirm draft', exact: true }));\n      }",
+          "count": 1
+        }
+      ]
+    }
+  ]
+}

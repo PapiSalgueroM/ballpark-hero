@@ -1,0 +1,1101 @@
+{
+  "Scope": "Fixed173-case observation only. Original/restored comparison required.19historical failures remain unresolved and unwaived.",
+  "Source": "99df1365160f4b30cd0151beb5f35ebdbb19ba03",
+  "Run": 41900634318,
+  "ExpectedPassed": 154,
+  "ExpectedFailed": 19,
+  "Files": [
+    "src/test/frontOfficeDraftAccess.test.tsx",
+    "src/test/frontOfficeDraftFocus.test.tsx",
+    "src/test/frontOfficeDraftReview.test.tsx",
+    "src/test/frontOfficeSaveRecovery.test.tsx",
+    "src/test/frontOfficeWriteRetry.test.tsx",
+    "src/components/front-office/FrontOfficeCuts.test.tsx",
+    "src/components/front-office/FrontOfficeFullRoster.test.tsx",
+    "src/components/front-office/FrontOfficeLazyDesk.test.tsx",
+    "src/components/front-office/FrontOfficeOnePress.test.tsx",
+    "src/components/front-office/FrontOfficePromotion.test.tsx",
+    "src/components/front-office/FrontOfficeRatingEvidence.test.tsx",
+    "src/components/front-office/FrontOfficeTagDepth.test.tsx",
+    "src/components/front-office/FrontOfficeTile.test.tsx",
+    "src/components/front-office-shared/FrontOfficeGmCareer.test.tsx"
+  ],
+  "Cases": [
+    {
+      "file": "src/test/frontOfficeDraftAccess.test.tsx",
+      "name": "NFL draft prospect access reaches all forty prospects through eighteen-row pages without changing the draft",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "src/test/frontOfficeDraftAccess.test.tsx",
+      "name": "NFL draft prospect access drafts a filtered prospect beyond the first page and preserves exact rival picks and draws",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "src/test/frontOfficeDraftAccess.test.tsx",
+      "name": "NFL draft prospect access resets a later page when the position changes and keeps empty groups safe",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "src/test/frontOfficeDraftAccess.test.tsx",
+      "name": "NFL draft prospect access holds the scouting directors grades and order without exposing true ratings",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "src/test/frontOfficeDraftFocus.test.tsx",
+      "name": "NFL draft review keyboard focus moves from the selected prospect into its review without changing the draft",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "src/test/frontOfficeDraftFocus.test.tsx",
+      "name": "NFL draft review keyboard focus returns Back to the exact filtered-page prospect without changing the draft",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "src/test/frontOfficeDraftReview.test.tsx",
+      "name": "NFL draft prospect review opens a review and returns to the same page without spending picks or draws",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "src/test/frontOfficeDraftReview.test.tsx",
+      "name": "NFL draft prospect review confirms one prospect through the unchanged pick and rival sequence",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "src/test/frontOfficeDraftReview.test.tsx",
+      "name": "NFL draft prospect review keeps scouting grades and hides true ratings before selection",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "src/test/frontOfficeSaveRecovery.test.tsx",
+      "name": "NFL actual save recovery restores current progress, contracts and counters without rewriting storage",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "src/test/frontOfficeSaveRecovery.test.tsx",
+      "name": "NFL actual save recovery loads supported older saves and advances the same league once",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "src/test/frontOfficeSaveRecovery.test.tsx",
+      "name": "NFL actual save recovery keeps the existing duplicate and missing entity ID repair",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "src/test/frontOfficeSaveRecovery.test.tsx",
+      "name": "NFL actual save recovery restores an in-progress draft with its remaining choices",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "src/test/frontOfficeSaveRecovery.test.tsx",
+      "name": "NFL actual save recovery keeps the older recap-to-draft migration without replaying a closed season",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "src/test/frontOfficeSaveRecovery.test.tsx",
+      "name": "NFL actual save recovery restores the saved postseason recap without replaying or replacing it",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "src/test/frontOfficeSaveRecovery.test.tsx",
+      "name": "NFL actual save recovery restores a save in its playoffs with its bracket, without rewriting storage",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "src/test/frontOfficeSaveRecovery.test.tsx",
+      "name": "NFL actual save recovery rejects zero period before render and deletes only this save on request",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "src/test/frontOfficeSaveRecovery.test.tsx",
+      "name": "NFL actual save recovery rejects fractional period before render and deletes only this save on request",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "src/test/frontOfficeSaveRecovery.test.tsx",
+      "name": "NFL actual save recovery rejects missing free agent pool before render and deletes only this save on request",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "src/test/frontOfficeSaveRecovery.test.tsx",
+      "name": "NFL actual save recovery rejects null team roster before render and deletes only this save on request",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "src/test/frontOfficeSaveRecovery.test.tsx",
+      "name": "NFL actual save recovery rejects missing selected club before render and deletes only this save on request",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "src/test/frontOfficeSaveRecovery.test.tsx",
+      "name": "NFL actual save recovery rejects null draft entity before render and deletes only this save on request",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "src/test/frontOfficeSaveRecovery.test.tsx",
+      "name": "NFL actual save recovery rejects object cut ledger before render and deletes only this save on request",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "src/test/frontOfficeSaveRecovery.test.tsx",
+      "name": "NFL actual save recovery rejects unknown phase before render and deletes only this save on request",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "src/test/frontOfficeSaveRecovery.test.tsx",
+      "name": "NFL actual save recovery rejects missing schedule before render and deletes only this save on request",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "src/test/frontOfficeSaveRecovery.test.tsx",
+      "name": "NFL actual save recovery rejects missing schedule week before render and deletes only this save on request",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "src/test/frontOfficeSaveRecovery.test.tsx",
+      "name": "NFL actual save recovery rejects unplayable eighteenth hub week before render and deletes only this save on request",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "src/test/frontOfficeSaveRecovery.test.tsx",
+      "name": "NFL actual save recovery rejects an eighteenth hub week with a bracket whose season already has a champion before render and deletes only this save on request",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "src/test/frontOfficeSaveRecovery.test.tsx",
+      "name": "NFL actual save recovery allows a fresh club to replace the unusable save without clearing another game",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "src/test/frontOfficeSaveRecovery.test.tsx",
+      "name": "NFL actual save recovery offers the same recovery for malformed JSON",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "src/test/frontOfficeSaveRecovery.test.tsx",
+      "name": "NHL actual save recovery restores current progress, contracts and counters without rewriting storage",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "src/test/frontOfficeSaveRecovery.test.tsx",
+      "name": "NHL actual save recovery loads supported older saves and advances the same league once",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "src/test/frontOfficeSaveRecovery.test.tsx",
+      "name": "NHL actual save recovery keeps the existing duplicate and missing entity ID repair",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "src/test/frontOfficeSaveRecovery.test.tsx",
+      "name": "NHL actual save recovery restores an in-progress draft with its remaining choices",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "src/test/frontOfficeSaveRecovery.test.tsx",
+      "name": "NHL actual save recovery keeps the older recap-to-draft migration without replaying a closed season",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "src/test/frontOfficeSaveRecovery.test.tsx",
+      "name": "NHL actual save recovery restores the saved postseason recap without replaying or replacing it",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "src/test/frontOfficeSaveRecovery.test.tsx",
+      "name": "NHL actual save recovery rejects zero period before render and deletes only this save on request",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "src/test/frontOfficeSaveRecovery.test.tsx",
+      "name": "NHL actual save recovery rejects fractional period before render and deletes only this save on request",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "src/test/frontOfficeSaveRecovery.test.tsx",
+      "name": "NHL actual save recovery rejects missing free agent pool before render and deletes only this save on request",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "src/test/frontOfficeSaveRecovery.test.tsx",
+      "name": "NHL actual save recovery rejects null team roster before render and deletes only this save on request",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "src/test/frontOfficeSaveRecovery.test.tsx",
+      "name": "NHL actual save recovery rejects missing selected club before render and deletes only this save on request",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "src/test/frontOfficeSaveRecovery.test.tsx",
+      "name": "NHL actual save recovery rejects null draft entity before render and deletes only this save on request",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "src/test/frontOfficeSaveRecovery.test.tsx",
+      "name": "NHL actual save recovery rejects object cut ledger before render and deletes only this save on request",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "src/test/frontOfficeSaveRecovery.test.tsx",
+      "name": "NHL actual save recovery rejects unknown phase before render and deletes only this save on request",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "src/test/frontOfficeSaveRecovery.test.tsx",
+      "name": "NHL actual save recovery rejects out of range round before render and deletes only this save on request",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "src/test/frontOfficeSaveRecovery.test.tsx",
+      "name": "NHL actual save recovery allows a fresh club to replace the unusable save without clearing another game",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "src/test/frontOfficeSaveRecovery.test.tsx",
+      "name": "NHL actual save recovery offers the same recovery for malformed JSON",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "src/test/frontOfficeWriteRetry.test.tsx",
+      "name": "NFL Front Office refused save recovery a real Cut reports its refused write and retries the exact pending snapshot until storage accepts it",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "src/test/frontOfficeWriteRetry.test.tsx",
+      "name": "NFL Front Office refused save recovery two real refused Cuts retry the latest complete state rather than overwriting it with the earlier attempt",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "src/test/frontOfficeWriteRetry.test.tsx",
+      "name": "NFL Front Office refused save recovery a healthy real Cut still writes once with the existing cap cost and no refused-save warning",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "src/components/front-office/FrontOfficeCuts.test.tsx",
+      "name": "NFL Front Office: a cut costs dead money on the board quotes the dead money before the tap, asks twice, and only then charges it",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "src/components/front-office/FrontOfficeCuts.test.tsx",
+      "name": "NFL Front Office: a cut costs dead money on the board shows why the man you cut cannot be signed back and greys his button",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "src/components/front-office/FrontOfficeCuts.test.tsx",
+      "name": "NFL Front Office: a cut costs dead money on the board at the roster floor every cut is disabled with the reason",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "src/components/front-office/FrontOfficeCuts.test.tsx",
+      "name": "NFL Front Office: a cut costs dead money on the board a man you cut this season cannot come back by trade, and the trade screen says why",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "src/components/front-office/FrontOfficeCuts.test.tsx",
+      "name": "NBA Front Office: a cut costs dead money on the board quotes the dead money before the tap, asks twice, and only then charges it",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "src/components/front-office/FrontOfficeCuts.test.tsx",
+      "name": "NBA Front Office: a cut costs dead money on the board shows why the man you cut cannot be signed back and greys his button",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "src/components/front-office/FrontOfficeCuts.test.tsx",
+      "name": "NBA Front Office: a cut costs dead money on the board at the roster floor every cut is disabled with the reason",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "src/components/front-office/FrontOfficeCuts.test.tsx",
+      "name": "NBA Front Office: a cut costs dead money on the board at the roster ceiling every Sign is disabled with the reason",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "src/components/front-office/FrontOfficeCuts.test.tsx",
+      "name": "NBA Front Office: a cut costs dead money on the board a man you cut this season cannot come back by trade, and the trade screen says why",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "src/components/front-office/FrontOfficeCuts.test.tsx",
+      "name": "MLB Front Office: a cut costs dead money on the board quotes the dead money before the tap, asks twice, and only then charges it",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "src/components/front-office/FrontOfficeCuts.test.tsx",
+      "name": "MLB Front Office: a cut costs dead money on the board shows why the man you cut cannot be signed back and greys his button",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "src/components/front-office/FrontOfficeCuts.test.tsx",
+      "name": "MLB Front Office: a cut costs dead money on the board at the roster floor every cut is disabled with the reason",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "src/components/front-office/FrontOfficeCuts.test.tsx",
+      "name": "MLB Front Office: a cut costs dead money on the board at the roster ceiling every Sign is disabled with the reason",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "src/components/front-office/FrontOfficeCuts.test.tsx",
+      "name": "MLB Front Office: a cut costs dead money on the board a man you cut this season cannot come back by trade, and the trade screen says why",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "src/components/front-office/FrontOfficeCuts.test.tsx",
+      "name": "NHL Front Office: a cut costs dead money on the board quotes the dead money before the tap, asks twice, and only then charges it",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "src/components/front-office/FrontOfficeCuts.test.tsx",
+      "name": "NHL Front Office: a cut costs dead money on the board shows why the man you cut cannot be signed back and greys his button",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "src/components/front-office/FrontOfficeCuts.test.tsx",
+      "name": "NHL Front Office: a cut costs dead money on the board at the roster floor every cut is disabled with the reason",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "src/components/front-office/FrontOfficeCuts.test.tsx",
+      "name": "NHL Front Office: a cut costs dead money on the board at the roster ceiling every Sign is disabled with the reason",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "src/components/front-office/FrontOfficeCuts.test.tsx",
+      "name": "NHL Front Office: a cut costs dead money on the board a man you cut this season cannot come back by trade, and the trade screen says why",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "src/components/front-office/FrontOfficeFullRoster.test.tsx",
+      "name": "NFL Front Office: a full roster on the board opens the Roster box on group tiles, never a list of every man",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "src/components/front-office/FrontOfficeFullRoster.test.tsx",
+      "name": "NFL Front Office: a full roster on the board calls a practice squad man up while there is a spot, and greys the button at 53",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "src/components/front-office/FrontOfficeFullRoster.test.tsx",
+      "name": "NFL Front Office: a full roster on the board starts a new league with the whole club when a team is tapped",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "src/components/front-office/FrontOfficeFullRoster.test.tsx",
+      "name": "NFL Front Office: a full roster on the board marks a rating that is only a draft spot on the depth chart and both trade lists",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "src/components/front-office/FrontOfficeFullRoster.test.tsx",
+      "name": "NFL Front Office: a full roster on the board locks Play with the count owed until a GM over 53 cuts down himself",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "src/components/front-office/FrontOfficeFullRoster.test.tsx",
+      "name": "NFL Front Office: a full roster on the board keeps the old list on a fifteen man save",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "src/components/front-office/FrontOfficeLazyDesk.test.tsx",
+      "name": "NFL front office: the GM career kit loads when it is needed a season being played never asks for it, and the Career box reads the same before and after it",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "src/components/front-office/FrontOfficeLazyDesk.test.tsx",
+      "name": "NFL front office: the GM career kit loads when it is needed a career box opened asks for it: the box header and the holding box, then the screen",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "src/components/front-office/FrontOfficeLazyDesk.test.tsx",
+      "name": "NFL front office: the GM career kit loads when it is needed the last week asks for it, its press buttons wait for it, and the one press then closes the season",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "src/components/front-office/FrontOfficeLazyDesk.test.tsx",
+      "name": "NFL front office: the GM career kit loads when it is needed a save that loads on the recap waits in a holding box, then draws the recap",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "src/components/front-office/FrontOfficeLazyDesk.test.tsx",
+      "name": "NFL front office: the GM career kit loads when it is needed a save that loads on the fired screen waits in a holding box, then draws the out of work screen",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "src/components/front-office/FrontOfficeLazyDesk.test.tsx",
+      "name": "NFL front office: the GM career kit loads when it is needed a fetch that fails says so and asks again on Try again",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "src/components/front-office/FrontOfficeOnePress.test.tsx",
+      "name": "NFL front office, fifteen league, GM desk off: one press of the final week ordinary: the save at the recap, the draft and the next season's hub is the base's",
+      "status": "failed",
+      "failureMessages": [
+        "AssertionError: the draft closed after 12 picks: expected 'draft' to be 'hub' // Object.is equality\n    at /home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office/FrontOfficeOnePress.test.tsx:310:72\n    at processTicksAndRejections (node:internal/process/task_queues:104:5)\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/@vitest/runner/dist/chunk-hooks.js:752:20"
+      ]
+    },
+    {
+      "file": "src/components/front-office/FrontOfficeOnePress.test.tsx",
+      "name": "NFL front office, fifteen league, GM desk off: one press of the final week title: the save at the recap, the draft and the next season's hub is the base's",
+      "status": "failed",
+      "failureMessages": [
+        "AssertionError: the draft closed after 12 picks: expected 'draft' to be 'hub' // Object.is equality\n    at /home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office/FrontOfficeOnePress.test.tsx:310:72\n    at processTicksAndRejections (node:internal/process/task_queues:104:5)\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/@vitest/runner/dist/chunk-hooks.js:752:20"
+      ]
+    },
+    {
+      "file": "src/components/front-office/FrontOfficeOnePress.test.tsx",
+      "name": "NFL front office, fifteen league, GM desk off: one press of the final week fired: the save at the recap, the draft and the next season's hub is the base's",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "src/components/front-office/FrontOfficeOnePress.test.tsx",
+      "name": "NFL front office, fifteen league, GM desk on: one press of the final week ordinary: the save at the recap, the draft and the next season's hub is the base's",
+      "status": "failed",
+      "failureMessages": [
+        "AssertionError: the draft closed after 12 picks: expected 'draft' to be 'hub' // Object.is equality\n    at /home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office/FrontOfficeOnePress.test.tsx:310:72\n    at processTicksAndRejections (node:internal/process/task_queues:104:5)\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/@vitest/runner/dist/chunk-hooks.js:752:20"
+      ]
+    },
+    {
+      "file": "src/components/front-office/FrontOfficeOnePress.test.tsx",
+      "name": "NFL front office, fifteen league, GM desk on: one press of the final week title: the save at the recap, the draft and the next season's hub is the base's",
+      "status": "failed",
+      "failureMessages": [
+        "AssertionError: the draft closed after 12 picks: expected 'draft' to be 'hub' // Object.is equality\n    at /home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office/FrontOfficeOnePress.test.tsx:310:72\n    at processTicksAndRejections (node:internal/process/task_queues:104:5)\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/@vitest/runner/dist/chunk-hooks.js:752:20"
+      ]
+    },
+    {
+      "file": "src/components/front-office/FrontOfficeOnePress.test.tsx",
+      "name": "NFL front office, fifteen league, GM desk on: one press of the final week fired: the save at the recap, the draft and the next season's hub is the base's",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "src/components/front-office/FrontOfficeOnePress.test.tsx",
+      "name": "NFL front office, deep league, GM desk off: one press of the final week ordinary: the save at the recap, the draft and the next season's hub is the base's",
+      "status": "failed",
+      "failureMessages": [
+        "AssertionError: the draft closed after 12 picks: expected 'draft' to be 'hub' // Object.is equality\n    at /home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office/FrontOfficeOnePress.test.tsx:310:72\n    at processTicksAndRejections (node:internal/process/task_queues:104:5)\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/@vitest/runner/dist/chunk-hooks.js:752:20"
+      ]
+    },
+    {
+      "file": "src/components/front-office/FrontOfficeOnePress.test.tsx",
+      "name": "NFL front office, deep league, GM desk off: one press of the final week title: the save at the recap, the draft and the next season's hub is the base's",
+      "status": "failed",
+      "failureMessages": [
+        "AssertionError: the draft closed after 12 picks: expected 'draft' to be 'hub' // Object.is equality\n    at /home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office/FrontOfficeOnePress.test.tsx:310:72\n    at processTicksAndRejections (node:internal/process/task_queues:104:5)\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/@vitest/runner/dist/chunk-hooks.js:752:20"
+      ]
+    },
+    {
+      "file": "src/components/front-office/FrontOfficeOnePress.test.tsx",
+      "name": "NFL front office, deep league, GM desk off: one press of the final week fired: the save at the recap, the draft and the next season's hub is the base's",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "src/components/front-office/FrontOfficeOnePress.test.tsx",
+      "name": "NFL front office, deep league, GM desk on: one press of the final week ordinary: the save at the recap, the draft and the next season's hub is the base's",
+      "status": "failed",
+      "failureMessages": [
+        "AssertionError: the draft closed after 12 picks: expected 'draft' to be 'hub' // Object.is equality\n    at /home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office/FrontOfficeOnePress.test.tsx:310:72\n    at processTicksAndRejections (node:internal/process/task_queues:104:5)\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/@vitest/runner/dist/chunk-hooks.js:752:20"
+      ]
+    },
+    {
+      "file": "src/components/front-office/FrontOfficeOnePress.test.tsx",
+      "name": "NFL front office, deep league, GM desk on: one press of the final week title: the save at the recap, the draft and the next season's hub is the base's",
+      "status": "failed",
+      "failureMessages": [
+        "AssertionError: the draft closed after 12 picks: expected 'draft' to be 'hub' // Object.is equality\n    at /home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office/FrontOfficeOnePress.test.tsx:310:72\n    at processTicksAndRejections (node:internal/process/task_queues:104:5)\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/@vitest/runner/dist/chunk-hooks.js:752:20"
+      ]
+    },
+    {
+      "file": "src/components/front-office/FrontOfficeOnePress.test.tsx",
+      "name": "NFL front office, deep league, GM desk on: one press of the final week fired: the save at the recap, the draft and the next season's hub is the base's",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "src/components/front-office/FrontOfficeOnePress.test.tsx",
+      "name": "the record is complete, or is being printed",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "src/components/front-office/FrontOfficePromotion.test.tsx",
+      "name": "NFL practice promotion cap outcomes holds ordinary free-agent admission as an independent baseline",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "src/components/front-office/FrontOfficePromotion.test.tsx",
+      "name": "NFL practice promotion cap outcomes holds legacy, membership and roster capacity refusals as an independent baseline",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "src/components/front-office/FrontOfficePromotion.test.tsx",
+      "name": "NFL practice promotion cap outcomes refuses invalid cap context missing without moving a player",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "src/components/front-office/FrontOfficePromotion.test.tsx",
+      "name": "NFL practice promotion cap outcomes refuses invalid cap context null without moving a player",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "src/components/front-office/FrontOfficePromotion.test.tsx",
+      "name": "NFL practice promotion cap outcomes refuses invalid cap context NaN without moving a player",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "src/components/front-office/FrontOfficePromotion.test.tsx",
+      "name": "NFL practice promotion cap outcomes refuses invalid cap context infinity without moving a player",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "src/components/front-office/FrontOfficePromotion.test.tsx",
+      "name": "NFL practice promotion cap outcomes refuses invalid cap context negative infinity without moving a player",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "src/components/front-office/FrontOfficePromotion.test.tsx",
+      "name": "NFL practice promotion cap outcomes refuses invalid cap context zero without moving a player",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "src/components/front-office/FrontOfficePromotion.test.tsx",
+      "name": "NFL practice promotion cap outcomes refuses invalid cap context negative without moving a player",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "src/components/front-office/FrontOfficePromotion.test.tsx",
+      "name": "NFL practice promotion cap outcomes refuses invalid cap context string without moving a player",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "src/components/front-office/FrontOfficePromotion.test.tsx",
+      "name": "NFL practice promotion cap outcomes refuses invalid cap context object without moving a player",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "src/components/front-office/FrontOfficePromotion.test.tsx",
+      "name": "NFL practice promotion cap outcomes refuses unaffordable promotion with raw team, depth and array identity held",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "src/components/front-office/FrontOfficePromotion.test.tsx",
+      "name": "NFL practice promotion cap outcomes counts dead money before deciding promotion affordability",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "src/components/front-office/FrontOfficePromotion.test.tsx",
+      "name": "NFL practice promotion cap outcomes keeps accepted promotion exact with 20M available and rejects replay",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "src/components/front-office/FrontOfficePromotion.test.tsx",
+      "name": "NFL practice promotion cap outcomes keeps accepted promotion exact with 18M available and rejects replay",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "src/components/front-office/FrontOfficePromotion.test.tsx",
+      "name": "NFL practice promotion cap outcomes shows the real price and refusal while a rejected Board click leaves the save exact",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "src/components/front-office/FrontOfficePromotion.test.tsx",
+      "name": "NFL practice promotion cap outcomes saves the exact affordable player and depth and restores that promotion once",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "src/components/front-office/FrontOfficePromotion.test.tsx",
+      "name": "NFL practice promotion cap outcomes updates every remaining call-up against the newly committed cap room",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "src/components/front-office/FrontOfficePromotion.test.tsx",
+      "name": "NFL practice promotion cap outcomes shows the dead-money refusal through the actual restored Board",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "src/components/front-office/FrontOfficePromotion.test.tsx",
+      "name": "NFL practice promotion cap outcomes refuses invalid practice salary null before mutation",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "src/components/front-office/FrontOfficePromotion.test.tsx",
+      "name": "NFL practice promotion cap outcomes refuses invalid practice salary negative before mutation",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "src/components/front-office/FrontOfficePromotion.test.tsx",
+      "name": "NFL practice promotion cap outcomes refuses invalid practice salary string before mutation",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "src/components/front-office/FrontOfficePromotion.test.tsx",
+      "name": "NFL practice promotion cap outcomes refuses invalid practice salary NaN before mutation",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "src/components/front-office/FrontOfficePromotion.test.tsx",
+      "name": "NFL practice promotion cap outcomes refuses invalid practice salary infinity before mutation",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "src/components/front-office/FrontOfficePromotion.test.tsx",
+      "name": "NFL practice promotion cap outcomes refuses an unpriced practice player from an actual restored save",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "src/components/front-office/FrontOfficePromotion.test.tsx",
+      "name": "NFL practice promotion cap outcomes keeps a valid zero-cost call-up exact instead of inventing a price",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "src/components/front-office/FrontOfficeRatingEvidence.test.tsx",
+      "name": "NFL saved opening rating evidence explains a partial new estimate instead of reusing the old draft-only claim",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "src/components/front-office/FrontOfficeRatingEvidence.test.tsx",
+      "name": "NFL saved opening rating evidence retains the original evidence after transfer, development and reload",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "src/components/front-office/FrontOfficeRatingEvidence.test.tsx",
+      "name": "NFL saved opening rating evidence keeps an existing full-roster save on its original rating and label",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "src/components/front-office/FrontOfficeRatingEvidence.test.tsx",
+      "name": "NFL saved opening rating evidence does not crash or present an unsupported basis from damaged metadata",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "src/components/front-office/FrontOfficeTagDepth.test.tsx",
+      "name": "NFL Front Office: the depth chart and the franchise tag on the board opens the chart from the Roster box, swaps two men on two taps, saves the order and moves strength",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "src/components/front-office/FrontOfficeTagDepth.test.tsx",
+      "name": "NFL Front Office: the depth chart and the franchise tag on the board greys every tag the room cannot cover, with the shortfall",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "src/components/front-office/FrontOfficeTagDepth.test.tsx",
+      "name": "NFL Front Office: the depth chart and the franchise tag on the board tags one expiring man before free agency, and he is still on his tender after the offseason",
+      "status": "failed",
+      "failureMessages": [
+        "AssertionError: pick 2: no button for Cooper Wexford: expected undefined to be truthy\n    at /home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office/FrontOfficeTagDepth.test.tsx:185:64\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/@vitest/runner/dist/chunk-hooks.js:155:11\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/@vitest/runner/dist/chunk-hooks.js:752:26\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/@vitest/runner/dist/chunk-hooks.js:1897:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/@vitest/runner/dist/chunk-hooks.js:1863:10)\n    at runTest (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/@vitest/runner/dist/chunk-hooks.js:1574:12)\n    at processTicksAndRejections (node:internal/process/task_queues:104:5)\n    at runSuite (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/@vitest/runner/dist/chunk-hooks.js:1729:8)\n    at runSuite (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/@vitest/runner/dist/chunk-hooks.js:1729:8)"
+      ]
+    },
+    {
+      "file": "src/components/front-office/FrontOfficeTagDepth.test.tsx",
+      "name": "NFL Front Office: the depth chart and the franchise tag on the board leaves the GM's tag to the GM: when he passes, the CPU policy does not tag his club for him",
+      "status": "failed",
+      "failureMessages": [
+        "AssertionError: pick 2: no button for Cooper Wexford: expected undefined to be truthy\n    at /home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office/FrontOfficeTagDepth.test.tsx:215:64\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/@vitest/runner/dist/chunk-hooks.js:155:11\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/@vitest/runner/dist/chunk-hooks.js:752:26\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/@vitest/runner/dist/chunk-hooks.js:1897:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/@vitest/runner/dist/chunk-hooks.js:1863:10)\n    at runTest (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/@vitest/runner/dist/chunk-hooks.js:1574:12)\n    at processTicksAndRejections (node:internal/process/task_queues:104:5)\n    at runSuite (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/@vitest/runner/dist/chunk-hooks.js:1729:8)\n    at runSuite (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/@vitest/runner/dist/chunk-hooks.js:1729:8)"
+      ]
+    },
+    {
+      "file": "src/components/front-office/FrontOfficeTile.test.tsx",
+      "name": "NFL front office: the Game Day tile the week box holds a tile: the next game before a press, his saved final after it, and again after a remount",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "src/components/front-office/FrontOfficeTile.test.tsx",
+      "name": "NFL front office: the Game Day tile WATCH IS THE SAME PRESS and gives nothing away: the page is the week before it until full time, and the save is the played week's",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "src/components/front-office/FrontOfficeTile.test.tsx",
+      "name": "NFL front office: the Game Day tile a reload in the middle of a watch shows the result, never a clock, and plays nothing twice",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "src/components/front-office/FrontOfficeTile.test.tsx",
+      "name": "NFL front office: the Game Day tile leaving the week box in the middle of a watch ends it: back in the box the result is there and both buttons are open",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "src/components/front-office/FrontOfficeTile.test.tsx",
+      "name": "NFL front office: the Game Day tile reduced motion: Watch shows the result at once, with no clock",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "src/components/front-office/FrontOfficeTile.test.tsx",
+      "name": "NFL front office: the Game Day tile the final week has Play, Watch and the old button, and the tile offers the watch",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "src/components/front-office/FrontOfficeTile.test.tsx",
+      "name": "NFL front office: the Game Day tile NO SPOILER ON THE OWNER CARD: while he watches, its pace line is the one of before the press, and at full time the saved league's",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "src/components/front-office/FrontOfficeTile.test.tsx",
+      "name": "NFL front office: the Game Day tile HIS SEED IS COUNTED FROM 1: on a club that holds a seed the standing line is the engine's own seeding of the saved league",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "src/components/front-office/FrontOfficeTile.test.tsx",
+      "name": "NFL front office: the Game Day tile a save from before the log shows the next game, and after its first press the chips start at that week",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "src/components/front-office-shared/FrontOfficeGmCareer.test.tsx",
+      "name": "nfl board: the default path seed 1|desk on: every checkpoint of two seasons is the base's",
+      "status": "failed",
+      "failureMessages": [
+        "AssertionError: expected 'draft' to be 'hub' // Object.is equality\n    at walk (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/FrontOfficeGmCareer.test.tsx:315:33)\n    at /home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/FrontOfficeGmCareer.test.tsx:333:23\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/@vitest/runner/dist/chunk-hooks.js:752:20"
+      ]
+    },
+    {
+      "file": "src/components/front-office-shared/FrontOfficeGmCareer.test.tsx",
+      "name": "nfl board: the default path seed 1|desk off: every checkpoint of two seasons is the base's",
+      "status": "failed",
+      "failureMessages": [
+        "AssertionError: expected 'draft' to be 'hub' // Object.is equality\n    at walk (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/FrontOfficeGmCareer.test.tsx:315:33)\n    at /home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/FrontOfficeGmCareer.test.tsx:333:23\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/@vitest/runner/dist/chunk-hooks.js:752:20"
+      ]
+    },
+    {
+      "file": "src/components/front-office-shared/FrontOfficeGmCareer.test.tsx",
+      "name": "nfl board: the default path seed 2|desk on: every checkpoint of two seasons is the base's",
+      "status": "failed",
+      "failureMessages": [
+        "AssertionError: expected 'draft' to be 'hub' // Object.is equality\n    at walk (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/FrontOfficeGmCareer.test.tsx:315:33)\n    at /home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/FrontOfficeGmCareer.test.tsx:333:23\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/@vitest/runner/dist/chunk-hooks.js:752:20"
+      ]
+    },
+    {
+      "file": "src/components/front-office-shared/FrontOfficeGmCareer.test.tsx",
+      "name": "nfl board: the default path seed 2|desk off: every checkpoint of two seasons is the base's",
+      "status": "failed",
+      "failureMessages": [
+        "AssertionError: expected 'draft' to be 'hub' // Object.is equality\n    at walk (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/FrontOfficeGmCareer.test.tsx:315:33)\n    at /home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/FrontOfficeGmCareer.test.tsx:333:23\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/@vitest/runner/dist/chunk-hooks.js:752:20"
+      ]
+    },
+    {
+      "file": "src/components/front-office-shared/FrontOfficeGmCareer.test.tsx",
+      "name": "nfl board: the default path seed 3|desk on: every checkpoint of two seasons is the base's",
+      "status": "failed",
+      "failureMessages": [
+        "AssertionError: expected 'draft' to be 'hub' // Object.is equality\n    at walk (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/FrontOfficeGmCareer.test.tsx:315:33)\n    at /home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/FrontOfficeGmCareer.test.tsx:333:23\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/@vitest/runner/dist/chunk-hooks.js:752:20"
+      ]
+    },
+    {
+      "file": "src/components/front-office-shared/FrontOfficeGmCareer.test.tsx",
+      "name": "nfl board: the default path seed 3|desk off: every checkpoint of two seasons is the base's",
+      "status": "failed",
+      "failureMessages": [
+        "AssertionError: expected 'draft' to be 'hub' // Object.is equality\n    at walk (/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/FrontOfficeGmCareer.test.tsx:315:33)\n    at /home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/FrontOfficeGmCareer.test.tsx:333:23\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/@vitest/runner/dist/chunk-hooks.js:752:20"
+      ]
+    },
+    {
+      "file": "src/components/front-office-shared/FrontOfficeGmCareer.test.tsx",
+      "name": "nfl board: the default path the record is written once, from the base",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "src/components/front-office-shared/FrontOfficeGmCareer.test.tsx",
+      "name": "nhl board: the default path seed 1|desk on: every checkpoint of two seasons is the base's",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "src/components/front-office-shared/FrontOfficeGmCareer.test.tsx",
+      "name": "nhl board: the default path seed 1|desk off: every checkpoint of two seasons is the base's",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "src/components/front-office-shared/FrontOfficeGmCareer.test.tsx",
+      "name": "nhl board: the default path seed 2|desk on: every checkpoint of two seasons is the base's",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "src/components/front-office-shared/FrontOfficeGmCareer.test.tsx",
+      "name": "nhl board: the default path seed 2|desk off: every checkpoint of two seasons is the base's",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "src/components/front-office-shared/FrontOfficeGmCareer.test.tsx",
+      "name": "nhl board: the default path seed 3|desk on: every checkpoint of two seasons is the base's",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "src/components/front-office-shared/FrontOfficeGmCareer.test.tsx",
+      "name": "nhl board: the default path seed 3|desk off: every checkpoint of two seasons is the base's",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "src/components/front-office-shared/FrontOfficeGmCareer.test.tsx",
+      "name": "nhl board: the default path the record is written once, from the base",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "src/components/front-office-shared/FrontOfficeGmCareer.test.tsx",
+      "name": "nhl board: the saves the base wrote fired desk on: it mounts with storage byte equal, on the phase the base wrote",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "src/components/front-office-shared/FrontOfficeGmCareer.test.tsx",
+      "name": "nhl board: the saves the base wrote fired desk off: it mounts with storage byte equal, on the phase the base wrote",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "src/components/front-office-shared/FrontOfficeGmCareer.test.tsx",
+      "name": "nhl board: the saves the base wrote hub desk on: it mounts with storage byte equal, on the phase the base wrote",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "src/components/front-office-shared/FrontOfficeGmCareer.test.tsx",
+      "name": "nfl board: the career fired: the recap offers who is calling and keeps the save; a remount opens the out of work screen with three boxes",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "src/components/front-office-shared/FrontOfficeGmCareer.test.tsx",
+      "name": "nfl board: the career taking an offer takes two taps, never the club that let him go, and the arrival stages no title even at the champion",
+      "status": "failed",
+      "failureMessages": [
+        "AssertionError: expected [ 'draft', 'CLE', …(1) ] to deeply equal [ 'hub', 'CLE', …(1) ]\n    at /home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/FrontOfficeGmCareer.test.tsx:574:74\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/@vitest/runner/dist/chunk-hooks.js:752:20"
+      ]
+    },
+    {
+      "file": "src/components/front-office-shared/FrontOfficeGmCareer.test.tsx",
+      "name": "nfl board: the career a call left open when he is fired stays with the old club: the new club's Trades box builds a deal",
+      "status": "failed",
+      "failureMessages": [
+        "AssertionError: expected 'draft' to be 'hub' // Object.is equality\n    at /home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/FrontOfficeGmCareer.test.tsx:628:35\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/@vitest/runner/dist/chunk-hooks.js:752:20"
+      ]
+    },
+    {
+      "file": "src/components/front-office-shared/FrontOfficeGmCareer.test.tsx",
+      "name": "nfl board: the career a year out: two taps, the league a season on with one more champion, his counters as they were",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "src/components/front-office-shared/FrontOfficeGmCareer.test.tsx",
+      "name": "nfl board: the career a point spent in Ownership survives a remount, and a tree off the live list sells nothing",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "src/components/front-office-shared/FrontOfficeGmCareer.test.tsx",
+      "name": "nfl board: the career a closed market draws no stay out button, and the new front office link deletes the save on the second tap only",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "src/components/front-office-shared/FrontOfficeGmCareer.test.tsx",
+      "name": "nfl board: the career looking at Career and GM level on the hub of a save whose desk is off writes nothing",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "src/components/front-office-shared/FrontOfficeGmCareer.test.tsx",
+      "name": "nfl board: the career looking at all three boxes out of work, desk off, writes nothing",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "src/components/front-office-shared/FrontOfficeGmCareer.test.tsx",
+      "name": "nfl board: the career a staff approach that runs out in the final week is still settled after the close",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "src/components/front-office-shared/FrontOfficeGmCareer.test.tsx",
+      "name": "nhl board: the career fired: the recap offers who is calling and keeps the save; a remount opens the out of work screen with three boxes",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "src/components/front-office-shared/FrontOfficeGmCareer.test.tsx",
+      "name": "nhl board: the career taking an offer takes two taps, never the club that let him go, and the arrival stages no title even at the champion",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "src/components/front-office-shared/FrontOfficeGmCareer.test.tsx",
+      "name": "nhl board: the career a call left open when he is fired stays with the old club: the new club's Trades box builds a deal",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "src/components/front-office-shared/FrontOfficeGmCareer.test.tsx",
+      "name": "nhl board: the career a year out: two taps, the league a season on with one more champion, his counters as they were",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "src/components/front-office-shared/FrontOfficeGmCareer.test.tsx",
+      "name": "nhl board: the career a point spent in Ownership survives a remount, and a tree off the live list sells nothing",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "src/components/front-office-shared/FrontOfficeGmCareer.test.tsx",
+      "name": "nhl board: the career a closed market draws no stay out button, and the new front office link deletes the save on the second tap only",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "src/components/front-office-shared/FrontOfficeGmCareer.test.tsx",
+      "name": "nhl board: the career looking at Career and GM level on the hub of a save whose desk is off writes nothing",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "src/components/front-office-shared/FrontOfficeGmCareer.test.tsx",
+      "name": "nhl board: the career looking at all three boxes out of work, desk off, writes nothing",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "src/components/front-office-shared/FrontOfficeGmCareer.test.tsx",
+      "name": "nhl board: the career a staff approach that runs out in the final week is still settled after the close",
+      "status": "passed",
+      "failureMessages": []
+    },
+    {
+      "file": "src/components/front-office-shared/FrontOfficeGmCareer.test.tsx",
+      "name": "nfl board: a title watched at the club he took the title game watched to full time records one finish, at the career score, and none before it",
+      "status": "failed",
+      "failureMessages": [
+        "AssertionError: expected 'draft' to be 'hub' // Object.is equality\n    at /home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/FrontOfficeGmCareer.test.tsx:839:33\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/@vitest/runner/dist/chunk-hooks.js:752:20"
+      ]
+    }
+  ]
+}
