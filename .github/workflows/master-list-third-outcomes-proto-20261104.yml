@@ -1,0 +1,123 @@
+name: Master-list third fixed outcomes and adjacent regressions
+on:
+  push:
+    branches: [codex/master-list-third-outcomes-proto-20261104]
+permissions:
+  contents: read
+env:
+  CI: '1'
+  SIM_NETWORK: offline
+jobs:
+  outcomes:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          filter: blob:none
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - name: Hold exact source and materialize original application controls
+        run: |
+          set -euo pipefail
+          OUT="$RUNNER_TEMP/master-list-third-outcomes"
+          mkdir -p "$OUT/logs" "$OUT/transport"
+          echo "QA_OUT=$OUT" >> "$GITHUB_ENV"
+          test "$(git rev-parse HEAD^)" = ed84107e8def5c2fca02266739bc702994ac09ab
+          test "$(git rev-parse HEAD^^{tree})" = 38653916f6744894784d5406bf39538a45142f07
+          test "$(git diff --name-status HEAD^ HEAD)" = $'A\t.github/workflows/master-list-third-outcomes-proto-20261104.yml'
+          git rev-parse HEAD HEAD^{tree} > "$OUT/source.txt"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$OUT/source-before.sha256"
+          git status --porcelain=v1 --untracked-files=all > "$OUT/status-before.txt"
+          test ! -s "$OUT/status-before.txt"
+          cp .github/workflows/master-list-third-outcomes-proto-20261104.yml "$OUT/workflow.yml"
+          for file in 'src/lib/soccerCareerTransferBrief.ts' 'src/components/soccer-career/AgentBrief.tsx' 'src/lib/soccerCareerEngine.ts' 'src/lib/clubManager.ts' 'src/components/front-office/FrontOfficeBoard.tsx'; do git show 14e888d72552248e3703d2ec65d1015ef3c887cc:"$file" > /dev/null; done
+          git show 3a02ef555e1d03f6fa27c66288bc1ee8144bf869:src/lib/clubManager.ts > "$OUT/reference-club-manager.ts"
+          npm ci --no-audit --no-fund > "$OUT/logs/install.log" 2>&1
+          git diff --exit-code HEAD -- package.json package-lock.json bun.lockb
+      - name: Complete actual forecast facts including both second-leg contexts
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          : > "$QA_OUT/transport/full-facts.log"
+          SIM_OFFLINE_RECEIPT="$QA_OUT/transport/full-facts.log" node scripts/qa/masterListFullFactsParity.mjs "$QA_OUT/full-facts" "$QA_OUT/reference-club-manager.ts" > "$QA_OUT/logs/full-facts.log" 2>&1
+          test ! -s "$QA_OUT/transport/full-facts.log"
+      - name: Actual baseline outcome assertions
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          : > "$QA_OUT/transport/caller.log"
+          export SIM_OFFLINE_RECEIPT="$QA_OUT/transport/caller.log"
+          node scripts/qa/masterListNextQualification.mjs "$QA_OUT/outcomes" fixed > "$QA_OUT/logs/outcomes.log" 2>&1
+          test ! -s "$QA_OUT/transport/caller.log"
+      - name: Proper application types and existing adjacent regression cases
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          : > "$QA_OUT/transport/types.log"
+          SIM_OFFLINE_RECEIPT="$QA_OUT/transport/types.log" node_modules/.bin/tsc --noEmit -p tsconfig.app.json > "$QA_OUT/logs/types.log" 2>&1
+          test ! -s "$QA_OUT/transport/types.log"
+          : > "$QA_OUT/transport/regressions.log"
+          SIM_OFFLINE_RECEIPT="$QA_OUT/transport/regressions.log" node node_modules/vitest/vitest.mjs run src/test/soccerTransferAppearanceFloor.test.tsx src/test/clubManagerCustomOdds.test.ts src/test/frontOfficeDraftFocus.test.tsx src/test/soccerCareerTransferBrief.test.ts src/test/soccerTransferBriefPage.test.tsx src/test/soccerTransferBriefPromise.test.tsx src/test/soccerTransferBriefUi.test.tsx src/test/managerMatchPlans.test.tsx src/test/MatchPlansCard.customPositions.test.tsx src/test/clubManagerPositionIntegration.test.ts src/test/clubManagerPositionLive.test.ts src/test/clubManagerPositionPersistence.test.tsx src/test/cmCustomTacticsPitch.test.ts src/test/cmCustomTacticsUi.test.tsx src/test/frontOfficeDraftReview.test.tsx src/test/frontOfficeDraftAccess.test.tsx src/components/front-office/FrontOfficeDraftCapital.test.tsx src/test/frontOfficeSaveRecovery.test.tsx src/test/frontOfficeWriteRetry.test.tsx src/test/soccerOfferNegotiationTarget.test.tsx src/test/soccerLoyaltyOfferTarget.test.tsx src/test/soccerCareerProgrammeUi.test.tsx --maxWorkers=1 --no-file-parallelism --reporter=default --reporter=json --outputFile="$QA_OUT/regressions.json" > "$QA_OUT/logs/regressions.log" 2>&1
+          test ! -s "$QA_OUT/transport/regressions.log"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const j=JSON.parse(fs.readFileSync(process.env.QA_OUT+'/regressions.json'));
+          assert.equal(j.testResults.length,22);assert.equal(j.numPassedTests,286);assert.equal(j.numFailedTests,0);assert.equal(j.numPendingTests,0);assert.equal(j.numTodoTests,0);
+          if(typeof j.numRuntimeErrors==='number')assert.equal(j.numRuntimeErrors,0);
+          const log=fs.readFileSync(process.env.QA_OUT+'/logs/regressions.log','utf8');assert(!/Unhandled\s+(?:Error|Rejection)|Vitest caught [1-9]|uncaughtException|unhandledRejection/i.test(log));
+          fs.writeFileSync(process.env.QA_OUT+'/regression-admission.json',JSON.stringify({files:j.testResults.length,passed:j.numPassedTests,failed:0,runtimeErrors:j.numRuntimeErrors??'UNKNOWN'})+'\n');
+          NODE
+
+      - name: Physical unreadable-brief guard and retained row control
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          node scripts/qa/masterListPreservedBriefControl.mjs "$QA_OUT/preserved-brief-control" > "$QA_OUT/logs/preserved-brief-control.log" 2>&1
+      - name: Exact numerical parity of the compact actual forecast grid
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          : > "$QA_OUT/transport/forecast-parity.log"
+          SIM_OFFLINE_RECEIPT="$QA_OUT/transport/forecast-parity.log" node scripts/qa/masterListForecastParity.mjs "$QA_OUT/forecast-parity" "$QA_OUT/outcomes/fixed/cm" > "$QA_OUT/logs/forecast-parity.log" 2>&1
+          test ! -s "$QA_OUT/transport/forecast-parity.log"
+      - name: Existing affected simulation harnesses
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          for name in simCareerProgramme simSoccerCareerLoyalty simClubManager simTacticsEngine simManagerMatchPlans simNflDraftCapital; do
+            : > "$QA_OUT/transport/$name.log"
+            SIM_OFFLINE_RECEIPT="$QA_OUT/transport/$name.log" node "scripts/$name.mjs" > "$QA_OUT/logs/$name.log" 2>&1
+            test ! -s "$QA_OUT/transport/$name.log"
+          done
+      - name: Always require full source restoration and empty status
+        if: always()
+        run: |
+          set -euo pipefail
+          git diff --exit-code HEAD > "$QA_OUT/source-diff.txt"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$QA_OUT/source-after.sha256"
+          cmp "$QA_OUT/source-before.sha256" "$QA_OUT/source-after.sha256"
+          git status --porcelain=v1 --untracked-files=all > "$QA_OUT/status-after.txt"
+          cmp "$QA_OUT/status-before.txt" "$QA_OUT/status-after.txt"
+          sha256sum --check "$QA_OUT/source-before.sha256" > "$QA_OUT/source-held.log"
+      - name: Bound evidence
+        id: artifact
+        if: always()
+        run: |
+          set -euo pipefail
+          test "$(du -sb "$QA_OUT" | cut -f1)" -lt 50000000
+          echo 'ready=true' >> "$GITHUB_OUTPUT"
+      - uses: actions/upload-artifact@v4
+        if: ${{ always() && steps.artifact.outputs.ready == 'true' }}
+        with:
+          name: master-list-third-outcomes
+          path: ${{ runner.temp }}/master-list-third-outcomes
+          if-no-files-found: error
+          retention-days: 7
