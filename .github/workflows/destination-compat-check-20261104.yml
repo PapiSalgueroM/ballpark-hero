@@ -1,0 +1,185 @@
+name: Destination current-source QA compatibility
+on:
+  push:
+    branches: [codex/destination-compat-check-20261104]
+permissions:
+  contents: read
+concurrency:
+  group: destination-compat-check-${{ github.ref }}
+  cancel-in-progress: false
+env:
+  CI: '1'
+  SIM_NETWORK: offline
+jobs:
+  destination:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: joined
+            source: 42ef023a2a36afea43c4b7d4b9e64cac098d95cf
+            tree: 7a1a1d72582f366712484f3824ede9e91d6b573b
+            parent: cfdbb34b755098a2ee6961a9fc05e61cd7202fdf
+          - name: main-reference
+            source: dea549ac59402de3335365226d21e91de4fa447e
+            tree: bb1f7280181e9d55d66c5413f0ab42915b7f33bd
+            parent: 7412fef3023f94f41de5251f024e227e027920b7
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      FRAME: '${{ matrix.name }}'
+      FRAME_SOURCE: '${{ matrix.source }}'
+      FRAME_TREE: '${{ matrix.tree }}'
+      FRAME_PARENT: '${{ matrix.parent }}'
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ matrix.source }}
+          fetch-depth: 2
+          filter: blob:none
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - name: Hold each exact QA-only source frame and materialize its reference
+        run: |
+          set -euo pipefail
+          export QA_OUT="$RUNNER_TEMP/destination-$FRAME"
+          mkdir -p "$QA_OUT/logs" "$QA_OUT/raw" "$QA_OUT/transport"
+          echo "QA_OUT=$QA_OUT" >> "$GITHUB_ENV"
+          test "$(git rev-parse HEAD)" = "$FRAME_SOURCE"
+          test "$(git rev-parse HEAD^{tree})" = "$FRAME_TREE"
+          test "$(git rev-parse HEAD^)" = "$FRAME_PARENT"
+          printf 'M\tscripts/qa/careerTransferBriefKit.mjs\n' > "$QA_OUT/expected-paths.txt"
+          git diff --name-status HEAD^ HEAD > "$QA_OUT/changed-paths.txt"
+          cmp "$QA_OUT/expected-paths.txt" "$QA_OUT/changed-paths.txt"
+          test "$(git rev-parse HEAD:scripts/qa/careerTransferBriefKit.mjs)" = 22af5caac7b55187416a0bf192848f93efaadb7f
+          test "$(git hash-object scripts/qa/careerTransferBriefKit.mjs)" = 22af5caac7b55187416a0bf192848f93efaadb7f
+          git status --porcelain=v1 --untracked-files=all > "$QA_OUT/status-before.txt"
+          test ! -s "$QA_OUT/status-before.txt"
+          test ! -e career-transfer-brief-artifacts
+          git rev-parse HEAD HEAD^{tree} HEAD^ > "$QA_OUT/source.txt"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$QA_OUT/source-before.sha256"
+          cp scripts/qa/careerTransferBriefKit.mjs "$QA_OUT/executed-kit.mjs"
+          git diff HEAD^ HEAD -- scripts/qa/careerTransferBriefKit.mjs > "$QA_OUT/kit-diff.patch"
+          git fetch --no-tags --depth=1 origin c176be815dc4af57dfd7185a485e28357aa0d41e
+          git rev-parse c176be815dc4af57dfd7185a485e28357aa0d41e c176be815dc4af57dfd7185a485e28357aa0d41e^{tree} > "$QA_OUT/reference.txt"
+          git ls-tree -r --format='%(objectname)' c176be815dc4af57dfd7185a485e28357aa0d41e src | git cat-file --batch > /dev/null
+          git fetch --no-tags --depth=1 origin "$GITHUB_SHA"
+          git show "$GITHUB_SHA:.github/workflows/destination-compat-check-20261104.yml" > "$QA_OUT/workflow.yml"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const source=fs.readFileSync('scripts/qa/careerTransferBriefKit.mjs','utf8');
+          assert(source.includes("BASE='c176be815dc4af57dfd7185a485e28357aa0d41e'"));
+          fs.writeFileSync(process.env.QA_OUT+'/scope.json',JSON.stringify({frame:process.env.FRAME,source:process.env.FRAME_SOURCE,tree:process.env.FRAME_TREE,parent:process.env.FRAME_PARENT,workflowSource:process.env.GITHUB_SHA,kit:'22af5caac7b55187416a0bf192848f93efaadb7f',reference:'c176be815dc4af57dfd7185a485e28357aa0d41e',scope:'QA-only source-frame compatibility. Existing normal outcome harness includes all eight effective copied faults. No app source, expected result, assertion, engine, data, browser or build changes. Existing outcome and Page controls/checkers run in both frames; the joined frame also runs three unchanged source fences. No command consumes dist; no build artifact or browser credit.'},null,2)+'\n');
+          NODE
+      - name: Install held dependencies
+        run: |
+          set -euo pipefail
+          npm ci --no-audit --no-fund > "$QA_OUT/logs/install.log" 2>&1
+          git diff --exit-code HEAD -- package.json package-lock.json
+      - name: Existing normal outcomes all eight copied faults and exact outcomes checker
+        timeout-minutes: 20
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          : > "$QA_OUT/transport/outcomes.log"
+          : > "$QA_OUT/transport/checker.log"
+          set +e
+          SIM_OFFLINE_RECEIPT="$QA_OUT/transport/outcomes.log" node scripts/simCareerTransferBrief.mjs 2>&1 | tee "$QA_OUT/logs/outcomes.log"
+          codes=("${PIPESTATUS[@]}")
+          printf '%s\n' "${codes[0]}" > "$QA_OUT/outcomes.exit"
+          printf '%s\n' "${codes[1]}" > "$QA_OUT/outcomes-tee.exit"
+          SIM_OFFLINE_RECEIPT="$QA_OUT/transport/checker.log" node scripts/qa/checkCareerTransferBrief.mjs outcomes 2>&1 | tee "$QA_OUT/logs/checker.log"
+          checks=("${PIPESTATUS[@]}")
+          printf '%s\n' "${checks[0]}" > "$QA_OUT/checker.exit"
+          printf '%s\n' "${checks[1]}" > "$QA_OUT/checker-tee.exit"
+          set -e
+          test "${codes[0]}" = 0
+          test "${codes[1]}" = 0
+          test "${checks[0]}" = 0
+          test "${checks[1]}" = 0
+          grep -Fx 'Transfer Brief:9 healthy outcome groups,60 full original state/RNG pairs,8 effective copied source controls,9 prepared native branches.' "$QA_OUT/logs/outcomes.log"
+          grep -Fx 'Outcomes:9 healthy groups,60 entire original/current state+RNG pairs,8 independently compiled effective exact faults,9 native fixture branches.' "$QA_OUT/logs/checker.log"
+          test ! -s "$QA_OUT/transport/outcomes.log"
+          test ! -s "$QA_OUT/transport/checker.log"
+      - name: Existing copied Page control and checker
+        if: ${{ !cancelled() }}
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          : > "$QA_OUT/transport/page-control.log"
+          : > "$QA_OUT/transport/page-checker.log"
+          set +e
+          SIM_OFFLINE_RECEIPT="$QA_OUT/transport/page-control.log" node scripts/simTransferBriefPageControl.mjs 2>&1 | tee "$QA_OUT/logs/page-control.log"
+          codes=("${PIPESTATUS[@]}")
+          printf '%s\n' "${codes[0]}" > "$QA_OUT/page-control.exit"
+          printf '%s\n' "${codes[1]}" > "$QA_OUT/page-control-tee.exit"
+          SIM_OFFLINE_RECEIPT="$QA_OUT/transport/page-checker.log" node scripts/qa/checkCareerTransferBrief.mjs page-control 2>&1 | tee "$QA_OUT/logs/page-checker.log"
+          checks=("${PIPESTATUS[@]}")
+          printf '%s\n' "${checks[0]}" > "$QA_OUT/page-checker.exit"
+          printf '%s\n' "${checks[1]}" > "$QA_OUT/page-checker-tee.exit"
+          set -e
+          test "${codes[0]}" = 0
+          test "${codes[1]}" = 0
+          test "${checks[0]}" = 0
+          test "${checks[1]}" = 0
+          grep -Fx 'Page source control:2 intended actual equality failures,4 unrelated page cases passed,6-case untouched copied baseline passed.' "$QA_OUT/logs/page-checker.log"
+          test ! -s "$QA_OUT/transport/page-control.log"
+          test ! -s "$QA_OUT/transport/page-checker.log"
+      - name: Existing joined source fences
+        if: ${{ !cancelled() && matrix.name == 'joined' }}
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          for name in simNoRivalNames simHarnessAnchors simBrowserHarnessDiscovery; do
+            : > "$QA_OUT/transport/$name.log"
+            set +e
+            SIM_OFFLINE_RECEIPT="$QA_OUT/transport/$name.log" node "scripts/$name.mjs" 2>&1 | tee "$QA_OUT/logs/$name.log"
+            codes=("${PIPESTATUS[@]}")
+            set -e
+            printf '%s\n' "${codes[0]}" > "$QA_OUT/$name.exit"
+            printf '%s\n' "${codes[1]}" > "$QA_OUT/$name-tee.exit"
+            test "${codes[0]}" = 0
+            test "${codes[1]}" = 0
+            test ! -s "$QA_OUT/transport/$name.log"
+          done
+      - name: Always retain complete raw evidence and source closure
+        if: always()
+        run: |
+          set -euo pipefail
+          test -n "$QA_OUT"
+          if [[ -d career-transfer-brief-artifacts ]]; then cp -a career-transfer-brief-artifacts "$QA_OUT/raw/"; fi
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$QA_OUT/source-after.sha256"
+          git diff --binary HEAD > "$QA_OUT/source-diff.txt"
+          git status --porcelain=v1 --untracked-files=all > "$QA_OUT/status-after.txt"
+          cmp "$QA_OUT/source-before.sha256" "$QA_OUT/source-after.sha256"
+          sha256sum --check "$QA_OUT/source-before.sha256" > "$QA_OUT/source-held.log"
+          test ! -s "$QA_OUT/source-diff.txt"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';import crypto from 'node:crypto';
+          const out=process.env.QA_OUT,lines=fs.readFileSync(out+'/status-after.txt','utf8').split('\n').filter(Boolean);
+          assert(lines.every(l=>l.startsWith('?? career-transfer-brief-artifacts/')),'Only the unchanged harness owns new untracked raw output');
+          const receipts=fs.readdirSync(out+'/transport').sort().map(file=>{const b=fs.readFileSync(out+'/transport/'+file);return{file,bytes:b.length,sha256:crypto.createHash('sha256').update(b).digest('hex')};});
+          fs.writeFileSync(out+'/closure.json',JSON.stringify({frame:process.env.FRAME,sourceHeld:true,status:lines,receipts,meaning:'Complete raw outputs and actual native exits retained, including failures. Empty Node receipts are not browser or provider availability proof. No dist was consumed or modified; no build/browser credit.'},null,2)+'\n');
+          NODE
+      - name: Bound retained evidence
+        id: artifact
+        if: always()
+        run: |
+          set -euo pipefail
+          test -d "$QA_OUT"
+          test "$(du -sb "$QA_OUT" | cut -f1)" -lt 150000000
+          echo ready=true >> "$GITHUB_OUTPUT"
+      - uses: actions/upload-artifact@v4
+        if: ${{ always() && steps.artifact.outputs.ready == 'true' }}
+        with:
+          name: destination-${{ matrix.name }}-${{ github.run_id }}
+          path: ${{ env.QA_OUT }}
+          if-no-files-found: error
+          retention-days: 7
+          compression-level: 6
