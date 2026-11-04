@@ -22,3 +22,18 @@ Remote-only application work. No local runtime, Git or app edits. Temporary QA a
 ## Claim limits
 
 Historical full-fleet, unfiltered and strict NFL parity failures remain unresolved and unwaived. Original 98-to-75 complaint remains unreproduced. No all-suite claim. No database/provider/dependency lock, coefficients, new random-call site, active-save reset or cap increase.
+
+
+## Qualified source and shared release candidate, 2026-11-04
+
+Exactly two display slices are removed from FrontOfficeBoard. No simulation engine, pool generation, signing/refusal path, save or math changes. Complete pool ordering/legend and actual tail signing are covered by3owned cases, original two owned failures/one held case, independent row and legend source controls and restored complete frames/RAW.
+
+Final source41909798738/source5a50b63b, artifact13361189502,3924290bytes,SHA256cb344ad6ebea4e43370c33059479db4fd38e4037b613c2fc94587ad9a718c916, passes proper application types, all selected controls/restoration, corrected198-case fixed/original/restored suites and13declared existing harnesses. Four legacy test drivers add exactly five clicks on the existing NFL Confirm draft action; model expectations, seeds, tapes, limits and other sports stay exact. Original omission driver198has177passes/21specified first stops; final corrected drivers pass all198on each of three arms. Only these21driver failures are closed. Earlier failed setup/type artifacts remain retained; no old failure is relabeled success.
+
+The single joined normal Bun build41910267879 passes proper types, twenty output readers and all sixteen unchanged caps. FO390.1KiB is inside the390rounded cap. Its overall job fails on CM-only QA expectations and ownership of a records-guard JSON, which remain disclosed in the sixth plan. Same-payload QA recovery reuses tarSHA2560437cc098e1aa8b596b6e3f4cd9b54643b34c8c55514fa12dad885bf213e3f0b; no second compile or FO code change.
+
+Final compiled qualification is run41920106398/job126890041506/source62f5c38397219ebbb1a1f7d5ba40280ae1d41245. Original13367336222,15531628bytes,SHA256448e3be36953eecd301c94963e918c13e5fedce5b7e3402fc5922e8a7c22043b was acquired once and verified before extraction. All9normal controlled journeys and9actual reviewed screenshots at320/390/1280 passed, with both trusted post-click10px faults caught by unchanged guards before normal runs. CM6covers UIStart/Pause/Resume/reload/Stop and three separately declared one-paid-week completion saves; FO3covers all33rows, real late signing, complete signed frames/reload and cap/full/cut refusals. All5728source bodies and847completed files held, source/statusdiff0. No unexpected page/console/asset/HTTP/request failures. CM693andFO945actual asset-body reads matched the completed payload. Same exact completed tar0437cc098e1aa8b596b6e3f4cd9b54643b34c8c55514fa12dad885bf213e3f0b; no second compile.
+
+The exact native desktop-preparation diagnosis and original-input replay are detailed in the paired sixth plan.
+
+Public release closure is still pending until appended below. Historical broader full-fleet/unfiltered/strict parity failures remain unwaived,98to75 remains unreproduced, and PL-16/book409 remain partial. No real data/math/RNG/dependency/DB/reset/cap changes.
