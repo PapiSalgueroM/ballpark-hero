@@ -40,7 +40,34 @@ async function journey(name,width,seeds,action){
  await c.route('**/*',async route=>{const q=route.request(),u=new URL(q.url());if(!['http:','https:'].includes(u.protocol)||u.origin===origin&&['GET','HEAD'].includes(q.method()))return route.continue();r.aborts.push({url:u.href,origin:u.origin,method:q.method()});return route.abort('blockedbyclient');});
  await c.routeWebSocket('**/*',async socket=>{r.aborts.push({url:socket.url(),origin:new URL(socket.url()).origin,method:'WEBSOCKET'});await socket.close({code:1008,reason:'Source feature QA'});});
  await c.addInitScript(({origin,seeds,routes})=>{if(location.origin!==origin||localStorage.getItem('feature-fixture-seeded'))return;for(const[k,v]of Object.entries(seeds))localStorage.setItem(k,v);for(const route of routes)localStorage.setItem('rules-gate-seen:'+route,'1');localStorage.setItem('feature-unrelated','held');localStorage.setItem('feature-fixture-seeded','1');},{origin,seeds,routes});
- c.on('page',page=>{page.on('request',q=>r.requests.push({url:q.url(),method:q.method()}));page.on('response',q=>{r.responses.push({url:q.url(),status:q.status()});const u=new URL(q.url());if(publicMode&&u.origin===origin&&u.pathname.startsWith('/assets/'))pendingAssets.push((async()=>{try{const file=decodeURIComponent(u.pathname.slice(1)),ref=assetReference.get(file);assert(ref,'Unknown published asset '+file);assert([200,304].includes(q.status()),'Published asset HTTP '+q.status());const bytes=await q.body(),digest=sha(bytes);assert.equal(bytes.length,ref.bytes,file+' bytes');assert.equal(digest,ref.sha256,file+' digest');r.assetBodies.push({file,status:q.status(),bytes:bytes.length,sha256:digest});if(observedAssets.has(file))assert.equal(observedAssets.get(file),digest);observedAssets.set(file,digest);}catch(e){r.assetErrors.push({url:q.url(),error:String(e.stack||e)});}})());});page.on('requestfailed',q=>r.requestFailures.push({url:q.url(),failure:q.failure()}));page.on('pageerror',e=>r.pageErrors.push(String(e.stack||e)));page.on('console',e=>r.console.push({type:e.type(),text:e.text(),location:e.location()}));});
+ c.on('page',page=>{
+  const activeAssets=new Set(),activeReads=new Set();let lastAssetActivity=Date.now();
+  const isAsset=url=>{const u=new URL(url);return u.origin===origin&&u.pathname.startsWith('/assets/');};
+  const assetFinished=q=>{if(activeAssets.delete(q))lastAssetActivity=Date.now();};
+  const drainAssets=async method=>{
+   if(page.url()==='about:blank')return;
+   const started=Date.now(),deadline=started+20000;
+   while(activeAssets.size||activeReads.size||Date.now()-lastAssetActivity<100){
+    assert(Date.now()<deadline,'Published asset capture did not settle before '+method);
+    await new Promise(resolve=>setTimeout(resolve,25));
+   }
+   assert.equal(r.assetErrors.length,0,'Published asset capture error before '+method);
+   r.assetNavigationWaits.push({method,from:page.url(),elapsedMs:Date.now()-started,activeRequests:activeAssets.size,activeReads:activeReads.size});
+  };
+  if(publicMode){r.assetNavigationWaits??=[];for(const method of['goto','reload','goBack']){const native=page[method].bind(page);page[method]=async(...args)=>{await drainAssets(method);return native(...args);};}}
+  page.on('request',q=>{r.requests.push({url:q.url(),method:q.method()});if(publicMode&&isAsset(q.url())){activeAssets.add(q);lastAssetActivity=Date.now();}});
+  page.on('response',q=>{
+   r.responses.push({url:q.url(),status:q.status()});const u=new URL(q.url());
+   if(publicMode&&u.origin===origin&&u.pathname.startsWith('/assets/')){
+    lastAssetActivity=Date.now();
+    const read=(async()=>{try{const file=decodeURIComponent(u.pathname.slice(1)),ref=assetReference.get(file);assert(ref,'Unknown published asset '+file);assert([200,304].includes(q.status()),'Published asset HTTP '+q.status());const bytes=await q.body(),digest=sha(bytes);assert.equal(bytes.length,ref.bytes,file+' bytes');assert.equal(digest,ref.sha256,file+' digest');r.assetBodies.push({file,status:q.status(),bytes:bytes.length,sha256:digest});if(observedAssets.has(file))assert.equal(observedAssets.get(file),digest);observedAssets.set(file,digest);}catch(e){r.assetErrors.push({url:q.url(),error:String(e.stack||e)});}})();
+    activeReads.add(read);pendingAssets.push(read);void read.finally(()=>{activeReads.delete(read);lastAssetActivity=Date.now();});
+   }
+  });
+  page.on('requestfinished',assetFinished);
+  page.on('requestfailed',q=>{r.requestFailures.push({url:q.url(),failure:q.failure()});assetFinished(q);});
+  page.on('pageerror',e=>r.pageErrors.push(String(e.stack||e)));page.on('console',e=>r.console.push({type:e.type(),text:e.text(),location:e.location()}));
+ });
  const p=await c.newPage();p.setDefaultTimeout(15000);p.setDefaultNavigationTimeout(30000);
  try{await action(p,r,c);assert.equal(await save(p,'feature-unrelated'),'held');r.status='passed';}
  catch(e){r.status='failed';r.error=String(e.stack||e);try{await p.screenshot({path:out+'/'+r.id+'-failure.png'});r.failureScreenshot=r.id+'-failure.png';}catch{}}
