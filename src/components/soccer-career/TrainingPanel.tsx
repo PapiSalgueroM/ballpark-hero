@@ -11,7 +11,7 @@
    the shooting drill (they SAVE penalties instead of taking them, feeding
    the same reflexes stat the engine always mapped them to), and a fourth
    drill arrived: Passing Gates, tap the lit gate before it shuts. */
-import { useEffect, useRef, useState } from "react";
+import { lazy, Suspense, useEffect, useRef, useState } from "react";
 import { focusDialogOnMount, escapeCloses } from '@/lib/dialogA11y';
 import type { CareerState } from "@/lib/soccerCareerEngine";
 import { trainingStatFor, type TrainingDrill } from "@/lib/soccerCareerEngine";
@@ -28,7 +28,8 @@ import { usePracticeClock } from "@/hooks/usePracticeClock";
    engine in DrillBoard. It sits beside the Round 81 tiles rather than
    replacing them, and it banks through its own rule (applyDrillResult). */
 /* Round 1032: "throughball" is the CM and CAM position drill, on its own board. */
-type Screen = "menu" | "dribbling" | "pace" | "shooting" | "passing" | "result" | "arcade" | "firsttouch" | "throughball";
+type Screen = "menu" | "dribbling" | "pace" | "shooting" | "passing" | "result" | "arcade" | "firsttouch" | "throughball" | "decisions";
+const PassingDecisionBoard = lazy(() => import("@/components/soccer-career/PassingDecisionBoard"));
 
 const CONES = [
   { x: 50, y: 90 }, { x: 24, y: 78 }, { x: 68, y: 68 }, { x: 30, y: 56 },
@@ -58,6 +59,7 @@ export default function TrainingPanel({ career, available, onComplete, onDrill, 
   const [screen, setScreen] = useState<Screen>("menu");
   const [drill, setDrill] = useState<TrainingDrill>("dribbling");
   const [score, setScore] = useState(0);
+  const [readingResult, setReadingResult] = useState(false);
   const [banked, setBanked] = useState(false);
   const [practiceOnly, setPracticeOnly] = useState(!available);
   const practiceSeed = useRef(1);
@@ -110,8 +112,9 @@ export default function TrainingPanel({ career, available, onComplete, onDrill, 
   const openBoard = (next: Screen) => { clock.reset(); setShowRules(false); setScreen(next); };
   const close = () => { clock.clearAll(); onClose(); };
 
-  const finish = (d: TrainingDrill, sc: number) => {
+  const finish = (d: TrainingDrill, sc: number, reading = false) => {
     clock.clearAll();
+    setReadingResult(reading);
     setDrill(d);
     setScore(Math.max(0, Math.min(100, Math.round(sc))));
     setScreen("result");
@@ -132,6 +135,7 @@ export default function TrainingPanel({ career, available, onComplete, onDrill, 
   };
 
   const openDrill = (d: TrainingDrill) => { resetDrills(); setDrill(d); setScreen(d); };
+  const openReading = () => { resetDrills(); setScreen("decisions"); };
 
   /* ── dribbling handlers ── */
   const clickCone = (i: number) => {
@@ -327,6 +331,11 @@ export default function TrainingPanel({ career, available, onComplete, onDrill, 
         </div>}
         {screen === "menu" && (
           <div className="p-4 space-y-3">
+            <button onClick={openReading} className="w-full flex items-center gap-3 rounded-xl border border-border bg-muted/10 hover:bg-muted/25 p-3.5 text-left">
+              <span className="text-3xl" aria-hidden="true">🧠</span>
+              <span className="flex-1"><span className="block text-sm font-black">Read the pass</span><span className="block text-[10px] text-muted-foreground">Untimed decisions. Trains {drillMeta.passing.stat}. Uses the same one-season reward; practice stays free.</span></span>
+              <span aria-hidden="true">›</span>
+            </button>
             {/* Round 468: the drill your position actually plays, on the arcade
                 engine. Always open, because practice is unlimited; only today's
                 ten bank, and only while the season's session is still there. */}
@@ -378,6 +387,9 @@ export default function TrainingPanel({ career, available, onComplete, onDrill, 
           </div>
         )}
 
+        {screen === "decisions" && <Suspense fallback={<p role="status" className="p-4 text-xs">Loading reading session...</p>}>
+          <PassingDecisionBoard onComplete={points => finish("passing", points, true)} onBack={toMenu} />
+        </Suspense>}
         {screen === "firsttouch" && <FirstTouchBoard career={career} canBank={available && !banked} onBank={onDrill} onBack={toMenu} />}
 
         {screen === "throughball" && <ThroughBallBoard career={career} canBank={available && !banked} onBank={onDrill} onBack={toMenu} />}
@@ -554,7 +566,7 @@ export default function TrainingPanel({ career, available, onComplete, onDrill, 
               </button>
             )}
             <div className="grid grid-cols-2 gap-2">
-              <button onClick={() => openDrill(drill)} className="min-h-11 rounded-lg border border-border text-sm font-bold">Try again</button>
+              <button onClick={() => readingResult ? openReading() : openDrill(drill)} className="min-h-11 rounded-lg border border-border text-sm font-bold">Try again</button>
               <button onClick={toMenu} className="min-h-11 rounded-lg border border-border text-sm font-bold">Choose a drill</button>
             </div>
           </div>
