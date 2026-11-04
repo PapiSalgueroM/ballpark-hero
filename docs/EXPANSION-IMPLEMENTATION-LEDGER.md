@@ -57,3 +57,13 @@ Original 98-to75 feedback remains unreproduced. The earlier published stale PED 
 
 Independent public review admitted the actual 23-journey matrix, all 1590 exact body reads, sixteen stable critical files, 41 completed navigation drains, source/output/fixture holds and accepted search submission. Four final-public phone screenshots were viewed by Root, supplementing prior local phone/desktop layout review. Controlled feature journeys do not establish natural-career progression, full-fleet health or guaranteed indexing.
 
+
+## Next bounded continuation, November4
+
+| Reference | Bounded deliverable | Actual missing behavior | State |
+| --- | --- | --- | --- |
+| SC-12, further partial | Select the current permanent offer for existing Loyalty terms, sign/reload/pay it, and clear only that employer's pending quote after a counter. | Loyalty still forced offerA or the first current offer after normal negotiation gained a target. | Qualified, publication pending |
+| CM-31, further partial | Explicit Fresh XI uses current fitness in existing position-first selection and the actual match/recovery week. | Ordinary Auto Pick considered rating, not a voluntary rotation policy. | Qualified, publication pending |
+| Owner top-page priority, PL-16 partial | Scout-grade prospect review plus own-position roster context before explicit draft commitment. | Any prospect-card tap immediately spent the pick and triggered rivals. | Qualified, publication pending |
+
+The new choices reuse existing contracts, eligibility, recovery and draft engines. They do not complete the broader contract-package, training-calendar or recruitment-simulation cards. Baseline1fbd2515 proved10owned failures and4held passes. Final qualificationbfc56677 passed14fixed,10original owned failures+4held passes,14restored and243adjacent cases, with five affected existing harnesses green. The finalSCtest's added stale-employer assertions are covered by this final physical original/restored run, not credited to the earlier baseline. The host-compatible build,20output readers,16unchanged caps and9native App journeys at320/390/1280 passed. Publication and actual public confirmation remain pending.

@@ -214,7 +214,8 @@ export default function FrontOfficeBoard() {
   const [draftClass, setDraftClass] = useState<Prospect[] | null>(null);
   const [draftPosition, setDraftPosition] = useState('all');
   const [draftPage, setDraftPage] = useState(0);
-  useEffect(() => { setDraftPosition('all'); setDraftPage(0); }, [phase, league, draftClass]);
+  const [draftReview, setDraftReview] = useState<string | null>(null);
+  useEffect(() => { setDraftPosition('all'); setDraftPage(0); setDraftReview(null); }, [phase, league, draftClass]);
   /* Round 515: draft night. Transient on the board and never persisted, the
      Round 186 rule for reveals: reload mid reveal and the save opens on the
      same screen it always did. */
@@ -1664,6 +1665,8 @@ export default function FrontOfficeBoard() {
     const pages = Math.max(1, Math.ceil(filteredProspects.length / 18));
     const page = Math.min(draftPage, pages - 1);
     const shownProspects = filteredProspects.slice(page * 18, (page + 1) * 18);
+    const reviewed = draftClass.find(pr => pr.id === draftReview);
+    const current = reviewed ? my.players.filter(p => p.pos === reviewed.pos) : [];
     return (
       <div className="space-y-4">
         {saveNotice}
@@ -1746,6 +1749,19 @@ export default function FrontOfficeBoard() {
           </div>
         )}
         {!draftDone && picksLeft > 0 && my.picks.length > 0 && draftClass.length > 0 && <>
+        {reviewed ? <section aria-label="Draft review" className="rounded-xl border border-border p-3 space-y-2 text-sm">
+          <h3 className="font-bold">{reviewed.name}</h3>
+          <p>{reviewed.pos} · age {reviewed.age}</p><p>Scouted grade {gradeOf(reviewed)}</p>
+          <p className="font-bold">Your {reviewed.pos} roster</p>
+          <div className="max-h-48 overflow-y-auto space-y-1">
+            {current.map(p => <p key={p.id} data-draft-current-player={p.id}>{p.name}: OVR {p.ovr}, age {p.age}, {p.years} year{p.years === 1 ? '' : 's'} left</p>)}
+            {!current.length && <p>No players at this position.</p>}
+          </div>
+          <div className="flex gap-2">
+            <button onClick={() => setDraftReview(null)} className="min-h-11 flex-1 rounded-lg border border-border px-3 font-bold">Back</button>
+            <button onClick={() => { draftProspect(reviewed.id); setDraftReview(null); }} className="min-h-11 flex-1 rounded-lg bg-primary px-3 font-bold text-primary-foreground">Confirm draft</button>
+          </div>
+        </section> : <>
         <label className="flex items-center justify-between gap-3 text-xs">
           <span className="font-bold">Prospect position</span>
           <select value={draftPosition} onChange={event => { setDraftPosition(event.target.value); setDraftPage(0); }} className="min-h-11 rounded-lg border border-border bg-background px-3">
@@ -1761,7 +1777,7 @@ export default function FrontOfficeBoard() {
           {shownProspects.map(pr => (
             <button
               key={pr.id}
-              onClick={() => draftProspect(pr.id)}
+              onClick={() => setDraftReview(pr.id)}
               className="flex items-center justify-between rounded-lg border border-border bg-card px-3 py-2 text-left hover:border-primary/60"
             >
               <span>
@@ -1777,6 +1793,7 @@ export default function FrontOfficeBoard() {
           <span role="status" className="text-center text-[11px] text-muted-foreground">{filteredProspects.length === 0 ? '0 prospects' : 'Page ' + (page + 1) + ' of ' + pages}</span>
           <button type="button" disabled={page >= pages - 1} onClick={() => setDraftPage(value => Math.min(pages - 1, value + 1))} className="min-h-11 rounded-lg border border-border px-3 text-xs font-bold disabled:opacity-40">Next prospects</button>
         </div>
+        </>}
         </>}
         {newsFeed.length > 0 && (
           <div className="rounded-2xl border border-border bg-card p-3 text-xs text-muted-foreground">

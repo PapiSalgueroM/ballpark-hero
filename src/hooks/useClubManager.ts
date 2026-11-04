@@ -898,10 +898,10 @@ export function useClubManager() {
     });
   }, []);
 
-  const autoPick = useCallback(() => {
+  const autoPick = useCallback((fresh = false) => {
     setCareer(prev => {
       if (!prev) return prev;
-      return { ...prev, xiIds: autoPickXI(prev.squad, FORMATIONS[prev.formationIndex]) };
+      return { ...prev, xiIds: autoPickXI(prev.squad, FORMATIONS[prev.formationIndex], fresh) };
     });
   }, []);
 

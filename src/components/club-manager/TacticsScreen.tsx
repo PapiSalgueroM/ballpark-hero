@@ -61,7 +61,7 @@ interface TacticsScreenProps {
   theirOpponent?: string | null;
   onSlot: (slotIdx: number, playerId: string | null) => void;
   onSwap: (a: number, b: number) => void;
-  onAutoPick: () => void;
+  onAutoPick: (fresh?: boolean) => void;
   /** Round 505: a duty on a slot, null to clear it. */
   onDuty: (slotIdx: number, duty: Duty | null) => void;
   /** Round 505: the armband or a set piece job to a man. */
@@ -624,17 +624,24 @@ export function TacticsScreen({
 
       {/* Pitch */}
       <div ref={pitchWrapRef}>
-        <div className="flex items-center justify-between mb-1.5">
+        <div className="flex flex-wrap items-center justify-between gap-2 mb-1.5">
           <div className="text-xs text-muted-foreground uppercase tracking-wider">
             Starting XI · avg <span className="text-primary font-bold" data-cm-xi-avg={fit.rating}>{fit.rating}</span>
           </div>
-          <button
-            onClick={onAutoPick}
-            className="inline-flex items-center gap-1 text-xs font-semibold text-primary hover:opacity-80 transition-opacity"
-          >
-            <Wand2 className="w-3.5 h-3.5" /> Auto Pick
-          </button>
+          <div className="flex gap-2">
+            <button type="button" onClick={() => onAutoPick()}
+              className="inline-flex min-h-11 items-center gap-1 text-xs font-semibold text-primary hover:opacity-80 transition-opacity">
+              <Wand2 className="w-3.5 h-3.5" /> Auto Pick
+            </button>
+            <button type="button" onClick={() => onAutoPick(true)}
+              className="min-h-11 rounded-lg border border-primary/50 px-2 text-xs font-semibold text-primary hover:bg-primary/10">
+              Fresh XI
+            </button>
+          </div>
         </div>
+        <p className="text-[10px] text-muted-foreground mb-1.5">
+          Fresh XI prefers 80+ fitness in each position, then rating. Tired players fill gaps.
+        </p>
         {fit.penalty > 0 && (
           <p className="text-[9px] text-amber-400 mb-1" data-cm-fit-adjusted={fit.penalty}>
             fit adjusted: {fit.raw} on paper, {fit.rating} the way the match reads them. A neighbouring position costs {FIT_PENALTY.family} on that man, the wrong line {FIT_PENALTY.wrong}, a keeper swap {FIT_PENALTY.keeper}.
