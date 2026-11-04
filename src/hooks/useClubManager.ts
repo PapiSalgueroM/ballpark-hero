@@ -852,8 +852,8 @@ export function useClubManager() {
   }, []);
 
   /** Put an outfielder to work on a second position. A refusal leaves the save alone; the screen prints why. */
-  const retrain = useCallback((playerId: string, to: Position) => {
-    setCareer(prev => (prev ? startRetraining(prev, playerId, to) ?? prev : prev));
+  const retrain = useCallback((playerId: string, to: Position, paused?: boolean) => {
+    setCareer(prev => (prev ? startRetraining(prev, playerId, to, paused) ?? prev : prev));
   }, []);
 
   const stopRetrain = useCallback((playerId: string) => {

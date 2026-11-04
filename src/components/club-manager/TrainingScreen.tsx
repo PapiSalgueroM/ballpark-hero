@@ -17,7 +17,7 @@ interface TrainingScreenProps {
   career: CareerState;
   onSetPlan: (plan: TrainingPlan) => void;
   /** Round 505: put a man to work on a second position, and call it off. */
-  onRetrain: (playerId: string, to: Position) => void;
+  onRetrain: (playerId: string, to: Position, paused?: boolean) => void;
   onStopRetrain: (playerId: string) => void;
 }
 
@@ -81,7 +81,7 @@ function PlayerRow({ p, career }: { p: CMPlayer; career: CareerState }) {
  * own (retrainWeeks), so what the chip promises is what the tick delivers.
  * A refusal is printed, never swallowed.
  */
-function RetrainCard({ career, onRetrain, onStopRetrain }: { career: CareerState; onRetrain: (id: string, to: Position) => void; onStopRetrain: (id: string) => void }) {
+function RetrainCard({ career, onRetrain, onStopRetrain }: { career: CareerState; onRetrain: (id: string, to: Position, paused?: boolean) => void; onStopRetrain: (id: string) => void }) {
   const [pickId, setPickId] = useState('');
   const pickRef = useRef<HTMLSelectElement>(null);
   const [refusal, setRefusal] = useState<string | null>(null);
@@ -141,6 +141,16 @@ function RetrainCard({ career, onRetrain, onStopRetrain }: { career: CareerState
             <div className="mt-1 h-1.5 rounded-full bg-secondary overflow-hidden" role="progressbar" aria-valuenow={pct} aria-valuemin={0} aria-valuemax={100}>
               <div className="h-full rounded-full bg-primary" style={{ width: `${Math.max(3, pct)}%` }} />
             </div>
+            {Object.prototype.hasOwnProperty.call(r, 'paused') && typeof r.paused !== 'boolean' ? (
+              <p className="mt-1 text-[10px] text-amber-400">This course has an unknown pause setting. Progress is held; Pause and Resume are unavailable. Stop still cancels the whole course.</p>
+            ) : (
+              <button type="button" aria-label={`${r.paused === true ? 'Resume' : 'Pause'} retraining for ${p.name}`}
+                onClick={() => onRetrain(p.id, r.to, r.paused !== true)}
+                className="mt-1 min-h-11 rounded-lg border border-border px-3 text-[11px] font-bold text-foreground hover:border-primary/60">
+                {r.paused === true ? 'Resume retraining' : 'Pause retraining'}
+              </button>
+            )}
+            {r.paused === true && <p className="mt-1 text-[10px] text-primary">Paused: {r.weeksLeft} paid week{r.weeksLeft === 1 ? '' : 's'} still to go.</p>}
           </div>
         );
       })}
@@ -206,7 +216,7 @@ function RetrainCard({ career, onRetrain, onStopRetrain }: { career: CareerState
       )}
 
       <p className="text-[9px] text-muted-foreground mt-1.5">
-        A position next to one he holds is the quickest, another on the same line takes longer, and crossing lines takes longest; past thirty it is half as long again, a better training ground shortens all of it, and nothing goes under {RETRAIN_MIN_WEEKS} weeks. One man learns one position at a time, keeps {MAX_SECONDARY_POSITIONS} at most, and keepers stay keepers. Every second position in this squad was earned here: the real data gives each man one.
+        A position next to one he holds is the quickest, another on the same line takes longer, and crossing lines takes longest; past thirty it is half as long again, a better training ground shortens all of it, and nothing goes under {RETRAIN_MIN_WEEKS} weeks. One man learns one position at a time, keeps {MAX_SECONDARY_POSITIONS} at most, and keepers stay keepers. Every second position in this squad was earned here: the real data gives each man one. Pause keeps the remaining weeks and his current positions; Resume continues from there. Completion can replace the oldest second position, while Stop discards the course. Pausing does not rest him from matches or change normal training. For example, pause a near-complete ST course to keep learned RW cover until you are ready to finish it.
       </p>
     </div>
   );

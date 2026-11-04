@@ -181,7 +181,7 @@ try {
        follows the line as it stands (it could never match again and the control stopped before it ran). */
     if (control === 'whistle') {
       viewer = replace(viewer, '      if (liveNow?.et) {\n', '      if (isExtraTimeDue(career)) {\n');
-      viewer = replace(viewer, '  liveFeed, liveStatsAt, myOnPitchAt, oppOnPitchAt, squadNumbers, benchFor, changeRoom, liveGoneIds, liveShapeAt,\n', '  liveFeed, liveStatsAt, myOnPitchAt, oppOnPitchAt, squadNumbers, benchFor, changeRoom, liveGoneIds, liveShapeAt, isExtraTimeDue,\n');
+      viewer = replace(viewer, '  liveStatsAt, myOnPitchAt, oppOnPitchAt, benchFor, changeRoom, liveGoneIds,\n', '  liveStatsAt, myOnPitchAt, oppOnPitchAt, benchFor, changeRoom, liveGoneIds, isExtraTimeDue,\n');
     }
     if (control === 'banner') viewer = replace(viewer, "club: extraTimeCall(career, liveNow), tone: 'none'", "club: 'Level after 90 minutes', tone: 'none'");
     /* Release AR: Round 1146 moved the goal's line into goalSegs (one function for the pill, the card and the

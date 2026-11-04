@@ -32,6 +32,7 @@ import motion from './FreeAgencyFeedback.module.css';
 import type { MarketResult, MarketWheel } from '@/lib/usCareerMarket';
 import MarketChanceWheel from './MarketChanceWheel';
 import MarketCompare from './MarketCompare';
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog';
 
 interface Props {
   window: FaWindow;
@@ -44,6 +45,7 @@ interface Props {
   wheel?: MarketWheel;
   onWheelContinue?: () => void;
   compare?: boolean;
+  reviewSigning?: boolean;
   odds?: Record<MarketResult, number>[];
 }
 
@@ -54,9 +56,20 @@ interface PushIntent {
   opener: HTMLButtonElement;
 }
 
-export default function FreeAgencyPanel({ window: w, sportNoun, talkLine, onPush, onSign, wheel, onWheelContinue, compare = false, odds }: Props) {
+interface SigningReview {
+  index: number;
+  window: FaWindow;
+  source: FaOffer;
+  offer: FaOffer;
+}
+
+export default function FreeAgencyPanel({ window: w, sportNoun, talkLine, onPush, onSign, wheel, onWheelContinue, compare = false, reviewSigning = false, odds }: Props) {
   const [intent, setIntent] = useState<PushIntent | null>(null);
   const [comparing, setComparing] = useState(false);
+  const [review, setReview] = useState<SigningReview | null>(null);
+  const signing = useRef<SigningReview | null>(null);
+  const signingOpener = useRef<HTMLButtonElement | null>(null);
+  const signingTitle = useRef<HTMLHeadingElement>(null);
   const root = useRef<HTMLDivElement>(null);
   const returnPush = useRef<number | null>(null);
   const compareReturn = useRef<number | null>(null);
@@ -130,12 +143,56 @@ export default function FreeAgencyPanel({ window: w, sportNoun, talkLine, onPush
     onPush(index);
   };
 
+  const sameSigningQuote = (request: SigningReview) => reviewSigning && w === request.window
+    && w.offers[request.index] === request.source && !request.source.gone
+    && JSON.stringify(request.source) === JSON.stringify(request.offer);
+  const closeSigning = () => { signing.current = null; setReview(null); };
+  const sign = (index: number, opener: HTMLButtonElement) => {
+    if (!reviewSigning) { onSign(index); return; }
+    const source = w.offers[index];
+    if (!source || source.gone) return;
+    const request = { index, window: w, source, offer: { ...source } };
+    signing.current = request;
+    signingOpener.current = opener;
+    setReview(request);
+  };
+
   if (wheel && !wheel.seen && onWheelContinue) return <div ref={root}><MarketChanceWheel wheel={wheel} onContinue={onWheelContinue} /></div>;
   if (comparing) return <div ref={root}><MarketCompare window={w} onBack={() => setComparing(false)} /></div>;
   return (
     /* data-fa-window scopes the browser harness to this screen, because the
        sitewide ticker above it also talks about teams and signings. */
     <div ref={root} className="space-y-3" data-fa-window>
+      <AlertDialog open={reviewSigning && !!review} onOpenChange={open => { if (!open) closeSigning(); }}>
+        {review && <AlertDialogContent data-fa-sign-review className="max-h-[85svh] max-w-md overflow-y-auto"
+          onOpenAutoFocus={event => { event.preventDefault(); signingTitle.current?.focus({ preventScroll: true }); }}
+          onCloseAutoFocus={event => {
+            event.preventDefault();
+            if (signingOpener.current?.isConnected) signingOpener.current.focus({ preventScroll: true });
+          }}>
+          <AlertDialogHeader>
+            <AlertDialogTitle ref={signingTitle} tabIndex={-1}>Sign with {review.offer.label}?</AlertDialogTitle>
+            <AlertDialogDescription>This signs the deal and starts your next season with this team. Back keeps your offers open.</AlertDialogDescription>
+          </AlertDialogHeader>
+          <dl className="grid grid-cols-2 gap-3 rounded-xl bg-secondary p-3 text-sm">
+            <div><dt className="text-xs text-muted-foreground">Per year</dt><dd className="font-bold">${review.offer.salary}M</dd></div>
+            <div><dt className="text-xs text-muted-foreground">Length</dt><dd className="font-bold">{review.offer.years} year{review.offer.years === 1 ? '' : 's'}</dd></div>
+            <div><dt className="text-xs text-muted-foreground">Total value</dt><dd className="font-bold">${faTotalValue(review.offer)}M</dd></div>
+            <div><dt className="text-xs text-muted-foreground">Roster</dt><dd className="font-bold">{review.offer.quality} · {FA_TIER_WORD[review.offer.tier]}</dd></div>
+          </dl>
+          {!sameSigningQuote(review) && <p role="status" className="text-sm text-destructive">This offer changed. Go back and review it again.</p>}
+          <AlertDialogFooter>
+            <AlertDialogCancel className="min-h-11">Back to offers</AlertDialogCancel>
+            <AlertDialogAction className="min-h-11" disabled={!sameSigningQuote(review)} onClick={event => {
+              const request = signing.current;
+              if (!request || !sameSigningQuote(request)) { event.preventDefault(); if (request) setReview({ ...request }); return; }
+              signing.current = null;
+              setReview(null);
+              onSign(request.index);
+            }}>Confirm signing</AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>}
+      </AlertDialog>
       <CelebrationStyles />
       {compare && <button type="button" data-market-compare-open onClick={() => { compareReturn.current = window.scrollY; setComparing(true); }}
         className="min-h-11 w-full rounded-xl border border-border px-3 py-2 text-xs font-bold">Compare offers</button>}
@@ -196,8 +253,8 @@ export default function FreeAgencyPanel({ window: w, sportNoun, talkLine, onPush
               {!o.gone && (
                 <div className="mt-2 grid grid-cols-2 gap-1.5">
                   <button
-                    data-fa-sign={onWheelContinue ? i : undefined}
-                    onClick={() => onSign(i)}
+                    data-fa-sign={onWheelContinue || reviewSigning ? i : undefined}
+                    onClick={event => sign(i, event.currentTarget)}
                     className="flex min-h-[44px] items-center justify-center gap-1 rounded-xl bg-primary px-3 py-2 text-xs font-bold text-primary-foreground hover:opacity-90"
                   >
                     <Handshake className="h-3.5 w-3.5" /> Sign

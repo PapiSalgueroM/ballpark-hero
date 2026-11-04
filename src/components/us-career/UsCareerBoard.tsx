@@ -1832,7 +1832,7 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
         </div>
       ) : phase === 'freeagency' && faWindow ? (
         <div ref={revealRef}>
-          <FreeAgencyPanel window={faWindow} sportNoun={sport.faSportNoun} talkLine={talkLine} onPush={pushFa} onSign={signFa} wheel={marketTalk?.wheel} onWheelContinue={acknowledgeMarket} compare odds={faWindow.offers.map((_, index) => freeAgencyMarketProbabilities(faWindow, index, sport.faPushArgs(career, Math.random)))} />
+          <FreeAgencyPanel window={faWindow} sportNoun={sport.faSportNoun} talkLine={talkLine} onPush={pushFa} onSign={signFa} wheel={marketTalk?.wheel} onWheelContinue={acknowledgeMarket} compare reviewSigning={sport.slug === 'nba' || sport.slug === 'nfl'} odds={faWindow.offers.map((_, index) => freeAgencyMarketProbabilities(faWindow, index, sport.faPushArgs(career, Math.random)))} />
           {!(marketTalk?.wheel && !marketTalk.wheel.seen) && retireFromMarket('Retire instead')}
         </div>
       ) : phase === 'event' && pendingEvent ? (
