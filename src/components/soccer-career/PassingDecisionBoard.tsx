@@ -40,7 +40,7 @@ const situations = [
 
 function Rules() {
   return <div className="rounded-xl border border-border bg-primary/5 p-3 text-xs leading-relaxed space-y-2">
-    <p>Read five fictional passing situations. Pick the open lane or useful support move. There is no timer. Your first answer in each situation is final.</p>
+    <p>Read five fictional passing situations. The passing options are onside. Pick the open lane or useful support move. There is no timer. Your first answer in each situation is final.</p>
     <p>Each correct read earns 20 points. Three correct reads score 60; four score 80.</p>
     <p>Worked example: a defender blocks one teammate, while another has a clear passing lane. Choose the clear lane to keep the ball away from the defender.</p>
     <p>Banking 50+ earns +1 to the listed skill next season; 80+ earns +2. Current attributes do not rise here. Only one session can be banked each season. Further runs are free practice.</p>

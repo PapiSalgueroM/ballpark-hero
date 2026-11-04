@@ -29,7 +29,7 @@ import { usePracticeClock } from "@/hooks/usePracticeClock";
    replacing them, and it banks through its own rule (applyDrillResult). */
 /* Round 1032: "throughball" is the CM and CAM position drill, on its own board. */
 type Screen = "menu" | "dribbling" | "pace" | "shooting" | "passing" | "result" | "arcade" | "firsttouch" | "throughball" | "decisions";
-const PassingDecisionBoard = lazy(() => import("./PassingDecisionBoard"));
+const PassingDecisionBoard = lazy(() => import("@/components/soccer-career/PassingDecisionBoard"));
 
 const CONES = [
   { x: 50, y: 90 }, { x: 24, y: 78 }, { x: 68, y: 68 }, { x: 30, y: 56 },
