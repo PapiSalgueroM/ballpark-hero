@@ -25,3 +25,7 @@ No local application/helper/build/test/browser/Git execution or local applicatio
 ## Review focus
 
 Changing priority must not silently discard a saved appearance floor. A zero-match request must not consume the annual request. Forecast comparison must not confuse a weekly fitness charge with custom geometry. Stale/future shape data must retain its existing fallback. Back must restore the selected prospect rather than the first card, and Confirm must keep the existing draft guard and outcome.
+
+## November4 qualification policy correction
+
+The first physical runs qualified all12 new outcomes but stopped on two older invalid/stale brief expectations and the save-keeper part-version policy. They explicitly required permissive fallback or overwriting unreadable transferBrief metadata. The new documented policy preserves and refuses that data. Additional bounded QA claims: src/test/soccerCareerTransferBrief.test.ts, scripts/simSaveKeeper.mjs and scripts/lib/realSaves.mjs. Keep every case, all generic version policies and all five application pins. Add an effective physical helper-guard removal control with changed bytes, exact owned failure and complete restoration, then rerun the unchanged gates. No gate is waived.
