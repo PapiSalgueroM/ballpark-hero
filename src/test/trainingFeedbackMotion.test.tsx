@@ -33,11 +33,13 @@ afterEach(() => {
 });
 
 describe('Soccer Career training feedback', () => {
-  it('keeps unavailable legacy drills and the opening menu quiet with unchanged close controls', () => {
+  it('keeps spent-session classic practice open and the opening menu quiet with unchanged close controls', () => {
     const callbacks = handlers();
     const view = render(draw(fixture(), callbacks, false));
     expect(view.getByText('Already trained this season')).toBeInTheDocument();
-    expect(view.queryByRole('button', { name: /Penalty Placement/ })).toBeNull();
+    for (const label of ['Cone Slalom', 'Sprint Burst', 'Penalty Placement', 'Passing Gates']) {
+      expect(view.getByRole('button', { name: new RegExp(label) })).toBeEnabled();
+    }
     expect(view.getByRole('button', { name: /Wall Shot/ })).toBeEnabled();
     expect(view.container.querySelector('[data-training-feedback], [data-training-summary], [data-training-banked], [data-training-marker]')).toBeNull();
     fireEvent.click(view.getByRole('button', { name: 'Close' }));

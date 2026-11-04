@@ -3,7 +3,7 @@ import { cn } from '@/lib/utils';
 import { Dumbbell, GraduationCap } from 'lucide-react';
 import {
   INTENSITY_INFO, FOCUS_INFO, developmentRate, developingPlayers,
-  retrainWeeks, retrainRefusal, heldPositions, MAX_SECONDARY_POSITIONS, RETRAIN_MIN_WEEKS,
+  retrainWeeks, retrainRefusal, heldPositions, MAX_SECONDARY_POSITIONS, RETRAIN_MIN_WEEKS, FORMATIONS, fitPenalty,
 } from '@/lib/clubManager';
 import type {
   CareerState, CMPlayer, TrainingFocus, TrainingIntensity, TrainingPlan,
@@ -79,6 +79,7 @@ function RetrainCard({ career, onRetrain, onStopRetrain }: { career: CareerState
   const targets: Position[] = picked
     ? ALL_POSITIONS.filter(pos => pos !== 'GK' && !heldPositions(picked).includes(pos))
     : [];
+  const formation = FORMATIONS[career.formationIndex] ?? FORMATIONS[0];
 
   const start = (to: Position) => {
     if (!picked) return;
@@ -150,19 +151,39 @@ function RetrainCard({ career, onRetrain, onStopRetrain }: { career: CareerState
           <p className="text-[9px] text-muted-foreground mb-1">
             {lastName(picked.name)} plays {heldPositions(picked).join(', ')}. Pick what he learns next{picked.age > 30 ? ', and he is past thirty, so it takes half as long again' : ''}:
           </p>
+          <p className="text-[10px] text-muted-foreground mb-1">
+            Fit points remove his out-of-position cost in {formation.name}; a minus adds a cost. His OVR and your XI stay as they are.
+          </p>
           <div className="flex flex-wrap gap-1">
-            {targets.map(to => (
-              <button
-                key={to}
-                type="button"
-                data-cm-retrain-to={to}
-                onClick={() => start(to)}
-                className="rounded-lg border border-border px-2 py-1 text-left hover:border-primary/60 transition-colors"
-              >
-                <span className="block text-[10px] font-bold text-foreground">{to}</span>
-                <span className="block text-[8px] text-muted-foreground">about {retrainWeeks(career, picked, to)} weeks</span>
-              </button>
-            ))}
+            {targets.map(to => {
+              const secondaryPositions = [...(picked.secondaryPositions ?? []).filter(pos => pos !== to && pos !== picked.position), to].slice(-MAX_SECONDARY_POSITIONS);
+              const trained = { ...picked, secondaryPositions };
+              const replaced = (picked.secondaryPositions ?? []).filter(pos => !secondaryPositions.includes(pos));
+              const changes = formation.slots.flatMap((slot, index) => {
+                const before = fitPenalty(picked, slot), after = fitPenalty(trained, slot);
+                return before === after ? [] : [{ label: slot.label, index, before, after }];
+              });
+              return (
+                <button
+                  key={to}
+                  type="button"
+                  data-cm-retrain-to={to}
+                  onClick={() => start(to)}
+                  className="rounded-lg border border-border px-2 py-1 text-left hover:border-primary/60 transition-colors"
+                >
+                  <span className="block text-[10px] font-bold text-foreground">{to}</span>
+                  <span className="block text-[8px] text-muted-foreground">about {retrainWeeks(career, picked, to)} weeks</span>
+                  <span className="block max-w-40 text-[10px] text-muted-foreground" data-cm-retrain-fit={to}>
+                    {changes.length === 0 ? 'No fit change in this formation' : changes.map((change, i) => (
+                      <span key={change.index} data-cm-fit-slot={change.index} data-cm-fit-before={change.before} data-cm-fit-after={change.after}>
+                        {i > 0 ? ' · ' : ''}{change.label}: {change.before > change.after ? '+' : ''}{change.before - change.after} fit
+                      </span>
+                    ))}
+                  </span>
+                  {replaced.length > 0 && <span className="block text-[10px] text-amber-400">Replaces {replaced.join(', ')}</span>}
+                </button>
+              );
+            })}
           </div>
           {refusal && <p className="text-[10px] text-red-400 mt-1" data-cm-retrain-refusal="1">{refusal}</p>}
         </div>

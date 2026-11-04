@@ -1,5 +1,5 @@
 /* ─── Round 81: training ground mini games. ───
-   Skill drills, one session per season, straight off the owner's list:
+   Skill drills, one bank per season, straight off the owner's list:
    trace-the-cones dribbling, click-burst pace, penalty placement shooting.
    Score 50+ banks +1 to the drilled stat next season, 80+ banks +2, applied
    through the engine's existing statBoostNextSeason pipeline. Tile rule:
@@ -40,8 +40,8 @@ const ZONES = [
   { id: 3, label: "bottom left", w: 0.24 }, { id: 4, label: "bottom middle", w: 0.20 }, { id: 5, label: "bottom right", w: 0.24 },
 ];
 
-function keeperPick(): number {
-  const r = Math.random();
+function keeperPick(random: () => number = Math.random): number {
+  const r = random();
   let acc = 0;
   for (const z of ZONES) { acc += z.w; if (r < acc) return z.id; }
   return 4;
@@ -59,6 +59,13 @@ export default function TrainingPanel({ career, available, onComplete, onDrill, 
   const [drill, setDrill] = useState<TrainingDrill>("dribbling");
   const [score, setScore] = useState(0);
   const [banked, setBanked] = useState(false);
+  const [practiceOnly, setPracticeOnly] = useState(!available);
+  const practiceSeed = useRef(1);
+  const nextRandom = () => {
+    if (!practiceOnly) return Math.random();
+    practiceSeed.current = (Math.imul(practiceSeed.current, 1664525) + 1013904223) >>> 0;
+    return practiceSeed.current / 4294967296;
+  };
   const [showRules, setShowRules] = useState(false);
   const legacyPlaying = screen === "dribbling" || screen === "pace" || screen === "shooting" || screen === "passing";
   const clock = usePracticeClock(legacyPlaying);
@@ -111,7 +118,7 @@ export default function TrainingPanel({ career, available, onComplete, onDrill, 
   };
 
   const resetDrills = () => {
-    clock.reset(); setShowRules(false);
+    clock.reset(); setShowRules(false); setPracticeOnly(!available || banked);
     setConeIdx(0); setMistakes(0); dribbleStart.current = null;
     setRunClock(0);
     if (runTimer.current) { clock.clear(runTimer.current); runTimer.current = null; }
@@ -179,10 +186,10 @@ export default function TrainingPanel({ career, available, onComplete, onDrill, 
   const takePen = (zone: number) => {
     if (clock.isPaused()) return;
     if (lastPen) return; // wait for the reveal to clear
-    const dive = keeperPick();
+    const dive = keeperPick(nextRandom);
     let result: string;
     let scored = false;
-    if (zone <= 2 && Math.random() < 0.12) {
+    if (zone <= 2 && nextRandom() < 0.12) {
       result = "Blazed over the bar!";
     } else if (zone === dive) {
       result = "Saved! Keeper guessed right.";
@@ -205,9 +212,9 @@ export default function TrainingPanel({ career, available, onComplete, onDrill, 
   const gkNextShot = () => {
     setGkLast(null);
     setGkShot(null);
-    const shot = keeperPick();
-    const honest = Math.random() < 0.65;
-    const tell = honest ? shot : keeperPick();
+    const shot = keeperPick(nextRandom);
+    const honest = nextRandom() < 0.65;
+    const tell = honest ? shot : keeperPick(nextRandom);
     setGkTell(tell);
     gkTimer.current = clock.timeout(() => {
       setGkTell(null);
@@ -234,7 +241,7 @@ export default function TrainingPanel({ career, available, onComplete, onDrill, 
   const GATE_COUNT = 8;
   const gateWindowFor = (n: number) => Math.max(650, 1400 - n * 100);
   const lightGate = (n: number) => {
-    const g = Math.floor(Math.random() * 6);
+    const g = Math.floor(nextRandom() * 6);
     setLitGate(g);
     setGateWindow(gateWindowFor(n));
     gateTimer.current = clock.timeout(() => {
@@ -293,7 +300,7 @@ export default function TrainingPanel({ career, available, onComplete, onDrill, 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [screen, isGK]);
 
-  const tierText = score >= 80 ? "Elite session! +2 " + drillMeta[drill].stat + " next season" :
+  const tierText = practiceOnly || (!available && !banked) ? "Practice only. No career boost." : score >= 80 ? "Elite session! +2 " + drillMeta[drill].stat + " next season" :
     score >= 50 ? "Solid work. +1 " + drillMeta[drill].stat + " next season" :
     "Rough day. No gains this time";
 
@@ -312,6 +319,7 @@ export default function TrainingPanel({ career, available, onComplete, onDrill, 
           {showRules && <p>Tap cones in order with as few slips as possible. Sprint Burst gives you five seconds to tap the track. Pick five penalty spots, or watch the tell and dive for five keeper shots. Hit eight passing gates before they close.</p>}
           {showRules && <p>Pause or opening these rules freezes the drill, including a shot reveal. Leaving the tab pauses it too. Close the rules, then choose Resume practice to carry on. Drills and Close discard the unfinished run.</p>}
           <p>One bank per season: 50 earns +1 to the shown stat next season, 80 earns +2. Example: three goals from five penalties score 60 and earn +1. A score below 50 uses the session without a gain.</p>
+          <p>Keep practising after you bank. Extra runs are just for a score and do not change your career.</p>
         </div>}
         {legacyPlaying && <div className="flex items-center justify-between gap-2 border-b border-border px-4 py-2 text-xs">
           <span role="status">{clock.paused ? "Practice paused. Your time and score are held." : "Pause any time. Drills leaves this run."}</span>
@@ -343,43 +351,39 @@ export default function TrainingPanel({ career, available, onComplete, onDrill, 
               <span className="flex-1"><span className="block text-sm font-black">First Touch</span><span className="block text-[10px] text-muted-foreground" data-first-touch-trains>Read the gate, time your control. Trains {drillStatFor("firsttouch", career.position).label}. Practice is always open.</span></span>
               <span className="text-muted-foreground">›</span>
             </button>
-            {!available ? (
-              <div className="rounded-xl border border-border bg-muted/10 p-6 text-center space-y-1">
-                <div className="text-3xl">😮‍💨</div>
+            {(!available || banked) && (
+              <div className="rounded-xl border border-border bg-muted/10 p-4 text-center space-y-1">
                 <div className="text-sm font-bold">Already trained this season</div>
-                <p className="text-[11px] text-muted-foreground">The gaffer says recovery matters too. Come back after the next season kicks off.</p>
+                <p className="text-[11px] text-muted-foreground">Your season reward is used. Every drill is still open for practice.</p>
               </div>
-            ) : (
-              <>
-                {isGK && (
-                  <p className="text-[11px] text-muted-foreground text-center" data-training-keeper-rule>
-                    You are in goal, so these train keeper skills: the slalom and First Touch are footwork for your Positioning, the sprint is your Sweeping Speed, the gates are your Distribution, and shot stopping is your Reflexes.
-                  </p>
-                )}
-                <div className="grid grid-cols-1 gap-2.5">
-                  {(Object.keys(drillMeta) as TrainingDrill[]).map(d => (
-                    <button key={d} onClick={() => openDrill(d)}
-                      className="flex items-center gap-3 rounded-xl border border-border bg-muted/10 hover:bg-muted/25 p-3.5 text-left transition-colors">
-                      <span className="text-3xl">{drillMeta[d].emoji}</span>
-                      <span className="flex-1">
-                        <span className="block text-sm font-black">{drillMeta[d].name}</span>
-                        <span className="block text-[10px] text-muted-foreground">Trains {drillMeta[d].stat}</span>
-                      </span>
-                      <span className="text-muted-foreground">›</span>
-                    </button>
-                  ))}
-                </div>
-              </>
             )}
+            {isGK && (
+              <p className="text-[11px] text-muted-foreground text-center" data-training-keeper-rule>
+                You are in goal, so these train keeper skills: the slalom and First Touch are footwork for your Positioning, the sprint is your Sweeping Speed, the gates are your Distribution, and shot stopping is your Reflexes.
+              </p>
+            )}
+            <div className="grid grid-cols-1 gap-2.5">
+              {(Object.keys(drillMeta) as TrainingDrill[]).map(d => (
+                <button key={d} onClick={() => openDrill(d)}
+                  className="flex items-center gap-3 rounded-xl border border-border bg-muted/10 hover:bg-muted/25 p-3.5 text-left transition-colors">
+                  <span className="text-3xl">{drillMeta[d].emoji}</span>
+                  <span className="flex-1">
+                    <span className="block text-sm font-black">{drillMeta[d].name}</span>
+                    <span className="block text-[10px] text-muted-foreground">Trains {drillMeta[d].stat}</span>
+                  </span>
+                  <span className="text-muted-foreground">›</span>
+                </button>
+              ))}
+            </div>
           </div>
         )}
 
-        {screen === "firsttouch" && <FirstTouchBoard career={career} canBank={available} onBank={onDrill} onBack={toMenu} />}
+        {screen === "firsttouch" && <FirstTouchBoard career={career} canBank={available && !banked} onBank={onDrill} onBack={toMenu} />}
 
-        {screen === "throughball" && <ThroughBallBoard career={career} canBank={available} onBank={onDrill} onBack={toMenu} />}
+        {screen === "throughball" && <ThroughBallBoard career={career} canBank={available && !banked} onBank={onDrill} onBack={toMenu} />}
 
         {screen === "arcade" && (
-          <DrillBoard career={career} canBank={available} onBank={onDrill} onBack={toMenu} />
+          <DrillBoard career={career} canBank={available && !banked} onBank={onDrill} onBack={toMenu} />
         )}
 
         {screen === "dribbling" && (
@@ -538,17 +542,21 @@ export default function TrainingPanel({ career, available, onComplete, onDrill, 
               </div>
               <p className="text-sm font-bold">{tierText}</p>
             </div>
-            {!banked ? (
+            {!banked && available && !practiceOnly ? (
               <button
-                onClick={() => { setBanked(true); onComplete(drill, score); }}
+                onClick={() => { if (!available || banked || practiceOnly) return; setBanked(true); onComplete(drill, score); }}
                 className="w-full h-11 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-black text-sm font-black">
                 Bank the session
               </button>
             ) : (
-              <button onClick={close} data-training-banked className={`w-full h-11 rounded-lg bg-muted/40 hover:bg-muted/60 text-sm font-black ${feedback.banked}`}>
+              <button onClick={close} data-training-banked={banked ? "" : undefined} className={`w-full h-11 rounded-lg bg-muted/40 hover:bg-muted/60 text-sm font-black ${feedback.banked}`}>
                 Back to your career
               </button>
             )}
+            <div className="grid grid-cols-2 gap-2">
+              <button onClick={() => openDrill(drill)} className="min-h-11 rounded-lg border border-border text-sm font-bold">Try again</button>
+              <button onClick={toMenu} className="min-h-11 rounded-lg border border-border text-sm font-bold">Choose a drill</button>
+            </div>
           </div>
         )}
       </div>
