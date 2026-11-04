@@ -1,0 +1,57 @@
+{
+  "base": "81e614f2e4716927cb8955e852a8b1bf37346b43",
+  "products": [
+    "src/lib/soccerCareerProgramme.ts",
+    "src/components/soccer-career/SoccerCareerProgramme.tsx"
+  ],
+  "files": [
+    "src/test/soccerProgrammeConditionalLoan.test.tsx"
+  ],
+  "cases": [
+    {
+      "fullName": "Soccer programme conditional loan chooses an 18 appearance condition through the native plan and completes the actual recorded loan season then reloads",
+      "baseline": "failed",
+      "marker": "SC_LOAN_CONDITIONAL_NATIVE"
+    },
+    {
+      "fullName": "Soccer programme conditional loan uses literal 18 and 26 league appearance boundaries rather than total appearances when sealing and completing",
+      "baseline": "failed",
+      "marker": "SC_LOAN_CONDITIONAL_BOUNDARIES"
+    },
+    {
+      "fullName": "Soccer programme conditional loan keeps the real parent return after a shortfall and records an honest missing or interrupted review",
+      "baseline": "failed",
+      "marker": "SC_LOAN_CONDITIONAL_RETURN"
+    },
+    {
+      "fullName": "Soccer programme conditional loan rechecks the matching sealed record and receipt before signing and cannot complete the same agreement twice",
+      "baseline": "failed",
+      "marker": "SC_LOAN_CONDITIONAL_PROOF"
+    },
+    {
+      "fullName": "Soccer programme conditional loan refuses unavailable and unreadable choices without signing deleting metadata or spending a draw",
+      "baseline": "passed",
+      "marker": null
+    },
+    {
+      "fullName": "Soccer programme conditional loan retains the complete ordinary season outputs and draw tapes for no choice and unconditional permanent moves",
+      "baseline": "passed",
+      "marker": null
+    }
+  ],
+  "rawEnv": {
+    "SC_LOAN_APPEARANCE_RAW": "sc"
+  },
+  "rawFiles": [
+    "sc/native-season.json",
+    "sc/literal-boundaries.json",
+    "sc/return-and-unavailable.json",
+    "sc/sealed-proof.json",
+    "sc/refused-state.json",
+    "sc/legacy-default.json"
+  ],
+  "heldRaw": [
+    "sc/refused-state.json",
+    "sc/legacy-default.json"
+  ]
+}
