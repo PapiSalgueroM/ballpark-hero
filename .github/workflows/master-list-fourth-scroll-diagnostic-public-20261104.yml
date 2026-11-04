@@ -1,0 +1,124 @@
+name: Fourth compiled App diagnostic on exact completed payload
+on:
+  push:
+    branches: [codex/master-list-fourth-scroll-diagnostic-public-20261104]
+permissions:
+  contents: read
+  actions: read
+env:
+  CI: '1'
+  SIM_NETWORK: offline
+  PLAYWRIGHT_BROWSERS_PATH: /home/runner/.cache/ms-playwright
+jobs:
+  browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          filter: blob:none
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - name: Hold exact source and admit the completed host-compatible build
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          OUT="$RUNNER_TEMP/master-list-fourth-scroll-diagnostic-public"
+          REF="$RUNNER_TEMP/popular-games-reference"
+          mkdir -p "$OUT/logs" "$OUT/transport" "$REF"
+          echo "QA_OUT=$OUT" >> "$GITHUB_ENV"
+          echo "QA_REF=$REF" >> "$GITHUB_ENV"
+          export QA_OUT="$OUT" QA_REF="$REF"
+          test "$(git rev-parse HEAD^)" = 060d3797944f1d9e77771fb58000ee3cf3f98fde
+          test "$(git rev-parse HEAD^^{tree})" = bfce7d9d0b4e3e36a7eedd8390c74d2d259256ac
+          test "$(git diff --name-status HEAD^ HEAD)" = $'A\t.github/workflows/master-list-fourth-scroll-diagnostic-public-20261104.yml'
+          git diff --exit-code 277b26fea891057af158e54fd85a2c97a9c69316 HEAD -- src public index.html package.json package-lock.json bun.lockb vite.config.ts
+          git diff --exit-code aedc51c257779aa156611ae7c74688980ad7e05b HEAD -- src public index.html package.json package-lock.json bun.lockb vite.config.ts
+          git rev-parse HEAD HEAD^{tree} > "$OUT/source.txt"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$OUT/source-before.sha256"
+          git status --porcelain=v1 --untracked-files=all > "$OUT/status-before.txt"
+          test ! -s "$OUT/status-before.txt"
+          cp .github/workflows/master-list-fourth-scroll-diagnostic-public-20261104.yml "$OUT/workflow.yml"
+          curl --fail --location --silent --show-error -H "Authorization: Bearer $GH_TOKEN" -H 'Accept: application/vnd.github+json' https://api.github.com/repos/PapiSalgueroM/ballpark-hero/actions/artifacts/13329580551 --output "$OUT/reference-meta.json"
+          curl --fail --location --silent --show-error -H "Authorization: Bearer $GH_TOKEN" -H 'Accept: application/vnd.github+json' https://api.github.com/repos/PapiSalgueroM/ballpark-hero/actions/jobs/126610500767 --output "$OUT/reference-job.json"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';const out=process.env.QA_OUT,m=JSON.parse(fs.readFileSync(out+'/reference-meta.json')),j=JSON.parse(fs.readFileSync(out+'/reference-job.json'));assert.equal(m.id,13329580551);assert.equal(m.expired,false);assert.equal(m.size_in_bytes,7715747);assert.equal(m.digest,'sha256:84ac1c7e43486d91bdda1c60f2030d83742199f281904cff303262bb46877870');assert.equal(m.workflow_run.id,41840500785);assert.equal(m.workflow_run.head_sha,'aedc51c257779aa156611ae7c74688980ad7e05b');assert.equal(j.id,126610500767);assert.equal(j.run_id,41840500785);assert.equal(j.head_sha,m.workflow_run.head_sha);assert.equal(j.status,'completed');assert.equal(j.conclusion,'failure');assert.deepEqual(j.steps.filter(s=>s.conclusion==='failure').map(s=>s.name),['Existing save and home guards, normal build, twenty readers and all unchanged page caps']);
+          NODE
+          curl --fail --location --silent --show-error -H "Authorization: Bearer $GH_TOKEN" -H 'Accept: application/vnd.github+json' https://api.github.com/repos/PapiSalgueroM/ballpark-hero/actions/artifacts/13329580551/zip --output "$OUT/reference-original.zip"
+          test "$(stat -c%s "$OUT/reference-original.zip")" = 7715747
+          echo "84ac1c7e43486d91bdda1c60f2030d83742199f281904cff303262bb46877870  $OUT/reference-original.zip" | sha256sum --check
+          unzip -q "$OUT/reference-original.zip" -d "$REF"
+          test "$(stat -c%s "$REF/completed-dist.tar.gz")" = 6992313
+          echo "d92534229621638e3910de09b47efe11fd999c02eca376ecd0e2fa700b6dd7e1  $REF/completed-dist.tar.gz" | sha256sum --check
+          echo "0d47b5e8fba3a0b12dfe82f105add9624b85c4d4463b32f6444e64e6095e6e61  $REF/dist-before.sha256" | sha256sum --check
+          tar -xzf "$REF/completed-dist.tar.gz" -C "$REF"
+          (cd "$REF" && sha256sum --check dist-before.sha256) > "$OUT/reference-dist-held.log"
+          cp "$REF/dist-before.sha256" "$OUT/reference-dist.sha256"
+      - name: Install held source and browser tooling outside dependency locks
+        run: |
+          set -euo pipefail
+          npm ci --no-audit --no-fund > "$QA_OUT/logs/npm-ci.log" 2>&1
+          npm install --prefix "$RUNNER_TEMP/top-games-browser-tools" --package-lock=false --no-audit --no-fund playwright@1.64.0 > "$QA_OUT/logs/playwright-install.log" 2>&1
+          test ! -e node_modules/playwright
+          test ! -e node_modules/playwright-core
+          ln -s "$RUNNER_TEMP/top-games-browser-tools/node_modules/playwright" node_modules/playwright
+          ln -s "$RUNNER_TEMP/top-games-browser-tools/node_modules/playwright-core" node_modules/playwright-core
+          "$RUNNER_TEMP/top-games-browser-tools/node_modules/.bin/playwright" install --with-deps chromium > "$QA_OUT/logs/chromium-install.log" 2>&1
+          git diff --exit-code HEAD -- package.json package-lock.json bun.lockb
+      - name: Generate source-held fixtures and play nine real feature journeys
+        run: |
+          set -euo pipefail
+          for file in masterListFourthFixtures masterListFourthBrowser scPrimaryRoleJourney cmRecoveryWeekJourney cmPlansNativeJourney; do node --check "scripts/qa/$file.mjs"; done
+          unset NODE_OPTIONS
+          : > "$QA_OUT/transport/fixtures.log"
+          SIM_OFFLINE_RECEIPT="$QA_OUT/transport/fixtures.log" node scripts/qa/masterListFourthFixtures.mjs --out "$QA_OUT/fixtures" --dist "$QA_REF/dist" --core 277b26fea891057af158e54fd85a2c97a9c69316 --sc-module scripts/qa/scPrimaryRoleJourney.mjs --cm-module scripts/qa/cmRecoveryWeekJourney.mjs > "$QA_OUT/logs/fixtures.log" 2>&1
+          test ! -s "$QA_OUT/transport/fixtures.log"
+          export SIM_OFFLINE_RECEIPT="$QA_OUT/transport/browser.log"
+          : > "$SIM_OFFLINE_RECEIPT"
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          export SWEEP_OFFLINE=1
+          : > "$QA_OUT/transport/server.log"
+          SIM_OFFLINE_RECEIPT="$QA_OUT/transport/server.log" node scripts/lib/hostLikeServer.mjs "$QA_REF/dist" 4174 > "$QA_OUT/logs/server.log" 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid" 2>/dev/null || true' EXIT
+          ready=0
+          for attempt in $(seq 1 40); do if curl --fail --silent http://127.0.0.1:4174/ > /dev/null; then ready=1; break; fi; kill -0 "$server_pid"; sleep 1; done
+          test "$ready" = 1
+          node scripts/qa/masterListFourthBrowser.mjs --base-url http://127.0.0.1:4174 --out "$QA_OUT/browser" --fixtures "$QA_OUT/fixtures" --dist "$QA_REF/dist" > "$QA_OUT/logs/browser.log" 2>&1
+          test ! -s "$QA_OUT/transport/browser.log"
+          test ! -s "$QA_OUT/transport/server.log"
+      - name: Always retain actual source and completed-dist holds
+        if: always()
+        run: |
+          set -euo pipefail
+          git diff --exit-code HEAD > "$QA_OUT/source-diff.txt"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$QA_OUT/source-after.sha256"
+          cmp "$QA_OUT/source-before.sha256" "$QA_OUT/source-after.sha256"
+          git status --porcelain=v1 --untracked-files=all > "$QA_OUT/status-after.txt"
+          cmp "$QA_OUT/status-before.txt" "$QA_OUT/status-after.txt"
+          if [[ -d "$QA_REF/dist" ]]; then
+            (cd "$QA_REF" && find dist -type f -print0 | sort -z | xargs -0 sha256sum) > "$QA_OUT/reference-dist-after.sha256"
+            cmp "$QA_OUT/reference-dist.sha256" "$QA_OUT/reference-dist-after.sha256"
+          fi
+      - name: Bound evidence
+        id: artifact
+        if: always()
+        run: |
+          set -euo pipefail
+          test "$(du -sb "$QA_OUT" | cut -f1)" -lt 150000000
+          echo 'ready=true' >> "$GITHUB_OUTPUT"
+      - uses: actions/upload-artifact@v4
+        if: ${{ always() && steps.artifact.outputs.ready == 'true' }}
+        with:
+          name: master-list-fourth-scroll-diagnostic-public
+          path: ${{ runner.temp }}/master-list-fourth-scroll-diagnostic-public
+          if-no-files-found: error
+          retention-days: 7
