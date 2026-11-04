@@ -1,0 +1,143 @@
+name: Master list seventh SC adjacent training
+on:
+  push:
+    branches: [codex/master-list-seventh-sc-adjacent-20261104]
+permissions:
+  contents: read
+env:
+  CI: '1'
+  SIM_NETWORK: offline
+jobs:
+  adjacent:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - name: Hold exact fixed app and unchanged adjacent sources
+        run: |
+          set -euo pipefail
+          OUT="$RUNNER_TEMP/master-list-seventh-sc-adjacent"
+          mkdir -p "$OUT/logs" "$OUT/transport" "$OUT/classic"
+          echo "QA_OUT=$OUT" >> "$GITHUB_ENV"
+          test "$(git rev-parse HEAD^)" = f04c7c8804349f9aee792e566221bb4c0b1bb0a5
+          test "$(git rev-parse HEAD^^{tree})" = 3e5868c5d75e158bf39d224f3e1934485cbc4057
+          test "$(git diff --name-status HEAD^ HEAD)" = $'A\t.github/workflows/master-list-seventh-sc-adjacent-20261104.yml'
+          node --input-type=module <<'JS'
+          import assert from 'node:assert/strict';
+          import {execFileSync} from 'node:child_process';
+          const pins={
+            'src/components/soccer-career/TrainingPanel.tsx':'c98cb31af7d9d4298b78ffe908b26d3bbec89906',
+            'src/components/soccer-career/PassingDecisionBoard.tsx':'ac438cb04641766b5a09be676afca5829daa2b1f',
+            'src/lib/soccerCareerEngine.ts':'e88d6f91744bf14ac1d1afd43bbb26be9f9e15db',
+            'src/lib/soccerCareerSave.ts':'86ec011693fd5bc702b5e8ccec05d27775a72a76',
+            'src/pages/SoccerCareer.tsx':'1f4d448cc9718bc3fa97b6987be5f14b27496c47',
+            'src/test/keeperTrainingPanel.test.tsx':'c779df9ca2dfe109b840a95fc3d32e264426acd6',
+            'src/test/trainingClassicPractice.test.tsx':'ea0ba5a61e5499b15cec36d1c2718ee0ad8cdf71',
+            'src/test/drillKeyboardRouting.test.tsx':'bbb738ba423f59f6041bdd7e2ecc80855f1fa869',
+            'src/test/trainingFeedbackMotion.test.tsx':'2ddc596d8587e6ab2689cc3bd33a020bf6a58e0e',
+            'scripts/simTrainingFeedbackMotion.mjs':'9bca78fede889ff2deef10143a15ba5ea3aed5d4'
+          };
+          for(const [file,want] of Object.entries(pins))assert.equal(execFileSync('git',['rev-parse','HEAD:'+file],{encoding:'utf8'}).trim(),want,file);
+          JS
+          git rev-parse HEAD HEAD^{tree} > "$OUT/source.txt"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$OUT/source-before.sha256"
+          test "$(wc -l < "$OUT/source-before.sha256")" = 5721
+          git status --porcelain=v1 --untracked-files=all > "$OUT/status-before.txt"
+          test ! -s "$OUT/status-before.txt"
+          cp .github/workflows/master-list-seventh-sc-adjacent-20261104.yml "$OUT/workflow.yml"
+          npm ci --no-audit --no-fund > "$OUT/logs/install.log" 2>&1
+          git diff --exit-code HEAD -- package.json package-lock.json bun.lockb
+      - name: Three unchanged consumers with exact52 outcome census
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          export SIM_OFFLINE_RECEIPT="$QA_OUT/transport/units.log"
+          export SC_CLASSIC_PRACTICE_RAW="$QA_OUT/classic"
+          export DRILL_KEYBOARD_RAW="$QA_OUT/keyboard.json"
+          : > "$SIM_OFFLINE_RECEIPT"
+          set +e
+          node_modules/.bin/vitest run src/test/keeperTrainingPanel.test.tsx src/test/trainingClassicPractice.test.tsx src/test/drillKeyboardRouting.test.tsx --reporter=json --outputFile="$QA_OUT/report.json" > "$QA_OUT/logs/units.log" 2>&1
+          native=$?
+          set -e
+          echo "$native" > "$QA_OUT/native-exit.txt"
+          test "$native" = 0
+          node --input-type=module <<'JS'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          import path from 'node:path';
+          const out=process.env.QA_OUT,read=file=>fs.readFileSync(path.join(out,file),'utf8'),r=JSON.parse(read('report.json'));
+          const expected={'src/test/keeperTrainingPanel.test.tsx':11,'src/test/trainingClassicPractice.test.tsx':6,'src/test/drillKeyboardRouting.test.tsx':35};
+          const files=r.testResults??[],rows=files.flatMap(file=>file.assertionResults??[]);
+          assert.equal(files.length,3);assert.equal(rows.length,52);assert.equal(new Set(rows.map(row=>row.fullName)).size,52);
+          for(const file of files){
+            const name=path.relative(process.cwd(),file.name).replaceAll('\\','/');
+            assert(name in expected,name);assert.equal(file.assertionResults.length,expected[name],name);
+          }
+          for(const row of rows){assert.equal(row.status,'passed',row.fullName);assert.deepEqual(row.failureMessages??[],[]);}
+          const counters={};
+          for(const key of ['numRuntimeErrorTestSuites','numUnhandledErrors']){counters[key]=key in r?r[key]:'UNKNOWN';if(key in r)assert.equal(r[key],0,key);}
+          const log=read('logs/units.log').replace(/\u001b\[[0-?]*[ -/]*[@-~]/g,'');
+          assert(!/Unhandled Errors|Unhandled Rejection|Uncaught Exception|Failed Suites|Failed to collect/.test(log));
+          assert.equal(fs.statSync(path.join(out,'transport/units.log')).size,0);
+          assert.deepEqual(fs.readdirSync(path.join(out,'classic')).sort(),['banked-repeat.json','free-keeper.json','free-passing.json','free-penalty.json','menu-free.json','rewarded-held.json']);
+          const keyboard=JSON.parse(read('keyboard.json'));assert.equal(keyboard.caseTitles.length,35);assert.equal(new Set(keyboard.caseTitles).size,35);assert.equal(Object.keys(keyboard.cases).length,35);
+          fs.writeFileSync(path.join(out,'admission.json'),JSON.stringify({status:'passed',files:expected,cases:52,runtimeCounters:counters,scope:'Three existing Panel consumers only. No new six-case, build, browser or full-suite credit.'},null,2)+'\n');
+          console.log('Three unchanged training files:52 exact cases passed,0 skipped or failed.');
+          JS
+      - name: Existing feedback normal and four effective binding controls
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          for control in normal unshot unmarker unresult unbank; do
+            export SIM_OFFLINE_RECEIPT="$QA_OUT/transport/feedback-$control.log"
+            : > "$SIM_OFFLINE_RECEIPT"
+            if [ "$control" = normal ]; then export TRAINING_FEEDBACK_CONTROL=; else export TRAINING_FEEDBACK_CONTROL="$control"; fi
+            set +e
+            node scripts/simTrainingFeedbackMotion.mjs > "$QA_OUT/logs/feedback-$control.log" 2>&1
+            native=$?
+            set -e
+            echo "$native" > "$QA_OUT/feedback-$control-exit.txt"
+            test "$native" = 0
+            test ! -s "$SIM_OFFLINE_RECEIPT"
+            if [ "$control" = normal ]; then
+              grep -F 'simTrainingFeedbackMotion: twelve actual-panel' "$QA_OUT/logs/feedback-$control.log"
+            else
+              grep -F "simTrainingFeedbackMotion $control:" "$QA_OUT/logs/feedback-$control.log"
+            fi
+          done
+      - name: Always hold full source status and lock files
+        if: always()
+        run: |
+          set -euo pipefail
+          test -n "${QA_OUT:-}"
+          git diff --exit-code HEAD > "$QA_OUT/source-diff.txt"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$QA_OUT/source-after.sha256"
+          cmp "$QA_OUT/source-before.sha256" "$QA_OUT/source-after.sha256"
+          git status --porcelain=v1 --untracked-files=all > "$QA_OUT/status-after.txt"
+          cmp "$QA_OUT/status-before.txt" "$QA_OUT/status-after.txt"
+          sha256sum --check "$QA_OUT/source-before.sha256" > "$QA_OUT/source-held.log"
+      - name: Bound retained evidence independently
+        id: artifact
+        if: always()
+        run: |
+          set -euo pipefail
+          test -n "${QA_OUT:-}"
+          test "$(du -sb "$QA_OUT" | cut -f1)" -lt 50000000
+          echo 'ready=true' >> "$GITHUB_OUTPUT"
+      - uses: actions/upload-artifact@v4
+        if: ${{ always() && steps.artifact.outputs.ready == 'true' }}
+        with:
+          name: master-list-seventh-sc-adjacent
+          path: ${{ runner.temp }}/master-list-seventh-sc-adjacent
+          if-no-files-found: error
+          retention-days: 7
