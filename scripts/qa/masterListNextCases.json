@@ -1,0 +1,101 @@
+{
+  "base": "14e888d72552248e3703d2ec65d1015ef3c887cc",
+  "files": [
+    "src/test/soccerTransferAppearanceFloor.test.tsx",
+    "src/test/frontOfficeDraftFocus.test.tsx",
+    "src/test/clubManagerCustomOdds.test.ts"
+  ],
+  "products": [
+    "src/lib/soccerCareerTransferBrief.ts",
+    "src/components/soccer-career/AgentBrief.tsx",
+    "src/lib/soccerCareerEngine.ts",
+    "src/lib/clubManager.ts",
+    "src/components/front-office/FrontOfficeBoard.tsx"
+  ],
+  "rawEnv": {
+    "SC_TRANSFER_FLOOR_RAW": "sc",
+    "FO_DRAFT_FOCUS_RAW": "fo",
+    "CM_CUSTOM_ODDS_RAW": "cm"
+  },
+  "rawFiles": [
+    "sc/native-save-sign.json",
+    "sc/priority-order.json",
+    "sc/empty-search.json",
+    "sc/unsupported-save.json",
+    "sc/sealed-response.json",
+    "sc/legacy-any.json",
+    "fo/entry.json",
+    "fo/back.json",
+    "cm/geometry.json",
+    "cm/saved-plan.json",
+    "cm/preset.json",
+    "cm/fallback.json"
+  ],
+  "cases": [
+    {
+      "fullName": "Soccer transfer appearance minimum saves a native projected minimum and signs the lower level club meeting its actual appearance band",
+      "baseline": "failed",
+      "marker": "SC_TRANSFER_FLOOR_NATIVE"
+    },
+    {
+      "fullName": "Soccer transfer appearance minimum filters actual appearance bands before home and club level priorities without changing the previewed save",
+      "baseline": "failed",
+      "marker": "SC_TRANSFER_FLOOR_ORDER"
+    },
+    {
+      "fullName": "Soccer transfer appearance minimum leaves an unmatched request and its existing offer untouched with zero draws and an honest explanation",
+      "baseline": "failed",
+      "marker": "SC_TRANSFER_FLOOR_EMPTY"
+    },
+    {
+      "fullName": "Soccer transfer appearance minimum preserves unreadable minimum versions values context and extra fields instead of silently running normal search",
+      "baseline": "failed",
+      "marker": "SC_TRANSFER_FLOOR_UNSUPPORTED"
+    },
+    {
+      "fullName": "Soccer transfer appearance minimum seals an actual response across reload and refuses repeat requests or changed brief choices",
+      "baseline": "passed",
+      "marker": null
+    },
+    {
+      "fullName": "Soccer transfer appearance minimum keeps the absent and explicit Any minimum identical to the old state offer and full draw vector",
+      "baseline": "passed",
+      "marker": null
+    },
+    {
+      "fullName": "NFL draft review keyboard focus moves from the selected prospect into its review without changing the draft",
+      "baseline": "failed",
+      "marker": "FO_DRAFT_REVIEW_ENTRY_FOCUS"
+    },
+    {
+      "fullName": "NFL draft review keyboard focus returns Back to the exact filtered-page prospect without changing the draft",
+      "baseline": "failed",
+      "marker": "FO_DRAFT_REVIEW_BACK_FOCUS"
+    },
+    {
+      "fullName": "Club Manager custom shape forecasts accounts for custom coordinates in the pre-match chance estimate",
+      "baseline": "failed",
+      "marker": "CM_CUSTOM_ODDS_GEOMETRY"
+    },
+    {
+      "fullName": "Club Manager custom shape forecasts keeps saved custom plan instructions duties and coordinates in the forecast after reload and apply",
+      "baseline": "failed",
+      "marker": "CM_CUSTOM_ODDS_SAVED_PLAN"
+    },
+    {
+      "fullName": "Club Manager custom shape forecasts preserves preset and exact-preset-coordinate estimates with zero draws",
+      "baseline": "passed",
+      "marker": null
+    },
+    {
+      "fullName": "Club Manager custom shape forecasts keeps unsupported or malformed geometry unchanged while using the existing fallback estimate",
+      "baseline": "passed",
+      "marker": null
+    }
+  ],
+  "heldRaw": [
+    "sc/legacy-any.json",
+    "cm/preset.json",
+    "cm/fallback.json"
+  ]
+}
