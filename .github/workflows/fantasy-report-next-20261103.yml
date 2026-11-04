@@ -1,0 +1,198 @@
+name: Next Fantasy and Soccer report focused qualification
+on:
+  push:
+    branches: [codex/fantasy-report-next-qa-retry2-20261104]
+permissions:
+  contents: read
+  actions: read
+jobs:
+  focused:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+      CORE: 6194f1dad597a063e490926ee1c295a746f91cf6
+      BUILD: 7776ac30bc29e244d4f5838ddb98bc253909e737
+      BUILD_TREE: ef3347bfa6451acd1ba0b4ba9ba881fdfb818b0d
+      ARTIFACT: 13289027722
+      ZIP_SHA: 413e470f02976dbb7566e08d087559ffa0c6aa9fb07db730543c0a0c80ff25ff
+      TAR_SHA: aa4162ca2690336c9e4d10152671fbbc6b195328d1ba796c139b292495f7accd
+      MANIFEST_SHA: d001c2073b01cfaa57b5fafcb761a12b74b8564a4abcec924480df6c1fe94ff5
+      DIST_DIGEST: 1d277297d2d91e06620986f59945cbdab054adf23df55998591cce51160f0abd
+      PLAYWRIGHT_BROWSERS_PATH: /home/runner/.cache/ms-playwright
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          filter: blob:none
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - name: Hold exact next source and the admitted completed build
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          OUT="$RUNNER_TEMP/fantasy-report-next"; PRIOR="$RUNNER_TEMP/next-built"
+          mkdir -p "$OUT/logs" "$OUT/units" "$OUT/raw" "$OUT/transport" "$PRIOR"
+          echo "QA_OUT=$OUT" >> "$GITHUB_ENV"
+          export QA_OUT="$OUT" QA_PRIOR="$PRIOR"
+          test -z "$(git status --porcelain=v1 --untracked-files=all)"
+          git rev-parse HEAD HEAD^{tree} > "$OUT/source.txt"
+          cp .github/workflows/fantasy-report-next-20261103.yml "$OUT/workflow.yml"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$OUT/source-before.sha256"
+          test "$(wc -l < "$OUT/source-before.sha256")" -eq 5678
+          curl -fLsS --retry 0 -H "Authorization: Bearer $GH_TOKEN" "https://api.github.com/repos/PapiSalgueroM/ballpark-hero/actions/artifacts/$ARTIFACT/zip" -o "$RUNNER_TEMP/next-build.zip"
+          echo "$ZIP_SHA  $RUNNER_TEMP/next-build.zip" | sha256sum --check
+          unzip -q "$RUNNER_TEMP/next-build.zip" -d "$PRIOR"
+          echo "$TAR_SHA  $PRIOR/completed-dist.tar.gz" | sha256sum --check
+          echo "$MANIFEST_SHA  $PRIOR/dist-manifest.json" | sha256sum --check
+          cp "$PRIOR/completed-dist.tar.gz" "$OUT/"
+          cp "$PRIOR/dist-manifest.json" "$OUT/"
+          cp "$PRIOR/association.json" "$OUT/build-association.json"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';import {execFileSync as git} from 'node:child_process';
+          const out=process.env.QA_OUT,prior=process.env.QA_PRIOR,ref=x=>git('git',['rev-parse',x]).toString().trim();
+          assert.equal(ref('HEAD^'),process.env.CORE);assert.equal(ref('HEAD^^{tree}'),'6d42fb1d9310436ffe60d77c228338d8962dcbcb');
+          const paths=['A\t.github/workflows/fantasy-report-next-20261103.yml','A\tscripts/qa/fantasyDraftBrowser20261102.mjs'];
+          assert.deepEqual(git('git',['diff','--name-status','HEAD^','HEAD']).toString().trim().split('\n').sort(),paths);
+          assert.equal(ref('HEAD:scripts/qa/fantasyDraftBrowser20261102.mjs'),'9c57d12d7f34cbccda1634034979ef66b46ba96e');
+          const a=JSON.parse(fs.readFileSync(prior+'/association.json')),p=JSON.parse(fs.readFileSync(prior+'/completed-dist-association.json'));assert.equal(a.source,process.env.BUILD);assert.equal(a.releaseCore,process.env.CORE);assert.equal(p.source,process.env.BUILD);assert.equal(p.tree,process.env.BUILD_TREE);assert.equal(p.applicationCore,process.env.CORE);assert.equal(p.distDigest,process.env.DIST_DIGEST);assert.equal(p.fileCount,845);assert.equal(p.tarBytes,6980817);assert.equal(p.tarSHA256,process.env.TAR_SHA);assert.equal(Object.keys(a.pins).length,22);for(const [file,pin]of Object.entries(a.pins))assert.equal(ref('HEAD:'+file),pin,file);
+          const sums=p=>Object.fromEntries(fs.readFileSync(p,'utf8').trim().split('\n').map(l=>[l.slice(66),l.slice(0,64)])),old=sums(prior+'/source-before.sha256'),now=sums(out+'/source-before.sha256'),oldWF='.github/workflows/next-popular-build-20261103.yml',skip=new Set(['.github/workflows/fantasy-report-next-20261103.yml','scripts/qa/fantasyDraftBrowser20261102.mjs']);
+          assert.equal(Object.keys(old).length,5677);assert.deepEqual(sums(prior+'/source-after.sha256'),old);
+          assert.deepEqual(Object.keys(old).filter(p=>p!==oldWF).sort(),Object.keys(now).filter(p=>!skip.has(p)).sort());
+          for(const p of Object.keys(old))if(p!==oldWF)assert.equal(now[p],old[p],p);
+          NODE
+          test ! -e dist
+          tar -xzf "$PRIOR/completed-dist.tar.gz"
+          find dist -type f -print0 | sort -z | xargs -0 sha256sum > "$OUT/dist-before.sha256"
+          cmp "$PRIOR/dist-before.sha256" "$OUT/dist-before.sha256"
+          for p in src/pages/FantasyDraft.tsx src/lib/fantasyCriteria.ts src/pages/SoccerCareer.tsx src/components/club-manager/WorldCompScreen.tsx; do git show "02ecc9672b3f9d69b6e64970cca25e3b5b796eb1:$p" > /dev/null; done
+      - name: Install tools and proper app types
+        run: |
+          set -euo pipefail
+          npm ci --no-audit --no-fund > "$QA_OUT/logs/install.log" 2>&1
+          npm install --prefix "$RUNNER_TEMP/tools" --no-audit --no-fund --package-lock=false playwright@1.64.0 >> "$QA_OUT/logs/install.log" 2>&1
+          ln -s "$RUNNER_TEMP/tools/node_modules/playwright" node_modules/playwright
+          ln -s "$RUNNER_TEMP/tools/node_modules/playwright-core" node_modules/playwright-core
+          "$RUNNER_TEMP/tools/node_modules/.bin/playwright" install --with-deps chromium >> "$QA_OUT/logs/install.log" 2>&1
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" SIM_OFFLINE_RECEIPT="$QA_OUT/transport/types" node_modules/.bin/tsc --noEmit -p tsconfig.app.json > "$QA_OUT/logs/types.log" 2>&1
+      - name: Existing39 plus two Cups cases and whole-original controls with exact restores
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import path from 'node:path';import assert from 'node:assert/strict';import crypto from 'node:crypto';import {spawnSync,execFileSync} from 'node:child_process';
+          const out=process.env.QA_OUT,sha=b=>crypto.createHash('sha256').update(b).digest('hex');
+          const sc={"Soccer Career safe rating report context describes creation without inventing a player or writing a career":"SC_RATING_REPORT_CONTEXT_CREATION","Soccer Career safe rating report context keeps stored and derived ratings distinct, omits personal data and never substitutes match rating for missing historical overall":"SC_RATING_REPORT_CONTEXT_MISMATCH","Soccer Career safe rating report context reports the current state after one real academy season without replaying progress":"SC_RATING_REPORT_CONTEXT_ADVANCE_BEFORE","Soccer Career safe rating report context keeps rating diagnostics safe on the real retirement ceremony phase":"SC_RATING_REPORT_CONTEXT_RETIREMENT","Soccer Career safe rating report context reports a real refused save and clears the flag after Retry without advancing the career":"SC_RATING_REPORT_CONTEXT_SAVE_FAILED","Soccer Career safe rating report context reports a real cross-tab move while preserving the newer tab save":"SC_RATING_REPORT_CONTEXT_SAVE_MOVED","Soccer Career safe rating report context reports an unreadable save without exposing or deleting its bytes":"SC_RATING_REPORT_CONTEXT_SAVE_ERROR"};
+          const fd={
+          'Fantasy Draft forms both starting XIs before settlement settles a balanced human draft against an AI with the same complete formation':'FD_FORMATION_AI_SETTLE_INPUT',
+          'Fantasy Draft forms both starting XIs before settlement rejects a fourth human forward while other formation slots remain open':'FD_FORMATION_FOURTH_FORWARD_BLOCKED',
+          'Fantasy Draft forms both starting XIs before settlement relaxes exhausted daily criteria only inside the remaining formation slots':'FD_FORMATION_NEEDED_POSITION_CRITERIA_RELAXED'};
+          const fdNatural={"Fantasy Draft forms both starting XIs before settlement rejects a fourth human forward while other formation slots remain open":{"head":"Error: expect(element).toBeDisabled()\n\nReceived element is not disabled:\n","stack":"/src/test/fantasyDraftFormation.test.tsx:153:59"},"Fantasy Draft forms both starting XIs before settlement relaxes exhausted daily criteria only inside the remaining formation slots":{"head":"Error: expect(element).toBeEnabled()\n\nReceived element is not enabled:\n","stack":"/src/test/fantasyDraftFormation.test.tsx:172:91"}};
+          const cups={'Club Manager lazy domestic cup summary keeps the entered-cup summary, bracket order and explicit overrides':'still alive. Next up','Club Manager lazy domestic cup summary keeps separate no-cup and nonparticipant summaries without a bracket':'There is no domestic cup'};
+          const files={'src/test/cmCupsLazySummary.test.tsx':2,'src/test/fantasyDraftFormation.test.tsx':3,'src/test/draftPoolFilters.test.tsx':7,'src/test/soccerCareerRatingReport.test.tsx':7,'src/test/reportContext.test.ts':5,'src/test/soccerCareerSaveRetry.test.tsx':8,'src/test/soccerCareerSaveFence.test.tsx':8},results=[];
+          function unit(name,selected,counts,red=null,filter=null){
+            const raw=out+'/raw/'+name;fs.mkdirSync(raw,{recursive:true});const report=out+'/units/'+name+'.json',args=['node_modules/vitest/vitest.mjs','run',...selected,'--maxWorkers=1','--minWorkers=1','--reporter=default','--reporter=json','--outputFile='+report];if(filter)args.push('-t',filter);
+            const run=spawnSync(process.execPath,args,{env:{...process.env,SC_RATING_REPORT_RAW:raw,SIM_OFFLINE_RECEIPT:out+'/transport/'+name},encoding:'utf8',timeout:240000,maxBuffer:33554432}),log=(run.stdout||'')+'\n'+(run.stderr||'');
+            fs.writeFileSync(out+'/logs/'+name+'.log',log);fs.writeFileSync(out+'/units/'+name+'.exit',String(run.status));
+            assert.equal(run.error,undefined);assert.equal(run.signal,null);assert.doesNotMatch(log,/Unhandled (?:Error|Rejection)|Vitest caught \d+ unhandled|uncaughtException|unhandledRejection|Transform failed|No test files found|Cannot find module/);
+            const r=JSON.parse(fs.readFileSync(report)),rows=r.testResults.flatMap(s=>s.assertionResults),active=rows.filter(x=>x.status!=='pending'&&x.status!=='skipped');
+            assert.equal(run.status,red?1:0);assert.equal(r.success,!red);assert.equal(active.length,Object.values(counts).reduce((a,b)=>a+b,0));assert.equal(r.numFailedTests,red?active.length:0);
+            for(const [file,n]of Object.entries(counts)){const suite=r.testResults.filter(s=>s.name.replaceAll('\\','/').endsWith('/'+file));assert.equal(suite.length,1);assert.equal(suite[0].assertionResults.filter(x=>x.status!=='pending'&&x.status!=='skipped').length,n);}
+            for(const row of active){assert.equal(row.status,red?'failed':'passed');if(red){assert(Object.hasOwn(red,row.fullName));assert(row.failureMessages.length>0&&row.failureMessages.every(m=>{const text=m.replace(/\x1b\[[0-9;]*m/g,'').trim(),natural=fdNatural[row.fullName];return text.includes(red[row.fullName])||(name==='fantasy-old'&&natural&&text.startsWith(natural.head)&&text.split('\n').some(line=>line.trim().startsWith('at ')&&line.trim().endsWith(natural.stack)));}));for(const m of row.failureMessages)assert.doesNotMatch(m.replace(/\x1b\[[0-9;]*m/g,'').trim(),/^(?:TypeError|ReferenceError|SyntaxError|TestingLibraryElementError)/);}else assert.deepEqual(row.failureMessages,[]);}
+            const counters={};for(const k of ['numRuntimeErrorTestSuites','numUnhandledErrors']){counters[k]=Object.hasOwn(r,k)?r[k]:null;if(counters[k]!==null)assert.equal(counters[k],0);}
+            if(!filter){assert.equal(r.numPendingTests,0);if(Object.hasOwn(r,'numTodoTests'))assert.equal(r.numTodoTests,0);}
+            results.push({name,nativeExit:run.status,passed:r.numPassedTests,failed:r.numFailedTests,unselected:rows.length-active.length,counters,missingCounters:'UNKNOWN',cases:active.map(x=>({name:x.fullName,status:x.status}))});return raw;
+          }
+          const fixedRaw=unit('fixed',Object.keys(files),files);
+          unit('score',['src/test/scoreShown.test.tsx'],{'src/test/scoreShown.test.tsx':1},null,'fantasy-draft');
+          const controls=[];
+          function oldControl(name,paths,selected,counts,markers){
+            const held=Object.fromEntries(paths.map(p=>[p,fs.readFileSync(p)]));let failure;
+            try{for(const p of paths){const bytes=execFileSync('git',['show','02ecc9672b3f9d69b6e64970cca25e3b5b796eb1:'+p],{maxBuffer:16777216});assert(!bytes.equals(held[p]));fs.writeFileSync(p,bytes);controls.push({name,path:p,fixedSHA:sha(held[p]),oldSHA:sha(bytes),changed:true});}unit(name+'-old',selected,counts,markers);}
+            catch(error){failure=error;}finally{for(const[p,bytes]of Object.entries(held)){fs.writeFileSync(p,bytes);assert(fs.readFileSync(p).equals(bytes));}}
+            const restored=unit(name+'-restored',selected,counts);if(name==='sc'){
+              const timePaths={"advance.json":[["observations","first","envelope","submittedAt"],["observations","second","envelope","submittedAt"]],"creation.json":[["observations","envelope","submittedAt"]],"mismatch.json":[["observations","observation","envelope","submittedAt"]],"retirement.json":[["observations","observation","envelope","submittedAt"]],"save-error.json":[["observations","envelope","submittedAt"]],"save-failed.json":[["observations","failed","envelope","submittedAt"],["observations","recovered","envelope","submittedAt"]],"save-moved.json":[["observations","observation","envelope","submittedAt"]]},masks=[],names=fs.readdirSync(fixedRaw).filter(n=>n.endsWith('.json')).sort();
+              assert.deepEqual(names,Object.keys(timePaths).sort());assert.deepEqual(fs.readdirSync(restored).filter(n=>n.endsWith('.json')).sort(),names);
+              for(const n of names){
+                const left=JSON.parse(fs.readFileSync(path.join(fixedRaw,n))),right=JSON.parse(fs.readFileSync(path.join(restored,n)));
+                for(const keys of timePaths[n]){
+                  let a=left,b=right;for(const key of keys.slice(0,-1)){assert(a&&b&&Object.hasOwn(a,key)&&Object.hasOwn(b,key),n+' exact generated-time path');a=a[key];b=b[key];}
+                  const key=keys.at(-1);assert(Object.hasOwn(a,key)&&Object.hasOwn(b,key),n+' generated time exists');
+                  const values=[a[key],b[key]];for(const value of values){assert.equal(typeof value,'string');assert.match(value,/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/);assert(Number.isFinite(Date.parse(value)));assert.equal(new Date(value).toISOString(),value);}
+                  masks.push({file:n,path:keys.join('.'),fixed:values[0],restored:values[1]});a[key]=b[key]='<validated generated submission time>';
+                }
+                assert.deepEqual(left,right,n+' full report restore except the recorded generated envelope submission time');
+              }
+              assert.equal(masks.length,9);fs.writeFileSync(out+'/sc-restore-submitted-times.json',JSON.stringify({masks,scope:'Only these nine canonical ISO envelope.submittedAt values are masked in comparison copies. Original raw bytes remain retained; every other field must be deeply equal.'},null,2)+'\n');
+            }if(failure)throw failure;
+          }
+          oldControl('fantasy',['src/pages/FantasyDraft.tsx','src/lib/fantasyCriteria.ts'],['src/test/fantasyDraftFormation.test.tsx'],{'src/test/fantasyDraftFormation.test.tsx':3},fd);
+          oldControl('sc',['src/pages/SoccerCareer.tsx'],['src/test/soccerCareerRatingReport.test.tsx'],{'src/test/soccerCareerRatingReport.test.tsx':7},sc);
+          oldControl('cups',['src/components/club-manager/WorldCompScreen.tsx'],['src/test/cmCupsLazySummary.test.tsx'],{'src/test/cmCupsLazySummary.test.tsx':2},cups);
+          fs.writeFileSync(out+'/unit-admission.json',JSON.stringify({uniqueHealthyCases:41,results,controls,scope:'Existing mounted cases only. Old-source rows are expected owned failures; restoration executions are not additional unique cases. Filtered score rows are explicitly unselected and uncredited.'},null,2)+'\n');
+          NODE
+      - name: Existing real-pool700 draft checks and both permanent controls
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          for mode in normal unfiltered noformation; do
+            flag="$mode"; if [ "$mode" = normal ]; then flag=''; fi
+            set +e
+            SIM_FDPOOL_CONTROL="$flag" SIM_OFFLINE_RECEIPT="$QA_OUT/transport/pool-$mode" node scripts/simFantasyDraftPool.mjs > "$QA_OUT/logs/pool-$mode.log" 2>&1
+            rc=$?
+            set -e
+            echo "$rc" > "$QA_OUT/units/pool-$mode.exit"
+            if [ "$mode" = noformation ]; then test "$rc" = 1; grep -E '^simFantasyDraftPool: CONTROL noformation FIRED: [1-9][0-9]* invalid XIs$' "$QA_OUT/logs/pool-$mode.log"
+            else test "$rc" = 0; if [ "$mode" = normal ]; then grep -F '700 of 700 drafts complete' "$QA_OUT/logs/pool-$mode.log"; grep -F 'simFantasyDraftPool: green.' "$QA_OUT/logs/pool-$mode.log"; else grep -F 'simFantasyDraftPool control: green. Unfiltered,' "$QA_OUT/logs/pool-$mode.log"; fi; fi
+          done
+      - name: Original44-pick actual Fantasy browser and its classifier controls
+        run: |
+          set -euo pipefail
+          echo 'Original Fantasy driver route policy retained: fallback fonts, declared local fixtures, all other external HTTP aborted. Only Node cases use the offline preload.' > "$QA_OUT/browser-policy.txt"
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" SIM_OFFLINE_RECEIPT="$QA_OUT/transport/server" node scripts/lib/hostLikeServer.mjs dist 4173 > "$QA_OUT/logs/server.log" 2>&1 &
+          server=$!; trap 'kill "$server" 2>/dev/null || true' EXIT
+          for n in $(seq 1 80); do if curl -fsS http://127.0.0.1:4173/fantasy-draft > /dev/null; then break; fi; sleep .25; done
+          set +e
+          BASE=http://127.0.0.1:4173 env -u NODE_OPTIONS node scripts/qa/fantasyDraftBrowser20261102.mjs > "$QA_OUT/logs/browser.log" 2>&1
+          rc=$?
+          set -e
+          echo "$rc" > "$QA_OUT/browser.exit"
+          test "$rc" = 0
+      - name: Always require source and completed payload holds
+        if: always()
+        run: |
+          set -euo pipefail
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$QA_OUT/source-after.sha256"
+          find dist -type f -print0 | sort -z | xargs -0 sha256sum > "$QA_OUT/dist-after.sha256"
+          git diff --binary HEAD > "$QA_OUT/source-diff.txt"
+          git status --porcelain=v1 --untracked-files=all > "$QA_OUT/status-after.txt"
+          cmp "$QA_OUT/source-before.sha256" "$QA_OUT/source-after.sha256"
+          cmp "$QA_OUT/dist-before.sha256" "$QA_OUT/dist-after.sha256"
+          echo "$TAR_SHA  $QA_OUT/completed-dist.tar.gz" | sha256sum --check
+          test ! -s "$QA_OUT/source-diff.txt"
+          test ! -s "$QA_OUT/status-after.txt"
+          for receipt in "$QA_OUT"/transport/*; do if [ -f "$receipt" ]; then test ! -s "$receipt"; fi; done
+      - name: Bound raw evidence independently
+        id: evidence
+        if: always()
+        run: |
+          set -euo pipefail
+          test -d "$QA_OUT"
+          test "$(du -sb "$QA_OUT" | cut -f1)" -lt 150000000
+          echo ready=true >> "$GITHUB_OUTPUT"
+      - uses: actions/upload-artifact@v4
+        if: ${{ always() && steps.evidence.outputs.ready == 'true' }}
+        with:
+          name: fantasy-report-next-${{ github.run_id }}
+          path: ${{ env.QA_OUT }}
+          if-no-files-found: error
+          retention-days: 7
+          compression-level: 6
