@@ -105,14 +105,20 @@ try{for(const width of[320,390,1280]){
   const opener=p.getByText(target.name,{exact:true}).locator('xpath=ancestor::button');
   r.focusJourney={entryTarget:'Draft review region',keyboard:width===1280,keys:[]};
   const press=async key=>{await p.keyboard.press(key);r.focusJourney.keys.push(key);};
+  const areaHandle=await combo.locator('xpath=../..').elementHandle();assert(areaHandle);
+  const measure=()=>areaHandle.evaluate(a=>{const b=a.getBoundingClientRect(),s=getComputedStyle(a);return{scroll:[scrollX,scrollY],height:b.height,top:b.top,bottom:b.bottom,clientHeight:a.clientHeight,scrollHeight:a.scrollHeight,scrollTop:a.scrollTop,style:a.getAttribute('style'),computedHeight:s.height,overflow:s.overflowY,anchor:s.overflowAnchor,docHeight:document.documentElement.scrollHeight,bodyHeight:document.body.scrollHeight,active:document.activeElement?.outerHTML?.slice(0,180)};});
+  await p.evaluate(()=>{window.__draftTrace=[];const keep=x=>{if(window.__draftTrace.length<80)window.__draftTrace.push({at:performance.now(),y:scrollY,...x});};window.addEventListener('scroll',e=>keep({kind:'scroll',target:e.target===document?'document':e.target?.tagName,top:e.target?.scrollTop}),true);for(const[name,owner]of[['focus',HTMLElement.prototype],['scrollIntoView',Element.prototype],['scrollTo',window]]){const fn=owner[name];owner[name]=function(...args){keep({kind:name,args,target:this?.tagName||'window',stack:new Error().stack?.split('\n').slice(1,5)});return Reflect.apply(fn,this,args);};}});
+  r.focusJourney.setupBefore=await measure();
   await opener.scrollIntoViewIfNeeded();await idle(p);
   if(width===1280){await opener.focus();assert.equal(await opener.evaluate(n=>n===document.activeElement),true,'FO_INITIAL_OPENER_FOCUSED');}
+  r.focusJourney.before=await measure();
   const entryScroll=await p.evaluate(()=>[scrollX,scrollY]);
   if(width===1280)await press('Enter');else await tap(p,r,opener);
   const review=p.getByRole('region',{name:'Draft review',exact:true});await review.waitFor({state:'visible'});
   await p.waitForFunction(()=>document.querySelector('section[aria-label="Draft review"]')===document.activeElement);
   assert.equal(await review.evaluate(n=>n===document.activeElement),true,'FO_PRODUCT_ENTRY_FOCUS');
   await idle(p);r.focusJourney.entryScroll={before:entryScroll,after:await p.evaluate(()=>[scrollX,scrollY])};
+  r.focusJourney.after=await measure();r.focusJourney.trace=await p.evaluate(()=>window.__draftTrace);await p.waitForTimeout(350);r.focusJourney.settled=await measure();
   assert.deepEqual(r.focusJourney.entryScroll.after,entryScroll,'FO_ENTRY_SCROLL_HELD');
   assert.equal(await save(p,f.key),bytes,'Review spends no pick');
   assert.equal(await review.getByText(target.name,{exact:true}).count(),1);
