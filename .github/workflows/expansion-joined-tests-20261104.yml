@@ -1,0 +1,86 @@
+name: Joined expansion regression outcomes
+on:
+  push:
+    branches: [codex/expansion-joined-focus-20261104]
+permissions:
+  contents: read
+env:
+  CI: '1'
+  SIM_NETWORK: offline
+jobs:
+  fixed:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          filter: blob:none
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - name: Hold exact source and dependencies
+        run: |
+          set -euo pipefail
+          OUT="$RUNNER_TEMP/expansion-joined-tests"
+          mkdir -p "$OUT/logs" "$OUT/raw"/{sc,cm,us,fo,payroll,hub} "$OUT/transport"
+          echo "QA_OUT=$OUT" >> "$GITHUB_ENV"
+          test "$(git rev-parse HEAD^)" = 089a41a99bce14b075393952a99bd79ec089c8fd
+          test "$(git rev-parse HEAD^^{tree})" = 281a0b827f3d7a5b32d0b385ca50d1ed113de4d5
+          git rev-parse HEAD HEAD^{tree} > "$OUT/source.txt"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$OUT/source-before.sha256"
+          git status --porcelain=v1 --untracked-files=all > "$OUT/status-before.txt"
+          test ! -s "$OUT/status-before.txt"
+          cp .github/workflows/expansion-joined-tests-20261104.yml "$OUT/workflow.yml"
+          npm ci --no-audit --no-fund > "$OUT/logs/install.log" 2>&1
+          git diff --exit-code HEAD -- package.json package-lock.json bun.lockb
+      - name: Proper types and real new plus adjacent outcomes
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          : > "$QA_OUT/transport/types.log"
+          SIM_OFFLINE_RECEIPT="$QA_OUT/transport/types.log" node_modules/.bin/tsc --noEmit -p tsconfig.app.json > "$QA_OUT/logs/types.log" 2>&1
+          export CM_TRAINING_EXPOSURE_RAW="$QA_OUT/raw/cm" SC_OFFER_NEGOTIATION_RAW="$QA_OUT/raw/sc" US_FREE_PRACTICE_RAW="$QA_OUT/raw/us" FO_DRAFT_PROSPECT_RAW="$QA_OUT/raw/fo" TYCOON_PAYROLL_RAW="$QA_OUT/raw/payroll" HUB_GAME_PICKS_RAW="$QA_OUT/raw/hub"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';import {spawnSync} from 'node:child_process';
+          const out=process.env.QA_OUT,receipt=out+'/transport/units.log';fs.writeFileSync(receipt,'');
+          const p=spawnSync(process.execPath,['node_modules/vitest/vitest.mjs','run',...["src/test/usCareerFreePractice.test.tsx","src/test/frontOfficeDraftAccess.test.tsx","src/test/tycoonPayrollBatch.test.tsx","src/test/hubGamePicks.test.tsx","src/test/soccerOfferNegotiationTarget.test.tsx","src/test/usCareerPractice.test.tsx","src/test/gamePicks.test.tsx","src/test/tycoonUpgradeBatch.test.tsx","src/test/tycoonSaveNotice.test.tsx","src/test/tycoonTicketPolicy.test.tsx","src/test/soccerCareerContracts.test.ts","src/test/soccerCareerProgrammeUi.test.tsx","src/test/clubManagerTrainingExposure.test.ts","src/components/front-office/FrontOfficeDraftCapital.test.tsx","src/test/clubManagerLoanDevelopment.test.ts","src/test/clubManagerLoanPlanIntegration.test.ts","src/test/clubManagerLoanPlanMounted.test.tsx","src/test/clubManagerSave.test.tsx","src/test/clubManagerSaveSize.test.tsx","src/test/clubManagerRetrainingPreview.test.tsx","src/lib/clubManagerTrajectory.test.ts","src/test/careerTrainingGround.test.tsx","src/test/trainingFeedbackMotion.test.tsx"],'--maxWorkers=1','--no-file-parallelism','--reporter=default','--reporter=json','--outputFile='+out+'/units.json'],{env:{...process.env,SIM_OFFLINE_RECEIPT:receipt},encoding:'utf8',timeout:900000,maxBuffer:32*1024*1024});
+          const log=(p.stdout||'')+'\n'+(p.stderr||'');fs.writeFileSync(out+'/logs/units.log',log);fs.writeFileSync(out+'/units.exit.json',JSON.stringify({status:p.status,signal:p.signal,error:p.error?String(p.error):null})+'\n');
+          assert(!p.error&&p.signal===null,'Native completion');assert.equal(p.status,0);
+          assert(!/Unhandled\s+(?:Error|Rejection)|Vitest caught [1-9]|uncaughtException|unhandledRejection/i.test(log));
+          const j=JSON.parse(fs.readFileSync(out+'/units.json')),rows=j.testResults.flatMap(s=>s.assertionResults);
+          assert(j.success);assert.equal(j.numFailedTests,0);assert.equal(j.numPendingTests,0);assert.equal(j.numTodoTests,0);assert.equal(rows.length,j.numPassedTests);
+          assert.equal(rows.length,343);assert(rows.every(r=>r.status==='passed'));assert.equal(j.testResults.length,23);
+          for(const name of ["US free practice after banking NBA repeats a banked drill without another reward or save","US free practice after banking NFL repeats a banked drill without another reward or save","US free practice after banking NBA reopens all four free drills with private randomness and unchanged career bytes","US free practice after banking NFL reopens all four free drills with private randomness and unchanged career bytes","US free practice after banking MLB keeps the existing post-bank lock without writes or random draws","US free practice after banking NHL keeps the existing post-bank lock without writes or random draws","NFL draft prospect access reaches all forty prospects through eighteen-row pages without changing the draft","NFL draft prospect access drafts a filtered prospect beyond the first page and preserves exact rival picks and draws","NFL draft prospect access resets a later page when the position changes and keeps empty groups safe","NFL draft prospect access holds the scouting directors grades and order without exposing true ratings","Stadium payroll batches holds one hire, unrelated fields, input and global draws","Stadium payroll batches buys five steward levels at their existing escalating prices","Stadium payroll batches buys only three affordable steward levels from341","Stadium payroll batches holds the existing staff cap and exact unaffordable no-ops","Stadium payroll batches quotes, hires and persists the affordable payroll batch from1000","Stadium payroll batches quotes, hires and persists the affordable payroll batch from341","Sport hub picks and Home pins from /soccer and restores the exact Home destination","Sport hub picks and Home pins from /pro-basketball and restores the exact Home destination","Sport hub picks and Home pins from /pro-football and restores the exact Home destination","Sport hub picks and Home unpins only the selected hub game and keeps the existing Home pick","Sport hub picks and Home uses the existing honest this-visit warning when a hub pin cannot be saved","Soccer selected offer negotiation selects offer B in the real plans screen, counters it, signs and reloads its exact wage","Soccer selected offer negotiation shortens the selected pending offer and retains the real agent wage and fee transforms","Soccer selected offer negotiation counters an expiry offer before applying the existing quoted loyalty contract and codec","Soccer selected offer negotiation records a rejected B attempt once while preserving both offers and leaving A available","Soccer selected offer negotiation refuses stale, outside, loan and invalid explicit targets without touching the current first offer","Soccer selected offer negotiation preserves omitted-target first-offer behavior through signing and the existing save codec","Club Manager recorded training exposure records the charged policy once per player and never charges a skipped night","Club Manager recorded training exposure uses the charged season instead of a last-week switch at the real summer rollover","Club Manager recorded training exposure preserves all nine constant-plan annual states and complete random tapes","Club Manager recorded training exposure applies the literal mixed-policy mean while keeping the current-plan forecast unchanged","Club Manager recorded training exposure keeps observations through real save/load and starts the next season with no inherited weeks","Club Manager recorded training exposure starts new signings and incoming loans at their own first charged week","Club Manager recorded training exposure freezes a loaned-out player while absent and resumes only his own count on recall","Club Manager recorded training exposure does not carry a previous employer or previous season into a new charged week","Club Manager recorded training exposure keeps missing, empty and unsupported history readable with no invented past observations"])assert.equal(rows.filter(r=>r.fullName===name&&r.status==='passed').length,1,name);
+          const census={sc:6,cm:9,us:6,fo:4,payroll:8,hub:8};for(const[folder,count]of Object.entries(census)){const paths=fs.readdirSync(out+'/raw/'+folder);assert.equal(paths.length,count,folder);for(const path of paths)JSON.parse(fs.readFileSync(out+'/raw/'+folder+'/'+path));}
+          fs.writeFileSync(out+'/fixed-admission.json',JSON.stringify({status:'fixed-outcomes',total:rows.length,newCases:36,files:j.testResults.length,nativeExit:0,runtimeErrors:j.numRuntimeErrors??'UNKNOWN',raw:census,scope:'Proper types, actual outcome tests and adjacent tests only. Build/browser/public pending.'},null,2)+'\n');
+          NODE
+      - name: Always require full source and offline holds
+        if: always()
+        run: |
+          set -euo pipefail
+          git diff --exit-code HEAD > "$QA_OUT/source-diff.txt"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$QA_OUT/source-after.sha256"
+          cmp "$QA_OUT/source-before.sha256" "$QA_OUT/source-after.sha256"
+          git status --porcelain=v1 --untracked-files=all > "$QA_OUT/status-after.txt"
+          cmp "$QA_OUT/status-before.txt" "$QA_OUT/status-after.txt"
+          for receipt in "$QA_OUT"/transport/*.log; do test ! -s "$receipt"; done
+      - name: Bound evidence
+        if: always()
+        id: artifact
+        run: |
+          set -euo pipefail
+          test "$(du -sb "$QA_OUT" | cut -f1)" -lt 50000000
+          echo 'ready=true' >> "$GITHUB_OUTPUT"
+      - uses: actions/upload-artifact@v4
+        if: ${{ always() && steps.artifact.outputs.ready == 'true' }}
+        with:
+          name: expansion-joined-tests
+          path: ${{ runner.temp }}/expansion-joined-tests
+          if-no-files-found: error
+          retention-days: 7
