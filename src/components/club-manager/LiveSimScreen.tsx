@@ -3,8 +3,9 @@ import { cn } from '@/lib/utils';
 import { Pause, Play, FastForward, Users, ArrowLeft, ArrowLeftRight, Gauge, X } from 'lucide-react';
 import {
   FORMATIONS, MENTALITIES, slotPosition, pitchLineOf, resolveXI, extraTimeCall,
-  liveFeed, liveStatsAt, myOnPitchAt, oppOnPitchAt, squadNumbers, benchFor, changeRoom, liveGoneIds, liveShapeAt,
+  liveStatsAt, myOnPitchAt, oppOnPitchAt, benchFor, changeRoom, liveGoneIds,
 } from '@/lib/clubManager';
+import { liveFeed, liveShapeAt, squadNumbers } from '@/lib/clubManagerLivePresentation';
 import type {
   CareerState, CMPlayer, LiveMatch, MatchWeekReport, MatchStats, Mentality, TalkTone,
   LiveChange, LiveFeedEvent, FormationSlot,

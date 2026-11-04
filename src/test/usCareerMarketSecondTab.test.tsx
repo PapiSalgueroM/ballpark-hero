@@ -13,7 +13,7 @@
  *   - a tab whose own write was refused (the save is BEHIND it) is not thrown back to the older saved talk.
  */
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { cleanup, fireEvent, render } from '@testing-library/react';
+import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 vi.mock('@/lib/completions', () => ({ recordCompletion: vi.fn(), recordActivity: vi.fn(), getCurrentPlayerName: () => 'Tester' }));
 vi.mock('@/lib/badges', () => ({ getNewlyEarnedBadges: () => Promise.resolve([]) }));
@@ -138,6 +138,7 @@ describe('a saved contract talk in two tabs', () => {
     /* the tab keeps ITS talk: the push stays spent on screen, and Sign still signs */
     expect(q<HTMLButtonElement>(a, '[data-fa-push="0"]')!.disabled).toBe(true);
     fireEvent.click(q(a, '[data-fa-sign="0"]')!);
+    if (sport.slug === 'nba' || sport.slug === 'nfl') fireEvent.click(screen.getByRole('button', { name: 'Confirm signing' }));
     expect(q(a, '[data-fa-window]')).toBeNull();
     expect(q(a, '[data-market-wheel]')).toBeNull();
   });

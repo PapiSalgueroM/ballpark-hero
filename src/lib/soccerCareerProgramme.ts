@@ -22,7 +22,7 @@ export interface SoccerProgrammeState {
   secondaryTraining?: { club: string; from: string; target: string; year: number; seasons: number };
   secondaryPosition?: { club: string; primary: string; position: string };
   negotiated?: { year: number; club: string; mode: string; accepted: boolean }[];
-  loanBuy?: { year: number; club: string; parent: string; ready: boolean };
+  loanBuy?: { year: number; club: string; parent: string; ready: boolean; minimumLeagueApps?: 18 | 26 };
 }
 export interface ProgrammeEffects {
   appsMult: number; injuryDelta: number; goalMult: number; assistMult: number;
@@ -42,9 +42,11 @@ const count = (value: unknown): value is number => Number.isSafeInteger(value) &
 const text = (value: unknown): value is string => typeof value === 'string' && value.trim().length > 0;
 const finite = (value: unknown): value is number => typeof value === 'number' && Number.isFinite(value);
 const clamp = (value: number, low: number, high: number) => Math.min(high, Math.max(low, value));
+const loanMinimum = (choice: string | undefined): 18 | 26 | undefined => choice === 'buy_18' ? 18 : choice === 'buy_26' ? 26 : undefined;
+const loanAppsKnown = (season: SeasonRecord) => count(season.apps) && count(season.leagueApps) && season.leagueApps <= season.apps;
 function validChoices(value: unknown): boolean {
   if (!value || typeof value !== 'object' || Array.isArray(value)) return false;
-  const known: Partial<Record<ProgrammeId, string[]>> = { tactics: ['finisher', 'creator', 'cover'], set_pieces: ['penalties', 'free_kicks'], promise: ['rotation', 'starter'], bonuses: ['appearances', 'goals', 'assists'], adaptation: ['settle', 'integrate'], fitness: ['managed', 'full'], captain: ['calm', 'rally'], loan: ['buy'] };
+  const known: Partial<Record<ProgrammeId, string[]>> = { tactics: ['finisher', 'creator', 'cover'], set_pieces: ['penalties', 'free_kicks'], promise: ['rotation', 'starter'], bonuses: ['appearances', 'goals', 'assists'], adaptation: ['settle', 'integrate'], fitness: ['managed', 'full'], captain: ['calm', 'rally'], loan: ['buy', 'buy_18', 'buy_26'] };
   return Object.entries(value).every(([id, choice]) => typeof choice === 'string' && IDS.includes(id as ProgrammeId) && (id === 'position' ? GROUPS.some(group => group.includes(choice)) : known[id as ProgrammeId]?.includes(choice)));
 }
 
@@ -60,7 +62,7 @@ function stateOf(career: CareerState): SoccerProgrammeState | null {
   if (state.plan && (!count(state.plan.year) || !text(state.plan.club) || !validChoices(state.plan.choices))) return null;
   if (state.secondaryTraining && (!text(state.secondaryTraining.club) || !text(state.secondaryTraining.from) || !text(state.secondaryTraining.target) || !count(state.secondaryTraining.year) || !count(state.secondaryTraining.seasons))) return null;
   if (state.secondaryPosition && (!text(state.secondaryPosition.club) || !text(state.secondaryPosition.primary) || !text(state.secondaryPosition.position))) return null;
-  if (state.loanBuy && (!count(state.loanBuy.year) || !text(state.loanBuy.club) || !text(state.loanBuy.parent) || typeof state.loanBuy.ready !== 'boolean')) return null;
+  if (state.loanBuy && (!count(state.loanBuy.year) || !text(state.loanBuy.club) || !text(state.loanBuy.parent) || typeof state.loanBuy.ready !== 'boolean' || ('minimumLeagueApps' in state.loanBuy && state.loanBuy.minimumLeagueApps !== 18 && state.loanBuy.minimumLeagueApps !== 26))) return null;
   return state;
 }
 function planOf(career: CareerState) {
@@ -163,7 +165,7 @@ function allowed(career: CareerState, id: ProgrammeId, choice: string, target?: 
   if (career.phase !== 'playing') return 'Plan this before the next club season.';
   const choices: Partial<Record<ProgrammeId, string[]>> = {
     tactics: ['finisher', 'creator', 'cover'], set_pieces: ['penalties', 'free_kicks'], promise: ['rotation', 'starter'],
-    bonuses: ['appearances', 'goals', 'assists'], adaptation: ['settle', 'integrate'], fitness: ['managed', 'full'], captain: ['calm', 'rally'], loan: ['buy'],
+    bonuses: ['appearances', 'goals', 'assists'], adaptation: ['settle', 'integrate'], fitness: ['managed', 'full'], captain: ['calm', 'rally'], loan: ['buy', 'buy_18', 'buy_26'],
   };
   if (id === 'position' && choice === 'adopt') return primaryRoleReason(career);
   if (id === 'position') return compatible(career.position, choice) ? null : 'Choose another position in your current position group.';
@@ -248,7 +250,11 @@ export function chooseProgramme(prev: CareerState, id: ProgrammeId, choice: stri
   if (old?.choices[id] === choice) return prev;
   programme.plan = { year, club: prev.currentClub, choices: { ...old?.choices, [id]: choice }, ...(old?.bonusEuros !== undefined ? { bonusEuros: old.bonusEuros } : {}) };
   if (id === 'bonuses') programme.plan.bonusEuros = Math.round(prev.weeklyWage * 4);
-  if (id === 'loan') programme.loanBuy = { year, club: prev.currentClub, parent: prev.loan!.parentClub, ready: false };
+  if (id === 'loan') {
+    const minimumLeagueApps = loanMinimum(choice);
+    programme.loanBuy = { year, club: prev.currentClub, parent: prev.loan!.parentClub, ready: false,
+      ...(minimumLeagueApps ? { minimumLeagueApps } : {}) };
+  }
   return state;
 }
 export function cancelProgramme(prev: CareerState, id: ProgrammeId, target?: ContractOffer): CareerState {
@@ -332,8 +338,19 @@ export function settleSoccerProgramme(career: CareerState, season: SeasonRecord)
   }
   if (pick.bonuses) receipt.outcomes.bonuses = receipt.bonusEuros > 0 ? `Your recorded target earned EUR ${receipt.bonusEuros.toLocaleString('en-US')}. Paid once.` : 'The recorded target was not met; no bonus was paid.';
   if (played && pick.adaptation === 'settle' && finite(career.morale)) { career.morale = clamp(career.morale + 5, 0, 100); receipt.outcomes.adaptation = 'The settling programme finished. Morale rose by 5.'; }
-  if (state.loanBuy && pick.loan === 'buy' && played && state.loanBuy.year === season.year && state.loanBuy.club === season.club && state.loanBuy.parent === career.loan?.parentClub) state.loanBuy.ready = true;
-  else if (pick.loan) delete state.loanBuy;
+  const minimum = loanMinimum(pick.loan);
+  if (state.loanBuy && (pick.loan === 'buy' || minimum !== undefined) && played && state.loanBuy.year === season.year && state.loanBuy.club === season.club && state.loanBuy.parent === career.loan?.parentClub) {
+    if (pick.loan === 'buy') state.loanBuy.ready = true;
+    else {
+      const agreed = state.loanBuy.minimumLeagueApps === minimum;
+      const known = loanAppsKnown(season);
+      state.loanBuy.ready = agreed && known && season.leagueApps! >= minimum!;
+      receipt.outcomes.loan = !agreed ? 'The saved loan condition did not match this choice. No permanent deal was completed.'
+        : !known ? `The ${minimum}-appearance loan review has unavailable league data. No permanent deal was completed; the parent-club return remains.`
+        : state.loanBuy.ready ? `${minimum}-appearance loan condition met: ${season.leagueApps} league appearances. The permanent deal is checked at the loan review.`
+        : `${minimum}-appearance loan condition not met: ${season.leagueApps} league appearances. The parent-club return remains.`;
+    }
+  } else if (pick.loan) delete state.loanBuy;
   season.programme = receipt;
   state.receipts = [...state.receipts, receipt];
   delete state.plan;
@@ -345,6 +362,16 @@ export function completeProgrammeLoanBuy(career: CareerState, club: ClubData): b
   const buy = existing?.loanBuy;
   const last = career.seasons[career.seasons.length - 1];
   if (!existing || !buy?.ready || !career.loan || buy.parent !== career.loan.parentClub || buy.club !== career.currentClub || club.name !== career.currentClub || last?.year !== buy.year || last.club !== buy.club || last.type !== 'playing' || !count(last.apps) || last.apps === 0 || last.injurySevere) return false;
+  const minimum = buy.minimumLeagueApps;
+  const proof = existing.receipts.filter(row => row.year === buy.year && row.club === buy.club);
+  const conditional = proof.some(row => loanMinimum(row.choices.loan) !== undefined) || loanMinimum(last.programme?.choices?.loan) !== undefined;
+  if (minimum !== undefined || conditional) {
+    const choice = minimum === 18 ? 'buy_18' : 'buy_26';
+    if (minimum === undefined || proof.length !== 1 || proof[0].status !== 'completed'
+      || proof[0].choices.loan !== choice || !last.programme || last.programme.choices?.loan !== choice
+      || JSON.stringify(last.programme) !== JSON.stringify(proof[0])
+      || !loanAppsKnown(last) || last.leagueApps! < minimum) return false;
+  }
   if (!text(club.country) || !text(club.league) || !text(club.color) || !count(club.tier) || club.tier < 1 || !finite(career.weeklyWage) || career.weeklyWage <= 0) return false;
   const state = detach(career, existing);
   career.loan = null;
@@ -356,7 +383,7 @@ export function completeProgrammeLoanBuy(career: CareerState, club: ClubData): b
   Object.assign(career, closeLoyaltyForEmployer(career, club.name));
   delete state.loanBuy;
   const receipt = [...state.receipts].reverse().find(row => row.year === buy.year && row.club === buy.club);
-  if (receipt) receipt.outcomes.loan = `The loan became a permanent two-year contract at ${club.name}, keeping EUR ${career.weeklyWage.toLocaleString('en-US')} a week.`;
+  if (receipt) receipt.outcomes.loan = `The loan became a permanent two-year contract at ${club.name}, keeping EUR ${career.weeklyWage.toLocaleString('en-US')} a week.${minimum !== undefined ? ` Your ${minimum}-appearance condition was met with ${last.leagueApps} league appearances.` : ''}`;
   if (last.programme) last.programme.outcomes.loan = receipt?.outcomes.loan ?? 'The permanent contract was completed.';
   return true;
 }
@@ -375,7 +402,7 @@ const DEFINITIONS: { id: ProgrammeId; title: string; description: string; choice
   { id: 'adaptation', title: 'New club adaptation', description: 'Choose how to handle your first season after a club change.', choices: [['settle', 'Settle in first', '5 morale after a played year.', '5% fewer planned appearances.'], ['integrate', 'Push for a place', '4% more planned appearances.', 'Injury chance rises by 1 percentage point.']] },
   { id: 'fitness', title: 'Return to fitness', description: 'Choose your next-season workload after a recorded serious injury.', choices: [['managed', 'Managed return', 'Injury chance falls by 3 percentage points.', '10% fewer planned appearances.'], ['full', 'Full workload', '4% more planned appearances.', 'Injury chance rises by 3 percentage points.']] },
   { id: 'captain', title: 'Captain duties', description: 'Turn the current club armband into a leadership approach.', choices: [['calm', 'Keep the team calm', '20% lower expected yellow and red card rates.', '2% fewer planned appearances.'], ['rally', 'Lead from the front', '4% more planned appearances.', '10% more expected yellow cards.']] },
-  { id: 'loan', title: 'Loan option to stay', description: 'Arrange a permanent deal at your loan club after a played season.', choices: [['buy', 'Make the move permanent', 'A two-year deal at the same weekly wage replaces the normal loan return.', 'The parent-club return is cancelled. An interrupted year cannot complete the deal.']] },
+  { id: 'loan', title: 'Loan option to stay', description: 'Choose an unconditional deal or require actual league appearances at this loan season review.', choices: [['buy', 'Make the move permanent', 'A two-year deal at the same weekly wage replaces the normal loan return.', 'The parent-club return is cancelled. An interrupted year cannot complete the deal.'], ['buy_18', 'Stay after 18 league appearances', 'Stay on a two-year deal at the same weekly wage only after at least 18 recorded league appearances this loan season.', 'Cup appearances do not count. A shortfall or unavailable proof keeps the existing parent-club return.'], ['buy_26', 'Stay after 26 league appearances', 'Stay on a two-year deal at the same weekly wage only after at least 26 recorded league appearances this loan season.', 'Cup appearances do not count. A shortfall or unavailable proof keeps the existing parent-club return.']] },
 ];
 export function programmeOptions(career: CareerState, negotiationTarget?: ContractOffer): ProgrammeView[] {
   const plan = planOf(career);
