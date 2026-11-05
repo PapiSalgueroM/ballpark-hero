@@ -1,3 +1,4 @@
+import { MAX_WORLD_NAMES, hasSoccerHistoricalPlayer, readSoccerHistoricalArrivals } from './soccerHistoricalArrivals';
 /* ─── Round 130: the phone stops being a one shot novelty ───────────────────
 
    What Round 80 shipped: a text arrived between seasons, you picked one of two
@@ -49,7 +50,7 @@ export const MAX_LINES = 6;    // lines kept per thread (three exchanges of hist
 export const MAX_THREADS = 8;  // threads kept, oldest resting one drops first
 export const MAX_FEED = 12;    // sports feed items kept
 export const MAX_PERKS = 6;    // stat perks a whole career can ever collect
-export const MAX_WORLD_NAMES = 28; // entries kept in the who plays where map
+export { MAX_WORLD_NAMES }; // Same bounded who-plays-where map.
 export const MAX_SEEN = 8;     // convo ids remembered per contact
 
 /* ─── types ─── */
@@ -1586,10 +1587,10 @@ function leaguePhrase(name: string): string {
 }
 
 /** Keep the who plays where map from growing for the length of a career. */
-function pruneClubs(p: PhoneState): void {
+function pruneClubs(p: PhoneState, s: CareerState): void {
   const keys = Object.keys(p.clubs);
   if (keys.length <= MAX_WORLD_NAMES) return;
-  const drop = keys.slice(0, keys.length - MAX_WORLD_NAMES);
+  const drop = keys.filter(k => !hasSoccerHistoricalPlayer(s, k)).slice(0, keys.length - MAX_WORLD_NAMES);
   for (const k of drop) delete p.clubs[k];
 }
 
@@ -1651,7 +1652,11 @@ export function worldSeasonTick(
      every one of them sits at the club his era pool gives for this season
      (careerEras.ts), which is where the Ballon d'Or night finds him too
      (worldClubOf). Generated names are seeded once, as before. */
-  for (const st of stars) if (realNames || !p.clubs[st.name]) p.clubs[st.name] = st.club;
+  // Registered arrivals keep the career's saved club across era-table changes.
+  for (const st of stars) {
+    const entry = hasSoccerHistoricalPlayer(s, st.name) ? readSoccerHistoricalArrivals(s)!.players[0] : undefined;
+    if ((realNames && !entry) || !p.clubs[st.name]) p.clubs[st.name] = entry?.entryClub ?? st.club;
+  }
 
   /* Transfers. Two to four of the era's names change clubs, and this map is
      the only place the answer lives, so nothing can contradict it later. */
@@ -1790,7 +1795,7 @@ export function worldSeasonTick(
   p.feed = [...p.feed, ...items].slice(-MAX_FEED);
   p.rivalClub = s.rival && !s.rival.retired ? s.rival.club : null;
   p.seed = rng.state;
-  pruneClubs(p);
+  pruneClubs(p, s);
   writePhone(s, p);
   return world;
 }

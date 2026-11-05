@@ -1,5 +1,6 @@
 // Soccer Career Simulation Engine v2, Youth Academy + Pro System
 
+import { recordSoccerHistoricalArrivals, type SoccerHistoricalArrivals } from './soccerHistoricalArrivals';
 import { rollCareerChance, type CareerChanceWheelReceipt } from '@/lib/careerChanceWheel';
 import { CAPTAIN_MIN_AGE, CAPTAIN_MIN_RATING } from '@/lib/captaincy';
 import type { SoccerAgentReview } from './soccerAgentReview';
@@ -924,6 +925,7 @@ export interface CareerStorySeason {
 }
 
 export interface CareerState {
+  historicalArrivals?: SoccerHistoricalArrivals;
   /** Round 1180: one optional personal target for the next club season. */
   seasonAmbition?: CareerSeasonAmbition;
   seasonPreparation?: CareerPreparationPlan;
@@ -1876,6 +1878,7 @@ export function applyRehabChoice(prev: CareerState, choiceIndex: number): Career
     row.injury = r.name; row.injuryWeeks = r.weeks; row.injurySevere = true;
     if (s.loan) row.onLoanFrom = s.loan.parentClub;
     s.seasons = [...s.seasons, row];
+    recordSoccerHistoricalArrivals(s, s.seasons[s.seasons.length - 1].year);
     settleSoccerPress(s, row);
     simulateSeasonFinances(s, row);
     runTournamentSummer(s, row, row.year, true);
@@ -5050,6 +5053,7 @@ export function advanceYouthYear(prev: CareerState, clubs: ClubData[]): CareerSt
     leagueTitle: false, domesticCup: false, championsLeague: false, worldCup: false, ballonDor: false, ballonDorRank: null, type: "youth",
     intApps: 0, intGoals: 0, intAssists: 0, intRating: 0, tournament: null, tournamentResult: null,
   }];
+  recordSoccerHistoricalArrivals(s, s.seasons[s.seasons.length - 1].year);
   s.events.push(`📈 Stats improved during youth development (OVR ${s.overall})`);
   /* Round 134: the market has a season even while you are still in the
      academy. It has to, or a sixteen year old who opens the Market tile sees
@@ -5344,6 +5348,7 @@ export function advanceProSeason(prev: CareerState, clubs: ClubData[]): CareerSt
         leagueTitle: false, domesticCup: false, championsLeague: false, worldCup: false, ballonDor: false, ballonDorRank: null, type: "playing",
         intApps: 0, intGoals: 0, intAssists: 0, intRating: 0, tournament: null, tournamentResult: null,
       }];
+      recordSoccerHistoricalArrivals(s, s.seasons[s.seasons.length - 1].year);
       s.pendingSummary = s.seasons[s.seasons.length - 1];
       settleReducedRole(s, s.pendingSummary);
       interruptSoccerProgramme(s, s.pendingSummary);
@@ -5377,6 +5382,7 @@ export function advanceProSeason(prev: CareerState, clubs: ClubData[]): CareerSt
       leagueTitle: false, domesticCup: false, championsLeague: false, worldCup: false, ballonDor: false, ballonDorRank: null, type: "playing",
       intApps: 0, intGoals: 0, intAssists: 0, intRating: 0, tournament: null, tournamentResult: null,
     }];
+    recordSoccerHistoricalArrivals(s, s.seasons[s.seasons.length - 1].year);
     s.pendingSummary = s.seasons[s.seasons.length - 1];
     settleReducedRole(s, s.pendingSummary);
     interruptSoccerProgramme(s, s.pendingSummary);
@@ -5442,6 +5448,7 @@ export function advanceProSeason(prev: CareerState, clubs: ClubData[]): CareerSt
        calendar fell a year behind his age (the prison row comes the year
        after). A tournament that summer is played without him. */
     s.seasons = [...s.seasons, yearOutRow(s, "CONVICTED")];
+    recordSoccerHistoricalArrivals(s, s.seasons[s.seasons.length - 1].year);
     settleSoccerPress(s, s.seasons[s.seasons.length - 1]);
     simulateSeasonFinances(s, s.seasons[s.seasons.length - 1]);
     runTournamentSummer(s, s.seasons[s.seasons.length - 1], s.seasons[s.seasons.length - 1].year, true);
@@ -5488,6 +5495,7 @@ export function advanceProSeason(prev: CareerState, clubs: ClubData[]): CareerSt
         leagueTitle: false, domesticCup: false, championsLeague: false, worldCup: false, ballonDor: false, ballonDorRank: null, type: "playing",
         intApps: 0, intGoals: 0, intAssists: 0, intRating: 0, tournament: null, tournamentResult: null,
       }];
+      recordSoccerHistoricalArrivals(s, s.seasons[s.seasons.length - 1].year);
       s.pendingSummary = s.seasons[s.seasons.length - 1];
       settleReducedRole(s, s.pendingSummary);
       interruptSoccerProgramme(s, s.pendingSummary);
@@ -5529,6 +5537,7 @@ export function advanceProSeason(prev: CareerState, clubs: ClubData[]): CareerSt
       leagueTitle: false, domesticCup: false, championsLeague: false, worldCup: false, ballonDor: false, ballonDorRank: null, type: "retired",
       intApps: 0, intGoals: 0, intAssists: 0, intRating: 0, tournament: null, tournamentResult: null,
     }];
+    recordSoccerHistoricalArrivals(s, s.seasons[s.seasons.length - 1].year);
     endClubCaptaincy(s, "retirement");
     if (s.rival) s.rivalrySummary = generateRivalrySummary(s);
     s.legacy = calculateLegacy(s);
@@ -5646,6 +5655,7 @@ function playPendingProSeason(s: CareerState, clubs: ClubData[]): CareerState {
       const injuryRow: SeasonRecord = { ...season, leagueTitle: false, leagueFinish: undefined, leagueSize: undefined, domesticCup: false };
       if (s.loan) injuryRow.onLoanFrom = s.loan.parentClub;
       s.seasons = [...s.seasons, injuryRow];
+      recordSoccerHistoricalArrivals(s, s.seasons[s.seasons.length - 1].year);
       settleReducedRole(s, injuryRow);
       settleSoccerPress(s, injuryRow);
       simulateSeasonFinances(s, injuryRow);
@@ -5969,6 +5979,7 @@ function playPendingProSeason(s: CareerState, clubs: ClubData[]): CareerState {
     s.popularity = clamp(s.popularity + 3, 0, 100);
   }
   s.seasons = [...s.seasons, season];
+  recordSoccerHistoricalArrivals(s, s.seasons[s.seasons.length - 1].year);
   settleReducedRole(s, season);
   /* Round 257: a freeze out is one season long. It is served here, after the
      season it crushed has been recorded, so the next window opens on a man
@@ -6442,6 +6453,7 @@ export function dismissNewspaper(prev: CareerState): CareerState {
     if (lastRow && lastRow.age < s.age) {
       s.events = [...s.events];
       s.seasons = [...s.seasons, yearOutRow(s, "CONVICTED")];
+      recordSoccerHistoricalArrivals(s, s.seasons[s.seasons.length - 1].year);
       settleSoccerPress(s, s.seasons[s.seasons.length - 1]);
       simulateSeasonFinances(s, s.seasons[s.seasons.length - 1]);
       runTournamentSummer(s, s.seasons[s.seasons.length - 1], s.seasons[s.seasons.length - 1].year, true);
@@ -8898,6 +8910,7 @@ export function choosePostRetirement(prev: CareerState, choice: PostRetirementCh
  */
 function applyRetirementMoneySeason(s: CareerState, seasonsSinceRetiring: number): void {
   const year = (s.seasons[s.seasons.length - 1]?.year ?? 2024) + Math.max(1, seasonsSinceRetiring);
+  recordSoccerHistoricalArrivals(s, year);
   const tick = moneySeasonTick(s, year);
   if (tick.events.length > 0) s.events = [...s.events, ...tick.events];
 }
@@ -8920,6 +8933,7 @@ export function acceptRetirementSuggestion(prev: CareerState): CareerState {
     leagueTitle: false, domesticCup: false, championsLeague: false, worldCup: false, ballonDor: false, ballonDorRank: null, type: "retired",
     intApps: 0, intGoals: 0, intAssists: 0, intRating: 0, tournament: null, tournamentResult: null,
   }];
+  recordSoccerHistoricalArrivals(s, s.seasons[s.seasons.length - 1].year);
   endClubCaptaincy(s, "retirement");
   if (s.rival) s.rivalrySummary = generateRivalrySummary(s);
   s.legacy = calculateLegacy(s);

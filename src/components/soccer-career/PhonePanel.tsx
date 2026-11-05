@@ -20,6 +20,8 @@
    bottom of the handset and the message list scrolls itself to the newest line
    after every tap, so the answer you just got is already on screen. The page
    behind the overlay is never touched. */
+import { readSoccerHistoricalArrivals } from "@/lib/soccerHistoricalArrivals";
+import { worldClubOf } from "@/lib/soccerPhone";
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { focusDialogOnMount, escapeCloses } from '@/lib/dialogA11y';
 import type { CareerState, PhoneMessage } from "@/lib/soccerCareerEngine";
@@ -237,7 +239,7 @@ export default function PhonePanel({ career, onAnswer, onMoney, onBuyItem, onClo
         <div className="absolute top-1.5 left-1/2 -translate-x-1/2 w-24 h-5 bg-zinc-900 rounded-full z-20" />
         {/* status bar */}
         <div className="flex items-center justify-between px-5 pt-8 pb-1 text-[10px] text-white/70 font-bold shrink-0">
-          <span>{year} · age {career.age}</span>
+          <span>{career.retired && readSoccerHistoricalArrivals(career) ? <>Retired · player record {year}</> : <>{year} · age {career.age}</>}</span>
           <span className={st.color}>{st.emoji} {standing}</span>
           <span>📶 🔋</span>
         </div>
@@ -377,6 +379,14 @@ export default function PhonePanel({ career, onAnswer, onMoney, onBuyItem, onClo
               <AppHeader title="📰 SportsFeed" backLabel="Home" onBack={() => setApp("home")} />
               <div className="flex-1 overflow-y-auto p-2.5 space-y-2">
                 <p className="text-[10px] text-white/40 text-center pb-1">World football. Nothing about you in here.</p>
+                {readSoccerHistoricalArrivals(career)?.players.length === 1 && (
+                  <section aria-label="Real player arrivals" className="rounded-lg bg-white/5 border border-white/10 px-3 py-2 text-[11px] leading-snug space-y-1">
+                    <p className="font-bold">Neymar</p>
+                    <p>Senior debut: Santos FC, 7 March 2009. Brazil. Attacker. Age 17 at his debut.</p>
+                    <p>Career world: {worldClubOf(career, 'Neymar') ?? 'Not recorded'}. This club belongs to your save. Development and results are simulated.</p>
+                    <p className="text-white/60">Calendar year entry. Sources: <a className="underline" href="https://www.santosfc.com.br/memoria-em-partida-oficial-neymar-fazia-a-estreia-com-a-camisa-do-santos-fc/" target="_blank" rel="noreferrer">Santos FC</a>, <a className="underline" href="https://ge.globo.com/Esportes/Noticias/Times/Santos/0,,MUL1033491-9874,00.html" target="_blank" rel="noreferrer">Globo</a>.</p>
+                  </section>
+                )}
                 {feed.length === 0 && <p className="text-center text-xs text-white/50 py-8">Quiet window. Check back after the season.</p>}
                 {feed.map((e, i) => (
                   <div key={i} className="rounded-lg bg-white/5 border border-white/10 px-3 py-2 text-[11px] leading-snug">{e}</div>
