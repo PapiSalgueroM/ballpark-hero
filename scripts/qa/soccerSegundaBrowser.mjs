@@ -31,7 +31,7 @@ async function inventory(){const rows=[];async function walk(rel=''){for(const e
 assert.deepEqual(await inventory(),m.distBefore);assert.equal(sha(JSON.stringify(m.distBefore)),m.distDigest);
 const assetReference=new Map(m.distBefore.filter(row=>row.file.startsWith('assets/')||row.file==='prerender-boot.js').map(row=>[row.file,row])),observedAssets=new Map();
 assert(assetReference.has('prerender-boot.js'),'Completed artifact retains the actual boot reference');
-const report={status:'incomplete',mode:publicMode?'public':'local',core:m.core,distDigest:m.distDigest,cupRuntime:{file:m.cupRuntime.file,sha256:m.cupRuntime.sha256,scope:'Retained separate Node season qualification only. Observer and copied control bundles are never page-injected.'},contexts:[],screenshots:[],scope:'Three Soccer Career contexts: real Andorra2026 creation/build50/youth/parent-signing, then separately declared Copa/legacy/palette saves. Actual browser RNG and clock. Production acceptance/load helpers supply exact saved-frame references. Unit outcomes own deterministic draws. No naturally delivered declared fixture, provider availability, full career, full format or master-card completion claim.'};
+const report={status:'incomplete',mode:publicMode?'public':'local',core:m.core,distDigest:m.distDigest,cupRuntime:{file:m.cupRuntime.file,sha256:m.cupRuntime.sha256,scope:'Retained separate Node season qualification only. Observer and copied control bundles are never page-injected.'},contexts:[],screenshots:[],auxiliaryPhotos:[],scope:'Three Soccer Career contexts: real Andorra2026 creation/build50/youth/parent-signing, then separately declared Copa/legacy/palette saves. Actual browser RNG and clock. Production acceptance/load helpers supply exact saved-frame references. Unit outcomes own deterministic draws. No naturally delivered declared fixture, provider availability, full career, full format or master-card completion claim.'};
 const known=new Set(['https://flagcdn.com','https://fonts.googleapis.com','https://fonts.gstatic.com','https://flawuiqbvjobmkfkauhw.supabase.co']);
 const routes=['/soccer-career'];
 const idle=p=>p.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
@@ -243,6 +243,84 @@ async function reviewAndSign(p,r,club,label,prepared=null){
  r.actions.push({type:'sign',label,offer,review,before:saved,expected,actual,beforeScroll,afterScroll:await scrollOf(p),scrollScope:'State changes run the existing phase reveal hook. Landing is recorded; no new exact-scroll signing guard or10px signing-control credit.'});
  await reloadExact(p,r,actual,label);return actual;
 }
+async function auxiliaryPaletteGeometry(card){
+ return card.evaluate(n=>{
+  const rect=b=>({x:b.x,y:b.y,right:b.right,bottom:b.bottom,width:b.width,height:b.height});
+  const target=rect(n.getBoundingClientRect());let clip={x:0,y:0,right:innerWidth,bottom:innerHeight};
+  for(let a=n.parentElement;a;a=a.parentElement){
+   const s=getComputedStyle(a),q=a.getBoundingClientRect();
+   if(['auto','scroll','hidden','clip'].includes(s.overflowX)){clip.x=Math.max(clip.x,q.x);clip.right=Math.min(clip.right,q.right);}
+   if(['auto','scroll','hidden','clip'].includes(s.overflowY)){clip.y=Math.max(clip.y,q.y);clip.bottom=Math.min(clip.bottom,q.bottom);}
+  }
+  const layers=[];
+  for(const el of document.querySelectorAll('body *')){
+   if(el===n||n.contains(el)||el.contains(n))continue;
+   const s=getComputedStyle(el),b=el.getBoundingClientRect();
+   if(!['fixed','sticky'].includes(s.position)||s.display==='none'||s.visibility==='hidden'||Number(s.opacity)===0||b.width<=0||b.height<=0||b.height>=innerHeight/2)continue;
+   if(b.right<=target.x||b.x>=target.right||b.bottom<=0||b.y>=innerHeight)continue;
+   if(b.y<=1||b.bottom>=innerHeight-1)layers.push({tag:el.tagName,id:el.id,text:el.textContent?.trim().slice(0,80),position:s.position,box:rect(b)});
+  }
+  const usable={...clip};
+  for(const layer of layers){if(layer.box.y<=1)usable.y=Math.max(usable.y,layer.box.bottom);if(layer.box.bottom>=innerHeight-1)usable.bottom=Math.min(usable.bottom,layer.box.y);}
+  const points=[];
+  for(const x of [target.x+12,(target.x+target.right)/2,target.right-12])for(const y of [target.y+12,(target.y+target.bottom)/2,target.bottom-12]){
+   const hit=document.elementFromPoint(x,y);points.push({x,y,inside:!!hit&&(hit===n||n.contains(hit)),hit:hit?{tag:hit.tagName,id:hit.id}:null});
+  }
+  return{target,clip,usable,layers,points,viewport:{width:innerWidth,height:innerHeight,dpr:devicePixelRatio},document:{x:scrollX,y:scrollY,scrollWidth:document.documentElement.scrollWidth,clientWidth:document.documentElement.clientWidth}};
+ });
+}
+function validateAuxiliaryPaletteGeometry(box){
+ const t=box.target,g=box.usable;
+ assert([t.x,t.y,t.right,t.bottom,t.width,t.height,g.x,g.y,g.right,g.bottom].every(Number.isFinite),'SC_SEGUNDA_AUXILIARY_PALETTE_VIEWPORT');
+ assert(t.width>0&&t.height>0&&t.x>=g.x&&t.right<=g.right&&t.y>=g.y+4&&t.bottom<=g.bottom-4,'SC_SEGUNDA_AUXILIARY_PALETTE_VIEWPORT');
+ assert(box.points.length===9&&box.points.every(p=>p.inside),'SC_SEGUNDA_AUXILIARY_PALETTE_VIEWPORT');
+ assert(box.document.scrollWidth<=box.document.clientWidth+1,'SC_SEGUNDA_AUXILIARY_PALETTE_VIEWPORT');
+}
+function copiedAuxiliaryPaletteGeometryControl(box){
+ const original=JSON.stringify(box),copy=clone(box),top=copy.target.y;copy.target.y=copy.usable.y-5;
+ const fault=JSON.stringify(copy);assert.notEqual(fault,original);let owned=null;
+ try{validateAuxiliaryPaletteGeometry(copy);}catch(error){owned=error;}
+ assert(owned instanceof assert.AssertionError);assert.match(owned.message,/^SC_SEGUNDA_AUXILIARY_PALETTE_VIEWPORT/);
+ copy.target.y=top;assert.equal(JSON.stringify(copy),original);assert.equal(JSON.stringify(box),original);
+ return{basis:'Copied actual auxiliary card geometry only',before:box,fault:JSON.parse(fault),ownedFailure:{name:owned.name,message:owned.message},wholeInverseExact:true,actualGeometryHeld:true,noPhysicalControlCredit:true};
+}
+async function auxiliaryPaletteViewport(p,r){
+ const name={320:'Eldense',390:'FC Andorra',1280:'Leganes'}[r.width];assert(name);
+ const opener=p.getByRole('button',{name:'Review contract with '+name,exact:true});assert.equal(await opener.count(),1);
+ const card=opener.locator('..');assert((await card.innerText()).includes(name));
+ const before={saved:await frame(p),url:p.url(),buttons:await p.getByRole('button',{name:/^Review contract with /}).count(),dialogs:await p.getByRole('dialog').count(),document:await scrollOf(p)};
+ assert.equal(before.buttons,10);assert.equal(before.dialogs,0);
+ const prep={width:r.width,actor:r.actor,actions:[]},samples=[];let session=null;
+ if(r.width<768)await touchReach(p,prep,card);else await keyboardTo(p,prep,opener);
+ try{
+  for(let attempt=0;attempt<24;attempt++){
+   await idle(p);await waitForScrollIdle(p);const box=await auxiliaryPaletteGeometry(card);
+   try{validateAuxiliaryPaletteGeometry(box);break;}catch(error){assert(error instanceof assert.AssertionError);}
+   const t=box.target,g=box.usable;assert(t.height+8<=g.bottom-g.y&&g.right-g.x>48,'Whole auxiliary card fits the measured usable viewport');
+   assert(t.y<g.y+4||t.bottom>g.bottom-4,'A non-edge occlusion remains; do not hide or alter it');
+   const down=t.bottom>g.bottom-4;
+   if(r.width<768){
+    session??=await p.context().newCDPSession(p);const x=(g.x+g.right)/2,start=down?g.bottom-24:g.y+24,stride=Math.min(160,(g.bottom-g.y)*.3),end=down?start-stride:start+stride;
+    await session.send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[{x,y:start,radiusX:1,radiusY:1,force:1,id:1}]});
+    for(let step=1;step<=10;step++){await session.send('Input.dispatchTouchEvent',{type:'touchMove',touchPoints:[{x,y:start+(end-start)*step/10,radiusX:1,radiusY:1,force:1,id:1}]});await p.waitForTimeout(25);}
+    await p.waitForTimeout(120);await session.send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});
+   }else await p.keyboard.press(down?'ArrowDown':'ArrowUp');
+   await idle(p);await waitForScrollIdle(p);samples.push({attempt,actor:r.actor,direction:down?'page-down':'page-up',before:box,after:await auxiliaryPaletteGeometry(card)});
+  }
+ }finally{if(session)await session.detach();}
+ const geometry=await auxiliaryPaletteGeometry(card);validateAuxiliaryPaletteGeometry(geometry);
+ const control=copiedAuxiliaryPaletteGeometryControl(geometry),captureDocument=await scrollOf(p);
+ const file=r.id+'-palette-aux-'+name.toLowerCase().replace(/[^a-z0-9]+/g,'-')+'-viewport.png';
+ await p.screenshot({path:out+'/'+file,fullPage:false});
+ assert.deepEqual(await scrollOf(p),captureDocument,'Actual viewport screenshot does not move the document');
+ const afterGeometry=await auxiliaryPaletteGeometry(card);validateAuxiliaryPaletteGeometry(afterGeometry);assert.deepEqual(afterGeometry.target,geometry.target);
+ const after={saved:await frame(p),url:p.url(),buttons:await p.getByRole('button',{name:/^Review contract with /}).count(),dialogs:await p.getByRole('dialog').count(),document:await scrollOf(p)};
+ assert.equal(after.saved.raw,before.saved.raw,'Auxiliary capture keeps all saved bytes');assert.deepEqual(after.saved.state,before.saved.state);
+ assert.equal(after.url,before.url);assert.equal(after.buttons,before.buttons);assert.equal(after.dialogs,before.dialogs);
+ const row={label:'auxiliary-palette-viewport',context:r.id,card:name,file,viewport:geometry.viewport,geometry,afterGeometry,geometryControl:control,preparation:prep.actions,samples,before,after,scope:'One actual viewport after native whole-card reach. Separate from the original five planned context photos; no CSS/layer/focus/scroll injection or signing-scroll credit.'};
+ r.auxiliaryPhotos??=[];r.auxiliaryPhotos.push(row);report.auxiliaryPhotos.push(row);
+}
+
 async function runSoccer(p,r){
  await goto(p,'/soccer-career');await p.getByRole('heading',{name:'Create Your Player',exact:true}).waitFor({state:'visible'});assert.equal(await save(p,KEY),null,'Fresh creation starts without a planted career');
  assert.equal(await p.getByRole('combobox').count(),3);
@@ -275,6 +353,7 @@ async function runSoccer(p,r){
   const rgb='rgb('+color.color.slice(1).match(/../g).map(v=>parseInt(v,16)).join(', ')+')';assert.equal(actual.color,rgb);assert(actual.text.includes(color.name));assert(actual.box.x>=-1&&actual.box.right<=r.width+1);seen.push({expected:color,actual});}
  assert.equal((await frame(p)).raw,pf.raw,'Palette inspection is whole-save read-only');r.actions.push({type:'declared-palette',seen,save:await frame(p),scope:'Native reach is to each real action button. Whole-card vertical visibility is not inferred; the complete palette photo is separate visual evidence.'});
  await photo(p,r,'declared-palette',p.getByRole('button',{name:/^Review contract with /}).first().locator('..').locator('..'));assert.equal((await frame(p)).raw,pf.raw);
+ if(publicMode)await auxiliaryPaletteViewport(p,r);
  return {scope:'Real creation/youth/parent acceptance, then explicitly prepared original-neutral/Copa/palette states. Entire signing and reload references, actual native controls. Browser RNG/clock untouched.',actions:r.actions,references:r.references};
 }
 const browser=await pw.chromium.launch({headless:true});
@@ -283,5 +362,8 @@ assert.deepEqual(await inventory(),m.distBefore);for(const[file,digest]of Object
 for(const[file,digest]of additional)assert.equal(sha(await fs.readFile(dir+'/'+file)),digest,file);assert.equal(sha(await fs.readFile(dir+'/'+m.bundle)),m.bundleSHA);assert.equal(sha(await fs.readFile(dir+'/'+m.preparation.file)),m.preparation.sha256);for(const[name,f]of Object.entries(m.fixtures))assert.equal(sha(await fs.readFile(dir+'/'+f.file)),f.sha256,name);await silent();
 report.sourceHeld=true;report.distHeld=true;report.fixtureHeld=true;report.nodeReceiptEmpty=true;report.publicAssets=Object.fromEntries([...observedAssets].sort(([a],[b])=>a<b?-1:a>b?1:0));
 report.status=report.contexts.length===3&&report.contexts.every(r=>r.status==='passed'&&r.assetBodies.length>0&&r.photos.length===5)&&report.screenshots.length===15&&new Set(report.screenshots).size===15?'passed':'failed';
+report.auxiliaryStatus=!publicMode?'not-requested':report.auxiliaryPhotos.length===3&&new Set(report.auxiliaryPhotos.map(p=>p.file)).size===3&&report.contexts.every(r=>r.auxiliaryPhotos?.length===1&&r.auxiliaryPhotos[0].card===({320:'Eldense',390:'FC Andorra',1280:'Leganes'})[r.width])?'passed':'failed';
+if(publicMode&&report.auxiliaryStatus!=='passed')report.status='failed';
 await fs.writeFile(out+'/report.json',JSON.stringify(report,null,2)+'\n');assert.equal(report.status,'passed');
+if(publicMode)console.log('soccerSegundaBrowser:3 separate auxiliary palette viewport photos, actual native card reach and full saves held.');
 console.log('soccerSegundaBrowser:3nativecontexts,realAndorra2026creation50/youth/parent-sign,reload,declaredCopa/legacy/palette,15photosandactualasset/sourceholds passed.');
