@@ -1,0 +1,180 @@
+{
+  "schema": 1,
+  "status": "BOUND_ORIGINAL_RETRY_BINARY_CAPTURE_PUBLIC_PROOF_SEPARATE",
+  "parent": "05bd628b349ef7483bc5f5f537a7d10807a83f05",
+  "tree": "b5d8207755aa6f46f7395c3a83c73514d15c2797",
+  "preparationSource": {
+    "app": "4e45ee3605589aeb5a268b2e6a902fb4ff71af92",
+    "soccerEquivalent": "4571ba4ea9545dab5ef70769204034e5163d48d7",
+    "scope": "Immutable App05bd/treeb5 selected by Root from actual host entry/assets. NBA public qualification is still pending. Original-only headless measurement, no version2 feature credit."
+  },
+  "test": {
+    "path": "src/test/soccerHistoricalFourOriginal.test.tsx",
+    "bytes": 26428,
+    "sha": "816c9020ccf445f94d5fe7b0ee38870b06c3f0ca"
+  },
+  "reader": {
+    "path": "scripts/qa/soccerHistoricalFourOriginalEvidence.mjs",
+    "blob": "7159c58df42d09a53432a80b86a602f90c88db1a"
+  },
+  "qaPaths": [
+    "src/test/soccerHistoricalFourOriginal.test.tsx",
+    "scripts/qa/soccerHistoricalFourOriginalCases.json",
+    "scripts/qa/soccerHistoricalFourOriginalEvidence.mjs",
+    ".github/workflows/soccer-four-cohort-original-20261105.yml"
+  ],
+  "evidenceEnvironment": "SC_FOUR_ORIGINAL_OUT",
+  "specEnvironment": "SC_FOUR_ORIGINAL_SPEC",
+  "clock": "2026-11-05T12:00:00Z",
+  "measureSeeds": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8
+  ],
+  "targetCommittedYear": 2019,
+  "limits": {
+    "maxActionsPerAttempt": 300,
+    "storedBytes": 12582912,
+    "decodedBytes": 46137344,
+    "artifactBytes": 50000000,
+    "testTimeoutMs": 600000,
+    "source": "12MiB stored and44MiB decoded ceilings inherited from admitted lossless NBA capture. No retention relaxation or truncation; overflow is unqualified fatal diagnostics."
+  },
+  "expected": {
+    "tests": 5,
+    "ownedAssertionErrors": 4,
+    "heldPasses": 1,
+    "nativeExit": 1,
+    "appTypesExit": 0
+  },
+  "cases": [
+    {
+      "fullName": "Soccer Career four historical entries original-first new eligible 2005 UI creation uses the four-entry version2 policy",
+      "file": "case-1-new-policy.json",
+      "marker": "SC4_NEW_CREATION_VERSION",
+      "ownership": "owned"
+    },
+    {
+      "fullName": "Soccer Career four historical entries original-first the ordinary committed-year timeline admits all four sourced IDs exactly once",
+      "file": "case-2-due-timeline.json",
+      "marker": "SC4_DUE_YEAR_ENTRIES",
+      "ownership": "owned"
+    },
+    {
+      "fullName": "Soccer Career four historical entries original-first each registered identity resolves its own saved source club across existing era tables",
+      "file": "case-3-world-identities.json",
+      "marker": "SC4_OWN_WORLD_IDENTITY",
+      "ownership": "owned"
+    },
+    {
+      "fullName": "Soccer Career four historical entries original-first the actual reopened SportsFeed shows all four source entries without writes or draws",
+      "file": "case-4-visible-cards.json",
+      "marker": "SC4_VISIBLE_SOURCE_CARDS",
+      "ownership": "owned"
+    },
+    {
+      "fullName": "Soccer Career four historical entries original-first actual original v1 unmarked opaque and newer inputs preserve complete codec world and draw projections",
+      "file": "case-5-held-originals.json",
+      "marker": null,
+      "ownership": "held"
+    }
+  ],
+  "sourcePins": {
+    "src/lib/soccerHistoricalArrivals.ts": "fce537f31d51a8de78a170c57808b8d233fa54b1",
+    "src/lib/soccerCareerEngine.ts": "40edcc5051d9b4a369698ea3572eb9e8e3314f26",
+    "src/pages/SoccerCareer.tsx": "f0d77f964522f4fb86ac0cb9543b7cd06f08a9ab",
+    "src/lib/soccerPhone.ts": "cee38fc40914dad6989c66c66b29fae88203d1c8",
+    "src/components/soccer-career/PhonePanel.tsx": "736bdf5a1b07ca83a30b1487f81cce52dd8208bb",
+    "src/lib/careerEras.ts": "e037022342382b1df9c8a5ede620d2cce480bc23",
+    "src/lib/soccerCareerSave.ts": "86ec011693fd5bc702b5e8ccec05d27775a72a76",
+    "src/lib/soccerAwardReveal.ts": "3c2ba81b18cdf575e0d6fb70c7743b41b78d519d",
+    "scripts/lib/offlineTransport.cjs": "0fda542a2649fe5da937c6976fd0f5b6073e74b6",
+    "package-lock.json": "97d6f12a052f25f400462938c241789a083f0bfe",
+    "package.json": "2ff64986fb76ebc51b706f2fd24765768874008a",
+    "tsconfig.app.json": "51f581dd91641b4c1f1219f646788e73cf6bf00c"
+  },
+  "sourceFactAuthority": {
+    "nextThreePacketSHA256": "f265438adec8375bb92b12d1fae02f823000c19dbf35970a8526a8704d9ad658",
+    "independentReviewSHA256": "530570ad086146e7c14995cf5a154498456c746f651c30a0ef18e7606f0218cd",
+    "newDataImports": false
+  },
+  "limitsOfCredit": [
+    "Source authored only, no measured healthy2019 seed or original outcome until actual remote run.",
+    "Actual v1 UI and direct constructor/declared opaque inputs must become authenticated frozen original references before candidate outcomes; never strip a newv2 save.",
+    "Full per-frame serialized saves/parsed states, module/UI/global tapes and codec/load retained; private keyed forks not captured.",
+    "No App implementation, data import, browser/native/public/build/coverage or cap qualification."
+  ],
+  "failedPrefixAuthority": {
+    "status": "FAILED_SETUP_OOM_NO_OWNED_CREDIT",
+    "qa": "5ac304fef03a7c42c93a1c822c54035b2a9164f4",
+    "run": "42048643283",
+    "job": "127318422792",
+    "artifact": "13426186682",
+    "zipBytes": 3401358,
+    "zipSHA256": "243356b6df43e923e933af492409ba2d8ef51d9eca7b777875d83f5fcca8e5d5",
+    "files": [
+      {
+        "file": "actual-original-ui-input.json",
+        "bytes": 97708,
+        "sha256": "7fef55fae16dc21b14b8b8efa1947f4c67454f7e22f304fff80b6e17fead2822",
+        "storedBytes": 20818,
+        "storedSHA256": "1d8221c0e6e9e3bf0ac68b437d3c3e88534275853fe81c8dda4c616aa0db3790"
+      },
+      {
+        "file": "attempt-1.json",
+        "bytes": 6977327,
+        "sha256": "863f660779720a7fb48acac774cbcff469ab94753816cb6aa58120a353b0df50",
+        "storedBytes": 1141566,
+        "storedSHA256": "55844038fd5d6dace531b0932b78b125d0c2ad3000eb04fa33555521828e0115"
+      },
+      {
+        "file": "healthy-repeated-original.json",
+        "bytes": 6977354,
+        "sha256": "61e3e2bc2d7f0beb35e7fb5eaa5c47c4d453a51dcd1e52b0e2b01291502e9da1",
+        "storedBytes": 1141598,
+        "storedSHA256": "e2b142c8d56b8e214479fb838c97d341480468cf446ef1cfaf251b9514b8fe30"
+      },
+      {
+        "file": "case-1-new-policy.json",
+        "bytes": 97849,
+        "sha256": "e6f2c34c0dd8099824becd5525a4be2d48b339cfb5fa83b576b789112652d07d",
+        "storedBytes": 20916,
+        "storedSHA256": "55021cce5defbda1ade40a6e80ba9fbde772c43e1a130d8da7b2688578393a77"
+      },
+      {
+        "file": "case-2-due-timeline.json",
+        "bytes": 146239,
+        "sha256": "8e453dee76eae292b13bba8e0034efb3506780cb28334d2531a8eeaf36becc2f",
+        "storedBytes": 36423,
+        "storedSHA256": "4b85fe52d6c9b0a079603549282d622ab1e33a0795c0640f1ec18f6608f1793f"
+      },
+      {
+        "file": "case-3-world-identities.json",
+        "bytes": 150928,
+        "sha256": "ee62930974a916f24e97cc24caf415939792f93512c090ef55a128a4b34aabee",
+        "storedBytes": 37229,
+        "storedSHA256": "18bdc2eeaf2216e14e82855699f3a5b067bc37bb1fa2a4beb6ed88b5706993d1"
+      },
+      {
+        "file": "case-4-visible-cards.json",
+        "bytes": 97499,
+        "sha256": "88627369cae13b9492d1c546302768c76a1145287a401eae673118b5d09ed8ef",
+        "storedBytes": 21127,
+        "storedSHA256": "4ac47db359bd31ee1abdc6aee0d5a905de4309fb546f38b6293bf4ed23a9638e"
+      }
+    ],
+    "scope": "All seven physically retained full literal RAW bodies. Recovery must match bytes/SHA with no field normalization. Prefix reachability is not a five-case/report/admission result."
+  },
+  "captureCorrection": {
+    "reason": "Vitest iterable deep equality materializes Buffer property-entry arrays; use exact Buffer.equals length+byte guard, one copied actual byte corruption/inverse, bounded capture-stage/actualheap journal. No actor/assertion/data/model/cap changes.",
+    "journalMaxNotesFormula": "(measureSeeds.length+8)*5+1",
+    "unchangedOriginalRawLimits": true,
+    "requireAll7FailedPrefixLiterals": true,
+    "noNormalizationExceptions": true
+  }
+}
