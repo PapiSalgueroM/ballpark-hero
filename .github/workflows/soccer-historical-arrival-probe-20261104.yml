@@ -1,0 +1,165 @@
+name: Soccer historical arrival measured product diagnostic recovery
+on:
+  push:
+    branches: [codex/historical-arrival-diagnostic-86919f88-20261105]
+permissions:
+  contents: read
+concurrency:
+  group: soccer-historical-arrival-diagnostic-86919f88-20261105
+  cancel-in-progress: false
+jobs:
+  original-seed-measurement:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      MEASURED_PARENT: 86919f885e7fc45c16822896f107e07c57450652
+      MEASURED_TREE: 62f7696a9bf41c1be237daf2e26a294ba6cb48e0
+      RUNNER_BLOB: 0d1f5912de142fda66a03d9b570a2cd173fb7831
+      SPEC_BLOB: 95d0acb812ca9273d8b01e8ca77411c0ba170fd0
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+          filter: blob:none
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Fail closed source binding and untouched baseline
+        shell: bash
+        run: |
+          set -euo pipefail
+          QA_OUT="$RUNNER_TEMP/soccer-historical-arrival-probe"
+          export QA_OUT
+          echo "QA_OUT=$QA_OUT" >> "$GITHUB_ENV"
+          mkdir -p "$QA_OUT"/{logs,transport}
+          [[ "$MEASURED_PARENT" =~ ^[a-f0-9]{40}$ ]]
+          [[ "$MEASURED_TREE" =~ ^[a-f0-9]{40}$ ]]
+          test "$(git rev-parse HEAD^)" = "$MEASURED_PARENT"
+          test "$(git rev-parse "$MEASURED_PARENT^{tree}")" = "$MEASURED_TREE"
+          test "$(git hash-object scripts/qa/soccerHistoricalArrivalProbe.mjs)" = "$RUNNER_BLOB"
+          test "$(git hash-object scripts/qa/soccerHistoricalArrivalProbe.json)" = "$SPEC_BLOB"
+          test -z "$(git status --porcelain=v1 --untracked-files=all)"
+          node --check scripts/qa/soccerHistoricalArrivalProbe.mjs
+          git ls-files -z > "$QA_OUT/tracked-before.bin"
+          git ls-files -z | xargs -0 sha256sum > "$QA_OUT/source-before.sha256"
+          git ls-files -s > "$QA_OUT/index-before.txt"
+          git status --porcelain=v1 --untracked-files=all > "$QA_OUT/status-before.txt"
+          cp package-lock.json "$QA_OUT/package-lock-before.json"
+          git rev-parse HEAD HEAD^ 'HEAD^{tree}' > "$QA_OUT/source-identity.txt"
+          node --version > "$QA_OUT/logs/node-version.log"
+          npm --version > "$QA_OUT/logs/npm-version.log"
+      - name: Install exact held lock
+        shell: bash
+        run: |
+          set -uo pipefail
+          npm ci --no-audit --no-fund > "$QA_OUT/logs/npm-ci.log" 2>&1
+          native_exit=$?
+          printf '%s\n' "$native_exit" > "$QA_OUT/logs/npm-ci.exit"
+          test "$native_exit" = 0
+      - name: Proper app type check offline
+        shell: bash
+        run: |
+          set -uo pipefail
+          export GIT_NO_LAZY_FETCH=1 SIM_NETWORK=offline
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          export SIM_OFFLINE_RECEIPT="$QA_OUT/transport/types.log"
+          : > "$SIM_OFFLINE_RECEIPT"
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json > "$QA_OUT/logs/types.log" 2>&1
+          native_exit=$?
+          printf '%s\n' "$native_exit" > "$QA_OUT/logs/types.exit"
+          test "$native_exit" = 0 || exit "$native_exit"
+          test ! -s "$SIM_OFFLINE_RECEIPT"
+          node --input-type=module -e 'import fs from "node:fs"; fs.writeFileSync(process.env.QA_OUT+"/types-passed.json",JSON.stringify({command:"node_modules/.bin/tsc --noEmit -p tsconfig.app.json",exit:0})+"\n",{flag:"wx"});'
+      - name: Measure actual original annual path and observer equivalence
+        shell: bash
+        run: |
+          set -uo pipefail
+          export GIT_NO_LAZY_FETCH=1 SIM_NETWORK=offline
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          export SIM_OFFLINE_RECEIPT="$QA_OUT/transport/probe-parent.log"
+          : > "$SIM_OFFLINE_RECEIPT"
+          node --unhandled-rejections=strict scripts/qa/soccerHistoricalArrivalProbe.mjs --out "$QA_OUT" --spec scripts/qa/soccerHistoricalArrivalProbe.json > "$QA_OUT/logs/probe.log" 2>&1
+          native_exit=$?
+          printf '%s\n' "$native_exit" > "$QA_OUT/logs/probe.exit"
+          cat "$QA_OUT/logs/probe.log"
+          test "$native_exit" = 0 || exit "$native_exit"
+          test ! -s "$SIM_OFFLINE_RECEIPT"
+      - name: Always retain full source lock and status holds
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          export GIT_NO_LAZY_FETCH=1
+          git ls-files -z > "$QA_OUT/tracked-after.bin"
+          git ls-files -z | xargs -0 sha256sum > "$QA_OUT/source-after.sha256"
+          git ls-files -s > "$QA_OUT/index-after.txt"
+          git status --porcelain=v1 --untracked-files=all > "$QA_OUT/status-after.txt"
+          cp package-lock.json "$QA_OUT/package-lock-after.json"
+          cmp "$QA_OUT/tracked-before.bin" "$QA_OUT/tracked-after.bin"
+          cmp "$QA_OUT/source-before.sha256" "$QA_OUT/source-after.sha256"
+          cmp "$QA_OUT/index-before.txt" "$QA_OUT/index-after.txt"
+          cmp "$QA_OUT/package-lock-before.json" "$QA_OUT/package-lock-after.json"
+          test ! -s "$QA_OUT/status-before.txt"
+          test ! -s "$QA_OUT/status-after.txt"
+          printf '0\n' > "$QA_OUT/logs/full-source-holds.exit"
+      - name: Always retain a small diagnostic view independently of the full proof cap
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          DIAG="$RUNNER_TEMP/soccer-historical-arrival-diagnostic"
+          mkdir -p "$DIAG"
+          echo "DIAGNOSTIC_OUT=$DIAG" >> "$GITHUB_ENV"
+          export DIAGNOSTIC_OUT="$DIAG"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import path from 'node:path';import crypto from 'node:crypto';
+          const out=process.env.QA_OUT,dir=process.env.DIAGNOSTIC_OUT,sha=b=>crypto.createHash('sha256').update(b).digest('hex');
+          const copied=[],captureErrors=[],attempts=[];
+          function copy(rel){if(!out)return;const file=path.join(out,rel);if(!fs.existsSync(file))return;try{const bytes=fs.readFileSync(file),target=path.join(dir,rel);fs.mkdirSync(path.dirname(target),{recursive:true});fs.writeFileSync(target,bytes);copied.push({file:rel,bytes:bytes.length,sha256:sha(bytes)});}catch(error){captureErrors.push({file:rel,error:String(error.stack||error)});}}
+          for(const rel of ['original-seed-probe.json','types-passed.json','source-before.json','source-after.json','source-before.sha256','source-after.sha256','tracked-before.bin','tracked-after.bin','index-before.txt','index-after.txt','status-before.txt','status-after.txt','package-lock-before.json','package-lock-after.json','source-identity.txt','original.mjs.meta.json','observer.mjs.meta.json'])copy(rel);
+          for(const folder of ['logs','transport'])if(out&&fs.existsSync(path.join(out,folder)))for(const entry of fs.readdirSync(path.join(out,folder),{withFileTypes:true}))if(entry.isFile())copy(folder+'/'+entry.name);
+          const seeds=out&&path.join(out,'seeds');
+          if(seeds&&fs.existsSync(seeds))for(const entry of fs.readdirSync(seeds,{withFileTypes:true}).filter(e=>e.isDirectory()&&/^[1-9][0-9]*$/.test(e.name)).sort((a,b)=>Number(a.name)-Number(b.name))){
+            const seed=Number(entry.name),modes=[];
+            for(const mode of ['normal','observer']){
+              for(const suffix of ['.native.json','.stdout.log','.stderr.log','-transport.log'])copy('seeds/'+entry.name+'/'+mode+suffix);
+              const rel='seeds/'+entry.name+'/'+mode+'.json',file=path.join(out,rel),row={mode,file:rel,present:fs.existsSync(file)};
+              if(row.present){try{const bytes=fs.readFileSync(file),value=JSON.parse(bytes);Object.assign(row,{bytes:bytes.length,sha256:sha(bytes),status:value.status??null,reason:value.reason??null,error:value.error??null,finalYear:value.finalYear??null,frames:Array.isArray(value.frames)?value.frames.length:null,importDraws:Array.isArray(value.importDraws)?value.importDraws.length:null,mainDraws:Array.isArray(value.draws)?value.draws.length:null,observedTransferDraws:Array.isArray(value.transferDrawObservations)?value.transferDrawObservations.length:null,lastFramePhase:value.frames?.at(-1)?.value?.phase??null});}catch(error){row.parseError=String(error.stack||error);}}
+              modes.push(row);
+            }
+            attempts.push({seed,modes});
+          }
+          const summaryFile=out&&path.join(out,'original-seed-probe.json');let reported=null;
+          if(summaryFile&&fs.existsSync(summaryFile))try{const s=JSON.parse(fs.readFileSync(summaryFile));reported={status:s.status,originalSource:s.originalSource,measuredParent:s.measuredParent,measuredTree:s.measuredTree,published:s.published,inputQualificationOnly:s.inputQualificationOnly,error:s.error??null,reportedTrials:Array.isArray(s.trials)?s.trials.length:null,sourceHeld:s.sourceHeld,statusClean:s.statusClean,phoneSourceHeld:s.phoneSourceHeld,bundleHeld:s.bundleHeld};}catch(error){captureErrors.push({file:'original-seed-probe.json',error:String(error.stack||error)});}
+          fs.writeFileSync(path.join(dir,'attempt-census.json'),JSON.stringify({schema:'historical-original-diagnostic-attempt-census-v1',attempts,scope:'Actual file census and diagnostic fields only. Raw trial payload files are excluded. Unmodified error text may quote data; counts and errors cannot replace complete frame/save/tape proof or admit a seed.'},null,2)+'\n');
+          fs.writeFileSync(path.join(dir,'diagnostic-manifest.json'),JSON.stringify({status:'partial-diagnostic-only',measuredProduct:process.env.MEASURED_PARENT,measuredTree:process.env.MEASURED_TREE,published:false,reported,attemptDirectories:attempts.length,copied,captureErrors,wholeProof:false,seedQualificationAdmitted:false,fullTrialAndBundlePayloadsExcluded:true,fullProofLimitBytes:50000000,scope:'Failure diagnosis and small source/native receipts retained independently before the unchanged full proof guard. This is not a sharded proof, complete state/tape equivalence, original-first feature admission, qualified seed or publication. Missing diagnostics remain explicitly missing.'},null,2)+'\n');
+          console.log('Historical probe diagnostic census: '+attempts.length+' actual seed directories; partial diagnosis only.');
+          NODE
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: soccer-historical-arrival-diagnostic-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ env.DIAGNOSTIC_OUT }}/
+          if-no-files-found: error
+          retention-days: 14
+          compression-level: 6
+      - name: Retain all actual output in one bounded evidence archive
+        id: evidence
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          tar -czf "$RUNNER_TEMP/soccer-historical-arrival-probe.tar.gz" -C "$QA_OUT" .
+          test "$(stat -c %s "$RUNNER_TEMP/soccer-historical-arrival-probe.tar.gz")" -le 50000000
+          sha256sum "$RUNNER_TEMP/soccer-historical-arrival-probe.tar.gz" > "$RUNNER_TEMP/soccer-historical-arrival-probe.tar.gz.sha256"
+      - uses: actions/upload-artifact@v4
+        if: always() && steps.evidence.outcome == 'success'
+        with:
+          name: soccer-historical-arrival-original-seed-probe
+          path: |
+            ${{ runner.temp }}/soccer-historical-arrival-probe.tar.gz
+            ${{ runner.temp }}/soccer-historical-arrival-probe.tar.gz.sha256
+          if-no-files-found: error
+          retention-days: 14
+          compression-level: 0

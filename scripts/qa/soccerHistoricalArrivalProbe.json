@@ -1,0 +1,55 @@
+{
+  "schema": 1,
+  "status": "BOUND_MEASURED_PRODUCT_SOURCE",
+  "preparationProduct": "ebd69abeb38ebb0b93fbff71a0caf2fa453db832",
+  "bindings": {
+    "measuredParent": "86919f885e7fc45c16822896f107e07c57450652",
+    "measuredTree": "62f7696a9bf41c1be237daf2e26a294ba6cb48e0",
+    "runnerBlob": "0d1f5912de142fda66a03d9b570a2cd173fb7831"
+  },
+  "qaPaths": [
+    ".github/workflows/soccer-historical-arrival-probe-20261104.yml",
+    "scripts/qa/soccerHistoricalArrivalProbe.mjs",
+    "scripts/qa/soccerHistoricalArrivalProbe.json"
+  ],
+  "maxSeeds": 128,
+  "sourcePins": {
+    "src/lib/soccerCareerEngine.ts": "94ccfb82dace9fc099c670357472732973e11d73",
+    "src/pages/SoccerCareer.tsx": "e191a4634c44be5ebe511da0885579fdb6696dc5",
+    "src/lib/soccerCareerSave.ts": "86ec011693fd5bc702b5e8ccec05d27775a72a76",
+    "src/lib/soccerPhone.ts": "f81e5a1b5207d776aea9594e28f130d0e8888832",
+    "src/lib/soccerCareerCup.ts": "1d93842578afa4fb92ed3c012701022fbf9d2e9c",
+    "scripts/lib/offlineTransport.cjs": "0fda542a2649fe5da937c6976fd0f5b6073e74b6",
+    "package-lock.json": "97d6f12a052f25f400462938c241789a083f0bfe",
+    "package.json": "2ff64986fb76ebc51b706f2fd24765768874008a",
+    "tsconfig.app.json": "51f581dd91641b4c1f1219f646788e73cf6bf00c"
+  },
+  "scope": {
+    "kind": "bounded read-only original input qualification on an explicitly measured unpublished product",
+    "entry": "Reachable 2005-09 option, actual init/youth/generated offer/accept/annual public API path through 2010.",
+    "qualification": "Actual Neymar 2010 visible nominee plus observed selected-but-originally-suppressed real transfer draw. Search inputs and outcomes are retained without an injected player or transfer.",
+    "observer": "One exact in-memory esbuild source observation only. Normal and observed full frames/save strings/import tape/main Math.random tape must match.",
+    "noCredit": [
+      "implemented historical arrival",
+      "applied Neymar transfer",
+      "candidate original-first test admission",
+      "frozen 2015 continuity seed",
+      "all sports coverage",
+      "build/native/public verification"
+    ],
+    "requiredBeforeExecution": [
+      "Bind this exact measured product86919f885e7fc45c16822896f107e07c57450652 and its tree. Public release is not a prerequisite for this original input qualifier and is not claimed.",
+      "Use BOUND_MEASURED_PRODUCT_SOURCE only after source review; commit exactly the three declared temporary QA paths on the measured parent.",
+      "Bind matching workflow runner/spec/source pins. No unreviewed seed constants, changed phase policy or injected outcomes.",
+      "Missing imports, unsupported phases, nonzero native commands, transport/runtime errors and source drift are setup failures, never owned expected feature failures."
+    ],
+    "reuseAfterRelease": [
+      "This is an input qualifier only, not original-first feature-test admission, a published-source result or proof of an implemented historical player.",
+      "Before future feature tests, compare the eventual baseline's actual bundle inputs/full source inventory with this measured source. Check all relevant engine, save, phone, annual and historical lookup dependencies, not just the short direct pin list.",
+      "If relevant inputs changed, remeasure the original on the new baseline and retain the actual complete frames, exact saves and import/main tapes. Do not transfer an earlier source label or silently freeze an old seed as a new source's original.",
+      "Any later claimed source-equivalence must be explicit and supported by unchanged relevant source or a fresh complete outcome/tape comparison, with all differing source paths retained.",
+      "The active354 historical lookup identity findings remain a separate unwaived audit."
+    ],
+    "published": false
+  }
+}
