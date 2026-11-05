@@ -39,7 +39,7 @@ jobs:
         run: |
           export NODE_OPTIONS="--max-old-space-size=6144 --require=$PWD/scripts/lib/offlineTransport.cjs"
           export SC_CLUB_POLICY_RAW="$PWD/club-policy-artifacts/raw"
-          node node_modules/vitest/vitest.mjs run src/test/soccerClubEligibility.test.ts --maxWorkers=1 --minWorkers=1 --reporter=default --reporter=json --outputFile=club-policy-artifacts/original.json 2>&1 | tee club-policy-artifacts/original.log
+          node node_modules/vitest/vitest.mjs run src/test/soccerClubEligibility.test.ts src/test/soccerClubEligibilityEvents.test.ts --maxWorkers=1 --minWorkers=1 --reporter=default --reporter=json --outputFile=club-policy-artifacts/original.json 2>&1 | tee club-policy-artifacts/original.log
       - name: Preserve source and offline evidence
         if: always()
         run: |
