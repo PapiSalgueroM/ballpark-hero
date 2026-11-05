@@ -17867,6 +17867,19 @@ Historical Neymar entry is live from a19121c3/tree b389. Current build, four-arm
 NBA-2004-LIVE-05bd628b-42052602075. PR502 source05bd628b, treeb5d82077, publish5a2f20c5-f35d-4d81-8b16-0a7aee824fc1. New2003 quick/Road careers receive all59 real2004 selections,58 verified DOBs plus1unknown, and persistent simulated camp records. Qualified build/eight arms/permanent/native3widths and actualpublic42052602075/artifact13428705240 independently admitted. See [scope and receipts](plans/2026-11-05-nba-real-draft-2004.md). Broader known failures remain unwaived; master409 and SC36/CM04/PL16 partial. Continue next Soccer Career real-entry cohorts, then playable SC/CM teams/leagues. No active-save backfill.
 
 
+## 2026-11-05: SC-36 four-entry policy proof record
+
+State: published and independently qualified; SC-36 remains partial. Qualified final App head: e16e9ea36fc6c9aab84d7f79d99679e5c22e8ad3.
+
+Runtime scope is exactly four files from candidatea9e56ff706ea71a51d3ec60438023ed9ad4d3b01/tree316d2084d15d5e24aff38e5a692b639432b3eb98: historical-arrival helper, phone world lookup, PhonePanel and the one new-creation version literal. New pre-2009 UI saves use v2; old v1/unmarked/unknown/newer inputs retain their supported behavior. Four first-team identities and source clubs are displayed without invented real speech, ratings or a forced history. Full factual boundaries and source links are in [the provenance note](data/soccer-historical-arrivals.md).
+
+Admitted proof: original42056408953/art13429002902/c572bce9; seven arms42068497425/art13435307037/7eadbca7; permanent42071146002/art13436901528/Root393e019c; build42071220857/art13437520395/independent811f86f0. The seven-arm56 lossless captures total251,270,552 decoded bytes; the separate permanent61 regular bodies total119,276,242 bytes. Those are separate authorities. The original reversal reproduces all eight original bodies, fixed/restored reproduce all eight bodies, and authenticated old inputs were never manufactured by stripping v2. Private keyed forks are not claimed observed.
+
+Native receipt: 69f420492bd29d81667ad18b3ed98209473e49f77e33a7e8f3eb6788e0acebe5. Deploy ID: 2d231ee7-24b2-4940-af8d-5908d26371e6. Public receipt: 147361f50c8e3db9c6583009a045a7d79c22c8a680d2fadb171826ff3d3b6c89.
+
+First integrate four runtime plus five explicit nonruntime paths, publish that nine-path App and qualify public proof. These four closeout documents then land separately with no second publish. The aggregate nine nonruntime inverses must recover App tree316d, then the four runtime inverses recover main1acb. No whole docs/scripts/test-prefix exception is allowed. Temporary QA workflows/helpers stay out. The OOM original and first-build reader18 failure remain failed; later admitted proofs do not waive them or wider-suite reds. SC-36 is partial. Next is the owner's teams/leagues integration priority, with no new league or loading implementation authorised by this closeout alone.
+
+
 ## 2026-11-05 Soccer Career training copy regression claim
 Owner: Codex current master-list continuation. Remote base main 1acb33005073be70ba5aae0285ece5537f390f9a, branch codex/soccer-training-copy-tests-20261105. Scope: src/test/soccerScreenTruths.test.tsx S4 only, plus this claim and a small plan/state note. The published classic practice feature added one truthful practice-after-bank paragraph; two old assertions still count earlier help paragraphs. Preserve all previous rules, pause/hidden-result and bank-help assertions, and assert the actual new paragraph. No TrainingPanel/product change, no test removal, no caps or US sim edits. Run original-first two business failures, fixed scoped file and a source-checked removal control on the actual new paragraph, then restore exact product bytes. Local root remains held; execution and Git are remote. This maintenance does not complete a master game card and is not permission to publish the unqualified global suite.
 
@@ -17879,4 +17892,9 @@ The first controller used an incorrect parameterized-case census[11,3,15]. Run42
 
 Evidence is retained under C:/Users/antho/dukb-handoff/2026-11-05/sc-training-copy/. Original focused artifact13441331904 (389203B, sha256 b2ab683c5fec7e45c5abc734ea7881b4ae599c38c7511d37501d60a022b68cef); first full packet13442254309 (8913403B,sha256 ac203fa940df8b57cd0bab0ac70f9e9decf480c90d301db22e85d76eccb0832a); final units13443071469 (533848B,sha256 0e17515a3f4e54e3a9f8a3c1a3d12d9e7559e0a1ccb873b68b2942f60aa4942e). Temporary controllers/workflows are excluded from clean delivery. No production code, cap, player data, score or save format changed. Full-suite/release-wide failures remain unwaived; this does not complete a master game card and has not been merged or published.
 
-Current-main follow-up: e16e9ea36fc6c9aab84d7f79d99679e5c22e8ad3 includes the NBA historical-draft raw-read normalization. The19/20 result above describes the pinned1ac build, not a remaining current-main anchor defect. Release-wide unit status is still not claimed green.
+Current-main follow-up: main e16 and its documentation closeout 3b include the NBA historical-draft raw-read repair. The older 19/20 result describes the pinned 1ac build. Full-suite completion is not claimed.
+
+
+## 2026-11-05 draft reconciliation
+
+Reconciled onto main 3b14650d360b010b25b525de33a5f32f33de2798 after the historical-release closeout. The published release records are preserved. Owned test/script blobs are unchanged from the scoped qualification. The combined soccer integration check is pending; this remains an unmerged, unpublished draft.
