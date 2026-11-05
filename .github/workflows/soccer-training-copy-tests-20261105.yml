@@ -1,0 +1,67 @@
+name: Soccer training copy original
+on:
+  push:
+    branches: [codex/soccer-training-copy-tests-20261105]
+permissions:
+  contents: read
+jobs:
+  original:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        shell: bash
+    env:
+      SIM_NETWORK: offline
+      SIM_OFFLINE_RECEIPT: training-copy-artifacts/offline.log
+      TZ: UTC
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Locked install and source holds
+        run: |
+          mkdir -p training-copy-artifacts
+          git rev-parse HEAD > training-copy-artifacts/head.txt
+          git rev-parse 'HEAD^{tree}' > training-copy-artifacts/tree.txt
+          git ls-files -s > training-copy-artifacts/source-before.txt
+          sha256sum package.json package-lock.json > training-copy-artifacts/locks-before.txt
+          npm ci
+      - name: Proper app types
+        run: node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee training-copy-artifacts/types.log
+      - name: Original two S4 assertion failures
+        run: |
+          set +e
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node node_modules/vitest/vitest.mjs run src/test/soccerScreenTruths.test.tsx -t 'S4 Training' --maxWorkers=1 --minWorkers=1 --reporter=default --reporter=json --outputFile=training-copy-artifacts/original.json 2>&1 | tee training-copy-artifacts/original.log
+          sc_test_status=${PIPESTATUS[0]}
+          set -e
+          test "$sc_test_status" -eq 1
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs'; import assert from 'node:assert/strict';
+          const data=JSON.parse(fs.readFileSync('training-copy-artifacts/original.json'));
+          const rows=data.testResults.flatMap(s=>s.assertionResults);
+          const failed=rows.filter(r=>r.status==='failed');
+          assert.equal(failed.length,2);
+          assert.ok(failed.every(r=>r.fullName.includes('S4 Training')&&r.failureMessages.join(' ').includes('AssertionError')));
+          console.log('Confirmed exactly two original S4 business assertion failures.');
+          NODE
+      - name: Source lock and offline holds
+        if: always()
+        run: |
+          git ls-files -s > training-copy-artifacts/source-after.txt
+          cmp training-copy-artifacts/source-before.txt training-copy-artifacts/source-after.txt
+          git diff --exit-code HEAD -- src scripts package.json package-lock.json
+          sha256sum package.json package-lock.json > training-copy-artifacts/locks-after.txt
+          cmp training-copy-artifacts/locks-before.txt training-copy-artifacts/locks-after.txt
+          if test -f training-copy-artifacts/offline.log; then test ! -s training-copy-artifacts/offline.log; fi
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: soccer-training-copy-original-${{ github.run_id }}
+          path: training-copy-artifacts
+          retention-days: 7
+          if-no-files-found: error
