@@ -1,0 +1,198 @@
+name: Segunda data note qualification
+on:
+  push:
+    branches: [codex/soccer-segunda-facts-note-recovery-20261105]
+permissions:
+  contents: read
+concurrency:
+  group: soccer-segunda-facts-note-20261105
+  cancel-in-progress: false
+env:
+  NOTE_PRODUCT: 21c858b2477ffefee89d161080345aff54e0c286
+  NOTE_TREE: 724ece301b467cc52d1779e160d7cdb10c512803
+  OLD_PRODUCT: ebd69abeb38ebb0b93fbff71a0caf2fa453db832
+jobs:
+  finite-note-proof:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 4
+          filter: blob:none
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: '1.4.4'
+      - name: Bind source and hydrate the single real prior facts body
+        shell: bash
+        run: |
+          set -euo pipefail
+          export QA_OUT="$RUNNER_TEMP/soccer-segunda-facts-note"
+          echo "QA_OUT=$QA_OUT" >> "$GITHUB_ENV"
+          mkdir -p "$QA_OUT/logs" "$QA_OUT/transport"
+          test "$(git rev-parse HEAD^)" = "$NOTE_PRODUCT"
+          test "$(git rev-parse "$NOTE_PRODUCT^{tree}")" = "$NOTE_TREE"
+          test "$(git rev-parse "$NOTE_PRODUCT^")" = "$OLD_PRODUCT"
+          test -z "$(git status --porcelain=v1 --untracked-files=all)"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$QA_OUT/source-before-install.sha256"
+          git status --porcelain=v1 --untracked-files=all > "$QA_OUT/status-before.txt"
+          git rev-parse HEAD HEAD^{tree} HEAD^ > "$QA_OUT/source-identity.txt"
+          git diff --name-status "$OLD_PRODUCT" "$NOTE_PRODUCT" > "$QA_OUT/note-delta.txt"
+          git show "$OLD_PRODUCT:scripts/data/soccerCareerFacts.json" > "$QA_OUT/bad-original-facts.json" 2> "$QA_OUT/logs/prior-body.stderr.log"
+          printf '0\n' > "$QA_OUT/logs/prior-body-native-exit.txt"
+          cp scripts/data/soccerCareerFacts.json "$QA_OUT/fixed-facts.json"
+          test "$(git hash-object "$QA_OUT/bad-original-facts.json")" = ae78078feb67f06fc2922802091a113366e25fcb
+          test "$(git hash-object "$QA_OUT/fixed-facts.json")" = 5a8bcd1ae9b048d2bfa6b759b6b8fff1a7131e13
+          cp package-lock.json "$QA_OUT/package-lock-before.json"
+      - name: Install exact held dependency versions
+        shell: bash
+        run: |
+          set -uo pipefail
+          test "$(bun --version)" = 1.4.4 || exit 1
+          bun --version > "$QA_OUT/logs/bun-version.log"
+          node --version > "$QA_OUT/logs/node-version.log"
+          bun install --frozen-lockfile > "$QA_OUT/logs/install.log" 2>&1
+          native_exit=$?
+          printf '%s\n' "$native_exit" > "$QA_OUT/logs/install.exit"
+          test "$native_exit" = 0
+      - name: Proper types, actual old failure, corrected Facts and seven unchanged cases
+        shell: bash
+        run: |
+          set -uo pipefail
+          export SIM_NETWORK=offline GIT_NO_LAZY_FETCH=1
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          export SIM_OFFLINE_RECEIPT="$QA_OUT/transport/controller.log"
+          : > "$SIM_OFFLINE_RECEIPT"
+          node --unhandled-rejections=strict --input-type=module > "$QA_OUT/logs/controller.stdout.log" 2> "$QA_OUT/logs/controller.stderr.log" <<'NODE'
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import cp from 'node:child_process';
+          import crypto from 'node:crypto';
+          import assert from 'node:assert/strict';
+          import ts from 'typescript';
+          const root=process.cwd(),out=process.env.QA_OUT,FACTS='scripts/data/soccerCareerFacts.json';
+          const blob=b=>crypto.createHash('sha1').update(Buffer.from('blob '+b.length+'\0')).update(b).digest('hex');
+          const sha=b=>crypto.createHash('sha256').update(b).digest('hex');
+          const write=(p,v)=>{fs.mkdirSync(path.dirname(p),{recursive:true});fs.writeFileSync(p,typeof v==='string'||Buffer.isBuffer(v)?v:JSON.stringify(v,null,2)+'\n',{flag:'wx'});};
+          const git=(...args)=>cp.execFileSync('git',args,{encoding:'utf8',env:{...process.env,GIT_NO_LAZY_FETCH:'1'}});
+          const files=git('ls-files','-z').split('\0').filter(Boolean).sort();
+          const inventory=()=>Object.fromEntries(files.map(p=>{const b=fs.readFileSync(p);return[p,{bytes:b.length,sha256:sha(b),blob:blob(b)}];}));
+          const status=()=>git('status','--porcelain=v1','--untracked-files=all');
+          const pins={"scripts/simCareerFacts.mjs":"03aabbdc01f22867ba35bec75a305b69c54a1237","src/test/soccerCareerSegundaBridge.test.ts":"893d8d9eaad5ab1ae7098b79b946afb426dc9aa7","src/test/soccerCareerSegundaCreation.test.tsx":"3cfb09a21f1786302861d85362249967dbb3bf53","scripts/lib/offlineTransport.cjs":"0fda542a2649fe5da937c6976fd0f5b6073e74b6","package-lock.json":"97d6f12a052f25f400462938c241789a083f0bfe"};
+          const expected=[{"file":"src/test/soccerCareerSegundaBridge.test.ts","name":"Soccer Career Segunda canonical bridge adds the nineteen current canonical academy clubs without rewriting the old pool"},{"file":"src/test/soccerCareerSegundaBridge.test.ts","name":"Soccer Career Segunda canonical bridge places an eligible Andorran academy player and signs the actual parent first-team offer"},{"file":"src/test/soccerCareerSegundaBridge.test.ts","name":"Soccer Career Segunda canonical bridge uses canonical profiles for the twenty existing lower-world destinations and real market actions"},{"file":"src/test/soccerCareerSegundaBridge.test.ts","name":"Soccer Career Segunda canonical bridge holds historical pools Girona and the first manager-job boundary before 2026"},{"file":"src/test/soccerCareerSegundaBridge.test.ts","name":"Soccer Career Segunda canonical bridge keeps Andorra as home country while recording the scoped Spanish cup context"},{"file":"src/test/soccerCareerSegundaBridge.test.ts","name":"Soccer Career Segunda canonical bridge holds loaded neutral offer IDs complete saved frames and the partial Spanish world"},{"file":"src/test/soccerCareerSegundaCreation.test.tsx","name":"Soccer Career Segunda creation bridge exposes Andorra and 2026 while retaining 2025 and starts at the shown FC Andorra academy"}];
+          const prior="Art. 13 gives 22 clubs in one group. Art. 14 gives 42 rounds, double round robin, and 3/1/0 points for win/draw/loss.",next="Art. 13 gives 22 clubs in one group. Art. 14 gives 42 rounds, double round robin, and three points for a win, one for a draw and zero for a loss.";
+          const fixed=fs.readFileSync(FACTS),bad=fs.readFileSync(out+'/bad-original-facts.json');
+          assert.equal(blob(fixed),'5a8bcd1ae9b048d2bfa6b759b6b8fff1a7131e13');assert.equal(blob(bad),'ae78078feb67f06fc2922802091a113366e25fcb');
+          assert.equal(bad.toString().split(prior).length,2);assert.equal(fixed.toString().split(next).length,2);
+          assert.equal(bad.toString().replace(prior,next),fixed.toString());assert.equal(fixed.toString().replace(next,prior),bad.toString());
+          const before=inventory();assert.equal(status(),'');write(out+'/source-before.json',before);
+          for(const[p,want]of Object.entries(pins))assert.equal(before[p]?.blob,want,'unchanged pinned body '+p);
+          assert.equal(process.env.NODE_OPTIONS,'--require='+path.join(root,'scripts/lib/offlineTransport.cjs'));
+          assert.equal(process.env.SIM_NETWORK,'offline');assert.equal(process.env.GIT_NO_LAZY_FETCH,'1');
+          const changed=git('diff','--name-only',process.env.OLD_PRODUCT,process.env.NOTE_PRODUCT).trim().split('\n');assert.deepEqual(changed,[FACTS]);
+          const qaChanged=git('diff-tree','--no-commit-id','--name-only','-r','HEAD').trim().split('\n');assert.deepEqual(qaChanged,['.github/workflows/soccer-segunda-facts-note-20261105.yml']);
+          const diagnostics=[],imports=[];let productionFiles=0;
+          for(const p of files.filter(p=>p.startsWith('src/')&&!p.startsWith('src/test/')&&/\.[cm]?[jt]sx?$/.test(p))){
+           const source=ts.createSourceFile(p,fs.readFileSync(p,'utf8'),ts.ScriptTarget.Latest,true);assert.equal(source.parseDiagnostics.length,0,p+' parses');
+           productionFiles++;
+           function visit(node){
+            if(ts.isStringLiteralLike(node)&&node.text.includes('soccerCareerFacts'))diagnostics.push({file:p,kind:ts.SyntaxKind[node.kind],value:node.text});
+            if((ts.isImportDeclaration(node)||ts.isExportDeclaration(node))&&node.moduleSpecifier)imports.push({file:p,value:node.moduleSpecifier.text});
+            ts.forEachChild(node,visit);
+           }visit(source);
+          }
+          assert.deepEqual(diagnostics,[],'SC_SEGUNDA_FACTS_NOT_IN_PRODUCTION_CODE');
+          write(out+'/production-input-bridge.json',{old:process.env.OLD_PRODUCT,current:process.env.NOTE_PRODUCT,changedOnly:changed,productionFiles,actualStaticImports:imports,noExecutableFactsFileLiteral:true,allOtherTrackedInputsEqualByExactGitDiff:true,compiledInputChange:false,rebuildRequiredByThisNote:false,scope:'Source proof only. No rebuild or new compiled/native credit.'});
+          let report={status:'running',noteOnly:true,runs:[],raw:[]},failure=null;
+          function hold(arm){
+           const want=structuredClone(before);if(arm==='bad')want[FACTS]={bytes:bad.length,sha256:sha(bad),blob:blob(bad)};
+           assert.deepEqual(inventory(),want,'all tracked bytes held for '+arm);
+           assert.equal(status(),arm==='bad'?' M '+FACTS+'\n':'');
+          }
+          function run(name,command,args,extra={}){
+           const dir=out+'/'+name;fs.mkdirSync(dir,{recursive:true});const receipt=dir+'/transport.log';write(receipt,'');
+           const env={...process.env,...extra,SIM_OFFLINE_RECEIPT:receipt};
+           assert.equal(env.SIM_CAREER_FACTS_CONTROL,undefined);assert.equal(env.SIM_CAREER_FACTS_SEED,undefined);
+           const r=cp.spawnSync(command,args,{cwd:root,encoding:'utf8',maxBuffer:64*1024*1024,env});
+           write(dir+'/stdout.log',r.stdout??'');write(dir+'/stderr.log',r.stderr??'');write(dir+'/native.json',{command:[command,...args],exit:r.status,signal:r.signal,error:r.error?.message??null});
+           assert.equal(r.signal,null);assert.equal(r.error,undefined);assert.equal(fs.statSync(receipt).size,0,'silent offline '+name);
+           assert(!/Unhandled Errors|Vitest caught|uncaughtException|unhandledRejection|ReferenceError|TypeError|SyntaxError/.test((r.stdout??'')+(r.stderr??'')),'no setup/unhandled runtime error '+name);
+           report.runs.push({name,exit:r.status,receiptBytes:0});return r;
+          }
+          function facts(name,owned){
+           const r=run(name,process.execPath,['--unhandled-rejections=strict','scripts/simCareerFacts.mjs']);
+           if(owned){assert.equal(r.status,1);assert.equal(r.stdout.trim().split('\n').at(-1),'simCareerFacts: 1 failure(s) in section(s) 6');
+            assert.equal(r.stderr.trim(),'FAIL [6]: Segunda Division: no page note states its points rule, yet points read [3,1,0] (null and a pointsUnread reason wanted)');
+           }else{assert.equal(r.status,0);assert.equal(r.stderr,'');assert.equal(r.stdout.trim().split('\n').at(-1),'simCareerFacts: all sections green');}
+           hold(owned?'bad':'fixed');
+          }
+          try{
+           const t=run('types', 'node_modules/.bin/tsc',['--noEmit','-p','tsconfig.app.json']);assert.equal(t.status,0);hold('fixed');
+           write(out+'/types-passed.json',{command:'node_modules/.bin/tsc --noEmit -p tsconfig.app.json',exit:0});
+           fs.writeFileSync(FACTS,bad);hold('bad');facts('bad-note-original',true);
+           fs.writeFileSync(FACTS,fixed);hold('fixed');facts('fixed-note',false);
+           const raw=out+'/fixed7/raw';fs.mkdirSync(raw,{recursive:true});
+           const v=run('fixed7',process.execPath,['--unhandled-rejections=strict','node_modules/vitest/vitest.mjs','run',...Object.keys(pins).filter(p=>p.startsWith('src/test/')),'--maxWorkers=1','--minWorkers=1','--reporter=json','--outputFile='+out+'/fixed7/vitest.json'],{SEGUNDA_EVIDENCE_DIR:raw});
+           assert.equal(v.status,0);const j=JSON.parse(fs.readFileSync(out+'/fixed7/vitest.json'));
+           assert.equal(j.success,true);assert.equal(j.numTotalTests,7);assert.equal(j.numPassedTests,7);
+           for(const k of ['numFailedTests','numPendingTests','numTodoTests','numFailedTestSuites','numPendingTestSuites'])assert.equal(j[k],0);
+           if(j.numRuntimeErrors!==undefined)assert.equal(j.numRuntimeErrors,0);for(const k of ['unhandledErrors','errors'])if(Array.isArray(j[k]))assert.equal(j[k].length,0);assert.equal(j.testResults.length,2);
+           const actual=j.testResults.flatMap(f=>f.assertionResults.map(a=>({file:path.relative(root,f.name).split(path.sep).join('/'),name:a.fullName,status:a.status,failures:a.failureMessages})));
+           assert.deepEqual(actual.map(({file,name})=>({file,name})),expected);for(const a of actual){assert.equal(a.status,'passed');assert.deepEqual(a.failures,[]);}
+           const rawNames=['academy','canonical','creation-ui','cup','history','savedOffers','world'].map(n=>n+'.json').sort();
+           assert.deepEqual(fs.readdirSync(raw).sort(),rawNames);
+           for(const name of rawNames){const b=fs.readFileSync(raw+'/'+name),value=JSON.parse(b);assert(Array.isArray(value.importDraws));assert(Object.hasOwn(value,'value'));report.raw.push({file:'fixed7/raw/'+name,bytes:b.length,sha256:sha(b)});}
+           write(out+'/fixed7/actual-census.json',actual);hold('fixed');
+           fs.writeFileSync(FACTS,bad);hold('bad');fs.writeFileSync(FACTS,fixed);hold('fixed');facts('restored-fixed-repeat',false);
+           report.status='data-note-only-qualified';report.scope='Actual one owned bad-note failure, two normal fixed Facts passes, proper types and exactly seven unchanged cases with seven complete RAW files. No broader or fresh build/native/public credit.';
+          }catch(e){failure=e;report.status='failed';report.error={name:e.name,message:e.message,stack:e.stack};}
+          finally{
+           fs.writeFileSync(FACTS,fixed);const after=inventory();write(out+'/source-after.json',after);report.sourceHeld=JSON.stringify(after)===JSON.stringify(before);report.statusClean=status()==='';
+           write(out+'/facts-note-admission.json',report);assert.deepEqual(after,before);assert.equal(status(),'');
+          }
+          if(failure)throw failure;
+          console.log('SC_SEGUNDA_FACTS_NOTE_QUALIFIED exact old-note failure, fixed Facts twice, unchanged7 RAW, types and all source holds');
+          NODE
+          native_exit=$?
+          printf '%s\n' "$native_exit" > "$QA_OUT/controller-native-exit.txt"
+          cat "$QA_OUT/logs/controller.stdout.log" "$QA_OUT/logs/controller.stderr.log"
+          test "$native_exit" = 0 || exit "$native_exit"
+          test ! -s "$SIM_OFFLINE_RECEIPT"
+      - name: Always hold every source file and exact lock bytes
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          export GIT_NO_LAZY_FETCH=1
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$QA_OUT/source-after.sha256"
+          cmp "$QA_OUT/source-before-install.sha256" "$QA_OUT/source-after.sha256"
+          git diff --exit-code HEAD > "$QA_OUT/source-diff.txt"
+          git status --porcelain=v1 --untracked-files=all > "$QA_OUT/status-after.txt"
+          test ! -s "$QA_OUT/status-before.txt"
+          test ! -s "$QA_OUT/status-after.txt"
+          cmp package-lock.json "$QA_OUT/package-lock-before.json"
+          test "$(git hash-object scripts/data/soccerCareerFacts.json)" = 5a8bcd1ae9b048d2bfa6b759b6b8fff1a7131e13
+          printf '0\n' > "$QA_OUT/source-holds-native-exit.txt"
+      - name: Retain bounded whole evidence
+        id: evidence
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          tar -czf "$RUNNER_TEMP/soccer-segunda-facts-note.tar.gz" -C "$QA_OUT" .
+          test "$(stat -c %s "$RUNNER_TEMP/soccer-segunda-facts-note.tar.gz")" -le 50000000
+          sha256sum "$RUNNER_TEMP/soccer-segunda-facts-note.tar.gz" > "$RUNNER_TEMP/soccer-segunda-facts-note.tar.gz.sha256"
+      - uses: actions/upload-artifact@v4
+        if: always() && steps.evidence.outcome == 'success'
+        with:
+          name: soccer-segunda-facts-note-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            ${{ runner.temp }}/soccer-segunda-facts-note.tar.gz
+            ${{ runner.temp }}/soccer-segunda-facts-note.tar.gz.sha256
+          if-no-files-found: error
+          retention-days: 30
+          compression-level: 0
