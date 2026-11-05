@@ -1,0 +1,220 @@
+name: Soccer expansion normal completed build
+on:
+  push:
+    branches: [codex/soccer-segunda-identity-build-20261105]
+permissions:
+  contents: read
+concurrency:
+  group: soccer-segunda-build-${{ github.ref }}
+  cancel-in-progress: false
+env:
+  CI: '1'
+  SIM_NETWORK: offline
+  TZ: UTC
+  PRODUCT_CORE: 76e2af6a555d86743a481a50c24dccb8348b26b7
+  PRODUCT_TREE: 8106a333f4e95ecb7f9197c98e4708ec232080b6
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      ENGINES: chromium
+      SEO_SPLIT_BASE_REF: HEAD
+      SWEEP_OFFLINE: '1'
+      PLAYWRIGHT_BROWSERS_PATH: /home/runner/.cache/ms-playwright
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+          filter: blob:none
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: '1.4.4'
+      - name: Bind clean product and unchanged build inputs
+        run: |
+          set -euo pipefail
+          OUT="$RUNNER_TEMP/soccer-segunda-build"
+          mkdir -p "$OUT/logs" "$OUT/transport"
+          echo "QA_OUT=$OUT" >> "$GITHUB_ENV"
+          export QA_OUT="$OUT"
+          test "$(git rev-parse HEAD^)" = "$PRODUCT_CORE"
+          test "$(git rev-parse HEAD^^{tree})" = "$PRODUCT_TREE"
+          test "$(git diff --name-status HEAD^ HEAD)" = $'A\t.github/workflows/soccer-segunda-identity-build-20261105.yml'
+          git rev-parse HEAD HEAD^{tree} > "$OUT/source.txt"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$OUT/source-before.sha256"
+          git status --porcelain=v1 --untracked-files=all > "$OUT/status-before.txt"
+          test ! -s "$OUT/status-before.txt"
+          cp .github/workflows/soccer-segunda-identity-build-20261105.yml "$OUT/workflow.yml"
+          test ! -e .tmp-fx/career-records-tests.json
+          test ! -L .tmp-fx/career-records-tests.json
+          if [[ -e .tmp-fx || -L .tmp-fx ]]; then test -d .tmp-fx; test ! -L .tmp-fx; fi
+          : > "$OUT/records-leaf-owned-before.txt"
+      - name: Install held app and required build tools
+        run: |
+          set -euo pipefail
+          test "$(bun --version)" = 1.4.4
+          bun --version > "$QA_OUT/logs/bun-version.log"
+          node --version > "$QA_OUT/logs/node-version.log"
+          bun install --frozen-lockfile > "$QA_OUT/logs/bun-install.log" 2>&1
+          node -p "JSON.stringify({router:require('react-router-dom/package.json').version,vite:require('vite/package.json').version,rollup:JSON.parse(require('fs').readFileSync('node_modules/rollup/package.json','utf8')).version})" > "$QA_OUT/logs/build-versions.json"
+          git diff --exit-code HEAD -- package.json package-lock.json bun.lock bun.lockb
+          npm install --prefix "$RUNNER_TEMP/soccer-build-tools" --package-lock=false --no-audit --no-fund playwright@1.64.0 > "$QA_OUT/logs/playwright-install.log" 2>&1
+          test ! -e node_modules/playwright
+          test ! -e node_modules/playwright-core
+          ln -s "$RUNNER_TEMP/soccer-build-tools/node_modules/playwright" node_modules/playwright
+          ln -s "$RUNNER_TEMP/soccer-build-tools/node_modules/playwright-core" node_modules/playwright-core
+          "$RUNNER_TEMP/soccer-build-tools/node_modules/.bin/playwright" install --with-deps chromium > "$QA_OUT/logs/chromium-install.log" 2>&1
+          python3 -m pip install --target "$RUNNER_TEMP/soccer-build-python" fonttools pillow > "$QA_OUT/logs/python-install.log" 2>&1
+          echo "PYTHONPATH=$RUNNER_TEMP/soccer-build-python" >> "$GITHUB_ENV"
+      - name: Proper application types
+        run: |
+          set -euo pipefail
+          export GIT_NO_LAZY_FETCH=1
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          : > "$QA_OUT/transport/types.log"
+          SIM_OFFLINE_RECEIPT="$QA_OUT/transport/types.log" node_modules/.bin/tsc --noEmit -p tsconfig.app.json > "$QA_OUT/logs/types.log" 2>&1
+          printf '%s\n' '{"command":"node_modules/.bin/tsc --noEmit -p tsconfig.app.json","exit":0}' > "$QA_OUT/types-passed.json"
+          test ! -s "$QA_OUT/transport/types.log"
+      - name: Normal build, all twenty output readers and unchanged caps
+        timeout-minutes: 25
+        run: |
+          set -euo pipefail
+          export GIT_NO_LAZY_FETCH=1
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          classify_receipt() {
+            local name="$1" receipt="$2"
+            local allowed='^\[SIM_OFFLINE_BLOCK\] external browser route continue https://fonts\.(googleapis|gstatic)\.com$'
+            if [[ "$name" == sweep-weight ]]; then
+              allowed="$allowed|^\[SIM_OFFLINE_BLOCK\] external browser route continue https://flagcdn\.com$"
+            elif [[ "$name" != build ]]; then
+              if [[ -s "$receipt" ]]; then cat "$receipt"; return 1; fi
+              return 0
+            fi
+            local status=0
+            grep -Ev "$allowed" "$receipt" || status=$?
+            if [[ "$status" == 1 ]]; then return 0; fi
+            return 1
+          }
+          run_gate() {
+            local name="$1"
+            shift
+            local receipt="$QA_OUT/transport/$name.log"
+            : > "$receipt"
+            SIM_OFFLINE_RECEIPT="$receipt" "$@" 2>&1 | tee "$QA_OUT/logs/$name.log"
+            if ! classify_receipt "$name" "$receipt"; then
+              echo "Unexpected blocked transport in $name" >&2
+              return 1
+            fi
+            # Every refusal is retained and counted, never credited as zero transport.
+            if [[ -s "$receipt" ]]; then
+              wc -l "$receipt" | tee "$QA_OUT/logs/$name-blocked-attempts.txt"
+            fi
+          }
+          run_gate simSaveKeeper node scripts/simSaveKeeper.mjs
+          run_gate simHomeFront node scripts/simHomeFront.mjs
+          grep -F '7) Continue playing:' "$QA_OUT/logs/simHomeFront.log"
+          run_gate simSoccerCareerRecords node scripts/simSoccerCareerRecords.mjs
+
+          grep -F 'simSoccerCareerRecords: 12 outcome checks green, three effective controls caught' "$QA_OUT/logs/simSoccerCareerRecords.log"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import path from 'node:path';import crypto from 'node:crypto';import assert from 'node:assert/strict';
+          const out=process.env.QA_OUT,leaf=path.resolve('.tmp-fx/career-records-tests.json');
+          assert(fs.existsSync(out+'/records-leaf-owned-before.txt'));
+          const dir=fs.lstatSync(path.dirname(leaf)),stat=fs.lstatSync(leaf);
+          assert(dir.isDirectory()&&!dir.isSymbolicLink());assert(stat.isFile()&&!stat.isSymbolicLink());
+          assert.equal(fs.realpathSync(path.dirname(leaf)),path.join(fs.realpathSync('.'),'.tmp-fx'));
+          const bytes=fs.readFileSync(leaf),report=JSON.parse(bytes),rows=report.testResults.flatMap(x=>x.assertionResults);
+          assert.equal(report.numTotalTests,12);assert.equal(report.numPassedTests,11);assert.equal(report.numFailedTests,1);
+          assert.equal(rows.length,12);assert.equal(rows.filter(x=>x.status==='passed').length,11);assert.equal(rows.filter(x=>x.status==='failed').length,1);
+          const retained=out+'/records-last-control-tests.json',sha=crypto.createHash('sha256').update(bytes).digest('hex');
+          fs.writeFileSync(retained,bytes,{flag:'wx'});assert.deepEqual(fs.readFileSync(retained),bytes);
+          fs.unlinkSync(leaf);
+          fs.writeFileSync(out+'/records-output-retention.json',JSON.stringify({sourceLeaf:'.tmp-fx/career-records-tests.json',retained:'records-last-control-tests.json',bytes:bytes.length,sha256:sha,nativeSimExit:0,ordinaryNonSymlinkLeaf:true,copyReadBackExact:true,removedOnlyExactLeaf:true,meaning:'Last negative-control report, intentionally 1 failed and 11 passed. Healthy 12 outcomes and three effective controls are in the complete native log.'},null,2)+'\n');
+          NODE
+          git status --porcelain=v1 --untracked-files=all > "$QA_OUT/status-after-records.txt"
+          test ! -s "$QA_OUT/status-after-records.txt"
+          run_gate build npm run build
+          find dist -type f -print0 | sort -z | xargs -0 sha256sum > "$QA_OUT/dist-before.sha256"
+          tar -czf "$QA_OUT/completed-dist.tar.gz" dist
+          sha256sum "$QA_OUT/completed-dist.tar.gz" > "$QA_OUT/completed-dist.tar.gz.sha256"
+          tar -tzf "$QA_OUT/completed-dist.tar.gz" > "$QA_OUT/completed-dist-members.txt"
+          export BASE=http://127.0.0.1:4173
+          export SWEEP_BASE="$BASE"
+          export SWEEP_OFFLINE=1
+          export SIM_OFFLINE_RECEIPT="$QA_OUT/transport/server.log"
+          : > "$SIM_OFFLINE_RECEIPT"
+          node scripts/lib/hostLikeServer.mjs dist 4173 > "$QA_OUT/logs/server.log" 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid" 2>/dev/null || true' EXIT
+          ready=0
+          for attempt in $(seq 1 40); do
+            if curl --fail --silent "$BASE/" > /dev/null; then ready=1; break; fi
+            kill -0 "$server_pid"
+            sleep 1
+          done
+          test "$ready" = 1
+          run_gate sweep-weight node scripts/sweepWeight.mjs
+          readers=(
+            simAdsense simBrand simHeadTags simHiddenPages simHubs
+            simIndexNow simIndexing simInternalLinks simNoRivalNames simPrerender
+            simPrerenderBoot simRetiredRoutes simSchema simSitemap simSnapshotAssets
+            simSiteSearch simGuideHeadings simHarnessAnchors
+          )
+          for reader in "${readers[@]}"; do
+            run_gate "$reader" node "scripts/$reader.mjs"
+          done
+          run_gate simSeoTitles node scripts/simSeoTitles.mjs
+          run_gate simSeoMetaSplit env SEO_SPLIT_ONLY=/soccer-career,/club-manager node scripts/simSeoMetaSplit.mjs
+          run_gate simCmLeagueRules node scripts/simCmLeagueRules.mjs
+          test ! -s "$QA_OUT/transport/server.log"
+      - name: Record the one completed immutable output
+        run: |
+          set -euo pipefail
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import crypto from 'node:crypto';import assert from 'node:assert/strict';
+          const out=process.env.QA_OUT,tar=fs.readFileSync(out+'/completed-dist.tar.gz'),dist=fs.readFileSync(out+'/dist-before.sha256');
+          const readers=['simAdsense','simBrand','simHeadTags','simHiddenPages','simHubs','simIndexNow','simIndexing','simInternalLinks','simNoRivalNames','simPrerender','simPrerenderBoot','simRetiredRoutes','simSchema','simSitemap','simSnapshotAssets','simSiteSearch','simGuideHeadings','simHarnessAnchors','simSeoTitles','simSeoMetaSplit'];
+          for(const name of ['simSaveKeeper','simHomeFront','simSoccerCareerRecords','build','sweep-weight',...readers,'simCmLeagueRules'])assert(fs.statSync(out+'/logs/'+name+'.log').size>0);
+          fs.writeFileSync(out+'/build-proof.json',JSON.stringify({status:'compiled-gates-passed',product:process.env.PRODUCT_CORE,productTree:process.env.PRODUCT_TREE,normalBuilds:1,readers,readersCount:20,seoSplitScope:['/soccer-career','/club-manager'],allCapsUnchanged:true,extraCmLeagueRules:true,tar:{bytes:tar.length,sha256:crypto.createHash('sha256').update(tar).digest('hex')},distInventorySHA256:crypto.createHash('sha256').update(dist).digest('hex'),native:false,public:false},null,2)+'\n');
+          console.log('SC_SEGUNDA_COMPLETED_BUILD 1 normal build,20 output readers,unchanged caps and CM lazy-world checks');
+          NODE
+      - name: Hold complete source and completed output
+        if: always()
+        run: |
+          set -euo pipefail
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$QA_OUT/source-after.sha256"
+          cmp "$QA_OUT/source-before.sha256" "$QA_OUT/source-after.sha256"
+          git diff --exit-code HEAD > "$QA_OUT/source-diff.txt"
+          git status --porcelain=v1 --untracked-files=all > "$QA_OUT/status-after.txt"
+          test ! -s "$QA_OUT/status-after.txt"
+          if [[ -f "$QA_OUT/dist-before.sha256" ]]; then
+            find dist -type f -print0 | sort -z | xargs -0 sha256sum > "$QA_OUT/dist-after.sha256"
+            cmp "$QA_OUT/dist-before.sha256" "$QA_OUT/dist-after.sha256"
+            sha256sum --check "$QA_OUT/dist-before.sha256" > "$QA_OUT/dist-held.log"
+          fi
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const out=process.env.QA_OUT,rows=fs.readdirSync(out+'/transport').sort().map(file=>{
+            const lines=fs.readFileSync(out+'/transport/'+file,'utf8').split('\n').filter(Boolean);
+            const permitted=line=>(file==='build.log'&&/^\[SIM_OFFLINE_BLOCK\] external browser route continue https:\/\/fonts\.(googleapis|gstatic)\.com$/.test(line))||(file==='sweep-weight.log'&&(/^\[SIM_OFFLINE_BLOCK\] external browser route continue https:\/\/fonts\.(googleapis|gstatic)\.com$/.test(line)||line==='[SIM_OFFLINE_BLOCK] external browser route continue https://flagcdn.com'));
+            assert(lines.every(permitted),'Unexpected transport receipt '+file);
+            return{file,blockedAttempts:lines.length,fontBlockedAttempts:lines.filter(line=>line.includes('fonts.googleapis.com')||line.includes('fonts.gstatic.com')).length,flagBlockedAttempts:lines.filter(line=>line.endsWith('https://flagcdn.com')).length};
+          });
+          fs.writeFileSync(out+'/transport-summary.json',JSON.stringify({receipts:rows,meaning:'Declared blocked font/flag attempts are retained; no provider/font availability claim.'},null,2)+'\n');
+          fs.writeFileSync(out+'/source-output-hold.json',JSON.stringify({sourceHeld:true,status:'clean',completedDistHeld:fs.existsSync(out+'/dist-before.sha256')},null,2)+'\n');
+          NODE
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: soccer-segunda-build-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ env.QA_OUT }}/
+          retention-days: 30
+          compression-level: 6
