@@ -1,4 +1,4 @@
-import { hasSoccerHistoricalPlayer } from './soccerHistoricalArrivals';
+import { MAX_WORLD_NAMES, hasSoccerHistoricalPlayer, readSoccerHistoricalArrivals } from './soccerHistoricalArrivals';
 /* ─── Round 130: the phone stops being a one shot novelty ───────────────────
 
    What Round 80 shipped: a text arrived between seasons, you picked one of two
@@ -50,7 +50,7 @@ export const MAX_LINES = 6;    // lines kept per thread (three exchanges of hist
 export const MAX_THREADS = 8;  // threads kept, oldest resting one drops first
 export const MAX_FEED = 12;    // sports feed items kept
 export const MAX_PERKS = 6;    // stat perks a whole career can ever collect
-export const MAX_WORLD_NAMES = 28; // entries kept in the who plays where map
+export { MAX_WORLD_NAMES }; // Same bounded who-plays-where map.
 export const MAX_SEEN = 8;     // convo ids remembered per contact
 
 /* ─── types ─── */
@@ -1653,7 +1653,10 @@ export function worldSeasonTick(
      (careerEras.ts), which is where the Ballon d'Or night finds him too
      (worldClubOf). Generated names are seeded once, as before. */
   // Registered arrivals keep the career's saved club across era-table changes.
-  for (const st of stars) if ((realNames && !hasSoccerHistoricalPlayer(s, st.name)) || !p.clubs[st.name]) p.clubs[st.name] = st.club;
+  for (const st of stars) {
+    const entry = hasSoccerHistoricalPlayer(s, st.name) ? readSoccerHistoricalArrivals(s)!.players[0] : undefined;
+    if ((realNames && !entry) || !p.clubs[st.name]) p.clubs[st.name] = entry?.entryClub ?? st.club;
+  }
 
   /* Transfers. Two to four of the era's names change clubs, and this map is
      the only place the answer lives, so nothing can contradict it later. */

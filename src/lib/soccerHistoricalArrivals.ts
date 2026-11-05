@@ -1,5 +1,7 @@
 import type { CareerState } from './soccerCareerEngine';
 
+export const MAX_WORLD_NAMES = 28;
+
 export interface SoccerHistoricalArrivals {
   version: 1;
   players: { id: 'soccer:neymar'; entryYear: 2009; entryClub: 'Santos' }[];
@@ -18,7 +20,10 @@ export function hasSoccerHistoricalPlayer(s: CareerState, name: string): boolean
 /** Admit a sourced identity after the career actually commits its calendar year. Draws nothing. */
 export function recordSoccerHistoricalArrivals(s: CareerState, year: number): void {
   const arrivals = readSoccerHistoricalArrivals(s);
-  if (!arrivals || year < 2009 || arrivals.players.length || !s.phone) return;
+  if (!arrivals || !Number.isSafeInteger(year) || year < 2009 || arrivals.players.length || !s.phone) return;
   s.historicalArrivals = { ...arrivals, players: [{ id: 'soccer:neymar', entryYear: 2009, entryClub: 'Santos' }] };
-  s.phone = { ...s.phone, clubs: { ...s.phone.clubs, Neymar: 'Santos' } };
+  const clubs: Record<string, string> = { ...s.phone.clubs, Neymar: 'Santos' };
+  const drop = Object.keys(clubs).filter(name => name !== 'Neymar').slice(0, Math.max(0, Object.keys(clubs).length - MAX_WORLD_NAMES));
+  for (const name of drop) delete clubs[name];
+  s.phone = { ...s.phone, clubs };
 }
