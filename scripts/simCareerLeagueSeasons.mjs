@@ -155,8 +155,12 @@ const red = new Set();
 let section = '0';
 let failures = 0;
 const shown = {};
+const lookupObservationFile = process.env.SOCCER_LEAGUE_LOOKUP_OBSERVATION;
+if (!lookupObservationFile || !path.isAbsolute(lookupObservationFile)) throw new Error('SOCCER_LEAGUE_LOOKUP_OBSERVATION must be an absolute evidence path');
+const lookupObservation = { rows: [], failures: [] };
 const fail = m => {
   failures += 1; red.add(section);
+  lookupObservation.failures.push({ section, message: m });
   shown[section] = (shown[section] || 0) + 1;
   if (shown[section] <= 12) console.error(`  FAIL [${section}]: ${m}`);
 };
@@ -324,6 +328,7 @@ for (const c of WORLD) {
     ok(got === (want ? want.name : null), `${c.name} ${span(y)}: the lookup says ${got}, the ledgers ${want ? want.name : 'no league'}`);
     ok(L.leagueKeyInYear(c, y) === (want ? want.key : null), `${c.name} ${span(y)}: key ${L.leagueKeyInYear(c, y)}, the ledgers ${want ? want.key : 'none'}`);
     const m = L.clubLedgerSeason(c.name, y);
+    lookupObservation.rows.push({ club: structuredClone(c), year: y, expected: want, actual: { league: got, key: L.leagueKeyInYear(c, y), ledger: m } });
     ok(!(m && m.canon === null), `${c.name} ${span(y)}: matched to an unnamed member of ${m && m.key}, a canon the ledgers missed or a false identity`);
   }
   ok(L.leagueInYear(c, LIST_SEASON) === (c.league || null), `${c.name}: from 2026-27 the lookup must answer today's label "${c.league}"`);
@@ -398,6 +403,22 @@ for (const [from, to] of Object.entries(L.MARKET_SPELLINGS)) {
 let printedNames = 0;
 for (const row of byLeague.values()) for (const ps of row.printed) for (const p of ps) { printedNames += 1; ok(L.identityKey(p) === genIdentity(p), `identityKey disagrees with the generator on "${p}"`); }
 console.log(`  ${seasonsIn} seasons, ${canonIn} named places; ${answers} club seasons answered (${placed} in a league); ${market.length} market clubs placed in ${marketPlaced} club seasons; ${printedNames} printed names keyed alike; ${guarded} club seasons hold the old save guard`);
+
+fs.mkdirSync(path.dirname(lookupObservationFile), { recursive: true });
+fs.writeFileSync(lookupObservationFile, JSON.stringify({
+  schema: 'soccer-league-lookup-observation-v1',
+  scope: 'Actual section A results from the unchanged assertion loop. Later sections retain their normal behavior; this file is written before section B and is not a full-harness pass receipt.',
+  source: {
+    trackedHarness: createHash('sha256').update(fs.readFileSync(path.join(ROOT, 'scripts/simCareerLeagueSeasons.mjs'))).digest('hex'),
+    observedHarness: createHash('sha256').update(fs.readFileSync(fileURLToPath(import.meta.url))).digest('hex'),
+    league: createHash('sha256').update(fs.readFileSync(path.join(ROOT, 'src/lib/soccerCareerLeague.ts'))).digest('hex'),
+    generatedSeasons: createHash('sha256').update(fs.readFileSync(path.join(ROOT, 'src/data/careerLeagueSeasons.ts'))).digest('hex'),
+    canonicalPool: createHash('sha256').update(fs.readFileSync(path.join(ROOT, 'src/data/soccerCareerClubPool.ts'))).digest('hex'),
+  },
+  listSeason: LIST_SEASON, world: WORLD, ledgers,
+  answers, placed, seasonsIn, canonIn, failureCounts: { ...shown },
+  ...lookupObservation,
+}, null, 2) + '\n');
 
 /* ─── b. PLAYED ─── */
 head('b', 'PLAYED: seeded careers from 1990 to 2019, to retirement and into the dugout');
