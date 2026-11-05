@@ -1,0 +1,133 @@
+name: Segunda frozen seven full RAW remeasurement
+on:
+  push:
+    branches: [codex/soccer-segunda-frozen-seven-20261105]
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: soccer-segunda-frozen-seven-${{ github.ref }}
+  cancel-in-progress: false
+env:
+  CI: '1'
+  TZ: UTC
+  PRODUCT_CORE: 76e2af6a555d86743a481a50c24dccb8348b26b7
+  PRODUCT_TREE: 8106a333f4e95ecb7f9197c98e4708ec232080b6
+  RUNNER_BLOB: 7136cd7b7d188e27b829ee825df8ba9c436f657f
+jobs:
+  frozen-seven:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+          filter: blob:none
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: '1.4.4'
+      - name: Bind four temporary additions and unchanged frozen tests
+        run: |
+          set -euo pipefail
+          OUT="$RUNNER_TEMP/soccer-frozen-seven"
+          REF="$RUNNER_TEMP/soccer-frozen-seven-reference"
+          mkdir -p "$OUT/logs" "$OUT/inputs" "$REF/evidence"
+          echo "QA_OUT=$OUT" >> "$GITHUB_ENV"
+          echo "FROZEN_REFERENCE=$REF/evidence" >> "$GITHUB_ENV"
+          echo "FROZEN_REFERENCE_ZIP=$REF/original-13387325465.zip" >> "$GITHUB_ENV"
+          test "$(git rev-parse HEAD^)" = "$PRODUCT_CORE"
+          test "$(git rev-parse "$PRODUCT_CORE^{tree}")" = "$PRODUCT_TREE"
+          test "$(git hash-object scripts/qa/soccerSegundaFrozenSeven.mjs)" = "$RUNNER_BLOB"
+          test "$(git hash-object scripts/qa/soccerSegundaBridgeEvidence.mjs)" = 8aadac23e0499142560c66790e1c9cb6affc0a52
+          test "$(git hash-object scripts/qa/soccerSegundaBridgeCases.json)" = 99653cab18cdc9f790e218490efcde732c8e2fd3
+          test "$(git hash-object src/test/soccerCareerSegundaBridge.test.ts)" = 893d8d9eaad5ab1ae7098b79b946afb426dc9aa7
+          test "$(git hash-object src/test/soccerCareerSegundaCreation.test.tsx)" = 3cfb09a21f1786302861d85362249967dbb3bf53
+          test "$(git hash-object src/lib/soccerCareerLeague.ts)" = 3bf1c117da22ea2253b8dce264da1ea3a49a0517
+          git diff --name-status "$PRODUCT_CORE" HEAD > "$OUT/qa-delta.txt"
+          printf '%s\n' $'A\t.github/workflows/soccer-segunda-frozen-seven-20261105.yml' $'A\tscripts/qa/soccerSegundaBridgeCases.json' $'A\tscripts/qa/soccerSegundaBridgeEvidence.mjs' $'A\tscripts/qa/soccerSegundaFrozenSeven.mjs' > "$OUT/expected-qa-delta.txt"
+          cmp "$OUT/qa-delta.txt" "$OUT/expected-qa-delta.txt"
+          git status --porcelain=v1 --untracked-files=all > "$OUT/status-before.txt"
+          test ! -s "$OUT/status-before.txt"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$OUT/source-before-install.sha256"
+      - name: Authenticate and reuse the single prior complete outcomes artifact
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import path from 'node:path';import assert from 'node:assert/strict';
+          const api=async route=>{const r=await fetch('https://api.github.com/repos/PapiSalgueroM/ballpark-hero/'+route,{headers:{Authorization:'Bearer '+process.env.GH_TOKEN,Accept:'application/vnd.github+json'}});assert.equal(r.status,200);return r.json();};
+          const run=await api('actions/runs/41963050038'),jobs=await api('actions/runs/41963050038/jobs?per_page=100'),artifact=await api('actions/artifacts/13387325465');
+          assert.equal(run.status,'completed');assert.equal(run.conclusion,'success');assert.equal(run.head_sha,'826d551ed3be6d0ca72a8721ff3cb429446265c5');
+          assert.equal(jobs.jobs.find(job=>job.id===127033652938)?.conclusion,'success');
+          assert.equal(artifact.id,13387325465);assert.equal(artifact.size_in_bytes,8637413);assert.equal(artifact.expired,false);assert.equal(artifact.workflow_run.id,41963050038);
+          for(const[name,value]of Object.entries({run,jobs,artifact}))fs.writeFileSync(path.join(process.env.QA_OUT,'inputs',name+'.json'),JSON.stringify(value,null,2)+'\n');
+          NODE
+          curl --fail --location --retry 3 -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" https://api.github.com/repos/PapiSalgueroM/ballpark-hero/actions/artifacts/13387325465/zip -o "$FROZEN_REFERENCE_ZIP"
+          test "$(stat -c %s "$FROZEN_REFERENCE_ZIP")" = 8637413
+          printf '%s  %s\n' 699840a8b4eccb73ae5b461db50ed81fac85c23544de5e2074a129f093b3989c "$FROZEN_REFERENCE_ZIP" | sha256sum -c -
+          unzip -Z1 "$FROZEN_REFERENCE_ZIP" > "$QA_OUT/inputs/reference-entry-list.txt"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import path from 'node:path';import assert from 'node:assert/strict';
+          for(const name of fs.readFileSync(path.join(process.env.QA_OUT,'inputs/reference-entry-list.txt'),'utf8').trim().split('\n'))assert(!name.startsWith('/')&&!name.split('/').includes('..'));
+          NODE
+          unzip -q "$FROZEN_REFERENCE_ZIP" -d "$FROZEN_REFERENCE"
+      - name: Install held package versions
+        run: |
+          set -euo pipefail
+          test "$(bun --version)" = 1.4.4
+          bun --version > "$QA_OUT/logs/bun-version.log"
+          node --version > "$QA_OUT/logs/node-version.log"
+          bun install --frozen-lockfile > "$QA_OUT/logs/install.log" 2>&1
+          git diff --exit-code HEAD -- package.json package-lock.json bun.lock bun.lockb
+      - name: Two fresh fixed measurements with exact complete RAW parity
+        run: |
+          set -uo pipefail
+          unset NODE_OPTIONS SEGUNDA_EVIDENCE_DIR RECORD SEEDS CAREERS SIM_OFFLINE_RECEIPT
+          export GIT_NO_LAZY_FETCH=1
+          node --unhandled-rejections=strict scripts/qa/soccerSegundaFrozenSeven.mjs --out "$QA_OUT/results" --reference "$FROZEN_REFERENCE" --reference-zip "$FROZEN_REFERENCE_ZIP" > "$QA_OUT/logs/controller.stdout.log" 2> "$QA_OUT/logs/controller.stderr.log"
+          native_exit=$?
+          printf '%s\n' "$native_exit" > "$QA_OUT/controller-native-exit.txt"
+          cat "$QA_OUT/logs/controller.stdout.log" "$QA_OUT/logs/controller.stderr.log"
+          test "$native_exit" = 0 || exit "$native_exit"
+      - name: Always prove full source and lock holds with silent receipts
+        if: always()
+        run: |
+          set -euo pipefail
+          export GIT_NO_LAZY_FETCH=1
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$QA_OUT/source-after.sha256"
+          cmp "$QA_OUT/source-before-install.sha256" "$QA_OUT/source-after.sha256"
+          git diff --exit-code HEAD > "$QA_OUT/source-diff.txt"
+          git status --porcelain=v1 --untracked-files=all > "$QA_OUT/status-after.txt"
+          test ! -s "$QA_OUT/status-after.txt"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import path from 'node:path';import assert from 'node:assert/strict';
+          const walk=dir=>fs.readdirSync(dir,{withFileTypes:true}).flatMap(e=>e.isDirectory()?walk(path.join(dir,e.name)):[path.join(dir,e.name)]);
+          for(const file of walk(process.env.QA_OUT).filter(file=>/-transport\.log$/.test(file)))assert.equal(fs.statSync(file).size,0,file);
+          NODE
+          printf '%s\n' SC_SEGUNDA_FROZEN_SEVEN_SOURCE_HELD > "$QA_OUT/workflow-source-held.txt"
+      - name: Retain actual results and full references within the unchanged cap
+        id: evidence
+        if: always()
+        run: |
+          set -euo pipefail
+          tar -czf "$RUNNER_TEMP/soccer-frozen-seven.tar.gz" -C "$QA_OUT" .
+          test "$(stat -c %s "$RUNNER_TEMP/soccer-frozen-seven.tar.gz")" -le 50000000
+          sha256sum "$RUNNER_TEMP/soccer-frozen-seven.tar.gz" > "$RUNNER_TEMP/soccer-frozen-seven.tar.gz.sha256"
+      - uses: actions/upload-artifact@v4
+        if: always() && steps.evidence.outcome == 'success'
+        with:
+          name: soccer-frozen-seven-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            ${{ runner.temp }}/soccer-frozen-seven.tar.gz
+            ${{ runner.temp }}/soccer-frozen-seven.tar.gz.sha256
+          if-no-files-found: error
+          retention-days: 30
+          compression-level: 0
