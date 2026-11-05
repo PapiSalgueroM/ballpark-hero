@@ -211,14 +211,14 @@
     "/career": {
       "howToPlay": [
         "Tap any hidden box to reveal that cell of the career table.",
-        "Press Give Hint to open 4 random boxes at once, as often as you like.",
+        "Reveal an early club opens the earliest club box still hidden on this board for 1 box. Give Hint opens up to 4 random boxes.",
         "Guess by typing a name in the search bar, any time, even with zero boxes open.",
         "Wrong guesses burn one of your 8 chances. Revealing boxes never does.",
         "Solve it and the game logs both your guess count and your box count."
       ],
       "rules": [
         "You get 8 guesses, and 8 wrong guesses ends the run.",
-        "Each hint opens exactly 4 random boxes.",
+        "Reveal an early club opens 1 hidden club box, starting from the top of the board. Give Hint opens up to 4 random hidden boxes.",
         "Five columns hide per season: club, appearances, goals, assists, and market value.",
         "The daily is shared by everyone. Unlimited mode adds Easy, Normal, and Hard tiers, splitting the pool by peak market value."
       ],
