@@ -742,9 +742,9 @@ export const SOCCER_CONTENT_2: GameContentMap = {
         ],
       },
       {
-        heading: "Using Give Hint for four boxes at once",
+        heading: "Choosing a club clue or random boxes",
         items: [
-          "Press Give Hint to open 4 random boxes at once, as often as you like.",
+          "Reveal an early club opens the earliest club box still hidden on this board for 1 box. Give Hint opens up to 4 random boxes.",
         ],
       },
       {
@@ -778,7 +778,7 @@ export const SOCCER_CONTENT_2: GameContentMap = {
       {
         heading: "Hints and the five hidden columns",
         items: [
-          "Each hint opens exactly 4 random boxes.",
+          "Reveal an early club opens 1 hidden club box, starting from the top of the board. Give Hint opens up to 4 random hidden boxes.",
           "Five columns hide per season: club, appearances, goals, assists, and market value.",
         ],
       },
