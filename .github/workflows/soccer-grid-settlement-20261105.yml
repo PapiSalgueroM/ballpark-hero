@@ -1,0 +1,71 @@
+name: Soccer Grid original settlement proof
+on:
+  push:
+    branches: [codex/soccer-grid-settlement-qa-20261105]
+permissions:
+  contents: read
+jobs:
+  original:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    defaults:
+      run:
+        shell: bash
+    env:
+      SIM_NETWORK: offline
+      SIM_OFFLINE_RECEIPT: grid-settlement-original/offline.log
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 3
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24.22.1
+          cache: npm
+      - name: Original source and locked dependencies
+        run: |
+          mkdir -p grid-settlement-original
+          git rev-parse HEAD > grid-settlement-original/head.txt
+          git ls-files -s > grid-settlement-original/source-before.txt
+          sha256sum package.json package-lock.json > grid-settlement-original/locks-before.txt
+          npm ci
+      - name: Proper app types including new test leaves
+        run: node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee grid-settlement-original/types.log
+      - name: Exact original ownership and no-tick deadline business failures
+        if: ${{ !cancelled() }}
+        run: |
+          set +e
+          SC_GRID_OWNERSHIP_RAW="$PWD/grid-settlement-original/ownership-raw.json" SC_GRID_SUBMISSION_DEADLINE_RAW="$PWD/grid-settlement-original/deadline-raw.json" NODE_OPTIONS="--max-old-space-size=6144 --require=$PWD/scripts/lib/offlineTransport.cjs" node node_modules/vitest/vitest.mjs run src/test/soccerGridSubmissionOwnership.test.tsx src/test/soccerGridSubmissionDeadline.test.tsx --maxWorkers=1 --minWorkers=1 --reporter=default --reporter=json --outputFile=grid-settlement-original/units.json > grid-settlement-original/units.log 2>&1
+          status=$?
+          set -e
+          cat grid-settlement-original/units.log
+          test "$status" -eq 1
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const report=JSON.parse(fs.readFileSync('grid-settlement-original/units.json'));
+          const rows=report.testResults.flatMap(s=>s.assertionResults),failed=rows.filter(x=>x.status==='failed');
+          assert.equal(report.numTotalTests,24);assert.equal(rows.length,24);assert.equal(failed.length,12);assert.equal(rows.filter(x=>x.status==='passed').length,12);
+          const expected=['SG_OWNERSHIP_VALIDATOR','SG_OWNERSHIP_RARITY','SG_OWNERSHIP_INSERT','SG_OWNERSHIP_WRONG','SG_OWNERSHIP_BATCH','SG_OWNERSHIP_RULES','GRID_SUBMISSION_ENTRY','GRID_SUBMISSION_VALIDATOR','GRID_SUBMISSION_RARITY','GRID_SUBMISSION_INSERT','GRID_SUBMISSION_WRONG','GRID_SUBMISSION_EXACT'].sort();
+          assert.deepEqual(failed.map(x=>x.title.split(' ')[0]).sort(),expected);
+          for(const row of failed)assert(row.failureMessages.length>0&&row.failureMessages.every(msg=>/^AssertionError: (SG_OWNERSHIP_|GRID_SUBMISSION_)/m.test(msg.replace(/\u001b\[[0-?]*[ -/]*[@-~]/g,''))),'Named actual business assertion: '+row.title);
+          assert(!/Unhandled Errors|Unhandled Rejection|Uncaught Exception|Failed to resolve import/.test(fs.readFileSync('grid-settlement-original/units.log','utf8')));
+          for(const f of ['ownership-raw.json','deadline-raw.json'])assert(fs.statSync('grid-settlement-original/'+f).size>1000,'Actual complete raw '+f);
+          console.log('PASS original24: exact12businessreds and12preservationpasses, no runtime banners');
+          NODE
+      - name: Source lock and offline holds
+        if: always()
+        run: |
+          git diff --exit-code HEAD -- src scripts package.json package-lock.json
+          git ls-files -s > grid-settlement-original/source-after.txt
+          cmp grid-settlement-original/source-before.txt grid-settlement-original/source-after.txt
+          sha256sum package.json package-lock.json > grid-settlement-original/locks-after.txt
+          cmp grid-settlement-original/locks-before.txt grid-settlement-original/locks-after.txt
+          if test -f grid-settlement-original/offline.log; then test ! -s grid-settlement-original/offline.log; fi
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: soccer-grid-settlement-original-${{ github.run_id }}
+          path: grid-settlement-original
+          retention-days: 14
+          if-no-files-found: error
