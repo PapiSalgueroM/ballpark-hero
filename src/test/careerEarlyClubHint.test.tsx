@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import { cleanup, fireEvent, render, waitFor } from '@testing-library/react';
+import { cleanup, fireEvent, render, waitFor, within } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { MemoryRouter } from 'react-router-dom';
 import type { CareerPlayer, CareerSeason } from '@/types/career';
@@ -49,7 +49,7 @@ async function mount() {
   return view;
 }
 function early(view: ReturnType<typeof render>, marker: string): HTMLButtonElement {
-  const button = view.queryByRole('button', { name: LABEL, exact: true });
+  const button = view.queryByRole('button', { name: LABEL });
   expect(button, marker + ' native named control exists').not.toBeNull();
   return button as HTMLButtonElement;
 }
@@ -80,12 +80,12 @@ describe('Career Quiz deliberate early club assistance', () => {
     expect(button, 'EARLY_CLUB_NATIVE native button').toBeInstanceOf(HTMLButtonElement);
     expect(button, 'EARLY_CLUB_NATIVE initially enabled').toBeEnabled();
     expect(button, 'EARLY_CLUB_NATIVE touch target class').toHaveClass('min-h-[44px]');
-    const random = view.getByRole('button', { name: 'Give Hint', exact: true });
+    const random = view.getByRole('button', { name: 'Give Hint' });
     expect(random, 'EARLY_CLUB_NATIVE random choice retained').toBeEnabled();
     expect(view.queryByText(/earliest club box still hidden on this board/i), 'EARLY_CLUB_NATIVE visible policy').toBeVisible();
     expect(view.container, 'EARLY_CLUB_NATIVE visible ordinary box cost').toHaveTextContent(/\b1 (?:ordinary )?box\b/);
     expect(view.container, 'EARLY_CLUB_NATIVE visible random box cost').toHaveTextContent(/4 random (?:hidden )?boxes/);
-    fireEvent.click(view.getByRole('button', { name: 'How to play', exact: true }));
+    fireEvent.click(view.getByRole('button', { name: 'How to play' }));
     const help = view.getByRole('dialog', { name: 'How to Play: Career Quiz' });
     expect(help, 'EARLY_CLUB_NATIVE help names assistance').toHaveTextContent(LABEL);
     expect(help, 'EARLY_CLUB_NATIVE help explains one box').toHaveTextContent(/\b1 (?:ordinary )?box\b/);
@@ -128,7 +128,7 @@ describe('Career Quiz deliberate early club assistance', () => {
     }
     const button = early(view, 'EARLY_CLUB_EXHAUST');
     expect(button, 'EARLY_CLUB_EXHAUST no eligible club').toBeDisabled();
-    expect(view.getByRole('button', { name: 'Give Hint', exact: true }), 'EARLY_CLUB_EXHAUST other hidden cells remain').toBeEnabled();
+    expect(view.getByRole('button', { name: 'Give Hint' }), 'EARLY_CLUB_EXHAUST other hidden cells remain').toBeEnabled();
     const before = localStorage.getItem(SAVE_KEY); fireEvent.click(button);
     expect(localStorage.getItem(SAVE_KEY), 'EARLY_CLUB_EXHAUST disabled action is quiet').toBe(before);
   });
@@ -140,7 +140,7 @@ describe('Career Quiz deliberate early club assistance', () => {
     fireEvent.click(button);
     counts(view, 0, 0, 'EARLY_CLUB_EMPTY');
     expect(localStorage.getItem(SAVE_KEY), 'EARLY_CLUB_EMPTY no ledger write').toBeNull();
-    expect(view.getByRole('button', { name: 'Give Hint', exact: true }), 'EARLY_CLUB_EMPTY classic hint retained').toBeEnabled();
+    expect(view.getByRole('button', { name: 'Give Hint' }), 'EARLY_CLUB_EMPTY classic hint retained').toBeEnabled();
   });
 
   it('EARLY_CLUB_RELOAD resumes the exact ordinary daily action ledger', async () => {
@@ -161,15 +161,15 @@ describe('Career Quiz deliberate early club assistance', () => {
   it('EARLY_CLUB_UNLIMITED counts ordinary boxes and preserves daily progress through mode switches and reset', async () => {
     const view = await mount(); fireEvent.click(early(view, 'EARLY_CLUB_UNLIMITED'));
     const daily = localStorage.getItem(SAVE_KEY);
-    fireEvent.click(view.getByRole('button', { name: '∞ Unlimited', exact: true }));
+    fireEvent.click(view.getByRole('button', { name: '∞ Unlimited' }));
     counts(view, 0, 0, 'EARLY_CLUB_UNLIMITED');
     fireEvent.click(early(view, 'EARLY_CLUB_UNLIMITED')); fireEvent.click(early(view, 'EARLY_CLUB_UNLIMITED'));
     counts(view, 2, 0, 'EARLY_CLUB_UNLIMITED');
     expect(view.getByText('Generated Middle', { exact: true }), 'EARLY_CLUB_UNLIMITED two clubs revealed').toBeVisible();
     expect(localStorage.getItem(SAVE_KEY), 'EARLY_CLUB_UNLIMITED daily bytes held').toBe(daily);
-    fireEvent.click(view.getByRole('button', { name: '📅 Daily', exact: true })); counts(view, 1, 0, 'EARLY_CLUB_UNLIMITED');
-    fireEvent.click(view.getByRole('button', { name: '∞ Unlimited', exact: true })); counts(view, 2, 0, 'EARLY_CLUB_UNLIMITED');
-    fireEvent.click(view.getByRole('button', { name: 'easy', exact: true })); counts(view, 0, 0, 'EARLY_CLUB_UNLIMITED');
+    fireEvent.click(view.getByRole('button', { name: '📅 Daily' })); counts(view, 1, 0, 'EARLY_CLUB_UNLIMITED');
+    fireEvent.click(view.getByRole('button', { name: '∞ Unlimited' })); counts(view, 2, 0, 'EARLY_CLUB_UNLIMITED');
+    fireEvent.click(view.getByRole('button', { name: 'easy' })); counts(view, 0, 0, 'EARLY_CLUB_UNLIMITED');
     fireEvent.click(early(view, 'EARLY_CLUB_UNLIMITED'));
     expect(view.queryByRole('button', { name: 'Reveal club for career row 2' }), 'EARLY_CLUB_UNLIMITED reset restarts earliest club').toBeNull();
     counts(view, 1, 0, 'EARLY_CLUB_UNLIMITED');
@@ -190,7 +190,7 @@ describe('Career Quiz deliberate early club assistance', () => {
     expect(localStorage.getItem(SAVE_KEY), 'EARLY_CLUB_MANUAL byte-identical ordinary save').toBe(manual);
     expect(recordCompletion, 'EARLY_CLUB_MANUAL unchanged payout once').toHaveBeenCalledExactlyOnceWith('/career', 700, 'FixtureBaller', 0);
     expect(view.getByRole('region', { name: 'Fixture result' }), 'EARLY_CLUB_MANUAL result still counts one box').toHaveTextContent('1 guess with 1 box uncovered!');
-    expect(view.queryByRole('button', { name: LABEL, exact: true }), 'EARLY_CLUB_MANUAL won controls hidden').toBeNull();
+    expect(view.queryByRole('button', { name: LABEL }), 'EARLY_CLUB_MANUAL won controls hidden').toBeNull();
   });
 
   it('EARLY_CLUB_FINISHED hides assistance after either finish and never appends on finished reload', async () => {
@@ -198,32 +198,69 @@ describe('Career Quiz deliberate early club assistance', () => {
       localStorage.removeItem(SAVE_KEY); vi.clearAllMocks();
       let view = await mount(); fireEvent.click(early(view, 'EARLY_CLUB_FINISHED'));
       if (outcome === 'won') guess(view, fixture.player.name);
-      else { fireEvent.click(view.getByRole('button', { name: 'Give up', exact: true })); fireEvent.click(view.getByRole('button', { name: 'Yes, reveal it', exact: true })); }
+      else { fireEvent.click(view.getByRole('button', { name: 'Give up' })); fireEvent.click(view.getByRole('button', { name: 'Yes, reveal it' })); }
       const finished = localStorage.getItem(SAVE_KEY);
       expect(readSave(), 'EARLY_CLUB_FINISHED exact finish record').toEqual(exactSave([cell('1-club'), outcome === 'won' ? { t: 'won' } : { t: 'give' }], outcome));
-      expect(view.queryByRole('button', { name: LABEL, exact: true }), 'EARLY_CLUB_FINISHED no named control').toBeNull();
-      expect(view.queryByRole('button', { name: 'Give Hint', exact: true }), 'EARLY_CLUB_FINISHED no random control').toBeNull();
+      expect(view.queryByRole('button', { name: LABEL }), 'EARLY_CLUB_FINISHED no named control').toBeNull();
+      expect(view.queryByRole('button', { name: 'Give Hint' }), 'EARLY_CLUB_FINISHED no random control').toBeNull();
       expect(recordCompletion, 'EARLY_CLUB_FINISHED single existing payout').toHaveBeenCalledExactlyOnceWith('/career', outcome === 'won' ? 700 : 0, 'FixtureBaller', 0);
       view.unmount(); vi.clearAllMocks(); view = await mountFinished();
-      expect(view.queryByRole('button', { name: LABEL, exact: true }), 'EARLY_CLUB_FINISHED restored finish has no hint').toBeNull();
+      expect(view.queryByRole('button', { name: LABEL }), 'EARLY_CLUB_FINISHED restored finish has no hint').toBeNull();
       expect(localStorage.getItem(SAVE_KEY), 'EARLY_CLUB_FINISHED reload bytes held').toBe(finished);
       expect(recordCompletion, 'EARLY_CLUB_FINISHED reload never pays again').not.toHaveBeenCalled();
       view.unmount();
     }
   });
 
+  it('EARLY_CLUB_STALE adopts another tab before spending the next ordinary club box', async () => {
+    const first = await mount(), firstDom = within(first.container);
+    const stale = render(<MemoryRouter initialEntries={['/career']}><CareerGame /></MemoryRouter>);
+    const staleDom = within(stale.container);
+    await waitFor(() => expect(staleDom.queryByRole('textbox', { name: 'Guess the player by name' })).not.toBeNull());
+    const initialHint = staleDom.queryByRole('button', { name: LABEL });
+    expect(initialHint, 'EARLY_CLUB_STALE native named control exists').not.toBeNull();
+    expect(staleDom.getByText('Boxes:').textContent, 'EARLY_CLUB_STALE starts with no boxes').toBe('Boxes: 0');
+
+    fireEvent.click(firstDom.getByRole('button', { name: 'Reveal club for career row 2' }));
+    const newer = localStorage.getItem(SAVE_KEY);
+    expect(readSave(), 'EARLY_CLUB_STALE other tab recorded one ordinary club').toEqual(exactSave([cell('1-club')]));
+    // No storage event is sent: this root must still show its old board at the click.
+    expect(staleDom.getByRole('button', { name: 'Reveal club for career row 2' }), 'EARLY_CLUB_STALE fixture is actually stale').toBeEnabled();
+    expect(staleDom.getByText('Boxes:').textContent, 'EARLY_CLUB_STALE stale count remains zero').toBe('Boxes: 0');
+
+    const writes = vi.spyOn(Storage.prototype, 'setItem');
+    fireEvent.click(initialHint as HTMLButtonElement);
+    expect(writes, 'EARLY_CLUB_STALE adoption makes no storage write').not.toHaveBeenCalled();
+    expect(localStorage.getItem(SAVE_KEY), 'EARLY_CLUB_STALE adoption preserves exact saved bytes').toBe(newer);
+    expect(staleDom.queryByRole('button', { name: 'Reveal club for career row 2' }), 'EARLY_CLUB_STALE adopts the other tab club').toBeNull();
+    expect(staleDom.getByText('Generated Early / Generated Loan', { exact: true }), 'EARLY_CLUB_STALE adopted source cell visible').toBeVisible();
+    expect(staleDom.getByRole('button', { name: 'Reveal club for career row 3' }), 'EARLY_CLUB_STALE adoption reveals no extra club').toBeEnabled();
+    expect(staleDom.getByText('Boxes:').textContent, 'EARLY_CLUB_STALE adoption counts only the saved box').toBe('Boxes: 1');
+
+    const nextHint = staleDom.queryByRole('button', { name: LABEL });
+    expect(nextHint, 'EARLY_CLUB_STALE native action remains available after adoption').not.toBeNull();
+    fireEvent.click(nextHint as HTMLButtonElement);
+    const next = exactSave([cell('1-club'), cell('2-club')]);
+    expect(writes, 'EARLY_CLUB_STALE next activation writes exactly once').toHaveBeenCalledExactlyOnceWith(SAVE_KEY, JSON.stringify(next));
+    expect(readSave(), 'EARLY_CLUB_STALE next activation appends exactly one next club').toEqual(next);
+    expect(staleDom.getByText('Generated Middle', { exact: true }), 'EARLY_CLUB_STALE next club visible').toBeVisible();
+    expect(staleDom.getByText('Boxes:').textContent, 'EARLY_CLUB_STALE next activation spends one box').toBe('Boxes: 2');
+    expect(staleDom.getByText('Guesses:').textContent, 'EARLY_CLUB_STALE never spends a guess').toBe('Guesses: 0/8');
+    expect(recordCompletion, 'EARLY_CLUB_STALE in-progress tabs never complete').not.toHaveBeenCalled();
+  });
+
   it('keeps the original four-random-cell hint and final short batch without duplicate actions', async () => {
     fixture.player.career = rows().slice(1, 2);
     const view = await mount();
     const random = vi.spyOn(Math, 'random').mockReturnValue(0.5);
-    fireEvent.click(view.getByRole('button', { name: 'Give Hint', exact: true }));
+    fireEvent.click(view.getByRole('button', { name: 'Give Hint' }));
     expect(readSave()).toEqual(exactSave([cell('0-club'), cell('0-appearances'), cell('0-goals'), cell('0-assists')]));
     counts(view, 4); expect(random).toHaveBeenCalled();
-    fireEvent.click(view.getByRole('button', { name: 'Give Hint', exact: true }));
+    fireEvent.click(view.getByRole('button', { name: 'Give Hint' }));
     expect(readSave()).toEqual(exactSave([cell('0-club'), cell('0-appearances'), cell('0-goals'), cell('0-assists'), cell('0-marketValue')]));
     counts(view, 5);
-    expect(view.getByRole('button', { name: 'Give Hint', exact: true })).toBeDisabled();
-    const completed = localStorage.getItem(SAVE_KEY); fireEvent.click(view.getByRole('button', { name: 'Give Hint', exact: true }));
+    expect(view.getByRole('button', { name: 'Give Hint' })).toBeDisabled();
+    const completed = localStorage.getItem(SAVE_KEY); fireEvent.click(view.getByRole('button', { name: 'Give Hint' }));
     expect(localStorage.getItem(SAVE_KEY)).toBe(completed);
     expect(recordCompletion).not.toHaveBeenCalled();
   });

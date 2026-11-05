@@ -18,7 +18,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 0
+          fetch-depth: 12
           persist-credentials: false
       - uses: actions/setup-node@v4
         with:
@@ -45,7 +45,7 @@ jobs:
           import fs from 'node:fs'; import assert from 'node:assert/strict';
           const report=JSON.parse(fs.readFileSync('early-club-artifacts/original.json'));
           const rows=report.testResults.flatMap(s=>s.assertionResults);
-          assert.equal(rows.length,10); assert.equal(rows.filter(r=>r.status==='failed').length,9); assert.equal(rows.filter(r=>r.status==='passed').length,1);
+          assert.equal(rows.length,11); assert.equal(rows.filter(r=>r.status==='failed').length,10); assert.equal(rows.filter(r=>r.status==='passed').length,1);
           assert(rows.filter(r=>r.status==='failed').every(r=>r.failureMessages.join('\n').includes('EARLY_CLUB_')));
           console.log('Original named business failures: '+rows.filter(r=>r.status==='failed').length+' of '+rows.length);
           NODE
