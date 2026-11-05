@@ -1,0 +1,471 @@
+name: Soccer four entries public same compiled assets and qualified native fixtures
+on:
+  push:
+    branches: [codex/soccer-four-entries-public-20261105]
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: soccer-four-entries-public-20261105
+  cancel-in-progress: false
+jobs:
+  public:
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    env:
+      PRODUCT: a9e56ff706ea71a51d3ec60438023ed9ad4d3b01
+      PRODUCT_TREE: 316d2084d15d5e24aff38e5a692b639432b3eb98
+      STAGE1_SOURCE: 0b7ffd557fdb81f10341358fe4885eff88f0138d
+      STAGE1_TREE: 66c31114b9f11a0da434dbd5a19d74c555516594
+      NATIVE_SOURCE: d85af8b48d513d80fbfa0f6dda7c045651aa4ae8
+      NATIVE_TREE: d932367338f642d371b994469b81544fff78cafd
+      NATIVE_RUN: 42080295381
+      NATIVE_JOB: 127431256822
+      NATIVE_ARTIFACT: 13439499755
+      NATIVE_BYTES: 13098490
+      NATIVE_SHA256: f7704ba54a173801fee0480a6eae4f69659cfaa0abf1dcd1019143aa17aa3d84
+      NATIVE_TGZ: soccer-four-entries-native.tar.gz
+      NATIVE_TGZ_BYTES: 13098014
+      NATIVE_TGZ_SHA256: 70022e6bfb5dd65b99877808608d86afb48d99ed5364627e13dc55cc326f67ee
+      NATIVE_MANIFEST_BYTES: 1671897
+      NATIVE_MANIFEST_SHA256: faa1abe5db462f338c61f0a31c9d63a83c687ae42d29d2002a817f36e721be64
+      NATIVE_ADMISSION_SHA256: 69f420492bd29d81667ad18b3ed98209473e49f77e33a7e8f3eb6788e0acebe5
+      PUBLISHED_SOURCE: e16e9ea36fc6c9aab84d7f79d99679e5c22e8ad3
+      PUBLISHED_TREE: 66c31114b9f11a0da434dbd5a19d74c555516594
+      DEPLOY_SOURCE: e16e9ea36fc6c9aab84d7f79d99679e5c22e8ad3
+      DEPLOY_TREE: 66c31114b9f11a0da434dbd5a19d74c555516594
+      DEPLOYMENT_ID: 2d231ee7-24b2-4940-af8d-5908d26371e6
+      BROWSER_BLOB: abb12d2d0b503d25cde4ec392cde67ba03956344
+      FIXTURE_BLOB: 3f5a12bb72cf73ffe7b9b0742ee7229d4d4eee65
+      SPEC_BLOB: f097d00f3b112e594ffbbab58c6684ba74b1208e
+      ASSETS_BLOB: c712011e87f8a863075a7375f3e9f8bae01de74b
+      READY_BLOB: 671f460aa088d42b44c435a03594cf26695d6e09
+      PLAYWRIGHT_BROWSERS_PATH: /home/runner/.cache/ms-playwright
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+          filter: blob:none
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: '1.4.4'
+      - name: Bind one added public workflow and all qualified helper bytes
+        shell: bash
+        run: |
+          set -euo pipefail
+          QA_OUT="$RUNNER_TEMP/soccer-four-entries-public"
+          QA_REF="$RUNNER_TEMP/soccer-four-entries-public-inputs"
+          QA_DIST="$RUNNER_TEMP/soccer-four-entries-public-dist"
+          export QA_OUT QA_REF QA_DIST
+          echo "QA_OUT=$QA_OUT" >> "$GITHUB_ENV"
+          echo "QA_REF=$QA_REF" >> "$GITHUB_ENV"
+          echo "QA_DIST=$QA_DIST" >> "$GITHUB_ENV"
+          mkdir -p "$QA_OUT"/{logs,input,transport,original-native} "$QA_REF" "$QA_DIST"
+          git ls-files -z > "$QA_OUT/tracked-before.bin"
+          git ls-files -z | xargs -0 sha256sum > "$QA_OUT/source-before.sha256"
+          git ls-files -s > "$QA_OUT/index-before.txt"
+          git status --porcelain=v1 --untracked-files=all > "$QA_OUT/status-before.txt"
+          cp package-lock.json "$QA_OUT/lock-before.json"
+          node --input-type=module -e 'import fs from "node:fs";import crypto from "node:crypto";const sha=b=>crypto.createHash("sha256").update(b).digest("hex");fs.writeFileSync(process.env.QA_OUT+"/all-locks-before.json",JSON.stringify(Object.fromEntries(["package.json","package-lock.json","bun.lock","bun.lockb","yarn.lock","pnpm-lock.yaml"].map(p=>[p,fs.existsSync(p)?sha(fs.readFileSync(p)):null])))+"\n");'
+          git rev-parse HEAD HEAD^ 'HEAD^{tree}' > "$QA_OUT/source-identity.txt"
+          node --input-type=module <<'NODE'
+          import assert from 'node:assert/strict';
+          for(const key of ['PRODUCT','PRODUCT_TREE','STAGE1_SOURCE','STAGE1_TREE','NATIVE_SOURCE','NATIVE_TREE','PUBLISHED_SOURCE','PUBLISHED_TREE','DEPLOY_SOURCE','DEPLOY_TREE'])assert.match(process.env[key]??'',/^[a-f0-9]{40}$/,key+' actual binding');
+          for(const key of ['NATIVE_RUN','NATIVE_JOB','NATIVE_ARTIFACT','NATIVE_BYTES','NATIVE_TGZ_BYTES','NATIVE_MANIFEST_BYTES'])assert.match(process.env[key]??'',/^[1-9][0-9]+$/,key+' actual binding');
+          for(const key of ['NATIVE_SHA256','NATIVE_TGZ_SHA256','NATIVE_MANIFEST_SHA256','NATIVE_ADMISSION_SHA256'])assert.match(process.env[key]??'',/^[a-f0-9]{64}$/);
+          assert.match(process.env.DEPLOYMENT_ID??'',/^[a-f0-9]{8}-(?:[a-f0-9]{4}-){3}[a-f0-9]{12}$/i);
+          assert.equal(process.env.PUBLISHED_SOURCE,process.env.DEPLOY_SOURCE);assert.equal(process.env.PUBLISHED_TREE,process.env.DEPLOY_TREE);assert.equal(process.env.PUBLISHED_TREE,process.env.STAGE1_TREE,'Published/deployed full tree is the exact Stage1 composition');
+          NODE
+          test "$(git rev-parse HEAD^)" = "$NATIVE_SOURCE"
+          test "$(git rev-parse "$NATIVE_SOURCE^{tree}")" = "$NATIVE_TREE"
+          test "$(git hash-object scripts/qa/soccerHistoricalFourBrowser.mjs)" = "$BROWSER_BLOB"
+          test "$(git hash-object scripts/qa/soccerHistoricalFourFixtures.mjs)" = "$FIXTURE_BLOB"
+          test "$(git hash-object scripts/qa/soccerHistoricalFourNative.json)" = "$SPEC_BLOB"
+          test "$(git hash-object scripts/qa/soccerHistoricalFourAssets.mjs)" = "$ASSETS_BLOB"
+          test "$(git hash-object scripts/qa/nativeScrollReady.mjs)" = "$READY_BLOB"
+          git diff --name-status HEAD^ HEAD > "$QA_OUT/qa-delta.txt"
+          node --input-type=module -e 'import fs from "node:fs";import assert from "node:assert/strict";assert.equal(fs.readFileSync(process.env.QA_OUT+"/qa-delta.txt","utf8"),"A\t.github/workflows/soccer-four-entries-public-20261105.yml\n");'
+          test ! -s "$QA_OUT/status-before.txt"
+      - name: Read exact product merge deployment and completed build source identities
+        shell: bash
+        run: |
+          set -euo pipefail
+          for ref in "$PRODUCT" "$STAGE1_SOURCE" "$PUBLISHED_SOURCE" "$DEPLOY_SOURCE" 6a173004a760ac26af0fa63d3745c8a9e6a40544; do
+            git fetch --depth=1 --filter=blob:none origin "$ref" >> "$QA_OUT/logs/source-ref-fetch.log" 2>&1
+          done
+          test "$(git rev-parse "$PRODUCT^{tree}")" = "$PRODUCT_TREE"
+          test "$(git rev-parse "$PUBLISHED_SOURCE^{tree}")" = "$PUBLISHED_TREE"
+          test "$(git rev-parse "$DEPLOY_SOURCE^{tree}")" = "$DEPLOY_TREE"
+          test "$(git rev-parse "$STAGE1_SOURCE^{tree}")" = "$STAGE1_TREE"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import path from 'node:path';import assert from 'node:assert/strict';import {createHash} from 'node:crypto';import {spawnSync} from 'node:child_process';
+          const rows=[{"path":"docs/data/soccer-historical-arrivals.md","before":"e2b6a87c7a44ab3f1473ebcb3ed65aba47b7d194","after":"adfae0db5b77775ab6c8a0398bfe6233a6683849"},{"path":"src/test/soccerHistoricalRealEntry.test.tsx","before":"a9c74d118bad8ddaf69e0af75e8185b5a7ca6d1c","after":"bec3f78f30501551fcd69bb3c88b8c8bf68c11d9"},{"path":"scripts/simSoccerHistoricalArrivals.mjs","before":"1d3af363c832ff7eacd498ca0f99eec6ca047a35","after":"02c559fcde4e731fedb02aaefaf83945815928a5"},{"path":"scripts/data/soccerHistoricalV1UiFixture.json","before":null,"after":"cdc13da018efec049567c8148755cc21a9b791d3"},{"path":"scripts/simNbaHistoricalDraft.mjs","before":"ff3b7ff375943cdc3c71a6a88b734bfc0cd98a84","after":"c1510bf64aef2ed0f75db10af2a00a8ae9d4163d"}],out=path.join(process.env.QA_OUT,'stage1-source'),sha=b=>createHash('sha256').update(b).digest('hex'),blob=b=>createHash('sha1').update('blob '+b.length+'\0').update(b).digest('hex');
+          const online={...process.env};delete online.GIT_NO_LAZY_FETCH;fs.mkdirSync(out);const receipts=[];
+          for(const row of rows){
+            const before=row.before===null?null:fs.readFileSync(row.path);if(before)assert.equal(blob(before),row.before);else assert.equal(fs.existsSync(row.path),false);
+            const args=['show',process.env.STAGE1_SOURCE+':'+row.path],read=spawnSync('git',args,{env:online,encoding:null,maxBuffer:4*1024*1024});
+            const name=row.path.replaceAll('/','__');fs.writeFileSync(path.join(out,name+'.git.stderr'),read.stderr??Buffer.alloc(0));assert.equal(read.status,0);assert.equal(read.signal,null);assert.equal(read.error,undefined);
+            const after=read.stdout;assert.equal(blob(after),row.after);
+            if(before)fs.writeFileSync(path.join(out,name+'.before'),before,{flag:'wx'});fs.writeFileSync(path.join(out,name+'.after'),after,{flag:'wx'});
+            const repeat=spawnSync('git',['cat-file','blob',row.after],{env:{...process.env,GIT_NO_LAZY_FETCH:'1'},encoding:null,maxBuffer:4*1024*1024});assert.equal(repeat.status,0);assert.equal(repeat.signal,null);assert.equal(repeat.error,undefined);assert(repeat.stdout.equals(after),'Exact no-lazy read after online materialization');
+            if(row.path==='docs/data/soccer-historical-arrivals.md'){assert.equal(before.length,2798);assert.equal(after.length,5648);assert(after.subarray(0,before.length).equals(before));assert.equal(sha(after),'3d13303a6ae0b1a3c4181fb6e1d6219f3e7dcc0eff6c71dbab54b9373618c8f6');}
+            receipts.push({...row,command:['git',...args],onlineExit:read.status,noLazyExit:repeat.status,beforeBytes:before?.length??null,beforeSHA256:before?sha(before):null,afterBytes:after.length,afterSHA256:sha(after)});
+          }
+          fs.writeFileSync(path.join(process.env.QA_OUT,'stage1-hydration.json'),JSON.stringify({status:'EXACT_FIVE_NEW_BODIES_HYDRATED_ONLINE_AND_READ_NO_LAZY',source:process.env.STAGE1_SOURCE,tree:process.env.STAGE1_TREE,rows:receipts},null,2)+'\n',{flag:'wx'});
+          NODE
+          printf 'GIT_NO_LAZY_FETCH=1\n' >> "$GITHUB_ENV"
+
+      - name: Reuse exactly the completed V2 build and actual successful native artifact
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import path from 'node:path';import crypto from 'node:crypto';import assert from 'node:assert/strict';import {spawnSync} from 'node:child_process';
+          const spec=JSON.parse(fs.readFileSync('scripts/qa/soccerHistoricalFourNative.json')),out=process.env.QA_OUT,ref=process.env.QA_REF;
+          const sha=b=>crypto.createHash('sha256').update(b).digest('hex');
+          const call=(label,argv,binary=false)=>{const r=spawnSync('gh',argv,{encoding:binary?null:'utf8',maxBuffer:64*1024*1024});fs.writeFileSync(path.join(out,'input',label+'.native.json'),JSON.stringify({command:['gh',...argv],status:r.status,signal:r.signal,error:r.error?String(r.error):null})+'\n');if(!binary)fs.writeFileSync(path.join(out,'input',label+'.json'),r.stdout??'');assert.equal(r.status,0);assert.equal(r.signal,null);assert.equal(r.error,undefined);return binary?r.stdout:JSON.parse(r.stdout);};
+          const native={run:Number(process.env.NATIVE_RUN),job:Number(process.env.NATIVE_JOB),qa:process.env.NATIVE_SOURCE,artifact:Number(process.env.NATIVE_ARTIFACT),zipBytes:Number(process.env.NATIVE_BYTES),zipSHA256:process.env.NATIVE_SHA256,tgz:process.env.NATIVE_TGZ,tgzBytes:Number(process.env.NATIVE_TGZ_BYTES),tgzSHA256:process.env.NATIVE_TGZ_SHA256,independentAdmissionSHA256:process.env.NATIVE_ADMISSION_SHA256};
+          assert.match(native.tgz,/^[a-z0-9-]+\.tar\.gz$/);
+          const inputs={build:spec.artifacts.build,native};
+          for(const[name,a]of Object.entries(inputs)){
+            assert.match(a.independentAdmissionSHA256,/^[a-f0-9]{64}$/,'Actual independent admission bound');
+            const run=call(name+'-run',['api','repos/PapiSalgueroM/ballpark-hero/actions/runs/'+a.run]);
+            const job=call(name+'-job',['api','repos/PapiSalgueroM/ballpark-hero/actions/jobs/'+a.job]);
+            const artifact=call(name+'-artifact',['api','repos/PapiSalgueroM/ballpark-hero/actions/artifacts/'+a.artifact]);
+            assert.equal(run.status,'completed');assert.equal(run.conclusion,'success');assert.equal(run.head_sha,a.qa);assert.equal(job.id,a.job);assert.equal(job.run_id,a.run);assert.equal(job.conclusion,'success');assert.equal(artifact.id,a.artifact);assert.equal(artifact.size_in_bytes,a.zipBytes);assert.equal(artifact.expired,false);assert.equal(artifact.workflow_run.id,a.run);
+            const zip=call(name+'-zip',['api','repos/PapiSalgueroM/ballpark-hero/actions/artifacts/'+a.artifact+'/zip'],true);
+            assert.equal(zip.length,a.zipBytes);assert.equal(sha(zip),a.zipSHA256);
+            const zipFile=path.join(ref,name+'.zip');fs.writeFileSync(zipFile,zip,{flag:'wx'});const dir=path.join(ref,name);fs.mkdirSync(dir);
+            const r=spawnSync('unzip',['-p',zipFile,a.tgz],{maxBuffer:64*1024*1024});assert.equal(r.status,0);assert.equal(r.signal,null);assert.equal(r.error,undefined);assert.equal(r.stdout.length,a.tgzBytes);assert.equal(sha(r.stdout),a.tgzSHA256);
+            const tgz=path.join(ref,name+'.tar.gz');fs.writeFileSync(tgz,r.stdout,{flag:'wx'});const extracted=spawnSync('tar',['-xzf',tgz,'-C',dir]);assert.equal(extracted.status,0);
+            if(name==='build')assert(Array.isArray(a.admittedFiles)&&a.admittedFiles.length===112,'All actual admitted compiled-body pins');
+            for(const row of a.admittedFiles??[]){const bytes=fs.readFileSync(path.join(dir,row.path));assert.equal(bytes.length,row.bytes);assert.equal(sha(bytes),row.sha256,row.path);const copy=path.join(out,'input',name,row.path);fs.mkdirSync(path.dirname(copy),{recursive:true});fs.writeFileSync(copy,bytes,{flag:'wx'});}
+            fs.writeFileSync(path.join(out,'input',name+'-authenticated.json'),JSON.stringify({run:a.run,job:a.job,head:a.qa,artifact:a.artifact,bytes:a.zipBytes,sha256:a.zipSHA256,tgzSHA256:a.tgzSHA256,independentAdmissionSHA256:a.independentAdmissionSHA256},null,2)+'\n',{flag:'wx'});
+          }
+          const build=path.join(ref,'build'),b=spec.artifacts.build;
+          assert.equal(b.artifact,13437520395,'Only the admitted current SC4 completed build');
+          const proof=JSON.parse(fs.readFileSync(path.join(build,'build-proof.json')));
+          assert.equal(proof.status,'compiled-gates-passed');assert.equal(proof.product,process.env.PRODUCT);assert.equal(proof.productTree,process.env.PRODUCT_TREE);assert.equal(proof.normalBuilds,1);assert.equal(proof.readersCount,20);assert.equal(proof.allCapsUnchanged,true);assert.equal(proof.extraCmLeagueRules,false);
+          const tar=fs.readFileSync(path.join(build,b.tar));assert.equal(tar.length,b.tarBytes);assert.equal(sha(tar),b.tarSHA256);assert.equal(proof.tar.sha256,b.tarSHA256);assert.equal(proof.distInventorySHA256,b.distInventorySHA256);
+          const extraction=spawnSync('tar',['-xzf',path.join(build,b.tar),'--strip-components=1','-C',process.env.QA_DIST]);assert.equal(extraction.status,0);
+          const n=path.join(ref,'native'),r=JSON.parse(fs.readFileSync(path.join(n,'browser/report.json')));
+          assert.equal(r.status,'passed');assert.deepEqual(r.contexts.map(c=>[c.width,c.status,c.photos.length]),[[320,'passed',5],[390,'passed',5],[1280,'passed',5]]);assert.equal(r.screenshots.length,15);assert.equal(new Set(r.screenshots).size,15);
+          for(const file of r.screenshots){assert(!file.includes('..'));const bytes=fs.readFileSync(path.join(n,'browser',file));assert(bytes.subarray(0,8).equals(Buffer.from([137,80,78,71,13,10,26,10])));}
+          for(const key of ['sourceHeld','distHeld','fixtureHeld','nodeReceiptEmpty'])assert.equal(r[key],true);
+          for(const c of r.contexts){
+            assert(c.assetBodies.some(a=>a.file==='prerender-boot.js'));assert.equal(c.wheelAcknowledgments.length,2);assert(c.wheelAcknowledgments.every(row=>row.status==='passed'&&row.guardControl.wholeInverseExact&&row.guardControl.actualReceiptHeld));
+            for(const key of ['pageErrors','unexpectedConsole','undeclaredAborts','localHttpErrors','assetErrors'])assert.deepEqual(c[key],[]);
+            assert.equal(c.failClosedControls.wholeInverseExact,true);assert.equal(c.cardGeometryControl.wholeInverseExact,true);assert.equal(c.reviewScrollControl.wholeInverseExact,true);assert.equal(c.photoPreparationControl.wholeInverseExact,true);assert.equal(c.photoPreparationControl.actualHeld,true);
+            assert.equal(c.actions.filter(row=>row.type==='reload-full-reference').length,3);assert.equal(c.actions.filter(row=>row.type==='read-only-review').length,17);assert.equal(c.sourceCards.length,5);
+          }
+          const held=JSON.parse(fs.readFileSync(path.join(n,'source-dist-fixture-held.json')));assert.equal(held.source,true);assert.equal(held.dist,849);assert.equal(held.fixtures,2);assert.equal(held.referenceAndOriginalRawHeld,true);assert.equal(held.allLockPresenceAndBodiesHeld,true);
+          for(const name of ['types','fixtures','server','assets-before','browser','assets-after'])assert.equal(fs.statSync(path.join(n,'transport',name+'.log')).size,0);
+          for(const name of ['types','fixtures','assets-before','browser','assets-after','final-source-holds'])assert.equal(fs.readFileSync(path.join(n,'logs',name+'.exit'),'utf8').trim(),'0');
+          const before=JSON.parse(fs.readFileSync(path.join(n,'served-assets-before.json'))),after=JSON.parse(fs.readFileSync(path.join(n,'served-assets-after.json')));assert.deepEqual(after.rows,before.rows);assert(before.rows.some(row=>row.file==='prerender-boot.js'));
+          assert.equal(fs.readFileSync(path.join(n,'source-identity.txt'),'utf8').split('\n')[0],process.env.NATIVE_SOURCE);
+          const manifest=fs.readFileSync(path.join(n,'native-fixtures/manifest.json'));assert.equal(manifest.length,Number(process.env.NATIVE_MANIFEST_BYTES));assert.equal(sha(manifest),process.env.NATIVE_MANIFEST_SHA256);
+          fs.writeFileSync(path.join(out,'original-native','manifest.json'),manifest,{flag:'wx'});
+          fs.copyFileSync(path.join(n,'source-before.sha256'),path.join(out,'original-native','source-before.sha256'));
+          fs.copyFileSync(path.join(n,'browser/report.json'),path.join(out,'original-native','browser-report.json'));
+          const referenceRows=[];function walkReference(rel=''){for(const e of fs.readdirSync(path.join(ref,rel),{withFileTypes:true})){const file=path.posix.join(rel,e.name);if(e.isDirectory())walkReference(file);else{assert(e.isFile());const bytes=fs.readFileSync(path.join(ref,file));referenceRows.push({file,bytes:bytes.length,sha256:sha(bytes)});}}}walkReference();referenceRows.sort((a,b)=>a.file<b.file?-1:a.file>b.file?1:0);
+          fs.writeFileSync(path.join(out,'input-reference-before.json'),JSON.stringify(referenceRows)+'\n',{flag:'wx'});
+          fs.writeFileSync(path.join(out,'input','qualified-native-input.json'),JSON.stringify({source:process.env.NATIVE_SOURCE,run:native.run,job:native.job,artifact:native.artifact,contexts:3,photos:15,actualNativeReportSHA256:sha(fs.readFileSync(path.join(n,'browser/report.json'))),nativeIndependentAdmissionSHA256:native.independentAdmissionSHA256,noRebuild:true,noFixtureRegeneration:true,modelContinuation:false},null,2)+'\n',{flag:'wx'});
+          NODE
+
+      - name: Install held App and browser runtime without rebuilding
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(bun --version)" = 1.4.4
+          bun --version > "$QA_OUT/logs/bun-version.log"
+          node --version > "$QA_OUT/logs/node-version.log"
+          bun install --frozen-lockfile > "$QA_OUT/logs/bun-install.log" 2>&1
+          git diff --exit-code HEAD -- package.json package-lock.json bun.lock bun.lockb
+          npm install --prefix "$RUNNER_TEMP/real-entry-public-tools" --package-lock=false --no-audit --no-fund playwright@1.64.0 > "$QA_OUT/logs/playwright-install.log" 2>&1
+          test ! -e node_modules/playwright
+          test ! -e node_modules/playwright-core
+          ln -s "$RUNNER_TEMP/real-entry-public-tools/node_modules/playwright" node_modules/playwright
+          ln -s "$RUNNER_TEMP/real-entry-public-tools/node_modules/playwright-core" node_modules/playwright-core
+          "$RUNNER_TEMP/real-entry-public-tools/node_modules/.bin/playwright" install --with-deps chromium > "$QA_OUT/logs/chromium-install.log" 2>&1
+      - name: Proper App types with a silent receipt
+        shell: bash
+        run: |
+          set +e
+          set -uo pipefail
+          export GIT_NO_LAZY_FETCH=1 SIM_NETWORK=offline
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          export SIM_OFFLINE_RECEIPT="$QA_OUT/transport/types.log"
+          : > "$SIM_OFFLINE_RECEIPT"
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json > "$QA_OUT/logs/types.log" 2>&1
+          native_exit=$?
+          printf '%s\n' "$native_exit" > "$QA_OUT/logs/types.exit" || exit 1
+          test "$native_exit" = 0 || exit "$native_exit"
+          test ! -s "$SIM_OFFLINE_RECEIPT" || exit 1
+      - name: Preserve native payloads and add only this public workflow to two source maps
+        shell: bash
+        run: |
+          set -euo pipefail
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import path from 'node:path';import crypto from 'node:crypto';import assert from 'node:assert/strict';import {execFileSync} from 'node:child_process';
+          const e=process.env,out=e.QA_OUT,source=path.join(e.QA_REF,'native','native-fixtures'),target=path.join(out,'fixtures'),PUB='.github/workflows/soccer-four-entries-public-20261105.yml';
+          const sha=b=>crypto.createHash('sha256').update(b).digest('hex'),blob=b=>crypto.createHash('sha1').update('blob '+b.length+'\0').update(b).digest('hex'),json=v=>JSON.stringify(v,null,2)+'\n',git=(...a)=>execFileSync('git',a);
+          const spec=JSON.parse(fs.readFileSync('scripts/qa/soccerHistoricalFourNative.json'));
+          const originalBytes=fs.readFileSync(path.join(source,'manifest.json')),original=JSON.parse(originalBytes);
+          assert.equal(original.product,e.PRODUCT);assert.equal(original.productTree,e.PRODUCT_TREE);assert.deepEqual(original.sourceBefore,original.sourceAfter);
+          assert.equal(originalBytes.length,Number(e.NATIVE_MANIFEST_BYTES));assert.equal(sha(originalBytes),e.NATIVE_MANIFEST_SHA256);
+          const tracked=git('ls-files','-z').toString().split('\0').filter(Boolean),current=Object.fromEntries(tracked.map(p=>[p,sha(fs.readFileSync(p))]));
+          assert(!Object.hasOwn(original.sourceBefore,PUB),'The sole public workflow is absent from the qualified native parent');
+          assert.deepEqual([...new Set([...Object.keys(original.sourceBefore),...Object.keys(current)])].filter(p=>original.sourceBefore[p]!==current[p]),[PUB],'Only the added workflow differs from the complete native inventory');
+          const nativeLedger=fs.readFileSync(path.join(e.QA_REF,'native','source-before.sha256'));
+          const ledger=b=>Object.fromEntries(b.toString().trim().split('\n').filter(Boolean).map(l=>{const m=/^([a-f0-9]{64})  (.+)$/.exec(l);assert(m);return[m[2],m[1]];}));
+          assert.deepEqual(ledger(nativeLedger),original.sourceBefore);
+          const buildLedger=fs.readFileSync(path.join(e.QA_REF,'build','source-before.sha256')),built=ledger(buildLedger);
+          assert(buildLedger.equals(fs.readFileSync(path.join(e.QA_REF,'build','source-after.sha256'))));
+          const qaOnly=new Set([...spec.qaPaths,spec.artifacts.build.workflowPath,PUB]);
+          assert.equal(qaOnly.size,spec.qaPaths.length+2,'Exact native QA paths, compiled workflow and public workflow only');
+          const bridge=spec.buildHarnessBridge,before=fs.readFileSync(bridge.path),beforeText=before.toString();
+          assert.equal(blob(before),bridge.checkoutBlob);assert.equal(beforeText.split(bridge.before).length-1,1);
+          const afterText=beforeText.replace(bridge.before,bridge.after),after=Buffer.from(afterText);
+          assert.notEqual(afterText,beforeText);assert.equal(afterText.replace(bridge.after,bridge.before),beforeText);
+          assert.equal(blob(after),bridge.buildBlob);assert.equal(sha(after),built[bridge.path],'Exact build-only NBA wrapper inverse');
+          const union=[...new Set([...Object.keys(built),...Object.keys(original.sourceBefore),...Object.keys(current)])].filter(p=>!qaOnly.has(p)).sort();
+          for(const file of union){assert.equal(current[file],original.sourceBefore[file],'Complete native/public source '+file);assert.equal(file===bridge.path?sha(after):current[file],built[file],'Complete compiled/public source '+file);}
+          function tree(ref){return Object.fromEntries(git('ls-tree','-r','-z','--full-tree',ref).toString().split('\0').filter(Boolean).map(line=>{const m=/^([0-9]+) blob ([a-f0-9]{40})\t([\s\S]+)$/.exec(line);assert(m);return[m[3],{mode:m[1],blob:m[2]}];}));}
+          const roles={product:e.PRODUCT,build:spec.artifacts.build.qa,native:e.NATIVE_SOURCE,stage1:e.STAGE1_SOURCE,published:e.PUBLISHED_SOURCE,deployed:e.DEPLOY_SOURCE},roleMaps=Object.fromEntries(Object.entries(roles).map(([role,ref])=>[role,tree(ref)]));
+          assert.equal(git('rev-parse',e.STAGE1_SOURCE+'^{tree}').toString().trim(),e.STAGE1_TREE);assert.equal(e.PUBLISHED_TREE,e.STAGE1_TREE);assert.equal(e.DEPLOY_TREE,e.STAGE1_TREE);
+          const stageHydration=JSON.parse(fs.readFileSync(path.join(out,'stage1-hydration.json'))),stageRows=stageHydration.rows;
+          assert.equal(stageHydration.status,'EXACT_FIVE_NEW_BODIES_HYDRATED_ONLINE_AND_READ_NO_LAZY');assert.equal(stageRows.length,5);
+          const stageByPath=new Map(stageRows.map(row=>[row.path,row]));
+          const changed=[...new Set([...Object.keys(roleMaps.product),...Object.keys(roleMaps.stage1)])].filter(file=>JSON.stringify(roleMaps.product[file])!==JSON.stringify(roleMaps.stage1[file])).sort();
+          assert.deepEqual(changed,stageRows.map(row=>row.path).sort(),'Exactly the five reviewed nonruntime source changes');
+          const inverseStage=structuredClone(roleMaps.stage1);
+          for(const row of stageRows){
+            assert.equal(roleMaps.product[row.path]?.blob??null,row.before);assert.equal(roleMaps.stage1[row.path]?.blob,row.after);assert.equal(roleMaps.stage1[row.path]?.mode,'100644');
+            if(row.before===null)delete inverseStage[row.path];else inverseStage[row.path]=structuredClone(roleMaps.product[row.path]);
+            const name=row.path.replaceAll('/','__'),after=fs.readFileSync(path.join(out,'stage1-source',name+'.after'));assert.equal(blob(after),row.after);assert.equal(sha(after),row.afterSHA256);
+            if(row.before!==null){const before=fs.readFileSync(path.join(out,'stage1-source',name+'.before'));assert.equal(blob(before),row.before);assert.equal(sha(before),row.beforeSHA256);}
+          }
+          assert.deepEqual(inverseStage,roleMaps.product,'Whole five-path inverse restores every original file/mode/blob leaf');
+          const indexModes=Object.fromEntries(git('ls-files','--stage','-z').toString().split('\0').filter(Boolean).map(line=>{const m=/^([0-9]+) [a-f0-9]{40} 0\t([\s\S]+)$/.exec(line);assert(m);return[m[2],m[1]];}));
+          const refUnion=[...new Set([...Object.values(roleMaps).flatMap(map=>Object.keys(map)),...tracked])].filter(file=>!qaOnly.has(file)).sort();
+          for(const file of refUnion){
+            const row=stageByPath.get(file);
+            if(row){
+              assert.equal(fs.existsSync(file),row.before!==null);if(row.before!==null)assert.equal(blob(fs.readFileSync(file)),row.before);
+              for(const[role,map]of Object.entries(roleMaps)){
+                const expected=['stage1','published','deployed'].includes(role)||(role==='build'&&file===bridge.path)?row.after:row.before;
+                assert.equal(map[file]?.blob??null,expected,'Exact nonruntime '+role+' source '+file);assert.equal(map[file]?.mode??null,expected===null?null:'100644','Exact source mode '+file);
+              }
+            }else{
+              const actual=blob(fs.readFileSync(file));
+              for(const[role,map]of Object.entries(roleMaps)){assert.equal(map[file]?.blob,actual,'Exact protected '+role+' body '+file);assert.equal(map[file]?.mode,indexModes[file],'Exact protected '+role+' mode '+file);}
+            }
+          }
+          for(const file of spec.qaPaths){assert.equal(built[file],undefined);assert.equal(original.sourceBefore[file],current[file]);assert.equal(roleMaps.native[file]?.blob,blob(fs.readFileSync(file)));assert.equal(roleMaps.native[file]?.mode,indexModes[file]);for(const role of['product','build','stage1','published','deployed'])assert.equal(roleMaps[role][file],undefined,'No native QA payload in '+role);}
+          for(const role of Object.keys(roles))assert.equal(roleMaps[role][PUB],undefined,'Public workflow only belongs to current QA carrier');
+          assert.equal(roleMaps.build[spec.artifacts.build.workflowPath]?.blob,spec.artifacts.build.workflowBlob);
+          for(const role of['product','native','stage1','published','deployed'])assert.equal(roleMaps[role][spec.artifacts.build.workflowPath],undefined);
+          fs.mkdirSync(target);const files=fs.readdirSync(source,{withFileTypes:true});assert(files.every(f=>f.isFile()));assert.equal(files.length,9);
+          const originals=[];for(const file of files){const bytes=fs.readFileSync(path.join(source,file.name));fs.writeFileSync(path.join(target,file.name),bytes,{flag:'wx'});originals.push({file:file.name,bytes:bytes.length,sha256:sha(bytes)});}
+          assert(fs.readFileSync(path.join(out,'original-native','manifest.json')).equals(originalBytes));
+          assert(fs.readFileSync(path.join(out,'original-native','source-before.sha256')).equals(nativeLedger));
+          const derived=JSON.parse(originalBytes);derived.sourceBefore={...original.sourceBefore,[PUB]:current[PUB]};derived.sourceAfter={...original.sourceAfter,[PUB]:current[PUB]};
+          assert.deepEqual(derived.sourceBefore,current);assert.deepEqual(derived.sourceAfter,current);
+          assert.deepEqual(Object.keys(original).filter(key=>JSON.stringify(original[key])!==JSON.stringify(derived[key])).sort(),['sourceAfter','sourceBefore']);
+          const derivedBytes=Buffer.from(json(derived)),inverse=JSON.parse(derivedBytes);delete inverse.sourceBefore[PUB];delete inverse.sourceAfter[PUB];
+          assert(Buffer.from(json(inverse)).equals(originalBytes),'Delete only the sole public workflow entry from both maps and restore every original manifest byte');
+          fs.writeFileSync(path.join(target,'manifest.json'),derivedBytes);
+          const afterFiles=originals.map(row=>{const bytes=fs.readFileSync(path.join(target,row.file));if(row.file!=='manifest.json'){assert.equal(bytes.length,row.bytes);assert.equal(sha(bytes),row.sha256);}return{file:row.file,bytes:bytes.length,sha256:sha(bytes)};});
+          assert(fs.readFileSync(path.join(source,'manifest.json')).equals(originalBytes));
+          fs.writeFileSync(path.join(out,'fixture-files-before.json'),json(afterFiles));
+          fs.writeFileSync(path.join(out,'source-bridge.json'),json({status:'one-added-workflow-two-source-map-only-inverse',publicWorkflow:PUB,publicWorkflowSHA256:current[PUB],nativeSource:e.NATIVE_SOURCE,currentQaSource:git('rev-parse','HEAD').toString().trim(),roles,completeProtectedUnion:union,refProtectedUnion:refUnion,stage1Source:e.STAGE1_SOURCE,stage1Tree:e.STAGE1_TREE,exactFiveNonruntimeRows:stageRows,wholeFivePathStage1InverseExact:true,buildOnlyHarnessBridge:{...bridge,checkoutBody:beforeText,buildBody:afterText,wholeInverseExact:true},allOtherProtectedBodiesExact:true,originalManifestSHA256:sha(originalBytes),derivedManifestSHA256:sha(derivedBytes),changedKeys:['sourceBefore','sourceAfter'],onlyAddedSourceEntry:PUB,wholeManifestInverseExact:true,originalNativeFiles:originals,currentFixtureFiles:afterFiles,noBuild:true,noFixtureGeneration:true,modelContinuation:false,publishedSource:e.PUBLISHED_SOURCE,deployedSource:e.DEPLOY_SOURCE,deployment:e.DEPLOYMENT_ID}));
+          fs.writeFileSync(path.join(out,'source-role-blob-maps.json'),json(roleMaps));
+          NODE
+
+      - name: Wait finitely for the exact completed root entry
+        shell: bash
+        run: |
+          set -euo pipefail
+          unset NODE_OPTIONS
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import crypto from 'node:crypto';import assert from 'node:assert/strict';
+          const out=process.env.QA_OUT+'/readiness';fs.mkdirSync(out);
+          const sha=b=>crypto.createHash('sha256').update(b).digest('hex'),reference=fs.readFileSync(process.env.QA_DIST+'/index.html','utf8');
+          function modules(html){const clean=html.replace(/<!--[\s\S]*?-->/g,'');return[...clean.matchAll(/<script\b([^>]*)>[\s\S]*?<\/script\s*>/gi)].map(m=>{const type=/(?:^|\s)type\s*=\s*(?:"([^"]*)"|'([^']*)')/i.exec(m[1]),src=/(?:^|\s)src\s*=\s*(?:"([^"]*)"|'([^']*)')/i.exec(m[1]);return{tag:m[0],type:type?(type[1]??type[2]).toLowerCase():null,src:src?(src[1]??src[2]):null};}).filter(s=>s.type==='module');}
+          const expected=modules(reference);assert.equal(expected.length,1);assert.match(expected[0].src,/^\/assets\/index-[^/?#]+\.js$/);
+          function requireEntry(status,complete,html){assert.equal(status,200,'SC_REAL_ENTRY_PUBLIC_EXPECTED_ENTRY_READY');assert.equal(complete,true,'SC_REAL_ENTRY_PUBLIC_EXPECTED_ENTRY_READY');assert.deepEqual(modules(html).map(s=>s.src),[expected[0].src],'SC_REAL_ENTRY_PUBLIC_EXPECTED_ENTRY_READY');}
+          requireEntry(200,true,reference);const tag=expected[0].tag;assert.equal(reference.split(tag).length,2);
+          const staleTag=tag.replace(expected[0].src,'/assets/index-real-entry-readiness-stale-control.js'),fault=reference.replace(tag,staleTag);assert.notEqual(staleTag,tag);assert.notEqual(fault,reference);let owned=null;try{requireEntry(200,true,fault);}catch(error){owned=error;}assert(owned instanceof assert.AssertionError);assert.match(owned.message,/^SC_REAL_ENTRY_PUBLIC_EXPECTED_ENTRY_READY/);assert.equal(fault.replace(staleTag,tag),reference);
+          fs.writeFileSync(out+'/reference-index.html',reference);fs.writeFileSync(out+'/copied-stale-control.html',fault);fs.writeFileSync(out+'/control.json',JSON.stringify({changed:true,referenceSHA256:sha(reference),faultSHA256:sha(fault),ownedFailure:{name:owned.name,message:owned.message},wholeInverseExact:true,scope:'Copied completed HTML through the same validator; actual HTTP bodies are never mocked.'},null,2)+'\n');
+          const started=Date.now(),deadline=started+360000,attempts=[];let ready=false;
+          for(let attempt=1;attempt<=72&&Date.now()<deadline;attempt++){
+            const url=new URL('https://douknowball.com/');url.searchParams.set('sc-real-entry-ready',(process.env.GITHUB_RUN_ID??'run')+'-'+attempt+'-'+Date.now());
+            const chunks=[];let status=null,complete=false,error=null,headers=null;
+            try{const response=await fetch(url,{redirect:'manual',cache:'no-store',headers:{'cache-control':'no-cache, no-store, max-age=0',pragma:'no-cache'},signal:AbortSignal.timeout(Math.max(1,Math.min(12000,deadline-Date.now())))});status=response.status;headers={contentType:response.headers.get('content-type'),cacheControl:response.headers.get('cache-control'),age:response.headers.get('age'),location:response.headers.get('location')};for await(const chunk of response.body)chunks.push(Buffer.from(chunk));complete=true;}catch(failure){error=String(failure.stack||failure);}
+            const body=Buffer.concat(chunks),file='attempt-'+String(attempt).padStart(2,'0')+'.html';fs.writeFileSync(out+'/'+file,body);
+            let actual=[];try{actual=modules(body.toString()).map(s=>s.src);requireEntry(status,complete,body.toString());ready=true;}catch(failure){if(!(failure instanceof assert.AssertionError))error??=String(failure.stack||failure);}
+            attempts.push({attempt,url:url.href,status,headers,bodyComplete:complete,file,bytes:body.length,sha256:sha(body),actualEntries:actual,expectedEntry:expected[0].src,error,ready,elapsedMilliseconds:Date.now()-started});
+            fs.writeFileSync(out+'/report.json',JSON.stringify({ready,expectedEntry:expected[0].src,maximumAttempts:72,maximumElapsedMilliseconds:360000,intervalMilliseconds:5000,attempts,scope:'Root entry readiness only. Actual root/route HTML, boot and SC critical bodies are verified next before public gameplay.'},null,2)+'\n');
+            if(ready)break;const remaining=deadline-Date.now();if(remaining>0)await new Promise(resolve=>setTimeout(resolve,Math.min(5000,remaining)));
+          }
+          assert(ready,'SC_REAL_ENTRY_PUBLIC_EXPECTED_ENTRY_READY: completed entry did not arrive within the finite window');
+          console.log('SC_REAL_ENTRY_PUBLIC_EXPECTED_ENTRY_READY '+expected[0].src+' after '+attempts.length+' actual root responses');
+          NODE
+
+      - name: Verify actual custom-domain bodies around the same three native journeys
+        shell: bash
+        run: |
+          set +e
+          set -uo pipefail
+          unset NODE_OPTIONS
+          export GIT_NO_LAZY_FETCH=1
+          run_live() {
+            local name="$1"; shift
+            local receipt="$QA_OUT/transport/$name.log"
+            : > "$receipt"
+            SIM_OFFLINE_RECEIPT="$receipt" "$@" > "$QA_OUT/logs/$name.stdout.log" 2> "$QA_OUT/logs/$name.stderr.log"
+            local code=$?
+            printf '%s\n' "$code" > "$QA_OUT/logs/$name.exit" || return 1
+            test "$code" = 0 || return "$code"
+            test ! -s "$receipt" || return 1
+          }
+          run_live assets-before node --unhandled-rejections=strict scripts/qa/soccerHistoricalFourAssets.mjs "$QA_OUT/fixtures/manifest.json" "$QA_DIST" "$QA_OUT/assets" https://douknowball.com before
+          before_exit=$?
+          test "$before_exit" = 0 || exit "$before_exit"
+          run_live browser node --unhandled-rejections=strict scripts/qa/soccerHistoricalFourBrowser.mjs --public --out "$QA_OUT/browser" --fixtures "$QA_OUT/fixtures" --dist "$QA_DIST" --base-url https://douknowball.com
+          browser_exit=$?
+          run_live assets-after node --unhandled-rejections=strict scripts/qa/soccerHistoricalFourAssets.mjs "$QA_OUT/fixtures/manifest.json" "$QA_DIST" "$QA_OUT/assets" https://douknowball.com after
+          after_exit=$?
+          test "$browser_exit" = 0 || exit "$browser_exit"
+          test "$after_exit" = 0 || exit "$after_exit"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const out=process.env.QA_OUT,r=JSON.parse(fs.readFileSync(out+'/browser/report.json'));
+          assert.equal(r.status,'passed');assert.equal(r.mode,'public');assert.deepEqual(r.contexts.map(c=>[c.width,c.status,c.photos.length]),[[320,'passed',5],[390,'passed',5],[1280,'passed',5]]);assert.equal(r.screenshots.length,15);assert.equal(new Set(r.screenshots).size,15);
+          for(const c of r.contexts){
+            assert(c.assetBodies.some(a=>a.file==='prerender-boot.js'));assert.equal(c.wheelAcknowledgments.length,2);
+            for(const wheel of c.wheelAcknowledgments){assert.equal(wheel.status,'passed');assert.equal(wheel.guardControl.wholeInverseExact,true);assert.equal(wheel.guardControl.actualReceiptHeld,true);assert.equal(wheel.actual.saved.state.phase,'newspaper');assert.equal(wheel.actual.saved.state.seasons.at(-1).year,2019);}
+            for(const key of['pageErrors','unexpectedConsole','undeclaredAborts','localHttpErrors','assetErrors'])assert.deepEqual(c[key],[]);
+            for(const key of['failClosedControls','cardGeometryControl','reviewScrollControl','photoPreparationControl'])assert.equal(c[key].wholeInverseExact,true,key);
+            assert.equal(c.photoPreparationControl.actualHeld,true);assert.equal(c.actions.filter(row=>row.type==='reload-full-reference').length,3);assert.equal(c.actions.filter(row=>row.type==='read-only-review').length,17);assert.equal(c.sourceCards.length,5);
+          }
+          for(const key of['sourceHeld','distHeld','fixtureHeld','nodeReceiptEmpty'])assert.equal(r[key],true);
+          const {createHash}=await import('node:crypto'),sha=b=>createHash('sha256').update(b).digest('hex');
+          for(const c of r.contexts){
+            assert.equal(c.publicWriteControl.changed,true);assert.equal(c.publicWriteControl.wholeInverseExact,true);assert.equal(c.publicWriteControl.actualSampleHeld,true);assert.match(c.publicWriteControl.ownedFailure.message,/^No new write request/);
+            assert.equal(c.publicHostInitiatorControl.changed,true);assert(c.publicHostInitiatorControl.removedSourceEntries>0);assert.equal(c.publicHostInitiatorControl.wholeInverseExact,true);assert.equal(c.publicHostInitiatorControl.actualSampleHeld,true);assert.match(c.publicHostInitiatorControl.ownedFailure.message,/^SC_REAL_ENTRY_PUBLIC_HOST_INITIATOR/);
+            assert.equal(c.publicPreflightControl.changed,true);assert.equal(c.publicPreflightControl.wholeInverseExact,true);assert.equal(c.publicPreflightControl.actualSampleHeld,true);assert.match(c.publicPreflightControl.ownedFailure.message,/^SC_REAL_ENTRY_PUBLIC_LINKED_READ_PREFLIGHT/);
+            assert(c.hostTelemetry.reads.length>0);assert(c.hostTelemetry.completionWaits.length>0);
+            for(const wait of c.hostTelemetry.completionWaits){assert.equal(wait.status,'paired');assert.equal(wait.maximumMilliseconds,5000);assert.equal(wait.intervalMilliseconds,25);assert(wait.elapsedMilliseconds<5000);assert(wait.samples.length>0);assert.equal(wait.samples.at(-1).status,'paired');}
+            const preflights=c.hostTelemetry.finalWindow.preflights;assert(preflights.length>0);
+            for(const row of preflights){assert.equal(row.preflight.method,'OPTIONS');assert.equal(row.preflight.initiator.type,'preflight');assert.equal(row.preflight.postData,null);assert.equal(row.preflight.initiator.requestId,row.read.requestId);assert.equal(row.read.method,'GET');assert.equal(row.read.url,row.preflight.url);assert.equal(row.pw.method,'GET');assert.equal(row.pw.url,row.read.url);assert.equal(row.abort.requestId,row.pw.requestId);assert.equal(row.abort.url,row.pw.url);assert.equal(row.abort.method,row.pw.method);}
+            const source=c.hostTelemetry.source;assert.equal(source.status,'actual-declared-and-observed-host-script');assert.equal(source.url,'https://douknowball.com/__l5e/events.270c78a44fc53e7b.js');assert.deepEqual(source.sourceEndpointMatches,[]);
+            for(const row of[source.document,source.script]){assert(!row.file.includes('..'));const bytes=fs.readFileSync(out+'/browser/'+row.file);assert.equal(bytes.length,row.bytes);assert.equal(sha(bytes),row.sha256);}
+            const sources=c.hostTelemetry.sources;assert.equal(sources.length,6);assert.deepEqual(sources.map(s=>s.navigation),Array.from({length:6},(_,i)=>i+1));assert.deepEqual(source,sources[0]);assert.deepEqual(c.hostTelemetry.finalWindow.sources,sources);
+            const firstBody=fs.readFileSync(out+'/browser/'+source.script.file);
+            for(const s of sources){assert.equal(s.status,'actual-declared-and-observed-host-script');assert.equal(s.document.status,200);assert.equal(s.script.status,200);assert.equal(s.script.resourceType,'script');assert.deepEqual(s.sourceEndpointMatches,[]);assert.equal(new URL(s.url).origin,'https://douknowball.com');assert.equal(s.redirectChain[0].url,s.declarationURL);assert.equal(s.redirectChain.at(-1).url,s.url);for(const q of s.redirectChain){assert.equal(q.method,'GET');assert.equal(new URL(q.url).origin,'https://douknowball.com');}for(const row of[s.document,s.script]){assert(!row.file.includes('..'));const body=fs.readFileSync(out+'/browser/'+row.file);assert.equal(body.length,row.bytes);assert.equal(sha(body),row.sha256);}assert(fs.readFileSync(out+'/browser/'+s.script.file).equals(firstBody),'Every later actual executed host body equals the initial complete body');}
+            const bodyControl=c.hostTelemetry.bodyControl;assert.equal(bodyControl.changed,true);assert.equal(bodyControl.wholeInverseExact,true);assert.equal(bodyControl.actualHeld,true);assert.match(bodyControl.ownedFailure.message,/^SC_REAL_ENTRY_PUBLIC_HOST_BODY_EQUAL/);assert(!bodyControl.faultFile.includes('..'));const bodyFault=fs.readFileSync(out+'/browser/'+bodyControl.faultFile);assert.equal(sha(bodyFault),bodyControl.faultSHA256);assert(!bodyFault.equals(firstBody));const bodyInverse=Buffer.from(bodyFault);bodyInverse[0]^=1;assert(bodyInverse.equals(firstBody),'Actual copied body fault fully inverts');
+            const registryControl=c.publicRegistryControl;assert.equal(registryControl.changed,true);assert(registryControl.removedSources.length>0);assert.equal(registryControl.wholeInverseExact,true);assert.equal(registryControl.actualSampleHeld,true);assert.match(registryControl.ownedFailure.message,/^SC_REAL_ENTRY_PUBLIC_HOST_INITIATOR/);
+
+            const writes=c.hostTelemetry.finalWindow.writes;assert(writes.length>0);
+            for(const row of writes){assert.equal(row.request.method,'POST');assert.equal(row.request.url,'https://douknowball.com/__l5e/trackevents');assert.equal(row.abort.requestId,row.request.requestId);assert.equal(row.abort.url,row.request.url);assert.equal(row.abort.method,row.request.method);const body=Buffer.from(row.trace.postData??'','utf8');assert.equal(body.length,row.request.body.bytes);assert.equal(sha(body),row.request.body.sha256);}
+          }
+          const before=JSON.parse(fs.readFileSync(out+'/assets/served-assets-before.json')),after=JSON.parse(fs.readFileSync(out+'/assets/served-assets-after.json'));assert.equal(before.base,'https://douknowball.com');assert.equal(after.base,before.base);assert.equal(after.entry,before.entry);assert.deepEqual(after.rows,before.rows);assert(before.rows.some(row=>row.file==='prerender-boot.js'));
+          for(const phase of['before','after']){const html=JSON.parse(fs.readFileSync(out+'/assets/served-'+phase+'/html-control.json')),boot=JSON.parse(fs.readFileSync(out+'/assets/served-'+phase+'/boot-inventory-control.json'));assert.equal(html.changed,true);assert.equal(html.wholeInverseExact,true);assert.match(html.ownedFailure.message,/^SC_SEGUNDA_ASSET_ROUTE_CURRENT_ENTRY/);assert.equal(boot.changed,true);assert.equal(boot.wholeInverseExact,true);assert.match(boot.ownedFailure.message,/^SC_SEGUNDA_ASSET_CRITICAL_STABLE_BOOT/);}
+          fs.writeFileSync(out+'/public-native-admission.json',JSON.stringify({status:'public-native-phase-passed',contexts:3,photos:15,actualPublicPhotosRequireHumanReview:true,qualifiedNativeSource:process.env.NATIVE_SOURCE,publishedSource:process.env.PUBLISHED_SOURCE,deployedSource:process.env.DEPLOY_SOURCE,deployment:process.env.DEPLOYMENT_ID,oneAddedWorkflowTwoMapOnlyBridge:true,publicHostEventAttribution:true,perNavigationHostSources:6,laterExecutedHostBodiesEqualFirst:true,noBuild:true,noFixtureRegeneration:true,modelContinuation:false,scope:'Actual2005 UI creation plus two separately declared authentic2019 newspaper boundaries. Real saved Contract Standoff acknowledgments, four source-entry cards and authentic old-v1 card, full codec/storage/read-only/reload and every observed asset. No annual progression, phase edit, nomination/transfer guarantee, provider, broad-suite-green or whole SC36 claim. Empty uninstrumented live receipts do not establish provider availability.'},null,2)+'\n',{flag:'wx'});
+          NODE
+      - name: Audit only the changed Soccer Career route after public gameplay
+        shell: bash
+        run: |
+          set +e
+          set -uo pipefail
+          unset NODE_OPTIONS
+          node scripts/auditLive.mjs /soccer-career > "$QA_OUT/logs/audit-live.log" 2>&1
+          native_exit=$?
+          printf '%s\n' "$native_exit" > "$QA_OUT/logs/audit-live.exit" || exit 1
+          test "$native_exit" = 0 || exit "$native_exit"
+          grep -F '1 of 1 answered cleanly, 0 did not.' "$QA_OUT/logs/audit-live.log"
+      - name: Submit only Soccer Career to IndexNow after all public checks pass
+        shell: bash
+        run: |
+          set +e
+          set -uo pipefail
+          unset NODE_OPTIONS
+          URLS=/soccer-career node scripts/indexnowSubmit.mjs > "$QA_OUT/logs/indexnow.log" 2>&1
+          native_exit=$?
+          printf '%s\n' "$native_exit" > "$QA_OUT/logs/indexnow.exit" || exit 1
+          test "$native_exit" = 0 || exit "$native_exit"
+          grep -E '1 URLs? to submit for douknowball.com' "$QA_OUT/logs/indexnow.log" || exit 1
+          grep -E 'accepted \(HTTP (200|202)\)' "$QA_OUT/logs/indexnow.log"
+
+      - name: Always retain full source payload and exact one-entry metadata inverse
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          git ls-files -z > "$QA_OUT/tracked-after.bin"
+          git ls-files -z | xargs -0 sha256sum > "$QA_OUT/source-after.sha256"
+          git ls-files -s > "$QA_OUT/index-after.txt"
+          git status --porcelain=v1 --untracked-files=all > "$QA_OUT/status-after.txt"
+          cp package-lock.json "$QA_OUT/lock-after.json"
+          cmp "$QA_OUT/tracked-before.bin" "$QA_OUT/tracked-after.bin"
+          cmp "$QA_OUT/source-before.sha256" "$QA_OUT/source-after.sha256"
+          cmp "$QA_OUT/index-before.txt" "$QA_OUT/index-after.txt"
+          cmp "$QA_OUT/lock-before.json" "$QA_OUT/lock-after.json"
+          test ! -s "$QA_OUT/status-before.txt"
+          test ! -s "$QA_OUT/status-after.txt"
+          if test -f "$QA_OUT/fixtures/manifest.json"; then
+            node --input-type=module <<'NODE'
+          import fs from 'node:fs';import path from 'node:path';import crypto from 'node:crypto';import assert from 'node:assert/strict';
+          const out=process.env.QA_OUT,dir=path.join(out,'fixtures'),PUB='.github/workflows/soccer-four-entries-public-20261105.yml',sha=b=>crypto.createHash('sha256').update(b).digest('hex');
+          const bytes=fs.readFileSync(path.join(dir,'manifest.json')),m=JSON.parse(bytes),originalBytes=fs.readFileSync(path.join(out,'original-native','manifest.json'));
+          assert.deepEqual(m.sourceBefore,m.sourceAfter);
+          for(const[p,d]of Object.entries(m.sourceAfter))assert.equal(sha(fs.readFileSync(p)),d,p);
+          const expected=JSON.parse(fs.readFileSync(path.join(out,'fixture-files-before.json')));
+          assert.equal(expected.length,9);assert.deepEqual(fs.readdirSync(dir).sort(),expected.map(r=>r.file).sort());
+          for(const row of expected){const b=fs.readFileSync(path.join(dir,row.file));assert.equal(b.length,row.bytes);assert.equal(sha(b),row.sha256,row.file);}
+          const inverse=JSON.parse(bytes);assert(Object.hasOwn(inverse.sourceBefore,PUB)&&Object.hasOwn(inverse.sourceAfter,PUB));
+          delete inverse.sourceBefore[PUB];delete inverse.sourceAfter[PUB];
+          assert(Buffer.from(JSON.stringify(inverse,null,2)+'\n').equals(originalBytes),'Delete only the one workflow entry from each source map and restore every original manifest byte');
+          const native=path.join(process.env.QA_REF,'native');
+          assert(fs.readFileSync(path.join(native,'native-fixtures','manifest.json')).equals(originalBytes));
+          assert(fs.readFileSync(path.join(native,'source-before.sha256')).equals(fs.readFileSync(path.join(out,'original-native','source-before.sha256'))));
+          const actual=[];function walk(rel=''){for(const e of fs.readdirSync(path.join(process.env.QA_DIST,rel),{withFileTypes:true})){const file=path.posix.join(rel,e.name);if(e.isDirectory())walk(file);else{assert(e.isFile());const b=fs.readFileSync(path.join(process.env.QA_DIST,file));actual.push({file,bytes:b.length,sha256:sha(b)});}}}
+          walk();actual.sort((a,b)=>a.file<b.file?-1:a.file>b.file?1:0);assert.deepEqual(actual,m.distBefore);assert.equal(actual.length,849);
+          const locks=Object.fromEntries(['package.json','package-lock.json','bun.lock','bun.lockb','yarn.lock','pnpm-lock.yaml'].map(p=>[p,fs.existsSync(p)?sha(fs.readFileSync(p)):null]));
+          fs.writeFileSync(path.join(out,'all-locks-after.json'),JSON.stringify(locks)+'\n');assert.deepEqual(locks,JSON.parse(fs.readFileSync(path.join(out,'all-locks-before.json'))));
+          const stage=JSON.parse(fs.readFileSync(path.join(out,'stage1-hydration.json')));
+          assert.equal(stage.rows.length,5);for(const row of stage.rows){const name=row.path.replaceAll('/','__');const after=fs.readFileSync(path.join(out,'stage1-source',name+'.after'));assert.equal(after.length,row.afterBytes);assert.equal(sha(after),row.afterSHA256);if(row.before!==null){const before=fs.readFileSync(path.join(out,'stage1-source',name+'.before'));assert.equal(before.length,row.beforeBytes);assert.equal(sha(before),row.beforeSHA256);}}
+          const ref=process.env.QA_REF,refs=[];function walkReference(rel=''){for(const e of fs.readdirSync(path.join(ref,rel),{withFileTypes:true})){const file=path.posix.join(rel,e.name);if(e.isDirectory())walkReference(file);else{assert(e.isFile());const b=fs.readFileSync(path.join(ref,file));refs.push({file,bytes:b.length,sha256:sha(b)});}}}walkReference();refs.sort((a,b)=>a.file<b.file?-1:a.file>b.file?1:0);
+          const refBytes=Buffer.from(JSON.stringify(refs)+'\n');fs.writeFileSync(path.join(out,'input-reference-after.json'),refBytes);assert(refBytes.equals(fs.readFileSync(path.join(out,'input-reference-before.json'))));
+          const receipts=fs.readdirSync(path.join(out,'transport')).sort();assert.deepEqual(receipts,['assets-after.log','assets-before.log','browser.log','types.log']);
+          for(const name of receipts)assert.equal(fs.statSync(path.join(out,'transport',name)).size,0,'Silent actual receipt '+name);
+          fs.writeFileSync(path.join(out,'source-dist-fixture-held.json'),JSON.stringify({source:true,dist:849,fixtureBoundaries:2,fixtureFiles:expected.length,allNativePayloadBodiesHeld:true,originalNativeManifestAndLedgerRetained:true,oneAddedWorkflowTwoSourceMapWholeInverseExact:true,allLockPresenceBodiesHeld:true,originalInputFilesHeld:true,readOnlyCodeNoBuild:true,modelContinuation:false})+'\n',{flag:'wx'});
+          NODE
+          fi
+          printf '0\n' > "$QA_OUT/logs/final-source-holds.exit" || exit 1
+      - name: Retain all actual public proof within the unchanged archive bound
+        id: evidence
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          tar -czf "$RUNNER_TEMP/soccer-four-entries-public.tar.gz" -C "$QA_OUT" .
+          test "$(stat -c %s "$RUNNER_TEMP/soccer-four-entries-public.tar.gz")" -le 50000000
+          sha256sum "$RUNNER_TEMP/soccer-four-entries-public.tar.gz" > "$RUNNER_TEMP/soccer-four-entries-public.tar.gz.sha256"
+      - uses: actions/upload-artifact@v4
+        if: always() && steps.evidence.outcome == 'success'
+        with:
+          name: soccer-four-entries-public
+          path: |
+            ${{ runner.temp }}/soccer-four-entries-public.tar.gz
+            ${{ runner.temp }}/soccer-four-entries-public.tar.gz.sha256
+          if-no-files-found: error
+          retention-days: 14
+          compression-level: 0
