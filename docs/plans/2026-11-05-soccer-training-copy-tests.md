@@ -14,9 +14,7 @@ The first controller used an incorrect parameterized-case census[11,3,15]. Run42
 
 Evidence is retained under C:/Users/antho/dukb-handoff/2026-11-05/sc-training-copy/. Original focused artifact13441331904 (389203B, sha256 b2ab683c5fec7e45c5abc734ea7881b4ae599c38c7511d37501d60a022b68cef); first full packet13442254309 (8913403B,sha256 ac203fa940df8b57cd0bab0ac70f9e9decf480c90d301db22e85d76eccb0832a); final units13443071469 (533848B,sha256 0e17515a3f4e54e3a9f8a3c1a3d12d9e7559e0a1ccb873b68b2942f60aa4942e). Temporary controllers/workflows are excluded from clean delivery. No production code, cap, player data, score or save format changed. Full-suite/release-wide failures remain unwaived; this does not complete a master game card and has not been merged or published.
 
-Current-main follow-up: main e16 and its documentation closeout 3b include the NBA historical-draft raw-read repair. The older 19/20 result describes the pinned 1ac build. Full-suite completion is not claimed.
 
+## 2026-11-05 combined soccer qualification complete
 
-## 2026-11-05 draft reconciliation
-
-Reconciled onto main 3b14650d360b010b25b525de33a5f32f33de2798 after the historical-release closeout. The published release records are preserved. Owned test/script blobs are unchanged from the scoped qualification. The combined soccer integration check is pending; this remains an unmerged, unpublished draft.
+Actions42096174788 and script-only follow-up42098915819 pass. Main3b release records are retained. The combined stack has225 distinct targeted cases, a normal build,9 engine/layout harnesses,20 saved-output readers,all16 unchanged caps and4 actual browser flows. Exact evidence and qualified limits:docs/plans/2026-11-05-soccer-master-integration.md. Full suite and live Reach remain uncredited. No merge or publication is claimed.
