@@ -1,0 +1,378 @@
+{
+  "schemaVersion": 1,
+  "status": "ORIGINAL_ONLY_FRESH_BUILD",
+  "base": {
+    "commit": "3b14650d360b010b25b525de33a5f32f33de2798",
+    "tree": "d9278a7b5f58395509f6ab937f918c1c2ef31127"
+  },
+  "master": {
+    "cards": [
+      {
+        "id": "CM-04",
+        "status": "PARTIAL"
+      },
+      {
+        "id": "SC-36",
+        "status": "PARTIAL"
+      }
+    ],
+    "masterSHA256": "fda0f7eef07d41f2ba91e89dff3542fef98cd3bd9aabcbe02f70b649797d357a"
+  },
+  "testFile": "src/test/clubManagerTeamPickerOriginal.test.tsx",
+  "helperPins": [
+    {
+      "path": "src/test/clubManagerTeamPickerOriginal.test.tsx",
+      "gitBlob": "89f7512372006317340c85aeae50a0737189558b",
+      "sha256": "a9bda48174ec7b380de4d62ba9cb697b61580e37a06f8f9c807caf4cffdbe4f3",
+      "bytes": 24281
+    },
+    {
+      "path": "scripts/qa/cmTeamPickerOriginalProbe.mjs",
+      "gitBlob": "6bf9b449122b5c926e7213344bf600a089b6e2f0",
+      "sha256": "cbbd9d17eb82549ec7246a1d4272b83340c274006fa16e90a3dfe1a64d549520",
+      "bytes": 11762
+    },
+    {
+      "path": "scripts/qa/cmTeamPickerOriginalEvidence.mjs",
+      "gitBlob": "06beb8d6de16daa9410aedb793aee3c8fba0f500",
+      "sha256": "f70453fba265acccf830354b55a8d8c13e79045234e2350af1b1c15d4127aa72",
+      "bytes": 12226
+    }
+  ],
+  "sourcePins": [
+    {
+      "path": "src/pages/ClubManager.tsx",
+      "gitBlob": "978bf575f489228041c278101ca77cfac434d8e3",
+      "bytes": 107466
+    },
+    {
+      "path": "src/hooks/useClubManager.ts",
+      "gitBlob": "fe8d97dbfabaea602968e9cca25d4930895093e1",
+      "bytes": 74095
+    },
+    {
+      "path": "src/lib/clubManager.ts",
+      "gitBlob": "4b0a734e9fe9ba1e7139ead8d4fe5d6a1574c484",
+      "bytes": 1307878
+    },
+    {
+      "path": "src/lib/clubManagerEras.ts",
+      "gitBlob": "2f462a0a753338cc95fbfbc066a4240917440623",
+      "bytes": 62756
+    },
+    {
+      "path": "src/lib/clubManagerFixtures.ts",
+      "gitBlob": "a9bbb510574d9d4be5f904337ec7e35ac6051b82",
+      "bytes": 9841
+    },
+    {
+      "path": "src/lib/clubManagerSlots.ts",
+      "gitBlob": "cd1a683637ce1fa0444b86b1cff46821aa75127d",
+      "bytes": 9763
+    },
+    {
+      "path": "src/lib/saveFence.ts",
+      "gitBlob": "1de45b573fd866433eb0982495af927a5427e8f4",
+      "bytes": 6552
+    },
+    {
+      "path": "src/components/club-manager/ManagerForm.tsx",
+      "gitBlob": "2bf450b0af6ba80af3fc89504e8a69691749eaf5",
+      "bytes": 15574
+    },
+    {
+      "path": "src/components/club-manager/CustomClubForm.tsx",
+      "gitBlob": "6d0bd2c849f41dbdf4a738c77abe22990c31e0fd",
+      "bytes": 17255
+    },
+    {
+      "path": "src/components/club-manager/ClubManagerClubList.tsx",
+      "gitBlob": "e222cfbb81536aa57f70765829f44652e5cabb04",
+      "bytes": 1792
+    },
+    {
+      "path": "src/components/club-manager/CmCards.tsx",
+      "gitBlob": "32b4f86e494f8ce5a88a0dcc947fd5288e785696",
+      "bytes": 2888
+    },
+    {
+      "path": "src/data/clubManagerWorldRosters.ts",
+      "gitBlob": "edb53cdfb032daf1da26b66d9a6251899a625f04",
+      "bytes": 10417
+    },
+    {
+      "path": "scripts/sweepWeight.mjs",
+      "gitBlob": "5a92a68cc0225d5e633c19e041087e7c6c4254e8",
+      "bytes": 104848
+    },
+    {
+      "path": "scripts/lib/hostLikeServer.mjs",
+      "gitBlob": "21059d5e8114669df61106c125d5272d357b6236",
+      "bytes": 2690
+    },
+    {
+      "path": "scripts/lib/playwrightLoader.mjs",
+      "gitBlob": "4f7739e217e0a47ee82e6bfc8be1c04bed17454a",
+      "bytes": 2777
+    },
+    {
+      "path": "scripts/lib/answerConsent.mjs",
+      "gitBlob": "c6d16997e4c06e8b35dcfd0bab5efcad3069d899",
+      "bytes": 5835
+    },
+    {
+      "path": "tailwind.config.ts",
+      "gitBlob": "f83c4f4032d359bc9285828eac3b0961a46c6b17",
+      "bytes": 5759
+    },
+    {
+      "path": "vite.config.ts",
+      "gitBlob": "0112b6ac4f2ad80b2fc04f9ec2f7185300913e7d",
+      "bytes": 10694
+    },
+    {
+      "path": "package.json",
+      "gitBlob": "2ff64986fb76ebc51b706f2fd24765768874008a",
+      "bytes": 3495
+    },
+    {
+      "path": "package-lock.json",
+      "gitBlob": "97d6f12a052f25f400462938c241789a083f0bfe",
+      "bytes": 309049
+    },
+    {
+      "path": "bun.lockb",
+      "gitBlob": "5d9d33a3bf4f45fa099e2aa3014149e034981149",
+      "bytes": 245395
+    },
+    {
+      "path": "bun.lock",
+      "gitBlob": "dff081dcd34a1aa928ddc90d910774a6b855dfe3",
+      "bytes": 152868
+    }
+  ],
+  "cases": [
+    {
+      "id": "current",
+      "fullName": "Club Manager Team picker original acceptance holds the complete current picker, selection callbacks and real saved start",
+      "expected": "passed",
+      "marker": null,
+      "raw": "current.json.gz",
+      "seedOrdinal": 1
+    },
+    {
+      "id": "historical-fixtures",
+      "fullName": "Club Manager Team picker original acceptance holds all four era grids and the actual fixture wait, retry and cancellation paths",
+      "expected": "passed",
+      "marker": null,
+      "raw": "historical-fixtures.json.gz",
+      "seedOrdinal": 2
+    },
+    {
+      "id": "edited-world",
+      "fullName": "Club Manager Team picker original acceptance holds the real edited-world grid, callbacks and complete saved career",
+      "expected": "passed",
+      "marker": null,
+      "raw": "edited-world.json.gz",
+      "seedOrdinal": 3
+    },
+    {
+      "id": "custom-manager",
+      "fullName": "Club Manager Team picker original acceptance holds Custom and Manager Back, exact null conversion and authentic save reloads",
+      "expected": "passed",
+      "marker": null,
+      "raw": "custom-manager.json.gz",
+      "seedOrdinal": 4
+    },
+    {
+      "id": "cold-delivery",
+      "fullName": "Club Manager Team picker original acceptance keeps executable Team rendering off the actual initial served path until League selection",
+      "expected": "failed",
+      "marker": "CM_TEAM_PICKER_COLD_DELIVERY",
+      "raw": "cold-delivery.json.gz",
+      "seedOrdinal": 5
+    }
+  ],
+  "expected": {
+    "tests": 5,
+    "passed": 4,
+    "failed": 1,
+    "pending": 0,
+    "todo": 0,
+    "testFiles": 1,
+    "vitestNativeExit": 1,
+    "probeNativeExit": 0,
+    "onlyOwnedError": "AssertionError"
+  },
+  "limits": {
+    "maxDecodedPerRaw": 46137344,
+    "maxStoredPerRaw": 12582912,
+    "archiveMaxBytes": 50000000,
+    "caseTimeoutsMs": [
+      360000,
+      360000,
+      180000,
+      360000,
+      null
+    ],
+    "fieldDropping": false,
+    "retention": "Each full literal gzip remains intact; archive cap fatal, small diagnostics always retained; no truncated frame or partial-owned admission."
+  },
+  "freshBuild": {
+    "required": true,
+    "normalCommand": "npm run build",
+    "properTypes": "node_modules/.bin/tsc --noEmit -p tsconfig.app.json",
+    "reason": "Tailwind content includes changed src/test input. Exact nonruntime role labels do not prove generated CSS identity.",
+    "oldBuildArtifact": "13437520395",
+    "oldCompletedTarSHA256": "c0866406ad812d84d4d56c89db34c3dcb46f96fb9241d3f074df77420239a172",
+    "oldBuildReuse": false,
+    "oldBuildRole": "historical only",
+    "unchangedNumericCaps": true,
+    "unchangedSweepWindow": {
+      "device": "iPhone 13",
+      "goto": "load",
+      "afterLoadWaitMs": 1500,
+      "gzip": "zlib.gzipSync(actualCompletedBody).length",
+      "gate": "Math.round(total/1024)>budget"
+    },
+    "savingsThreshold": null,
+    "exactFreshBytes": "MEASURE_ACTUAL",
+    "bodyProbe": {
+      "executableShape": "quoted data-cm-board-wants property followed by colon in actual served JS",
+      "bindTo": "real rendered Team DOM, completed dist body equality, one retained body per actual request",
+      "initialAndSettled": true,
+      "lateRequests": true,
+      "warmRevisit": true,
+      "bodyOmissionControl": "same actual body-receipt validator, changed/full-inverse"
+    }
+  },
+  "sourceBridge": {
+    "originalApp": "a9e56ff706ea71a51d3ec60438023ed9ad4d3b01",
+    "originalTree": "316d2084d15d5e24aff38e5a692b639432b3eb98",
+    "currentTree": "d9278a7b5f58395509f6ab937f918c1c2ef31127",
+    "exactChangedPaths": 9,
+    "leavesHeld": 5732,
+    "entries": [
+      {
+        "path": "docs/EXPANSION-IMPLEMENTATION-LEDGER.md",
+        "before": "190ab5a4738fa056222d54291f24ff34ecff592d",
+        "after": "746a534448d637ca7967d286413b52044aef08e2",
+        "modeBefore": "100644",
+        "modeAfter": "100644"
+      },
+      {
+        "path": "docs/PROJECT-STATE.md",
+        "before": "a609c0295f3395e0197e680cd292c7e092555121",
+        "after": "ac039df29a68075c148454de56274357973f31df",
+        "modeBefore": "100644",
+        "modeAfter": "100644"
+      },
+      {
+        "path": "docs/WORKBOARD.md",
+        "before": "9f4902aa4cf7cb85463adf0f16b74cb177a3ba3a",
+        "after": "258de2115c4cfc630778e161d74bb38b74b8d9cd",
+        "modeBefore": "100644",
+        "modeAfter": "100644"
+      },
+      {
+        "path": "docs/data/soccer-historical-arrivals.md",
+        "before": "e2b6a87c7a44ab3f1473ebcb3ed65aba47b7d194",
+        "after": "adfae0db5b77775ab6c8a0398bfe6233a6683849",
+        "modeBefore": "100644",
+        "modeAfter": "100644"
+      },
+      {
+        "path": "scripts/simNbaHistoricalDraft.mjs",
+        "before": "ff3b7ff375943cdc3c71a6a88b734bfc0cd98a84",
+        "after": "c1510bf64aef2ed0f75db10af2a00a8ae9d4163d",
+        "modeBefore": "100644",
+        "modeAfter": "100644"
+      },
+      {
+        "path": "scripts/simSoccerHistoricalArrivals.mjs",
+        "before": "1d3af363c832ff7eacd498ca0f99eec6ca047a35",
+        "after": "02c559fcde4e731fedb02aaefaf83945815928a5",
+        "modeBefore": "100644",
+        "modeAfter": "100644"
+      },
+      {
+        "path": "src/test/soccerHistoricalRealEntry.test.tsx",
+        "before": "a9c74d118bad8ddaf69e0af75e8185b5a7ca6d1c",
+        "after": "bec3f78f30501551fcd69bb3c88b8c8bf68c11d9",
+        "modeBefore": "100644",
+        "modeAfter": "100644"
+      },
+      {
+        "path": "docs/plans/2026-11-05-soccer-four-first-team-entries.md",
+        "before": null,
+        "after": "84e58bf525c0a44175ce6b9130c9fbd8eced9420",
+        "modeBefore": null,
+        "modeAfter": "100644"
+      },
+      {
+        "path": "scripts/data/soccerHistoricalV1UiFixture.json",
+        "before": null,
+        "after": "cdc13da018efec049567c8148755cc21a9b791d3",
+        "modeBefore": null,
+        "modeAfter": "100644"
+      }
+    ],
+    "role": "Read-only exact full-leaf source relationship only. Not a build-input equivalence or old CSS/output reuse waiver."
+  },
+  "extractionContract": {
+    "scope": "Future grid706-779 only, 4877UTF8 bytes; no implementation in this packet",
+    "parentOwns": [
+      "existing Team conditional point",
+      "all display row calculations in original order and timing",
+      "Back and exact chooseClub('') callback",
+      "honesty paragraph",
+      "selected footer and Takejob callback",
+      "Manager null-to-undefined positional conversion",
+      "existing pickRef useRevealScroll key and intentional reveal",
+      "all state/cache/registry/engine/data/RNG initialization"
+    ],
+    "leaf": "proposed presentational grid and original onPick/onCreate only; no original import/absence/setup-owned assertion",
+    "recovery": "Existing global RouteErrorBoundary/freshBuild only. Pending Back outside Suspense must remain usable; unsaved selection survival after reload is not an established contract."
+  },
+  "observations": {
+    "business": "Real page, hook, engine, constructors, JSON save/load, world editor, Custom and Manager components. Pass-through callback observations do not replace business outcomes.",
+    "mocks": [
+      "Existing completion/badge/auth/game chrome/SEO/ads side effects",
+      "Actual era/data import gates for wait/retry/refusal/cancel",
+      "reloadToRetryChunk is a false-returning stub as in the existing fixture-wait test. No failed-fetch Retry/reload actor or call-list credit. Actual retry coverage is the still-pending eight-second fixture wait; separate refused import uses the explicit generated-start choice."
+    ],
+    "wholeBrowserInitial": "Actual built probe retains real whole document including SEO and consent before actions, no page/component mocks.",
+    "rng": "Headless fixed-seed Math.random complete import/action values and state; natural browser RNG and clock unchanged. No private-fork observation claim.",
+    "sourceConditionalTiming": "No display calculation is hoisted or recomputed in a new runtime initializer. Test captures real rendered values; oracle names are read only after original Team render.",
+    "callbacks": "Lossless explicit {$type:'undefined'} tags preserve every positional undefined separately from ManagerForm null.",
+    "save": "Exact dukb-club-manager-save JSON literal/parsed state, local/session/fence, actual real hook reload with complete normalization evidence",
+    "actualColdFailure": "After complete valid Team and Back/warm UI plus actual compiled response bodies are retained. A nonexistent proposed leaf/module, TypeError, missing API, runtime or parser failure cannot own the case.",
+    "parityLimit": "Retain full natural network timings and browser metadata, but do not claim byte equality of independent real-time measurements. Future deterministic four held case RAW/tape parity is separate."
+  },
+  "output": {
+    "rawEnv": "CM_TEAM_PICKER_OUT",
+    "builtReportEnv": "CM_TEAM_PICKER_BUILD_REPORT",
+    "report": "vitest.json",
+    "stdout": "logs/vitest.stdout.log",
+    "stderr": "logs/vitest.stderr.log",
+    "types": "types-passed.json",
+    "build": "build-passed.json",
+    "probeNative": "built/probe.exit",
+    "admission": "ORIGINAL-ADMITTED.json",
+    "silentReceipts": [
+      "transport/types.log",
+      "transport/probe.log",
+      "transport/vitest.log",
+      "transport/reader.log"
+    ]
+  },
+  "noCredit": [
+    "Candidate App/runtime/source implementation",
+    "Savings, cap headroom or first-paint improvement",
+    "New league/data import",
+    "Private fork traces",
+    "New local error framework",
+    "Unsaved picker selection across reload",
+    "Native visual/public or full suite green"
+  ]
+}
