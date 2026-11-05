@@ -46,7 +46,7 @@ function run(name, text, expected) {
   } else {
     assert.equal(child.status, 1, name + ': business failure exit');
     assert.deepEqual(failures.map(row => row.title.split(' ')[0]), expected, name + ': exact failed business case set');
-    assert(failures.every(row => /^(?:AssertionError: EARLY_CLUB_|Error: expect\(element\)\.(?:toBeDisabled|toHaveClass|toHaveTextContent)\()/m.test(row.failureMessages.join('\n'))), name + ': named assertion or actual expected DOM matcher failures only');
+    assert(failures.every(row => /^(?:AssertionError: EARLY_CLUB_|Error: expect\(element\)\.(?:toBeDisabled|toHaveClass|toHaveTextContent)\()/m.test(row.failureMessages.join('\n').replace(/\u001b\[[0-?]*[ -/]*[@-~]/g, ''))), name + ': named assertion or actual expected DOM matcher failures only');
   }
   console.log(name + ': ' + (cases.length - failures.length) + ' passed, ' + failures.length + ' exact named failures');
 }
