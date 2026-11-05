@@ -1,3 +1,9 @@
+## 2026-11-05 Soccer Career club continental eligibility, qualified draft only
+
+Complete seasons from 2022 now use one Russian club suspension rule for named cups and European appearances. Fresh passport/rivalry cards respect it; old history and delivered cards keep their behavior. Nationality at a foreign employer keeps that employer's competitions. Later fictional years retain the policy verified on 2026-11-05. This supports SC-39 correctness without completing a world or narrative card.
+
+Base: preferred-league PR505 (5689ab28). Scoped proof: 14 fixed/restored cases, 135 RAW files, six physical controls, 161 related cases, seven source-matched harnesses, proper types, a normal completed build, all 16 caps and three reviewed browser widths with exact reloads. The pinned build's 19/20 reader result predates the NBA anchor repair now on main e16. The full-unit attempt timed out and is not credited complete. Unmerged and unpublished. Exact runs, facts, hashes and limits: docs/plans/2026-11-05-soccer-club-eligibility.md.
+
 ## 2026-11-01 20:55 EDT, Claude session K (games): RELEASE BV IS LIVE (deployment 96c67a3b, main 7bd3e99a1)
 
 LIVE: release-bv-gate 7bd3e99a1 fast forwarded onto main from 19911f815 and published 20:54 EDT as deployment
