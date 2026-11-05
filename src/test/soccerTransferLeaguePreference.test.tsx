@@ -305,6 +305,7 @@ describe('Soccer transfer preferred league', () => {
     const opener = view.getByRole('button', { name: 'Set transfer priority' }), scroll = { x: window.scrollX, y: window.scrollY };
     fireEvent.click(opener); fireEvent.click(view.getByRole('button', { name: 'Choose a priority' }));
     let picker = view.queryByRole('combobox', { name: 'Preferred league' });
+    const hadPicker = picker !== null;
     if (picker) fireEvent.change(picker, { target: { value: domesticLeague } });
     fireEvent.click(view.getByRole('button', { name: 'Transfer brief help' }));
     const helpText = view.getByRole('dialog', { name: 'Your transfer brief' }).textContent ?? '';
@@ -321,7 +322,7 @@ describe('Soccer transfer preferred league', () => {
     raw('read-only-dialog', { original, afterBack, afterEscape: initial, helpText, reopenedValue, callbacks: changed.mock.calls.length, draws: allDraws().slice(at), scrollBefore: scroll, scrollAfter: { x: window.scrollX, y: window.scrollY } });
     expect(initial, 'SC_TRANSFER_LEAGUE_READ_ONLY').toEqual(original); expect(afterBack).toEqual(original);
     expect(changed).not.toHaveBeenCalled(); expect(allDraws().length).toBe(at); expect({ x: window.scrollX, y: window.scrollY }).toEqual(scroll);
-    if (picker) expect(reopenedValue).not.toBe(domesticLeague);
+    if (hadPicker) { expect(picker).not.toBeNull(); expect(reopenedValue).toBe(''); }
     expect(helpText).toMatch(/Example:/); expect(helpText).toMatch(/not.*guaranteed|not.*promise|projections/i);
   });
 });
