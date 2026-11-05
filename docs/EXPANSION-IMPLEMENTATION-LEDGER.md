@@ -243,3 +243,7 @@ The authoritative444117B master file SHA256fda0f7eef07d41f2ba91e89dff3542fef98cd
 ## 2026-11-05: SC-36 first real arrival live, partial
 
 SC-36, "A consistent evolving football population" (master line761): PR500 adds one sourced Neymar2009 identity, immutable Santos entry and one saved current-club owner. Annual/tail admission, reload, 2015 reseeding and 28-name pruning are covered. Public42023961495 passed three viewport journeys and 12 reloads; all 12 photos were reviewed. [Scope and proof](plans/2026-11-05-soccer-real-player-entry.md). This completes the first arrival slice; SC-36, further cohorts, Club Manager and the all-sport population work remain partial.
+
+## 2026-11-05: owner-requested NBA historical intake, partial PL-16 adaptation
+
+New2003 NBA My Career UI saves now introduce the sourced59-selection2004 class at the actual2004 calendar boundary. Full class view and saved simulated camp receipts persist through reloads and later signing. Factual selection/identity/birth/broad-role evidence is separate from simulated team/comparison/role/morale outcomes.58 DOBs verified, Karaulov unknown. Other classes/sports/front offices and the full evolving football population remain open. [Implementation, provenance and admitted proof](plans/2026-11-05-nba-real-draft-2004.md). Live App05bd628b, deploy5a2f20c5-f35d-4d81-8b16-0a7aee824fc1, public42052602075/artifact13428705240. Master409/PL16/SC36/CM04 remain partial; existing wider failures remain unwaived.
