@@ -69,26 +69,32 @@ function checkCopiedActualEvidence(actual) {
   scope:'Copied actual context report only. Remove real matching abort declarations or real verified boot observations. Same validator owns both failures; no App outcomes or HTTP bodies are fabricated.'};
 }
 const HOST_SCRIPT='/__l5e/events.270c78a44fc53e7b.js',HOST_WRITE='/__l5e/trackevents',publicHostResponses=new WeakMap();
+const hostScriptPath=p=>/^\/__l5e\/events(?:\.[a-f0-9]+)?\.js$/.test(p);
+function requireHostBody(body,first){assert.equal(body.length,first.length,'NBA_2004_NATIVE_PUBLIC_HOST_BODY_EQUAL');assert(body.equals(first),'NBA_2004_NATIVE_PUBLIC_HOST_BODY_EQUAL');}
 async function qualifyPublicTelemetry(p,r,response){
- assert(publicMode);assert.equal(response.status(),200);
- const html=await response.body(),text=html.toString(),sourceURL=origin+HOST_SCRIPT;
+ assert(publicMode);assert.equal(response.status(),200);await p.waitForLoadState('load');
+ const html=await response.body(),text=html.toString();
  const tags=[...text.replace(/<!--[\s\S]*?-->/g,'').matchAll(/<script\b([^>]*)>[\s\S]*?<\/script\s*>/gi)].map(x=>x[0]);
- const tag=tags.filter(t=>{const a=/\bsrc\s*=\s*(?:"([^"]*)"|'([^']*)')/i.exec(t);return a&&new URL(a[1]??a[2],response.url()).href===sourceURL;});
- assert.equal(tag.length,1,'NBA_2004_NATIVE_PUBLIC_HOST_SOURCE_DECLARED');
- assert(/\bdata-autocapture="1"/.test(tag[0])&&/\bdata-consent="1"/.test(tag[0]),'Actual declared host event script attributes');
- const dom=await p.locator('script[src]').evaluateAll(nodes=>nodes.map(n=>n.src));
- assert.equal(dom.filter(url=>url===sourceURL).length,1,'Actual page loaded its declared host script');
- const actual=publicHostResponses.get(p);assert(actual,'NBA_2004_NATIVE_PUBLIC_OBSERVED_HOST_SCRIPT');
- assert.equal(actual.url(),sourceURL);assert.equal(actual.status(),200);const code=await actual.body();assert(code.length>0);
- const folder=path.join(out,'host-telemetry');await fs.mkdir(folder,{recursive:true});
- const htmlFile=r.id+'-document.html',scriptFile=r.id+'-events.js';
+ const declarations=tags.map(tag=>{const a=/\bsrc\s*=\s*(?:"([^"]*)"|'([^']*)')/i.exec(tag);return a?{tag,url:new URL(a[1]??a[2],response.url())}:null;}).filter(x=>x&&x.url.origin===origin&&hostScriptPath(x.url.pathname)&&x.url.search===''&&x.url.hash==='');
+ assert.equal(declarations.length,1,'NBA_2004_NATIVE_PUBLIC_HOST_SOURCE_DECLARED');const declaration=declarations[0];
+ assert(/\bdata-autocapture="1"/.test(declaration.tag)&&/\bdata-consent="1"/.test(declaration.tag),'Actual declared host event script attributes');
+ const dom=await p.locator('script[src]').evaluateAll(nodes=>nodes.map(n=>n.src));assert.equal(dom.filter(url=>url===declaration.url.href).length,1,'Current page loaded its freshly declared host script');
+ const chainOf=actual=>{const chain=[];for(let request=actual.request();request;request=request.redirectedFrom()){assert(chain.length<8,'Bounded actual host redirect chain');assert.equal(request.method(),'GET');assert.equal(new URL(request.url()).origin,origin);chain.unshift({url:request.url(),method:request.method(),resourceType:request.resourceType()});}return chain;};
+ const observed=(publicHostResponses.get(p)??[]).map(actual=>({actual,chain:chainOf(actual)})).filter(row=>row.chain[0]?.url===declaration.url.href);
+ assert.equal(observed.length,1,'NBA_2004_NATIVE_PUBLIC_OBSERVED_CURRENT_HOST_SCRIPT');const {actual,chain}=observed[0];
+ assert.equal(actual.request().resourceType(),'script');assert.equal(actual.request().frame(),p.mainFrame());assert.equal(actual.status(),200);assert.equal(chain.at(-1).url,actual.url());const code=await actual.body();assert(code.length>0);
+ r.hostTelemetry.sources??=[];const number=r.hostTelemetry.sources.length+1,folder=path.join(out,'host-telemetry');await fs.mkdir(folder,{recursive:true});
+ const stem=r.id+'-navigation-'+String(number).padStart(2,'0'),htmlFile=stem+'-document.html',scriptFile=stem+'-events.js';
  await fs.writeFile(path.join(folder,htmlFile),html,{flag:'wx'});await fs.writeFile(path.join(folder,scriptFile),code,{flag:'wx'});
- const sourceMatches=[];for(const file of Object.keys(m.sourceAfter).filter(p=>p.startsWith('src/')))if((await fs.readFile(file)).includes(Buffer.from(HOST_WRITE)))sourceMatches.push(file);
- assert.deepEqual(sourceMatches,[],'The exact host event endpoint is absent from every tracked src body');
- r.hostTelemetry.source={status:'actual-declared-and-observed-host-script',url:sourceURL,
-  document:{url:response.url(),file:'host-telemetry/'+htmlFile,bytes:html.length,sha256:sha(html),scriptTag:tag[0]},
-  script:{file:'host-telemetry/'+scriptFile,bytes:code.length,sha256:sha(code)},sourceEndpointMatches:sourceMatches,
-  scope:'Actual public HTML and actual executed host-script response, retained before UI creation/Phone actions. No response or App source replacement.'};
+ if(r.hostTelemetry.source){const first=await fs.readFile(path.join(out,r.hostTelemetry.source.script.file));requireHostBody(code,first);}
+ else{assert.equal(declaration.url.href,origin+HOST_SCRIPT,'Initial actual hashed host declaration');assert.equal(actual.url(),origin+HOST_SCRIPT);}
+ const sourceMatches=[];for(const file of Object.keys(m.sourceAfter).filter(p=>p.startsWith('src/')))if((await fs.readFile(file)).includes(Buffer.from(HOST_WRITE)))sourceMatches.push(file);assert.deepEqual(sourceMatches,[],'Exact host endpoint absent from every tracked src body');
+ const record={status:'actual-declared-and-observed-host-script',navigation:number,url:actual.url(),declarationURL:declaration.url.href,redirectChain:chain,
+  document:{url:response.url(),status:response.status(),file:'host-telemetry/'+htmlFile,bytes:html.length,sha256:sha(html),scriptTag:declaration.tag},
+  script:{status:actual.status(),resourceType:actual.request().resourceType(),file:'host-telemetry/'+scriptFile,bytes:code.length,sha256:sha(code)},sourceEndpointMatches:sourceMatches,
+  scope:'Fresh main HTML, current DOM declaration and this navigation actual script response body. Later bodies equal the first full executed body; older proofs remain retained.'};
+ r.hostTelemetry.source??=record;r.hostTelemetry.sources.push(record);
+ if(!r.hostTelemetry.bodyControl){const copy=Buffer.from(code),first=copy[0];copy[0]^=1;assert(!copy.equals(code));let owned;try{requireHostBody(copy,code);}catch(error){owned=error;}assert(owned instanceof assert.AssertionError);assert.match(owned.message,/^NBA_2004_NATIVE_PUBLIC_HOST_BODY_EQUAL/);const faultFile=r.id+'-copied-host-body-control.js';await fs.writeFile(path.join(folder,faultFile),copy,{flag:'wx'});const faultSHA256=sha(copy);copy[0]=first;assert(copy.equals(code));r.hostTelemetry.bodyControl={changed:true,source:record.script,faultFile:'host-telemetry/'+faultFile,faultSHA256,ownedFailure:{name:owned.name,message:owned.message},wholeInverseExact:true,actualHeld:true,scope:'Copied actual script-body byte mutation only, never a replaced HTTP/App response.'};}
 }
 function initiatorURLs(initiator){const urls=[];for(let stack=initiator?.stack;stack;stack=stack.parent)for(const frame of stack.callFrames??[])if(frame.url)urls.push(frame.url);if(initiator?.url)urls.push(initiator.url);return urls;}
 function validateReadPreflight(row){
@@ -128,7 +134,7 @@ function publicWriteWindow(r){
  assert(r.hostTelemetry.source,'NBA_2004_NATIVE_PUBLIC_HOST_SOURCE_BEFORE_REVIEW');
  const writes=r.requests.filter(q=>!['GET','HEAD'].includes(q.method)),{traces,preflights}=publicProtocolRows(r);
  assert.equal(traces.length,writes.length,'NBA_2004_NATIVE_PUBLIC_COMPLETE_WRITE_INITIATORS');
- return{source:r.hostTelemetry.source,preflights,writes:writes.map((q,i)=>{
+ return{source:clone(r.hostTelemetry.source),sources:clone(r.hostTelemetry.sources??[]),preflights,writes:writes.map((q,i)=>{
   const trace=traces[i];assert.equal(trace.url,q.url,'Exact ordered native write URL');assert.equal(trace.method,q.method,'Exact ordered native write method');
   const body=trace.postData===null?Buffer.alloc(0):Buffer.from(trace.postData,'utf8');
   assert.equal(body.length,q.body.bytes,'NBA_2004_NATIVE_PUBLIC_NATIVE_WRITE_BODY');assert.equal(sha(body),q.body.sha256,'NBA_2004_NATIVE_PUBLIC_NATIVE_WRITE_BODY');assert.equal(body.toString('base64'),q.body.base64??'','NBA_2004_NATIVE_PUBLIC_NATIVE_WRITE_BODY');
@@ -144,7 +150,8 @@ function gameWriteIds(window){
   assert.equal(window.source.url,origin+HOST_SCRIPT,'NBA_2004_NATIVE_PUBLIC_HOST_ATTRIBUTION');
   assert.equal(abort.requestId,q.requestId);assert.equal(abort.url,q.url);assert.equal(abort.method,q.method);
   assert.equal(trace.url,q.url);assert.equal(trace.method,q.method);
-  assert(initiatorURLs(trace.initiator).includes(window.source.url),'NBA_2004_NATIVE_PUBLIC_HOST_INITIATOR');
+  const urls=initiatorURLs(trace.initiator),proofs=(window.sources??[]).filter(source=>urls.includes(source.url));
+  assert(proofs.length>0,'NBA_2004_NATIVE_PUBLIC_HOST_INITIATOR');for(const proof of proofs){assert.equal(proof.status,'actual-declared-and-observed-host-script','NBA_2004_NATIVE_PUBLIC_HOST_ATTRIBUTION');assert.equal(proof.script.bytes,window.source.script.bytes,'NBA_2004_NATIVE_PUBLIC_HOST_BODY_EQUAL');assert.equal(proof.script.sha256,window.source.script.sha256,'NBA_2004_NATIVE_PUBLIC_HOST_BODY_EQUAL');}
   return false;
  }).map(row=>row.request.requestId);
 }
@@ -176,18 +183,24 @@ function copiedUnknownWriteControl(before,next){
   scope:'Copied actual attempted POST with only URL changed, through the same write classifier and unchanged read-only validator. Guard logic only, no physical or App fault claim.'};
 }
 function copiedHostInitiatorControl(next){
- const actual=JSON.stringify(next),window=clone(next.writeWindow),original=JSON.stringify(window),source=window.source.url;
+ const actual=JSON.stringify(next),window=clone(next.writeWindow),original=JSON.stringify(window),sources=new Set(window.sources.map(source=>source.url));
  const target=window.writes.find(row=>row.request.url===origin+HOST_WRITE&&row.request.method==='POST');assert(target);
  const held=clone(target.trace.initiator);let removed=0;
- for(let stack=target.trace.initiator?.stack;stack;stack=stack.parent){const before=stack.callFrames??[];stack.callFrames=before.filter(frame=>frame.url!==source);removed+=before.length-stack.callFrames.length;}
- if(target.trace.initiator.url===source){delete target.trace.initiator.url;removed++;}
- assert(removed>0);assert(!initiatorURLs(target.trace.initiator).includes(source));const fault=JSON.stringify(window);assert.notEqual(fault,original);
+ for(let stack=target.trace.initiator?.stack;stack;stack=stack.parent){const before=stack.callFrames??[];stack.callFrames=before.filter(frame=>!sources.has(frame.url));removed+=before.length-stack.callFrames.length;}
+ if(sources.has(target.trace.initiator.url)){delete target.trace.initiator.url;removed++;}
+ assert(removed>0);assert(!initiatorURLs(target.trace.initiator).some(url=>sources.has(url)));const fault=JSON.stringify(window);assert.notEqual(fault,original);
  let owned;try{gameWriteIds(window);}catch(error){owned=error;}
  assert(owned instanceof assert.AssertionError);assert.match(owned.message,/^NBA_2004_NATIVE_PUBLIC_HOST_INITIATOR/);
  const faultInitiator=clone(target.trace.initiator);target.trace.initiator=held;assert.equal(JSON.stringify(window),original);assert.equal(JSON.stringify(next),actual);
- return{changed:true,removedSourceEntries:removed,source,actualInitiator:held,faultInitiator,faultSHA256:sha(fault),
+ return{changed:true,removedSourceEntries:removed,source:window.source.url,qualifiedSourceURLs:[...sources],actualInitiator:held,faultInitiator,faultSHA256:sha(fault),
   ownedFailure:{name:owned.name,message:owned.message},wholeInverseExact:true,actualSampleHeld:true,
   scope:'Copied actual attempted host POST loses every occurrence of its actual initiating host script. Same classifier must refuse the exclusion; the complete copy is then restored. Guard logic only.'};
+}
+function copiedRegistryOmissionControl(next){
+ const actual=JSON.stringify(next),window=clone(next.writeWindow),original=JSON.stringify(window),target=window.writes.find(row=>row.request.method==='POST'&&row.request.url===origin+HOST_WRITE);assert(target);
+ const urls=new Set(initiatorURLs(target.trace.initiator)),held=window.sources;window.sources=held.filter(source=>!urls.has(source.url));assert(window.sources.length<held.length);const fault=JSON.stringify(window);assert.notEqual(fault,original);
+ let owned;try{gameWriteIds(window);}catch(error){owned=error;}assert(owned instanceof assert.AssertionError);assert.match(owned.message,/^NBA_2004_NATIVE_PUBLIC_HOST_INITIATOR/);window.sources=held;assert.equal(JSON.stringify(window),original);assert.equal(JSON.stringify(next),actual);
+ return{changed:true,removedSources:held.filter(source=>urls.has(source.url)),faultSHA256:sha(fault),ownedFailure:{name:owned.name,message:owned.message},wholeInverseExact:true,actualSampleHeld:true,scope:'Copied actual qualified-registry omission, no live response or App mutation.'};
 }
 async function journey(name,width,seeds,action){
  const height=width===390?844:900;
@@ -212,11 +225,11 @@ async function journey(name,width,seeds,action){
    r.assetNavigationWaits.push({method,from:page.url(),elapsedMs:Date.now()-started,activeRequests:activeAssets.size,activeReads:activeReads.size});
   };
   assetDrains.set(page,drainAssets);
-  {r.assetNavigationWaits??=[];for(const method of['goto','reload','goBack']){const native=page[method].bind(page);page[method]=async(...args)=>{await drainAssets(method);return native(...args);};}}
+  {r.assetNavigationWaits??=[];for(const method of['goto','reload','goBack']){const native=page[method].bind(page);page[method]=async(...args)=>{await drainAssets(method);if(publicMode)publicHostResponses.set(page,[]);return native(...args);};}}
   page.on('request',q=>{const row={url:q.url(),method:q.method()};if(publicMode){row.requestId=requestId(q);if(!['GET','HEAD'].includes(row.method)){const body=q.postDataBuffer();row.body={bytes:body?.length??0,sha256:sha(body??Buffer.alloc(0)),base64:body?.toString('base64')??null};row.resourceType=q.resourceType();}}r.requests.push(row);if(isAsset(q.url())){activeAssets.add(q);lastAssetActivity=Date.now();}});
   page.on('response',q=>{
    r.responses.push({url:q.url(),status:q.status()});const u=new URL(q.url());
-    if(publicMode&&u.origin===origin&&u.pathname===HOST_SCRIPT&&q.request().resourceType()==='script')publicHostResponses.set(page,q);
+    if(publicMode&&u.origin===origin&&hostScriptPath(u.pathname)&&q.request().resourceType()==='script'){const rows=publicHostResponses.get(page)??[];rows.push(q);publicHostResponses.set(page,rows);}
    if(isAsset(q.url())){
     lastAssetActivity=Date.now();
     const read=(async()=>{try{const file=decodeURIComponent(u.pathname.slice(1)),ref=assetReference.get(file);assert(ref,'Unknown published asset '+file);assert([200,304].includes(q.status()),'Published asset HTTP '+q.status());const bytes=await q.body(),digest=sha(bytes);assert.equal(bytes.length,ref.bytes,file+' bytes');assert.equal(digest,ref.sha256,file+' digest');r.assetBodies.push({file,status:q.status(),bytes:bytes.length,sha256:digest});if(observedAssets.has(file))assert.equal(observedAssets.get(file),digest);else{observedAssets.set(file,digest);await fs.mkdir(path.join(out,'served-assets',path.dirname(file)),{recursive:true});await fs.writeFile(path.join(out,'served-assets',file),bytes,{flag:'wx'});}}catch(e){r.assetErrors.push({url:q.url(),error:String(e.stack||e)});}})();
@@ -229,7 +242,7 @@ async function journey(name,width,seeds,action){
  });
  const p=await c.newPage();p.setDefaultTimeout(15000);p.setDefaultNavigationTimeout(30000);
  if(publicMode){r.hostTelemetry={initiators:[],reads:[],completionWaits:[]};const session=await c.newCDPSession(p);session.on('Network.requestWillBeSent',e=>{if(['GET','HEAD'].includes(e.request.method))r.hostTelemetry.reads.push({url:e.request.url,method:e.request.method,requestId:e.requestId,timestamp:e.timestamp});else r.hostTelemetry.initiators.push({url:e.request.url,method:e.request.method,postData:e.request.postData??null,initiator:clone(e.initiator),requestId:e.requestId,timestamp:e.timestamp});});await session.send('Network.enable');}
- try{await action(p,r,c);assert.equal(await save(p,'feature-unrelated'),'held');if(publicMode){const writes=(await completePublicWriteSnapshot(r,'final context')).writeWindow;assert.deepEqual(gameWriteIds(writes),[],'NBA_2004_NATIVE_PUBLIC_NO_GAME_OR_PROVIDER_WRITES');assert(r.publicWriteControl?.wholeInverseExact);assert(r.publicHostInitiatorControl?.wholeInverseExact);assert(r.publicPreflightControl?.wholeInverseExact);r.hostTelemetry.finalWindow=writes;}r.status='passed';}
+ try{await action(p,r,c);assert.equal(await save(p,'feature-unrelated'),'held');if(publicMode){const writes=(await completePublicWriteSnapshot(r,'final context')).writeWindow;assert.deepEqual(gameWriteIds(writes),[],'NBA_2004_NATIVE_PUBLIC_NO_GAME_OR_PROVIDER_WRITES');assert(r.publicWriteControl?.wholeInverseExact);assert(r.publicHostInitiatorControl?.wholeInverseExact);assert(r.publicPreflightControl?.wholeInverseExact);assert(r.publicRegistryControl?.wholeInverseExact);assert(r.hostTelemetry.bodyControl?.wholeInverseExact);r.hostTelemetry.finalWindow=writes;}r.status='passed';}
  catch(e){r.status='failed';r.error=String(e.stack||e);try{await p.screenshot({path:out+'/'+r.id+'-failure.png'});r.failureScreenshot=r.id+'-failure.png';}catch{}}
  finally{
   r.url=p.url();
@@ -259,16 +272,16 @@ function noDraw(r,label,fn){const random=Math.random,now=Date.now;let draws=0,cl
 async function hubReady(p){await p.locator('[data-career-hub-buttons]').waitFor({state:'visible'});assert.equal(await p.getByRole('dialog').count(),0,'No unsupported saved modal');}
 async function reloadActual(p,r,before,label){
  const reference=noDraw(r,label+' actual source loader',()=>api.observeLoad(before.raw));assert.equal(reference.phase,'season');assert.equal(reference.modal,null);assert.equal(reference.wouldPersist,false);
- await p.reload({waitUntil:'domcontentloaded'});await p.locator('#dukb-main').waitFor({state:'visible'});await answerConsent(p,{wait:1000});await hubReady(p);await idle(p);
+ const response=await p.reload({waitUntil:'domcontentloaded'});await p.locator('#dukb-main').waitFor({state:'visible'});await answerConsent(p,{wait:1000});await hubReady(p);await idle(p);
  const actual=await frame(p);assert.equal(actual.raw,before.raw,'Whole actual JSON storage reload bytes');assert.deepEqual(actual.state,before.state);assert.equal(await save(p,'feature-unrelated'),'held');
- r.actions.push({type:'actual-NBA-JSON-reload',label,before,reference,actual,scope:'Original storage bytes held. Complete source loader helper memory reference retained separately; no forced phase or invented codec.'});return actual;
+ r.actions.push({type:'actual-NBA-JSON-reload',label,before,reference,actual,scope:'Original storage bytes held. Complete source loader helper memory reference retained separately; no forced phase or invented codec.'});if(publicMode)await qualifyPublicTelemetry(p,r,response);return actual;
 }
 async function declared(p,r,name){
  const f=fixtures[name],reference=noDraw(r,name+' actual source loader',()=>api.observeLoad(f.raw));assert.deepEqual(reference,f.loader);
  await p.evaluate(({raw,key})=>localStorage.setItem(key,raw),{raw:f.raw,key:KEY});
- await p.reload({waitUntil:'domcontentloaded'});await p.locator('#dukb-main').waitFor({state:'visible'});await answerConsent(p,{wait:1000});await hubReady(p);await idle(p);
+ const response=await p.reload({waitUntil:'domcontentloaded'});await p.locator('#dukb-main').waitFor({state:'visible'});await answerConsent(p,{wait:1000});await hubReady(p);await idle(p);
  const actual=await frame(p);assert.equal(actual.raw,f.raw,'Exact admitted complete NBA JSON save');assert.deepEqual(actual.state,f.expected.save);
- r.actions.push({type:'declared-complete-RAW-boundary',name,source:f.source,actual,reference,scope:f.scope});return actual;
+ r.actions.push({type:'declared-complete-RAW-boundary',name,source:f.source,actual,reference,scope:f.scope});if(publicMode)await qualifyPublicTelemetry(p,r,response);return actual;
 }
 function validateOuterRead(before,next){
  assert.equal(next.saved.raw,before.saved.raw,'Every saved byte held');assert.deepEqual(next.saved.state,before.saved.state);
@@ -281,7 +294,7 @@ async function readAction(p,r,target,label,after,{strict=true,perform=null,prepa
  if(perform)await perform();else await pressPrepared(p,r,target,label);
  await after();await idle(p);
  const next={document:await scrollOf(p),saved:await frame(p),focus:await active(p),storage:await storage(p),url:p.url(),...(publicMode?await completePublicWriteSnapshot(r,label+' after'):writeSnapshot(r))};
- if(strict){validateReadonlyReview(before,next);r.reviewScrollControl??=copiedReviewScrollControl(before,next);if(publicMode){r.publicWriteControl??=copiedUnknownWriteControl(before,next);r.publicHostInitiatorControl??=copiedHostInitiatorControl(next);r.publicPreflightControl??=copiedReadPreflightControl(next);}}
+ if(strict){validateReadonlyReview(before,next);r.reviewScrollControl??=copiedReviewScrollControl(before,next);if(publicMode){r.publicWriteControl??=copiedUnknownWriteControl(before,next);r.publicHostInitiatorControl??=copiedHostInitiatorControl(next);r.publicPreflightControl??=copiedReadPreflightControl(next);r.publicRegistryControl??=copiedRegistryOmissionControl(next);}}
  else validateOuterRead(before,next);
  r.actions.push({type:strict?'strict-read-only-class':'existing-read-only-reveal-navigation',label,before,after:next,documentZeroClaim:strict});return next.saved;
 }
@@ -432,7 +445,7 @@ async function assertCamp(p,r,name){
  r.actions.push({type:'actual-saved-simulated-camp-receipt',name,visits,text,saved});return card;
 }
 async function run(p,r){
- await goto(p,'/nba-my-career');const name=p.getByRole('textbox',{name:'Your player name',exact:true});await typeInto(p,r,name,'Native Draft Probe','fictional player name');
+ const response=await goto(p,'/nba-my-career');if(publicMode)await qualifyPublicTelemetry(p,r,response);const name=p.getByRole('textbox',{name:'Your player name',exact:true});await typeInto(p,r,name,'Native Draft Probe','fictional player name');
  const era=p.getByRole('button').filter({has:p.getByText('⏪ 2003-04 throwback',{exact:true})});await press(p,r,era,'actual2003 era');await press(p,r,p.getByRole('button',{name:'PG',exact:true}),'actual PG');
  await press(p,r,p.getByRole('button',{name:'Enter the draft',exact:true}),'actual quick2003 constructor');await hubReady(p);
  const initial=await frame(p);assert.equal(initial.state.c.year,2003);assert.equal(initial.state.c.eraId,'y2004');assert.deepEqual(initial.state.c.draft2004,{v:1,ids:[],visits:[]});r.created=initial;
