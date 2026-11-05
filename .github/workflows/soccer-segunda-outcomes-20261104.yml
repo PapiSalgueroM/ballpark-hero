@@ -1,0 +1,150 @@
+name: Segunda fixed original and source controls
+on:
+  push:
+    branches: [codex/soccer-segunda-outcomes-20261104]
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: soccer-segunda-outcomes-${{ github.ref }}
+  cancel-in-progress: false
+env:
+  CI: '1'
+  SIM_NETWORK: offline
+  TZ: UTC
+  BASE_SOURCE: 3268307038c4586dbc35f4697da1849512b473d9
+  PRODUCT_CORE: ebd69abeb38ebb0b93fbff71a0caf2fa453db832
+  PRODUCT_TREE: 821809914563e7830354f3567ba66ac8801cfd10
+  QA_CORE: 8c8402981f81a4863df9a6e42dc20b54b1d55816
+  QA_TREE: 37cdc14f802d2e786d9f9f4b64336e491a5c3d1e
+jobs:
+  outcomes:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 4
+          filter: blob:none
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: '1.4.4'
+      - name: Bind reviewed product and four QA files
+        run: |
+          set -euo pipefail
+          OUT="$RUNNER_TEMP/soccer-segunda-outcomes"
+          REF="$RUNNER_TEMP/soccer-segunda-original-input"
+          mkdir -p "$OUT/logs" "$OUT/transport" "$OUT/input-provenance" "$OUT/original-bodies" "$REF/evidence"
+          echo "QA_OUT=$OUT" >> "$GITHUB_ENV"
+          echo "QA_REF=$REF" >> "$GITHUB_ENV"
+          export QA_OUT="$OUT" QA_REF="$REF"
+          test "$(git rev-parse HEAD^)" = "$QA_CORE"
+          test "$(git rev-parse HEAD^^)" = "$PRODUCT_CORE"
+          test "$(git rev-parse "$PRODUCT_CORE^{tree}")" = "$PRODUCT_TREE"
+          test "$(git rev-parse "$QA_CORE^{tree}")" = "$QA_TREE"
+          test "$(git diff --name-status HEAD^ HEAD)" = $'A\t.github/workflows/soccer-segunda-outcomes-20261104.yml'
+          git diff --name-status "$PRODUCT_CORE" "$QA_CORE" > "$OUT/qa-delta.txt"
+          printf '%s\n' $'A\tscripts/qa/soccerSegundaBridgeCases.json' $'A\tscripts/qa/soccerSegundaBridgeEvidence.mjs' $'A\tscripts/qa/soccerSegundaBridgeFaults.json' $'A\tscripts/qa/soccerSegundaBridgeOutcomes.mjs' > "$OUT/expected-qa-delta.txt"
+          cmp "$OUT/qa-delta.txt" "$OUT/expected-qa-delta.txt"
+          git rev-parse HEAD > "$OUT/source-head.txt"
+          git rev-parse HEAD^{tree} > "$OUT/source-tree.txt"
+          git status --porcelain --untracked-files=all > "$OUT/status-before.txt"
+          test ! -s "$OUT/status-before.txt"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import cp from 'node:child_process';import crypto from 'node:crypto';
+          const paths=cp.execFileSync('git',['ls-files','-z']).toString().split('\0').filter(Boolean);
+          const rows=Object.fromEntries(paths.map(p=>[p,{bytes:fs.statSync(p).size,sha256:crypto.createHash('sha256').update(fs.readFileSync(p)).digest('hex')}]));
+          fs.writeFileSync(process.env.QA_OUT+'/source-before.json',JSON.stringify(rows,null,2)+'\n');
+          NODE
+      - name: Retrieve the one qualified original input
+        env:
+          ACTIONS_READ_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          curl --fail --silent --show-error -H "Authorization: Bearer $ACTIONS_READ_TOKEN" -H "Accept: application/vnd.github+json" https://api.github.com/repos/PapiSalgueroM/ballpark-hero/actions/artifacts/13383634508 > "$QA_OUT/input-provenance/original-artifact-metadata.json"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const a=JSON.parse(fs.readFileSync(process.env.QA_OUT+'/input-provenance/original-artifact-metadata.json'));
+          assert.equal(a.id,13383634508);assert.equal(a.size_in_bytes,2675629);assert.equal(a.expired,false);
+          assert.equal(a.digest,'sha256:3e9c89a2a24207957761b640ede622c587d97c2daaeaaeddd8498afb3d82119e');
+          assert.equal(a.workflow_run.id,41958380733);assert.equal(a.workflow_run.head_sha,'abd5f1d616a14da15c76ef380a4447a09a62cd86');
+          NODE
+          curl --fail --silent --show-error --location -H "Authorization: Bearer $ACTIONS_READ_TOKEN" https://api.github.com/repos/PapiSalgueroM/ballpark-hero/actions/artifacts/13383634508/zip > "$QA_REF/ORIGINAL.zip"
+          test "$(wc -c < "$QA_REF/ORIGINAL.zip")" = 2675629
+          printf '%s\n' "3e9c89a2a24207957761b640ede622c587d97c2daaeaaeddd8498afb3d82119e  $QA_REF/ORIGINAL.zip" | sha256sum --check
+          unzip -q "$QA_REF/ORIGINAL.zip" -d "$QA_REF/evidence"
+          cp "$QA_REF/evidence/admission.json" "$QA_OUT/input-provenance/original-admission.json"
+      - name: Install held dependencies and hydrate only original pinned bodies
+        run: |
+          set -euo pipefail
+          test "$(bun --version)" = 1.4.4
+          bun --version > "$QA_OUT/logs/bun-version.log"
+          node --version > "$QA_OUT/logs/node-version.log"
+          bun install --frozen-lockfile > "$QA_OUT/logs/install.log" 2>&1
+          git diff --exit-code HEAD -- package.json package-lock.json bun.lock bun.lockb
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import path from 'node:path';import cp from 'node:child_process';import crypto from 'node:crypto';import assert from 'node:assert/strict';
+          const out=process.env.QA_OUT,cases=JSON.parse(fs.readFileSync('scripts/qa/soccerSegundaBridgeCases.json')),rows=[];
+          const blob=b=>crypto.createHash('sha1').update(Buffer.concat([Buffer.from('blob '+b.length+'\0'),b])).digest('hex');
+          for(const [file,pin]of Object.entries(cases.originalPins)){
+            const b=cp.execFileSync('git',['show',process.env.BASE_SOURCE+':'+file],{maxBuffer:8*1024*1024});assert.equal(blob(b),pin);
+            const target=path.join(out,'original-bodies',file);fs.mkdirSync(path.dirname(target),{recursive:true});fs.writeFileSync(target,b);
+            cp.execFileSync('git',['cat-file','-e',pin]);rows.push({path:file,blob:pin,bytes:b.length,sha256:crypto.createHash('sha256').update(b).digest('hex')});
+          }
+          fs.writeFileSync(out+'/original-body-pins.json',JSON.stringify(rows,null,2)+'\n');
+          console.log('SC_SEGUNDA_ORIGINAL_BODIES_HYDRATED '+rows.length+' exact pinned source bodies, no broad history');
+          NODE
+      - name: Actual fixed original faults and restored outcomes
+        run: |
+          set -euo pipefail
+          export GIT_NO_LAZY_FETCH=1
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          export SIM_OFFLINE_RECEIPT="$QA_OUT/transport/controller.log"
+          : > "$SIM_OFFLINE_RECEIPT"
+          set +e
+          node scripts/qa/soccerSegundaBridgeOutcomes.mjs --out "$QA_OUT/results" --baseline "$QA_REF/evidence" --baseline-zip "$QA_REF/ORIGINAL.zip" --original-bodies "$QA_OUT/original-bodies" --faults scripts/qa/soccerSegundaBridgeFaults.json > "$QA_OUT/logs/controller.stdout.log" 2> "$QA_OUT/logs/controller.stderr.log"
+          native_exit=$?
+          set -e
+          printf '%s\n' "$native_exit" > "$QA_OUT/controller-native-exit.txt"
+          cat "$QA_OUT/logs/controller.stdout.log"
+          cat "$QA_OUT/logs/controller.stderr.log"
+          test "$native_exit" = 0
+          test ! -s "$SIM_OFFLINE_RECEIPT"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const r=JSON.parse(fs.readFileSync(process.env.QA_OUT+'/results/outcomes.json'));
+          assert.equal(r.status,'admitted');assert.equal(r.finalSourceAndLockHeld,true);
+          assert.deepEqual(r.arms.map(a=>a.name),['fixed','original','missing-row','since-year','manager-leak','cup-context','country-provenance','colour-owner','restored-fixed']);
+          console.log('SC_SEGUNDA_ACTUAL_OUTCOMES_CENSUS 9 arms,7 seven-case measurements and2source fences');
+          NODE
+      - name: Hold complete source lock and offline bytes
+        if: always()
+        run: |
+          set -euo pipefail
+          export GIT_NO_LAZY_FETCH=1
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import cp from 'node:child_process';import crypto from 'node:crypto';import assert from 'node:assert/strict';
+          const out=process.env.QA_OUT,before=JSON.parse(fs.readFileSync(out+'/source-before.json'));
+          const paths=cp.execFileSync('git',['ls-files','-z']).toString().split('\0').filter(Boolean);
+          const after=Object.fromEntries(paths.map(p=>[p,{bytes:fs.statSync(p).size,sha256:crypto.createHash('sha256').update(fs.readFileSync(p)).digest('hex')}]));
+          fs.writeFileSync(out+'/source-after.json',JSON.stringify(after,null,2)+'\n');assert.deepEqual(after,before,'Whole source/lock bytes held');
+          const status=cp.execFileSync('git',['status','--porcelain','--untracked-files=all']).toString();fs.writeFileSync(out+'/status-after.txt',status);assert.equal(status,'');
+          const receipts=fs.readdirSync(out+'/transport').map(p=>({path:p,bytes:fs.statSync(out+'/transport/'+p).size}));assert(receipts.every(x=>x.bytes===0));
+          fs.writeFileSync(out+'/source-hold.json',JSON.stringify({tracked:paths.length,allBytesHeld:true,status:'clean',receipts},null,2)+'\n');
+          console.log('SC_SEGUNDA_OUTCOMES_SOURCE_HELD '+paths.length+' tracked files, empty offline receipts, clean status');
+          NODE
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: soccer-segunda-outcomes-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ env.QA_OUT }}/
+          retention-days: 30
+          compression-level: 6
