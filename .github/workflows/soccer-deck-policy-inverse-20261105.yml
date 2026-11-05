@@ -1,4 +1,4 @@
-name: Soccer deck policy inverse proof
+name: Soccer deck policy inverse qualified
 on:
   push:
     branches: [codex/soccer-deck-policy-inverse-qa-20261105]
@@ -18,7 +18,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 0
+          fetch-depth: 12
           persist-credentials: false
       - uses: actions/setup-node@v4
         with:
@@ -31,23 +31,31 @@ jobs:
           git rev-parse 'HEAD^{tree}' > deck-policy-artifacts/tree.txt
           git ls-files -s > deck-policy-artifacts/source-before.txt
           sha256sum package.json package-lock.json > deck-policy-artifacts/locks-before.txt
+          git fetch --no-tags --depth=1 origin c176be815dc4af57dfd7185a485e28357aa0d41e
           npm ci
-      - name: Current inverse original business failures
+      - name: Fixed inverse legacy bytes actual policy and strict anchors
+        run: |
+          DECK_POLICY_ARM=fixed DECK_POLICY_OUT=deck-policy-artifacts/fixed NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/careerDeckFairPolicyCompatibility.mjs 2>&1 | tee deck-policy-artifacts/fixed.log
+      - name: Effective omitted inverse draw control
         run: |
           set +e
-          DECK_POLICY_ARM=original DECK_POLICY_OUT=deck-policy-artifacts/original NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/careerDeckFairPolicyCompatibility.mjs 2>&1 | tee deck-policy-artifacts/original.log
-          deck_test_status=${PIPESTATUS[0]}
+          DECK_POLICY_ARM=omit-inverse DECK_POLICY_CONTROL=omit-inverse DECK_POLICY_OUT=deck-policy-artifacts/omit-inverse NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/careerDeckFairPolicyCompatibility.mjs 2>&1 | tee deck-policy-artifacts/omit-inverse.log
+          deck_control_status=${PIPESTATUS[0]}
           set -e
-          test "$deck_test_status" = 1
+          test "$deck_control_status" = 1
           node --input-type=module <<'NODE'
           import fs from 'node:fs'; import assert from 'node:assert/strict';
-          const r=JSON.parse(fs.readFileSync('deck-policy-artifacts/original/report.json'));
-          assert.equal(r.cases.length,4); assert.equal(r.cases.filter(x=>x.status==='passed').length,2);
-          const failures=r.cases.filter(x=>x.status==='failed'); assert.equal(failures.length,2);
-          assert(failures[0].error.message.includes('DECK_POLICY_CURRENT_INVERSE'));
-          assert(failures[1].error.message.includes('DECK_POLICY_REJECT_MIXED_DUPLICATE'));
-          assert.equal(r.sourceHeld,true); console.log('PASS original: two exact inverse business failures, two preserved cases');
+          const r=JSON.parse(fs.readFileSync('deck-policy-artifacts/omit-inverse/report.json'));
+          assert.equal(r.cases.length,4); assert.equal(r.cases.filter(x=>x.status==='passed').length,3);
+          const failures=r.cases.filter(x=>x.status==='failed'); assert.equal(failures.length,1);
+          assert(failures[0].error.message.includes('DECK_POLICY_INVERSE_DRAWS'));
+          assert.equal(r.currentInverse.controlChangedSource,true); assert.equal(r.frames.length,3);
+          assert.equal(r.sourceHeld,true); console.log('PASS effective omitted inverse: exact draw failure, three held cases');
           NODE
+      - name: Exact restored source and existing source fences
+        run: |
+          DECK_POLICY_ARM=restored DECK_POLICY_OUT=deck-policy-artifacts/restored NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/careerDeckFairPolicyCompatibility.mjs 2>&1 | tee deck-policy-artifacts/restored.log
+          ONLY=simHarnessAnchors,simNoRivalNames node scripts/runAllSims.mjs --browser 2>&1 | tee deck-policy-artifacts/fences.log
       - name: Source lock and offline holds
         if: always()
         run: |
