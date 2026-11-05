@@ -1,4 +1,4 @@
-name: Soccer club eligibility original
+name: Soccer club continental eligibility
 on:
   push:
     branches:
@@ -6,16 +6,18 @@ on:
 permissions:
   contents: read
 jobs:
-  original:
+  scoped:
     runs-on: ubuntu-latest
-    timeout-minutes: 18
+    timeout-minutes: 50
     defaults:
       run:
         shell: bash
     env:
       SIM_NETWORK: offline
       SIM_OFFLINE_RECEIPT: club-policy-artifacts/offline.log
+      ENGINES: chromium
       TZ: UTC
+      SEO_SPLIT_BASE_REF: 5689ab28b63a754430926479477db5d0d49502b5
     steps:
       - uses: actions/checkout@v4
         with:
@@ -25,7 +27,13 @@ jobs:
         with:
           node-version: 24
           cache: npm
-      - name: Locked install and source receipt
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.4.4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Locked dependencies and source receipt
         run: |
           mkdir -p club-policy-artifacts
           git rev-parse HEAD > club-policy-artifacts/head.txt
@@ -33,14 +41,61 @@ jobs:
           git ls-files -s > club-policy-artifacts/source-before.txt
           sha256sum package.json package-lock.json > club-policy-artifacts/locks-before.txt
           npm ci
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          const lock=JSON.parse(fs.readFileSync('package-lock.json'));
+          const rows=Object.keys(lock.packages).filter(p=>p.startsWith('node_modules/')&&fs.existsSync(p+'/package.json')).map(p=>[p,JSON.parse(fs.readFileSync(p+'/package.json')).version]);
+          fs.writeFileSync('club-policy-artifacts/installed-before.json',JSON.stringify(rows));
+          NODE
+          npm install --prefix "$RUNNER_TEMP/sc11-browser" --no-save --package-lock=false playwright
+          test ! -e node_modules/playwright
+          ln -s "$RUNNER_TEMP/sc11-browser/node_modules/playwright" node_modules/playwright
+          node "$RUNNER_TEMP/sc11-browser/node_modules/playwright/cli.js" install --with-deps chromium
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs'; import assert from 'node:assert/strict';
+          const before=JSON.parse(fs.readFileSync('club-policy-artifacts/installed-before.json'));
+          const after=before.map(([p])=>[p,JSON.parse(fs.readFileSync(p+'/package.json')).version]);
+          fs.writeFileSync('club-policy-artifacts/installed-after.json',JSON.stringify(after)); assert.deepEqual(after,before);
+          console.log('Preserved all '+after.length+' locked installed versions.');
+          NODE
+          python -m pip install fonttools pillow
       - name: Proper app types
         run: node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee club-policy-artifacts/types.log
-      - name: Original first business outcomes
+      - name: Fixed original faults and full restoration
         run: |
-          export NODE_OPTIONS="--max-old-space-size=6144 --require=$PWD/scripts/lib/offlineTransport.cjs"
-          export SC_CLUB_POLICY_RAW="$PWD/club-policy-artifacts/raw"
-          node node_modules/vitest/vitest.mjs run src/test/soccerClubEligibility.test.ts src/test/soccerClubEligibilityEvents.test.ts --maxWorkers=1 --minWorkers=1 --reporter=default --reporter=json --outputFile=club-policy-artifacts/original.json 2>&1 | tee club-policy-artifacts/original.log
-      - name: Preserve source and offline evidence
+          NODE_OPTIONS="--max-old-space-size=6144 --require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/soccerClubEligibilityCheck.mjs 2>&1 | tee club-policy-artifacts/outcomes.log
+      - name: Existing competitions histories and transfer rules
+        run: |
+          NODE_OPTIONS="--max-old-space-size=6144 --require=$PWD/scripts/lib/offlineTransport.cjs" node node_modules/vitest/vitest.mjs run src/test/soccerCareerTransferBrief.test.ts src/test/soccerTransferBriefUi.test.tsx src/test/soccerTransferBriefPage.test.tsx src/test/soccerTransferBriefPromise.test.tsx src/test/soccerTransferAppearanceFloor.test.tsx src/test/soccerCareerContracts.test.ts src/test/soccerOfferReviewAgeRule.test.tsx src/lib/soccerCareerContinental.test.ts src/test/soccerSeasonCompetitions.test.tsx src/test/soccerTransferLeaguePreference.test.tsx --maxWorkers=1 --minWorkers=1 --reporter=default --reporter=json --outputFile=club-policy-artifacts/related.json 2>&1 | tee club-policy-artifacts/related.log
+      - name: Normal production build
+        if: ${{ !cancelled() }}
+        id: build
+        run: |
+          NODE_OPTIONS="--max-old-space-size=6144" npm run build 2>&1 | tee club-policy-artifacts/build.log
+          tar -czf club-policy-artifacts/dist.tgz dist
+          sha256sum club-policy-artifacts/dist.tgz > club-policy-artifacts/dist.sha256
+      - name: Existing continental appearance life and save harnesses
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          ONLY=simCareerContinental,simSoccerCareerUcl,simLoanSpell,simClubSquads,simCareerLife,simSoccerCareerSaveRecovery node scripts/runAllSims.mjs --browser 2>&1 | tee club-policy-artifacts/related-sims.log
+      - name: All built output readers
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          export ONLY="simAdsense,simBrand,simHeadTags,simHiddenPages,simHubs,simIndexNow,simIndexing,simInternalLinks,simNoRivalNames,simPrerender,simPrerenderBoot,simRetiredRoutes,simSchema,simSitemap,simSnapshotAssets,simSiteSearch,simGuideHeadings,simSeoMetaSplit,simHomeCopy,simHarnessAnchors"
+          node scripts/runAllSims.mjs --browser 2>&1 | tee club-policy-artifacts/readers.log
+      - name: Existing route download limits
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          node scripts/lib/hostLikeServer.mjs dist 4173 > club-policy-artifacts/weight-host.log 2>&1 &
+          sc_host_pid=$!
+          trap 'kill "$sc_host_pid" 2>/dev/null || true' EXIT
+          sleep 2
+          SWEEP_OFFLINE=1 BASE=http://127.0.0.1:4173 node scripts/sweepWeight.mjs 2>&1 | tee club-policy-artifacts/weight.log
+      - name: Actual route phone and desktop journeys
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          SOCCER_RUSSIA_RAW=club-policy-artifacts/arms/fixed/raw/advanced-season-codec.json SOCCER_RUSSIA_BROWSER_OUT=club-policy-artifacts/browser NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/playSoccerRussiaEurope.mjs 2>&1 | tee club-policy-artifacts/browser.log
+      - name: Source and lock holds
         if: always()
         run: |
           git ls-files -s > club-policy-artifacts/source-after.txt
@@ -52,7 +107,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: soccer-club-policy-original-${{ github.run_id }}
+          name: soccer-club-policy-scope-${{ github.run_id }}
           path: club-policy-artifacts
           retention-days: 7
           if-no-files-found: error
