@@ -1,0 +1,292 @@
+{
+  "schema": 1,
+  "status": "BOUND_FRESH_V2_INPUTS_PENDING_SOURCE_REVIEW",
+  "product": "4571ba4ea9545dab5ef70769204034e5163d48d7",
+  "productTree": "b38910df255daf979e74ccce34e252befccde8b3",
+  "qaPaths": [
+    ".github/workflows/soccer-first-real-entry-native-v2-20261105.yml",
+    "scripts/qa/soccerHistoricalEntryBrowser.mjs",
+    "scripts/qa/soccerHistoricalEntryFixtures.mjs",
+    "scripts/qa/soccerHistoricalEntryAssets.mjs",
+    "scripts/qa/nativeScrollReady.mjs",
+    "scripts/qa/soccerHistoricalEntryNative.json"
+  ],
+  "sourcePins": {
+    "src/lib/soccerCareerSave.ts": "86ec011693fd5bc702b5e8ccec05d27775a72a76",
+    "src/lib/careerEras.ts": "e037022342382b1df9c8a5ede620d2cce480bc23",
+    "src/lib/soccerAwardReveal.ts": "3c2ba81b18cdf575e0d6fb70c7743b41b78d519d",
+    "scripts/lib/offlineTransport.cjs": "0fda542a2649fe5da937c6976fd0f5b6073e74b6",
+    "package-lock.json": "97d6f12a052f25f400462938c241789a083f0bfe",
+    "package.json": "2ff64986fb76ebc51b706f2fd24765768874008a",
+    "tsconfig.app.json": "51f581dd91641b4c1f1219f646788e73cf6bf00c",
+    "src/components/soccer-career/PhonePanel.tsx": "736bdf5a1b07ca83a30b1487f81cce52dd8208bb",
+    "src/lib/soccerCareerEngine.ts": "40edcc5051d9b4a369698ea3572eb9e8e3314f26",
+    "src/lib/soccerHistoricalArrivals.ts": "fce537f31d51a8de78a170c57808b8d233fa54b1",
+    "src/lib/soccerPhone.ts": "cee38fc40914dad6989c66c66b29fae88203d1c8",
+    "src/pages/SoccerCareer.tsx": "f0d77f964522f4fb86ac0cb9543b7cd06f08a9ab",
+    "src/components/soccer-career/careerMoments.ts": "e9618355bc011458cde8930ceefdfec34d026b0d",
+    "scripts/lib/playwrightLoader.mjs": "4f7739e217e0a47ee82e6bfc8be1c04bed17454a",
+    "scripts/lib/answerConsent.mjs": "c6d16997e4c06e8b35dcfd0bab5efcad3069d899",
+    "scripts/lib/hostLikeServer.mjs": "21059d5e8114669df61106c125d5272d357b6236"
+  },
+  "artifacts": {
+    "build": {
+      "run": 42007228535,
+      "job": 127176941469,
+      "head": "92a82c1e950fe9f2e90789fce99e25d8ef74a28d",
+      "id": 13405133248,
+      "bytes": 7700737,
+      "sha256": "98453df15b0d3bc86fc3d3d7943987414702b5598fa23467228c689733c561ec",
+      "format": "zip-files",
+      "tar": "completed-dist.tar.gz",
+      "tarBytes": 7007296,
+      "tarSHA256": "51349e33ac11c12ee22684bf3a386aaee635eb4c6fd683fa1e6deb50771e4aaf",
+      "distInventorySHA256": "5c04aee1b45e3255a9cda85335cda360ba6bc1b2790273300054c7835aa6f03a",
+      "admittedFiles": [
+        {
+          "path": "build-proof.json",
+          "bytes": 1110,
+          "sha256": "1dd4a2450ff028f047aa7955e5873f398ca9ea624ae726010373e711355d3ba6"
+        },
+        {
+          "path": "dist-after.sha256",
+          "bytes": 86289,
+          "sha256": "5c04aee1b45e3255a9cda85335cda360ba6bc1b2790273300054c7835aa6f03a"
+        },
+        {
+          "path": "dist-before.sha256",
+          "bytes": 86289,
+          "sha256": "5c04aee1b45e3255a9cda85335cda360ba6bc1b2790273300054c7835aa6f03a"
+        },
+        {
+          "path": "logs/build-versions.json",
+          "bytes": 54,
+          "sha256": "a246e08cc9c4a14bc90934ca00e4cc547667133775c939958baeade6e4c2dbf3"
+        },
+        {
+          "path": "logs/build.log",
+          "bytes": 96904,
+          "sha256": "e7b2be39d3d7fc38e86554ad8039fbc465f425d7cfbbf6f70ffff27b214da772"
+        },
+        {
+          "path": "logs/simAdsense.log",
+          "bytes": 1508,
+          "sha256": "dce8b98691b7db151b5b1d43e81c7651dc00158f2b7f61be0b3aa13fea8cd50b"
+        },
+        {
+          "path": "logs/simBrand.log",
+          "bytes": 1011,
+          "sha256": "7f7df14b60b95614866c4bd39e2715afe9cc2a13d34b6c33efd425853c46f500"
+        },
+        {
+          "path": "logs/simGuideHeadings.log",
+          "bytes": 6989,
+          "sha256": "8bf19ab6f8119300438dbb5964f9ddc7bfe8318a461f7d1a182d54146c55f160"
+        },
+        {
+          "path": "logs/simHarnessAnchors.log",
+          "bytes": 447,
+          "sha256": "61d938caa4fa2d1f6ad056f217e00ff8b964629cf4c188a795d493106538c801"
+        },
+        {
+          "path": "logs/simHeadTags.log",
+          "bytes": 624,
+          "sha256": "99ad22dabb92b2617b84ca2f67e9f6422b67fa6eb3cae592a83b8295ac23bad0"
+        },
+        {
+          "path": "logs/simHiddenPages.log",
+          "bytes": 483,
+          "sha256": "eb3c6a0bfa1eeae5fc5f9f170c4115653c75d9e19160de81cffb3fe3fa8644c4"
+        },
+        {
+          "path": "logs/simHomeFront.log",
+          "bytes": 2610,
+          "sha256": "ed18544b0297e552eebd7e7422c982df7ca118f05d4967be6defb7c940e5f4c6"
+        },
+        {
+          "path": "logs/simHubs.log",
+          "bytes": 1802,
+          "sha256": "cc2e49ee98dea2034ef14ce9b7c936ae2032d541706371cefbf47a7f93e79949"
+        },
+        {
+          "path": "logs/simIndexNow.log",
+          "bytes": 287,
+          "sha256": "a9d492157b79c962960e16d784f4d1f85884f6c40e5a65cc2890aef62c7c28db"
+        },
+        {
+          "path": "logs/simIndexing.log",
+          "bytes": 1080,
+          "sha256": "1eda258110842f5fd597d87a30ffe448e8b3bf4d02938fedb6521b5e01a46ad1"
+        },
+        {
+          "path": "logs/simInternalLinks.log",
+          "bytes": 457,
+          "sha256": "cdc98e23d230ffe19944d63d202773e41a0ec651ee8ca9415f91079e14edc024"
+        },
+        {
+          "path": "logs/simNoRivalNames.log",
+          "bytes": 689,
+          "sha256": "7b7a3c392d7315f1ad3b6c3d82fc5adf8acf87824882e2fbcdebad9e8f4e55b4"
+        },
+        {
+          "path": "logs/simPrerender.log",
+          "bytes": 2120,
+          "sha256": "def8c1dad50ba55cd07fc1b1a1fd7108476664a962bd7bc57edfda8833a142f7"
+        },
+        {
+          "path": "logs/simPrerenderBoot.log",
+          "bytes": 1658,
+          "sha256": "31d47e1c6fb36ec5775003d1253f4f4f52e0025bb4fda84aa5ef961b0edf960b"
+        },
+        {
+          "path": "logs/simRetiredRoutes.log",
+          "bytes": 631,
+          "sha256": "2484ba1f3901b7ef0946811ee1c89a5190e877aeb74496a5e554f7e320638ed4"
+        },
+        {
+          "path": "logs/simSaveKeeper.log",
+          "bytes": 12831,
+          "sha256": "7627257f797a6d6876af0deac5519a81630b198d0865fc7ff0e7cc7add9f03e5"
+        },
+        {
+          "path": "logs/simSchema.log",
+          "bytes": 1093,
+          "sha256": "3abfdf45ff7b9ce8fe38369773a2e88598f05a974d02ac29e43ac7678dde3fd9"
+        },
+        {
+          "path": "logs/simSeoMetaSplit.log",
+          "bytes": 1143,
+          "sha256": "7d2fe4ba0bcf06f685836d4ab94cdcd59aa283e2324a9f9be0db3a7dde376be3"
+        },
+        {
+          "path": "logs/simSeoTitles.log",
+          "bytes": 1699,
+          "sha256": "9b1fced496b0799c79b028bb9e6d2ba343f3feb2ee1852af3c29b4db706adae9"
+        },
+        {
+          "path": "logs/simSiteSearch.log",
+          "bytes": 1788,
+          "sha256": "7057297848ac6c5c3da07383b424e5da043f16923063a53a1701cd8bc49058c0"
+        },
+        {
+          "path": "logs/simSitemap.log",
+          "bytes": 594,
+          "sha256": "87cb4704be9f897a87210c09d57f555fa32c56b854d93c121737982c18052471"
+        },
+        {
+          "path": "logs/simSnapshotAssets.log",
+          "bytes": 766,
+          "sha256": "3c48f70cbbf11f671e573c44d030c2e88541f9608c494abbb2293e1eae8a1f8b"
+        },
+        {
+          "path": "logs/simSoccerCareerRecords.log",
+          "bytes": 11877,
+          "sha256": "012737fdbad7f553850f4be3bb17e6b9ed1a99e201ac8b55ce5f12ce280e51cf"
+        },
+        {
+          "path": "logs/sweep-weight.log",
+          "bytes": 3359,
+          "sha256": "099ff09c18d4cf5d0bf03352b4e0ee26690d823b59c5063d6d95d3be1c4c7a4b"
+        },
+        {
+          "path": "source-after.sha256",
+          "bytes": 588735,
+          "sha256": "2027a05daf1e05fceb209abd588a4c984cacf7e8a2d4e7160ea011722d890ac9"
+        },
+        {
+          "path": "source-before.sha256",
+          "bytes": 588735,
+          "sha256": "2027a05daf1e05fceb209abd588a4c984cacf7e8a2d4e7160ea011722d890ac9"
+        },
+        {
+          "path": "source-output-hold.json",
+          "bytes": 75,
+          "sha256": "87042490bcc984019c2b17b68408bccb32efd810bf824e60d09802ee446462d8"
+        },
+        {
+          "path": "types-passed.json",
+          "bytes": 75,
+          "sha256": "f80953007ecd091c9ff14a8b6a402bf746f91cd318c09cf7ead15f3e04941ba9"
+        }
+      ]
+    },
+    "outcomes": {
+      "run": 42007357112,
+      "job": 127177372231,
+      "head": "97f7c138ddd4022a3ab34a71b4dff964861a00f9",
+      "id": 13406490022,
+      "bytes": 11181166,
+      "sha256": "a2c8ea726c2cf42f3538cd26873886ab4d3acd3b5aed77b98864b8e99e9a43aa",
+      "format": "zip-tgz",
+      "tgz": "soccer-first-real-entry-outcomes.tar.gz",
+      "tgzBytes": 11180660,
+      "tgzSHA256": "20922c7d001a4d3c7dc9fddfc2135bbfb49f59ff03a74a450f808edc15ef28df",
+      "candidate": "4571ba4ea9545dab5ef70769204034e5163d48d7"
+    },
+    "tail": {
+      "run": 42005045198,
+      "job": 127169550777,
+      "head": "7f5dcb12939fd600ca43146c9e79c1190a180d7a",
+      "id": 13404157411,
+      "bytes": 2720566,
+      "sha256": "72fb4b0e37ac9b2858f3c138121350312444c53f2ef30f7ee97520af4e5109fa",
+      "format": "zip-tgz",
+      "tgz": "soccer-first-real-entry-boundaries.tar.gz",
+      "tgzBytes": 2720050,
+      "tgzSHA256": "b56d29e53f5c294443c032a716c159634e1fc875348708d504ea4f6c7fbc3d8e",
+      "originalProduct": "8ddca6c113a906dc774221620644a1b3c80eb6ca",
+      "currentDifference": "Only PhonePanel retired record label; all model/codec/Page source bytes held"
+    }
+  },
+  "fixtures": [
+    {
+      "name": "entry2009",
+      "origin": "outcomes",
+      "sourceRaw": "restored-fixed/evidence/entry.json",
+      "sourceRawSHA256": "192f23949ff1df5453cfa42c31ea6f4e514f2e7527d8812d10e6344824a67d58",
+      "sourceSaveSHA256": "4fd19cdc8133dc05584dfeea06067599ea96f0a9c0bc4fae0b69af6e7cae70cf"
+    },
+    {
+      "name": "entry2015",
+      "origin": "outcomes",
+      "sourceRaw": "restored-fixed/evidence/continuity.json",
+      "sourceRawSHA256": "a60bafc1eff2ce7f0785f08a47959a83d073cf2a6dbd500e2deab8ec5728e9f0",
+      "sourceSaveSHA256": "4abb3706d67900a5bbe134f9b9e5331e13d4b827c8a2e424cb65cbb86e1babbc"
+    },
+    {
+      "name": "retiredTail",
+      "origin": "boundaries",
+      "sourceSelection": {
+        "name": "manager-employed",
+        "mode": "supported",
+        "field": "candidate.saved"
+      },
+      "scope": "Actual declared manager season result, immutable first entry2009 while last playing record2008. Not a natural retirement journey."
+    }
+  ],
+  "tail": {
+    "gzip": "evidence/declared-boundaries.json.gz",
+    "gzipSHA256": "6586375d82e899f67c5679a69b1d8de761a52c28eddcf681e9c2afbcadddf959"
+  },
+  "expected": {
+    "contexts": 3,
+    "widths": [
+      320,
+      390,
+      1280
+    ],
+    "photosPerContext": 4,
+    "photosTotal": 12,
+    "declaredFixtures": 3,
+    "sourceChangePaths": 6,
+    "buildsInThisWorkflow": 0
+  },
+  "limits": [
+    "Actual browser natural RNG/clock for UI2005 creation only, no manually supplied entrant or predetermined roll.",
+    "Three separately declared actual admitted saves, warmed through actual source Page loader with full first/second load frames and no-draw receipts.",
+    "No constructor/season replay for fixture generation, no App rebuild/regeneration or cap change.",
+    "Same fresh V2completedtar only; superseded first-entry build13403637312 is not consumed.",
+    "Tail fixture's model inputs are byte-identical across the one UI-only retired-label successor; header must explicitly identify last player record2008, source debut2009 remains factual.",
+    "No naturally delivered declared state, whole-career/population, guaranteed nomination/transfer, provider or full-suite-green claim."
+  ]
+}
