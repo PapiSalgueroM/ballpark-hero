@@ -1,0 +1,147 @@
+name: Generate verified Segunda career pool
+on:
+  push:
+    branches: [codex/soccer-segunda-generate-20261104]
+permissions:
+  contents: read
+concurrency:
+  group: soccer-segunda-generate-${{ github.ref }}
+  cancel-in-progress: false
+env:
+  CI: '1'
+  SIM_NETWORK: offline
+  TZ: UTC
+  PRODUCT_CORE: a9bc98c36fa232a415322e60ca4b4af682f881fc
+  PRODUCT_TREE: 0444eab2ded1d2273072b15b4e34f6b8665796d0
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+          filter: blob:none
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: '1.4.4'
+      - name: Bind exact candidate and untouched generated baseline
+        run: |
+          set -euo pipefail
+          OUT="$RUNNER_TEMP/soccer-segunda-generated"
+          mkdir -p "$OUT/logs" "$OUT/transport"
+          echo "QA_OUT=$OUT" >> "$GITHUB_ENV"
+          export QA_OUT="$OUT"
+          test "$(git rev-parse HEAD^)" = "$PRODUCT_CORE"
+          test "$(git rev-parse HEAD^^{tree})" = "$PRODUCT_TREE"
+          test "$(git diff --name-status HEAD^ HEAD)" = $'A\t.github/workflows/soccer-segunda-generate-20261104.yml'
+          test "$(git hash-object src/data/soccerCareerClubPool.ts)" = 83e9df78441c0d16509f80b8ec0bfbadb0f08f26
+          git status --porcelain --untracked-files=all > "$OUT/status-before.txt"
+          test ! -s "$OUT/status-before.txt"
+          git rev-parse HEAD > "$OUT/source-head.txt"
+          git rev-parse HEAD^{tree} > "$OUT/source-tree.txt"
+          git grep -n "cupAssociation" -- src > "$OUT/cup-callers.txt"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import cp from 'node:child_process';import crypto from 'node:crypto';
+          const paths=cp.execFileSync('git',['ls-files','-z']).toString().split('\0').filter(Boolean);
+          const rows=Object.fromEntries(paths.map(p=>[p,{bytes:fs.statSync(p).size,sha256:crypto.createHash('sha256').update(fs.readFileSync(p)).digest('hex')}]));
+          fs.writeFileSync(process.env.QA_OUT+'/source-before.json',JSON.stringify(rows,null,2)+'\n');
+          fs.copyFileSync('src/data/soccerCareerClubPool.ts',process.env.QA_OUT+'/pool-before.ts');
+          NODE
+      - name: Install held dependencies
+        run: |
+          set -euo pipefail
+          test "$(bun --version)" = 1.4.4
+          bun --version > "$QA_OUT/logs/bun-version.log"
+          node --version > "$QA_OUT/logs/node-version.log"
+          bun install --frozen-lockfile > "$QA_OUT/logs/install.log" 2>&1
+          git diff --exit-code HEAD -- package.json package-lock.json bun.lock bun.lockb
+      - name: Run actual generator twice and qualify the append
+        run: |
+          set -euo pipefail
+          export GIT_NO_LAZY_FETCH=1
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          export SIM_OFFLINE_RECEIPT="$QA_OUT/transport/generate.log"
+          : > "$SIM_OFFLINE_RECEIPT"
+          node scripts/genCareerClubPool.mjs --table > "$QA_OUT/logs/generate-first.log" 2>&1
+          cp src/data/soccerCareerClubPool.ts "$QA_OUT/soccerCareerClubPool.ts"
+          node scripts/genCareerClubPool.mjs --table > "$QA_OUT/logs/generate-second.log" 2>&1
+          cmp src/data/soccerCareerClubPool.ts "$QA_OUT/soccerCareerClubPool.ts"
+          cat "$QA_OUT/logs/generate-first.log"
+          test ! -s "$SIM_OFFLINE_RECEIPT"
+          export SIM_OFFLINE_RECEIPT="$QA_OUT/transport/qualify.log"
+          : > "$SIM_OFFLINE_RECEIPT"
+          node --input-type=module <<'NODE' > "$QA_OUT/logs/qualification.log" 2>&1
+          import fs from 'node:fs';import path from 'node:path';import assert from 'node:assert/strict';import crypto from 'node:crypto';import {pathToFileURL} from 'node:url';import {build} from 'esbuild';
+          import {bundleCareerSources,deriveCareerClubPool,poolInputs,sinceInput,renderPoolFile} from './scripts/lib/careerClubPool.mjs';
+          const out=process.env.QA_OUT,tmp=path.join(out,'bundles');fs.mkdirSync(tmp,{recursive:true});
+          const write=(name,value)=>fs.writeFileSync(path.join(out,name),JSON.stringify(value,null,2)+'\n');
+          await build({entryPoints:[path.join(out,'pool-before.ts')],outfile:path.join(tmp,'old-pool.mjs'),platform:'node',format:'esm',bundle:true,logLevel:'silent'});
+          await build({entryPoints:['src/data/soccerCareerClubPool.ts'],outfile:path.join(tmp,'new-pool.mjs'),platform:'node',format:'esm',bundle:true,logLevel:'silent'});
+          const old=await import(pathToFileURL(path.join(tmp,'old-pool.mjs')).href),current=await import(pathToFileURL(path.join(tmp,'new-pool.mjs')).href);
+          const expected=["cm-real-oviedo","cm-mallorca","cm-eibar","cm-castellon","cm-almeria","cm-burgos","cm-sabadell","cm-sporting-gijon","cm-granada","cm-las-palmas","cm-tenerife","cm-leganes","cm-valladolid","cm-cordoba","cm-eldense","cm-cadiz","cm-fc-andorra","cm-ceuta","cm-albacete"];
+          assert.equal(old.CAREER_CLUB_POOL.length,307);assert.equal(current.CAREER_CLUB_POOL.length,326);
+          assert.deepEqual(current.CAREER_CLUB_POOL.slice(0,307),old.CAREER_CLUB_POOL,'SC_SEGUNDA_OLD_PREFIX_HELD');
+          const added=current.CAREER_CLUB_POOL.slice(307);assert.deepEqual(added.map(c=>c.id),expected,'SC_SEGUNDA_GENERATED_APPEND');
+          for(const c of added){assert.equal(c.league,'Segunda Division');assert.equal(c.tier,4);assert.equal(c.country,c.name==='FC Andorra'?'Andorra':'Spain');assert.notEqual(c.color.toLowerCase(),'#8899aa');assert.equal(current.CAREER_POOL_SINCE[c.name],2026);}
+          const ladders={...current.CAREER_LEAGUE_LADDER};delete ladders['Segunda Division'];assert.deepEqual(ladders,old.CAREER_LEAGUE_LADDER);
+          assert.equal(current.CAREER_LEAGUE_LADDER['Segunda Division'].flat().length,20);
+          const since={...current.CAREER_POOL_SINCE};for(const c of added)delete since[c.name];assert.deepEqual(since,old.CAREER_POOL_SINCE);
+          globalThis.localStorage={getItem:()=>null,setItem:()=>{},removeItem:()=>{},clear:()=>{}};
+          let seed=7391;const draws=[],real=Math.random;Math.random=()=>{seed=(Math.imul(seed,1664525)+1013904223)>>>0;const v=seed/4294967296;draws.push(v);return v;};
+          let mod;try{mod=await bundleCareerSources({root:process.cwd(),tmpDir:tmp,stubPool:false});}finally{Math.random=real;}
+          assert.equal(mod.engine.HAND_CLUBS.length,190);assert.equal(mod.engine.FALLBACK_CLUBS.length,516);
+          assert.deepEqual(mod.engine.FALLBACK_CLUBS.filter(c=>c.name==='Girona').map(c=>c.id),['fb-96']);
+          const derived=deriveCareerClubPool({...poolInputs(mod),since:sinceInput(process.cwd())});
+          assert.deepEqual(derived.rows,current.CAREER_CLUB_POOL);assert.deepEqual(derived.ladder,current.CAREER_LEAGUE_LADDER);assert.deepEqual(derived.poolSince,current.CAREER_POOL_SINCE);
+          const rendered=Buffer.from(renderPoolFile(derived.rows,mod.CM_ROSTER_META,derived.ladder,derived.poolSince));assert.deepEqual(rendered,fs.readFileSync('src/data/soccerCareerClubPool.ts'));
+          write('old-pool-data.json',{rows:old.CAREER_CLUB_POOL,ladder:old.CAREER_LEAGUE_LADDER,since:old.CAREER_POOL_SINCE});
+          write('generator-derived.json',derived);write('app-pool-data.json',{hand:mod.engine.HAND_CLUBS,all:mod.engine.FALLBACK_CLUBS,importDraws:draws});
+          write('generation-admission.json',{status:'generated-qualified',old:307,added:19,generated:326,hand:190,all:516,oldPrefixHeld:true,idempotent:true,girona:'fb-96',sha256:crypto.createHash('sha256').update(rendered).digest('hex'),bytes:rendered.length});
+          console.log('SC_SEGUNDA_GENERATION_QUALIFIED 307 old +19 =326 generated,190 hand,516 total; old prefix/ledgers held; exact two-run bytes');
+          NODE
+          cat "$QA_OUT/logs/qualification.log"
+          test ! -s "$SIM_OFFLINE_RECEIPT"
+      - name: Proper app types after generation
+        run: |
+          set -euo pipefail
+          export GIT_NO_LAZY_FETCH=1
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          export SIM_OFFLINE_RECEIPT="$QA_OUT/transport/types.log"
+          : > "$SIM_OFFLINE_RECEIPT"
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json > "$QA_OUT/logs/types.log" 2>&1
+          printf '%s\n' '{"command":"node_modules/.bin/tsc --noEmit -p tsconfig.app.json","exit":0}' > "$QA_OUT/types-passed.json"
+          test ! -s "$SIM_OFFLINE_RECEIPT"
+      - name: Hold every byte except the declared generated file
+        if: always()
+        run: |
+          set -euo pipefail
+          export GIT_NO_LAZY_FETCH=1
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import cp from 'node:child_process';import crypto from 'node:crypto';import assert from 'node:assert/strict';
+          const out=process.env.QA_OUT,pool='src/data/soccerCareerClubPool.ts',before=JSON.parse(fs.readFileSync(out+'/source-before.json'));
+          const paths=cp.execFileSync('git',['ls-files','-z']).toString().split('\0').filter(Boolean);
+          const after=Object.fromEntries(paths.map(p=>[p,{bytes:fs.statSync(p).size,sha256:crypto.createHash('sha256').update(fs.readFileSync(p)).digest('hex')}]));
+          fs.writeFileSync(out+'/source-after.json',JSON.stringify(after,null,2)+'\n');
+          assert.deepEqual(Object.keys(after),Object.keys(before));for(const p of paths)if(p!==pool)assert.deepEqual(after[p],before[p],p+' must remain byte exact');
+          const status=cp.execFileSync('git',['status','--porcelain','--untracked-files=all']).toString();fs.writeFileSync(out+'/status-after.txt',status);
+          const changed=status===''?[]:status.trim().split('\n').map(x=>x.trim());assert(changed.every(x=>x==='M '+pool),'Only generated file may change');
+          const receipts=fs.readdirSync(out+'/transport').map(p=>({path:p,bytes:fs.statSync(out+'/transport/'+p).size}));assert(receipts.every(x=>x.bytes===0));
+          fs.writeFileSync(out+'/source-hold.json',JSON.stringify({tracked:paths.length,onlyPermitted:pool,changed,receipts,otherBytesHeld:true},null,2)+'\n');
+          console.log('SC_SEGUNDA_GENERATION_SOURCE_HELD '+paths.length+' tracked files, only declared pool write, empty receipts');
+          NODE
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: soccer-segunda-generated-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ env.QA_OUT }}/
+          retention-days: 30
+          compression-level: 6
