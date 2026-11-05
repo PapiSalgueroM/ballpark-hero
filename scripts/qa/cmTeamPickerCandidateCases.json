@@ -1,0 +1,402 @@
+{
+  "schemaVersion": 1,
+  "status": "CANDIDATE_THREE_ARM",
+  "base": {
+    "commit": "3b14650d360b010b25b525de33a5f32f33de2798",
+    "tree": "d9278a7b5f58395509f6ab937f918c1c2ef31127"
+  },
+  "master": {
+    "cards": [
+      {
+        "id": "CM-04",
+        "status": "PARTIAL"
+      },
+      {
+        "id": "SC-36",
+        "status": "PARTIAL"
+      }
+    ],
+    "masterSHA256": "fda0f7eef07d41f2ba91e89dff3542fef98cd3bd9aabcbe02f70b649797d357a"
+  },
+  "testFile": "src/test/clubManagerTeamPickerOriginal.test.tsx",
+  "frozen": {
+    "test": "89f7512372006317340c85aeae50a0737189558b",
+    "probe": "6bf9b449122b5c926e7213344bf600a089b6e2f0",
+    "originalReader": "06beb8d6de16daa9410aedb793aee3c8fba0f500",
+    "originalSpec": "8859c8549d645392c6c94459b7d996779a3dc225",
+    "testStatementsChanged": false
+  },
+  "original": {
+    "run": "42098971319",
+    "job": "127496422993",
+    "qa": "f7a13d3e79bd740e898ebde4c2db51bc368546e5",
+    "qaTree": "681de02e45ece0361e3047c72066e46137505faf",
+    "branch": "codex/cm-team-picker-original-v3-20261105",
+    "workflow": ".github/workflows/cm-team-picker-original-20261105.yml",
+    "workflowBlob": "ebc44b810eefd0d0432f309ea45e3de71abf7ea3",
+    "artifact": "13449467861",
+    "zipBytes": 11895467,
+    "zipSHA256": "bb7876264807079637859ab93cc8af00a4e70d9884f223652dbe7198ce3bb1f6",
+    "innerTar": {
+      "name": "cm-team-picker-original-evidence.tar.gz",
+      "bytes": 11894961,
+      "sha256": "1afb58e977789741b5f070b46392a57d50994311b1a1317bb2989f436ae6393a"
+    },
+    "admissionBytes": 214077,
+    "admissionSHA256": "af01a6328b6da181e1c12b63dfd4fc9acc4e02423273b9304a603fdd972b5f82",
+    "independentAdmissionSHA256": "66569142faf341c717c14350fbc0bc3a6b8ddda846449c4d3c325e02fb069d5f",
+    "rawPins": [
+      {
+        "file": "raw/current.json.gz",
+        "storedBytes": 443624,
+        "storedSHA256": "b453238f79e3ea9119712b93f69608fe47dc27386717368e4bf4a23ac763d5ce",
+        "decodedBytes": 5250129,
+        "decodedSHA256": "24b3ce8ef84c9fd89729677a67fa84048c4d4e3913f5df284c66019d5c0248c2",
+        "frames": 58,
+        "importDraws": 4,
+        "actionDraws": 706
+      },
+      {
+        "file": "raw/historical-fixtures.json.gz",
+        "storedBytes": 454043,
+        "storedSHA256": "40e39242ad8cb5c1a7333559d79901e84f71e24bb67c837439116c78383455df",
+        "decodedBytes": 4586388,
+        "decodedSHA256": "82cfb1f90754d55d05864680e0810d36252ed0bc624d8fc7d0939698e5c69832",
+        "frames": 41,
+        "importDraws": 4,
+        "actionDraws": 1845
+      },
+      {
+        "file": "raw/edited-world.json.gz",
+        "storedBytes": 282518,
+        "storedSHA256": "ee0929d7964ec3daa21c3f6a4613c6c0219d1ad64d5246ffbc503e05d94064cf",
+        "decodedBytes": 1813218,
+        "decodedSHA256": "1311b0dbe6ae5a922f5e3f0e7c600341f44f5e5593679b4601cb4ec5bb498a58",
+        "frames": 9,
+        "importDraws": 4,
+        "actionDraws": 758
+      },
+      {
+        "file": "raw/custom-manager.json.gz",
+        "storedBytes": 554834,
+        "storedSHA256": "8f912c454853de942970a594e076c783fa33328e55a07357e55c5ba36095a100",
+        "decodedBytes": 3038368,
+        "decodedSHA256": "074fb52ba4b1769f9c6153b99c013eecceb3be626d89f13182cfb73b903436f1",
+        "frames": 14,
+        "importDraws": 4,
+        "actionDraws": 1427
+      },
+      {
+        "file": "raw/cold-delivery.json.gz",
+        "storedBytes": 780027,
+        "storedSHA256": "2e2790a8b9b2432239bb500d7527fdcc6782fdf7d807dee1b61491a80ef0e96c",
+        "decodedBytes": 2965016,
+        "decodedSHA256": "94bad8edba109d29f69581fd9748f025dd86b63c2f9872ec88718e6c9f25b423",
+        "frames": 1,
+        "importDraws": 4,
+        "actionDraws": 0
+      }
+    ],
+    "bodyProbe": {
+      "sha256": "e14ca64c45c60cf5ae7b2614740fb353589b103500bce043f8d6bcce24678048",
+      "initialGzipBytes": 663974,
+      "settledGzipBytes": 663974,
+      "allGzipBytes": 663974,
+      "bytes": 1520582
+    },
+    "role": "Only actual admitted V3. Earlier types-only/V2incomplete late-case RAW are not golden references."
+  },
+  "candidate": {
+    "commit": "671730c30f67685f070593af7b2464a9cc1f5352",
+    "tree": "7080fc953cab1ebbb3f616b7741f022c8b7a8ea0",
+    "parent": "3b14650d360b010b25b525de33a5f32f33de2798",
+    "parentTree": "d9278a7b5f58395509f6ab937f918c1c2ef31127",
+    "pagePath": "src/pages/ClubManager.tsx",
+    "pageBlob": "9d047919f7af871cc58c082f44fbf5d2b98f8c06",
+    "pageSHA256": "7fc893a8c8f8e93d6f7fbadc1eabba7ce016879903723e81601dbb6109ce079c",
+    "leafPath": "src/components/club-manager/ClubManagerTeamPicker.tsx",
+    "leafBlob": "17462cdb8b2d281ab2706906f7894e937f6d8b3f",
+    "leafSHA256": "a8e873102ea0cc06af3309e8481b11e84368a98b0adb7d4282efb03197cebd92",
+    "sourceDelta": "Exactly M page + A leaf; complete inverse restores original d927 tree. No PR merge/deploy."
+  },
+  "fault": {
+    "name": "physical-eager-wire",
+    "mechanisms": 1,
+    "path": "src/pages/ClubManager.tsx",
+    "pageBlob": "6ef5b760cda58f4a1f08eec874b94ed9f82f718b",
+    "pageSHA256": "c191cf84e897597da3794595db850775038c3d3506b63fb82267cbb10331982b",
+    "pageBytes": 103945,
+    "operations": [
+      {
+        "before": "import { Play, ChevronRight, ChevronLeft, Trophy, Briefcase } from 'lucide-react';",
+        "after": "import { Play, ChevronRight, ChevronLeft, Trophy, Briefcase } from 'lucide-react';\nimport EagerClubManagerTeamPicker from '@/components/club-manager/ClubManagerTeamPicker';",
+        "count": 1
+      },
+      {
+        "before": "const ClubManagerTeamPicker = lazy(() => import('@/components/club-manager/ClubManagerTeamPicker'));",
+        "after": "const ClubManagerTeamPicker = EagerClubManagerTeamPicker;",
+        "count": 1
+      }
+    ],
+    "expected": "Actual compiled initial marker present, unchanged fifth owns AssertionError, all four business records/tapes/saves held. Source-only fault not executed yet."
+  },
+  "helperPins": [
+    {
+      "path": "src/test/clubManagerTeamPickerOriginal.test.tsx",
+      "gitBlob": "89f7512372006317340c85aeae50a0737189558b",
+      "bytes": 24281,
+      "sha256": "a9bda48174ec7b380de4d62ba9cb697b61580e37a06f8f9c807caf4cffdbe4f3"
+    },
+    {
+      "path": "scripts/qa/cmTeamPickerOriginalProbe.mjs",
+      "gitBlob": "6bf9b449122b5c926e7213344bf600a089b6e2f0",
+      "bytes": 11762,
+      "sha256": "cbbd9d17eb82549ec7246a1d4272b83340c274006fa16e90a3dfe1a64d549520"
+    },
+    {
+      "path": "scripts/qa/cmTeamPickerCandidateEvidence.mjs",
+      "gitBlob": "e0aa6dbf21c29335b9d1ba730573c75010d03621",
+      "bytes": 25239,
+      "sha256": "ece9608a4563b9491e57e90e1eb8efc64dd9c48827fc02315939ab41276de7cf"
+    }
+  ],
+  "sourcePins": [
+    {
+      "path": "src/hooks/useClubManager.ts",
+      "gitBlob": "fe8d97dbfabaea602968e9cca25d4930895093e1",
+      "bytes": 74095
+    },
+    {
+      "path": "src/lib/clubManager.ts",
+      "gitBlob": "4b0a734e9fe9ba1e7139ead8d4fe5d6a1574c484",
+      "bytes": 1307878
+    },
+    {
+      "path": "src/lib/clubManagerEras.ts",
+      "gitBlob": "2f462a0a753338cc95fbfbc066a4240917440623",
+      "bytes": 62756
+    },
+    {
+      "path": "src/lib/clubManagerFixtures.ts",
+      "gitBlob": "a9bbb510574d9d4be5f904337ec7e35ac6051b82",
+      "bytes": 9841
+    },
+    {
+      "path": "src/lib/clubManagerSlots.ts",
+      "gitBlob": "cd1a683637ce1fa0444b86b1cff46821aa75127d",
+      "bytes": 9763
+    },
+    {
+      "path": "src/lib/saveFence.ts",
+      "gitBlob": "1de45b573fd866433eb0982495af927a5427e8f4",
+      "bytes": 6552
+    },
+    {
+      "path": "src/components/club-manager/ManagerForm.tsx",
+      "gitBlob": "2bf450b0af6ba80af3fc89504e8a69691749eaf5",
+      "bytes": 15574
+    },
+    {
+      "path": "src/components/club-manager/CustomClubForm.tsx",
+      "gitBlob": "6d0bd2c849f41dbdf4a738c77abe22990c31e0fd",
+      "bytes": 17255
+    },
+    {
+      "path": "src/components/club-manager/ClubManagerClubList.tsx",
+      "gitBlob": "e222cfbb81536aa57f70765829f44652e5cabb04",
+      "bytes": 1792
+    },
+    {
+      "path": "src/components/club-manager/CmCards.tsx",
+      "gitBlob": "32b4f86e494f8ce5a88a0dcc947fd5288e785696",
+      "bytes": 2888
+    },
+    {
+      "path": "src/data/clubManagerWorldRosters.ts",
+      "gitBlob": "edb53cdfb032daf1da26b66d9a6251899a625f04",
+      "bytes": 10417
+    },
+    {
+      "path": "scripts/sweepWeight.mjs",
+      "gitBlob": "5a92a68cc0225d5e633c19e041087e7c6c4254e8",
+      "bytes": 104848
+    },
+    {
+      "path": "scripts/lib/hostLikeServer.mjs",
+      "gitBlob": "21059d5e8114669df61106c125d5272d357b6236",
+      "bytes": 2690
+    },
+    {
+      "path": "scripts/lib/playwrightLoader.mjs",
+      "gitBlob": "4f7739e217e0a47ee82e6bfc8be1c04bed17454a",
+      "bytes": 2777
+    },
+    {
+      "path": "scripts/lib/answerConsent.mjs",
+      "gitBlob": "c6d16997e4c06e8b35dcfd0bab5efcad3069d899",
+      "bytes": 5835
+    },
+    {
+      "path": "tailwind.config.ts",
+      "gitBlob": "f83c4f4032d359bc9285828eac3b0961a46c6b17",
+      "bytes": 5759
+    },
+    {
+      "path": "vite.config.ts",
+      "gitBlob": "0112b6ac4f2ad80b2fc04f9ec2f7185300913e7d",
+      "bytes": 10694
+    },
+    {
+      "path": "package.json",
+      "gitBlob": "2ff64986fb76ebc51b706f2fd24765768874008a",
+      "bytes": 3495
+    },
+    {
+      "path": "package-lock.json",
+      "gitBlob": "97d6f12a052f25f400462938c241789a083f0bfe",
+      "bytes": 309049
+    },
+    {
+      "path": "bun.lockb",
+      "gitBlob": "5d9d33a3bf4f45fa099e2aa3014149e034981149",
+      "bytes": 245395
+    },
+    {
+      "path": "bun.lock",
+      "gitBlob": "dff081dcd34a1aa928ddc90d910774a6b855dfe3",
+      "bytes": 152868
+    }
+  ],
+  "cases": [
+    {
+      "id": "current",
+      "fullName": "Club Manager Team picker original acceptance holds the complete current picker, selection callbacks and real saved start",
+      "marker": null,
+      "raw": "current.json.gz",
+      "seedOrdinal": 1,
+      "originalExpected": "passed"
+    },
+    {
+      "id": "historical-fixtures",
+      "fullName": "Club Manager Team picker original acceptance holds all four era grids and the actual fixture wait, retry and cancellation paths",
+      "marker": null,
+      "raw": "historical-fixtures.json.gz",
+      "seedOrdinal": 2,
+      "originalExpected": "passed"
+    },
+    {
+      "id": "edited-world",
+      "fullName": "Club Manager Team picker original acceptance holds the real edited-world grid, callbacks and complete saved career",
+      "marker": null,
+      "raw": "edited-world.json.gz",
+      "seedOrdinal": 3,
+      "originalExpected": "passed"
+    },
+    {
+      "id": "custom-manager",
+      "fullName": "Club Manager Team picker original acceptance holds Custom and Manager Back, exact null conversion and authentic save reloads",
+      "marker": null,
+      "raw": "custom-manager.json.gz",
+      "seedOrdinal": 4,
+      "originalExpected": "passed"
+    },
+    {
+      "id": "cold-delivery",
+      "fullName": "Club Manager Team picker original acceptance keeps executable Team rendering off the actual initial served path until League selection",
+      "marker": "CM_TEAM_PICKER_COLD_DELIVERY",
+      "raw": "cold-delivery.json.gz",
+      "seedOrdinal": 5,
+      "originalExpected": "failed"
+    }
+  ],
+  "arms": [
+    {
+      "name": "fixed",
+      "success": true,
+      "types": 0,
+      "probe": 0,
+      "vitest": 0,
+      "passed": 5,
+      "failed": 0,
+      "initialTeamBodies": 0
+    },
+    {
+      "name": "eager-wire",
+      "success": false,
+      "types": 0,
+      "probe": 0,
+      "vitest": 1,
+      "passed": 4,
+      "failed": 1,
+      "initialTeamBodies": 1,
+      "marker": "CM_TEAM_PICKER_COLD_DELIVERY"
+    },
+    {
+      "name": "restored",
+      "success": true,
+      "types": 0,
+      "probe": 0,
+      "vitest": 0,
+      "passed": 5,
+      "failed": 0,
+      "initialTeamBodies": 0
+    }
+  ],
+  "limits": {
+    "maxDecodedPerRaw": 46137344,
+    "maxStoredPerRaw": 12582912,
+    "archiveMaxBytes": 50000000,
+    "caseTimeoutsMs": [
+      360000,
+      360000,
+      180000,
+      360000,
+      null
+    ],
+    "fieldDropping": false,
+    "retention": "Each full literal gzip remains intact; archive cap fatal, small diagnostics always retained; no truncated frame or partial-owned admission."
+  },
+  "observations": {
+    "business": "Real page, hook, engine, constructors, JSON save/load, world editor, Custom and Manager components. Pass-through callback observations do not replace business outcomes.",
+    "mocks": [
+      "Existing completion/badge/auth/game chrome/SEO/ads side effects",
+      "Actual era/data import gates for wait/retry/refusal/cancel",
+      "reloadToRetryChunk is a false-returning stub as in the existing fixture-wait test. No failed-fetch Retry/reload actor or call-list credit. Actual retry coverage is the still-pending eight-second fixture wait; separate refused import uses the explicit generated-start choice."
+    ],
+    "wholeBrowserInitial": "Actual built probe retains real whole document including SEO and consent before actions, no page/component mocks.",
+    "rng": "Headless fixed-seed Math.random complete import/action values and state; natural browser RNG and clock unchanged. No private-fork observation claim.",
+    "sourceConditionalTiming": "Approved grid706-779 only; parent calculations stay at original conditional point. Physical fault changes import wire only.",
+    "callbacks": "Lossless explicit {$type:'undefined'} tags preserve every positional undefined separately from ManagerForm null.",
+    "save": "Exact dukb-club-manager-save JSON literal/parsed state, local/session/fence, actual real hook reload with complete normalization evidence",
+    "actualColdFailure": "After complete valid Team and Back/warm UI plus actual compiled response bodies are retained. A nonexistent proposed leaf/module, TypeError, missing API, runtime or parser failure cannot own the case.",
+    "parityLimit": "Retain full natural network timings and browser metadata, but do not claim byte equality of independent real-time measurements. Future deterministic four held case RAW/tape parity is separate.",
+    "parity": "All four business RAW gzip/decoded bytes, every saved frame/callback/DOM/text/import/action tape exact against authentic V3 and across three arms. Full fifth natural HTTP observations remain retained plus complete difference receipt; deterministic headless envelope/Team rows and compiled-body roles are strict. No silently stripped replacement RAW.",
+    "benefit": "Report exact unique initial/settled/all raw/gzip sets and deltas, no automatic savings admission or new threshold."
+  },
+  "sourceRestoration": {
+    "sourcePageOriginal": "9d047919f7af871cc58c082f44fbf5d2b98f8c06",
+    "leafHeld": true,
+    "eagerStatus": "Only M src/pages/ClubManager.tsx with exact2span source inverse",
+    "final": "Full fixed source/index/tracked/status/locks and complete restored per-file dist identity"
+  },
+  "output": {
+    "root": "QA_OUT",
+    "arms": "replay/fixed,replay/eager-wire,replay/restored",
+    "perArmAdmission": "ARM-ADMITTED.json",
+    "final": "FINAL-CANDIDATE-ADMITTED.json",
+    "nativeManifest": "native-manifest.json",
+    "originalReference": "outside QA_OUT, authenticated original once",
+    "rawEnv": "CM_TEAM_PICKER_OUT",
+    "builtReportEnv": "CM_TEAM_PICKER_BUILD_REPORT"
+  },
+  "actualExecution": "NOT_EXECUTED",
+  "noAppEditsByQa": true,
+  "noOriginalAcquisitionByQa": true,
+  "noCredit": [
+    "Savings/firstpaint/capheadroom absent actual paired measurement",
+    "Private fork observations",
+    "Native/public/visual",
+    "New league/data",
+    "EarlierunadmittedRAWgoldenpromotion"
+  ]
+}

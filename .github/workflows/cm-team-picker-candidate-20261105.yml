@@ -1,0 +1,639 @@
+name: CM Team-picker candidate fixed eager and restored qualification
+on:
+  push:
+    branches: [codex/cm-team-picker-candidate-20261105]
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: cm-team-picker-candidate-${{ github.ref }}
+  cancel-in-progress: false
+env:
+  CI: '1'
+  SIM_NETWORK: offline
+  TZ: UTC
+  PRODUCT_CORE: 671730c30f67685f070593af7b2464a9cc1f5352
+  PRODUCT_TREE: 7080fc953cab1ebbb3f616b7741f022c8b7a8ea0
+  BASE_CORE: 3b14650d360b010b25b525de33a5f32f33de2798
+  BASE_TREE: d9278a7b5f58395509f6ab937f918c1c2ef31127
+jobs:
+  qualify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    env:
+      ENGINES: chromium
+      SEO_SPLIT_BASE_REF: HEAD
+      SWEEP_OFFLINE: '1'
+      PLAYWRIGHT_BROWSERS_PATH: /home/runner/.cache/ms-playwright
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 6
+          filter: blob:none
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: '1.4.4'
+      - name: Bind exact two App paths and five QA additions
+        run: |
+          set -euo pipefail
+          ROOT="$RUNNER_TEMP/cm-team-picker-candidate"
+          REF="$RUNNER_TEMP/cm-team-picker-candidate-reference"
+          test ! -e "$ROOT"; test ! -e "$REF"
+          mkdir -p "$ROOT/logs" "$ROOT/transport" "$ROOT/replay"
+          printf 'QA_OUT=%s\nQA_ROOT=%s\nQA_REF=%s\n' "$ROOT" "$ROOT" "$REF" >> "$GITHUB_ENV"
+          export QA_OUT="$ROOT" QA_ROOT="$ROOT" QA_REF="$REF"
+          test "$(git rev-parse HEAD^)" = "$PRODUCT_CORE"
+          test "$(git rev-parse HEAD^^{tree})" = "$PRODUCT_TREE"
+          test "$(git rev-parse HEAD^^)" = "$BASE_CORE"
+          test "$(git rev-parse HEAD^^^{tree})" = "$BASE_TREE"
+          git rev-parse HEAD HEAD^{tree} > "$ROOT/source.txt"
+          git diff --name-status --no-renames HEAD^ HEAD > "$ROOT/qa-delta.txt"
+          git diff --name-status --no-renames HEAD^^ HEAD^ > "$ROOT/product-delta.txt"
+          node --input-type=module <<'CM_PINS'
+          import assert from 'node:assert/strict';import fs from 'node:fs';import crypto from 'node:crypto';import{execFileSync}from'node:child_process';
+          const out=process.env.QA_OUT,spec=JSON.parse(fs.readFileSync('scripts/qa/cmTeamPickerCandidateCases.json','utf8'));
+          const paths=['.github/workflows/cm-team-picker-candidate-20261105.yml','scripts/qa/cmTeamPickerCandidateCases.json','scripts/qa/cmTeamPickerCandidateEvidence.mjs','scripts/qa/cmTeamPickerOriginalProbe.mjs','src/test/clubManagerTeamPickerOriginal.test.tsx'].sort();
+          assert.deepEqual(fs.readFileSync(out+'/qa-delta.txt','utf8').trimEnd().split('\n'),paths.map(p=>'A\t'+p));
+          assert.deepEqual(fs.readFileSync(out+'/product-delta.txt','utf8').trimEnd().split('\n'),['A\tsrc/components/club-manager/ClubManagerTeamPicker.tsx','M\tsrc/pages/ClubManager.tsx']);
+          assert.equal(spec.candidate.commit,process.env.PRODUCT_CORE);assert.equal(spec.candidate.tree,process.env.PRODUCT_TREE);
+          assert.equal(spec.base.commit,process.env.BASE_CORE);assert.equal(spec.base.tree,process.env.BASE_TREE);
+          const blob=b=>crypto.createHash('sha1').update(Buffer.from('blob '+b.length+'\0')).update(b).digest('hex');
+          const sources=[...spec.sourcePins,...spec.helperPins,{path:spec.candidate.pagePath,gitBlob:spec.candidate.pageBlob},{path:spec.candidate.leafPath,gitBlob:spec.candidate.leafBlob},{path:'scripts/lib/offlineTransport.cjs',gitBlob:'0fda542a2649fe5da937c6976fd0f5b6073e74b6'}];
+          for(const row of sources)assert.equal(blob(fs.readFileSync(row.path)),row.gitBlob,row.path);
+          assert.equal(blob(fs.readFileSync('scripts/qa/cmTeamPickerCandidateCases.json')),'72c5c93d4cf2652dc408faad9dd9e49f2e35c9ab');
+          assert.equal(execFileSync('git',['rev-parse',spec.base.commit+':src/pages/ClubManager.tsx'],{encoding:'utf8'}).trim(),'978bf575f489228041c278101ca77cfac434d8e3');
+          fs.writeFileSync(out+'/input-pins.json',JSON.stringify({sources,original:spec.original,candidate:spec.candidate,fault:spec.fault},null,2)+'\n');
+          const page=fs.readFileSync(spec.candidate.pagePath);assert.equal(blob(page),spec.candidate.pageBlob);
+          fs.writeFileSync(out+'/fixed-page.tsx',page,{flag:'wx'});
+          CM_PINS
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$ROOT/source-before.sha256"
+          git ls-files -s > "$ROOT/index-before.txt"
+          git ls-files -z > "$ROOT/tracked-before.bin"
+          for lock in package.json package-lock.json bun.lock bun.lockb; do if test -f "$lock"; then sha256sum "$lock"; fi; done > "$ROOT/locks-before.sha256"
+          git status --porcelain=v1 --untracked-files=all > "$ROOT/status-before.txt"
+          test ! -s "$ROOT/status-before.txt"
+      - name: Authenticate the only admitted original reference
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          # Online admitted-original authentication only. Run before NODE_OPTIONS/offline/no-lazy.
+          # QA_OUT already exists; QA_REF must be a fresh directory outside QA_OUT.
+          node --input-type=module <<'ORIGINAL_AUTH'
+          import fs from 'node:fs';import path from 'node:path';import assert from 'node:assert/strict';import crypto from 'node:crypto';import{spawnSync}from'node:child_process';import{gunzipSync,gzipSync}from'node:zlib';
+          const out=path.resolve(process.env.QA_OUT),ref=path.resolve(process.env.QA_REF),spec=JSON.parse(fs.readFileSync('scripts/qa/cmTeamPickerCandidateCases.json','utf8')),o=spec.original,repo='PapiSalgueroM/ballpark-hero';
+          const sha=b=>crypto.createHash('sha256').update(b).digest('hex'),gitBlob=b=>crypto.createHash('sha1').update(Buffer.from('blob '+b.length+'\0')).update(b).digest('hex');
+          assert.equal(spec.status,'CANDIDATE_THREE_ARM');assert.equal(o.qa,'f7a13d3e79bd740e898ebde4c2db51bc368546e5');assert.equal(o.artifact,'13449467861');assert.equal(o.independentAdmissionSHA256,'66569142faf341c717c14350fbc0bc3a6b8ddda846449c4d3c325e02fb069d5f');
+          assert(ref!==out&&!ref.startsWith(out+path.sep),'Reference remains outside output archive');assert(!fs.existsSync(ref),'Fresh reference directory');assert(fs.statSync(out).isDirectory());
+          fs.mkdirSync(ref);fs.mkdirSync(path.join(ref,'archive'));const meta=path.join(out,'original-auth');fs.mkdirSync(meta);
+          const command=(label,cmd,args,binary=false)=>{const r=spawnSync(cmd,args,{encoding:binary?null:'utf8',maxBuffer:64*1024*1024});fs.writeFileSync(path.join(meta,label+'.native.json'),JSON.stringify({command:[cmd,...args],status:r.status,signal:r.signal,error:r.error?String(r.error):null})+'\n');fs.writeFileSync(path.join(meta,label+'.stderr.log'),r.stderr??'');if(!binary)fs.writeFileSync(path.join(meta,label+'.stdout.log'),r.stdout??'');assert.equal(r.error,undefined,label);assert.equal(r.signal,null,label);assert.equal(r.status,0,label);return r.stdout;};
+          const api=(label,endpoint)=>JSON.parse(command(label,'gh',['api','repos/'+repo+'/'+endpoint]));
+          const run=api('run','actions/runs/'+o.run),job=api('job','actions/jobs/'+o.job),artifact=api('artifact','actions/artifacts/'+o.artifact),commit=api('source-commit','git/commits/'+o.qa);
+          assert.equal(run.id,Number(o.run));assert.equal(run.status,'completed');assert.equal(run.conclusion,'success');assert.equal(run.head_sha,o.qa);assert.equal(run.head_branch,o.branch);assert.equal(run.path,o.workflow);assert.equal(commit.sha,o.qa);assert.equal(commit.tree.sha,o.qaTree);
+          assert.equal(job.id,Number(o.job));assert.equal(job.run_id,Number(o.run));assert.equal(job.status,'completed');assert.equal(job.conclusion,'success');assert.equal(job.head_sha,o.qa);
+          assert.equal(artifact.id,Number(o.artifact));assert.equal(artifact.expired,false);assert.equal(artifact.size_in_bytes,o.zipBytes);assert.equal(artifact.workflow_run.id,Number(o.run));assert.equal(artifact.workflow_run.head_sha,o.qa);assert.equal(artifact.name,'cm-team-picker-original-'+o.run+'-'+run.run_attempt);
+          const source=api('source-workflow','contents/'+o.workflow+'?ref='+o.qa);assert.equal(source.type,'file');assert.equal(source.sha,o.workflowBlob);assert.equal(source.encoding,'base64');const workflow=Buffer.from(source.content,'base64');assert.equal(gitBlob(workflow),o.workflowBlob);fs.writeFileSync(path.join(meta,'original-workflow.yml'),workflow);
+          const zip=command('sole-original-artifact-acquisition','gh',['api','repos/'+repo+'/actions/artifacts/'+o.artifact+'/zip'],true);assert.equal(zip.length,o.zipBytes);assert.equal(sha(zip),o.zipSHA256);
+          const zipFile=path.join(ref,'archive','original-'+o.artifact+'.zip');fs.writeFileSync(zipFile,zip,{flag:'wx'});
+          const names=command('zip-list','unzip',['-Z1',zipFile]).trimEnd().split('\n');assert.deepEqual(names.slice().sort(),[o.innerTar.name,o.innerTar.name+'.sha256'].sort(),'Exact two original ZIP entries');
+          const tgz=command('zip-inner','unzip',['-p',zipFile,o.innerTar.name],true);assert.equal(tgz.length,o.innerTar.bytes);assert.equal(sha(tgz),o.innerTar.sha256);
+          const checksum=command('zip-checksum','unzip',['-p',zipFile,o.innerTar.name+'.sha256']);assert.equal(checksum.trim().split(/\s+/)[0],o.innerTar.sha256);fs.writeFileSync(path.join(ref,'archive',o.innerTar.name+'.sha256'),checksum,{flag:'wx'});
+          const tgzFile=path.join(ref,'archive',o.innerTar.name);fs.writeFileSync(tgzFile,tgz,{flag:'wx'});
+          const safe=name=>{assert(name&&!name.startsWith('/')&&!name.includes('\\')&&!name.includes('\0')&&!name.split('/').includes('..'),'Safe original archive path');return name.replace(/^(\.\/)+/,'');};
+          const members=command('tar-list','tar',['-tzf',tgzFile]).trimEnd().split('\n');for(const name of members)safe(name);
+          const modes=command('tar-types','tar',['-tvzf',tgzFile]).trimEnd().split('\n');assert.equal(modes.length,members.length);assert(modes.every(v=>v.startsWith('-')||v.startsWith('d')),'Only directories and regular files');
+          assert(!members.some(name=>{const rel=safe(name);return rel==='archive'||rel.startsWith('archive/')||rel==='reference-auth.json';}),'Archive cannot replace authentication-owned paths');
+          command('tar-extract','tar',['-xzf',tgzFile,'-C',ref]);
+          const admissionBytes=fs.readFileSync(path.join(ref,'ORIGINAL-ADMITTED.json'));assert.equal(admissionBytes.length,o.admissionBytes);assert.equal(sha(admissionBytes),o.admissionSHA256);const admission=JSON.parse(admissionBytes.toString('utf8'));
+          assert.equal(admission.status,'ADMITTED_ORIGINAL_FOUR_HELD_ONE_EXECUTABLE_OWNED');assert.equal(admission.completeRawCount,5);assert.deepEqual(admission.base,spec.base);assert.deepEqual(admission.caseStatuses.map(v=>v.status),['passed','passed','passed','passed','failed']);assert.deepEqual(admission.rawPins,o.rawPins);
+          assert.equal(admission.sourceProof.helperPins.find(v=>v.path===spec.testFile)?.gitBlob,spec.frozen.test);assert.equal(admission.sourceProof.helperPins.find(v=>v.path==='scripts/qa/cmTeamPickerOriginalProbe.mjs')?.gitBlob,spec.frozen.probe);
+          const actualRaws=[];for(const row of o.rawPins){safe(row.file);assert(row.storedBytes<=spec.limits.maxStoredPerRaw);assert(row.decodedBytes<=spec.limits.maxDecodedPerRaw);const stored=fs.readFileSync(path.join(ref,row.file));assert.equal(stored.length,row.storedBytes);assert.equal(sha(stored),row.storedSHA256);const decoded=gunzipSync(stored,{maxOutputLength:spec.limits.maxDecodedPerRaw});assert.equal(decoded.length,row.decodedBytes);assert.equal(sha(decoded),row.decodedSHA256);JSON.parse(decoded.toString('utf8'));actualRaws.push({...row,storedHeld:true,decodedHeld:true});}
+          assert.equal(actualRaws.length,5);assert.equal(new Set(actualRaws.map(r=>r.file)).size,5);
+          const probeBytes=fs.readFileSync(path.join(ref,'built','report.json'));assert.equal(probeBytes.length,o.bodyProbe.bytes);assert.equal(sha(probeBytes),o.bodyProbe.sha256);assert.equal(admission.bodyProbe.bytes,probeBytes.length);assert.equal(admission.bodyProbe.sha256,sha(probeBytes));const probe=JSON.parse(probeBytes.toString('utf8'));assert.equal(probe.status,'MEASURED_ACTUAL_UI_AND_BODIES');for(const key of ['initialGzipBytes','settledGzipBytes','allGzipBytes'])assert.equal(probe[key],o.bodyProbe[key]);
+          for(const row of probe.responses){safe(row.file);const body=fs.readFileSync(path.join(ref,'built',row.file));assert.equal(body.length,row.bytes);assert.equal(sha(body),row.sha256);assert.equal(gzipSync(body).length,row.gzipBytes);}
+          safe(probe.routeHtml.file);const route=fs.readFileSync(path.join(ref,'built',probe.routeHtml.file));assert.equal(route.length,probe.routeHtml.bytes);assert.equal(sha(route),probe.routeHtml.sha256);
+          const auth={artifact:o.artifact,bytes:o.zipBytes,sha256:o.zipSHA256,run:o.run,job:o.job,qa:o.qa,qaTree:o.qaTree,branch:o.branch,workflow:o.workflow,workflowBlob:o.workflowBlob,innerTar:o.innerTar,admissionBytes:admissionBytes.length,admissionSHA256:sha(admissionBytes),independentAdmissionSHA256:o.independentAdmissionSHA256,independentReceiptRole:'Externally admitted metadata binding, not a receipt body in this original ZIP.',rawPins:actualRaws,bodyProbe:{bytes:probeBytes.length,sha256:sha(probeBytes)},soleArtifactAcquisition:true};
+          const authBytes=Buffer.from(JSON.stringify(auth,null,2)+'\n');fs.writeFileSync(path.join(ref,'reference-auth.json'),authBytes,{flag:'wx'});fs.writeFileSync(path.join(meta,'reference-auth.json'),authBytes,{flag:'wx'});
+          const inventory=[];function walk(rel=''){for(const entry of fs.readdirSync(path.join(ref,rel),{withFileTypes:true})){const file=path.posix.join(rel,entry.name);if(entry.isDirectory())walk(file);else{assert(entry.isFile());const body=fs.readFileSync(path.join(ref,file));inventory.push({file,bytes:body.length,sha256:sha(body)});}}}walk();inventory.sort((a,b)=>a.file<b.file?-1:a.file>b.file?1:0);
+          fs.writeFileSync(path.join(out,'reference-before.sha256'),inventory.map(row=>row.sha256+'  '+row.file+'\n').join(''),{flag:'wx'});fs.writeFileSync(path.join(meta,'reference-before.json'),JSON.stringify(inventory,null,2)+'\n',{flag:'wx'});
+          fs.writeFileSync(path.join(meta,'AUTHENTICATED-ORIGINAL.json'),JSON.stringify({status:'AUTHENTICATED_ADMITTED_ORIGINAL_REFERENCE',original:o,zipEntries:names,tarEntries:members.length,regularReferenceFiles:inventory.length,allFiveStoredDecodedRawHeld:true,actualBuiltHttpBodyReportHeld:true,wholeReferenceInventoryRetained:true,artifactAcquisitions:1,AppBuilds:0,sourceModified:false},null,2)+'\n',{flag:'wx'});
+          ORIGINAL_AUTH
+      - name: Install held app and required build tools
+        run: |
+          set -euo pipefail
+          test "$(bun --version)" = 1.4.4
+          bun --version > "$QA_OUT/logs/bun-version.log"
+          node --version > "$QA_OUT/logs/node-version.log"
+          bun install --frozen-lockfile > "$QA_OUT/logs/bun-install.log" 2>&1
+          node -p "JSON.stringify({router:require('react-router-dom/package.json').version,vite:require('vite/package.json').version,rollup:JSON.parse(require('fs').readFileSync('node_modules/rollup/package.json','utf8')).version})" > "$QA_OUT/logs/build-versions.json"
+          git diff --exit-code HEAD -- package.json package-lock.json bun.lock bun.lockb
+          npm install --prefix "$RUNNER_TEMP/cm-team-picker-original-tools" --package-lock=false --no-audit --no-fund playwright@1.64.0 > "$QA_OUT/logs/playwright-install.log" 2>&1
+          test ! -e node_modules/playwright
+          test ! -e node_modules/playwright-core
+          ln -s "$RUNNER_TEMP/cm-team-picker-original-tools/node_modules/playwright" node_modules/playwright
+          ln -s "$RUNNER_TEMP/cm-team-picker-original-tools/node_modules/playwright-core" node_modules/playwright-core
+          "$RUNNER_TEMP/cm-team-picker-original-tools/node_modules/.bin/playwright" install --with-deps chromium > "$QA_OUT/logs/chromium-install.log" 2>&1
+          python3 -m pip install --target "$RUNNER_TEMP/cm-team-picker-original-python" fonttools pillow > "$QA_OUT/logs/python-install.log" 2>&1
+          echo "PYTHONPATH=$RUNNER_TEMP/cm-team-picker-original-python" >> "$GITHUB_ENV"
+      - name: Fixed physical eager-wire and restored serial full qualification
+        timeout-minutes: 80
+        run: |
+          set -euo pipefail
+          export QA_ROOT="$QA_OUT"
+          export GIT_NO_LAZY_FETCH=1
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          restore_page() {
+            node --input-type=module <<'CM_RESTORE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';import crypto from 'node:crypto';
+          const root=process.env.QA_ROOT,spec=JSON.parse(fs.readFileSync('scripts/qa/cmTeamPickerCandidateCases.json','utf8'));
+          const bytes=fs.readFileSync(root+'/fixed-page.tsx'),blob=b=>crypto.createHash('sha1').update(Buffer.from('blob '+b.length+'\0')).update(b).digest('hex');
+          assert.equal(blob(bytes),spec.candidate.pageBlob);
+          fs.writeFileSync(spec.candidate.pagePath,bytes);assert.deepEqual(fs.readFileSync(spec.candidate.pagePath),bytes);
+          CM_RESTORE
+          }
+          trap restore_page EXIT
+          cat > "$QA_ROOT/arm-driver.sh" <<'CM_ARM_DRIVER'
+          #!/usr/bin/env bash
+          set -euo pipefail
+          export CM_ARM="$1"
+          export QA_OUT="$QA_ROOT/replay/$CM_ARM"
+          mkdir -p "$QA_OUT/logs" "$QA_OUT/transport" "$QA_OUT/gates"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$QA_OUT/source-before.sha256"
+          git ls-files -s > "$QA_OUT/index-before.txt"
+          git ls-files -z > "$QA_OUT/tracked-before.bin"
+          for lock in package.json package-lock.json bun.lock bun.lockb; do if test -f "$lock"; then sha256sum "$lock"; fi; done > "$QA_OUT/locks-before.sha256"
+          git status --porcelain=v1 --untracked-files=all > "$QA_OUT/status-before.txt"
+          if [[ "$CM_ARM" == eager-wire ]]; then
+            printf ' M src/pages/ClubManager.tsx\n' > "$QA_OUT/status-expected.txt"
+            cmp "$QA_OUT/status-expected.txt" "$QA_OUT/status-before.txt"
+          else
+            test ! -s "$QA_OUT/status-before.txt"
+          fi
+          test ! -e .tmp-fx/career-records-tests.json
+          test ! -L .tmp-fx/career-records-tests.json
+          if [[ -e .tmp-fx || -L .tmp-fx ]]; then test -d .tmp-fx; test ! -L .tmp-fx; fi
+          : > "$QA_OUT/records-leaf-owned-before.txt"
+          server_pids=()
+          hold_arm() {
+          set -euo pipefail
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$QA_OUT/source-after.sha256"
+          cmp "$QA_OUT/source-before.sha256" "$QA_OUT/source-after.sha256"
+          git ls-files -s > "$QA_OUT/index-after.txt"
+          git ls-files -z > "$QA_OUT/tracked-after.bin"
+          for lock in package.json package-lock.json bun.lock bun.lockb; do if test -f "$lock"; then sha256sum "$lock"; fi; done > "$QA_OUT/locks-after.sha256"
+          cmp "$QA_OUT/index-before.txt" "$QA_OUT/index-after.txt"
+          cmp "$QA_OUT/tracked-before.bin" "$QA_OUT/tracked-after.bin"
+          cmp "$QA_OUT/locks-before.sha256" "$QA_OUT/locks-after.sha256"
+          set +e
+          git diff --exit-code HEAD > "$QA_OUT/source-diff.txt"
+          source_diff_exit=$?
+          printf '%s\n' "$source_diff_exit" > "$QA_OUT/source-diff.exit" || exit 1
+          set -e
+          if [[ "$CM_ARM" == eager-wire ]]; then
+            test "$source_diff_exit" = 1
+            test "$(git diff --name-only HEAD)" = src/pages/ClubManager.tsx
+            node --input-type=module <<'CM_EAGER_HELD'
+          import fs from 'node:fs';import assert from 'node:assert/strict';import crypto from 'node:crypto';
+          const spec=JSON.parse(fs.readFileSync('scripts/qa/cmTeamPickerCandidateCases.json','utf8')),bytes=fs.readFileSync(spec.candidate.pagePath);
+          assert.equal(crypto.createHash('sha1').update(Buffer.from('blob '+bytes.length+'\0')).update(bytes).digest('hex'),spec.fault.pageBlob);
+          CM_EAGER_HELD
+          else
+            test "$source_diff_exit" = 0
+          fi
+          git status --porcelain=v1 --untracked-files=all > "$QA_OUT/status-after.txt"
+          cmp "$QA_OUT/status-before.txt" "$QA_OUT/status-after.txt"
+          if [[ -f "$QA_OUT/dist-before.sha256" ]]; then
+            find dist -type f -print0 | sort -z | xargs -0 sha256sum > "$QA_OUT/dist-after.sha256"
+            cmp "$QA_OUT/dist-before.sha256" "$QA_OUT/dist-after.sha256"
+            sha256sum --check "$QA_OUT/dist-before.sha256" > "$QA_OUT/dist-held.log"
+          fi
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const out=process.env.QA_OUT,rows=fs.readdirSync(out+'/transport').sort().map(file=>{
+            const lines=fs.readFileSync(out+'/transport/'+file,'utf8').split('\n').filter(Boolean);
+            const permitted=line=>(file==='build.log'&&/^\[SIM_OFFLINE_BLOCK\] external browser route continue https:\/\/fonts\.(googleapis|gstatic)\.com$/.test(line))||(file==='sweep-weight.log'&&(/^\[SIM_OFFLINE_BLOCK\] external browser route continue https:\/\/fonts\.(googleapis|gstatic)\.com$/.test(line)||line==='[SIM_OFFLINE_BLOCK] external browser route continue https://flagcdn.com'));
+            assert(lines.every(permitted),'Unexpected transport receipt '+file);
+            return{file,blockedAttempts:lines.length,fontBlockedAttempts:lines.filter(line=>line.includes('fonts.googleapis.com')||line.includes('fonts.gstatic.com')).length,flagBlockedAttempts:lines.filter(line=>line.endsWith('https://flagcdn.com')).length};
+          });
+          fs.writeFileSync(out+'/transport-summary.json',JSON.stringify({receipts:rows,meaning:'Declared blocked font/flag attempts are retained; no provider/font availability claim.'},null,2)+'\n');
+          fs.writeFileSync(out+'/source-output-hold.json',JSON.stringify({sourceHeld:true,indexHeld:true,trackedPathsHeld:true,locksHeld:true,status:process.env.CM_ARM==='eager-wire'?'EXACT_CONTROLLED_PAGE_M':'clean',completedDistHeld:fs.existsSync(out+'/dist-before.sha256')},null,2)+'\n');
+          NODE
+          
+          }
+          finish_arm() {
+            local original_exit=$?
+            trap - EXIT
+            set +e
+            for pid in "${server_pids[@]}"; do kill "$pid" 2>/dev/null || true; done
+            hold_arm
+            local held=$?
+            if [[ "$held" != 0 ]]; then exit 1; fi
+            exit "$original_exit"
+          }
+          trap finish_arm EXIT
+          
+          set -euo pipefail
+          export GIT_NO_LAZY_FETCH=1
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          : > "$QA_OUT/transport/types.log"
+          set +e
+          SIM_OFFLINE_RECEIPT="$QA_OUT/transport/types.log" node_modules/.bin/tsc --noEmit -p tsconfig.app.json > "$QA_OUT/logs/types.log" 2>&1
+          type_exit=$?
+          printf '%s\n' "$type_exit" > "$QA_OUT/types.exit" || exit 1
+          test "$type_exit" = 0 || exit "$type_exit"
+          set -e
+          printf '%s\n' '{"command":"node_modules/.bin/tsc --noEmit -p tsconfig.app.json","exit":0}' > "$QA_OUT/types-passed.json"
+          test ! -s "$QA_OUT/transport/types.log"
+          
+          set -euo pipefail
+          export GIT_NO_LAZY_FETCH=1
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          classify_receipt() {
+            local name="$1" receipt="$2"
+            local allowed='^\[SIM_OFFLINE_BLOCK\] external browser route continue https://fonts\.(googleapis|gstatic)\.com$'
+            if [[ "$name" == sweep-weight ]]; then
+              allowed="$allowed|^\[SIM_OFFLINE_BLOCK\] external browser route continue https://flagcdn\.com$"
+            elif [[ "$name" != build ]]; then
+              if [[ -s "$receipt" ]]; then cat "$receipt"; return 1; fi
+              return 0
+            fi
+            local status=0
+            grep -Ev "$allowed" "$receipt" || status=$?
+            if [[ "$status" == 1 ]]; then return 0; fi
+            return 1
+          }
+          run_gate() {
+            local name="$1"
+            shift
+            local receipt="$QA_OUT/transport/$name.log"
+            : > "$receipt"
+            set +e
+            SIM_OFFLINE_RECEIPT="$receipt" "$@" 2>&1 | tee "$QA_OUT/logs/$name.log"
+            local statuses=("${PIPESTATUS[@]}")
+            set -e
+            printf '%s\n' "${statuses[0]}" > "$QA_OUT/gates/$name.exit"
+            test "${statuses[1]}" = 0
+            classify_receipt "$name" "$receipt"
+            if [[ -s "$receipt" ]]; then wc -l "$receipt" > "$QA_OUT/logs/$name-blocked-attempts.txt"; fi
+            if [[ "$name" == sweep-weight && "$CM_ARM" == eager-wire ]]; then
+              # Verdict is deferred to the strict complete16/sections2-4 classifier after actual probe/cases.
+              return 0
+            fi
+            return "${statuses[0]}"
+          }
+          run_gate simSaveKeeper node scripts/simSaveKeeper.mjs
+          run_gate simHomeFront node scripts/simHomeFront.mjs
+          grep -F '7) Continue playing:' "$QA_OUT/logs/simHomeFront.log"
+          run_gate simSoccerCareerRecords node scripts/simSoccerCareerRecords.mjs
+          
+          grep -F 'simSoccerCareerRecords: 12 outcome checks green, three effective controls caught' "$QA_OUT/logs/simSoccerCareerRecords.log"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import path from 'node:path';import crypto from 'node:crypto';import assert from 'node:assert/strict';
+          const out=process.env.QA_OUT,leaf=path.resolve('.tmp-fx/career-records-tests.json');
+          assert(fs.existsSync(out+'/records-leaf-owned-before.txt'));
+          const dir=fs.lstatSync(path.dirname(leaf)),stat=fs.lstatSync(leaf);
+          assert(dir.isDirectory()&&!dir.isSymbolicLink());assert(stat.isFile()&&!stat.isSymbolicLink());
+          assert.equal(fs.realpathSync(path.dirname(leaf)),path.join(fs.realpathSync('.'),'.tmp-fx'));
+          const bytes=fs.readFileSync(leaf),report=JSON.parse(bytes),rows=report.testResults.flatMap(x=>x.assertionResults);
+          assert.equal(report.numTotalTests,12);assert.equal(report.numPassedTests,11);assert.equal(report.numFailedTests,1);
+          assert.equal(rows.length,12);assert.equal(rows.filter(x=>x.status==='passed').length,11);assert.equal(rows.filter(x=>x.status==='failed').length,1);
+          const retained=out+'/records-last-control-tests.json',sha=crypto.createHash('sha256').update(bytes).digest('hex');
+          fs.writeFileSync(retained,bytes,{flag:'wx'});assert.deepEqual(fs.readFileSync(retained),bytes);
+          fs.unlinkSync(leaf);
+          fs.writeFileSync(out+'/records-output-retention.json',JSON.stringify({sourceLeaf:'.tmp-fx/career-records-tests.json',retained:'records-last-control-tests.json',bytes:bytes.length,sha256:sha,nativeSimExit:0,ordinaryNonSymlinkLeaf:true,copyReadBackExact:true,removedOnlyExactLeaf:true,meaning:'Last negative-control report, intentionally 1 failed and 11 passed. Healthy 12 outcomes and three effective controls are in the complete native log.'},null,2)+'\n');
+          NODE
+          git status --porcelain=v1 --untracked-files=all > "$QA_OUT/status-after-records.txt"
+          cmp "$QA_OUT/status-before.txt" "$QA_OUT/status-after-records.txt"
+          run_gate build npm run build
+          printf '%s\n' '{"command":"npm run build","exit":0}' > "$QA_OUT/build-passed.json"
+          find dist -type f -print0 | sort -z | xargs -0 sha256sum > "$QA_OUT/dist-before.sha256"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import path from 'node:path';import zlib from 'node:zlib';import crypto from 'node:crypto';import assert from 'node:assert/strict';
+          const assets=fs.readdirSync('dist/assets').filter(file=>/\.(js|css)$/.test(file)).sort().map(file=>{
+            const bytes=fs.readFileSync(path.join('dist/assets',file));return{file,bytes:bytes.length,gzipBytes:zlib.gzipSync(bytes).length,sha256:crypto.createHash('sha256').update(bytes).digest('hex')};
+          });
+          const soccer=assets.filter(row=>/^SoccerCareer-.*\.js$/.test(row.file));
+          assert.equal(soccer.length,1);
+          fs.writeFileSync(process.env.QA_OUT+'/soccer-chunk-sizes.json',JSON.stringify({status:'MEASURED_BUILT_CHUNKS_NO_NEW_CAP',soccer,allBuiltAssets:assets,limits:'Individual built chunk raw/gzip sizes only. Actual route critical-body proof comes from the unchanged sweepWeight window and all16 original caps, including Soccer840KiB. No headroom or full-download total is inferred from this chunk list.'},null,2)+'\n',{flag:'wx'});
+          console.log('SC4_BUILT_CHUNK_SIZES '+JSON.stringify(soccer));
+          NODE
+          tar -czf "$QA_OUT/completed-dist.tar.gz" dist
+          sha256sum "$QA_OUT/completed-dist.tar.gz" > "$QA_OUT/completed-dist.tar.gz.sha256"
+          tar -tzf "$QA_OUT/completed-dist.tar.gz" > "$QA_OUT/completed-dist-members.txt"
+          export BASE=http://127.0.0.1:4173
+          export SWEEP_BASE="$BASE"
+          export SWEEP_OFFLINE=1
+          export SIM_OFFLINE_RECEIPT="$QA_OUT/transport/server.log"
+          : > "$SIM_OFFLINE_RECEIPT"
+          node scripts/lib/hostLikeServer.mjs dist 4173 > "$QA_OUT/logs/server.log" 2>&1 &
+          server_pid=$!
+          server_pids+=("$server_pid")
+          ready=0
+          for attempt in $(seq 1 40); do
+            if curl --fail --silent "$BASE/" > /dev/null; then ready=1; break; fi
+            kill -0 "$server_pid"
+            sleep 1
+          done
+          test "$ready" = 1
+          run_gate sweep-weight node scripts/sweepWeight.mjs
+          readers=(
+            simAdsense simBrand simHeadTags simHiddenPages simHubs
+            simIndexNow simIndexing simInternalLinks simNoRivalNames simPrerender
+            simPrerenderBoot simRetiredRoutes simSchema simSitemap simSnapshotAssets
+            simSiteSearch simGuideHeadings simHarnessAnchors
+          )
+          for reader in "${readers[@]}"; do
+            run_gate "$reader" node "scripts/$reader.mjs"
+          done
+          run_gate simSeoTitles node scripts/simSeoTitles.mjs
+          run_gate simSeoMetaSplit env SEO_SPLIT_ONLY=/soccer-career,/club-manager,/nba-my-career node scripts/simSeoMetaSplit.mjs
+          run_gate simNbaHistoricalDraft env NBA_HISTORICAL_DRAFT_OUT="$QA_OUT/nba-permanent" node scripts/simNbaHistoricalDraft.mjs
+          grep -F 'NBA historical draft: 5 cases passed; copied missing-selection control rejected by 4 business assertions; original source held.' "$QA_OUT/logs/simNbaHistoricalDraft.log"
+          test ! -s "$QA_OUT/transport/server.log"
+          kill "$server_pid" 2>/dev/null || true
+          wait "$server_pid" 2>/dev/null || true
+          
+          set -euo pipefail
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import crypto from 'node:crypto';import assert from 'node:assert/strict';
+          const out=process.env.QA_OUT,tar=fs.readFileSync(out+'/completed-dist.tar.gz'),dist=fs.readFileSync(out+'/dist-before.sha256');
+          const distFiles=dist.toString('utf8').trim().split('\n').length;assert(distFiles>0);
+          const readers=['simAdsense','simBrand','simHeadTags','simHiddenPages','simHubs','simIndexNow','simIndexing','simInternalLinks','simNoRivalNames','simPrerender','simPrerenderBoot','simRetiredRoutes','simSchema','simSitemap','simSnapshotAssets','simSiteSearch','simGuideHeadings','simHarnessAnchors','simSeoTitles','simSeoMetaSplit'];
+          for(const name of ['simSaveKeeper','simHomeFront','simSoccerCareerRecords','build','sweep-weight','simNbaHistoricalDraft',...readers])assert(fs.statSync(out+'/logs/'+name+'.log').size>0);
+          fs.writeFileSync(out+'/build-proof.json',JSON.stringify({status:'actual-arm-compiled-gates-recorded',product:process.env.PRODUCT_CORE,productTree:process.env.PRODUCT_TREE,arm:process.env.CM_ARM,normalBuilds:1,readers,readersCount:20,allCapsUnchanged:true,sweepNativeExit:Number(fs.readFileSync(out+'/gates/sweep-weight.exit','utf8')),oldBuildReused:false,scope:'Candidate arm actual commands. Definitions/window unchanged; the eager counterfactual sweep native is separately classified, never product cap-green credit.',tar:{bytes:tar.length,sha256:crypto.createHash('sha256').update(tar).digest('hex')},distInventorySHA256:crypto.createHash('sha256').update(dist).digest('hex'),distFiles},null,2)+'\n');
+          NODE
+          
+          set +e
+          set -uo pipefail
+          export GIT_NO_LAZY_FETCH=1
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          export SIM_OFFLINE_RECEIPT="$QA_OUT/transport/simNbaCareer.log"
+          : > "$SIM_OFFLINE_RECEIPT"
+          node --unhandled-rejections=strict scripts/simNbaCareer.mjs > "$QA_OUT/logs/simNbaCareer.log" 2>&1
+          native_exit=$?
+          printf '%s\n' "$native_exit" > "$QA_OUT/simNbaCareer.exit" || exit 1
+          test ! -s "$SIM_OFFLINE_RECEIPT" || exit 1
+          if test "$native_exit" = 0; then
+            grep -F 'PASS: no crashes, every position produces stats, shop fully reachable, deck C reachable, era gates hold, words match effects, life cards tagged, rivalry beats honest' "$QA_OUT/logs/simNbaCareer.log" || exit 1
+          fi
+          test "$native_exit" = 0 || exit "$native_exit"
+          set -e
+          
+          set -euo pipefail
+          export GIT_NO_LAZY_FETCH=1
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          : > "$QA_OUT/transport/probe-server.log"
+          SIM_OFFLINE_RECEIPT="$QA_OUT/transport/probe-server.log" node scripts/lib/hostLikeServer.mjs dist 4173 > "$QA_OUT/logs/probe-server.log" 2>&1 &
+          server_pid=$!
+          server_pids+=("$server_pid")
+          ready=0
+          for attempt in $(seq 1 40); do
+            if curl --fail --silent http://127.0.0.1:4173/ > /dev/null; then ready=1; break; fi
+            kill -0 "$server_pid"
+            sleep 1
+          done
+          test "$ready" = 1
+          : > "$QA_OUT/transport/probe.log"
+          set +e
+          SIM_OFFLINE_RECEIPT="$QA_OUT/transport/probe.log" node scripts/qa/cmTeamPickerOriginalProbe.mjs --out "$QA_OUT/built" --dist "$PWD/dist" --base-url http://127.0.0.1:4173 > "$QA_OUT/logs/probe.stdout.log" 2> "$QA_OUT/logs/probe.stderr.log"
+          native_exit=$?
+          mkdir -p "$QA_OUT/built" || exit 1
+          printf '%s\n' "$native_exit" > "$QA_OUT/built/probe.exit" || exit 1
+          test "$native_exit" = 0 || exit "$native_exit"
+          test ! -s "$QA_OUT/transport/probe.log" || exit 1
+          test ! -s "$QA_OUT/transport/probe-server.log" || exit 1
+          set -e
+          
+          set -euo pipefail
+          export GIT_NO_LAZY_FETCH=1
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          export CM_TEAM_PICKER_OUT="$QA_OUT/raw"
+          export CM_TEAM_PICKER_BUILD_REPORT="$QA_OUT/built/report.json"
+          : > "$QA_OUT/transport/vitest.log"
+          : > "$QA_OUT/transport/reader.log"
+          set +e
+          SIM_OFFLINE_RECEIPT="$QA_OUT/transport/vitest.log" node node_modules/vitest/vitest.mjs run src/test/clubManagerTeamPickerOriginal.test.tsx --reporter=json --outputFile="$QA_OUT/vitest.json" --maxWorkers=1 --no-file-parallelism > "$QA_OUT/logs/vitest.stdout.log" 2> "$QA_OUT/logs/vitest.stderr.log"
+          native_exit=$?
+          printf '%s\n' "$native_exit" > "$QA_OUT/vitest.exit" || exit 1
+          find dist -type f -print0 | sort -z | xargs -0 sha256sum > "$QA_OUT/dist-after.sha256"
+          cmp "$QA_OUT/dist-before.sha256" "$QA_OUT/dist-after.sha256" || exit 1
+          SIM_OFFLINE_RECEIPT="$QA_OUT/transport/reader.log" node scripts/qa/cmTeamPickerCandidateEvidence.mjs --out "$QA_OUT" --spec scripts/qa/cmTeamPickerCandidateCases.json --original "$QA_REF" --arm "$CM_ARM" --exit-code "$native_exit" > "$QA_OUT/logs/reader.stdout.log" 2> "$QA_OUT/logs/reader.stderr.log"
+          reader_exit=$?
+          printf '%s\n' "$reader_exit" > "$QA_OUT/reader.exit" || exit 1
+          test ! -s "$QA_OUT/transport/vitest.log" || exit 1
+          test ! -s "$QA_OUT/transport/reader.log" || exit 1
+          test "$reader_exit" = 0 || exit "$reader_exit"
+          set -e
+          
+          node --input-type=module <<'CM_CAP'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import { createHash } from 'node:crypto';
+          const out = process.env.QA_OUT, arm = process.env.CM_ARM;
+          assert(out && ['fixed', 'eager-wire', 'restored'].includes(arm));
+          const bytes = fs.readFileSync(path.join(out, 'logs/sweep-weight.log'));
+          const text = bytes.toString('utf8');
+          const native = Number(fs.readFileSync(path.join(out, 'gates/sweep-weight.exit'), 'utf8').trim());
+          const caps = [['/',245],['/club-manager',648],['/soccer-career',840],['/stadium-tycoon',305],['/wonderkid-factory',278],['/minefield',295],['/footle',354],['/nfl-my-career',499],['/front-office',390],['/soccer-grid',320],['/leaderboard',266],['/manager-hot-seat',672],['/deadline-day',680],['/transfer-path',381],['/nba-front-office',397],['/nhl-front-office',379]];
+          const headings = [
+            '1) Every page is inside its download budget',
+            '2) The two things Round 210 moved off the critical path stay off it',
+            '3) Every guide is still reachable, one sport at a time',
+            '4) The data these pages never read is in none of the files they fetch',
+          ];
+          const lines = text.trimEnd().split(/\r?\n/);
+          const rows = lines.flatMap(line => {
+            const m = line.match(/^\s+(\S+)\s+(\d+)K gz over\s+(\d+) files \(budget (\d+)K, (\d+\.\d)K to the tenth\)$/);
+            return m ? [{ route:m[1], roundedKiB:Number(m[2]), files:Number(m[3]), cap:Number(m[4]), tenthKiB:Number(m[5]) }] : [];
+          });
+          const findingRows = lines.flatMap(line => { const m=line.match(/^  FAIL: (.*)$/); return m ? [m[1]] : []; });
+          const green = 'sweepWeight: green. Every page is inside its budget, and the budgets came down this round.';
+          const actual = {
+            native, rows, findings:findingRows, closing:lines.at(-1),
+            headings:headings.map(line=>({line,index:lines.indexOf(line),count:lines.filter(x=>x===line).length})),
+            section2:lines.filter(line=>line.trim()==='the screenshot library and the merged guide map are both off the critical path').length,
+            section3:lines.filter(line=>line.trim()==='132 guides across 13 sport files, every one of them routed').length,
+            section4:lines.filter(line=>/^\s+10 probe sets \(400 probes\) all found in the build; 4 routes checked, 0 findings; \/soccer-career still fetches the pools \([^)]+\.js\)$/.test(line)).length,
+            runtimeText:/\b(?:TypeError|ReferenceError|SyntaxError|Unhandled|uncaught|unhandled rejection)\b/i.test(text),
+          };
+          function validate(value, role) {
+            const marker = 'CM_TEAM_PICKER_COUNTERFACTUAL_CAP_SCOPE';
+            assert.deepEqual(value.rows.map(row=>[row.route,row.cap]),caps,marker+' full16unchanged');
+            assert(value.rows.every(row=>Number.isInteger(row.files)&&row.files>0),marker+' actualfiles');
+            assert(value.headings.every((row,i)=>row.count===1&&row.index>=0&&(i===0||row.index>value.headings[i-1].index)),marker+' allsections');
+            assert.equal(value.section2,1,marker+' section2complete');
+            assert.equal(value.section3,1,marker+' section3complete');
+            assert.equal(value.section4,1,marker+' section4zero');
+            assert.equal(value.runtimeText,false,marker+' runtime');
+            const cm=value.rows.find(row=>row.route==='/club-manager');
+            assert(value.rows.filter(row=>row.route!=='/club-manager').every(row=>row.roundedKiB<=row.cap),marker+' otherroute');
+            if(role!=='eager-wire'||value.native===0){
+              assert.equal(value.native,0,marker+' requirednative0');
+              assert.deepEqual(value.findings,[],marker+' none');
+              assert.equal(value.closing,green,marker+' greenclosing');
+              assert(cm.roundedKiB<=cm.cap,marker+' cmcap');
+              return 'NATIVE0_RECORDED';
+            }
+            assert.equal(value.native,1,marker+' native1only');
+            assert.equal(value.findings.length,1,marker+' solefinding');
+            const m=value.findings[0].match(/^\/club-manager: (\d+)K of gzipped JavaScript against a budget of 648K$/);
+            assert(m,marker+' onlyCM');
+            assert.equal(Number(m[1]),cm.roundedKiB,marker+' actualCMrow');
+            assert(cm.roundedKiB>cm.cap,marker+' actualconsequence');
+            assert.equal(value.closing,'sweepWeight: 1 failure',marker+' oneclosing');
+            return 'COUNTERFACTUAL_CM_CAP_CONSEQUENCE_NATIVE1_RETAINED';
+          }
+          const verdict=validate(actual,arm);
+          const probe=JSON.parse(fs.readFileSync(path.join(out,'built/report.json'),'utf8'));
+          const admitted=JSON.parse(fs.readFileSync(path.join(out,'ARM-ADMITTED.json'),'utf8'));
+          assert.equal(probe.errors.length,0);
+          assert.equal(admitted.status,'ADMITTED_CANDIDATE_ARM');
+          assert.equal(admitted.arm,arm);
+          for(const file of ['types','probe','vitest','reader'])assert.equal(fs.statSync(path.join(out,'transport',file+'.log')).size,0);
+          const copied=structuredClone(actual),whole=JSON.stringify(copied);
+          const priorNative=copied.native,priorClosing=copied.closing;
+          copied.findings.push('/soccer-career: copied extra finding');
+          copied.native=1;
+          copied.closing='sweepWeight: '+copied.findings.length+' failure'+(copied.findings.length===1?'':'s');
+          assert.notEqual(JSON.stringify(copied),whole);
+          let owned=null;
+          try{validate(copied,'eager-wire');}catch(error){assert.equal(error.name,'AssertionError');assert(String(error.message).includes('CM_TEAM_PICKER_COUNTERFACTUAL_CAP_SCOPE'));owned={name:error.name,message:error.message};}
+          assert(owned,'copied extra route/finding must fail same validator');
+          copied.findings.pop();copied.native=priorNative;copied.closing=priorClosing;
+          assert.equal(JSON.stringify(copied),whole);validate(copied,arm);
+          fs.writeFileSync(path.join(out,'counterfactual-cap.json'),JSON.stringify({
+            arm,verdict,nativeExit:native,fullNativeLog:{file:'logs/sweep-weight.log',bytes:bytes.length,sha256:createHash('sha256').update(bytes).digest('hex')},
+            actual,copiedExtraFindingControl:{changed:true,owned,wholeInverse:true,actualHeld:JSON.stringify(actual)===whole},
+            limits:'Unchanged16caps/window and allsections completed. Any sole CM native1 is a retained consequence of this one eager-wire counterfactual, never a cap-green product claim. Fixed/restored require native0; no second mechanism.'
+          },null,2)+'\n');
+          
+          CM_CAP
+          
+          CM_ARM_DRIVER
+          set +e
+          bash "$QA_ROOT/arm-driver.sh" fixed
+          fixed_exit=$?
+          printf '%s\n' "$fixed_exit" > "$QA_ROOT/fixed-arm.exit" || exit 1
+          set -e
+          test "$fixed_exit" = 0 || exit "$fixed_exit"
+          node --input-type=module <<'CM_FAULT'
+          import fs from 'node:fs';import assert from 'node:assert/strict';import crypto from 'node:crypto';
+          const root=process.env.QA_ROOT,spec=JSON.parse(fs.readFileSync('scripts/qa/cmTeamPickerCandidateCases.json','utf8'));
+          const blob=b=>crypto.createHash('sha1').update(Buffer.from('blob '+b.length+'\0')).update(b).digest('hex');
+          const before=fs.readFileSync(spec.candidate.pagePath);assert.equal(blob(before),spec.candidate.pageBlob);
+          let after=before.toString('utf8');
+          for(const op of spec.fault.operations){assert.equal(after.split(op.before).length-1,op.count);after=after.split(op.before).join(op.after);}
+          const bytes=Buffer.from(after,'utf8');assert(!bytes.equals(before));assert.equal(blob(bytes),spec.fault.pageBlob);
+          let inverse=after;for(let i=spec.fault.operations.length-1;i>=0;i--){const op=spec.fault.operations[i];assert.equal(inverse.split(op.after).length-1,op.count);inverse=inverse.split(op.after).join(op.before);}
+          assert(Buffer.from(inverse,'utf8').equals(before));
+          fs.writeFileSync(root+'/eager-wire-page.tsx',bytes,{flag:'wx'});fs.writeFileSync(spec.candidate.pagePath,bytes);assert.deepEqual(fs.readFileSync(spec.candidate.pagePath),bytes);
+          fs.writeFileSync(root+'/physical-fault-source.json',JSON.stringify({mechanisms:1,changed:true,fixedBlob:spec.candidate.pageBlob,faultBlob:spec.fault.pageBlob,operations:spec.fault.operations,wholeInverse:true,actualFaultPageSaved:true},null,2)+'\n');
+          CM_FAULT
+          set +e
+          bash "$QA_ROOT/arm-driver.sh" eager-wire
+          eager_exit=$?
+          printf '%s\n' "$eager_exit" > "$QA_ROOT/eager-wire-arm.exit" || exit 1
+          set -e
+          restore_page
+          git diff --exit-code HEAD -- src/pages/ClubManager.tsx
+          set +e
+          bash "$QA_ROOT/arm-driver.sh" restored
+          restored_exit=$?
+          printf '%s\n' "$restored_exit" > "$QA_ROOT/restored-arm.exit" || exit 1
+          set -e
+          test "$eager_exit" = 0 || exit "$eager_exit"
+          test "$restored_exit" = 0 || exit "$restored_exit"
+          restore_page
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$QA_ROOT/source-after.sha256"
+          cmp "$QA_ROOT/source-before.sha256" "$QA_ROOT/source-after.sha256"
+          git ls-files -s > "$QA_ROOT/index-after.txt"
+          git ls-files -z > "$QA_ROOT/tracked-after.bin"
+          for lock in package.json package-lock.json bun.lock bun.lockb; do if test -f "$lock"; then sha256sum "$lock"; fi; done > "$QA_ROOT/locks-after.sha256"
+          cmp "$QA_ROOT/index-before.txt" "$QA_ROOT/index-after.txt"
+          cmp "$QA_ROOT/tracked-before.bin" "$QA_ROOT/tracked-after.bin"
+          cmp "$QA_ROOT/locks-before.sha256" "$QA_ROOT/locks-after.sha256"
+          git status --porcelain=v1 --untracked-files=all > "$QA_ROOT/status-after.txt"
+          test ! -s "$QA_ROOT/status-after.txt"
+          : > "$QA_ROOT/transport/final-reader.log"
+          SIM_OFFLINE_RECEIPT="$QA_ROOT/transport/final-reader.log" node scripts/qa/cmTeamPickerCandidateEvidence.mjs --out "$QA_ROOT" --spec scripts/qa/cmTeamPickerCandidateCases.json --original "$QA_REF" --arm compare > "$QA_ROOT/logs/final-reader.stdout.log" 2> "$QA_ROOT/logs/final-reader.stderr.log"
+          test ! -s "$QA_ROOT/transport/final-reader.log"
+          trap - EXIT
+      - name: Hold whole fixed source and immutable original reference
+        if: always()
+        run: |
+          set -euo pipefail
+          if [[ -f "$QA_OUT/fixed-page.tsx" ]]; then
+            node --input-type=module <<'CM_ALWAYS_RESTORE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';import crypto from 'node:crypto';
+          const out=process.env.QA_OUT,spec=JSON.parse(fs.readFileSync('scripts/qa/cmTeamPickerCandidateCases.json','utf8'));
+          const fixed=fs.readFileSync(out+'/fixed-page.tsx'),blob=crypto.createHash('sha1').update(Buffer.from('blob '+fixed.length+'\0')).update(fixed).digest('hex');
+          assert.equal(blob,spec.candidate.pageBlob);fs.writeFileSync(spec.candidate.pagePath,fixed);assert.deepEqual(fs.readFileSync(spec.candidate.pagePath),fixed);
+          CM_ALWAYS_RESTORE
+          fi
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$QA_OUT/source-after.sha256"
+          cmp "$QA_OUT/source-before.sha256" "$QA_OUT/source-after.sha256"
+          git ls-files -s > "$QA_OUT/index-after.txt"
+          git ls-files -z > "$QA_OUT/tracked-after.bin"
+          for lock in package.json package-lock.json bun.lock bun.lockb; do if test -f "$lock"; then sha256sum "$lock"; fi; done > "$QA_OUT/locks-after.sha256"
+          cmp "$QA_OUT/index-before.txt" "$QA_OUT/index-after.txt"
+          cmp "$QA_OUT/tracked-before.bin" "$QA_OUT/tracked-after.bin"
+          cmp "$QA_OUT/locks-before.sha256" "$QA_OUT/locks-after.sha256"
+          git diff --exit-code HEAD > "$QA_OUT/source-diff.txt"
+          git status --porcelain=v1 --untracked-files=all > "$QA_OUT/status-after.txt"
+          test ! -s "$QA_OUT/status-after.txt"
+          if [[ -f "$QA_OUT/original-auth/reference-before.json" ]]; then
+            node --input-type=module <<'CM_REFERENCE_HOLD'
+          import fs from 'node:fs';import path from 'node:path';import assert from 'node:assert/strict';import crypto from 'node:crypto';
+          const out=process.env.QA_OUT,ref=process.env.QA_REF,before=JSON.parse(fs.readFileSync(out+'/original-auth/reference-before.json','utf8')),rows=[];
+          function walk(rel=''){for(const entry of fs.readdirSync(path.join(ref,rel),{withFileTypes:true})){const file=path.posix.join(rel,entry.name);if(entry.isDirectory())walk(file);else{assert(entry.isFile());const bytes=fs.readFileSync(path.join(ref,file));rows.push({file,bytes:bytes.length,sha256:crypto.createHash('sha256').update(bytes).digest('hex')});}}}walk();rows.sort((a,b)=>a.file<b.file?-1:a.file>b.file?1:0);assert.deepEqual(rows,before,'whole original reference inventory, no addition/deletion/body drift');fs.writeFileSync(out+'/original-auth/reference-after.json',JSON.stringify(rows,null,2)+'\n');
+          CM_REFERENCE_HOLD
+          fi
+      - name: Pack bounded complete candidate output or fatal diagnostic
+        id: pack
+        if: always()
+        run: |
+          set +e
+          set -uo pipefail
+          archive="$RUNNER_TEMP/cm-team-picker-candidate-evidence.tar.gz"
+          tar -czf "$archive" -C "$QA_OUT" . > "$RUNNER_TEMP/cm-team-picker-candidate-pack.log" 2>&1
+          pack_exit=$?
+          printf '%s\n' "$pack_exit" > "$QA_OUT/pack-native.exit" || exit 1
+          if [[ "$pack_exit" == 0 && -f "$archive" && "$(stat -c %s "$archive")" -le 50000000 ]]; then
+            sha256sum "$archive" > "$archive.sha256" || exit 1
+            printf 'archive=%s\n' "$archive" >> "$GITHUB_OUTPUT" || exit 1
+            exit 0
+          fi
+          printf '%s\n' 'DIAGNOSTIC_ONLY_NO_COMPLETE_OUTPUT_PROOF: full pack failed or exceeded50000000bytes' > "$QA_OUT/DIAGNOSTIC-ONLY.txt" || exit 1
+          diagnostic_dir="$RUNNER_TEMP/cm-team-picker-candidate-diagnostic"
+          mkdir -p "$diagnostic_dir" || exit 1
+          QA_DIAGNOSTIC="$diagnostic_dir" node --input-type=module <<'CM_DIAGNOSTIC'
+          import fs from 'node:fs';import path from 'node:path';
+          const source=process.env.QA_OUT,target=process.env.QA_DIAGNOSTIC;
+          function walk(rel=''){for(const e of fs.readdirSync(path.join(source,rel),{withFileTypes:true})){const name=path.posix.join(rel,e.name),parts=name.split('/');if(parts.some(p=>p==='raw'||p==='bodies'))continue;if(e.isDirectory())walk(name);else if(e.isFile()&&!/\.(?:tar\.gz|tgz)$/.test(name)){const dst=path.join(target,name);fs.mkdirSync(path.dirname(dst),{recursive:true});fs.copyFileSync(path.join(source,name),dst);}}}walk();
+          CM_DIAGNOSTIC
+          test "$?" = 0 || exit 1
+          diagnostic="$RUNNER_TEMP/cm-team-picker-candidate-diagnostic.tar.gz"
+          tar -czf "$diagnostic" -C "$diagnostic_dir" . || exit 1
+          test "$(stat -c %s "$diagnostic")" -le 50000000 || exit 1
+          sha256sum "$diagnostic" > "$diagnostic.sha256" || exit 1
+          printf 'archive=%s\n' "$diagnostic" >> "$GITHUB_OUTPUT" || exit 1
+          exit 1
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cm-team-picker-candidate-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            ${{ steps.pack.outputs.archive }}
+            ${{ steps.pack.outputs.archive }}.sha256
+          if-no-files-found: error
+          retention-days: 30
+          compression-level: 0
