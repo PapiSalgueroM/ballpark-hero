@@ -1,0 +1,255 @@
+name: Segunda normal source regressions
+on:
+  push:
+    branches: [codex/soccer-segunda-source-regressions-20261105]
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: soccer-segunda-source-regressions-${{ github.ref }}
+  cancel-in-progress: false
+env:
+  CI: '1'
+  SIM_NETWORK: offline
+  TZ: UTC
+  PRODUCT_CORE: ebd69abeb38ebb0b93fbff71a0caf2fa453db832
+  PRODUCT_TREE: 821809914563e7830354f3567ba66ac8801cfd10
+  RELEASED_BASE: 3268307038c4586dbc35f4697da1849512b473d9
+  CM_OBSERVER_BLOB: 782014fb8af7592af378e3947f8eb575f0e31673
+jobs:
+  normal:
+    runs-on: ubuntu-latest
+    timeout-minutes: ${{ matrix.minutes }}
+    strategy:
+      fail-fast: false
+      max-parallel: 3
+      matrix:
+        include:
+          - harness: simCareerClubPool
+            minutes: 45
+            history: ''
+          - harness: simCareerFacts
+            minutes: 45
+            history: ''
+          - harness: simCareerLeagueWorld
+            minutes: 60
+            history: ''
+          - harness: simCareerDomesticCup
+            minutes: 45
+            history: ''
+          - harness: simCareerLeagueFinish
+            minutes: 45
+            history: ''
+          - harness: simCareerLeagueSeasons
+            minutes: 45
+            history: '3268307038c4586dbc35f4697da1849512b473d9'
+          - harness: simCareerAcademy
+            minutes: 45
+            history: ''
+          - harness: simCareerEras
+            minutes: 45
+            history: ''
+          - harness: simCareerDerbies
+            minutes: 45
+            history: ''
+          - harness: simSoccerCareerLeagueWorld
+            minutes: 110
+            history: ''
+          - harness: simSoccerOfferReview
+            minutes: 45
+            history: ''
+          - harness: simCmLeagueRules
+            minutes: 90
+            history: '3268307038c4586dbc35f4697da1849512b473d9'
+          - harness: simCreation
+            minutes: 45
+            history: ''
+          - harness: simSoccerWorldTruth
+            minutes: 75
+            history: 'c2d215747b153390c42b5646fa75cc04be26e4c0'
+    env:
+      HARNESS: ${{ matrix.harness }}
+      HISTORY_REF: ${{ matrix.history }}
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 4
+          filter: blob:none
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: '1.4.4'
+      - name: Bind exact current source and temporary QA footprint
+        run: |
+          set -euo pipefail
+          OUT="$RUNNER_TEMP/soccer-source-$HARNESS"
+          mkdir -p "$OUT/logs" "$OUT/transport" "$OUT/history"
+          echo "QA_OUT=$OUT" >> "$GITHUB_ENV"
+          export QA_OUT="$OUT"
+          test "$(git rev-parse "$PRODUCT_CORE^{tree}")" = "$PRODUCT_TREE"
+          git merge-base --is-ancestor "$PRODUCT_CORE" HEAD
+          git diff --name-status "$PRODUCT_CORE" HEAD > "$OUT/qa-delta.txt"
+          printf '%s\n' $'A\t.github/workflows/soccer-segunda-source-regressions-20261105.yml' $'A\tscripts/qa/soccerSegundaCmObserve.mjs' > "$OUT/expected-qa-delta.txt"
+          cmp "$OUT/qa-delta.txt" "$OUT/expected-qa-delta.txt"
+          test "$(git hash-object scripts/qa/soccerSegundaCmObserve.mjs)" = "$CM_OBSERVER_BLOB"
+          git status --porcelain=v1 --untracked-files=all > "$OUT/status-before.txt"
+          test ! -s "$OUT/status-before.txt"
+          git rev-parse HEAD HEAD^{tree} > "$OUT/source.txt"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$OUT/source-before.sha256"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import cp from 'node:child_process';import crypto from 'node:crypto';import assert from 'node:assert/strict';
+          const pins={"scripts/simCareerClubPool.mjs":"f88897c263ecf23ab82ef1b0ea93eaa22e942fe3","scripts/simCareerFacts.mjs":"03aabbdc01f22867ba35bec75a305b69c54a1237","scripts/simCareerLeagueWorld.mjs":"a039f0f7a98ddfce96f5bd5f3e5ce7c12c010d81","scripts/simCareerDomesticCup.mjs":"284915a9f2b4ca3a2713e9d82217647ed47d4cc6","scripts/simCareerLeagueFinish.mjs":"079fba58522f778553abdd11aa2e10e9d0e0f4ac","scripts/simCareerLeagueSeasons.mjs":"481a91b6887b4440f0b463cdb217167b45ec6d41","scripts/simCareerAcademy.mjs":"9bdf01129861cb0a82c0cff17ce0de43a3ddc633","scripts/simCareerEras.mjs":"96fff43305d3f4dd45cd7748a9b6357afdb597c9","scripts/simCareerDerbies.mjs":"ac7f8c6e73f6cea44d0b2a67888682b1c6445b93","scripts/simSoccerCareerLeagueWorld.mjs":"ae076d9e8d595ecade5f60b031ea8eae8c66d685","scripts/simSoccerOfferReview.mjs":"ea74e5feda378bbfd753a342cd29b8b4a29215cb","scripts/simCmLeagueRules.mjs":"b1ac15d38741bce3dd0643e2d3842327da093d33","scripts/simCreation.mjs":"1318d5a2dae1d5f239a03762897a9fb4172ddabf","scripts/simSoccerWorldTruth.mjs":"6b0ffebae6e7468aa17985ef5230942d2fd28be6"};
+          for(const[file,want]of Object.entries(pins)){const b=fs.readFileSync(file),got=crypto.createHash('sha1').update(Buffer.from('blob '+b.length+'\0')).update(b).digest('hex');assert.equal(got,want,file+' normal source body');}
+          assert(!process.env.CM_OBSERVER_BLOB.includes('MUST_BIND'));
+          fs.writeFileSync(process.env.QA_OUT+'/normal-harness-pins.json',JSON.stringify(pins,null,2)+'\n');
+          NODE
+      - name: Install the held dependency versions
+        run: |
+          set -euo pipefail
+          test "$(bun --version)" = 1.4.4
+          bun --version > "$QA_OUT/logs/bun-version.log"
+          node --version > "$QA_OUT/logs/node-version.log"
+          bun install --frozen-lockfile > "$QA_OUT/logs/install.log" 2>&1
+          git diff --exit-code HEAD -- package.json package-lock.json bun.lock bun.lockb
+      - name: Hydrate only the actual historical source ref before offline reads
+        if: matrix.history != ''
+        run: |
+          set -euo pipefail
+          unset NODE_OPTIONS GIT_NO_LAZY_FETCH SIM_OFFLINE_RECEIPT
+          git fetch --no-tags --depth=1 --filter=blob:none origin "$HISTORY_REF" > "$QA_OUT/history/fetch.stdout.log" 2> "$QA_OUT/history/fetch.stderr.log"
+          printf '%s\n' 0 > "$QA_OUT/history/fetch-native-exit.txt"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import cp from 'node:child_process';import crypto from 'node:crypto';import assert from 'node:assert/strict';
+          const out=process.env.QA_OUT,ref=process.env.HISTORY_REF,trees={'3268307038c4586dbc35f4697da1849512b473d9':'6d18d84bcef424def83e496087830c096ba4163b','c2d215747b153390c42b5646fa75cc04be26e4c0':'de57e1d593beb3fd877cb05105dd56c3e4e9f320'};
+          const git=(args,input)=>cp.execFileSync('git',args,{input,maxBuffer:96*1024*1024});
+          assert.equal(git(['rev-parse',ref+'^{commit}']).toString().trim(),ref);assert.equal(git(['rev-parse',ref+'^{tree}']).toString().trim(),trees[ref]);
+          const roots=process.env.HARNESS==='simCmLeagueRules'?['src','scripts/lib/careerClubPool.mjs','scripts/data/soccerCareerFacts.json','scripts/data/domesticCupSources.json']:['src'];const rows=git(['ls-tree','-r','-z',ref,'--',...roots]).toString().split('\0').filter(Boolean).map(line=>{const m=line.match(/^(\d+) blob ([a-f0-9]{40})\t((?:src\/|scripts\/).+)$/);assert(m,line);return{mode:m[1],blob:m[2],path:m[3]};});
+          assert(rows.length>1000);const ids=[...new Set(rows.map(r=>r.blob))],bodies=new Map();
+          for(let i=0;i<ids.length;i+=48){const batch=ids.slice(i,i+48),input=batch.join('\n')+'\n';const result=cp.spawnSync('git',['cat-file','--batch'],{input,maxBuffer:96*1024*1024});assert.equal(result.status,0);assert.equal(result.signal,null);assert.equal(result.error,undefined);fs.writeFileSync(out+'/history/batch-'+i+'.stderr.log',result.stderr);let at=0;
+            for(const id of batch){const end=result.stdout.indexOf(10,at);assert(end>=0);const h=result.stdout.subarray(at,end).toString().split(' ');assert.equal(h[0],id);assert.equal(h[1],'blob');const size=Number(h[2]);assert(Number.isSafeInteger(size)&&size>=0);const body=result.stdout.subarray(end+1,end+1+size);assert.equal(body.length,size);assert.equal(result.stdout[end+1+size],10);assert.equal(crypto.createHash('sha1').update(Buffer.from('blob '+size+'\0')).update(body).digest('hex'),id);bodies.set(id,{bytes:size,sha256:crypto.createHash('sha256').update(body).digest('hex')});at=end+2+size;}assert.equal(at,result.stdout.length);
+          }
+          process.env.GIT_NO_LAZY_FETCH='1';const offline=git(['cat-file','--batch-check'],ids.join('\n')+'\n').toString().trim().split('\n');assert.equal(offline.length,ids.length);
+          for(let i=0;i<ids.length;i++){const h=offline[i].split(' ');assert.equal(h[0],ids[i]);assert.equal(h[1],'blob');assert.equal(Number(h[2]),bodies.get(ids[i]).bytes);}
+          fs.writeFileSync(out+'/history/hydration.json',JSON.stringify({ref,tree:trees[ref],roots,sourceFiles:rows.map(row=>({...row,...bodies.get(row.blob)})),uniqueObjects:ids.length,actualBinaryBodyHashesVerified:true,noLazyObjectsRepeated:true,onlyThisExactRefFetched:true},null,2)+'\n');
+          NODE
+          echo "GIT_NO_LAZY_FETCH=1" >> "$GITHUB_ENV"
+      - name: Proper application types on the fixed current source
+        run: |
+          set -euo pipefail
+          export GIT_NO_LAZY_FETCH=1
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          : > "$QA_OUT/transport/types.log"
+          set +e
+          SIM_OFFLINE_RECEIPT="$QA_OUT/transport/types.log" node_modules/.bin/tsc --noEmit -p tsconfig.app.json > "$QA_OUT/logs/types.stdout.log" 2> "$QA_OUT/logs/types.stderr.log"
+          native_exit=$?
+          set -e
+          printf '%s\n' "$native_exit" > "$QA_OUT/types-native-exit.txt"
+          cat "$QA_OUT/logs/types.stdout.log" "$QA_OUT/logs/types.stderr.log"
+          test "$native_exit" = 0
+          test ! -s "$QA_OUT/transport/types.log"
+      - name: One unchanged normal harness with all default seeds and sections
+        if: matrix.harness != 'simCmLeagueRules'
+        run: |
+          set -euo pipefail
+          export GIT_NO_LAZY_FETCH=1
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          export SIM_OFFLINE_RECEIPT="$QA_OUT/transport/normal.log"
+          export SIM_LEAGUE_SEASONS_BASE="$RELEASED_BASE"
+          export SIM_LEAGUE_FINISH_ARTIFACTS="$QA_OUT/league-finish"
+          export SIM_LEAGUE_SEASONS_ARTIFACTS="$QA_OUT/league-seasons"
+          export SOCCER_OFFER_REVIEW_ARTIFACTS="$QA_OUT/offer-review"
+          test -z "$(env | grep -E '^(RECORD|RECORD_PART|WORLD|CAREERS|SEEDS|NATION|SNAPSHOT_PROBE_ONLY|WORLD_TRUTH_ONLY|WORLD_TRUTH_CONTROL|CUP_CONTROL|CM_RULES_CONTROL|SIM_[A-Z_]*CONTROL)=' || true)"
+          if [[ "$HARNESS" = simSoccerCareerLeagueWorld ]]; then
+            test ! -e .tmp-fx/league-world-tests.json
+            test ! -L .tmp-fx/league-world-tests.json
+            if [[ -e .tmp-fx || -L .tmp-fx ]]; then test -d .tmp-fx; test ! -L .tmp-fx; fi
+            : > "$QA_OUT/world-leaf-owned-before.txt"
+          fi
+          : > "$SIM_OFFLINE_RECEIPT"
+          set +e
+          node "scripts/$HARNESS.mjs" > "$QA_OUT/logs/normal.stdout.log" 2> "$QA_OUT/logs/normal.stderr.log"
+          native_exit=$?
+          set -e
+          printf '%s\n' "$native_exit" > "$QA_OUT/normal-native-exit.txt"
+          cat "$QA_OUT/logs/normal.stdout.log" "$QA_OUT/logs/normal.stderr.log"
+          test "$native_exit" = 0
+          test ! -s "$SIM_OFFLINE_RECEIPT"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const markers={simCareerClubPool:'simCareerClubPool: all sections green',simCareerFacts:'simCareerFacts: all sections green',simCareerLeagueWorld:'simCareerLeagueWorld: all sections green',simCareerDomesticCup:'simCareerDomesticCup: all sections green',simCareerLeagueFinish:'simCareerLeagueFinish: green.',simCareerLeagueSeasons:'simCareerLeagueSeasons: all sections green',simCareerAcademy:'simCareerAcademy: ALL CHECKS PASSED',simCareerEras:'simCareerEras: all green',simCareerDerbies:'simCareerDerbies: all 8 sections green',simSoccerCareerLeagueWorld:'simSoccerCareerLeagueWorld: seventeen outcome tests and two engine career tests green, all twelve effective negative controls caught',simSoccerOfferReview:'Soccer offer review: passed.',simCreation:'ALL CREATION CHECKS PASSED',simSoccerWorldTruth:'simSoccerWorldTruth: OK, every section green'};
+          const stdout=fs.readFileSync(process.env.QA_OUT+'/logs/normal.stdout.log','utf8'),marker=markers[process.env.HARNESS];assert(marker);assert(stdout.split('\n').some(line=>line.trim().startsWith(marker)),'ACTUAL_NORMAL_CLOSING_OUTPUT');
+          fs.writeFileSync(process.env.QA_OUT+'/normal-admission.json',JSON.stringify({harness:process.env.HARNESS,nativeExit:0,actualClosingOutput:marker,defaultSeedsAndSections:true,sourceHoldsStillRequired:true,scope:'Only this normal harness. No full-suite or pending-test waiver.'},null,2)+'\n');
+          NODE
+      - name: Retrieve the same completed output for full CM chunk checks
+        if: matrix.harness == 'simCmLeagueRules'
+        env:
+          ACTIONS_READ_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          REF="$RUNNER_TEMP/soccer-cm-completed"
+          mkdir -p "$REF/build" "$QA_OUT/input-provenance"
+          echo "QA_REF=$REF" >> "$GITHUB_ENV"
+          curl --fail --silent --show-error -H "Authorization: Bearer $ACTIONS_READ_TOKEN" https://api.github.com/repos/PapiSalgueroM/ballpark-hero/actions/artifacts/13387357930 > "$QA_OUT/input-provenance/build-artifact.json"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';const a=JSON.parse(fs.readFileSync(process.env.QA_OUT+'/input-provenance/build-artifact.json'));assert.equal(a.id,13387357930);assert.equal(a.size_in_bytes,7688979);assert.equal(a.digest,'sha256:fd87b3fedf54d0eb9f649633f99a9876a99109ccd4b83b8a00dfde640d2c71b6');assert.equal(a.expired,false);assert.equal(a.workflow_run.id,41965564992);assert.equal(a.workflow_run.head_sha,'e7713237e75f0e281f45f61f67b867b9116c6d03');
+          NODE
+          curl --fail --silent --show-error --location -H "Authorization: Bearer $ACTIONS_READ_TOKEN" https://api.github.com/repos/PapiSalgueroM/ballpark-hero/actions/artifacts/13387357930/zip > "$REF/BUILD.zip"
+          test "$(wc -c < "$REF/BUILD.zip")" = 7688979
+          printf '%s\n' "fd87b3fedf54d0eb9f649633f99a9876a99109ccd4b83b8a00dfde640d2c71b6  $REF/BUILD.zip" | sha256sum --check
+          unzip -q "$REF/BUILD.zip" -d "$REF/build"
+          test "$(wc -c < "$REF/build/completed-dist.tar.gz")" = 6997111
+          printf '%s\n' "986dc17187de3f3c1a932b893154981885ae63bd3863616b38cf2b9c782747c5  $REF/build/completed-dist.tar.gz" "091f8d661d263dd28e4238f6eb33f6c9ee20a7873e64ac6c489f4590d8404d34  $REF/build/dist-before.sha256" | sha256sum --check
+          tar -tzf "$REF/build/completed-dist.tar.gz" > "$QA_OUT/input-provenance/tar-members.txt"
+          if grep -Eq '(^/|(^|/)\.\.(/|$))' "$QA_OUT/input-provenance/tar-members.txt"; then exit 1; fi
+          if grep -Ev '^dist(/|$)' "$QA_OUT/input-provenance/tar-members.txt"; then exit 1; fi
+          tar -xzf "$REF/build/completed-dist.tar.gz" -C "$REF"
+          (cd "$REF" && sha256sum --check build/dist-before.sha256) > "$QA_OUT/input-provenance/dist-verified.log"
+          cp "$REF/build/dist-before.sha256" "$QA_OUT/input-provenance/dist-inventory.sha256"
+      - name: Measure original and current CM without waiving either normal red result
+        if: matrix.harness == 'simCmLeagueRules'
+        run: |
+          set -euo pipefail
+          export GIT_NO_LAZY_FETCH=1
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          export SIM_OFFLINE_RECEIPT="$QA_OUT/transport/cm-controller.log"
+          : > "$SIM_OFFLINE_RECEIPT"
+          set +e
+          node scripts/qa/soccerSegundaCmObserve.mjs --out "$QA_OUT/cm" --dist "$QA_REF/dist" > "$QA_OUT/logs/cm-controller.stdout.log" 2> "$QA_OUT/logs/cm-controller.stderr.log"
+          native_exit=$?
+          set -e
+          printf '%s\n' "$native_exit" > "$QA_OUT/cm-controller-native-exit.txt"
+          cat "$QA_OUT/logs/cm-controller.stdout.log" "$QA_OUT/logs/cm-controller.stderr.log"
+          test "$native_exit" = 0
+          test ! -s "$SIM_OFFLINE_RECEIPT"
+      - name: Retain the owned world report and hold full source and lock bytes
+        if: always()
+        run: |
+          set -euo pipefail
+          export GIT_NO_LAZY_FETCH=1
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import path from 'node:path';import crypto from 'node:crypto';import assert from 'node:assert/strict';
+          const out=process.env.QA_OUT;
+          if(process.env.HARNESS==='simSoccerCareerLeagueWorld'&&fs.existsSync(out+'/world-leaf-owned-before.txt')){const file=path.resolve('.tmp-fx/league-world-tests.json');if(fs.existsSync(file)){assert(fs.lstatSync(path.dirname(file)).isDirectory()&&!fs.lstatSync(path.dirname(file)).isSymbolicLink());assert(fs.lstatSync(file).isFile()&&!fs.lstatSync(file).isSymbolicLink());assert.equal(fs.realpathSync(path.dirname(file)),path.join(fs.realpathSync('.'),'.tmp-fx'));const b=fs.readFileSync(file);JSON.parse(b);fs.writeFileSync(out+'/last-world-control-tests.json',b,{flag:'wx'});assert.deepEqual(fs.readFileSync(out+'/last-world-control-tests.json'),b);fs.unlinkSync(file);fs.writeFileSync(out+'/world-leaf-retention.json',JSON.stringify({retained:'last-world-control-tests.json',bytes:b.length,sha256:crypto.createHash('sha256').update(b).digest('hex'),exactOwnedLeafOnly:true,scope:'Last report may be an intentional negative-control report. Ordinary outcomes and all twelve controls must be read from the native log.'},null,2)+'\n');}}
+          const dir=out+'/transport';for(const file of fs.readdirSync(dir))assert.equal(fs.statSync(dir+'/'+file).size,0,'empty Node transport receipt '+file);
+          NODE
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$QA_OUT/source-after.sha256"
+          cmp "$QA_OUT/source-before.sha256" "$QA_OUT/source-after.sha256"
+          git diff --exit-code HEAD > "$QA_OUT/source-diff.txt"
+          git status --porcelain=v1 --untracked-files=all > "$QA_OUT/status-after.txt"
+          test ! -s "$QA_OUT/status-after.txt"
+          if [[ "$HARNESS" = simCmLeagueRules && -f "$QA_REF/build/dist-before.sha256" ]]; then (cd "$QA_REF" && sha256sum --check build/dist-before.sha256) > "$QA_OUT/dist-held.log"; fi
+          printf '%s\n' 'SC_SEGUNDA_NORMAL_SOURCE_HELD' > "$QA_OUT/source-held.txt"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: soccer-normal-${{ matrix.harness }}-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ env.QA_OUT }}/
+          retention-days: 30
+          compression-level: 6
