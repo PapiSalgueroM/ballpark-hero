@@ -1,0 +1,112 @@
+{
+  "schema": 1,
+  "status": "BOUND_IMMUTABLE_PUBLISHED_APP_ORIGINAL_ONLY_PUBLIC_PROOF_PENDING",
+  "parent": "05bd628b349ef7483bc5f5f537a7d10807a83f05",
+  "tree": "b5d8207755aa6f46f7395c3a83c73514d15c2797",
+  "preparationSource": {
+    "app": "4e45ee3605589aeb5a268b2e6a902fb4ff71af92",
+    "soccerEquivalent": "4571ba4ea9545dab5ef70769204034e5163d48d7",
+    "scope": "Immutable App05bd/treeb5 selected by Root from actual host entry/assets. NBA public qualification is still pending. Original-only headless measurement, no version2 feature credit."
+  },
+  "test": {
+    "path": "src/test/soccerHistoricalFourOriginal.test.tsx",
+    "bytes": 24222,
+    "sha": "758b7f1a0243a6abc88c64c1d03500c72bf6ccf6"
+  },
+  "reader": {
+    "path": "scripts/qa/soccerHistoricalFourOriginalEvidence.mjs",
+    "blob": "f96356c8471855feb8b7120f56aba6c68fa0c0c2"
+  },
+  "qaPaths": [
+    "src/test/soccerHistoricalFourOriginal.test.tsx",
+    "scripts/qa/soccerHistoricalFourOriginalCases.json",
+    "scripts/qa/soccerHistoricalFourOriginalEvidence.mjs",
+    ".github/workflows/soccer-four-cohort-original-20261105.yml"
+  ],
+  "evidenceEnvironment": "SC_FOUR_ORIGINAL_OUT",
+  "specEnvironment": "SC_FOUR_ORIGINAL_SPEC",
+  "clock": "2026-11-05T12:00:00Z",
+  "measureSeeds": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8
+  ],
+  "targetCommittedYear": 2019,
+  "limits": {
+    "maxActionsPerAttempt": 300,
+    "storedBytes": 12582912,
+    "decodedBytes": 46137344,
+    "artifactBytes": 50000000,
+    "testTimeoutMs": 600000,
+    "source": "12MiB stored and44MiB decoded ceilings inherited from admitted lossless NBA capture. No retention relaxation or truncation; overflow is unqualified fatal diagnostics."
+  },
+  "expected": {
+    "tests": 5,
+    "ownedAssertionErrors": 4,
+    "heldPasses": 1,
+    "nativeExit": 1,
+    "appTypesExit": 0
+  },
+  "cases": [
+    {
+      "fullName": "Soccer Career four historical entries original-first new eligible 2005 UI creation uses the four-entry version2 policy",
+      "file": "case-1-new-policy.json",
+      "marker": "SC4_NEW_CREATION_VERSION",
+      "ownership": "owned"
+    },
+    {
+      "fullName": "Soccer Career four historical entries original-first the ordinary committed-year timeline admits all four sourced IDs exactly once",
+      "file": "case-2-due-timeline.json",
+      "marker": "SC4_DUE_YEAR_ENTRIES",
+      "ownership": "owned"
+    },
+    {
+      "fullName": "Soccer Career four historical entries original-first each registered identity resolves its own saved source club across existing era tables",
+      "file": "case-3-world-identities.json",
+      "marker": "SC4_OWN_WORLD_IDENTITY",
+      "ownership": "owned"
+    },
+    {
+      "fullName": "Soccer Career four historical entries original-first the actual reopened SportsFeed shows all four source entries without writes or draws",
+      "file": "case-4-visible-cards.json",
+      "marker": "SC4_VISIBLE_SOURCE_CARDS",
+      "ownership": "owned"
+    },
+    {
+      "fullName": "Soccer Career four historical entries original-first actual original v1 unmarked opaque and newer inputs preserve complete codec world and draw projections",
+      "file": "case-5-held-originals.json",
+      "marker": null,
+      "ownership": "held"
+    }
+  ],
+  "sourcePins": {
+    "src/lib/soccerHistoricalArrivals.ts": "fce537f31d51a8de78a170c57808b8d233fa54b1",
+    "src/lib/soccerCareerEngine.ts": "40edcc5051d9b4a369698ea3572eb9e8e3314f26",
+    "src/pages/SoccerCareer.tsx": "f0d77f964522f4fb86ac0cb9543b7cd06f08a9ab",
+    "src/lib/soccerPhone.ts": "cee38fc40914dad6989c66c66b29fae88203d1c8",
+    "src/components/soccer-career/PhonePanel.tsx": "736bdf5a1b07ca83a30b1487f81cce52dd8208bb",
+    "src/lib/careerEras.ts": "e037022342382b1df9c8a5ede620d2cce480bc23",
+    "src/lib/soccerCareerSave.ts": "86ec011693fd5bc702b5e8ccec05d27775a72a76",
+    "src/lib/soccerAwardReveal.ts": "3c2ba81b18cdf575e0d6fb70c7743b41b78d519d",
+    "scripts/lib/offlineTransport.cjs": "0fda542a2649fe5da937c6976fd0f5b6073e74b6",
+    "package-lock.json": "97d6f12a052f25f400462938c241789a083f0bfe",
+    "package.json": "2ff64986fb76ebc51b706f2fd24765768874008a",
+    "tsconfig.app.json": "51f581dd91641b4c1f1219f646788e73cf6bf00c"
+  },
+  "sourceFactAuthority": {
+    "nextThreePacketSHA256": "f265438adec8375bb92b12d1fae02f823000c19dbf35970a8526a8704d9ad658",
+    "independentReviewSHA256": "530570ad086146e7c14995cf5a154498456c746f651c30a0ef18e7606f0218cd",
+    "newDataImports": false
+  },
+  "limitsOfCredit": [
+    "Source authored only, no measured healthy2019 seed or original outcome until actual remote run.",
+    "Actual v1 UI and direct constructor/declared opaque inputs must become authenticated frozen original references before candidate outcomes; never strip a newv2 save.",
+    "Full per-frame serialized saves/parsed states, module/UI/global tapes and codec/load retained; private keyed forks not captured.",
+    "No App implementation, data import, browser/native/public/build/coverage or cap qualification."
+  ]
+}

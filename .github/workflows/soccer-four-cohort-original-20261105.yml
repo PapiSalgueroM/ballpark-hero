@@ -1,0 +1,185 @@
+name: Soccer four cohort original baseline
+on:
+  push:
+    branches: [codex/soccer-four-cohort-original-20261105]
+permissions:
+  contents: read
+concurrency:
+  group: soccer-four-cohort-original-20261105
+  cancel-in-progress: false
+jobs:
+  original:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      LIVE_PARENT: 05bd628b349ef7483bc5f5f537a7d10807a83f05
+      LIVE_TREE: b5d8207755aa6f46f7395c3a83c73514d15c2797
+      TEST_BLOB: 758b7f1a0243a6abc88c64c1d03500c72bf6ccf6
+      SPEC_BLOB: c4f32794556f704fd1415153bd780f3269bd9b06
+      READER_BLOB: f96356c8471855feb8b7120f56aba6c68fa0c0c2
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+          filter: blob:none
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Bind the final live parent and exactly four reviewed QA additions
+        shell: bash
+        run: |
+          set -euo pipefail
+          QA_OUT="$RUNNER_TEMP/soccer-four-cohort-original"
+          QA_DIAG="$RUNNER_TEMP/soccer-four-cohort-original-diagnostic"
+          export QA_OUT QA_DIAG
+          echo "QA_OUT=$QA_OUT" >> "$GITHUB_ENV"
+          echo "QA_DIAG=$QA_DIAG" >> "$GITHUB_ENV"
+          mkdir -p "$QA_OUT"/{logs,transport} "$QA_DIAG"
+          node --input-type=module <<'NODE'
+          import assert from 'node:assert/strict';
+          for(const name of['LIVE_PARENT','LIVE_TREE','TEST_BLOB','SPEC_BLOB','READER_BLOB'])assert.match(process.env[name]??'',/^[a-f0-9]{40}$/,name+' must be measured and reviewed');
+          NODE
+          test "$(git rev-parse HEAD^)" = "$LIVE_PARENT"
+          test "$(git rev-parse "$LIVE_PARENT^{tree}")" = "$LIVE_TREE"
+          test "$(git hash-object src/test/soccerHistoricalFourOriginal.test.tsx)" = "$TEST_BLOB"
+          test "$(git hash-object scripts/qa/soccerHistoricalFourOriginalCases.json)" = "$SPEC_BLOB"
+          test "$(git hash-object scripts/qa/soccerHistoricalFourOriginalEvidence.mjs)" = "$READER_BLOB"
+          git diff --name-status HEAD^ HEAD > "$QA_OUT/qa-delta.txt"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const rows=fs.readFileSync(process.env.QA_OUT+'/qa-delta.txt','utf8').trim().split('\n').map(x=>x.split('\t'));
+          assert.equal(rows.length,4);assert(rows.every(row=>row[0]==='A'));
+          assert.deepEqual(rows.map(row=>row[1]).sort(),[
+            '.github/workflows/soccer-four-cohort-original-20261105.yml',
+            'scripts/qa/soccerHistoricalFourOriginalCases.json',
+            'scripts/qa/soccerHistoricalFourOriginalEvidence.mjs',
+            'src/test/soccerHistoricalFourOriginal.test.tsx'
+          ].sort());
+          NODE
+          test -z "$(git status --porcelain=v1 --untracked-files=all)"
+          git rev-parse HEAD HEAD^ 'HEAD^{tree}' > "$QA_OUT/source-identity.txt"
+          git ls-files -z > "$QA_OUT/tracked-before.bin"
+          git ls-files -z | xargs -0 sha256sum > "$QA_OUT/source-before.sha256"
+          git ls-files -s > "$QA_OUT/index-before.txt"
+          git status --porcelain=v1 --untracked-files=all > "$QA_OUT/status-before.txt"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import crypto from 'node:crypto';
+          const files=['package.json','package-lock.json','bun.lock','bun.lockb'].filter(file=>fs.existsSync(file));
+          fs.writeFileSync(process.env.QA_OUT+'/locks-before.json',JSON.stringify(files.map(file=>({file,sha256:crypto.createHash('sha256').update(fs.readFileSync(file)).digest('hex')})),null,2)+'\n',{flag:'wx'});
+          NODE
+          cp scripts/qa/soccerHistoricalFourOriginalCases.json "$QA_OUT/cases.json"
+      - name: Install the committed App dependency tree without edits
+        shell: bash
+        run: |
+          set +e
+          set -uo pipefail
+          node --version > "$QA_OUT/logs/node-version.log"
+          npm --version > "$QA_OUT/logs/npm-version.log"
+          npm ci > "$QA_OUT/logs/npm-ci.stdout.log" 2> "$QA_OUT/logs/npm-ci.stderr.log"
+          native_exit=$?
+          printf '%s\n' "$native_exit" > "$QA_OUT/logs/npm-ci.exit" || exit 1
+          test "$native_exit" = 0 || exit "$native_exit"
+          git diff --exit-code HEAD -- package.json package-lock.json bun.lock bun.lockb
+      - name: Proper App types before any original cases
+        shell: bash
+        run: |
+          set +e
+          set -uo pipefail
+          export SIM_NETWORK=offline GIT_NO_LAZY_FETCH=1
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          export SIM_OFFLINE_RECEIPT="$QA_OUT/transport/types.log"
+          : > "$SIM_OFFLINE_RECEIPT"
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json > "$QA_OUT/logs/types.stdout.log" 2> "$QA_OUT/logs/types.stderr.log"
+          native_exit=$?
+          printf '%s\n' "$native_exit" > "$QA_OUT/logs/types.exit" || exit 1
+          test "$native_exit" = 0 || exit "$native_exit"
+          test ! -s "$SIM_OFFLINE_RECEIPT" || exit 1
+          printf '{"command":"node_modules/.bin/tsc --noEmit -p tsconfig.app.json","exit":0}\n' > "$QA_OUT/types-passed.json" || exit 1
+      - name: Measure the five original cases and admit only their actual owned outcomes
+        shell: bash
+        run: |
+          set +e
+          set -uo pipefail
+          export SIM_NETWORK=offline GIT_NO_LAZY_FETCH=1
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          export SC_FOUR_ORIGINAL_OUT="$QA_OUT/raw"
+          export SC_FOUR_ORIGINAL_SPEC="$GITHUB_WORKSPACE/scripts/qa/soccerHistoricalFourOriginalCases.json"
+          export SIM_OFFLINE_RECEIPT="$QA_OUT/transport/vitest.log"
+          : > "$SIM_OFFLINE_RECEIPT"
+          timeout --signal=TERM --kill-after=5s 600s node_modules/.bin/vitest run src/test/soccerHistoricalFourOriginal.test.tsx --reporter=json --outputFile="$QA_OUT/vitest.json" --maxWorkers=1 --minWorkers=1 --testTimeout=600000 > "$QA_OUT/logs/vitest.stdout" 2> "$QA_OUT/logs/vitest.stderr"
+          native_exit=$?
+          printf '%s\n' "$native_exit" > "$QA_OUT/vitest.exit" || exit 1
+          printf '%s\n' "$native_exit" > "$QA_OUT/logs/vitest.exit" || exit 1
+          vitest_receipt_exit=0
+          test ! -s "$SIM_OFFLINE_RECEIPT" || vitest_receipt_exit=1
+          export SIM_OFFLINE_RECEIPT="$QA_OUT/transport/reader.log"
+          : > "$SIM_OFFLINE_RECEIPT"
+          node --unhandled-rejections=strict scripts/qa/soccerHistoricalFourOriginalEvidence.mjs --out "$QA_OUT" --spec scripts/qa/soccerHistoricalFourOriginalCases.json --exit-code "$native_exit" > "$QA_OUT/logs/reader.stdout.log" 2> "$QA_OUT/logs/reader.stderr.log"
+          reader_exit=$?
+          printf '%s\n' "$reader_exit" > "$QA_OUT/logs/reader.exit" || exit 1
+          test "$reader_exit" = 0 || exit "$reader_exit"
+          test "$native_exit" = 1 || exit 1
+          test "$vitest_receipt_exit" = 0 || exit 1
+          test ! -s "$SIM_OFFLINE_RECEIPT" || exit 1
+      - name: Always hold full source index status dependencies and silent receipts
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          git ls-files -z > "$QA_OUT/tracked-after.bin"
+          git ls-files -z | xargs -0 sha256sum > "$QA_OUT/source-after.sha256"
+          git ls-files -s > "$QA_OUT/index-after.txt"
+          git status --porcelain=v1 --untracked-files=all > "$QA_OUT/status-after.txt"
+          cmp "$QA_OUT/tracked-before.bin" "$QA_OUT/tracked-after.bin"
+          cmp "$QA_OUT/source-before.sha256" "$QA_OUT/source-after.sha256"
+          cmp "$QA_OUT/index-before.txt" "$QA_OUT/index-after.txt"
+          test ! -s "$QA_OUT/status-before.txt"
+          test ! -s "$QA_OUT/status-after.txt"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import crypto from 'node:crypto';import assert from 'node:assert/strict';
+          const out=process.env.QA_OUT,locks=JSON.parse(fs.readFileSync(out+'/locks-before.json'));
+          const after=['package.json','package-lock.json','bun.lock','bun.lockb'].filter(file=>fs.existsSync(file)).map(file=>({file,sha256:crypto.createHash('sha256').update(fs.readFileSync(file)).digest('hex')}));
+          assert.deepEqual(after,locks);fs.writeFileSync(out+'/locks-after.json',JSON.stringify(after,null,2)+'\n',{flag:'wx'});
+          const receipts=fs.readdirSync(out+'/transport').map(file=>({file,bytes:fs.statSync(out+'/transport/'+file).size}));for(const row of receipts)assert.equal(row.bytes,0,'Actual offline receipt '+row.file);
+          fs.writeFileSync(out+'/source-held.json',JSON.stringify({fullTrackedSource:true,index:true,statusClean:true,locks:true,receipts,noAppChange:true,noBuild:true,noHistoryFetch:true,noBrowser:true})+'\n',{flag:'wx'});
+          NODE
+      - name: Always retain a small failure diagnostic before the full archive guard
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import path from 'node:path';import crypto from 'node:crypto';
+          const out=process.env.QA_OUT,diag=process.env.QA_DIAG;fs.mkdirSync(diag,{recursive:true});
+          const files=[];function walk(rel=''){for(const entry of fs.readdirSync(path.join(out,rel),{withFileTypes:true})){const file=path.posix.join(rel,entry.name);if(entry.isDirectory())walk(file);else{const b=fs.readFileSync(path.join(out,file));files.push({file,bytes:b.length,sha256:crypto.createHash('sha256').update(b).digest('hex')});}}}if(fs.existsSync(out))walk();
+          const selected={};for(const file of['logs/npm-ci.exit','logs/types.exit','vitest.exit','logs/reader.exit','logs/types.stderr.log','logs/vitest.stderr','logs/reader.stderr.log']){const p=path.join(out,file);if(fs.existsSync(p)){const b=fs.readFileSync(p);selected[file]={fullBytes:b.length,tailUtf8:b.subarray(Math.max(0,b.length-6000)).toString(),truncated:b.length>6000};}}
+          fs.writeFileSync(path.join(diag,'diagnostic.json'),JSON.stringify({status:'DIAGNOSTIC_ONLY_NOT_BUSINESS_OR_FULL_RAW_ADMISSION',source:process.env.GITHUB_SHA,selected,retainedFiles:files,scope:'Only diagnostic tails. Every complete native report/stdout/stderr/lossless RAW remains in the primary archive; the size gate is fatal and is not waived.'},null,2)+'\n');
+          NODE
+          test "$(stat -c %s "$QA_DIAG/diagnostic.json")" -le 1000000
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: soccer-four-cohort-original-diagnostic
+          path: ${{ runner.temp }}/soccer-four-cohort-original-diagnostic/diagnostic.json
+          if-no-files-found: error
+          retention-days: 14
+      - name: Retain all original proof within the unchanged full archive limit
+        id: evidence
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          tar -czf "$RUNNER_TEMP/soccer-four-cohort-original.tar.gz" -C "$QA_OUT" .
+          test "$(stat -c %s "$RUNNER_TEMP/soccer-four-cohort-original.tar.gz")" -le 50000000
+          sha256sum "$RUNNER_TEMP/soccer-four-cohort-original.tar.gz" > "$RUNNER_TEMP/soccer-four-cohort-original.tar.gz.sha256"
+      - uses: actions/upload-artifact@v4
+        if: always() && steps.evidence.outcome == 'success'
+        with:
+          name: soccer-four-cohort-original
+          path: |
+            ${{ runner.temp }}/soccer-four-cohort-original.tar.gz
+            ${{ runner.temp }}/soccer-four-cohort-original.tar.gz.sha256
+          if-no-files-found: error
+          retention-days: 14
+          compression-level: 0
