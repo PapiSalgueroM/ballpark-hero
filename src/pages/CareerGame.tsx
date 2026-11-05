@@ -36,6 +36,9 @@ const CareerGame = () => {
     isLoadingPool,
   } = useCareerGame();
 
+  const earlyClubIndex = targetPlayer.career.findIndex((row, rowIdx) =>
+    row.club.trim().length > 0 && !revealedCells.has(`${rowIdx}-club`));
+
   const [input, setInput] = useState('');
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [selectedIdx, setSelectedIdx] = useState(-1);
@@ -117,6 +120,10 @@ const CareerGame = () => {
                     Press <span className="text-foreground font-semibold">Give Hint</span> to reveal{' '}
                     <span className="text-primary font-semibold">4 random boxes</span> at once
                   </li>
+                  <li>
+                    <span className="text-foreground font-semibold">Reveal an early club</span> opens the earliest club box still hidden on this board for 1 box.
+                  </li>
+                  <li>Example: if the first club is already open, Reveal an early club opens the next hidden club for 1 box.</li>
                   <li>Use Give Hint as many times as you need</li>
                 </ul>
               </section>
@@ -232,17 +239,27 @@ const CareerGame = () => {
                     </div>
                   )}
                 </div>
-                <div className="flex justify-center gap-3 mt-4">
+                <div className="flex flex-wrap justify-center gap-3 mt-4">
+                  <button
+                    type="button"
+                    onClick={() => { if (earlyClubIndex >= 0) revealCell(`${earlyClubIndex}-club`); }}
+                    disabled={earlyClubIndex < 0}
+                    className="min-h-[44px] px-4 py-2 text-sm rounded-full bg-secondary text-secondary-foreground hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    Reveal an early club
+                  </button>
                   <button
                     onClick={giveHint}
                     disabled={allRevealed}
-                    className="inline-flex items-center gap-2 px-5 py-2 text-sm rounded-full bg-primary text-primary-foreground hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="inline-flex min-h-[44px] items-center gap-2 px-5 py-2 text-sm rounded-full bg-primary text-primary-foreground hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     <Lightbulb className="w-4 h-4" />
                     Give Hint
                   </button>
                   <GiveUpButton onGiveUp={giveUp} />
                 </div>
+                <p className="mt-2 text-center text-xs text-muted-foreground">Reveals the earliest club box still hidden on this board.</p>
+                <p className="mt-1 text-center text-xs text-muted-foreground">Early club: 1 box. Give Hint: up to 4 random boxes.</p>
               </div>
             )}
 

@@ -1,4 +1,4 @@
-name: Career Path early club original proof
+name: Career Path early club source proof
 on:
   push:
     branches: [codex/career-early-club-qa-20261105]
@@ -34,21 +34,8 @@ jobs:
           npm ci
       - name: Original App types
         run: node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee early-club-artifacts/types.log
-      - name: Original page must demonstrate missing deliberate hint
-        run: |
-          set +e
-          NODE_OPTIONS="--max-old-space-size=6144 --require=$PWD/scripts/lib/offlineTransport.cjs" node node_modules/vitest/vitest.mjs run src/test/careerEarlyClubHint.test.tsx --maxWorkers=1 --minWorkers=1 --reporter=default --reporter=json --outputFile=early-club-artifacts/original.json 2>&1 | tee early-club-artifacts/original.log
-          crq_test_status=${PIPESTATUS[0]}
-          set -e
-          test "$crq_test_status" -ne 0
-          node --input-type=module <<'NODE'
-          import fs from 'node:fs'; import assert from 'node:assert/strict';
-          const report=JSON.parse(fs.readFileSync('early-club-artifacts/original.json'));
-          const rows=report.testResults.flatMap(s=>s.assertionResults);
-          assert.equal(rows.length,11); assert.equal(rows.filter(r=>r.status==='failed').length,10); assert.equal(rows.filter(r=>r.status==='passed').length,1);
-          assert(rows.filter(r=>r.status==='failed').every(r=>r.failureMessages.join('\n').includes('EARLY_CLUB_')));
-          console.log('Original named business failures: '+rows.filter(r=>r.status==='failed').length+' of '+rows.length);
-          NODE
+      - name: Original fixed physical faults and restored actual page
+        run: NODE_OPTIONS="--max-old-space-size=6144 --require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/checkCareerEarlyClub.mjs 2>&1 | tee early-club-artifacts/arms.log
       - name: Source and lock holds
         if: always()
         run: |
