@@ -1,0 +1,51 @@
+name: Soccer league full unit baseline
+on:
+  push:
+    branches:
+      - codex/soccer-transfer-league-full-20261105
+permissions:
+  contents: read
+jobs:
+  full-units:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    defaults:
+      run:
+        shell: bash
+    env:
+      SIM_NETWORK: offline
+      SIM_OFFLINE_RECEIPT: league-full/offline.log
+      TZ: UTC
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Install and capture source
+        run: |
+          mkdir -p league-full
+          git rev-parse HEAD > league-full/head.txt
+          git ls-files -s > league-full/source-before.txt
+          npm ci
+      - name: Full project unit command
+        run: |
+          export NODE_OPTIONS="--max-old-space-size=4096 --require=$PWD/scripts/lib/offlineTransport.cjs"
+          npm test 2>&1 | tee league-full/units.log
+      - name: Source holds
+        if: always()
+        run: |
+          git ls-files -s > league-full/source-after.txt
+          cmp league-full/source-before.txt league-full/source-after.txt
+          git diff --exit-code HEAD -- src scripts package.json package-lock.json
+          if test -f league-full/offline.log; then test ! -s league-full/offline.log; fi
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: soccer-league-full-${{ github.run_id }}
+          path: league-full
+          retention-days: 7
+          if-no-files-found: error
