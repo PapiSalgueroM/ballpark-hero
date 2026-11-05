@@ -17975,3 +17975,17 @@ Next: bounded CRQ-03. Original42124906855 has4owned public-order assertion reds 
 ## 2026-11-05 Career Quiz public suggestion order claim
 
 This chat also owns bounded CRQ-03 source gap in useCareerGame.playerNames. A delayed fetched pool can omit or re-tier the already drawn fallback target, after which the current helper appends only that hidden name. No current live mismatch is claimed. Original-first fictional-cohort tests will pin answer-independent public-tier union, current order, target/progress/RNG holds and unchanged daily behavior. Scope one hook memo/comment plus tests/docs. Do not merge fallback records into data or replace a playing target. All execution remote; local App/index held. Stack only after admitted CRQ-08. No publication/global waiver.
+
+
+## 2026-11-05 Career Quiz public suggestions qualified
+
+Unlimited autocomplete now uses a public union: current difficulty cohort first, then missing names from the same baked fallback cohort. The hidden answer cannot choose which extra name appears. The selected puzzle, progress, draws, scoring and saves stay intact; Daily options retain the current public pool. This closes a reproducible delayed-loader edge without claiming a current live roster mismatch.
+
+Product hook61e614fdc5740d7d2b8639bd8acc1ae56a78fca5. Original42124906855 has4owned public-order assertion reds and4preservation passes. Final closure42128131238 atab97a8e6cdbbf7cccd273c6a7cb68be84b9af292 passes8fixed/restored cases,7effective faults, joined review controls,15existing cases/parity and proper types/build. A traced React first-async-act setup draw is bootstrapped before the unchanged exact game-draw assertions; extra-App-draw and missing-bootstrap controls prove both boundaries.
+
+Every849fresh build file is byte-identical to E9/run42126367485's completed20readers/16unchangedcaps/browser9821checks. Initial E9 unitstep had1fixture failure and is not green credit; later closure owns its repair. Source4648row join differs only in exact test/QA repairs,521installed versions andlocks hold. Native browser15tier/width oracles have exact names/order;30fill-clear pairs hold board/counters/storage/completion. Five fresh review PNGs root+independently viewed. Ten reloads/clipboard readbacks,5score700dailywins and100foreign aborts pass; no backend-write/native-RNG credit.
+
+Clean draft stacks after PR512,511,510,508,505,506. CRQ03/CRQ08/master remainpartial. No merge/publication. The broader full suite, PR512's observed automatic practice failures and live Reach remain unwaived/unattributed here. Exact source/trace/fixture/build-join/audit receipts: docs/plans/2026-11-05-career-public-search.md. Evidence C:/Users/antho/dukb-handoff/2026-11-05/career-public-search/.
+
+Current main3b14650d verified. Other owner retains Club Manager Team-picker/KLeague. Local App/index held; this chat used only native external evidence and append-only local board writes. Next soccer work should address remaining P0 data/search cases without claiming completed cards.
+
