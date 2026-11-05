@@ -1,0 +1,54 @@
+name: Soccer club policy full regression
+on:
+  push:
+    branches: [codex/soccer-club-policy-full-20261105]
+permissions:
+  contents: read
+jobs:
+  regression:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      SIM_NETWORK: offline
+      OFFLINE_TRANSPORT_LOG: ${{ github.workspace }}/club-full-artifacts/offline.log
+      TZ: UTC
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Locked dependencies and source holds
+        run: |
+          mkdir -p club-full-artifacts
+          git rev-parse HEAD > club-full-artifacts/head.txt
+          git rev-parse 'HEAD^{tree}' > club-full-artifacts/tree.txt
+          git ls-files -s > club-full-artifacts/source-before.txt
+          sha256sum package.json package-lock.json > club-full-artifacts/locks-before.txt
+          npm ci
+      - name: Existing rivalry harness
+        run: |
+          NODE_OPTIONS="--max-old-space-size=6144 --require=$PWD/scripts/lib/offlineTransport.cjs" ONLY=simCareerRivalryEvents node scripts/runAllSims.mjs --browser 2>&1 | tee club-full-artifacts/rivalry.log
+      - name: Complete units with full repository history
+        if: ${{ !cancelled() }}
+        run: |
+          NODE_OPTIONS="--max-old-space-size=6144 --require=$PWD/scripts/lib/offlineTransport.cjs" node node_modules/vitest/vitest.mjs run --maxWorkers=1 --minWorkers=1 --reporter=default --reporter=json --outputFile=club-full-artifacts/units.json 2>&1 | tee club-full-artifacts/units.log
+      - name: Source and lock holds
+        if: always()
+        run: |
+          git ls-files -s > club-full-artifacts/source-after.txt
+          cmp club-full-artifacts/source-before.txt club-full-artifacts/source-after.txt
+          git diff --exit-code HEAD -- src scripts package.json package-lock.json
+          sha256sum package.json package-lock.json > club-full-artifacts/locks-after.txt
+          cmp club-full-artifacts/locks-before.txt club-full-artifacts/locks-after.txt
+          if test -f club-full-artifacts/offline.log; then test ! -s club-full-artifacts/offline.log; fi
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: soccer-club-policy-full-${{ github.run_id }}
+          path: club-full-artifacts
+          retention-days: 7
+          if-no-files-found: error
