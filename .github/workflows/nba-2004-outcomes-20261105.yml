@@ -1,0 +1,182 @@
+name: NBA 2004 finite candidate outcomes and controls
+on:
+  push:
+    branches: [codex/nba-2004-outcomes-warm-20261105]
+permissions:
+  contents: read
+concurrency:
+  group: nba-2004-outcomes-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  outcomes:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      CI: '1'
+      TZ: UTC
+      CANDIDATE: 4e45ee3605589aeb5a268b2e6a902fb4ff71af92
+      CANDIDATE_TREE: 5ffdee94dc4dac52922a3dc6d893abc317e578c0
+      TEST_BLOB: 1433a9b5ad1de75478793e564695dcd7d4b5d2e7
+      RUNNER_BLOB: debbc2451bc087ed5572d8bf839b1d118a116358
+      SPEC_BLOB: 169470d06d260af6deb830409a5c01aa3e1ad34c
+      INPUTS_BLOB: d3b65765d370da19223758fd733ed20a3fbbba97
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+          filter: blob:none
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Bind candidate and exactly five isolated QA additions
+        run: |
+          set -euo pipefail
+          QA_OUT="$RUNNER_TEMP/nba-2004-outcomes"
+          export QA_OUT
+          echo "QA_OUT=$QA_OUT" >> "$GITHUB_ENV"
+          mkdir -p "$QA_OUT"/{logs,transport}
+          node --input-type=module <<'NODE'
+          import assert from 'node:assert/strict';
+          for(const key of ['CANDIDATE','CANDIDATE_TREE','TEST_BLOB','RUNNER_BLOB','SPEC_BLOB','INPUTS_BLOB'])assert.match(process.env[key]??'',/^[a-f0-9]{40}$/,key+' must bind reviewed actual bytes');
+          NODE
+          test "$(git rev-parse HEAD^)" = "$CANDIDATE"
+          test "$(git rev-parse "$CANDIDATE^{tree}")" = "$CANDIDATE_TREE"
+          test "$(git hash-object src/test/nbaHistoricalDraft2004Outcomes.test.tsx)" = "$TEST_BLOB"
+          test "$(git hash-object scripts/qa/nbaHistoricalDraft2004Outcomes.mjs)" = "$RUNNER_BLOB"
+          test "$(git hash-object scripts/qa/nbaHistoricalDraft2004Outcomes.json)" = "$SPEC_BLOB"
+          test "$(git hash-object scripts/qa/nbaHistoricalDraft2004OriginalInputs.json)" = "$INPUTS_BLOB"
+          git diff --name-status "$CANDIDATE" HEAD > "$QA_OUT/qa-delta.txt"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const rows=fs.readFileSync(process.env.QA_OUT+'/qa-delta.txt','utf8').trim().split('\n').map(row=>row.split('\t'));
+          assert(rows.every(row=>row[0]==='A'),'Only five QA additions');
+          assert.deepEqual(rows.map(row=>row[1]),[".github/workflows/nba-2004-outcomes-20261105.yml","scripts/qa/nbaHistoricalDraft2004OriginalInputs.json","scripts/qa/nbaHistoricalDraft2004Outcomes.json","scripts/qa/nbaHistoricalDraft2004Outcomes.mjs","src/test/nbaHistoricalDraft2004Outcomes.test.tsx"]);
+          NODE
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import crypto from 'node:crypto';import assert from 'node:assert/strict';
+          const pins={"src/lib/nbaMyCareer.ts":"c988aaa195da6ab00aa542a28b61c5abd9c107d8","src/lib/nbaCareerPreDraft.ts":"5352d30899eae0144edda1d1a6974a3dee734f39","src/lib/nbaCareerSport.ts":"e9bc724661032a18da1e7f5086d961b9aa7132a6","src/lib/usCareerProspect.ts":"b45a725288d9bc8191cffc04183eee6fe14180ad","src/lib/usCareerSport.ts":"4223154dd2a79c54ca1b359858576ffeb7d515d7","src/lib/careerPreDraft.ts":"dcf57cd888b59c4277428f0e9946ee9793685f19","src/components/us-career/UsCareerBoard.tsx":"09794d5779453495bb92cc02af079d01ce992773","src/components/nba-my-career/NbaMyCareerBoard.tsx":"38378052f958f112561e32d9b17b38f4bc73f4de","src/pages/NbaMyCareer.tsx":"1fedb9185a96a674871283397e6275fa4f0971f9","src/lib/nbaCareerInbox.ts":"bbe80cbb56d43c6c5646fbb59154de98c7c9da8c","src/lib/nbaCareerRivalryEvents.ts":"aa38eb393a76d2e12b9f47f9163e61f69acf510b","src/lib/careerRival.ts":"0ab4d83812b2c1707d39775d9aa9655b6ea4c42a","src/lib/keyedRng.ts":"acfd3a0a410e03ac0950953aa05b82e4c46e004f","src/test/usBoardFixture.test.tsx":"3e0a34201a780f617182cef69f35575e8a84bf69","src/test/nbaOldSaveLines.test.ts":"6cba1bb9181309ec508d279714cbe5a89ea4b66d","scripts/simUsCareerWeight.mjs":"96168a55a0c2ca7b6327f4ec2230448e4551bcea","scripts/lib/usCareerFiles.mjs":"a72d8994f72f02113b4c8c6d748d01ab48338509","scripts/lib/offlineTransport.cjs":"0fda542a2649fe5da937c6976fd0f5b6073e74b6","package-lock.json":"97d6f12a052f25f400462938c241789a083f0bfe","package.json":"2ff64986fb76ebc51b706f2fd24765768874008a","tsconfig.app.json":"51f581dd91641b4c1f1219f646788e73cf6bf00c","src/data/nbaDraft2004.ts":"6ed1a8ba997953c66fcd3355a8d6defe41e4df74","src/components/nba-my-career/NbaHistoricalDraftClass.tsx":"2838b52bfe7a2e6652d7c0fc48c5bc4e26336f92","scripts/data/nbaDraft2004Sources.json":"ac711ca3e22dd5bf2320988660ff107cff98aa10"};
+          for(const[file,want]of Object.entries(pins)){const b=fs.readFileSync(file),blob=crypto.createHash('sha1').update(Buffer.from('blob '+b.length+'\0')).update(b).digest('hex');assert.equal(blob,want,file+' frozen candidate source');}
+          fs.writeFileSync(process.env.QA_OUT+'/candidate-source-pins.json',JSON.stringify(pins,null,2)+'\n');
+          NODE
+          node --check scripts/qa/nbaHistoricalDraft2004Outcomes.mjs
+          git status --porcelain=v1 --untracked-files=all > "$QA_OUT/status-before.txt"
+          test ! -s "$QA_OUT/status-before.txt"
+          git ls-files -z > "$QA_OUT/tracked-before.bin"
+          git ls-files -z | xargs -0 sha256sum > "$QA_OUT/source-before.sha256"
+          git ls-files -s > "$QA_OUT/index-before.txt"
+          cp package-lock.json "$QA_OUT/package-lock-before.json"
+          git rev-parse HEAD HEAD^ 'HEAD^{tree}' > "$QA_OUT/source-identity.txt"
+          cp .github/workflows/nba-2004-outcomes-20261105.yml "$QA_OUT/workflow.yml"
+          node --version > "$QA_OUT/logs/node-version.log"
+          npm --version > "$QA_OUT/logs/npm-version.log"
+      - name: Install exact held lock
+        run: |
+          set +e
+          set -uo pipefail
+          npm ci --no-audit --no-fund > "$QA_OUT/logs/npm-ci.log" 2>&1
+          native_exit=$?
+          printf '%s\n' "$native_exit" > "$QA_OUT/logs/npm-ci.exit" || exit "$?"
+          test "$native_exit" = 0 || exit "$native_exit"
+      - name: Proper app types before any candidate or control arm
+        run: |
+          set +e
+          set -uo pipefail
+          export GIT_NO_LAZY_FETCH=1 SIM_NETWORK=offline
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          export SIM_OFFLINE_RECEIPT="$QA_OUT/transport/types.log"
+          : > "$SIM_OFFLINE_RECEIPT"
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json > "$QA_OUT/logs/types.log" 2>&1
+          native_exit=$?
+          printf '%s\n' "$native_exit" > "$QA_OUT/logs/types.exit" || exit "$?"
+          test "$native_exit" = 0 || exit "$native_exit"
+          test ! -s "$SIM_OFFLINE_RECEIPT" || exit 1
+          node --input-type=module -e 'import fs from "node:fs";fs.writeFileSync(process.env.QA_OUT+"/types-passed.json",JSON.stringify({command:"node_modules/.bin/tsc --noEmit -p tsconfig.app.json",exit:0})+"\n",{flag:"wx"});'
+      - name: Run eight finite serial arms through the bound controller
+        run: |
+          set +e
+          set -uo pipefail
+          export GIT_NO_LAZY_FETCH=1 SIM_NETWORK=offline
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          export SIM_OFFLINE_RECEIPT="$QA_OUT/transport/controller.log"
+          : > "$SIM_OFFLINE_RECEIPT"
+          node --unhandled-rejections=strict scripts/qa/nbaHistoricalDraft2004Outcomes.mjs --out "$QA_OUT" --spec scripts/qa/nbaHistoricalDraft2004Outcomes.json > "$QA_OUT/logs/controller.stdout.log" 2> "$QA_OUT/logs/controller.stderr.log"
+          native_exit=$?
+          printf '%s\n' "$native_exit" > "$QA_OUT/logs/controller.exit" || exit "$?"
+          cat "$QA_OUT/logs/controller.stdout.log" "$QA_OUT/logs/controller.stderr.log"
+          test "$native_exit" = 0 || exit "$native_exit"
+          test ! -s "$SIM_OFFLINE_RECEIPT" || exit 1
+      - name: Always retain complete source index lock status and receipt holds
+        if: always()
+        run: |
+          set -euo pipefail
+          export GIT_NO_LAZY_FETCH=1
+          git ls-files -z > "$QA_OUT/tracked-after.bin"
+          git ls-files -z | xargs -0 sha256sum > "$QA_OUT/source-after.sha256"
+          git ls-files -s > "$QA_OUT/index-after.txt"
+          git status --porcelain=v1 --untracked-files=all > "$QA_OUT/status-after.txt"
+          cp package-lock.json "$QA_OUT/package-lock-after.json"
+          cmp "$QA_OUT/tracked-before.bin" "$QA_OUT/tracked-after.bin"
+          cmp "$QA_OUT/source-before.sha256" "$QA_OUT/source-after.sha256"
+          cmp "$QA_OUT/index-before.txt" "$QA_OUT/index-after.txt"
+          cmp "$QA_OUT/package-lock-before.json" "$QA_OUT/package-lock-after.json"
+          test ! -s "$QA_OUT/status-before.txt"
+          test ! -s "$QA_OUT/status-after.txt"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import path from 'node:path';import assert from 'node:assert/strict';
+          const dir=process.env.QA_OUT+'/transport',rows=fs.readdirSync(dir).map(file=>({file,bytes:fs.statSync(path.join(dir,file)).size}));assert(rows.every(row=>row.bytes===0));
+          fs.writeFileSync(process.env.QA_OUT+'/transport-summary.json',JSON.stringify(rows,null,2)+'\n');
+          NODE
+          printf '0\n' > "$QA_OUT/logs/full-source-holds.exit"
+      - name: Retain bounded full evidence or explicit diagnostic fallback
+        id: evidence
+        if: always()
+        run: |
+          set +e
+          set -uo pipefail
+          full_archive="$RUNNER_TEMP/nba-2004-outcomes.tar.gz"
+          tar -czf "$full_archive" -C "$QA_OUT" .
+          pack_exit=$?
+          pack_bytes=0
+          if test -f "$full_archive"; then pack_bytes=$(stat -c %s "$full_archive"); fi
+          export PACK_EXIT="$pack_exit" PACK_BYTES="$pack_bytes"
+          printf '%s\n' "$pack_exit" > "$QA_OUT/logs/full-archive.exit" || exit "$?"
+          if test "$pack_exit" = 0 && test "$pack_bytes" -le 50000000; then
+            sha256sum "$full_archive" > "$full_archive.sha256" || exit "$?"
+            printf 'archive=%s\n' "$full_archive" >> "$GITHUB_OUTPUT" || exit "$?"
+            exit 0
+          fi
+          diagnostic_dir="$RUNNER_TEMP/nba-2004-outcomes-diagnostic"
+          export DIAGNOSTIC_DIR="$diagnostic_dir"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import path from 'node:path';import crypto from 'node:crypto';
+          const root=process.env.QA_OUT,dest=process.env.DIAGNOSTIC_DIR;fs.mkdirSync(dest,{recursive:true});
+          const retained=[],omitted=[];
+          const copy=(relative)=>{if(relative.split(path.sep).some(part=>part==='raw'||part==='references')){omitted.push(relative);return;}const src=path.join(root,relative);if(!fs.existsSync(src))return;const stat=fs.statSync(src);if(stat.isDirectory()){for(const entry of fs.readdirSync(src))copy(path.join(relative,entry));return;}const body=fs.readFileSync(src);const to=path.join(dest,relative);fs.mkdirSync(path.dirname(to),{recursive:true});fs.writeFileSync(to,body);retained.push({file:relative,bytes:body.length,sha256:crypto.createHash('sha256').update(body).digest('hex')});};
+          for(const entry of fs.readdirSync(root))copy(entry);
+          fs.writeFileSync(path.join(dest,'DIAGNOSTIC-NO-FULL-PROOF.json'),JSON.stringify({status:'DIAGNOSTIC_ONLY_NO_FULL_PROOF',fullArchiveExit:Number(process.env.PACK_EXIT),fullArchiveBytes:Number(process.env.PACK_BYTES),artifactCeilingBytes:50000000,rawJourneysAndCaseBodiesOmitted:true,qualification:false,retained,omitted,scope:'Failure diagnostics only. The full proof archive failed or exceeded the unchanged ceiling. This archive cannot admit candidate outcomes, controls or any full saved journey.'},null,2)+'\n');
+          NODE
+          diagnostic_exit=$?
+          test "$diagnostic_exit" = 0 || exit "$diagnostic_exit"
+          diagnostic_archive="$RUNNER_TEMP/nba-2004-outcomes-diagnostic.tar.gz"
+          tar -czf "$diagnostic_archive" -C "$diagnostic_dir" .
+          diagnostic_exit=$?
+          test "$diagnostic_exit" = 0 || exit "$diagnostic_exit"
+          test "$(stat -c %s "$diagnostic_archive")" -le 50000000 || exit 1
+          sha256sum "$diagnostic_archive" > "$diagnostic_archive.sha256" || exit "$?"
+          printf 'archive=%s\n' "$diagnostic_archive" >> "$GITHUB_OUTPUT" || exit "$?"
+          exit 1
+      - uses: actions/upload-artifact@v4
+        if: always() && steps.evidence.outputs.archive != ''
+        with:
+          name: nba-2004-outcomes-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            ${{ steps.evidence.outputs.archive }}
+            ${{ steps.evidence.outputs.archive }}.sha256
+          if-no-files-found: error
+          retention-days: 30
+          compression-level: 0
+

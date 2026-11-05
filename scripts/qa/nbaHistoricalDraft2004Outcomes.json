@@ -1,0 +1,1076 @@
+{
+  "schema": 1,
+  "status": "SOURCE_PREPARED_SEPARATE_MEASURED_ORIGINAL_WARM_AUTHORITY_NOT_EXECUTED",
+  "baseline": {
+    "commit": "4e45ee3605589aeb5a268b2e6a902fb4ff71af92",
+    "tree": "5ffdee94dc4dac52922a3dc6d893abc317e578c0",
+    "originalProduct": "536705b4e4be7df8a80c02ff818b04a4fe23cf3a"
+  },
+  "clock": "2026-11-05T00:00:00.000Z",
+  "importSeed": 1,
+  "quickSeeds": [
+    1,
+    2,
+    3,
+    5,
+    14
+  ],
+  "roadSeed": 61,
+  "legacySeed": 62,
+  "currentSeed": 63,
+  "otherSeed": 64,
+  "limits": {
+    "maxDistinctGlobalSeeds": 9,
+    "maxActionsPerJourney": 260,
+    "maxRawBytes": 12582912,
+    "maxArtifactBytes": 50000000,
+    "testTimeoutMs": 600000,
+    "maxArmTimeoutMs": 600000,
+    "maxTotalRawBytes": 100663296,
+    "maxDecodedRawBytes": 46137344
+  },
+  "tapeBoundary": {
+    "captured": "Actual calls to global Math.random from before NBA module imports and during each real UI/public-phase journey, plus exact camp call slices",
+    "notCaptured": "Private keyed generator values used inside rival/rivalry/inbox/money/other helpers; no all-keyed-fork claim",
+    "noRngOverrideInProduction": true,
+    "qaInput": "Preregistered seeded global Math.random in isolated Vitest/jsdom only; no native/browser credit",
+    "observer": "Temporary descriptor camp passthrough records full input/output and actual global-tape slice. Qualified by unobserved same-seed UI replay full save/text/global equality before any feature assertion; not a production patch.",
+    "initialization": "Actual cold create-screen bootstrap and all observed global draws/origin stacks retained separately before each journey resets its declared seed; no normalization or discarded expected measurement."
+  },
+  "expectedClass": [
+    {
+      "id": "nba-draft-2004-p01",
+      "pick": 1,
+      "name": "Dwight Howard",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "C"
+      ],
+      "dateOfBirth": "1985-12-08",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p02",
+      "pick": 2,
+      "name": "Emeka Okafor",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "C"
+      ],
+      "dateOfBirth": "1982-09-28",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p03",
+      "pick": 3,
+      "name": "Ben Gordon",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "G"
+      ],
+      "dateOfBirth": "1983-04-04",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p04",
+      "pick": 4,
+      "name": "Shaun Livingston",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "G"
+      ],
+      "dateOfBirth": "1985-09-11",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p05",
+      "pick": 5,
+      "name": "Devin Harris",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "G"
+      ],
+      "dateOfBirth": "1983-02-27",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p06",
+      "pick": 6,
+      "name": "Josh Childress",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "F"
+      ],
+      "dateOfBirth": "1983-06-20",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p07",
+      "pick": 7,
+      "name": "Luol Deng",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "F"
+      ],
+      "dateOfBirth": "1985-04-16",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p08",
+      "pick": 8,
+      "name": "Rafael Araujo",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "C"
+      ],
+      "dateOfBirth": "1980-08-12",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p09",
+      "pick": 9,
+      "name": "Andre Iguodala",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "F"
+      ],
+      "dateOfBirth": "1984-01-28",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p10",
+      "pick": 10,
+      "name": "Luke Jackson",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "F"
+      ],
+      "dateOfBirth": "1981-11-06",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p11",
+      "pick": 11,
+      "name": "Andris Biedrins",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "C"
+      ],
+      "dateOfBirth": "1986-04-02",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p12",
+      "pick": 12,
+      "name": "Robert Swift",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "C"
+      ],
+      "dateOfBirth": "1985-12-03",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p13",
+      "pick": 13,
+      "name": "Sebastian Telfair",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "G"
+      ],
+      "dateOfBirth": "1985-06-09",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p14",
+      "pick": 14,
+      "name": "Kris Humphries",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "F"
+      ],
+      "dateOfBirth": "1985-02-06",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p15",
+      "pick": 15,
+      "name": "Al Jefferson",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "C"
+      ],
+      "dateOfBirth": "1985-01-04",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p16",
+      "pick": 16,
+      "name": "Kirk Snyder",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "G",
+        "F"
+      ],
+      "dateOfBirth": "1983-06-05",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p17",
+      "pick": 17,
+      "name": "Josh Smith",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "F"
+      ],
+      "dateOfBirth": "1985-12-05",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p18",
+      "pick": 18,
+      "name": "J.R. Smith",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "G"
+      ],
+      "dateOfBirth": "1985-09-09",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p19",
+      "pick": 19,
+      "name": "Dorell Wright",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "F"
+      ],
+      "dateOfBirth": "1985-12-02",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p20",
+      "pick": 20,
+      "name": "Jameer Nelson",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "G"
+      ],
+      "dateOfBirth": "1982-02-09",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p21",
+      "pick": 21,
+      "name": "Pavel Podkolzin",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "C"
+      ],
+      "dateOfBirth": "1985-01-15",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p22",
+      "pick": 22,
+      "name": "Viktor Khryapa",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "F"
+      ],
+      "dateOfBirth": "1982-08-03",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p23",
+      "pick": 23,
+      "name": "Sergei Monia",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "F"
+      ],
+      "dateOfBirth": "1983-04-15",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p24",
+      "pick": 24,
+      "name": "Delonte West",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "G"
+      ],
+      "dateOfBirth": "1983-07-26",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p25",
+      "pick": 25,
+      "name": "Tony Allen",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "G"
+      ],
+      "dateOfBirth": "1982-01-11",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p26",
+      "pick": 26,
+      "name": "Kevin Martin",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "G"
+      ],
+      "dateOfBirth": "1983-02-01",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p27",
+      "pick": 27,
+      "name": "Sasha Vujacic",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "G"
+      ],
+      "dateOfBirth": "1984-03-08",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p28",
+      "pick": 28,
+      "name": "Beno Udrih",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "G"
+      ],
+      "dateOfBirth": "1982-07-05",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p29",
+      "pick": 29,
+      "name": "David Harrison",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "C"
+      ],
+      "dateOfBirth": "1982-08-15",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p30",
+      "pick": 30,
+      "name": "Anderson Varejao",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "F"
+      ],
+      "dateOfBirth": "1982-09-28",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p31",
+      "pick": 31,
+      "name": "Jackson Vroman",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "F",
+        "C"
+      ],
+      "dateOfBirth": "1981-06-06",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p32",
+      "pick": 32,
+      "name": "Peter John Ramos",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "C"
+      ],
+      "dateOfBirth": "1985-05-23",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p33",
+      "pick": 33,
+      "name": "Lionel Chalmers",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "G"
+      ],
+      "dateOfBirth": "1980-11-10",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p34",
+      "pick": 34,
+      "name": "Donta Smith",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "G"
+      ],
+      "dateOfBirth": "1983-11-27",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p35",
+      "pick": 35,
+      "name": "Andre Emmett",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "G"
+      ],
+      "dateOfBirth": "1982-08-27",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p36",
+      "pick": 36,
+      "name": "Antonio Burks",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "G"
+      ],
+      "dateOfBirth": "1980-02-25",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p37",
+      "pick": 37,
+      "name": "Royal Ivey",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "G"
+      ],
+      "dateOfBirth": "1981-12-20",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p38",
+      "pick": 38,
+      "name": "Chris Duhon",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "G"
+      ],
+      "dateOfBirth": "1982-08-31",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p39",
+      "pick": 39,
+      "name": "Albert Miralles",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "F"
+      ],
+      "dateOfBirth": "1982-05-14",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p40",
+      "pick": 40,
+      "name": "Justin Reed",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "F"
+      ],
+      "dateOfBirth": "1982-01-16",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p41",
+      "pick": 41,
+      "name": "David Young",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "G"
+      ],
+      "dateOfBirth": "1981-08-18",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p42",
+      "pick": 42,
+      "name": "Viktor Sanikidze",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "F"
+      ],
+      "dateOfBirth": "1986-04-01",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p43",
+      "pick": 43,
+      "name": "Trevor Ariza",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "F"
+      ],
+      "dateOfBirth": "1985-06-30",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p44",
+      "pick": 44,
+      "name": "Tim Pickett",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "G"
+      ],
+      "dateOfBirth": "1981-04-18",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p45",
+      "pick": 45,
+      "name": "Bernard Robinson",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "G",
+        "F"
+      ],
+      "dateOfBirth": "1980-12-26",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p46",
+      "pick": 46,
+      "name": "Ha Seung-Jin",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "C"
+      ],
+      "dateOfBirth": "1985-08-04",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p47",
+      "pick": 47,
+      "name": "Pape Sow",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "F"
+      ],
+      "dateOfBirth": "1981-11-22",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p48",
+      "pick": 48,
+      "name": "Ricky Minard",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "G"
+      ],
+      "dateOfBirth": "1982-09-11",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p49",
+      "pick": 49,
+      "name": "Sergei Lishouk",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "F",
+        "C"
+      ],
+      "dateOfBirth": "1982-03-31",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p50",
+      "pick": 50,
+      "name": "Vassilis Spanoulis",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "G"
+      ],
+      "dateOfBirth": "1982-08-07",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p51",
+      "pick": 51,
+      "name": "Christian Drejer",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "F"
+      ],
+      "dateOfBirth": "1982-12-08",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p52",
+      "pick": 52,
+      "name": "Romain Sato",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "G"
+      ],
+      "dateOfBirth": "1981-03-02",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p53",
+      "pick": 53,
+      "name": "Matt Freije",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "F"
+      ],
+      "dateOfBirth": "1981-10-02",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p54",
+      "pick": 54,
+      "name": "Rickey Paulding",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "F"
+      ],
+      "dateOfBirth": "1982-10-23",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p55",
+      "pick": 55,
+      "name": "Luis Flores",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "G"
+      ],
+      "dateOfBirth": "1981-04-11",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p56",
+      "pick": 56,
+      "name": "Marcus Douthit",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "F",
+        "C"
+      ],
+      "dateOfBirth": "1980-04-15",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p57",
+      "pick": 57,
+      "name": "Sergei Karaulov",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "C"
+      ],
+      "dateOfBirth": null,
+      "dobStatus": "held-source-conflict"
+    },
+    {
+      "id": "nba-draft-2004-p58",
+      "pick": 58,
+      "name": "Blake Stepp",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "G"
+      ],
+      "dateOfBirth": "1982-02-04",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p59",
+      "pick": 59,
+      "name": "Rashad Wright",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "G"
+      ],
+      "dateOfBirth": "1982-03-17",
+      "dobStatus": "verified"
+    }
+  ],
+  "cases": [
+    {
+      "name": "NBA 2004 historical draft outcomes new 2003 UI career exposes all 59 real selections after the 2003 season",
+      "raw": "case-1-arrival.json",
+      "marker": "NBA_2004_CLASS_ARRIVAL"
+    },
+    {
+      "name": "NBA 2004 historical draft outcomes new Road to the Draft opts in before pending reload and reaches the real 2003 career",
+      "raw": "case-2-road.json",
+      "marker": "NBA_2004_NEW_PROSPECT_POLICY"
+    },
+    {
+      "name": "NBA 2004 historical draft outcomes the actual 2004 camp has a persistent real-identity participant and unchanged healthy role effects",
+      "raw": "case-3-camp.json",
+      "marker": "NBA_2004_CAMP_PARTICIPANT"
+    },
+    {
+      "name": "NBA 2004 historical draft outcomes all factual identities survive actual reload and later real free-agency signing",
+      "raw": "case-4-persistence.json",
+      "marker": "NBA_2004_PERSISTED_IDENTITIES"
+    },
+    {
+      "name": "NBA 2004 historical draft outcomes unmarked original career replay current era and other sport creations remain healthy and cohort absent",
+      "raw": "case-5-legacy.json",
+      "marker": "NBA_2004_LEGACY_EXACT"
+    }
+  ],
+  "testPath": "src/test/nbaHistoricalDraft2004Outcomes.test.tsx",
+  "specPath": "scripts/qa/nbaHistoricalDraft2004Outcomes.json",
+  "bootstrap": {
+    "kind": "ACTUAL_REAL_CREATE_SCREEN_BEFORE_PER_JOURNEY_SEED_BOUNDARY",
+    "flushes": 12,
+    "captureAllGlobalOriginStacks": true,
+    "noCareerCreation": true,
+    "noSkippedDraws": true,
+    "previousAttempt": "42002277316 failed strict observer-input equality; cold quick1 MOUNT1draw vs warm normal1 MOUNT0draw"
+  },
+  "productPins": {
+    "src/lib/nbaMyCareer.ts": "c988aaa195da6ab00aa542a28b61c5abd9c107d8",
+    "src/lib/nbaCareerPreDraft.ts": "5352d30899eae0144edda1d1a6974a3dee734f39",
+    "src/lib/nbaCareerSport.ts": "e9bc724661032a18da1e7f5086d961b9aa7132a6",
+    "src/lib/usCareerProspect.ts": "b45a725288d9bc8191cffc04183eee6fe14180ad",
+    "src/lib/usCareerSport.ts": "4223154dd2a79c54ca1b359858576ffeb7d515d7",
+    "src/lib/careerPreDraft.ts": "dcf57cd888b59c4277428f0e9946ee9793685f19",
+    "src/components/us-career/UsCareerBoard.tsx": "09794d5779453495bb92cc02af079d01ce992773",
+    "src/components/nba-my-career/NbaMyCareerBoard.tsx": "38378052f958f112561e32d9b17b38f4bc73f4de",
+    "src/pages/NbaMyCareer.tsx": "1fedb9185a96a674871283397e6275fa4f0971f9",
+    "src/lib/nbaCareerInbox.ts": "bbe80cbb56d43c6c5646fbb59154de98c7c9da8c",
+    "src/lib/nbaCareerRivalryEvents.ts": "aa38eb393a76d2e12b9f47f9163e61f69acf510b",
+    "src/lib/careerRival.ts": "0ab4d83812b2c1707d39775d9aa9655b6ea4c42a",
+    "src/lib/keyedRng.ts": "acfd3a0a410e03ac0950953aa05b82e4c46e004f",
+    "src/test/usBoardFixture.test.tsx": "3e0a34201a780f617182cef69f35575e8a84bf69",
+    "src/test/nbaOldSaveLines.test.ts": "6cba1bb9181309ec508d279714cbe5a89ea4b66d",
+    "scripts/simUsCareerWeight.mjs": "96168a55a0c2ca7b6327f4ec2230448e4551bcea",
+    "scripts/lib/usCareerFiles.mjs": "a72d8994f72f02113b4c8c6d748d01ab48338509",
+    "src/test/setup.ts": "df00cdf5c54e8c8efc71e46d7585ae76acb4fc8d",
+    "vitest.config.ts": "ed2a9dc677f77dfe95c061064eeff5782b856864",
+    "package.json": "2ff64986fb76ebc51b706f2fd24765768874008a",
+    "package-lock.json": "97d6f12a052f25f400462938c241789a083f0bfe",
+    "scripts/lib/offlineTransport.cjs": "0fda542a2649fe5da937c6976fd0f5b6073e74b6",
+    "tsconfig.app.json": "51f581dd91641b4c1f1219f646788e73cf6bf00c",
+    "src/components/us-career/ProspectJourney.tsx": "787275954fb69a1974975c96b90323d6b411a99d",
+    "src/components/career/PreDraftSeasonCard.tsx": "30c9c5f7f58b8a34b87048c81329fab67b10084e",
+    "src/components/career/DraftShowcaseCard.tsx": "39b1caec5e3ed36adf4a8e0c2eab30e33b354c43",
+    "src/components/career/DraftNightSequence.tsx": "1074ddd0c63ffe1e13ab39ae946b75206704829b",
+    "src/lib/careerHub.ts": "76f7d71fe72f4743664dbb1a5e0ab25f3c3cee11",
+    "src/components/nfl-my-career/NflMyCareerBoard.tsx": "cc5617b36efc9dd02fd4eddbb5bbb1088fcb6005",
+    "src/components/mlb-my-career/MlbMyCareerBoard.tsx": "ffe04f862c89288af75d6d3a8abe44527743d64f",
+    "src/components/nhl-my-career/NhlMyCareerBoard.tsx": "8524da77014603c72b55c86cbdc3ce3ae942a6af",
+    "src/components/hub/HubTiles.tsx": "9f86af330339de9de032eb8f8009a8c5d7e133ba",
+    "src/components/us-career/FreeAgencyPanel.tsx": "1d32d94e38245f2b919a7762f90076991b562a9f",
+    "src/data/nbaDraft2004.ts": "6ed1a8ba997953c66fcd3355a8d6defe41e4df74",
+    "src/components/nba-my-career/NbaHistoricalDraftClass.tsx": "2838b52bfe7a2e6652d7c0fc48c5bc4e26336f92",
+    "scripts/data/nbaDraft2004Sources.json": "ac711ca3e22dd5bf2320988660ff107cff98aa10"
+  },
+  "originalInputsFile": "scripts/qa/nbaHistoricalDraft2004OriginalInputs.json",
+  "originalInputsSha256": "d2b88af6de5815069c65020c7fdce5e319101cb3e878494e516bd156c94a1323",
+  "testBlob": "1433a9b5ad1de75478793e564695dcd7d4b5d2e7",
+  "runnerPath": "scripts/qa/nbaHistoricalDraft2004Outcomes.mjs",
+  "arms": [
+    {
+      "name": "fixed",
+      "failed": [],
+      "markers": {}
+    },
+    {
+      "name": "reversal",
+      "mutation": {
+        "file": "src/lib/nbaCareerSport.ts",
+        "old": "  historicalDraft: {\n    label: '2004 draft class',\n    policyForEra: eraId => eraId === 'y2004' ? 'nba-draft-2004-v1' : undefined,\n    enableNewCareer: enableNbaDraft2004,\n    available: hasNbaDraft2004,\n    Panel: NbaHistoricalDraftPanel,\n  },",
+        "new": "  historicalDraft: undefined,",
+        "beforeBlob": "e9bc724661032a18da1e7f5086d961b9aa7132a6",
+        "afterBlob": "809b544692b0102d4eb99d79a9d61e3ae7c87377"
+      },
+      "failed": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "markers": {
+        "0": [
+          "NBA_2004_CLASS_ARRIVAL"
+        ],
+        "1": [
+          "NBA_2004_NEW_PROSPECT_POLICY"
+        ],
+        "2": [
+          "NBA_2004_CAMP_PARTICIPANT"
+        ],
+        "3": [
+          "NBA_2004_PERSISTED_IDENTITIES"
+        ]
+      }
+    },
+    {
+      "name": "missing59",
+      "mutation": {
+        "file": "src/data/nbaDraft2004.ts",
+        "old": "  {\"id\":\"nba-draft-2004-p59\",\"pick\":59,\"name\":\"Rashad Wright\",\"families\":[\"G\"],\"dob\":\"1982-03-17\"},\n",
+        "new": "",
+        "beforeBlob": "6ed1a8ba997953c66fcd3355a8d6defe41e4df74",
+        "afterBlob": "5b433a41938c517c67b27b9f9591fbb60655cf08"
+      },
+      "failed": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "markers": {
+        "0": [
+          "NBA_2004_CLASS_FACTS"
+        ],
+        "1": [
+          "NBA_2004_NEW_PROSPECT_POLICY"
+        ],
+        "2": [
+          "NBA_2004_CAMP_PARTICIPANT"
+        ],
+        "3": [
+          "NBA_2004_PERSISTED_IDENTITIES"
+        ]
+      }
+    },
+    {
+      "name": "shift2004",
+      "mutation": {
+        "file": "src/lib/nbaMyCareer.ts",
+        "old": "  if (!b || c.year !== 2004 || b.ids.length) return null;",
+        "new": "  if (!b || c.year !== 2005 || b.ids.length) return null;",
+        "beforeBlob": "c988aaa195da6ab00aa542a28b61c5abd9c107d8",
+        "afterBlob": "e16a9440188f5fb105c4d3c1558f4caf8ad9dbe0"
+      },
+      "failed": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "markers": {
+        "0": [
+          "NBA_2004_CLASS_ARRIVAL"
+        ],
+        "1": [
+          "NBA_2004_NEW_PROSPECT_POLICY"
+        ],
+        "2": [
+          "NBA_2004_CAMP_PARTICIPANT"
+        ],
+        "3": [
+          "NBA_2004_PERSISTED_IDENTITIES"
+        ]
+      }
+    },
+    {
+      "name": "camp-name",
+      "mutation": {
+        "file": "src/lib/nbaMyCareer.ts",
+        "old": "  return 'Simulated camp matchup: ' + player.name + '. ' + (note ?? 'You keep your starting spot.');",
+        "new": "  return 'Simulated camp matchup: Generated competitor. ' + (note ?? 'You keep your starting spot.');",
+        "beforeBlob": "c988aaa195da6ab00aa542a28b61c5abd9c107d8",
+        "afterBlob": "eebe6a8940763b3ae656ccdbe3d1ca57e2f2913a"
+      },
+      "failed": [
+        2
+      ],
+      "markers": {
+        "2": [
+          "NBA_2004_CAMP_PARTICIPANT"
+        ]
+      }
+    },
+    {
+      "name": "hide-entry",
+      "mutation": {
+        "file": "src/components/us-career/UsCareerBoard.tsx",
+        "old": "{sport.historicalDraft?.available(career) && <button ref={draftClassOpener}",
+        "new": "{sport.historicalDraft?.available(career) && Boolean(0) && <button ref={draftClassOpener}",
+        "beforeBlob": "09794d5779453495bb92cc02af079d01ce992773",
+        "afterBlob": "b834e72ee8397bf1d2089232fc590e3a52209d1c"
+      },
+      "failed": [
+        0,
+        2,
+        3
+      ],
+      "markers": {
+        "0": [
+          "NBA_2004_CLASS_ARRIVAL"
+        ],
+        "2": [
+          "NBA_2004_CAMP_PARTICIPANT"
+        ],
+        "3": [
+          "NBA_2004_PERSISTED_IDENTITIES"
+        ]
+      }
+    },
+    {
+      "name": "drop-registry",
+      "mutation": {
+        "file": "src/lib/nbaMyCareer.ts",
+        "old": "  b.ids = NBA_DRAFT_2004.map(p => p.id);",
+        "new": "  b.ids = [];",
+        "beforeBlob": "c988aaa195da6ab00aa542a28b61c5abd9c107d8",
+        "afterBlob": "5e88dea893937ea250f1c7b9a6d2d8328e9c0e5b"
+      },
+      "failed": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "markers": {
+        "0": [
+          "NBA_2004_CLASS_ARRIVAL"
+        ],
+        "1": [
+          "NBA_2004_NEW_PROSPECT_POLICY"
+        ],
+        "2": [
+          "NBA_2004_CAMP_PARTICIPANT"
+        ],
+        "3": [
+          "NBA_2004_PERSISTED_IDENTITIES"
+        ]
+      }
+    },
+    {
+      "name": "restored",
+      "failed": [],
+      "markers": {}
+    }
+  ],
+  "boundary": "Eight serial source-bound arms only. Fixed/restored must pass5, exact two optional fields removed only in saved-gameplay comparison. Actual admitted old input bytes/checkpoints are never synthesized. Every arm directly compares all seven complete original journey saved-gameplay/global-tape projections, even after an early feature assertion. Complete global Math.random tapes only; private keyed values excluded. No build/native/public/all-history credit. Separate measured original457 warm pending authority replaces only the mismatched cold expected pending suffix; no text/state/tape fields or actors are dropped. Initial8 fixture remains byte-immutable.",
+  "originalAuthority": {
+    "run": "42007780812",
+    "job": "127178802477",
+    "head": "c82f35e8d7f297f1291af7fd55c2239c85b77440",
+    "product": "536705b4e4be7df8a80c02ff818b04a4fe23cf3a",
+    "artifact": "13405981615",
+    "zipSHA256": "f23a76385563ab2d9eb3d724aba598559222ff0e982816abb366e66f46ec1984",
+    "tarSHA256": "5623c04c64c4c1a2671d17ff5cd5c9f8d9e8ed82833c683fa99999eb174171fa",
+    "independentAdmissionSHA256": "635b9656fb1e969d302f942027828424dc33d6fea47c44267a9b26d3f3f46056"
+  },
+  "transport": {
+    "encoding": "gzip-full-literal-json",
+    "storedSuffix": ".gz",
+    "manifest": "raw/closing.json",
+    "literalIdentity": "Full original JSON.stringify UTF-8 bytes, no packed/delta frames, no omitted/reduced duplicates. Stored/decoded sizes and SHA256 retained; round-trip exact at writer and reader.",
+    "resourceBudget": "Existing maxRawBytes12MiB per-arm and maxTotalRawBytes96MiB apply to stored gzip bodies. Decoded safety bound44MiB is inherited unchanged from the admitted original full-evidence spec. Final archive ceiling50,000,000 bytes remains unchanged.",
+    "predecessorFailure": {
+      "artifact": "13410736807",
+      "zipSHA256": "7d9a21416742b7c13490867f6809a956338952ff87545a92eb166653182f0681",
+      "status": "FAILED_CAPTURE_BEFORE_ALL_FIVE_BUSINESS_CASES",
+      "beforeCase3Bytes": 9951074,
+      "case3Bytes": 3743863,
+      "attemptedDecodedBytes": 13694937
+    }
+  },
+  "originalWarmPending": {
+    "status": "ADMITTED_ORIGINAL_WARM_PENDING_TRACE",
+    "authority": {
+      "run": "42026473502",
+      "job": "127241826947",
+      "qa": "7dd497303b1f95c71a124a6c279b4548e877e101",
+      "qaTree": "098db0a8afd0b45f7c0bac306267a28cf7b9d9ee",
+      "product": "4571ba4ea9545dab5ef70769204034e5163d48d7",
+      "productTree": "b38910df255daf979e74ccce34e252befccde8b3",
+      "artifact": "13413523617",
+      "zipBytes": 2130335,
+      "zipSHA256": "7b464e58d10e7c627742f60493d294e4cbf554ea3c9de0c71fe516f3310032f9",
+      "tarBytes": 2129824,
+      "tarSHA256": "8bcf17f8a92977828835aba9342b85d1d1fd4ccda85dcaf545dd127bc165cc01",
+      "independentAdmissionSHA256": "4fb30c030c3e2879c4f98688f90eba63c85d8a095131c20de937b8f007eebb24"
+    },
+    "sourceFile": "raw/journeys/legacy-pending-61-PG.json.gz",
+    "bytes": 242748,
+    "sha256": "b6588e02a692e326396ef9f501fd87919d184b2ad3e02f88371a36a0cd654c21",
+    "gzipBytes": 21719,
+    "gzipSHA256": "7c6a2eeb824c5e5577bad6078fdd4eb645737f8e651ac9a34c4e2904dfe2ad63",
+    "gzipBase64": "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",
+    "suffixProjection": {
+      "frames": 15,
+      "globalDraws": 34,
+      "bytes": 64661,
+      "sha256": "8792c1fd1ac5981fc279e10b1a878b38ac06c3c35bd236d29000cca3fc0fd077"
+    },
+    "initial8ReferenceSHA256": "d2b88af6de5815069c65020c7fdce5e319101cb3e878494e516bd156c94a1323",
+    "scope": "Lossless whole original-source warm pending journey. Existing actor order, no added warm actor or App patch. No text normalization. Initial8 refs remain immutable. No candidate feature proof."
+  },
+  "referenceCorrection": {
+    "status": "ADMITTED_ORIGINAL_SOURCE_CAUSAL_INPUT_MATCH",
+    "run": "42026473502",
+    "job": "127241826947",
+    "qa": "7dd497303b1f95c71a124a6c279b4548e877e101",
+    "receiptSHA256": "4fb30c030c3e2879c4f98688f90eba63c85d8a095131c20de937b8f007eebb24",
+    "finding": "The first cold original Road used the compact fallback; the later original-source pending replay used resolved cinema. Their full saved state/actions/checkpoints/global tape are identical. The entire original warm pending literal is separately preserved, with no loss of text. Initial8 original authority remains exact.",
+    "priorCandidateAttempt": "42021258880 fixed4pass/1stale-cold-reference failure remains not fully qualified."
+  }
+}
