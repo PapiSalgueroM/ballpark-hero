@@ -1,0 +1,886 @@
+{
+  "schema": 1,
+  "status": "ORIGINAL_MEASUREMENT_INPUTS_AND_FEATURE_ABSENCE_NOT_IMPLEMENTATION",
+  "baseline": {
+    "commit": "536705b4e4be7df8a80c02ff818b04a4fe23cf3a",
+    "tree": "8106a333f4e95ecb7f9197c98e4708ec232080b6",
+    "publishedQualifiedByRoot": true
+  },
+  "clock": "2026-11-05T00:00:00.000Z",
+  "importSeed": 1,
+  "quickSeeds": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30,
+    31,
+    32,
+    33,
+    34,
+    35,
+    36,
+    37,
+    38,
+    39,
+    40,
+    41,
+    42,
+    43,
+    44,
+    45,
+    46,
+    47,
+    48,
+    49,
+    50,
+    51,
+    52,
+    53,
+    54,
+    55,
+    56,
+    57,
+    58,
+    59,
+    60
+  ],
+  "roadSeed": 61,
+  "legacySeed": 62,
+  "currentSeed": 63,
+  "otherSeed": 64,
+  "limits": {
+    "maxDistinctGlobalSeeds": 64,
+    "maxActionsPerJourney": 260,
+    "maxRawBytes": 46137344,
+    "maxArtifactBytes": 52428800,
+    "testTimeoutMs": 600000
+  },
+  "tapeBoundary": {
+    "captured": "Actual calls to global Math.random from before NBA module imports and during each real UI/public-phase journey, plus exact camp call slices",
+    "notCaptured": "Private keyed generator values used inside rival/rivalry/inbox/money/other helpers; no all-keyed-fork claim",
+    "noRngOverrideInProduction": true,
+    "qaInput": "Preregistered seeded global Math.random in isolated Vitest/jsdom only; no native/browser credit",
+    "observer": "Temporary descriptor camp passthrough records full input/output and actual global-tape slice. Qualified by unobserved same-seed UI replay full save/text/global equality before any feature assertion; not a production patch."
+  },
+  "sourcePins": {
+    "src/lib/nbaMyCareer.ts": "6d5008844ccd113573270baae2771b527ea79dbb",
+    "src/lib/nbaCareerPreDraft.ts": "5352d30899eae0144edda1d1a6974a3dee734f39",
+    "src/lib/nbaCareerSport.ts": "02463de649d59034424531e6ab785fc4ad40d3b4",
+    "src/lib/usCareerProspect.ts": "7f6bdf7c0fe6cee0501a6368347cddbe4a348975",
+    "src/lib/usCareerSport.ts": "e2353a3f7466e3ffb61fba781d9e430ad38fe051",
+    "src/lib/careerPreDraft.ts": "dcf57cd888b59c4277428f0e9946ee9793685f19",
+    "src/components/us-career/UsCareerBoard.tsx": "ed647f81e2ec2378609bf7e22a92c4ed130420db",
+    "src/components/nba-my-career/NbaMyCareerBoard.tsx": "38378052f958f112561e32d9b17b38f4bc73f4de",
+    "src/pages/NbaMyCareer.tsx": "3796ec746c46bbaafab4e69441f2d3734d5c801e",
+    "src/lib/nbaCareerInbox.ts": "bbe80cbb56d43c6c5646fbb59154de98c7c9da8c",
+    "src/lib/nbaCareerRivalryEvents.ts": "aa38eb393a76d2e12b9f47f9163e61f69acf510b",
+    "src/lib/careerRival.ts": "0ab4d83812b2c1707d39775d9aa9655b6ea4c42a",
+    "src/lib/keyedRng.ts": "acfd3a0a410e03ac0950953aa05b82e4c46e004f",
+    "src/test/usBoardFixture.test.tsx": "d1c3642e245ffd7465faf3413df3df316d892421",
+    "src/test/nbaOldSaveLines.test.ts": "6cba1bb9181309ec508d279714cbe5a89ea4b66d",
+    "scripts/simUsCareerWeight.mjs": "96168a55a0c2ca7b6327f4ec2230448e4551bcea",
+    "scripts/lib/usCareerFiles.mjs": "a72d8994f72f02113b4c8c6d748d01ab48338509",
+    "src/test/setup.ts": "df00cdf5c54e8c8efc71e46d7585ae76acb4fc8d",
+    "vitest.config.ts": "ed2a9dc677f77dfe95c061064eeff5782b856864",
+    "package.json": "2ff64986fb76ebc51b706f2fd24765768874008a",
+    "package-lock.json": "97d6f12a052f25f400462938c241789a083f0bfe",
+    "scripts/lib/offlineTransport.cjs": "0fda542a2649fe5da937c6976fd0f5b6073e74b6",
+    "tsconfig.app.json": "51f581dd91641b4c1f1219f646788e73cf6bf00c",
+    "src/components/us-career/ProspectJourney.tsx": "787275954fb69a1974975c96b90323d6b411a99d",
+    "src/components/career/PreDraftSeasonCard.tsx": "30c9c5f7f58b8a34b87048c81329fab67b10084e",
+    "src/components/career/DraftShowcaseCard.tsx": "39b1caec5e3ed36adf4a8e0c2eab30e33b354c43",
+    "src/components/career/DraftNightSequence.tsx": "1074ddd0c63ffe1e13ab39ae946b75206704829b",
+    "src/lib/careerHub.ts": "76f7d71fe72f4743664dbb1a5e0ab25f3c3cee11",
+    "src/components/nfl-my-career/NflMyCareerBoard.tsx": "cc5617b36efc9dd02fd4eddbb5bbb1088fcb6005",
+    "src/components/mlb-my-career/MlbMyCareerBoard.tsx": "ffe04f862c89288af75d6d3a8abe44527743d64f",
+    "src/components/nhl-my-career/NhlMyCareerBoard.tsx": "8524da77014603c72b55c86cbdc3ce3ae942a6af",
+    "src/components/hub/HubTiles.tsx": "9f86af330339de9de032eb8f8009a8c5d7e133ba",
+    "src/components/us-career/FreeAgencyPanel.tsx": "1d32d94e38245f2b919a7762f90076991b562a9f"
+  },
+  "expectedClass": [
+    {
+      "id": "nba-draft-2004-p01",
+      "pick": 1,
+      "name": "Dwight Howard",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "C"
+      ],
+      "dateOfBirth": "1985-12-08",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p02",
+      "pick": 2,
+      "name": "Emeka Okafor",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "C"
+      ],
+      "dateOfBirth": "1982-09-28",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p03",
+      "pick": 3,
+      "name": "Ben Gordon",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "G"
+      ],
+      "dateOfBirth": "1983-04-04",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p04",
+      "pick": 4,
+      "name": "Shaun Livingston",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "G"
+      ],
+      "dateOfBirth": "1985-09-11",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p05",
+      "pick": 5,
+      "name": "Devin Harris",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "G"
+      ],
+      "dateOfBirth": "1983-02-27",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p06",
+      "pick": 6,
+      "name": "Josh Childress",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "F"
+      ],
+      "dateOfBirth": "1983-06-20",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p07",
+      "pick": 7,
+      "name": "Luol Deng",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "F"
+      ],
+      "dateOfBirth": "1985-04-16",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p08",
+      "pick": 8,
+      "name": "Rafael Araujo",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "C"
+      ],
+      "dateOfBirth": "1980-08-12",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p09",
+      "pick": 9,
+      "name": "Andre Iguodala",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "F"
+      ],
+      "dateOfBirth": "1984-01-28",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p10",
+      "pick": 10,
+      "name": "Luke Jackson",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "F"
+      ],
+      "dateOfBirth": "1981-11-06",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p11",
+      "pick": 11,
+      "name": "Andris Biedrins",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "C"
+      ],
+      "dateOfBirth": "1986-04-02",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p12",
+      "pick": 12,
+      "name": "Robert Swift",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "C"
+      ],
+      "dateOfBirth": "1985-12-03",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p13",
+      "pick": 13,
+      "name": "Sebastian Telfair",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "G"
+      ],
+      "dateOfBirth": "1985-06-09",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p14",
+      "pick": 14,
+      "name": "Kris Humphries",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "F"
+      ],
+      "dateOfBirth": "1985-02-06",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p15",
+      "pick": 15,
+      "name": "Al Jefferson",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "C"
+      ],
+      "dateOfBirth": "1985-01-04",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p16",
+      "pick": 16,
+      "name": "Kirk Snyder",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "G",
+        "F"
+      ],
+      "dateOfBirth": "1983-06-05",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p17",
+      "pick": 17,
+      "name": "Josh Smith",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "F"
+      ],
+      "dateOfBirth": "1985-12-05",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p18",
+      "pick": 18,
+      "name": "J.R. Smith",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "G"
+      ],
+      "dateOfBirth": "1985-09-09",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p19",
+      "pick": 19,
+      "name": "Dorell Wright",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "F"
+      ],
+      "dateOfBirth": "1985-12-02",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p20",
+      "pick": 20,
+      "name": "Jameer Nelson",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "G"
+      ],
+      "dateOfBirth": "1982-02-09",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p21",
+      "pick": 21,
+      "name": "Pavel Podkolzin",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "C"
+      ],
+      "dateOfBirth": "1985-01-15",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p22",
+      "pick": 22,
+      "name": "Viktor Khryapa",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "F"
+      ],
+      "dateOfBirth": "1982-08-03",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p23",
+      "pick": 23,
+      "name": "Sergei Monia",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "F"
+      ],
+      "dateOfBirth": "1983-04-15",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p24",
+      "pick": 24,
+      "name": "Delonte West",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "G"
+      ],
+      "dateOfBirth": "1983-07-26",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p25",
+      "pick": 25,
+      "name": "Tony Allen",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "G"
+      ],
+      "dateOfBirth": "1982-01-11",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p26",
+      "pick": 26,
+      "name": "Kevin Martin",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "G"
+      ],
+      "dateOfBirth": "1983-02-01",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p27",
+      "pick": 27,
+      "name": "Sasha Vujacic",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "G"
+      ],
+      "dateOfBirth": "1984-03-08",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p28",
+      "pick": 28,
+      "name": "Beno Udrih",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "G"
+      ],
+      "dateOfBirth": "1982-07-05",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p29",
+      "pick": 29,
+      "name": "David Harrison",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "C"
+      ],
+      "dateOfBirth": "1982-08-15",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p30",
+      "pick": 30,
+      "name": "Anderson Varejao",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "F"
+      ],
+      "dateOfBirth": "1982-09-28",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p31",
+      "pick": 31,
+      "name": "Jackson Vroman",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "F",
+        "C"
+      ],
+      "dateOfBirth": "1981-06-06",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p32",
+      "pick": 32,
+      "name": "Peter John Ramos",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "C"
+      ],
+      "dateOfBirth": "1985-05-23",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p33",
+      "pick": 33,
+      "name": "Lionel Chalmers",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "G"
+      ],
+      "dateOfBirth": "1980-11-10",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p34",
+      "pick": 34,
+      "name": "Donta Smith",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "G"
+      ],
+      "dateOfBirth": "1983-11-27",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p35",
+      "pick": 35,
+      "name": "Andre Emmett",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "G"
+      ],
+      "dateOfBirth": "1982-08-27",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p36",
+      "pick": 36,
+      "name": "Antonio Burks",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "G"
+      ],
+      "dateOfBirth": "1980-02-25",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p37",
+      "pick": 37,
+      "name": "Royal Ivey",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "G"
+      ],
+      "dateOfBirth": "1981-12-20",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p38",
+      "pick": 38,
+      "name": "Chris Duhon",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "G"
+      ],
+      "dateOfBirth": "1982-08-31",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p39",
+      "pick": 39,
+      "name": "Albert Miralles",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "F"
+      ],
+      "dateOfBirth": "1982-05-14",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p40",
+      "pick": 40,
+      "name": "Justin Reed",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "F"
+      ],
+      "dateOfBirth": "1982-01-16",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p41",
+      "pick": 41,
+      "name": "David Young",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "G"
+      ],
+      "dateOfBirth": "1981-08-18",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p42",
+      "pick": 42,
+      "name": "Viktor Sanikidze",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "F"
+      ],
+      "dateOfBirth": "1986-04-01",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p43",
+      "pick": 43,
+      "name": "Trevor Ariza",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "F"
+      ],
+      "dateOfBirth": "1985-06-30",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p44",
+      "pick": 44,
+      "name": "Tim Pickett",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "G"
+      ],
+      "dateOfBirth": "1981-04-18",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p45",
+      "pick": 45,
+      "name": "Bernard Robinson",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "G",
+        "F"
+      ],
+      "dateOfBirth": "1980-12-26",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p46",
+      "pick": 46,
+      "name": "Ha Seung-Jin",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "C"
+      ],
+      "dateOfBirth": "1985-08-04",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p47",
+      "pick": 47,
+      "name": "Pape Sow",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "F"
+      ],
+      "dateOfBirth": "1981-11-22",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p48",
+      "pick": 48,
+      "name": "Ricky Minard",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "G"
+      ],
+      "dateOfBirth": "1982-09-11",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p49",
+      "pick": 49,
+      "name": "Sergei Lishouk",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "F",
+        "C"
+      ],
+      "dateOfBirth": "1982-03-31",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p50",
+      "pick": 50,
+      "name": "Vassilis Spanoulis",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "G"
+      ],
+      "dateOfBirth": "1982-08-07",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p51",
+      "pick": 51,
+      "name": "Christian Drejer",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "F"
+      ],
+      "dateOfBirth": "1982-12-08",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p52",
+      "pick": 52,
+      "name": "Romain Sato",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "G"
+      ],
+      "dateOfBirth": "1981-03-02",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p53",
+      "pick": 53,
+      "name": "Matt Freije",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "F"
+      ],
+      "dateOfBirth": "1981-10-02",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p54",
+      "pick": 54,
+      "name": "Rickey Paulding",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "F"
+      ],
+      "dateOfBirth": "1982-10-23",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p55",
+      "pick": 55,
+      "name": "Luis Flores",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "G"
+      ],
+      "dateOfBirth": "1981-04-11",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p56",
+      "pick": 56,
+      "name": "Marcus Douthit",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "F",
+        "C"
+      ],
+      "dateOfBirth": "1980-04-15",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p57",
+      "pick": 57,
+      "name": "Sergei Karaulov",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "C"
+      ],
+      "dateOfBirth": null,
+      "dobStatus": "held-source-conflict"
+    },
+    {
+      "id": "nba-draft-2004-p58",
+      "pick": 58,
+      "name": "Blake Stepp",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "G"
+      ],
+      "dateOfBirth": "1982-02-04",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p59",
+      "pick": 59,
+      "name": "Rashad Wright",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "G"
+      ],
+      "dateOfBirth": "1982-03-17",
+      "dobStatus": "verified"
+    }
+  ],
+  "cases": [
+    {
+      "name": "NBA 2004 original UI inputs and future real draft class new 2003 UI career exposes all 59 real selections after the 2003 season",
+      "raw": "case-1-arrival.json",
+      "marker": "NBA_2004_CLASS_ARRIVAL",
+      "original": "owned"
+    },
+    {
+      "name": "NBA 2004 original UI inputs and future real draft class new Road to the Draft opts in before pending reload and reaches the real 2003 career",
+      "raw": "case-2-road.json",
+      "marker": "NBA_2004_NEW_PROSPECT_POLICY",
+      "original": "owned"
+    },
+    {
+      "name": "NBA 2004 original UI inputs and future real draft class the actual 2004 camp has a persistent real-identity participant and unchanged healthy role effects",
+      "raw": "case-3-camp.json",
+      "marker": "NBA_2004_CAMP_PARTICIPANT",
+      "original": "owned"
+    },
+    {
+      "name": "NBA 2004 original UI inputs and future real draft class all factual identities survive actual reload and later real free-agency signing",
+      "raw": "case-4-persistence.json",
+      "marker": "NBA_2004_PERSISTED_IDENTITIES",
+      "original": "owned"
+    },
+    {
+      "name": "NBA 2004 original UI inputs and future real draft class unmarked original career replay current era and other sport creations remain healthy and cohort absent",
+      "raw": "case-5-legacy.json",
+      "marker": "NBA_2004_LEGACY_EXACT",
+      "original": "held"
+    }
+  ],
+  "expectedOriginal": {
+    "tests": 5,
+    "owned": 4,
+    "held": 1,
+    "todo": 0,
+    "runtimeErrors": 0,
+    "status": "PREREGISTERED_EXPECTATION_NOT_MEASURED_RESULT"
+  },
+  "testPath": "src/test/nbaHistoricalDraft2004Original.test.tsx",
+  "readerPath": "scripts/qa/nbaHistoricalDraft2004OriginalEvidence.mjs",
+  "specPath": "scripts/qa/nbaHistoricalDraft2004OriginalCases.json",
+  "futureCandidate": "This first run captures original healthy inputs/references. Before fixed-candidate qualification freeze actual original legacy complete saves and global-state checkpoints from this artifact; do not create candidate legacy input from a newly opted-in candidate UI.",
+  "noProductionChange": true
+}
