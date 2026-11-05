@@ -1,0 +1,1319 @@
+{
+  "schema": 1,
+  "status": "SOURCE_BOUND_HEADLESS_AUTHORITY_ADMITTED_NATIVE_UNQUALIFIED",
+  "product": "4e45ee3605589aeb5a268b2e6a902fb4ff71af92",
+  "productTree": "5ffdee94dc4dac52922a3dc6d893abc317e578c0",
+  "qaPaths": [
+    "scripts/qa/nbaHistoricalDraftBrowser.mjs",
+    "scripts/qa/nbaHistoricalDraftFixtures.mjs",
+    "scripts/qa/nbaHistoricalDraftNative.json",
+    "scripts/qa/nbaHistoricalDraftAssets.mjs",
+    "scripts/qa/nativeScrollReady.mjs",
+    ".github/workflows/nba-2004-native-20261105.yml"
+  ],
+  "sourcePins": {
+    "src/components/us-career/UsCareerBoard.tsx": "09794d5779453495bb92cc02af079d01ce992773",
+    "src/lib/nbaMyCareer.ts": "c988aaa195da6ab00aa542a28b61c5abd9c107d8",
+    "src/lib/nbaCareerSport.ts": "e9bc724661032a18da1e7f5086d961b9aa7132a6",
+    "src/lib/usCareerSport.ts": "4223154dd2a79c54ca1b359858576ffeb7d515d7",
+    "src/pages/NbaMyCareer.tsx": "1fedb9185a96a674871283397e6275fa4f0971f9",
+    "src/components/nba-my-career/NbaHistoricalDraftClass.tsx": "2838b52bfe7a2e6652d7c0fc48c5bc4e26336f92",
+    "src/data/nbaDraft2004.ts": "6ed1a8ba997953c66fcd3355a8d6defe41e4df74",
+    "src/hooks/useRevealScroll.ts": "0cd106080bfb4e0461d9b86f0a973689f717d502",
+    "src/components/hub/HubTiles.tsx": "9f86af330339de9de032eb8f8009a8c5d7e133ba",
+    "src/lib/usCareerRetirementFlow.ts": "0c1410dc574f19806eb90cbeb0d94b49c8158a95",
+    "src/lib/usCareerMarket.ts": "6222b2c95228d71603a2eea1732a22678b1f1f70",
+    "src/lib/usCareerSummer.ts": "8d6b0491ddf3422f95ce7db920546f04e4c6dd66",
+    "src/lib/usCoachCareer.ts": "f8feb8ca768e2f9eeaee0f0a3a51671c69091262",
+    "src/lib/careerPreDraft.ts": "dcf57cd888b59c4277428f0e9946ee9793685f19",
+    "src/components/nba-my-career/NbaMyCareerBoard.tsx": "38378052f958f112561e32d9b17b38f4bc73f4de",
+    "src/lib/careerHub.ts": "76f7d71fe72f4743664dbb1a5e0ab25f3c3cee11",
+    "scripts/lib/playwrightLoader.mjs": "4f7739e217e0a47ee82e6bfc8be1c04bed17454a",
+    "scripts/lib/answerConsent.mjs": "c6d16997e4c06e8b35dcfd0bab5efcad3069d899",
+    "scripts/lib/hostLikeServer.mjs": "21059d5e8114669df61106c125d5272d357b6236",
+    "scripts/lib/offlineTransport.cjs": "0fda542a2649fe5da937c6976fd0f5b6073e74b6"
+  },
+  "artifacts": {
+    "build": {
+      "run": 42020567207,
+      "job": 127221988457,
+      "head": "1cc6477f2f7ee401385345810b1f283eb67d8d8e",
+      "tree": "eb9ecacab46ca2dfb9e23d83208a09a66c738783",
+      "id": 13411692407,
+      "bytes": 8232604,
+      "sha256": "55cda9b70d8548aad01382c08e382a72fffe23a376426d9d7e99c5086a2fbd72",
+      "tarBytes": 6985869,
+      "tarSHA256": "2ed6ba3810b5d443f4a8339abbf6c5dc81117ed636b70bef70f3bea22bec3da2",
+      "distInventorySHA256": "98639a900e2f0b2b31fb1c0ae952fc046fc0a1f065c647ec2db707572427bef0",
+      "distFiles": 849,
+      "tar": "completed-dist.tar.gz",
+      "admittedFiles": [
+        {
+          "path": "build-proof.json",
+          "bytes": 125677,
+          "sha256": "39bc3ec2445559ed8e18a2f53a37ee02d3535d438ac2612bc79abc0f846821f1"
+        },
+        {
+          "path": "completed-dist-members.txt",
+          "bytes": 34519,
+          "sha256": "abd49d57e93e4c5869ab1467997c695b13ba5ec339d93ad138bb500afc6a8f5c"
+        },
+        {
+          "path": "completed-dist.tar.gz",
+          "bytes": 6985869,
+          "sha256": "2ed6ba3810b5d443f4a8339abbf6c5dc81117ed636b70bef70f3bea22bec3da2"
+        },
+        {
+          "path": "completed-dist.tar.gz.sha256",
+          "bytes": 127,
+          "sha256": "82df73b39a95aacd4d29fa86e3a23e34f8b491c909c210613034637a50330b14"
+        },
+        {
+          "path": "dist-after.sha256",
+          "bytes": 86403,
+          "sha256": "98639a900e2f0b2b31fb1c0ae952fc046fc0a1f065c647ec2db707572427bef0"
+        },
+        {
+          "path": "dist-before.sha256",
+          "bytes": 86403,
+          "sha256": "98639a900e2f0b2b31fb1c0ae952fc046fc0a1f065c647ec2db707572427bef0"
+        },
+        {
+          "path": "dist-held.log",
+          "bytes": 33765,
+          "sha256": "2ee4bb4542070468b70988cc0c6c556245b8547f0c4cea21f03a15387e9924e0"
+        },
+        {
+          "path": "index-after.txt",
+          "bytes": 497337,
+          "sha256": "af64032f8f6548638fb366ca531de559c1d7e8acc62510bcaa54d2c8e9bf1d96"
+        },
+        {
+          "path": "index-before.txt",
+          "bytes": 497337,
+          "sha256": "af64032f8f6548638fb366ca531de559c1d7e8acc62510bcaa54d2c8e9bf1d96"
+        },
+        {
+          "path": "locks-after.sha256",
+          "bytes": 314,
+          "sha256": "c4d3d37c8be5418c6254ce652ab45c0f5d7e6c2c6d40d2f88443ccf1bd6e3f15"
+        },
+        {
+          "path": "locks-before.sha256",
+          "bytes": 314,
+          "sha256": "c4d3d37c8be5418c6254ce652ab45c0f5d7e6c2c6d40d2f88443ccf1bd6e3f15"
+        },
+        {
+          "path": "logs/build-versions.json",
+          "bytes": 54,
+          "sha256": "a246e08cc9c4a14bc90934ca00e4cc547667133775c939958baeade6e4c2dbf3"
+        },
+        {
+          "path": "logs/build.log",
+          "bytes": 97056,
+          "sha256": "31d55e18c4f4ede10ab430d2b315cff08e0e3774776ae7a206596fff10c5939f"
+        },
+        {
+          "path": "logs/bun-install.log",
+          "bytes": 2231,
+          "sha256": "93b9bcb424e9fd000cc80880be991c8c7ed450304596b3204c914469f8f24953"
+        },
+        {
+          "path": "logs/bun-version.log",
+          "bytes": 6,
+          "sha256": "d03d8b268b4171328ac2458ce8ca82d69a1fde38469d4e4faae4f8fa8d8a5e35"
+        },
+        {
+          "path": "logs/chromium-install.log",
+          "bytes": 16266,
+          "sha256": "3e2abe11a9ef4642a739fd976f3c20a96116475eff836af5337a4ceba1faba01"
+        },
+        {
+          "path": "logs/node-version.log",
+          "bytes": 9,
+          "sha256": "6a0cec2e157365c1a8ac6d1715733b7c3321a7c5565862a701ca71ef00359d04"
+        },
+        {
+          "path": "logs/playwright-install.log",
+          "bytes": 24,
+          "sha256": "65c731cd02e19c79f6f5a3e84a4dd64a49acd6c47d2ee551d7cc9da191e8c96c"
+        },
+        {
+          "path": "logs/python-install.log",
+          "bytes": 865,
+          "sha256": "59761e14df7b79ac8afbb05a67e7a3e6be022a51d92ac96c8651197757c9b070"
+        },
+        {
+          "path": "logs/server.log",
+          "bytes": 94,
+          "sha256": "4726949dc1c36cb030c5969a52e17e3cd2aa4ee53995c81312bb7cb0db607966"
+        },
+        {
+          "path": "logs/simAdsense.log",
+          "bytes": 1508,
+          "sha256": "dce8b98691b7db151b5b1d43e81c7651dc00158f2b7f61be0b3aa13fea8cd50b"
+        },
+        {
+          "path": "logs/simBrand.log",
+          "bytes": 1011,
+          "sha256": "7f7df14b60b95614866c4bd39e2715afe9cc2a13d34b6c33efd425853c46f500"
+        },
+        {
+          "path": "logs/simGuideHeadings.log",
+          "bytes": 6989,
+          "sha256": "8bf19ab6f8119300438dbb5964f9ddc7bfe8318a461f7d1a182d54146c55f160"
+        },
+        {
+          "path": "logs/simHarnessAnchors.log",
+          "bytes": 447,
+          "sha256": "61d938caa4fa2d1f6ad056f217e00ff8b964629cf4c188a795d493106538c801"
+        },
+        {
+          "path": "logs/simHeadTags.log",
+          "bytes": 624,
+          "sha256": "99ad22dabb92b2617b84ca2f67e9f6422b67fa6eb3cae592a83b8295ac23bad0"
+        },
+        {
+          "path": "logs/simHiddenPages.log",
+          "bytes": 483,
+          "sha256": "eb3c6a0bfa1eeae5fc5f9f170c4115653c75d9e19160de81cffb3fe3fa8644c4"
+        },
+        {
+          "path": "logs/simHomeFront.log",
+          "bytes": 2610,
+          "sha256": "ed18544b0297e552eebd7e7422c982df7ca118f05d4967be6defb7c940e5f4c6"
+        },
+        {
+          "path": "logs/simHubs.log",
+          "bytes": 1802,
+          "sha256": "cc2e49ee98dea2034ef14ce9b7c936ae2032d541706371cefbf47a7f93e79949"
+        },
+        {
+          "path": "logs/simIndexNow.log",
+          "bytes": 287,
+          "sha256": "a9d492157b79c962960e16d784f4d1f85884f6c40e5a65cc2890aef62c7c28db"
+        },
+        {
+          "path": "logs/simIndexing.log",
+          "bytes": 1080,
+          "sha256": "1eda258110842f5fd597d87a30ffe448e8b3bf4d02938fedb6521b5e01a46ad1"
+        },
+        {
+          "path": "logs/simInternalLinks.log",
+          "bytes": 457,
+          "sha256": "cdc98e23d230ffe19944d63d202773e41a0ec651ee8ca9415f91079e14edc024"
+        },
+        {
+          "path": "logs/simNoRivalNames.log",
+          "bytes": 689,
+          "sha256": "639d609c2259699a5670c95e9f102c8bc2adf7adb3796a93ccd90c474d410e3d"
+        },
+        {
+          "path": "logs/simNbaCareer.log",
+          "bytes": 1998,
+          "sha256": "76898d7a8b156cf8f061c98bf6c21feec7075f88bc337d8721d36134d842b1ff"
+        },
+        {
+          "path": "logs/simPrerender.log",
+          "bytes": 2120,
+          "sha256": "992934bb36ab7eb55853023f6d4346cf3db1321e3367215e8aeacb3c34669f19"
+        },
+        {
+          "path": "logs/simPrerenderBoot.log",
+          "bytes": 1658,
+          "sha256": "31d47e1c6fb36ec5775003d1253f4f4f52e0025bb4fda84aa5ef961b0edf960b"
+        },
+        {
+          "path": "logs/simRetiredRoutes.log",
+          "bytes": 631,
+          "sha256": "2484ba1f3901b7ef0946811ee1c89a5190e877aeb74496a5e554f7e320638ed4"
+        },
+        {
+          "path": "logs/simSaveKeeper.log",
+          "bytes": 12831,
+          "sha256": "d59f29567952bc7124c47fb304764e852253bd884dd1acdf29c9a0a45be62903"
+        },
+        {
+          "path": "logs/simSchema.log",
+          "bytes": 1093,
+          "sha256": "3abfdf45ff7b9ce8fe38369773a2e88598f05a974d02ac29e43ac7678dde3fd9"
+        },
+        {
+          "path": "logs/simSeoMetaSplit.log",
+          "bytes": 1143,
+          "sha256": "8d4c1f072a75e28e85e20d01fbdf71904ee152627221c0040ebe63226b84ef95"
+        },
+        {
+          "path": "logs/simSeoTitles.log",
+          "bytes": 1699,
+          "sha256": "c8f0fc65232add9990c291cd8a31cfe64e04688ce8ffb1ba29f5b10a8e5cca03"
+        },
+        {
+          "path": "logs/simSiteSearch.log",
+          "bytes": 1788,
+          "sha256": "dd69e79a82cb0d5df32bd57d58a5c65145c45b90cea9a4ad944a4be5d6af12b7"
+        },
+        {
+          "path": "logs/simSitemap.log",
+          "bytes": 594,
+          "sha256": "87cb4704be9f897a87210c09d57f555fa32c56b854d93c121737982c18052471"
+        },
+        {
+          "path": "logs/simSnapshotAssets.log",
+          "bytes": 766,
+          "sha256": "3c48f70cbbf11f671e573c44d030c2e88541f9608c494abbb2293e1eae8a1f8b"
+        },
+        {
+          "path": "logs/simSoccerCareerRecords.log",
+          "bytes": 11875,
+          "sha256": "1d1d31d4c9fb25c238adf13b45641cef431fca6feb5eacea5b9c887d15e2b8a2"
+        },
+        {
+          "path": "logs/sweep-weight-blocked-attempts.txt",
+          "bytes": 69,
+          "sha256": "c11e927ac49b6ea34d0e4de477ac736192314bbe5b0079893cf7ed586f443356"
+        },
+        {
+          "path": "logs/sweep-weight.log",
+          "bytes": 3359,
+          "sha256": "b85e665c156dfb2898b7e6bb99d27e5d535839b0ae1d3389a88db23bb463e3e5"
+        },
+        {
+          "path": "nba-career-harness-blob.txt",
+          "bytes": 41,
+          "sha256": "bc5dcdf2503afa2bb4f50f3c598701778c87145b41bcca516131567e863eee67"
+        },
+        {
+          "path": "logs/types.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "nba-chunk-sizes.json",
+          "bytes": 116828,
+          "sha256": "3d07c50e674b6cab700b995875b55770302beef002c5ad6fe92236bb7ec4691e"
+        },
+        {
+          "path": "records-last-control-tests.json",
+          "bytes": 5585,
+          "sha256": "83b110bd97e5ce5babd8b29e4c41ab2ffb412b1a0df709c4ec5c8fb70bd382cc"
+        },
+        {
+          "path": "records-leaf-owned-before.txt",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "records-output-retention.json",
+          "bytes": 484,
+          "sha256": "d8d643de82d1c8fb2e3688eee205ac928788d163a25573ee228e059634d539d9"
+        },
+        {
+          "path": "source-after.sha256",
+          "bytes": 589049,
+          "sha256": "7c403ac007491fbbff7ff4fc7eb3c66d2396f9783fe3edd563c289d539d3db14"
+        },
+        {
+          "path": "simNbaCareer.exit",
+          "bytes": 2,
+          "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+        },
+        {
+          "path": "source-diff.txt",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "source-before.sha256",
+          "bytes": 589049,
+          "sha256": "7c403ac007491fbbff7ff4fc7eb3c66d2396f9783fe3edd563c289d539d3db14"
+        },
+        {
+          "path": "source-output-hold.json",
+          "bytes": 145,
+          "sha256": "0412a03e1b1e6796e1cad4f911ee7d7c334e71aff1e0457789b42e1198229568"
+        },
+        {
+          "path": "status-after-records.txt",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "status-after.txt",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "source.txt",
+          "bytes": 82,
+          "sha256": "8c3d2b5d13d01c8053a462667723cdb24dd75f770ecba8a92e1e550ccab49449"
+        },
+        {
+          "path": "status-before.txt",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "tracked-after.bin",
+          "bytes": 210737,
+          "sha256": "1becd0cc6f73061f69874a386e3e0fee66951eac73815aa5968fcad50165b5c3"
+        },
+        {
+          "path": "tracked-before.bin",
+          "bytes": 210737,
+          "sha256": "1becd0cc6f73061f69874a386e3e0fee66951eac73815aa5968fcad50165b5c3"
+        },
+        {
+          "path": "transport/build.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "transport/server.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "transport/simAdsense.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "transport/simBrand.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "transport/simHarnessAnchors.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "transport/simGuideHeadings.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "transport/simHeadTags.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "transport/simHiddenPages.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "transport/simHomeFront.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "transport/simHubs.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "transport/simIndexing.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "transport/simIndexNow.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "transport/simInternalLinks.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "transport/simNbaCareer.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "transport/simNoRivalNames.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "transport/simPrerender.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "transport/simPrerenderBoot.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "transport/simRetiredRoutes.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "transport/simSaveKeeper.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "transport/simSchema.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "transport/simSeoMetaSplit.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "transport/simSeoTitles.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "transport/simSiteSearch.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "transport/simSitemap.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "transport/simSnapshotAssets.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "transport/sweep-weight.log",
+          "bytes": 1440,
+          "sha256": "c8fc016380c744569ac6ddc8111adf6d6ac9f60f3a236ef2c9cbe9f9c80cf412"
+        },
+        {
+          "path": "transport/simSoccerCareerRecords.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "transport/types.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "transport-summary.json",
+          "bytes": 3999,
+          "sha256": "bab46f49558db75f6f3b17079d951076cfca852806048eceba73cfd5ae142b4e"
+        },
+        {
+          "path": "types-passed.json",
+          "bytes": 75,
+          "sha256": "f80953007ecd091c9ff14a8b6a402bf746f91cd318c09cf7ead15f3e04941ba9"
+        },
+        {
+          "path": "workflow.yml",
+          "bytes": 17725,
+          "sha256": "4930d691f41d707ef50a1cf36e00e388246db5b7b3878c2d0d335e15a683bcae"
+        }
+      ]
+    },
+    "outcomes": {
+      "run": 42030307428,
+      "job": 127254775366,
+      "head": "5e44426d6be86c0039ea1623ebbeb68af53d2379",
+      "id": 13415993514,
+      "bytes": 18457199,
+      "sha256": "c17ba689556aea1fc4e516f403a21d80a038081b81fd39586fa8ef639c6fcbd7",
+      "tgz": "nba-2004-outcomes.tar.gz",
+      "tgzBytes": 18456768,
+      "tgzSHA256": "a25debd3a72007b3cd9417aa6666ac7740cec53b019e18c865e7d00ddd1c4d14"
+    }
+  },
+  "transport": {
+    "encoding": "gzip-full-literal-json",
+    "preserveOriginalGzip": true,
+    "preserveCompleteDecodedRaw": true
+  },
+  "originalProfessional": {
+    "source": "raw/legacy-full.json",
+    "field": "inputRaw",
+    "bytes": 1920,
+    "sha256": "23d6bf164466d0e751b5f4fc3cebdfd74d26f60afd518936623d5c32225fdadf",
+    "rngState": 503953338
+  },
+  "expectedClass": [
+    {
+      "id": "nba-draft-2004-p01",
+      "pick": 1,
+      "name": "Dwight Howard",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "C"
+      ],
+      "dateOfBirth": "1985-12-08",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p02",
+      "pick": 2,
+      "name": "Emeka Okafor",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "C"
+      ],
+      "dateOfBirth": "1982-09-28",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p03",
+      "pick": 3,
+      "name": "Ben Gordon",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "G"
+      ],
+      "dateOfBirth": "1983-04-04",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p04",
+      "pick": 4,
+      "name": "Shaun Livingston",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "G"
+      ],
+      "dateOfBirth": "1985-09-11",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p05",
+      "pick": 5,
+      "name": "Devin Harris",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "G"
+      ],
+      "dateOfBirth": "1983-02-27",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p06",
+      "pick": 6,
+      "name": "Josh Childress",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "F"
+      ],
+      "dateOfBirth": "1983-06-20",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p07",
+      "pick": 7,
+      "name": "Luol Deng",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "F"
+      ],
+      "dateOfBirth": "1985-04-16",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p08",
+      "pick": 8,
+      "name": "Rafael Araujo",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "C"
+      ],
+      "dateOfBirth": "1980-08-12",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p09",
+      "pick": 9,
+      "name": "Andre Iguodala",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "F"
+      ],
+      "dateOfBirth": "1984-01-28",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p10",
+      "pick": 10,
+      "name": "Luke Jackson",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "F"
+      ],
+      "dateOfBirth": "1981-11-06",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p11",
+      "pick": 11,
+      "name": "Andris Biedrins",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "C"
+      ],
+      "dateOfBirth": "1986-04-02",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p12",
+      "pick": 12,
+      "name": "Robert Swift",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "C"
+      ],
+      "dateOfBirth": "1985-12-03",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p13",
+      "pick": 13,
+      "name": "Sebastian Telfair",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "G"
+      ],
+      "dateOfBirth": "1985-06-09",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p14",
+      "pick": 14,
+      "name": "Kris Humphries",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "F"
+      ],
+      "dateOfBirth": "1985-02-06",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p15",
+      "pick": 15,
+      "name": "Al Jefferson",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "C"
+      ],
+      "dateOfBirth": "1985-01-04",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p16",
+      "pick": 16,
+      "name": "Kirk Snyder",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "G",
+        "F"
+      ],
+      "dateOfBirth": "1983-06-05",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p17",
+      "pick": 17,
+      "name": "Josh Smith",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "F"
+      ],
+      "dateOfBirth": "1985-12-05",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p18",
+      "pick": 18,
+      "name": "J.R. Smith",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "G"
+      ],
+      "dateOfBirth": "1985-09-09",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p19",
+      "pick": 19,
+      "name": "Dorell Wright",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "F"
+      ],
+      "dateOfBirth": "1985-12-02",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p20",
+      "pick": 20,
+      "name": "Jameer Nelson",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "G"
+      ],
+      "dateOfBirth": "1982-02-09",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p21",
+      "pick": 21,
+      "name": "Pavel Podkolzin",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "C"
+      ],
+      "dateOfBirth": "1985-01-15",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p22",
+      "pick": 22,
+      "name": "Viktor Khryapa",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "F"
+      ],
+      "dateOfBirth": "1982-08-03",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p23",
+      "pick": 23,
+      "name": "Sergei Monia",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "F"
+      ],
+      "dateOfBirth": "1983-04-15",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p24",
+      "pick": 24,
+      "name": "Delonte West",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "G"
+      ],
+      "dateOfBirth": "1983-07-26",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p25",
+      "pick": 25,
+      "name": "Tony Allen",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "G"
+      ],
+      "dateOfBirth": "1982-01-11",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p26",
+      "pick": 26,
+      "name": "Kevin Martin",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "G"
+      ],
+      "dateOfBirth": "1983-02-01",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p27",
+      "pick": 27,
+      "name": "Sasha Vujacic",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "G"
+      ],
+      "dateOfBirth": "1984-03-08",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p28",
+      "pick": 28,
+      "name": "Beno Udrih",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "G"
+      ],
+      "dateOfBirth": "1982-07-05",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p29",
+      "pick": 29,
+      "name": "David Harrison",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "C"
+      ],
+      "dateOfBirth": "1982-08-15",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p30",
+      "pick": 30,
+      "name": "Anderson Varejao",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "F"
+      ],
+      "dateOfBirth": "1982-09-28",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p31",
+      "pick": 31,
+      "name": "Jackson Vroman",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "F",
+        "C"
+      ],
+      "dateOfBirth": "1981-06-06",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p32",
+      "pick": 32,
+      "name": "Peter John Ramos",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "C"
+      ],
+      "dateOfBirth": "1985-05-23",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p33",
+      "pick": 33,
+      "name": "Lionel Chalmers",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "G"
+      ],
+      "dateOfBirth": "1980-11-10",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p34",
+      "pick": 34,
+      "name": "Donta Smith",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "G"
+      ],
+      "dateOfBirth": "1983-11-27",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p35",
+      "pick": 35,
+      "name": "Andre Emmett",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "G"
+      ],
+      "dateOfBirth": "1982-08-27",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p36",
+      "pick": 36,
+      "name": "Antonio Burks",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "G"
+      ],
+      "dateOfBirth": "1980-02-25",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p37",
+      "pick": 37,
+      "name": "Royal Ivey",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "G"
+      ],
+      "dateOfBirth": "1981-12-20",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p38",
+      "pick": 38,
+      "name": "Chris Duhon",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "G"
+      ],
+      "dateOfBirth": "1982-08-31",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p39",
+      "pick": 39,
+      "name": "Albert Miralles",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "F"
+      ],
+      "dateOfBirth": "1982-05-14",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p40",
+      "pick": 40,
+      "name": "Justin Reed",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "F"
+      ],
+      "dateOfBirth": "1982-01-16",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p41",
+      "pick": 41,
+      "name": "David Young",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "G"
+      ],
+      "dateOfBirth": "1981-08-18",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p42",
+      "pick": 42,
+      "name": "Viktor Sanikidze",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "F"
+      ],
+      "dateOfBirth": "1986-04-01",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p43",
+      "pick": 43,
+      "name": "Trevor Ariza",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "F"
+      ],
+      "dateOfBirth": "1985-06-30",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p44",
+      "pick": 44,
+      "name": "Tim Pickett",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "G"
+      ],
+      "dateOfBirth": "1981-04-18",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p45",
+      "pick": 45,
+      "name": "Bernard Robinson",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "G",
+        "F"
+      ],
+      "dateOfBirth": "1980-12-26",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p46",
+      "pick": 46,
+      "name": "Ha Seung-Jin",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "C"
+      ],
+      "dateOfBirth": "1985-08-04",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p47",
+      "pick": 47,
+      "name": "Pape Sow",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "F"
+      ],
+      "dateOfBirth": "1981-11-22",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p48",
+      "pick": 48,
+      "name": "Ricky Minard",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "G"
+      ],
+      "dateOfBirth": "1982-09-11",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p49",
+      "pick": 49,
+      "name": "Sergei Lishouk",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "F",
+        "C"
+      ],
+      "dateOfBirth": "1982-03-31",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p50",
+      "pick": 50,
+      "name": "Vassilis Spanoulis",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "G"
+      ],
+      "dateOfBirth": "1982-08-07",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p51",
+      "pick": 51,
+      "name": "Christian Drejer",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "F"
+      ],
+      "dateOfBirth": "1982-12-08",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p52",
+      "pick": 52,
+      "name": "Romain Sato",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "G"
+      ],
+      "dateOfBirth": "1981-03-02",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p53",
+      "pick": 53,
+      "name": "Matt Freije",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "F"
+      ],
+      "dateOfBirth": "1981-10-02",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p54",
+      "pick": 54,
+      "name": "Rickey Paulding",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "F"
+      ],
+      "dateOfBirth": "1982-10-23",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p55",
+      "pick": 55,
+      "name": "Luis Flores",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "G"
+      ],
+      "dateOfBirth": "1981-04-11",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p56",
+      "pick": 56,
+      "name": "Marcus Douthit",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "F",
+        "C"
+      ],
+      "dateOfBirth": "1980-04-15",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p57",
+      "pick": 57,
+      "name": "Sergei Karaulov",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "C"
+      ],
+      "dateOfBirth": null,
+      "dobStatus": "held-source-conflict"
+    },
+    {
+      "id": "nba-draft-2004-p58",
+      "pick": 58,
+      "name": "Blake Stepp",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "G"
+      ],
+      "dateOfBirth": "1982-02-04",
+      "dobStatus": "verified"
+    },
+    {
+      "id": "nba-draft-2004-p59",
+      "pick": 59,
+      "name": "Rashad Wright",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "broadFamilies": [
+        "G"
+      ],
+      "dateOfBirth": "1982-03-17",
+      "dobStatus": "verified"
+    }
+  ],
+  "fixtures": [
+    {
+      "name": "preCamp",
+      "sourceRaw": "journeys/quick-3-SF.json",
+      "action": "HEALTHY 2004 pre-camp hub",
+      "year": 2004,
+      "active": true,
+      "kind": "frame",
+      "sourceRawSHA256": "47fee6b2add0f3734fa025698bd3a26a7ede70949d1470cda17e8cd2359b20a8",
+      "sourceSaveSHA256": "22b8cbd94f2f8b4ea6054b048f7a4b73dcf799aaf42def4a4381598f1b01f98f",
+      "scope": "Declared complete actual2004hub, before actual2004camp. Not reached by this native creation."
+    },
+    {
+      "name": "postCamp",
+      "sourceRaw": "journeys/persistence-3-SF.json",
+      "action": "RELOAD actual post-2004 save",
+      "year": 2005,
+      "active": true,
+      "kind": "frame",
+      "sourceRawSHA256": "734b5b27e4773f54b7e4c62696471faa26fb61631b56546bb3f4c60baeb3621b",
+      "sourceSaveSHA256": "404198354d5917d218ace458d0a59c70531d7cd4cad15bfb6593fcb6d14ea036",
+      "scope": "Declared complete same persistence journey2005hub after actual2004camp AND season, not a camp-only result."
+    },
+    {
+      "name": "laterFa",
+      "sourceRaw": "journeys/persistence-3-SF.json",
+      "action": "NATURAL FA signed complete save",
+      "year": 2007,
+      "active": true,
+      "kind": "frame",
+      "sourceRawSHA256": "734b5b27e4773f54b7e4c62696471faa26fb61631b56546bb3f4c60baeb3621b",
+      "sourceSaveSHA256": "dc3fec33170bcdd3938b51f6706b2c4b7e6a1711a04dfeb81ae3215a4311507a",
+      "scope": "Declared complete actual later post-FA result, expected current team from the full saved frame. No native signing claim."
+    },
+    {
+      "name": "legacy",
+      "sourceRaw": "legacy-full.json",
+      "kind": "original-professional",
+      "year": 2003,
+      "active": false,
+      "sourceRawSHA256": "3b5208f44aa130526d63ee74c96fdc184a1d236456498bc7db6923c927c4a3fa",
+      "sourceSaveSHA256": "23d6bf164466d0e751b5f4fc3cebdfd74d26f60afd518936623d5c32225fdadf",
+      "scope": "Authentic admitted original professional inputRaw, never a candidate with marker removed."
+    },
+    {
+      "name": "current",
+      "sourceRaw": "journeys/current-era-63.json",
+      "action": "CURRENT Enter the draft",
+      "year": 2026,
+      "active": false,
+      "kind": "frame",
+      "sourceRawSHA256": "75f52c95f66752bac01988d5924a9173605651641c42d16c701be90aa530458e",
+      "sourceSaveSHA256": "a4875c7a3371e9739b6eb3eb46386e145c3e7e9622ab6b1a828f2e51fb918428",
+      "scope": "Declared actual current-era UI save with all original fields, no new historical registry."
+    }
+  ],
+  "scope": "Three widths, actual2003UI/natural browser RNG/clock; five separately declared complete admitted saves. Real59draft selections and actual simulated camp receipts, first/last row native internal scrolling, legacy/current absence, full JSON storage/read-only/reload/asset proof,15ordinary viewport photos. No native annual career/FA-signing, roster/debut promise, first-paint/cap, full-fleet or provider claim."
+}
