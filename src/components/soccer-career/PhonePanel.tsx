@@ -239,7 +239,7 @@ export default function PhonePanel({ career, onAnswer, onMoney, onBuyItem, onClo
         <div className="absolute top-1.5 left-1/2 -translate-x-1/2 w-24 h-5 bg-zinc-900 rounded-full z-20" />
         {/* status bar */}
         <div className="flex items-center justify-between px-5 pt-8 pb-1 text-[10px] text-white/70 font-bold shrink-0">
-          <span>{year} · age {career.age}</span>
+          <span>{career.retired && readSoccerHistoricalArrivals(career) ? <>Retired · player record {year}</> : <>{year} · age {career.age}</>}</span>
           <span className={st.color}>{st.emoji} {standing}</span>
           <span>📶 🔋</span>
         </div>
