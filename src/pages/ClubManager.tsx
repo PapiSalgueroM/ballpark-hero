@@ -76,6 +76,7 @@ const FacilitiesScreen = lazy(() => import('@/components/club-manager/Facilities
 const StaffScreen = lazy(() => import('@/components/club-manager/StaffScreen').then(m => ({ default: m.StaffScreen })));
 const FinancesScreen = lazy(() => import('@/components/club-manager/FinancesScreen').then(m => ({ default: m.FinancesScreen })));
 const ManagerForm = lazy(() => import('@/components/club-manager/ManagerForm').then(m => ({ default: m.ManagerForm })));
+const ClubManagerTeamPicker = lazy(() => import('@/components/club-manager/ClubManagerTeamPicker'));
 const WorldTablesCard = lazy(() => import('@/components/club-manager/WorldTablesCard').then(m => ({ default: m.WorldTablesCard })));
 const MetersStrip = lazy(() => import('@/components/club-manager/MetersStrip').then(m => ({ default: m.MetersStrip })));
 const UclBracketCard = lazy(() => import('@/components/club-manager/UclBracketCard').then(m => ({ default: m.UclBracketCard })));
@@ -703,80 +704,33 @@ const ClubManager = () => {
             >
               <ChevronLeft className="w-3.5 h-3.5" /> <FlagImg name={pickNation.name} size={14} /> {league.name}
             </button>
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-              {teams.map(c => {
+            {(() => {
+              const rows = teams.map(c => {
                 const sel = g.pendingClub === c.name;
                 const partial = isPartialClub(c.name, historicPick ? pickEra : undefined);
-                return (
-                  <button
-                    key={c.name}
-                    onClick={() => g.chooseClub(c.name, pickEra)}
-                    className={cn(
-                      'rounded-xl border p-3 text-left transition-all',
-                      sel ? 'bg-primary/10 border-primary' : 'bg-card border-border hover:border-primary',
-                    )}
-                  >
-                    <div className="flex items-center gap-1.5">
-                      <span className="w-2.5 h-2.5 rounded-full shrink-0" style={{ backgroundColor: c.color }} />
-                      {/* Round 106: flags run all the way through the picker now. */}
-                      <FlagImg name={homeNationOf(c.name) ?? pickNation.name} size={12} />
-                      <span className={cn('text-xs font-bold truncate', sel ? 'text-primary' : 'text-foreground')}>{c.name}</span>
-                    </div>
-                    <div className="text-[9px] text-muted-foreground mt-0.5">
-                      {TIER_INFO[c.tier].emoji} {TIER_INFO[c.tier].label}
-                      {partial && <span className="ml-1 text-yellow-500/80" title="The market data covers only part of this squad; the rest is filled with youth players.">· partial data</span>}
-                    </div>
-                    <div className="flex items-center justify-between mt-1.5">
-                      <span className="text-[10px] text-muted-foreground">Squad</span>
-                      {/* Round 132: the squad number is the squad in the era you
-                          picked, not the 2026 one, or the tile would be lying
-                          about the team you are about to take over. */}
-                      <span className="text-sm font-bold font-display text-foreground">
-                        {Math.round(projectedXIAvg(c.name, eraYearsOn, pickEra) ?? clubPreviewRating(c.name))}
-                      </span>
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <span className="text-[10px] text-muted-foreground">Budget</span>
-                      {/* Round 514: the club picker runs before a career exists, so there are no
-                          start options to follow and this one stays in the default symbol. */}
-                      <span className="text-xs font-bold text-gold">{money(c.budget)}</span>
-                    </div>
-                    {/* Round 145: this line said "Top 20" at a rank 20 club,
-                        which is exactly the phrasing he told us to stop using.
-                        It now quotes the board's actual named demand. */}
-                    {/* Round 1328: the one line that tells clubs apart was cut at
-                        390 ("Win the Premi..."). It wraps now, at 12px, whole. */}
-                    <div className="text-xs leading-snug mt-0.5 break-words" data-cm-board-wants>
-                      <span className="text-muted-foreground">Board wants </span>
-                      <span className="font-bold text-foreground" title={teamWants.get(c.name) ?? ''}>
-                        {teamWants.get(c.name) ?? ''}
-                      </span>
-                    </div>
-                  </button>
-                );
-              })}
-              {/* Round 964: a founded club is placed against the real lineups, so
-                  the edited world and a custom club do not mix. */}
-              {editing ? (
-                <div className="rounded-xl border border-dashed border-border p-3 text-[10px] text-muted-foreground">
-                  Creating your own club starts in the real world. Reset the world editor to found one.
-                </div>
-              ) : (
-              <button
-                onClick={() => { g.chooseClub(''); setPickStep('custom'); }}
-                className="rounded-xl border border-dashed border-primary/50 p-3 text-left transition-all bg-card hover:border-primary hover:bg-primary/5"
-              >
-                <div className="flex items-center gap-1.5">
-                  <span className="text-base leading-none">✨</span>
-                  <span className="text-xs font-bold text-primary truncate">Create your own club</span>
-                </div>
-                <div className="text-[9px] text-muted-foreground mt-1">
-                  Your name, your crest, your stadium, your money. It takes the place of the league's weakest side.
-                </div>
-                <div className="text-[10px] font-bold text-foreground mt-1.5">Full customization →</div>
-              </button>
-              )}
-            </div>
+                return {
+                  name: c.name,
+                  color: c.color,
+                  selected: sel,
+                  flagName: homeNationOf(c.name) ?? pickNation.name,
+                  tierEmoji: TIER_INFO[c.tier].emoji,
+                  tierLabel: TIER_INFO[c.tier].label,
+                  partial,
+                  rating: Math.round(projectedXIAvg(c.name, eraYearsOn, pickEra) ?? clubPreviewRating(c.name)),
+                  budgetLabel: money(c.budget),
+                  boardTitle: teamWants.get(c.name) ?? '',
+                  boardText: teamWants.get(c.name) ?? '',
+                };
+              });
+              return (
+                <ScreenLoading><ClubManagerTeamPicker
+                  rows={rows}
+                  editing={editing}
+                  onPick={name => g.chooseClub(name, pickEra)}
+                  onCreate={() => { g.chooseClub(''); setPickStep('custom'); }}
+                /></ScreenLoading>
+              );
+            })()}
             <p className="text-[9px] text-muted-foreground text-center mt-3">
               {historicPick ? (
                 <>{eraHonestyLine(era)}</>
