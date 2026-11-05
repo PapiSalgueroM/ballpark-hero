@@ -1,0 +1,155 @@
+{
+  "status": "source-only bound to actual complete product candidate, never executed",
+  "candidateHead": "ebd69abeb38ebb0b93fbff71a0caf2fa453db832",
+  "candidateTree": "821809914563e7830354f3567ba66ac8801cfd10",
+  "readerBlob": "8aadac23e0499142560c66790e1c9cb6affc0a52",
+  "originalArtifact": {
+    "run": 41958380733,
+    "job": 127018622387,
+    "id": 13383634508,
+    "bytes": 2675629,
+    "sha256": "3e9c89a2a24207957761b640ede622c587d97c2daaeaaeddd8498afb3d82119e"
+  },
+  "candidatePins": {
+    "scripts/lib/careerClubPool.mjs": "9ac9f0b9437f68e6a6b1f20c640afce109a8352f",
+    "src/data/soccerCareerClubPool.ts": "9340217fac2ae3a86877ac878fcd677d22c973bd",
+    "src/lib/clubManager.ts": "4b0a734e9fe9ba1e7139ead8d4fe5d6a1574c484",
+    "src/data/clubManagerRosters.ts": "66fc430c504bfb97e5fd17762ed3084c2ff6c205",
+    "scripts/data/soccerCareerFacts.json": "ae78078feb67f06fc2922802091a113366e25fcb",
+    "src/lib/soccerCareerEngine.ts": "94ccfb82dace9fc099c670357472732973e11d73",
+    "src/lib/careerEras.ts": "e037022342382b1df9c8a5ede620d2cce480bc23",
+    "src/lib/soccerCareerLeagueWorld.ts": "72fcabdd0c557a743aa849b01208140c3030048f",
+    "src/data/soccerCareerLowerClubs.ts": "88318bbb4103ae91dccba1671b42b8e13fe3ddbc",
+    "src/lib/soccerCareerCup.ts": "1d93842578afa4fb92ed3c012701022fbf9d2e9c",
+    "scripts/data/domesticCupSources.json": "7ca21b866ac6641ff953c60c64f531bd674e48ce",
+    "src/lib/soccerCareerSave.ts": "86ec011693fd5bc702b5e8ccec05d27775a72a76",
+    "src/data/leagueFormat.ts": "802650466c0c4439f12c741e7d1ae28957280f9b",
+    "src/pages/SoccerCareer.tsx": "e191a4634c44be5ebe511da0885579fdb6696dc5",
+    "src/components/FlagImg.tsx": "f415a12892f747ecf07414e61710584ca98be6a8",
+    "src/lib/confederationGroups.ts": "6e7fc26724cb56c6c6f5a1a68be4e32d41dbc3cd"
+  },
+  "faults": [
+    {
+      "id": "missing-row",
+      "path": "src/data/soccerCareerClubPool.ts",
+      "before": "  { id: \"cm-real-oviedo\", name: \"Real Oviedo\", country: \"Spain\", tier: 4, color: \"#2b7fc4\", league: \"Segunda Division\" },\n",
+      "after": "",
+      "failedFullNames": [
+        "Soccer Career Segunda canonical bridge adds the nineteen current canonical academy clubs without rewriting the old pool",
+        "Soccer Career Segunda canonical bridge uses canonical profiles for the twenty existing lower-world destinations and real market actions"
+      ],
+      "ownership": "One physical omitted row, two actual failing cases, not two fault classes."
+    },
+    {
+      "id": "since-year",
+      "path": "src/data/soccerCareerClubPool.ts",
+      "before": "\"Real Oviedo\": 2026,",
+      "after": "\"Real Oviedo\": 2025,",
+      "failedFullNames": [
+        "Soccer Career Segunda canonical bridge adds the nineteen current canonical academy clubs without rewriting the old pool",
+        "Soccer Career Segunda canonical bridge holds historical pools Girona and the first manager-job boundary before 2026"
+      ],
+      "ownership": "One incorrect start boundary; actual2025 leak retained."
+    },
+    {
+      "id": "manager-leak",
+      "path": "src/lib/soccerCareerEngine.ts",
+      "before": " || row.league === 'Segunda Division'",
+      "after": "",
+      "failedFullNames": [
+        "Soccer Career Segunda canonical bridge holds historical pools Girona and the first manager-job boundary before 2026"
+      ],
+      "ownership": "Exact actual AssertionError case plus raw eligibility counterexample, no invented later assertion marker."
+    },
+    {
+      "id": "cup-context",
+      "path": "src/lib/soccerCareerCup.ts",
+      "before": "  Andorra: { leagues: [\"Segunda Division\", \"La Liga\"], association: \"Spain\", from: 2026 },\n",
+      "after": "",
+      "failedFullNames": [
+        "Soccer Career Segunda canonical bridge keeps Andorra as home country while recording the scoped Spanish cup context"
+      ],
+      "ownership": "One absent scoped cup association; old country and other cross-border rows held."
+    },
+    {
+      "id": "country-provenance",
+      "path": "scripts/data/soccerCareerFacts.json",
+      "before": "\"FC Andorra\": {\n        \"country\": \"Andorra\",",
+      "after": "\"FC Andorra\": {\n        \"country\": \"Spain\",",
+      "diagnostic": "FC Andorra: its country Andorra has no two sourced row in soccerCareerFacts.json clubCountries",
+      "ownership": "Existing simCareerClubPool section3 provenance fence. App profiles remain correct; no wrong-country app journey claim."
+    },
+    {
+      "id": "colour-owner",
+      "path": "src/lib/clubManager.ts",
+      "before": "'Castellón': '#2b2b2b'",
+      "after": "'Castellón': '#8899aa'",
+      "diagnostic": "no colour for Castellón (Segunda Division)",
+      "ownership": "Existing actual derive refusal, simCareerClubPool section3. No newPOOL_COLORS fallback."
+    }
+  ],
+  "limits": [
+    "No candidate outcome is claimed until bound source and remote runtime qualify.",
+    "Only the first four faults run the frozen seven-case app suite.",
+    "The two source-fence faults run existing simCareerClubPool with unchanged defaults after that same normal harness passes.",
+    "The original overlay restores all sixteen existing source pins; candidate QA legacy harness adapters stay held and are not executed in the original arm.",
+    "Current expanded pools/offers may differ from original; full fixed/restored RAW and all saved original held references must match.",
+    "Literal2026 cup runtime and served native/public paths remain separate gates."
+  ],
+  "changedProducts": [
+    {
+      "path": "scripts/lib/careerClubPool.mjs",
+      "beforeBlob": "16ccc6137958a1adf2e40e5d26b99de466b38e24",
+      "afterBlob": "9ac9f0b9437f68e6a6b1f20c640afce109a8352f"
+    },
+    {
+      "path": "src/data/soccerCareerClubPool.ts",
+      "beforeBlob": "83e9df78441c0d16509f80b8ec0bfbadb0f08f26",
+      "afterBlob": "9340217fac2ae3a86877ac878fcd677d22c973bd"
+    },
+    {
+      "path": "src/lib/clubManager.ts",
+      "beforeBlob": "e3c9bcf0aec0f1e1caeb27d38d506d591d694237",
+      "afterBlob": "4b0a734e9fe9ba1e7139ead8d4fe5d6a1574c484"
+    },
+    {
+      "path": "scripts/data/soccerCareerFacts.json",
+      "beforeBlob": "9828e41da792eafeead8036879d49f05242a5164",
+      "afterBlob": "ae78078feb67f06fc2922802091a113366e25fcb"
+    },
+    {
+      "path": "src/lib/soccerCareerEngine.ts",
+      "beforeBlob": "e88d6f91744bf14ac1d1afd43bbb26be9f9e15db",
+      "afterBlob": "94ccfb82dace9fc099c670357472732973e11d73"
+    },
+    {
+      "path": "src/lib/soccerCareerCup.ts",
+      "beforeBlob": "0f2a6cc03afed64642d396af4d0979474a3c41cf",
+      "afterBlob": "1d93842578afa4fb92ed3c012701022fbf9d2e9c"
+    },
+    {
+      "path": "scripts/data/domesticCupSources.json",
+      "beforeBlob": "b42a2d20fcb3882277902b80f5cb1bad510b2dff",
+      "afterBlob": "7ca21b866ac6641ff953c60c64f531bd674e48ce"
+    },
+    {
+      "path": "src/pages/SoccerCareer.tsx",
+      "beforeBlob": "1f4d448cc9718bc3fa97b6987be5f14b27496c47",
+      "afterBlob": "e191a4634c44be5ebe511da0885579fdb6696dc5"
+    }
+  ],
+  "generation": {
+    "run": 41960219919,
+    "job": 127024577625,
+    "artifact": 13384444415,
+    "bytes": 1701648,
+    "sha256": "0db353f9da16e647dd9b250eb7c52538ce14fd32a5b259487c8c544ae490c9db",
+    "pool": {
+      "path": "src/data/soccerCareerClubPool.ts",
+      "gitBlob": "9340217fac2ae3a86877ac878fcd677d22c973bd",
+      "bytes": 51861,
+      "sha256": "c16e2bab153073ed758de308b1fa37ddf2ae821d3262a2b1f3a8cef6998b3f3e"
+    },
+    "source": "Root-admitted remote generation-only result, no acquisition or runtime by this agent"
+  }
+}

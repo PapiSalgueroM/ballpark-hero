@@ -1,0 +1,76 @@
+{
+  "base": "3268307038c4586dbc35f4697da1849512b473d9",
+  "scope": "Test-first original seven-case qualification; no product edit, build, browser, release or data credit.",
+  "files": [
+    {
+      "path": "src/test/soccerCareerSegundaBridge.test.ts",
+      "sha256": "281c55cfbf627b8e23269fc251593e50048caee7d392ef26c9850293b9786594"
+    },
+    {
+      "path": "src/test/soccerCareerSegundaCreation.test.tsx",
+      "sha256": "9d9d030c6457c2d21e0c9afb5ac2ed47fd9ab21bcd76381914f5acd60ba5886a"
+    }
+  ],
+  "cases": [
+    {
+      "fullName": "Soccer Career Segunda canonical bridge adds the nineteen current canonical academy clubs without rewriting the old pool",
+      "marker": "SC_SEGUNDA_CANONICAL_POOL",
+      "owned": true,
+      "raw": "canonical"
+    },
+    {
+      "fullName": "Soccer Career Segunda canonical bridge places an eligible Andorran academy player and signs the actual parent first-team offer",
+      "marker": "SC_SEGUNDA_ACADEMY_PARENT",
+      "owned": true,
+      "raw": "academy"
+    },
+    {
+      "fullName": "Soccer Career Segunda canonical bridge uses canonical profiles for the twenty existing lower-world destinations and real market actions",
+      "marker": "SC_SEGUNDA_CANONICAL_WORLD",
+      "owned": true,
+      "raw": "world"
+    },
+    {
+      "fullName": "Soccer Career Segunda canonical bridge holds historical pools Girona and the first manager-job boundary before 2026",
+      "marker": "SC_SEGUNDA_HISTORY_HELD",
+      "owned": false,
+      "raw": "history"
+    },
+    {
+      "fullName": "Soccer Career Segunda canonical bridge keeps Andorra as home country while recording the scoped Spanish cup context",
+      "marker": "SC_SEGUNDA_COUNTRY_CUP",
+      "owned": true,
+      "raw": "cup"
+    },
+    {
+      "fullName": "Soccer Career Segunda canonical bridge holds loaded neutral offer IDs complete saved frames and the partial Spanish world",
+      "marker": "SC_SEGUNDA_SAVE_HELD",
+      "owned": false,
+      "raw": "savedOffers"
+    },
+    {
+      "fullName": "Soccer Career Segunda creation bridge exposes Andorra and 2026 while retaining 2025 and starts at the shown FC Andorra academy",
+      "marker": "SC_SEGUNDA_CREATION_REACHABLE",
+      "owned": true,
+      "raw": "creation-ui"
+    }
+  ],
+  "originalPins": {
+    "scripts/lib/careerClubPool.mjs": "16ccc6137958a1adf2e40e5d26b99de466b38e24",
+    "src/data/soccerCareerClubPool.ts": "83e9df78441c0d16509f80b8ec0bfbadb0f08f26",
+    "src/lib/clubManager.ts": "e3c9bcf0aec0f1e1caeb27d38d506d591d694237",
+    "src/data/clubManagerRosters.ts": "66fc430c504bfb97e5fd17762ed3084c2ff6c205",
+    "scripts/data/soccerCareerFacts.json": "9828e41da792eafeead8036879d49f05242a5164",
+    "src/lib/soccerCareerEngine.ts": "e88d6f91744bf14ac1d1afd43bbb26be9f9e15db",
+    "src/lib/careerEras.ts": "e037022342382b1df9c8a5ede620d2cce480bc23",
+    "src/lib/soccerCareerLeagueWorld.ts": "72fcabdd0c557a743aa849b01208140c3030048f",
+    "src/data/soccerCareerLowerClubs.ts": "88318bbb4103ae91dccba1671b42b8e13fe3ddbc",
+    "src/lib/soccerCareerCup.ts": "0f2a6cc03afed64642d396af4d0979474a3c41cf",
+    "scripts/data/domesticCupSources.json": "b42a2d20fcb3882277902b80f5cb1bad510b2dff",
+    "src/lib/soccerCareerSave.ts": "86ec011693fd5bc702b5e8ccec05d27775a72a76",
+    "src/data/leagueFormat.ts": "802650466c0c4439f12c741e7d1ae28957280f9b",
+    "src/pages/SoccerCareer.tsx": "1f4d448cc9718bc3fa97b6987be5f14b27496c47",
+    "src/components/FlagImg.tsx": "f415a12892f747ecf07414e61710584ca98be6a8",
+    "src/lib/confederationGroups.ts": "6e7fc26724cb56c6c6f5a1a68be4e32d41dbc3cd"
+  }
+}
