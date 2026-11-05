@@ -1,0 +1,134 @@
+name: Segunda identity guard qualification
+on:
+  push:
+    branches: [codex/soccer-segunda-identity-fixed-20261105]
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: soccer-segunda-identity-fixed-${{ github.ref }}
+  cancel-in-progress: false
+env:
+  CI: '1'
+  TZ: UTC
+  PRODUCT_CORE: 76e2af6a555d86743a481a50c24dccb8348b26b7
+  PRODUCT_TREE: 8106a333f4e95ecb7f9197c98e4708ec232080b6
+  RUNNER_BLOB: d31009631000c720e7b99ca8bbde10ce451c504c
+jobs:
+  identity:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 4
+          filter: blob:none
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: '1.4.4'
+      - name: Bind exactly two temporary QA additions
+        run: |
+          set -euo pipefail
+          OUT="$RUNNER_TEMP/soccer-identity-fixed"
+          REF="$RUNNER_TEMP/soccer-identity-original"
+          mkdir -p "$OUT/logs" "$OUT/inputs" "$REF/archive" "$REF/evidence"
+          echo "QA_OUT=$OUT" >> "$GITHUB_ENV"
+          echo "LOOKUP_REFERENCE=$REF/evidence" >> "$GITHUB_ENV"
+          echo "LOOKUP_REFERENCE_ZIP=$REF/original-13394699766.zip" >> "$GITHUB_ENV"
+          test "$(git rev-parse HEAD^)" = "$PRODUCT_CORE"
+          test "$(git rev-parse "$PRODUCT_CORE^{tree}")" = "$PRODUCT_TREE"
+          test "$(git hash-object scripts/qa/soccerSegundaIdentityFixed.mjs)" = "$RUNNER_BLOB"
+          test "$(git hash-object scripts/simCareerLeagueSeasons.mjs)" = d9e77ab7a84f166ad2026bdd9e4d9d6afb22496e
+          test "$(git hash-object src/lib/soccerCareerLeague.ts)" = 3bf1c117da22ea2253b8dce264da1ea3a49a0517
+          test "$(git hash-object src/test/soccerSegundaHistoricalIdentity.test.ts)" = 008a5c95ff12b0e029b264078843744f2888fbd2
+          git diff --name-status "$PRODUCT_CORE" HEAD > "$OUT/qa-delta.txt"
+          printf '%s\n' $'A\t.github/workflows/soccer-segunda-identity-fixed-20261105.yml' $'A\tscripts/qa/soccerSegundaIdentityFixed.mjs' > "$OUT/expected-qa-delta.txt"
+          cmp "$OUT/qa-delta.txt" "$OUT/expected-qa-delta.txt"
+          git status --porcelain=v1 --untracked-files=all > "$OUT/status-before.txt"
+          test ! -s "$OUT/status-before.txt"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$OUT/source-before-install.sha256"
+      - name: Reuse the exact measured original red artifact
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import path from 'node:path';import assert from 'node:assert/strict';
+          const api=async route=>{const r=await fetch('https://api.github.com/repos/PapiSalgueroM/ballpark-hero/'+route,{headers:{Authorization:'Bearer '+process.env.GH_TOKEN,Accept:'application/vnd.github+json'}});assert.equal(r.status,200);return r.json();};
+          const run=await api('actions/runs/41983973484'),jobs=await api('actions/runs/41983973484/jobs?per_page=100'),artifact=await api('actions/artifacts/13394699766');
+          assert.equal(run.status,'completed');assert.equal(run.conclusion,'failure');assert.equal(run.head_sha,'2fba3b551e821b7c14163f0efa5f86a06e55a3d9');assert.equal(run.path,'.github/workflows/soccer-segunda-lookup-observation-20261105.yml');
+          assert.equal(jobs.jobs.find(job=>job.id===127100291579)?.conclusion,'failure');
+          assert.equal(artifact.id,13394699766);assert.equal(artifact.size_in_bytes,15978538);assert.equal(artifact.expired,false);assert.equal(artifact.workflow_run.id,41983973484);
+          for(const[name,value]of Object.entries({run,jobs,artifact}))fs.writeFileSync(path.join(process.env.QA_OUT,'inputs',name+'.json'),JSON.stringify(value,null,2)+'\n');
+          NODE
+          curl --fail --location --retry 3 -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" https://api.github.com/repos/PapiSalgueroM/ballpark-hero/actions/artifacts/13394699766/zip -o "$LOOKUP_REFERENCE_ZIP"
+          test "$(stat -c %s "$LOOKUP_REFERENCE_ZIP")" = 15978538
+          printf '%s  %s\n' 9a8036d064cec27c83a68e186dc5f345446c8aa512471a590ae7a489f364bd60 "$LOOKUP_REFERENCE_ZIP" | sha256sum -c -
+          REF="$(dirname "$LOOKUP_REFERENCE_ZIP")"
+          unzip -q "$LOOKUP_REFERENCE_ZIP" -d "$REF/archive"
+          TGZ="$REF/archive/soccer-lookup-observation-simCareerLeagueSeasons.tar.gz"
+          printf '%s  %s\n' 1d68b76b9661b5bf3a3939a74d95f8ba63a42535c5d3f81707896ca24738878b "$TGZ" | sha256sum -c -
+          tar -tzf "$TGZ" > "$QA_OUT/inputs/original-entry-list.txt"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import path from 'node:path';import assert from 'node:assert/strict';
+          for(const name of fs.readFileSync(path.join(process.env.QA_OUT,'inputs/original-entry-list.txt'),'utf8').trim().split('\n'))assert(!name.startsWith('/')&&!name.split('/').includes('..'));
+          NODE
+          tar -xzf "$TGZ" -C "$LOOKUP_REFERENCE"
+      - name: Install held package versions
+        run: |
+          set -euo pipefail
+          test "$(bun --version)" = 1.4.4
+          bun --version > "$QA_OUT/logs/bun-version.log"
+          node --version > "$QA_OUT/logs/node-version.log"
+          bun install --frozen-lockfile > "$QA_OUT/logs/install.log" 2>&1
+          git diff --exit-code HEAD -- package.json package-lock.json bun.lock bun.lockb
+      - name: Measure default normal replays then observer and source controls
+        run: |
+          set -uo pipefail
+          unset NODE_OPTIONS GIT_NO_LAZY_FETCH SIM_OFFLINE_RECEIPT
+          node --unhandled-rejections=strict scripts/qa/soccerSegundaIdentityFixed.mjs --out "$QA_OUT/replay" --reference "$LOOKUP_REFERENCE" --reference-zip "$LOOKUP_REFERENCE_ZIP" > "$QA_OUT/logs/controller.stdout.log" 2> "$QA_OUT/logs/controller.stderr.log"
+          native_exit=$?
+          printf '%s\n' "$native_exit" > "$QA_OUT/controller-native-exit.txt"
+          cat "$QA_OUT/logs/controller.stdout.log" "$QA_OUT/logs/controller.stderr.log"
+          test "$native_exit" = 0 || exit "$native_exit"
+      - name: Always prove full candidate restoration and silent offline receipts
+        if: always()
+        run: |
+          set -euo pipefail
+          export GIT_NO_LAZY_FETCH=1
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$QA_OUT/source-after.sha256"
+          cmp "$QA_OUT/source-before-install.sha256" "$QA_OUT/source-after.sha256"
+          git diff --exit-code HEAD > "$QA_OUT/source-diff.txt"
+          git status --porcelain=v1 --untracked-files=all > "$QA_OUT/status-after.txt"
+          test ! -s "$QA_OUT/status-after.txt"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import path from 'node:path';import assert from 'node:assert/strict';
+          const walk=dir=>fs.readdirSync(dir,{withFileTypes:true}).flatMap(e=>e.isDirectory()?walk(path.join(dir,e.name)):[path.join(dir,e.name)]);
+          for(const file of walk(process.env.QA_OUT).filter(file=>/-transport\.log$/.test(file)))assert.equal(fs.statSync(file).size,0,file);
+          NODE
+          printf '%s\n' SC_SEGUNDA_IDENTITY_FIXED_SOURCE_HELD > "$QA_OUT/workflow-source-held.txt"
+      - name: Retain actual target proof and unresolved normal failures
+        id: evidence
+        if: always()
+        run: |
+          set -euo pipefail
+          tar -czf "$RUNNER_TEMP/soccer-identity-fixed.tar.gz" -C "$QA_OUT" .
+          test "$(stat -c %s "$RUNNER_TEMP/soccer-identity-fixed.tar.gz")" -le 50000000
+          sha256sum "$RUNNER_TEMP/soccer-identity-fixed.tar.gz" > "$RUNNER_TEMP/soccer-identity-fixed.tar.gz.sha256"
+      - uses: actions/upload-artifact@v4
+        if: always() && steps.evidence.outcome == 'success'
+        with:
+          name: soccer-identity-fixed-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            ${{ runner.temp }}/soccer-identity-fixed.tar.gz
+            ${{ runner.temp }}/soccer-identity-fixed.tar.gz.sha256
+          if-no-files-found: error
+          retention-days: 30
+          compression-level: 0
