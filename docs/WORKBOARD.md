@@ -17918,6 +17918,15 @@ The complete soccer stack passes Actions42096174788 at5f05c06b6133cf213ac2c318e4
 SC-39 supporting slice: one club-country eligibility rule from complete2022 seasons, fresh European-card gating, and final leagueApps<=apps reconciliation after availability/injury. Recorded history stays intact; newly generated invalid splits anywhere are corrected.15 policy/totals cases,8 effective controls and176RAW files pass on the combined source. All210 related cases,9 normal harnesses,20 readers,16 caps and4 browser flows pass. The injury-aware loan guard also passes positive/new-fault/old-shut checks. Shared receipt:docs/plans/2026-11-05-soccer-master-integration.md. No whole card completion, full-suite/live-Reach credit, merge or publication.
 
 
+## 2026-11-05 Missing XI accessible lineup claim
+Owner: Codex master-list continuation, base main1acb33005073be70ba5aae0285ece5537f390f9a, branch codex/missing-xi-lineup-list-20261105. Master MX-11 partial: add a compact equivalent ordered lineup view, label the blank role and position in both views, keep full names readable, and support native keyboard controls. Scope src/pages/MissingXi.tsx, one focused UI test leaf, a bounded browser proof and docs. Existing pitch geometry, player data, guess/scoring/actions, RNG and saved daily log stay unchanged. Source authoring, tests, build/browser and Git stay remote; held local app drafts untouched. Original-first missing-list tests, exact information/no-answer-leak/purity tests, layout/daily guards, three-width browser journey and normal build/required saved-output fences qualify this slice. No claim that the whole MX card or game is complete. No merge/publish authority claimed from other release lanes.
+
+
+## 2026-11-05 Missing XI accessible lineup qualified
+
+MX-11 presentation slice adds native Pitch/Lineup controls,11 ordered full-name rows and an explicit missing role/position. Default pitch geometry, data, guesses, scores and daily storage remain unchanged. Source and five fault controls pass;7 daily checks,2 existing game/layout harnesses,20 readers and16 caps pass. Actual daily wins at320/390/1280 pass touch/keyboard,mask/reveal and exact reload checks;6 reviewed screenshots. The final full soccer stack also passes225 targeted cases and all4 browser flows. Source/evidence/limits:docs/plans/2026-11-05-soccer-master-integration.md. Whole-card/full-suite/live-Reach credit remains open. No merge or publication.
+
+
 ## 2026-11-05 club-policy historical inverse compatibility
 
 Wider automatic checks exposed an owned test-helper incompatibility: completedYear and the fresh passport gate interrupted Round1327's full deck anchor. scripts/lib/careerDeckFair1327.mjs now accepts exactly one of two explicit complete blocks. The legacy block and its output stay byte-identical; the new block keeps the club policy on both sides of the deck-only inverse. Missing, altered, duplicate and mixed old/new blocks still refuse. Pins, patch API and all16 receipt rows are unchanged.

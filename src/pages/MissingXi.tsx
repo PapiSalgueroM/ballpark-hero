@@ -430,9 +430,46 @@ const MissingXi = () => {
  * sitewide no-IP-risk convention.
  */
 function MissingXiPitch({ puzzle, revealed }: { puzzle: ActivePuzzle; revealed: boolean }) {
+  const [view, setView] = useState<'pitch' | 'lineup'>('pitch');
   const { lineup, candidate } = puzzle;
   const tiles = pitchLayout(lineup.slots);
   return (
+    <div className="space-y-3">
+      <div role="group" aria-label="Lineup view" className="flex w-fit mx-auto gap-1 rounded-xl border border-border bg-card p-1">
+        {(['pitch', 'lineup'] as const).map(next => (
+          <button
+            key={next}
+            type="button"
+            aria-pressed={view === next}
+            onClick={() => setView(next)}
+            className={cn(
+              'min-h-[44px] rounded-lg px-4 text-sm font-semibold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary',
+              view === next ? 'bg-primary text-primary-foreground' : 'text-muted-foreground hover:text-foreground',
+            )}
+          >
+            {next === 'pitch' ? 'Pitch' : 'Lineup'}
+          </button>
+        ))}
+      </div>
+      {view === 'lineup' ? (
+        <ol aria-label="Starting lineup" className="max-w-md mx-auto space-y-1 rounded-xl border border-border bg-card p-2">
+          {lineup.slots.map((slot, i) => {
+            const isBlank = i === candidate.slotIndex;
+            return (
+              <li
+                key={i}
+                aria-label={isBlank && !revealed ? `Missing player (${slot.position})` : undefined}
+                className={cn('flex items-baseline gap-3 rounded-lg px-2 py-1 text-sm', isBlank && !revealed && 'bg-destructive/10')}
+              >
+                <span className="w-8 shrink-0 text-xs font-bold text-muted-foreground">{slot.position}</span>
+                <span className="min-w-0 flex-1 break-words font-medium">
+                  {isBlank ? (revealed ? candidate.name : 'Missing player') : slot.name}
+                </span>
+              </li>
+            );
+          })}
+        </ol>
+      ) : (
     <div
       className="relative w-full max-w-md mx-auto rounded-2xl border-2 border-correct/40 bg-gradient-to-b from-correct/10 to-correct/5 overflow-hidden"
       style={{ aspectRatio: PITCH_ASPECT }}
@@ -486,7 +523,7 @@ function MissingXiPitch({ puzzle, revealed }: { puzzle: ActivePuzzle; revealed: 
                   isBlank && !revealed ? 'text-destructive' : 'text-foreground',
                 )}
               >
-                {isBlank ? (revealed ? candidate.name : '?') : slot.name}
+                {isBlank ? (revealed ? candidate.name : <><span className="sr-only">Missing player</span><span aria-hidden="true">?</span></>) : slot.name}
               </p>
               {/* Round 215: the slot chips sit on the pitch tint, not on a
                   card, and the muted grey measured 3.97 there. One shade up
@@ -498,6 +535,8 @@ function MissingXiPitch({ puzzle, revealed }: { puzzle: ActivePuzzle; revealed: 
           </div>
         );
       })}
+    </div>
+      )}
     </div>
   );
 }

@@ -1,3 +1,7 @@
+## 2026-11-05 Missing XI lineup view, combined qualification complete
+
+Stacked after PR508, PR505 and PR506 on main3b, retaining the published historical release. Full-name ordered lineup and native keyboard/touch toggles pass alongside the original pitch; masking/reveal, three actual daily wins and exact reloads are verified. The full stack passes225 targeted cases,normal build,9 engine/layout harnesses,20 readers,16 unchanged caps and all4 browser flows. Full suite/live Reach and whole master-card completion are not credited. Draft, unmerged and unpublished. See docs/plans/2026-11-05-soccer-master-integration.md.
+
 ## 2026-11-05 club competitions and appearance totals, qualified draft
 
 Stacked on PR505 after PR506, preserving main3b release records. The policy blocks fresh club European stakes from complete2022 seasons. Final league counts are capped by final totals after availability and injury; fresh invalid historical/foreign outputs can also change, while saved history stays untouched. Combined15+210 targeted cases,normal build,9 harnesses,20 readers,16 caps and all4 browser flows pass. Script-only loan controls pass. SC-39 remains partial; full suite/live Reach remain open. Unmerged and unpublished. See docs/plans/2026-11-05-soccer-master-integration.md.
