@@ -41,8 +41,23 @@ jobs:
           git ls-files -s > league-artifacts/source-before.txt
           sha256sum package.json package-lock.json > league-artifacts/locks-before.txt
           npm ci
-          npm install --no-save --package-lock=false playwright
-          npx playwright install --with-deps chromium
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          const lock=JSON.parse(fs.readFileSync('package-lock.json'));
+          const rows=Object.keys(lock.packages).filter(p=>p.startsWith('node_modules/')&&fs.existsSync(p+'/package.json')).map(p=>[p,JSON.parse(fs.readFileSync(p+'/package.json')).version]);
+          fs.writeFileSync('league-artifacts/installed-before.json',JSON.stringify(rows));
+          NODE
+          npm install --prefix "$RUNNER_TEMP/sc11-browser" --no-save --package-lock=false playwright
+          test ! -e node_modules/playwright
+          ln -s "$RUNNER_TEMP/sc11-browser/node_modules/playwright" node_modules/playwright
+          node "$RUNNER_TEMP/sc11-browser/node_modules/playwright/cli.js" install --with-deps chromium
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs'; import assert from 'node:assert/strict';
+          const before=JSON.parse(fs.readFileSync('league-artifacts/installed-before.json'));
+          const after=before.map(([p])=>[p,JSON.parse(fs.readFileSync(p+'/package.json')).version]);
+          fs.writeFileSync('league-artifacts/installed-after.json',JSON.stringify(after)); assert.deepEqual(after,before);
+          console.log('Preserved all '+after.length+' locked installed versions.');
+          NODE
           python -m pip install fonttools pillow
       - name: Proper app types
         run: node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee league-artifacts/types.log
@@ -53,6 +68,7 @@ jobs:
         run: |
           NODE_OPTIONS="--max-old-space-size=6144 --require=$PWD/scripts/lib/offlineTransport.cjs" node node_modules/vitest/vitest.mjs run src/test/soccerCareerTransferBrief.test.ts src/test/soccerTransferBriefUi.test.tsx src/test/soccerTransferBriefPage.test.tsx src/test/soccerTransferBriefPromise.test.tsx src/test/soccerTransferAppearanceFloor.test.tsx src/test/soccerCareerContracts.test.ts src/test/soccerOfferReviewAgeRule.test.tsx --maxWorkers=1 --minWorkers=1 --reporter=default --reporter=json --outputFile=league-artifacts/related.json 2>&1 | tee league-artifacts/related.log
       - name: Normal production build
+        if: ${{ !cancelled() }}
         id: build
         run: |
           NODE_OPTIONS="--max-old-space-size=6144" npm run build 2>&1 | tee league-artifacts/build.log
