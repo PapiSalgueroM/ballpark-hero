@@ -1,0 +1,20 @@
+# Soccer Career club continental eligibility
+
+The source audit found two separate own-club paths: clubCupFor grants the named cup, while calcAppearances independently adds European appearances. This slice makes both respect the same club suspension predicate. It supports the master specification's requirement that competitions reconcile eligibility and records, and is a prerequisite for the partial SC-36/CM-04 league-world work. It adds no clubs or national-team rules.
+
+Base: qualified preferred-league PR505, head5689ab28b63a754430926479477db5d0d49502b5. PR504 retains historical-entry phone/page ownership. Source authoring, execution and Git stay remote; local work is native text, JSON, hashes and archives outside held app sources.
+
+1. Add a new regression leaf using existing exports, constructor-owned fictional players/clubs, a real saved season boundary and complete outputs/draw tapes. Original source must reach named cup, appearance and actual-season business failures before production edits.
+2. Export one pure clubContinentalSuspended(country, year) predicate from the existing continental module. It is true only for exact club country Russia and season start year >=2022. clubCupFor returns null on that policy. calcAppearances keeps its public signature and gates its existing tier1/2 European block using the same next-saved-season expression as simulateUCL. Calls without state or country retain existing behavior.
+3. Prove fixed/original/restored complete RAW and all unaffected paths byte-equal; plant independent named-cup, appearance and overbroad-country faults. Verify pre2022 Russia, foreign clubs with Russian players, other continents, missing state/country and recorded campaign/codec preservation. Newly excluded seasons intentionally consume fewer European draws and can change later simulated outcomes.
+4. Run proper app types, existing continental/UCL/loan/save tests and related harnesses, a normal production build with unchanged caps and all saved-output readers. Drive the real page on phones and desktop through one controlled completed season and reload.
+
+Facts reviewed 2026-11-05:
+- UEFA Circular10/2022,28February2022, suspends Russian representative and club teams until further notice: https://editorial.uefa.com/resources/0273-148f20d27980-23a90d5c0d62-1000/20220228_circular_2022_10_en.pdf
+- FIFA's separate8March implementation independently reaffirms the28February suspension across both bodies: https://inside.fifa.com/tournaments/mens/worldcup/qatar2022/media-releases/decisions-taken-concerning-fifa-world-cup-qatar-2022-tm-qualifiers
+- UEFA's2May decision explicitly excludes affiliated clubs from2022/23: https://www.uefa.com/news/0275-150cf33eaaac-e3142bd109bb-1000--suspension-of-russian-teams/
+- UEFA's2026/27 guide, updated4November2026, still states the suspension: https://www.uefa.com/uefachampionsleague/news/02a6-20d57cfcd03e-407c22a7f465-1000--2026-27-champions-league-teams-dates-draws-format-final/
+
+The2022 boundary is the first complete post-decision season, not the date of the suspension. The interrupted2021/22season is held rather than retroactively suppressing its whole campaign. Recorded alternate-history rows remain readable and untouched. After the verified present, suspension continues as the simulation's frozen2026-11-05 policy, not a prediction of permanent exclusion or an invented reinstatement date. National eligibility, youth exceptions, competition fields and new Russian club palettes are outside this correction.
+
+Review focus: correct next-season boundary; club affiliation versus player nationality; both independent paths gated; untouched RNG/output for unaffected cases; no rewriting of stored campaign history. Current broad-suite and historical anchor failures remain unwaived. Status: claimed, original-first tests being prepared.
