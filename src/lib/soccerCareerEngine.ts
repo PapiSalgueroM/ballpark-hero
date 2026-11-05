@@ -4239,7 +4239,7 @@ function calcSeasonRating(position: string, apps: number, goals: number, assists
 function seasonCupAssociation(season: SeasonRecord, s: CareerState): string {
   const league = season.club === s.currentClub ? s.currentLeague
     : (FALLBACK_CLUBS.find(c => c.name === season.club)?.league ?? s.currentLeague);
-  return cupAssociation(season.clubCountry, league);
+  return cupAssociation(season.clubCountry, league, season.year);
 }
 function seasonCupTitle(season: SeasonRecord, s: CareerState): string {
   const st = domesticCupFor(seasonCupAssociation(season, s), season.year);
@@ -4301,7 +4301,7 @@ function generateSeasonStats(state: CareerState, clubs: ClubData[]): SeasonRecor
      2019-20, the U.S. Open Cup of 2020 and 2021, Mexico after the Copa MX,
      Argentina before 2011-12) is never won. */
   const winCup = Math.random() < cupChance
-    && domesticCupFor(cupAssociation(state.currentClubCountry, state.currentLeague), seasonYear).kind !== "NONE";
+    && domesticCupFor(cupAssociation(state.currentClubCountry, state.currentLeague, seasonYear), seasonYear).kind !== "NONE";
   /* Round 929: the league finish, from its own generator seeded off this
      season, so the main Math.random stream does not move. Round 1037: a
      season before 2026-27 is drawn in the league the club was really in
@@ -6018,7 +6018,7 @@ function playPendingProSeason(s: CareerState, clubs: ClubData[]): CareerState {
     playerCupAssociation: cupAssoc,
     cupAssociationOf: (name: string) => {
       const c = clubs.find(x => x.name === name) ?? FALLBACK_CLUBS.find(x => x.name === name);
-      return c ? cupAssociation(c.country, c.league) : null;
+      return c ? cupAssociation(c.country, c.league, thisYear) : null;
     },
   });
   /* Round 1041: the season's cup run, drawn from its own generator after the
@@ -8811,10 +8811,10 @@ export function manualRetire(prev: CareerState): CareerState {
   return s;
 }
 
-/** Only the newly listed Ligue 2 and Serie B clubs wait until their verified season. */
+/** Newly listed Ligue 2, Serie B and Segunda clubs wait until their verified season. */
 export function managerEntryClubInYear(club: Pick<ClubData, 'id'> | null | undefined, year: number): boolean {
   return !club || year >= 2026 || !CAREER_CLUB_POOL.some(row =>
-    row.id === club.id && (row.league === 'Ligue 2' || row.league === 'Serie B') && CAREER_POOL_SINCE[row.name] === 2026);
+    row.id === club.id && (row.league === 'Ligue 2' || row.league === 'Serie B' || row.league === 'Segunda Division') && CAREER_POOL_SINCE[row.name] === 2026);
 }
 
 /* ─── Post-retirement choices ─── */

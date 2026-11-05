@@ -151,7 +151,7 @@ console.log('4) the creation picker reaches every window');
   const page = fs.readFileSync(`${ROOT}/src/pages/SoccerCareer.tsx`, 'utf8');
   const rows = [...page.matchAll(/\{ value: "([^"]+)", label: "([^"]+)", startYear: (\d+) \}/g)]
     .map(m => ({ value: m[1], label: m[2], startYear: Number(m[3]) }));
-  if (rows.length !== 8) fail(`picker has ${rows.length} era rows, expected 8`);
+  if (rows.length !== 9) fail(`picker has ${rows.length} era rows, expected 9`);
   if (new Set(rows.map(r => r.value)).size !== rows.length) fail('picker era values repeat');
   const reached = new Set(rows.map(r => eraDefFor(r.startYear).from));
   if (reached.size !== ERA_DEFS.length) {

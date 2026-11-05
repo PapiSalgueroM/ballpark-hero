@@ -174,16 +174,17 @@ export const DOMESTIC_CUPS: Readonly<Record<string, readonly CupWindow[]>> = {
    French club (both two sourced in the ledger). Keyed by the club's country,
    then the leagues that carry it across; a Welsh club outside the English
    leagues would play its own country's cup, which this table does not hold. */
-const CROSS_BORDER: Readonly<Record<string, { leagues: readonly string[]; association: string }>> = {
+const CROSS_BORDER: Readonly<Record<string, { leagues: readonly string[]; association: string; from?: number }>> = {
   Wales: { leagues: ["Premier League", "Championship", "League One", "League Two"], association: "England" },
   Monaco: { leagues: ["Ligue 1", "Ligue 2"], association: "France" },
+  Andorra: { leagues: ["Segunda Division", "La Liga"], association: "Spain", from: 2026 },
 };
 
 /** The association whose cup a club plays: its country, or the one across
  *  the border whose league it plays in. */
-export function cupAssociation(country: string, league: string): string {
+export function cupAssociation(country: string, league: string, year?: number): string {
   const x = CROSS_BORDER[country];
-  return x && x.leagues.includes(league) ? x.association : country;
+  return x && x.leagues.includes(league) && (x.from === undefined || (Number.isSafeInteger(year) && year! >= x.from)) ? x.association : country;
 }
 
 export type CupStatus =
@@ -313,7 +314,7 @@ export function cupOpponentPool(association: string, year: number, club: string,
   const seen = new Set<string>([club]);
   const out: ClubData[] = [];
   for (const c of adjustClubsForYear(clubs as ClubData[], year)) {
-    if (seen.has(c.name) || cupAssociation(c.country, c.league) !== association) continue;
+    if (seen.has(c.name) || cupAssociation(c.country, c.league, year) !== association) continue;
     seen.add(c.name);
     out.push(c);
   }
@@ -497,7 +498,7 @@ export function readCupRun(row: unknown): CupRun | null {
       || opening.opp === r.club || stages.some(tie => tie.opp === opening.opp) || typeof opening.country !== 'string' || typeof opening.league !== 'string'
       || typeof opening.won !== 'boolean' || opening.won !== stages[0].won || typeof opening.home !== 'boolean'
       || !goalsOk(opening.for) || !goalsOk(opening.against) || opening.for === opening.against || (opening.for > opening.against) !== opening.won) return null;
-    const status = cupFor(cupAssociation(opening.country, opening.league), r.year as number);
+    const status = cupFor(cupAssociation(opening.country, opening.league, r.year as number), r.year as number);
     if (status.kind !== 'NAMED' || status.name !== run.cup) return null;
     run.opening = { opp: opening.opp, country: opening.country, league: opening.league, won: opening.won, for: opening.for, against: opening.against, home: opening.home };
   }

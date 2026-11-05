@@ -427,14 +427,24 @@
       ],
       "sources": [
         {
-          "url": "https://www.espn.com/soccer/standings/_/league/esp.2",
-          "read": "2026-10-06",
-          "says": "2026-2027 Segunda: Girona among the 22"
+          "url": "https://www.laliga.com/laliga-hypermotion/clubes",
+          "publisher": "LALIGA",
+          "publisherGroup": "LALIGA",
+          "read": "2026-11-05",
+          "says": "The official club page lists the 22 participants, including all 20 CM first teams and both reserve teams.",
+          "access": "direct text read",
+          "locator": "Equipos de LALIGA HYPERMOTION 2026/27",
+          "asOf": "explicit 2026/27 heading; current at retrieval"
         },
         {
-          "url": "https://www.laliga.com/en-GB/laliga-hypermotion/standing",
-          "read": "2026-10-06",
-          "says": "LALIGA HYPERMOTION 2026/27: Girona FC among the 22"
+          "url": "https://as.com/resultados/futbol/segunda/equipos/",
+          "publisher": "AS",
+          "publisherGroup": "PRISA",
+          "read": "2026-11-05",
+          "says": "AS lists the same 22 teams, including Girona, Sabadell, Tenerife, Eldense, Real Sociedad B and Celta Fortuna.",
+          "access": "direct text read",
+          "locator": "Equipos list",
+          "asOf": "2026/2027 heading; updated 2026-11-03 at 12:46 CET in this read"
         }
       ]
     },
@@ -3587,21 +3597,36 @@
       ],
       "membership": [
         {
-          "url": "https://site.api.espn.com/apis/v2/sports/soccer/esp.2/standings?season=2026",
-          "read": "2026-10-07",
-          "says": "ESPN's standings feed, season 2026: 22 clubs, all 20 of Club Manager's by name, plus Real Sociedad II and RC Celta Fortuna, which Club Manager does not carry; Pts = 3W + D on 22 of 22 rows"
+          "url": "https://www.laliga.com/laliga-hypermotion/clubes",
+          "publisher": "LALIGA",
+          "publisherGroup": "LALIGA",
+          "read": "2026-11-05",
+          "says": "The official club page lists the 22 participants, including all 20 CM first teams and both reserve teams.",
+          "access": "direct text read",
+          "locator": "Equipos de LALIGA HYPERMOTION 2026/27",
+          "asOf": "explicit 2026/27 heading; current at retrieval"
         },
         {
-          "url": "https://as.com/resultados/futbol/segunda/clasificacion/",
-          "read": "2026-10-07",
-          "says": "the table: 22 clubs, all 20 of Club Manager's by name, plus R. Sociedad B and Celta Fortuna, which Club Manager does not carry"
+          "url": "https://as.com/resultados/futbol/segunda/equipos/",
+          "publisher": "AS",
+          "publisherGroup": "PRISA",
+          "read": "2026-11-05",
+          "says": "AS lists the same 22 teams, including Girona, Sabadell, Tenerife, Eldense, Real Sociedad B and Celta Fortuna.",
+          "access": "direct text read",
+          "locator": "Equipos list",
+          "asOf": "2026/2027 heading; updated 2026-11-03 at 12:46 CET in this read"
         }
       ],
       "format": [
         {
-          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/esp.2/scoreboard?dates=YYYYMMDD",
-          "read": "2026-10-07",
-          "says": "ESPN's scoreboard feed read for every day of the season calendar (75 dates, 2026-08-14 to 2027-06-06): 462 fixtures, 22 clubs, 42 games a club, 231 pairs meet 2 times"
+          "url": "https://rfef.es/sites/default/files/pdf/circulares/1._Circular_84_-_CNL_Primera_y_Segunda_Division___Anexo.pdf?cb=6df81e55",
+          "publisher": "RFEF",
+          "publisherGroup": "RFEF",
+          "read": "2026-11-05",
+          "says": "Art. 13 gives 22 clubs in one group. Art. 14 gives 42 rounds, double round robin, and 3/1/0 points for win/draw/loss.",
+          "access": "direct PDF text read",
+          "locator": "PDF page 9 of 24 (printed page 8), Articles 13 and 14; scope on PDF page 5",
+          "asOf": "Approved 2026-06-18, notified 2026-06-30; annex and Art. 4 explicitly apply to 2026/27"
         }
       ]
     },
@@ -3658,7 +3683,7 @@
     }
   },
   "clubColours": {
-    "about": "Round 1100. Verified home-colour words and decorative game renderings for career pool clubs. The fact is the colour in words, from two sources; hex is this game's rendering of that word and nothing more. scripts/lib/careerClubPool.mjs POOL_COLORS and the added Ligue 2 and Serie B Club Manager colours use only the records listed here.",
+    "about": "Round 1100. Verified home-colour words and decorative game renderings for career pool clubs. The fact is the colour in words, from two sources; hex is this game's rendering of that word and nothing more. scripts/lib/careerClubPool.mjs POOL_COLORS and the added Ligue 2, Serie B and Segunda Division Club Manager colours use only the records listed here.",
     "clubs": {
       "Macarthur FC": {
         "colour": "black, with thin white pinstripes",
@@ -4151,6 +4176,280 @@
             "locator": "Final visible article paragraph"
           }
         ]
+      },
+      "Castellon": {
+        "colour": "white and black",
+        "hex": "#2b2b2b",
+        "sources": [
+          {
+            "url": "https://www.cdcastellon.com/wp-content/uploads/2019/07/Dossier20192020.pdf",
+            "publisher": "CD Castellón",
+            "publisherGroup": "CD Castellón",
+            "read": "2026-11-05",
+            "says": "Club document identifies its shirt colours as white and black.",
+            "access": "direct PDF text read",
+            "locator": "PDF page 2, opening paragraph (tool P1)",
+            "asOf": "2019-20 membership campaign"
+          },
+          {
+            "url": "https://www.elperiodic.com/castellon/manzana-albinegra-edificios-colores-club-visitas-torre-maraton-quiere-renovar-castellon-zona-castalia_916141",
+            "publisher": "Elperiodic.com",
+            "publisherGroup": "Elperiodic.com",
+            "read": "2026-11-05",
+            "says": "Report quotes the mayor identifying white and black as the club's colours for the Castalia project.",
+            "access": "direct text read",
+            "locator": "Manzana Albinegra project paragraph",
+            "asOf": "2023-07-29",
+            "published": "2023-07-29"
+          }
+        ]
+      },
+      "Burgos": {
+        "colour": "white and black",
+        "hex": "#d9d9d9",
+        "sources": [
+          {
+            "url": "https://www.burgoscf.es/noticias/el-burgos-cf-y-la-moda-unidos-por-un-sentimiento",
+            "publisher": "Burgos CF",
+            "publisherGroup": "Burgos CF",
+            "read": "2026-11-05",
+            "says": "Club explicitly calls white and black its characteristic colours.",
+            "access": "direct text read",
+            "locator": "Opening collaboration-description paragraph",
+            "asOf": "undated current article; related posts place context around 2025-26"
+          },
+          {
+            "url": "https://www.laliga.com/noticias/cinco-cosas-que-no-sabias-del-burgos-cf",
+            "publisher": "LALIGA",
+            "publisherGroup": "LALIGA",
+            "read": "2026-11-05",
+            "says": "League explains the blanquinegros name refers to the colours the team wears.",
+            "access": "direct text read",
+            "locator": "Final bullet",
+            "asOf": "2021-06-15",
+            "published": "2021-06-15"
+          }
+        ]
+      },
+      "Sabadell": {
+        "colour": "blue and white",
+        "hex": "#1b458f",
+        "sources": [
+          {
+            "url": "https://www.laliga.com/noticias/cinco-cosas-que-quiza-no-sabias-del-ce-sabadell",
+            "publisher": "LALIGA",
+            "publisherGroup": "LALIGA",
+            "read": "2026-11-05",
+            "says": "League says Sabadell and Bristol Rovers share a quartered white and blue shirt.",
+            "access": "direct text read",
+            "locator": "Twinning bullet",
+            "asOf": "2020-08-19",
+            "published": "2020-08-19"
+          },
+          {
+            "url": "https://as.com/futbol/el-sabadell-presenta-su-nueva-equipacion-f202607-n/",
+            "publisher": "AS",
+            "publisherGroup": "PRISA",
+            "read": "2026-11-05",
+            "says": "Report identifies the quartered blue and white design as Sabadell's identity.",
+            "access": "direct text read",
+            "locator": "Main shirt-description paragraph",
+            "asOf": "2026-07-24; 2026-27 home shirt",
+            "published": "2026-07-24"
+          }
+        ]
+      },
+      "Tenerife": {
+        "colour": "white and blue",
+        "hex": "#1b458f",
+        "sources": [
+          {
+            "url": "https://www.clubdeportivotenerife.es/noticias/primera-equipacion-20262027-una-camiseta-que-cuenta-historias",
+            "publisher": "CD Tenerife",
+            "publisherGroup": "CD Tenerife",
+            "read": "2026-11-05",
+            "says": "Official launch identifies the home shirt and club identity as blanquiazul (white and blue).",
+            "access": "direct text read",
+            "locator": "First collaboration and identity paragraphs",
+            "asOf": "2026-07-09; 2026-27 home shirt",
+            "published": "2026-07-09"
+          },
+          {
+            "url": "https://as.com/futbol/segunda/el-tenerife-estrenara-camiseta-n/",
+            "publisher": "AS",
+            "publisherGroup": "PRISA",
+            "read": "2026-11-05",
+            "says": "Report distinguishes a commemorative sky-blue shirt from the usual white shirt with a blue cross.",
+            "access": "direct text read",
+            "locator": "Paragraph beginning Hasta el momento",
+            "asOf": "2025-04-10; 2024-25 shirt context",
+            "published": "2025-04-10"
+          }
+        ]
+      },
+      "Leganes": {
+        "colour": "white and blue",
+        "hex": "#1b458f",
+        "sources": [
+          {
+            "url": "https://www.cdleganes.com/nueva-segunda-equipacion-puma-leganes-2026-2027",
+            "publisher": "CD Leganés",
+            "publisherGroup": "CD Leganés",
+            "read": "2026-11-05",
+            "says": "Club explicitly calls white and blue its historic identity colours, separate from the black away base.",
+            "access": "direct text read",
+            "locator": "Dualidad en blanco y azul section",
+            "asOf": "2026-07-15; 2026-27 away shirt with traditional club-colour details",
+            "published": "2026-07-15"
+          },
+          {
+            "url": "https://as.com/futbol/segunda/el-leganes-resucita-como-primera-camiseta-la-del-ascenso-en-1993-n/",
+            "publisher": "AS",
+            "publisherGroup": "PRISA",
+            "read": "2026-11-05",
+            "says": "Report describes blue and white as the club's regular colours, distinguishing commemorative red details.",
+            "access": "direct text read",
+            "locator": "Main colour-description paragraphs",
+            "asOf": "2023-06-27; 2023-24 shirt context",
+            "published": "2023-06-27"
+          }
+        ]
+      },
+      "Cordoba": {
+        "colour": "white and green",
+        "hex": "#0a7040",
+        "sources": [
+          {
+            "url": "https://www.cordobacf.com/noticias/el-cordoba-cf-presenta-su-primera-equipacion-para-la-temporada-202627-la-esencia-del-club-hecha-camiseta",
+            "publisher": "Córdoba CF",
+            "publisherGroup": "Córdoba CF",
+            "read": "2026-11-05",
+            "says": "Official launch explicitly states traditional vertical white and green stripes.",
+            "access": "direct text read",
+            "locator": "Opening paragraph",
+            "asOf": "2026-27 home shirt; article says release next Friday after Thursday presentation"
+          },
+          {
+            "url": "https://cordopolis.eldiario.es/deportes/ccf/arte-historia-tradicion-primera-equipacion-cordoba-26-27_1_13352443.html",
+            "publisher": "Cordópolis / elDiario.es",
+            "publisherGroup": "elDiario.es / Cordópolis",
+            "read": "2026-11-05",
+            "says": "Independently published report describes the traditional vertical white and green shirt.",
+            "access": "direct text read",
+            "locator": "Article paragraphs around the club's identity description",
+            "asOf": "2026-07-02; 2026-27 home shirt",
+            "published": "2026-07-02"
+          }
+        ]
+      },
+      "Eldense": {
+        "colour": "blue and grana",
+        "hex": "#7d1c2a",
+        "sources": [
+          {
+            "url": "https://www.cdeldense.es/historia",
+            "publisher": "CD Eldense",
+            "publisherGroup": "CD Eldense",
+            "read": "2026-11-05",
+            "says": "Official history states blue and grana shirt colours, with black shorts distinguishing it.",
+            "access": "direct text read",
+            "locator": "PRIMERA ALINEACIÓN",
+            "asOf": "undated official history; founding-era and continuing identity"
+          },
+          {
+            "url": "https://as.com/futbol/segunda/el-eldense-presenta-su-nueva-piel-f202607-n/",
+            "publisher": "AS",
+            "publisherGroup": "PRISA",
+            "read": "2026-11-05",
+            "says": "Report describes blue and red vertical stripes and calls the club azulgrana.",
+            "access": "direct text read",
+            "locator": "Home-shirt description",
+            "asOf": "2026-07-28; 2026-27 home shirt",
+            "published": "2026-07-28"
+          }
+        ]
+      },
+      "FC Andorra": {
+        "colour": "blue, yellow and red",
+        "hex": "#1b458f",
+        "sources": [
+          {
+            "url": "https://www.fcandorra.com/identitat",
+            "publisher": "FC Andorra",
+            "publisherGroup": "FC Andorra",
+            "read": "2026-11-05",
+            "says": "Official identity identifies blue, yellow and red as the club's traditional tricolour.",
+            "access": "direct text read",
+            "locator": "Uns colors molt representatius",
+            "asOf": "undated official identity page, current at retrieval"
+          },
+          {
+            "url": "https://www.andorraesportiu.com/el-fc-andorra-presenta-la-primera-equipacio-de-la-temporada-2026-2027/?amp=1",
+            "publisher": "Andorra Esportiu",
+            "publisherGroup": "Premsa Esportiva Romgual S.L.",
+            "read": "2026-11-05",
+            "says": "Report describes the blue, yellow and red shirt with yellow shorts and red socks.",
+            "access": "direct text read",
+            "locator": "Opening shirt-description paragraph",
+            "asOf": "2026-07-08; 2026-27 home shirt",
+            "published": "2026-07-08"
+          }
+        ]
+      },
+      "Ceuta": {
+        "colour": "white",
+        "hex": "#d9d9d9",
+        "sources": [
+          {
+            "url": "https://as.com/futbol/segunda/el-ceuta-presenta-sus-nuevas-camisetas-f202607-n/",
+            "publisher": "AS",
+            "publisherGroup": "PRISA",
+            "read": "2026-11-05",
+            "says": "Report states white remains the dominant home-shirt colour.",
+            "access": "direct text read",
+            "locator": "Home-kit description",
+            "asOf": "2026-07-27; 2026-27 home shirt",
+            "published": "2026-07-27"
+          },
+          {
+            "url": "https://www.rtvce.es/deportes/vivas-saluda-bosque-leyendas-seleccion-enfunda-camiseta-ceuta-fitur/20250122125338084029.html",
+            "publisher": "Radio Televisión Ceuta",
+            "publisherGroup": "RTVCE public broadcaster",
+            "read": "2026-11-05",
+            "says": "Local public broadcaster calls AD Ceuta the white team while reporting its shirt presentation to the city president.",
+            "access": "direct text read",
+            "locator": "Club president / city president paragraph",
+            "asOf": "2025-01-22",
+            "published": "2025-01-22"
+          }
+        ]
+      },
+      "Albacete": {
+        "colour": "white",
+        "hex": "#d9d9d9",
+        "sources": [
+          {
+            "url": "https://www.albacetebalompie.es/noticias/una-camiseta-historia",
+            "publisher": "Albacete Balompié",
+            "publisherGroup": "Albacete Balompié",
+            "read": "2026-11-05",
+            "says": "Official launch describes white as characteristic and irreplaceable, with garnet as an accompanying colour.",
+            "access": "direct text read",
+            "locator": "First substantive paragraph",
+            "asOf": "2018-19 home shirt"
+          },
+          {
+            "url": "https://www.5maseldescuento.es/2026/07/el-albacete-presenta-su-nueva-primera-equipacion-para-la-temporada-2026-27/",
+            "publisher": "5 más el descuento",
+            "publisherGroup": "5 más el descuento",
+            "read": "2026-11-05",
+            "says": "Local specialist report describes white as the dominant shirt and shorts colour, with garnet details.",
+            "access": "direct text read",
+            "locator": "Home-kit description paragraphs",
+            "asOf": "2026-07-21; 2026-27 home shirt",
+            "published": "2026-07-21"
+          }
+        ]
       }
     }
   },
@@ -4573,6 +4872,32 @@
             "url": "https://sfl.ch/articles/le-fc-vaduz-champion-et-promu-dans-lelite",
             "read": "2026-10-08",
             "says": "the Swiss Football League's own report of the club's promotion, 2026-05-15: \"Les Liechtensteinois pourront ainsi disputer dès cet été la sixième saison de Brack Super League de leur histoire\" (it replaces the club's address page, which named the town and not the country)"
+          }
+        ]
+      },
+      "FC Andorra": {
+        "country": "Andorra",
+        "sources": [
+          {
+            "url": "https://www.fcandorra.com/bases-legals-sorteig-samarreta",
+            "publisher": "FC Andorra",
+            "publisherGroup": "FC Andorra",
+            "read": "2026-11-05",
+            "says": "The club's legal notice gives its registered address in Escaldes-Engordany, Andorra. Used only for home-country identity.",
+            "access": "direct text read",
+            "locator": "Opening legal-entity/address paragraph; no legal advice inferred",
+            "asOf": "2026-07-31 to 2026-08-15 promotional terms",
+            "published": "2026-07-31"
+          },
+          {
+            "url": "https://www.govern.ad/es/ministeris-i-secretaries-d-estat/ministeri-de-justicia-i-interior/area-d-entitats-juridiques-i-professions-titulades/registre-d-associacions/associacions?start=30",
+            "publisher": "Govern d'Andorra",
+            "publisherGroup": "Govern d'Andorra",
+            "read": "2026-11-05",
+            "says": "Government association register lists Futbol Club Andorra at the Ordino sports training centre in Andorra.",
+            "access": "direct text read",
+            "locator": "Associacions table, Futbol Club Andorra (FCA) row",
+            "asOf": "current public registry at retrieval; no season asserted"
           }
         ]
       }

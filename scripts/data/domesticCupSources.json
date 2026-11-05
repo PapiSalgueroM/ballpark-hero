@@ -3635,6 +3635,32 @@
      ]
     }
    ]
+  },
+  "Andorra": {
+   "association": "Spain",
+   "facts": [
+    {
+     "ref": "segunda-2026:andorra-copa",
+     "verified": true,
+     "claim": "FC Andorra participates in Spain's Copa del Rey in2026/27 while in Segunda Division.",
+     "sources": [
+      {
+       "host": "rfef.es",
+       "url": "https://rfef.es/es/noticias/comienzan-las-grandes-noches-de-copa-0",
+       "read": "2026-11-05",
+       "line": "Copa del Rey2026-2027 first-round schedule: CD Varea versus FC Andorra.",
+       "asOf": "2026-10-26; Copa del Rey 2026/27 first round"
+      },
+      {
+       "host": "www.fcandorra.com",
+       "url": "https://www.fcandorra.com/es/partidos/temporada-2026-2027-copa-del-rey-3-cd-varea-vs-fc-andorra-5221",
+       "read": "2026-11-05",
+       "line": "Official FC Andorra match page identifies CD Varea versus FC Andorra as a2026/27 Copa del Rey tie.",
+       "asOf": "2026/27 Copa del Rey match page; 29 October 2026 result"
+      }
+     ]
+    }
+   ]
   }
  },
  "corrections": [

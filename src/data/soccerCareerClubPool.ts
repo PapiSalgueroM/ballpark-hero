@@ -5,7 +5,7 @@
    premier, championship, laliga, brasileirao, seriea, bundesliga,
    ligue1, eredivisie, saudi, mlsEast, mlsWest, primeira, scottish,
    superlig, bundesliga2, proleague, austria, greece, denmark,
-   switzerland, croatia, ligamx, aleague, serieb, ligue2.
+   switzerland, croatia, ligamx, aleague, serieb, ligue2, segunda.
    Rosters baked 2026-10-07.
    The file has no imports on purpose, so the Soccer Career page never pulls
    Club Manager into its bundle. */
@@ -319,6 +319,25 @@ export const CAREER_CLUB_POOL: CareerPoolClub[] = [
   { id: "cm-clermont", name: "Clermont", country: "France", tier: 4, color: "#d02128", league: "Ligue 2" },
   { id: "cm-boulogne", name: "Boulogne", country: "France", tier: 4, color: "#d02128", league: "Ligue 2" },
   { id: "cm-laval", name: "Laval", country: "France", tier: 4, color: "#ff6600", league: "Ligue 2" },
+  { id: "cm-real-oviedo", name: "Real Oviedo", country: "Spain", tier: 4, color: "#2b7fc4", league: "Segunda Division" },
+  { id: "cm-mallorca", name: "Mallorca", country: "Spain", tier: 4, color: "#e20613", league: "Segunda Division" },
+  { id: "cm-eibar", name: "Eibar", country: "Spain", tier: 4, color: "#8f2242", league: "Segunda Division" },
+  { id: "cm-castellon", name: "Castellon", country: "Spain", tier: 4, color: "#2b2b2b", league: "Segunda Division" },
+  { id: "cm-almeria", name: "Almeria", country: "Spain", tier: 4, color: "#d02128", league: "Segunda Division" },
+  { id: "cm-burgos", name: "Burgos", country: "Spain", tier: 4, color: "#d9d9d9", league: "Segunda Division" },
+  { id: "cm-sabadell", name: "Sabadell", country: "Spain", tier: 4, color: "#1b458f", league: "Segunda Division" },
+  { id: "cm-sporting-gijon", name: "Sporting Gijon", country: "Spain", tier: 4, color: "#e30613", league: "Segunda Division" },
+  { id: "cm-granada", name: "Granada", country: "Spain", tier: 4, color: "#c8102e", league: "Segunda Division" },
+  { id: "cm-las-palmas", name: "Las Palmas", country: "Spain", tier: 4, color: "#fee23e", league: "Segunda Division" },
+  { id: "cm-tenerife", name: "Tenerife", country: "Spain", tier: 4, color: "#1b458f", league: "Segunda Division" },
+  { id: "cm-leganes", name: "Leganes", country: "Spain", tier: 4, color: "#1b458f", league: "Segunda Division" },
+  { id: "cm-valladolid", name: "Valladolid", country: "Spain", tier: 4, color: "#5c2d91", league: "Segunda Division" },
+  { id: "cm-cordoba", name: "Cordoba", country: "Spain", tier: 4, color: "#0a7040", league: "Segunda Division" },
+  { id: "cm-eldense", name: "Eldense", country: "Spain", tier: 4, color: "#7d1c2a", league: "Segunda Division" },
+  { id: "cm-cadiz", name: "Cadiz", country: "Spain", tier: 4, color: "#ffe100", league: "Segunda Division" },
+  { id: "cm-fc-andorra", name: "FC Andorra", country: "Andorra", tier: 4, color: "#1b458f", league: "Segunda Division" },
+  { id: "cm-ceuta", name: "Ceuta", country: "Spain", tier: 4, color: "#d9d9d9", league: "Segunda Division" },
+  { id: "cm-albacete", name: "Albacete", country: "Spain", tier: 4, color: "#d9d9d9", league: "Segunda Division" },
 ];
 
 /** Every generated league as the career knows it (hand clubs included),
@@ -352,6 +371,7 @@ export const CAREER_LEAGUE_LADDER: Record<string, string[][]> = {
   "A-League": [["Adelaide United"], ["Melbourne City"], ["Sydney FC"], ["Newcastle Jets"], ["Auckland FC"], ["Macarthur FC"], ["Melbourne Victory"], ["Perth Glory"], ["Wellington Phoenix"], ["Western Sydney Wanderers"], ["Brisbane Roar"], ["Central Coast Mariners"]],
   "Serie B": [["Pisa"], ["Verona"], ["Arezzo", "Ascoli", "Avellino", "Benevento", "Carrarese", "Catanzaro", "Cesena", "Cremonese", "Empoli", "Entella", "Juve Stabia", "Mantova", "Modena", "Padova", "Palermo", "Sampdoria", "Sudtirol", "Vicenza"]],
   "Ligue 2": [["Nantes"], ["Saint-Etienne"], ["Reims"], ["Annecy", "Boulogne", "Clermont", "Dijon", "Dunkerque", "Grenoble", "Guingamp", "Laval", "Metz", "Montpellier", "Nancy", "Pau", "Red Star FC", "Rodez", "Sochaux"]],
+  "Segunda Division": [["Girona"], ["Mallorca"], ["Albacete", "Almeria", "Burgos", "Cadiz", "Castellon", "Ceuta", "Cordoba", "Eibar", "Eldense", "FC Andorra", "Granada", "Las Palmas", "Leganes", "Real Oviedo", "Sabadell", "Sporting Gijon", "Tenerife", "Valladolid"]],
 };
 
 /** The first season (start year) the game offers a generated club, for the
@@ -406,5 +426,8 @@ export const CAREER_POOL_SINCE: Record<string, number> = {
   "Vicenza": 2026, "Arezzo": 2026, "Benevento": 2026, "Ascoli": 2026, "Metz": 2026, "Saint-Etienne": 2026,
   "Red Star FC": 2026, "Reims": 2026, "Montpellier": 2026, "Nancy": 2026, "Annecy": 2026, "Sochaux": 2026,
   "Dijon": 2026, "Pau": 2026, "Guingamp": 2026, "Dunkerque": 2026, "Grenoble": 2026, "Rodez": 2026, "Clermont": 2026,
-  "Boulogne": 2026, "Laval": 2026,
+  "Boulogne": 2026, "Laval": 2026, "Real Oviedo": 2026, "Mallorca": 2026, "Eibar": 2026, "Castellon": 2026,
+  "Almeria": 2026, "Burgos": 2026, "Sabadell": 2026, "Sporting Gijon": 2026, "Granada": 2026, "Las Palmas": 2026,
+  "Tenerife": 2026, "Leganes": 2026, "Valladolid": 2026, "Cordoba": 2026, "Eldense": 2026, "Cadiz": 2026,
+  "FC Andorra": 2026, "Ceuta": 2026, "Albacete": 2026,
 };
