@@ -1,4 +1,4 @@
-import { MAX_WORLD_NAMES, hasSoccerHistoricalPlayer, readSoccerHistoricalArrivals } from './soccerHistoricalArrivals';
+import { MAX_WORLD_NAMES, hasSoccerHistoricalPlayer, readSoccerHistoricalArrivals, soccerHistoricalEntryForName } from './soccerHistoricalArrivals';
 /* ─── Round 130: the phone stops being a one shot novelty ───────────────────
 
    What Round 80 shipped: a text arrived between seasons, you picked one of two
@@ -1654,6 +1654,11 @@ export function worldSeasonTick(
      (worldClubOf). Generated names are seeded once, as before. */
   // Registered arrivals keep the career's saved club across era-table changes.
   for (const st of stars) {
+    if (s.historicalArrivals?.version === 2) {
+      const entry = soccerHistoricalEntryForName(s, st.name);
+      if ((realNames && !entry) || !p.clubs[st.name]) p.clubs[st.name] = entry?.entryClub ?? st.club;
+      continue;
+    }
     const entry = hasSoccerHistoricalPlayer(s, st.name) ? readSoccerHistoricalArrivals(s)!.players[0] : undefined;
     if ((realNames && !entry) || !p.clubs[st.name]) p.clubs[st.name] = entry?.entryClub ?? st.club;
   }

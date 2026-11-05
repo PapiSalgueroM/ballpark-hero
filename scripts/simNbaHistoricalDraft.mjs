@@ -82,7 +82,7 @@ try {
   assert.equal(native('normal', args('normal'), clean).exit, 0, 'normal native exit');
   receipt.normal = result('normal', []);
   const before = source.get(DATA).toString('utf8');
-  const span = '  {"id":"nba-draft-2004-p59","pick":59,"name":"Rashad Wright","families":["G"],"dob":"1982-03-17"},\n';
+  const span = '  {"id":"nba-draft-2004-p59","pick":59,"name":"Rashad Wright","families":["G"],"dob":"1982-03-17"},';
   assert.equal(before.split(span).length - 1, 1, 'actual selection59 executable row is unique');
   const at = before.indexOf(span);
   const changed = before.slice(0, at) + before.slice(at + span.length);

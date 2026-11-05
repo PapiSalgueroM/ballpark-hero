@@ -20,7 +20,7 @@
    bottom of the handset and the message list scrolls itself to the newest line
    after every tap, so the answer you just got is already on screen. The page
    behind the overlay is never touched. */
-import { readSoccerHistoricalArrivals } from "@/lib/soccerHistoricalArrivals";
+import { readSoccerHistoricalArrivals, SOCCER_HISTORICAL_PLAYERS } from "@/lib/soccerHistoricalArrivals";
 import { worldClubOf } from "@/lib/soccerPhone";
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { focusDialogOnMount, escapeCloses } from '@/lib/dialogA11y';
@@ -87,6 +87,25 @@ function AppHeader({ title, backLabel, onBack }: { title: string; backLabel: str
     </div>
   );
 }
+
+const HISTORICAL_ENTRY_SOURCES = {
+  'soccer:neymar': [
+    ['https://www.santosfc.com.br/memoria-em-partida-oficial-neymar-fazia-a-estreia-com-a-camisa-do-santos-fc/', 'Santos FC'],
+    ['https://ge.globo.com/Esportes/Noticias/Times/Santos/0,,MUL1033491-9874,00.html', 'Globo'],
+  ],
+  'soccer:mbappe': [
+    ['https://www.asmonaco.com/fr/news/kylian-mbappe-fete-ses-cinq-ans-en-pro', 'AS Monaco'],
+    ['https://kylianmbappe.com/saison-2015-2016/', 'Kylian Mbappe'],
+  ],
+  'soccer:haaland': [
+    ['https://www.brynefk.no/nyheter/kan-vi-sla-ranheim', 'Bryne FK'],
+    ['https://es.mancity.com/news/mens/carrera-erling-haaland-63815180', 'Manchester City'],
+  ],
+  'soccer:bellingham': [
+    ['https://www.englandfootball.com/england/mens-senior-team/squad/jude-bellingham', 'England Football'],
+    ['https://www.realmadrid.com/en-US/news/football/first-team/latest-news/bellingham-is-a-new-real-madrid-player', 'Real Madrid'],
+  ],
+} as const;
 
 export default function PhonePanel({ career, onAnswer, onMoney, onBuyItem, onClose }: {
   career: CareerState;
@@ -379,12 +398,26 @@ export default function PhonePanel({ career, onAnswer, onMoney, onBuyItem, onClo
               <AppHeader title="📰 SportsFeed" backLabel="Home" onBack={() => setApp("home")} />
               <div className="flex-1 overflow-y-auto p-2.5 space-y-2">
                 <p className="text-[10px] text-white/40 text-center pb-1">World football. Nothing about you in here.</p>
-                {readSoccerHistoricalArrivals(career)?.players.length === 1 && (
+                {career.historicalArrivals?.version !== 2 && readSoccerHistoricalArrivals(career)?.players.length === 1 && (
                   <section aria-label="Real player arrivals" className="rounded-lg bg-white/5 border border-white/10 px-3 py-2 text-[11px] leading-snug space-y-1">
                     <p className="font-bold">Neymar</p>
                     <p>Senior debut: Santos FC, 7 March 2009. Brazil. Attacker. Age 17 at his debut.</p>
                     <p>Career world: {worldClubOf(career, 'Neymar') ?? 'Not recorded'}. This club belongs to your save. Development and results are simulated.</p>
                     <p className="text-white/60">Calendar year entry. Sources: <a className="underline" href="https://www.santosfc.com.br/memoria-em-partida-oficial-neymar-fazia-a-estreia-com-a-camisa-do-santos-fc/" target="_blank" rel="noreferrer">Santos FC</a>, <a className="underline" href="https://ge.globo.com/Esportes/Noticias/Times/Santos/0,,MUL1033491-9874,00.html" target="_blank" rel="noreferrer">Globo</a>.</p>
+                  </section>
+                )}
+                {career.historicalArrivals?.version === 2 && !!readSoccerHistoricalArrivals(career)?.players.length && (
+                  <section aria-label="Real player arrivals" className="rounded-lg bg-white/5 border border-white/10 px-3 py-2 text-[11px] leading-snug space-y-2">
+                    {readSoccerHistoricalArrivals(career)!.players.map(player => {
+                      const entry = SOCCER_HISTORICAL_PLAYERS.find(row => row.id === player.id)!;
+                      return <div key={player.id} className="space-y-1">
+                        <p className="font-bold">{entry.name}</p>
+                        <p>First-team entry: {player.entryYear} at {player.entryClub}.</p>
+                        <p>Career world: {worldClubOf(career, entry.name) ?? 'Not recorded'}. This club belongs to your save. Development and results are simulated.</p>
+                        <p className="text-white/60">Calendar year entry. Sources: {HISTORICAL_ENTRY_SOURCES[player.id].map(([href, label], i) =>
+                          <span key={href}>{i > 0 && ', '}<a className="underline" href={href} target="_blank" rel="noreferrer">{label}</a></span>)}.</p>
+                      </div>;
+                    })}
                   </section>
                 )}
                 {feed.length === 0 && <p className="text-center text-xs text-white/50 py-8">Quiet window. Check back after the season.</p>}
