@@ -1,0 +1,142 @@
+name: NBA free-agent market candidate regressions
+on:
+  push:
+    branches: [codex/nba-fo-market-regressions-20261104]
+permissions:
+  contents: read
+env:
+  CI: '1'
+  SIM_NETWORK: offline
+  NBA_FO_QA_PARENT: dd7273e4835a8048fc7745e5fe8bdf4de571c9d5
+  NBA_FO_REGRESSIONS_RUNNER_BLOB: 0ff5b7f08d0bb7334172c103f4360cfde4eb24c9
+  NBA_FO_REGRESSIONS_SPEC_BLOB: 0434c7587f7f58d70230eb71deed76368af57894
+jobs:
+  regressions:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+          filter: blob:none
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - name: Bind candidate and the three-path temporary QA carrier
+        run: |
+          set -euo pipefail
+          OUT="$RUNNER_TEMP/nba-fo-market-regressions"
+          mkdir -p "$OUT/logs" "$OUT/transport"
+          echo "QA_OUT=$OUT" >> "$GITHUB_ENV"
+          test "$(git rev-parse HEAD^)" = "$NBA_FO_QA_PARENT"
+          test "$(git rev-parse 'HEAD^^{tree}')" = e92145c08b3ce3091077818d4c9802c5b7805ea7
+          [[ "$NBA_FO_REGRESSIONS_RUNNER_BLOB" =~ ^[a-f0-9]{40}$ ]]
+          [[ "$NBA_FO_REGRESSIONS_SPEC_BLOB" =~ ^[a-f0-9]{40}$ ]]
+          test "$(git hash-object scripts/qa/nbaFoMarketRegressions.mjs)" = "$NBA_FO_REGRESSIONS_RUNNER_BLOB"
+          test "$(git hash-object scripts/qa/nbaFoMarketRegressions.json)" = "$NBA_FO_REGRESSIONS_SPEC_BLOB"
+          git rev-parse HEAD HEAD^ HEAD^{tree} > "$OUT/source.txt"
+          git diff --name-status HEAD^ HEAD > "$OUT/qa-commit-paths.txt"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$OUT/source-before.sha256"
+          git status --porcelain=v1 --untracked-files=all > "$OUT/status-before.txt"
+          test ! -s "$OUT/status-before.txt"
+          cp .github/workflows/nba-fo-market-regressions-20261104.yml "$OUT/workflow.yml"
+          cp scripts/qa/nbaFoMarketRegressions.json "$OUT/spec.json"
+          cp scripts/qa/nbaFoMarketRegressions.mjs "$OUT/runner.mjs"
+      - name: Install exact npm lock
+        run: |
+          set -euo pipefail
+          npm ci --no-audit --no-fund > "$QA_OUT/logs/npm-ci.log" 2>&1
+          git diff --exit-code HEAD -- package.json package-lock.json bun.lockb
+      - name: Prehydrate only the actual normal Schedule source dependency
+        run: |
+          set -euo pipefail
+          mkdir -p "$QA_OUT/history"
+          set +e
+          git fetch --no-tags --depth=1 --filter=blob:none origin cf3679e78076fb6f84a49106481de15d36c22348 > "$QA_OUT/history/fetch.log" 2>&1
+          FETCH_EXIT=$?
+          set -e
+          printf '{"command":["git","fetch","--no-tags","--depth=1","--filter=blob:none","origin","cf3679e78076fb6f84a49106481de15d36c22348"],"exit":%s}\n' "$FETCH_EXIT" > "$QA_OUT/history/fetch-command.json"
+          test "$FETCH_EXIT" -eq 0
+          node --input-type=module <<'NODE' > "$QA_OUT/history/read.log" 2>&1
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import assert from 'node:assert/strict';
+          import { spawnSync } from 'node:child_process';
+          import { createHash } from 'node:crypto';
+          const out=path.join(process.env.QA_OUT,'history'),spec=JSON.parse(fs.readFileSync('scripts/qa/nbaFoMarketRegressions.json'));
+          assert.equal(spec.history.required.length,1);
+          const h=spec.history.required[0],commands=[];
+          assert.equal(h.commit,'cf3679e78076fb6f84a49106481de15d36c22348');
+          assert.equal(h.tree,'671db8fb5e53f065766a5ef72fbe6f6682e1550f');
+          assert.equal(h.count,1350);assert.equal(h.totalBytes,21114074);assert.equal(h.files.length,h.count);
+          const sha=bytes=>createHash('sha256').update(bytes).digest('hex');
+          const blob=bytes=>createHash('sha1').update('blob '+bytes.length+'\0').update(bytes).digest('hex');
+          function git(args,input,localOnly=false){
+           const child=spawnSync('git',args,{input,env:{...process.env,...(localOnly?{GIT_NO_LAZY_FETCH:'1'}:{})},maxBuffer:64*1024*1024});
+           commands.push({command:['git',...args],stdin:input?{bytes:Buffer.byteLength(input),sha256:sha(input)}:null,localOnly,exit:child.status,signal:child.signal,error:child.error?String(child.error):null,stdout:{bytes:child.stdout?.length??0,sha256:sha(child.stdout??Buffer.alloc(0))},stderr:child.stderr?.toString()??''});
+           fs.writeFileSync(path.join(out,'read-commands.json'),JSON.stringify(commands,null,2)+'\n');
+           assert(!child.error&&child.signal===null);assert.equal(child.status,0);return child.stdout;
+          }
+          assert.equal(git(['rev-parse',h.commit+'^{tree}']).toString().trim(),h.tree);
+          const treeBytes=git(['ls-tree','-r','--long','--full-tree',h.commit,'src']);
+          fs.writeFileSync(path.join(out,'actual-src-tree.txt'),treeBytes);
+          const actualTree=treeBytes.toString().trimEnd().split('\n').map(line=>{const m=/^[0-7]{6} blob ([a-f0-9]{40})\s+([0-9]+)\t(.+)$/.exec(line);assert(m,'Exact historical source blob entry');return{path:m[3],blob:m[1],bytes:Number(m[2])};});
+          assert.deepEqual(actualTree,h.files,'Only actual normal Schedule historical src files');
+          const requests=h.files.map(row=>h.commit+':'+row.path).join('\n')+'\n';
+          fs.writeFileSync(path.join(out,'requested-src.txt'),requests);
+          const batch=git(['cat-file','--batch'],requests),rows=[];let at=0;
+          for(const expected of h.files){
+           const end=batch.indexOf(10,at);assert(end>=at,'Actual cat-file header');const header=batch.subarray(at,end).toString(),m=/^([a-f0-9]{40}) blob ([0-9]+)$/.exec(header);assert(m,'Actual historical blob, not missing');
+           const size=Number(m[2]),start=end+1,body=batch.subarray(start,start+size);assert.equal(m[1],expected.blob);assert.equal(size,expected.bytes);assert.equal(body.length,size);assert.equal(blob(body),expected.blob);assert.equal(batch[start+size],10);
+           rows.push({...expected,sha256:sha(body)});at=start+size+1;
+          }
+          assert.equal(at,batch.length);assert.equal(rows.reduce((sum,row)=>sum+row.bytes,0),h.totalBytes);
+          const checks=git(['cat-file','--batch-check'],h.files.map(row=>row.blob).join('\n')+'\n',true).toString().trimEnd().split('\n');
+          assert.deepEqual(checks,h.files.map(row=>row.blob+' blob '+row.bytes),'Every historical body is locally available with lazy fetching disabled');
+          const receipt={status:'prehydrated-exact-normal-schedule-source',commit:h.commit,tree:h.tree,count:h.count,totalBytes:h.totalBytes,files:rows,nativeExit:0};
+          fs.writeFileSync(path.join(out,'prehydration.json'),JSON.stringify(receipt,null,2)+'\n');
+          console.log('NBA regression history: exactly1350 actual cf3679 source blobs,21114074 body bytes, hash verified and locally available before offline types/tests. No full history or extra ref fetched.');
+          NODE
+          echo 'GIT_NO_LAZY_FETCH=1' >> "$GITHUB_ENV"
+      - name: Proper real application types first with local-only Git objects
+        run: |
+          set -euo pipefail
+          test "$GIT_NO_LAZY_FETCH" = 1
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          : > "$QA_OUT/transport/types.log"
+          SIM_OFFLINE_RECEIPT="$QA_OUT/transport/types.log" node_modules/.bin/tsc --noEmit -p tsconfig.app.json > "$QA_OUT/logs/types.log" 2>&1
+          test ! -s "$QA_OUT/transport/types.log"
+          echo '{"command":"node_modules/.bin/tsc --noEmit -p tsconfig.app.json","exit":0}' > "$QA_OUT/types-passed.json"
+      - name: Actual201 cases and14 unchanged serial harnesses
+        run: |
+          set -euo pipefail
+          test "$GIT_NO_LAZY_FETCH" = 1
+          node --check scripts/qa/nbaFoMarketRegressions.mjs
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          : > "$QA_OUT/transport/regressions.log"
+          SIM_OFFLINE_RECEIPT="$QA_OUT/transport/regressions.log" node scripts/qa/nbaFoMarketRegressions.mjs --out "$QA_OUT" --spec scripts/qa/nbaFoMarketRegressions.json > "$QA_OUT/logs/regressions.log" 2>&1
+          test ! -s "$QA_OUT/transport/regressions.log"
+      - name: Always retain exact full source status and lock holds
+        if: always()
+        run: |
+          set -euo pipefail
+          git diff HEAD > "$QA_OUT/source-diff.txt"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$QA_OUT/source-after.sha256"
+          git status --porcelain=v1 --untracked-files=all > "$QA_OUT/status-after.txt"
+          cmp "$QA_OUT/source-before.sha256" "$QA_OUT/source-after.sha256"
+          cmp "$QA_OUT/status-before.txt" "$QA_OUT/status-after.txt"
+          git diff --exit-code HEAD -- package.json package-lock.json bun.lockb
+          git diff --exit-code HEAD
+          test "$(du -sb "$QA_OUT" | cut -f1)" -lt 50000000
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: nba-fo-market-regressions
+          path: ${{ runner.temp }}/nba-fo-market-regressions
+          if-no-files-found: error
+          retention-days: 14
