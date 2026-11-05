@@ -1,0 +1,190 @@
+name: Soccer same-output browser recovery
+on:
+  push:
+    branches: [codex/soccer-segunda-native-recovery-20261104]
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: soccer-segunda-native-${{ github.ref }}
+  cancel-in-progress: false
+env:
+  CI: '1'
+  SIM_NETWORK: offline
+  TZ: UTC
+  PLAYWRIGHT_BROWSERS_PATH: /home/runner/.cache/ms-playwright
+  PRODUCT_CORE: ebd69abeb38ebb0b93fbff71a0caf2fa453db832
+  PRODUCT_TREE: 821809914563e7830354f3567ba66ac8801cfd10
+  BUILD_SOURCE: e7713237e75f0e281f45f61f67b867b9116c6d03
+  BUILD_TREE: db172ae37d8adda1087d5844067a46291648726e
+  QA_CORE: cefc6684d5894942774731a9445e09e8a7acf688
+  QA_TREE: b03f9b8519765bfc504f67f534a8640a5cead842
+jobs:
+  native:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 4
+          filter: blob:none
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: '1.4.4'
+      - name: Bind four helpers to the completed build source
+        run: |
+          set -euo pipefail
+          OUT="$RUNNER_TEMP/soccer-segunda-native"
+          REF="$RUNNER_TEMP/soccer-segunda-input"
+          mkdir -p "$OUT/logs" "$OUT/transport" "$OUT/input-provenance" "$REF/build" "$REF/original"
+          echo "QA_OUT=$OUT" >> "$GITHUB_ENV"
+          echo "QA_REF=$REF" >> "$GITHUB_ENV"
+          export QA_OUT="$OUT" QA_REF="$REF"
+          test "$(git rev-parse HEAD^)" = "$QA_CORE"
+          test "$(git rev-parse HEAD^^)" = "$BUILD_SOURCE"
+          test "$(git rev-parse "$QA_CORE^{tree}")" = "$QA_TREE"
+          test "$(git rev-parse "$BUILD_SOURCE^{tree}")" = "$BUILD_TREE"
+          test "$(git rev-parse "$PRODUCT_CORE^{tree}")" = "$PRODUCT_TREE"
+          test "$(git diff --name-status HEAD^ HEAD)" = $'A\t.github/workflows/soccer-segunda-native-20261104.yml'
+          git diff --name-status "$BUILD_SOURCE" "$QA_CORE" > "$OUT/qa-delta.txt"
+          printf '%s\n' $'A\tscripts/qa/nativeScrollReady.mjs' $'A\tscripts/qa/soccerSegundaBrowser.mjs' $'A\tscripts/qa/soccerSegundaCupProbe.mjs' $'A\tscripts/qa/soccerSegundaFixtures.mjs' > "$OUT/expected-qa-delta.txt"
+          cmp "$OUT/qa-delta.txt" "$OUT/expected-qa-delta.txt"
+          git diff --exit-code "$BUILD_SOURCE" HEAD -- src public index.html package.json package-lock.json bun.lock bun.lockb vite.config.ts tsconfig.app.json scripts/data scripts/lib scripts/simCareerClubPool.mjs scripts/simCareerDomesticCup.mjs scripts/simCareerEras.mjs > "$OUT/application-bridge.txt"
+          git status --porcelain --untracked-files=all > "$OUT/status-before.txt"
+          test ! -s "$OUT/status-before.txt"
+          git rev-parse HEAD HEAD^{tree} > "$OUT/source.txt"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$OUT/source-before.sha256"
+          for helper in nativeScrollReady soccerSegundaBrowser soccerSegundaCupProbe soccerSegundaFixtures; do node --check "scripts/qa/$helper.mjs"; done
+      - name: Retrieve and verify both immutable inputs before extraction
+        env:
+          ACTIONS_READ_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          curl --fail --silent --show-error -H "Authorization: Bearer $ACTIONS_READ_TOKEN" https://api.github.com/repos/PapiSalgueroM/ballpark-hero/actions/artifacts/13387357930 > "$QA_OUT/input-provenance/build-artifact.json"
+          curl --fail --silent --show-error -H "Authorization: Bearer $ACTIONS_READ_TOKEN" https://api.github.com/repos/PapiSalgueroM/ballpark-hero/actions/artifacts/13383634508 > "$QA_OUT/input-provenance/original-artifact.json"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const out=process.env.QA_OUT;
+          for(const[name,id,bytes,digest,run,head]of[
+            ['build',13387357930,7688979,'fd87b3fedf54d0eb9f649633f99a9876a99109ccd4b83b8a00dfde640d2c71b6',41965564992,'e7713237e75f0e281f45f61f67b867b9116c6d03'],
+            ['original',13383634508,2675629,'3e9c89a2a24207957761b640ede622c587d97c2daaeaaeddd8498afb3d82119e',41958380733,'abd5f1d616a14da15c76ef380a4447a09a62cd86']]){
+            const a=JSON.parse(fs.readFileSync(out+'/input-provenance/'+name+'-artifact.json'));assert.equal(a.id,id);assert.equal(a.size_in_bytes,bytes);assert.equal(a.digest,'sha256:'+digest);assert.equal(a.expired,false);assert.equal(a.workflow_run.id,run);assert.equal(a.workflow_run.head_sha,head);
+          }
+          NODE
+          curl --fail --silent --show-error --location -H "Authorization: Bearer $ACTIONS_READ_TOKEN" https://api.github.com/repos/PapiSalgueroM/ballpark-hero/actions/artifacts/13387357930/zip > "$QA_REF/BUILD.zip"
+          curl --fail --silent --show-error --location -H "Authorization: Bearer $ACTIONS_READ_TOKEN" https://api.github.com/repos/PapiSalgueroM/ballpark-hero/actions/artifacts/13383634508/zip > "$QA_REF/ORIGINAL.zip"
+          test "$(wc -c < "$QA_REF/BUILD.zip")" = 7688979
+          test "$(wc -c < "$QA_REF/ORIGINAL.zip")" = 2675629
+          printf '%s\n' "fd87b3fedf54d0eb9f649633f99a9876a99109ccd4b83b8a00dfde640d2c71b6  $QA_REF/BUILD.zip" "3e9c89a2a24207957761b640ede622c587d97c2daaeaaeddd8498afb3d82119e  $QA_REF/ORIGINAL.zip" | sha256sum --check
+          unzip -q "$QA_REF/BUILD.zip" -d "$QA_REF/build"
+          unzip -q "$QA_REF/ORIGINAL.zip" -d "$QA_REF/original"
+          test "$(wc -c < "$QA_REF/build/completed-dist.tar.gz")" = 6997111
+          printf '%s\n' "986dc17187de3f3c1a932b893154981885ae63bd3863616b38cf2b9c782747c5  $QA_REF/build/completed-dist.tar.gz" "091f8d661d263dd28e4238f6eb33f6c9ee20a7873e64ac6c489f4590d8404d34  $QA_REF/build/dist-before.sha256" | sha256sum --check
+          tar -tzf "$QA_REF/build/completed-dist.tar.gz" > "$QA_OUT/input-provenance/tar-members.txt"
+          if grep -Eq '(^/|(^|/)\.\.(/|$))' "$QA_OUT/input-provenance/tar-members.txt"; then exit 1; fi
+          if grep -Ev '^dist(/|$)' "$QA_OUT/input-provenance/tar-members.txt"; then exit 1; fi
+          tar -xzf "$QA_REF/build/completed-dist.tar.gz" -C "$QA_REF"
+          (cd "$QA_REF" && sha256sum --check build/dist-before.sha256) > "$QA_OUT/input-provenance/completed-dist-verified.log"
+          cp "$QA_REF/build/dist-before.sha256" "$QA_OUT/input-provenance/original-dist-inventory.sha256"
+          cp "$QA_REF/original/admission.json" "$QA_OUT/input-provenance/original-admission.json"
+      - name: Install held dependencies and existing browser tools
+        run: |
+          set -euo pipefail
+          test "$(bun --version)" = 1.4.4
+          bun --version > "$QA_OUT/logs/bun-version.log"
+          node --version > "$QA_OUT/logs/node-version.log"
+          bun install --frozen-lockfile > "$QA_OUT/logs/install.log" 2>&1
+          git diff --exit-code HEAD -- package.json package-lock.json bun.lock bun.lockb
+          npm install --prefix "$RUNNER_TEMP/soccer-native-tools" --package-lock=false --no-audit --no-fund playwright@1.64.0 > "$QA_OUT/logs/playwright-install.log" 2>&1
+          test ! -e node_modules/playwright
+          test ! -e node_modules/playwright-core
+          ln -s "$RUNNER_TEMP/soccer-native-tools/node_modules/playwright" node_modules/playwright
+          ln -s "$RUNNER_TEMP/soccer-native-tools/node_modules/playwright-core" node_modules/playwright-core
+          "$RUNNER_TEMP/soccer-native-tools/node_modules/.bin/playwright" install --with-deps chromium > "$QA_OUT/logs/chromium-install.log" 2>&1
+      - name: Literal cup and fixture qualification after retained CM failure
+        run: |
+          set -euo pipefail
+          export GIT_NO_LAZY_FETCH=1
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          run_gate() {
+            local label="$1"
+            shift
+            local receipt="$QA_OUT/transport/$label.log"
+            : > "$receipt"
+            set +e
+            SIM_OFFLINE_RECEIPT="$receipt" "$@" > "$QA_OUT/logs/$label.stdout.log" 2> "$QA_OUT/logs/$label.stderr.log"
+            local native_status=$?
+            set -e
+            printf '%s\n' "$native_status" > "$QA_OUT/$label-native-exit.txt"
+            cat "$QA_OUT/logs/$label.stdout.log"
+            cat "$QA_OUT/logs/$label.stderr.log"
+            test "$native_status" = 0
+            test ! -s "$receipt"
+          }
+          run_gate fixtures node scripts/qa/soccerSegundaFixtures.mjs --out "$QA_OUT/fixtures" --dist "$QA_REF/dist" --core "$QA_CORE" --original "$QA_REF/original"
+          find "$QA_OUT/fixtures" -type f -print0 | sort -z | xargs -0 sha256sum > "$QA_OUT/fixture-before.sha256"
+      - name: Actual touch and keyboard journeys on the same completed build
+        run: |
+          set -euo pipefail
+          export GIT_NO_LAZY_FETCH=1
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          export SIM_OFFLINE_RECEIPT="$QA_OUT/transport/server.log"
+          : > "$SIM_OFFLINE_RECEIPT"
+          node scripts/lib/hostLikeServer.mjs "$QA_REF/dist" 4176 > "$QA_OUT/logs/server.log" 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid" 2>/dev/null || true' EXIT
+          ready=0
+          for attempt in $(seq 1 40); do if curl --fail --silent http://127.0.0.1:4176/ > /dev/null; then ready=1; break; fi; kill -0 "$server_pid"; sleep 1; done
+          test "$ready" = 1
+          export SIM_OFFLINE_RECEIPT="$QA_OUT/transport/browser.log"
+          : > "$SIM_OFFLINE_RECEIPT"
+          set +e
+          node scripts/qa/soccerSegundaBrowser.mjs --out "$QA_OUT/browser" --fixtures "$QA_OUT/fixtures" --dist "$QA_REF/dist" --base-url http://127.0.0.1:4176 > "$QA_OUT/logs/browser.stdout.log" 2> "$QA_OUT/logs/browser.stderr.log"
+          native_exit=$?
+          set -e
+          printf '%s\n' "$native_exit" > "$QA_OUT/browser-native-exit.txt"
+          cat "$QA_OUT/logs/browser.stdout.log"
+          cat "$QA_OUT/logs/browser.stderr.log"
+          test "$native_exit" = 0
+          test ! -s "$SIM_OFFLINE_RECEIPT"
+          test ! -s "$QA_OUT/transport/server.log"
+          find "$QA_OUT/fixtures" -type f -print0 | sort -z | xargs -0 sha256sum > "$QA_OUT/fixture-after.sha256"
+          cmp "$QA_OUT/fixture-before.sha256" "$QA_OUT/fixture-after.sha256"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';import crypto from 'node:crypto';
+          const out=process.env.QA_OUT,r=JSON.parse(fs.readFileSync(out+'/browser/report.json')),m=JSON.parse(fs.readFileSync(out+'/fixtures/manifest.json'));
+          assert.equal(r.status,'passed');assert.equal(r.contexts.length,3);assert.equal(r.screenshots.length,15);
+          for(const file of r.screenshots)assert(fs.statSync(out+'/browser/'+file).size>0);
+          fs.writeFileSync(out+'/native-proof.json',JSON.stringify({status:'native-phase-passed',cmDefault:'prior run41970182220 failed47 digest checks; unresolved and unwaived',product:process.env.PRODUCT_CORE,build:process.env.BUILD_SOURCE,normalBuilds:1,completedTarSHA256:'986dc17187de3f3c1a932b893154981885ae63bd3863616b38cf2b9c782747c5',fixturesSHA256:crypto.createHash('sha256').update(fs.readFileSync(out+'/fixtures/manifest.json')).digest('hex'),distDigest:m.distDigest,contexts:3,photos:15,public:false,sourceHoldsRequired:true},null,2)+'\n');
+          NODE
+      - name: Hold full source completed output and immutable fixtures
+        if: always()
+        run: |
+          set -euo pipefail
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$QA_OUT/source-after.sha256"
+          cmp "$QA_OUT/source-before.sha256" "$QA_OUT/source-after.sha256"
+          git diff --exit-code HEAD > "$QA_OUT/source-diff.txt"
+          git status --porcelain --untracked-files=all > "$QA_OUT/status-after.txt"
+          test ! -s "$QA_OUT/status-after.txt"
+          (cd "$QA_REF" && sha256sum --check build/dist-before.sha256) > "$QA_OUT/dist-held.log"
+          if [[ -f "$QA_OUT/fixture-before.sha256" ]]; then sha256sum --check "$QA_OUT/fixture-before.sha256" > "$QA_OUT/fixtures-held.log"; fi
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const out=process.env.QA_OUT,receipts=fs.readdirSync(out+'/transport').map(file=>({file,bytes:fs.statSync(out+'/transport/'+file).size}));assert(receipts.every(r=>r.bytes===0));
+          fs.writeFileSync(out+'/source-output-hold.json',JSON.stringify({sourceHeld:true,status:'clean',completedDistHeld:true,fixturesHeld:fs.existsSync(out+'/fixture-before.sha256'),receipts},null,2)+'\n');
+          NODE
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: soccer-segunda-native-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ env.QA_OUT }}/
+          retention-days: 30
+          compression-level: 6
