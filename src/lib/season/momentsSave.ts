@@ -13,6 +13,8 @@
 
 export interface SeasonMomentsSave {
   v: 1;
+  /** The wall rules pinned when this soccer ledger began. Missing is legacy. */
+  wallShotRules?: number;
   /** The season key of the row it belongs to; any other key is an older season. */
   key: string;
   /** [matchday, moment, result, ...the packed input]; result -1 used (the
@@ -58,6 +60,10 @@ export function readSeasonMoments(raw: unknown): SeasonMomentsSave | null {
       m.push(e.slice());
     }
     const out: SeasonMomentsSave = { v: 1, key: r.key, m };
+    if (r.wallShotRules !== undefined) {
+      if (!isInt(r.wallShotRules, 1, Number.MAX_SAFE_INTEGER)) return null;
+      out.wallShotRules = r.wallShotRules;
+    }
     if (r.banked !== undefined) { if (r.banked !== 1) return null; out.banked = 1; }
     if (r.paid !== undefined) {
       const p = r.paid;
@@ -106,11 +112,12 @@ const packed = (input: readonly number[]) => input.slice(0, ENTRY_MAX - ENTRY_MI
  *  one starts; its unbanked stars never bank late. An entry already there is
  *  only ever completed (used, then its result): a settled one is kept, so an
  *  attempt cannot be taken twice. */
-export function ledgerPut(save: SeasonMomentsSave | null | undefined, key: string, md: number, moment: number, result: number, input: readonly number[]): SeasonMomentsSave {
+export function ledgerPut(save: SeasonMomentsSave | null | undefined, key: string, md: number, moment: number, result: number, input: readonly number[], wallShotRules?: 2): SeasonMomentsSave {
   const prev = readSeasonMoments(save);
   const entry = [md, moment, result, ...packed(input)];
   if (!prev || prev.key !== key) {
     const out: SeasonMomentsSave = { v: 1, key, m: [entry] };
+    if (wallShotRules === 2) out.wallShotRules = 2;
     if (prev) out.tally = folded(prev);
     return out;
   }

@@ -64,7 +64,7 @@ import {
   buildLadder, clamp, daySeed, lehmer, sprayFor as arcadeSpray,
   ROUNDS_PER_RUN, type SprayConfig,
 } from './arcade';
-import { flightPath, keeperDive, type Aim, type KickSetup } from './freeKick';
+import { flightPath, keeperDive, GOAL_WIDTH, type Aim, type KickSetup } from './freeKick';
 import { effectivePotential, trainingStatFor, type CareerState, type TrainingStat } from './soccerCareerEngine';
 import { momentsPaid } from './season/momentsSave';
 
@@ -122,6 +122,8 @@ export function drillSeed(kind: DrillKind, dateStr: string): number {
 /* ───────────────────────────── wall shot ───────────────────────────── */
 
 export interface WallShotSetup {
+  /** Missing is legacy; the caller pins rules 2 for a new finite-wall game. */
+  wallShotRules?: 1 | 2;
   /** Metres from the goal line. */
   distance: number;
   /** Where across the goal the gap is, -1 (left post) to 1 (right post). */
@@ -217,7 +219,67 @@ export function buildWallShotRun(seed: number): WallShotSetup[] {
     through the gap, which left five of ten rounds unwinnable by any input. */
 export const WALL_UNSIGHTED = 0.45;
 
+export const WALL_SHOT_HOW = "Five defenders cover part of the goal. Aim over their heads or past either end. Medium power is easier to control. Set your aim and power, then shoot when you're ready. Keys: arrows aim, W and S set power, space shoots.";
+
+export type WallShotRules = 1 | 2;
+
+/** Missing markers are saved legacy games, never an implicit upgrade. */
+export function wallShotRules(setup: { wallShotRules?: number }): WallShotRules {
+  const rules = setup.wallShotRules ?? 1;
+  if (rules !== 1 && rules !== 2) throw new Error('Unsupported Wall Shot rules');
+  return rules;
+}
+
+export interface WallShotGeometry {
+  count: 5;
+  lo: number;
+  hi: number;
+  top: number;
+  centres: number[];
+}
+
+/** Five adjoining half-metre cells on the existing goal scale. */
+export function wallShotGeometry(setup: WallShotSetup): WallShotGeometry {
+  const half = 2.5 / GOAL_WIDTH;
+  const centre = clamp(setup.gapCentre, -1 + half, 1 - half);
+  const lo = centre - half;
+  const hi = centre + half;
+  return { count: 5, lo, hi, top: 0.38, centres: Array.from({ length: 5 }, (_, i) => lo + (i + 0.5) * (hi - lo) / 5) };
+}
+
+export function wallShotContact(path: readonly { x: number; y: number }[]): { x: number; y: number } {
+  return path[Math.round(path.length * 0.45)];
+}
+
+export function wallShotBlocked(setup: WallShotSetup, path: readonly { x: number; y: number }[]): boolean {
+  const wall = wallShotGeometry(setup);
+  const contact = wallShotContact(path);
+  return contact.y < wall.top && contact.x > wall.lo && contact.x < wall.hi;
+}
+
+export function wallShotMinimumPower(setup: WallShotSetup): number {
+  return 0.36 + (setup.distance - 16) * 0.014;
+}
+
+/** A no-spray route check, never a keeper prediction or a goal promise. */
+export function wallShotPreview(input: WallShotInput, setup: WallShotSetup): {
+  reason: 'wall' | 'weak' | 'off-target' | 'clear';
+  path: Array<{ x: number; y: number }>;
+} {
+  if (wallShotRules(setup) !== 2) throw new Error('Preview requires Wall Shot rules 2');
+  const aim: Aim = { x: input.x, y: input.y, power: clamp(input.power, 0, 1), curve: 0 };
+  const kick: KickSetup = { distance: setup.distance, wallSize: 5, keeperSkill: setup.keeperSkill * WALL_UNSIGHTED, keeperLean: setup.keeperLean, label: setup.label };
+  const path = flightPath(aim, kick);
+  const end = path[path.length - 1];
+  const reason = wallShotBlocked(setup, path) ? 'wall'
+    : aim.power < wallShotMinimumPower(setup) ? 'weak'
+    : Math.abs(end.x) >= 1 || end.y <= 0 || end.y >= 1 || Math.abs(Math.abs(end.x) - 1) < 0.035 ? 'off-target'
+    : 'clear';
+  return { reason, path };
+}
+
 export function takeWallShot(input: WallShotInput, setup: WallShotSetup, rng: () => number): WallShotResult {
+  const rules = wallShotRules(setup);
   const aim: Aim = { x: input.x, y: input.y, power: clamp(input.power, 0, 1), curve: 0 };
   const kick: KickSetup = { distance: setup.distance, wallSize: 5, keeperSkill: setup.keeperSkill * WALL_UNSIGHTED, keeperLean: setup.keeperLean, label: setup.label };
   const spray = arcadeSpray(aim.power, setup.distance - 16, WALL_SPRAY, rng);
@@ -225,17 +287,18 @@ export function takeWallShot(input: WallShotInput, setup: WallShotSetup, rng: ()
   const end = path[path.length - 1];
   const keeper = keeperDive(aim, kick, rng);
 
-  /* The wall: taller than you can clip from here, so the gap is the only way
-     through, and it is only as wide as it is at the moment the ball arrives. */
+  /* Saved legacy games keep their timed gap. Rules 2 uses the finite wall's
+     actual bounds and top, with the same flight and outcome draws. */
   const arrive = Math.max(0, input.press) + wallTravel(aim.power);
   const open = wallOpenAt(setup, arrive);
   const atWall = path[Math.round(path.length * 0.45)];
-  const hitWall = Math.abs(atWall.x - setup.gapCentre) >= setup.gapMax * open;
+  const hitWall = rules === 2 ? wallShotBlocked(setup, path)
+    : Math.abs(atWall.x - setup.gapCentre) >= setup.gapMax * open;
 
   const insideX = Math.abs(end.x) < 1;
   const insideY = end.y > 0 && end.y < 1;
   const hitPost = !hitWall && Math.abs(Math.abs(end.x) - 1) < 0.035 && insideY;
-  const tooWeak = aim.power < 0.36 + (setup.distance - 16) * 0.014;
+  const tooWeak = aim.power < wallShotMinimumPower(setup);
   const onTarget = !hitWall && !hitPost && insideX && insideY && !tooWeak;
 
   /* Free Kick's keeper, unsighted: a dive is a reach, not a teleport, and a
@@ -251,7 +314,14 @@ export function takeWallShot(input: WallShotInput, setup: WallShotSetup, rng: ()
     points = Math.round(100 + (setup.distance - 16) * 8 + corner * 120 + setup.keeperSkill * 60 + (0.3 - setup.gapMax) * 200);
   }
 
-  const verdict = hitWall
+  const verdict = rules === 2
+    ? hitWall ? 'Into the wall. Aim higher or past an end.'
+      : hitPost ? 'Off the post.'
+      : tooWeak ? 'Never had the legs.'
+      : !insideX || !insideY ? 'Wide of everything.'
+      : saved ? 'Keeper got there.'
+      : 'In the net.'
+    : hitWall
     ? (open <= 0.02 ? 'Into the wall. It was shut.' : 'Into the wall. Off the gap.')
     : hitPost
     ? 'Through the gap, off the post.'

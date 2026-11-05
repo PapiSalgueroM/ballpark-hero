@@ -141,7 +141,7 @@ describe('cancelled training gestures', { timeout: 20000 }, () => {
     const onBank = vi.fn(), onBack = vi.fn();
     const writes = vi.spyOn(Storage.prototype, 'setItem');
     const key = `career-drill-${kind}-daily-2026-10-06`;
-    const view = render(<DrillBoard career={career} canBank onBank={onBank} onBack={onBack} />);
+    const view = render(<DrillBoard career={career} canBank onBank={onBank} onBack={onBack} wallShotRules={1} />);
     fireEvent.click(view.getByRole('button', { name: "Today's ten" }));
     fireEvent.click(view.getByRole('button', { name: 'Start' }));
     const svg = view.container.querySelector(`[data-drill-board="${kind}"]`)!;
