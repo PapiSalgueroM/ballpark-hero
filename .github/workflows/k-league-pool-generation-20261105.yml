@@ -1,0 +1,371 @@
+name: K League pool generation and exact source qualification
+on:
+  push:
+    branches: [codex/k-league-pool-generation-20261105]
+permissions:
+  contents: read
+concurrency:
+  group: k-league-pool-generation-${{ github.ref }}
+  cancel-in-progress: false
+env:
+  CI: '1'
+  SIM_NETWORK: offline
+  TZ: UTC
+  PRODUCT_CORE: 7e99c3d834986c5271f2d1b154ade889f675fb7d
+  PRODUCT_TREE: 6e470b13d0fdeccb115ae59a20513aebf068ecea
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 3
+          filter: blob:none
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: '1.4.4'
+      - name: Bind the exact unpublished pre-generation core and sole QA workflow
+        run: |
+          set -euo pipefail
+          OUT="$RUNNER_TEMP/k-league-pool-generation"
+          test ! -e "$OUT"
+          mkdir -p "$OUT/logs" "$OUT/transport" "$OUT/original" "$OUT/commands"
+          printf 'QA_OUT=%s\n' "$OUT" >> "$GITHUB_ENV"
+          export QA_OUT="$OUT"
+          git rev-parse HEAD HEAD^{tree} > "$OUT/source.txt"
+          git diff --name-status --no-renames HEAD^ HEAD > "$OUT/qa-delta.txt"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$OUT/source-before.sha256"
+          git ls-files -s > "$OUT/index-before.txt"
+          git ls-files -z > "$OUT/tracked-before.bin"
+          for lock in package.json package-lock.json bun.lock bun.lockb; do if test -f "$lock"; then sha256sum "$lock"; fi; done > "$OUT/locks-before.sha256"
+          git status --porcelain=v1 --untracked-files=all > "$OUT/status-before.txt"
+          test ! -s "$OUT/status-before.txt"
+          node --input-type=module <<'PINS'
+          import fs from 'node:fs';import assert from 'node:assert/strict';import crypto from 'node:crypto';import{execFileSync}from'node:child_process';
+          const out=process.env.QA_OUT,wf='.github/workflows/k-league-pool-generation-20261105.yml',git=(...a)=>execFileSync('git',a,{encoding:'utf8'}).trim(),blob=b=>crypto.createHash('sha1').update(Buffer.from('blob '+b.length+'\0')).update(b).digest('hex');
+          assert.match(process.env.PRODUCT_CORE,/^[a-f0-9]{40}$/);assert.match(process.env.PRODUCT_TREE,/^[a-f0-9]{40}$/);
+          assert.equal(git('rev-parse','HEAD^'),process.env.PRODUCT_CORE);assert.equal(git('rev-parse','HEAD^^{tree}'),process.env.PRODUCT_TREE);
+          assert.equal(git('rev-parse',process.env.PRODUCT_CORE+'^'),'671730c30f67685f070593af7b2464a9cc1f5352');
+          assert.equal(git('rev-parse',process.env.PRODUCT_CORE+'^^{tree}'),'7080fc953cab1ebbb3f616b7741f022c8b7a8ea0');
+          assert.deepEqual(fs.readFileSync(out+'/qa-delta.txt','utf8').trimEnd().split('\n'),['A\t'+wf]);
+          const corePins={"src/data/kLeague2026.ts":"7786c30acb29289ae929dbc605b1a14289dec388","src/lib/soccerCareerEngine.ts":"663eab42df957f156b35e931d81f9f643ea1a7f4","src/lib/soccerCareerLeague.ts":"cf7772161d902d2bb82d7f5cb6b3bdc5d04a9659","src/lib/soccerCareerOwner.ts":"925fe2c4d5cbdd37d723bd90e57523d46027e64d","scripts/lib/careerClubPool.mjs":"3abec590896605188a4fc0cc7d122fc3be8438c3","scripts/simCareerClubPool.mjs":"4b913baca982c696055d7aa0764345c0c7439ff5","scripts/data/soccerCareerFacts.json":"15e8144766c6ed9600a953beb13783891ff7acc9","scripts/simNoRivalNames.mjs":"e7f7cfe09d0d53afb46a9dfe100cd34de42a2146","src/lib/clubManager.ts":"f2484429d627c4e05257886fb8e78d4e3561c64b","src/hooks/useClubManager.ts":"a8bae5b90a609a4e5ee5b267a58a52f4189bf699","src/lib/clubManagerCalendar.ts":"ada619859360b05ef0067393ad7175f21f80870c","src/pages/ClubManager.tsx":"3c820cbc7141d6f682f4a1ad2fc1fee7dfe9e3c2","src/components/club-manager/ClubManagerTeamPicker.tsx":"c6ef33e8ce54e1d964dda157dd5a6b12e899ef89","src/components/club-manager/ClubManagerClubList.tsx":"6c81ba72fc661673812c021f7f78a6877ffd4022","src/components/club-manager/ClubManagerHelp.tsx":"62174d0614c4b2e27dbaa461869d056bde937644","src/components/club-manager/WorldTablesCard.tsx":"2e333af9aa698d7d2074e32f52ea673d2abf538d","src/components/club-manager/LeagueTableCard.tsx":"fb3141db713c6ae6b39155ce415c5e61dd8a5971","src/components/club-manager/ClubDetailScreen.tsx":"aa54f2f72fc339f644ada87efe871b108a95382a","src/data/gameContent/soccer2.ts":"7576d973cf9a4a0aa7a9413eeb99130ad81f4f88","src/data/gameContent/clubManagement.ts":"0e1fa56534a005204a6e53df875d7ed5e7f8692f"};
+          assert.equal(Object.keys(corePins).length,20);
+          const expected=Object.keys(corePins).sort().map(p=>(p==='src/data/kLeague2026.ts'?'A':'M')+'\t'+p);
+          assert.deepEqual(git('diff','--name-status','--no-renames','671730c30f67685f070593af7b2464a9cc1f5352',process.env.PRODUCT_CORE).split('\n'),expected);
+          const pins={...corePins,'src/data/soccerCareerClubPool.ts':'9340217fac2ae3a86877ac878fcd677d22c973bd','scripts/genCareerClubPool.mjs':'c6bb0149ee6495ea6c443d172cb77fe45a3d9fd0','scripts/simCareerFacts.mjs':'03aabbdc01f22867ba35bec75a305b69c54a1237','scripts/lib/offlineTransport.cjs':'0fda542a2649fe5da937c6976fd0f5b6073e74b6','package.json':'2ff64986fb76ebc51b706f2fd24765768874008a','package-lock.json':'97d6f12a052f25f400462938c241789a083f0bfe','tsconfig.app.json':'51f581dd91641b4c1f1219f646788e73cf6bf00c'};
+          const rows=Object.entries(pins).map(([path,want])=>{const b=fs.readFileSync(path);assert.equal(blob(b),want,path);return{path,gitBlob:want,bytes:b.length,sha256:crypto.createHash('sha256').update(b).digest('hex')};});
+          fs.copyFileSync('src/data/soccerCareerClubPool.ts',out+'/original/soccerCareerClubPool.ts');
+          fs.writeFileSync(out+'/input-pins.json',JSON.stringify({product:process.env.PRODUCT_CORE,tree:process.env.PRODUCT_TREE,rows,wholeCoreInverse:'Exact20 declared source changes against671/tree7080; no generated-pool change yet.'},null,2)+'\n');
+          fs.copyFileSync(wf,out+'/workflow.yml');fs.writeFileSync(out+'/workflow-source.json',JSON.stringify({head:git('rev-parse','HEAD'),tree:git('rev-parse','HEAD^{tree}'),path:wf,gitBlob:blob(fs.readFileSync(wf))})+'\n');
+          PINS
+      - name: Install the held app dependencies only
+        run: |
+          set -euo pipefail
+          test "$(bun --version)" = 1.4.4
+          bun --version > "$QA_OUT/logs/bun-version.log"
+          node --version > "$QA_OUT/logs/node-version.log"
+          bun install --frozen-lockfile > "$QA_OUT/logs/bun-install.log" 2>&1
+          node -p "JSON.stringify({router:require('react-router-dom/package.json').version,vite:require('vite/package.json').version,rollup:JSON.parse(require('fs').readFileSync('node_modules/rollup/package.json','utf8')).version})" > "$QA_OUT/logs/dependency-versions.json"
+          git diff --exit-code HEAD -- package.json package-lock.json bun.lock bun.lockb
+      - name: Proper application types before generation
+        run: |
+          set -euo pipefail
+          export GIT_NO_LAZY_FETCH=1
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          : > "$QA_OUT/transport/types-before.log"
+          set +e
+          SIM_OFFLINE_RECEIPT="$QA_OUT/transport/types-before.log" node_modules/.bin/tsc --noEmit -p tsconfig.app.json > "$QA_OUT/logs/types-before.stdout.log" 2> "$QA_OUT/logs/types-before.stderr.log"
+          native_exit=$?
+          printf '%s\n' "$native_exit" > "$QA_OUT/types-before.exit" || exit 1
+          test "$native_exit" = 0 || exit "$native_exit"
+          test ! -s "$QA_OUT/transport/types-before.log" || exit 1
+          printf '%s\n' '{"command":"node_modules/.bin/tsc --noEmit -p tsconfig.app.json","exit":0}' > "$QA_OUT/types-before-passed.json" || exit 1
+      - name: Generate once, validate full literals and effective controls, then restore checkout
+        timeout-minutes: 35
+        run: |
+          set -euo pipefail
+          export GIT_NO_LAZY_FETCH=1
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          cat > "$QA_OUT/generation-controller.mjs" <<'CONTROLLER'
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import os from 'node:os';
+          import crypto from 'node:crypto';
+          import assert from 'node:assert/strict';
+          import {execFileSync,spawnSync} from 'node:child_process';
+          import {createRequire} from 'node:module';
+          const root=fs.realpathSync('.'),out=process.env.QA_OUT,target='src/data/soccerCareerClubPool.ts';
+          const ts=createRequire(path.join(root,'package.json'))('typescript');
+          const sha=b=>crypto.createHash('sha256').update(b).digest('hex');
+          const blob=b=>crypto.createHash('sha1').update(Buffer.from('blob '+b.length+'\0')).update(b).digest('hex');
+          const write=(p,b)=>{fs.mkdirSync(path.dirname(p),{recursive:true});fs.writeFileSync(p,b,{flag:'wx'});};
+          const old=fs.readFileSync(out+'/original/soccerCareerClubPool.ts');
+          assert.equal(blob(old),'9340217fac2ae3a86877ac878fcd677d22c973bd');
+          assert(fs.readFileSync(target).equals(old),'K_GEN_INPUT_OLD_BODY');
+          const tracked=execFileSync('git',['ls-files','-z'],{encoding:'utf8'}).split('\0').filter(Boolean).sort();
+          const ledger=()=>Object.fromEntries(tracked.map(p=>[p,sha(fs.readFileSync(p))]));
+          const before=ledger(),commands=[],progress=[];
+          const log=(stage,data={})=>{progress.push({stage,...data});fs.writeFileSync(out+'/progress.json',JSON.stringify(progress,null,2)+'\n');};
+          function run(name,args,cwd=root,want=0){
+           const receipt=out+'/transport/'+name+'.log';write(receipt,'');
+           const stdout=out+'/logs/'+name+'.stdout.log',stderr=out+'/logs/'+name+'.stderr.log';
+           const a=fs.openSync(stdout,'wx'),b=fs.openSync(stderr,'wx');
+           let r;try{r=spawnSync(args[0],args.slice(1),{cwd,env:{...process.env,SIM_OFFLINE_RECEIPT:receipt},stdio:['ignore',a,b],timeout:600000});}finally{fs.closeSync(a);fs.closeSync(b);}
+           const row={name,command:args,cwd,exit:r.status,signal:r.signal,error:r.error?String(r.error):null,stdout,stderr};
+           commands.push(row);write(out+'/commands/'+name+'.json',JSON.stringify(row,null,2)+'\n');
+           assert.equal(r.error,undefined,'K_GEN_SETUP '+name);assert.equal(r.signal,null,'K_GEN_SIGNAL '+name);assert.equal(r.status,want,'K_GEN_NATIVE '+name);
+           assert.equal(fs.readFileSync(receipt).length,0,'K_GEN_TRANSPORT '+name);
+           log(name,{native:r.status});return {stdout:fs.readFileSync(stdout,'utf8'),stderr:fs.readFileSync(stderr,'utf8'),row};
+          }
+          function source(text,file){
+           const sf=ts.createSourceFile(file,text,ts.ScriptTarget.Latest,true,ts.ScriptKind.TS);
+           assert.equal(sf.parseDiagnostics.length,0,'K_POOL_PARSE');
+           return sf;
+          }
+          function declaration(sf,name){
+           const matches=sf.statements.flatMap(s=>ts.isVariableStatement(s)?[...s.declarationList.declarations].filter(d=>ts.isIdentifier(d.name)&&d.name.text===name):[]);
+           assert.equal(matches.length,1,'K_POOL_DECLARATION '+name);
+           let n=matches[0].initializer;while(n&&(ts.isAsExpression(n)||ts.isTypeAssertionExpression(n)||ts.isParenthesizedExpression(n)))n=n.expression;
+           assert(n,'K_POOL_INITIALIZER');return n;
+          }
+          function literal(n){
+           if(ts.isAsExpression(n)||ts.isTypeAssertionExpression(n)||ts.isParenthesizedExpression(n))return literal(n.expression);
+           if(ts.isStringLiteral(n)||ts.isNumericLiteral(n))return ts.isNumericLiteral(n)?Number(n.text):n.text;
+           if(n.kind===ts.SyntaxKind.TrueKeyword)return true;
+           if(n.kind===ts.SyntaxKind.FalseKeyword)return false;
+           if(ts.isArrayLiteralExpression(n))return n.elements.map(literal);
+           if(ts.isObjectLiteralExpression(n)){
+            const o={};for(const p of n.properties){assert(ts.isPropertyAssignment(p),'K_POOL_LITERAL_PROPERTY');
+             assert(ts.isIdentifier(p.name)||ts.isStringLiteral(p.name)||ts.isNumericLiteral(p.name),'K_POOL_LITERAL_KEY');
+             const k=p.name.text;assert(!Object.hasOwn(o,k),'K_POOL_DUPLICATE_KEY');o[k]=literal(p.initializer);
+            }return o;
+           }
+           assert.fail('K_POOL_LITERAL_ONLY');
+          }
+          function read(text){
+           const sf=source(text,'pool.ts'),r=declaration(sf,'CAREER_CLUB_POOL'),l=declaration(sf,'CAREER_LEAGUE_LADDER'),y=declaration(sf,'CAREER_POOL_SINCE');
+           assert(ts.isArrayLiteralExpression(r)&&ts.isObjectLiteralExpression(l)&&ts.isObjectLiteralExpression(y),'K_POOL_SHAPE');
+           return {sf,rowNode:r,ladderNode:l,sinceNode:y,rows:literal(r),ladder:literal(l),since:literal(y),
+            rowInterior:text.slice(r.getStart(sf)+1,r.end-1),ladderInterior:text.slice(l.getStart(sf)+1,l.end-1),
+            sinceProps:Object.fromEntries(y.properties.map(p=>[p.name.text,p.getText(sf)]))};
+          }
+          const original=read(old.toString('utf8'));
+          assert.equal(original.rows.length,326);assert.equal(Object.keys(original.ladder).length,25);assert.equal(Object.keys(original.since).length,275);
+          const descriptorFile='src/data/kLeague2026.ts',descriptorText=fs.readFileSync(descriptorFile,'utf8');
+          const descriptor=literal(declaration(source(descriptorText,descriptorFile),'K_LEAGUE_2026'));
+          assert.equal(descriptor.id,'kleague1');assert.equal(descriptor.label,'K League 1');assert.equal(descriptor.country,'South Korea');
+          assert.equal(descriptor.membershipYear,2026);assert.equal(descriptor.modelOnlyRoster,true);assert.equal(descriptor.clubs.length,12);
+          const added=descriptor.clubs.filter(c=>c.gameSince===2026);
+          assert.equal(added.length,8);assert.equal(descriptor.clubs.filter(c=>c.accessHeld===true).length,1);
+          const oldNames=new Set(original.rows.map(c=>c.name)),slug=s=>s.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'');
+          function validate(text){
+           const p=read(text);
+           assert.equal(p.rows.length,334,'K_POOL_ROWS');
+           assert(p.rowInterior.startsWith(original.rowInterior),'K_POOL_OLD_LITERAL_PREFIX');
+           assert.deepEqual(p.rows.slice(0,326),original.rows,'K_POOL_OLD_ROWS');
+           assert.equal(new Set(p.rows.map(c=>c.id)).size,334,'K_POOL_UNIQUE_IDS');
+           assert.equal(new Set(p.rows.map(c=>c.name)).size,334,'K_POOL_UNIQUE_NAMES');
+           assert.deepEqual(p.rows.slice(326).map(c=>c.name).sort(),added.map(c=>c.name).sort(),'K_POOL_NEW_NAMES');
+           for(const row of p.rows.slice(326)){
+            const c=added.find(c=>c.name===row.name);assert(c&&!oldNames.has(c.name),'K_POOL_NEW_NAMES');
+            assert.deepEqual(row,{id:'cm-'+slug(c.name),name:c.name,country:descriptor.country,tier:4,color:c.color,league:descriptor.label},'K_POOL_NEW_FIELDS');
+           }
+           assert(p.ladderInterior.startsWith(original.ladderInterior),'K_POOL_OLD_LADDER_LITERAL');
+           assert.deepEqual(Object.keys(p.ladder).slice(0,25),Object.keys(original.ladder),'K_POOL_OLD_LADDERS');
+           for(const [k,v]of Object.entries(original.ladder))assert.deepEqual(p.ladder[k],v,'K_POOL_OLD_LADDERS');
+           assert.deepEqual(Object.keys(p.ladder).slice(25),[descriptor.label],'K_POOL_LADDER_KEYS');
+           const groups=p.ladder[descriptor.label];assert(Array.isArray(groups)&&groups.every(g=>Array.isArray(g)&&g.length&&g.every(n=>typeof n==='string')),'K_POOL_LADDER');
+           const names=groups.flat();assert.equal(names.length,12,'K_POOL_LADDER');assert.equal(new Set(names).size,12,'K_POOL_LADDER');
+           assert.deepEqual([...names].sort(),descriptor.clubs.map(c=>c.name).sort(),'K_POOL_LADDER');
+           assert.deepEqual(Object.keys(p.since).slice(0,275),Object.keys(original.since),'K_POOL_OLD_SINCE_KEYS');
+           for(const [k,v]of Object.entries(original.since)){assert.equal(p.since[k],v,'K_POOL_OLD_SINCE');assert.equal(p.sinceProps[k],original.sinceProps[k],'K_POOL_OLD_SINCE_LITERAL');}
+           assert.equal(Object.keys(p.since).length,283,'K_POOL_SINCE');
+           assert.deepEqual(Object.keys(p.since).slice(275).sort(),added.map(c=>c.name).sort(),'K_POOL_SINCE');
+           for(const c of added)assert.equal(p.since[c.name],2026,'K_POOL_SINCE');
+           return p;
+          }
+          function one(text,oldPart,newPart){
+           const i=text.indexOf(oldPart);assert(i>=0&&text.indexOf(oldPart,i+1)<0,'K_GEN_CONTROL_UNIQUE');
+           const changed=text.slice(0,i)+newPart+text.slice(i+oldPart.length);assert.notEqual(changed,text,'K_GEN_CONTROL_CHANGED');
+           const inverse=changed.slice(0,i)+oldPart+changed.slice(i+newPart.length);assert.equal(inverse,text,'K_GEN_CONTROL_INVERSE');
+           return {changed,inverse,index:i,oldPart,newPart};
+          }
+          function readerControl(name,text,oldPart,newPart,marker){
+           const m=one(text,oldPart,newPart),file=out+'/reader-controls/'+name+'.ts';
+           write(file,m.changed);write(out+'/reader-controls/'+name+'.fault.ts',m.changed);
+           let error;try{validate(fs.readFileSync(file,'utf8'));}catch(e){error=e;}
+           assert(error&&error.name==='AssertionError'&&error.code==='ERR_ASSERTION'&&error.message.includes(marker),'K_GEN_READER_CONTROL_OWNED '+name);
+           fs.writeFileSync(file,m.inverse);assert(fs.readFileSync(file).equals(Buffer.from(text)),'K_GEN_CONTROL_RESTORED');
+           validate(fs.readFileSync(file,'utf8'));
+           return {name,marker,accepted:false,error:{name:error.name,code:error.code,message:error.message},changed:true,index:m.index,wholeInverse:true,faultSHA256:sha(Buffer.from(m.changed)),restoredSHA256:sha(Buffer.from(m.inverse))};
+          }
+          function onlyTargetChanged(){
+           const now=ledger(),changed=tracked.filter(p=>now[p]!==before[p]);
+           assert.deepEqual(changed,[target],'K_GEN_ONLY_TARGET_DIFF');
+           const git=execFileSync('git',['diff','--name-only','--no-renames','HEAD'],{encoding:'utf8'}).trim().split('\n').filter(Boolean).sort();assert.deepEqual(git,[target],'K_GEN_GIT_DIFF');
+           write(out+'/source-during.sha256.json',JSON.stringify(now,null,2)+'\n');write(out+'/generated-diff.txt',execFileSync('git',['diff','--no-ext-diff','HEAD','--',target]));return changed;
+          }
+          const officialURL='https://fdp.fifa.org/assetspublic/ce281/pdf/SquadLists-English.pdf?gsid=05dd1acf-0bba-4cfd-816a-22f0cc38b668';
+          const guardBlock="      // This hostname occurrence cites the governing body's official archive.\n      // Nearby names and lookalike hostnames get no exception.\n      if (probe.slice(Math.max(0, fifa.index - 12), fifa.index + 9).toLowerCase() === 'https://fdp.fifa.org/') continue;\n";
+          function officialControls(realNormal){
+           const tempBase=fs.realpathSync(process.env.RUNNER_TEMP||os.tmpdir()),copy=fs.mkdtempSync(path.join(tempBase,'k-pool-source-control-'));
+           assert(path.resolve(copy).startsWith(tempBase+path.sep),'K_GEN_COPY_OWNED');
+           const scanPaths=tracked.filter(p=>p==='index.html'||['src/','public/','supabase/','scripts/'].some(prefix=>p.startsWith(prefix)));
+           const corpus={};for(const p of scanPaths){const from=path.join(root,p);assert(fs.lstatSync(from).isFile()&&!fs.lstatSync(from).isSymbolicLink(),'K_GEN_COPY_REGULAR');const to=path.join(copy,p);fs.mkdirSync(path.dirname(to),{recursive:true});fs.copyFileSync(from,to);corpus[p]=sha(fs.readFileSync(to));}
+           const guard='scripts/simNoRivalNames.mjs',facts='scripts/data/soccerCareerFacts.json',g=fs.readFileSync(path.join(copy,guard),'utf8'),f=fs.readFileSync(path.join(copy,facts),'utf8');
+           assert.equal(blob(Buffer.from(g)),'e7f7cfe09d0d53afb46a9dfe100cd34de42a2146');assert.equal(blob(Buffer.from(f)),'15e8144766c6ed9600a953beb13783891ff7acc9');
+           write(out+'/official-controls/corpus.json',JSON.stringify(corpus,null,2)+'\n');write(out+'/official-controls/original-guard.mjs',g);write(out+'/official-controls/original-facts.json',f);
+           const same=()=>{for(const p of scanPaths)assert.equal(sha(fs.readFileSync(path.join(copy,p))),corpus[p],'K_GEN_COPY_INVERSE '+p);};
+           const positive=result=>{assert(result.stdout.includes('No rival product names found. 0 findings.'),'K_GEN_RIVAL_POSITIVE');const c=result.stdout.match(/^Checked (\d+) product names against (\d+) files$/m);assert(c,'K_GEN_RIVAL_CENSUS');return c.slice(1);};
+           const expect=positive(realNormal),records=[];
+           try{
+            assert.deepEqual(positive(run('official-copy-normal',[process.execPath,path.join(copy,guard)],copy)),expect,'K_GEN_SCAN_CORPUS');
+            const cases=[
+             {name:'official-allow-removed',file:guard,base:g,old:guardBlock,next:'',reason:'real official hostname occurrence'},
+             {name:'official-lookalike',file:facts,base:f,old:officialURL,next:officialURL.replace('https://fdp.fifa.org/','https://fdp.fifa.org.invalid/'),reason:'lookalike hostname'},
+             {name:'official-nearby-product',file:facts,base:f,old:officialURL,next:officialURL+' FIFA 26',reason:'nearby product name'}
+            ];
+            for(const c of cases){
+             same();const m=one(c.base,c.old,c.next),file=path.join(copy,c.file);fs.writeFileSync(file,m.changed);
+             if(c.file===facts)JSON.parse(fs.readFileSync(file,'utf8'));
+             if(c.file===guard)assert.equal(blob(Buffer.from(m.changed)),'0cc180c43c692ed65fb067e7f187826806845798','K_GEN_AUTHENTIC_OLD_GUARD');
+             const changed=scanPaths.filter(p=>sha(fs.readFileSync(path.join(copy,p)))!==corpus[p]);assert.deepEqual(changed,[c.file],'K_GEN_CONTROL_ONLY_FILE');
+             write(out+'/official-controls/'+c.name+(c.file===guard?'.mjs':'.json'),m.changed);
+             const result=run(c.name,[process.execPath,path.join(copy,guard)],copy,1);
+             const line=f.slice(0,f.indexOf(officialURL)).split('\n').length;
+             assert.match(result.stdout,/^RIVAL NAMES FOUND: 1$/m,'K_GEN_RIVAL_OWNED');
+             assert.equal((result.stdout.match(/\[FIFA \(not the governing body\)\]/g)||[]).length,1,'K_GEN_RIVAL_OWNED');
+             assert(result.stdout.includes('  scripts/data/soccerCareerFacts.json:'+line+'  [FIFA (not the governing body)]'),'K_GEN_RIVAL_LOCATION');
+             assert(!/ReferenceError|SyntaxError|ERR_MODULE|Cannot find|ENOENT/.test(result.stderr),'K_GEN_RIVAL_SETUP');
+             fs.writeFileSync(file,m.inverse);assert(fs.readFileSync(file).equals(Buffer.from(c.base)),'K_GEN_LITERAL_INVERSE');same();
+             records.push({name:c.name,nativeExit:1,soleFinding:c.reason,path:facts,line,changedPaths:changed,changed:true,wholeSourceInverse:true,fullCorpusInverse:true,faultSHA256:sha(Buffer.from(m.changed))});
+            }
+            assert.deepEqual(positive(run('official-copy-restored',[process.execPath,path.join(copy,guard)],copy)),expect,'K_GEN_SCAN_RESTORED');same();
+            write(out+'/official-controls/receipt.json',JSON.stringify({status:'AUTHENTIC_COPIED_CORPUS_CONTROLS_PASSED',scanPaths:scanPaths.length,scannerCensus:expect,records,restoredNativeExit:0,wholeCorpusInverse:true},null,2)+'\n');
+           }finally{assert(path.resolve(copy).startsWith(tempBase+path.sep));fs.rmSync(copy,{recursive:true,force:true});}
+           return records;
+          }
+          let failure,summary;
+          try{
+           log('start');
+           run('generate',[process.execPath,'scripts/genCareerClubPool.mjs']);
+           const generated=fs.readFileSync(target);assert(!generated.equals(old),'K_GEN_CHANGED');write(out+'/generated/soccerCareerClubPool.ts',generated);
+           const normal=validate(generated.toString('utf8'));log('literal-reader',{rows:normal.rows.length});
+           const text=generated.toString('utf8'),first=normal.rowNode.elements[0],firstText=first.getText(normal.sf),tier=first.properties.find(p=>p.name.text==='tier');
+           const rel=tier.initializer.getStart(normal.sf)-first.getStart(normal.sf),oldTier=tier.initializer.getText(normal.sf),newTier=String(Number(oldTier)===4?3:4);
+           const oldChanged=firstText.slice(0,rel)+newTier+firstText.slice(rel+oldTier.length);
+           const newNode=normal.rowNode.elements[326],newRowText=newNode.getText(normal.sf);
+           const ladderProp=normal.ladderNode.properties.find(p=>p.name.text===descriptor.label),ladderText=ladderProp.initializer.getText(normal.sf),ladderCopy=normal.ladder[descriptor.label].map(g=>[...g]);ladderCopy[0].shift();if(!ladderCopy[0].length)ladderCopy.shift();
+           const sinceProp=normal.sinceNode.properties.find(p=>p.name.text===normal.rows[326].name),sinceText=sinceProp.getText(normal.sf),sinceBad=sinceText.slice(0,sinceText.lastIndexOf('2026'))+'2025';
+           const readerControls=[
+            readerControl('old-row-change',text,firstText,oldChanged,'K_POOL_OLD_LITERAL_PREFIX'),
+            readerControl('new-name-omitted',text,newRowText+',','','K_POOL_ROWS'),
+            readerControl('k-ladder-member-omitted',text,ladderText,JSON.stringify(ladderCopy),'K_POOL_LADDER'),
+            readerControl('new-since-changed',text,sinceText,sinceBad,'K_POOL_SINCE')
+           ];
+           write(out+'/reader-controls/receipt.json',JSON.stringify({status:'ACTUAL_GENERATED_COPY_READER_CONTROLS_PASSED',controls:readerControls},null,2)+'\n');
+           onlyTargetChanged();
+           run('types-after',['node_modules/.bin/tsc','--noEmit','-p','tsconfig.app.json']);
+           const pool=run('simCareerClubPool',[process.execPath,'scripts/simCareerClubPool.mjs']);assert(pool.stdout.includes('simCareerClubPool: all sections green'),'K_GEN_POOL_CLOSING');
+           const facts=run('simCareerFacts',[process.execPath,'scripts/simCareerFacts.mjs']);assert(/simCareerFacts:.*green/.test(facts.stdout),'K_GEN_FACTS_CLOSING');
+           const rival=run('simNoRivalNames',[process.execPath,'scripts/simNoRivalNames.mjs']);assert(rival.stdout.includes('No rival product names found. 0 findings.'),'K_GEN_RIVAL_CLOSING');
+           const official=officialControls(rival);
+           assert(fs.readFileSync(target).equals(generated),'K_GEN_GENERATED_BODY_HELD');
+           const during=ledger();assert.deepEqual(tracked.filter(p=>during[p]!==before[p]),[target],'K_GEN_FINAL_ONLY_TARGET');
+           summary={status:'GENERATED_SOURCE_QUALIFIED_NOT_COMPILED',product:process.env.PRODUCT_CORE,productTree:process.env.PRODUCT_TREE,old:{bytes:old.length,sha256:sha(old),gitBlob:blob(old),rows:326,ladders:25,since:275},generated:{bytes:generated.length,sha256:sha(generated),gitBlob:blob(generated),rows:334,combinedWith190HandRows:524,ladders:26,since:283},newRows:normal.rows.slice(326),kLadder:normal.ladder[descriptor.label],readerControls,officialControls:official,commands,scope:'Only actual generator source output; no App build/native/public or broader-suite credit.'};
+          }catch(e){failure={name:e.name,code:e.code,message:e.message,stack:e.stack};throw e;}
+          finally{
+           fs.writeFileSync(target,old);assert(fs.readFileSync(target).equals(old),'K_GEN_CHECKOUT_RESTORE');
+           const after=ledger();assert.deepEqual(after,before,'K_GEN_COMPLETE_SOURCE_RESTORED');
+           write(out+'/restoration.json',JSON.stringify({target,oldBytes:old.length,oldSHA256:sha(old),oldGitBlob:blob(old),wholeBodyRestored:true,allTrackedBytesRestored:true,failure,commands},null,2)+'\n');
+           if(summary&&!failure)write(out+'/GENERATED-POOL-ADMITTED.json',JSON.stringify({...summary,checkoutRestored:true},null,2)+'\n');
+          }
+          console.log('K League generation: 326 old rows held, 8 derived additions, 25 old ladders held, 12-member K ladder, 4 effective reader controls, 3 official-source controls, checkout restored');
+          CONTROLLER
+          : > "$QA_OUT/transport/controller.log"
+          set +e
+          SIM_OFFLINE_RECEIPT="$QA_OUT/transport/controller.log" node "$QA_OUT/generation-controller.mjs" > "$QA_OUT/logs/controller.stdout.log" 2> "$QA_OUT/logs/controller.stderr.log"
+          native_exit=$?
+          printf '%s\n' "$native_exit" > "$QA_OUT/controller.exit" || exit 1
+          test ! -s "$QA_OUT/transport/controller.log" || exit 1
+          test "$native_exit" = 0 || exit "$native_exit"
+          test -f "$QA_OUT/GENERATED-POOL-ADMITTED.json" || exit 1
+          grep -F 'K League generation: 326 old rows held, 8 derived additions, 25 old ladders held, 12-member K ladder, 4 effective reader controls, 3 official-source controls, checkout restored' "$QA_OUT/logs/controller.stdout.log" || exit 1
+      - name: Restore the original generated target and hold all source, index, paths, locks and receipts
+        if: always()
+        run: |
+          set -euo pipefail
+          node --input-type=module <<'RESTORE'
+          import fs from 'node:fs';import path from 'node:path';import assert from 'node:assert/strict';import crypto from 'node:crypto';
+          const out=process.env.QA_OUT,target=path.resolve('src/data/soccerCareerClubPool.ts'),root=fs.realpathSync('.');
+          assert(target.startsWith(root+path.sep));assert(fs.lstatSync(target).isFile()&&!fs.lstatSync(target).isSymbolicLink());
+          const old=fs.readFileSync(out+'/original/soccerCareerClubPool.ts'),blob=crypto.createHash('sha1').update(Buffer.from('blob '+old.length+'\0')).update(old).digest('hex');
+          assert.equal(blob,'9340217fac2ae3a86877ac878fcd677d22c973bd');
+          fs.writeFileSync(target,old);assert(fs.readFileSync(target).equals(old));
+          fs.writeFileSync(out+'/final-restoration.json',JSON.stringify({target:'src/data/soccerCareerClubPool.ts',bytes:old.length,gitBlob:blob,wholeBytesRestored:true})+'\n');
+          RESTORE
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$QA_OUT/source-after.sha256"
+          git ls-files -s > "$QA_OUT/index-after.txt"
+          git ls-files -z > "$QA_OUT/tracked-after.bin"
+          for lock in package.json package-lock.json bun.lock bun.lockb; do if test -f "$lock"; then sha256sum "$lock"; fi; done > "$QA_OUT/locks-after.sha256"
+          cmp "$QA_OUT/source-before.sha256" "$QA_OUT/source-after.sha256"
+          cmp "$QA_OUT/index-before.txt" "$QA_OUT/index-after.txt"
+          cmp "$QA_OUT/tracked-before.bin" "$QA_OUT/tracked-after.bin"
+          cmp "$QA_OUT/locks-before.sha256" "$QA_OUT/locks-after.sha256"
+          git diff --exit-code HEAD > "$QA_OUT/source-diff.txt"
+          git status --porcelain=v1 --untracked-files=all > "$QA_OUT/status-after.txt"
+          test ! -s "$QA_OUT/status-after.txt"
+          node --input-type=module <<'HELD'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const out=process.env.QA_OUT,receipts=fs.readdirSync(out+'/transport').sort().map(file=>{const b=fs.readFileSync(out+'/transport/'+file);assert.equal(b.length,0,file);return{file,bytes:b.length};});
+          if(fs.existsSync(out+'/GENERATED-POOL-ADMITTED.json'))assert.equal(receipts.length,12,'All expected actual command receipts');
+          fs.writeFileSync(out+'/source-output-hold.json',JSON.stringify({sourceHeld:true,indexHeld:true,trackedPathsHeld:true,locksHeld:true,status:'clean',originalGeneratedTargetRestored:true,receipts},null,2)+'\n');
+          HELD
+      - name: Pack bounded complete output or fatal diagnostic
+        id: pack
+        if: always()
+        run: |
+          set +e
+          set -uo pipefail
+          archive="$RUNNER_TEMP/k-league-pool-generation-evidence.tar.gz"
+          tar -czf "$archive" -C "$QA_OUT" . > "$RUNNER_TEMP/k-league-pool-generation-pack.log" 2>&1
+          pack_exit=$?
+          printf '%s\n' "$pack_exit" > "$QA_OUT/pack-native.exit" || exit 1
+          if [[ "$pack_exit" == 0 && -f "$archive" && "$(stat -c %s "$archive")" -le 50000000 ]]; then
+            sha256sum "$archive" > "$archive.sha256" || exit 1
+            printf 'archive=%s\n' "$archive" >> "$GITHUB_OUTPUT" || exit 1
+            exit 0
+          fi
+          printf '%s\n' 'DIAGNOSTIC_ONLY_NO_COMPLETE_OUTPUT_PROOF: full pack failed or exceeded50000000bytes' > "$QA_OUT/DIAGNOSTIC-ONLY.txt" || exit 1
+          cp "$RUNNER_TEMP/k-league-pool-generation-pack.log" "$QA_OUT/pack.log" || exit 1
+          diagnostic="$RUNNER_TEMP/k-league-pool-generation-diagnostic.tar.gz"
+          diagnostic_dir="$RUNNER_TEMP/k-league-pool-generation-diagnostic"
+          mkdir -p "$diagnostic_dir/logs" "$diagnostic_dir/transport" || exit 1
+          find "$QA_OUT" -maxdepth 1 -type f ! -name '*.tar.gz' ! -name '*.tgz' -exec cp '{}' "$diagnostic_dir/" \; || exit 1
+          cp -R "$QA_OUT/logs/." "$diagnostic_dir/logs/" || exit 1
+          cp -R "$QA_OUT/transport/." "$diagnostic_dir/transport/" || exit 1
+          for folder in original generated reader-controls official-controls commands; do if test -d "$QA_OUT/$folder"; then cp -R "$QA_OUT/$folder" "$diagnostic_dir/" || exit 1; fi; done
+          tar -czf "$diagnostic" -C "$diagnostic_dir" . || exit 1
+          test "$(stat -c %s "$diagnostic")" -le 50000000 || exit 1
+          sha256sum "$diagnostic" > "$diagnostic.sha256" || exit 1
+          printf 'archive=%s\n' "$diagnostic" >> "$GITHUB_OUTPUT" || exit 1
+          exit 1
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: k-league-pool-generation-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            ${{ steps.pack.outputs.archive }}
+            ${{ steps.pack.outputs.archive }}.sha256
+          if-no-files-found: error
+          retention-days: 30
+          compression-level: 0
