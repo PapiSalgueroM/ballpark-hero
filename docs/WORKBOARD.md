@@ -17865,3 +17865,8 @@ Historical Neymar entry is live from a19121c3/tree b389. Current build, four-arm
 ## 2026-11-05: NBA real 2004 draft class live
 
 NBA-2004-LIVE-05bd628b-42052602075. PR502 source05bd628b, treeb5d82077, publish5a2f20c5-f35d-4d81-8b16-0a7aee824fc1. New2003 quick/Road careers receive all59 real2004 selections,58 verified DOBs plus1unknown, and persistent simulated camp records. Qualified build/eight arms/permanent/native3widths and actualpublic42052602075/artifact13428705240 independently admitted. See [scope and receipts](plans/2026-11-05-nba-real-draft-2004.md). Broader known failures remain unwaived; master409 and SC36/CM04/PL16 partial. Continue next Soccer Career real-entry cohorts, then playable SC/CM teams/leagues. No active-save backfill.
+
+
+## 2026-11-05: Preferred-league transfer brief claimed
+
+This chat owns SC-11's optional preferred league in src/lib/soccerCareerTransferBrief.ts, src/components/soccer-career/AgentBrief.tsx and only the engine preview/empty-request seams. Isolated branch codex/soccer-transfer-league-20261105 starts at main1acb3300. PR504's historical arrivals, PhonePanel, soccerPhone and SoccerCareer page remain with their existing owner. No shared local source/index changes or local application execution. Remote original-first tests precede product changes. Existing Any behavior, saved offers, strict invalid-state refusal, random-call sites and the 840 KiB route cap must hold. SC-11 and the whole master list remain partial. Scope and checks: docs/plans/2026-11-05-soccer-transfer-league.md.

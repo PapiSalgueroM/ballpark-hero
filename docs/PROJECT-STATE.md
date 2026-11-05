@@ -20259,3 +20259,8 @@ PR502 merged `05bd628b349ef7483bc5f5f537a7d10807a83f05`, exact integrated tree `
 Proper types, eight-arm outcomes, completed build/readers/caps, permanent regression and all3 native viewports passed independent review. Publication `5a2f20c5-f35d-4d81-8b16-0a7aee824fc1` used the verified merged source. Actual custom-domain proof [42052602075](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/42052602075), original artifact 13428705240, independent receipt `d71f385a5dce154ca9c588d149bca6f1160f3a9997bb53aa45e6becf8d58f498`, closes this scoped release.
 
 Master409/PL-16/SC-36/CM-04 remain partial. Existing CM47, Seasons582, baseline NFL37/NBA25 golden differences and broader automatic/source/native failures remain unwaived; no full-suite-green claim. Next: the sourced three additional Soccer Career historical entries, then actual playable team/league coverage. Existing v1/opaque saves retain their own policy.
+
+
+## 2026-11-05: Preferred-league transfer brief claimed
+
+This chat owns SC-11's optional preferred league in src/lib/soccerCareerTransferBrief.ts, src/components/soccer-career/AgentBrief.tsx and only the engine preview/empty-request seams. Isolated branch codex/soccer-transfer-league-20261105 starts at main1acb3300. PR504's historical arrivals, PhonePanel, soccerPhone and SoccerCareer page remain with their existing owner. No shared local source/index changes or local application execution. Remote original-first tests precede product changes. Existing Any behavior, saved offers, strict invalid-state refusal, random-call sites and the 840 KiB route cap must hold. SC-11 and the whole master list remain partial. Scope and checks: docs/plans/2026-11-05-soccer-transfer-league.md.
