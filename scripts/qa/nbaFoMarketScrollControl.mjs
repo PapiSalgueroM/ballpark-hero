@@ -8,7 +8,7 @@ const arg=(name,fallback)=>{const i=process.argv.indexOf(name);return i<0?fallba
 for(const key of ['--out','--fixtures','--dist','--base-url'])assert(process.argv.includes(key),key);
 const root=process.cwd(),out=path.resolve(arg('--out')),fixtures=path.resolve(arg('--fixtures')),dist=path.resolve(arg('--dist')),
  base=arg('--base-url'),publicMode=process.argv.includes('--public'),normalFile=path.resolve(root,arg('--driver','scripts/qa/nbaFoMarketBrowser.mjs'));
-const expectedNormal='52aa2d850c2737500f1a0ad09ed3f210914325f8';
+const expectedNormal='5e25d8b38eb5f42e01a82d22f249fe25fc5ad275';
 const sha=value=>crypto.createHash('sha256').update(value).digest('hex');
 const blob=value=>crypto.createHash('sha1').update(Buffer.concat([Buffer.from('blob '+value.length+'\0'),value])).digest('hex');
 await fs.mkdir(out,{recursive:true});assert.equal((await fs.readdir(out)).length,0);

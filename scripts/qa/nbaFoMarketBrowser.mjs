@@ -191,9 +191,25 @@ async function keyboardToTail(p,r,grid,ids) {
   sameScroll(before,await scrollOf(p),'NBA_FO_NATIVE_KEYBOARD_INTERNAL_SCROLL');
  }
  const last=p.locator('[data-fa-row="'+ids.at(-1)+'"]');
- const g=await rectOf(grid),t=await rectOf(last);
+ const readTail=async()=>({grid:await rectOf(grid),target:await rectOf(last),document:await scrollOf(p),focus:await activeId(p),saved:await readFrame(p)});
+ const beforeEnd=await readTail();let g=beforeEnd.grid,t=beforeEnd.target;
+ const endTrace={attempted:false,needed:t.bottom>g.bottom+1,beforeKey:beforeEnd};r.keyboardTailEnd=endTrace;
+ if(endTrace.needed) {
+  endTrace.attempted=true;await p.keyboard.press('End');events.push('End');
+  endTrace.afterKey=await readTail();
+  await idle(p);await waitForScrollIdle(p);endTrace.afterReady=await readTail();
+  for(const state of [endTrace.afterKey,endTrace.afterReady]) {
+   sameScroll(beforeEnd.document,state.document,'NBA_FO_NATIVE_KEYBOARD_END_DOCUMENT_SCROLL');
+   assert.equal(state.focus,ids.at(-1),'NBA_FO_NATIVE_KEYBOARD_END_TAIL_FOCUS');
+   assert.equal(state.saved.raw,beforeEnd.saved.raw,'NBA_FO_NATIVE_KEYBOARD_END_FULL_SAVE_HELD');
+   assert.deepEqual(state.saved.frame,beforeEnd.saved.frame);
+  }
+  assert(endTrace.afterReady.grid.scrollTop>beforeEnd.grid.scrollTop,'NBA_FO_NATIVE_KEYBOARD_END_INTERNAL_PROGRESS');
+  sameScroll(before,endTrace.afterReady.document,'NBA_FO_NATIVE_KEYBOARD_INTERNAL_SCROLL');
+  g=endTrace.afterReady.grid;t=endTrace.afterReady.target;
+ }
  assert(t.y>=g.y-1&&t.bottom<=g.bottom+1,'Keyboard brings the actual tail row into its internal viewport');
- return {events,before,after:await scrollOf(p),grid:g,target:t};
+ return {events,before,after:await scrollOf(p),grid:g,target:t,end:endTrace};
 }
 async function runMarket(p,r) {
  const observed={width:r.width,transitions:[],scope:'33 fictional complete NBA free agents. Real nbaSign and optional nbaNoteArrivals supply full saved-frame references. Actual touch/keyboard input and unmodified browser clock/RNG. Unit outcomes own writes and exact RNG tapes; this is not a naturally reached career.'};
