@@ -1,0 +1,58 @@
+name: Soccer club eligibility original
+on:
+  push:
+    branches:
+      - codex/soccer-club-eligibility-20261105
+permissions:
+  contents: read
+jobs:
+  original:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    defaults:
+      run:
+        shell: bash
+    env:
+      SIM_NETWORK: offline
+      SIM_OFFLINE_RECEIPT: club-policy-artifacts/offline.log
+      TZ: UTC
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Locked install and source receipt
+        run: |
+          mkdir -p club-policy-artifacts
+          git rev-parse HEAD > club-policy-artifacts/head.txt
+          git rev-parse 'HEAD^{tree}' > club-policy-artifacts/tree.txt
+          git ls-files -s > club-policy-artifacts/source-before.txt
+          sha256sum package.json package-lock.json > club-policy-artifacts/locks-before.txt
+          npm ci
+      - name: Proper app types
+        run: node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee club-policy-artifacts/types.log
+      - name: Original first business outcomes
+        run: |
+          export NODE_OPTIONS="--max-old-space-size=6144 --require=$PWD/scripts/lib/offlineTransport.cjs"
+          export SC_CLUB_POLICY_RAW="$PWD/club-policy-artifacts/raw"
+          node node_modules/vitest/vitest.mjs run src/test/soccerClubEligibility.test.ts --maxWorkers=1 --minWorkers=1 --reporter=default --reporter=json --outputFile=club-policy-artifacts/original.json 2>&1 | tee club-policy-artifacts/original.log
+      - name: Preserve source and offline evidence
+        if: always()
+        run: |
+          git ls-files -s > club-policy-artifacts/source-after.txt
+          cmp club-policy-artifacts/source-before.txt club-policy-artifacts/source-after.txt
+          git diff --exit-code HEAD -- src scripts package.json package-lock.json
+          sha256sum package.json package-lock.json > club-policy-artifacts/locks-after.txt
+          cmp club-policy-artifacts/locks-before.txt club-policy-artifacts/locks-after.txt
+          if test -f club-policy-artifacts/offline.log; then test ! -s club-policy-artifacts/offline.log; fi
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: soccer-club-policy-original-${{ github.run_id }}
+          path: club-policy-artifacts
+          retention-days: 7
+          if-no-files-found: error
