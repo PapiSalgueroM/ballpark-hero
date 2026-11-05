@@ -1,0 +1,67 @@
+name: Career Path early club original proof
+on:
+  push:
+    branches: [codex/career-early-club-qa-20261105]
+permissions:
+  contents: read
+jobs:
+  source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    defaults:
+      run:
+        shell: bash
+    env:
+      SIM_NETWORK: offline
+      SIM_OFFLINE_RECEIPT: early-club-artifacts/offline.log
+      TZ: UTC
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24.22.1
+          cache: npm
+      - name: Source and locked dependencies
+        run: |
+          mkdir -p early-club-artifacts
+          git rev-parse HEAD > early-club-artifacts/head.txt
+          git rev-parse 'HEAD^{tree}' > early-club-artifacts/tree.txt
+          git ls-files -s > early-club-artifacts/source-before.txt
+          sha256sum package.json package-lock.json > early-club-artifacts/locks-before.txt
+          npm ci
+      - name: Original App types
+        run: node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee early-club-artifacts/types.log
+      - name: Original page must demonstrate missing deliberate hint
+        run: |
+          set +e
+          NODE_OPTIONS="--max-old-space-size=6144 --require=$PWD/scripts/lib/offlineTransport.cjs" node node_modules/vitest/vitest.mjs run src/test/careerEarlyClubHint.test.tsx --maxWorkers=1 --minWorkers=1 --reporter=default --reporter=json --outputFile=early-club-artifacts/original.json 2>&1 | tee early-club-artifacts/original.log
+          crq_test_status=${PIPESTATUS[0]}
+          set -e
+          test "$crq_test_status" -ne 0
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs'; import assert from 'node:assert/strict';
+          const report=JSON.parse(fs.readFileSync('early-club-artifacts/original.json'));
+          const rows=report.testResults.flatMap(s=>s.assertionResults);
+          assert.equal(rows.length,10); assert.equal(rows.filter(r=>r.status==='failed').length,9); assert.equal(rows.filter(r=>r.status==='passed').length,1);
+          assert(rows.filter(r=>r.status==='failed').every(r=>r.failureMessages.join('\n').includes('EARLY_CLUB_')));
+          console.log('Original named business failures: '+rows.filter(r=>r.status==='failed').length+' of '+rows.length);
+          NODE
+      - name: Source and lock holds
+        if: always()
+        run: |
+          git ls-files -s > early-club-artifacts/source-after.txt
+          cmp early-club-artifacts/source-before.txt early-club-artifacts/source-after.txt
+          git diff --exit-code HEAD -- src scripts package.json package-lock.json
+          sha256sum package.json package-lock.json > early-club-artifacts/locks-after.txt
+          cmp early-club-artifacts/locks-before.txt early-club-artifacts/locks-after.txt
+          if test -f early-club-artifacts/offline.log; then test ! -s early-club-artifacts/offline.log; fi
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: career-early-club-original-${{ github.run_id }}
+          path: early-club-artifacts
+          retention-days: 7
+          if-no-files-found: error
