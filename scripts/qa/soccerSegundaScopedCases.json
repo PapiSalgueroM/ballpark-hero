@@ -1,0 +1,693 @@
+{
+  "schema": 1,
+  "purpose": "Two-source scoped legacy replay, not whole-suite green",
+  "base": "3268307038c4586dbc35f4697da1849512b473d9",
+  "current": "ebd69abeb38ebb0b93fbff71a0caf2fa453db832",
+  "currentTree": "821809914563e7830354f3567ba66ac8801cfd10",
+  "observedUnfiltered": {
+    "head": "115b0b161fbf77bce6b6cbcf4f48fb90dfc101b9",
+    "artifact": 13387966903,
+    "sha256": "00622e65b4e68c8d605e4310874f22e5c8190768f2d25ed00e5a3f1d6a018f63",
+    "vitestSha256": "9e615caddc99eb296567c10d8fa52c9d92c8dd98179d189e2d0f36a9eb7442e7",
+    "fullSuitePending": 109
+  },
+  "history": [
+    {
+      "ref": "2b7dda2951fb9b63e76a2af66970cb682f312105",
+      "short": "2b7dda2951fb9b63e76a2af66970cb682f312105",
+      "path": "src/lib/cageClash.ts",
+      "blob": "1bedbee6b0ca319fc230082e0319d6e5f18a5048"
+    },
+    {
+      "ref": "31a4ec01f13dde6ce5614d371f5aa135e08ef8da",
+      "short": "31a4ec01",
+      "path": "src/lib/cageClash.ts",
+      "blob": "5a71e48523a1261f3842f46819b1dae2ed190af2"
+    }
+  ],
+  "productSources": [
+    {
+      "path": "scripts/lib/careerClubPool.mjs",
+      "beforeBlob": "16ccc6137958a1adf2e40e5d26b99de466b38e24",
+      "afterBlob": "9ac9f0b9437f68e6a6b1f20c640afce109a8352f"
+    },
+    {
+      "path": "src/data/soccerCareerClubPool.ts",
+      "beforeBlob": "83e9df78441c0d16509f80b8ec0bfbadb0f08f26",
+      "afterBlob": "9340217fac2ae3a86877ac878fcd677d22c973bd"
+    },
+    {
+      "path": "src/lib/clubManager.ts",
+      "beforeBlob": "e3c9bcf0aec0f1e1caeb27d38d506d591d694237",
+      "afterBlob": "4b0a734e9fe9ba1e7139ead8d4fe5d6a1574c484"
+    },
+    {
+      "path": "scripts/data/soccerCareerFacts.json",
+      "beforeBlob": "9828e41da792eafeead8036879d49f05242a5164",
+      "afterBlob": "ae78078feb67f06fc2922802091a113366e25fcb"
+    },
+    {
+      "path": "src/lib/soccerCareerEngine.ts",
+      "beforeBlob": "e88d6f91744bf14ac1d1afd43bbb26be9f9e15db",
+      "afterBlob": "94ccfb82dace9fc099c670357472732973e11d73"
+    },
+    {
+      "path": "src/lib/soccerCareerCup.ts",
+      "beforeBlob": "0f2a6cc03afed64642d396af4d0979474a3c41cf",
+      "afterBlob": "1d93842578afa4fb92ed3c012701022fbf9d2e9c"
+    },
+    {
+      "path": "scripts/data/domesticCupSources.json",
+      "beforeBlob": "b42a2d20fcb3882277902b80f5cb1bad510b2dff",
+      "afterBlob": "7ca21b866ac6641ff953c60c64f531bd674e48ce"
+    },
+    {
+      "path": "src/pages/SoccerCareer.tsx",
+      "beforeBlob": "1f4d448cc9718bc3fa97b6987be5f14b27496c47",
+      "afterBlob": "e191a4634c44be5ebe511da0885579fdb6696dc5"
+    }
+  ],
+  "unusedLegacyAdapters": [
+    "scripts/simCareerClubPool.mjs",
+    "scripts/simCareerDomesticCup.mjs",
+    "scripts/simCareerEras.mjs"
+  ],
+  "files": [
+    {
+      "path": "src/test/cagePractice.test.tsx",
+      "bytes": 20629,
+      "sha256": "79bc4b3265c4eacd871301a1ec75e9fa49b28bfac3767145a0cc23361bd8e84b",
+      "cases": 14
+    },
+    {
+      "path": "src/test/cageReadiness.test.tsx",
+      "bytes": 15039,
+      "sha256": "15071bf7394cbe6b51ac3715ff1c68f48f150488263fdf54f39beb0d7dc3cb5b",
+      "cases": 10
+    },
+    {
+      "path": "src/test/soccerScreenTruths.test.tsx",
+      "bytes": 18210,
+      "sha256": "7979b0b73f3ab907d75e212c2024e2bdb0a758533edb0c76ee4777392418c44f",
+      "cases": 11
+    },
+    {
+      "path": "src/test/usCareerHallBoard.test.tsx",
+      "bytes": 40450,
+      "sha256": "965db46c2e35d660e5255ef4f9c288eb2c390e015ae4ac45542400dcd243ab47",
+      "cases": 95
+    },
+    {
+      "path": "src/components/front-office/FrontOfficeSeasonStats.test.tsx",
+      "bytes": 24644,
+      "sha256": "3ef37e255728b44a914d6fde9db742a18cf0791a3f336940686da438da62f992",
+      "cases": 13
+    }
+  ],
+  "cases": [
+    {
+      "file": "src/test/cagePractice.test.tsx",
+      "fullName": "Cage Practice earned outcomes keeps every normal seeded quick fight identical to the accepted release"
+    },
+    {
+      "file": "src/test/cagePractice.test.tsx",
+      "fullName": "Cage Practice earned outcomes uses the fight range stamina and cooldown rules with an explicit passive partner"
+    },
+    {
+      "file": "src/test/cagePractice.test.tsx",
+      "fullName": "Cage Practice earned outcomes stays untimed and passive without earning any idle lesson"
+    },
+    {
+      "file": "src/test/cagePractice.test.tsx",
+      "fullName": "Cage Practice earned outcomes filters irrelevant keyboard actions through the lesson engine"
+    },
+    {
+      "file": "src/test/cagePractice.test.tsx",
+      "fullName": "Cage Practice earned outcomes earns three strikes then gates attacks while release recovers actual gas"
+    },
+    {
+      "file": "src/test/cagePractice.test.tsx",
+      "fullName": "Cage Practice earned outcomes earns takedown lessons only through a clinch and an actual top position"
+    },
+    {
+      "file": "src/test/cagePractice.test.tsx",
+      "fullName": "Cage Practice earned outcomes earns submission lessons with real positional work and full finishing pressure"
+    },
+    {
+      "file": "src/test/cagePractice.test.tsx",
+      "fullName": "Cage Practice earned outcomes earns escape lessons by recovering guard before actually returning to the feet"
+    },
+    {
+      "file": "src/test/cagePractice.test.tsx",
+      "fullName": "Cage Practice earned outcomes freezes an earned lesson even when its underlying fight is still active"
+    },
+    {
+      "file": "src/test/cagePractice.test.tsx",
+      "fullName": "Cage Practice mounted lifecycle never records saves network activity or points for an actual practice submission"
+    },
+    {
+      "file": "src/test/cagePractice.test.tsx",
+      "fullName": "Cage Practice mounted lifecycle advances the four drills only after mounted controls earn their objectives"
+    },
+    {
+      "file": "src/test/cagePractice.test.tsx",
+      "fullName": "Cage Practice mounted lifecycle releases practice controls and pauses help and hidden tabs without replaying input"
+    },
+    {
+      "file": "src/test/cagePractice.test.tsx",
+      "fullName": "Cage Practice mounted lifecycle clears practice and held controls on retry reset and remount"
+    },
+    {
+      "file": "src/test/cagePractice.test.tsx",
+      "fullName": "Cage Practice mounted lifecycle preserves the accepted promotion world independently of practice controls"
+    },
+    {
+      "file": "src/test/cageReadiness.test.tsx",
+      "fullName": "Cage action readiness outcomes reports literal contextual costs including each sides first and continuing submission"
+    },
+    {
+      "file": "src/test/cageReadiness.test.tsx",
+      "fullName": "Cage action readiness outcomes prioritizes legal position before gas cooldown and range for either corner"
+    },
+    {
+      "file": "src/test/cageReadiness.test.tsx",
+      "fullName": "Cage action readiness outcomes matches strike and clinch reach at literal standing edges without applying range on the mat"
+    },
+    {
+      "file": "src/test/cageReadiness.test.tsx",
+      "fullName": "Cage action readiness outcomes matches exact gas and cooldown recovery with actual attacks on the following tick"
+    },
+    {
+      "file": "src/test/cageReadiness.test.tsx",
+      "fullName": "Cage action readiness outcomes keeps every seeded combat state identical to the accepted engine before helper extraction"
+    },
+    {
+      "file": "src/test/cageReadiness.test.tsx",
+      "fullName": "Cage action readiness outcomes describes all six real action buttons with visible hints and unchanged accessible names"
+    },
+    {
+      "file": "src/test/cageReadiness.test.tsx",
+      "fullName": "Cage action readiness outcomes keeps a held button active through recovering hints and lands the next actual strike"
+    },
+    {
+      "file": "src/test/cageReadiness.test.tsx",
+      "fullName": "Cage action readiness outcomes shows drill restrictions and paused hints before ordinary readiness without advancing play"
+    },
+    {
+      "file": "src/test/cageReadiness.test.tsx",
+      "fullName": "Cage action readiness outcomes calculates repeated hints without editing resources scores or either fighter"
+    },
+    {
+      "file": "src/test/cageReadiness.test.tsx",
+      "fullName": "Cage action readiness outcomes preserves the accepted promotion world independently of readiness changes"
+    },
+    {
+      "file": "src/test/soccerScreenTruths.test.tsx",
+      "fullName": "S1 the Ballon d'Or night holds Full attributes while it counts down disables the button with the night line, and a press leaves the night up and the save unchanged"
+    },
+    {
+      "file": "src/test/soccerScreenTruths.test.tsx",
+      "fullName": "S1 the Ballon d'Or night holds Full attributes while it counts down opens Full attributes once the night has been shown"
+    },
+    {
+      "file": "src/test/soccerScreenTruths.test.tsx",
+      "fullName": "S1 the Ballon d'Or night holds Full attributes while it counts down keeps Full attributes open on the season summary with the night still to come"
+    },
+    {
+      "file": "src/test/soccerScreenTruths.test.tsx",
+      "fullName": "S2 Week by week says it is a watch labels the 📺 button as a watch, never live"
+    },
+    {
+      "file": "src/test/soccerScreenTruths.test.tsx",
+      "fullName": "S2 Week by week says it is a watch opens its help on what the sheet is, with no Spanish pool note and no \"nothing here can change\""
+    },
+    {
+      "file": "src/test/soccerScreenTruths.test.tsx",
+      "fullName": "S2 Week by week says it is a watch still names the Spanish club pool in a partial league world season's own note"
+    },
+    {
+      "file": "src/test/soccerScreenTruths.test.tsx",
+      "fullName": "S3 the Squad sheet opens on the squad, the rules one tap away lands on home with the pointer, writes the flag after mount only, and ? opens the help with the new first rule"
+    },
+    {
+      "file": "src/test/soccerScreenTruths.test.tsx",
+      "fullName": "S3 the Squad sheet opens on the squad, the rules one tap away shows the pointer on the first open only"
+    },
+    {
+      "file": "src/test/soccerScreenTruths.test.tsx",
+      "fullName": "S3 the Squad sheet opens on the squad, the rules one tap away shows the pointer and does not crash when storage throws"
+    },
+    {
+      "file": "src/test/soccerScreenTruths.test.tsx",
+      "fullName": "S4 Training shows one rules paragraph on its menu, the rest behind its ? holds only the bank rule with its example on the menu, and ? shows all three"
+    },
+    {
+      "file": "src/test/soccerScreenTruths.test.tsx",
+      "fullName": "S4 Training shows one rules paragraph on its menu, the rest behind its ? keeps the ? during a drill as it was: three paragraphs, the drill paused (passes on the base too)"
+    },
+    {
+      "file": "src/test/usCareerHallBoard.test.tsx",
+      "fullName": "nfl: the retirement talk on the board an old active save inside the rule opens on the talk, writes nothing, and a reload asks again"
+    },
+    {
+      "file": "src/test/usCareerHallBoard.test.tsx",
+      "fullName": "nfl: the retirement talk on the board Retire now ends the career on the last season played"
+    },
+    {
+      "file": "src/test/usCareerHallBoard.test.tsx",
+      "fullName": "nfl: the retirement talk on the board One more year goes to the hub and is not asked again for that season"
+    },
+    {
+      "file": "src/test/usCareerHallBoard.test.tsx",
+      "fullName": "nfl: the retirement talk on the board a farewell season carries its banner, is played, and ends the career after it"
+    },
+    {
+      "file": "src/test/usCareerHallBoard.test.tsx",
+      "fullName": "nfl: the retirement talk on the board a farewell season on the last year of the deal opens no extension talk (review fix)"
+    },
+    {
+      "file": "src/test/usCareerHallBoard.test.tsx",
+      "fullName": "nfl: the retirement talk on the board a farewell season with no deal left offers one year deals, and a push adds no year (closing check fix)"
+    },
+    {
+      "file": "src/test/usCareerHallBoard.test.tsx",
+      "fullName": "nfl: the retirement talk on the board Retire now in the middle of an offseason drops the dealt card unapplied"
+    },
+    {
+      "file": "src/test/usCareerHallBoard.test.tsx",
+      "fullName": "nba: the retirement talk on the board an old active save inside the rule opens on the talk, writes nothing, and a reload asks again"
+    },
+    {
+      "file": "src/test/usCareerHallBoard.test.tsx",
+      "fullName": "nba: the retirement talk on the board Retire now ends the career on the last season played"
+    },
+    {
+      "file": "src/test/usCareerHallBoard.test.tsx",
+      "fullName": "nba: the retirement talk on the board One more year goes to the hub and is not asked again for that season"
+    },
+    {
+      "file": "src/test/usCareerHallBoard.test.tsx",
+      "fullName": "nba: the retirement talk on the board a farewell season carries its banner, is played, and ends the career after it"
+    },
+    {
+      "file": "src/test/usCareerHallBoard.test.tsx",
+      "fullName": "nba: the retirement talk on the board a farewell season on the last year of the deal opens no extension talk (review fix)"
+    },
+    {
+      "file": "src/test/usCareerHallBoard.test.tsx",
+      "fullName": "nba: the retirement talk on the board a farewell season with no deal left offers one year deals, and a push adds no year (closing check fix)"
+    },
+    {
+      "file": "src/test/usCareerHallBoard.test.tsx",
+      "fullName": "nba: the retirement talk on the board Retire now in the middle of an offseason drops the dealt card unapplied"
+    },
+    {
+      "file": "src/test/usCareerHallBoard.test.tsx",
+      "fullName": "mlb: the retirement talk on the board an old active save inside the rule opens on the talk, writes nothing, and a reload asks again"
+    },
+    {
+      "file": "src/test/usCareerHallBoard.test.tsx",
+      "fullName": "mlb: the retirement talk on the board Retire now ends the career on the last season played"
+    },
+    {
+      "file": "src/test/usCareerHallBoard.test.tsx",
+      "fullName": "mlb: the retirement talk on the board One more year goes to the hub and is not asked again for that season"
+    },
+    {
+      "file": "src/test/usCareerHallBoard.test.tsx",
+      "fullName": "mlb: the retirement talk on the board a farewell season carries its banner, is played, and ends the career after it"
+    },
+    {
+      "file": "src/test/usCareerHallBoard.test.tsx",
+      "fullName": "mlb: the retirement talk on the board a farewell season on the last year of the deal opens no extension talk (review fix)"
+    },
+    {
+      "file": "src/test/usCareerHallBoard.test.tsx",
+      "fullName": "mlb: the retirement talk on the board a farewell season with no deal left offers one year deals, and a push adds no year (closing check fix)"
+    },
+    {
+      "file": "src/test/usCareerHallBoard.test.tsx",
+      "fullName": "mlb: the retirement talk on the board Retire now in the middle of an offseason drops the dealt card unapplied"
+    },
+    {
+      "file": "src/test/usCareerHallBoard.test.tsx",
+      "fullName": "nhl: the retirement talk on the board an old active save inside the rule opens on the talk, writes nothing, and a reload asks again"
+    },
+    {
+      "file": "src/test/usCareerHallBoard.test.tsx",
+      "fullName": "nhl: the retirement talk on the board Retire now ends the career on the last season played"
+    },
+    {
+      "file": "src/test/usCareerHallBoard.test.tsx",
+      "fullName": "nhl: the retirement talk on the board One more year goes to the hub and is not asked again for that season"
+    },
+    {
+      "file": "src/test/usCareerHallBoard.test.tsx",
+      "fullName": "nhl: the retirement talk on the board a farewell season carries its banner, is played, and ends the career after it"
+    },
+    {
+      "file": "src/test/usCareerHallBoard.test.tsx",
+      "fullName": "nhl: the retirement talk on the board a farewell season on the last year of the deal opens no extension talk (review fix)"
+    },
+    {
+      "file": "src/test/usCareerHallBoard.test.tsx",
+      "fullName": "nhl: the retirement talk on the board a farewell season with no deal left offers one year deals, and a push adds no year (closing check fix)"
+    },
+    {
+      "file": "src/test/usCareerHallBoard.test.tsx",
+      "fullName": "nhl: the retirement talk on the board Retire now in the middle of an offseason drops the dealt card unapplied"
+    },
+    {
+      "file": "src/test/usCareerHallBoard.test.tsx",
+      "fullName": "nfl: the Hall of Fame on the retirement screen an old retired save with no blocks shows the Hall card, and the Hall pill waits for the ballot"
+    },
+    {
+      "file": "src/test/usCareerHallBoard.test.tsx",
+      "fullName": "nfl: the Hall of Fame on the retirement screen the induction speech is given once and survives a reload"
+    },
+    {
+      "file": "src/test/usCareerHallBoard.test.tsx",
+      "fullName": "nfl: the Hall of Fame on the retirement screen Continue folds the card to its headline"
+    },
+    {
+      "file": "src/test/usCareerHallBoard.test.tsx",
+      "fullName": "nfl: the Hall of Fame on the retirement screen a corrupt retirement, speech or jersey block is dropped alone"
+    },
+    {
+      "file": "src/test/usCareerHallBoard.test.tsx",
+      "fullName": "nba: the Hall of Fame on the retirement screen an old retired save with no blocks shows the Hall card, and the Hall pill waits for the ballot"
+    },
+    {
+      "file": "src/test/usCareerHallBoard.test.tsx",
+      "fullName": "nba: the Hall of Fame on the retirement screen the induction speech is given once and survives a reload"
+    },
+    {
+      "file": "src/test/usCareerHallBoard.test.tsx",
+      "fullName": "nba: the Hall of Fame on the retirement screen Continue folds the card to its headline"
+    },
+    {
+      "file": "src/test/usCareerHallBoard.test.tsx",
+      "fullName": "nba: the Hall of Fame on the retirement screen a corrupt retirement, speech or jersey block is dropped alone"
+    },
+    {
+      "file": "src/test/usCareerHallBoard.test.tsx",
+      "fullName": "mlb: the Hall of Fame on the retirement screen an old retired save with no blocks shows the Hall card, and the Hall pill waits for the ballot"
+    },
+    {
+      "file": "src/test/usCareerHallBoard.test.tsx",
+      "fullName": "mlb: the Hall of Fame on the retirement screen the induction speech is given once and survives a reload"
+    },
+    {
+      "file": "src/test/usCareerHallBoard.test.tsx",
+      "fullName": "mlb: the Hall of Fame on the retirement screen Continue folds the card to its headline"
+    },
+    {
+      "file": "src/test/usCareerHallBoard.test.tsx",
+      "fullName": "mlb: the Hall of Fame on the retirement screen a corrupt retirement, speech or jersey block is dropped alone"
+    },
+    {
+      "file": "src/test/usCareerHallBoard.test.tsx",
+      "fullName": "nhl: the Hall of Fame on the retirement screen an old retired save with no blocks shows the Hall card, and the Hall pill waits for the ballot"
+    },
+    {
+      "file": "src/test/usCareerHallBoard.test.tsx",
+      "fullName": "nhl: the Hall of Fame on the retirement screen the induction speech is given once and survives a reload"
+    },
+    {
+      "file": "src/test/usCareerHallBoard.test.tsx",
+      "fullName": "nhl: the Hall of Fame on the retirement screen Continue folds the card to its headline"
+    },
+    {
+      "file": "src/test/usCareerHallBoard.test.tsx",
+      "fullName": "nhl: the Hall of Fame on the retirement screen a corrupt retirement, speech or jersey block is dropped alone"
+    },
+    {
+      "file": "src/test/usCareerHallBoard.test.tsx",
+      "fullName": "nfl: the calibration stamp (Round 1051) an active save retired through the board is saved with hallCal 2"
+    },
+    {
+      "file": "src/test/usCareerHallBoard.test.tsx",
+      "fullName": "nfl: the calibration stamp (Round 1051) with no Hall bound the same retirement writes no hallCal: the save is byte for byte the old one"
+    },
+    {
+      "file": "src/test/usCareerHallBoard.test.tsx",
+      "fullName": "nfl: the calibration stamp (Round 1051) a retired save with no stamp reads calibration 1 and is never stamped: not by the speech, not by a coach career"
+    },
+    {
+      "file": "src/test/usCareerHallBoard.test.tsx",
+      "fullName": "nfl: the calibration stamp (Round 1051) a junk stamp is dropped on load and the save reads calibration 1"
+    },
+    {
+      "file": "src/test/usCareerHallBoard.test.tsx",
+      "fullName": "nfl: the calibration stamp (Round 1051) a retired save stamped 2 reads calibration 2 on every later load and keeps its stamp"
+    },
+    {
+      "file": "src/test/usCareerHallBoard.test.tsx",
+      "fullName": "nfl: the calibration stamp (Round 1051) two tabs: retired a moment ago in another tab, this tab's retirement keeps the stamp that tab wrote"
+    },
+    {
+      "file": "src/test/usCareerHallBoard.test.tsx",
+      "fullName": "nfl: the calibration stamp (Round 1051) the stamp reads the disk: a live save stamps, the same man retired there hands his stamp on, anyone else's is left alone"
+    },
+    {
+      "file": "src/test/usCareerHallBoard.test.tsx",
+      "fullName": "nba: the calibration stamp (Round 1051) an active save retired through the board is saved with hallCal 2"
+    },
+    {
+      "file": "src/test/usCareerHallBoard.test.tsx",
+      "fullName": "nba: the calibration stamp (Round 1051) with no Hall bound the same retirement writes no hallCal: the save is byte for byte the old one"
+    },
+    {
+      "file": "src/test/usCareerHallBoard.test.tsx",
+      "fullName": "nba: the calibration stamp (Round 1051) a retired save with no stamp reads calibration 1 and is never stamped: not by the speech, not by a coach career"
+    },
+    {
+      "file": "src/test/usCareerHallBoard.test.tsx",
+      "fullName": "nba: the calibration stamp (Round 1051) a junk stamp is dropped on load and the save reads calibration 1"
+    },
+    {
+      "file": "src/test/usCareerHallBoard.test.tsx",
+      "fullName": "nba: the calibration stamp (Round 1051) a retired save stamped 2 reads calibration 2 on every later load and keeps its stamp"
+    },
+    {
+      "file": "src/test/usCareerHallBoard.test.tsx",
+      "fullName": "nba: the calibration stamp (Round 1051) two tabs: retired a moment ago in another tab, this tab's retirement keeps the stamp that tab wrote"
+    },
+    {
+      "file": "src/test/usCareerHallBoard.test.tsx",
+      "fullName": "nba: the calibration stamp (Round 1051) the stamp reads the disk: a live save stamps, the same man retired there hands his stamp on, anyone else's is left alone"
+    },
+    {
+      "file": "src/test/usCareerHallBoard.test.tsx",
+      "fullName": "mlb: the calibration stamp (Round 1051) an active save retired through the board is saved with hallCal 2"
+    },
+    {
+      "file": "src/test/usCareerHallBoard.test.tsx",
+      "fullName": "mlb: the calibration stamp (Round 1051) with no Hall bound the same retirement writes no hallCal: the save is byte for byte the old one"
+    },
+    {
+      "file": "src/test/usCareerHallBoard.test.tsx",
+      "fullName": "mlb: the calibration stamp (Round 1051) a retired save with no stamp reads calibration 1 and is never stamped: not by the speech, not by a coach career"
+    },
+    {
+      "file": "src/test/usCareerHallBoard.test.tsx",
+      "fullName": "mlb: the calibration stamp (Round 1051) a junk stamp is dropped on load and the save reads calibration 1"
+    },
+    {
+      "file": "src/test/usCareerHallBoard.test.tsx",
+      "fullName": "mlb: the calibration stamp (Round 1051) a retired save stamped 2 reads calibration 2 on every later load and keeps its stamp"
+    },
+    {
+      "file": "src/test/usCareerHallBoard.test.tsx",
+      "fullName": "mlb: the calibration stamp (Round 1051) two tabs: retired a moment ago in another tab, this tab's retirement keeps the stamp that tab wrote"
+    },
+    {
+      "file": "src/test/usCareerHallBoard.test.tsx",
+      "fullName": "mlb: the calibration stamp (Round 1051) the stamp reads the disk: a live save stamps, the same man retired there hands his stamp on, anyone else's is left alone"
+    },
+    {
+      "file": "src/test/usCareerHallBoard.test.tsx",
+      "fullName": "nhl: the calibration stamp (Round 1051) an active save retired through the board is saved with hallCal 2"
+    },
+    {
+      "file": "src/test/usCareerHallBoard.test.tsx",
+      "fullName": "nhl: the calibration stamp (Round 1051) with no Hall bound the same retirement writes no hallCal: the save is byte for byte the old one"
+    },
+    {
+      "file": "src/test/usCareerHallBoard.test.tsx",
+      "fullName": "nhl: the calibration stamp (Round 1051) a retired save with no stamp reads calibration 1 and is never stamped: not by the speech, not by a coach career"
+    },
+    {
+      "file": "src/test/usCareerHallBoard.test.tsx",
+      "fullName": "nhl: the calibration stamp (Round 1051) a junk stamp is dropped on load and the save reads calibration 1"
+    },
+    {
+      "file": "src/test/usCareerHallBoard.test.tsx",
+      "fullName": "nhl: the calibration stamp (Round 1051) a retired save stamped 2 reads calibration 2 on every later load and keeps its stamp"
+    },
+    {
+      "file": "src/test/usCareerHallBoard.test.tsx",
+      "fullName": "nhl: the calibration stamp (Round 1051) two tabs: retired a moment ago in another tab, this tab's retirement keeps the stamp that tab wrote"
+    },
+    {
+      "file": "src/test/usCareerHallBoard.test.tsx",
+      "fullName": "nhl: the calibration stamp (Round 1051) the stamp reads the disk: a live save stamps, the same man retired there hands his stamp on, anyone else's is left alone"
+    },
+    {
+      "file": "src/test/usCareerHallBoard.test.tsx",
+      "fullName": "the card prints class years only from the verified class a first class before verifiedFromClass shows ordinal ballots and no rule line; one at it shows the years"
+    },
+    {
+      "file": "src/test/usCareerHallBoard.test.tsx",
+      "fullName": "nfl: the deck retirement cards never come after the talk playSeason: a season played inside the rule deals none, and none is shown after One more year"
+    },
+    {
+      "file": "src/test/usCareerHallBoard.test.tsx",
+      "fullName": "nfl: the deck retirement cards never come after the talk restore: a save standing on a deck retirement card dealt before the talk never shows it"
+    },
+    {
+      "file": "src/test/usCareerHallBoard.test.tsx",
+      "fullName": "nfl: the deck retirement cards never come after the talk chooseOption: a deck retirement card later in the summer is skipped after the talk was answered"
+    },
+    {
+      "file": "src/test/usCareerHallBoard.test.tsx",
+      "fullName": "nfl: the deck retirement cards never come after the talk the filter reads the career when it is asked, so a talk that comes mid-summer holds the cards out"
+    },
+    {
+      "file": "src/test/usCareerHallBoard.test.tsx",
+      "fullName": "nba: the deck retirement cards never come after the talk playSeason: a season played inside the rule deals none, and none is shown after One more year"
+    },
+    {
+      "file": "src/test/usCareerHallBoard.test.tsx",
+      "fullName": "nba: the deck retirement cards never come after the talk restore: a save standing on a deck retirement card dealt before the talk never shows it"
+    },
+    {
+      "file": "src/test/usCareerHallBoard.test.tsx",
+      "fullName": "nba: the deck retirement cards never come after the talk chooseOption: a deck retirement card later in the summer is skipped after the talk was answered"
+    },
+    {
+      "file": "src/test/usCareerHallBoard.test.tsx",
+      "fullName": "nba: the deck retirement cards never come after the talk the filter reads the career when it is asked, so a talk that comes mid-summer holds the cards out"
+    },
+    {
+      "file": "src/test/usCareerHallBoard.test.tsx",
+      "fullName": "mlb: the deck retirement cards never come after the talk playSeason: a season played inside the rule deals none, and none is shown after One more year"
+    },
+    {
+      "file": "src/test/usCareerHallBoard.test.tsx",
+      "fullName": "mlb: the deck retirement cards never come after the talk restore: a save standing on a deck retirement card dealt before the talk never shows it"
+    },
+    {
+      "file": "src/test/usCareerHallBoard.test.tsx",
+      "fullName": "mlb: the deck retirement cards never come after the talk chooseOption: a deck retirement card later in the summer is skipped after the talk was answered"
+    },
+    {
+      "file": "src/test/usCareerHallBoard.test.tsx",
+      "fullName": "mlb: the deck retirement cards never come after the talk the filter reads the career when it is asked, so a talk that comes mid-summer holds the cards out"
+    },
+    {
+      "file": "src/test/usCareerHallBoard.test.tsx",
+      "fullName": "nhl: the deck retirement cards never come after the talk playSeason: a season played inside the rule deals none, and none is shown after One more year"
+    },
+    {
+      "file": "src/test/usCareerHallBoard.test.tsx",
+      "fullName": "nhl: the deck retirement cards never come after the talk restore: a save standing on a deck retirement card dealt before the talk never shows it"
+    },
+    {
+      "file": "src/test/usCareerHallBoard.test.tsx",
+      "fullName": "nhl: the deck retirement cards never come after the talk chooseOption: a deck retirement card later in the summer is skipped after the talk was answered"
+    },
+    {
+      "file": "src/test/usCareerHallBoard.test.tsx",
+      "fullName": "nhl: the deck retirement cards never come after the talk the filter reads the career when it is asked, so a talk that comes mid-summer holds the cards out"
+    },
+    {
+      "file": "src/test/usCareerHallBoard.test.tsx",
+      "fullName": "nfl: the deck jersey card and the Hall card the card is offered only by a club he has played a season for"
+    },
+    {
+      "file": "src/test/usCareerHallBoard.test.tsx",
+      "fullName": "nfl: the deck jersey card and the Hall card an old save whose deck card retired the number, with no club kept, shows no jersey line"
+    },
+    {
+      "file": "src/test/usCareerHallBoard.test.tsx",
+      "fullName": "nba: the deck jersey card and the Hall card the card is offered only by a club he has played a season for"
+    },
+    {
+      "file": "src/test/usCareerHallBoard.test.tsx",
+      "fullName": "nba: the deck jersey card and the Hall card an old save whose deck card retired the number, with no club kept, shows no jersey line"
+    },
+    {
+      "file": "src/test/usCareerHallBoard.test.tsx",
+      "fullName": "mlb: the deck jersey card and the Hall card the card is offered only by a club he has played a season for"
+    },
+    {
+      "file": "src/test/usCareerHallBoard.test.tsx",
+      "fullName": "mlb: the deck jersey card and the Hall card an old save whose deck card retired the number, with no club kept, shows no jersey line"
+    },
+    {
+      "file": "src/components/front-office/FrontOfficeSeasonStats.test.tsx",
+      "fullName": "NFL front office: who scored, the press and the save three presses from Week 1 record every game of each week, his games keep their credits, and the block reads back whole"
+    },
+    {
+      "file": "src/components/front-office/FrontOfficeSeasonStats.test.tsx",
+      "fullName": "NFL front office: who scored, the press and the save the recorder takes no draw: with it switched off the same presses draw the same numbers and save the same league"
+    },
+    {
+      "file": "src/components/front-office/FrontOfficeSeasonStats.test.tsx",
+      "fullName": "NFL front office: who scored, the press and the save a save from before season lines, at Week 5, loads, plays on and writes no block until its next Week 1"
+    },
+    {
+      "file": "src/components/front-office/FrontOfficeSeasonStats.test.tsx",
+      "fullName": "NFL front office: who scored, the load and the close a damaged block is deleted from the stored league on the draft restore of an old recap save"
+    },
+    {
+      "file": "src/components/front-office/FrontOfficeSeasonStats.test.tsx",
+      "fullName": "NFL front office: who scored, the load and the close and on a bracket started again"
+    },
+    {
+      "file": "src/components/front-office/FrontOfficeSeasonStats.test.tsx",
+      "fullName": "NFL front office: who scored, the load and the close the final week names the awards once, writes them on the cards, and a reload on the recap names nothing again"
+    },
+    {
+      "file": "src/components/front-office/FrontOfficeSeasonStats.test.tsx",
+      "fullName": "NFL front office: who scored, the load and the close the bracket path (\"Play Week 17\", a round, then \"Sim the rest\") keeps his playoff games out of the lines, credits them for the tile, and closes once"
+    },
+    {
+      "file": "src/components/front-office/FrontOfficeSeasonStats.test.tsx",
+      "fullName": "NFL front office: who scored, the load and the close a winner's roster row carries the sim badge, and a card that does not read shows none"
+    },
+    {
+      "file": "src/components/front-office/FrontOfficeSeasonStats.test.tsx",
+      "fullName": "NFL front office: who scored, the load and the close a whole season on full rosters with lines and the desk on: the save it writes, measured"
+    },
+    {
+      "file": "src/components/front-office/FrontOfficeSeasonStats.test.tsx",
+      "fullName": "NFL front office: the season card and the history Standings opens on the table, and its This season face draws the season so far and the award history"
+    },
+    {
+      "file": "src/components/front-office/FrontOfficeSeasonStats.test.tsx",
+      "fullName": "NFL front office: the season card and the history a season sat out between two lined ones has its own history row saying so"
+    },
+    {
+      "file": "src/components/front-office/FrontOfficeSeasonStats.test.tsx",
+      "fullName": "NFL front office: the season card and the history the recap draws the closed season with its three award boxes, and a save with no lines says so"
+    },
+    {
+      "file": "src/components/front-office/FrontOfficeSeasonStats.test.tsx",
+      "fullName": "NFL front office: the draft stamps its first year men every man the draft brings in, his and the computer clubs', carries next season as his first year, and nobody else does"
+    }
+  ],
+  "hypothesisFailedFullNames": [
+    "S4 Training shows one rules paragraph on its menu, the rest behind its ? holds only the bank rule with its example on the menu, and ? shows all three",
+    "S4 Training shows one rules paragraph on its menu, the rest behind its ? keeps the ? during a drill as it was: three paragraphs, the drill paused (passes on the base too)",
+    "nfl: the retirement talk on the board a farewell season with no deal left offers one year deals, and a push adds no year (closing check fix)",
+    "nba: the retirement talk on the board a farewell season with no deal left offers one year deals, and a push adds no year (closing check fix)",
+    "NFL front office: the draft stamps its first year men every man the draft brings in, his and the computer clubs', carries next season as his first year, and nobody else does"
+  ],
+  "limits": [
+    "Five failed assertions are a source hypothesis until both actual native reports are retained and compared.",
+    "No App or test edit is part of this replay. The original source arm overlays only the eight listed product bodies.",
+    "109 pending cases from the complete unfiltered run remain unresolved and are not executed or waived by this scoped replay."
+  ]
+}

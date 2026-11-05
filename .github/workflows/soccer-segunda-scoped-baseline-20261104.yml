@@ -1,0 +1,81 @@
+name: Segunda scoped legacy baseline
+on:
+  push:
+    branches: [codex/soccer-segunda-scoped-baseline-20261104]
+permissions:
+  contents: read
+concurrency:
+  group: soccer-segunda-scoped-baseline-${{ github.ref }}
+  cancel-in-progress: false
+env:
+  CI: '1'
+  SIM_NETWORK: offline
+  TZ: UTC
+  PRODUCT_CORE: ebd69abeb38ebb0b93fbff71a0caf2fa453db832
+  PRODUCT_TREE: 821809914563e7830354f3567ba66ac8801cfd10
+jobs:
+  baseline:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 3
+          filter: blob:none
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: '1.4.4'
+      - name: Bind clean current source and exact QA-only additions
+        run: |
+          set -euo pipefail
+          OUT="$RUNNER_TEMP/soccer-segunda-scoped-baseline"
+          mkdir -p "$OUT/install"
+          echo "QA_OUT=$OUT" >> "$GITHUB_ENV"
+          test "$(git rev-parse HEAD^)" = "$PRODUCT_CORE"
+          test "$(git rev-parse HEAD^^{tree})" = "$PRODUCT_TREE"
+          test "$(git diff --name-status HEAD^ HEAD)" = $'A\t.github/workflows/soccer-segunda-scoped-baseline-20261104.yml\nA\tscripts/qa/soccerSegundaScopedBaseline.mjs\nA\tscripts/qa/soccerSegundaScopedCases.json'
+          test -z "$(git status --porcelain --untracked-files=all)"
+      - name: Install held dependency versions
+        run: |
+          set -euo pipefail
+          test "$(bun --version)" = 1.4.4
+          bun --version > "$QA_OUT/install/bun-version.log"
+          node --version > "$QA_OUT/install/node-version.log"
+          bun install --frozen-lockfile > "$QA_OUT/install/bun.log" 2>&1
+          git diff --exit-code HEAD -- package.json package-lock.json bun.lock bun.lockb
+          test -z "$(git status --porcelain --untracked-files=all)"
+      - name: Hydrate exact history then measure original and current 143 cases
+        run: |
+          set -euo pipefail
+          unset NODE_OPTIONS GIT_NO_LAZY_FETCH SIM_OFFLINE_RECEIPT
+          node scripts/qa/soccerSegundaScopedBaseline.mjs --out "$QA_OUT" --spec scripts/qa/soccerSegundaScopedCases.json
+      - name: Final complete source and lock hold
+        if: always()
+        run: |
+          set -euo pipefail
+          export GIT_NO_LAZY_FETCH=1
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import cp from 'node:child_process';import crypto from 'node:crypto';import assert from 'node:assert/strict';
+          const out=process.env.QA_OUT,before=JSON.parse(fs.readFileSync(out+'/source-before.json')),paths=cp.execFileSync('git',['ls-files','-z']).toString().split('\0').filter(Boolean);
+          const after=Object.fromEntries(paths.map(p=>{const b=fs.readFileSync(p);return[p,{bytes:b.length,sha256:crypto.createHash('sha256').update(b).digest('hex')}];}));
+          fs.writeFileSync(out+'/source-final-workflow.json',JSON.stringify(after,null,2)+'\n');assert.deepEqual(after,before);
+          const status=cp.execFileSync('git',['status','--porcelain','--untracked-files=all']).toString();fs.writeFileSync(out+'/status-final-workflow.txt',status);assert.equal(status,'');
+          for(const arm of ['original','current']){const dir=out+'/'+arm+'/transport';if(fs.existsSync(dir))for(const name of fs.readdirSync(dir))assert.equal(fs.statSync(dir+'/'+name).size,0);}
+          console.log('SC_SEGUNDA_SCOPED_SOURCE_HELD '+paths.length+' tracked files, original bytes restored, clean source and lock');
+          NODE
+          git diff --exit-code HEAD -- package.json package-lock.json bun.lock bun.lockb
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: soccer-segunda-scoped-baseline-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ env.QA_OUT }}/
+          retention-days: 30
+          compression-level: 6
