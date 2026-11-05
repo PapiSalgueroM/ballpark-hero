@@ -22,7 +22,6 @@ vi.mock('@/lib/badges', () => ({ getNewlyEarnedBadges: async () => [] }));
 import { useCareerGame } from '@/hooks/useCareerGame';
 import { recordCompletion } from '@/lib/completions';
 
-const rngTraces: { value: number; stack: string | undefined }[] = [];
 const SAVE_KEY = 'career-path-daily-2026-11-05';
 const DIFFICULTY_KEY = 'career-quiz-difficulty';
 function player(letter: string, peak: number): CareerPlayer {
@@ -52,8 +51,9 @@ async function deliver(pool: CareerPlayer[]) {
   await act(async () => { pending.forEach(resolve => resolve(pool)); });
 }
 
-beforeEach(() => {
-  rngTraces.length = 0;
+beforeEach(async () => {
+  // Initialize React's async test flush before measuring gameplay draws.
+  await act(async () => {});
   localStorage.clear();
   fixture.fallback.splice(0, fixture.fallback.length, ...fallbackPool());
   fixture.pending.length = 0;
@@ -61,17 +61,13 @@ beforeEach(() => {
   vi.useFakeTimers({ toFake: ['Date'] });
   vi.setSystemTime(new Date('2026-11-05T17:00:00Z'));
 });
-afterEach(() => { console.log('CAREER_SEARCH_RNG_STACKS ' + JSON.stringify(rngTraces)); cleanup(); fixture.pending.length = 0; vi.restoreAllMocks(); vi.useRealTimers(); });
+afterEach(() => { cleanup(); fixture.pending.length = 0; vi.restoreAllMocks(); vi.useRealTimers(); });
 
 describe('Career Quiz public autocomplete fairness', () => {
   it('CAREER_SEARCH_NORMAL uses one literal public union for different missing fallback targets', async () => {
-    let randomValue = 0;
-    const random = vi.spyOn(Math, 'random').mockImplementation(() => {
-      rngTraces.push({ value: randomValue, stack: new Error('Actual Math.random caller').stack });
-      return randomValue;
-    });
+    const random = vi.spyOn(Math, 'random').mockReturnValue(0);
     const first = await mountGame();
-    randomValue = 0.7;
+    random.mockReturnValue(0.7);
     const second = await mountGame();
     expect(first.result.current.targetPlayer.name, 'CAREER_SEARCH_NORMAL first actual target').toBe('Generated A');
     expect(second.result.current.targetPlayer.name, 'CAREER_SEARCH_NORMAL different actual target').toBe('Generated G');

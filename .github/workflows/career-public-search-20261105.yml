@@ -1,51 +1,125 @@
-name: Career Quiz random call diagnostics
+name: Career Quiz public search fixture and build closure
 on:
   push:
     branches: [codex/career-public-search-qa-20261105]
 permissions:
   contents: read
+  actions: read
 jobs:
-  diagnostic:
+  closeout:
     runs-on: ubuntu-latest
-    timeout-minutes: 12
+    timeout-minutes: 20
     defaults:
       run:
         shell: bash
     env:
       SIM_NETWORK: offline
-      SIM_OFFLINE_RECEIPT: fair-search-rng-diagnostic/offline.log
+      SIM_OFFLINE_RECEIPT: reveal-review-artifacts/offline.log
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 5
+          fetch-depth: 8
           persist-credentials: false
       - uses: actions/setup-node@v4
         with:
           node-version: 24.22.1
           cache: npm
-      - name: Locked source and diagnostic setup
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.4.4
+      - name: Locked dependencies and source receipts
         run: |
-          mkdir -p fair-search-rng-diagnostic
-          git rev-parse HEAD > fair-search-rng-diagnostic/head.txt
-          git ls-files -s > fair-search-rng-diagnostic/source-before.txt
-          sha256sum package.json package-lock.json > fair-search-rng-diagnostic/locks-before.txt
+          mkdir -p reveal-review-artifacts
+          git rev-parse HEAD > reveal-review-artifacts/head.txt
+          git rev-parse 'HEAD^{tree}' > reveal-review-artifacts/tree.txt
+          git ls-files -s > reveal-review-artifacts/source-before.txt
+          sha256sum package.json package-lock.json > reveal-review-artifacts/locks-before.txt
           git fetch --no-tags --depth=1 origin 271e8af48b87ac36500c56138b81595b00d50775
+          git fetch --no-tags --depth=1 origin 617b8354b722c703407074e78a86665d4f7633b5
+          git show 617b8354b722c703407074e78a86665d4f7633b5:src/hooks/useDailyPuzzle.ts > reveal-review-artifacts/pre-daily-hook.ts
           npm ci
-      - name: Actual original fixed restored caller stacks
-        run: NODE_OPTIONS="--max-old-space-size=6144 --require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/traceCareerSearchRng.mjs 2>&1 | tee fair-search-rng-diagnostic/diagnostic.log
-      - name: Source lock and offline holds
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          const lock=JSON.parse(fs.readFileSync('package-lock.json'));
+          const rows=Object.keys(lock.packages).filter(p=>p.startsWith('node_modules/')&&fs.existsSync(p+'/package.json')).map(p=>[p,JSON.parse(fs.readFileSync(p+'/package.json')).version]);
+          fs.writeFileSync('reveal-review-artifacts/installed-before.json',JSON.stringify(rows));
+          NODE
+      - name: Proper app types
+        run: node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee reveal-review-artifacts/types.log
+      - name: Warm original fixed seven effective faults and restored public search
+        run: NODE_OPTIONS="--max-old-space-size=6144 --require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/checkCareerSearchFairness.mjs 2>&1 | tee reveal-review-artifacts/public-search-arms.log
+      - name: Joined reveal review fixed faults and restore
+        if: ${{ !cancelled() }}
+        run: NODE_OPTIONS="--max-old-space-size=6144 --require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/checkCareerRevealReview.mjs 2>&1 | tee reveal-review-artifacts/review-arms.log
+      - name: Existing early-club record stale and parity contracts
+        if: ${{ !cancelled() }}
+        run: |
+          NODE_OPTIONS="--max-old-space-size=6144 --require=$PWD/scripts/lib/offlineTransport.cjs" node node_modules/vitest/vitest.mjs run src/test/careerEarlyClubHint.test.tsx --maxWorkers=1 --minWorkers=1 --reporter=default --reporter=json --outputFile=reveal-review-artifacts/existing-early-club.json 2>&1 | tee reveal-review-artifacts/existing-early-club.log
+          NODE_OPTIONS="--max-old-space-size=6144 --require=$PWD/scripts/lib/offlineTransport.cjs" node node_modules/vitest/vitest.mjs run src/test/dailyRecord.test.tsx src/test/dailySaveHardening.test.tsx --testNamePattern="Career Path" --maxWorkers=1 --minWorkers=1 --reporter=default --reporter=json --outputFile=reveal-review-artifacts/existing-daily.json 2>&1 | tee reveal-review-artifacts/existing-daily.log
+          R848_PARITY_ONLY=career R848_PRE_HOOK="$PWD/reveal-review-artifacts/pre-daily-hook.ts" NODE_OPTIONS="--max-old-space-size=6144 --require=$PWD/scripts/lib/offlineTransport.cjs" node node_modules/vitest/vitest.mjs run src/test/dailySaveParity.test.tsx --maxWorkers=1 --minWorkers=1 --reporter=default --reporter=json --outputFile=reveal-review-artifacts/existing-parity.json 2>&1 | tee reveal-review-artifacts/existing-parity.log
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          for(const [file,expected] of [['existing-early-club',11],['existing-daily',3],['existing-parity',1]]) {
+            const r=JSON.parse(fs.readFileSync('reveal-review-artifacts/'+file+'.json'));
+            const rows=r.testResults.flatMap(s=>s.assertionResults);
+            assert.equal(rows.filter(x=>x.status==='passed').length,expected);assert.equal(rows.filter(x=>x.status==='failed').length,0);
+          }
+          NODE
+      - name: Verified completed reference build artifact
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh api repos/PapiSalgueroM/ballpark-hero/actions/artifacts/13461117896/zip > "$RUNNER_TEMP/search-reference.zip"
+          echo "6d501f83dc6f0d953f2cfbb7ff35c618254219d0f6843a3f6b3b8128394890a2  $RUNNER_TEMP/search-reference.zip" | sha256sum --check
+          mkdir -p "$RUNNER_TEMP/search-reference" "$RUNNER_TEMP/search-reference-dist"
+          unzip -q "$RUNNER_TEMP/search-reference.zip" -d "$RUNNER_TEMP/search-reference"
+          echo "ded5fcec66050eb3fc88d38f3d119809d16234af6221d465f6cbd0ddda7764b4  $RUNNER_TEMP/search-reference/dist.tgz" | sha256sum --check
+          tar -xzf "$RUNNER_TEMP/search-reference/dist.tgz" -C "$RUNNER_TEMP/search-reference-dist"
+          cp "$RUNNER_TEMP/search-reference/source-before.txt" reveal-review-artifacts/reference-source.txt
+      - name: Production build after test-only setup repair
+        run: NODE_OPTIONS="--max-old-space-size=6144" npm run build 2>&1 | tee reveal-review-artifacts/build.log
+      - name: Every source and built file joined to prior gates
+        env:
+          SEARCH_REFERENCE_DIST: ${{ runner.temp }}/search-reference-dist/dist
+        run: |
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import path from 'node:path';import assert from 'node:assert/strict';import {createHash} from 'node:crypto';
+          const sha=bytes=>createHash('sha256').update(bytes).digest('hex');
+          const readIndex=file=>new Map(fs.readFileSync(file,'utf8').trim().split('\n').map(line=>{const m=/^[0-9]+ ([0-9a-f]{40}) 0\t(.+)$/.exec(line);assert(m,'Actual index row');return [m[2],m[1]];}));
+          const old=readIndex('reveal-review-artifacts/reference-source.txt'),current=readIndex('reveal-review-artifacts/source-before.txt');
+          const excluded=new Set(['src/test/careerSearchFairness.test.tsx','scripts/qa/checkCareerSearchFairness.mjs']);
+          assert.equal(old.get('src/test/careerSearchFairness.test.tsx'),'54a6e197bdb1a7c5159a92dd14e6edc58fec5f34');
+          assert.equal(current.get('src/test/careerSearchFairness.test.tsx'),'2e8b541c2d74965502af3ea92be9cd2f3afb06c8');
+          assert.equal(old.get('scripts/qa/checkCareerSearchFairness.mjs'),'c3ec478b809c81e100aacfc15547d9dcdbf7be7b');
+          assert.equal(current.get('scripts/qa/checkCareerSearchFairness.mjs'),'a94ab8f941a8396d18e5b9c7c9dbeeb53b73e80c');
+          const scoped=map=>[...map].filter(([p])=>/^(?:src|public|scripts)\//.test(p)&&!excluded.has(p)).sort(([a],[b])=>a.localeCompare(b));
+          const sourceRows=scoped(current);assert.deepEqual(sourceRows,scoped(old),'Every other source/public/script blob held');
+          const inventory=dir=>fs.readdirSync(dir,{withFileTypes:true}).sort((a,b)=>a.name.localeCompare(b.name)).flatMap(e=>e.isDirectory()?inventory(path.join(dir,e.name)).map(r=>({...r,path:e.name+'/'+r.path})):[{path:e.name,bytes:fs.statSync(path.join(dir,e.name)).size,sha256:sha(fs.readFileSync(path.join(dir,e.name)))}]);
+          const actual=inventory('dist'),reference=inventory(process.env.SEARCH_REFERENCE_DIST);
+          assert.equal(actual.length,849);assert.deepEqual(actual,reference,'Every byte of every built file matches the completed readers/caps/browser artifact');
+          const result={status:'passed',referenceRun:42126367485,referenceApp:'e9145ebef2ab4081dcd3f9613f2555445b443fa3',referenceArtifact:13461117896,referenceZipSHA256:'6d501f83dc6f0d953f2cfbb7ff35c618254219d0f6843a3f6b3b8128394890a2',referenceTarSHA256:'ded5fcec66050eb3fc88d38f3d119809d16234af6221d465f6cbd0ddda7764b4',sourceRows:sourceRows.length,onlyExcludedChanges:[...excluded],distFiles:actual.length,distManifestSHA256:sha(JSON.stringify(actual)),dist:actual};
+          fs.writeFileSync('reveal-review-artifacts/reference-build-join.json',JSON.stringify(result,null,2));
+          console.log('PASS all '+sourceRows.length+' source rows except exact2test/QA repairs and all849built files held');
+          NODE
+      - name: Source lock installed versions and offline holds
         if: always()
         run: |
-          git diff --exit-code HEAD -- src scripts package.json package-lock.json
-          git ls-files -s > fair-search-rng-diagnostic/source-after.txt
-          cmp fair-search-rng-diagnostic/source-before.txt fair-search-rng-diagnostic/source-after.txt
-          sha256sum package.json package-lock.json > fair-search-rng-diagnostic/locks-after.txt
-          cmp fair-search-rng-diagnostic/locks-before.txt fair-search-rng-diagnostic/locks-after.txt
-          if test -f fair-search-rng-diagnostic/offline.log; then test ! -s fair-search-rng-diagnostic/offline.log; fi
+          git ls-files -s > reveal-review-artifacts/source-after.txt
+          cmp reveal-review-artifacts/source-before.txt reveal-review-artifacts/source-after.txt
+          git diff --exit-code HEAD -- src scripts public package.json package-lock.json
+          sha256sum package.json package-lock.json > reveal-review-artifacts/locks-after.txt
+          cmp reveal-review-artifacts/locks-before.txt reveal-review-artifacts/locks-after.txt
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const before=JSON.parse(fs.readFileSync('reveal-review-artifacts/installed-before.json'));
+          const after=before.map(([p])=>[p,JSON.parse(fs.readFileSync(p+'/package.json')).version]);assert.equal(after.length,521);assert.deepEqual(after,before);
+          fs.writeFileSync('reveal-review-artifacts/installed-final.json',JSON.stringify(after));
+          NODE
+          if test -f reveal-review-artifacts/offline.log; then test ! -s reveal-review-artifacts/offline.log; fi
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: career-public-search-rng-diagnostic-${{ github.run_id }}
-          path: fair-search-rng-diagnostic
+          name: career-public-search-fixture-closure-${{ github.run_id }}
+          path: reveal-review-artifacts
           retention-days: 14
           if-no-files-found: error
