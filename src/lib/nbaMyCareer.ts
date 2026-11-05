@@ -10,6 +10,7 @@ import { formatNumber } from './formatNumber';
  */
 
 import { NBA_TEAMS } from '@/data/conquestDataNba';
+import { NBA_DRAFT_2004 } from '@/data/nbaDraft2004';
 import { nbaEraNeutral, nbaEraScale } from '@/data/nbaLeagueNorms';
 import { usSeasonLength } from '@/data/usSeasonLengths';
 import { seasonSwing, swingNote, playoffDepthOf, playoffGames, clutchSwing, clutchNote } from './careerVariance';
@@ -218,6 +219,53 @@ export interface NbaCareerState {
       nothing seen. */
   pendingRivalryChoice?: RivalryChoiceCard | null;
   rivalryChoicesSeen?: string[];
+  /** Opted in by new throwback UI creation only. Absent saves keep the old world. */
+  draft2004?: NbaDraft2004Block;
+}
+
+export interface NbaDraft2004Visit {
+  year: number; id: string; team: string; family: 'G' | 'F' | 'C'; comparison: number;
+  roleBefore: 'starter' | 'backup'; roleAfter: 'starter' | 'backup';
+  moraleBefore: number; moraleAfter: number;
+}
+export interface NbaDraft2004Block { v: 1; ids: string[]; visits: NbaDraft2004Visit[] }
+
+function validNbaDraft2004(c: NbaCareerState): NbaDraft2004Block | null {
+  const b = c.draft2004;
+  if (c.eraId !== 'y2004' || !b || b.v !== 1 || !Array.isArray(b.ids) || !Array.isArray(b.visits)) return null;
+  if (b.ids.length === 0) return b.visits.length === 0 ? b : null;
+  if (b.ids.length !== NBA_DRAFT_2004.length || b.ids.some((id, i) => id !== NBA_DRAFT_2004[i].id)) return null;
+  const role = (v: unknown) => v === 'starter' || v === 'backup';
+  if (b.visits.some(v => !v || v.year !== 2004 || !NBA_DRAFT_2004.some(p => p.id === v.id && p.families.includes(v.family))
+    || typeof v.team !== 'string' || !Number.isFinite(v.comparison) || !role(v.roleBefore) || !role(v.roleAfter)
+    || !Number.isFinite(v.moraleBefore) || !Number.isFinite(v.moraleAfter))) return null;
+  return b;
+}
+
+export function enableNbaDraft2004(c: NbaCareerState): void {
+  if (c.eraId === 'y2004' && c.year === 2003 && c.draft2004 === undefined)
+    c.draft2004 = { v: 1, ids: [], visits: [] };
+}
+export function hasNbaDraft2004(c: NbaCareerState): boolean {
+  return c.year >= 2004 && validNbaDraft2004(c)?.ids.length === NBA_DRAFT_2004.length;
+}
+function admitNbaDraft2004(c: NbaCareerState): string | null {
+  const b = validNbaDraft2004(c);
+  if (!b || c.year !== 2004 || b.ids.length) return null;
+  b.ids = NBA_DRAFT_2004.map(p => p.id);
+  return 'The real 2004 draft class has arrived: 59 selections. Camp matchups and results are simulated.';
+}
+function finishNbaDraft2004Camp(c: NbaCareerState, comparison: number,
+  before: { role: 'starter' | 'backup'; morale: number }, note: string | null): string | null {
+  const b = validNbaDraft2004(c);
+  if (!b || c.year !== 2004 || b.ids.length !== NBA_DRAFT_2004.length) return note;
+  const family = c.pos === 'C' ? 'C' : c.pos === 'PG' || c.pos === 'SG' ? 'G' : 'F';
+  const eligible = NBA_DRAFT_2004.filter(p => p.families.includes(family));
+  const player = eligible[Math.max(0, c.draftPick - 1) % eligible.length];
+  if (!player) return note;
+  b.visits.push({ year: c.year, id: player.id, team: c.team, family, comparison,
+    roleBefore: before.role, roleAfter: c.role!, moraleBefore: before.morale, moraleAfter: c.morale });
+  return 'Simulated camp matchup: ' + player.name + '. ' + (note ?? 'You keep your starting spot.');
 }
 
 export interface NbaCareerEvent {
@@ -505,22 +553,23 @@ export function nbaAssignRole(c: NbaCareerState, teamQuality: number, rng: () =>
 /** The training camp fight. Mutates c.role, returns a line or null. */
 export function nbaCampBattle(c: NbaCareerState, teamQuality: number, rng: () => number = Math.random): string | null {
   if (!c.role) c.role = 'starter'; /* pre-182 save repair */
+  const before: { role: 'starter' | 'backup'; morale: number } = { role: c.role, morale: c.morale };
   const incumbent = nbaIncumbentOvr(teamQuality, rng);
   if (c.role === 'starter') {
     if (c.ovr < incumbent - 5) {
       c.role = 'backup';
       c.morale = Math.max(20, c.morale - 10);
-      return '🪑 Moved to the second unit. The new arrival took your spot in camp.';
+      return finishNbaDraft2004Camp(c, incumbent, before, '🪑 Moved to the second unit. The new arrival took your spot in camp.');
     }
-    return null;
+    return finishNbaDraft2004Camp(c, incumbent, before, null);
   }
   const p = Math.max(0.05, Math.min(0.9, 0.1 + (c.ovr - incumbent) * 0.07));
   if (c.ovr >= incumbent - 1 || rng() < p) {
     c.role = 'starter';
     c.morale = Math.min(100, c.morale + 10);
-    return '🚀 You cracked the starting five. Opening night, your name gets called.';
+    return finishNbaDraft2004Camp(c, incumbent, before, '🚀 You cracked the starting five. Opening night, your name gets called.');
   }
-  return '🪑 Still the second unit. The minutes will come, keep pushing.';
+  return finishNbaDraft2004Camp(c, incumbent, before, '🪑 Still the second unit. The minutes will come, keep pushing.');
 }
 
 export function nbaMarketSalary(c: NbaCareerState): number {
@@ -910,6 +959,8 @@ export function nbaProgress(c: NbaCareerState, rng: () => number): string[] {
   if (c.age >= 31) c.health = Math.max(30, c.health - 3);
   c.age += 1;
   c.year += 1;
+  const draftArrival = admitNbaDraft2004(c);
+  if (draftArrival) notes.push(draftArrival);
   c.contractYears -= 1;
   c.morale = Math.max(20, Math.min(100, c.morale + Math.round(rng() * 10 - 4)));
   /* Round 182: a second-unit year wears on you and the crowd learns other names. */

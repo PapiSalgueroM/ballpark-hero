@@ -14,6 +14,7 @@ export interface UsCareerProspect {
   rating: number;
   pot: number;
   state: PreDraftState | null;
+  draftClassPolicy?: string;
 }
 
 export function createUsCareerProspect(
@@ -21,7 +22,9 @@ export function createUsCareerProspect(
   input: Pick<UsCareerProspect, 'name' | 'pos' | 'archetypeId' | 'eraId' | 'appearance' | 'seed'>,
 ): UsCareerProspect {
   const arch = sport.create.archetypes[input.pos].find(a => a.id === input.archetypeId)!;
-  return { v: 1, ...input, ...sport.prospectRatings(arch, keyedRng(`${input.seed}|ratings`)), state: null };
+  const policy = sport.historicalDraft?.policyForEra(input.eraId);
+  return { v: 1, ...input, ...sport.prospectRatings(arch, keyedRng(`${input.seed}|ratings`)), state: null,
+    ...(policy ? { draftClassPolicy: policy } : {}) };
 }
 
 /** A partial prospect never replaces an already valid professional save. */

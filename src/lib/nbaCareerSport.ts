@@ -1,3 +1,4 @@
+import { lazy } from 'react';
 import { nbaPreDraftDescriptor } from '@/lib/nbaCareerPreDraft';
 /**
  * Round 900: the NBA's binding for the one US career board.
@@ -13,7 +14,7 @@ import {
   NBA_SPEND_ITEMS, buyNbaItem, getNbaSpendItem,
   nbaShouldRetire, nbaLegacyOf, nbaCareerTotals, nbaRollTeamQuality, nbaTeamLabelOf,
   buildNbaFaWindow, nbaFaPushArgs, buildNbaExtension, nbaExtPushArgs,
-  nbaAssignRole, nbaCampBattle,
+  nbaAssignRole, nbaCampBattle, enableNbaDraft2004, hasNbaDraft2004,
   type NbaCareerPos, type NbaCareerState, type NbaSeasonLine,
 } from '@/lib/nbaMyCareer';
 import { countOf, nbaStatLine } from '@/lib/usCareerStatLine';
@@ -35,6 +36,7 @@ import { usSeasonHeldLine } from '@/data/usSeasonLengths';
    page's Continue fence (simHomeFront section 7) can find where every save
    key in src is declared; the value is the one the old board used. */
 const SAVE_KEY = 'nba-my-career-save-v1';
+const NbaHistoricalDraftPanel = lazy(() => import('@/components/nba-my-career/NbaHistoricalDraftClass'));
 /** The awards the Trophy Case tile already counts in a row of their own (the honours below). */
 const NBA_TILE_NAMED = ['MVP', 'All-NBA', 'All-Star'];
 
@@ -63,6 +65,13 @@ export const NBA_CAREER_SPORT: UsCareerSport<NbaCareerState, NbaSeasonLine> = wi
   },
 
   preDraft: nbaPreDraftDescriptor,
+  historicalDraft: {
+    label: '2004 draft class',
+    policyForEra: eraId => eraId === 'y2004' ? 'nba-draft-2004-v1' : undefined,
+    enableNewCareer: enableNbaDraft2004,
+    available: hasNbaDraft2004,
+    Panel: NbaHistoricalDraftPanel,
+  },
   prospectRatings: (arch, rng) => {
     const a = arch as NbaCareerState['archetype'];
     const rating = 68 + Math.floor(rng() * 8) + a.ovrBoost;

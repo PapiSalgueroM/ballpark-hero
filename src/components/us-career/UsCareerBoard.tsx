@@ -184,6 +184,9 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
   const [appearance, setAppearance] = useState<PlayerAppearance>(() => defaultAppearance());
   // Round 85: the tile rule. The season hub is boxes; each opens its own screen.
   const [panel, setPanel] = useState<'none' | 'bank' | 'stats' | 'log' | 'trophies' | 'news' | 'inbox' | 'dirty'>('none');
+  const [draftClassOpen, setDraftClassOpen] = useState(false);
+  const draftClassOpener = useRef<HTMLButtonElement>(null);
+  const DraftClassPanel = sport.historicalDraft?.Panel;
   const [retiredReview, setRetiredReview] = useState(false);
   const reviewReturn = useRef<'log' | 'retired' | 'wallCreate' | 'wallRetired' | null>(null);
   const reviewHubIndex = useRef(0);
@@ -355,9 +358,10 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
      at scrollY 443 with the panel's own back button 246px above the fold, so
      the player landed underneath the screen he had just opened. The hook does
      nothing when the top of the panel is already readable. */
-  const panelRef = useRevealScroll<HTMLDivElement>(`${panel}:${newsTab}:${intlOpen ? 'intl' : ''}`);
+  const panelRef = useRevealScroll<HTMLDivElement>(`${panel}:${newsTab}:${intlOpen ? 'intl' : ''}${draftClassOpen ? ':draft-class' : ''}`);
   /* Round 1557: leaving the trophies panel any way at all closes the International view, so the case opens on itself. */
   useEffect(() => { if (panel !== 'trophies') setIntlOpen(false); }, [panel]);
+  useEffect(() => { if (panel !== 'stats') setDraftClassOpen(false); }, [panel]);
 
   /* Round 1569 (the lead's ruling R1, report A's own screen). A start or a
      restart swaps the whole board: Enter the draft swaps the tall create
@@ -616,6 +620,8 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
     const rng = keyedRng(`${pending.seed}|career`);
     const c: CareerState = sport.startCareer(pending.name, pending.pos, arch, rng, pending.appearance, pending.eraId,
       { ...outcome, pot: state.pot, health: outcome.devSeasons.length ? 100 : state.health, prospect: state });
+    const draftPolicy = sport.historicalDraft?.policyForEra(pending.eraId);
+    if (draftPolicy && pending.draftClassPolicy === draftPolicy) sport.historicalDraft!.enableNewCareer(c);
     const tq = sport.rollTeamQuality(null, rng);
     const roleNote = sport.assignRole(c, tq, rng);
     /* Round 1038: the summer's salt, last off this career's own stream. */
@@ -640,6 +646,7 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
   const create = () => {
     const arch = sport.create.archetypes[pos].find(a => a.id === archetypeId) ?? sport.create.archetypes[pos][0];
     const c: CareerState = sport.startCareer(nameInput.trim() || sport.create.defaultName, pos, arch, Math.random, appearance, eraId);
+    if (sport.historicalDraft?.policyForEra(eraId)) sport.historicalDraft.enableNewCareer(c);
     const tq = sport.rollTeamQuality(null, Math.random);
     /* Round 182: the depth chart is set the day you arrive. */
     const roleNote = sport.assignRole(c, tq, Math.random);
@@ -1596,9 +1603,20 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
             }} />
           </Suspense>
         )}
-        {panel === 'stats' && (
+        {panel === 'stats' && (draftClassOpen && DraftClassPanel && sport.historicalDraft?.available(career) ? (
+          <Suspense fallback={<p role="status">Opening draft class...</p>}>
+            <DraftClassPanel career={career} onBack={() => {
+              setDraftClassOpen(false);
+              requestAnimationFrame(() => draftClassOpener.current?.focus({ preventScroll: true }));
+            }} />
+          </Suspense>
+        ) : (
           <div className="space-y-3">
             {career.prospect && <ProspectRecord sport={sport} state={career.prospect} />}
+            {sport.historicalDraft?.available(career) && <button ref={draftClassOpener} onClick={() => setDraftClassOpen(true)}
+              className="min-h-11 w-full rounded-xl border border-primary/40 bg-card px-3 py-3 text-left text-sm font-bold">
+              {sport.historicalDraft.label}
+            </button>}
             <div className="rounded-2xl border border-border bg-card p-4 text-center">
               <p className="text-4xl font-black text-primary">{career.ovr}</p>
               <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">overall</p>
@@ -1619,7 +1637,7 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
               <div className="rounded-xl border border-border bg-card px-2 py-2"><p className="text-lg font-black text-foreground">{sport.ringsOf(career)}</p><p className="text-muted-foreground">{sport.ringsLabel}</p></div>
             </div>
           </div>
-        )}
+        ))}
         {/* Round 1557: the medals of the summers with the national team sit on the shelf as rows of their own
             (the sport's face, loaded with the save that carries a summer), and the International tile opens every
             summer he was called, one tile each, in its own view with Back: never a list above the badges. */}
