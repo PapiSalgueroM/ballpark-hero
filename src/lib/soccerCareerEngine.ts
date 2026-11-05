@@ -28,7 +28,7 @@ import { uclTieOutcome } from '@/lib/uclTieRule';
 /* Round 972: the first stage before the knockouts, and the cup a club outside
    Europe plays instead of the Champions League. Never imports this engine. */
 import {
-  uclProbit, poissonGoals, UCL_BASE_LAMBDA, UCL_HOME_EDGE, clubCupFor, CONTINENTAL_LADDER,
+  uclProbit, poissonGoals, UCL_BASE_LAMBDA, UCL_HOME_EDGE, clubCupFor, clubContinentalSuspended, CONTINENTAL_LADDER,
   CONTINENTAL_SIMPLIFIED, continentalOpponents, firstStageShape, firstStageOpponentCount,
   firstStageTarget, solveStageStrength, playFirstStage, isFirstStageResult,
   type ClubCupId, type FirstStageResult,
@@ -4002,7 +4002,8 @@ export function calcAppearances(overall: number, clubTier: number, age: number, 
 
   // --- UCL appearances (0-13), only Tier 1-2 clubs qualify ---
   let uclApps = 0;
-  if (clubTier <= 2) {
+  const clubYear = state && state.seasons.length > 0 ? state.seasons[state.seasons.length - 1].year + 1 : 2024;
+  if (clubTier <= 2 && !(state && clubContinentalSuspended(state.currentClubCountry, clubYear))) {
     // Group stage: 6-8 games, knockouts add more
     const qualifies = clubTier === 1 ? true : Math.random() < 0.5;
     if (qualifies) {
@@ -4110,7 +4111,7 @@ export function calcAppearances(overall: number, clubTier: number, age: number, 
     apps = Math.max(1, apps - clamp(missedApps, 0, injurySevere ? 34 : 12));
   }
 
-  return { apps, leagueApps, injured, injuryWeeks, injuryName, injurySevere };
+  return { apps, leagueApps: Math.min(leagueApps, apps), injured, injuryWeeks, injuryName, injurySevere };
 }
 
 /* ─── Goals per 38 apps by position & overall rating ───
@@ -6945,10 +6946,12 @@ export function generateRandomEvents(state: CareerState): RandomEvent[] {
   if (state.age < 17) return [];
   const all = getAllEvents(state);
   const season = eventSeasonIndex(state);
+  const completedYear = state.seasons[state.seasons.length - 1]?.year ?? 2024;
   const eligible = all.filter(e => {
     if (e.id === state.lastEventId) return false;
     if (isEventOnCooldown(state, e, season)) return false;
     if (!cardFitsSeason(e.id, state)) return false;
+    if (e.id === 65 && clubContinentalSuspended(state.currentClubCountry, completedYear)) return false;
     if (e.category === "international") {
       if (e.id === 17 && state.internationalCareer) return false;
       if (e.id === 18 && !state.internationalCareer) return false;
@@ -8420,7 +8423,7 @@ export const SOCCER_RIVALRY_EVENTS: RivalryEventDef<CareerState, RivalPlayer>[] 
     id: 107, emoji: "⭐", title: "Rival Wins Champions League",
     description: (_s, r) => `${r.name} wins the Champions League. You were eliminated in the semis.`,
     consequence: "Morale -5, Motivation boost",
-    when: (_s, r) => r.championsLeagues > 0,
+    when: (s, r) => r.championsLeagues > 0 && !clubContinentalSuspended(s.currentClubCountry, s.seasons?.[s.seasons.length - 1]?.year ?? 2024),
     apply: s => {
       s.morale = clamp(s.morale - 5, 0, 100);
       s.statBoostNextSeason = { ...s.statBoostNextSeason, physical: (s.statBoostNextSeason.physical || 0) + 1 };

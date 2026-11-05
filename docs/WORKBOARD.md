@@ -17911,3 +17911,17 @@ Soccer Career transfer briefs now offer an optional preferred league, preview ac
 ## Combined qualification on current release
 
 The complete soccer stack passes Actions42096174788 at5f05c06b6133cf213ac2c318e4278a7e43b0f95e:225 distinct targeted cases, normal build,9 engine/layout harnesses,20 saved-output readers,16 unchanged caps and all4 browser flows. Preferred-league signing/refusal specifically passes199 runtime checks,9 exact reloads and16 document-scroll restorations on the composed App. Owned preferred-league code/test blobs remain unchanged from5689ab28. Main3b historical-release records are preserved. Exact evidence and limits:docs/plans/2026-11-05-soccer-master-integration.md. Full suite/live Reach remain uncredited. Partial SC-11, draft and unpublished.
+
+
+## 2026-11-05 competition and appearance qualification complete
+
+SC-39 supporting slice: one club-country eligibility rule from complete2022 seasons, fresh European-card gating, and final leagueApps<=apps reconciliation after availability/injury. Recorded history stays intact; newly generated invalid splits anywhere are corrected.15 policy/totals cases,8 effective controls and176RAW files pass on the combined source. All210 related cases,9 normal harnesses,20 readers,16 caps and4 browser flows pass. The injury-aware loan guard also passes positive/new-fault/old-shut checks. Shared receipt:docs/plans/2026-11-05-soccer-master-integration.md. No whole card completion, full-suite/live-Reach credit, merge or publication.
+
+
+## 2026-11-05 club-policy historical inverse compatibility
+
+Wider automatic checks exposed an owned test-helper incompatibility: completedYear and the fresh passport gate interrupted Round1327's full deck anchor. scripts/lib/careerDeckFair1327.mjs now accepts exactly one of two explicit complete blocks. The legacy block and its output stay byte-identical; the new block keeps the club policy on both sides of the deck-only inverse. Missing, altered, duplicate and mixed old/new blocks still refuse. Pins, patch API and all16 receipt rows are unchanged.
+
+Original proof42106390333 at702499ce recorded two exact business failures, CURRENT_INVERSE and REJECT_MIXED_DUPLICATE, plus two held cases. Fixed proof42107005050 at3c2ae71b passes all4 cases and restores all4. Actual inverse generator vectors exclude the passport card for Russia2022 and retain it for England2022/Russia2021, with full states and draw tapes. The effective omit-inverse control preserves policy outcomes but fails the exact legacy count-draw assertion;3 other cases stay green. HarnessAnchors and NoRivalNames pass. App code, input snapshots, source inventory and locks remain unchanged by this script-only repair. No new App build or browser credit is claimed for it.
+
+The original and fixed archives are retained in soccer-integration/deck-original and deck-fixed. Fixed artifact13453021290 is7387805B, SHA256 d7805e322e516904e359349e42984e7dda0593eca96c8cd804b067f6cb3826e2. The inherited phone inverse still fails on PRbase8a9, and two veteran workflows stop at historical preparation fences already violated by current main. Programme's US replay failure lacks retained child output and remains unresolved. Full suite/live Reach/release-wide approval remain uncredited. This does not waive those checks or authorize publication.

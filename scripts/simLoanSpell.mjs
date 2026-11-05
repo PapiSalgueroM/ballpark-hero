@@ -7,9 +7,9 @@
  * things worth pinning:
  *
  *  1. THE SHARED TABLE. The projection quoted on the loan screen and the
- *     band the season draws from are the same function. 300 draws per case,
- *     every one inside its projected band, and the table returns exactly the
- *     bands the old inline code carried (the refactor changed nothing).
+ *     band the season draws from are the same function. The table returns
+ *     exactly the old bands. Healthy fringe draws keep both band bounds;
+ *     injured draws can fall below it, but league games never exceed all games.
  *  2. THE OFFER LAW. Loans appear exactly when they should: young, contract
  *     to run, a top two tier club, a fringe projection. Stars, veterans,
  *     final year men and small club players never see one. Every offer is a
@@ -29,6 +29,8 @@
  * engine and section 4's cohort must collapse through its floor. It exists
  * because Round 537 widened that cohort from 150 careers to 900, and a
  * widening is only honest if the floor can still fail.
+ * LOAN_CONTROL=injury-total gives injured seasons an impossible league total
+ * in the bundle only. Section 1 must catch it with LOAN_APPEARANCE_TOTAL.
  *
  * Run: node scripts/simLoanSpell.mjs
  */
@@ -54,8 +56,8 @@ const ENTRY = path.join(os.tmpdir(), 'loan-engine-entry.mjs');
    there. That is not hypothetical: simEarlyReturnScope's control could not
    fire on this machine for exactly that reason. */
 const CONTROL = process.env.LOAN_CONTROL || '';
-if (CONTROL && CONTROL !== 'shut') {
-  console.error(`LOAN_CONTROL=${CONTROL} is not a control this harness knows (shut)`);
+if (CONTROL && CONTROL !== 'shut' && CONTROL !== 'injury-total') {
+  console.error(`LOAN_CONTROL=${CONTROL} is not a control this harness knows (shut, injury-total)`);
   process.exit(1);
 }
 const ENGINE_SRC = 'src/lib/soccerCareerEngine.ts';
@@ -80,6 +82,26 @@ if (CONTROL === 'shut') {
   console.log('NEGATIVE CONTROL ON (shut): the loan market closed in the bundle, section 4 must go red');
 }
 
+if (CONTROL === 'injury-total') {
+  const src = fs.readFileSync(path.join(ROOT, ENGINE_SRC), 'utf8').split('\r\n').join('\n');
+  const needle = '  return { apps, leagueApps: Math.min(leagueApps, apps), injured, injuryWeeks, injuryName, injurySevere };';
+  if (src.split(needle).length - 1 !== 1) {
+    console.error('CONTROL injury-total needs exactly one capped appearance return, so it would change nothing');
+    process.exit(1);
+  }
+  const mutated = src.replace(needle, '  return { apps, leagueApps: injured ? apps + 1 : Math.min(leagueApps, apps), injured, injuryWeeks, injuryName, injurySevere };');
+  if (mutated === src) { console.error('CONTROL injury-total changed nothing'); process.exit(1); }
+  plugins.push({
+    name: 'loan-injury-total-control',
+    setup(b) {
+      b.onLoad({ filter: /soccerCareerEngine\.ts$/ }, args => ({
+        contents: mutated, loader: 'ts', resolveDir: path.dirname(args.path),
+      }));
+    },
+  });
+  console.log('NEGATIVE CONTROL ON (injury-total): injured league games exceed all games in the bundle, section 1 must go red');
+}
+
 writeFileSync(ENTRY, `
 globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };
 const mod = await import('${ROOT.replaceAll('\\', '/')}/${ENGINE_SRC}');
@@ -100,6 +122,7 @@ const {
 } = engine;
 
 let failures = 0;
+let injuredFringeDraws = 0, appearanceTotalFailures = 0;
 const fail = m => { failures += 1; console.error("  FAIL: " + m); };
 const clubs = FALLBACK_CLUBS;
 const stats = ovr => ({ pace: ovr, shooting: ovr, passing: ovr, dribbling: ovr, defending: ovr, physical: ovr, reflexes: ovr });
@@ -139,7 +162,7 @@ console.log("1) the projection and the draw share one table");
       if (c.tier > 2 || c.name !== elite.name) {
         /* non elite band depends only on overall and tier */
         if (draw.leagueApps < got.min - 0 && !draw.injured) {
-          /* injuries cut the total, never the league split */
+          /* injuries may reduce the realized league split below the band */
         }
       }
       if (draw.leagueApps < 0 || draw.leagueApps > 38) fail("league apps out of the football");
@@ -152,11 +175,14 @@ console.log("1) the projection and the draw share one table");
     const s = proState(66, 18, elite, 4);
     const d = calcAppearances(s.overall, s.currentClubTier, s.age, s);
     draws += 1;
-    /* phone swing is plus or minus two at the extremes */
-    if (d.leagueApps >= 8 - 2 && d.leagueApps <= 16 + 2) inBand += 1;
+    /* phone swing is plus or minus two; injury can lower the realized split */
+    if (d.injured) injuredFringeDraws += 1;
+    if (d.leagueApps >= (d.injured ? 0 : 8 - 2) && d.leagueApps <= 16 + 2) inBand += 1;
+    if (d.leagueApps > d.apps) appearanceTotalFailures += 1;
   }
-  if (inBand !== draws) fail(`elite fringe band leaked: ${draws - inBand} of ${draws} draws left 8-16 (swing allowed 2)`);
-  console.log(`   table intact across ${CASES.length} cases, ${draws} fringe draws inside the band`);
+  if (inBand !== draws) fail(`elite fringe band leaked: ${draws - inBand} of ${draws} draws left healthy 6-18 or injured 0-18`);
+  if (appearanceTotalFailures > 0) fail(`LOAN_APPEARANCE_TOTAL: ${appearanceTotalFailures} of ${draws} fringe draws recorded more league games than all games`);
+  console.log(`   table intact across ${CASES.length} cases; ${draws} fringe draws checked, ${injuredFringeDraws} injured, ${appearanceTotalFailures} invalid league totals`);
 }
 
 /* --------------------------------------------------------- 2. the offer law */
@@ -420,6 +446,14 @@ console.log("6) the wiring and the words");
 }
 
 console.log("");
+if (CONTROL === 'injury-total') {
+  if (injuredFringeDraws > 0 && appearanceTotalFailures === injuredFringeDraws) {
+    console.log(`simLoanSpell control (injury-total): green. LOAN_APPEARANCE_TOTAL caught all ${injuredFringeDraws} injured fringe draws.`);
+    process.exit(0);
+  }
+  console.error(`simLoanSpell control (injury-total): RED. ${injuredFringeDraws} injured fringe draws, ${appearanceTotalFailures} invalid totals caught.`);
+  process.exit(1);
+}
 if (CONTROL) {
   if (failures > 0) {
     console.log(`simLoanSpell control (${CONTROL}): green. Shutting the loan market was caught (${failures} finding${failures === 1 ? "" : "s"}).`);

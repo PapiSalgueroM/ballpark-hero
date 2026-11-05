@@ -217,10 +217,18 @@ export const SC_CONTINENTAL_PARTIAL: string[] = [
   'caf-champions-league-2019-2021',
 ];
 
+/* Full seasons from 2022/23 use the suspension verified through 2026-11-05.
+   This version keeps that policy in later simulated years. Sources and the
+   interrupted 2021/22 limit: docs/plans/2026-11-05-soccer-club-eligibility.md. */
+export function clubContinentalSuspended(country: string, year: number): boolean {
+  return country === 'Russia' && year >= 2022;
+}
+
 /** The continental cup a club plays in a season, or null when there is none
  *  this game models (UEFA plays the Champions League, which the engine reads
  *  from uclFormatHistory, and no Oceanian club is above tier 4). */
 export function clubCupFor(country: string, year: number): { cup: ClubCupId; confederation: Confederation; period: ClubCupPeriod | null } | null {
+  if (clubContinentalSuspended(country, year)) return null;
   const confederation = clubConfederation(country);
   if (confederation === 'UEFA') return { cup: 'ucl', confederation, period: null };
   const period = CONTINENTAL_PERIODS.find(p => p.confederation === confederation && year >= p.from && (p.to === null || year <= p.to));
