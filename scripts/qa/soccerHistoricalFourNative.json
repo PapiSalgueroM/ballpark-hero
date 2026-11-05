@@ -1,0 +1,765 @@
+{
+  "schema": 1,
+  "status": "SOURCE_ONLY_NATIVE_INPUTS_BOUND_TO_ADMITTED_BUILD_AND_SEVEN_ARMS",
+  "product": "a9e56ff706ea71a51d3ec60438023ed9ad4d3b01",
+  "productTree": "316d2084d15d5e24aff38e5a692b639432b3eb98",
+  "qaPaths": [
+    "scripts/qa/soccerHistoricalFourBrowser.mjs",
+    "scripts/qa/soccerHistoricalFourFixtures.mjs",
+    "scripts/qa/soccerHistoricalFourNative.json",
+    "scripts/qa/soccerHistoricalFourAssets.mjs",
+    "scripts/qa/nativeScrollReady.mjs",
+    ".github/workflows/soccer-four-entries-native-20261105.yml"
+  ],
+  "sourcePins": {
+    "src/lib/soccerCareerSave.ts": "86ec011693fd5bc702b5e8ccec05d27775a72a76",
+    "src/lib/careerEras.ts": "e037022342382b1df9c8a5ede620d2cce480bc23",
+    "src/lib/soccerAwardReveal.ts": "3c2ba81b18cdf575e0d6fb70c7743b41b78d519d",
+    "scripts/lib/offlineTransport.cjs": "0fda542a2649fe5da937c6976fd0f5b6073e74b6",
+    "package-lock.json": "97d6f12a052f25f400462938c241789a083f0bfe",
+    "package.json": "2ff64986fb76ebc51b706f2fd24765768874008a",
+    "tsconfig.app.json": "51f581dd91641b4c1f1219f646788e73cf6bf00c",
+    "src/components/soccer-career/PhonePanel.tsx": "3f9a00c0ecb06fc15a820e8d6588097f7692baac",
+    "src/lib/soccerCareerEngine.ts": "40edcc5051d9b4a369698ea3572eb9e8e3314f26",
+    "src/lib/soccerHistoricalArrivals.ts": "c57d5048ffbce45c33051873e799a7e79dcdc561",
+    "src/lib/soccerPhone.ts": "e01df0bf20e7813830eebe298c8c792b3992c078",
+    "src/pages/SoccerCareer.tsx": "c9cd18a50659023f0c8fab6f47a6bf86b650860f",
+    "src/components/soccer-career/careerMoments.ts": "e9618355bc011458cde8930ceefdfec34d026b0d",
+    "scripts/lib/playwrightLoader.mjs": "4f7739e217e0a47ee82e6bfc8be1c04bed17454a",
+    "scripts/lib/answerConsent.mjs": "c6d16997e4c06e8b35dcfd0bab5efcad3069d899",
+    "scripts/lib/hostLikeServer.mjs": "21059d5e8114669df61106c125d5272d357b6236",
+    "src/lib/careerChanceWheel.ts": "9cea3b8347b2d68f1af3ae871d805cc67833ea72",
+    "src/components/soccer-career/CareerChanceWheel.tsx": "dd3ce85c3238cda4f5a45621089e262a46716ac4"
+  },
+  "artifacts": {
+    "build": {
+      "run": 42071220857,
+      "job": 127399344245,
+      "qa": "6a173004a760ac26af0fa63d3745c8a9e6a40544",
+      "qaTree": "9c72d814de82daf6eaf88766c1688ae89be08254",
+      "workflowPath": ".github/workflows/soccer-four-cohort-build-v2-20261105.yml",
+      "workflowBlob": "536b386ef98cf9ca304cd9b9f28edfdba4d827a8",
+      "artifact": 13437520395,
+      "zipBytes": 8283559,
+      "zipSHA256": "a13477477d80fa2c58167be3144f2efb20a8765125cc36be864e63c816cd46d3",
+      "tar": "completed-dist.tar.gz",
+      "tarBytes": 6983872,
+      "tarSHA256": "c0866406ad812d84d4d56c89db34c3dcb46f96fb9241d3f074df77420239a172",
+      "distBodies": 849,
+      "distInventorySHA256": "350a453706874531c2cf900aba07324f905b6750087ace08cd41de11a37afc47",
+      "independentAdmissionSHA256": "811f86f066dde48ccdd7ef21ff2d2bd6582fc7bf538a2c30ab0407054899f4d3",
+      "tgz": "soccer-four-cohort-build-evidence.tar.gz",
+      "tgzBytes": 8283048,
+      "tgzSHA256": "692ae715645d12911fabb30ce69c5fbd15100e0029b89e89d834a79cbafc4ee7",
+      "admittedFiles": [
+        {
+          "path": "transport/simNbaCareer.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "transport/simBrand.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "transport/simHubs.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "transport/simPrerender.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "transport/build.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "transport/simHomeFront.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "transport/simSchema.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "transport/simIndexNow.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "transport/simSeoTitles.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "transport/simSaveKeeper.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "transport/simSitemap.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "transport/types.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "transport/server.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "transport/simPrerenderBoot.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "transport/simInternalLinks.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "transport/simSoccerCareerRecords.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "transport/simHeadTags.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "transport/simSeoMetaSplit.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "transport/simAdsense.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "transport/simRetiredRoutes.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "transport/simNoRivalNames.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "transport/simHarnessAnchors.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "transport/simSnapshotAssets.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "transport/simIndexing.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "transport/simSiteSearch.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "transport/simGuideHeadings.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "transport/sweep-weight.log",
+          "bytes": 1440,
+          "sha256": "c8fc016380c744569ac6ddc8111adf6d6ac9f60f3a236ef2c9cbe9f9c80cf412"
+        },
+        {
+          "path": "transport/simNbaHistoricalDraft.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "transport/simHiddenPages.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "soccer-chunk-sizes.json",
+          "bytes": 116585,
+          "sha256": "6ba5629f94323e496d554d97ec7d665004c989e7737755bf68fe53535d3d9052"
+        },
+        {
+          "path": "types-passed.json",
+          "bytes": 75,
+          "sha256": "f80953007ecd091c9ff14a8b6a402bf746f91cd318c09cf7ead15f3e04941ba9"
+        },
+        {
+          "path": "locks-after.sha256",
+          "bytes": 314,
+          "sha256": "c4d3d37c8be5418c6254ce652ab45c0f5d7e6c2c6d40d2f88443ccf1bd6e3f15"
+        },
+        {
+          "path": "simNbaCareer.exit",
+          "bytes": 2,
+          "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+        },
+        {
+          "path": "build-proof.json",
+          "bytes": 127464,
+          "sha256": "d816d658e93427661dfd7c3992c0fd8b3787eaba3f04f1dc778d69423c726cce"
+        },
+        {
+          "path": "source-output-hold.json",
+          "bytes": 145,
+          "sha256": "0412a03e1b1e6796e1cad4f911ee7d7c334e71aff1e0457789b42e1198229568"
+        },
+        {
+          "path": "transport-summary.json",
+          "bytes": 4146,
+          "sha256": "52e83f42d444d09b623fb769de73fed4c16aadc55c066784f828517ac10bd0bc"
+        },
+        {
+          "path": "tracked-before.bin",
+          "bytes": 211078,
+          "sha256": "e32e8e24c3daefc6ac29e04c6da0af12b5b45e4681ca795407dd492f25a1063c"
+        },
+        {
+          "path": "records-leaf-owned-before.txt",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "four-app-source.patch",
+          "bytes": 11564,
+          "sha256": "d17821584906b05f7de0c1be039b35ff8af60dd9bedc065d2eed4434bfdb477d"
+        },
+        {
+          "path": "records-last-control-tests.json",
+          "bytes": 5576,
+          "sha256": "0828bed6b2f4e12a7dc45092338710188ed2cf83e120fb7f382a7438f34cc4a5"
+        },
+        {
+          "path": "tracked-after.bin",
+          "bytes": 211078,
+          "sha256": "e32e8e24c3daefc6ac29e04c6da0af12b5b45e4681ca795407dd492f25a1063c"
+        },
+        {
+          "path": "status-before.txt",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "source-diff.txt",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "completed-dist-members.txt",
+          "bytes": 34519,
+          "sha256": "fe49861336418acff17967f730056916310dbce8ae85dba81a567be34c194d97"
+        },
+        {
+          "path": "logs/simNbaCareer.log",
+          "bytes": 1998,
+          "sha256": "76898d7a8b156cf8f061c98bf6c21feec7075f88bc337d8721d36134d842b1ff"
+        },
+        {
+          "path": "logs/simBrand.log",
+          "bytes": 1011,
+          "sha256": "7f7df14b60b95614866c4bd39e2715afe9cc2a13d34b6c33efd425853c46f500"
+        },
+        {
+          "path": "logs/simHubs.log",
+          "bytes": 1802,
+          "sha256": "cc2e49ee98dea2034ef14ce9b7c936ae2032d541706371cefbf47a7f93e79949"
+        },
+        {
+          "path": "logs/simPrerender.log",
+          "bytes": 2120,
+          "sha256": "4cc4ee869e6529209461ac1c8406ab2e6e89e83daa2fa4f9eef736dad186ad53"
+        },
+        {
+          "path": "logs/build.log",
+          "bytes": 97056,
+          "sha256": "24aa72fa8736d6d69cd75c51ad5050ce954cfc633b4eb8bab8ae80d23a786261"
+        },
+        {
+          "path": "logs/simHomeFront.log",
+          "bytes": 2610,
+          "sha256": "ed18544b0297e552eebd7e7422c982df7ca118f05d4967be6defb7c940e5f4c6"
+        },
+        {
+          "path": "logs/simSchema.log",
+          "bytes": 1093,
+          "sha256": "3abfdf45ff7b9ce8fe38369773a2e88598f05a974d02ac29e43ac7678dde3fd9"
+        },
+        {
+          "path": "logs/simIndexNow.log",
+          "bytes": 287,
+          "sha256": "a9d492157b79c962960e16d784f4d1f85884f6c40e5a65cc2890aef62c7c28db"
+        },
+        {
+          "path": "logs/simSeoTitles.log",
+          "bytes": 1699,
+          "sha256": "60096fb47299fcdc6e9bfa6563d6681f9139f5e478521641f3fe736523742eda"
+        },
+        {
+          "path": "logs/simSaveKeeper.log",
+          "bytes": 12831,
+          "sha256": "2eab42cea3f75e2693a0eaba692a1e81f1d0305e73eb2a0431c107431cdef0ff"
+        },
+        {
+          "path": "logs/simSitemap.log",
+          "bytes": 594,
+          "sha256": "87cb4704be9f897a87210c09d57f555fa32c56b854d93c121737982c18052471"
+        },
+        {
+          "path": "logs/chromium-install.log",
+          "bytes": 16266,
+          "sha256": "ede9b902113dd058cd518166b267da80dda8d0331f54ef2a38f5f5b4f864c540"
+        },
+        {
+          "path": "logs/types.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "logs/server.log",
+          "bytes": 94,
+          "sha256": "4726949dc1c36cb030c5969a52e17e3cd2aa4ee53995c81312bb7cb0db607966"
+        },
+        {
+          "path": "logs/simPrerenderBoot.log",
+          "bytes": 1658,
+          "sha256": "31d47e1c6fb36ec5775003d1253f4f4f52e0025bb4fda84aa5ef961b0edf960b"
+        },
+        {
+          "path": "logs/simInternalLinks.log",
+          "bytes": 457,
+          "sha256": "cdc98e23d230ffe19944d63d202773e41a0ec651ee8ca9415f91079e14edc024"
+        },
+        {
+          "path": "logs/simSoccerCareerRecords.log",
+          "bytes": 11875,
+          "sha256": "f4306c12dd53211374c2f4b96a3c7c12ccf9cd15caee814b985827618ceeb74e"
+        },
+        {
+          "path": "logs/simHeadTags.log",
+          "bytes": 624,
+          "sha256": "99ad22dabb92b2617b84ca2f67e9f6422b67fa6eb3cae592a83b8295ac23bad0"
+        },
+        {
+          "path": "logs/simSeoMetaSplit.log",
+          "bytes": 1143,
+          "sha256": "8d4c1f072a75e28e85e20d01fbdf71904ee152627221c0040ebe63226b84ef95"
+        },
+        {
+          "path": "logs/simAdsense.log",
+          "bytes": 1508,
+          "sha256": "dce8b98691b7db151b5b1d43e81c7651dc00158f2b7f61be0b3aa13fea8cd50b"
+        },
+        {
+          "path": "logs/bun-install.log",
+          "bytes": 2231,
+          "sha256": "b11b4c09860ed8aa706f2e068fe10c1681590bbd85ebaa4cc2dff556605ad534"
+        },
+        {
+          "path": "logs/playwright-install.log",
+          "bytes": 24,
+          "sha256": "bf14b7a2bc076990244fa3239536925868dfe5ad05089c7d459b5fa482abfc72"
+        },
+        {
+          "path": "logs/simRetiredRoutes.log",
+          "bytes": 631,
+          "sha256": "2484ba1f3901b7ef0946811ee1c89a5190e877aeb74496a5e554f7e320638ed4"
+        },
+        {
+          "path": "logs/python-install.log",
+          "bytes": 865,
+          "sha256": "995173b1fa2b96e7cff55481797e1829870a11b8e9a3248b60b9f7a98db7e0fc"
+        },
+        {
+          "path": "logs/simNoRivalNames.log",
+          "bytes": 689,
+          "sha256": "9bca25ebc996101cbb5539126387aa1ef4331b3ed72187c223ba93163d71d911"
+        },
+        {
+          "path": "logs/simHarnessAnchors.log",
+          "bytes": 447,
+          "sha256": "a0dc63ad85adf92e9c034c5898a1d06725e03b0ca1b55c1dccc2b9eb4bb6260c"
+        },
+        {
+          "path": "logs/simSnapshotAssets.log",
+          "bytes": 766,
+          "sha256": "3c48f70cbbf11f671e573c44d030c2e88541f9608c494abbb2293e1eae8a1f8b"
+        },
+        {
+          "path": "logs/simIndexing.log",
+          "bytes": 1080,
+          "sha256": "1eda258110842f5fd597d87a30ffe448e8b3bf4d02938fedb6521b5e01a46ad1"
+        },
+        {
+          "path": "logs/simSiteSearch.log",
+          "bytes": 1788,
+          "sha256": "8a73658b0f84821e15c9b5ed96f9aada8b2e10a99efc489e92fdd302b503aaf2"
+        },
+        {
+          "path": "logs/simGuideHeadings.log",
+          "bytes": 6989,
+          "sha256": "8bf19ab6f8119300438dbb5964f9ddc7bfe8318a461f7d1a182d54146c55f160"
+        },
+        {
+          "path": "logs/bun-version.log",
+          "bytes": 6,
+          "sha256": "d03d8b268b4171328ac2458ce8ca82d69a1fde38469d4e4faae4f8fa8d8a5e35"
+        },
+        {
+          "path": "logs/node-version.log",
+          "bytes": 9,
+          "sha256": "6a0cec2e157365c1a8ac6d1715733b7c3321a7c5565862a701ca71ef00359d04"
+        },
+        {
+          "path": "logs/sweep-weight.log",
+          "bytes": 3359,
+          "sha256": "d65100e6b84cfc95d453c1ac16d1f9a1a62d835b868731b7ae31283a483e75a6"
+        },
+        {
+          "path": "logs/harness-syntax.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "logs/build-versions.json",
+          "bytes": 54,
+          "sha256": "a246e08cc9c4a14bc90934ca00e4cc547667133775c939958baeade6e4c2dbf3"
+        },
+        {
+          "path": "logs/sweep-weight-blocked-attempts.txt",
+          "bytes": 79,
+          "sha256": "9467126dce404e890d1a44a8166995c022b27516dab18c5e69221c8937f1afa1"
+        },
+        {
+          "path": "logs/simNbaHistoricalDraft.log",
+          "bytes": 128,
+          "sha256": "fce2a78eb07420ae561d01fcc73e5195b6719b77c4d84876b81dc35f53293d43"
+        },
+        {
+          "path": "logs/simHiddenPages.log",
+          "bytes": 483,
+          "sha256": "eb3c6a0bfa1eeae5fc5f9f170c4115653c75d9e19160de81cffb3fe3fa8644c4"
+        },
+        {
+          "path": "locks-before.sha256",
+          "bytes": 314,
+          "sha256": "c4d3d37c8be5418c6254ce652ab45c0f5d7e6c2c6d40d2f88443ccf1bd6e3f15"
+        },
+        {
+          "path": "source-after.sha256",
+          "bytes": 589918,
+          "sha256": "98278d0313fc7859c286f92a638236ae3f0f8d515c32e799219bb14fa44e4b6a"
+        },
+        {
+          "path": "source.txt",
+          "bytes": 82,
+          "sha256": "f174397e9850aa822e32848c2f02c760404c749363e065028a251e9bb23f3362"
+        },
+        {
+          "path": "workflow.yml",
+          "bytes": 32422,
+          "sha256": "df733d753cf2df937f6ca52ad32e7ad44f2f2baa6c021e281694d33ba189e6d9"
+        },
+        {
+          "path": "nba-career-harness-blob.txt",
+          "bytes": 41,
+          "sha256": "bc5dcdf2503afa2bb4f50f3c598701778c87145b41bcca516131567e863eee67"
+        },
+        {
+          "path": "index-after.txt",
+          "bytes": 498078,
+          "sha256": "8e14a8924c9be095129468e5a63104ae6a9df6de30389b2a72233a46427d9a7b"
+        },
+        {
+          "path": "status-after-records.txt",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "records-output-retention.json",
+          "bytes": 484,
+          "sha256": "a7a2198489ebc34aaddbc34318c1a7664fee4c5a9e92f941214ff5628960d6e4"
+        },
+        {
+          "path": "source-before.sha256",
+          "bytes": 589918,
+          "sha256": "98278d0313fc7859c286f92a638236ae3f0f8d515c32e799219bb14fa44e4b6a"
+        },
+        {
+          "path": "dist-after.sha256",
+          "bytes": 86403,
+          "sha256": "350a453706874531c2cf900aba07324f905b6750087ace08cd41de11a37afc47"
+        },
+        {
+          "path": "dist-before.sha256",
+          "bytes": 86403,
+          "sha256": "350a453706874531c2cf900aba07324f905b6750087ace08cd41de11a37afc47"
+        },
+        {
+          "path": "dist-held.log",
+          "bytes": 33765,
+          "sha256": "3b53bf0632b2f1a30eede5ce73faf943b307f281cd557186e029ab7be221319f"
+        },
+        {
+          "path": "completed-dist.tar.gz.sha256",
+          "bytes": 137,
+          "sha256": "8c29d52b4d3a2729f74d6ee72b17f08553f18df8c38fcf84310d47ce27c63aa5"
+        },
+        {
+          "path": "nba-permanent/normal.stdout",
+          "bytes": 98,
+          "sha256": "e089941490d32e1f10b6e2a293143895b91958c73ee18d95525e97ca49e6f32b"
+        },
+        {
+          "path": "nba-permanent/types.stdout",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "nba-permanent/normal.native.json",
+          "bytes": 388,
+          "sha256": "867821953b6a30a1019e21eddddd142b1c3485582d66940de2f2cc01abc07448"
+        },
+        {
+          "path": "nba-permanent/missing-selection.stdout",
+          "bytes": 109,
+          "sha256": "26ae3b66f6d572c95e8bcb5f4a089713ef13f7841eefdff25a40542ff586f46d"
+        },
+        {
+          "path": "nba-permanent/types.stderr",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "nba-permanent/normal.json",
+          "bytes": 2556,
+          "sha256": "a805abe0d07298bee38c924bc301420f869f18c61745de187147e892b105ffaf"
+        },
+        {
+          "path": "nba-permanent/types.native.json",
+          "bytes": 233,
+          "sha256": "811dee2c4289a377f249bf525d0dd222dce579d6ec8c6ddc43bcbe3d1b72adeb"
+        },
+        {
+          "path": "nba-permanent/missing-selection.native.json",
+          "bytes": 410,
+          "sha256": "f1a2ae65d4ec87c2e3b10776d4757f9ca2bc8202adc0273877a07936d01789a6"
+        },
+        {
+          "path": "nba-permanent/missing-selection.stderr",
+          "bytes": 192,
+          "sha256": "6a95514bca1a9286bfcf0faa08609afc8578f4664ac1b97c49890e832827ec44"
+        },
+        {
+          "path": "nba-permanent/missing-selection.json",
+          "bytes": 8273,
+          "sha256": "3fdfb98df9d271212f857cfc566b5a819c7c7c440bc4f0ef0dd4788c77264822"
+        },
+        {
+          "path": "nba-permanent/regression.json",
+          "bytes": 3518,
+          "sha256": "fff112397613c2c5d1fb9530ab677f9d25de5c24366beb156b9508655615d6dd"
+        },
+        {
+          "path": "nba-permanent/normal.stderr",
+          "bytes": 192,
+          "sha256": "6a95514bca1a9286bfcf0faa08609afc8578f4664ac1b97c49890e832827ec44"
+        },
+        {
+          "path": "nba-permanent/missing-selection-control.json",
+          "bytes": 465,
+          "sha256": "7eee9643d7a5e2a4ff9a62c7fc2ca5bac262970103c5cd4c7e5440660d4fc3ad"
+        },
+        {
+          "path": "index-before.txt",
+          "bytes": 498078,
+          "sha256": "8e14a8924c9be095129468e5a63104ae6a9df6de30389b2a72233a46427d9a7b"
+        },
+        {
+          "path": "qa-harness-source-bridge.json",
+          "bytes": 521,
+          "sha256": "c33e5e3940a66d5df3627fe677082b991170ab92b475bbb576cc9d97f010c3dc"
+        },
+        {
+          "path": "four-app-source-bridge.json",
+          "bytes": 1379,
+          "sha256": "688dbd9edbd3e7738ded3789510056ef06037c5f339040bd6748f8d42a5bd235"
+        },
+        {
+          "path": "status-after.txt",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ]
+    },
+    "outcomes": {
+      "run": 42068497425,
+      "job": 127389378383,
+      "qa": "1c0b5fd384635c74a7240ebeea14fc15382f81d9",
+      "qaTree": "91812d616d9568740fc182484013f456c656befd",
+      "artifact": 13435307037,
+      "zipBytes": 40806492,
+      "zipSHA256": "f9f12fcac147b18221cde8c068641de5382dc904c12313d364980305d250457b",
+      "tar": "soccer-four-cohort-outcomes.tar.gz",
+      "tarBytes": 40806011,
+      "tarSHA256": "599758d5269352b9caab40fdc97a4fe26f75279cbf22ed30ee6635f01578c86c",
+      "independentAdmissionSHA256": "7eadbca71e1e351741802f8f9e8b9ac1852e4b957ec4c6c5785c0267c03c487a",
+      "tgz": "soccer-four-cohort-outcomes.tar.gz",
+      "tgzBytes": 40806011,
+      "tgzSHA256": "599758d5269352b9caab40fdc97a4fe26f75279cbf22ed30ee6635f01578c86c",
+      "admittedFiles": [
+        {
+          "path": "outcomes.json",
+          "bytes": 31114,
+          "sha256": "8a273da60910b3ae6069fbf8887013334b3a15608a290b57c6cb96bd96bee7cc"
+        },
+        {
+          "path": "fixed-restored.json",
+          "bytes": 3746,
+          "sha256": "20892e350cb12c4de28e85747bc665332f2813bb33626882eee501632dbd1365"
+        },
+        {
+          "path": "original-input-authority.json",
+          "bytes": 54458,
+          "sha256": "c49e3cb424e5db86ee61bdb45a82878ff58135b97b0b1e6b6575d9bdf32d8f0c"
+        }
+      ]
+    }
+  },
+  "originalAuthoritySHA256": "c49e3cb424e5db86ee61bdb45a82878ff58135b97b0b1e6b6575d9bdf32d8f0c",
+  "buildHarnessBridge": {
+    "path": "scripts/simNbaHistoricalDraft.mjs",
+    "checkoutBlob": "ff3b7ff375943cdc3c71a6a88b734bfc0cd98a84",
+    "buildBlob": "c1510bf64aef2ed0f75db10af2a00a8ae9d4163d",
+    "before": "  const span = '  {\"id\":\"nba-draft-2004-p59\",\"pick\":59,\"name\":\"Rashad Wright\",\"families\":[\"G\"],\"dob\":\"1982-03-17\"},\\n';",
+    "after": "  const span = '  {\"id\":\"nba-draft-2004-p59\",\"pick\":59,\"name\":\"Rashad Wright\",\"families\":[\"G\"],\"dob\":\"1982-03-17\"},';"
+  },
+  "fixtures": [
+    {
+      "name": "four2019",
+      "sourceStoredFile": "replay/restored/raw/attempt-1.json.gz",
+      "sourceStoredBytes": 1148994,
+      "sourceStoredSHA256": "ad7215b9e97f2ee9ac1cce3a062102cbc02db165fb97f445e146c47ab9a86144",
+      "sourceBytes": 7001331,
+      "sourceSHA256": "a1c2fd738c0bc6a1ce72fe1ebfdcb5d7b24acb29ab33beadf6c7d991a32bb00c",
+      "sourceSaveSHA256": "eef10186deb0fd1d3171fd1229a10410cd3661432a37d44b3abf7a1f5ff6ced7",
+      "sourceSaveBytes": 34425,
+      "mainRngState": 1465591958,
+      "drawsThrough": 6289
+    },
+    {
+      "name": "originalV1_2019",
+      "sourceStoredFile": "replay/restored/raw/case-5-held-originals.json.gz",
+      "sourceStoredBytes": 3237471,
+      "sourceStoredSHA256": "2f5e90db72e3a40c54644286116d599ac36ba653b7d20a100ee10ecea4b7fda2",
+      "sourceBytes": 21297593,
+      "sourceSHA256": "018092b754c0247efa3803dce20c31e994526e8176a16aad76d3c77f07850a50",
+      "sourceSaveSHA256": "cf179d659187b8754cc5c2b83d994acf958260d0da1221405824224e42c7b3b4",
+      "sourceSaveBytes": 34223,
+      "mainRngState": 1465591958,
+      "drawsThrough": 6289
+    }
+  ],
+  "players": [
+    {
+      "id": "soccer:neymar",
+      "name": "Neymar",
+      "entryYear": 2009,
+      "entryClub": "Santos",
+      "sources": [
+        {
+          "label": "Santos FC",
+          "url": "https://www.santosfc.com.br/memoria-em-partida-oficial-neymar-fazia-a-estreia-com-a-camisa-do-santos-fc/"
+        },
+        {
+          "label": "Globo",
+          "url": "https://ge.globo.com/Esportes/Noticias/Times/Santos/0,,MUL1033491-9874,00.html"
+        }
+      ]
+    },
+    {
+      "id": "soccer:mbappe",
+      "name": "Kylian Mbappé",
+      "entryYear": 2015,
+      "entryClub": "Monaco",
+      "sources": [
+        {
+          "label": "AS Monaco",
+          "url": "https://www.asmonaco.com/fr/news/kylian-mbappe-fete-ses-cinq-ans-en-pro"
+        },
+        {
+          "label": "Kylian Mbappe",
+          "url": "https://kylianmbappe.com/saison-2015-2016/"
+        }
+      ]
+    },
+    {
+      "id": "soccer:haaland",
+      "name": "Erling Haaland",
+      "entryYear": 2016,
+      "entryClub": "Bryne",
+      "sources": [
+        {
+          "label": "Bryne FK",
+          "url": "https://www.brynefk.no/nyheter/kan-vi-sla-ranheim"
+        },
+        {
+          "label": "Manchester City",
+          "url": "https://es.mancity.com/news/mens/carrera-erling-haaland-63815180"
+        }
+      ]
+    },
+    {
+      "id": "soccer:bellingham",
+      "name": "Jude Bellingham",
+      "entryYear": 2019,
+      "entryClub": "Birmingham City",
+      "sources": [
+        {
+          "label": "England Football",
+          "url": "https://www.englandfootball.com/england/mens-senior-team/squad/jude-bellingham"
+        },
+        {
+          "label": "Real Madrid",
+          "url": "https://www.realmadrid.com/en-US/news/football/first-team/latest-news/bellingham-is-a-new-real-madrid-player"
+        }
+      ]
+    }
+  ],
+  "limits": {
+    "widths": [
+      320,
+      390,
+      1280
+    ],
+    "contexts": 3,
+    "photosPerContext": 5,
+    "photosTotal": 15,
+    "modelContinuation": false,
+    "annualAdvance": false,
+    "naturalBrowserRngClock": true,
+    "scope": "Actual2005 creation and two separately declared authentic2019 newspaper frontiers. Global utility Phone is gated only by career. Real saved-wheel acknowledgment changes only seen plus actual persisted fence generation. No nomination, transfer, full population or natural full-career claim."
+  }
+}
