@@ -4111,7 +4111,7 @@ export function calcAppearances(overall: number, clubTier: number, age: number, 
     apps = Math.max(1, apps - clamp(missedApps, 0, injurySevere ? 34 : 12));
   }
 
-  return { apps, leagueApps, injured, injuryWeeks, injuryName, injurySevere };
+  return { apps, leagueApps: Math.min(leagueApps, apps), injured, injuryWeeks, injuryName, injurySevere };
 }
 
 /* ─── Goals per 38 apps by position & overall rating ───
