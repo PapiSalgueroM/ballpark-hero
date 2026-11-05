@@ -214,3 +214,12 @@ This decision closes a concrete user-access gap. It does not expand the underlyi
 Original run 41957684457 executed the untouched App after proper types passed. Its seven business cases produced the five named feature-absence AssertionErrors and two historical/save passes. Full canonical evidence measured 190 hand clubs and 307 generated clubs, 497 combined. The planning count of 308 generated was wrong. The read-only evidence reader stopped at that count check before generator qualification, so this attempt is partial.
 
 Before any product change, correct only the original and resulting total/prefix constants to 307 old generated, 326 generated after the same 19 additions, and 516 combined. Preserve the prior test and reader, all seven case names, all business assertions, seeds, raw outcomes and source holds. Rerun original qualification with the corrected count metadata and retain both attempts. This correction does not remove or add a club.
+
+
+## Historical identity boundary
+
+The added canonical profiles exposed 118 old club/year matches against unnamed ledger aliases. The existing Seasons harness reported 354 additional assertions. Real Burgos is an explicit ambiguous identity in the ledger and must not be assigned to the modern Burgos profile.
+
+After original-first tests measured two owned failures and three held passes on product 86919f88, the lookup now refuses an unnamed historical alias for a future-only profile in the current Segunda ladder before its existing availability year. Explicit verified canon results remain authoritative. The ledgers and their generator stay unchanged. Old neutral queries using the same nineteen names intentionally become unknown where their identity is unresolved; stored names and IDs are retained.
+
+Qualification requires the five focused cases and effective guard and overbroad-refusal controls, complete original/current lookup domains, unchanged long-career replay assertions, the seven frozen outcomes, and a fresh build with unchanged limits. The earlier build and native journey remain earlier-source evidence. Existing unrelated failures remain unwaived. Public release is pending.

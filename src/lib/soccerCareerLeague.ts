@@ -18,7 +18,7 @@
 import { adjustClubsForYear } from "./careerEras";
 import { SC_CLUB_CANON } from "../data/clubRivalries";
 import { CAREER_LEAGUE_SEASONS } from "../data/careerLeagueSeasons";
-import { CAREER_LEAGUE_LADDER } from "../data/soccerCareerClubPool";
+import { CAREER_LEAGUE_LADDER, CAREER_POOL_SINCE } from "../data/soccerCareerClubPool";
 import { ODD_FORMATS, oddFormatFor } from "../data/leagueOddFormats";
 /* the harnesses that bundle this module read the odd ledger through it */
 export { oddFormatFor };
@@ -480,6 +480,11 @@ export function ledgerLeague(key: string, year: number): LedgerSeason | null {
 export function clubLedgerSeason(club: string, year: number): (LedgerSeason & { canon: string | null }) | null {
   if (year >= LIST_SEASON) return null;
   const m = ledgerMember(club, year);
+  /* A future-only Segunda profile does not bind an unnamed historical alias.
+     An explicitly verified historical canon result remains authoritative. */
+  const since = CAREER_POOL_SINCE[club];
+  if (m?.canon === null && since !== undefined && year < since
+    && CAREER_LEAGUE_LADDER["Segunda Division"]?.some(group => group.includes(club))) return null;
   const s = m ? ledgerLeague(m.key, year) : null;
   return s && m ? { ...s, canon: m.canon } : null;
 }
