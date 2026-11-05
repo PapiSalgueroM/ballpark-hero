@@ -1,0 +1,369 @@
+name: CM Team-picker original-first fresh built measurement
+on:
+  push:
+    branches: [codex/cm-team-picker-original-v2-20261105]
+permissions:
+  contents: read
+concurrency:
+  group: cm-team-picker-original-${{ github.ref }}
+  cancel-in-progress: false
+env:
+  CI: '1'
+  SIM_NETWORK: offline
+  TZ: UTC
+  PRODUCT_CORE: 3b14650d360b010b25b525de33a5f32f33de2798
+  PRODUCT_TREE: d9278a7b5f58395509f6ab937f918c1c2ef31127
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    env:
+      ENGINES: chromium
+      SEO_SPLIT_BASE_REF: HEAD
+      SWEEP_OFFLINE: '1'
+      PLAYWRIGHT_BROWSERS_PATH: /home/runner/.cache/ms-playwright
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 6
+          filter: blob:none
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: '1.4.4'
+      - name: Bind unchanged main and five temporary QA additions
+        run: |
+          set -euo pipefail
+          OUT="$RUNNER_TEMP/cm-team-picker-original"
+          test ! -e "$OUT"
+          mkdir -p "$OUT/logs" "$OUT/transport"
+          printf 'QA_OUT=%s\n' "$OUT" >> "$GITHUB_ENV"
+          export QA_OUT="$OUT"
+          test "$(git rev-parse HEAD^)" = "$PRODUCT_CORE"
+          test "$(git rev-parse HEAD^^{tree})" = "$PRODUCT_TREE"
+          git rev-parse HEAD HEAD^{tree} > "$OUT/source.txt"
+          git diff --name-status --no-renames HEAD^ HEAD > "$OUT/qa-delta.txt"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$OUT/source-before.sha256"
+          git ls-files -s > "$OUT/index-before.txt"
+          git ls-files -z > "$OUT/tracked-before.bin"
+          for lock in package.json package-lock.json bun.lock bun.lockb; do if test -f "$lock"; then sha256sum "$lock"; fi; done > "$OUT/locks-before.sha256"
+          git status --porcelain=v1 --untracked-files=all > "$OUT/status-before.txt"
+          test ! -s "$OUT/status-before.txt"
+          node --input-type=module <<'PINS'
+          import assert from 'node:assert/strict';import fs from 'node:fs';import crypto from 'node:crypto';import{execFileSync}from'node:child_process';
+          const out=process.env.QA_OUT,paths=["src/test/clubManagerTeamPickerOriginal.test.tsx","scripts/qa/cmTeamPickerOriginalCases.json","scripts/qa/cmTeamPickerOriginalProbe.mjs","scripts/qa/cmTeamPickerOriginalEvidence.mjs",".github/workflows/cm-team-picker-original-20261105.yml"];
+          const delta=fs.readFileSync(out+'/qa-delta.txt','utf8').trimEnd().split('\n');
+          assert.deepEqual(delta,paths.map(p=>'A\t'+p).sort());
+          const pins={
+            'src/pages/ClubManager.tsx':'978bf575f489228041c278101ca77cfac434d8e3',
+            'src/hooks/useClubManager.ts':'fe8d97dbfabaea602968e9cca25d4930895093e1',
+            'src/lib/clubManager.ts':'4b0a734e9fe9ba1e7139ead8d4fe5d6a1574c484',
+            'src/lib/clubManagerEras.ts':'2f462a0a753338cc95fbfbc066a4240917440623',
+            'src/components/club-manager/ManagerForm.tsx':'2bf450b0af6ba80af3fc89504e8a69691749eaf5',
+            'src/components/club-manager/ClubManagerClubList.tsx':'e222cfbb81536aa57f70765829f44652e5cabb04',
+            'scripts/lib/offlineTransport.cjs':'0fda542a2649fe5da937c6976fd0f5b6073e74b6',
+            'scripts/lib/hostLikeServer.mjs':'21059d5e8114669df61106c125d5272d357b6236',
+            'scripts/lib/playwrightLoader.mjs':'4f7739e217e0a47ee82e6bfc8be1c04bed17454a',
+            'scripts/simNbaHistoricalDraft.mjs':'c1510bf64aef2ed0f75db10af2a00a8ae9d4163d',
+            'package.json':'2ff64986fb76ebc51b706f2fd24765768874008a',
+            'package-lock.json':'97d6f12a052f25f400462938c241789a083f0bfe',
+            'tsconfig.app.json':'51f581dd91641b4c1f1219f646788e73cf6bf00c',
+            'src/test/clubManagerTeamPickerOriginal.test.tsx':'4a0e4fc17f7d8886550e3516f057aae5f260533a',
+            'scripts/qa/cmTeamPickerOriginalCases.json':'e2b6fca9a5382631ce21a143e87dbcf3afaf7a0a',
+            'scripts/qa/cmTeamPickerOriginalProbe.mjs':'6bf9b449122b5c926e7213344bf600a089b6e2f0',
+            'scripts/qa/cmTeamPickerOriginalEvidence.mjs':'06beb8d6de16daa9410aedb793aee3c8fba0f500',
+          };
+          const blob=b=>crypto.createHash('sha1').update(Buffer.from('blob '+b.length+'\0')).update(b).digest('hex');
+          const rows=Object.entries(pins).map(([path,want])=>{assert(/^[a-f0-9]{40}$/.test(want),'Unbound helper pin');const b=fs.readFileSync(path);assert.equal(blob(b),want,path);return{path,blob:want,bytes:b.length,sha256:crypto.createHash('sha256').update(b).digest('hex')};});
+          fs.writeFileSync(out+'/input-pins.json',JSON.stringify(rows,null,2)+'\n');
+          const base='a9e56ff706ea71a51d3ec60438023ed9ad4d3b01';
+          execFileSync('git',['cat-file','-e',base+'^{commit}']);
+          const names=execFileSync('git',['diff','--no-renames','--name-only',base,process.env.PRODUCT_CORE],{encoding:'utf8'}).trimEnd().split('\n');
+          const expected=['docs/data/soccer-historical-arrivals.md','src/test/soccerHistoricalRealEntry.test.tsx','scripts/simSoccerHistoricalArrivals.mjs','scripts/data/soccerHistoricalV1UiFixture.json','scripts/simNbaHistoricalDraft.mjs','docs/plans/2026-11-05-soccer-four-first-team-entries.md','docs/PROJECT-STATE.md','docs/WORKBOARD.md','docs/EXPANSION-IMPLEMENTATION-LEDGER.md'].sort();
+          assert.deepEqual(names,expected);
+          fs.writeFileSync(out+'/historical-nine-path-labels.json',JSON.stringify({base,main:process.env.PRODUCT_CORE,paths:names,scope:'Name-only historical composition record. No old-body equality or old CSS/dist reuse credit. Fresh unchanged-original normal build is required because Tailwind scans the changed test input.'},null,2)+'\n');
+          PINS
+          test ! -e .tmp-fx/career-records-tests.json
+          test ! -L .tmp-fx/career-records-tests.json
+          if [[ -e .tmp-fx || -L .tmp-fx ]]; then test -d .tmp-fx; test ! -L .tmp-fx; fi
+          : > "$OUT/records-leaf-owned-before.txt"
+      - name: Install held app and required build tools
+        run: |
+          set -euo pipefail
+          test "$(bun --version)" = 1.4.4
+          bun --version > "$QA_OUT/logs/bun-version.log"
+          node --version > "$QA_OUT/logs/node-version.log"
+          bun install --frozen-lockfile > "$QA_OUT/logs/bun-install.log" 2>&1
+          node -p "JSON.stringify({router:require('react-router-dom/package.json').version,vite:require('vite/package.json').version,rollup:JSON.parse(require('fs').readFileSync('node_modules/rollup/package.json','utf8')).version})" > "$QA_OUT/logs/build-versions.json"
+          git diff --exit-code HEAD -- package.json package-lock.json bun.lock bun.lockb
+          npm install --prefix "$RUNNER_TEMP/cm-team-picker-original-tools" --package-lock=false --no-audit --no-fund playwright@1.64.0 > "$QA_OUT/logs/playwright-install.log" 2>&1
+          test ! -e node_modules/playwright
+          test ! -e node_modules/playwright-core
+          ln -s "$RUNNER_TEMP/cm-team-picker-original-tools/node_modules/playwright" node_modules/playwright
+          ln -s "$RUNNER_TEMP/cm-team-picker-original-tools/node_modules/playwright-core" node_modules/playwright-core
+          "$RUNNER_TEMP/cm-team-picker-original-tools/node_modules/.bin/playwright" install --with-deps chromium > "$QA_OUT/logs/chromium-install.log" 2>&1
+          python3 -m pip install --target "$RUNNER_TEMP/cm-team-picker-original-python" fonttools pillow > "$QA_OUT/logs/python-install.log" 2>&1
+          echo "PYTHONPATH=$RUNNER_TEMP/cm-team-picker-original-python" >> "$GITHUB_ENV"
+      - name: Proper application types
+        run: |
+          set -euo pipefail
+          export GIT_NO_LAZY_FETCH=1
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          : > "$QA_OUT/transport/types.log"
+          SIM_OFFLINE_RECEIPT="$QA_OUT/transport/types.log" node_modules/.bin/tsc --noEmit -p tsconfig.app.json > "$QA_OUT/logs/types.log" 2>&1
+          printf '%s\n' '{"command":"node_modules/.bin/tsc --noEmit -p tsconfig.app.json","exit":0}' > "$QA_OUT/types-passed.json"
+          test ! -s "$QA_OUT/transport/types.log"
+      - name: Normal build, all twenty output readers and unchanged caps
+        timeout-minutes: 25
+        run: |
+          set -euo pipefail
+          export GIT_NO_LAZY_FETCH=1
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          classify_receipt() {
+            local name="$1" receipt="$2"
+            local allowed='^\[SIM_OFFLINE_BLOCK\] external browser route continue https://fonts\.(googleapis|gstatic)\.com$'
+            if [[ "$name" == sweep-weight ]]; then
+              allowed="$allowed|^\[SIM_OFFLINE_BLOCK\] external browser route continue https://flagcdn\.com$"
+            elif [[ "$name" != build ]]; then
+              if [[ -s "$receipt" ]]; then cat "$receipt"; return 1; fi
+              return 0
+            fi
+            local status=0
+            grep -Ev "$allowed" "$receipt" || status=$?
+            if [[ "$status" == 1 ]]; then return 0; fi
+            return 1
+          }
+          run_gate() {
+            local name="$1"
+            shift
+            local receipt="$QA_OUT/transport/$name.log"
+            : > "$receipt"
+            SIM_OFFLINE_RECEIPT="$receipt" "$@" 2>&1 | tee "$QA_OUT/logs/$name.log"
+            if ! classify_receipt "$name" "$receipt"; then
+              echo "Unexpected blocked transport in $name" >&2
+              return 1
+            fi
+            # Every refusal is retained and counted, never credited as zero transport.
+            if [[ -s "$receipt" ]]; then
+              wc -l "$receipt" | tee "$QA_OUT/logs/$name-blocked-attempts.txt"
+            fi
+          }
+          run_gate simSaveKeeper node scripts/simSaveKeeper.mjs
+          run_gate simHomeFront node scripts/simHomeFront.mjs
+          grep -F '7) Continue playing:' "$QA_OUT/logs/simHomeFront.log"
+          run_gate simSoccerCareerRecords node scripts/simSoccerCareerRecords.mjs
+
+          grep -F 'simSoccerCareerRecords: 12 outcome checks green, three effective controls caught' "$QA_OUT/logs/simSoccerCareerRecords.log"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import path from 'node:path';import crypto from 'node:crypto';import assert from 'node:assert/strict';
+          const out=process.env.QA_OUT,leaf=path.resolve('.tmp-fx/career-records-tests.json');
+          assert(fs.existsSync(out+'/records-leaf-owned-before.txt'));
+          const dir=fs.lstatSync(path.dirname(leaf)),stat=fs.lstatSync(leaf);
+          assert(dir.isDirectory()&&!dir.isSymbolicLink());assert(stat.isFile()&&!stat.isSymbolicLink());
+          assert.equal(fs.realpathSync(path.dirname(leaf)),path.join(fs.realpathSync('.'),'.tmp-fx'));
+          const bytes=fs.readFileSync(leaf),report=JSON.parse(bytes),rows=report.testResults.flatMap(x=>x.assertionResults);
+          assert.equal(report.numTotalTests,12);assert.equal(report.numPassedTests,11);assert.equal(report.numFailedTests,1);
+          assert.equal(rows.length,12);assert.equal(rows.filter(x=>x.status==='passed').length,11);assert.equal(rows.filter(x=>x.status==='failed').length,1);
+          const retained=out+'/records-last-control-tests.json',sha=crypto.createHash('sha256').update(bytes).digest('hex');
+          fs.writeFileSync(retained,bytes,{flag:'wx'});assert.deepEqual(fs.readFileSync(retained),bytes);
+          fs.unlinkSync(leaf);
+          fs.writeFileSync(out+'/records-output-retention.json',JSON.stringify({sourceLeaf:'.tmp-fx/career-records-tests.json',retained:'records-last-control-tests.json',bytes:bytes.length,sha256:sha,nativeSimExit:0,ordinaryNonSymlinkLeaf:true,copyReadBackExact:true,removedOnlyExactLeaf:true,meaning:'Last negative-control report, intentionally 1 failed and 11 passed. Healthy 12 outcomes and three effective controls are in the complete native log.'},null,2)+'\n');
+          NODE
+          git status --porcelain=v1 --untracked-files=all > "$QA_OUT/status-after-records.txt"
+          test ! -s "$QA_OUT/status-after-records.txt"
+          run_gate build npm run build
+          printf '%s\n' '{"command":"npm run build","exit":0}' > "$QA_OUT/build-passed.json"
+          find dist -type f -print0 | sort -z | xargs -0 sha256sum > "$QA_OUT/dist-before.sha256"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import path from 'node:path';import zlib from 'node:zlib';import crypto from 'node:crypto';import assert from 'node:assert/strict';
+          const assets=fs.readdirSync('dist/assets').filter(file=>/\.(js|css)$/.test(file)).sort().map(file=>{
+            const bytes=fs.readFileSync(path.join('dist/assets',file));return{file,bytes:bytes.length,gzipBytes:zlib.gzipSync(bytes).length,sha256:crypto.createHash('sha256').update(bytes).digest('hex')};
+          });
+          const soccer=assets.filter(row=>/^SoccerCareer-.*\.js$/.test(row.file));
+          assert.equal(soccer.length,1);
+          fs.writeFileSync(process.env.QA_OUT+'/soccer-chunk-sizes.json',JSON.stringify({status:'MEASURED_BUILT_CHUNKS_NO_NEW_CAP',soccer,allBuiltAssets:assets,limits:'Individual built chunk raw/gzip sizes only. Actual route critical-body proof comes from the unchanged sweepWeight window and all16 original caps, including Soccer840KiB. No headroom or full-download total is inferred from this chunk list.'},null,2)+'\n',{flag:'wx'});
+          console.log('SC4_BUILT_CHUNK_SIZES '+JSON.stringify(soccer));
+          NODE
+          tar -czf "$QA_OUT/completed-dist.tar.gz" dist
+          sha256sum "$QA_OUT/completed-dist.tar.gz" > "$QA_OUT/completed-dist.tar.gz.sha256"
+          tar -tzf "$QA_OUT/completed-dist.tar.gz" > "$QA_OUT/completed-dist-members.txt"
+          export BASE=http://127.0.0.1:4173
+          export SWEEP_BASE="$BASE"
+          export SWEEP_OFFLINE=1
+          export SIM_OFFLINE_RECEIPT="$QA_OUT/transport/server.log"
+          : > "$SIM_OFFLINE_RECEIPT"
+          node scripts/lib/hostLikeServer.mjs dist 4173 > "$QA_OUT/logs/server.log" 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid" 2>/dev/null || true' EXIT
+          ready=0
+          for attempt in $(seq 1 40); do
+            if curl --fail --silent "$BASE/" > /dev/null; then ready=1; break; fi
+            kill -0 "$server_pid"
+            sleep 1
+          done
+          test "$ready" = 1
+          run_gate sweep-weight node scripts/sweepWeight.mjs
+          readers=(
+            simAdsense simBrand simHeadTags simHiddenPages simHubs
+            simIndexNow simIndexing simInternalLinks simNoRivalNames simPrerender
+            simPrerenderBoot simRetiredRoutes simSchema simSitemap simSnapshotAssets
+            simSiteSearch simGuideHeadings simHarnessAnchors
+          )
+          for reader in "${readers[@]}"; do
+            run_gate "$reader" node "scripts/$reader.mjs"
+          done
+          run_gate simSeoTitles node scripts/simSeoTitles.mjs
+          run_gate simSeoMetaSplit env SEO_SPLIT_ONLY=/soccer-career,/club-manager,/nba-my-career node scripts/simSeoMetaSplit.mjs
+          run_gate simNbaHistoricalDraft env NBA_HISTORICAL_DRAFT_OUT="$QA_OUT/nba-permanent" node scripts/simNbaHistoricalDraft.mjs
+          grep -F 'NBA historical draft: 5 cases passed; copied missing-selection control rejected by 4 business assertions; original source held.' "$QA_OUT/logs/simNbaHistoricalDraft.log"
+          test ! -s "$QA_OUT/transport/server.log"
+      - name: Record the one fresh unchanged-original completed output
+        run: |
+          set -euo pipefail
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import crypto from 'node:crypto';import assert from 'node:assert/strict';
+          const out=process.env.QA_OUT,tar=fs.readFileSync(out+'/completed-dist.tar.gz'),dist=fs.readFileSync(out+'/dist-before.sha256');
+          assert.equal(dist.toString('utf8').trim().split('\n').length,849);
+          const readers=['simAdsense','simBrand','simHeadTags','simHiddenPages','simHubs','simIndexNow','simIndexing','simInternalLinks','simNoRivalNames','simPrerender','simPrerenderBoot','simRetiredRoutes','simSchema','simSitemap','simSnapshotAssets','simSiteSearch','simGuideHeadings','simHarnessAnchors','simSeoTitles','simSeoMetaSplit'];
+          for(const name of ['simSaveKeeper','simHomeFront','simSoccerCareerRecords','build','sweep-weight','simNbaHistoricalDraft',...readers])assert(fs.statSync(out+'/logs/'+name+'.log').size>0);
+          fs.writeFileSync(out+'/build-proof.json',JSON.stringify({status:'fresh-unchanged-original-compiled-gates-passed',product:process.env.PRODUCT_CORE,productTree:process.env.PRODUCT_TREE,normalBuilds:1,readers,readersCount:20,allCapsUnchanged:true,oldBuildReused:false,scope:'Original CM Team-picker measurement. All16 existing caps and the original window are unchanged. No feature-positive or broader-suite-green claim.',tar:{bytes:tar.length,sha256:crypto.createHash('sha256').update(tar).digest('hex')},distInventorySHA256:crypto.createHash('sha256').update(dist).digest('hex'),distFiles:849},null,2)+'\n');
+          NODE
+      - name: Unchanged default NBA career harness, any native red remains unwaived
+        run: |
+          set +e
+          set -uo pipefail
+          export GIT_NO_LAZY_FETCH=1
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          export SIM_OFFLINE_RECEIPT="$QA_OUT/transport/simNbaCareer.log"
+          : > "$SIM_OFFLINE_RECEIPT"
+          node --unhandled-rejections=strict scripts/simNbaCareer.mjs > "$QA_OUT/logs/simNbaCareer.log" 2>&1
+          native_exit=$?
+          printf '%s\n' "$native_exit" > "$QA_OUT/simNbaCareer.exit" || exit 1
+          test ! -s "$SIM_OFFLINE_RECEIPT" || exit 1
+          if test "$native_exit" = 0; then
+            grep -F 'PASS: no crashes, every position produces stats, shop fully reachable, deck C reachable, era gates hold, words match effects, life cards tagged, rivalry beats honest' "$QA_OUT/logs/simNbaCareer.log" || exit 1
+          fi
+          exit "$native_exit"
+      - name: Measure authentic built bodies and real Team UI
+        timeout-minutes: 10
+        run: |
+          set -euo pipefail
+          export GIT_NO_LAZY_FETCH=1
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          : > "$QA_OUT/transport/probe-server.log"
+          SIM_OFFLINE_RECEIPT="$QA_OUT/transport/probe-server.log" node scripts/lib/hostLikeServer.mjs dist 4173 > "$QA_OUT/logs/probe-server.log" 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid" 2>/dev/null || true' EXIT
+          ready=0
+          for attempt in $(seq 1 40); do
+            if curl --fail --silent http://127.0.0.1:4173/ > /dev/null; then ready=1; break; fi
+            kill -0 "$server_pid"
+            sleep 1
+          done
+          test "$ready" = 1
+          : > "$QA_OUT/transport/probe.log"
+          set +e
+          SIM_OFFLINE_RECEIPT="$QA_OUT/transport/probe.log" node scripts/qa/cmTeamPickerOriginalProbe.mjs --out "$QA_OUT/built" --dist "$PWD/dist" --base-url http://127.0.0.1:4173 > "$QA_OUT/logs/probe.stdout.log" 2> "$QA_OUT/logs/probe.stderr.log"
+          native_exit=$?
+          mkdir -p "$QA_OUT/built" || exit 1
+          printf '%s\n' "$native_exit" > "$QA_OUT/built/probe.exit" || exit 1
+          test "$native_exit" = 0 || exit "$native_exit"
+          test ! -s "$QA_OUT/transport/probe.log" || exit 1
+          test ! -s "$QA_OUT/transport/probe-server.log" || exit 1
+      - name: Retain actual five original assertions and classify their ownership
+        timeout-minutes: 10
+        run: |
+          set -euo pipefail
+          export GIT_NO_LAZY_FETCH=1
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          export CM_TEAM_PICKER_OUT="$QA_OUT/raw"
+          export CM_TEAM_PICKER_BUILD_REPORT="$QA_OUT/built/report.json"
+          : > "$QA_OUT/transport/vitest.log"
+          : > "$QA_OUT/transport/reader.log"
+          set +e
+          SIM_OFFLINE_RECEIPT="$QA_OUT/transport/vitest.log" node node_modules/vitest/vitest.mjs run src/test/clubManagerTeamPickerOriginal.test.tsx --reporter=json --outputFile="$QA_OUT/vitest.json" --maxWorkers=1 --no-file-parallelism > "$QA_OUT/logs/vitest.stdout.log" 2> "$QA_OUT/logs/vitest.stderr.log"
+          native_exit=$?
+          printf '%s\n' "$native_exit" > "$QA_OUT/vitest.exit" || exit 1
+          SIM_OFFLINE_RECEIPT="$QA_OUT/transport/reader.log" node scripts/qa/cmTeamPickerOriginalEvidence.mjs --out "$QA_OUT" --spec scripts/qa/cmTeamPickerOriginalCases.json --exit-code "$native_exit" > "$QA_OUT/logs/reader.stdout.log" 2> "$QA_OUT/logs/reader.stderr.log"
+          reader_exit=$?
+          printf '%s\n' "$reader_exit" > "$QA_OUT/reader.exit" || exit 1
+          test ! -s "$QA_OUT/transport/vitest.log" || exit 1
+          test ! -s "$QA_OUT/transport/reader.log" || exit 1
+          exit "$reader_exit"
+      - name: Hold complete source and completed output
+        if: always()
+        run: |
+          set -euo pipefail
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$QA_OUT/source-after.sha256"
+          cmp "$QA_OUT/source-before.sha256" "$QA_OUT/source-after.sha256"
+          git ls-files -s > "$QA_OUT/index-after.txt"
+          git ls-files -z > "$QA_OUT/tracked-after.bin"
+          for lock in package.json package-lock.json bun.lock bun.lockb; do if test -f "$lock"; then sha256sum "$lock"; fi; done > "$QA_OUT/locks-after.sha256"
+          cmp "$QA_OUT/index-before.txt" "$QA_OUT/index-after.txt"
+          cmp "$QA_OUT/tracked-before.bin" "$QA_OUT/tracked-after.bin"
+          cmp "$QA_OUT/locks-before.sha256" "$QA_OUT/locks-after.sha256"
+          git diff --exit-code HEAD > "$QA_OUT/source-diff.txt"
+          git status --porcelain=v1 --untracked-files=all > "$QA_OUT/status-after.txt"
+          test ! -s "$QA_OUT/status-after.txt"
+          if [[ -f "$QA_OUT/dist-before.sha256" ]]; then
+            find dist -type f -print0 | sort -z | xargs -0 sha256sum > "$QA_OUT/dist-after.sha256"
+            cmp "$QA_OUT/dist-before.sha256" "$QA_OUT/dist-after.sha256"
+            sha256sum --check "$QA_OUT/dist-before.sha256" > "$QA_OUT/dist-held.log"
+          fi
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const out=process.env.QA_OUT,rows=fs.readdirSync(out+'/transport').sort().map(file=>{
+            const lines=fs.readFileSync(out+'/transport/'+file,'utf8').split('\n').filter(Boolean);
+            const permitted=line=>(file==='build.log'&&/^\[SIM_OFFLINE_BLOCK\] external browser route continue https:\/\/fonts\.(googleapis|gstatic)\.com$/.test(line))||(file==='sweep-weight.log'&&(/^\[SIM_OFFLINE_BLOCK\] external browser route continue https:\/\/fonts\.(googleapis|gstatic)\.com$/.test(line)||line==='[SIM_OFFLINE_BLOCK] external browser route continue https://flagcdn.com'));
+            assert(lines.every(permitted),'Unexpected transport receipt '+file);
+            return{file,blockedAttempts:lines.length,fontBlockedAttempts:lines.filter(line=>line.includes('fonts.googleapis.com')||line.includes('fonts.gstatic.com')).length,flagBlockedAttempts:lines.filter(line=>line.endsWith('https://flagcdn.com')).length};
+          });
+          fs.writeFileSync(out+'/transport-summary.json',JSON.stringify({receipts:rows,meaning:'Declared blocked font/flag attempts are retained; no provider/font availability claim.'},null,2)+'\n');
+          fs.writeFileSync(out+'/source-output-hold.json',JSON.stringify({sourceHeld:true,indexHeld:true,trackedPathsHeld:true,locksHeld:true,status:'clean',completedDistHeld:fs.existsSync(out+'/dist-before.sha256')},null,2)+'\n');
+          NODE
+      - name: Pack bounded complete output or fatal diagnostic
+        id: pack
+        if: always()
+        run: |
+          set +e
+          set -uo pipefail
+          archive="$RUNNER_TEMP/cm-team-picker-original-evidence.tar.gz"
+          tar -czf "$archive" -C "$QA_OUT" . > "$RUNNER_TEMP/cm-team-picker-original-pack.log" 2>&1
+          pack_exit=$?
+          printf '%s\n' "$pack_exit" > "$QA_OUT/pack-native.exit" || exit 1
+          if [[ "$pack_exit" == 0 && -f "$archive" && "$(stat -c %s "$archive")" -le 50000000 ]]; then
+            sha256sum "$archive" > "$archive.sha256" || exit 1
+            printf 'archive=%s\n' "$archive" >> "$GITHUB_OUTPUT" || exit 1
+            exit 0
+          fi
+          printf '%s\n' 'DIAGNOSTIC_ONLY_NO_COMPLETE_OUTPUT_PROOF: full pack failed or exceeded50000000bytes' > "$QA_OUT/DIAGNOSTIC-ONLY.txt" || exit 1
+          cp "$RUNNER_TEMP/cm-team-picker-original-pack.log" "$QA_OUT/pack.log" || exit 1
+          diagnostic="$RUNNER_TEMP/cm-team-picker-original-diagnostic.tar.gz"
+          diagnostic_dir="$RUNNER_TEMP/cm-team-picker-original-diagnostic"
+          mkdir -p "$diagnostic_dir/logs" "$diagnostic_dir/transport" "$diagnostic_dir/built" || exit 1
+          find "$QA_OUT" -maxdepth 1 -type f ! -name '*.tar.gz' ! -name '*.tgz' -exec cp '{}' "$diagnostic_dir/" \; || exit 1
+          cp -R "$QA_OUT/logs/." "$diagnostic_dir/logs/" || exit 1
+          cp -R "$QA_OUT/transport/." "$diagnostic_dir/transport/" || exit 1
+          for file in report.json probe.exit; do if test -f "$QA_OUT/built/$file"; then cp "$QA_OUT/built/$file" "$diagnostic_dir/built/$file" || exit 1; fi; done
+          tar -czf "$diagnostic" -C "$diagnostic_dir" . || exit 1
+          test "$(stat -c %s "$diagnostic")" -le 50000000 || exit 1
+          sha256sum "$diagnostic" > "$diagnostic.sha256" || exit 1
+          printf 'archive=%s\n' "$diagnostic" >> "$GITHUB_OUTPUT" || exit 1
+          exit 1
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cm-team-picker-original-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            ${{ steps.pack.outputs.archive }}
+            ${{ steps.pack.outputs.archive }}.sha256
+          if-no-files-found: error
+          retention-days: 30
+          compression-level: 0
