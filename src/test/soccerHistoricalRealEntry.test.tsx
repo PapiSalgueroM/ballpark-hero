@@ -181,36 +181,45 @@ beforeEach(() => {
 });
 afterEach(() => { cleanup(); vi.clearAllTimers(); vi.useRealTimers(); vi.restoreAllMocks(); vi.unstubAllGlobals(); });
 
-describe('Soccer Career first historical real entry', () => {
+describe('Soccer Career four historical real entries', () => {
   it('the actual 2005 creation path admits Neymar once at Santos in 2009', async () => {
     const ui = await createFromUi();
     const run = journey(ui.state, 2009);
     retain('entry', { ui, ...run, uiDraws, mainDraws, storage: storage() });
     const entrant = arrival(run.state)?.players;
     expect(entrant, 'SC_REAL_ENTRY_2009').toEqual([{ id: 'soccer:neymar', entryYear: 2009, entryClub: 'Santos' }]);
-    expect(arrival(run.state)?.version).toBe(1);
+    expect(arrival(run.state)?.version).toBe(2);
     for (const frame of run.frames.filter(f => f.year < 2009)) expect(arrival(frame.state)?.players).toEqual([]);
     for (const row of run.priorArrivalWrites) expect(row.after, row.action).toEqual(row.before);
     expect(localStorage.getItem(OTHER)).toBe('untouched');
   });
 
-  it('the actual entry survives complete reload and the 2015 era club change', async () => {
+  it('all four entries survive complete reload and later era club changes', async () => {
     const ui = await createFromUi();
     const to2009 = journey(ui.state, 2009), load2009 = wholeLoad(to2009.state);
-    const to2015 = journey(load2009.state, 2015), load2015 = wholeLoad(to2015.state);
-    const resolved = worldClubOf(load2015.state, 'Neymar');
-    const poolRow = getEraStars(2015).find(row => row.name === 'Neymar');
-    retain('continuity', { ui, to2009, load2009, to2015, load2015, resolved, poolRow, uiDraws, mainDraws, storage: storage() });
-    expect(arrival(load2015.state)?.players, 'SC_REAL_ENTRY_CONTINUITY').toEqual([{ id: 'soccer:neymar', entryYear: 2009, entryClub: 'Santos' }]);
-    expect(poolRow?.club, 'SC_REAL_ENTRY_ACTUAL_2015_POOL').toBe('PSG');
-    expect(resolved, 'SC_REAL_ENTRY_SAVED_CLUB_RESOLVER').toBe('Santos');
-    expect(load2009.loadedBytes).toBe(load2009.bytes); expect(load2015.loadedBytes).toBe(load2015.bytes);
-    for (const row of [...to2009.priorArrivalWrites, ...to2015.priorArrivalWrites]) expect(row.after, row.action).toEqual(row.before);
+    const to2019 = journey(load2009.state, 2019), load2019 = wholeLoad(to2019.state);
+    const expected = [
+      { id: 'soccer:neymar', name: 'Neymar', entryYear: 2009, entryClub: 'Santos' },
+      { id: 'soccer:mbappe', name: 'Kylian Mbappé', entryYear: 2015, entryClub: 'Monaco' },
+      { id: 'soccer:haaland', name: 'Erling Haaland', entryYear: 2016, entryClub: 'Bryne' },
+      { id: 'soccer:bellingham', name: 'Jude Bellingham', entryYear: 2019, entryClub: 'Birmingham City' },
+    ];
+    retain('continuity', { ui, to2009, load2009, to2019, load2019, uiDraws, mainDraws, storage: storage() });
+    expect(arrival(load2019.state)?.players, 'SC_REAL_ENTRY_CONTINUITY').toEqual(expected.map(({ name, ...entry }) => entry));
+    for (const frame of [...to2009.frames, ...to2019.frames])
+      expect(arrival(frame.state)?.players, 'SC_REAL_ENTRY_DUE_YEAR').toEqual(expected.filter(p => p.entryYear <= frame.year).map(({ name, ...entry }) => entry));
+    for (const player of expected)
+      expect(worldClubOf(load2019.state, player.name), 'SC_REAL_ENTRY_OWN_SAVED_CLUB').toBe(player.entryClub);
+    expect(getEraStars(2015).find(row => row.name === 'Neymar')?.club).toBe('PSG');
+    expect(Object.keys(load2019.state.phone!.clubs).length).toBeLessThanOrEqual(28);
+    expect(Object.prototype.hasOwnProperty.call(load2019.state.phone!.clubs, 'Kylian Mbappe')).toBe(false);
+    expect(load2009.loadedBytes).toBe(load2009.bytes); expect(load2019.loadedBytes).toBe(load2019.bytes);
+    for (const row of [...to2009.priorArrivalWrites, ...to2019.priorArrivalWrites]) expect(row.after, row.action).toEqual(row.before);
     expect(localStorage.getItem(OTHER)).toBe('untouched');
   });
 
   it('SportsFeed keeps the sourced entry separate from the persistent career world club', async () => {
-    const ui = await createFromUi(), run = journey(ui.state, 2009);
+    const ui = await createFromUi(), run = journey(ui.state, 2019);
     // Declared transient-feed pruning boundary, derived from the actual UI career.
     const input = plain(run.state);
     expect(input.phone).toBeDefined(); input.phone!.feed = [];
@@ -228,11 +237,13 @@ describe('Soccer Career first historical real entry', () => {
     expect(region, 'SC_REAL_ENTRY_PHONE_CARD').not.toBeNull();
     const card = within(region!);
     expect(card.getByText('Neymar', { exact: true })).toBeInTheDocument();
-    expect(region!.textContent).toMatch(/Senior debut/i);
-    expect(region!.textContent).toMatch(/7 March 2009/);
-    expect(region!.textContent).toMatch(/Brazil/);
-    expect(region!.textContent).toMatch(/Attacker/i);
-    expect(region!.textContent).toMatch(/\b17\b/);
+    for (const name of ['Neymar', 'Kylian Mbappé', 'Erling Haaland', 'Jude Bellingham'])
+      expect(card.getByText(name, { exact: true })).toBeInTheDocument();
+    for (const entry of ['2009 at Santos', '2015 at Monaco', '2016 at Bryne', '2019 at Birmingham City'])
+      expect(region!.textContent).toContain(entry);
+    expect(region!.textContent).toMatch(/First-team entry/i);
+    expect(region!.textContent).toMatch(/Development and results are simulated/i);
+    expect(card.getAllByRole('link')).toHaveLength(8);
     expect(region!.textContent).toMatch(/Career world/i);
     expect(region!.textContent).toMatch(/Santos/);
     expect(after).toBe(before); expect(storage()).toEqual(beforeStorage); expect(mainDraws).toHaveLength(beforeDraws);
@@ -261,6 +272,40 @@ describe('Soccer Career first historical real entry', () => {
     expect((futureInput as typeof future).historicalArrivals).toEqual(beforeFuture);
     expect(futureLoaded.loadedBytes).toBe(futureLoaded.bytes);
     expect(localStorage.getItem(OTHER)).toBe('untouched');
+  });
+
+  it('the authentic original version1 save keeps Neymar only and its original source card', async () => {
+    const fixture = JSON.parse(fs.readFileSync(path.resolve('scripts/data/soccerHistoricalV1UiFixture.json'), 'utf8')) as { saved: string };
+    const parsed = parseSoccerCareerSave(fixture.saved);
+    expect(isSoccerCareerSave(parsed)).toBe(true);
+    const original = parsed as E.CareerState;
+    expect(serializeSoccerCareerSave(original), 'SC_REAL_ENTRY_AUTHENTIC_V1_CODEC').toBe(fixture.saved);
+    expect(arrival(original)).toEqual({ version: 1, players: [] });
+    const input = plain(original);
+    seedMain();
+    const repaired = E.repairCareer(input), run = journey(repaired, 2019), loaded = wholeLoad(run.state);
+    expect(serializeSoccerCareerSave(original)).toBe(fixture.saved);
+    expect(arrival(loaded.state), 'SC_REAL_ENTRY_V1_NOT_UPGRADED').toEqual({ version: 1, players: [
+      { id: 'soccer:neymar', entryYear: 2009, entryClub: 'Santos' },
+    ] });
+    expect(loaded.loadedBytes).toBe(loaded.bytes);
+    expect(worldClubOf(loaded.state, 'Neymar')).toBe('Santos');
+    const display = plain(loaded.state);
+    display.phone!.feed = [];
+    const before = serializeSoccerCareerSave(display), beforeStorage = storage(), beforeDraws = mainDraws.length;
+    const view = render(<PhonePanel career={display} onAnswer={() => undefined} onMoney={() => undefined} onBuyItem={() => undefined} onClose={() => undefined} />);
+    fireEvent.click(view.getByRole('button', { name: /SportsFeed/ }));
+    const region = view.getByRole('region', { name: 'Real player arrivals' });
+    expect(region.textContent).toMatch(/Senior debut/i);
+    expect(region.textContent).toMatch(/7 March 2009/);
+    expect(region.textContent).toMatch(/Brazil/);
+    expect(region.textContent).toMatch(/Attacker/i);
+    expect(region.textContent).toMatch(/\b17\b/);
+    for (const name of ['Kylian Mbappé', 'Erling Haaland', 'Jude Bellingham'])
+      expect(within(region).queryByText(name, { exact: true })).toBeNull();
+    expect(serializeSoccerCareerSave(display)).toBe(before);
+    expect(storage()).toEqual(beforeStorage); expect(mainDraws).toHaveLength(beforeDraws);
+    retain('original-v1', { fixture, original, repaired, run, loaded, uiDraws, mainDraws, storage: storage() });
   });
 
   it('the actual newer era creation UI keeps its unmarked saved default', async () => {

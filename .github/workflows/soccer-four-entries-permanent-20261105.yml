@@ -1,0 +1,238 @@
+name: Soccer four entries permanent regression qualification
+on:
+  push:
+    branches: [codex/soccer-four-entries-permanent-20261105]
+permissions:
+  contents: read
+concurrency:
+  group: soccer-four-entries-permanent-20261105
+  cancel-in-progress: false
+jobs:
+  permanent:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+          filter: blob:none
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - name: Exact isolated source and fresh evidence
+        shell: bash
+        run: |
+          set -euo pipefail
+          QA_OUT="$RUNNER_TEMP/soccer-four-entries-permanent-$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT"
+          test ! -e "$QA_OUT"
+          mkdir -p "$QA_OUT/logs" "$QA_OUT/transport"
+          printf 'QA_OUT=%s\n' "$QA_OUT" >> "$GITHUB_ENV"
+          export QA_OUT
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import assert from 'node:assert/strict';
+          import {createHash} from 'node:crypto';
+          import {execFileSync} from 'node:child_process';
+          const git=(...args)=>execFileSync('git',args,{encoding:'utf8'}).trim();
+          const parent='a9e56ff706ea71a51d3ec60438023ed9ad4d3b01',tree='316d2084d15d5e24aff38e5a692b639432b3eb98';
+          const pins={
+            'src/test/soccerHistoricalRealEntry.test.tsx':'bec3f78f30501551fcd69bb3c88b8c8bf68c11d9',
+            'scripts/data/soccerHistoricalV1UiFixture.json':'cdc13da018efec049567c8148755cc21a9b791d3',
+            'scripts/simSoccerHistoricalArrivals.mjs':'02c559fcde4e731fedb02aaefaf83945815928a5',
+          };
+          const workflow='.github/workflows/soccer-four-entries-permanent-20261105.yml';
+          assert.equal(git('rev-parse','HEAD^'),parent);
+          assert.equal(git('rev-parse','HEAD^^{tree}'),tree);
+          const changed=git('diff','--name-only',parent,'HEAD').split('\n').filter(Boolean).sort();
+          assert.deepEqual(changed,[...Object.keys(pins),workflow].sort(),'Exactly four isolated qualification paths');
+          assert.equal(git('status','--porcelain=v1','--untracked-files=all'),'','Clean start');
+          const blob=b=>createHash('sha1').update('blob '+b.length+'\0').update(b).digest('hex');
+          for(const[file,pin]of Object.entries(pins)){
+            assert.match(pin,/^[a-f0-9]{40}$/,'Reviewed source binding');
+            assert.equal(blob(fs.readFileSync(file)),pin,file);
+          }
+          assert.equal(blob(fs.readFileSync('src/lib/soccerHistoricalArrivals.ts')),'c57d5048ffbce45c33051873e799a7e79dcdc561');
+          fs.writeFileSync(path.join(process.env.QA_OUT,'source-identity.json'),JSON.stringify({
+            parent,parentTree:tree,head:git('rev-parse','HEAD'),tree:git('rev-parse','HEAD^{tree}'),changed,pins,
+            scope:'Permanent six-case direct/sim qualification and one physical Bellingham-row omission with exact restoration. No App commit, build, browser, history fetch or model generation outside the actual tests.',
+          },null,2)+'\n');
+          NODE
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$QA_OUT/source-before.sha256"
+          git ls-files --stage > "$QA_OUT/index-before.txt"
+          git status --porcelain=v1 --untracked-files=all > "$QA_OUT/status-before.txt"
+          cp .github/workflows/soccer-four-entries-permanent-20261105.yml "$QA_OUT/workflow.yml"
+          node --check scripts/simSoccerHistoricalArrivals.mjs
+      - name: Held dependency install
+        shell: bash
+        run: |
+          set +e
+          set -uo pipefail
+          npm ci --no-audit --no-fund > "$QA_OUT/logs/install.stdout" 2> "$QA_OUT/logs/install.stderr"
+          native=$?
+          printf '%s\n' "$native" > "$QA_OUT/install.exit" || exit 1
+          test "$native" -eq 0
+      - name: Proper types, six actual cases, sim and physical missing-row control
+        shell: bash
+        run: |
+          set -euo pipefail
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import assert from 'node:assert/strict';
+          import {createHash} from 'node:crypto';
+          import {execFileSync,spawnSync} from 'node:child_process';
+          const out=process.env.QA_OUT,root=process.cwd(),helper='src/lib/soccerHistoricalArrivals.ts';
+          const sha=b=>createHash('sha256').update(b).digest('hex');
+          const git=(...args)=>execFileSync('git',args);
+          const tracked=git('ls-files','-z').toString().split('\0').filter(Boolean);
+          const inventory=()=>Object.fromEntries(tracked.map(file=>[file,sha(fs.readFileSync(file))]));
+          const locks=()=>Object.fromEntries(['package.json','package-lock.json','bun.lock','bun.lockb','yarn.lock','pnpm-lock.yaml'].map(file=>[file,fs.existsSync(file)?sha(fs.readFileSync(file)):null]));
+          const write=(file,value)=>fs.writeFileSync(path.join(out,file),JSON.stringify(value,null,2)+'\n');
+          const before=inventory(),index=git('ls-files','--stage','-z'),lockBefore=locks(),status=git('status','--porcelain=v1','--untracked-files=all');
+          assert.equal(status.length,0);
+          write('locks-before.json',lockBefore);
+          const source=fs.readFileSync(helper),text=source.toString();
+          const span="  { id: 'soccer:bellingham', name: 'Jude Bellingham', entryYear: 2019, entryClub: 'Birmingham City' },\n";
+          assert.equal(text.split(span).length-1,1,'Unique physical Bellingham source row');
+          const changed=Buffer.from(text.replace(span,''));
+          assert(!changed.equals(source),'Real physical fault changes helper bytes');
+          fs.writeFileSync(path.join(out,'helper-original.ts'),source);
+          const result={status:'incomplete',runs:[],sourceOriginalSHA256:sha(source),faultSHA256:sha(changed)};
+          const names=[
+            'the actual 2005 creation path admits Neymar once at Santos in 2009',
+            'all four entries survive complete reload and later era club changes',
+            'SportsFeed keeps the sourced entry separate from the persistent career world club',
+            'legacy unmarked APIs and opaque future save versions keep their complete state and draw path',
+            'the authentic original version1 save keeps Neymar only and its original source card',
+            'the actual newer era creation UI keeps its unmarked saved default',
+          ];
+          const describe='Soccer Career four historical real entries';
+          const strip=s=>s.replace(/\u001b\[[0-9;]*m/g,'');
+          function run(name,args,evidence){
+            const receipt=path.join(out,'transport',name+'.log');
+            fs.writeFileSync(receipt,'',{flag:'wx'});
+            if(evidence)fs.mkdirSync(path.join(out,evidence),{recursive:true});
+            const env={...process.env,SIM_NETWORK:'offline',GIT_NO_LAZY_FETCH:'1',
+              NODE_OPTIONS:'--require='+path.join(root,'scripts/lib/offlineTransport.cjs'),SIM_OFFLINE_RECEIPT:receipt};
+            if(evidence)env.SC_HISTORICAL_ENTRY_EVIDENCE=path.join(out,evidence);
+            const child=spawnSync(process.execPath,args,{cwd:root,env,encoding:null,timeout:240000,maxBuffer:16*1024*1024});
+            fs.writeFileSync(path.join(out,'logs',name+'.stdout'),child.stdout??Buffer.alloc(0));
+            fs.writeFileSync(path.join(out,'logs',name+'.stderr'),child.stderr??Buffer.alloc(0));
+            const row={name,command:[process.execPath,...args],exit:child.status,signal:child.signal,error:child.error?String(child.error.stack||child.error):null};
+            result.runs.push(row);write(name+'-native.json',row);
+            assert.equal(fs.readFileSync(receipt).length,0,name+' silent transport');
+            assert.equal(row.signal,null,name+' signal');assert.equal(row.error,null,name+' setup');
+            for(const output of[child.stdout,child.stderr])assert(!/Unhandled (?:Error|Rejection)|uncaught exception|Vitest caught/i.test(strip((output??Buffer.alloc(0)).toString())),name+' no unhandled runtime');
+            return row;
+          }
+          function census(report){
+            assert.equal(report.testResults?.length,1,'SC4_PERMANENT_SUITE_CENSUS');
+            const rows=report.testResults.flatMap(s=>s.assertionResults??[]);
+            assert.equal(rows.length,6,'SC4_PERMANENT_CASE_CENSUS');
+            assert.deepEqual(rows.map(r=>r.fullName).sort(),names.map(n=>describe+' '+n).sort(),'SC4_PERMANENT_CASE_NAMES');
+            assert.equal(report.numTotalTests,6);
+            assert.equal(report.numPendingTests??0,0);assert.equal(report.numTodoTests??0,0);
+            for(const key of['numRuntimeErrorTestSuites','numRuntimeErrorTests','numRuntimeErrors','numUnhandledErrors'])assert.equal(report[key]??0,0,key);
+            assert.deepEqual(report.unhandledErrors??[],[]);
+            return rows;
+          }
+          function admit(file,fault){
+            const report=JSON.parse(fs.readFileSync(path.join(out,file),'utf8')),rows=census(report);
+            assert.equal(report.success,!fault);
+            assert.equal(report.numPassedTests,fault?4:6);assert.equal(report.numFailedTests,fault?2:0);
+            const ordered=names.map(name=>{const found=rows.filter(r=>r.title===name);assert.equal(found.length,1);return found[0];});
+            assert.deepEqual(ordered.map(r=>r.status),fault?['passed','failed','failed','passed','passed','passed']:Array(6).fill('passed'));
+            for(const[i,row]of ordered.entries()){
+              assert(Array.isArray(row.failureMessages));
+              if(!fault||![1,2].includes(i))assert.deepEqual(row.failureMessages,[]);
+              else{
+                const failure=strip(row.failureMessages.join('\n'));
+                assert(!/\b(?:TypeError|ReferenceError|SyntaxError)\b/.test(failure),'No setup/runtime fault credit');
+                if(i===1)assert.match(failure,/AssertionError/);
+                assert.match(failure,i===1?/SC_REAL_ENTRY_CONTINUITY/:/Unable to find an element with the text: Jude Bellingham/);
+              }
+            }
+            return {rows:ordered.map(r=>({fullName:r.fullName,status:r.status,failureMessages:r.failureMessages})),success:report.success};
+          }
+          let error;
+          try{
+            assert.equal(run('types',['node_modules/typescript/bin/tsc','--noEmit','-p','tsconfig.app.json']).exit,0,'Proper app TSC before cases');
+            assert.equal(run('normal',['node_modules/vitest/vitest.mjs','run','src/test/soccerHistoricalRealEntry.test.tsx','--maxWorkers=1','--minWorkers=1','--reporter=json','--outputFile='+path.join(out,'normal.json')],'raw/normal').exit,0,'Normal native0');
+            result.normal=admit('normal.json',false);
+            const actual=JSON.parse(fs.readFileSync(path.join(out,'normal.json'),'utf8')),original=JSON.stringify(actual),copy=JSON.parse(original);
+            const removed=copy.testResults[0].assertionResults.pop();assert.notEqual(JSON.stringify(copy),original);
+            let owned;try{census(copy);}catch(e){owned=e;}assert(owned instanceof assert.AssertionError);assert.match(owned.message,/SC4_PERMANENT_CASE_CENSUS/);
+            copy.testResults[0].assertionResults.push(removed);assert.equal(JSON.stringify(copy),original);assert.equal(JSON.stringify(actual),original);
+            result.censusControl={changed:true,ownedFailure:{name:owned.name,message:owned.message},wholeInverseExact:true,actualHeld:true};
+            assert.equal(run('sim',['scripts/simSoccerHistoricalArrivals.mjs'],'raw/sim').exit,0,'Actual unchanged sim native0');
+            assert(fs.readFileSync(path.join(out,'logs/sim.stdout'),'utf8').includes('simSoccerHistoricalArrivals: 6 UI, save and phone outcomes green; missing-case control caught'),'Actual sim closing output');
+            fs.writeFileSync(helper,changed);fs.writeFileSync(path.join(out,'helper-fault.ts'),changed);
+            const faultInventory=inventory();assert.deepEqual(Object.keys(before).filter(file=>before[file]!==faultInventory[file]),[helper]);
+            assert.equal(run('fault-types',['node_modules/typescript/bin/tsc','--noEmit','-p','tsconfig.app.json']).exit,0,'Compileable physical fault');
+            assert.equal(run('fault',['node_modules/vitest/vitest.mjs','run','src/test/soccerHistoricalRealEntry.test.tsx','--maxWorkers=1','--minWorkers=1','--reporter=json','--outputFile='+path.join(out,'fault.json')],'raw/fault').exit,1,'Physical missing-row native1');
+            result.control=admit('fault.json',true);
+            assert(fs.readFileSync(helper).equals(changed),'Fault remains the exact one-row deletion');
+            result.status='PERMANENT_SIX_CASES_SIM_AND_PHYSICAL_MISSING_ROW_ADMITTED';
+          }catch(e){error=e;result.error=String(e.stack||e);}
+          finally{
+            fs.writeFileSync(helper,source);fs.writeFileSync(path.join(out,'helper-restored.ts'),fs.readFileSync(helper));
+            const after=inventory(),lockAfter=locks();write('locks-after.json',lockAfter);
+            assert.deepEqual(after,before,'Finally full tracked source');
+            assert(git('ls-files','--stage','-z').equals(index),'Finally index');
+            assert(git('status','--porcelain=v1','--untracked-files=all').equals(status),'Finally all status');
+            assert.deepEqual(lockAfter,lockBefore,'Finally every lock presence/body');
+            assert(fs.readFileSync(helper).equals(source),'Whole physical source inverse');
+            for(const row of result.runs)assert.equal(fs.readFileSync(path.join(out,'transport',row.name+'.log')).length,0);
+            result.fullSourceIndexLocksStatusHeld=true;result.wholeSourceInverseExact=true;write('qualification.json',result);
+          }
+          if(error)throw error;
+          assert.equal(result.runs.length,5,'Exactly five actual commands and receipts');
+          console.log('SC4_PERMANENT_ADMITTED proper types,6green,direct sim,2owned physical-row failures,whole source inverse');
+          NODE
+      - name: Complete original source and silent offline hold
+        if: always()
+        shell: bash
+        run: |
+          set +e
+          set -uo pipefail
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$QA_OUT/source-after.sha256" || exit 1
+          git ls-files --stage > "$QA_OUT/index-after.txt" || exit 1
+          git status --porcelain=v1 --untracked-files=all > "$QA_OUT/status-after.txt" || exit 1
+          cmp "$QA_OUT/source-before.sha256" "$QA_OUT/source-after.sha256" > "$QA_OUT/source-held.log" 2>&1
+          source_exit=$?
+          cmp "$QA_OUT/index-before.txt" "$QA_OUT/index-after.txt" > "$QA_OUT/index-held.log" 2>&1
+          index_exit=$?
+          cmp "$QA_OUT/status-before.txt" "$QA_OUT/status-after.txt" > "$QA_OUT/status-held.log" 2>&1
+          status_exit=$?
+          printf '{"source":%s,"index":%s,"status":%s}\n' "$source_exit" "$index_exit" "$status_exit" > "$QA_OUT/hold-exits.json" || exit 1
+          test "$source_exit" -eq 0 && test "$index_exit" -eq 0 && test "$status_exit" -eq 0 && test ! -s "$QA_OUT/status-after.txt" || exit 1
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import path from 'node:path';import assert from 'node:assert/strict';
+          const out=process.env.QA_OUT,result=JSON.parse(fs.readFileSync(path.join(out,'qualification.json'),'utf8'));
+          assert.equal(result.status,'PERMANENT_SIX_CASES_SIM_AND_PHYSICAL_MISSING_ROW_ADMITTED');
+          assert.equal(result.fullSourceIndexLocksStatusHeld,true);assert.equal(result.wholeSourceInverseExact,true);
+          assert.deepEqual(result.runs.map(r=>[r.name,r.exit,r.signal,r.error]),[['types',0,null,null],['normal',0,null,null],['sim',0,null,null],['fault-types',0,null,null],['fault',1,null,null]]);
+          const receipts=fs.readdirSync(path.join(out,'transport')).sort();
+          assert.deepEqual(receipts,['fault-types.log','fault.log','normal.log','sim.log','types.log']);
+          for(const file of receipts)assert.equal(fs.readFileSync(path.join(out,'transport',file)).length,0);
+          NODE
+      - name: Bounded full evidence archive
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          pack="$QA_OUT-packed"
+          mkdir "$pack"
+          tar -czf "$pack/soccer-four-entries-permanent.tar.gz" -C "$QA_OUT" .
+          bytes=$(stat -c '%s' "$pack/soccer-four-entries-permanent.tar.gz")
+          test "$bytes" -le 50000000
+          sha256sum "$pack/soccer-four-entries-permanent.tar.gz" > "$pack/soccer-four-entries-permanent.tar.gz.sha256"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: soccer-four-entries-permanent
+          path: ${{ env.QA_OUT }}-packed/*
+          if-no-files-found: error
+          retention-days: 7

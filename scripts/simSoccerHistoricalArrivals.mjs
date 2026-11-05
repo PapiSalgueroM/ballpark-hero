@@ -9,18 +9,19 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const out = fs.mkdtempSync(path.join(os.tmpdir(), 'dukb-soccer-real-entry-'));
 const names = [
   'the actual 2005 creation path admits Neymar once at Santos in 2009',
-  'the actual entry survives complete reload and the 2015 era club change',
+  'all four entries survive complete reload and later era club changes',
   'SportsFeed keeps the sourced entry separate from the persistent career world club',
   'legacy unmarked APIs and opaque future save versions keep their complete state and draw path',
+  'the authentic original version1 save keeps Neymar only and its original source card',
   'the actual newer era creation UI keeps its unmarked saved default',
 ];
 function validate(report) {
   const cases = report.testResults?.flatMap(suite => suite.assertionResults ?? []) ?? [];
-  assert.equal(cases.length, 5, 'SC_REAL_ENTRY_CASE_CENSUS');
+  assert.equal(cases.length, 6, 'SC_REAL_ENTRY_CASE_CENSUS');
   assert.deepEqual(cases.map(item => item.title).sort(), names.slice().sort(), 'SC_REAL_ENTRY_CASE_NAMES');
   assert.equal(report.success, true);
-  assert.equal(report.numTotalTests, 5);
-  assert.equal(report.numPassedTests, 5);
+  assert.equal(report.numTotalTests, 6);
+  assert.equal(report.numPassedTests, 6);
   assert.equal(report.numFailedTests, 0);
   assert(cases.every(item => item.status === 'passed' && item.failureMessages.length === 0));
   assert.equal(report.numPendingTests ?? 0, 0);
@@ -48,7 +49,7 @@ try {
   assert.throws(() => validate(changed), /SC_REAL_ENTRY_CASE_CENSUS/);
   changed.testResults[0].assertionResults.push(removed);
   assert.equal(JSON.stringify(changed), before, 'Whole copied report restored');
-  console.log('simSoccerHistoricalArrivals: 5 UI, save and phone outcomes green; missing-case control caught');
+  console.log('simSoccerHistoricalArrivals: 6 UI, save and phone outcomes green; missing-case control caught');
 } finally {
   fs.rmSync(out, { recursive: true, force: true });
 }
