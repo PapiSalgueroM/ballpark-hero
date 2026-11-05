@@ -1,0 +1,237 @@
+name: NBA 2004 native same completed build
+on:
+  push:
+    branches: [codex/nba-2004-native-20261105]
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: nba-2004-native-20261105
+  cancel-in-progress: false
+jobs:
+  native:
+    runs-on: ubuntu-latest
+    timeout-minutes: 50
+    env:
+      PRODUCT: 4e45ee3605589aeb5a268b2e6a902fb4ff71af92
+      PRODUCT_TREE: 5ffdee94dc4dac52922a3dc6d893abc317e578c0
+      BROWSER_BLOB: e3f38bee08a9916ba2c17cf71a9ebaa66a2fd380
+      FIXTURE_BLOB: 04b51f22a8e37ddc6285cfcf6e37f138c5e68f54
+      SPEC_BLOB: e59408b9d6525463413c21bba568ed7f2c23c164
+      ASSETS_BLOB: 06ffe6481831232ad7bfbbbbff9176e9eff9bbeb
+      READY_BLOB: 671f460aa088d42b44c435a03594cf26695d6e09
+      PLAYWRIGHT_BROWSERS_PATH: /home/runner/.cache/ms-playwright
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+          filter: blob:none
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: '1.4.4'
+      - name: Bind six reviewed QA additions on the frozen NBA product
+        shell: bash
+        run: |
+          set -euo pipefail
+          QA_OUT="$RUNNER_TEMP/nba-2004-native"
+          QA_REF="$RUNNER_TEMP/nba-2004-native-inputs"
+          QA_DIST="$RUNNER_TEMP/nba-2004-native-dist"
+          export QA_OUT QA_REF QA_DIST
+          echo "QA_OUT=$QA_OUT" >> "$GITHUB_ENV"
+          echo "QA_REF=$QA_REF" >> "$GITHUB_ENV"
+          echo "QA_DIST=$QA_DIST" >> "$GITHUB_ENV"
+          mkdir -p "$QA_OUT"/{logs,input,transport} "$QA_REF" "$QA_DIST"
+          test "$(git rev-parse HEAD^)" = "$PRODUCT"
+          test "$(git rev-parse "$PRODUCT^{tree}")" = "$PRODUCT_TREE"
+          test "$(git hash-object scripts/qa/nbaHistoricalDraftBrowser.mjs)" = "$BROWSER_BLOB"
+          test "$(git hash-object scripts/qa/nbaHistoricalDraftFixtures.mjs)" = "$FIXTURE_BLOB"
+          test "$(git hash-object scripts/qa/nbaHistoricalDraftNative.json)" = "$SPEC_BLOB"
+          test "$(git hash-object scripts/qa/nbaHistoricalDraftAssets.mjs)" = "$ASSETS_BLOB"
+          test "$(git hash-object scripts/qa/nativeScrollReady.mjs)" = "$READY_BLOB"
+          git diff --name-status HEAD^ HEAD > "$QA_OUT/qa-delta.txt"
+          node --input-type=module -e 'import fs from "node:fs";import assert from "node:assert/strict";const s=JSON.parse(fs.readFileSync("scripts/qa/nbaHistoricalDraftNative.json"));const r=fs.readFileSync(process.env.QA_OUT+"/qa-delta.txt","utf8").trim().split("\n").map(x=>x.split("\t"));assert(r.every(x=>x[0]==="A"));assert.deepEqual(r.map(x=>x[1]).sort(),s.qaPaths.slice().sort());'
+          test -z "$(git status --porcelain=v1 --untracked-files=all)"
+          node --check scripts/qa/nbaHistoricalDraftBrowser.mjs
+          node --check scripts/qa/nbaHistoricalDraftFixtures.mjs
+          git ls-files -z > "$QA_OUT/tracked-before.bin"
+          git ls-files -z | xargs -0 sha256sum > "$QA_OUT/source-before.sha256"
+          git ls-files -s > "$QA_OUT/index-before.txt"
+          git status --porcelain=v1 --untracked-files=all > "$QA_OUT/status-before.txt"
+          cp package-lock.json "$QA_OUT/lock-before.json"
+          cp scripts/qa/nbaHistoricalDraftNative.json "$QA_OUT/spec.json"
+          git rev-parse HEAD HEAD^ 'HEAD^{tree}' > "$QA_OUT/source-identity.txt"
+      - name: Reuse exactly the completed NBA build and admitted healthy eight-arm inputs
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import path from 'node:path';import crypto from 'node:crypto';import assert from 'node:assert/strict';import {spawnSync} from 'node:child_process';
+          const spec=JSON.parse(fs.readFileSync('scripts/qa/nbaHistoricalDraftNative.json')),out=process.env.QA_OUT,ref=process.env.QA_REF;
+          const sha=b=>crypto.createHash('sha256').update(b).digest('hex');
+          const call=(label,argv,binary=false)=>{const r=spawnSync('gh',argv,{encoding:binary?null:'utf8',maxBuffer:64*1024*1024});fs.writeFileSync(path.join(out,'input',label+'.native.json'),JSON.stringify({command:['gh',...argv],status:r.status,signal:r.signal,error:r.error?String(r.error):null})+'\n');if(!binary)fs.writeFileSync(path.join(out,'input',label+'.json'),r.stdout??'');assert.equal(r.status,0);assert.equal(r.signal,null);return binary?r.stdout:JSON.parse(r.stdout);};
+          for(const[name,a]of Object.entries(spec.artifacts)){
+            for(const k of['run','job','id','bytes'])assert(Number.isSafeInteger(a[k])&&a[k]>0,'Actual healthy artifact binding '+name+'.'+k);
+            assert.match(a.head,/^[a-f0-9]{40}$/);assert.match(a.sha256,/^[a-f0-9]{64}$/);
+            const run=call(name+'-run',['api','repos/PapiSalgueroM/ballpark-hero/actions/runs/'+a.run]);
+            const job=call(name+'-job',['api','repos/PapiSalgueroM/ballpark-hero/actions/jobs/'+a.job]);
+            const artifact=call(name+'-artifact',['api','repos/PapiSalgueroM/ballpark-hero/actions/artifacts/'+a.id]);
+            assert.equal(run.status,'completed');assert.equal(run.conclusion,'success');assert.equal(run.head_sha,a.head);assert.equal(job.run_id,a.run);assert.equal(job.conclusion,'success');assert.equal(artifact.id,a.id);assert.equal(artifact.size_in_bytes,a.bytes);assert.equal(artifact.expired,false);assert.equal(artifact.workflow_run.id,a.run);
+            const zip=call(name+'-zip',['api','repos/PapiSalgueroM/ballpark-hero/actions/artifacts/'+a.id+'/zip'],true);
+            assert.equal(zip.length,a.bytes);assert.equal(sha(zip),a.sha256);const zipFile=path.join(ref,name+'.zip');fs.writeFileSync(zipFile,zip,{flag:'wx'});const dir=path.join(ref,name);fs.mkdirSync(dir);
+            const native=(label,args,options={})=>{const r=spawnSync(args[0],args.slice(1),{maxBuffer:64*1024*1024,...options});fs.writeFileSync(path.join(out,'input',name+'-'+label+'.native.json'),JSON.stringify({command:args,status:r.status,signal:r.signal,error:r.error?String(r.error):null})+'\n');fs.writeFileSync(path.join(out,'input',name+'-'+label+'.stderr.log'),r.stderr??'');assert.equal(r.status,0);assert.equal(r.signal,null);assert.equal(r.error,undefined);return r;};
+            if(name==='build'){const r=native('unzip',['unzip','-q',zipFile,'-d',dir]);fs.writeFileSync(path.join(out,'input',name+'-unzip.stdout.log'),r.stdout);}
+            else{assert(!a.tgz.includes('..')&&!a.tgz.startsWith('/'));assert(Number.isSafeInteger(a.tgzBytes)&&a.tgzBytes>0);assert.match(a.tgzSHA256,/^[a-f0-9]{64}$/);const r=native('tgz-member',['unzip','-p',zipFile,a.tgz]);assert.equal(r.stdout.length,a.tgzBytes);assert.equal(sha(r.stdout),a.tgzSHA256);const tgz=path.join(ref,name+'.tar.gz');fs.writeFileSync(tgz,r.stdout,{flag:'wx'});const extracted=native('tar',['tar','-xzf',tgz,'-C',dir]);fs.writeFileSync(path.join(out,'input',name+'-tar.stdout.log'),extracted.stdout);}
+            fs.writeFileSync(path.join(out,'input',name+'-authenticated.json'),JSON.stringify({run:a.run,job:a.job,head:a.head,artifact:a.id,bytes:a.bytes,sha256:a.sha256,format:name==='build'?'zip-files':'zip-single-authenticated-tgz'},null,2)+'\n',{flag:'wx'});
+          }
+          const build=path.join(ref,'build'),b=spec.artifacts.build;
+          for(const row of b.admittedFiles){const bytes=fs.readFileSync(path.join(build,row.path));assert.equal(bytes.length,row.bytes);assert.equal(sha(bytes),row.sha256,row.path);}
+          const proof=JSON.parse(fs.readFileSync(path.join(build,'build-proof.json')));
+          assert.equal(proof.status,'compiled-gates-passed');assert.equal(proof.product,spec.product);assert.equal(proof.productTree,spec.productTree);assert.equal(proof.normalBuilds,1);assert.equal(proof.readersCount,20);assert.equal(proof.allCapsUnchanged,true);assert.equal(proof.extraCmLeagueRules,false);assert.equal(proof.distFiles,849);
+          assert.equal(fs.readFileSync(path.join(build,'simNbaCareer.exit'),'utf8').trim(),'0');
+          for(const[a,z]of[['source-before.sha256','source-after.sha256'],['index-before.txt','index-after.txt'],['locks-before.sha256','locks-after.sha256'],['tracked-before.bin','tracked-after.bin'],['dist-before.sha256','dist-after.sha256']])assert(fs.readFileSync(path.join(build,a)).equals(fs.readFileSync(path.join(build,z))),a);
+          const tar=fs.readFileSync(path.join(build,b.tar));assert.equal(tar.length,b.tarBytes);assert.equal(sha(tar),b.tarSHA256);assert.equal(proof.tar.sha256,b.tarSHA256);assert.equal(proof.distInventorySHA256,b.distInventorySHA256);
+          const extracted=spawnSync('tar',['-xzf',path.join(build,b.tar),'--strip-components=1','-C',process.env.QA_DIST]);assert.equal(extracted.status,0);assert.equal(extracted.signal,null);assert.equal(extracted.error,undefined);
+          const outcomes=JSON.parse(fs.readFileSync(path.join(ref,'outcomes','qualification.json')));
+          assert.equal(outcomes.status,'FIVE_CANDIDATE_CASES_AND_SIX_OWNED_SOURCE_FAULTS_ADMITTED');assert.equal(outcomes.fixedRestoredWholeFiveRawExact,true);assert.equal(outcomes.everyArmOriginalSavedGameplayAndGlobalTapeExact,true);
+          for(const file of['build-proof.json','types-passed.json','source-before.sha256','source-after.sha256','dist-before.sha256','dist-after.sha256','source-output-hold.json','nba-chunk-sizes.json'])fs.copyFileSync(path.join(build,file),path.join(out,'input','build-'+file));
+          fs.copyFileSync(path.join(ref,'outcomes','qualification.json'),path.join(out,'input','outcomes-qualification.json'));
+          fs.writeFileSync(path.join(out,'input','reuse-admitted.json'),JSON.stringify({completedNBABuildOnly:true,normalBuildsInThisWorkflow:0,sourceProduct:spec.product,twoAuthenticatedInputs:true,declaredCompleteSavedBoundaries:5,noFixtureModelRun:true,noNativeAnnualOrSigningClaim:true},null,2)+'\n',{flag:'wx'});
+          NODE
+      - name: Install held App and browser runtime only
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(bun --version)" = 1.4.4
+          bun --version > "$QA_OUT/logs/bun-version.log"
+          node --version > "$QA_OUT/logs/node-version.log"
+          bun install --frozen-lockfile > "$QA_OUT/logs/bun-install.log" 2>&1
+          git diff --exit-code HEAD -- package.json package-lock.json bun.lock bun.lockb
+          npm install --prefix "$RUNNER_TEMP/nba-draft2004-browser-tools" --package-lock=false --no-audit --no-fund playwright@1.64.0 > "$QA_OUT/logs/playwright-install.log" 2>&1
+          test ! -e node_modules/playwright
+          test ! -e node_modules/playwright-core
+          ln -s "$RUNNER_TEMP/nba-draft2004-browser-tools/node_modules/playwright" node_modules/playwright
+          ln -s "$RUNNER_TEMP/nba-draft2004-browser-tools/node_modules/playwright-core" node_modules/playwright-core
+          "$RUNNER_TEMP/nba-draft2004-browser-tools/node_modules/.bin/playwright" install --with-deps chromium > "$QA_OUT/logs/chromium-install.log" 2>&1
+      - name: Proper App types before fixture preparation or browser
+        shell: bash
+        run: |
+          set +e
+          set -uo pipefail
+          export SIM_NETWORK=offline GIT_NO_LAZY_FETCH=1
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          export SIM_OFFLINE_RECEIPT="$QA_OUT/transport/types.log"
+          : > "$SIM_OFFLINE_RECEIPT"
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json > "$QA_OUT/logs/types.log" 2>&1
+          native_exit=$?
+          printf '%s\n' "$native_exit" > "$QA_OUT/logs/types.exit"
+          test "$native_exit" = 0 || exit "$native_exit"
+          test ! -s "$SIM_OFFLINE_RECEIPT" || exit 1
+          printf '{"command":"tsc --noEmit -p tsconfig.app.json","nativeExit":0}\n' > "$QA_OUT/types-passed.json"
+      - name: Copy complete admitted NBA JSON and retain separate actual loader helper references
+        shell: bash
+        run: |
+          set +e
+          set -uo pipefail
+          export SIM_NETWORK=offline GIT_NO_LAZY_FETCH=1
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          export SIM_OFFLINE_RECEIPT="$QA_OUT/transport/fixtures.log"
+          : > "$SIM_OFFLINE_RECEIPT"
+          node --unhandled-rejections=strict scripts/qa/nbaHistoricalDraftFixtures.mjs --out "$QA_OUT/native-fixtures" --dist "$QA_DIST" --build "$QA_REF/build" --outcomes "$QA_REF/outcomes" --spec scripts/qa/nbaHistoricalDraftNative.json > "$QA_OUT/logs/fixtures.log" 2>&1
+          native_exit=$?
+          printf '%s\n' "$native_exit" > "$QA_OUT/logs/fixtures.exit"
+          test "$native_exit" = 0 || exit "$native_exit"
+          test ! -s "$SIM_OFFLINE_RECEIPT" || exit 1
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import path from 'node:path';import crypto from 'node:crypto';import assert from 'node:assert/strict';
+          const dir=process.env.QA_OUT+'/native-fixtures',rows=[];for(const e of fs.readdirSync(dir,{withFileTypes:true})){assert(e.isFile());const b=fs.readFileSync(path.join(dir,e.name));rows.push({file:e.name,bytes:b.length,sha256:crypto.createHash('sha256').update(b).digest('hex')});}rows.sort((a,b)=>a.file<b.file?-1:a.file>b.file?1:0);fs.writeFileSync(process.env.QA_OUT+'/native-fixture-files-before.json',JSON.stringify(rows,null,2)+'\n',{flag:'wx'});
+          NODE
+      - name: Actual localhost asset proof and three finite native contexts
+        shell: bash
+        run: |
+          set +e
+          set -uo pipefail
+          export SIM_NETWORK=offline GIT_NO_LAZY_FETCH=1
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          export SIM_OFFLINE_RECEIPT="$QA_OUT/transport/server.log"
+          : > "$SIM_OFFLINE_RECEIPT"
+          node scripts/lib/hostLikeServer.mjs "$QA_DIST" 4173 > "$QA_OUT/logs/server.log" 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid" 2>/dev/null || true' EXIT
+          ready=0
+          for i in $(seq 1 40); do
+            if curl --fail --silent http://127.0.0.1:4173/nba-my-career > /dev/null; then ready=1; break; fi
+            sleep 0.25
+          done
+          test "$ready" = 1 || exit 1
+          export SIM_OFFLINE_RECEIPT="$QA_OUT/transport/assets-before.log"
+          : > "$SIM_OFFLINE_RECEIPT"
+          node --unhandled-rejections=strict scripts/qa/nbaHistoricalDraftAssets.mjs "$QA_OUT/native-fixtures/manifest.json" "$QA_DIST" "$QA_OUT" http://127.0.0.1:4173 before > "$QA_OUT/logs/assets-before.log" 2>&1
+          before_exit=$?
+          printf '%s\n' "$before_exit" > "$QA_OUT/logs/assets-before.exit"
+          test "$before_exit" = 0 || exit "$before_exit"
+          test ! -s "$SIM_OFFLINE_RECEIPT" || exit 1
+          export SIM_OFFLINE_RECEIPT="$QA_OUT/transport/browser.log"
+          : > "$SIM_OFFLINE_RECEIPT"
+          node --unhandled-rejections=strict scripts/qa/nbaHistoricalDraftBrowser.mjs --fixtures "$QA_OUT/native-fixtures" --dist "$QA_DIST" --out "$QA_OUT/browser" --base-url http://127.0.0.1:4173 > "$QA_OUT/logs/browser.log" 2>&1
+          browser_exit=$?
+          printf '%s\n' "$browser_exit" > "$QA_OUT/logs/browser.exit"
+          export SIM_OFFLINE_RECEIPT="$QA_OUT/transport/assets-after.log"
+          : > "$SIM_OFFLINE_RECEIPT"
+          node --unhandled-rejections=strict scripts/qa/nbaHistoricalDraftAssets.mjs "$QA_OUT/native-fixtures/manifest.json" "$QA_DIST" "$QA_OUT" http://127.0.0.1:4173 after > "$QA_OUT/logs/assets-after.log" 2>&1
+          after_exit=$?
+          printf '%s\n' "$after_exit" > "$QA_OUT/logs/assets-after.exit"
+          test "$browser_exit" = 0 || exit "$browser_exit"
+          test "$after_exit" = 0 || exit "$after_exit"
+          for receipt in server assets-before browser assets-after; do test ! -s "$QA_OUT/transport/$receipt.log" || exit 1; done
+      - name: Always hold complete source fixtures output and locks
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          git ls-files -z > "$QA_OUT/tracked-after.bin"
+          git ls-files -z | xargs -0 sha256sum > "$QA_OUT/source-after.sha256"
+          git ls-files -s > "$QA_OUT/index-after.txt"
+          git status --porcelain=v1 --untracked-files=all > "$QA_OUT/status-after.txt"
+          cp package-lock.json "$QA_OUT/lock-after.json"
+          cmp "$QA_OUT/tracked-before.bin" "$QA_OUT/tracked-after.bin"
+          cmp "$QA_OUT/source-before.sha256" "$QA_OUT/source-after.sha256"
+          cmp "$QA_OUT/index-before.txt" "$QA_OUT/index-after.txt"
+          cmp "$QA_OUT/lock-before.json" "$QA_OUT/lock-after.json"
+          test ! -s "$QA_OUT/status-before.txt"
+          test ! -s "$QA_OUT/status-after.txt"
+          if test -f "$QA_OUT/native-fixtures/manifest.json"; then
+            node --input-type=module <<'NODE'
+          import fs from 'node:fs';import path from 'node:path';import crypto from 'node:crypto';import assert from 'node:assert/strict';
+          const dir=process.env.QA_OUT+'/native-fixtures',m=JSON.parse(fs.readFileSync(dir+'/manifest.json')),sha=b=>crypto.createHash('sha256').update(b).digest('hex');
+          for(const[p,d]of Object.entries(m.sourceAfter))assert.equal(sha(fs.readFileSync(p)),d,p);
+          const expected=JSON.parse(fs.readFileSync(process.env.QA_OUT+'/native-fixture-files-before.json')),actual=[];for(const e of fs.readdirSync(dir,{withFileTypes:true})){assert(e.isFile());const b=fs.readFileSync(path.join(dir,e.name));actual.push({file:e.name,bytes:b.length,sha256:sha(b)});}actual.sort((a,b)=>a.file<b.file?-1:a.file>b.file?1:0);assert.deepEqual(actual,expected,'Every actual source gzip/decoded RAW/selected full save/preparation/reference/manifest byte held');
+          const inventory=[];function walk(rel=''){for(const e of fs.readdirSync(path.join(process.env.QA_DIST,rel),{withFileTypes:true})){const file=path.posix.join(rel,e.name);if(e.isDirectory())walk(file);else{assert(e.isFile());const b=fs.readFileSync(path.join(process.env.QA_DIST,file));inventory.push({file,bytes:b.length,sha256:sha(b)});}}}walk();inventory.sort((a,b)=>a.file<b.file?-1:a.file>b.file?1:0);assert.deepEqual(inventory,m.distBefore);assert.equal(inventory.length,849);
+          fs.writeFileSync(process.env.QA_OUT+'/source-dist-fixture-held.json',JSON.stringify({source:true,dist:849,declaredFullSaves:5,allInputAndReferenceFilesHeld:true,noAppBuild:true,noModelRun:true})+'\n',{flag:'wx'});
+          NODE
+          fi
+          printf '0\n' > "$QA_OUT/logs/final-source-holds.exit"
+      - name: Retain all native proof within the unchanged archive bound
+        id: evidence
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          tar -czf "$RUNNER_TEMP/nba-2004-native.tar.gz" -C "$QA_OUT" .
+          test "$(stat -c %s "$RUNNER_TEMP/nba-2004-native.tar.gz")" -le 50000000
+          sha256sum "$RUNNER_TEMP/nba-2004-native.tar.gz" > "$RUNNER_TEMP/nba-2004-native.tar.gz.sha256"
+      - uses: actions/upload-artifact@v4
+        if: always() && steps.evidence.outcome == 'success'
+        with:
+          name: nba-2004-native
+          path: |
+            ${{ runner.temp }}/nba-2004-native.tar.gz
+            ${{ runner.temp }}/nba-2004-native.tar.gz.sha256
+          if-no-files-found: error
+          retention-days: 14
+          compression-level: 0
