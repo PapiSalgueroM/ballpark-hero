@@ -151,7 +151,7 @@ export function themColor(usColor: string): string {
 function Surface({ frame, usColor, top }: { frame: MotionFrame<PitchFig>; usColor: string; top: boolean }) {
   const them = themColor(usColor);
   return (
-    <PitchSurface frame={frame} style={{ position: 'absolute', left: 0, width: '100%', top: top ? 0 : undefined, bottom: top ? undefined : 0 }}>
+    <PitchSurface frame={frame} lift style={{ position: 'absolute', left: 0, width: '100%', top: top ? 0 : undefined, bottom: top ? undefined : 0 }}>
       {frame.theirs.map(p => (
         <div key={p.key} className="pm-figure" data-pm-figure="opp" data-pitch-ring={p.ring ? '' : undefined} style={pitchSpot(p)}>
           <LivePitchPlayer color={them} keeper={p.keeper} pose={frame.poses[p.key]} selected={p.ring} />

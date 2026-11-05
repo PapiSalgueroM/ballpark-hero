@@ -1,0 +1,73 @@
+{
+  "schema": 1,
+  "status": "SOURCE_RECIPES_UNEXECUTED",
+  "controls": [
+    {
+      "id": "mini-surface-lift",
+      "target": "src/components/season-centre/MiniPitch.tsx",
+      "sourceSha256": "34b6b132c6ebaf4f2b91e8e28c7e0ec82fed3db74e6a0a2e0a07cbda7f297994",
+      "before": "    <PitchSurface frame={frame} lift style={{ position: 'absolute', left: 0, width: '100%', top: top ? 0 : undefined, bottom: top ? undefined : 0 }}>",
+      "after": "    <PitchSurface frame={frame} style={{ position: 'absolute', left: 0, width: '100%', top: top ? 0 : undefined, bottom: top ? undefined : 0 }}>",
+      "occurrences": 1,
+      "changedSha256": "4b54b4e812f57fbea5cf2e66a7415a0f79ccbbabe4583f39aa8e69ccce8ab97a",
+      "wholeInverseSha256": "34b6b132c6ebaf4f2b91e8e28c7e0ec82fed3db74e6a0a2e0a07cbda7f297994",
+      "testPath": "src/test/MiniPitch.height.test.tsx",
+      "ancestor": "Career mini pitch ball height",
+      "caseTitle": "draws the actual flight height and ground shadow for goals at either end",
+      "expectedAssertionMarker": "MINI_REAL_FLIGHT_HEIGHT_VISIBLE",
+      "expectedExit": 1,
+      "scope": "One actual copied production body, one declared real imported outcome case. No mutation executed locally."
+    },
+    {
+      "id": "root-build-forwarding",
+      "target": "src/components/pitch-motion/PitchMotion.tsx",
+      "sourceSha256": "53c4983e70cd48dafd66d5379937e98515288521ff9cdcb618e62cbbd5d2ad30",
+      "before": "  const plan = useMemo(() => pitchPlan({ mine, theirs, feed, span: { from: span.from, to: span.to }, kickoffs, possession, seed, build }), [planKey]);",
+      "after": "  const plan = useMemo(() => pitchPlan({ mine, theirs, feed, span: { from: span.from, to: span.to }, kickoffs, possession, seed }), [planKey]);",
+      "occurrences": 1,
+      "changedSha256": "9381cfd5d10d8f0708f8725c06d8867edf816fe5f998c893aaf486ce2ba6caea",
+      "wholeInverseSha256": "53c4983e70cd48dafd66d5379937e98515288521ff9cdcb618e62cbbd5d2ad30",
+      "testPath": "src/test/PitchMotion.build.test.tsx",
+      "ancestor": "Generic PitchMotion optional build wiring",
+      "caseTitle": "renders the supplied build plan in actual ball and figure positions",
+      "expectedAssertionMarker": "PITCH_ROOT_BUILD_REACHES_BALL",
+      "expectedExit": 1,
+      "scope": "One actual copied production body, one declared real imported outcome case. No mutation executed locally."
+    },
+    {
+      "id": "root-build-memo-dependency",
+      "target": "src/components/pitch-motion/PitchMotion.tsx",
+      "sourceSha256": "53c4983e70cd48dafd66d5379937e98515288521ff9cdcb618e62cbbd5d2ad30",
+      "before": "    [mine, theirs, feed, span.from, span.to, kickoffs, possession, seed, build],",
+      "after": "    [mine, theirs, feed, span.from, span.to, kickoffs, possession, seed],",
+      "occurrences": 1,
+      "changedSha256": "cdf32f5b61a66b2590097cc9d2d573b5fd1ece21560c1a3f438474ee80a94267",
+      "wholeInverseSha256": "53c4983e70cd48dafd66d5379937e98515288521ff9cdcb618e62cbbd5d2ad30",
+      "testPath": "src/test/PitchMotion.build.test.tsx",
+      "ancestor": "Generic PitchMotion optional build wiring",
+      "caseTitle": "replans when only build changes while all other prop references and the clock stay held",
+      "expectedAssertionMarker": "PITCH_ROOT_BUILD_ONLY_INVALIDATES_MEMO",
+      "expectedExit": 1,
+      "scope": "One actual copied production body, one declared real imported outcome case. No mutation executed locally."
+    },
+    {
+      "id": "root-surface-lift",
+      "target": "src/components/pitch-motion/PitchMotion.tsx",
+      "sourceSha256": "53c4983e70cd48dafd66d5379937e98515288521ff9cdcb618e62cbbd5d2ad30",
+      "before": "    <PitchSurface frame={frame} orientation={orientation} className={className} lift={!!build}>",
+      "after": "    <PitchSurface frame={frame} orientation={orientation} className={className}>",
+      "occurrences": 1,
+      "changedSha256": "a611e6e7882c61d9a7d60a86bcc9d9b948bc0a9101568e830ba98596d5777ff2",
+      "wholeInverseSha256": "53c4983e70cd48dafd66d5379937e98515288521ff9cdcb618e62cbbd5d2ad30",
+      "testPath": "src/test/PitchMotion.build.test.tsx",
+      "ancestor": "Generic PitchMotion optional build wiring",
+      "caseTitle": "draws the real full-motion free-kick lift when build is supplied",
+      "expectedAssertionMarker": "PITCH_ROOT_BUILD_FLIGHT_LIFT",
+      "expectedExit": 1,
+      "scope": "One actual copied production body, one declared real imported outcome case. No mutation executed locally."
+    }
+  ],
+  "baselineSource": "4d276143a74f00d1783ca100b98c987bd3fa5f5b",
+  "baselineRun": "39997001873",
+  "runtimeObserved": false
+}
