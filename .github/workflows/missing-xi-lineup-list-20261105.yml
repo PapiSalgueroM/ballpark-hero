@@ -1,0 +1,67 @@
+name: Missing XI lineup original
+on:
+  push:
+    branches: [codex/missing-xi-lineup-list-20261105]
+permissions:
+  contents: read
+jobs:
+  original:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        shell: bash
+    env:
+      SIM_NETWORK: offline
+      SIM_OFFLINE_RECEIPT: missing-xi-artifacts/offline.log
+      TZ: UTC
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Locked install and source holds
+        run: |
+          mkdir -p missing-xi-artifacts
+          git rev-parse HEAD > missing-xi-artifacts/head.txt
+          git rev-parse 'HEAD^{tree}' > missing-xi-artifacts/tree.txt
+          git ls-files -s > missing-xi-artifacts/source-before.txt
+          sha256sum package.json package-lock.json > missing-xi-artifacts/locks-before.txt
+          npm ci
+      - name: Proper app types
+        run: node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee missing-xi-artifacts/types.log
+      - name: Original four missing lineup contracts
+        run: |
+          set +e
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node node_modules/vitest/vitest.mjs run src/test/missingXiLineupView.test.tsx --maxWorkers=1 --minWorkers=1 --reporter=default --reporter=json --outputFile=missing-xi-artifacts/original.json 2>&1 | tee missing-xi-artifacts/original.log
+          sc_test_status=${PIPESTATUS[0]}
+          set -e
+          test "$sc_test_status" -eq 1
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs'; import assert from 'node:assert/strict';
+          const data=JSON.parse(fs.readFileSync('missing-xi-artifacts/original.json'));
+          const rows=data.testResults.flatMap(s=>s.assertionResults);
+          assert.equal(rows.length,4); assert.ok(rows.every(r=>r.status==='failed'));
+          for(const marker of ['CONTROLS','ORDER','READ_ONLY','REVEAL'])assert.ok(rows.some(r=>r.failureMessages.join(' ').includes('MISSING_XI_LINEUP_'+marker)));
+          assert.ok(rows.every(r=>r.failureMessages.join(' ').includes('AssertionError')));
+          console.log('Confirmed all four original lineup contracts fail at their business assertions.');
+          NODE
+      - name: Source lock and offline holds
+        if: always()
+        run: |
+          git ls-files -s > missing-xi-artifacts/source-after.txt
+          cmp missing-xi-artifacts/source-before.txt missing-xi-artifacts/source-after.txt
+          git diff --exit-code HEAD -- src scripts package.json package-lock.json
+          sha256sum package.json package-lock.json > missing-xi-artifacts/locks-after.txt
+          cmp missing-xi-artifacts/locks-before.txt missing-xi-artifacts/locks-after.txt
+          if test -f missing-xi-artifacts/offline.log; then test ! -s missing-xi-artifacts/offline.log; fi
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: missing-xi-original-${{ github.run_id }}
+          path: missing-xi-artifacts
+          retention-days: 7
+          if-no-files-found: error
