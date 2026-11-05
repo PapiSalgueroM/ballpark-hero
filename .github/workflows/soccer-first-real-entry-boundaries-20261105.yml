@@ -1,0 +1,136 @@
+name: Soccer historical entry declared boundaries
+on:
+  push:
+    branches: [codex/soccer-first-real-entry-boundaries-20261105]
+permissions:
+  contents: read
+concurrency:
+  group: soccer-first-real-entry-boundaries-20261105
+  cancel-in-progress: false
+jobs:
+  boundaries:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      CANDIDATE: 8ddca6c113a906dc774221620644a1b3c80eb6ca
+      CANDIDATE_TREE: d89e1fc39051cca6b26a55f2617ce28b2b594ccb
+      ORIGINAL_BASE: 484595fd4f7b07d24066e2de7bae5486483ae284
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+          filter: blob:none
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Bind exact candidate and three isolated QA additions
+        shell: bash
+        run: |
+          set -euo pipefail
+          QA_OUT="$RUNNER_TEMP/soccer-first-real-entry-boundaries"
+          export QA_OUT
+          echo "QA_OUT=$QA_OUT" >> "$GITHUB_ENV"
+          mkdir -p "$QA_OUT"/{history/bodies/src/lib,logs,transport,evidence}
+          test "$(git rev-parse HEAD^)" = "$CANDIDATE"
+          test "$(git rev-parse "$CANDIDATE^{tree}")" = "$CANDIDATE_TREE"
+          test "$(git hash-object scripts/qa/soccerHistoricalEntryBoundaries.mjs)" = 129a649e30e013ddc5a8540b020daa75d08f802c
+          test "$(git hash-object scripts/qa/soccerHistoricalEntryBoundaries.json)" = 19df6ffa6df9beedd1ecec8e5f6e516aa499876c
+          git diff --name-status HEAD^ HEAD > "$QA_OUT/qa-delta.txt"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const rows=fs.readFileSync(process.env.QA_OUT+'/qa-delta.txt','utf8').trim().split('\n').map(s=>s.split('\t'));
+          assert(rows.every(r=>r[0]==='A'));
+          assert.deepEqual(rows.map(r=>r[1]).sort(),['.github/workflows/soccer-first-real-entry-boundaries-20261105.yml','scripts/qa/soccerHistoricalEntryBoundaries.json','scripts/qa/soccerHistoricalEntryBoundaries.mjs']);
+          NODE
+          node --check scripts/qa/soccerHistoricalEntryBoundaries.mjs
+          git rev-parse HEAD HEAD^ 'HEAD^{tree}' > "$QA_OUT/source-identity.txt"
+          git ls-files -z | xargs -0 sha256sum > "$QA_OUT/source-before.sha256"
+          git ls-files -s > "$QA_OUT/index-before.txt"
+          git status --porcelain=v1 --untracked-files=all > "$QA_OUT/status-before.txt"
+          test ! -s "$QA_OUT/status-before.txt"
+          cp package-lock.json "$QA_OUT/package-lock-before.json"
+      - name: Prehydrate only two exact original API bodies before offline phase
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch --depth=1 --filter=blob:none origin "$ORIGINAL_BASE" > "$QA_OUT/history/fetch.log" 2>&1
+          test "$(git rev-parse "$ORIGINAL_BASE^{tree}")" = 7759bc8fa046ea9024b9c603cbbc94482c01db01
+          for file in soccerCareerEngine.ts soccerPhone.ts; do
+            git show "$ORIGINAL_BASE:src/lib/$file" > "$QA_OUT/history/bodies/src/lib/$file"
+            GIT_NO_LAZY_FETCH=1 git show "$ORIGINAL_BASE:src/lib/$file" > "$QA_OUT/history/$file.repeat"
+            cmp "$QA_OUT/history/bodies/src/lib/$file" "$QA_OUT/history/$file.repeat"
+          done
+          test "$(git hash-object "$QA_OUT/history/bodies/src/lib/soccerCareerEngine.ts")" = 94ccfb82dace9fc099c670357472732973e11d73
+          test "$(git hash-object "$QA_OUT/history/bodies/src/lib/soccerPhone.ts")" = f81e5a1b5207d776aea9594e28f130d0e8888832
+      - name: Install exact held lock
+        shell: bash
+        run: |
+          set +e
+          set -uo pipefail
+          npm ci --no-audit --no-fund > "$QA_OUT/logs/npm-ci.log" 2>&1
+          native_exit=$?
+          printf '%s\n' "$native_exit" > "$QA_OUT/logs/npm-ci.exit"
+          test "$native_exit" = 0
+      - name: Proper application types before declared branch outcomes
+        shell: bash
+        run: |
+          set +e
+          set -uo pipefail
+          export GIT_NO_LAZY_FETCH=1 SIM_NETWORK=offline
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          export SIM_OFFLINE_RECEIPT="$QA_OUT/transport/types.log"
+          : > "$SIM_OFFLINE_RECEIPT"
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json > "$QA_OUT/logs/types.log" 2>&1
+          native_exit=$?
+          printf '%s\n' "$native_exit" > "$QA_OUT/logs/types.exit"
+          test "$native_exit" = 0 || exit "$native_exit"
+          test ! -s "$SIM_OFFLINE_RECEIPT"
+      - name: Actual 45 prepared API outcomes and copied controls
+        shell: bash
+        run: |
+          set +e
+          set -uo pipefail
+          export GIT_NO_LAZY_FETCH=1 SIM_NETWORK=offline
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          export SIM_OFFLINE_RECEIPT="$QA_OUT/transport/boundaries.log"
+          : > "$SIM_OFFLINE_RECEIPT"
+          node --unhandled-rejections=strict scripts/qa/soccerHistoricalEntryBoundaries.mjs --out "$QA_OUT/evidence" --spec scripts/qa/soccerHistoricalEntryBoundaries.json --original-bodies "$QA_OUT/history/bodies" > "$QA_OUT/logs/boundaries.log" 2>&1
+          native_exit=$?
+          printf '%s\n' "$native_exit" > "$QA_OUT/logs/boundaries.exit"
+          test "$native_exit" = 0 || exit "$native_exit"
+          test ! -s "$SIM_OFFLINE_RECEIPT"
+          grep -F 'SC_ENTRY_DECLARED_BOUNDARIES_PASSED 11player+4tail paths,45actual outcomes' "$QA_OUT/logs/boundaries.log"
+      - name: Always retain full source index lock and status holds
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          git ls-files -z | xargs -0 sha256sum > "$QA_OUT/source-after.sha256"
+          git ls-files -s > "$QA_OUT/index-after.txt"
+          git status --porcelain=v1 --untracked-files=all > "$QA_OUT/status-after.txt"
+          cp package-lock.json "$QA_OUT/package-lock-after.json"
+          cmp "$QA_OUT/source-before.sha256" "$QA_OUT/source-after.sha256"
+          cmp "$QA_OUT/index-before.txt" "$QA_OUT/index-after.txt"
+          cmp "$QA_OUT/package-lock-before.json" "$QA_OUT/package-lock-after.json"
+          test ! -s "$QA_OUT/status-after.txt"
+          printf '0\n' > "$QA_OUT/logs/source-holds.exit"
+      - name: Preserve actual complete success or failure evidence
+        id: evidence
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          tar -czf "$RUNNER_TEMP/soccer-first-real-entry-boundaries.tar.gz" -C "$QA_OUT" .
+          test "$(stat -c %s "$RUNNER_TEMP/soccer-first-real-entry-boundaries.tar.gz")" -le 50000000
+          sha256sum "$RUNNER_TEMP/soccer-first-real-entry-boundaries.tar.gz" > "$RUNNER_TEMP/soccer-first-real-entry-boundaries.tar.gz.sha256"
+      - uses: actions/upload-artifact@v4
+        if: always() && steps.evidence.outcome == 'success'
+        with:
+          name: soccer-first-real-entry-boundaries
+          path: |
+            ${{ runner.temp }}/soccer-first-real-entry-boundaries.tar.gz
+            ${{ runner.temp }}/soccer-first-real-entry-boundaries.tar.gz.sha256
+          if-no-files-found: error
+          retention-days: 14
+          compression-level: 0

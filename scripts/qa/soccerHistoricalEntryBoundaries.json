@@ -1,0 +1,19 @@
+{
+  "authorization": "CANDIDATE_AFTER_OWNED_ORIGINAL_ADMITTED",
+  "candidate": "8ddca6c113a906dc774221620644a1b3c80eb6ca",
+  "tree": "d89e1fc39051cca6b26a55f2617ce28b2b594ccb",
+  "sourcePins": {
+    "src/lib/soccerHistoricalArrivals.ts": "fce537f31d51a8de78a170c57808b8d233fa54b1",
+    "src/lib/soccerCareerEngine.ts": "40edcc5051d9b4a369698ea3572eb9e8e3314f26",
+    "src/pages/SoccerCareer.tsx": "f0d77f964522f4fb86ac0cb9543b7cd06f08a9ab",
+    "src/lib/soccerPhone.ts": "cee38fc40914dad6989c66c66b29fae88203d1c8",
+    "src/components/soccer-career/PhonePanel.tsx": "f1e66d83729c4ee0343e31ca750351a5bd6c55c1",
+    "src/lib/soccerCareerSave.ts": "86ec011693fd5bc702b5e8ccec05d27775a72a76",
+    "src/lib/careerEras.ts": "e037022342382b1df9c8a5ede620d2cce480bc23",
+    "src/lib/soccerCareerOwner.ts": "ddd2c00ea4f0a2927c301a9f018f307f3c4c1bf0",
+    "src/lib/soccerOwnerGate.ts": "594c25f19c7e9258342396c792aa3112264333f4",
+    "package-lock.json": "97d6f12a052f25f400462938c241789a083f0bfe"
+  },
+  "scope": "Source-authored prepared API branches, no native/natural delivery. Root's actualoriginal b25c7b9 is prerequisite; runner assumes QA child of candidate.",
+  "originalBodies": "Prehydrate actual484 engine94cc + phonef81 to matching relative paths before offline. Outer workflow must prove all other dependency and full tracked source/index/status/lock holds."
+}
