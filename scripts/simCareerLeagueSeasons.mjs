@@ -688,7 +688,9 @@ let baseRoot = null;
 try {
   baseRoot = path.join(tmp, 'base');
   fs.mkdirSync(baseRoot, { recursive: true });
-  execSync(`git archive ${BASE} src | tar --force-local -x -C "${baseRoot.replaceAll('\\', '/')}"`, { cwd: ROOT, stdio: ['ignore', 'ignore', 'pipe'], shell: 'bash' });
+  const baseArchiveExtras = execFileSync('git', ['ls-tree', '-r', '--name-only', BASE, '--',
+    'scripts/lib/cmValueCurve.mjs', 'scripts/lib/cmAges.mjs'], { cwd: ROOT, encoding: 'utf8' }).trim().split('\n').filter(Boolean);
+  execSync(`git archive ${BASE} src ${baseArchiveExtras.join(' ')} | tar --force-local -x -C "${baseRoot.replaceAll('\\', '/')}"`, { cwd: ROOT, stdio: ['ignore', 'ignore', 'pipe'], shell: 'bash' });
 } catch (err) { fail(`git archive ${BASE} failed: ${String(err.message).slice(0, 160)}`); baseRoot = null; }
 const releasePins = release => ({ name: 'pins', setup(b) {
   b.onLoad({ filter: /soccerCareerEngine\.ts$/ }, args => {
