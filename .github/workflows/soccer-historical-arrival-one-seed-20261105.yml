@@ -1,0 +1,123 @@
+name: Soccer historical one seed public phase diagnostic
+on:
+  push:
+    branches: [codex/historical-arrival-one-seed-main536-20261105]
+permissions:
+  contents: read
+concurrency:
+  group: historical-arrival-one-seed-main536-20261105
+  cancel-in-progress: false
+jobs:
+  original-seed-measurement:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      MEASURED_PARENT: 536705b4e4be7df8a80c02ff818b04a4fe23cf3a
+      MEASURED_TREE: 8106a333f4e95ecb7f9197c98e4708ec232080b6
+      RUNNER_BLOB: 8cd04b5b25206fe123eb11cf0f83c0aaa0527f62
+      SPEC_BLOB: 536136defe0023456f534b46c584fdd089787ccd
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+          filter: blob:none
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Fail closed source binding and untouched baseline
+        shell: bash
+        run: |
+          set -euo pipefail
+          QA_OUT="$RUNNER_TEMP/soccer-historical-arrival-one-seed"
+          export QA_OUT
+          echo "QA_OUT=$QA_OUT" >> "$GITHUB_ENV"
+          mkdir -p "$QA_OUT"/{logs,transport}
+          [[ "$MEASURED_PARENT" =~ ^[a-f0-9]{40}$ ]]
+          [[ "$MEASURED_TREE" =~ ^[a-f0-9]{40}$ ]]
+          test "$(git rev-parse HEAD^)" = "$MEASURED_PARENT"
+          test "$(git rev-parse "$MEASURED_PARENT^{tree}")" = "$MEASURED_TREE"
+          test "$(git hash-object scripts/qa/soccerHistoricalArrivalOneSeed.mjs)" = "$RUNNER_BLOB"
+          test "$(git hash-object scripts/qa/soccerHistoricalArrivalOneSeed.json)" = "$SPEC_BLOB"
+          test -z "$(git status --porcelain=v1 --untracked-files=all)"
+          node --check scripts/qa/soccerHistoricalArrivalOneSeed.mjs
+          git ls-files -z > "$QA_OUT/tracked-before.bin"
+          git ls-files -z | xargs -0 sha256sum > "$QA_OUT/source-before.sha256"
+          git ls-files -s > "$QA_OUT/index-before.txt"
+          git status --porcelain=v1 --untracked-files=all > "$QA_OUT/status-before.txt"
+          cp package-lock.json "$QA_OUT/package-lock-before.json"
+          git rev-parse HEAD HEAD^ 'HEAD^{tree}' > "$QA_OUT/source-identity.txt"
+          node --version > "$QA_OUT/logs/node-version.log"
+          npm --version > "$QA_OUT/logs/npm-version.log"
+      - name: Install exact held lock
+        shell: bash
+        run: |
+          set -uo pipefail
+          npm ci --no-audit --no-fund > "$QA_OUT/logs/npm-ci.log" 2>&1
+          native_exit=$?
+          printf '%s\n' "$native_exit" > "$QA_OUT/logs/npm-ci.exit"
+          test "$native_exit" = 0
+      - name: Proper app type check offline
+        shell: bash
+        run: |
+          set -uo pipefail
+          export GIT_NO_LAZY_FETCH=1 SIM_NETWORK=offline
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          export SIM_OFFLINE_RECEIPT="$QA_OUT/transport/types.log"
+          : > "$SIM_OFFLINE_RECEIPT"
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json > "$QA_OUT/logs/types.log" 2>&1
+          native_exit=$?
+          printf '%s\n' "$native_exit" > "$QA_OUT/logs/types.exit"
+          test "$native_exit" = 0 || exit "$native_exit"
+          test ! -s "$SIM_OFFLINE_RECEIPT"
+          node --input-type=module -e 'import fs from "node:fs"; fs.writeFileSync(process.env.QA_OUT+"/types-passed.json",JSON.stringify({command:"node_modules/.bin/tsc --noEmit -p tsconfig.app.json",exit:0})+"\n",{flag:"wx"});'
+      - name: Retain one actual original public phase path and observer equivalence
+        shell: bash
+        run: |
+          set -uo pipefail
+          export GIT_NO_LAZY_FETCH=1 SIM_NETWORK=offline
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          export SIM_OFFLINE_RECEIPT="$QA_OUT/transport/probe-parent.log"
+          : > "$SIM_OFFLINE_RECEIPT"
+          node --unhandled-rejections=strict scripts/qa/soccerHistoricalArrivalOneSeed.mjs --out "$QA_OUT" --spec scripts/qa/soccerHistoricalArrivalOneSeed.json > "$QA_OUT/logs/probe.log" 2>&1
+          native_exit=$?
+          printf '%s\n' "$native_exit" > "$QA_OUT/logs/probe.exit"
+          test "$native_exit" = 0 || exit "$native_exit"
+          test ! -s "$SIM_OFFLINE_RECEIPT"
+      - name: Always retain full source lock and status holds
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          export GIT_NO_LAZY_FETCH=1
+          git ls-files -z > "$QA_OUT/tracked-after.bin"
+          git ls-files -z | xargs -0 sha256sum > "$QA_OUT/source-after.sha256"
+          git ls-files -s > "$QA_OUT/index-after.txt"
+          git status --porcelain=v1 --untracked-files=all > "$QA_OUT/status-after.txt"
+          cp package-lock.json "$QA_OUT/package-lock-after.json"
+          cmp "$QA_OUT/tracked-before.bin" "$QA_OUT/tracked-after.bin"
+          cmp "$QA_OUT/source-before.sha256" "$QA_OUT/source-after.sha256"
+          cmp "$QA_OUT/index-before.txt" "$QA_OUT/index-after.txt"
+          cmp "$QA_OUT/package-lock-before.json" "$QA_OUT/package-lock-after.json"
+          test ! -s "$QA_OUT/status-before.txt"
+          test ! -s "$QA_OUT/status-after.txt"
+          printf '0\n' > "$QA_OUT/logs/full-source-holds.exit"
+      - name: Retain all actual output in one bounded evidence archive
+        id: evidence
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          tar -czf "$RUNNER_TEMP/soccer-historical-arrival-one-seed.tar.gz" -C "$QA_OUT" .
+          test "$(stat -c %s "$RUNNER_TEMP/soccer-historical-arrival-one-seed.tar.gz")" -le 50000000
+          sha256sum "$RUNNER_TEMP/soccer-historical-arrival-one-seed.tar.gz" > "$RUNNER_TEMP/soccer-historical-arrival-one-seed.tar.gz.sha256"
+      - uses: actions/upload-artifact@v4
+        if: always() && steps.evidence.outcome == 'success'
+        with:
+          name: soccer-historical-one-seed-main536-diagnostic
+          path: |
+            ${{ runner.temp }}/soccer-historical-arrival-one-seed.tar.gz
+            ${{ runner.temp }}/soccer-historical-arrival-one-seed.tar.gz.sha256
+          if-no-files-found: error
+          retention-days: 14
+          compression-level: 0

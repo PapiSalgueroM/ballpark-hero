@@ -1,0 +1,48 @@
+{
+  "schema": 1,
+  "status": "BOUND_MEASURED_MAIN_SOURCE",
+  "bindings": {
+    "measuredParent": "536705b4e4be7df8a80c02ff818b04a4fe23cf3a",
+    "measuredTree": "8106a333f4e95ecb7f9197c98e4708ec232080b6",
+    "runnerBlob": "8cd04b5b25206fe123eb11cf0f83c0aaa0527f62"
+  },
+  "qaPaths": [
+    ".github/workflows/soccer-historical-arrival-one-seed-20261105.yml",
+    "scripts/qa/soccerHistoricalArrivalOneSeed.mjs",
+    "scripts/qa/soccerHistoricalArrivalOneSeed.json"
+  ],
+  "globalSeed": 1,
+  "actionLimit": 300,
+  "workerTimeoutMilliseconds": 120000,
+  "sourcePins": {
+    "src/lib/soccerCareerEngine.ts": "94ccfb82dace9fc099c670357472732973e11d73",
+    "src/pages/SoccerCareer.tsx": "e191a4634c44be5ebe511da0885579fdb6696dc5",
+    "src/lib/soccerCareerSave.ts": "86ec011693fd5bc702b5e8ccec05d27775a72a76",
+    "src/lib/soccerPhone.ts": "f81e5a1b5207d776aea9594e28f130d0e8888832",
+    "src/lib/soccerCareerCup.ts": "1d93842578afa4fb92ed3c012701022fbf9d2e9c",
+    "scripts/lib/offlineTransport.cjs": "0fda542a2649fe5da937c6976fd0f5b6073e74b6",
+    "package-lock.json": "97d6f12a052f25f400462938c241789a083f0bfe",
+    "package.json": "2ff64986fb76ebc51b706f2fd24765768874008a",
+    "tsconfig.app.json": "51f581dd91641b4c1f1219f646788e73cf6bf00c",
+    "src/lib/careerEras.ts": "e037022342382b1df9c8a5ede620d2cce480bc23",
+    "src/lib/soccerAwardReveal.ts": "3c2ba81b18cdf575e0d6fb70c7743b41b78d519d",
+    "src/lib/careerAwardsNight.ts": "9e93b771ca565d22c523fb4f09cb72e58cf0fed0",
+    "src/lib/soccerCareerLeague.ts": "3bf1c117da22ea2253b8dce264da1ea3a49a0517",
+    "src/lib/soccerWorldTruth.ts": "2dd8507b11ad4c588e8c6055eeab382697e2386d"
+  },
+  "scope": {
+    "kind": "One-seed read-only original behavior diagnostic, no search or qualification",
+    "entry": "Actual2005 option and real init/youth/generated-offer/accept/annual public APIs, with declared60-stat/85-potential inputs",
+    "stop": "After the real2010 ceremony reaches the public reveal callback, or before advancing2011 if that ceremony did not occur. Never inject a ballot, nominee, transfer, player marker or state outcome.",
+    "observer": "One exact in-memory phone source span, recording every actually selected transfer draw with actual year/private input seed/private post-draw seed/wanted/index and candidate-name arrays. No additional RNG draw, coefficient or product change.",
+    "proof": "Complete normal/observer value/save frames plus import/main tapes, actual2010 compact phase/ballot/judged/phone evidence, full source/status/lock and silent offline receipts. Actual copied frame parity fault must reject and fully invert.",
+    "noCredit": [
+      "No joint seed is qualified by this diagnostic",
+      "Existing strict future qualifier and old128-seed probe remain unchanged",
+      "No arrival App implementation or opt-in marker is introduced",
+      "No local runtime, artifact acquisition, 128-seed rerun, Brotli packing, build, browser or public feature result",
+      "All seven frozen Segunda tests and their RAW remain unchanged"
+    ],
+    "sourceRole": "Measured main536/tree8106. Repository source, not a transferred old869 result or an inferred browser/host claim."
+  }
+}
