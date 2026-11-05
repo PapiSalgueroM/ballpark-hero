@@ -1,0 +1,58 @@
+name: Soccer preferred league original
+on:
+  push:
+    branches:
+      - codex/soccer-transfer-league-20261105
+permissions:
+  contents: read
+jobs:
+  original:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    defaults:
+      run:
+        shell: bash
+    env:
+      SIM_NETWORK: offline
+      SIM_OFFLINE_RECEIPT: league-artifacts/offline.log
+      TZ: UTC
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Locked install and source receipt
+        run: |
+          mkdir -p league-artifacts
+          git rev-parse HEAD > league-artifacts/head.txt
+          git rev-parse 'HEAD^{tree}' > league-artifacts/tree.txt
+          git ls-files -s > league-artifacts/source-before.txt
+          sha256sum package.json package-lock.json > league-artifacts/locks-before.txt
+          npm ci
+      - name: Proper app types
+        run: node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee league-artifacts/types.log
+      - name: Original first business outcomes
+        run: |
+          export NODE_OPTIONS="--max-old-space-size=6144 --require=$PWD/scripts/lib/offlineTransport.cjs"
+          export SC_TRANSFER_LEAGUE_RAW="$PWD/league-artifacts/raw"
+          node node_modules/vitest/vitest.mjs run src/test/soccerTransferLeaguePreference.test.tsx --maxWorkers=1 --minWorkers=1 --reporter=default --reporter=json --outputFile=league-artifacts/original.json 2>&1 | tee league-artifacts/original.log
+      - name: Preserve source and offline evidence
+        if: always()
+        run: |
+          git ls-files -s > league-artifacts/source-after.txt
+          cmp league-artifacts/source-before.txt league-artifacts/source-after.txt
+          git diff --exit-code HEAD -- src scripts package.json package-lock.json
+          sha256sum package.json package-lock.json > league-artifacts/locks-after.txt
+          cmp league-artifacts/locks-before.txt league-artifacts/locks-after.txt
+          if test -f league-artifacts/offline.log; then test ! -s league-artifacts/offline.log; fi
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: soccer-league-original-${{ github.run_id }}
+          path: league-artifacts
+          retention-days: 7
+          if-no-files-found: error
