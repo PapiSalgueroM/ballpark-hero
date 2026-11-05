@@ -1,0 +1,153 @@
+name: NBA 2004 permanent regression qualification
+on:
+  push:
+    branches: [codex/nba-2004-permanent-20261105]
+permissions:
+  contents: read
+concurrency:
+  group: nba-2004-permanent-20261105
+  cancel-in-progress: false
+jobs:
+  permanent:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+          filter: blob:none
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - name: Exact isolated source and fresh evidence
+        shell: bash
+        run: |
+          set -euo pipefail
+          QA_OUT="$RUNNER_TEMP/nba-2004-permanent-$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT"
+          test ! -e "$QA_OUT"
+          mkdir -p "$QA_OUT/logs" "$QA_OUT/transport"
+          printf 'QA_OUT=%s\n' "$QA_OUT" >> "$GITHUB_ENV"
+          export QA_OUT
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import assert from 'node:assert/strict';
+          import {createHash} from 'node:crypto';
+          import {execFileSync} from 'node:child_process';
+          const git=(...args)=>execFileSync('git',args,{encoding:'utf8'}).trim();
+          const parent='4e45ee3605589aeb5a268b2e6a902fb4ff71af92';
+          const tree='5ffdee94dc4dac52922a3dc6d893abc317e578c0';
+          const pins={
+            'src/test/nbaHistoricalDraft2004.test.tsx':'f7125a290fa1e173bb9add22cb8507fb096cbe40',
+            'scripts/data/nbaHistoricalDraft2004Fixture.json':'be7ac3386bb5481e2945bef3d7a52dbe860fc765',
+            'scripts/simNbaHistoricalDraft.mjs':'ff3b7ff375943cdc3c71a6a88b734bfc0cd98a84',
+          };
+          assert.equal(git('rev-parse','HEAD^'),parent);
+          assert.equal(git('rev-parse','HEAD^^{tree}'),tree);
+          const changed=git('diff','--name-only',parent,'HEAD').split('\n').filter(Boolean).sort();
+          const expected=[...Object.keys(pins),'.github/workflows/nba-2004-permanent-20261105.yml'].sort();
+          assert.deepEqual(changed,expected,'Exactly four isolated qualification additions');
+          assert.equal(git('status','--porcelain=v1','--untracked-files=all'),'','Clean start');
+          for(const[file,pin]of Object.entries(pins)){
+            assert.match(pin,/^[a-f0-9]{40}$/,'Reviewed source binding');
+            const b=fs.readFileSync(file);
+            const blob=createHash('sha1').update('blob '+b.length+'\0').update(b).digest('hex');
+            assert.equal(blob,pin,file);
+          }
+          fs.writeFileSync(path.join(process.env.QA_OUT,'source-identity.json'),JSON.stringify({
+            parent,parentTree:tree,head:git('rev-parse','HEAD'),tree:git('rev-parse','HEAD^{tree}'),changed,pins,
+            scope:'Permanent normal/copy-alias control only. No App edit, build, browser, history fetch or model generation.',
+          },null,2)+'\n');
+          NODE
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$QA_OUT/source-before.sha256"
+          git ls-files --stage > "$QA_OUT/index-before.txt"
+          git status --porcelain=v1 --untracked-files=all > "$QA_OUT/status-before.txt"
+          sha256sum package.json package-lock.json > "$QA_OUT/locks-before.sha256"
+          cp .github/workflows/nba-2004-permanent-20261105.yml "$QA_OUT/workflow.yml"
+          node --check scripts/simNbaHistoricalDraft.mjs
+      - name: Held dependency install
+        shell: bash
+        run: |
+          set +e
+          set -uo pipefail
+          npm ci --no-audit --no-fund > "$QA_OUT/logs/install.stdout" 2> "$QA_OUT/logs/install.stderr"
+          native=$?
+          printf '%s\n' "$native" > "$QA_OUT/install.exit"
+          test "$native" -eq 0
+      - name: Proper types then normal and copied source fault
+        shell: bash
+        run: |
+          set +e
+          set -uo pipefail
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          export SIM_NETWORK=offline
+          export SIM_OFFLINE_RECEIPT="$QA_OUT/transport/wrapper.log"
+          export NBA_HISTORICAL_DRAFT_OUT="$QA_OUT/regression"
+          : > "$SIM_OFFLINE_RECEIPT"
+          node scripts/simNbaHistoricalDraft.mjs > "$QA_OUT/logs/wrapper.stdout" 2> "$QA_OUT/logs/wrapper.stderr"
+          native=$?
+          printf '%s\n' "$native" > "$QA_OUT/wrapper.exit"
+          test "$native" -eq 0
+      - name: Complete original source and silent offline hold
+        if: always()
+        shell: bash
+        run: |
+          set +e
+          set -uo pipefail
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$QA_OUT/source-after.sha256"
+          git ls-files --stage > "$QA_OUT/index-after.txt"
+          git status --porcelain=v1 --untracked-files=all > "$QA_OUT/status-after.txt"
+          sha256sum package.json package-lock.json > "$QA_OUT/locks-after.sha256"
+          cmp "$QA_OUT/source-before.sha256" "$QA_OUT/source-after.sha256" > "$QA_OUT/source-held.log" 2>&1
+          source_exit=$?
+          cmp "$QA_OUT/index-before.txt" "$QA_OUT/index-after.txt" > "$QA_OUT/index-held.log" 2>&1
+          index_exit=$?
+          cmp "$QA_OUT/locks-before.sha256" "$QA_OUT/locks-after.sha256" > "$QA_OUT/locks-held.log" 2>&1
+          lock_exit=$?
+          cmp "$QA_OUT/status-before.txt" "$QA_OUT/status-after.txt" > "$QA_OUT/status-held.log" 2>&1
+          status_exit=$?
+          printf '{"source":%s,"index":%s,"locks":%s,"status":%s}\n' "$source_exit" "$index_exit" "$lock_exit" "$status_exit" > "$QA_OUT/hold-exits.json"
+          test "$source_exit" -eq 0 && test "$index_exit" -eq 0 && test "$lock_exit" -eq 0 && test "$status_exit" -eq 0 && test ! -s "$QA_OUT/status-after.txt" || exit 1
+          test -f "$QA_OUT/transport/wrapper.log" && test ! -s "$QA_OUT/transport/wrapper.log" || exit 1
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import assert from 'node:assert/strict';
+          const out=process.env.QA_OUT;
+          assert.equal(fs.readFileSync(path.join(out,'wrapper.exit'),'utf8').trim(),'0','Actual wrapper native0');
+          const receipt=JSON.parse(fs.readFileSync(path.join(out,'regression/regression.json'),'utf8'));
+          assert.equal(receipt.status,'passed');
+          assert.equal(receipt.sourceHeld,true);
+          assert.deepEqual(receipt.changedOriginalFiles,[]);
+          assert.deepEqual(receipt.runs.map(r=>[r.name,r.exit,r.signal,r.error]),[
+            ['types',0,null,null],['normal',0,null,null],['missing-selection',1,null,null],
+          ]);
+          assert.equal(receipt.normal.cases.length,5);
+          assert(receipt.normal.cases.every(c=>c.status==='passed'));
+          assert.deepEqual(receipt.control.cases.map(c=>c.status),['failed','failed','failed','failed','passed']);
+          fs.writeFileSync(path.join(out,'qualification.json'),JSON.stringify({
+            status:'PERMANENT_NORMAL_AND_OWNED_COPY_ALIAS_CONTROL_ADMITTED',
+            normalCases:5,ownedMissingSelectionFailures:4,legacyHeld:true,properTypesExit:0,
+            fullTrackedSourceIndexLockStatusHeld:true,silentOfflineReceipt:true,
+            noAppChange:true,noBuild:true,noBrowser:true,
+          },null,2)+'\n');
+          NODE
+      - name: Bounded full evidence archive
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          pack="$QA_OUT-packed"
+          mkdir "$pack"
+          tar -czf "$pack/nba-2004-permanent.tar.gz" -C "$QA_OUT" .
+          bytes=$(stat -c '%s' "$pack/nba-2004-permanent.tar.gz")
+          test "$bytes" -le 50000000
+          sha256sum "$pack/nba-2004-permanent.tar.gz" > "$pack/nba-2004-permanent.tar.gz.sha256"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: nba-2004-permanent
+          path: ${{ env.QA_OUT }}-packed/*
+          if-no-files-found: error
+          retention-days: 7
