@@ -20259,3 +20259,16 @@ PR502 merged `05bd628b349ef7483bc5f5f537a7d10807a83f05`, exact integrated tree `
 Proper types, eight-arm outcomes, completed build/readers/caps, permanent regression and all3 native viewports passed independent review. Publication `5a2f20c5-f35d-4d81-8b16-0a7aee824fc1` used the verified merged source. Actual custom-domain proof [42052602075](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/42052602075), original artifact 13428705240, independent receipt `d71f385a5dce154ca9c588d149bca6f1160f3a9997bb53aa45e6becf8d58f498`, closes this scoped release.
 
 Master409/PL-16/SC-36/CM-04 remain partial. Existing CM47, Seasons582, baseline NFL37/NBA25 golden differences and broader automatic/source/native failures remain unwaived; no full-suite-green claim. Next: the sourced three additional Soccer Career historical entries, then actual playable team/league coverage. Existing v1/opaque saves retain their own policy.
+
+
+## 2026-11-05: SC-36 four sourced first-team entries
+
+Qualification state: published and independently qualified; SC-36 remains partial. Qualified App source: e16e9ea36fc6c9aab84d7f79d99679e5c22e8ad3.
+
+New UI-created careers using the existing pre-2009 gate select version2: Neymar2009/Santos, Kylian Mbappé2015/Monaco, Erling Haaland2016/Bryne first team, and Jude Bellingham2019/Birmingham City. SportsFeed shows sourced entry separately from the save's simulated club. Version1 stays Neymar-only; unmarked, opaque and newer starts are not backfilled. Stable IDs, the existing accented Mbappé world key and the28-name cache cap are retained. No real ratings, transfers, dialogue, extra era stars or playable-club claim is added.
+
+Actual independent seven-arm proof is7eadbca71e1e351741802f8f9e8b9ac1852e4b957ec4c6c5785c0267c03c487a. Root permanent proof393e019c8817297fa2560fbfdb9434c6e5981d3fd81601e0ed5ca9e78cb59c90 holds six normal cases, sim0 and the physical Bellingham fault's two owned failures/four held cases. Independent build811f86f066dde48ccdd7ef21ff2d2bd6582fc7bf538a2c30ab0407054899f4d3 holds20 readers,3smokes,16 unchanged caps, defaultNBA and the corrected permanentNBA wrapper. Soccer measured839.4K at the840 row; no budget was raised.
+
+Native admission: 69f420492bd29d81667ad18b3ed98209473e49f77e33a7e8f3eb6788e0acebe5. Deployment: 2d231ee7-24b2-4940-af8d-5908d26371e6. Public admission: 147361f50c8e3db9c6583009a045a7d79c22c8a680d2fadb171826ff3d3b6c89. Full source, provenance, artifact identities and the exact nine-path nonruntime bridge are in [the dated plan](plans/2026-11-05-soccer-four-first-team-entries.md).
+
+SC-36 remains partial. This does not add leagues, rosters or a complete evolving population. Next owner priority is more Soccer Career/Club Manager teams and leagues, preceded by a measured Team-picker UI cut if needed for the unchanged CM cap. CM47, LeagueSeasons582, measured NFL37/NBA25 golden differences and the separately triaged PR502 reds remain unwaived. The first SC4 build stopped at reader18; it is not relabelled green.
