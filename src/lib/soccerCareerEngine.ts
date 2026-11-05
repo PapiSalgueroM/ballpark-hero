@@ -8423,7 +8423,7 @@ export const SOCCER_RIVALRY_EVENTS: RivalryEventDef<CareerState, RivalPlayer>[] 
     id: 107, emoji: "⭐", title: "Rival Wins Champions League",
     description: (_s, r) => `${r.name} wins the Champions League. You were eliminated in the semis.`,
     consequence: "Morale -5, Motivation boost",
-    when: (s, r) => r.championsLeagues > 0 && !clubContinentalSuspended(s.currentClubCountry, s.seasons[s.seasons.length - 1]?.year ?? 2024),
+    when: (s, r) => r.championsLeagues > 0 && !clubContinentalSuspended(s.currentClubCountry, s.seasons?.[s.seasons.length - 1]?.year ?? 2024),
     apply: s => {
       s.morale = clamp(s.morale - 5, 0, 100);
       s.statBoostNextSeason = { ...s.statBoostNextSeason, physical: (s.statBoostNextSeason.physical || 0) + 1 };

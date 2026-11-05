@@ -77,7 +77,7 @@ jobs:
       - name: Existing continental appearance life and save harnesses
         if: ${{ !cancelled() && steps.build.outcome == 'success' }}
         run: |
-          ONLY=simCareerContinental,simSoccerCareerUcl,simLoanSpell,simClubSquads,simCareerLife,simSoccerCareerSaveRecovery node scripts/runAllSims.mjs --browser 2>&1 | tee club-policy-artifacts/related-sims.log
+          ONLY=simCareerRivalryEvents,simCareerContinental,simSoccerCareerUcl,simLoanSpell,simClubSquads,simCareerLife,simSoccerCareerSaveRecovery node scripts/runAllSims.mjs --browser 2>&1 | tee club-policy-artifacts/related-sims.log
       - name: All built output readers
         if: ${{ !cancelled() && steps.build.outcome == 'success' }}
         run: |

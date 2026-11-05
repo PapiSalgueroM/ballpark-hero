@@ -59,10 +59,23 @@ describe('Russian club policy in fresh and delivered event cards', () => {
       const input = fixture(country as string, year as number), original = clone(input);
       return { original, input, rival, eligible: definition.when(input, rival), description: definition.description(input, rival) };
     });
+    const partial = clone(vectors[1].input) as Partial<CareerState>;
+    expect(['seasons', 'currentClubCountry'].map(key => key in partial)).toEqual([true, true]);
+    delete partial.seasons; delete partial.currentClubCountry;
+    expect(['seasons', 'currentClubCountry'].map(key => key in partial)).toEqual([false, false]);
+    const legacyOriginal = clone(partial);
+    let legacyEligible: boolean | undefined;
+    let legacyError: { name: string; message: string } | undefined;
+    try { legacyEligible = definition.when(partial as CareerState, rival); }
+    catch (error) { legacyError = { name: (error as Error).name, message: (error as Error).message }; }
     raw('fresh-rivalry-policy', vectors);
+    raw('legacy-rivalry-context', { original: legacyOriginal, inputAfter: partial, rival, eligible: legacyEligible, error: legacyError });
     expect(vectors.map(row => row.eligible), 'SC_CLUB_POLICY_RIVALRY').toEqual([false, true, true]);
     expect(definition.when(fixture('England', 2022), { ...rival, championsLeagues: 0 })).toBe(false);
     for (const row of vectors) expect(row.input).toEqual(row.original);
+    expect(legacyError, 'SC_CLUB_POLICY_LEGACY_RIVALRY_CONTEXT').toBeUndefined();
+    expect(legacyEligible, 'SC_CLUB_POLICY_LEGACY_RIVALRY_CONTEXT').toBe(true);
+    expect(partial).toEqual(legacyOriginal);
   });
 
   it('resolves an already delivered passport choice after real codec reload through the existing catalog', () => {
