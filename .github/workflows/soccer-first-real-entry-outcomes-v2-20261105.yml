@@ -1,0 +1,169 @@
+name: Soccer first real entry four arm outcomes
+on:
+  push:
+    branches: [codex/soccer-first-real-entry-outcomes-v2-20261105]
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: soccer-first-real-entry-outcomes-v2-20261105
+  cancel-in-progress: false
+jobs:
+  outcomes:
+    runs-on: ubuntu-latest
+    timeout-minutes: 50
+    env:
+      CANDIDATE: 4571ba4ea9545dab5ef70769204034e5163d48d7
+      CANDIDATE_TREE: b38910df255daf979e74ccce34e252befccde8b3
+      ORIGINAL_BASE: 484595fd4f7b07d24066e2de7bae5486483ae284
+      TEST_BLOB: a9c74d118bad8ddaf69e0af75e8185b5a7ca6d1c
+      RUNNER_BLOB: b410fefe370fd0d0d6250f40e9fd09ac5c85fd05
+      SPEC_BLOB: 5e97dc350626a3f0cf15e3b616c97a44e21df628
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+          filter: blob:none
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Bind exact reviewed candidate and four QA additions
+        shell: bash
+        run: |
+          set -euo pipefail
+          QA_OUT="$RUNNER_TEMP/soccer-first-real-entry-outcomes"
+          QA_REF="$RUNNER_TEMP/soccer-first-real-entry-original-input"
+          export QA_OUT QA_REF
+          echo "QA_OUT=$QA_OUT" >> "$GITHUB_ENV"
+          echo "QA_REF=$QA_REF" >> "$GITHUB_ENV"
+          mkdir -p "$QA_OUT"/{logs,history,input,transport} "$QA_REF"
+          test "$(git rev-parse HEAD^)" = "$CANDIDATE"
+          test "$(git rev-parse "$CANDIDATE^{tree}")" = "$CANDIDATE_TREE"
+          test "$(git hash-object src/test/soccerHistoricalRealEntry.test.tsx)" = "$TEST_BLOB"
+          test "$(git hash-object scripts/qa/soccerHistoricalRealEntryOutcomes.mjs)" = "$RUNNER_BLOB"
+          test "$(git hash-object scripts/qa/soccerHistoricalRealEntryOutcomes.json)" = "$SPEC_BLOB"
+          git diff --name-status HEAD^ HEAD > "$QA_OUT/qa-delta.txt"
+          node --input-type=module -e 'import fs from "node:fs";import assert from "node:assert/strict";const s=JSON.parse(fs.readFileSync("scripts/qa/soccerHistoricalRealEntryOutcomes.json"));const r=fs.readFileSync(process.env.QA_OUT+"/qa-delta.txt","utf8").trim().split("\n").map(x=>x.split("\t"));assert(r.every(x=>x[0]==="A"));assert.deepEqual(r.map(x=>x[1]).sort(),s.qaPaths.slice().sort());'
+          test -z "$(git status --porcelain=v1 --untracked-files=all)"
+          node --check scripts/qa/soccerHistoricalRealEntryOutcomes.mjs
+          git ls-files -z > "$QA_OUT/tracked-before.bin"
+          git ls-files -z | xargs -0 sha256sum > "$QA_OUT/source-before.sha256"
+          git ls-files -s > "$QA_OUT/index-before.txt"
+          git status --porcelain=v1 --untracked-files=all > "$QA_OUT/status-before.txt"
+          cp package-lock.json "$QA_OUT/lock-before.json"
+          cp scripts/qa/soccerHistoricalRealEntryOutcomes.json "$QA_OUT/spec.json"
+          git rev-parse HEAD HEAD^ 'HEAD^{tree}' > "$QA_OUT/source-identity.txt"
+          node --version > "$QA_OUT/logs/node-version.log"
+          npm --version > "$QA_OUT/logs/npm-version.log"
+      - name: Prehydrate only exact original App source before offline phase
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch --depth=1 --filter=blob:none origin "$ORIGINAL_BASE" > "$QA_OUT/history/fetch.log" 2>&1
+          test "$(git rev-parse "$ORIGINAL_BASE^{tree}")" = 7759bc8fa046ea9024b9c603cbbc94482c01db01
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import crypto from 'node:crypto';
+          import assert from 'node:assert/strict';
+          import {execFileSync} from 'node:child_process';
+          const s=JSON.parse(fs.readFileSync('scripts/qa/soccerHistoricalRealEntryOutcomes.json'));
+          const blob=b=>crypto.createHash('sha1').update('blob '+b.length+'\0').update(b).digest('hex');
+          const sha=b=>crypto.createHash('sha256').update(b).digest('hex'), rows=[];
+          for(const r of s.changes.filter(r=>r.original!==null)){
+            const command=['show',s.originalParent+':'+r.path], online=execFileSync('git',command);
+            assert.equal(blob(online),r.original);
+            const offline=execFileSync('git',command,{env:{...process.env,GIT_NO_LAZY_FETCH:'1'}});
+            assert(online.equals(offline));
+            rows.push({path:r.path,command:['git',...command],bytes:online.length,blob:r.original,sha256:sha(online),noLazyRepeatExact:true});
+          }
+          assert.equal(rows.length,4);
+          fs.writeFileSync(process.env.QA_OUT+'/history/prehydrated.json',JSON.stringify({base:s.originalParent,scope:'Only four existing App bodies; added helper absent on original',rows},null,2)+'\n',{flag:'wx'});
+          NODE
+      - name: Reuse the single authenticated completed original evidence input
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          gh api repos/PapiSalgueroM/ballpark-hero/actions/runs/42001656620 > "$QA_OUT/input/run.json"
+          gh api repos/PapiSalgueroM/ballpark-hero/actions/jobs/127158101290 > "$QA_OUT/input/job.json"
+          gh api repos/PapiSalgueroM/ballpark-hero/actions/artifacts/13403295335 > "$QA_OUT/input/artifact.json"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const read=n=>JSON.parse(fs.readFileSync(process.env.QA_OUT+'/input/'+n+'.json'));
+          const r=read('run'),j=read('job'),a=read('artifact');
+          assert.equal(r.id,42001656620);assert.equal(r.status,'completed');assert.equal(r.conclusion,'success');assert.equal(r.head_sha,'3155d96a87c62343eacfdee3f8b773d9b3a2ccd6');
+          assert.equal(j.id,127158101290);assert.equal(j.run_id,r.id);assert.equal(j.conclusion,'success');assert(j.steps.some(s=>s.name==='Actual five-case original and strict owned-failure reader'&&s.conclusion==='success'));
+          assert.equal(a.id,13403295335);assert.equal(a.size_in_bytes,2968750);assert.equal(a.expired,false);assert.equal(a.workflow_run.id,r.id);
+          NODE
+          gh api repos/PapiSalgueroM/ballpark-hero/actions/artifacts/13403295335/zip > "$RUNNER_TEMP/soccer-first-real-entry-input.zip"
+          test "$(stat -c %s "$RUNNER_TEMP/soccer-first-real-entry-input.zip")" = 2968750
+          echo "694f06f869cc3badba7de100c64dc48901e014901ac85b3562c02ee10344b0ed  $RUNNER_TEMP/soccer-first-real-entry-input.zip" | sha256sum -c -
+          unzip -p "$RUNNER_TEMP/soccer-first-real-entry-input.zip" soccer-first-real-entry-original.tar.gz > "$RUNNER_TEMP/soccer-first-real-entry-input.tar.gz"
+          test "$(stat -c %s "$RUNNER_TEMP/soccer-first-real-entry-input.tar.gz")" = 2968244
+          echo "5b710f3a58fc2de2d9c5238c37487ddcdf05c5ae3543a781830b2352040c3edd  $RUNNER_TEMP/soccer-first-real-entry-input.tar.gz" | sha256sum -c -
+          tar -xzf "$RUNNER_TEMP/soccer-first-real-entry-input.tar.gz" -C "$QA_REF"
+          cp "$QA_REF/original-admitted.json" "$QA_OUT/input/first-original-admitted.json"
+          cp "$QA_REF/cases.json" "$QA_OUT/input/first-original-cases.json"
+          printf '%s\n' '13403295335 2968750 694f06f869cc3badba7de100c64dc48901e014901ac85b3562c02ee10344b0ed' > "$QA_OUT/input/zip-pin.txt"
+          printf '%s\n' 'soccer-first-real-entry-original.tar.gz 2968244 5b710f3a58fc2de2d9c5238c37487ddcdf05c5ae3543a781830b2352040c3edd' > "$QA_OUT/input/tgz-pin.txt"
+      - name: Install exact held original lock
+        shell: bash
+        run: |
+          set +e
+          set -uo pipefail
+          npm ci --no-audit --no-fund > "$QA_OUT/logs/npm-ci.log" 2>&1
+          native_exit=$?
+          printf '%s\n' "$native_exit" > "$QA_OUT/logs/npm-ci.exit"
+          test "$native_exit" = 0
+      - name: Four actual proper-type test reader arms with original App restoration
+        shell: bash
+        run: |
+          set +e
+          set -uo pipefail
+          export GIT_NO_LAZY_FETCH=1 SIM_NETWORK=offline
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          export SIM_OFFLINE_RECEIPT="$QA_OUT/transport/controller.log"
+          : > "$SIM_OFFLINE_RECEIPT"
+          node --unhandled-rejections=strict scripts/qa/soccerHistoricalRealEntryOutcomes.mjs --out "$QA_OUT" --spec scripts/qa/soccerHistoricalRealEntryOutcomes.json --original-evidence "$QA_REF" > "$QA_OUT/logs/controller.stdout.log" 2> "$QA_OUT/logs/controller.stderr.log"
+          native_exit=$?
+          printf '%s\n' "$native_exit" > "$QA_OUT/logs/controller.exit"
+          test "$native_exit" = 0 || exit "$native_exit"
+          test ! -s "$SIM_OFFLINE_RECEIPT" || exit 1
+      - name: Always preserve whole final source index lock and status holds
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          git ls-files -z > "$QA_OUT/tracked-after.bin"
+          git ls-files -z | xargs -0 sha256sum > "$QA_OUT/source-after.sha256"
+          git ls-files -s > "$QA_OUT/index-after.txt"
+          git status --porcelain=v1 --untracked-files=all > "$QA_OUT/status-after.txt"
+          cp package-lock.json "$QA_OUT/lock-after.json"
+          cmp "$QA_OUT/tracked-before.bin" "$QA_OUT/tracked-after.bin"
+          cmp "$QA_OUT/source-before.sha256" "$QA_OUT/source-after.sha256"
+          cmp "$QA_OUT/index-before.txt" "$QA_OUT/index-after.txt"
+          cmp "$QA_OUT/lock-before.json" "$QA_OUT/lock-after.json"
+          test ! -s "$QA_OUT/status-before.txt"
+          test ! -s "$QA_OUT/status-after.txt"
+          printf '0\n' > "$QA_OUT/logs/full-source-holds.exit"
+      - name: Retain all actual outcomes within held archive bound
+        id: evidence
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          tar -czf "$RUNNER_TEMP/soccer-first-real-entry-outcomes.tar.gz" -C "$QA_OUT" .
+          test "$(stat -c %s "$RUNNER_TEMP/soccer-first-real-entry-outcomes.tar.gz")" -le 50000000
+          sha256sum "$RUNNER_TEMP/soccer-first-real-entry-outcomes.tar.gz" > "$RUNNER_TEMP/soccer-first-real-entry-outcomes.tar.gz.sha256"
+      - uses: actions/upload-artifact@v4
+        if: always() && steps.evidence.outcome == 'success'
+        with:
+          name: soccer-first-real-entry-four-arm-outcomes
+          path: |
+            ${{ runner.temp }}/soccer-first-real-entry-outcomes.tar.gz
+            ${{ runner.temp }}/soccer-first-real-entry-outcomes.tar.gz.sha256
+          if-no-files-found: error
+          retention-days: 14
+          compression-level: 0
