@@ -1,0 +1,320 @@
+name: Soccer four-cohort normal build with row-anchor compatibility
+on:
+  push:
+    branches: [codex/soccer-four-cohort-build-v2-20261105]
+permissions:
+  contents: read
+concurrency:
+  group: soccer-four-cohort-build-anchor-${{ github.ref }}
+  cancel-in-progress: false
+env:
+  CI: '1'
+  SIM_NETWORK: offline
+  TZ: UTC
+  PRODUCT_CORE: a9e56ff706ea71a51d3ec60438023ed9ad4d3b01
+  PRODUCT_TREE: 316d2084d15d5e24aff38e5a692b639432b3eb98
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      ENGINES: chromium
+      SEO_SPLIT_BASE_REF: HEAD
+      SWEEP_OFFLINE: '1'
+      PLAYWRIGHT_BROWSERS_PATH: /home/runner/.cache/ms-playwright
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 3
+          filter: blob:none
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: '1.4.4'
+      - name: Bind clean product and unchanged build inputs
+        run: |
+          set -euo pipefail
+          OUT="$RUNNER_TEMP/soccer-four-cohort-build"
+          mkdir -p "$OUT/logs" "$OUT/transport"
+          echo "QA_OUT=$OUT" >> "$GITHUB_ENV"
+          export QA_OUT="$OUT"
+          test "$(git rev-parse HEAD^)" = "$PRODUCT_CORE"
+          test "$(git rev-parse HEAD^^{tree})" = "$PRODUCT_TREE"
+          test "$(git diff --name-status HEAD^ HEAD)" = $'A\t.github/workflows/soccer-four-cohort-build-v2-20261105.yml\nM\tscripts/simNbaHistoricalDraft.mjs'
+          git rev-parse HEAD HEAD^{tree} > "$OUT/source.txt"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$OUT/source-before.sha256"
+          git ls-files -s > "$OUT/index-before.txt"
+          git ls-files -z > "$OUT/tracked-before.bin"
+          for lock in package.json package-lock.json bun.lock bun.lockb; do if test -f "$lock"; then sha256sum "$lock"; fi; done > "$OUT/locks-before.sha256"
+          git status --porcelain=v1 --untracked-files=all > "$OUT/status-before.txt"
+          test ! -s "$OUT/status-before.txt"
+          cp .github/workflows/soccer-four-cohort-build-v2-20261105.yml "$OUT/workflow.yml"
+          test "$(git hash-object scripts/sweepWeight.mjs)" = 5a92a68cc0225d5e633c19e041087e7c6c4254e8
+          test "$(git rev-parse "$PRODUCT_CORE^")" = 1acb33005073be70ba5aae0285ece5537f390f9a
+          test "$(git rev-parse "$PRODUCT_CORE^^{tree}")" = 801e4ff83cdbedc676c4308aa10ce69db835035f
+          git diff --binary "$PRODUCT_CORE^" "$PRODUCT_CORE" > "$OUT/four-app-source.patch"
+          git apply --reverse --check "$OUT/four-app-source.patch"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import crypto from 'node:crypto';import assert from 'node:assert/strict';import{execFileSync}from'node:child_process';
+          const base='1acb33005073be70ba5aae0285ece5537f390f9a',core=process.env.PRODUCT_CORE,out=process.env.QA_OUT;
+          const files=[{"path":"src/lib/soccerHistoricalArrivals.ts","beforeGitBlob":"fce537f31d51a8de78a170c57808b8d233fa54b1","afterGitBlob":"c57d5048ffbce45c33051873e799a7e79dcdc561"},{"path":"src/lib/soccerPhone.ts","beforeGitBlob":"cee38fc40914dad6989c66c66b29fae88203d1c8","afterGitBlob":"e01df0bf20e7813830eebe298c8c792b3992c078"},{"path":"src/components/soccer-career/PhonePanel.tsx","beforeGitBlob":"736bdf5a1b07ca83a30b1487f81cce52dd8208bb","afterGitBlob":"3f9a00c0ecb06fc15a820e8d6588097f7692baac"},{"path":"src/pages/SoccerCareer.tsx","beforeGitBlob":"f0d77f964522f4fb86ac0cb9543b7cd06f08a9ab","afterGitBlob":"c9cd18a50659023f0c8fab6f47a6bf86b650860f"}];
+          const edits=[{"path":"src/lib/soccerHistoricalArrivals.ts","indexUTF16":94,"oldText":"export interface SoccerHistoricalArrivals {","newText":"export const SOCCER_HISTORICAL_PLAYERS = [\n  { id: 'soccer:neymar', name: 'Neymar', entryYear: 2009, entryClub: 'Santos' },\n  { id: 'soccer:mbappe', name: 'Kylian Mbappé', entryYear: 2015, entryClub: 'Monaco' },\n  { id: 'soccer:haaland', name: 'Erling Haaland', entryYear: 2016, entryClub: 'Bryne' },\n  { id: 'soccer:bellingham', name: 'Jude Bellingham', entryYear: 2019, entryClub: 'Birmingham City' },\n] as const;\n\ntype SoccerHistoricalEntry = Pick<(typeof SOCCER_HISTORICAL_PLAYERS)[number], 'id' | 'entryYear' | 'entryClub'>;\ninterface SoccerHistoricalArrivalsV2 {\n  version: 2;\n  players: SoccerHistoricalEntry[];\n}\n\nexport type SoccerHistoricalArrivals = SoccerHistoricalArrivalsV1 | SoccerHistoricalArrivalsV2;\n\ninterface SoccerHistoricalArrivalsV1 {"},{"path":"src/lib/soccerHistoricalArrivals.ts","indexUTF16":1041,"oldText":"  const value = s.historicalArrivals;\n","newText":"  const value = s.historicalArrivals;\n  if (value?.version === 2) {\n    if (!Array.isArray(value.players) || value.players.length > SOCCER_HISTORICAL_PLAYERS.length ||\n        new Set(value.players.map(p => p?.id)).size !== value.players.length) return null;\n    return value.players.every(p => p && SOCCER_HISTORICAL_PLAYERS.some(entry =>\n      p.id === entry.id && p.entryYear === entry.entryYear && p.entryClub === entry.entryClub)) ? value : null;\n  }\n"},{"path":"src/lib/soccerHistoricalArrivals.ts","indexUTF16":1735,"oldText":"export function hasSoccerHistoricalPlayer(s: CareerState, name: string): boolean {\n","newText":"export function soccerHistoricalEntryForName(s: CareerState, name: string): SoccerHistoricalEntry | undefined {\n  const id = SOCCER_HISTORICAL_PLAYERS.find(entry => entry.name === name)?.id;\n  return readSoccerHistoricalArrivals(s)?.players.find(entry => entry.id === id);\n}\n\nexport function hasSoccerHistoricalPlayer(s: CareerState, name: string): boolean {\n  if (s.historicalArrivals?.version === 2) return !!soccerHistoricalEntryForName(s, name);\n"},{"path":"src/lib/soccerHistoricalArrivals.ts","indexUTF16":2458,"oldText":"  const arrivals = readSoccerHistoricalArrivals(s);\n","newText":"  const arrivals = readSoccerHistoricalArrivals(s);\n  if (arrivals?.version === 2) {\n    if (!Number.isSafeInteger(year) || !s.phone) return;\n    const added = SOCCER_HISTORICAL_PLAYERS.filter(entry => entry.entryYear <= year &&\n      !arrivals.players.some(player => player.id === entry.id));\n    const players = [...arrivals.players, ...added.map(({ id, entryYear, entryClub }) => ({ id, entryYear, entryClub }))];\n    const clubs = { ...s.phone.clubs };\n    const protectedNames = SOCCER_HISTORICAL_PLAYERS.filter(entry => players.some(player => player.id === entry.id));\n    for (const entry of protectedNames) {\n      if (added.some(player => player.id === entry.id) || !clubs[entry.name]) clubs[entry.name] = entry.entryClub;\n    }\n    const drop = Object.keys(clubs).filter(name => !protectedNames.some(entry => entry.name === name))\n      .slice(0, Math.max(0, Object.keys(clubs).length - MAX_WORLD_NAMES));\n    for (const name of drop) delete clubs[name];\n    s.historicalArrivals = { ...arrivals, players };\n    s.phone = { ...s.phone, clubs };\n    return;\n  }\n"},{"path":"src/pages/SoccerCareer.tsx","indexUTF16":76918,"oldText":"if (startYear < 2009) newCareer.historicalArrivals = { version: 1, players: [] };","newText":"if (startYear < 2009) newCareer.historicalArrivals = { version: 2, players: [] };"},{"path":"src/lib/soccerPhone.ts","indexUTF16":0,"oldText":"import { MAX_WORLD_NAMES, hasSoccerHistoricalPlayer, readSoccerHistoricalArrivals } from './soccerHistoricalArrivals';","newText":"import { MAX_WORLD_NAMES, hasSoccerHistoricalPlayer, readSoccerHistoricalArrivals, soccerHistoricalEntryForName } from './soccerHistoricalArrivals';"},{"path":"src/lib/soccerPhone.ts","indexUTF16":98182,"oldText":"  for (const st of stars) {\n    const entry = hasSoccerHistoricalPlayer(s, st.name) ? readSoccerHistoricalArrivals(s)!.players[0] : undefined;\n","newText":"  for (const st of stars) {\n    if (s.historicalArrivals?.version === 2) {\n      const entry = soccerHistoricalEntryForName(s, st.name);\n      if ((realNames && !entry) || !p.clubs[st.name]) p.clubs[st.name] = entry?.entryClub ?? st.club;\n      continue;\n    }\n    const entry = hasSoccerHistoricalPlayer(s, st.name) ? readSoccerHistoricalArrivals(s)!.players[0] : undefined;\n"},{"path":"src/components/soccer-career/PhonePanel.tsx","indexUTF16":1240,"oldText":"import { readSoccerHistoricalArrivals } from \"@/lib/soccerHistoricalArrivals\";","newText":"import { readSoccerHistoricalArrivals, SOCCER_HISTORICAL_PLAYERS } from \"@/lib/soccerHistoricalArrivals\";"},{"path":"src/components/soccer-career/PhonePanel.tsx","indexUTF16":20801,"oldText":"{readSoccerHistoricalArrivals(career)?.players.length === 1 && (","newText":"{career.historicalArrivals?.version !== 2 && readSoccerHistoricalArrivals(career)?.players.length === 1 && ("},{"path":"src/components/soccer-career/PhonePanel.tsx","indexUTF16":21869,"oldText":"                {feed.length === 0 && <p className=\"text-center text-xs text-white/50 py-8\">Quiet window. Check back after the season.</p>}","newText":"                {career.historicalArrivals?.version === 2 && !!readSoccerHistoricalArrivals(career)?.players.length && (\n                  <section aria-label=\"Real player arrivals\" className=\"rounded-lg bg-white/5 border border-white/10 px-3 py-2 text-[11px] leading-snug space-y-2\">\n                    {readSoccerHistoricalArrivals(career)!.players.map(player => {\n                      const entry = SOCCER_HISTORICAL_PLAYERS.find(row => row.id === player.id)!;\n                      return <div key={player.id} className=\"space-y-1\">\n                        <p className=\"font-bold\">{entry.name}</p>\n                        <p>First-team entry: {player.entryYear} at {player.entryClub}.</p>\n                        <p>Career world: {worldClubOf(career, entry.name) ?? 'Not recorded'}. This club belongs to your save. Development and results are simulated.</p>\n                        <p className=\"text-white/60\">Calendar year entry. Sources: {HISTORICAL_ENTRY_SOURCES[player.id].map(([href, label], i) =>\n                          <span key={href}>{i > 0 && ', '}<a className=\"underline\" href={href} target=\"_blank\" rel=\"noreferrer\">{label}</a></span>)}.</p>\n                      </div>;\n                    })}\n                  </section>\n                )}\n                {feed.length === 0 && <p className=\"text-center text-xs text-white/50 py-8\">Quiet window. Check back after the season.</p>}"},{"path":"src/components/soccer-career/PhonePanel.tsx","indexUTF16":4962,"oldText":"export default function PhonePanel(","newText":"const HISTORICAL_ENTRY_SOURCES = {\n  'soccer:neymar': [\n    ['https://www.santosfc.com.br/memoria-em-partida-oficial-neymar-fazia-a-estreia-com-a-camisa-do-santos-fc/', 'Santos FC'],\n    ['https://ge.globo.com/Esportes/Noticias/Times/Santos/0,,MUL1033491-9874,00.html', 'Globo'],\n  ],\n  'soccer:mbappe': [\n    ['https://www.asmonaco.com/fr/news/kylian-mbappe-fete-ses-cinq-ans-en-pro', 'AS Monaco'],\n    ['https://kylianmbappe.com/saison-2015-2016/', 'Kylian Mbappe'],\n  ],\n  'soccer:haaland': [\n    ['https://www.brynefk.no/nyheter/kan-vi-sla-ranheim', 'Bryne FK'],\n    ['https://es.mancity.com/news/mens/carrera-erling-haaland-63815180', 'Manchester City'],\n  ],\n  'soccer:bellingham': [\n    ['https://www.englandfootball.com/england/mens-senior-team/squad/jude-bellingham', 'England Football'],\n    ['https://www.realmadrid.com/en-US/news/football/first-team/latest-news/bellingham-is-a-new-real-madrid-player', 'Real Madrid'],\n  ],\n} as const;\n\nexport default function PhonePanel("}];
+          const actual=execFileSync('git',['diff','--name-only',base,core],{encoding:'utf8'}).trim().split('\n').sort();
+          assert.deepEqual(actual,files.map(row=>row.path).sort());
+          const gitBlob=value=>crypto.createHash('sha1').update(Buffer.concat([Buffer.from('blob '+Buffer.byteLength(value)+'\0'),Buffer.from(value)])).digest('hex');
+          const rows=files.map(file=>{
+            const current=fs.readFileSync(file.path,'utf8');assert.equal(gitBlob(current),file.afterGitBlob);
+            let restored=current;const own=edits.filter(edit=>edit.path===file.path);
+            for(const edit of own.toReversed()){
+              const at=restored.indexOf(edit.newText);assert.equal(at,edit.indexUTF16);assert.equal(restored.indexOf(edit.newText,at+edit.newText.length),-1);
+              restored=restored.slice(0,at)+edit.oldText+restored.slice(at+edit.newText.length);
+            }
+            assert.equal(gitBlob(restored),file.beforeGitBlob);assert.equal(restored,execFileSync('git',['show',base+':'+file.path],{encoding:'utf8',maxBuffer:2*1024*1024}));
+            return{...file,uniqueOperations:own.length,wholeInverseExact:true};
+          });
+          fs.writeFileSync(out+'/four-app-source-bridge.json',JSON.stringify({status:'EXACT_FOUR_APP_INVERSE_TO_ACTUAL_MAIN',base,core,operations:edits.length,rows,scope:'No pre-NBA457 assumption. All remaining tracked paths, including the three permanent NBA additions, are inherited unchanged from main1acb.'},null,2)+'\n',{flag:'wx'});
+          NODE
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import crypto from 'node:crypto';import assert from 'node:assert/strict';import{execFileSync}from'node:child_process';
+          const file='scripts/simNbaHistoricalDraft.mjs',wantBefore='ff3b7ff375943cdc3c71a6a88b734bfc0cd98a84',wantAfter='c1510bf64aef2ed0f75db10af2a00a8ae9d4163d';
+          const edit={"indexUTF16":5558,"oldText":"  const span = '  {\"id\":\"nba-draft-2004-p59\",\"pick\":59,\"name\":\"Rashad Wright\",\"families\":[\"G\"],\"dob\":\"1982-03-17\"},\\n';","newText":"  const span = '  {\"id\":\"nba-draft-2004-p59\",\"pick\":59,\"name\":\"Rashad Wright\",\"families\":[\"G\"],\"dob\":\"1982-03-17\"},';"};
+          const body=fs.readFileSync(file,'utf8'),blob=value=>crypto.createHash('sha1').update(Buffer.from('blob '+Buffer.byteLength(value)+'\0')).update(value).digest('hex');
+          assert.equal(blob(body),wantAfter);const at=body.indexOf(edit.newText);assert.equal(at,edit.indexUTF16);assert.equal(body.indexOf(edit.newText,at+edit.newText.length),-1);
+          const restored=body.slice(0,at)+edit.oldText+body.slice(at+edit.newText.length);assert.equal(blob(restored),wantBefore);
+          assert.equal(restored,execFileSync('git',['show',process.env.PRODUCT_CORE+':'+file],{encoding:'utf8',maxBuffer:1024*1024}));
+          fs.writeFileSync(process.env.QA_OUT+'/qa-harness-source-bridge.json',JSON.stringify({status:'ONE_LITERAL_HARNESS_ONLY_INVERSE',file,wantBefore,wantAfter,wholeInverse:true,rawLedgerHeld:true,assertionsAndDataHeld:true,scope:'The copied missing-selection control removes the same complete row body on LF and CRLF. The physical blank line remains. This QA-only source change does not modify the App product core, data, caps or oracle.'},null,2)+'\n',{flag:'wx'});
+          NODE
+          node --check scripts/simNbaHistoricalDraft.mjs > "$OUT/logs/harness-syntax.log" 2>&1
+          git hash-object scripts/simNbaCareer.mjs > "$OUT/nba-career-harness-blob.txt"
+          test ! -e .tmp-fx/career-records-tests.json
+          test ! -L .tmp-fx/career-records-tests.json
+          if [[ -e .tmp-fx || -L .tmp-fx ]]; then test -d .tmp-fx; test ! -L .tmp-fx; fi
+          : > "$OUT/records-leaf-owned-before.txt"
+      - name: Install held app and required build tools
+        run: |
+          set -euo pipefail
+          test "$(bun --version)" = 1.4.4
+          bun --version > "$QA_OUT/logs/bun-version.log"
+          node --version > "$QA_OUT/logs/node-version.log"
+          bun install --frozen-lockfile > "$QA_OUT/logs/bun-install.log" 2>&1
+          node -p "JSON.stringify({router:require('react-router-dom/package.json').version,vite:require('vite/package.json').version,rollup:JSON.parse(require('fs').readFileSync('node_modules/rollup/package.json','utf8')).version})" > "$QA_OUT/logs/build-versions.json"
+          git diff --exit-code HEAD -- package.json package-lock.json bun.lock bun.lockb
+          npm install --prefix "$RUNNER_TEMP/soccer-four-cohort-build-tools" --package-lock=false --no-audit --no-fund playwright@1.64.0 > "$QA_OUT/logs/playwright-install.log" 2>&1
+          test ! -e node_modules/playwright
+          test ! -e node_modules/playwright-core
+          ln -s "$RUNNER_TEMP/soccer-four-cohort-build-tools/node_modules/playwright" node_modules/playwright
+          ln -s "$RUNNER_TEMP/soccer-four-cohort-build-tools/node_modules/playwright-core" node_modules/playwright-core
+          "$RUNNER_TEMP/soccer-four-cohort-build-tools/node_modules/.bin/playwright" install --with-deps chromium > "$QA_OUT/logs/chromium-install.log" 2>&1
+          python3 -m pip install --target "$RUNNER_TEMP/soccer-four-cohort-build-python" fonttools pillow > "$QA_OUT/logs/python-install.log" 2>&1
+          echo "PYTHONPATH=$RUNNER_TEMP/soccer-four-cohort-build-python" >> "$GITHUB_ENV"
+      - name: Proper application types
+        run: |
+          set -euo pipefail
+          export GIT_NO_LAZY_FETCH=1
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          : > "$QA_OUT/transport/types.log"
+          SIM_OFFLINE_RECEIPT="$QA_OUT/transport/types.log" node_modules/.bin/tsc --noEmit -p tsconfig.app.json > "$QA_OUT/logs/types.log" 2>&1
+          printf '%s\n' '{"command":"node_modules/.bin/tsc --noEmit -p tsconfig.app.json","exit":0}' > "$QA_OUT/types-passed.json"
+          test ! -s "$QA_OUT/transport/types.log"
+      - name: Normal build, all twenty output readers and unchanged caps
+        timeout-minutes: 25
+        run: |
+          set -euo pipefail
+          export GIT_NO_LAZY_FETCH=1
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          classify_receipt() {
+            local name="$1" receipt="$2"
+            local allowed='^\[SIM_OFFLINE_BLOCK\] external browser route continue https://fonts\.(googleapis|gstatic)\.com$'
+            if [[ "$name" == sweep-weight ]]; then
+              allowed="$allowed|^\[SIM_OFFLINE_BLOCK\] external browser route continue https://flagcdn\.com$"
+            elif [[ "$name" != build ]]; then
+              if [[ -s "$receipt" ]]; then cat "$receipt"; return 1; fi
+              return 0
+            fi
+            local status=0
+            grep -Ev "$allowed" "$receipt" || status=$?
+            if [[ "$status" == 1 ]]; then return 0; fi
+            return 1
+          }
+          run_gate() {
+            local name="$1"
+            shift
+            local receipt="$QA_OUT/transport/$name.log"
+            : > "$receipt"
+            SIM_OFFLINE_RECEIPT="$receipt" "$@" 2>&1 | tee "$QA_OUT/logs/$name.log"
+            if ! classify_receipt "$name" "$receipt"; then
+              echo "Unexpected blocked transport in $name" >&2
+              return 1
+            fi
+            # Every refusal is retained and counted, never credited as zero transport.
+            if [[ -s "$receipt" ]]; then
+              wc -l "$receipt" | tee "$QA_OUT/logs/$name-blocked-attempts.txt"
+            fi
+          }
+          run_gate simSaveKeeper node scripts/simSaveKeeper.mjs
+          run_gate simHomeFront node scripts/simHomeFront.mjs
+          grep -F '7) Continue playing:' "$QA_OUT/logs/simHomeFront.log"
+          run_gate simSoccerCareerRecords node scripts/simSoccerCareerRecords.mjs
+
+          grep -F 'simSoccerCareerRecords: 12 outcome checks green, three effective controls caught' "$QA_OUT/logs/simSoccerCareerRecords.log"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import path from 'node:path';import crypto from 'node:crypto';import assert from 'node:assert/strict';
+          const out=process.env.QA_OUT,leaf=path.resolve('.tmp-fx/career-records-tests.json');
+          assert(fs.existsSync(out+'/records-leaf-owned-before.txt'));
+          const dir=fs.lstatSync(path.dirname(leaf)),stat=fs.lstatSync(leaf);
+          assert(dir.isDirectory()&&!dir.isSymbolicLink());assert(stat.isFile()&&!stat.isSymbolicLink());
+          assert.equal(fs.realpathSync(path.dirname(leaf)),path.join(fs.realpathSync('.'),'.tmp-fx'));
+          const bytes=fs.readFileSync(leaf),report=JSON.parse(bytes),rows=report.testResults.flatMap(x=>x.assertionResults);
+          assert.equal(report.numTotalTests,12);assert.equal(report.numPassedTests,11);assert.equal(report.numFailedTests,1);
+          assert.equal(rows.length,12);assert.equal(rows.filter(x=>x.status==='passed').length,11);assert.equal(rows.filter(x=>x.status==='failed').length,1);
+          const retained=out+'/records-last-control-tests.json',sha=crypto.createHash('sha256').update(bytes).digest('hex');
+          fs.writeFileSync(retained,bytes,{flag:'wx'});assert.deepEqual(fs.readFileSync(retained),bytes);
+          fs.unlinkSync(leaf);
+          fs.writeFileSync(out+'/records-output-retention.json',JSON.stringify({sourceLeaf:'.tmp-fx/career-records-tests.json',retained:'records-last-control-tests.json',bytes:bytes.length,sha256:sha,nativeSimExit:0,ordinaryNonSymlinkLeaf:true,copyReadBackExact:true,removedOnlyExactLeaf:true,meaning:'Last negative-control report, intentionally 1 failed and 11 passed. Healthy 12 outcomes and three effective controls are in the complete native log.'},null,2)+'\n');
+          NODE
+          git status --porcelain=v1 --untracked-files=all > "$QA_OUT/status-after-records.txt"
+          test ! -s "$QA_OUT/status-after-records.txt"
+          run_gate build npm run build
+          find dist -type f -print0 | sort -z | xargs -0 sha256sum > "$QA_OUT/dist-before.sha256"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import path from 'node:path';import zlib from 'node:zlib';import crypto from 'node:crypto';import assert from 'node:assert/strict';
+          const assets=fs.readdirSync('dist/assets').filter(file=>/\.(js|css)$/.test(file)).sort().map(file=>{
+            const bytes=fs.readFileSync(path.join('dist/assets',file));return{file,bytes:bytes.length,gzipBytes:zlib.gzipSync(bytes).length,sha256:crypto.createHash('sha256').update(bytes).digest('hex')};
+          });
+          const soccer=assets.filter(row=>/^SoccerCareer-.*\.js$/.test(row.file));
+          assert.equal(soccer.length,1);
+          fs.writeFileSync(process.env.QA_OUT+'/soccer-chunk-sizes.json',JSON.stringify({status:'MEASURED_BUILT_CHUNKS_NO_NEW_CAP',soccer,allBuiltAssets:assets,limits:'Individual built chunk raw/gzip sizes only. Actual route critical-body proof comes from the unchanged sweepWeight window and all16 original caps, including Soccer840KiB. No headroom or full-download total is inferred from this chunk list.'},null,2)+'\n',{flag:'wx'});
+          console.log('SC4_BUILT_CHUNK_SIZES '+JSON.stringify(soccer));
+          NODE
+          tar -czf "$QA_OUT/completed-dist.tar.gz" dist
+          sha256sum "$QA_OUT/completed-dist.tar.gz" > "$QA_OUT/completed-dist.tar.gz.sha256"
+          tar -tzf "$QA_OUT/completed-dist.tar.gz" > "$QA_OUT/completed-dist-members.txt"
+          export BASE=http://127.0.0.1:4173
+          export SWEEP_BASE="$BASE"
+          export SWEEP_OFFLINE=1
+          export SIM_OFFLINE_RECEIPT="$QA_OUT/transport/server.log"
+          : > "$SIM_OFFLINE_RECEIPT"
+          node scripts/lib/hostLikeServer.mjs dist 4173 > "$QA_OUT/logs/server.log" 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid" 2>/dev/null || true' EXIT
+          ready=0
+          for attempt in $(seq 1 40); do
+            if curl --fail --silent "$BASE/" > /dev/null; then ready=1; break; fi
+            kill -0 "$server_pid"
+            sleep 1
+          done
+          test "$ready" = 1
+          run_gate sweep-weight node scripts/sweepWeight.mjs
+          readers=(
+            simAdsense simBrand simHeadTags simHiddenPages simHubs
+            simIndexNow simIndexing simInternalLinks simNoRivalNames simPrerender
+            simPrerenderBoot simRetiredRoutes simSchema simSitemap simSnapshotAssets
+            simSiteSearch simGuideHeadings simHarnessAnchors
+          )
+          for reader in "${readers[@]}"; do
+            run_gate "$reader" node "scripts/$reader.mjs"
+          done
+          run_gate simSeoTitles node scripts/simSeoTitles.mjs
+          run_gate simSeoMetaSplit env SEO_SPLIT_ONLY=/soccer-career,/club-manager,/nba-my-career node scripts/simSeoMetaSplit.mjs
+          run_gate simNbaHistoricalDraft env NBA_HISTORICAL_DRAFT_OUT="$QA_OUT/nba-permanent" node scripts/simNbaHistoricalDraft.mjs
+          grep -F 'NBA historical draft: 5 cases passed; copied missing-selection control rejected by 4 business assertions; original source held.' "$QA_OUT/logs/simNbaHistoricalDraft.log"
+          test ! -s "$QA_OUT/transport/server.log"
+      - name: Record the one completed immutable output
+        run: |
+          set -euo pipefail
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import crypto from 'node:crypto';import assert from 'node:assert/strict';
+          const out=process.env.QA_OUT,tar=fs.readFileSync(out+'/completed-dist.tar.gz'),dist=fs.readFileSync(out+'/dist-before.sha256');
+          assert.equal(dist.toString('utf8').trim().split('\n').length,849);
+          const readers=['simAdsense','simBrand','simHeadTags','simHiddenPages','simHubs','simIndexNow','simIndexing','simInternalLinks','simNoRivalNames','simPrerender','simPrerenderBoot','simRetiredRoutes','simSchema','simSitemap','simSnapshotAssets','simSiteSearch','simGuideHeadings','simHarnessAnchors','simSeoTitles','simSeoMetaSplit'];
+          for(const name of ['simSaveKeeper','simHomeFront','simSoccerCareerRecords','build','sweep-weight','simNbaHistoricalDraft',...readers])assert(fs.statSync(out+'/logs/'+name+'.log').size>0);
+          fs.writeFileSync(out+'/build-proof.json',JSON.stringify({status:'compiled-gates-passed',product:process.env.PRODUCT_CORE,productTree:process.env.PRODUCT_TREE,normalBuilds:1,readers,readersCount:20,seoSplitScope:['/soccer-career','/club-manager','/nba-my-career'],allCapsUnchanged:true,extraCmLeagueRules:false,scope:'Four-cohort Soccer completed build qualification. All16 existing route caps including Soccer840KiB and the original measurement window are unchanged. Known wider-suite failures remain unwaived',tar:{bytes:tar.length,sha256:crypto.createHash('sha256').update(tar).digest('hex')},distInventorySHA256:crypto.createHash('sha256').update(dist).digest('hex'),distFiles:dist.toString('utf8').trim().split('\n').length,soccerChunkSizes:JSON.parse(fs.readFileSync(out+'/soccer-chunk-sizes.json','utf8')),fourAppBridge:JSON.parse(fs.readFileSync(out+'/four-app-source-bridge.json','utf8')),qaHarnessBridge:JSON.parse(fs.readFileSync(out+'/qa-harness-source-bridge.json','utf8')),native:false,public:false},null,2)+'\n');
+          console.log('SC4_COMPLETED_BUILD 1 normal build,20 output readers,16 unchanged route caps');
+          NODE
+      - name: Unchanged default NBA career harness, any native red remains unwaived
+        run: |
+          set +e
+          set -uo pipefail
+          export GIT_NO_LAZY_FETCH=1
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          export SIM_OFFLINE_RECEIPT="$QA_OUT/transport/simNbaCareer.log"
+          : > "$SIM_OFFLINE_RECEIPT"
+          node --unhandled-rejections=strict scripts/simNbaCareer.mjs > "$QA_OUT/logs/simNbaCareer.log" 2>&1
+          native_exit=$?
+          printf '%s\n' "$native_exit" > "$QA_OUT/simNbaCareer.exit" || exit 1
+          test ! -s "$SIM_OFFLINE_RECEIPT" || exit 1
+          if test "$native_exit" = 0; then
+            grep -F 'PASS: no crashes, every position produces stats, shop fully reachable, deck C reachable, era gates hold, words match effects, life cards tagged, rivalry beats honest' "$QA_OUT/logs/simNbaCareer.log" || exit 1
+          fi
+          exit "$native_exit"
+      - name: Hold complete source and completed output
+        if: always()
+        run: |
+          set -euo pipefail
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$QA_OUT/source-after.sha256"
+          cmp "$QA_OUT/source-before.sha256" "$QA_OUT/source-after.sha256"
+          git ls-files -s > "$QA_OUT/index-after.txt"
+          git ls-files -z > "$QA_OUT/tracked-after.bin"
+          for lock in package.json package-lock.json bun.lock bun.lockb; do if test -f "$lock"; then sha256sum "$lock"; fi; done > "$QA_OUT/locks-after.sha256"
+          cmp "$QA_OUT/index-before.txt" "$QA_OUT/index-after.txt"
+          cmp "$QA_OUT/tracked-before.bin" "$QA_OUT/tracked-after.bin"
+          cmp "$QA_OUT/locks-before.sha256" "$QA_OUT/locks-after.sha256"
+          git diff --exit-code HEAD > "$QA_OUT/source-diff.txt"
+          git status --porcelain=v1 --untracked-files=all > "$QA_OUT/status-after.txt"
+          test ! -s "$QA_OUT/status-after.txt"
+          if [[ -f "$QA_OUT/dist-before.sha256" ]]; then
+            find dist -type f -print0 | sort -z | xargs -0 sha256sum > "$QA_OUT/dist-after.sha256"
+            cmp "$QA_OUT/dist-before.sha256" "$QA_OUT/dist-after.sha256"
+            sha256sum --check "$QA_OUT/dist-before.sha256" > "$QA_OUT/dist-held.log"
+          fi
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const out=process.env.QA_OUT,rows=fs.readdirSync(out+'/transport').sort().map(file=>{
+            const lines=fs.readFileSync(out+'/transport/'+file,'utf8').split('\n').filter(Boolean);
+            const permitted=line=>(file==='build.log'&&/^\[SIM_OFFLINE_BLOCK\] external browser route continue https:\/\/fonts\.(googleapis|gstatic)\.com$/.test(line))||(file==='sweep-weight.log'&&(/^\[SIM_OFFLINE_BLOCK\] external browser route continue https:\/\/fonts\.(googleapis|gstatic)\.com$/.test(line)||line==='[SIM_OFFLINE_BLOCK] external browser route continue https://flagcdn.com'));
+            assert(lines.every(permitted),'Unexpected transport receipt '+file);
+            return{file,blockedAttempts:lines.length,fontBlockedAttempts:lines.filter(line=>line.includes('fonts.googleapis.com')||line.includes('fonts.gstatic.com')).length,flagBlockedAttempts:lines.filter(line=>line.endsWith('https://flagcdn.com')).length};
+          });
+          fs.writeFileSync(out+'/transport-summary.json',JSON.stringify({receipts:rows,meaning:'Declared blocked font/flag attempts are retained; no provider/font availability claim.'},null,2)+'\n');
+          fs.writeFileSync(out+'/source-output-hold.json',JSON.stringify({sourceHeld:true,indexHeld:true,trackedPathsHeld:true,locksHeld:true,status:'clean',completedDistHeld:fs.existsSync(out+'/dist-before.sha256')},null,2)+'\n');
+          NODE
+      - name: Pack bounded complete output or fatal diagnostic
+        id: pack
+        if: always()
+        run: |
+          set +e
+          set -uo pipefail
+          archive="$RUNNER_TEMP/soccer-four-cohort-build-evidence.tar.gz"
+          tar -czf "$archive" -C "$QA_OUT" . > "$RUNNER_TEMP/sc4-build-pack.log" 2>&1
+          pack_exit=$?
+          printf '%s\n' "$pack_exit" > "$QA_OUT/pack-native.exit" || exit 1
+          if [[ "$pack_exit" == 0 && -f "$archive" && "$(stat -c %s "$archive")" -le 50000000 ]]; then
+            sha256sum "$archive" > "$archive.sha256" || exit 1
+            printf 'archive=%s\n' "$archive" >> "$GITHUB_OUTPUT" || exit 1
+            exit 0
+          fi
+          printf '%s\n' 'DIAGNOSTIC_ONLY_NO_COMPLETE_OUTPUT_PROOF: full pack failed or exceeded50000000bytes' > "$QA_OUT/DIAGNOSTIC-ONLY.txt" || exit 1
+          cp "$RUNNER_TEMP/sc4-build-pack.log" "$QA_OUT/pack.log" || exit 1
+          diagnostic="$RUNNER_TEMP/soccer-four-cohort-build-diagnostic.tar.gz"
+          tar --exclude='./completed-dist.tar.gz' -czf "$diagnostic" -C "$QA_OUT" . || exit 1
+          test "$(stat -c %s "$diagnostic")" -le 50000000 || exit 1
+          sha256sum "$diagnostic" > "$diagnostic.sha256" || exit 1
+          printf 'archive=%s\n' "$diagnostic" >> "$GITHUB_OUTPUT" || exit 1
+          exit 1
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: soccer-four-cohort-build-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            ${{ steps.pack.outputs.archive }}
+            ${{ steps.pack.outputs.archive }}.sha256
+          if-no-files-found: error
+          retention-days: 30
+          compression-level: 0
