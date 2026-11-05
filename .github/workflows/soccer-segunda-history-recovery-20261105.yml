@@ -1,0 +1,107 @@
+name: Segunda three normal history replays
+on:
+  push:
+    branches: [codex/soccer-segunda-history-recovery-20261105]
+permissions:
+  contents: read
+concurrency:
+  group: soccer-segunda-history-recovery-${{ github.ref }}
+  cancel-in-progress: false
+env:
+  CI: '1'
+  TZ: UTC
+  PRODUCT_CORE: 21c858b2477ffefee89d161080345aff54e0c286
+  PRODUCT_TREE: 724ece301b467cc52d1779e160d7cdb10c512803
+  RUNNER_BLOB: 98153e442eccb45caabfd4fe3c1fcf8d88469a3f
+jobs:
+  original-current:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    strategy:
+      fail-fast: false
+      max-parallel: 3
+      matrix:
+        harness: [simCareerLeagueFinish, simCareerLeagueSeasons, simSoccerWorldTruth]
+    env:
+      HARNESS: ${{ matrix.harness }}
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 4
+          filter: blob:none
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: '1.4.4'
+      - name: Bind current source and the two temporary QA additions
+        run: |
+          set -euo pipefail
+          OUT="$RUNNER_TEMP/soccer-history-$HARNESS"
+          mkdir -p "$OUT/logs"
+          echo "QA_OUT=$OUT" >> "$GITHUB_ENV"
+          test "$(git rev-parse HEAD^)" = "$PRODUCT_CORE"
+          test "$(git rev-parse "$PRODUCT_CORE^{tree}")" = "$PRODUCT_TREE"
+          test "$(git hash-object scripts/qa/soccerSegundaHistoryRecovery.mjs)" = "$RUNNER_BLOB"
+          git diff --name-status "$PRODUCT_CORE" HEAD > "$OUT/qa-delta.txt"
+          printf '%s\n' $'A\t.github/workflows/soccer-segunda-history-recovery-20261105.yml' $'A\tscripts/qa/soccerSegundaHistoryRecovery.mjs' > "$OUT/expected-qa-delta.txt"
+          cmp "$OUT/qa-delta.txt" "$OUT/expected-qa-delta.txt"
+          git status --porcelain=v1 --untracked-files=all > "$OUT/status-before-install.txt"
+          test ! -s "$OUT/status-before-install.txt"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$OUT/source-before-install.sha256"
+      - name: Install exact held dependency versions
+        run: |
+          set -euo pipefail
+          test "$(bun --version)" = 1.4.4
+          bun --version > "$QA_OUT/logs/bun-version.log"
+          node --version > "$QA_OUT/logs/node-version.log"
+          bun install --frozen-lockfile > "$QA_OUT/logs/install.log" 2>&1
+          git diff --exit-code HEAD -- package.json package-lock.json bun.lock bun.lockb
+      - name: Prehydrate real history, then run both unchanged normal harness arms
+        run: |
+          set -uo pipefail
+          unset NODE_OPTIONS GIT_NO_LAZY_FETCH SIM_OFFLINE_RECEIPT
+          node --unhandled-rejections=strict scripts/qa/soccerSegundaHistoryRecovery.mjs --out "$QA_OUT/replay" --harness "$HARNESS" > "$QA_OUT/logs/controller.stdout.log" 2> "$QA_OUT/logs/controller.stderr.log"
+          native_exit=$?
+          printf '%s\n' "$native_exit" > "$QA_OUT/controller-native-exit.txt"
+          cat "$QA_OUT/logs/controller.stdout.log" "$QA_OUT/logs/controller.stderr.log"
+          test "$native_exit" = 0 || exit "$native_exit"
+      - name: Always verify current source restoration and silent transport
+        if: always()
+        run: |
+          set -euo pipefail
+          export GIT_NO_LAZY_FETCH=1
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$QA_OUT/source-after.sha256"
+          cmp "$QA_OUT/source-before-install.sha256" "$QA_OUT/source-after.sha256"
+          git diff --exit-code HEAD > "$QA_OUT/source-diff.txt"
+          git status --porcelain=v1 --untracked-files=all > "$QA_OUT/status-after.txt"
+          test ! -s "$QA_OUT/status-after.txt"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import path from 'node:path';import assert from 'node:assert/strict';
+          const walk=dir=>fs.readdirSync(dir,{withFileTypes:true}).flatMap(e=>e.isDirectory()?walk(path.join(dir,e.name)):[path.join(dir,e.name)]);
+          for(const file of walk(process.env.QA_OUT).filter(file=>/-transport\.log$/.test(file)))assert.equal(fs.statSync(file).size,0,file);
+          NODE
+          printf '%s\n' SC_SEGUNDA_HISTORY_RECOVERY_SOURCE_HELD > "$QA_OUT/workflow-source-held.txt"
+      - name: Retain complete bounded evidence even when a normal result is red
+        id: evidence
+        if: always()
+        run: |
+          set -euo pipefail
+          tar -czf "$RUNNER_TEMP/soccer-history-$HARNESS.tar.gz" -C "$QA_OUT" .
+          test "$(stat -c %s "$RUNNER_TEMP/soccer-history-$HARNESS.tar.gz")" -le 50000000
+          sha256sum "$RUNNER_TEMP/soccer-history-$HARNESS.tar.gz" > "$RUNNER_TEMP/soccer-history-$HARNESS.tar.gz.sha256"
+      - uses: actions/upload-artifact@v4
+        if: always() && steps.evidence.outcome == 'success'
+        with:
+          name: soccer-history-${{ matrix.harness }}-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            ${{ runner.temp }}/soccer-history-${{ matrix.harness }}.tar.gz
+            ${{ runner.temp }}/soccer-history-${{ matrix.harness }}.tar.gz.sha256
+          if-no-files-found: error
+          retention-days: 30
+          compression-level: 0
