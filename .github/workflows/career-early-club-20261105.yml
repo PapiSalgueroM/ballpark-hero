@@ -1,4 +1,4 @@
-name: Career Quiz derived search index
+name: Career Quiz verified guide reference
 on:
   push:
     branches: [codex/career-early-club-qa-20261105]
@@ -23,44 +23,49 @@ jobs:
         with:
           node-version: 24.22.1
           cache: npm
-      - name: Held source and locked dependencies
+      - name: Preserve the prior reference and source
         run: |
-          mkdir -p career-index-artifacts
-          git rev-parse HEAD > career-index-artifacts/head.txt
-          git rev-parse 'HEAD^{tree}' > career-index-artifacts/tree.txt
-          sha256sum package.json package-lock.json > career-index-artifacts/locks-before.txt
-          cp src/data/searchKeywords.json career-index-artifacts/before.json
+          mkdir -p career-guide-artifacts
+          git rev-parse HEAD > career-guide-artifacts/head.txt
+          git rev-parse 'HEAD^{tree}' > career-guide-artifacts/tree.txt
+          cp scripts/data/guideHeadingsFrozen.json career-guide-artifacts/before.json
+          sha256sum scripts/simGuideHeadings.mjs package.json package-lock.json > career-guide-artifacts/held-before.txt
           npm ci
-      - name: Generate only the derived career keyword row
+      - name: Refresh only the verified Career Quiz instructions
         run: |
-          node scripts/genSearchKeywords.mjs 2>&1 | tee career-index-artifacts/generator.log
-          cp src/data/searchKeywords.json career-index-artifacts/first.json
-          node scripts/genSearchKeywords.mjs 2>&1 | tee career-index-artifacts/generator-repeat.log
-          cmp src/data/searchKeywords.json career-index-artifacts/first.json
+          node scripts/simGuideHeadings.mjs --refresh /career 2>&1 | tee career-guide-artifacts/refresh.log
           node --input-type=module <<'NODE'
-          import assert from 'node:assert/strict'; import fs from 'node:fs'; import path from 'node:path'; import {createHash} from 'node:crypto';
-          const before=JSON.parse(fs.readFileSync('career-index-artifacts/before.json')),after=JSON.parse(fs.readFileSync('src/data/searchKeywords.json'));
-          assert.deepEqual(Object.keys(after),['v','source','k']);assert.equal(after.v,1);
-          assert.equal(Object.keys(after.k).length,133);assert.deepEqual(Object.keys(after.k),Object.keys(before.k));
-          const changed=Object.keys(after.k).filter(route=>after.k[route]!==before.k[route]);assert.deepEqual(changed,['/career']);
-          const directory='src/data/gameContent';
-          const source=createHash('sha256').update(fs.readdirSync(directory).sort().map(file=>fs.readFileSync(path.join(directory,file),'utf8').replace(/\r\n/g,'\n')).join('\n')).digest('hex').slice(0,16);
-          assert.equal(after.source,source);assert.notEqual(after.source,before.source);
-          const bytes=fs.readFileSync('src/data/searchKeywords.json'),sha256=createHash('sha256').update(bytes).digest('hex'),gitBlob=createHash('sha1').update('blob '+bytes.length+'\0').update(bytes).digest('hex');
-          fs.writeFileSync('career-index-artifacts/receipt.json',JSON.stringify({changed,routeCount:133,oldSource:before.source,source,oldCareer:before.k['/career'],newCareer:after.k['/career'],bytes:bytes.length,sha256,gitBlob},null,2));
-          console.log('PASS generated index: only Career keyword row changed,133routes held, independent hash and repeat bytes match');
+          import assert from 'node:assert/strict'; import fs from 'node:fs'; import {createHash} from 'node:crypto';
+          const old=JSON.parse(fs.readFileSync('career-guide-artifacts/before.json')),now=JSON.parse(fs.readFileSync('scripts/data/guideHeadingsFrozen.json'));
+          assert.deepEqual(Object.keys(now),Object.keys(old));assert.deepEqual(Object.keys(now.routes),Object.keys(old.routes));
+          for(const key of Object.keys(old).filter(k=>k!=='about'&&k!=='routes'))assert.deepEqual(now[key],old[key]);
+          for(const route of Object.keys(old.routes).filter(r=>r!=='/career'))assert.deepEqual(now.routes[route],old.routes[route],route+' reference held');
+          assert.deepEqual(Object.keys(now.routes['/career']),Object.keys(old.routes['/career']));
+          const changes=[];
+          for(const part of Object.keys(old.routes['/career'])) {
+            const before=old.routes['/career'][part],after=now.routes['/career'][part];assert.equal(after.length,before.length);
+            for(let i=0;i<before.length;i++)if(before[i]!==after[i])changes.push({part,index:i,before:before[i],after:after[i]});
+          }
+          const expected=[
+            {part:'howToPlay',before:'Press Give Hint to open 4 random boxes at once, as often as you like.',after:'Reveal an early club opens the earliest club box still hidden on this board for 1 box. Give Hint opens up to 4 random boxes.'},
+            {part:'rules',before:'Each hint opens exactly 4 random boxes.',after:'Reveal an early club opens 1 hidden club box, starting from the top of the board. Give Hint opens up to 4 random hidden boxes.'}
+          ];
+          assert.deepEqual(changes.map(({part,before,after})=>({part,before,after})),expected);
+          const bytes=fs.readFileSync('scripts/data/guideHeadingsFrozen.json'),sha256=createHash('sha256').update(bytes).digest('hex'),gitBlob=createHash('sha1').update('blob '+bytes.length+'\0').update(bytes).digest('hex');
+          fs.writeFileSync('career-guide-artifacts/receipt.json',JSON.stringify({route:'/career',routeCount:Object.keys(now.routes).length,changes,aboutBefore:old.about,aboutAfter:now.about,bytes:bytes.length,sha256,gitBlob},null,2));
+          console.log('PASS exact two Career instruction updates; every other reference sentence, field and route held');
           NODE
-          cp src/data/searchKeywords.json career-index-artifacts/searchKeywords.json
-      - name: Everything else held
+          cp scripts/data/guideHeadingsFrozen.json career-guide-artifacts/guideHeadingsFrozen.json
+      - name: Every other source and lock held
         if: always()
         run: |
-          git diff --exit-code HEAD -- src scripts package.json package-lock.json ':!src/data/searchKeywords.json'
-          sha256sum package.json package-lock.json > career-index-artifacts/locks-after.txt
-          cmp career-index-artifacts/locks-before.txt career-index-artifacts/locks-after.txt
+          git diff --exit-code HEAD -- src scripts package.json package-lock.json ':!scripts/data/guideHeadingsFrozen.json'
+          sha256sum scripts/simGuideHeadings.mjs package.json package-lock.json > career-guide-artifacts/held-after.txt
+          cmp career-guide-artifacts/held-before.txt career-guide-artifacts/held-after.txt
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: career-search-index-${{ github.run_id }}
-          path: career-index-artifacts
+          name: career-guide-reference-${{ github.run_id }}
+          path: career-guide-artifacts
           retention-days: 7
           if-no-files-found: error
