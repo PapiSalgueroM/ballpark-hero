@@ -1,0 +1,117 @@
+name: Segunda unfiltered project tests
+on:
+  push:
+    branches: [codex/soccer-segunda-all-tests-20261104]
+permissions:
+  contents: read
+concurrency:
+  group: soccer-segunda-all-tests-${{ github.ref }}
+  cancel-in-progress: false
+env:
+  CI: '1'
+  SIM_NETWORK: offline
+  TZ: UTC
+  PRODUCT_CORE: ebd69abeb38ebb0b93fbff71a0caf2fa453db832
+  PRODUCT_TREE: 821809914563e7830354f3567ba66ac8801cfd10
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+          filter: blob:none
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: '1.4.4'
+      - name: Bind product and clean source
+        run: |
+          set -euo pipefail
+          OUT="$RUNNER_TEMP/soccer-segunda-all-tests"
+          mkdir -p "$OUT/logs" "$OUT/transport"
+          echo "QA_OUT=$OUT" >> "$GITHUB_ENV"
+          export QA_OUT="$OUT"
+          test "$(git rev-parse HEAD^)" = "$PRODUCT_CORE"
+          test "$(git rev-parse HEAD^^{tree})" = "$PRODUCT_TREE"
+          test "$(git diff --name-status HEAD^ HEAD)" = $'A\t.github/workflows/soccer-segunda-all-tests-20261104.yml'
+          git rev-parse HEAD > "$OUT/source-head.txt"
+          git rev-parse HEAD^{tree} > "$OUT/source-tree.txt"
+          git status --porcelain --untracked-files=all > "$OUT/status-before.txt"
+          test ! -s "$OUT/status-before.txt"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import cp from 'node:child_process';import crypto from 'node:crypto';
+          const paths=cp.execFileSync('git',['ls-files','-z']).toString().split('\0').filter(Boolean);
+          const rows=Object.fromEntries(paths.map(p=>[p,{bytes:fs.statSync(p).size,sha256:crypto.createHash('sha256').update(fs.readFileSync(p)).digest('hex')}]));
+          fs.writeFileSync(process.env.QA_OUT+'/source-before.json',JSON.stringify(rows,null,2)+'\n');
+          NODE
+      - name: Install held dependencies
+        run: |
+          set -euo pipefail
+          test "$(bun --version)" = 1.4.4
+          bun --version > "$QA_OUT/logs/bun-version.log"
+          node --version > "$QA_OUT/logs/node-version.log"
+          bun install --frozen-lockfile > "$QA_OUT/logs/install.log" 2>&1
+          git diff --exit-code HEAD -- package.json package-lock.json bun.lock bun.lockb
+      - name: Proper app types and actual unfiltered project test command
+        run: |
+          set -euo pipefail
+          export GIT_NO_LAZY_FETCH=1
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          export SIM_OFFLINE_RECEIPT="$QA_OUT/transport/types.log"
+          : > "$SIM_OFFLINE_RECEIPT"
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json > "$QA_OUT/logs/types.log" 2>&1
+          printf '%s\n' '{"command":"node_modules/.bin/tsc --noEmit -p tsconfig.app.json","exit":0}' > "$QA_OUT/types-passed.json"
+          test ! -s "$SIM_OFFLINE_RECEIPT"
+          export SIM_OFFLINE_RECEIPT="$QA_OUT/transport/all-tests.log"
+          : > "$SIM_OFFLINE_RECEIPT"
+          set +e
+          npm test -- --maxWorkers=1 --minWorkers=1 --reporter=json --outputFile="$QA_OUT/vitest-all.json" > "$QA_OUT/logs/vitest.stdout.log" 2> "$QA_OUT/logs/vitest.stderr.log"
+          native_exit=$?
+          set -e
+          printf '%s\n' "$native_exit" > "$QA_OUT/vitest-native-exit.txt"
+          export VITEST_NATIVE_EXIT="$native_exit"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const out=process.env.QA_OUT,r=JSON.parse(fs.readFileSync(out+'/vitest-all.json')),a=r.testResults.flatMap(f=>f.assertionResults);
+          const wanted=["Soccer Career Segunda canonical bridge adds the nineteen current canonical academy clubs without rewriting the old pool","Soccer Career Segunda canonical bridge places an eligible Andorran academy player and signs the actual parent first-team offer","Soccer Career Segunda canonical bridge uses canonical profiles for the twenty existing lower-world destinations and real market actions","Soccer Career Segunda canonical bridge holds historical pools Girona and the first manager-job boundary before 2026","Soccer Career Segunda canonical bridge keeps Andorra as home country while recording the scoped Spanish cup context","Soccer Career Segunda canonical bridge holds loaded neutral offer IDs complete saved frames and the partial Spanish world","Soccer Career Segunda creation bridge exposes Andorra and 2026 while retaining 2025 and starts at the shown FC Andorra academy"];
+          const summary={command:'npm test -- --maxWorkers=1 --minWorkers=1 --reporter=json --outputFile=OUT/vitest-all.json',unfiltered:true,nativeExit:Number(process.env.VITEST_NATIVE_EXIT),files:r.testResults.length,total:r.numTotalTests,passed:r.numPassedTests,failed:r.numFailedTests,pending:r.numPendingTests,todo:r.numTodoTests??0,runtimeErrors:r.numRuntimeErrors??null,failedNames:a.filter(t=>t.status==='failed').map(t=>t.fullName),newCases:wanted.map(n=>({name:n,status:a.find(t=>t.fullName===n)?.status??'missing'}))};
+          fs.writeFileSync(out+'/all-tests-summary.json',JSON.stringify(summary,null,2)+'\n');console.log(JSON.stringify(summary));
+          assert.equal(a.length,r.numTotalTests);assert(r.numTotalTests>0);assert.equal(r.numPendingTests,0);assert.equal(r.numTodoTests??0,0);
+          for(const key of ['numRuntimeErrors','numRuntimeErrorTestSuites'])if(Object.hasOwn(r,key))assert.equal(r[key],0);
+          if(Object.hasOwn(r,'unhandledErrors')){assert(Array.isArray(r.unhandledErrors));assert.equal(r.unhandledErrors.length,0);}
+          for(const n of wanted){const found=a.filter(t=>t.fullName===n);assert.equal(found.length,1);assert.equal(found[0].status,'passed');}
+          assert.equal(Number(process.env.VITEST_NATIVE_EXIT),0);assert.equal(r.numFailedTests,0);assert.equal(r.numPassedTests,r.numTotalTests);assert.equal(r.success,true);
+          NODE
+          test "$native_exit" = 0
+          test ! -s "$SIM_OFFLINE_RECEIPT"
+      - name: Hold every tracked source and lock byte
+        if: always()
+        run: |
+          set -euo pipefail
+          export GIT_NO_LAZY_FETCH=1
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import cp from 'node:child_process';import crypto from 'node:crypto';import assert from 'node:assert/strict';
+          const out=process.env.QA_OUT,before=JSON.parse(fs.readFileSync(out+'/source-before.json')),paths=cp.execFileSync('git',['ls-files','-z']).toString().split('\0').filter(Boolean);
+          const after=Object.fromEntries(paths.map(p=>[p,{bytes:fs.statSync(p).size,sha256:crypto.createHash('sha256').update(fs.readFileSync(p)).digest('hex')}]));
+          fs.writeFileSync(out+'/source-after.json',JSON.stringify(after,null,2)+'\n');assert.deepEqual(after,before);
+          const status=cp.execFileSync('git',['status','--porcelain','--untracked-files=all']).toString();fs.writeFileSync(out+'/status-after.txt',status);assert.equal(status,'');
+          const receipts=fs.readdirSync(out+'/transport').map(p=>({path:p,bytes:fs.statSync(out+'/transport/'+p).size}));assert(receipts.every(x=>x.bytes===0));
+          fs.writeFileSync(out+'/source-hold.json',JSON.stringify({tracked:paths.length,allBytesHeld:true,status:'clean',receipts},null,2)+'\n');
+          console.log('SC_SEGUNDA_ALL_TESTS_SOURCE_HELD '+paths.length+' tracked files, empty receipts, clean status');
+          NODE
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: soccer-segunda-all-tests-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ env.QA_OUT }}/
+          retention-days: 30
+          compression-level: 6
