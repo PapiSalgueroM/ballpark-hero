@@ -1,0 +1,2739 @@
+{
+  "schema": 1,
+  "verifiedAt": "2026-11-05",
+  "scope": "Real 2004 NBA draft selection identity/date and broad general roles only. Not NBA debut, signing, historical destination, exact rookie slot, rating or performance.",
+  "independence": "NBA and NBA G League count once; AP syndication counts once. Differing career roles are disclosed rather than turned into an exact rookie slot.",
+  "sources": {
+    "realgm2004": {
+      "id": "realgm2004",
+      "url": "https://basketball.realgm.com/nba/draft/past_drafts/2004",
+      "publisher": "RealGM",
+      "publisherGroup": "RealGM LLC",
+      "published": null,
+      "retrieved": "2026-11-05",
+      "access": "Direct complete first/second-round table read, lines21-92. Excludes separate undrafted table.",
+      "excerpt": "2004 NBA Draft Recap",
+      "supports": [
+        "complete class names",
+        "pick1-59",
+        "draftYear2004",
+        "draftDate2004-06-24"
+      ],
+      "completeness": {
+        "rows": 59,
+        "picksMin": 1,
+        "picksMax": 59,
+        "gaps": [],
+        "duplicates": []
+      }
+    },
+    "ap2004": {
+      "id": "ap2004",
+      "url": "https://www.deseret.com/2004/6/25/19836808/2004-nba-draft-selections/",
+      "publisher": "Associated Press, published by Deseret News",
+      "publisherGroup": "Associated Press",
+      "published": "2004-06-25",
+      "retrieved": "2026-11-05",
+      "access": "Direct complete numbered list read, lines45-151; byline Associated Press at24.",
+      "excerpt": "SECOND ROUND",
+      "supports": [
+        "complete class names",
+        "pick1-59",
+        "draftYear2004",
+        "draftDate2004-06-24"
+      ],
+      "completeness": {
+        "rows": 59,
+        "picksMin": 1,
+        "picksMax": 59,
+        "gaps": [],
+        "duplicates": []
+      },
+      "independence": "AP is the underlying reporting publisher; another AP syndication would not count independently. RealGM is a distinct publisher."
+    },
+    "AP2004": {
+      "id": "AP2004",
+      "publisher": "Associated Press via Deseret News",
+      "url": "https://www.deseret.com/2004/6/25/19836808/2004-nba-draft-selections/",
+      "published": "2004-06-25",
+      "evidenceLocation": "Rows 1 through 10, lines 45..60 in retrieved article",
+      "evidenceSummary": "Reports F, F-C, G, G, G, F, F, C, F, F respectively.",
+      "read": true
+    },
+    "p01_official": {
+      "publisher": "NBA",
+      "url": "https://www.nba.com/stats/player/2730/career",
+      "evidence": {
+        "birthDate": "1985-12-08",
+        "careerRole": "Center-Forward",
+        "draft": "2004 R1 Pick 1"
+      },
+      "read": true
+    },
+    "p01_independentDob": {
+      "publisher": "RealGM",
+      "url": "https://basketball.realgm.com/player/Dwight-Howard/Bio/376",
+      "evidence": "Dec 8, 1985",
+      "roleIfPresent": "C",
+      "read": true,
+      "location": null
+    },
+    "p02_official": {
+      "publisher": "NBA",
+      "url": "https://www.nba.com/stats/player/2731",
+      "evidence": {
+        "birthDate": "1982-09-28",
+        "careerRole": "Center",
+        "draft": "2004 R1 Pick 2"
+      },
+      "read": true
+    },
+    "p02_independentDob": {
+      "publisher": "University of Connecticut Athletics",
+      "url": "https://uconnhuskies.com/documents/download/2018/6/26/UConnRegionals.pdf",
+      "evidence": "Born September 28, 1982",
+      "roleIfPresent": null,
+      "read": true,
+      "location": "2002-03 player bio, PDF page index 40, printed page 41"
+    },
+    "p03_official": {
+      "publisher": "NBA",
+      "url": "https://www.nba.com/stats/player/2732/career",
+      "evidence": {
+        "birthDate": "1983-04-04",
+        "careerRole": "Guard",
+        "draft": "2004 R1 Pick 3"
+      },
+      "read": true
+    },
+    "p03_independentDob": {
+      "publisher": "FIBA",
+      "url": "https://www.fiba.basketball/en/players/166174-ben-gordon",
+      "evidence": "Apr 4, 1983",
+      "roleIfPresent": null,
+      "read": true,
+      "location": null
+    },
+    "p04_official": {
+      "publisher": "NBA",
+      "url": "https://www.nba.com/stats/player/2733/career",
+      "evidence": {
+        "birthDate": "1985-09-11",
+        "careerRole": "Guard",
+        "draft": "2004 R1 Pick 4"
+      },
+      "read": true
+    },
+    "p04_independentDob": {
+      "publisher": "RealGM",
+      "url": "https://basketball.realgm.com/player/Shaun-Livingston/Bio/377",
+      "evidence": "Sep 11, 1985",
+      "roleIfPresent": "G",
+      "read": true,
+      "location": null
+    },
+    "p05_official": {
+      "publisher": "NBA",
+      "url": "https://www.nba.com/stats/player/2734/career",
+      "evidence": {
+        "birthDate": "1983-02-27",
+        "careerRole": "Guard",
+        "draft": "2004 R1 Pick 5"
+      },
+      "read": true
+    },
+    "p05_independentDob": {
+      "publisher": "RealGM",
+      "url": "https://basketball.realgm.com/player/Devin-Harris/Summary/276",
+      "evidence": "Feb 27, 1983",
+      "roleIfPresent": "G",
+      "read": true,
+      "location": null
+    },
+    "p06_official": {
+      "publisher": "NBA",
+      "url": "https://www.nba.com/stats/player/2735",
+      "evidence": {
+        "birthDate": "1983-06-20",
+        "careerRole": "Forward-Guard",
+        "draft": "2004 R1 Pick 6"
+      },
+      "read": true
+    },
+    "p06_independentDob": {
+      "publisher": "RealGM",
+      "url": "https://basketball.realgm.com/player/Josh-Childress/Bio/310",
+      "evidence": "Jun 20, 1983",
+      "roleIfPresent": "SF",
+      "read": true,
+      "location": null
+    },
+    "p07_official": {
+      "publisher": "NBA",
+      "url": "https://www.nba.com/stats/player/2736",
+      "evidence": {
+        "birthDate": "1985-04-16",
+        "careerRole": "Forward",
+        "draft": "2004 R1 Pick 7"
+      },
+      "read": true
+    },
+    "p07_independentDob": {
+      "publisher": "FIBA",
+      "url": "https://www.fiba.basketball/en/players/135716-luol-deng",
+      "evidence": "Apr 16, 1985",
+      "roleIfPresent": null,
+      "read": true,
+      "location": null
+    },
+    "p08_official": {
+      "publisher": "NBA",
+      "url": "https://www.nba.com/stats/player/2737",
+      "evidence": {
+        "birthDate": "1980-08-12",
+        "careerRole": "Center",
+        "draft": "2004 R1 Pick 8"
+      },
+      "read": true
+    },
+    "p08_independentDob": {
+      "publisher": "RealGM",
+      "url": "https://basketball.realgm.com/info/birth-cities/278/Curitiba--Brazil",
+      "evidence": "Aug 12, 1980",
+      "roleIfPresent": "C",
+      "read": true,
+      "location": "Actual Rafael Araujo row, not the page title"
+    },
+    "p09_official": {
+      "publisher": "NBA",
+      "url": "https://www.nba.com/stats/player/2738/career",
+      "evidence": {
+        "birthDate": "1984-01-28",
+        "careerRole": "Guard-Forward",
+        "draft": "2004 R1 Pick 9"
+      },
+      "read": true
+    },
+    "p09_independentDob": {
+      "publisher": "RealGM",
+      "url": "https://basketball.realgm.com/info/birthdays/19840128/1",
+      "evidence": "Jan 28, 1984",
+      "roleIfPresent": "SF",
+      "read": true,
+      "location": null
+    },
+    "p10_official": {
+      "publisher": "NBA",
+      "url": "https://www.nba.com/stats/player/2739",
+      "evidence": {
+        "birthDate": "1981-11-06",
+        "careerRole": "Forward-Guard",
+        "draft": "2004 R1 Pick 10"
+      },
+      "read": true
+    },
+    "p10_independentDob": {
+      "publisher": "University of Oregon Athletics",
+      "url": "https://goducks.com/sports/mens-basketball/roster/luke-jackson/1904",
+      "evidence": "Born Luke Ryan Jackson November 6, 1981",
+      "roleIfPresent": "G",
+      "read": true,
+      "location": "2003-04 roster bio, PERSONAL section"
+    },
+    "rg11": {
+      "publisher": "RealGM",
+      "url": "https://basketball.realgm.com/player/Andris-Biedrins/Bio/381",
+      "access": "Direct page body",
+      "asOf": "Historical birth date; broad role at the source's reported career or roster date",
+      "dob": "1986-04-02",
+      "role": "C"
+    },
+    "official11": {
+      "publisher": "NBA",
+      "url": "https://www.nba.com/stats/player/2740/career",
+      "access": "Direct page body",
+      "asOf": "Historical birth date; broad role at the source's reported career or roster date",
+      "dob": "1986-04-02",
+      "role": "Center"
+    },
+    "rg12": {
+      "publisher": "RealGM",
+      "url": "https://basketball.realgm.com/player/Robert-Swift/Bio/290",
+      "access": "Direct page body",
+      "asOf": "Historical birth date; broad role at the source's reported career or roster date",
+      "dob": "1985-12-03",
+      "role": "C"
+    },
+    "official12": {
+      "publisher": "NBA",
+      "url": "https://www.nba.com/stats/player/2741",
+      "access": "Direct page body",
+      "asOf": "Historical birth date; broad role at the source's reported career or roster date",
+      "dob": "1985-12-03",
+      "role": "Center"
+    },
+    "rg13": {
+      "publisher": "RealGM",
+      "url": "https://basketball.realgm.com/player/Sebastian-Telfair/Bio/382",
+      "access": "Direct page body",
+      "asOf": "Historical birth date; broad role at the source's reported career or roster date",
+      "dob": "1985-06-09",
+      "role": "PG"
+    },
+    "official13": {
+      "publisher": "NBA",
+      "url": "https://www.nba.com/stats/player/2742",
+      "access": "Direct page body",
+      "asOf": "Historical birth date; broad role at the source's reported career or roster date",
+      "dob": "1985-06-09",
+      "role": "Guard"
+    },
+    "rg14": {
+      "publisher": "RealGM",
+      "url": "https://basketball.realgm.com/player/Kris-Humphries/Bio/383",
+      "access": "Direct page body",
+      "asOf": "Historical birth date; broad role at the source's reported career or roster date",
+      "dob": "1985-02-06",
+      "role": "PF"
+    },
+    "official14": {
+      "publisher": "NBA",
+      "url": "https://www.nba.com/stats/player/2743",
+      "access": "Direct page body",
+      "asOf": "Historical birth date; broad role at the source's reported career or roster date",
+      "dob": "1985-02-06",
+      "role": "Forward"
+    },
+    "rg15": {
+      "publisher": "RealGM",
+      "url": "https://basketball.realgm.com/player/Al-Jefferson/Bio/384",
+      "access": "Direct page body",
+      "asOf": "Historical birth date; broad role at the source's reported career or roster date",
+      "dob": "1985-01-04",
+      "role": "FC"
+    },
+    "official15": {
+      "publisher": "NBA",
+      "url": "https://www.nba.com/stats/player/2744",
+      "access": "Direct page body",
+      "asOf": "Historical birth date; broad role at the source's reported career or roster date",
+      "dob": "1985-01-04",
+      "role": "Center"
+    },
+    "rg16": {
+      "publisher": "RealGM",
+      "url": "https://basketball.realgm.com/player/Kirk-Snyder/Bio/385",
+      "access": "Direct page body",
+      "asOf": "Historical birth date; broad role at the source's reported career or roster date",
+      "dob": "1983-06-05",
+      "role": "F-G"
+    },
+    "official16": {
+      "publisher": "NBA",
+      "url": "https://www.nba.com/stats/player/2745",
+      "access": "Direct page body",
+      "asOf": "Historical birth date; broad role at the source's reported career or roster date",
+      "dob": "1983-06-05",
+      "role": "Forward-Guard"
+    },
+    "rg17": {
+      "publisher": "RealGM",
+      "url": "https://basketball.realgm.com/player/Josh-Smith/Bio/312",
+      "access": "Direct page body",
+      "asOf": "Historical birth date; broad role at the source's reported career or roster date",
+      "dob": "1985-12-05",
+      "role": "PF"
+    },
+    "official17": {
+      "publisher": "NBA",
+      "url": "https://www.nba.com/stats/player/2746",
+      "access": "Direct page body",
+      "asOf": "Historical birth date; broad role at the source's reported career or roster date",
+      "dob": "1985-12-05",
+      "role": "Forward"
+    },
+    "rg18": {
+      "publisher": "RealGM",
+      "url": "https://basketball.realgm.com/player/JR-Smith/Bio/386",
+      "access": "Direct page body",
+      "asOf": "Historical birth date; broad role at the source's reported career or roster date",
+      "dob": "1985-09-09",
+      "role": "SG"
+    },
+    "official18": {
+      "publisher": "NBA",
+      "url": "https://www.nba.com/stats/player/2747",
+      "access": "Direct page body",
+      "asOf": "Historical birth date; broad role at the source's reported career or roster date",
+      "dob": "1985-09-09",
+      "role": "Guard"
+    },
+    "rg19": {
+      "publisher": "RealGM",
+      "url": "https://basketball.realgm.com/player/Dorell-Wright/Bio/387",
+      "access": "Direct page body",
+      "asOf": "Historical birth date; broad role at the source's reported career or roster date",
+      "dob": "1985-12-02",
+      "role": "F"
+    },
+    "official19": {
+      "publisher": "NBA",
+      "url": "https://www.nba.com/stats/player/2748",
+      "access": "Direct page body",
+      "asOf": "Historical birth date; broad role at the source's reported career or roster date",
+      "dob": "1985-12-02",
+      "role": "Forward-Guard"
+    },
+    "rg20": {
+      "publisher": "RealGM",
+      "url": "https://basketball.realgm.com/player/Jameer-Nelson/Bio/388",
+      "access": "Direct page body",
+      "asOf": "Historical birth date; broad role at the source's reported career or roster date",
+      "dob": "1982-02-09",
+      "role": "G"
+    },
+    "official20": {
+      "publisher": "NBA",
+      "url": "https://www.nba.com/stats/player/2749",
+      "access": "Direct page body",
+      "asOf": "Historical birth date; broad role at the source's reported career or roster date",
+      "dob": "1982-02-09",
+      "role": "Guard"
+    },
+    "rg21": {
+      "publisher": "RealGM",
+      "url": "https://basketball.realgm.com/player/Pavel-Podkolzin/Bio/389",
+      "access": "Direct page body",
+      "asOf": "Historical birth date; broad role at the source's reported career or roster date",
+      "dob": "1985-01-15",
+      "role": "C"
+    },
+    "official21": {
+      "publisher": "NBA",
+      "url": "https://www.nba.com/stats/player/2750",
+      "access": "Direct page body",
+      "asOf": "Historical birth date; broad role at the source's reported career or roster date",
+      "dob": "1985-01-15",
+      "role": "Center"
+    },
+    "rg22": {
+      "publisher": "RealGM",
+      "url": "https://basketball.realgm.com/player/Viktor-Khryapa/Bio/324",
+      "access": "Direct page body",
+      "asOf": "Historical birth date; broad role at the source's reported career or roster date",
+      "dob": "1982-08-03",
+      "role": "PF"
+    },
+    "official22": {
+      "publisher": "NBA",
+      "url": "https://www.nba.com/stats/player/2751/career",
+      "access": "Direct page body",
+      "asOf": "Historical birth date; broad role at the source's reported career or roster date",
+      "dob": "1982-08-03"
+    },
+    "rg23": {
+      "publisher": "RealGM",
+      "url": "https://basketball.realgm.com/player/Sergei-Monia/Bio/390",
+      "access": "Direct page body",
+      "asOf": "Historical birth date; broad role at the source's reported career or roster date",
+      "dob": "1983-04-15",
+      "role": "PF"
+    },
+    "official23": {
+      "publisher": "NBA",
+      "url": "https://www.nba.com/stats/player/2752",
+      "access": "Direct page body",
+      "asOf": "Historical birth date; broad role at the source's reported career or roster date",
+      "dob": "1983-04-15",
+      "role": "Forward"
+    },
+    "rg24": {
+      "publisher": "RealGM",
+      "url": "https://basketball.realgm.com/player/Delonte-West/Bio/256",
+      "access": "Direct page body",
+      "asOf": "Historical birth date; broad role at the source's reported career or roster date",
+      "dob": "1983-07-26",
+      "role": "G"
+    },
+    "official24": {
+      "publisher": "NBA",
+      "url": "https://www.nba.com/stats/player/2753",
+      "access": "Direct page body",
+      "asOf": "Historical birth date; broad role at the source's reported career or roster date",
+      "dob": "1983-07-26",
+      "role": "Guard"
+    },
+    "rg25": {
+      "publisher": "RealGM",
+      "url": "https://basketball.realgm.com/player/Tony-Allen/Bio/391",
+      "access": "Direct page body",
+      "asOf": "Historical birth date; broad role at the source's reported career or roster date",
+      "dob": "1982-01-11",
+      "role": "SG"
+    },
+    "official25": {
+      "publisher": "NBA",
+      "url": "https://www.nba.com/stats/player/2754",
+      "access": "Direct page body",
+      "asOf": "Historical birth date; broad role at the source's reported career or roster date",
+      "dob": "1982-01-11",
+      "role": "Guard-Forward"
+    },
+    "rg26": {
+      "publisher": "RealGM",
+      "url": "https://basketball.realgm.com/player/Kevin-Martin/Bio/392",
+      "access": "Direct page body",
+      "asOf": "Historical birth date; broad role at the source's reported career or roster date",
+      "dob": "1983-02-01",
+      "role": "SG"
+    },
+    "official26": {
+      "publisher": "NBA",
+      "url": "https://www.nba.com/stats/player/2755",
+      "access": "Direct page body",
+      "asOf": "Historical birth date; broad role at the source's reported career or roster date",
+      "dob": "1983-02-01",
+      "role": "Guard"
+    },
+    "rg27": {
+      "publisher": "RealGM",
+      "url": "https://basketball.realgm.com/player/Sasha-Vujacic/Bio/393",
+      "access": "Direct page body",
+      "asOf": "Historical birth date; broad role at the source's reported career or roster date",
+      "dob": "1984-03-08",
+      "role": "G"
+    },
+    "official27": {
+      "publisher": "NBA",
+      "url": "https://www.nba.com/stats/player/2756",
+      "access": "Direct page body",
+      "asOf": "Historical birth date; broad role at the source's reported career or roster date",
+      "dob": "1984-03-08",
+      "role": "Guard"
+    },
+    "rg28": {
+      "publisher": "RealGM",
+      "url": "https://basketball.realgm.com/player/Beno-Udrih/Bio/394",
+      "access": "Direct page body",
+      "asOf": "Historical birth date; broad role at the source's reported career or roster date",
+      "dob": "1982-07-05",
+      "role": "G"
+    },
+    "official28": {
+      "publisher": "NBA",
+      "url": "https://www.nba.com/stats/player/2757",
+      "access": "Direct page body",
+      "asOf": "Historical birth date; broad role at the source's reported career or roster date",
+      "dob": "1982-07-05",
+      "role": "Guard"
+    },
+    "rg29": {
+      "publisher": "RealGM",
+      "url": "https://basketball.realgm.com/player/David-Harrison/Bio/235",
+      "access": "Direct page body",
+      "asOf": "Historical birth date; broad role at the source's reported career or roster date",
+      "dob": "1982-08-15",
+      "role": "C"
+    },
+    "official29": {
+      "publisher": "NBA",
+      "url": "https://www.nba.com/stats/player/2758",
+      "access": "Direct page body",
+      "asOf": "Historical birth date; broad role at the source's reported career or roster date",
+      "dob": "1982-08-15",
+      "role": "Center"
+    },
+    "rg30": {
+      "publisher": "RealGM",
+      "url": "https://basketball.realgm.com/player/Anderson-Varejao/Bio/251",
+      "access": "Direct page body",
+      "asOf": "Historical birth date; broad role at the source's reported career or roster date",
+      "dob": "1982-09-28",
+      "role": "C"
+    },
+    "official30": {
+      "publisher": "NBA",
+      "url": "https://www.nba.com/stats/player/2760",
+      "access": "Direct page body",
+      "asOf": "Historical birth date; broad role at the source's reported career or roster date",
+      "dob": "1982-09-28",
+      "role": "Forward"
+    },
+    "rg31": {
+      "publisher": "RealGM",
+      "url": "https://basketball.realgm.com/player/Jackson-Vroman/Bio/414",
+      "access": "Direct page body",
+      "asOf": "Historical birth date; broad role at the source's reported career or roster date",
+      "dob": "1981-06-06",
+      "role": "FC"
+    },
+    "official31": {
+      "publisher": "NBA",
+      "url": "https://www.nba.com/stats/player/2761/career",
+      "access": "Direct page body",
+      "asOf": "Historical birth date; broad role at the source's reported career or roster date",
+      "dob": "1981-06-06",
+      "role": "Forward-Center"
+    },
+    "rg32": {
+      "publisher": "RealGM",
+      "url": "https://basketball.realgm.com/player/Peter-John-Ramos/Bio/413",
+      "access": "Direct page body",
+      "asOf": "Historical birth date; broad role at the source's reported career or roster date",
+      "dob": "1985-05-23",
+      "role": "C"
+    },
+    "official32": {
+      "publisher": "NBA",
+      "url": "https://www.nba.com/stats/player/2762",
+      "access": "Direct page body",
+      "asOf": "Historical birth date; broad role at the source's reported career or roster date",
+      "dob": "1985-05-23",
+      "role": "Center"
+    },
+    "rg33": {
+      "publisher": "RealGM",
+      "url": "https://basketball.realgm.com/player/Lionel-Chalmers/Bio/412",
+      "access": "Direct page body",
+      "asOf": "Historical birth date; broad role at the source's reported career or roster date",
+      "dob": "1980-11-10",
+      "role": "G"
+    },
+    "official33": {
+      "publisher": "NBA",
+      "url": "https://www.nba.com/stats/player/2763",
+      "access": "Direct page body",
+      "asOf": "Historical birth date; broad role at the source's reported career or roster date",
+      "dob": "1980-11-10",
+      "role": "Guard"
+    },
+    "rg34": {
+      "publisher": "RealGM",
+      "url": "https://basketball.realgm.com/player/Donta-Smith/Bio/411",
+      "access": "Direct page body",
+      "asOf": "Historical birth date; broad role at the source's reported career or roster date",
+      "dob": "1983-11-27",
+      "role": "GF"
+    },
+    "official34": {
+      "publisher": "NBA",
+      "url": "https://www.nba.com/stats/player/2764",
+      "access": "Direct page body",
+      "asOf": "Historical birth date; broad role at the source's reported career or roster date",
+      "dob": "1983-11-27",
+      "role": "Guard"
+    },
+    "rg35": {
+      "publisher": "RealGM",
+      "url": "https://basketball.realgm.com/player/Andre-Emmett/Bio/410",
+      "access": "Direct page body",
+      "asOf": "Historical birth date; broad role at the source's reported career or roster date",
+      "dob": "1982-08-27",
+      "role": "GF"
+    },
+    "official35": {
+      "publisher": "NBA",
+      "url": "https://www.nba.com/stats/player/2765",
+      "access": "Direct page body",
+      "asOf": "Historical birth date; broad role at the source's reported career or roster date",
+      "dob": "1982-08-27",
+      "role": "Guard"
+    },
+    "rg36": {
+      "publisher": "RealGM",
+      "url": "https://basketball.realgm.com/player/Antonio-Burks/Bio/409",
+      "access": "Direct page body",
+      "asOf": "Historical birth date; broad role at the source's reported career or roster date",
+      "dob": "1980-02-25",
+      "role": "G"
+    },
+    "official36": {
+      "publisher": "NBA",
+      "url": "https://www.nba.com/stats/player/2766",
+      "access": "Direct page body",
+      "asOf": "Historical birth date; broad role at the source's reported career or roster date",
+      "dob": "1980-02-25",
+      "role": "Guard"
+    },
+    "rg37": {
+      "publisher": "RealGM",
+      "url": "https://basketball.realgm.com/player/Royal-Ivey/Bio/226",
+      "access": "Direct page body",
+      "asOf": "Historical birth date; broad role at the source's reported career or roster date",
+      "dob": "1981-12-20",
+      "role": "G"
+    },
+    "official37": {
+      "publisher": "NBA",
+      "url": "https://www.nba.com/stats/player/2767",
+      "access": "Direct page body",
+      "asOf": "Historical birth date; broad role at the source's reported career or roster date",
+      "dob": "1981-12-20",
+      "role": "Guard"
+    },
+    "rg38": {
+      "publisher": "RealGM",
+      "url": "https://basketball.realgm.com/player/Chris-Duhon/Bio/213",
+      "access": "Direct page body",
+      "asOf": "Historical birth date; broad role at the source's reported career or roster date",
+      "dob": "1982-08-31",
+      "role": "G"
+    },
+    "official38": {
+      "publisher": "NBA",
+      "url": "https://www.nba.com/stats/player/2768",
+      "access": "Direct page body",
+      "asOf": "Historical birth date; broad role at the source's reported career or roster date",
+      "dob": "1982-08-31",
+      "role": "Guard"
+    },
+    "rg39": {
+      "publisher": "RealGM",
+      "url": "https://basketball.realgm.com/player/Albert-Miralles/Bio/395",
+      "access": "Direct page body",
+      "asOf": "Historical birth date; broad role at the source's reported career or roster date",
+      "dob": "1982-05-14",
+      "role": "FC"
+    },
+    "official39": {
+      "publisher": "FIBA",
+      "url": "https://www.fiba.basketball/en/players/24450-albert-miralles-berge",
+      "access": "Direct page body",
+      "asOf": "Historical birth date; broad role at the source's reported career or roster date",
+      "dob": "1982-05-14"
+    },
+    "rg40": {
+      "publisher": "RealGM",
+      "url": "https://basketball.realgm.com/player/Justin-Reed/Bio/357",
+      "access": "Direct page body",
+      "asOf": "Historical birth date; broad role at the source's reported career or roster date",
+      "dob": "1982-01-16",
+      "role": "F"
+    },
+    "official40": {
+      "publisher": "NBA",
+      "url": "https://www.nba.com/stats/player/2770",
+      "access": "Direct page body",
+      "asOf": "Historical birth date; broad role at the source's reported career or roster date",
+      "dob": "1982-01-16",
+      "role": "Forward"
+    },
+    "rg41": {
+      "publisher": "RealGM",
+      "url": "https://basketball.realgm.com/player/David-Young/Bio/396",
+      "access": "Direct page body",
+      "asOf": "Historical birth date; broad role at the source's reported career or roster date",
+      "dob": "1981-08-18",
+      "role": "G"
+    },
+    "official41": {
+      "publisher": "NBA G League",
+      "url": "https://stats.gleague.nba.com/player/2801/",
+      "access": "Direct page body",
+      "asOf": "Historical birth date; broad role at the source's reported career or roster date",
+      "dob": "1981-08-18",
+      "role": "G"
+    },
+    "rg42": {
+      "publisher": "RealGM",
+      "url": "https://basketball.realgm.com/player/Viktor-Sanikidze/Bio/397",
+      "access": "Direct page body",
+      "asOf": "Historical birth date; broad role at the source's reported career or roster date",
+      "dob": "1986-04-01",
+      "role": "F"
+    },
+    "official42": {
+      "publisher": "Finnish Basketball Association",
+      "url": "https://basket.fi/uutiset/suomen-ja-georgian-panokset-ovat-huipussaan-helsingissa/",
+      "access": "Direct page body",
+      "asOf": "Historical birth date; broad role at the source's reported career or roster date",
+      "dob": "1986-04-01",
+      "role": "PF"
+    },
+    "rg43": {
+      "publisher": "RealGM",
+      "url": "https://basketball.realgm.com/player/Trevor-Ariza/Bio/398",
+      "access": "Direct page body",
+      "asOf": "Historical birth date; broad role at the source's reported career or roster date",
+      "dob": "1985-06-30",
+      "role": "SF"
+    },
+    "official43": {
+      "publisher": "NBA",
+      "url": "https://www.nba.com/stats/player/2772",
+      "access": "Direct page body",
+      "asOf": "Historical birth date; broad role at the source's reported career or roster date",
+      "dob": "1985-06-30",
+      "role": "Forward"
+    },
+    "rg44": {
+      "publisher": "RealGM",
+      "url": "https://basketball.realgm.com/player/Tim-Pickett/Bio/399",
+      "access": "Direct page body",
+      "asOf": "Historical birth date; broad role at the source's reported career or roster date",
+      "dob": "1981-04-18",
+      "role": "G"
+    },
+    "official44": {
+      "publisher": "NBA G League",
+      "url": "https://stats.gleague.nba.com/player/2773/",
+      "access": "Direct page body",
+      "asOf": "Historical birth date; broad role at the source's reported career or roster date",
+      "dob": "1981-04-18"
+    },
+    "rg45": {
+      "publisher": "RealGM",
+      "url": "https://basketball.realgm.com/player/Bernard-Robinson/Summary/400",
+      "access": "Direct page body",
+      "asOf": "Historical birth date; broad role at the source's reported career or roster date",
+      "dob": "1980-12-26",
+      "role": "GF"
+    },
+    "official45": {
+      "publisher": "NBA",
+      "url": "https://www.nba.com/stats/player/2774",
+      "access": "Direct page body",
+      "asOf": "Historical birth date; broad role at the source's reported career or roster date",
+      "dob": "1980-12-26",
+      "role": "Guard-Forward"
+    },
+    "rg46": {
+      "publisher": "RealGM",
+      "url": "https://basketball.realgm.com/player/Ha-Seung-Jin/Bio/401",
+      "access": "Direct page body",
+      "asOf": "Historical birth date; broad role at the source's reported career or roster date",
+      "dob": "1985-08-04",
+      "role": "C"
+    },
+    "official46": {
+      "publisher": "NBA",
+      "url": "https://www.nba.com/stats/player/2775",
+      "access": "Direct page body",
+      "asOf": "Historical birth date; broad role at the source's reported career or roster date",
+      "dob": "1985-08-04",
+      "role": "Center"
+    },
+    "rg47": {
+      "publisher": "RealGM",
+      "url": "https://basketball.realgm.com/player/Pape-Sow/Bio/402",
+      "access": "Direct page body",
+      "asOf": "Historical birth date; broad role at the source's reported career or roster date",
+      "dob": "1981-11-22",
+      "role": "FC"
+    },
+    "official47": {
+      "publisher": "NBA",
+      "url": "https://www.nba.com/stats/player/2776",
+      "access": "Direct page body",
+      "asOf": "Historical birth date; broad role at the source's reported career or roster date",
+      "dob": "1981-11-22",
+      "role": "Forward"
+    },
+    "rg48": {
+      "publisher": "RealGM",
+      "url": "https://basketball.realgm.com/player/Ricky-Minard/Bio/403",
+      "access": "Direct page body",
+      "asOf": "Historical birth date; broad role at the source's reported career or roster date",
+      "dob": "1982-09-11",
+      "role": "G"
+    },
+    "official48": {
+      "publisher": "Besiktas JK",
+      "url": "https://bjk.com.tr/en/news/54831/eagles_get_new_american_forward.html",
+      "access": "Direct page body",
+      "asOf": "Historical birth date; broad role at the source's reported career or roster date",
+      "dob": "1982-09-11",
+      "role": "Small Forward"
+    },
+    "rg49": {
+      "publisher": "RealGM",
+      "url": "https://basketball.realgm.com/player/Sergei-Lishouk/Bio/404",
+      "access": "Direct page body",
+      "asOf": "Historical birth date; broad role at the source's reported career or roster date",
+      "dob": "1982-03-31",
+      "role": "FC"
+    },
+    "official49": {
+      "publisher": "FIBA",
+      "url": "https://www.fiba.basketball/en/players/133046-serhiy-lishchuk",
+      "access": "Direct page body",
+      "asOf": "Historical birth date; broad role at the source's reported career or roster date",
+      "dob": "1982-03-31"
+    },
+    "lishouk-alias": {
+      "publisher": "ShamSports",
+      "url": "https://www.shamsports.com/players/sergei-lishouk",
+      "access": "Direct page body",
+      "asOf": "Historical birth date; broad role at the source's reported career or roster date",
+      "dob": "1982-03-31",
+      "role": "PF/C",
+      "identityEvidence": "Direct profile: Sergei Lishouk, pick49 in2004; linked article label: Serhiy Lishchuk, same pick/year."
+    },
+    "rg50": {
+      "publisher": "RealGM",
+      "url": "https://basketball.realgm.com/player/Vassilis-Spanoulis/Bio/405",
+      "access": "Direct page body",
+      "asOf": "Historical birth date; broad role at the source's reported career or roster date",
+      "dob": "1982-08-07",
+      "role": "SG"
+    },
+    "official50": {
+      "publisher": "Olympiacos BC",
+      "url": "https://www.olympiacosbc.gr/en/team/roster/player/24.html",
+      "access": "Direct page body",
+      "asOf": "Historical birth date; broad role at the source's reported career or roster date",
+      "dob": "1982-08-07",
+      "role": "Guard"
+    },
+    "rg51": {
+      "publisher": "RealGM",
+      "url": "https://basketball.realgm.com/player/Christian-Drejer/Bio/406",
+      "access": "Direct page body",
+      "asOf": "Historical birth date; broad role at the source's reported career or roster date",
+      "dob": "1982-12-08",
+      "role": "F"
+    },
+    "official51": {
+      "publisher": "FIBA",
+      "url": "https://www.fiba.basketball/en/players/132991-christian-drejer",
+      "access": "Direct page body",
+      "asOf": "Historical birth date; broad role at the source's reported career or roster date",
+      "dob": "1982-12-08"
+    },
+    "rg52": {
+      "publisher": "RealGM",
+      "url": "https://basketball.realgm.com/player/Romain-Sato/Bio/407",
+      "access": "Direct page body",
+      "asOf": "Historical birth date; broad role at the source's reported career or roster date",
+      "dob": "1981-03-02",
+      "role": "GF"
+    },
+    "official52": {
+      "publisher": "FIBA",
+      "url": "https://www.fiba.basketball/en/players/152581-romain-sato",
+      "access": "Direct page body",
+      "asOf": "Historical birth date; broad role at the source's reported career or roster date",
+      "dob": "1981-03-02"
+    },
+    "rg53": {
+      "publisher": "RealGM",
+      "url": "https://basketball.realgm.com/player/Matt-Freije/Bio/408",
+      "access": "Direct page body",
+      "asOf": "Historical birth date; broad role at the source's reported career or roster date",
+      "dob": "1981-10-02",
+      "role": "FC"
+    },
+    "official53": {
+      "publisher": "NBA",
+      "url": "https://www.nba.com/stats/player/2782",
+      "access": "Direct page body",
+      "asOf": "Historical birth date; broad role at the source's reported career or roster date",
+      "dob": "1981-10-02",
+      "role": "Forward"
+    },
+    "rg54": {
+      "publisher": "RealGM",
+      "url": "https://basketball.realgm.com/player/Ricky-Paulding/Bio/418",
+      "access": "Direct page body",
+      "asOf": "Historical birth date; broad role at the source's reported career or roster date",
+      "dob": "1982-10-23",
+      "role": "SF"
+    },
+    "official54": {
+      "publisher": "EWE Baskets Oldenburg",
+      "url": "https://ewe-baskets.de/team/kader/kader-2020-2021.html",
+      "access": "Direct page body",
+      "asOf": "Historical birth date; broad role at the source's reported career or roster date",
+      "dob": "1982-10-23",
+      "role": "Forward"
+    },
+    "rg55": {
+      "publisher": "RealGM",
+      "url": "https://basketball.realgm.com/player/Luis-Flores/Bio/417",
+      "access": "Direct page body",
+      "asOf": "Historical birth date; broad role at the source's reported career or roster date",
+      "dob": "1981-04-11",
+      "role": "G"
+    },
+    "official55": {
+      "publisher": "NBA",
+      "url": "https://www.nba.com/stats/player/2784",
+      "access": "Direct page body",
+      "asOf": "Historical birth date; broad role at the source's reported career or roster date",
+      "dob": "1981-04-11",
+      "role": "Guard"
+    },
+    "rg56": {
+      "publisher": "RealGM",
+      "url": "https://basketball.realgm.com/player/Marcus-Douthit/Bio/416",
+      "access": "Direct page body",
+      "asOf": "Historical birth date; broad role at the source's reported career or roster date",
+      "dob": "1980-04-15",
+      "role": "FC"
+    },
+    "official56": {
+      "publisher": "NBA G League",
+      "url": "https://stats.gleague.nba.com/player/2785/",
+      "access": "Direct page body",
+      "asOf": "Historical birth date; broad role at the source's reported career or roster date",
+      "dob": "1980-04-15",
+      "role": "F-C"
+    },
+    "rg57": {
+      "publisher": "RealGM",
+      "url": "https://basketball.realgm.com/player/Sergei-Karaulov/Bio/415",
+      "access": "Direct page body",
+      "asOf": "Historical birth date; broad role at the source's reported career or roster date",
+      "dob": "1982-04-15",
+      "role": "C"
+    },
+    "official57": {
+      "publisher": "FIBA",
+      "url": "https://www.fiba.basketball/en/players/148647-sergey-karaulov",
+      "access": "Direct page body",
+      "asOf": "Historical birth date; broad role at the source's reported career or roster date",
+      "dob": "1984-04-15"
+    },
+    "rg58": {
+      "publisher": "RealGM",
+      "url": "https://basketball.realgm.com/player/Blake-Stepp/Bio/419",
+      "access": "Direct page body",
+      "asOf": "Historical birth date; broad role at the source's reported career or roster date",
+      "dob": "1982-02-04",
+      "role": "G"
+    },
+    "official58": {
+      "publisher": "ABA League",
+      "url": "https://www.aba-liga.com/player/659/4/1/blake-stepp/",
+      "access": "Direct page body",
+      "asOf": "Historical birth date; broad role at the source's reported career or roster date",
+      "dob": "1982-02-04",
+      "role": "Shooting Guard"
+    },
+    "rg59": {
+      "publisher": "RealGM",
+      "url": "https://basketball.realgm.com/player/Rashad-Wright/Bio/420",
+      "access": "Direct page body",
+      "asOf": "Historical birth date; broad role at the source's reported career or roster date",
+      "dob": "1982-03-17",
+      "role": "SG"
+    },
+    "official59": {
+      "publisher": "ABA League",
+      "url": "https://www.aba-liga.com/player/681/5/1/rashad-wright/",
+      "access": "Direct page body",
+      "asOf": "Historical birth date; broad role at the source's reported career or roster date",
+      "dob": "1982-03-17",
+      "role": "Guard"
+    },
+    "spanoulis-nba-conflict": {
+      "publisher": "NBA",
+      "url": "https://www.nba.com/stats/player/2779",
+      "access": "Direct page body",
+      "asOf": "Historical birth date; broad role at the source's reported career or roster date",
+      "dob": "1982-08-02",
+      "role": "Guard"
+    },
+    "sanikidze-fiba-conflict": {
+      "publisher": "FIBA",
+      "url": "https://www.fiba.basketball/en/players/144460-viktor-sanikidze",
+      "access": "Retrieved indexed primary profile text",
+      "asOf": "Historical birth date; broad role at the source's reported career or roster date",
+      "dob": "1984-04-01"
+    },
+    "sanikidze-euroleague": {
+      "publisher": "EuroLeague Basketball",
+      "url": "https://admin.euroleague.net/competition/players/showplayer?pcode=004164&seasoncode=E2012",
+      "access": "Retrieved indexed profile text; later direct requests failed",
+      "asOf": "Historical birth date; broad role at the source's reported career or roster date",
+      "dob": "1986-04-01",
+      "role": "Forward"
+    },
+    "spanoulis-euroleague": {
+      "publisher": "EuroLeague Basketball",
+      "url": "https://admin.euroleague.net/competition/players/showplayer?pcode=JUO",
+      "access": "Retrieved indexed profile text; direct request failed",
+      "asOf": "Historical birth date; broad role at the source's reported career or roster date",
+      "dob": "1982-08-07"
+    },
+    "karaulov-third-lead": {
+      "publisher": "Apparent San Antonio Spurs media-guide document, mirrored by a sports library",
+      "url": "https://library.sfo2.cdn.digitaloceanspaces.com/publications/basketball/yearbooks/KSASPMG-2017.pdf",
+      "dob": "1982-04-15",
+      "role": "Center",
+      "access": "Indexed excerpt only; direct22MB PDF exceeds tool size limit",
+      "status": "LEAD_NOT_USED_TO_CLEAR_HOLD"
+    }
+  },
+  "players": [
+    {
+      "id": "nba-draft-2004-p01",
+      "pick": 1,
+      "name": "Dwight Howard",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "families": [
+        "C"
+      ],
+      "dob": "1985-12-08",
+      "sources": {
+        "identityAndPick": [
+          "realgm2004",
+          "ap2004"
+        ],
+        "dob": [
+          "p01_official",
+          "p01_independentDob"
+        ],
+        "generalFamily": [
+          "p01_official",
+          "p01_independentDob"
+        ]
+      },
+      "dobStatus": "two_independent_publishers",
+      "roleNote": "The AP draft list says F, while NBA says Center-Forward and RealGM says C. C is independently supported as a general career family; no assertion that F was wrong in June 2004."
+    },
+    {
+      "id": "nba-draft-2004-p02",
+      "pick": 2,
+      "name": "Emeka Okafor",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "families": [
+        "C"
+      ],
+      "dob": "1982-09-28",
+      "sources": {
+        "identityAndPick": [
+          "realgm2004",
+          "ap2004"
+        ],
+        "dob": [
+          "p02_official",
+          "p02_independentDob"
+        ],
+        "generalFamily": [
+          "p02_official",
+          "AP2004"
+        ]
+      },
+      "dobStatus": "two_independent_publishers",
+      "roleNote": null
+    },
+    {
+      "id": "nba-draft-2004-p03",
+      "pick": 3,
+      "name": "Ben Gordon",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "families": [
+        "G"
+      ],
+      "dob": "1983-04-04",
+      "sources": {
+        "identityAndPick": [
+          "realgm2004",
+          "ap2004"
+        ],
+        "dob": [
+          "p03_official",
+          "p03_independentDob"
+        ],
+        "generalFamily": [
+          "p03_official",
+          "AP2004"
+        ]
+      },
+      "dobStatus": "two_independent_publishers",
+      "roleNote": null
+    },
+    {
+      "id": "nba-draft-2004-p04",
+      "pick": 4,
+      "name": "Shaun Livingston",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "families": [
+        "G"
+      ],
+      "dob": "1985-09-11",
+      "sources": {
+        "identityAndPick": [
+          "realgm2004",
+          "ap2004"
+        ],
+        "dob": [
+          "p04_official",
+          "p04_independentDob"
+        ],
+        "generalFamily": [
+          "p04_official",
+          "AP2004"
+        ]
+      },
+      "dobStatus": "two_independent_publishers",
+      "roleNote": null
+    },
+    {
+      "id": "nba-draft-2004-p05",
+      "pick": 5,
+      "name": "Devin Harris",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "families": [
+        "G"
+      ],
+      "dob": "1983-02-27",
+      "sources": {
+        "identityAndPick": [
+          "realgm2004",
+          "ap2004"
+        ],
+        "dob": [
+          "p05_official",
+          "p05_independentDob"
+        ],
+        "generalFamily": [
+          "p05_official",
+          "AP2004"
+        ]
+      },
+      "dobStatus": "two_independent_publishers",
+      "roleNote": null
+    },
+    {
+      "id": "nba-draft-2004-p06",
+      "pick": 6,
+      "name": "Josh Childress",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "families": [
+        "F"
+      ],
+      "dob": "1983-06-20",
+      "sources": {
+        "identityAndPick": [
+          "realgm2004",
+          "ap2004"
+        ],
+        "dob": [
+          "p06_official",
+          "p06_independentDob"
+        ],
+        "generalFamily": [
+          "p06_official",
+          "AP2004"
+        ]
+      },
+      "dobStatus": "two_independent_publishers",
+      "roleNote": null
+    },
+    {
+      "id": "nba-draft-2004-p07",
+      "pick": 7,
+      "name": "Luol Deng",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "families": [
+        "F"
+      ],
+      "dob": "1985-04-16",
+      "sources": {
+        "identityAndPick": [
+          "realgm2004",
+          "ap2004"
+        ],
+        "dob": [
+          "p07_official",
+          "p07_independentDob"
+        ],
+        "generalFamily": [
+          "p07_official",
+          "AP2004"
+        ]
+      },
+      "dobStatus": "two_independent_publishers",
+      "roleNote": null
+    },
+    {
+      "id": "nba-draft-2004-p08",
+      "pick": 8,
+      "name": "Rafael Araujo",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "families": [
+        "C"
+      ],
+      "dob": "1980-08-12",
+      "sources": {
+        "identityAndPick": [
+          "realgm2004",
+          "ap2004"
+        ],
+        "dob": [
+          "p08_official",
+          "p08_independentDob"
+        ],
+        "generalFamily": [
+          "p08_official",
+          "AP2004"
+        ]
+      },
+      "dobStatus": "two_independent_publishers",
+      "roleNote": null
+    },
+    {
+      "id": "nba-draft-2004-p09",
+      "pick": 9,
+      "name": "Andre Iguodala",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "families": [
+        "F"
+      ],
+      "dob": "1984-01-28",
+      "sources": {
+        "identityAndPick": [
+          "realgm2004",
+          "ap2004"
+        ],
+        "dob": [
+          "p09_official",
+          "p09_independentDob"
+        ],
+        "generalFamily": [
+          "p09_official",
+          "AP2004"
+        ]
+      },
+      "dobStatus": "two_independent_publishers",
+      "roleNote": null
+    },
+    {
+      "id": "nba-draft-2004-p10",
+      "pick": 10,
+      "name": "Luke Jackson",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "families": [
+        "F"
+      ],
+      "dob": "1981-11-06",
+      "sources": {
+        "identityAndPick": [
+          "realgm2004",
+          "ap2004"
+        ],
+        "dob": [
+          "p10_official",
+          "p10_independentDob"
+        ],
+        "generalFamily": [
+          "p10_official",
+          "AP2004"
+        ]
+      },
+      "dobStatus": "two_independent_publishers",
+      "roleNote": "Oregon's 2003-04 roster labels him G; NBA later lists Forward-Guard and AP's draft list F. F is an overlap of NBA/AP, not a claim that his college role was F."
+    },
+    {
+      "id": "nba-draft-2004-p11",
+      "pick": 11,
+      "name": "Andris Biedrins",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "families": [
+        "C"
+      ],
+      "dob": "1986-04-02",
+      "sources": {
+        "identityAndPick": [
+          "realgm2004",
+          "ap2004"
+        ],
+        "dob": [
+          "official11",
+          "rg11"
+        ],
+        "generalFamily": [
+          "official11",
+          "rg11"
+        ]
+      },
+      "dobStatus": "two_independent_publishers"
+    },
+    {
+      "id": "nba-draft-2004-p12",
+      "pick": 12,
+      "name": "Robert Swift",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "families": [
+        "C"
+      ],
+      "dob": "1985-12-03",
+      "sources": {
+        "identityAndPick": [
+          "realgm2004",
+          "ap2004"
+        ],
+        "dob": [
+          "official12",
+          "rg12"
+        ],
+        "generalFamily": [
+          "official12",
+          "rg12"
+        ]
+      },
+      "dobStatus": "two_independent_publishers"
+    },
+    {
+      "id": "nba-draft-2004-p13",
+      "pick": 13,
+      "name": "Sebastian Telfair",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "families": [
+        "G"
+      ],
+      "dob": "1985-06-09",
+      "sources": {
+        "identityAndPick": [
+          "realgm2004",
+          "ap2004"
+        ],
+        "dob": [
+          "official13",
+          "rg13"
+        ],
+        "generalFamily": [
+          "official13",
+          "rg13"
+        ]
+      },
+      "dobStatus": "two_independent_publishers"
+    },
+    {
+      "id": "nba-draft-2004-p14",
+      "pick": 14,
+      "name": "Kris Humphries",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "families": [
+        "F"
+      ],
+      "dob": "1985-02-06",
+      "sources": {
+        "identityAndPick": [
+          "realgm2004",
+          "ap2004"
+        ],
+        "dob": [
+          "official14",
+          "rg14"
+        ],
+        "generalFamily": [
+          "official14",
+          "rg14"
+        ]
+      },
+      "dobStatus": "two_independent_publishers"
+    },
+    {
+      "id": "nba-draft-2004-p15",
+      "pick": 15,
+      "name": "Al Jefferson",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "families": [
+        "C"
+      ],
+      "dob": "1985-01-04",
+      "sources": {
+        "identityAndPick": [
+          "realgm2004",
+          "ap2004"
+        ],
+        "dob": [
+          "official15",
+          "rg15"
+        ],
+        "generalFamily": [
+          "official15",
+          "rg15"
+        ]
+      },
+      "dobStatus": "two_independent_publishers"
+    },
+    {
+      "id": "nba-draft-2004-p16",
+      "pick": 16,
+      "name": "Kirk Snyder",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "families": [
+        "G",
+        "F"
+      ],
+      "dob": "1983-06-05",
+      "sources": {
+        "identityAndPick": [
+          "realgm2004",
+          "ap2004"
+        ],
+        "dob": [
+          "official16",
+          "rg16"
+        ],
+        "generalFamily": [
+          "official16",
+          "rg16"
+        ]
+      },
+      "dobStatus": "two_independent_publishers"
+    },
+    {
+      "id": "nba-draft-2004-p17",
+      "pick": 17,
+      "name": "Josh Smith",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "families": [
+        "F"
+      ],
+      "dob": "1985-12-05",
+      "sources": {
+        "identityAndPick": [
+          "realgm2004",
+          "ap2004"
+        ],
+        "dob": [
+          "official17",
+          "rg17"
+        ],
+        "generalFamily": [
+          "official17",
+          "rg17"
+        ]
+      },
+      "dobStatus": "two_independent_publishers"
+    },
+    {
+      "id": "nba-draft-2004-p18",
+      "pick": 18,
+      "name": "J.R. Smith",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "families": [
+        "G"
+      ],
+      "dob": "1985-09-09",
+      "sources": {
+        "identityAndPick": [
+          "realgm2004",
+          "ap2004"
+        ],
+        "dob": [
+          "official18",
+          "rg18"
+        ],
+        "generalFamily": [
+          "official18",
+          "rg18"
+        ]
+      },
+      "dobStatus": "two_independent_publishers"
+    },
+    {
+      "id": "nba-draft-2004-p19",
+      "pick": 19,
+      "name": "Dorell Wright",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "families": [
+        "F"
+      ],
+      "dob": "1985-12-02",
+      "sources": {
+        "identityAndPick": [
+          "realgm2004",
+          "ap2004"
+        ],
+        "dob": [
+          "official19",
+          "rg19"
+        ],
+        "generalFamily": [
+          "official19",
+          "rg19"
+        ]
+      },
+      "dobStatus": "two_independent_publishers"
+    },
+    {
+      "id": "nba-draft-2004-p20",
+      "pick": 20,
+      "name": "Jameer Nelson",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "families": [
+        "G"
+      ],
+      "dob": "1982-02-09",
+      "sources": {
+        "identityAndPick": [
+          "realgm2004",
+          "ap2004"
+        ],
+        "dob": [
+          "official20",
+          "rg20"
+        ],
+        "generalFamily": [
+          "official20",
+          "rg20"
+        ]
+      },
+      "dobStatus": "two_independent_publishers"
+    },
+    {
+      "id": "nba-draft-2004-p21",
+      "pick": 21,
+      "name": "Pavel Podkolzin",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "families": [
+        "C"
+      ],
+      "dob": "1985-01-15",
+      "sources": {
+        "identityAndPick": [
+          "realgm2004",
+          "ap2004"
+        ],
+        "dob": [
+          "official21",
+          "rg21"
+        ],
+        "generalFamily": [
+          "official21",
+          "rg21"
+        ]
+      },
+      "dobStatus": "two_independent_publishers"
+    },
+    {
+      "id": "nba-draft-2004-p22",
+      "pick": 22,
+      "name": "Viktor Khryapa",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "families": [
+        "F"
+      ],
+      "dob": "1982-08-03",
+      "sources": {
+        "identityAndPick": [
+          "realgm2004",
+          "ap2004"
+        ],
+        "dob": [
+          "official22",
+          "rg22"
+        ],
+        "generalFamily": [
+          "AP2004",
+          "rg22"
+        ]
+      },
+      "dobStatus": "two_independent_publishers"
+    },
+    {
+      "id": "nba-draft-2004-p23",
+      "pick": 23,
+      "name": "Sergei Monia",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "families": [
+        "F"
+      ],
+      "dob": "1983-04-15",
+      "sources": {
+        "identityAndPick": [
+          "realgm2004",
+          "ap2004"
+        ],
+        "dob": [
+          "official23",
+          "rg23"
+        ],
+        "generalFamily": [
+          "official23",
+          "rg23"
+        ]
+      },
+      "dobStatus": "two_independent_publishers"
+    },
+    {
+      "id": "nba-draft-2004-p24",
+      "pick": 24,
+      "name": "Delonte West",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "families": [
+        "G"
+      ],
+      "dob": "1983-07-26",
+      "sources": {
+        "identityAndPick": [
+          "realgm2004",
+          "ap2004"
+        ],
+        "dob": [
+          "official24",
+          "rg24"
+        ],
+        "generalFamily": [
+          "official24",
+          "rg24"
+        ]
+      },
+      "dobStatus": "two_independent_publishers"
+    },
+    {
+      "id": "nba-draft-2004-p25",
+      "pick": 25,
+      "name": "Tony Allen",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "families": [
+        "G"
+      ],
+      "dob": "1982-01-11",
+      "sources": {
+        "identityAndPick": [
+          "realgm2004",
+          "ap2004"
+        ],
+        "dob": [
+          "official25",
+          "rg25"
+        ],
+        "generalFamily": [
+          "official25",
+          "rg25"
+        ]
+      },
+      "dobStatus": "two_independent_publishers"
+    },
+    {
+      "id": "nba-draft-2004-p26",
+      "pick": 26,
+      "name": "Kevin Martin",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "families": [
+        "G"
+      ],
+      "dob": "1983-02-01",
+      "sources": {
+        "identityAndPick": [
+          "realgm2004",
+          "ap2004"
+        ],
+        "dob": [
+          "official26",
+          "rg26"
+        ],
+        "generalFamily": [
+          "official26",
+          "rg26"
+        ]
+      },
+      "dobStatus": "two_independent_publishers"
+    },
+    {
+      "id": "nba-draft-2004-p27",
+      "pick": 27,
+      "name": "Sasha Vujacic",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "families": [
+        "G"
+      ],
+      "dob": "1984-03-08",
+      "sources": {
+        "identityAndPick": [
+          "realgm2004",
+          "ap2004"
+        ],
+        "dob": [
+          "official27",
+          "rg27"
+        ],
+        "generalFamily": [
+          "official27",
+          "rg27"
+        ]
+      },
+      "dobStatus": "two_independent_publishers"
+    },
+    {
+      "id": "nba-draft-2004-p28",
+      "pick": 28,
+      "name": "Beno Udrih",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "families": [
+        "G"
+      ],
+      "dob": "1982-07-05",
+      "sources": {
+        "identityAndPick": [
+          "realgm2004",
+          "ap2004"
+        ],
+        "dob": [
+          "official28",
+          "rg28"
+        ],
+        "generalFamily": [
+          "official28",
+          "rg28"
+        ]
+      },
+      "dobStatus": "two_independent_publishers"
+    },
+    {
+      "id": "nba-draft-2004-p29",
+      "pick": 29,
+      "name": "David Harrison",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "families": [
+        "C"
+      ],
+      "dob": "1982-08-15",
+      "sources": {
+        "identityAndPick": [
+          "realgm2004",
+          "ap2004"
+        ],
+        "dob": [
+          "official29",
+          "rg29"
+        ],
+        "generalFamily": [
+          "official29",
+          "rg29"
+        ]
+      },
+      "dobStatus": "two_independent_publishers"
+    },
+    {
+      "id": "nba-draft-2004-p30",
+      "pick": 30,
+      "name": "Anderson Varejao",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "families": [
+        "F"
+      ],
+      "dob": "1982-09-28",
+      "sources": {
+        "identityAndPick": [
+          "realgm2004",
+          "ap2004"
+        ],
+        "dob": [
+          "official30",
+          "rg30"
+        ],
+        "generalFamily": [
+          "official30",
+          "AP2004"
+        ]
+      },
+      "dobStatus": "two_independent_publishers"
+    },
+    {
+      "id": "nba-draft-2004-p31",
+      "pick": 31,
+      "name": "Jackson Vroman",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "families": [
+        "F",
+        "C"
+      ],
+      "dob": "1981-06-06",
+      "sources": {
+        "identityAndPick": [
+          "realgm2004",
+          "ap2004"
+        ],
+        "dob": [
+          "official31",
+          "rg31"
+        ],
+        "generalFamily": [
+          "official31",
+          "rg31"
+        ]
+      },
+      "dobStatus": "two_independent_publishers"
+    },
+    {
+      "id": "nba-draft-2004-p32",
+      "pick": 32,
+      "name": "Peter John Ramos",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "families": [
+        "C"
+      ],
+      "dob": "1985-05-23",
+      "sources": {
+        "identityAndPick": [
+          "realgm2004",
+          "ap2004"
+        ],
+        "dob": [
+          "official32",
+          "rg32"
+        ],
+        "generalFamily": [
+          "official32",
+          "rg32"
+        ]
+      },
+      "dobStatus": "two_independent_publishers"
+    },
+    {
+      "id": "nba-draft-2004-p33",
+      "pick": 33,
+      "name": "Lionel Chalmers",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "families": [
+        "G"
+      ],
+      "dob": "1980-11-10",
+      "sources": {
+        "identityAndPick": [
+          "realgm2004",
+          "ap2004"
+        ],
+        "dob": [
+          "official33",
+          "rg33"
+        ],
+        "generalFamily": [
+          "official33",
+          "rg33"
+        ]
+      },
+      "dobStatus": "two_independent_publishers"
+    },
+    {
+      "id": "nba-draft-2004-p34",
+      "pick": 34,
+      "name": "Donta Smith",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "families": [
+        "G"
+      ],
+      "dob": "1983-11-27",
+      "sources": {
+        "identityAndPick": [
+          "realgm2004",
+          "ap2004"
+        ],
+        "dob": [
+          "official34",
+          "rg34"
+        ],
+        "generalFamily": [
+          "official34",
+          "rg34"
+        ]
+      },
+      "dobStatus": "two_independent_publishers"
+    },
+    {
+      "id": "nba-draft-2004-p35",
+      "pick": 35,
+      "name": "Andre Emmett",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "families": [
+        "G"
+      ],
+      "dob": "1982-08-27",
+      "sources": {
+        "identityAndPick": [
+          "realgm2004",
+          "ap2004"
+        ],
+        "dob": [
+          "official35",
+          "rg35"
+        ],
+        "generalFamily": [
+          "official35",
+          "rg35"
+        ]
+      },
+      "dobStatus": "two_independent_publishers"
+    },
+    {
+      "id": "nba-draft-2004-p36",
+      "pick": 36,
+      "name": "Antonio Burks",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "families": [
+        "G"
+      ],
+      "dob": "1980-02-25",
+      "sources": {
+        "identityAndPick": [
+          "realgm2004",
+          "ap2004"
+        ],
+        "dob": [
+          "official36",
+          "rg36"
+        ],
+        "generalFamily": [
+          "official36",
+          "rg36"
+        ]
+      },
+      "dobStatus": "two_independent_publishers"
+    },
+    {
+      "id": "nba-draft-2004-p37",
+      "pick": 37,
+      "name": "Royal Ivey",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "families": [
+        "G"
+      ],
+      "dob": "1981-12-20",
+      "sources": {
+        "identityAndPick": [
+          "realgm2004",
+          "ap2004"
+        ],
+        "dob": [
+          "official37",
+          "rg37"
+        ],
+        "generalFamily": [
+          "official37",
+          "rg37"
+        ]
+      },
+      "dobStatus": "two_independent_publishers"
+    },
+    {
+      "id": "nba-draft-2004-p38",
+      "pick": 38,
+      "name": "Chris Duhon",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "families": [
+        "G"
+      ],
+      "dob": "1982-08-31",
+      "sources": {
+        "identityAndPick": [
+          "realgm2004",
+          "ap2004"
+        ],
+        "dob": [
+          "official38",
+          "rg38"
+        ],
+        "generalFamily": [
+          "official38",
+          "rg38"
+        ]
+      },
+      "dobStatus": "two_independent_publishers"
+    },
+    {
+      "id": "nba-draft-2004-p39",
+      "pick": 39,
+      "name": "Albert Miralles",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "families": [
+        "F"
+      ],
+      "dob": "1982-05-14",
+      "sources": {
+        "identityAndPick": [
+          "realgm2004",
+          "ap2004"
+        ],
+        "dob": [
+          "official39",
+          "rg39"
+        ],
+        "generalFamily": [
+          "AP2004",
+          "rg39"
+        ]
+      },
+      "dobStatus": "two_independent_publishers"
+    },
+    {
+      "id": "nba-draft-2004-p40",
+      "pick": 40,
+      "name": "Justin Reed",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "families": [
+        "F"
+      ],
+      "dob": "1982-01-16",
+      "sources": {
+        "identityAndPick": [
+          "realgm2004",
+          "ap2004"
+        ],
+        "dob": [
+          "official40",
+          "rg40"
+        ],
+        "generalFamily": [
+          "official40",
+          "rg40"
+        ]
+      },
+      "dobStatus": "two_independent_publishers"
+    },
+    {
+      "id": "nba-draft-2004-p41",
+      "pick": 41,
+      "name": "David Young",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "families": [
+        "G"
+      ],
+      "dob": "1981-08-18",
+      "sources": {
+        "identityAndPick": [
+          "realgm2004",
+          "ap2004"
+        ],
+        "dob": [
+          "official41",
+          "rg41"
+        ],
+        "generalFamily": [
+          "official41",
+          "rg41"
+        ]
+      },
+      "dobStatus": "two_independent_publishers"
+    },
+    {
+      "id": "nba-draft-2004-p42",
+      "pick": 42,
+      "name": "Viktor Sanikidze",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "families": [
+        "F"
+      ],
+      "dob": "1986-04-01",
+      "sources": {
+        "identityAndPick": [
+          "realgm2004",
+          "ap2004"
+        ],
+        "dob": [
+          "official42",
+          "rg42"
+        ],
+        "generalFamily": [
+          "official42",
+          "rg42"
+        ]
+      },
+      "dobStatus": "two_independent_publishers"
+    },
+    {
+      "id": "nba-draft-2004-p43",
+      "pick": 43,
+      "name": "Trevor Ariza",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "families": [
+        "F"
+      ],
+      "dob": "1985-06-30",
+      "sources": {
+        "identityAndPick": [
+          "realgm2004",
+          "ap2004"
+        ],
+        "dob": [
+          "official43",
+          "rg43"
+        ],
+        "generalFamily": [
+          "official43",
+          "rg43"
+        ]
+      },
+      "dobStatus": "two_independent_publishers"
+    },
+    {
+      "id": "nba-draft-2004-p44",
+      "pick": 44,
+      "name": "Tim Pickett",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "families": [
+        "G"
+      ],
+      "dob": "1981-04-18",
+      "sources": {
+        "identityAndPick": [
+          "realgm2004",
+          "ap2004"
+        ],
+        "dob": [
+          "official44",
+          "rg44"
+        ],
+        "generalFamily": [
+          "AP2004",
+          "rg44"
+        ]
+      },
+      "dobStatus": "two_independent_publishers"
+    },
+    {
+      "id": "nba-draft-2004-p45",
+      "pick": 45,
+      "name": "Bernard Robinson",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "families": [
+        "G",
+        "F"
+      ],
+      "dob": "1980-12-26",
+      "sources": {
+        "identityAndPick": [
+          "realgm2004",
+          "ap2004"
+        ],
+        "dob": [
+          "official45",
+          "rg45"
+        ],
+        "generalFamily": [
+          "official45",
+          "rg45"
+        ]
+      },
+      "dobStatus": "two_independent_publishers"
+    },
+    {
+      "id": "nba-draft-2004-p46",
+      "pick": 46,
+      "name": "Ha Seung-Jin",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "families": [
+        "C"
+      ],
+      "dob": "1985-08-04",
+      "sources": {
+        "identityAndPick": [
+          "realgm2004",
+          "ap2004"
+        ],
+        "dob": [
+          "official46",
+          "rg46"
+        ],
+        "generalFamily": [
+          "official46",
+          "rg46"
+        ]
+      },
+      "dobStatus": "two_independent_publishers"
+    },
+    {
+      "id": "nba-draft-2004-p47",
+      "pick": 47,
+      "name": "Pape Sow",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "families": [
+        "F"
+      ],
+      "dob": "1981-11-22",
+      "sources": {
+        "identityAndPick": [
+          "realgm2004",
+          "ap2004"
+        ],
+        "dob": [
+          "official47",
+          "rg47"
+        ],
+        "generalFamily": [
+          "official47",
+          "rg47"
+        ]
+      },
+      "dobStatus": "two_independent_publishers"
+    },
+    {
+      "id": "nba-draft-2004-p48",
+      "pick": 48,
+      "name": "Ricky Minard",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "families": [
+        "G"
+      ],
+      "dob": "1982-09-11",
+      "sources": {
+        "identityAndPick": [
+          "realgm2004",
+          "ap2004"
+        ],
+        "dob": [
+          "official48",
+          "rg48"
+        ],
+        "generalFamily": [
+          "AP2004",
+          "rg48"
+        ]
+      },
+      "dobStatus": "two_independent_publishers"
+    },
+    {
+      "id": "nba-draft-2004-p49",
+      "pick": 49,
+      "name": "Sergei Lishouk",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "families": [
+        "F",
+        "C"
+      ],
+      "dob": "1982-03-31",
+      "sources": {
+        "identityAndPick": [
+          "realgm2004",
+          "ap2004"
+        ],
+        "dob": [
+          "official49",
+          "rg49"
+        ],
+        "generalFamily": [
+          "rg49",
+          "lishouk-alias"
+        ]
+      },
+      "dobStatus": "two_independent_publishers"
+    },
+    {
+      "id": "nba-draft-2004-p50",
+      "pick": 50,
+      "name": "Vassilis Spanoulis",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "families": [
+        "G"
+      ],
+      "dob": "1982-08-07",
+      "sources": {
+        "identityAndPick": [
+          "realgm2004",
+          "ap2004"
+        ],
+        "dob": [
+          "official50",
+          "rg50"
+        ],
+        "generalFamily": [
+          "official50",
+          "rg50"
+        ]
+      },
+      "dobStatus": "two_independent_publishers"
+    },
+    {
+      "id": "nba-draft-2004-p51",
+      "pick": 51,
+      "name": "Christian Drejer",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "families": [
+        "F"
+      ],
+      "dob": "1982-12-08",
+      "sources": {
+        "identityAndPick": [
+          "realgm2004",
+          "ap2004"
+        ],
+        "dob": [
+          "official51",
+          "rg51"
+        ],
+        "generalFamily": [
+          "AP2004",
+          "rg51"
+        ]
+      },
+      "dobStatus": "two_independent_publishers"
+    },
+    {
+      "id": "nba-draft-2004-p52",
+      "pick": 52,
+      "name": "Romain Sato",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "families": [
+        "G"
+      ],
+      "dob": "1981-03-02",
+      "sources": {
+        "identityAndPick": [
+          "realgm2004",
+          "ap2004"
+        ],
+        "dob": [
+          "official52",
+          "rg52"
+        ],
+        "generalFamily": [
+          "AP2004",
+          "rg52"
+        ]
+      },
+      "dobStatus": "two_independent_publishers"
+    },
+    {
+      "id": "nba-draft-2004-p53",
+      "pick": 53,
+      "name": "Matt Freije",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "families": [
+        "F"
+      ],
+      "dob": "1981-10-02",
+      "sources": {
+        "identityAndPick": [
+          "realgm2004",
+          "ap2004"
+        ],
+        "dob": [
+          "official53",
+          "rg53"
+        ],
+        "generalFamily": [
+          "official53",
+          "rg53"
+        ]
+      },
+      "dobStatus": "two_independent_publishers"
+    },
+    {
+      "id": "nba-draft-2004-p54",
+      "pick": 54,
+      "name": "Rickey Paulding",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "families": [
+        "F"
+      ],
+      "dob": "1982-10-23",
+      "sources": {
+        "identityAndPick": [
+          "realgm2004",
+          "ap2004"
+        ],
+        "dob": [
+          "official54",
+          "rg54"
+        ],
+        "generalFamily": [
+          "official54",
+          "rg54"
+        ]
+      },
+      "dobStatus": "two_independent_publishers"
+    },
+    {
+      "id": "nba-draft-2004-p55",
+      "pick": 55,
+      "name": "Luis Flores",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "families": [
+        "G"
+      ],
+      "dob": "1981-04-11",
+      "sources": {
+        "identityAndPick": [
+          "realgm2004",
+          "ap2004"
+        ],
+        "dob": [
+          "official55",
+          "rg55"
+        ],
+        "generalFamily": [
+          "official55",
+          "rg55"
+        ]
+      },
+      "dobStatus": "two_independent_publishers"
+    },
+    {
+      "id": "nba-draft-2004-p56",
+      "pick": 56,
+      "name": "Marcus Douthit",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "families": [
+        "F",
+        "C"
+      ],
+      "dob": "1980-04-15",
+      "sources": {
+        "identityAndPick": [
+          "realgm2004",
+          "ap2004"
+        ],
+        "dob": [
+          "official56",
+          "rg56"
+        ],
+        "generalFamily": [
+          "official56",
+          "rg56"
+        ]
+      },
+      "dobStatus": "two_independent_publishers"
+    },
+    {
+      "id": "nba-draft-2004-p57",
+      "pick": 57,
+      "name": "Sergei Karaulov",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "families": [
+        "C"
+      ],
+      "dob": null,
+      "sources": {
+        "identityAndPick": [
+          "realgm2004",
+          "ap2004"
+        ],
+        "dob": [
+          "official57",
+          "rg57"
+        ],
+        "generalFamily": [
+          "AP2004",
+          "rg57"
+        ]
+      },
+      "dobStatus": "held_source_conflict"
+    },
+    {
+      "id": "nba-draft-2004-p58",
+      "pick": 58,
+      "name": "Blake Stepp",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "families": [
+        "G"
+      ],
+      "dob": "1982-02-04",
+      "sources": {
+        "identityAndPick": [
+          "realgm2004",
+          "ap2004"
+        ],
+        "dob": [
+          "official58",
+          "rg58"
+        ],
+        "generalFamily": [
+          "official58",
+          "rg58"
+        ]
+      },
+      "dobStatus": "two_independent_publishers"
+    },
+    {
+      "id": "nba-draft-2004-p59",
+      "pick": 59,
+      "name": "Rashad Wright",
+      "draftYear": 2004,
+      "draftDate": "2004-06-24",
+      "families": [
+        "G"
+      ],
+      "dob": "1982-03-17",
+      "sources": {
+        "identityAndPick": [
+          "realgm2004",
+          "ap2004"
+        ],
+        "dob": [
+          "official59",
+          "rg59"
+        ],
+        "generalFamily": [
+          "official59",
+          "rg59"
+        ]
+      },
+      "dobStatus": "two_independent_publishers"
+    }
+  ],
+  "disagreements": [
+    {
+      "pick": 50,
+      "field": "DOB",
+      "observations": {
+        "spanoulis-nba-conflict": "1982-08-02",
+        "official50": "1982-08-07",
+        "rg50": "1982-08-07",
+        "spanoulis-euroleague": "1982-08-07"
+      },
+      "approved": "1982-08-07",
+      "status": "ADJUDICATED",
+      "reason": "Direct official former-club record agrees with RealGM and EuroLeague text. The conflicting NBA value is retained as a discrepancy."
+    },
+    {
+      "pick": 42,
+      "field": "DOB",
+      "observations": {
+        "sanikidze-fiba-conflict": "1984-04-01",
+        "official42": "1986-04-01",
+        "rg42": "1986-04-01",
+        "sanikidze-euroleague": "1986-04-01"
+      },
+      "approved": "1986-04-01",
+      "status": "ADJUDICATED",
+      "reason": "Direct Finnish federation roster agrees with RealGM and EuroLeague. FIBA's conflicting generic profile is not counted as agreement."
+    },
+    {
+      "pick": 57,
+      "field": "DOB",
+      "observations": {
+        "official57": "1984-04-15",
+        "rg57": "1982-04-15",
+        "karaulov-third-lead": "1982-04-15"
+      },
+      "approved": null,
+      "status": "HELD",
+      "reason": "Primary FIBA and RealGM disagree by two years. The apparent Spurs third source was available only as an indexed PDF excerpt. Do not approve DOB or calculate a factual age."
+    }
+  ],
+  "roleVariations": [
+    {
+      "pick": 11,
+      "note": "AP draftF differs from NBA/RealGM generalC; only the independently supported generalC is approved."
+    },
+    {
+      "pick": 15,
+      "note": "AP draftF differs from NBA C and RealGM F-C; approvedC is general, not an exclusive rookie slot."
+    },
+    {
+      "pick": 30,
+      "note": "NBA/AP both supportF, while RealGM saysC. The approvedF does not deny that another career source calls himC."
+    },
+    {
+      "pick": 48,
+      "note": "AP/RealGM supportG, while official2013 Besiktas signing text calls himSmallForward. No exclusive or exact rookie slot is claimed."
+    }
+  ],
+  "identityNotes": [
+    {
+      "pick": 18,
+      "note": "NBA JR Smith and canonical J.R. Smith differ only by punctuation."
+    },
+    {
+      "pick": 46,
+      "note": "NBA title wasHaHa, but actual body identifiesSeung-JinHa with2004 pick46. Do not use the malformed title as a name."
+    },
+    {
+      "pick": 49,
+      "note": "CanonicalSergeiLishouk remains. Direct ShamSports profile links the SerhiyLishchuk spelling to the same2004 pick49, supporting the FIBA-name bridge."
+    },
+    {
+      "pick": 54,
+      "note": "CanonicalRickeyPaulding remains from the original adjudication; RealGM's Ricky variant is retained only as source spelling."
+    }
+  ],
+  "resolvedClassNameVariants": [
+    {
+      "pick": 21,
+      "variantSource": "ap2004",
+      "sourceForm": "PAVEL PODKOLZINE",
+      "canonicalSources": [
+        "realgm2004",
+        "nba-podkolzin"
+      ],
+      "decision": "Official NBA name/pick agrees with RealGM; AP variant retained as alias evidence."
+    },
+    {
+      "pick": 23,
+      "variantSource": "ap2004",
+      "sourceForm": "SERGEY MONIA",
+      "canonicalSources": [
+        "realgm2004",
+        "nba-monia"
+      ],
+      "decision": "Official NBA name/pick agrees with RealGM; AP transliteration retained as alias evidence."
+    },
+    {
+      "pick": 54,
+      "variantSource": "realgm2004",
+      "sourceForm": "Ricky Paulding",
+      "canonicalSources": [
+        "ap2004",
+        "missouri-paulding"
+      ],
+      "decision": "Athlete's university primary draft history agrees with AP spelling/pick; shortened RealGM name retained as alias evidence."
+    }
+  ],
+  "held": [
+    "Karaulov DOB remains unknown",
+    "NBA debut/stash/signing dates",
+    "historical team destinations/contracts",
+    "real historical ratings/potential",
+    "post-entry results are simulated"
+  ],
+  "evidencePacketSha256": {
+    "class": "4123d0d9bf5f0cd64ccb9c7ef04677032579a4a0c9b433eca24c24e10b7e886c",
+    "firstTen": "5f9e6e8bbbd2c1cc829f292bb04fa5fb029b967556d8eef45b42c8afc9150e15",
+    "remaining49": "df6feab4d8a1838b804aeb3f280385c395698e1f03ff1daeb6b579966cff1233"
+  }
+}

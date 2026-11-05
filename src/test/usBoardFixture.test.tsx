@@ -142,7 +142,7 @@ function oneCardBoard(sport: () => UsCareerSport): ComponentType {
          and the recording stays the board it was. The call itself is tested in
          src/test/usCareerIntlBoard.test.tsx, whose last arm replays the
          recorded saves with the bind mounted and counts which meet a call. */
-      const knob: UsCareerSport = { ...s, summer: ONE_CARD_KNOB, hall: undefined, intl: undefined };
+      const knob: UsCareerSport = { ...s, summer: ONE_CARD_KNOB, hall: undefined, intl: undefined, historicalDraft: undefined };
       Board = function KnobBoard() { return <UsCareerBoard sport={knob} />; };
       knobbed.set(s, Board);
     }

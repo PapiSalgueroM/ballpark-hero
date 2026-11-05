@@ -18,6 +18,7 @@
  * they were, and scripts/simUsBoardParity.mjs replays a fixture recorded from
  * the four old boards to hold that.
  */
+import type { ComponentType } from 'react';
 import type { CareerDraftEntry, PreDraftDescriptor, PreDraftState } from '@/lib/careerPreDraft';
 import type { PlayerAppearance } from '@/lib/soccerCareerAppearance';
 import type { CareerRival } from '@/lib/careerRival';
@@ -279,6 +280,14 @@ export interface UsCareerSport<C extends UsCareerCore = any, L extends UsCareerS
   loadTraining(pos: string): Promise<TrainingSport>;
 
   preDraft(eraId: string): PreDraftDescriptor;
+  /** Optional on one binding; no sport or data import enters the shared board. */
+  historicalDraft?: {
+    label: string;
+    policyForEra(eraId: string): string | undefined;
+    enableNewCareer(c: C): void;
+    available(c: C): boolean;
+    Panel: ComponentType<{ career: C; onBack: () => void }>;
+  };
   prospectRatings(arch: UsCareerArchetype, rng: () => number): { rating: number; pot: number };
 
   /* The engine. */
