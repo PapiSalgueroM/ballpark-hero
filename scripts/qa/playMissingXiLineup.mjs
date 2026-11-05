@@ -75,12 +75,20 @@ try {
       const value = await button.evaluate(e => { const r = e.getBoundingClientRect(), hit = document.elementFromPoint(r.x + r.width / 2, r.y + r.height / 2); return { width: r.width, height: r.height, x: r.x, right: r.right, top: r.top, bottom: r.bottom, painted: !!hit && (hit === e || e.contains(hit)) }; });
       row.layouts.push({ name, ...value }); check(value.width >= 43.5 && value.height >= 43.5 && value.x >= -0.5 && value.right <= width + 0.5 && value.top >= -0.5 && value.bottom <= page.viewportSize().height + 0.5 && value.painted, id + ': native ' + name + ' control is 44px and painted'); } };
     const inspectPitch = async revealed => { const pitch = page.locator('div[style*="aspect-ratio"]'); check(await pitch.count() === 1, id + ': actual pitch is unique');
-      const value = await pitch.evaluate(e => ({ aspect: e.style.aspectRatio, text: e.textContent, tiles: [...e.children].filter(n => n instanceof HTMLElement && n.style.left && n.style.top && n.style.width).map(n => ({ left: parseFloat(n.style.left), top: parseFloat(n.style.top), width: parseFloat(n.style.width), height: [...n.children].find(c => c instanceof HTMLElement && c.style.height)?.style.height })) }));
-      const tiles = B.pitchLayout(puzzle.lineup.slots); check(value.tiles.length === 11 && Math.abs(parseFloat(value.aspect) - B.PITCH_ASPECT) < 0.000001, id + ': original pitch geometry is retained');
-      tiles.forEach((tile, i) => check(Math.abs(value.tiles[i].left - tile.x) < 0.000001 && Math.abs(value.tiles[i].top - tile.y) < 0.000001 && Math.abs(value.tiles[i].width - tile.widthPct) < 0.000001
-        && parseFloat(value.tiles[i].height) === B.PITCH_TILE_HEIGHT_PX, id + ': exact pitch tile ' + i));
+      const sourceGeometry = { tiles: B.pitchLayout(puzzle.lineup.slots), aspect: B.PITCH_ASPECT, height: B.PITCH_TILE_HEIGHT_PX };
+      const value = await pitch.evaluate((e, expected) => {
+        const css = (property, value) => { const style = document.createElement('div').style; style.setProperty(property, value); return style.getPropertyValue(property); };
+        return { aspect: e.style.aspectRatio, expectedAspect: css('aspect-ratio', String(expected.aspect)), text: e.textContent, sourceGeometry: expected,
+          normalization: 'Detached CSSStyleDeclaration only; no probe is inserted in the document.',
+          tiles: [...e.children].filter(n => n instanceof HTMLElement && n.style.left && n.style.top && n.style.width).map(n => ({
+            left: n.style.left, top: n.style.top, width: n.style.width, height: [...n.children].find(c => c instanceof HTMLElement && c.style.height)?.style.height })),
+          expectedTiles: expected.tiles.map(tile => ({ left: css('left', tile.x + '%'), top: css('top', tile.y + '%'), width: css('width', tile.widthPct + '%'), height: css('height', expected.height + 'px') })) };
+      }, sourceGeometry);
+      row.layouts.push({ name: revealed ? 'revealed-pitch' : 'hidden-pitch', ...value }); put(id + '/' + (revealed ? 'revealed-pitch' : 'hidden-pitch'), value);
+      check(value.tiles.length === 11 && value.aspect === value.expectedAspect, id + ': original pitch geometry is retained');
+      value.expectedTiles.forEach((tile, i) => check(['left', 'top', 'width', 'height'].every(key => value.tiles[i][key] === tile[key]), id + ': exact pitch tile ' + i));
       if (!revealed) check(value.text.includes('Missing player') && value.text.includes(puzzle.lineup.slots[puzzle.candidate.slotIndex].position) && !value.text.includes(puzzle.candidate.name), id + ': pitch names the missing role without the answer');
-      row.layouts.push({ name: revealed ? 'revealed-pitch' : 'hidden-pitch', ...value }); };
+    };
     const inspectList = async revealed => { const items = list.getByRole('listitem'); check(await items.count() === 11, id + ': ordered list contains eleven starters');
       const html = await list.evaluate(e => e.outerHTML);
       if (!revealed) for (const forbidden of new Set([puzzle.candidate.name, puzzle.lineup.slots[puzzle.candidate.slotIndex].name])) check(!html.includes(forbidden), id + ': lineup wrapper does not expose hidden answer ' + forbidden);

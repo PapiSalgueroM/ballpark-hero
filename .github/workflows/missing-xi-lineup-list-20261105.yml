@@ -1,14 +1,14 @@
-name: Missing XI lineup full qualification
+name: Missing XI lineup same build browser
 on:
   push:
-    branches:
-      - codex/missing-xi-lineup-list-20261105
+    branches: [codex/missing-xi-lineup-list-20261105]
 permissions:
   contents: read
+  actions: read
 jobs:
-  scoped:
+  browser:
     runs-on: ubuntu-latest
-    timeout-minutes: 50
+    timeout-minutes: 25
     defaults:
       run:
         shell: bash
@@ -17,11 +17,10 @@ jobs:
       SIM_OFFLINE_RECEIPT: missing-xi-artifacts/offline.log
       ENGINES: chromium
       TZ: UTC
-      SEO_SPLIT_BASE_REF: e16e9ea36fc6c9aab84d7f79d99679e5c22e8ad3
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 8
+          fetch-depth: 1
           persist-credentials: false
       - uses: actions/setup-node@v4
         with:
@@ -59,40 +58,35 @@ jobs:
           console.log('Preserved all '+after.length+' locked installed versions.');
           NODE
           python -m pip install fonttools pillow
-      - name: Proper app types
-        run: node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee missing-xi-artifacts/types.log
-      - name: Fixed original five physical UI faults and restoration
+      - name: Download completed Missing XI build
+        uses: actions/download-artifact@v4
+        with:
+          name: missing-xi-lineup-final-42087796663
+          run-id: 42087796663
+          github-token: ${{ github.token }}
+          path: .tmp-mx-input
+      - name: Admit exact completed source-matched build
         run: |
-          NODE_OPTIONS="--max-old-space-size=6144 --require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/missingXiLineupCheck.mjs 2>&1 | tee missing-xi-artifacts/outcomes.log
-      - name: Existing Missing XI daily reload contract
-        run: |
-          ONLY=missing-xi NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node node_modules/vitest/vitest.mjs run src/test/dailyReload.test.tsx --maxWorkers=1 --minWorkers=1 --reporter=default --reporter=json --outputFile=missing-xi-artifacts/daily.json 2>&1 | tee missing-xi-artifacts/daily.log
-      - name: Normal production build
-        if: ${{ !cancelled() }}
-        id: build
-        run: |
-          NODE_OPTIONS="--max-old-space-size=6144" npm run build 2>&1 | tee missing-xi-artifacts/build.log
-          tar -czf missing-xi-artifacts/dist.tgz dist
-          sha256sum missing-xi-artifacts/dist.tgz > missing-xi-artifacts/dist.sha256
-      - name: Existing Missing XI engine layout and reach harnesses
-        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
-        run: |
-          ONLY=simMissingXi,simMissingXiLayout,simMissingXiReach node scripts/runAllSims.mjs --browser 2>&1 | tee missing-xi-artifacts/related-sims.log
-      - name: All built output readers
-        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
-        run: |
-          export ONLY="simAdsense,simBrand,simHeadTags,simHiddenPages,simHubs,simIndexNow,simIndexing,simInternalLinks,simNoRivalNames,simPrerender,simPrerenderBoot,simRetiredRoutes,simSchema,simSitemap,simSnapshotAssets,simSiteSearch,simGuideHeadings,simSeoMetaSplit,simHomeCopy,simHarnessAnchors"
-          node scripts/runAllSims.mjs --browser 2>&1 | tee missing-xi-artifacts/readers.log
-      - name: Existing route download limits
-        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
-        run: |
-          node scripts/lib/hostLikeServer.mjs dist 4173 > missing-xi-artifacts/weight-host.log 2>&1 &
-          sc_host_pid=$!
-          trap 'kill "$sc_host_pid" 2>/dev/null || true' EXIT
-          sleep 2
-          SWEEP_OFFLINE=1 BASE=http://127.0.0.1:4173 node scripts/sweepWeight.mjs 2>&1 | tee missing-xi-artifacts/weight.log
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';import {execFileSync} from 'node:child_process';import crypto from 'node:crypto';
+          const previous=fs.readFileSync('.tmp-mx-input/source-before.txt','utf8').split('\n').filter(l=>l.includes('\tsrc/')).join('\n').trim();
+          const current=execFileSync('git',['ls-files','-s','--','src'],{encoding:'utf8',maxBuffer:8*1024*1024}).trim();
+          assert.equal(current,previous,'Every src blob equals the completed build');
+          assert.equal(fs.readFileSync('.tmp-mx-input/head.txt','utf8').trim(),'7600754cb40d891343cf733366d9b6debcde4a85');
+          const archive=fs.readFileSync('.tmp-mx-input/dist.tgz');
+          assert.equal(archive.length,6980348);
+          assert.equal(crypto.createHash('sha256').update(archive).digest('hex'),'00f4cd853a62636a1a9f7a32218b60624090dc4b6f955f9dba181305d10cc391');
+          NODE
+          test ! -d dist
+          python - <<'PY'
+          import pathlib,tarfile
+          with tarfile.open('.tmp-mx-input/dist.tgz') as archive:
+            assert all(m.name=='dist' or (m.name.startswith('dist/') and '..' not in pathlib.PurePosixPath(m.name).parts) for m in archive.getmembers())
+            archive.extractall('.')
+          PY
+          cp .tmp-mx-input/dist.sha256 missing-xi-artifacts/admitted-dist.sha256
+          echo "Using exact completed build from 42087796663; no rebuild claim."
       - name: Actual daily wins phone desktop keyboard and touch
-        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
         run: |
           MX_LINEUP_BROWSER_OUT=missing-xi-artifacts/browser NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/playMissingXiLineup.mjs 2>&1 | tee missing-xi-artifacts/browser.log
       - name: Source and lock holds
@@ -107,7 +101,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: missing-xi-lineup-final-${{ github.run_id }}
+          name: missing-xi-lineup-browser-${{ github.run_id }}
           path: missing-xi-artifacts
           retention-days: 7
           if-no-files-found: error
