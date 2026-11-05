@@ -58,7 +58,7 @@ function units(name, expectedTitles) {
   const report = JSON.parse(fs.readFileSync(path.join(dir, 'report.json')));
   assert.equal(report.testResults.length, 3, name + ' all three test files');
   const counts = tests.map(file => report.testResults.find(row => row.name.replaceAll('\\', '/').endsWith(file))?.assertionResults.length);
-  assert.deepEqual(counts, [11, 3, 15], name + ' unchanged case census');
+  assert.deepEqual(counts, [11, 6, 15], name + ' unchanged case census');
   const cases = report.testResults.flatMap(row => row.assertionResults), failed = cases.filter(row => row.status === 'failed');
   assert(cases.every(row => ['passed', 'failed'].includes(row.status)), name + ' no skipped or pending cases');
   for (const row of failed) assert(row.failureMessages.some(message => message.includes('AssertionError')), name + ' assertion failure, not setup');
