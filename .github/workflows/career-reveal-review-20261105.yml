@@ -42,7 +42,9 @@ jobs:
           import fs from 'node:fs'; import assert from 'node:assert/strict';
           const r=JSON.parse(fs.readFileSync('reveal-review-original/units.json'));
           const rows=r.testResults.flatMap(s=>s.assertionResults);
-          assert.equal(r.numRuntimeErrorTestSuites,0);
+          assert.equal(r.numTotalTests,9); assert.equal(r.numFailedTests,9);
+          const raw=fs.readFileSync('reveal-review-original/units.log','utf8');
+          assert(!/Unhandled Errors|Unhandled Rejection|Uncaught Exception|Failed to resolve import/.test(raw));
           assert.equal(rows.length,9); assert.equal(rows.filter(x=>x.status==='failed').length,9);
           for(const row of rows) {
             assert(row.title.startsWith('REVIEW_'));
