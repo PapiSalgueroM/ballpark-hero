@@ -40,7 +40,7 @@ const report={status:'incomplete',mode:publicMode?'public':'local',product:m.pro
 const known=new Set(['https://flagcdn.com','https://fonts.googleapis.com','https://fonts.gstatic.com','https://flawuiqbvjobmkfkauhw.supabase.co']),routes=['/soccer-career'];
 const idle=p=>p.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
 const save=(p,key)=>p.evaluate(k=>localStorage.getItem(k),key);
-async function goto(p,url){await p.goto(base+url);await p.locator('#dukb-main').waitFor({state:'visible'});await answerConsent(p,{wait:1000});await idle(p);}
+async function goto(p,url){const response=await p.goto(base+url);await p.locator('#dukb-main').waitFor({state:'visible'});await answerConsent(p,{wait:1000});await idle(p);return response;}
 function validateNativeEvidence(actual) {
  assert.deepEqual(actual.requestFailures.filter(row=>!actual.aborts.some(a=>a.url===row.url)),[],'SC_REAL_ENTRY_NATIVE_UNDECLARED_REQUEST_FAILURE');
  assert(actual.assetBodies.some(row=>row.file==='prerender-boot.js'),'SC_REAL_ENTRY_NATIVE_OBSERVED_BOOT_BODY');
@@ -67,11 +67,133 @@ function checkCopiedActualEvidence(actual) {
   boot:{removed:removedBoot.length,actualBodies:removedBoot.map(x=>x.row),faultSHA256:sha(bootFault),ownedFailure:{name:bootError.name,message:bootError.message}},wholeInverseExact:true,actualReportHeld:true,
   scope:'Copied actual context report only. Remove real matching abort declarations or real verified boot observations. Same validator owns both failures; no App outcomes or HTTP bodies are fabricated.'};
 }
+const HOST_SCRIPT='/__l5e/events.270c78a44fc53e7b.js',HOST_WRITE='/__l5e/trackevents',publicHostResponses=new WeakMap();
+async function qualifyPublicTelemetry(p,r,response){
+ assert(publicMode);assert.equal(response.status(),200);
+ const html=await response.body(),text=html.toString(),sourceURL=origin+HOST_SCRIPT;
+ const tags=[...text.replace(/<!--[\s\S]*?-->/g,'').matchAll(/<script\b([^>]*)>[\s\S]*?<\/script\s*>/gi)].map(x=>x[0]);
+ const tag=tags.filter(t=>{const a=/\bsrc\s*=\s*(?:"([^"]*)"|'([^']*)')/i.exec(t);return a&&new URL(a[1]??a[2],response.url()).href===sourceURL;});
+ assert.equal(tag.length,1,'SC_REAL_ENTRY_PUBLIC_HOST_SOURCE_DECLARED');
+ assert(/\bdata-autocapture="1"/.test(tag[0])&&/\bdata-consent="1"/.test(tag[0]),'Actual declared host event script attributes');
+ const dom=await p.locator('script[src]').evaluateAll(nodes=>nodes.map(n=>n.src));
+ assert.equal(dom.filter(url=>url===sourceURL).length,1,'Actual page loaded its declared host script');
+ const actual=publicHostResponses.get(p);assert(actual,'SC_REAL_ENTRY_PUBLIC_OBSERVED_HOST_SCRIPT');
+ assert.equal(actual.url(),sourceURL);assert.equal(actual.status(),200);const code=await actual.body();assert(code.length>0);
+ const folder=path.join(out,'host-telemetry');await fs.mkdir(folder,{recursive:true});
+ const htmlFile=r.id+'-document.html',scriptFile=r.id+'-events.js';
+ await fs.writeFile(path.join(folder,htmlFile),html,{flag:'wx'});await fs.writeFile(path.join(folder,scriptFile),code,{flag:'wx'});
+ const sourceMatches=[];for(const file of Object.keys(m.sourceAfter).filter(p=>p.startsWith('src/')))if((await fs.readFile(file)).includes(Buffer.from(HOST_WRITE)))sourceMatches.push(file);
+ assert.deepEqual(sourceMatches,[],'The exact host event endpoint is absent from every tracked src body');
+ r.hostTelemetry.source={status:'actual-declared-and-observed-host-script',url:sourceURL,
+  document:{url:response.url(),file:'host-telemetry/'+htmlFile,bytes:html.length,sha256:sha(html),scriptTag:tag[0]},
+  script:{file:'host-telemetry/'+scriptFile,bytes:code.length,sha256:sha(code)},sourceEndpointMatches:sourceMatches,
+  scope:'Actual public HTML and actual executed host-script response, retained before UI creation/Phone actions. No response or App source replacement.'};
+}
+function initiatorURLs(initiator){const urls=[];for(let stack=initiator?.stack;stack;stack=stack.parent)for(const frame of stack.callFrames??[])if(frame.url)urls.push(frame.url);if(initiator?.url)urls.push(initiator.url);return urls;}
+function validateReadPreflight(row){
+ const {preflight,read,pw,abort}=row,marker='SC_REAL_ENTRY_PUBLIC_LINKED_READ_PREFLIGHT',u=new URL(preflight.url);
+ assert.equal(preflight.method,'OPTIONS',marker);assert.equal(preflight.initiator?.type,'preflight',marker);assert.equal(preflight.postData,null,marker);
+ assert.equal(u.origin,'https://flawuiqbvjobmkfkauhw.supabase.co',marker);assert.equal(u.pathname,'/rest/v1/live_scores',marker);
+ assert.equal(preflight.initiator.url,preflight.url,marker);assert.equal(preflight.initiator.requestId,read.requestId,marker);
+ assert.equal(read.method,'GET',marker);assert.equal(read.url,preflight.url,marker);assert.equal(pw.method,'GET',marker);assert.equal(pw.url,read.url,marker);
+ assert.equal(abort.requestId,pw.requestId,marker);assert.equal(abort.method,pw.method,marker);assert.equal(abort.url,pw.url,marker);
+}
+function publicProtocolRows(r){
+ const traces=[],preflights=[];
+ for(const preflight of r.hostTelemetry.initiators){
+  if(preflight.method!=='OPTIONS'||preflight.initiator?.type!=='preflight'){traces.push(preflight);continue;}
+  const parents=[...r.hostTelemetry.reads,...r.hostTelemetry.initiators].filter(q=>q.requestId===preflight.initiator.requestId);
+  if(parents.length===0)assert.fail('SC_REAL_ENTRY_PUBLIC_READ_PARENT_PENDING');assert.equal(parents.length,1,'Unique native preflight parent');
+  const read=parents[0];assert.equal(read.method,'GET','SC_REAL_ENTRY_PUBLIC_LINKED_READ_PREFLIGHT');
+  const requests=r.requests.filter(q=>q.method===read.method&&q.url===read.url);
+  if(requests.length===0)assert.fail('SC_REAL_ENTRY_PUBLIC_PW_READ_PENDING');assert.equal(requests.length,1,'Unique actual preflight-triggering read');
+  const pw=requests[0],aborts=r.aborts.filter(a=>a.requestId===pw.requestId);
+  if(aborts.length===0)assert.fail('SC_REAL_ENTRY_PUBLIC_READ_ABORT_PENDING');assert.equal(aborts.length,1,'Unique actual read abort');
+  const row={preflight:clone(preflight),read:clone(read),pw:clone(pw),abort:clone(aborts[0])};validateReadPreflight(row);preflights.push(row);
+ }
+ return{traces,preflights};
+}
+function copiedReadPreflightControl(next){
+ const actual=JSON.stringify(next),copy=clone(next.writeWindow.preflights[0]);assert(copy,'Actual linked read preflight control anchor');
+ const original=JSON.stringify(copy),held=copy.read.method;copy.read.method='POST';const fault=JSON.stringify(copy);assert.notEqual(fault,original);
+ let owned;try{validateReadPreflight(copy);}catch(error){owned=error;}
+ assert(owned instanceof assert.AssertionError);assert.match(owned.message,/^SC_REAL_ENTRY_PUBLIC_LINKED_READ_PREFLIGHT/);
+ copy.read.method=held;assert.equal(JSON.stringify(copy),original);assert.equal(JSON.stringify(next),actual);
+ return{changed:true,actualPreflight:next.writeWindow.preflights[0],faultParentMethod:'POST',faultSHA256:sha(fault),
+  ownedFailure:{name:owned.name,message:owned.message},wholeInverseExact:true,actualSampleHeld:true,
+  scope:'Copied actual native preflight with only triggering parent method changed. Same pure preflight validator must refuse; full inverse. No provider availability or physical fault claim.'};
+}
+function publicWriteWindow(r){
+ assert(r.hostTelemetry.source,'SC_REAL_ENTRY_PUBLIC_HOST_SOURCE_BEFORE_REVIEW');
+ const writes=r.requests.filter(q=>!['GET','HEAD'].includes(q.method)),{traces,preflights}=publicProtocolRows(r);
+ assert.equal(traces.length,writes.length,'SC_REAL_ENTRY_PUBLIC_COMPLETE_WRITE_INITIATORS');
+ return{source:r.hostTelemetry.source,preflights,writes:writes.map((q,i)=>{
+  const trace=traces[i];assert.equal(trace.url,q.url,'Exact ordered native write URL');assert.equal(trace.method,q.method,'Exact ordered native write method');
+  const body=trace.postData===null?Buffer.alloc(0):Buffer.from(trace.postData,'utf8');
+  assert.equal(body.length,q.body.bytes,'SC_REAL_ENTRY_PUBLIC_NATIVE_WRITE_BODY');assert.equal(sha(body),q.body.sha256,'SC_REAL_ENTRY_PUBLIC_NATIVE_WRITE_BODY');assert.equal(body.toString('base64'),q.body.base64??'','SC_REAL_ENTRY_PUBLIC_NATIVE_WRITE_BODY');
+  const aborts=r.aborts.filter(a=>a.requestId===q.requestId);if(aborts.length===0)assert.fail('SC_REAL_ENTRY_PUBLIC_WRITE_ABORT_PENDING');assert.equal(aborts.length,1,'Every attempted write has one actual abort declaration');
+  return{request:clone(q),abort:clone(aborts[0]),trace:clone(trace)};
+ })};
+}
+function gameWriteIds(window){
+ return window.writes.filter(({request:q,abort,trace})=>{
+  const u=new URL(q.url),host=q.method==='POST'&&u.origin===origin&&u.pathname===HOST_WRITE&&u.search===''&&u.hash==='';
+  if(!host)return true;
+  assert.equal(window.source.status,'actual-declared-and-observed-host-script','SC_REAL_ENTRY_PUBLIC_HOST_ATTRIBUTION');
+  assert.equal(window.source.url,origin+HOST_SCRIPT,'SC_REAL_ENTRY_PUBLIC_HOST_ATTRIBUTION');
+  assert.equal(abort.requestId,q.requestId);assert.equal(abort.url,q.url);assert.equal(abort.method,q.method);
+  assert.equal(trace.url,q.url);assert.equal(trace.method,q.method);
+  assert(initiatorURLs(trace.initiator).includes(window.source.url),'SC_REAL_ENTRY_PUBLIC_HOST_INITIATOR');
+  return false;
+ }).map(row=>row.request.requestId);
+}
+function writeSnapshot(r,paired){
+ if(!publicMode)return{writeRequests:r.requests.filter(q=>!['GET','HEAD'].includes(q.method)).length};
+ const writeWindow=paired??publicWriteWindow(r);return{writeRequests:gameWriteIds(writeWindow).length,writeWindow};
+}
+async function completePublicWriteSnapshot(r,label){
+ const started=Date.now(),deadline=started+5000,wait={label,maximumMilliseconds:5000,intervalMilliseconds:25,status:'waiting',samples:[]};
+ r.hostTelemetry.completionWaits.push(wait);
+ const pending=/^(?:SC_REAL_ENTRY_PUBLIC_COMPLETE_WRITE_INITIATORS|SC_REAL_ENTRY_PUBLIC_READ_PARENT_PENDING|SC_REAL_ENTRY_PUBLIC_PW_READ_PENDING|SC_REAL_ENTRY_PUBLIC_READ_ABORT_PENDING|SC_REAL_ENTRY_PUBLIC_WRITE_ABORT_PENDING)/;
+ for(;;){
+  if(Date.now()>=deadline){wait.status='timeout';assert.fail('SC_REAL_ENTRY_PUBLIC_WRITE_COMPLETION_TIMEOUT '+label);}
+  const sample={elapsedMilliseconds:Date.now()-started,pwWrites:r.requests.filter(q=>!['GET','HEAD'].includes(q.method)).length,nativeNonReads:r.hostTelemetry.initiators.length,nativeReads:r.hostTelemetry.reads.length};
+  try{const window=publicWriteWindow(r),snapshot=writeSnapshot(r,window);sample.pairedWrites=window.writes.length;sample.linkedReadPreflights=window.preflights.length;if(Date.now()>=deadline){wait.status='timeout';assert.fail('SC_REAL_ENTRY_PUBLIC_WRITE_COMPLETION_TIMEOUT '+label);}sample.status='paired';wait.samples.push(sample);wait.status='paired';wait.elapsedMilliseconds=Date.now()-started;wait.windowSHA256=sha(JSON.stringify(window));return snapshot;}
+  catch(error){sample.error={name:error.name,message:error.message};sample.status='not-paired';wait.samples.push(sample);if(!(error instanceof assert.AssertionError)||!pending.test(error.message)){wait.status=String(error.message).startsWith('SC_REAL_ENTRY_PUBLIC_WRITE_COMPLETION_TIMEOUT')?'timeout':'fatal';throw error;}if(Date.now()>=deadline){wait.status='timeout';assert.fail('SC_REAL_ENTRY_PUBLIC_WRITE_COMPLETION_TIMEOUT '+label);}await new Promise(resolve=>setTimeout(resolve,Math.min(25,Math.max(1,deadline-Date.now()))));}
+ }
+}
+function copiedUnknownWriteControl(before,next){
+ const actual=JSON.stringify({before,next}),window=clone(next.writeWindow),original=JSON.stringify(window);
+ const target=window.writes.find(row=>row.request.url===origin+HOST_WRITE&&row.request.method==='POST');assert(target,'Actual host POST control anchor');
+ const old=target.request.url;target.request.url=origin+'/__l5e/unrecognized-write-control';
+ const fault=JSON.stringify(window);assert.notEqual(fault,original);const altered={...next,writeWindow:window,writeRequests:gameWriteIds(window).length};
+ let owned;try{validateReadonlyReview(before,altered);}catch(error){owned=error;}
+ assert(owned instanceof assert.AssertionError);assert.match(owned.message,/^No new write request/);
+ target.request.url=old;assert.equal(JSON.stringify(window),original);assert.equal(JSON.stringify({before,next}),actual);
+ return{changed:true,actualSampleSHA256:sha(actual),actualRequestURL:old,faultRequestURL:origin+'/__l5e/unrecognized-write-control',
+  faultSHA256:sha(fault),ownedFailure:{name:owned.name,message:owned.message},wholeInverseExact:true,actualSampleHeld:true,
+  scope:'Copied actual attempted POST with only URL changed, through the same write classifier and unchanged read-only validator. Guard logic only, no physical or App fault claim.'};
+}
+function copiedHostInitiatorControl(next){
+ const actual=JSON.stringify(next),window=clone(next.writeWindow),original=JSON.stringify(window),source=window.source.url;
+ const target=window.writes.find(row=>row.request.url===origin+HOST_WRITE&&row.request.method==='POST');assert(target);
+ const held=clone(target.trace.initiator);let removed=0;
+ for(let stack=target.trace.initiator?.stack;stack;stack=stack.parent){const before=stack.callFrames??[];stack.callFrames=before.filter(frame=>frame.url!==source);removed+=before.length-stack.callFrames.length;}
+ if(target.trace.initiator.url===source){delete target.trace.initiator.url;removed++;}
+ assert(removed>0);assert(!initiatorURLs(target.trace.initiator).includes(source));const fault=JSON.stringify(window);assert.notEqual(fault,original);
+ let owned;try{gameWriteIds(window);}catch(error){owned=error;}
+ assert(owned instanceof assert.AssertionError);assert.match(owned.message,/^SC_REAL_ENTRY_PUBLIC_HOST_INITIATOR/);
+ const faultInitiator=clone(target.trace.initiator);target.trace.initiator=held;assert.equal(JSON.stringify(window),original);assert.equal(JSON.stringify(next),actual);
+ return{changed:true,removedSourceEntries:removed,source,actualInitiator:held,faultInitiator,faultSHA256:sha(fault),
+  ownedFailure:{name:owned.name,message:owned.message},wholeInverseExact:true,actualSampleHeld:true,
+  scope:'Copied actual attempted host POST loses every occurrence of its actual initiating host script. Same classifier must refuse the exclusion; the complete copy is then restored. Guard logic only.'};
+}
 async function journey(name,width,seeds,action){
  const height=width===390?844:900;
  const r={id:name+'-'+width,name,width,height,actor:width<768?'touch':'keyboard',status:'incomplete',actions:[],photos:[],requests:[],responses:[],aborts:[],requestFailures:[],console:[],pageErrors:[],assetBodies:[],assetErrors:[]},pendingAssets=[],assetDrains=new Map();report.contexts.push(r);
  const c=await browser.newContext({viewport:{width,height},deviceScaleFactor:1,isMobile:width<768,hasTouch:width<768,serviceWorkers:'block'});
- await c.route('**/*',async route=>{const q=route.request(),u=new URL(q.url());if(!['http:','https:'].includes(u.protocol)||u.origin===origin&&['GET','HEAD'].includes(q.method()))return route.continue();r.aborts.push({url:u.href,origin:u.origin,method:q.method()});return route.abort('blockedbyclient');});
+ const requestIds=new WeakMap();let requestSequence=0;const requestId=q=>{if(!requestIds.has(q))requestIds.set(q,++requestSequence);return requestIds.get(q);};
+ await c.route('**/*',async route=>{const q=route.request(),u=new URL(q.url());if(!['http:','https:'].includes(u.protocol)||u.origin===origin&&['GET','HEAD'].includes(q.method()))return route.continue();r.aborts.push({url:u.href,origin:u.origin,method:q.method(),...(publicMode?{requestId:requestId(q)}:{})});return route.abort('blockedbyclient');});
  await c.routeWebSocket('**/*',async socket=>{r.aborts.push({url:socket.url(),origin:new URL(socket.url()).origin,method:'WEBSOCKET'});await socket.close({code:1008,reason:'Source real entry QA'});});
  await c.addInitScript(({origin,seeds,routes})=>{if(location.origin!==origin||localStorage.getItem('feature-fixture-seeded'))return;for(const[k,v]of Object.entries(seeds))localStorage.setItem(k,v);for(const route of routes)localStorage.setItem('rules-gate-seen:'+route,'1');localStorage.setItem('feature-unrelated','held');localStorage.setItem('feature-fixture-seeded','1');},{origin,seeds,routes});
  c.on('page',page=>{
@@ -90,9 +212,10 @@ async function journey(name,width,seeds,action){
   };
   assetDrains.set(page,drainAssets);
   {r.assetNavigationWaits??=[];for(const method of['goto','reload','goBack']){const native=page[method].bind(page);page[method]=async(...args)=>{await drainAssets(method);return native(...args);};}}
-  page.on('request',q=>{r.requests.push({url:q.url(),method:q.method()});if(isAsset(q.url())){activeAssets.add(q);lastAssetActivity=Date.now();}});
+  page.on('request',q=>{const row={url:q.url(),method:q.method()};if(publicMode){row.requestId=requestId(q);if(!['GET','HEAD'].includes(row.method)){const body=q.postDataBuffer();row.body={bytes:body?.length??0,sha256:sha(body??Buffer.alloc(0)),base64:body?.toString('base64')??null};row.resourceType=q.resourceType();}}r.requests.push(row);if(isAsset(q.url())){activeAssets.add(q);lastAssetActivity=Date.now();}});
   page.on('response',q=>{
    r.responses.push({url:q.url(),status:q.status()});const u=new URL(q.url());
+    if(publicMode&&u.origin===origin&&u.pathname===HOST_SCRIPT&&q.request().resourceType()==='script')publicHostResponses.set(page,q);
    if(isAsset(q.url())){
     lastAssetActivity=Date.now();
     const read=(async()=>{try{const file=decodeURIComponent(u.pathname.slice(1)),ref=assetReference.get(file);assert(ref,'Unknown published asset '+file);assert([200,304].includes(q.status()),'Published asset HTTP '+q.status());const bytes=await q.body(),digest=sha(bytes);assert.equal(bytes.length,ref.bytes,file+' bytes');assert.equal(digest,ref.sha256,file+' digest');r.assetBodies.push({file,status:q.status(),bytes:bytes.length,sha256:digest});if(observedAssets.has(file))assert.equal(observedAssets.get(file),digest);else{observedAssets.set(file,digest);await fs.mkdir(path.join(out,'served-assets',path.dirname(file)),{recursive:true});await fs.writeFile(path.join(out,'served-assets',file),bytes,{flag:'wx'});}}catch(e){r.assetErrors.push({url:q.url(),error:String(e.stack||e)});}})();
@@ -104,7 +227,8 @@ async function journey(name,width,seeds,action){
   page.on('pageerror',e=>r.pageErrors.push(String(e.stack||e)));page.on('console',e=>r.console.push({type:e.type(),text:e.text(),location:e.location()}));
  });
  const p=await c.newPage();p.setDefaultTimeout(15000);p.setDefaultNavigationTimeout(30000);
- try{await action(p,r,c);assert.equal(await save(p,'feature-unrelated'),'held');r.status='passed';}
+ if(publicMode){r.hostTelemetry={initiators:[],reads:[],completionWaits:[]};const session=await c.newCDPSession(p);session.on('Network.requestWillBeSent',e=>{if(['GET','HEAD'].includes(e.request.method))r.hostTelemetry.reads.push({url:e.request.url,method:e.request.method,requestId:e.requestId,timestamp:e.timestamp});else r.hostTelemetry.initiators.push({url:e.request.url,method:e.request.method,postData:e.request.postData??null,initiator:clone(e.initiator),requestId:e.requestId,timestamp:e.timestamp});});await session.send('Network.enable');}
+ try{await action(p,r,c);assert.equal(await save(p,'feature-unrelated'),'held');if(publicMode){const writes=(await completePublicWriteSnapshot(r,'final context')).writeWindow;assert.deepEqual(gameWriteIds(writes),[],'SC_REAL_ENTRY_PUBLIC_NO_GAME_OR_PROVIDER_WRITES');assert(r.publicWriteControl?.wholeInverseExact);assert(r.publicHostInitiatorControl?.wholeInverseExact);assert(r.publicPreflightControl?.wholeInverseExact);r.hostTelemetry.finalWindow=writes;}r.status='passed';}
  catch(e){r.status='failed';r.error=String(e.stack||e);try{await p.screenshot({path:out+'/'+r.id+'-failure.png'});r.failureScreenshot=r.id+'-failure.png';}catch{}}
  finally{
   r.url=p.url();
@@ -215,10 +339,11 @@ function copiedReviewScrollControl(before,after){
  return{actualSampleSHA256:sha(original),beforeDocument:before.document,actualAfterDocument:after.document,faultAfterDocument:faultDocument,ownedFailure:{name:owned.name,message:owned.message},wholeInverseExact:true,actualSampleHeld:true,scope:'Copied actual read-only review sample only. No physical input or signing-scroll control credit.'};
 }
 async function readonlyAction(p,r,target,label,after){
- await prepareControl(p,r,target);const before={document:await scrollOf(p),saved:await frame(p),focus:await active(p),storage:await storage(p),url:p.url(),writeRequests:r.requests.filter(q=>!['GET','HEAD'].includes(q.method)).length};
+ await prepareControl(p,r,target);const pairedBefore=publicMode?await completePublicWriteSnapshot(r,label+' before'):null;
+ const before={document:await scrollOf(p),saved:await frame(p),focus:await active(p),storage:await storage(p),url:p.url(),...(publicMode?pairedBefore:writeSnapshot(r))};
  await pressPrepared(p,r,target,label);await after();await idle(p);
- const next={document:await scrollOf(p),saved:await frame(p),focus:await active(p),storage:await storage(p),url:p.url(),writeRequests:r.requests.filter(q=>!['GET','HEAD'].includes(q.method)).length};
- validateReadonlyReview(before,next);r.reviewScrollControl??=copiedReviewScrollControl(before,next);
+ const next={document:await scrollOf(p),saved:await frame(p),focus:await active(p),storage:await storage(p),url:p.url(),...(publicMode?await completePublicWriteSnapshot(r,label+' after'):writeSnapshot(r))};
+ validateReadonlyReview(before,next);r.reviewScrollControl??=copiedReviewScrollControl(before,next);if(publicMode){r.publicWriteControl??=copiedUnknownWriteControl(before,next);r.publicHostInitiatorControl??=copiedHostInitiatorControl(next);r.publicPreflightControl??=copiedReadPreflightControl(next);}
  r.actions.push({type:'read-only-review',label,before,after:next});
 }
 
@@ -298,7 +423,7 @@ async function phoneRead(p,r,label,empty=false,retired=false){
  return before;
 }
 async function run(p,r){
- await goto(p,'/soccer-career');assert.equal(await save(p,KEY),null,'Real creation starts without an App save');
+ const response=await goto(p,'/soccer-career');if(publicMode)await qualifyPublicTelemetry(p,r,response);assert.equal(await save(p,KEY),null,'Real creation starts without an App save');
  await typeInto(p,r,p.getByPlaceholder('Enter your player name...'),'Native Entry Tester','Actual player name');
  await selectOption(p,r,0,'Spain');await selectOption(p,r,1,'Central Mid (CM)');await selectOption(p,r,2,'Late 2000s (2005 start)');
  await press(p,r,p.getByRole('button',{name:/Generate Starting Potential|Roll again/}),'Actual natural roll');
