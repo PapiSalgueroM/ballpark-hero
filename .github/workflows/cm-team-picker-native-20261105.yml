@@ -1,0 +1,265 @@
+name: CM Team-picker native same qualified completed build
+on:
+  push:
+    branches: [codex/cm-team-picker-native-20261105]
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: cm-team-picker-native-20261105
+  cancel-in-progress: false
+jobs:
+  native:
+    runs-on: ubuntu-latest
+    timeout-minutes: 50
+    env:
+      PRODUCT: 671730c30f67685f070593af7b2464a9cc1f5352
+      PRODUCT_TREE: 7080fc953cab1ebbb3f616b7741f022c8b7a8ea0
+      QA_PARENT: 4df3156f09eb58a6ef7c5f77bde54a8692cb0609
+      QA_PARENT_TREE: 5f147f4c95a2d2437b71a1137d92d8e15e090705
+      QA_BRANCH: codex/cm-team-picker-candidate-20261105
+      BROWSER_BLOB: 6c130859d28c128e38794927204f4c339a18665f
+      READY_BLOB: 671f460aa088d42b44c435a03594cf26695d6e09
+      FIXED_RUN: 42107635888
+      FIXED_JOB: 127526561572
+      FIXED_ARTIFACT: 13454126903
+      FIXED_ARTIFACT_NAME: cm-team-picker-candidate-42107635888-1
+      FIXED_ZIP_BYTES: 40030069
+      FIXED_ZIP_SHA: 24467054ddc4de31ec166887cc4832ae687f65ebb1786062986710516e17622f
+      FIXED_TGZ_ENTRY: cm-team-picker-candidate-evidence.tar.gz
+      FIXED_TGZ_BYTES: 40029558
+      FIXED_TGZ_SHA: 0736490be36d4eb9b5df87ab9085e7d0d3960053a3a9a75b2e2575bfd707e8d0
+      FIXED_CLOSING_PATH: FINAL-CANDIDATE-ADMITTED.json
+      FIXED_CLOSING_BYTES: 811980
+      FIXED_CLOSING_SHA: 85ab3194feb0f20093b3bbea6a2048cf9b782ad5e6c96f10a1499ceae8f775c2
+      FIXED_MANIFEST_PATH: native-manifest.json
+      FIXED_MANIFEST_BYTES: 1430241
+      FIXED_MANIFEST_SHA: 6105fbd662a6b8bab76236f3a002e4883f7a3e652a0be3b686b151b3e00bb9c8
+      FIXED_PROOF_PATH: replay/fixed/build-proof.json
+      FIXED_PROOF_BYTES: 1149
+      FIXED_PROOF_SHA: fadc348ea69e3b147d17086fb8e27b5bd8101df1ae27f2fd51877dfe3c088b94
+      FIXED_PROOF_STATUS: actual-arm-compiled-gates-recorded
+      FIXED_TAR_PATH: replay/fixed/completed-dist.tar.gz
+      FIXED_TAR_BYTES: 6982957
+      FIXED_TAR_SHA: 0439e8dc5635f6146dc67a80e9a831c5fbbd847e019b1e58b2d2510399b90e70
+      FIXED_INDEPENDENT_SHA: 7d19fe8286d30116932e39f7da30b3d1b91c8ce38f4c86d5c92cd11699b2037a
+      ORIGINAL_INDEPENDENT_SHA: 66569142faf341c717c14350fbc0bc3a6b8ddda846449c4d3c325e02fb069d5f
+      PLAYWRIGHT_BROWSERS_PATH: /home/runner/.cache/ms-playwright
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+          filter: blob:none
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: '1.4.4'
+      - name: Bind exactly three native QA additions on the admitted headless QA tree
+        shell: bash
+        run: |
+          set -euo pipefail
+          QA_OUT="$RUNNER_TEMP/cm-team-picker-native"
+          QA_REF="$RUNNER_TEMP/cm-team-picker-native-inputs"
+          QA_DIST="$RUNNER_TEMP/cm-team-picker-native-dist"
+          export QA_OUT QA_REF QA_DIST
+          test ! -e "$QA_OUT"
+          test ! -e "$QA_REF"
+          test ! -e "$QA_DIST"
+          mkdir -p "$QA_OUT"/{logs,input,transport} "$QA_REF" "$QA_DIST"
+          printf 'QA_OUT=%s\nQA_REF=%s\nQA_DIST=%s\n' "$QA_OUT" "$QA_REF" "$QA_DIST" >> "$GITHUB_ENV"
+          node --input-type=module <<'PINS'
+          import fs from 'node:fs';import assert from 'node:assert/strict';import{execFileSync}from'node:child_process';
+          const env=process.env;
+          for(const name of ['QA_PARENT','QA_PARENT_TREE'])assert.match(env[name],/^[a-f0-9]{40}$/,name);
+          for(const name of ['FIXED_ZIP_SHA','FIXED_TGZ_SHA','FIXED_CLOSING_SHA','FIXED_MANIFEST_SHA','FIXED_PROOF_SHA','FIXED_TAR_SHA','FIXED_INDEPENDENT_SHA','ORIGINAL_INDEPENDENT_SHA'])assert.match(env[name],/^[a-f0-9]{64}$/,name);
+          for(const name of ['FIXED_RUN','FIXED_JOB','FIXED_ARTIFACT','FIXED_ZIP_BYTES','FIXED_TGZ_BYTES','FIXED_CLOSING_BYTES','FIXED_MANIFEST_BYTES','FIXED_PROOF_BYTES','FIXED_TAR_BYTES'])assert.match(env[name],/^[1-9][0-9]*$/,name);
+          for(const[name,value]of Object.entries(env).filter(([name])=>name.startsWith('FIXED_')||name==='QA_BRANCH'))assert(value&&!value.includes('MUST_BIND'),name);
+          const git=(...args)=>execFileSync('git',args,{encoding:'utf8'}).trim();
+          assert.equal(git('rev-parse','HEAD^'),env.QA_PARENT);assert.equal(git('rev-parse','HEAD^^{tree}'),env.QA_PARENT_TREE);
+          const expected=['.github/workflows/cm-team-picker-native-20261105.yml','scripts/qa/cmTeamPickerNative.mjs','scripts/qa/nativeScrollReady.mjs'];
+          const delta=git('diff','--name-status','--no-renames','HEAD^','HEAD').split('\n').map(row=>row.split('\t'));
+          assert(delta.every(row=>row.length===2&&row[0]==='A'));assert.deepEqual(delta.map(row=>row[1]).sort(),expected.slice().sort());
+          assert.equal(git('hash-object','scripts/qa/cmTeamPickerNative.mjs'),env.BROWSER_BLOB);assert.equal(git('hash-object','scripts/qa/nativeScrollReady.mjs'),env.READY_BLOB);
+          assert.equal(git('status','--porcelain=v1','--untracked-files=all'),'');
+          fs.writeFileSync(env.QA_OUT+'/qa-delta.json',JSON.stringify({parent:env.QA_PARENT,parentTree:env.QA_PARENT_TREE,delta,wholeInverse:'Remove exactly these three added QA files to recover the actual inherited headless QA tree.'},null,2)+'\n');
+          fs.copyFileSync('.github/workflows/cm-team-picker-native-20261105.yml',env.QA_OUT+'/workflow.yml');
+          fs.writeFileSync(env.QA_OUT+'/workflow-source.json',JSON.stringify({head:git('rev-parse','HEAD'),tree:git('rev-parse','HEAD^{tree}'),path:expected[0],gitBlob:git('hash-object',expected[0])})+'\n');
+          PINS
+          node --check scripts/qa/cmTeamPickerNative.mjs
+          node --check scripts/qa/nativeScrollReady.mjs
+          git ls-files -z > "$QA_OUT/tracked-before.bin"
+          git ls-files -z | xargs -0 sha256sum > "$QA_OUT/source-before.sha256"
+          git ls-files -s > "$QA_OUT/index-before.txt"
+          git status --porcelain=v1 --untracked-files=all > "$QA_OUT/status-before.txt"
+          test ! -s "$QA_OUT/status-before.txt"
+          cp package-lock.json "$QA_OUT/lock-before.json"
+          node --input-type=module -e 'import fs from "node:fs";import crypto from "node:crypto";const sha=b=>crypto.createHash("sha256").update(b).digest("hex");fs.writeFileSync(process.env.QA_OUT+"/all-locks-before.json",JSON.stringify(Object.fromEntries(["package.json","package-lock.json","bun.lock","bun.lockb","yarn.lock","pnpm-lock.yaml"].map(p=>[p,fs.existsSync(p)?sha(fs.readFileSync(p)):null])))+"\n");'
+          git rev-parse HEAD HEAD^ 'HEAD^{tree}' > "$QA_OUT/source-identity.txt"
+      - name: Authenticate one admitted candidate artifact and its fixed completed output
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          node --input-type=module <<'AUTH'
+          import fs from 'node:fs';import path from 'node:path';import crypto from 'node:crypto';import assert from 'node:assert/strict';import{spawnSync}from'node:child_process';
+          const e=process.env,out=e.QA_OUT,ref=e.QA_REF,sha=b=>crypto.createHash('sha256').update(b).digest('hex');
+          const native=(label,command,args,binary=false)=>{const r=spawnSync(command,args,{encoding:binary?null:'utf8',maxBuffer:64*1024*1024});fs.writeFileSync(path.join(out,'input',label+'.native.json'),JSON.stringify({command:[command,...args],status:r.status,signal:r.signal,error:r.error?String(r.error):null})+'\n');fs.writeFileSync(path.join(out,'input',label+'.stderr.log'),r.stderr??'');if(!binary)fs.writeFileSync(path.join(out,'input',label+'.stdout.log'),r.stdout??'');assert.equal(r.status,0);assert.equal(r.signal,null);assert.equal(r.error,undefined);return r.stdout;};
+          const api=(name,apiPath)=>JSON.parse(native(name,'gh',['api','repos/PapiSalgueroM/ballpark-hero/'+apiPath]));
+          const run=api('run','actions/runs/'+e.FIXED_RUN),job=api('job','actions/jobs/'+e.FIXED_JOB),artifact=api('artifact','actions/artifacts/'+e.FIXED_ARTIFACT);
+          assert.equal(run.status,'completed');assert.equal(run.conclusion,'success');assert.equal(run.head_sha,e.QA_PARENT);assert.equal(run.head_branch,e.QA_BRANCH);assert.equal(job.id,Number(e.FIXED_JOB));assert.equal(job.run_id,Number(e.FIXED_RUN));assert.equal(job.conclusion,'success');
+          assert.equal(artifact.id,Number(e.FIXED_ARTIFACT));assert.equal(artifact.name,e.FIXED_ARTIFACT_NAME);assert.equal(artifact.size_in_bytes,Number(e.FIXED_ZIP_BYTES));assert.equal(artifact.expired,false);assert.equal(artifact.workflow_run.id,Number(e.FIXED_RUN));
+          const zip=native('sole-artifact-acquisition','gh',['api','repos/PapiSalgueroM/ballpark-hero/actions/artifacts/'+e.FIXED_ARTIFACT+'/zip'],true);
+          assert.equal(zip.length,Number(e.FIXED_ZIP_BYTES));assert.equal(sha(zip),e.FIXED_ZIP_SHA);
+          const zipFile=path.join(ref,'original.zip');fs.writeFileSync(zipFile,zip,{flag:'wx'});
+          const entries=native('zip-list','unzip',['-Z1',zipFile]).trim().split('\n');assert(entries.every(v=>!v.startsWith('/')&&!v.split('/').includes('..')));assert.equal(entries.filter(v=>v===e.FIXED_TGZ_ENTRY).length,1);
+          const tgz=native('zip-inner','unzip',['-p',zipFile,e.FIXED_TGZ_ENTRY],true);assert.equal(tgz.length,Number(e.FIXED_TGZ_BYTES));assert.equal(sha(tgz),e.FIXED_TGZ_SHA);
+          const tgzFile=path.join(ref,'evidence.tar.gz');fs.writeFileSync(tgzFile,tgz,{flag:'wx'});
+          const names=native('tar-list','tar',['-tzf',tgzFile]).trim().split('\n');assert(names.every(v=>!v.startsWith('/')&&!v.split('/').includes('..')));
+          const modes=native('tar-types','tar',['-tvzf',tgzFile]).trim().split('\n');assert(modes.every(v=>v.startsWith('-')||v.startsWith('d')),'No link or special-file extraction');
+          const extracted=path.join(ref,'evidence');fs.mkdirSync(extracted);native('tar-extract','tar',['-xzf',tgzFile,'-C',extracted]);
+          const read=(name,relative,bytes,digest)=>{assert(relative&&!relative.startsWith('/')&&!relative.split('/').includes('..'));const b=fs.readFileSync(path.join(extracted,relative));assert.equal(b.length,Number(bytes),name+' bytes');assert.equal(sha(b),digest,name+' SHA');fs.writeFileSync(path.join(out,'input',name+'.json'),b,{flag:'wx'});return{bytes:b,value:JSON.parse(b.toString('utf8'))};};
+          const close=read('original-closing',e.FIXED_CLOSING_PATH,e.FIXED_CLOSING_BYTES,e.FIXED_CLOSING_SHA),manifest=read('original-native-manifest',e.FIXED_MANIFEST_PATH,e.FIXED_MANIFEST_BYTES,e.FIXED_MANIFEST_SHA),proof=read('original-fixed-build-proof',e.FIXED_PROOF_PATH,e.FIXED_PROOF_BYTES,e.FIXED_PROOF_SHA);
+          assert.equal(close.value.status,'ADMITTED_THREE_ARM_COLD_BOUNDARY_AND_HELD_UI');assert.equal(close.value.candidate.commit,e.PRODUCT);assert.equal(close.value.candidate.tree,e.PRODUCT_TREE);
+          assert.deepEqual(Object.keys(close.value.arms).sort(),['fixed','eager-wire','restored'].sort());assert.equal(close.value.fourBusinessRecordsWholeExact,true);assert.equal(close.value.restoredCompleteDistHeld,true);assert.equal(close.value.finalFullSourceHeld,true);assert.equal(close.value.eagerMechanisms,1);
+          assert.equal(close.value.copiedActualTapeControl.changed,true);assert.equal(close.value.copiedActualTapeControl.wholeInverse,true);
+          for(const name of ['fixed','eager-wire','restored']){const a=close.value.arms[name].admitted;assert.equal(a.status,'ADMITTED_CANDIDATE_ARM');assert.equal(a.arm,name);assert.equal(a.caseStatuses.length,5);assert.equal(a.caseStatuses.filter(v=>v.status==='passed').length,name==='eager-wire'?4:5);assert.equal(a.caseStatuses.filter(v=>v.status==='failed').length,name==='eager-wire'?1:0);assert.equal(a.completeRawCount,5);assert(a.heldComparisons.every(v=>v.storedExact&&v.decodedExact));assert.equal(a.copiedCensusControl.changed,true);assert.equal(a.copiedCensusControl.wholeInverse,true);}
+          const m=manifest.value;assert.equal(m.schema,'CM_TEAM_PICKER_NATIVE_SOURCE_DIST_V1');assert.equal(m.status,'QUALIFIED_FIXED_BUILD_NATIVE_INPUT');assert.equal(m.product.commit,e.PRODUCT);assert.equal(m.product.tree,e.PRODUCT_TREE);assert.equal(m.core,e.PRODUCT);assert.equal(m.admissions.candidate,e.FIXED_CLOSING_SHA);assert.equal(m.admissions.original,close.value.original.admissionSHA256);assert.equal(m.independentOriginalPeerSHA256,e.ORIGINAL_INDEPENDENT_SHA);assert.equal(close.value.original.independentAdmissionSHA256,e.ORIGINAL_INDEPENDENT_SHA);
+          assert.deepEqual(m.sourceBefore,m.sourceAfter);assert.equal(proof.value.status,e.FIXED_PROOF_STATUS);assert.equal(proof.value.normalBuilds,1);assert.equal(proof.value.readersCount,20);assert.equal(proof.value.allCapsUnchanged,true);
+          const expected=close.value.arms.fixed.admitted.completeDist.map(r=>({file:r.path,bytes:r.bytes,sha256:r.sha256})).sort((a,b)=>a.file<b.file?-1:a.file>b.file?1:0);
+          assert.deepEqual(m.distBefore,expected);assert.equal(m.distDigest,sha(Buffer.from(JSON.stringify(expected))));assert.equal(proof.value.distFiles,m.distBefore.length);
+          const tarPath=path.join(extracted,e.FIXED_TAR_PATH);assert(!e.FIXED_TAR_PATH.startsWith('/')&&!e.FIXED_TAR_PATH.split('/').includes('..'));const tar=fs.readFileSync(tarPath);assert.equal(tar.length,Number(e.FIXED_TAR_BYTES));assert.equal(sha(tar),e.FIXED_TAR_SHA);assert.deepEqual(m.completedTar,{bytes:tar.length,sha256:sha(tar)});assert.deepEqual(proof.value.tar,m.completedTar);
+          const distNames=native('fixed-dist-list','tar',['-tzf',tarPath]).trim().split('\n');assert(distNames.every(v=>v==='dist/'||v.startsWith('dist/')&&!v.split('/').includes('..')));
+          const distModes=native('fixed-dist-types','tar',['-tvzf',tarPath]).trim().split('\n');assert(distModes.every(v=>v.startsWith('-')||v.startsWith('d')));
+          native('fixed-dist-extract','tar',['-xzf',tarPath,'--strip-components=1','-C',e.QA_DIST]);
+          const inventory=dir=>{const rows=[];function walk(rel=''){for(const f of fs.readdirSync(path.join(dir,rel),{withFileTypes:true})){const file=path.posix.join(rel,f.name);if(f.isDirectory())walk(file);else{assert(f.isFile());const b=fs.readFileSync(path.join(dir,file));rows.push({file,bytes:b.length,sha256:sha(b)});}}}walk();return rows.sort((a,b)=>a.file<b.file?-1:a.file>b.file?1:0);};
+          assert.deepEqual(inventory(e.QA_DIST),m.distBefore);
+          const current=Object.fromEntries(fs.readFileSync(path.join(out,'source-before.sha256'),'utf8').trim().split('\n').map(line=>{const x=/^([a-f0-9]{64}) [ *](.*)$/.exec(line);assert(x);return[x[2],x[1]];}));
+          const additions=['.github/workflows/cm-team-picker-native-20261105.yml','scripts/qa/cmTeamPickerNative.mjs','scripts/qa/nativeScrollReady.mjs'];
+          assert.deepEqual(Object.keys(current).sort(),[...Object.keys(m.sourceAfter),...additions].sort());
+          for(const[p,digest]of Object.entries(m.sourceAfter)){assert.equal(current[p],digest,p);assert.equal(sha(fs.readFileSync(p)),digest,p);}
+          const gitBlob=b=>crypto.createHash('sha1').update(Buffer.from('blob '+b.length+'\0')).update(b).digest('hex');
+          for(const pin of m.pins)assert.equal(gitBlob(fs.readFileSync(pin.path)),pin.gitBlob,pin.path);
+          const derived={...m,sourceBefore:current,sourceAfter:current};assert(Buffer.from(JSON.stringify(m,null,2)+'\n').equals(manifest.bytes),'Exact original canonical manifest bytes');
+          const inverse={...derived,sourceBefore:m.sourceBefore,sourceAfter:m.sourceAfter};assert(Buffer.from(JSON.stringify(inverse,null,2)+'\n').equals(manifest.bytes),'Only two source maps changed; whole inverse');
+          const derivedBytes=Buffer.from(JSON.stringify(derived,null,2)+'\n');fs.writeFileSync(path.join(out,'input','native-manifest.json'),derivedBytes,{flag:'wx'});
+          fs.writeFileSync(path.join(out,'input','source-bridge.json'),JSON.stringify({originalManifestSHA256:e.FIXED_MANIFEST_SHA,derivedManifestSHA256:sha(derivedBytes),changedKeys:['sourceBefore','sourceAfter'],wholeInverseExact:true,exactAddedQaPaths:additions,AppAndHeadlessInputsHeld:true,independentCandidateAdmissionSHA256:e.FIXED_INDEPENDENT_SHA,sourceProduct:e.PRODUCT,sourceTree:e.PRODUCT_TREE,headlessQa:e.QA_PARENT,headlessTree:e.QA_PARENT_TREE},null,2)+'\n',{flag:'wx'});
+          fs.writeFileSync(path.join(out,'input-reference-before.json'),JSON.stringify(inventory(ref))+'\n',{flag:'wx'});
+          fs.writeFileSync(path.join(out,'dist-before.json'),JSON.stringify(inventory(e.QA_DIST))+'\n',{flag:'wx'});
+          fs.writeFileSync(path.join(out,'input','acquisition-authenticated.json'),JSON.stringify({run:e.FIXED_RUN,job:e.FIXED_JOB,qa:e.QA_PARENT,artifact:e.FIXED_ARTIFACT,zipBytes:zip.length,zipSHA256:sha(zip),tgzBytes:tgz.length,tgzSHA256:sha(tgz),closingSHA256:sha(close.bytes),nativeManifestSHA256:sha(manifest.bytes),tarBytes:tar.length,tarSHA256:sha(tar),independentAdmissionSHA256:e.FIXED_INDEPENDENT_SHA,soleAcquisition:true,AppBuilds:0,fixtureOrModelGeneration:false},null,2)+'\n',{flag:'wx'});
+          AUTH
+      - name: Install held App and browser runtime only
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(bun --version)" = 1.4.4
+          bun --version > "$QA_OUT/logs/bun-version.log"
+          node --version > "$QA_OUT/logs/node-version.log"
+          bun install --frozen-lockfile > "$QA_OUT/logs/bun-install.log" 2>&1
+          git diff --exit-code HEAD -- package.json package-lock.json bun.lock bun.lockb
+          npm install --prefix "$RUNNER_TEMP/real-entry-browser-tools" --package-lock=false --no-audit --no-fund playwright@1.64.0 > "$QA_OUT/logs/playwright-install.log" 2>&1
+          test ! -e node_modules/playwright
+          test ! -e node_modules/playwright-core
+          ln -s "$RUNNER_TEMP/real-entry-browser-tools/node_modules/playwright" node_modules/playwright
+          ln -s "$RUNNER_TEMP/real-entry-browser-tools/node_modules/playwright-core" node_modules/playwright-core
+          "$RUNNER_TEMP/real-entry-browser-tools/node_modules/.bin/playwright" install --with-deps chromium > "$QA_OUT/logs/chromium-install.log" 2>&1
+      - name: Proper App types before native browser
+        shell: bash
+        run: |
+          set +e
+          set -uo pipefail
+          export SIM_NETWORK=offline GIT_NO_LAZY_FETCH=1
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          export SIM_OFFLINE_RECEIPT="$QA_OUT/transport/types.log"
+          : > "$SIM_OFFLINE_RECEIPT"
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json > "$QA_OUT/logs/types.log" 2>&1
+          native_exit=$?
+          printf '%s\n' "$native_exit" > "$QA_OUT/logs/types.exit" || exit 1
+          test "$native_exit" = 0 || exit "$native_exit"
+          test ! -s "$SIM_OFFLINE_RECEIPT" || exit 1
+      - name: Three finite native contexts on the same completed fixed dist
+        shell: bash
+        run: |
+          set +e
+          set -uo pipefail
+          export SIM_NETWORK=offline GIT_NO_LAZY_FETCH=1
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          export SIM_OFFLINE_RECEIPT="$QA_OUT/transport/server.log"
+          : > "$SIM_OFFLINE_RECEIPT"
+          node scripts/lib/hostLikeServer.mjs "$QA_DIST" 4173 > "$QA_OUT/logs/server.log" 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid" 2>/dev/null || true' EXIT
+          ready=0
+          for i in $(seq 1 40); do
+            if curl --fail --silent http://127.0.0.1:4173/club-manager > /dev/null; then ready=1; break; fi
+            sleep 0.25
+          done
+          test "$ready" = 1 || exit 1
+          export SIM_OFFLINE_RECEIPT="$QA_OUT/transport/browser.log"
+          : > "$SIM_OFFLINE_RECEIPT"
+          node --unhandled-rejections=strict scripts/qa/cmTeamPickerNative.mjs --manifest "$QA_OUT/input/native-manifest.json" --dist "$QA_DIST" --out "$QA_OUT/browser" --base-url http://127.0.0.1:4173 > "$QA_OUT/logs/browser.log" 2>&1
+          native_exit=$?
+          printf '%s\n' "$native_exit" > "$QA_OUT/logs/browser.exit" || exit 1
+          test ! -s "$SIM_OFFLINE_RECEIPT" || exit 1
+          test ! -s "$QA_OUT/transport/server.log" || exit 1
+          exit "$native_exit"
+      - name: Always hold complete source input output index and lock bytes
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          git ls-files -z > "$QA_OUT/tracked-after.bin"
+          git ls-files -z | xargs -0 sha256sum > "$QA_OUT/source-after.sha256"
+          git ls-files -s > "$QA_OUT/index-after.txt"
+          git status --porcelain=v1 --untracked-files=all > "$QA_OUT/status-after.txt"
+          cp package-lock.json "$QA_OUT/lock-after.json"
+          cmp "$QA_OUT/tracked-before.bin" "$QA_OUT/tracked-after.bin"
+          cmp "$QA_OUT/source-before.sha256" "$QA_OUT/source-after.sha256"
+          cmp "$QA_OUT/index-before.txt" "$QA_OUT/index-after.txt"
+          cmp "$QA_OUT/lock-before.json" "$QA_OUT/lock-after.json"
+          test ! -s "$QA_OUT/status-before.txt"
+          test ! -s "$QA_OUT/status-after.txt"
+          node --input-type=module <<'HOLDS'
+          import fs from 'node:fs';import path from 'node:path';import crypto from 'node:crypto';import assert from 'node:assert/strict';import{gunzipSync}from'node:zlib';
+          const out=process.env.QA_OUT,sha=b=>crypto.createHash('sha256').update(b).digest('hex');
+          const inventory=dir=>{const rows=[];function walk(rel=''){for(const e of fs.readdirSync(path.join(dir,rel),{withFileTypes:true})){const file=path.posix.join(rel,e.name);if(e.isDirectory())walk(file);else{assert(e.isFile());const b=fs.readFileSync(path.join(dir,file));rows.push({file,bytes:b.length,sha256:sha(b)});}}}walk();return rows.sort((a,b)=>a.file<b.file?-1:a.file>b.file?1:0);};
+          const locks=Object.fromEntries(['package.json','package-lock.json','bun.lock','bun.lockb','yarn.lock','pnpm-lock.yaml'].map(p=>[p,fs.existsSync(p)?sha(fs.readFileSync(p)):null]));fs.writeFileSync(out+'/all-locks-after.json',JSON.stringify(locks)+'\n');assert.deepEqual(locks,JSON.parse(fs.readFileSync(out+'/all-locks-before.json')));
+          if(fs.existsSync(out+'/input-reference-before.json')){const actual=Buffer.from(JSON.stringify(inventory(process.env.QA_REF))+'\n');fs.writeFileSync(out+'/input-reference-after.json',actual);assert(actual.equals(fs.readFileSync(out+'/input-reference-before.json')));}
+          if(fs.existsSync(out+'/dist-before.json')){const actual=Buffer.from(JSON.stringify(inventory(process.env.QA_DIST))+'\n');fs.writeFileSync(out+'/dist-after.json',actual);assert(actual.equals(fs.readFileSync(out+'/dist-before.json')));}
+          const expectedReceipts=['browser.log','server.log','types.log'];assert.deepEqual(fs.readdirSync(out+'/transport').sort(),expectedReceipts);
+          for(const file of expectedReceipts)assert.equal(fs.readFileSync(out+'/transport/'+file).length,0,file);
+          const report=JSON.parse(fs.readFileSync(out+'/browser/report.json')),manifest=JSON.parse(fs.readFileSync(out+'/input/native-manifest.json'));
+          assert.equal(report.status,'passed');assert.equal(report.sourceHeld,true);assert.equal(report.distHeld,true);assert.deepEqual(report.contexts.map(c=>c.width),[320,390,1280]);assert.equal(report.screenshots.length,15);assert.equal(new Set(report.screenshots).size,15);
+          const labels=['held-parent-back','first-row','last-row','fixed-selection-footer','after-manager-back'];
+          for(const c of report.contexts){assert.equal(c.status,'passed');assert.deepEqual(c.photos.map(p=>p.label),labels);assert.deepEqual(c.leafAttempts.map(a=>a.mode),['hold','hold','refuse','refuse','allow']);assert.equal(c.traces.length,3);assert.equal(c.traceOmissionControl.actualHeld,true);assert.equal(c.assetControls.actualHeld,true);assert.equal(c.cardControl.actualHeld,true);assert.equal(c.footerControl.actualHeld,true);assert.equal(c.reviewScrollControl.actualSampleHeld,true);
+            for(const row of c.frames){const stored=fs.readFileSync(out+'/browser/'+row.file),decoded=gunzipSync(stored);assert.equal(stored.length,row.bytes);assert.equal(sha(stored),row.sha256);assert.equal(decoded.length,row.decodedBytes);assert.equal(sha(decoded),row.decodedSHA256);assert.equal(JSON.parse(decoded).value.careerRaw,null);}
+            for(const body of c.assetBodies){const b=fs.readFileSync(out+'/browser/'+body.file);assert.equal(b.length,body.bytes);assert.equal(sha(b),body.sha256);}
+            assert.equal(c.unexpectedConsole.length,0);assert.equal(c.unexpectedPageErrors.length,0);assert.equal(c.unexpectedExternalAborts.length,0);assert.equal(c.localHttpErrors.length,0);assert.equal(c.assetErrors.length,0);
+          }
+          const images=report.screenshots.map(file=>{assert(/^[a-z0-9-]+\.png$/.test(file));const b=fs.readFileSync(out+'/browser/'+file);assert(b.length>8&&b.subarray(0,8).equals(Buffer.from([137,80,78,71,13,10,26,10])));return{file,bytes:b.length,sha256:sha(b)};});fs.writeFileSync(out+'/screenshots.json',JSON.stringify(images,null,2)+'\n');
+          for(const[p,digest]of Object.entries(manifest.sourceAfter))assert.equal(sha(fs.readFileSync(p)),digest,p);
+          fs.writeFileSync(out+'/source-dist-input-held.json',JSON.stringify({source:true,index:true,tracked:true,status:true,locks:true,completeInputHeld:true,distFiles:manifest.distBefore.length,distDigest:manifest.distDigest,threeContexts:true,fifteenPhotos:true,AppBuilds:0,modelOrFixtureGeneration:false,visualReview:'PENDING_HUMAN_OR_INDEPENDENT_IMAGE_REVIEW'},null,2)+'\n',{flag:'wx'});
+          HOLDS
+          printf '0\n' > "$QA_OUT/logs/final-source-holds.exit" || exit 1
+      - name: Retain all native proof within the unchanged archive bound
+        id: evidence
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          tar -czf "$RUNNER_TEMP/cm-team-picker-native.tar.gz" -C "$QA_OUT" .
+          test "$(stat -c %s "$RUNNER_TEMP/cm-team-picker-native.tar.gz")" -le 50000000
+          sha256sum "$RUNNER_TEMP/cm-team-picker-native.tar.gz" > "$RUNNER_TEMP/cm-team-picker-native.tar.gz.sha256"
+      - uses: actions/upload-artifact@v4
+        if: always() && steps.evidence.outcome == 'success'
+        with:
+          name: cm-team-picker-native
+          path: |
+            ${{ runner.temp }}/cm-team-picker-native.tar.gz
+            ${{ runner.temp }}/cm-team-picker-native.tar.gz.sha256
+          if-no-files-found: error
+          retention-days: 14
+          compression-level: 0
