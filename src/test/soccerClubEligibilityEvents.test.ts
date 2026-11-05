@@ -63,6 +63,11 @@ describe('Russian club policy in fresh and delivered event cards', () => {
     expect(vectors.map(row => row.eligible), 'SC_CLUB_POLICY_RIVALRY').toEqual([false, true, true]);
     expect(definition.when(fixture('England', 2022), { ...rival, championsLeagues: 0 })).toBe(false);
     for (const row of vectors) expect(row.input).toEqual(row.original);
+    const partial = clone(vectors[1].input) as Partial<CareerState>;
+    expect(['seasons', 'currentClubCountry'].map(key => key in partial)).toEqual([true, true]);
+    delete partial.seasons; delete partial.currentClubCountry;
+    expect(['seasons', 'currentClubCountry'].map(key => key in partial)).toEqual([false, false]);
+    expect(definition.when(partial as CareerState, rival), 'SC_CLUB_POLICY_LEGACY_RIVALRY_CONTEXT').toBe(true);
   });
 
   it('resolves an already delivered passport choice after real codec reload through the existing catalog', () => {

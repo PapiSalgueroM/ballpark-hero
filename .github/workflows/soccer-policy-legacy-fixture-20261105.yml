@@ -1,0 +1,67 @@
+name: Soccer policy legacy fixture original
+on:
+  push:
+    branches: [codex/soccer-policy-legacy-fixture-20261105]
+permissions:
+  contents: read
+jobs:
+  original:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        shell: bash
+    env:
+      SIM_NETWORK: offline
+      SIM_OFFLINE_RECEIPT: legacy-fixture-artifacts/offline.log
+      TZ: UTC
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Locked install and source holds
+        run: |
+          mkdir -p legacy-fixture-artifacts
+          git rev-parse HEAD > legacy-fixture-artifacts/head.txt
+          git rev-parse 'HEAD^{tree}' > legacy-fixture-artifacts/tree.txt
+          git ls-files -s > legacy-fixture-artifacts/source-before.txt
+          sha256sum package.json package-lock.json > legacy-fixture-artifacts/locks-before.txt
+          npm ci
+      - name: Proper app types
+        run: node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee legacy-fixture-artifacts/types.log
+      - name: Reproduce missing historical fixture context
+        run: |
+          set +e
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node node_modules/vitest/vitest.mjs run src/test/soccerClubEligibilityEvents.test.ts -t 'excludes a fresh rivalry' --maxWorkers=1 --minWorkers=1 --reporter=default --reporter=json --outputFile=legacy-fixture-artifacts/original.json 2>&1 | tee legacy-fixture-artifacts/original.log
+          sc_test_status=${PIPESTATUS[0]}
+          set -e
+          test "$sc_test_status" -eq 1
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs'; import assert from 'node:assert/strict';
+          const data=JSON.parse(fs.readFileSync('legacy-fixture-artifacts/original.json'));
+          const failed=data.testResults.flatMap(s=>s.assertionResults).filter(r=>r.status==='failed');
+          assert.equal(failed.length,1); assert.ok(failed[0].fullName.includes('excludes a fresh rivalry'));
+          assert.ok(failed[0].failureMessages.join(' ').includes('TypeError'));
+          assert.ok(failed[0].failureMessages.join(' ').includes('length'));
+          console.log('Confirmed missing history TypeError on the existing exported rivalry predicate.');
+          NODE
+      - name: Source lock and offline holds
+        if: always()
+        run: |
+          git ls-files -s > legacy-fixture-artifacts/source-after.txt
+          cmp legacy-fixture-artifacts/source-before.txt legacy-fixture-artifacts/source-after.txt
+          git diff --exit-code HEAD -- src scripts package.json package-lock.json
+          sha256sum package.json package-lock.json > legacy-fixture-artifacts/locks-after.txt
+          cmp legacy-fixture-artifacts/locks-before.txt legacy-fixture-artifacts/locks-after.txt
+          if test -f legacy-fixture-artifacts/offline.log; then test ! -s legacy-fixture-artifacts/offline.log; fi
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: soccer-policy-legacy-original-${{ github.run_id }}
+          path: legacy-fixture-artifacts
+          retention-days: 7
+          if-no-files-found: error
