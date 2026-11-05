@@ -2043,6 +2043,75 @@
           "says": "Lithuania - Topsport A Lyga 2026 standings and fixtures (round of 2026-07-18 to 2026-09-20) list Zalgiris Vilnius"
         }
       ]
+    },
+    "K League 1 2026 expansion": {
+      "league": "K League 1",
+      "season": "2026",
+      "clubs": [
+        "Gangwon FC",
+        "Gwangju FC",
+        "Gimcheon Sangmu",
+        "Daejeon Hana Citizen",
+        "Bucheon FC 1995",
+        "FC Seoul",
+        "FC Anyang",
+        "Ulsan HD",
+        "Incheon United",
+        "Jeonbuk Motors",
+        "Jeju SK",
+        "Pohang Steelers"
+      ],
+      "sources": [
+        {
+          "url": "https://www.kleague.com/about/competition.do",
+          "publisher": "Korea Professional Football League",
+          "read": "2026-11-05",
+          "says": "Twelve listed entrants;33 regular plus5 split games;3/1/0 points;2026 Gimcheon and ranking exceptions. Only the league source explicitly verifies some rules below.",
+          "locator": "Articles5-7,28,30; web lines79-129,668-700"
+        },
+        {
+          "url": "https://gangwon-fc.com/match/schedule?league=all",
+          "publisher": "Gangwon FC",
+          "read": "2026-11-05",
+          "says": "Own2026 K League1 participation; dated2026-27 ACL Two fixtures.",
+          "locator": "Lines212-307"
+        },
+        {
+          "url": "https://www.dhcfc.kr/",
+          "publisher": "Daejeon Hana Citizen",
+          "read": "2026-11-05",
+          "says": "Dated K League1 fixtures against every other listed entrant. Counterparty evidence is labeled as such.",
+          "locator": "Fixture cards lines308-1104"
+        },
+        {
+          "url": "https://www.gimcheonfc.com/index.php",
+          "publisher": "Gimcheon Sangmu",
+          "read": "2026-11-05",
+          "says": "Own2026 K League1 membership and a separately labeled Korea Cup fixture.",
+          "locator": "K League1 schedule cards; lines418-620 include dated fixtures"
+        },
+        {
+          "url": "https://incheonutd.com/fanzone/feeds_view.php?idx=5150&tgbn=feeds_notice",
+          "publisher": "Incheon United",
+          "read": "2026-11-05",
+          "says": "Own2026 K League1 opening fixture against FC Seoul.",
+          "locator": "Lines167-175"
+        },
+        {
+          "url": "https://www.fc-anyang.com/news/newsDetail.asp?menu=TNews&seq=1056",
+          "publisher": "FC Anyang",
+          "read": "2026-11-05",
+          "says": "Calls FC Anyang a K League1 club for its2026 season.",
+          "locator": "Lines119-123"
+        },
+        {
+          "url": "https://www.jejuskfc.com/board/notice/detail?bbsSn=18384&topYn=N",
+          "publisher": "Jeju SK FC",
+          "read": "2026-11-05",
+          "says": "Own2026 K League1 FinalB schedule, rounds34 through38, five fixtures.",
+          "locator": "Lines301-330"
+        }
+      ]
     }
   },
   "clubLeagues": {
@@ -3680,6 +3749,499 @@
         }
       ],
       "format": []
+    },
+    "K League 1": {
+      "season": "2026",
+      "evidence": "K League 1 2026 expansion",
+      "members": [
+        "Gangwon FC",
+        "Gwangju FC",
+        "Gimcheon Sangmu",
+        "Daejeon Hana Citizen",
+        "Bucheon FC 1995",
+        "FC Seoul",
+        "FC Anyang",
+        "Ulsan HD",
+        "Incheon United",
+        "Jeonbuk Motors",
+        "Jeju SK",
+        "Pohang Steelers"
+      ],
+      "size": 12,
+      "games": 38,
+      "shape": "split",
+      "points": [
+        3,
+        1,
+        0
+      ],
+      "membership": [
+        {
+          "url": "https://www.kleague.com/about/competition.do",
+          "publisher": "Korea Professional Football League",
+          "read": "2026-11-05",
+          "says": "Twelve listed entrants;33 regular plus5 split games;3/1/0 points;2026 Gimcheon and ranking exceptions. Only the league source explicitly verifies some rules below. Article28 awards three points for a win, one for a draw and zero for a loss.",
+          "locator": "Articles5-7,28,30; web lines79-129,668-700"
+        },
+        {
+          "url": "https://gangwon-fc.com/match/schedule?league=all",
+          "publisher": "Gangwon FC",
+          "read": "2026-11-05",
+          "says": "Own2026 K League1 participation; dated2026-27 ACL Two fixtures.",
+          "locator": "Lines212-307"
+        },
+        {
+          "url": "https://www.dhcfc.kr/",
+          "publisher": "Daejeon Hana Citizen",
+          "read": "2026-11-05",
+          "says": "Dated K League1 fixtures against every other listed entrant. Counterparty evidence is labeled as such.",
+          "locator": "Fixture cards lines308-1104"
+        },
+        {
+          "url": "https://www.gimcheonfc.com/index.php",
+          "publisher": "Gimcheon Sangmu",
+          "read": "2026-11-05",
+          "says": "Own2026 K League1 membership and a separately labeled Korea Cup fixture.",
+          "locator": "K League1 schedule cards; lines418-620 include dated fixtures"
+        },
+        {
+          "url": "https://incheonutd.com/fanzone/feeds_view.php?idx=5150&tgbn=feeds_notice",
+          "publisher": "Incheon United",
+          "read": "2026-11-05",
+          "says": "Own2026 K League1 opening fixture against FC Seoul.",
+          "locator": "Lines167-175"
+        },
+        {
+          "url": "https://www.fc-anyang.com/news/newsDetail.asp?menu=TNews&seq=1056",
+          "publisher": "FC Anyang",
+          "read": "2026-11-05",
+          "says": "Calls FC Anyang a K League1 club for its2026 season.",
+          "locator": "Lines119-123"
+        },
+        {
+          "url": "https://www.jejuskfc.com/board/notice/detail?bbsSn=18384&topYn=N",
+          "publisher": "Jeju SK FC",
+          "read": "2026-11-05",
+          "says": "Own2026 K League1 FinalB schedule, rounds34 through38, five fixtures.",
+          "locator": "Lines301-330"
+        }
+      ],
+      "format": [
+        {
+          "url": "https://www.kleague.com/about/competition.do",
+          "publisher": "Korea Professional Football League",
+          "read": "2026-11-05",
+          "says": "Twelve listed entrants;33 regular plus5 split games;3/1/0 points;2026 Gimcheon and ranking exceptions. Only the league source explicitly verifies some rules below. Article28 awards three points for a win, one for a draw and zero for a loss.",
+          "locator": "Articles5-7,28,30; web lines79-129,668-700"
+        },
+        {
+          "url": "https://www.jejuskfc.com/board/news/detail?bbsSn=17316",
+          "publisher": "Jeju SK FC",
+          "read": "2026-11-05",
+          "says": "2026 K League1 opening fixture against Gwangju;33 regular rounds followed by rounds34-38, five final-stage games.",
+          "access": "Article text was returned by indexed official-source result; subsequent direct fetches timed out. Do not treat a timeout as contradictory evidence."
+        },
+        {
+          "url": "https://www.jejuskfc.com/board/notice/detail?bbsSn=18384&topYn=N",
+          "publisher": "Jeju SK FC",
+          "read": "2026-11-05",
+          "says": "Own2026 K League1 FinalB schedule, rounds34 through38, five fixtures.",
+          "locator": "Lines301-330"
+        }
+      ],
+      "pointsEvidence": [
+        {
+          "url": "https://www.kleague.com/about/competition.do",
+          "publisher": "Korea Professional Football League",
+          "read": "2026-11-05",
+          "says": "Explicit rule awards three points to the winner, one for a draw and zero to the loser.",
+          "locator": "2026 K League 1 Article 28, line670"
+        },
+        {
+          "url": "https://www.gimcheonfc.com/bd/bd_v.php?buid=news05&wr_id=430",
+          "publisher": "Gimcheon Sangmu",
+          "read": "2026-11-05",
+          "says": "Actual 2026 round10 win at Bucheon is explicitly described as earning three points.",
+          "locator": "lines124-128"
+        },
+        {
+          "url": "https://www.gimcheonfc.com/bd/bd_v.php?buid=news05&wr_id=442",
+          "publisher": "Gimcheon Sangmu",
+          "read": "2026-11-05",
+          "says": "Actual 2026 round16 1-1 draw against Jeju explicitly earns one point.",
+          "locator": "lines124-128"
+        },
+        {
+          "url": "https://www.gimcheonfc.com/bd/bd_v.php?buid=news08&wr_id=304",
+          "publisher": "Gimcheon Sangmu",
+          "read": "2026-11-05",
+          "says": "2026 round2 preview explicitly records one opening draw as one point and Jeonbuk one opening defeat as zero points. This corroborates the loss value with a stated one-match record, not a derived full-table fit.",
+          "locator": "line130"
+        }
+      ],
+      "rankingUnread": "The complete real ranking order lacks a second independent source; the game's goal-difference fallback is not claimed as the K League rule.",
+      "countryEvidence": {
+        "value": "South Korea",
+        "scope": "Per-club home country, not inferred from league membership. Governing-body Korea Republic labels normalize to the existing South Korea string.",
+        "clubs": [
+          {
+            "club": "Gangwon FC",
+            "sources": [
+              "AFC26",
+              "worldBody2026"
+            ]
+          },
+          {
+            "club": "Gwangju FC",
+            "sources": [
+              "AFC26",
+              "GWANG_SOFA"
+            ]
+          },
+          {
+            "club": "Gimcheon Sangmu",
+            "sources": [
+              "AFC26",
+              "GIM_SOFA"
+            ]
+          },
+          {
+            "club": "Daejeon Hana Citizen",
+            "sources": [
+              "BRIGHTON",
+              "BERNAMA"
+            ]
+          },
+          {
+            "club": "Bucheon FC 1995",
+            "sources": [
+              "BUC_SOFA",
+              "FOOTY_BUC"
+            ]
+          },
+          {
+            "club": "FC Seoul",
+            "sources": [
+              "AFC26",
+              "SEOUL_SOFA"
+            ]
+          },
+          {
+            "club": "FC Anyang",
+            "sources": [
+              "PNJ",
+              "ANYANG_SOFA"
+            ]
+          },
+          {
+            "club": "Ulsan HD",
+            "sources": [
+              "worldBody2026",
+              "ULS_SOFA"
+            ]
+          },
+          {
+            "club": "Incheon United",
+            "sources": [
+              "AFC_INC",
+              "INC_SOFA"
+            ]
+          },
+          {
+            "club": "Jeonbuk Motors",
+            "sources": [
+              "worldBody2026",
+              "JB_SOFA"
+            ]
+          },
+          {
+            "club": "Jeju SK",
+            "sources": [
+              "JEJU_CLUB",
+              "JEJU_RG"
+            ]
+          },
+          {
+            "club": "Pohang Steelers",
+            "sources": [
+              "AFC26",
+              "POH_SOFA"
+            ]
+          }
+        ],
+        "sources": {
+          "AFC26": {
+            "id": "AFC26",
+            "publisher": "Asian Football Confederation",
+            "kind": "primary official registration",
+            "url": "https://assets.the-afc.com/2026_AFC_U23_Asian_Cup_/Finals/Squad_Lists/AFC-U23-Asian-Cup-2026-Final-Registration.pdf?source=url",
+            "sourceAsOf": "2026 tournament; Korea Republic page timestamp 2025-12-30 08:40:50",
+            "readDate": "2026-11-05",
+            "read": "2026-11-05",
+            "locator": "printed PDF page7, club-country column, rows1-4/10-11, lines177-188",
+            "exactSupport": {
+              "heading": "Club Name (Country)",
+              "clubCells": [
+                "GIMCHEON SANGMU (KOR)",
+                "POHANG STEELERS (KOR)",
+                "FC SEOUL (KOR)",
+                "GANGWON FC (KOR)",
+                "JEONBUK HYUNDAI (KOR)",
+                "GWANGJU FC (KOR)"
+              ]
+            },
+            "scope": "Only country-labelled club cells. No player identity, roster membership or statistics adopted.",
+            "access": "DIRECT_PDF",
+            "says": "Only country-labelled club cells. No player identity, roster membership or statistics adopted."
+          },
+          "worldBody2026": {
+            "id": "worldBody2026",
+            "publisher": "FIFA archive",
+            "kind": "primary official registration",
+            "url": "https://fdp.fifa.org/assetspublic/ce281/pdf/SquadLists-English.pdf?gsid=05dd1acf-0bba-4cfd-816a-22f0cc38b668",
+            "sourceAsOf": "2026-07-19 22:34 UTC version1",
+            "readDate": "2026-11-05",
+            "read": "2026-11-05",
+            "locator": "printed page27, Korea Republic country header and CLUB column, lines1560/1564/1573/1587",
+            "exactSupport": {
+              "countryHeader": "Korea Republic (KOR)",
+              "clubCells": [
+                "Gangwon FC (KOR)",
+                "Jeonbuk Hyundai Motors FC (KOR)",
+                "Ulsan HD (KOR)"
+              ]
+            },
+            "scope": "Country-code normalization only, no player or squad import.",
+            "access": "DIRECT_PDF",
+            "says": "Country-code normalization only, no player or squad import."
+          },
+          "BRIGHTON": {
+            "id": "BRIGHTON",
+            "publisher": "Brighton & Hove Albion FC",
+            "kind": "primary transfer counterparty",
+            "url": "https://www.brightonandhovealbion.com/media-article/albion-sign-winger-yoon-doyoung",
+            "sourceAsOf": "2025-03-21",
+            "readDate": "2026-11-05",
+            "read": "2026-11-05",
+            "locator": "line53",
+            "exactSupport": "South Korean club Daejeon Hana Citizen",
+            "scope": "Club country only; transfer/player fields not adopted.",
+            "access": "DIRECT_HTML",
+            "says": "Club country only; transfer/player fields not adopted."
+          },
+          "BERNAMA": {
+            "id": "BERNAMA",
+            "publisher": "Bernama",
+            "kind": "independent national news agency report",
+            "url": "https://bernama.com/tv/news.php?id=2596062",
+            "sourceAsOf": "2026-08-18",
+            "readDate": "2026-11-05",
+            "read": "2026-11-05",
+            "locator": "lines55 and62",
+            "evidence": "Report explicitly groups Daejeon Hana Citizen, Jeonbuk Hyundai Motors and Pohang Steelers as South Korean clubs, and separately calls Gangwon South Korean.",
+            "scope": "Country only; no fixture or competition entry imported.",
+            "access": "DIRECT_HTML",
+            "says": "Report explicitly groups Daejeon Hana Citizen, Jeonbuk Hyundai Motors and Pohang Steelers as South Korean clubs, and separately calls Gangwon South Korean."
+          },
+          "PNJ": {
+            "id": "PNJ",
+            "publisher": "PNJ Corporation",
+            "kind": "primary agent's own represented-player portfolio",
+            "url": "https://www.pnjcorporation.com/PORTFOLIO",
+            "sourceAsOf": "projects1-2 describe 2017 and2017-2019",
+            "readDate": "2026-11-05",
+            "read": "2026-11-05",
+            "locator": "projects1-2, lines1833-1849/1859-1875",
+            "exactSupport": "Current Club : FC Anyang (Republic of Korea, K-League)",
+            "scope": "Club-country statement only, corroborated by separately read current profile. Historical timing is explicit.",
+            "access": "DIRECT_HTML",
+            "says": "Club-country statement only, corroborated by separately read current profile. Historical timing is explicit."
+          },
+          "AFC_INC": {
+            "id": "AFC_INC",
+            "publisher": "Asian Football Confederation",
+            "kind": "primary official competition report",
+            "url": "https://www.the-afc.com/en/club/afc_champions_league/news/young_incheon_players_make_cho_proud.html",
+            "sourceAsOf": "2023-11-29",
+            "readDate": "2026-11-05",
+            "read": "2026-11-05",
+            "locator": "lines9-11",
+            "evidence": "Names Incheon United, then explicitly identifies that club as the Korea Republic side.",
+            "scope": "Club country only.",
+            "access": "DIRECT_HTML",
+            "says": "Names Incheon United, then explicitly identifies that club as the Korea Republic side."
+          },
+          "JEJU_CLUB": {
+            "id": "JEJU_CLUB",
+            "publisher": "Jeju SK FC Co., Ltd. (club-declared Google Play listing)",
+            "kind": "primary club-issued legal developer postal address",
+            "url": "https://play.google.com/store/apps/details?hl=ko&id=com.jeju_utd.app",
+            "sourceAsOf": "listing updated2026-07-06",
+            "readDate": "2026-11-05",
+            "read": "2026-11-05",
+            "locator": "official app atlines67/76; developer legal name131; postal address135",
+            "exactSupport": "일주서로 166-31 (강정동) 서귀포시, 제주특별자치도 63558 South Korea",
+            "scope": "This is the club's declared address, not the unrelated Anyang fan-app developer's address.",
+            "access": "DIRECT_HTML",
+            "says": "This is the club's declared address, not the unrelated Anyang fan-app developer's address."
+          },
+          "JEJU_RG": {
+            "id": "JEJU_RG",
+            "publisher": "Red&Gold Football",
+            "kind": "primary partner's own club profile",
+            "url": "https://rg-football.com/en/clubs/jeju-sk-fc",
+            "sourceAsOf": "partnership from2025-09; undated current page read2026-11-05",
+            "readDate": "2026-11-05",
+            "read": "2026-11-05",
+            "locator": "club name line1, separate country line8; home ground line3",
+            "exactSupport": "South Korea",
+            "evidence": "Separate club-country field under Jeju SK FC, plus home matches on Jeju Island.",
+            "access": "DIRECT_HTML",
+            "says": "Separate club-country field under Jeju SK FC, plus home matches on Jeju Island."
+          },
+          "FOOTY_BUC": {
+            "id": "FOOTY_BUC",
+            "publisher": "FootyStats",
+            "kind": "independent statistical club profile",
+            "url": "https://footystats.org/clubs/bucheon-fc-1995-3852",
+            "sourceAsOf": "2026 club page, undated country field",
+            "readDate": "2026-11-05",
+            "read": "2026-11-05",
+            "locator": "Bucheon FC1995 Information, lines4032-4034; actual site link4048",
+            "exactSupport": "Country South Korea",
+            "scope": "Only this named club-country field, not other stats, season labels or colours.",
+            "access": "DIRECT_HTML",
+            "says": "Only this named club-country field, not other stats, season labels or colours."
+          },
+          "GIM_SOFA": {
+            "id": "GIM_SOFA",
+            "publisher": "Sofascore",
+            "kind": "independent club profile",
+            "url": "https://www.sofascore.com/football/team/gimcheon-sangmu-fc/7647",
+            "sourceAsOf": "undated live profile read2026-11-05",
+            "readDate": "2026-11-05",
+            "read": "2026-11-05",
+            "locator": "Named club Info section, country field near line96",
+            "exactSupport": "Country South Korea",
+            "scope": "Country only; no roster, venue, founding or other field adopted.",
+            "access": "DIRECT_HTML",
+            "says": "Country only; no roster, venue, founding or other field adopted."
+          },
+          "GWANG_SOFA": {
+            "id": "GWANG_SOFA",
+            "publisher": "Sofascore",
+            "kind": "independent club profile",
+            "url": "https://www.sofascore.com/football/team/gwangju-fc/48912",
+            "sourceAsOf": "undated live profile read2026-11-05",
+            "readDate": "2026-11-05",
+            "read": "2026-11-05",
+            "locator": "Named club Info section, country field near line96",
+            "exactSupport": "Country South Korea",
+            "scope": "Country only; no roster, venue, founding or other field adopted.",
+            "access": "DIRECT_HTML",
+            "says": "Country only; no roster, venue, founding or other field adopted."
+          },
+          "BUC_SOFA": {
+            "id": "BUC_SOFA",
+            "publisher": "Sofascore",
+            "kind": "independent club profile",
+            "url": "https://www.sofascore.com/football/team/bucheon-fc-1995/92539",
+            "sourceAsOf": "undated live profile read2026-11-05",
+            "readDate": "2026-11-05",
+            "read": "2026-11-05",
+            "locator": "Named club Info section, country field near line80",
+            "exactSupport": "Country South Korea",
+            "scope": "Country only; no roster, venue, founding or other field adopted.",
+            "access": "DIRECT_HTML",
+            "says": "Country only; no roster, venue, founding or other field adopted."
+          },
+          "SEOUL_SOFA": {
+            "id": "SEOUL_SOFA",
+            "publisher": "Sofascore",
+            "kind": "independent club profile",
+            "url": "https://www.sofascore.com/football/team/fc-seoul/7646",
+            "sourceAsOf": "undated live profile read2026-11-05",
+            "readDate": "2026-11-05",
+            "read": "2026-11-05",
+            "locator": "Named club Info section, country field near line105",
+            "exactSupport": "Country South Korea",
+            "scope": "Country only; no roster, venue, founding or other field adopted.",
+            "access": "DIRECT_HTML",
+            "says": "Country only; no roster, venue, founding or other field adopted."
+          },
+          "ANYANG_SOFA": {
+            "id": "ANYANG_SOFA",
+            "publisher": "Sofascore",
+            "kind": "independent club profile",
+            "url": "https://www.sofascore.com/football/team/fc-anyang/32675",
+            "sourceAsOf": "undated live profile read2026-11-05",
+            "readDate": "2026-11-05",
+            "read": "2026-11-05",
+            "locator": "Named club Info section, country field near line96",
+            "exactSupport": "Country South Korea",
+            "scope": "Country only; no roster, venue, founding or other field adopted.",
+            "access": "DIRECT_HTML",
+            "says": "Country only; no roster, venue, founding or other field adopted."
+          },
+          "INC_SOFA": {
+            "id": "INC_SOFA",
+            "publisher": "Sofascore",
+            "kind": "independent club profile",
+            "url": "https://www.sofascore.com/football/team/incheon-united/7648",
+            "sourceAsOf": "undated live profile read2026-11-05",
+            "readDate": "2026-11-05",
+            "read": "2026-11-05",
+            "locator": "Named club Info section, country field near line99",
+            "exactSupport": "Country South Korea",
+            "scope": "Country only; no roster, venue, founding or other field adopted.",
+            "access": "DIRECT_HTML",
+            "says": "Country only; no roster, venue, founding or other field adopted."
+          },
+          "JB_SOFA": {
+            "id": "JB_SOFA",
+            "publisher": "Sofascore",
+            "kind": "independent club profile",
+            "url": "https://www.sofascore.com/football/team/jeonbuk-hyundai-motors/6908",
+            "sourceAsOf": "undated live profile read2026-11-05",
+            "readDate": "2026-11-05",
+            "read": "2026-11-05",
+            "locator": "Named club Info section, country field near line111",
+            "exactSupport": "Country South Korea",
+            "scope": "Country only; no roster, venue, founding or other field adopted.",
+            "access": "DIRECT_HTML",
+            "says": "Country only; no roster, venue, founding or other field adopted."
+          },
+          "POH_SOFA": {
+            "id": "POH_SOFA",
+            "publisher": "Sofascore",
+            "kind": "independent club profile",
+            "url": "https://www.sofascore.com/football/team/pohang-steelers/7650",
+            "sourceAsOf": "undated live profile read2026-11-05",
+            "readDate": "2026-11-05",
+            "read": "2026-11-05",
+            "locator": "Named club Info section, country field near line107",
+            "exactSupport": "Country South Korea",
+            "scope": "Country only; no roster, venue, founding or other field adopted.",
+            "access": "DIRECT_HTML",
+            "says": "Country only; no roster, venue, founding or other field adopted."
+          },
+          "ULS_SOFA": {
+            "id": "ULS_SOFA",
+            "publisher": "Sofascore",
+            "kind": "independent club profile",
+            "url": "https://www.sofascore.com/football/team/ulsan-hd/7653",
+            "sourceAsOf": "undated live profile read2026-11-05",
+            "readDate": "2026-11-05",
+            "read": "2026-11-05",
+            "locator": "Named club Info section, country field near line111",
+            "exactSupport": "Country South Korea",
+            "scope": "Country only; no roster, venue, founding or other field adopted.",
+            "access": "DIRECT_HTML",
+            "says": "Country only; no roster, venue, founding or other field adopted."
+          }
+        }
+      },
+      "modelScope": "2026 membership only. Club Manager plays generated squads, 22 double-round-robin matches on its shared August-May calendar, fallback ranking and no simulated Korea Cup, AFC competition, split or promotion/relegation. Eleven ordinary destinations are available; Gimcheon remains an opponent with ordinary access held. This is a game policy, not an invented military eligibility rule. Existing CM saved worlds keep their population; new current careers add this league."
     }
   },
   "clubColours": {
@@ -4450,11 +5012,211 @@
             "published": "2026-07-21"
           }
         ]
+      },
+      "Gangwon FC": {
+        "colour": "orange",
+        "hex": "#f5a800",
+        "hexRendering": "Approximate decorative dot using the site's existing palette, not an official RGB value or primary-colour hierarchy.",
+        "sources": [
+          {
+            "url": "https://gangwon-fc.com/club/clubhouse",
+            "publisher": "Gangwon FC",
+            "read": "2026-11-05",
+            "says": "2008 launch; Orange explicitly called main colour",
+            "access": "Direct page read",
+            "publisherGroup": "Gangwon FC"
+          },
+          {
+            "url": "https://m.kwnews.co.kr/article/20260723501253?site_preference=normal",
+            "publisher": "Gangwon Ilbo",
+            "read": "2026-11-05",
+            "says": "Orange explicitly described as club symbolic colour",
+            "access": "Search result body read; direct mobile and desktop opens returned502",
+            "publisherGroup": "Gangwon Ilbo"
+          }
+        ],
+        "scope": "Second orange publisher was index-readable; direct mobile/desktop returned502. Access gap retained."
+      },
+      "Gwangju FC": {
+        "colour": "yellow",
+        "hex": "#f5d800",
+        "hexRendering": "Approximate decorative dot using the site's existing palette, not an official RGB value or primary-colour hierarchy.",
+        "sources": [
+          {
+            "url": "https://www.gwangjufc.com/gwboard/gwboard_view.php?board_statue=PUBLIC&board_type=31&document_srl=74885&page=47&s_field=board_name&s_value=",
+            "publisher": "Gwangju FC",
+            "read": "2026-11-05",
+            "says": "Yellow explicitly team colour and symbol",
+            "access": "Direct page read lines124-133",
+            "publisherGroup": "Gwangju FC"
+          },
+          {
+            "url": "https://www.goalstudio.com/product/gfc-26-authentic-3rd-field-game-top-dark-navy/9111/category/69/display/1/",
+            "publisher": "GOALSTUDIO",
+            "read": "2026-11-05",
+            "says": "Yellow described as Gwangju symbolic colour",
+            "access": "Direct page read lines43-54",
+            "publisherGroup": "GOALSTUDIO"
+          }
+        ],
+        "scope": "Distinct civic club, not military Gwangju Sangmu identity; legal entity continuity not adopted."
+      },
+      "Gimcheon Sangmu": {
+        "colour": "red, navy",
+        "hex": "#d02128",
+        "hexRendering": "Approximate decorative dot using the site's existing palette, not an official RGB value or primary-colour hierarchy.",
+        "sources": [
+          {
+            "url": "https://www.kleague.com/news_view.do?orderBy=seq&page=23&seq=87350&viewOption=album",
+            "publisher": "KLeague, club release carried by official league",
+            "read": "2026-11-05",
+            "says": "Explicit official colour words red and navy; military-team status",
+            "access": "direct text",
+            "publisherGroup": "Korea Professional Football League"
+          },
+          {
+            "url": "https://www.newsis.com/view/NISX20210224_0001349331",
+            "publisher": "Newsis, Park Hong-sik",
+            "read": "2026-11-05",
+            "says": "February23 launch ceremony after relocation;first2021 KLeague2 season;red/navy emblem colours and home shirt",
+            "access": "actual indexed complete article text",
+            "publisherGroup": "Newsis"
+          }
+        ],
+        "scope": "2021 competition entry is not ordinary contract eligibility or founding of the wider Sangmu institution. No2027 citizen-team inference."
+      },
+      "Daejeon Hana Citizen": {
+        "colour": "purple, green",
+        "hex": "#5c2d91",
+        "hexRendering": "Approximate decorative dot using the site's existing palette, not an official RGB value or primary-colour hierarchy.",
+        "sources": [
+          {
+            "url": "https://www.dhcfc.kr/cl/emb.php",
+            "publisher": "Daejeon Hana Citizen",
+            "read": "2026-11-05",
+            "says": "Purple is historic club colour and green represents Hana; later prose names Bloody Purple/Hana Green. No numeric colour values adopted.",
+            "access": "direct text",
+            "publisherGroup": "Daejeon Hana Citizen"
+          },
+          {
+            "url": "https://www.yna.co.kr/view/AKR20200104041000007",
+            "publisher": "Yonhap News Agency, Choi Song-a",
+            "read": "2026-11-05",
+            "says": "New Daejeon Hana Citizen name,2020 KLeague2 entry and purple/green emblem/home-shirt combination",
+            "access": "direct text",
+            "publisherGroup": "Yonhap"
+          }
+        ],
+        "scope": "1997 lineage is distinct from2020 offered name. No exact1997 day or pro-contract effective date adopted."
+      },
+      "Bucheon FC 1995": {
+        "colour": "red, black",
+        "hex": "#d02128",
+        "hexRendering": "Approximate decorative dot using the site's existing palette, not an official RGB value or primary-colour hierarchy.",
+        "sources": [
+          {
+            "url": "https://www.kleague.com/news_view.do?orderBy=seq&page=3&seq=94285&viewOption=album",
+            "publisher": "Bucheon FC1995 via K League club-news section",
+            "read": "2026-11-05",
+            "says": "Red and black are Bucheon symbolic colours; 2007 foundation,2008 K3,2013 K League2 chronology",
+            "access": "Direct page read lines65-70",
+            "publisherGroup": "Bucheon FC1995 via K League club-news section"
+          },
+          {
+            "url": "https://www.yna.co.kr/view/AKR20170214147300065",
+            "publisher": "Yonhap",
+            "read": "2026-11-05",
+            "says": "Team own red and black identified separately from commemorative gold",
+            "access": "Search result full relevant body",
+            "publisherGroup": "Yonhap"
+          }
+        ],
+        "scope": "1995 is not the founding year;2008 K3 is not professional;2012 approval is not first pro season. Distinct from relocated BucheonSK/Jeju."
+      },
+      "FC Anyang": {
+        "colour": "purple",
+        "hex": "#5c2d91",
+        "hexRendering": "Approximate decorative dot using the site's existing palette, not an official RGB value or primary-colour hierarchy.",
+        "sources": [
+          {
+            "url": "https://fc-anyang.com/club/emblem.asp",
+            "publisher": "FC Anyang",
+            "read": "2026-11-05",
+            "says": "Purple explicitly used as Anyang grape symbol",
+            "access": "Direct page read lines135-137",
+            "publisherGroup": "FC Anyang"
+          },
+          {
+            "url": "https://www.anyang.go.kr/mayor/selectPressRelease.do?bbsNo=1687&integrDeptCode=&key=4111&nttNo=338257&pageIndex=155&searchCnd=all&searchCtgry=&searchKrwd=&searchNttType=",
+            "publisher": "Anyang City",
+            "read": "2026-11-05",
+            "says": "Purple explicitly identified as FC Anyang symbolic colour",
+            "access": "Search result body read",
+            "publisherGroup": "Anyang City"
+          },
+          {
+            "url": "https://m.news.nate.com/view/20130318n08030?cate=interest&list=rank&sect=s02",
+            "publisher": "Sports Seoul via Nate",
+            "read": "2026-11-05",
+            "says": "Actual2013 K League Challenge opener against Goyang; Purple/grape club colour distinguished from old LG red",
+            "access": "Search result full relevant article text",
+            "publisherGroup": "Sports Seoul via Nate"
+          }
+        ],
+        "scope": "New2013 civic club, not AnyangLG/FCSeoul historical canon."
+      },
+      "Incheon United": {
+        "colour": "blue, black",
+        "hex": "#0057b8",
+        "hexRendering": "Approximate decorative dot using the site's existing palette, not an official RGB value or primary-colour hierarchy.",
+        "sources": [
+          {
+            "url": "https://www.incheonutd.com/fanzone/feeds_view.php?idx=4264&tgbn=feeds_news",
+            "publisher": "Incheon United",
+            "read": "2026-11-05",
+            "says": "The characteristic blue-black (page word 파검) striped identity",
+            "access": "direct text and actual indexed article text",
+            "publisherGroup": "Incheon United"
+          },
+          {
+            "url": "https://www.mk.co.kr/news/sports/11962975",
+            "publisher": "MK Sports, Kim Young-hoon",
+            "read": "2026-11-05",
+            "says": "Explicit blue and black team colours;2026 home design recalls first2004 KLeague season",
+            "access": "actual indexed article text; direct open did not expose matching article body",
+            "publisherGroup": "Maeil Business Newspaper"
+          }
+        ],
+        "scope": "2003 formation and2004 playing launch/ceremony are different events, not contradictory dates for one field."
+      },
+      "Jeju SK": {
+        "colour": "orange",
+        "hex": "#f5a800",
+        "hexRendering": "Approximate decorative dot using the site's existing palette, not an official RGB value or primary-colour hierarchy.",
+        "sources": [
+          {
+            "url": "https://www.jejuskfc.com/club/historyStory",
+            "publisher": "Jeju SK FC",
+            "read": "2026-11-05",
+            "says": "Founding lineage1982; orange explicitly called the symbolic colour;2025 current-name season",
+            "access": "actual indexed article text",
+            "publisherGroup": "Jeju SK FC"
+          },
+          {
+            "url": "https://pdf.ihalla.com/sectionpdf/20250210-102387.pdf",
+            "publisher": "Halla Ilbo",
+            "read": "2026-11-05",
+            "says": "2025 home shirt uses the club's symbolic orange; black trim is season-specific, not adopted as a timeless secondary",
+            "access": "actual indexed PDF article text; direct PDF extraction did not preserve matching Hangul",
+            "publisherGroup": "Halla Ilbo"
+          }
+        ],
+        "scope": "1982 lineage does not backdate JejuSK name. Exact founding day and timeless secondary colour held. Old names are not merged into BucheonFC1995."
       }
     }
   },
   "clubSince": {
-    "about": "Round 1100. Since when the game offers each generated pool club. Every generated club has exactly one decision here. shipped: one of the 51 rows Round 1013 shipped; it stays in every era exactly as main had it (their first seasons were never two sourced: an open item, see scripts/simCareerClubPool.mjs). held: a club Round 1100 brought in. The game knows it as a 2026-27 club and nothing earlier, so it is not offered, drawn or met in any season before heldBefore until its first season as a professional club under this name is read from two sources that are not wikis; then it moves to since with that year (a year of 1990 or earlier means every era). Nothing here is a founding date and none is claimed. One place a held club is named earlier: a past league table. Where the Round 1036 league ledgers (scripts/data/leagueSeasons) hold the club in that league that season from two sources, that season's table and fixtures print its name; it is still not offered in the market, drawn in a continental tie or played as a derby before heldBefore.",
+    "about": "Round 1100. Since when the game offers each generated pool club. Every generated club has exactly one decision here. shipped: one of the 51 rows Round 1013 shipped; it stays in every era exactly as main had it (their first seasons were never two sourced: an open item, see scripts/simCareerClubPool.mjs). held: a club Round 1100 brought in. The game knows it as a 2026-27 club and nothing earlier, so it is not offered, drawn or met in any season before heldBefore until its first season as a professional club under this name is read from two sources that are not wikis; then it moves to since with that year (a year of 1990 or earlier means every era). Nothing here is a founding date and none is claimed. One place a held club is named earlier: a past league table. Where the Round 1036 league ledgers (scripts/data/leagueSeasons) hold the club in that league that season from two sources, that season's table and fixtures print its name; it is still not offered in the market, drawn in a continental tie or played as a derby before heldBefore. The eight K League 1 additions stay held to the first supported catalogue season, 2026, even where their professional history is older. This is game availability, not a claimed founding or first-professional date.",
     "heldBefore": 2026,
     "shipped": [
       "Bournemouth",
@@ -4826,6 +5588,16 @@
         "FC Andorra",
         "Ceuta",
         "Albacete"
+      ],
+      "K League 1": [
+        "Gangwon FC",
+        "Gwangju FC",
+        "Gimcheon Sangmu",
+        "Daejeon Hana Citizen",
+        "Bucheon FC 1995",
+        "FC Anyang",
+        "Incheon United",
+        "Jeju SK"
       ]
     },
     "since": {}

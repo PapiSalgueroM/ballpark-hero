@@ -10,7 +10,7 @@ import type { HubTab } from '@/hooks/useClubManager';
 import {
   TIER_INFO, clubDefFor, clubPreviewRating, careerLeagueOf, money,
   isAvailable, xiAverageRating, sortedTable,
-  NATIONS, REAL_LEAGUES, playableClubs, objectiveStatuses, CM_ROSTER_META, isPartialClub,
+  NATIONS, REAL_LEAGUES, playableClubs, objectiveStatuses, CM_ROSTER_META, isPartialClub, ordinaryClubAllowed,
   isHistoricEra, eraLeaguesFor, eraPlayableClubs, boardWantLabel,
   developingPlayers, INTENSITY_INFO, FOCUS_INFO,
   brokenPromises, CM_ERAS, DEFAULT_ERA_ID, eraById, projectedXIAvg, CM_BASE_YEAR,
@@ -19,6 +19,7 @@ import {
 } from '@/lib/clubManager';
 // Round 1035: the A-League Men's squads come from their own generated file.
 import { generatedLeagueCountClauses, generatedLeagueMonthClause } from '@/data/clubManagerWorldRosters';
+import { K_LEAGUE_2026, kLeagueMember } from '@/data/kLeague2026';
 import { FACILITY_IDS, facilitiesOf } from '@/lib/clubManagerFacilities';
 import { projectFinances } from '@/lib/clubManagerFinances';
 import { expiringDealsLine, inboxTile, kittyChange, leagueTileValue, recordLine } from '@/lib/clubManagerHubLines';
@@ -312,7 +313,7 @@ const ClubManager = () => {
     <>
       <PageSeo
         title="Club Manager: Football Management Sim | DoUKnowBall"
-        description="Pick a real club, set your tactics, work the transfer market and survive the sack race across full 38-game seasons, cup runs and the Champions League."
+        description="Pick a real club, set your tactics, work the transfer market and survive the sack race across league seasons and the competitions each league plays."
         path="/club-manager"
       />
       <GameShell
@@ -359,10 +360,10 @@ const ClubManager = () => {
         <GameSeoContent
           pageHasOwnH1
           title="Club Manager: Football Management Sim"
-          description="A full club-management sim in your browser: 454 clubs across 27 real leagues, from the Premier League, the 2. Bundesliga, Serie B, Ligue 2, the Segunda División and the Scottish Premiership to the Saudi Pro League, MLS, Brazil, Mexico, Australia, Russia, Croatia, Denmark, Switzerland, Austria and Greece, with real players at their real market values as of August 2026 (October for the A-League Men and the Russian Premier League) and thin squads topped up with made up youth, marked as such. Manage today or in a real past season: 2020-21 with Haaland's Dortmund and Mbappé's PSG, 2015-16 with Leicester at 5000 to 1, 2010-11 with prime Messi, or 2005-06 with Ronaldinho's Barcelona. Or create your own club with its own crest and stadium. Negotiate transfers, survive bidding wars, hit the board's named objectives, and chase titles season after season."
+          description="A full club-management sim in your browser: the existing 27 real leagues cover 454 clubs, from the Premier League, the 2. Bundesliga, Serie B, Ligue 2, the Segunda División and the Scottish Premiership to the Saudi Pro League, MLS, Brazil, Mexico, Australia, Russia, Croatia, Denmark, Switzerland, Austria and Greece, with real players at their real market values as of August 2026 (October for the A-League Men and the Russian Premier League) and thin squads topped up with made up youth, marked as such. K League 1 adds 12 member clubs and 11 available ordinary jobs, with generated opening squads and simplified competition rules. Start a new current career to use it; existing saved worlds keep their previous leagues. Manage today or in a real past season: 2020-21 with Haaland's Dortmund and Mbappé's PSG, 2015-16 with Leicester at 5000 to 1, 2010-11 with prime Messi, or 2005-06 with Ronaldinho's Barcelona. Or create your own club with its own crest and stadium. Negotiate transfers, survive bidding wars, hit the board's named objectives, and chase titles season after season."
           howToPlay={[
-            'Pick your era: 2026-27 with real players, or a real past season: 2020-21, 2015-16, 2010-11 or 2005-06, each with the Premier League, La Liga, Serie A, the Bundesliga and Ligue 1.',
-            'Pick your nation, league and club (454 clubs across 27 real leagues), or create your own club with its own crest, stadium and budget.',
+            'Pick your era: 2026-27 with the roster coverage stated for each league, or a real past season: 2020-21, 2015-16, 2010-11 or 2005-06, each with the Premier League, La Liga, Serie A, the Bundesliga and Ligue 1.',
+            'Pick your nation, league and an available club, or create your own club with its own crest, stadium and budget.',
             'Read the board\'s objectives: league finish, cup run, Europe where it applies, beating your rival, and a goals quota.',
             'Go and meet the two asks the board makes in the market: a country quota, an experience count, the thinnest line in your squad, a signing 21 or under at a rating floor, or one fee over a threshold, every number worked out from your club and your era.',
             'Set your formation, mentality and XI, then play through the full season week by week.',
@@ -482,7 +483,7 @@ const ClubManager = () => {
         <header className="text-center mb-6">
           <h1 className="text-4xl md:text-6xl font-bold tracking-[0.1em] text-primary font-display mb-1">CLUB MANAGER</h1>
           <p className="text-muted-foreground text-sm md:text-base max-w-xl mx-auto">
-            {REAL_LEAGUES.length} real league tables and {REAL_LEAGUES.reduce((s, l) => s + l.clubs.length, 0)} clubs today, squads as of {CM_ROSTER_META.asOf}{generatedLeagueMonthClause() ? ` (${generatedLeagueMonthClause()})` : ''}, plus four real past seasons: 2020-21, 2015-16, 2010-11 and 2005-06. Pick when you start, then your nation, your league, your club.
+            {REAL_LEAGUES.length} league tables and {REAL_LEAGUES.reduce((s, l) => s + l.clubs.length, 0)} member clubs today. The existing 27 leagues use roster snapshots from {CM_ROSTER_META.asOf}{generatedLeagueMonthClause() ? ` (${generatedLeagueMonthClause()})` : ''}; K League 1 uses generated opening squads. Start a new current career for K League 1. Four real past seasons stay separate: 2020-21, 2015-16, 2010-11 and 2005-06.
           </p>
         </header>
 
@@ -515,7 +516,7 @@ const ClubManager = () => {
                     <span className="text-xl leading-none">{e.emoji}</span>
                     <div className="min-w-0">
                       <div className="text-base font-bold font-display text-foreground">{e.label}</div>
-                      <div className="text-[10px] text-muted-foreground">{e.blurb}</div>
+                      <div className="text-[10px] text-muted-foreground">{e.id === DEFAULT_ERA_ID ? 'Current clubs; K League squads are generated.' : e.blurb}</div>
                     </div>
                     <ChevronRight className="w-4 h-4 text-muted-foreground ml-auto shrink-0" />
                   </div>
@@ -533,7 +534,7 @@ const ClubManager = () => {
                       ? 'text-[hsl(var(--wc-green-ink))] border-emerald-500/50 bg-emerald-500/10'
                       : 'text-gold border-yellow-500/50 bg-yellow-500/10',
                   )}>
-                    {e.startYear <= CM_BASE_YEAR ? 'REAL DATA' : 'PROJECTION'} · {eraRealShareLabel(e)}
+                    {e.id === DEFAULT_ERA_ID ? 'REAL CLUBS · SQUAD COVERAGE VARIES' : <>{e.startYear <= CM_BASE_YEAR ? 'REAL DATA' : 'PROJECTION'} · {eraRealShareLabel(e)}</>}
                   </div>
                 </button>
               ))}
@@ -635,7 +636,7 @@ const ClubManager = () => {
                     <div className="min-w-0">
                       <div className="text-sm font-bold text-foreground">{n.name}</div>
                       <div className="text-[10px] text-muted-foreground">
-                        {leagues.length > 1 ? `${leagues.length} leagues` : '1 league'} · {clubCount} clubs
+                        {leagues.length > 1 ? `${leagues.length} leagues` : '1 league'} · {clubCount} clubs{!historicPick && n.leagueIds.includes(K_LEAGUE_2026.id) ? ` · ${leagues.reduce((s, l) => s + todaysTeams(l.id).length, 0)} available jobs` : ''}
                       </div>
                     </div>
                     <ChevronRight className="w-4 h-4 text-muted-foreground ml-auto shrink-0" />
@@ -681,13 +682,13 @@ const ClubManager = () => {
                     <div className="min-w-0">
                       <div className="text-base font-bold text-foreground">{lg.name}</div>
                       <div className="text-[10px] text-muted-foreground">
-                        {lg.clubs.length} clubs · {lg.cupName !== null ? `domestic cup: ${lg.cupName}` : 'no domestic cup'}{lg.euro ? ' · Champions League spots' : ''}
+                        {lg.clubs.length} clubs · {lg.id === K_LEAGUE_2026.id ? `${lgTeams.length} available jobs · Korea Cup not played` : lg.cupName !== null ? `domestic cup: ${lg.cupName}` : 'no domestic cup'}{lg.euro ? ' · Champions League spots' : ''}
                       </div>
                     </div>
                     <ChevronRight className="w-4 h-4 text-muted-foreground ml-auto shrink-0" />
                   </div>
                   <div className="text-[10px] text-muted-foreground mt-2 truncate">
-                    Strongest sides: {lgTeams.slice(0, 4).map(c => c.name).join(' · ')}
+                    {lg.id === K_LEAGUE_2026.id ? 'Club options' : 'Strongest sides'}: {lgTeams.slice(0, 4).map(c => c.name).join(' · ')}
                   </div>
                 </button>
               );
@@ -704,6 +705,7 @@ const ClubManager = () => {
             >
               <ChevronLeft className="w-3.5 h-3.5" /> <FlagImg name={pickNation.name} size={14} /> {league.name}
             </button>
+            {league.id === K_LEAGUE_2026.id && <p data-cm-kleague-access className="text-xs text-muted-foreground mb-3">The current K League 1 catalogue has {K_LEAGUE_2026.clubs.length} members; your world offers {teams.length} ordinary jobs here. {K_LEAGUE_2026.clubs.filter(c => !ordinaryClubAllowed(c.name)).map(c => c.name).join(', ')} remains in the league world as an opponent. Managing or joining the real club is not supported here yet.</p>}
             {(() => {
               const rows = teams.map(c => {
                 const sel = g.pendingClub === c.name;
@@ -716,6 +718,7 @@ const ClubManager = () => {
                   tierEmoji: TIER_INFO[c.tier].emoji,
                   tierLabel: TIER_INFO[c.tier].label,
                   partial,
+                  ...(!historicPick && K_LEAGUE_2026.modelOnlyRoster && kLeagueMember(c.name) ? { modelOnlyRoster: true } : {}),
                   rating: Math.round(projectedXIAvg(c.name, eraYearsOn, pickEra) ?? clubPreviewRating(c.name)),
                   budgetLabel: money(c.budget),
                   boardTitle: teamWants.get(c.name) ?? '',
@@ -735,7 +738,7 @@ const ClubManager = () => {
               {historicPick ? (
                 <>{eraHonestyLine(era)}</>
               ) : (
-                <>Squads, ratings and values from market data plus the verified summer window: {CM_ROSTER_META.players} players as of {CM_ROSTER_META.asOf}, refreshed {CM_ROSTER_META.generated}, and {generatedLeagueCountClauses().join(', and ')}.</>
+                <>{teams.some(c => kLeagueMember(c.name)) ? <>K League member clubs have no verified opening roster here: their starting players are generated, and ratings and budgets are game estimates. Any other clubs on this screen keep their stated roster coverage.</> : <>Squads, ratings and values from market data plus the verified summer window: {CM_ROSTER_META.players} players as of {CM_ROSTER_META.asOf}, refreshed {CM_ROSTER_META.generated}, and {generatedLeagueCountClauses().join(', and ')}.</>}</>
               )}
               {eraYearsOn > 0 && (
                 <> Starting {era.label}, so those squads have been aged {eraYearsOn} years: {eraHonestyLine(era)}</>
@@ -957,6 +960,7 @@ const ClubManager = () => {
   const cupSatOut = cupSatOutBy(c);
   const cupAlive = cupName !== null && c.cupRound !== 'out' && c.cupRound !== 'won';
   const uclAlive = (c.uclGroup !== null && c.uclKoRound === null) || (!!c.uclKoRound && c.uclKoRound !== 'out' && c.uclKoRound !== 'won');
+  const kLeagueModel = careerLeagueOf(c).id === K_LEAGUE_2026.id;
 
   /* ---- Round 74: the rival viewer takes over the whole screen ---- */
   if (card) {
@@ -1048,6 +1052,7 @@ const ClubManager = () => {
             strip 60px, so the slot holds 60 then. */}
         <div className={cn('flow-root', boardMeter(c).value > 0 && boardMeter(c).value < BOARD_EDGE ? 'min-h-[60px]' : 'min-h-[52px]')}><ScreenLoading compact><MetersStrip career={c} /></ScreenLoading></div>
       </header>
+      {kLeagueModel && <p data-cm-kleague-model className="text-xs text-muted-foreground mb-4">K League 1 plays 22 simulated league games on the shared August to May calendar. The real 2026 league used 33 games, then 5 split games. The split, Korea Cup, AFC competitions and promotion/relegation are not played here.</p>}
 
       <Tabs value={g.activeTab} onValueChange={(v) => g.setActiveTab(v as HubTab)}>
         <TabsList className="grid grid-cols-5 w-full mb-4">
@@ -1261,7 +1266,7 @@ const ClubManager = () => {
               />
               <HubTile
                 icon="🏅" title="Cups" accent={cupAlive && !!c.cupDraw[c.cupRound as CupRound]}
-                value={cupName === null ? (cupSatOut ? 'Not entered' : 'No domestic cup') : cupAlive ? 'Still alive' : c.cupRound === 'won' ? 'CUP WINNERS' : 'Knocked out'}
+                value={kLeagueModel ? 'Korea Cup not played' : cupName === null ? (cupSatOut ? 'Not entered' : 'No domestic cup') : cupAlive ? 'Still alive' : c.cupRound === 'won' ? 'CUP WINNERS' : 'Knocked out'}
                 sub={uclAlive ? (cupName === null ? 'UCL alive' : 'UCL alive too') : (cupName ?? careerLeagueOf(c).name)}
                 onClick={() => setHubPanel('cups')}
               />
@@ -1524,9 +1529,10 @@ const ClubManager = () => {
                 <ScreenLoading><CupsPanel
                   career={c}
                   onClubClick={setClubView}
-                  cupTitle="Domestic cup"
-                  cupValue={cupName ?? cupSatOut ?? 'No domestic cup'}
-                  cupSub={cupName === null ? (cupSatOut ? 'Not entered' : undefined) : cupAlive ? `Still alive. Next up: ${c.cupDraw[c.cupRound as CupRound] ?? 'to be drawn'}` : c.cupRound === 'won' ? 'Cup winners' : 'Knocked out'}
+                  cupTitle={kLeagueModel ? 'Korea Cup' : 'Domestic cup'}
+                  cupValue={kLeagueModel ? 'Not played' : cupName ?? cupSatOut ?? 'No domestic cup'}
+                  cupSub={kLeagueModel ? 'League-only model' : cupName === null ? (cupSatOut ? 'Not entered' : undefined) : cupAlive ? `Still alive. Next up: ${c.cupDraw[c.cupRound as CupRound] ?? 'to be drawn'}` : c.cupRound === 'won' ? 'Cup winners' : 'Knocked out'}
+                  cupLine={kLeagueModel ? <p data-cm-kleague-cup className="bg-card border border-border rounded-xl p-3 text-xs text-muted-foreground">The Korea Cup is not played here. This K League 1 season is a 22-game league simulation on the shared calendar. Its real 2026 split, AFC competitions and promotion/relegation are not played either.</p> : undefined}
                   /* Round 102 built this bracket; Round 312 mounted it. */
                   cupBracket={cupName === null ? undefined : <CupBracketCard career={c} onClubClick={setClubView} />}
                   uclHeading={<div className="text-xs text-muted-foreground uppercase tracking-wider">⭐ Champions League</div>}

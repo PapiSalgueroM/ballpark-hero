@@ -23,6 +23,7 @@
    and the only thing a different choice changes is the choice's own effect.
    Elite clubs (tier 1) are never for sale; a club gets there by promotion. */
 import type { CareerState, ClubData, OwnerPlan, OwnerSeasonRow, OwnerState } from "./soccerCareerEngine";
+import { kLeagueMember } from '@/data/kLeague2026';
 import { adjustClubsForYear } from "./careerEras";
 import { divisionMove, finishZone, keyedStream, leagueKeyInYear, leagueSeasonLine, managerLeagueField, ordinal, playDugoutTable } from "./soccerCareerLeague";
 
@@ -151,7 +152,8 @@ export interface OwnerClubForSale {
  *  every visit. Two clubs of one band come from different leagues when the
  *  band has more than one league. */
 export function ownerClubsForSale(input: { clubs: readonly ClubData[]; year: number; netWorth: number; key: string }): OwnerClubForSale[] {
-  const world = adjustClubsForYear([...input.clubs], input.year);
+  const world = adjustClubsForYear([...input.clubs], input.year)
+    .filter(club => !kLeagueMember(club.name)?.accessHeld);
   const out: OwnerClubForSale[] = [];
   for (const tier of OWNER_SALE_TIERS) {
     const band = OWNER_TIERS[tier];

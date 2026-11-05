@@ -9,6 +9,7 @@ type TeamRow = {
   tierEmoji: string;
   tierLabel: string;
   partial: boolean;
+  modelOnlyRoster?: boolean;
   rating: number;
   budgetLabel: string;
   boardTitle: string;
@@ -42,10 +43,10 @@ export default function ClubManagerTeamPicker({ rows, editing, onPick, onCreate 
           </div>
           <div className="text-[9px] text-muted-foreground mt-0.5">
             {c.tierEmoji} {c.tierLabel}
-            {c.partial && <span className="ml-1 text-yellow-500/80" title="The market data covers only part of this squad; the rest is filled with youth players.">· partial data</span>}
+            {c.modelOnlyRoster ? <span className="ml-1 text-yellow-500/80" title="No verified opening roster. Starting players are generated; ratings and budgets are game estimates.">· generated squad</span> : c.partial && <span className="ml-1 text-yellow-500/80" title="The market data covers only part of this squad; the rest is filled with youth players.">· partial data</span>}
           </div>
           <div className="flex items-center justify-between mt-1.5">
-            <span className="text-[10px] text-muted-foreground">Squad</span>
+            <span className="text-[10px] text-muted-foreground">{c.modelOnlyRoster ? 'Game rating' : 'Squad'}</span>
             {/* Round 132: the squad number is the squad in the era you
                 picked, not the 2026 one, or the tile would be lying
                 about the team you are about to take over. */}
@@ -54,7 +55,7 @@ export default function ClubManagerTeamPicker({ rows, editing, onPick, onCreate 
             </span>
           </div>
           <div className="flex items-center justify-between">
-            <span className="text-[10px] text-muted-foreground">Budget</span>
+            <span className="text-[10px] text-muted-foreground">{c.modelOnlyRoster ? 'Game budget' : 'Budget'}</span>
             {/* Round 514: the club picker runs before a career exists, so there are no
                 start options to follow and this one stays in the default symbol. */}
             <span className="text-xs font-bold text-gold">{c.budgetLabel}</span>
