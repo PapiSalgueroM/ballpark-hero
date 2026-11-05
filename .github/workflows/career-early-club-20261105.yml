@@ -80,7 +80,7 @@ jobs:
       - name: Existing old-versus-current Career Path save and reload parity
         if: ${{ !cancelled() }}
         run: |
-          R848_PARITY_ONLY=career R848_PRE_HOOK="$RUNNER_TEMP/crq-pre-daily.ts" NODE_OPTIONS="--max-old-space-size=6144 --require=$PWD/scripts/lib/offlineTransport.cjs" node node_modules/vitest/vitest.mjs run src/test/dailySaveParity.test.tsx --maxWorkers=1 --minWorkers=1 --reporter=default --reporter=json --outputFile=early-club-artifacts/existing-parity.json 2>&1 | tee early-club-artifacts/existing-parity.log
+          R848_PARITY_ONLY=career R848_PRE_HOOK="$PWD/early-club-artifacts/pre-daily-hook.ts" NODE_OPTIONS="--max-old-space-size=6144 --require=$PWD/scripts/lib/offlineTransport.cjs" node node_modules/vitest/vitest.mjs run src/test/dailySaveParity.test.tsx --maxWorkers=1 --minWorkers=1 --reporter=default --reporter=json --outputFile=early-club-artifacts/existing-parity.json 2>&1 | tee early-club-artifacts/existing-parity.log
           node --input-type=module <<'NODE'
           import fs from 'node:fs'; import assert from 'node:assert/strict';
           const r=JSON.parse(fs.readFileSync('early-club-artifacts/existing-parity.json'));

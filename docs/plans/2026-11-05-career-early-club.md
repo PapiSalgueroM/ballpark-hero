@@ -41,3 +41,6 @@ Board-order versus repeated seasons and composite club strings; all clubs exhaus
 ## Ledger
 
 2026-11-05: Plan and claim prepared before product edits. Original page/hook/board source pinned. Broader automatic PR failures are being separately classified; no global release credit or publication.
+
+
+2026-11-05 qualification follow-up: full run42108226892 at7f58cb93 passes types, fixed11, the3 existing record/stale-save cases, normal build, all20 readers, all16 unchanged caps and4991 actual-day browser checks across320/390/1280. All3 real wins score700, with no completion request forwarded. The source controller stopped at allow-empty because the DOM disabled matcher omits Vitest's custom label in its error; its exact outcome was retained. The controller now accepts only the expected DOM assertion shapes and asserts full failed-case sets. Old save parity failed setup before any case because its copied prehook was outside the Vite project; it now loads the exact retained617b hook inside the evidence directory. Neither failure justified a game logic change. Screenshot review also found the old article's blanket four-box rule; only Career Quiz's three copy strings in soccer2.ts and the help's up-to wording are corrected to describe both hint choices. This requires a fresh build/readers/browser run. Prior partial results remain retained, no global release credit.

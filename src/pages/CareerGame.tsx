@@ -117,7 +117,7 @@ const CareerGame = () => {
                 <ul className="space-y-1.5 text-muted-foreground">
                   <li>Tap any hidden box to reveal that cell</li>
                   <li>
-                    Press <span className="text-foreground font-semibold">Give Hint</span> to reveal{' '}
+                    Press <span className="text-foreground font-semibold">Give Hint</span> to reveal up to{' '}
                     <span className="text-primary font-semibold">4 random boxes</span> at once
                   </li>
                   <li>

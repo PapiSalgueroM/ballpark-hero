@@ -45,13 +45,13 @@ function run(name, text, expected) {
     assert.equal(failures.length, 0, name + ': every case passes');
   } else {
     assert.equal(child.status, 1, name + ': business failure exit');
-    for (const marker of expected) assert(failures.some(row => row.title.includes(marker)), name + ': ' + marker + ' failed');
-    assert(failures.every(row => row.failureMessages.join('\n').includes('EARLY_CLUB_')), name + ': named assertion failures only');
+    assert.deepEqual(failures.map(row => row.title.split(' ')[0]), expected, name + ': exact failed business case set');
+    assert(failures.every(row => /^(?:AssertionError: EARLY_CLUB_|Error: expect\(element\)\.(?:toBeDisabled|toHaveClass|toHaveTextContent)\()/m.test(row.failureMessages.join('\n'))), name + ': named assertion or actual expected DOM matcher failures only');
   }
   console.log(name + ': ' + (cases.length - failures.length) + ' passed, ' + failures.length + ' exact named failures');
 }
 try {
-  run('original', original, ['EARLY_CLUB_NATIVE', 'EARLY_CLUB_ORDER', 'EARLY_CLUB_STALE']);
+  run('original', original, ["EARLY_CLUB_NATIVE","EARLY_CLUB_ORDER","EARLY_CLUB_SKIP","EARLY_CLUB_EXHAUST","EARLY_CLUB_EMPTY","EARLY_CLUB_RELOAD","EARLY_CLUB_UNLIMITED","EARLY_CLUB_MANUAL","EARLY_CLUB_FINISHED","EARLY_CLUB_STALE"]);
   assert.equal(rows[0].failures.length, 10, 'Original ten missing-feature failures');
   run('fixed', source, []);
   const controls = [
@@ -62,7 +62,9 @@ try {
     [
       "EARLY_CLUB_SKIP",
       "EARLY_CLUB_EXHAUST",
-      "EARLY_CLUB_RELOAD"
+      "EARLY_CLUB_RELOAD",
+      "EARLY_CLUB_UNLIMITED",
+      "EARLY_CLUB_STALE"
     ]
   ],
   [
@@ -71,7 +73,13 @@ try {
     "",
     [
       "EARLY_CLUB_ORDER",
-      "EARLY_CLUB_EMPTY"
+      "EARLY_CLUB_SKIP",
+      "EARLY_CLUB_EXHAUST",
+      "EARLY_CLUB_EMPTY",
+      "EARLY_CLUB_RELOAD",
+      "EARLY_CLUB_UNLIMITED",
+      "EARLY_CLUB_FINISHED",
+      "EARLY_CLUB_STALE"
     ]
   ],
   [
@@ -80,7 +88,13 @@ try {
     "onClick={giveHint}",
     [
       "EARLY_CLUB_ORDER",
-      "EARLY_CLUB_MANUAL"
+      "EARLY_CLUB_SKIP",
+      "EARLY_CLUB_EXHAUST",
+      "EARLY_CLUB_RELOAD",
+      "EARLY_CLUB_UNLIMITED",
+      "EARLY_CLUB_MANUAL",
+      "EARLY_CLUB_FINISHED",
+      "EARLY_CLUB_STALE"
     ]
   ],
   [
