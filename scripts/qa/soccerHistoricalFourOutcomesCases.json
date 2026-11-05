@@ -1,0 +1,495 @@
+{
+  "schema": 1,
+  "status": "BOUND_CANDIDATE_SOURCE_DRAFT_NO_RUNTIME",
+  "candidate": {
+    "head": "a9e56ff706ea71a51d3ec60438023ed9ad4d3b01",
+    "tree": "316d2084d15d5e24aff38e5a692b639432b3eb98",
+    "parent": "1acb33005073be70ba5aae0285ece5537f390f9a",
+    "parentTree": "801e4ff83cdbedc676c4308aa10ce69db835035f"
+  },
+  "parent": "05bd628b349ef7483bc5f5f537a7d10807a83f05",
+  "tree": "b5d8207755aa6f46f7395c3a83c73514d15c2797",
+  "preparationSource": {
+    "app": "4e45ee3605589aeb5a268b2e6a902fb4ff71af92",
+    "soccerEquivalent": "4571ba4ea9545dab5ef70769204034e5163d48d7",
+    "scope": "Immutable App05bd/treeb5 selected by Root from actual host entry/assets. NBA public qualification is still pending. Original-only headless measurement, no version2 feature credit."
+  },
+  "test": {
+    "path": "src/test/soccerHistoricalFourOriginal.test.tsx",
+    "bytes": 28600,
+    "sha": "12720a5b245ca04194f84def377766a377c348d2",
+    "derivedFrom": "816c9020ccf445f94d5fe7b0ee38870b06c3f0ca"
+  },
+  "originalReader": {
+    "path": "scripts/qa/soccerHistoricalFourOriginalEvidence.mjs",
+    "blob": "7159c58df42d09a53432a80b86a602f90c88db1a"
+  },
+  "original": {
+    "run": "42056408953",
+    "job": "127345868366",
+    "qa": "5bce6146c5a5e70429847de007f20b4ebb4fe738",
+    "artifact": "13429002902",
+    "zipBytes": 6536407,
+    "zipSHA256": "fcaf5a200177b644876e90c06507a68cb1ac0bf3986693e00a024eb26d264a81",
+    "tarBytes": 6535926,
+    "tarSHA256": "c98633e051871dd18df35eda355345917a3a526b931d9c0c29014a6c14f9227d",
+    "inputAuthority": {
+      "file": "original-input-authority.json",
+      "bytes": 54458,
+      "sha256": "c49e3cb424e5db86ee61bdb45a82878ff58135b97b0b1e6b6575d9bdf32d8f0c"
+    },
+    "independentAdmissionSHA256": "c572bce973e68971e82f7821b7d77a01dab907f2805f16b357569ae0b942089a",
+    "selectedSeed": 1,
+    "records": [
+      {
+        "file": "actual-original-ui-input.json",
+        "storedFile": "actual-original-ui-input.json.gz",
+        "bytes": 97708,
+        "sha256": "7fef55fae16dc21b14b8b8efa1947f4c67454f7e22f304fff80b6e17fead2822",
+        "storedBytes": 20818,
+        "storedSHA256": "1d8221c0e6e9e3bf0ac68b437d3c3e88534275853fe81c8dda4c616aa0db3790",
+        "journeys": []
+      },
+      {
+        "file": "attempt-1.json",
+        "storedFile": "attempt-1.json.gz",
+        "bytes": 6977327,
+        "sha256": "863f660779720a7fb48acac774cbcff469ab94753816cb6aa58120a353b0df50",
+        "storedBytes": 1141566,
+        "storedSHA256": "55844038fd5d6dace531b0932b78b125d0c2ad3000eb04fa33555521828e0115",
+        "journeys": [
+          {
+            "pointer": "",
+            "frames": 140,
+            "draws": 6289
+          }
+        ]
+      },
+      {
+        "file": "healthy-repeated-original.json",
+        "storedFile": "healthy-repeated-original.json.gz",
+        "bytes": 6977354,
+        "sha256": "61e3e2bc2d7f0beb35e7fb5eaa5c47c4d453a51dcd1e52b0e2b01291502e9da1",
+        "storedBytes": 1141598,
+        "storedSHA256": "e2b142c8d56b8e214479fb838c97d341480468cf446ef1cfaf251b9514b8fe30",
+        "journeys": [
+          {
+            "pointer": "",
+            "frames": 140,
+            "draws": 6289
+          }
+        ]
+      },
+      {
+        "file": "case-1-new-policy.json",
+        "storedFile": "case-1-new-policy.json.gz",
+        "bytes": 97849,
+        "sha256": "e6f2c34c0dd8099824becd5525a4be2d48b339cfb5fa83b576b789112652d07d",
+        "storedBytes": 20916,
+        "storedSHA256": "55021cce5defbda1ade40a6e80ba9fbde772c43e1a130d8da7b2688578393a77",
+        "journeys": []
+      },
+      {
+        "file": "case-2-due-timeline.json",
+        "storedFile": "case-2-due-timeline.json.gz",
+        "bytes": 146239,
+        "sha256": "8e453dee76eae292b13bba8e0034efb3506780cb28334d2531a8eeaf36becc2f",
+        "storedBytes": 36423,
+        "storedSHA256": "4b85fe52d6c9b0a079603549282d622ab1e33a0795c0640f1ec18f6608f1793f",
+        "journeys": []
+      },
+      {
+        "file": "case-3-world-identities.json",
+        "storedFile": "case-3-world-identities.json.gz",
+        "bytes": 150928,
+        "sha256": "ee62930974a916f24e97cc24caf415939792f93512c090ef55a128a4b34aabee",
+        "storedBytes": 37229,
+        "storedSHA256": "18bdc2eeaf2216e14e82855699f3a5b067bc37bb1fa2a4beb6ed88b5706993d1",
+        "journeys": []
+      },
+      {
+        "file": "case-4-visible-cards.json",
+        "storedFile": "case-4-visible-cards.json.gz",
+        "bytes": 97499,
+        "sha256": "88627369cae13b9492d1c546302768c76a1145287a401eae673118b5d09ed8ef",
+        "storedBytes": 21127,
+        "storedSHA256": "4ac47db359bd31ee1abdc6aee0d5a905de4309fb546f38b6293bf4ed23a9638e",
+        "journeys": []
+      },
+      {
+        "file": "case-5-held-originals.json",
+        "storedFile": "case-5-held-originals.json.gz",
+        "bytes": 21297593,
+        "sha256": "018092b754c0247efa3803dce20c31e994526e8176a16aad76d3c77f07850a50",
+        "storedBytes": 3237471,
+        "storedSHA256": "2f5e90db72e3a40c54644286116d599ac36ba653b7d20a100ee10ecea4b7fda2",
+        "journeys": [
+          {
+            "pointer": "/v1One",
+            "frames": 140,
+            "draws": 6289
+          },
+          {
+            "pointer": "/v1Two",
+            "frames": 140,
+            "draws": 6289
+          },
+          {
+            "pointer": "/legacyOne/run",
+            "frames": 49,
+            "draws": 2106
+          },
+          {
+            "pointer": "/legacyTwo/run",
+            "frames": 49,
+            "draws": 2106
+          },
+          {
+            "pointer": "/opaqueOne/run",
+            "frames": 49,
+            "draws": 2106
+          },
+          {
+            "pointer": "/opaqueTwo/run",
+            "frames": 49,
+            "draws": 2106
+          }
+        ]
+      }
+    ]
+  },
+  "bridge": {
+    "base": "05bd628b349ef7483bc5f5f537a7d10807a83f05",
+    "baseTree": "b5d8207755aa6f46f7395c3a83c73514d15c2797",
+    "head": "1acb33005073be70ba5aae0285ece5537f390f9a",
+    "tree": "801e4ff83cdbedc676c4308aa10ce69db835035f",
+    "receiptSHA256": "feca9a98780c83e0a2f67fe8ccbf2e8600439b9849f25a25b9665fd1899632d9",
+    "paths": [
+      "docs/EXPANSION-IMPLEMENTATION-LEDGER.md",
+      "docs/PROJECT-STATE.md",
+      "docs/WORKBOARD.md",
+      "docs/plans/2026-11-05-nba-real-draft-2004.md",
+      "scripts/data/nbaHistoricalDraft2004Fixture.json",
+      "scripts/simNbaHistoricalDraft.mjs",
+      "src/test/nbaHistoricalDraft2004.test.tsx"
+    ]
+  },
+  "appFiles": [
+    {
+      "path": "src/lib/soccerHistoricalArrivals.ts",
+      "before": "fce537f31d51a8de78a170c57808b8d233fa54b1",
+      "current": "c57d5048ffbce45c33051873e799a7e79dcdc561",
+      "beforeBytes": 1537,
+      "currentBytes": 4056
+    },
+    {
+      "path": "src/lib/soccerPhone.ts",
+      "before": "cee38fc40914dad6989c66c66b29fae88203d1c8",
+      "current": "e01df0bf20e7813830eebe298c8c792b3992c078",
+      "beforeBytes": 108161,
+      "currentBytes": 108424
+    },
+    {
+      "path": "src/components/soccer-career/PhonePanel.tsx",
+      "before": "736bdf5a1b07ca83a30b1487f81cce52dd8208bb",
+      "current": "3f9a00c0ecb06fc15a820e8d6588097f7692baac",
+      "beforeBytes": 37866,
+      "currentBytes": 40153
+    },
+    {
+      "path": "src/pages/SoccerCareer.tsx",
+      "before": "f0d77f964522f4fb86ac0cb9543b7cd06f08a9ab",
+      "current": "c9cd18a50659023f0c8fab6f47a6bf86b650860f",
+      "beforeBytes": 298958,
+      "currentBytes": 298958
+    }
+  ],
+  "sourcePins": {
+    "src/lib/soccerHistoricalArrivals.ts": "c57d5048ffbce45c33051873e799a7e79dcdc561",
+    "src/lib/soccerCareerEngine.ts": "40edcc5051d9b4a369698ea3572eb9e8e3314f26",
+    "src/pages/SoccerCareer.tsx": "c9cd18a50659023f0c8fab6f47a6bf86b650860f",
+    "src/lib/soccerPhone.ts": "e01df0bf20e7813830eebe298c8c792b3992c078",
+    "src/components/soccer-career/PhonePanel.tsx": "3f9a00c0ecb06fc15a820e8d6588097f7692baac",
+    "src/lib/careerEras.ts": "e037022342382b1df9c8a5ede620d2cce480bc23",
+    "src/lib/soccerCareerSave.ts": "86ec011693fd5bc702b5e8ccec05d27775a72a76",
+    "src/lib/soccerAwardReveal.ts": "3c2ba81b18cdf575e0d6fb70c7743b41b78d519d",
+    "scripts/lib/offlineTransport.cjs": "0fda542a2649fe5da937c6976fd0f5b6073e74b6",
+    "package-lock.json": "97d6f12a052f25f400462938c241789a083f0bfe",
+    "package.json": "2ff64986fb76ebc51b706f2fd24765768874008a",
+    "tsconfig.app.json": "51f581dd91641b4c1f1219f646788e73cf6bf00c"
+  },
+  "clock": "2026-11-05T12:00:00Z",
+  "measureSeeds": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8
+  ],
+  "targetCommittedYear": 2019,
+  "limits": {
+    "maxActionsPerAttempt": 300,
+    "storedBytes": 12582912,
+    "decodedBytes": 46137344,
+    "artifactBytes": 50000000,
+    "testTimeoutMs": 600000,
+    "source": "12MiB stored and44MiB decoded ceilings inherited from admitted lossless NBA capture. No retention relaxation or truncation; overflow is unqualified fatal diagnostics."
+  },
+  "cases": [
+    {
+      "fullName": "Soccer Career four historical entries original-first new eligible 2005 UI creation uses the four-entry version2 policy",
+      "file": "case-1-new-policy.json",
+      "marker": "SC4_NEW_CREATION_VERSION",
+      "ownership": "owned"
+    },
+    {
+      "fullName": "Soccer Career four historical entries original-first the ordinary committed-year timeline admits all four sourced IDs exactly once",
+      "file": "case-2-due-timeline.json",
+      "marker": "SC4_DUE_YEAR_ENTRIES",
+      "ownership": "owned"
+    },
+    {
+      "fullName": "Soccer Career four historical entries original-first each registered identity resolves its own saved source club across existing era tables",
+      "file": "case-3-world-identities.json",
+      "marker": "SC4_OWN_WORLD_IDENTITY",
+      "ownership": "owned"
+    },
+    {
+      "fullName": "Soccer Career four historical entries original-first the actual reopened SportsFeed shows all four source entries without writes or draws",
+      "file": "case-4-visible-cards.json",
+      "marker": "SC4_VISIBLE_SOURCE_CARDS",
+      "ownership": "owned"
+    },
+    {
+      "fullName": "Soccer Career four historical entries original-first actual original v1 unmarked opaque and newer inputs preserve complete codec world and draw projections",
+      "file": "case-5-held-originals.json",
+      "marker": null,
+      "ownership": "held"
+    }
+  ],
+  "arms": [
+    {
+      "name": "fixed",
+      "failed": [],
+      "markers": {},
+      "source": "candidate",
+      "uiVersion": 2
+    },
+    {
+      "name": "reversal",
+      "failed": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "markers": {
+        "0": "SC4_NEW_CREATION_VERSION",
+        "1": "SC4_DUE_YEAR_ENTRIES",
+        "2": "SC4_OWN_WORLD_IDENTITY",
+        "3": "SC4_VISIBLE_SOURCE_CARDS"
+      },
+      "source": "original",
+      "uiVersion": 1
+    },
+    {
+      "name": "missing-new-row",
+      "failed": [
+        1,
+        2,
+        3
+      ],
+      "markers": {
+        "1": "SC4_DUE_YEAR_ENTRIES",
+        "2": "SC4_OWN_WORLD_IDENTITY",
+        "3": "SC4_VISIBLE_SOURCE_CARDS"
+      },
+      "source": "fault",
+      "uiVersion": 2
+    },
+    {
+      "name": "wrong-id-fallback",
+      "failed": [
+        2
+      ],
+      "markers": {
+        "2": "SC4_OWN_WORLD_IDENTITY"
+      },
+      "source": "fault",
+      "uiVersion": 2
+    },
+    {
+      "name": "unprotected-cache",
+      "failed": [
+        2
+      ],
+      "markers": {
+        "2": "SC4_OWN_WORLD_IDENTITY"
+      },
+      "source": "fault",
+      "uiVersion": 2
+    },
+    {
+      "name": "v1-upgrade",
+      "failed": [
+        4
+      ],
+      "markers": {
+        "4": "SC4_V1_PRESERVED_NO_UPGRADE"
+      },
+      "source": "fault",
+      "uiVersion": 2
+    },
+    {
+      "name": "restored",
+      "failed": [],
+      "markers": {},
+      "source": "candidate",
+      "uiVersion": 2
+    }
+  ],
+  "faults": [
+    {
+      "name": "missing-new-row",
+      "path": "src/lib/soccerHistoricalArrivals.ts",
+      "old": "  { id: 'soccer:bellingham', name: 'Jude Bellingham', entryYear: 2019, entryClub: 'Birmingham City' },\n",
+      "replacement": "",
+      "failed": [
+        1,
+        2,
+        3
+      ],
+      "markers": {
+        "1": "SC4_DUE_YEAR_ENTRIES",
+        "2": "SC4_OWN_WORLD_IDENTITY",
+        "3": "SC4_VISIBLE_SOURCE_CARDS"
+      },
+      "scope": "One actual new row omission; admission/world/card failures are linked effects of that single omission, not three independent faults.",
+      "at": 395,
+      "afterBlob": "102a3bf6732713dc7fce5ba8df05364e435c055b"
+    },
+    {
+      "name": "wrong-id-fallback",
+      "path": "src/lib/soccerHistoricalArrivals.ts",
+      "old": "clubs[entry.name] = entry.entryClub;",
+      "replacement": "clubs[entry.name] = players[0]?.entryClub ?? entry.entryClub;",
+      "failed": [
+        2
+      ],
+      "markers": {
+        "2": "SC4_OWN_WORLD_IDENTITY"
+      },
+      "scope": "One v2 cache write uses first registered identity club instead of its own entry club. No player/award injection.",
+      "at": 3153,
+      "afterBlob": "ae1681bb6957cb47e761bc8a1429030d01675427"
+    },
+    {
+      "name": "unprotected-cache",
+      "path": "src/lib/soccerHistoricalArrivals.ts",
+      "old": "const protectedNames = SOCCER_HISTORICAL_PLAYERS.filter(entry => players.some(player => player.id === entry.id));",
+      "replacement": "const protectedNames = SOCCER_HISTORICAL_PLAYERS.filter(() => false);",
+      "failed": [
+        2
+      ],
+      "markers": {
+        "2": "SC4_OWN_WORLD_IDENTITY"
+      },
+      "scope": "One actual registered-name set is emptied before both seeding and protection consumers. Owns combined cache admission/protection, not an isolated28-cap claim.",
+      "at": 2919,
+      "afterBlob": "b24bd8fff5f73b8e473278c7a66eee08c47dccb6"
+    },
+    {
+      "name": "v1-upgrade",
+      "path": "src/lib/soccerHistoricalArrivals.ts",
+      "old": "return value.players.every(p => p && p.id === 'soccer:neymar' && p.entryYear === 2009 && p.entryClub === 'Santos') ? value : null;",
+      "replacement": "return value.players.every(p => p && p.id === 'soccer:neymar' && p.entryYear === 2009 && p.entryClub === 'Santos') ? { ...value, version: 2 } : null;",
+      "failed": [
+        4
+      ],
+      "markers": {
+        "4": "SC4_V1_PRESERVED_NO_UPGRADE"
+      },
+      "scope": "One valid v1 reader result is wrongly upgraded; actual frozenv1 input is unchanged and its later owned business failure must be measured.",
+      "at": 1601,
+      "afterBlob": "ca5e66dfe9f493daf502979df4b355e79d2d8116"
+    }
+  ],
+  "qaPaths": [
+    "src/test/soccerHistoricalFourOriginal.test.tsx",
+    "scripts/qa/soccerHistoricalFourOutcomes.mjs",
+    "scripts/qa/soccerHistoricalFourOutcomesCases.json",
+    ".github/workflows/soccer-four-cohort-outcomes-20261105.yml"
+  ],
+  "failedPrefixAuthority": {
+    "status": "FAILED_SETUP_OOM_NO_OWNED_CREDIT",
+    "qa": "5ac304fef03a7c42c93a1c822c54035b2a9164f4",
+    "run": "42048643283",
+    "job": "127318422792",
+    "artifact": "13426186682",
+    "zipBytes": 3401358,
+    "zipSHA256": "243356b6df43e923e933af492409ba2d8ef51d9eca7b777875d83f5fcca8e5d5",
+    "files": [
+      {
+        "file": "actual-original-ui-input.json",
+        "bytes": 97708,
+        "sha256": "7fef55fae16dc21b14b8b8efa1947f4c67454f7e22f304fff80b6e17fead2822",
+        "storedBytes": 20818,
+        "storedSHA256": "1d8221c0e6e9e3bf0ac68b437d3c3e88534275853fe81c8dda4c616aa0db3790"
+      },
+      {
+        "file": "attempt-1.json",
+        "bytes": 6977327,
+        "sha256": "863f660779720a7fb48acac774cbcff469ab94753816cb6aa58120a353b0df50",
+        "storedBytes": 1141566,
+        "storedSHA256": "55844038fd5d6dace531b0932b78b125d0c2ad3000eb04fa33555521828e0115"
+      },
+      {
+        "file": "healthy-repeated-original.json",
+        "bytes": 6977354,
+        "sha256": "61e3e2bc2d7f0beb35e7fb5eaa5c47c4d453a51dcd1e52b0e2b01291502e9da1",
+        "storedBytes": 1141598,
+        "storedSHA256": "e2b142c8d56b8e214479fb838c97d341480468cf446ef1cfaf251b9514b8fe30"
+      },
+      {
+        "file": "case-1-new-policy.json",
+        "bytes": 97849,
+        "sha256": "e6f2c34c0dd8099824becd5525a4be2d48b339cfb5fa83b576b789112652d07d",
+        "storedBytes": 20916,
+        "storedSHA256": "55021cce5defbda1ade40a6e80ba9fbde772c43e1a130d8da7b2688578393a77"
+      },
+      {
+        "file": "case-2-due-timeline.json",
+        "bytes": 146239,
+        "sha256": "8e453dee76eae292b13bba8e0034efb3506780cb28334d2531a8eeaf36becc2f",
+        "storedBytes": 36423,
+        "storedSHA256": "4b85fe52d6c9b0a079603549282d622ab1e33a0795c0640f1ec18f6608f1793f"
+      },
+      {
+        "file": "case-3-world-identities.json",
+        "bytes": 150928,
+        "sha256": "ee62930974a916f24e97cc24caf415939792f93512c090ef55a128a4b34aabee",
+        "storedBytes": 37229,
+        "storedSHA256": "18bdc2eeaf2216e14e82855699f3a5b067bc37bb1fa2a4beb6ed88b5706993d1"
+      },
+      {
+        "file": "case-4-visible-cards.json",
+        "bytes": 97499,
+        "sha256": "88627369cae13b9492d1c546302768c76a1145287a401eae673118b5d09ed8ef",
+        "storedBytes": 21127,
+        "storedSHA256": "4ac47db359bd31ee1abdc6aee0d5a905de4309fb546f38b6293bf4ed23a9638e"
+      }
+    ],
+    "scope": "All seven physically retained full literal RAW bodies. Recovery must match bytes/SHA with no field normalization. Prefix reachability is not a five-case/report/admission result."
+  },
+  "creditLimits": [
+    "Exactly7 native arms; no duplicated second omission mechanism. Expected source-backed fault ownership is a strict runtime gate, not measured success before execution.",
+    "Frozen actual original inputs and complete reference RAW are authenticated; no marker stripping. Reversal retains all8 literal bodies equal to original, so the source original gzip reference need not be duplicated inside output.",
+    "Fixed/restored all8 RAW whole stored and decoded bytes equal. Held case5 complete bytes equal original except the explicitly owned v1-upgrade fault; all other original child values remain equal in that fault.",
+    "All module/UI/global tapes and frame action/checkpoint projections equal the actual original in all arms. Complete changed owned states/text/codec retained without field masking. No private keyed-fork proof.",
+    "Each native arm keeps existing12MiBstored/44MiBdecoded capture bound and max300actions/600s. Total output and actual compressed artifact remain below50MB or fail without truncation.",
+    "No build/native/browser/public/wholepopulation or cap qualification. Four App bytes and full tracked/index/locks/status are restored in finally."
+  ]
+}
