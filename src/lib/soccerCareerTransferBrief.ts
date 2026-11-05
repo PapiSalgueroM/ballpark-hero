@@ -19,6 +19,7 @@ export interface SoccerTransferBrief {
   priority: TransferBriefPriority;
   context: TransferBriefContext;
   minimumApps?: 18 | 26;
+  preferredLeague?: string;
   result?: TransferBriefResult;
 }
 export type TransferBriefProjection = (overall: number, tier: number, club: string, seasonsAtClub: number) => TransferBriefBand;
@@ -30,6 +31,8 @@ export interface TransferBriefPreview {
   eligible: boolean; selected: TransferBriefPriority | null; result: TransferBriefResult | null;
   options: TransferBriefOption[];
   minimumApps?: 18 | 26;
+  preferredLeague?: string;
+  leagues: string[];
   blockedReason?: string;
 }
 
@@ -95,8 +98,9 @@ function currentWindow(career: CareerState): boolean {
 export function readTransferBrief(career: CareerState, project?: TransferBriefProjection): SoccerTransferBrief | null {
   const value: unknown = career.transferBrief;
   const context = contextOf(career);
-  if (!object(value) || !keys(value, ['version', 'priority', 'context'], ['result', 'minimumApps'])
+  if (!object(value) || !keys(value, ['version', 'priority', 'context'], ['result', 'minimumApps', 'preferredLeague'])
     || ('minimumApps' in value && value.minimumApps !== 18 && value.minimumApps !== 26)
+    || ('preferredLeague' in value && !text(value.preferredLeague))
     || value.version !== 1 || !PRIORITIES.includes(value.priority as TransferBriefPriority)
     || !object(value.context) || !keys(value.context, ['club', 'seasonCount', 'lastYear', 'overall', 'age', 'nationality'])
     || !context
@@ -109,6 +113,7 @@ export function readTransferBrief(career: CareerState, project?: TransferBriefPr
     const offer = value.result.offer;
     if (offer) {
       if (clubKeyOf(offer.club.name) === clubKeyOf(career.currentClub)
+        || (value.preferredLeague && offer.club.league !== value.preferredLeague)
         || (value.priority === 'home' && offer.club.country !== career.nationality) || !project) return null;
       const band = project(career.overall, offer.club.tier, offer.club.name, 0);
       if (!validBand(band) || band.min !== value.result.projection!.min || band.max !== value.result.projection!.max
@@ -118,9 +123,10 @@ export function readTransferBrief(career: CareerState, project?: TransferBriefPr
   return value as unknown as SoccerTransferBrief;
 }
 
-export function setTransferBrief(career: CareerState, priority: TransferBriefPriority | null, minimumApps?: TransferBriefMinimum): CareerState {
+export function setTransferBrief(career: CareerState, priority: TransferBriefPriority | null, minimumApps?: TransferBriefMinimum, preferredLeague?: string | null): CareerState {
   const held = readTransferBrief(career);
-  if ((career.transferBrief !== undefined && !held) || held?.result || (minimumApps !== undefined && !validMinimum(minimumApps))) return career;
+  if ((career.transferBrief !== undefined && !held) || held?.result || (minimumApps !== undefined && !validMinimum(minimumApps))
+    || (preferredLeague !== undefined && preferredLeague !== null && !text(preferredLeague))) return career;
   if (priority === null) {
     if (!held) return career;
     const next = { ...career };
@@ -128,13 +134,15 @@ export function setTransferBrief(career: CareerState, priority: TransferBriefPri
     return next;
   }
   const context = contextOf(career), minimum = minimumApps ?? held?.minimumApps ?? 0;
+  const league = preferredLeague === undefined ? held?.preferredLeague : preferredLeague ?? undefined;
   if (!currentWindow(career) || !context || !PRIORITIES.includes(priority)
-    || (held?.priority === priority && (held.minimumApps ?? 0) === minimum)) return career;
-  return { ...career, transferBrief: { version: 1, priority, context, ...(minimum ? { minimumApps: minimum } : {}) } };
+    || (held?.priority === priority && (held.minimumApps ?? 0) === minimum && held.preferredLeague === league)) return career;
+  return { ...career, transferBrief: { version: 1, priority, context, ...(minimum ? { minimumApps: minimum } : {}), ...(league ? { preferredLeague: league } : {}) } };
 }
 
-function candidatesFor(career: CareerState, priority: TransferBriefPriority, eligible: readonly ClubData[], project: TransferBriefProjection, minimumApps: TransferBriefMinimum = 0): ClubData[] {
+function candidatesFor(career: CareerState, priority: TransferBriefPriority, eligible: readonly ClubData[], project: TransferBriefProjection, minimumApps: TransferBriefMinimum = 0, preferredLeague?: string): ClubData[] {
   let clubs = eligible.filter(club => validClub(club) && clubKeyOf(club.name) !== clubKeyOf(career.currentClub));
+  if (preferredLeague) clubs = clubs.filter(club => club.league === preferredLeague);
   if (minimumApps) clubs = clubs.filter(club => {
     const band = project(career.overall, club.tier, club.name, 0);
     return validBand(band) && band.min >= minimumApps;
@@ -156,22 +164,25 @@ function poolBand(career: CareerState, clubs: readonly ClubData[], project: Tran
 }
 export function transferBriefCandidates(career: CareerState, eligible: readonly ClubData[], project: TransferBriefProjection): ClubData[] {
   const brief = readTransferBrief(career);
-  return brief && !brief.result ? candidatesFor(career, brief.priority, eligible, project, brief.minimumApps) : [];
+  return brief && !brief.result ? candidatesFor(career, brief.priority, eligible, project, brief.minimumApps, brief.preferredLeague) : [];
 }
-export function previewTransferBrief(career: CareerState, eligible: readonly ClubData[], project: TransferBriefProjection, minimumApps?: TransferBriefMinimum): TransferBriefPreview {
+export function previewTransferBrief(career: CareerState, eligible: readonly ClubData[], project: TransferBriefProjection, minimumApps?: TransferBriefMinimum, preferredLeague?: string | null): TransferBriefPreview {
   const held = readTransferBrief(career, project);
-  if ((career.transferBrief !== undefined && !held) || (minimumApps !== undefined && !validMinimum(minimumApps))) {
-    return { eligible: false, selected: null, result: null, options: [], blockedReason: 'This saved transfer brief cannot be read. It has been kept unchanged; no search was sent.' };
+  if ((career.transferBrief !== undefined && !held) || (minimumApps !== undefined && !validMinimum(minimumApps))
+    || (preferredLeague !== undefined && preferredLeague !== null && !text(preferredLeague))) {
+    return { eligible: false, selected: null, result: null, options: [], leagues: [], blockedReason: 'This saved transfer brief cannot be read. It has been kept unchanged; no search was sent.' };
   }
   const minimum = minimumApps ?? held?.minimumApps ?? 0;
+  const league = preferredLeague === undefined ? held?.preferredLeague : preferredLeague ?? undefined;
   const clubs = eligible.filter(club => validClub(club) && clubKeyOf(club.name) !== clubKeyOf(career.currentClub));
   return { eligible: currentWindow(career) && contextOf(career) !== null, selected: held?.priority ?? null,
-    result: held?.result ?? null, options: PRIORITIES.map(id => {
-      const matches = candidatesFor(career, id, clubs, project, minimum);
+    result: held?.result ?? null, leagues: [...new Set(clubs.map(club => club.league))].sort(), options: PRIORITIES.map(id => {
+      const matches = candidatesFor(career, id, clubs, project, minimum, league);
       return { id, label: LABELS[id], eligibleCount: clubs.length, matchingCount: matches.length,
         tiers: [...new Set(matches.map(club => club.tier))].sort((a, b) => a - b), projection: poolBand(career, matches, project) };
-    }), ...(minimum ? { minimumApps: minimum } : {}) };
+    }), ...(minimum ? { minimumApps: minimum } : {}), ...(league ? { preferredLeague: league } : {}) };
 }
+
 export function transferBriefResult(career: CareerState, project?: TransferBriefProjection): TransferBriefResult | null {
   return readTransferBrief(career, project)?.result ?? null;
 }

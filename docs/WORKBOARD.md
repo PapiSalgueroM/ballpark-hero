@@ -17896,3 +17896,18 @@ Evidence is retained under C:/Users/antho/dukb-handoff/2026-11-05/sc-training-co
 ## 2026-11-05 combined soccer qualification complete
 
 Actions42096174788 and script-only follow-up42098915819 pass. Main3b release records are retained. The combined stack has225 distinct targeted cases, a normal build,9 engine/layout harnesses,20 saved-output readers,all16 unchanged caps and4 actual browser flows. Exact evidence and qualified limits:docs/plans/2026-11-05-soccer-master-integration.md. Full suite and live Reach remain uncredited. No merge or publication is claimed.
+
+
+## 2026-11-05: Preferred-league transfer brief claimed
+
+This chat owns SC-11's optional preferred league in src/lib/soccerCareerTransferBrief.ts, src/components/soccer-career/AgentBrief.tsx and only the engine preview/empty-request seams. Isolated branch codex/soccer-transfer-league-20261105 starts at main1acb3300. PR504's historical arrivals, PhonePanel, soccerPhone and SoccerCareer page remain with their existing owner. No shared local source/index changes or local application execution. Remote original-first tests precede product changes. Existing Any behavior, saved offers, strict invalid-state refusal, random-call sites and the 840 KiB route cap must hold. SC-11 and the whole master list remain partial. Scope and checks: docs/plans/2026-11-05-soccer-transfer-league.md.
+
+
+## 2026-11-05: SC-11 preferred league scoped for integration
+
+Soccer Career transfer briefs now offer an optional preferred league, preview actual matches and constrain the real request. Empty/unavailable choices preserve the existing offer and draw stream; default Any is unchanged. Exact production/test blobs were reviewed and executed remotely. Original9owned failures/3passes, fixed/restored12, three effective controls7/2/1 and121existing cases pass. Normal build/all16unchanged caps pass, SC839.3/840KiB;19of20readers pass including all15required saved-output fences. Same-artifact native42074689255 passes199checks/4journeys/151fullframes/64actions and6picker/contract captures. Full command42069800178 remains failed with7cases/3suite setup errors; the NBA CRLF anchor reader also remains held. This is scoped integration evidence, not a green global release or publication. PR504 historical entries and final publication stay with their owner. Exact receipts and limitations: docs/plans/2026-11-05-soccer-transfer-league.md. No shared source/index, data, dependency lock or budget changes.
+
+
+## Combined qualification on current release
+
+The complete soccer stack passes Actions42096174788 at5f05c06b6133cf213ac2c318e4278a7e43b0f95e:225 distinct targeted cases, normal build,9 engine/layout harnesses,20 saved-output readers,16 unchanged caps and all4 browser flows. Preferred-league signing/refusal specifically passes199 runtime checks,9 exact reloads and16 document-scroll restorations on the composed App. Owned preferred-league code/test blobs remain unchanged from5689ab28. Main3b historical-release records are preserved. Exact evidence and limits:docs/plans/2026-11-05-soccer-master-integration.md. Full suite/live Reach remain uncredited. Partial SC-11, draft and unpublished.

@@ -1,3 +1,7 @@
+## 2026-11-05 preferred-league brief, combined qualification complete
+
+Stacked on training PR506 and main3b. Preferred-league preview, request and saved-result rules pass on the complete soccer source, including199 browser checks and exact sign/reload flows. SC-11 remains partial. Latest source/evidence:docs/plans/2026-11-05-soccer-master-integration.md. Draft, unmerged and unpublished.
+
 ## 2026-11-05 training check draft, combined qualification complete
 
 Latest retained release base:3b14650d. Production code is unchanged in this maintenance. The32-case omission/restoration proof and W7 checks pass; all soccer changes also pass combined qualification42096174788. The old NBA anchor failure is repaired on the retained main. Full suite/live Reach are not claimed green. Draft, unmerged and unpublished. See docs/plans/2026-11-05-soccer-master-integration.md.
@@ -20276,3 +20280,13 @@ Actual independent seven-arm proof is7eadbca71e1e351741802f8f9e8b9ac1852e4b957ec
 Native admission: 69f420492bd29d81667ad18b3ed98209473e49f77e33a7e8f3eb6788e0acebe5. Deployment: 2d231ee7-24b2-4940-af8d-5908d26371e6. Public admission: 147361f50c8e3db9c6583009a045a7d79c22c8a680d2fadb171826ff3d3b6c89. Full source, provenance, artifact identities and the exact nine-path nonruntime bridge are in [the dated plan](plans/2026-11-05-soccer-four-first-team-entries.md).
 
 SC-36 remains partial. This does not add leagues, rosters or a complete evolving population. Next owner priority is more Soccer Career/Club Manager teams and leagues, preceded by a measured Team-picker UI cut if needed for the unchanged CM cap. CM47, LeagueSeasons582, measured NFL37/NBA25 golden differences and the separately triaged PR502 reds remain unwaived. The first SC4 build stopped at reader18; it is not relabelled green.
+
+
+## 2026-11-05: Preferred-league transfer brief claimed
+
+This chat owns SC-11's optional preferred league in src/lib/soccerCareerTransferBrief.ts, src/components/soccer-career/AgentBrief.tsx and only the engine preview/empty-request seams. Isolated branch codex/soccer-transfer-league-20261105 starts at main1acb3300. PR504's historical arrivals, PhonePanel, soccerPhone and SoccerCareer page remain with their existing owner. No shared local source/index changes or local application execution. Remote original-first tests precede product changes. Existing Any behavior, saved offers, strict invalid-state refusal, random-call sites and the 840 KiB route cap must hold. SC-11 and the whole master list remain partial. Scope and checks: docs/plans/2026-11-05-soccer-transfer-league.md.
+
+
+## 2026-11-05: SC-11 preferred league scoped for integration
+
+Soccer Career transfer briefs now offer an optional preferred league, preview actual matches and constrain the real request. Empty/unavailable choices preserve the existing offer and draw stream; default Any is unchanged. Exact production/test blobs were reviewed and executed remotely. Original9owned failures/3passes, fixed/restored12, three effective controls7/2/1 and121existing cases pass. Normal build/all16unchanged caps pass, SC839.3/840KiB;19of20readers pass including all15required saved-output fences. Same-artifact native42074689255 passes199checks/4journeys/151fullframes/64actions and6picker/contract captures. Full command42069800178 remains failed with7cases/3suite setup errors; the NBA CRLF anchor reader also remains held. This is scoped integration evidence, not a green global release or publication. PR504 historical entries and final publication stay with their owner. Exact receipts and limitations: docs/plans/2026-11-05-soccer-transfer-league.md. No shared source/index, data, dependency lock or budget changes.

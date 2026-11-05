@@ -4858,8 +4858,8 @@ function transferBriefPool(state: CareerState, clubs: ClubData[]): ClubData[] {
     .filter(club => tiers.includes(club.tier) && clubKeyOf(club.name) !== clubKeyOf(state.currentClub));
 }
 
-export function transferBriefPreview(state: CareerState, clubs: ClubData[], minimumApps?: TransferBriefMinimum): TransferBriefPreview {
-  return previewTransferBrief(state, transferBriefPool(state, clubs), projectLeagueApps, minimumApps);
+export function transferBriefPreview(state: CareerState, clubs: ClubData[], minimumApps?: TransferBriefMinimum, preferredLeague?: string | null): TransferBriefPreview {
+  return previewTransferBrief(state, transferBriefPool(state, clubs), projectLeagueApps, minimumApps, preferredLeague);
 }
 
 export function requestTransferDecision(prev: CareerState, clubs: ClubData[]): CareerState {
@@ -4879,7 +4879,7 @@ export function requestTransferDecision(prev: CareerState, clubs: ClubData[]): C
   }
   const pool = transferBriefPool(prev, clubs);
   const candidates = transferBriefCandidates(prev, pool, projectLeagueApps);
-  if (brief.minimumApps && candidates.length === 0) return prev;
+  if ((brief.minimumApps || brief.preferredLeague) && candidates.length === 0) return prev;
   const option = previewTransferBrief(prev, pool, projectLeagueApps).options.find(row => row.id === brief.priority)!;
   /* Release AW: the same rule as requestTransfer above. The coin is drawn first, as the plain request draws
      it, and a club that broke its appearance promise answers whatever it shows. */

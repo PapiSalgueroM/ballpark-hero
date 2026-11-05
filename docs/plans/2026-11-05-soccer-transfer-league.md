@@ -1,0 +1,39 @@
+# Preferred league in Soccer Career transfer briefs
+
+SC-11 partially calls for an agent brief with acceptable leagues. This slice adds one optional league to the existing priority and projected appearance minimum. It creates no new league, real sports fact, random-call site or contract promise.
+
+Base: main1acb33005073be70ba5aae0285ece5537f390f9a. The canonical master remains DoUKnowBall_Game_Expansion_Masterplan.txt, 444117 bytes, SHA256 fda0f7eef07d41f2ba91e89dff3542fef98cd3bd9aabcbe02f70b649797d357a. The existing historical-entry PR504 owns different files and stays separate.
+
+1. Capture original behavior with real constructor/search/acceptance/codec and mounted AgentBrief tests. Verify named missing-feature AssertionErrors and preservation passes remotely before implementation.
+2. Add optional preferredLeague to the existing v1 brief. Undefined setter/draft arguments preserve the held selection; null means Any; malformed saved values are preserved and refused. Derive options from eligible next-season clubs, then intersect league, appearance minimum and existing priority. An unavailable league remains visible with zero matches and cannot consume a request or draw. Validate a saved offered club against the selected league.
+3. Add one accessible draft dropdown, saved summary, unavailable explanation and worked help example. Existing Back, Escape, focus and no-write preview behavior remain.
+4. Prove fixed/original/restored outcomes and actual changed-source controls for filtering, empty refusal and mismatched receipts. Run proper app types and existing transfer suites. Build normally, retain current caps and all rebuilt-output readers, then inspect the actual route at 320/390/1280 with offline fixtures.
+
+Production surface: soccerCareerTransferBrief.ts, AgentBrief.tsx, and the engine preview signature plus early empty-pool guard. Page, save codec, data, coefficients and dependencies stay held. Permanent regression source is soccerTransferLeaguePreference.test.tsx. Temporary workflows and controllers do not belong in the final application PR.
+
+Review focus: exact legacy Any state/draw equality; league before level ranking; home as intersection; invalid and unavailable values fail closed; saved result cannot point off-league. These are explicit test cases. Current broader suite/historical transfer-harness failures must be reported rather than treated as passing. Publication belongs to the release owner after combined source/budget qualification.
+
+Status: implemented and scoped for integration with the explicit global-check holds below.
+
+
+## Scoped implementation and verification, 2026-11-05
+
+The picker now saves one exact league from the eligible next-season club pool. League filtering precedes the existing appearance floor and priority. An unavailable selection stays visible and refuses a request without consuming the current offer or a random draw. Offered receipts must match the saved league. Any preserves existing states and draws. This completes only this part of SC-11.
+
+Production and permanent test blobs exactly match the executed source: helper 5eb0bb7040428967203bdab75261fe9f8b10a00c, engine c2d782f3ce58892e1704d8a2682a63df7af2af6a, AgentBrief a64cf9423f3112e9c4bd1795161d09992fc8eb81 and test 48000133c061b8601899efa1f349767b33168533. Clean delivery excludes temporary QA/workflows and generated files.
+
+- [Original run42068390198](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/42068390198) reached exactly nine named missing-feature AssertionErrors and three preservation passes after proper app types. All twelve original RAW bodies are retained.
+- [Scope run42071746813](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/42071746813) passed types, all 521 installed-version holds, twelve fixed cases, original nine-failure reversal, seven/two/one effective changed-source failures, twelve restored cases and all 121 existing transfer/signing cases across seven files. All 72 full RAW bodies were independently audited. Every restored body matches fixed; every original arm body matches the first original packet; Any matches across all six arms. The second empty-guard failure is an unnamed identity AssertionError, with its exact title retained.
+- The normal production build passed all sixteen unchanged route budgets. Soccer Career measured 839.3 KiB against the existing rounded 840 fence. Nineteen of twenty output readers passed, including all fifteen required saved-output fences. The sole reader failure is the previously shipped NBA draft harness's CRLF anchor, owned by the active historical-entry lane. It remains a blocker, not a waiver.
+- [Same-artifact native run42074689255](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/42074689255) passed 199 checks, three signing journeys at 320/390/1280 plus a 320 unavailable-league refusal, 151 complete saved frames and 64 actions. All six picker/contract screenshots were visually reviewed by root and an independent peer. Controls were reachable with no blocking overlap or sideways bleed; the 320-pixel brief uses its existing internal scrolling. All App/owned-asset errors were empty; source/input/lock holds passed. It reuses the exact completed 6,980,627-byte build tar, SHA256 a9ba9f48f8c93bcf316277f0453287ece412893c00f419b130bc2b4b44d583d8, without a second build. All nonloopback requests were aborted, so this uses fallback fonts and offline squad notices rather than verifying production data or actual font delivery.
+
+The first fixed attempt stopped on an unrelated college-grid type error after an in-place browser install changed 186 packages. Its original evidence is retained. The corrected setup isolates Playwright and proves all 521 app versions stay held. The first native attempt stopped on Escape from the native select; its save bytes were unchanged. Select interception is inferred. The final QA presses one Escape from a verified focused priority button, preserving every original close, scroll, focus and no-write assertion. The final captures show the actual picker instead of only its help.
+
+[The full unit command42069800178](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/42069800178) is FAILED: 10,554 passed, seven failed and 114 skipped across 770 files (eight failed files, three skipped). Its shallow checkout lacks historical objects for frontOfficeRatings, nbaOpeningRatings, nhlOpeningRatings, cagePractice and cageReadiness. Other failures are two soccerScreenTruths training-copy assertions, NFL/NBA farewell-contract checks in usCareerHallBoard and the NFL draft-year assertion in FrontOfficeSeasonStats. No whole-suite-green or release acceptance is granted.
+
+No merge, production data write or publication was performed. The historical-entry PR504 remains separately owned. Release integration must qualify their combined source and unchanged budgets. The master list remains partial. Native source, logs, original archives, independent audits and next Russian-eligibility research are retained under the owner's sc-preferred-league handoff folder.
+
+
+## Combined qualification on current release
+
+The complete soccer stack passes Actions42096174788 at5f05c06b6133cf213ac2c318e4278a7e43b0f95e:225 distinct targeted cases, normal build,9 engine/layout harnesses,20 saved-output readers,16 unchanged caps and all4 browser flows. Preferred-league signing/refusal specifically passes199 runtime checks,9 exact reloads and16 document-scroll restorations on the composed App. Owned preferred-league code/test blobs remain unchanged from5689ab28. Main3b historical-release records are preserved. Exact evidence and limits:docs/plans/2026-11-05-soccer-master-integration.md. Full suite/live Reach remain uncredited. Partial SC-11, draft and unpublished.
