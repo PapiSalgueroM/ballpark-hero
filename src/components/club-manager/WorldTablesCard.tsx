@@ -4,6 +4,7 @@ import { worldLeagueDefs, careerLeagueOf, sortedWorldTable, leagueRounds, league
 import type { CareerState, TableRow } from '@/lib/clubManager';
 import { LeagueTableCard } from '@/components/club-manager/LeagueTableCard';
 import { FlagImg } from '@/components/FlagImg';
+import { K_LEAGUE_2026 } from '@/data/kLeague2026';
 
 interface WorldTablesCardProps {
   career: CareerState;
@@ -83,6 +84,7 @@ export function WorldTablesCard({ career, myRows, onClubClick }: WorldTablesCard
   const total = leagueRounds(active.clubs.length);
   const preseason = rows.length > 0 && rows.every(r => r.w + r.d + r.l === 0);
   const footnote = preseason ? undefined : tiebreakFootnote(leagueTiebreak(active.id), rows, career.pairResults?.[active.id]);
+  const kLeagueModel = active.id === K_LEAGUE_2026.id;
 
   return (
     <div className="space-y-3" data-world-tables>
@@ -120,6 +122,7 @@ export function WorldTablesCard({ career, myRows, onClubClick }: WorldTablesCard
 
       {!browsing && (rows.length > 0 ? (
         <>
+          {kLeagueModel && <p data-cm-kleague-table className="text-xs text-muted-foreground">This is the game's 22-match league on the shared August to May calendar. The real 2026 K League 1 played 33 matches then five split matches. The split, Korea Cup, AFC places and promotion/relegation are not played here; table order uses the game's sorting rules.</p>}
           <LeagueTableCard
             rows={rows}
             myClub={career.clubName}
@@ -128,7 +131,9 @@ export function WorldTablesCard({ career, myRows, onClubClick }: WorldTablesCard
               : `${active.name} · round ${Math.min(played, total)} of ${total}`}
             preseason={preseason}
             onClubClick={onClubClick}
-            footnote={footnote}
+            footnote={kLeagueModel && footnote ? `Game tiebreak: ${footnote}` : footnote}
+            zoneTop={kLeagueModel ? 0 : undefined}
+            scoutLine={kLeagueModel ? 'Tap a club to open its squad page.' : undefined}
           />
           {preseason && (
             <p className="text-[9px] text-muted-foreground px-1">
