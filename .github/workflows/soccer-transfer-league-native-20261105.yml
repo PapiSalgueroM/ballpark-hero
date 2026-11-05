@@ -1,0 +1,88 @@
+name: Soccer preferred league native artifact
+on:
+  push:
+    branches:
+      - codex/soccer-transfer-league-native-20261105
+permissions:
+  contents: read
+  actions: read
+jobs:
+  browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    defaults:
+      run:
+        shell: bash
+    env:
+      SIM_NETWORK: offline
+      SIM_OFFLINE_RECEIPT: league-artifacts/offline.log
+      TZ: UTC
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - uses: actions/download-artifact@v4
+        with:
+          name: soccer-league-scope-42071746813
+          run-id: 42071746813
+          github-token: ${{ github.token }}
+          path: previous
+      - name: Admit exact completed output and fixture
+        run: |
+          mkdir -p league-artifacts
+          git diff --exit-code 3b778c82f034c2b4a9d789d99f3075897e921e97 HEAD -- . ':!scripts/qa/playSoccerTransferLeague.mjs' ':!.github/workflows/soccer-transfer-league-native-20261105.yml'
+          test "$(cat previous/head.txt)" = "3b778c82f034c2b4a9d789d99f3075897e921e97"
+          printf '%s  %s\n' 'a9ba9f48f8c93bcf316277f0453287ece412893c00f419b130bc2b4b44d583d8' previous/dist.tgz | sha256sum -c -
+          test "$(stat -c%s previous/dist.tgz)" = 6980627
+          printf '%s  %s\n' 'b59fb1d84d7e186f9c0fbeacdf35f092d525c21a49d6ddcaaef46deb04423ff3' previous/arms/fixed/raw/native-save-sign.json | sha256sum -c -
+          cp previous/arms/fixed/raw/native-save-sign.json league-artifacts/fixture.json
+          tar -xzf previous/dist.tgz
+          git rev-parse HEAD > league-artifacts/head.txt
+          git ls-files -s > league-artifacts/source-before.txt
+          sha256sum package.json package-lock.json > league-artifacts/locks-before.txt
+          sha256sum previous/dist.tgz > league-artifacts/completed-output.sha256
+          cp previous/arms/summary.json league-artifacts/previous-outcomes.json
+      - name: Locked install with separate browser
+        run: |
+          npm ci
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          const lock=JSON.parse(fs.readFileSync('package-lock.json'));
+          const rows=Object.keys(lock.packages).filter(p=>p.startsWith('node_modules/')&&fs.existsSync(p+'/package.json')).map(p=>[p,JSON.parse(fs.readFileSync(p+'/package.json')).version]);
+          fs.writeFileSync('league-artifacts/installed-before.json',JSON.stringify(rows));
+          NODE
+          npm install --prefix "$RUNNER_TEMP/sc11-browser" --no-save --package-lock=false playwright
+          test ! -e node_modules/playwright
+          ln -s "$RUNNER_TEMP/sc11-browser/node_modules/playwright" node_modules/playwright
+          node "$RUNNER_TEMP/sc11-browser/node_modules/playwright/cli.js" install --with-deps chromium
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs'; import assert from 'node:assert/strict';
+          const before=JSON.parse(fs.readFileSync('league-artifacts/installed-before.json'));
+          const after=before.map(([p])=>[p,JSON.parse(fs.readFileSync(p+'/package.json')).version]);
+          fs.writeFileSync('league-artifacts/installed-after.json',JSON.stringify(after)); assert.deepEqual(after,before);
+          NODE
+      - name: Native picker contract and unavailable journeys
+        run: |
+          SOCCER_LEAGUE_RAW=league-artifacts/fixture.json SOCCER_LEAGUE_BROWSER_OUT=league-artifacts/browser NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/playSoccerTransferLeague.mjs 2>&1 | tee league-artifacts/browser.log
+      - name: Hold complete output source and inputs
+        if: always()
+        run: |
+          git ls-files -s > league-artifacts/source-after.txt
+          cmp league-artifacts/source-before.txt league-artifacts/source-after.txt
+          git diff --exit-code HEAD -- src scripts package.json package-lock.json
+          sha256sum package.json package-lock.json > league-artifacts/locks-after.txt
+          cmp league-artifacts/locks-before.txt league-artifacts/locks-after.txt
+          printf '%s  %s\n' 'a9ba9f48f8c93bcf316277f0453287ece412893c00f419b130bc2b4b44d583d8' previous/dist.tgz | sha256sum -c -
+          if test -f league-artifacts/offline.log; then test ! -s league-artifacts/offline.log; fi
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: soccer-league-native-${{ github.run_id }}
+          path: league-artifacts
+          retention-days: 7
+          if-no-files-found: error

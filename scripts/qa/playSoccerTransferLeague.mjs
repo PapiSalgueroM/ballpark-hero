@@ -169,8 +169,13 @@ async function journey(width, fixture, refusal) {
     return { trigger, before };
   };
   const close = async (opened, how) => {
-    await action('close-brief-' + how + '-' + report.actions.length,
-      () => how === 'escape' ? page.keyboard.press('Escape') : activate(page.locator('[data-transfer-brief-back]')), { noWrite: true });
+    await action('close-brief-' + how + '-' + report.actions.length, async () => {
+      if (how === 'escape') {
+        const choice = page.locator('[data-transfer-priority="minutes"]'); await choice.focus();
+        check(await choice.evaluate(e => e === document.activeElement), id + ': dialog Escape starts on the existing priority button');
+        await page.keyboard.press('Escape');
+      } else await activate(page.locator('[data-transfer-brief-back]'));
+    }, { noWrite: true });
     await page.locator('[data-transfer-brief]').waitFor({ state: 'hidden' });
     check(JSON.stringify(await position()) === JSON.stringify(opened.before), id + ': ' + how + ' restores exact document position and scroll lock');
     check(await opened.trigger.evaluate(e => e === document.activeElement), id + ': ' + how + ' returns focus to opener');
@@ -211,7 +216,6 @@ async function journey(width, fixture, refusal) {
     check(help.includes('Example:') && /league/i.test(help), id + ': real first-use rules and worked example are visible');
     await layout('brief-back', '[data-transfer-brief-back]');
     await layout('brief-help', '[data-transfer-brief-help-open]');
-    if (!refusal) await shot('rules');
     await action('finish-rules', () => activate(page.getByRole('button', { name: 'Choose a priority', exact: true })), { noWrite: true });
     const select = page.getByRole('combobox', { name: 'Preferred league', exact: true });
     await select.waitFor(); await layout('preferred-league', '[aria-label="Preferred league"]');
@@ -242,6 +246,7 @@ async function journey(width, fixture, refusal) {
       await action('return-from-help', () => activate(page.locator('[data-transfer-brief-back]')), { noWrite: true });
       check(await select.inputValue() === selected.value, id + ': help keeps the league draft');
       await layout('save-brief', '[data-transfer-brief-save]');
+      await shot('brief');
       const saved = await action('save-brief', () => activate(page.locator('[data-transfer-brief-save]')), {
         wait: () => page.waitForFunction(({ key, league }) => JSON.parse(localStorage.getItem(key)).transferBrief?.preferredLeague === league, { key: KEY, league: selected.value }) });
       const brief = saved.after.state.transferBrief;
