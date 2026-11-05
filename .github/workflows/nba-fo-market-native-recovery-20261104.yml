@@ -1,0 +1,304 @@
+name: NBA same-artifact native-only recovery
+on:
+  push:
+    branches: [codex/nba-fo-market-native-recovery-20261104]
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: nba-fo-market-native-recovery-${{ github.ref }}
+  cancel-in-progress: false
+env:
+  CI: '1'
+  SIM_NETWORK: offline
+  PLAYWRIGHT_BROWSERS_PATH: /home/runner/.cache/ms-playwright
+  QUALIFIED_APPLICATION_CORE: dd7273e4835a8048fc7745e5fe8bdf4de571c9d5
+  QUALIFIED_APPLICATION_TREE: e92145c08b3ce3091077818d4c9802c5b7805ea7
+  JOINED_QA_CORE: 2e1636291e70d4435a246d5e6d608cdffb2e265f
+  JOINED_QA_TREE: 13354de2c75d56901a4b8c28e4cfc677c3d2500e
+  RECOVERY_QA_CORE: e6b1216df4cb2841235ffca72f76123b8c046093
+  RECOVERY_QA_TREE: 3393ca418c1305621ea52813fc7d97155d6d16ea
+  ROOT_SOURCE_HEAD: e6b1216df4cb2841235ffca72f76123b8c046093
+  ROOT_SOURCE_TREE: 3393ca418c1305621ea52813fc7d97155d6d16ea
+  BUILD_SOURCE: 1070a25dcd7a7568dcc6b943091ef90176bb5f4d
+  BUILD_TREE: fec81f403d03e8714195f784af6fffab08f8f3d5
+  COMPILED_WORKFLOW_BLOB: 1f4e70a56d07b7ba54acb3408759960c6805712c
+  BUILD_RUN: '41939840722'
+  BUILD_JOB: '126957524253'
+  BUILD_ARTIFACT_ID: '13375633208'
+  BUILD_ARTIFACT_NAME: nba-fo-market-build-41939840722-1
+  BUILD_ARTIFACT_BYTES: '12185997'
+  BUILD_ARTIFACT_SHA256: 173db820905068bb8d9039bce88d8c73677566a5d5c005d8339705f32d3a8626
+  BUILD_TAR_BYTES: '6978609'
+  BUILD_TAR_SHA256: 966696867c3dd225a46e666e7c443fe3c562e674de44385cc04380069480c873
+  BUILD_SOURCE_INVENTORY_SHA256: 0dab20a44561b2a5d5a3b177ea4c9c9370e525e9759440b0039696d72f8787f2
+  BUILD_DIST_INVENTORY_SHA256: 46a9fd658d59b640313decccff2c338244182590cf47edee1a52abb7762fc3a6
+  BUILD_DIST_DIGEST: f286b5025f9688cc6b21f757bda1a188cebf9177dbeafbf7ec6ec42652f06a2d
+  BUILD_FIXTURE_INVENTORY_SHA256: 4f4e59eae96ace4fedeae7285fbd3ec31df90cc6800f285542657f18634b698d
+  BUILD_FIXTURE_MANIFEST_SHA256: e068ae9905da6ea32f69b67994d4b3914cb55b7dc66febe519ce490294bc19e9
+  BUILD_ENGINE_BUNDLE_SHA256: 2ef4f21f86f559a7ba572b279ec06f3dcd245f458623c1b8414364c147da803e
+  ORIGINAL_NATIVE_REPORT_SHA256: ab612b86e63157dcffbafda4f8ae34de218d18cf823f8cd216710344f7b53ab5
+jobs:
+  native:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+          filter: blob:none
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - name: Bind only the two helper hypotheses and recovery workflow
+        run: |
+          set -euo pipefail
+          OUT="$RUNNER_TEMP/nba-fo-market-native-recovery"
+          REF="$RUNNER_TEMP/nba-fo-market-native-recovery-reference"
+          mkdir -p "$OUT/logs" "$OUT/transport" "$REF"
+          echo "QA_OUT=$OUT" >> "$GITHUB_ENV"
+          echo "QA_REF=$REF" >> "$GITHUB_ENV"
+          export QA_OUT="$OUT" QA_REF="$REF"
+          for key in RECOVERY_QA_CORE RECOVERY_QA_TREE ROOT_SOURCE_HEAD ROOT_SOURCE_TREE; do [[ "${!key}" =~ ^[a-f0-9]{40}$ ]]; done
+          test "$(git rev-parse HEAD^)" = "$RECOVERY_QA_CORE"
+          test "$(git rev-parse HEAD^^{tree})" = "$RECOVERY_QA_TREE"
+          test "$(git diff --name-status HEAD^ HEAD)" = $'A\t.github/workflows/nba-fo-market-native-recovery-20261104.yml'
+          mapfile -t refs < <(printf '%s\n' "$QUALIFIED_APPLICATION_CORE" "$JOINED_QA_CORE" "$BUILD_SOURCE" "$ROOT_SOURCE_HEAD" | sort -u)
+          for ref in "${refs[@]}"; do git fetch --no-tags --depth=1 --filter=blob:none origin "$ref" >> "$OUT/logs/source-ref-fetch.log" 2>&1; done
+          test "$(git rev-parse "$QUALIFIED_APPLICATION_CORE^{tree}")" = "$QUALIFIED_APPLICATION_TREE"
+          test "$(git rev-parse "$JOINED_QA_CORE^{tree}")" = "$JOINED_QA_TREE"
+          test "$(git rev-parse "$BUILD_SOURCE^{tree}")" = "$BUILD_TREE"
+          test "$(git rev-parse "$ROOT_SOURCE_HEAD^{tree}")" = "$ROOT_SOURCE_TREE"
+          test "$(git rev-parse "$BUILD_SOURCE:.github/workflows/nba-fo-market-build-20261104.yml")" = "$COMPILED_WORKFLOW_BLOB"
+          test "$(git diff --name-status "$BUILD_SOURCE" "$RECOVERY_QA_CORE")" = $'M\tscripts/qa/nbaFoMarketBrowser.mjs\nM\tscripts/qa/nbaFoMarketScrollControl.mjs'
+          protected=(src public index.html package.json package-lock.json bun.lock bun.lockb vite.config.ts tailwind.config.ts postcss.config.js components.json tsconfig.json tsconfig.app.json tsconfig.node.json)
+          for ref in "$QUALIFIED_APPLICATION_CORE" "$JOINED_QA_CORE" "$BUILD_SOURCE" "$ROOT_SOURCE_HEAD"; do git diff --exit-code "$ref" HEAD -- "${protected[@]}" >> "$OUT/application-source-bridges.txt"; done
+          git diff --exit-code "$BUILD_SOURCE" HEAD -- scripts ':(exclude)scripts/qa/nbaFoMarketBrowser.mjs' ':(exclude)scripts/qa/nbaFoMarketScrollControl.mjs' > "$OUT/held-script-source-bridge.txt"
+          while read -r file pin; do test "$(git hash-object "$file")" = "$pin"; done <<'PINS'
+          scripts/qa/nbaFoMarketFixtures.mjs 473594059a1941e20e1816b3f8605cc49cc171c0
+          scripts/qa/nbaFoMarketBrowser.mjs 5e25d8b38eb5f42e01a82d22f249fe25fc5ad275
+          scripts/qa/nbaFoMarketScrollControl.mjs 35abad4a8d54d2d691bf808e46f7d64a79418291
+          scripts/qa/nbaFoMarketAssets.mjs 25abcbb80279d502f4360c3893b9445b07e29fc6
+          scripts/qa/nativeScrollReady.mjs 671f460aa088d42b44c435a03594cf26695d6e09
+          PINS
+          git rev-parse HEAD HEAD^{tree} > "$OUT/source.txt"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$OUT/source-before.sha256"
+          git status --porcelain=v1 --untracked-files=all > "$OUT/status-before.txt"
+          test ! -s "$OUT/status-before.txt"
+          cp .github/workflows/nba-fo-market-native-recovery-20261104.yml "$OUT/workflow.yml"
+          for script in nbaFoMarketBrowser nbaFoMarketScrollControl nbaFoMarketAssets nativeScrollReady; do node --check "scripts/qa/$script.mjs"; done
+      - name: Acquire once the completed build from its honestly failed native-first run
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          for pair in "artifacts/$BUILD_ARTIFACT_ID artifact" "jobs/$BUILD_JOB job" "runs/$BUILD_RUN run"; do
+            read -r endpoint file <<< "$pair"
+            curl --fail --location --silent --show-error -H "Authorization: Bearer $GH_TOKEN" -H 'Accept: application/vnd.github+json' "https://api.github.com/repos/PapiSalgueroM/ballpark-hero/actions/$endpoint" --output "$QA_OUT/reference-$file.json"
+          done
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';const e=process.env,out=e.QA_OUT,m=JSON.parse(fs.readFileSync(out+'/reference-artifact.json')),j=JSON.parse(fs.readFileSync(out+'/reference-job.json')),r=JSON.parse(fs.readFileSync(out+'/reference-run.json'));
+          assert.equal(m.id,Number(e.BUILD_ARTIFACT_ID));assert.equal(m.name,e.BUILD_ARTIFACT_NAME);assert.equal(m.expired,false);assert.equal(m.size_in_bytes,Number(e.BUILD_ARTIFACT_BYTES));assert.equal(m.digest,'sha256:'+e.BUILD_ARTIFACT_SHA256);assert.equal(m.workflow_run.id,Number(e.BUILD_RUN));assert.equal(m.workflow_run.head_sha,e.BUILD_SOURCE);
+          assert.equal(r.id,Number(e.BUILD_RUN));assert.equal(r.head_sha,e.BUILD_SOURCE);assert.equal(r.status,'completed');assert.equal(r.conclusion,'failure');assert.equal(r.run_attempt,1);assert.equal(r.path,'.github/workflows/nba-fo-market-build-20261104.yml');
+          assert.equal(j.id,Number(e.BUILD_JOB));assert.equal(j.run_id,Number(e.BUILD_RUN));assert.equal(j.head_sha,e.BUILD_SOURCE);assert.equal(j.status,'completed');assert.equal(j.conclusion,'failure');
+          const native='Source-held NBA3 native journeys on this completed build';assert.deepEqual(j.steps.filter(s=>s.conclusion==='failure').map(s=>s.name),[native]);
+          for(const name of ['Proper joined application types','Existing save and home guards, normal build, twenty readers and all unchanged page caps','Retain full source holds and transport evidence','Bound retained focused evidence','Run actions/upload-artifact@v4'])assert(j.steps.some(s=>s.name===name&&s.status==='completed'&&s.conclusion==='success'),'Actual previously passed gate '+name);
+          NODE
+          curl --fail --location --silent --show-error -H "Authorization: Bearer $GH_TOKEN" -H 'Accept: application/vnd.github+json' "https://api.github.com/repos/PapiSalgueroM/ballpark-hero/actions/artifacts/$BUILD_ARTIFACT_ID/zip" --output "$QA_REF/reference-original.zip"
+          test "$(stat -c%s "$QA_REF/reference-original.zip")" = "$BUILD_ARTIFACT_BYTES"
+          echo "$BUILD_ARTIFACT_SHA256  $QA_REF/reference-original.zip" | sha256sum --check
+          unzip -q "$QA_REF/reference-original.zip" -d "$QA_REF"
+          test "$(stat -c%s "$QA_REF/completed-dist.tar.gz")" = "$BUILD_TAR_BYTES"
+          echo "$BUILD_TAR_SHA256  $QA_REF/completed-dist.tar.gz" | sha256sum --check
+          echo "$BUILD_SOURCE_INVENTORY_SHA256  $QA_REF/source-before.sha256" | sha256sum --check
+          echo "$BUILD_DIST_INVENTORY_SHA256  $QA_REF/dist-before.sha256" | sha256sum --check
+          echo "$BUILD_FIXTURE_INVENTORY_SHA256  $QA_REF/fixture-before.sha256" | sha256sum --check
+          echo "$BUILD_FIXTURE_MANIFEST_SHA256  $QA_REF/nba-fixtures/manifest.json" | sha256sum --check
+          echo "$ORIGINAL_NATIVE_REPORT_SHA256  $QA_REF/nba-native/report.json" | sha256sum --check
+          cmp "$QA_REF/source-before.sha256" "$QA_REF/source-after.sha256"
+          cmp "$QA_REF/dist-before.sha256" "$QA_REF/dist-after.sha256"
+          test ! -s "$QA_REF/source-diff.txt"
+          test ! -s "$QA_REF/status-before.txt"
+          test ! -s "$QA_REF/status-after.txt"
+          test "$(wc -l < "$QA_REF/source-before.sha256")" = 5729
+          test "$(wc -l < "$QA_REF/dist-before.sha256")" = 848
+          tar -tzf "$QA_REF/completed-dist.tar.gz" > "$QA_OUT/reference-dist-members.txt"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';for(const member of fs.readFileSync(process.env.QA_OUT+'/reference-dist-members.txt','utf8').trimEnd().split('\n'))assert(member==='dist/'||member.startsWith('dist/')&&!member.split('/').includes('..')&&!member.startsWith('/'));
+          NODE
+          tar -xzf "$QA_REF/completed-dist.tar.gz" -C "$QA_REF"
+          (cd "$QA_REF" && sha256sum --check dist-before.sha256) > "$QA_OUT/reference-dist-held.log"
+          cp "$QA_REF/dist-before.sha256" "$QA_OUT/reference-dist-before.sha256"
+      - name: Preserve the original first stop and bridge only declared QA source metadata
+        run: |
+          set -euo pipefail
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import path from 'node:path';import crypto from 'node:crypto';import assert from 'node:assert/strict';import{execFileSync}from'node:child_process';
+          const e=process.env,out=e.QA_OUT,ref=e.QA_REF,oldDir=ref+'/nba-fixtures',newDir=out+'/nba-recovery-fixtures',sha=b=>crypto.createHash('sha256').update(b).digest('hex'),blob=b=>crypto.createHash('sha1').update('blob '+b.length+'\0').update(b).digest('hex'),canonical=o=>Buffer.from(JSON.stringify(o,null,2)+'\n');
+          const sumMap=text=>Object.fromEntries(text.trimEnd().split('\n').map(line=>{const m=/^([a-f0-9]{64})  (.+)$/.exec(line);assert(m);return[m[2],m[1]];}));
+          assert.deepEqual(fs.readFileSync(ref+'/source.txt','utf8').trimEnd().split('\n'),[e.BUILD_SOURCE,e.BUILD_TREE]);assert.equal(blob(fs.readFileSync(ref+'/workflow.yml')),e.COMPILED_WORKFLOW_BLOB);
+          const holds=JSON.parse(fs.readFileSync(ref+'/hold-exits.json'));for(const key of ['sourceCapture','sourceDiff','statusCapture','holdExit'])assert.equal(holds[key],0);assert.equal(fs.readFileSync(ref+'/logs/bun-version.log','utf8').trim(),'1.4.4');
+          const failed=JSON.parse(fs.readFileSync(ref+'/nba-native/report.json'));assert.equal(failed.status,'failed');assert.equal(failed.sourceHeld,true);assert.equal(failed.distHeld,true);assert.deepEqual(failed.contexts.map(c=>[c.width,c.status]),[[320,'passed'],[390,'passed'],[1280,'failed']]);assert.equal(failed.screenshots.length,2);
+          for(const c of failed.contexts){for(const key of ['pageErrors','unexpectedConsole','undeclaredAborts','localHttpErrors','assetErrors'])assert.deepEqual(c[key],[]);assert.deepEqual(c.requestFailures.filter(row=>!c.aborts.some(a=>a.url===row.url)),[]);assert(c.assetBodies.some(row=>row.file==='prerender-boot.js'));assert.equal(c.failClosedControls.wholeInverseExact,true);assert.equal(c.failClosedControls.actualReportHeld,true);}
+          assert.match(failed.contexts[2].error,/^AssertionError \[ERR_ASSERTION\]: Keyboard brings the actual tail row into its internal viewport\n/,'Exact original desktop whole-row visibility first stop');
+          const originalControl=JSON.parse(fs.readFileSync(ref+'/nba-scroll-control/control-report.json'));assert.equal(originalControl.status,'admitted');assert.equal(originalControl.child.exit,1);assert.equal(originalControl.child.signal,null);assert.equal(originalControl.child.error,null);assert.equal(originalControl.owned.actualVerticalPixels,10);assert.equal(originalControl.owned.trustedClicks,1);assert.equal(originalControl.owned.completeSignedFrameEqual,true);assert.equal(originalControl.owned.completeSignedBytesEqual,true);for(const key of ['sourceHeld','distHeld','normalHeld','inverseWholeSourceExact'])assert.equal(originalControl[key],true);
+          const evidence=out+'/original-build-evidence';fs.mkdirSync(evidence);
+          const retain=(from,to)=>{const bytes=fs.readFileSync(ref+'/'+from);fs.mkdirSync(path.dirname(evidence+'/'+to),{recursive:true});fs.writeFileSync(evidence+'/'+to,bytes,{flag:'wx'});assert(fs.readFileSync(evidence+'/'+to).equals(bytes));return{file:to,bytes:bytes.length,sha256:sha(bytes)};};
+          const retained=[retain('nba-fixtures/manifest.json','fixture-manifest-original.json'),retain('source-before.sha256','source-before.sha256'),retain('fixture-before.sha256','fixture-before.sha256'),retain('nba-native/report.json','native-first-stop.json'),retain('nba-scroll-control/control-report.json','original-scroll-control.json'),retain('logs/nba-native.log','native-first-stop.log'),retain('workflow.yml','workflow.yml'),retain('hold-exits.json','hold-exits.json')];
+          assert.equal(retained[0].sha256,e.BUILD_FIXTURE_MANIFEST_SHA256);assert.equal(retained[0].bytes,3987268);assert.equal(retained[1].sha256,e.BUILD_SOURCE_INVENTORY_SHA256);assert.equal(retained[1].bytes,588673);assert.equal(retained[3].sha256,e.ORIGINAL_NATIVE_REPORT_SHA256);
+          const priorLogs=['types','build','sweep-weight','simAdsense','simBrand','simHeadTags','simHiddenPages','simHubs','simIndexNow','simIndexing','simInternalLinks','simNoRivalNames','simPrerender','simPrerenderBoot','simRetiredRoutes','simSchema','simSitemap','simSnapshotAssets','simSiteSearch','simGuideHeadings','simHarnessAnchors','simSeoTitles','simSeoMetaSplit'];for(const name of priorLogs)retained.push(retain('logs/'+name+'.log','logs/'+name+'.log'));
+          fs.writeFileSync(out+'/original-build-input-admission.json',JSON.stringify({status:'completed-normal-build-with-native-first-stop',run:Number(e.BUILD_RUN),job:Number(e.BUILD_JOB),runConclusion:'failure',source:e.BUILD_SOURCE,tree:e.BUILD_TREE,artifact:Number(e.BUILD_ARTIFACT_ID),artifactAcquisitionsInThisCIJob:1,passedGates:['proper application types','normal Bun1.4.4 build','all20 readers','all16 unchanged caps','final full source/dist/status holds'],originalNative:failed.contexts.map(c=>({width:c.width,status:c.status,assetBodies:c.assetBodies.length,bootBodies:c.assetBodies.filter(row=>row.file==='prerender-boot.js').length,error:c.error??null})),originalControl:'admitted actual390px trusted sign and exact10px displacement',retained,scope:'Original run failed only its actual1280px whole-row viewport assertion. This does not call that run successful or qualify all original native journeys. No type/build/reader/sim/cap gate is rerun.'},null,2)+'\n');
+          const originalBytes=fs.readFileSync(oldDir+'/manifest.json'),original=JSON.parse(originalBytes);assert.equal(sha(originalBytes),e.BUILD_FIXTURE_MANIFEST_SHA256);assert(canonical(original).equals(originalBytes));assert.equal(original.core,e.JOINED_QA_CORE);assert.equal(original.schema,1);assert.deepEqual(original.sourceBefore,original.sourceAfter);assert.deepEqual(original.sourceAfter,sumMap(fs.readFileSync(evidence+'/source-before.sha256','utf8')));
+          assert.equal(original.distBefore.length,848);assert.equal(original.distDigest,e.BUILD_DIST_DIGEST);assert.equal(sha(JSON.stringify(original.distBefore)),e.BUILD_DIST_DIGEST);assert.equal(original.bundle,'engines.mjs');assert.equal(original.bundleSHA,e.BUILD_ENGINE_BUNDLE_SHA256);assert.equal(sha(fs.readFileSync(oldDir+'/engines.mjs')),e.BUILD_ENGINE_BUNDLE_SHA256);
+          for(const row of original.distBefore){const bytes=fs.readFileSync(ref+'/dist/'+row.file);assert.equal(bytes.length,row.bytes);assert.equal(sha(bytes),row.sha256);}
+          const names=['cap.json','engines.mjs','entry.mjs','full.json','gm.json','manifest.json','opening.json','plain.json','released.json'];assert.deepEqual(fs.readdirSync(oldDir).sort(),names);assert.deepEqual(Object.keys(original.fixtures).sort(),['cap','full','gm','opening','plain','released']);
+          const recorded=Object.entries(sumMap(fs.readFileSync(ref+'/fixture-before.sha256','utf8'))).map(([file,digest])=>{assert(file.endsWith('/nba-fixtures/'+path.posix.basename(file)));return{file:path.posix.basename(file),sha256:digest};});assert.deepEqual(recorded.map(row=>row.file).sort(),names);
+          const originalFiles={};for(const file of names){const source=oldDir+'/'+file;assert(fs.lstatSync(source).isFile()&&!fs.lstatSync(source).isSymbolicLink());const bytes=fs.readFileSync(source);originalFiles[file]={bytes:bytes.length,sha256:sha(bytes)};assert.equal(sha(bytes),recorded.find(row=>row.file===file).sha256);}
+          for(const [kind,f]of Object.entries(original.fixtures)){assert.equal(f.file,kind+'.json');const raw=fs.readFileSync(oldDir+'/'+f.file,'utf8');assert.equal(sha(raw),f.sha256);assert.equal(JSON.stringify(f.expected.before),raw);}
+          const browser='scripts/qa/nbaFoMarketBrowser.mjs',controller='scripts/qa/nbaFoMarketScrollControl.mjs',oldBrowser=execFileSync('git',['show',e.BUILD_SOURCE+':'+browser]),oldController=execFileSync('git',['show',e.BUILD_SOURCE+':'+controller]),newBrowser=fs.readFileSync(browser),newController=fs.readFileSync(controller);
+          assert.equal(blob(oldBrowser),'52aa2d850c2737500f1a0ad09ed3f210914325f8');assert.equal(blob(newBrowser),'5e25d8b38eb5f42e01a82d22f249fe25fc5ad275');assert.equal(blob(oldController),'721abd49a07377c626ca80c5190c9a8bea1d682d');assert.equal(blob(newController),'35abad4a8d54d2d691bf808e46f7d64a79418291');
+          const edit={"old":" const last=p.locator('[data-fa-row=\"'+ids.at(-1)+'\"]');\n const g=await rectOf(grid),t=await rectOf(last);\n assert(t.y>=g.y-1&&t.bottom<=g.bottom+1,'Keyboard brings the actual tail row into its internal viewport');\n return {events,before,after:await scrollOf(p),grid:g,target:t};","next":" const last=p.locator('[data-fa-row=\"'+ids.at(-1)+'\"]');\n const readTail=async()=>({grid:await rectOf(grid),target:await rectOf(last),document:await scrollOf(p),focus:await activeId(p),saved:await readFrame(p)});\n const beforeEnd=await readTail();let g=beforeEnd.grid,t=beforeEnd.target;\n const endTrace={attempted:false,needed:t.bottom>g.bottom+1,beforeKey:beforeEnd};r.keyboardTailEnd=endTrace;\n if(endTrace.needed) {\n  endTrace.attempted=true;await p.keyboard.press('End');events.push('End');\n  endTrace.afterKey=await readTail();\n  await idle(p);await waitForScrollIdle(p);endTrace.afterReady=await readTail();\n  for(const state of [endTrace.afterKey,endTrace.afterReady]) {\n   sameScroll(beforeEnd.document,state.document,'NBA_FO_NATIVE_KEYBOARD_END_DOCUMENT_SCROLL');\n   assert.equal(state.focus,ids.at(-1),'NBA_FO_NATIVE_KEYBOARD_END_TAIL_FOCUS');\n   assert.equal(state.saved.raw,beforeEnd.saved.raw,'NBA_FO_NATIVE_KEYBOARD_END_FULL_SAVE_HELD');\n   assert.deepEqual(state.saved.frame,beforeEnd.saved.frame);\n  }\n  assert(endTrace.afterReady.grid.scrollTop>beforeEnd.grid.scrollTop,'NBA_FO_NATIVE_KEYBOARD_END_INTERNAL_PROGRESS');\n  sameScroll(before,endTrace.afterReady.document,'NBA_FO_NATIVE_KEYBOARD_INTERNAL_SCROLL');\n  g=endTrace.afterReady.grid;t=endTrace.afterReady.target;\n }\n assert(t.y>=g.y-1&&t.bottom<=g.bottom+1,'Keyboard brings the actual tail row into its internal viewport');\n return {events,before,after:await scrollOf(p),grid:g,target:t,end:endTrace};"};
+          const oldText=oldBrowser.toString(),newText=newBrowser.toString();assert.equal(oldText.split(edit.old).length-1,1);assert.equal(newText.split(edit.next).length-1,1);assert.equal(oldText.replace(edit.old,edit.next),newText);assert.equal(newText.replace(edit.next,edit.old),oldText,'Whole browser source inverse retains every original measurement and strict guard');
+          const oldPin='52aa2d850c2737500f1a0ad09ed3f210914325f8',newPin='5e25d8b38eb5f42e01a82d22f249fe25fc5ad275';assert.equal(oldController.toString().split(oldPin).length-1,1);assert.equal(newController.toString().split(newPin).length-1,1);assert.equal(oldController.toString().replace(oldPin,newPin),newController.toString());assert.equal(newController.toString().replace(newPin,oldPin),oldController.toString(),'Whole controller inverse is its normal-driver pin only');
+          for(const [kind,rows]of [['original-helper-sources',[[browser,oldBrowser],[controller,oldController]]],['recovery-helper-sources',[[browser,newBrowser],[controller,newController]]]]){fs.mkdirSync(out+'/'+kind);for(const [file,bytes]of rows)fs.writeFileSync(out+'/'+kind+'/'+path.basename(file),bytes,{flag:'wx'});}
+          fs.writeFileSync(out+'/helper-source-inverse.json',JSON.stringify({browser:{beforeBlob:blob(oldBrowser),afterBlob:blob(newBrowser),edit,wholeInverseExact:true},controller:{beforeBlob:blob(oldController),afterBlob:blob(newController),oldPin,newPin,wholeInverseExact:true},scope:'One real End only when actual desktop tail bottom is clipped. Complete pre/post document/grid/focus/save diagnostics, actual internal progress and original strict full-row/document guards remain. Source-only hypothesis until actual recovery admission.'},null,2)+'\n');
+          const tracked=execFileSync('git',['ls-files','-z']).toString().split('\0').filter(Boolean).sort(),current=Object.fromEntries(tracked.map(file=>[file,sha(fs.readFileSync(file))]));assert.deepEqual(current,sumMap(fs.readFileSync(out+'/source-before.sha256','utf8')));
+          const union=[...new Set([...Object.keys(original.sourceAfter),...tracked])].sort(),changed=union.filter(file=>original.sourceAfter[file]!==current[file]);assert.deepEqual(changed,['.github/workflows/nba-fo-market-native-recovery-20261104.yml',browser,controller].sort(),'Only the two declared helper changes and recovery workflow differ from actual compiled source');
+          assert.equal(original.sourceAfter[browser],sha(oldBrowser));assert.equal(original.sourceAfter[controller],sha(oldController));
+          const helpers=['scripts/qa/nbaFoMarketFixtures.mjs','scripts/qa/nbaFoMarketAssets.mjs','scripts/qa/nativeScrollReady.mjs','scripts/lib/playwrightLoader.mjs','scripts/lib/answerConsent.mjs','scripts/lib/offlineTransport.cjs'];
+          const protectedPath=file=>file.startsWith('src/')||file.startsWith('public/')||file.startsWith('scripts/')||['index.html','package.json','package-lock.json','bun.lock','bun.lockb','vite.config.ts','tailwind.config.ts','postcss.config.js','components.json'].includes(file)||/^tsconfig(?:\..+)?\.json$/.test(file);
+          for(const file of union.filter(protectedPath)){assert(Object.prototype.hasOwnProperty.call(original.sourceAfter,file)&&Object.prototype.hasOwnProperty.call(current,file),'Protected added/deleted path '+file);if(![browser,controller].includes(file))assert.equal(current[file],original.sourceAfter[file],file+' original compiled byte hold');}
+          for(const file of helpers)assert.equal(current[file],original.sourceAfter[file],file+' original compiled helper/dependency');for(const [file,pin]of Object.entries(original.pins))assert.equal(blob(fs.readFileSync(file)),pin);
+          assert(!fs.existsSync(newDir));fs.mkdirSync(newDir);for(const file of names)fs.copyFileSync(oldDir+'/'+file,newDir+'/'+file,fs.constants.COPYFILE_EXCL);
+          const derived=structuredClone(original);derived.sourceBefore=current;derived.sourceAfter=current;const derivedBytes=canonical(derived);fs.writeFileSync(newDir+'/manifest.json',derivedBytes);const inverse=structuredClone(derived);inverse.sourceBefore=original.sourceBefore;inverse.sourceAfter=original.sourceAfter;assert(canonical(inverse).equals(originalBytes),'Two source metadata maps restore every original manifest byte');assert(fs.readFileSync(oldDir+'/manifest.json').equals(originalBytes));assert(fs.readFileSync(evidence+'/fixture-manifest-original.json').equals(originalBytes));
+          const recoveryFiles={};for(const file of names){const bytes=fs.readFileSync(newDir+'/'+file);recoveryFiles[file]={bytes:bytes.length,sha256:sha(bytes)};if(file!=='manifest.json')assert(bytes.equals(fs.readFileSync(oldDir+'/'+file)),file+' exact original payload/bundle/entry');}
+          fs.writeFileSync(out+'/fixture-original-files.json',JSON.stringify(originalFiles,null,2)+'\n');fs.writeFileSync(out+'/fixture-recovery-files-before.json',JSON.stringify(recoveryFiles,null,2)+'\n');fs.writeFileSync(out+'/recovery-source-map.json',JSON.stringify(current,null,2)+'\n');
+          fs.writeFileSync(out+'/fixture-source-bridge.json',JSON.stringify({status:'derived-source-metadata-only',originalFixtureCore:original.core,originalBuildSource:e.BUILD_SOURCE,rootHeldRecoveryQaCore:e.ROOT_SOURCE_HEAD,recoveryHelperQaCore:e.RECOVERY_QA_CORE,actualWorkflowHead:execFileSync('git',['rev-parse','HEAD']).toString().trim(),originalManifestSHA256:sha(originalBytes),derivedManifestSHA256:sha(derivedBytes),changedKeys:['sourceBefore','sourceAfter'],wholeOriginalManifestByteInverse:true,changedSourcePaths:changed,originalFiles,recoveryFiles,retainedOriginalManifest:'original-build-evidence/fixture-manifest-original.json',retainedOriginalSourceLedger:'original-build-evidence/source-before.sha256',scope:'Honest recovery QA source metadata only. Original model, payloads, full frames/references, bundle, entry, core, pins and dist remain byte held. The two known QA helper source inverses are separate from model/source holds. This is not published main or public proof.'},null,2)+'\n');
+          NODE
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: '1.4.4'
+      - name: Install only held source and required browser tooling
+        run: |
+          set -euo pipefail
+          bun --version > "$QA_OUT/logs/bun-version.log"
+          test "$(cat "$QA_OUT/logs/bun-version.log")" = 1.4.4
+          bun install --frozen-lockfile > "$QA_OUT/logs/bun-install.log" 2>&1
+          npm install --prefix "$RUNNER_TEMP/nba-recovery-browser-tools" --package-lock=false --no-audit --no-fund playwright@1.64.0 > "$QA_OUT/logs/playwright-install.log" 2>&1
+          test ! -e node_modules/playwright
+          test ! -e node_modules/playwright-core
+          ln -s "$RUNNER_TEMP/nba-recovery-browser-tools/node_modules/playwright" node_modules/playwright
+          ln -s "$RUNNER_TEMP/nba-recovery-browser-tools/node_modules/playwright-core" node_modules/playwright-core
+          "$RUNNER_TEMP/nba-recovery-browser-tools/node_modules/.bin/playwright" install --with-deps chromium > "$QA_OUT/logs/chromium-install.log" 2>&1
+          git diff --exit-code HEAD -- package.json package-lock.json bun.lock bun.lockb
+      - name: Serve the same completed artifact and run physical control before three normal contexts
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          export SIM_OFFLINE_RECEIPT="$QA_OUT/transport/runner.log"
+          : > "$SIM_OFFLINE_RECEIPT"
+          : > "$QA_OUT/transport/server.log"
+          BASE=http://127.0.0.1:4175
+          SIM_OFFLINE_RECEIPT="$QA_OUT/transport/server.log" node scripts/lib/hostLikeServer.mjs "$QA_REF/dist" 4175 > "$QA_OUT/logs/server.log" 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid" 2>/dev/null || true' EXIT
+          ready=0
+          for attempt in $(seq 1 40); do if curl --fail --silent "$BASE/" > /dev/null; then ready=1; break; fi; kill -0 "$server_pid"; sleep 1; done
+          test "$ready" = 1
+          run_native() {
+            local name="$1"
+            shift
+            local receipt="$QA_OUT/transport/$name.log"
+            : > "$receipt"
+            set +e
+            SIM_OFFLINE_RECEIPT="$receipt" "$@" > "$QA_OUT/logs/$name.log" 2>&1
+            local native_status=$?
+            set -e
+            NATIVE_NAME="$name" NATIVE_STATUS="$native_status" node --input-type=module - "$@" <<'NODE'
+          import fs from 'node:fs';fs.writeFileSync(process.env.QA_OUT+'/'+process.env.NATIVE_NAME+'-native-command.json',JSON.stringify({command:process.argv.slice(2),exit:Number(process.env.NATIVE_STATUS)},null,2)+'\n');
+          NODE
+            test "$native_status" = 0
+            test ! -s "$receipt"
+          }
+          run_native nba-assets-before node scripts/qa/nbaFoMarketAssets.mjs "$QA_OUT/nba-recovery-fixtures/manifest.json" "$QA_REF/dist" "$QA_OUT/nba-assets" "$BASE" before
+          run_native nba-scroll-control node scripts/qa/nbaFoMarketScrollControl.mjs --out "$QA_OUT/nba-scroll-control" --fixtures "$QA_OUT/nba-recovery-fixtures" --dist "$QA_REF/dist" --base-url "$BASE"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';const out=process.env.QA_OUT,r=JSON.parse(fs.readFileSync(out+'/nba-scroll-control/control-report.json')),w=JSON.parse(fs.readFileSync(out+'/nba-scroll-control-native-command.json'));
+          assert.equal(w.exit,0);assert.equal(r.status,'admitted');assert.equal(r.child.exit,1);assert.equal(r.child.signal,null);assert.equal(r.child.error,null);assert.equal(r.owned.marker,'NBA_FO_NATIVE_SIGN_DOCUMENT_SCROLL');assert.equal(r.owned.actualVerticalPixels,10);assert.equal(r.owned.trustedClicks,1);assert.equal(r.owned.completeSignedFrameEqual,true);assert.equal(r.owned.completeSignedBytesEqual,true);for(const key of ['sourceHeld','distHeld','normalHeld','inverseWholeSourceExact'])assert.equal(r[key],true);
+          assert.equal(r.native.contexts.length,1);assert.equal(r.native.contexts[0].width,390);assert.match(r.native.contexts[0].error,/^AssertionError \[ERR_ASSERTION\]: NBA_FO_NATIVE_SIGN_DOCUMENT_SCROLL\b/);
+          NODE
+          run_native nba-native node scripts/qa/nbaFoMarketBrowser.mjs --out "$QA_OUT/nba-native" --fixtures "$QA_OUT/nba-recovery-fixtures" --dist "$QA_REF/dist" --base-url "$BASE"
+          run_native nba-assets-after node scripts/qa/nbaFoMarketAssets.mjs "$QA_OUT/nba-recovery-fixtures/manifest.json" "$QA_REF/dist" "$QA_OUT/nba-assets" "$BASE" after
+          test ! -s "$QA_OUT/transport/server.log"
+          test ! -s "$QA_OUT/transport/runner.log"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import crypto from 'node:crypto';import assert from 'node:assert/strict';const e=process.env,out=e.QA_OUT,sha=b=>crypto.createHash('sha256').update(b).digest('hex'),r=JSON.parse(fs.readFileSync(out+'/nba-native/report.json'));
+          assert.equal(r.status,'passed');assert.equal(r.mode,'local');assert.equal(r.core,e.JOINED_QA_CORE);assert.deepEqual(r.contexts.map(c=>c.width),[320,390,1280]);assert.equal(r.screenshots.length,3);assert.equal(new Set(r.screenshots).size,3);assert.equal(r.sourceHeld,true);assert.equal(r.distHeld,true);
+          for(const c of r.contexts){assert.equal(c.status,'passed');for(const key of ['pageErrors','unexpectedConsole','undeclaredAborts','localHttpErrors','assetErrors'])assert.deepEqual(c[key],[]);assert.deepEqual(c.requestFailures.filter(row=>!c.aborts.some(a=>a.url===row.url)),[]);assert(c.assetBodies.some(row=>row.file==='prerender-boot.js'));assert.equal(c.failClosedControls.wholeInverseExact,true);assert.equal(c.failClosedControls.actualReportHeld,true);assert.match(c.failClosedControls.declaration.ownedFailure.message,/^NBA_FO_NATIVE_UNDECLARED_REQUEST_FAILURE/);assert.match(c.failClosedControls.boot.ownedFailure.message,/^NBA_FO_NATIVE_OBSERVED_BOOT_BODY/);assert(fs.statSync(out+'/nba-native/'+c.screenshot).size>0);}
+          const desktop=r.contexts[2],end=desktop.keyboardTailEnd;assert(end&&typeof end.needed==='boolean');assert.equal(end.needed,end.beforeKey.target.bottom>end.beforeKey.grid.bottom+1);assert.equal(end.attempted,end.needed);assert.deepEqual(desktop.observed.keyboard.end,end);
+          if(end.attempted){assert.equal(desktop.observed.keyboard.events.filter(x=>x==='End').length,1);for(const state of [end.afterKey,end.afterReady]){assert.deepEqual(state.document,end.beforeKey.document);assert.equal(state.focus,'nba-market-access-fa-33');assert.equal(state.saved.raw,end.beforeKey.saved.raw);assert.deepEqual(state.saved.frame,end.beforeKey.saved.frame);}assert(end.afterReady.grid.scrollTop>end.beforeKey.grid.scrollTop);assert(end.afterReady.target.y>=end.afterReady.grid.y-1&&end.afterReady.target.bottom<=end.afterReady.grid.bottom+1);}
+          const before=JSON.parse(fs.readFileSync(out+'/nba-assets/served-assets-before.json')),after=JSON.parse(fs.readFileSync(out+'/nba-assets/served-assets-after.json'));assert.equal(before.base,'http://127.0.0.1:4175');assert.equal(after.base,before.base);assert.deepEqual(after.rows,before.rows);assert.equal(before.entry,'/assets/index-Bpl-P-XB.js');
+          const critical=[['assets/index-Bpl-P-XB.js',798778,'e7ce7680b191d5d76de9d8a36be8f186585355e9828c1a11a9b2a747916dcf71'],['assets/NbaFrontOffice-B88eDZJL.js',120817,'a2ab1c44147a59e101622a3cbf8f912be564f066deee6b5b502af0197e3f5ccd'],['assets/index-Dya1Mx9g.css',206790,'975cd7c03aff6188f8c67c2cf94f5425f9f1ba665242a8b51450cf37e5154107'],['prerender-boot.js',3049,'c5da547fd0b4b0920dfeb100f3d5f3f73ca5317e38135ddc132649cd43f85c70']];
+          for(const [file,bytes,digest]of critical){const row=before.rows.find(row=>row.file===file);assert(row);assert.equal(row.bytes,bytes);assert.equal(row.sha256,digest);}
+          for(const phase of ['before','after']){const h=JSON.parse(fs.readFileSync(out+'/nba-assets/served-'+phase+'/html-control.json')),b=JSON.parse(fs.readFileSync(out+'/nba-assets/served-'+phase+'/boot-inventory-control.json'));assert.equal(h.changed,true);assert.equal(h.wholeInverseExact,true);assert.match(h.ownedFailure.message,/^NBA_FO_ASSET_ROUTE_CURRENT_ENTRY/);assert.equal(b.changed,true);assert.equal(b.wholeInverseExact,true);assert.match(b.ownedFailure.message,/^NBA_FO_ASSET_CRITICAL_STABLE_BOOT/);}
+          const expected=JSON.parse(fs.readFileSync(out+'/fixture-recovery-files-before.json')),actual={};for(const [file,pin]of Object.entries(expected)){const bytes=fs.readFileSync(out+'/nba-recovery-fixtures/'+file);actual[file]={bytes:bytes.length,sha256:sha(bytes)};assert.deepEqual(actual[file],pin);}fs.writeFileSync(out+'/fixture-recovery-files-after.json',JSON.stringify(actual,null,2)+'\n');
+          fs.writeFileSync(out+'/native-admission.json',JSON.stringify({status:'native-phase-passed',finalSourceDistFixtureHoldsRequired:true,originalRun:Number(e.BUILD_RUN),originalRunConclusion:'failure',completedBuildSource:e.BUILD_SOURCE,recoveryHelperQaCore:e.RECOVERY_QA_CORE,rootHeldRecoveryQaCore:e.ROOT_SOURCE_HEAD,originalFixtureCore:e.JOINED_QA_CORE,contexts:3,photos:3,controlsAdmittedBeforeNormal:true,controllerWrapperExit:0,controllerChildExit:1,actualControlPixels:10,keyboardEnd:end,fixtureManifestSHA256:sha(fs.readFileSync(out+'/nba-recovery-fixtures/manifest.json')),originalFixtureManifestSHA256:e.BUILD_FIXTURE_MANIFEST_SHA256,engineBundleSHA256:e.BUILD_ENGINE_BUNDLE_SHA256,completedTarSHA256:e.BUILD_TAR_SHA256,scope:'Native-only recovery on the same completed normal build and exact original fixture/reference/engine bytes. Three actual local320/390/1280 journeys and existing actual390px +10scroll control. Original failed desktop whole-row first stop remains retained. No rebuild, generator, type/sim/reader/cap repetition, public/main release, provider/font availability, whole-fleet, natural-career or whole PL-16 completion claim. Screenshots require separate visual review.'},null,2)+'\n');
+          NODE
+      - name: Always retain source dist fixture lock and inverse holds
+        if: always()
+        run: |
+          set +e
+          set -uo pipefail
+          OUT="$(printenv QA_OUT || true)"
+          REF="$(printenv QA_REF || true)"
+          if [[ -z "$OUT" ]]; then OUT="$RUNNER_TEMP/nba-fo-market-native-recovery"; fi
+          if [[ -z "$REF" ]]; then REF="$RUNNER_TEMP/nba-fo-market-native-recovery-reference"; fi
+          mkdir -p "$OUT/logs"
+          echo "QA_OUT=$OUT" >> "$GITHUB_ENV"
+          git diff --exit-code HEAD > "$OUT/source-diff.txt" 2> "$OUT/source-diff-errors.log"
+          source_diff=$?
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$OUT/source-after.sha256" 2> "$OUT/source-capture-errors.log"
+          source_capture=$?
+          git status --porcelain=v1 --untracked-files=all > "$OUT/status-after.txt" 2> "$OUT/status-capture-errors.log"
+          status_capture=$?
+          hold=0
+          if [[ "$source_diff" != 0 || "$source_capture" != 0 || "$status_capture" != 0 ]]; then hold=1; fi
+          if [[ -f "$OUT/source-before.sha256" ]]; then cmp "$OUT/source-before.sha256" "$OUT/source-after.sha256" || hold=1; else hold=1; fi
+          if [[ -f "$OUT/status-before.txt" ]]; then cmp "$OUT/status-before.txt" "$OUT/status-after.txt" || hold=1; else hold=1; fi
+          if [[ -s "$OUT/status-after.txt" ]]; then hold=1; fi
+          if [[ -d "$REF/dist" && -f "$OUT/reference-dist-before.sha256" ]]; then
+            (cd "$REF" && find dist -type f -print0 | sort -z | xargs -0 sha256sum) > "$OUT/reference-dist-after.sha256"
+            if [[ "$?" != 0 ]]; then hold=1; fi
+            cmp "$OUT/reference-dist-before.sha256" "$OUT/reference-dist-after.sha256" || hold=1
+          else hold=1; fi
+          QA_OUT="$OUT" QA_REF="$REF" node --input-type=module <<'NODE'
+          import fs from 'node:fs';import path from 'node:path';import crypto from 'node:crypto';import assert from 'node:assert/strict';const e=process.env,out=e.QA_OUT,ref=e.QA_REF,sha=b=>crypto.createHash('sha256').update(b).digest('hex');
+          for(const [base,list]of [[ref+'/nba-fixtures','fixture-original-files.json'],[out+'/nba-recovery-fixtures','fixture-recovery-files-before.json']]){const expected=JSON.parse(fs.readFileSync(out+'/'+list));assert.deepEqual(fs.readdirSync(base).sort(),Object.keys(expected).sort());for(const [file,pin]of Object.entries(expected)){const b=fs.readFileSync(path.join(base,file));assert.deepEqual({bytes:b.length,sha256:sha(b)},pin);}}
+          const originalBytes=fs.readFileSync(out+'/original-build-evidence/fixture-manifest-original.json'),original=JSON.parse(originalBytes),derived=JSON.parse(fs.readFileSync(out+'/nba-recovery-fixtures/manifest.json'));assert.equal(sha(originalBytes),e.BUILD_FIXTURE_MANIFEST_SHA256);assert.equal(sha(fs.readFileSync(out+'/original-build-evidence/source-before.sha256')),e.BUILD_SOURCE_INVENTORY_SHA256);derived.sourceBefore=original.sourceBefore;derived.sourceAfter=original.sourceAfter;assert(Buffer.from(JSON.stringify(derived,null,2)+'\n').equals(originalBytes),'Final retained-original byte inverse independently replayed');
+          const current=JSON.parse(fs.readFileSync(out+'/recovery-source-map.json'));for(const [file,digest]of Object.entries(current))assert.equal(sha(fs.readFileSync(file)),digest);
+          const inputs=JSON.parse(fs.readFileSync(out+'/original-build-input-admission.json'));for(const pin of inputs.retained){const b=fs.readFileSync(out+'/original-build-evidence/'+pin.file);assert.equal(b.length,pin.bytes);assert.equal(sha(b),pin.sha256);}
+          NODE
+          fixture_hold=$?
+          if [[ "$fixture_hold" != 0 ]]; then hold=1; fi
+          printf '{"sourceDiff":%s,"sourceCapture":%s,"statusCapture":%s,"fixtureHold":%s,"holdExit":%s}\n' "$source_diff" "$source_capture" "$status_capture" "$fixture_hold" "$hold" > "$OUT/hold-exits.json"
+          test "$hold" = 0
+      - name: Bound retained native-only evidence
+        id: artifact
+        if: always()
+        run: |
+          set -euo pipefail
+          test -d "$QA_OUT"
+          test "$(du -sb "$QA_OUT" | cut -f1)" -lt 150000000
+          echo 'ready=true' >> "$GITHUB_OUTPUT"
+      - uses: actions/upload-artifact@v4
+        if: ${{ always() && steps.artifact.outputs.ready == 'true' }}
+        with:
+          name: nba-fo-market-native-recovery
+          path: ${{ runner.temp }}/nba-fo-market-native-recovery
+          if-no-files-found: error
+          retention-days: 14
