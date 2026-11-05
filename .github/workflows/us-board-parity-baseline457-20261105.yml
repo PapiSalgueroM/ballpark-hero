@@ -1,0 +1,180 @@
+name: Existing US board baseline457 with installed Sonner alias
+on:
+  push:
+    branches: [codex/us-board-parity-baseline457-20261105]
+permissions:
+  contents: read
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+          filter: blob:none
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Bind unchanged candidate and source
+        shell: bash
+        run: |
+          set -euo pipefail
+          QA_OUT="$RUNNER_TEMP/us-board-parity-baseline457"
+          export QA_OUT
+          echo "QA_OUT=$QA_OUT" >> "$GITHUB_ENV"
+          mkdir -p "$QA_OUT"
+          test "$(git rev-parse HEAD^)" = 4571ba4ea9545dab5ef70769204034e5163d48d7
+          test "$(git rev-parse HEAD^^{tree})" = b38910df255daf979e74ccce34e252befccde8b3
+          test "$(git diff --name-status HEAD^ HEAD)" = $'A\t.github/workflows/us-board-parity-baseline457-20261105.yml'
+          git ls-files -z | xargs -0 sha256sum > "$QA_OUT/source-before.sha256"
+          git ls-files -s > "$QA_OUT/index-before.txt"
+          git status --porcelain=v1 --untracked-files=all > "$QA_OUT/status-before.txt"
+          test ! -s "$QA_OUT/status-before.txt"
+          cp package-lock.json "$QA_OUT/lock-before.json"
+          git rev-parse HEAD HEAD^ 'HEAD^{tree}' > "$QA_OUT/source-identity.txt"
+          test "$(git hash-object scripts/simUsBoardParity.mjs)" = 2e574a8be770d8ac188433964b754415dbc1747b
+          test "$(git hash-object src/test/usBoardFixture.test.tsx)" = d1c3642e245ffd7465faf3413df3df316d892421
+          cat > "$QA_OUT/observeSpawn.cjs" <<'OBSERVER'
+          const fs = require('node:fs');
+          const path = require('node:path');
+          const cp = require('node:child_process');
+          const native = cp.spawnSync;
+          cp.spawnSync = function (...args) {
+            const result = native.apply(this, args);
+            const argv = Array.isArray(args[1]) ? args[1] : [];
+            if (argv.some(value => String(value).endsWith('usBoardFixture.test.tsx'))) {
+              const dir = process.env.QA_OUT;
+              const record = { command: args[0], args: argv, status: result.status, signal: result.signal,
+                error: result.error ? { name: result.error.name, message: result.error.message } : null };
+              fs.writeFileSync(path.join(dir, 'vitest-native.json'), JSON.stringify(record, null, 2) + '\n', { flag: 'wx' });
+              fs.writeFileSync(path.join(dir, 'vitest.stdout.log'), result.stdout ?? '', { flag: 'wx' });
+              fs.writeFileSync(path.join(dir, 'vitest.stderr.log'), result.stderr ?? '', { flag: 'wx' });
+              const option = argv.find(value => String(value).startsWith('--outputFile.json='));
+              if (option) {
+                const source = String(option).slice('--outputFile.json='.length);
+                if (fs.existsSync(source)) fs.writeFileSync(path.join(dir, 'vitest.report.json'), fs.readFileSync(source), { flag: 'wx' });
+              }
+              // Read the exact child-selected report before the unchanged harness deletes its temporary directory.
+              const report = args[2]?.env?.US_BOARD_FIXTURE_REPORT;
+              if (typeof report !== 'string' || !path.isAbsolute(report) || !fs.existsSync(report))
+                throw new Error('US_BOARD_BASELINE_FULL_REPORT_MISSING');
+              const bytes = fs.readFileSync(report);
+              fs.writeFileSync(path.join(dir, 'fixture-differences.txt'), bytes, { flag: 'wx' });
+              fs.writeFileSync(path.join(dir, 'fixture-differences.json'),
+                JSON.stringify(bytes.toString('utf8').split('\n').filter(Boolean), null, 2) + '\n', { flag: 'wx' });
+              fs.writeFileSync(path.join(dir, 'replay-child-environment.json'), JSON.stringify({
+                US_BOARD_FIXTURE: args[2].env.US_BOARD_FIXTURE,
+                US_BOARD_FIXTURE_REPORT: report,
+                NO_DOUBLE_SWAP: JSON.parse(args[2].env.NO_DOUBLE_SWAP),
+                note: 'Exact existing child environment and ordered report, observed after the native child returns. No argument, callback, result or fixture modification.'
+              }, null, 2) + '\n', { flag: 'wx' });
+            }
+            return result;
+          };
+          require('node:module').syncBuiltinESMExports();
+          OBSERVER
+          node --check "$QA_OUT/observeSpawn.cjs"
+      - name: Install held lock
+        shell: bash
+        run: |
+          set -euo pipefail
+          npm ci --no-audit --no-fund > "$QA_OUT/npm-ci.log" 2>&1
+      - name: Proper App types before the existing baseline replay
+        shell: bash
+        run: |
+          set +e
+          set -uo pipefail
+          export SIM_NETWORK=offline GIT_NO_LAZY_FETCH=1
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          export SIM_OFFLINE_RECEIPT="$QA_OUT/types-transport.log"
+          : > "$SIM_OFFLINE_RECEIPT"
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json > "$QA_OUT/types.log" 2>&1
+          native_exit=$?
+          printf '%s\n' "$native_exit" > "$QA_OUT/types.exit"
+          test "$native_exit" = 0 || exit "$native_exit"
+          test ! -s "$SIM_OFFLINE_RECEIPT" || exit 1
+      - name: Preserve exact child diagnostics before old harness cleanup
+        shell: bash
+        run: |
+          set +e
+          set -uo pipefail
+          export SIM_NETWORK=offline GIT_NO_LAZY_FETCH=1
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs --require=$QA_OUT/observeSpawn.cjs"
+          export SIM_OFFLINE_RECEIPT="$QA_OUT/transport.log"
+          : > "$SIM_OFFLINE_RECEIPT"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import path from 'node:path';import crypto from 'node:crypto';import {createRequire} from 'node:module';import assert from 'node:assert/strict';
+          const req=createRequire(path.join(process.cwd(),'package.json')),file=req.resolve('sonner');
+          assert(file.startsWith(path.join(process.cwd(),'node_modules')+path.sep),'Actual held installed package');
+          const aliases={sonner:file};
+          fs.writeFileSync(process.env.QA_OUT+'/aliases.json',JSON.stringify(aliases)+'\n',{flag:'wx'});
+          fs.writeFileSync(process.env.QA_OUT+'/installed-sonner.json',JSON.stringify({file,sha256:crypto.createHash('sha256').update(fs.readFileSync(file)).digest('hex'),meaning:'Explicit resolution for the existing temporary historical Board; same installed package, no mock or product edit.'},null,2)+'\n',{flag:'wx'});
+          NODE
+          test "$?" = 0 || exit 1
+          export NO_DOUBLE_SWAP="$(cat "$QA_OUT/aliases.json")"
+          node --unhandled-rejections=strict scripts/simUsBoardParity.mjs > "$QA_OUT/harness.log" 2>&1
+          native_exit=$?
+          printf '%s\n' "$native_exit" > "$QA_OUT/harness.exit"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import path from 'node:path';import crypto from 'node:crypto';import assert from 'node:assert/strict';
+          const out=process.env.QA_OUT,read=p=>fs.readFileSync(path.join(out,p)),json=p=>JSON.parse(read(p)),sha=b=>crypto.createHash('sha256').update(b).digest('hex');
+          const native=json('vitest-native.json'),report=json('vitest.report.json'),full=read('fixture-differences.txt'),ordered=json('fixture-differences.json');
+          assert.equal(native.error,null);assert.equal(native.signal,null);assert([0,1].includes(native.status));
+          assert.equal(report.numTotalTests,4);assert.equal(report.numPendingTests,0);assert.equal(report.numTodoTests,0);
+          assert.equal(report.numPassedTests+report.numFailedTests,4);assert.equal(report.testResults.length,1);
+          for(const key of['numRuntimeErrorTestSuites','numUnhandledErrors'])if(key in report)assert.equal(report[key],0);
+          if('unhandledErrors' in report)assert.deepEqual(report.unhandledErrors,[]);
+          const rows=report.testResults[0].assertionResults;
+          assert.deepEqual(rows.map(r=>r.fullName),['nfl','nba','mlb','nhl'].map(s=>'the four US career boards against the recorded fixture '+s));
+          assert(rows.every(r=>r.status==='passed'||r.status==='failed'));
+          assert.equal(report.success,report.numFailedTests===0);assert.equal(native.status,report.success?0:1);
+          assert.deepEqual(ordered,full.toString('utf8').split('\n').filter(Boolean),'Entire ordered child report retained');
+          const child=json('replay-child-environment.json');assert.equal(child.US_BOARD_FIXTURE,'replay');
+          const installed=json('installed-sonner.json');assert.equal(child.NO_DOUBLE_SWAP.sonner,installed.file);
+          const harnessExit=Number(read('harness.exit').toString().trim());
+          assert.equal(harnessExit,report.success?0:1,'Actual unchanged normal harness status');
+          const counts=Object.fromEntries(['nfl','nba','mlb','nhl'].map(s=>[s,ordered.filter(line=>line.startsWith(s+' ')).length]));
+          assert.equal(Object.values(counts).reduce((a,b)=>a+b,0),ordered.length,'Every reported difference retains its sport');
+          if(report.success)assert.equal(ordered.length,0);
+          assert.equal(read('transport.log').length,0);assert.equal(read('types-transport.log').length,0);assert.equal(read('types.exit').toString().trim(),'0');
+          fs.writeFileSync(path.join(out,'baseline-observation.json'),JSON.stringify({
+            status:report.success?'NATIVE_BASELINE_GREEN':'NATIVE_BASELINE_RED_UNWAIVED',
+            product:'4571ba4ea9545dab5ef70769204034e5163d48d7',tree:'b38910df255daf979e74ccce34e252befccde8b3',
+            nativeHarnessExit:harnessExit,nativeVitestExit:native.status,tests:4,passed:report.numPassedTests,failed:report.numFailedTests,
+            rows:rows.map(r=>({fullName:r.fullName,status:r.status,failureMessages:r.failureMessages})),
+            orderedDifferences:ordered,counts,fullReportSHA256:sha(full),fullReportBytes:full.length,
+            nativeReportSHA256:sha(read('vitest.report.json')),installedSonner:installed,
+            limits:'Measured baseline only. Any failed normal harness remains failed. No golden rerecord, original comparison relaxation, App/test/fixture mutation, current-Panel visual parity or broad-suite claim.'
+          },null,2)+'\n',{flag:'wx'});
+          NODE
+          diagnostic_exit=$?
+          printf '%s\n' "$diagnostic_exit" > "$QA_OUT/diagnostic-validation.exit"
+          test "$diagnostic_exit" = 0 || exit "$diagnostic_exit"
+          printf '%s\n' 'Existing four-sport golden replay on product4571. Actual installed Sonner alias and pass-through output collector retain the complete ordered child report before cleanup. Native red remains red; product, callbacks and immutable fixture are unchanged.' > "$QA_OUT/SCOPE.txt"
+          exit "$native_exit"
+      - name: Always hold full source index lock and status
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          git ls-files -z | xargs -0 sha256sum > "$QA_OUT/source-after.sha256"
+          git ls-files -s > "$QA_OUT/index-after.txt"
+          git status --porcelain=v1 --untracked-files=all > "$QA_OUT/status-after.txt"
+          cp package-lock.json "$QA_OUT/lock-after.json"
+          cmp "$QA_OUT/source-before.sha256" "$QA_OUT/source-after.sha256"
+          cmp "$QA_OUT/index-before.txt" "$QA_OUT/index-after.txt"
+          cmp "$QA_OUT/lock-before.json" "$QA_OUT/lock-after.json"
+          test ! -s "$QA_OUT/status-after.txt"
+          for receipt in "$QA_OUT/transport.log" "$QA_OUT/types-transport.log"; do
+            if test -f "$receipt"; then test ! -s "$receipt"; fi
+          done
+          printf '0\n' > "$QA_OUT/source-holds.exit"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: us-board-parity-baseline457
+          path: ${{ env.QA_OUT }}/
+          if-no-files-found: error
+          retention-days: 14
