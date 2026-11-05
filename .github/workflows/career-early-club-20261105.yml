@@ -7,7 +7,7 @@ permissions:
 jobs:
   scoped:
     runs-on: ubuntu-latest
-    timeout-minutes: 35
+    timeout-minutes: 45
     defaults:
       run:
         shell: bash
@@ -49,18 +49,6 @@ jobs:
           const rows=Object.keys(lock.packages).filter(p=>p.startsWith('node_modules/')&&fs.existsSync(p+'/package.json')).map(p=>[p,JSON.parse(fs.readFileSync(p+'/package.json')).version]);
           fs.writeFileSync('early-club-artifacts/installed-before.json',JSON.stringify(rows));
           NODE
-          npm install --prefix "$RUNNER_TEMP/crq-browser" --no-save --package-lock=false playwright@1.64.1
-          test ! -e node_modules/playwright
-          ln -s "$RUNNER_TEMP/crq-browser/node_modules/playwright" node_modules/playwright
-          node "$RUNNER_TEMP/crq-browser/node_modules/playwright/cli.js" install --with-deps chromium
-          node --input-type=module <<'NODE'
-          import fs from 'node:fs'; import assert from 'node:assert/strict';
-          const before=JSON.parse(fs.readFileSync('early-club-artifacts/installed-before.json'));
-          const after=before.map(([p])=>[p,JSON.parse(fs.readFileSync(p+'/package.json')).version]);
-          fs.writeFileSync('early-club-artifacts/installed-after.json',JSON.stringify(after)); assert.deepEqual(after,before);
-          console.log('Preserved all '+after.length+' locked installed versions.');
-          NODE
-          python -m pip install fonttools pillow
       - name: Proper app types
         run: node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee early-club-artifacts/types.log
       - name: Original fixed seven physical faults and restored actual page
@@ -88,11 +76,53 @@ jobs:
           assert.equal(passed.length,1); assert.equal(passed[0].title,'career');
           assert.equal(rows.filter(x=>x.status==='failed').length,0);
           NODE
-      - name: Normal production build
+      - name: Retain source proof before browser setup
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: career-early-club-source-${{ github.run_id }}
+          path: early-club-artifacts
+          retention-days: 7
+          if-no-files-found: error
+      - name: Isolated browser and snapshot dependencies
+        id: browser_setup
+        timeout-minutes: 12
         if: ${{ !cancelled() }}
+        run: |
+          npm install --prefix "$RUNNER_TEMP/crq-browser" --no-save --package-lock=false playwright@1.64.1
+          test ! -e node_modules/playwright
+          ln -s "$RUNNER_TEMP/crq-browser/node_modules/playwright" node_modules/playwright
+          node "$RUNNER_TEMP/crq-browser/node_modules/playwright/cli.js" install --with-deps chromium
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs'; import assert from 'node:assert/strict';
+          const before=JSON.parse(fs.readFileSync('early-club-artifacts/installed-before.json'));
+          const after=before.map(([p])=>[p,JSON.parse(fs.readFileSync(p+'/package.json')).version]);
+          fs.writeFileSync('early-club-artifacts/installed-after.json',JSON.stringify(after)); assert.deepEqual(after,before);
+          console.log('Preserved all '+after.length+' locked installed versions.');
+          NODE
+          python -m pip install fonttools pillow
+      - name: Production build and refreshed Career Quiz snapshot
+        if: ${{ !cancelled() && steps.browser_setup.outcome == 'success' }}
         id: build
         run: |
-          NODE_OPTIONS="--max-old-space-size=6144" npm run build 2>&1 | tee early-club-artifacts/build.log
+          NODE_OPTIONS="--max-old-space-size=6144" PRERENDER_ONLY=/career npm run build:seo 2>&1 | tee early-club-artifacts/build.log
+          git diff --name-only HEAD -- public scripts/data/lastmod.json > early-club-artifacts/generated-paths.txt
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs'; import assert from 'node:assert/strict';
+          const changed=fs.readFileSync('early-club-artifacts/generated-paths.txt','utf8').trim().split('\n').filter(Boolean);
+          const allowed=new Set(['public/career/index.html','public/sitemap.xml','scripts/data/lastmod.json']);
+          assert(changed.includes('public/career/index.html'),'Actual saved Career Quiz page refreshed');
+          assert(changed.every(file=>allowed.has(file)),'Only the owned page, derived sitemap and ledger may change: '+changed.join(','));
+          const html=fs.readFileSync('public/career/index.html','utf8');
+          assert(html.includes('Choosing a club clue or random boxes'),'Updated saved hint instructions');
+          assert(!html.includes('Each hint opens exactly 4 random boxes.'),'Old blanket hint claim removed from saved page');
+          NODE
+          git diff --binary HEAD -- public/career/index.html public/sitemap.xml scripts/data/lastmod.json > early-club-artifacts/generated.patch
+          mkdir -p early-club-artifacts/generated/public/career early-club-artifacts/generated/scripts/data
+          cp public/career/index.html early-club-artifacts/generated/public/career/index.html
+          cp public/sitemap.xml early-club-artifacts/generated/public/sitemap.xml
+          cp scripts/data/lastmod.json early-club-artifacts/generated/scripts/data/lastmod.json
+          sha256sum scripts/data/lastmod.json > early-club-artifacts/generated-ledger.sha256
           tar -czf early-club-artifacts/dist.tgz dist
           sha256sum early-club-artifacts/dist.tgz > early-club-artifacts/dist.sha256
       - name: All required built-output readers and existing source fences
@@ -116,7 +146,8 @@ jobs:
         run: |
           git ls-files -s > early-club-artifacts/source-after.txt
           cmp early-club-artifacts/source-before.txt early-club-artifacts/source-after.txt
-          git diff --exit-code HEAD -- src scripts package.json package-lock.json
+          git diff --exit-code HEAD -- src scripts package.json package-lock.json ':!scripts/data/lastmod.json'
+          if test -f early-club-artifacts/generated-ledger.sha256; then sha256sum --check early-club-artifacts/generated-ledger.sha256; fi
           sha256sum package.json package-lock.json > early-club-artifacts/locks-after.txt
           cmp early-club-artifacts/locks-before.txt early-club-artifacts/locks-after.txt
           node --input-type=module <<'NODE'
