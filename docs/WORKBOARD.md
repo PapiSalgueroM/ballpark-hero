@@ -17892,12 +17892,10 @@ The first controller used an incorrect parameterized-case census[11,3,15]. Run42
 
 Evidence is retained under C:/Users/antho/dukb-handoff/2026-11-05/sc-training-copy/. Original focused artifact13441331904 (389203B, sha256 b2ab683c5fec7e45c5abc734ea7881b4ae599c38c7511d37501d60a022b68cef); first full packet13442254309 (8913403B,sha256 ac203fa940df8b57cd0bab0ac70f9e9decf480c90d301db22e85d76eccb0832a); final units13443071469 (533848B,sha256 0e17515a3f4e54e3a9f8a3c1a3d12d9e7559e0a1ccb873b68b2942f60aa4942e). Temporary controllers/workflows are excluded from clean delivery. No production code, cap, player data, score or save format changed. Full-suite/release-wide failures remain unwaived; this does not complete a master game card and has not been merged or published.
 
-Current-main follow-up: main e16 and its documentation closeout 3b include the NBA historical-draft raw-read repair. The older 19/20 result describes the pinned 1ac build. Full-suite completion is not claimed.
 
+## 2026-11-05 combined soccer qualification complete
 
-## 2026-11-05 draft reconciliation
-
-Reconciled onto main 3b14650d360b010b25b525de33a5f32f33de2798 after the historical-release closeout. The published release records are preserved. Owned test/script blobs are unchanged from the scoped qualification. The combined soccer integration check is pending; this remains an unmerged, unpublished draft.
+Actions42096174788 and script-only follow-up42098915819 pass. Main3b release records are retained. The combined stack has225 distinct targeted cases, a normal build,9 engine/layout harnesses,20 saved-output readers,all16 unchanged caps and4 actual browser flows. Exact evidence and qualified limits:docs/plans/2026-11-05-soccer-master-integration.md. Full suite and live Reach remain uncredited. No merge or publication is claimed.
 
 
 ## 2026-11-05: Preferred-league transfer brief claimed
@@ -17910,6 +17908,6 @@ This chat owns SC-11's optional preferred league in src/lib/soccerCareerTransfer
 Soccer Career transfer briefs now offer an optional preferred league, preview actual matches and constrain the real request. Empty/unavailable choices preserve the existing offer and draw stream; default Any is unchanged. Exact production/test blobs were reviewed and executed remotely. Original9owned failures/3passes, fixed/restored12, three effective controls7/2/1 and121existing cases pass. Normal build/all16unchanged caps pass, SC839.3/840KiB;19of20readers pass including all15required saved-output fences. Same-artifact native42074689255 passes199checks/4journeys/151fullframes/64actions and6picker/contract captures. Full command42069800178 remains failed with7cases/3suite setup errors; the NBA CRLF anchor reader also remains held. This is scoped integration evidence, not a green global release or publication. PR504 historical entries and final publication stay with their owner. Exact receipts and limitations: docs/plans/2026-11-05-soccer-transfer-league.md. No shared source/index, data, dependency lock or budget changes.
 
 
-## 2026-11-05 SC-11 draft integration
+## Combined qualification on current release
 
-Stacked after training maintenance PR506 and main 3b14650d. Historical-release records are preserved. Owned production and test blobs remain identical to the qualified 5689ab28 version. A combined soccer integration check is pending. This remains a partial SC-11 implementation, unmerged and unpublished.
+The complete soccer stack passes Actions42096174788 at5f05c06b6133cf213ac2c318e4278a7e43b0f95e:225 distinct targeted cases, normal build,9 engine/layout harnesses,20 saved-output readers,16 unchanged caps and all4 browser flows. Preferred-league signing/refusal specifically passes199 runtime checks,9 exact reloads and16 document-scroll restorations on the composed App. Owned preferred-league code/test blobs remain unchanged from5689ab28. Main3b historical-release records are preserved. Exact evidence and limits:docs/plans/2026-11-05-soccer-master-integration.md. Full suite/live Reach remain uncredited. Partial SC-11, draft and unpublished.

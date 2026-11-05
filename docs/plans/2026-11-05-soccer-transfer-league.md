@@ -32,3 +32,8 @@ The first fixed attempt stopped on an unrelated college-grid type error after an
 [The full unit command42069800178](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/42069800178) is FAILED: 10,554 passed, seven failed and 114 skipped across 770 files (eight failed files, three skipped). Its shallow checkout lacks historical objects for frontOfficeRatings, nbaOpeningRatings, nhlOpeningRatings, cagePractice and cageReadiness. Other failures are two soccerScreenTruths training-copy assertions, NFL/NBA farewell-contract checks in usCareerHallBoard and the NFL draft-year assertion in FrontOfficeSeasonStats. No whole-suite-green or release acceptance is granted.
 
 No merge, production data write or publication was performed. The historical-entry PR504 remains separately owned. Release integration must qualify their combined source and unchanged budgets. The master list remains partial. Native source, logs, original archives, independent audits and next Russian-eligibility research are retained under the owner's sc-preferred-league handoff folder.
+
+
+## Combined qualification on current release
+
+The complete soccer stack passes Actions42096174788 at5f05c06b6133cf213ac2c318e4278a7e43b0f95e:225 distinct targeted cases, normal build,9 engine/layout harnesses,20 saved-output readers,16 unchanged caps and all4 browser flows. Preferred-league signing/refusal specifically passes199 runtime checks,9 exact reloads and16 document-scroll restorations on the composed App. Owned preferred-league code/test blobs remain unchanged from5689ab28. Main3b historical-release records are preserved. Exact evidence and limits:docs/plans/2026-11-05-soccer-master-integration.md. Full suite/live Reach remain uncredited. Partial SC-11, draft and unpublished.

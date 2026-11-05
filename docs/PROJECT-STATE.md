@@ -1,16 +1,10 @@
-## 2026-11-05 preferred-league draft reconciled with current release
+## 2026-11-05 preferred-league brief, combined qualification complete
 
-Base: training PR506 on main 3b14650d. Own code/test blobs are unchanged from scoped qualification. Combined integration is pending; release records and all preceding maintenance notes are retained.
+Stacked on training PR506 and main3b. Preferred-league preview, request and saved-result rules pass on the complete soccer source, including199 browser checks and exact sign/reload flows. SC-11 remains partial. Latest source/evidence:docs/plans/2026-11-05-soccer-master-integration.md. Draft, unmerged and unpublished.
 
-## 2026-11-05 training check draft reconciled with current main
+## 2026-11-05 training check draft, combined qualification complete
 
-Latest base: 3b14650d360b010b25b525de33a5f32f33de2798. Release records preserved; production code is unchanged in this maintenance. Scoped 32-case and W7 checks remain qualified. A combined integration check is pending.
-
-## 2026-11-05 Soccer Career training copy checks, qualified draft only
-
-The published classic practice feature added help about extra runs after banking. This maintenance updates the two stale S4 expectations and matching W7 browser expectations to cover that real text. No production code changes. Source base: main1acb33005073be70ba5aae0285ece5537f390f9a; main last observed at e16e9ea36fc6c9aab84d7f79d99679e5c22e8ad3 during qualification.
-
-Final scoped proof:32unit cases pass and restore; the real paragraph-removal control produces only the two intended failures. W7 passes12checks at390/1280 and restores after the original oracle's four expected failures. Proper types, normal build and all16 caps pass;19/20 saved-output readers pass with the older pinned build's NBA CRLF anchor red; that repair is now on current main. First test-runner census mistake corrected and retained. Full suite is not claimed green. See docs/plans/2026-11-05-soccer-training-copy-tests.md for exact runs and archives. Unmerged, unpublished, no master card marked complete.
+Latest retained release base:3b14650d. Production code is unchanged in this maintenance. The32-case omission/restoration proof and W7 checks pass; all soccer changes also pass combined qualification42096174788. The old NBA anchor failure is repaired on the retained main. Full suite/live Reach are not claimed green. Draft, unmerged and unpublished. See docs/plans/2026-11-05-soccer-master-integration.md.
 
 ## 2026-11-01 20:55 EDT, Claude session K (games): RELEASE BV IS LIVE (deployment 96c67a3b, main 7bd3e99a1)
 
