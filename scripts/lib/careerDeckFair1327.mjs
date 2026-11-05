@@ -98,8 +98,27 @@ export function inverseDeckFair(relative, source, receipt = []) {
   if (relative !== DECK_FAIR_FILE) return source;
   let out = source.split('\r\n').join('\n');
   for (const row of EDITS) {
-    assert.equal(out.split(row.from).length, 2, `the ${row.name} row of Round 1327's inverse must be in ${DECK_FAIR_FILE} exactly once at its turn`);
-    out = out.replace(row.from, () => row.to);
+    const variants = [row];
+    if (row.name === "deck-helpers-and-gate") {
+      const seasonLine = "  const season = eventSeasonIndex(state);\n";
+      const yearLine = "  const completedYear = state.seasons[state.seasons.length - 1]?.year ?? 2024;\n";
+      const gateLine = "    if (e.id === 65 && clubContinentalSuspended(state.currentClubCountry, completedYear)) return false;\n";
+      const cardLine = "    if (!cardFitsSeason(e.id, state)) return false;\n";
+      const cooldownLine = "    if (isEventOnCooldown(state, e, season)) return false;\n";
+      assert.equal(row.from.split(seasonLine).length, 2, "Unique deck policy season anchor");
+      assert.equal(row.to.split(seasonLine).length, 2, "Unique inverse policy season anchor");
+      assert.equal(row.from.split(cardLine).length, 2, "Unique deck policy card anchor");
+      assert.equal(row.to.split(cooldownLine).length, 2, "Unique inverse policy cooldown anchor");
+      // Keep the later club policy in both sides of the historical deck inverse.
+      variants.push({
+        from: row.from.replace(seasonLine, seasonLine + yearLine).replace(cardLine, cardLine + gateLine),
+        to: row.to.replace(seasonLine, seasonLine + yearLine).replace(cooldownLine, cooldownLine + gateLine),
+      });
+    }
+    const occurrences = variants.map(variant => out.split(variant.from).length - 1);
+    assert.equal(occurrences.reduce((sum, count) => sum + count, 0), 1, `the ${row.name} row of Round 1327's inverse must be in ${DECK_FAIR_FILE} exactly once at its turn`);
+    const variant = variants[occurrences.findIndex(count => count === 1)];
+    out = out.replace(variant.from, () => variant.to);
     receipt.push({ addition: row.name, file: DECK_FAIR_FILE });
   }
   return out;
