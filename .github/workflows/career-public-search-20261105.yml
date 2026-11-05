@@ -1,0 +1,72 @@
+name: Career Quiz public search original proof
+on:
+  push:
+    branches: [codex/career-public-search-qa-20261105]
+permissions:
+  contents: read
+jobs:
+  original:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    defaults:
+      run:
+        shell: bash
+    env:
+      SIM_NETWORK: offline
+      SIM_OFFLINE_RECEIPT: fair-search-original/offline.log
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24.22.1
+          cache: npm
+      - name: Locked install and original product receipt
+        run: |
+          mkdir -p fair-search-original
+          git rev-parse HEAD > fair-search-original/head.txt
+          git ls-files -s > fair-search-original/source-before.txt
+          sha256sum package.json package-lock.json > fair-search-original/locks-before.txt
+          npm ci
+      - name: Original mounted page yields exactly owned business reds
+        run: |
+          set +e
+          NODE_OPTIONS="--max-old-space-size=6144 --require=$PWD/scripts/lib/offlineTransport.cjs" node node_modules/vitest/vitest.mjs run src/test/careerSearchFairness.test.tsx --maxWorkers=1 --minWorkers=1 --reporter=default --reporter=json --outputFile=fair-search-original/units.json > fair-search-original/units.log 2>&1
+          status=$?
+          set -e
+          cat fair-search-original/units.log
+          test "$status" -eq 1
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs'; import assert from 'node:assert/strict';
+          const r=JSON.parse(fs.readFileSync('fair-search-original/units.json'));
+          const rows=r.testResults.flatMap(s=>s.assertionResults);
+          assert.equal(r.numTotalTests,8); assert.equal(r.numFailedTests,4); assert.equal(rows.length,8);
+          const raw=fs.readFileSync('fair-search-original/units.log','utf8');
+          assert(!/Unhandled Errors|Unhandled Rejection|Uncaught Exception|Failed to resolve import/.test(raw));
+          const failed=rows.filter(row=>row.status==='failed'), passed=rows.filter(row=>row.status==='passed');
+          assert.deepEqual(failed.map(row=>row.title.split(' ')[0]),['CAREER_SEARCH_NORMAL','CAREER_SEARCH_EASY','CAREER_SEARCH_HARD','CAREER_SEARCH_SMALL']);
+          assert.deepEqual(passed.map(row=>row.title.split(' ')[0]),['CAREER_SEARCH_PROGRESS','CAREER_SEARCH_DAILY','CAREER_SEARCH_SAME_EMPTY','CAREER_SEARCH_DRAWS']);
+          for(const row of failed) {
+            assert(row.failureMessages.length>0);
+            assert(row.failureMessages.every(msg=>/^AssertionError: CAREER_SEARCH_/.test(msg.replace(/\u001b\[[0-?]*[ -/]*[@-~]/g,''))),'Only named public-order assertions: '+row.title);
+          }
+          console.log('PASS original: four owned public-order assertion failures and four preservation passes');
+          NODE
+      - name: Original source lock and offline hold
+        if: always()
+        run: |
+          git diff --exit-code HEAD -- src scripts package.json package-lock.json
+          git ls-files -s > fair-search-original/source-after.txt
+          cmp fair-search-original/source-before.txt fair-search-original/source-after.txt
+          sha256sum package.json package-lock.json > fair-search-original/locks-after.txt
+          cmp fair-search-original/locks-before.txt fair-search-original/locks-after.txt
+          if test -f fair-search-original/offline.log; then test ! -s fair-search-original/offline.log; fi
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: career-public-search-original-${{ github.run_id }}
+          path: fair-search-original
+          retention-days: 14
+          if-no-files-found: error
