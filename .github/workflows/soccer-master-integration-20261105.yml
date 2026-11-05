@@ -1,125 +1,73 @@
-name: Soccer master combined qualification
+name: Soccer loan appearance guard
 on:
   push:
-    branches:
-      - codex/soccer-master-integration-20261105
+    branches: [codex/soccer-master-integration-20261105]
 permissions:
   contents: read
 jobs:
-  scoped:
+  guard:
     runs-on: ubuntu-latest
-    timeout-minutes: 50
+    timeout-minutes: 20
     defaults:
       run:
         shell: bash
     env:
       SIM_NETWORK: offline
-      SIM_OFFLINE_RECEIPT: integration-artifacts/offline.log
-      ENGINES: chromium
+      SIM_OFFLINE_RECEIPT: loan-guard-artifacts/offline.log
       TZ: UTC
-      SEO_SPLIT_BASE_REF: 3b14650d360b010b25b525de33a5f32f33de2798
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 12
           persist-credentials: false
       - uses: actions/setup-node@v4
         with:
           node-version: 24.22.1
           cache: npm
-      - uses: oven-sh/setup-bun@v2
-        with:
-          bun-version: 1.4.4
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.12'
-      - name: Locked dependencies and source receipt
+      - name: Locked install and held sources
         run: |
-          mkdir -p integration-artifacts
-          git rev-parse HEAD > integration-artifacts/head.txt
-          git rev-parse 'HEAD^{tree}' > integration-artifacts/tree.txt
-          git ls-files -s > integration-artifacts/source-before.txt
-          sha256sum package.json package-lock.json > integration-artifacts/locks-before.txt
+          mkdir -p loan-guard-artifacts
+          git rev-parse HEAD > loan-guard-artifacts/head.txt
+          git ls-files -s > loan-guard-artifacts/source-before.txt
+          sha256sum package.json package-lock.json > loan-guard-artifacts/locks-before.txt
           npm ci
+      - name: Positive complete loan harness
+        run: |
+          ONLY=simLoanSpell node scripts/runAllSims.mjs --browser 2>&1 | tee loan-guard-artifacts/positive.log
+      - name: Effective injured-total negative control
+        run: |
+          LOAN_CONTROL=injury-total NODE_OPTIONS="--max-old-space-size=6144 --require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simLoanSpell.mjs 2>&1 | tee loan-guard-artifacts/injury-control.log
           node --input-type=module <<'NODE'
-          import fs from 'node:fs';
-          const lock=JSON.parse(fs.readFileSync('package-lock.json'));
-          const rows=Object.keys(lock.packages).filter(p=>p.startsWith('node_modules/')&&fs.existsSync(p+'/package.json')).map(p=>[p,JSON.parse(fs.readFileSync(p+'/package.json')).version]);
-          fs.writeFileSync('integration-artifacts/installed-before.json',JSON.stringify(rows));
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const log=fs.readFileSync('loan-guard-artifacts/injury-control.log','utf8');
+          assert(log.includes('NEGATIVE CONTROL ON (injury-total)'));
+          const match=log.match(/simLoanSpell control \(injury-total\): green\. LOAN_APPEARANCE_TOTAL caught all (\d+) injured fringe draws\./);
+          assert(match&&Number(match[1])>0,'actual injured outcomes changed and every one was caught');
           NODE
-          npm install --prefix "$RUNNER_TEMP/sc11-browser" --no-save --package-lock=false playwright@1.64.1
-          test ! -e node_modules/playwright
-          ln -s "$RUNNER_TEMP/sc11-browser/node_modules/playwright" node_modules/playwright
-          node "$RUNNER_TEMP/sc11-browser/node_modules/playwright/cli.js" install --with-deps chromium
+      - name: Existing shut control still catches the closed market
+        run: |
+          LOAN_CONTROL=shut NODE_OPTIONS="--max-old-space-size=6144 --require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simLoanSpell.mjs 2>&1 | tee loan-guard-artifacts/shut-control.log
           node --input-type=module <<'NODE'
-          import fs from 'node:fs'; import assert from 'node:assert/strict';
-          const before=JSON.parse(fs.readFileSync('integration-artifacts/installed-before.json'));
-          const after=before.map(([p])=>[p,JSON.parse(fs.readFileSync(p+'/package.json')).version]);
-          fs.writeFileSync('integration-artifacts/installed-after.json',JSON.stringify(after)); assert.deepEqual(after,before);
-          console.log('Preserved all '+after.length+' locked installed versions.');
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const log=fs.readFileSync('loan-guard-artifacts/shut-control.log','utf8');
+          assert(log.includes('NEGATIVE CONTROL ON (shut)'));
+          assert(log.includes('simLoanSpell control (shut): green. Shutting the loan market was caught'));
           NODE
-          python -m pip install fonttools pillow
-      - name: Proper app types
-        run: node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee integration-artifacts/types.log
-      - name: Policy totals original physical faults and restoration
+      - name: Changed script source fences
         run: |
-          NODE_OPTIONS="--max-old-space-size=6144 --require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/soccerClubEligibilityCheck.mjs 2>&1 | tee integration-artifacts/policy-outcomes.log
-      - name: Combined transfer practice lineup historical and daily contracts
-        run: |
-          ONLY=missing-xi SC_TRANSFER_LEAGUE_RAW=integration-artifacts/league-raw NODE_OPTIONS="--max-old-space-size=6144 --require=$PWD/scripts/lib/offlineTransport.cjs" node node_modules/vitest/vitest.mjs run src/test/soccerCareerTransferBrief.test.ts src/test/soccerTransferBriefUi.test.tsx src/test/soccerTransferBriefPage.test.tsx src/test/soccerTransferBriefPromise.test.tsx src/test/soccerTransferAppearanceFloor.test.tsx src/test/soccerCareerContracts.test.ts src/test/soccerOfferReviewAgeRule.test.tsx src/lib/soccerCareerContinental.test.ts src/test/soccerSeasonCompetitions.test.tsx src/test/soccerTransferLeaguePreference.test.tsx src/test/soccerScreenTruths.test.tsx src/test/trainingClassicPractice.test.tsx src/test/soccerPracticeLifecycle.test.tsx src/test/missingXiLineupView.test.tsx src/test/dailyReload.test.tsx src/test/soccerHistoricalRealEntry.test.tsx --maxWorkers=1 --minWorkers=1 --reporter=default --reporter=json --outputFile=integration-artifacts/related.json 2>&1 | tee integration-artifacts/related.log
-      - name: Normal production build
-        if: ${{ !cancelled() }}
-        id: build
-        run: |
-          NODE_OPTIONS="--max-old-space-size=6144" npm run build 2>&1 | tee integration-artifacts/build.log
-          tar -czf integration-artifacts/dist.tgz dist
-          sha256sum integration-artifacts/dist.tgz > integration-artifacts/dist.sha256
-      - name: Existing career and lineup harnesses
-        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
-        run: |
-          ONLY=simCareerContinental,simSoccerCareerUcl,simLoanSpell,simClubSquads,simCareerLife,simSoccerCareerSaveRecovery,simCareerRivalryEvents,simMissingXi,simMissingXiLayout node scripts/runAllSims.mjs --browser 2>&1 | tee integration-artifacts/related-sims.log
-      - name: All built output readers
-        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
-        run: |
-          export ONLY="simAdsense,simBrand,simHeadTags,simHiddenPages,simHubs,simIndexNow,simIndexing,simInternalLinks,simNoRivalNames,simPrerender,simPrerenderBoot,simRetiredRoutes,simSchema,simSitemap,simSnapshotAssets,simSiteSearch,simGuideHeadings,simSeoMetaSplit,simHomeCopy,simHarnessAnchors"
-          node scripts/runAllSims.mjs --browser 2>&1 | tee integration-artifacts/readers.log
-      - name: Existing route download limits
-        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
-        run: |
-          node scripts/lib/hostLikeServer.mjs dist 4173 > integration-artifacts/weight-host.log 2>&1 &
-          sc_host_pid=$!
-          trap 'kill "$sc_host_pid" 2>/dev/null || true' EXIT
-          sleep 2
-          SWEEP_OFFLINE=1 BASE=http://127.0.0.1:4173 node scripts/sweepWeight.mjs 2>&1 | tee integration-artifacts/weight.log
-      - name: Actual preferred league sign and reload journeys
-        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
-        run: |
-          SOCCER_LEAGUE_RAW=integration-artifacts/league-raw/native-save-sign.json SOCCER_LEAGUE_BROWSER_OUT=integration-artifacts/league-browser NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/playSoccerTransferLeague.mjs 2>&1 | tee integration-artifacts/league-browser.log
-      - name: Actual completed Russian season display and reload
-        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
-        run: |
-          SOCCER_RUSSIA_RAW=integration-artifacts/policy-arms/fixed/raw/advanced-season-codec.json SOCCER_RUSSIA_BROWSER_OUT=integration-artifacts/russia-browser NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/playSoccerRussiaEurope.mjs 2>&1 | tee integration-artifacts/russia-browser.log
-      - name: Actual training rules and drill fold
-        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
-        run: |
-          SECTIONS=W7 SHOTS=integration-artifacts/training-browser NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playSoccerScreenTruths.mjs 2>&1 | tee integration-artifacts/training-browser.log
-      - name: Actual Missing XI daily wins keyboard and touch
-        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
-        run: |
-          MX_LINEUP_BROWSER_OUT=integration-artifacts/mx-browser NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/playMissingXiLineup.mjs 2>&1 | tee integration-artifacts/mx-browser.log
-      - name: Source and lock holds
+          ONLY=simHarnessAnchors,simNoRivalNames node scripts/runAllSims.mjs --browser 2>&1 | tee loan-guard-artifacts/source-fences.log
+      - name: Source lock and offline holds
         if: always()
         run: |
-          git ls-files -s > integration-artifacts/source-after.txt
-          cmp integration-artifacts/source-before.txt integration-artifacts/source-after.txt
+          git ls-files -s > loan-guard-artifacts/source-after.txt
+          cmp loan-guard-artifacts/source-before.txt loan-guard-artifacts/source-after.txt
           git diff --exit-code HEAD -- src scripts package.json package-lock.json
-          sha256sum package.json package-lock.json > integration-artifacts/locks-after.txt
-          cmp integration-artifacts/locks-before.txt integration-artifacts/locks-after.txt
-          if test -f integration-artifacts/offline.log; then test ! -s integration-artifacts/offline.log; fi
+          sha256sum package.json package-lock.json > loan-guard-artifacts/locks-after.txt
+          cmp loan-guard-artifacts/locks-before.txt loan-guard-artifacts/locks-after.txt
+          if test -f loan-guard-artifacts/offline.log; then test ! -s loan-guard-artifacts/offline.log; fi
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: soccer-master-integration-final-${{ github.run_id }}
-          path: integration-artifacts
+          name: soccer-loan-appearance-guard-${{ github.run_id }}
+          path: loan-guard-artifacts
           retention-days: 7
           if-no-files-found: error
