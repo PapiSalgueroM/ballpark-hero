@@ -1,0 +1,141 @@
+{
+  "schema": 1,
+  "status": "CANDIDATE_SOURCE_BOUND_PENDING_PRODUCT_PEER",
+  "originalParent": "484595fd4f7b07d24066e2de7bae5486483ae284",
+  "originalTree": "7759bc8fa046ea9024b9c603cbbc94482c01db01",
+  "candidate": "8ddca6c113a906dc774221620644a1b3c80eb6ca",
+  "candidateTree": "d89e1fc39051cca6b26a55f2617ce28b2b594ccb",
+  "test": {
+    "path": "src/test/soccerHistoricalRealEntry.test.tsx",
+    "blob": "a9c74d118bad8ddaf69e0af75e8185b5a7ca6d1c",
+    "bytes": 17945,
+    "sha256": "dafcefd4adb4dc82d4f347907b25ff251b59539670247f73778b3a8d0e0859d0"
+  },
+  "cases": [
+    {
+      "fullName": "Soccer Career first historical real entry the actual 2005 creation path admits Neymar once at Santos in 2009",
+      "file": "entry.json",
+      "ownership": "owned",
+      "marker": "SC_REAL_ENTRY_2009"
+    },
+    {
+      "fullName": "Soccer Career first historical real entry the actual entry survives complete reload and the 2015 era club change",
+      "file": "continuity.json",
+      "ownership": "owned",
+      "marker": "SC_REAL_ENTRY_CONTINUITY"
+    },
+    {
+      "fullName": "Soccer Career first historical real entry SportsFeed keeps the sourced entry separate from the persistent career world club",
+      "file": "phone-card.json",
+      "ownership": "owned",
+      "marker": "SC_REAL_ENTRY_PHONE_CARD"
+    },
+    {
+      "fullName": "Soccer Career first historical real entry legacy unmarked APIs and opaque future save versions keep their complete state and draw path",
+      "file": "legacy.json",
+      "ownership": "held",
+      "marker": null
+    },
+    {
+      "fullName": "Soccer Career first historical real entry the actual newer era creation UI keeps its unmarked saved default",
+      "file": "newer-ui.json",
+      "ownership": "held",
+      "marker": null
+    }
+  ],
+  "unchangedPins": {
+    "src/lib/soccerCareerSave.ts": "86ec011693fd5bc702b5e8ccec05d27775a72a76",
+    "src/lib/careerEras.ts": "e037022342382b1df9c8a5ede620d2cce480bc23",
+    "src/lib/soccerAwardReveal.ts": "3c2ba81b18cdf575e0d6fb70c7743b41b78d519d",
+    "scripts/lib/offlineTransport.cjs": "0fda542a2649fe5da937c6976fd0f5b6073e74b6",
+    "package-lock.json": "97d6f12a052f25f400462938c241789a083f0bfe",
+    "package.json": "2ff64986fb76ebc51b706f2fd24765768874008a",
+    "tsconfig.app.json": "51f581dd91641b4c1f1219f646788e73cf6bf00c"
+  },
+  "changes": [
+    {
+      "path": "src/components/soccer-career/PhonePanel.tsx",
+      "original": "5c1ac9fa9d852f61b01a751197af3766f157d508",
+      "candidate": "f1e66d83729c4ee0343e31ca750351a5bd6c55c1"
+    },
+    {
+      "path": "src/lib/soccerCareerEngine.ts",
+      "original": "94ccfb82dace9fc099c670357472732973e11d73",
+      "candidate": "40edcc5051d9b4a369698ea3572eb9e8e3314f26"
+    },
+    {
+      "path": "src/lib/soccerHistoricalArrivals.ts",
+      "original": null,
+      "candidate": "fce537f31d51a8de78a170c57808b8d233fa54b1"
+    },
+    {
+      "path": "src/lib/soccerPhone.ts",
+      "original": "f81e5a1b5207d776aea9594e28f130d0e8888832",
+      "candidate": "cee38fc40914dad6989c66c66b29fae88203d1c8"
+    },
+    {
+      "path": "src/pages/SoccerCareer.tsx",
+      "original": "e191a4634c44be5ebe511da0885579fdb6696dc5",
+      "candidate": "f0d77f964522f4fb86ac0cb9543b7cd06f08a9ab"
+    }
+  ],
+  "qaPaths": [
+    ".github/workflows/soccer-first-real-entry-outcomes-20261105.yml",
+    "scripts/qa/soccerHistoricalRealEntryOutcomes.mjs",
+    "scripts/qa/soccerHistoricalRealEntryOutcomes.json",
+    "src/test/soccerHistoricalRealEntry.test.tsx"
+  ],
+  "arms": [
+    {
+      "name": "original-revised",
+      "mode": "original",
+      "passed": 2,
+      "failed": 3
+    },
+    {
+      "name": "fixed",
+      "mode": "fixed",
+      "passed": 5,
+      "failed": 0
+    },
+    {
+      "name": "whole-app-reversed",
+      "mode": "original",
+      "passed": 2,
+      "failed": 3
+    },
+    {
+      "name": "restored-fixed",
+      "mode": "fixed",
+      "passed": 5,
+      "failed": 0
+    }
+  ],
+  "originalEvidence": {
+    "run": 42001656620,
+    "job": 127158101290,
+    "head": "3155d96a87c62343eacfdee3f8b773d9b3a2ccd6",
+    "artifact": 13403295335,
+    "zipBytes": 2968750,
+    "zipSHA256": "694f06f869cc3badba7de100c64dc48901e014901ac85b3562c02ee10344b0ed",
+    "tgzName": "soccer-first-real-entry-original.tar.gz",
+    "tgzBytes": 2968244,
+    "tgzSHA256": "5b710f3a58fc2de2d9c5238c37487ddcdf05c5ae3543a781830b2352040c3edd",
+    "raw": {
+      "entry.json": "c5a720634ac47e03db71b3ef552b12d2f857d7f47bd3d81ae1c2226980615da2",
+      "continuity.json": "e9eb46889941d5d2318158e750fcf60d495b7b439c73527c8bf089228c6cea11",
+      "phone-card.json": "5dfbb22b3813ced351a697c74c715362413d61ecf541abed27f8175983d64011",
+      "legacy.json": "b8501a5eed17b0558d5812a1ec5e3b03079f68a0bc2c16ed55ba2167d9257da1",
+      "newer-ui.json": "0a59316a09dec3d196638e35d1d0d1ca55dee6a17643281bb744a24a528676e1"
+    }
+  },
+  "legacyCondition": "Declared legacy storage boundary: exact codec bytes from the real unmarked constructor replace only the earlier UI setup save",
+  "limits": [
+    "The original f8b admission stays immutable and is not silently relabeled as the a9c test revision.",
+    "A same-revision original App arm must independently reproduce3owned2held before fixed comparison.",
+    "Whole-App reversal is one physical missing-feature mechanism, not three independent faults.",
+    "Original/reversal and fixed/restored all5RAW exact; complete legacy/newer RAW exact across App arms, including storage and tapes.",
+    "Owned import/UI/main tapes exact, while intentional feature/world/save differences remain retained without a false whole-state equality claim.",
+    "No new cases, guarantee of nomination/transfer, move generator, broad-suite green, local runtime or acquisition."
+  ]
+}
