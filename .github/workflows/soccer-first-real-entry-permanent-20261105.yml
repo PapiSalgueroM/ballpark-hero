@@ -1,0 +1,90 @@
+name: Soccer historical entry permanent regression
+on:
+  push:
+    branches: [codex/soccer-first-real-entry-permanent-20261105]
+permissions:
+  contents: read
+jobs:
+  regression:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+          filter: blob:none
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Bind candidate and permanent regression sources
+        shell: bash
+        run: |
+          set -euo pipefail
+          QA_OUT="$RUNNER_TEMP/soccer-real-entry-permanent"
+          echo "QA_OUT=$QA_OUT" >> "$GITHUB_ENV"
+          mkdir -p "$QA_OUT"
+          test "$(git rev-parse HEAD^)" = 8ddca6c113a906dc774221620644a1b3c80eb6ca
+          test "$(git rev-parse HEAD^^{tree})" = d89e1fc39051cca6b26a55f2617ce28b2b594ccb
+          test "$(git hash-object src/test/soccerHistoricalRealEntry.test.tsx)" = a9c74d118bad8ddaf69e0af75e8185b5a7ca6d1c
+          test "$(git hash-object scripts/simSoccerHistoricalArrivals.mjs)" = 1d3af363c832ff7eacd498ca0f99eec6ca047a35
+          git ls-files -z | xargs -0 sha256sum > "$QA_OUT/source-before.sha256"
+          git ls-files -s > "$QA_OUT/index-before.txt"
+          git status --porcelain=v1 --untracked-files=all > "$QA_OUT/status-before.txt"
+          test ! -s "$QA_OUT/status-before.txt"
+          cp package-lock.json "$QA_OUT/lock-before.json"
+          node --check scripts/simSoccerHistoricalArrivals.mjs
+      - name: Install held application lock
+        shell: bash
+        run: |
+          set -euo pipefail
+          npm ci --no-audit --no-fund > "$QA_OUT/npm-ci.log" 2>&1
+      - name: Proper application types
+        shell: bash
+        run: |
+          set +e
+          set -uo pipefail
+          export GIT_NO_LAZY_FETCH=1 SIM_NETWORK=offline
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          export SIM_OFFLINE_RECEIPT="$QA_OUT/types.transport"
+          : > "$SIM_OFFLINE_RECEIPT"
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json > "$QA_OUT/types.log" 2>&1
+          native_exit=$?
+          printf '%s\n' "$native_exit" > "$QA_OUT/types.exit"
+          test "$native_exit" = 0 || exit "$native_exit"
+          test ! -s "$SIM_OFFLINE_RECEIPT"
+      - name: Actual permanent five-case harness and copied omission control
+        shell: bash
+        run: |
+          set +e
+          set -uo pipefail
+          export GIT_NO_LAZY_FETCH=1 SIM_NETWORK=offline
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          export SIM_OFFLINE_RECEIPT="$QA_OUT/sim.transport"
+          : > "$SIM_OFFLINE_RECEIPT"
+          node --unhandled-rejections=strict scripts/simSoccerHistoricalArrivals.mjs > "$QA_OUT/sim.log" 2>&1
+          native_exit=$?
+          printf '%s\n' "$native_exit" > "$QA_OUT/sim.exit"
+          test "$native_exit" = 0 || exit "$native_exit"
+          test ! -s "$SIM_OFFLINE_RECEIPT"
+          grep -F 'simSoccerHistoricalArrivals: 5 UI, save and phone outcomes green; missing-case control caught' "$QA_OUT/sim.log"
+      - name: Always retain full source and index holds
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          git ls-files -z | xargs -0 sha256sum > "$QA_OUT/source-after.sha256"
+          git ls-files -s > "$QA_OUT/index-after.txt"
+          git status --porcelain=v1 --untracked-files=all > "$QA_OUT/status-after.txt"
+          cp package-lock.json "$QA_OUT/lock-after.json"
+          cmp "$QA_OUT/source-before.sha256" "$QA_OUT/source-after.sha256"
+          cmp "$QA_OUT/index-before.txt" "$QA_OUT/index-after.txt"
+          cmp "$QA_OUT/lock-before.json" "$QA_OUT/lock-after.json"
+          test ! -s "$QA_OUT/status-after.txt"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: soccer-real-entry-permanent
+          path: ${{ env.QA_OUT }}/
+          if-no-files-found: error
+          retention-days: 14
