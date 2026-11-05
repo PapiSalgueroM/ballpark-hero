@@ -2,7 +2,7 @@
    S1 the Ballon d'Or night holds Full attributes while it counts down.
    S2 Week by week says it is a watch, and the Season Centre help says what it is.
    S3 the Squad sheet opens on the squad with a one line pointer to its ?.
-   S4 Training shows one rules paragraph on its menu, all three behind its ?.
+   S4 Training shows bank and practice rules on its menu, all four paragraphs behind its ?.
    Every case renders a component that exists on the base too, so the base
    control (this file run against the base's copies of the edited files) fails
    on the words and the behaviour, never on a missing export. */
@@ -263,38 +263,41 @@ describe('S3 the Squad sheet opens on the squad, the rules one tap away', () => 
 
 /* ---------- S4 Training ---------- */
 const BANK = 'One bank per season: 50 earns +1 to the shown stat next season, 80 earns +2. Example: three goals from five penalties score 60 and earn +1. A score below 50 uses the session without a gain.';
+const PRACTICE = 'Keep practising after you bank. Extra runs are just for a score and do not change your career.';
 function training() {
   const career = { position: 'ST', phase: 'pro', retired: false, seasons: [{ year: 2031 }], trainingSeasonYear: 2030, statBoostNextSeason: {}, morale: 50, events: [] } as unknown as E.CareerState;
   return render(<TrainingPanel career={career} available onComplete={vi.fn()} onDrill={vi.fn()} onClose={vi.fn()} />);
 }
 const paragraphs = (root: HTMLElement) => [...(root.querySelector('[data-practice-rules]')?.querySelectorAll('p') ?? [])].map(p => p.textContent ?? '');
 
-describe('S4 Training shows one rules paragraph on its menu, the rest behind its ?', () => {
-  it('holds only the bank rule with its example on the menu, and ? shows all three', () => {
+describe('S4 Training shows bank and practice rules on its menu, the drill details behind its ?', () => {
+  it('holds the bank rule with its example and free practice on the menu, and ? shows all four', () => {
     const v = training();
-    expect(paragraphs(v.container)).toEqual([BANK]);
+    expect(paragraphs(v.container)).toEqual([BANK, PRACTICE]);
     expect(v.container.textContent).not.toContain('One session per season');
     const rulesButton = v.getByRole('button', { name: 'Practice rules' });
     expect(rulesButton).toHaveAttribute('aria-expanded', 'true');
     fireEvent.click(rulesButton);
     const all = paragraphs(v.container);
-    expect(all).toHaveLength(3);
+    expect(all).toHaveLength(4);
     expect(all[0]).toContain('Tap cones in order');
     expect(all[1]).toContain('Pause or opening these rules');
     expect(all[2]).toBe(BANK);
+    expect(all[3]).toBe(PRACTICE);
     expect(rulesButton).toHaveAttribute('aria-expanded', 'true');
     fireEvent.click(rulesButton);
-    expect(paragraphs(v.container)).toEqual([BANK]);
+    expect(paragraphs(v.container)).toEqual([BANK, PRACTICE]);
   });
 
-  it('keeps the ? during a drill as it was: three paragraphs, the drill paused (passes on the base too)', () => {
+  it('keeps all four rules paragraphs behind the ? during a drill, with the drill paused', () => {
     const v = training();
     fireEvent.click(v.getByRole('button', { name: /Penalty Placement/ }));
     fireEvent.click(v.getByRole('button', { name: 'Shoot bottom middle' }));
     act(() => { vi.advanceTimersByTime(400); });
     expect(v.container.querySelector('[data-practice-rules]')).toBeNull();
     fireEvent.click(v.getByRole('button', { name: 'Practice rules' }));
-    expect(paragraphs(v.container)).toHaveLength(3);
+    expect(paragraphs(v.container)).toHaveLength(4);
+    expect(paragraphs(v.container)[3]).toBe(PRACTICE);
     expect(v.container.querySelector('[data-soccer-practice-paused]')?.getAttribute('data-soccer-practice-paused')).toBe('true');
     fireEvent.click(v.getByRole('button', { name: 'Practice rules' }));
     expect(v.container.querySelector('[data-practice-rules]')).toBeNull();
