@@ -1,71 +1,163 @@
-name: Career Quiz reveal original proof
+name: Career Quiz reveal review qualification
 on:
   push:
     branches: [codex/career-reveal-review-qa-20261105]
 permissions:
   contents: read
 jobs:
-  original:
+  scoped:
     runs-on: ubuntu-latest
-    timeout-minutes: 12
+    timeout-minutes: 45
     defaults:
       run:
         shell: bash
     env:
       SIM_NETWORK: offline
-      SIM_OFFLINE_RECEIPT: reveal-review-original/offline.log
+      SIM_OFFLINE_RECEIPT: reveal-review-artifacts/offline.log
+      ENGINES: chromium
+      TZ: UTC
+      SEO_SPLIT_BASE_REF: 3b14650d360b010b25b525de33a5f32f33de2798
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 2
+          fetch-depth: 12
           persist-credentials: false
       - uses: actions/setup-node@v4
         with:
           node-version: 24.22.1
           cache: npm
-      - name: Locked install and original product receipt
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.4.4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Locked dependencies and source receipt
         run: |
-          mkdir -p reveal-review-original
-          git rev-parse HEAD > reveal-review-original/head.txt
-          git ls-files -s > reveal-review-original/source-before.txt
-          sha256sum package.json package-lock.json > reveal-review-original/locks-before.txt
+          mkdir -p reveal-review-artifacts
+          git rev-parse HEAD > reveal-review-artifacts/head.txt
+          git rev-parse 'HEAD^{tree}' > reveal-review-artifacts/tree.txt
+          git ls-files -s > reveal-review-artifacts/source-before.txt
+          sha256sum package.json package-lock.json > reveal-review-artifacts/locks-before.txt
+          git fetch --no-tags --depth=1 origin 3b14650d360b010b25b525de33a5f32f33de2798
+          test "$(git rev-parse 3b14650d360b010b25b525de33a5f32f33de2798:src/data/seoMeta.ts)" = cf7a5142e59b97048d27b5ece9a6588a92073728
+          git fetch --no-tags --depth=1 origin 617b8354b722c703407074e78a86665d4f7633b5
+          git show 617b8354b722c703407074e78a86665d4f7633b5:src/hooks/useDailyPuzzle.ts > "$RUNNER_TEMP/crq-pre-daily.ts"
+          cp "$RUNNER_TEMP/crq-pre-daily.ts" reveal-review-artifacts/pre-daily-hook.ts
           npm ci
-      - name: Original mounted page yields exactly owned business reds
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          const lock=JSON.parse(fs.readFileSync('package-lock.json'));
+          const rows=Object.keys(lock.packages).filter(p=>p.startsWith('node_modules/')&&fs.existsSync(p+'/package.json')).map(p=>[p,JSON.parse(fs.readFileSync(p+'/package.json')).version]);
+          fs.writeFileSync('reveal-review-artifacts/installed-before.json',JSON.stringify(rows));
+          NODE
+      - name: Proper app types
+        run: node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee reveal-review-artifacts/types.log
+      - name: Fixed physical source faults and restored actual reveal review
+        run: NODE_OPTIONS="--max-old-space-size=6144 --require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/checkCareerRevealReview.mjs 2>&1 | tee reveal-review-artifacts/arms.log
+      - name: Existing early-club actual-page cases
+        if: ${{ !cancelled() }}
         run: |
-          set +e
-          NODE_OPTIONS="--max-old-space-size=6144 --require=$PWD/scripts/lib/offlineTransport.cjs" node node_modules/vitest/vitest.mjs run src/test/careerRevealReview.test.tsx --maxWorkers=1 --minWorkers=1 --reporter=default --reporter=json --outputFile=reveal-review-original/units.json > reveal-review-original/units.log 2>&1
-          status=$?
-          set -e
-          cat reveal-review-original/units.log
-          test "$status" -eq 1
+          NODE_OPTIONS="--max-old-space-size=6144 --require=$PWD/scripts/lib/offlineTransport.cjs" node node_modules/vitest/vitest.mjs run src/test/careerEarlyClubHint.test.tsx --maxWorkers=1 --minWorkers=1 --reporter=default --reporter=json --outputFile=reveal-review-artifacts/existing-early-club.json 2>&1 | tee reveal-review-artifacts/existing-early-club.log
+      - name: Existing Career Path record and stale-save contracts
+        if: ${{ !cancelled() }}
+        run: |
+          NODE_OPTIONS="--max-old-space-size=6144 --require=$PWD/scripts/lib/offlineTransport.cjs" node node_modules/vitest/vitest.mjs run src/test/dailyRecord.test.tsx src/test/dailySaveHardening.test.tsx --testNamePattern="Career Path" --maxWorkers=1 --minWorkers=1 --reporter=default --reporter=json --outputFile=reveal-review-artifacts/existing-daily.json 2>&1 | tee reveal-review-artifacts/existing-daily.log
           node --input-type=module <<'NODE'
           import fs from 'node:fs'; import assert from 'node:assert/strict';
-          const r=JSON.parse(fs.readFileSync('reveal-review-original/units.json'));
-          const rows=r.testResults.flatMap(s=>s.assertionResults);
-          assert.equal(r.numTotalTests,9); assert.equal(r.numFailedTests,9);
-          const raw=fs.readFileSync('reveal-review-original/units.log','utf8');
-          assert(!/Unhandled Errors|Unhandled Rejection|Uncaught Exception|Failed to resolve import/.test(raw));
-          assert.equal(rows.length,9); assert.equal(rows.filter(x=>x.status==='failed').length,9);
-          for(const row of rows) {
-            assert(row.title.startsWith('REVIEW_'));
-            assert(row.failureMessages.length>0);
-            assert(row.failureMessages.every(msg=>msg.includes('postgame review exists')),'Only missing review business assertion: '+row.title);
-          }
-          console.log('PASS original: nine exact missing-review business failures, zero runtime errors');
+          const r=JSON.parse(fs.readFileSync('reveal-review-artifacts/existing-daily.json'));
+          const rows=r.testResults.flatMap(s=>s.assertionResults), passed=rows.filter(x=>x.status==='passed');
+          assert.equal(passed.length,3); assert(passed.every(x=>x.title.includes('Career Path')));
+          assert.equal(rows.filter(x=>x.status==='failed').length,0);
+          console.log('PASS all three existing Career Path record and stale-save cases');
           NODE
-      - name: Original source lock and offline hold
+      - name: Existing old-versus-current Career Path save and reload parity
+        if: ${{ !cancelled() }}
+        run: |
+          R848_PARITY_ONLY=career R848_PRE_HOOK="$PWD/reveal-review-artifacts/pre-daily-hook.ts" NODE_OPTIONS="--max-old-space-size=6144 --require=$PWD/scripts/lib/offlineTransport.cjs" node node_modules/vitest/vitest.mjs run src/test/dailySaveParity.test.tsx --maxWorkers=1 --minWorkers=1 --reporter=default --reporter=json --outputFile=reveal-review-artifacts/existing-parity.json 2>&1 | tee reveal-review-artifacts/existing-parity.log
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs'; import assert from 'node:assert/strict';
+          const r=JSON.parse(fs.readFileSync('reveal-review-artifacts/existing-parity.json'));
+          const rows=r.testResults.flatMap(s=>s.assertionResults), passed=rows.filter(x=>x.status==='passed');
+          assert.equal(passed.length,1); assert.equal(passed[0].title,'career');
+          assert.equal(rows.filter(x=>x.status==='failed').length,0);
+          NODE
+      - name: Retain source proof before browser setup
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: career-reveal-review-source-${{ github.run_id }}
+          path: reveal-review-artifacts
+          retention-days: 14
+          if-no-files-found: error
+      - name: Isolated browser and snapshot dependencies
+        id: browser_setup
+        timeout-minutes: 12
+        if: ${{ !cancelled() }}
+        run: |
+          npm install --prefix "$RUNNER_TEMP/crq-browser" --no-save --package-lock=false playwright@1.64.1
+          test ! -e node_modules/playwright
+          ln -s "$RUNNER_TEMP/crq-browser/node_modules/playwright" node_modules/playwright
+          node "$RUNNER_TEMP/crq-browser/node_modules/playwright/cli.js" install --with-deps chromium
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs'; import assert from 'node:assert/strict';
+          const before=JSON.parse(fs.readFileSync('reveal-review-artifacts/installed-before.json'));
+          const after=before.map(([p])=>[p,JSON.parse(fs.readFileSync(p+'/package.json')).version]);
+          fs.writeFileSync('reveal-review-artifacts/installed-after.json',JSON.stringify(after)); assert.deepEqual(after,before);
+          console.log('Preserved all '+after.length+' locked installed versions.');
+          NODE
+          python -m pip install fonttools pillow
+      - name: Production build with existing saved pages held
+        if: ${{ !cancelled() && steps.browser_setup.outcome == 'success' }}
+        id: build
+        run: |
+          NODE_OPTIONS="--max-old-space-size=6144" npm run build 2>&1 | tee reveal-review-artifacts/build.log
+          git diff --exit-code HEAD -- public scripts/data/lastmod.json scripts/data/guideHeadingsFrozen.json src/data/searchKeywords.json
+          tar -czf reveal-review-artifacts/dist.tgz dist
+          sha256sum reveal-review-artifacts/dist.tgz > reveal-review-artifacts/dist.sha256
+      - name: All required built-output readers and existing source fences
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          export ONLY="simAdsense,simBrand,simHeadTags,simHiddenPages,simHubs,simIndexNow,simIndexing,simInternalLinks,simNoRivalNames,simPrerender,simPrerenderBoot,simRetiredRoutes,simSchema,simSitemap,simSnapshotAssets,simSiteSearch,simGuideHeadings,simSeoMetaSplit,simHomeCopy,simHarnessAnchors"
+          node scripts/runAllSims.mjs --browser 2>&1 | tee reveal-review-artifacts/readers.log
+      - name: All original route download limits
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          node scripts/lib/hostLikeServer.mjs dist 4173 > reveal-review-artifacts/weight-host.log 2>&1 &
+          crq_host_pid=$!
+          trap 'kill "$crq_host_pid" 2>/dev/null || true' EXIT
+          sleep 2
+          SWEEP_OFFLINE=1 BASE=http://127.0.0.1:4173 node scripts/sweepWeight.mjs 2>&1 | tee reveal-review-artifacts/weight.log
+      - name: Actual daily hints wins reloads native review and clipboard
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: CAREER_REVIEW_BROWSER_OUT=reveal-review-artifacts/browser NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/playCareerRevealReview.mjs 2>&1 | tee reveal-review-artifacts/browser.log
+      - name: Source lock installed versions and offline holds
         if: always()
         run: |
-          git diff --exit-code HEAD -- src scripts package.json package-lock.json
-          git ls-files -s > reveal-review-original/source-after.txt
-          cmp reveal-review-original/source-before.txt reveal-review-original/source-after.txt
-          sha256sum package.json package-lock.json > reveal-review-original/locks-after.txt
-          cmp reveal-review-original/locks-before.txt reveal-review-original/locks-after.txt
-          if test -f reveal-review-original/offline.log; then test ! -s reveal-review-original/offline.log; fi
+          git ls-files -s > reveal-review-artifacts/source-after.txt
+          cmp reveal-review-artifacts/source-before.txt reveal-review-artifacts/source-after.txt
+          git diff --exit-code HEAD -- src scripts public package.json package-lock.json
+          sha256sum package.json package-lock.json > reveal-review-artifacts/locks-after.txt
+          cmp reveal-review-artifacts/locks-before.txt reveal-review-artifacts/locks-after.txt
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs'; import assert from 'node:assert/strict';
+          const before=JSON.parse(fs.readFileSync('reveal-review-artifacts/installed-before.json'));
+          const after=before.map(([p])=>[p,JSON.parse(fs.readFileSync(p+'/package.json')).version]);
+          fs.writeFileSync('reveal-review-artifacts/installed-final.json',JSON.stringify(after));
+          assert.equal(after.length,521); assert.deepEqual(after,before);
+          NODE
+          if test -f reveal-review-artifacts/offline.log; then test ! -s reveal-review-artifacts/offline.log; fi
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: career-reveal-original-${{ github.run_id }}
-          path: reveal-review-original
+          name: career-reveal-review-viewport-images-${{ github.run_id }}
+          path: reveal-review-artifacts/browser/*-viewport.png
           retention-days: 14
+          if-no-files-found: error
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: career-reveal-review-final-${{ github.run_id }}
+          path: reveal-review-artifacts
+          retention-days: 7
           if-no-files-found: error

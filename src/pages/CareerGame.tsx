@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { useCareerGame } from '@/hooks/useCareerGame';
 import { CareerBoard } from '@/components/career/CareerBoard';
+import { CareerRevealReview } from '@/components/career/CareerRevealReview';
 import { GameNav } from '@/components/game/GameNav';
 import { GameShell } from '@/components/game/GameShell';
 import { ResultScreen } from '@/components/game/ResultScreen';
@@ -297,7 +298,16 @@ const CareerGame = () => {
                     }}
                     onPlayAgain={mode === 'unlimited' ? () => { resetGame(); setInput(''); } : undefined}
                     playNext={mode === 'daily' ? 'Come back tomorrow for a new puzzle!' : undefined}
-                  />
+                  >
+                    <CareerRevealReview
+                      key={`${mode}:${targetPlayer.name}`}
+                      career={targetPlayer.career}
+                      revealedCells={revealedCells}
+                      guessesUsed={guessesUsed}
+                      boxesUsed={boxesUsed}
+                      won={gameStatus === 'won'}
+                    />
+                  </ResultScreen>
                 </div>
               );
             })()}
