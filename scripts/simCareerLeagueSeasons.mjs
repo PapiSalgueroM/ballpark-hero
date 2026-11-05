@@ -688,7 +688,9 @@ let baseRoot = null;
 try {
   baseRoot = path.join(tmp, 'base');
   fs.mkdirSync(baseRoot, { recursive: true });
-  execSync(`git archive ${BASE} src | tar --force-local -x -C "${baseRoot.replaceAll('\\', '/')}"`, { cwd: ROOT, stdio: ['ignore', 'ignore', 'pipe'], shell: 'bash' });
+  const baseArchiveExtras = execFileSync('git', ['ls-tree', '-r', '--name-only', BASE, '--',
+    'scripts/lib/cmValueCurve.mjs', 'scripts/lib/cmAges.mjs'], { cwd: ROOT, encoding: 'utf8' }).trim().split('\n').filter(Boolean);
+  execSync(`git archive ${BASE} src ${baseArchiveExtras.join(' ')} | tar --force-local -x -C "${baseRoot.replaceAll('\\', '/')}"`, { cwd: ROOT, stdio: ['ignore', 'ignore', 'pipe'], shell: 'bash' });
 } catch (err) { fail(`git archive ${BASE} failed: ${String(err.message).slice(0, 160)}`); baseRoot = null; }
 const releasePins = release => ({ name: 'pins', setup(b) {
   b.onLoad({ filter: /soccerCareerEngine\.ts$/ }, args => {
@@ -746,7 +748,10 @@ async function replay(T, seed) {
    printed; still different, it fails as before. When the base already holds
    Round 1041 the anchors still match and the arm is simply not needed. */
 const R1041_OUT = [
-  ['soccerCareerEngine.ts', '\n    && domesticCupFor(cupAssociation(state.currentClubCountry, state.currentLeague), seasonYear).kind !== "NONE";', ';'],
+  ['soccerCareerEngine.ts', [
+    '\n    && domesticCupFor(cupAssociation(state.currentClubCountry, state.currentLeague), seasonYear).kind !== "NONE";',
+    '\n    && domesticCupFor(cupAssociation(state.currentClubCountry, state.currentLeague, seasonYear), seasonYear).kind !== "NONE";',
+  ], ';'],
   ['soccerPhone.ts', 'if (assoc === undefined || opts.playerCupAssociation === undefined) {', 'if (true) {'],
 ];
 const r1041Out = { name: 'r1041out', setup(b) {
@@ -756,8 +761,9 @@ const r1041Out = { name: 'r1041out', setup(b) {
     if (CONTROL === 'future' && args.path.endsWith('soccerCareerEngine.ts')) { src = controlEdit(src); controlFired = true; }
     for (const [file, from, to] of R1041_OUT) {
       if (!args.path.endsWith(file)) continue;
-      if (src.split(from).length !== 2) { console.error(`Round 1041 arm: the anchor is not in ${file} exactly once`); process.exit(2); }
-      src = src.replace(from, to);
+      const anchors = typeof from === 'string' ? [from] : from;
+      if (anchors.reduce((n, anchor) => n + src.split(anchor).length - 1, 0) !== 1) { console.error(`Round 1041 arm: the anchor is not in ${file} exactly once`); process.exit(2); }
+      src = src.replace(anchors.find(anchor => src.includes(anchor)), to);
     }
     return { contents: src, loader: 'ts' };
   });
@@ -822,8 +828,9 @@ const r1185Out = with1041 => ({ name: with1041 ? 'r1185and1041out' : 'r1185out',
     if (with1041) {
       for (const [file, old, replacement] of R1041_OUT) {
         if (!args.path.endsWith(file)) continue;
-        if (src.split(old).length !== 2) { console.error(`Round 1041 combined arm: the anchor is not in ${file} exactly once`); process.exit(2); }
-        src = src.replace(old, replacement);
+        const anchors = typeof old === 'string' ? [old] : old;
+        if (anchors.reduce((n, anchor) => n + src.split(anchor).length - 1, 0) !== 1) { console.error(`Round 1041 combined arm: the anchor is not in ${file} exactly once`); process.exit(2); }
+        src = src.replace(anchors.find(anchor => src.includes(anchor)), replacement);
       }
     }
     return { contents: src, loader: 'ts' };

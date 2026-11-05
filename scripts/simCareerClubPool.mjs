@@ -681,12 +681,14 @@ const rawFour = t4.filter(c => FOUR.has(c.league)).length;
    100 to 58 in 167 (Ligue 2 counts as one of those until its release). This
    is the round's intent (whole leagues to sign for); LEAGUE_DRAW_CAP is the
    engine's and is reviewed in Round 1106. */
-/* Ligue 2 release: Nantes' tier 4 group grows from one club to eighteen,
-   weight 1 to 5. Serie B adds one twenty-club group with weight 5. The
-   measured totals are 176 and 119; the four leagues hold 20 over 77 groups. */
+/* Ligue 2 and Serie B left total weight 176, read-label weight 119 and
+   77 groups. Segunda adds nineteen tier 4 clubs in one new group: capped
+   weight 5. Its existing hand club Girona stays tier 2. Group sizes in the
+   stated shares below do not change; only the total denominator grows. */
+const WANT_W4 = 176 + Math.min(19, CAP);
 const R4 = g4.filter(g => READ.has(g.clubs[0].league)).reduce((s, g) => s + g.weight, 0);
 const tierW = t => engine.leagueDrawGroups(POOL.filter(c => c.tier === t)).reduce((s, g) => s + g.weight, 0);
-ok(F4 === 20 && W4 === 176 && R4 === 119 && g4.length === 77, `tier 4: the four leagues hold ${F4}, the read labels ${R4}, of ${W4} over ${g4.length} groups; 20, 119, 176 and 77 expected`);
+ok(F4 === 20 && W4 === WANT_W4 && R4 === 124 && g4.length === 78, `tier 4: the four leagues hold ${F4}, the read labels ${R4}, of ${W4} over ${g4.length} groups; 20, 124, ${WANT_W4} and 78 expected`);
 ok(tierW(1) === 18 && tierW(2) === 39 && tierW(3) === 69, `tier 1 to 3 draw weights ${tierW(1)}, ${tierW(2)}, ${tierW(3)}; 18, 39 and 69 expected`);
 /* The sampler itself on the full tier 4, both calls on the grid: every club
    in every group, capped ones included, drawn exactly weight * M * M2 times. */
@@ -708,9 +710,9 @@ console.log(`  full pool tier 4: four leagues ${F4}/${W4} capped; a plain pick w
      Cruzeiro and Santos 5/2338 (14), and a club alone in its league, Enyimba,
      1/167 where it was 1/100. Newly whole leagues: Twente and Utrecht 5/2338
      in the Eredivisie's 14 tier 4 clubs, Hearts 5/1670 in Scotland's 10. */
-  /* Ligue 2 and Serie B: only the total-weight denominator changes for
-     these clubs; each numerator and each club's own group size stay held. */
-  const WANT_SHARE = { 'Norwich City': [5, 3872], Brentford: [5, 1408], 'Crystal Palace': [5, 1408], 'Real Betis': [5, 2288], 'Celta Vigo': [5, 2288], Cruzeiro: [5, 2464], Santos: [5, 2464], Enyimba: [1, 176], Twente: [5, 2464], Utrecht: [5, 2464], Hearts: [5, 1760] };
+  /* Segunda changes only total weight. Independent stated group sizes
+     remain 22, 8, 13, 14, 1 and 10, not sizes read from the sampler. */
+  const WANT_SHARE = { 'Norwich City': [5, 22 * WANT_W4], Brentford: [5, 8 * WANT_W4], 'Crystal Palace': [5, 8 * WANT_W4], 'Real Betis': [5, 13 * WANT_W4], 'Celta Vigo': [5, 13 * WANT_W4], Cruzeiro: [5, 14 * WANT_W4], Santos: [5, 14 * WANT_W4], Enyimba: [1, WANT_W4], Twente: [5, 14 * WANT_W4], Utrecht: [5, 14 * WANT_W4], Hearts: [5, 10 * WANT_W4] };
   for (const [name, [a, b]] of Object.entries(WANT_SHARE)) {
     const g = g4.find(x => x.clubs.some(c => c.name === name));
     ok(g && g.weight * b === a * W4 * g.clubs.length, `${name}: tier 4 share ${share(name)}, ${a}/${b} stated`);

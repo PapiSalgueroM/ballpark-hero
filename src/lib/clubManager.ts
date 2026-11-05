@@ -5313,6 +5313,11 @@ const CLUB_COLORS: Record<string, string> = {
   'Entella': '#87d8f7', 'Juve Stabia': '#f7d417', 'Mantova': '#d02128',
   'Modena': '#f7d417', 'Padova': '#d02128', 'Südtirol': '#d02128',
   'Vicenza': '#d02128', 'Arezzo': '#7d1c2a',
+  // Segunda Division: decorative colour words, verified in soccerCareerFacts.json.
+  'Castellón': '#2b2b2b', 'Burgos': '#d9d9d9', 'Sabadell': '#1b458f',
+  'Tenerife': '#1b458f', 'Leganés': '#1b458f', 'Córdoba': '#0a7040',
+  'Eldense': '#7d1c2a', 'FC Andorra': '#1b458f', 'Ceuta': '#d9d9d9',
+  'Albacete': '#d9d9d9',
 };
 
 /**

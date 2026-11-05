@@ -64,7 +64,6 @@ export const POOL_LEAGUE_ROWS = [
 /* Leagues the table names but the pool does not read yet, each with its
    reason. None of their clubs is generated and none gets a ladder. */
 export const HELD_LEAGUES = {
-  segunda: '10 clubs without a verified colour, and its format read from one source so far',
   /* Round 1052 read one host for each club's colour and shipped none, so
      Club Manager draws all sixteen in the neutral grey the generator
      refuses. A Soccer Career manager can still be offered a job there: the
@@ -79,12 +78,12 @@ export const LEAGUE_COUNTRY = Object.fromEntries(POOL_LEAGUE_ROWS.map(r => [r.id
    in the English pyramid shipped with Round 1013 (goal.com and
    footballgroundguide.com, read 2026-10-05; Wales is a Soccer Career
    nationality with a flag). CF Montreal and Vaduz: two sources each in
-   soccerCareerFacts.json clubCountries. FC Andorra, of the held Segunda
-   Division, needs its own row there before that league is released. Club
-   Manager's own clubCountry rows (LEAGUE_RULES) are read too and win. */
+   soccerCareerFacts.json clubCountries, along with FC Andorra. Club Manager's
+   own clubCountry rows (LEAGUE_RULES) are read too and win. */
 export const CLUB_COUNTRY = {
   'Cardiff City': 'Wales', 'Swansea City': 'Wales', 'Wrexham': 'Wales',
   'CF Montreal': 'Canada', 'Vaduz': 'Liechtenstein',
+  'FC Andorra': 'Andorra',
 };
 export const WELSH_CLUBS = new Set(Object.keys(CLUB_COUNTRY).filter(n => CLUB_COUNTRY[n] === 'Wales'));
 /* Club Manager answers its fallback grey for a club it has no colour for.
