@@ -1,12 +1,12 @@
-name: Soccer same-output browser recovery
+name: Soccer native stepper recovery on retained fixtures
 on:
   push:
-    branches: [codex/soccer-segunda-native-recovery-20261104]
+    branches: [codex/soccer-segunda-native-stepper-recovery-20261105]
 permissions:
   contents: read
   actions: read
 concurrency:
-  group: soccer-segunda-native-${{ github.ref }}
+  group: soccer-segunda-select-${{ github.ref }}
   cancel-in-progress: false
 env:
   CI: '1'
@@ -16,13 +16,13 @@ env:
   PRODUCT_CORE: ebd69abeb38ebb0b93fbff71a0caf2fa453db832
   PRODUCT_TREE: 821809914563e7830354f3567ba66ac8801cfd10
   BUILD_SOURCE: e7713237e75f0e281f45f61f67b867b9116c6d03
-  BUILD_TREE: db172ae37d8adda1087d5844067a46291648726e
-  QA_CORE: cefc6684d5894942774731a9445e09e8a7acf688
-  QA_TREE: b03f9b8519765bfc504f67f534a8640a5cead842
+  INPUT_SOURCE: fe67fa93d98b03de97cf613934a939f72c7093d0
+  QA_CORE: 137b3268ad9948cf23f288fa12503ecd4a504c65
+  QA_TREE: b66111a3427be25e873beaa39b07a1a30372a1c5
 jobs:
   native:
     runs-on: ubuntu-latest
-    timeout-minutes: 45
+    timeout-minutes: 35
     defaults:
       run:
         shell: bash
@@ -39,102 +39,102 @@ jobs:
       - uses: oven-sh/setup-bun@v2
         with:
           bun-version: '1.4.4'
-      - name: Bind four helpers to the completed build source
+      - name: Bind only the declared native driver changes to held application sources
         run: |
           set -euo pipefail
-          OUT="$RUNNER_TEMP/soccer-segunda-native"
-          REF="$RUNNER_TEMP/soccer-segunda-input"
-          mkdir -p "$OUT/logs" "$OUT/transport" "$OUT/input-provenance" "$REF/build" "$REF/original"
+          OUT="$RUNNER_TEMP/soccer-segunda-select-recovery"
+          REF="$RUNNER_TEMP/soccer-segunda-select-input"
+          mkdir -p "$OUT/logs" "$OUT/transport" "$OUT/input-provenance" "$REF/build" "$REF/native"
           echo "QA_OUT=$OUT" >> "$GITHUB_ENV"
           echo "QA_REF=$REF" >> "$GITHUB_ENV"
-          export QA_OUT="$OUT" QA_REF="$REF"
           test "$(git rev-parse HEAD^)" = "$QA_CORE"
-          test "$(git rev-parse HEAD^^)" = "$BUILD_SOURCE"
-          test "$(git rev-parse "$QA_CORE^{tree}")" = "$QA_TREE"
-          test "$(git rev-parse "$BUILD_SOURCE^{tree}")" = "$BUILD_TREE"
-          test "$(git rev-parse "$PRODUCT_CORE^{tree}")" = "$PRODUCT_TREE"
-          test "$(git diff --name-status HEAD^ HEAD)" = $'A\t.github/workflows/soccer-segunda-native-20261104.yml'
-          git diff --name-status "$BUILD_SOURCE" "$QA_CORE" > "$OUT/qa-delta.txt"
-          printf '%s\n' $'A\tscripts/qa/nativeScrollReady.mjs' $'A\tscripts/qa/soccerSegundaBrowser.mjs' $'A\tscripts/qa/soccerSegundaCupProbe.mjs' $'A\tscripts/qa/soccerSegundaFixtures.mjs' > "$OUT/expected-qa-delta.txt"
-          cmp "$OUT/qa-delta.txt" "$OUT/expected-qa-delta.txt"
-          git diff --exit-code "$BUILD_SOURCE" HEAD -- src public index.html package.json package-lock.json bun.lock bun.lockb vite.config.ts tsconfig.app.json scripts/data scripts/lib scripts/simCareerClubPool.mjs scripts/simCareerDomesticCup.mjs scripts/simCareerEras.mjs > "$OUT/application-bridge.txt"
+          test "$(git rev-parse HEAD^^{tree})" = "$QA_TREE"
+          test "$(git rev-parse HEAD^^)" = "$INPUT_SOURCE"
+          test "$(git diff --name-only HEAD^ HEAD)" = .github/workflows/soccer-segunda-native-20261104.yml
+          test "$(git diff --name-only HEAD^^ HEAD^)" = scripts/qa/soccerSegundaBrowser.mjs
+          test "$(git hash-object scripts/qa/soccerSegundaBrowser.mjs)" = d614573c6e1a266cda674cecccccf19cb6ca45ce
+          git diff --exit-code "$INPUT_SOURCE" HEAD -- src public index.html package.json package-lock.json bun.lock bun.lockb vite.config.ts tailwind.config.ts postcss.config.js components.json tsconfig.json tsconfig.app.json tsconfig.node.json scripts/data scripts/lib scripts/simCareerClubPool.mjs scripts/simCareerDomesticCup.mjs scripts/simCareerEras.mjs > "$OUT/application-bridge.txt"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$OUT/source-before.sha256"
+          git rev-parse HEAD HEAD^{tree} > "$OUT/source.txt"
           git status --porcelain --untracked-files=all > "$OUT/status-before.txt"
           test ! -s "$OUT/status-before.txt"
-          git rev-parse HEAD HEAD^{tree} > "$OUT/source.txt"
-          git ls-files -z | sort -z | xargs -0 sha256sum > "$OUT/source-before.sha256"
-          for helper in nativeScrollReady soccerSegundaBrowser soccerSegundaCupProbe soccerSegundaFixtures; do node --check "scripts/qa/$helper.mjs"; done
-      - name: Retrieve and verify both immutable inputs before extraction
+          cp .github/workflows/soccer-segunda-native-20261104.yml "$OUT/workflow.yml"
+      - name: Verify both original immutable archives before extraction
         env:
-          ACTIONS_READ_TOKEN: ${{ github.token }}
+          GH_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
-          curl --fail --silent --show-error -H "Authorization: Bearer $ACTIONS_READ_TOKEN" https://api.github.com/repos/PapiSalgueroM/ballpark-hero/actions/artifacts/13387357930 > "$QA_OUT/input-provenance/build-artifact.json"
-          curl --fail --silent --show-error -H "Authorization: Bearer $ACTIONS_READ_TOKEN" https://api.github.com/repos/PapiSalgueroM/ballpark-hero/actions/artifacts/13383634508 > "$QA_OUT/input-provenance/original-artifact.json"
-          node --input-type=module <<'NODE'
-          import fs from 'node:fs';import assert from 'node:assert/strict';
-          const out=process.env.QA_OUT;
-          for(const[name,id,bytes,digest,run,head]of[
-            ['build',13387357930,7688979,'fd87b3fedf54d0eb9f649633f99a9876a99109ccd4b83b8a00dfde640d2c71b6',41965564992,'e7713237e75f0e281f45f61f67b867b9116c6d03'],
-            ['original',13383634508,2675629,'3e9c89a2a24207957761b640ede622c587d97c2daaeaaeddd8498afb3d82119e',41958380733,'abd5f1d616a14da15c76ef380a4447a09a62cd86']]){
-            const a=JSON.parse(fs.readFileSync(out+'/input-provenance/'+name+'-artifact.json'));assert.equal(a.id,id);assert.equal(a.size_in_bytes,bytes);assert.equal(a.digest,'sha256:'+digest);assert.equal(a.expired,false);assert.equal(a.workflow_run.id,run);assert.equal(a.workflow_run.head_sha,head);
-          }
+          download() {
+            local id="$1" bytes="$2" digest="$3" run="$4" source="$5" dir="$6"
+            curl --fail --location --silent --show-error -H "Authorization: Bearer $GH_TOKEN" -H 'Accept: application/vnd.github+json' "https://api.github.com/repos/PapiSalgueroM/ballpark-hero/actions/artifacts/$id" --output "$dir/metadata.json"
+            ID="$id" BYTES="$bytes" DIGEST="$digest" RUN_ID="$run" SOURCE="$source" META="$dir/metadata.json" node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';const e=process.env,m=JSON.parse(fs.readFileSync(e.META));assert.equal(m.id,+e.ID);assert.equal(m.size_in_bytes,+e.BYTES);assert.equal(m.digest,'sha256:'+e.DIGEST);assert.equal(m.expired,false);assert.equal(m.workflow_run.id,+e.RUN_ID);assert.equal(m.workflow_run.head_sha,e.SOURCE);
           NODE
-          curl --fail --silent --show-error --location -H "Authorization: Bearer $ACTIONS_READ_TOKEN" https://api.github.com/repos/PapiSalgueroM/ballpark-hero/actions/artifacts/13387357930/zip > "$QA_REF/BUILD.zip"
-          curl --fail --silent --show-error --location -H "Authorization: Bearer $ACTIONS_READ_TOKEN" https://api.github.com/repos/PapiSalgueroM/ballpark-hero/actions/artifacts/13383634508/zip > "$QA_REF/ORIGINAL.zip"
-          test "$(wc -c < "$QA_REF/BUILD.zip")" = 7688979
-          test "$(wc -c < "$QA_REF/ORIGINAL.zip")" = 2675629
-          printf '%s\n' "fd87b3fedf54d0eb9f649633f99a9876a99109ccd4b83b8a00dfde640d2c71b6  $QA_REF/BUILD.zip" "3e9c89a2a24207957761b640ede622c587d97c2daaeaaeddd8498afb3d82119e  $QA_REF/ORIGINAL.zip" | sha256sum --check
-          unzip -q "$QA_REF/BUILD.zip" -d "$QA_REF/build"
-          unzip -q "$QA_REF/ORIGINAL.zip" -d "$QA_REF/original"
-          test "$(wc -c < "$QA_REF/build/completed-dist.tar.gz")" = 6997111
-          printf '%s\n' "986dc17187de3f3c1a932b893154981885ae63bd3863616b38cf2b9c782747c5  $QA_REF/build/completed-dist.tar.gz" "091f8d661d263dd28e4238f6eb33f6c9ee20a7873e64ac6c489f4590d8404d34  $QA_REF/build/dist-before.sha256" | sha256sum --check
-          tar -tzf "$QA_REF/build/completed-dist.tar.gz" > "$QA_OUT/input-provenance/tar-members.txt"
-          if grep -Eq '(^/|(^|/)\.\.(/|$))' "$QA_OUT/input-provenance/tar-members.txt"; then exit 1; fi
-          if grep -Ev '^dist(/|$)' "$QA_OUT/input-provenance/tar-members.txt"; then exit 1; fi
-          tar -xzf "$QA_REF/build/completed-dist.tar.gz" -C "$QA_REF"
-          (cd "$QA_REF" && sha256sum --check build/dist-before.sha256) > "$QA_OUT/input-provenance/completed-dist-verified.log"
-          cp "$QA_REF/build/dist-before.sha256" "$QA_OUT/input-provenance/original-dist-inventory.sha256"
-          cp "$QA_REF/original/admission.json" "$QA_OUT/input-provenance/original-admission.json"
-      - name: Install held dependencies and existing browser tools
+            curl --fail --location --silent --show-error -H "Authorization: Bearer $GH_TOKEN" -H 'Accept: application/vnd.github+json' "https://api.github.com/repos/PapiSalgueroM/ballpark-hero/actions/artifacts/$id/zip" --output "$dir/original.zip"
+            test "$(stat -c%s "$dir/original.zip")" = "$bytes"
+            echo "$digest  $dir/original.zip" | sha256sum --check
+            unzip -q "$dir/original.zip" -d "$dir/evidence"
+            cp "$dir/metadata.json" "$QA_OUT/input-provenance/$id-metadata.json"
+          }
+          download 13387357930 7688979 fd87b3fedf54d0eb9f649633f99a9876a99109ccd4b83b8a00dfde640d2c71b6 41965564992 "$BUILD_SOURCE" "$QA_REF/build"
+          download 13389671517 5467771 e14057eb95dd7fa5625bf4bb95e98eadaab5199833530270be026d2660bdeeb4 41970754022 "$INPUT_SOURCE" "$QA_REF/native"
+          echo "986dc17187de3f3c1a932b893154981885ae63bd3863616b38cf2b9c782747c5  $QA_REF/build/evidence/completed-dist.tar.gz" | sha256sum --check
+          test "$(stat -c%s "$QA_REF/build/evidence/completed-dist.tar.gz")" = 6997111
+          echo "091f8d661d263dd28e4238f6eb33f6c9ee20a7873e64ac6c489f4590d8404d34  $QA_REF/build/evidence/dist-before.sha256" | sha256sum --check
+          cmp "$QA_REF/build/evidence/dist-before.sha256" "$QA_REF/build/evidence/dist-after.sha256"
+          tar -tzf "$QA_REF/build/evidence/completed-dist.tar.gz" > "$QA_OUT/input-provenance/tar-members.txt"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';for(const p of fs.readFileSync(process.env.QA_OUT+'/input-provenance/tar-members.txt','utf8').trimEnd().split('\n'))assert(p==='dist/'||p.startsWith('dist/')&&!p.split('/').includes('..')&&!p.startsWith('/'));
+          NODE
+          tar -xzf "$QA_REF/build/evidence/completed-dist.tar.gz" -C "$QA_REF"
+          (cd "$QA_REF" && sha256sum --check build/evidence/dist-before.sha256) > "$QA_OUT/input-provenance/dist-verified.log"
+      - name: Reuse first fixtures with an exact source metadata inverse
+        run: |
+          set -euo pipefail
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import path from 'node:path';import crypto from 'node:crypto';import cp from 'node:child_process';import assert from 'node:assert/strict';
+          const out=process.env.QA_OUT,old=process.env.QA_REF+'/native/evidence',dir=out+'/fixtures',sha=b=>crypto.createHash('sha256').update(b).digest('hex'),json=v=>Buffer.from(JSON.stringify(v,null,2)+'\n');
+          const b=fs.readFileSync(old+'/fixtures/manifest.json');assert.equal(sha(b),'3ea86e58f3c3b622787bb54cd78884c6ee75a5f072187ffc34f4b10b340df80e');const m=JSON.parse(b);
+          assert.equal(m.core,'cefc6684d5894942774731a9445e09e8a7acf688');assert.deepEqual(m.sourceBefore,m.sourceAfter);
+          const first=JSON.parse(fs.readFileSync(old+'/browser/report.json'));assert.equal(first.status,'failed');assert.deepEqual(first.contexts.map(r=>[r.width,r.status]),[[320,'failed'],[390,'failed'],[1280,'failed']]);assert.equal(first.screenshots.length,0);assert.equal(first.sourceHeld,true);assert.equal(first.distHeld,true);assert.equal(first.fixtureHeld,true);
+          assert.equal(fs.readFileSync(old+'/fixtures-native-exit.txt','utf8').trim(),'0');
+          assert.equal(sha(fs.readFileSync(old+'/source-before.sha256')),'836223bf2e79a902ca9054c6419e671cb74e919b8b1accc8c912187ba40c2161');assert(fs.readFileSync(old+'/source-before.sha256').equals(fs.readFileSync(old+'/source-after.sha256')));
+          assert.equal(sha(fs.readFileSync(old+'/fixture-before.sha256')),'4b44cc9a57b317fbe9dd6cc5290ba7518285ab8dfcf8fcb735d9a6042277b542');
+          const held=JSON.parse(fs.readFileSync(old+'/source-output-hold.json'));for(const k of ['sourceHeld','completedDistHeld','fixturesHeld'])assert.equal(held[k],true);assert.equal(held.status,'clean');assert(held.receipts.every(r=>r.bytes===0));
+          for(const f of ['source-diff.txt','status-before.txt','status-after.txt'])assert.equal(fs.statSync(old+'/'+f).size,0);
+          const paths=cp.execFileSync('git',['ls-files','-z']).toString().split('\0').filter(Boolean).sort(),current=Object.fromEntries(paths.map(p=>[p,sha(fs.readFileSync(p))])),changed=[...new Set([...Object.keys(m.sourceAfter),...paths])].filter(p=>m.sourceAfter[p]!==current[p]).sort();
+          assert.deepEqual(changed,['.github/workflows/soccer-segunda-native-20261104.yml','scripts/qa/soccerSegundaBrowser.mjs']);
+          for(const [p,digest]of Object.entries(m.sourceAfter))assert.equal(sha(cp.execFileSync('git',['show',process.env.INPUT_SOURCE+':'+p],{maxBuffer:32*1024*1024})),digest,p+' actual input Git source');
+          fs.mkdirSync(dir);const inventory={};const names=fs.readdirSync(old+'/fixtures').sort();assert.equal(names.length,11);
+          for(const file of names){const body=fs.readFileSync(old+'/fixtures/'+file);inventory[file]={bytes:body.length,sha256:sha(body)};fs.copyFileSync(old+'/fixtures/'+file,dir+'/'+file,fs.constants.COPYFILE_EXCL);}
+          for(const [file,expected]of Object.entries(m.fixtures))assert.equal(sha(fs.readFileSync(dir+'/'+expected.file)),expected.sha256,file);
+          assert.equal(sha(fs.readFileSync(dir+'/'+m.bundle)),m.bundleSHA);assert.equal(sha(fs.readFileSync(dir+'/'+m.preparation.file)),m.preparation.sha256);
+          assert.equal(sha(fs.readFileSync(dir+'/'+m.cupRuntime.file)),m.cupRuntime.sha256);for(const[file,digest]of Object.entries(m.cupRuntime.bundles))assert.equal(sha(fs.readFileSync(dir+'/'+file)),digest);
+          const cup=JSON.parse(fs.readFileSync(dir+'/'+m.cupRuntime.file));assert.equal(cup.status,'admitted');
+          const derived=JSON.parse(b);derived.sourceBefore=current;derived.sourceAfter=current;const derivedBytes=json(derived);fs.writeFileSync(dir+'/manifest.json',derivedBytes);const inverse=JSON.parse(derivedBytes);inverse.sourceBefore=m.sourceBefore;inverse.sourceAfter=m.sourceAfter;assert(json(inverse).equals(b));
+          for(const file of ['source-before.sha256','source-after.sha256','fixture-before.sha256','fixtures-held.log','source-output-hold.json','source.txt'])fs.copyFileSync(old+'/'+file,out+'/input-provenance/native-'+file);
+          fs.writeFileSync(out+'/input-provenance/first-manifest-original.json',b);fs.copyFileSync(old+'/browser/report.json',out+'/input-provenance/first-browser-report.json');
+          const after={};for(const file of names){const body=fs.readFileSync(dir+'/'+file);after[file]={bytes:body.length,sha256:sha(body)};if(file!=='manifest.json')assert.deepEqual(after[file],inventory[file]);}
+          fs.writeFileSync(out+'/fixture-original-files.json',json(inventory));fs.writeFileSync(out+'/fixture-recovery-files-before.json',json(after));fs.writeFileSync(out+'/fixture-source-bridge.json',json({status:'metadata-only',changedSourcePaths:changed,changedKeys:['sourceBefore','sourceAfter'],wholeInverseExact:true,firstManifestSHA256:sha(b),derivedManifestSHA256:sha(derivedBytes),originalRun:41970754022,originalConclusion:'failure',originalPhotos:0,noRegeneration:true,noRebuild:true,cm47FailuresUnwaived:true}));
+          NODE
+          export GIT_NO_LAZY_FETCH=1
+          echo 'GIT_NO_LAZY_FETCH=1' >> "$GITHUB_ENV"
+      - name: Install held source and browser tooling without build or fixture generation
         run: |
           set -euo pipefail
           test "$(bun --version)" = 1.4.4
-          bun --version > "$QA_OUT/logs/bun-version.log"
-          node --version > "$QA_OUT/logs/node-version.log"
           bun install --frozen-lockfile > "$QA_OUT/logs/install.log" 2>&1
-          git diff --exit-code HEAD -- package.json package-lock.json bun.lock bun.lockb
-          npm install --prefix "$RUNNER_TEMP/soccer-native-tools" --package-lock=false --no-audit --no-fund playwright@1.64.0 > "$QA_OUT/logs/playwright-install.log" 2>&1
+          npm install --prefix "$RUNNER_TEMP/soccer-select-browser-tools" --package-lock=false --no-audit --no-fund playwright@1.64.0 > "$QA_OUT/logs/playwright-install.log" 2>&1
           test ! -e node_modules/playwright
           test ! -e node_modules/playwright-core
-          ln -s "$RUNNER_TEMP/soccer-native-tools/node_modules/playwright" node_modules/playwright
-          ln -s "$RUNNER_TEMP/soccer-native-tools/node_modules/playwright-core" node_modules/playwright-core
-          "$RUNNER_TEMP/soccer-native-tools/node_modules/.bin/playwright" install --with-deps chromium > "$QA_OUT/logs/chromium-install.log" 2>&1
-      - name: Literal cup and fixture qualification after retained CM failure
+          ln -s "$RUNNER_TEMP/soccer-select-browser-tools/node_modules/playwright" node_modules/playwright
+          ln -s "$RUNNER_TEMP/soccer-select-browser-tools/node_modules/playwright-core" node_modules/playwright-core
+          "$RUNNER_TEMP/soccer-select-browser-tools/node_modules/.bin/playwright" install --with-deps chromium > "$QA_OUT/logs/chromium-install.log" 2>&1
+          git diff --exit-code HEAD -- package.json package-lock.json bun.lock bun.lockb
+          node --check scripts/qa/soccerSegundaBrowser.mjs
+      - name: Run the corrected native actions on exact retained saves
         run: |
           set -euo pipefail
-          export GIT_NO_LAZY_FETCH=1
-          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
-          run_gate() {
-            local label="$1"
-            shift
-            local receipt="$QA_OUT/transport/$label.log"
-            : > "$receipt"
-            set +e
-            SIM_OFFLINE_RECEIPT="$receipt" "$@" > "$QA_OUT/logs/$label.stdout.log" 2> "$QA_OUT/logs/$label.stderr.log"
-            local native_status=$?
-            set -e
-            printf '%s\n' "$native_status" > "$QA_OUT/$label-native-exit.txt"
-            cat "$QA_OUT/logs/$label.stdout.log"
-            cat "$QA_OUT/logs/$label.stderr.log"
-            test "$native_status" = 0
-            test ! -s "$receipt"
-          }
-          run_gate fixtures node scripts/qa/soccerSegundaFixtures.mjs --out "$QA_OUT/fixtures" --dist "$QA_REF/dist" --core "$QA_CORE" --original "$QA_REF/original"
-          find "$QA_OUT/fixtures" -type f -print0 | sort -z | xargs -0 sha256sum > "$QA_OUT/fixture-before.sha256"
-      - name: Actual touch and keyboard journeys on the same completed build
-        run: |
-          set -euo pipefail
-          export GIT_NO_LAZY_FETCH=1
           export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
           export SIM_OFFLINE_RECEIPT="$QA_OUT/transport/server.log"
           : > "$SIM_OFFLINE_RECEIPT"
@@ -148,24 +148,20 @@ jobs:
           : > "$SIM_OFFLINE_RECEIPT"
           set +e
           node scripts/qa/soccerSegundaBrowser.mjs --out "$QA_OUT/browser" --fixtures "$QA_OUT/fixtures" --dist "$QA_REF/dist" --base-url http://127.0.0.1:4176 > "$QA_OUT/logs/browser.stdout.log" 2> "$QA_OUT/logs/browser.stderr.log"
-          native_exit=$?
+          code=$?
           set -e
-          printf '%s\n' "$native_exit" > "$QA_OUT/browser-native-exit.txt"
+          printf '%s\n' "$code" > "$QA_OUT/browser-native-exit.txt"
           cat "$QA_OUT/logs/browser.stdout.log"
           cat "$QA_OUT/logs/browser.stderr.log"
-          test "$native_exit" = 0
+          test "$code" = 0
           test ! -s "$SIM_OFFLINE_RECEIPT"
           test ! -s "$QA_OUT/transport/server.log"
-          find "$QA_OUT/fixtures" -type f -print0 | sort -z | xargs -0 sha256sum > "$QA_OUT/fixture-after.sha256"
-          cmp "$QA_OUT/fixture-before.sha256" "$QA_OUT/fixture-after.sha256"
           node --input-type=module <<'NODE'
-          import fs from 'node:fs';import assert from 'node:assert/strict';import crypto from 'node:crypto';
-          const out=process.env.QA_OUT,r=JSON.parse(fs.readFileSync(out+'/browser/report.json')),m=JSON.parse(fs.readFileSync(out+'/fixtures/manifest.json'));
-          assert.equal(r.status,'passed');assert.equal(r.contexts.length,3);assert.equal(r.screenshots.length,15);
-          for(const file of r.screenshots)assert(fs.statSync(out+'/browser/'+file).size>0);
-          fs.writeFileSync(out+'/native-proof.json',JSON.stringify({status:'native-phase-passed',cmDefault:'prior run41970182220 failed47 digest checks; unresolved and unwaived',product:process.env.PRODUCT_CORE,build:process.env.BUILD_SOURCE,normalBuilds:1,completedTarSHA256:'986dc17187de3f3c1a932b893154981885ae63bd3863616b38cf2b9c782747c5',fixturesSHA256:crypto.createHash('sha256').update(fs.readFileSync(out+'/fixtures/manifest.json')).digest('hex'),distDigest:m.distDigest,contexts:3,photos:15,public:false,sourceHoldsRequired:true},null,2)+'\n');
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const out=process.env.QA_OUT,r=JSON.parse(fs.readFileSync(out+'/browser/report.json'));assert.equal(r.status,'passed');assert.deepEqual(r.contexts.map(c=>[c.width,c.status]),[[320,'passed'],[390,'passed'],[1280,'passed']]);assert.equal(r.screenshots.length,15);for(const k of ['sourceHeld','distHeld','fixtureHeld','nodeReceiptEmpty'])assert.equal(r[k],true);
+          fs.writeFileSync(out+'/native-proof.json',JSON.stringify({status:'native-phase-passed',product:process.env.PRODUCT_CORE,build:process.env.BUILD_SOURCE,normalBuilds:1,completedTarSHA256:'986dc17187de3f3c1a932b893154981885ae63bd3863616b38cf2b9c782747c5',contexts:3,photos:15,cmDefault:'47 prior digest failures unresolved and unwaived',sameOriginalFixtures:true,onlyQaSourceMetadataDerived:true,finalSourceDistFixtureHoldsRequired:true,public:false},null,2)+'\n');
           NODE
-      - name: Hold full source completed output and immutable fixtures
+      - name: Retain full source dist fixture and inverse holds on every outcome
         if: always()
         run: |
           set -euo pipefail
@@ -174,17 +170,18 @@ jobs:
           git diff --exit-code HEAD > "$QA_OUT/source-diff.txt"
           git status --porcelain --untracked-files=all > "$QA_OUT/status-after.txt"
           test ! -s "$QA_OUT/status-after.txt"
-          (cd "$QA_REF" && sha256sum --check build/dist-before.sha256) > "$QA_OUT/dist-held.log"
-          if [[ -f "$QA_OUT/fixture-before.sha256" ]]; then sha256sum --check "$QA_OUT/fixture-before.sha256" > "$QA_OUT/fixtures-held.log"; fi
+          (cd "$QA_REF" && sha256sum --check build/evidence/dist-before.sha256) > "$QA_OUT/dist-held.log"
           node --input-type=module <<'NODE'
-          import fs from 'node:fs';import assert from 'node:assert/strict';
-          const out=process.env.QA_OUT,receipts=fs.readdirSync(out+'/transport').map(file=>({file,bytes:fs.statSync(out+'/transport/'+file).size}));assert(receipts.every(r=>r.bytes===0));
-          fs.writeFileSync(out+'/source-output-hold.json',JSON.stringify({sourceHeld:true,status:'clean',completedDistHeld:true,fixturesHeld:fs.existsSync(out+'/fixture-before.sha256'),receipts},null,2)+'\n');
+          import fs from 'node:fs';import crypto from 'node:crypto';import assert from 'node:assert/strict';
+          const out=process.env.QA_OUT,sha=b=>crypto.createHash('sha256').update(b).digest('hex'),before=JSON.parse(fs.readFileSync(out+'/fixture-recovery-files-before.json')),after={};assert.deepEqual(fs.readdirSync(out+'/fixtures').sort(),Object.keys(before).sort());
+          for(const[file,pin]of Object.entries(before)){const b=fs.readFileSync(out+'/fixtures/'+file);after[file]={bytes:b.length,sha256:sha(b)};assert.deepEqual(after[file],pin);}fs.writeFileSync(out+'/fixture-recovery-files-after.json',JSON.stringify(after,null,2)+'\n');
+          const original=fs.readFileSync(out+'/input-provenance/first-manifest-original.json'),old=JSON.parse(original),derived=JSON.parse(fs.readFileSync(out+'/fixtures/manifest.json'));derived.sourceBefore=old.sourceBefore;derived.sourceAfter=old.sourceAfter;assert(Buffer.from(JSON.stringify(derived,null,2)+'\n').equals(original));
+          const receipts=fs.readdirSync(out+'/transport').map(file=>({file,bytes:fs.statSync(out+'/transport/'+file).size}));assert(receipts.every(r=>r.bytes===0));fs.writeFileSync(out+'/source-output-hold.json',JSON.stringify({sourceHeld:true,completedDistHeld:true,fixturesHeld:true,wholeInverseExact:true,status:'clean',receipts},null,2)+'\n');
           NODE
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: soccer-segunda-native-${{ github.run_id }}-${{ github.run_attempt }}
+          name: soccer-segunda-stepper-recovery-${{ github.run_id }}-${{ github.run_attempt }}
           path: ${{ env.QA_OUT }}/
           retention-days: 30
           compression-level: 6
