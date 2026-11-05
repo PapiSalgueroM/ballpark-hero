@@ -1,3 +1,13 @@
+## 2026-11-05 Career Quiz first-opening review, qualified draft
+
+After a win or loss, Review your reveals walks only the cells opened during play, in first-opening order. Guesses and boxes remain separate. A copied row/column/order map contains no player, season, club or stat spoilers. Hints are included as ordinary cells; automatically exposed finish cells are excluded. Existing saves, data, score and random choices stay unchanged.
+
+Qualified App1b36dfbe19797bbb4509d5c5fef005c703baca98, run42123433679. Nine fixed/restored actual-page cases, seven effective fault controls, existing11hint/3record-stale cases and12save old/current parity pass. Proper types/build, all20saved-output readers and16unchanged caps pass. Browser9140checks/5wins/10reloads/10real clipboard readbacks;5fresh review PNGs root+independently viewed. Core3widths retain full hint path;430/1440 are bounded review paths. All100foreign requests aborted and no backend-write credit. Source, locks,521installed versions and239protected saved-content references held.
+
+Draft stacks after PR511, PR510, PR508, PR505 and PR506. CRQ-08/master remain partial; no inference about decisive clues or hint grouping. No merge/publication. Broader full-suite, inherited historical checks and live Reach stay unwaived. Exact pins, artifact/audit hashes and visibility limits: docs/plans/2026-11-05-career-reveal-review.md. Evidence C:/Users/antho/dukb-handoff/2026-11-05/career-reveal-review/.
+
+Next: bounded CRQ-03. Original42124906855 has4owned public-order assertion reds and4preservation passes for a delayed-loader edge. No live mismatch is claimed. Keep the selected puzzle and draws intact; make Unlimited options depend on public tier cohorts. Other owner retains Club Manager Team-picker/K League. Held local App/index remain untouched.
+
 ## 2026-11-05 Missing XI lineup view, combined qualification complete
 
 Stacked after PR508, PR505 and PR506 on main3b, retaining the published historical release. Full-name ordered lineup and native keyboard/touch toggles pass alongside the original pitch; masking/reveal, three actual daily wins and exact reloads are verified. The full stack passes225 targeted cases,normal build,9 engine/layout harnesses,20 readers,16 unchanged caps and all4 browser flows. Full suite/live Reach and whole master-card completion are not credited. Draft, unmerged and unpublished. See docs/plans/2026-11-05-soccer-master-integration.md.

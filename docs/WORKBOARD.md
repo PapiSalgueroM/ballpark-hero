@@ -17953,3 +17953,25 @@ Qualified App7ff91a59ae9b17d8da73e0c080708bd428ca9b52, treeb9751137e551fbcdad44d
 Six fresh viewport PNGs were reviewed by root and independent reviewer. Three real wins,6literal browser reloads,135frames/63actions,48post-preparation scroll holds and exact local completion plus1aborted score700 request perwidth pass. All60foreign requests were aborted; no backend-write or native-RNG measurement is claimed. The correct1box/up-to4 article is in the actual saved page. Generated keyword index changes only the Career row/source stamp across133keys. The existing --refresh /career command changes exactly2reference sentences across131guides; permanent guide/search harness code stays unchanged. Physical unapproved-copy and stale-index controls fail exactly2/1findings, restore bytes and rerun green. OnlyCareer changes in the172-route sitemap ledger; the XML generator comment date also advances.
 
 Clean delivery stacks after PR510 on codex/career-early-club-clean-20261105. Source and evidence:docs/plans/2026-11-05-career-early-club.md. Whole CRQ-06/masterlist remain partial. Earlier soccer drafts remain PR506,505,508,510. Broader full-suite, inherited phone/veteran historical checks, unresolved US replay and live Reach stay unwaived. This batch is unmerged and unpublished. Local App sources/index remain held; evidence originals survived native compression and a temporary full drive.
+
+
+## 2026-11-05 Career Quiz reveal review claim
+
+This chat owns bounded CRQ-08 on PR511 head271e8af48b87ac36500c56138b81595b00d50775. Add a compact postgame first-opening review and copied spoiler-free row/column/order map through ResultScreen children. Existing revealedCells insertion order is authoritative. Never assign automatically exposed finish cells, guess markers, or inferred decisive clues. Scope CareerRevealReview component, CareerGame mount, focused real-page tests and docs. Hook, data, scoring, daily action/save format, shared result/board and16route caps stay unchanged. Original-first business reds, physical source faults, fixed/restored tests, build/readers and actual-day native clipboard/phone/reload proof qualify before clean draft delivery. Local App/Git remain held; remote execution only. Other owner retains Team-picker/K League. WholeCRQ08 remainspartial; no merge/publish or global-gate waiver.
+
+
+## 2026-11-05 Career Quiz first-opening review qualified
+
+After a win or loss, Review your reveals walks only the cells opened during play, in first-opening order. Guesses and boxes remain separate. A copied row/column/order map contains no player, season, club or stat spoilers. Hints are included as ordinary cells; automatically exposed finish cells are excluded. Existing saves, data, score and random choices stay unchanged.
+
+Qualified App1b36dfbe19797bbb4509d5c5fef005c703baca98, run42123433679. Nine fixed/restored actual-page cases, seven effective fault controls, existing11hint/3record-stale cases and12save old/current parity pass. Proper types/build, all20saved-output readers and16unchanged caps pass. Browser9140checks/5wins/10reloads/10real clipboard readbacks;5fresh review PNGs root+independently viewed. Core3widths retain full hint path;430/1440 are bounded review paths. All100foreign requests aborted and no backend-write credit. Source, locks,521installed versions and239protected saved-content references held.
+
+Draft stacks after PR511, PR510, PR508, PR505 and PR506. CRQ-08/master remain partial; no inference about decisive clues or hint grouping. No merge/publication. Broader full-suite, inherited historical checks and live Reach stay unwaived. Exact pins, artifact/audit hashes and visibility limits: docs/plans/2026-11-05-career-reveal-review.md. Evidence C:/Users/antho/dukb-handoff/2026-11-05/career-reveal-review/.
+
+Next: bounded CRQ-03. Original42124906855 has4owned public-order assertion reds and4preservation passes for a delayed-loader edge. No live mismatch is claimed. Keep the selected puzzle and draws intact; make Unlimited options depend on public tier cohorts. Other owner retains Club Manager Team-picker/K League. Held local App/index remain untouched.
+
+
+
+## 2026-11-05 Career Quiz public suggestion order claim
+
+This chat also owns bounded CRQ-03 source gap in useCareerGame.playerNames. A delayed fetched pool can omit or re-tier the already drawn fallback target, after which the current helper appends only that hidden name. No current live mismatch is claimed. Original-first fictional-cohort tests will pin answer-independent public-tier union, current order, target/progress/RNG holds and unchanged daily behavior. Scope one hook memo/comment plus tests/docs. Do not merge fallback records into data or replace a playing target. All execution remote; local App/index held. Stack only after admitted CRQ-08. No publication/global waiver.

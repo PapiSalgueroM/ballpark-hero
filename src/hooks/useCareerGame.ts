@@ -270,12 +270,17 @@ export function useCareerGame() {
     });
   }, [mode, playerPool]);
 
-  // Autocomplete pool mirrors the active tier in unlimited mode (same
-  // convention as Footle's availablePlayers), full pool for daily.
+  // Autocomplete is independent of the hidden player. Unlimited keeps the
+  // current tier first, then missing names from the same baked fallback tier.
   const playerNames = useMemo(() => {
     const source = mode === 'unlimited' ? unlimitedPool : playerPool;
-    return ensureAnswerInOptions(source.map((p) => p.name), targetPlayer.name);
-  }, [mode, unlimitedPool, playerPool, targetPlayer]);
+    const names = source.map((p) => p.name);
+    if (mode === 'daily') return names;
+    return buildCareerPool(difficulty, fallbackPlayers).reduce(
+      (options, player) => ensureAnswerInOptions(options, player.name),
+      names,
+    );
+  }, [mode, difficulty, unlimitedPool, playerPool]);
 
   const completionScore = dailyGameStatus === 'won'
     ? Math.max(100, (MAX_GUESSES - dailyGuessesUsed) * 100)
