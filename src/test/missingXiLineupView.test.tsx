@@ -65,7 +65,10 @@ describe('Missing XI equivalent lineup view', () => {
     expect([!!view.group, view.pitch?.tagName, view.lineup?.tagName], 'MISSING_XI_LINEUP_CONTROLS').toEqual([true, 'BUTTON', 'BUTTON']);
     expect(within(view.group!).getAllByRole('button').map(button => compact(button.textContent))).toEqual(['Pitch', 'Lineup']);
     expect([view.pitch!.getAttribute('aria-pressed'), view.lineup!.getAttribute('aria-pressed')]).toEqual(['true', 'false']);
-    expect(list(m)).toBeNull(); expect(m.container.querySelector('[style*="aspect-ratio"]')).not.toBeNull();
+    expect(list(m)).toBeNull();
+    expect(m.container.querySelectorAll('div[style*="left:"][style*="top:"]')).toHaveLength(11);
+    for (const name of fixture.names.filter(name => name !== fixture.puzzle.candidate.name)) expect(m.container.textContent).toContain(name);
+    expect(m.container.textContent).toContain('Missing player');
     expect(m.container.innerHTML).not.toContain(fixture.puzzle.candidate.name);
     expect(fixture.puzzle).toEqual(original); expect(recordCompletion).not.toHaveBeenCalled();
   });

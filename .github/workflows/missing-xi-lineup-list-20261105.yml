@@ -1,30 +1,39 @@
-name: Missing XI lineup source controls
+name: Missing XI lineup full qualification
 on:
   push:
-    branches: [codex/missing-xi-lineup-list-20261105]
+    branches:
+      - codex/missing-xi-lineup-list-20261105
 permissions:
   contents: read
 jobs:
-  original:
+  scoped:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 50
     defaults:
       run:
         shell: bash
     env:
       SIM_NETWORK: offline
       SIM_OFFLINE_RECEIPT: missing-xi-artifacts/offline.log
+      ENGINES: chromium
       TZ: UTC
+      SEO_SPLIT_BASE_REF: e16e9ea36fc6c9aab84d7f79d99679e5c22e8ad3
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 4
+          fetch-depth: 8
           persist-credentials: false
       - uses: actions/setup-node@v4
         with:
-          node-version: 24
+          node-version: 24.22.1
           cache: npm
-      - name: Locked install and source holds
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.4.4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Locked dependencies and source receipt
         run: |
           mkdir -p missing-xi-artifacts
           git rev-parse HEAD > missing-xi-artifacts/head.txt
@@ -32,15 +41,61 @@ jobs:
           git ls-files -s > missing-xi-artifacts/source-before.txt
           sha256sum package.json package-lock.json > missing-xi-artifacts/locks-before.txt
           npm ci
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          const lock=JSON.parse(fs.readFileSync('package-lock.json'));
+          const rows=Object.keys(lock.packages).filter(p=>p.startsWith('node_modules/')&&fs.existsSync(p+'/package.json')).map(p=>[p,JSON.parse(fs.readFileSync(p+'/package.json')).version]);
+          fs.writeFileSync('missing-xi-artifacts/installed-before.json',JSON.stringify(rows));
+          NODE
+          npm install --prefix "$RUNNER_TEMP/sc11-browser" --no-save --package-lock=false playwright@1.64.1
+          test ! -e node_modules/playwright
+          ln -s "$RUNNER_TEMP/sc11-browser/node_modules/playwright" node_modules/playwright
+          node "$RUNNER_TEMP/sc11-browser/node_modules/playwright/cli.js" install --with-deps chromium
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs'; import assert from 'node:assert/strict';
+          const before=JSON.parse(fs.readFileSync('missing-xi-artifacts/installed-before.json'));
+          const after=before.map(([p])=>[p,JSON.parse(fs.readFileSync(p+'/package.json')).version]);
+          fs.writeFileSync('missing-xi-artifacts/installed-after.json',JSON.stringify(after)); assert.deepEqual(after,before);
+          console.log('Preserved all '+after.length+' locked installed versions.');
+          NODE
+          python -m pip install fonttools pillow
       - name: Proper app types
         run: node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee missing-xi-artifacts/types.log
-      - name: Fixed original physical faults and full restoration
+      - name: Fixed original five physical UI faults and restoration
         run: |
-          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/missingXiLineupCheck.mjs 2>&1 | tee missing-xi-artifacts/outcomes.log
+          NODE_OPTIONS="--max-old-space-size=6144 --require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/missingXiLineupCheck.mjs 2>&1 | tee missing-xi-artifacts/outcomes.log
       - name: Existing Missing XI daily reload contract
         run: |
           ONLY=missing-xi NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node node_modules/vitest/vitest.mjs run src/test/dailyReload.test.tsx --maxWorkers=1 --minWorkers=1 --reporter=default --reporter=json --outputFile=missing-xi-artifacts/daily.json 2>&1 | tee missing-xi-artifacts/daily.log
-      - name: Source lock and offline holds
+      - name: Normal production build
+        if: ${{ !cancelled() }}
+        id: build
+        run: |
+          NODE_OPTIONS="--max-old-space-size=6144" npm run build 2>&1 | tee missing-xi-artifacts/build.log
+          tar -czf missing-xi-artifacts/dist.tgz dist
+          sha256sum missing-xi-artifacts/dist.tgz > missing-xi-artifacts/dist.sha256
+      - name: Existing Missing XI engine layout and reach harnesses
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          ONLY=simMissingXi,simMissingXiLayout,simMissingXiReach node scripts/runAllSims.mjs --browser 2>&1 | tee missing-xi-artifacts/related-sims.log
+      - name: All built output readers
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          export ONLY="simAdsense,simBrand,simHeadTags,simHiddenPages,simHubs,simIndexNow,simIndexing,simInternalLinks,simNoRivalNames,simPrerender,simPrerenderBoot,simRetiredRoutes,simSchema,simSitemap,simSnapshotAssets,simSiteSearch,simGuideHeadings,simSeoMetaSplit,simHomeCopy,simHarnessAnchors"
+          node scripts/runAllSims.mjs --browser 2>&1 | tee missing-xi-artifacts/readers.log
+      - name: Existing route download limits
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          node scripts/lib/hostLikeServer.mjs dist 4173 > missing-xi-artifacts/weight-host.log 2>&1 &
+          sc_host_pid=$!
+          trap 'kill "$sc_host_pid" 2>/dev/null || true' EXIT
+          sleep 2
+          SWEEP_OFFLINE=1 BASE=http://127.0.0.1:4173 node scripts/sweepWeight.mjs 2>&1 | tee missing-xi-artifacts/weight.log
+      - name: Actual daily wins phone desktop keyboard and touch
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          MX_LINEUP_BROWSER_OUT=missing-xi-artifacts/browser NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/playMissingXiLineup.mjs 2>&1 | tee missing-xi-artifacts/browser.log
+      - name: Source and lock holds
         if: always()
         run: |
           git ls-files -s > missing-xi-artifacts/source-after.txt
@@ -52,7 +107,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: missing-xi-source-controls-${{ github.run_id }}
+          name: missing-xi-lineup-final-${{ github.run_id }}
           path: missing-xi-artifacts
           retention-days: 7
           if-no-files-found: error

@@ -1232,7 +1232,7 @@ export default function SoccerCareer() {
     if (!previewStats || !isFormValid || clubs.length === 0 || rolledOvr === null) return;
     const startYear = ERAS.find(e => e.value === era)?.startYear ?? 2020;
     const newCareer = initCareer(playerName.trim(), nationality, position, era, previewStats, rolledOvr, startYear, clubs, appearance, rolledPot ?? undefined, physique, attrShape, academyPreview);
-    if (startYear < 2009) newCareer.historicalArrivals = { version: 1, players: [] };
+    if (startYear < 2009) newCareer.historicalArrivals = { version: 2, players: [] };
     setSaveError(false);
     setArrivalCount(n => n + 1);
     setCareer(newCareer);
