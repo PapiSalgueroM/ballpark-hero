@@ -5,6 +5,7 @@ on:
       - codex/soccer-club-eligibility-20261105
 permissions:
   contents: read
+  actions: read
 jobs:
   scoped:
     runs-on: ubuntu-latest
@@ -21,11 +22,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 0
+          fetch-depth: 12
           persist-credentials: false
       - uses: actions/setup-node@v4
         with:
-          node-version: 24
+          node-version: 24.22.1
           cache: npm
       - uses: oven-sh/setup-bun@v2
         with:
@@ -47,7 +48,7 @@ jobs:
           const rows=Object.keys(lock.packages).filter(p=>p.startsWith('node_modules/')&&fs.existsSync(p+'/package.json')).map(p=>[p,JSON.parse(fs.readFileSync(p+'/package.json')).version]);
           fs.writeFileSync('club-policy-artifacts/installed-before.json',JSON.stringify(rows));
           NODE
-          npm install --prefix "$RUNNER_TEMP/sc11-browser" --no-save --package-lock=false playwright
+          npm install --prefix "$RUNNER_TEMP/sc11-browser" --no-save --package-lock=false playwright@1.64.1
           test ! -e node_modules/playwright
           ln -s "$RUNNER_TEMP/sc11-browser/node_modules/playwright" node_modules/playwright
           node "$RUNNER_TEMP/sc11-browser/node_modules/playwright/cli.js" install --with-deps chromium
@@ -67,17 +68,42 @@ jobs:
       - name: Existing competitions histories and transfer rules
         run: |
           NODE_OPTIONS="--max-old-space-size=6144 --require=$PWD/scripts/lib/offlineTransport.cjs" node node_modules/vitest/vitest.mjs run src/test/soccerCareerTransferBrief.test.ts src/test/soccerTransferBriefUi.test.tsx src/test/soccerTransferBriefPage.test.tsx src/test/soccerTransferBriefPromise.test.tsx src/test/soccerTransferAppearanceFloor.test.tsx src/test/soccerCareerContracts.test.ts src/test/soccerOfferReviewAgeRule.test.tsx src/lib/soccerCareerContinental.test.ts src/test/soccerSeasonCompetitions.test.tsx src/test/soccerTransferLeaguePreference.test.tsx --maxWorkers=1 --minWorkers=1 --reporter=default --reporter=json --outputFile=club-policy-artifacts/related.json 2>&1 | tee club-policy-artifacts/related.log
-      - name: Normal production build
+      - name: Download retained completed build
+        if: ${{ !cancelled() }}
+        uses: actions/download-artifact@v4
+        with:
+          name: soccer-club-policy-scope-42084422697
+          run-id: 42084422697
+          github-token: ${{ github.token }}
+          path: .tmp-policy-input
+      - name: Admit the completed source-matched production build
         if: ${{ !cancelled() }}
         id: build
         run: |
-          NODE_OPTIONS="--max-old-space-size=6144" npm run build 2>&1 | tee club-policy-artifacts/build.log
-          tar -czf club-policy-artifacts/dist.tgz dist
-          sha256sum club-policy-artifacts/dist.tgz > club-policy-artifacts/dist.sha256
-      - name: Existing continental appearance life and save harnesses
-        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
-        run: |
-          ONLY=simCareerRivalryEvents,simCareerContinental,simSoccerCareerUcl,simLoanSpell,simClubSquads,simCareerLife,simSoccerCareerSaveRecovery node scripts/runAllSims.mjs --browser 2>&1 | tee club-policy-artifacts/related-sims.log
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs'; import assert from 'node:assert/strict'; import {execFileSync} from 'node:child_process';
+          const input=fs.readFileSync('.tmp-policy-input/source-before.txt','utf8').split('\n').filter(l=>l.includes('\tsrc/')).join('\n').trim();
+          const current=execFileSync('git',['ls-files','-s','--','src'],{encoding:'utf8',maxBuffer:8*1024*1024}).trim();
+          assert.equal(current,input,'Every src blob equals the completed build input');
+          assert.equal(fs.readFileSync('.tmp-policy-input/head.txt','utf8').trim(),'31ecd1fa0f92ebc348a41f0eef4d9a9a2386bb53');
+          NODE
+          sha256sum .tmp-policy-input/dist.tgz | tee club-policy-artifacts/admitted-dist.sha256
+          test ! -d dist
+          python - <<'PY'
+          import hashlib, pathlib, tarfile
+          packet=pathlib.Path('.tmp-policy-input/dist.tgz')
+          expected=pathlib.Path('.tmp-policy-input/dist.sha256').read_text().split()[0]
+          assert hashlib.sha256(packet.read_bytes()).hexdigest()==expected
+          with tarfile.open(packet) as archive:
+            assert all(m.name=='dist' or (m.name.startswith('dist/') and '..' not in pathlib.PurePosixPath(m.name).parts) for m in archive.getmembers())
+            archive.extractall('.')
+          PY
+          cp .tmp-policy-input/dist.tgz club-policy-artifacts/dist.tgz
+          cp .tmp-policy-input/dist.sha256 club-policy-artifacts/dist.sha256
+          cp .tmp-policy-input/build.log club-policy-artifacts/admitted-build.log
+          cp .tmp-policy-input/related-sims.log club-policy-artifacts/admitted-related-sims.log
+          git diff --exit-code HEAD -- src
+          echo "Admitted the retained completed build and seven prior harness passes. No new build or harness-run claim."
       - name: All built output readers
         if: ${{ !cancelled() && steps.build.outcome == 'success' }}
         run: |
