@@ -247,3 +247,10 @@ SC-36, "A consistent evolving football population" (master line761): PR500 adds 
 ## 2026-11-05: owner-requested NBA historical intake, partial PL-16 adaptation
 
 New2003 NBA My Career UI saves now introduce the sourced59-selection2004 class at the actual2004 calendar boundary. Full class view and saved simulated camp receipts persist through reloads and later signing. Factual selection/identity/birth/broad-role evidence is separate from simulated team/comparison/role/morale outcomes.58 DOBs verified, Karaulov unknown. Other classes/sports/front offices and the full evolving football population remain open. [Implementation, provenance and admitted proof](plans/2026-11-05-nba-real-draft-2004.md). Live App05bd628b, deploy5a2f20c5-f35d-4d81-8b16-0a7aee824fc1, public42052602075/artifact13428705240. Master409/PL16/SC36/CM04 remain partial; existing wider failures remain unwaived.
+
+
+### 2026-11-05 | SC-36 | Four first-team entries, partial population
+
+State: published and independently qualified; SC-36 remains partial. Qualified App head: e16e9ea36fc6c9aab84d7f79d99679e5c22e8ad3. New pre-2009 UI v2 careers admit Neymar2009/Santos, Mbappé2015/Monaco, Haaland2016/Bryne first team and Bellingham2019/Birmingham City exactly once, with stable IDs and source entry separated from the simulated saved world club. V1 remains Neymar-only; unmarked/opaque/newer saves are not upgraded. No extra era stars, real transfers, ratings, dialogue or complete-population/playable-club claim.
+
+Seven-arm7eadbca7, permanent Root393e019c and independent build811f86f0 are retained. Native: 69f420492bd29d81667ad18b3ed98209473e49f77e33a7e8f3eb6788e0acebe5. Deploy: 2d231ee7-24b2-4940-af8d-5908d26371e6. Public: 147361f50c8e3db9c6583009a045a7d79c22c8a680d2fadb171826ff3d3b6c89. [Scope, source evidence and exact integration bridge](plans/2026-11-05-soccer-four-first-team-entries.md). SC-36 and CM-04 remain partial. Existing wider failures and the first failed SC4 build remain unwaived.

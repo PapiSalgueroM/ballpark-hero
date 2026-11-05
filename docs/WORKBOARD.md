@@ -17865,3 +17865,16 @@ Historical Neymar entry is live from a19121c3/tree b389. Current build, four-arm
 ## 2026-11-05: NBA real 2004 draft class live
 
 NBA-2004-LIVE-05bd628b-42052602075. PR502 source05bd628b, treeb5d82077, publish5a2f20c5-f35d-4d81-8b16-0a7aee824fc1. New2003 quick/Road careers receive all59 real2004 selections,58 verified DOBs plus1unknown, and persistent simulated camp records. Qualified build/eight arms/permanent/native3widths and actualpublic42052602075/artifact13428705240 independently admitted. See [scope and receipts](plans/2026-11-05-nba-real-draft-2004.md). Broader known failures remain unwaived; master409 and SC36/CM04/PL16 partial. Continue next Soccer Career real-entry cohorts, then playable SC/CM teams/leagues. No active-save backfill.
+
+
+## 2026-11-05: SC-36 four-entry policy proof record
+
+State: published and independently qualified; SC-36 remains partial. Qualified final App head: e16e9ea36fc6c9aab84d7f79d99679e5c22e8ad3.
+
+Runtime scope is exactly four files from candidatea9e56ff706ea71a51d3ec60438023ed9ad4d3b01/tree316d2084d15d5e24aff38e5a692b639432b3eb98: historical-arrival helper, phone world lookup, PhonePanel and the one new-creation version literal. New pre-2009 UI saves use v2; old v1/unmarked/unknown/newer inputs retain their supported behavior. Four first-team identities and source clubs are displayed without invented real speech, ratings or a forced history. Full factual boundaries and source links are in [the provenance note](data/soccer-historical-arrivals.md).
+
+Admitted proof: original42056408953/art13429002902/c572bce9; seven arms42068497425/art13435307037/7eadbca7; permanent42071146002/art13436901528/Root393e019c; build42071220857/art13437520395/independent811f86f0. The seven-arm56 lossless captures total251,270,552 decoded bytes; the separate permanent61 regular bodies total119,276,242 bytes. Those are separate authorities. The original reversal reproduces all eight original bodies, fixed/restored reproduce all eight bodies, and authenticated old inputs were never manufactured by stripping v2. Private keyed forks are not claimed observed.
+
+Native receipt: 69f420492bd29d81667ad18b3ed98209473e49f77e33a7e8f3eb6788e0acebe5. Deploy ID: 2d231ee7-24b2-4940-af8d-5908d26371e6. Public receipt: 147361f50c8e3db9c6583009a045a7d79c22c8a680d2fadb171826ff3d3b6c89.
+
+First integrate four runtime plus five explicit nonruntime paths, publish that nine-path App and qualify public proof. These four closeout documents then land separately with no second publish. The aggregate nine nonruntime inverses must recover App tree316d, then the four runtime inverses recover main1acb. No whole docs/scripts/test-prefix exception is allowed. Temporary QA workflows/helpers stay out. The OOM original and first-build reader18 failure remain failed; later admitted proofs do not waive them or wider-suite reds. SC-36 is partial. Next is the owner's teams/leagues integration priority, with no new league or loading implementation authorised by this closeout alone.
