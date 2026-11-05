@@ -2,7 +2,7 @@
 
 The published classic practice feature added help about extra runs after banking. This maintenance updates the two stale S4 expectations and matching W7 browser expectations to cover that real text. No production code changes. Source base: main1acb33005073be70ba5aae0285ece5537f390f9a; main last observed at e16e9ea36fc6c9aab84d7f79d99679e5c22e8ad3 during qualification.
 
-Final scoped proof:32unit cases pass and restore; the real paragraph-removal control produces only the two intended failures. W7 passes12checks at390/1280 and restores after the original oracle's four expected failures. Proper types, normal build and all16 caps pass;19/20 saved-output readers pass with the existing NBA CRLF anchor still red. First test-runner census mistake corrected and retained. Full suite is not claimed green. See docs/plans/2026-11-05-soccer-training-copy-tests.md for exact runs and archives. Unmerged, unpublished, no master card marked complete.
+Final scoped proof:32unit cases pass and restore; the real paragraph-removal control produces only the two intended failures. W7 passes12checks at390/1280 and restores after the original oracle's four expected failures. Proper types, normal build and all16 caps pass;19/20 saved-output readers pass with the older pinned build's NBA CRLF anchor red. That harness correction has since landed on current main. First test-runner census mistake corrected and retained. Full suite is not claimed green. See docs/plans/2026-11-05-soccer-training-copy-tests.md for exact runs and archives. Unmerged, unpublished, no master card marked complete.
 
 ## 2026-11-01 20:55 EDT, Claude session K (games): RELEASE BV IS LIVE (deployment 96c67a3b, main 7bd3e99a1)
 
