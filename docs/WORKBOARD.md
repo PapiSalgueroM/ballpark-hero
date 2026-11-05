@@ -17867,6 +17867,39 @@ Historical Neymar entry is live from a19121c3/tree b389. Current build, four-arm
 NBA-2004-LIVE-05bd628b-42052602075. PR502 source05bd628b, treeb5d82077, publish5a2f20c5-f35d-4d81-8b16-0a7aee824fc1. New2003 quick/Road careers receive all59 real2004 selections,58 verified DOBs plus1unknown, and persistent simulated camp records. Qualified build/eight arms/permanent/native3widths and actualpublic42052602075/artifact13428705240 independently admitted. See [scope and receipts](plans/2026-11-05-nba-real-draft-2004.md). Broader known failures remain unwaived; master409 and SC36/CM04/PL16 partial. Continue next Soccer Career real-entry cohorts, then playable SC/CM teams/leagues. No active-save backfill.
 
 
+## 2026-11-05: SC-36 four-entry policy proof record
+
+State: published and independently qualified; SC-36 remains partial. Qualified final App head: e16e9ea36fc6c9aab84d7f79d99679e5c22e8ad3.
+
+Runtime scope is exactly four files from candidatea9e56ff706ea71a51d3ec60438023ed9ad4d3b01/tree316d2084d15d5e24aff38e5a692b639432b3eb98: historical-arrival helper, phone world lookup, PhonePanel and the one new-creation version literal. New pre-2009 UI saves use v2; old v1/unmarked/unknown/newer inputs retain their supported behavior. Four first-team identities and source clubs are displayed without invented real speech, ratings or a forced history. Full factual boundaries and source links are in [the provenance note](data/soccer-historical-arrivals.md).
+
+Admitted proof: original42056408953/art13429002902/c572bce9; seven arms42068497425/art13435307037/7eadbca7; permanent42071146002/art13436901528/Root393e019c; build42071220857/art13437520395/independent811f86f0. The seven-arm56 lossless captures total251,270,552 decoded bytes; the separate permanent61 regular bodies total119,276,242 bytes. Those are separate authorities. The original reversal reproduces all eight original bodies, fixed/restored reproduce all eight bodies, and authenticated old inputs were never manufactured by stripping v2. Private keyed forks are not claimed observed.
+
+Native receipt: 69f420492bd29d81667ad18b3ed98209473e49f77e33a7e8f3eb6788e0acebe5. Deploy ID: 2d231ee7-24b2-4940-af8d-5908d26371e6. Public receipt: 147361f50c8e3db9c6583009a045a7d79c22c8a680d2fadb171826ff3d3b6c89.
+
+First integrate four runtime plus five explicit nonruntime paths, publish that nine-path App and qualify public proof. These four closeout documents then land separately with no second publish. The aggregate nine nonruntime inverses must recover App tree316d, then the four runtime inverses recover main1acb. No whole docs/scripts/test-prefix exception is allowed. Temporary QA workflows/helpers stay out. The OOM original and first-build reader18 failure remain failed; later admitted proofs do not waive them or wider-suite reds. SC-36 is partial. Next is the owner's teams/leagues integration priority, with no new league or loading implementation authorised by this closeout alone.
+
+
+## 2026-11-05 Soccer Career training copy regression claim
+Owner: Codex current master-list continuation. Remote base main 1acb33005073be70ba5aae0285ece5537f390f9a, branch codex/soccer-training-copy-tests-20261105. Scope: src/test/soccerScreenTruths.test.tsx S4 only, plus this claim and a small plan/state note. The published classic practice feature added one truthful practice-after-bank paragraph; two old assertions still count earlier help paragraphs. Preserve all previous rules, pause/hidden-result and bank-help assertions, and assert the actual new paragraph. No TrainingPanel/product change, no test removal, no caps or US sim edits. Run original-first two business failures, fixed scoped file and a source-checked removal control on the actual new paragraph, then restore exact product bytes. Local root remains held; execution and Git are remote. This maintenance does not complete a master game card and is not permission to publish the unqualified global suite.
+
+The same bounded claim includes scripts/playSoccerScreenTruths.mjs W7's matching stale paragraph oracle. Keep existing fold, focus and scroll checks. No production source changes.
+
+
+Qualified 2026-11-05, test and browser oracle maintenance only. The source build remains pinned to main1acb33005073be70ba5aae0285ece5537f390f9a. Proper app types were zero in run42083460725; its normal build, all16 unchanged route caps and19/20 output readers passed. The sole output-reader failure is the previously recorded simHarnessAnchors NBA historical-draft CRLF anchor. Production TrainingPanel is byte-identical to main.
+
+The first controller used an incorrect parameterized-case census[11,3,15]. Run42085901958 corrected only that census to[11,6,15]: original30pass/2exactS4reds, fixed32pass, physical actual-practice-paragraph removal30pass/2exactnewS4reds, restored32pass. No skipped cases, five held proof sources restored exactly, source and locks held. Browser run42083460725, same completed build: fixed12W7checks, original oracle4exact stale-copy failures, restored12checks. All12actual screenshots reviewed,390/1280 menu/help, no clipping and first drill visible without panel scroll. All849 served files held.
+
+Evidence is retained under C:/Users/antho/dukb-handoff/2026-11-05/sc-training-copy/. Original focused artifact13441331904 (389203B, sha256 b2ab683c5fec7e45c5abc734ea7881b4ae599c38c7511d37501d60a022b68cef); first full packet13442254309 (8913403B,sha256 ac203fa940df8b57cd0bab0ac70f9e9decf480c90d301db22e85d76eccb0832a); final units13443071469 (533848B,sha256 0e17515a3f4e54e3a9f8a3c1a3d12d9e7559e0a1ccb873b68b2942f60aa4942e). Temporary controllers/workflows are excluded from clean delivery. No production code, cap, player data, score or save format changed. Full-suite/release-wide failures remain unwaived; this does not complete a master game card and has not been merged or published.
+
+Current-main follow-up: main e16 and its documentation closeout 3b include the NBA historical-draft raw-read repair. The older 19/20 result describes the pinned 1ac build. Full-suite completion is not claimed.
+
+
+## 2026-11-05 draft reconciliation
+
+Reconciled onto main 3b14650d360b010b25b525de33a5f32f33de2798 after the historical-release closeout. The published release records are preserved. Owned test/script blobs are unchanged from the scoped qualification. The combined soccer integration check is pending; this remains an unmerged, unpublished draft.
+
+
 ## 2026-11-05: Preferred-league transfer brief claimed
 
 This chat owns SC-11's optional preferred league in src/lib/soccerCareerTransferBrief.ts, src/components/soccer-career/AgentBrief.tsx and only the engine preview/empty-request seams. Isolated branch codex/soccer-transfer-league-20261105 starts at main1acb3300. PR504's historical arrivals, PhonePanel, soccerPhone and SoccerCareer page remain with their existing owner. No shared local source/index changes or local application execution. Remote original-first tests precede product changes. Existing Any behavior, saved offers, strict invalid-state refusal, random-call sites and the 840 KiB route cap must hold. SC-11 and the whole master list remain partial. Scope and checks: docs/plans/2026-11-05-soccer-transfer-league.md.
@@ -17875,3 +17908,8 @@ This chat owns SC-11's optional preferred league in src/lib/soccerCareerTransfer
 ## 2026-11-05: SC-11 preferred league scoped for integration
 
 Soccer Career transfer briefs now offer an optional preferred league, preview actual matches and constrain the real request. Empty/unavailable choices preserve the existing offer and draw stream; default Any is unchanged. Exact production/test blobs were reviewed and executed remotely. Original9owned failures/3passes, fixed/restored12, three effective controls7/2/1 and121existing cases pass. Normal build/all16unchanged caps pass, SC839.3/840KiB;19of20readers pass including all15required saved-output fences. Same-artifact native42074689255 passes199checks/4journeys/151fullframes/64actions and6picker/contract captures. Full command42069800178 remains failed with7cases/3suite setup errors; the NBA CRLF anchor reader also remains held. This is scoped integration evidence, not a green global release or publication. PR504 historical entries and final publication stay with their owner. Exact receipts and limitations: docs/plans/2026-11-05-soccer-transfer-league.md. No shared source/index, data, dependency lock or budget changes.
+
+
+## 2026-11-05 SC-11 draft integration
+
+Stacked after training maintenance PR506 and main 3b14650d. Historical-release records are preserved. Owned production and test blobs remain identical to the qualified 5689ab28 version. A combined soccer integration check is pending. This remains a partial SC-11 implementation, unmerged and unpublished.
