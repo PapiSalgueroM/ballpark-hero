@@ -1,0 +1,101 @@
+{
+  "schema": 1,
+  "status": "BOUND_ORIGINAL_FIRST_NO_APP_IMPLEMENTATION",
+  "parent": "484595fd4f7b07d24066e2de7bae5486483ae284",
+  "tree": "7759bc8fa046ea9024b9c603cbbc94482c01db01",
+  "appEquivalentPublishedSource": "536705b4e4be7df8a80c02ff818b04a4fe23cf3a",
+  "test": {
+    "bytes": 17738,
+    "sha256": "a89381159d57062182ed10c52fa430040af40c4359a55faee0f777877ed326a5",
+    "blob": "f8b11107568291fc8ba64d610b906c643ebeab43",
+    "path": "src/test/soccerHistoricalRealEntry.test.tsx"
+  },
+  "evidenceEnvironment": "SC_HISTORICAL_ENTRY_EVIDENCE",
+  "cases": [
+    {
+      "fullName": "Soccer Career first historical real entry the actual 2005 creation path admits Neymar once at Santos in 2009",
+      "file": "entry.json",
+      "ownership": "owned",
+      "marker": "SC_REAL_ENTRY_2009"
+    },
+    {
+      "fullName": "Soccer Career first historical real entry the actual entry survives complete reload and the 2015 era club change",
+      "file": "continuity.json",
+      "ownership": "owned",
+      "marker": "SC_REAL_ENTRY_CONTINUITY"
+    },
+    {
+      "fullName": "Soccer Career first historical real entry SportsFeed keeps the sourced entry separate from the persistent career world club",
+      "file": "phone-card.json",
+      "ownership": "owned",
+      "marker": "SC_REAL_ENTRY_PHONE_CARD"
+    },
+    {
+      "fullName": "Soccer Career first historical real entry legacy unmarked APIs and opaque future save versions keep their complete state and draw path",
+      "file": "legacy.json",
+      "ownership": "held",
+      "marker": null
+    },
+    {
+      "fullName": "Soccer Career first historical real entry the actual newer era creation UI keeps its unmarked saved default",
+      "file": "newer-ui.json",
+      "ownership": "held",
+      "marker": null
+    }
+  ],
+  "sourcePins": {
+    "src/lib/soccerCareerEngine.ts": "94ccfb82dace9fc099c670357472732973e11d73",
+    "src/pages/SoccerCareer.tsx": "e191a4634c44be5ebe511da0885579fdb6696dc5",
+    "src/lib/soccerCareerSave.ts": "86ec011693fd5bc702b5e8ccec05d27775a72a76",
+    "src/lib/careerEras.ts": "e037022342382b1df9c8a5ede620d2cce480bc23",
+    "src/lib/soccerPhone.ts": "f81e5a1b5207d776aea9594e28f130d0e8888832",
+    "src/components/soccer-career/PhonePanel.tsx": "5c1ac9fa9d852f61b01a751197af3766f157d508",
+    "src/lib/soccerAwardReveal.ts": "3c2ba81b18cdf575e0d6fb70c7743b41b78d519d",
+    "scripts/lib/offlineTransport.cjs": "0fda542a2649fe5da937c6976fd0f5b6073e74b6",
+    "package-lock.json": "97d6f12a052f25f400462938c241789a083f0bfe",
+    "package.json": "2ff64986fb76ebc51b706f2fd24765768874008a",
+    "tsconfig.app.json": "51f581dd91641b4c1f1219f646788e73cf6bf00c"
+  },
+  "qaPaths": [
+    ".github/workflows/soccer-first-real-entry-original-20261105.yml",
+    "src/test/soccerHistoricalRealEntry.test.tsx",
+    "scripts/qa/soccerHistoricalRealEntryCases.json",
+    "scripts/qa/soccerHistoricalRealEntryOriginal.mjs",
+    "docs/plans/2026-11-05-soccer-first-real-entry-original-first.md"
+  ],
+  "expected": {
+    "tests": 5,
+    "ownedAssertionErrors": 3,
+    "heldPasses": 2,
+    "pending": 0,
+    "appTypesExit": 0,
+    "vitestExit": 1
+  },
+  "oneSeedInputQualification": {
+    "run": 41996253666,
+    "job": 127140043319,
+    "artifact": 13400546851,
+    "bytes": 3803852,
+    "sha256": "622aeedfd11cea617cf0e05f1ea0cd1446b718879e07174d12af0fd27dc30ebb",
+    "credit": "Input/phase qualification only. No feature identity, joint seed, guaranteed nominee or selected transfer.",
+    "independentAdmissionSHA256": "fc83f41e6c22610b24618a7978376fb2f979e5290a15fe352d65ee40ec76ba0a"
+  },
+  "facts": {
+    "approvedPacket": "HISTORICAL-COHORT-FACTS.json",
+    "sha256": "4123d0d9bf5f0cd64ccb9c7ef04677032579a4a0c9b433eca24c24e10b7e886c",
+    "addedRealData": false
+  },
+  "limits": [
+    "Five source-authored cases await actual original remote app-config TSC and native Vitest evidence.",
+    "First supported Neymar senior entry only; no whole cohort/population, academy-date, specific2009position, rating, nomination or transfer selection guarantee.",
+    "Existing historical transfer suppression and all random sites/budgets remain unchanged.",
+    "Original held legacy/newer-UI RAW, all import/UI/main tapes and complete codec frames become baseline artifacts for later exact comparison.",
+    "No build/browser/public feature result, provider/new dependency/DB/source-data mutation, local runtime or artifact acquisition."
+  ],
+  "contract": {
+    "savedAdmission": "historicalArrivals:{version:1,players:[{id,entryYear,entryClub}]}",
+    "entryClub": "Immutable sourced admission club, Santos",
+    "currentClubAuthority": "Existing phone.clubs[name] only; protect the registered key from era reseeding and existing28-cap eviction",
+    "transferPolicy": "Existing historical suppression unchanged; no move generator or selection/nominee guarantee"
+  }
+}
