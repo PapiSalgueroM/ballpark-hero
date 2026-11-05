@@ -1,0 +1,136 @@
+name: Segunda canonical bridge original source qualification
+on:
+  push:
+    branches: [codex/soccer-segunda-original-20261104]
+permissions:
+  contents: read
+concurrency:
+  group: soccer-segunda-original-${{ github.ref }}
+  cancel-in-progress: false
+env:
+  CI: '1'
+  SIM_NETWORK: offline
+  TZ: UTC
+  BASE_SOURCE: 3268307038c4586dbc35f4697da1849512b473d9
+  BASE_TREE: 6d18d84bcef424def83e496087830c096ba4163b
+  QA_CORE: 5abe186b778a775b1275b850f3780bc5d7ee002f
+  QA_TREE: c0c3d3d201b2835a43af744254c4b7bc47366b8c
+jobs:
+  original:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 3
+          filter: blob:none
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: '1.4.4'
+      - name: Bind untouched application source and test-only qualification
+        run: |
+          set -euo pipefail
+          OUT="$RUNNER_TEMP/soccer-segunda-original"
+          mkdir -p "$OUT/logs" "$OUT/transport" "$OUT/evidence"
+          echo "QA_OUT=$OUT" >> "$GITHUB_ENV"
+          export QA_OUT="$OUT"
+          test "$(git rev-parse HEAD^)" = "$QA_CORE"
+          test "$(git rev-parse HEAD^^)" = "$BASE_SOURCE"
+          test "$(git rev-parse "$BASE_SOURCE^{tree}")" = "$BASE_TREE"
+          test "$(git rev-parse "$QA_CORE^{tree}")" = "$QA_TREE"
+          test "$(git diff --name-status HEAD^ HEAD)" = $'A\t.github/workflows/soccer-segunda-original-20261104.yml'
+          git diff --name-status "$BASE_SOURCE" "$QA_CORE" > "$OUT/source-delta.txt"
+          printf '%s\n' $'A\tdocs/plans/2026-11-04-segunda-canonical-bridge.md' $'A\tscripts/qa/soccerSegundaBridgeCases.json' $'A\tscripts/qa/soccerSegundaBridgeEvidence.mjs' $'A\tsrc/test/soccerCareerSegundaBridge.test.ts' $'A\tsrc/test/soccerCareerSegundaCreation.test.tsx' > "$OUT/expected-source-delta.txt"
+          cmp "$OUT/source-delta.txt" "$OUT/expected-source-delta.txt"
+          git rev-parse HEAD > "$OUT/source-head.txt"
+          git rev-parse HEAD^{tree} > "$OUT/source-tree.txt"
+          git ls-files -s > "$OUT/tracked-blobs.txt"
+          git grep -n "cupAssociation" -- src > "$OUT/cup-callers-before.txt"
+          git status --porcelain --untracked-files=all > "$OUT/status-before-install.txt"
+          test ! -s "$OUT/status-before-install.txt"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import crypto from 'node:crypto';import cp from 'node:child_process';
+          const paths=cp.execFileSync('git',['ls-files','-z']).toString().split('\0').filter(Boolean);
+          const rows=Object.fromEntries(paths.map(p=>[p,{bytes:fs.statSync(p).size,sha256:crypto.createHash('sha256').update(fs.readFileSync(p)).digest('hex')}]));
+          fs.writeFileSync(process.env.QA_OUT+'/source-before.json',JSON.stringify(rows,null,2)+'\n');
+          NODE
+      - name: Install held dependencies before offline phase
+        run: |
+          set -euo pipefail
+          test "$(bun --version)" = 1.4.4
+          bun --version > "$QA_OUT/logs/bun-version.log"
+          node --version > "$QA_OUT/logs/node-version.log"
+          bun install --frozen-lockfile > "$QA_OUT/logs/install.log" 2>&1
+          git diff --exit-code HEAD -- package.json package-lock.json bun.lock bun.lockb
+      - name: Proper app types
+        run: |
+          set -euo pipefail
+          export GIT_NO_LAZY_FETCH=1
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          export SIM_OFFLINE_RECEIPT="$QA_OUT/transport/types.log"
+          : > "$SIM_OFFLINE_RECEIPT"
+          set +e
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json > "$QA_OUT/logs/types.log" 2>&1
+          native_exit=$?
+          set -e
+          printf '%s\n' "$native_exit" > "$QA_OUT/types-native-exit.txt"
+          cat "$QA_OUT/logs/types.log"
+          test "$native_exit" = 0
+          printf '%s\n' '{"command":"node_modules/.bin/tsc --noEmit -p tsconfig.app.json","exit":0}' > "$QA_OUT/types-passed.json"
+          test ! -s "$SIM_OFFLINE_RECEIPT"
+      - name: Actual original business cases and read-only generation
+        run: |
+          set -euo pipefail
+          export GIT_NO_LAZY_FETCH=1
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          export SEGUNDA_EVIDENCE_DIR="$QA_OUT/evidence"
+          export SIM_OFFLINE_RECEIPT="$QA_OUT/transport/original-tests.log"
+          : > "$SIM_OFFLINE_RECEIPT"
+          set +e
+          node node_modules/vitest/vitest.mjs run src/test/soccerCareerSegundaBridge.test.ts src/test/soccerCareerSegundaCreation.test.tsx --maxWorkers=1 --minWorkers=1 --reporter=json --outputFile="$QA_OUT/vitest.json" > "$QA_OUT/vitest.stdout.log" 2> "$QA_OUT/vitest.stderr.log"
+          native_exit=$?
+          set -e
+          printf '%s\n' "$native_exit" > "$QA_OUT/vitest-native-exit.txt"
+          cat "$QA_OUT/vitest.stdout.log"
+          cat "$QA_OUT/vitest.stderr.log"
+          test ! -s "$SIM_OFFLINE_RECEIPT"
+          export SIM_OFFLINE_RECEIPT="$QA_OUT/transport/reader.log"
+          : > "$SIM_OFFLINE_RECEIPT"
+          node scripts/qa/soccerSegundaBridgeEvidence.mjs --out "$QA_OUT" --mode original --exit-code "$native_exit" > "$QA_OUT/logs/evidence-reader.log" 2>&1
+          cat "$QA_OUT/logs/evidence-reader.log"
+          test ! -s "$SIM_OFFLINE_RECEIPT"
+      - name: Hold complete tracked bytes and offline receipts
+        if: always()
+        run: |
+          set -euo pipefail
+          test -n "${QA_OUT:-}"
+          export GIT_NO_LAZY_FETCH=1
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import crypto from 'node:crypto';import cp from 'node:child_process';import assert from 'node:assert/strict';
+          const out=process.env.QA_OUT;
+          const paths=cp.execFileSync('git',['ls-files','-z']).toString().split('\0').filter(Boolean);
+          const rows=Object.fromEntries(paths.map(p=>[p,{bytes:fs.statSync(p).size,sha256:crypto.createHash('sha256').update(fs.readFileSync(p)).digest('hex')}]));
+          fs.writeFileSync(out+'/source-after.json',JSON.stringify(rows,null,2)+'\n');
+          assert.deepEqual(rows,JSON.parse(fs.readFileSync(out+'/source-before.json','utf8')),'SC_SEGUNDA_SOURCE_BYTES_HELD');
+          const receipts=fs.readdirSync(out+'/transport').map(p=>({path:p,bytes:fs.statSync(out+'/transport/'+p).size}));
+          assert(receipts.every(x=>x.bytes===0),'SC_SEGUNDA_OFFLINE_RECEIPTS_HELD');
+          const status=cp.execFileSync('git',['status','--porcelain','--untracked-files=all']).toString();
+          fs.writeFileSync(out+'/status-after.txt',status);assert.equal(status,'','SC_SEGUNDA_TRACKED_STATUS_HELD');
+          fs.writeFileSync(out+'/source-hold.json',JSON.stringify({tracked:paths.length,receipts,status:'clean',allBytesHeld:true},null,2)+'\n');
+          console.log('SC_SEGUNDA_SOURCE_BYTES_HELD '+paths.length+' tracked files, empty offline receipts and clean status');
+          NODE
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: soccer-segunda-original-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ env.QA_OUT }}/
+          retention-days: 30
+          compression-level: 6
