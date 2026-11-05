@@ -20251,3 +20251,11 @@ PR500 merged at a19121c3, qualified tree b389. New UI careers starting before 20
 NBA's full 2004 class is still unreleased. Candidate 4e45ee3 passed the production build, 20 readers, 3 smokes, all 16 existing caps and the default NBA career harness. Its first fixed arm passed four new feature cases; the fifth exposed a cold versus warm draft-reveal text difference. The original-source causal replay and complete eight-arm qualification remain pending.
 
 CM47 and LeagueSeasons582 remain unwaived. All 62 ordered NFL37/NBA25 golden failures match baseline457 and candidate4e45 exactly; MLB/NHL pass. No recording was replaced and no full-suite-green claim is made.
+
+## 2026-11-05: NBA 2004 real draft class live
+
+PR502 merged `05bd628b349ef7483bc5f5f537a7d10807a83f05`, exact integrated tree `b5d8207755aa6f46f7395c3a83c73514d15c2797`. New 2003 NBA My Career quick/Road saves admit all59 real2004 selections once, show the complete class and retain simulated camp receipts through reloads/later signing.58 verified DOBs, Karaulov unknown. [Scope, sources and evidence](plans/2026-11-05-nba-real-draft-2004.md).
+
+Proper types, eight-arm outcomes, completed build/readers/caps, permanent regression and all3 native viewports passed independent review. Publication `5a2f20c5-f35d-4d81-8b16-0a7aee824fc1` used the verified merged source. Actual custom-domain proof [42052602075](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/42052602075), original artifact 13428705240, independent receipt `d71f385a5dce154ca9c588d149bca6f1160f3a9997bb53aa45e6becf8d58f498`, closes this scoped release.
+
+Master409/PL-16/SC-36/CM-04 remain partial. Existing CM47, Seasons582, baseline NFL37/NBA25 golden differences and broader automatic/source/native failures remain unwaived; no full-suite-green claim. Next: the sourced three additional Soccer Career historical entries, then actual playable team/league coverage. Existing v1/opaque saves retain their own policy.

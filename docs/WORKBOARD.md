@@ -17861,3 +17861,7 @@ The authoritative444117B master file SHA256fda0f7eef07d41f2ba91e89dff3542fef98cd
 ## 2026-11-05: PR500 published and verified
 
 Historical Neymar entry is live from a19121c3/tree b389. Current build, four-arm, 45-boundary and native V3 evidence is admitted. Public run42023961495/job127233399263 passed on douknowball.com; all 12 actual 320/390/1280 images were reviewed. The one-route audit passed and IndexNow accepted one URL. Permanent five-case test/sim and sourced provenance are retained with this closeout. [Exact scope and receipts](plans/2026-11-05-soccer-real-player-entry.md). SC-36 stays partial. NBA's full 2004 class remains in qualification; the old47/582/37/25 failures remain unwaived.
+
+## 2026-11-05: NBA real 2004 draft class live
+
+NBA-2004-LIVE-05bd628b-42052602075. PR502 source05bd628b, treeb5d82077, publish5a2f20c5-f35d-4d81-8b16-0a7aee824fc1. New2003 quick/Road careers receive all59 real2004 selections,58 verified DOBs plus1unknown, and persistent simulated camp records. Qualified build/eight arms/permanent/native3widths and actualpublic42052602075/artifact13428705240 independently admitted. See [scope and receipts](plans/2026-11-05-nba-real-draft-2004.md). Broader known failures remain unwaived; master409 and SC36/CM04/PL16 partial. Continue next Soccer Career real-entry cohorts, then playable SC/CM teams/leagues. No active-save backfill.
