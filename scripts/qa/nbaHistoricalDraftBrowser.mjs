@@ -432,7 +432,7 @@ async function assertCamp(p,r,name){
  r.actions.push({type:'actual-saved-simulated-camp-receipt',name,visits,text,saved});return card;
 }
 async function run(p,r){
- await goto(p,'/nba-my-career');const name=p.getByRole('textbox',{name:'Your player name',exact:true});await typeInto(p,r,name,'Native Draft Probe','fictional player name');
+ const response=await goto(p,'/nba-my-career');if(publicMode)await qualifyPublicTelemetry(p,r,response);const name=p.getByRole('textbox',{name:'Your player name',exact:true});await typeInto(p,r,name,'Native Draft Probe','fictional player name');
  const era=p.getByRole('button').filter({has:p.getByText('⏪ 2003-04 throwback',{exact:true})});await press(p,r,era,'actual2003 era');await press(p,r,p.getByRole('button',{name:'PG',exact:true}),'actual PG');
  await press(p,r,p.getByRole('button',{name:'Enter the draft',exact:true}),'actual quick2003 constructor');await hubReady(p);
  const initial=await frame(p);assert.equal(initial.state.c.year,2003);assert.equal(initial.state.c.eraId,'y2004');assert.deepEqual(initial.state.c.draft2004,{v:1,ids:[],visits:[]});r.created=initial;
