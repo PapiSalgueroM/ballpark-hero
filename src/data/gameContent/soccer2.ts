@@ -1791,6 +1791,14 @@ export const SOCCER_CONTENT_2: GameContentMap = {
         ],
       },
       {
+        heading: "K League 1 club coverage",
+        items: [
+          "The current pool keeps all 12 K League 1 members, with 11 ordinary player and manager destinations. Gimcheon Sangmu remains a league member. Joining or managing the real club is not supported here yet.",
+          "Eight clubs are added from the 2026 starting year. The four Korean club identities already in the game keep their older history, tiers and colours. Club membership does not promise a verified current squad, real ratings or a complete Korean season format.",
+          "Korean domestic cup results remain a generic simulation where the real season record is not verified. No Korea Cup entry list, calendar or final format is promised by that result.",
+        ],
+      },
+      {
         heading: "Advancing seasons through the training ground",
         items: [
           "Advance season by season through simulated stats, newspaper headlines, random events, and decisions.",
@@ -1896,7 +1904,7 @@ export const SOCCER_CONTENT_2: GameContentMap = {
       {
         heading: "Your domestic cup run",
         items: [
-          "Every season your club plays its country's domestic cup as a run, from the early rounds to the final, and the cup carries its real name (the FA Cup, the Copa del Rey, the DFB-Pokal) wherever two sources back it; a cup that was not played that season cannot be won.",
+          "A season can include a simulated domestic cup run, from the early rounds to the final, and the cup carries its real name (the FA Cup, the Copa del Rey, the DFB-Pokal) wherever two sources back it; a cup that was not played that season cannot be won.",
           "Go out early and your season summary names the round and the club that knocked you out. Win it and the celebration walks you through the run, and your trophy chip names the cup.",
         ],
       },

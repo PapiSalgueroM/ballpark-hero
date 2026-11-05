@@ -443,7 +443,7 @@ console.log(`  since: ${sinceTally.shipped} shipped clubs in every list 1980 to 
 
 /* ─── 4. TIERS ─── */
 head('4', 'TIERS: the rule worked again, hand rows frozen, Forest across eras');
-const partialSet = new Set(stubMod.CM_PARTIAL);
+const partialSet = new Set(inputs.partial);
 const handBy = new Map(HAND.map(c => [c.name, c]));
 const tableLines = [];
 let aboveFour = 0;

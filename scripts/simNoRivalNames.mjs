@@ -408,6 +408,9 @@ for (const file of files) {
     const fifaRe = /FIFA/gi;
     fifaRe.lastIndex = 0;
     while ((fifa = fifaRe.exec(probe)) !== null) {
+      // This hostname occurrence cites the governing body's official archive.
+      // Nearby names and lookalike hostnames get no exception.
+      if (probe.slice(Math.max(0, fifa.index - 12), fifa.index + 9).toLowerCase() === 'https://fdp.fifa.org/') continue;
       const window = probe.slice(Math.max(0, fifa.index - 70), fifa.index + 70);
       if (FIFA_ALLOWED.some(ok => ok.test(window))) continue;
       findings.push({

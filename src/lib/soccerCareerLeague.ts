@@ -480,11 +480,12 @@ export function ledgerLeague(key: string, year: number): LedgerSeason | null {
 export function clubLedgerSeason(club: string, year: number): (LedgerSeason & { canon: string | null }) | null {
   if (year >= LIST_SEASON) return null;
   const m = ledgerMember(club, year);
-  /* A future-only Segunda profile does not bind an unnamed historical alias.
+  /* A current-only profile does not bind an unnamed historical alias.
      An explicitly verified historical canon result remains authoritative. */
   const since = CAREER_POOL_SINCE[club];
   if (m?.canon === null && since !== undefined && year < since
-    && CAREER_LEAGUE_LADDER["Segunda Division"]?.some(group => group.includes(club))) return null;
+    && (CAREER_LEAGUE_LADDER["Segunda Division"]?.some(group => group.includes(club))
+      || CAREER_LEAGUE_LADDER["K League 1"]?.some(group => group.includes(club)))) return null;
   const s = m ? ledgerLeague(m.key, year) : null;
   return s && m ? { ...s, canon: m.canon } : null;
 }
