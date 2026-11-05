@@ -186,8 +186,8 @@ async function selectOption(p,r,index,text){
  const trigger=p.getByRole('combobox').nth(index);await press(p,r,trigger,'Open actual creation picker '+index);
  const list=p.getByRole('listbox');await list.waitFor({state:'visible'});assert.equal(await list.count(),1);
  const target=list.getByRole('option',index===0?{name:/^Andorra(?:\s+Andorra)?$/}:{name:text,exact:true});await target.waitFor({state:'visible'});assert.equal(await target.count(),1);
- if(r.width<768){await touchReach(p,r,target);await target.tap();}
- else{const wanted=await target.evaluate(n=>[...n.closest('[role="listbox"]').querySelectorAll('[role="option"]')].indexOf(n));assert(wanted>=0);await p.keyboard.press('Home');for(let i=0;i<wanted;i++)await p.keyboard.press('ArrowDown');await p.waitForFunction(n=>n===document.activeElement||n.contains(document.activeElement),await target.elementHandle());await p.keyboard.press('Enter');}
+ if(r.width<768){const label=target.locator(':scope > span').last();assert.equal(await label.count(),1);assert((await label.innerText()).includes(text));await touchReach(p,r,label);await label.tap();}
+ else{const wanted=await target.evaluate(n=>[...n.closest('[role="listbox"]').querySelectorAll('[role="option"]')].indexOf(n));assert(wanted>=0);await p.keyboard.press('Home');await idle(p);for(let i=0;i<wanted;i++){await p.keyboard.press('ArrowDown');await idle(p);}await p.waitForFunction(n=>n===document.activeElement||n.contains(document.activeElement),await target.elementHandle());await p.keyboard.press('Enter');}
  await idle(p);assert((await trigger.innerText()).includes(text));r.actions.push({type:'real-select',actor:r.actor,index,text});
 }
 function validateReadonlyReview(before,next){
@@ -253,7 +253,7 @@ async function runSoccer(p,r){
  await press(p,r,p.getByRole('button',{name:/Generate Starting Potential$/}),'Real scout roll');
  await p.getByRole('button',{name:/Customize your build$/}).waitFor({state:'visible'});
  await press(p,r,p.getByRole('button',{name:/Customize your build$/}),'Open actual build editor');
- const overall=p.getByRole('textbox',{name:'Starting overall',exact:true});await overall.waitFor({state:'visible'});await typeInto(p,r,overall,'50','Actual starting overall');
+ const overall=p.getByRole('textbox',{name:'Starting overall',exact:true});await overall.waitFor({state:'visible'});const steps=[];for(let attempt=0;attempt<20&&Number(await overall.inputValue())!==50;attempt++){const before=Number(await overall.inputValue());assert(Number.isInteger(before)&&before>=40&&before<=99);const amount=Math.abs(before-50)>=5?5:1,direction=before>50?'down':'up';await press(p,r,p.getByRole('button',{name:'Starting overall '+direction+' '+amount,exact:true}),'Actual overall '+direction+' '+amount);const after=Number(await overall.inputValue());assert.equal(after,before+(direction==='down'?-amount:amount));steps.push({before,direction,amount,after});}assert.equal(await overall.inputValue(),'50');r.actions.push({type:'real-overall-stepper',steps,actualFinal:50});
  await press(p,r,p.getByRole('button',{name:/Lock in build$/}),'Lock actual50 build');
  const placement=p.getByText('Academy Placement',{exact:true}).locator('..');await placement.waitFor({state:'visible'});assert((await placement.innerText()).includes('FC Andorra Youth'));assert((await placement.innerText()).includes('Tier 4'));
  r.actions.push({type:'real-academy-preview',text:await placement.innerText(),html:await placement.innerHTML()});await photo(p,r,'creation-placement',placement);
