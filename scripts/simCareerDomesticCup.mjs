@@ -166,13 +166,13 @@ const UI = 'src/components/soccer-career/CupRunLines.tsx';
 const SRC = { [CUP]: read(CUP), [ENGINE]: read(ENGINE), [PHONE]: read(PHONE), [UI]: read(UI) };
 const DRAW_HEAD = 'export function drawCupRun(input: CupRunInput): CupRun | null {';
 const NO_RUN = s => edit(s, DRAW_HEAD, DRAW_HEAD + ' if (input) return null;', 'run off', CUP);
-const COIN = '\n    && domesticCupFor(cupAssociation(state.currentClubCountry, state.currentLeague), seasonYear).kind !== "NONE";';
+const COIN = '\n    && domesticCupFor(cupAssociation(state.currentClubCountry, state.currentLeague, seasonYear), seasonYear).kind !== "NONE";';
 const OLD_WORLD = 'if (assoc === undefined || opts.playerCupAssociation === undefined) {';
 
 const main = { ...SRC };
 const ctl = (file, anchor, replacement) => { main[file] = edit(main[file], anchor, replacement, CONTROL, file); };
 if (CONTROL === 'stream') ctl(CUP, DRAW_HEAD, DRAW_HEAD + ' Math.random();');
-if (CONTROL === 'wrongcountry') ctl(CUP, 'if (seen.has(c.name) || cupAssociation(c.country, c.league) !== association) continue;', 'if (seen.has(c.name)) continue;');
+if (CONTROL === 'wrongcountry') ctl(CUP, 'if (seen.has(c.name) || cupAssociation(c.country, c.league, year) !== association) continue;', 'if (seen.has(c.name)) continue;');
 if (CONTROL === 'ignoreworld') ctl(CUP, 'const winner = input.worldWinner && all.some(c => c.name === input.worldWinner) ? input.worldWinner : null;', 'const winner = null as string | null;');
 /* review fixes: a run for an UNKNOWN association whose pool cannot name a
    club at every stage; the world's winner taken even where it is not a club
@@ -369,7 +369,7 @@ function recorded(assoc, year) {
   if (!a || year < a.windows[0].from) return { kind: 'UNKNOWN' };
   return a.windows.find(w => year >= w.from && (w.to === undefined || year <= w.to)) ?? a.windows[a.windows.length - 1];
 }
-const assocOf = name => { const c = clubs.find(x => x.name === name); return c ? cup.cupAssociation(c.country, c.league) : null; };
+const assocOf = (name, year) => { const c = clubs.find(x => x.name === name); return c ? cup.cupAssociation(c.country, c.league, year) : null; };
 
 console.log('running the fleet through MAIN, B (no run) and A (the round taken out)');
 const RUN_MAIN = fleet(engine, 'MAIN');
@@ -411,13 +411,13 @@ console.log("2) every season is coherent with itself, the table and the phone's 
     if (!r) continue;
     const row = r.row;
     n.seasons += 1;
-    const assoc = cup.cupAssociation(r.country, r.league);
+    const assoc = cup.cupAssociation(r.country, r.league, row.year);
     const rec = recorded(assoc, row.year);
     const wl = cup.worldLeagueOf(assoc);
     const winner = wl && r.world && r.world.year === row.year ? r.world.cups[wl] : undefined;
     if (r.world && r.world.year === row.year && r.world.cups.MLS !== undefined) {
       n.mlsWorlds += 1;
-      if (assocOf(r.world.cups.MLS) === 'Canada') flag('canadian', `${r.world.cups.MLS} won the U.S. Open Cup in ${row.year}`);
+      if (assocOf(r.world.cups.MLS, row.year) === 'Canada') flag('canadian', `${r.world.cups.MLS} won the U.S. Open Cup in ${row.year}`);
     }
     const severe = !!(row.injury && row.injurySevere);
     if (row.cupRun && !cup.readCupRun(row)) flag('unreadable', `${x.club} ${row.year} carries a run its own reader refuses`);
@@ -443,7 +443,7 @@ console.log("2) every season is coherent with itself, the table and the phone's 
        opponent only where it is one of them (the lead's rule), since the
        phone's era lists carry clubs before they existed. */
     const alive = new Set(eras.adjustClubsForYear(clubs, row.year).map(c => c.name));
-    const winnerIn = winner !== undefined && winner !== row.club && alive.has(winner) && assocOf(winner) === assoc;
+    const winnerIn = winner !== undefined && winner !== row.club && alive.has(winner) && assocOf(winner, row.year) === assoc;
     const owed = rec.kind === 'NAMED' ? pool.length >= 1 : pool.length >= 3;
     if (rec.kind === 'UNKNOWN' && pool.length < 3) n.thinUnknown += 1;
     if (!run) {
@@ -468,7 +468,7 @@ console.log("2) every season is coherent with itself, the table and the phone's 
       if (!t.opp) continue;
       if (t.opp === row.club) flag('self', `${x.club} ${row.year} drew itself`);
       const lostFinal = t.stage === 'F' && !t.won;
-      if (assocOf(t.opp) !== assoc) flag('country', `${x.club} (${assoc}) ${row.year} met ${t.opp} (${assocOf(t.opp)})`);
+      if (assocOf(t.opp, row.year) !== assoc) flag('country', `${x.club} (${assoc}) ${row.year} met ${t.opp} (${assocOf(t.opp, row.year)})`);
       if (!alive.has(t.opp)) flag('unborn', `${x.club} ${row.year} met ${t.opp}, not a club that year`);
       if (t.won && winner !== undefined && t.opp === winner) flag('beatwinner', `${x.club} ${row.year} beat ${t.opp}, the world's winner`);
       if (lostFinal && winnerIn) { n.lostFinalWorld += 1; if (t.opp !== winner) flag('lostfinal', `${x.club} ${row.year} lost the final to ${t.opp}, the world says ${winner} won it`); }
@@ -506,7 +506,7 @@ console.log('3) the same coin as before the round outside a season with no cup, 
   for (let i = 0; i < RUN_MAIN.length; i++) {
     const m = RUN_MAIN[i].r, a = RUN_A[i].r;
     if (!m || !a) continue;
-    const rec = recorded(cup.cupAssociation(m.country, m.league), m.row.year);
+    const rec = recorded(cup.cupAssociation(m.country, m.league, m.row.year), m.row.year);
     if (rec.kind === 'NONE') { noneSeasons += 1; if (a.row.domesticCup) noneA += 1; if (m.row.domesticCup) noneMain += 1; continue; }
     if (m.row.domesticCup === a.row.domesticCup) same += 1; else differ += 1;
   }
@@ -548,7 +548,7 @@ const PIN_PER = Number(process.env.CUP_PIN_PER || 12);
     const m = pinnedCareer(engine, club, year, seed, 6), a = pinnedCareer(A.engine, club, year, seed, 6);
     if (!m || !a) continue;
     careers += 1;
-    if (m.some(r => NONE_ASSOCS.has(assocOf(r.club))) || a.some(r => NONE_ASSOCS.has(assocOf(r.club)))) continue;
+    if (m.some(r => NONE_ASSOCS.has(assocOf(r.club, r.year))) || a.some(r => NONE_ASSOCS.has(assocOf(r.club, r.year)))) continue;
     held += 1;
     rowsCompared += m.length;
     cupsMain += m.filter(r => r.domesticCup).length;
@@ -574,7 +574,7 @@ const PIN_PER = Number(process.env.CUP_PIN_PER || 12);
     const run = r && cup.readCupRun(r.row);
     if (!run) continue;
     const row = r.row;
-    const assoc = cup.cupAssociation(r.country, r.league);
+    const assoc = cup.cupAssociation(r.country, r.league, row.year);
     const wl = cup.worldLeagueOf(assoc);
     const winner = wl && r.world && r.world.year === row.year ? r.world.cups[wl] : undefined;
     const others = cup.cupOpponentPool(assoc, row.year, row.club, clubs).filter(c => c.name !== winner).length;

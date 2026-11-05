@@ -272,7 +272,7 @@ function PhoneSurface(props: ComponentProps<typeof PhonePanel>) {
   );
 }
 const NATIONALITIES = [
-  "Albania","Algeria","Angola","Argentina","Armenia","Australia","Austria","Azerbaijan",
+  "Albania","Algeria","Andorra","Angola","Argentina","Armenia","Australia","Austria","Azerbaijan",
   "Bahrain","Belarus","Belgium","Benin","Bolivia","Bosnia & Herzegovina","Brazil","Bulgaria",
   "Burkina Faso","Cameroon","Canada","Cape Verde","Chile","China","Colombia","Comoros",
   "Congo","Costa Rica","Croatia","Cuba","Curaçao","Cyprus","Czech Republic","DR Congo",
@@ -313,7 +313,8 @@ const ERAS = [
   { value: "2010-14", label: "Early 2010s (2010 start)", startYear: 2010 },
   { value: "2015-19", label: "Late 2010s (2015 start)", startYear: 2015 },
   { value: "2020-24", label: "2020s (2020 start)", startYear: 2020 },
-  { value: "2025", label: "Current era (2025 start)", startYear: 2025 },
+  { value: "2025", label: "2025 start", startYear: 2025 },
+  { value: "2026", label: "Current era (2026 start)", startYear: 2026 },
 ];
 
 const rand = (min: number, max: number) => Math.floor(Math.random() * (max - min + 1)) + min;
