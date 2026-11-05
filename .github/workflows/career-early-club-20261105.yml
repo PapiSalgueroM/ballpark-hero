@@ -1,19 +1,18 @@
-name: Career Path exact hint outcome controls
+name: Career Quiz derived search index
 on:
   push:
     branches: [codex/career-early-club-qa-20261105]
 permissions:
   contents: read
 jobs:
-  source:
+  generate:
     runs-on: ubuntu-latest
-    timeout-minutes: 12
+    timeout-minutes: 10
     defaults:
       run:
         shell: bash
     env:
       SIM_NETWORK: offline
-      SIM_OFFLINE_RECEIPT: early-club-artifacts/offline.log
       TZ: UTC
     steps:
       - uses: actions/checkout@v4
@@ -26,27 +25,42 @@ jobs:
           cache: npm
       - name: Held source and locked dependencies
         run: |
-          mkdir -p early-club-artifacts
-          git rev-parse HEAD > early-club-artifacts/head.txt
-          git rev-parse 'HEAD^{tree}' > early-club-artifacts/tree.txt
-          git ls-files -s > early-club-artifacts/source-before.txt
-          sha256sum package.json package-lock.json > early-club-artifacts/locks-before.txt
+          mkdir -p career-index-artifacts
+          git rev-parse HEAD > career-index-artifacts/head.txt
+          git rev-parse 'HEAD^{tree}' > career-index-artifacts/tree.txt
+          sha256sum package.json package-lock.json > career-index-artifacts/locks-before.txt
+          cp src/data/searchKeywords.json career-index-artifacts/before.json
           npm ci
-      - name: Original fixed seven exact faults and restored actual page
-        run: NODE_OPTIONS="--max-old-space-size=6144 --require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/checkCareerEarlyClub.mjs 2>&1 | tee early-club-artifacts/arms.log
-      - name: Exact source locks and offline holds
+      - name: Generate only the derived career keyword row
+        run: |
+          node scripts/genSearchKeywords.mjs 2>&1 | tee career-index-artifacts/generator.log
+          cp src/data/searchKeywords.json career-index-artifacts/first.json
+          node scripts/genSearchKeywords.mjs 2>&1 | tee career-index-artifacts/generator-repeat.log
+          cmp src/data/searchKeywords.json career-index-artifacts/first.json
+          node --input-type=module <<'NODE'
+          import assert from 'node:assert/strict'; import fs from 'node:fs'; import path from 'node:path'; import {createHash} from 'node:crypto';
+          const before=JSON.parse(fs.readFileSync('career-index-artifacts/before.json')),after=JSON.parse(fs.readFileSync('src/data/searchKeywords.json'));
+          assert.deepEqual(Object.keys(after),['v','source','k']);assert.equal(after.v,1);
+          assert.equal(Object.keys(after.k).length,133);assert.deepEqual(Object.keys(after.k),Object.keys(before.k));
+          const changed=Object.keys(after.k).filter(route=>after.k[route]!==before.k[route]);assert.deepEqual(changed,['/career']);
+          const directory='src/data/gameContent';
+          const source=createHash('sha256').update(fs.readdirSync(directory).sort().map(file=>fs.readFileSync(path.join(directory,file),'utf8').replace(/\r\n/g,'\n')).join('\n')).digest('hex').slice(0,16);
+          assert.equal(after.source,source);assert.notEqual(after.source,before.source);
+          const bytes=fs.readFileSync('src/data/searchKeywords.json'),sha256=createHash('sha256').update(bytes).digest('hex'),gitBlob=createHash('sha1').update('blob '+bytes.length+'\0').update(bytes).digest('hex');
+          fs.writeFileSync('career-index-artifacts/receipt.json',JSON.stringify({changed,routeCount:133,oldSource:before.source,source,oldCareer:before.k['/career'],newCareer:after.k['/career'],bytes:bytes.length,sha256,gitBlob},null,2));
+          console.log('PASS generated index: only Career keyword row changed,133routes held, independent hash and repeat bytes match');
+          NODE
+          cp src/data/searchKeywords.json career-index-artifacts/searchKeywords.json
+      - name: Everything else held
         if: always()
         run: |
-          git ls-files -s > early-club-artifacts/source-after.txt
-          cmp early-club-artifacts/source-before.txt early-club-artifacts/source-after.txt
-          git diff --exit-code HEAD -- src scripts package.json package-lock.json
-          sha256sum package.json package-lock.json > early-club-artifacts/locks-after.txt
-          cmp early-club-artifacts/locks-before.txt early-club-artifacts/locks-after.txt
-          if test -f early-club-artifacts/offline.log; then test ! -s early-club-artifacts/offline.log; fi
+          git diff --exit-code HEAD -- src scripts package.json package-lock.json ':!src/data/searchKeywords.json'
+          sha256sum package.json package-lock.json > career-index-artifacts/locks-after.txt
+          cmp career-index-artifacts/locks-before.txt career-index-artifacts/locks-after.txt
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: career-early-club-control-final-${{ github.run_id }}
-          path: early-club-artifacts
+          name: career-search-index-${{ github.run_id }}
+          path: career-index-artifacts
           retention-days: 7
           if-no-files-found: error
