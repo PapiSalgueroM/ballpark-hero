@@ -165,6 +165,7 @@ describe('Career Quiz deliberate early club assistance', () => {
     counts(view, 0, 0, 'EARLY_CLUB_UNLIMITED');
     fireEvent.click(early(view, 'EARLY_CLUB_UNLIMITED')); fireEvent.click(early(view, 'EARLY_CLUB_UNLIMITED'));
     counts(view, 2, 0, 'EARLY_CLUB_UNLIMITED');
+    expect(view.queryByText('Generated Middle', { exact: true }), 'EARLY_CLUB_UNLIMITED correct second club exists').not.toBeNull();
     expect(view.getByText('Generated Middle', { exact: true }), 'EARLY_CLUB_UNLIMITED two clubs revealed').toBeVisible();
     expect(localStorage.getItem(SAVE_KEY), 'EARLY_CLUB_UNLIMITED daily bytes held').toBe(daily);
     fireEvent.click(view.getByRole('button', { name: '📅 Daily' })); counts(view, 1, 0, 'EARLY_CLUB_UNLIMITED');

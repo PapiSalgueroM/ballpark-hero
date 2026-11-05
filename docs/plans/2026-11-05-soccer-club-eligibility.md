@@ -19,3 +19,12 @@ Original-first proof:Actions42094277913, pre-policy passes1case and the uncapped
 The final engine/continental blobs are ac4d7263b9dbefb5462e99891fac2bfaf13e3e52 and654ab1a839733eeb5e26802bb53a954bb22ec24a. Clean delivery contains those production files,three test leaves,the permanent loan harness and docs. Temporary QA code is excluded. Stack base is PR505 after PR506 on main3b, retaining the published historical release.
 
 Full evidence, source pins, screenshot qualifications and limits:docs/plans/2026-11-05-soccer-master-integration.md. Full suite and live database Reach are uncredited. Controlled Russia display is not natural browser season advancement. Draft, unmerged and unpublished.
+
+
+## 2026-11-05 club-policy historical inverse compatibility
+
+Wider automatic checks exposed an owned test-helper incompatibility: completedYear and the fresh passport gate interrupted Round1327's full deck anchor. scripts/lib/careerDeckFair1327.mjs now accepts exactly one of two explicit complete blocks. The legacy block and its output stay byte-identical; the new block keeps the club policy on both sides of the deck-only inverse. Missing, altered, duplicate and mixed old/new blocks still refuse. Pins, patch API and all16 receipt rows are unchanged.
+
+Original proof42106390333 at702499ce recorded two exact business failures, CURRENT_INVERSE and REJECT_MIXED_DUPLICATE, plus two held cases. Fixed proof42107005050 at3c2ae71b passes all4 cases and restores all4. Actual inverse generator vectors exclude the passport card for Russia2022 and retain it for England2022/Russia2021, with full states and draw tapes. The effective omit-inverse control preserves policy outcomes but fails the exact legacy count-draw assertion;3 other cases stay green. HarnessAnchors and NoRivalNames pass. App code, input snapshots, source inventory and locks remain unchanged by this script-only repair. No new App build or browser credit is claimed for it.
+
+The original and fixed archives are retained in soccer-integration/deck-original and deck-fixed. Fixed artifact13453021290 is7387805B, SHA256 d7805e322e516904e359349e42984e7dda0593eca96c8cd804b067f6cb3826e2. The inherited phone inverse still fails on PRbase8a9, and two veteran workflows stop at historical preparation fences already violated by current main. Programme's US replay failure lacks retained child output and remains unresolved. Full suite/live Reach/release-wide approval remain uncredited. This does not waive those checks or authorize publication.

@@ -1,20 +1,22 @@
-name: Career Path early club source proof
+name: Career Path early club qualification
 on:
   push:
     branches: [codex/career-early-club-qa-20261105]
 permissions:
   contents: read
 jobs:
-  source:
+  scoped:
     runs-on: ubuntu-latest
-    timeout-minutes: 18
+    timeout-minutes: 35
     defaults:
       run:
         shell: bash
     env:
       SIM_NETWORK: offline
       SIM_OFFLINE_RECEIPT: early-club-artifacts/offline.log
+      ENGINES: chromium
       TZ: UTC
+      SEO_SPLIT_BASE_REF: 3b14650d360b010b25b525de33a5f32f33de2798
     steps:
       - uses: actions/checkout@v4
         with:
@@ -24,19 +26,92 @@ jobs:
         with:
           node-version: 24.22.1
           cache: npm
-      - name: Source and locked dependencies
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.4.4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Locked dependencies and source receipt
         run: |
           mkdir -p early-club-artifacts
           git rev-parse HEAD > early-club-artifacts/head.txt
           git rev-parse 'HEAD^{tree}' > early-club-artifacts/tree.txt
           git ls-files -s > early-club-artifacts/source-before.txt
           sha256sum package.json package-lock.json > early-club-artifacts/locks-before.txt
+          git fetch --no-tags --depth=1 origin 617b8354b722c703407074e78a86665d4f7633b5
+          git show 617b8354b722c703407074e78a86665d4f7633b5:src/hooks/useDailyPuzzle.ts > "$RUNNER_TEMP/crq-pre-daily.ts"
+          cp "$RUNNER_TEMP/crq-pre-daily.ts" early-club-artifacts/pre-daily-hook.ts
           npm ci
-      - name: Original App types
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          const lock=JSON.parse(fs.readFileSync('package-lock.json'));
+          const rows=Object.keys(lock.packages).filter(p=>p.startsWith('node_modules/')&&fs.existsSync(p+'/package.json')).map(p=>[p,JSON.parse(fs.readFileSync(p+'/package.json')).version]);
+          fs.writeFileSync('early-club-artifacts/installed-before.json',JSON.stringify(rows));
+          NODE
+          npm install --prefix "$RUNNER_TEMP/crq-browser" --no-save --package-lock=false playwright@1.64.1
+          test ! -e node_modules/playwright
+          ln -s "$RUNNER_TEMP/crq-browser/node_modules/playwright" node_modules/playwright
+          node "$RUNNER_TEMP/crq-browser/node_modules/playwright/cli.js" install --with-deps chromium
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs'; import assert from 'node:assert/strict';
+          const before=JSON.parse(fs.readFileSync('early-club-artifacts/installed-before.json'));
+          const after=before.map(([p])=>[p,JSON.parse(fs.readFileSync(p+'/package.json')).version]);
+          fs.writeFileSync('early-club-artifacts/installed-after.json',JSON.stringify(after)); assert.deepEqual(after,before);
+          console.log('Preserved all '+after.length+' locked installed versions.');
+          NODE
+          python -m pip install fonttools pillow
+      - name: Proper app types
         run: node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee early-club-artifacts/types.log
-      - name: Original fixed physical faults and restored actual page
+      - name: Original fixed seven physical faults and restored actual page
         run: NODE_OPTIONS="--max-old-space-size=6144 --require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/checkCareerEarlyClub.mjs 2>&1 | tee early-club-artifacts/arms.log
-      - name: Source and lock holds
+      - name: Existing Career Path record and stale-save contracts
+        if: ${{ !cancelled() }}
+        run: |
+          NODE_OPTIONS="--max-old-space-size=6144 --require=$PWD/scripts/lib/offlineTransport.cjs" node node_modules/vitest/vitest.mjs run src/test/dailyRecord.test.tsx src/test/dailySaveHardening.test.tsx --testNamePattern="Career Path" --maxWorkers=1 --minWorkers=1 --reporter=default --reporter=json --outputFile=early-club-artifacts/existing-daily.json 2>&1 | tee early-club-artifacts/existing-daily.log
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs'; import assert from 'node:assert/strict';
+          const r=JSON.parse(fs.readFileSync('early-club-artifacts/existing-daily.json'));
+          const rows=r.testResults.flatMap(s=>s.assertionResults), passed=rows.filter(x=>x.status==='passed');
+          assert.equal(passed.length,3); assert(passed.every(x=>x.title.includes('Career Path')));
+          assert.equal(rows.filter(x=>x.status==='failed').length,0);
+          console.log('PASS all three existing Career Path record and stale-save cases');
+          NODE
+      - name: Existing old-versus-current Career Path save and reload parity
+        if: ${{ !cancelled() }}
+        run: |
+          R848_PARITY_ONLY=career R848_PRE_HOOK="$RUNNER_TEMP/crq-pre-daily.ts" NODE_OPTIONS="--max-old-space-size=6144 --require=$PWD/scripts/lib/offlineTransport.cjs" node node_modules/vitest/vitest.mjs run src/test/dailySaveParity.test.tsx --maxWorkers=1 --minWorkers=1 --reporter=default --reporter=json --outputFile=early-club-artifacts/existing-parity.json 2>&1 | tee early-club-artifacts/existing-parity.log
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs'; import assert from 'node:assert/strict';
+          const r=JSON.parse(fs.readFileSync('early-club-artifacts/existing-parity.json'));
+          const rows=r.testResults.flatMap(s=>s.assertionResults), passed=rows.filter(x=>x.status==='passed');
+          assert.equal(passed.length,1); assert.equal(passed[0].title,'career');
+          assert.equal(rows.filter(x=>x.status==='failed').length,0);
+          NODE
+      - name: Normal production build
+        if: ${{ !cancelled() }}
+        id: build
+        run: |
+          NODE_OPTIONS="--max-old-space-size=6144" npm run build 2>&1 | tee early-club-artifacts/build.log
+          tar -czf early-club-artifacts/dist.tgz dist
+          sha256sum early-club-artifacts/dist.tgz > early-club-artifacts/dist.sha256
+      - name: All required built-output readers and existing source fences
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          export ONLY="simAdsense,simBrand,simHeadTags,simHiddenPages,simHubs,simIndexNow,simIndexing,simInternalLinks,simNoRivalNames,simPrerender,simPrerenderBoot,simRetiredRoutes,simSchema,simSitemap,simSnapshotAssets,simSiteSearch,simGuideHeadings,simSeoMetaSplit,simHomeCopy,simHarnessAnchors"
+          node scripts/runAllSims.mjs --browser 2>&1 | tee early-club-artifacts/readers.log
+      - name: All original route download limits
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          node scripts/lib/hostLikeServer.mjs dist 4173 > early-club-artifacts/weight-host.log 2>&1 &
+          crq_host_pid=$!
+          trap 'kill "$crq_host_pid" 2>/dev/null || true' EXIT
+          sleep 2
+          SWEEP_OFFLINE=1 BASE=http://127.0.0.1:4173 node scripts/sweepWeight.mjs 2>&1 | tee early-club-artifacts/weight.log
+      - name: Actual daily hints rules wins reloads keyboard and touch
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: CAREER_EARLY_BROWSER_OUT=early-club-artifacts/browser NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/playCareerEarlyClub.mjs 2>&1 | tee early-club-artifacts/browser.log
+      - name: Source lock installed versions and offline holds
         if: always()
         run: |
           git ls-files -s > early-club-artifacts/source-after.txt
@@ -44,11 +119,18 @@ jobs:
           git diff --exit-code HEAD -- src scripts package.json package-lock.json
           sha256sum package.json package-lock.json > early-club-artifacts/locks-after.txt
           cmp early-club-artifacts/locks-before.txt early-club-artifacts/locks-after.txt
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs'; import assert from 'node:assert/strict';
+          const before=JSON.parse(fs.readFileSync('early-club-artifacts/installed-before.json'));
+          const after=before.map(([p])=>[p,JSON.parse(fs.readFileSync(p+'/package.json')).version]);
+          fs.writeFileSync('early-club-artifacts/installed-final.json',JSON.stringify(after));
+          assert.equal(after.length,521); assert.deepEqual(after,before);
+          NODE
           if test -f early-club-artifacts/offline.log; then test ! -s early-club-artifacts/offline.log; fi
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: career-early-club-original-${{ github.run_id }}
+          name: career-early-club-final-${{ github.run_id }}
           path: early-club-artifacts
           retention-days: 7
           if-no-files-found: error
