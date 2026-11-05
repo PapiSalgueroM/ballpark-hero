@@ -1,0 +1,55 @@
+name: Soccer combined appearance original
+on:
+  push:
+    branches: [codex/soccer-master-integration-20261105]
+permissions:
+  contents: read
+jobs:
+  original:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        shell: bash
+    env:
+      SIM_NETWORK: offline
+      SIM_OFFLINE_RECEIPT: integration-artifacts/offline.log
+      TZ: UTC
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 8
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24.22.1
+          cache: npm
+      - name: Locked install and source holds
+        run: |
+          mkdir -p integration-artifacts
+          git rev-parse HEAD > integration-artifacts/head.txt
+          git rev-parse 'HEAD^{tree}' > integration-artifacts/tree.txt
+          git ls-files -s > integration-artifacts/source-before.txt
+          sha256sum package.json package-lock.json > integration-artifacts/locks-before.txt
+          npm ci
+      - name: Proper app types
+        run: node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee integration-artifacts/types.log
+      - name: Original Europe padding and new uncapped policy
+        run: |
+          NODE_OPTIONS="--max-old-space-size=6144 --require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/soccerAppearanceTotalsOriginal.mjs 2>&1 | tee integration-artifacts/original.log
+      - name: Source lock and offline holds
+        if: always()
+        run: |
+          git ls-files -s > integration-artifacts/source-after.txt
+          cmp integration-artifacts/source-before.txt integration-artifacts/source-after.txt
+          git diff --exit-code HEAD -- src scripts package.json package-lock.json
+          sha256sum package.json package-lock.json > integration-artifacts/locks-after.txt
+          cmp integration-artifacts/locks-before.txt integration-artifacts/locks-after.txt
+          if test -f integration-artifacts/offline.log; then test ! -s integration-artifacts/offline.log; fi
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: soccer-integration-appearance-original-${{ github.run_id }}
+          path: integration-artifacts
+          retention-days: 7
+          if-no-files-found: error
