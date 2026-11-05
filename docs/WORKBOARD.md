@@ -17865,3 +17865,9 @@ Historical Neymar entry is live from a19121c3/tree b389. Current build, four-arm
 ## 2026-11-05: NBA real 2004 draft class live
 
 NBA-2004-LIVE-05bd628b-42052602075. PR502 source05bd628b, treeb5d82077, publish5a2f20c5-f35d-4d81-8b16-0a7aee824fc1. New2003 quick/Road careers receive all59 real2004 selections,58 verified DOBs plus1unknown, and persistent simulated camp records. Qualified build/eight arms/permanent/native3widths and actualpublic42052602075/artifact13428705240 independently admitted. See [scope and receipts](plans/2026-11-05-nba-real-draft-2004.md). Broader known failures remain unwaived; master409 and SC36/CM04/PL16 partial. Continue next Soccer Career real-entry cohorts, then playable SC/CM teams/leagues. No active-save backfill.
+
+
+## 2026-11-05 Soccer Career training copy regression claim
+Owner: Codex current master-list continuation. Remote base main 1acb33005073be70ba5aae0285ece5537f390f9a, branch codex/soccer-training-copy-tests-20261105. Scope: src/test/soccerScreenTruths.test.tsx S4 only, plus this claim and a small plan/state note. The published classic practice feature added one truthful practice-after-bank paragraph; two old assertions still count earlier help paragraphs. Preserve all previous rules, pause/hidden-result and bank-help assertions, and assert the actual new paragraph. No TrainingPanel/product change, no test removal, no caps or US sim edits. Run original-first two business failures, fixed scoped file and a source-checked removal control on the actual new paragraph, then restore exact product bytes. Local root remains held; execution and Git are remote. This maintenance does not complete a master game card and is not permission to publish the unqualified global suite.
+
+The same bounded claim includes scripts/playSoccerScreenTruths.mjs W7's matching stale paragraph oracle. Keep existing fold, focus and scroll checks. No production source changes.
