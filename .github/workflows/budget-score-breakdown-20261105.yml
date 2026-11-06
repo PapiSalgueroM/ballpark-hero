@@ -1,4 +1,4 @@
-name: Budget Builder original score visibility proof
+name: Budget Builder fixed score visibility proof
 on:
   push:
     branches: [codex/budget-score-breakdown-qa-20261105]
@@ -13,7 +13,7 @@ jobs:
         shell: bash
     env:
       SIM_NETWORK: offline
-      SIM_OFFLINE_RECEIPT: budget-score-original/offline.log
+      SIM_OFFLINE_RECEIPT: budget-score-fixed/offline.log
     steps:
       - uses: actions/checkout@v4
         with:
@@ -22,59 +22,43 @@ jobs:
         with:
           node-version: 24.22.1
           cache: npm
-      - name: Exact original Budget and locked dependencies
+      - name: Exact fixed Budget and locked dependencies
         run: |
-          mkdir -p budget-score-original
-          touch budget-score-original/offline.log
-          git rev-parse HEAD > budget-score-original/head.txt
-          git ls-files -s > budget-score-original/source-before.txt
-          sha256sum package.json package-lock.json > budget-score-original/locks-before.txt
-          test "$(git rev-parse HEAD:src/hooks/useBudgetBuilder.ts)" = 02ec7d7971bbcf96723e4a15fe285c5c0edf2ad2
-          test "$(git rev-parse HEAD:src/components/budget-builder/BudgetBuilderBoard.tsx)" = 526213213e4a5e1b625e1b6505227b623f76ad26
+          mkdir -p budget-score-fixed
+          touch budget-score-fixed/offline.log
+          git rev-parse HEAD > budget-score-fixed/head.txt
+          git ls-files -s > budget-score-fixed/source-before.txt
+          sha256sum package.json package-lock.json > budget-score-fixed/locks-before.txt
+          test "$(git rev-parse HEAD:src/hooks/useBudgetBuilder.ts)" = 0220c215cb2530a632abc477810ec38b095982c7
+          test "$(git rev-parse HEAD:src/components/budget-builder/BudgetBuilderBoard.tsx)" = f9111c2782f61ec9b976aee52baed4ae095f0d6b
           test "$(git rev-parse HEAD:src/test/budgetSigning.test.tsx)" = 97cb3fa452184995a52a77381c7ecc45d25d2c03
           npm ci
       - name: Proper app types
-        run: node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee budget-score-original/types.log
-      - name: Original missing earned-score business census
+        run: node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee budget-score-fixed/types.log
+      - name: Exact owned components and unchanged signing outcomes
         run: |
-          set +e
-          BB_SCORE_BREAKDOWN_RAW="$PWD/budget-score-original/raw.json" NODE_OPTIONS="--max-old-space-size=6144 --require=$PWD/scripts/lib/offlineTransport.cjs" node node_modules/vitest/vitest.mjs run src/test/budgetScoreBreakdown.test.tsx --maxWorkers=1 --minWorkers=1 --reporter=default --reporter=json --outputFile=budget-score-original/owned.json 2>&1 | tee budget-score-original/owned.log
-          owned_status=${PIPESTATUS[0]}
-          set -e
-          echo "$owned_status" > budget-score-original/owned-exit.txt
+          BB_SCORE_BREAKDOWN_RAW="$PWD/budget-score-fixed/raw.json" NODE_OPTIONS="--max-old-space-size=6144 --require=$PWD/scripts/lib/offlineTransport.cjs" node node_modules/vitest/vitest.mjs run src/test/budgetScoreBreakdown.test.tsx src/test/budgetSigning.test.tsx --maxWorkers=1 --minWorkers=1 --reporter=default --reporter=json --outputFile=budget-score-fixed/units.json 2>&1 | tee budget-score-fixed/units.log
           node --input-type=module <<'NODE'
           import fs from 'node:fs';import assert from 'node:assert/strict';
-          const r=JSON.parse(fs.readFileSync('budget-score-original/owned.json')),raw=JSON.parse(fs.readFileSync('budget-score-original/raw.json')),log=fs.readFileSync('budget-score-original/owned.log','utf8');
-          assert.equal(fs.readFileSync('budget-score-original/owned-exit.txt','utf8').trim(),'1');
-          assert.equal(r.numTotalTests,10);assert.equal(r.numFailedTests,9);assert.equal(r.numPassedTests,1);assert.equal(r.numPendingTests,0);
-          const rows=r.testResults.flatMap(s=>s.assertionResults),failed=rows.filter(x=>x.status==='failed'),passed=rows.filter(x=>x.status==='passed');
-          assert.equal(rows.length,10);assert(passed[0].title.startsWith('BB_SCORE_PRESERVE'));
-          for(const row of failed){assert(row.title.startsWith('BB_SCORE_')&&!row.title.startsWith('BB_SCORE_PRESERVE'));assert(row.failureMessages.every(m=>m.includes('AssertionError')&&m.includes(row.title)),'Named actual business failure: '+row.title);}
-          assert.equal(raw.caseTitles.length,10);assert.equal(Object.keys(raw.cases).length,10);assert(Object.values(raw.cases).every(x=>x.frames.length>0));
-          assert(!/Unhandled Errors|Unhandled Rejection|Uncaught Exception|Failed to resolve import/.test(log));
-          console.log('PASS original9namedbusiness AssertionErrors and1preservation case, all10RAW cases retained');
+          const r=JSON.parse(fs.readFileSync('budget-score-fixed/units.json')),raw=JSON.parse(fs.readFileSync('budget-score-fixed/raw.json'));
+          assert.equal(r.numTotalTests,19);assert.equal(r.numPassedTests,19);assert.equal(r.numFailedTests,0);assert.equal(r.numPendingTests,0);assert.equal(raw.caseTitles.length,10);assert.equal(Object.keys(raw.cases).length,10);
+          assert(!/Unhandled Errors|Unhandled Rejection|Uncaught Exception|Failed to resolve import/.test(fs.readFileSync('budget-score-fixed/units.log','utf8')));
+          console.log('PASS10owned earned-score cases and9existing signing outcomes');
           NODE
-      - name: Existing signing outcomes held
-        if: ${{ !cancelled() }}
-        run: |
-          NODE_OPTIONS="--max-old-space-size=6144 --require=$PWD/scripts/lib/offlineTransport.cjs" node node_modules/vitest/vitest.mjs run src/test/budgetSigning.test.tsx --maxWorkers=1 --minWorkers=1 --reporter=default --reporter=json --outputFile=budget-score-original/existing.json 2>&1 | tee budget-score-original/existing.log
-          node --input-type=module <<'NODE'
-          import fs from 'node:fs';import assert from 'node:assert/strict';const r=JSON.parse(fs.readFileSync('budget-score-original/existing.json'));assert.equal(r.numTotalTests,9);assert.equal(r.numPassedTests,9);assert.equal(r.numFailedTests,0);assert.equal(r.numPendingTests,0);
-          NODE
-      - name: Original source locks and offline held
+      - name: Fixed source locks and offline held
         if: always()
         run: |
-          git ls-files -s > budget-score-original/source-after.txt
-          cmp budget-score-original/source-before.txt budget-score-original/source-after.txt
+          git ls-files -s > budget-score-fixed/source-after.txt
+          cmp budget-score-fixed/source-before.txt budget-score-fixed/source-after.txt
           git diff --exit-code HEAD -- src scripts public package.json package-lock.json
-          sha256sum package.json package-lock.json > budget-score-original/locks-after.txt
-          cmp budget-score-original/locks-before.txt budget-score-original/locks-after.txt
-          test -f budget-score-original/offline.log
-          test ! -s budget-score-original/offline.log
+          sha256sum package.json package-lock.json > budget-score-fixed/locks-after.txt
+          cmp budget-score-fixed/locks-before.txt budget-score-fixed/locks-after.txt
+          test -f budget-score-fixed/offline.log
+          test ! -s budget-score-fixed/offline.log
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: budget-score-original-${{ github.run_id }}
-          path: budget-score-original
+          name: budget-score-fixed-${{ github.run_id }}
+          path: budget-score-fixed
           retention-days: 14
           if-no-files-found: error

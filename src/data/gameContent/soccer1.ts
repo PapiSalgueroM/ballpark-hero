@@ -45,6 +45,7 @@ export const SOCCER_CONTENT_1: GameContentMap = {
         heading: "Filling all eleven for the Money XI final",
         items: [
           "Fill all eleven for your team rating, then play the Money XI final.",
+          "Before the Final, check Score breakdown for squad quality, savings, board demand and the pending series outcome. A pending Final adds 0 so far.",
         ],
       },
     ],
@@ -71,6 +72,7 @@ export const SOCCER_CONTENT_1: GameContentMap = {
         heading: "Final score: rating, savings and the series",
         items: [
           "Final score is your team rating, plus 1 point for every full 200 million left unspent, plus 10 for meeting the board demand, plus 15 for a series win or 5 for a draw.",
+          "A signing preview shows the score after that choice and its total change, including any replacement refund. Signing clears the old Final, so the preview counts its series bonus as 0 until you play again.",
         ],
       },
     ],
@@ -85,6 +87,7 @@ export const SOCCER_CONTENT_1: GameContentMap = {
         heading: "Bargain fullbacks and a 2 legs to 1 win",
         paragraphs: [
           "The XI rates 82, the daily demand wanted two players under 15 million, and your fullbacks tick it. You edge the Money XI 2 legs to 1 for the full haul.",
+          "For example, 85 squad quality, 1 savings point, 10 for the demand and a pending Final total 96. A replacement raises quality to 86 but drops savings to 0, so its total change is +0. After a win adds 15, another signing removes that bonus until you play the Final again.",
         ],
       },
     ],
