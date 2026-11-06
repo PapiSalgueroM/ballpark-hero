@@ -1,0 +1,570 @@
+{
+  "schema": "K_LEAGUE_SHARED_CANDIDATE_CASES_V1",
+  "status": "CANDIDATE_ACTUAL_GENERATED_SOURCE_BOUND",
+  "candidate": {
+    "commit": "7fa61db3491eec0830db90bcb47bf35b25c97b71",
+    "tree": "c249186fc75a12eed2c3748cbc57ec7329140417",
+    "preGeneration": {
+      "commit": "497e6a0c93416e21f22988a4503217c506052162",
+      "tree": "24b49ef6a6d2d2d2bd5cb79aadd0fea51a95f9e2",
+      "scope": "Actual reviewed20source-only composition; generated pool still old, never claimed qualified."
+    }
+  },
+  "original": {
+    "commit": "671730c30f67685f070593af7b2464a9cc1f5352",
+    "tree": "7080fc953cab1ebbb3f616b7741f022c8b7a8ea0",
+    "qa": "0cbe00d39e7726a3448ab5ea2246f18a414a9e18",
+    "qaTree": "609aac035c523892213e32ce03f830b6be22eb95",
+    "run": 42117484125,
+    "job": 127560884924,
+    "artifact": 13457278862,
+    "zipBytes": 10371933,
+    "zipSHA256": "fa94491f704dde3195a0fd4916904b6debf646763d5b53ce82decb0d9d2fcb6a",
+    "innerBytes": 10371422,
+    "innerSHA256": "dcbb7798afb6b7df161f63fc75412ad95b4dc5ed8365886a685f441085d51985",
+    "strictAdmissionSHA256": "675f478362c90f4980910361c7cf6f21137c0e909836e2e2b7ed71d47e216d07",
+    "independentAdmissionSHA256": "e3b1f2cd0774464113b64e62ac07d6939faf8a1254dcb8e32d70cf577718858c",
+    "rawPins": [
+      {
+        "file": "old-catalogues",
+        "storedBytes": 35608,
+        "storedSHA256": "cc342f9b39bb7c8158c356e2c7de9db7735e9e1341c83f6f3dce972d963ec1f9",
+        "bytes": 195651,
+        "sha256": "75d911255a6ded667feb9451653ecf1d11db74f751d3c5cc1a38ed0d237cb369"
+      },
+      {
+        "file": "lookup-boundaries",
+        "storedBytes": 12550,
+        "storedSHA256": "754bf878a41cab7046134aa458143e08d28460c44b24b9c17064e119f7be837b",
+        "bytes": 88856,
+        "sha256": "ae419d507a9af8b4a150cb09150f5bc3c723485c8415747c06d7eaae84d1b51a"
+      },
+      {
+        "file": "old-custom-pending",
+        "storedBytes": 1516055,
+        "storedSHA256": "4ebf461a380c647fb983f8fb9184889759d0952556a911d7b4acc6d7075d6fce",
+        "bytes": 7825979,
+        "sha256": "2b3b5b385ff1f09db523035e5903147cd6b00d290283d5b3706e471fabc221e4"
+      },
+      {
+        "file": "old-world-edits",
+        "storedBytes": 563946,
+        "storedSHA256": "899ce2173bdc703286319b4e45f85f0a16b9a4431a8388e2d12800f4453ec784",
+        "bytes": 2934848,
+        "sha256": "cbf381563960eb3911a746bd4a6650c9ce07ac3cd0048be57a92231cc400c5b7"
+      },
+      {
+        "file": "cm-reachability",
+        "storedBytes": 3932,
+        "storedSHA256": "b524250db907ace9d7eee4d13c3de3bb86e1a8992ecfdcc990a5b6add787dfe8",
+        "bytes": 62136,
+        "sha256": "cfe21eeca1ba6df7c4972e672d7e91c8b0bc54e5f8d9aab608ca7b5fde8c661d"
+      },
+      {
+        "file": "sc-population",
+        "storedBytes": 11446,
+        "storedSHA256": "53722ada8a6fd7bad178cc390c8dcae9f445f87ae3f3a7affc3a2e9e19c12fcc",
+        "bytes": 59599,
+        "sha256": "9a506f329aec52b0e1f9ef21299d4968cd0fd06645801b850f3fb3a6ed8109aa"
+      }
+    ],
+    "role": "Closed original4held+2owned authority, not rerun as candidate setup/fault."
+  },
+  "testFiles": [
+    "src/test/kLeagueSharedCandidate.test.tsx",
+    "src/test/kLeagueSharedBoundaries.test.ts"
+  ],
+  "cases": [
+    {
+      "id": "old-catalogues",
+      "group": "cases",
+      "ordinal": 1,
+      "file": "src/test/kLeagueSharedCandidate.test.tsx",
+      "fullName": "K League shared integration candidate acceptance holds the four old SC identities and complete old 27-league CM catalogue",
+      "raw": "old-catalogues.json.gz",
+      "role": "held-prefix-and-authentic-source-boundary"
+    },
+    {
+      "id": "lookup-boundaries",
+      "group": "cases",
+      "ordinal": 2,
+      "file": "src/test/kLeagueSharedCandidate.test.tsx",
+      "fullName": "K League shared integration candidate acceptance holds known historical canons and current-only lookup boundaries",
+      "raw": "lookup-boundaries.json.gz",
+      "role": "held-prefix-and-authentic-source-boundary"
+    },
+    {
+      "id": "old-custom-pending",
+      "group": "cases",
+      "ordinal": 3,
+      "file": "src/test/kLeagueSharedCandidate.test.tsx",
+      "fullName": "K League shared integration candidate acceptance holds authentic old custom names, pending applications, full saves and cache reset",
+      "raw": "old-custom-pending.json.gz",
+      "role": "held-prefix-and-authentic-source-boundary"
+    },
+    {
+      "id": "old-world-edits",
+      "group": "cases",
+      "ordinal": 4,
+      "file": "src/test/kLeagueSharedCandidate.test.tsx",
+      "fullName": "K League shared integration candidate acceptance holds authentic sparse and 27-key world edits, their saves and rejection controls",
+      "raw": "old-world-edits.json.gz",
+      "role": "held-prefix-and-authentic-source-boundary"
+    },
+    {
+      "id": "cm-reachability",
+      "group": "cases",
+      "ordinal": 5,
+      "file": "src/test/kLeagueSharedCandidate.test.tsx",
+      "fullName": "K League shared integration candidate acceptance exposes South Korea and K League 1 through the real CM country and league UI",
+      "raw": "cm-reachability.json.gz",
+      "role": "positive-feature"
+    },
+    {
+      "id": "sc-population",
+      "group": "cases",
+      "ordinal": 6,
+      "file": "src/test/kLeagueSharedCandidate.test.tsx",
+      "fullName": "K League shared integration candidate acceptance contains the eight new current-only SC identities in one shared 12-member population",
+      "raw": "sc-population.json.gz",
+      "role": "positive-feature"
+    },
+    {
+      "id": "membership-rosters",
+      "group": "api",
+      "ordinal": 1,
+      "file": "src/test/kLeagueSharedBoundaries.test.ts",
+      "fullName": "K League declared API boundaries keeps twelve known members, eleven ordinary destinations and generated current squads",
+      "raw": "membership-rosters.json.gz",
+      "role": "declared-API-not-natural-journey"
+    },
+    {
+      "id": "saved-world-access",
+      "group": "api",
+      "ordinal": 2,
+      "file": "src/test/kLeagueSharedBoundaries.test.ts",
+      "fullName": "K League declared API boundaries keeps authenticated old saved worlds closed across declared job and rollover APIs",
+      "raw": "saved-world-access.json.gz",
+      "role": "declared-API-not-natural-journey"
+    },
+    {
+      "id": "manager-local-year",
+      "group": "api",
+      "ordinal": 3,
+      "file": "src/test/kLeagueSharedBoundaries.test.ts",
+      "fullName": "K League declared API boundaries uses the passed local manager season at the 2025 to 2026 market boundary",
+      "raw": "manager-local-year.json.gz",
+      "role": "declared-API-not-natural-journey"
+    },
+    {
+      "id": "prepared-manager-targets",
+      "group": "api",
+      "ordinal": 4,
+      "file": "src/test/kLeagueSharedBoundaries.test.ts",
+      "fullName": "K League declared API boundaries keeps declared non-K same-name targets compatible and refuses early or held K targets",
+      "raw": "prepared-manager-targets.json.gz",
+      "role": "declared-API-not-natural-journey"
+    }
+  ],
+  "oldCMIds": [
+    "premier",
+    "championship",
+    "laliga",
+    "seriea",
+    "bundesliga",
+    "ligue1",
+    "eredivisie",
+    "saudi",
+    "mlsEast",
+    "mlsWest",
+    "primeira",
+    "scottish",
+    "superlig",
+    "bundesliga2",
+    "proleague",
+    "austria",
+    "greece",
+    "denmark",
+    "switzerland",
+    "croatia",
+    "brasileirao",
+    "ligamx",
+    "aleague",
+    "serieb",
+    "ligue2",
+    "segunda",
+    "russia"
+  ],
+  "oldSCRows": [
+    {
+      "id": "fb-112",
+      "name": "Jeonbuk Motors",
+      "country": "South Korea",
+      "tier": 3,
+      "color": "#0C6B3E",
+      "league": "K League 1"
+    },
+    {
+      "id": "fb-186",
+      "name": "Ulsan HD",
+      "country": "South Korea",
+      "tier": 3,
+      "color": "#0053A0",
+      "league": "K League 1"
+    },
+    {
+      "id": "fb-187",
+      "name": "FC Seoul",
+      "country": "South Korea",
+      "tier": 4,
+      "color": "#AC1A2F",
+      "league": "K League 1"
+    },
+    {
+      "id": "fb-188",
+      "name": "Pohang Steelers",
+      "country": "South Korea",
+      "tier": 4,
+      "color": "#C8102E",
+      "league": "K League 1"
+    }
+  ],
+  "members": [
+    "Gangwon FC",
+    "Gwangju FC",
+    "Gimcheon Sangmu",
+    "Daejeon Hana Citizen",
+    "Bucheon FC 1995",
+    "FC Seoul",
+    "FC Anyang",
+    "Ulsan HD",
+    "Incheon United",
+    "Jeonbuk Motors",
+    "Jeju SK",
+    "Pohang Steelers"
+  ],
+  "arms": {
+    "fixed": {
+      "expectedFailures": {},
+      "nativeExit": 0
+    },
+    "membership": {
+      "expectedFailures": {
+        "sc-population": [
+          "K_LEAGUE_SHARED_MEMBERSHIP"
+        ],
+        "membership-rosters": [
+          "K_LEAGUE_SHARED_MEMBERSHIP"
+        ],
+        "manager-local-year": [
+          "K_LEAGUE_LOCAL_MS_YEAR"
+        ]
+      },
+      "nativeExit": 1
+    },
+    "pool": {
+      "expectedFailures": {
+        "sc-population": [
+          "K_LEAGUE_SC_CANONICAL_POPULATION"
+        ]
+      },
+      "nativeExit": 1
+    },
+    "access": {
+      "expectedFailures": {
+        "membership-rosters": [
+          "K_LEAGUE_ORDINARY_ACCESS"
+        ],
+        "manager-local-year": [
+          "K_LEAGUE_LOCAL_MS_YEAR"
+        ],
+        "prepared-manager-targets": [
+          "K_LEAGUE_MANAGER_ACCESS"
+        ]
+      },
+      "nativeExit": 1
+    },
+    "roster": {
+      "expectedFailures": {
+        "membership-rosters": [
+          "K_LEAGUE_GENERATED_SQUAD"
+        ]
+      },
+      "nativeExit": 1
+    },
+    "restored": {
+      "expectedFailures": {},
+      "nativeExit": 0
+    }
+  },
+  "faults": {
+    "membership": {
+      "id": "membership",
+      "path": "src/data/kLeague2026.ts",
+      "operations": [
+        {
+          "index": 560,
+          "before": "    { name: 'Gwangju FC', color: '#f5d800', gameSince: 2026 },\n",
+          "after": "",
+          "count": 1
+        }
+      ],
+      "afterGitBlob": "a970531f4e048fe58442e6c2653db2790bbed4bd",
+      "afterBytes": 1418,
+      "afterSHA256": "52f1b01c018b6f6fc0d3e089aa8a41aab2ef61c36670b7c6422d493e5a2ee37f",
+      "wholeInverse": true,
+      "scope": "Physical removal of one actual descriptor member, preserving all other data. Not a normal factual edit.",
+      "club": "Gwangju FC",
+      "existingPoolPlayer": null
+    },
+    "access": {
+      "id": "access",
+      "path": "src/data/kLeague2026.ts",
+      "operations": [
+        {
+          "index": 623,
+          "before": "    { name: 'Gimcheon Sangmu', color: '#d02128', gameSince: 2026, accessHeld: true },",
+          "after": "    { name: 'Gimcheon Sangmu', color: '#d02128', gameSince: 2026 },",
+          "count": 1
+        }
+      ],
+      "afterGitBlob": "dfd0fe50609c520136b871b8c20ab9df743842db",
+      "afterBytes": 1463,
+      "afterSHA256": "2a332bced4b4f8213a2fc5d5b4995e6d173c69abb2ab4f8ae7f770ca73ce839b",
+      "wholeInverse": true,
+      "scope": "Physical removal of the actual ordinary-access hold. No military eligibility policy is created.",
+      "club": null,
+      "existingPoolPlayer": null
+    },
+    "roster": {
+      "id": "roster",
+      "path": "src/lib/clubManager.ts",
+      "operations": [
+        {
+          "index": 403781,
+          "before": "  const real = modelOnly ? [] : baked.length",
+          "after": "  const real = modelOnly ? getPool().slice(0, 1).map(toCMPlayer) : baked.length",
+          "count": 1
+        }
+      ],
+      "afterGitBlob": "994522ab5ed24fe13856e494bbfd43dfd4e67e52",
+      "afterBytes": 1312148,
+      "afterSHA256": "4b7a932b784ede505fc9c95d8e4287c99c6cc047214518bf46aced388bb2e69b",
+      "wholeInverse": true,
+      "scope": "Accepted physical wrong-fallback fault admits one existing RAW_POOL player into the used fresh K branch. This is corruption only, never factual K roster adoption.",
+      "club": null,
+      "existingPoolPlayer": "Erling Haaland"
+    },
+    "pool": {
+      "id": "pool",
+      "path": "src/data/soccerCareerClubPool.ts",
+      "afterBytes": 53163,
+      "afterSHA256": "6f4f3a23409b49429df8fe7f075373e29a5da73afb8791c36331f60f1783eb60",
+      "operations": [
+        {
+          "count": 1,
+          "after": "",
+          "index": 38811,
+          "before": "  { id: \"cm-gwangju-fc\", name: \"Gwangju FC\", country: \"South Korea\", tier: 4, color: \"#f5d800\", league: \"K League 1\" },\n"
+        }
+      ],
+      "wholeInverse": true,
+      "club": "Gwangju FC",
+      "afterGitBlob": "412bd9401ee9335172cb28b345cbae4c8fb49614",
+      "scope": "One complete actual appended generated canonical row removed physically after measured generation. Existing326-prefix/SINCE/ladders stay held; no guessed source literal."
+    }
+  },
+  "sourcePins": [
+    {
+      "path": "src/lib/soccerCareerEngine.ts",
+      "gitBlob": "663eab42df957f156b35e931d81f9f643ea1a7f4"
+    },
+    {
+      "path": "src/pages/ClubManager.tsx",
+      "gitBlob": "3c820cbc7141d6f682f4a1ad2fc1fee7dfe9e3c2"
+    },
+    {
+      "path": "src/lib/clubManager.ts",
+      "gitBlob": "f2484429d627c4e05257886fb8e78d4e3561c64b"
+    },
+    {
+      "path": "src/lib/clubManagerWorldEdit.ts",
+      "gitBlob": "fe5f6e53b1814e6bb4aaba00b175b589b6330129"
+    },
+    {
+      "path": "src/lib/managerJobMarket.ts",
+      "gitBlob": "82e11ce8c1c76b780059969674a26ad368bd4db4"
+    },
+    {
+      "path": "src/lib/soccerCareerLeague.ts",
+      "gitBlob": "cf7772161d902d2bb82d7f5cb6b3bdc5d04a9659"
+    },
+    {
+      "path": "src/lib/careerEras.ts",
+      "gitBlob": "e037022342382b1df9c8a5ede620d2cce480bc23"
+    },
+    {
+      "path": "src/components/club-manager/ClubManagerTeamPicker.tsx",
+      "gitBlob": "c6ef33e8ce54e1d964dda157dd5a6b12e899ef89"
+    },
+    {
+      "path": "src/components/club-manager/CustomClubForm.tsx",
+      "gitBlob": "6d0bd2c849f41dbdf4a738c77abe22990c31e0fd"
+    },
+    {
+      "path": "src/hooks/useClubManager.ts",
+      "gitBlob": "a8bae5b90a609a4e5ee5b267a58a52f4189bf699"
+    },
+    {
+      "path": "src/lib/clubManagerEras.ts",
+      "gitBlob": "2f462a0a753338cc95fbfbc066a4240917440623"
+    },
+    {
+      "path": "src/data/soccerCareerClubPool.ts",
+      "gitBlob": "522399403d4a5816680d0d5d2e19e3fda650d71d"
+    },
+    {
+      "path": "src/data/careerLeagueSeasons.ts",
+      "gitBlob": "eb57362c1d0e774259d582674edf2d38186c0dc8"
+    },
+    {
+      "path": "scripts/data/soccerCareerFacts.json",
+      "gitBlob": "3020b7ebbc6a17013b3c7ab6a30558b675e35257"
+    },
+    {
+      "path": "scripts/lib/careerClubPool.mjs",
+      "gitBlob": "3abec590896605188a4fc0cc7d122fc3be8438c3"
+    },
+    {
+      "path": "scripts/simCareerClubPool.mjs",
+      "gitBlob": "4f2493986069d7486e05560fbfd021455f27f1f7"
+    },
+    {
+      "path": "scripts/simNoRivalNames.mjs",
+      "gitBlob": "e7f7cfe09d0d53afb46a9dfe100cd34de42a2146"
+    },
+    {
+      "path": "src/components/club-manager/ClubDetailScreen.tsx",
+      "gitBlob": "aa54f2f72fc339f644ada87efe871b108a95382a"
+    },
+    {
+      "path": "src/components/club-manager/ClubManagerClubList.tsx",
+      "gitBlob": "6c81ba72fc661673812c021f7f78a6877ffd4022"
+    },
+    {
+      "path": "src/components/club-manager/ClubManagerHelp.tsx",
+      "gitBlob": "62174d0614c4b2e27dbaa461869d056bde937644"
+    },
+    {
+      "path": "src/components/club-manager/LeagueTableCard.tsx",
+      "gitBlob": "fb3141db713c6ae6b39155ce415c5e61dd8a5971"
+    },
+    {
+      "path": "src/components/club-manager/WorldTablesCard.tsx",
+      "gitBlob": "2e333af9aa698d7d2074e32f52ea673d2abf538d"
+    },
+    {
+      "path": "src/data/gameContent/clubManagement.ts",
+      "gitBlob": "0e1fa56534a005204a6e53df875d7ed5e7f8692f"
+    },
+    {
+      "path": "src/data/gameContent/soccer2.ts",
+      "gitBlob": "7576d973cf9a4a0aa7a9413eeb99130ad81f4f88"
+    },
+    {
+      "path": "src/data/kLeague2026.ts",
+      "gitBlob": "7786c30acb29289ae929dbc605b1a14289dec388"
+    },
+    {
+      "path": "src/lib/clubManagerCalendar.ts",
+      "gitBlob": "ada619859360b05ef0067393ad7175f21f80870c"
+    },
+    {
+      "path": "src/lib/soccerCareerOwner.ts",
+      "gitBlob": "925fe2c4d5cbdd37d723bd90e57523d46027e64d"
+    },
+    {
+      "path": "scripts/data/soccerHistoricalV1UiFixture.json",
+      "gitBlob": "cdc13da018efec049567c8148755cc21a9b791d3"
+    },
+    {
+      "path": "src/data/players.ts",
+      "gitBlob": "e3435eaae958a2853ae24de9d7eca29f5cfcf0da"
+    },
+    {
+      "path": "src/data/leagueOddFormats.ts",
+      "gitBlob": "c4f1aa9f996acb82475ff5a993f7b07defae6933"
+    }
+  ],
+  "helperPins": [
+    {
+      "path": "src/test/kLeagueSharedCandidate.test.tsx",
+      "bytes": 25929,
+      "gitBlob": "5e987d56a4f3a3002c0f9b2a062591ed7be7f98b",
+      "sha256": "a51f6e1ad97fb216e7f7dd84de486a7a80295fef44d4c92ad4bdc51662bbd505",
+      "operations": 18,
+      "wholeInverse": true
+    },
+    {
+      "path": "src/test/kLeagueSharedBoundaries.test.ts",
+      "bytes": 19144,
+      "gitBlob": "96bdc743f6b5364c8f5dc7854f541aecb98cc2b7",
+      "sha256": "9eea2365d96166a523a432f9b243068e306846989b41ef8e8240e435a5aee83a",
+      "wholeInverse": true
+    },
+    {
+      "path": "scripts/qa/kLeagueSharedCandidateEvidence.mjs",
+      "bytes": 19328,
+      "gitBlob": "6915db24a616cf342ec78ce065dadee64488a8de",
+      "sha256": "1ba4ce9fd0098a3666dbd93c0e32910cd4928a69bd9a2099014ba2d9ebded9bb"
+    }
+  ],
+  "limits": {
+    "storedPerCaseMaxBytes": 12582912,
+    "decodedPerCaseMaxBytes": 46137344,
+    "archiveMaxBytes": 50000000,
+    "caseTimeoutMs": 180000
+  },
+  "scope": {
+    "world": "Fresh current worlds deliberately gain12Kmembers. Exact old27definitions/order/palettes, old516canonical prefix and selected authentic complete old save/load projections stay held. No whole fresh-current-world RAW parity is asserted.",
+    "availability": "Eight added canonical rows are GAME-offer2026 only. True first professional dates stay separately sourced provenance. Old4player/initial-manager availability stays held. Newly shared-market K roles are2026-only,11ordinary destinations; Gimcheon remains opponent-only.",
+    "replay": "Exact original source/saved strings are authenticated. replaySaved uses separately recorded main-global replacement segments from actual source checkpoints; each complete segment is validated against original seed/draws/checkpoint. Outer tape alone is not claimed to contain those segment calls. Private forks remain unobserved.",
+    "prepared": "SC last existing record-year/phase/retired/managerState and specific non-K targets are explicitly prepared API boundaries from complete authentic v1UIinput. Original CM applications target Arsenal; zero same-name generic provider rows were observed. No natural same-name SCoffer/retirement claim.",
+    "fault": "Four separate physical source faults: actual member removal, actual generated row removal, held-access removal, and actual existing-RAW_POOL wrong fallback. No dummy flags/missing imports/setup failures/TypeErrors are owned. Counts are strict predeclared hypotheses until actual measurement.",
+    "completeness": "All10 RAW and every main/import/replay stream retained losslessly in every arm. Any incomplete fallback record fails admission, even if an owned marker also appears. Fixed/restored all10 stored+decoded complete bodies must be exact.",
+    "build": "Headless model outcomes are separate from Root's normal compiled build20readers/3smokes/16caps/defaultNBA/permanentNBA. No App build required on broken model arms; no build/size/native/public credit from this packet.",
+    "ownership": "Source preparation only. Root owns final source binding, remote controller staging/activation and original acquisition.",
+    "scSeasonFormat": "Source-defined inherited partial only: K League 1 has no leagueSizeFor window or oddFormatFor row in the pinned SC modules, so managerLeagueField uses max(20,named+1), which is20 for the12-member catalogue. This packet does not play or qualify that SC managerial season/table or the real Korean format. It earns SC12known members/11ordinary current destinations/eight2026-dated additions only. Pre2026 old-four behavior is held. CM's separately declared12-row/22-game shared-calendar model is distinct."
+  },
+  "futureWorkflow": {
+    "env": {
+      "K_LEAGUE_CANDIDATE_OUT": "$ARM_OUT/cases",
+      "K_LEAGUE_API_OUT": "$ARM_OUT/api",
+      "K_LEAGUE_ORIGINAL_RAW": "$QA_REF"
+    },
+    "types": "node_modules/.bin/tsc --noEmit -p tsconfig.app.json",
+    "vitest": "node_modules/.bin/vitest run src/test/kLeagueSharedCandidate.test.tsx src/test/kLeagueSharedBoundaries.test.ts --reporter=json --outputFile=$ARM_OUT/vitest.json --maxWorkers=1 --minWorkers=1",
+    "reader": "node scripts/qa/kLeagueSharedCandidateEvidence.mjs --mode arm --arm \"$arm\" --out \"$ARM_OUT\" --original \"$QA_REF\" --spec scripts/qa/kLeagueSharedCandidateCases.json --exit-code \"$native_exit\"",
+    "compare": "node scripts/qa/kLeagueSharedCandidateEvidence.mjs --mode compare --out \"$QA_OUT\" --original \"$QA_REF\" --spec scripts/qa/kLeagueSharedCandidateCases.json",
+    "armLayout": "replay/<arm>/{cases,api,logs,transport,vitest.json,native.json,types-passed.json,ARM-ADMITTED.json}",
+    "typeReceipt": {
+      "command": "node_modules/.bin/tsc --noEmit -p tsconfig.app.json",
+      "exit": 0
+    },
+    "nativeReceipt": {
+      "exit": "ACTUAL_CHILD_STATUS",
+      "signal": null,
+      "error": null
+    },
+    "transport": [
+      "types.log",
+      "vitest.log",
+      "reader.log"
+    ],
+    "logs": [
+      "vitest.stdout.log",
+      "vitest.stderr.log"
+    ],
+    "sourceFences": "Full source/index/allstatus/four locks/receipts before-after each arm, physical fault file exact expected blob/status only, finally restore whole fixed product/QA/reference inventories."
+  }
+}
