@@ -21,7 +21,7 @@ const receipt = file => { const bytes = fs.readFileSync(path.join(ROOT, file)); 
 const inventory = dir => fs.readdirSync(path.join(ROOT, dir), { withFileTypes: true }).sort((a,b) => a.name.localeCompare(b.name)).flatMap(e => e.isDirectory() ? inventory(dir + '/' + e.name) : e.isFile() ? [receipt(dir + '/' + e.name)] : []);
 const COMPONENT = 'src/components/lineup/TeamSpinner.tsx';
 const component = receipt(COMPONENT);
-assert.equal(component.blob, ARM === 'fixed' ? '2c230efb93f28330d1d26b91cb9f3b78d3700b1d' : '7c49f86a41927dee736614cb859d461f620ca6bc', 'Exact physical component arm');
+assert.equal(component.blob, ARM === 'fixed' ? '7777b6a3e115866c468fbd480820b6356066d91d' : '7c49f86a41927dee736614cb859d461f620ca6bc', 'Exact physical component arm');
 const index = fs.readFileSync(path.join(ROOT, 'dist/index.html'), 'utf8');
 const css = [...index.matchAll(/<link\b[^>]*>/gi)].map(m => m[0]).filter(t => /\brel=["']stylesheet["']/i.test(t)).map(t => /\bhref=["']([^"']+)["']/i.exec(t)?.[1]).filter(Boolean).filter(href => href.startsWith('/assets/') && href.split('?')[0].endsWith('.css'));
 assert(css.length > 0, 'Actual built local CSS links required');
@@ -113,8 +113,13 @@ try {
         return {club:after.club,spinningHeight:before.card.height,settledHeight:after.card.height,settledMinusSpinning:after.card.height-before.card.height,elapsedMs:settled.at-spinning.at,subtitleHeight:h.rect.height};
       });
       row.vectors=put(width+'-vectors',vectors);row.changed=vectors.filter(v=>v.settledMinusSpinning!==0).length;
-      if(ARM==='fixed')check(row.changed===0,width+': all29 actual Club year component heights held exactly');
-      else check(row.changed>0 && vectors.every(v=>v.settledMinusSpinning>=0),width+': physical original produces nonzero missing-hint-space phase deltas');
+      row.subtitleReserve=width<640?48:32;row.maxSubtitleHeight=Math.max(...vectors.map(v=>v.subtitleHeight));
+      row.spinningHeights=[...new Set(vectors.map(v=>v.spinningHeight))];row.settledHeights=[...new Set(vectors.map(v=>v.settledHeight))];
+      if(ARM==='fixed'){
+        check(row.changed===0,width+': all29 actual Club year component heights held exactly');
+        check(new Set([...row.spinningHeights,...row.settledHeights]).size===1,width+': all29 clubs share one outer card height in both phases');
+        check(row.maxSubtitleHeight<=row.subtitleReserve,width+': all29 subtitles fit the responsive reserved height');
+      }else check(row.changed===29 && vectors.every(v=>v.settledMinusSpinning>0),width+': physical original produces29 nonzero missing-hint-space phase deltas');
       check(row.errors.length===0 && row.assetErrors.length===0,width+': no React or local asset errors');
       row.status='passed';
     }catch(error){row.status='failed';row.error=String(error.stack||error);throw error;}
