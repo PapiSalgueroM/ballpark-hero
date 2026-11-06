@@ -173,6 +173,37 @@ afterAll(() => {
 });
 
 describe('Soccer Connect4 pending Cancel ownership', () => {
+  it(TITLES.idle, async () => {
+    activeCase = 'idle'; await mountPage(); const before = progress(); select(); capture('idle-selection-before-cancel');
+    await cancel(); const cancelled = capture('idle-selection-after-cancel');
+    expect(progress(), TITLES.idle + ' selecting and cancelling does not mutate full game progress').toEqual(before);
+    expect([cancelled.state.selectedColumn, cancelled.state.targetRow, cancelled.state.validationError, cancelled.state.isValidating], TITLES.idle + ' existing idle cleanup').toEqual([null, null, null, false]);
+    expect(wires, TITLES.idle + ' Cancel does not create a validator').toHaveLength(0);
+    select(1); capture('idle-next-selection'); expect([current().selectedColumn, current().targetRow], TITLES.idle + ' next choice stays available').toEqual([1, 5]);
+    expectEmpty(TITLES.idle);
+  });
+
+  it(TITLES.progress, async () => {
+    activeCase = 'progress'; await mountPage();
+    let dailyProgress: ReturnType<typeof progress> | null = null;
+    for (const mode of ['daily', 'unlimited'] as const) {
+      if (mode === 'unlimited') { fireEvent.click(within(view!.container).getByRole('button', { name: '∞ Unlimited' })); await flush(); }
+      select(); await pageSelect('Fixture Request A'); await finish(wires.length - 1, { valid: true, fullName: 'Fixture Request A' }); capture(mode + '-current-move');
+      expectOne('Fixture Request A', 0, TITLES.progress + ' ' + mode);
+      const before = progress(); if (mode === 'daily') dailyProgress = before;
+      select(1); await pageSelect('Fixture Fresh B'); await finish(wires.length - 1, { valid: false, reason: 'Fixture current refusal.' }); capture(mode + '-current-refusal');
+      expect(current().validationError, TITLES.progress + ' current refusal still appears').toBe('Fixture current refusal.');
+      expect(current().isValidating, TITLES.progress + ' settled refusal releases busy').toBe(false);
+      await cancel(); const cancelled = capture(mode + '-after-settled-cancel');
+      expect(progress(), TITLES.progress + ' ' + mode + ' Cancel keeps actual prior move turn used names storage and draws').toEqual(before);
+      expect([cancelled.state.selectedColumn, cancelled.state.targetRow, cancelled.state.validationError, cancelled.state.isValidating], TITLES.progress + ' ' + mode + ' clears settled selection and error').toEqual([null, null, null, false]);
+    }
+    const draws = [...io.draws]; fireEvent.click(within(view!.container).getByRole('button', { name: '📅 Daily' })); await flush(); capture('progress-return-to-daily');
+    expect(progress(), TITLES.progress + ' return restores exact daily progress with the ordinary Unlimited draw retained').toEqual({ ...dailyProgress!, draws });
+    expect(log(), TITLES.progress + ' only actual daily move is saved').toEqual([{ t: 'move', col: 0, row: 5, team: 'blue', playerName: 'Fixture Request A' }]);
+    expect(wires, TITLES.progress + ' actual valid and invalid requests in both modes').toHaveLength(4);
+    expect(io.completion, TITLES.progress + ' no incomplete round recorded').not.toHaveBeenCalled();
+  });
   it(TITLES.daily, async () => {
     activeCase = 'daily'; await mountPage(); const before = progress(); select(); await pageSelect('Fixture Request A');
     await act(async () => { headers(0); }); capture('daily-old-body-pending');
@@ -233,35 +264,4 @@ describe('Soccer Connect4 pending Cancel ownership', () => {
     expectEmpty(TITLES[key]); expect(wires, TITLES[key] + ' no extra validation').toHaveLength(1);
   });
 
-  it(TITLES.idle, async () => {
-    activeCase = 'idle'; await mountPage(); const before = progress(); select(); capture('idle-selection-before-cancel');
-    await cancel(); const cancelled = capture('idle-selection-after-cancel');
-    expect(progress(), TITLES.idle + ' selecting and cancelling does not mutate full game progress').toEqual(before);
-    expect([cancelled.state.selectedColumn, cancelled.state.targetRow, cancelled.state.validationError, cancelled.state.isValidating], TITLES.idle + ' existing idle cleanup').toEqual([null, null, null, false]);
-    expect(wires, TITLES.idle + ' Cancel does not create a validator').toHaveLength(0);
-    select(1); capture('idle-next-selection'); expect([current().selectedColumn, current().targetRow], TITLES.idle + ' next choice stays available').toEqual([1, 5]);
-    expectEmpty(TITLES.idle);
-  });
-
-  it(TITLES.progress, async () => {
-    activeCase = 'progress'; await mountPage();
-    let dailyProgress: ReturnType<typeof progress> | null = null;
-    for (const mode of ['daily', 'unlimited'] as const) {
-      if (mode === 'unlimited') { fireEvent.click(within(view!.container).getByRole('button', { name: '∞ Unlimited' })); await flush(); }
-      select(); await pageSelect('Fixture Request A'); await finish(wires.length - 1, { valid: true, fullName: 'Fixture Request A' }); capture(mode + '-current-move');
-      expectOne('Fixture Request A', 0, TITLES.progress + ' ' + mode);
-      const before = progress(); if (mode === 'daily') dailyProgress = before;
-      select(1); await pageSelect('Fixture Fresh B'); await finish(wires.length - 1, { valid: false, reason: 'Fixture current refusal.' }); capture(mode + '-current-refusal');
-      expect(current().validationError, TITLES.progress + ' current refusal still appears').toBe('Fixture current refusal.');
-      expect(current().isValidating, TITLES.progress + ' settled refusal releases busy').toBe(false);
-      await cancel(); const cancelled = capture(mode + '-after-settled-cancel');
-      expect(progress(), TITLES.progress + ' ' + mode + ' Cancel keeps actual prior move turn used names storage and draws').toEqual(before);
-      expect([cancelled.state.selectedColumn, cancelled.state.targetRow, cancelled.state.validationError, cancelled.state.isValidating], TITLES.progress + ' ' + mode + ' clears settled selection and error').toEqual([null, null, null, false]);
-    }
-    const draws = [...io.draws]; fireEvent.click(within(view!.container).getByRole('button', { name: '📅 Daily' })); await flush(); capture('progress-return-to-daily');
-    expect(progress(), TITLES.progress + ' return restores exact daily progress with the ordinary Unlimited draw retained').toEqual({ ...dailyProgress!, draws });
-    expect(log(), TITLES.progress + ' only actual daily move is saved').toEqual([{ t: 'move', col: 0, row: 5, team: 'blue', playerName: 'Fixture Request A' }]);
-    expect(wires, TITLES.progress + ' actual valid and invalid requests in both modes').toHaveLength(4);
-    expect(io.completion, TITLES.progress + ' no incomplete round recorded').not.toHaveBeenCalled();
-  });
 });
