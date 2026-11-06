@@ -3,10 +3,42 @@ import { Check, Copy, RotateCcw, Swords, X } from 'lucide-react';
 import { FlagImg } from '@/components/FlagImg';
 import { GameNav } from '@/components/game/GameNav';
 import { FORMATIONS, TOPICS, playerRating } from '@/lib/squadDeal';
-import { BB_ERAS, useBudgetBuilder } from '@/hooks/useBudgetBuilder';
+import { BB_ERAS, budgetScoreBreakdown, useBudgetBuilder } from '@/hooks/useBudgetBuilder';
 import { useRevealScroll } from '@/hooks/useRevealScroll';
 import type { Player } from '@/types/game';
 import styles from './BudgetBuilderBoard.module.css';
+
+function ScoreBreakdown({ label, points, outcome, change }: {
+  label: string;
+  points: ReturnType<typeof budgetScoreBreakdown>;
+  outcome: 'win' | 'draw' | 'loss' | null;
+  change?: number;
+}) {
+  const series = outcome === null
+    ? `Pending (${points.series} so far)`
+    : `${outcome === 'win' ? 'Win' : outcome === 'draw' ? 'Draw' : 'Loss'} (+${points.series})`;
+  const rows: [string, number | string][] = [
+    ['Squad quality', points.quality],
+    ['Savings', points.savings],
+    ['Board demand', points.demand],
+    ['Series outcome', series],
+    ['Total', points.total],
+  ];
+  if (change !== undefined) rows.push(['Total change', `${change >= 0 ? '+' : ''}${change}`]);
+  return (
+    <section aria-label={label} className="rounded-lg border border-border/60 bg-background/50 p-2 text-left">
+      <h3 className="text-xs font-semibold text-foreground">{label}</h3>
+      <dl className="mt-1 space-y-0.5 text-xs">
+        {rows.map(([term, value]) => (
+          <div key={term} className="flex items-start justify-between gap-2">
+            <dt className="min-w-0 text-muted-foreground">{term}</dt>
+            <dd className="shrink-0 text-right tabular-nums text-foreground">{value}</dd>
+          </div>
+        ))}
+      </dl>
+    </section>
+  );
+}
 
 export function BudgetBuilderBoard() {
   const {
@@ -115,6 +147,13 @@ export function BudgetBuilderBoard() {
     Object.values({ ...squad, [activeSlot]: choice }).filter(Boolean) as Player[];
   const afterRating = afterSquad.length ? Math.round(afterSquad.reduce((sum, player) => sum + playerRating(player), 0) / afterSquad.length) : 0;
   const afterCondition = choice ? criterion.check(afterSquad, budget, afterRemaining) : false;
+  const scoreParts = budgetScoreBreakdown({
+    complete, teamRating, remaining, criterionMet, seriesOutcome: series?.outcome ?? null,
+  });
+  const afterScoreParts = budgetScoreBreakdown({
+    complete: afterSquad.length === formation.slots.length, teamRating: afterRating,
+    remaining: afterRemaining, criterionMet: afterCondition, seriesOutcome: null,
+  });
 
   return (
     <div className={`${styles.board} mx-auto max-w-3xl px-4 py-6`} data-budget-builder>
@@ -302,7 +341,11 @@ export function BudgetBuilderBoard() {
               <div><dt className="text-muted-foreground">Signed after this choice</dt><dd>{afterSquad.length}/{formation.slots.length}</dd></div>
               <div><dt className="text-muted-foreground">Demand condition after signing</dt><dd>{afterCondition ? 'Met so far' : 'Not met yet'}</dd></div>
             </dl>
+            <div className="mt-2">
+              <ScoreBreakdown label="Score impact after signing" points={afterScoreParts} outcome={null} change={afterScoreParts.total - finalScore} />
+            </div>
             <p className="mt-2 text-xs text-muted-foreground">The board demand bonus is checked on your completed XI. This preview does not sign anyone.</p>
+            <p className="mt-1 text-xs text-muted-foreground">Score starts with all 11 slots filled. Signing clears the Final, so its bonus is pending in this preview.</p>
             <div className="mt-3 flex flex-wrap gap-2">
               <button onClick={confirmSigning} disabled={!candidates.includes(choice) || current === choice}
                 onKeyDown={event => { if (event.repeat && (event.key === 'Enter' || event.key === ' ')) event.preventDefault(); }}
@@ -360,6 +403,10 @@ export function BudgetBuilderBoard() {
           <p className="text-sm text-muted-foreground">
             team rating · ${spent}M spent · ${remaining}M left over
           </p>
+
+          <div className="mt-3">
+            <ScoreBreakdown label="Score breakdown" points={scoreParts} outcome={series?.outcome ?? null} />
+          </div>
 
           {!series && (
             <button

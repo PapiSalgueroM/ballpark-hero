@@ -133,6 +133,20 @@ export function budgetFor(moneyXi: (Player | null)[], eraId?: string): number {
   return Math.max(100, Math.round((naive * 0.62) / 10) * 10);
 }
 
+export function budgetScoreBreakdown({
+  complete, teamRating, remaining, criterionMet, seriesOutcome,
+}: {
+  complete: boolean; teamRating: number; remaining: number; criterionMet: boolean;
+  seriesOutcome: SeriesResult['outcome'] | null;
+}) {
+  if (!complete) return { quality: 0, savings: 0, demand: 0, series: 0, total: 0 };
+  const quality = teamRating;
+  const savings = Math.floor(Math.max(0, remaining) / 200);
+  const demand = criterionMet ? 10 : 0;
+  const series = seriesOutcome === 'win' ? 15 : seriesOutcome === 'draw' ? 5 : 0;
+  return { quality, savings, demand, series, total: quality + savings + demand + series };
+}
+
 export function useBudgetBuilder(): BudgetBuilderState {
   const [pools, setPools] = useState<Record<string, Player[]>>({});
   const [loading, setLoading] = useState(true);
@@ -230,7 +244,6 @@ export function useBudgetBuilder(): BudgetBuilderState {
   }, [activeSlot, formation, topicPool, usedNames, squad, remaining, search]);
 
   const finalScore = useMemo(() => {
-    if (!complete) return 0;
     /* Round 315, the owner's review: "you get way too many points for this
        game in comparison to the other games". The old formula (rating x 10
        plus bonuses) paid out around 1,200 a play while most games top out
@@ -238,10 +251,9 @@ export function useBudgetBuilder(): BudgetBuilderState {
        ingredients, one tenth the scale: a great day lands a bit over 100,
        like everywhere else. Old personal bests from the inflated scale will
        stand until genuinely beaten, which is the honest reading of a best. */
-    let s = teamRating + Math.floor(Math.max(0, remaining) / 200);
-    if (criterionMet) s += 10;
-    if (series) s += series.outcome === 'win' ? 15 : series.outcome === 'draw' ? 5 : 0;
-    return s;
+    return budgetScoreBreakdown({
+      complete, teamRating, remaining, criterionMet, seriesOutcome: series?.outcome ?? null,
+    }).total;
   }, [complete, teamRating, remaining, criterionMet, series]);
 
   useGameCompletion('budget-builder', complete && series !== null, finalScore, teamRating);
