@@ -1423,6 +1423,7 @@ export const SOCCER_CONTENT_2: GameContentMap = {
         heading: "Choosing a timer from unlimited to forty seconds",
         items: [
           "Timers: Unlimited, 90, 60, or 40 seconds, starting on your first guess.",
+          "Timed rounds keep counting while answers are checked and while you are away. Reloading keeps the same deadline. A late answer does not count. Unlimited has no clock.",
         ],
       },
       {
@@ -1450,6 +1451,12 @@ export const SOCCER_CONTENT_2: GameContentMap = {
         heading: "Kaka finishes a nine for nine grid",
         paragraphs: [
           "The last corner wants a Champions League winner who played in Serie A. One miss, then Kaka clicks in: 9 for 9, rarity 19 percent.",
+        ],
+      },
+      {
+        heading: "A late answer after the clock reaches zero",
+        paragraphs: [
+          "Example: if checking finishes after the clock reaches 0, that late answer does not change the ended main round.",
         ],
       },
     ],

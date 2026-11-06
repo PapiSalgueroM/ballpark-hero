@@ -109,6 +109,12 @@ const SoccerGrid = () => {
                 <p className="text-muted-foreground">
                   Pick Unlimited or race the clock at 90s, 60s, or 40s. The clock starts on your first guess, not when the page loads. Running out of time ends the round just like running out of guesses.
                 </p>
+                <p className="text-muted-foreground mt-2">
+                  Timed rounds keep counting while answers are checked and while you are away. Reloading keeps the same deadline. A late answer does not count. Unlimited has no clock.
+                </p>
+                <p className="text-muted-foreground mt-2">
+                  Example: if checking finishes after the clock reaches 0, that late answer does not change the ended main round.
+                </p>
               </section>
               <section>
                 <h3 className="font-bold text-foreground mb-2">Overtime</h3>
@@ -191,6 +197,9 @@ const SoccerGrid = () => {
                     </button>
                   ))}
                 </div>
+                <p className="text-xs text-muted-foreground text-center mt-3">
+                  Timed rounds keep counting while answers are checked and while you are away. Reloading keeps the same deadline. A late answer does not count. Unlimited has no clock.
+                </p>
                 <p className="text-xs text-muted-foreground text-center mt-3">
                   Your first guess locks in these settings for today's puzzle.
                 </p>
