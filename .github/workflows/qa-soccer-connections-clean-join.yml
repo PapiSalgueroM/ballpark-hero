@@ -1,0 +1,124 @@
+name: Soccer Connections clean build join
+on:
+  push:
+    branches: [codex/soccer-connections-clean-join-qa-20261106]
+permissions:
+  contents: read
+  actions: read
+jobs:
+  closeout:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        shell: bash
+    env:
+      SIM_NETWORK: offline
+      SIM_OFFLINE_RECEIPT: connections-clean-join/offline.log
+      CONNECTIONS_REFERENCE_ARTIFACT: '13488269666'
+      CONNECTIONS_REFERENCE_ZIP: '44e93094b9740276d918689fc46dff9ed6bf5aca0393a111770db459e62c16fa'
+      CONNECTIONS_REFERENCE_TAR: '690374906941b8e5c5ae6fe0e02aac36facc05b2737bb46a0c9732abfbb3ddd3'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 3
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24.22.1
+          cache: npm
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.4.4
+      - name: Locked dependencies and clean source receipts
+        run: |
+          set -euo pipefail
+          [[ "$CONNECTIONS_REFERENCE_ARTIFACT" =~ ^[0-9]+$ ]]
+          [[ "$CONNECTIONS_REFERENCE_ZIP" =~ ^[a-f0-9]{64}$ ]]
+          [[ "$CONNECTIONS_REFERENCE_TAR" =~ ^[a-f0-9]{64}$ ]]
+          test ! -e connections-clean-join
+          mkdir connections-clean-join
+          touch connections-clean-join/offline.log
+          git rev-parse HEAD > connections-clean-join/head.txt
+          git rev-parse 'HEAD^{tree}' > connections-clean-join/tree.txt
+          git ls-files -s > connections-clean-join/source-before.txt
+          sha256sum package.json package-lock.json > connections-clean-join/locks-before.txt
+          npm ci
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const lock=JSON.parse(fs.readFileSync('package-lock.json'));
+          const rows=Object.keys(lock.packages).filter(p=>p.startsWith('node_modules/')&&fs.existsSync(p+'/package.json')).map(p=>[p,JSON.parse(fs.readFileSync(p+'/package.json')).version]);
+          assert.equal(rows.length,521);for(const[p,v]of rows)assert.equal(v,lock.packages[p].version,p);fs.writeFileSync('connections-clean-join/installed-before.json',JSON.stringify(rows));
+          NODE
+      - name: Proper app types
+        run: node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee connections-clean-join/types.log
+      - name: Pinned reference qualification artifact
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          gh api repos/PapiSalgueroM/ballpark-hero/actions/runs/42188232094 > connections-clean-join/reference-run.json
+          gh api "repos/PapiSalgueroM/ballpark-hero/actions/artifacts/$CONNECTIONS_REFERENCE_ARTIFACT" > connections-clean-join/reference-artifact.json
+          gh api "repos/PapiSalgueroM/ballpark-hero/actions/artifacts/$CONNECTIONS_REFERENCE_ARTIFACT/zip" > "$RUNNER_TEMP/connections-reference.zip"
+          echo "$CONNECTIONS_REFERENCE_ZIP  $RUNNER_TEMP/connections-reference.zip" | sha256sum --check
+          mkdir -p "$RUNNER_TEMP/connections-reference" "$RUNNER_TEMP/connections-reference-dist"
+          unzip -q "$RUNNER_TEMP/connections-reference.zip" -d "$RUNNER_TEMP/connections-reference"
+          echo "$CONNECTIONS_REFERENCE_TAR  $RUNNER_TEMP/connections-reference/dist.tgz" | sha256sum --check
+          tar -xzf "$RUNNER_TEMP/connections-reference/dist.tgz" -C "$RUNNER_TEMP/connections-reference-dist"
+          cp "$RUNNER_TEMP/connections-reference/source-before.txt" connections-clean-join/reference-source.txt
+      - name: Fresh unchanged product-name fence on clean source
+        run: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simNoRivalNames.mjs 2>&1 | tee connections-clean-join/no-rival.log
+      - name: Clean production build
+        run: NODE_OPTIONS="--max-old-space-size=6144" npm run build 2>&1 | tee connections-clean-join/build.log
+      - name: Every product test script and built byte joined to completed native and reader/cap build
+        id: join
+        env:
+          CONNECTIONS_REFERENCE_DIR: ${{ runner.temp }}/connections-reference
+          CONNECTIONS_REFERENCE_DIST: ${{ runner.temp }}/connections-reference-dist/dist
+        run: |
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import path from 'node:path';import assert from 'node:assert/strict';import {createHash} from 'node:crypto';
+          const sha=bytes=>createHash('sha256').update(bytes).digest('hex');
+          const readIndex=file=>new Map(fs.readFileSync(file,'utf8').trim().split('\n').map(line=>{const m=/^[0-9]+ ([0-9a-f]{40}) 0\t(.+)$/.exec(line);assert(m,'Actual source row');return [m[2],m[1]];}));
+          const old=readIndex('connections-clean-join/reference-source.txt'),current=readIndex('connections-clean-join/source-before.txt');
+          const excluded=new Set(['scripts/qa/playConnectionsModeSelection.mjs']);
+          assert.equal(old.get('scripts/qa/playConnectionsModeSelection.mjs'),'a915e4dd34f163a0d49a3e95be8455756e9747a9');
+          for(const file of excluded)assert(!current.has(file),'Remote-only evidence helper absent from clean tree: '+file);
+          const configs=['index.html','package.json','package-lock.json','vite.config.ts','tailwind.config.ts','postcss.config.js','tsconfig.json','tsconfig.app.json','tsconfig.node.json','bun.lockb','bun.lock'];
+          for(const file of configs){assert.equal(current.has(file),old.has(file),'Same root configuration presence: '+file);if(current.has(file))assert.equal(current.get(file),old.get(file),'Exact qualified root configuration: '+file);}
+          assert.equal(current.get('src/hooks/useConnections.ts'),'55050eccb78a6574a1524f0cfb7597c789104c73');
+          assert.equal(current.get('src/pages/Connections.tsx'),'b5bd5aaba7d8877be86cc592ca4ae1616b517a5f');
+          assert.equal(current.get('docs/plans/2026-11-06-soccer-connections-mode-selection.md'),'58f0fd78014cd6508da98f44909942b88409aefe');
+          assert.equal(current.get('src/test/connectionsModeSelection.test.tsx'),'e79ad2f59a671d83fba294e4bc61c400dd2b3037');
+          const scoped=map=>[...map].filter(([p])=>/^(?:src|public|scripts)\//.test(p)&&!excluded.has(p)).sort(([a],[b])=>a.localeCompare(b));
+          const sourceRows=scoped(current);assert.equal(sourceRows.length,4655);assert.deepEqual(sourceRows,scoped(old),'Every other source/public/script blob held, including exact committed generated files');
+          const inventory=dir=>fs.readdirSync(dir,{withFileTypes:true}).sort((a,b)=>a.name.localeCompare(b.name)).flatMap(e=>e.isDirectory()?inventory(path.join(dir,e.name)).map(r=>({...r,path:e.name+'/'+r.path})):[{path:e.name,bytes:fs.statSync(path.join(dir,e.name)).size,sha256:sha(fs.readFileSync(path.join(dir,e.name)))}]);
+          const actual=inventory('dist'),reference=inventory(process.env.CONNECTIONS_REFERENCE_DIST);
+          assert.equal(actual.length,850);assert.deepEqual(actual,reference,'Every byte of every built file matches the pinned reference build');
+          const meta=JSON.parse(fs.readFileSync('connections-clean-join/reference-artifact.json')),referenceHead=fs.readFileSync(path.join(process.env.CONNECTIONS_REFERENCE_DIR,'head.txt'),'utf8').trim();
+          assert.equal(meta.id,Number(process.env.CONNECTIONS_REFERENCE_ARTIFACT));assert.equal(meta.expired,false);assert.match(referenceHead,/^[a-f0-9]{40}$/);assert.equal(meta.workflow_run.head_sha,referenceHead);const run=JSON.parse(fs.readFileSync('connections-clean-join/reference-run.json'));assert.equal(run.id,42188232094);assert.equal(run.id,meta.workflow_run.id);assert.equal(run.head_sha,referenceHead);assert.equal(run.status,'completed');assert.equal(run.conclusion,'success');const native=JSON.parse(fs.readFileSync(path.join(process.env.CONNECTIONS_REFERENCE_DIR,'admission.json')));assert.equal(native.status,'passed');assert.equal(native.helper,'a915e4dd34f163a0d49a3e95be8455756e9747a9');assert.equal(native.unitCases,32);assert.equal(native.rawFrames,42);assert.equal(native.readers.length,20);assert.equal(native.immutableCaps.length,16);assert.equal(native.nativePngs,9);assert.equal(native.sourceRows,4656);assert.equal(native.cleanSourceRows,4655);
+          const result={status:'passed',referenceRun:meta.workflow_run.id,referenceApp:referenceHead,referenceArtifact:meta.id,referenceZipSHA256:process.env.CONNECTIONS_REFERENCE_ZIP,referenceTarSHA256:process.env.CONNECTIONS_REFERENCE_TAR,sourceRows:sourceRows.length,rootConfigurations:configs.filter(file=>current.has(file)).map(file=>({file,blob:current.get(file)})),remoteOnlyHelpers:[...excluded],generatedPatches:[],distFiles:actual.length,distManifestSHA256:sha(JSON.stringify(actual)),dist:actual,limits:'Clean build join only. No native, reader or cap rerun. Exact source and every built byte bind this clean tree to the reference Connections build. A separately complete successful full/native qualification is required; this join does not admit native behavior. The owned plan blob is pinned, other docs are outside this code join.'};
+          fs.writeFileSync('connections-clean-join/reference-build-join.json',JSON.stringify(result,null,2));console.log('PASS all '+sourceRows.length+' source rows and every '+actual.length+' built file held');
+          NODE
+      - name: Final source locks installed versions and offline holds
+        if: always()
+        run: |
+          git ls-files -s > connections-clean-join/source-after.txt
+          cmp connections-clean-join/source-before.txt connections-clean-join/source-after.txt
+          git diff --exit-code HEAD -- .
+          sha256sum package.json package-lock.json > connections-clean-join/locks-after.txt
+          cmp connections-clean-join/locks-before.txt connections-clean-join/locks-after.txt
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const before=JSON.parse(fs.readFileSync('connections-clean-join/installed-before.json'));
+          const after=before.map(([p])=>[p,JSON.parse(fs.readFileSync(p+'/package.json')).version]);assert.equal(after.length,521);assert.deepEqual(after,before);
+          fs.writeFileSync('connections-clean-join/installed-final.json',JSON.stringify(after));
+          assert(fs.existsSync('connections-clean-join/offline.log'));assert.equal(fs.statSync('connections-clean-join/offline.log').size,0);
+          NODE
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: soccer-connections-clean-build-join-${{ github.run_id }}
+          path: connections-clean-join
+          retention-days: 14
+          if-no-files-found: error
