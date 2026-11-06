@@ -58,3 +58,22 @@ Initial test01517a94661545555cb5b31ca5df294c9c76d8b7 remains preserved. Refreshe
 Artifact13527331378 is1452506bytes,SHA256a43f94dbf9d9f2c692bc31f24ccb46fd80fefd93765f5d642916d1ef029dbaa8. Its21 bodies include full RAW18914298bytes,SHA25672f5107496128c4a943e48fb382c728f6d6c45c0556a450798d01f9c51f94b9d. The original refresh must retain this failed provenance, verify the pinned old packet and require the entire fresh RAW to be byte-identical, including every complete case/HTML/clock/timer/global-RNG/storage/call/transport/completion field. Its global RNG guard measures the retained pre-start idle prefix separately from successful letter draws. It still requires the exact four business failures and two complete preservation passes.
 
 No App fix is authored. A corrected test source or wrapper is not executed original qualification.
+
+## Reviewed fix candidate after original admission
+
+Original42267893519 is independently admitted:6actual cases,4named business AssertionErrors,2preservation passes,69completeframes. All18914298 RAW bytes match the retained first packet. First42265573431 remains FAILED5/1; the six assertion-only count corrections and unattributed idle RNG call remain documented above.
+
+The reviewed Page candidate isf6a2b471abdf3ec5b21daa928348e11a3232019b (19875bytes,SHA256320a4563f9908b9c699c375c61fa49ebbc5d830c521289dca5dc7f5c676b691c). Its five unique literal edits reverse byte-for-byte to originalf8b98f42aeaca4d6399f0eebcf68dfbc03a2655e:
+1. Add deadlineRef initialized0.
+2. Only after a successful first draw, set deadlineRef to entry Date.now plus the chosen mode duration.
+3. Keep the existing one-second interval and phase cleanup, but calculate max0/ceil of remaining elapsed deadline time.
+4. Skip checks Date.now against deadline after its existing phase/letter/timeLeft check and before all streak/input/draw/focus changes. Expiry sets only timeLeft0.
+5. Submit checks the same entry deadline before input validation, resolver, feedback, used names, score or draws. Expiry sets only timeLeft0.
+
+Private pick is held. Actual source has one synchronous caller inside submit, with no await between admission and resolution/pick. Policy is entry-time admission: a legitimate predeadline entry may finish synchronous resolution. Existing timeLeft0 effects remain the only best/save/completion settlement path. No extra callback, second scoring path or save-format change.
+
+Fixed qualification must run the unchanged e0904ccdeb6c068e73b305fdf6a3b50822a32f41 regression with all6passes and69completeframes, and compare both whole ordinary/finish case objects to the original without stripping fields or HTML IDs. The harm cases may now settle earlier; their changed timer/phase/score/save/completion traces must be retained honestly.
+
+Controls are planned as six physical arms fixed/original/omit-countdown/omit-submit/omit-skip/restored, predicted failures0/4/2/1/1/0. Every control must change actual Page bytes, produce the specific named business failures and preserve all12 whole normal-case vectors. Fixed/restored RAW must match each other and the actual completed fixed reference; original RAW must match qualified original. These are source-only predictions until actual remote execution.
+
+Full qualification later requires proper types, locked521 versions, normal850-file build, all20 existing built readers, all16 original immutable route caps, three native viewport journeys and exact clean source/build binding. Native scope is normal real elapsed20s runs and replay through trusted public UI, using bounded fictional HTTP transport and no App/DOM/save/clock/RNG/pool overrides. Delayed-callback and late-event-race behaviors are unit-proven only; native does not claim tab suspension. No real sports data, provider truth, backend write or release claim.
