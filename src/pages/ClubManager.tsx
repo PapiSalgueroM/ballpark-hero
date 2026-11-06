@@ -4,7 +4,6 @@ import type { MutableRefObject, ReactNode } from 'react';
 import { cn } from '@/lib/utils';
 import type { MidSeasonEntry } from '@/lib/clubManagerCalendar';
 import { Play, ChevronRight, ChevronLeft, Trophy, Briefcase } from 'lucide-react';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useClubManager } from '@/hooks/useClubManager';
 import type { HubTab } from '@/hooks/useClubManager';
 import {
@@ -49,6 +48,13 @@ import { GAP, topInset, useRevealScroll } from '@/hooks/useRevealScroll';
 import { useArrivalTop } from '@/hooks/useArrivalTop';
 /* Round 1593: the hub's Week X of Y counts the weeks a season charges, never a night. */
 import { tickingWeeksDone, tickingWeeksIn } from '@/lib/worldNights';
+
+const Tabs = lazy(() => import('@/components/ui/tabs').then(m => ({ default: m.Tabs })));
+const TabsContent = lazy(() => import('@/components/ui/tabs').then(m => ({ default: m.TabsContent })));
+const TabsList = lazy(() => import('@/components/ui/tabs').then(m => ({ default: m.TabsList })));
+const TabsTrigger = lazy(() => import('@/components/ui/tabs').then(m => ({ default: m.TabsTrigger })));
+const EraLoadFailedView = lazy(() => import('@/components/club-manager/ClubManagerDeferredViews').then(m => ({ default: m.EraLoadFailed })));
+const WorldEditorTile = lazy(() => import('@/components/club-manager/ClubManagerDeferredViews').then(m => ({ default: m.WorldEditorTile })));
 
 const HubTile = lazy(() => import('@/components/club-manager/HubTile'));
 const ClubManagerTreatmentPanel = lazy(() => import('@/components/club-manager/ClubManagerTreatmentPanel'));
@@ -142,28 +148,7 @@ function DeskInView({ jump, served, children }: { jump: number; served: MutableR
 /** Round 832: a past era's squads did not arrive (offline, a dropped
  *  connection, a new deploy). Says so and offers the fetch again. */
 function EraLoadFailed({ label, noun = 'squads', onRetry, onBack, backLabel = 'Pick another season' }: { label: string; noun?: string; onRetry: () => void; onBack?: () => void; backLabel?: string }) {
-  return (
-    <div role="alert" data-testid="cm-era-load-failed" className="max-w-md mx-auto my-12 rounded-xl border border-border bg-card p-5 text-center">
-      <div className="text-sm font-bold text-foreground">The {label} {noun} did not load.</div>
-      <div className="mt-1 text-xs text-muted-foreground">Check your connection, then try again. Nothing has been lost.</div>
-      <button
-        onClick={onRetry}
-        className="mt-4 px-5 py-2.5 rounded-xl font-bold bg-primary text-primary-foreground hover:opacity-90 transition-opacity"
-      >
-        Try again
-      </button>
-      {/* Round 832 review: the picker's waiting steps hide their own back
-          buttons, so a season that will not load offers the way back here. */}
-      {onBack && (
-        <button
-          onClick={onBack}
-          className="mt-4 ml-2 px-5 py-2.5 rounded-xl font-bold bg-secondary text-foreground hover:bg-secondary/70 transition-colors"
-        >
-          {backLabel}
-        </button>
-      )}
-    </div>
-  );
+  return <ScreenLoading><EraLoadFailedView label={label} noun={noun} onRetry={onRetry} onBack={onBack} backLabel={backLabel} /></ScreenLoading>;
 }
 
 const FORM_TONE: Record<'W' | 'D' | 'L', string> = {
@@ -580,25 +565,7 @@ const ClubManager = () => {
             edit it holds rides into every later step and into the career. */}
         {pickStep === 'nation' && !historicPick && (
           <div className="max-w-2xl mx-auto mb-2.5">
-            <button
-              onClick={() => setPickStep('world')}
-              data-testid="cm-world-editor-tile"
-              className={cn(
-                'w-full rounded-xl border p-3 text-left transition-all hover:border-primary',
-                movedCount ? 'bg-primary/10 border-primary' : 'bg-card border-dashed border-primary/50',
-              )}
-            >
-              <div className="flex items-center gap-2.5">
-                <span className="text-xl leading-none">🌍</span>
-                <div className="min-w-0">
-                  <div className="text-sm font-bold text-foreground">World editor{movedCount ? `: ${movedCount} clubs moved` : ''}</div>
-                  <div className="text-[10px] text-muted-foreground">
-                    {movedCount ? 'Your world is edited. Tap to change it or put it back.' : 'Optional. Move any club to any league first: Celtic in the Premier League, your own super league.'}
-                  </div>
-                </div>
-                <ChevronRight className="w-4 h-4 text-muted-foreground ml-auto shrink-0" />
-              </div>
-            </button>
+            <ScreenLoading compact><WorldEditorTile movedCount={movedCount} onOpen={() => setPickStep('world')} /></ScreenLoading>
           </div>
         )}
         {pickStep === 'world' && !historicPick && (
@@ -1054,7 +1021,7 @@ const ClubManager = () => {
       </header>
       {kLeagueModel && <p data-cm-kleague-model className="text-xs text-muted-foreground mb-4">K League 1 plays 22 simulated league games on the shared August to May calendar. The real 2026 league used 33 games, then 5 split games. The split, Korea Cup, AFC competitions and promotion/relegation are not played here.</p>}
 
-      <Tabs value={g.activeTab} onValueChange={(v) => g.setActiveTab(v as HubTab)}>
+      <ScreenLoading><Tabs value={g.activeTab} onValueChange={(v) => g.setActiveTab(v as HubTab)}>
         <TabsList className="grid grid-cols-5 w-full mb-4">
           <TabsTrigger value="overview" className="text-[10px] md:text-xs">Home</TabsTrigger>
           <TabsTrigger value="squad" className="text-[10px] md:text-xs">Squad</TabsTrigger>
@@ -1686,7 +1653,7 @@ const ClubManager = () => {
             onClearNote={g.clearDeskNote}
           /></ScreenLoading>
         </TabsContent>
-      </Tabs>
+      </Tabs></ScreenLoading>
     </div>
   );
 };

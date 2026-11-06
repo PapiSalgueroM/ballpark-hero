@@ -144,8 +144,8 @@ const clamp = (v: number, lo: number, hi: number): number => Math.max(lo, Math.m
 
 function careerDef(state: Pick<CareerState, 'clubName' | 'eraId'>): ClubDef {
   return state.eraId && isHistoricEra(state.eraId)
-    ? eraClubDefFor(state.clubName, state.eraId)
-    : clubDefFor(state.clubName);
+    ? eraClubDefFor(state.clubName, state.eraId, state)
+    : clubDefFor(state.clubName, state);
 }
 
 function eraMoney(state: Pick<CareerState, 'eraId'>): number {

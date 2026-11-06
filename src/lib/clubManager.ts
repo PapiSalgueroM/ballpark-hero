@@ -5063,13 +5063,13 @@ function eraClubDefMap(eraId: string): Map<string, ClubDef> {
 /** ClubDef inside an era, falling back to the modern def for odd states.
  *  Round 154: a custom club outranks the era map here too, because a custom
  *  save inside a historic era still has to color and rank its own club. */
-export function eraClubDefFor(clubName: string, eraId: string | undefined): ClubDef {
+export function eraClubDefFor(clubName: string, eraId: string | undefined, career?: CareerWorldContext): ClubDef {
   if (ACTIVE_CUSTOM && ACTIVE_CUSTOM.def.name === clubName) return ACTIVE_CUSTOM.def;
   if (eraId && isHistoricEra(eraId)) {
     const def = eraClubDefMap(eraId).get(clubName);
     if (def) return def;
   }
-  return clubDefFor(clubName);
+  return clubDefFor(clubName, career);
 }
 
 /** The era's leagues, optionally narrowed to one nation. Round 832: by the
@@ -5443,10 +5443,12 @@ export function playableClubs(leagueId: string): ClubDef[] {
  *  Round 154: the active save's custom club answers first, so its color, tier
  *  and expectation show correctly on every screen without threading the save
  *  through a hundred callsites. */
-export function clubDefFor(name: string): ClubDef {
+export function clubDefFor(name: string, career?: CareerWorldContext): ClubDef {
   if (ACTIVE_CUSTOM && ACTIVE_CUSTOM.def.name === name) return ACTIVE_CUSTOM.def;
-  return clubDefMap().get(name)
-    ?? CLUBS.find(c => c.name === name)
+  /* A legacy custom keeps the old repair defaults when its name becomes real. */
+  const legacyCustom = !!career && career.clubName === name && career.customClub?.name === name
+    && !!kLeagueMember(name) && !careerHasKLeagueWorld(career);
+  return (!legacyCustom ? clubDefMap().get(name) ?? CLUBS.find(c => c.name === name) : undefined)
     ?? { name, tier: 4, color: '#8899aa', budget: 20, expectation: 10 };
 }
 
