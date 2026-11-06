@@ -1,4 +1,4 @@
-name: Build Your XI warning and stable spinner qualification
+name: Build Your XI clean build and browser closure
 on:
   push:
     branches: [codex/build-xi-unrated-warning-qa-20261105]
@@ -44,91 +44,44 @@ jobs:
           NODE
       - name: Proper app types
         run: node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee xi-warning-closure/types.log
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.12'
-      - name: Exact warning and supporting spinner source
-        run: |
-          test "$(git rev-parse HEAD:src/pages/LineupBuilder.tsx)" = dcd727d53ed3f31b38e0c3db1849af3ba09f03b6
-          test "$(git rev-parse HEAD:src/hooks/useLineupBuilder.ts)" = d6ecb6bd9ca7e15d328957294c60126b1d02f1d8
-          test "$(git rev-parse HEAD:src/components/lineup/TeamSpinner.tsx)" = 7777b6a3e115866c468fbd480820b6356066d91d
-      - name: Owned and unchanged admission outcomes
-        run: |
-          XI_RECORD_WARNING_RAW="$PWD/xi-warning-closure/raw.json" NODE_OPTIONS="--max-old-space-size=6144 --require=$PWD/scripts/lib/offlineTransport.cjs" node node_modules/vitest/vitest.mjs run src/test/buildXiUnratedWarning.test.tsx src/test/buildXiClubYear.test.tsx src/test/buildXiClubYearSetup.test.tsx src/test/lineupBuilderHistoryRead.test.tsx src/test/lineupValidatorClient.test.tsx --maxWorkers=1 --minWorkers=1 --reporter=default --reporter=json --outputFile=xi-warning-closure/units.json 2>&1 | tee xi-warning-closure/units.log
-          node --input-type=module <<'NODE'
-          import fs from 'node:fs';import assert from 'node:assert/strict';const r=JSON.parse(fs.readFileSync('xi-warning-closure/units.json')),raw=JSON.parse(fs.readFileSync('xi-warning-closure/raw.json'));
-          assert.equal(r.numTotalTests,86);assert.equal(r.numPassedTests,86);assert.equal(r.numFailedTests,0);assert.equal(r.numPendingTests,0);assert.equal(raw.caseTitles.length,14);assert.equal(Object.keys(raw.cases).length,14);
-          assert(!/Unhandled Errors|Unhandled Rejection|Uncaught Exception|Failed to resolve import/.test(fs.readFileSync('xi-warning-closure/units.log','utf8')));
-          NODE
-      - name: Clean production build
-        id: join
-        run: |
-          NODE_OPTIONS="--max-old-space-size=6144" npm run build 2>&1 | tee xi-warning-closure/build.log
-          tar -czf xi-warning-closure/dist.tgz dist
-          sha256sum xi-warning-closure/dist.tgz > xi-warning-closure/dist.sha256
-      - name: Isolated browser and snapshot dependencies
-        id: browser_setup
-        timeout-minutes: 12
-        if: ${{ !cancelled() && steps.join.outcome == 'success' }}
-        run: |
-          python -m pip install fonttools pillow
-          npm install --prefix "$RUNNER_TEMP/xi-browser" --no-save --package-lock=false playwright@1.64.1
-          test ! -e node_modules/playwright
-          ln -s "$RUNNER_TEMP/xi-browser/node_modules/playwright" node_modules/playwright
-          node "$RUNNER_TEMP/xi-browser/node_modules/playwright/cli.js" install --with-deps chromium
-          node --input-type=module <<'NODE'
-          import fs from 'node:fs';import assert from 'node:assert/strict';
-          const before=JSON.parse(fs.readFileSync('xi-warning-closure/installed-before.json'));
-          const after=before.map(([p])=>[p,JSON.parse(fs.readFileSync(p+'/package.json')).version]);assert.deepEqual(after,before);
-          fs.writeFileSync('xi-warning-closure/installed-after.json',JSON.stringify(after));console.log('Preserved all '+after.length+' locked installed versions.');
-          NODE
-      - name: All required output readers and original download caps
-        if: ${{ !cancelled() && steps.join.outcome == 'success' && steps.browser_setup.outcome == 'success' }}
+      - name: Pinned completed qualification artifact
         env:
-          SEO_SPLIT_BASE_REF: 3b14650d360b010b25b525de33a5f32f33de2798
-          ENGINES: chromium
+          GH_TOKEN: ${{ github.token }}
         run: |
-          git fetch --no-tags --depth=1 origin 3b14650d360b010b25b525de33a5f32f33de2798
-          test "$(git rev-parse 3b14650d360b010b25b525de33a5f32f33de2798:src/data/seoMeta.ts)" = cf7a5142e59b97048d27b5ece9a6588a92073728
-          export ONLY="simAdsense,simBrand,simHeadTags,simHiddenPages,simHubs,simIndexNow,simIndexing,simInternalLinks,simNoRivalNames,simPrerender,simPrerenderBoot,simRetiredRoutes,simSchema,simSitemap,simSnapshotAssets,simSiteSearch,simGuideHeadings,simSeoMetaSplit,simHomeCopy,simHarnessAnchors"
-          node scripts/runAllSims.mjs --browser 2>&1 | tee xi-warning-closure/readers.log
-          node scripts/lib/hostLikeServer.mjs dist 4173 > xi-warning-closure/weight-host.log 2>&1 &
-          xi_host_pid=$!
-          trap 'kill "$xi_host_pid" 2>/dev/null || true' EXIT
-          sleep 2
-          SWEEP_OFFLINE=1 BASE=http://127.0.0.1:4173 node scripts/sweepWeight.mjs 2>&1 | tee xi-warning-closure/weight.log
-      - name: Native warning choices and unrated finish at three widths
-        if: ${{ !cancelled() && steps.join.outcome == 'success' && steps.browser_setup.outcome == 'success' }}
-        run: XI_UNRATED_BROWSER_OUT=xi-warning-closure/browser NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/playBuildXiUnratedWarning.mjs 2>&1 | tee xi-warning-closure/browser.log
-      - name: Every club label and physical original component inverse
-        if: ${{ !cancelled() && steps.join.outcome == 'success' && steps.browser_setup.outcome == 'success' }}
+          gh api repos/PapiSalgueroM/ballpark-hero/actions/artifacts/13475336686/zip > "$RUNNER_TEMP/xi-reference.zip"
+          echo "b4f15bf0beccaee485b3c07e0e501d3d05d346b73a0e25c11061091d75058b86  $RUNNER_TEMP/xi-reference.zip" | sha256sum --check
+          mkdir -p "$RUNNER_TEMP/xi-reference" "$RUNNER_TEMP/xi-reference-dist"
+          unzip -q "$RUNNER_TEMP/xi-reference.zip" -d "$RUNNER_TEMP/xi-reference"
+          echo "5d9efb222b9bf9e8353c4c3309c4185eaf2a056d6fd6a26f456faf2169efa441  $RUNNER_TEMP/xi-reference/dist.tgz" | sha256sum --check
+          tar -xzf "$RUNNER_TEMP/xi-reference/dist.tgz" -C "$RUNNER_TEMP/xi-reference-dist"
+          cp "$RUNNER_TEMP/xi-reference/source-before.txt" xi-warning-closure/reference-source.txt
+      - name: Clean production build
+        run: NODE_OPTIONS="--max-old-space-size=6144" npm run build 2>&1 | tee xi-warning-closure/build.log
+      - name: Every product test script and built byte joined to completed qualification
+        id: join
+        env:
+          XI_REFERENCE_DIR: ${{ runner.temp }}/xi-reference
+          XI_REFERENCE_DIST: ${{ runner.temp }}/xi-reference-dist/dist
         run: |
-          test "$(git hash-object src/components/lineup/TeamSpinner.tsx)" = 7777b6a3e115866c468fbd480820b6356066d91d
-          XI_SPINNER_LAYOUT_ARM=fixed XI_SPINNER_LAYOUT_OUT=xi-warning-closure/spinner-fixed node scripts/qa/checkXiSpinnerLayout.mjs
-          cp src/components/lineup/TeamSpinner.tsx "$RUNNER_TEMP/xi-spinner-fixed.tsx"
-          trap 'cp "$RUNNER_TEMP/xi-spinner-fixed.tsx" src/components/lineup/TeamSpinner.tsx' EXIT
-          git fetch --no-tags --depth=1 origin 3cf296e80ad254bec3cfba2f12660addef5bbe18
-          git show 3cf296e80ad254bec3cfba2f12660addef5bbe18:src/components/lineup/TeamSpinner.tsx > src/components/lineup/TeamSpinner.tsx
-          test "$(git hash-object src/components/lineup/TeamSpinner.tsx)" = 7c49f86a41927dee736614cb859d461f620ca6bc
-          XI_SPINNER_LAYOUT_ARM=original XI_SPINNER_LAYOUT_OUT=xi-warning-closure/spinner-original node scripts/qa/checkXiSpinnerLayout.mjs
-          cp "$RUNNER_TEMP/xi-spinner-fixed.tsx" src/components/lineup/TeamSpinner.tsx
-          test "$(git hash-object src/components/lineup/TeamSpinner.tsx)" = 7777b6a3e115866c468fbd480820b6356066d91d
-          git diff --exit-code HEAD -- src/components/lineup/TeamSpinner.tsx
           node --input-type=module <<'NODE'
-          import fs from 'node:fs';import assert from 'node:assert/strict';
-          const f=JSON.parse(fs.readFileSync('xi-warning-closure/spinner-fixed/report.json')),o=JSON.parse(fs.readFileSync('xi-warning-closure/spinner-original/report.json'));
-          for(const r of [f,o]){assert.equal(r.status,'passed');assert(r.sourceHeld&&r.distHeld);assert.equal(r.journeys.length,3);assert(r.journeys.every(j=>j.status==='passed'));}
-          assert.notEqual(f.component.blob,o.component.blob,'Physical control changes actual component');
-          assert(f.journeys.every(j=>j.changed===0));assert(o.journeys.every(j=>j.changed===29),'Every original pair must expose lost hint space');
-          console.log('PASS fixed87exactheight holds; physical original87measured phase deltas; fixedsource restored');
+          import fs from 'node:fs';import path from 'node:path';import assert from 'node:assert/strict';import {createHash} from 'node:crypto';
+          const sha=bytes=>createHash('sha256').update(bytes).digest('hex');
+          const gitblob=bytes=>createHash('sha1').update(Buffer.concat([Buffer.from('blob '+bytes.length+'\0'),bytes])).digest('hex');
+          const readIndex=file=>new Map(fs.readFileSync(file,'utf8').trim().split('\n').map(line=>{const m=/^[0-9]+ ([0-9a-f]{40}) 0\t(.+)$/.exec(line);assert(m,'Actual source row');return [m[2],m[1]];}));
+          const old=readIndex('xi-warning-closure/reference-source.txt'),current=readIndex('xi-warning-closure/source-before.txt');
+          const excluded=new Set(['scripts/qa/playBuildXiUnratedWarning.mjs','scripts/qa/checkXiSpinnerLayout.mjs']);
+          assert.equal(old.get('scripts/qa/playBuildXiUnratedWarning.mjs'),'d7ae347704349a5f89cd9f187a8880b3e56d9d7c');
+          assert.equal(old.get('scripts/qa/checkXiSpinnerLayout.mjs'),'95ec21a3f4ff3ed38a77462d2d0919f2d6739e64');
+          for(const file of excluded)assert(!current.has(file),'Remote-only evidence helper absent from clean tree: '+file);
+          for(const file of ['package.json','package-lock.json'])assert.equal(current.get(file),old.get(file),'Exact qualified dependency source: '+file);
+          const scoped=map=>[...map].filter(([p])=>/^(?:src|public|scripts)\//.test(p)&&!excluded.has(p)).sort(([a],[b])=>a.localeCompare(b));
+          const sourceRows=scoped(current);assert.deepEqual(sourceRows,scoped(old),'Every other source/public/script blob held, including exact committed generated files');
+          const inventory=dir=>fs.readdirSync(dir,{withFileTypes:true}).sort((a,b)=>a.name.localeCompare(b.name)).flatMap(e=>e.isDirectory()?inventory(path.join(dir,e.name)).map(r=>({...r,path:e.name+'/'+r.path})):[{path:e.name,bytes:fs.statSync(path.join(dir,e.name)).size,sha256:sha(fs.readFileSync(path.join(dir,e.name)))}]);
+          const actual=inventory('dist'),reference=inventory(process.env.XI_REFERENCE_DIST);
+          assert.equal(actual.length,850);assert.deepEqual(actual,reference,'Every byte of every built file matches completed readers/caps');
+          const result={status:'passed',referenceRun:42155505844,referenceApp:'3f7fd09fc930c4104d1f93abf8d4fa2ee4a5ffa0',referenceArtifact:13475336686,referenceZipSHA256:'b4f15bf0beccaee485b3c07e0e501d3d05d346b73a0e25c11061091d75058b86',referenceTarSHA256:'5d9efb222b9bf9e8353c4c3309c4185eaf2a056d6fd6a26f456faf2169efa441',sourceRows:sourceRows.length,remoteOnlyHelpers:[...excluded],distFiles:actual.length,distManifestSHA256:sha(JSON.stringify(actual)),dist:actual};
+          fs.writeFileSync('xi-warning-closure/reference-build-join.json',JSON.stringify(result,null,2));console.log('PASS all '+sourceRows.length+' source rows and every '+actual.length+' built file held');
           NODE
-      - uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: build-xi-warning-closure-images-${{ github.run_id }}
-          path: xi-warning-closure/browser/*.png
-          retention-days: 14
-          if-no-files-found: error
       - name: Final source locks installed versions and offline holds
         if: always()
         run: |
@@ -147,7 +100,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: soccer-xi-warning-closure-${{ github.run_id }}
+          name: build-xi-warning-clean-build-join-${{ github.run_id }}
           path: xi-warning-closure
           retention-days: 14
           if-no-files-found: error
