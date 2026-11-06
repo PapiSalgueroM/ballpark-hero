@@ -1,0 +1,186 @@
+name: Budget Builder physical phase-return controls
+on:
+  push:
+    branches: [codex/budget-phase-return-controls-20261106]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  phase-controls:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        arm: [original, fixed]
+    defaults:
+      run:
+        shell: bash
+    env:
+      SIM_NETWORK: offline
+      SIM_OFFLINE_RECEIPT: budget-phase-controls-${{ matrix.arm }}/offline.log
+      BB_CONTROL_OUT: budget-phase-controls-${{ matrix.arm }}
+      BB_PHASE_ARM: ${{ matrix.arm }}
+      BB_PHASE_WIDTHS: '1280'
+      BB_ORIGINAL_REF: 011039ded2a01ba95c47a1c824241d5d4383fb49
+      TZ: UTC
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 3
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24.22.1
+          cache: npm
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.4.4
+      - name: Pin source and install
+        run: |
+          set -euo pipefail
+          mkdir -p "$BB_CONTROL_OUT"
+          touch "$SIM_OFFLINE_RECEIPT"
+          git rev-parse HEAD > "$BB_CONTROL_OUT/head.txt"
+          git rev-parse 'HEAD^{tree}' > "$BB_CONTROL_OUT/tree.txt"
+          git ls-files -s > "$BB_CONTROL_OUT/source-before.txt"
+          sha256sum package.json package-lock.json > "$BB_CONTROL_OUT/locks-before.txt"
+          git diff --exit-code HEAD -- .
+          git fetch --no-tags --depth=1 origin "$BB_ORIGINAL_REF"
+          test "$(git rev-parse HEAD:src/hooks/useBudgetBuilder.ts)" = 0220c215cb2530a632abc477810ec38b095982c7
+          test "$(git rev-parse HEAD:src/components/budget-builder/BudgetBuilderBoard.tsx)" = f9111c2782f61ec9b976aee52baed4ae095f0d6b
+          test "$(git rev-parse HEAD:src/components/FlagImg.tsx)" = f415a12892f747ecf07414e61710584ca98be6a8
+          test "$(git rev-parse HEAD:scripts/lib/budgetPhaseReturn.mjs)" = 62b9aa4e979c2d7d6b2ce9397f15827206a85376
+          test "$(git rev-parse HEAD:scripts/qa/playBudgetPhaseReturn.mjs)" = bbbda6c80742de47b25746b65fa620cf741989fa
+          test "$(git rev-parse "$BB_ORIGINAL_REF:src/hooks/useBudgetBuilder.ts")" = 02ec7d7971bbcf96723e4a15fe285c5c0edf2ad2
+          test "$(git rev-parse "$BB_ORIGINAL_REF:src/components/budget-builder/BudgetBuilderBoard.tsx")" = 526213213e4a5e1b625e1b6505227b623f76ad26
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import {execFileSync} from 'node:child_process';import {createHash} from 'node:crypto';
+          const out=process.env.BB_CONTROL_OUT,files=execFileSync('git',['ls-files','-z'],{encoding:'utf8'}).split('\0').filter(Boolean);
+          const rows=files.map(file=>{const b=fs.readFileSync(file);return{file,bytes:b.length,sha256:createHash('sha256').update(b).digest('hex')};});
+          fs.writeFileSync(out+'/tracked-head.json',JSON.stringify(rows));
+          NODE
+          npm ci 2>&1 | tee "$BB_CONTROL_OUT/install.log"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const lock=JSON.parse(fs.readFileSync('package-lock.json')),rows=Object.keys(lock.packages).filter(p=>p.startsWith('node_modules/')&&fs.existsSync(p+'/package.json')).map(p=>[p,JSON.parse(fs.readFileSync(p+'/package.json')).version]);
+          assert.equal(rows.length,521);fs.writeFileSync(process.env.BB_CONTROL_OUT+'/installed-before.json',JSON.stringify(rows));
+          NODE
+      - name: Isolated pinned browser
+        timeout-minutes: 12
+        run: |
+          set -euo pipefail
+          npm install --prefix "$RUNNER_TEMP/budget-phase-browser" --no-save --package-lock=false playwright@1.64.1 2>&1 | tee "$BB_CONTROL_OUT/browser-install.log"
+          test ! -e node_modules/playwright
+          ln -s "$RUNNER_TEMP/budget-phase-browser/node_modules/playwright" node_modules/playwright
+          node "$RUNNER_TEMP/budget-phase-browser/node_modules/playwright/cli.js" install --with-deps chromium 2>&1 | tee "$BB_CONTROL_OUT/chromium-install.log"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const out=process.env.BB_CONTROL_OUT,before=JSON.parse(fs.readFileSync(out+'/installed-before.json')),after=before.map(([p])=>[p,JSON.parse(fs.readFileSync(p+'/package.json')).version]);
+          assert.deepEqual(after,before);assert.equal(JSON.parse(fs.readFileSync('node_modules/playwright/package.json')).version,'1.64.1');
+          fs.writeFileSync(out+'/installed-browser.json',JSON.stringify(after));
+          NODE
+      - name: Build positive source then physical fault and measure both
+        timeout-minutes: 15
+        run: |
+          set -euo pipefail
+          for phase in baseline control; do
+            export BB_CONTROL_PHASE="$phase"
+            mkdir -p "$BB_CONTROL_OUT/$phase"
+            node --input-type=module <<'NODE'
+          import fs from 'node:fs';import {execFileSync} from 'node:child_process';import {createHash} from 'node:crypto';import assert from 'node:assert/strict';
+          const root=process.env.BB_CONTROL_OUT,phase=process.env.BB_CONTROL_PHASE,out=root+'/'+phase,original=process.env.BB_PHASE_ARM==='original',hook='src/hooks/useBudgetBuilder.ts',board='src/components/budget-builder/BudgetBuilderBoard.tsx';
+          const baseRef=original?process.env.BB_ORIGINAL_REF:'HEAD',read=file=>execFileSync('git',['show',baseRef+':'+file]);
+          fs.writeFileSync(hook,read(hook));const baseline=read(board);fs.writeFileSync(board,baseline);
+          const blob=b=>createHash('sha1').update(Buffer.concat([Buffer.from('blob '+b.length+'\0'),b])).digest('hex');
+          assert.equal(blob(fs.readFileSync(hook)),original?'02ec7d7971bbcf96723e4a15fe285c5c0edf2ad2':'0220c215cb2530a632abc477810ec38b095982c7');
+          const baselineBlob=original?'526213213e4a5e1b625e1b6505227b623f76ad26':'f9111c2782f61ec9b976aee52baed4ae095f0d6b';assert.equal(blob(baseline),baselineBlob);
+          const anchor='      slots.current[request.slot]?.focus({ preventScroll: true });';
+          assert.equal(baseline.toString('utf8').split(anchor).length-1,1,'One exact real committed-focus anchor');
+          const addition=original?'      requestAnimationFrame(() => requestAnimationFrame(() => window.scrollBy(0, 64)));':'      requestAnimationFrame(() => requestAnimationFrame(() => window.scrollBy(0, window.innerHeight)));';
+          const mutated=Buffer.from(baseline.toString('utf8').replace(anchor,anchor+'\n'+addition));
+          assert.notEqual(blob(mutated),baselineBlob);assert.deepEqual(Buffer.from(mutated.toString('utf8').replace(anchor+'\n'+addition,anchor)),baseline,'Surgical inverse restores exact original Board bytes');
+          if(phase==='control')fs.writeFileSync(board,mutated);
+          const body=fs.readFileSync(board),physical={hook:blob(fs.readFileSync(hook)),board:blob(body)};
+          fs.writeFileSync(out+'/physical-Board.tsx',body);fs.writeFileSync(out+'/physical-Hook.ts',fs.readFileSync(hook));
+          const files=execFileSync('git',['ls-files','-z'],{encoding:'utf8'}).split('\0').filter(Boolean),rows=files.map(file=>{const b=fs.readFileSync(file);return{file,bytes:b.length,sha256:createHash('sha256').update(b).digest('hex')};});
+          const head=JSON.parse(fs.readFileSync(root+'/tracked-head.json'));assert.deepEqual(rows.map(r=>r.file),head.map(r=>r.file));const changed=rows.filter((r,i)=>JSON.stringify(r)!==JSON.stringify(head[i])).map(r=>r.file).sort();
+          assert.deepEqual(changed,original?[board,hook].sort():phase==='control'?[board]:[],'Only explicit physical arm files differ from HEAD');
+          fs.writeFileSync(out+'/tracked-before.json',JSON.stringify(rows));fs.writeFileSync(out+'/physical.json',JSON.stringify({arm:process.env.BB_PHASE_ARM,phase,physical,baselineBlob,changed,actuator:phase==='control'?addition:null,anchor,mutantBlob:blob(mutated),physicalSHA256:createHash('sha256').update(body).digest('hex'),inverseExact:true},null,2));fs.writeFileSync(out+'/board-blob.txt',physical.board);
+          NODE
+            node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee "$BB_CONTROL_OUT/$phase/types.log"
+            NODE_OPTIONS="--max-old-space-size=6144 --require=$PWD/scripts/lib/offlineTransport.cjs" npm run build 2>&1 | tee "$BB_CONTROL_OUT/$phase/build.log"
+            tar -czf "$BB_CONTROL_OUT/$phase/dist.tgz" dist
+            sha256sum "$BB_CONTROL_OUT/$phase/dist.tgz" > "$BB_CONTROL_OUT/$phase/dist.sha256"
+            node --input-type=module <<'NODE'
+          import fs from 'node:fs';import {createHash} from 'node:crypto';import assert from 'node:assert/strict';
+          const out=process.env.BB_CONTROL_OUT+'/'+process.env.BB_CONTROL_PHASE,walk=d=>fs.readdirSync(d,{withFileTypes:true}).sort((a,b)=>a.name.localeCompare(b.name)).flatMap(e=>e.isDirectory()?walk(d+'/'+e.name):e.isFile()?[d+'/'+e.name]:[]);
+          const rows=walk('dist').map(file=>{const b=fs.readFileSync(file);return{file,bytes:b.length,sha256:createHash('sha256').update(b).digest('hex')};});assert.equal(rows.length,850);
+          fs.writeFileSync(out+'/dist-before.json',JSON.stringify(rows));const b=fs.readFileSync(out+'/dist.tgz');fs.writeFileSync(out+'/build-provenance.json',JSON.stringify({physical:JSON.parse(fs.readFileSync(out+'/physical.json')),distFiles:rows.length,tarBytes:b.length,tarSHA256:createHash('sha256').update(b).digest('hex')},null,2));
+          NODE
+            export BB_PHASE_OUT="$BB_CONTROL_OUT/$phase/browser"
+            export BB_PHASE_BOARD_BLOB="$(cat "$BB_CONTROL_OUT/$phase/board-blob.txt")"
+            if [ "$phase" = baseline ]; then export BB_PHASE_CONTROL=baseline; else
+              if [ "$BB_PHASE_ARM" = original ]; then export BB_PHASE_CONTROL=extra-sixty-four; else export BB_PHASE_CONTROL=lost-one-viewport; fi
+            fi
+            set +e
+            NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/playBudgetPhaseReturn.mjs > "$BB_CONTROL_OUT/$phase/browser.log" 2>&1
+            browser_code=$?
+            set -e
+            printf '%s\n' "$browser_code" > "$BB_CONTROL_OUT/$phase/browser.exit"
+            cat "$BB_CONTROL_OUT/$phase/browser.log"
+            node --input-type=module <<'NODE'
+          import fs from 'node:fs';import path from 'node:path';import {execFileSync} from 'node:child_process';import {createHash} from 'node:crypto';import assert from 'node:assert/strict';
+          const root=process.env.BB_CONTROL_OUT,phase=process.env.BB_CONTROL_PHASE,out=root+'/'+phase,dir=out+'/browser',original=process.env.BB_PHASE_ARM==='original',report=JSON.parse(fs.readFileSync(dir+'/report.json')),physical=JSON.parse(fs.readFileSync(out+'/physical.json')),negative=phase==='control',expected=original?'BUDGET_RETURN_EXTRA_MOVEMENT_1280':'BUDGET_RETURN_UNREADABLE_1280';
+          assert.equal(Number(fs.readFileSync(out+'/browser.exit','utf8').trim()),negative?1:0,'Actual child exit');assert.equal(report.arm,process.env.BB_PHASE_ARM);assert.equal(report.control,process.env.BB_PHASE_CONTROL);assert.equal(report.boardPin,physical.physical.board);assert.deepEqual(report.physical,physical.physical);assert.deepEqual(report.widths,[1280]);assert.equal(report.externalForwarded,0);
+          assert.equal(report.status,negative?'business-failed':'passed');assert.equal(report.journeys.length,1);assert.equal(report.screenshots.length,2);assert.equal(report.journeys[0].status,negative?'business-failed':'passed');assert(!report.journeys[0].error);
+          if(negative){assert.deepEqual(report.businessFailures.map(f=>f.id),[expected]);assert.match(report.error,/^AssertionError \[ERR_ASSERTION\]: BUDGET_PHASE_RETURN: /);assert(report.error.includes(expected));}
+          else{assert.deepEqual(report.businessFailures,[]);assert(!report.error);}
+          assert(report.sourceHeld&&report.distHeld);assert.deepEqual(report.sourceBefore,report.sourceAfter);assert.deepEqual(report.distBefore,report.distAfter);assert.deepEqual(report.distBefore,JSON.parse(fs.readFileSync(out+'/dist-before.json')),'Browser bound to its own physical build');
+          const refs=[],read=ref=>{const b=fs.readFileSync(path.join(dir,ref.file));assert.equal(b.length,ref.bytes);assert.equal(createHash('sha256').update(b).digest('hex'),ref.sha256);refs.push(ref);return ref.file.endsWith('.json')?JSON.parse(b):null;};
+          const j=report.journeys[0];assert.equal(j.width,1280);assert.equal(j.height,900);assert.deepEqual(j.errors,[]);assert.deepEqual(j.assetErrors,[]);assert.deepEqual(j.routeErrors,[]);
+          const fixture=read(report.fixture);assert.equal(fixture.rawRows.length,33);assert(fixture.rawRows.every(r=>r.nationality==='England'));
+          for(const ref of [...j.frames,...j.actions])read(ref);for(const shot of report.screenshots){read(shot);read(shot.layout);read(shot.frame);}
+          read(j.confirmation.beforeLayout);read(j.confirmation.afterLayout);assert(j.confirmation.fullStorageHeld);assert.equal(j.confirmation.assertedZeroScroll,false);
+          const result=read(j.phaseReturn),a=result.assessment,b=result.before,z=result.after;assert.equal(result.name,'first-sign-GK40');assert.equal(a.allowed,!negative);assert.equal(a.actualScroll,z.scroll.y);assert.equal(b.scroll.x,z.scroll.x);assert.deepEqual(b.viewport,z.viewport);assert(z.target.connected&&z.target.enabled&&z.target.visible&&z.target.focused);assert(z.sameDestination&&z.sameParent&&z.sameDOMParent&&z.sameAncestors);
+          const t=z.target,r=t.rect,insideClips=z.clips.every(c=>(!c.clipX||(r.docX>=c.left&&r.docX+r.width<=c.right))&&(!c.clipY||(r.docY>=c.top&&r.docY+r.height<=c.bottom)));
+          assert(insideClips,'Relative pitch/ancestor clipping held, independent of viewport fault');
+          const viewportReadable=r.y>=z.chrome.top&&r.bottom<=z.viewport.height-z.chrome.bottom&&r.x>=0&&r.right<=z.viewport.width;
+          if(original){assert(a.oldClampedWindowReadable,'Measured already-readable branch required for the64px extra-movement control');assert(viewportReadable&&t.centerHit,'Original control must remain readable and hit-reachable');if(negative){assert.equal(a.reason,'BUDGET_RETURN_EXTRA_MOVEMENT');assert.notEqual(a.actualScroll,a.B);assert.notEqual(a.actualScroll,a.anchorScroll);}else assert(['held-or-required-clamp','exact-layout-anchor'].includes(a.mode));}
+          else if(negative){assert.equal(a.reason,'BUDGET_RETURN_UNREADABLE');assert(!viewportReadable,'The physical one-viewport actuator must actually lose destination readability');}
+          else{assert(viewportReadable&&t.centerHit);assert(['held-or-required-clamp','exact-layout-anchor','bounded-visible-return'].includes(a.mode));}
+          const versions=JSON.parse(fs.readFileSync(root+'/installed-before.json')),actual=versions.map(([p])=>[p,JSON.parse(fs.readFileSync(p+'/package.json')).version]);assert.deepEqual(actual,versions);
+          const files=execFileSync('git',['ls-files','-z'],{encoding:'utf8'}).split('\0').filter(Boolean),rows=files.map(file=>{const bytes=fs.readFileSync(file);return{file,bytes:bytes.length,sha256:createHash('sha256').update(bytes).digest('hex')};});fs.writeFileSync(out+'/tracked-after.json',JSON.stringify(rows));assert.deepEqual(rows,JSON.parse(fs.readFileSync(out+'/tracked-before.json')),'All physical source bytes held through build/browser');
+          const walk=d=>fs.readdirSync(d,{withFileTypes:true}).sort((a,b)=>a.name.localeCompare(b.name)).flatMap(e=>e.isDirectory()?walk(d+'/'+e.name):e.isFile()?[d+'/'+e.name]:[]),dist=walk('dist').map(file=>{const bytes=fs.readFileSync(file);return{file,bytes:bytes.length,sha256:createHash('sha256').update(bytes).digest('hex')};});fs.writeFileSync(out+'/dist-after.json',JSON.stringify(dist));assert.deepEqual(dist,report.distAfter);
+          if(negative){const baseline=JSON.parse(fs.readFileSync(root+'/baseline/browser/report.json')),f=baseline.fixture,raw=fs.readFileSync(path.join(root,'baseline/browser',f.file));assert.equal(createHash('sha256').update(raw).digest('hex'),f.sha256);assert.deepEqual(JSON.parse(raw),fixture,'Same complete fiction/day/formation inputs');assert.equal(report.day,baseline.day,'No ET day rollover between pair');assert.notDeepEqual(report.physical,baseline.physical,'Effective physical source fault');}
+          const admitted={status:negative?'effective-physical-negative':'positive-baseline',arm:report.arm,phase,expectedFailure:negative?expected:null,actualFailures:report.businessFailures.map(f=>f.id),physical,assessment:a,destination:{focused:t.focused,centerHit:t.centerHit,insideClips,viewportReadable},retainedRefs:refs.length,distFiles:dist.length,scope:'Bounded first-sign native phase-return policy only. No full score, reader, cap, backend-write or whole-App qualification.'};
+          fs.writeFileSync(out+'/admission.json',JSON.stringify(admitted,null,2));console.log(JSON.stringify(admitted));
+          NODE
+          done
+      - name: Restore exact HEAD source and retain outer holds
+        if: always()
+        run: |
+          set -euo pipefail
+          mkdir -p "$BB_CONTROL_OUT"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import {execFileSync} from 'node:child_process';import {createHash} from 'node:crypto';import assert from 'node:assert/strict';
+          const out=process.env.BB_CONTROL_OUT,files=execFileSync('git',['ls-files','-z'],{encoding:'utf8'}).split('\0').filter(Boolean),capture=()=>files.map(file=>{const b=fs.readFileSync(file);return{file,bytes:b.length,sha256:createHash('sha256').update(b).digest('hex')};});
+          const last=capture();fs.writeFileSync(out+'/tracked-before-restore.json',JSON.stringify(last));
+          for(const file of ['src/hooks/useBudgetBuilder.ts','src/components/budget-builder/BudgetBuilderBoard.tsx'])fs.writeFileSync(file,execFileSync('git',['show','HEAD:'+file]));
+          const restored=capture();fs.writeFileSync(out+'/tracked-restored.json',JSON.stringify(restored));assert.deepEqual(restored,JSON.parse(fs.readFileSync(out+'/tracked-head.json')),'Exact whole tracked restoration');
+          const lock=JSON.parse(fs.readFileSync('package-lock.json')),versions=Object.keys(lock.packages).filter(p=>p.startsWith('node_modules/')&&fs.existsSync(p+'/package.json')).map(p=>[p,JSON.parse(fs.readFileSync(p+'/package.json')).version]);fs.writeFileSync(out+'/installed-final.json',JSON.stringify(versions));assert.equal(versions.length,521);assert.deepEqual(versions,JSON.parse(fs.readFileSync(out+'/installed-before.json')));
+          assert(fs.existsSync(process.env.SIM_OFFLINE_RECEIPT));assert.equal(fs.statSync(process.env.SIM_OFFLINE_RECEIPT).size,0);
+          fs.writeFileSync(out+'/restoration.json',JSON.stringify({restored:true,trackedRows:restored.length,installed:versions.length,offlineBytes:0,scope:'Source restoration does not rebuild retained physical-arm dist.'},null,2));
+          NODE
+          git ls-files -s > "$BB_CONTROL_OUT/source-after.txt"
+          cmp "$BB_CONTROL_OUT/source-before.txt" "$BB_CONTROL_OUT/source-after.txt"
+          git diff --exit-code HEAD -- .
+          sha256sum package.json package-lock.json > "$BB_CONTROL_OUT/locks-after.txt"
+          cmp "$BB_CONTROL_OUT/locks-before.txt" "$BB_CONTROL_OUT/locks-after.txt"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: budget-phase-controls-${{ matrix.arm }}-${{ github.run_id }}
+          path: budget-phase-controls-${{ matrix.arm }}
+          retention-days: 14
+          if-no-files-found: error
