@@ -47,6 +47,8 @@ export function LineupHowToPlay({ open, onOpenChange }: LineupHowToPlayProps) {
               <li>• The selected record must match the club and year, and the position still has to fit</li>
               <li>• If there is no match, try another player or reroll the club</li>
               <li>• Ratings use the value and age on your selected records. If either is missing, the draft can finish without a rating</li>
+              <li>• Club year draft warns before you use a record with no usable value or age. Keep searching, or choose Use this unrated record to continue.</li>
+              <li>• Example: a matching record with a value but no age needs your confirmation. Keep searching leaves the slot open. Use this unrated record keeps the original record, and the completed XI stays unrated.</li>
             </ul>
             <p className="mt-2 rounded-lg bg-secondary/40 px-3 py-2 text-xs text-muted-foreground">
               Example: you pick 2010 and Inter Milan lands on your GK slot. Júlio César's Inter Milan record from 2010 counts, he was their keeper that year. A record from another year or another club does not.

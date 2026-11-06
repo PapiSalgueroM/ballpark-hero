@@ -163,6 +163,11 @@ async function fillPage() {
     const club = (operation(query, 'in', 'club') as string[])[0], year = operation(query, 'eq', 'year') as number;
     fireEvent.click(option('Fixture ' + club + ' ' + year + ' Pick ' + String(index).padStart(2, '0')));
     await flush();
+    if (io.missingAge || io.missingValue) {
+      const warning = screen.getByRole('alertdialog', { name: 'This record is missing rating inputs' });
+      fireEvent.click(within(warning).getByRole('button', { name: 'Use this unrated record' }));
+      await flush();
+    }
   }
   expect(screen.getByRole('button', { name: 'Submit Team' })).toBeVisible();
 }
