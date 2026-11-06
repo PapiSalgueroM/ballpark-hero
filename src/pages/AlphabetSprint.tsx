@@ -65,6 +65,7 @@ const AlphabetSprint = () => {
   const [feedback, setFeedback] = useState<string | null>(null);
   const [best, setBest] = useState<BestMap>(() => loadBest());
   const inputRef = useRef<HTMLInputElement>(null);
+  const deadlineRef = useRef(0);
 
   const boot = useCallback(async () => {
     setPhase('boot');
@@ -88,7 +89,7 @@ const AlphabetSprint = () => {
   useEffect(() => {
     if (phase !== 'running') return;
     const id = window.setInterval(() => {
-      setTimeLeft(t => (t > 0 ? t - 1 : 0));
+      setTimeLeft(Math.max(0, Math.ceil((deadlineRef.current - Date.now()) / 1000)));
     }, 1000);
     return () => window.clearInterval(id);
   }, [phase]);
@@ -135,6 +136,7 @@ const AlphabetSprint = () => {
     const empty = new Set<string>();
     const first = drawLetter(pool, empty, playable, null);
     if (!first) return;
+    deadlineRef.current = Date.now() + modeById(id).seconds * 1000;
     setModeId(id);
     setUsed(empty);
     setNamed([]);
@@ -168,6 +170,10 @@ const AlphabetSprint = () => {
 
   const skip = () => {
     if (phase !== 'running' || !letter || timeLeft <= 0) return;
+    if (Date.now() >= deadlineRef.current) {
+      setTimeLeft(0);
+      return;
+    }
     setStreak(0);
     setLastGain(null);
     setFeedback(null);
@@ -184,6 +190,10 @@ const AlphabetSprint = () => {
   // unambiguous). Ambiguity asks for the full name WITHOUT listing candidates.
   const submit = () => {
     if (phase !== 'running' || !letter || timeLeft <= 0) return;
+    if (Date.now() >= deadlineRef.current) {
+      setTimeLeft(0);
+      return;
+    }
     if (input.trim().length < 2) return;
     const outcome = resolveSprintGuess(pool, letter, input, used);
     if (outcome.kind === 'hit') {
