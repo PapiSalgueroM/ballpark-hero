@@ -1,0 +1,225 @@
+name: K League unchanged staff paired diagnostic
+on:
+  push:
+    branches: [codex/k-league-staff-paired-diagnostic-v2-20261106]
+permissions:
+  contents: read
+concurrency:
+  group: k-league-staff-paired-diagnostic-${{ github.ref }}
+  cancel-in-progress: false
+env:
+  CI: '1'
+  TZ: UTC
+jobs:
+  diagnostic:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: qa-source
+          fetch-depth: 13
+          filter: blob:none
+          persist-credentials: false
+      - uses: actions/checkout@v4
+        with:
+          ref: 3b14650d360b010b25b525de33a5f32f33de2798
+          path: source-main
+          fetch-depth: 1
+          filter: blob:none
+          persist-credentials: false
+      - uses: actions/checkout@v4
+        with:
+          ref: a6b0b19c4256d2e8aecd70e774e295d964512ee7
+          path: source-current
+          fetch-depth: 1
+          filter: blob:none
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: '1.4.4'
+      - name: Materialize the finite paired diagnostic controller
+        if: always()
+        run: |
+          set -euo pipefail
+          QA_OUT="$RUNNER_TEMP/k-league-staff-paired-diagnostic"
+          STAFF_CONTROLLER="$RUNNER_TEMP/k-league-staff-paired-controller.mjs"
+          export QA_OUT STAFF_CONTROLLER
+          printf 'QA_OUT=%s\nSTAFF_CONTROLLER=%s\n' "$QA_OUT" "$STAFF_CONTROLLER" >> "$GITHUB_ENV"
+          test ! -e "$QA_OUT"
+          mkdir -p "$QA_OUT/logs" "$QA_OUT/transport"
+          cat > "$STAFF_CONTROLLER" <<'STAFF_CONTROLLER'
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import crypto from 'node:crypto';
+          import assert from 'node:assert/strict';
+          import {spawnSync} from 'node:child_process';
+          const out=process.env.QA_OUT,workspace=process.env.GITHUB_WORKSPACE;
+          assert(out&&workspace);
+          const roots={qa:path.join(workspace,'qa-source'),main:path.join(workspace,'source-main'),current:path.join(workspace,'source-current')};
+          const sources={main:{commit:'3b14650d360b010b25b525de33a5f32f33de2798',tree:'d9278a7b5f58395509f6ab937f918c1c2ef31127'},current:{commit:'a6b0b19c4256d2e8aecd70e774e295d964512ee7',tree:'abd76428663b653db41e4473fd180904ef784720'}};
+          const workflow='.github/workflows/k-league-staff-paired-diagnostic-20261105.yml';
+          const pins={'scripts/simClubManagerStaff.mjs':'04a8f37d0a9fa7df6effda6caa79418aae003024','scripts/lib/seedRandom.mjs':'13e2534d2936880c0529a37190050fffb7d8df7d','scripts/lib/offlineTransport.cjs':'0fda542a2649fe5da937c6976fd0f5b6073e74b6','src/types/game.ts':'3a894340e0434cd3e5c7ebfce7d436eef131a3d6','src/components/club-manager/StaffScreen.tsx':'00c8ee8452f4d58451585f932344dfca15d5b44a','src/lib/clubManagerFinances.ts':'40a62cfbfef44a22bf369110cede465d9cceab3d','package.json':'2ff64986fb76ebc51b706f2fd24765768874008a','package-lock.json':'97d6f12a052f25f400462938c241789a083f0bfe','bun.lock':'dff081dcd34a1aa928ddc90d910774a6b855dfe3','bun.lockb':'5d9d33a3bf4f45fa099e2aa3014149e034981149','tsconfig.app.json':'51f581dd91641b4c1f1219f646788e73cf6bf00c'};
+          const sha=b=>crypto.createHash('sha256').update(b).digest('hex');
+          const blob=b=>crypto.createHash('sha1').update(Buffer.from('blob '+b.length+'\0')).update(b).digest('hex');
+          const put=(name,data)=>{fs.mkdirSync(path.dirname(path.join(out,name)),{recursive:true});fs.writeFileSync(path.join(out,name),typeof data==='string'||Buffer.isBuffer(data)?data:JSON.stringify(data,null,2)+'\n',{flag:'wx'});};
+          const git=(root,...args)=>{const r=spawnSync('git',['-C',root,...args],{encoding:'utf8',maxBuffer:32*1024*1024});assert.equal(r.status,0,'git '+args.join(' '));assert.equal(r.signal,null);assert.equal(r.error,undefined);return r.stdout;};
+          const tuple=v=>v?{mode:v.mode,type:v.type,sha:v.sha}:null;
+          const vector=root=>Object.fromEntries(git(root,'ls-tree','-r','-z','--full-tree','HEAD').split('\0').filter(Boolean).map(row=>{const m=/^([0-7]{6}) (blob|commit) ([a-f0-9]{40})\t([\s\S]+)$/.exec(row);assert(m);return[m[4],{mode:m[1],type:m[2],sha:m[3]}];}));
+          const changed=(a,b)=>[...new Set([...Object.keys(a),...Object.keys(b)])].filter(p=>JSON.stringify(a[p])!==JSON.stringify(b[p])).sort();
+          const capture=(role,when)=>{const root=roots[role],prefix='roles/'+role+'/'+when,tracked=git(root,'ls-files','-z'),index=git(root,'ls-files','-s'),status=git(root,'status','--porcelain=v1','--untracked-files=all');assert.equal(status,'','K_STAFF_SOURCE_STATUS '+role);const rows=tracked.split('\0').filter(Boolean).map(file=>{const b=fs.readFileSync(path.join(root,file));return{file,bytes:b.length,sha256:sha(b)};});const locks=['package.json','package-lock.json','bun.lock','bun.lockb'].map(file=>{const b=fs.readFileSync(path.join(root,file));return{file,bytes:b.length,sha256:sha(b)};});put(prefix+'/tracked.bin',tracked);put(prefix+'/index.txt',index);put(prefix+'/status.txt',status);put(prefix+'/source.json',rows);put(prefix+'/locks.json',locks);return{rows,locks,index,tracked,status};};
+          const headings=['1) Day one staff come from stature, four men per club, every one inside 1 to 10','2) The staff wage reaches the ledger and the fees leave the kitty for what the desk quoted','3) Each effect runs the right way, on every position, and stays bounded','4) Every effect is exactly neutral at level 1 and on an empty chair, and the desk charges an idle club nothing','5) A rival can come for every post, the deadline takes the man, and the match limit binds','6) Three men from outside plus your own academy, and the promoted man really grows',"7) A save from before the desk, and a mangled block, both open on the club's day one men",'8) Every name the desk can print, against every real player the worlds carry'];
+          const marker='NEGATIVE CONTROL ON: the coaches no longer reach developmentRate';
+          const fixed='trainingGroundGrowthMult(career) * coachGrowthMult(career, p.position)',broken='trainingGroundGrowthMult(career)';
+          const rateFailure=/^  FAIL: (attack|defence|goalkeeping) coach at 10: developmentRate for a (GK|CB|LB|RB|LWB|RWB|CDM|CM|LM|RM|CAM|LW|RW|CF|ST) moved 1\.0000, the multiplier says 1\.(0990|0495)$/;
+          const growthFailure=/^  FAIL: level 10 coaches moved growth 1\.000x, the effect is gone$/;
+          const gridFailure=/^  FAIL: (attack|defence|goalkeeping) coach at 10, (GK|CB|LB|RB|LWB|RWB|CDM|CM|LM|RM|CAM|LW|RW|CF|ST), academy (1|8|14|20), (light|normal|double), (0|8|20|34) apps, potential (62|66|72|80): developmentRate ((?:0|1|2)\.\d{4}), the clamp formula says ((?:0|1|2)\.\d{4})$/;
+          const cardFailure=/^  FAIL: (attack|defence|goalkeeping) coach at 10, (GK|CB|LB|RB|LWB|RWB|CDM|CM|LM|RM|CAM|LW|RW|CF|ST), age (19|28), academy (1|8|14|20), (light|normal|double), (0|8|20|34) apps, potential (62|66|72|80): the card does not count him, yet as a regular he would get ((?:0|1|2)\.\d{4}) of a promised ((?:0|1|2)\.\d{4}) and he turns (20|29)$/;
+          const clampCoverageFailure=/^  FAIL: the clamp grid is not reaching both sides of the ceiling: 3456 clipped, (\d+) already on it, of 3456$/;
+          const cardCoverageFailure=/^  FAIL: the card grid is not reaching every side: 6912 counted of 10368, 0 only as regulars, 3456 turning 30$/;
+          function ownedNoliftFinding(line){
+           if(rateFailure.test(line)||growthFailure.test(line)||cardCoverageFailure.test(line))return true;
+           let m=gridFailure.exec(line);if(m){const got=Number(m[7]),formula=Number(m[8]);return got>=0.1&&got<2.6&&formula>got&&formula<=2.6;}
+           m=cardFailure.exec(line);if(m){const got=Number(m[8]),promised=Number(m[9]);return Number(m[10])===Number(m[3])+1&&got>=0.1&&got<2.6&&promised>got&&promised<=2.8575;}
+           m=clampCoverageFailure.exec(line);return !!m&&Number(m[1])>=20&&Number(m[1])<=3456;
+          }
+          function classify(run,control){
+           const guard='K_STAFF_COMPLETE_OWNED_RESULT',stdout=run.stdout.replaceAll('\r\n','\n'),stderr=run.stderr.replaceAll('\r\n','\n'),lines=stdout.split('\n');
+           assert([0,1].includes(run.status),guard+' native status');assert.equal(run.signal,null,guard+' signal');assert.equal(run.error,null,guard+' setup error');
+           assert.deepEqual(lines.filter(l=>/^[1-8]\) /.test(l)),headings,guard+' eight exact sections');
+           const failures=stderr.split('\n').filter(l=>l.startsWith('  FAIL: ')),closings=stderr.split('\n').filter(l=>/^simClubManagerStaff: \d+ failures?$/.test(l)),other=stderr.split('\n').filter(l=>l.trim()&&!l.startsWith('  FAIL: ')&&!/^simClubManagerStaff: \d+ failures?$/.test(l));
+           assert.deepEqual(other,[],guard+' no setup/stderr extras');
+           if(run.status===0){assert.equal(failures.length,0,guard);assert.equal(closings.length,0,guard);assert.equal(lines.filter(l=>l.startsWith('simClubManagerStaff: PASS. ')).length,1,guard);}
+           else{assert.equal(closings.length,1,guard+' failure closing');assert(failures.length>0,guard);assert.equal(Number(/^simClubManagerStaff: (\d+) /.exec(closings[0])[1]),failures.length,guard+' exact actual failure count');assert.equal(lines.filter(l=>l.startsWith('simClubManagerStaff: PASS. ')).length,0,guard);}
+           assert(!lines.some(l=>/control cannot run|^Error:|ReferenceError|TypeError|SyntaxError|RangeError/.test(l)),guard+' setup stdout');
+           if(control){assert.equal(run.status,1,guard+' nolift native1');assert.equal(lines.filter(l=>l===marker).length,1,guard+' actual nolift marker');assert(failures.some(l=>rateFailure.test(l)),guard+' owned exact per-position development effect');assert(failures.some(l=>growthFailure.test(l)),guard+' owned actual whole-season nolift effect');assert(failures.some(l=>gridFailure.test(l)),guard+' actual owned clamp grid findings');assert(failures.some(l=>cardFailure.test(l)),guard+' actual owned card grid findings');assert(failures.some(l=>clampCoverageFailure.test(l)),guard+' actual owned clamp coverage closing');assert(failures.some(l=>cardCoverageFailure.test(l)),guard+' actual owned card coverage closing');assert(failures.every(ownedNoliftFinding),guard+' Section3-owned only');}
+           else assert.equal(lines.filter(l=>l.startsWith('NEGATIVE CONTROL ON:')).length,0,guard+' ordinary default no control');
+           return{nativeExit:run.status,sectionCensus:headings,failures,knownSection3:failures.filter(ownedNoliftFinding),unclassifiedNormalMessages:control?[]:failures.filter(l=>!ownedNoliftFinding(l)),status:control?'EXISTING_NOLIFT_CONTROL_OWNED_SECTION3_NATIVE1':run.status?'NORMAL_DIAGNOSTIC_RED_UNWAIVED':'NORMAL_DIAGNOSTIC_NATIVE0_NOT_RELEASE_QUALIFICATION'};
+          }
+          function child(role,name,command,args){
+           const dir='roles/'+role+'/'+name;fs.mkdirSync(path.join(out,dir),{recursive:true});const receipt=path.join(out,dir,'transport.log');fs.writeFileSync(receipt,'',{flag:'wx'});
+           const tmp=path.join(process.env.RUNNER_TEMP,'k-staff-paired-temps',role+'-'+name);assert(!fs.existsSync(tmp));fs.mkdirSync(tmp,{recursive:true});
+           const env={...process.env,SIM_NETWORK:'offline',SIM_OFFLINE_RECEIPT:receipt,NODE_OPTIONS:'--require='+path.join(roots[role],'scripts/lib/offlineTransport.cjs'),GIT_NO_LAZY_FETCH:'1',TMPDIR:tmp};
+           delete env.SIM_SEED;delete env.CM_STAFF_CONTROL;if(name==='nolift')env.CM_STAFF_CONTROL='nolift';
+           const r=spawnSync(command,args,{cwd:roots[role],env,encoding:'utf8',timeout:600000,maxBuffer:32*1024*1024});
+           const run={command:[command,...args],status:r.status,signal:r.signal,error:r.error?String(r.error):null,stdout:r.stdout??'',stderr:r.stderr??'',SIM_SEED:'UNSET',CM_STAFF_CONTROL:name==='nolift'?'nolift':'UNSET',TMPDIR:tmp};
+           put(dir+'/stdout.log',run.stdout);put(dir+'/stderr.log',run.stderr);put(dir+'/native.json',{...run,stdout:undefined,stderr:undefined});put(dir+'/exit.txt',String(r.status)+'\n');assert.equal(fs.statSync(receipt).size,0,'K_STAFF_SILENT_TRANSPORT');
+           return run;
+          }
+          const expected44=[{"path":"public/career-ladder/index.html","before":{"mode":"100644","type":"blob","sha":"351cd18bd0ff6846ab41690470697ee506c6bcc2"},"after":{"mode":"100644","type":"blob","sha":"21b0c3e6c2a79c142a5f4e5473e498d810bdf925"}},{"path":"public/cbb-dynasty/index.html","before":{"mode":"100644","type":"blob","sha":"6eaca5b6603816b06aa25cd76dff24a2191908ee"},"after":{"mode":"100644","type":"blob","sha":"e59c9411a57e642da094794bb3cf5f11ce5c8d3e"}},{"path":"public/club-manager/index.html","before":{"mode":"100644","type":"blob","sha":"a9b6bacd5c1f3a38777e5b185d0612ed9e740fd8"},"after":{"mode":"100644","type":"blob","sha":"78b2b3342f925c81fafb522cb4eb7aa868144158"}},{"path":"public/dart-draft/index.html","before":{"mode":"100644","type":"blob","sha":"20259e399400f4d0f425bff93948377ef5b61689"},"after":{"mode":"100644","type":"blob","sha":"f71806fa74d5fd9562e2e1866a81421e16da4604"}},{"path":"public/search/index.html","before":{"mode":"100644","type":"blob","sha":"c69f2d278a142982ba336db1a5619663bf8df6ee"},"after":{"mode":"100644","type":"blob","sha":"8bd4ac2178e0d0ebcca71ac84b7ec87ca8c682f1"}},{"path":"public/sitemap.xml","before":{"mode":"100644","type":"blob","sha":"b37fcc58eeab3af01982518c7e4b0e30f790c1b4"},"after":{"mode":"100644","type":"blob","sha":"5d91ccfd3ca9ef419e71b173a2fc0fedbfb7df0f"}},{"path":"public/soccer-career/index.html","before":{"mode":"100644","type":"blob","sha":"131a54dbb91e2832c56e7958edc7f987ba4d09ac"},"after":{"mode":"100644","type":"blob","sha":"3bf87bbf36266f9667fe3aa56c8ad26c53c769ca"}},{"path":"public/soccer/index.html","before":{"mode":"100644","type":"blob","sha":"a00e5e46fd21f982e97424e209ce89ba19829998"},"after":{"mode":"100644","type":"blob","sha":"425962926b3c3a18e3bf0ad379e017dd19a8ee84"}},{"path":"public/who-am-i/index.html","before":{"mode":"100644","type":"blob","sha":"cd4d7ab7de79d9742bfbebea4de649ada9349fea"},"after":{"mode":"100644","type":"blob","sha":"9ed73d14442c30d7e0df1503415f68b2460f0086"}},{"path":"scripts/data/guideHeadingsFrozen.json","before":{"mode":"100644","type":"blob","sha":"44b69c5931a210d18eb674119eaed8e593db59e5"},"after":{"mode":"100644","type":"blob","sha":"fa969a7bd126f05b60922dd9ea797b18571122fd"}},{"path":"scripts/data/lastmod.json","before":{"mode":"100644","type":"blob","sha":"a9d91055a4d148f05681cdf818371ada332cccb1"},"after":{"mode":"100644","type":"blob","sha":"fa5c29fb2acb6e5f8d4da012dd04d443792673bd"}},{"path":"scripts/data/soccerCareerFacts.json","before":{"mode":"100644","type":"blob","sha":"5a8bcd1ae9b048d2bfa6b759b6b8fff1a7131e13"},"after":{"mode":"100644","type":"blob","sha":"3020b7ebbc6a17013b3c7ab6a30558b675e35257"}},{"path":"scripts/lib/careerClubPool.mjs","before":{"mode":"100644","type":"blob","sha":"9ac9f0b9437f68e6a6b1f20c640afce109a8352f"},"after":{"mode":"100644","type":"blob","sha":"3abec590896605188a4fc0cc7d122fc3be8438c3"}},{"path":"scripts/simCareerClubPool.mjs","before":{"mode":"100644","type":"blob","sha":"f88897c263ecf23ab82ef1b0ea93eaa22e942fe3"},"after":{"mode":"100644","type":"blob","sha":"4f2493986069d7486e05560fbfd021455f27f1f7"}},{"path":"scripts/simNoRivalNames.mjs","before":{"mode":"100644","type":"blob","sha":"0cc180c43c692ed65fb067e7f187826806845798"},"after":{"mode":"100644","type":"blob","sha":"e7f7cfe09d0d53afb46a9dfe100cd34de42a2146"}},{"path":"src/components/club-manager/ClubDetailScreen.tsx","before":{"mode":"100644","type":"blob","sha":"a66007aebc312e94f9d9ce8ce21f550c6009aec9"},"after":{"mode":"100644","type":"blob","sha":"aa54f2f72fc339f644ada87efe871b108a95382a"}},{"path":"src/components/club-manager/ClubManagerClubList.tsx","before":{"mode":"100644","type":"blob","sha":"e222cfbb81536aa57f70765829f44652e5cabb04"},"after":{"mode":"100644","type":"blob","sha":"6c81ba72fc661673812c021f7f78a6877ffd4022"}},{"path":"src/components/club-manager/ClubManagerDeferredViews.tsx","before":null,"after":{"mode":"100644","type":"blob","sha":"6a38a686347c46d16c6f12bc26858197d3a14be5"}},{"path":"src/components/club-manager/ClubManagerHelp.tsx","before":{"mode":"100644","type":"blob","sha":"c8216e4a5b16dcf7e4d890fc227412bc5fa494cf"},"after":{"mode":"100644","type":"blob","sha":"62174d0614c4b2e27dbaa461869d056bde937644"}},{"path":"src/components/club-manager/ClubManagerTeamPicker.tsx","before":null,"after":{"mode":"100644","type":"blob","sha":"c6ef33e8ce54e1d964dda157dd5a6b12e899ef89"}},{"path":"src/components/club-manager/LeagueTableCard.tsx","before":{"mode":"100644","type":"blob","sha":"340702c4114fbb7a7a1b1bb2550e0ca06f9b551d"},"after":{"mode":"100644","type":"blob","sha":"fb3141db713c6ae6b39155ce415c5e61dd8a5971"}},{"path":"src/components/club-manager/SquadScreen.tsx","before":{"mode":"100644","type":"blob","sha":"0f0bc719a5d6da3352ae7eab9b72b04618c319f8"},"after":{"mode":"100644","type":"blob","sha":"b3b32fe21f5ab3a089a6e4427df7c896b970b6f7"}},{"path":"src/components/club-manager/WorldTablesCard.tsx","before":{"mode":"100644","type":"blob","sha":"94f5dc20f396b16488c82ce49b59d71256d8112e"},"after":{"mode":"100644","type":"blob","sha":"2e333af9aa698d7d2074e32f52ea673d2abf538d"}},{"path":"src/components/deadline-day/DeadlineDayBoard.tsx","before":{"mode":"100644","type":"blob","sha":"8d6e012def957f92a8cf2aa001c0b5a5d006a711"},"after":{"mode":"100644","type":"blob","sha":"177d04e594110bb5d0a38af1bb48af534a742fe7"}},{"path":"src/components/deadline-day/DeadlineDayViews.tsx","before":null,"after":{"mode":"100644","type":"blob","sha":"686ce8607099b410f470149de9a8b4dfc0663867"}},{"path":"src/components/soccer-career/CareerAttributesScreen.tsx","before":null,"after":{"mode":"100644","type":"blob","sha":"7c0894da1cc8f59b1e0918291dfb6d598ec21462"}},{"path":"src/data/gameContent/clubManagement.ts","before":{"mode":"100644","type":"blob","sha":"7676cb9a61403b32b9a2537b2bcfb119f2cee313"},"after":{"mode":"100644","type":"blob","sha":"0e1fa56534a005204a6e53df875d7ed5e7f8692f"}},{"path":"src/data/gameContent/soccer2.ts","before":{"mode":"100644","type":"blob","sha":"6b0ddd15dcac750b22a0f7b6a7d5e108ce804095"},"after":{"mode":"100644","type":"blob","sha":"7576d973cf9a4a0aa7a9413eeb99130ad81f4f88"}},{"path":"src/data/gameRegistry.ts","before":{"mode":"100644","type":"blob","sha":"f560b40a74d1468ac72dfde4ee6fec6635a9a255"},"after":{"mode":"100644","type":"blob","sha":"d35291bfe6b3681f0c14dc8879a894fe70925c64"}},{"path":"src/data/kLeague2026.ts","before":null,"after":{"mode":"100644","type":"blob","sha":"7786c30acb29289ae929dbc605b1a14289dec388"}},{"path":"src/data/searchKeywords.json","before":{"mode":"100644","type":"blob","sha":"78c07779d2678802f7cdd3a4ab6e8d41af221650"},"after":{"mode":"100644","type":"blob","sha":"1331cd736a97d66dfa39025b829e0f8ed9643fa1"}},{"path":"src/data/seoMeta.ts","before":{"mode":"100644","type":"blob","sha":"cf7a5142e59b97048d27b5ece9a6588a92073728"},"after":{"mode":"100644","type":"blob","sha":"10e64dfc8dee9e75603bf38849580d609d8e10e1"}},{"path":"src/data/seoMetaParts/seoMetaPart12.ts","before":{"mode":"100644","type":"blob","sha":"74611f8b98c269fb95ef344bcea64d575c061a32"},"after":{"mode":"100644","type":"blob","sha":"6aa0c88da726824979807fe1e3ff2b6e44a92f33"}},{"path":"src/data/soccerCareerClubPool.ts","before":{"mode":"100644","type":"blob","sha":"9340217fac2ae3a86877ac878fcd677d22c973bd"},"after":{"mode":"100644","type":"blob","sha":"522399403d4a5816680d0d5d2e19e3fda650d71d"}},{"path":"src/hooks/useClubManager.ts","before":{"mode":"100644","type":"blob","sha":"fe8d97dbfabaea602968e9cca25d4930895093e1"},"after":{"mode":"100644","type":"blob","sha":"a8bae5b90a609a4e5ee5b267a58a52f4189bf699"}},{"path":"src/lib/clubManager.ts","before":{"mode":"100644","type":"blob","sha":"4b0a734e9fe9ba1e7139ead8d4fe5d6a1574c484"},"after":{"mode":"100644","type":"blob","sha":"a089f29e8f1adee4090927937bac4d50017ae7cf"}},{"path":"src/lib/clubManagerCalendar.ts","before":{"mode":"100644","type":"blob","sha":"353c2019273564b48b0ad9657c02a83990ff7bc3"},"after":{"mode":"100644","type":"blob","sha":"ada619859360b05ef0067393ad7175f21f80870c"}},{"path":"src/lib/clubManagerFacilities.ts","before":{"mode":"100644","type":"blob","sha":"4a3aa41a7652cb8dfbdfcc8ffb624d41faba1c51"},"after":{"mode":"100644","type":"blob","sha":"38708eff41c3bbe93842da118e86d5db95d99213"}},{"path":"src/lib/clubManagerStaff.ts","before":{"mode":"100644","type":"blob","sha":"db69fdf34797a4f827511947b1c0b253605a19b3"},"after":{"mode":"100644","type":"blob","sha":"25db354900344c9f7da81f4bb584081dcdc148b1"}},{"path":"src/lib/soccerCareerEngine.ts","before":{"mode":"100644","type":"blob","sha":"40edcc5051d9b4a369698ea3572eb9e8e3314f26"},"after":{"mode":"100644","type":"blob","sha":"663eab42df957f156b35e931d81f9f643ea1a7f4"}},{"path":"src/lib/soccerCareerLeague.ts","before":{"mode":"100644","type":"blob","sha":"3bf1c117da22ea2253b8dce264da1ea3a49a0517"},"after":{"mode":"100644","type":"blob","sha":"cf7772161d902d2bb82d7f5cb6b3bdc5d04a9659"}},{"path":"src/lib/soccerCareerOwner.ts","before":{"mode":"100644","type":"blob","sha":"ddd2c00ea4f0a2927c301a9f018f307f3c4c1bf0"},"after":{"mode":"100644","type":"blob","sha":"925fe2c4d5cbdd37d723bd90e57523d46027e64d"}},{"path":"src/pages/ClubManager.tsx","before":{"mode":"100644","type":"blob","sha":"978bf575f489228041c278101ca77cfac434d8e3"},"after":{"mode":"100644","type":"blob","sha":"e6ced533f6c6d5a76190dbc1042f9120d8bb39ea"}},{"path":"src/pages/SoccerCareer.tsx","before":{"mode":"100644","type":"blob","sha":"c9cd18a50659023f0c8fab6f47a6bf86b650860f"},"after":{"mode":"100644","type":"blob","sha":"08a93b48a2bfcd42883b24c72e8f64f49caec6aa"}}];
+          const phase=process.argv[2];
+          if(phase==='preflight'){
+           assert(!Object.prototype.hasOwnProperty.call(process.env,'SIM_SEED'),'SIM_SEED must be unset');assert(!process.env.CM_STAFF_CONTROL,'CM_STAFF_CONTROL must be unset');
+           assert.equal(git(roots.qa,'rev-parse','HEAD^').trim(),sources.current.commit);assert.equal(git(roots.qa,'rev-parse','HEAD^^{tree}').trim(),sources.current.tree);assert.equal(git(roots.qa,'diff','--name-status','--no-renames','HEAD^','HEAD').trim(),'A\t'+workflow);
+           const currentRows=vector(roots.current),mainRows=vector(roots.main);assert.equal(expected44.length,44);const check=rows=>{assert.deepEqual(changed(mainRows,currentRows),rows.map(r=>r.path).sort(),'K_STAFF_EXACT44_SOURCE_BRIDGE');const inverse={...currentRows};for(const row of rows){assert.deepEqual(mainRows[row.path]??null,tuple(row.before),'K_STAFF_EXACT44_SOURCE_BRIDGE');assert.deepEqual(currentRows[row.path]??null,tuple(row.after),'K_STAFF_EXACT44_SOURCE_BRIDGE');if(row.before)inverse[row.path]=tuple(row.before);else delete inverse[row.path];}assert.deepEqual(inverse,mainRows,'K_STAFF_EXACT44_SOURCE_BRIDGE inverse');};check(expected44);
+           const copied=JSON.parse(JSON.stringify(expected44)),removed=copied.pop();let owned;try{check(copied);}catch(e){owned=e;}assert(owned instanceof assert.AssertionError);assert.match(owned.message,/K_STAFF_EXACT44_SOURCE_BRIDGE/);copied.push(removed);assert.equal(JSON.stringify(copied),JSON.stringify(expected44));
+           for(const role of ['main','current']){assert.equal(git(roots[role],'rev-parse','HEAD').trim(),sources[role].commit);assert.equal(git(roots[role],'rev-parse','HEAD^{tree}').trim(),sources[role].tree);const rows=[];for(const[file,pin]of Object.entries(pins)){const b=fs.readFileSync(path.join(roots[role],file));assert.equal(blob(b),pin,role+' '+file);rows.push({file,gitBlob:pin,bytes:b.length,sha256:sha(b)});}put('roles/'+role+'/input-pins.json',rows);put('roles/'+role+'/harness-source.mjs',fs.readFileSync(path.join(roots[role],'scripts/simClubManagerStaff.mjs')));put('roles/'+role+'/seed-source.mjs',fs.readFileSync(path.join(roots[role],'scripts/lib/seedRandom.mjs')));put('roles/'+role+'/original-engine.ts',fs.readFileSync(path.join(roots[role],'src/lib/clubManager.ts')));}
+           for(const role of ['qa','main','current'])capture(role,'before');
+           put('SOURCE-ADMITTED.json',{status:'EXACT_TWO_SOURCE_TREES_AND_SOLE_QA_44_PATH_BRIDGE',sources,sourceIdentityIndependentSHA256:'b2e61e6b7ae2454595cbd59b30850e1a9e7d37205fe30af5e3a05fc298c7764d',QAAdditions:[workflow],expected44,sourceOmissionControl:{changed:true,rejected:owned.message,wholeInverseExact:true},sourcesBefore:{main:mainRows,current:currentRows},sourceOnly:true});
+          }else if(phase==='run'){
+           const admitted=JSON.parse(fs.readFileSync(path.join(out,'SOURCE-ADMITTED.json'),'utf8'));assert.deepEqual(admitted.sources,sources);assert(!Object.prototype.hasOwnProperty.call(process.env,'SIM_SEED'));assert(!process.env.CM_STAFF_CONTROL);
+           const results={};for(const role of ['main','current']){
+            const types=child(role,'types',path.join(roots[role],'node_modules/.bin/tsc'),['--noEmit','-p','tsconfig.app.json']);assert.equal(types.status,0,'K_STAFF_PROPER_TYPES');assert.equal(types.signal,null);assert.equal(types.error,null);
+            const normal=child(role,'normal','node',['scripts/simClubManagerStaff.mjs']);const normalResult=classify(normal,false);put('roles/'+role+'/normal/CLASSIFIED.json',normalResult);
+            const control=child(role,'nolift','node',['scripts/simClubManagerStaff.mjs']);const source=fs.readFileSync(path.join(roots[role],'src/lib/clubManager.ts'),'utf8').replaceAll('\r\n','\n'),at=source.indexOf(fixed);assert(at>=0&&source.lastIndexOf(fixed)===at,'K_STAFF_NOLIFT_UNIQUE_EXECUTABLE_ANCHOR');const physical=fs.readFileSync(path.join(control.TMPDIR,'clubManagerStaff.nolift.ts')),expected=Buffer.from(source.slice(0,at)+broken+source.slice(at+fixed.length));put('roles/'+role+'/nolift/clubManagerStaff.nolift.ts',physical);put('roles/'+role+'/nolift/original-normalized.ts',source);assert(physical.equals(expected),'K_STAFF_ACTUAL_PHYSICAL_REWRITE');assert(!physical.equals(Buffer.from(source)),'K_STAFF_CHANGED_PHYSICAL_SOURCE');const fault=physical.toString('utf8');assert.equal(fault.slice(at,at+broken.length),broken);assert.equal(fault.slice(0,at)+fixed+fault.slice(at+broken.length),source,'K_STAFF_WHOLE_PHYSICAL_INVERSE');
+            const controlResult=classify(control,true);put('roles/'+role+'/nolift/CLASSIFIED.json',controlResult);
+            const encoded=JSON.stringify(control),copied=JSON.parse(encoded);assert.equal(copied.stdout.split(marker).length-1,1);copied.stdout=copied.stdout.replace(marker,'COPIED OMITTED NOLIFT MARKER');assert.notEqual(JSON.stringify(copied),encoded);let rejection;try{classify(copied,true);}catch(e){rejection=e;}assert(rejection instanceof assert.AssertionError);assert.match(rejection.message,/K_STAFF_COMPLETE_OWNED_RESULT/);copied.stdout=copied.stdout.replace('COPIED OMITTED NOLIFT MARKER',marker);assert.equal(JSON.stringify(copied),encoded);
+            const firstFailure=controlResult.failures[0];assert.equal(copied.stderr.split(firstFailure).length-1,1);copied.stderr=copied.stderr.replace(firstFailure,firstFailure+' COPIED_UNOWNED_FAILURE');assert.notEqual(JSON.stringify(copied),encoded);let unowned;try{classify(copied,true);}catch(e){unowned=e;}assert(unowned instanceof assert.AssertionError);assert.match(unowned.message,/K_STAFF_COMPLETE_OWNED_RESULT/);copied.stderr=copied.stderr.replace(firstFailure+' COPIED_UNOWNED_FAILURE',firstFailure);assert.equal(JSON.stringify(copied),encoded);
+            put('roles/'+role+'/nolift/physical-source-and-classifier-control.json',{index:at,sourceBytes:Buffer.byteLength(source),sourceSHA256:sha(source),faultBytes:physical.length,faultSHA256:sha(physical),changed:true,wholePhysicalInverseExact:true,actualOwnedControl:controlResult,copiedMarkerOmission:{changed:true,rejected:rejection.message,wholeInverseExact:true},copiedUnownedFinding:{changed:true,rejected:unowned.message,wholeInverseExact:true}});
+            results[role]={source:sources[role],properTypesNative0:true,normal:normalResult,nolift:controlResult};
+           }
+           put('PAIRED-DIAGNOSTIC.json',{status:'FOUR_UNCHANGED_DEFAULT_HARNESS_RESULTS_RETAINED_DIAGNOSTIC_ONLY',harnessGitBlob:pins['scripts/simClubManagerStaff.mjs'],seedRandomGitBlob:pins['scripts/lib/seedRandom.mjs'],SIM_SEED:'UNSET',runsPerSource:{normal:1,nolift:1},results,scope:'Only diagnostic attribution. Every actual normal red stays red and unwaived. Candidate-only or different messages remain unclassified. No threshold, seed, sample, source, model, build, browser or release qualification is inferred.'});
+          }else if(phase==='hold'){
+           const holds={};for(const role of ['qa','main','current']){capture(role,'after');for(const file of ['source.json','locks.json','index.txt','tracked.bin','status.txt']){const before=fs.readFileSync(path.join(out,'roles',role,'before',file)),after=fs.readFileSync(path.join(out,'roles',role,'after',file));assert(before.equals(after),'K_STAFF_FULL_SOURCE_HOLD '+role+' '+file);}holds[role]={sourceHeld:true,indexHeld:true,trackedHeld:true,fourLocksHeld:true,status:'clean'};}
+           const receipts=[];for(const role of ['main','current'])for(const name of ['types','normal','nolift']){const p=path.join(out,'roles',role,name,'transport.log');if(fs.existsSync(p)){assert.equal(fs.statSync(p).size,0);receipts.push(role+'/'+name);}}
+           if(fs.existsSync(path.join(out,'PAIRED-DIAGNOSTIC.json')))assert.equal(receipts.length,6);
+           put('SOURCE-HOLDS.json',{holds,receipts,allExistingReceiptsEmpty:true,sourceMutation:false});
+          }else throw new Error('Unknown diagnostic phase');
+          STAFF_CONTROLLER
+          cp "$STAFF_CONTROLLER" "$QA_OUT/controller.mjs"
+      - name: Bind two exact source trees and the sole diagnostic workflow
+        run: |
+          set -euo pipefail
+          node "$STAFF_CONTROLLER" preflight > "$QA_OUT/logs/preflight.stdout.log" 2> "$QA_OUT/logs/preflight.stderr.log"
+          cp "$GITHUB_WORKSPACE/qa-source/.github/workflows/k-league-staff-paired-diagnostic-20261105.yml" "$QA_OUT/workflow.yml"
+      - name: Install held dependencies separately without changing either source
+        run: |
+          set -euo pipefail
+          test "$(bun --version)" = 1.4.4
+          bun --version > "$QA_OUT/logs/bun-version.log"
+          node --version > "$QA_OUT/logs/node-version.log"
+          for role in main current; do
+            (
+              cd "$GITHUB_WORKSPACE/source-$role"
+              set +e
+              bun install --frozen-lockfile > "$QA_OUT/logs/$role-install.stdout.log" 2> "$QA_OUT/logs/$role-install.stderr.log"
+              native_exit=$?
+              printf '%s\n' "$native_exit" > "$QA_OUT/logs/$role-install.exit" || exit 1
+              test "$native_exit" = 0 || exit "$native_exit"
+              set -e
+              node -p "JSON.stringify({router:require('react-router-dom/package.json').version,vite:require('vite/package.json').version,rollup:JSON.parse(require('fs').readFileSync('node_modules/rollup/package.json','utf8')).version,esbuild:require('esbuild/package.json').version,typescript:require('typescript/package.json').version})" > "$QA_OUT/logs/$role-dependency-versions.json"
+              git diff --exit-code HEAD -- package.json package-lock.json bun.lock bun.lockb
+            )
+          done
+      - name: Proper types and exactly four unchanged default staff replays
+        run: |
+          set -euo pipefail
+          set +e
+          node "$STAFF_CONTROLLER" run > "$QA_OUT/logs/controller.stdout.log" 2> "$QA_OUT/logs/controller.stderr.log"
+          native_exit=$?
+          printf '%s\n' "$native_exit" > "$QA_OUT/controller.exit" || exit 1
+          exit "$native_exit"
+      - name: Hold all three source trees and every existing silent receipt
+        if: always()
+        run: |
+          set -euo pipefail
+          set +e
+          node "$STAFF_CONTROLLER" hold > "$QA_OUT/logs/hold.stdout.log" 2> "$QA_OUT/logs/hold.stderr.log"
+          native_exit=$?
+          printf '%s\n' "$native_exit" > "$QA_OUT/hold.exit" || exit 1
+          exit "$native_exit"
+      - name: Pack bounded complete output or fatal diagnostic
+        id: pack
+        if: always()
+        run: |
+          set +e
+          set -uo pipefail
+          archive="$RUNNER_TEMP/k-league-staff-paired-diagnostic-evidence.tar.gz"
+          tar -czf "$archive" -C "$QA_OUT" . > "$RUNNER_TEMP/k-league-staff-paired-diagnostic-pack.log" 2>&1
+          pack_exit=$?
+          printf '%s\n' "$pack_exit" > "$QA_OUT/pack-native.exit" || exit 1
+          if [[ "$pack_exit" == 0 && -f "$archive" && "$(stat -c %s "$archive")" -le 50000000 ]]; then
+            sha256sum "$archive" > "$archive.sha256" || exit 1
+            printf 'archive=%s\n' "$archive" >> "$GITHUB_OUTPUT" || exit 1
+            exit 0
+          fi
+          printf '%s\n' 'DIAGNOSTIC_ONLY_NO_COMPLETE_OUTPUT_PROOF: full pack failed or exceeded50000000bytes' > "$QA_OUT/DIAGNOSTIC-ONLY.txt" || exit 1
+          cp "$RUNNER_TEMP/k-league-staff-paired-diagnostic-pack.log" "$QA_OUT/pack.log" || exit 1
+          diagnostic="$RUNNER_TEMP/k-league-staff-paired-diagnostic-diagnostic.tar.gz"
+          diagnostic_dir="$RUNNER_TEMP/k-league-staff-paired-diagnostic-diagnostic"
+          mkdir -p "$diagnostic_dir/logs" "$diagnostic_dir/transport" || exit 1
+          find "$QA_OUT" -maxdepth 1 -type f ! -name '*.tar.gz' ! -name '*.tgz' -exec cp '{}' "$diagnostic_dir/" \; || exit 1
+          cp -R "$QA_OUT/logs/." "$diagnostic_dir/logs/" || exit 1
+          cp -R "$QA_OUT/transport/." "$diagnostic_dir/transport/" || exit 1
+          for folder in roles; do if test -d "$QA_OUT/$folder"; then cp -R "$QA_OUT/$folder" "$diagnostic_dir/" || exit 1; fi; done
+          tar -czf "$diagnostic" -C "$diagnostic_dir" . || exit 1
+          test "$(stat -c %s "$diagnostic")" -le 50000000 || exit 1
+          sha256sum "$diagnostic" > "$diagnostic.sha256" || exit 1
+          printf 'archive=%s\n' "$diagnostic" >> "$GITHUB_OUTPUT" || exit 1
+          exit 1
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: k-league-staff-paired-diagnostic-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            ${{ steps.pack.outputs.archive }}
+            ${{ steps.pack.outputs.archive }}.sha256
+          if-no-files-found: error
+          retention-days: 30
+          compression-level: 0
