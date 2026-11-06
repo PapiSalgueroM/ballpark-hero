@@ -1,4 +1,21 @@
 
+## 2026-11-06: PL-05 Soccer Connect4 pending Cancel, bounded draft
+
+Cancel now abandons the current client request owner and releases validation before clearing selection/error. Late A cannot place a chip, append a Daily move, restore feedback or unlock/clear a newer B. The unchanged Page/Board, validator, data, board generator, draws, scoring, save format and other sports stay held. No server abort, unmount or Skip policy. PL-05 remains partial.
+
+Original42227289308 admitted four named business failures and two complete preserves; fixed42251082954 passed6new+34prior cases with31new and44prior RAW frames. Five-arm controls42251503941 passed0/4/4/4/0 expected failures across30actual rows,12business failures,147frames and10whole-preserve vectors. Full primary42251560277 remains FAILED only at its old outer startup-navigation census; actual40unit/types/build850/20reader/16cap/37legacy and native3journeys1474checks171frames63receipts36layouts9PNGs passed. Global bind was skipped and its former admission is0B.
+
+Retained-evidence closure42258721019 succeeded at workflow heade8013ed5d7e6abb0a558161045f8e1a5be8ae3bb while checking out physical980aa733e11c95e19ca145818ca234e72921bd0b. The only outer correction requires the two observed same-route finite chronological startup events before the first frame. Corrected outere994af30425bc4e39db9fc9832a3fe2c15615f24 freshly passed37555checks. All366 ZIP bodies and332 byte-identical nested primary bodies were independently audited. Product checks are carried explicitly, never reported rerun or primary-success.
+
+Clean join42260775399 succeeded at35cfd01fae4885e3ee6a2248e941f77d600e60ca/tree9ea71148818e6de6dea1aa9bc0f46832988d1f2b. Fresh proper App types, unchanged product-name fence, normal build,521locked versions, source/index/locks and zero-byte offline receipt passed. Every4656 clean src/public/scripts path, mode and blob plus all11 root configurations exactly match physical980 excluding only the remote native helper. Every path, length and SHA256 of all850 built files matches the primary's retained23851894bytes admitted by closure42258721019. Clean artifact13524373605 is660634bytes,SHA2561879db01db743bac025023a5bbeada66221d0367414af19d518187d294992e61. This is a fresh clean types/build/name check and exact source/build join, not a rerun of carried native/readers/caps.
+
+Delivery is a five-file clean draft stacked on PR520: Hook, regression, plan, this state entry and append-only WORKBOARD. No QA helper/controller/workflow or Grade delta. Grade Hook5e677e844f8af33de27c206673fcf66849ad5930 remains held. Canonical409-card master stays444117B,SHA256fda0f7eef07d41f2ba91e89dff3542fef98cd3bd9aabcbe02f70b649797d357a. Plan:docs/plans/2026-11-06-soccer-connect4-cancel-ownership.md. Evidence:C:/Users/antho/dukb-handoff/2026-11-05/soccer-connect4-cancel-ownership/.
+
+All fifteen drafts remain unmerged/unpublished. Local App/Git/runtime/PROJECT-STATE and companion Career/Club/Team-picker/KLeague/guide holds persist. Local WORKBOARD remains exact-prefix append-only. Scoped40unit plus3native and37legacy journeys are not a full-suite claim. Fictional transport does not verify real eligibility, providers or backend writes. Inherited small Cancel/mode/grid controls remain unqualified for44px; strict viewport/clip/hit/enabled/trusted gestures hold.
+
+Next: original-test the source-reviewed Alphabet Sprint deadline candidate only after active App route, uncommented Soccer catalog and indexable nonredirect snapshot preflight. No retired Grade revival.
+
+
 ## 2026-11-06: PL-05 Soccer Connections mode-owned selection, bounded draft
 
 Soccer Connections now clears its selected names, wrong-guess tile feedback and One away banner when the player actually changes Daily/Unlimited mode. Clicking the current mode remains a no-op. Before this fix, four names from the previous board could leave Submit enabled with no selected destination tiles and consume that board's life. Daily could also record the invisible wrong guess. Only the existing switchMode callback changes, from85964ad8462a9b7c60cd3709240c3107bfb47e7f to55050eccb78a6574a1524f0cfb7597c789104c73. Replacing that callback restores the entire original Hook exactly.
