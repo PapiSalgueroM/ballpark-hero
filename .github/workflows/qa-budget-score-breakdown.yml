@@ -74,7 +74,7 @@ jobs:
           for(const item of derived){const bytes=fs.readFileSync(path.join(process.env.BB_REFERENCE_DIR,'derived',item.file));assert.equal(sha(bytes),item.sha256);assert.equal(bytes.length,item.bytes);old.set(item.file,gitblob(bytes));assert.equal(current.get(item.file),gitblob(bytes),'Exact generated blob: '+item.file);}
           const excluded=new Set(['scripts/qa/playBudgetScoreBreakdown.mjs','scripts/lib/budgetPhaseReturn.mjs']);
           assert.equal(old.get('scripts/qa/playBudgetScoreBreakdown.mjs'),'b97d96a21120f59a8eaf25446ee306c2666050fd');
-          assert.equal(current.get('scripts/qa/playBudgetScoreBreakdown.mjs'),'e4df4563f8c287405e3a98b511595bdd5bb51668','Exact QA-only phase return observer and supported flag fixture');
+          assert.equal(current.get('scripts/qa/playBudgetScoreBreakdown.mjs'),'01a244230e0f8aa9e8a34edbd97276f3a8046cc0','Exact QA-only phase return observer and supported flag fixture');
           assert.equal(current.get('scripts/lib/budgetPhaseReturn.mjs'),'62b9aa4e979c2d7d6b2ce9397f15827206a85376');
           assert(!old.has('scripts/lib/budgetPhaseReturn.mjs'));
           assert(!current.has('scripts/qa/budgetScoreBreakdownCheck.mjs'),'Physical control helper absent from clean App build');
