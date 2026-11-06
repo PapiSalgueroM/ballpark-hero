@@ -1,27 +1,24 @@
-name: XI native scroll diagnosis
+name: Build Your XI warning and stable spinner qualification
 on:
   push:
     branches: [codex/build-xi-unrated-warning-qa-20261105]
 permissions:
   contents: read
+  actions: read
 jobs:
-  diagnose:
-    strategy:
-      fail-fast: false
-      matrix:
-        variant: [original, warning]
+  closeout:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 20
     defaults:
       run:
         shell: bash
     env:
       SIM_NETWORK: offline
-      SIM_OFFLINE_RECEIPT: xi-scroll/offline.log
+      SIM_OFFLINE_RECEIPT: xi-warning-closure/offline.log
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 1
+          fetch-depth: 3
           persist-credentials: false
       - uses: actions/setup-node@v4
         with:
@@ -30,41 +27,105 @@ jobs:
       - uses: oven-sh/setup-bun@v2
         with:
           bun-version: 1.4.4
-      - name: Explicit physical baseline and receipts
+      - name: Locked dependencies and clean source receipts
         run: |
-          mkdir -p xi-scroll
-          touch xi-scroll/offline.log
-          git rev-parse HEAD > xi-scroll/head.txt
-          if [ "${{ matrix.variant }}" = original ]; then
-            git fetch --no-tags --depth=1 origin 3cf296e80ad254bec3cfba2f12660addef5bbe18
-            git show 3cf296e80ad254bec3cfba2f12660addef5bbe18:src/pages/LineupBuilder.tsx > src/pages/LineupBuilder.tsx
-            test "$(git hash-object src/pages/LineupBuilder.tsx)" = acb60c5c9f8a4d45a2b33b71b0beda0062570592
-          else
-            test "$(git hash-object src/pages/LineupBuilder.tsx)" = dcd727d53ed3f31b38e0c3db1849af3ba09f03b6
-          fi
-          sha256sum src/pages/LineupBuilder.tsx src/components/lineup/TeamSpinner.tsx src/hooks/useLineupBuilder.ts package.json package-lock.json > xi-scroll/before.txt
+          mkdir -p xi-warning-closure
+          touch xi-warning-closure/offline.log
+          git rev-parse HEAD > xi-warning-closure/head.txt
+          git rev-parse 'HEAD^{tree}' > xi-warning-closure/tree.txt
+          git ls-files -s > xi-warning-closure/source-before.txt
+          sha256sum package.json package-lock.json > xi-warning-closure/locks-before.txt
           npm ci
-      - name: Build actual selected App variant
-        run: npm run build 2>&1 | tee xi-scroll/build.log
-      - name: Isolated browser
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const lock=JSON.parse(fs.readFileSync('package-lock.json'));
+          const rows=Object.keys(lock.packages).filter(p=>p.startsWith('node_modules/')&&fs.existsSync(p+'/package.json')).map(p=>[p,JSON.parse(fs.readFileSync(p+'/package.json')).version]);
+          assert.equal(rows.length,521);fs.writeFileSync('xi-warning-closure/installed-before.json',JSON.stringify(rows));
+          NODE
+      - name: Proper app types
+        run: node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee xi-warning-closure/types.log
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Exact warning and supporting spinner source
         run: |
+          test "$(git rev-parse HEAD:src/pages/LineupBuilder.tsx)" = dcd727d53ed3f31b38e0c3db1849af3ba09f03b6
+          test "$(git rev-parse HEAD:src/hooks/useLineupBuilder.ts)" = d6ecb6bd9ca7e15d328957294c60126b1d02f1d8
+          test "$(git rev-parse HEAD:src/components/lineup/TeamSpinner.tsx)" = 2c230efb93f28330d1d26b91cb9f3b78d3700b1d
+      - name: Owned and unchanged admission outcomes
+        run: |
+          XI_RECORD_WARNING_RAW="$PWD/xi-warning-closure/raw.json" NODE_OPTIONS="--max-old-space-size=6144 --require=$PWD/scripts/lib/offlineTransport.cjs" node node_modules/vitest/vitest.mjs run src/test/buildXiUnratedWarning.test.tsx src/test/buildXiClubYear.test.tsx src/test/buildXiClubYearSetup.test.tsx src/test/lineupBuilderHistoryRead.test.tsx src/test/lineupValidatorClient.test.tsx --maxWorkers=1 --minWorkers=1 --reporter=default --reporter=json --outputFile=xi-warning-closure/units.json 2>&1 | tee xi-warning-closure/units.log
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';const r=JSON.parse(fs.readFileSync('xi-warning-closure/units.json')),raw=JSON.parse(fs.readFileSync('xi-warning-closure/raw.json'));
+          assert.equal(r.numTotalTests,86);assert.equal(r.numPassedTests,86);assert.equal(r.numFailedTests,0);assert.equal(r.numPendingTests,0);assert.equal(raw.caseTitles.length,14);assert.equal(Object.keys(raw.cases).length,14);
+          assert(!/Unhandled Errors|Unhandled Rejection|Uncaught Exception|Failed to resolve import/.test(fs.readFileSync('xi-warning-closure/units.log','utf8')));
+          NODE
+      - name: Clean production build
+        id: join
+        run: |
+          NODE_OPTIONS="--max-old-space-size=6144" npm run build 2>&1 | tee xi-warning-closure/build.log
+          tar -czf xi-warning-closure/dist.tgz dist
+          sha256sum xi-warning-closure/dist.tgz > xi-warning-closure/dist.sha256
+      - name: Isolated browser and snapshot dependencies
+        id: browser_setup
+        timeout-minutes: 12
+        if: ${{ !cancelled() && steps.join.outcome == 'success' }}
+        run: |
+          python -m pip install fonttools pillow
           npm install --prefix "$RUNNER_TEMP/xi-browser" --no-save --package-lock=false playwright@1.64.1
           test ! -e node_modules/playwright
           ln -s "$RUNNER_TEMP/xi-browser/node_modules/playwright" node_modules/playwright
           node "$RUNNER_TEMP/xi-browser/node_modules/playwright/cli.js" install --with-deps chromium
-      - name: Diagnostic native actions and readonly geometry
-        run: XI_UNRATED_BROWSER_OUT=xi-scroll/browser NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/playBuildXiUnratedWarning.mjs 2>&1 | tee xi-scroll/browser.log
-      - name: Variant source and offline held
-        if: always()
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const before=JSON.parse(fs.readFileSync('xi-warning-closure/installed-before.json'));
+          const after=before.map(([p])=>[p,JSON.parse(fs.readFileSync(p+'/package.json')).version]);assert.deepEqual(after,before);
+          fs.writeFileSync('xi-warning-closure/installed-after.json',JSON.stringify(after));console.log('Preserved all '+after.length+' locked installed versions.');
+          NODE
+      - name: All required output readers and original download caps
+        if: ${{ !cancelled() && steps.join.outcome == 'success' && steps.browser_setup.outcome == 'success' }}
+        env:
+          SEO_SPLIT_BASE_REF: 3b14650d360b010b25b525de33a5f32f33de2798
+          ENGINES: chromium
         run: |
-          sha256sum src/pages/LineupBuilder.tsx src/components/lineup/TeamSpinner.tsx src/hooks/useLineupBuilder.ts package.json package-lock.json > xi-scroll/after.txt
-          cmp xi-scroll/before.txt xi-scroll/after.txt
-          test -f xi-scroll/offline.log
-          test ! -s xi-scroll/offline.log
+          git fetch --no-tags --depth=1 origin 3b14650d360b010b25b525de33a5f32f33de2798
+          test "$(git rev-parse 3b14650d360b010b25b525de33a5f32f33de2798:src/data/seoMeta.ts)" = cf7a5142e59b97048d27b5ece9a6588a92073728
+          export ONLY="simAdsense,simBrand,simHeadTags,simHiddenPages,simHubs,simIndexNow,simIndexing,simInternalLinks,simNoRivalNames,simPrerender,simPrerenderBoot,simRetiredRoutes,simSchema,simSitemap,simSnapshotAssets,simSiteSearch,simGuideHeadings,simSeoMetaSplit,simHomeCopy,simHarnessAnchors"
+          node scripts/runAllSims.mjs --browser 2>&1 | tee xi-warning-closure/readers.log
+          node scripts/lib/hostLikeServer.mjs dist 4173 > xi-warning-closure/weight-host.log 2>&1 &
+          xi_host_pid=$!
+          trap 'kill "$xi_host_pid" 2>/dev/null || true' EXIT
+          sleep 2
+          SWEEP_OFFLINE=1 BASE=http://127.0.0.1:4173 node scripts/sweepWeight.mjs 2>&1 | tee xi-warning-closure/weight.log
+      - name: Native warning choices and unrated finish at three widths
+        if: ${{ !cancelled() && steps.join.outcome == 'success' && steps.browser_setup.outcome == 'success' }}
+        run: XI_UNRATED_BROWSER_OUT=xi-warning-closure/browser NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/playBuildXiUnratedWarning.mjs 2>&1 | tee xi-warning-closure/browser.log
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: xi-scroll-diagnostic-${{ matrix.variant }}-${{ github.run_id }}
-          path: xi-scroll
+          name: build-xi-warning-closure-images-${{ github.run_id }}
+          path: xi-warning-closure/browser/*.png
+          retention-days: 14
+          if-no-files-found: error
+      - name: Final source locks installed versions and offline holds
+        if: always()
+        run: |
+          git ls-files -s > xi-warning-closure/source-after.txt
+          cmp xi-warning-closure/source-before.txt xi-warning-closure/source-after.txt
+          git diff --exit-code HEAD -- src scripts public package.json package-lock.json
+          sha256sum package.json package-lock.json > xi-warning-closure/locks-after.txt
+          cmp xi-warning-closure/locks-before.txt xi-warning-closure/locks-after.txt
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const before=JSON.parse(fs.readFileSync('xi-warning-closure/installed-before.json'));
+          const after=before.map(([p])=>[p,JSON.parse(fs.readFileSync(p+'/package.json')).version]);assert.equal(after.length,521);assert.deepEqual(after,before);
+          fs.writeFileSync('xi-warning-closure/installed-final.json',JSON.stringify(after));
+          assert(fs.existsSync('xi-warning-closure/offline.log'));assert.equal(fs.statSync('xi-warning-closure/offline.log').size,0);
+          NODE
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: soccer-xi-warning-closure-${{ github.run_id }}
+          path: xi-warning-closure
           retention-days: 14
           if-no-files-found: error
