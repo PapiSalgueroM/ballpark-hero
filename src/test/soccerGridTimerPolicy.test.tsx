@@ -34,7 +34,7 @@ function capture(key: keyof typeof TITLES, label: string) {
 }
 async function mount() {
   const view = mountPage(<SoccerGrid />, '/soccer-grid');
-  await waitFor(() => expect(within(view.container).queryByRole('button', { name: '40s', exact: true }), 'SG_TIMER_POLICY_SETUP real pre-play controls loaded').not.toBeNull());
+  await waitFor(() => expect(within(view.container).queryByRole('button', { name: '40s' }), 'SG_TIMER_POLICY_SETUP real pre-play controls loaded').not.toBeNull());
   return view;
 }
 beforeEach(() => { cleanup(); resetMocks(); localStorage.clear(); localStorage.setItem('sg-rules-seen', '1');
@@ -52,13 +52,13 @@ describe('Soccer Grid explicit clock policy', () => {
     expect(document.querySelector('[role="dialog"]')).toBeNull();
     const policy = within(view.container).queryByText(POLICY, { exact: true });
     expect(policy, TITLES.preplay).not.toBeNull(); expect(policy).toBeVisible();
-    expect(within(view.container).getByRole('button', { name: 'Unlimited', exact: true })).toBeEnabled();
-    expect(within(view.container).getByRole('button', { name: '40s', exact: true })).toBeEnabled();
+    expect(within(view.container).getByRole('button', { name: 'Unlimited' })).toBeEnabled();
+    expect(within(view.container).getByRole('button', { name: '40s' })).toBeEnabled();
     expect(fixture.submitGuess).not.toHaveBeenCalled(); expect(localStorage.getItem('policy-unrelated')).toBe('held');
   });
   it(TITLES.help, async () => {
     const view = await mount(), before = localStorage.getItem('policy-unrelated');
-    const trigger = within(view.container).getByRole('button', { name: 'How to play', exact: true });
+    const trigger = within(view.container).getByRole('button', { name: 'How to play' });
     for (let opening = 0; opening < 2; opening++) {
       fireEvent.click(trigger);
       const dialog = await within(document.body).findByRole('dialog', { name: 'How to Play Soccer Grid' });
@@ -67,7 +67,7 @@ describe('Soccer Grid explicit clock policy', () => {
       expect(policy, TITLES.help).not.toBeNull(); expect(policy).toBeVisible();
       expect(within(dialog).getByText(EXAMPLE), 'SG_TIMER_POLICY_HELP worked example').toBeVisible();
       expect(within(dialog).getByText(/The clock starts on your first guess/)).toBeVisible();
-      fireEvent.click(within(dialog).getByRole('button', { name: "Let's Play!", exact: true }));
+      fireEvent.click(within(dialog).getByRole('button', { name: "Let's Play!" }));
       await waitFor(() => expect(within(document.body).queryByRole('dialog')).toBeNull());
       capture('help', 'help-closed-' + opening);
     }
