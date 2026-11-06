@@ -1,0 +1,135 @@
+name: Budget Builder clean build and phase return proof
+on:
+  push:
+    branches: [codex/budget-score-breakdown-qa-20261105]
+permissions:
+  contents: read
+  actions: read
+jobs:
+  closeout:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        shell: bash
+    env:
+      SIM_NETWORK: offline
+      SIM_OFFLINE_RECEIPT: budget-score-closure/offline.log
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 3
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24.22.1
+          cache: npm
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.4.4
+      - name: Locked dependencies and clean source receipts
+        run: |
+          mkdir -p budget-score-closure
+          touch budget-score-closure/offline.log
+          git rev-parse HEAD > budget-score-closure/head.txt
+          git rev-parse 'HEAD^{tree}' > budget-score-closure/tree.txt
+          git ls-files -s > budget-score-closure/source-before.txt
+          sha256sum package.json package-lock.json > budget-score-closure/locks-before.txt
+          npm ci
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const lock=JSON.parse(fs.readFileSync('package-lock.json'));
+          const rows=Object.keys(lock.packages).filter(p=>p.startsWith('node_modules/')&&fs.existsSync(p+'/package.json')).map(p=>[p,JSON.parse(fs.readFileSync(p+'/package.json')).version]);
+          assert.equal(rows.length,521);fs.writeFileSync('budget-score-closure/installed-before.json',JSON.stringify(rows));
+          NODE
+      - name: Proper app types
+        run: node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee budget-score-closure/types.log
+      - name: Pinned completed qualification artifact
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh api repos/PapiSalgueroM/ballpark-hero/actions/artifacts/13476108681/zip > "$RUNNER_TEMP/bb-reference.zip"
+          echo "05910d19e8c8d78899677418d21f1a6e5e8325964c06c42a1d070ed732aaf21a  $RUNNER_TEMP/bb-reference.zip" | sha256sum --check
+          mkdir -p "$RUNNER_TEMP/bb-reference" "$RUNNER_TEMP/bb-reference-dist"
+          unzip -q "$RUNNER_TEMP/bb-reference.zip" -d "$RUNNER_TEMP/bb-reference"
+          echo "25d37d49e0f4f04c8bb6ca983f904e707520a3dda8b1c0bb9afbded3252c29d2  $RUNNER_TEMP/bb-reference/dist.tgz" | sha256sum --check
+          tar -xzf "$RUNNER_TEMP/bb-reference/dist.tgz" -C "$RUNNER_TEMP/bb-reference-dist"
+          cp "$RUNNER_TEMP/bb-reference/source-before.txt" budget-score-closure/reference-source.txt
+      - name: Clean production build
+        run: NODE_OPTIONS="--max-old-space-size=6144" npm run build 2>&1 | tee budget-score-closure/build.log
+      - name: Every product test script and built byte joined to completed qualification
+        id: join
+        env:
+          BB_REFERENCE_DIR: ${{ runner.temp }}/bb-reference
+          BB_REFERENCE_DIST: ${{ runner.temp }}/bb-reference-dist/dist
+        run: |
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import path from 'node:path';import assert from 'node:assert/strict';import {createHash} from 'node:crypto';
+          const sha=bytes=>createHash('sha256').update(bytes).digest('hex');
+          const gitblob=bytes=>createHash('sha1').update(Buffer.concat([Buffer.from('blob '+bytes.length+'\0'),bytes])).digest('hex');
+          const readIndex=file=>new Map(fs.readFileSync(file,'utf8').trim().split('\n').map(line=>{const m=/^[0-9]+ ([0-9a-f]{40}) 0\t(.+)$/.exec(line);assert(m,'Actual source row');return [m[2],m[1]];}));
+          const old=readIndex('budget-score-closure/reference-source.txt'),current=readIndex('budget-score-closure/source-before.txt');
+          const derived=JSON.parse(fs.readFileSync(path.join(process.env.BB_REFERENCE_DIR,'derived.json'))).derived;
+          assert.equal(derived.length,5,'Exact derived file census');
+          for(const item of derived){const bytes=fs.readFileSync(path.join(process.env.BB_REFERENCE_DIR,'derived',item.file));assert.equal(sha(bytes),item.sha256);assert.equal(bytes.length,item.bytes);old.set(item.file,gitblob(bytes));assert.equal(current.get(item.file),gitblob(bytes),'Exact generated blob: '+item.file);}
+          const excluded=new Set(['scripts/qa/playBudgetScoreBreakdown.mjs','scripts/lib/budgetPhaseReturn.mjs']);
+          assert.equal(old.get('scripts/qa/playBudgetScoreBreakdown.mjs'),'b97d96a21120f59a8eaf25446ee306c2666050fd');
+          assert.equal(current.get('scripts/qa/playBudgetScoreBreakdown.mjs'),'935098cf9e4af1563e14ee6b24aa9c2461d299f4','Exact QA-only phase return observer and supported flag fixture');
+          assert.equal(current.get('scripts/lib/budgetPhaseReturn.mjs'),'62b9aa4e979c2d7d6b2ce9397f15827206a85376');
+          assert(!old.has('scripts/lib/budgetPhaseReturn.mjs'));
+          assert(!current.has('scripts/qa/budgetScoreBreakdownCheck.mjs'),'Physical control helper absent from clean App build');
+          const scoped=map=>[...map].filter(([p])=>/^(?:src|public|scripts)\//.test(p)&&!excluded.has(p)).sort(([a],[b])=>a.localeCompare(b));
+          const sourceRows=scoped(current);assert.deepEqual(sourceRows,scoped(old),'Every other source/public/script blob held, with exact generated files admitted');
+          const inventory=dir=>fs.readdirSync(dir,{withFileTypes:true}).sort((a,b)=>a.name.localeCompare(b.name)).flatMap(e=>e.isDirectory()?inventory(path.join(dir,e.name)).map(r=>({...r,path:e.name+'/'+r.path})):[{path:e.name,bytes:fs.statSync(path.join(dir,e.name)).size,sha256:sha(fs.readFileSync(path.join(dir,e.name)))}]);
+          const actual=inventory('dist'),reference=inventory(process.env.BB_REFERENCE_DIST);
+          assert.equal(actual.length,850);assert.deepEqual(actual,reference,'Every byte of every built file matches completed readers/caps');
+          const result={status:'passed',referenceRun:42159605456,referenceApp:'3509eb0956ce07b4baa48cbb27028ba593b8fa6d',referenceArtifact:13476108681,referenceZipSHA256:'05910d19e8c8d78899677418d21f1a6e5e8325964c06c42a1d070ed732aaf21a',referenceTarSHA256:'25d37d49e0f4f04c8bb6ca983f904e707520a3dda8b1c0bb9afbded3252c29d2',sourceRows:sourceRows.length,remoteOnlyHelpers:[...excluded],derived,distFiles:actual.length,distManifestSHA256:sha(JSON.stringify(actual)),dist:actual};
+          fs.writeFileSync('budget-score-closure/reference-build-join.json',JSON.stringify(result,null,2));console.log('PASS all '+sourceRows.length+' source rows and every '+actual.length+' built file held');
+          NODE
+      - name: Isolated browser and snapshot dependencies
+        id: browser_setup
+        timeout-minutes: 12
+        if: ${{ !cancelled() && steps.join.outcome == 'success' }}
+        run: |
+          npm install --prefix "$RUNNER_TEMP/bb-browser" --no-save --package-lock=false playwright@1.64.1
+          test ! -e node_modules/playwright
+          ln -s "$RUNNER_TEMP/bb-browser/node_modules/playwright" node_modules/playwright
+          node "$RUNNER_TEMP/bb-browser/node_modules/playwright/cli.js" install --with-deps chromium
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const before=JSON.parse(fs.readFileSync('budget-score-closure/installed-before.json'));
+          const after=before.map(([p])=>[p,JSON.parse(fs.readFileSync(p+'/package.json')).version]);assert.deepEqual(after,before);
+          fs.writeFileSync('budget-score-closure/installed-after.json',JSON.stringify(after));console.log('Preserved all '+after.length+' locked installed versions.');
+          NODE
+      - name: Native score previews refunds and natural Final at three widths
+        if: ${{ !cancelled() && steps.join.outcome == 'success' && steps.browser_setup.outcome == 'success' }}
+        run: BB_SCORE_BROWSER_OUT=budget-score-closure/browser NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/playBudgetScoreBreakdown.mjs 2>&1 | tee budget-score-closure/browser.log
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: build-budget-score-closure-images-${{ github.run_id }}
+          path: budget-score-closure/browser/*.png
+          retention-days: 14
+          if-no-files-found: error
+      - name: Final source locks installed versions and offline holds
+        if: always()
+        run: |
+          git ls-files -s > budget-score-closure/source-after.txt
+          cmp budget-score-closure/source-before.txt budget-score-closure/source-after.txt
+          git diff --exit-code HEAD -- src scripts public package.json package-lock.json
+          sha256sum package.json package-lock.json > budget-score-closure/locks-after.txt
+          cmp budget-score-closure/locks-before.txt budget-score-closure/locks-after.txt
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const before=JSON.parse(fs.readFileSync('budget-score-closure/installed-before.json'));
+          const after=before.map(([p])=>[p,JSON.parse(fs.readFileSync(p+'/package.json')).version]);assert.equal(after.length,521);assert.deepEqual(after,before);
+          fs.writeFileSync('budget-score-closure/installed-final.json',JSON.stringify(after));
+          assert(fs.existsSync('budget-score-closure/offline.log'));assert.equal(fs.statSync('budget-score-closure/offline.log').size,0);
+          NODE
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: budget-score-clean-closure-${{ github.run_id }}
+          path: budget-score-closure
+          retention-days: 14
+          if-no-files-found: error
