@@ -34,7 +34,13 @@ function seedShuffle(players: string[], seed: number): string[] {
 
 export function useConnections() {
   const [mode, setMode] = useState<ConnectionsMode>('daily');
-  const switchMode = useCallback((m: ConnectionsMode) => setMode(m), []);
+  const switchMode = useCallback((m: ConnectionsMode) => {
+    if (m === mode) return;
+    setMode(m);
+    setSelected([]);
+    setLastIncorrect(null);
+    setOneAway(false);
+  }, [mode]);
 
   // ── Supabase puzzle pool ───────────────────────────────────────────────────
   const [puzzlePool, setPuzzlePool] = useState(fallbackPuzzles);
