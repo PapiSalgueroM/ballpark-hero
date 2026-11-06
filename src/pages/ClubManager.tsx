@@ -55,6 +55,8 @@ const TabsList = lazy(() => import('@/components/ui/tabs').then(m => ({ default:
 const TabsTrigger = lazy(() => import('@/components/ui/tabs').then(m => ({ default: m.TabsTrigger })));
 const EraLoadFailedView = lazy(() => import('@/components/club-manager/ClubManagerDeferredViews').then(m => ({ default: m.EraLoadFailed })));
 const WorldEditorTile = lazy(() => import('@/components/club-manager/ClubManagerDeferredViews').then(m => ({ default: m.WorldEditorTile })));
+const ClubHeading = lazy(() => import('@/components/club-manager/ClubManagerDeferredViews').then(m => ({ default: m.ClubHeading })));
+const ClubStatus = lazy(() => import('@/components/club-manager/ClubManagerDeferredViews').then(m => ({ default: m.ClubStatus })));
 
 const HubTile = lazy(() => import('@/components/club-manager/HubTile'));
 const ClubManagerTreatmentPanel = lazy(() => import('@/components/club-manager/ClubManagerTreatmentPanel'));
@@ -946,63 +948,28 @@ const ClubManager = () => {
       <header className="mb-4">
         {/* Round 1328: px-12 on both sides keeps the help button's corner clear
             of the club name and the pills, and the row centred. */}
-        <div className="flex items-center justify-center gap-2 mb-1 flex-wrap px-12">
-          {/* Round 154: a club you founded wears its crest where every other
-              club wears its color dot. */}
-          {c.customClub && c.customClub.name === c.clubName
+        <ScreenLoading compact><ClubHeading
+          crest={c.customClub && c.customClub.name === c.clubName
             ? <ScreenLoading compact><CrestBadge crest={c.customClub.crest} size={22} /></ScreenLoading>
             : <span className="w-3 h-3 rounded-full" style={{ backgroundColor: club.color }} />}
-          <h1 className="text-2xl md:text-3xl font-bold text-primary font-display">{c.clubName}</h1>
-          {/* Round 132: the save now knows what year it is, so it says so, next
-              to the season count it has always shown. */}
-          <span className="text-xs font-bold text-muted-foreground border border-border rounded-full px-2 py-0.5 whitespace-nowrap">
-            {worldSeasonLabel(c)} · Season {c.season}
-          </span>
-          {/* Round 1501: a career off Medium wears its level (Round 1512: whichever it is on now). No pill on Medium. */}
-          {levelFrom(c) !== 'normal' && (
-            <span data-cm-level-pill={levelFrom(c)} className="text-xs font-bold text-muted-foreground border border-border rounded-full px-2 py-0.5 whitespace-nowrap">
-              {DIFFICULTY_INFO[levelFrom(c)].label}
-            </span>
-          )}
-          {/* Round 1342: a No sacking career wears it for its whole life. No pill otherwise. */}
-          {noSackFrom(c) !== null && (
-            <span data-cm-nosack-pill className="text-xs font-bold text-muted-foreground border border-border rounded-full px-2 py-0.5 whitespace-nowrap">
-              🛡️ No sacking
-            </span>
-          )}
-          {/* Round 549: a career that began part way through says so for as long
-              as that season runs. The games before the takeover were simulated,
-              and a badge that only lives on the picker would let somebody forget
-              that by the time they are reading the table. Round 1328: it used to
-              call those games the run-in, but a run-in is the end of a season,
-              and "The run-in" is itself one of the three takeover points; the words
-              now hold for the Autumn, the New year and the run-in takeovers and
-              for a Hot Seat carry on alike. */}
-          {c.midSeasonStart && c.season === 1 && (
-            <span className="text-xs font-bold text-muted-foreground border border-border rounded-full px-2 py-0.5 text-center leading-snug">
-              🗓️ Took over mid season · the games before you arrived were simulated
-            </span>
-          )}
-        </div>
+          clubName={c.clubName}
+          seasonLabel={worldSeasonLabel(c)}
+          season={c.season}
+          difficulty={levelFrom(c) !== 'normal' ? { id: levelFrom(c), label: DIFFICULTY_INFO[levelFrom(c)].label } : null}
+          noSack={noSackFrom(c) !== null}
+          midSeason={!!(c.midSeasonStart && c.season === 1)}
+        /></ScreenLoading>
         <div className="flex items-center justify-center gap-4 text-xs text-muted-foreground flex-wrap">
-          {/* Round 99: found by playing it. Before a ball is kicked every
-              club is on zero points, so the "position" was just wherever the
-              shuffled table happened to put you: a brand new Manchester City
-              save opened on "#15 in league", which reads as broken. */}
-          <span>{!leagueStarted(c) ? 'Season not started' : `#${g.myPosition || '-'} in league`}</span>
-          {c.customClub && c.customClub.name === c.clubName && (
-            <span className="inline-flex items-center gap-1">
-              🏟 {c.customClub.stadium}{c.customClub.capacity ? ` (${Math.round(c.customClub.capacity / 1000)}k)` : ''}
-            </span>
-          )}
-          <span className="text-gold font-semibold">{money(c.budget, c)}</span>
-          <span className="inline-flex items-center gap-1">
-            {c.form.length === 0 && <span>No matches yet</span>}
-            {c.form.map((f, i) => (
+          <ScreenLoading compact><ClubStatus
+            positionLabel={!leagueStarted(c) ? 'Season not started' : `#${g.myPosition || '-'} in league`}
+            stadium={c.customClub && c.customClub.name === c.clubName ? { name: c.customClub.stadium, capacity: c.customClub.capacity ? Math.round(c.customClub.capacity / 1000) : null } : null}
+            budgetLabel={money(c.budget, c)}
+            noMatches={c.form.length === 0}
+            formDots={c.form.map((f, i) => (
               <span key={i} className={cn('w-2 h-2 rounded-full', FORM_TONE[f])} />
             ))}
-          </span>
-          {c.trophies.length > 0 && <span>🏆×{c.trophies.length}</span>}
+            trophyCount={c.trophies.length > 0 ? c.trophies.length : 0}
+          /></ScreenLoading>
           {/* Round 928: back to the three manager slots, this career saved first. */}
           <button onClick={g.showSlots} data-testid="cm-show-slots" className="inline-flex min-h-[44px] items-center underline underline-offset-2 hover:text-primary transition-colors">
             Managers
