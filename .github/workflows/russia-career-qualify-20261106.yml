@@ -1,0 +1,307 @@
+name: Russia Career bridge, model and unchanged build gates
+on:
+  push:
+    branches: [codex/russia-career-qualify-v2-20261106]
+permissions:
+  contents: read
+concurrency:
+  group: russia-career-qualify-20261106
+  cancel-in-progress: false
+jobs:
+  qualify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    defaults:
+      run:
+        shell: bash
+    env:
+      BASE_CORE: 636b31efd64b749d4900e3f5773681e0496addf6
+      BASE_TREE: 9b6671db9c6f56db7bfd572521cf4e37cf7011a7
+      PRODUCT_CORE: ed511fd80b8d4a8c532bbc02e851a19335952c82
+      PRODUCT_TREE: 3e8928f4109945c331f9ef797bc7b7a87c5e24ef
+      PRODUCT_FILES: '[{"path":"scripts/data/soccerCareerFacts.json","before":"3020b7ebbc6a17013b3c7ab6a30558b675e35257","after":"5441c8d0d1fa60d28e46e0da7c66af2d9c7a1d9f"},{"path":"scripts/lib/careerClubPool.mjs","before":"3abec590896605188a4fc0cc7d122fc3be8438c3","after":"f5416cca123c9b3792588182f59350689e7f09e8"},{"path":"scripts/simCareerClubPool.mjs","before":"4f2493986069d7486e05560fbfd021455f27f1f7","after":"17d303564c35ffb5c985db3922f42809bc2c032f"},{"path":"scripts/simRussiaCareerBridge.mjs","before":null,"after":"513cd968a640e5d483e3dc57de7cf460aa315a9c"},{"path":"src/data/leagueFormat.ts","before":"802650466c0c4439f12c741e7d1ae28957280f9b","after":"54d431b2d963d10f0980a1c54d5aaf2b5963ff10"},{"path":"src/data/soccerCareerClubPool.ts","before":"522399403d4a5816680d0d5d2e19e3fda650d71d","after":"50d91e61a50459b60388a8f25551b353192842e5"},{"path":"src/lib/clubManager.ts","before":"a089f29e8f1adee4090927937bac4d50017ae7cf","after":"0735c1eda13393b8a6da605aa3c880fa276090bb"},{"path":"src/lib/soccerCareerContinental.ts","before":"44d4acee04504ac92382a986b3e2cfd5301d4ac1","after":"fe278d5fe50492374206e5846701db0c31fa6b01"},{"path":"src/lib/soccerCareerDerby.ts","before":"e25062b2b6560957feb414fd709b7bbc5b4af7ba","after":"895f15bbd52c3766325664e01da4627e6110d2d9"},{"path":"src/lib/soccerCareerEngine.ts","before":"663eab42df957f156b35e931d81f9f643ea1a7f4","after":"393d2b61b3d59cba721527f3ca47282171729a1f"},{"path":"src/lib/soccerCareerLeague.ts","before":"cf7772161d902d2bb82d7f5cb6b3bdc5d04a9659","after":"009b5c36a28e0f64076c9f6b302cba8af7fd3094"},{"path":"src/lib/soccerCareerTransferBrief.ts","before":"74718f3b76923c77a55c87e5c150c366f0d482ce","after":"fab5f9491750e3615adeed75fbedcd80d700e260"},{"path":"src/pages/SoccerCareer.tsx","before":"08a93b48a2bfcd42883b24c72e8f64f49caec6aa","after":"7a8a81467627be0e1d9d3c2e09c741b7953fec74"}]'
+      PLAYWRIGHT_BROWSERS_PATH: /home/runner/.cache/ms-playwright
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24.22.2'
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: '1.4.4'
+      - name: Bind the complete product and sole qualification-only addition
+        run: |
+          set -euo pipefail
+          export QA_OUT="$RUNNER_TEMP/russia-career-qualification-evidence"
+          export QA_BASE_SRC="$RUNNER_TEMP/russia-career-qualification-original"
+          mkdir -p "$QA_OUT/logs" "$QA_OUT/transport"
+          echo "QA_OUT=$QA_OUT" >> "$GITHUB_ENV"
+          echo "QA_BASE_SRC=$QA_BASE_SRC" >> "$GITHUB_ENV"
+          test "$(git rev-parse HEAD^)" = "$PRODUCT_CORE"
+          test "$(git rev-parse "$PRODUCT_CORE^{tree}")" = "$PRODUCT_TREE"
+          test "$(git rev-parse "$BASE_CORE^{tree}")" = "$BASE_TREE"
+          git worktree add --detach "$QA_BASE_SRC" "$BASE_CORE"
+          node --input-type=module <<'BIND'
+          import fs from 'node:fs';import assert from 'node:assert/strict';import {execFileSync} from 'node:child_process';
+          const e=process.env,out=e.QA_OUT,git=(...a)=>execFileSync('git',a,{encoding:'utf8'}).trim();
+          const expected=JSON.parse(e.PRODUCT_FILES),workflow='.github/workflows/russia-career-qualify-20261106.yml';
+          const delta=git('diff-tree','--no-commit-id','--name-only','-r',e.BASE_CORE,e.PRODUCT_CORE).split('\n').filter(Boolean).sort();
+          assert.deepEqual(delta,expected.map(r=>r.path).sort());
+          for(const r of expected){if(r.before===null)assert.equal(git('ls-tree',e.BASE_CORE,'--',r.path),'');else assert.equal(git('rev-parse',e.BASE_CORE+':'+r.path),r.before);assert.equal(git('rev-parse',e.PRODUCT_CORE+':'+r.path),r.after);}
+          const qaDelta=git('diff-tree','--no-commit-id','--name-only','-r','HEAD').split('\n').filter(Boolean);
+          assert.deepEqual(qaDelta,[workflow]);
+          const leaf='.tmp-fx/career-records-tests.json';assert(!fs.existsSync(leaf));fs.writeFileSync(out+'/records-leaf-owned-before.txt','absent before this owned smoke\n');
+          fs.copyFileSync(workflow,out+'/workflow.yml');
+          fs.copyFileSync('scripts/simRussiaCareerBridge.mjs',out+'/bridge-source.mjs');
+          fs.writeFileSync(out+'/source-role.json',JSON.stringify({base:{commit:e.BASE_CORE,tree:e.BASE_TREE},product:{commit:e.PRODUCT_CORE,tree:e.PRODUCT_TREE,files:expected},qa:{commit:git('rev-parse','HEAD'),tree:git('rev-parse','HEAD^{tree}'),soleAddition:workflow},scope:'Fresh focused model qualification, original comparisons and owned syntax/model controls, proper App types, one normal build,20 output readers,3 smokes and16 unchanged route caps. No new browser or public gameplay claim.'},null,2)+'\n');
+          BIND
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$QA_OUT/source-before.sha256"
+          git ls-files --stage > "$QA_OUT/index-before.txt"
+          git status --porcelain=v1 --untracked-files=all > "$QA_OUT/status-before.txt"
+          sha256sum package.json package-lock.json bun.lock bun.lockb > "$QA_OUT/locks-before.sha256"
+          (cd "$QA_BASE_SRC"; git ls-files -z | sort -z | xargs -0 sha256sum) > "$QA_OUT/baseline-source-before.sha256"
+          (cd "$QA_BASE_SRC"; git ls-files --stage) > "$QA_OUT/baseline-index-before.txt"
+          (cd "$QA_BASE_SRC"; git status --porcelain=v1 --untracked-files=all) > "$QA_OUT/baseline-status-before.txt"
+          (cd "$QA_BASE_SRC"; sha256sum package.json package-lock.json bun.lock bun.lockb) > "$QA_OUT/baseline-locks-before.sha256"
+          test ! -s "$QA_OUT/status-before.txt"
+          test ! -s "$QA_OUT/baseline-status-before.txt"
+      - name: Install held app and required build tools
+        run: |
+          set -euo pipefail
+          test "$(bun --version)" = 1.4.4
+          bun --version > "$QA_OUT/logs/bun-version.log"
+          node --version > "$QA_OUT/logs/node-version.log"
+          bun install --frozen-lockfile > "$QA_OUT/logs/bun-install.log" 2>&1
+          node -p "JSON.stringify({router:require('react-router-dom/package.json').version,vite:require('vite/package.json').version,rollup:JSON.parse(require('fs').readFileSync('node_modules/rollup/package.json','utf8')).version})" > "$QA_OUT/logs/build-versions.json"
+          git diff --exit-code HEAD -- package.json package-lock.json bun.lock bun.lockb
+          npm install --prefix "$RUNNER_TEMP/russia-bridge-tools" --package-lock=false --no-audit --no-fund playwright@1.64.0 > "$QA_OUT/logs/playwright-install.log" 2>&1
+          test ! -e node_modules/playwright
+          test ! -e node_modules/playwright-core
+          ln -s "$RUNNER_TEMP/russia-bridge-tools/node_modules/playwright" node_modules/playwright
+          ln -s "$RUNNER_TEMP/russia-bridge-tools/node_modules/playwright-core" node_modules/playwright-core
+          "$RUNNER_TEMP/russia-bridge-tools/node_modules/.bin/playwright" install --with-deps chromium > "$QA_OUT/logs/chromium-install.log" 2>&1
+          python3 -m pip install --target "$RUNNER_TEMP/russia-bridge-python" fonttools pillow > "$QA_OUT/logs/python-install.log" 2>&1
+          echo "PYTHONPATH=$RUNNER_TEMP/russia-bridge-python" >> "$GITHUB_ENV"
+      - name: Share held dependencies with the immutable original
+        run: |
+          set -euo pipefail
+          test "$(node --version)" = v24.22.2
+          ln -s "$GITHUB_WORKSPACE/node_modules" "$QA_BASE_SRC/node_modules"
+      - name: Proper application types
+        run: |
+          set -euo pipefail
+          export GIT_NO_LAZY_FETCH=1
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          : > "$QA_OUT/transport/types.log"
+          set +e
+          SIM_OFFLINE_RECEIPT="$QA_OUT/transport/types.log" node_modules/.bin/tsc --noEmit -p tsconfig.app.json > "$QA_OUT/logs/types.log" 2>&1
+          native_exit=$?
+          printf '%s\n' "$native_exit" > "$QA_OUT/types.exit" || exit 1
+          test "$native_exit" = 0 || exit "$native_exit"
+          test ! -s "$QA_OUT/transport/types.log" || exit 1
+          set -e
+          printf '%s\n' '{"command":"node_modules/.bin/tsc --noEmit -p tsconfig.app.json","exit":0}' > "$QA_OUT/types-passed.json"
+          test ! -s "$QA_OUT/transport/types.log"
+      - name: Focused bridge, owned faults and affected model guards
+        timeout-minutes: 25
+        run: |
+          set -euo pipefail
+          export GIT_NO_LAZY_FETCH=1
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          export RUSSIA_BASE_ROOT="$QA_BASE_SRC"
+          export RUSSIA_EVIDENCE_ROOT="$QA_OUT/bridge"
+          run_model() {
+            local name="$1"
+            shift
+            local receipt="$QA_OUT/transport/$name.log"
+            : > "$receipt"
+            set +e
+            SIM_OFFLINE_RECEIPT="$receipt" "$@" > "$QA_OUT/logs/$name.log" 2>&1
+            local native_exit=$?
+            set -e
+            printf '%s\n' "$native_exit" > "$QA_OUT/logs/$name.exit"
+            cat "$QA_OUT/logs/$name.log"
+            test "$native_exit" = 0
+            test ! -s "$receipt"
+          }
+          run_model bridge node scripts/simRussiaCareerBridge.mjs
+          run_model bridge-controls node scripts/simRussiaCareerBridge.mjs --controls
+          guards=(
+            simCareerClubPool simCareerFacts simCareerEras simCareerFallback
+            simCareerLeagueFinish simCareerLeagueSeasons simCareerLeagueWorld
+            simCareerDomesticCup simCareerContinental simSoccerCareerUcl
+            simLoanSpell simCareerTransferBrief simSoccerCareerSavedLoan
+            simSoccerLoanBite simSoccerLoanMinutes simTransferBriefPageControl
+          )
+          for guard in "${guards[@]}"; do run_model "$guard" node "scripts/$guard.mjs"; done
+          run_model simSaveKeeper node scripts/simSaveKeeper.mjs
+          run_model simHomeFront node scripts/simHomeFront.mjs
+          grep -F '7) Continue playing:' "$QA_OUT/logs/simHomeFront.log"
+          run_model simSoccerCareerRecords node scripts/simSoccerCareerRecords.mjs
+          grep -F 'simSoccerCareerRecords: 12 outcome checks green, three effective controls caught' "$QA_OUT/logs/simSoccerCareerRecords.log"
+          node --input-type=module <<'RECORDS'
+          import fs from 'node:fs';import path from 'node:path';import crypto from 'node:crypto';import assert from 'node:assert/strict';
+          const out=process.env.QA_OUT,leaf=path.resolve('.tmp-fx/career-records-tests.json');
+          assert(fs.existsSync(out+'/records-leaf-owned-before.txt'));
+          const dir=fs.lstatSync(path.dirname(leaf)),stat=fs.lstatSync(leaf);
+          assert(dir.isDirectory()&&!dir.isSymbolicLink());assert(stat.isFile()&&!stat.isSymbolicLink());
+          assert.equal(fs.realpathSync(path.dirname(leaf)),path.join(fs.realpathSync('.'),'.tmp-fx'));
+          const bytes=fs.readFileSync(leaf),report=JSON.parse(bytes),rows=report.testResults.flatMap(x=>x.assertionResults);
+          assert.equal(report.numTotalTests,12);assert.equal(report.numPassedTests,11);assert.equal(report.numFailedTests,1);
+          assert.equal(rows.length,12);assert.equal(rows.filter(x=>x.status==='passed').length,11);assert.equal(rows.filter(x=>x.status==='failed').length,1);
+          fs.writeFileSync(out+'/records-last-control-tests.json',bytes,{flag:'wx'});assert.deepEqual(fs.readFileSync(out+'/records-last-control-tests.json'),bytes);
+          fs.unlinkSync(leaf);
+          fs.writeFileSync(out+'/records-output-retention.json',JSON.stringify({sourceLeaf:'.tmp-fx/career-records-tests.json',retained:'records-last-control-tests.json',bytes:bytes.length,sha256:crypto.createHash('sha256').update(bytes).digest('hex'),nativeSimExit:0,ordinaryNonSymlinkLeaf:true,copyReadBackExact:true,removedOnlyExactLeaf:true,meaning:'Last negative-control report has1failed and11passed. Healthy12 outcomes and3 effective controls are in the full native log.'},null,2)+'\n');
+          RECORDS
+          git status --porcelain=v1 --untracked-files=all > "$QA_OUT/status-after-models.txt"
+          test ! -s "$QA_OUT/status-after-models.txt"
+      - name: Normal build, all twenty output readers and unchanged caps
+        timeout-minutes: 25
+        run: |
+          set -euo pipefail
+          export GIT_NO_LAZY_FETCH=1
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          classify_receipt() {
+            local name="$1" receipt="$2"
+            local allowed='^\[SIM_OFFLINE_BLOCK\] external browser route continue https://fonts\.(googleapis|gstatic)\.com$'
+            if [[ "$name" == sweep-weight ]]; then
+              allowed="$allowed|^\[SIM_OFFLINE_BLOCK\] external browser route continue https://flagcdn\.com$"
+            elif [[ "$name" != build ]]; then
+              if [[ -s "$receipt" ]]; then cat "$receipt"; return 1; fi
+              return 0
+            fi
+            local status=0
+            grep -Ev "$allowed" "$receipt" || status=$?
+            if [[ "$status" == 1 ]]; then return 0; fi
+            return 1
+          }
+          run_gate() {
+            local name="$1"
+            shift
+            local receipt="$QA_OUT/transport/$name.log"
+            : > "$receipt"
+            SIM_OFFLINE_RECEIPT="$receipt" "$@" 2>&1 | tee "$QA_OUT/logs/$name.log"
+            if ! classify_receipt "$name" "$receipt"; then
+              echo "Unexpected blocked transport in $name" >&2
+              return 1
+            fi
+            # Every refusal is retained and counted, never credited as zero transport.
+            if [[ -s "$receipt" ]]; then
+              wc -l "$receipt" | tee "$QA_OUT/logs/$name-blocked-attempts.txt"
+            fi
+          }
+          run_gate build npm run build
+          printf '%s\n' '{"command":"npm run build","exit":0}' > "$QA_OUT/build-passed.json"
+          find dist -type f -print0 | sort -z | xargs -0 sha256sum > "$QA_OUT/dist-before.sha256"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import path from 'node:path';import zlib from 'node:zlib';import crypto from 'node:crypto';import assert from 'node:assert/strict';
+          const assets=fs.readdirSync('dist/assets').filter(file=>/\.(js|css)$/.test(file)).sort().map(file=>{
+            const bytes=fs.readFileSync(path.join('dist/assets',file));return{file,bytes:bytes.length,gzipBytes:zlib.gzipSync(bytes).length,sha256:crypto.createHash('sha256').update(bytes).digest('hex')};
+          });
+          const soccer=assets.filter(row=>/^SoccerCareer-.*\.js$/.test(row.file));
+          assert.equal(soccer.length,1);
+          fs.writeFileSync(process.env.QA_OUT+'/soccer-chunk-sizes.json',JSON.stringify({status:'MEASURED_BUILT_CHUNKS_NO_NEW_CAP',soccer,allBuiltAssets:assets,limits:'Individual built chunk raw/gzip sizes only. Actual route critical-body proof comes from the unchanged sweepWeight window and all16 original caps, including Soccer840KiB. No headroom or full-download total is inferred from this chunk list.'},null,2)+'\n',{flag:'wx'});
+          console.log('RUSSIA_BRIDGE_BUILT_CHUNK_SIZES '+JSON.stringify(soccer));
+          NODE
+          tar -czf "$QA_OUT/completed-dist.tar.gz" dist
+          sha256sum "$QA_OUT/completed-dist.tar.gz" > "$QA_OUT/completed-dist.tar.gz.sha256"
+          tar -tzf "$QA_OUT/completed-dist.tar.gz" > "$QA_OUT/completed-dist-members.txt"
+          export BASE=http://127.0.0.1:4173
+          export SWEEP_BASE="$BASE"
+          export SWEEP_OFFLINE=1
+          export SIM_OFFLINE_RECEIPT="$QA_OUT/transport/server.log"
+          : > "$SIM_OFFLINE_RECEIPT"
+          node scripts/lib/hostLikeServer.mjs dist 4173 > "$QA_OUT/logs/server.log" 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid" 2>/dev/null || true' EXIT
+          ready=0
+          for attempt in $(seq 1 40); do
+            if curl --fail --silent "$BASE/" > /dev/null; then ready=1; break; fi
+            kill -0 "$server_pid"
+            sleep 1
+          done
+          test "$ready" = 1
+          run_gate sweep-weight node scripts/sweepWeight.mjs
+          readers=(
+            simAdsense simBrand simHeadTags simHiddenPages simHubs
+            simIndexNow simIndexing simInternalLinks simNoRivalNames simPrerender
+            simPrerenderBoot simRetiredRoutes simSchema simSitemap simSnapshotAssets
+            simSiteSearch simGuideHeadings simHarnessAnchors
+          )
+          for reader in "${readers[@]}"; do
+            run_gate "$reader" node "scripts/$reader.mjs"
+          done
+          run_gate simSeoTitles node scripts/simSeoTitles.mjs
+          run_gate simSeoMetaSplit env SEO_SPLIT_ONLY=/soccer-career,/club-manager,/nba-my-career node scripts/simSeoMetaSplit.mjs
+          test ! -s "$QA_OUT/transport/server.log"
+      - name: Close the fresh compiled output
+        run: |
+          set -euo pipefail
+          find dist -type f -print0 | sort -z | xargs -0 sha256sum > "$QA_OUT/dist-after.sha256"
+          cmp "$QA_OUT/dist-before.sha256" "$QA_OUT/dist-after.sha256"
+          node --input-type=module <<'CLOSE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const out=process.env.QA_OUT,bridge=JSON.parse(fs.readFileSync(out+'/bridge/BRIDGE.json')),controls=JSON.parse(fs.readFileSync(out+'/bridge/PHYSICAL-CONTROLS.json'));
+          assert.equal(bridge.status,'passed');assert.equal(controls.status,'passed');
+          assert.equal(controls.results.length,10);for(const r of controls.results){assert.equal(r.native,1);assert.equal(r.owned,true);}
+          const readers=['simAdsense','simBrand','simHeadTags','simHiddenPages','simHubs','simIndexNow','simIndexing','simInternalLinks','simNoRivalNames','simPrerender','simPrerenderBoot','simRetiredRoutes','simSchema','simSitemap','simSnapshotAssets','simSiteSearch','simGuideHeadings','simHarnessAnchors','simSeoTitles','simSeoMetaSplit'];
+          fs.writeFileSync(out+'/qualification.json',JSON.stringify({status:'FOCUSED_MODEL_AND_BUILD_PASSED',product:{commit:process.env.PRODUCT_CORE,tree:process.env.PRODUCT_TREE},bridgeCases:bridge.cases.length,physicalControls:10,properTypes:true,normalBuilds:1,readers,unchangedCaps:16,smokes:3,fullSuite:false,browser:false,public:false},null,2)+'\n');
+          CLOSE
+      - name: Retain any owned records diagnostic after an earlier failure
+        if: always()
+        run: |
+          set -euo pipefail
+          node --input-type=module <<'RECORDS_FAILURE'
+          import fs from 'node:fs';import path from 'node:path';import assert from 'node:assert/strict';
+          const out=process.env.QA_OUT,leaf=path.resolve('.tmp-fx/career-records-tests.json');
+          if(fs.existsSync(leaf)){
+            assert.equal(fs.readFileSync(out+'/records-leaf-owned-before.txt','utf8'),'absent before this owned smoke\n');
+            assert(fs.lstatSync(path.dirname(leaf)).isDirectory()&&!fs.lstatSync(path.dirname(leaf)).isSymbolicLink());
+            assert(fs.lstatSync(leaf).isFile()&&!fs.lstatSync(leaf).isSymbolicLink());
+            assert.equal(fs.realpathSync(path.dirname(leaf)),path.join(fs.realpathSync('.'),'.tmp-fx'));
+            const body=fs.readFileSync(leaf),copy=out+'/records-earlier-failure-owned-leaf.json';
+            fs.writeFileSync(copy,body,{flag:'wx'});assert.deepEqual(fs.readFileSync(copy),body);
+            fs.unlinkSync(leaf);
+          }
+          RECORDS_FAILURE
+      - name: Always preserve both source roles and locks
+        if: always()
+        run: |
+          set -euo pipefail
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$QA_OUT/source-after.sha256"
+          git ls-files --stage > "$QA_OUT/index-after.txt"
+          git status --porcelain=v1 --untracked-files=all > "$QA_OUT/status-after.txt"
+          sha256sum package.json package-lock.json bun.lock bun.lockb > "$QA_OUT/locks-after.sha256"
+          cmp "$QA_OUT/source-before.sha256" "$QA_OUT/source-after.sha256"
+          cmp "$QA_OUT/index-before.txt" "$QA_OUT/index-after.txt"
+          cmp "$QA_OUT/locks-before.sha256" "$QA_OUT/locks-after.sha256"
+          test ! -s "$QA_OUT/status-after.txt"
+          (cd "$QA_BASE_SRC"; git ls-files -z | sort -z | xargs -0 sha256sum) > "$QA_OUT/baseline-source-after.sha256"
+          (cd "$QA_BASE_SRC"; git ls-files --stage) > "$QA_OUT/baseline-index-after.txt"
+          (cd "$QA_BASE_SRC"; git status --porcelain=v1 --untracked-files=all) > "$QA_OUT/baseline-status-after.txt"
+          (cd "$QA_BASE_SRC"; sha256sum package.json package-lock.json bun.lock bun.lockb) > "$QA_OUT/baseline-locks-after.sha256"
+          cmp "$QA_OUT/baseline-source-before.sha256" "$QA_OUT/baseline-source-after.sha256"
+          cmp "$QA_OUT/baseline-index-before.txt" "$QA_OUT/baseline-index-after.txt"
+          cmp "$QA_OUT/baseline-locks-before.sha256" "$QA_OUT/baseline-locks-after.sha256"
+          test ! -s "$QA_OUT/baseline-status-after.txt"
+      - name: Retain the complete native packet
+        if: always()
+        run: |
+          set -euo pipefail
+          cd "$QA_OUT"
+          find . -type f ! -name manifest.sha256 -print0 | sort -z | xargs -0 sha256sum > manifest.sha256
+          tar -czf "$RUNNER_TEMP/russia-career-qualification.tar.gz" .
+          cd "$RUNNER_TEMP"
+          sha256sum russia-career-qualification.tar.gz > russia-career-qualification.tar.gz.sha256
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: russia-career-qualification
+          path: |
+            ${{ runner.temp }}/russia-career-qualification.tar.gz
+            ${{ runner.temp }}/russia-career-qualification.tar.gz.sha256
+          compression-level: 0
+          retention-days: 30
