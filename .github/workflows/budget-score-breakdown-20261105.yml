@@ -1,11 +1,11 @@
-name: Budget Builder fixed score visibility proof
+name: Budget Builder score physical controls
 on:
   push:
     branches: [codex/budget-score-breakdown-qa-20261105]
 permissions:
   contents: read
 jobs:
-  original:
+  controls:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     defaults:
@@ -13,7 +13,7 @@ jobs:
         shell: bash
     env:
       SIM_NETWORK: offline
-      SIM_OFFLINE_RECEIPT: budget-score-fixed/offline.log
+      SIM_OFFLINE_RECEIPT: budget-score-controls/offline.log
     steps:
       - uses: actions/checkout@v4
         with:
@@ -24,41 +24,40 @@ jobs:
           cache: npm
       - name: Exact fixed Budget and locked dependencies
         run: |
-          mkdir -p budget-score-fixed
-          touch budget-score-fixed/offline.log
-          git rev-parse HEAD > budget-score-fixed/head.txt
-          git ls-files -s > budget-score-fixed/source-before.txt
-          sha256sum package.json package-lock.json > budget-score-fixed/locks-before.txt
+          mkdir -p budget-score-controls
+          touch budget-score-controls/offline.log
+          git rev-parse HEAD > budget-score-controls/head.txt
+          git ls-files -s > budget-score-controls/source-before.txt
+          sha256sum package.json package-lock.json > budget-score-controls/locks-before.txt
           test "$(git rev-parse HEAD:src/hooks/useBudgetBuilder.ts)" = 0220c215cb2530a632abc477810ec38b095982c7
           test "$(git rev-parse HEAD:src/components/budget-builder/BudgetBuilderBoard.tsx)" = f9111c2782f61ec9b976aee52baed4ae095f0d6b
           test "$(git rev-parse HEAD:src/test/budgetSigning.test.tsx)" = 97cb3fa452184995a52a77381c7ecc45d25d2c03
           npm ci
-      - name: Proper app types
-        run: node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee budget-score-fixed/types.log
-      - name: Exact owned components and unchanged signing outcomes
+      - name: Exact immutable original source copies
         run: |
-          BB_SCORE_BREAKDOWN_RAW="$PWD/budget-score-fixed/raw.json" NODE_OPTIONS="--max-old-space-size=6144 --require=$PWD/scripts/lib/offlineTransport.cjs" node node_modules/vitest/vitest.mjs run src/test/budgetScoreBreakdown.test.tsx src/test/budgetSigning.test.tsx --maxWorkers=1 --minWorkers=1 --reporter=default --reporter=json --outputFile=budget-score-fixed/units.json 2>&1 | tee budget-score-fixed/units.log
-          node --input-type=module <<'NODE'
-          import fs from 'node:fs';import assert from 'node:assert/strict';
-          const r=JSON.parse(fs.readFileSync('budget-score-fixed/units.json')),raw=JSON.parse(fs.readFileSync('budget-score-fixed/raw.json'));
-          assert.equal(r.numTotalTests,19);assert.equal(r.numPassedTests,19);assert.equal(r.numFailedTests,0);assert.equal(r.numPendingTests,0);assert.equal(raw.caseTitles.length,10);assert.equal(Object.keys(raw.cases).length,10);
-          assert(!/Unhandled Errors|Unhandled Rejection|Uncaught Exception|Failed to resolve import/.test(fs.readFileSync('budget-score-fixed/units.log','utf8')));
-          console.log('PASS10owned earned-score cases and9existing signing outcomes');
-          NODE
+          git fetch --no-tags --depth=1 origin 3cf296e80ad254bec3cfba2f12660addef5bbe18
+          git show 3cf296e80ad254bec3cfba2f12660addef5bbe18:src/hooks/useBudgetBuilder.ts > "$RUNNER_TEMP/budget-original-hook.ts"
+          git show 3cf296e80ad254bec3cfba2f12660addef5bbe18:src/components/budget-builder/BudgetBuilderBoard.tsx > "$RUNNER_TEMP/budget-original-board.tsx"
+          test "$(git hash-object "$RUNNER_TEMP/budget-original-hook.ts")" = 02ec7d7971bbcf96723e4a15fe285c5c0edf2ad2
+          test "$(git hash-object "$RUNNER_TEMP/budget-original-board.tsx")" = 526213213e4a5e1b625e1b6505227b623f76ad26
+          test "$(git hash-object scripts/qa/budgetScoreBreakdownCheck.mjs)" = 6025b5adeaf55c59cfee974c44bb0418c3012a16
+      - name: Eleven physical states and full original semantic parity
+        run: |
+          BB_SCORE_CONTROL_OUT="$PWD/budget-score-controls/controls" BB_SCORE_ORIGINAL_HOOK="$RUNNER_TEMP/budget-original-hook.ts" BB_SCORE_ORIGINAL_BOARD="$RUNNER_TEMP/budget-original-board.tsx" NODE_OPTIONS="--max-old-space-size=6144 --require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/budgetScoreBreakdownCheck.mjs 2>&1 | tee budget-score-controls/controls.log
       - name: Fixed source locks and offline held
         if: always()
         run: |
-          git ls-files -s > budget-score-fixed/source-after.txt
-          cmp budget-score-fixed/source-before.txt budget-score-fixed/source-after.txt
+          git ls-files -s > budget-score-controls/source-after.txt
+          cmp budget-score-controls/source-before.txt budget-score-controls/source-after.txt
           git diff --exit-code HEAD -- src scripts public package.json package-lock.json
-          sha256sum package.json package-lock.json > budget-score-fixed/locks-after.txt
-          cmp budget-score-fixed/locks-before.txt budget-score-fixed/locks-after.txt
-          test -f budget-score-fixed/offline.log
-          test ! -s budget-score-fixed/offline.log
+          sha256sum package.json package-lock.json > budget-score-controls/locks-after.txt
+          cmp budget-score-controls/locks-before.txt budget-score-controls/locks-after.txt
+          test -f budget-score-controls/offline.log
+          test ! -s budget-score-controls/offline.log
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: budget-score-fixed-${{ github.run_id }}
-          path: budget-score-fixed
+          name: budget-score-controls-${{ github.run_id }}
+          path: budget-score-controls
           retention-days: 14
           if-no-files-found: error
