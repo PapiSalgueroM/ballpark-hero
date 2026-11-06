@@ -1,4 +1,4 @@
-// Remote-only Connect 4 ownership proof. Fulfilled search and validation records are fictional.
+// Soccer board request ownership proof for remote CI. Fulfilled search and validation records are fictional.
 import '../lib/offlineTransport.cjs';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
