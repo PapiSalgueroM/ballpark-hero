@@ -1,4 +1,4 @@
-import { useState, useCallback, useMemo, useEffect } from 'react';
+import { useState, useCallback, useMemo, useEffect, useRef } from 'react';
 import { makeFirstDraw } from '@/lib/firstDraw';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { useDailyPuzzle } from '@/hooks/useDailyPuzzle';
@@ -165,6 +165,7 @@ export function useFootballConnect4() {
   const [targetRow, setTargetRow] = useState<number | null>(null);
   const [isValidating, setIsValidating] = useState(false);
   const [validationError, setValidationError] = useState<string | null>(null);
+  const pendingRequest = useRef<symbol | null>(null);
 
   const selectColumn = useCallback(
     (col: number) => {
@@ -189,15 +190,19 @@ export function useFootballConnect4() {
 
   const submitPlayer = useCallback(
     async (playerName: string) => {
-      if (phase !== 'playing' || selectedColumn === null || targetRow === null) return;
+      if (pendingRequest.current || phase !== 'playing' || selectedColumn === null || targetRow === null) return false;
 
       const trimmed = playerName.trim();
-      if (!trimmed) return;
+      if (!trimmed) return true;
 
       if (usedPlayers.has(normalizeName(trimmed))) {
         setValidationError(`${trimmed} has already been used!`);
-        return;
+        return true;
       }
+
+      const request = Symbol();
+      pendingRequest.current = request;
+      const ownsRequest = () => pendingRequest.current === request;
 
       setIsValidating(true);
       setValidationError(null);
@@ -219,6 +224,7 @@ export function useFootballConnect4() {
         );
 
         const payload: unknown = await resp.json().catch(() => null);
+        if (!ownsRequest()) return false;
         const result: ValidatorResponse | null = payload && typeof payload === 'object'
           ? payload as ValidatorResponse
           : null;
@@ -229,7 +235,7 @@ export function useFootballConnect4() {
               ? 'Answer checker is busy right now. This guess was not used. Try again in a minute.'
               : 'Answer checker is unavailable right now. This guess was not used. Try again.',
           );
-          return;
+          return true;
         }
 
         if (!result || result.valid !== true || result.unverified === true) {
@@ -237,7 +243,7 @@ export function useFootballConnect4() {
             ? 'Could not verify this answer. This guess was not used. Try again.'
             : 'Player does not match both attributes.';
           setValidationError(normalizeValidationReason(result?.reason ?? result?.error, fallback));
-          return;
+          return true;
         }
 
         const displayName = typeof result.fullName === 'string' && result.fullName.trim()
@@ -246,7 +252,7 @@ export function useFootballConnect4() {
 
         if (usedPlayers.has(normalizeName(displayName))) {
           setValidationError(`${displayName} has already been used!`);
-          return;
+          return true;
         }
 
         if (mode === 'daily') {
@@ -273,10 +279,16 @@ export function useFootballConnect4() {
 
         setSelectedColumn(null);
         setTargetRow(null);
+        return true;
       } catch {
+        if (!ownsRequest()) return false;
         setValidationError('Answer checker could not connect. This guess was not used. Try again.');
+        return true;
       } finally {
-        setIsValidating(false);
+        if (ownsRequest()) {
+          pendingRequest.current = null;
+          setIsValidating(false);
+        }
       }
     },
     [phase, selectedColumn, targetRow, board, currentTurn, boardConfig, usedPlayers, mode, addDailyAction, unlimitedBoard],
@@ -295,6 +307,8 @@ export function useFootballConnect4() {
   }, [phase, currentTurn, mode, addDailyAction]);
 
   const switchMode = useCallback((m: FootballConnect4Mode) => {
+    pendingRequest.current = null;
+    setIsValidating(false);
     if (m === 'unlimited') {
       setUnlimitedBoardConfig(getRandomBoard());
       setUnlimitedBoard(createEmptyBoard());
@@ -312,6 +326,8 @@ export function useFootballConnect4() {
 
   const resetGame = useCallback(() => {
     if (mode !== 'unlimited') return;
+    pendingRequest.current = null;
+    setIsValidating(false);
     setUnlimitedBoardConfig(getRandomBoard());
     setUnlimitedBoard(createEmptyBoard());
     setUnlimitedCurrentTurn('blue');
