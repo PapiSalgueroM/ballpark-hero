@@ -1,22 +1,22 @@
-name: Fantasy Draft causal pending criteria gate
+name: Fantasy Draft pending criteria full qualification
 on:
   push:
     branches: [codex/fantasy-draft-criteria-start-qa-20261106]
 permissions:
   contents: read
-  actions: read
 jobs:
-  causal:
+  qualify:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 45
     defaults:
       run:
         shell: bash
     env:
       SIM_NETWORK: offline
-      SIM_OFFLINE_RECEIPT: fantasy-draft-criteria-causal/offline.log
-      FD_GATE_OUT: fantasy-draft-criteria-causal
+      SIM_OFFLINE_RECEIPT: fantasy-draft-qualified/offline.log
+      ENGINES: chromium
       TZ: UTC
+      SEO_SPLIT_BASE_REF: 3b14650d360b010b25b525de33a5f32f33de2798
     steps:
       - uses: actions/checkout@v4
         with:
@@ -26,89 +26,165 @@ jobs:
         with:
           node-version: 24.22.1
           cache: npm
-      - name: Pin source lineage and locked install
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.4.4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Exact FD source join and locked install
         run: |
           set -euo pipefail
-          test ! -e "$FD_GATE_OUT"
-          mkdir "$FD_GATE_OUT"
-          touch "$SIM_OFFLINE_RECEIPT"
-          git rev-parse HEAD > "$FD_GATE_OUT/head.txt"
-          git rev-parse 'HEAD^{tree}' > "$FD_GATE_OUT/tree.txt"
-          git ls-files -s > "$FD_GATE_OUT/source-before.txt"
-          sha256sum package.json package-lock.json > "$FD_GATE_OUT/locks-before.txt"
+          test ! -e fantasy-draft-qualified
+          mkdir fantasy-draft-qualified
+          touch fantasy-draft-qualified/offline.log
+          git rev-parse HEAD > fantasy-draft-qualified/head.txt
+          git rev-parse 'HEAD^{tree}' > fantasy-draft-qualified/tree.txt
+          git ls-files -s > fantasy-draft-qualified/source-before.txt
+          sha256sum package.json package-lock.json > fantasy-draft-qualified/locks-before.txt
           git diff --exit-code HEAD -- .
-          git fetch --no-tags --depth=1 origin 4b513e64391a352fe1394a935ef4f13a995a5959
+          git fetch --no-tags --depth=1 origin cc649bad5ac21d2e7b6c2695518324e1daf017b0
+          git fetch --no-tags --depth=1 origin 3b14650d360b010b25b525de33a5f32f33de2798
+          test "$(git rev-parse 'cc649bad5ac21d2e7b6c2695518324e1daf017b0^{tree}')" = 081064d48ac1676c3eb1ed86b5d209e51a580638
+          test "$(git rev-parse 3b14650d360b010b25b525de33a5f32f33de2798:src/data/seoMeta.ts)" = cf7a5142e59b97048d27b5ece9a6588a92073728
           node --input-type=module <<'NODE'
           import fs from 'node:fs';import assert from 'node:assert/strict';import {execFileSync} from 'node:child_process';import {createHash} from 'node:crypto';
-          const out=process.env.FD_GATE_OUT,original='4b513e64391a352fe1394a935ef4f13a995a5959',page='src/pages/FantasyDraft.tsx',controller='scripts/qa/fantasyDraftCriteriaStartCheck.mjs',workflow='.github/workflows/fantasy-draft-criteria-start-20261106.yml';
-          const at=(ref,file)=>execFileSync('git',['rev-parse',ref+':'+file],{encoding:'utf8'}).trim();
-          assert.equal(at('HEAD',page),'d1b38c9aaae0ead2c68d746866e0ccb3b47adccd');assert.equal(at(original,page),'2343cadb8ff109230f8ed6d13fe3c70e21c57014');
-          assert.equal(at('HEAD',controller),'ef82dcf6d1fd53d3539cb4ca6b455cafd539c4d2');assert.equal(at('HEAD','src/test/fantasyDraftCriteriaStart.test.tsx'),'4e9d54803677696454ef0cbbf155182192e03769');
-          const tree=ref=>execFileSync('git',['ls-tree','-r','-z',ref],{encoding:'utf8',maxBuffer:16*1024*1024}).split('\0').filter(Boolean),file=row=>row.split('\t')[1];
-          const excluded=[controller,workflow],base=tree(original).filter(r=>!excluded.includes(file(r))),current=tree('HEAD').filter(r=>!excluded.includes(file(r))).map(r=>file(r)===page?r.replace('d1b38c9aaae0ead2c68d746866e0ccb3b47adccd','2343cadb8ff109230f8ed6d13fe3c70e21c57014'):r);
-          assert.deepEqual(current,base,'Only the fixed gate and two QA leaves differ from admitted original');
-          fs.writeFileSync(out+'/source-join.json',JSON.stringify({status:'passed',original,heldRows:base.length,onlyProductChange:page,excludedQALeaves:excluded},null,2));
+          const out='fantasy-draft-qualified',base='cc649bad5ac21d2e7b6c2695518324e1daf017b0',page='src/pages/FantasyDraft.tsx',test='src/test/fantasyDraftCriteriaStart.test.tsx',helper='scripts/qa/playFantasyDraftCriteriaStart.mjs',at=(ref,file)=>execFileSync('git',['rev-parse',ref+':'+file],{encoding:'utf8'}).trim();
+          const pins={[page]:'d1b38c9aaae0ead2c68d746866e0ccb3b47adccd',[test]:'4e9d54803677696454ef0cbbf155182192e03769',[helper]:'c9cd105b9d14850df8a98a483679f212182eaf0d','docs/plans/2026-11-06-fantasy-draft-criteria-start.md':'58c27ca1630d874c5201f2ed3f21b0f0fceeee34'};for(const[f,p]of Object.entries(pins))assert.equal(at('HEAD',f),p,f);assert.equal(at(base,page),'2343cadb8ff109230f8ed6d13fe3c70e21c57014');assert(!fs.existsSync('scripts/qa/fantasyDraftCriteriaStartCheck.mjs'),'No causal runner in full source');
+          const fixed=fs.readFileSync(page,'utf8'),gate='                  disabled={loadingCriteria}\n';assert.equal(fixed.split(gate).length-1,1);assert.equal(fixed.replace(gate,''),execFileSync('git',['show',base+':'+page],{encoding:'utf8'}),'Exact one-line product inverse');
+          const paths=['src','public','scripts','index.html','package.json','package-lock.json','vite.config.ts','tailwind.config.ts','postcss.config.js','tsconfig.json','tsconfig.app.json','tsconfig.node.json','bun.lockb'],tree=ref=>execFileSync('git',['ls-tree','-r','-z',ref,'--',...paths],{encoding:'utf8',maxBuffer:16*1024*1024}).split('\0').filter(Boolean),excluded=[page,test,helper],held=rows=>rows.filter(line=>!excluded.includes(line.split('\t')[1])),before=tree(base),after=tree('HEAD');assert.deepEqual(held(after),held(before),'All other App/public/scripts/config equals clean Title517');for(const f of[test,helper])assert(!before.some(row=>row.split('\t')[1]===f));
+          const readers='simAdsense,simBrand,simHeadTags,simHiddenPages,simHubs,simIndexNow,simIndexing,simInternalLinks,simNoRivalNames,simPrerender,simPrerenderBoot,simRetiredRoutes,simSchema,simSitemap,simSnapshotAssets,simSiteSearch,simGuideHeadings,simSeoMetaSplit,simHomeCopy,simHarnessAnchors'.split(','),guardPins=Object.fromEntries([...readers.map(n=>'scripts/'+n+'.mjs'),'scripts/sweepWeight.mjs','scripts/runAllSims.mjs'].map(f=>{assert.equal(at('HEAD',f),at(base,f));return[f,at(base,f)];}));
+          fs.writeFileSync(out+'/source-join.json',JSON.stringify({status:'passed',base,baseTree:'081064d48ac1676c3eb1ed86b5d209e51a580638',scope:paths,heldRows:held(after).length,onlySourceExceptions:excluded,pins,guardPins,causalRunnerAbsent:true,productInverseExact:true,limits:'Docs and workflow are outside this source join. All tracked physical bytes are separately held.'},null,2));
           const files=execFileSync('git',['ls-files','-z'],{encoding:'utf8'}).split('\0').filter(Boolean),rows=files.map(file=>{const b=fs.readFileSync(file);return{file,bytes:b.length,sha256:createHash('sha256').update(b).digest('hex')};});fs.writeFileSync(out+'/tracked-before.json',JSON.stringify(rows));
           NODE
-          npm ci 2>&1 | tee "$FD_GATE_OUT/install.log"
+          npm ci 2>&1 | tee fantasy-draft-qualified/install.log
           node --input-type=module <<'NODE'
-          import fs from 'node:fs';import assert from 'node:assert/strict';
-          const lock=JSON.parse(fs.readFileSync('package-lock.json')),rows=Object.keys(lock.packages).filter(p=>p.startsWith('node_modules/')&&fs.existsSync(p+'/package.json')).map(p=>[p,JSON.parse(fs.readFileSync(p+'/package.json')).version]);
-          assert.equal(rows.length,521);for(const[p,v]of rows)assert.equal(v,lock.packages[p].version,p);
-          fs.writeFileSync(process.env.FD_GATE_OUT+'/installed-before.json',JSON.stringify(rows));
+          import fs from 'node:fs';import assert from 'node:assert/strict';const lock=JSON.parse(fs.readFileSync('package-lock.json')),rows=Object.keys(lock.packages).filter(p=>p.startsWith('node_modules/')&&fs.existsSync(p+'/package.json')).map(p=>[p,JSON.parse(fs.readFileSync(p+'/package.json')).version]);assert.equal(rows.length,521);for(const[p,v]of rows)assert.equal(v,lock.packages[p].version,p);fs.writeFileSync('fantasy-draft-qualified/installed-before.json',JSON.stringify(rows));
           NODE
-      - name: Retain exact admitted original artifact
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          set -euo pipefail
-          gh api repos/PapiSalgueroM/ballpark-hero/actions/runs/42169883619 > "$FD_GATE_OUT/original-run.json"
-          gh api repos/PapiSalgueroM/ballpark-hero/actions/artifacts/13480164759 > "$FD_GATE_OUT/original-artifact.json"
-          node --input-type=module <<'NODE'
-          import fs from 'node:fs';import assert from 'node:assert/strict';
-          const out=process.env.FD_GATE_OUT,r=JSON.parse(fs.readFileSync(out+'/original-run.json')),a=JSON.parse(fs.readFileSync(out+'/original-artifact.json'));
-          assert.equal(r.id,42169883619);assert.equal(r.head_sha,'4b513e64391a352fe1394a935ef4f13a995a5959');assert.equal(r.conclusion,'success');
-          assert.equal(a.id,13480164759);assert.equal(a.size_in_bytes,1016886);assert.equal(a.digest,'sha256:eb67952ff70680742c294ef9543cb43a142e22f4d0badab04ab612af986a1c86');assert.equal(a.expired,false);assert.equal(a.workflow_run.id,r.id);assert.equal(a.workflow_run.head_sha,r.head_sha);
-          NODE
-          gh api repos/PapiSalgueroM/ballpark-hero/actions/artifacts/13480164759/zip > "$FD_GATE_OUT/original.zip"
-          printf '%s  %s\n' eb67952ff70680742c294ef9543cb43a142e22f4d0badab04ab612af986a1c86 "$FD_GATE_OUT/original.zip" | sha256sum -c -
-          test ! -e "$RUNNER_TEMP/fd-criteria-original"
-          mkdir "$RUNNER_TEMP/fd-criteria-original"
-          unzip -q "$FD_GATE_OUT/original.zip" -d "$RUNNER_TEMP/fd-criteria-original"
-          printf '%s  %s\n' cb4a95ed5b94ba2437fd81e1f5a2d0b64410110967a926c03c48db999862802e "$RUNNER_TEMP/fd-criteria-original/raw.json" | sha256sum -c -
       - name: Proper App types
         run: |
           set -euo pipefail
-          node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee "$FD_GATE_OUT/types.log"
-      - name: Fixed23 physical gate removal4 and restored4
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee fantasy-draft-qualified/types.log
+      - name: Actual fixed page and nineteen existing cases
         run: |
           set -euo pipefail
-          FD_RULES_GATE_OUT="$PWD/$FD_GATE_OUT/causal" FD_RULES_ORIGINAL_RAW="$RUNNER_TEMP/fd-criteria-original/raw.json" NODE_OPTIONS="--max-old-space-size=6144 --require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/fantasyDraftCriteriaStartCheck.mjs 2>&1 | tee "$FD_GATE_OUT/causal.log"
+          FD_RULES_START_RAW="$PWD/fantasy-draft-qualified/unit-raw.json" NODE_OPTIONS="--max-old-space-size=6144 --require=$PWD/scripts/lib/offlineTransport.cjs" node node_modules/vitest/vitest.mjs run src/test/fantasyDraftCriteriaStart.test.tsx src/test/fantasyDraftFormation.test.tsx src/test/draftPoolFilters.test.tsx src/test/draftRosterMotion.test.tsx src/test/draftWinnerFeedback.test.tsx --maxWorkers=1 --minWorkers=1 --reporter=default --reporter=json --outputFile=fantasy-draft-qualified/units.json 2>&1 | tee fantasy-draft-qualified/units.log
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import path from 'node:path';import assert from 'node:assert/strict';
+          const out='fantasy-draft-qualified',r=JSON.parse(fs.readFileSync(out+'/units.json')),raw=JSON.parse(fs.readFileSync(out+'/unit-raw.json'));assert.equal(r.numTotalTests,23);assert.equal(r.numPassedTests,23);assert.equal(r.numFailedTests,0);assert.equal(r.numPendingTests,0);assert(r.testResults.every(s=>s.assertionResults.every(v=>v.status==='passed')));assert.deepEqual(Object.fromEntries(r.testResults.map(s=>[path.basename(s.name),s.assertionResults.length])),{'fantasyDraftCriteriaStart.test.tsx':4,'fantasyDraftFormation.test.tsx':3,'draftPoolFilters.test.tsx':7,'draftRosterMotion.test.tsx':4,'draftWinnerFeedback.test.tsx':5});
+          for(const key of ['numRuntimeErrorTestSuites','numUnhandledErrors'])if(Object.hasOwn(r,key))assert.equal(r[key],0,key);assert(!/Unhandled Errors|Unhandled Rejection|Uncaught Exception|Failed to resolve import|No test files found|SyntaxError/.test(fs.readFileSync(out+'/units.log','utf8')));assert.deepEqual(Object.keys(raw.cases).sort(),['legacy','null','rejection','success']);assert.deepEqual(['success','rejection','null','legacy'].map(k=>raw.cases[k].frames.length),[4,4,3,3]);assert(Object.values(raw.cases).every(c=>c.frames.every(f=>f.inputPool.length===27&&typeof f.html==='string')));fs.writeFileSync(out+'/unit-admission.json',JSON.stringify({status:'passed',actualTests:23,owned:4,existing:19,rawCases:4,rawFrames:14},null,2));
+          NODE
+      - name: Normal production build and retained bytes
+        id: build
+        run: |
+          set -euo pipefail
+          NODE_OPTIONS="--max-old-space-size=6144" npm run build 2>&1 | tee fantasy-draft-qualified/build.log
+          tar -czf fantasy-draft-qualified/dist.tgz dist
+          sha256sum fantasy-draft-qualified/dist.tgz > fantasy-draft-qualified/dist.sha256
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import {createHash} from 'node:crypto';import assert from 'node:assert/strict';
+          const walk=dir=>fs.readdirSync(dir,{withFileTypes:true}).sort((a,b)=>a.name.localeCompare(b.name)).flatMap(e=>e.isDirectory()?walk(dir+'/'+e.name):e.isFile()?[dir+'/'+e.name]:[]);
+          const rows=walk('dist').map(file=>{const b=fs.readFileSync(file);return {file,bytes:b.length,sha256:createHash('sha256').update(b).digest('hex')};});
+          assert.equal(rows.length,850);fs.writeFileSync('fantasy-draft-qualified/dist-before.json',JSON.stringify(rows));
+          NODE
+      - name: Isolated pinned Playwright and Chromium
+        id: browser_setup
+        timeout-minutes: 12
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          python -m pip install fonttools pillow
+          npm install --prefix "$RUNNER_TEMP/fd-rules-browser" --no-save --package-lock=false playwright@1.64.1 2>&1 | tee fantasy-draft-qualified/browser-install.log
+          test ! -e node_modules/playwright
+          ln -s "$RUNNER_TEMP/fd-rules-browser/node_modules/playwright" node_modules/playwright
+          node "$RUNNER_TEMP/fd-rules-browser/node_modules/playwright/cli.js" install --with-deps chromium 2>&1 | tee fantasy-draft-qualified/chromium-install.log
           node --input-type=module <<'NODE'
           import fs from 'node:fs';import assert from 'node:assert/strict';
-          const r=JSON.parse(fs.readFileSync(process.env.FD_GATE_OUT+'/causal/report.json'));assert.equal(r.status,'passed');assert(r.restored);
-          assert.deepEqual(r.arms.map(a=>[a.name,a.tests,a.passed,a.failed.length,a.rawFrames]),[['fixed',23,23,0,14],['remove-gate',4,2,2,12],['restored',4,4,0,14]]);
-          assert.equal(r.installed,521);assert(r.mutation.changed&&r.mutation.inverseExact);console.log('PASS actual31 cases, exact2 physical business reds, original semantic parity and complete restoration');
+          const before=JSON.parse(fs.readFileSync('fantasy-draft-qualified/installed-before.json'));
+          const after=before.map(([p])=>[p,JSON.parse(fs.readFileSync(p+'/package.json')).version]);assert.deepEqual(after,before);
+          const pw=JSON.parse(fs.readFileSync('node_modules/playwright/package.json'));assert.equal(pw.version,'1.64.1');
+          fs.writeFileSync('fantasy-draft-qualified/installed-after.json',JSON.stringify(after));fs.writeFileSync('fantasy-draft-qualified/browser-package.json',JSON.stringify({version:pw.version,target:fs.realpathSync('node_modules/playwright')}));
           NODE
-      - name: Exact source locks installed versions and offline holds
-        if: always()
+      - name: All required built readers and existing source fences
+        if: ${{ !cancelled() && steps.build.outcome == 'success' && steps.browser_setup.outcome == 'success' }}
+        run: |
+          export ONLY="simAdsense,simBrand,simHeadTags,simHiddenPages,simHubs,simIndexNow,simIndexing,simInternalLinks,simNoRivalNames,simPrerender,simPrerenderBoot,simRetiredRoutes,simSchema,simSitemap,simSnapshotAssets,simSiteSearch,simGuideHeadings,simSeoMetaSplit,simHomeCopy,simHarnessAnchors"
+          node scripts/runAllSims.mjs --browser 2>&1 | tee fantasy-draft-qualified/readers.log
+      - name: All original route download limits
+        if: ${{ !cancelled() && steps.build.outcome == 'success' && steps.browser_setup.outcome == 'success' }}
+        run: |
+          node scripts/lib/hostLikeServer.mjs dist 4173 > fantasy-draft-qualified/weight-host.log 2>&1 &
+          xi_host_pid=$!
+          trap 'kill "$xi_host_pid" 2>/dev/null || true' EXIT
+          sleep 2
+          SWEEP_OFFLINE=1 BASE=http://127.0.0.1:4173 node scripts/sweepWeight.mjs 2>&1 | tee fantasy-draft-qualified/weight.log
+      - name: Native pending criterion and early Under25 draft
+        timeout-minutes: 12
+        if: ${{ !cancelled() && steps.build.outcome == 'success' && steps.browser_setup.outcome == 'success' }}
         run: |
           set -euo pipefail
-          git ls-files -s > "$FD_GATE_OUT/source-after.txt"
-          cmp "$FD_GATE_OUT/source-before.txt" "$FD_GATE_OUT/source-after.txt"
-          git diff --exit-code HEAD -- .
-          sha256sum package.json package-lock.json > "$FD_GATE_OUT/locks-after.txt"
-          cmp "$FD_GATE_OUT/locks-before.txt" "$FD_GATE_OUT/locks-after.txt"
+          set +e
+          FD_RULES_BROWSER_OUT=fantasy-draft-qualified/browser NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/playFantasyDraftCriteriaStart.mjs > fantasy-draft-qualified/browser.log 2>&1
+          browser_code=$?
+          set -e
+          printf '%s\n' "$browser_code" > fantasy-draft-qualified/browser.exit
+          cat fantasy-draft-qualified/browser.log
           node --input-type=module <<'NODE'
-          import fs from 'node:fs';import assert from 'node:assert/strict';import {execFileSync} from 'node:child_process';import {createHash} from 'node:crypto';
-          const out=process.env.FD_GATE_OUT,files=execFileSync('git',['ls-files','-z'],{encoding:'utf8'}).split('\0').filter(Boolean),rows=files.map(file=>{const b=fs.readFileSync(file);return{file,bytes:b.length,sha256:createHash('sha256').update(b).digest('hex')};});fs.writeFileSync(out+'/tracked-after.json',JSON.stringify(rows));assert.deepEqual(rows,JSON.parse(fs.readFileSync(out+'/tracked-before.json')));
-          const lock=JSON.parse(fs.readFileSync('package-lock.json')),versions=Object.keys(lock.packages).filter(p=>p.startsWith('node_modules/')&&fs.existsSync(p+'/package.json')).map(p=>[p,JSON.parse(fs.readFileSync(p+'/package.json')).version]);assert.equal(versions.length,521);assert.deepEqual(versions,JSON.parse(fs.readFileSync(out+'/installed-before.json')));fs.writeFileSync(out+'/installed-after.json',JSON.stringify(versions));
-          assert(fs.existsSync(process.env.SIM_OFFLINE_RECEIPT));assert.equal(fs.statSync(process.env.SIM_OFFLINE_RECEIPT).size,0);
+          import fs from 'node:fs';import path from 'node:path';import assert from 'node:assert/strict';import {createHash} from 'node:crypto';
+          const root='fantasy-draft-qualified',out=root+'/browser',report=JSON.parse(fs.readFileSync(out+'/report.json')),log=fs.readFileSync(root+'/browser.log','utf8');
+          assert.equal(Number(fs.readFileSync(root+'/browser.exit','utf8').trim()),0,'Actual helper exit0');assert.equal(report.status,'passed');assert(!report.error);
+          assert(report.sourceHeld&&report.distHeld&&report.installedHeld&&report.offlineHeld);assert.deepEqual(report.sourceBefore,report.sourceAfter);assert.deepEqual(report.sourceBefore,JSON.parse(fs.readFileSync(root+'/tracked-before.json')),'Whole physical source build binding');assert.deepEqual(report.distBefore,report.distAfter);assert.deepEqual(report.distBefore,JSON.parse(fs.readFileSync(root+'/dist-before.json')),'Own850-file build binding');assert.equal(report.distBefore.length,850);assert.deepEqual(report.installedBefore,report.installedAfter);assert.deepEqual(report.installedBefore,JSON.parse(fs.readFileSync(root+'/installed-before.json')));assert.equal(report.installedBefore.length,521);assert.deepEqual(report.offlineBefore,report.offlineAfter);assert.equal(report.offlineAfter.bytes,0);assert.equal(report.externalForwarded,0);
+          assert.deepEqual(report.journeys.map(j=>[j.width,j.height,j.status]),[[320,568,'passed'],[390,844,'passed'],[1280,900,'passed']]);assert.equal(report.screenshots.length,9);assert(!/Unhandled Rejection|Uncaught Exception|Failed to resolve import|SyntaxError/.test(log));
+          const read=ref=>{const b=fs.readFileSync(path.join(out,ref.file));assert.equal(b.length,ref.bytes);assert.equal(createHash('sha256').update(b).digest('hex'),ref.sha256);return ref.file.endsWith('.json')?JSON.parse(b):null;};
+          const fixture=read(report.fixture),rule='Under 25s: Every player must be 25 or younger';assert.equal(fixture.rule,rule);assert.equal(fixture.rawRows.length,27);assert.equal(new Set(fixture.rawRows.map(p=>p.id)).size,27);assert(fixture.rawRows.every(p=>p.nationality==='England'));const byName=new Map(fixture.rawRows.map(p=>[p.name,p]));assert.equal(byName.get('Fixture Veteran FWD').age,40);
+          const summaries=[];
+          for(const j of report.journeys){
+            assert(!j.error);assert.deepEqual(j.errors,[]);assert.deepEqual(j.assetErrors,[]);assert.deepEqual(j.routeErrors,[]);assert(j.requests.every(r=>['aborted','fixture-cors','fixture-fulfilled'].includes(r.outcome)));
+            const daily=j.requests.filter(r=>r.path==='/functions/v1/fantasy-draft-daily'&&r.method==='POST'),market=j.requests.filter(r=>r.path==='/rest/v1/fantasy_draft_players'&&r.method==='GET');assert.equal(daily.length,1);assert.equal(market.length,1);assert.equal(daily[0].outcome,'fixture-fulfilled');assert.equal(market[0].outcome,'fixture-fulfilled');assert(Number.isFinite(daily[0].heldAt)&&daily[0].releasedAt>=daily[0].heldAt);assert.deepEqual(daily[0].response,{criteria:rule});assert.deepEqual(market[0].rows,fixture.rawRows);assert.equal(market[0].bodySHA,createHash('sha256').update(JSON.stringify(fixture.rawRows)).digest('hex'));assert(j.requests.every(r=>!(r.method==='POST'&&r.path?.endsWith('/game_completions'))),'No completion initiation');
+            const frameValues=j.frames.map(ref=>({ref,value:read(ref)})),actions=j.actions.map(read),one=name=>{const rows=frameValues.filter(v=>v.ref.file.endsWith('-'+name+'.json'));assert.equal(rows.length,1,'Exactly one '+name+' frame');return rows[0].value;};
+            const held=one('daily-held'),attempt=one('pending-attempt-confirmed'),released=one('after-rule-release'),first=one('first-human-turn'),final=one('after-one-human-and-initial-ai');
+            for(const v of[held,attempt,released]){assert(v.startPresent&&!v.poolPresent);assert.deepEqual(v.human,[]);assert.deepEqual(v.ai,[]);assert.equal(v.turn,null);}
+            assert.equal(held.ruleVisible,false);assert.equal(released.ruleVisible,true);assert(market[0].at>=released.at,'Pool request only follows settled criterion and native Start');assert.deepEqual(attempt.storage,held.storage);assert.deepEqual(released.storage,held.storage);assert.deepEqual(final.storage,held.storage);
+            for(const name of['pending-start-attempt','refuse-veteran']){const rows=actions.filter(a=>a.name===name);assert.equal(rows.length,1);const a=rows[0];assert(a.geometry.disabled);assert(a.geometry.hit||(a.geometry.pointerEvents==='none'&&a.geometry.ancestorHit));assert(a.events.some(e=>e.type==='pointerdown'&&e.trusted));assert.deepEqual(a.after.human,a.before.human);assert.deepEqual(a.after.ai,a.before.ai);assert.deepEqual(a.after.storage,a.before.storage);assert.deepEqual(a.after.scroll,a.before.scroll);}
+            const firstSeat=first.ai.length===0?'user':'ai';assert.equal(j.firstSeat,firstSeat);assert.equal(first.human.length,0);assert(first.ai.length<=1&&first.turn==='user');assert.equal(final.human.length,1);assert.equal(final.ai.length,firstSeat==='user'?2:1);assert.equal(final.turn,'user');assert.deepEqual([final.round,final.nextPick],firstSeat==='user'?[2,4]:[2,3]);const all=[...final.human,...final.ai];assert.equal(new Set(all.map(p=>p.name)).size,all.length);assert(all.every(p=>byName.has(p.name)&&byName.get(p.name).age<=25));assert(!all.some(p=>p.name==='Fixture Veteran FWD'));assert.deepEqual(j.observedSequence.human,final.human);assert.deepEqual(j.observedSequence.ai,final.ai);assert.equal(j.observedSequence.nextOwner,'user');assert.deepEqual(j.observedSequence.sourceExpectedOwners,firstSeat==='user'?['user','ai','ai']:['ai','user']);
+            assert.equal(j.screenshots.length,3);assert.deepEqual(j.screenshots.map(s=>s.file).sort(),['pending-start','under25-refusal','initial-rosters'].map(n=>j.width+'-'+n+'.png').sort());for(const shot of j.screenshots){read(shot);const f=read(shot.frame);assert.equal(f.viewport.width,j.width);}
+            summaries.push({width:j.width,status:j.status,firstSeat,human:final.human,ai:final.ai,nextPick:final.nextPick,frames:j.frames.length,actions:j.actions.length,layouts:j.layouts.length,progress:j.progress.length,requests:j.requests.length,screenshots:j.screenshots.length});
+          }
+          for(const shot of report.screenshots){read(shot);read(shot.frame);}const summary={status:'native-under25-pending-proof-passed',actualChecks:report.checks,journeys:summaries,screenshots:report.screenshots.length,sourceHeld:report.sourceHeld,distHeld:report.distHeld,installedHeld:report.installedHeld,offlineHeld:report.offlineHeld,limits:'Three bounded native Under25 contexts. No RNG count, full contest, null/legacy/rejection native, live provider or backend-write credit. All20 readers and16 immutable caps remain separate required stages.'};fs.writeFileSync(root+'/admission.json',JSON.stringify(summary,null,2));console.log(JSON.stringify(summary));
           NODE
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: fantasy-draft-criteria-causal-${{ github.run_id }}
-          path: fantasy-draft-criteria-causal
+          name: fantasy-draft-qualified-images-${{ github.run_id }}
+          path: fantasy-draft-qualified/browser/*.png
+          retention-days: 14
+          if-no-files-found: error
+      - name: Final whole source locks installed versions dist and offline holds
+        if: always()
+        run: |
+          set -euo pipefail
+          mkdir -p fantasy-draft-qualified
+          git ls-files -s > fantasy-draft-qualified/source-after.txt
+          cmp fantasy-draft-qualified/source-before.txt fantasy-draft-qualified/source-after.txt
+          git diff --exit-code HEAD -- .
+          sha256sum package.json package-lock.json > fantasy-draft-qualified/locks-after.txt
+          cmp fantasy-draft-qualified/locks-before.txt fantasy-draft-qualified/locks-after.txt
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import {execFileSync} from 'node:child_process';import {createHash} from 'node:crypto';import assert from 'node:assert/strict';
+          const hash=file=>{const b=fs.readFileSync(file);return {file,bytes:b.length,sha256:createHash('sha256').update(b).digest('hex')};};
+          const files=execFileSync('git',['ls-files','-z'],{encoding:'utf8'}).split('\0').filter(Boolean),tracked=files.map(hash);
+          fs.writeFileSync('fantasy-draft-qualified/tracked-after.json',JSON.stringify(tracked));assert.deepEqual(tracked,JSON.parse(fs.readFileSync('fantasy-draft-qualified/tracked-before.json')));
+          const before=JSON.parse(fs.readFileSync('fantasy-draft-qualified/installed-before.json')),lock=JSON.parse(fs.readFileSync('package-lock.json'));
+          const after=Object.keys(lock.packages).filter(p=>p.startsWith('node_modules/')&&fs.existsSync(p+'/package.json')).map(p=>[p,JSON.parse(fs.readFileSync(p+'/package.json')).version]);
+          assert.equal(after.length,521);assert.deepEqual(after,before);fs.writeFileSync('fantasy-draft-qualified/installed-final.json',JSON.stringify(after));
+          const walk=dir=>fs.readdirSync(dir,{withFileTypes:true}).sort((a,b)=>a.name.localeCompare(b.name)).flatMap(e=>e.isDirectory()?walk(dir+'/'+e.name):e.isFile()?[dir+'/'+e.name]:[]);
+          if(fs.existsSync('fantasy-draft-qualified/dist-before.json')){const rows=walk('dist').map(hash);fs.writeFileSync('fantasy-draft-qualified/dist-after.json',JSON.stringify(rows));assert.deepEqual(rows,JSON.parse(fs.readFileSync('fantasy-draft-qualified/dist-before.json')));}
+          assert(fs.existsSync('fantasy-draft-qualified/offline.log'));assert.equal(fs.statSync('fantasy-draft-qualified/offline.log').size,0);
+          NODE
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: fantasy-draft-qualified-${{ github.run_id }}
+          path: fantasy-draft-qualified
           retention-days: 14
           if-no-files-found: error

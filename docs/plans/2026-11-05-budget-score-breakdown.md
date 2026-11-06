@@ -1,78 +1,41 @@
-# BB-09: earned score breakdown, bounded proposal
+# BB-09: earned score breakdown
 
-Status: original-first candidate only. No App changes, refs, execution or new sports data.
-Canonical master: line 3667, BB-09, P0 / S. This is a bounded slice of the card.
-Master SHA256: fda0f7eef07d41f2ba91e89dff3542fef98cd3bd9aabcbe02f70b649797d357a.
+This closes the earned-score display slice of BB-09. The whole master card remains partial. Draft stack only, unmerged and unpublished.
 
-## Source pins
+Canonical master: line 3667, P0 / S. SHA256 fda0f7eef07d41f2ba91e89dff3542fef98cd3bd9aabcbe02f70b649797d357a.
+Base: Build XI warning PR515 at 011039ded2a01ba95c47a1c824241d5d4383fb49.
 
-Budget is unchanged from PR514. The supplied provisional ref a65eb565a2aeca5ce332ab2911dd64f56c943a25 returned GitHub404 during preparation, so these immutable blobs are the positive source authority:
+## Behavior
 
-- src/hooks/useBudgetBuilder.ts: 02ec7d7971bbcf96723e4a15fe285c5c0edf2ad2
-- src/components/budget-builder/BudgetBuilderBoard.tsx: 526213213e4a5e1b625e1b6505227b623f76ad26
-- src/test/budgetSigning.test.tsx: 97cb3fa452184995a52a77381c7ecc45d25d2c03
-- src/lib/squadDeal.ts: 726c554d99de4c285604e23cbe1d6def78477bcb
-- src/lib/squadShape.ts: b116f1dfb7cde01be9904c98e263c514bfc114aa
-- src/lib/dartDraft.ts: 1dd73605180c08731cfe31335ea67aadfb259ac9
-- src/lib/dateUtils.ts: 12c9de0ed37b0797492f3e936bcba70bdc03d585
+A complete XI now has an accessible definition list showing squad quality, savings, board demand, series outcome and total. It appears before and after Final. Pending says "Pending (0 so far)".
 
-The existing test leaf has nine actual-hook/Board cases, including original XI, score, series, completion and sharing preservation.
+The existing signing preview shows the projected components and signed total change. It includes the old player's refund and removes any old Final bonus, because the existing signing action already resets that Final. Instructions, reopenable help and a worked example explain those rules.
 
-## Demonstrated production gap
+One small helper exposes the existing arithmetic: incomplete scores 0; complete scores rounded rating plus floor(max(0, remaining)/200), plus 10 for meeting the actual demand, plus 15/5/0 for a win/draw/loss. Pending adds 0. State shape, rating, pools, validation, simulation, RNG, completion, sharing and storage behavior remain held.
 
-Hook lines232-245 already have one exact formula. Board lines354-391 show rating, spend and remaining before Final, then one score and generic formula after Final. The earned components are not itemized. Existing signing-preview lines294-305 show replacement refund, remaining, rating and demand condition, but do not show score points or their signed change.
+Only three App files change: hook0220c215cb2530a632abc477810ec38b095982c7, Boardf9111c2782f61ec9b976aee52baed4ae095f0d6b and guidedf18ce05e16f8fd8cefea188ca0fde7404303dfb. The owned test is86de81375d764be5bf7a13642081495fe5c09927. Five generated files update only Budget's guide/search/saved page and its ledger/sitemap date. No real sports records or backend changes.
 
-## Held arithmetic and state
+## Verification
 
-Keep the current arithmetic exactly:
+Original admission42154773125 produced nine actual named business AssertionErrors and one preservation pass, with all nine existing cases and proper app types passing. Fixed42156573715 passed all 19 cases. Literal tests cover remaining201/200/199, savings1/1/0, demand failure, real simulated win/draw/loss, refund+1, old-win reset-15 and incomplete quiet inspection.
 
-- Incomplete XI: finalScore0.
-- Complete XI: rounded teamRating + floor(max(0, remaining)/200) + (criterionMet ?10:0) + series bonus.
-- Series bonus: win15, draw5, loss0, pending0.
-- Pending must explicitly say Pending and0 so far. It is not a forecast.
-- Existing sign/replacement already sets series=null. Projected signing points therefore remove any old15/5 bonus.
-- A replacement refunds the current player's original marketValue before charging the new player.
-- The real daily criterion applies only to a complete XI.
-- Preserve playerRating, formation, pool order/cap, signing validation, series simulation, RNG, completion, share text and storage behavior.
+Controls42157017070 ran 11 physical arms and110 case rows. Actual business-red counts were0/9/8/3/3/1/1/2/1/1/0, giving81 passes and29 expected failures. Every changed anchor/hash was checked and all ten source pins restored. All19 original/fixed/restored semantic frames match except added UI. Whole original raw output matches admitted original; whole fixed/restored raw matches admitted fixed. All209 raw frames, full fixture pools, states, calls, storage and RNG tapes were independently audited.
 
-Retain the immutable original hook and its full formula before authoring. A tiny pure helper for this existing arithmetic is justified because it will serve the hook's scalar, current UI and preview. The helper can be called at all three sites without adding fields to BudgetBuilderState. Do not invent a second score formula or a production test seam.
+Primary42159605456 passed proper types, all19 tests, normal producers/build, all20 output readers and16 unchanged download caps. It remained overall red at the first native zero-scroll assertion. The retained diagnostic42162969627 showed that closing the flow-mounted picker can require a useful return to the signed target; exact layout-anchor compensation can also preserve its viewport position.
 
-## Product slice
+Final native42169991804 on8be7a4e5689b40240a0f77b3138ca46586b60373 passed all three widths with2241 checks,418 frames,206 actions,48 phase returns and nine fresh PNGs. Actual outcomes were win/draw/win at320/390/1280. Root personally viewed all nine captures. Helper935887af1adb45283f4d69588bd0f590dfc64978 and policy62b9aa4e979c2d7d6b2ce9397f15827206a85376 preserve every unrelated strict geometry, zero-scroll, scoring, refund, Final and transport guard.
 
-1. Add an accessible Score breakdown region on a complete XI, before and after Final. A native definition list has Squad quality, Savings, Board demand, Series outcome, and Total. Points stay exact integers. Series text is Pending (0 so far), Win (+15), Draw (+5), or Loss (+0).
-2. Add an accessible Score impact after signing region inside the existing signing preview. Show the same projected components plus Total change, including an explicit sign such as +0, +1 or -15. Its projected series is pending0 because committing a signing invalidates the old Final.
-3. Keep the existing post-Final Score: N output and all nine old assertions. Incomplete squads remain unscored and do not auto-play, record completion or consume RNG during inspection.
-4. Add compact instructions before play and reopenable help explaining the unchanged components and that replacing a player requires a new Final. Refresh only the approved route's derived guide/search/snapshot through existing generators when the source is qualified.
+The policy requires actual focus, hit testing, identity and full final visibility inside viewport, chrome and clipping ancestors. A previously readable clamped window holds or uses exact untransformed layout compensation. Otherwise only a bounded visible return is accepted. A new completion card holds if its160px lead was already readable.
 
-## Original-first test candidate
+Physical native controls42168178865 proved both failure branches. Original desktop baseline611 matched its exact anchor; an inserted64px fault ended675 while still readable/focused and was rejected as EXTRA_MOVEMENT. Fixed baseline463 was readable; an inserted900px fault ended1363 with the target lost and was rejected as UNREADABLE. Both own850-file builds, actual source faults/inverses, full raw receipts, restored5771 tracked rows,521 versions, locks and offline0 were independently audited.
 
-Suggested leaf: src/test/budgetScoreBreakdown.test.tsx
-Blob: 86de81375d764be5bf7a13642081495fe5c09927
-Ten cases, predicted original9 named business AssertionErrors plus one preservation pass. These predictions need remote type and actual original admission.
+Clean join42170380950 at536043744cd0c030569ad29ab64688648f8d8ef1 passed proper types and a fresh35.14s build. All4652 source/public/script rows and every850 literal built file match the completed reader/cap build after admitting exactly the five generated files. Remote QA helpers are absent. Artifact13481205461,656199 bytes, SHA256aff79dbc0a5e39e51e82d5ee5ca4c881fe464233829bc718408c841b15f4c71c. Dist manifest2cd5f78895b6959f5be9878576bc7e11896d43dfa300350d2ff746784becf683.
+Independent final native audit:3940 checks,729 actual ZIP bodies individually hashed,731 reference checks/712 unique references, all48 phase decisions independently recomputed,30 score vectors and141 unchanged strict zero-scroll actions. All nine PNGs were personally reviewed by root and the native auditor. Final native artifact13480548357,3999068 bytes, SHA256d31061f5f30dec1eb494820e759a7924f6f242e739501f41571486ab59810a1f.
 
-The leaf imports existing exports only. It renders the actual Board and actual hook. Its hook wrapper records the state and returns it unchanged. Only the fetched pool and external completion/auth/badge boundaries are fictional/offline. The real dailyIndex selects a day with the real no-galactico criterion. The real rating and three-leg simulation are retained.
+## Retained limits
 
-Literal fixture oracles:
-- Ten60M age22 players rate85; the40M keeper rates82; the199/200/201M keepers rate91;400M rates95.
-- Keeper200: XI86, remaining200, savings1, demand10, pending0, total97.
-- Keeper199/200/201: remaining201/200/199 and savings1/1/0, totals97/97/96.
-- Keeper400 costs more than one third of the1000M budget: demand0, remaining0, XI86, total86.
-- Actual win/draw/loss: bonuses15/5/0 and totals112/102/97. Declared legal tapes consume42/33/42 real draws and produce three1-0/0-0/0-1 legs.
-- Replacing keeper40 with201: quality85->86, savings1->0, total96->96, delta+0.
-- Replacing keeper201 with199: actual refund yields spent799, remaining201, total97, delta+1.
-- Replacing keeper200 after a real win:112->97, delta-15; the committed XI has series=null.
-- Partial and complete preview/cancel/rerender preserve all scoring state, storage, completion count and unfiltered observed random draws.
+The original Fixtureland fallback stretched one320 pitch tile past its clipping ancestor. That unsupported-country composed-tile edge remains unqualified. Main native fixtures use the existing England inline flag; this does not fix that edge. All33 market rows are explicitly fictional and pass through the real loader.
 
-Optional full evidence file: BB_SCORE_BREAKDOWN_RAW, absolute path, fresh file. It retains all ten case IDs, full serializable input pool and actual hook states, HTML/text, completion/clipboard calls, search inputs, transport boundary and every observed random draw. No stack filtering or global draw-count relaxation.
+The first recovery42166870630 stopped after320 at a QA negative-zero expectation on a natural390 loss. The next42168069475 passed both phones but found desktop input preparation underneath the real32px sticky score bar. Diagnostic42168803165 retained the actual input y0..44 and center hit at y22. Final proof uses a measured trusted wheel before action capture to clear that bar. It retains exact movement and state receipts, skips only existing marked volatile text during the new preparation comparison, and preserves every old guard.
 
-## Qualification and physical controls
-
-After the original census is admitted:
-1. Implement the small helper and UI only, then proper app tsc plus all ten new and nine old cases.
-2. Run fixed, original Board+hook, meaningful physical faults and restored. Every mutation must assert unique actual anchors, changed source hashes, exact case-title/AssertionError sets, retained raw output and finally exact restoration.
-3. Useful independent faults: hide the new overview; round savings instead of floor; always award the demand; give a drawn Final the win bonus; ignore replacement refund; carry the old series into a preview; mutate a preview/sign on inspection. Exact failed sets must be derived from the eventual source and admitted from actual output, not assumed.
-4. Compare every existing serializable state field, pool and complete RNG tape between original/fixed/restored. Only the added UI differs. Retain exact original formula and inverse behavior. No threshold or old-assertion changes.
-5. Native browser proof on the baked App should inspect pre-Final points, replacement preview/cancel/commit, actual Final and reload boundaries at phone/desktop widths. No source, RNG or clock overrides in that browser proof. It does not verify real player records.
-6. Follow the normal type/build, all saved-page readers, immutable caps, source/lock/version/offline and derived-output gates. No live database or whole-suite credit without actual corresponding evidence.
-
-No branch, ref, App source or local runtime was changed during this proposal.
+No browser clock, RNG, App/save state or DOM-style override was used. Native randomness is unobserved, not a deterministic draw-count claim. No real-player verification, provider correctness, backend-write, whole-site end-to-end or full-card completion claim. Global release and local runtime/index holds remain.
