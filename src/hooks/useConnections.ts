@@ -142,13 +142,13 @@ export function useConnections() {
     return 'playing' as const;
   }, [mode, rawDailyStatus, solvedGroupsUnlimited, livesUnlimited]);
 
-  // Streak: only fire when the user actually plays (wasPlaying guard)
-  const wasPlayingRef = useRef(false);
+  // Streak: each mode owns its wasPlaying guard.
+  const wasPlayingRef = useRef<Record<ConnectionsMode, boolean>>({ daily: false, unlimited: false });
   useEffect(() => {
     if (isLoading) return;
-    if (gameStatus === 'playing') { wasPlayingRef.current = true; return; }
-    if (!wasPlayingRef.current) return;
-    wasPlayingRef.current = false;
+    if (gameStatus === 'playing') { wasPlayingRef.current[mode] = true; return; }
+    if (!wasPlayingRef.current[mode]) return;
+    wasPlayingRef.current[mode] = false;
     if (gameStatus === 'won') {
       setStreak((prev) => {
         const next = prev + 1;
@@ -159,7 +159,7 @@ export function useConnections() {
       setStreak(0);
       safeSetItem('connections-streak', '0');
     }
-  }, [gameStatus, isLoading]);
+  }, [mode, gameStatus, isLoading]);
 
   const allPlayers = useMemo(() => {
     const seen = new Set<string>();
