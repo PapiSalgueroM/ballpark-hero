@@ -1,3 +1,7 @@
+## 2026-11-05 training check draft, combined qualification complete
+
+Latest retained release base:3b14650d. Production code is unchanged in this maintenance. The32-case omission/restoration proof and W7 checks pass; all soccer changes also pass combined qualification42096174788. The old NBA anchor failure is repaired on the retained main. Full suite/live Reach are not claimed green. Draft, unmerged and unpublished. See docs/plans/2026-11-05-soccer-master-integration.md.
+
 ## 2026-11-01 20:55 EDT, Claude session K (games): RELEASE BV IS LIVE (deployment 96c67a3b, main 7bd3e99a1)
 
 LIVE: release-bv-gate 7bd3e99a1 fast forwarded onto main from 19911f815 and published 20:54 EDT as deployment

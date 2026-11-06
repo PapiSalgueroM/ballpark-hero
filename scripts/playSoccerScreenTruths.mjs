@@ -19,8 +19,8 @@
  *  W6  the Squad sheet: the first open with the flag cleared lands on home with the one line hint, the hint
  *      and the first tile at the same y in the first frame and one second later; ? opens the help; the next
  *      open has no hint.
- *  W7  Training: the menu's rules block is one paragraph with its example, the first drill tile is in view
- *      at 390 without scrolling the panel, ? expands it to three paragraphs.
+ *  W7  Training: the menu's rules block holds the bank example and free practice, the first drill tile is in view
+ *      at 390 without scrolling the panel, ? expands it to four paragraphs.
  *  W8  the attributes screen: a long name is whole in the title at 320, and every keeper label holds its
  *      whole text at 1280 and 320 (scrollWidth not above clientWidth, no ellipsis).
  *
@@ -349,7 +349,8 @@ async function w6(width, height) {
   } finally { await ctx.close(); }
 }
 
-/* ---------- W7: Training's menu shows one rules paragraph above the drills ---------- */
+/* ---------- W7: Training's menu keeps bank and practice rules above the drills ---------- */
+const PRACTICE = 'Keep practising after you bank. Extra runs are just for a score and do not change your career.';
 async function w7(width, height) {
   section = 'W7';
   const { ctx, page, errors } = await open(recordedSave('ere'), { width, height });
@@ -363,7 +364,7 @@ async function w7(width, height) {
     await dialog.locator('[data-practice-rules]').waitFor({ timeout: 8000 });
     await page.waitForTimeout(400);
     const menu = await dialog.locator('[data-practice-rules] p').allInnerTexts();
-    check(menu.length === 1 && menu[0].includes('Example'), `${width}: the menu's rules block is one paragraph with its worked example (${menu.length} paragraphs)`);
+    check(menu.length === 2 && menu[0].includes('Example') && menu[1] === PRACTICE, `${width}: the menu shows its bank example and free practice rule (${menu.length} paragraphs)`);
     check(!(await dialog.innerText()).includes('One session per season'), `${width}: the bank rule is said once on the menu`);
     const view = await page.evaluate(() => {
       const d = document.querySelector('[role="dialog"][aria-label="Training ground"]');
@@ -377,7 +378,7 @@ async function w7(width, height) {
     await shot(page, `W7-menu-${width}`);
     await dialog.getByRole('button', { name: 'Practice rules', exact: true }).click();
     const all = await dialog.locator('[data-practice-rules] p').allInnerTexts();
-    check(all.length === 3 && all[2] === menu[0], `${width}: ? shows all three paragraphs, the bank rule last (${all.length})`);
+    check(all.length === 4 && all[2] === menu[0] && all[3] === PRACTICE, `${width}: ? shows all four paragraphs, ending with bank and practice rules (${all.length})`);
     await shot(page, `W7-rules-${width}`);
     check(await saveBytes(page) === before, `${width}: the save is byte for byte the same`);
     check(errors.length === 0, `${width}: no page error (${errors[0] || 'none'})`);

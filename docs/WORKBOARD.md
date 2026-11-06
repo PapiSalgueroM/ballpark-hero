@@ -17878,3 +17878,21 @@ Admitted proof: original42056408953/art13429002902/c572bce9; seven arms420684974
 Native receipt: 69f420492bd29d81667ad18b3ed98209473e49f77e33a7e8f3eb6788e0acebe5. Deploy ID: 2d231ee7-24b2-4940-af8d-5908d26371e6. Public receipt: 147361f50c8e3db9c6583009a045a7d79c22c8a680d2fadb171826ff3d3b6c89.
 
 First integrate four runtime plus five explicit nonruntime paths, publish that nine-path App and qualify public proof. These four closeout documents then land separately with no second publish. The aggregate nine nonruntime inverses must recover App tree316d, then the four runtime inverses recover main1acb. No whole docs/scripts/test-prefix exception is allowed. Temporary QA workflows/helpers stay out. The OOM original and first-build reader18 failure remain failed; later admitted proofs do not waive them or wider-suite reds. SC-36 is partial. Next is the owner's teams/leagues integration priority, with no new league or loading implementation authorised by this closeout alone.
+
+
+## 2026-11-05 Soccer Career training copy regression claim
+Owner: Codex current master-list continuation. Remote base main 1acb33005073be70ba5aae0285ece5537f390f9a, branch codex/soccer-training-copy-tests-20261105. Scope: src/test/soccerScreenTruths.test.tsx S4 only, plus this claim and a small plan/state note. The published classic practice feature added one truthful practice-after-bank paragraph; two old assertions still count earlier help paragraphs. Preserve all previous rules, pause/hidden-result and bank-help assertions, and assert the actual new paragraph. No TrainingPanel/product change, no test removal, no caps or US sim edits. Run original-first two business failures, fixed scoped file and a source-checked removal control on the actual new paragraph, then restore exact product bytes. Local root remains held; execution and Git are remote. This maintenance does not complete a master game card and is not permission to publish the unqualified global suite.
+
+The same bounded claim includes scripts/playSoccerScreenTruths.mjs W7's matching stale paragraph oracle. Keep existing fold, focus and scroll checks. No production source changes.
+
+
+Qualified 2026-11-05, test and browser oracle maintenance only. The source build remains pinned to main1acb33005073be70ba5aae0285ece5537f390f9a. Proper app types were zero in run42083460725; its normal build, all16 unchanged route caps and19/20 output readers passed. The sole output-reader failure is the previously recorded simHarnessAnchors NBA historical-draft CRLF anchor. Production TrainingPanel is byte-identical to main.
+
+The first controller used an incorrect parameterized-case census[11,3,15]. Run42085901958 corrected only that census to[11,6,15]: original30pass/2exactS4reds, fixed32pass, physical actual-practice-paragraph removal30pass/2exactnewS4reds, restored32pass. No skipped cases, five held proof sources restored exactly, source and locks held. Browser run42083460725, same completed build: fixed12W7checks, original oracle4exact stale-copy failures, restored12checks. All12actual screenshots reviewed,390/1280 menu/help, no clipping and first drill visible without panel scroll. All849 served files held.
+
+Evidence is retained under C:/Users/antho/dukb-handoff/2026-11-05/sc-training-copy/. Original focused artifact13441331904 (389203B, sha256 b2ab683c5fec7e45c5abc734ea7881b4ae599c38c7511d37501d60a022b68cef); first full packet13442254309 (8913403B,sha256 ac203fa940df8b57cd0bab0ac70f9e9decf480c90d301db22e85d76eccb0832a); final units13443071469 (533848B,sha256 0e17515a3f4e54e3a9f8a3c1a3d12d9e7559e0a1ccb873b68b2942f60aa4942e). Temporary controllers/workflows are excluded from clean delivery. No production code, cap, player data, score or save format changed. Full-suite/release-wide failures remain unwaived; this does not complete a master game card and has not been merged or published.
+
+
+## 2026-11-05 combined soccer qualification complete
+
+Actions42096174788 and script-only follow-up42098915819 pass. Main3b release records are retained. The combined stack has225 distinct targeted cases, a normal build,9 engine/layout harnesses,20 saved-output readers,all16 unchanged caps and4 actual browser flows. Exact evidence and qualified limits:docs/plans/2026-11-05-soccer-master-integration.md. Full suite and live Reach remain uncredited. No merge or publication is claimed.
