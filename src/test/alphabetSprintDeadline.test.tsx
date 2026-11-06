@@ -211,16 +211,16 @@ describe('Alphabet Sprint elapsed deadline ownership', () => {
     const idle = capture('ordinary-return-to-pace'); await closeCase();
 
     expect([started.page.phase, started.page.seconds, started.page.score, started.page.namedCount, started.page.letter, started.focus.inputIsActive], TITLES.ordinary + ' genuine Classic start').toEqual(['running', 45, 0, 0, 'A', true]);
-    expect([miss.page.score, miss.page.namedCount, miss.draws.length], TITLES.ordinary + ' a real miss keeps score names and draw order').toEqual([0, 0, 1]);
+    expect([miss.page.score, miss.page.namedCount, miss.library.draws.length], TITLES.ordinary + ' a real miss keeps score names and draw order').toEqual([0, 0, 1]);
     expect(miss.page.feedback, TITLES.ordinary + ' current miss remains actionable').toEqual(['That doesn\'t match an unused "A" surname. Check the spelling or skip.']);
     expect(ambiguous.page.feedback, TITLES.ordinary + ' ambiguous surname asks for a full name').toEqual(['Which one? Type the full name.']);
-    expect([ambiguous.page.score, ambiguous.page.namedCount, ambiguous.draws.length], TITLES.ordinary + ' ambiguity consumes nothing').toEqual([0, 0, 1]);
+    expect([ambiguous.page.score, ambiguous.page.namedCount, ambiguous.library.draws.length], TITLES.ordinary + ' ambiguity consumes nothing').toEqual([0, 0, 1]);
     expect(ambiguous.page.text, TITLES.ordinary + ' ambiguity does not list fictional answers').not.toContain('Fixture A00 Aster');
-    expect([duplicate.page.score, duplicate.page.namedCount, duplicate.draws.length], TITLES.ordinary + ' used full name cannot score twice').toEqual([2, 2, 3]);
-    expect([earned.page.score, earned.page.namedCount, earned.page.streak, earned.page.lastGain, earned.page.letter, earned.draws.length], TITLES.ordinary + ' five actual answers earn the fifth-pick bonus').toEqual([6, 5, 5, '+2', 'B', 6]);
-    expect([skipped.page.score, skipped.page.namedCount, skipped.page.streak, skipped.page.lastGain, skipped.page.input, skipped.page.letter, skipped.draws.length], TITLES.ordinary + ' ordinary Skip spends one draw and resets only the live streak').toEqual([6, 5, 0, null, '', 'A', 7]);
+    expect([duplicate.page.score, duplicate.page.namedCount, duplicate.library.draws.length], TITLES.ordinary + ' used full name cannot score twice').toEqual([2, 2, 3]);
+    expect([earned.page.score, earned.page.namedCount, earned.page.streak, earned.page.lastGain, earned.page.letter, earned.library.draws.length], TITLES.ordinary + ' five actual answers earn the fifth-pick bonus').toEqual([6, 5, 5, '+2', 'B', 6]);
+    expect([skipped.page.score, skipped.page.namedCount, skipped.page.streak, skipped.page.lastGain, skipped.page.input, skipped.page.letter, skipped.library.draws.length], TITLES.ordinary + ' ordinary Skip spends one draw and resets only the live streak').toEqual([6, 5, 0, null, '', 'A', 7]);
     expect(skipped.usedAtLastDraw, TITLES.ordinary + ' Skip keeps all used names').toEqual(earned.usedAtLastDraw);
-    expect([resetPick.page.score, resetPick.page.namedCount, resetPick.page.streak, resetPick.page.lastGain, resetPick.draws.length], TITLES.ordinary + ' next real pick starts a fresh streak').toEqual([7, 6, 1, '+1', 8]);
+    expect([resetPick.page.score, resetPick.page.namedCount, resetPick.page.streak, resetPick.page.lastGain, resetPick.library.draws.length], TITLES.ordinary + ' next real pick starts a fresh streak').toEqual([7, 6, 1, '+1', 8]);
     expect([tick.page.seconds, tick.page.score, tick.focus.inputIsActive], TITLES.ordinary + ' normal countdown and focus remain').toEqual([44, 7, true]);
     expect([done.page.phase, done.page.score, done.page.namedCount], TITLES.ordinary + ' normal timeout closes the earned score').toEqual(['done', 7, 6]);
     expect(done.page.namedNames, TITLES.ordinary + ' result lists the actual six named players in order').toEqual(['Fixture A00 Aster', 'Fixture B00 Bramble', 'Fixture A01 Aster', 'Fixture B01 Bramble', 'Fixture A02 Amber02', 'Fixture A03 Amber03']);

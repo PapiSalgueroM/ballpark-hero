@@ -46,3 +46,15 @@ Preservation cases run first to keep complete HTML identities comparable later. 
 - elapsedTick: ALPHABET_ELAPSED_TICK,10frames, expected original business failure.
 
 Total69frames includes both settled teardown boundaries per case. These are pre-execution predictions, not runtime credit. The actual JSON rows and every complete RAW frame must reconcile them; any mismatch is investigated rather than relabeled.
+
+## First original run retained, assertion measurement corrected
+
+Run42265573431 at196f01349ea65a8379961fd7ce7c10ab00d2327a/tree97524997931163e0c355606098b412fab5068cb9 remains FAILED qualification. Proper types, active preflight, whole source/index/locks/521/offline holds passed. All six actual cases produced all69 complete RAW frames, and the four predicted business AssertionErrors occurred. Finish preservation passed, but ordinary preservation also failed, producing five failures and one pass.
+
+The additional failure was our measurement assumption. The first ordinary idle frame already has one global Math.random call while actual drawLetter calls are zero. All14 ordinary frames keep that pre-start offset1. The other cases have no offset against RNG-consuming successful draws. Pool exhaustion still includes one actual drawLetter call returning null without consuming RNG, so total call count and RNG count must stay distinct. The source of the pre-start global call has not been attributed.
+
+Initial test01517a94661545555cb5b31ca5df294c9c76d8b7 remains preserved. Refreshed teste0904ccdeb6c068e73b305fdf6a3b50822a32f41 changes only six non-exhausted ordinary numeric assertions from the global random tape length to actual pass-through library.draws.length. The inverse of those six substitutions reconstructs every initial test byte. Every case action, capture, fixture, global random value and all other assertions are unchanged. No RNG call is stripped, normalized or hidden.
+
+Artifact13527331378 is1452506bytes,SHA256a43f94dbf9d9f2c692bc31f24ccb46fd80fefd93765f5d642916d1ef029dbaa8. Its21 bodies include full RAW18914298bytes,SHA25672f5107496128c4a943e48fb382c728f6d6c45c0556a450798d01f9c51f94b9d. The original refresh must retain this failed provenance, verify the pinned old packet and require the entire fresh RAW to be byte-identical, including every complete case/HTML/clock/timer/global-RNG/storage/call/transport/completion field. Its global RNG guard measures the retained pre-start idle prefix separately from successful letter draws. It still requires the exact four business failures and two complete preservation passes.
+
+No App fix is authored. A corrected test source or wrapper is not executed original qualification.
