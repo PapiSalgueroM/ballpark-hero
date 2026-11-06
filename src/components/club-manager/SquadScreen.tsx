@@ -432,9 +432,12 @@ function SquadRow({ p, career, eraId, inXI, isCaptain, isOpen, onToggle, sortKey
       >
         <span className="w-9 shrink-0 text-[10px] font-bold text-muted-foreground bg-secondary rounded px-1 py-0.5 text-center">{p.position}</span>
         <span className="flex-1 min-w-0 block">
-          <span className="flex items-center gap-1.5 min-w-0">
-            {nat ? <FlagImg name={nat} size={13} /> : null}
-            <span title={p.name} className={cn('text-xs truncate', p.isYouth ? 'text-muted-foreground italic' : 'text-foreground')}>{p.name}</span>
+          <span className="flex flex-col gap-0.5 min-w-0 md:flex-row md:items-center md:gap-1.5">
+            <span className="flex items-start gap-1.5 min-w-0 md:contents">
+              {nat ? <FlagImg name={nat} size={13} /> : null}
+              <span title={p.name} className={cn('text-xs min-w-0 whitespace-normal break-words md:truncate', p.isYouth ? 'text-muted-foreground italic' : 'text-foreground')}>{p.name}</span>
+            </span>
+            <span className="flex flex-wrap items-center gap-1.5 empty:hidden md:contents">
             {(p.generated || (p.isYouth && kLeagueMember(career.clubName) && careerHasKLeagueWorld(career))) && <MadeUpTag className="text-[9px]" title={kLeagueMember(career.clubName) && careerHasKLeagueWorld(career) ? 'Not a real player. This club has no verified opening roster here, so its starting squad is generated.' : undefined} />}
             {inXI && <span className={cn(badge, 'text-primary border-primary/50')}>XI</span>}
             {/* Round 505: the armband, and any position he has learned in this save. */}
@@ -457,6 +460,7 @@ function SquadRow({ p, career, eraId, inXI, isCaptain, isOpen, onToggle, sortKey
                 🌍 {duty.resting ? 'RESTING' : 'BACK'}
               </span>
             )}
+            </span>
           </span>
           {/* Round 73: the stat line. Round 715: on a phone it is the short
               version, and the rest is one tap away in the detail. */}
