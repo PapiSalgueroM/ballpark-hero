@@ -1,0 +1,236 @@
+name: Resume Public V3 consumer from its complete immutable failed original
+on:
+  push:
+    branches: [codex/k-league-public-consumer-replay-20261106]
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: k-league-public-consumer-replay-20261106
+  cancel-in-progress: false
+env:
+  CI: '1'
+  TZ: UTC
+  PRODUCT: 25193b6efbde2e4855c171a91077efd6647d0285
+  PRODUCT_TREE: 4debc9eb6ef46e9ace0c43e9a351e61efc6337c3
+  CATALOGUE_BASELINE_LEDGER_BLOB: 5e7505312820030bba74aa43dd6e1f1d9dfa5e18
+  PUBLISHED_SOURCE: 15652350f43fa82fa6872357bb1561f948fa150b
+  DEPLOY_SOURCE: 15652350f43fa82fa6872357bb1561f948fa150b
+  DEPLOYMENT_ID: 979de67b-e1bd-46d0-9115-e28f9939171a
+jobs:
+  replay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: af9ceda86b36f5d380e01fe97c8bd33872703c72
+          fetch-depth: 1
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24.22.2'
+      - name: Bind the exact original checkout and sole new replay workflow
+        run: |
+          set -euo pipefail
+          root="$RUNNER_TEMP/k-league-public-v3-consumer-replay"
+          test ! -e "$root"
+          mkdir -p "$root/proof/logs"
+          export QA_ROOT="$root" QA_PROOF="$root/proof" QA_ORIGINAL="$root/original" QA_WORK="$root/work" QA_DIST="$root/native-reference-docs"
+          printf 'QA_ROOT=%s\nQA_PROOF=%s\nQA_ORIGINAL=%s\nQA_WORK=%s\nQA_DIST=%s\n' "$QA_ROOT" "$QA_PROOF" "$QA_ORIGINAL" "$QA_WORK" "$QA_DIST" >> "$GITHUB_ENV"
+          test "$(node --version)" = v24.22.2
+          test "$(git rev-parse HEAD)" = af9ceda86b36f5d380e01fe97c8bd33872703c72
+          test "$(git rev-parse HEAD^{tree})" = 34ba4b6fa423c3ce3570300ddb5337437f955e76
+          git fetch --no-tags --depth=2 origin "$GITHUB_SHA" > "$QA_PROOF/logs/replay-source-fetch.log" 2>&1
+          test "$(git rev-parse FETCH_HEAD)" = "$GITHUB_SHA"
+          test "$(git rev-parse FETCH_HEAD^)" = af9ceda86b36f5d380e01fe97c8bd33872703c72
+          git diff --name-status --no-renames HEAD FETCH_HEAD > "$QA_PROOF/replay-qa-delta.txt"
+          test "$(cat "$QA_PROOF/replay-qa-delta.txt")" = "$(printf 'A\t.github/workflows/k-league-public-consumer-replay-20261106.yml')"
+          git show FETCH_HEAD:.github/workflows/k-league-public-consumer-replay-20261106.yml > "$QA_PROOF/replay-workflow.yml"
+          git rev-parse HEAD HEAD^{tree} FETCH_HEAD FETCH_HEAD^{tree} > "$QA_PROOF/source-identity.txt"
+          git ls-files -z | xargs -0 sha256sum > "$QA_PROOF/source-before.sha256"
+          git ls-files -s > "$QA_PROOF/index-before.txt"
+          git ls-files -z > "$QA_PROOF/tracked-before.bin"
+          for lock in package.json package-lock.json bun.lock bun.lockb; do if test -f "$lock"; then sha256sum "$lock"; fi; done > "$QA_PROOF/locks-before.sha256"
+          git status --porcelain=v1 --untracked-files=all > "$QA_PROOF/status-before.txt"
+          test ! -s "$QA_PROOF/status-before.txt"
+      - name: Authenticate the complete original and derive the single path correction
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          node --input-type=module <<'AUTH'
+          import fs from 'node:fs';import path from 'node:path';import assert from 'node:assert/strict';import {createHash} from 'node:crypto';import {spawnSync} from 'node:child_process';
+          const e=process.env,out=e.QA_PROOF,original=e.QA_ORIGINAL,work=e.QA_WORK,sha=b=>createHash('sha256').update(b).digest('hex'),blob=b=>createHash('sha1').update('blob '+b.length+'\0').update(b).digest('hex'),json=v=>JSON.stringify(v,null,2)+'\n';
+          const A={run:42288933810,job:128136964756,artifact:13538609257,attempt:1,qa:'af9ceda86b36f5d380e01fe97c8bd33872703c72',tree:'34ba4b6fa423c3ce3570300ddb5337437f955e76',branch:'codex/k-league-public-v3-20261106',workflow:'.github/workflows/k-league-public-20261105.yml',workflowBlob:'656d3779059879d908cc30c59401c3197ab91c74',zipBytes:44020005,zipSHA256:'590729570919af3679f93319b37c660fcca3ead671b166f2f2a9ab5d4fb97629',entry:'k-league-public.tar.xz',xzBytes:44019584,xzSHA256:'135e913f90cc3e42f35c19ecde58cfc86437e08b730862fe3ea7011dbc5ece67',regularFiles:2339,regularBytes:411487285};
+          const allowed=['assets/served-after/search-noindex-policy-control.html','assets/served-after/search-noindex-policy-control.json','assets/served-before/search-noindex-policy-control.html','assets/served-before/search-noindex-policy-control.json','public-http-policy-admission.json','public-native-admission.json','screenshots.json'].sort();
+          const call=(label,command,args,binary=false)=>{const r=spawnSync(command,args,{encoding:binary?null:'utf8',maxBuffer:64*1024*1024});fs.writeFileSync(out+'/logs/'+label+'.native.json',json({command:[command,...args],status:r.status,signal:r.signal,error:r.error?String(r.error):null}));fs.writeFileSync(out+'/logs/'+label+'.stderr.log',r.stderr??'');if(!binary)fs.writeFileSync(out+'/logs/'+label+'.stdout.log',r.stdout??'');assert.equal(r.status,0,label);assert.equal(r.signal,null);assert.equal(r.error,undefined);return r.stdout;};
+          const api=(label,url)=>JSON.parse(call(label,'gh',['api','repos/PapiSalgueroM/ballpark-hero/'+url]));
+          const run=api('original-run','actions/runs/'+A.run),job=api('original-job','actions/jobs/'+A.job),artifact=api('original-artifact','actions/artifacts/'+A.artifact);
+          assert.equal(run.status,'completed');assert.equal(run.conclusion,'failure');assert.equal(run.head_sha,A.qa);assert.equal(run.head_branch,A.branch);assert.equal(run.event,'push');assert.equal(run.path,A.workflow);assert.equal(run.run_attempt,A.attempt);
+          assert.equal(job.id,A.job);assert.equal(job.run_id,A.run);assert.equal(job.conclusion,'failure');assert.equal(artifact.id,A.artifact);assert.equal(artifact.name,'k-league-public');assert.equal(artifact.size_in_bytes,A.zipBytes);assert.equal(artifact.expired,false);assert.equal(artifact.workflow_run.id,A.run);
+          const safe=p=>{assert(typeof p==='string'&&p&&!p.startsWith('/')&&!p.includes('\\')&&!p.includes('\0')&&!/^[a-z]:/i.test(p));assert(!p.split('/').includes('..'));return p.replace(/^\.\//,'').replace(/\/$/,'');};
+          const zip=call('sole-original-zip','gh',['api','repos/PapiSalgueroM/ballpark-hero/actions/artifacts/'+A.artifact+'/zip'],true);assert.equal(zip.length,A.zipBytes);assert.equal(sha(zip),A.zipSHA256);const zipPath=e.QA_ROOT+'/original.zip';fs.writeFileSync(zipPath,zip,{flag:'wx'});
+          const entries=call('zip-list','unzip',['-Z1',zipPath]).trim().split('\n');entries.forEach(safe);assert.deepEqual(entries.slice().sort(),[A.entry,A.entry+'.sha256'].sort());
+          const xz=call('zip-payload','unzip',['-p',zipPath,A.entry],true);assert.equal(xz.length,A.xzBytes);assert.equal(sha(xz),A.xzSHA256);assert.equal(call('zip-checksum','unzip',['-p',zipPath,A.entry+'.sha256']).trim().split(/\s+/)[0],A.xzSHA256);const xzPath=e.QA_ROOT+'/original.tar.xz';fs.writeFileSync(xzPath,xz,{flag:'wx'});
+          const members=call('tar-list','tar',['-tf',xzPath]).trim().split('\n').map(safe);assert.equal(new Set(members).size,members.length,'Unique normalized original tar paths');
+          assert(call('tar-types','tar',['-tvf',xzPath]).trim().split('\n').every(v=>v.startsWith('-')||v.startsWith('d')),'Only original regular files and directories');
+          assert(!fs.existsSync(original)&&!fs.existsSync(work)&&!fs.existsSync(e.QA_DIST));fs.mkdirSync(original);call('tar-extract','tar',['--no-same-owner','--no-same-permissions','-xf',xzPath,'-C',original]);
+          const inventory=dir=>{const rows=[];function walk(rel=''){for(const f of fs.readdirSync(path.join(dir,rel),{withFileTypes:true})){const file=path.posix.join(rel,f.name);assert(!f.isSymbolicLink());if(f.isDirectory())walk(file);else{assert(f.isFile());const b=fs.readFileSync(path.join(dir,file));rows.push({file,bytes:b.length,sha256:sha(b)});}}}walk();return rows.sort((a,b)=>a.file<b.file?-1:a.file>b.file?1:0);};
+          const rows=inventory(original);assert.equal(rows.length,A.regularFiles);assert.equal(rows.reduce((n,r)=>n+r.bytes,0),A.regularBytes);fs.writeFileSync(out+'/original-files-before.json',json(rows));fs.writeFileSync(out+'/original-envelope.json',json(A));fs.writeFileSync(out+'/allowed-consumer-additions.json',json(allowed));
+          assert.equal(blob(fs.readFileSync(original+'/workflow.yml')),A.workflowBlob);assert.equal(blob(fs.readFileSync(A.workflow)),A.workflowBlob);assert.equal(sha(fs.readFileSync(original+'/browser/report.json')),'b0ff4faef2a9e2a88dc9fd9baacc64ef4b86846547863584dbc519dbabf9fcc0');
+          for(const name of ['types','browser','assets-before','assets-after','final-source-holds'])assert.equal(fs.readFileSync(original+'/logs/'+name+'.exit','utf8'),'0\n');
+          assert.equal(fs.readFileSync(original+'/logs/public-admission.exit','utf8'),'1\n');const stderr=fs.readFileSync(original+'/logs/public-admission.stderr.log');assert.equal(stderr.length,947);assert.equal(sha(stderr),'322f86170278df5fe066e953f4c4e0169d9b60383ed49e4a3bb2e90dc139db18');assert(stderr.toString().includes('/host-telemetry/host-telemetry/k-cm-320-copied-host-body-control.js'));fs.copyFileSync(original+'/logs/public-admission.exit',out+'/original-public-admission.exit');fs.writeFileSync(out+'/original-public-admission.stderr.log',stderr);
+          for(const file of allowed)assert(!fs.existsSync(original+'/'+file),'All7 consumer outputs absent originally '+file);
+          fs.cpSync(original,work,{recursive:true,force:false,errorOnExist:true});assert.deepEqual(inventory(work),rows);
+          const m=JSON.parse(fs.readFileSync(original+'/public-manifest.json'));assert.deepEqual(m.product,{commit:e.PRODUCT,tree:e.PRODUCT_TREE});assert.equal(m.distDigest,'d3f13fbe07c8e984a34573e1a9b2d3764c7f3fd8356d7a09b6684aaf43503570');assert.equal(m.completedTar.sha256,'bdda3188c8460b1588f83bf45c2c01a3d429b2e2a17d803eef6e8457401aadc1');assert.equal(m.distBefore.length,852);
+          fs.mkdirSync(e.QA_DIST);const referenceRows=[];for(const route of ['/','/club-manager','/soccer-career','/deadline-day','/career-ladder','/dart-draft','/search','/who-am-i','/soccer','/cbb-dynasty']){const name=route==='/'?'index':route.slice(1),file=route==='/'?'index.html':name+'/index.html',ref=m.distBefore.find(row=>row.file===file);assert(ref);const before=fs.readFileSync(original+'/assets/served-before/reference-'+name+'.html'),after=fs.readFileSync(original+'/assets/served-after/reference-'+name+'.html');assert(before.equals(after));assert.equal(before.length,ref.bytes);assert.equal(sha(before),ref.sha256);const dest=e.QA_DIST+'/'+file;fs.mkdirSync(path.dirname(dest),{recursive:true});fs.writeFileSync(dest,before,{flag:'wx'});referenceRows.push(ref);}fs.writeFileSync(out+'/exact-native-reference-docs.json',json({scope:'Ten exact retained native reference HTML bodies, each equal its authenticated852-file Build6 manifest row. No new dist or build.',rows:referenceRows}));
+          const workflow=fs.readFileSync(original+'/workflow.yml','utf8'),lines=workflow.split('\n'),begin=lines.findIndex(line=>line.includes("node --input-type=module <<'ADMIT'")),end=lines.findIndex((line,i)=>i>begin&&line==='          ADMIT');assert(begin>=0&&end>begin);
+          const before=lines.slice(begin+1,end).map(line=>{assert(line.startsWith('          '));return line.slice(10);}).join('\n')+'\n';assert.equal(Buffer.byteLength(before),29831);assert.equal(sha(before),'ac336f9f56429f0bcae1b4d8fa7c09a41d77b7994f9f09fc53d2cc3eaf45eb63');
+          const old="out+'/browser/host-telemetry/'+c.hostTelemetry.bodyControl.faultFile",replacement="out+'/browser/'+c.hostTelemetry.bodyControl.faultFile",at=before.indexOf(old);assert(at>=0&&before.lastIndexOf(old)===at);const corrected=before.slice(0,at)+replacement+before.slice(at+old.length);assert.equal(Buffer.byteLength(corrected),29816);assert.equal(sha(corrected),'eabcb3ccfa855e5bf687cb7a7d54cd48d5a4255edec98986b87c93672a83c7fb');assert.equal(corrected.slice(0,at)+old+corrected.slice(at+replacement.length),before);
+          fs.writeFileSync(out+'/admit.original.mjs',before,{flag:'wx'});fs.writeFileSync(out+'/admit.corrected.mjs',corrected,{flag:'wx'});fs.writeFileSync(out+'/consumer-one-path-derivation.json',json({beforeSHA256:sha(before),afterSHA256:sha(corrected),atUTF16:at,old,new:replacement,wholeInverseExact:true,scope:'Exact original consumer except one duplicated directory path. Original failed status stays1. No App/model/build/browser/deploy run.'}));
+          AUTH
+          cmp "$QA_PROOF/source-before.sha256" "$QA_ORIGINAL/source-before.sha256"
+          cmp "$QA_PROOF/index-before.txt" "$QA_ORIGINAL/index-before.txt"
+          cmp "$QA_PROOF/tracked-before.bin" "$QA_ORIGINAL/tracked-before.bin"
+      - name: Install only held HTML parser and HTTP request packages
+        run: |
+          set -euo pipefail
+          tools="$RUNNER_TEMP/k-league-public-replay-http-tools"
+          test ! -e "$tools"
+          test "$(node -p "JSON.parse(require('fs').readFileSync('package-lock.json','utf8')).packages['node_modules/jsdom'].version")" = 20.0.3
+          npm install --prefix "$tools" --package-lock=false --no-audit --no-fund jsdom@20.0.3 playwright@1.64.0 > "$QA_PROOF/logs/http-tools-install.log" 2>&1
+          test ! -e node_modules
+          mkdir node_modules
+          ln -s "$tools/node_modules/jsdom" node_modules/jsdom
+          ln -s "$tools/node_modules/playwright" node_modules/playwright
+          ln -s "$tools/node_modules/playwright-core" node_modules/playwright-core
+          test "$(node -p "JSON.parse(require('fs').readFileSync('node_modules/jsdom/package.json','utf8')).version")" = 20.0.3
+          test "$(node -p "require('playwright/package.json').version")" = 1.64.0
+          node --version > "$QA_PROOF/logs/node-version.log"
+      - name: Run only corrected original data consumer on the exact workcopy
+        run: |
+          set +e
+          set -uo pipefail
+          unset NODE_OPTIONS
+          QA_OUT="$QA_WORK" node --input-type=module < "$QA_PROOF/admit.corrected.mjs" > "$QA_PROOF/logs/resume.stdout.log" 2> "$QA_PROOF/logs/resume.stderr.log"
+          native_exit=$?
+          printf '%s\n' "$native_exit" > "$QA_PROOF/logs/resume-exit" || exit 1
+          test "$native_exit" = 0 || exit "$native_exit"
+          test ! -s "$QA_PROOF/logs/resume.stderr.log" || exit 1
+          test -f "$QA_WORK/public-native-admission.json" || exit 1
+          test -f "$QA_WORK/public-http-policy-admission.json" || exit 1
+      - name: Run unchanged live audit on nine indexable documents
+        run: |
+          set +e
+          set -uo pipefail
+          unset NODE_OPTIONS
+          test -f "$QA_WORK/public-native-admission.json" || exit 1
+          test -f "$QA_WORK/public-http-policy-admission.json" || exit 1
+          node scripts/auditLive.mjs / /club-manager /soccer-career /deadline-day /career-ladder /dart-draft /who-am-i /soccer /cbb-dynasty > "$QA_PROOF/logs/audit-live.stdout.log" 2> "$QA_PROOF/logs/audit-live.stderr.log"
+          native_exit=$?
+          printf '%s\n' "$native_exit" > "$QA_PROOF/logs/audit-live.exit" || exit 1
+          test "$native_exit" = 0 || exit "$native_exit"
+          grep -F '9 of 9 answered cleanly, 0 did not.' "$QA_PROOF/logs/audit-live.stdout.log"
+      - name: Submit only the same seven changed indexable snapshots once
+        run: |
+          set +e
+          set -uo pipefail
+          unset NODE_OPTIONS
+          test -f "$QA_WORK/public-native-admission.json" || exit 1
+          test -f "$QA_WORK/public-http-policy-admission.json" || exit 1
+          test "$(cat "$QA_PROOF/logs/audit-live.exit")" = 0 || exit 1
+          node --input-type=module <<'INDEXABLE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';import{createHash}from'node:crypto';
+          const e=process.env,work=e.QA_WORK,out=e.QA_PROOF,proof=JSON.parse(fs.readFileSync(work+'/indexnow-changed-indexable-snapshots.json')),sha=b=>createHash('sha256').update(b).digest('hex'),blob=b=>createHash('sha1').update('blob '+b.length+'\0').update(b).digest('hex'),expected=['/career-ladder','/dart-draft','/soccer-career','/who-am-i','/soccer','/club-manager','/cbb-dynasty'];
+          assert.equal(proof.status,'EXACT_ACTUAL_SEVEN_BODY_CHANGED_INDEXABLE_SNAPSHOTS');assert.deepEqual(proof.product,{commit:e.PRODUCT,tree:e.PRODUCT_TREE});assert.deepEqual(proof.paths.slice().sort(),expected.slice().sort());assert.equal(new Set(proof.paths).size,7);assert.equal(proof.searchAbsent,true);assert.equal(blob(fs.readFileSync(work+'/catalogue-ledger-before.json')),e.CATALOGUE_BASELINE_LEDGER_BLOB);assert.equal(sha(fs.readFileSync('scripts/data/lastmod.json')),proof.currentLedger.sha256);
+          fs.writeFileSync(out+'/indexnow-paths.txt',proof.paths.join(',')+'\n',{flag:'wx'});
+          INDEXABLE
+          selection_exit=$?
+          printf '%s\n' "$selection_exit" > "$QA_PROOF/logs/indexnow-selection.exit" || exit 1
+          test "$selection_exit" = 0 || exit "$selection_exit"
+          URLS="$(cat "$QA_PROOF/indexnow-paths.txt")" node scripts/indexnowSubmit.mjs > "$QA_PROOF/logs/indexnow.stdout.log" 2> "$QA_PROOF/logs/indexnow.stderr.log"
+          native_exit=$?
+          printf '%s\n' "$native_exit" > "$QA_PROOF/logs/indexnow.exit" || exit 1
+          test "$native_exit" = 0 || exit "$native_exit"
+          grep -F '7 URLs to submit for douknowball.com' "$QA_PROOF/logs/indexnow.stdout.log" || exit 1
+          grep -E 'accepted \(HTTP (200|202)\)' "$QA_PROOF/logs/indexnow.stdout.log"
+      - name: Always hold source original inputs and all original workcopy bytes
+        if: always()
+        run: |
+          set -euo pipefail
+          git ls-files -z | xargs -0 sha256sum > "$QA_PROOF/source-after.sha256"
+          git ls-files -s > "$QA_PROOF/index-after.txt"
+          git ls-files -z > "$QA_PROOF/tracked-after.bin"
+          for lock in package.json package-lock.json bun.lock bun.lockb; do if test -f "$lock"; then sha256sum "$lock"; fi; done > "$QA_PROOF/locks-after.sha256"
+          git status --porcelain=v1 --untracked-files=all > "$QA_PROOF/status-after.txt"
+          cmp "$QA_PROOF/source-before.sha256" "$QA_PROOF/source-after.sha256"
+          cmp "$QA_PROOF/index-before.txt" "$QA_PROOF/index-after.txt"
+          cmp "$QA_PROOF/tracked-before.bin" "$QA_PROOF/tracked-after.bin"
+          cmp "$QA_PROOF/locks-before.sha256" "$QA_PROOF/locks-after.sha256"
+          cmp "$QA_PROOF/status-before.txt" "$QA_PROOF/status-after.txt"
+          test ! -s "$QA_PROOF/status-after.txt"
+          node --input-type=module <<'HOLDS'
+          import fs from 'node:fs';import path from 'node:path';import assert from 'node:assert/strict';import{createHash}from'node:crypto';
+          const e=process.env,out=e.QA_PROOF,sha=b=>createHash('sha256').update(b).digest('hex'),json=v=>JSON.stringify(v,null,2)+'\n';
+          const inventory=dir=>{const rows=[];function walk(rel=''){for(const f of fs.readdirSync(path.join(dir,rel),{withFileTypes:true})){const file=path.posix.join(rel,f.name);assert(!f.isSymbolicLink());if(f.isDirectory())walk(file);else{assert(f.isFile());const b=fs.readFileSync(path.join(dir,file));rows.push({file,bytes:b.length,sha256:sha(b)});}}}walk();return rows.sort((a,b)=>a.file<b.file?-1:a.file>b.file?1:0);};
+          const beforeFile=out+'/original-files-before.json';let originalHeld='NOT_REACHED',workHeld='NOT_REACHED',added=[];
+          if(fs.existsSync(beforeFile)){
+           const before=JSON.parse(fs.readFileSync(beforeFile)),actual=inventory(e.QA_ORIGINAL);assert.deepEqual(actual,before,'Every original2339 file held');fs.writeFileSync(out+'/original-files-after.json',json(actual));
+           const zip=fs.readFileSync(e.QA_ROOT+'/original.zip'),xz=fs.readFileSync(e.QA_ROOT+'/original.tar.xz');assert.equal(zip.length,44020005);assert.equal(sha(zip),'590729570919af3679f93319b37c660fcca3ead671b166f2f2a9ab5d4fb97629');assert.equal(xz.length,44019584);assert.equal(sha(xz),'135e913f90cc3e42f35c19ecde58cfc86437e08b730862fe3ea7011dbc5ece67');originalHeld=true;
+           if(fs.existsSync(e.QA_WORK)){
+            const work=inventory(e.QA_WORK),known=new Map(work.map(row=>[row.file,row])),names=new Set(before.map(row=>row.file));for(const row of before)assert.deepEqual(known.get(row.file),row,'Original workcopy file held '+row.file);
+            added=work.filter(row=>!names.has(row.file));const allowed=JSON.parse(fs.readFileSync(out+'/allowed-consumer-additions.json'));assert(added.every(row=>allowed.includes(row.file)),'Only exact7 consumer additions permitted');
+            const resumed=fs.existsSync(out+'/logs/resume-exit')&&fs.readFileSync(out+'/logs/resume-exit','utf8')==='0\n';if(resumed)assert.deepEqual(added.map(row=>row.file),allowed,'All exact7 new consumer outputs');
+            for(const row of added){const dest=out+'/derived/'+row.file;fs.mkdirSync(path.dirname(dest),{recursive:true});fs.copyFileSync(e.QA_WORK+'/'+row.file,dest,fs.constants.COPYFILE_EXCL);}
+            fs.writeFileSync(out+'/workcopy-files-after.json',json(work));fs.writeFileSync(out+'/derived-output-inventory.json',json(added));workHeld=true;
+           }
+          }
+          const sourceFiles=['source','index','tracked','locks','status'];for(const name of sourceFiles){const suffix=name==='tracked'?'.bin':name==='source'||name==='locks'?'.sha256':'.txt',before=out+'/'+name+'-before'+suffix,after=out+'/'+name+'-after'+suffix;assert(fs.readFileSync(before).equals(fs.readFileSync(after)),name+' held');}
+          assert.equal(fs.readFileSync(out+'/status-after.txt').length,0);
+          const held={status:'SOURCE_AND_IMMUTABLE_ORIGINAL_HOLDS_PASSED',originalHeld,workOriginalFilesHeld:workHeld,allowedNewConsumerFiles:7,actualNewConsumerFiles:added.length,originalFailedAdmissionExitPreserved:originalHeld===true?fs.readFileSync(e.QA_ORIGINAL+'/logs/public-admission.exit','utf8'):null,sourceHeld:true,indexHeld:true,trackedHeld:true,locksHeld:true,statusHeld:true,AppBuilds:0,browserJourneys:0,modelOrFixtureGeneration:false,newDeployment:false};
+          fs.writeFileSync(out+'/replay-holds.json',json(held));
+          const exits=['resume-exit','audit-live.exit','indexnow-selection.exit','indexnow.exit'];if(exits.every(file=>fs.existsSync(out+'/logs/'+file)&&fs.readFileSync(out+'/logs/'+file,'utf8')==='0\n')){
+           assert.equal(originalHeld,true);assert.equal(workHeld,true);assert.equal(added.length,7);fs.writeFileSync(out+'/replay-complete.json',json({status:'CORRECTED_ORIGINAL_CONSUMER_AND_LIVE_AUDIT_INDEXNOW_PASSED',originalRun:42288933810,originalArtifact:13538609257,originalConclusion:'failure',originalBrowserContexts:9,originalOrdinaryPhotos:84,correctedConsumerSHA256:'eabcb3ccfa855e5bf687cb7a7d54cd48d5a4255edec98986b87c93672a83c7fb',pathOnlyCorrection:true,allOriginal2339AndWorkcopyBytesHeld:true,derivedConsumerOutputs:added,independentVisualAndFullOriginalAdmission:'Separate retained-original audit required. No original failure is rewritten.',freshBrowserRuns:0,freshBuilds:0,actualLiveAuditDocuments:9,intentionalSearchNoindexCheckedInOriginalTwoPhases:true,indexNowChangedIndexableURLs:7,deployment:'979de67b-e1bd-46d0-9115-e28f9939171a',newDeployment:false}));
+          }
+          HOLDS
+      - name: Retain complete small replay proof or explicit fatal diagnostic
+        id: evidence
+        if: always()
+        run: |
+          set +e
+          set -uo pipefail
+          archive="$RUNNER_TEMP/k-league-public-consumer-replay.tar.gz"
+          tar -czf "$archive" -C "$QA_PROOF" . > "$RUNNER_TEMP/k-league-public-consumer-replay-pack.log" 2>&1
+          pack_exit=$?
+          printf '%s\n' "$pack_exit" > "$QA_PROOF/pack-native.exit" || exit 1
+          if [[ "$pack_exit" == 0 && -f "$archive" && "$(stat -c %s "$archive")" -le 50000000 ]]; then
+            sha256sum "$archive" > "$archive.sha256" || exit 1
+            printf 'archive=%s\n' "$archive" >> "$GITHUB_OUTPUT" || exit 1
+            exit 0
+          fi
+          printf '%s\n' 'DIAGNOSTIC_ONLY_NO_COMPLETE_REPLAY_PROOF: full pack failed or exceeded50000000bytes' > "$QA_PROOF/DIAGNOSTIC-ONLY.txt" || exit 1
+          cp "$RUNNER_TEMP/k-league-public-consumer-replay-pack.log" "$QA_PROOF/pack.log" || exit 1
+          diagnostic="$RUNNER_TEMP/k-league-public-consumer-replay-diagnostic.tar.gz"
+          diagnostic_dir="$RUNNER_TEMP/k-league-public-consumer-replay-diagnostic"
+          mkdir -p "$diagnostic_dir/logs" || exit 1
+          find "$QA_PROOF" -maxdepth 1 -type f -exec cp '{}' "$diagnostic_dir/" \; || exit 1
+          cp -R "$QA_PROOF/logs/." "$diagnostic_dir/logs/" || exit 1
+          tar -czf "$diagnostic" -C "$diagnostic_dir" . || exit 1
+          test "$(stat -c %s "$diagnostic")" -le 50000000 || exit 1
+          sha256sum "$diagnostic" > "$diagnostic.sha256" || exit 1
+          printf 'archive=%s\n' "$diagnostic" >> "$GITHUB_OUTPUT" || exit 1
+          exit 1
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: k-league-public-consumer-replay
+          path: |
+            ${{ steps.evidence.outputs.archive }}
+            ${{ steps.evidence.outputs.archive }}.sha256
+          if-no-files-found: error
+          retention-days: 30
+          compression-level: 0
