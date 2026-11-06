@@ -6,7 +6,7 @@
    ligue1, eredivisie, saudi, mlsEast, mlsWest, primeira, scottish,
    superlig, bundesliga2, proleague, austria, greece, denmark,
    switzerland, croatia, ligamx, aleague, serieb, ligue2, segunda,
-   kleague1.
+   kleague1, russia.
    Rosters baked 2026-10-07.
    The file has no imports on purpose, so the Soccer Career page never pulls
    Club Manager into its bundle. */
@@ -347,6 +347,21 @@ export const CAREER_CLUB_POOL: CareerPoolClub[] = [
   { id: "cm-fc-anyang", name: "FC Anyang", country: "South Korea", tier: 4, color: "#5c2d91", league: "K League 1" },
   { id: "cm-incheon-united", name: "Incheon United", country: "South Korea", tier: 4, color: "#0057b8", league: "K League 1" },
   { id: "cm-jeju-sk", name: "Jeju SK", country: "South Korea", tier: 4, color: "#f5a800", league: "K League 1" },
+  { id: "cm-krasnodar", name: "Krasnodar", country: "Russia", tier: 2, color: "#0a7040", league: "Russian Premier League" },
+  { id: "cm-spartak-moscow", name: "Spartak Moscow", country: "Russia", tier: 2, color: "#d02128", league: "Russian Premier League" },
+  { id: "cm-cska-moscow", name: "CSKA Moscow", country: "Russia", tier: 2, color: "#d02128", league: "Russian Premier League" },
+  { id: "cm-lokomotiv-moscow", name: "Lokomotiv Moscow", country: "Russia", tier: 2, color: "#d02128", league: "Russian Premier League" },
+  { id: "cm-rubin-kazan", name: "Rubin Kazan", country: "Russia", tier: 2, color: "#7d1c2a", league: "Russian Premier League" },
+  { id: "cm-dynamo-moscow", name: "Dynamo Moscow", country: "Russia", tier: 2, color: "#d9d9d9", league: "Russian Premier League" },
+  { id: "cm-rostov", name: "Rostov", country: "Russia", tier: 2, color: "#f5d800", league: "Russian Premier League" },
+  { id: "cm-akhmat-grozny", name: "Akhmat Grozny", country: "Russia", tier: 2, color: "#0a7040", league: "Russian Premier League" },
+  { id: "cm-krylia-sovetov", name: "Krylia Sovetov", country: "Russia", tier: 2, color: "#0a7040", league: "Russian Premier League" },
+  { id: "cm-baltika", name: "Baltika", country: "Russia", tier: 2, color: "#1b3f94", league: "Russian Premier League" },
+  { id: "cm-orenburg", name: "Orenburg", country: "Russia", tier: 2, color: "#1b3f94", league: "Russian Premier League" },
+  { id: "cm-akron-tolyatti", name: "Akron Tolyatti", country: "Russia", tier: 2, color: "#d02128", league: "Russian Premier League" },
+  { id: "cm-dynamo-makhachkala", name: "Dynamo Makhachkala", country: "Russia", tier: 2, color: "#d9d9d9", league: "Russian Premier League" },
+  { id: "cm-rodina-moscow", name: "Rodina Moscow", country: "Russia", tier: 2, color: "#d9d9d9", league: "Russian Premier League" },
+  { id: "cm-fakel-voronezh", name: "Fakel Voronezh", country: "Russia", tier: 2, color: "#1b3f94", league: "Russian Premier League" },
 ];
 
 /** Every generated league as the career knows it (hand clubs included),
@@ -382,6 +397,7 @@ export const CAREER_LEAGUE_LADDER: Record<string, string[][]> = {
   "Ligue 2": [["Nantes"], ["Saint-Etienne"], ["Reims"], ["Annecy", "Boulogne", "Clermont", "Dijon", "Dunkerque", "Grenoble", "Guingamp", "Laval", "Metz", "Montpellier", "Nancy", "Pau", "Red Star FC", "Rodez", "Sochaux"]],
   "Segunda Division": [["Girona"], ["Mallorca"], ["Albacete", "Almeria", "Burgos", "Cadiz", "Castellon", "Ceuta", "Cordoba", "Eibar", "Eldense", "FC Andorra", "Granada", "Las Palmas", "Leganes", "Real Oviedo", "Sabadell", "Sporting Gijon", "Tenerife", "Valladolid"]],
   "K League 1": [["Jeonbuk Motors", "Ulsan HD"], ["Bucheon FC 1995", "Daejeon Hana Citizen", "FC Anyang", "FC Seoul", "Gangwon FC", "Gimcheon Sangmu", "Gwangju FC", "Incheon United", "Jeju SK", "Pohang Steelers"]],
+  "Russian Premier League": [["Zenit"], ["Krasnodar"], ["Spartak Moscow"], ["CSKA Moscow"], ["Dynamo Moscow"], ["Lokomotiv Moscow"], ["Rubin Kazan"], ["Rostov"], ["Akhmat Grozny"], ["Baltika"], ["Akron Tolyatti"], ["Krylia Sovetov"], ["Rodina Moscow"], ["Orenburg"], ["Dynamo Makhachkala"], ["Fakel Voronezh"]],
 };
 
 /** The first season (start year) the game offers a generated club, for the
@@ -441,5 +457,8 @@ export const CAREER_POOL_SINCE: Record<string, number> = {
   "Tenerife": 2026, "Leganes": 2026, "Valladolid": 2026, "Cordoba": 2026, "Eldense": 2026, "Cadiz": 2026,
   "FC Andorra": 2026, "Ceuta": 2026, "Albacete": 2026, "Gangwon FC": 2026, "Gwangju FC": 2026,
   "Gimcheon Sangmu": 2026, "Daejeon Hana Citizen": 2026, "Bucheon FC 1995": 2026, "FC Anyang": 2026,
-  "Incheon United": 2026, "Jeju SK": 2026,
+  "Incheon United": 2026, "Jeju SK": 2026, "Krasnodar": 2026, "Spartak Moscow": 2026, "CSKA Moscow": 2026,
+  "Lokomotiv Moscow": 2026, "Rubin Kazan": 2026, "Dynamo Moscow": 2026, "Rostov": 2026, "Akhmat Grozny": 2026,
+  "Krylia Sovetov": 2026, "Baltika": 2026, "Orenburg": 2026, "Akron Tolyatti": 2026, "Dynamo Makhachkala": 2026,
+  "Rodina Moscow": 2026, "Fakel Voronezh": 2026,
 };
