@@ -1,4 +1,4 @@
-name: Soccer Connect4 Cancel causal ownership controls
+name: Soccer Connect4 Cancel full qualification
 on:
   push:
     branches: [codex/soccer-connect4-cancel-ownership-qa-20261106]
@@ -6,24 +6,18 @@ permissions:
   contents: read
   actions: read
 jobs:
-  controls:
+  qualify:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 45
     defaults:
       run:
         shell: bash
     env:
-      TZ: UTC
       SIM_NETWORK: offline
-      SIM_OFFLINE_RECEIPT: soccer-connect4-cancel-controls/offline.log
-      FIXED_RUN_ID: '42251082954'
-      FIXED_ARTIFACT_ID: '13521026406'
-      FIXED_HEAD: '40b3b670e2c7db4fb2067e08572a2bdc14d7c8b3'
-      FIXED_TREE: 'f13f68109baaefd6fdeba44f09ea2c1034bbecec'
-      FIXED_ZIP_BYTES: '2148428'
-      FIXED_ZIP_SHA256: '431016e4cd77a07451622e508208ce35eea6c0811d2f28a1eea40e38b40b2f7b'
-      C4_CANCEL_FIXED_RAW_BYTES: '892665'
-      C4_CANCEL_FIXED_RAW_SHA256: '26cf6e27571915ddd00c2bc1d19f29a9a44d96959aee9b1b0e8a95468c7d7f27'
+      SIM_OFFLINE_RECEIPT: soccer-connect4-cancel-qualified/offline.log
+      TZ: UTC
+      ENGINES: chromium
+      SEO_SPLIT_BASE_REF: 3b14650d360b010b25b525de33a5f32f33de2798
     steps:
       - uses: actions/checkout@v4
         with:
@@ -33,102 +27,285 @@ jobs:
         with:
           node-version: 24.22.1
           cache: npm
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.4.4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Require completed fixed ownership proof
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh api repos/PapiSalgueroM/ballpark-hero/actions/runs/42251082954 > "$RUNNER_TEMP/c4-cancel-fast-run.json"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';const r=JSON.parse(fs.readFileSync(process.env.RUNNER_TEMP+'/c4-cancel-fast-run.json'));assert.equal(r.id,42251082954);assert.equal(r.head_sha,'40b3b670e2c7db4fb2067e08572a2bdc14d7c8b3');assert.equal(r.status,'completed');assert.equal(r.conclusion,'success');
+          NODE
       - name: Exact fixed source and locked install
         run: |
           set -euo pipefail
-          test ! -e soccer-connect4-cancel-controls
-          mkdir soccer-connect4-cancel-controls
-          touch soccer-connect4-cancel-controls/offline.log
-          git rev-parse HEAD > soccer-connect4-cancel-controls/head.txt
-          git rev-parse 'HEAD^{tree}' > soccer-connect4-cancel-controls/tree.txt
-          git ls-files -s > soccer-connect4-cancel-controls/source-before.txt
-          sha256sum package.json package-lock.json > soccer-connect4-cancel-controls/locks-before.txt
+          test ! -e soccer-connect4-cancel-qualified
+          mkdir soccer-connect4-cancel-qualified
+          touch soccer-connect4-cancel-qualified/offline.log
+          git rev-parse HEAD > soccer-connect4-cancel-qualified/head.txt
+          git rev-parse 'HEAD^{tree}' > soccer-connect4-cancel-qualified/tree.txt
+          git ls-files -s > soccer-connect4-cancel-qualified/source-before.txt
+          sha256sum package.json package-lock.json > soccer-connect4-cancel-qualified/locks-before.txt
           git diff --exit-code HEAD -- .
           git fetch --no-tags --depth=1 origin 069d19d994abc8f0f23c2b9edb035188b5a22519
+          git fetch --no-tags --depth=1 origin 3b14650d360b010b25b525de33a5f32f33de2798
+          test "$(git rev-parse 3b14650d360b010b25b525de33a5f32f33de2798:src/data/seoMeta.ts)" = cf7a5142e59b97048d27b5ece9a6588a92073728
           test "$(git rev-parse '069d19d994abc8f0f23c2b9edb035188b5a22519^{tree}')" = 4b3ec02208ca565468b3e4c4f94ae58fa1873d64
           node --input-type=module <<'NODE'
           import fs from 'node:fs';import assert from 'node:assert/strict';import {execFileSync} from 'node:child_process';import {createHash} from 'node:crypto';
-          for(const name of['FIXED_RUN_ID','FIXED_ARTIFACT_ID','FIXED_ZIP_BYTES','C4_CANCEL_FIXED_RAW_BYTES'])assert(/^[1-9][0-9]*$/.test(process.env[name]||''),'Bind actual '+name);
-          for(const name of['FIXED_HEAD','FIXED_TREE'])assert.match(process.env[name]||'',/^[a-f0-9]{40}$/,'Bind actual '+name);
-          for(const name of['FIXED_ZIP_SHA256','C4_CANCEL_FIXED_RAW_SHA256'])assert.match(process.env[name]||'',/^[a-f0-9]{64}$/,'Bind actual '+name);
-          const out='soccer-connect4-cancel-controls',base='069d19d994abc8f0f23c2b9edb035188b5a22519',hook='src/hooks/useFootballConnect4.ts',test='src/test/footballConnect4CancelOwnership.test.tsx',plan='docs/plans/2026-11-06-soccer-connect4-cancel-ownership.md',runner='scripts/qa/checkFootballConnect4CancelOwnership.mjs',workflow='.github/workflows/soccer-connect4-cancel-ownership-20261106.yml',at=(ref,file)=>execFileSync('git',['rev-parse',ref+':'+file],{encoding:'utf8'}).trim();
-          const pins={[hook]:'630d21236f9f82ad4e728caad64dc4139bab7b57',[test]:'7f648764ed421584337c0a908d68a0941681e0a8',[plan]:'a0f9e88e81c29bb115b4f1a40601dfc75f3fac8f',[runner]:'fd03e016be0e2bf4566a870aa976ee9aebf0c67c','src/pages/FootballConnect4.tsx':'634f94cea7810cfd678c3a4a6f470c3039773882','src/test/footballConnect4RequestOwnership.test.tsx':'1156a83c6966f4c55bef0ed4c7f7a3288f4e87eb','src/test/connect4ReasonShape.test.tsx':'112831b4d78682a1f242c3fb75ae81f25b4ba14b','src/hooks/useNbaConnect4.ts':'1140a3762571b4143dadd2ea06abe2a4902b56ef','src/hooks/useNflConnect4.ts':'a61d056156dd44d471ca96eb7618e2ecd4ddad32','src/hooks/useNhlConnect4.ts':'7d3d05bec3082731e1a04415176c678e6b295870','src/hooks/useMlbConnect4.ts':'8f2fa1e059e92ec5b68af1f71b186b335423b5b3','src/App.tsx':'8bfedf7aaa1d076e0f0c8e2216c7e46632cd8a33','src/data/gameRegistry.ts':'f560b40a74d1468ac72dfde4ee6fec6635a9a255','public/football-connect-4/index.html':'e401626658329203487a7d45eec6e745a1bed353','package.json':'2ff64986fb76ebc51b706f2fd24765768874008a','package-lock.json':'97d6f12a052f25f400462938c241789a083f0bfe'};
-          for(const[file,want]of Object.entries(pins))assert.equal(at('HEAD',file),want,file);
-          const tree=ref=>execFileSync('git',['ls-tree','-r','-z',ref],{encoding:'utf8',maxBuffer:16*1024*1024}).split('\0').filter(Boolean),owned=[hook,test,plan,runner,workflow],held=rows=>rows.filter(row=>!owned.includes(row.split('\t')[1]));assert.deepEqual(held(tree('HEAD')),held(tree(base)),'Every other tracked blob equals clean PR520');assert.equal(at(base,hook),'971dbdfa5a0e3c5adf749f9f301cc0fd994a178f');assert(!tree('HEAD').some(row=>row.endsWith('\tscripts/qa/playFootballConnect4Cancel.mjs')),'No native helper in source-only control tree');
-          fs.writeFileSync(out+'/source-join.json',JSON.stringify({status:'passed',base,baseTree:'4b3ec02208ca565468b3e4c4f94ae58fa1873d64',heldRows:held(tree('HEAD')).length,onlyOwnedLeaves:owned,pins},null,2));
+          const out='soccer-connect4-cancel-qualified',base='069d19d994abc8f0f23c2b9edb035188b5a22519',test='src/test/footballConnect4CancelOwnership.test.tsx',plan='docs/plans/2026-11-06-soccer-connect4-cancel-ownership.md',workflow='.github/workflows/soccer-connect4-cancel-ownership-20261106.yml',at=(ref,file)=>execFileSync('git',['rev-parse',ref+':'+file],{encoding:'utf8'}).trim();
+          const pins={'src/hooks/useFootballConnect4.ts':'630d21236f9f82ad4e728caad64dc4139bab7b57','src/pages/FootballConnect4.tsx':'634f94cea7810cfd678c3a4a6f470c3039773882','src/hooks/useNbaConnect4.ts':'1140a3762571b4143dadd2ea06abe2a4902b56ef','src/hooks/useNflConnect4.ts':'a61d056156dd44d471ca96eb7618e2ecd4ddad32','src/hooks/useNhlConnect4.ts':'7d3d05bec3082731e1a04415176c678e6b295870','src/hooks/useMlbConnect4.ts':'8f2fa1e059e92ec5b68af1f71b186b335423b5b3','src/test/connect4ReasonShape.test.tsx':'112831b4d78682a1f242c3fb75ae81f25b4ba14b',[test]:'7f648764ed421584337c0a908d68a0941681e0a8',[plan]:'a0f9e88e81c29bb115b4f1a40601dfc75f3fac8f','src/test/footballConnect4RequestOwnership.test.tsx':'1156a83c6966f4c55bef0ed4c7f7a3288f4e87eb','src/App.tsx':'8bfedf7aaa1d076e0f0c8e2216c7e46632cd8a33','src/data/gameRegistry.ts':'f560b40a74d1468ac72dfde4ee6fec6635a9a255','public/football-connect-4/index.html':'e401626658329203487a7d45eec6e745a1bed353','scripts/qa/playFootballConnect4Cancel.mjs':'eeaf194d3bb086aa788562e05fc51cc27407c572','package.json':'2ff64986fb76ebc51b706f2fd24765768874008a','package-lock.json':'97d6f12a052f25f400462938c241789a083f0bfe'};
+          assert.equal(at(base,'src/hooks/useFootballConnect4.ts'),'971dbdfa5a0e3c5adf749f9f301cc0fd994a178f');for(const[f,p]of Object.entries(pins))assert.equal(at('HEAD',f),p,f);for(const f of Object.keys(pins).filter(f=>f!==test&&f!==plan&&f!=='src/hooks/useFootballConnect4.ts'&&f!=='scripts/qa/playFootballConnect4Cancel.mjs'))assert.equal(at(base,f),pins[f],f+' base');
+          const tree=ref=>execFileSync('git',['ls-tree','-r','-z',ref],{encoding:'utf8',maxBuffer:16*1024*1024}).split('\0').filter(Boolean),owned=[test,plan,workflow,'src/hooks/useFootballConnect4.ts','scripts/qa/playFootballConnect4Cancel.mjs'],held=rows=>rows.filter(row=>!owned.includes(row.split('\t')[1]));assert.deepEqual(held(tree('HEAD')),held(tree(base)),'Every other tracked blob equals clean PR520');fs.writeFileSync(out+'/source-join.json',JSON.stringify({status:'passed',base,baseTree:'4b3ec02208ca565468b3e4c4f94ae58fa1873d64',heldRows:held(tree('HEAD')).length,onlyOwnedLeaves:owned,pins,otherFourSportHooksHeld:true},null,2));
+          const hook='src/hooks/useFootballConnect4.ts',oldHook=execFileSync('git',['show',base+':'+hook]),fixedHook=fs.readFileSync(hook),oldBlock="  const cancelSelection = useCallback(() => {\n    setSelectedColumn(null);\n    setTargetRow(null);\n    setValidationError(null);\n  }, []);",newBlock="  const cancelSelection = useCallback(() => {\n    pendingRequest.current = null;\n    setIsValidating(false);\n    setSelectedColumn(null);\n    setTargetRow(null);\n    setValidationError(null);\n  }, []);",blob=bytes=>createHash('sha1').update(Buffer.concat([Buffer.from('blob '+bytes.length+'\0'),bytes])).digest('hex');assert.equal(blob(oldHook),'971dbdfa5a0e3c5adf749f9f301cc0fd994a178f');assert.equal(blob(fixedHook),'630d21236f9f82ad4e728caad64dc4139bab7b57');assert.equal(fixedHook.toString('utf8').split(newBlock).length-1,1);assert(Buffer.from(fixedHook.toString('utf8').replace(newBlock,oldBlock)).equals(oldHook),'Entire fixed Hook differs only by two Cancel ownership lines');fs.writeFileSync(out+'/original-hook.ts',oldHook);fs.writeFileSync(out+'/cancel-inverse.json',JSON.stringify({status:'passed',before:blob(oldHook),after:blob(fixedHook),onlyCancelInvalidationAndBusyRelease:true},null,2));
           const files=execFileSync('git',['ls-files','-z'],{encoding:'utf8'}).split('\0').filter(Boolean),rows=files.map(file=>{const b=fs.readFileSync(file);return{file,bytes:b.length,sha256:createHash('sha256').update(b).digest('hex')};});fs.writeFileSync(out+'/tracked-before.json',JSON.stringify(rows));
           NODE
-          npm ci 2>&1 | tee soccer-connect4-cancel-controls/install.log
+          npm ci 2>&1 | tee soccer-connect4-cancel-qualified/install.log
           node --input-type=module <<'NODE'
-          import fs from 'node:fs';import assert from 'node:assert/strict';
-          const lock=JSON.parse(fs.readFileSync('package-lock.json')),rows=Object.keys(lock.packages).filter(p=>p.startsWith('node_modules/')&&fs.existsSync(p+'/package.json')).map(p=>[p,JSON.parse(fs.readFileSync(p+'/package.json')).version]);assert.equal(rows.length,521);for(const[p,v]of rows)assert.equal(v,lock.packages[p].version,p);fs.writeFileSync('soccer-connect4-cancel-controls/installed-before.json',JSON.stringify(rows));
+          import fs from 'node:fs';import assert from 'node:assert/strict';const lock=JSON.parse(fs.readFileSync('package-lock.json')),rows=Object.keys(lock.packages).filter(p=>p.startsWith('node_modules/')&&fs.existsSync(p+'/package.json')).map(p=>[p,JSON.parse(fs.readFileSync(p+'/package.json')).version]);assert.equal(rows.length,521);for(const[p,v]of rows)assert.equal(v,lock.packages[p].version,p);fs.writeFileSync('soccer-connect4-cancel-qualified/installed-before.json',JSON.stringify(rows));
           NODE
-      - name: Proper App types before controls
+      - name: Active public route registry and inert snapshot preflight
         run: |
           set -euo pipefail
-          node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee soccer-connect4-cancel-controls/types-before.log
-      - name: Pinned completed fixed and original evidence custody
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';import ts from 'typescript';import {JSDOM} from 'jsdom';import {createHash} from 'node:crypto';
+          const out='soccer-connect4-cancel-qualified',route='/football-connect-4',component='FootballConnect4',appText=fs.readFileSync('src/App.tsx','utf8'),catalogText=fs.readFileSync('src/data/gameRegistry.ts','utf8'),app=ts.createSourceFile('src/App.tsx',appText,ts.ScriptTarget.Latest,true,ts.ScriptKind.TSX),catalog=ts.createSourceFile('src/data/gameRegistry.ts',catalogText,ts.ScriptTarget.Latest,true,ts.ScriptKind.TS);assert.deepEqual(app.parseDiagnostics,[]);assert.deepEqual(catalog.parseDiagnostics,[]);
+          const all=(root,predicate)=>{const found=[];const visit=n=>{if(predicate(n))found.push(n);ts.forEachChild(n,visit);};visit(root);return found;},routes=all(app,n=>ts.isJsxSelfClosingElement(n)&&n.tagName.getText(app)==='Route').filter(n=>n.attributes.properties.some(p=>ts.isJsxAttribute(p)&&p.name.text==='path'&&p.initializer&&ts.isStringLiteralLike(p.initializer)&&p.initializer.text===route));assert.equal(routes.length,1,'One actual direct public JSX route');const element=routes[0].attributes.properties.find(p=>ts.isJsxAttribute(p)&&p.name.text==='element')?.initializer;assert(element&&ts.isJsxExpression(element)&&element.expression&&ts.isJsxSelfClosingElement(element.expression));assert.equal(element.expression.tagName.getText(app),component,'Direct game mount, no Navigate');
+          const declarations=all(app,n=>ts.isVariableDeclaration(n)&&ts.isIdentifier(n.name)&&n.name.text===component);assert.equal(declarations.length,1);const imports=all(declarations[0],n=>ts.isCallExpression(n)&&n.expression.kind===ts.SyntaxKind.ImportKeyword&&n.arguments.length===1&&ts.isStringLiteralLike(n.arguments[0]));assert.equal(imports.length,1);assert.equal(imports[0].arguments[0].text,'./pages/FootballConnect4');
+          const prop=(node,name)=>node.properties.find(p=>ts.isPropertyAssignment(p)&&((ts.isIdentifier(p.name)||ts.isStringLiteralLike(p.name))&&p.name.text===name))?.initializer,defs=all(catalog,n=>ts.isVariableDeclaration(n)&&ts.isIdentifier(n.name)&&n.name.text==='CATEGORIES');assert.equal(defs.length,1);const categories=defs[0].initializer;assert(categories&&ts.isArrayLiteralExpression(categories));const soccer=categories.elements.filter(n=>ts.isObjectLiteralExpression(n)&&prop(n,'title')&&ts.isStringLiteralLike(prop(n,'title'))&&prop(n,'title').text==='Soccer');assert.equal(soccer.length,1);const games=prop(soccer[0],'games');assert(games&&ts.isArrayLiteralExpression(games));const entries=games.elements.filter(n=>ts.isObjectLiteralExpression(n)&&prop(n,'path')&&ts.isStringLiteralLike(prop(n,'path'))&&prop(n,'path').text===route);assert.equal(entries.length,1,'One actual uncommented Soccer catalog object');
+          const file='public/football-connect-4/index.html',bytes=fs.readFileSync(file),dom=new JSDOM(bytes.toString('utf8')),doc=dom.window.document,canonicals=[...doc.querySelectorAll('link[rel="canonical"]')];assert.equal(canonicals.length,1);assert.equal(canonicals[0].getAttribute('href'),'https://douknowball.com'+route);const snapshot=doc.querySelector('#dukb-snapshot');assert(snapshot&&snapshot.textContent.trim().length>500);assert(/Soccer Connect 4/i.test(snapshot.textContent));assert.equal(doc.querySelectorAll('meta[name="dukb-retired-from"],meta[name="dukb-retired-to"]').length,0);assert([...doc.querySelectorAll('meta[http-equiv]')].every(m=>m.getAttribute('http-equiv').toLowerCase()!=='refresh'),'No actual redirect meta');assert([...doc.querySelectorAll('meta[name="robots"]')].every(m=>!/noindex/i.test(m.getAttribute('content')||'')),'Active snapshot remains indexable');fs.copyFileSync(file,out+'/active-snapshot.html');fs.writeFileSync(out+'/active-route-preflight.json',JSON.stringify({status:'passed',route,component,routeNode:routes[0].getText(app),lazyImport:declarations[0].getText(app),catalogObject:entries[0].getText(catalog),snapshot:{file,bytes:bytes.length,sha256:createHash('sha256').update(bytes).digest('hex'),canonical:canonicals[0].getAttribute('href'),snapshotTextLength:snapshot.textContent.trim().length,retiredMarkers:0,metaRefresh:0},parsers:{typescript:ts.version,html:'Inert JSDOM, scripts/resources not enabled'},limits:'Actual AST nodes and inert DOM elements, never comments or a dormant Page file. This is source/public-entry preflight, native route reachability is still required.'},null,2));dom.window.close();console.log('PASS actual direct route, lazy Page import, live Soccer registry object and indexable nonredirect snapshot');
+          NODE
+
+      - name: Proper App types
+        run: |
+          set -euo pipefail
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee soccer-connect4-cancel-qualified/types.log
+      - name: Complete textual census and AST code caller audit
+        run: |
+          set -euo pipefail
+          git grep -n -I -e useFootballConnect4 -e hooks/useFootballConnect4 -- . > soccer-connect4-cancel-qualified/caller-grep.txt
+          git ls-files '*useFootballConnect4*' > soccer-connect4-cancel-qualified/hook-paths.txt
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import path from 'node:path';import assert from 'node:assert/strict';import ts from 'typescript';import {execFileSync} from 'node:child_process';
+          const out='soccer-connect4-cancel-qualified',hook='src/hooks/useFootballConnect4.ts',page='src/pages/FootballConnect4.tsx',name='useFootballConnect4',files=execFileSync('git',['ls-files','-z'],{encoding:'utf8'}).split('\0').filter(Boolean),hookPaths=files.filter(f=>f.toLowerCase().includes(name.toLowerCase()));
+          const sourceFiles=files.filter(f=>f.startsWith('src/')&&/\.[cm]?[jt]sx?$/.test(f)),isTest=f=>/^src\/test(?:\/|$)/.test(f)||/(?:^|\/)__tests__\//.test(f)||/\.(test|spec)\.[cm]?[jt]sx?$/.test(f),events=[],unresolved=[],parseErrors=[];
+          const target=(specifier,file)=>{let resolved=specifier.startsWith('@/')?'src/'+specifier.slice(2):specifier.startsWith('.')?path.posix.join(path.posix.dirname(file),specifier):specifier;resolved=path.posix.normalize(resolved).replace(/\.[cm]?[jt]sx?$/,'');return resolved==='src/hooks/useFootballConnect4'||specifier===name;};
+          for(const file of sourceFiles){
+            const text=fs.readFileSync(file,'utf8'),ast=ts.createSourceFile(file,text,ts.ScriptTarget.Latest,true),production=!isTest(file);for(const d of ast.parseDiagnostics)parseErrors.push({file,message:ts.flattenDiagnosticMessageText(d.messageText,' ')});
+            const record=(node,kind,module=null)=>{const pos=ast.getLineAndCharacterOfPosition(node.getStart(ast));events.push({file,production,kind,module,line:pos.line+1,column:pos.character+1,code:node.getText(ast)});};
+            const visit=node=>{
+              if((ts.isImportDeclaration(node)||ts.isExportDeclaration(node))&&node.moduleSpecifier&&ts.isStringLiteralLike(node.moduleSpecifier)&&target(node.moduleSpecifier.text,file))record(node,ts.isImportDeclaration(node)?'import':'reexport',node.moduleSpecifier.text);
+              if(ts.isImportTypeNode(node)&&ts.isLiteralTypeNode(node.argument)&&ts.isStringLiteralLike(node.argument.literal)&&target(node.argument.literal.text,file))record(node,'type-import',node.argument.literal.text);
+              if(ts.isCallExpression(node)&&(node.expression.kind===ts.SyntaxKind.ImportKeyword||(ts.isIdentifier(node.expression)&&node.expression.text==='require'))){const argument=node.arguments[0],kind=node.expression.kind===ts.SyntaxKind.ImportKeyword?'dynamic-import':'require';if(argument&&ts.isStringLiteralLike(argument)){if(target(argument.text,file))record(node,kind,argument.text);}else{const pos=ast.getLineAndCharacterOfPosition(node.getStart(ast));unresolved.push({file,production,kind,line:pos.line+1,code:node.getText(ast)});}}
+              if(ts.isIdentifier(node)&&node.text===name)record(node,'symbol-identifier');ts.forEachChild(node,visit);
+            };visit(ast);
+          }
+          const productionCallers=[...new Set(events.filter(e=>e.production&&e.file!==hook).map(e=>e.file))].sort(),unknownProductionLoads=unresolved.filter(e=>e.production),report={status:'pending-review',typescriptVersion:ts.version,commentPolicy:'TypeScript AST nodes only, never comments/trivia. Complete raw gitgrep retained separately.',scannedFiles:sourceFiles.length,hookPaths,productionCallers,events,unresolvedLoaders:unresolved,parseErrors,limits:'Direct module/symbol census includes imports, reexports, dynamic import and require. Unresolved production loaders refuse automatic admission and require source review. No transitive higher-order callgraph claim.'};
+          fs.copyFileSync(hook,out+'/fixed-hook.ts');fs.copyFileSync(page,out+'/original-page.tsx');fs.writeFileSync(out+'/caller-audit.json',JSON.stringify(report,null,2));assert.deepEqual(parseErrors,[]);assert.deepEqual(hookPaths,[hook]);assert.deepEqual(productionCallers,[page],'Only known Soccer page consumes hook');assert.deepEqual(unknownProductionLoads,[],'Unresolved production loader requires review before an App fix');assert(events.some(e=>e.file===page&&e.kind==='import'));report.status='passed';fs.writeFileSync(out+'/caller-audit.json',JSON.stringify(report,null,2));console.log('PASS code callers: '+JSON.stringify({productionCallers,hookPaths,scannedFiles:sourceFiles.length}));
+          NODE
+      - name: Pinned completed original Cancel packet
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
-          gh api "repos/PapiSalgueroM/ballpark-hero/actions/runs/$FIXED_RUN_ID" > soccer-connect4-cancel-controls/fixed-run.json
-          gh api "repos/PapiSalgueroM/ballpark-hero/actions/artifacts/$FIXED_ARTIFACT_ID" > soccer-connect4-cancel-controls/fixed-artifact.json
-          gh api "repos/PapiSalgueroM/ballpark-hero/actions/artifacts/$FIXED_ARTIFACT_ID/zip" > "$RUNNER_TEMP/c4-cancel-fixed.zip"
-          echo "$FIXED_ZIP_SHA256  $RUNNER_TEMP/c4-cancel-fixed.zip" | sha256sum --check
-          test "$(stat -c%s "$RUNNER_TEMP/c4-cancel-fixed.zip")" = "$FIXED_ZIP_BYTES"
-          mkdir soccer-connect4-cancel-controls/reference-fixed
-          unzip -q "$RUNNER_TEMP/c4-cancel-fixed.zip" -d soccer-connect4-cancel-controls/reference-fixed
-          git fetch --no-tags --depth=1 origin "$FIXED_HEAD"
-          test "$(git rev-parse "$FIXED_HEAD^{tree}")" = "$FIXED_TREE"
+          gh api repos/PapiSalgueroM/ballpark-hero/actions/runs/42227289308 > soccer-connect4-cancel-qualified/original-run.json
+          gh api repos/PapiSalgueroM/ballpark-hero/actions/artifacts/13507120183 > soccer-connect4-cancel-qualified/original-artifact.json
+          gh api repos/PapiSalgueroM/ballpark-hero/actions/artifacts/13507120183/zip > "$RUNNER_TEMP/c4-cancel-original.zip"
+          echo "501423f539ddc523f227c32165095c10b7f08a077bbdae9d30b0e062d617202c  $RUNNER_TEMP/c4-cancel-original.zip" | sha256sum --check
+          mkdir soccer-connect4-cancel-qualified/original-packet
+          unzip -q "$RUNNER_TEMP/c4-cancel-original.zip" -d soccer-connect4-cancel-qualified/original-packet
           node --input-type=module <<'NODE'
-          import fs from 'node:fs';import assert from 'node:assert/strict';import {execFileSync} from 'node:child_process';import {createHash} from 'node:crypto';
-          const out='soccer-connect4-cancel-controls',ref=out+'/reference-fixed',read=file=>JSON.parse(fs.readFileSync(file)),run=read(out+'/fixed-run.json'),meta=read(out+'/fixed-artifact.json'),proof=read(ref+'/fixed-admission.json'),oldProof=read(ref+'/original-packet/original-admission.json'),sha=b=>createHash('sha256').update(b).digest('hex');
-          assert.equal(run.id,Number(process.env.FIXED_RUN_ID));assert.equal(run.head_sha,process.env.FIXED_HEAD);assert.equal(run.status,'completed');assert.equal(run.conclusion,'success');assert.equal(meta.id,Number(process.env.FIXED_ARTIFACT_ID));assert.equal(meta.expired,false);assert.equal(meta.size_in_bytes,Number(process.env.FIXED_ZIP_BYTES));assert.equal(meta.digest,'sha256:'+process.env.FIXED_ZIP_SHA256);assert.equal(meta.workflow_run.id,run.id);assert.equal(meta.workflow_run.head_sha,run.head_sha);assert.equal(fs.readFileSync(ref+'/head.txt','utf8').trim(),run.head_sha);assert.equal(fs.readFileSync(ref+'/tree.txt','utf8').trim(),process.env.FIXED_TREE);
-          assert.equal(proof.status,'fixed-six-cancel-passed-two-whole-cases-held');assert.equal(proof.cases,6);assert.equal(proof.rawFrames,31);assert.deepEqual(proof.preservedCases,['idle','progress']);const rawBytes=fs.readFileSync(ref+'/raw.json');assert.equal(rawBytes.length,Number(process.env.C4_CANCEL_FIXED_RAW_BYTES));assert.equal(sha(rawBytes),process.env.C4_CANCEL_FIXED_RAW_SHA256);assert.equal(proof.rawBytes,rawBytes.length);assert.equal(proof.rawSHA256,sha(rawBytes));
-          const oldMeta=read(ref+'/original-artifact.json'),oldRun=read(ref+'/original-run.json'),oldBytes=fs.readFileSync(ref+'/original-packet/raw.json');assert.equal(oldRun.id,42227289308);assert.equal(oldRun.head_sha,'d182441512179bd78b7bfad59b60d97281a1c8aa');assert.equal(oldRun.status,'completed');assert.equal(oldRun.conclusion,'success');assert.equal(oldMeta.id,13507120183);assert.equal(oldMeta.size_in_bytes,1070007);assert.equal(oldMeta.digest,'sha256:501423f539ddc523f227c32165095c10b7f08a077bbdae9d30b0e062d617202c');assert.equal(oldMeta.workflow_run.id,oldRun.id);assert.equal(oldMeta.workflow_run.head_sha,oldRun.head_sha);assert.equal(oldMeta.expired,false);assert.equal(fs.readFileSync(ref+'/original-packet/head.txt','utf8').trim(),oldRun.head_sha);assert.equal(fs.readFileSync(ref+'/original-packet/tree.txt','utf8').trim(),'59cded5c1deee5f9ae35a820c9b1c704bbdf3e53');assert.equal(oldProof.status,'original-four-cancel-business-reds-admitted');assert.equal(oldProof.actualRows,6);assert.equal(oldProof.rawFrames,28);assert.equal(oldBytes.length,798067);assert.equal(sha(oldBytes),'968ecae8537532cea51eb5866e24427d8d3b8fe1ce16553e9d78b0b17fa93369');
-          const raw=JSON.parse(rawBytes),old=JSON.parse(oldBytes);for(const key of['idle','progress'])assert.deepEqual(raw.cases[key],old.cases[key],'Qualified whole preservation '+key);
-          const evidence=[['owned',6],['existing-owner',12],['existing-reasons',22]];for(const[file,count]of evidence){const result=read(ref+'/'+file+'.json'),rows=result.testResults.flatMap(s=>s.assertionResults);assert.equal(result.numTotalTests,count);assert.equal(result.numPassedTests,count);assert.equal(result.numFailedTests,0);assert.equal(result.numPendingTests,0);assert.equal(rows.length,count);assert(rows.every(row=>row.status==='passed'));for(const key of['numRuntimeErrorTestSuites','numUnhandledErrors'])if(Object.hasOwn(result,key))assert.equal(result[key],0);assert(!/Unhandled Errors|Unhandled Rejection|Uncaught Exception|Failed to resolve import|No test files found|SyntaxError/.test(fs.readFileSync(ref+'/'+file+'.log','utf8')));}
-          const prior=fs.readFileSync(ref+'/prior-owner-raw.json');assert.equal(prior.length,365602);assert.equal(sha(prior),'9109bcf79649a72de8e16364ca45b5ca05129fe33ab097e0ba88910b360df823');assert.equal(read(ref+'/existing-admission.json').actualCases,34);
-          const parse=text=>text.trimEnd().split('\n').map(line=>{const m=line.match(/^([0-9]+) ([0-9a-f]{40}) 0\t(.+)$/);assert(m,'Strict index row');return[m[1],m[2],m[3]];});const referenceIndex=parse(fs.readFileSync(ref+'/source-before.txt','utf8')),currentIndex=parse(fs.readFileSync(out+'/source-before.txt','utf8'));
-          const fixedTree=execFileSync('git',['ls-tree','-r','-z',process.env.FIXED_HEAD],{encoding:'utf8',maxBuffer:16*1024*1024}).split('\0').filter(Boolean).map(row=>{const m=row.match(/^([0-9]+) blob ([0-9a-f]{40})\t(.+)$/);assert(m);return[m[1],m[2],m[3]];});assert.deepEqual(referenceIndex,fixedTree,'Retained fixed source index is actual immutable Git tree');
-          const ignored=['scripts/qa/checkFootballConnect4CancelOwnership.mjs','.github/workflows/soccer-connect4-cancel-ownership-20261106.yml'];assert.deepEqual(currentIndex.filter(row=>!ignored.includes(row[2])),referenceIndex.filter(row=>!ignored.includes(row[2])),'Exact qualified source except control runner/workflow');
-          const blob=b=>createHash('sha1').update(Buffer.concat([Buffer.from('blob '+b.length+'\0'),b])).digest('hex');assert.equal(blob(fs.readFileSync(ref+'/fixed-hook.ts')),'630d21236f9f82ad4e728caad64dc4139bab7b57');assert.equal(blob(fs.readFileSync(ref+'/original-packet/original-hook.ts')),'971dbdfa5a0e3c5adf749f9f301cc0fd994a178f');assert(fs.readFileSync(ref+'/fixed-hook.ts').equals(fs.readFileSync('src/hooks/useFootballConnect4.ts')));
-          assert.equal(read(ref+'/active-route-preflight.json').status,'passed');assert.equal(read(ref+'/original-packet/active-route-preflight.json').status,'passed');assert.equal(fs.statSync(ref+'/types.log').size,0);assert.equal(fs.statSync(ref+'/offline.log').size,0);
-          const retained=['owned.json','owned.log','raw.json','existing-owner.json','existing-owner.log','existing-reasons.json','existing-reasons.log','prior-owner-raw.json','fixed-admission.json','existing-admission.json','active-route-preflight.json','source-before.txt','tracked-before.json','types.log','offline.log'].map(file=>{const b=fs.readFileSync(ref+'/'+file);return{file,bytes:b.length,sha256:sha(b)};});fs.writeFileSync(out+'/fixed-stages-carried.json',JSON.stringify({status:'passed',run:run.id,head:run.head_sha,artifact:meta.id,zipSHA256:process.env.FIXED_ZIP_SHA256,fixedCases:6,existingCases:34,qualifiedCases:40,originalRun:oldRun.id,rawFrames:31,rawBytes:rawBytes.length,rawSHA256:sha(rawBytes),wholePreservedCases:['idle','progress'],retained,limits:'Completed40-case fixed qualification carried from three actual reports. Controls freshly rerun only6 Cancel cases per arm. No34-baseline/native/build/cap/server-abort/unmount/full-suite/live rerun credit.'},null,2));
+          import fs from 'node:fs';import assert from 'node:assert/strict';import {createHash} from 'node:crypto';
+          const out='soccer-connect4-cancel-qualified',read=file=>JSON.parse(fs.readFileSync(out+'/'+file)),run=read('original-run.json'),meta=read('original-artifact.json'),proof=read('original-packet/original-admission.json'),rawBytes=fs.readFileSync(out+'/original-packet/raw.json');assert.equal(run.id,42227289308);assert.equal(run.head_sha,'d182441512179bd78b7bfad59b60d97281a1c8aa');assert.equal(run.status,'completed');assert.equal(run.conclusion,'success');assert.equal(meta.id,13507120183);assert.equal(meta.expired,false);assert.equal(meta.size_in_bytes,1070007);assert.equal(meta.digest,'sha256:501423f539ddc523f227c32165095c10b7f08a077bbdae9d30b0e062d617202c');assert.equal(meta.workflow_run.id,run.id);assert.equal(meta.workflow_run.head_sha,run.head_sha);assert.equal(fs.readFileSync(out+'/original-packet/head.txt','utf8').trim(),run.head_sha);assert.equal(fs.readFileSync(out+'/original-packet/tree.txt','utf8').trim(),'59cded5c1deee5f9ae35a820c9b1c704bbdf3e53');assert.equal(proof.status,'original-four-cancel-business-reds-admitted');assert.equal(proof.actualRows,6);assert.equal(proof.rawFrames,28);assert.equal(rawBytes.length,798067);assert.equal(createHash('sha256').update(rawBytes).digest('hex'),'968ecae8537532cea51eb5866e24427d8d3b8fe1ce16553e9d78b0b17fa93369');assert.deepEqual(fs.readFileSync(out+'/original-packet/original-hook.ts'),fs.readFileSync(out+'/original-hook.ts'),'Actual original producer source exactly equals git-show clean-base Hook');assert.equal(read('original-packet/active-route-preflight.json').status,'passed');console.log('PASS actual original4Cancel failures/2preserves/28RAW, exact active-entry and original-Hook custody');
           NODE
-      - name: Five physical Cancel controls with exact business sets
+      - name: Actual fixed six Cancel cases and complete preservation
         run: |
           set -euo pipefail
-          C4_CANCEL_FIXED_PACKET="$PWD/soccer-connect4-cancel-controls/reference-fixed" C4_CANCEL_CONTROL_OUT="$PWD/soccer-connect4-cancel-controls/arms" NODE_OPTIONS="--max-old-space-size=6144 --require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/checkFootballConnect4CancelOwnership.mjs 2>&1 | tee soccer-connect4-cancel-controls/controls.log
+          C4_CANCEL_OWNER_RAW="$PWD/soccer-connect4-cancel-qualified/raw.json" NODE_OPTIONS="--max-old-space-size=6144 --require=$PWD/scripts/lib/offlineTransport.cjs" node node_modules/vitest/vitest.mjs run src/test/footballConnect4CancelOwnership.test.tsx --maxWorkers=1 --minWorkers=1 --reporter=default --reporter=json --outputFile=soccer-connect4-cancel-qualified/owned.json 2>&1 | tee soccer-connect4-cancel-qualified/owned.log
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';import {createHash} from 'node:crypto';
+          const out='soccer-connect4-cancel-qualified',read=file=>JSON.parse(fs.readFileSync(out+'/'+file)),result=read('owned.json'),raw=read('raw.json'),old=read('original-packet/raw.json'),log=fs.readFileSync(out+'/owned.log','utf8'),rows=result.testResults.flatMap(s=>s.assertionResults);assert.equal(result.numTotalTests,6);assert.equal(result.numPassedTests,6);assert.equal(result.numFailedTests,0);assert.equal(result.numPendingTests,0);assert.equal(rows.length,6);assert(rows.every(row=>row.status==='passed'));assert.deepEqual(rows.map(row=>row.title).sort(),Object.values(old.cases).map(c=>c.title).sort());for(const field of['numRuntimeErrorTestSuites','numUnhandledErrors'])if(Object.hasOwn(result,field))assert.equal(result[field],0,field);assert(!/Unhandled Errors|Unhandled Rejection|Uncaught Exception|Failed to resolve import|No test files found|SyntaxError/.test(log));
+          assert.deepEqual({...raw,cases:null},{...old,cases:null});const labels={daily:['daily-old-body-pending','daily-after-cancel','daily-new-request-attempt','daily-old-valid-during-new-request','daily-new-response-settled','daily-next-selection-clean','teardown-settled']};for(const key of['unlimited','invalid','network','idle','progress'])labels[key]=old.cases[key].frames.map(f=>f.label);assert.deepEqual(Object.keys(raw.cases).sort(),Object.keys(old.cases).sort());let frames=0;for(const[key,value]of Object.entries(raw.cases)){assert.equal(value.title,old.cases[key].title);assert.deepEqual(value.frames.map(f=>f.label),labels[key],key+' complete physical labels');frames+=value.frames.length;for(const f of value.frames){assert(f.state.board.length===6&&f.state.board.every(row=>row.length===7));for(const name of['draws','transport','dailyLog','search','completions'])assert(Array.isArray(f[name]));assert.equal(f.storage['c4-unrelated'],'held');assert(f.page&&typeof f.page.html==='string');}}assert.equal(frames,31);for(const key of['idle','progress'])assert.deepEqual(raw.cases[key],old.cases[key],'Entire original no-pending/current-progress preservation case held: '+key);
+          for(const key of['daily','unlimited','invalid','network']){const f=raw.cases[key].frames;assert.equal(f[0].state.isValidating,true);assert.equal(f[0].page.cancelDisabled,false);assert.equal(f[1].state.isValidating,false,'Actual Cancel releases busy immediately');assert.deepEqual([f[1].state.selectedColumn,f[1].state.targetRow,f[1].state.validationError],[null,null,null]);assert.equal(f[1].page.input,null);assert.deepEqual(f[1].draws,f[0].draws);assert.deepEqual(f[1].storage,f[0].storage);assert.deepEqual(f[1].state.boardConfig,f[0].state.boardConfig);}
+          const daily=raw.cases.daily.frames,oldDuring=daily[3],current=daily[4],next=daily[5];assert.equal(daily[2].transport.length,2,'One genuine new B validation after Cancel');assert.equal(oldDuring.state.isValidating,true);assert.deepEqual([oldDuring.state.selectedColumn,oldDuring.state.targetRow],[1,5]);assert.equal(oldDuring.page.input,'Fixture Fresh B');assert.equal(oldDuring.page.inputDisabled,true);assert.equal(oldDuring.state.board.flat().filter(Boolean).length,0);assert.deepEqual(oldDuring.dailyLog,[]);assert.deepEqual(oldDuring.storage,daily[0].storage);assert.equal(oldDuring.transport[0].settled,true);assert.equal(oldDuring.transport[1].settled,false);assert.equal(oldDuring.transport[1].rejected,false);
+          assert.deepEqual(current.state.board[5][1],{team:'blue',playerName:'Fixture Fresh B'});assert.equal(current.state.board.flat().filter(Boolean).length,1);assert.equal(current.state.currentTurn,'red');assert.equal(current.state.isValidating,false);assert.deepEqual(current.dailyLog,[{t:'move',col:1,row:5,team:'blue',playerName:'Fixture Fresh B'}]);assert.equal(next.page.input,'');assert.equal(next.page.inputDisabled,false);assert.deepEqual([next.state.selectedColumn,next.state.targetRow],[2,5]);assert.equal(daily[daily.length-1].transport.length,2);
+          for(const key of['unlimited','invalid','network']){const f=raw.cases[key].frames,settled=f[2];for(const name of['boardConfig','board','currentTurn','phase','winner','isDraw','usedPlayers'])assert.deepEqual(settled.state[name],f[0].state[name],key+' old result keeps '+name);assert.deepEqual(settled.storage,f[0].storage);assert.deepEqual(settled.dailyLog,f[0].dailyLog);assert.deepEqual(settled.draws,f[0].draws);assert.equal(settled.state.isValidating,false);assert.equal(settled.state.validationError,null);assert.deepEqual([settled.state.selectedColumn,settled.state.targetRow],[null,null]);assert.equal(settled.state.board.flat().filter(Boolean).length,0);assert.equal(settled.transport.length,1);}assert.equal(raw.cases.network.frames[2].transport[0].rejected,true);
+          const bytes=fs.readFileSync(out+'/raw.json');fs.writeFileSync(out+'/fixed-admission.json',JSON.stringify({status:'fixed-six-cancel-passed-two-whole-cases-held',cases:6,rawFrames:31,preservedCases:['idle','progress'],rawBytes:bytes.length,rawSHA256:createHash('sha256').update(bytes).digest('hex'),limits:'Client Cancel ownership only. Original Page cannot enter the B branch; that reachable fixed continuation is recorded explicitly. No server abort/unmount/Skip/native/full-suite credit.'},null,2));console.log('PASS actual6fixed/31RAW/2wholepreserves, actual newer B owns its UI and one Daily move');
+          NODE
+      - name: Unchanged prior ownership and reason-shape baseline
+        run: |
+          set -euo pipefail
+          C4_REQUEST_OWNER_RAW="$PWD/soccer-connect4-cancel-qualified/prior-owner-raw.json" NODE_OPTIONS="--max-old-space-size=6144 --require=$PWD/scripts/lib/offlineTransport.cjs" node node_modules/vitest/vitest.mjs run src/test/footballConnect4RequestOwnership.test.tsx --maxWorkers=1 --minWorkers=1 --reporter=default --reporter=json --outputFile=soccer-connect4-cancel-qualified/existing-owner.json 2>&1 | tee soccer-connect4-cancel-qualified/existing-owner.log
+          NODE_OPTIONS="--max-old-space-size=6144 --require=$PWD/scripts/lib/offlineTransport.cjs" node node_modules/vitest/vitest.mjs run src/test/connect4ReasonShape.test.tsx --maxWorkers=1 --minWorkers=1 --reporter=default --reporter=json --outputFile=soccer-connect4-cancel-qualified/existing-reasons.json 2>&1 | tee soccer-connect4-cancel-qualified/existing-reasons.log
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';import {createHash} from 'node:crypto';
+          const out='soccer-connect4-cancel-qualified';for(const[file,count]of[['existing-owner',12],['existing-reasons',22]]){const r=JSON.parse(fs.readFileSync(out+'/'+file+'.json')),rows=r.testResults.flatMap(s=>s.assertionResults);assert.equal(r.numTotalTests,count);assert.equal(r.numPassedTests,count);assert.equal(r.numFailedTests,0);assert.equal(r.numPendingTests,0);assert.equal(rows.length,count);assert(rows.every(v=>v.status==='passed'));for(const k of['numRuntimeErrorTestSuites','numUnhandledErrors'])if(Object.hasOwn(r,k))assert.equal(r[k],0,k);assert(!/Unhandled Errors|Unhandled Rejection|Uncaught Exception|Failed to resolve import|No test files found|SyntaxError/.test(fs.readFileSync(out+'/'+file+'.log','utf8')));}
+          const b=fs.readFileSync(out+'/prior-owner-raw.json'),raw=JSON.parse(b);assert.equal(b.length,365602);assert.equal(createHash('sha256').update(b).digest('hex'),'9109bcf79649a72de8e16364ca45b5ca05129fe33ab097e0ba88910b360df823');assert.equal(Object.values(raw.cases).reduce((n,c)=>n+c.frames.length,0),44);assert.deepEqual(JSON.parse(fs.readFileSync(out+'/raw.json')).boardCatalog,raw.boardCatalog,'New actual catalog exactly equals unchanged prior ownership catalog');
+          fs.writeFileSync(out+'/existing-admission.json',JSON.stringify({status:'passed',actualCases:34,ownershipCases:12,reasonShapeCases:22,commands:2,priorRawBytes:b.length,priorRawSHA256:createHash('sha256').update(b).digest('hex'),scope:'Unchanged prior ownership12 and all-sport/shared reason-shape22 in separate actual Vitest invocations, no combined fabricated runner report.'},null,2));console.log('PASS actual12+22 unchanged baseline, entire44-frame ownership RAW identical');
+          NODE
+      - name: Normal production build and retained bytes
+        id: build
+        run: |
+          set -euo pipefail
+          NODE_OPTIONS="--max-old-space-size=6144" npm run build 2>&1 | tee soccer-connect4-cancel-qualified/build.log
+          tar -czf soccer-connect4-cancel-qualified/dist.tgz dist
+          sha256sum soccer-connect4-cancel-qualified/dist.tgz > soccer-connect4-cancel-qualified/dist.sha256
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import {createHash} from 'node:crypto';import assert from 'node:assert/strict';
+          const walk=dir=>fs.readdirSync(dir,{withFileTypes:true}).sort((a,b)=>a.name.localeCompare(b.name)).flatMap(e=>e.isDirectory()?walk(dir+'/'+e.name):e.isFile()?[dir+'/'+e.name]:[]);
+          const rows=walk('dist').map(file=>{const b=fs.readFileSync(file);return {file,bytes:b.length,sha256:createHash('sha256').update(b).digest('hex')};});
+          assert.equal(rows.length,850);fs.writeFileSync('soccer-connect4-cancel-qualified/dist-before.json',JSON.stringify(rows));
+          NODE
+      - name: Isolated pinned Playwright and Chromium
+        id: browser_setup
+        timeout-minutes: 12
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          python -m pip install fonttools pillow
+          npm install --prefix "$RUNNER_TEMP/c4-cancel-browser" --no-save --package-lock=false playwright@1.64.1 2>&1 | tee soccer-connect4-cancel-qualified/browser-install.log
+          test ! -e node_modules/playwright
+          ln -s "$RUNNER_TEMP/c4-cancel-browser/node_modules/playwright" node_modules/playwright
+          node "$RUNNER_TEMP/c4-cancel-browser/node_modules/playwright/cli.js" install --with-deps chromium 2>&1 | tee soccer-connect4-cancel-qualified/chromium-install.log
           node --input-type=module <<'NODE'
           import fs from 'node:fs';import assert from 'node:assert/strict';
-          const out='soccer-connect4-cancel-controls',s=JSON.parse(fs.readFileSync(out+'/arms/summary.json'));assert.equal(s.status,'passed');assert.equal(s.error,null);assert.equal(s.completedArms,5);assert.equal(s.actualRows,30);assert.equal(s.actualNamedBusinessReds,12);assert.equal(s.rawFrames,147);assert.equal(s.wholePreservationVectors,10);assert.deepEqual(s.arms.map(a=>a.name),['fixed','original','omit-cancel-owner','omit-cancel-busy','restored']);assert.deepEqual(s.arms.map(a=>a.actualFailed.length),[0,4,4,4,0]);assert.deepEqual(s.arms.map(a=>a.rawFrames),[31,28,29,28,31]);for(const key of['allTrackedRestored','indexHeld','installed521Held','offlineHeld'])assert.equal(s[key],true);
-          fs.writeFileSync(out+'/controls-admission.json',JSON.stringify({status:'passed',arms:5,actualRows:30,actualNamedBusinessReds:12,actualPasses:18,redCounts:s.arms.map(a=>a.actualFailed.length),frameCounts:s.arms.map(a=>a.rawFrames),rawFrames:147,wholePreservationVectors:10,originalRawSHA256:s.originalRawSha256,fixedRestoredRawSHA256:s.fixedRawSha256,allTrackedRestored:true,limits:'Actual source-only controls. Faulty Daily branches differ and are retained without fabricated whole-original equality. Both complete preservation cases remain exact. Prior34 baseline carried, no native/build/cap/live/server-abort credit.'},null,2));console.log('PASS actual5 arms/30rows/12namedreds/147RAW/10wholepreserves and restoration');
+          const before=JSON.parse(fs.readFileSync('soccer-connect4-cancel-qualified/installed-before.json'));
+          const after=before.map(([p])=>[p,JSON.parse(fs.readFileSync(p+'/package.json')).version]);assert.deepEqual(after,before);
+          const pw=JSON.parse(fs.readFileSync('node_modules/playwright/package.json'));assert.equal(pw.version,'1.64.1');
+          fs.writeFileSync('soccer-connect4-cancel-qualified/installed-after.json',JSON.stringify(after));fs.writeFileSync('soccer-connect4-cancel-qualified/browser-package.json',JSON.stringify({version:pw.version,target:fs.realpathSync('node_modules/playwright')}));
           NODE
-      - name: Proper App types after exact restoration
+      - name: All required built readers and existing source fences
+        if: ${{ !cancelled() && steps.build.outcome == 'success' && steps.browser_setup.outcome == 'success' }}
+        run: |
+          export ONLY="simAdsense,simBrand,simHeadTags,simHiddenPages,simHubs,simIndexNow,simIndexing,simInternalLinks,simNoRivalNames,simPrerender,simPrerenderBoot,simRetiredRoutes,simSchema,simSitemap,simSnapshotAssets,simSiteSearch,simGuideHeadings,simSeoMetaSplit,simHomeCopy,simHarnessAnchors"
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/runAllSims.mjs --browser 2>&1 | tee soccer-connect4-cancel-qualified/readers.log
+      - name: All original route download limits
+        if: ${{ !cancelled() && steps.build.outcome == 'success' && steps.browser_setup.outcome == 'success' }}
+        run: |
+          node scripts/lib/hostLikeServer.mjs dist 4173 > soccer-connect4-cancel-qualified/weight-host.log 2>&1 &
+          xi_host_pid=$!
+          trap 'kill "$xi_host_pid" 2>/dev/null || true' EXIT
+          sleep 2
+          SWEEP_OFFLINE=1 BASE=http://127.0.0.1:4173 NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/sweepWeight.mjs 2>&1 | tee soccer-connect4-cancel-qualified/weight.log
+      - name: Unchanged existing Soccer Connect4 failed-verdict browser fence
+        timeout-minutes: 8
+        if: ${{ !cancelled() && steps.build.outcome == 'success' && steps.browser_setup.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD:scripts/playFootballConnect4Failures.mjs)" = 01fddf104d0579a35dc285c63704d3400563c590
+          C4FAIL_CONTROL= NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playFootballConnect4Failures.mjs 2>&1 | tee soccer-connect4-cancel-qualified/related.log
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';const out='soccer-connect4-cancel-qualified',log=fs.readFileSync(out+'/related.log','utf8');assert(log.includes('playFootballConnect4Failures: green. Failed checks keep the guess and turn; a valid answer alone places the piece.'));assert(!/^\s+FAIL\b/m.test(log));assert.equal([...log.matchAll(/^\s+PASS\s+/gm)].length,37);for(const label of['HTTP 429','object-shaped invalid reason','unverified verdict','contradictory valid and unverified verdict','valid verdict'])assert(log.split('\n').some(line=>line.trim()===label));assert(!/Unhandled Rejection|Uncaught Exception|Failed to resolve import|SyntaxError/.test(log));fs.writeFileSync(out+'/related-admission.json',JSON.stringify({status:'passed',source:'01fddf104d0579a35dc285c63704d3400563c590',actualChecks:37,actualScenarios:5,control:'default positive, C4FAIL_CONTROL empty',limits:'Unchanged legacy fence uses its historical mocked record and consent storage setup. No new roster truth, ownership, no-injection, font-provider or negative-control credit from this fence.'},null,2));
+          NODE
+      - name: Three actual native pending Cancel ownership journeys
+        id: native
+        timeout-minutes: 12
+        if: ${{ !cancelled() && steps.build.outcome == 'success' && steps.browser_setup.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          C4_CANCEL_HOOK_BLOB=630d21236f9f82ad4e728caad64dc4139bab7b57 C4_CANCEL_BROWSER_OUT="$PWD/soccer-connect4-cancel-qualified/browser" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/playFootballConnect4Cancel.mjs 2>&1 | tee soccer-connect4-cancel-qualified/browser.log
+          cat > "$RUNNER_TEMP/admitFootballConnect4Cancel.mjs" <<'NATIVE'
+          // Admit immutable Soccer board Cancel browser receipts. This script does not run the browser.
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import { createHash } from 'node:crypto';
+          assert.equal(process.argv.length,3,'Usage: node admitFootballConnect4Cancel.mjs EVIDENCE_DIRECTORY');
+          const ROOT=process.cwd(),OUT=path.resolve(ROOT,process.argv[2]),hash=b=>createHash('sha256').update(b).digest('hex'),blob=b=>createHash('sha1').update(Buffer.concat([Buffer.from('blob '+b.length+'\0'),b])).digest('hex'),read=file=>JSON.parse(fs.readFileSync(path.join(OUT,file),'utf8'));
+          let checks=0,refCount=0;const ok=(value,label)=>{checks++;assert(value,label);},eq=(a,b,label)=>{checks++;assert.deepEqual(a,b,label);};
+          const safe=(base,file)=>{ok(typeof file==='string'&&!path.isAbsolute(file)&&!file.split(/[\\/]/).includes('..'),'Relative receipt path');const full=path.resolve(base,file);ok(full.startsWith(path.resolve(base)+path.sep),'Receipt stays within root');return full;};
+          const verified=new Map(),verify=(ref,base)=>{ok(ref&&typeof ref==='object'&&typeof ref.file==='string'&&Number.isInteger(ref.bytes)&&ref.bytes>=0&&/^[0-9a-f]{64}$/.test(ref.sha256),'Complete byte receipt');refCount++;const full=safe(base,ref.file),b=fs.readFileSync(full);eq(b.length,ref.bytes,ref.file+' bytes');eq(hash(b),ref.sha256,ref.file+' SHA256');verified.set(full,ref.sha256);return b;};
+          const load=ref=>JSON.parse(verify(ref,OUT).toString('utf8')),r=read('report.json'),WIDTHS=[[320,568],[390,844],[1280,900]],HOOK='630d21236f9f82ad4e728caad64dc4139bab7b57',HELPER='eeaf194d3bb086aa788562e05fc51cc27407c572';
+          eq(r.status,'passed','Actual native report passed');eq(r.externalForwarded,0,'No foreign forwarding');ok(Number.isInteger(r.checks)&&r.checks>0,'Actual native check count retained');eq(r.journeys.length,3,'Three native journeys');eq(r.screenshots.length,9,'Nine native viewport images');
+          eq(r.pins['src/hooks/useFootballConnect4.ts'],HOOK,'Reviewed fixed physical hook');eq(blob(fs.readFileSync(path.join(ROOT,'src/hooks/useFootballConnect4.ts'))),HOOK,'Current physical fixed hook');eq(blob(fs.readFileSync(path.join(ROOT,'scripts/qa/playFootballConnect4Cancel.mjs'))),HELPER,'Exact strengthened native helper');
+          eq(r.originalHook,'971dbdfa5a0e3c5adf749f9f301cc0fd994a178f','Original ownership source role');
+          for(const[file,want]of Object.entries(r.pins)){ok(/^[0-9a-f]{40}$/.test(want),'Physical source pin');eq(blob(fs.readFileSync(safe(ROOT,file))),want,file+' physical pin');}
+          for(const key of['sourceHeld','distHeld','installedHeld','offlineHeld'])eq(r[key],true,key);
+          for(const pair of[['sourceBefore','sourceAfter'],['distBefore','distAfter'],['installedBefore','installedAfter'],['offlineBefore','offlineAfter']])eq(r[pair[0]],r[pair[1]],pair.join('/'));
+          eq(r.distBefore.length,850,'850 built bodies');eq(r.installedBefore.length,521,'521 locked installed versions');eq(new Set(r.installedBefore.map(v=>v[0])).size,521,'Unique installed version entries');
+          for(const list of[r.sourceBefore,r.distBefore]){eq(new Set(list.map(v=>v.file)).size,list.length,'Unique body paths');for(const ref of list)verify(ref,ROOT);}
+          for(const ref of[r.offlineBefore,r.offlineAfter]){eq(ref.bytes,0,'Offline receipt empty');verify(ref,ROOT);}
+          const pre=load(r.activePreflight);eq(pre.status,'passed','Active preflight passed');eq(pre.route,'/football-connect-4','Active public route');eq(pre.component,'FootballConnect4','Actual component');eq(pre.imports,['./pages/FootballConnect4'],'Actual direct lazy import');eq(pre.snapshot.canonical,'https://douknowball.com/football-connect-4','Saved canonical');ok(pre.snapshot.snapshotTextLength>500,'Readable saved snapshot');eq([pre.snapshot.retiredMarkers,pre.snapshot.metaRefresh,pre.snapshot.noindex],[0,0,0],'Indexable nonredirect snapshot');eq(pre.parsers.html,'Inert JSDOM, scripts/resources not enabled','Inert HTML parser');ok(typeof pre.parsers.typescript==='string'&&pre.routeNode&&pre.lazyImport&&pre.catalogObject,'Actual AST node receipts');for(const ref of[pre.app,pre.registry,pre.snapshot])verify(ref,ROOT);
+          const fixture=load(r.fixture),NAMES=['Fixture A','Fixture B'],CANON=['QA Old A','QA New B'],SELECT='player_name,market_value_usd,year,club,nationality,position,age,person_key',ORDER='market_value_usd.desc,year.desc,player_name.asc';
+          eq(fixture.rawRows,NAMES.map((player_name,i)=>({player_name,name_folded:player_name.toLowerCase(),person_key:'c4-fiction-'+i,market_value_usd:10000000,year:2026,club:'Fixture Club '+i,nationality:'England',position:'Forward',age:24})),'Exact fictional search transport');eq(fixture.canonicalResponses,CANON.map(fullName=>({valid:true,fullName})),'Exact canonical validator fixtures');
+          const gestureNames=['reject-consent','unlimited-setup','select-0','type-0','submit-0','cancel-pending-A','select-1','type-1','submit-1'],prepNames=[...gestureNames,'before-old-release-photo','after-old-release-photo','after-B-commit-photo'],kinds=['consent','mode','grid','request','request','cancel','grid','request','request','request','request','grid'],photos=['before-old-release','after-old-release','after-B-commit'],stableKeys=['url','documentTimeOrigin','storage','columns','rows','selectedColumn','target','turn','errors','boardScroll'];
+          const stable=(a,b,label,input=true)=>{for(const key of stableKeys)eq(a[key],b[key],label+' '+key);eq(a.cells.map(c=>[c.label,c.text,c.disabled,c.classes]),b.cells.map(c=>[c.label,c.text,c.disabled,c.classes]),label+' full board');if(input)eq(a.input&&[a.input.value,a.input.disabled,a.input.expanded],b.input&&[b.input.value,b.input.disabled,b.input.expanded],label+' input');};
+          const pending=(v,index,label)=>{eq(v.chips,[],label+' empty board');eq(v.turn,'blue',label+' Blue turn');eq([v.input?.value,v.input?.disabled],[NAMES[index],true],label+' pending input');ok(v.cells.every(c=>c.disabled),label+' board locked');eq(v.selectedColumn,index,label+' selected column');eq(v.target,[[5,index]],label+' lowest target');};
+          const boundaries=[];let frameCount=0,actionCount=0,layoutCount=0,enabledGestures=0,disabledPhotos=0,trustedActions=0;
+          for(let i=0;i<WIDTHS.length;i++){
+           const row=r.journeys[i],[width,height]=WIDTHS[i],id=String(width),mobile=width<1000;eq([row.width,row.height],[width,height],id+' viewport');eq(row.status,'passed',id+' journey passed');eq(row.frames.length,57,id+' exact frames');eq(row.actions.length,21,id+' exact action/preparation receipts');eq(row.layouts.length,12,id+' exact target layouts');eq(row.screenshots.length,3,id+' exact images');frameCount+=row.frames.length;actionCount+=row.actions.length;layoutCount+=row.layouts.length;
+           for(const key of['errors','assetErrors','routeErrors'])eq(row[key],[],id+' '+key);
+           const frames=row.frames.map(ref=>({ref,value:load(ref)})),get=name=>{const found=frames.filter(v=>v.ref.file.endsWith('-'+name+'.json'));eq(found.length,1,id+' unique '+name);return found[0].value;},initial=get('unlimited-empty'),baseline=load(row.baseline);eq(baseline,initial,id+' actual setup baseline');eq(row.baselineStorage,initial.storage,id+' full baseline bytes');eq(row.boardIdentity,{columns:initial.columns,rows:initial.rows},id+' ordered board identity');eq(initial.columns.length,7,id+' seven column clues');eq(initial.rows.length,6,id+' six row clues');eq(initial.chips,[],id+' empty initial board');eq(initial.turn,'blue',id+' initial Blue');
+           const baselineIndex=frames.findIndex(v=>v.ref.file===row.baseline.file);ok(baselineIndex>=0,id+' baseline belongs to frames');
+           for(let n=0;n<frames.length;n++){const v=frames[n].value;eq(v.url,r.base+'/football-connect-4',id+' actual active URL');eq(v.documentTimeOrigin,initial.documentTimeOrigin,id+' same document');eq(v.viewport,{width,height},id+' frame viewport');ok(v.documentWidth<=width,id+' no outer horizontal overflow');eq(v.cells.length,42,id+' forty-two actual cells');eq(v.cells.map(c=>[c.index,c.row,c.col]),Array.from({length:42},(_,j)=>[j,Math.floor(j/7),j%7]),id+' actual cell coordinates');if(n>=baselineIndex){eq(v.storage,initial.storage,id+' postbaseline full storage held');eq([v.columns,v.rows],[initial.columns,initial.rows],id+' all ordered clues held');}}
+           eq(row.navigations.length,1,id+' one actual navigation');eq(row.navigations[0].url,r.base+'/football-connect-4',id+' actual route mounted');
+           const receipts=row.actions.map(ref=>({ref,value:load(ref)})),gestures=receipts.filter(v=>v.ref.file.includes('/actions/')).map(v=>v.value),preparations=receipts.filter(v=>v.ref.file.includes('/preparations/')).map(v=>v.value);eq(gestures.map(v=>v.name),gestureNames,id+' exact native action sequence');eq(preparations.map(v=>v.name),prepNames,id+' exact preparation sequence');eq(gestures.filter(v=>v.held).map(v=>v.name),['type-0','type-1'],id+' typing holds');
+           for(let n=0;n<12;n++){const v=row.layouts[n],p=preparations[n];eq(v.kind,kinds[n],id+' named target kind');ok(v.rect.width>0&&v.rect.height>0&&v.rect.x>=0&&v.rect.right<=width&&v.rect.y>=v.chrome.top&&v.rect.bottom<=height-v.chrome.bottom,id+' full target inside actual viewport/chrome');ok(v.clips.every(c=>(!c.cx||(v.rect.x>=c.x&&v.rect.right<=c.right))&&(!c.cy||(v.rect.y>=c.y&&v.rect.bottom<=c.bottom))),id+' whole target inside every actual ancestor clip');eq(v.hit,true,id+' actual center hit');eq(v.meets44,v.rect.width>=44&&v.rect.height>=44,id+' actual measured dimensions');if(v.kind==='request'||v.kind==='consent')eq(v.meets44,true,id+' request/consent44');else ok(['mode','grid','cancel'].includes(v.kind),id+' inherited size scope');
+            if(n<9){eq(v.disabled,false,id+' actual gesture enabled');eq(gestures[n].geometry,v,id+' exact gesture geometry');enabledGestures++;}else{eq(v.disabled,true,id+' only explicit pending/occupied photo disabled');disabledPhotos++;}
+            stable(p.before,p.after,id+' '+p.name+' preparation');eq(p.before.focus,p.after.focus,id+' preparation focus receipt held');if(p.blocked){ok(p.blocked.pixels>0&&Number.isInteger(p.blocked.pixels),id+' measured chrome correction');ok(p.events.some(e=>e.type==='wheel'&&e.trusted&&e.deltaMode===0&&e.deltaY===-p.blocked.pixels),id+' trusted measured native wheel');}
+           }
+           for(const action of gestures){ok(action.events.some(e=>e.trusted&&(mobile?e.pointerType==='touch':e.type==='keydown')),id+' native '+action.name);trustedActions++;if(action.held){stable(action.before,action.after,id+' typing action',false);eq(action.before.scroll,action.after.scroll,id+' typing exact scroll');}}
+           const aBusy=get('pending-0'),clear=get('cancelled-empty'),bBusy=get('pending-1'),cancel=load(row.cancelBoundary),cancelAction=gestures.find(v=>v.name==='cancel-pending-A');pending(aBusy,0,id+' A');pending(bBusy,1,id+' B');eq(cancel.before,cancelAction.before,id+' Cancel before actual action');eq(cancel.after,clear,id+' Cancel after named state');eq(cancel.pendingOutcomes,['fixture-held'],id+' A read remains held');eq(cancel.validatorCount,1,id+' one pending read at Cancel');eq(clear.input,null,id+' Cancel closes input');eq(clear.selectedColumn,-1,id+' Cancel clears selected column');eq(clear.target,[],id+' Cancel clears target');eq(clear.chips,[],id+' Cancel creates no chip');eq(clear.turn,'blue',id+' Cancel keeps turn');ok(clear.cells.every(c=>!c.disabled),id+' Cancel unlocks all forty-two cells');eq(clear.storage,initial.storage,id+' Cancel save bytes held');
+           const beforeOld=get('old-release-before'),settled1=get('old-release-settled-1'),settled2=get('old-release-settled-2');pending(beforeOld,1,id+' B before A');for(const after of[settled1,settled2]){stable(beforeOld,after,id+' fully finished stale A');eq(beforeOld.scroll,after.scroll,id+' stale A exact scroll');eq(beforeOld.focus,after.focus,id+' stale A focus fields');pending(after,1,id+' B after A');}
+           const validators=row.requests.filter(v=>v.path==='/functions/v1/football-connect4-validate'&&v.method==='POST');eq(validators.length,2,id+' exactly two validator reads');
+           for(let n=0;n<2;n++){const v=validators[n];eq(v.outcome,'fixture-fulfilled',id+' actual released read');eq(v.payload,{playerName:NAMES[n],columnAttribute:initial.columns[n],rowAttribute:initial.rows[5]},id+' selected current clues');eq(JSON.parse(v.body),v.payload,id+' actual request body');eq(v.response,{valid:true,fullName:CANON[n]},id+' actual canonical response');ok(v.heldAt<=v.releasedAt,id+' held read chronology');eq(row['origin'+n],{columns:initial.columns,rows:initial.rows,column:n,targetRow:5},id+' public origin');}
+           const[a,b]=validators;eq(row.oldResponse.body,a.response,id+' completed old body');eq(row.currentResponse.body,b.response,id+' completed current body');eq(row.oldResponse.status,200,id+' old HTTP response');eq(row.currentResponse.status,200,id+' current HTTP response');ok(a.heldAt<=cancel.before.at&&cancel.after.at<=b.heldAt&&b.heldAt<=beforeOld.at&&beforeOld.at<=a.releasedAt&&a.releasedAt<=row.oldResponse.finishedAt&&row.oldResponse.finishedAt<=settled1.at&&settled1.at<=settled2.at,id+' actual Cancel/B/finished-A/two-settled chronology');
+           const beforeB=get('B-release-before'),done=get('B-committed'),final=get('final');pending(beforeB,1,id+' B before release');ok(settled2.at<=beforeB.at&&beforeB.at<=b.releasedAt&&b.releasedAt<=row.currentResponse.finishedAt&&row.currentResponse.finishedAt<=done.at,id+' current response completion chronology');eq(done.chips.length,1,id+' sole current chip');const chip=done.chips[0];eq([chip.text,chip.row,chip.col],[CANON[1],5,1],id+' current canonical row5col1');ok(chip.classes.includes('bg-blue-500/90')&&chip.disabled,id+' current Blue occupied chip');ok(done.cells.filter(c=>c.index!==36).every(c=>!c.disabled),id+' other cells unlocked');eq([done.turn,done.selectedColumn,done.input,done.target],['red',-1,null,[]],id+' next turn and selection closed');eq(done.errors,[],id+' no current error');ok(!done.mainText.includes(CANON[0]),id+' no old canonical UI');stable(done,final,id+' final state');
+           for(const request of row.requests){const u=new URL(request.url);ok(u.origin!==r.base,id+' recorded request is foreign');eq(request.path,u.pathname,id+' request path');eq(request.query,Object.fromEntries(u.searchParams),id+' actual request query');ok(['aborted','fixture-cors','fixture-fulfilled'].includes(request.outcome),id+' no forwarded/unresolved traffic');ok(request.path!=='/rest/v1/game_completions'&&!request.path.includes('record-completion'),id+' no completion attempt');if(request.outcome==='aborted')continue;eq(u.hostname,'flawuiqbvjobmkfkauhw.supabase.co',id+' only explicit fixture host');ok(['/rest/v1/player_market_values','/functions/v1/football-connect4-validate'].includes(request.path),id+' only explicit fixture paths');if(request.outcome==='fixture-cors'){eq(request.method,'OPTIONS',id+' fixture preflight only');continue;}if(request.path.endsWith('football-connect4-validate')){eq(request.method,'POST',id+' validator read method');continue;}eq(request.method,'GET',id+' fictional search read');const q=request.query;eq(q.select.replaceAll(' ',''),SELECT,id+' exact search select');eq(q.order,ORDER,id+' exact search order');ok(['200','1000'].includes(q.limit)&&Object.keys(q).every(k=>['select','order','limit','name_folded'].includes(k)),id+' exact search filters');if(q.name_folded!==undefined)ok(/^ilike\.%fixture [ab]%$/.test(q.name_folded),id+' fictional folded query');eq(request.response,fixture.rawRows.filter(p=>q.name_folded===undefined||p.name_folded.includes(q.name_folded.slice(7,-1))),id+' exact fictional response');}
+           for(let n=0;n<3;n++){const shot=row.screenshots[n];eq(shot.file,id+'-'+photos[n]+'.png',id+' named viewport image');const png=verify(shot,OUT);eq(png.subarray(0,8),Buffer.from([137,80,78,71,13,10,26,10]),id+' actual PNG');eq([png.readUInt32BE(16),png.readUInt32BE(20)],[width,height],id+' actual viewport PNG dimensions');eq(shot.viewport,{width,height},id+' image viewport');const v=load(shot.frame);eq(v,get(photos[n]+'-photo'),id+' image actual named frame');if(n<2)pending(v,1,id+' image pending B');else eq(v.chips.map(c=>[c.text,c.row,c.col]),[[CANON[1],5,1]],id+' image current chip');}
+           boundaries.push({width,cancel:row.cancelBoundary,staleA:{before:frames.find(v=>v.ref.file.endsWith('-old-release-before.json')).ref,settled:frames.filter(v=>/-old-release-settled-[12]\.json$/.test(v.ref.file)).map(v=>v.ref),response:row.oldResponse},currentB:{before:frames.find(v=>v.ref.file.endsWith('-B-release-before.json')).ref,committed:frames.find(v=>v.ref.file.endsWith('-B-committed.json')).ref,response:row.currentResponse}});
+          }
+          eq(r.screenshots,r.journeys.flatMap(row=>row.screenshots),'Global images are exact journey images');eq([frameCount,actionCount,layoutCount,enabledGestures,disabledPhotos,trustedActions],[171,63,36,27,9,27],'Actual native census and disabled-photo boundary');
+          console.log(JSON.stringify({status:'passed',checks,report:{file:'report.json',bytes:fs.statSync(path.join(OUT,'report.json')).size,sha256:hash(fs.readFileSync(path.join(OUT,'report.json')))},hook:HOOK,helper:HELPER,activePreflight:r.activePreflight,boundaries,census:{journeys:3,frames:frameCount,actionReceipts:actionCount,layouts:layoutCount,enabledGestures,disabledPhotoLayouts:disabledPhotos,viewportPNGs:9,trustedActions,verifiedReferenceOccurrences:refCount,uniqueVerifiedBodies:verified.size,sourceBodies:r.sourceBefore.length,distBodies:850,installedVersions:521},limits:['Valid native pending-Cancel ownership proof only. Fictional search/validator transport is not real eligibility or a successful backend write.','Inherited Cancel/mode/grid target dimensions remain measured and unqualified for44px compliance. Input/options/consent retain strict44px and every actual target retains full viewport/clip/hit.','Photo-only disabled controls are exactly two pending inputs and one occupied chip per width. Native stale-A live DOM focus identity is asserted by the pinned helper; raw focus fields are also compared here.','No native RNG-count, server-abort, Daily-hidden-log, same-config/API-duplicate or full-match claim. Viewport photos may omit the board top or other columns.']},null,2));
+          NATIVE
+          test "$(git hash-object "$RUNNER_TEMP/admitFootballConnect4Cancel.mjs")" = 4a23f902886c28e4bb36b2888f4c5e4abf9bb815
+          cp "$RUNNER_TEMP/admitFootballConnect4Cancel.mjs" soccer-connect4-cancel-qualified/native-admission-script.mjs
+          node "$RUNNER_TEMP/admitFootballConnect4Cancel.mjs" soccer-connect4-cancel-qualified/browser > soccer-connect4-cancel-qualified/native-admission.json
+      - name: Bind actual unit native readers caps and source receipts
+        run: |
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const out='soccer-connect4-cancel-qualified',native=JSON.parse(fs.readFileSync(out+'/native-admission.json'));
+          assert.equal(native.status,'passed');
+          const reports=[['owned',6],['existing-owner',12],['existing-reasons',22]];
+          for(const [name,count]of reports){const r=JSON.parse(fs.readFileSync(out+'/'+name+'.json')),rows=r.testResults.flatMap(s=>s.assertionResults);assert.equal(r.numTotalTests,count);assert.equal(r.numPassedTests,count);assert.equal(r.numFailedTests,0);assert.equal(rows.length,count);assert(rows.every(x=>x.status==='passed'));}
+          const raw=JSON.parse(fs.readFileSync(out+'/raw.json')),prior=JSON.parse(fs.readFileSync(out+'/prior-owner-raw.json'));assert.equal(Object.values(raw.cases).reduce((n,c)=>n+c.frames.length,0),31);assert.equal(Object.values(prior.cases).reduce((n,c)=>n+c.frames.length,0),44);assert.deepEqual(raw.boardCatalog,prior.boardCatalog);
+          const readers=fs.readFileSync(out+'/readers.log','utf8'),wanted='simAdsense,simBrand,simHeadTags,simHiddenPages,simHubs,simIndexNow,simIndexing,simInternalLinks,simNoRivalNames,simPrerender,simPrerenderBoot,simRetiredRoutes,simSchema,simSitemap,simSnapshotAssets,simSiteSearch,simGuideHeadings,simSeoMetaSplit,simHomeCopy,simHarnessAnchors'.split(',').map(n=>n+'.mjs').sort(),actual=[...readers.matchAll(/^\s+PASS\s+(sim[A-Za-z0-9]+\.mjs)/gm)].map(m=>m[1]).sort();assert.deepEqual(actual,wanted);assert(!/^\s+FAIL\s+/m.test(readers));
+          const weight=fs.readFileSync(out+'/weight.log','utf8'),caps=[...weight.matchAll(/^\s+(\/\S*)\s+\d+K gz over\s+\d+ files \(budget (\d+)K, [\d.]+K to the tenth\)/gm)].map(m=>[m[1],Number(m[2])]);assert.deepEqual(caps,[['/',245],['/club-manager',648],['/soccer-career',840],['/stadium-tycoon',305],['/wonderkid-factory',278],['/minefield',295],['/footle',354],['/nfl-my-career',499],['/front-office',390],['/soccer-grid',320],['/leaderboard',266],['/manager-hot-seat',672],['/deadline-day',680],['/transfer-path',381],['/nba-front-office',397],['/nhl-front-office',379]]);assert(weight.includes('sweepWeight: green.'));
+          const related=JSON.parse(fs.readFileSync(out+'/related-admission.json'));assert.equal(related.status,'passed');assert.equal(related.actualChecks,37);
+          const source=fs.readFileSync(out+'/source-before.txt','utf8').trim().split('\n'),sourceRows=source.filter(l=>/\t(?:src|public|scripts)\//.test(l));assert.equal(sourceRows.length,4657);assert.equal(sourceRows.filter(l=>l.endsWith('\tscripts/qa/playFootballConnect4Cancel.mjs')).length,1);
+          const result={status:'passed',helper:'eeaf194d3bb086aa788562e05fc51cc27407c572',unitCases:40,unitCommands:3,ownedCases:6,rawFrames:31,priorCases:34,priorRawFrames:44,readers:actual,immutableCaps:caps,sourceRows:sourceRows.length,cleanSourceRows:4656,distFiles:850,nativePngs:9,legacyBrowserChecks:37,nativeReceipt:native,limits:'Actual scoped40 unit cases plus three native Cancel journeys, unchanged37 legacy browser checks,20 readers and all16 original immutable caps. Not the full test/sim suite. Real data, provider, backend write, server abort, unmount, other-sport Cancel and release remain unqualified.'};
+          fs.writeFileSync(out+'/admission.json',JSON.stringify(result,null,2));console.log(JSON.stringify(result));
+          NODE
+      - name: Whole tracked source locks versions and offline held
         if: always()
         run: |
           set -euo pipefail
-          node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee soccer-connect4-cancel-controls/types-after.log
-      - name: Whole tracked source locks installed versions and offline held
-        if: always()
-        run: |
-          set -euo pipefail
-          git ls-files -s > soccer-connect4-cancel-controls/source-after.txt
-          cmp soccer-connect4-cancel-controls/source-before.txt soccer-connect4-cancel-controls/source-after.txt
+          git ls-files -s > soccer-connect4-cancel-qualified/source-after.txt
+          cmp soccer-connect4-cancel-qualified/source-before.txt soccer-connect4-cancel-qualified/source-after.txt
           git diff --exit-code HEAD -- .
-          sha256sum package.json package-lock.json > soccer-connect4-cancel-controls/locks-after.txt
-          cmp soccer-connect4-cancel-controls/locks-before.txt soccer-connect4-cancel-controls/locks-after.txt
+          sha256sum package.json package-lock.json > soccer-connect4-cancel-qualified/locks-after.txt
+          cmp soccer-connect4-cancel-qualified/locks-before.txt soccer-connect4-cancel-qualified/locks-after.txt
           node --input-type=module <<'NODE'
           import fs from 'node:fs';import assert from 'node:assert/strict';import {execFileSync} from 'node:child_process';import {createHash} from 'node:crypto';
-          const out='soccer-connect4-cancel-controls',files=execFileSync('git',['ls-files','-z'],{encoding:'utf8'}).split('\0').filter(Boolean),rows=files.map(file=>{const b=fs.readFileSync(file);return{file,bytes:b.length,sha256:createHash('sha256').update(b).digest('hex')};});fs.writeFileSync(out+'/tracked-after.json',JSON.stringify(rows));assert.deepEqual(rows,JSON.parse(fs.readFileSync(out+'/tracked-before.json')));
-          const lock=JSON.parse(fs.readFileSync('package-lock.json')),before=JSON.parse(fs.readFileSync(out+'/installed-before.json')),after=Object.keys(lock.packages).filter(p=>p.startsWith('node_modules/')&&fs.existsSync(p+'/package.json')).map(p=>[p,JSON.parse(fs.readFileSync(p+'/package.json')).version]);assert.equal(after.length,521);assert.deepEqual(after,before);fs.writeFileSync(out+'/installed-after.json',JSON.stringify(after));assert.equal(fs.statSync(out+'/offline.log').size,0);
+          const out='soccer-connect4-cancel-qualified',files=execFileSync('git',['ls-files','-z'],{encoding:'utf8'}).split('\0').filter(Boolean);
+          const rows=files.map(file=>{const b=fs.readFileSync(file);return{file,bytes:b.length,sha256:createHash('sha256').update(b).digest('hex')};});
+          fs.writeFileSync(out+'/tracked-after.json',JSON.stringify(rows));assert.deepEqual(rows,JSON.parse(fs.readFileSync(out+'/tracked-before.json')));
+          const lock=JSON.parse(fs.readFileSync('package-lock.json')),before=JSON.parse(fs.readFileSync(out+'/installed-before.json'));
+          const after=Object.keys(lock.packages).filter(p=>p.startsWith('node_modules/')&&fs.existsSync(p+'/package.json')).map(p=>[p,JSON.parse(fs.readFileSync(p+'/package.json')).version]);
+          assert.equal(after.length,521);assert.deepEqual(after,before);fs.writeFileSync(out+'/installed-after.json',JSON.stringify(after));
+          assert(fs.existsSync(out+'/offline.log'));assert.equal(fs.statSync(out+'/offline.log').size,0);
+          const walk=dir=>fs.readdirSync(dir,{withFileTypes:true}).sort((a,b)=>a.name.localeCompare(b.name)).flatMap(e=>e.isDirectory()?walk(dir+'/'+e.name):e.isFile()?[dir+'/'+e.name]:[]);if(fs.existsSync(out+'/dist-before.json')){const dist=walk('dist').map(file=>{const b=fs.readFileSync(file);return{file,bytes:b.length,sha256:createHash('sha256').update(b).digest('hex')};});assert.equal(dist.length,850);assert.deepEqual(dist,JSON.parse(fs.readFileSync(out+'/dist-before.json')));fs.writeFileSync(out+'/dist-after.json',JSON.stringify(dist));}
           NODE
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: soccer-connect4-cancel-controls-${{ github.run_id }}
-          path: soccer-connect4-cancel-controls
+          name: soccer-connect4-cancel-ownership-qualified-${{ github.run_id }}
+          path: soccer-connect4-cancel-qualified
           retention-days: 14
           if-no-files-found: error
