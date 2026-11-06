@@ -16,7 +16,7 @@ import {
   changeLive, startSecondHalf, startExtraTime, markLiveMinute, setInstructions,
   setDuty, setSetPiece, autoSetPieces, startRetraining, stopRetraining,
   setShootoutOrder,
-  DEFAULT_ERA_ID,
+  DEFAULT_ERA_ID, ordinaryClubAllowed,
   releasePlayer, signFreeAgent,
   doorRefusal, loanOutRefusal,
   applyForJob, joinClubInSummer,
@@ -36,6 +36,7 @@ import { cmVarGameAsk } from '@/lib/clubManagerVar';
 import { eraById, eraRostersLoaded, ensureEraRosters, isHistoricEra } from '@/lib/clubManagerEras';
 import { ensureRealLeagueFixtures, realLeagueFixturesLoaded, realLeagueFixtureKeyFor } from '@/lib/clubManagerFixtures';
 import { reloadToRetryChunk } from '@/lib/freshBuild';
+import { kLeagueMember } from '@/data/kLeague2026';
 import { readSlots, switchSlot, deleteSlot, activeSlot, type SlotView } from '@/lib/clubManagerSlots';
 import { clearSlotPoints, noteSeasonCredited, seasonPosts } from '@/lib/cmSavePointsStore';
 import type { MidSeasonEntry } from '@/lib/clubManagerCalendar';
@@ -650,6 +651,7 @@ export function useClubManager() {
   }, []);
   useEffect(() => () => { dropStartHold(); }, [dropStartHold]);
   const chooseClub = useCallback((clubName: string, eraId?: string) => {
+    if (clubName && (!ordinaryClubAllowed(clubName) || (eraId && isHistoricEra(eraId) && kLeagueMember(clubName)))) return;
     setPendingClub(clubName);
     const key = clubName && eraId ? startFixtureKey(clubName, eraId) : null;
     fixtureFetch.current = key && !realLeagueFixturesLoaded(key) ? { key, done: ensureRealLeagueFixtures(key).catch(() => undefined) } : null;
@@ -668,6 +670,7 @@ export function useClubManager() {
   const confirmClub = useCallback((eraId?: string, manager?: ManagerSpec, entry?: MidSeasonEntry, worldEdit?: Record<string, string[]> | null, setup?: CareerSetup) => {
     if (!pendingClub) return;
     const club = pendingClub, era = eraId ?? DEFAULT_ERA_ID, edit = validWorldEdit(worldEdit ?? null);
+    if (!ordinaryClubAllowed(club) || (isHistoricEra(era) && kLeagueMember(club))) return;
     const begin = () => {
       const fresh = startCareer(club, era, undefined, manager, undefined, edit);
       /* Round 549: a mid season takeover plays the run-in first, under the

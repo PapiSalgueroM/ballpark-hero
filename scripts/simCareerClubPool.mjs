@@ -443,7 +443,7 @@ console.log(`  since: ${sinceTally.shipped} shipped clubs in every list 1980 to 
 
 /* ─── 4. TIERS ─── */
 head('4', 'TIERS: the rule worked again, hand rows frozen, Forest across eras');
-const partialSet = new Set(stubMod.CM_PARTIAL);
+const partialSet = new Set(inputs.partial);
 const handBy = new Map(HAND.map(c => [c.name, c]));
 const tableLines = [];
 let aboveFour = 0;
@@ -685,10 +685,32 @@ const rawFour = t4.filter(c => FOUR.has(c.league)).length;
    77 groups. Segunda adds nineteen tier 4 clubs in one new group: capped
    weight 5. Its existing hand club Girona stays tier 2. Group sizes in the
    stated shares below do not change; only the total denominator grows. */
-const WANT_W4 = 176 + Math.min(19, CAP);
+/* K League 1 already held two hand clubs at tier 4. Eight current-only
+   additions make ten, so its capped weight grows from two to five. It is
+   also a newly read label. No old probe's group size or cap changes. */
+const BEFORE_K_W4 = 176 + Math.min(19, CAP);
+const OLD_K_T4 = 2;
+const ADDED_K_T4 = 8;
+const K_T4_SIZE = OLD_K_T4 + ADDED_K_T4;
+const K_T4_WEIGHT = Math.min(K_T4_SIZE, CAP);
+const WANT_W4 = BEFORE_K_W4 + K_T4_WEIGHT - OLD_K_T4;
+const WANT_R4 = 124 + K_T4_WEIGHT;
+const validKGroup = g => !!g && g.clubs.length === K_T4_SIZE && g.weight === K_T4_WEIGHT;
+const k4 = g4.find(g => g.key === 'K League 1|4');
+ok(validKGroup(k4), `K League 1 tier 4: ${k4?.clubs.length ?? 0} members, weight ${k4?.weight ?? 0}; ten members and capped weight five expected`);
+if (k4) {
+  const before = JSON.stringify(k4);
+  const changed = { ...k4, clubs: k4.clubs.slice(1) };
+  const restored = { ...changed, clubs: [k4.clubs[0], ...changed.clubs] };
+  const control = changed.clubs.length === K_T4_SIZE - 1 && JSON.stringify(changed) !== before
+    && !validKGroup(changed) && validKGroup(restored) && JSON.stringify(restored) === before
+    && JSON.stringify(k4) === before;
+  ok(control, 'K League 1 copied group control changes ten to nine, rejects it and restores the full original');
+  if (control) console.log('  K League 1 tier 4: ten members, capped weight five; copied nine-member control rejected and fully restored');
+}
 const R4 = g4.filter(g => READ.has(g.clubs[0].league)).reduce((s, g) => s + g.weight, 0);
 const tierW = t => engine.leagueDrawGroups(POOL.filter(c => c.tier === t)).reduce((s, g) => s + g.weight, 0);
-ok(F4 === 20 && W4 === WANT_W4 && R4 === 124 && g4.length === 78, `tier 4: the four leagues hold ${F4}, the read labels ${R4}, of ${W4} over ${g4.length} groups; 20, 124, ${WANT_W4} and 78 expected`);
+ok(F4 === 20 && W4 === WANT_W4 && R4 === WANT_R4 && g4.length === 78, `tier 4: the four leagues hold ${F4}, the read labels ${R4}, of ${W4} over ${g4.length} groups; 20, ${WANT_R4}, ${WANT_W4} and 78 expected`);
 ok(tierW(1) === 18 && tierW(2) === 39 && tierW(3) === 69, `tier 1 to 3 draw weights ${tierW(1)}, ${tierW(2)}, ${tierW(3)}; 18, 39 and 69 expected`);
 /* The sampler itself on the full tier 4, both calls on the grid: every club
    in every group, capped ones included, drawn exactly weight * M * M2 times. */

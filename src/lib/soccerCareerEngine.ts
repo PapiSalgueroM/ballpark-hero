@@ -1,6 +1,7 @@
 // Soccer Career Simulation Engine v2, Youth Academy + Pro System
 
 import { recordSoccerHistoricalArrivals, type SoccerHistoricalArrivals } from './soccerHistoricalArrivals';
+import { K_LEAGUE_2026, kLeagueMember } from '@/data/kLeague2026';
 import { rollCareerChance, type CareerChanceWheelReceipt } from '@/lib/careerChanceWheel';
 import { CAPTAIN_MIN_AGE, CAPTAIN_MIN_RATING } from '@/lib/captaincy';
 import type { SoccerAgentReview } from './soccerAgentReview';
@@ -2629,6 +2630,7 @@ export function getClubsByTier(clubs: ClubData[], tier: number): ClubData[] {
 }
 
 export function getYouthAcademyClub(clubs: ClubData[], nationality: string, overall?: number): ClubData {
+  clubs = clubs.filter(club => careerClubAllowed(club));
   const ovr = overall ?? 50;
   
   if (ovr >= 75) {
@@ -3937,6 +3939,12 @@ export const HAND_CLUBS: ClubData[] = [
    REAL_LEAGUES rows, and scripts/simCareerClubPool.mjs fails while it is stale. */
 export const FALLBACK_CLUBS: ClubData[] = [...HAND_CLUBS, ...CAREER_CLUB_POOL];
 
+/** Membership stays complete even where ordinary access is not supported. */
+function careerClubAllowed(club: Pick<ClubData, 'name'>, year?: number): boolean {
+  const member = kLeagueMember(club.name);
+  return !member?.accessHeld && (member?.gameSince === undefined || year === undefined || year >= member.gameSince);
+}
+
 /* ─── Appearances, league + UCL + cups for realistic totals ─── */
 /* Round 217: the league appearance band, pulled out of calcAppearances so
    the loan screen can QUOTE the same bands the simulation draws from. One
@@ -4383,6 +4391,7 @@ export function formatWage(wage: number): string {
 
 /* ─── Generate initial contract offers (age 17) ─── */
 export function generateContractOffers(clubs: ClubData[], overall: number, age: number, academyClubName?: string): ContractOffer[] {
+  clubs = clubs.filter(club => careerClubAllowed(club));
   let targetTiers: number[];
   if (overall >= 66) targetTiers = [2, 2, 3];
   else if (overall >= 56) targetTiers = [3, 3, 3];
@@ -4544,7 +4553,8 @@ export function determineLoanOffers(state: CareerState, clubs: ClubData[]): Cont
   /* real minutes already on the table means no loan market */
   if (here.max >= 24) return null;
   const lastSeason = state.seasons[state.seasons.length - 1];
-  const pool = projectLeagueWorldClubs(state, adjustClubsForYear(clubs, (lastSeason?.year ?? 2024) + 1), (lastSeason?.year ?? 2024) + 1);
+  const pool = projectLeagueWorldClubs(state, adjustClubsForYear(clubs, (lastSeason?.year ?? 2024) + 1), (lastSeason?.year ?? 2024) + 1)
+    .filter(club => careerClubAllowed(club));
   const exclude = new Set<string>([state.currentClub]);
   /* every tier below the parent is a candidate market, because the tier
      that can PROMISE a fringe kid real minutes depends on how good he
@@ -4565,6 +4575,7 @@ export function determineLoanOffers(state: CareerState, clubs: ClubData[]): Cont
 }
 
 export function acceptLoan(prev: CareerState, offer: ContractOffer): CareerState {
+  if (!careerClubAllowed(offer.club, nextSeasonYear(prev))) return prev;
   const s = { ...prev };
   if (s.loan || !offer.isLoan) return s;
   cancelReducedRole(s);
@@ -4727,7 +4738,8 @@ export function clubVerdict(state: CareerState): ClubVerdict | null {
 export function determineTransferSituation(state: CareerState, clubs: ClubData[]): TransferSituation {
   const { overall, age, currentClub, currentClubTier, marketValue, contractYearsLeft } = state;
   const lastSeason = state.seasons[state.seasons.length - 1];
-  clubs = projectLeagueWorldClubs(state, adjustClubsForYear(clubs, (lastSeason?.year ?? 2024) + 1), (lastSeason?.year ?? 2024) + 1);
+  clubs = projectLeagueWorldClubs(state, adjustClubsForYear(clubs, (lastSeason?.year ?? 2024) + 1), (lastSeason?.year ?? 2024) + 1)
+    .filter(club => careerClubAllowed(club));
   const exclude = new Set<string>([currentClub]);
   const interestedTiers = getInterestedTiers(overall, age);
 
@@ -4842,7 +4854,8 @@ export function determineTransferSituation(state: CareerState, clubs: ClubData[]
 
 /* ─── Request transfer, 50/50 ─── */
 export function requestTransfer(state: CareerState, clubs: ClubData[]): TransferSituation {
-  clubs = projectLeagueWorldClubs(state, adjustClubsForYear(clubs, (state.seasons[state.seasons.length - 1]?.year ?? 2024) + 1), (state.seasons[state.seasons.length - 1]?.year ?? 2024) + 1);
+  clubs = projectLeagueWorldClubs(state, adjustClubsForYear(clubs, (state.seasons[state.seasons.length - 1]?.year ?? 2024) + 1), (state.seasons[state.seasons.length - 1]?.year ?? 2024) + 1)
+    .filter(club => careerClubAllowed(club));
   if (Math.random() < 0.5 || programmePromiseBroken(state)) {
     const exclude = new Set<string>([state.currentClub]);
     const offer = makeOffer(clubs, pick(getInterestedTiers(state.overall, state.age)), state.overall, state.age, exclude, state.marketValue, state.seasons);
@@ -4855,7 +4868,7 @@ function transferBriefPool(state: CareerState, clubs: ClubData[]): ClubData[] {
   const year = (state.seasons[state.seasons.length - 1]?.year ?? 2024) + 1;
   const tiers = getInterestedTiers(state.overall, state.age);
   return projectLeagueWorldClubs(state, adjustClubsForYear(clubs, year), year)
-    .filter(club => tiers.includes(club.tier) && clubKeyOf(club.name) !== clubKeyOf(state.currentClub));
+    .filter(club => careerClubAllowed(club) && tiers.includes(club.tier) && clubKeyOf(club.name) !== clubKeyOf(state.currentClub));
 }
 
 export function transferBriefPreview(state: CareerState, clubs: ClubData[], minimumApps?: TransferBriefMinimum): TransferBriefPreview {
@@ -4913,7 +4926,7 @@ export function initCareer(
      below runs exactly as it always has. */
   academyName?: string | null,
 ): CareerState {
-  const yearClubs = adjustClubsForYear(clubs, startYear);
+  const yearClubs = adjustClubsForYear(clubs, startYear).filter(club => careerClubAllowed(club));
   const academyClub = (academyName ? yearClubs.find(c => c.name === academyName) : undefined)
     ?? getYouthAcademyClub(yearClubs, nationality, overall);
   // Round 80: one text waiting on day one so the phone is alive immediately
@@ -5074,6 +5087,7 @@ export function advanceYouthYear(prev: CareerState, clubs: ClubData[]): CareerSt
 
 /* ─── Accept contract offer ─── */
 export function acceptOffer(prev: CareerState, offer: ContractOffer, clubDirected = false): CareerState {
+  if (!careerClubAllowed(offer.club, nextSeasonYear(prev))) return prev;
   const loyaltyBaseWage = Math.round(offer.wage * agentWageMult(prev.agentId));
   if (!clubDirected && !canAcceptLoyaltyOffer(prev, offer, loyaltyBaseWage)) return prev;
   const s = { ...prev };
@@ -8825,6 +8839,8 @@ export function manualRetire(prev: CareerState): CareerState {
 
 /** Newly listed Ligue 2, Serie B and Segunda clubs wait until their verified season. */
 export function managerEntryClubInYear(club: Pick<ClubData, 'id'> | null | undefined, year: number): boolean {
+  const pooled = club && CAREER_CLUB_POOL.find(row => row.id === club.id);
+  if (pooled && !careerClubAllowed(pooled, year)) return false;
   return !club || year >= 2026 || !CAREER_CLUB_POOL.some(row =>
     row.id === club.id && (row.league === 'Ligue 2' || row.league === 'Serie B' || row.league === 'Segunda Division') && CAREER_POOL_SINCE[row.name] === 2026);
 }
@@ -9011,7 +9027,9 @@ export function refreshManagerOffers(s: CareerState, ms: ManagerState): void {
     ms.offerNote = "Still getting the phone lines up. Give it a second and go again.";
     return;
   }
-  const offers = MARKET.realJobOffers(profile, Math.random, [ms.club]);
+  const year = managerNextSeasonYear({ ...s, managerState: ms });
+  const clubs = MARKET.allOfferClubs().filter(club => year >= K_LEAGUE_2026.membershipYear || club.league !== K_LEAGUE_2026.label);
+  const offers = MARKET.realJobOffers(profile, Math.random, [ms.club], clubs);
   ms.offers = offers.map(o => ({
     club: o.club, country: o.country, tier: o.tier, league: o.league,
     brief: o.brief, reason: o.reason, budget: o.budget,
@@ -9041,6 +9059,10 @@ export function managerNextSeasonYear(s: CareerState): number {
 
 /** Round 111: take one of the jobs on the table. */
 export function acceptManagerOffer(prev: CareerState, index: number): CareerState {
+  const target = prev.managerState?.offers?.[index];
+  const year = managerNextSeasonYear(prev);
+  if (target?.league === K_LEAGUE_2026.label
+    && (!careerClubAllowed({ name: target.club }, year) || year < K_LEAGUE_2026.membershipYear)) return prev;
   const s = { ...prev };
   if (!s.managerState) return s;
   const ms = { ...s.managerState };

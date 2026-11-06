@@ -14,6 +14,7 @@ interface LeagueTableCardProps {
   onClubClick?: (club: string) => void;
   /** Round 462: how level points were split, printed under the rows. */
   footnote?: string;
+  scoutLine?: string;
   /** Round 582: how many places at the top are coloured as the prize zone.
    *  Club Manager's Champions League four by default; the tycoon passes 1,
    *  because only its champion goes up. */
@@ -28,7 +29,7 @@ interface LeagueTableCardProps {
 /**
  * League (or UCL group) standings. Top 4 = UCL zone marker, 1st = title.
  */
-export function LeagueTableCard({ rows, myClub, compact = false, title, preseason = false, onClubClick, footnote, zoneTop = 4, isUnnamed }: LeagueTableCardProps) {
+export function LeagueTableCard({ rows, myClub, compact = false, title, preseason = false, onClubClick, footnote, scoutLine = 'Tap any club to scout their full squad.', zoneTop = 4, isUnnamed }: LeagueTableCardProps) {
   const myIdx = rows.findIndex(r => r.club === myClub);
   let visible = rows.map((r, i) => ({ r, pos: i + 1 }));
   if (compact) {
@@ -45,7 +46,7 @@ export function LeagueTableCard({ rows, myClub, compact = false, title, preseaso
         <span>#</span><span>Club</span><span className="text-center">W</span><span className="text-center">D</span><span className="text-center">L</span><span className="text-center">GF-GA</span><span className="text-center">GD</span><span className="text-right">Pts</span>
       </div>
       {onClubClick && (
-        <p className="text-[9px] text-muted-foreground pt-1">Tap any club to scout their full squad.</p>
+        <p className="text-[9px] text-muted-foreground pt-1">{scoutLine}</p>
       )}
       {visible.map(({ r, pos }) => {
         const mine = r.club === myClub;

@@ -30,6 +30,7 @@ import {
   cupProgressRank, uclProgressRank, objectiveStatuses, openObjectives,
   /* Round 783: the mid season takeover an accepted application walks into. */
   startCareer, interimManagerName, refreshWorldRoster, worldSeedOf, livingWorldOf, customExitUclField, SAVE_CAPS,
+  clubAvailableInCareer, careerHasKLeagueWorld,
   /* Round 1335: the old season rules' switch, read by both handovers. */
   legacySeason,
   /* Round 1502: the watched Champions League across a move, and where its nights sit. */
@@ -980,6 +981,7 @@ export function joinClubNow(career: CareerState): CareerState | null {
   const open = hunt.open;
   if (!open || open.status !== 'accepted' || career.sacked) return null;
   const club = open.club;
+  if (!clubAvailableInCareer(career, club)) return null;
   const from = career.clubName;
   const departed = refreshWorldRoster(snapshotWorldRosterClub(career, from));
   const eraId = career.eraId ?? DEFAULT_ERA_ID;
@@ -990,6 +992,7 @@ export function joinClubNow(career: CareerState): CareerState | null {
   try {
     fresh = startCareer(club, eraId, undefined, career.manager, {
       yearsOn,
+      kLeagueActive: careerHasKLeagueWorld(career),
       uclField: career.uclField ? customExitUclField(career, career.uclField) : null,
       keepLeagueOverrides: true,
       ...(worldRosterView(departed) || worldSeedOf(departed) !== undefined

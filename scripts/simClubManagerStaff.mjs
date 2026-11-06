@@ -23,9 +23,12 @@
           growth: developmentRate read for EVERY position in the Position
             union, one coach at a time, so a coach wired to the wrong unit
             fails rather than hiding inside a pooled mean; then the same
-            summer rolled at level 1 and at level 10 over ten clubs, mean
-            positive drift of everybody with headroom, and no player past
-            his ceiling either way (the Round 96 and 116 rule).
+            summer rolled at level 1 and at level 10 over ten clubs, with
+            its whole point drift retained as a diagnostic. The same eligible
+            returning players also run through the real aging function over
+            every value of their finite age band. That conditional expectation
+            must lift within the same band, with no player past his ceiling
+            either way (the Round 96 and 116 rule).
           the clamp (Round 963): the per position kid sits on a pinned
             academy, provably under developmentRate's 2.6 ceiling; then a
             grid of academies, loads, game time and headroom, every coach on
@@ -67,6 +70,9 @@
    Negative controls (house rule: prove the checks can fail):
      CM_STAFF_CONTROL=nolift bundles a copy of the engine with the coach
        factor taken back out of developmentRate. Section 3 must go red.
+     CM_STAFF_CONTROL=nogrowth leaves developmentRate intact but takes its
+       rate out of the actual aging function. The expected aging outcome in
+       section 3 must fail while the per position rate checks stay green.
      CM_STAFF_CONTROL=nocard bundles a copy of the engine whose
        growingAtCeiling never counts anybody, so the cards would promise the
        full lift to a kid on the ceiling. Section 3 must go red.
@@ -82,16 +88,22 @@
      Every control refuses to run if its rewrite did not find its text.
 
    Bands, measured on this harness's own seeded stream on 2026-09-06:
-     growth, all four at level 10 over all four at level 1, mean whole point
-       drift of every player with three or more points of headroom pooled
-       over ten clubs: measured 1.098x on the default seed, 1.052x on
-       SIM_SEED=2 and 1.056x on SIM_SEED=3, against a multiplier of 1.099x
-       and a nolift control that reads 1.000x. The band is 1.03x to 1.20x:
-       the floor sits half way between the control and the thinnest run
-       measured, so a coach whose effect halved fails and a quiet seed does
-       not. The strong reading in this section is the per position one above
-       it, which is exact; the season drift is the outcome behind it and
-       carries agePlayer's whole point rounding.
+     growth, all four at level 10 over all four at level 1, used to gate one
+       rounded summer at 1.03x to 1.20x. Its archived 2026-09-06 readings were
+       1.098x on the default seed, 1.052x on SIM_SEED=2 and 1.056x on SIM_SEED=3,
+       with a 1.099x multiplier and a nolift control at 1.000x. The K world
+       changed the natural closed cohorts without changing developmentRate or
+       agePlayer: the admitted default Main outcome was 127/119 (1.067x), and
+       the new current outcome was 130/127 (1.024x). Those integer readings
+       stay printed as diagnostics. Whole point rounding can hide most of a
+       small lift in one otherwise healthy cohort, so the same 1.03x to 1.20x
+       bounds now apply to expected rating drift over the actual complete
+       finite age band of the same eligible returning players. This calls the
+       real agePlayer with its existing optional random argument, not a second
+       copy of its formula, and checks every paired outcome, the original
+       observed pair's membership and both ceiling guards. It is an aging
+       expectation conditional on that closed cohort, not an entire-season
+       expectation or proof of the original random operands.
      the clamp and the card (Round 963, measured 2026-10-03; the grid is
        pure arithmetic on Everton's day one state, so it does not move with
        the seed, only with a re-bake of Everton's training ground or staff):
@@ -129,7 +141,7 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const ROOT_URL = ROOT.replaceAll('\\', '/');
 const TMP = os.tmpdir().replaceAll('\\', '/');
 const CONTROL = process.env.CM_STAFF_CONTROL || '';
-if (CONTROL && !['nolift', 'nocard', 'seasonsofar', 'oldlegs', 'tax', 'freewage'].includes(CONTROL)) {
+if (CONTROL && !['nolift', 'nogrowth', 'nocard', 'seasonsofar', 'oldlegs', 'tax', 'freewage'].includes(CONTROL)) {
   console.error(`CM_STAFF_CONTROL=${CONTROL} is not a control this harness knows`);
   process.exit(1);
 }
@@ -198,6 +210,28 @@ if (CONTROL === 'freewage') {
   fs.writeFileSync(booksPath, src.replace(fixed, broken));
   console.log('NEGATIVE CONTROL ON: the four men work for nothing in the ledger');
 }
+if (CONTROL === 'nogrowth') {
+  const src = lf(fs.readFileSync(path.join(ROOT, 'src/lib/clubManager.ts'), 'utf8'));
+  const fixed = 'drift = Math.round(drift * recordedTraining(p, career).rate);';
+  const broken = 'drift = Math.round(drift);';
+  const at = src.indexOf(fixed);
+  if (at < 0 || src.lastIndexOf(fixed) !== at) { console.error('control cannot run: agePlayer growth has no unique rewrite'); process.exit(1); }
+  const changed = src.slice(0, at) + broken + src.slice(at + fixed.length);
+  if (changed === src || changed.slice(0, at) + fixed + changed.slice(at + broken.length) !== src) { console.error('control cannot run: agePlayer growth rewrite did not invert'); process.exit(1); }
+  enginePath = `${TMP}/clubManagerStaff.nogrowth.ts`;
+  fs.writeFileSync(enginePath, changed);
+  if (fs.readFileSync(enginePath, 'utf8') !== changed) { console.error('control cannot run: agePlayer growth copy differs'); process.exit(1); }
+  console.log('NEGATIVE CONTROL ON: the aging function no longer uses the development rate');
+}
+/* Expose the existing private function only in the temporary module under test.
+   Every selected control rewrite has already happened. The App source stays held. */
+const selectedEngine = fs.readFileSync(enginePath);
+const ageExport = Buffer.from('\nexport { agePlayer as staffGrowthAgePlayer };\n');
+const exposedEngine = Buffer.concat([selectedEngine, ageExport]);
+if (!exposedEngine.subarray(0, -ageExport.length).equals(selectedEngine)) throw new Error('staff aging export did not invert');
+enginePath = `${TMP}/clubManagerStaff.exposed.ts`;
+fs.writeFileSync(enginePath, exposedEngine);
+if (!fs.readFileSync(enginePath).equals(exposedEngine)) throw new Error('staff aging export copy differs');
 const ENTRY = `${TMP}/clubManagerStaff.entry.mjs`;
 const BUNDLE = `${TMP}/clubManagerStaff.bundle.mjs`;
 fs.writeFileSync(ENTRY, `
@@ -226,7 +260,7 @@ const fin = mod.books;
 const { ageDriftBand } = mod;
 const {
   startCareer, playNextEntry, finishSeason, startNextSeason, developmentRate, DEVELOPMENT_RATE_MAX, growingAtCeiling, clubDefFor, eraClubDefFor,
-  playableClubs, REAL_LEAGUES, eraPlayableClubs, eraLeaguesFor, CM_ERAS, loadCareer, SCOUT_REGIONS, hireScout,
+  playableClubs, REAL_LEAGUES, eraPlayableClubs, eraLeaguesFor, CM_ERAS, loadCareer, SCOUT_REGIONS, hireScout, staffGrowthAgePlayer,
 } = cm;
 const {
   STAFF_POST_IDS, STAFF_MAX, STAFF_MATCHES_PER_SEASON, POACH_WEEKS, STAFF_POST_INFO,
@@ -554,6 +588,60 @@ console.log('3) Each effect runs the right way, on every position, and stays bou
   /* The outcome: the same summer rolled at level 1 and at level 10. */
   const CLUBS = ['Everton', 'Napoli', 'Brentford', 'Newcastle', 'Ajax', 'Benfica', 'Leverkusen', 'Lyon', 'Sevilla', 'Coventry'];
   const pooledLo = [], pooledHi = [];
+  const expectedLo = [], expectedHi = [];
+  let finiteCalls = 0;
+  const ageProbe = (player, state, quantile) => {
+    const p = clone(player), held = JSON.stringify(p), saved = Math.random;
+    let calls = 0;
+    Math.random = () => { throw new Error('finite aging used global randomness'); };
+    try {
+      finiteCalls++;
+      const q = staffGrowthAgePlayer(p, state, () => { calls++; return quantile; });
+      if (calls !== 1) throw new Error('finite aging did not use exactly one callback');
+      if (JSON.stringify(p) !== held) throw new Error('finite aging changed its input player');
+      return q;
+    } finally { Math.random = saved; }
+  };
+  const finiteDrift = (closed, lo, hi, club) => {
+    const low = new Map(lo.squad.map(p => [p.id, p]));
+    const high = new Map(hi.squad.map(p => [p.id, p]));
+    const ids = closed.squad.map(p => p.id);
+    const eligible = by => closed.squad.filter(p => by.has(p.id) && (p.potential ?? p.rating) - p.rating >= 3 && p.age <= 27).map(p => p.id);
+    const lowIDs = eligible(low), highIDs = eligible(high);
+    const retainedLow = ids.filter(id => low.has(id)), retainedHigh = ids.filter(id => high.has(id));
+    if (new Set(ids).size !== ids.length || low.size !== lo.squad.length || high.size !== hi.squad.length
+      || JSON.stringify(lowIDs) !== JSON.stringify(highIDs) || JSON.stringify(retainedLow) !== JSON.stringify(retainedHigh)) {
+      fail(club + ': finite aging does not have the same unique retained and eligible players in both arms');
+      return;
+    }
+    const states = { low: setAll(closed, 1), high: setAll(closed, STAFF_MAX) };
+    const heldStates = JSON.stringify(states);
+    for (const id of lowIDs) {
+      const p = closed.squad.find(x => x.id === id);
+      if (!Number.isFinite(p.potential) || p.potential <= 0) { fail(club + ': finite aging needs an explicit positive potential for ' + id); continue; }
+      const [first, last] = ageDriftBand(p.age + 1);
+      if (!Number.isSafeInteger(first) || !Number.isSafeInteger(last) || last < first) { fail(club + ': finite aging has no valid age band for ' + id); continue; }
+      if (high.get(id).rating < low.get(id).rating) fail(club + ': better coaches reduced observed growth for ' + id);
+      const width = last - first + 1;
+      let sumLow = 0, sumHigh = 0, observedPair = false, complete = true;
+      for (let j = 0; j < width; j++) {
+        try {
+          const quantile = (j + 0.5) / width;
+          const a = ageProbe(p, states.low, quantile), b = ageProbe(p, states.high, quantile);
+          if (a.id !== id || b.id !== id || a.age !== p.age + 1 || b.age !== p.age + 1
+            || !Number.isFinite(a.rating) || !Number.isFinite(b.rating)) throw new Error('finite aging returned another player or invalid rating');
+          if (b.rating < a.rating) fail(club + ': better coaches reduced a finite growth outcome for ' + id);
+          if (a.rating > (a.potential ?? a.rating) || b.rating > (b.potential ?? b.rating)) fail(club + ': finite aging grew past potential for ' + id);
+          if (a.rating === low.get(id).rating && b.rating === high.get(id).rating) observedPair = true;
+          sumLow += a.rating - p.rating;
+          sumHigh += b.rating - p.rating;
+        } catch (e) { complete = false; fail(club + ': finite aging probe failed for ' + id + ': ' + e.message); }
+      }
+      if (!observedPair) fail(club + ': observed integer growth pair is outside finite aging support for ' + id);
+      if (complete) { expectedLo.push(sumLow / width); expectedHi.push(sumHigh / width); }
+    }
+    if (JSON.stringify(states) !== heldStates) fail(club + ': finite aging changed its input careers');
+  };
   let overCeiling = 0;
   for (const [i, club] of CLUBS.entries()) {
     const end = withStream(100 + i, () => playSeason(startCareer(club)));
@@ -574,13 +662,18 @@ console.log('3) Each effect runs the right way, on every position, and stays bou
     };
     pooledLo.push(...drift(lo));
     pooledHi.push(...drift(hiRun));
+    finiteDrift(closed, lo, hiRun, club);
   }
   const ml = mean(pooledLo), mh = mean(pooledHi);
   const ratio = mh / Math.max(0.01, ml);
   console.log(`   growth: mean drift of ${pooledLo.length} players with headroom across ${CLUBS.length} clubs, level 1 ${ml.toFixed(3)} vs level 10 ${mh.toFixed(3)} (${ratio.toFixed(3)}x, multiplier ${full.toFixed(3)}x)`);
   if (pooledLo.length < 60) fail(`only ${pooledLo.length} players with headroom sampled`);
-  if (!(ratio >= 1.03)) fail(`level 10 coaches moved growth ${ratio.toFixed(3)}x, the effect is gone`);
-  if (!(ratio <= 1.2)) fail(`level 10 coaches moved growth ${ratio.toFixed(3)}x, which is not small`);
+  if (expectedLo.length !== pooledLo.length || expectedHi.length !== pooledHi.length || expectedLo.length !== expectedHi.length) fail('finite aging changed the original eligible player census');
+  const expectedLow = mean(expectedLo), expectedHigh = mean(expectedHi);
+  const expectedRatio = expectedHigh / Math.max(0.01, expectedLow);
+  console.log(`   finite growth: expected drift of ${expectedLo.length} players across ${CLUBS.length} closed cohorts, ${finiteCalls} actual age-band calls, level 1 ${expectedLow.toFixed(6)} vs level 10 ${expectedHigh.toFixed(6)} (${expectedRatio.toFixed(6)}x)`);
+  if (!(expectedRatio >= 1.03)) fail(`level 10 coaches moved expected aging growth ${expectedRatio.toFixed(3)}x, the effect is gone`);
+  if (!(expectedRatio <= 1.2)) fail(`level 10 coaches moved expected aging growth ${expectedRatio.toFixed(3)}x, which is not small`);
   if (overCeiling) fail(`${overCeiling} players grew past their potential`);
 
   /* Scouting: the same trips, run at lead scout 1 and at 10. Boys are
