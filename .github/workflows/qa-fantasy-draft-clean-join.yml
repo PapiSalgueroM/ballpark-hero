@@ -1,0 +1,118 @@
+name: Fantasy Draft clean build join
+on:
+  push:
+    branches: [codex/fantasy-draft-clean-join-qa-20261106]
+permissions:
+  contents: read
+  actions: read
+jobs:
+  closeout:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        shell: bash
+    env:
+      SIM_NETWORK: offline
+      SIM_OFFLINE_RECEIPT: fd-clean-join/offline.log
+      FD_REFERENCE_ARTIFACT: '13481304865'
+      FD_REFERENCE_ZIP: '351808b4cf7ead513d8296b6e2d930d2dffec8440514d76bfea7d00228a6f093'
+      FD_REFERENCE_TAR: 'f5033c7b5534a43a5dedf57a06a35fab131007ec30624936a957a1c10646c387'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 3
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24.22.1
+          cache: npm
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.4.4
+      - name: Locked dependencies and clean source receipts
+        run: |
+          set -euo pipefail
+          [[ "$FD_REFERENCE_ARTIFACT" =~ ^[0-9]+$ ]]
+          [[ "$FD_REFERENCE_ZIP" =~ ^[a-f0-9]{64}$ ]]
+          [[ "$FD_REFERENCE_TAR" =~ ^[a-f0-9]{64}$ ]]
+          mkdir -p fd-clean-join
+          touch fd-clean-join/offline.log
+          git rev-parse HEAD > fd-clean-join/head.txt
+          git rev-parse 'HEAD^{tree}' > fd-clean-join/tree.txt
+          git ls-files -s > fd-clean-join/source-before.txt
+          sha256sum package.json package-lock.json > fd-clean-join/locks-before.txt
+          npm ci
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const lock=JSON.parse(fs.readFileSync('package-lock.json'));
+          const rows=Object.keys(lock.packages).filter(p=>p.startsWith('node_modules/')&&fs.existsSync(p+'/package.json')).map(p=>[p,JSON.parse(fs.readFileSync(p+'/package.json')).version]);
+          assert.equal(rows.length,521);fs.writeFileSync('fd-clean-join/installed-before.json',JSON.stringify(rows));
+          NODE
+      - name: Proper app types
+        run: node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee fd-clean-join/types.log
+      - name: Pinned completed reader/cap build artifact
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          gh api "repos/PapiSalgueroM/ballpark-hero/actions/artifacts/$FD_REFERENCE_ARTIFACT" > fd-clean-join/reference-artifact.json
+          gh api "repos/PapiSalgueroM/ballpark-hero/actions/artifacts/$FD_REFERENCE_ARTIFACT/zip" > "$RUNNER_TEMP/fd-reference.zip"
+          echo "$FD_REFERENCE_ZIP  $RUNNER_TEMP/fd-reference.zip" | sha256sum --check
+          mkdir -p "$RUNNER_TEMP/fd-reference" "$RUNNER_TEMP/fd-reference-dist"
+          unzip -q "$RUNNER_TEMP/fd-reference.zip" -d "$RUNNER_TEMP/fd-reference"
+          echo "$FD_REFERENCE_TAR  $RUNNER_TEMP/fd-reference/dist.tgz" | sha256sum --check
+          tar -xzf "$RUNNER_TEMP/fd-reference/dist.tgz" -C "$RUNNER_TEMP/fd-reference-dist"
+          cp "$RUNNER_TEMP/fd-reference/source-before.txt" fd-clean-join/reference-source.txt
+      - name: Clean production build
+        run: NODE_OPTIONS="--max-old-space-size=6144" npm run build 2>&1 | tee fd-clean-join/build.log
+      - name: Every product test script and built byte joined to completed reader/cap build
+        id: join
+        env:
+          FD_REFERENCE_DIR: ${{ runner.temp }}/fd-reference
+          FD_REFERENCE_DIST: ${{ runner.temp }}/fd-reference-dist/dist
+        run: |
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import path from 'node:path';import assert from 'node:assert/strict';import {createHash} from 'node:crypto';
+          const sha=bytes=>createHash('sha256').update(bytes).digest('hex');
+          const readIndex=file=>new Map(fs.readFileSync(file,'utf8').trim().split('\n').map(line=>{const m=/^[0-9]+ ([0-9a-f]{40}) 0\t(.+)$/.exec(line);assert(m,'Actual source row');return [m[2],m[1]];}));
+          const old=readIndex('fd-clean-join/reference-source.txt'),current=readIndex('fd-clean-join/source-before.txt');
+          const excluded=new Set(['scripts/qa/playFantasyDraftCriteriaStart.mjs']);
+          assert.equal(old.get('scripts/qa/playFantasyDraftCriteriaStart.mjs'),'c9cd105b9d14850df8a98a483679f212182eaf0d');
+          for(const file of excluded)assert(!current.has(file),'Remote-only evidence helper absent from clean tree: '+file);
+          const configs=['index.html','package.json','package-lock.json','vite.config.ts','tailwind.config.ts','postcss.config.js','tsconfig.json','tsconfig.app.json','tsconfig.node.json','bun.lockb','bun.lock'];
+          for(const file of configs){assert.equal(current.has(file),old.has(file),'Same root configuration presence: '+file);if(current.has(file))assert.equal(current.get(file),old.get(file),'Exact qualified root configuration: '+file);}
+          assert.equal(current.get('src/pages/FantasyDraft.tsx'),'d1b38c9aaae0ead2c68d746866e0ccb3b47adccd');
+          assert.equal(current.get('src/test/fantasyDraftCriteriaStart.test.tsx'),'4e9d54803677696454ef0cbbf155182192e03769');
+          const scoped=map=>[...map].filter(([p])=>/^(?:src|public|scripts)\//.test(p)&&!excluded.has(p)).sort(([a],[b])=>a.localeCompare(b));
+          const sourceRows=scoped(current);assert.equal(sourceRows.length,4653);assert.deepEqual(sourceRows,scoped(old),'Every other source/public/script blob held, including exact committed generated files');
+          const inventory=dir=>fs.readdirSync(dir,{withFileTypes:true}).sort((a,b)=>a.name.localeCompare(b.name)).flatMap(e=>e.isDirectory()?inventory(path.join(dir,e.name)).map(r=>({...r,path:e.name+'/'+r.path})):[{path:e.name,bytes:fs.statSync(path.join(dir,e.name)).size,sha256:sha(fs.readFileSync(path.join(dir,e.name)))}]);
+          const actual=inventory('dist'),reference=inventory(process.env.FD_REFERENCE_DIST);
+          assert.equal(actual.length,850);assert.deepEqual(actual,reference,'Every byte of every built file matches completed readers/caps');
+          const meta=JSON.parse(fs.readFileSync('fd-clean-join/reference-artifact.json')),referenceHead=fs.readFileSync(path.join(process.env.FD_REFERENCE_DIR,'head.txt'),'utf8').trim();
+          assert.equal(meta.id,Number(process.env.FD_REFERENCE_ARTIFACT));assert.equal(meta.expired,false);assert.match(referenceHead,/^[a-f0-9]{40}$/);assert.equal(meta.workflow_run.head_sha,referenceHead);
+          const result={status:'passed',referenceRun:meta.workflow_run.id,referenceApp:referenceHead,referenceArtifact:meta.id,referenceZipSHA256:process.env.FD_REFERENCE_ZIP,referenceTarSHA256:process.env.FD_REFERENCE_TAR,sourceRows:sourceRows.length,rootConfigurations:configs.filter(file=>current.has(file)).map(file=>({file,blob:current.get(file)})),remoteOnlyHelpers:[...excluded],generatedPatches:[],distFiles:actual.length,distManifestSHA256:sha(JSON.stringify(actual)),dist:actual,limits:'Clean build join only. No native, reader or cap rerun. Exact source and every built byte bind this clean tree to the completed FD reader/cap build; successful native qualification is separately required. Docs and plan admission are outside this code join.'};
+          fs.writeFileSync('fd-clean-join/reference-build-join.json',JSON.stringify(result,null,2));console.log('PASS all '+sourceRows.length+' source rows and every '+actual.length+' built file held');
+          NODE
+      - name: Final source locks installed versions and offline holds
+        if: always()
+        run: |
+          git ls-files -s > fd-clean-join/source-after.txt
+          cmp fd-clean-join/source-before.txt fd-clean-join/source-after.txt
+          git diff --exit-code HEAD -- .
+          sha256sum package.json package-lock.json > fd-clean-join/locks-after.txt
+          cmp fd-clean-join/locks-before.txt fd-clean-join/locks-after.txt
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const before=JSON.parse(fs.readFileSync('fd-clean-join/installed-before.json'));
+          const after=before.map(([p])=>[p,JSON.parse(fs.readFileSync(p+'/package.json')).version]);assert.equal(after.length,521);assert.deepEqual(after,before);
+          fs.writeFileSync('fd-clean-join/installed-final.json',JSON.stringify(after));
+          assert(fs.existsSync('fd-clean-join/offline.log'));assert.equal(fs.statSync('fd-clean-join/offline.log').size,0);
+          NODE
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: fantasy-draft-clean-build-join-${{ github.run_id }}
+          path: fd-clean-join
+          retention-days: 14
+          if-no-files-found: error
