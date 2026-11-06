@@ -1,0 +1,131 @@
+name: Soccer Connect4 Cancel clean build join to retained admission
+on:
+  push:
+    branches: [codex/soccer-connect4-cancel-clean-join-qa-20261106]
+permissions:
+  contents: read
+  actions: read
+jobs:
+  closeout:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        shell: bash
+    env:
+      SIM_NETWORK: offline
+      SIM_OFFLINE_RECEIPT: c4-cancel-clean-join/offline.log
+      C4_CANCEL_REFERENCE_ARTIFACT: '13523662631'
+      C4_CANCEL_REFERENCE_RUN: '42258721019'
+      C4_CANCEL_REFERENCE_ZIP: '9fb2e1661fc697ed300fd85360094dcfa4983de47368df5442ff0dc1d56e2f7d'
+      C4_CANCEL_REFERENCE_TAR: '3890e50c12992f3726c7979350345c94bb627fd31aae00533779ddb4d8e310d5'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 3
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24.22.1
+          cache: npm
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.4.4
+      - name: Locked dependencies and clean source receipts
+        run: |
+          set -euo pipefail
+          [[ "$C4_CANCEL_REFERENCE_ARTIFACT" =~ ^[0-9]+$ ]]
+          [[ "$C4_CANCEL_REFERENCE_RUN" =~ ^[0-9]+$ ]]
+          [[ "$C4_CANCEL_REFERENCE_ZIP" =~ ^[a-f0-9]{64}$ ]]
+          [[ "$C4_CANCEL_REFERENCE_TAR" =~ ^[a-f0-9]{64}$ ]]
+          test ! -e c4-cancel-clean-join
+          mkdir c4-cancel-clean-join
+          touch c4-cancel-clean-join/offline.log
+          git rev-parse HEAD > c4-cancel-clean-join/head.txt
+          git rev-parse 'HEAD^{tree}' > c4-cancel-clean-join/tree.txt
+          git ls-files -s > c4-cancel-clean-join/source-before.txt
+          sha256sum package.json package-lock.json > c4-cancel-clean-join/locks-before.txt
+          npm ci
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const lock=JSON.parse(fs.readFileSync('package-lock.json'));
+          const rows=Object.keys(lock.packages).filter(p=>p.startsWith('node_modules/')&&fs.existsSync(p+'/package.json')).map(p=>[p,JSON.parse(fs.readFileSync(p+'/package.json')).version]);
+          assert.equal(rows.length,521);for(const[p,v]of rows)assert.equal(v,lock.packages[p].version,p);fs.writeFileSync('c4-cancel-clean-join/installed-before.json',JSON.stringify(rows));
+          NODE
+      - name: Proper app types
+        run: node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee c4-cancel-clean-join/types.log
+      - name: Pinned completed retained admission closure artifact
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          gh api "repos/PapiSalgueroM/ballpark-hero/actions/runs/$C4_CANCEL_REFERENCE_RUN" > c4-cancel-clean-join/reference-run.json
+          gh api "repos/PapiSalgueroM/ballpark-hero/actions/artifacts/$C4_CANCEL_REFERENCE_ARTIFACT" > c4-cancel-clean-join/reference-artifact.json
+          gh api "repos/PapiSalgueroM/ballpark-hero/actions/artifacts/$C4_CANCEL_REFERENCE_ARTIFACT/zip" > "$RUNNER_TEMP/c4-cancel-reference.zip"
+          echo "$C4_CANCEL_REFERENCE_ZIP  $RUNNER_TEMP/c4-cancel-reference.zip" | sha256sum --check
+          mkdir -p "$RUNNER_TEMP/c4-cancel-reference" "$RUNNER_TEMP/c4-cancel-reference-dist"
+          unzip -q "$RUNNER_TEMP/c4-cancel-reference.zip" -d "$RUNNER_TEMP/c4-cancel-reference"
+          echo "$C4_CANCEL_REFERENCE_TAR  $RUNNER_TEMP/c4-cancel-reference/dist.tgz" | sha256sum --check
+          tar -xzf "$RUNNER_TEMP/c4-cancel-reference/dist.tgz" -C "$RUNNER_TEMP/c4-cancel-reference-dist"
+          cp "$RUNNER_TEMP/c4-cancel-reference/source-before.txt" c4-cancel-clean-join/reference-source.txt
+      - name: Fresh unchanged product-name fence on clean source
+        run: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simNoRivalNames.mjs 2>&1 | tee c4-cancel-clean-join/no-rival.log
+      - name: Clean production build
+        run: NODE_OPTIONS="--max-old-space-size=6144" npm run build 2>&1 | tee c4-cancel-clean-join/build.log
+      - name: Every product test script and built byte joined to admitted retained physical build
+        id: join
+        env:
+          C4_CANCEL_REFERENCE_DIR: ${{ runner.temp }}/c4-cancel-reference
+          C4_CANCEL_REFERENCE_DIST: ${{ runner.temp }}/c4-cancel-reference-dist/dist
+        run: |
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import path from 'node:path';import assert from 'node:assert/strict';import {createHash} from 'node:crypto';
+          const sha=bytes=>createHash('sha256').update(bytes).digest('hex');
+          const readIndex=file=>new Map(fs.readFileSync(file,'utf8').trim().split('\n').map(line=>{const m=/^[0-9]+ ([0-9a-f]{40}) 0\t(.+)$/.exec(line);assert(m,'Actual source row');return [m[2],m[1]];}));
+          const old=readIndex('c4-cancel-clean-join/reference-source.txt'),current=readIndex('c4-cancel-clean-join/source-before.txt');
+          const excluded=new Set(['scripts/qa/playFootballConnect4Cancel.mjs']);
+          assert.equal(old.get('scripts/qa/playFootballConnect4Cancel.mjs'),'eeaf194d3bb086aa788562e05fc51cc27407c572');
+          for(const file of excluded)assert(!current.has(file),'Remote-only evidence helper absent from clean tree: '+file);
+          const configs=['index.html','package.json','package-lock.json','vite.config.ts','tailwind.config.ts','postcss.config.js','tsconfig.json','tsconfig.app.json','tsconfig.node.json','bun.lockb','bun.lock'];
+          assert.equal(configs.length,11);for(const file of configs){assert(current.has(file)&&old.has(file),'Every one of11 root configurations present: '+file);assert.equal(current.get(file),old.get(file),'Exact qualified root configuration: '+file);}
+          assert.equal(current.get('src/hooks/useFootballConnect4.ts'),'630d21236f9f82ad4e728caad64dc4139bab7b57');
+          assert.equal(current.get('src/pages/FootballConnect4.tsx'),'634f94cea7810cfd678c3a4a6f470c3039773882');
+          assert.equal(current.get('docs/plans/2026-11-06-soccer-connect4-cancel-ownership.md'),'a0f9e88e81c29bb115b4f1a40601dfc75f3fac8f');
+          assert.equal(current.get('src/test/footballConnect4CancelOwnership.test.tsx'),'7f648764ed421584337c0a908d68a0941681e0a8');
+          const scoped=map=>[...map].filter(([p])=>/^(?:src|public|scripts)\//.test(p)&&!excluded.has(p)).sort(([a],[b])=>a.localeCompare(b));
+          const indexedModes=file=>fs.readFileSync(file,'utf8').trim().split('\n').map(line=>{const m=/^([0-9]+) ([0-9a-f]{40}) 0\t(.+)$/.exec(line);assert(m,'Actual path/mode/blob index row');return[m[3],m[1],m[2]];}).filter(([p])=>(/^(?:src|public|scripts)\//.test(p)||configs.includes(p))&&!excluded.has(p)).sort(([a],[b])=>a.localeCompare(b));assert.deepEqual(indexedModes('c4-cancel-clean-join/source-before.txt'),indexedModes('c4-cancel-clean-join/reference-source.txt'),'Every qualified source/root path, mode and blob held');
+          const sourceRows=scoped(current);assert.equal(sourceRows.length,4656);assert.deepEqual(sourceRows,scoped(old),'Every other source/public/script blob held, including exact committed generated files');
+          const inventory=dir=>fs.readdirSync(dir,{withFileTypes:true}).sort((a,b)=>a.name.localeCompare(b.name)).flatMap(e=>e.isDirectory()?inventory(path.join(dir,e.name)).map(r=>({...r,path:e.name+'/'+r.path})):[{path:e.name,bytes:fs.statSync(path.join(dir,e.name)).size,sha256:sha(fs.readFileSync(path.join(dir,e.name)))}]);
+          const actual=inventory('dist'),reference=inventory(process.env.C4_CANCEL_REFERENCE_DIST);
+          assert.equal(actual.length,850);assert.deepEqual(actual,reference,'Every byte of every built file matches the pinned reference build');
+          const ref=process.env.C4_CANCEL_REFERENCE_DIR,read=file=>JSON.parse(fs.readFileSync(path.join(ref,file))),text=file=>fs.readFileSync(path.join(ref,file),'utf8').trim();
+          const meta=JSON.parse(fs.readFileSync('c4-cancel-clean-join/reference-artifact.json')),referenceHead=text('head.txt'),referenceSourceHead=text('source-head.txt'),referenceSourceTree=text('source-tree.txt');
+          assert.equal(meta.id,Number(process.env.C4_CANCEL_REFERENCE_ARTIFACT));assert.equal(meta.expired,false);assert.equal(meta.digest,'sha256:'+process.env.C4_CANCEL_REFERENCE_ZIP);assert.match(referenceHead,/^[a-f0-9]{40}$/);assert.equal(referenceSourceHead,'980aa733e11c95e19ca145818ca234e72921bd0b');assert.equal(referenceSourceTree,'225a1b6cf15b77fb3ab69c2549151c88dc113f54');assert.notEqual(referenceHead,referenceSourceHead,'Closure trigger head is distinct from the physical source checkout');assert.equal(meta.workflow_run.head_sha,referenceHead);const run=JSON.parse(fs.readFileSync('c4-cancel-clean-join/reference-run.json'));assert.equal(run.id,Number(process.env.C4_CANCEL_REFERENCE_RUN));assert.equal(run.id,meta.workflow_run.id);assert.equal(run.head_sha,referenceHead);assert.equal(run.status,'completed');assert.equal(run.conclusion,'success');assert.equal(meta.name,'soccer-connect4-cancel-retained-admission-'+run.id);
+          const native=read('admission.json'),outer=read('native-admission.json'),custody=read('primary-custody.json'),sourceJoin=read('closure-source-join.json');assert.equal(native.status,'passed');assert.equal(native.qualification,'retained-primary-with-fresh-amended-admission');assert.equal(native.closureHead,referenceHead);assert.equal(native.sourceHead,referenceSourceHead);assert.equal(native.admissionOuter,'e994af30425bc4e39db9fc9832a3fe2c15615f24');const outerBytes=fs.readFileSync(path.join(ref,'amended-native-admission.mjs'));assert.equal(createHash('sha1').update(Buffer.concat([Buffer.from('blob '+outerBytes.length+'\0'),outerBytes])).digest('hex'),native.admissionOuter);assert.equal(outer.status,'passed');assert.deepEqual(native.nativeReceipt,outer);assert.equal(outer.helper,'eeaf194d3bb086aa788562e05fc51cc27407c572');assert.equal(native.helper,outer.helper);assert.equal(native.unitCases,40);assert.equal(native.rawFrames,31);assert.equal(native.readers.length,20);assert.equal(native.immutableCaps.length,16);assert.equal(native.nativePngs,9);assert.equal(native.sourceRows,4657);assert.equal(native.cleanSourceRows,4656);assert.equal(native.distFiles,850);assert.deepEqual(native.rerun,{unit:false,build:false,readers:false,caps:false,legacyBrowser:false,native:false});assert.deepEqual(native.carriedChecks,{unitCases:40,unitCommands:3,builtReaders:20,immutableCaps:16,legacyBrowserChecks:37,nativeJourneys:3,nativeChecks:1474});
+          for(const receipt of[native,custody]){assert.equal(receipt.primaryRun,42251560277);assert.equal(receipt.primaryConclusion,'failure');assert.equal(receipt.primaryArtifact,13521671507);}assert.equal(custody.status,'passed');assert.equal(custody.primaryHead,referenceSourceHead);assert.equal(custody.primaryTree,referenceSourceTree);assert.equal(custody.tarSHA256,process.env.C4_CANCEL_REFERENCE_TAR);assert.equal(custody.tarSHA256,'3890e50c12992f3726c7979350345c94bb627fd31aae00533779ddb4d8e310d5');assert.equal(custody.amendedOuter,native.admissionOuter);assert.equal(sourceJoin.status,'passed');assert.equal(sourceJoin.closureHead,referenceHead);assert.equal(sourceJoin.physicalSource,referenceSourceHead);assert.equal(sourceJoin.physicalTree,referenceSourceTree);assert.equal(sourceJoin.sourceRows,4657);assert.equal(sourceJoin.cleanSourceRows,4656);
+          const result={status:'passed',referenceRun:meta.workflow_run.id,referenceWorkflowHead:referenceHead,referenceApp:referenceSourceHead,referenceAppTree:referenceSourceTree,referenceQualification:native.qualification,referenceAdmissionOuter:native.admissionOuter,referenceArtifact:meta.id,referenceZipSHA256:process.env.C4_CANCEL_REFERENCE_ZIP,referenceTarSHA256:process.env.C4_CANCEL_REFERENCE_TAR,primaryRun:native.primaryRun,primaryConclusion:native.primaryConclusion,primaryArtifact:native.primaryArtifact,sourceRows:sourceRows.length,rootConfigurations:configs.map(file=>({file,blob:current.get(file)})),remoteOnlyHelpers:[...excluded],generatedPatches:[],distFiles:actual.length,distManifestSHA256:sha(JSON.stringify(actual)),dist:actual,limits:'Clean build join only. No native, reader or cap rerun. Exact source and every built byte bind this clean tree to physical980 admitted by the successful retained-evidence closure. The closure freshly runs the corrected outer against retained evidence and carries product checks from primary42251560277, which remains failed. This join does not independently admit native behavior or claim a successful full product rerun. The owned plan blob is pinned, final docs follow separately and other docs are outside this code join.'};
+          fs.writeFileSync('c4-cancel-clean-join/reference-build-join.json',JSON.stringify(result,null,2));console.log('PASS all '+sourceRows.length+' source rows and every '+actual.length+' built file held');
+          NODE
+      - name: Final source locks installed versions and offline holds
+        if: always()
+        run: |
+          set -euo pipefail
+          git ls-files -s > c4-cancel-clean-join/source-after.txt
+          cmp c4-cancel-clean-join/source-before.txt c4-cancel-clean-join/source-after.txt
+          git diff --exit-code HEAD -- .
+          sha256sum package.json package-lock.json > c4-cancel-clean-join/locks-after.txt
+          cmp c4-cancel-clean-join/locks-before.txt c4-cancel-clean-join/locks-after.txt
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const before=JSON.parse(fs.readFileSync('c4-cancel-clean-join/installed-before.json'));
+          const after=before.map(([p])=>[p,JSON.parse(fs.readFileSync(p+'/package.json')).version]);assert.equal(after.length,521);assert.deepEqual(after,before);
+          fs.writeFileSync('c4-cancel-clean-join/installed-final.json',JSON.stringify(after));
+          assert(fs.existsSync('c4-cancel-clean-join/offline.log'));assert.equal(fs.statSync('c4-cancel-clean-join/offline.log').size,0);
+          NODE
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: soccer-connect4-cancel-clean-build-join-${{ github.run_id }}
+          path: c4-cancel-clean-join
+          retention-days: 14
+          if-no-files-found: error
