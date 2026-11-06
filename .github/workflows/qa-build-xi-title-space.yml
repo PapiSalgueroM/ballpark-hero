@@ -1,22 +1,20 @@
-name: Build Your XI title space full qualification
+name: Build Your XI title clean build join
 on:
   push:
     branches: [codex/build-xi-title-space-qa-20261105]
 permissions:
   contents: read
+  actions: read
 jobs:
-  original:
+  closeout:
     runs-on: ubuntu-latest
-    timeout-minutes: 45
+    timeout-minutes: 20
     defaults:
       run:
         shell: bash
     env:
       SIM_NETWORK: offline
-      SIM_OFFLINE_RECEIPT: xi-title-qualified/offline.log
-      ENGINES: chromium
-      TZ: UTC
-      SEO_SPLIT_BASE_REF: 3b14650d360b010b25b525de33a5f32f33de2798
+      SIM_OFFLINE_RECEIPT: xi-title-clean-join/offline.log
     steps:
       - uses: actions/checkout@v4
         with:
@@ -29,167 +27,79 @@ jobs:
       - uses: oven-sh/setup-bun@v2
         with:
           bun-version: 1.4.4
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.12'
-      - name: Exact fixed source and locked install
+      - name: Locked dependencies and clean source receipts
         run: |
-          set -euo pipefail
-          mkdir -p xi-title-qualified
-          touch xi-title-qualified/offline.log
-          git rev-parse HEAD > xi-title-qualified/head.txt
-          git rev-parse 'HEAD^{tree}' > xi-title-qualified/tree.txt
-          git ls-files -s > xi-title-qualified/source-before.txt
-          test "$(git rev-parse HEAD:src/pages/LineupBuilder.tsx)" = dcd727d53ed3f31b38e0c3db1849af3ba09f03b6
-          test "$(git rev-parse HEAD:src/hooks/useLineupBuilder.ts)" = d6ecb6bd9ca7e15d328957294c60126b1d02f1d8
-          test "$(git rev-parse HEAD:src/components/lineup/TeamSpinner.tsx)" = aecb4220f2ff7bb063478a3ba88aa1ca45ddbaff
-          test "$(git rev-parse HEAD:scripts/qa/playBuildXiTitleSpace.mjs)" = e4e053a154b40e6929cee3e8bb9ee1fa5ec7ea90
-          sha256sum package.json package-lock.json > xi-title-qualified/locks-before.txt
-          git fetch --no-tags --depth=1 origin e4987975ad0be520114cf2b4fe15923f7c7e9925
-          git fetch --no-tags --depth=1 origin 3b14650d360b010b25b525de33a5f32f33de2798
-          test "$(git rev-parse e4987975ad0be520114cf2b4fe15923f7c7e9925:src/components/lineup/TeamSpinner.tsx)" = 7777b6a3e115866c468fbd480820b6356066d91d
-          test "$(git rev-parse 3b14650d360b010b25b525de33a5f32f33de2798:src/data/seoMeta.ts)" = cf7a5142e59b97048d27b5ece9a6588a92073728
-          node --input-type=module <<'NODE'
-          import fs from 'node:fs';import assert from 'node:assert/strict';import {execFileSync} from 'node:child_process';
-          const base='e4987975ad0be520114cf2b4fe15923f7c7e9925',component='src/components/lineup/TeamSpinner.tsx',helper='scripts/qa/playBuildXiTitleSpace.mjs';
-          const paths=['src','public','scripts','index.html','package.json','package-lock.json','vite.config.ts','tailwind.config.ts','postcss.config.js','tsconfig.json','tsconfig.app.json','tsconfig.node.json','bun.lockb'];
-          const tree=ref=>execFileSync('git',['ls-tree','-r','-z',ref,'--',...paths],{encoding:'utf8'}).split('\0').filter(Boolean);
-          const budgetQA=[['scripts/qa/playBudgetScoreBreakdown.mjs','935098cf9e4af1563e14ee6b24aa9c2461d299f4'],['scripts/lib/budgetPhaseReturn.mjs','62b9aa4e979c2d7d6b2ce9397f15827206a85376']];
-          const excluded=[component,helper,...budgetQA.map(([file])=>file)];
-          const before=tree(base),after=tree('HEAD'),held=rows=>rows.filter(line=>!excluded.includes(line.split('\t')[1]));
-          assert.deepEqual(held(after),held(before),'Budget advertised source held except Title component/helper and exactly two pinned QA-only helpers absent from clean Title tree');
-          const at=(ref,file)=>execFileSync('git',['rev-parse',ref+':'+file],{encoding:'utf8'}).trim();
-          for(const [file,pin]of budgetQA){assert.equal(at(base,file),pin,'Exact excluded Budget QA helper in advertised base');assert(!after.some(line=>line.split('\t')[1]===file),'Budget QA helper must be absent from clean Title source');}
-          assert.equal(at('HEAD',component),'aecb4220f2ff7bb063478a3ba88aa1ca45ddbaff');assert.equal(at('HEAD',helper),'e4e053a154b40e6929cee3e8bb9ee1fa5ec7ea90');
-          fs.writeFileSync('xi-title-qualified/source-join.json',JSON.stringify({status:'source-join-passed',base,scope:paths,heldRows:held(after).length,excludedBudgetQA:budgetQA,excludedBudgetQAAbsentInHEAD:true,componentBefore:at(base,component),componentAfter:at('HEAD',component),helper:at('HEAD',helper),capsBlob:at(base,'scripts/sweepWeight.mjs'),runnerBlob:at(base,'scripts/runAllSims.mjs'),limits:'Docs are outside this source-only join. Final Budget documentation commit may differ; no unqualified source changes are allowed.'},null,2));
-          NODE
-          node --input-type=module <<'NODE'
-          import fs from 'node:fs';import {execFileSync} from 'node:child_process';import {createHash} from 'node:crypto';
-          const files=execFileSync('git',['ls-files','-z'],{encoding:'utf8'}).split('\0').filter(Boolean);
-          const rows=files.map(file=>{const b=fs.readFileSync(file);return {file,bytes:b.length,sha256:createHash('sha256').update(b).digest('hex')};});
-          fs.writeFileSync('xi-title-qualified/tracked-before.json',JSON.stringify(rows));
-          NODE
-          npm ci 2>&1 | tee xi-title-qualified/install.log
+          mkdir -p xi-title-clean-join
+          touch xi-title-clean-join/offline.log
+          git rev-parse HEAD > xi-title-clean-join/head.txt
+          git rev-parse 'HEAD^{tree}' > xi-title-clean-join/tree.txt
+          git ls-files -s > xi-title-clean-join/source-before.txt
+          sha256sum package.json package-lock.json > xi-title-clean-join/locks-before.txt
+          npm ci
           node --input-type=module <<'NODE'
           import fs from 'node:fs';import assert from 'node:assert/strict';
           const lock=JSON.parse(fs.readFileSync('package-lock.json'));
           const rows=Object.keys(lock.packages).filter(p=>p.startsWith('node_modules/')&&fs.existsSync(p+'/package.json')).map(p=>[p,JSON.parse(fs.readFileSync(p+'/package.json')).version]);
-          assert.equal(rows.length,521);fs.writeFileSync('xi-title-qualified/installed-before.json',JSON.stringify(rows));
+          assert.equal(rows.length,521);fs.writeFileSync('xi-title-clean-join/installed-before.json',JSON.stringify(rows));
           NODE
-      - name: Proper App types
+      - name: Proper app types
+        run: node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee xi-title-clean-join/types.log
+      - name: Pinned completed qualification artifact
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
-          set -euo pipefail
-          node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee xi-title-qualified/types.log
-      - name: Normal production build and retained bytes
-        id: build
+          gh api repos/PapiSalgueroM/ballpark-hero/actions/artifacts/13480615222/zip > "$RUNNER_TEMP/xi-reference.zip"
+          echo "1e38471c405052105d40ab25aa48ba22ce7e103b481e0325d4412c951f975cff  $RUNNER_TEMP/xi-reference.zip" | sha256sum --check
+          mkdir -p "$RUNNER_TEMP/xi-reference" "$RUNNER_TEMP/xi-reference-dist"
+          unzip -q "$RUNNER_TEMP/xi-reference.zip" -d "$RUNNER_TEMP/xi-reference"
+          echo "0e02e2e796dd4850b667085fb5a746f91c9cedc4bdef259eefb89c70253d7c9b  $RUNNER_TEMP/xi-reference/dist.tgz" | sha256sum --check
+          tar -xzf "$RUNNER_TEMP/xi-reference/dist.tgz" -C "$RUNNER_TEMP/xi-reference-dist"
+          cp "$RUNNER_TEMP/xi-reference/source-before.txt" xi-title-clean-join/reference-source.txt
+      - name: Clean production build
+        run: NODE_OPTIONS="--max-old-space-size=6144" npm run build 2>&1 | tee xi-title-clean-join/build.log
+      - name: Every product test script and built byte joined to completed qualification
+        id: join
+        env:
+          XI_REFERENCE_DIR: ${{ runner.temp }}/xi-reference
+          XI_REFERENCE_DIST: ${{ runner.temp }}/xi-reference-dist/dist
         run: |
-          set -euo pipefail
-          NODE_OPTIONS="--max-old-space-size=6144" npm run build 2>&1 | tee xi-title-qualified/build.log
-          tar -czf xi-title-qualified/dist.tgz dist
-          sha256sum xi-title-qualified/dist.tgz > xi-title-qualified/dist.sha256
-          node --input-type=module <<'NODE'
-          import fs from 'node:fs';import {createHash} from 'node:crypto';import assert from 'node:assert/strict';
-          const walk=dir=>fs.readdirSync(dir,{withFileTypes:true}).sort((a,b)=>a.name.localeCompare(b.name)).flatMap(e=>e.isDirectory()?walk(dir+'/'+e.name):e.isFile()?[dir+'/'+e.name]:[]);
-          const rows=walk('dist').map(file=>{const b=fs.readFileSync(file);return {file,bytes:b.length,sha256:createHash('sha256').update(b).digest('hex')};});
-          assert.equal(rows.length,850);fs.writeFileSync('xi-title-qualified/dist-before.json',JSON.stringify(rows));
-          NODE
-      - name: Isolated pinned Playwright and Chromium
-        id: browser_setup
-        timeout-minutes: 12
-        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
-        run: |
-          set -euo pipefail
-          python -m pip install fonttools pillow
-          npm install --prefix "$RUNNER_TEMP/xi-title-browser" --no-save --package-lock=false playwright@1.64.1 2>&1 | tee xi-title-qualified/browser-install.log
-          test ! -e node_modules/playwright
-          ln -s "$RUNNER_TEMP/xi-title-browser/node_modules/playwright" node_modules/playwright
-          node "$RUNNER_TEMP/xi-title-browser/node_modules/playwright/cli.js" install --with-deps chromium 2>&1 | tee xi-title-qualified/chromium-install.log
-          node --input-type=module <<'NODE'
-          import fs from 'node:fs';import assert from 'node:assert/strict';
-          const before=JSON.parse(fs.readFileSync('xi-title-qualified/installed-before.json'));
-          const after=before.map(([p])=>[p,JSON.parse(fs.readFileSync(p+'/package.json')).version]);assert.deepEqual(after,before);
-          const pw=JSON.parse(fs.readFileSync('node_modules/playwright/package.json'));assert.equal(pw.version,'1.64.1');
-          fs.writeFileSync('xi-title-qualified/installed-after.json',JSON.stringify(after));fs.writeFileSync('xi-title-qualified/browser-package.json',JSON.stringify({version:pw.version,target:fs.realpathSync('node_modules/playwright')}));
-          NODE
-      - name: All required built readers and existing source fences
-        if: ${{ !cancelled() && steps.build.outcome == 'success' && steps.browser_setup.outcome == 'success' }}
-        run: |
-          export ONLY="simAdsense,simBrand,simHeadTags,simHiddenPages,simHubs,simIndexNow,simIndexing,simInternalLinks,simNoRivalNames,simPrerender,simPrerenderBoot,simRetiredRoutes,simSchema,simSitemap,simSnapshotAssets,simSiteSearch,simGuideHeadings,simSeoMetaSplit,simHomeCopy,simHarnessAnchors"
-          node scripts/runAllSims.mjs --browser 2>&1 | tee xi-title-qualified/readers.log
-      - name: All original route download limits
-        if: ${{ !cancelled() && steps.build.outcome == 'success' && steps.browser_setup.outcome == 'success' }}
-        run: |
-          node scripts/lib/hostLikeServer.mjs dist 4173 > xi-title-qualified/weight-host.log 2>&1 &
-          xi_host_pid=$!
-          trap 'kill "$xi_host_pid" 2>/dev/null || true' EXIT
-          sleep 2
-          SWEEP_OFFLINE=1 BASE=http://127.0.0.1:4173 node scripts/sweepWeight.mjs 2>&1 | tee xi-title-qualified/weight.log
-      - name: Native fixed title space and all preserves pass
-        timeout-minutes: 12
-        if: ${{ !cancelled() && steps.build.outcome == 'success' && steps.browser_setup.outcome == 'success' }}
-        run: |
-          set -euo pipefail
-          set +e
-          XI_TITLE_BROWSER_ARM=fixed XI_TITLE_BROWSER_OUT=xi-title-qualified/browser NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/playBuildXiTitleSpace.mjs > xi-title-qualified/browser.log 2>&1
-          browser_code=$?
-          set -e
-          printf '%s\n' "$browser_code" > xi-title-qualified/browser.exit
-          cat xi-title-qualified/browser.log
           node --input-type=module <<'NODE'
           import fs from 'node:fs';import path from 'node:path';import assert from 'node:assert/strict';import {createHash} from 'node:crypto';
-          const out='xi-title-qualified/browser',report=JSON.parse(fs.readFileSync(out+'/report.json')),log=fs.readFileSync('xi-title-qualified/browser.log','utf8');
-          assert.equal(Number(fs.readFileSync('xi-title-qualified/browser.exit','utf8').trim()),0,'Actual fixed helper exit must be0');
-          assert.equal(report.status,'passed');assert.equal(report.arm,'fixed');
-          assert.deepEqual(report.businessFailures,[]);
-          assert.deepEqual(report.journeys.map(j=>[j.width,j.status]),[[320,'passed'],[390,'passed'],[1280,'passed']]);
-          assert.equal(report.screenshots.length,3);assert(report.sourceHeld&&report.distHeld);assert.deepEqual(report.sourceBefore,report.sourceAfter);assert.deepEqual(report.distBefore,report.distAfter);
-          assert.equal(report.distBefore.length,850);assert(!report.error);
-          assert(!/Unhandled Rejection|Uncaught Exception|Failed to resolve import|setup-or-preserve-failed/.test(log));
-          const read=ref=>{const b=fs.readFileSync(path.join(out,ref.file));assert.equal(b.length,ref.bytes);assert.equal(createHash('sha256').update(b).digest('hex'),ref.sha256);return ref.file.endsWith('.json')?JSON.parse(b):null;};
-          for(const j of report.journeys){
-            assert(!j.error);assert.equal(j.errors.length,0);assert.equal(j.assetErrors.length,0);assert(j.requests.every(r=>r.outcome==='aborted'));
-            assert(j.reservationResults.length>=2&&j.reservationResults.every(v=>v===true));assert.equal(j.spacePassed,true);
-            assert(j.rerolls>=0&&j.rerolls<=29);assert.equal(j.longCapture.requiredForQualification,false);
-            for(const ref of j.observations){const v=read(ref);assert.equal(v.reserved,true);assert.equal(v.title.paddingRight,48);assert(v.title.contentRight<=v.button.rect.x);assert.equal(v.hint.text,'Matching '+v.club+' records from 2010');}
-            for(const ref of [...j.frames,...j.actions])read(ref);
-          }
-          for(const shot of report.screenshots){read(shot);read(shot.frame);read(shot.observation);}
-          const summary={status:'fixed-native-proof-passed',ownedFailures:report.businessFailures.map(f=>f.id),journeys:report.journeys.map(j=>({width:j.width,frames:j.frames.length,actions:j.actions.length,observations:j.observations.length,rerolls:j.rerolls,longCapture:j.longCapture})),screenshots:report.screenshots.length,sourceHeld:report.sourceHeld,distHeld:report.distHeld,limits:'This step admits only native title-space evidence. Separate exact reader and cap steps must also pass for this full job; no warning, draft completion, real roster or backend-write credit.'};
-          fs.writeFileSync('xi-title-qualified/admission.json',JSON.stringify(summary,null,2));console.log(JSON.stringify(summary));
+          const sha=bytes=>createHash('sha256').update(bytes).digest('hex');
+          const gitblob=bytes=>createHash('sha1').update(Buffer.concat([Buffer.from('blob '+bytes.length+'\0'),bytes])).digest('hex');
+          const readIndex=file=>new Map(fs.readFileSync(file,'utf8').trim().split('\n').map(line=>{const m=/^[0-9]+ ([0-9a-f]{40}) 0\t(.+)$/.exec(line);assert(m,'Actual source row');return [m[2],m[1]];}));
+          const old=readIndex('xi-title-clean-join/reference-source.txt'),current=readIndex('xi-title-clean-join/source-before.txt');
+          const excluded=new Set(['scripts/qa/playBuildXiTitleSpace.mjs']);
+          assert.equal(old.get('scripts/qa/playBuildXiTitleSpace.mjs'),'e4e053a154b40e6929cee3e8bb9ee1fa5ec7ea90');
+          for(const file of excluded)assert(!current.has(file),'Remote-only evidence helper absent from clean tree: '+file);
+          for(const file of ['package.json','package-lock.json'])assert.equal(current.get(file),old.get(file),'Exact qualified dependency source: '+file);
+          const scoped=map=>[...map].filter(([p])=>/^(?:src|public|scripts)\//.test(p)&&!excluded.has(p)).sort(([a],[b])=>a.localeCompare(b));
+          const sourceRows=scoped(current);assert.deepEqual(sourceRows,scoped(old),'Every other source/public/script blob held, including exact committed generated files');
+          const inventory=dir=>fs.readdirSync(dir,{withFileTypes:true}).sort((a,b)=>a.name.localeCompare(b.name)).flatMap(e=>e.isDirectory()?inventory(path.join(dir,e.name)).map(r=>({...r,path:e.name+'/'+r.path})):[{path:e.name,bytes:fs.statSync(path.join(dir,e.name)).size,sha256:sha(fs.readFileSync(path.join(dir,e.name)))}]);
+          const actual=inventory('dist'),reference=inventory(process.env.XI_REFERENCE_DIST);
+          assert.equal(actual.length,850);assert.deepEqual(actual,reference,'Every byte of every built file matches completed readers/caps');
+          const result={status:'passed',referenceRun:42167934091,referenceApp:'98588971156dee718e392f4ea66371c656ef1b3d',referenceArtifact:13480615222,referenceZipSHA256:'1e38471c405052105d40ab25aa48ba22ce7e103b481e0325d4412c951f975cff',referenceTarSHA256:'0e02e2e796dd4850b667085fb5a746f91c9cedc4bdef259eefb89c70253d7c9b',sourceRows:sourceRows.length,remoteOnlyHelpers:[...excluded],distFiles:actual.length,distManifestSHA256:sha(JSON.stringify(actual)),dist:actual};
+          fs.writeFileSync('xi-title-clean-join/reference-build-join.json',JSON.stringify(result,null,2));console.log('PASS all '+sourceRows.length+' source rows and every '+actual.length+' built file held');
           NODE
-      - uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: build-xi-title-qualified-images-${{ github.run_id }}
-          path: xi-title-qualified/browser/*.png
-          retention-days: 14
-          if-no-files-found: error
-      - name: Final whole source locks installed versions dist and offline holds
+      - name: Final source locks installed versions and offline holds
         if: always()
         run: |
-          set -euo pipefail
-          mkdir -p xi-title-qualified
-          git ls-files -s > xi-title-qualified/source-after.txt
-          cmp xi-title-qualified/source-before.txt xi-title-qualified/source-after.txt
-          git diff --exit-code HEAD -- .
-          sha256sum package.json package-lock.json > xi-title-qualified/locks-after.txt
-          cmp xi-title-qualified/locks-before.txt xi-title-qualified/locks-after.txt
+          git ls-files -s > xi-title-clean-join/source-after.txt
+          cmp xi-title-clean-join/source-before.txt xi-title-clean-join/source-after.txt
+          git diff --exit-code HEAD -- src scripts public package.json package-lock.json
+          sha256sum package.json package-lock.json > xi-title-clean-join/locks-after.txt
+          cmp xi-title-clean-join/locks-before.txt xi-title-clean-join/locks-after.txt
           node --input-type=module <<'NODE'
-          import fs from 'node:fs';import {execFileSync} from 'node:child_process';import {createHash} from 'node:crypto';import assert from 'node:assert/strict';
-          const hash=file=>{const b=fs.readFileSync(file);return {file,bytes:b.length,sha256:createHash('sha256').update(b).digest('hex')};};
-          const files=execFileSync('git',['ls-files','-z'],{encoding:'utf8'}).split('\0').filter(Boolean),tracked=files.map(hash);
-          fs.writeFileSync('xi-title-qualified/tracked-after.json',JSON.stringify(tracked));assert.deepEqual(tracked,JSON.parse(fs.readFileSync('xi-title-qualified/tracked-before.json')));
-          const before=JSON.parse(fs.readFileSync('xi-title-qualified/installed-before.json')),lock=JSON.parse(fs.readFileSync('package-lock.json'));
-          const after=Object.keys(lock.packages).filter(p=>p.startsWith('node_modules/')&&fs.existsSync(p+'/package.json')).map(p=>[p,JSON.parse(fs.readFileSync(p+'/package.json')).version]);
-          assert.equal(after.length,521);assert.deepEqual(after,before);fs.writeFileSync('xi-title-qualified/installed-final.json',JSON.stringify(after));
-          const walk=dir=>fs.readdirSync(dir,{withFileTypes:true}).sort((a,b)=>a.name.localeCompare(b.name)).flatMap(e=>e.isDirectory()?walk(dir+'/'+e.name):e.isFile()?[dir+'/'+e.name]:[]);
-          if(fs.existsSync('xi-title-qualified/dist-before.json')){const rows=walk('dist').map(hash);fs.writeFileSync('xi-title-qualified/dist-after.json',JSON.stringify(rows));assert.deepEqual(rows,JSON.parse(fs.readFileSync('xi-title-qualified/dist-before.json')));}
-          assert(fs.existsSync('xi-title-qualified/offline.log'));assert.equal(fs.statSync('xi-title-qualified/offline.log').size,0);
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const before=JSON.parse(fs.readFileSync('xi-title-clean-join/installed-before.json'));
+          const after=before.map(([p])=>[p,JSON.parse(fs.readFileSync(p+'/package.json')).version]);assert.equal(after.length,521);assert.deepEqual(after,before);
+          fs.writeFileSync('xi-title-clean-join/installed-final.json',JSON.stringify(after));
+          assert(fs.existsSync('xi-title-clean-join/offline.log'));assert.equal(fs.statSync('xi-title-clean-join/offline.log').size,0);
           NODE
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: build-xi-title-qualified-${{ github.run_id }}
-          path: xi-title-qualified
+          name: build-xi-title-clean-build-join-${{ github.run_id }}
+          path: xi-title-clean-join
           retention-days: 14
           if-no-files-found: error
