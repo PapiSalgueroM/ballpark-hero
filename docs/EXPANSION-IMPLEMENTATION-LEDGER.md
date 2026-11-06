@@ -254,3 +254,15 @@ New2003 NBA My Career UI saves now introduce the sourced59-selection2004 class a
 State: published and independently qualified; SC-36 remains partial. Qualified App head: e16e9ea36fc6c9aab84d7f79d99679e5c22e8ad3. New pre-2009 UI v2 careers admit Neymar2009/Santos, Mbappé2015/Monaco, Haaland2016/Bryne first team and Bellingham2019/Birmingham City exactly once, with stable IDs and source entry separated from the simulated saved world club. V1 remains Neymar-only; unmarked/opaque/newer saves are not upgraded. No extra era stars, real transfers, ratings, dialogue or complete-population/playable-club claim.
 
 Seven-arm7eadbca7, permanent Root393e019c and independent build811f86f0 are retained. Native: 69f420492bd29d81667ad18b3ed98209473e49f77e33a7e8f3eb6788e0acebe5. Deploy: 2d231ee7-24b2-4940-af8d-5908d26371e6. Public: 147361f50c8e3db9c6583009a045a7d79c22c8a680d2fadb171826ff3d3b6c89. [Scope, source evidence and exact integration bridge](plans/2026-11-05-soccer-four-first-team-entries.md). SC-36 and CM-04 remain partial. Existing wider failures and the first failed SC4 build remain unwaived.
+
+
+## 2026-11-06: SC-36 / CM-04 current K slice and phone Squad follow-up
+
+Cards remain partial. K product `25193` / tree `4debc`, PR509 merge `15652350`, deployment `979de67b`: 12 current members, 11 ordinary destinations, generated and labelled opening squads, Gimcheon access held. CM22 versus real38 split; CM Korea Cup/AFC/split/promotion unplayed. SC generic20-team manager fallback remains partial. Existing four SC identities/history and old27-league saved worlds held.
+
+K full public admission `6f9b8b87` composes original9passed contexts/84fresh reviewed images with corrected data-only consumer replay. Original failure remains recorded; all2339originals and exact7newoutputs held. Audit9 clean, Search noindex preserved, IndexNow7 HTTP200. Build6 `34055f96`, Staff `db9ed7eb`, native84 `e1a8c8cd`, Deadline33 `fc2a2c73` remain admitted.
+
+PR522 adds shared Squad phone name/badge wrapping only: product `2005`, current live merge `51e4ba9e` / tree `b1f5`, deployment `7a36d673`. UI42292541989 passed six same-save cases/36newimages/all16names/detailopenclose/saveholds, proper types/build/20readers/16unchangedcaps. Root product admission `0b12c805`; live HTTP42300717290 confirms two HTML declarations and five exact compiled bodies. Desktop parity holds;320longnames wrap over several lines. No new gameplay claim from the HTTP-only check, no every-local-GET-body claim.
+
+CM-03 verified real rosters and all-sports historical entrant coverage remain incomplete. Old unrelated full-fleet reds remain unwaived. Russia15SC bridge remains research only, with no adopted data or policy. Continue the source and availability gates before importing more teams/leagues.
+

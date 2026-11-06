@@ -17878,3 +17878,15 @@ Admitted proof: original42056408953/art13429002902/c572bce9; seven arms420684974
 Native receipt: 69f420492bd29d81667ad18b3ed98209473e49f77e33a7e8f3eb6788e0acebe5. Deploy ID: 2d231ee7-24b2-4940-af8d-5908d26371e6. Public receipt: 147361f50c8e3db9c6583009a045a7d79c22c8a680d2fadb171826ff3d3b6c89.
 
 First integrate four runtime plus five explicit nonruntime paths, publish that nine-path App and qualify public proof. These four closeout documents then land separately with no second publish. The aggregate nine nonruntime inverses must recover App tree316d, then the four runtime inverses recover main1acb. No whole docs/scripts/test-prefix exception is allowed. Temporary QA workflows/helpers stay out. The OOM original and first-build reader18 failure remain failed; later admitted proofs do not waive them or wider-suite reds. SC-36 is partial. Next is the owner's teams/leagues integration priority, with no new league or loading implementation authorised by this closeout alone.
+
+
+## 2026-11-06: K League and phone Squad names live
+
+PR509 K product `25193` / tree `4debc` merged as `15652350` and published once as `979de67b`. PR522 one-component Squad fix `2005` / tree `b1f5` merged as `51e4ba9e` and published once as `7a36d673`. The current live App is `51e4ba9e`; documentation-only closeout needs no republish.
+
+K: 12 members, 11 ordinary destinations, generated and labelled opening squads, Gimcheon access held. CM22 versus real38 split; CM cup/AFC/split/promotion unplayed. SC generic20-team manager fallback stays partial. Existing four SC identities/history and old27-league saved worlds remain held. Build6 `34055f96`, native84 `e1a8c8cd`, Deadline33 `fc2a2c73`, public composite `6f9b8b87` passed. Public9/84 original runtime remains immutable; corrected consumer replay preserves its old failed status, all2339files and exact7outputs. Audit9 clean, Search noindex held, IndexNow7 HTTP200.
+
+Phone names now wrap above badges; narrow320 rows are taller. UI run42292541989: types/build/20readers/16caps, six contexts/36 fresh images, all16 names, native detail open/close and full save/storage holds passed. Build/source `a1f262c6`, browser `024dc9ee`, Root composite `0b12c805`. Desktop parity holds. HTTP42300717290 confirms root/CM declarations and five exact delivered bodies for7a36, with no new gameplay claim. Eight ancillary read bodies remain outside the byte-coupled scope.
+
+SC-36/CM-04 partial; CM-03 real rosters and all-sports historical future classes remain incomplete. Old unrelated reds unwaived. Next: continue verified team/league and real entrant coverage from the master list. Russia15 bridge remains unadopted research; Rubin traditional-colour corroboration does not establish official RGB or current brand specifications.
+
