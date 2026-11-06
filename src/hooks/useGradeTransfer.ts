@@ -50,7 +50,15 @@ export function pickDaily(pool: TransferCase[], today: string): TransferCase[] {
 function loadSaved(today: string): { grades: (Grade | null)[]; index: number } | null {
   try {
     const raw = localStorage.getItem(`${STORAGE_PREFIX}${today}`);
-    if (raw) return JSON.parse(raw);
+    if (raw) {
+      const parsed: unknown = JSON.parse(raw);
+      if (!parsed || typeof parsed !== 'object') return null;
+      const { grades, index } = parsed as Record<string, unknown>;
+      if (!Array.isArray(grades) ||
+        !grades.every(g => g === null || GRADES.includes(g)) ||
+        typeof index !== 'number' || !Number.isInteger(index) || index < 0) return null;
+      return { grades, index };
+    }
   } catch { /* ignore */ }
   return null;
 }
