@@ -1,7 +1,7 @@
-name: Budget Builder clean build and phase return proof
+name: Budget Builder clean production build join
 on:
   push:
-    branches: [codex/budget-score-breakdown-qa-20261105]
+    branches: [codex/budget-score-clean-join-qa-20261106]
 permissions:
   contents: read
   actions: read
@@ -74,8 +74,7 @@ jobs:
           for(const item of derived){const bytes=fs.readFileSync(path.join(process.env.BB_REFERENCE_DIR,'derived',item.file));assert.equal(sha(bytes),item.sha256);assert.equal(bytes.length,item.bytes);old.set(item.file,gitblob(bytes));assert.equal(current.get(item.file),gitblob(bytes),'Exact generated blob: '+item.file);}
           const excluded=new Set(['scripts/qa/playBudgetScoreBreakdown.mjs','scripts/lib/budgetPhaseReturn.mjs']);
           assert.equal(old.get('scripts/qa/playBudgetScoreBreakdown.mjs'),'b97d96a21120f59a8eaf25446ee306c2666050fd');
-          assert.equal(current.get('scripts/qa/playBudgetScoreBreakdown.mjs'),'935887af1adb45283f4d69588bd0f590dfc64978','Exact QA-only phase return observer and supported flag fixture');
-          assert.equal(current.get('scripts/lib/budgetPhaseReturn.mjs'),'62b9aa4e979c2d7d6b2ce9397f15827206a85376');
+          for(const file of excluded)assert(!current.has(file),'Remote-only QA helper absent from clean App source: '+file);
           assert(!old.has('scripts/lib/budgetPhaseReturn.mjs'));
           assert(!current.has('scripts/qa/budgetScoreBreakdownCheck.mjs'),'Physical control helper absent from clean App build');
           const scoped=map=>[...map].filter(([p])=>/^(?:src|public|scripts)\//.test(p)&&!excluded.has(p)).sort(([a],[b])=>a.localeCompare(b));
@@ -86,31 +85,6 @@ jobs:
           const result={status:'passed',referenceRun:42159605456,referenceApp:'3509eb0956ce07b4baa48cbb27028ba593b8fa6d',referenceArtifact:13476108681,referenceZipSHA256:'05910d19e8c8d78899677418d21f1a6e5e8325964c06c42a1d070ed732aaf21a',referenceTarSHA256:'25d37d49e0f4f04c8bb6ca983f904e707520a3dda8b1c0bb9afbded3252c29d2',sourceRows:sourceRows.length,remoteOnlyHelpers:[...excluded],derived,distFiles:actual.length,distManifestSHA256:sha(JSON.stringify(actual)),dist:actual};
           fs.writeFileSync('budget-score-closure/reference-build-join.json',JSON.stringify(result,null,2));console.log('PASS all '+sourceRows.length+' source rows and every '+actual.length+' built file held');
           NODE
-      - name: Isolated browser and snapshot dependencies
-        id: browser_setup
-        timeout-minutes: 12
-        if: ${{ !cancelled() && steps.join.outcome == 'success' }}
-        run: |
-          npm install --prefix "$RUNNER_TEMP/bb-browser" --no-save --package-lock=false playwright@1.64.1
-          test ! -e node_modules/playwright
-          ln -s "$RUNNER_TEMP/bb-browser/node_modules/playwright" node_modules/playwright
-          node "$RUNNER_TEMP/bb-browser/node_modules/playwright/cli.js" install --with-deps chromium
-          node --input-type=module <<'NODE'
-          import fs from 'node:fs';import assert from 'node:assert/strict';
-          const before=JSON.parse(fs.readFileSync('budget-score-closure/installed-before.json'));
-          const after=before.map(([p])=>[p,JSON.parse(fs.readFileSync(p+'/package.json')).version]);assert.deepEqual(after,before);
-          fs.writeFileSync('budget-score-closure/installed-after.json',JSON.stringify(after));console.log('Preserved all '+after.length+' locked installed versions.');
-          NODE
-      - name: Native score previews refunds and natural Final at three widths
-        if: ${{ !cancelled() && steps.join.outcome == 'success' && steps.browser_setup.outcome == 'success' }}
-        run: BB_SCORE_BROWSER_OUT=budget-score-closure/browser NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/playBudgetScoreBreakdown.mjs 2>&1 | tee budget-score-closure/browser.log
-      - uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: build-budget-score-closure-images-${{ github.run_id }}
-          path: budget-score-closure/browser/*.png
-          retention-days: 14
-          if-no-files-found: error
       - name: Final source locks installed versions and offline holds
         if: always()
         run: |
