@@ -18002,3 +18002,43 @@ Clean build/capture closure42140111926 atba6414400a056f7e5ccb81434254db35e0a42b2
 
 Next bounded soccer candidate: XI-03, warning before choosing an incomplete Club year record using already-loaded missing age/value metadata. Do not invent a rating or silently change the existing unrated outcome.
 
+
+
+## 2026-11-06: XI-03 incomplete-record warning, bounded draft
+
+Club year draft now warns before committing a matching record with no usable value or age. Keep searching and Escape leave the slot open and return focus to search without scrolling. Use this unrated record submits the original copied metadata through the existing adapter once. The finished XI keeps its existing unrated result. The old finite-age gate, including numeric zero and negative finite ages, is preserved.
+
+XI-03 remains partial. Nearby supported alternatives and ranked-result policy are outside this slice. No real sports data, pool, schema, edge function, save codec, simulation, scoring, completion rule or shared validator changed. The 409-card master was reverified at 444117 bytes, SHA256 fda0f7eef07d41f2ba91e89dff3542fef98cd3bd9aabcbe02f70b649797d357a.
+
+This follows the eight earlier stacked drafts through PR514, exact base 3cf296e80ad254bec3cfba2f12660addef5bbe18, tree ed36803daa7dd92b3574f65e76f6684424c27a6d. Main was re-read as 3b14650d360b010b25b525de33a5f32f33de2798. Delivery stays draft, unmerged and unpublished. Local App, Git and runtime holds remain. The companion chat owns Club Manager Team-picker and K League.
+
+Owned source pins:
+
+- Page: dcd727d53ed3f31b38e0c3db1849af3ba09f03b6.
+- Help: 822253fa89294287a26348935e6616b0c350870b.
+- Permanent guide: b85cf0ba452a35c967937d1e200b1402fef528e7.
+- Supporting spinner: 7777b6a3e115866c468fbd480820b6356066d91d.
+- Held admission hook: d6ecb6bd9ca7e15d328957294c60126b1d02f1d8.
+- Owned 14-case test: 7ce7e0a2d713dd8b5bf6169995520f284fad6417.
+- Existing nullable-only test helper adapter: 370c09cc786e5a568e79aafa05aaa93a72ca4bb6.
+
+The pending choice owns a copied entity and origin. Synchronous clearing, one-use consumption and pending-object identity checks reject stale confirmations, including resets away and back. The complete keyboard keeper test required no adaptation.
+
+Original proof 42145107172 measured 12 named business AssertionErrors and two preservation passes from 14 cases, with proper app types zero and 14 existing passes. Fast proof 42146871423 passed 14 owned cases, 72 existing cases and five offline position/validator/report guards. Physical controls 42148598456 measured 154 rows across 11 arms: red counts 0/12/11/2/2/1/4/1/2/1/0, 118 passes and 36 named AssertionErrors. Seven pins and fixed/restored whole RAW bytes were restored exactly. Independent native audit verified all packet bodies and RAW cases. Controlled-hook tests prove Page routing; existing real-hook cases retain admission and report outcomes.
+
+The browser found an existing spinner height collapse. Original and warning pages both measured a 126 to 98px card change at 320px; at 390px the card changed from 110 or 126px to 98px. A warning journey also moved scroll from 543 to 531px. A separate diagnostic used different natural draws and did not reproduce that scroll delta, so it receives only the geometry credit it actually measured. The first 32px reserve passed same-club phase checks, but exhaustive inspection found Borussia Dortmund needs 48px at 320px. The final spinner reserves 48px on small screens and 32px at sm and above. Text, native timers, random draws, club pool and Mixed rendering are held. No scroll assertion was loosened.
+
+Final qualification [42155505844](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/42155505844), head 3f7fd09fc930c4104d1f93abf8d4fa2ee4a5ffa0, passed proper app types (zero errors), all 86 unit cases, the build, all 20 required/related output readers and all 16 unchanged route download limits. Three native warning-to-unrated journeys passed 1931 checks, 321 frames, 150 actions and 33 actual selected fixture records, with six PNGs. Every journey attempted one existing 500-point completion, blocked at transport; no backend write is credited. All source, 850 built bodies, locks, 521 installed versions and offline receipts held.
+
+Standalone lab 95ec21a3f4ff3ed38a77462d2d0919f2d6739e64 measured all 29 clubs at all three widths. All 87 phase pairs held exactly, with one common card height per width: 142px at 320/390 and 130px at 1280. Observed hint maxima were 48/48/32px. The physical original component 7c49f86a41927dee736614cb859d461f620ca6bc produced all 87 positive phase deltas. Fixed source was restored exactly. This is exhaustive component evidence within the measured fallback-font scope, separate from the native App journeys.
+
+The full artifact is 13475336686, 10706802 bytes, SHA256 b4f15bf0beccaee485b3c07e0e501d3d05d346b73a0e25c11061091d75058b86; its dist archive SHA256 is 5d9efb222b9bf9e8353c4c3309c4185eaf2a056d6fd6a26f456faf2169efa441. Clean build join [42157787509](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/42157787509), head 6139e1bc8f933029ebcea6fb17f5c121a8d31a8e, passed a fresh proper type gate and 29.35s build, matching all 4651 product/public/script source rows and all 850 built files exactly. Remote-only browser, component-lab and physical-control helpers are absent from the clean delivery. Its artifact is 13475870416, 655730 bytes, SHA256 b1c1818f0e1962c3e58a0ca481b982878b7c6ca98af786d44731d0cca85703d4.
+
+The normal producers changed only five owned/derived outputs: /build-your-xi snapshot, its frozen guide additions, its search keyword row/source stamp, derived sitemap and committed lastmod ledger. Other 130 guides, 132 search rows and 171 ledger entries held. Instructions and the worked example use the existing help and guide system.
+
+Root personally viewed all six final native PNGs. Warning-specific visual review passed at 320, 390 and 1280px. A separate existing 320px title/reroll-button issue remains: the corner button can cover a long club title. Title and button geometry were held by the hint-only change. No measured pixel intersection is claimed, and the standalone component lab omits Page's overlay button. The title spacing fix is next.
+
+Evidence is retained under dukb-handoff/2026-11-05/build-xi-unrated-warning and immutable GitHub artifacts. Browser player records are explicitly fictional transport fixtures. They establish UI plumbing, not real roster eligibility, hidden metadata fidelity, live provider availability or successful backend writes. No hidden-tab, OS-suspension, native RNG-measurement or release-wide-suite credit is claimed.
+
+BB-09 is proceeding independently. Original proof 42154773125 measured nine named score-visibility AssertionErrors, one preservation pass and nine existing passes. Fixed proof 42156573715 passed all 19 cases. Controls 42157017070 passed 110 rows across 11 arms, with 81 passes and 29 expected AssertionErrors. All 19 original/fixed/restored semantic frames, full pools, calls, storage and draw tapes match; fixed/restored whole RAW bytes match. Full build, producers and native qualification remain pending for that separate slice.
+

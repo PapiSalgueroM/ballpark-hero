@@ -1129,6 +1129,7 @@ export const SOCCER_CONTENT_2: GameContentMap = {
         items: [
           "Type a name and choose a suggestion that fits the slot. Club year picks must match both club and recorded year.",
           "Tap Browse players to see matching Club year records, or type to narrow them. Records may be incomplete, not a full squad or proof of every appearance.",
+          "Club year draft warns before you use a record with no usable value or age. Keep searching, or choose Use this unrated record to continue.",
         ],
         subsections: [
           {
@@ -1141,6 +1142,7 @@ export const SOCCER_CONTENT_2: GameContentMap = {
             heading: "A recorded goalkeeper example",
             items: [
               "Choose 2010, tap GK and use Browse players. A goalkeeper record from the current club in 2010 can fill that slot; a record only from a different year cannot.",
+              "Example: a matching record with a value but no age needs your confirmation. Keep searching leaves the slot open. Use this unrated record keeps the original record, and the completed XI stays unrated.",
             ],
           },
         ],
