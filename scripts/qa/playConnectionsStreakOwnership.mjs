@@ -237,7 +237,7 @@ async function runContext(BASE,width,height,scenario){
   page.on('framenavigated',f=>{if(f===page.mainFrame())row.navigations.push({at:Date.now(),url:f.url()});});
   page.on('requestfailed',request=>{if(request.url().startsWith(BASE+'/'))row.assetErrors.push({url:request.url(),error:request.failure()?.errorText});});
   await page.exposeBinding('__connectionsNativeEvent',(_,event)=>row.events.push(event));
-  await page.goto(BASE+ROUTE,{waitUntil:'domcontentloaded'});await button('\u{1F4C5} Daily').waitFor({state:'visible'});
+  await page.goto(BASE+ROUTE,{waitUntil:'domcontentloaded'});await page.getByRole('dialog',{name:'How to Play',exact:true}).waitFor({state:'visible'});
   await page.evaluate(()=>{
    for(const type of['pointerdown','pointerup','click','keydown','wheel','scroll'])addEventListener(type,event=>{
     const target=event.target?.closest?.('button')??event.target,dialog=event.target?.closest?.('[role=dialog]');
@@ -248,7 +248,7 @@ async function runContext(BASE,width,height,scenario){
   const cookie=page.getByRole('region',{name:'Cookie choices',exact:true});await cookie.waitFor({state:'visible'});
   await mouseAction('startup-reject-all',cookie.getByRole('button',{name:'Reject all',exact:true}),'startup',async()=>!(await state()).cookieChoices);
   equal(await storedConsent(page),'rejected',id+' real optional consent rejection');
-  await mouseAction('startup-help-reopen',button('How to play'),'startup',async()=>(await state()).dialog.open);
+  await mouseAction('startup-help-reopen',button('\u{1F4C5} Daily').locator('xpath=ancestor::header').getByRole('button',{name:'How to play',exact:true}),'startup',async()=>(await state()).dialog.open);
   await escapeHelp('startup-reopened-help-escape');
   await wait(async()=>{const s=await state();return s.phase==='playing'&&s.mode==='daily'&&s.remaining.length===16&&!s.dialog.open;},id+' actual fetched fresh public game');
   const baseline=await checkpoint('baseline');row.baseline=baseline.ref;
