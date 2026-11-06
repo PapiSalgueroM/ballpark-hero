@@ -319,6 +319,7 @@ const FantasyDraft = () => {
                 </div>
                 <Button
                   size="lg"
+                  disabled={loadingCriteria}
                   onClick={() => setStarted(true)}
                   className="text-lg px-10 py-6 rounded-xl shadow-lg shadow-primary/20 hover:shadow-primary/40 transition-all duration-300 hover:scale-105"
                 >
