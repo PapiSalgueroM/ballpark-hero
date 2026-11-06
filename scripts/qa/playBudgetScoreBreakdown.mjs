@@ -83,8 +83,44 @@ try{
    check(v.hit&&!v.disabled&&v.rect.x>=-.5&&v.rect.x+v.rect.width<=width+.5&&v.rect.y>=0&&v.rect.y+v.rect.height<=height+.5,id+': target fully visible and center reachable');
    if(needs44)check(v.rect.width>=44&&v.rect.height>=44,id+': native target at least44px');return v;
   };
+  const prepareTopChrome=async(target,name)=>{
+   if(mobile)return;
+   const blocked=await target.evaluate(el=>{
+    const r=el.getBoundingClientRect(),x=r.x+r.width/2,y=r.y+r.height/2,hit=document.elementFromPoint(x,y),chrome=[];
+    for(let n=hit;n;n=n.parentElement){const s=getComputedStyle(n),b=n.getBoundingClientRect();if(['fixed','sticky'].includes(s.position)&&b.y<=0&&b.bottom>0&&b.height<=innerHeight*.4&&b.width>=innerWidth/2)chrome.push({tag:n.tagName,id:n.id,position:s.position,rect:{x:b.x,y:b.y,width:b.width,height:b.height,bottom:b.bottom}});}
+    const bottom=Math.max(0,...chrome.map(v=>v.rect.bottom)),covered=hit!==el&&!el.contains(hit);
+    if(!covered||!chrome.length||r.y<0||r.bottom>innerHeight||r.y>=bottom||r.bottom<=bottom)return null;
+    return{label:el.getAttribute('aria-label'),rect:{x:r.x,y:r.y,width:r.width,height:r.height,bottom:r.bottom},scroll:{x:scrollX,y:scrollY},viewport:{width:innerWidth,height:innerHeight},chrome,chromeBottom:bottom,neededPixels:Math.ceil(bottom-r.y),wheelPoint:{x,y:(bottom+r.bottom)/2}};
+   });
+   if(!blocked)return;
+   const gameplay=async()=>page.evaluate(()=>{
+    const root=document.querySelector('[data-budget-builder]'),pathOf=e=>{const parts=[];for(let n=e;n&&n!==root;n=n.parentElement)parts.unshift([...n.parentElement.children].indexOf(n));return parts.join('.');};
+    const markers=[...root.querySelectorAll('[data-no-prerender]')],walker=document.createTreeWalker(root,NodeFilter.SHOW_TEXT),text=[];let excludedTextNodes=0,node;
+    while((node=walker.nextNode())){const marker=node.parentElement?.closest('[data-no-prerender]');if(marker&&root.contains(marker))excludedTextNodes++;else text.push(node.textContent);}
+    return{text:text.join(''),markerStructure:markers.map(e=>({tag:e.tagName,path:pathOf(e),attribute:e.getAttribute('data-no-prerender')})),excluded:markers.map(e=>({tag:e.tagName,path:pathOf(e),text:e.textContent})),markerCount:markers.length,excludedTextNodes};
+   });
+   const before=await frame('native-top-chrome-'+name+'-before'),stableBefore=await gameplay(),eventStart=row.events.length,completionCount=completionAttempts().length;
+   equal(before.scroll,blocked.scroll,id+': prepared chrome pose stayed stable');
+   await page.evaluate(()=>document.addEventListener('wheel',e=>window.__bbScoreEvidence({at:Date.now(),kind:'native-top-chrome-preparation',type:e.type,trusted:e.isTrusted,deltaY:e.deltaY,deltaMode:e.deltaMode,clientX:e.clientX,clientY:e.clientY,targetTag:e.target?.tagName,targetLabel:e.target?.getAttribute?.('aria-label')}),{once:true,capture:true}));
+   await page.mouse.move(blocked.wheelPoint.x,blocked.wheelPoint.y);await page.mouse.wheel(0,-blocked.neededPixels);
+   await wait(()=>row.events.slice(eventStart).some(e=>e.kind==='native-top-chrome-preparation'&&e.trusted&&e.deltaMode===0&&e.deltaY===-blocked.neededPixels),id+': actual trusted pixel wheel preparation');
+   const expectedY=Math.max(0,before.scroll.y-blocked.neededPixels);
+   await wait(()=>page.evaluate(y=>scrollY===y,expectedY),id+': native minimum whole-pixel chrome clearance reached');
+   const after=await frame('native-top-chrome-'+name+'-after'),prepared=await target.evaluate(el=>{
+    const r=el.getBoundingClientRect(),x=r.x+r.width/2,y=r.y+r.height/2,hit=document.elementFromPoint(x,y),bars=document.elementsFromPoint(x,1).filter(n=>{const s=getComputedStyle(n),b=n.getBoundingClientRect();return['fixed','sticky'].includes(s.position)&&b.y<=0&&b.bottom>0&&b.height<=innerHeight*.4&&b.width>=innerWidth/2;});
+    return{rect:{x:r.x,y:r.y,width:r.width,height:r.height,bottom:r.bottom},centerHit:hit===el||el.contains(hit),chromeBottom:Math.max(0,...bars.map(n=>n.getBoundingClientRect().bottom))};
+   });
+   const stableAfter=await gameplay(),record={name:'native-top-chrome-preparation-'+name,preparation:true,heldScroll:false,before,after,stableGameplay:{before:stableBefore,after:stableAfter},blocked,prepared,expectedY,events:row.events.slice(eventStart)};
+   row.actions.push(put(id+'/native-preparations/'+String(row.actions.length).padStart(3,'0')+'-'+name,record));
+   equal(after.scroll,{x:before.scroll.x,y:expectedY},id+': only measured native chrome clearance moved');
+   for(const field of ['storage','slots','input','focus'])equal(after[field],before[field],id+': '+field+' held through native preparation');
+   equal(stableAfter.text,stableBefore.text,id+': gameplay text outside existing marked volatile subtrees held');
+   equal(stableAfter.markerStructure,stableBefore.markerStructure,id+': exact marked subtree structure and census held');
+   equal(completionAttempts().length,completionCount,id+': preparation does not complete or record');
+   check(prepared.centerHit&&prepared.rect.y>=prepared.chromeBottom,id+': native preparation clears actual top chrome');
+  };
   const action=async(name,target,work,held=true,needs44=true,returnPlan=null)=>{
-   if(target){await target.scrollIntoViewIfNeeded();await settle();}
+   if(target){await target.scrollIntoViewIfNeeded();await settle();await prepareTopChrome(target,name);}
    const targetReceipt=target?await geometry(target,needs44):null,before=await frame(name+'-before'),start=row.events.length;
    const returnBefore=returnPlan?await captureBudgetReturn(page,returnPlan.kind==='completion'?null:returnPlan.destination,returnPlan.kind):null;
    await work();const after=await frame(name+'-after');if(held)equal(after.scroll,before.scroll,id+': exact prepared document scroll held '+name);
