@@ -1,11 +1,12 @@
-name: Fantasy Draft pending criteria full qualification
+name: Fantasy Draft native recovery and exact build join
 on:
   push:
     branches: [codex/fantasy-draft-criteria-start-qa-20261106]
 permissions:
   contents: read
+  actions: read
 jobs:
-  qualify:
+  recover:
     runs-on: ubuntu-latest
     timeout-minutes: 45
     defaults:
@@ -50,7 +51,7 @@ jobs:
           node --input-type=module <<'NODE'
           import fs from 'node:fs';import assert from 'node:assert/strict';import {execFileSync} from 'node:child_process';import {createHash} from 'node:crypto';
           const out='fantasy-draft-qualified',base='cc649bad5ac21d2e7b6c2695518324e1daf017b0',page='src/pages/FantasyDraft.tsx',test='src/test/fantasyDraftCriteriaStart.test.tsx',helper='scripts/qa/playFantasyDraftCriteriaStart.mjs',at=(ref,file)=>execFileSync('git',['rev-parse',ref+':'+file],{encoding:'utf8'}).trim();
-          const pins={[page]:'d1b38c9aaae0ead2c68d746866e0ccb3b47adccd',[test]:'4e9d54803677696454ef0cbbf155182192e03769',[helper]:'c9cd105b9d14850df8a98a483679f212182eaf0d','docs/plans/2026-11-06-fantasy-draft-criteria-start.md':'58c27ca1630d874c5201f2ed3f21b0f0fceeee34'};for(const[f,p]of Object.entries(pins))assert.equal(at('HEAD',f),p,f);assert.equal(at(base,page),'2343cadb8ff109230f8ed6d13fe3c70e21c57014');assert(!fs.existsSync('scripts/qa/fantasyDraftCriteriaStartCheck.mjs'),'No causal runner in full source');
+          const pins={[page]:'d1b38c9aaae0ead2c68d746866e0ccb3b47adccd',[test]:'4e9d54803677696454ef0cbbf155182192e03769',[helper]:'27c5fdc32544b80ad9ba4bf24e90e3e88c373ec4','docs/plans/2026-11-06-fantasy-draft-criteria-start.md':'58c27ca1630d874c5201f2ed3f21b0f0fceeee34'};for(const[f,p]of Object.entries(pins))assert.equal(at('HEAD',f),p,f);assert.equal(at(base,page),'2343cadb8ff109230f8ed6d13fe3c70e21c57014');assert(!fs.existsSync('scripts/qa/fantasyDraftCriteriaStartCheck.mjs'),'No causal runner in full source');
           const fixed=fs.readFileSync(page,'utf8'),gate='                  disabled={loadingCriteria}\n';assert.equal(fixed.split(gate).length-1,1);assert.equal(fixed.replace(gate,''),execFileSync('git',['show',base+':'+page],{encoding:'utf8'}),'Exact one-line product inverse');
           const paths=['src','public','scripts','index.html','package.json','package-lock.json','vite.config.ts','tailwind.config.ts','postcss.config.js','tsconfig.json','tsconfig.app.json','tsconfig.node.json','bun.lockb'],tree=ref=>execFileSync('git',['ls-tree','-r','-z',ref,'--',...paths],{encoding:'utf8',maxBuffer:16*1024*1024}).split('\0').filter(Boolean),excluded=[page,test,helper],held=rows=>rows.filter(line=>!excluded.includes(line.split('\t')[1])),before=tree(base),after=tree('HEAD');assert.deepEqual(held(after),held(before),'All other App/public/scripts/config equals clean Title517');for(const f of[test,helper])assert(!before.some(row=>row.split('\t')[1]===f));
           const readers='simAdsense,simBrand,simHeadTags,simHiddenPages,simHubs,simIndexNow,simIndexing,simInternalLinks,simNoRivalNames,simPrerender,simPrerenderBoot,simRetiredRoutes,simSchema,simSitemap,simSnapshotAssets,simSiteSearch,simGuideHeadings,simSeoMetaSplit,simHomeCopy,simHarnessAnchors'.split(','),guardPins=Object.fromEntries([...readers.map(n=>'scripts/'+n+'.mjs'),'scripts/sweepWeight.mjs','scripts/runAllSims.mjs'].map(f=>{assert.equal(at('HEAD',f),at(base,f));return[f,at(base,f)];}));
@@ -105,19 +106,39 @@ jobs:
           const pw=JSON.parse(fs.readFileSync('node_modules/playwright/package.json'));assert.equal(pw.version,'1.64.1');
           fs.writeFileSync('fantasy-draft-qualified/installed-after.json',JSON.stringify(after));fs.writeFileSync('fantasy-draft-qualified/browser-package.json',JSON.stringify({version:pw.version,target:fs.realpathSync('node_modules/playwright')}));
           NODE
-      - name: All required built readers and existing source fences
+      - name: Retain pinned primary outer proof and join every fresh built byte
         if: ${{ !cancelled() && steps.build.outcome == 'success' && steps.browser_setup.outcome == 'success' }}
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          export ONLY="simAdsense,simBrand,simHeadTags,simHiddenPages,simHubs,simIndexNow,simIndexing,simInternalLinks,simNoRivalNames,simPrerender,simPrerenderBoot,simRetiredRoutes,simSchema,simSitemap,simSnapshotAssets,simSiteSearch,simGuideHeadings,simSeoMetaSplit,simHomeCopy,simHarnessAnchors"
-          node scripts/runAllSims.mjs --browser 2>&1 | tee fantasy-draft-qualified/readers.log
-      - name: All original route download limits
-        if: ${{ !cancelled() && steps.build.outcome == 'success' && steps.browser_setup.outcome == 'success' }}
-        run: |
-          node scripts/lib/hostLikeServer.mjs dist 4173 > fantasy-draft-qualified/weight-host.log 2>&1 &
-          xi_host_pid=$!
-          trap 'kill "$xi_host_pid" 2>/dev/null || true' EXIT
-          sleep 2
-          SWEEP_OFFLINE=1 BASE=http://127.0.0.1:4173 node scripts/sweepWeight.mjs 2>&1 | tee fantasy-draft-qualified/weight.log
+          set -euo pipefail
+          gh api repos/PapiSalgueroM/ballpark-hero/actions/artifacts/13481304865 > fantasy-draft-qualified/primary-artifact.json
+          gh api repos/PapiSalgueroM/ballpark-hero/actions/artifacts/13481304865/zip > fantasy-draft-qualified/primary.zip
+          printf '%s  %s\n' 351808b4cf7ead513d8296b6e2d930d2dffec8440514d76bfea7d00228a6f093 fantasy-draft-qualified/primary.zip | sha256sum -c -
+          test ! -e "$RUNNER_TEMP/fd-primary"
+          test ! -e "$RUNNER_TEMP/fd-primary-dist"
+          mkdir "$RUNNER_TEMP/fd-primary" "$RUNNER_TEMP/fd-primary-dist"
+          unzip -q fantasy-draft-qualified/primary.zip -d "$RUNNER_TEMP/fd-primary"
+          printf '%s  %s\n' f5033c7b5534a43a5dedf57a06a35fab131007ec30624936a957a1c10646c387 "$RUNNER_TEMP/fd-primary/dist.tgz" | sha256sum -c -
+          test "$(stat -c%s "$RUNNER_TEMP/fd-primary/dist.tgz")" = 6986539
+          tar -xzf "$RUNNER_TEMP/fd-primary/dist.tgz" -C "$RUNNER_TEMP/fd-primary-dist"
+          FD_PRIMARY_DIR="$RUNNER_TEMP/fd-primary" FD_PRIMARY_DIST="$RUNNER_TEMP/fd-primary-dist/dist" node --input-type=module <<'NODE'
+          import fs from 'node:fs';import path from 'node:path';import assert from 'node:assert/strict';import {createHash} from 'node:crypto';
+          const out='fantasy-draft-qualified',ref=process.env.FD_PRIMARY_DIR,helper='scripts/qa/playFantasyDraftCriteriaStart.mjs',oldPin='c9cd105b9d14850df8a98a483679f212182eaf0d',newPin='27c5fdc32544b80ad9ba4bf24e90e3e88c373ec4',sha=b=>createHash('sha256').update(b).digest('hex');
+          const meta=JSON.parse(fs.readFileSync(out+'/primary-artifact.json'));assert.equal(meta.id,13481304865);assert.equal(meta.size_in_bytes,9107586);assert.equal(meta.digest,'sha256:351808b4cf7ead513d8296b6e2d930d2dffec8440514d76bfea7d00228a6f093');assert.equal(meta.expired,false);assert.equal(meta.workflow_run.id,42172239248);assert.equal(meta.workflow_run.head_sha,'348416c8f8c626b39abe56e90044c426332987f1');assert.equal(fs.readFileSync(ref+'/head.txt','utf8').trim(),meta.workflow_run.head_sha);
+          const parse=file=>new Map(fs.readFileSync(file,'utf8').trim().split('\n').map(line=>{const m=/^([0-9]+) ([a-f0-9]{40}) 0\t(.+)$/.exec(line);assert(m);return[m[3],{mode:m[1],sha:m[2]}];})),before=parse(ref+'/source-before.txt'),after=parse(out+'/source-before.txt');
+          assert.equal(before.get(helper).sha,oldPin);assert.equal(after.get(helper).sha,newPin);assert.notEqual(oldPin,newPin);assert(!after.has('scripts/qa/fantasyDraftCriteriaStartCheck.mjs'),'No causal runner');const scoped=map=>[...map].filter(([file])=>/^(src|public|scripts)\//.test(file)&&file!==helper).sort(([a],[b])=>a.localeCompare(b)),sourceRows=scoped(after);assert.equal(sourceRows.length,4653);assert.deepEqual(sourceRows,scoped(before),'Every4653 product/public/script row held except explicit oldc9/new27 native helper');
+          const configs=['index.html','package.json','package-lock.json','vite.config.ts','tailwind.config.ts','postcss.config.js','tsconfig.json','tsconfig.app.json','tsconfig.node.json','bun.lockb','bun.lock'];for(const f of configs){assert.equal(after.has(f),before.has(f),f);if(after.has(f))assert.deepEqual(after.get(f),before.get(f),f);}
+          const inventory=(dir,prefix='dist')=>fs.readdirSync(dir,{withFileTypes:true}).sort((a,b)=>a.name.localeCompare(b.name)).flatMap(e=>e.isDirectory()?inventory(path.join(dir,e.name),prefix+'/'+e.name):e.isFile()?(()=>{const b=fs.readFileSync(path.join(dir,e.name));return[{file:prefix+'/'+e.name,bytes:b.length,sha256:sha(b)}];})():[]);
+          const actual=inventory('dist'),reference=inventory(process.env.FD_PRIMARY_DIST),manifest=JSON.parse(fs.readFileSync(ref+'/dist-before.json'));assert.equal(actual.length,850);assert.deepEqual(actual,reference,'Every literal fresh built body equals primary tar');assert.deepEqual(reference,manifest,'Tar bodies equal retained primary manifest');assert.deepEqual(manifest,JSON.parse(fs.readFileSync(ref+'/dist-after.json')));assert.deepEqual(actual,JSON.parse(fs.readFileSync(out+'/dist-before.json')),'Fresh own manifest matches actual bodies');
+          const sourceJoin=JSON.parse(fs.readFileSync(ref+'/source-join.json')),wanted=Object.keys(sourceJoin.guardPins).filter(f=>!['scripts/sweepWeight.mjs','scripts/runAllSims.mjs'].includes(f)).map(f=>path.basename(f)).sort();for(const[f,p]of Object.entries(sourceJoin.guardPins)){assert.equal(before.get(f).sha,p);assert.equal(after.get(f).sha,p);}
+          const readers=fs.readFileSync(ref+'/readers.log','utf8'),passed=[...readers.matchAll(/^\s+PASS\s+(sim[A-Za-z0-9]+\.mjs)/gm)].map(m=>m[1]).sort();assert.equal(passed.length,20);assert.deepEqual(passed,wanted);assert(readers.includes('All 20 harnesses green.'));assert(!/^\s+FAIL\b/m.test(readers));
+          const weight=fs.readFileSync(ref+'/weight.log','utf8'),routes=[...weight.matchAll(/^\s+(\/\S*)\s+\d+K gz over/gm)].map(m=>m[1]);assert.deepEqual(routes,['/','/club-manager','/soccer-career','/stadium-tycoon','/wonderkid-factory','/minefield','/footle','/nfl-my-career','/front-office','/soccer-grid','/leaderboard','/manager-hot-seat','/deadline-day','/transfer-path','/nba-front-office','/nhl-front-office']);assert(weight.includes('sweepWeight: green.'));
+          const primaryBrowser=JSON.parse(fs.readFileSync(ref+'/browser/report.json'));assert.equal(primaryBrowser.status,'failed','Primary native390 remains historically failed');assert.deepEqual(primaryBrowser.journeys.map(j=>[j.width,j.status]),[[320,'passed'],[390,'failed']]);assert(primaryBrowser.sourceHeld&&primaryBrowser.distHeld&&primaryBrowser.installedHeld&&primaryBrowser.offlineHeld);assert.equal(fs.statSync(ref+'/offline.log').size,0);
+          for(const f of ['readers.log','weight.log','source-join.json','dist-before.json','dist-after.json'])fs.copyFileSync(path.join(ref,f),path.join(out,'primary-'+f));
+          const result={status:'passed',primaryRun:42172239248,primaryHead:meta.workflow_run.head_sha,primaryArtifact:meta.id,primaryZipSHA256:'351808b4cf7ead513d8296b6e2d930d2dffec8440514d76bfea7d00228a6f093',primaryTarSHA256:'f5033c7b5534a43a5dedf57a06a35fab131007ec30624936a957a1c10646c387',sourceRows:sourceRows.length,rootConfigs:configs.filter(f=>after.has(f)),onlySourceExclusion:{file:helper,before:oldPin,after:newPin},distFiles:actual.length,distManifestSHA256:sha(JSON.stringify(actual)),dist:actual,carriedReaders:passed,carriedCaps:routes,guardPins:sourceJoin.guardPins,generatedPatches:[],limits:'Fresh exact source/build join carries only separately retained primary20-reader/16-cap proof. Neither readers nor caps rerun here. Primary native390 failed and1280 did not run; fresh corrected native admission is independently required.'};
+          fs.writeFileSync(out+'/reference-build-join.json',JSON.stringify(result,null,2));console.log('PASS exact4653 source rows/850 built files; primary20readers16caps carried without new native credit');
+          NODE
       - name: Native pending criterion and early Under25 draft
         timeout-minutes: 12
         if: ${{ !cancelled() && steps.build.outcome == 'success' && steps.browser_setup.outcome == 'success' }}
