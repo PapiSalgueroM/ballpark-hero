@@ -711,7 +711,24 @@ if (k4) {
 const R4 = g4.filter(g => READ.has(g.clubs[0].league)).reduce((s, g) => s + g.weight, 0);
 const tierW = t => engine.leagueDrawGroups(POOL.filter(c => c.tier === t)).reduce((s, g) => s + g.weight, 0);
 ok(F4 === 20 && W4 === WANT_W4 && R4 === WANT_R4 && g4.length === 78, `tier 4: the four leagues hold ${F4}, the read labels ${R4}, of ${W4} over ${g4.length} groups; 20, ${WANT_R4}, ${WANT_W4} and 78 expected`);
-ok(tierW(1) === 18 && tierW(2) === 39 && tierW(3) === 69, `tier 1 to 3 draw weights ${tierW(1)}, ${tierW(2)}, ${tierW(3)}; 18, 39 and 69 expected`);
+/* Russia adds fifteen tier 2 clubs to the existing Zenit group. Its weight changes from one to five under the same cap. */
+const BEFORE_RUSSIA_W2 = 39;
+const OLD_RUSSIA_T2 = 1;
+const RUSSIA_T2_SIZE = 16;
+const WANT_W2 = BEFORE_RUSSIA_W2 + Math.min(RUSSIA_T2_SIZE, CAP) - OLD_RUSSIA_T2;
+const r2 = engine.leagueDrawGroups(POOL.filter(c => c.tier === 2)).find(g => g.key === 'Russian Premier League|2');
+const validRussiaGroup = g => !!g && g.clubs.length === RUSSIA_T2_SIZE && g.weight === Math.min(RUSSIA_T2_SIZE, CAP);
+ok(validRussiaGroup(r2), 'Russia tier 2: sixteen members under the existing league draw cap');
+if (r2) {
+  const before = JSON.stringify(r2);
+  const missing = { ...r2, clubs: r2.clubs.slice(1) };
+  const wrongWeight = { ...r2, weight: r2.weight - 1 };
+  ok(JSON.stringify(missing) !== before && JSON.stringify(wrongWeight) !== before
+    && !validRussiaGroup(missing) && !validRussiaGroup(wrongWeight)
+    && validRussiaGroup(r2) && JSON.stringify(r2) === before,
+  'Russia copied fifteen-member and weight-four controls reject, full original stays held');
+}
+ok(tierW(1) === 18 && tierW(2) === WANT_W2 && tierW(3) === 69, `tier 1 to 3 draw weights ${tierW(1)}, ${tierW(2)}, ${tierW(3)}; 18, ${WANT_W2} and 69 expected`);
 /* The sampler itself on the full tier 4, both calls on the grid: every club
    in every group, capped ones included, drawn exactly weight * M * M2 times. */
 const gr4 = gridOdds(() => engine.pickAcrossLeagues(t4), t4);

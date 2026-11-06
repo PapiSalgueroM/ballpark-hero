@@ -221,6 +221,7 @@ export const SC_CONTINENTAL_PARTIAL: string[] = [
  *  this game models (UEFA plays the Champions League, which the engine reads
  *  from uclFormatHistory, and no Oceanian club is above tier 4). */
 export function clubCupFor(country: string, year: number): { cup: ClubCupId; confederation: Confederation; period: ClubCupPeriod | null } | null {
+  if (country === 'Russia' && year >= 2022) return null;
   const confederation = clubConfederation(country);
   if (confederation === 'UEFA') return { cup: 'ucl', confederation, period: null };
   const period = CONTINENTAL_PERIODS.find(p => p.confederation === confederation && year >= p.from && (p.to === null || year <= p.to));
@@ -244,6 +245,7 @@ export function continentalOpponents(clubs: ClubData[], confederation: Confedera
   return adjustClubsForYear(clubs, year)
     .filter(c => c.name !== exclude && clubConfederation(c.country) === confederation)
     .filter(c => !(c.country === 'Australia' && year < 2007))
+    .filter(c => c.country !== 'Russia' || clubCupFor(c.country, year) !== null)
     .map(c => c.name);
 }
 
