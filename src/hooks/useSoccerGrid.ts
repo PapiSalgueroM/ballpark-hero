@@ -60,9 +60,11 @@ export function useSoccerGrid() {
   const [settings, setSettings] = useState<SoccerGridSettings>(
     () => loadSoccerGridSettings(todayStr) ?? DEFAULT_SETTINGS,
   );
+  const settingsRef = useRef(settings);
   const settingsLoaded = true;
 
   const setDifficulty = useCallback((difficulty: SoccerGridDifficulty) => {
+    settingsRef.current = { ...settingsRef.current, difficulty };
     setSettings((prev) => {
       const next = { ...prev, difficulty };
       saveSoccerGridSettings(todayStr, next);
@@ -72,6 +74,7 @@ export function useSoccerGrid() {
   }, [todayStr]);
 
   const setTimerMode = useCallback((timerMode: SoccerGridTimerMode) => {
+    settingsRef.current = { ...settingsRef.current, timerMode };
     setSettings((prev) => {
       const next = { ...prev, timerMode };
       saveSoccerGridSettings(todayStr, next);
@@ -100,6 +103,8 @@ export function useSoccerGrid() {
     puzzle: dailyPuzzle,
     guesses: dailyActions,
     addGuess: addDailyGuess,
+    takeNewerSave: takeNewerDailySave,
+    getCurrentProgress,
     gameStatus: rawDailyStatus,
     isLoading,
   } = useDailyPuzzle<SoccerGridPuzzle, GridAction>({
@@ -116,6 +121,9 @@ export function useSoccerGrid() {
   });
 
   const puzzle = dailyPuzzle ?? soccerGridPuzzles[0];
+  const puzzleKey = JSON.stringify([puzzle.id, puzzle.rows.map(a => [a.type, a.label]), puzzle.cols.map(a => [a.type, a.label])]);
+  const puzzleKeyRef = useRef(puzzleKey);
+  puzzleKeyRef.current = puzzleKey;
 
   const [activeCell, setActiveCell] = useState<number | null>(null);
   const [validating, setValidating] = useState(false);
@@ -154,6 +162,7 @@ export function useSoccerGrid() {
   const [timerStartedAt, setTimerStartedAtState] = useState<number | null>(
     () => loadTimerStartedAt(todayStr),
   );
+  const timerStartedAtRef = useRef(timerStartedAt);
   const [timerExpired, setTimerExpiredState] = useState<boolean>(
     () => loadTimerExpired(todayStr),
   );
@@ -172,8 +181,9 @@ export function useSoccerGrid() {
   }, [settings.timerMode, timerStartedAt, nowTick]);
 
   const startTimerIfNeeded = useCallback(() => {
-    if (settings.timerMode === 0 || timerStartedAt !== null) return;
+    if (settings.timerMode === 0 || timerStartedAtRef.current !== null) return;
     const now = Date.now();
+    timerStartedAtRef.current = now;
     setNowTick(now);
     saveTimerStartedAt(todayStr, now);
     setTimerStartedAtState(now);
@@ -266,24 +276,46 @@ export function useSoccerGrid() {
   }, [cells, overtimeActive, overtimeCells]);
 
   const isOvertime = overtimeActive && gameStatus === 'complete';
+  const displayedCellsRef = useRef(overtimeDisplayCells);
+  displayedCellsRef.current = overtimeDisplayCells;
 
   const submitGuess = useCallback(
     async (playerName: string) => {
       if (activeCell === null || validating) return;
 
-      // Not in Overtime and the main game has ended, nothing to submit.
-      if (gameStatus !== 'playing' && !isOvertime) return;
-
-      const currentCell = isOvertime ? overtimeDisplayCells[activeCell] : cells[activeCell];
-      if (currentCell.status === 'correct') return;
+      const capturedCell = activeCell;
+      const requestIsOvertime = isOvertime;
+      const requestPuzzleKey = puzzleKey;
+      const requestSettings = settings;
+      const canSettle = () => {
+        if (takeNewerDailySave()) return false;
+        const progress = getCurrentProgress();
+        if (!requestIsOvertime && (progress.gameStatus !== 'playing' || mainRoundComplete.current)) return false;
+        if (puzzleKeyRef.current !== requestPuzzleKey ||
+          settingsRef.current.difficulty !== requestSettings.difficulty ||
+          settingsRef.current.timerMode !== requestSettings.timerMode) return false;
+        if (!requestIsOvertime) {
+          const epoch = timerStartedAtRef.current;
+          const now = Date.now();
+          if (requestSettings.timerMode !== 0 && epoch !== null && now >= epoch + requestSettings.timerMode * 1000) {
+            mainRoundComplete.current = true;
+            saveTimerExpired(todayStr);
+            setTimerExpiredState(true);
+            setNowTick(now);
+            return false;
+          }
+        }
+        if (progress.guesses.some(a => a.t === 'ok' && a.cellIndex === capturedCell)) return false;
+        return !requestIsOvertime || displayedCellsRef.current[capturedCell].status !== 'correct';
+      };
+      if (!canSettle()) return;
 
       // Timed modes start their clock on the first real submission, not on
       // page load, so idle time before typing never costs the player.
       if (gameStatus === 'playing') startTimerIfNeeded();
 
       setValidating(true);
-      const { rowAttr, colAttr } = getRowCol(activeCell);
-      const capturedCell = activeCell;
+      const { rowAttr, colAttr } = getRowCol(capturedCell);
 
       try {
         const { data, error } = await supabase.functions.invoke('soccer-grid-validate', {
@@ -294,20 +326,20 @@ export function useSoccerGrid() {
         const displayName = data?.fullName || playerName;
 
         if (isValid) {
-          if (!isOvertime && mainRoundComplete.current) return;
+          if (!canSettle()) return;
           /* Round 401: measure the crowd BEFORE this row joins it. The
              formula adds the player's own row itself; inserting first counted
              it twice (a first pick read 100 instead of the unicorn 101). */
           const rarity = await fetchRarity(puzzle.id, capturedCell, displayName);
-          if (!isOvertime && mainRoundComplete.current) return;
+          if (!canSettle()) return;
           await supabase.from('soccer_grid_selections').insert({
             puzzle_id: puzzle.id,
             cell_index: capturedCell,
             player_name: displayName.toLowerCase(),
           });
-          if (!isOvertime && mainRoundComplete.current) return;
+          if (!canSettle()) return;
 
-          if (isOvertime) {
+          if (requestIsOvertime) {
             // Overtime picks never touch dailyActions/correctCount/rarityScore -
             // the main recorded score stays exactly as it was when the main
             // game ended. Tracked in its own localStorage list instead.
@@ -330,12 +362,12 @@ export function useSoccerGrid() {
             toast.error("Couldn't verify that answer, please try again.");
           }
         } else {
-          if (!isOvertime && mainRoundComplete.current) return;
+          if (!canSettle()) return;
           setWrongFlash({ cellIndex: capturedCell, playerName });
           setTimeout(() => setWrongFlash(null), 1500);
           // Wrong guesses during Overtime don't cost anything, Overtime has
           // no guess limit, it's purely "keep filling what's left".
-          if (!isOvertime) addDailyGuess({ t: 'x' });
+          if (!requestIsOvertime) addDailyGuess({ t: 'x' });
         }
       } catch {
         // Network error, don't count the guess
@@ -344,7 +376,7 @@ export function useSoccerGrid() {
         setActiveCell(null);
       }
     },
-    [activeCell, gameStatus, validating, isOvertime, overtimeDisplayCells, cells, puzzle, getRowCol, fetchRarity, addDailyGuess, startTimerIfNeeded, todayStr],
+    [activeCell, gameStatus, validating, isOvertime, overtimeDisplayCells, cells, puzzle, puzzleKey, settings, getCurrentProgress, takeNewerDailySave, getRowCol, fetchRarity, addDailyGuess, startTimerIfNeeded, todayStr],
   );
 
   // Uses the derived gameStatus (which also accounts for timeUp), not
