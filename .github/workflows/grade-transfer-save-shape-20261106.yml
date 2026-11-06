@@ -1,4 +1,4 @@
-name: Grade the Transfer saved-shape controls
+name: Grade the Transfer saved-shape full qualification
 on:
   push:
     branches: [codex/grade-transfer-save-shape-qa-20261106]
@@ -6,20 +6,18 @@ permissions:
   contents: read
   actions: read
 jobs:
-  controls:
+  qualify:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 45
     defaults:
       run:
         shell: bash
     env:
       SIM_NETWORK: offline
-      SIM_OFFLINE_RECEIPT: grade-save-controls/offline.log
+      SIM_OFFLINE_RECEIPT: grade-save-qualified/offline.log
       TZ: UTC
-      GRADE_SAVE_FIXED_RUN: '42193192991'
-      GRADE_SAVE_FIXED_ARTIFACT: '13490826772'
-      GRADE_SAVE_FIXED_ZIP_SHA256: '5607a72130f2974fb1b689bb0b2dde10c1b17435460b7d79b889ec2a05d035b7'
-      GRADE_SAVE_FIXED_HEAD: '401a1d06d43815412b58233ea06d76b47fd00d4b'
+      ENGINES: chromium
+      SEO_SPLIT_BASE_REF: 3b14650d360b010b25b525de33a5f32f33de2798
     steps:
       - uses: actions/checkout@v4
         with:
@@ -29,113 +27,193 @@ jobs:
         with:
           node-version: 24.22.1
           cache: npm
-      - name: Exact control source and locked install
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.4.4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Exact qualified source and locked install
         run: |
           set -euo pipefail
-          [[ "$GRADE_SAVE_FIXED_RUN" =~ ^[0-9]+$ ]]
-          [[ "$GRADE_SAVE_FIXED_ARTIFACT" =~ ^[0-9]+$ ]]
-          [[ "$GRADE_SAVE_FIXED_ZIP_SHA256" =~ ^[a-f0-9]{64}$ ]]
-          [[ "$GRADE_SAVE_FIXED_HEAD" =~ ^[a-f0-9]{40}$ ]]
-          test ! -e grade-save-controls
-          mkdir grade-save-controls
-          touch grade-save-controls/offline.log
-          git rev-parse HEAD > grade-save-controls/head.txt
-          git rev-parse 'HEAD^{tree}' > grade-save-controls/tree.txt
-          git ls-files -s > grade-save-controls/source-before.txt
-          sha256sum package.json package-lock.json > grade-save-controls/locks-before.txt
+          test ! -e grade-save-qualified
+          mkdir grade-save-qualified
+          touch grade-save-qualified/offline.log
+          git rev-parse HEAD > grade-save-qualified/head.txt
+          git rev-parse 'HEAD^{tree}' > grade-save-qualified/tree.txt
+          git ls-files -s > grade-save-qualified/source-before.txt
+          sha256sum package.json package-lock.json > grade-save-qualified/locks-before.txt
           git diff --exit-code HEAD -- .
           git fetch --no-tags --depth=1 origin 069d19d994abc8f0f23c2b9edb035188b5a22519
+          git fetch --no-tags --depth=1 origin 3b14650d360b010b25b525de33a5f32f33de2798
+          test "$(git rev-parse 3b14650d360b010b25b525de33a5f32f33de2798:src/data/seoMeta.ts)" = cf7a5142e59b97048d27b5ece9a6588a92073728
           test "$(git rev-parse '069d19d994abc8f0f23c2b9edb035188b5a22519^{tree}')" = 4b3ec02208ca565468b3e4c4f94ae58fa1873d64
           node --input-type=module <<'NODE'
           import fs from 'node:fs';import assert from 'node:assert/strict';import {execFileSync} from 'node:child_process';import {createHash} from 'node:crypto';
-          const out='grade-save-controls',base='069d19d994abc8f0f23c2b9edb035188b5a22519',hook='src/hooks/useGradeTransfer.ts',test='src/test/gradeTransferSaveShape.test.tsx',plan='docs/plans/2026-11-06-grade-transfer-save-shape.md',runner='scripts/qa/checkGradeTransferSaveShape.mjs',workflow='.github/workflows/grade-transfer-save-shape-20261106.yml',at=(ref,file)=>execFileSync('git',['rev-parse',ref+':'+file],{encoding:'utf8'}).trim();
-          const pins={"src/hooks/useGradeTransfer.ts":"0048c0b04375b5035988dce33ddaa4abba80b74e","src/test/gradeTransferSaveShape.test.tsx":"c2d3dc2ef4e9d873e7e4a66fdab1c20eda43d585","docs/plans/2026-11-06-grade-transfer-save-shape.md":"c15361c0dade1ffa9205ee5ef487783ff36bc5f9","scripts/qa/checkGradeTransferSaveShape.mjs":"c3f5ffa94f5cf006136fd6cfb5fc2103660169bd","src/pages/GradeTransfer.tsx":"518f865c38c043e08048b4270a644baf50c48ce1","src/components/grade-transfer/GradeTransferBoard.tsx":"79d6c0a974bf0f8edb9914edd0ecdcf27eec5af8","src/lib/fetchTransferGrades.ts":"c7e8db542217df61adc4022facb0f2f8ca62423c","src/lib/fetchAllRows.ts":"16a6d21750405e7a647576ff513ed8ee11d5ba6b","src/lib/dateUtils.ts":"12c9de0ed37b0797492f3e936bcba70bdc03d585","src/hooks/useGameCompletion.ts":"b104822551fd5d9b1c5d6ddb14f01c79e5a662b2","src/lib/restoredFinish.ts":"a7707c36eba160b36eb31713039329658eebe51a","src/test/noDoubleRecord.test.tsx":"35f0b55a98dbc9437bdbf4da83c6f015b54fb174","package.json":"2ff64986fb76ebc51b706f2fd24765768874008a","package-lock.json":"97d6f12a052f25f400462938c241789a083f0bfe"};
-          for(const[file,sha]of Object.entries(pins))assert.equal(at('HEAD',file),sha,file);
-          const owned=[hook,test,plan,runner,workflow],tree=ref=>execFileSync('git',['ls-tree','-r','-z',ref],{encoding:'utf8',maxBuffer:16*1024*1024}).split('\0').filter(Boolean),held=rows=>rows.filter(row=>!owned.includes(row.split('\t')[1]));
-          assert.deepEqual(held(tree('HEAD')),held(tree(base)),'Every other tracked mode and blob equals clean PR520');assert.equal(at(base,hook),'5e677e844f8af33de27c206673fcf66849ad5930');
-          for(const file of Object.keys(pins).filter(file=>!owned.includes(file)))assert.equal(at(base,file),pins[file],file+' base');
-          fs.writeFileSync(out+'/source-join.json',JSON.stringify({status:'passed',base,baseTree:'4b3ec02208ca565468b3e4c4f94ae58fa1873d64',heldRows:held(tree('HEAD')).length,onlyOwnedLeaves:owned,pins,nativeHelperPresent:false},null,2));
-          const files=execFileSync('git',['ls-files','-z'],{encoding:'utf8'}).split('\0').filter(Boolean),rows=files.map(file=>{const bytes=fs.readFileSync(file);return{file,bytes:bytes.length,sha256:createHash('sha256').update(bytes).digest('hex')};});fs.writeFileSync(out+'/tracked-before.json',JSON.stringify(rows));
+          const out='grade-save-qualified',base='069d19d994abc8f0f23c2b9edb035188b5a22519',test='src/test/gradeTransferSaveShape.test.tsx',plan='docs/plans/2026-11-06-grade-transfer-save-shape.md',workflow='.github/workflows/grade-transfer-save-shape-20261106.yml',at=(ref,file)=>execFileSync('git',['rev-parse',ref+':'+file],{encoding:'utf8'}).trim();
+          const pins={'src/hooks/useGradeTransfer.ts':'0048c0b04375b5035988dce33ddaa4abba80b74e','src/pages/GradeTransfer.tsx':'518f865c38c043e08048b4270a644baf50c48ce1','src/components/grade-transfer/GradeTransferBoard.tsx':'79d6c0a974bf0f8edb9914edd0ecdcf27eec5af8','src/lib/fetchTransferGrades.ts':'c7e8db542217df61adc4022facb0f2f8ca62423c','src/hooks/useGameCompletion.ts':'b104822551fd5d9b1c5d6ddb14f01c79e5a662b2','src/lib/restoredFinish.ts':'a7707c36eba160b36eb31713039329658eebe51a','src/test/noDoubleRecord.test.tsx':'35f0b55a98dbc9437bdbf4da83c6f015b54fb174',[test]:'c2d3dc2ef4e9d873e7e4a66fdab1c20eda43d585',[plan]:'c15361c0dade1ffa9205ee5ef487783ff36bc5f9','scripts/qa/playGradeTransferSave.mjs':'40879745818cc31cd764087f488c6da1816b2109','package.json':'2ff64986fb76ebc51b706f2fd24765768874008a','package-lock.json':'97d6f12a052f25f400462938c241789a083f0bfe'};
+          assert.equal(at(base,'src/hooks/useGradeTransfer.ts'),'5e677e844f8af33de27c206673fcf66849ad5930');for(const[f,p]of Object.entries(pins))assert.equal(at('HEAD',f),p,f);for(const f of Object.keys(pins).filter(f=>f!==test&&f!==plan&&f!=='src/hooks/useGradeTransfer.ts'&&f!=='scripts/qa/playGradeTransferSave.mjs'))assert.equal(at(base,f),pins[f],f+' base');
+          const tree=ref=>execFileSync('git',['ls-tree','-r','-z',ref],{encoding:'utf8',maxBuffer:16*1024*1024}).split('\0').filter(Boolean),owned=[test,plan,workflow,'src/hooks/useGradeTransfer.ts','scripts/qa/playGradeTransferSave.mjs'],held=rows=>rows.filter(row=>!owned.includes(row.split('\t')[1]));assert.deepEqual(held(tree('HEAD')),held(tree(base)),'Every other tracked blob equals clean Connections PR520');fs.writeFileSync(out+'/source-join.json',JSON.stringify({status:'passed',base,baseTree:'4b3ec02208ca565468b3e4c4f94ae58fa1873d64',heldRows:held(tree('HEAD')).length,onlyOwnedLeaves:owned,pins,saveDependenciesHeld:true},null,2));
+          const files=execFileSync('git',['ls-files','-z'],{encoding:'utf8'}).split('\0').filter(Boolean),rows=files.map(file=>{const b=fs.readFileSync(file);return{file,bytes:b.length,sha256:createHash('sha256').update(b).digest('hex')};});fs.writeFileSync(out+'/tracked-before.json',JSON.stringify(rows));
           NODE
-          npm ci 2>&1 | tee grade-save-controls/install.log
+          npm ci 2>&1 | tee grade-save-qualified/install.log
           node --input-type=module <<'NODE'
-          import fs from 'node:fs';import assert from 'node:assert/strict';
-          const lock=JSON.parse(fs.readFileSync('package-lock.json')),rows=Object.keys(lock.packages).filter(p=>p.startsWith('node_modules/')&&fs.existsSync(p+'/package.json')).map(p=>[p,JSON.parse(fs.readFileSync(p+'/package.json')).version]);assert.equal(rows.length,521);for(const[p,v]of rows)assert.equal(v,lock.packages[p].version,p);fs.writeFileSync('grade-save-controls/installed-before.json',JSON.stringify(rows));
+          import fs from 'node:fs';import assert from 'node:assert/strict';const lock=JSON.parse(fs.readFileSync('package-lock.json')),rows=Object.keys(lock.packages).filter(p=>p.startsWith('node_modules/')&&fs.existsSync(p+'/package.json')).map(p=>[p,JSON.parse(fs.readFileSync(p+'/package.json')).version]);assert.equal(rows.length,521);for(const[p,v]of rows)assert.equal(v,lock.packages[p].version,p);fs.writeFileSync('grade-save-qualified/installed-before.json',JSON.stringify(rows));
           NODE
-      - name: Proper App types before controls
+      - name: Proper App types
         run: |
           set -euo pipefail
-          node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee grade-save-controls/types-before.log
-      - name: Pinned completed fixed qualification
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee grade-save-qualified/types.log
+      - name: Complete textual census and AST code caller audit
+        run: |
+          set -euo pipefail
+          git grep -n -I -e useGradeTransfer -e hooks/useGradeTransfer -- . > grade-save-qualified/caller-grep.txt
+          git ls-files '*useGradeTransfer*' > grade-save-qualified/hook-paths.txt
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import path from 'node:path';import assert from 'node:assert/strict';import ts from 'typescript';import {execFileSync} from 'node:child_process';
+          const out='grade-save-qualified',hook='src/hooks/useGradeTransfer.ts',page='src/pages/GradeTransfer.tsx',board='src/components/grade-transfer/GradeTransferBoard.tsx',name='useGradeTransfer',files=execFileSync('git',['ls-files','-z'],{encoding:'utf8'}).split('\0').filter(Boolean),hookPaths=files.filter(f=>/(?:^|\/)useGradeTransfer\.[cm]?[jt]sx?$/i.test(f));
+          const sourceFiles=files.filter(f=>f.startsWith('src/')&&/\.[cm]?[jt]sx?$/.test(f)),isTest=f=>/^src\/test(?:\/|$)/.test(f)||/(?:^|\/)__tests__\//.test(f)||/\.(test|spec)\.[cm]?[jt]sx?$/.test(f),events=[],unresolved=[],parseErrors=[];
+          const target=(specifier,file)=>{let resolved=specifier.startsWith('@/')?'src/'+specifier.slice(2):specifier.startsWith('.')?path.posix.join(path.posix.dirname(file),specifier):specifier;resolved=path.posix.normalize(resolved).replace(/\.[cm]?[jt]sx?$/,'');return resolved==='src/hooks/useGradeTransfer'||specifier===name;};
+          for(const file of sourceFiles){
+            const text=fs.readFileSync(file,'utf8'),ast=ts.createSourceFile(file,text,ts.ScriptTarget.Latest,true),production=!isTest(file);for(const d of ast.parseDiagnostics)parseErrors.push({file,message:ts.flattenDiagnosticMessageText(d.messageText,' ')});
+            const record=(node,kind,module=null)=>{const pos=ast.getLineAndCharacterOfPosition(node.getStart(ast));events.push({file,production,kind,module,line:pos.line+1,column:pos.character+1,code:node.getText(ast)});};
+            const visit=node=>{
+              if((ts.isImportDeclaration(node)||ts.isExportDeclaration(node))&&node.moduleSpecifier&&ts.isStringLiteralLike(node.moduleSpecifier)&&target(node.moduleSpecifier.text,file))record(node,ts.isImportDeclaration(node)?'import':'reexport',node.moduleSpecifier.text);
+              if(ts.isImportTypeNode(node)&&ts.isLiteralTypeNode(node.argument)&&ts.isStringLiteralLike(node.argument.literal)&&target(node.argument.literal.text,file))record(node,'type-import',node.argument.literal.text);
+              if(ts.isCallExpression(node)&&(node.expression.kind===ts.SyntaxKind.ImportKeyword||(ts.isIdentifier(node.expression)&&node.expression.text==='require'))){const argument=node.arguments[0],kind=node.expression.kind===ts.SyntaxKind.ImportKeyword?'dynamic-import':'require';if(argument&&ts.isStringLiteralLike(argument)){if(target(argument.text,file))record(node,kind,argument.text);}else{const pos=ast.getLineAndCharacterOfPosition(node.getStart(ast));unresolved.push({file,production,kind,line:pos.line+1,code:node.getText(ast)});}}
+              if(ts.isIdentifier(node)&&node.text===name)record(node,'symbol-identifier');ts.forEachChild(node,visit);
+            };visit(ast);
+          }
+          const productionCallers=[...new Set(events.filter(e=>e.production&&e.file!==hook).map(e=>e.file))].sort(),unknownProductionLoads=unresolved.filter(e=>e.production),report={status:'pending-review',typescriptVersion:ts.version,commentPolicy:'TypeScript AST nodes only, never comments/trivia. Complete raw gitgrep retained separately.',scannedFiles:sourceFiles.length,hookPaths,productionCallers,events,unresolvedLoaders:unresolved,parseErrors,limits:'Direct module/symbol census includes imports, reexports, dynamic import and require. Unresolved production loaders refuse automatic admission and require source review. No transitive higher-order callgraph claim.'};
+          fs.copyFileSync(hook,out+'/fixed-hook.ts');fs.copyFileSync(page,out+'/original-page.tsx');fs.copyFileSync(board,out+'/original-board.tsx');fs.writeFileSync(out+'/caller-audit.json',JSON.stringify(report,null,2));assert.deepEqual(parseErrors,[]);assert.deepEqual(hookPaths,[hook]);assert.deepEqual(productionCallers,[board],'Only known Grade the Transfer board consumes hook');assert.deepEqual(unknownProductionLoads,[],'Unresolved production loader requires review before an App fix');assert(events.some(e=>e.file===board&&e.kind==='import'));report.status='passed';fs.writeFileSync(out+'/caller-audit.json',JSON.stringify(report,null,2));console.log('PASS code callers: '+JSON.stringify({productionCallers,hookPaths,scannedFiles:sourceFiles.length}));
+          NODE
+      - name: Pinned completed original malformed-save packet
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
-          gh api "repos/PapiSalgueroM/ballpark-hero/actions/runs/$GRADE_SAVE_FIXED_RUN" > grade-save-controls/fixed-run.json
-          gh api "repos/PapiSalgueroM/ballpark-hero/actions/artifacts/$GRADE_SAVE_FIXED_ARTIFACT" > grade-save-controls/fixed-artifact.json
-          gh api "repos/PapiSalgueroM/ballpark-hero/actions/artifacts/$GRADE_SAVE_FIXED_ARTIFACT/zip" > "$RUNNER_TEMP/connections-fixed.zip"
-          echo "$GRADE_SAVE_FIXED_ZIP_SHA256  $RUNNER_TEMP/connections-fixed.zip" | sha256sum --check
-          mkdir grade-save-controls/reference-fixed
-          unzip -q "$RUNNER_TEMP/connections-fixed.zip" -d grade-save-controls/reference-fixed
-          node --input-type=module <<'NODE'
-          import fs from 'node:fs';import path from 'node:path';import assert from 'node:assert/strict';import {createHash} from 'node:crypto';
-          const out='grade-save-controls',ref=out+'/reference-fixed',read=file=>JSON.parse(fs.readFileSync(path.join(ref,file))),hash=bytes=>createHash('sha256').update(bytes).digest('hex'),blob=bytes=>createHash('sha1').update(Buffer.concat([Buffer.from('blob '+bytes.length+'\0'),bytes])).digest('hex');
-          const run=JSON.parse(fs.readFileSync(out+'/fixed-run.json')),meta=JSON.parse(fs.readFileSync(out+'/fixed-artifact.json'));
-          assert.equal(run.id,Number(process.env.GRADE_SAVE_FIXED_RUN));assert.equal(run.head_sha,process.env.GRADE_SAVE_FIXED_HEAD);assert.equal(run.status,'completed');assert.equal(run.conclusion,'success');
-          assert.equal(meta.id,Number(process.env.GRADE_SAVE_FIXED_ARTIFACT));assert.equal(meta.expired,false);assert.equal(meta.size_in_bytes,2078628);assert.equal(meta.workflow_run.id,run.id);assert.equal(meta.workflow_run.head_sha,run.head_sha);assert.equal(meta.digest,'sha256:'+process.env.GRADE_SAVE_FIXED_ZIP_SHA256);
-          assert.equal(fs.readFileSync(ref+'/head.txt','utf8').trim(),run.head_sha);assert.equal(fs.readFileSync(ref+'/tree.txt','utf8').trim(),'8278e5c6e7edf0d8c52ae17302c6b0f18645f264');
-          for(const[a,b]of[['source-before.txt','source-after.txt'],['tracked-before.json','tracked-after.json'],['locks-before.txt','locks-after.txt'],['installed-before.json','installed-after.json']])assert.deepEqual(fs.readFileSync(path.join(ref,a)),fs.readFileSync(path.join(ref,b)),'Actual fixed physical hold '+a);
-          assert.equal(fs.statSync(ref+'/types.log').size,0);assert.equal(fs.statSync(ref+'/offline.log').size,0);assert.equal(read('installed-before.json').length,521);
-          const oldRun=read('original-run.json'),oldMeta=read('original-artifact.json'),original=read('original-packet/original-admission.json'),proof=read('fixed-admission.json');
-          assert.equal(oldRun.id,42192242514);assert.equal(oldRun.status,'completed');assert.equal(oldRun.conclusion,'success');assert.equal(oldRun.head_sha,'e836f916398ab487096985eae0e0a274db43ac43');assert.equal(oldMeta.id,13490107684);assert.equal(oldMeta.workflow_run.id,oldRun.id);assert.equal(oldMeta.workflow_run.head_sha,oldRun.head_sha);assert.equal(oldMeta.digest,'sha256:cfdd786fc42e26ae7d64b33b3585e01a847e92c155858ff4684223192ad6718a');assert.equal(original.status,'original-five-business-reds-admitted');assert.equal(original.actualRows,11);assert.equal(original.rawFrames,47);
-          assert.equal(proof.status,'fixed-eleven-passed-six-whole-cases-held');assert.equal(proof.cases,11);assert.equal(proof.rawFrames,47);assert.deepEqual(proof.preservedCases,['missing','corrupt','short','partial','revealed','finished']);
-          assert.equal(blob(fs.readFileSync(ref+'/fixed-hook.ts')),'0048c0b04375b5035988dce33ddaa4abba80b74e');assert.equal(blob(fs.readFileSync(ref+'/original-page.tsx')),'518f865c38c043e08048b4270a644baf50c48ce1');assert.equal(blob(fs.readFileSync(ref+'/original-board.tsx')),'79d6c0a974bf0f8edb9914edd0ecdcf27eec5af8');assert.equal(blob(fs.readFileSync(ref+'/original-packet/original-hook.ts')),'5e677e844f8af33de27c206673fcf66849ad5930');
-          const rawBytes=fs.readFileSync(ref+'/raw.json'),raw=JSON.parse(rawBytes),oldBytes=fs.readFileSync(ref+'/original-packet/raw.json'),old=JSON.parse(oldBytes);assert.equal(hash(oldBytes),'acd8e0e981dd522e77084b3d0eb20ba42cd7749afdf9363809bd562e906207ad');assert.equal(rawBytes.length,683385);assert.equal(hash(rawBytes),'56c15cef01a71f0bf4a4424f57df3c3f2037984cdceec4b0410714a5b458d716');assert.equal(rawBytes.length,proof.rawBytes);assert.equal(hash(rawBytes),proof.rawSHA256);assert.equal(Object.values(raw.cases).reduce((sum,c)=>sum+c.frames.length,0),47);assert.deepEqual({...raw,cases:null},{...old,cases:null});for(const key of proof.preservedCases)assert.deepEqual(raw.cases[key],old.cases[key],'Actual whole preservation '+key);
-          for(const[file,count]of[['owned.json',11],['existing.json',3]]){const r=read(file),rows=r.testResults.flatMap(s=>s.assertionResults);assert.equal(r.numTotalTests,count);assert.equal(r.numPassedTests,count);assert.equal(r.numFailedTests,0);assert.equal(r.numPendingTests,0);assert.equal(rows.length,count);assert(rows.every(row=>row.status==='passed'));for(const field of['numRuntimeErrorTestSuites','numUnhandledErrors'])if(Object.hasOwn(r,field))assert.equal(r[field],0);const log=fs.readFileSync(ref+'/'+file.replace('.json','.log'),'utf8');assert(!/Unhandled Errors|Unhandled Rejection|Uncaught Exception|Failed to resolve import|No test files found|SyntaxError/.test(log));}
-          const callers=read('caller-audit.json');assert.equal(callers.status,'passed');assert.deepEqual(callers.productionCallers,['src/components/grade-transfer/GradeTransferBoard.tsx']);assert.deepEqual(callers.parseErrors,[]);assert.deepEqual(callers.unresolvedLoaders.filter(row=>row.production),[]);
-          const parseIndex=file=>new Map(fs.readFileSync(file,'utf8').trim().split('\n').map(line=>{const m=/^([0-9]+) ([0-9a-f]{40}) 0\t(.+)$/.exec(line);assert(m,'Actual index row');return[m[3],[m[1],m[2]]];})),oldSource=parseIndex(ref+'/source-before.txt'),current=parseIndex(out+'/source-before.txt'),excluded=new Set(['scripts/qa/checkGradeTransferSaveShape.mjs','.github/workflows/grade-transfer-save-shape-20261106.yml']),held=map=>[...map].filter(([file])=>!excluded.has(file)).sort(([a],[b])=>a.localeCompare(b));
-          assert.deepEqual(held(current),held(oldSource),'Every other qualified fixed index path/mode/blob held');assert(!oldSource.has('scripts/qa/checkGradeTransferSaveShape.mjs'));assert.equal(current.get('scripts/qa/checkGradeTransferSaveShape.mjs')[1],'c3f5ffa94f5cf006136fd6cfb5fc2103660169bd');assert(!current.has('scripts/qa/playGradeTransferSave.mjs'),'Native helper not admitted in this unit control tree');
-          const retained=['owned.json','owned.log','existing.json','existing.log','raw.json','fixed-admission.json','source-before.txt','tracked-before.json','caller-audit.json','types.log','offline.log'].map(file=>{const bytes=fs.readFileSync(path.join(ref,file));return{file,bytes:bytes.length,sha256:hash(bytes)};});
-          fs.writeFileSync(out+'/fixed-stages-carried.json',JSON.stringify({status:'passed',run:run.id,head:run.head_sha,artifact:meta.id,zipSHA256:process.env.GRADE_SAVE_FIXED_ZIP_SHA256,fixedCases:11,existingCases:3,qualifiedCases:14,rawFrames:47,originalRun:oldRun.id,wholePreservedCases:proof.preservedCases,rawSHA256:hash(rawBytes),retained,limits:'Completed14-case fixed qualification carried, not rerun as14 here. The control runner reruns only the11 owned cases in each arm, not the3 existing discovery/handshake/finish-reload cases. No native,build,weight,full-suite or live backend credit.'},null,2));
-          console.log('PASS pinned completed14-case fixed qualification/47RAW/6whole preserves and all fixed-source holds');
-          NODE
-      - name: Actual seven-arm saved-shape causal census
-        run: |
-          set -euo pipefail
-          GRADE_SAVE_CONTROL_OUT="$PWD/grade-save-controls/arms" GRADE_SAVE_FIXED_PACKET="$PWD/grade-save-controls/reference-fixed" NODE_OPTIONS="--max-old-space-size=6144 --require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/checkGradeTransferSaveShape.mjs 2>&1 | tee grade-save-controls/controls.log
+          gh api repos/PapiSalgueroM/ballpark-hero/actions/runs/42192242514 > grade-save-qualified/original-run.json
+          gh api repos/PapiSalgueroM/ballpark-hero/actions/artifacts/13490107684 > grade-save-qualified/original-artifact.json
+          gh api repos/PapiSalgueroM/ballpark-hero/actions/artifacts/13490107684/zip > "$RUNNER_TEMP/grade-save-original.zip"
+          echo "cfdd786fc42e26ae7d64b33b3585e01a847e92c155858ff4684223192ad6718a  $RUNNER_TEMP/grade-save-original.zip" | sha256sum --check
+          mkdir grade-save-qualified/original-packet
+          unzip -q "$RUNNER_TEMP/grade-save-original.zip" -d grade-save-qualified/original-packet
+          cp grade-save-qualified/original-packet/original-hook.ts grade-save-qualified/original-hook.ts
           node --input-type=module <<'NODE'
           import fs from 'node:fs';import assert from 'node:assert/strict';import {createHash} from 'node:crypto';
-          const out='grade-save-controls',read=file=>JSON.parse(fs.readFileSync(out+'/'+file)),s=read('arms/summary.json'),hash=b=>createHash('sha256').update(b).digest('hex');
-          const matrix=[['fixed',[]],['original',['GTT_SAVE_GRADES_OBJECT','GTT_SAVE_INDEX_NEGATIVE','GTT_SAVE_INDEX_FRACTION','GTT_SAVE_INDEX_STRING','GTT_SAVE_GRADE_ITEM']],['omit-grades-validation',['GTT_SAVE_GRADES_OBJECT','GTT_SAVE_GRADE_ITEM']],['omit-grade-items',['GTT_SAVE_GRADE_ITEM']],['omit-numeric-integer-pair',['GTT_SAVE_INDEX_FRACTION','GTT_SAVE_INDEX_STRING']],['omit-nonnegative-index',['GTT_SAVE_INDEX_NEGATIVE']],['restored',[]]];
-          assert.equal(s.status,'passed');assert.equal(s.error,null);assert.equal(s.completedArms,7);assert.equal(s.actualRows,77);assert.equal(s.actualNamedBusinessReds,11);assert.equal(s.rawFrames,329);assert.deepEqual(s.arms.map(a=>a.name),matrix.map(a=>a[0]));
-          for(let i=0;i<matrix.length;i++){const[name,failed]=matrix[i],a=s.arms[i];assert.deepEqual(a,read('arms/'+name+'/admission.json'));assert.equal(a.status,'passed');assert.equal(a.actualRows,11);assert.equal(a.rawFrames,47);assert.deepEqual(a.actualFailed.map(title=>title.split(' ')[0]).sort(),[...failed].sort());assert.equal(a.actualPassed.length,11-failed.length);assert.equal(a.changed.length,i===0||i===6?0:1);assert.equal(a.wholePreservationCases.length,6);assert(a.otherTrackedBodiesHeld&&a.indexHeld&&a.installed521Held&&a.offlineHeld);}
-          for(const k of['allTrackedRestored','indexHeld','installed521Held','offlineHeld'])assert.equal(s[k],true);
-          const old=fs.readFileSync(out+'/reference-fixed/original-packet/raw.json'),fixed=fs.readFileSync(out+'/reference-fixed/raw.json');assert.equal(s.originalRawSha256,hash(old));assert.equal(s.fixedRawSha256,hash(fixed));assert.equal(s.originalRawBytes,old.length);assert.equal(s.fixedRawBytes,fixed.length);assert.deepEqual(fs.readFileSync(out+'/arms/original/raw.json'),old);for(const a of['fixed','restored'])assert.deepEqual(fs.readFileSync(out+'/arms/'+a+'/raw.json'),fixed);assert.deepEqual(fs.readFileSync(out+'/arms/tracked-before.json'),fs.readFileSync(out+'/arms/tracked-after.json'));assert.deepEqual(fs.readFileSync(out+'/arms/index-before.txt'),fs.readFileSync(out+'/arms/index-after.txt'));
-          fs.writeFileSync(out+'/controls-admission.json',JSON.stringify({status:'passed',arms:7,actualRows:77,actualNamedBusinessReds:11,redCounts:s.arms.map(a=>a.actualFailed.length),actualPasses:66,rawFrames:329,originalRawSHA256:hash(old),fixedRestoredRawSHA256:hash(fixed),wholeHarmedVectors:s.arms.reduce((n,a)=>n+a.wholeHarmedCases.length,0),wholeUnaffectedVectors:s.arms.reduce((n,a)=>n+a.wholeUnaffectedCases.length,0),wholePreservationVectors:s.arms.reduce((n,a)=>n+a.wholePreservationCases.length,0),allTrackedRestored:true,limits:'Source-only controls. Harmed whole cases equal original, unaffected whole cases equal fixed, all6 preserves hold in every arm. No3-existing-case rerun/native/build/cap/live credit.'},null,2));console.log('PASS actual7arms/77rows/11namedbusinessreds/66passes/329RAW, exact matrix and source restoration');
+          const out='grade-save-qualified',read=f=>JSON.parse(fs.readFileSync(out+'/'+f)),run=read('original-run.json'),meta=read('original-artifact.json'),proof=read('original-packet/original-admission.json');assert.equal(run.id,42192242514);assert.equal(run.head_sha,'e836f916398ab487096985eae0e0a274db43ac43');assert.equal(run.status,'completed');assert.equal(run.conclusion,'success');assert.equal(meta.id,13490107684);assert.equal(meta.expired,false);assert.equal(meta.workflow_run.id,run.id);assert.equal(meta.workflow_run.head_sha,run.head_sha);assert.equal(proof.status,'original-five-business-reds-admitted');assert.equal(proof.actualRows,11);assert.equal(proof.rawFrames,47);const old=fs.readFileSync(out+'/original-hook.ts'),blob=createHash('sha1').update(Buffer.concat([Buffer.from('blob '+old.length+'\0'),old])).digest('hex');assert.equal(blob,'5e677e844f8af33de27c206673fcf66849ad5930');assert.equal(createHash('sha256').update(fs.readFileSync(out+'/original-packet/raw.json')).digest('hex'),'acd8e0e981dd522e77084b3d0eb20ba42cd7749afdf9363809bd562e906207ad');console.log('PASS actual original5 business failures/6 preserves/47 RAW with exact original Hook');
           NODE
-      - name: Proper App types after restored controls
+      - name: Actual fixed eleven cases and complete preservation
+        run: |
+          set -euo pipefail
+          GRADE_TRANSFER_SAVE_RAW="$PWD/grade-save-qualified/raw.json" NODE_OPTIONS="--max-old-space-size=6144 --require=$PWD/scripts/lib/offlineTransport.cjs" node node_modules/vitest/vitest.mjs run src/test/gradeTransferSaveShape.test.tsx --maxWorkers=1 --minWorkers=1 --reporter=default --reporter=json --outputFile=grade-save-qualified/owned.json 2>&1 | tee grade-save-qualified/owned.log
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';import {createHash} from 'node:crypto';
+          const out='grade-save-qualified',r=JSON.parse(fs.readFileSync(out+'/owned.json')),raw=JSON.parse(fs.readFileSync(out+'/raw.json')),old=JSON.parse(fs.readFileSync(out+'/original-packet/raw.json')),log=fs.readFileSync(out+'/owned.log','utf8'),rows=r.testResults.flatMap(s=>s.assertionResults);assert.equal(r.numTotalTests,11);assert.equal(r.numPassedTests,11);assert.equal(r.numFailedTests,0);assert.equal(r.numPendingTests,0);assert.equal(rows.length,11);assert(rows.every(r=>r.status==='passed'));for(const k of ['numRuntimeErrorTestSuites','numUnhandledErrors'])if(Object.hasOwn(r,k))assert.equal(r[k],0,k);assert(!/Unhandled Errors|Unhandled Rejection|Uncaught Exception|Failed to resolve import|No test files found|SyntaxError/.test(log));
+          assert.deepEqual({...raw,cases:null},{...old,cases:null});assert.deepEqual(Object.keys(raw.cases).sort(),Object.keys(old.cases).sort());let frames=0;for(const[k,c]of Object.entries(raw.cases)){assert.equal(c.title,old.cases[k].title);assert.deepEqual(c.frames.map(f=>f.label),old.cases[k].frames.map(f=>f.label));frames+=c.frames.length;for(const f of c.frames){assert.equal(f.state.rounds.length,5);assert.equal(f.state.loading,false);for(const key of['draws','transport','operationErrors','boundaries','completions'])assert(Array.isArray(f[key]));assert.equal(f.storage['grade-transfer-unrelated'],'held');assert.equal(f.operationErrors.length,0);}}assert.equal(frames,47);
+          const preserved=['missing','corrupt','short','partial','revealed','finished'];for(const key of preserved)assert.deepEqual(raw.cases[key],old.cases[key],'Entire original preservation case held: '+key);
+          for(const key of ['gradesObject','indexNegative','indexFraction','indexString','gradeItem']){const c=raw.cases[key].frames,before=c[0],after=c[1];assert.equal(before.state.index,0);assert.equal(before.state.current.tc.playerName,before.state.rounds[0].tc.playerName);assert.equal(before.state.status,'grading');assert.equal(before.state.score,0);assert.equal(before.page.gradeButtons.length,5);assert.equal(before.savedBytes,before.boundaries[before.boundaries.length-1].bytes);assert.equal(after.state.status,'revealed');assert.equal(after.state.score,100);assert.equal(after.state.current.userGrade,'A');assert.equal(after.operationErrors.length,0);assert.equal(after.transport.filter(q=>q.steps.some(s=>s.method==='insert')).length,1);}const next=raw.cases.indexString.frames[2];assert.equal(next.state.index,1);assert.equal(next.state.status,'grading');assert.equal(next.page.gradeButtons.length,5);
+          const b=fs.readFileSync(out+'/raw.json');fs.writeFileSync(out+'/fixed-admission.json',JSON.stringify({status:'fixed-eleven-passed-six-whole-cases-held',cases:11,rawFrames:frames,preservedCases:preserved,rawBytes:b.length,rawSHA256:createHash('sha256').update(b).digest('hex')},null,2));console.log('PASS actual11 fixed,47RAW,6 complete original preservation cases');
+          NODE
+      - name: Existing Grade the Transfer once-only finished reload
         if: ${{ !cancelled() }}
         run: |
           set -euo pipefail
-          node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee grade-save-controls/types-after.log
-      - name: Whole tracked source index locks versions and offline held
+          NO_DOUBLE_ONLY=grade-transfer NODE_OPTIONS="--max-old-space-size=6144 --require=$PWD/scripts/lib/offlineTransport.cjs" node node_modules/vitest/vitest.mjs run src/test/noDoubleRecord.test.tsx --maxWorkers=1 --minWorkers=1 --reporter=default --reporter=json --outputFile=grade-save-qualified/existing.json 2>&1 | tee grade-save-qualified/existing.log
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';const out='grade-save-qualified',r=JSON.parse(fs.readFileSync(out+'/existing.json')),rows=r.testResults.flatMap(s=>s.assertionResults);assert.equal(r.numTotalTests,3);assert.equal(r.numPassedTests,3);assert.equal(r.numFailedTests,0);assert.equal(r.numPendingTests,0);assert.equal(rows.length,3);assert(rows.every(v=>v.status==='passed'));for(const k of ['numRuntimeErrorTestSuites','numUnhandledErrors'])if(Object.hasOwn(r,k))assert.equal(r[k],0,k);assert(!/Unhandled Errors|Unhandled Rejection|Uncaught Exception|Failed to resolve import|No test files found|SyntaxError/.test(fs.readFileSync(out+'/existing.log','utf8')));fs.writeFileSync(out+'/existing-admission.json',JSON.stringify({status:'passed',actualCases:3,scope:'Unchanged discovery/handshake and Grade the Transfer actual finish plus two finished reloads, selected by NO_DOUBLE_ONLY.'},null,2));console.log('PASS actual3 existing Grade the Transfer completion/reload cases');
+          NODE
+      - name: Normal production build and retained bytes
+        id: build
+        run: |
+          set -euo pipefail
+          NODE_OPTIONS="--max-old-space-size=6144" npm run build 2>&1 | tee grade-save-qualified/build.log
+          tar -czf grade-save-qualified/dist.tgz dist
+          sha256sum grade-save-qualified/dist.tgz > grade-save-qualified/dist.sha256
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import {createHash} from 'node:crypto';import assert from 'node:assert/strict';
+          const walk=dir=>fs.readdirSync(dir,{withFileTypes:true}).sort((a,b)=>a.name.localeCompare(b.name)).flatMap(e=>e.isDirectory()?walk(dir+'/'+e.name):e.isFile()?[dir+'/'+e.name]:[]);
+          const rows=walk('dist').map(file=>{const b=fs.readFileSync(file);return {file,bytes:b.length,sha256:createHash('sha256').update(b).digest('hex')};});
+          assert.equal(rows.length,850);fs.writeFileSync('grade-save-qualified/dist-before.json',JSON.stringify(rows));
+          NODE
+      - name: Isolated pinned Playwright and Chromium
+        id: browser_setup
+        timeout-minutes: 12
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          python -m pip install fonttools pillow
+          npm install --prefix "$RUNNER_TEMP/grade-save-browser" --no-save --package-lock=false playwright@1.64.1 2>&1 | tee grade-save-qualified/browser-install.log
+          test ! -e node_modules/playwright
+          ln -s "$RUNNER_TEMP/grade-save-browser/node_modules/playwright" node_modules/playwright
+          node "$RUNNER_TEMP/grade-save-browser/node_modules/playwright/cli.js" install --with-deps chromium 2>&1 | tee grade-save-qualified/chromium-install.log
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const before=JSON.parse(fs.readFileSync('grade-save-qualified/installed-before.json'));
+          const after=before.map(([p])=>[p,JSON.parse(fs.readFileSync(p+'/package.json')).version]);assert.deepEqual(after,before);
+          const pw=JSON.parse(fs.readFileSync('node_modules/playwright/package.json'));assert.equal(pw.version,'1.64.1');
+          fs.writeFileSync('grade-save-qualified/installed-after.json',JSON.stringify(after));fs.writeFileSync('grade-save-qualified/browser-package.json',JSON.stringify({version:pw.version,target:fs.realpathSync('node_modules/playwright')}));
+          NODE
+      - name: All required built readers and existing source fences
+        if: ${{ !cancelled() && steps.build.outcome == 'success' && steps.browser_setup.outcome == 'success' }}
+        run: |
+          export ONLY="simAdsense,simBrand,simHeadTags,simHiddenPages,simHubs,simIndexNow,simIndexing,simInternalLinks,simNoRivalNames,simPrerender,simPrerenderBoot,simRetiredRoutes,simSchema,simSitemap,simSnapshotAssets,simSiteSearch,simGuideHeadings,simSeoMetaSplit,simHomeCopy,simHarnessAnchors"
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/runAllSims.mjs --browser 2>&1 | tee grade-save-qualified/readers.log
+      - name: All original route download limits
+        if: ${{ !cancelled() && steps.build.outcome == 'success' && steps.browser_setup.outcome == 'success' }}
+        run: |
+          node scripts/lib/hostLikeServer.mjs dist 4173 > grade-save-qualified/weight-host.log 2>&1 &
+          xi_host_pid=$!
+          trap 'kill "$xi_host_pid" 2>/dev/null || true' EXIT
+          sleep 2
+          SWEEP_OFFLINE=1 BASE=http://127.0.0.1:4173 NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/sweepWeight.mjs 2>&1 | tee grade-save-qualified/weight.log
+      - name: Three native Grade the Transfer save reload journeys
+        id: native
+        if: ${{ !cancelled() && steps.build.outcome == 'success' && steps.browser_setup.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          GRADE_SAVE_HOOK_BLOB=0048c0b04375b5035988dce33ddaa4abba80b74e GRADE_SAVE_BROWSER_OUT="$PWD/grade-save-qualified/browser" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/playGradeTransferSave.mjs 2>&1 | tee grade-save-qualified/browser.log
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import path from 'node:path';import assert from 'node:assert/strict';import {createHash} from 'node:crypto';
+          const out='grade-save-qualified',dir=path.resolve(out,'browser'),r=JSON.parse(fs.readFileSync(dir+'/report.json')),hash=b=>createHash('sha256').update(b).digest('hex');
+          assert.equal(r.status,'passed');assert.equal(r.pins['src/hooks/useGradeTransfer.ts'],'0048c0b04375b5035988dce33ddaa4abba80b74e');assert.equal(r.originalHook,'5e677e844f8af33de27c206673fcf66849ad5930');assert.equal(r.externalForwarded,0);assert.deepEqual(r.journeys.map(j=>[j.width,j.height,j.status]),[[320,568,'passed'],[390,844,'passed'],[1280,900,'passed']]);assert.equal(r.screenshots.length,9);for(const k of ['source','dist','installed','offline']){assert.equal(r[k+'Held'],true);assert.deepEqual(r[k+'Before'],r[k+'After']);}assert.equal(r.installedBefore.length,521);assert.equal(r.offlineAfter.bytes,0);assert.deepEqual(r.sourceBefore,JSON.parse(fs.readFileSync(out+'/tracked-before.json')));assert.deepEqual(r.distBefore,JSON.parse(fs.readFileSync(out+'/dist-before.json')));
+          let refs=0;const verify=ref=>{const file=path.resolve(dir,ref.file);assert(file.startsWith(dir+path.sep));const b=fs.readFileSync(file);assert.equal(b.length,ref.bytes);assert.equal(hash(b),ref.sha256);refs++;return /\.json$/.test(file)?JSON.parse(b):null;};const fixture=verify(r.fixture);assert.equal(fixture.rawRows.length,5);assert.equal(new Set(fixture.rawRows.map(p=>p.player_name)).size,5);
+          const mainNames=['fresh-ungraded','grade-1-revealed','revealed-reload-after','next-ungraded','ungraded-reload-after','grade-2-revealed','final-second-revealed'],grades=['A','B','C','D','F'];
+          for(const j of r.journeys){assert.equal(j.errors.length,0);assert.equal(j.assetErrors.length,0);assert.equal(j.routeErrors.length,0);assert.equal(j.screenshots.length,3);assert.equal(j.transactions.length,2);assert.equal(j.frames.length,36);assert.equal(j.actions.length,13);assert.equal(j.layouts.length,4);assert.notEqual(j.firstPlayer,j.secondPlayer);assert(j.requests.every(q=>['aborted','fixture-cors','fixture-fulfilled'].includes(q.outcome)));const count=(path,method)=>j.requests.filter(q=>q.path===path&&q.method===method).length;assert.equal(count('/rest/v1/transfer_grade_pool','GET'),3);assert.equal(count('/rest/v1/transfer_grade_votes','POST'),2);assert.equal(count('/rest/v1/transfer_grade_votes','GET'),2);assert.equal(j.requests.filter(q=>q.path==='/rest/v1/game_completions').length,0);for(const f of j.frames)verify(f);for(const a of j.actions)verify(a);
+          const phase=name=>{const found=j.frames.filter(f=>f.file.endsWith('-'+name+'.json'));assert.equal(found.length,1,name+' actual single phase');return verify(found[0]);};for(const name of mainNames)phase(name);const fresh=phase('fresh-ungraded'),first=phase('grade-1-revealed'),restored=phase('revealed-reload-after'),next=phase('next-ungraded'),restoredNext=phase('ungraded-reload-after'),second=phase('grade-2-revealed'),final=phase('final-second-revealed');assert.equal(fresh.status,'grading');assert.equal(fresh.number,1);assert.equal(fresh.total,5);assert.equal(fresh.saves.length,0);assert.deepEqual(fresh.gradeButtons.map(g=>g.grade),grades);
+          const saved=(v,array,index)=>{assert.equal(v.saves.length,1);assert.equal(v.saves[0].key,'grade-transfer-'+v.day);assert.deepEqual(v.saves[0].parsed,{grades:array,index});};for(const v of[first,restored]){saved(v,['A',null,null,null,null],0);assert.equal(v.status,'revealed');assert.equal(v.userGrade,'A');assert.equal(v.playerName,j.firstPlayer);}assert.deepEqual(restored.saves,first.saves);assert.equal(restored.crowdMode,null);assert.equal(restored.crowdTotal,null);assert.notEqual(restored.documentTimeOrigin,first.documentTimeOrigin);assert.equal(restored.navigationType,'reload');for(const v of[next,restoredNext]){saved(v,['A',null,null,null,null],1);assert.equal(v.status,'grading');assert.equal(v.number,2);assert.equal(v.playerName,j.secondPlayer);assert.equal(v.userGrade,null);assert.equal(v.crowdMode,null);assert.deepEqual(v.gradeButtons.map(g=>g.grade),grades);}assert.deepEqual(restoredNext.saves,next.saves);assert.notEqual(restoredNext.documentTimeOrigin,next.documentTimeOrigin);assert.equal(restoredNext.navigationType,'reload');for(const v of[second,final]){saved(v,['A','B',null,null,null],1);assert.equal(v.status,'revealed');assert.equal(v.userGrade,'B');assert.equal(v.playerName,j.secondPlayer);assert.equal(v.crowdMode,'B');assert.equal(v.crowdTotal,'3 votes');}assert.deepEqual(restored.requestCounts,{pool:2,votes:1,crowd:1,completions:0});assert.deepEqual(restoredNext.requestCounts,{pool:3,votes:1,crowd:1,completions:0});assert.deepEqual(final.requestCounts,{pool:3,votes:2,crowd:2,completions:0});assert(j.navigations.filter(n=>n.url===r.base+'/grade-transfer').length===3);
+          for(const t of j.transactions){assert.equal(t.voteStatus,201);assert.equal(t.crowdStatus,200);assert.equal(t.vote,'');assert.equal(t.crowd.length,3);}for(const shot of j.screenshots){verify(shot);verify(shot.frame);}for(const g of j.layouts){assert(['consent','grade','next'].includes(g.kind));assert(g.hit&&!g.disabled);assert(g.rect.width>0&&g.rect.height>0);if(g.kind==='consent')assert(g.meets44);}assert(j.events.some(e=>e.trusted&&e.type==='click'));}for(const shot of r.screenshots){verify(shot);verify(shot.frame);}
+          const readers=fs.readFileSync(out+'/readers.log','utf8'),wanted='simAdsense,simBrand,simHeadTags,simHiddenPages,simHubs,simIndexNow,simIndexing,simInternalLinks,simNoRivalNames,simPrerender,simPrerenderBoot,simRetiredRoutes,simSchema,simSitemap,simSnapshotAssets,simSiteSearch,simGuideHeadings,simSeoMetaSplit,simHomeCopy,simHarnessAnchors'.split(',').map(n=>n+'.mjs').sort(),actual=[...readers.matchAll(/^\s+PASS\s+(sim[A-Za-z0-9]+\.mjs)/gm)].map(m=>m[1]).sort();assert.deepEqual(actual,wanted);assert(!/^\s+FAIL\s+/m.test(readers));
+          const weight=fs.readFileSync(out+'/weight.log','utf8'),caps=[...weight.matchAll(/^\s+(\/\S*)\s+\d+K gz over\s+\d+ files \(budget (\d+)K, [\d.]+K to the tenth\)/gm)].map(m=>[m[1],Number(m[2])]);assert.deepEqual(caps,[['/',245],['/club-manager',648],['/soccer-career',840],['/stadium-tycoon',305],['/wonderkid-factory',278],['/minefield',295],['/footle',354],['/nfl-my-career',499],['/front-office',390],['/soccer-grid',320],['/leaderboard',266],['/manager-hot-seat',672],['/deadline-day',680],['/transfer-path',381],['/nba-front-office',397],['/nhl-front-office',379]]);assert(weight.includes('sweepWeight: green.'));
+          const rows=fs.readFileSync(out+'/source-before.txt','utf8').trim().split('\n').filter(l=>/\t(?:src|public|scripts)\//.test(l));assert.equal(rows.length,4657);assert.equal(rows.filter(l=>l.endsWith('\tscripts/qa/playGradeTransferSave.mjs')).length,1);const admission={status:'passed',helper:'40879745818cc31cd764087f488c6da1816b2109',unitCases:14,rawFrames:47,readers:actual,immutableCaps:caps,sourceRows:rows.length,cleanSourceRows:4656,distFiles:r.distBefore.length,nativeChecks:r.checks,nativeFrames:r.journeys.reduce((n,j)=>n+j.frames.length,0),nativeActions:r.journeys.reduce((n,j)=>n+j.actions.length,0),nativeLayouts:r.journeys.reduce((n,j)=>n+j.layouts.length,0),nativePngs:9,rawReferencesVerified:refs,reloads:6,syntheticVotes:6,syntheticCrowdReads:6,limits:'Native valid-save compatibility only, malformed records are unit boundary fixtures. Exact writer-generated grade-save bytes persist across actual reloads; unrelated storage changes are reported. Revealed photos cover the outcome region, not every part of a long card. Inherited grade/Next44px compliance, real data/provider/backend write/full-match/full-suite/release remain unqualified.'};fs.writeFileSync(out+'/admission.json',JSON.stringify(admission,null,2));console.log(JSON.stringify(admission));
+          NODE
+
+      - name: Final whole source locks installed versions dist and offline holds
         if: always()
         run: |
           set -euo pipefail
-          git ls-files -s > grade-save-controls/source-after.txt
-          cmp grade-save-controls/source-before.txt grade-save-controls/source-after.txt
+          mkdir -p grade-save-qualified
+          git ls-files -s > grade-save-qualified/source-after.txt
+          cmp grade-save-qualified/source-before.txt grade-save-qualified/source-after.txt
           git diff --exit-code HEAD -- .
-          sha256sum package.json package-lock.json > grade-save-controls/locks-after.txt
-          cmp grade-save-controls/locks-before.txt grade-save-controls/locks-after.txt
+          sha256sum package.json package-lock.json > grade-save-qualified/locks-after.txt
+          cmp grade-save-qualified/locks-before.txt grade-save-qualified/locks-after.txt
           node --input-type=module <<'NODE'
-          import fs from 'node:fs';import assert from 'node:assert/strict';import {execFileSync} from 'node:child_process';import {createHash} from 'node:crypto';
-          const out='grade-save-controls',files=execFileSync('git',['ls-files','-z'],{encoding:'utf8'}).split('\0').filter(Boolean),rows=files.map(file=>{const bytes=fs.readFileSync(file);return{file,bytes:bytes.length,sha256:createHash('sha256').update(bytes).digest('hex')};});fs.writeFileSync(out+'/tracked-after.json',JSON.stringify(rows));assert.deepEqual(rows,JSON.parse(fs.readFileSync(out+'/tracked-before.json')));
-          const lock=JSON.parse(fs.readFileSync('package-lock.json')),before=JSON.parse(fs.readFileSync(out+'/installed-before.json')),after=Object.keys(lock.packages).filter(p=>p.startsWith('node_modules/')&&fs.existsSync(p+'/package.json')).map(p=>[p,JSON.parse(fs.readFileSync(p+'/package.json')).version]);assert.equal(after.length,521);assert.deepEqual(after,before);for(const[p,v]of after)assert.equal(v,lock.packages[p].version,p);fs.writeFileSync(out+'/installed-after.json',JSON.stringify(after));assert(fs.existsSync(out+'/offline.log'));assert.equal(fs.statSync(out+'/offline.log').size,0);
+          import fs from 'node:fs';import {execFileSync} from 'node:child_process';import {createHash} from 'node:crypto';import assert from 'node:assert/strict';
+          const hash=file=>{const b=fs.readFileSync(file);return {file,bytes:b.length,sha256:createHash('sha256').update(b).digest('hex')};};
+          const files=execFileSync('git',['ls-files','-z'],{encoding:'utf8'}).split('\0').filter(Boolean),tracked=files.map(hash);
+          fs.writeFileSync('grade-save-qualified/tracked-after.json',JSON.stringify(tracked));assert.deepEqual(tracked,JSON.parse(fs.readFileSync('grade-save-qualified/tracked-before.json')));
+          const before=JSON.parse(fs.readFileSync('grade-save-qualified/installed-before.json')),lock=JSON.parse(fs.readFileSync('package-lock.json'));
+          const after=Object.keys(lock.packages).filter(p=>p.startsWith('node_modules/')&&fs.existsSync(p+'/package.json')).map(p=>[p,JSON.parse(fs.readFileSync(p+'/package.json')).version]);
+          assert.equal(after.length,521);assert.deepEqual(after,before);fs.writeFileSync('grade-save-qualified/installed-final.json',JSON.stringify(after));
+          const walk=dir=>fs.readdirSync(dir,{withFileTypes:true}).sort((a,b)=>a.name.localeCompare(b.name)).flatMap(e=>e.isDirectory()?walk(dir+'/'+e.name):e.isFile()?[dir+'/'+e.name]:[]);
+          if(fs.existsSync('grade-save-qualified/dist-before.json')){const rows=walk('dist').map(hash);fs.writeFileSync('grade-save-qualified/dist-after.json',JSON.stringify(rows));assert.deepEqual(rows,JSON.parse(fs.readFileSync('grade-save-qualified/dist-before.json')));}
+          assert(fs.existsSync('grade-save-qualified/offline.log'));assert.equal(fs.statSync('grade-save-qualified/offline.log').size,0);
           NODE
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: grade-transfer-save-shape-controls-${{ github.run_id }}
-          path: grade-save-controls
+          name: grade-save-qualified-${{ github.run_id }}
+          path: grade-save-qualified
           retention-days: 14
           if-no-files-found: error
