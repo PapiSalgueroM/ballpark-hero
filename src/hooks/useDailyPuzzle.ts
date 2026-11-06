@@ -160,6 +160,12 @@ export interface DailyPuzzleReturn<T, G> {
    */
   takeNewerSave: () => boolean;
 
+  /** Read progress already adopted by this hook before React renders it. */
+  getCurrentProgress: () => {
+    readonly guesses: readonly G[];
+    readonly gameStatus: 'playing' | 'won' | 'lost';
+  };
+
   /** Current game outcome. Persisted to localStorage. */
   gameStatus: 'playing' | 'won' | 'lost';
 
@@ -524,6 +530,11 @@ export function useDailyPuzzle<T, G>(
     return true;
   }, []);
 
+  const getCurrentProgress = useCallback(() => ({
+    guesses: guessesRef.current,
+    gameStatus: statusRef.current,
+  }), []);
+
   /* Round 848: and an open tab follows the other one live. The browser fires
      storage in every other tab of this site when one writes, so a second tab
      moves to the saved round before the player can answer the old one. */
@@ -589,6 +600,7 @@ export function useDailyPuzzle<T, G>(
     guesses,
     addGuess,
     takeNewerSave,
+    getCurrentProgress,
     gameStatus,
     isLoading,
     todayStr,

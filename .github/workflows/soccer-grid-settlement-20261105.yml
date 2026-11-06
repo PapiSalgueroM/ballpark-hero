@@ -1,19 +1,19 @@
-name: Soccer Grid original clock policy proof
+name: Soccer Grid settlement fixed source proof
 on:
   push:
     branches: [codex/soccer-grid-settlement-qa-20261105]
 permissions:
   contents: read
 jobs:
-  original:
+  source:
     runs-on: ubuntu-latest
-    timeout-minutes: 12
+    timeout-minutes: 30
     defaults:
       run:
         shell: bash
     env:
       SIM_NETWORK: offline
-      SIM_OFFLINE_RECEIPT: grid-settlement-original/offline.log
+      SIM_OFFLINE_RECEIPT: grid-settlement-fixed/offline.log
     steps:
       - uses: actions/checkout@v4
         with:
@@ -23,48 +23,53 @@ jobs:
         with:
           node-version: 24.22.1
           cache: npm
-      - name: Original source and locked dependencies
+      - name: Fixed source and locked dependencies
         run: |
-          mkdir -p grid-settlement-original
-          git rev-parse HEAD > grid-settlement-original/head.txt
-          git ls-files -s > grid-settlement-original/source-before.txt
-          sha256sum package.json package-lock.json > grid-settlement-original/locks-before.txt
+          mkdir -p grid-settlement-fixed
+          git rev-parse HEAD > grid-settlement-fixed/head.txt
+          git ls-files -s > grid-settlement-fixed/source-before.txt
+          sha256sum package.json package-lock.json > grid-settlement-fixed/locks-before.txt
           npm ci
-      - name: Proper app types including new test leaves
-        run: node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee grid-settlement-original/types.log
-      - name: Exact original missing clock policy
-        if: ${{ !cancelled() }}
+      - name: Proper app types
+        run: node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee grid-settlement-fixed/types.log
+      - name: Fixed 26 settlement and policy cases
         run: |
-          set +e
-          SC_GRID_POLICY_RAW="$PWD/grid-settlement-original/policy-raw.json" NODE_OPTIONS="--max-old-space-size=6144 --require=$PWD/scripts/lib/offlineTransport.cjs" node node_modules/vitest/vitest.mjs run src/test/soccerGridTimerPolicy.test.tsx --maxWorkers=1 --minWorkers=1 --reporter=default --reporter=json --outputFile=grid-settlement-original/units.json > grid-settlement-original/units.log 2>&1
-          status=$?
-          set -e
-          cat grid-settlement-original/units.log
-          test "$status" -eq 1
+          SC_GRID_OWNERSHIP_RAW="$PWD/grid-settlement-fixed/ownership-raw.json" SC_GRID_SUBMISSION_DEADLINE_RAW="$PWD/grid-settlement-fixed/deadline-raw.json" SC_GRID_POLICY_RAW="$PWD/grid-settlement-fixed/policy-raw.json" NODE_OPTIONS="--max-old-space-size=6144 --require=$PWD/scripts/lib/offlineTransport.cjs" node node_modules/vitest/vitest.mjs run src/test/soccerGridSubmissionOwnership.test.tsx src/test/soccerGridSubmissionDeadline.test.tsx src/test/soccerGridTimerPolicy.test.tsx --maxWorkers=1 --minWorkers=1 --reporter=default --reporter=json --outputFile=grid-settlement-fixed/fixed.json 2>&1 | tee grid-settlement-fixed/fixed.log
           node --input-type=module <<'NODE'
           import fs from 'node:fs';import assert from 'node:assert/strict';
-          const report=JSON.parse(fs.readFileSync('grid-settlement-original/units.json'));
-          const rows=report.testResults.flatMap(s=>s.assertionResults),failed=rows.filter(x=>x.status==='failed');
-          assert.equal(report.numTotalTests,2);assert.equal(rows.length,2);assert.equal(failed.length,2);assert.equal(rows.filter(x=>x.status==='passed').length,0);
-          assert.deepEqual(failed.map(x=>x.title.split(' ')[0]).sort(),['SG_TIMER_POLICY_HELP','SG_TIMER_POLICY_PREPLAY']);
-          for(const row of failed)assert(row.failureMessages.length>0&&row.failureMessages.every(msg=>/^(?:AssertionError: SG_TIMER_POLICY_|Error: expect\(element\)\.)/m.test(msg.replace(/\u001b\[[0-?]*[ -/]*[@-~]/g,''))),'Owned missing clock policy assertion: '+row.title);
-          assert(!/Unhandled Errors|Unhandled Rejection|Uncaught Exception|Failed to resolve import/.test(fs.readFileSync('grid-settlement-original/units.log','utf8')));
-          assert(fs.statSync('grid-settlement-original/policy-raw.json').size>1000);
-          console.log('PASS original clock policy: exact2missing-copy business failures');
+          const report=JSON.parse(fs.readFileSync('grid-settlement-fixed/fixed.json'));const rows=report.testResults.flatMap(s=>s.assertionResults);
+          assert.equal(report.numTotalTests,26);assert.equal(rows.length,26);assert.equal(report.numPassedTests,26);assert(rows.every(r=>r.status==='passed'));assert.equal(report.numPendingTests,0);
+          for(const name of ['ownership','deadline','policy'])assert(fs.statSync('grid-settlement-fixed/'+name+'-raw.json').size>1000);
+          assert(!/Unhandled Errors|Unhandled Rejection|Uncaught Exception|Failed to resolve import/.test(fs.readFileSync('grid-settlement-fixed/fixed.log','utf8')));
+          console.log('PASS fixed26: every owned case and preservation row');
           NODE
+      - name: Existing grid and shared daily consumers
+        if: ${{ !cancelled() }}
+        run: |
+          NODE_OPTIONS="--max-old-space-size=6144 --require=$PWD/scripts/lib/offlineTransport.cjs" node node_modules/vitest/vitest.mjs run src/test/soccerGridBlurOwnership.test.tsx src/test/soccerGridDeadline.test.tsx src/test/soccerGridInitialTimer.test.tsx src/test/soccerGridSearchAccessibility.test.tsx src/test/soccerGridSearchDiscovery.test.tsx src/test/soccerGridSettingsRace.test.tsx src/test/gridCellLayout.test.tsx src/test/gridCellMotion.test.tsx src/test/dailyRecord.test.tsx src/test/dailySaveHardening.test.tsx src/test/dailySaveShapes.test.tsx --maxWorkers=1 --minWorkers=1 --reporter=default --reporter=json --outputFile=grid-settlement-fixed/existing.json 2>&1 | tee grid-settlement-fixed/existing.log
+      - name: Full old to current daily consumer parity
+        if: ${{ !cancelled() }}
+        run: |
+          git fetch --no-tags origin 617b8354b722c703407074e78a86665d4f7633b5
+          R848_PART=parity NODE_OPTIONS="--max-old-space-size=6144 --require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simDailySaveHardening.mjs 2>&1 | tee grid-settlement-fixed/parity.log
+      - name: Shared contract and record negative controls
+        if: ${{ !cancelled() }}
+        run: |
+          NODE_OPTIONS="--max-old-space-size=6144 --require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simDailyPuzzleContract.mjs 2>&1 | tee grid-settlement-fixed/contract.log
+          NODE_OPTIONS="--max-old-space-size=6144 --require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simDailyRecord.mjs 2>&1 | tee grid-settlement-fixed/record.log
       - name: Source lock and offline holds
         if: always()
         run: |
           git diff --exit-code HEAD -- src scripts package.json package-lock.json
-          git ls-files -s > grid-settlement-original/source-after.txt
-          cmp grid-settlement-original/source-before.txt grid-settlement-original/source-after.txt
-          sha256sum package.json package-lock.json > grid-settlement-original/locks-after.txt
-          cmp grid-settlement-original/locks-before.txt grid-settlement-original/locks-after.txt
-          if test -f grid-settlement-original/offline.log; then test ! -s grid-settlement-original/offline.log; fi
+          git ls-files -s > grid-settlement-fixed/source-after.txt
+          cmp grid-settlement-fixed/source-before.txt grid-settlement-fixed/source-after.txt
+          sha256sum package.json package-lock.json > grid-settlement-fixed/locks-after.txt
+          cmp grid-settlement-fixed/locks-before.txt grid-settlement-fixed/locks-after.txt
+          if test -f grid-settlement-fixed/offline.log; then test ! -s grid-settlement-fixed/offline.log; fi
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: soccer-grid-policy-original-${{ github.run_id }}
-          path: grid-settlement-original
+          name: soccer-grid-fixed-source-${{ github.run_id }}
+          path: grid-settlement-fixed
           retention-days: 14
           if-no-files-found: error
