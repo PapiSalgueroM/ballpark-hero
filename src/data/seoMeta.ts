@@ -59,7 +59,7 @@ export const SEO_META: Record<string, SeoMeta> = {
   },
   '/club-manager': {
     title: 'Club Manager: Free Football Management Game',
-    description: 'Manage any of 454 real clubs across 27 leagues, today or in a real past season. Transfers, tactics, the board and the sack race. Free soccer management sim.',
+    description: 'Manage a club across current and historical leagues. Transfers, tactics, the board and the sack race. Free soccer management sim.',
   },
   '/soccer-conquest': {
     title: 'Soccer Conquest: Europe Imperialism Map Game',
