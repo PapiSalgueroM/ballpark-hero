@@ -1,11 +1,12 @@
-name: Build Your XI warning physical controls
+name: Build Your XI clean build and browser closure
 on:
   push:
     branches: [codex/build-xi-unrated-warning-qa-20261105]
 permissions:
   contents: read
+  actions: read
 jobs:
-  controls:
+  closeout:
     runs-on: ubuntu-latest
     timeout-minutes: 20
     defaults:
@@ -13,7 +14,7 @@ jobs:
         shell: bash
     env:
       SIM_NETWORK: offline
-      SIM_OFFLINE_RECEIPT: xi-warning-controls/offline.log
+      SIM_OFFLINE_RECEIPT: xi-warning-closure/offline.log
     steps:
       - uses: actions/checkout@v4
         with:
@@ -23,32 +24,110 @@ jobs:
         with:
           node-version: 24.22.1
           cache: npm
-      - name: Exact source and original reference files
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.4.4
+      - name: Locked dependencies and clean source receipts
         run: |
-          mkdir -p xi-warning-controls
-          touch xi-warning-controls/offline.log
-          git rev-parse HEAD > xi-warning-controls/head.txt
-          git ls-files -s > xi-warning-controls/source-before.txt
-          sha256sum package.json package-lock.json > xi-warning-controls/locks-before.txt
-          git fetch --no-tags --depth=1 origin 3cf296e80ad254bec3cfba2f12660addef5bbe18
-          git show 3cf296e80ad254bec3cfba2f12660addef5bbe18:src/pages/LineupBuilder.tsx > xi-warning-controls/original-page.tsx
-          git show 3cf296e80ad254bec3cfba2f12660addef5bbe18:src/components/lineup/LineupHowToPlay.tsx > xi-warning-controls/original-help.tsx
+          mkdir -p xi-warning-closure
+          touch xi-warning-closure/offline.log
+          git rev-parse HEAD > xi-warning-closure/head.txt
+          git rev-parse 'HEAD^{tree}' > xi-warning-closure/tree.txt
+          git ls-files -s > xi-warning-closure/source-before.txt
+          sha256sum package.json package-lock.json > xi-warning-closure/locks-before.txt
           npm ci
-      - name: Fixed original eight faults and restored warning
-        run: XI_RECORD_WARNING_CONTROL_OUT="$PWD/xi-warning-controls/arms" XI_RECORD_WARNING_ORIGINAL_PAGE="$PWD/xi-warning-controls/original-page.tsx" XI_RECORD_WARNING_ORIGINAL_HELP="$PWD/xi-warning-controls/original-help.tsx" NODE_OPTIONS="--max-old-space-size=6144 --require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/buildXiUnratedWarningCheck.mjs 2>&1 | tee xi-warning-controls/controls.log
-      - name: Source locks and offline holds
-        if: always()
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const lock=JSON.parse(fs.readFileSync('package-lock.json'));
+          const rows=Object.keys(lock.packages).filter(p=>p.startsWith('node_modules/')&&fs.existsSync(p+'/package.json')).map(p=>[p,JSON.parse(fs.readFileSync(p+'/package.json')).version]);
+          assert.equal(rows.length,521);fs.writeFileSync('xi-warning-closure/installed-before.json',JSON.stringify(rows));
+          NODE
+      - name: Proper app types
+        run: node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee xi-warning-closure/types.log
+      - name: Pinned completed qualification artifact
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
-          git diff --exit-code HEAD -- src scripts public package.json package-lock.json
-          git ls-files -s > xi-warning-controls/source-after.txt
-          cmp xi-warning-controls/source-before.txt xi-warning-controls/source-after.txt
-          sha256sum package.json package-lock.json > xi-warning-controls/locks-after.txt
-          cmp xi-warning-controls/locks-before.txt xi-warning-controls/locks-after.txt
-          test ! -s xi-warning-controls/offline.log
+          gh api repos/PapiSalgueroM/ballpark-hero/actions/artifacts/13471850953/zip > "$RUNNER_TEMP/xi-reference.zip"
+          echo "c6047e51fb41ada68b418fff94e6c3d52bdef5898d9cd9c593200c861470d237  $RUNNER_TEMP/xi-reference.zip" | sha256sum --check
+          mkdir -p "$RUNNER_TEMP/xi-reference" "$RUNNER_TEMP/xi-reference-dist"
+          unzip -q "$RUNNER_TEMP/xi-reference.zip" -d "$RUNNER_TEMP/xi-reference"
+          echo "5635d84195cf388ab40a3e75797a244dc9f3406b53fe513d48cec47adb59c07a  $RUNNER_TEMP/xi-reference/dist.tgz" | sha256sum --check
+          tar -xzf "$RUNNER_TEMP/xi-reference/dist.tgz" -C "$RUNNER_TEMP/xi-reference-dist"
+          cp "$RUNNER_TEMP/xi-reference/source-before.txt" xi-warning-closure/reference-source.txt
+      - name: Clean production build
+        run: NODE_OPTIONS="--max-old-space-size=6144" npm run build 2>&1 | tee xi-warning-closure/build.log
+      - name: Every product test script and built byte joined to completed qualification
+        id: join
+        env:
+          XI_REFERENCE_DIR: ${{ runner.temp }}/xi-reference
+          XI_REFERENCE_DIST: ${{ runner.temp }}/xi-reference-dist/dist
+        run: |
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import path from 'node:path';import assert from 'node:assert/strict';import {createHash} from 'node:crypto';
+          const sha=bytes=>createHash('sha256').update(bytes).digest('hex');
+          const gitblob=bytes=>createHash('sha1').update(Buffer.concat([Buffer.from('blob '+bytes.length+'\0'),bytes])).digest('hex');
+          const readIndex=file=>new Map(fs.readFileSync(file,'utf8').trim().split('\n').map(line=>{const m=/^[0-9]+ ([0-9a-f]{40}) 0\t(.+)$/.exec(line);assert(m,'Actual source row');return [m[2],m[1]];}));
+          const old=readIndex('xi-warning-closure/reference-source.txt'),current=readIndex('xi-warning-closure/source-before.txt');
+          const derived=JSON.parse(fs.readFileSync(path.join(process.env.XI_REFERENCE_DIR,'derived.json'))).derived;
+          assert.equal(derived.length,5,'Exact derived file census');
+          for(const item of derived){const bytes=fs.readFileSync(path.join(process.env.XI_REFERENCE_DIR,'derived',item.file));assert.equal(sha(bytes),item.sha256);assert.equal(bytes.length,item.bytes);old.set(item.file,gitblob(bytes));assert.equal(current.get(item.file),gitblob(bytes),'Exact generated blob: '+item.file);}
+          const excluded=new Set(['scripts/qa/playBuildXiUnratedWarning.mjs']);
+          assert.equal(old.get('scripts/qa/playBuildXiUnratedWarning.mjs'),'78db409bbee2fa18e308074f015d2ee16c647e41');
+          assert.equal(current.get('scripts/qa/playBuildXiUnratedWarning.mjs'),'8377894d03644a3017614a52119161a1e6d9aa99','Exact QA-only native photo/selector repair');
+          assert(!current.has('scripts/qa/buildXiUnratedWarningCheck.mjs'),'Physical control helper absent from clean App build');
+          const scoped=map=>[...map].filter(([p])=>/^(?:src|public|scripts)\//.test(p)&&!excluded.has(p)).sort(([a],[b])=>a.localeCompare(b));
+          const sourceRows=scoped(current);assert.deepEqual(sourceRows,scoped(old),'Every other source/public/script blob held, with exact generated files admitted');
+          const inventory=dir=>fs.readdirSync(dir,{withFileTypes:true}).sort((a,b)=>a.name.localeCompare(b.name)).flatMap(e=>e.isDirectory()?inventory(path.join(dir,e.name)).map(r=>({...r,path:e.name+'/'+r.path})):[{path:e.name,bytes:fs.statSync(path.join(dir,e.name)).size,sha256:sha(fs.readFileSync(path.join(dir,e.name)))}]);
+          const actual=inventory('dist'),reference=inventory(process.env.XI_REFERENCE_DIST);
+          assert.equal(actual.length,850);assert.deepEqual(actual,reference,'Every byte of every built file matches completed readers/caps');
+          const result={status:'passed',referenceRun:42148055053,referenceApp:'3dafb1e658d83494141f1745446a45823418e493',referenceArtifact:13471850953,referenceZipSHA256:'c6047e51fb41ada68b418fff94e6c3d52bdef5898d9cd9c593200c861470d237',referenceTarSHA256:'5635d84195cf388ab40a3e75797a244dc9f3406b53fe513d48cec47adb59c07a',sourceRows:sourceRows.length,remoteOnlyHelpers:[...excluded],derived,distFiles:actual.length,distManifestSHA256:sha(JSON.stringify(actual)),dist:actual};
+          fs.writeFileSync('xi-warning-closure/reference-build-join.json',JSON.stringify(result,null,2));console.log('PASS all '+sourceRows.length+' source rows and every '+actual.length+' built file held');
+          NODE
+      - name: Isolated browser and snapshot dependencies
+        id: browser_setup
+        timeout-minutes: 12
+        if: ${{ !cancelled() && steps.join.outcome == 'success' }}
+        run: |
+          npm install --prefix "$RUNNER_TEMP/xi-browser" --no-save --package-lock=false playwright@1.64.1
+          test ! -e node_modules/playwright
+          ln -s "$RUNNER_TEMP/xi-browser/node_modules/playwright" node_modules/playwright
+          node "$RUNNER_TEMP/xi-browser/node_modules/playwright/cli.js" install --with-deps chromium
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const before=JSON.parse(fs.readFileSync('xi-warning-closure/installed-before.json'));
+          const after=before.map(([p])=>[p,JSON.parse(fs.readFileSync(p+'/package.json')).version]);assert.deepEqual(after,before);
+          fs.writeFileSync('xi-warning-closure/installed-after.json',JSON.stringify(after));console.log('Preserved all '+after.length+' locked installed versions.');
+          NODE
+      - name: Native warning choices and unrated finish at three widths
+        if: ${{ !cancelled() && steps.join.outcome == 'success' && steps.browser_setup.outcome == 'success' }}
+        run: XI_UNRATED_BROWSER_OUT=xi-warning-closure/browser NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/playBuildXiUnratedWarning.mjs 2>&1 | tee xi-warning-closure/browser.log
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: build-xi-warning-controls-${{ github.run_id }}
-          path: xi-warning-controls
+          name: build-xi-warning-closure-images-${{ github.run_id }}
+          path: xi-warning-closure/browser/*.png
+          retention-days: 14
+          if-no-files-found: error
+      - name: Final source locks installed versions and offline holds
+        if: always()
+        run: |
+          git ls-files -s > xi-warning-closure/source-after.txt
+          cmp xi-warning-closure/source-before.txt xi-warning-closure/source-after.txt
+          git diff --exit-code HEAD -- src scripts public package.json package-lock.json
+          sha256sum package.json package-lock.json > xi-warning-closure/locks-after.txt
+          cmp xi-warning-closure/locks-before.txt xi-warning-closure/locks-after.txt
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const before=JSON.parse(fs.readFileSync('xi-warning-closure/installed-before.json'));
+          const after=before.map(([p])=>[p,JSON.parse(fs.readFileSync(p+'/package.json')).version]);assert.equal(after.length,521);assert.deepEqual(after,before);
+          fs.writeFileSync('xi-warning-closure/installed-final.json',JSON.stringify(after));
+          assert(fs.existsSync('xi-warning-closure/offline.log'));assert.equal(fs.statSync('xi-warning-closure/offline.log').size,0);
+          NODE
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: soccer-xi-warning-closure-${{ github.run_id }}
+          path: xi-warning-closure
           retention-days: 14
           if-no-files-found: error

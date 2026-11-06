@@ -120,10 +120,40 @@ try {
       return frame('warning-' + chosen.kind);
     };
     const photo = async (name, target, fullPhase = false) => {
+      let preparation = null, chrome = null;
+      if (fullPhase) {
+        const before = await frame(name + '-native-photo-preparation-before'), eventStart = row.events.length;
+        const main = page.locator('#dukb-main'); check(await main.count() === 1 && await main.isVisible(), id + ': native photo preparation has the actual main landmark');
+        await page.evaluate(() => {
+          const observe = event => {
+            if (event.key !== 'Home' || !event.ctrlKey) return;
+            document.removeEventListener('keydown', observe, true);
+            window.__xiWarningEvidence({ at: Date.now(), kind: 'native-photo-preparation', type: event.type, trusted: event.isTrusted, key: event.key, ctrlKey: event.ctrlKey, targetId: event.target?.id });
+          };
+          document.addEventListener('keydown', observe, true);
+        });
+        await main.focus(); await page.keyboard.press('Control+Home');
+        await waitUntil(() => page.evaluate(() => scrollX === 0 && scrollY === 0), id + ': native Control+Home reaches document origin');
+        await waitUntil(() => row.events.slice(eventStart).some(event => event.kind === 'native-photo-preparation' && event.trusted && event.ctrlKey && event.key === 'Home' && event.targetId === 'dukb-main'), id + ': actual trusted main Control+Home observed');
+        const after = await frame(name + '-native-photo-preparation-after');
+        equal(after.scroll, { x: 0, y: 0 }, id + ': confirmation photo starts at document origin');
+        equal(after.storage, before.storage, id + ': full storage held through native photo preparation');
+        chrome = await page.evaluate(() => {
+          const observed = [...document.querySelectorAll('body *')].flatMap(el => {
+            const style = getComputedStyle(el); if (!['fixed', 'sticky'].includes(style.position)) return [];
+            const r = el.getBoundingClientRect(); if (r.width <= 0 || r.height <= 0 || r.bottom <= 0 || r.top >= innerHeight || style.visibility === 'hidden' || style.display === 'none') return [];
+            return [{ tag: el.tagName, id: el.id, role: el.getAttribute('role'), position: style.position, rect: { x: r.x, y: r.y, width: r.width, height: r.height, bottom: r.bottom } }];
+          });
+          const top = observed.filter(el => el.rect.y <= 1 && el.rect.width >= innerWidth / 2);
+          return { activeId: document.activeElement?.id, observed, top, bottom: Math.max(0, ...top.map(el => el.rect.bottom)) };
+        });
+        preparation = put(id + '/photo-preparations/' + name, { name: name + '-native-photo-preparation', prepared: true, nativeFocus: '#dukb-main', nativeKey: 'Control+Home', scrollHeld: false, before, after, chrome, events: row.events.slice(eventStart) });
+        row.actions.push(preparation);
+      }
       if (target && !fullPhase) await target.scrollIntoViewIfNeeded(); const value = await frame(name + '-photo'); let clip;
-      if (fullPhase) { const a = await progress(1).boundingBox(), b = await pitch().boundingBox(); check(a && b, id + ': confirmation phase ROI exists'); const y = Math.max(0, Math.floor(Math.min(a.y, b.y) + value.scroll.y - 12)); clip = { x: 0, y, width, height: Math.min(value.documentHeight - y, Math.ceil(Math.max(a.y + a.height, b.y + b.height) + value.scroll.y + 12 - y)) }; }
+      if (fullPhase) { const a = await progress(1).boundingBox(), b = await pitch().boundingBox(); check(a && b, id + ': confirmation phase ROI exists'); check(a.y >= chrome.bottom && b.y >= chrome.bottom, id + ': actual progress and pitch start below observed top chrome'); row.layouts.push({ name: name + '-photo-geometry', scroll: value.scroll, progress: a, pitch: b, chrome }); const y = Math.max(0, Math.floor(Math.min(a.y, b.y) + value.scroll.y - 12)); clip = { x: 0, y, width, height: Math.min(value.documentHeight - y, Math.ceil(Math.max(a.y + a.height, b.y + b.height) + value.scroll.y + 12 - y)) }; }
       const file = id + '-' + name + '.png'; await page.screenshot({ path: path.join(OUT, file), ...(clip ? { fullPage: true, clip } : { fullPage: false }) });
-      const bytes = fs.readFileSync(path.join(OUT, file)), item = { file, bytes: bytes.length, sha256: sha(bytes), clip: clip ?? null, frame: row.frames.at(-1) }; report.screenshots.push(item); row.screenshots.push(item);
+      const bytes = fs.readFileSync(path.join(OUT, file)), item = { file, bytes: bytes.length, sha256: sha(bytes), clip: clip ?? null, frame: row.frames.at(-1), ...(preparation ? { preparation } : {}) }; report.screenshots.push(item); row.screenshots.push(item);
     };
     try {
       await context.routeWebSocket('**/*', route => { row.requests.push({ at: Date.now(), path: new URL(route.url()).pathname, method: 'WEBSOCKET', outcome: 'aborted' }); route.close({ code: 1008, reason: 'Offline fixture proof' }); });
@@ -160,7 +190,9 @@ try {
       if (await help.isVisible()) { await help.getByRole('button', { name: 'Close', exact: true }).press('Escape'); await help.waitFor({ state: 'hidden' }); }
       await page.getByRole('button', { name: 'Club year draft', exact: true }).waitFor();
       check(await page.getByRole('button', { name: 'Mixed', exact: true }).getAttribute('aria-pressed') === 'true', id + ': default Mixed remains available');
-      await action('reopen-help', page.getByRole('button', { name: 'How to play', exact: true }), async () => { await press(page.getByRole('button', { name: 'How to play', exact: true })); await help.waitFor(); });
+      const helpTrigger = page.getByRole('button', { name: 'How to play', exact: true }).filter({ hasText: /^\s*How to play\s*$/ });
+      check(await helpTrigger.count() === 1, id + ': exact visible-text XI rules button');
+      await action('reopen-help', helpTrigger, async () => { await press(helpTrigger); await help.waitFor(); });
       check((await help.innerText()).includes(INSTRUCTION) && (await help.innerText()).includes(EXAMPLE), id + ': actual reopenable instruction and worked example');
       await action('close-help', null, async () => { await page.keyboard.press('Escape'); await help.waitFor({ state: 'hidden' }); });
       await action('choose-club-year', page.getByRole('button', { name: 'Club year draft', exact: true }), () => press(page.getByRole('button', { name: 'Club year draft', exact: true })), false);
