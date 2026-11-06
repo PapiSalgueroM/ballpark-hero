@@ -188,6 +188,13 @@ describe('Soccer Connect4 pending request ownership', () => {
     act(() => current().switchMode('unlimited')); capture('fresh-round-before-old-refusal');
     await finish(0, { valid: false, reason: 'Fixture refusal from the abandoned round.' }, task); capture('old-refusal-settled');
     expect(current().validationError, TITLES.refusal).toBeNull(); expectEmpty(TITLES.refusal);
+    select(); const staleNetwork = begin('Fixture Stale Network');
+    act(() => current().switchMode('unlimited')); const draws = [...io.draws]; capture('fresh-round-before-old-network-failure');
+    await act(async () => { wires[1].rejected = true; wires[1].fetch.reject(Error('Fixture abandoned transport unavailable')); await staleNetwork; });
+    capture('old-network-failure-settled');
+    expect(current().validationError, TITLES.refusal + ' stale network catch cannot restore feedback').toBeNull();
+    expect(current().isValidating, TITLES.refusal + ' stale network leaves the fresh round available').toBe(false);
+    expectEmpty(TITLES.refusal); expect(io.draws, TITLES.refusal + ' stale network adds no draw').toEqual(draws);
   });
   it(TITLES.newer, async () => {
     activeCase = 'newer'; await mountHook(); act(() => current().switchMode('unlimited')); select(); const old = begin();
@@ -220,6 +227,19 @@ describe('Soccer Connect4 pending request ownership', () => {
       expect(document.activeElement, TITLES.page + ' fresh input keeps focus').toBe(input);
       expect([current().selectedColumn, current().targetRow], TITLES.page + ' old completion cannot clear fresh selection').toEqual([1, 5]);
       expectEmpty(TITLES.page);
+      await pageSelect('Fixture Fresh B');
+      expect(wires.length, TITLES.page + ' current fresh selection starts its own request').toBe(2);
+      await finish(1, { valid: false, reason: 'Fixture current refusal.' }); await flush(); capture('page-current-refusal-cleared');
+      expect(input.value, TITLES.page + ' current refusal retains the original input cleanup').toBe('');
+      expect(current().validationError, TITLES.page + ' current refusal feedback stays visible').toBe('Fixture current refusal.');
+      expect([current().selectedColumn, current().targetRow], TITLES.page + ' current refusal remains retryable').toEqual([1, 5]);
+      await pageSelect('Fixture Fresh B');
+      expect(wires.length, TITLES.page + ' retry initiates one current request').toBe(3);
+      await finish(2, { valid: true, fullName: 'Fixture Fresh B' }); await flush(); capture('page-current-valid-retry');
+      expectOne('Fixture Fresh B', 1, TITLES.page);
+      const third = current().boardConfig.columnAttributes[2]; fireEvent.click(within(view.container).getByRole('button', { name: third }));
+      const reopened = within(view.container).getByRole('combobox') as HTMLInputElement; capture('page-current-reopened-clean');
+      expect(reopened.value, TITLES.page + ' current valid retry cleans the next input as before').toBe('');
     } else { await finish(0, { valid: true, fullName: 'Fixture Old Answer' }); await flush(); capture('original-page-cannot-enter-new-round'); }
     expect(unlocked, TITLES.page + ' fresh real page must be usable before old response returns').toBe(true);
   });
