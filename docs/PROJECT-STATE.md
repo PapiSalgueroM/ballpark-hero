@@ -1,4 +1,26 @@
 
+## 2026-11-06: BB-09 earned score breakdown, bounded draft
+
+Budget Builder now shows the existing earned score as squad quality, savings, board demand, series outcome and total before and after Final. The signing preview shows the projected components and signed total change, including the original refund and removal of an old Final bonus. Pending explicitly contributes 0. Instructions, reopenable help and a worked example describe the same rules.
+
+This closes only the earned-score display slice. BB-09 remains partial. The original arithmetic, state shape, pools, rating, validation, simulation, RNG, completion, sharing and storage behavior are held. No real sports records, database, schema or backend changes. Canonical master: line 3667, 409 cards, 444117 bytes, SHA256 fda0f7eef07d41f2ba91e89dff3542fef98cd3bd9aabcbe02f70b649797d357a, rehashed on 2026-11-06.
+
+Base is draft PR515 at 011039ded2a01ba95c47a1c824241d5d4383fb49. New App pins: hook0220c215cb2530a632abc477810ec38b095982c7, Boardf9111c2782f61ec9b976aee52baed4ae095f0d6b and guidedf18ce05e16f8fd8cefea188ca0fde7404303dfb. The ten-case owned test86de81375d764be5bf7a13642081495fe5c09927 supplements nine unchanged signing cases. Only Budget's three guide entries, owned search row/hash, saved-page text and ledger/sitemap entry changed in five generated files. Other generated rows, page head/canonical/snapshot and noindex absence were audited.
+
+Verification receipts:
+
+- Original42154773125: proper types, nine actual named business reds, one preservation pass, all nine existing cases pass. Fixed42156573715: all19 pass. Literal outcomes cover floor boundaries, demand failure, real simulated win/draw/loss, refund+1, old-win reset-15 and quiet inspection.
+- Physical controls42157017070: 11 arms,110 rows,81 passes and29 expected business failures. Actual red counts0/9/8/3/3/1/1/2/1/1/0. All19 original/fixed/restored semantic frames, complete pools, storage, calls and observed RNG tapes held; all ten source pins restored.
+- Primary42159605456: proper types,19 tests, normal producers/build, all20 readers and16 unchanged caps passed. It remains overall red at its first native zero-scroll assertion. Retained diagnostic42162969627 established useful phase returns and exact layout-anchor compensation. Later QA-only negative-zero and sticky-header preparation failures remain retained rather than relabeled as passing runs.
+- Final native42169991804 at8be7a4e5689b40240a0f77b3138ca46586b60373/treec623dddbbca74259cda7188c6f2f771e9eaa3f2c:2241 checks,418 frames,206 actions,48 measured phase returns and nine actual PNGs. Actual win/draw/win at320/390/1280. Root personally viewed all nine captures. Desktop's two measured trusted wheel preparations each moved1178 to1146, clearing the real32px sticky bar while gameplay, focus, inputs, storage and completion stayed held. All previous strict action/geometry/score guards remain intact.
+- Physical native controls42168178865: baseline611 versus fault675 caught64px extra movement while still readable/focused; baseline463 versus fault1363 caught a lost target. Exact named errors, actual one-line source faults, both own850-file tar bodies and5771-row source restoration were independently audited. Locks,521 installed versions and offline0 held.
+- Clean build join42170380950 at536043744cd0c030569ad29ab64688648f8d8ef1/treeb21109a4a7ca0fdb7f6e8b1f87b6dba178cc951f: proper types and fresh35.14s production build, all4652 product/public/script rows and every850 literal built file match the completed reader/cap build. Clean source omits remote native/policy/control helpers. Manifest2cd5f78895b6959f5be9878576bc7e11896d43dfa300350d2ff746784becf683.
+
+Final native artifact13480548357:3999068 bytes, SHA256d31061f5f30dec1eb494820e759a7924f6f242e739501f41571486ab59810a1f. Clean join artifact13481205461:656199 bytes, SHA256aff79dbc0a5e39e51e82d5ee5ca4c881fe464233829bc718408c841b15f4c71c. Independent final native audit admitted3940 checks,729 actual ZIP bodies,731 hash references, all48 phase decisions,30 score vectors and141 unchanged strict zero-scroll actions. The fresh clean build's full source and literal byte join passed separately.
+
+The unsupported Fixtureland fallback at320 remains an unqualified composed-tile clipping edge. Main33-row native fixtures use the existing England inline flag; they do not fix that edge or verify real players. No browser App/save/DOM-style/clock/RNG override, native RNG-count claim, live-provider, backend-write, whole-site end-to-end or full-card completion claim. Draft only, unmerged and unpublished. Local App/Git/runtime and global release holds remain. Companion Career/Club Manager/Team-picker/K League ownership remains separate. Next: independently qualified Club year title spacing, then FD-01 pending-criteria entry guard.
+
+
 ## 2026-11-06: XI-03 incomplete-record warning, bounded draft
 
 Club year draft now warns before committing a matching record with no usable value or age. Keep searching and Escape leave the slot open and return focus to search without scrolling. Use this unrated record submits the original copied metadata through the existing adapter once. The finished XI keeps its existing unrated result. The old finite-age gate, including numeric zero and negative finite ages, is preserved.
