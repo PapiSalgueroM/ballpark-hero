@@ -1,26 +1,24 @@
-name: Soccer Grid settlement and saved guide qualification
+name: Soccer Grid clean build and native capture closure
 on:
   push:
     branches: [codex/soccer-grid-settlement-qa-20261105]
 permissions:
   contents: read
+  actions: read
 jobs:
-  qualify:
+  closeout:
     runs-on: ubuntu-latest
-    timeout-minutes: 45
+    timeout-minutes: 20
     defaults:
       run:
         shell: bash
     env:
       SIM_NETWORK: offline
-      SIM_OFFLINE_RECEIPT: grid-submission-artifacts/offline.log
-      ENGINES: chromium
-      TZ: UTC
-      SEO_SPLIT_BASE_REF: 3b14650d360b010b25b525de33a5f32f33de2798
+      SIM_OFFLINE_RECEIPT: grid-clean-closure/offline.log
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 12
+          fetch-depth: 3
           persist-credentials: false
       - uses: actions/setup-node@v4
         with:
@@ -29,54 +27,63 @@ jobs:
       - uses: oven-sh/setup-bun@v2
         with:
           bun-version: 1.4.4
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.12'
-      - name: Locked dependencies and exact source receipt
+      - name: Locked dependencies and clean source receipts
         run: |
-          mkdir -p grid-submission-artifacts
-          touch grid-submission-artifacts/offline.log
-          git rev-parse HEAD > grid-submission-artifacts/head.txt
-          git rev-parse 'HEAD^{tree}' > grid-submission-artifacts/tree.txt
-          git ls-files -s > grid-submission-artifacts/source-before.txt
-          sha256sum package.json package-lock.json > grid-submission-artifacts/locks-before.txt
-          git fetch --no-tags --depth=1 origin d3935a288f00abd556467a45076636b890d8dd25
-          git fetch --no-tags --depth=1 origin 3b14650d360b010b25b525de33a5f32f33de2798
-          test "$(git rev-parse 3b14650d360b010b25b525de33a5f32f33de2798:src/data/seoMeta.ts)" = cf7a5142e59b97048d27b5ece9a6588a92073728
+          mkdir -p grid-clean-closure
+          touch grid-clean-closure/offline.log
+          git rev-parse HEAD > grid-clean-closure/head.txt
+          git rev-parse 'HEAD^{tree}' > grid-clean-closure/tree.txt
+          git ls-files -s > grid-clean-closure/source-before.txt
+          sha256sum package.json package-lock.json > grid-clean-closure/locks-before.txt
           npm ci
           node --input-type=module <<'NODE'
           import fs from 'node:fs';import assert from 'node:assert/strict';
           const lock=JSON.parse(fs.readFileSync('package-lock.json'));
           const rows=Object.keys(lock.packages).filter(p=>p.startsWith('node_modules/')&&fs.existsSync(p+'/package.json')).map(p=>[p,JSON.parse(fs.readFileSync(p+'/package.json')).version]);
-          assert.equal(rows.length,521);fs.writeFileSync('grid-submission-artifacts/installed-before.json',JSON.stringify(rows));
+          assert.equal(rows.length,521);fs.writeFileSync('grid-clean-closure/installed-before.json',JSON.stringify(rows));
           NODE
       - name: Proper app types
-        run: node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee grid-submission-artifacts/types.log
-      - name: Fixed original nine effective faults and restored source
-        run: NODE_OPTIONS="--max-old-space-size=6144 --require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/checkSoccerGridSubmission.mjs 2>&1 | tee grid-submission-artifacts/arms.log
-      - name: Existing Grid and shared daily consumers after guide correction
-        if: ${{ !cancelled() }}
+        run: node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee grid-clean-closure/types.log
+      - name: Pinned completed qualification artifact
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
-          NODE_OPTIONS="--max-old-space-size=6144 --require=$PWD/scripts/lib/offlineTransport.cjs" node node_modules/vitest/vitest.mjs run src/test/soccerGridBlurOwnership.test.tsx src/test/soccerGridDeadline.test.tsx src/test/soccerGridInitialTimer.test.tsx src/test/soccerGridSearchAccessibility.test.tsx src/test/soccerGridSearchDiscovery.test.tsx src/test/soccerGridSettingsRace.test.tsx src/test/gridCellLayout.test.tsx src/test/gridCellMotion.test.tsx src/test/dailyRecord.test.tsx src/test/dailySaveHardening.test.tsx src/test/dailySaveShapes.test.tsx --maxWorkers=1 --minWorkers=1 --reporter=default --reporter=json --outputFile=grid-submission-artifacts/existing.json 2>&1 | tee grid-submission-artifacts/existing.log
-          git fetch --no-tags --depth=1 origin 617b8354b722c703407074e78a86665d4f7633b5
-          R848_PART=parity NODE_OPTIONS="--max-old-space-size=6144 --require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simDailySaveHardening.mjs 2>&1 | tee grid-submission-artifacts/parity-coverage.log
-          git show 617b8354b722c703407074e78a86665d4f7633b5:src/hooks/useDailyPuzzle.ts > grid-submission-artifacts/pre-daily-hook.ts
-          test "$(git hash-object grid-submission-artifacts/pre-daily-hook.ts)" = 3486bb42c9626752236be858651e6f7332bc5d24
-          R848_PRE_HOOK="$PWD/grid-submission-artifacts/pre-daily-hook.ts" NODE_OPTIONS="--max-old-space-size=6144 --require=$PWD/scripts/lib/offlineTransport.cjs" node node_modules/vitest/vitest.mjs run src/test/dailySaveParity.test.tsx --maxWorkers=1 --minWorkers=1 --reporter=default --reporter=json --outputFile=grid-submission-artifacts/parity.json 2>&1 | tee grid-submission-artifacts/parity.log
+          gh api repos/PapiSalgueroM/ballpark-hero/actions/artifacts/13465094870/zip > "$RUNNER_TEMP/grid-reference.zip"
+          echo "0a045fb4b18b8f280fbfd3a06121b4b54deac6cc7f5162a6b7b36a0005260e7c  $RUNNER_TEMP/grid-reference.zip" | sha256sum --check
+          mkdir -p "$RUNNER_TEMP/grid-reference" "$RUNNER_TEMP/grid-reference-dist"
+          unzip -q "$RUNNER_TEMP/grid-reference.zip" -d "$RUNNER_TEMP/grid-reference"
+          echo "640a6f32e28e4aa7857a26e7362dac3c48dc2d648580d83d2925e454011bc6f0  $RUNNER_TEMP/grid-reference/dist.tgz" | sha256sum --check
+          tar -xzf "$RUNNER_TEMP/grid-reference/dist.tgz" -C "$RUNNER_TEMP/grid-reference-dist"
+          cp "$RUNNER_TEMP/grid-reference/source-before.txt" grid-clean-closure/reference-source.txt
+      - name: Clean production build
+        run: NODE_OPTIONS="--max-old-space-size=6144" npm run build 2>&1 | tee grid-clean-closure/build.log
+      - name: Every product test script and built byte joined to completed qualification
+        env:
+          GRID_REFERENCE_DIR: ${{ runner.temp }}/grid-reference
+          GRID_REFERENCE_DIST: ${{ runner.temp }}/grid-reference-dist/dist
+        run: |
           node --input-type=module <<'NODE'
-          import fs from 'node:fs';import assert from 'node:assert/strict';
-          for(const [file,passed,skipped] of [['existing',183,1],['parity',39,1]]) {
-            const report=JSON.parse(fs.readFileSync('grid-submission-artifacts/'+file+'.json'));assert.equal(report.numPassedTests,passed);assert.equal(report.numPendingTests,skipped);assert.equal(report.numFailedTests,0);
-          }
+          import fs from 'node:fs';import path from 'node:path';import assert from 'node:assert/strict';import {createHash} from 'node:crypto';
+          const sha=bytes=>createHash('sha256').update(bytes).digest('hex');
+          const gitblob=bytes=>createHash('sha1').update(Buffer.concat([Buffer.from('blob '+bytes.length+'\0'),bytes])).digest('hex');
+          const readIndex=file=>new Map(fs.readFileSync(file,'utf8').trim().split('\n').map(line=>{const m=/^[0-9]+ ([0-9a-f]{40}) 0\t(.+)$/.exec(line);assert(m,'Actual source row');return [m[2],m[1]];}));
+          const old=readIndex('grid-clean-closure/reference-source.txt'),current=readIndex('grid-clean-closure/source-before.txt');
+          const derived=JSON.parse(fs.readFileSync(path.join(process.env.GRID_REFERENCE_DIR,'derived.json'))).derived;
+          assert.equal(derived.length,5,'Exact derived file census');
+          for(const item of derived){const bytes=fs.readFileSync(path.join(process.env.GRID_REFERENCE_DIR,'derived',item.file));assert.equal(sha(bytes),item.sha256);assert.equal(bytes.length,item.bytes);old.set(item.file,gitblob(bytes));assert.equal(current.get(item.file),gitblob(bytes),'Exact generated blob: '+item.file);}
+          const excluded=new Set(['scripts/qa/checkSoccerGridSubmission.mjs','scripts/qa/playSoccerGridSubmission.mjs']);
+          assert.equal(old.get('scripts/qa/checkSoccerGridSubmission.mjs'),'f6e8a5dcfff458ea02f7836f99f30ff7033f06a8');
+          assert.equal(old.get('scripts/qa/playSoccerGridSubmission.mjs'),'64f882fa01c17e07afc9edfa3fd516fa02d3756a');
+          assert(!current.has('scripts/qa/checkSoccerGridSubmission.mjs'),'Control runner is remote qualification only');
+          assert.equal(current.get('scripts/qa/playSoccerGridSubmission.mjs'),'5b5775705f3173618609605b2bf33c3ec6971cbc','Only exact native capture preparation repair admitted');
+          const scoped=map=>[...map].filter(([p])=>/^(?:src|public|scripts)\//.test(p)&&!excluded.has(p)).sort(([a],[b])=>a.localeCompare(b));
+          const sourceRows=scoped(current);assert.deepEqual(sourceRows,scoped(old),'Every other source/public/script blob held, with exact generated files admitted');
+          const inventory=dir=>fs.readdirSync(dir,{withFileTypes:true}).sort((a,b)=>a.name.localeCompare(b.name)).flatMap(e=>e.isDirectory()?inventory(path.join(dir,e.name)).map(r=>({...r,path:e.name+'/'+r.path})):[{path:e.name,bytes:fs.statSync(path.join(dir,e.name)).size,sha256:sha(fs.readFileSync(path.join(dir,e.name)))}]);
+          const actual=inventory('dist'),reference=inventory(process.env.GRID_REFERENCE_DIST);
+          assert.equal(actual.length,849);assert.deepEqual(actual,reference,'Every byte of every built file matches completed readers/caps/browser');
+          const result={status:'passed',referenceRun:42136658673,referenceApp:'bf9d8a39cd422f25a4a478551bd01589e7516a9b',referenceArtifact:13465094870,referenceZipSHA256:'0a045fb4b18b8f280fbfd3a06121b4b54deac6cc7f5162a6b7b36a0005260e7c',referenceTarSHA256:'640a6f32e28e4aa7857a26e7362dac3c48dc2d648580d83d2925e454011bc6f0',sourceRows:sourceRows.length,remoteOnlyHelpers:[...excluded],derived,distFiles:actual.length,distManifestSHA256:sha(JSON.stringify(actual)),dist:actual};
+          fs.writeFileSync('grid-clean-closure/reference-build-join.json',JSON.stringify(result,null,2));console.log('PASS all '+sourceRows.length+' source rows and every '+actual.length+' built file held');
           NODE
-      - name: Preserve source proof before browser setup
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: soccer-grid-submission-source-${{ github.run_id }}
-          path: grid-submission-artifacts
-          retention-days: 14
-          if-no-files-found: error
       - name: Isolated browser and snapshot dependencies
         id: browser_setup
         timeout-minutes: 12
@@ -86,97 +93,41 @@ jobs:
           test ! -e node_modules/playwright
           ln -s "$RUNNER_TEMP/grid-browser/node_modules/playwright" node_modules/playwright
           node "$RUNNER_TEMP/grid-browser/node_modules/playwright/cli.js" install --with-deps chromium
-          python -m pip install fonttools pillow
           node --input-type=module <<'NODE'
           import fs from 'node:fs';import assert from 'node:assert/strict';
-          const before=JSON.parse(fs.readFileSync('grid-submission-artifacts/installed-before.json'));
+          const before=JSON.parse(fs.readFileSync('grid-clean-closure/installed-before.json'));
           const after=before.map(([p])=>[p,JSON.parse(fs.readFileSync(p+'/package.json')).version]);assert.deepEqual(after,before);
-          fs.writeFileSync('grid-submission-artifacts/installed-after.json',JSON.stringify(after));console.log('Preserved all '+after.length+' locked installed versions.');
+          fs.writeFileSync('grid-clean-closure/installed-after.json',JSON.stringify(after));console.log('Preserved all '+after.length+' locked installed versions.');
           NODE
-      - name: Unchanged guide and search generators
+      - name: Native six journeys with prepared phase captures
         if: ${{ !cancelled() && steps.browser_setup.outcome == 'success' }}
-        run: |
-          node scripts/simGuideHeadings.mjs --refresh /soccer-grid 2>&1 | tee grid-submission-artifacts/guide-refresh.log
-          node scripts/genSearchKeywords.mjs 2>&1 | tee grid-submission-artifacts/search-generation.log
-          node --input-type=module <<'NODE'
-          import fs from 'node:fs';import assert from 'node:assert/strict';import {execFileSync} from 'node:child_process';
-          const original=file=>JSON.parse(execFileSync('git',['show','HEAD:'+file],{encoding:'utf8'})),current=file=>JSON.parse(fs.readFileSync(file));
-          const oldGuide=original('scripts/data/guideHeadingsFrozen.json'),newGuide=current('scripts/data/guideHeadingsFrozen.json');
-          assert.deepEqual({...oldGuide,routes:{...oldGuide.routes,'/soccer-grid':newGuide.routes['/soccer-grid']}},newGuide,'Only the owned frozen guide may change');
-          assert.equal(newGuide.routes['/soccer-grid'].rules.length,oldGuide.routes['/soccer-grid'].rules.length+1);
-          assert.equal(newGuide.routes['/soccer-grid'].example.length,oldGuide.routes['/soccer-grid'].example.length+1);
-          const oldIndex=original('src/data/searchKeywords.json'),newIndex=current('src/data/searchKeywords.json');
-          assert.deepEqual(Object.keys(newIndex.k).sort(),Object.keys(oldIndex.k).sort(),'All search routes held');
-          assert.deepEqual({...oldIndex,source:newIndex.source,k:{...oldIndex.k,'/soccer-grid':newIndex.k['/soccer-grid']}},newIndex,'Only owned search row and generated source stamp may change');
-          fs.writeFileSync('grid-submission-artifacts/guide-index-derivation.json',JSON.stringify({guideRoute:'/soccer-grid',oldGuide:oldGuide.routes['/soccer-grid'],newGuide:newGuide.routes['/soccer-grid'],oldIndexSource:oldIndex.source,newIndexSource:newIndex.source,oldKeywords:oldIndex.k['/soccer-grid'],newKeywords:newIndex.k['/soccer-grid'],otherGuideRoutesHeld:Object.keys(oldGuide.routes).length-1,otherSearchRowsHeld:Object.keys(oldIndex.k).length-1},null,2));
-          console.log('PASS only owned frozen2sentences and search row/source stamp');
-          NODE
-      - name: Scoped saved page and production build
-        if: ${{ !cancelled() && steps.browser_setup.outcome == 'success' }}
-        id: build
-        run: |
-          PRERENDER_ONLY=/soccer-grid NODE_OPTIONS="--max-old-space-size=6144" npm run build:seo 2>&1 | tee grid-submission-artifacts/build.log
-          node --input-type=module <<'NODE'
-          import fs from 'node:fs';import path from 'node:path';import assert from 'node:assert/strict';import {execFileSync} from 'node:child_process';import {createHash} from 'node:crypto';
-          const changed=execFileSync('git',['diff','--name-only','HEAD'],{encoding:'utf8'}).trim().split('\n').filter(Boolean).sort();
-          const allowed=['public/sitemap.xml','public/soccer-grid/index.html','scripts/data/lastmod.json','scripts/data/guideHeadingsFrozen.json','src/data/searchKeywords.json'];
-          assert(changed.includes('public/soccer-grid/index.html'),'Owned policy appears in refreshed snapshot');
-          assert(changed.every(p=>allowed.includes(p)),'Only owned snapshot, guide, search and derived sitemap/ledger may change: '+changed);
-          const before=JSON.parse(execFileSync('git',['show','HEAD:scripts/data/lastmod.json'],{encoding:'utf8'})),after=JSON.parse(fs.readFileSync('scripts/data/lastmod.json'));
-          assert.deepEqual(Object.keys(after).sort(),Object.keys(before).sort(),'All ledger routes held');
-          const keys=Object.keys(before);const ledgers=before.pages?{a:before.pages,b:after.pages}:before.routes?{a:before.routes,b:after.routes}:{a:before,b:after};
-          for(const [route,value] of Object.entries(ledgers.a))if(route!=='/soccer-grid')assert.deepEqual(ledgers.b[route],value,'Unrelated ledger held: '+route);
-          const text=fs.readFileSync('public/soccer-grid/index.html','utf8');assert(text.includes('Timed rounds keep counting while answers are checked and while you are away.'));
-          const derived=allowed.map(file=>{const bytes=fs.readFileSync(file),target=path.join('grid-submission-artifacts/derived',file);fs.mkdirSync(path.dirname(target),{recursive:true});fs.writeFileSync(target,bytes);return {file,bytes:bytes.length,sha256:createHash('sha256').update(bytes).digest('hex')};});
-          fs.writeFileSync('grid-submission-artifacts/derived.json',JSON.stringify({changed,derived,ledgerKeys:keys.length},null,2));console.log('PASS scoped derived files: '+changed.join(', '));
-          NODE
-          tar -czf grid-submission-artifacts/dist.tgz dist
-          sha256sum grid-submission-artifacts/dist.tgz > grid-submission-artifacts/dist.sha256
-      - name: All required built readers and existing source fences
-        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
-        run: |
-          export ONLY="simAdsense,simBrand,simHeadTags,simHiddenPages,simHubs,simIndexNow,simIndexing,simInternalLinks,simNoRivalNames,simPrerender,simPrerenderBoot,simRetiredRoutes,simSchema,simSitemap,simSnapshotAssets,simSiteSearch,simGuideHeadings,simSeoMetaSplit,simHomeCopy,simHarnessAnchors"
-          node scripts/runAllSims.mjs --browser 2>&1 | tee grid-submission-artifacts/readers.log
-      - name: All original route download limits
-        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
-        run: |
-          node scripts/lib/hostLikeServer.mjs dist 4173 > grid-submission-artifacts/weight-host.log 2>&1 &
-          grid_host_pid=$!
-          trap 'kill "$grid_host_pid" 2>/dev/null || true' EXIT
-          sleep 2
-          SWEEP_OFFLINE=1 BASE=http://127.0.0.1:4173 node scripts/sweepWeight.mjs 2>&1 | tee grid-submission-artifacts/weight.log
-      - name: Actual two tab settlement and real deadline at three widths
-        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
-        run: SOCCER_GRID_BROWSER_OUT=grid-submission-artifacts/browser NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/playSoccerGridSubmission.mjs 2>&1 | tee grid-submission-artifacts/browser.log
-      - name: Final source dependency and offline holds
-        if: always()
-        run: |
-          git ls-files -s > grid-submission-artifacts/source-after.txt
-          cmp grid-submission-artifacts/source-before.txt grid-submission-artifacts/source-after.txt
-          git diff --exit-code HEAD -- src scripts/qa scripts/lib package.json package-lock.json ':!src/data/searchKeywords.json'
-          git diff --name-only HEAD > grid-submission-artifacts/changed.txt
-          sha256sum package.json package-lock.json > grid-submission-artifacts/locks-after.txt
-          cmp grid-submission-artifacts/locks-before.txt grid-submission-artifacts/locks-after.txt
-          node --input-type=module <<'NODE'
-          import fs from 'node:fs';import assert from 'node:assert/strict';
-          const before=JSON.parse(fs.readFileSync('grid-submission-artifacts/installed-before.json'));
-          const after=before.map(([p])=>[p,JSON.parse(fs.readFileSync(p+'/package.json')).version]);assert.equal(after.length,521);assert.deepEqual(after,before);
-          fs.writeFileSync('grid-submission-artifacts/installed-final.json',JSON.stringify(after));
-          const allowed=['public/sitemap.xml','public/soccer-grid/index.html','scripts/data/lastmod.json','scripts/data/guideHeadingsFrozen.json','src/data/searchKeywords.json'];
-          const changed=fs.readFileSync('grid-submission-artifacts/changed.txt','utf8').trim().split('\n').filter(Boolean);assert(changed.every(p=>allowed.includes(p)),'No unrelated source changes');
-          assert(fs.existsSync('grid-submission-artifacts/offline.log'),'Precreated preload receipt held');assert.equal(fs.statSync('grid-submission-artifacts/offline.log').size,0,'No Node transport attempted');
-          NODE
+        run: SOCCER_GRID_BROWSER_OUT=grid-clean-closure/browser NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/playSoccerGridSubmission.mjs 2>&1 | tee grid-clean-closure/browser.log
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: soccer-grid-submission-phase-images-${{ github.run_id }}
-          path: grid-submission-artifacts/browser/*.png
+          name: soccer-grid-clean-phase-images-${{ github.run_id }}
+          path: grid-clean-closure/browser/*.png
           retention-days: 14
           if-no-files-found: error
+      - name: Final source locks installed versions and offline holds
+        if: always()
+        run: |
+          git ls-files -s > grid-clean-closure/source-after.txt
+          cmp grid-clean-closure/source-before.txt grid-clean-closure/source-after.txt
+          git diff --exit-code HEAD -- src scripts public package.json package-lock.json
+          sha256sum package.json package-lock.json > grid-clean-closure/locks-after.txt
+          cmp grid-clean-closure/locks-before.txt grid-clean-closure/locks-after.txt
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const before=JSON.parse(fs.readFileSync('grid-clean-closure/installed-before.json'));
+          const after=before.map(([p])=>[p,JSON.parse(fs.readFileSync(p+'/package.json')).version]);assert.equal(after.length,521);assert.deepEqual(after,before);
+          fs.writeFileSync('grid-clean-closure/installed-final.json',JSON.stringify(after));
+          assert(fs.existsSync('grid-clean-closure/offline.log'));assert.equal(fs.statSync('grid-clean-closure/offline.log').size,0);
+          NODE
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: soccer-grid-submission-final-${{ github.run_id }}
-          path: grid-submission-artifacts
+          name: soccer-grid-clean-closure-${{ github.run_id }}
+          path: grid-clean-closure
           retention-days: 14
           if-no-files-found: error

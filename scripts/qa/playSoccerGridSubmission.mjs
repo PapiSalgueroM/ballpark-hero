@@ -104,7 +104,20 @@ try {
       return value;
     };
     const photo = async (page, name) => {
+      const prepared = await action(page, name + '-native-capture-home', null, async () => {
+        await page.locator('#dukb-main').focus(); await page.keyboard.press('Control+Home');
+        await page.waitForFunction(() => scrollX === 0 && scrollY === 0);
+      }, false);
+      heldBytes(prepared.before, prepared.after, 'native capture preparation');
+      equal(prepared.after.storage, prepared.before.storage, id + ': capture preparation preserves full storage');
+      equal(prepared.after.scroll, { x: 0, y: 0 }, id + ': actual native Home reaches document origin');
       const value = await frame(page, name + '-screenshot'), board = cells(page).first().locator('xpath=../../..');
+      const chrome = await page.locator('[data-site-chrome]').evaluateAll(nodes => nodes.map(e => {
+        const r = e.getBoundingClientRect(); return { tag: e.tagName, label: e.getAttribute('aria-label'), position: getComputedStyle(e).position, x: r.x, y: r.y, width: r.width, height: r.height, bottom: r.bottom };
+      }).filter(r => r.width > 0 && r.height > 0 && r.bottom > 0 && r.y < innerHeight));
+      const chromeBottom = Math.max(0, ...chrome.map(r => r.bottom)), firstRow = value.cells.slice(0, 3);
+      check(chrome.length > 0 && firstRow.length === 3 && firstRow.every(c => c.rect.y >= chromeBottom), id + ': actual first row clears observed top chrome after native Home');
+      row.layouts.push(put(id + '/layouts/' + name + '-capture-preparation', { scroll: value.scroll, chrome, chromeBottom, firstRow }));
       const bounds = await board.boundingBox(), result = page.getByRole('status').filter({ has: page.getByRole('heading', { name: scenario === 'ownership' ? 'Grid Complete!' : "Time's Up!", exact: true }) });
       const end = await result.boundingBox(); check(!!bounds && !!end, id + ': phase screenshot has actual board and result');
       const y = Math.max(0, Math.floor(bounds.y + value.scroll.y - 12)), clip = { x: 0, y, width, height: Math.min(value.documentHeight - y, Math.ceil(end.y + value.scroll.y + end.height + 12 - y)) };
