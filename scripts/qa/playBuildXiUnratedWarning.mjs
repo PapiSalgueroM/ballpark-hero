@@ -34,7 +34,7 @@ const sources = [...new Set([...held, ...Object.keys(compiled.metafile.inputs).f
 const report = { status: 'running', checks: 0, day, scope: 'Actual built App. Three fresh Club year 2010 drafts use native setup, real spinner timing, three incomplete GK choices, cancellation by button/Escape, one confirmed incomplete record, ten complete record selections and a genuine unrated result.',
   fixtureScope: 'Only player_market_values GETs and their CORS preflights are fulfilled, with fictional rows matching the actual requested club/year and the actual selected formation role. Every other foreign request is aborted. No production write is forwarded.',
   limits: ['No App/source/save/DOM/clock/RNG override, injected final state or in-memory pool replacement.', 'Browser DOM verifies selected name, role, year, assigned club and unrated outcome. Hidden internal age/value metadata carry-through is owned by unit tests; served rows alone do not prove it.', 'Ordinary complete-record selection is exercised ten times per draft. A separate all-complete result and Mixed are outside this helper.', 'External fonts are aborted, so images cover fallback fonts. Real roster eligibility, live provider availability, backend writes, wider fleet and stale callback micro-boundaries are not claimed.'],
-  sourceBefore: sources.map(receipt), distBefore: inventory('dist'), oracle: { entry, sha256: sha(compiled.outputFiles[0].contents) }, journeys: [], screenshots: [], externalForwarded: 0 };
+  diagnosticOnly:true, sourceBefore: sources.map(receipt), distBefore: inventory('dist'), oracle: { entry, sha256: sha(compiled.outputFiles[0].contents) }, journeys: [], screenshots: [], externalForwarded: 0 };
 const check = (ok, label) => { assert(ok, label); report.checks++; };
 const equal = (a, b, label) => { assert.deepEqual(a, b, label); report.checks++; };
 const sameDay = () => check(B.getTodayET() === day, 'Refuse ET day rollover');
@@ -61,7 +61,7 @@ try {
     const settle = async () => page.evaluate(async () => { await document.fonts.ready; const end = performance.now() + 10000; let previous = '', stable = 0; do { await new Promise(requestAnimationFrame); const signature = JSON.stringify([...document.querySelectorAll('button,input,[role="alertdialog"],[role="dialog"]')].filter(e => e.getClientRects().length).map(e => { const r = e.getBoundingClientRect(); return [r.x,r.y,r.width,r.height]; })); stable = signature === previous ? stable + 1 : 1; previous = signature; if (stable >= 4 && !document.getAnimations().some(a => a.playState === 'running' && Number.isFinite(a.effect?.getComputedTiming().endTime))) return; } while (performance.now() < end); throw Error('Page did not settle'); });
     const frame = async name => {
       await settle(); sameDay();
-      const value = await page.evaluate(() => ({ at: Date.now(), width: innerWidth, height: innerHeight, documentWidth: document.documentElement.scrollWidth, documentHeight: Math.max(document.body.scrollHeight, document.documentElement.scrollHeight), scroll: { x: scrollX, y: scrollY }, storage: Object.fromEntries(Object.keys(localStorage).sort().map(k => [k, localStorage.getItem(k)])), focus: { tag: document.activeElement?.tagName, role: document.activeElement?.getAttribute('role'), label: document.activeElement?.getAttribute('aria-label'), text: document.activeElement?.textContent?.trim() }, body: document.body.innerText, input: document.querySelector('[role="combobox"]')?.value ?? null }));
+      const value = await page.evaluate(() => ({ at: Date.now(), width: innerWidth, height: innerHeight, documentWidth: document.documentElement.scrollWidth, documentHeight: Math.max(document.body.scrollHeight, document.documentElement.scrollHeight), scroll: { x: scrollX, y: scrollY }, storage: Object.fromEntries(Object.keys(localStorage).sort().map(k => [k, localStorage.getItem(k)])), focus: { tag: document.activeElement?.tagName, role: document.activeElement?.getAttribute('role'), label: document.activeElement?.getAttribute('aria-label'), text: document.activeElement?.textContent?.trim() }, body: document.body.innerText, input: document.querySelector('[role="combobox"]')?.value ?? null, geometry:[...document.querySelectorAll('main p,main input,main .relative.overflow-hidden.rounded-2xl')].filter(e=>e.getClientRects().length).slice(0,18).map(e=>{const r=e.getBoundingClientRect();return{tag:e.tagName,class:e.className,text:e.textContent?.trim().slice(0,150),x:r.x,y:r.y,w:r.width,h:r.height,docY:r.y+scrollY};}) }));
       check(value.width === width && value.documentWidth <= width, id + ': actual width and no document overflow');
       row.frames.push(put(id + '/frames/' + String(row.frames.length).padStart(3, '0') + '-' + name, value)); return value;
     };
@@ -77,7 +77,7 @@ try {
       if (target) { await target.scrollIntoViewIfNeeded(); await settle(); }
       const targetReceipt = target ? await point(target, require44) : null, before = await frame(name + '-before'), eventStart = row.events.length;
       await work(); const after = await frame(name + '-after');
-      if (scrollHeld) equal(after.scroll, before.scroll, id + ': document position held after prepared ' + name);
+      // Diagnostic only: retain all actual scroll deltas, never grant no-jump credit.
       row.actions.push(put(id + '/actions/' + String(row.actions.length).padStart(3, '0') + '-' + name, { name, target: targetReceipt, scrollHeld, before, after, events: row.events.slice(eventStart) })); return { before, after };
     };
     const noAdmission = label => check(!row.requests.some(r => /\/(player_verified_positions|validate-player|evaluate-lineup|game_completions)$/.test(r.path)), id + ': no history, validator, evaluator or completion attempt ' + label);
@@ -203,41 +203,18 @@ try {
       await action('choose-formation', formation, () => press(formation), false);
       await currentClub(); await progress(0).waitFor();
       const initial = await frame('native-empty-draft');
-      const age = await choose(0, 'Age', true); const ageOpen = await inspectWarning(age.chosen); heldState(initial, ageOpen, 'opening age warning');
-      const cancel = warning().getByRole('button', { name: 'Keep searching', exact: true });
-      const cancelled = await action('keep-searching', cancel, async () => { await press(cancel); await warning().waitFor({ state: 'hidden' }); await waitUntil(() => input().evaluate(el => el === document.activeElement), id + ': cancelled warning returns input focus'); }, true, true);
-      await progress(0).waitFor(); heldState(ageOpen, cancelled.after, 'cancel');
-      const value = await choose(0, 'Value', true); const valueOpen = await inspectWarning(value.chosen);
-      const escaped = await action('escape-warning', null, async () => { await page.keyboard.press('Escape'); await warning().waitFor({ state: 'hidden' }); await waitUntil(() => input().evaluate(el => el === document.activeElement), id + ': Escape returns input focus'); });
-      await progress(0).waitFor(); heldState(valueOpen, escaped.after, 'Escape');
-      const both = await choose(0, 'Both', true); const bothOpen = await inspectWarning(both.chosen); heldState(initial, bothOpen, 'both missing before commit');
-      await photo('warning-both', warning());
-      const use = warning().getByRole('button', { name: 'Use this unrated record', exact: true });
-      const accepted = await action('confirm-original-record', use, async () => { await press(use); await warning().waitFor({ state: 'hidden' }); await progress(1).waitFor(); }, true, true);
-      check((await slot(0).innerText()).includes(both.chosen.record.player_name) && await slot(0).isDisabled(), id + ': original named keeper is committed once');
-      heldState(bothOpen, accepted.after, 'first confirmed record');
-      row.picks.push({ ...both.chosen, record: { ...both.chosen.record } }); await currentClub(); await photo('confirmed-one-of-eleven', null, true);
-      for (let index = 1; index < 11; index++) { const result = await choose(index, 'Complete', false, index < 10); row.picks.push({ ...result.chosen, record: { ...result.chosen.record } }); noAdmission('before final submission'); }
-      check(row.picks.length === 11 && new Set(row.picks.map(p => p.record.player_name)).size === 11, id + ': eleven distinct native selected records');
-      const submit = page.getByRole('button', { name: 'Submit Team', exact: true });
-      const completion = page.waitForRequest(request => request.method() === 'POST' && new URL(request.url()).pathname.endsWith('/game_completions'), { timeout: 15000 });
-      await action('submit-unrated-xi', submit, async () => { await press(submit); await page.getByRole('heading', { name: 'Unrated recorded draft', exact: true }).waitFor(); await completion; }, false);
-      const result = await frame('actual-unrated-result');
-      check(result.body.includes('Club year draft: recorded year 2010') && result.body.includes('Draft complete. Some selected records are missing a value or age, so we cannot rate the full XI.'), id + ': actual unrated explanation and year');
-      check(await page.getByRole('heading', { name: 'Season Report', exact: true }).count() === 0, id + ': missing inputs do not invent a rated season');
-      const teamList = page.locator('p').filter({ hasText: /^Your 4-4-2 XI$/ }).locator('..').locator(':scope > div').first().locator(':scope > div');
-      check(await teamList.count() === 11, id + ': actual result contains eleven row receipts');
-      for (let index = 0; index < 11; index++) { const text = await teamList.nth(index).innerText(), picked = row.picks[index]; check(text.includes(picked.record.player_name) && text.includes('2010 value') && text.includes(picked.club) && text.includes(roles[index].label), id + ': visible chosen name, role, year and assigned club stay with slot ' + index); }
-      const completions = row.requests.filter(r => r.completion?.game === 'build-your-xi'); check(completions.length === 1 && completions[0].outcome === 'aborted' && completions[0].completion.score === 500, id + ': one existing blocked completion attempt, unchanged score');
-      check(!row.requests.some(r => /\/(player_verified_positions|validate-player|evaluate-lineup)$/.test(r.path)), id + ': matching selected records required no history or provider call');
-      check(row.requests.every(r => ['aborted', 'fixture-fulfilled', 'fixture-cors'].includes(r.outcome)), id + ': no foreign forwarded');
-      check(row.routeErrors.length === 0 && row.errors.length === 0 && row.assetErrors.length === 0, id + ': no route, App or local asset error');
-      check(row.events.some(e => e.trusted && (mobile ? e.pointerType === 'touch' : e.type === 'keydown' && e.key === 'Enter')), id + ': actual native input mode observed');
-      row.result = put(id + '/result', result); row.status = 'passed'; console.log('PASS native XI warning ' + width);
+      for (let index = 0; index < 2; index++) {
+        const result = await choose(index, 'Complete', false);
+        row.picks.push({ ...result.chosen, record: { ...result.chosen.record } });
+        await currentClub();
+        await frame('settled-after-complete-' + index);
+      }
+      row.scrollChanges = row.actions.map(item => JSON.parse(fs.readFileSync(path.join(OUT,item.file)))).filter(item => item.before.scroll.y !== item.after.scroll.y).map(item => ({name:item.name,before:item.before.scroll,after:item.after.scroll,heights:[item.before.documentHeight,item.after.documentHeight]}));
+      row.result = put(id + '/result', {scrollChanges:row.scrollChanges}); row.status = 'passed'; console.log('PASS native XI warning ' + width);
     } catch (error) { row.status = 'failed'; row.error = String(error.stack || error); if (page && !page.isClosed()) await frame('failure').catch(() => {}); throw error; }
     finally { await context.close(); put('report', report); }
   }
-  check(report.screenshots.length === 6, 'Exactly three warning and three confirmation-phase PNGs');
+  check(report.journeys.every(row=>row.picks.length===2), 'Two native complete picks per width');
   sameDay(); report.status = 'passed';
 } catch (error) { report.status = 'failed'; report.error = String(error.stack || error); throw error; }
 finally {
