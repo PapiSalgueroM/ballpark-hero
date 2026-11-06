@@ -1,0 +1,174 @@
+name: CM mobile post-publish compiled HTTP delivery
+on:
+  workflow_dispatch:
+  push:
+    branches: [codex/cm-mobile-live-http-20261106]
+permissions:
+  contents: read
+concurrency:
+  group: cm-mobile-live-http-20261106
+  cancel-in-progress: false
+jobs:
+  delivery:
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+          persist-credentials: false
+      - name: Verify sole workflow addition on published merge
+        shell: bash
+        run: |
+          set -euo pipefail
+          HTTP_OUT="$RUNNER_TEMP/cm-mobile-live-http"
+          export HTTP_OUT
+          printf 'HTTP_OUT=%s\n' "$HTTP_OUT" >> "$GITHUB_ENV"
+          mkdir -p "$HTTP_OUT"
+          test "$(git show -s --format=%P HEAD)" = 51e4ba9e100aa22dbe047999311c725baccae09d
+          test "$(git show -s --format=%T HEAD^)" = b1f5ac6efe4d97a1645580c6b473d03616e471b7
+          test "$(git diff --name-status HEAD^ HEAD)" = $'A\t.github/workflows/cm-mobile-live-http-20261106.yml'
+          git rev-parse HEAD > "$HTTP_OUT/qa-head.txt"
+          git rev-parse HEAD^ > "$HTTP_OUT/published-merge.txt"
+          git status --porcelain=v1 > "$HTTP_OUT/status-before.txt"
+          test ! -s "$HTTP_OUT/status-before.txt"
+      - name: Observe expected deployment and five complete pinned bodies
+        shell: bash
+        run: |
+          set +e
+          node --input-type=module <<'HTTP_NODE'
+          import fs from 'node:fs';
+          import {createHash} from 'node:crypto';
+          
+          const out=process.env.HTTP_OUT, origin='https://douknowball.com';
+          fs.mkdirSync(out,{recursive:true});
+          const source={
+            merge:'51e4ba9e100aa22dbe047999311c725baccae09d',
+            product:'2005eabfa616f1232093851d76618747960c67af',
+            tree:'b1f5ac6efe4d97a1645580c6b473d03616e471b7',
+            artifact:13541310425,
+            compiledPinsSHA256:'b82e67534654cd7898f45051960bc488f954f57f6106c8c8e23d88753596959e',
+            deployment:'7a36d673-a773-4196-9e2d-51f82b2ad3de'
+          };
+          const pins=[
+            {file:'assets/index-D8wf2m0U.js',bytes:798737,sha256:'4efc7671aa14c8111d4ce17378c4436346dc1fe64ffc809c4c36ba9cd421bbd8'},
+            {file:'assets/index-lOVfTVeW.css',bytes:206847,sha256:'2a17ca58363647d97671ae4095cd02954a64c9444f9f29e62660735e2f783118'},
+            {file:'assets/ClubManager-D36h9td6.js',bytes:88396,sha256:'913ebf8eab4b97798b3d113565e47544991047603ef82423a2b95025b359163a'},
+            {file:'assets/SquadScreen-DcOOjSYO.js',bytes:21001,sha256:'fe5e8cb8d933304572150a9b21bcbcadc235587cd12552f9ecbba8cf6a1ddbcc'},
+            {file:'prerender-boot.js',bytes:3049,sha256:'c5da547fd0b4b0920dfeb100f3d5f3f73ca5317e38135ddc132649cd43f85c70'}
+          ];
+          const report={schema:'CM_MOBILE_LIVE_HTTP_DELIVERY_V1',status:'failed',origin,source,pins,
+            scope:'Two HTML declaration checks and five complete delivered compiled bodies only. No gameplay, browser, all-site or full protocol qualification.',
+            readiness:[],responses:[],controls:[]};
+          const sha=b=>createHash('sha256').update(b).digest('hex');
+          const check=(v,m)=>{if(!v)throw Error(m);};
+          const save=(name,b)=>fs.writeFileSync(out+'/'+name,b);
+          const json=(name,v)=>save(name,JSON.stringify(v,null,2)+'\n');
+          async function capture(path,label){
+            const row={path,label,started:new Date().toISOString()};
+            report.responses.push(row);
+            try{
+              const response=await fetch(origin+path,{cache:'no-store',redirect:'error',signal:AbortSignal.timeout(15000)});
+              const body=Buffer.from(await response.arrayBuffer());
+              Object.assign(row,{status:response.status,url:response.url,headers:Object.fromEntries(response.headers),
+                file:label+'.body',bytes:body.length,sha256:sha(body)});
+              save(row.file,body);
+              return {row,body};
+            }catch(e){row.error=String(e.stack??e);throw e;}
+            finally{row.finished=new Date().toISOString();json(label+'.json',row);}
+          }
+          function deployment(row){
+            check(row.status===200,'HTTP_STATUS_200');
+            check((row.headers['x-deployment-id']??'').split('.').includes(source.deployment),'EXPECTED_DEPLOYMENT_ID');
+          }
+          function declarations(body,kind){
+            const html=body.toString('utf8').replace(/<!--[\s\S]*?-->/g,'');
+            const attrs=s=>Object.fromEntries([...s.matchAll(/([^\s=/>]+)(?:\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s"'=<>]+)))?/g)]
+              .map(m=>[m[1].toLowerCase(),m[2]??m[3]??m[4]??'']));
+            const scripts=[...html.matchAll(/<script\b([^>]*)>[\s\S]*?<\/script\s*>/gi)].map(m=>({tag:m[0],a:attrs(m[1])}));
+            const staticHTML=html.replace(/<script\b[^>]*>[\s\S]*?<\/script\s*>/gi,'').replace(/<style\b[^>]*>[\s\S]*?<\/style\s*>/gi,'');
+            const links=[...staticHTML.matchAll(/<link\b([^>]*)>/gi)].map(m=>attrs(m[1]));
+            const modules=scripts.filter(s=>s.a.type==='module'&&(s.a.src??'').startsWith('/assets/'));
+            const styles=links.filter(a=>(a.rel??'').split(/\s+/).includes('stylesheet')&&(a.href??'').startsWith('/assets/'));
+            check(modules.length===1&&modules[0].a.src==='/'+pins[0].file,kind+'_MODULE_DECLARATIONS');
+            check(styles.length===(kind==='CM'?2:1)&&styles.every(a=>a.href==='/'+pins[1].file),kind+'_CSS_DECLARATIONS');
+            if(kind==='CM'){
+              const boots=scripts.filter(s=>s.a.src==='/prerender-boot.js');
+              check(boots.length===1&&Object.hasOwn(boots[0].a,'defer'),'CM_BOOT_DECLARATION');
+            }
+            return {modules:modules.map(s=>s.a.src),styles:styles.map(a=>a.href),moduleTag:modules[0].tag};
+          }
+          function bodyMatches(body,pin){check(body.length===pin.bytes&&sha(body)===pin.sha256,'CRITICAL_BODY_BYTES');}
+          function rejected(label,marker,fn){
+            let message;
+            try{fn();}catch(e){message=e.message;}
+            check(message===marker,'CONTROL_OWNERSHIP_'+label);
+            report.controls.push({label,rejectedBy:message});
+          }
+          try{
+            let root;
+            for(let i=1;i<=8;i++){
+              const attempt={attempt:i};report.readiness.push(attempt);
+              try{
+                const value=await capture('/','root-attempt-'+i);
+                deployment(value.row);
+                attempt.declarations=declarations(value.body,'ROOT');
+                attempt.ready=true;root=value;break;
+              }catch(e){attempt.error=String(e.message??e);}
+              if(i<8)await new Promise(resolve=>setTimeout(resolve,3000));
+            }
+            check(root,'ROOT_ENTRY_READINESS_EXHAUSTED');
+            const cm=await capture('/club-manager','club-manager');
+            deployment(cm.row);cm.row.declarations=declarations(cm.body,'CM');
+            const rootDeclarations=declarations(root.body,'ROOT');
+            const faultHTML=root.body.toString('utf8').replace(rootDeclarations.moduleTag,'');
+            check(faultHTML!==root.body.toString('utf8'),'CONTROL_MODULE_CHANGED');
+            save('control-root-module-omitted.html',faultHTML);
+            rejected('root-module-omission','ROOT_MODULE_DECLARATIONS',()=>declarations(Buffer.from(faultHTML),'ROOT'));
+            rejected('deployment-mutation','EXPECTED_DEPLOYMENT_ID',()=>deployment({...root.row,headers:{...root.row.headers,'x-deployment-id':'wrong'}}));
+            for(let i=0;i<pins.length;i++){
+              const value=await capture('/'+pins[i].file,'critical-'+(i+1));
+              check(value.row.status===200,'HTTP_STATUS_200');bodyMatches(value.body,pins[i]);
+              if(i===pins.length-1){
+                const fault=Buffer.from(value.body);fault[0]^=1;
+                check(!fault.equals(value.body),'CONTROL_BODY_CHANGED');save('control-boot-byte-mutated.body',fault);
+                rejected('boot-body-mutation','CRITICAL_BODY_BYTES',()=>bodyMatches(fault,pins[i]));
+                fault[0]^=1;check(fault.equals(value.body),'CONTROL_BODY_WHOLE_INVERSE');
+              }
+            }
+            report.status='passed';
+          }catch(e){report.error=String(e.stack??e);process.exitCode=1;}
+          finally{report.finished=new Date().toISOString();json('HTTP-DELIVERY.json',report);console.log(JSON.stringify({status:report.status,responses:report.responses.length,controls:report.controls.length,error:report.error??null}));}
+          HTTP_NODE
+          native_exit=$?
+          printf '%s\n' "$native_exit" > "$HTTP_OUT/native.exit" || exit 1
+          exit "$native_exit"
+      - name: Hold checkout after HTTP-only child
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$HTTP_OUT"
+          git diff --exit-code > "$HTTP_OUT/source-diff.txt"
+          git diff --cached --exit-code > "$HTTP_OUT/index-diff.txt"
+          git status --porcelain=v1 > "$HTTP_OUT/status-after.txt"
+          test ! -s "$HTTP_OUT/status-after.txt"
+          git rev-parse HEAD > "$HTTP_OUT/qa-head-after.txt"
+          cmp "$HTTP_OUT/qa-head.txt" "$HTTP_OUT/qa-head-after.txt"
+      - name: Retain complete HTTP evidence
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$HTTP_OUT" "$RUNNER_TEMP/cm-mobile-live-http-pack"
+          tar -czf "$RUNNER_TEMP/cm-mobile-live-http-pack/cm-mobile-live-http.tar.gz" -C "$HTTP_OUT" .
+          test "$(stat -c %s "$RUNNER_TEMP/cm-mobile-live-http-pack/cm-mobile-live-http.tar.gz")" -le 50000000
+          cd "$RUNNER_TEMP/cm-mobile-live-http-pack"
+          sha256sum cm-mobile-live-http.tar.gz > cm-mobile-live-http.tar.gz.sha256
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cm-mobile-live-http-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/cm-mobile-live-http-pack/*
+          if-no-files-found: error
+          retention-days: 14
