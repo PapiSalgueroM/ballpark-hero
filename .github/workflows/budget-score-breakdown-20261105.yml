@@ -1,63 +1,187 @@
-name: Budget Builder score physical controls
+name: Budget Builder earned score qualification
 on:
   push:
     branches: [codex/budget-score-breakdown-qa-20261105]
 permissions:
   contents: read
 jobs:
-  controls:
+  qualify:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 45
     defaults:
       run:
         shell: bash
     env:
       SIM_NETWORK: offline
-      SIM_OFFLINE_RECEIPT: budget-score-controls/offline.log
+      SIM_OFFLINE_RECEIPT: budget-score-artifacts/offline.log
+      ENGINES: chromium
+      TZ: UTC
+      SEO_SPLIT_BASE_REF: 3b14650d360b010b25b525de33a5f32f33de2798
     steps:
       - uses: actions/checkout@v4
         with:
+          fetch-depth: 12
           persist-credentials: false
       - uses: actions/setup-node@v4
         with:
           node-version: 24.22.1
           cache: npm
-      - name: Exact fixed Budget and locked dependencies
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.4.4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Locked dependencies and exact source receipt
         run: |
-          mkdir -p budget-score-controls
-          touch budget-score-controls/offline.log
-          git rev-parse HEAD > budget-score-controls/head.txt
-          git ls-files -s > budget-score-controls/source-before.txt
-          sha256sum package.json package-lock.json > budget-score-controls/locks-before.txt
+          mkdir -p budget-score-artifacts
+          touch budget-score-artifacts/offline.log
+          git rev-parse HEAD > budget-score-artifacts/head.txt
+          git rev-parse 'HEAD^{tree}' > budget-score-artifacts/tree.txt
+          git ls-files -s > budget-score-artifacts/source-before.txt
+          sha256sum package.json package-lock.json > budget-score-artifacts/locks-before.txt
+          git fetch --no-tags --depth=1 origin 011039ded2a01ba95c47a1c824241d5d4383fb49
+          git fetch --no-tags --depth=1 origin 3b14650d360b010b25b525de33a5f32f33de2798
+          test "$(git rev-parse 3b14650d360b010b25b525de33a5f32f33de2798:src/data/seoMeta.ts)" = cf7a5142e59b97048d27b5ece9a6588a92073728
+          npm ci
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const lock=JSON.parse(fs.readFileSync('package-lock.json'));
+          const rows=Object.keys(lock.packages).filter(p=>p.startsWith('node_modules/')&&fs.existsSync(p+'/package.json')).map(p=>[p,JSON.parse(fs.readFileSync(p+'/package.json')).version]);
+          assert.equal(rows.length,521);fs.writeFileSync('budget-score-artifacts/installed-before.json',JSON.stringify(rows));
+          NODE
+      - name: Proper app types
+        run: node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee budget-score-artifacts/types.log
+      - name: Exact fast-qualified scoring source
+        run: |
           test "$(git rev-parse HEAD:src/hooks/useBudgetBuilder.ts)" = 0220c215cb2530a632abc477810ec38b095982c7
           test "$(git rev-parse HEAD:src/components/budget-builder/BudgetBuilderBoard.tsx)" = f9111c2782f61ec9b976aee52baed4ae095f0d6b
+          test "$(git rev-parse HEAD:src/data/gameContent/soccer1.ts)" = df18ce05e16f8fd8cefea188ca0fde7404303dfb
+          test "$(git rev-parse HEAD:src/test/budgetScoreBreakdown.test.tsx)" = 86de81375d764be5bf7a13642081495fe5c09927
           test "$(git rev-parse HEAD:src/test/budgetSigning.test.tsx)" = 97cb3fa452184995a52a77381c7ecc45d25d2c03
-          npm ci
-      - name: Exact immutable original source copies
+      - name: Owned score and unchanged signing outcomes
         run: |
-          git fetch --no-tags --depth=1 origin 3cf296e80ad254bec3cfba2f12660addef5bbe18
-          git show 3cf296e80ad254bec3cfba2f12660addef5bbe18:src/hooks/useBudgetBuilder.ts > "$RUNNER_TEMP/budget-original-hook.ts"
-          git show 3cf296e80ad254bec3cfba2f12660addef5bbe18:src/components/budget-builder/BudgetBuilderBoard.tsx > "$RUNNER_TEMP/budget-original-board.tsx"
-          test "$(git hash-object "$RUNNER_TEMP/budget-original-hook.ts")" = 02ec7d7971bbcf96723e4a15fe285c5c0edf2ad2
-          test "$(git hash-object "$RUNNER_TEMP/budget-original-board.tsx")" = 526213213e4a5e1b625e1b6505227b623f76ad26
-          test "$(git hash-object scripts/qa/budgetScoreBreakdownCheck.mjs)" = 6025b5adeaf55c59cfee974c44bb0418c3012a16
-      - name: Eleven physical states and full original semantic parity
+          BB_SCORE_BREAKDOWN_RAW="$PWD/budget-score-artifacts/raw.json" NODE_OPTIONS="--max-old-space-size=6144 --require=$PWD/scripts/lib/offlineTransport.cjs" node node_modules/vitest/vitest.mjs run src/test/budgetScoreBreakdown.test.tsx src/test/budgetSigning.test.tsx --maxWorkers=1 --minWorkers=1 --reporter=default --reporter=json --outputFile=budget-score-artifacts/units.json 2>&1 | tee budget-score-artifacts/units.log
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const r=JSON.parse(fs.readFileSync('budget-score-artifacts/units.json'));assert.equal(r.numTotalTests,19);assert.equal(r.numPassedTests,19);assert.equal(r.numFailedTests,0);assert.equal(r.numPendingTests,0);
+          assert(!/Unhandled Errors|Unhandled Rejection|Uncaught Exception|Failed to resolve import/.test(fs.readFileSync('budget-score-artifacts/units.log','utf8')));
+          NODE
+      - name: Preserve source proof before browser setup
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: budget-score-breakdown-source-${{ github.run_id }}
+          path: budget-score-artifacts
+          retention-days: 14
+          if-no-files-found: error
+      - name: Isolated browser and snapshot dependencies
+        id: browser_setup
+        timeout-minutes: 12
+        if: ${{ !cancelled() }}
         run: |
-          BB_SCORE_CONTROL_OUT="$PWD/budget-score-controls/controls" BB_SCORE_ORIGINAL_HOOK="$RUNNER_TEMP/budget-original-hook.ts" BB_SCORE_ORIGINAL_BOARD="$RUNNER_TEMP/budget-original-board.tsx" NODE_OPTIONS="--max-old-space-size=6144 --require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/budgetScoreBreakdownCheck.mjs 2>&1 | tee budget-score-controls/controls.log
-      - name: Fixed source locks and offline held
+          npm install --prefix "$RUNNER_TEMP/xi-browser" --no-save --package-lock=false playwright@1.64.1
+          test ! -e node_modules/playwright
+          ln -s "$RUNNER_TEMP/xi-browser/node_modules/playwright" node_modules/playwright
+          node "$RUNNER_TEMP/xi-browser/node_modules/playwright/cli.js" install --with-deps chromium
+          python -m pip install fonttools pillow
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const before=JSON.parse(fs.readFileSync('budget-score-artifacts/installed-before.json'));
+          const after=before.map(([p])=>[p,JSON.parse(fs.readFileSync(p+'/package.json')).version]);assert.deepEqual(after,before);
+          fs.writeFileSync('budget-score-artifacts/installed-after.json',JSON.stringify(after));console.log('Preserved all '+after.length+' locked installed versions.');
+          NODE
+      - name: Unchanged guide and search generators
+        if: ${{ !cancelled() && steps.browser_setup.outcome == 'success' }}
+        run: |
+          node scripts/simGuideHeadings.mjs --refresh /budget-builder 2>&1 | tee budget-score-artifacts/guide-refresh.log
+          node scripts/genSearchKeywords.mjs 2>&1 | tee budget-score-artifacts/search-generation.log
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';import {execFileSync} from 'node:child_process';
+          const original=file=>JSON.parse(execFileSync('git',['show','HEAD:'+file],{encoding:'utf8'})),current=file=>JSON.parse(fs.readFileSync(file));
+          const oldGuide=original('scripts/data/guideHeadingsFrozen.json'),newGuide=current('scripts/data/guideHeadingsFrozen.json');
+          assert.deepEqual({...oldGuide,routes:{...oldGuide.routes,'/budget-builder':newGuide.routes['/budget-builder']}},newGuide,'Only the owned frozen guide may change');
+          const additions={"howToPlay":"Before the Final, check Score breakdown for squad quality, savings, board demand and the pending series outcome. A pending Final adds 0 so far.","rules":"A signing preview shows the score after that choice and its total change, including any replacement refund. Signing clears the old Final, so the preview counts its series bonus as 0 until you play again.","example":"For example, 85 squad quality, 1 savings point, 10 for the demand and a pending Final total 96. A replacement raises quality to 86 but drops savings to 0, so its total change is +0. After a win adds 15, another signing removes that bonus until you play the Final again."};
+          const ownOld=oldGuide.routes['/budget-builder'],ownNew=newGuide.routes['/budget-builder'];
+          for(const part of ['howToPlay','rules','example','tips']){
+            const line=additions[part];if(!line){assert.deepEqual(ownNew[part],ownOld[part]);continue;}
+            assert.equal(ownNew[part].length,ownOld[part].length+1);
+            assert.equal(ownNew[part].filter(x=>x===line).length,1);assert(!ownOld[part].includes(line));
+            assert.deepEqual(ownNew[part].filter(x=>x!==line),ownOld[part],'Every prior owned guide line held: '+part);
+          }
+          const oldIndex=original('src/data/searchKeywords.json'),newIndex=current('src/data/searchKeywords.json');
+          assert.deepEqual(Object.keys(newIndex.k).sort(),Object.keys(oldIndex.k).sort(),'All search routes held');
+          assert.deepEqual({...oldIndex,source:newIndex.source,k:{...oldIndex.k,'/budget-builder':newIndex.k['/budget-builder']}},newIndex,'Only owned search row and generated source stamp may change');
+          fs.writeFileSync('budget-score-artifacts/guide-index-derivation.json',JSON.stringify({guideRoute:'/budget-builder',oldGuide:oldGuide.routes['/budget-builder'],newGuide:newGuide.routes['/budget-builder'],oldIndexSource:oldIndex.source,newIndexSource:newIndex.source,oldKeywords:oldIndex.k['/budget-builder'],newKeywords:newIndex.k['/budget-builder'],otherGuideRoutesHeld:Object.keys(oldGuide.routes).length-1,otherSearchRowsHeld:Object.keys(oldIndex.k).length-1},null,2));
+          console.log('PASS only three owned guide additions and search row/source stamp');
+          NODE
+      - name: Scoped saved page and production build
+        if: ${{ !cancelled() && steps.browser_setup.outcome == 'success' }}
+        id: build
+        run: |
+          PRERENDER_ONLY=/budget-builder NODE_OPTIONS="--max-old-space-size=6144" npm run build:seo 2>&1 | tee budget-score-artifacts/build.log
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import path from 'node:path';import assert from 'node:assert/strict';import {execFileSync} from 'node:child_process';import {createHash} from 'node:crypto';
+          const changed=execFileSync('git',['diff','--name-only','HEAD'],{encoding:'utf8'}).trim().split('\n').filter(Boolean).sort();
+          const allowed=['public/sitemap.xml','public/budget-builder/index.html','scripts/data/lastmod.json','scripts/data/guideHeadingsFrozen.json','src/data/searchKeywords.json'];
+          assert(changed.includes('public/budget-builder/index.html'),'Owned policy appears in refreshed snapshot');
+          assert(changed.every(p=>allowed.includes(p)),'Only owned snapshot, guide, search and derived sitemap/ledger may change: '+changed);
+          const before=JSON.parse(execFileSync('git',['show','HEAD:scripts/data/lastmod.json'],{encoding:'utf8'})),after=JSON.parse(fs.readFileSync('scripts/data/lastmod.json'));
+          assert.deepEqual(Object.keys(after).sort(),Object.keys(before).sort(),'All ledger routes held');
+          const keys=Object.keys(before);const ledgers=before.pages?{a:before.pages,b:after.pages}:before.routes?{a:before.routes,b:after.routes}:{a:before,b:after};
+          for(const [route,value] of Object.entries(ledgers.a))if(route!=='/budget-builder')assert.deepEqual(ledgers.b[route],value,'Unrelated ledger held: '+route);
+          const text=fs.readFileSync('public/budget-builder/index.html','utf8');
+          for(const line of Object.values({"howToPlay":"Before the Final, check Score breakdown for squad quality, savings, board demand and the pending series outcome. A pending Final adds 0 so far.","rules":"A signing preview shows the score after that choice and its total change, including any replacement refund. Signing clears the old Final, so the preview counts its series bonus as 0 until you play again.","example":"For example, 85 squad quality, 1 savings point, 10 for the demand and a pending Final total 96. A replacement raises quality to 86 but drops savings to 0, so its total change is +0. After a win adds 15, another signing removes that bonus until you play the Final again."}))assert(text.includes(line),'Owned score instruction/example reaches saved page');
+          const derived=allowed.map(file=>{const bytes=fs.readFileSync(file),target=path.join('budget-score-artifacts/derived',file);fs.mkdirSync(path.dirname(target),{recursive:true});fs.writeFileSync(target,bytes);return {file,bytes:bytes.length,sha256:createHash('sha256').update(bytes).digest('hex')};});
+          fs.writeFileSync('budget-score-artifacts/derived.json',JSON.stringify({changed,derived,ledgerKeys:keys.length},null,2));console.log('PASS scoped derived files: '+changed.join(', '));
+          NODE
+          tar -czf budget-score-artifacts/dist.tgz dist
+          sha256sum budget-score-artifacts/dist.tgz > budget-score-artifacts/dist.sha256
+      - name: All required built readers and existing source fences
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          export ONLY="simAdsense,simBrand,simHeadTags,simHiddenPages,simHubs,simIndexNow,simIndexing,simInternalLinks,simNoRivalNames,simPrerender,simPrerenderBoot,simRetiredRoutes,simSchema,simSitemap,simSnapshotAssets,simSiteSearch,simGuideHeadings,simSeoMetaSplit,simHomeCopy,simHarnessAnchors"
+          node scripts/runAllSims.mjs --browser 2>&1 | tee budget-score-artifacts/readers.log
+      - name: All original route download limits
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          node scripts/lib/hostLikeServer.mjs dist 4173 > budget-score-artifacts/weight-host.log 2>&1 &
+          xi_host_pid=$!
+          trap 'kill "$xi_host_pid" 2>/dev/null || true' EXIT
+          sleep 2
+          SWEEP_OFFLINE=1 BASE=http://127.0.0.1:4173 node scripts/sweepWeight.mjs 2>&1 | tee budget-score-artifacts/weight.log
+      - name: Native score previews refunds and observed Final at three widths
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: BB_SCORE_BROWSER_OUT=budget-score-artifacts/browser NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/playBudgetScoreBreakdown.mjs 2>&1 | tee budget-score-artifacts/browser.log
+      - name: Final source dependency and offline holds
         if: always()
         run: |
-          git ls-files -s > budget-score-controls/source-after.txt
-          cmp budget-score-controls/source-before.txt budget-score-controls/source-after.txt
-          git diff --exit-code HEAD -- src scripts public package.json package-lock.json
-          sha256sum package.json package-lock.json > budget-score-controls/locks-after.txt
-          cmp budget-score-controls/locks-before.txt budget-score-controls/locks-after.txt
-          test -f budget-score-controls/offline.log
-          test ! -s budget-score-controls/offline.log
+          git ls-files -s > budget-score-artifacts/source-after.txt
+          cmp budget-score-artifacts/source-before.txt budget-score-artifacts/source-after.txt
+          git diff --exit-code HEAD -- src scripts/qa scripts/lib package.json package-lock.json ':!src/data/searchKeywords.json'
+          git diff --name-only HEAD > budget-score-artifacts/changed.txt
+          sha256sum package.json package-lock.json > budget-score-artifacts/locks-after.txt
+          cmp budget-score-artifacts/locks-before.txt budget-score-artifacts/locks-after.txt
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const before=JSON.parse(fs.readFileSync('budget-score-artifacts/installed-before.json'));
+          const after=before.map(([p])=>[p,JSON.parse(fs.readFileSync(p+'/package.json')).version]);assert.equal(after.length,521);assert.deepEqual(after,before);
+          fs.writeFileSync('budget-score-artifacts/installed-final.json',JSON.stringify(after));
+          const allowed=['public/sitemap.xml','public/budget-builder/index.html','scripts/data/lastmod.json','scripts/data/guideHeadingsFrozen.json','src/data/searchKeywords.json'];
+          const changed=fs.readFileSync('budget-score-artifacts/changed.txt','utf8').trim().split('\n').filter(Boolean);assert(changed.every(p=>allowed.includes(p)),'No unrelated source changes');
+          assert(fs.existsSync('budget-score-artifacts/offline.log'),'Precreated preload receipt held');assert.equal(fs.statSync('budget-score-artifacts/offline.log').size,0,'No Node transport attempted');
+          NODE
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: budget-score-controls-${{ github.run_id }}
-          path: budget-score-controls
+          name: budget-score-breakdown-phase-images-${{ github.run_id }}
+          path: budget-score-artifacts/browser/*.png
+          retention-days: 14
+          if-no-files-found: error
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: budget-score-breakdown-final-${{ github.run_id }}
+          path: budget-score-artifacts
           retention-days: 14
           if-no-files-found: error
