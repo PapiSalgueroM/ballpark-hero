@@ -1,81 +1,77 @@
-name: Build Your XI unrated record original proof
+name: Build Your XI unrated record fixed source proof
 on:
   push:
     branches: [codex/build-xi-unrated-warning-qa-20261105]
 permissions:
   contents: read
 jobs:
-  original:
+  fixed:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 20
     defaults:
       run:
         shell: bash
     env:
       SIM_NETWORK: offline
-      SIM_OFFLINE_RECEIPT: xi-warning-original/offline.log
+      SIM_OFFLINE_RECEIPT: xi-warning-fixed/offline.log
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 3
           persist-credentials: false
       - uses: actions/setup-node@v4
         with:
           node-version: 24.22.1
           cache: npm
-      - name: Original source and locked dependencies
+      - name: Fixed source and locked dependencies
         run: |
-          mkdir -p xi-warning-original
-          touch xi-warning-original/offline.log
-          git rev-parse HEAD > xi-warning-original/head.txt
-          git ls-files -s > xi-warning-original/source-before.txt
-          sha256sum package.json package-lock.json > xi-warning-original/locks-before.txt
-          test "$(git rev-parse HEAD:src/pages/LineupBuilder.tsx)" = acb60c5c9f8a4d45a2b33b71b0beda0062570592
+          mkdir -p xi-warning-fixed
+          touch xi-warning-fixed/offline.log
+          git rev-parse HEAD > xi-warning-fixed/head.txt
+          git ls-files -s > xi-warning-fixed/source-before.txt
+          sha256sum package.json package-lock.json > xi-warning-fixed/locks-before.txt
           test "$(git rev-parse HEAD:src/hooks/useLineupBuilder.ts)" = d6ecb6bd9ca7e15d328957294c60126b1d02f1d8
-          test "$(git rev-parse HEAD:src/test/buildXiClubYear.test.tsx)" = 98ca43f7221f4b71eff18d2db456baf598e66a8e
           npm ci
-      - name: Proper app types including owned test
-        run: node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee xi-warning-original/types.log
-      - name: Existing original club year and setup cases
+      - name: Proper app types
+        run: node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee xi-warning-fixed/types.log
+      - name: Fourteen actual-page warning cases
+        run: |
+          XI_RECORD_WARNING_RAW="$PWD/xi-warning-fixed/raw.json" NODE_OPTIONS="--max-old-space-size=6144 --require=$PWD/scripts/lib/offlineTransport.cjs" node node_modules/vitest/vitest.mjs run src/test/buildXiUnratedWarning.test.tsx --maxWorkers=1 --minWorkers=1 --reporter=default --reporter=json --outputFile=xi-warning-fixed/units.json 2>&1 | tee xi-warning-fixed/units.log
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';const r=JSON.parse(fs.readFileSync('xi-warning-fixed/units.json')),raw=JSON.parse(fs.readFileSync('xi-warning-fixed/raw.json'));
+          assert.equal(r.numTotalTests,14);assert.equal(r.numPassedTests,14);assert.equal(r.numFailedTests,0);assert.equal(r.numPendingTests,0);
+          assert.equal(raw.caseTitles.length,14);assert.equal(Object.keys(raw.cases).length,14);
+          assert(!/Unhandled Errors|Unhandled Rejection|Uncaught Exception|Failed to resolve import/.test(fs.readFileSync('xi-warning-fixed/units.log','utf8')));
+          NODE
+      - name: Existing real-hook club year history and validator outcomes
         if: ${{ !cancelled() }}
         run: |
-          NODE_OPTIONS="--max-old-space-size=6144 --require=$PWD/scripts/lib/offlineTransport.cjs" node node_modules/vitest/vitest.mjs run src/test/buildXiClubYear.test.tsx src/test/buildXiClubYearSetup.test.tsx --maxWorkers=1 --minWorkers=1 --reporter=default --reporter=json --outputFile=xi-warning-original/existing.json 2>&1 | tee xi-warning-original/existing.log
+          NODE_OPTIONS="--max-old-space-size=6144 --require=$PWD/scripts/lib/offlineTransport.cjs" node node_modules/vitest/vitest.mjs run src/test/buildXiClubYear.test.tsx src/test/buildXiClubYearSetup.test.tsx src/test/lineupBuilderHistoryRead.test.tsx src/test/lineupValidatorClient.test.tsx --maxWorkers=1 --minWorkers=1 --reporter=default --reporter=json --outputFile=xi-warning-fixed/existing.json 2>&1 | tee xi-warning-fixed/existing.log
           node --input-type=module <<'NODE'
-          import fs from 'node:fs';import assert from 'node:assert/strict';const report=JSON.parse(fs.readFileSync('xi-warning-original/existing.json'));
-          assert.equal(report.numTotalTests,14);assert.equal(report.numPassedTests,14);assert.equal(report.numFailedTests,0);assert.equal(report.numPendingTests,0);
+          import fs from 'node:fs';import assert from 'node:assert/strict';const r=JSON.parse(fs.readFileSync('xi-warning-fixed/existing.json'));
+          assert.equal(r.numTotalTests,72);assert.equal(r.numPassedTests,72);assert.equal(r.numFailedTests,0);assert.equal(r.numPendingTests,0);
           NODE
-      - name: Exact original missing pre-selection warning
+      - name: Existing offline position fit validator and report guards
         if: ${{ !cancelled() }}
         run: |
-          set +e
-          XI_RECORD_WARNING_RAW="$PWD/xi-warning-original/raw.json" NODE_OPTIONS="--max-old-space-size=6144 --require=$PWD/scripts/lib/offlineTransport.cjs" node node_modules/vitest/vitest.mjs run src/test/buildXiUnratedWarning.test.tsx --maxWorkers=1 --minWorkers=1 --reporter=default --reporter=json --outputFile=xi-warning-original/units.json > xi-warning-original/units.log 2>&1
-          status=$?
-          set -e
-          cat xi-warning-original/units.log
-          test "$status" -eq 1
-          node --input-type=module <<'NODE'
-          import fs from 'node:fs';import assert from 'node:assert/strict';
-          const report=JSON.parse(fs.readFileSync('xi-warning-original/units.json')),rows=report.testResults.flatMap(s=>s.assertionResults),failed=rows.filter(x=>x.status==='failed');
-          assert.equal(report.numTotalTests,14);assert.equal(rows.length,14);assert.equal(failed.length,12);assert.equal(rows.filter(x=>x.status==='passed').length,2);assert.equal(report.numPendingTests,0);
-          assert.deepEqual(failed.map(x=>x.title.split(' ')[0]).sort(),["XI_RECORD_WARNING_AGE","XI_RECORD_WARNING_BOTH","XI_RECORD_WARNING_CANCEL","XI_RECORD_WARNING_CONFIRM_ONCE","XI_RECORD_WARNING_ESCAPE","XI_RECORD_WARNING_HELP","XI_RECORD_WARNING_INPUT","XI_RECORD_WARNING_RESET","XI_RECORD_WARNING_SLOT","XI_RECORD_WARNING_TEAM","XI_RECORD_WARNING_VALUE","XI_RECORD_WARNING_YEAR"]);
-          for(const row of failed){assert(row.failureMessages.length>0,'Actual failure messages');for(const message of row.failureMessages){const plain=message.replace(/\u001b\[[0-?]*[ -/]*[@-~]/g,'');assert(plain.startsWith('AssertionError: '+row.title.split(' ')[0]+' '),'Owned business assertion: '+row.title);}}
-          assert(!/Unhandled Errors|Unhandled Rejection|Uncaught Exception|Failed to resolve import/.test(fs.readFileSync('xi-warning-original/units.log','utf8')));
-          assert(fs.statSync('xi-warning-original/raw.json').size>1000);
-          console.log('PASS original14: exact12business reds and2immediate-path preserves');
-          NODE
+          export NODE_OPTIONS="--max-old-space-size=6144 --require=$PWD/scripts/lib/offlineTransport.cjs"
+          node scripts/simLineupValidatorClient.mjs 2>&1 | tee xi-warning-fixed/validator.log
+          node scripts/simLineupRecordPositions.mjs 2>&1 | tee xi-warning-fixed/positions.log
+          node scripts/simBuildYourXiFit.mjs 2>&1 | tee xi-warning-fixed/fit.log
+          node scripts/simWorldXiReport.mjs 2>&1 | tee xi-warning-fixed/report.log
+          node scripts/simWorldXiSeasonReport.mjs 2>&1 | tee xi-warning-fixed/season-report.log
       - name: Source locks and offline holds
         if: always()
         run: |
           git diff --exit-code HEAD -- src scripts public package.json package-lock.json
-          git ls-files -s > xi-warning-original/source-after.txt
-          cmp xi-warning-original/source-before.txt xi-warning-original/source-after.txt
-          sha256sum package.json package-lock.json > xi-warning-original/locks-after.txt
-          cmp xi-warning-original/locks-before.txt xi-warning-original/locks-after.txt
-          test ! -s xi-warning-original/offline.log
+          git ls-files -s > xi-warning-fixed/source-after.txt
+          cmp xi-warning-fixed/source-before.txt xi-warning-fixed/source-after.txt
+          sha256sum package.json package-lock.json > xi-warning-fixed/locks-after.txt
+          cmp xi-warning-fixed/locks-before.txt xi-warning-fixed/locks-after.txt
+          test ! -s xi-warning-fixed/offline.log
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: build-xi-warning-original-${{ github.run_id }}
-          path: xi-warning-original
+          name: build-xi-warning-fixed-source-${{ github.run_id }}
+          path: xi-warning-fixed
           retention-days: 14
           if-no-files-found: error
