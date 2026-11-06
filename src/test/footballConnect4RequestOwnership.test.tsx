@@ -50,11 +50,12 @@ function deferred<T>() {
   const promise = new Promise<T>((yes, no) => { resolve = yes; reject = no; });
   return { promise, resolve, reject };
 }
+type SubmitTask = ReturnType<ReturnType<typeof useFootballConnect4>['submitPlayer']>;
 type Wire = {
   url: string; payload: unknown; fetch: ReturnType<typeof deferred<Response>>; body: ReturnType<typeof deferred<unknown>>;
   headers: boolean; settled: boolean; rejected: boolean; status: number | null; jsonCalls: number; signal?: AbortSignal | null;
 };
-let wires: Wire[] = [], pending: Promise<void>[] = [], view: RenderResult | null = null, activeCase = '';
+let wires: Wire[] = [], pending: SubmitTask[] = [], view: RenderResult | null = null, activeCase = '';
 const TITLES = {
   reset: 'C4_OWNER_RESET discards an old valid response after an identical Unlimited re-deal',
   daily: 'C4_OWNER_DAILY refuses a hidden daily move after switching to Unlimited',
@@ -101,14 +102,14 @@ async function mountHook() {
 }
 function select(col = 0) { act(() => current().selectColumn(col)); }
 function begin(name = 'Fixture Request A') {
-  let task!: Promise<void>; act(() => { task = current().submitPlayer(name); }); pending.push(task); return task;
+  let task!: SubmitTask; act(() => { task = current().submitPlayer(name); }); pending.push(task); return task;
 }
 function headers(index: number, status = 200) {
   const w = wires[index]; if (w.headers || w.rejected) return;
   w.headers = true; w.status = status;
   w.fetch.resolve({ ok: status >= 200 && status < 300, status, json: () => { w.jsonCalls += 1; return w.body.promise; } } as Response);
 }
-async function finish(index: number, body: unknown, task?: Promise<void>, status = 200) {
+async function finish(index: number, body: unknown, task?: SubmitTask, status = 200) {
   await act(async () => { headers(index, status); wires[index].settled = true; wires[index].body.resolve(body); if (task) await task; });
 }
 function expectEmpty(id: string) {
@@ -223,7 +224,7 @@ describe('Soccer Connect4 pending request ownership', () => {
     expect(unlocked, TITLES.page + ' fresh real page must be usable before old response returns').toBe(true);
   });
   it(TITLES.duplicate, async () => {
-    activeCase = 'duplicate'; await mountHook(); select(); const h = current(); let first!: Promise<void>, second!: Promise<void>;
+    activeCase = 'duplicate'; await mountHook(); select(); const h = current(); let first!: SubmitTask, second!: SubmitTask;
     // Both calls use the existing exported API before React commits its busy render.
     act(() => { first = h.submitPlayer('Fixture Same Origin'); second = h.submitPlayer('Fixture Same Origin'); }); pending.push(first, second); capture('same-origin-two-api-calls');
     await act(async () => { for (let i = 0; i < wires.length; i++) { headers(i); wires[i].settled = true; wires[i].body.resolve({ valid: true, fullName: 'Fixture Same Origin' }); } await Promise.all([first, second]); });
