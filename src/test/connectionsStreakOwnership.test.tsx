@@ -86,15 +86,15 @@ const dailyKey = () => 'connections-daily-' + getTodayET();
 const dailyLog = () => { const bytes = localStorage.getItem(dailyKey()); return bytes ? JSON.parse(bytes).guesses as unknown[] : []; };
 function capture(label: string) {
   if (!activeCase) throw Error('Connections streak capture case missing');
-  const h = io.current, submit = view ? within(view.container).queryByRole('button', { name: 'Submit', exact: true }) as HTMLButtonElement | null : null;
+  const h = io.current, submit = view ? within(view.container).queryByRole('button', { name: 'Submit' }) as HTMLButtonElement | null : null;
   const active = document.activeElement as HTMLElement | null;
   const value = clone({ label, at: Date.now(), state: h ? stateOf(h) : null, storage: storage(), dailyLog: dailyLog(),
     storageOps: io.storageOps, draws: io.draws, transport: io.transport, unexpectedTransport: io.unexpected,
     pendingResponses: io.pending.length, renders: io.renders, actions: io.actions, completions: io.completion.mock.calls,
     page: view ? { html: view.container.innerHTML, text: view.container.textContent, submitDisabled: submit?.disabled ?? null,
       oneAwayVisible: view.container.textContent?.includes('One away!') ?? false,
-      selectedVisible: h ? h.remainingPlayers.filter(name => within(view!.container).queryByRole('button', { name, exact: true })?.classList.contains('bg-primary')) : [],
-      playerButtons: h ? h.remainingPlayers.filter(name => !!within(view!.container).queryByRole('button', { name, exact: true })) : [],
+      selectedVisible: h ? h.remainingPlayers.filter(name => within(view!.container).queryByRole('button', { name })?.classList.contains('bg-primary')) : [],
+      playerButtons: h ? h.remainingPlayers.filter(name => !!within(view!.container).queryByRole('button', { name })) : [],
       resultHeadings: [...view.container.querySelectorAll('[aria-label="Round result"] h2')].map(node => node.textContent),
       buttons: [...view.container.querySelectorAll('button')].map(button => ({ text: button.textContent?.trim(), disabled: button.disabled })) } : null,
     focus: { tag: active?.tagName ?? null, id: active?.id ?? null, label: active?.getAttribute('aria-label') ?? null,
@@ -106,7 +106,7 @@ const observed = (frame: ReturnType<typeof capture>) => ({ state: frame.state, s
   storageOps: frame.storageOps, draws: frame.draws, transport: frame.transport, unexpectedTransport: frame.unexpectedTransport,
   pendingResponses: frame.pendingResponses, completions: frame.completions, page: frame.page, focus: frame.focus });
 async function click(name: string) {
-  const before = stateOf(current()); fireEvent.click(within(view!.container).getByRole('button', { name, exact: true })); await flush();
+  const before = stateOf(current()); fireEvent.click(within(view!.container).getByRole('button', { name })); await flush();
   io.actions.push({ name, at: Date.now(), before, after: stateOf(current()) });
 }
 async function mode(value: 'daily' | 'unlimited') { await click(value === 'daily' ? '📅 Daily' : '∞ Unlimited'); }

@@ -72,7 +72,7 @@ The first static plan forecast four harm categories. Review established that old
 
 ## Locked original source contract
 
-Regression src/test/connectionsStreakOwnership.test.tsx is blobf83ee818add17199697838895ef1c35a69311c15,32246UTF-8 bytes,SHA256554cb524f1263c5921c70e4747057f5b1f28fd630c49f9f4b3a141737fd574bb. Six cases use248 public clicks,7actual mounts and7bounded fictional read queries. Every query returns the two supplied sixteen-name boards. All116complete frames include before-mount/pending/settled loading observations and teardown-before/after; cumulative render/action/storage/RNG/completion tapes remain in RAW. Restore coverage is nonterminal only.
+Regression src/test/connectionsStreakOwnership.test.tsx is bloba196e04d005c53c605ad092615ced0d566c7ba21,32194UTF-8 bytes,SHA25637149d9326293ce780c0d80ca9aeb82350276dc60952a56157b3b5a8dcf88221. Six cases use248 public clicks,7actual mounts and7bounded fictional read queries. Every query returns the two supplied sixteen-name boards. All116complete frames include before-mount/pending/settled loading observations and teardown-before/after; cumulative render/action/storage/RNG/completion tapes remain in RAW. Restore coverage is nonterminal only.
 
 | Case | Original forecast | Frames | Exact test title |
 |---|---|---:|---|
@@ -88,3 +88,11 @@ The unchanged prior eight mode-selection cases contribute42frames. Original qual
 ## Current outcome
 
 Active entry only is qualified. Original tests/workflow are being authored. No original business failures, App fix, controls, build/native or clean delivery are claimed yet.
+
+## Retained first original qualification failure
+
+Run42294868639 at4f29d314c1df8a31d6041bae6a2acbc7ebab7bf3/tree75977145c43bc0d9afcc56f7aa647e50d8fbdcdd remains FAILED. Proper App tsc reported four TS2769 errors in the new regression at89/96/97/109: installed Testing Library ByRoleOptions does not accept exact:true. The regression command never ran. Zero game cases and zero RAW frames are credited; no original streak business proof or App fix is claimed.
+
+Artifact13541042797 is1010768ZIP bytes/SHA256c279751198d6470ac3f44b0e240b09f0313669a583e6ea382fbd203e760651a0, saved with all17retained bodies outside the repo. Source/index/locks/521versions/offline holds passed. The original Hook55050 and Pageb5 remain held. Preflight retention and the unit report/RAW/admission steps were skipped after types failed.
+
+The refreshed test a196e04d005c53c605ad092615ced0d566c7ba21,32194B/SHA25637149d9326293ce780c0d80ca9aeb82350276dc60952a56157b3b5a8dcf88221 removes exactly four unsupported comma-space exact:true options. A unique-line inverse reconstructs the entire originalf83ee818add17199697838895ef1c35a69311c15/32246B source. Every other byte, literal accessible name, public action, assertion, label and capture DTO is unchanged. The six-case3/3,116frame/248click/7read forecast and prior8/42remain predictions. First source/manifest remain saved. The refreshed manifest SHA2563b20dc48454669a1f11ef9ab240a05b2d4e13d2fb64481f200886db1d0d0e9bd records this correction. No RAW equality with the first run can be claimed because no first RAW exists.
