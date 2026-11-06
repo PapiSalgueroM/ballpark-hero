@@ -1,0 +1,417 @@
+name: CM mobile Squad names, one layout build and six saved-career contexts
+on:
+  push:
+    branches: [codex/cm-mobile-squad-name-v2-20261106]
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: cm-mobile-squad-name-${{ github.ref }}
+  cancel-in-progress: false
+env:
+  CI: '1'
+  SIM_NETWORK: offline
+  TZ: UTC
+  PRODUCT_CORE: 2005eabfa616f1232093851d76618747960c67af
+  PRODUCT_TREE: b1f5ac6efe4d97a1645580c6b473d03616e471b7
+  BASELINE_CORE: 25193b6efbde2e4855c171a91077efd6647d0285
+  BASELINE_TREE: 4debc9eb6ef46e9ace0c43e9a351e61efc6337c3
+  PUBLISHED_MERGE: 15652350f43fa82fa6872357bb1561f948fa150b
+  MOBILE_BROWSER_BLOB: 5d64782d660950445808ee9e9db4c603fd4981f2
+  NATIVE_INPUT: '{"run":42272859035,"job":128081619825,"artifact":13531897565,"qa":"ef849def2f41fac7d7a37150cbea040d360c262a","qaTree":"33b10eca6218fa97de52556d65bba6b46f724319","branch":"codex/k-league-native-v6-20261106","workflowPath":".github/workflows/k-league-native-20261105.yml","workflowBlob":"d18095ab2e726b6265ae6540cbcd15828aaca1f4","attempt":1,"artifactName":"k-league-native","zipBytes":29459981,"zipSHA256":"a69e9f7df59d737ae4a728fedebe9f8b3098b9adbb2668679ff690fdc19c849a","tgzEntry":"k-league-native.tar.xz","tgzBytes":29459560,"tgzSHA256":"94ed521cd50036ab9578af4b4ee07fca6db0083374ee033769b918ec24548ec9","independentAdmissionSHA256":"e1a8c8cd7bb546a779caca45e3912691645c24421c0e36efd05aa7e7d522b916","files":[{"file":"workflow.yml","bytes":46412,"sha256":"191851d8a352aa070ea42da65b8a0d3647b3c90714ec60e088e7f21b7b85003e"},{"file":"source-before.sha256","bytes":590911,"sha256":"7cf54865494326cf2f91ec1204ce415cc59225148d4a05c2a3daaca157b3204a"},{"file":"source-after.sha256","bytes":590911,"sha256":"7cf54865494326cf2f91ec1204ce415cc59225148d4a05c2a3daaca157b3204a"},{"file":"index-before.txt","bytes":498927,"sha256":"79523db500cb4d9184395912ce3416e8280ac7d5d65ecb6a63f0b3cc230affe7"},{"file":"index-after.txt","bytes":498927,"sha256":"79523db500cb4d9184395912ce3416e8280ac7d5d65ecb6a63f0b3cc230affe7"},{"file":"tracked-before.bin","bytes":211477,"sha256":"02b178260c71cd05fbe69ac7fc7396ef44bee9bb6e5fd65b6e6824536d2f5c23"},{"file":"tracked-after.bin","bytes":211477,"sha256":"02b178260c71cd05fbe69ac7fc7396ef44bee9bb6e5fd65b6e6824536d2f5c23"},{"file":"all-locks-before.json","bytes":367,"sha256":"b59da16476ca547e59e4703a0133041ace36e66737573b181ce7cd2b473e947c"},{"file":"all-locks-after.json","bytes":367,"sha256":"b59da16476ca547e59e4703a0133041ace36e66737573b181ce7cd2b473e947c"},{"file":"source-dist-input-held.json","bytes":395,"sha256":"782738f4ee1a5fb671ccff9e388e9f13bd3b4ba33cf4974400c0d5c14be40461"},{"file":"input/native-manifest.json","bytes":1428736,"sha256":"189f3de9d6b5e7606d7fb4f98ae42ee2360ed91f3e827dc3d7c32ac9061d25e9"},{"file":"browser/report.json","bytes":110558792,"sha256":"2090fa8f876ba8ba86e09ad7937206cf8e6441cb12ca2f0d3a8258cc813fa75a"},{"file":"screenshots.json","bytes":13489,"sha256":"16349e40f5988271136531bcafd6375b19d08169387e4ca3663a508483ba7b18"},{"file":"logs/types.exit","bytes":2,"sha256":"9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"},{"file":"logs/browser.exit","bytes":2,"sha256":"9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"},{"file":"transport/types.log","bytes":0,"sha256":"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"},{"file":"transport/server.log","bytes":0,"sha256":"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"},{"file":"transport/browser.log","bytes":0,"sha256":"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"}]}'
+  BUILD_INPUT: '{"run":42199520923,"job":127831051186,"artifact":13493294810,"qa":"c0ffbba09bed90e6477fc09982b09713d897296b","qaTree":"83e1cff98455ed2127d3fcf34b3dabe8bd8de36b","branch":"codex/k-league-normal-build-v6-20261106","workflowPath":".github/workflows/k-league-normal-build-20261105.yml","workflowBlob":"96a1226fcfa4d26b060fcd406a581ba7e88cdcc8","attempt":1,"artifactName":"k-league-normal-build-42199520923-1","zipBytes":8522469,"zipSHA256":"eee949e2653fe684b7c1c76a7799996665a403127686478191f056b7b9624bd9","tgzEntry":"k-league-normal-build-evidence.tar.gz","tgzBytes":8521973,"tgzSHA256":"be5ba294a902e1fa60b5e0a7772e8a8538567e711fcd4b07afea2b6721194056","independentAdmissionSHA256":"34055f96eac95a773f26cb158a01c4fcbf4eb6d7c5295d038f674d1045baa264","files":[{"file":"workflow.yml","bytes":50816,"sha256":"2e61750c067a714a79dad0189dea655814c31cfba7169a57e31bce454e2db63c"},{"file":"source-before.sha256","bytes":590716,"sha256":"ed9d29d9f2f949d92c332f3501d981113538083b122ae1b9ed6c67b94c0c1c23"},{"file":"source-after.sha256","bytes":590716,"sha256":"ed9d29d9f2f949d92c332f3501d981113538083b122ae1b9ed6c67b94c0c1c23"},{"file":"index-before.txt","bytes":498764,"sha256":"dbdf80c2e80f5462a92e1763fd05adb6846684d2ad0dee4742f816d7a4c737f6"},{"file":"index-after.txt","bytes":498764,"sha256":"dbdf80c2e80f5462a92e1763fd05adb6846684d2ad0dee4742f816d7a4c737f6"},{"file":"tracked-before.bin","bytes":211414,"sha256":"0a5e8ff10ce37e5241b65f8aa8283f559fce21226ec18bd9431ba7ff7f71e59f"},{"file":"tracked-after.bin","bytes":211414,"sha256":"0a5e8ff10ce37e5241b65f8aa8283f559fce21226ec18bd9431ba7ff7f71e59f"},{"file":"locks-before.sha256","bytes":314,"sha256":"c4d3d37c8be5418c6254ce652ab45c0f5d7e6c2c6d40d2f88443ccf1bd6e3f15"},{"file":"locks-after.sha256","bytes":314,"sha256":"c4d3d37c8be5418c6254ce652ab45c0f5d7e6c2c6d40d2f88443ccf1bd6e3f15"},{"file":"build-proof.json","bytes":1284,"sha256":"152573004ac8d7b4b8450c4de92e226b251e043816fb3e69b6a820c6e7e900f0"},{"file":"source-output-hold.json","bytes":145,"sha256":"0412a03e1b1e6796e1cad4f911ee7d7c334e71aff1e0457789b42e1198229568"},{"file":"generated-product-bridge.json","bytes":52466,"sha256":"2dc3eab663118613d54b419977bae58bc74f40a7a13b2fa05b908f85ad9fc2b3"},{"file":"dist-before.sha256","bytes":86752,"sha256":"d6faaa1d1e4565c34ac528ef93f748c21e4b0ab65a024f4cb971517b722a211d"},{"file":"dist-after.sha256","bytes":86752,"sha256":"d6faaa1d1e4565c34ac528ef93f748c21e4b0ab65a024f4cb971517b722a211d"},{"file":"types-passed.json","bytes":75,"sha256":"f80953007ecd091c9ff14a8b6a402bf746f91cd318c09cf7ead15f3e04941ba9"},{"file":"types.exit","bytes":2,"sha256":"9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"},{"file":"simNbaCareer.exit","bytes":2,"sha256":"9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"}]}'
+  GENERATED_POOL_BLOB: 522399403d4a5816680d0d5d2e19e3fda650d71d
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    env:
+      ENGINES: chromium
+      SEO_SPLIT_BASE_REF: HEAD
+      SWEEP_OFFLINE: '1'
+      PLAYWRIGHT_BROWSERS_PATH: /home/runner/.cache/ms-playwright
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 15
+          filter: blob:none
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: '1.4.4'
+      - name: Bind one Squad layout path and exactly two QA additions
+        run: |
+          set -euo pipefail
+          OUT="$RUNNER_TEMP/cm-mobile-squad-name"
+          QA_REF="$RUNNER_TEMP/cm-mobile-squad-name-inputs"
+          QA_BASE_SRC="$RUNNER_TEMP/cm-mobile-squad-name-baseline-source"
+          QA_BASE_DIST="$RUNNER_TEMP/cm-mobile-squad-name-baseline-dist"
+          for p in "$OUT" "$QA_REF" "$QA_BASE_SRC" "$QA_BASE_DIST"; do test ! -e "$p"; done
+          mkdir -p "$OUT/logs" "$OUT/transport" "$OUT/input" "$QA_REF" "$QA_BASE_DIST"
+          export QA_OUT="$OUT" QA_REF QA_BASE_SRC QA_BASE_DIST
+          printf 'QA_OUT=%s\nQA_REF=%s\nQA_BASE_SRC=%s\nQA_BASE_DIST=%s\n' "$OUT" "$QA_REF" "$QA_BASE_SRC" "$QA_BASE_DIST" >> "$GITHUB_ENV"
+          git worktree add --detach "$QA_BASE_SRC" "$BASELINE_CORE" > "$OUT/logs/baseline-checkout.log" 2>&1
+          node --input-type=module <<'PINS'
+          import fs from 'node:fs';import assert from 'node:assert/strict';import {execFileSync} from 'node:child_process';import {createHash} from 'node:crypto';
+          const e=process.env,out=e.QA_OUT,target='src/components/club-manager/SquadScreen.tsx',workflow='.github/workflows/cm-mobile-squad-name-20261106.yml',helper='scripts/qa/cmMobileSquadNameBrowser.mjs';
+          const git=(...a)=>execFileSync('git',a,{encoding:'utf8'}).trim(),sha=b=>createHash('sha256').update(b).digest('hex');
+          assert.match(e.MOBILE_BROWSER_BLOB,/^[a-f0-9]{40}$/);
+          assert.equal(git('rev-parse','HEAD^'),e.PRODUCT_CORE);assert.equal(git('rev-parse','HEAD^^{tree}'),e.PRODUCT_TREE);
+          assert.equal(git('rev-parse',e.BASELINE_CORE+'^{tree}'),e.BASELINE_TREE);assert.equal(git('rev-parse',e.PUBLISHED_MERGE+'^{tree}'),e.BASELINE_TREE);
+          assert.deepEqual(git('cat-file','-p',e.PRODUCT_CORE).split('\n').filter(s=>s.startsWith('parent ')).map(s=>s.slice(7)),[e.PUBLISHED_MERGE]);
+          assert.deepEqual(git('diff','--name-status','--no-renames',e.BASELINE_CORE,e.PRODUCT_CORE).split('\n'),['M\t'+target]);
+          assert.equal(git('rev-parse',e.BASELINE_CORE+':'+target),'b4a61d1683f5df42602d86ed3b1dae19eead86bd');
+          assert.equal(git('rev-parse',e.PRODUCT_CORE+':'+target),'90b29619567c0eca31b4939de622c01c24fc130a');
+          const delta=git('diff','--name-status','--no-renames','HEAD^','HEAD').split('\n').map(s=>s.split('\t'));assert.deepEqual(delta,[['A',workflow],['A',helper]]);
+          assert.equal(git('hash-object',helper),e.MOBILE_BROWSER_BLOB);assert.equal(git('status','--porcelain=v1','--untracked-files=all'),'');
+          fs.writeFileSync(out+'/qa-source-role.json',JSON.stringify({candidate:{commit:e.PRODUCT_CORE,tree:e.PRODUCT_TREE},baseline:{commit:e.BASELINE_CORE,tree:e.BASELINE_TREE},publishedMerge:e.PUBLISHED_MERGE,sourceOnlyChangedPath:target,qa:{commit:git('rev-parse','HEAD'),tree:git('rev-parse','HEAD^{tree}'),additions:delta},wholeOnePathInverse:e.BASELINE_TREE,wholeTwoQAAdditionInverse:e.PRODUCT_TREE,scope:'One UI layout path only. No model/data/seed/threshold change. Baseline reuses actual Build6 compiled output; candidate must earn one new normal build.'},null,2)+'\n');
+          fs.writeFileSync(out+'/workflow.yml',fs.readFileSync(workflow));fs.writeFileSync(out+'/helper-source.mjs',fs.readFileSync(helper));
+          fs.writeFileSync(out+'/workflow-source.json',JSON.stringify({head:git('rev-parse','HEAD'),tree:git('rev-parse','HEAD^{tree}'),path:workflow,gitBlob:git('hash-object',workflow)})+'\n');
+          PINS
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$OUT/source-before.sha256"
+          git ls-files -s > "$OUT/index-before.txt"
+          git ls-files -z > "$OUT/tracked-before.bin"
+          for lock in package.json package-lock.json bun.lock bun.lockb; do if test -f "$lock"; then sha256sum "$lock"; fi; done > "$OUT/locks-before.sha256"
+          git status --porcelain=v1 --untracked-files=all > "$OUT/status-before.txt"
+          test ! -s "$OUT/status-before.txt"
+          (cd "$QA_BASE_SRC"; git ls-files -z | sort -z | xargs -0 sha256sum) > "$OUT/baseline-source-before.sha256"
+          git -C "$QA_BASE_SRC" ls-files -s > "$OUT/baseline-index-before.txt"
+          git -C "$QA_BASE_SRC" status --porcelain=v1 --untracked-files=all > "$OUT/baseline-status-before.txt"
+          test ! -s "$OUT/baseline-status-before.txt"
+      - name: Authenticate the actual saved native input and completed baseline build
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          node --input-type=module <<'AUTH'
+          import fs from 'node:fs';import path from 'node:path';import assert from 'node:assert/strict';import {createHash} from 'node:crypto';import {spawnSync} from 'node:child_process';import {gunzipSync} from 'node:zlib';
+          const e=process.env,out=e.QA_OUT,ref=e.QA_REF,N=JSON.parse(e.NATIVE_INPUT),B=JSON.parse(e.BUILD_INPUT),sha=b=>createHash('sha256').update(b).digest('hex'),blob=b=>createHash('sha1').update('blob '+b.length+'\0').update(b).digest('hex'),json=v=>JSON.stringify(v,null,2)+'\n';
+          const call=(label,command,args,binary=false)=>{const r=spawnSync(command,args,{encoding:binary?null:'utf8',maxBuffer:64*1024*1024});fs.writeFileSync(path.join(out,'input',label+'.native.json'),json({command:[command,...args],status:r.status,signal:r.signal,error:r.error?String(r.error):null}));fs.writeFileSync(path.join(out,'input',label+'.stderr.log'),r.stderr??'');if(!binary)fs.writeFileSync(path.join(out,'input',label+'.stdout.log'),r.stdout??'');assert.equal(r.status,0,label);assert.equal(r.signal,null,label);assert.equal(r.error,undefined,label);return r.stdout;};
+          const api=(label,p)=>JSON.parse(call(label,'gh',['api','repos/PapiSalgueroM/ballpark-hero/'+p]));
+          const safe=p=>{assert(typeof p==='string'&&p&&!p.startsWith('/')&&!p.includes('\\')&&!p.includes('\0')&&!/^[a-z]:/i.test(p));assert(!p.split('/').includes('..'));};
+          const inventory=dir=>{const rows=[];function walk(rel=''){for(const f of fs.readdirSync(path.join(dir,rel),{withFileTypes:true})){const file=path.posix.join(rel,f.name);if(f.isDirectory())walk(file);else{assert(f.isFile());const b=fs.readFileSync(path.join(dir,file));rows.push({file,bytes:b.length,sha256:sha(b)});}}}walk();return rows.sort((a,b)=>a.file<b.file?-1:a.file>b.file?1:0);};
+          const required={native:['workflow.yml','source-before.sha256','source-after.sha256','index-before.txt','index-after.txt','tracked-before.bin','tracked-after.bin','all-locks-before.json','all-locks-after.json','source-dist-input-held.json','input/native-manifest.json','browser/report.json','screenshots.json','logs/types.exit','logs/browser.exit','transport/types.log','transport/server.log','transport/browser.log'],build:['workflow.yml','source-before.sha256','source-after.sha256','index-before.txt','index-after.txt','tracked-before.bin','tracked-after.bin','locks-before.sha256','locks-after.sha256','build-proof.json','source-output-hold.json','generated-product-bridge.json','dist-before.sha256','dist-after.sha256','types-passed.json','types.exit','simNbaCareer.exit']};
+          const fetchInput=(role,a)=>{
+            assert(a&&typeof a==='object');for(const k of ['run','job','artifact','zipBytes','tgzBytes'])assert(Number.isSafeInteger(a[k])&&a[k]>0,k);
+            for(const k of ['qa','qaTree','workflowBlob'])assert.match(a[k],/^[a-f0-9]{40}$/);for(const k of ['zipSHA256','tgzSHA256','independentAdmissionSHA256'])assert.match(a[k],/^[a-f0-9]{64}$/);
+            assert(typeof a.branch==='string'&&a.branch.startsWith('codex/'));assert.equal(a.workflowPath,role==='native'?'.github/workflows/k-league-native-20261105.yml':'.github/workflows/k-league-normal-build-20261105.yml');safe(a.tgzEntry);if(role==='native')assert.equal(a.tgzEntry,'k-league-native.tar.xz');else assert.match(a.tgzEntry,/^[a-z0-9-]+\.tar\.gz$/);
+            const run=api(role+'-run','actions/runs/'+a.run),job=api(role+'-job','actions/jobs/'+a.job),artifact=api(role+'-artifact','actions/artifacts/'+a.artifact);
+            assert.equal(run.status,'completed');assert.equal(run.conclusion,'success');assert.equal(run.head_sha,a.qa);assert.equal(run.head_branch,a.branch);assert.equal(run.event,'push');assert.equal(run.path,a.workflowPath);assert.equal(run.run_attempt,a.attempt);assert(Number.isSafeInteger(a.attempt)&&a.attempt>0);
+            assert.equal(job.id,a.job);assert.equal(job.run_id,a.run);assert.equal(job.conclusion,'success');assert.equal(artifact.id,a.artifact);assert.equal(artifact.name,a.artifactName);assert.equal(artifact.size_in_bytes,a.zipBytes);assert.equal(artifact.expired,false);assert.equal(artifact.workflow_run.id,a.run);
+            const dir=path.join(ref,role);fs.mkdirSync(dir);const zip=call(role+'-sole-original','gh',['api','repos/PapiSalgueroM/ballpark-hero/actions/artifacts/'+a.artifact+'/zip'],true);assert.equal(zip.length,a.zipBytes);assert.equal(sha(zip),a.zipSHA256);const z=path.join(dir,'original.zip');fs.writeFileSync(z,zip,{flag:'wx'});
+            const entries=call(role+'-zip-list','unzip',['-Z1',z]).trim().split('\n');entries.forEach(safe);assert.deepEqual(entries.slice().sort(),[a.tgzEntry,a.tgzEntry+'.sha256'].sort());
+            const tgz=call(role+'-zip-body','unzip',['-p',z,a.tgzEntry],true);assert.equal(tgz.length,a.tgzBytes);assert.equal(sha(tgz),a.tgzSHA256);const checksum=call(role+'-zip-checksum','unzip',['-p',z,a.tgzEntry+'.sha256']);assert.equal(checksum.trim().split(/\s+/)[0],a.tgzSHA256);
+            const t=path.join(dir,role==='native'?'evidence.tar.xz':'evidence.tar.gz');fs.writeFileSync(t,tgz,{flag:'wx'});call(role+'-tar-list','tar',['-tf',t]).trim().split('\n').forEach(safe);assert(call(role+'-tar-types','tar',['-tvf',t]).trim().split('\n').every(v=>v.startsWith('-')||v.startsWith('d')));
+            const root=path.join(dir,'evidence');fs.mkdirSync(root);call(role+'-tar-extract','tar',['-xf',t,'-C',root]);
+            assert(Array.isArray(a.files));assert.equal(new Set(a.files.map(v=>v.file)).size,a.files.length);for(const file of required[role])assert(a.files.some(row=>row.file===file),role+' actual critical pin '+file);
+            for(const row of a.files){safe(row.file);assert(Number.isSafeInteger(row.bytes)&&row.bytes>=0);assert.match(row.sha256,/^[a-f0-9]{64}$/);const bytes=fs.readFileSync(path.join(root,row.file));assert.equal(bytes.length,row.bytes);assert.equal(sha(bytes),row.sha256,row.file);const target=path.join(out,'input',role,row.file);fs.mkdirSync(path.dirname(target),{recursive:true});fs.writeFileSync(target,bytes,{flag:'wx'});}
+            const rows=inventory(root);fs.writeFileSync(path.join(out,'input',role+'-complete-body-inventory.json'),json(rows));fs.writeFileSync(path.join(out,'input',role+'-authenticated.json'),json({status:'EXACT_SUCCESSFUL_ORIGINAL_AUTHENTICATED',...a,independentAdmissionScope:'Exact externally source-reviewed admission hash binding, not a receipt body claimed to be inside the artifact.',regularFiles:rows.length}));return root;
+          };
+          const n=fetchInput('native',N),b=fetchInput('build',B);
+          const m=JSON.parse(fs.readFileSync(n+'/input/native-manifest.json')),proof=JSON.parse(fs.readFileSync(b+'/build-proof.json'));
+          assert.deepEqual(m.product,{commit:e.BASELINE_CORE,tree:e.BASELINE_TREE});assert.equal(m.admissions.build,B.independentAdmissionSHA256);
+          assert.equal(N.independentAdmissionSHA256,'e1a8c8cd7bb546a779caca45e3912691645c24421c0e36efd05aa7e7d522b916');
+          assert.equal(B.independentAdmissionSHA256,'34055f96eac95a773f26cb158a01c4fcbf4eb6d7c5295d038f674d1045baa264');
+          const frameFile=n+'/browser/frames/k-cm-320-166.json.gz',stored=fs.readFileSync(frameFile),decoded=gunzipSync(stored),frame=JSON.parse(decoded);
+          assert.equal(stored.length,85954);assert.equal(sha(stored),'5e84698da5c6d34a04245911c36c537dac5812dcac446e8819af2a21bf24445b');
+          assert.equal(decoded.length,363866);assert.equal(sha(decoded),'ddefb474badef0256f1a732eb7c7da059bb96e2ee33c229134242e6714dcee3e');
+          assert.equal(frame.sequence,166);assert.equal(frame.label,'actual K hub after real slot resume');assert.equal(frame.value.careerState.clubName,'Gangwon FC');assert.equal(frame.value.careerState.squad.length,16);assert.equal(Object.keys(frame.value.careerState).length,71);
+          const tar=fs.readFileSync(b+'/completed-dist.tar.gz');assert.deepEqual({bytes:tar.length,sha256:sha(tar)},m.completedTar);assert.deepEqual(proof.tar,m.completedTar);
+          call('baseline-dist-list','tar',['-tzf',b+'/completed-dist.tar.gz']).trim().split('\n').forEach(p=>{safe(p);assert(p==='dist/'||p.startsWith('dist/'));});
+          assert(call('baseline-dist-types','tar',['-tvzf',b+'/completed-dist.tar.gz']).trim().split('\n').every(s=>s.startsWith('-')||s.startsWith('d')));
+          call('baseline-dist-extract','tar',['-xzf',b+'/completed-dist.tar.gz','--strip-components=1','-C',e.QA_BASE_DIST]);
+          const rows=inventory(e.QA_BASE_DIST);assert.deepEqual(rows,m.distBefore);assert.equal(sha(JSON.stringify(rows)),m.distDigest);
+          fs.writeFileSync(out+'/baseline-dist-before.json',json(rows));fs.writeFileSync(out+'/input-reference-before.json',json(inventory(ref)));
+          fs.writeFileSync(out+'/fixture-authority.json',json({file:frameFile,storedBytes:stored.length,storedSHA256:sha(stored),decodedBytes:decoded.length,decodedSHA256:sha(decoded),sequence:166,label:frame.label,sourceNativeAdmission:N.independentAdmissionSHA256}));
+          fs.writeFileSync(out+'/authenticated-input-paths.json',json({native:n,build:b,baselineDist:e.QA_BASE_DIST,baselineSource:e.QA_BASE_SRC}));
+          AUTH
+      - name: Install held app and required build tools
+        run: |
+          set -euo pipefail
+          test "$(bun --version)" = 1.4.4
+          bun --version > "$QA_OUT/logs/bun-version.log"
+          node --version > "$QA_OUT/logs/node-version.log"
+          bun install --frozen-lockfile > "$QA_OUT/logs/bun-install.log" 2>&1
+          node -p "JSON.stringify({router:require('react-router-dom/package.json').version,vite:require('vite/package.json').version,rollup:JSON.parse(require('fs').readFileSync('node_modules/rollup/package.json','utf8')).version})" > "$QA_OUT/logs/build-versions.json"
+          git diff --exit-code HEAD -- package.json package-lock.json bun.lock bun.lockb
+          npm install --prefix "$RUNNER_TEMP/cm-team-picker-original-tools" --package-lock=false --no-audit --no-fund playwright@1.64.0 > "$QA_OUT/logs/playwright-install.log" 2>&1
+          test ! -e node_modules/playwright
+          test ! -e node_modules/playwright-core
+          ln -s "$RUNNER_TEMP/cm-team-picker-original-tools/node_modules/playwright" node_modules/playwright
+          ln -s "$RUNNER_TEMP/cm-team-picker-original-tools/node_modules/playwright-core" node_modules/playwright-core
+          "$RUNNER_TEMP/cm-team-picker-original-tools/node_modules/.bin/playwright" install --with-deps chromium > "$QA_OUT/logs/chromium-install.log" 2>&1
+          python3 -m pip install --target "$RUNNER_TEMP/cm-team-picker-original-python" fonttools pillow > "$QA_OUT/logs/python-install.log" 2>&1
+          echo "PYTHONPATH=$RUNNER_TEMP/cm-team-picker-original-python" >> "$GITHUB_ENV"
+      - name: Proper application types
+        run: |
+          set -euo pipefail
+          export GIT_NO_LAZY_FETCH=1
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          : > "$QA_OUT/transport/types.log"
+          set +e
+          SIM_OFFLINE_RECEIPT="$QA_OUT/transport/types.log" node_modules/.bin/tsc --noEmit -p tsconfig.app.json > "$QA_OUT/logs/types.log" 2>&1
+          native_exit=$?
+          printf '%s\n' "$native_exit" > "$QA_OUT/types.exit" || exit 1
+          test "$native_exit" = 0 || exit "$native_exit"
+          test ! -s "$QA_OUT/transport/types.log" || exit 1
+          set -e
+          printf '%s\n' '{"command":"node_modules/.bin/tsc --noEmit -p tsconfig.app.json","exit":0}' > "$QA_OUT/types-passed.json"
+          test ! -s "$QA_OUT/transport/types.log"
+      - name: Normal build, all twenty output readers and unchanged caps
+        timeout-minutes: 25
+        run: |
+          set -euo pipefail
+          export GIT_NO_LAZY_FETCH=1
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          classify_receipt() {
+            local name="$1" receipt="$2"
+            local allowed='^\[SIM_OFFLINE_BLOCK\] external browser route continue https://fonts\.(googleapis|gstatic)\.com$'
+            if [[ "$name" == sweep-weight ]]; then
+              allowed="$allowed|^\[SIM_OFFLINE_BLOCK\] external browser route continue https://flagcdn\.com$"
+            elif [[ "$name" != build ]]; then
+              if [[ -s "$receipt" ]]; then cat "$receipt"; return 1; fi
+              return 0
+            fi
+            local status=0
+            grep -Ev "$allowed" "$receipt" || status=$?
+            if [[ "$status" == 1 ]]; then return 0; fi
+            return 1
+          }
+          run_gate() {
+            local name="$1"
+            shift
+            local receipt="$QA_OUT/transport/$name.log"
+            : > "$receipt"
+            SIM_OFFLINE_RECEIPT="$receipt" "$@" 2>&1 | tee "$QA_OUT/logs/$name.log"
+            if ! classify_receipt "$name" "$receipt"; then
+              echo "Unexpected blocked transport in $name" >&2
+              return 1
+            fi
+            # Every refusal is retained and counted, never credited as zero transport.
+            if [[ -s "$receipt" ]]; then
+              wc -l "$receipt" | tee "$QA_OUT/logs/$name-blocked-attempts.txt"
+            fi
+          }
+          run_gate build npm run build
+          printf '%s\n' '{"command":"npm run build","exit":0}' > "$QA_OUT/build-passed.json"
+          find dist -type f -print0 | sort -z | xargs -0 sha256sum > "$QA_OUT/dist-before.sha256"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import path from 'node:path';import zlib from 'node:zlib';import crypto from 'node:crypto';import assert from 'node:assert/strict';
+          const assets=fs.readdirSync('dist/assets').filter(file=>/\.(js|css)$/.test(file)).sort().map(file=>{
+            const bytes=fs.readFileSync(path.join('dist/assets',file));return{file,bytes:bytes.length,gzipBytes:zlib.gzipSync(bytes).length,sha256:crypto.createHash('sha256').update(bytes).digest('hex')};
+          });
+          const soccer=assets.filter(row=>/^SoccerCareer-.*\.js$/.test(row.file));
+          assert.equal(soccer.length,1);
+          fs.writeFileSync(process.env.QA_OUT+'/soccer-chunk-sizes.json',JSON.stringify({status:'MEASURED_BUILT_CHUNKS_NO_NEW_CAP',soccer,allBuiltAssets:assets,limits:'Individual built chunk raw/gzip sizes only. Actual route critical-body proof comes from the unchanged sweepWeight window and all16 original caps, including Soccer840KiB. No headroom or full-download total is inferred from this chunk list.'},null,2)+'\n',{flag:'wx'});
+          console.log('SC4_BUILT_CHUNK_SIZES '+JSON.stringify(soccer));
+          NODE
+          tar -czf "$QA_OUT/completed-dist.tar.gz" dist
+          sha256sum "$QA_OUT/completed-dist.tar.gz" > "$QA_OUT/completed-dist.tar.gz.sha256"
+          tar -tzf "$QA_OUT/completed-dist.tar.gz" > "$QA_OUT/completed-dist-members.txt"
+          export BASE=http://127.0.0.1:4173
+          export SWEEP_BASE="$BASE"
+          export SWEEP_OFFLINE=1
+          export SIM_OFFLINE_RECEIPT="$QA_OUT/transport/server.log"
+          : > "$SIM_OFFLINE_RECEIPT"
+          node scripts/lib/hostLikeServer.mjs dist 4173 > "$QA_OUT/logs/server.log" 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid" 2>/dev/null || true' EXIT
+          ready=0
+          for attempt in $(seq 1 40); do
+            if curl --fail --silent "$BASE/" > /dev/null; then ready=1; break; fi
+            kill -0 "$server_pid"
+            sleep 1
+          done
+          test "$ready" = 1
+          run_gate sweep-weight node scripts/sweepWeight.mjs
+          readers=(
+            simAdsense simBrand simHeadTags simHiddenPages simHubs
+            simIndexNow simIndexing simInternalLinks simNoRivalNames simPrerender
+            simPrerenderBoot simRetiredRoutes simSchema simSitemap simSnapshotAssets
+            simSiteSearch simGuideHeadings simHarnessAnchors
+          )
+          for reader in "${readers[@]}"; do
+            run_gate "$reader" node "scripts/$reader.mjs"
+          done
+          run_gate simSeoTitles node scripts/simSeoTitles.mjs
+          run_gate simSeoMetaSplit env SEO_SPLIT_ONLY=/soccer-career,/club-manager,/nba-my-career node scripts/simSeoMetaSplit.mjs
+          test ! -s "$QA_OUT/transport/server.log"
+      - name: Record only the fresh UI build and unchanged compiled gates
+        run: |
+          set -euo pipefail
+          node --input-type=module <<'RECORD'
+          import fs from 'node:fs';import assert from 'node:assert/strict';import {createHash} from 'node:crypto';
+          const out=process.env.QA_OUT,sha=b=>createHash('sha256').update(b).digest('hex'),tar=fs.readFileSync(out+'/completed-dist.tar.gz'),ledger=fs.readFileSync(out+'/dist-before.sha256');
+          const readers=['simAdsense','simBrand','simHeadTags','simHiddenPages','simHubs','simIndexNow','simIndexing','simInternalLinks','simNoRivalNames','simPrerender','simPrerenderBoot','simRetiredRoutes','simSchema','simSitemap','simSnapshotAssets','simSiteSearch','simGuideHeadings','simHarnessAnchors','simSeoTitles','simSeoMetaSplit'];
+          for(const name of ['build','sweep-weight',...readers])assert(fs.statSync(out+'/logs/'+name+'.log').size>0);
+          fs.writeFileSync(out+'/build-proof.json',JSON.stringify({status:'FRESH_UI_NORMAL_BUILD_COMPILED_GATES_PASSED',product:{commit:process.env.PRODUCT_CORE,tree:process.env.PRODUCT_TREE},normalBuilds:1,readers,readersCount:20,unchangedCaps:16,oldBuildReused:false,tar:{bytes:tar.length,sha256:sha(tar)},distInventorySHA256:sha(ledger),scope:'One Squad layout source path. All20 existing rebuilt-output readers,16 unchanged caps and fixed sweep window. No full model/fixture generation, smoke/records fixture or NBA career rerun. Old unrelated reds stay unwaived.'},null,2)+'\n',{flag:'wx'});
+          RECORD
+      - name: Bind both completed outputs and the authentic complete saved input
+        run: |
+          set -euo pipefail
+          node --input-type=module <<'MANIFEST'
+          import fs from 'node:fs';import path from 'node:path';import assert from 'node:assert/strict';import {createHash} from 'node:crypto';
+          const e=process.env,out=e.QA_OUT,sha=b=>createHash('sha256').update(b).digest('hex'),json=v=>JSON.stringify(v,null,2)+'\n';
+          const read=p=>JSON.parse(fs.readFileSync(p)),ledger=p=>Object.fromEntries(fs.readFileSync(p,'utf8').trim().split('\n').map(s=>{const m=/^([a-f0-9]{64})  (.+)$/.exec(s);assert(m);return[m[2],m[1]];}));
+          const paths=read(out+'/authenticated-input-paths.json'),original=read(paths.native+'/input/native-manifest.json'),B=JSON.parse(e.BUILD_INPUT),N=JSON.parse(e.NATIVE_INPUT),proof=read(out+'/build-proof.json');
+          const baselineSource=ledger(out+'/baseline-source-before.sha256'),candidateSource=ledger(out+'/source-before.sha256'),pureProduct={...original.sourceBefore};
+          for(const p of ['.github/workflows/k-league-native-20261105.yml','scripts/qa/kLeagueNativeBrowser.mjs','scripts/qa/nativeScrollReady.mjs']){assert(pureProduct[p]);delete pureProduct[p];}
+          assert.deepEqual(baselineSource,pureProduct);
+          const rows=dir=>{const found=[];function walk(rel=''){for(const f of fs.readdirSync(path.join(dir,rel),{withFileTypes:true})){const file=path.posix.join(rel,f.name);if(f.isDirectory())walk(file);else{assert(f.isFile());const b=fs.readFileSync(path.join(dir,file));found.push({file,bytes:b.length,sha256:sha(b)});}}}walk();return found.sort((a,b)=>a.file<b.file?-1:a.file>b.file?1:0);};
+          const baselineDist=rows(e.QA_BASE_DIST),candidateDist=rows(path.resolve('dist'));assert.deepEqual(baselineDist,original.distBefore);
+          const role=(product,sourceRoot,distPath,source,pins,distBefore,completedTar,admissions)=>({product,sourceRoot,distPath,sourceBefore:source,sourceAfter:source,pins,distBefore,distDigest:sha(Buffer.from(JSON.stringify(distBefore))),completedTar,admissions});
+          const m={schema:'CM_MOBILE_SQUAD_NAME_SOURCE_DIST_V1',status:'BOTH_COMPLETED_DISTS_AND_AUTHENTIC_NATIVE_FIXTURE_BOUND',
+            baseline:role({commit:e.BASELINE_CORE,tree:e.BASELINE_TREE},e.QA_BASE_SRC,e.QA_BASE_DIST,baselineSource,[{path:'src/components/club-manager/SquadScreen.tsx',gitBlob:'b4a61d1683f5df42602d86ed3b1dae19eead86bd'}],baselineDist,original.completedTar,{build:B.independentAdmissionSHA256,native:N.independentAdmissionSHA256}),
+            candidate:role({commit:e.PRODUCT_CORE,tree:e.PRODUCT_TREE},process.cwd(),path.resolve('dist'),candidateSource,[{path:'src/components/club-manager/SquadScreen.tsx',gitBlob:'90b29619567c0eca31b4939de622c01c24fc130a'}],candidateDist,proof.tar,{compiledGateReceipt:sha(fs.readFileSync(out+'/build-proof.json')),nativeFixture:N.independentAdmissionSHA256}),
+            fixture:read(out+'/fixture-authority.json'),
+            scope:'One authentic complete71-field saved Gangwon career and same16 players in all6 contexts. Baseline is admitted Build6; candidate is this one normal build after20readers/16caps. No conditional load normalization or source/compiled bridge is invented by this metadata.'};
+          assert.equal(m.baseline.distDigest,original.distDigest);fs.writeFileSync(out+'/mobile-manifest.json',json(m),{flag:'wx'});
+          MANIFEST
+      - name: Six real saved-career layout contexts with the owned old-phone negative
+        run: |
+          set +e
+          set -uo pipefail
+          export GIT_NO_LAZY_FETCH=1 SIM_NETWORK=offline
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          export SIM_OFFLINE_RECEIPT="$QA_OUT/transport/mobile-server-baseline.log"
+          : > "$SIM_OFFLINE_RECEIPT" || exit 1
+          node scripts/lib/hostLikeServer.mjs "$QA_BASE_DIST" 4173 > "$QA_OUT/logs/mobile-server-baseline.log" 2>&1 &
+          baseline_pid=$!
+          export SIM_OFFLINE_RECEIPT="$QA_OUT/transport/mobile-server-candidate.log"
+          : > "$SIM_OFFLINE_RECEIPT" || exit 1
+          node scripts/lib/hostLikeServer.mjs dist 4174 > "$QA_OUT/logs/mobile-server-candidate.log" 2>&1 &
+          candidate_pid=$!
+          trap 'kill "$baseline_pid" "$candidate_pid" 2>/dev/null || true' EXIT
+          for port in 4173 4174; do
+            ready=0
+            for attempt in $(seq 1 40); do
+              if curl --fail --silent "http://127.0.0.1:$port/club-manager" > /dev/null; then ready=1; break; fi
+              sleep 0.25
+            done
+            test "$ready" = 1 || exit 1
+          done
+          export SIM_OFFLINE_RECEIPT="$QA_OUT/transport/mobile-browser.log"
+          : > "$SIM_OFFLINE_RECEIPT" || exit 1
+          node --check scripts/qa/cmMobileSquadNameBrowser.mjs > "$QA_OUT/logs/mobile-syntax.stdout.log" 2> "$QA_OUT/logs/mobile-syntax.stderr.log"
+          syntax_exit=$?
+          printf '%s\n' "$syntax_exit" > "$QA_OUT/logs/mobile-syntax.exit" || exit 1
+          test "$syntax_exit" = 0 || exit "$syntax_exit"
+          test ! -s "$SIM_OFFLINE_RECEIPT" || exit 1
+          node --unhandled-rejections=strict scripts/qa/cmMobileSquadNameBrowser.mjs --manifest "$QA_OUT/mobile-manifest.json" --out "$QA_OUT/browser" --baseline-url http://127.0.0.1:4173 --candidate-url http://127.0.0.1:4174 > "$QA_OUT/logs/mobile-browser.log" 2>&1
+          native_exit=$?
+          printf '%s\n' "$native_exit" > "$QA_OUT/logs/mobile-browser.exit" || exit 1
+          test "$native_exit" = 0 || exit "$native_exit"
+          test ! -s "$SIM_OFFLINE_RECEIPT" || exit 1
+          test ! -s "$QA_OUT/transport/mobile-server-baseline.log" || exit 1
+          test ! -s "$QA_OUT/transport/mobile-server-candidate.log" || exit 1
+          node --input-type=module <<'ADMIT'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const r=JSON.parse(fs.readFileSync(process.env.QA_OUT+'/browser/report.json'));
+          assert.equal(r.schema,'CM_MOBILE_SQUAD_NAME_BROWSER_V1');assert.equal(r.status,'passed');for(const k of ['sourceHeld','distHeld','storageHeld'])assert.equal(r[k],true);
+          assert.equal(r.contexts.length,6);assert.deepEqual(r.contexts.map(c=>{assert.equal(c.status,'passed');assert.equal(c.storageHeld,true);return c.role+':'+c.width;}).sort(),['baseline:1280','baseline:320','baseline:390','candidate:1280','candidate:320','candidate:390']);
+          for(const c of r.contexts){assert.equal(c.visibility.oracleStatus,c.width===1280?'desktop-baseline-parity':c.role==='baseline'?'owned-baseline-negative':'candidate-full-name-pass');}
+          ADMIT
+      - name: Hold complete source and completed output
+        if: always()
+        run: |
+          set -euo pipefail
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$QA_OUT/source-after.sha256"
+          cmp "$QA_OUT/source-before.sha256" "$QA_OUT/source-after.sha256"
+          git ls-files -s > "$QA_OUT/index-after.txt"
+          git ls-files -z > "$QA_OUT/tracked-after.bin"
+          for lock in package.json package-lock.json bun.lock bun.lockb; do if test -f "$lock"; then sha256sum "$lock"; fi; done > "$QA_OUT/locks-after.sha256"
+          cmp "$QA_OUT/index-before.txt" "$QA_OUT/index-after.txt"
+          cmp "$QA_OUT/tracked-before.bin" "$QA_OUT/tracked-after.bin"
+          cmp "$QA_OUT/locks-before.sha256" "$QA_OUT/locks-after.sha256"
+          git diff --exit-code HEAD > "$QA_OUT/source-diff.txt"
+          git status --porcelain=v1 --untracked-files=all > "$QA_OUT/status-after.txt"
+          test ! -s "$QA_OUT/status-after.txt"
+          if [[ -f "$QA_OUT/dist-before.sha256" ]]; then
+            find dist -type f -print0 | sort -z | xargs -0 sha256sum > "$QA_OUT/dist-after.sha256"
+            cmp "$QA_OUT/dist-before.sha256" "$QA_OUT/dist-after.sha256"
+            sha256sum --check "$QA_OUT/dist-before.sha256" > "$QA_OUT/dist-held.log"
+          fi
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const out=process.env.QA_OUT,rows=fs.readdirSync(out+'/transport').sort().map(file=>{
+            const lines=fs.readFileSync(out+'/transport/'+file,'utf8').split('\n').filter(Boolean);
+            const permitted=line=>(file==='build.log'&&/^\[SIM_OFFLINE_BLOCK\] external browser route continue https:\/\/fonts\.(googleapis|gstatic)\.com$/.test(line))||(file==='sweep-weight.log'&&(/^\[SIM_OFFLINE_BLOCK\] external browser route continue https:\/\/fonts\.(googleapis|gstatic)\.com$/.test(line)||line==='[SIM_OFFLINE_BLOCK] external browser route continue https://flagcdn.com'));
+            assert(lines.every(permitted),'Unexpected transport receipt '+file);
+            return{file,blockedAttempts:lines.length,fontBlockedAttempts:lines.filter(line=>line.includes('fonts.googleapis.com')||line.includes('fonts.gstatic.com')).length,flagBlockedAttempts:lines.filter(line=>line.endsWith('https://flagcdn.com')).length};
+          });
+          fs.writeFileSync(out+'/transport-summary.json',JSON.stringify({receipts:rows,meaning:'Declared blocked font/flag attempts are retained; no provider/font availability claim.'},null,2)+'\n');
+          fs.writeFileSync(out+'/source-output-hold.json',JSON.stringify({sourceHeld:true,indexHeld:true,trackedPathsHeld:true,locksHeld:true,status:'clean',completedDistHeld:fs.existsSync(out+'/dist-before.sha256')},null,2)+'\n');
+          NODE
+      - name: Always hold the complete baseline source, original inputs and fixed baseline dist
+        if: always()
+        run: |
+          set -euo pipefail
+          (cd "$QA_BASE_SRC"; git ls-files -z | sort -z | xargs -0 sha256sum) > "$QA_OUT/baseline-source-after.sha256"
+          git -C "$QA_BASE_SRC" ls-files -s > "$QA_OUT/baseline-index-after.txt"
+          git -C "$QA_BASE_SRC" status --porcelain=v1 --untracked-files=all > "$QA_OUT/baseline-status-after.txt"
+          cmp "$QA_OUT/baseline-source-before.sha256" "$QA_OUT/baseline-source-after.sha256"
+          cmp "$QA_OUT/baseline-index-before.txt" "$QA_OUT/baseline-index-after.txt"
+          cmp "$QA_OUT/baseline-status-before.txt" "$QA_OUT/baseline-status-after.txt"
+          node --input-type=module <<'HOLDS'
+          import fs from 'node:fs';import path from 'node:path';import assert from 'node:assert/strict';import {createHash} from 'node:crypto';
+          const e=process.env,out=e.QA_OUT,sha=b=>createHash('sha256').update(b).digest('hex'),json=v=>JSON.stringify(v,null,2)+'\n';
+          const inventory=dir=>{const rows=[];function walk(rel=''){for(const f of fs.readdirSync(path.join(dir,rel),{withFileTypes:true})){const file=path.posix.join(rel,f.name);if(f.isDirectory())walk(file);else{assert(f.isFile());const b=fs.readFileSync(path.join(dir,file));rows.push({file,bytes:b.length,sha256:sha(b)});}}}walk();return rows.sort((a,b)=>a.file<b.file?-1:a.file>b.file?1:0);};
+          for(const [dir,name]of[[e.QA_REF,'input-reference'],[e.QA_BASE_DIST,'baseline-dist']])if(fs.existsSync(out+'/'+name+'-before.json')){const b=Buffer.from(json(inventory(dir)));fs.writeFileSync(out+'/'+name+'-after.json',b);assert(b.equals(fs.readFileSync(out+'/'+name+'-before.json')));}
+          fs.writeFileSync(out+'/mobile-source-input-held.json',json({baselineSource:true,baselineIndex:true,baselineStatus:true,originalInputs:true,baselineDist:true,candidateBuildAndSourceHold:'source-output-hold.json',AppBuilds:fs.existsSync(out+'/build-proof.json')?1:0,modelOrFixtureGeneration:false,browserAdmissionSeparate:true}));
+          HOLDS
+      - name: Retain bounded complete layout proof or fatal diagnostic
+        id: evidence
+        if: always()
+        shell: bash
+        run: |
+          set +e
+          set -uo pipefail
+          archive="$RUNNER_TEMP/cm-mobile-squad-name.tar.xz"
+          tar -I 'xz -9' -cf "$archive" -C "$QA_OUT" . > "$RUNNER_TEMP/cm-mobile-squad-name-pack.log" 2>&1
+          pack_exit=$?
+          printf '%s\n' "$pack_exit" > "$QA_OUT/pack-native.exit" || exit 1
+          if [[ "$pack_exit" == 0 && -f "$archive" && "$(stat -c %s "$archive")" -le 50000000 ]]; then
+            sha256sum "$archive" > "$archive.sha256" || exit 1
+            printf 'archive=%s\n' "$archive" >> "$GITHUB_OUTPUT" || exit 1
+            exit 0
+          fi
+          printf '%s\n' 'DIAGNOSTIC_ONLY_NO_COMPLETE_NATIVE_OR_IMAGE_PROOF: full pack failed or exceeded50000000bytes' > "$QA_OUT/DIAGNOSTIC-ONLY.txt" || exit 1
+          cp "$RUNNER_TEMP/cm-mobile-squad-name-pack.log" "$QA_OUT/pack.log" || exit 1
+          node --input-type=module <<'DIAGNOSTIC'
+          import fs from 'node:fs';import path from 'node:path';import crypto from 'node:crypto';
+          const root=process.env.QA_OUT,sha=b=>crypto.createHash('sha256').update(b).digest('hex'),rows=[];
+          function walk(rel=''){for(const entry of fs.readdirSync(path.join(root,rel),{withFileTypes:true})){const file=path.posix.join(rel,entry.name);if(entry.isDirectory())walk(file);else if(entry.isFile()){const bytes=fs.readFileSync(path.join(root,file));rows.push({file,bytes:bytes.length,sha256:sha(bytes)});}}}walk();
+          fs.writeFileSync(root+'/fatal-full-output-inventory.json',JSON.stringify({status:'DIAGNOSTIC_ONLY',completeNativeProof:false,fullArchive:fs.existsSync(path.join(process.env.RUNNER_TEMP,'cm-mobile-squad-name.tar.xz'))?{bytes:fs.statSync(path.join(process.env.RUNNER_TEMP,'cm-mobile-squad-name.tar.xz')).size,sha256:sha(fs.readFileSync(path.join(process.env.RUNNER_TEMP,'cm-mobile-squad-name.tar.xz')))}:null,fullOutput:rows.sort((a,b)=>a.file<b.file?-1:a.file>b.file?1:0),omittedFromDiagnostic:['browser/frames','browser/bodies','ordinary and failure PNG files'],note:'Successful evidence is never truncated. This diagnostic has no runtime or image qualification.'},null,2)+'\n');
+          DIAGNOSTIC
+          test "$?" = 0 || exit 1
+          diagnostic="$RUNNER_TEMP/cm-mobile-squad-name-diagnostic.tar.gz"
+          diagnostic_dir="$RUNNER_TEMP/cm-mobile-squad-name-diagnostic"
+          mkdir -p "$diagnostic_dir/logs" "$diagnostic_dir/transport" "$diagnostic_dir/input" "$diagnostic_dir/browser" || exit 1
+          find "$QA_OUT" -maxdepth 1 -type f -exec cp '{}' "$diagnostic_dir/" \; || exit 1
+          cp -R "$QA_OUT/logs/." "$diagnostic_dir/logs/" || exit 1
+          cp -R "$QA_OUT/transport/." "$diagnostic_dir/transport/" || exit 1
+          cp -R "$QA_OUT/input/." "$diagnostic_dir/input/" || exit 1
+          if test -d "$QA_OUT/browser"; then find "$QA_OUT/browser" -maxdepth 1 -type f -name '*.json' -exec cp '{}' "$diagnostic_dir/browser/" \; || exit 1; fi
+          tar -czf "$diagnostic" -C "$diagnostic_dir" . || exit 1
+          test "$(stat -c %s "$diagnostic")" -le 50000000 || exit 1
+          sha256sum "$diagnostic" > "$diagnostic.sha256" || exit 1
+          printf 'archive=%s\n' "$diagnostic" >> "$GITHUB_OUTPUT" || exit 1
+          exit 1
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cm-mobile-squad-name
+          path: |
+            ${{ steps.evidence.outputs.archive }}
+            ${{ steps.evidence.outputs.archive }}.sha256
+          if-no-files-found: error
+          retention-days: 14
+          compression-level: 0
