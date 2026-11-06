@@ -1,65 +1,110 @@
-name: Alphabet Sprint effective deadline controls
+name: Alphabet Sprint deadline full qualification
 on:
   push:
-    branches: [codex/alphabet-sprint-deadline-controls-qa-20261106]
+    branches: [codex/alphabet-sprint-deadline-full-qa-20261106]
 permissions:
   contents: read
   actions: read
 jobs:
-  preflight:
+  qualify:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 45
     defaults:
       run:
         shell: bash
     env:
       SIM_NETWORK: offline
-      SIM_OFFLINE_RECEIPT: alphabet-sprint-deadline-controls/offline.log
+      SIM_OFFLINE_RECEIPT: alphabet-sprint-deadline-qualified/offline.log
       TZ: UTC
+      ENGINES: chromium
+      SEO_SPLIT_BASE_REF: 3b14650d360b010b25b525de33a5f32f33de2798
+      ALPHABET_FIXED_RUN: '42271120702'
+      ALPHABET_FIXED_HEAD: '31c89230b1506f76f4ad5b80fb2117980a5cf6b1'
+      ALPHABET_FIXED_TREE: '70f76477d990842635e8cdb51225d8ad106cebde'
+      ALPHABET_FIXED_ARTIFACT: '13528769476'
+      ALPHABET_FIXED_ZIP_BYTES: '4363746'
+      ALPHABET_FIXED_ZIP_SHA256: '4b7aaecf57ca5a48d4d432bcc9594d0493058ae00178892acab1dc5548c2bc8f'
+      ALPHABET_FIXED_PAGE_BLOB: 'f6a2b471abdf3ec5b21daa928348e11a3232019b'
+      ALPHABET_FIXED_PLAN_BLOB: '545d232cfd977b7fdeba8d19d7071262973c5f10'
+      ALPHABET_NATIVE_HELPER_BLOB: '5f74a51112539bb873ea3eaba5068ca39c0eaeef'
+      ALPHABET_NATIVE_OUTER_BLOB: 'b86e869fa997462782b73d2ca5aadf588a5f2059'
+      ALPHABET_CONTROLS_RUN: '42272588314'
+      ALPHABET_CONTROLS_HEAD: '42ce885d9b5f75d2d023ff4de61c982e2c3985e4'
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 2
+          fetch-depth: 3
           persist-credentials: false
       - uses: actions/setup-node@v4
         with:
           node-version: 24.22.1
           cache: npm
-      - name: Exact PR521 product source and physical before receipts
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.4.4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Strict reviewed bindings and completed fixed original and control provenance
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
-          test ! -e alphabet-sprint-deadline-controls
-          mkdir alphabet-sprint-deadline-controls
-          touch alphabet-sprint-deadline-controls/offline.log
-          git rev-parse HEAD > alphabet-sprint-deadline-controls/head.txt
-          git rev-parse 'HEAD^{tree}' > alphabet-sprint-deadline-controls/tree.txt
-          git ls-files -s > alphabet-sprint-deadline-controls/source-before.txt
-          sha256sum package.json package-lock.json > alphabet-sprint-deadline-controls/locks-before.txt
+          for value in "$ALPHABET_FIXED_RUN" "$ALPHABET_FIXED_ARTIFACT" "$ALPHABET_FIXED_ZIP_BYTES" "$ALPHABET_CONTROLS_RUN"; do [[ "$value" =~ ^[1-9][0-9]*$ ]]; done
+          for value in "$ALPHABET_FIXED_HEAD" "$ALPHABET_FIXED_TREE" "$ALPHABET_FIXED_PAGE_BLOB" "$ALPHABET_FIXED_PLAN_BLOB" "$ALPHABET_NATIVE_HELPER_BLOB" "$ALPHABET_NATIVE_OUTER_BLOB" "$ALPHABET_CONTROLS_HEAD"; do [[ "$value" =~ ^[a-f0-9]{40}$ ]]; done
+          [[ "$ALPHABET_FIXED_ZIP_SHA256" =~ ^[a-f0-9]{64}$ ]]
+          test ! -e alphabet-sprint-deadline-qualified
+          test ! -e dist
+          mkdir alphabet-sprint-deadline-qualified
+          touch alphabet-sprint-deadline-qualified/offline.log
+          gh api "repos/PapiSalgueroM/ballpark-hero/actions/runs/$ALPHABET_FIXED_RUN" > alphabet-sprint-deadline-qualified/fixed-run.json
+          gh api "repos/PapiSalgueroM/ballpark-hero/actions/artifacts/$ALPHABET_FIXED_ARTIFACT" > alphabet-sprint-deadline-qualified/fixed-artifact.json
+          gh api "repos/PapiSalgueroM/ballpark-hero/actions/runs/$ALPHABET_CONTROLS_RUN" > alphabet-sprint-deadline-qualified/controls-run.json
+          gh api repos/PapiSalgueroM/ballpark-hero/actions/runs/42267893519 > alphabet-sprint-deadline-qualified/original-run.json
+          gh api repos/PapiSalgueroM/ballpark-hero/actions/artifacts/13528026986 > alphabet-sprint-deadline-qualified/original-artifact.json
+          gh api "repos/PapiSalgueroM/ballpark-hero/git/blobs/$ALPHABET_NATIVE_OUTER_BLOB" > alphabet-sprint-deadline-qualified/native-outer-blob.json
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const out='alphabet-sprint-deadline-qualified',read=file=>JSON.parse(fs.readFileSync(out+'/'+file)),env=process.env;
+          const fixed=read('fixed-run.json'),meta=read('fixed-artifact.json');assert.equal(fixed.id,Number(env.ALPHABET_FIXED_RUN));assert.equal(fixed.head_sha,env.ALPHABET_FIXED_HEAD);assert.equal(fixed.head_commit.tree_id,env.ALPHABET_FIXED_TREE);assert.equal(fixed.status,'completed');assert.equal(fixed.conclusion,'success');assert.equal(meta.id,Number(env.ALPHABET_FIXED_ARTIFACT));assert.equal(meta.expired,false);assert.equal(meta.size_in_bytes,Number(env.ALPHABET_FIXED_ZIP_BYTES));assert.equal(meta.digest,'sha256:'+env.ALPHABET_FIXED_ZIP_SHA256);assert.equal(meta.workflow_run.id,fixed.id);assert.equal(meta.workflow_run.head_sha,fixed.head_sha);
+          const controls=read('controls-run.json');assert.equal(controls.id,Number(env.ALPHABET_CONTROLS_RUN));assert.equal(controls.head_sha,env.ALPHABET_CONTROLS_HEAD);assert.equal(controls.status,'completed');assert.equal(controls.conclusion,'success');
+          const original=read('original-run.json'),oldMeta=read('original-artifact.json');assert.equal(original.id,42267893519);assert.equal(original.head_sha,'8e02979d3a82af01313198053d62cdaf53cbf67c');assert.equal(original.head_commit.tree_id,'46527815eaaa66f2ed90b10758e67e8a74b7ac24');assert.equal(original.status,'completed');assert.equal(original.conclusion,'success');assert.equal(oldMeta.id,13528026986);assert.equal(oldMeta.expired,false);assert.equal(oldMeta.size_in_bytes,2910037);assert.equal(oldMeta.digest,'sha256:376c241df3bf133a92aeba1d4d83a1d13b32a91693795f64dc6a138e55296627');assert.equal(oldMeta.workflow_run.id,original.id);assert.equal(oldMeta.workflow_run.head_sha,original.head_sha);
+          const blob=read('native-outer-blob.json');assert.equal(blob.sha,env.ALPHABET_NATIVE_OUTER_BLOB);assert.equal(blob.encoding,'base64');const bytes=Buffer.from(blob.content.replace(/\s/g,''),'base64');assert.equal(bytes.length,blob.size);fs.writeFileSync(out+'/native-admission-script.mjs',bytes);
+          NODE
+          test "$(git hash-object alphabet-sprint-deadline-qualified/native-admission-script.mjs)" = "$ALPHABET_NATIVE_OUTER_BLOB"
+      - name: Exact fixed physical source and locked install
+        run: |
+          set -euo pipefail
+          git rev-parse HEAD > alphabet-sprint-deadline-qualified/head.txt
+          git rev-parse 'HEAD^{tree}' > alphabet-sprint-deadline-qualified/tree.txt
+          git ls-files -s > alphabet-sprint-deadline-qualified/source-before.txt
+          sha256sum package.json package-lock.json > alphabet-sprint-deadline-qualified/locks-before.txt
           git diff --exit-code HEAD -- .
           git fetch --no-tags --depth=1 origin e13b0448367e835ea1436618f46fbc26a19e2025
+          git fetch --no-tags --depth=1 origin "$ALPHABET_FIXED_HEAD"
+          git fetch --no-tags --depth=1 origin 3b14650d360b010b25b525de33a5f32f33de2798
           test "$(git rev-parse 'e13b0448367e835ea1436618f46fbc26a19e2025^{tree}')" = 9aeeac6a1ce9db8b96810f19e890864cb3ad2e68
+          test "$(git rev-parse "$ALPHABET_FIXED_HEAD^{tree}")" = "$ALPHABET_FIXED_TREE"
+          test "$(git rev-parse 3b14650d360b010b25b525de33a5f32f33de2798:src/data/seoMeta.ts)" = cf7a5142e59b97048d27b5ece9a6588a92073728
           node --input-type=module <<'NODE'
           import fs from 'node:fs';import assert from 'node:assert/strict';import {execFileSync} from 'node:child_process';import {createHash} from 'node:crypto';
-          const out='alphabet-sprint-deadline-controls',base='e13b0448367e835ea1436618f46fbc26a19e2025',workflow='.github/workflows/alphabet-sprint-deadline-20261106.yml',owned=new Set([workflow,'src/test/alphabetSprintDeadline.test.tsx','docs/plans/2026-11-06-alphabet-sprint-deadline.md','src/pages/AlphabetSprint.tsx','scripts/qa/checkAlphabetSprintDeadline.mjs']),at=(ref,file)=>execFileSync('git',['rev-parse',ref+':'+file],{encoding:'utf8'}).trim(),sha=bytes=>createHash('sha256').update(bytes).digest('hex');
-          const pins={'src/App.tsx':'8bfedf7aaa1d076e0f0c8e2216c7e46632cd8a33','src/data/gameRegistry.ts':'f560b40a74d1468ac72dfde4ee6fec6635a9a255','public/alphabet-sprint/index.html':'6d95820a7796a416464ed3d579b6b1f535287634','src/pages/AlphabetSprint.tsx':'f6a2b471abdf3ec5b21daa928348e11a3232019b','src/lib/alphabetSprint.ts':'d3f58b309cbaa9b3b9f2e263774b16b99ecf7347','package.json':'2ff64986fb76ebc51b706f2fd24765768874008a','package-lock.json':'97d6f12a052f25f400462938c241789a083f0bfe','src/test/alphabetSprintDeadline.test.tsx':'e0904ccdeb6c068e73b305fdf6a3b50822a32f41','scripts/qa/checkAlphabetSprintDeadline.mjs':'84d8fd00b200ea1ef286fb3ad36097aa0afcc174','docs/plans/2026-11-06-alphabet-sprint-deadline.md':'545d232cfd977b7fdeba8d19d7071262973c5f10'};
-          for(const[file,want]of Object.entries(pins)){assert.equal(at('HEAD',file),want,file+' current index');if(!owned.has(file))assert.equal(at(base,file),want,file+' PR521 base');const bytes=fs.readFileSync(file);assert.equal(createHash('sha1').update(Buffer.concat([Buffer.from('blob '+bytes.length+'\0'),bytes])).digest('hex'),want,file+' actual physical body');}assert.equal(fs.statSync('public/alphabet-sprint/index.html').size,22140,'Actual UTF-8 snapshot byte count');
-          assert.equal(at(base,'src/pages/AlphabetSprint.tsx'),'f8b98f42aeaca4d6399f0eebcf68dfbc03a2655e');const tree=ref=>execFileSync('git',['ls-tree','-r','-z',ref],{encoding:'utf8',maxBuffer:16*1024*1024}).split('\0').filter(Boolean),held=rows=>rows.filter(row=>!owned.has(row.split('\t')[1])),head=execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim();assert.deepEqual(held(tree('HEAD')),held(tree(base)),'Every other tracked path, mode and blob equals completed clean PR521');assert.deepEqual(execFileSync('git',['diff','--name-only',base,'HEAD'],{encoding:'utf8'}).trim().split('\n').sort(),[...owned].sort(),'Only owned Page/workflow/regression/plan/controller differ from PR521');
-          fs.writeFileSync(out+'/source-join.json',JSON.stringify({status:'passed',base,baseTree:'9aeeac6a1ce9db8b96810f19e890864cb3ad2e68',head,heldRows:held(tree('HEAD')).length,ownedLeaves:[...owned],workflowBlob:at('HEAD',workflow),pins,snapshotBytes:22140,limits:'Controls QA owns the fixed Page, held regression/plan, QA workflow and temporary source controller. Other PR521 product paths/modes/blobs remain held; only the Page physically changes during explicit fault arms and is restored.'},null,2));
-          const files=execFileSync('git',['ls-files','-z'],{encoding:'utf8'}).split('\0').filter(Boolean),physical=files.map(file=>{const bytes=fs.readFileSync(file);return{file,bytes:bytes.length,sha256:sha(bytes)};});fs.writeFileSync(out+'/tracked-before.json',JSON.stringify(physical));assert.equal(fs.statSync(out+'/offline.log').size,0);
+          const out='alphabet-sprint-deadline-qualified',base='e13b0448367e835ea1436618f46fbc26a19e2025',test='src/test/alphabetSprintDeadline.test.tsx',page='src/pages/AlphabetSprint.tsx',plan='docs/plans/2026-11-06-alphabet-sprint-deadline.md',workflow='.github/workflows/alphabet-sprint-deadline-20261106.yml',helper='scripts/qa/playAlphabetSprintDeadline.mjs',at=(ref,file)=>execFileSync('git',['rev-parse',ref+':'+file],{encoding:'utf8'}).trim(),tree=ref=>execFileSync('git',['ls-tree','-r','-z',ref],{encoding:'utf8',maxBuffer:16*1024*1024}).split('\0').filter(Boolean),env=process.env;
+          const pins={'src/App.tsx':'8bfedf7aaa1d076e0f0c8e2216c7e46632cd8a33','src/data/gameRegistry.ts':'f560b40a74d1468ac72dfde4ee6fec6635a9a255','public/alphabet-sprint/index.html':'6d95820a7796a416464ed3d579b6b1f535287634','src/lib/alphabetSprint.ts':'d3f58b309cbaa9b3b9f2e263774b16b99ecf7347','package.json':'2ff64986fb76ebc51b706f2fd24765768874008a','package-lock.json':'97d6f12a052f25f400462938c241789a083f0bfe',[test]:'e0904ccdeb6c068e73b305fdf6a3b50822a32f41',[page]:env.ALPHABET_FIXED_PAGE_BLOB,[plan]:env.ALPHABET_FIXED_PLAN_BLOB,[helper]:env.ALPHABET_NATIVE_HELPER_BLOB};
+          assert.equal(at(base,page),'f8b98f42aeaca4d6399f0eebcf68dfbc03a2655e');assert.notEqual(env.ALPHABET_FIXED_PAGE_BLOB,at(base,page));for(const[file,want]of Object.entries(pins)){assert.equal(at('HEAD',file),want,file+' index');const bytes=fs.readFileSync(file);assert.equal(createHash('sha1').update(Buffer.concat([Buffer.from('blob '+bytes.length+'\0'),bytes])).digest('hex'),want,file+' physical source');if(![test,page,plan,helper].includes(file))assert.equal(at(base,file),want,file+' base');}
+          const current=tree('HEAD'),original=tree(base),fixed=tree(env.ALPHABET_FIXED_HEAD),owned=[page,test,plan,workflow,helper],held=rows=>rows.filter(row=>!owned.includes(row.split('\t')[1]));assert.deepEqual(held(current),held(original),'Every other path mode and blob equals clean PR521');const fixedHeld=rows=>rows.filter(row=>![workflow,helper].includes(row.split('\t')[1]));assert.deepEqual(fixedHeld(current),fixedHeld(fixed),'Entire qualified fixed tree held except owned full workflow and native helper');
+          const scoped=rows=>rows.filter(row=>/^(?:src|public|scripts)\//.test(row.split('\t')[1])),basePaths=new Set(original.map(row=>row.split('\t')[1])),currentPaths=new Set(current.map(row=>row.split('\t')[1]));assert.equal(scoped(original).length,4656,'Actual clean PR521 scoped source count');assert(!basePaths.has(test)&&!basePaths.has(helper),'Only test and native helper add scoped paths');assert.equal(scoped(current).length,scoped(original).length+2);for(const file of['scripts/qa/playFootballConnect4Cancel.mjs','scripts/qa/checkFootballConnect4CancelOwnership.mjs'])assert(!currentPaths.has(file),'Old remote-only evidence helper absent');
+          const files=execFileSync('git',['ls-files','-z'],{encoding:'utf8'}).split('\0').filter(Boolean),rows=files.map(file=>{const b=fs.readFileSync(file);return{file,bytes:b.length,sha256:createHash('sha256').update(b).digest('hex')};});fs.writeFileSync(out+'/tracked-before.json',JSON.stringify(rows));fs.writeFileSync(out+'/source-join.json',JSON.stringify({status:'passed',base,baseTree:'9aeeac6a1ce9db8b96810f19e890864cb3ad2e68',fixedHead:env.ALPHABET_FIXED_HEAD,fixedTree:env.ALPHABET_FIXED_TREE,heldRows:held(current).length,onlyOwnedLeaves:owned,pins,baseScopedRows:scoped(original).length,sourceRows:scoped(current).length,cleanSourceRows:scoped(current).length-1,limits:'Product source is Alphabet Page plus regression and owned plan only. QA workflow/helper are remote-only. Final PROJECT-STATE and WORKBOARD docs follow separately.'},null,2));
           NODE
-      - name: Locked dependency install and all521 installed versions
-        run: |
-          set -euo pipefail
-          npm ci 2>&1 | tee alphabet-sprint-deadline-controls/install.log
+          npm ci 2>&1 | tee alphabet-sprint-deadline-qualified/install.log
           node --input-type=module <<'NODE'
-          import fs from 'node:fs';import assert from 'node:assert/strict';const lock=JSON.parse(fs.readFileSync('package-lock.json')),rows=Object.keys(lock.packages).filter(p=>p.startsWith('node_modules/')&&fs.existsSync(p+'/package.json')).map(p=>[p,JSON.parse(fs.readFileSync(p+'/package.json')).version]);assert.equal(rows.length,521);for(const[p,v]of rows)assert.equal(v,lock.packages[p].version,p);fs.writeFileSync('alphabet-sprint-deadline-controls/installed-before.json',JSON.stringify(rows));assert.equal(fs.statSync('alphabet-sprint-deadline-controls/offline.log').size,0);
+          import fs from 'node:fs';import assert from 'node:assert/strict';const lock=JSON.parse(fs.readFileSync('package-lock.json')),rows=Object.keys(lock.packages).filter(p=>p.startsWith('node_modules/')&&fs.existsSync(p+'/package.json')).map(p=>[p,JSON.parse(fs.readFileSync(p+'/package.json')).version]);assert.equal(rows.length,521);for(const[p,v]of rows)assert.equal(v,lock.packages[p].version,p);fs.writeFileSync('alphabet-sprint-deadline-qualified/installed-before.json',JSON.stringify(rows));
           NODE
       - name: Actual direct route React lazy Soccer object and inert snapshot
         run: |
           set -euo pipefail
           NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node --input-type=module <<'NODE'
           import fs from 'node:fs';import assert from 'node:assert/strict';import ts from 'typescript';import {JSDOM} from 'jsdom';import {createHash} from 'node:crypto';
-          const out='alphabet-sprint-deadline-controls',route='/alphabet-sprint',component='AlphabetSprint',label='Alphabet Sprint',appText=fs.readFileSync('src/App.tsx','utf8'),catalogText=fs.readFileSync('src/data/gameRegistry.ts','utf8'),app=ts.createSourceFile('src/App.tsx',appText,ts.ScriptTarget.Latest,true,ts.ScriptKind.TSX),catalog=ts.createSourceFile('src/data/gameRegistry.ts',catalogText,ts.ScriptTarget.Latest,true,ts.ScriptKind.TS);assert.deepEqual(app.parseDiagnostics,[]);assert.deepEqual(catalog.parseDiagnostics,[]);
+          const out='alphabet-sprint-deadline-qualified',route='/alphabet-sprint',component='AlphabetSprint',label='Alphabet Sprint',appText=fs.readFileSync('src/App.tsx','utf8'),catalogText=fs.readFileSync('src/data/gameRegistry.ts','utf8'),app=ts.createSourceFile('src/App.tsx',appText,ts.ScriptTarget.Latest,true,ts.ScriptKind.TSX),catalog=ts.createSourceFile('src/data/gameRegistry.ts',catalogText,ts.ScriptTarget.Latest,true,ts.ScriptKind.TS);assert.deepEqual(app.parseDiagnostics,[]);assert.deepEqual(catalog.parseDiagnostics,[]);
           const all=(root,predicate)=>{const found=[];const visit=node=>{if(predicate(node))found.push(node);ts.forEachChild(node,visit);};visit(root);return found;},attrs=(node,name)=>node.attributes.properties.filter(p=>ts.isJsxAttribute(p)&&p.name.text===name);
           const routes=all(app,node=>(ts.isJsxSelfClosingElement(node)||ts.isJsxOpeningElement(node))&&node.tagName.getText(app)==='Route').filter(node=>attrs(node,'path').some(p=>p.initializer&&ts.isStringLiteralLike(p.initializer)&&p.initializer.text===route));assert.equal(routes.length,1,'One actual direct public JSX Route');assert(ts.isJsxSelfClosingElement(routes[0]),'Direct self-closing route');assert.equal(attrs(routes[0],'path').length,1);const elements=attrs(routes[0],'element');assert.equal(elements.length,1);const element=elements[0].initializer;assert(element&&ts.isJsxExpression(element)&&element.expression&&ts.isJsxSelfClosingElement(element.expression));assert.equal(element.expression.tagName.getText(app),component,'Direct AlphabetSprint mount, no Navigate');
           const declarations=all(app,node=>ts.isVariableDeclaration(node)&&ts.isIdentifier(node.name)&&node.name.text===component);assert.equal(declarations.length,1);const init=declarations[0].initializer;assert(init&&ts.isCallExpression(init)&&ts.isIdentifier(init.expression)&&init.expression.text==='lazy');assert.equal(init.arguments.length,1);const factory=init.arguments[0];assert(ts.isArrowFunction(factory)&&factory.parameters.length===0);const load=factory.body;assert(ts.isCallExpression(load)&&load.expression.kind===ts.SyntaxKind.ImportKeyword&&load.arguments.length===1&&ts.isStringLiteralLike(load.arguments[0]));assert.equal(load.arguments[0].text,'./pages/AlphabetSprint');const reactLazy=all(app,node=>ts.isImportDeclaration(node)&&ts.isStringLiteralLike(node.moduleSpecifier)&&node.moduleSpecifier.text==='react'&&node.importClause?.namedBindings&&ts.isNamedImports(node.importClause.namedBindings)).flatMap(node=>node.importClause.namedBindings.elements).filter(node=>node.name.text==='lazy'&&(node.propertyName?.text??node.name.text)==='lazy');assert.equal(reactLazy.length,1,'lazy is the actual named React import');
@@ -67,67 +112,133 @@ jobs:
           const file='public/alphabet-sprint/index.html',bytes=fs.readFileSync(file);assert.equal(bytes.length,22140);const dom=new JSDOM(bytes.toString('utf8')),doc=dom.window.document,canonicals=[...doc.querySelectorAll('link[rel]')].filter(node=>node.getAttribute('rel').toLowerCase().split(/\s+/).includes('canonical'));assert.equal(canonicals.length,1);assert.equal(canonicals[0].getAttribute('href'),'https://douknowball.com'+route);const snapshots=[...doc.querySelectorAll('#dukb-snapshot')];assert.equal(snapshots.length,1);const snapshot=snapshots[0],snapshotText=snapshot.textContent.trim();assert(snapshotText.length>500,'Actual readable saved game content');const headings=[...snapshot.querySelectorAll('h1')].map(node=>node.textContent.trim().replace(/\s+/g,' ').toUpperCase());assert(headings.includes('ALPHABET SPRINT'),'Actual saved game heading');const metas=[...doc.querySelectorAll('meta')],retired=metas.filter(node=>['dukb-retired-from','dukb-retired-to'].includes((node.getAttribute('name')||'').toLowerCase())),refresh=metas.filter(node=>(node.getAttribute('http-equiv')||'').trim().toLowerCase()==='refresh'),robots=metas.filter(node=>['robots','googlebot','bingbot'].includes((node.getAttribute('name')||'').toLowerCase()));assert.equal(retired.length,0,'No actual retired-route markers');assert.equal(refresh.length,0,'No actual redirect meta');assert(robots.every(node=>!/(?:^|[\s,])(?:noindex|none)(?:[\s,]|$)/i.test(node.getAttribute('content')||'')),'Active snapshot remains indexable');
           fs.copyFileSync(file,out+'/active-snapshot.html');fs.writeFileSync(out+'/active-route-preflight.json',JSON.stringify({status:'passed',route,component,label,routeNode:routes[0].getText(app),reactLazyImport:reactLazy[0].parent.parent.parent.getText(app),lazyDeclaration:declarations[0].getText(app),catalogObject:entries[0].getText(catalog),snapshot:{file,bytes:bytes.length,sha256:createHash('sha256').update(bytes).digest('hex'),canonical:canonicals[0].getAttribute('href'),snapshotTextLength:snapshotText.length,headings,retiredMarkers:retired.length,metaRefresh:refresh.length,robots:robots.map(node=>({name:node.getAttribute('name'),content:node.getAttribute('content')}))},parsers:{typescript:ts.version,html:'Inert JSDOM, scripts/resources not enabled'},limits:'Actual AST nodes and inert DOM elements, never comments or a dormant Page file. Active source/public entry preflight only. No timer reproduction, game test, App fix, build, browser journey, real-data truth or release claim. Native route reachability remains unqualified.'},null,2));dom.window.close();console.log('PASS actual direct AlphabetSprint route, React lazy Page import, labeled Soccer catalog object and indexable nonredirect snapshot');
           NODE
-      - name: Proper App types on unchanged source and new regression
+      - name: Proper App types
         run: |
           set -euo pipefail
-          node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee alphabet-sprint-deadline-controls/types.log
-      - name: Pinned completed fixed packet and reference source join
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee alphabet-sprint-deadline-qualified/types.log
+      - name: Pinned qualified fixed and original packets with all retained bodies
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
-          gh api repos/PapiSalgueroM/ballpark-hero/actions/runs/42271120702 > alphabet-sprint-deadline-controls/fixed-run.json
-          gh api repos/PapiSalgueroM/ballpark-hero/actions/artifacts/13528769476 > alphabet-sprint-deadline-controls/fixed-artifact.json
-          gh api repos/PapiSalgueroM/ballpark-hero/actions/artifacts/13528769476/zip > "$RUNNER_TEMP/alphabet-fixed.zip"
-          echo "4b7aaecf57ca5a48d4d432bcc9594d0493058ae00178892acab1dc5548c2bc8f  $RUNNER_TEMP/alphabet-fixed.zip" | sha256sum --check
-          unzip -Z1 "$RUNNER_TEMP/alphabet-fixed.zip" > alphabet-sprint-deadline-controls/fixed-entries.txt
+          gh api "repos/PapiSalgueroM/ballpark-hero/actions/artifacts/$ALPHABET_FIXED_ARTIFACT/zip" > "$RUNNER_TEMP/alphabet-fixed.zip"
+          gh api repos/PapiSalgueroM/ballpark-hero/actions/artifacts/13528026986/zip > "$RUNNER_TEMP/alphabet-original.zip"
+          echo "$ALPHABET_FIXED_ZIP_SHA256  $RUNNER_TEMP/alphabet-fixed.zip" | sha256sum --check
+          echo "376c241df3bf133a92aeba1d4d83a1d13b32a91693795f64dc6a138e55296627  $RUNNER_TEMP/alphabet-original.zip" | sha256sum --check
+          unzip -Z1 "$RUNNER_TEMP/alphabet-fixed.zip" > alphabet-sprint-deadline-qualified/fixed-entries.txt
+          unzip -Z1 "$RUNNER_TEMP/alphabet-original.zip" > alphabet-sprint-deadline-qualified/original-entries.txt
           node --input-type=module <<'NODE'
-          import fs from 'node:fs';import assert from 'node:assert/strict';
-          const out='alphabet-sprint-deadline-controls',run=JSON.parse(fs.readFileSync(out+'/fixed-run.json')),meta=JSON.parse(fs.readFileSync(out+'/fixed-artifact.json'));assert.equal(run.id,42271120702);assert.equal(run.status,'completed');assert.equal(run.conclusion,'success');assert.equal(run.head_sha,'31c89230b1506f76f4ad5b80fb2117980a5cf6b1');assert.equal(meta.id,13528769476);assert.equal(meta.expired,false);assert.equal(meta.size_in_bytes,4363746);assert.equal(meta.digest,'sha256:4b7aaecf57ca5a48d4d432bcc9594d0493058ae00178892acab1dc5548c2bc8f');assert.equal(meta.workflow_run.id,run.id);assert.equal(meta.workflow_run.head_sha,run.head_sha);const entries=fs.readFileSync(out+'/fixed-entries.txt','utf8').trim().split('\n');assert.equal(new Set(entries).size,entries.length);for(const f of entries)assert(!f.startsWith('/')&&!f.split(/[\\/]/).includes('..'));
+          import fs from 'node:fs';import assert from 'node:assert/strict';const out='alphabet-sprint-deadline-qualified';for(const prefix of['fixed','original']){const entries=fs.readFileSync(out+'/'+prefix+'-entries.txt','utf8').trim().split('\n');assert.equal(new Set(entries).size,entries.length);for(const entry of entries)assert(!entry.startsWith('/')&&!entry.split(/[\\/]/).includes('..')&&!entry.includes('\0'),'Relative pinned archive path');}
           NODE
-          mkdir alphabet-sprint-deadline-controls/fixed-packet
-          unzip -q "$RUNNER_TEMP/alphabet-fixed.zip" -d alphabet-sprint-deadline-controls/fixed-packet
+          mkdir alphabet-sprint-deadline-qualified/fixed-packet alphabet-sprint-deadline-qualified/original-packet
+          unzip -q "$RUNNER_TEMP/alphabet-fixed.zip" -d alphabet-sprint-deadline-qualified/fixed-packet
+          unzip -q "$RUNNER_TEMP/alphabet-original.zip" -d alphabet-sprint-deadline-qualified/original-packet
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import path from 'node:path';import assert from 'node:assert/strict';import {createHash} from 'node:crypto';
+          const out='alphabet-sprint-deadline-qualified',sha=b=>createHash('sha256').update(b).digest('hex'),read=(prefix,file)=>JSON.parse(fs.readFileSync(out+'/'+prefix+'-packet/'+file)),walk=dir=>fs.readdirSync(dir,{withFileTypes:true}).sort((a,b)=>a.name.localeCompare(b.name)).flatMap(e=>{const file=path.join(dir,e.name);if(e.isDirectory())return walk(file);assert(e.isFile(),'Regular retained evidence body');return[file];}),inventory=dir=>walk(dir).map(file=>{const b=fs.readFileSync(file);return{file,bytes:b.length,sha256:sha(b)};});
+          for(const prefix of['fixed','original']){const dir=out+'/'+prefix+'-packet',bodies=inventory(dir);if(prefix==='original')assert.equal(bodies.length,47);fs.writeFileSync(out+'/'+prefix+'-bodies-before.json',JSON.stringify(bodies));assert.deepEqual(fs.readFileSync(dir+'/source-before.txt'),fs.readFileSync(dir+'/source-after.txt'));assert.deepEqual(fs.readFileSync(dir+'/tracked-before.json'),fs.readFileSync(dir+'/tracked-after.json'));assert.deepEqual(fs.readFileSync(dir+'/locks-before.txt'),fs.readFileSync(dir+'/locks-after.txt'));assert.deepEqual(read(prefix,'installed-before.json'),read(prefix,'installed-after.json'));assert.equal(fs.statSync(dir+'/offline.log').size,0);}
+          const fixed=out+'/fixed-packet',original=out+'/original-packet';assert.equal(fs.readFileSync(fixed+'/head.txt','utf8').trim(),process.env.ALPHABET_FIXED_HEAD);assert.equal(fs.readFileSync(fixed+'/tree.txt','utf8').trim(),process.env.ALPHABET_FIXED_TREE);assert.equal(fs.readFileSync(original+'/head.txt','utf8').trim(),'8e02979d3a82af01313198053d62cdaf53cbf67c');assert.equal(fs.readFileSync(original+'/tree.txt','utf8').trim(),'46527815eaaa66f2ed90b10758e67e8a74b7ac24');
+          const omitted=new Set(['.github/workflows/alphabet-sprint-deadline-20261106.yml','scripts/qa/playAlphabetSprintDeadline.mjs']),heldIndex=text=>text.trim().split('\n').filter(row=>!omitted.has(row.split('\t')[1]));assert.deepEqual(heldIndex(fs.readFileSync(out+'/source-before.txt','utf8')),heldIndex(fs.readFileSync(fixed+'/source-before.txt','utf8')),'Exact fixed physical index held except full workflow/helper');const heldRows=rows=>rows.filter(row=>!omitted.has(row.file));assert.deepEqual(heldRows(JSON.parse(fs.readFileSync(out+'/tracked-before.json'))),heldRows(read('fixed','tracked-before.json')),'Every other current physical source body equals qualified fixed');assert.deepEqual(fs.readFileSync(out+'/locks-before.txt'),fs.readFileSync(fixed+'/locks-before.txt'));assert.deepEqual(JSON.parse(fs.readFileSync(out+'/installed-before.json')),read('fixed','installed-before.json'));
+          const oldRaw=fs.readFileSync(original+'/raw.json'),old=JSON.parse(oldRaw),proof=read('original','original-admission.json');assert.equal(oldRaw.length,18914298);assert.equal(sha(oldRaw),'72f5107496128c4a943e48fb382c728f6d6c45c0556a450798d01f9c51f94b9d');assert.equal(proof.status,'expected-four-original-business-failures-two-preserves');assert.deepEqual([proof.actualCases,proof.actualAssertionErrors,proof.actualPasses,proof.rawFrames],[6,4,2,69]);assert.equal(proof.failedInitialRun,42265573431);assert.equal(proof.failedInitialConclusion,'failure');assert.equal(proof.entireOriginalRAWBytesHeld,true);assert.equal(Object.values(old.cases).reduce((n,c)=>n+c.frames.length,0),69);
+          const report=(prefix)=>{const r=read(prefix,'owned.json'),rows=r.testResults.flatMap(s=>s.assertionResults);assert.equal(r.numTotalTests,6);assert.equal(r.numPendingTests,0);assert.equal(rows.length,6);for(const k of['numRuntimeErrorTestSuites','numUnhandledErrors'])if(Object.hasOwn(r,k))assert.equal(r[k],0,k);return{r,rows};};const prior=report('original'),current=report('fixed');assert.deepEqual([prior.r.numPassedTests,prior.r.numFailedTests],[2,4]);assert.deepEqual(prior.rows.filter(v=>v.status==='failed').map(v=>v.title.split(' ')[0]).sort(),['ALPHABET_LATE_SUBMIT','ALPHABET_LATE_SKIP','ALPHABET_DELAYED_TIMEOUT','ALPHABET_ELAPSED_TICK'].sort());assert(prior.rows.filter(v=>v.status==='failed').every(v=>v.failureMessages.length>0&&v.failureMessages.every(m=>m.startsWith('AssertionError:'))));assert.deepEqual([current.r.numPassedTests,current.r.numFailedTests],[6,0]);assert(current.rows.every(v=>v.status==='passed'));assert.deepEqual(current.rows.map(v=>v.title).sort(),prior.rows.map(v=>v.title).sort());const fixedProof=read('fixed','fixed-admission.json');assert.equal(fixedProof.status,'fixed-six-deadline-passed-two-whole-preserves');assert.deepEqual([fixedProof.actualCases,fixedProof.actualPasses,fixedProof.actualFailures,fixedProof.rawFrames],[6,6,0,69]);assert.equal(fixedProof.originalRun,42267893519);assert.equal(fixedProof.originalArtifact,13528026986);assert.equal(fixedProof.originalRawSHA256,'72f5107496128c4a943e48fb382c728f6d6c45c0556a450798d01f9c51f94b9d');assert.equal(fixedProof.source.page,process.env.ALPHABET_FIXED_PAGE_BLOB);assert.equal(fixedProof.source.lib,'d3f58b309cbaa9b3b9f2e263774b16b99ecf7347');assert.equal(fixedProof.source.test,'e0904ccdeb6c068e73b305fdf6a3b50822a32f41');const fixedRaw=read('fixed','raw.json');const fixedBytes=fs.readFileSync(fixed+'/raw.json');assert.equal(fixedProof.rawBytes,fixedBytes.length);assert.equal(fixedProof.rawSHA256,sha(fixedBytes));assert.deepEqual({...fixedRaw,cases:null},{...old,cases:null});assert.equal(Object.values(fixedRaw.cases).reduce((n,c)=>n+c.frames.length,0),69);for(const key of['ordinary','finish'])assert.deepEqual(fixedRaw.cases[key],old.cases[key],'Entire qualified fixed preservation case equals original: '+key);
+          fs.writeFileSync(out+'/packet-custody.json',JSON.stringify({status:'passed',fixedRun:Number(process.env.ALPHABET_FIXED_RUN),fixedHead:process.env.ALPHABET_FIXED_HEAD,fixedArtifact:Number(process.env.ALPHABET_FIXED_ARTIFACT),fixedZipSHA256:process.env.ALPHABET_FIXED_ZIP_SHA256,originalRun:42267893519,originalArtifact:13528026986,originalRawBytes:oldRaw.length,originalRawSHA256:sha(oldRaw),retainedFirstRun:42265573431,retainedFirstConclusion:'failure',fixedCases:6,originalBusinessFailures:4,wholePreservedCases:['ordinary','finish'],limits:'Pinned successful fixed and qualified original unit evidence. Controls completed-run provenance is gated separately; no controls rerun or invented artifact parse.'},null,2));
+          NODE
+      - name: Actual fixed six cases whole preserved cases and exact qualified fixed RAW
+        run: |
+          set -euo pipefail
+          set +e
+          ALPHABET_DEADLINE_RAW="$PWD/alphabet-sprint-deadline-qualified/raw.json" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node_modules/.bin/vitest run src/test/alphabetSprintDeadline.test.tsx --reporter=json --outputFile=alphabet-sprint-deadline-qualified/owned.json > alphabet-sprint-deadline-qualified/owned.log 2>&1
+          status=$?
+          set -e
+          printf '%s\n' "$status" > alphabet-sprint-deadline-qualified/test-exit.txt
+          test "$status" = 0
           node --input-type=module <<'NODE'
           import fs from 'node:fs';import assert from 'node:assert/strict';import {createHash} from 'node:crypto';
-          const out='alphabet-sprint-deadline-controls',ref=out+'/fixed-packet',read=f=>JSON.parse(fs.readFileSync(ref+'/'+f)),sha=b=>createHash('sha256').update(b).digest('hex'),r=read('owned.json'),a=read('fixed-admission.json');assert.equal(r.numTotalTests,6);assert.equal(r.numPassedTests,6);assert.equal(r.numFailedTests,0);assert.equal(r.numPendingTests,0);assert.equal(r.testResults.flatMap(s=>s.assertionResults).length,6);assert(r.testResults.flatMap(s=>s.assertionResults).every(v=>v.status==='passed'));assert.equal(a.status,'fixed-six-deadline-passed-two-whole-preserves');assert.equal(a.actualCases,6);assert.equal(a.rawFrames,69);assert.equal(a.rawBytes,18749465);assert.equal(a.rawSHA256,'86f6ce00958f675f4d99d2af0bd1dd531462d7da506619691bc7852e02c2f9e7');const b=fs.readFileSync(ref+'/raw.json');assert.equal(b.length,a.rawBytes);assert.equal(sha(b),a.rawSHA256);assert.equal(fs.readFileSync(ref+'/head.txt','utf8').trim(),'31c89230b1506f76f4ad5b80fb2117980a5cf6b1');assert.equal(fs.readFileSync(ref+'/tree.txt','utf8').trim(),'70f76477d990842635e8cdb51225d8ad106cebde');assert.equal(fs.statSync(ref+'/offline.log').size,0);assert.equal(fs.statSync(ref+'/types.log').size,0);assert.equal(read('installed-before.json').length,521);assert.deepEqual(read('installed-before.json'),read('installed-after.json'));assert.deepEqual(read('installed-before.json'),JSON.parse(fs.readFileSync(out+'/installed-before.json')));
-          const excluded=new Set(['.github/workflows/alphabet-sprint-deadline-20261106.yml','scripts/qa/checkAlphabetSprintDeadline.mjs']),parse=file=>fs.readFileSync(file,'utf8').trim().split('\n').filter(line=>!excluded.has(line.split('\t')[1]));assert.deepEqual(parse(out+'/source-before.txt'),parse(ref+'/source-before.txt'),'Every other source path/mode/blob equals completed fixed source');fs.writeFileSync(out+'/fixed-custody.json',JSON.stringify({status:'passed fixed reference',run:42271120702,artifact:13528769476,head:'31c89230b1506f76f4ad5b80fb2117980a5cf6b1',rawBytes:b.length,rawSHA256:sha(b),unitCases:6,rawFrames:69,limits:'Reference fixed proof only, actual controls run separately.'},null,2));
+          const out='alphabet-sprint-deadline-qualified',read=file=>JSON.parse(fs.readFileSync(out+'/'+file)),result=read('owned.json'),rows=result.testResults.flatMap(s=>s.assertionResults),rawBytes=fs.readFileSync(out+'/raw.json'),raw=JSON.parse(rawBytes),old=read('original-packet/raw.json');assert.deepEqual([result.numTotalTests,result.numPassedTests,result.numFailedTests,result.numPendingTests],[6,6,0,0]);assert.equal(rows.length,6);assert(rows.every(row=>row.status==='passed'));assert.deepEqual(rows.map(row=>row.title).sort(),Object.values(old.cases).map(c=>c.title).sort());for(const field of['numRuntimeErrorTestSuites','numUnhandledErrors'])if(Object.hasOwn(result,field))assert.equal(result[field],0,field);assert(!/Unhandled Errors|Unhandled Rejection|Uncaught Exception|Failed to resolve import|No test files found|SyntaxError/.test(fs.readFileSync(out+'/owned.log','utf8')));
+          assert(rawBytes.equals(fs.readFileSync(out+'/fixed-packet/raw.json')),'Entire fresh fixed RAW bytes equal qualified fixed packet, all cases metadata HTML IDs and tapes');assert.deepEqual({...raw,cases:null},{...old,cases:null});assert.deepEqual(Object.keys(raw.cases),Object.keys(old.cases));let count=0;for(const[key,value]of Object.entries(raw.cases)){assert.equal(value.title,old.cases[key].title);assert.deepEqual(value.frames.map(f=>f.label),old.cases[key].frames.map(f=>f.label),'All original capture labels retained: '+key);count+=value.frames.length;for(const f of value.frames){assert(f.clock&&Number.isFinite(f.clock.now));assert(f.page&&(typeof f.page.html==='string'||(f.page.phase==='unmounted'&&f.page.html===null)));for(const key of['draws','transport','unknownTransport','storageWrites','usedAtLastDraw','completions'])assert(Array.isArray(f[key]));for(const key of['draws','resolutions','points'])assert(Array.isArray(f.library[key]));assert.equal(f.storage['alphabet-unrelated'],'held');assert.deepEqual(f.unknownTransport,[]);}}assert.equal(count,69);for(const key of['ordinary','finish'])assert.deepEqual(raw.cases[key],old.cases[key],'Entire original preservation case including HTML IDs held: '+key);
+          fs.writeFileSync(out+'/fixed-admission.json',JSON.stringify({status:'passed',cases:6,rawFrames:count,rawBytes:rawBytes.length,rawSHA256:createHash('sha256').update(rawBytes).digest('hex'),wholePreservedCases:['ordinary','finish'],wholeQualifiedFixedRAWBytesHeld:true,qualifiedFixedRun:Number(process.env.ALPHABET_FIXED_RUN),originalRun:42267893519,retainedFirstRun:42265573431,retainedFirstConclusion:'failure',limits:'Actual fresh six unit cases on the pinned fixed Page. Entire fresh fixed RAW equals qualified fixed; two complete preservation cases equal original. Unit Date/timer/RNG/storage and fictional query-builder boundary only, no native or full-suite credit.'},null,2));console.log('PASS fresh6fixed cases/2wholepreserves/69RAW and every byte equals completed fixed packet');
           NODE
-      - name: Six actual physical source control arms
-        env:
-          ALPHABET_DEADLINE_CONTROL_OUT: ${{ github.workspace }}/alphabet-sprint-deadline-controls/arms
-          ALPHABET_FIXED_REFERENCE: ${{ github.workspace }}/alphabet-sprint-deadline-controls/fixed-packet
-          ALPHABET_FIXED_RAW_SHA256: 86f6ce00958f675f4d99d2af0bd1dd531462d7da506619691bc7852e02c2f9e7
-          ALPHABET_FIXED_RAW_BYTES: '18749465'
+      - name: Normal production build and retained bytes
+        id: build
         run: |
           set -euo pipefail
-          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/checkAlphabetSprintDeadline.mjs 2>&1 | tee alphabet-sprint-deadline-controls/controls.log
+          NODE_OPTIONS="--max-old-space-size=6144" npm run build 2>&1 | tee alphabet-sprint-deadline-qualified/build.log
+          tar -czf alphabet-sprint-deadline-qualified/dist.tgz dist
+          sha256sum alphabet-sprint-deadline-qualified/dist.tgz > alphabet-sprint-deadline-qualified/dist.sha256
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import {createHash} from 'node:crypto';import assert from 'node:assert/strict';
+          const walk=dir=>fs.readdirSync(dir,{withFileTypes:true}).sort((a,b)=>a.name.localeCompare(b.name)).flatMap(e=>e.isDirectory()?walk(dir+'/'+e.name):e.isFile()?[dir+'/'+e.name]:[]);
+          const rows=walk('dist').map(file=>{const b=fs.readFileSync(file);return {file,bytes:b.length,sha256:createHash('sha256').update(b).digest('hex')};});
+          assert.equal(rows.length,850);fs.writeFileSync('alphabet-sprint-deadline-qualified/dist-before.json',JSON.stringify(rows));
+          NODE
+      - name: Isolated pinned Playwright and Chromium
+        id: browser_setup
+        timeout-minutes: 12
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          python -m pip install fonttools pillow
+          npm install --prefix "$RUNNER_TEMP/alphabet-deadline-browser" --no-save --package-lock=false playwright@1.64.1 2>&1 | tee alphabet-sprint-deadline-qualified/browser-install.log
+          test ! -e node_modules/playwright
+          ln -s "$RUNNER_TEMP/alphabet-deadline-browser/node_modules/playwright" node_modules/playwright
+          node "$RUNNER_TEMP/alphabet-deadline-browser/node_modules/playwright/cli.js" install --with-deps chromium 2>&1 | tee alphabet-sprint-deadline-qualified/chromium-install.log
           node --input-type=module <<'NODE'
           import fs from 'node:fs';import assert from 'node:assert/strict';
-          const r=JSON.parse(fs.readFileSync('alphabet-sprint-deadline-controls/arms/summary.json'));assert.equal(r.status,'passed');assert.equal(r.completedArms,6);assert.equal(r.actualRows,36);assert.equal(r.actualNamedBusinessReds,8);assert.equal(r.actualPasses,28);assert.equal(r.rawFrames,414);assert.equal(r.wholePreservationVectors,12);assert.deepEqual(r.arms.map(a=>a.actualFailed.length),[0,4,2,1,1,0]);for(const flag of['allTrackedRestored','indexHeld','locksHeld','installed521Held','offlineHeld'])assert.equal(r[flag],true,flag);assert.equal(r.fixedRawBytes,18749465);assert.equal(r.fixedRawSHA256,'86f6ce00958f675f4d99d2af0bd1dd531462d7da506619691bc7852e02c2f9e7');console.log('PASS all actual36rows/8businessreds/28passes/414frames/12wholepreserves and honest source restoration');
+          const before=JSON.parse(fs.readFileSync('alphabet-sprint-deadline-qualified/installed-before.json'));
+          const after=before.map(([p])=>[p,JSON.parse(fs.readFileSync(p+'/package.json')).version]);assert.deepEqual(after,before);
+          const pw=JSON.parse(fs.readFileSync('node_modules/playwright/package.json'));assert.equal(pw.version,'1.64.1');
+          fs.writeFileSync('alphabet-sprint-deadline-qualified/installed-after.json',JSON.stringify(after));fs.writeFileSync('alphabet-sprint-deadline-qualified/browser-package.json',JSON.stringify({version:pw.version,target:fs.realpathSync('node_modules/playwright')}));
           NODE
-      - name: Proper App types after exact restoration
+      - name: All required built readers and existing source fences
+        if: ${{ !cancelled() && steps.build.outcome == 'success' && steps.browser_setup.outcome == 'success' }}
+        run: |
+          export ONLY="simAdsense,simBrand,simHeadTags,simHiddenPages,simHubs,simIndexNow,simIndexing,simInternalLinks,simNoRivalNames,simPrerender,simPrerenderBoot,simRetiredRoutes,simSchema,simSitemap,simSnapshotAssets,simSiteSearch,simGuideHeadings,simSeoMetaSplit,simHomeCopy,simHarnessAnchors"
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/runAllSims.mjs --browser 2>&1 | tee alphabet-sprint-deadline-qualified/readers.log
+      - name: All original route download limits
+        if: ${{ !cancelled() && steps.build.outcome == 'success' && steps.browser_setup.outcome == 'success' }}
+        run: |
+          node scripts/lib/hostLikeServer.mjs dist 4173 > alphabet-sprint-deadline-qualified/weight-host.log 2>&1 &
+          xi_host_pid=$!
+          trap 'kill "$xi_host_pid" 2>/dev/null || true' EXIT
+          sleep 2
+          SWEEP_OFFLINE=1 BASE=http://127.0.0.1:4173 NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/sweepWeight.mjs 2>&1 | tee alphabet-sprint-deadline-qualified/weight.log
+      - name: Three native viewport journeys six real twenty-second runs and reviewed outer
+        id: native
+        timeout-minutes: 12
+        if: ${{ !cancelled() && steps.build.outcome == 'success' && steps.browser_setup.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          ALPHABET_DEADLINE_PAGE_BLOB="$ALPHABET_FIXED_PAGE_BLOB" ALPHABET_DEADLINE_BROWSER_OUT="$PWD/alphabet-sprint-deadline-qualified/browser" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/playAlphabetSprintDeadline.mjs 2>&1 | tee alphabet-sprint-deadline-qualified/browser.log
+          test "$(git hash-object alphabet-sprint-deadline-qualified/native-admission-script.mjs)" = "$ALPHABET_NATIVE_OUTER_BLOB"
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node alphabet-sprint-deadline-qualified/native-admission-script.mjs alphabet-sprint-deadline-qualified/browser > alphabet-sprint-deadline-qualified/native-admission.json
+      - name: Bind actual unit native reader cap and complete source receipts
+        run: |
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const out='alphabet-sprint-deadline-qualified',read=file=>JSON.parse(fs.readFileSync(out+'/'+file)),native=read('native-admission.json'),unit=read('fixed-admission.json'),source=read('source-join.json');assert.equal(native.status,'passed');assert.equal(native.page,process.env.ALPHABET_FIXED_PAGE_BLOB);assert.equal(native.helper,process.env.ALPHABET_NATIVE_HELPER_BLOB);assert.deepEqual([native.census.journeys,native.census.runs,native.census.viewportPNGs,native.census.completionAttempts,native.census.distBodies,native.census.installedVersions],[3,6,9,6,850,521]);assert.equal(native.census.sourceBodies,read('tracked-before.json').length);assert.deepEqual([unit.status,unit.cases,unit.rawFrames,unit.wholeQualifiedFixedRAWBytesHeld],['passed',6,69,true]);
+          const readers=fs.readFileSync(out+'/readers.log','utf8'),wanted='simAdsense,simBrand,simHeadTags,simHiddenPages,simHubs,simIndexNow,simIndexing,simInternalLinks,simNoRivalNames,simPrerender,simPrerenderBoot,simRetiredRoutes,simSchema,simSitemap,simSnapshotAssets,simSiteSearch,simGuideHeadings,simSeoMetaSplit,simHomeCopy,simHarnessAnchors'.split(',').map(n=>n+'.mjs').sort(),actual=[...readers.matchAll(/^\s+PASS\s+(sim[A-Za-z0-9]+\.mjs)/gm)].map(m=>m[1]).sort();assert.deepEqual(actual,wanted);assert(!/^\s+FAIL\s+/m.test(readers));
+          const weight=fs.readFileSync(out+'/weight.log','utf8'),caps=[...weight.matchAll(/^\s+(\/\S*)\s+\d+K gz over\s+\d+ files \(budget (\d+)K, [\d.]+K to the tenth\)/gm)].map(m=>[m[1],Number(m[2])]);assert.deepEqual(caps,[['/',245],['/club-manager',648],['/soccer-career',840],['/stadium-tycoon',305],['/wonderkid-factory',278],['/minefield',295],['/footle',354],['/nfl-my-career',499],['/front-office',390],['/soccer-grid',320],['/leaderboard',266],['/manager-hot-seat',672],['/deadline-day',680],['/transfer-path',381],['/nba-front-office',397],['/nhl-front-office',379]]);assert(weight.includes('sweepWeight: green.'));assert.deepEqual([source.baseScopedRows,source.sourceRows,source.cleanSourceRows],[4656,4658,4657]);
+          const result={status:'passed',qualification:'fresh-alphabet-deadline-full-scope',head:process.env.GITHUB_SHA,page:process.env.ALPHABET_FIXED_PAGE_BLOB,helper:process.env.ALPHABET_NATIVE_HELPER_BLOB,nativeOuter:process.env.ALPHABET_NATIVE_OUTER_BLOB,qualifiedFixedRun:Number(process.env.ALPHABET_FIXED_RUN),qualifiedFixedHead:process.env.ALPHABET_FIXED_HEAD,qualifiedFixedArtifact:Number(process.env.ALPHABET_FIXED_ARTIFACT),completedControlsRun:Number(process.env.ALPHABET_CONTROLS_RUN),controlsScope:'Completed successful pinned controls run gated, not rerun or artifact-parsed here',originalRun:42267893519,originalArtifact:13528026986,retainedFirstRun:42265573431,retainedFirstConclusion:'failure',unitCases:6,unitCommands:1,rawFrames:69,wholePreservedCases:['ordinary','finish'],wholeQualifiedFixedRAWBytesHeld:true,readers:actual,immutableCaps:caps,sourceRows:source.sourceRows,cleanSourceRows:source.cleanSourceRows,distFiles:850,nativeJourneys:native.census.journeys,nativeRuns:native.census.runs,nativePngs:native.census.viewportPNGs,nativeReceipt:native,limits:'Fresh scoped6 unit cases, normal850-file production build,20 required readers,16 unchanged original caps and three native viewport journeys containing six real20s runs. Not the full test/sim suite. Native bounded fictional GETs and aborted completion POSTs are not real-player/provider/backend-write proof. No native delayed-callback suspension or late-event-race, clock-edit resistance or release claim. Unrelated Soccer Connect4 legacy37 fence is not rerun or credited. Final docs and clean-source/build join follow separately.'};fs.writeFileSync(out+'/admission.json',JSON.stringify(result,null,2));console.log(JSON.stringify(result));
+          NODE
+      - name: Whole tracked physical source dist locks521 versions and zero offline held
         if: always()
         run: |
           set -euo pipefail
-          node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee alphabet-sprint-deadline-controls/types-after.log
-      - name: Final whole source index locks installed521 and offline holds
-        if: always()
-        run: |
-          set -euo pipefail
-          git ls-files -s > alphabet-sprint-deadline-controls/source-after.txt
-          cmp alphabet-sprint-deadline-controls/source-before.txt alphabet-sprint-deadline-controls/source-after.txt
+          git ls-files -s > alphabet-sprint-deadline-qualified/source-after.txt
+          cmp alphabet-sprint-deadline-qualified/source-before.txt alphabet-sprint-deadline-qualified/source-after.txt
           git diff --exit-code HEAD -- .
-          sha256sum package.json package-lock.json > alphabet-sprint-deadline-controls/locks-after.txt
-          cmp alphabet-sprint-deadline-controls/locks-before.txt alphabet-sprint-deadline-controls/locks-after.txt
-          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node --input-type=module <<'NODE'
-          import fs from 'node:fs';import assert from 'node:assert/strict';import {execFileSync} from 'node:child_process';import {createHash} from 'node:crypto';
-          const out='alphabet-sprint-deadline-controls',files=execFileSync('git',['ls-files','-z'],{encoding:'utf8'}).split('\0').filter(Boolean),rows=files.map(file=>{const bytes=fs.readFileSync(file);return{file,bytes:bytes.length,sha256:createHash('sha256').update(bytes).digest('hex')};});assert.deepEqual(rows,JSON.parse(fs.readFileSync(out+'/tracked-before.json')));fs.writeFileSync(out+'/tracked-after.json',JSON.stringify(rows));
-          const lock=JSON.parse(fs.readFileSync('package-lock.json')),before=JSON.parse(fs.readFileSync(out+'/installed-before.json')),after=Object.keys(lock.packages).filter(p=>p.startsWith('node_modules/')&&fs.existsSync(p+'/package.json')).map(p=>[p,JSON.parse(fs.readFileSync(p+'/package.json')).version]);assert.equal(after.length,521);for(const[p,v]of after)assert.equal(v,lock.packages[p].version,p);assert.deepEqual(after,before);fs.writeFileSync(out+'/installed-after.json',JSON.stringify(after));assert.equal(fs.statSync(out+'/offline.log').size,0);fs.writeFileSync(out+'/final-holds.json',JSON.stringify({status:'passed',trackedBodies:rows.length,installedLockedVersions:521,indexUnchanged:true,sourceBytesUnchanged:true,locksUnchanged:true,offlineBytes:0,limits:'Physical source/index/locks/version/offline holds only. Fixed business/preservation census is separate and the completed workflow conclusion is required.'},null,2));console.log('PASS exact tracked physical source/index/locks/521 versions and zero-byte offline receipt held');
+          sha256sum package.json package-lock.json > alphabet-sprint-deadline-qualified/locks-after.txt
+          cmp alphabet-sprint-deadline-qualified/locks-before.txt alphabet-sprint-deadline-qualified/locks-after.txt
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import path from 'node:path';import assert from 'node:assert/strict';import {execFileSync} from 'node:child_process';import {createHash} from 'node:crypto';
+          const out='alphabet-sprint-deadline-qualified',read=file=>JSON.parse(fs.readFileSync(out+'/'+file)),sha=b=>createHash('sha256').update(b).digest('hex'),files=execFileSync('git',['ls-files','-z'],{encoding:'utf8'}).split('\0').filter(Boolean),rows=files.map(file=>{const b=fs.readFileSync(file);return{file,bytes:b.length,sha256:sha(b)};});assert.deepEqual(rows,read('tracked-before.json'));fs.writeFileSync(out+'/tracked-after.json',JSON.stringify(rows));
+          const lock=JSON.parse(fs.readFileSync('package-lock.json')),before=read('installed-before.json'),after=Object.keys(lock.packages).filter(p=>p.startsWith('node_modules/')&&fs.existsSync(p+'/package.json')).map(p=>[p,JSON.parse(fs.readFileSync(p+'/package.json')).version]);assert.equal(after.length,521);for(const[p,v]of after)assert.equal(v,lock.packages[p].version,p);assert.deepEqual(after,before);fs.writeFileSync(out+'/installed-after.json',JSON.stringify(after));assert.equal(fs.statSync(out+'/offline.log').size,0);
+          const walk=dir=>fs.readdirSync(dir,{withFileTypes:true}).sort((a,b)=>a.name.localeCompare(b.name)).flatMap(e=>{const file=path.join(dir,e.name);if(e.isDirectory())return walk(file);assert(e.isFile(),'Regular source or evidence body');return[file];}),inventory=dir=>walk(dir).map(file=>{const b=fs.readFileSync(file);return{file,bytes:b.length,sha256:sha(b)};});if(fs.existsSync(out+'/dist-before.json')){const dist=inventory('dist');assert.equal(dist.length,850);assert.deepEqual(dist,read('dist-before.json'));fs.writeFileSync(out+'/dist-after.json',JSON.stringify(dist));}for(const prefix of['fixed','original'])if(fs.existsSync(out+'/'+prefix+'-bodies-before.json')){const bodies=inventory(out+'/'+prefix+'-packet');assert.deepEqual(bodies,read(prefix+'-bodies-before.json'));fs.writeFileSync(out+'/'+prefix+'-bodies-after.json',JSON.stringify(bodies));}fs.writeFileSync(out+'/final-holds.json',JSON.stringify({status:'passed',trackedBodies:rows.length,installedLockedVersions:521,indexUnchanged:true,sourceBytesUnchanged:true,locksUnchanged:true,distHeld:fs.existsSync(out+'/dist-after.json'),retainedPacketsHeld:fs.existsSync(out+'/fixed-bodies-after.json')&&fs.existsSync(out+'/original-bodies-after.json'),offlineBytes:0,limits:'Final holds only. A completed successful full workflow and independent actual artifact audit remain required.'},null,2));
           NODE
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: alphabet-sprint-deadline-controls-${{ github.run_id }}
-          path: alphabet-sprint-deadline-controls
+          name: alphabet-sprint-deadline-qualified-${{ github.run_id }}
+          path: alphabet-sprint-deadline-qualified
           retention-days: 14
           if-no-files-found: error
