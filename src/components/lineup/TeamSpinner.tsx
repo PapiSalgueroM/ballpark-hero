@@ -123,8 +123,9 @@ const TeamSpinner = ({ teams, targetIndex, isSpinning, onFinish, recordedYear }:
           >
             {displayName || '...'}
           </div>
-          {settled && target && (
-            <p className="text-xs text-muted-foreground mt-0.5 animate-fade-in">
+          {target && (settled || recordedYear !== undefined) && (
+            <p aria-hidden={!settled || undefined}
+              className={`text-xs text-muted-foreground mt-0.5 ${recordedYear !== undefined ? 'min-h-12 sm:min-h-8 ' : ''}${settled ? 'animate-fade-in' : 'invisible'}`}>
               {recordedYear === undefined ? `Name a player who has played for ${target.name}` : `Matching ${target.name} records from ${recordedYear}`}
             </p>
           )}

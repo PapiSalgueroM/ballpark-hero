@@ -1,4 +1,4 @@
-import { useState, useEffect, useLayoutEffect, useMemo, useRef } from 'react';
+import { useState, useEffect, useLayoutEffect, useMemo, useRef, useCallback } from 'react';
 import { useLineupBuilder } from '@/hooks/useLineupBuilder';
 import { FORMATIONS, type Formation, type DraftChoice, type AIVerdict } from '@/types/lineupBuilder';
 import { GameNav } from '@/components/game/GameNav';
@@ -25,6 +25,10 @@ import { SeasonReportTabs } from '@/components/world-xi/SeasonReportTabs';
 import { lineupFitSlots, seasonAdjust, xiFitBreakdown, type XiFitSlot } from '@/lib/xiFit';
 import { XiFitBreakdown, XiFitWorth } from '@/components/lineup/XiFitBreakdown';
 import { safeSetItem } from '@/lib/safeStorage';
+import {
+  AlertDialog, AlertDialogContent, AlertDialogHeader, AlertDialogTitle,
+  AlertDialogDescription, AlertDialogFooter, AlertDialogCancel, AlertDialogAction,
+} from '@/components/ui/alert-dialog';
 
 const formationOptions: Formation[] = ['4-3-3', '4-4-2', '3-5-2', '4-2-3-1', '3-4-3', '5-3-2'];
 
@@ -67,6 +71,30 @@ const LineupBuilder = () => {
   const isClubYear = draftChoice.mode === 'club-year';
   const recordedYear = draftChoice.mode === 'club-year' ? draftChoice.year : null;
   const searchDisabled = isValidating || selectedPositionIndex === null || !currentTeam || isSpinning || checkingDown;
+  const [pendingRecordedPick, setPendingRecordedPick] = useState<{
+    entity: PlayerEntity; origin: string; year: number; missingFields: string;
+  } | null>(null);
+  const pendingRecordedPickRef = useRef<typeof pendingRecordedPick>(null);
+  const clearRecordedPick = useCallback(() => {
+    pendingRecordedPickRef.current = null;
+    setPendingRecordedPick(null);
+  }, []);
+  const recordedPickOrigin = () => JSON.stringify([
+    formation, phase, draftChoice.mode, recordedYear, selectedPositionIndex,
+    currentTeam?.name, currentTeam?.isNation, filledCount,
+    selectedPositionIndex !== null && filledSlots.has(selectedPositionIndex),
+    isValidating, isSpinning, checkingDown, inputRevision.current,
+  ]);
+  const currentRecordedPickOrigin = recordedPickOrigin();
+  const recordedPickOriginRef = useRef(currentRecordedPickOrigin);
+  recordedPickOriginRef.current = currentRecordedPickOrigin;
+
+  useEffect(() => {
+    if (pendingRecordedPickRef.current?.origin !== undefined
+      && pendingRecordedPickRef.current.origin !== currentRecordedPickOrigin) clearRecordedPick();
+  }, [currentRecordedPickOrigin, clearRecordedPick]);
+
+  useEffect(() => () => { pendingRecordedPickRef.current = null; }, []);
 
   useEffect(() => {
     setBrowsingPlayers(false);
@@ -175,6 +203,35 @@ const LineupBuilder = () => {
     if (inputRevision.current === revision) setPlayerInput('');
   };
 
+  const choosePlayer = (entity: PlayerEntity) => {
+    clearRecordedPick();
+    const value = entity.meta.value;
+    const age = entity.meta.age;
+    const missingValue = typeof value !== 'number' || !Number.isFinite(value) || value <= 0;
+    const missingAge = typeof age !== 'number' || !Number.isFinite(age);
+    if (recordedYear !== null && (missingValue || missingAge)) {
+      const pending = {
+        entity: { ...entity, meta: { ...entity.meta } },
+        origin: recordedPickOrigin(),
+        year: recordedYear,
+        missingFields: missingValue && missingAge ? 'market value and age' : missingValue ? 'market value' : 'age',
+      };
+      pendingRecordedPickRef.current = pending;
+      setPendingRecordedPick(pending);
+      return;
+    }
+    void handleSelectPlayer(entity);
+  };
+
+  const confirmRecordedPick = () => {
+    const pending = pendingRecordedPickRef.current;
+    if (!pending || pending !== pendingRecordedPick) return;
+    clearRecordedPick();
+    if (pending.origin !== recordedPickOriginRef.current
+      || phase !== 'building' || !isClubYear || selectedPositionIndex === null
+      || filledSlots.has(selectedPositionIndex) || searchDisabled) return;
+    void handleSelectPlayer(pending.entity);
+  };
   /* Round 825: role fit, chemistry and balance, slot by slot, off the rows
      the picks came from. The season sim reads these three numbers, and the
      same breakdown is what the tiles show while you pick, before you submit
@@ -325,7 +382,7 @@ const LineupBuilder = () => {
               {formationOptions.map((f) => (
                 <button
                   key={f}
-                  onClick={() => setupMode === 'mixed' ? selectFormation(f) : selectFormation(f, { mode: 'club-year', year: setupYear })}
+                  onClick={() => { clearRecordedPick(); if (setupMode === 'mixed') selectFormation(f); else selectFormation(f, { mode: 'club-year', year: setupYear }); }}
                   className="rounded-xl border border-border bg-card hover:bg-primary hover:text-primary-foreground transition-all p-6 text-center group"
                 >
                   <span className="text-2xl font-bold font-display group-hover:scale-110 transition-transform inline-block">
@@ -370,7 +427,7 @@ const LineupBuilder = () => {
                 />
                 {!isSpinning && currentTeam && (
                   <button
-                    onClick={rerollTeam}
+                    onClick={() => { clearRecordedPick(); rerollTeam(); }}
                     className={cn('absolute top-2 right-2 flex items-center justify-center rounded-lg bg-secondary hover:bg-secondary/80 text-muted-foreground hover:text-foreground transition-all', isClubYear ? 'w-11 h-11' : 'w-10 h-10')}
                     title={isClubYear ? 'Reroll club' : 'Reroll: get a different team'}
                   >
@@ -400,6 +457,7 @@ const LineupBuilder = () => {
                       <p className="text-xs text-muted-foreground">Matching records, recorded year {recordedYear}</p>
                       <button type="button" disabled={searchDisabled} className="min-h-11 rounded-xl bg-secondary px-3 py-2 text-sm font-semibold text-secondary-foreground disabled:opacity-50"
                         onClick={() => {
+                          clearRecordedPick();
                           inputRevision.current += 1;
                           setPlayerInput('');
                           setBrowsingPlayers(true);
@@ -414,8 +472,8 @@ const LineupBuilder = () => {
                       <PlayerAutocomplete
                         key={browseActivation}
                         value={playerInput}
-                        onChange={value => { inputRevision.current += 1; setBrowsingPlayers(false); setPlayerInput(value); }}
-                        onSelect={handleSelectPlayer}
+                        onChange={value => { clearRecordedPick(); inputRevision.current += 1; setBrowsingPlayers(false); setPlayerInput(value); }}
+                        onSelect={choosePlayer}
                         searchOptions={{ source: teamScopedSource ?? SOCCER_MARKET_VALUE_SOURCE, exclude: excludedPlayers, boostNames: cappedNames, ...(isClubYear && browsingPlayers ? { minChars: 0, limit: 50 } : {}) }}
                         placeholder={currentTeam ? `Search a ${currentTeam.name} player...` : 'Enter player name...'}
                         disabled={searchDisabled}
@@ -456,7 +514,7 @@ const LineupBuilder = () => {
                 positions={positions}
                 filledSlots={filledSlots}
                 selectedIndex={selectedPositionIndex}
-                onSelectPosition={selectPosition}
+                onSelectPosition={index => { clearRecordedPick(); selectPosition(index); }}
               />
             </div>
 
@@ -490,7 +548,7 @@ const LineupBuilder = () => {
 
             <div className="flex flex-wrap items-center justify-center gap-3">
               <button
-                onClick={resetGame}
+                onClick={() => { clearRecordedPick(); resetGame(); }}
                 className="inline-flex items-center gap-2 px-6 py-3 bg-secondary text-secondary-foreground rounded-full font-semibold hover:bg-secondary/80 transition-all"
               >
                 <RotateCcw className="w-4 h-4" />
@@ -535,7 +593,7 @@ const LineupBuilder = () => {
                 gameName: isClubYear ? 'Build Your XI Club year draft' : 'Build Your XI',
                 gamePath: '/build-your-xi',
               }}
-              onPlayAgain={resetGame}
+              onPlayAgain={() => { clearRecordedPick(); resetGame(); }}
             >
               <div className="bg-secondary/30 rounded-2xl p-4 mb-2 text-left">
                 <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">Your {formation} XI</p>
@@ -651,6 +709,24 @@ const LineupBuilder = () => {
 
 
         <GameNav />
+
+        <AlertDialog open={pendingRecordedPick !== null} onOpenChange={open => { if (!open) clearRecordedPick(); }}>
+          <AlertDialogContent className="max-h-[85vh] overflow-y-auto" onCloseAutoFocus={event => {
+            event.preventDefault();
+            inputOwner.current?.querySelector('input')?.focus({ preventScroll: true });
+          }}>
+            <AlertDialogHeader>
+              <AlertDialogTitle>This record is missing rating inputs</AlertDialogTitle>
+              <AlertDialogDescription>
+                No usable {pendingRecordedPick?.missingFields} is recorded for {pendingRecordedPick?.entity.name} in {pendingRecordedPick?.year}. If accepted, this pick leaves the completed XI unrated.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel className="min-h-11 whitespace-normal" onClick={clearRecordedPick}>Keep searching</AlertDialogCancel>
+              <AlertDialogAction className="min-h-11 whitespace-normal" onClick={confirmRecordedPick}>Use this unrated record</AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
 
         <LineupHowToPlay open={showRules} onOpenChange={setShowRules} />
       </GameShell>
