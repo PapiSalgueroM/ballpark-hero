@@ -87,7 +87,7 @@ The unchanged prior eight mode-selection cases contribute42frames. Original qual
 
 ## Current outcome
 
-Active entry only is qualified. Original tests/workflow are being authored. No original business failures, App fix, controls, build/native or clean delivery are claimed yet.
+Active entry only is qualified. The two failed original attempts below remain unqualified; the next original attempt uses only a measured runner execution adjustment. No original business failures, App fix, controls, build/native or clean delivery are claimed.
 
 ## Retained first original qualification failure
 
@@ -96,3 +96,15 @@ Run42294868639 at4f29d314c1df8a31d6041bae6a2acbc7ebab7bf3/tree75977145c43bc0d9af
 Artifact13541042797 is1010768ZIP bytes/SHA256c279751198d6470ac3f44b0e240b09f0313669a583e6ea382fbd203e760651a0, saved with all17retained bodies outside the repo. Source/index/locks/521versions/offline holds passed. The original Hook55050 and Pageb5 remain held. Preflight retention and the unit report/RAW/admission steps were skipped after types failed.
 
 The refreshed test a196e04d005c53c605ad092615ced0d566c7ba21,32194B/SHA25637149d9326293ce780c0d80ca9aeb82350276dc60952a56157b3b5a8dcf88221 removes exactly four unsupported comma-space exact:true options. A unique-line inverse reconstructs the entire originalf83ee818add17199697838895ef1c35a69311c15/32246B source. Every other byte, literal accessible name, public action, assertion, label and capture DTO is unchanged. The six-case3/3,116frame/248click/7read forecast and prior8/42remain predictions. First source/manifest remain saved. The refreshed manifest SHA2563b20dc48454669a1f11ef9ab240a05b2d4e13d2fb64481f200886db1d0d0e9bd records this correction. No RAW equality with the first run can be claimed because no first RAW exists.
+
+## Retained second original qualification failure and finite runner experiment
+
+Run42296698793 atacaebff895e672918b842248f425b951c02251df/treecc1242df9f67879e3ef2ccc72bd277e637d31b71 remains FAILED. Proper App types passed with0bytes of diagnostics. Vitest reported14rows,7passes and7failures, so the strict expected14/3/11 gate rejected it. Six new rows and the first prior mode-selection row have registration STACK_TRACE_ERROR traces, not the required named business AssertionErrors. Their real durations were6053/8797/6986/7816/5656/6736/8076ms. The files began1ms apart. Parallel execution is observed; CPU causation is not measured.
+
+The complete retained RAW records43new frames, distributed7/7/7/8/7/7 rather than116, and61new public action records rather than248. The prior capture retains42frames. Every mounted new capture is still playing with streak2, without a result heading or completion attempt. Teardown observations overlap an in-flight click, but captured foreign case labels have not been established. There is no qualified streak business proof. No incomplete capture is normalized or removed.
+
+Artifact13541124502 is3173285ZIP bytes/SHA25641871ad40b823777dde4b29cfda301c16fcdf7b827f680df82161409390cc5fd, saved outside the repo with all45bodies including16retained preflight bodies, reports, logs and both complete-as-written RAW files. New partial RAW is2814978bytes and prior RAW394640bytes. Source/index/locks/521versions/offline holds passed; original-admission.json is absent.
+
+Pinned Vitest3.2.7 source resolves Node testTimeout5000/hookTimeout10000 when the held repository config supplies no override. runner/src/suite.ts creates the registration STACK_TRACE_ERROR and passes it to the timeout wrapper; runner/src/context.ts260-271 uses that registration stack for timeout errors, explaining the generic report. Official immutable source: https://github.com/vitest-dev/vitest/blob/v3.2.7/packages/vitest/src/node/config/resolveConfig.ts#L890 and https://github.com/vitest-dev/vitest/blob/v3.2.7/packages/runner/src/context.ts#L260 .
+
+The next QA-only experiment adds exactly --testTimeout=60000 --no-file-parallelism to the same single JSON-only Vitest command. The pinned resolver sets one worker when fileParallelism is false. Hook timeout remains10000 because no hook-timeout failure was observed. This is a finite wall-clock execution allowance, not a game-timer change or a relaxed oracle. Testa196, all assertions, actions, labels, fixtures, render/storage/RNG/completion observations and expected14/3/11 plus158frames remain held. Any further timeout, runtime error or incomplete census still fails qualification. No App fix is authorized before actual original admission.
