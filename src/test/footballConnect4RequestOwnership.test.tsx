@@ -170,7 +170,7 @@ describe('Soccer Connect4 pending request ownership', () => {
   it(TITLES.reset, async () => {
     activeCase = 'reset'; await mountHook(); act(() => current().switchMode('unlimited'));
     select(); const task = begin(); await act(async () => { headers(0); }); capture('old-json-body-pending');
-    const config = clone(current().boardConfig), draws = [...io.draws]; act(() => current().switchMode('unlimited')); capture('same-config-fresh-round');
+    const config = clone(current().boardConfig), draws = [...io.draws]; act(() => current().resetGame()); capture('same-config-fresh-round');
     await finish(0, { valid: true, fullName: 'Fixture Old Answer' }, task); capture('old-valid-settled');
     expect(current().boardConfig, TITLES.reset + ' same source board deliberately repeats').toEqual(config);
     expect(io.draws, TITLES.reset + ' ordinary reroll consumes exactly one existing draw').toEqual([...draws, 0]);
