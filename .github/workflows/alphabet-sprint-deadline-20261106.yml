@@ -1,0 +1,130 @@
+name: Alphabet Sprint deadline clean build join
+on:
+  push:
+    branches: [codex/alphabet-sprint-deadline-clean-join-qa-20261106]
+permissions:
+  contents: read
+  actions: read
+jobs:
+  closeout:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        shell: bash
+    env:
+      SIM_NETWORK: offline
+      SIM_OFFLINE_RECEIPT: alphabet-sprint-clean-join/offline.log
+      ALPHABET_REFERENCE_ARTIFACT: '13535097011'
+      ALPHABET_REFERENCE_RUN: '42278917027'
+      ALPHABET_REFERENCE_ZIP: '1caebb538a53dae481bccda6b534f9179c5a2af68f567284fb7ea09789aa27aa'
+      ALPHABET_REFERENCE_TAR: 'aa86c0e2405696f0e9e31e99db33cb8ca7be8250f8dcef07fbef45ef30715be0'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 3
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24.22.1
+          cache: npm
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.4.4
+      - name: Locked dependencies and clean source receipts
+        run: |
+          set -euo pipefail
+          [[ "$ALPHABET_REFERENCE_ARTIFACT" =~ ^[0-9]+$ ]]
+          [[ "$ALPHABET_REFERENCE_RUN" =~ ^[0-9]+$ ]]
+          [[ "$ALPHABET_REFERENCE_ZIP" =~ ^[a-f0-9]{64}$ ]]
+          [[ "$ALPHABET_REFERENCE_TAR" =~ ^[a-f0-9]{64}$ ]]
+          test ! -e alphabet-sprint-clean-join
+          mkdir alphabet-sprint-clean-join
+          touch alphabet-sprint-clean-join/offline.log
+          git rev-parse HEAD > alphabet-sprint-clean-join/head.txt
+          git rev-parse 'HEAD^{tree}' > alphabet-sprint-clean-join/tree.txt
+          git ls-files -s > alphabet-sprint-clean-join/source-before.txt
+          sha256sum package.json package-lock.json > alphabet-sprint-clean-join/locks-before.txt
+          npm ci
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const lock=JSON.parse(fs.readFileSync('package-lock.json'));
+          const rows=Object.keys(lock.packages).filter(p=>p.startsWith('node_modules/')&&fs.existsSync(p+'/package.json')).map(p=>[p,JSON.parse(fs.readFileSync(p+'/package.json')).version]);
+          assert.equal(rows.length,521);for(const[p,v]of rows)assert.equal(v,lock.packages[p].version,p);fs.writeFileSync('alphabet-sprint-clean-join/installed-before.json',JSON.stringify(rows));
+          NODE
+      - name: Proper app types
+        run: node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee alphabet-sprint-clean-join/types.log
+      - name: Pinned reference qualification artifact
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          gh api "repos/PapiSalgueroM/ballpark-hero/actions/runs/$ALPHABET_REFERENCE_RUN" > alphabet-sprint-clean-join/reference-run.json
+          gh api "repos/PapiSalgueroM/ballpark-hero/actions/artifacts/$ALPHABET_REFERENCE_ARTIFACT" > alphabet-sprint-clean-join/reference-artifact.json
+          gh api "repos/PapiSalgueroM/ballpark-hero/actions/artifacts/$ALPHABET_REFERENCE_ARTIFACT/zip" > "$RUNNER_TEMP/alphabet-sprint-reference.zip"
+          echo "$ALPHABET_REFERENCE_ZIP  $RUNNER_TEMP/alphabet-sprint-reference.zip" | sha256sum --check
+          mkdir -p "$RUNNER_TEMP/alphabet-sprint-reference" "$RUNNER_TEMP/alphabet-sprint-reference-dist"
+          unzip -q "$RUNNER_TEMP/alphabet-sprint-reference.zip" -d "$RUNNER_TEMP/alphabet-sprint-reference"
+          echo "$ALPHABET_REFERENCE_TAR  $RUNNER_TEMP/alphabet-sprint-reference/dist.tgz" | sha256sum --check
+          tar -xzf "$RUNNER_TEMP/alphabet-sprint-reference/dist.tgz" -C "$RUNNER_TEMP/alphabet-sprint-reference-dist"
+          cp "$RUNNER_TEMP/alphabet-sprint-reference/source-before.txt" alphabet-sprint-clean-join/reference-source.txt
+      - name: Fresh unchanged product-name fence on clean source
+        run: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simNoRivalNames.mjs 2>&1 | tee alphabet-sprint-clean-join/no-rival.log
+      - name: Clean production build
+        run: NODE_OPTIONS="--max-old-space-size=6144" npm run build 2>&1 | tee alphabet-sprint-clean-join/build.log
+      - name: Exact clean product source and every built byte joined to successful full qualification
+        id: join
+        env:
+          ALPHABET_REFERENCE_DIR: ${{ runner.temp }}/alphabet-sprint-reference
+          ALPHABET_REFERENCE_DIST: ${{ runner.temp }}/alphabet-sprint-reference-dist/dist
+        run: |
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import path from 'node:path';import assert from 'node:assert/strict';import {createHash} from 'node:crypto';
+          const sha=bytes=>createHash('sha256').update(bytes).digest('hex');
+          const readIndex=file=>new Map(fs.readFileSync(file,'utf8').trim().split('\n').map(line=>{const m=/^[0-9]+ ([0-9a-f]{40}) 0\t(.+)$/.exec(line);assert(m,'Actual source row');return [m[2],m[1]];}));
+          const old=readIndex('alphabet-sprint-clean-join/reference-source.txt'),current=readIndex('alphabet-sprint-clean-join/source-before.txt');
+          const excluded=new Set(['scripts/qa/playAlphabetSprintDeadline.mjs']);
+          assert.equal(old.get('scripts/qa/playAlphabetSprintDeadline.mjs'),'d9dcfa9dab223b53ace92ab3c380b90aba3daa7d');
+          for(const file of['scripts/qa/checkAlphabetSprintDeadline.mjs','scripts/qa/playFootballConnect4Cancel.mjs','scripts/qa/checkFootballConnect4CancelOwnership.mjs'])assert(!old.has(file)&&!current.has(file),'Remote-only controller/old helper absent from full and clean source: '+file);
+          for(const file of excluded)assert(!current.has(file),'Remote-only evidence helper absent from clean tree: '+file);
+          const configs=['index.html','package.json','package-lock.json','vite.config.ts','tailwind.config.ts','postcss.config.js','tsconfig.json','tsconfig.app.json','tsconfig.node.json','bun.lockb','bun.lock'];
+          assert.equal(configs.length,11);for(const file of configs){assert(current.has(file)&&old.has(file),'All11 root configurations present: '+file);assert.equal(current.get(file),old.get(file),'Exact qualified root configuration: '+file);}
+          const pins={'src/pages/AlphabetSprint.tsx':'f6a2b471abdf3ec5b21daa928348e11a3232019b','src/test/alphabetSprintDeadline.test.tsx':'e0904ccdeb6c068e73b305fdf6a3b50822a32f41','src/lib/alphabetSprint.ts':'d3f58b309cbaa9b3b9f2e263774b16b99ecf7347','public/alphabet-sprint/index.html':'6d95820a7796a416464ed3d579b6b1f535287634','docs/plans/2026-11-06-alphabet-sprint-deadline.md':'545d232cfd977b7fdeba8d19d7071262973c5f10','src/hooks/useFootballConnect4.ts':'630d21236f9f82ad4e728caad64dc4139bab7b57','src/hooks/useGradeTransfer.ts':'5e677e844f8af33de27c206673fcf66849ad5930'};
+          for(const[file,want]of Object.entries(pins)){assert.equal(current.get(file),want,file+' clean pin');assert.equal(old.get(file),want,file+' qualified full pin');}
+          const scoped=map=>[...map].filter(([p])=>/^(?:src|public|scripts)\//.test(p)&&!excluded.has(p)).sort(([a],[b])=>a.localeCompare(b));
+          const indexedModes=file=>fs.readFileSync(file,'utf8').trim().split('\n').map(line=>{const m=/^([0-9]+) ([0-9a-f]{40}) 0\t(.+)$/.exec(line);assert(m,'Actual path/mode/blob index row');return[m[3],m[1],m[2]];}).filter(([p])=>(/^(?:src|public|scripts)\//.test(p)||configs.includes(p))&&!excluded.has(p)).sort(([a],[b])=>a.localeCompare(b));assert.deepEqual(indexedModes('alphabet-sprint-clean-join/source-before.txt'),indexedModes('alphabet-sprint-clean-join/reference-source.txt'),'Every qualified source/root path, mode and blob held');
+          assert.equal([...old.keys()].filter(file=>/^(?:src|public|scripts)\//.test(file)).length,4658,'Qualified full includes exactly one native helper');const sourceRows=scoped(current);assert.equal(sourceRows.length,4657);assert.deepEqual(sourceRows,scoped(old),'Every other source/public/script blob held, including exact committed generated files');
+          const inventory=dir=>fs.readdirSync(dir,{withFileTypes:true}).sort((a,b)=>a.name.localeCompare(b.name)).flatMap(e=>e.isDirectory()?inventory(path.join(dir,e.name)).map(r=>({...r,path:e.name+'/'+r.path})):[{path:e.name,bytes:fs.statSync(path.join(dir,e.name)).size,sha256:sha(fs.readFileSync(path.join(dir,e.name)))}]);
+          const actual=inventory('dist'),reference=inventory(process.env.ALPHABET_REFERENCE_DIST);
+          assert.equal(actual.length,850);assert.deepEqual(actual,reference,'Every byte of every built file matches the pinned reference build');
+          const ref=process.env.ALPHABET_REFERENCE_DIR,read=file=>JSON.parse(fs.readFileSync(path.join(ref,file))),meta=JSON.parse(fs.readFileSync('alphabet-sprint-clean-join/reference-artifact.json')),referenceHead=fs.readFileSync(path.join(ref,'head.txt'),'utf8').trim();
+          assert.equal(meta.id,Number(process.env.ALPHABET_REFERENCE_ARTIFACT));assert.equal(meta.expired,false);assert.equal(meta.digest,'sha256:'+process.env.ALPHABET_REFERENCE_ZIP);assert.match(referenceHead,/^[a-f0-9]{40}$/);assert.equal(meta.workflow_run.head_sha,referenceHead);const run=JSON.parse(fs.readFileSync('alphabet-sprint-clean-join/reference-run.json'));assert.equal(run.id,Number(process.env.ALPHABET_REFERENCE_RUN));assert.equal(run.id,meta.workflow_run.id);assert.equal(run.head_sha,referenceHead);assert.equal(run.status,'completed');assert.equal(run.conclusion,'success');assert.equal(meta.name,'alphabet-sprint-deadline-qualified-'+run.id);
+          const full=read('admission.json'),native=read('native-admission.json'),unit=read('fixed-admission.json'),holds=read('final-holds.json');assert.equal(full.status,'passed');assert.equal(full.qualification,'fresh-alphabet-deadline-full-scope');assert.equal(full.head,referenceHead,'Successful full workflow and physical source share one head');assert.equal(full.page,pins['src/pages/AlphabetSprint.tsx']);assert.equal(full.helper,'d9dcfa9dab223b53ace92ab3c380b90aba3daa7d');assert.equal(full.nativeOuter,'8893c77594b036b44cb647270c51c94345e04540');assert.equal(native.status,'passed');assert.equal(native.page,full.page);assert.equal(native.helper,full.helper);assert.deepEqual(full.nativeReceipt,native);const outerBytes=fs.readFileSync(path.join(ref,'native-admission-script.mjs'));assert.equal(createHash('sha1').update(Buffer.concat([Buffer.from('blob '+outerBytes.length+'\0'),outerBytes])).digest('hex'),full.nativeOuter);
+          assert.deepEqual([full.unitCases,full.unitCommands,full.rawFrames,full.sourceRows,full.cleanSourceRows,full.distFiles,full.nativeJourneys,full.nativeRuns,full.nativePngs],[6,1,69,4658,4657,850,3,6,9]);assert.deepEqual(full.wholePreservedCases,['ordinary','finish']);assert.equal(full.wholeQualifiedFixedRAWBytesHeld,true);assert.equal(full.readers.length,20);assert.equal(full.immutableCaps.length,16);assert.deepEqual([unit.status,unit.cases,unit.rawFrames,unit.wholeQualifiedFixedRAWBytesHeld],['passed',6,69,true]);assert.deepEqual(unit.wholePreservedCases,['ordinary','finish']);assert.deepEqual([native.census.journeys,native.census.runs,native.census.viewportPNGs,native.census.completionAttempts,native.census.distBodies,native.census.installedVersions],[3,6,9,6,850,521]);assert.equal(native.census.sourceBodies,read('tracked-before.json').length);
+          assert.equal(full.originalRun,42267893519);assert.equal(full.originalArtifact,13528026986);assert.equal(full.retainedFirstRun,42265573431);assert.equal(full.retainedFirstConclusion,'failure');for(const key of['qualifiedFixedRun','qualifiedFixedArtifact','completedControlsRun'])assert(Number.isSafeInteger(full[key])&&full[key]>0,key+' completed provenance');assert.equal(holds.status,'passed');for(const key of['indexUnchanged','sourceBytesUnchanged','locksUnchanged','distHeld','retainedPacketsHeld'])assert.equal(holds[key],true,key+' qualified full final hold');assert.equal(holds.installedLockedVersions,521);assert.equal(holds.offlineBytes,0);assert.deepEqual(fs.readFileSync(path.join(ref,'source-before.txt')),fs.readFileSync(path.join(ref,'source-after.txt')));
+          const result={status:'passed',referenceRun:run.id,referenceWorkflowHead:referenceHead,referenceApp:referenceHead,referenceQualification:full.qualification,referenceArtifact:meta.id,referenceZipSHA256:process.env.ALPHABET_REFERENCE_ZIP,referenceTarSHA256:process.env.ALPHABET_REFERENCE_TAR,sourceRows:sourceRows.length,rootConfigurations:configs.map(file=>({file,blob:current.get(file)})),remoteOnlyHelpers:[...excluded],forbiddenControllers:['scripts/qa/checkAlphabetSprintDeadline.mjs'],generatedPatches:[],distFiles:actual.length,distManifestSHA256:sha(JSON.stringify(actual)),dist:actual,referenceChecks:{unitCases:6,rawFrames:69,wholePreservedCases:full.wholePreservedCases,readers:20,immutableCaps:16,nativeJourneys:3,nativeRuns:6,nativePngs:9,abortedCompletionAttempts:native.census.completionAttempts},limits:'Fresh clean proper types/name fence/normal production build and exact source/build join only. No unit/native/reader/cap rerun. All4657 product source paths plus11 root configurations and every850 built-file byte bind this clean tree to the completed successful normal full run, whose workflow head is its physical source head. The reviewed owned plan blob is held; final plan/PROJECT-STATE/WORKBOARD docs follow separately. Other docs and QA workflow are outside this code join; final product diff must exclude all QA workflows/helpers/controllers. This join does not independently admit native behavior, delayed-callback suspension, late-event races, real-player/provider/backend writes or release.'};
+          fs.writeFileSync('alphabet-sprint-clean-join/reference-build-join.json',JSON.stringify(result,null,2));console.log('PASS all '+sourceRows.length+' source rows and every '+actual.length+' built file held');
+          NODE
+      - name: Final source locks installed versions and offline holds
+        if: always()
+        run: |
+          set -euo pipefail
+          git ls-files -s > alphabet-sprint-clean-join/source-after.txt
+          cmp alphabet-sprint-clean-join/source-before.txt alphabet-sprint-clean-join/source-after.txt
+          git diff --exit-code HEAD -- .
+          sha256sum package.json package-lock.json > alphabet-sprint-clean-join/locks-after.txt
+          cmp alphabet-sprint-clean-join/locks-before.txt alphabet-sprint-clean-join/locks-after.txt
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const before=JSON.parse(fs.readFileSync('alphabet-sprint-clean-join/installed-before.json')),lock=JSON.parse(fs.readFileSync('package-lock.json'));
+          const after=Object.keys(lock.packages).filter(p=>p.startsWith('node_modules/')&&fs.existsSync(p+'/package.json')).map(p=>[p,JSON.parse(fs.readFileSync(p+'/package.json')).version]);assert.equal(after.length,521);for(const[p,v]of after)assert.equal(v,lock.packages[p].version,p);assert.deepEqual(after,before);
+          fs.writeFileSync('alphabet-sprint-clean-join/installed-final.json',JSON.stringify(after));
+          assert(fs.existsSync('alphabet-sprint-clean-join/offline.log'));assert.equal(fs.statSync('alphabet-sprint-clean-join/offline.log').size,0);
+          NODE
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: alphabet-sprint-deadline-clean-build-join-${{ github.run_id }}
+          path: alphabet-sprint-clean-join
+          retention-days: 14
+          if-no-files-found: error
