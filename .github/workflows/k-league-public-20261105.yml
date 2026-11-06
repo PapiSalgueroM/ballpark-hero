@@ -1,0 +1,535 @@
+name: K League public same completed native journeys and strict host protocol
+on:
+  push:
+    branches: [codex/k-league-public-20261105]
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: k-league-public-20261105
+  cancel-in-progress: false
+jobs:
+  public:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    env:
+      PRODUCT: 25193b6efbde2e4855c171a91077efd6647d0285
+      PRODUCT_TREE: 4debc9eb6ef46e9ace0c43e9a351e61efc6337c3
+      FINAL_SOURCE_INDEPENDENT_SHA: a20e67bb840e29461e63077ec8f78a76c01c8291b7c757ff0aff92a826de433f
+      CATALOGUE_BASELINE_CORE: 5f9f41d8ef0a4d025b3da1f55e5720b6e82c1710
+      CATALOGUE_BASELINE_TREE: d99664b6535b5addf08172fcb9ebc03e89301a9c
+      CATALOGUE_BASELINE_LEDGER_BLOB: 5e7505312820030bba74aa43dd6e1f1d9dfa5e18
+      NATIVE_QA: ef849def2f41fac7d7a37150cbea040d360c262a
+      NATIVE_QA_TREE: 33b10eca6218fa97de52556d65bba6b46f724319
+      NATIVE_BROWSER_BLOB: 9f370ccbcd1534e6cfd5144059eb6a4fc8f3ee6d
+      READY_BLOB: 671f460aa088d42b44c435a03594cf26695d6e09
+      PUBLIC_BROWSER_BLOB: f206c2fa80aaa25419e77495ab5c72756a840f86
+      PUBLIC_ASSETS_BLOB: ea1ea83d293678e8e735a9e7dbd8e8fb0bc4087a
+      NATIVE_INPUT: '{"run":42272859035,"job":128081619825,"artifact":13531897565,"qa":"ef849def2f41fac7d7a37150cbea040d360c262a","qaTree":"33b10eca6218fa97de52556d65bba6b46f724319","branch":"codex/k-league-native-v6-20261106","workflowPath":".github/workflows/k-league-native-20261105.yml","workflowBlob":"d18095ab2e726b6265ae6540cbcd15828aaca1f4","attempt":1,"artifactName":"k-league-native","zipBytes":29459981,"zipSHA256":"a69e9f7df59d737ae4a728fedebe9f8b3098b9adbb2668679ff690fdc19c849a","tgzEntry":"k-league-native.tar.xz","tgzBytes":29459560,"tgzSHA256":"94ed521cd50036ab9578af4b4ee07fca6db0083374ee033769b918ec24548ec9","independentAdmissionSHA256":"e1a8c8cd7bb546a779caca45e3912691645c24421c0e36efd05aa7e7d522b916","files":[{"file":"workflow.yml","bytes":46412,"sha256":"191851d8a352aa070ea42da65b8a0d3647b3c90714ec60e088e7f21b7b85003e"},{"file":"source-before.sha256","bytes":590911,"sha256":"7cf54865494326cf2f91ec1204ce415cc59225148d4a05c2a3daaca157b3204a"},{"file":"source-after.sha256","bytes":590911,"sha256":"7cf54865494326cf2f91ec1204ce415cc59225148d4a05c2a3daaca157b3204a"},{"file":"index-before.txt","bytes":498927,"sha256":"79523db500cb4d9184395912ce3416e8280ac7d5d65ecb6a63f0b3cc230affe7"},{"file":"index-after.txt","bytes":498927,"sha256":"79523db500cb4d9184395912ce3416e8280ac7d5d65ecb6a63f0b3cc230affe7"},{"file":"tracked-before.bin","bytes":211477,"sha256":"02b178260c71cd05fbe69ac7fc7396ef44bee9bb6e5fd65b6e6824536d2f5c23"},{"file":"tracked-after.bin","bytes":211477,"sha256":"02b178260c71cd05fbe69ac7fc7396ef44bee9bb6e5fd65b6e6824536d2f5c23"},{"file":"all-locks-before.json","bytes":367,"sha256":"b59da16476ca547e59e4703a0133041ace36e66737573b181ce7cd2b473e947c"},{"file":"all-locks-after.json","bytes":367,"sha256":"b59da16476ca547e59e4703a0133041ace36e66737573b181ce7cd2b473e947c"},{"file":"source-dist-input-held.json","bytes":395,"sha256":"782738f4ee1a5fb671ccff9e388e9f13bd3b4ba33cf4974400c0d5c14be40461"},{"file":"input/native-manifest.json","bytes":1428736,"sha256":"189f3de9d6b5e7606d7fb4f98ae42ee2360ed91f3e827dc3d7c32ac9061d25e9"},{"file":"browser/report.json","bytes":110558792,"sha256":"2090fa8f876ba8ba86e09ad7937206cf8e6441cb12ca2f0d3a8258cc813fa75a"},{"file":"screenshots.json","bytes":13489,"sha256":"16349e40f5988271136531bcafd6375b19d08169387e4ca3663a508483ba7b18"},{"file":"logs/types.exit","bytes":2,"sha256":"9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"},{"file":"logs/browser.exit","bytes":2,"sha256":"9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"},{"file":"transport/types.log","bytes":0,"sha256":"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"},{"file":"transport/server.log","bytes":0,"sha256":"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"},{"file":"transport/browser.log","bytes":0,"sha256":"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"}]}'
+      BUILD_INPUT: '{"run":42199520923,"job":127831051186,"artifact":13493294810,"qa":"c0ffbba09bed90e6477fc09982b09713d897296b","qaTree":"83e1cff98455ed2127d3fcf34b3dabe8bd8de36b","branch":"codex/k-league-normal-build-v6-20261106","workflowPath":".github/workflows/k-league-normal-build-20261105.yml","workflowBlob":"96a1226fcfa4d26b060fcd406a581ba7e88cdcc8","attempt":1,"artifactName":"k-league-normal-build-42199520923-1","zipBytes":8522469,"zipSHA256":"eee949e2653fe684b7c1c76a7799996665a403127686478191f056b7b9624bd9","tgzEntry":"k-league-normal-build-evidence.tar.gz","tgzBytes":8521973,"tgzSHA256":"be5ba294a902e1fa60b5e0a7772e8a8538567e711fcd4b07afea2b6721194056","independentAdmissionSHA256":"34055f96eac95a773f26cb158a01c4fcbf4eb6d7c5295d038f674d1045baa264","files":[{"file":"workflow.yml","bytes":50816,"sha256":"2e61750c067a714a79dad0189dea655814c31cfba7169a57e31bce454e2db63c"},{"file":"source-before.sha256","bytes":590716,"sha256":"ed9d29d9f2f949d92c332f3501d981113538083b122ae1b9ed6c67b94c0c1c23"},{"file":"source-after.sha256","bytes":590716,"sha256":"ed9d29d9f2f949d92c332f3501d981113538083b122ae1b9ed6c67b94c0c1c23"},{"file":"index-before.txt","bytes":498764,"sha256":"dbdf80c2e80f5462a92e1763fd05adb6846684d2ad0dee4742f816d7a4c737f6"},{"file":"index-after.txt","bytes":498764,"sha256":"dbdf80c2e80f5462a92e1763fd05adb6846684d2ad0dee4742f816d7a4c737f6"},{"file":"tracked-before.bin","bytes":211414,"sha256":"0a5e8ff10ce37e5241b65f8aa8283f559fce21226ec18bd9431ba7ff7f71e59f"},{"file":"tracked-after.bin","bytes":211414,"sha256":"0a5e8ff10ce37e5241b65f8aa8283f559fce21226ec18bd9431ba7ff7f71e59f"},{"file":"locks-before.sha256","bytes":314,"sha256":"c4d3d37c8be5418c6254ce652ab45c0f5d7e6c2c6d40d2f88443ccf1bd6e3f15"},{"file":"locks-after.sha256","bytes":314,"sha256":"c4d3d37c8be5418c6254ce652ab45c0f5d7e6c2c6d40d2f88443ccf1bd6e3f15"},{"file":"build-proof.json","bytes":1284,"sha256":"152573004ac8d7b4b8450c4de92e226b251e043816fb3e69b6a820c6e7e900f0"},{"file":"source-output-hold.json","bytes":145,"sha256":"0412a03e1b1e6796e1cad4f911ee7d7c334e71aff1e0457789b42e1198229568"},{"file":"generated-product-bridge.json","bytes":52466,"sha256":"2dc3eab663118613d54b419977bae58bc74f40a7a13b2fa05b908f85ad9fc2b3"},{"file":"dist-before.sha256","bytes":86752,"sha256":"d6faaa1d1e4565c34ac528ef93f748c21e4b0ab65a024f4cb971517b722a211d"},{"file":"dist-after.sha256","bytes":86752,"sha256":"d6faaa1d1e4565c34ac528ef93f748c21e4b0ab65a024f4cb971517b722a211d"},{"file":"types-passed.json","bytes":75,"sha256":"f80953007ecd091c9ff14a8b6a402bf746f91cd318c09cf7ead15f3e04941ba9"},{"file":"types.exit","bytes":2,"sha256":"9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"},{"file":"simNbaCareer.exit","bytes":2,"sha256":"9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"}]}'
+      PUBLISHED_SOURCE: 15652350f43fa82fa6872357bb1561f948fa150b
+      PUBLISHED_TREE: 4debc9eb6ef46e9ace0c43e9a351e61efc6337c3
+      DEPLOY_SOURCE: 15652350f43fa82fa6872357bb1561f948fa150b
+      DEPLOY_TREE: 4debc9eb6ef46e9ace0c43e9a351e61efc6337c3
+      DEPLOYMENT_ID: 979de67b-e1bd-46d0-9115-e28f9939171a
+      PLAYWRIGHT_BROWSERS_PATH: /home/runner/.cache/ms-playwright
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 3
+          filter: blob:none
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: '1.4.4'
+      - name: Bind exactly three public additions on the actual admitted native QA parent
+        shell: bash
+        run: |
+          set -euo pipefail
+          QA_OUT="$RUNNER_TEMP/k-league-public"
+          QA_REF="$RUNNER_TEMP/k-league-public-inputs"
+          QA_DIST="$RUNNER_TEMP/k-league-public-dist"
+          export QA_OUT QA_REF QA_DIST
+          test ! -e "$QA_OUT"
+          test ! -e "$QA_REF"
+          test ! -e "$QA_DIST"
+          mkdir -p "$QA_OUT"/{logs,input,transport,original-native} "$QA_REF" "$QA_DIST"
+          printf 'QA_OUT=%s\nQA_REF=%s\nQA_DIST=%s\n' "$QA_OUT" "$QA_REF" "$QA_DIST" >> "$GITHUB_ENV"
+          node --input-type=module <<'BIND'
+          import fs from 'node:fs';import assert from 'node:assert/strict';import {execFileSync} from 'node:child_process';
+          const e=process.env,git=(...a)=>execFileSync('git',a,{encoding:'utf8'}).trim();
+          for(const k of ['PRODUCT','PRODUCT_TREE','CATALOGUE_BASELINE_CORE','CATALOGUE_BASELINE_TREE','CATALOGUE_BASELINE_LEDGER_BLOB','NATIVE_QA','NATIVE_QA_TREE','NATIVE_BROWSER_BLOB','READY_BLOB','PUBLIC_BROWSER_BLOB','PUBLIC_ASSETS_BLOB','PUBLISHED_SOURCE','PUBLISHED_TREE','DEPLOY_SOURCE','DEPLOY_TREE'])assert.match(e[k]??'',/^[a-f0-9]{40}$/,k);
+          assert.match(e.FINAL_SOURCE_INDEPENDENT_SHA??'',/^[a-f0-9]{64}$/);assert.match(e.DEPLOYMENT_ID??'',/^[a-f0-9]{8}(?:-[a-f0-9]{4}){3}-[a-f0-9]{12}$/);
+          for(const k of ['NATIVE_INPUT','BUILD_INPUT']){const a=JSON.parse(e[k]);assert(a&&typeof a==='object',k+' actual admitted input');}
+          assert.equal(e.PUBLISHED_SOURCE,e.DEPLOY_SOURCE);assert.equal(e.PUBLISHED_TREE,e.DEPLOY_TREE);assert.equal(e.PUBLISHED_TREE,e.PRODUCT_TREE,'Exact published product tree, no implicit source exception');
+          assert.equal(git('rev-parse','HEAD^'),e.NATIVE_QA);assert.equal(git('rev-parse','HEAD^^{tree}'),e.NATIVE_QA_TREE);
+          const additions=['.github/workflows/k-league-public-20261105.yml','scripts/qa/kLeaguePublicBrowser.mjs','scripts/qa/kLeaguePublicAssets.mjs'];
+          const delta=git('diff','--name-status','--no-renames','HEAD^','HEAD').split('\n').map(s=>s.split('\t'));assert(delta.every(row=>row.length===2&&row[0]==='A'));assert.deepEqual(delta.map(row=>row[1]).sort(),additions.slice().sort());
+          for(const [p,k]of [['scripts/qa/kLeagueNativeBrowser.mjs','NATIVE_BROWSER_BLOB'],['scripts/qa/nativeScrollReady.mjs','READY_BLOB'],['scripts/qa/kLeaguePublicBrowser.mjs','PUBLIC_BROWSER_BLOB'],['scripts/qa/kLeaguePublicAssets.mjs','PUBLIC_ASSETS_BLOB']])assert.equal(git('hash-object',p),e[k],p);
+          assert.equal(git('status','--porcelain=v1','--untracked-files=all'),'');
+          fs.copyFileSync(additions[0],e.QA_OUT+'/workflow.yml');
+          fs.writeFileSync(e.QA_OUT+'/qa-delta.json',JSON.stringify({parent:e.NATIVE_QA,parentTree:e.NATIVE_QA_TREE,delta,wholeInverse:'Remove exactly the three public additions. Every inherited native file stays byte-held.'},null,2)+'\n');
+          fs.writeFileSync(e.QA_OUT+'/workflow-source.json',JSON.stringify({head:git('rev-parse','HEAD'),tree:git('rev-parse','HEAD^{tree}'),path:additions[0],gitBlob:git('hash-object',additions[0])})+'\n');
+          BIND
+          node --check scripts/qa/kLeaguePublicBrowser.mjs
+          node --check scripts/qa/kLeaguePublicAssets.mjs
+          git ls-files -z > "$QA_OUT/tracked-before.bin"
+          git ls-files -z | xargs -0 sha256sum > "$QA_OUT/source-before.sha256"
+          git ls-files -s > "$QA_OUT/index-before.txt"
+          git status --porcelain=v1 --untracked-files=all > "$QA_OUT/status-before.txt"
+          test ! -s "$QA_OUT/status-before.txt"
+          cp package-lock.json "$QA_OUT/lock-before.json"
+          node --input-type=module -e 'import fs from "node:fs";import crypto from "node:crypto";const sha=b=>crypto.createHash("sha256").update(b).digest("hex");fs.writeFileSync(process.env.QA_OUT+"/all-locks-before.json",JSON.stringify(Object.fromEntries(["package.json","package-lock.json","bun.lock","bun.lockb","yarn.lock","pnpm-lock.yaml"].map(p=>[p,fs.existsSync(p)?sha(fs.readFileSync(p)):null])))+"\n");'
+          git rev-parse HEAD HEAD^ 'HEAD^{tree}' > "$QA_OUT/source-identity.txt"
+      - name: Read exact native build product and published role trees before offline work
+        shell: bash
+        run: |
+          set -euo pipefail
+          node --input-type=module <<'ROLES'
+          import fs from 'node:fs';import assert from 'node:assert/strict';import {execFileSync,spawnSync} from 'node:child_process';import {createHash} from 'node:crypto';
+          const e=process.env,N=JSON.parse(e.NATIVE_INPUT),B=JSON.parse(e.BUILD_INPUT),out=e.QA_OUT;
+          const refs=[...new Set([e.PRODUCT,e.NATIVE_QA,B.qa,e.PUBLISHED_SOURCE,e.DEPLOY_SOURCE,e.CATALOGUE_BASELINE_CORE])];
+          for(const ref of refs){assert.match(ref,/^[a-f0-9]{40}$/);const r=spawnSync('git',['fetch','--depth=1','--filter=blob:none','origin',ref],{encoding:'utf8'});fs.appendFileSync(out+'/logs/source-ref-fetch.log',(r.stdout??'')+(r.stderr??''));assert.equal(r.status,0);assert.equal(r.signal,null);assert.equal(r.error,undefined);}
+          const git=(...a)=>execFileSync('git',a,{encoding:'utf8',maxBuffer:16*1024*1024}).trim(),tree=ref=>Object.fromEntries(git('ls-tree','-r','--full-tree',ref).split('\n').filter(Boolean).map(line=>{const m=/^([0-9]+) blob ([a-f0-9]{40})\t(.*)$/.exec(line);assert(m);return[m[3],{mode:m[1],blob:m[2]}];}));
+          const roles={product:{commit:e.PRODUCT,tree:e.PRODUCT_TREE},native:{commit:e.NATIVE_QA,tree:e.NATIVE_QA_TREE},build:{commit:B.qa,tree:B.qaTree},published:{commit:e.PUBLISHED_SOURCE,tree:e.PUBLISHED_TREE},deployed:{commit:e.DEPLOY_SOURCE,tree:e.DEPLOY_TREE},public:{commit:git('rev-parse','HEAD'),tree:git('rev-parse','HEAD^{tree}')}},maps={};
+          for(const[role,row]of Object.entries(roles)){assert.equal(git('rev-parse',row.commit+'^{tree}'),row.tree);maps[role]=tree(row.commit);}
+          const parents=ref=>git('cat-file','-p',ref).split('\n').filter(s=>s.startsWith('parent ')).map(s=>s.slice(7));assert.equal(N.qa,e.NATIVE_QA);assert.equal(N.qaTree,e.NATIVE_QA_TREE);assert.deepEqual(parents(N.qa),[e.PRODUCT]);assert.deepEqual(parents(B.qa),[e.PRODUCT]);
+          const nativePaths=['.github/workflows/k-league-native-20261105.yml','scripts/qa/kLeagueNativeBrowser.mjs','scripts/qa/nativeScrollReady.mjs'],publicPaths=['.github/workflows/k-league-public-20261105.yml','scripts/qa/kLeaguePublicBrowser.mjs','scripts/qa/kLeaguePublicAssets.mjs'];
+          const remove=(actual,base,paths,label)=>{const expected=[...new Set([...Object.keys(actual),...Object.keys(base)])].filter(p=>JSON.stringify(actual[p])!==JSON.stringify(base[p])).sort();assert.deepEqual(expected,paths.slice().sort(),label);const inverse=structuredClone(actual);for(const p of paths){assert(!base[p],label+' added only');assert.equal(actual[p]?.mode,'100644');delete inverse[p];}assert.deepEqual(inverse,base,label+' complete leaf-vector inverse');};
+          remove(maps.native,maps.product,nativePaths,'K_PUBLIC_NATIVE_THREE_ADDS');remove(maps.build,maps.product,[B.workflowPath],'K_PUBLIC_BUILD_SOLE_WORKFLOW');remove(maps.public,maps.native,publicPaths,'K_PUBLIC_THREE_ADDS');
+          assert.deepEqual(maps.published,maps.product);assert.deepEqual(maps.deployed,maps.product);assert.equal(maps.native[N.workflowPath].blob,N.workflowBlob);assert.equal(maps.build[B.workflowPath].blob,B.workflowBlob);
+          assert.equal(maps.native['scripts/qa/kLeagueNativeBrowser.mjs'].blob,e.NATIVE_BROWSER_BLOB);assert.equal(maps.native['scripts/qa/nativeScrollReady.mjs'].blob,e.READY_BLOB);
+          const copied=structuredClone(maps.public),omitted=publicPaths[0],held=copied[omitted];delete copied[omitted];let owned;try{remove(copied,maps.native,publicPaths,'K_PUBLIC_THREE_ADDS');}catch(error){owned=error;}assert(owned instanceof assert.AssertionError);assert.match(owned.message,/K_PUBLIC_THREE_ADDS/);copied[omitted]=held;assert.deepEqual(copied,maps.public);
+          assert.equal(git('rev-parse',e.CATALOGUE_BASELINE_CORE+'^{tree}'),e.CATALOGUE_BASELINE_TREE);
+          const beforeLedgerBytes=execFileSync('git',['show',e.CATALOGUE_BASELINE_CORE+':scripts/data/lastmod.json'],{maxBuffer:2*1024*1024}),currentLedgerBytes=fs.readFileSync('scripts/data/lastmod.json'),blob=b=>createHash('sha1').update('blob '+b.length+'\0').update(b).digest('hex'),sha=b=>createHash('sha256').update(b).digest('hex');
+          assert.equal(blob(beforeLedgerBytes),e.CATALOGUE_BASELINE_LEDGER_BLOB);fs.writeFileSync(out+'/catalogue-ledger-before.json',beforeLedgerBytes,{flag:'wx'});fs.writeFileSync(out+'/catalogue-ledger-current.json',currentLedgerBytes,{flag:'wx'});
+          const oldLedger=JSON.parse(beforeLedgerBytes),newLedger=JSON.parse(currentLedgerBytes),bodyRoutes=['/career-ladder','/dart-draft','/soccer-career','/search','/who-am-i','/soccer','/club-manager','/cbb-dynasty'],expectedIndexable=bodyRoutes.filter(route=>route!=='/search'),baseline=tree(e.CATALOGUE_BASELINE_CORE);
+          assert.deepEqual(Object.keys(newLedger),Object.keys(oldLedger));assert.equal(oldLedger.__version,3);assert.equal(newLedger.__version,oldLedger.__version);assert(!Object.hasOwn(oldLedger,'/search'));assert(!Object.hasOwn(newLedger,'/search'));
+          const ledgerChanged=Object.keys(oldLedger).filter(p=>p!=='__version'&&JSON.stringify(oldLedger[p])!==JSON.stringify(newLedger[p]));assert(ledgerChanged.every(route=>expectedIndexable.includes(route)),'K_PUBLIC_ONLY_ACTUAL_SELECTED_LEDGER_CHANGES');
+          for(const route of ledgerChanged){assert.notEqual(oldLedger[route].hash,newLedger[route].hash,'Actual fingerprint change, not merely a date');assert(/^\d{4}-\d{2}-\d{2}$/.test(newLedger[route].date));assert(newLedger[route].date>=oldLedger[route].date);assert(newLedger[route].date<=new Date().toISOString().slice(0,10));}
+          const snapshotRows=bodyRoutes.map(route=>{const p='public'+route+'/index.html',before=baseline[p],after=maps.product[p],b=fs.readFileSync(p);assert(before&&after);assert.equal(before.mode,'100644');assert.equal(after.mode,'100644');assert.notEqual(before.blob,after.blob,'K_PUBLIC_ACTUAL_SNAPSHOT_BODY_CHANGED '+route);assert.equal(blob(b),after.blob);return{route,path:p,beforeGitBlob:before.blob,afterGitBlob:after.blob,bytes:b.length,sha256:sha(b),bodyChanged:true,indexable:route!=='/search'};});
+          assert.equal(snapshotRows.length,8);const paths=snapshotRows.filter(row=>row.indexable).map(row=>row.route);assert.deepEqual(paths.slice().sort(),expectedIndexable.slice().sort());assert.equal(paths.length,7);
+          const xml=fs.readFileSync('public/sitemap.xml','utf8'),submitted=[...xml.matchAll(/<loc>([^<]+)<\/loc>/g)].map(v=>v[1]);assert(!submitted.includes('https://douknowball.com/search'));for(const route of paths)assert.equal(submitted.filter(v=>v==='https://douknowball.com'+route).length,1);
+          fs.writeFileSync(out+'/indexnow-changed-indexable-snapshots.json',JSON.stringify({status:'EXACT_ACTUAL_SEVEN_BODY_CHANGED_INDEXABLE_SNAPSHOTS',baseline:{commit:e.CATALOGUE_BASELINE_CORE,tree:e.CATALOGUE_BASELINE_TREE,ledgerBlob:blob(beforeLedgerBytes),bytes:beforeLedgerBytes.length,sha256:sha(beforeLedgerBytes)},product:{commit:e.PRODUCT,tree:e.PRODUCT_TREE},currentLedger:{bytes:currentLedgerBytes.length,sha256:sha(currentLedgerBytes)},paths,snapshotRows,ledgerChangedKeys:ledgerChanged,ledgerChangedRows:ledgerChanged.map(route=>({route,before:oldLedger[route],after:newLedger[route]})),searchAbsent:true,otherLedgerRowsAndVersionHeld:true,scope:'Eight actual before/after Git body identities, minus intentionalnoindex Search. Ledger hash/date changes are measured separately and may be fewer than seven; no indexing promise.'},null,2)+'\n',{flag:'wx'});
+          fs.writeFileSync(out+'/source-role-blob-maps.json',JSON.stringify({roles,maps,nativePaths,publicPaths,buildWorkflow:B.workflowPath,allAppModelDataRootStyleLocksLiteral:true,noBuildInputExemption:true,sourceIndependentAdmission:e.FINAL_SOURCE_INDEPENDENT_SHA,copiedOmissionControl:{changed:true,name:owned.name,message:owned.message,wholeInverseExact:true,actualHeld:true}},null,2)+'\n');
+          ROLES
+      - name: Authenticate the successful native original and the final successful normal build
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          node --input-type=module <<'AUTH'
+          import fs from 'node:fs';import path from 'node:path';import assert from 'node:assert/strict';import {createHash} from 'node:crypto';import {spawnSync} from 'node:child_process';import {gunzipSync} from 'node:zlib';
+          const e=process.env,out=e.QA_OUT,ref=e.QA_REF,N=JSON.parse(e.NATIVE_INPUT),B=JSON.parse(e.BUILD_INPUT),sha=b=>createHash('sha256').update(b).digest('hex'),blob=b=>createHash('sha1').update('blob '+b.length+'\0').update(b).digest('hex'),json=v=>JSON.stringify(v,null,2)+'\n';
+          const call=(label,command,args,binary=false)=>{const r=spawnSync(command,args,{encoding:binary?null:'utf8',maxBuffer:64*1024*1024});fs.writeFileSync(path.join(out,'input',label+'.native.json'),json({command:[command,...args],status:r.status,signal:r.signal,error:r.error?String(r.error):null}));fs.writeFileSync(path.join(out,'input',label+'.stderr.log'),r.stderr??'');if(!binary)fs.writeFileSync(path.join(out,'input',label+'.stdout.log'),r.stdout??'');assert.equal(r.status,0,label);assert.equal(r.signal,null,label);assert.equal(r.error,undefined,label);return r.stdout;};
+          const api=(label,p)=>JSON.parse(call(label,'gh',['api','repos/PapiSalgueroM/ballpark-hero/'+p]));
+          const safe=p=>{assert(typeof p==='string'&&p&&!p.startsWith('/')&&!p.includes('\\')&&!p.includes('\0')&&!/^[a-z]:/i.test(p));assert(!p.split('/').includes('..'));};
+          const inventory=dir=>{const rows=[];function walk(rel=''){for(const f of fs.readdirSync(path.join(dir,rel),{withFileTypes:true})){const file=path.posix.join(rel,f.name);if(f.isDirectory())walk(file);else{assert(f.isFile());const b=fs.readFileSync(path.join(dir,file));rows.push({file,bytes:b.length,sha256:sha(b)});}}}walk();return rows.sort((a,b)=>a.file<b.file?-1:a.file>b.file?1:0);};
+          const required={native:['workflow.yml','source-before.sha256','source-after.sha256','index-before.txt','index-after.txt','tracked-before.bin','tracked-after.bin','all-locks-before.json','all-locks-after.json','source-dist-input-held.json','input/native-manifest.json','browser/report.json','screenshots.json','logs/types.exit','logs/browser.exit','transport/types.log','transport/server.log','transport/browser.log'],build:['workflow.yml','source-before.sha256','source-after.sha256','index-before.txt','index-after.txt','tracked-before.bin','tracked-after.bin','locks-before.sha256','locks-after.sha256','build-proof.json','source-output-hold.json','generated-product-bridge.json','dist-before.sha256','dist-after.sha256','types-passed.json','types.exit','simNbaCareer.exit']};
+          const fetchInput=(role,a)=>{
+            assert(a&&typeof a==='object');for(const k of ['run','job','artifact','zipBytes','tgzBytes'])assert(Number.isSafeInteger(a[k])&&a[k]>0,k);
+            for(const k of ['qa','qaTree','workflowBlob'])assert.match(a[k],/^[a-f0-9]{40}$/);for(const k of ['zipSHA256','tgzSHA256','independentAdmissionSHA256'])assert.match(a[k],/^[a-f0-9]{64}$/);
+            assert(typeof a.branch==='string'&&a.branch.startsWith('codex/'));assert.equal(a.workflowPath,role==='native'?'.github/workflows/k-league-native-20261105.yml':'.github/workflows/k-league-normal-build-20261105.yml');safe(a.tgzEntry);if(role==='native')assert.equal(a.tgzEntry,'k-league-native.tar.xz');else assert.match(a.tgzEntry,/^[a-z0-9-]+\.tar\.gz$/);
+            const run=api(role+'-run','actions/runs/'+a.run),job=api(role+'-job','actions/jobs/'+a.job),artifact=api(role+'-artifact','actions/artifacts/'+a.artifact);
+            assert.equal(run.status,'completed');assert.equal(run.conclusion,'success');assert.equal(run.head_sha,a.qa);assert.equal(run.head_branch,a.branch);assert.equal(run.event,'push');assert.equal(run.path,a.workflowPath);assert.equal(run.run_attempt,a.attempt);assert(Number.isSafeInteger(a.attempt)&&a.attempt>0);
+            assert.equal(job.id,a.job);assert.equal(job.run_id,a.run);assert.equal(job.conclusion,'success');assert.equal(artifact.id,a.artifact);assert.equal(artifact.name,a.artifactName);assert.equal(artifact.size_in_bytes,a.zipBytes);assert.equal(artifact.expired,false);assert.equal(artifact.workflow_run.id,a.run);
+            const dir=path.join(ref,role);fs.mkdirSync(dir);const zip=call(role+'-sole-original','gh',['api','repos/PapiSalgueroM/ballpark-hero/actions/artifacts/'+a.artifact+'/zip'],true);assert.equal(zip.length,a.zipBytes);assert.equal(sha(zip),a.zipSHA256);const z=path.join(dir,'original.zip');fs.writeFileSync(z,zip,{flag:'wx'});
+            const entries=call(role+'-zip-list','unzip',['-Z1',z]).trim().split('\n');entries.forEach(safe);assert.deepEqual(entries.slice().sort(),[a.tgzEntry,a.tgzEntry+'.sha256'].sort());
+            const tgz=call(role+'-zip-body','unzip',['-p',z,a.tgzEntry],true);assert.equal(tgz.length,a.tgzBytes);assert.equal(sha(tgz),a.tgzSHA256);const checksum=call(role+'-zip-checksum','unzip',['-p',z,a.tgzEntry+'.sha256']);assert.equal(checksum.trim().split(/\s+/)[0],a.tgzSHA256);
+            const t=path.join(dir,role==='native'?'evidence.tar.xz':'evidence.tar.gz');fs.writeFileSync(t,tgz,{flag:'wx'});call(role+'-tar-list','tar',['-tf',t]).trim().split('\n').forEach(safe);assert(call(role+'-tar-types','tar',['-tvf',t]).trim().split('\n').every(v=>v.startsWith('-')||v.startsWith('d')));
+            const root=path.join(dir,'evidence');fs.mkdirSync(root);call(role+'-tar-extract','tar',['-xf',t,'-C',root]);
+            assert(Array.isArray(a.files));assert.equal(new Set(a.files.map(v=>v.file)).size,a.files.length);for(const file of required[role])assert(a.files.some(row=>row.file===file),role+' actual critical pin '+file);
+            for(const row of a.files){safe(row.file);assert(Number.isSafeInteger(row.bytes)&&row.bytes>=0);assert.match(row.sha256,/^[a-f0-9]{64}$/);const bytes=fs.readFileSync(path.join(root,row.file));assert.equal(bytes.length,row.bytes);assert.equal(sha(bytes),row.sha256,row.file);const target=path.join(out,'input',role,row.file);fs.mkdirSync(path.dirname(target),{recursive:true});fs.writeFileSync(target,bytes,{flag:'wx'});}
+            const rows=inventory(root);fs.writeFileSync(path.join(out,'input',role+'-complete-body-inventory.json'),json(rows));fs.writeFileSync(path.join(out,'input',role+'-authenticated.json'),json({status:'EXACT_SUCCESSFUL_ORIGINAL_AUTHENTICATED',...a,independentAdmissionScope:'Exact externally source-reviewed admission hash binding, not a receipt body claimed to be inside the artifact.',regularFiles:rows.length}));return root;
+          };
+          const n=fetchInput('native',N),b=fetchInput('build',B);assert.equal(N.qa,e.NATIVE_QA);assert.equal(N.qaTree,e.NATIVE_QA_TREE);
+          const read=(root,file)=>JSON.parse(fs.readFileSync(path.join(root,file))),bytes=(root,file)=>fs.readFileSync(path.join(root,file)),eq=(root,a,c)=>assert(bytes(root,a).equals(bytes(root,c)),a+' full before/after');
+          for(const root of[n,b])for(const[a,c]of[['source-before.sha256','source-after.sha256'],['index-before.txt','index-after.txt'],['tracked-before.bin','tracked-after.bin']])eq(root,a,c);
+          eq(n,'all-locks-before.json','all-locks-after.json');eq(b,'locks-before.sha256','locks-after.sha256');
+          const originalBytes=bytes(n,'input/native-manifest.json'),m=JSON.parse(originalBytes),r=read(n,'browser/report.json'),held=read(n,'source-dist-input-held.json'),proof=read(b,'build-proof.json'),buildHeld=read(b,'source-output-hold.json');
+          assert.equal(m.schema,'K_LEAGUE_NATIVE_SOURCE_DIST_V1');assert.equal(m.status,'QUALIFIED_FIXED_BUILD_NATIVE_INPUT');assert(!Object.hasOwn(m,'public'));assert(originalBytes.equals(Buffer.from(json(m))),'Original native canonical bytes, no normalization');
+          assert.deepEqual(m.product,{commit:e.PRODUCT,tree:e.PRODUCT_TREE});assert.deepEqual(m.sourceBefore,m.sourceAfter);assert.equal(m.admissions.build,B.independentAdmissionSHA256);
+          assert.equal(r.status,'passed');assert.deepEqual(r.product,m.product);assert.equal(r.authority.manifestSHA256,sha(originalBytes));assert.equal(r.authority.distDigest,m.distDigest);assert.equal(r.sourceHeld,true);assert.equal(r.distHeld,true);
+          assert.deepEqual(r.contexts.map(c=>[c.width,c.flow,c.status]),[320,390,1280].flatMap(width=>['cm','sc-current','sc-historical'].map(flow=>[width,flow,'passed'])));assert.equal(r.screenshots.length,84);assert.equal(new Set(r.screenshots).size,84);
+          const imageRows=read(n,'screenshots.json');assert.deepEqual(imageRows.map(v=>v.file),r.screenshots);for(const row of imageRows){safe(row.file);const v=bytes(n,'browser/'+row.file);assert.equal(v.length,row.bytes);assert.equal(sha(v),row.sha256);assert(v.subarray(0,8).equals(Buffer.from([137,80,78,71,13,10,26,10])));}
+          for(const c of r.contexts){assert(c.frames.length>0&&c.photos.length>0&&c.documentRequests.length>0&&c.assetBodies.length>0);for(const row of c.frames){safe(row.file);const stored=bytes(n,'browser/'+row.file),decoded=gunzipSync(stored);assert.equal(stored.length,row.bytes);assert.equal(sha(stored),row.sha256);assert.equal(decoded.length,row.decodedBytes);assert.equal(sha(decoded),row.decodedSHA256);}
+            for(const row of [...c.assetBodies,...c.documentBodies]){safe(row.file);const body=bytes(n,'browser/'+row.file);assert.equal(body.length,row.bytes);assert.equal(sha(body),row.sha256);}
+            for(const key of ['unexpectedConsole','unexpectedPageErrors','unexpectedExternalAborts','localHttpErrors','assetErrors'])assert.deepEqual(c[key],[]);
+          }
+          for(const k of ['source','index','tracked','status','locks','completeInputHeld','nineContexts','eightyFourPhotos'])assert.equal(held[k],true,k);assert.equal(held.AppBuilds,0);assert.equal(held.modelOrFixtureGeneration,false);
+          for(const f of ['types','browser'])assert.equal(bytes(n,'logs/'+f+'.exit').toString().trim(),'0');for(const f of ['types','server','browser'])assert.equal(bytes(n,'transport/'+f+'.log').length,0);
+          assert.equal(proof.status,'fresh-k-league-product-compiled-gates-passed');assert.equal(proof.product,e.PRODUCT);assert.equal(proof.productTree,e.PRODUCT_TREE);assert.equal(proof.normalBuilds,1);assert.equal(proof.readersCount,20);assert.equal(proof.readers.length,20);assert.equal(new Set(proof.readers).size,20);assert.equal(proof.allCapsUnchanged,true);assert.equal(proof.oldBuildReused,false);
+          for(const k of ['sourceHeld','indexHeld','trackedPathsHeld','locksHeld','completedDistHeld'])assert.equal(buildHeld[k],true);assert.equal(buildHeld.status,'clean');assert.deepEqual(read(b,'types-passed.json'),{command:'node_modules/.bin/tsc --noEmit -p tsconfig.app.json',exit:0});for(const f of ['types.exit','simNbaCareer.exit'])assert.equal(bytes(b,f).toString().trim(),'0');
+          const t=bytes(b,'completed-dist.tar.gz');assert.deepEqual({bytes:t.length,sha256:sha(t)},proof.tar);assert.deepEqual(proof.tar,m.completedTar);eq(b,'dist-before.sha256','dist-after.sha256');assert.equal(sha(bytes(b,'dist-before.sha256')),proof.distInventorySHA256);
+          const tarPath=path.join(b,'completed-dist.tar.gz');call('completed-dist-list','tar',['-tzf',tarPath]).trim().split('\n').forEach(p=>{safe(p);assert(p==='dist/'||p.startsWith('dist/'));});assert(call('completed-dist-types','tar',['-tvzf',tarPath]).trim().split('\n').every(v=>v.startsWith('-')||v.startsWith('d')));call('completed-dist-extract','tar',['-xzf',tarPath,'--strip-components=1','-C',e.QA_DIST]);
+          const dist=inventory(e.QA_DIST);assert.deepEqual(dist,m.distBefore);assert.equal(dist.length,proof.distFiles);assert.equal(sha(JSON.stringify(dist)),m.distDigest);
+          fs.writeFileSync(out+'/dist-before.json',json(dist));fs.writeFileSync(out+'/native-original-authority.json',json({manifestFile:'input/native/input/native-manifest.json',manifestBytes:originalBytes.length,manifestSHA256:sha(originalBytes),sourceLedgerFile:'input/native/source-before.sha256',sourceLedgerSHA256:sha(bytes(n,'source-before.sha256')),nativeAdmission:N.independentAdmissionSHA256,buildAdmission:B.independentAdmissionSHA256,all84OriginalPhotosAuthenticated:true,originalReportAndAllFrameBodiesAuthenticated:true,noBuild:true}));
+          fs.writeFileSync(out+'/input-reference-before.json',json(inventory(ref)));
+          AUTH
+      - name: Install held App and browser runtime without rebuilding
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(bun --version)" = 1.4.4
+          bun --version > "$QA_OUT/logs/bun-version.log"
+          node --version > "$QA_OUT/logs/node-version.log"
+          bun install --frozen-lockfile > "$QA_OUT/logs/bun-install.log" 2>&1
+          git diff --exit-code HEAD -- package.json package-lock.json bun.lock bun.lockb
+          npm install --prefix "$RUNNER_TEMP/real-entry-public-tools" --package-lock=false --no-audit --no-fund playwright@1.64.0 > "$QA_OUT/logs/playwright-install.log" 2>&1
+          test ! -e node_modules/playwright
+          test ! -e node_modules/playwright-core
+          ln -s "$RUNNER_TEMP/real-entry-public-tools/node_modules/playwright" node_modules/playwright
+          ln -s "$RUNNER_TEMP/real-entry-public-tools/node_modules/playwright-core" node_modules/playwright-core
+          "$RUNNER_TEMP/real-entry-public-tools/node_modules/.bin/playwright" install --with-deps chromium > "$QA_OUT/logs/chromium-install.log" 2>&1
+      - name: Proper App types with a silent receipt
+        shell: bash
+        run: |
+          set +e
+          set -uo pipefail
+          export GIT_NO_LAZY_FETCH=1 SIM_NETWORK=offline
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          export SIM_OFFLINE_RECEIPT="$QA_OUT/transport/types.log"
+          : > "$SIM_OFFLINE_RECEIPT" || exit 1
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json > "$QA_OUT/logs/types.log" 2>&1
+          native_exit=$?
+          printf '%s\n' "$native_exit" > "$QA_OUT/logs/types.exit" || exit 1
+          test "$native_exit" = 0 || exit "$native_exit"
+          test ! -s "$SIM_OFFLINE_RECEIPT" || exit 1
+      - name: Preserve every original native manifest byte with exactly three public map additions
+        shell: bash
+        run: |
+          set -euo pipefail
+          node --input-type=module <<'MANIFEST'
+          import fs from 'node:fs';import assert from 'node:assert/strict';import {createHash} from 'node:crypto';
+          const e=process.env,out=e.QA_OUT,N=JSON.parse(e.NATIVE_INPUT),B=JSON.parse(e.BUILD_INPUT),sha=b=>createHash('sha256').update(b).digest('hex'),blob=b=>createHash('sha1').update('blob '+b.length+'\0').update(b).digest('hex'),json=v=>JSON.stringify(v,null,2)+'\n';
+          const ledger=b=>Object.fromEntries(b.toString().trim().split('\n').filter(Boolean).map(line=>{const m=/^([a-f0-9]{64}) [ *](.*)$/.exec(line);assert(m);return[m[2],m[1]];})),current=ledger(fs.readFileSync(out+'/source-before.sha256')),role=JSON.parse(fs.readFileSync(out+'/source-role-blob-maps.json'));
+          const originalBytes=fs.readFileSync(out+'/input/native/input/native-manifest.json'),original=JSON.parse(originalBytes),nativeLedger=fs.readFileSync(out+'/input/native/source-before.sha256');
+          assert.deepEqual(ledger(nativeLedger),original.sourceBefore);assert.deepEqual(original.sourceBefore,original.sourceAfter);assert(originalBytes.equals(Buffer.from(json(original))));
+          const nativeWF=fs.readFileSync(out+'/input/native/workflow.yml'),buildWF=fs.readFileSync(out+'/input/build/workflow.yml');assert.equal(blob(nativeWF),N.workflowBlob);assert.equal(blob(buildWF),B.workflowBlob);
+          const buildBefore=fs.readFileSync(out+'/input/build/source-before.sha256'),buildAfter=fs.readFileSync(out+'/input/build/source-after.sha256');assert(buildBefore.equals(buildAfter));const built=ledger(buildBefore);assert.equal(built[B.workflowPath],sha(buildWF));delete built[B.workflowPath];
+          const nativeProduct={...original.sourceBefore};for(const p of role.nativePaths){assert(nativeProduct[p]);delete nativeProduct[p];}assert.deepEqual(nativeProduct,built,'K_PUBLIC_COMPLETE_BUILD_NATIVE_PRODUCT_MAP');
+          const validate=map=>{assert.deepEqual(Object.keys(map).sort(),[...Object.keys(original.sourceBefore),...role.publicPaths].sort(),'K_PUBLIC_SOURCE_MAP');for(const[p,d]of Object.entries(map))assert.equal(sha(fs.readFileSync(p)),d,'K_PUBLIC_SOURCE_MAP '+p);for(const[p,d]of Object.entries(original.sourceBefore))assert.equal(map[p],d,'K_PUBLIC_NATIVE_BODY_HELD '+p);};
+          validate(current);for(const[p,row]of Object.entries(role.maps.public)){const bytes=fs.readFileSync(p);assert.equal(blob(bytes),row.blob,p);}for(const p of role.publicPaths)assert(!Object.hasOwn(original.sourceBefore,p));
+          const derived=JSON.parse(originalBytes);derived.schema='K_LEAGUE_PUBLIC_SOURCE_DIST_V1';derived.status='QUALIFIED_NATIVE_BUILD_PUBLIC_INPUT';derived.public={schema:'K_LEAGUE_PUBLIC_ACTUAL_AUTHORITY_V1',status:'ACTUAL_PUBLISHED_NATIVE_BODY_AUTHORITY',nativeAdmission:N.independentAdmissionSHA256,buildAdmission:B.independentAdmissionSHA256,sourceCommit:e.PUBLISHED_SOURCE,sourceTree:e.PUBLISHED_TREE,deploymentId:e.DEPLOYMENT_ID,origin:'https://douknowball.com',nativeDriverGitBlob:e.NATIVE_BROWSER_BLOB};
+          derived.sourceBefore={...original.sourceBefore};derived.sourceAfter={...original.sourceAfter};for(const p of role.publicPaths){derived.sourceBefore[p]=current[p];derived.sourceAfter[p]=current[p];}assert.deepEqual(derived.sourceBefore,current);assert.deepEqual(derived.sourceAfter,current);
+          const changed=[...new Set([...Object.keys(original),...Object.keys(derived)])].filter(k=>JSON.stringify(original[k])!==JSON.stringify(derived[k])).sort();assert.deepEqual(changed,['public','schema','sourceAfter','sourceBefore','status']);
+          const restore=copy=>{for(const p of role.publicPaths){delete copy.sourceBefore[p];delete copy.sourceAfter[p];}delete copy.public;copy.schema=original.schema;copy.status=original.status;return Buffer.from(json(copy));};
+          const bytes=Buffer.from(json(derived));assert(restore(JSON.parse(bytes)).equals(originalBytes),'K_PUBLIC_WHOLE_NATIVE_MANIFEST_BYTE_INVERSE');
+          const copy={...current},key=role.publicPaths[0],held=copy[key];copy[key]='0'.repeat(64);assert.notEqual(copy[key],held);let owned;try{validate(copy);}catch(error){owned=error;}assert(owned instanceof assert.AssertionError);assert.match(owned.message,/K_PUBLIC_SOURCE_MAP/);copy[key]=held;assert.deepEqual(copy,current);
+          fs.writeFileSync(out+'/public-manifest.json',bytes,{flag:'wx'});fs.writeFileSync(out+'/manifest-bridge.json',json({status:'EXACT_THREE_ADDITIONS_FIVE_METADATA_KEYS_WHOLE_NATIVE_BYTE_INVERSE',originalManifestFile:'input/native/input/native-manifest.json',originalManifestBytes:originalBytes.length,originalManifestSHA256:sha(originalBytes),rawNativeLedgerFile:'input/native/source-before.sha256',rawNativeLedgerSHA256:sha(nativeLedger),derivedManifestBytes:bytes.length,derivedManifestSHA256:sha(bytes),changedMetadataKeys:changed,addedMapPaths:role.publicPaths,sourceMapOnlyAdditions:true,wholeByteInverse:true,nativeParent:e.NATIVE_QA,product:original.product,compiledDistDigest:original.distDigest,copiedDigestControl:{changed:true,name:owned.name,message:owned.message,wholeInverseExact:true,actualHeld:true},noAppBuild:true,noGenerator:true,noFixtureCreation:true}));
+          MANIFEST
+      - name: Wait finitely for the exact completed root entry
+        shell: bash
+        run: |
+          set -euo pipefail
+          unset NODE_OPTIONS
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import crypto from 'node:crypto';import assert from 'node:assert/strict';
+          const out=process.env.QA_OUT+'/readiness';fs.mkdirSync(out);
+          const sha=b=>crypto.createHash('sha256').update(b).digest('hex'),reference=fs.readFileSync(process.env.QA_DIST+'/index.html','utf8');
+          function modules(html){const clean=html.replace(/<!--[\s\S]*?-->/g,'');return[...clean.matchAll(/<script\b([^>]*)>[\s\S]*?<\/script\s*>/gi)].map(m=>{const type=/(?:^|\s)type\s*=\s*(?:"([^"]*)"|'([^']*)')/i.exec(m[1]),src=/(?:^|\s)src\s*=\s*(?:"([^"]*)"|'([^']*)')/i.exec(m[1]);return{tag:m[0],type:type?(type[1]??type[2]).toLowerCase():null,src:src?(src[1]??src[2]):null};}).filter(s=>s.type==='module');}
+          const expected=modules(reference);assert.equal(expected.length,1);assert.match(expected[0].src,/^\/assets\/index-[^/?#]+\.js$/);
+          function requireEntry(status,complete,html){assert.equal(status,200,'SC_REAL_ENTRY_PUBLIC_EXPECTED_ENTRY_READY');assert.equal(complete,true,'SC_REAL_ENTRY_PUBLIC_EXPECTED_ENTRY_READY');assert.deepEqual(modules(html).map(s=>s.src),[expected[0].src],'SC_REAL_ENTRY_PUBLIC_EXPECTED_ENTRY_READY');}
+          requireEntry(200,true,reference);const tag=expected[0].tag;assert.equal(reference.split(tag).length,2);
+          const staleTag=tag.replace(expected[0].src,'/assets/index-real-entry-readiness-stale-control.js'),fault=reference.replace(tag,staleTag);assert.notEqual(staleTag,tag);assert.notEqual(fault,reference);let owned=null;try{requireEntry(200,true,fault);}catch(error){owned=error;}assert(owned instanceof assert.AssertionError);assert.match(owned.message,/^SC_REAL_ENTRY_PUBLIC_EXPECTED_ENTRY_READY/);assert.equal(fault.replace(staleTag,tag),reference);
+          fs.writeFileSync(out+'/reference-index.html',reference);fs.writeFileSync(out+'/copied-stale-control.html',fault);fs.writeFileSync(out+'/control.json',JSON.stringify({changed:true,referenceSHA256:sha(reference),faultSHA256:sha(fault),ownedFailure:{name:owned.name,message:owned.message},wholeInverseExact:true,scope:'Copied completed HTML through the same validator; actual HTTP bodies are never mocked.'},null,2)+'\n');
+          const started=Date.now(),deadline=started+360000,attempts=[];let ready=false;
+          for(let attempt=1;attempt<=72&&Date.now()<deadline;attempt++){
+            const url=new URL('https://douknowball.com/');url.searchParams.set('sc-real-entry-ready',(process.env.GITHUB_RUN_ID??'run')+'-'+attempt+'-'+Date.now());
+            const chunks=[];let status=null,complete=false,error=null,headers=null;
+            try{const response=await fetch(url,{redirect:'manual',cache:'no-store',headers:{'cache-control':'no-cache, no-store, max-age=0',pragma:'no-cache'},signal:AbortSignal.timeout(Math.max(1,Math.min(12000,deadline-Date.now())))});status=response.status;headers={contentType:response.headers.get('content-type'),cacheControl:response.headers.get('cache-control'),age:response.headers.get('age'),location:response.headers.get('location')};for await(const chunk of response.body)chunks.push(Buffer.from(chunk));complete=true;}catch(failure){error=String(failure.stack||failure);}
+            const body=Buffer.concat(chunks),file='attempt-'+String(attempt).padStart(2,'0')+'.html';fs.writeFileSync(out+'/'+file,body);
+            let actual=[];try{actual=modules(body.toString()).map(s=>s.src);requireEntry(status,complete,body.toString());ready=true;}catch(failure){if(!(failure instanceof assert.AssertionError))error??=String(failure.stack||failure);}
+            attempts.push({attempt,url:url.href,status,headers,bodyComplete:complete,file,bytes:body.length,sha256:sha(body),actualEntries:actual,expectedEntry:expected[0].src,error,ready,elapsedMilliseconds:Date.now()-started});
+            fs.writeFileSync(out+'/report.json',JSON.stringify({ready,expectedEntry:expected[0].src,maximumAttempts:72,maximumElapsedMilliseconds:360000,intervalMilliseconds:5000,attempts,scope:'Root entry readiness only. Actual root/route HTML, boot and SC critical bodies are verified next before public gameplay.'},null,2)+'\n');
+            if(ready)break;const remaining=deadline-Date.now();if(remaining>0)await new Promise(resolve=>setTimeout(resolve,Math.min(5000,remaining)));
+          }
+          assert(ready,'SC_REAL_ENTRY_PUBLIC_EXPECTED_ENTRY_READY: completed entry did not arrive within the finite window');
+          console.log('SC_REAL_ENTRY_PUBLIC_EXPECTED_ENTRY_READY '+expected[0].src+' after '+attempts.length+' actual root responses');
+          NODE
+
+      - name: Verify complete public bodies around the same nine native journeys
+        shell: bash
+        run: |
+          set +e
+          set -uo pipefail
+          unset NODE_OPTIONS
+          export GIT_NO_LAZY_FETCH=1
+          run_live() {
+            local name="$1"; shift
+            local receipt="$QA_OUT/transport/$name.log"
+            : > "$receipt" || return 1
+            SIM_OFFLINE_RECEIPT="$receipt" "$@" > "$QA_OUT/logs/$name.stdout.log" 2> "$QA_OUT/logs/$name.stderr.log"
+            local code=$?
+            printf '%s\n' "$code" > "$QA_OUT/logs/$name.exit" || return 1
+            test "$code" = 0 || return "$code"
+            test ! -s "$receipt" || return 1
+          }
+          run_live assets-before node --unhandled-rejections=strict scripts/qa/kLeaguePublicAssets.mjs "$QA_OUT/public-manifest.json" "$QA_DIST" "$QA_OUT/assets" https://douknowball.com before
+          before_exit=$?
+          test "$before_exit" = 0 || exit "$before_exit"
+          run_live browser node --unhandled-rejections=strict scripts/qa/kLeaguePublicBrowser.mjs --out "$QA_OUT/browser" --manifest "$QA_OUT/public-manifest.json" --dist "$QA_DIST" --base-url https://douknowball.com
+          browser_exit=$?
+          run_live assets-after node --unhandled-rejections=strict scripts/qa/kLeaguePublicAssets.mjs "$QA_OUT/public-manifest.json" "$QA_DIST" "$QA_OUT/assets" https://douknowball.com after
+          after_exit=$?
+          test "$browser_exit" = 0 || exit "$browser_exit"
+          test "$after_exit" = 0 || exit "$after_exit"
+          node --input-type=module <<'ADMIT' > "$QA_OUT/logs/public-admission.stdout.log" 2> "$QA_OUT/logs/public-admission.stderr.log"
+          import fs from 'node:fs';import assert from 'node:assert/strict';import {createHash} from 'node:crypto';import {gunzipSync} from 'node:zlib';import {liveIndexabilityFindings} from './scripts/lib/liveIndexability.mjs';
+          const out=process.env.QA_OUT,sha=b=>createHash('sha256').update(b).digest('hex'),m=JSON.parse(fs.readFileSync(out+'/public-manifest.json')),r=JSON.parse(fs.readFileSync(out+'/browser/report.json'));
+          const safe=p=>assert(typeof p==='string'&&p&&!p.startsWith('/')&&!p.includes('\\')&&!p.split('/').includes('..')),body=row=>{safe(row.file);const b=fs.readFileSync(out+'/browser/'+row.file);assert.equal(b.length,row.bytes);assert.equal(sha(b),row.sha256);return b;},actualControl=c=>{assert(c);assert.equal(c.changed,true);assert.equal(c.wholeInverseExact,true);assert(c.actualHeld===true||c.actualSampleHeld===true);assert(c.ownedFailure&&c.ownedFailure.name==='AssertionError'&&c.ownedFailure.message);};
+          assert.equal(r.schema,'K_LEAGUE_PUBLIC_FULL_NATIVE_JOURNEYS_V1');assert.equal(r.status,'passed');assert.equal(r.sourceHeld,true);assert.equal(r.distHeld,true);assert.deepEqual(r.product,m.product);assert.deepEqual(r.public,m.public);assert.equal(r.authority.manifestSHA256,sha(fs.readFileSync(out+'/public-manifest.json')));assert.equal(r.authority.distDigest,m.distDigest);
+          assert.deepEqual(r.contexts.map(c=>[c.width,c.flow,c.status]),[320,390,1280].flatMap(width=>['cm','sc-current','sc-historical'].map(flow=>[width,flow,'passed'])));assert.equal(r.screenshots.length,84);assert.equal(new Set(r.screenshots).size,84);
+          const closed=[];
+          for(const c of r.contexts){
+            for(const key of ['unexpectedConsole','unexpectedPageErrors','unexpectedExternalAborts','localHttpErrors','assetErrors'])assert.deepEqual(c[key],[]);
+            assert(c.frames.length>0&&c.photos.length>0&&c.documentRequests.length>0&&c.assetBodies.length>0);for(const key of ['photoOmissionControl','documentControl']){assert.equal(c[key].changed,true);assert.equal(c[key].wholeInverseExact,true);assert.equal(c[key].actualHeld,true);assert.equal(c[key].name,'AssertionError');assert(c[key].message);}
+            const frames=new Map();for(const row of c.frames){const stored=body(row),decoded=gunzipSync(stored);assert.equal(decoded.length,row.decodedBytes);assert.equal(sha(decoded),row.decodedSHA256);const f=JSON.parse(decoded);assert.equal(f.sequence,row.sequence);assert.equal(f.publicNetwork.context,c.id);assert.equal(f.writeRequests,f.publicNetwork.playwrightWriteIds.length);frames.set(f.sequence,{network:f.publicNetwork,writeRequests:f.writeRequests});}
+            for(const row of c.assetBodies){body(row);const expected=m.distBefore.find(v=>v.file===row.path);assert(expected);assert.equal(row.status,200);assert.equal(row.bytes,expected.bytes);assert.equal(row.sha256,expected.sha256);}
+            const nw=c.publicNetworkClosed;assert.equal(nw.status,'complete-actual-native-pw-preflight-body-source-abort-census');assert.deepEqual(nw.gameWriteIds,[]);
+            const window=nw.finalWindow,writes=c.requests.filter(q=>!['GET','HEAD'].includes(q.method)),native=c.nativeRequests.filter(q=>!['GET','HEAD'].includes(q.method));
+            assert.deepEqual(nw.rawPWNonReadIds,writes.map(q=>q.requestId));assert.deepEqual(window.writes.map(v=>v.request.requestId),nw.rawPWNonReadIds);assert.deepEqual(nw.rawNativeNonReadIds,native.map(q=>q.requestId));
+            assert(c.nativeRequests.every(q=>['GET','HEAD','POST','OPTIONS'].includes(q.method)));assert(c.requests.every(q=>['GET','HEAD','POST','OPTIONS'].includes(q.method)));assert.equal(c.aborts.filter(q=>q.method==='WEBSOCKET').length,0);
+            const sources=c.hostTelemetry.sources;assert.equal(sources.length,c.documentRequests.length);assert.equal(c.publicDocuments.length,c.documentRequests.length);assert(c.publicDocuments.every(v=>v.qualified));assert.deepEqual(window.sources,sources);assert.deepEqual(window.source,sources[0]);assert.equal(sources[0].url,'https://douknowball.com/__l5e/events.270c78a44fc53e7b.js');
+            const first=body(sources[0].script);for(const [i,s]of sources.entries()){assert.equal(s.navigation,i+1);assert.equal(s.status,'actual-declared-and-observed-host-script');assert.equal(s.document.status,200);assert.equal(s.script.status,200);assert.equal(s.script.resourceType,'script');assert.deepEqual(s.sourceEndpointMatches,[]);body(s.document);assert(body(s.script).equals(first));assert.equal(s.redirectChain[0].url,s.declarationURL);assert.equal(s.redirectChain.at(-1).url,s.url);for(const q of s.redirectChain){assert.equal(q.method,'GET');assert.equal(new URL(q.url).origin,'https://douknowball.com');}}
+            const docIds=new Set();for(const q of c.documentRequests){assert.equal(q.method,'GET');assert(!docIds.has(q.id));docIds.add(q.id);const rows=c.documentBodies.filter(v=>v.id===q.id);assert.equal(rows.length,1);const d=rows[0];body(d);assert.equal(d.url,q.url);assert.equal(d.status,200);const s=sources[d.publicSourceNavigation-1];assert(s);assert.equal(s.document.url,d.url);assert.equal(s.document.bytes,d.bytes);assert.equal(s.document.sha256,d.sha256);}
+            assert.equal(c.documentBodies.length,docIds.size);assert.equal(sources.length,docIds.size);
+            const urls=i=>{const a=[];for(let s=i?.stack;s;s=s.parent)for(const f of s.callFrames??[])if(f.url)a.push(f.url);if(i?.url)a.push(i.url);return a;};
+            for(const row of window.writes){const q=row.request,u=new URL(q.url);assert.equal(q.method,'POST');assert.equal(u.origin,'https://douknowball.com');assert.equal(u.pathname,'/__l5e/trackevents');assert.equal(u.search,'');assert.equal(u.hash,'');assert.deepEqual(row.abort,c.aborts.find(a=>a.requestId===q.requestId));assert.equal(row.abort.url,q.url);assert.equal(row.abort.method,q.method);assert.equal(row.trace.url,q.url);assert.equal(row.trace.method,q.method);const b=Buffer.from(row.trace.postData??'','utf8');assert.equal(b.length,q.body.bytes);assert.equal(sha(b),q.body.sha256);assert.equal(b.toString('base64'),q.body.base64??'');assert(sources.some(s=>urls(row.trace.initiator).includes(s.url)));}
+            for(const row of window.preflights){assert.equal(row.preflight.method,'OPTIONS');assert.equal(row.preflight.initiator.type,'preflight');assert.equal(row.preflight.postData,null);assert.equal(row.preflight.initiator.requestId,row.read.requestId);assert.equal(row.read.method,'GET');assert.equal(row.read.url,row.preflight.url);assert.equal(row.pw.method,'GET');assert.equal(row.pw.url,row.read.url);assert.equal(row.abort.requestId,row.pw.requestId);assert.equal(row.abort.url,row.pw.url);assert.equal(row.abort.method,'GET');}
+            for(const w of c.hostTelemetry.completionWaits){assert.equal(w.status,'paired');assert.equal(w.maximumMilliseconds,5000);assert.equal(w.intervalMilliseconds,25);assert(w.elapsedMilliseconds<5000&&w.samples.length>0);assert.equal(w.samples.at(-1).status,'paired');}assert(c.hostTelemetry.completionWaits.length>0);
+            actualControl(c.hostTelemetry.bodyControl);safe(c.hostTelemetry.bodyControl.faultFile);const fault=fs.readFileSync(out+'/browser/host-telemetry/'+c.hostTelemetry.bodyControl.faultFile);assert.equal(sha(fault),c.hostTelemetry.bodyControl.faultSHA256);assert(!fault.equals(first));const inverse=Buffer.from(fault);inverse[0]^=1;assert(inverse.equals(first));
+            for(const v of c.publicProtocolControls.writeAndCensus)actualControl(v);actualControl(c.publicProtocolControls.initiator);actualControl(c.publicProtocolControls.registry);actualControl(c.publicProtocolControls.nativeMethod);for(const v of c.publicProtocolControls.boundaries)actualControl(v);if(window.preflights.length)actualControl(c.publicProtocolControls.preflight);
+            assert.equal(nw.boundaries.length,c.publicBoundaries.length);assert(nw.boundaries.length>0);for(const b of nw.boundaries){assert.equal(b.status,'closed-by-full-global-zero-game-write-proof');for(const edge of ['before','after']){const n=b[edge],f=frames.get(n.sequence);assert(f);assert.deepEqual(n,f.network);assert.equal(f.writeRequests,n.playwrightWriteIds.length);assert.deepEqual(n.playwrightWriteIds,nw.rawPWNonReadIds.slice(0,n.playwrightWriteIds.length));assert.deepEqual(n.nativeNonReadIds,nw.rawNativeNonReadIds.slice(0,n.nativeNonReadIds.length));}}
+            closed.push({id:c.id,width:c.width,flow:c.flow,photos:c.photos.length,frames:c.frames.length,actualDocumentGETs:docIds.size,rawFrameNavigationEvents:c.navigations.length,qualifiedSources:sources.length,rawPWNonReadAttempts:writes.length,rawNativeNonReadAttempts:native.length,linkedReadPreflights:window.preflights.length,readOnlyBoundaries:nw.boundaries.length,gameProviderWriteAttempts:0});
+          }
+          const photos=r.screenshots.map(file=>{safe(file);const b=fs.readFileSync(out+'/browser/'+file);assert(b.subarray(0,8).equals(Buffer.from([137,80,78,71,13,10,26,10])));return{file,bytes:b.length,sha256:sha(b)};});fs.writeFileSync(out+'/screenshots.json',JSON.stringify(photos,null,2)+'\n');
+          const base='https://douknowball.com',origin=base;
+          function cssDeclarations(text){
+           const styles=[],links=[];
+           for(const row of text.matchAll(/<!--[\s\S]*?-->|<script\b[^>]*>[\s\S]*?<\/script\s*>|<style\b[^>]*>([\s\S]*?)<\/style\s*>|<link\b([^>]*)>/gi)){
+            if(row[1]!==undefined){styles.push({tag:row[0],body:row[1]});continue;}
+            if(row[2]===undefined)continue;
+            const attr=name=>{const hit=new RegExp('(?:^|\\s)'+name+'\\s*=\\s*(?:"([^"]*)"|\\x27([^\\x27]*)\\x27)','i').exec(row[2]);return hit?(hit[1]??hit[2]):null;};
+            if(!(attr('rel')??'').toLowerCase().split(/\s+/).includes('stylesheet'))continue;
+            const href=attr('href');assert(href,'K_PUBLIC_HTTP_STYLESHEET_HREF');links.push({tag:row[0],href,absolute:new URL(href,base).href});
+           }
+           return{styles,links};
+          }
+          function validateCSS(reference,actual){
+           const expected=cssDeclarations(reference),served=cssDeclarations(actual);
+           assert(expected.styles.length||expected.links.some(row=>new URL(row.absolute).origin===origin),'K_PUBLIC_HTTP_REFERENCE_APP_CSS');
+           assert.deepEqual(served.styles.map(row=>row.body),expected.styles.map(row=>row.body),'K_PUBLIC_HTTP_INLINE_CSS_BODY');
+           assert.deepEqual(served.links.map(row=>row.absolute),expected.links.map(row=>row.absolute),'K_PUBLIC_HTTP_STYLESHEET_URLS');
+           return{inline:served.styles.map(row=>({bytes:Buffer.byteLength(row.body),sha256:sha(row.body)})),stylesheetURLs:served.links.map(row=>row.absolute),scope:'Exact actual inline CSS bodies and declared stylesheet URLs versus the admitted document. External font declarations are not a font availability or font response-body claim.'};
+          }
+          
+          const before=JSON.parse(fs.readFileSync(out+'/assets/served-assets-before.json')),after=JSON.parse(fs.readFileSync(out+'/assets/served-assets-after.json'));
+          const expectedRoutes=['/','/club-manager','/soccer-career','/deadline-day','/career-ladder','/dart-draft','/search','/who-am-i','/soccer','/cbb-dynasty'];
+          assert.equal(before.base,base);assert.equal(after.base,base);assert.equal(after.entry,before.entry);assert.deepEqual(after.rows,before.rows);assert.deepEqual(after.criticalOwners,before.criticalOwners);
+          assert.equal(before.schema,'K_LEAGUE_PUBLIC_HTTP_BODIES_V1');assert.equal(after.schema,before.schema);
+          assert(before.rows.some(v=>v.file==='prerender-boot.js'));assert.deepEqual(before.routeHTML.map(v=>v.route).sort(),expectedRoutes.slice().sort());assert.deepEqual(after.routeHTML.map(v=>v.route),before.routeHTML.map(v=>v.route));assert.equal(new Set(before.routeHTML.map(v=>v.route)).size,10);
+          const eligibility=JSON.parse(fs.readFileSync(out+'/indexnow-changed-indexable-snapshots.json'));assert.equal(eligibility.status,'EXACT_ACTUAL_SEVEN_BODY_CHANGED_INDEXABLE_SNAPSHOTS');assert.deepEqual(eligibility.product,m.product);
+          const routes=expectedRoutes.map(route=>({route}));
+          const changedCatalogRoutes=new Set(['/career-ladder','/dart-draft','/soccer-career','/search','/who-am-i','/soccer','/club-manager','/cbb-dynasty']);
+          const catalogueText='Manage a club across current and historical leagues: negotiations, board objectives, trophies and the sack race';
+          const catalogueBefore='Manage any of 454 real clubs across 27 leagues, today or in a real past season: negotiations, board objectives, trophies and the sack race';
+          const metaText='Manage a club across current and historical leagues. Transfers, tactics, the board and the sack race. Free soccer management sim.';
+          const metaBefore='Manage any of 454 real clubs across 27 leagues, today or in a real past season. Transfers, tactics, the board and the sack race. Free soccer management sim.';
+          function attrValue(attrs,name){const hit=new RegExp('(?:^|\\s)'+name+'\\s*=\\s*(?:"([^"]*)"|\\x27([^\\x27]*)\\x27)','i').exec(attrs);return hit?(hit[1]??hit[2]):null;}
+          function attributeText(text){return text.replace(/&#x([0-9a-f]+);/gi,(_,x)=>String.fromCodePoint(parseInt(x,16))).replace(/&#(\d+);/g,(_,x)=>String.fromCodePoint(Number(x))).replace(/&quot;/g,'"').replace(/&apos;/g,"'").replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&nbsp;/g,' ').replace(/&amp;/g,'&').replace(/\s+/g,' ').trim();}
+          function readableText(text){return attributeText(text.replace(/<[^>]+>/g,' '));}
+          function catalogProjection(text){
+           const clean=text.replace(/<!--[\s\S]*?-->/g,''),visible=clean.replace(/<script\b[^>]*>[\s\S]*?<\/script\s*>/gi,'').replace(/<style\b[^>]*>[\s\S]*?<\/style\s*>/gi,'');
+           const values=[catalogueText,catalogueBefore,metaText,metaBefore],readable=[],metas=[],ld=[],stale=[],witnesses=[];
+           const mark=(value,tag,kind)=>{if(value.includes(catalogueBefore)||value.includes(metaBefore))stale.push({kind,value});const needle=value.includes(catalogueText)?catalogueText:value.includes(metaText)?metaText:null;if(needle)witnesses.push({tag,kind,needle,before:needle===catalogueText?catalogueBefore:metaBefore});};
+           for(const m of visible.matchAll(/<(a|p)\b([^>]*)>([\s\S]*?)<\/\1\s*>/gi)){const value=readableText(m[3]);if(!values.some(x=>value.includes(x)))continue;const row={tag:m[1].toLowerCase(),href:m[1].toLowerCase()==='a'?attrValue(m[2],'href'):null,text:value};readable.push(row);mark(value,m[0],'readable-'+row.tag);}
+           for(const m of visible.matchAll(/<meta\b([^>]*)>/gi)){const key=(attrValue(m[1],'name')??attrValue(m[1],'property')??'').toLowerCase(),value=attributeText(attrValue(m[1],'content')??'');if(!['description','og:description','twitter:description'].includes(key)||!values.some(x=>value.includes(x)))continue;metas.push({key,content:value});mark(value,m[0],'head-meta');}
+           for(const m of text.matchAll(/<!--[\s\S]*?-->|<script\b([^>]*)>([\s\S]*?)<\/script\s*>/gi)){
+            if(m[1]===undefined)continue;
+            if((attrValue(m[1],'type')??'').toLowerCase()!=='application/ld+json')continue;
+            let value;try{value=JSON.parse(m[2]);}catch{assert.fail('K_PUBLIC_HTTP_CATALOG_JSONLD_PARSE');}
+            function walk(n){if(Array.isArray(n)){for(const item of n)walk(item);return;}if(!n||typeof n!=='object')return;for(const[k,v]of Object.entries(n)){if(k==='description'&&typeof v==='string'&&values.some(x=>v.includes(x))){ld.push({type:n['@type']??null,description:v});mark(v,m[0],'game-jsonld');}else if(v&&typeof v==='object')walk(v);}}
+            walk(value);
+           }
+           return{value:{readable,metas,ld,stale},witnesses};
+          }
+          function validateCatalog(reference,actual){
+           const expected=catalogProjection(reference),served=catalogProjection(actual);
+           assert.equal(expected.value.stale.length,0,'K_PUBLIC_HTTP_CATALOG_COPY');assert(expected.witnesses.length>0,'K_PUBLIC_HTTP_CATALOG_COPY');
+           assert.equal(served.value.stale.length,0,'K_PUBLIC_HTTP_CATALOG_COPY');assert.deepEqual(served.value,expected.value,'K_PUBLIC_HTTP_CATALOG_COPY');
+           return{expected:expected.value,actual:served.value,scope:'Exact source-derived readable Club Manager link/paragraph and head-meta/GameJSONLD description projection. No unrelated historical count or guide text is rewritten.'};
+          }
+          function requireDocuments(rows){assert.deepEqual(rows.map(row=>row.route),routes.map(row=>row.route),'K_PUBLIC_HTTP_DOCUMENT_CENSUS');}
+                    const policyRows=[],policyControls=[],requirePolicy=(route,actual,expected)=>assert.deepEqual(actual,expected,'K_PUBLIC_EXPECTED_INDEXABILITY_POLICY '+route);
+          for(const phase of ['before','after']){
+            const report=phase==='before'?before:after,dir=out+'/assets/served-'+phase;
+            requireDocuments(report.routeHTML);assert.deepEqual(report.routeHTML.filter(row=>row.catalogCopy).map(row=>row.route).sort(),[...changedCatalogRoutes].sort());
+            const docControl=JSON.parse(fs.readFileSync(dir+'/required-document-omission-control.json'));assert.deepEqual(docControl,report.requiredDocumentControl);assert.equal(docControl.changed,true);assert.equal(docControl.wholeInverseExact,true);assert.equal(docControl.actualHeld,true);assert.equal(docControl.ownedFailure.name,'AssertionError');assert.equal(docControl.removedRoute,'/career-ladder');assert.match(docControl.ownedFailure.message,/^K_PUBLIC_HTTP_DOCUMENT_CENSUS/);
+            const copiedDocs=structuredClone(report.routeHTML),copyBefore=JSON.stringify(copiedDocs),removeAt=copiedDocs.findIndex(row=>row.route===docControl.removedRoute);assert(removeAt>=0);const removed=copiedDocs.splice(removeAt,1)[0];assert.notEqual(JSON.stringify(copiedDocs),copyBefore);let docError;try{requireDocuments(copiedDocs);}catch(error){docError=error;}assert(docError instanceof assert.AssertionError);assert.match(docError.message,/^K_PUBLIC_HTTP_DOCUMENT_CENSUS/);copiedDocs.splice(removeAt,0,removed);assert.equal(JSON.stringify(copiedDocs),copyBefore);
+            const critical=[...new Map(report.criticalOwners.map(owner=>[owner.row.file,owner.row])).values()].sort((a,b)=>a.file<b.file?-1:a.file>b.file?1:0);
+            assert.deepEqual(report.rows.map(row=>({file:row.file,bytes:row.bytes,sha256:row.sha256})),critical);
+            for(const row of report.rows){safe(row.file);const bytes=fs.readFileSync(dir+'/'+row.file),ref=m.distBefore.find(v=>v.file===row.file);assert(ref);assert.equal(row.status,200);assert.equal(bytes.length,row.bytes);assert.equal(sha(bytes),row.sha256);assert.equal(row.bytes,ref.bytes);assert.equal(row.sha256,ref.sha256);}
+            const inventoryControls=JSON.parse(fs.readFileSync(dir+'/critical-inventory-controls.json'));assert.deepEqual(inventoryControls.roles,report.criticalOwners);assert.equal(inventoryControls.controls.length,report.criticalOwners.length);
+            for(const control of inventoryControls.controls){assert.equal(control.changed,true);assert.equal(control.wholeInverseExact,true);assert.match(control.ownedFailure.message,/^K_PUBLIC_HTTP_COMPLETE_CRITICAL_INVENTORY/);assert.equal(control.originalSHA256,sha(JSON.stringify(critical)));const i=critical.findIndex(row=>row.file===control.removed.file);assert(i>=0);assert.deepEqual(control.removed,critical[i]);const fault=critical.filter((_,n)=>n!==i);assert.equal(sha(JSON.stringify(fault)),control.faultSHA256);fault.splice(i,0,control.removed);assert.deepEqual(fault,critical);}
+            for(const row of report.routeHTML){
+              safe(row.file);const bytes=fs.readFileSync(dir+'/'+row.file),text=bytes.toString('utf8'),name=row.route==='/'?'index':row.route.slice(1),referencePath=row.route==='/'?'index.html':row.route.slice(1)+'/index.html',reference=fs.readFileSync(process.env.QA_DIST+'/'+referencePath),referenceRow=m.distBefore.find(v=>v.file===referencePath);
+              assert(referenceRow);assert.equal(row.status,200);assert.equal(bytes.length,row.bytes);assert.equal(sha(bytes),row.sha256);assert.equal(row.referenceHTMLSHA256,referenceRow.sha256);assert.equal(sha(reference),referenceRow.sha256);assert.deepEqual(row.entries,[report.entry]);
+              if(eligibility.snapshotRows.some(v=>v.route===row.route)){const source=eligibility.snapshotRows.find(v=>v.route===row.route);assert(source.bodyChanged);assert.notEqual(source.beforeGitBlob,source.afterGitBlob);assert.deepEqual(row.sourceSnapshot,{path:source.path,bytes:source.bytes,sha256:source.sha256,gitBlob:source.afterGitBlob});assert.equal(m.sourceAfter[source.path],source.sha256);}
+              if(changedCatalogRoutes.has(row.route)){
+                const {control,...projection}=row.catalogCopy;assert.deepEqual(projection,validateCatalog(reference.toString('utf8'),text));
+                const savedControl=JSON.parse(fs.readFileSync(dir+'/'+name+'-catalog-control.json'));assert.deepEqual(savedControl,control);assert.equal(control.changed,true);assert.equal(control.wholeInverseExact,true);assert.equal(control.originalSHA256,sha(bytes));assert.equal(control.ownedFailure.name,'AssertionError');assert.match(control.ownedFailure.message,/^K_PUBLIC_HTTP_CATALOG_COPY/);
+                safe(control.file);const fault=fs.readFileSync(dir+'/'+control.file),faultText=fault.toString('utf8');assert.equal(sha(fault),control.faultSHA256);assert(!fault.equals(bytes));const witness=catalogProjection(text).witnesses.find(w=>w.tag.includes(w.needle));assert(witness);assert.equal(control.witnessKind,witness.kind);const at=text.indexOf(witness.tag);assert(at>=0&&text.indexOf(witness.tag,at+witness.tag.length)<0);const within=witness.tag.indexOf(witness.needle),changedTag=witness.tag.slice(0,within)+witness.before+witness.tag.slice(within+witness.needle.length);assert(Buffer.from(text.slice(0,at)+changedTag+text.slice(at+witness.tag.length)).equals(fault));let owned;try{validateCatalog(reference.toString('utf8'),faultText);}catch(error){owned=error;}assert(owned instanceof assert.AssertionError);assert.match(owned.message,/^K_PUBLIC_HTTP_CATALOG_COPY/);assert(Buffer.from(faultText.slice(0,at)+witness.tag+faultText.slice(at+changedTag.length)).equals(bytes));
+              }
+              const entryControl=JSON.parse(fs.readFileSync(dir+'/'+name+'-html-control.json'));assert.deepEqual(entryControl,row.control);assert.equal(entryControl.changed,true);assert.equal(entryControl.wholeInverseExact,true);assert.match(entryControl.ownedFailure.message,/^CM_TEAM_PUBLIC_ASSET_(?:ROOT|ROUTE)_CURRENT_ENTRY/);
+              const entryFault=fs.readFileSync(dir+'/'+name+'-stale-entry-control.html');assert.equal(sha(entryFault),entryControl.faultSHA256);assert(!entryFault.equals(bytes));const stale=row.route==='/'?'/assets/index-k-league-public-stale-root-control.js':entryControl.staleEntry;assert(stale);assert.equal(entryFault.toString('utf8').split(stale).length-1,1);assert(Buffer.from(entryFault.toString('utf8').replace(stale,report.entry)).equals(bytes));
+              const cssControl=JSON.parse(fs.readFileSync(dir+'/'+name+'-css-control.json'));assert.deepEqual(cssControl,row.css.control);assert.equal(cssControl.changed,true);assert.equal(cssControl.wholeInverseExact,true);assert.equal(cssControl.originalSHA256,sha(bytes));const{control:ignored,...declaredCSS}=row.css;assert.deepEqual(declaredCSS,validateCSS(reference.toString('utf8'),text));
+              safe(cssControl.file);const cssFault=fs.readFileSync(dir+'/'+cssControl.file),faultText=cssFault.toString('utf8');assert.equal(sha(cssFault),cssControl.faultSHA256);assert(!cssFault.equals(bytes));let cssError;try{validateCSS(reference.toString('utf8'),faultText);}catch(error){cssError=error;}assert(cssError instanceof assert.AssertionError);assert.match(cssError.message,/^K_PUBLIC_HTTP_(?:INLINE_CSS_BODY|STYLESHEET_URLS)/);
+              const positiveParts=cssDeclarations(text),faultParts=cssDeclarations(faultText),positiveTags=[...positiveParts.styles,...positiveParts.links].map(v=>v.tag),faultTags=[...faultParts.styles,...faultParts.links].map(v=>v.tag);assert.equal(faultTags.length,positiveTags.length);const changed=positiveTags.map((tag,i)=>tag!==faultTags[i]?i:-1).filter(i=>i>=0);assert.equal(changed.length,1);const ci=changed[0];assert.equal(faultText.split(faultTags[ci]).length-1,1);assert(Buffer.from(faultText.replace(faultTags[ci],positiveTags[ci])).equals(bytes));
+              assert(Array.isArray(row.headers));assert(row.headers.every(h=>typeof h.name==='string'&&typeof h.value==='string'));const expected=liveIndexabilityFindings(reference.toString('utf8')),actual=liveIndexabilityFindings(text,row.headers);if(row.route==='/search')assert(expected.length>0&&expected.every(v=>v.startsWith('blocks Google indexing with meta ')));else assert.deepEqual(expected,[]);requirePolicy(row.route,actual,expected);
+              policyRows.push({phase,route:row.route,referenceHTMLSHA256:sha(reference),actualHTMLSHA256:sha(bytes),actualHeaders:row.headers,findings:actual,policy:row.route==='/search'?'INTENTIONAL_NOINDEX_PRESERVED':'INDEXABLE_EXPECTED_NO_BLOCKERS'});
+              if(row.route==='/search'){
+                const candidates=[...text.matchAll(/<meta\b[^>]*>/gi)].map(v=>v[0]).filter(tag=>text.split(tag).length-1===1&&JSON.stringify(liveIndexabilityFindings(text.replace(tag,''),row.headers))!==JSON.stringify(actual));assert(candidates.length>0,'Actual parsed blocking meta control anchor');const tag=candidates[0],at=text.indexOf(tag),fault=text.slice(0,at)+text.slice(at+tag.length),restored=fault.slice(0,at)+tag+fault.slice(at);assert.notEqual(fault,text);assert.equal(restored,text);let owned;try{requirePolicy(row.route,liveIndexabilityFindings(fault,row.headers),expected);}catch(error){owned=error;}assert(owned instanceof assert.AssertionError);assert.match(owned.message,/^K_PUBLIC_EXPECTED_INDEXABILITY_POLICY/);const file='search-noindex-policy-control.html';fs.writeFileSync(dir+'/'+file,fault,{flag:'wx'});const c={phase,route:row.route,file,changed:true,originalSHA256:sha(bytes),faultSHA256:sha(Buffer.from(fault)),restoredSHA256:sha(Buffer.from(restored)),ownedFailure:{name:owned.name,message:owned.message},wholeInverseExact:true,actualRawHTMLHeld:true,scope:'Copied actual HTML loses one actual parsed blocking meta; no response replacement or indexing claim.'};fs.writeFileSync(dir+'/search-noindex-policy-control.json',JSON.stringify(c,null,2)+'\n',{flag:'wx'});policyControls.push(c);
+              }
+            }
+          }
+          assert.equal(policyRows.length,20);assert.equal(policyControls.length,2);fs.writeFileSync(out+'/public-http-policy-admission.json',JSON.stringify({status:'TEN_ACTUAL_HTTP_DOCUMENT_POLICIES_PASSED_BEFORE_AND_AFTER',routes:expectedRoutes,rows:policyRows,controls:policyControls,scope:'Nine documents retain no indexing blocker, while Search intentionally retains its admitted noindex. This is policy evidence, not a promise of search-engine indexing.'},null,2)+'\n',{flag:'wx'});
+          fs.writeFileSync(out+'/public-native-admission.json',JSON.stringify({status:'PUBLIC_NATIVE_AND_HTTP_PHASES_PASSED',product:m.product,publishedSource:process.env.PUBLISHED_SOURCE,deployedSource:process.env.DEPLOY_SOURCE,deployment:process.env.DEPLOYMENT_ID,contexts:closed,ordinaryPhotos:84,httpDocuments:10,indexableHttpAuditDocuments:9,intentionalNoindexSearch:true,photoReview:'PENDING_ROOT_AND_INDEPENDENT_IMAGE_REVIEW',actualSourceNavigationCounts:true,rawCountsAndFullFramesHeld:true,throughCloseNativePWBodyAbortPreflightProof:true,globalGameProviderWrites:0,publicSourceMapAdditions:3,wholeNativeManifestByteInverse:true,AppBuilds:0,modelOrFixtureGeneration:false,deadline:'Actual HTTP/body identity only, no Deadline play or End-completion claim.'},null,2)+'\n',{flag:'wx'});
+          ADMIT
+          admission_exit=$?
+          printf '%s\n' "$admission_exit" > "$QA_OUT/logs/public-admission.exit" || exit 1
+          exit "$admission_exit"
+      - name: Audit nine indexable documents and require the actual Search noindex policy
+        shell: bash
+        run: |
+          set +e
+          set -uo pipefail
+          unset NODE_OPTIONS
+          test -f "$QA_OUT/public-native-admission.json" || exit 1
+          test -f "$QA_OUT/public-http-policy-admission.json" || exit 1
+          node scripts/auditLive.mjs / /club-manager /soccer-career /deadline-day /career-ladder /dart-draft /who-am-i /soccer /cbb-dynasty > "$QA_OUT/logs/audit-live.stdout.log" 2> "$QA_OUT/logs/audit-live.stderr.log"
+          native_exit=$?
+          printf '%s\n' "$native_exit" > "$QA_OUT/logs/audit-live.exit" || exit 1
+          test "$native_exit" = 0 || exit "$native_exit"
+          grep -F '9 of 9 answered cleanly, 0 did not.' "$QA_OUT/logs/audit-live.stdout.log"
+      - name: Submit only the actual seven changed indexable snapshot URLs
+        shell: bash
+        run: |
+          set +e
+          set -uo pipefail
+          unset NODE_OPTIONS
+          test -f "$QA_OUT/public-native-admission.json" || exit 1
+          test -f "$QA_OUT/public-http-policy-admission.json" || exit 1
+          test "$(cat "$QA_OUT/logs/audit-live.exit")" = 0 || exit 1
+          node --input-type=module <<'INDEXABLE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';import {createHash} from 'node:crypto';
+          const e=process.env,out=e.QA_OUT,proof=JSON.parse(fs.readFileSync(out+'/indexnow-changed-indexable-snapshots.json')),sha=b=>createHash('sha256').update(b).digest('hex'),blob=b=>createHash('sha1').update('blob '+b.length+'\0').update(b).digest('hex'),expected=['/career-ladder','/dart-draft','/soccer-career','/who-am-i','/soccer','/club-manager','/cbb-dynasty'];
+          assert.equal(proof.status,'EXACT_ACTUAL_SEVEN_BODY_CHANGED_INDEXABLE_SNAPSHOTS');assert.deepEqual(proof.product,{commit:e.PRODUCT,tree:e.PRODUCT_TREE});assert.deepEqual(proof.paths.slice().sort(),expected.slice().sort());assert.equal(new Set(proof.paths).size,7);assert.equal(proof.searchAbsent,true);assert.equal(blob(fs.readFileSync(out+'/catalogue-ledger-before.json')),e.CATALOGUE_BASELINE_LEDGER_BLOB);assert.equal(sha(fs.readFileSync('scripts/data/lastmod.json')),proof.currentLedger.sha256);
+          fs.writeFileSync(out+'/indexnow-paths.txt',proof.paths.join(',')+'\n',{flag:'wx'});
+          INDEXABLE
+          selection_exit=$?
+          printf '%s\n' "$selection_exit" > "$QA_OUT/logs/indexnow-selection.exit" || exit 1
+          test "$selection_exit" = 0 || exit "$selection_exit"
+          URLS="$(cat "$QA_OUT/indexnow-paths.txt")" node scripts/indexnowSubmit.mjs > "$QA_OUT/logs/indexnow.stdout.log" 2> "$QA_OUT/logs/indexnow.stderr.log"
+          native_exit=$?
+          printf '%s\n' "$native_exit" > "$QA_OUT/logs/indexnow.exit" || exit 1
+          test "$native_exit" = 0 || exit "$native_exit"
+          grep -F '7 URLs to submit for douknowball.com' "$QA_OUT/logs/indexnow.stdout.log" || exit 1
+          grep -E 'accepted \(HTTP (200|202)\)' "$QA_OUT/logs/indexnow.stdout.log"
+      - name: Always hold every source byte raw native manifest input dist index and lock
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          git ls-files -z > "$QA_OUT/tracked-after.bin"
+          git ls-files -z | xargs -0 sha256sum > "$QA_OUT/source-after.sha256"
+          git ls-files -s > "$QA_OUT/index-after.txt"
+          git status --porcelain=v1 --untracked-files=all > "$QA_OUT/status-after.txt"
+          cp package-lock.json "$QA_OUT/lock-after.json"
+          cmp "$QA_OUT/tracked-before.bin" "$QA_OUT/tracked-after.bin"
+          cmp "$QA_OUT/source-before.sha256" "$QA_OUT/source-after.sha256"
+          cmp "$QA_OUT/index-before.txt" "$QA_OUT/index-after.txt"
+          cmp "$QA_OUT/lock-before.json" "$QA_OUT/lock-after.json"
+          test ! -s "$QA_OUT/status-before.txt"
+          test ! -s "$QA_OUT/status-after.txt"
+          node --input-type=module <<'HOLDS'
+          import fs from 'node:fs';import path from 'node:path';import assert from 'node:assert/strict';import {createHash} from 'node:crypto';
+          const e=process.env,out=e.QA_OUT,sha=b=>createHash('sha256').update(b).digest('hex'),json=v=>JSON.stringify(v,null,2)+'\n';
+          const inventory=dir=>{const rows=[];function walk(rel=''){for(const f of fs.readdirSync(path.join(dir,rel),{withFileTypes:true})){const file=path.posix.join(rel,f.name);if(f.isDirectory())walk(file);else{assert(f.isFile());const b=fs.readFileSync(path.join(dir,file));rows.push({file,bytes:b.length,sha256:sha(b)});}}}walk();return rows.sort((a,b)=>a.file<b.file?-1:a.file>b.file?1:0);};
+          const locks=Object.fromEntries(['package.json','package-lock.json','bun.lock','bun.lockb','yarn.lock','pnpm-lock.yaml'].map(p=>[p,fs.existsSync(p)?sha(fs.readFileSync(p)):null]));fs.writeFileSync(out+'/all-locks-after.json',JSON.stringify(locks)+'\n');assert.deepEqual(locks,JSON.parse(fs.readFileSync(out+'/all-locks-before.json')));
+          if(fs.existsSync(out+'/input-reference-before.json')){const actual=Buffer.from(json(inventory(e.QA_REF)));fs.writeFileSync(out+'/input-reference-after.json',actual);assert(actual.equals(fs.readFileSync(out+'/input-reference-before.json')));}
+          if(fs.existsSync(out+'/dist-before.json')){const actual=Buffer.from(json(inventory(e.QA_DIST)));fs.writeFileSync(out+'/dist-after.json',actual);assert(actual.equals(fs.readFileSync(out+'/dist-before.json')));}
+          if(fs.existsSync(out+'/public-manifest.json')){
+            const originalBytes=fs.readFileSync(out+'/input/native/input/native-manifest.json'),original=JSON.parse(originalBytes),actualBytes=fs.readFileSync(out+'/public-manifest.json'),m=JSON.parse(actualBytes),bridge=JSON.parse(fs.readFileSync(out+'/manifest-bridge.json'));
+            assert.equal(actualBytes.length,bridge.derivedManifestBytes);assert.equal(sha(actualBytes),bridge.derivedManifestSHA256);assert.equal(originalBytes.length,bridge.originalManifestBytes);assert.equal(sha(originalBytes),bridge.originalManifestSHA256);
+            assert.deepEqual(m.sourceBefore,m.sourceAfter);for(const[p,d]of Object.entries(m.sourceAfter))assert.equal(sha(fs.readFileSync(p)),d,p);
+            const inverse=JSON.parse(actualBytes);for(const p of bridge.addedMapPaths){assert(Object.hasOwn(inverse.sourceBefore,p)&&Object.hasOwn(inverse.sourceAfter,p));delete inverse.sourceBefore[p];delete inverse.sourceAfter[p];}delete inverse.public;inverse.schema=original.schema;inverse.status=original.status;assert(Buffer.from(json(inverse)).equals(originalBytes),'K_PUBLIC_FINAL_WHOLE_NATIVE_MANIFEST_BYTE_INVERSE');
+            assert(fs.readFileSync(e.QA_REF+'/native/evidence/input/native-manifest.json').equals(originalBytes));assert(fs.readFileSync(e.QA_REF+'/native/evidence/source-before.sha256').equals(fs.readFileSync(out+'/input/native/source-before.sha256')));
+            assert.deepEqual(inventory(e.QA_DIST),m.distBefore);assert.equal(sha(JSON.stringify(m.distBefore)),m.distDigest);
+          }
+          const admission=out+'/public-native-admission.json',runtimePassed=fs.existsSync(admission);if(runtimePassed){const expected=['assets-after.log','assets-before.log','browser.log','types.log'];assert.deepEqual(fs.readdirSync(out+'/transport').sort(),expected);for(const file of expected)assert.equal(fs.readFileSync(out+'/transport/'+file).length,0);for(const name of ['types','assets-before','browser','assets-after'])assert.equal(fs.readFileSync(out+'/logs/'+name+'.exit','utf8').trim(),'0');}
+          fs.writeFileSync(out+'/source-dist-input-held.json',json({source:true,index:true,tracked:true,status:true,locks:true,completeOriginalInputsHeld:fs.existsSync(out+'/input-reference-after.json'),distHeld:fs.existsSync(out+'/dist-after.json'),rawNativeManifestAndLedgerHeld:fs.existsSync(out+'/manifest-bridge.json'),exactThreePublicMapAdditions:fs.existsSync(out+'/manifest-bridge.json'),wholeNativeManifestByteInverse:fs.existsSync(out+'/manifest-bridge.json'),publicRuntimePassed:runtimePassed,AppBuilds:0,modelOrFixtureGeneration:false,visualReview:'PENDING_ROOT_AND_INDEPENDENT_IMAGE_REVIEW'}),{flag:'wx'});
+          HOLDS
+          printf '0\n' > "$QA_OUT/logs/final-source-holds.exit" || exit 1
+      - name: Retain bounded complete public proof or fatal diagnostic
+        id: evidence
+        if: always()
+        shell: bash
+        run: |
+          set +e
+          set -uo pipefail
+          archive="$RUNNER_TEMP/k-league-public.tar.xz"
+          tar -I 'xz -9' -cf "$archive" -C "$QA_OUT" . > "$RUNNER_TEMP/k-league-public-pack.log" 2>&1
+          pack_exit=$?
+          printf '%s\n' "$pack_exit" > "$QA_OUT/pack-native.exit" || exit 1
+          if [[ "$pack_exit" == 0 && -f "$archive" && "$(stat -c %s "$archive")" -le 50000000 ]]; then
+            sha256sum "$archive" > "$archive.sha256" || exit 1
+            printf 'archive=%s\n' "$archive" >> "$GITHUB_OUTPUT" || exit 1
+            exit 0
+          fi
+          printf '%s\n' 'DIAGNOSTIC_ONLY_NO_COMPLETE_PUBLIC_OR_IMAGE_PROOF: full pack failed or exceeded50000000bytes' > "$QA_OUT/DIAGNOSTIC-ONLY.txt" || exit 1
+          cp "$RUNNER_TEMP/k-league-public-pack.log" "$QA_OUT/pack.log" || exit 1
+          node --input-type=module <<'DIAGNOSTIC'
+          import fs from 'node:fs';import path from 'node:path';import crypto from 'node:crypto';
+          const root=process.env.QA_OUT,sha=b=>crypto.createHash('sha256').update(b).digest('hex'),rows=[];
+          function walk(rel=''){for(const entry of fs.readdirSync(path.join(root,rel),{withFileTypes:true})){const file=path.posix.join(rel,entry.name);if(entry.isDirectory())walk(file);else if(entry.isFile()){const bytes=fs.readFileSync(path.join(root,file));rows.push({file,bytes:bytes.length,sha256:sha(bytes)});}}}walk();
+          fs.writeFileSync(root+'/fatal-full-output-inventory.json',JSON.stringify({status:'DIAGNOSTIC_ONLY',completePublicProof:false,fullArchive:fs.existsSync(path.join(process.env.RUNNER_TEMP,'k-league-public.tar.xz'))?{bytes:fs.statSync(path.join(process.env.RUNNER_TEMP,'k-league-public.tar.xz')).size,sha256:sha(fs.readFileSync(path.join(process.env.RUNNER_TEMP,'k-league-public.tar.xz')))}:null,fullOutput:rows.sort((a,b)=>a.file<b.file?-1:a.file>b.file?1:0),omittedFromDiagnostic:['browser/frames','browser/bodies','ordinary and failure PNG files'],note:'Successful evidence is never truncated. This diagnostic has no runtime or image qualification.'},null,2)+'\n');
+          DIAGNOSTIC
+          test "$?" = 0 || exit 1
+          diagnostic="$RUNNER_TEMP/k-league-public-diagnostic.tar.gz"
+          diagnostic_dir="$RUNNER_TEMP/k-league-public-diagnostic"
+          mkdir -p "$diagnostic_dir/logs" "$diagnostic_dir/transport" "$diagnostic_dir/input" "$diagnostic_dir/browser" || exit 1
+          find "$QA_OUT" -maxdepth 1 -type f -exec cp '{}' "$diagnostic_dir/" \; || exit 1
+          cp -R "$QA_OUT/logs/." "$diagnostic_dir/logs/" || exit 1
+          cp -R "$QA_OUT/transport/." "$diagnostic_dir/transport/" || exit 1
+          cp -R "$QA_OUT/input/." "$diagnostic_dir/input/" || exit 1
+          if test -d "$QA_OUT/browser"; then find "$QA_OUT/browser" -maxdepth 1 -type f -name '*.json' -exec cp '{}' "$diagnostic_dir/browser/" \; || exit 1; fi
+          if test -d "$QA_OUT/assets"; then
+            mkdir -p "$diagnostic_dir/assets" || exit 1
+            find "$QA_OUT/assets" -maxdepth 1 -type f -name '*.json' -exec cp '{}' "$diagnostic_dir/assets/" \; || exit 1
+            for phase in before after; do
+              if test -d "$QA_OUT/assets/served-$phase"; then
+                mkdir -p "$diagnostic_dir/assets/served-$phase" || exit 1
+                find "$QA_OUT/assets/served-$phase" -maxdepth 1 -type f \( -name '*.json' -o -name '*.html' \) -exec cp '{}' "$diagnostic_dir/assets/served-$phase/" \; || exit 1
+              fi
+            done
+          fi
+          tar -czf "$diagnostic" -C "$diagnostic_dir" . || exit 1
+          test "$(stat -c %s "$diagnostic")" -le 50000000 || exit 1
+          sha256sum "$diagnostic" > "$diagnostic.sha256" || exit 1
+          printf 'archive=%s\n' "$diagnostic" >> "$GITHUB_OUTPUT" || exit 1
+          exit 1
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: k-league-public
+          path: |
+            ${{ steps.evidence.outputs.archive }}
+            ${{ steps.evidence.outputs.archive }}.sha256
+          if-no-files-found: error
+          retention-days: 14
+          compression-level: 0
