@@ -1,4 +1,4 @@
-name: Soccer Grid settlement qualification
+name: Soccer Grid settlement and saved guide qualification
 on:
   push:
     branches: [codex/soccer-grid-settlement-qa-20261105]
@@ -54,6 +54,21 @@ jobs:
         run: node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee grid-submission-artifacts/types.log
       - name: Fixed original nine effective faults and restored source
         run: NODE_OPTIONS="--max-old-space-size=6144 --require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/checkSoccerGridSubmission.mjs 2>&1 | tee grid-submission-artifacts/arms.log
+      - name: Existing Grid and shared daily consumers after guide correction
+        if: ${{ !cancelled() }}
+        run: |
+          NODE_OPTIONS="--max-old-space-size=6144 --require=$PWD/scripts/lib/offlineTransport.cjs" node node_modules/vitest/vitest.mjs run src/test/soccerGridBlurOwnership.test.tsx src/test/soccerGridDeadline.test.tsx src/test/soccerGridInitialTimer.test.tsx src/test/soccerGridSearchAccessibility.test.tsx src/test/soccerGridSearchDiscovery.test.tsx src/test/soccerGridSettingsRace.test.tsx src/test/gridCellLayout.test.tsx src/test/gridCellMotion.test.tsx src/test/dailyRecord.test.tsx src/test/dailySaveHardening.test.tsx src/test/dailySaveShapes.test.tsx --maxWorkers=1 --minWorkers=1 --reporter=default --reporter=json --outputFile=grid-submission-artifacts/existing.json 2>&1 | tee grid-submission-artifacts/existing.log
+          git fetch --no-tags --depth=1 origin 617b8354b722c703407074e78a86665d4f7633b5
+          R848_PART=parity NODE_OPTIONS="--max-old-space-size=6144 --require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simDailySaveHardening.mjs 2>&1 | tee grid-submission-artifacts/parity-coverage.log
+          git show 617b8354b722c703407074e78a86665d4f7633b5:src/hooks/useDailyPuzzle.ts > grid-submission-artifacts/pre-daily-hook.ts
+          test "$(git hash-object grid-submission-artifacts/pre-daily-hook.ts)" = 3486bb42c9626752236be858651e6f7332bc5d24
+          R848_PRE_HOOK="$PWD/grid-submission-artifacts/pre-daily-hook.ts" NODE_OPTIONS="--max-old-space-size=6144 --require=$PWD/scripts/lib/offlineTransport.cjs" node node_modules/vitest/vitest.mjs run src/test/dailySaveParity.test.tsx --maxWorkers=1 --minWorkers=1 --reporter=default --reporter=json --outputFile=grid-submission-artifacts/parity.json 2>&1 | tee grid-submission-artifacts/parity.log
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          for(const [file,passed,skipped] of [['existing',183,1],['parity',39,1]]) {
+            const report=JSON.parse(fs.readFileSync('grid-submission-artifacts/'+file+'.json'));assert.equal(report.numPassedTests,passed);assert.equal(report.numPendingTests,skipped);assert.equal(report.numFailedTests,0);
+          }
+          NODE
       - name: Preserve source proof before browser setup
         if: always()
         uses: actions/upload-artifact@v4
@@ -83,7 +98,19 @@ jobs:
         run: |
           node scripts/simGuideHeadings.mjs --refresh /soccer-grid 2>&1 | tee grid-submission-artifacts/guide-refresh.log
           node scripts/genSearchKeywords.mjs 2>&1 | tee grid-submission-artifacts/search-generation.log
-          git diff --exit-code HEAD -- scripts/data/guideHeadingsFrozen.json src/data/searchKeywords.json
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';import {execFileSync} from 'node:child_process';
+          const original=file=>JSON.parse(execFileSync('git',['show','HEAD:'+file],{encoding:'utf8'})),current=file=>JSON.parse(fs.readFileSync(file));
+          const oldGuide=original('scripts/data/guideHeadingsFrozen.json'),newGuide=current('scripts/data/guideHeadingsFrozen.json');
+          assert.deepEqual({...oldGuide,routes:{...oldGuide.routes,'/soccer-grid':newGuide.routes['/soccer-grid']}},newGuide,'Only the owned frozen guide may change');
+          assert.equal(newGuide.routes['/soccer-grid'].rules.length,oldGuide.routes['/soccer-grid'].rules.length+1);
+          assert.equal(newGuide.routes['/soccer-grid'].example.length,oldGuide.routes['/soccer-grid'].example.length+1);
+          const oldIndex=original('src/data/searchKeywords.json'),newIndex=current('src/data/searchKeywords.json');
+          assert.deepEqual(Object.keys(newIndex.k).sort(),Object.keys(oldIndex.k).sort(),'All search routes held');
+          assert.deepEqual({...oldIndex,source:newIndex.source,k:{...oldIndex.k,'/soccer-grid':newIndex.k['/soccer-grid']}},newIndex,'Only owned search row and generated source stamp may change');
+          fs.writeFileSync('grid-submission-artifacts/guide-index-derivation.json',JSON.stringify({guideRoute:'/soccer-grid',oldGuide:oldGuide.routes['/soccer-grid'],newGuide:newGuide.routes['/soccer-grid'],oldIndexSource:oldIndex.source,newIndexSource:newIndex.source,oldKeywords:oldIndex.k['/soccer-grid'],newKeywords:newIndex.k['/soccer-grid'],otherGuideRoutesHeld:Object.keys(oldGuide.routes).length-1,otherSearchRowsHeld:Object.keys(oldIndex.k).length-1},null,2));
+          console.log('PASS only owned frozen2sentences and search row/source stamp');
+          NODE
       - name: Scoped saved page and production build
         if: ${{ !cancelled() && steps.browser_setup.outcome == 'success' }}
         id: build
@@ -92,9 +119,9 @@ jobs:
           node --input-type=module <<'NODE'
           import fs from 'node:fs';import path from 'node:path';import assert from 'node:assert/strict';import {execFileSync} from 'node:child_process';import {createHash} from 'node:crypto';
           const changed=execFileSync('git',['diff','--name-only','HEAD'],{encoding:'utf8'}).trim().split('\n').filter(Boolean).sort();
-          const allowed=['public/sitemap.xml','public/soccer-grid/index.html','scripts/data/lastmod.json'];
+          const allowed=['public/sitemap.xml','public/soccer-grid/index.html','scripts/data/lastmod.json','scripts/data/guideHeadingsFrozen.json','src/data/searchKeywords.json'];
           assert(changed.includes('public/soccer-grid/index.html'),'Owned policy appears in refreshed snapshot');
-          assert(changed.every(p=>allowed.includes(p)),'Only owned snapshot and derived sitemap/ledger may change: '+changed);
+          assert(changed.every(p=>allowed.includes(p)),'Only owned snapshot, guide, search and derived sitemap/ledger may change: '+changed);
           const before=JSON.parse(execFileSync('git',['show','HEAD:scripts/data/lastmod.json'],{encoding:'utf8'})),after=JSON.parse(fs.readFileSync('scripts/data/lastmod.json'));
           assert.deepEqual(Object.keys(after).sort(),Object.keys(before).sort(),'All ledger routes held');
           const keys=Object.keys(before);const ledgers=before.pages?{a:before.pages,b:after.pages}:before.routes?{a:before.routes,b:after.routes}:{a:before,b:after};
@@ -126,7 +153,7 @@ jobs:
         run: |
           git ls-files -s > grid-submission-artifacts/source-after.txt
           cmp grid-submission-artifacts/source-before.txt grid-submission-artifacts/source-after.txt
-          git diff --exit-code HEAD -- src scripts/qa scripts/lib package.json package-lock.json scripts/data/guideHeadingsFrozen.json src/data/searchKeywords.json
+          git diff --exit-code HEAD -- src scripts/qa scripts/lib package.json package-lock.json ':!src/data/searchKeywords.json'
           git diff --name-only HEAD > grid-submission-artifacts/changed.txt
           sha256sum package.json package-lock.json > grid-submission-artifacts/locks-after.txt
           cmp grid-submission-artifacts/locks-before.txt grid-submission-artifacts/locks-after.txt
@@ -135,7 +162,7 @@ jobs:
           const before=JSON.parse(fs.readFileSync('grid-submission-artifacts/installed-before.json'));
           const after=before.map(([p])=>[p,JSON.parse(fs.readFileSync(p+'/package.json')).version]);assert.equal(after.length,521);assert.deepEqual(after,before);
           fs.writeFileSync('grid-submission-artifacts/installed-final.json',JSON.stringify(after));
-          const allowed=['public/sitemap.xml','public/soccer-grid/index.html','scripts/data/lastmod.json'];
+          const allowed=['public/sitemap.xml','public/soccer-grid/index.html','scripts/data/lastmod.json','scripts/data/guideHeadingsFrozen.json','src/data/searchKeywords.json'];
           const changed=fs.readFileSync('grid-submission-artifacts/changed.txt','utf8').trim().split('\n').filter(Boolean);assert(changed.every(p=>allowed.includes(p)),'No unrelated source changes');
           assert(fs.existsSync('grid-submission-artifacts/offline.log'),'Precreated preload receipt held');assert.equal(fs.statSync('grid-submission-artifacts/offline.log').size,0,'No Node transport attempted');
           NODE

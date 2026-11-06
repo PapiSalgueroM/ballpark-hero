@@ -50,7 +50,8 @@ describe('Soccer Grid explicit clock policy', () => {
   it(TITLES.preplay, async () => {
     const view = await mount(); capture('preplay', 'before-first-guess');
     expect(document.querySelector('[role="dialog"]')).toBeNull();
-    const policy = within(view.container).queryByText(POLICY, { exact: true });
+    const settings = within(view.container).getByRole('button', { name: '40s' }).parentElement!.parentElement!;
+    const policy = within(settings).queryByText(POLICY, { exact: true });
     expect(policy, TITLES.preplay).not.toBeNull(); expect(policy).toBeVisible();
     expect(within(view.container).getByRole('button', { name: 'Unlimited' })).toBeEnabled();
     expect(within(view.container).getByRole('button', { name: '40s' })).toBeEnabled();

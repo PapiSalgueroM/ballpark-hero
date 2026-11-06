@@ -9,12 +9,13 @@ const BASE = 'd3935a288f00abd556467a45076636b890d8dd25';
 const FILES = { hook: 'src/hooks/useSoccerGrid.ts', daily: 'src/hooks/useDailyPuzzle.ts', page: 'src/pages/SoccerGrid.tsx' };
 const TESTS = ['src/test/soccerGridSubmissionOwnership.test.tsx', 'src/test/soccerGridSubmissionDeadline.test.tsx', 'src/test/soccerGridTimerPolicy.test.tsx'];
 const PINS = {
+  'src/data/gameContent/soccer2.ts': 'fbc57434c0f4e27df17176dacccd10f159efad3b',
   [FILES.hook]: '1c84994a36c8ac51e4020823d899c2342be60271',
   [FILES.daily]: 'b8a0d6ba268efe0e728c4ee96fbc6c60fcc73846',
   [FILES.page]: 'fd793d83fef33fa075fcac53e97453cdbf83fff7',
   [TESTS[0]]: '7cb7f94a73ce7340243e7bdae6d6759e2c1a6f11',
   [TESTS[1]]: 'ac23b92cb6cedb7c0eb92343d95ba462349ae8ac',
-  [TESTS[2]]: '62320c279b70935a6baa478684c4f2db5be0441e',
+  [TESTS[2]]: 'f422283b69492a7a5b538749c694620d63847566',
   'src/test/dailySaveParity.test.tsx': '2dc86a625380e1f472f12ee4948c4fc1fae7cbc4',
 };
 const sha = bytes => createHash('sha256').update(bytes).digest('hex');

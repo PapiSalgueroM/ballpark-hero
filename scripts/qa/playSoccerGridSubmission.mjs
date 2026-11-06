@@ -130,7 +130,8 @@ try {
         await action(page, 'initial-help-close', dialog.getByRole('button', { name: "Let's Play!", exact: true }), () => press(dialog.getByRole('button', { name: "Let's Play!", exact: true })), false);
       }
       await cells(page).first().waitFor(); check(await cells(page).count() === 9, id + ': actual App grid loaded');
-      const note = page.locator('#dukb-main').getByText(POLICY, { exact: true }); await note.waitFor();
+      const settings = page.getByRole('button', { name: '40s', exact: true }).locator('xpath=../..');
+      const note = settings.getByText(POLICY, { exact: true }); await note.waitFor();
       const box = await note.boundingBox(); check(!!box && box.x >= 0 && box.x + box.width <= width && box.height > 0, id + ': pre-play policy wraps within screen');
       await inspectBoard(page, 0, 'mounted-' + label); return page;
     };
