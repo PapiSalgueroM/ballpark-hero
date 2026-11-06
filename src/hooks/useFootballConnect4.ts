@@ -183,6 +183,8 @@ export function useFootballConnect4() {
   );
 
   const cancelSelection = useCallback(() => {
+    pendingRequest.current = null;
+    setIsValidating(false);
     setSelectedColumn(null);
     setTargetRow(null);
     setValidationError(null);
