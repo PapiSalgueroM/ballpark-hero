@@ -1,0 +1,147 @@
+name: Derive K League guide search keywords without changing the generator
+on:
+  push:
+    branches: [codex/k-league-search-generation-20261105]
+permissions:
+  contents: read
+concurrency:
+  group: k-league-search-generation-${{ github.ref }}
+  cancel-in-progress: false
+env:
+  CI: '1'
+  SIM_NETWORK: offline
+  TZ: UTC
+  PRODUCT: f79e9d02483037182e106e96435b2c34f431d4ff
+  PRODUCT_TREE: 884af46c41f895c9ad76c23f5a74447e2f8fd140
+jobs:
+  derive:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: '1.4.4'
+      - name: Bind exact source and capture complete checkout
+        run: |
+          set -euo pipefail
+          OUT="$RUNNER_TEMP/k-league-search-generation"
+          test ! -e "$OUT"
+          mkdir -p "$OUT/logs" "$OUT/transport" "$OUT/outputs"
+          export OUT
+          printf 'OUT=%s\n' "$OUT" >> "$GITHUB_ENV"
+          test "$(git rev-parse HEAD^)" = "$PRODUCT"
+          test "$(git rev-parse 'HEAD^^{tree}')" = "$PRODUCT_TREE"
+          test "$(git diff --name-status --no-renames HEAD^ HEAD)" = $'A\t.github/workflows/k-league-search-generation-20261105.yml'
+          test "$(git hash-object scripts/genSearchKeywords.mjs)" = d0a237a766215631a81d7cd6789f1fa632d3f9b7
+          test "$(git hash-object scripts/simSiteSearch.mjs)" = 6be8e1603e84e1a8799099e1558c415bc87a42a7
+          test "$(git hash-object src/data/searchKeywords.json)" = 78c07779d2678802f7cdd3a4ab6e8d41af221650
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$OUT/source-before.sha256"
+          git ls-files -s > "$OUT/index-before.txt"
+          git ls-files -z > "$OUT/tracked-before.bin"
+          git status --porcelain=v1 --untracked-files=all > "$OUT/status-before.txt"
+          test ! -s "$OUT/status-before.txt"
+          for lock in package.json package-lock.json bun.lock bun.lockb; do if test -f "$lock"; then sha256sum "$lock"; fi; done > "$OUT/locks-before.sha256"
+          cp src/data/searchKeywords.json "$OUT/outputs/before.json"
+          cp .github/workflows/k-league-search-generation-20261105.yml "$OUT/workflow.yml"
+          git rev-parse HEAD 'HEAD^{tree}' HEAD^ > "$OUT/source-identity.txt"
+      - name: Install held dependencies
+        run: |
+          set -euo pipefail
+          test "$(bun --version)" = 1.4.4
+          bun --version > "$OUT/logs/bun-version.log"
+          node --version > "$OUT/logs/node-version.log"
+          bun install --frozen-lockfile > "$OUT/logs/bun-install.log" 2>&1
+          git diff --exit-code HEAD
+      - name: Measure stale input then generate and test the exact output
+        run: |
+          set -euo pipefail
+          export GIT_NO_LAZY_FETCH=1
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          node --input-type=module <<'DERIVE'
+          import fs from 'node:fs';import path from 'node:path';import crypto from 'node:crypto';import assert from 'node:assert/strict';import{spawnSync}from'node:child_process';
+          const out=process.env.OUT,target='src/data/searchKeywords.json',sha=b=>crypto.createHash('sha256').update(b).digest('hex'),blob=b=>crypto.createHash('sha1').update(Buffer.from('blob '+b.length+'\0')).update(b).digest('hex'),commands=[];
+          const run=(label,command,args,expected)=>{const receipt=out+'/transport/'+label+'.log';fs.writeFileSync(receipt,'');const r=spawnSync(command,args,{encoding:'utf8',maxBuffer:16*1024*1024,env:{...process.env,SIM_OFFLINE_RECEIPT:receipt}});fs.writeFileSync(out+'/logs/'+label+'.stdout.log',r.stdout??'');fs.writeFileSync(out+'/logs/'+label+'.stderr.log',r.stderr??'');const v={label,command:[command,...args],status:r.status,signal:r.signal,error:r.error?String(r.error):null,receiptBytes:fs.statSync(receipt).size};commands.push(v);fs.writeFileSync(out+'/commands.json',JSON.stringify(commands,null,2)+'\n');assert.equal(r.status,expected,label);assert.equal(r.signal,null);assert.equal(r.error,undefined);assert.equal(v.receiptBytes,0,label);return r;};
+          const staleMessage='FAIL: the guides have changed since the keyword index was built (index 3612528c808babc3, guides now f0fab3b07a51fc12). Rerun: node scripts/genSearchKeywords.mjs';
+          const lines=r=>(r.stdout+r.stderr).split(/\r?\n/).map(line=>line.trim()).filter(Boolean);
+          const onlyStale=r=>{assert.deepEqual(lines(r).filter(line=>line.startsWith('FAIL:')),[staleMessage],'K_SEARCH_ONLY_EXPECTED_STALE_FAILURE');assert.deepEqual(lines(r).filter(line=>line.startsWith('simSiteSearch:')),['simSiteSearch: 1 failure'],'K_SEARCH_ONLY_EXPECTED_STALE_FAILURE');};
+          const green=r=>assert.deepEqual(lines(r).filter(line=>line.startsWith('simSiteSearch:')),['simSiteSearch: green. Every game is findable by name, typos included, and the ranking can explain itself.'],'K_SEARCH_NORMAL_GREEN_CLOSING');
+          const before=fs.readFileSync(target);assert(before.equals(fs.readFileSync(out+'/outputs/before.json')));assert.equal(blob(before),'78c07779d2678802f7cdd3a4ab6e8d41af221650');
+          const stale=run('old-index','node',['--unhandled-rejections=strict','scripts/simSiteSearch.mjs'],1);onlyStale(stale);const copied={stdout:stale.stdout+'\n  FAIL: copied extra finding\n',stderr:stale.stderr};assert.notEqual(copied.stdout,stale.stdout);let classifierError;try{onlyStale(copied);}catch(error){classifierError=error;}assert(classifierError instanceof assert.AssertionError);assert.match(classifierError.message,/K_SEARCH_ONLY_EXPECTED_STALE_FAILURE/);copied.stdout=stale.stdout;assert.equal(copied.stdout,stale.stdout);assert.equal(copied.stderr,stale.stderr);
+          run('types-before','node_modules/.bin/tsc',['--noEmit','-p','tsconfig.app.json'],0);
+          run('generate','node',['--unhandled-rejections=strict','scripts/genSearchKeywords.mjs'],0);
+          const after=fs.readFileSync(target);assert(!after.equals(before));fs.writeFileSync(out+'/outputs/after.json',after,{flag:'wx'});const a=JSON.parse(after),b=JSON.parse(before);assert.equal(a.source,'f0fab3b07a51fc12');assert.equal(b.source,'3612528c808babc3');assert.deepEqual(Object.keys(a).sort(),['k','source','v']);assert.equal(a.v,b.v);assert.deepEqual(Object.keys(a.k).sort(),Object.keys(b.k).sort());
+          run('generate-repeat','node',['--unhandled-rejections=strict','scripts/genSearchKeywords.mjs'],0);assert(fs.readFileSync(target).equals(after),'Whole repeated generator output');
+          green(run('new-index','node',['--unhandled-rejections=strict','scripts/simSiteSearch.mjs'],0));
+          const delta=run('generated-delta','git',['diff','--name-only','--no-renames'],0);assert.equal(delta.stdout.trim(),target);
+          const fault=JSON.parse(after);fault.source=b.source;const faultBytes=Buffer.from(JSON.stringify(fault)+'\n');assert(!faultBytes.equals(after));fs.writeFileSync(target,faultBytes);fs.writeFileSync(out+'/outputs/stale-control.json',faultBytes,{flag:'wx'});
+          const rejected=run('stale-control','node',['--unhandled-rejections=strict','scripts/simSiteSearch.mjs'],1);onlyStale(rejected);
+          fs.writeFileSync(target,after);assert(fs.readFileSync(target).equals(after));green(run('restored-index','node',['--unhandled-rejections=strict','scripts/simSiteSearch.mjs'],0));run('types-after','node_modules/.bin/tsc',['--noEmit','-p','tsconfig.app.json'],0);
+          fs.writeFileSync(out+'/generation-admitted.json',JSON.stringify({status:'ACTUAL_DERIVED_SEARCH_INDEX_CAPTURED_NO_BUILD_NATIVE_OR_RELEASE_CREDIT',product:process.env.PRODUCT,tree:process.env.PRODUCT_TREE,unchangedGenerator:'d0a237a766215631a81d7cd6789f1fa632d3f9b7',unchangedReader:'6be8e1603e84e1a8799099e1558c415bc87a42a7',path:target,before:{bytes:before.length,sha256:sha(before),gitBlob:blob(before),source:b.source},after:{bytes:after.length,sha256:sha(after),gitBlob:blob(after),source:a.source},keys:Object.keys(a.k).length,repeatWholeBytesExact:true,onlyGeneratedPathChanged:true,copiedActualStaleHashControl:{changed:true,rejected:true,wholeInverseExact:true},copiedActualClassifierControl:{changed:true,rejected:true,message:classifierError.message,wholeInverseExact:true},commandCount:commands.length},null,2)+'\n');
+          fs.writeFileSync(target,before);assert(fs.readFileSync(target).equals(before));
+          DERIVE
+      - name: Always restore and hold complete source
+        if: always()
+        run: |
+          set -euo pipefail
+          test -f "$OUT/outputs/before.json"
+          cp "$OUT/outputs/before.json" src/data/searchKeywords.json
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$OUT/source-after.sha256"
+          git ls-files -s > "$OUT/index-after.txt"
+          git ls-files -z > "$OUT/tracked-after.bin"
+          git status --porcelain=v1 --untracked-files=all > "$OUT/status-after.txt"
+          for lock in package.json package-lock.json bun.lock bun.lockb; do if test -f "$lock"; then sha256sum "$lock"; fi; done > "$OUT/locks-after.sha256"
+          cmp "$OUT/source-before.sha256" "$OUT/source-after.sha256"
+          cmp "$OUT/index-before.txt" "$OUT/index-after.txt"
+          cmp "$OUT/tracked-before.bin" "$OUT/tracked-after.bin"
+          cmp "$OUT/locks-before.sha256" "$OUT/locks-after.sha256"
+          test ! -s "$OUT/status-after.txt"
+          printf '0\n' > "$OUT/final-source-hold.exit"
+      - name: Pack bounded complete output or fatal diagnostic
+        id: pack
+        if: always()
+        run: |
+          set +e
+          set -uo pipefail
+          archive="$RUNNER_TEMP/k-league-search-generation-evidence.tar.gz"
+          tar -czf "$archive" -C "$OUT" . > "$RUNNER_TEMP/k-league-search-generation-pack.log" 2>&1
+          pack_exit=$?
+          printf '%s\n' "$pack_exit" > "$OUT/pack-native.exit" || exit 1
+          if [[ "$pack_exit" == 0 && -f "$archive" && "$(stat -c %s "$archive")" -le 50000000 ]]; then
+            sha256sum "$archive" > "$archive.sha256" || exit 1
+            printf 'archive=%s\n' "$archive" >> "$GITHUB_OUTPUT" || exit 1
+            exit 0
+          fi
+          printf '%s\n' 'DIAGNOSTIC_ONLY_NO_COMPLETE_GENERATION_PROOF: full pack failed or exceeded50000000bytes' > "$OUT/DIAGNOSTIC-ONLY.txt" || exit 1
+          cp "$RUNNER_TEMP/k-league-search-generation-pack.log" "$OUT/pack.log" || exit 1
+          diagnostic="$RUNNER_TEMP/k-league-search-generation-diagnostic.tar.gz"
+          diagnostic_dir="$RUNNER_TEMP/k-league-search-generation-diagnostic"
+          mkdir -p "$diagnostic_dir/logs" "$diagnostic_dir/transport" "$diagnostic_dir/raw" || exit 1
+          find "$OUT" -maxdepth 1 -type f ! -name '*.tar.gz' ! -name '*.tgz' -exec cp '{}' "$diagnostic_dir/" \; || exit 1
+          cp -R "$OUT/logs/." "$diagnostic_dir/logs/" || exit 1
+          cp -R "$OUT/transport/." "$diagnostic_dir/transport/" || exit 1
+          if test -f "$OUT/raw/closing.json"; then cp "$OUT/raw/closing.json" "$diagnostic_dir/raw/closing.json" || exit 1; fi
+          tar -czf "$diagnostic" -C "$diagnostic_dir" . || exit 1
+          test "$(stat -c %s "$diagnostic")" -le 50000000 || exit 1
+          sha256sum "$diagnostic" > "$diagnostic.sha256" || exit 1
+          printf 'archive=%s\n' "$diagnostic" >> "$GITHUB_OUTPUT" || exit 1
+          exit 1
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: k-league-search-generation-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            ${{ steps.pack.outputs.archive }}
+            ${{ steps.pack.outputs.archive }}.sha256
+          if-no-files-found: error
+          retention-days: 30
+          compression-level: 0
