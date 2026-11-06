@@ -1,0 +1,163 @@
+name: Russia Career bridge, original pool generation
+on:
+  push:
+    branches: [codex/russia-career-generate-20261106]
+permissions:
+  contents: read
+concurrency:
+  group: russia-career-generate-20261106
+  cancel-in-progress: false
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        shell: bash
+    env:
+      BASE_CORE: 636b31efd64b749d4900e3f5773681e0496addf6
+      BASE_TREE: 9b6671db9c6f56db7bfd572521cf4e37cf7011a7
+      CANDIDATE_CORE: 271d0dd74dfa473ce0bdee371975aca7847813f4
+      CANDIDATE_TREE: e786648a6267b04713146e9c5cffe0db11ac9238
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24.22.2'
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: '1.4.4'
+      - name: Bind the exact three input edits and original tree
+        run: |
+          set -euo pipefail
+          export QA_OUT="$RUNNER_TEMP/russia-career-generate-evidence"
+          export QA_BASE="$RUNNER_TEMP/russia-career-generate-baseline"
+          mkdir -p "$QA_OUT/logs" "$QA_OUT/transport" "$QA_OUT/source"
+          echo "QA_OUT=$QA_OUT" >> "$GITHUB_ENV"
+          echo "QA_BASE=$QA_BASE" >> "$GITHUB_ENV"
+          test "$(git rev-parse HEAD^)" = "$CANDIDATE_CORE"
+          test "$(git rev-parse "$CANDIDATE_CORE^{tree}")" = "$CANDIDATE_TREE"
+          test "$(git rev-parse "$BASE_CORE^{tree}")" = "$BASE_TREE"
+          test "$(git diff-tree --no-commit-id --name-only -r HEAD | wc -l)" = 1
+          test "$(git diff-tree --no-commit-id --name-only -r HEAD)" = ".github/workflows/russia-career-generate-20261106.yml"
+          git worktree add --detach "$QA_BASE" "$BASE_CORE"
+          (cd "$QA_BASE"; git ls-files -z | sort -z | xargs -0 sha256sum) > "$QA_OUT/baseline-source-before.sha256"
+          (cd "$QA_BASE"; git ls-files --stage) > "$QA_OUT/baseline-index-before.txt"
+          (cd "$QA_BASE"; git status --porcelain=v1) > "$QA_OUT/baseline-status-before.txt"
+          (cd "$QA_BASE"; sha256sum package.json package-lock.json bun.lock bun.lockb) > "$QA_OUT/baseline-locks-before.sha256"
+          test ! -s "$QA_OUT/baseline-status-before.txt"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$QA_OUT/source-before.sha256"
+          git ls-files --stage > "$QA_OUT/index-before.txt"
+          git status --porcelain=v1 > "$QA_OUT/status-before.txt"
+          test ! -s "$QA_OUT/status-before.txt"
+          sha256sum package.json package-lock.json bun.lock bun.lockb > "$QA_OUT/locks-before.sha256"
+          cp .github/workflows/russia-career-generate-20261106.yml "$QA_OUT/workflow.yml"
+          git diff --name-only "$BASE_CORE" "$CANDIDATE_CORE" > "$QA_OUT/input-paths.txt"
+          node --input-type=module <<'BIND'
+          import fs from 'node:fs';import assert from 'node:assert/strict';import {execFileSync} from 'node:child_process';
+          const expected=['scripts/data/soccerCareerFacts.json','scripts/lib/careerClubPool.mjs','src/lib/clubManager.ts'];
+          const actual=fs.readFileSync(process.env.QA_OUT+'/input-paths.txt','utf8').trim().split('\n').sort();
+          assert.deepEqual(actual,expected);
+          const git=(...args)=>execFileSync('git',args,{encoding:'utf8'}).trim();
+          for(const p of expected)fs.copyFileSync(p,process.env.QA_OUT+'/source/'+p.replaceAll('/','__'));
+          fs.writeFileSync(process.env.QA_OUT+'/source-role.json',JSON.stringify({base:{commit:process.env.BASE_CORE,tree:process.env.BASE_TREE},candidate:{commit:process.env.CANDIDATE_CORE,tree:process.env.CANDIDATE_TREE},qa:{commit:git('rev-parse','HEAD'),tree:git('rev-parse','HEAD^{tree}')},inputPaths:actual,scope:'Original baseline generator freshness plus candidate generated output only. No type/build/model/browser/deploy claim.'},null,2)+'\n');
+          BIND
+      - name: Install frozen app tools
+        run: |
+          set -euo pipefail
+          test "$(node --version)" = v24.22.2
+          test "$(bun --version)" = 1.4.4
+          bun install --frozen-lockfile > "$QA_OUT/logs/install.log" 2>&1
+          ln -s "$GITHUB_WORKSPACE/node_modules" "$QA_BASE/node_modules"
+          git diff --exit-code HEAD -- package.json package-lock.json bun.lock bun.lockb
+      - name: Original unchanged pool must regenerate exactly
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          export SIM_OFFLINE_RECEIPT="$QA_OUT/transport/original.log"
+          export GIT_NO_LAZY_FETCH=1
+          : > "$SIM_OFFLINE_RECEIPT"
+          cp "$QA_BASE/src/data/soccerCareerClubPool.ts" "$QA_OUT/original-pool.ts"
+          set +e
+          (cd "$QA_BASE"; node scripts/genCareerClubPool.mjs --table) 2>&1 | tee "$QA_OUT/logs/original-generator.log"
+          pipeline_status=("${PIPESTATUS[@]}")
+          native_exit=${pipeline_status[0]}
+          tee_exit=${pipeline_status[1]}
+          set -e
+          printf '%s\n' "$native_exit" > "$QA_OUT/original-generator.exit"
+          printf '%s\n' "$tee_exit" > "$QA_OUT/original-generator-log.exit"
+          test "$native_exit" = 0
+          test "$tee_exit" = 0
+          cmp "$QA_BASE/src/data/soccerCareerClubPool.ts" "$QA_OUT/original-pool.ts"
+          (cd "$QA_BASE"; git diff --exit-code HEAD)
+          test ! -s "$SIM_OFFLINE_RECEIPT"
+      - name: Generate the candidate once and retain the complete output
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          export SIM_OFFLINE_RECEIPT="$QA_OUT/transport/candidate.log"
+          export GIT_NO_LAZY_FETCH=1
+          : > "$SIM_OFFLINE_RECEIPT"
+          set +e
+          node scripts/genCareerClubPool.mjs --table 2>&1 | tee "$QA_OUT/logs/candidate-generator.log"
+          pipeline_status=("${PIPESTATUS[@]}")
+          native_exit=${pipeline_status[0]}
+          tee_exit=${pipeline_status[1]}
+          set -e
+          printf '%s\n' "$native_exit" > "$QA_OUT/candidate-generator.exit"
+          printf '%s\n' "$tee_exit" > "$QA_OUT/candidate-generator-log.exit"
+          test "$native_exit" = 0
+          test "$tee_exit" = 0
+          cp src/data/soccerCareerClubPool.ts "$QA_OUT/candidate-pool.ts"
+          test ! -s "$SIM_OFFLINE_RECEIPT"
+          git diff -- src/data/soccerCareerClubPool.ts > "$QA_OUT/generated-pool.diff"
+          test "$(git diff --name-only)" = src/data/soccerCareerClubPool.ts
+          cp "$QA_OUT/original-pool.ts" src/data/soccerCareerClubPool.ts
+          git diff --exit-code HEAD
+      - name: Hold all inputs after the intentional generated-output capture
+        if: always()
+        run: |
+          set -euo pipefail
+          if test -f "$QA_OUT/original-pool.ts"; then
+            cp "$QA_BASE/src/data/soccerCareerClubPool.ts" "$QA_OUT/baseline-pool-at-cleanup.ts"
+            cp src/data/soccerCareerClubPool.ts "$QA_OUT/candidate-pool-at-cleanup.ts"
+            cp "$QA_OUT/original-pool.ts" "$QA_BASE/src/data/soccerCareerClubPool.ts"
+            cp "$QA_OUT/original-pool.ts" src/data/soccerCareerClubPool.ts
+          fi
+          (cd "$QA_BASE"; git ls-files -z | sort -z | xargs -0 sha256sum) > "$QA_OUT/baseline-source-after.sha256"
+          (cd "$QA_BASE"; git ls-files --stage) > "$QA_OUT/baseline-index-after.txt"
+          (cd "$QA_BASE"; git status --porcelain=v1) > "$QA_OUT/baseline-status-after.txt"
+          (cd "$QA_BASE"; sha256sum package.json package-lock.json bun.lock bun.lockb) > "$QA_OUT/baseline-locks-after.sha256"
+          cmp "$QA_OUT/baseline-source-before.sha256" "$QA_OUT/baseline-source-after.sha256"
+          cmp "$QA_OUT/baseline-index-before.txt" "$QA_OUT/baseline-index-after.txt"
+          cmp "$QA_OUT/baseline-locks-before.sha256" "$QA_OUT/baseline-locks-after.sha256"
+          test ! -s "$QA_OUT/baseline-status-after.txt"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$QA_OUT/source-after.sha256"
+          git ls-files --stage > "$QA_OUT/index-after.txt"
+          git status --porcelain=v1 > "$QA_OUT/status-after.txt"
+          sha256sum package.json package-lock.json bun.lock bun.lockb > "$QA_OUT/locks-after.sha256"
+          cmp "$QA_OUT/source-before.sha256" "$QA_OUT/source-after.sha256"
+          cmp "$QA_OUT/index-before.txt" "$QA_OUT/index-after.txt"
+          cmp "$QA_OUT/locks-before.sha256" "$QA_OUT/locks-after.sha256"
+          test ! -s "$QA_OUT/status-after.txt"
+      - name: Retain the original complete packet
+        if: always()
+        run: |
+          set -euo pipefail
+          cd "$QA_OUT"
+          find . -type f ! -name manifest.sha256 -print0 | sort -z | xargs -0 sha256sum > manifest.sha256
+          tar -czf "$RUNNER_TEMP/russia-career-generate.tar.gz" .
+          cd "$RUNNER_TEMP"
+          sha256sum russia-career-generate.tar.gz > russia-career-generate.tar.gz.sha256
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: russia-career-generate
+          path: |
+            ${{ runner.temp }}/russia-career-generate.tar.gz
+            ${{ runner.temp }}/russia-career-generate.tar.gz.sha256
+          compression-level: 0
+          retention-days: 30
