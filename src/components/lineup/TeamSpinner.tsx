@@ -117,7 +117,7 @@ const TeamSpinner = ({ teams, targetIndex, isSpinning, onFinish, recordedYear }:
             {settled ? (displayIsNation ? '🏳️ Nation' : '🏟️ Club') : 'Spinning...'}
           </p>
           <div
-            className={`text-2xl md:text-3xl font-bold font-display transition-all duration-100 truncate ${
+            className={`text-2xl md:text-3xl font-bold font-display transition-all duration-100 truncate ${recordedYear !== undefined ? 'pr-12 ' : ''}${
               settled ? 'text-foreground' : 'text-primary blur-[1px]'
             }`}
           >
