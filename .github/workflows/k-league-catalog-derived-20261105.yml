@@ -1,0 +1,250 @@
+name: Derive the corrected K League catalogue copy without final-build credit
+on:
+  push:
+    branches: [codex/k-league-catalog-derived-20261105]
+permissions:
+  contents: read
+concurrency:
+  group: k-league-catalog-derived-${{ github.ref }}
+  cancel-in-progress: false
+env:
+  CI: '1'
+  SIM_NETWORK: offline
+  TZ: UTC
+  PRODUCT_CORE: 5f9f41d8ef0a4d025b3da1f55e5720b6e82c1710
+  PRODUCT_TREE: d99664b6535b5addf08172fcb9ebc03e89301a9c
+  GENERATED_POOL_BLOB: 522399403d4a5816680d0d5d2e19e3fda650d71d
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    env:
+      ENGINES: chromium
+      SEO_SPLIT_BASE_REF: HEAD
+      SWEEP_OFFLINE: '1'
+      PLAYWRIGHT_BROWSERS_PATH: /home/runner/.cache/ms-playwright
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 3
+          filter: blob:none
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: '1.4.4'
+      - name: Bind the two canonical catalogue corrections and capture all derived targets
+        run: |
+          set -euo pipefail
+          OUT="$RUNNER_TEMP/k-league-catalog-derived"
+          test ! -e "$OUT"
+          mkdir -p "$OUT/logs" "$OUT/transport" "$OUT/original" "$OUT/generated" "$OUT/commands" "$OUT/controls"
+          printf 'QA_OUT=%s\n' "$OUT" >> "$GITHUB_ENV"
+          export QA_OUT="$OUT"
+          node --input-type=module <<'PINS'
+          import assert from 'node:assert/strict';import fs from 'node:fs';import path from 'node:path';import crypto from 'node:crypto';import{execFileSync}from'node:child_process';
+          const out=process.env.QA_OUT,workflow='.github/workflows/k-league-catalog-derived-20261105.yml',parent='2177b835998fd4605002b2d6ce41c07ee4ffdfff',parentTree='0ca31c45846ee164f944de7de7c191e553d32106';
+          const git=(...a)=>execFileSync('git',a,{encoding:'utf8'}).trim(),bytes=(...a)=>execFileSync('git',a),sha=b=>crypto.createHash('sha256').update(b).digest('hex'),blob=b=>crypto.createHash('sha1').update(Buffer.from('blob '+b.length+'\0')).update(b).digest('hex');
+          assert.equal(git('rev-parse','HEAD^'),process.env.PRODUCT_CORE);assert.equal(git('rev-parse','HEAD^^{tree}'),process.env.PRODUCT_TREE);assert.equal(git('show','-s','--format=%P',process.env.PRODUCT_CORE),parent);assert.equal(git('rev-parse',parent+'^{tree}'),parentTree);assert.deepEqual(git('diff','--name-status','--no-renames','HEAD^','HEAD').split('\n'),['A\t'+workflow]);
+          const roles=[{"path":"src/data/gameRegistry.ts","beforeGitBlob":"f560b40a74d1468ac72dfde4ee6fec6635a9a255","operations":[{"offset":3912,"before":"Manage any of 454 real clubs across 27 leagues, today or in a real past season: negotiations, board objectives, trophies and the sack race","after":"Manage a club across current and historical leagues: negotiations, board objectives, trophies and the sack race","count":1}],"afterGitBlob":"d35291bfe6b3681f0c14dc8879a894fe70925c64"},{"path":"src/data/seoMeta.ts","beforeGitBlob":"cf7a5142e59b97048d27b5ece9a6588a92073728","operations":[{"offset":3537,"before":"Manage any of 454 real clubs across 27 leagues, today or in a real past season. Transfers, tactics, the board and the sack race. Free soccer management sim.","after":"Manage a club across current and historical leagues. Transfers, tactics, the board and the sack race. Free soccer management sim.","count":1}],"afterGitBlob":"10e64dfc8dee9e75603bf38849580d609d8e10e1"}],pins=[["scripts/genSeoMetaParts.mjs","4ea8d8661a3d99ae44f55aec38b443a80ca43318"],["scripts/genSearchKeywords.mjs","d0a237a766215631a81d7cd6789f1fa632d3f9b7"],["scripts/simSiteSearch.mjs","6be8e1603e84e1a8799099e1558c415bc87a42a7"],["scripts/prerender.mjs","3d4fb1e595413c48c7bd65b927730d25cc3a2e18"],["scripts/lib/prerenderClock.mjs","da0aa64a36581e239563bccc6844713930e1fe0d"],["scripts/genSitemap.mjs","08344dfc84be3ca24533c8d56e0f229b02b93c0a"],["scripts/data/guideHeadingsFrozen.json","fa969a7bd126f05b60922dd9ea797b18571122fd"],["scripts/simGuideHeadings.mjs","fa23f7e6ace62d8e71e3585ab6afbe4dbef0f674"],["src/data/gameContent/clubManagement.ts","0e1fa56534a005204a6e53df875d7ed5e7f8692f"],["src/data/gameContent/soccer2.ts","7576d973cf9a4a0aa7a9413eeb99130ad81f4f88"],["scripts/lib/offlineTransport.cjs","0fda542a2649fe5da937c6976fd0f5b6073e74b6"],["package.json","2ff64986fb76ebc51b706f2fd24765768874008a"],["package-lock.json","97d6f12a052f25f400462938c241789a083f0bfe"],["tsconfig.app.json","51f581dd91641b4c1f1219f646788e73cf6bf00c"]];assert.deepEqual(git('diff','--name-status','--no-renames',parent,process.env.PRODUCT_CORE).split('\n'),roles.map(r=>'M\t'+r.path).sort());
+          for(const row of roles){const old=bytes('show',parent+':'+row.path),actual=fs.readFileSync(row.path),o=row.operations[0],s=old.toString('utf8');assert.equal(blob(old),row.beforeGitBlob);assert.equal(blob(actual),row.afterGitBlob);assert.equal(s.split(o.before).length-1,1);assert.equal(s.indexOf(o.before),o.offset);assert(actual.equals(Buffer.from(s.slice(0,o.offset)+o.after+s.slice(o.offset+o.before.length))));const back=actual.toString('utf8');assert(Buffer.from(back.slice(0,o.offset)+o.before+back.slice(o.offset+o.after.length)).equals(old));const dest=out+'/canonical-before/'+row.path;fs.mkdirSync(path.dirname(dest),{recursive:true});fs.writeFileSync(dest,old,{flag:'wx'});}
+          for(const[p,held]of pins)assert.equal(blob(fs.readFileSync(p)),held,p);
+          const names=fs.readdirSync('src/data/seoMetaParts').sort();assert.equal(names.length,33);assert(names.every(n=>/^(?:index|seoMetaPart\d\d)\.ts$/.test(n)));
+          const routes=['/career-ladder','/dart-draft','/soccer-career','/search','/who-am-i','/soccer','/club-manager','/cbb-dynasty'],paths=[...names.map(n=>'src/data/seoMetaParts/'+n),'src/data/searchKeywords.json',...routes.map(r=>'public'+r+'/index.html'),'public/sitemap.xml','scripts/data/lastmod.json'];assert.equal(paths.length,44);assert.equal(new Set(paths).size,44);
+          const originals=paths.map(p=>{const b=fs.readFileSync(p),dest=out+'/original/'+p;fs.mkdirSync(path.dirname(dest),{recursive:true});fs.writeFileSync(dest,b,{flag:'wx'});assert(fs.readFileSync(dest).equals(b));return{path:p,bytes:b.length,sha256:sha(b),gitBlob:blob(b)};});fs.writeFileSync(out+'/original-output-pins.json',JSON.stringify(originals,null,2)+'\n',{flag:'wx'});
+          fs.writeFileSync(out+'/source-identity.json',JSON.stringify({QA:{commit:git('rev-parse','HEAD'),tree:git('rev-parse','HEAD^{tree}'),workflowGit:blob(fs.readFileSync(workflow))},product:{commit:process.env.PRODUCT_CORE,tree:process.env.PRODUCT_TREE},parent:{commit:parent,tree:parentTree},canonicalRoles:roles,sourcePins:pins,exactTwoLiteralWholeInverses:true,scope:'Only source composition. No derived outputs, build/native/public qualification at preflight.'},null,2)+'\n',{flag:'wx'});fs.copyFileSync(workflow,out+'/workflow.yml');
+          PINS
+          git rev-parse HEAD HEAD^{tree} > "$OUT/source.txt"
+          git diff --name-status --no-renames HEAD^ HEAD > "$OUT/qa-delta.txt"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$OUT/source-before.sha256"
+          git ls-files -s > "$OUT/index-before.txt"
+          git ls-files -z > "$OUT/tracked-before.bin"
+          for lock in package.json package-lock.json bun.lock bun.lockb; do if test -f "$lock"; then sha256sum "$lock"; fi; done > "$OUT/locks-before.sha256"
+          git status --porcelain=v1 --untracked-files=all > "$OUT/status-before.txt"
+          test ! -s "$OUT/status-before.txt"
+      - name: Install held app and required build tools
+        run: |
+          set -euo pipefail
+          test "$(bun --version)" = 1.4.4
+          bun --version > "$QA_OUT/logs/bun-version.log"
+          node --version > "$QA_OUT/logs/node-version.log"
+          bun install --frozen-lockfile > "$QA_OUT/logs/bun-install.log" 2>&1
+          node -p "JSON.stringify({router:require('react-router-dom/package.json').version,vite:require('vite/package.json').version,rollup:JSON.parse(require('fs').readFileSync('node_modules/rollup/package.json','utf8')).version})" > "$QA_OUT/logs/build-versions.json"
+          git diff --exit-code HEAD -- package.json package-lock.json bun.lock bun.lockb
+          npm install --prefix "$RUNNER_TEMP/cm-team-picker-original-tools" --package-lock=false --no-audit --no-fund playwright@1.64.0 > "$QA_OUT/logs/playwright-install.log" 2>&1
+          test ! -e node_modules/playwright
+          test ! -e node_modules/playwright-core
+          ln -s "$RUNNER_TEMP/cm-team-picker-original-tools/node_modules/playwright" node_modules/playwright
+          ln -s "$RUNNER_TEMP/cm-team-picker-original-tools/node_modules/playwright-core" node_modules/playwright-core
+          "$RUNNER_TEMP/cm-team-picker-original-tools/node_modules/.bin/playwright" install --with-deps chromium > "$QA_OUT/logs/chromium-install.log" 2>&1
+          python3 -m pip install --target "$RUNNER_TEMP/cm-team-picker-original-python" fonttools pillow > "$QA_OUT/logs/python-install.log" 2>&1
+          echo "PYTHONPATH=$RUNNER_TEMP/cm-team-picker-original-python" >> "$GITHUB_ENV"
+      - name: Derive metadata then one unqualified seed and only eight snapshot documents
+        run: |
+          set -euo pipefail
+          export GIT_NO_LAZY_FETCH=1
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          cat > "$QA_OUT/catalog-derived-controller.mjs" <<'CATALOG_CONTROLLER'
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import crypto from 'node:crypto';
+          import assert from 'node:assert/strict';
+          import {spawnSync,execFileSync} from 'node:child_process';
+          import {pathToFileURL} from 'node:url';
+          import {createRequire} from 'node:module';
+          const out=process.env.QA_OUT,ROOT=process.cwd();
+          const routes=['/career-ladder','/dart-draft','/soccer-career','/search','/who-am-i','/soccer','/club-manager','/cbb-dynasty'];
+          const htmlPaths=routes.map(r=>'public'+r+'/index.html'),metaDir='src/data/seoMetaParts',keywordPath='src/data/searchKeywords.json',sitemapPath='public/sitemap.xml',ledgerPath='scripts/data/lastmod.json';
+          const oldPrefix='Manage any of 454 real clubs across 27 leagues',newPrefix='Manage a club across current and historical leagues';
+          const newSeo='Manage a club across current and historical leagues. Transfers, tactics, the board and the sack race. Free soccer management sim.';
+          const oldSeo='Manage any of 454 real clubs across 27 leagues, today or in a real past season. Transfers, tactics, the board and the sack race. Free soccer management sim.';
+          const sha=b=>crypto.createHash('sha256').update(b).digest('hex'),blob=b=>crypto.createHash('sha1').update(Buffer.from('blob '+b.length+'\0')).update(b).digest('hex'),pin=b=>({bytes:b.length,sha256:sha(b),gitBlob:blob(b)});
+          const originals=JSON.parse(fs.readFileSync(out+'/original-output-pins.json')),old=new Map(originals.map(r=>[r.path,fs.readFileSync(out+'/original/'+r.path)]));
+          const metaPaths=originals.map(r=>r.path).filter(p=>p.startsWith(metaDir+'/')),targets=[...metaPaths,keywordPath,...htmlPaths,sitemapPath,ledgerPath],commands=[],controls=[];
+          assert.equal(targets.length,44);assert.equal(new Set(targets).size,44);assert.deepEqual([...old.keys()].sort(),[...targets].sort());for(const r of originals)assert.deepEqual(pin(old.get(r.path)),{bytes:r.bytes,sha256:r.sha256,gitBlob:r.gitBlob});
+          const metadata=new Map(),generated=new Map();
+          function run(name,command,args,env={}){
+            const stdout=out+'/logs/'+name+'.stdout.log',stderr=out+'/logs/'+name+'.stderr.log',receipt=out+'/transport/'+name+'.log';
+            fs.writeFileSync(receipt,'',{flag:'wx'});const a=fs.openSync(stdout,'wx'),b=fs.openSync(stderr,'wx');let r;
+            try{r=spawnSync(command,args,{env:{...process.env,...env,SIM_OFFLINE_RECEIPT:receipt},stdio:['ignore',a,b],timeout:900000});}finally{fs.closeSync(a);fs.closeSync(b);}
+            const row={name,command:[command,...args],status:r.status,signal:r.signal,error:r.error?String(r.error):null,stdout,stderr,receipt};
+            commands.push(row);fs.writeFileSync(out+'/commands/'+name+'.json',JSON.stringify(row,null,2)+'\n',{flag:'wx'});fs.writeFileSync(out+'/commands.json',JSON.stringify(commands,null,2)+'\n');
+            assert.equal(r.status,0,name+' native status');assert.equal(r.signal,null);assert.equal(r.error,undefined);
+            const lines=fs.readFileSync(receipt,'utf8').trim().split('\n').filter(Boolean);
+            const allowed=/^\[SIM_OFFLINE_BLOCK\] external browser route continue https:\/\/(?:fonts\.(?:googleapis|gstatic)\.com|flagcdn\.com)$/;
+            if(name==='prerender')assert(lines.every(s=>allowed.test(s)),name+' unexpected blocked transport');else assert.equal(lines.length,0,name+' unexpected transport');
+            return {name,blockedAttempts:lines.length};
+          }
+          const node=(name,args,env)=>run(name,process.execPath,['--unhandled-rejections=strict',...args],env);
+          const type=name=>run(name,'node_modules/.bin/tsc',['--noEmit','-p','tsconfig.app.json']);
+          const listMeta=()=>fs.readdirSync(metaDir).sort().map(n=>metaDir+'/'+n);
+          function sameMetaPresence(){assert.deepEqual(listMeta(),[...metaPaths].sort(),'K_CATALOG_META_PRESENCE');}
+          function saveGenerated(p){const b=fs.readFileSync(p),dest=out+'/generated/'+p;fs.mkdirSync(path.dirname(dest),{recursive:true});fs.writeFileSync(dest,b,{flag:'wx'});generated.set(p,b);return {path:p,...pin(b),changed:!b.equals(old.get(p)),old:pin(old.get(p))};}
+          function metaValidate(actual,expected){assert.deepEqual([...actual.keys()].sort(),[...expected.keys()].sort(),'K_CATALOG_META_FILE_CENSUS');for(const [p,b]of actual)assert.equal(b.toString('utf8'),expected.get(p),'K_CATALOG_META_CANONICAL_SOURCE_BYTES');}
+          function searchValidate(before,after){assert.deepEqual(Object.keys(after),Object.keys(before),'K_CATALOG_SEARCH_FIELDS');assert.equal(after.v,before.v);assert.equal(after.source,'f0fab3b07a51fc12');assert.equal(before.source,after.source);assert.deepEqual(Object.keys(after.k),Object.keys(before.k),'K_CATALOG_SEARCH_ROUTE_KEYS');for(const route of Object.keys(before.k))if(route!=='/club-manager')assert.deepEqual(after.k[route],before.k[route],'K_CATALOG_OTHER_KEYWORD_ROWS_HELD');}
+          function snapshot(p,b){const s=b.toString('utf8');assert(s.includes('id="dukb-snapshot"'),'K_CATALOG_SNAPSHOT_MARKER');assert(!s.includes(oldPrefix),'K_CATALOG_STALE_DESCRIPTION_ABSENT');assert(s.includes(newPrefix),'K_CATALOG_NEW_DESCRIPTION_PRESENT');assert(!/\/assets\//.test(s),'K_CATALOG_SNAPSHOT_NO_ASSET_LINKS');const route='/'+p.slice('public/'.length,-'/index.html'.length),can=[...s.matchAll(/<link\b[^>]*rel="canonical"[^>]*>/g)];assert.equal(can.length,1);assert(can[0][0].includes('https://douknowball.com'+route));const robots=text=>[...text.matchAll(/<meta\b[^>]*\bname="robots"[^>]*>/gi)].map(m=>m[0]);const previous=robots(old.get(p).toString('utf8'));assert.deepEqual(robots(s),previous,'K_CATALOG_ROBOTS_TAGS_HELD');if(route==='/search')assert(previous.some(t=>/noindex/i.test(t)),'K_CATALOG_SEARCH_REMAINS_NOINDEX');else assert(!robots(s).some(t=>/noindex/i.test(t)),'K_CATALOG_INDEXABLE_ROUTE_REMAINS_INDEXABLE');}
+          function mapSitemap(b){const m=new Map();for(const match of b.toString('utf8').matchAll(/<url>[\s\S]*?<\/url>/g)){const loc=match[0].match(/<loc>([^<]+)<\/loc>/)?.[1];assert(loc&&!m.has(loc));m.set(loc,match[0]);}assert(m.size>100);return m;}
+          function sitemapValidate(before,after,nextLedger){const a=mapSitemap(before),b=mapSitemap(after);assert.deepEqual([...a.keys()],[...b.keys()],'K_CATALOG_SITEMAP_URL_CENSUS');for(const [url,row]of a){const route=url.slice('https://douknowball.com'.length);if(!routes.includes(route))assert.equal(b.get(url),row,'K_CATALOG_OTHER_SITEMAP_ROWS');else{const expected=row.replace(/<lastmod>[^<]*<\/lastmod>/,'<lastmod>'+nextLedger[route].date+'</lastmod>');assert.equal(b.get(url),expected,'K_CATALOG_ONLY_DERIVED_LASTMOD_IN_SELECTED_ROW');}}const strip=s=>s.toString('utf8').replace(/<url>[\s\S]*?<\/url>/g,'');assert.equal(strip(before),strip(after),'K_CATALOG_SITEMAP_OTHER_BYTES');}
+          function rejected(label,body){let error;try{body();}catch(e){error=e;}assert(error instanceof assert.AssertionError,label+' must reject changed actual output');const prefixes={'meta-stale-description':'K_CATALOG_META_CANONICAL_SOURCE_BYTES','meta-cm-row-omission':'K_CATALOG_META_CANONICAL_SOURCE_BYTES','snapshot-stale-description':'K_CATALOG_STALE_DESCRIPTION_ABSENT','sitemap-row-omission':'K_CATALOG_SITEMAP_URL_CENSUS','other-ledger-row':'K_CATALOG_OTHER_LEDGER_ROWS','search-other-row':'K_CATALOG_OTHER_KEYWORD_ROWS_HELD'};assert(Object.hasOwn(prefixes,label),'Declared actual control label');assert(error.message.startsWith(prefixes[label]),label+' intended guard ownership');return {label,name:error.name,message:error.message,ownedGuard:prefixes[label]};}
+          function copyControl(label,before,fault,restore,validator,extension){assert(!fault.equals(before));assert(restore.equals(before));const dir=out+'/controls';fs.mkdirSync(dir,{recursive:true});fs.writeFileSync(dir+'/'+label+'.fault.'+extension,fault,{flag:'wx'});fs.writeFileSync(dir+'/'+label+'.restored.'+extension,restore,{flag:'wx'});const e=rejected(label,()=>validator(fault));controls.push({...e,changed:true,wholeInverseExact:true,before:pin(before),fault:pin(fault),restored:pin(restore)});}
+          function currentDelta(){return execFileSync('git',['diff','--name-only','--no-renames','HEAD'],{encoding:'utf8'}).trim().split('\n').filter(Boolean).sort();}
+          function inventory(dir){const rows=[];function visit(p){for(const e of fs.readdirSync(p,{withFileTypes:true})){const q=path.join(p,e.name);if(e.isDirectory())visit(q);else{assert(e.isFile());const b=fs.readFileSync(q);rows.push({file:q.split(path.sep).join('/'),bytes:b.length,sha256:sha(b)});}}}visit(dir);return rows.sort((a,b)=>a.file<b.file?-1:a.file>b.file?1:0);}
+          let result,seedBefore;
+          try{
+            for(const name of ['PRERENDER_CONTROL','PRERENDER_SETTLE','PRERENDER_ONLY'])assert.equal(process.env[name],undefined,name+' must retain unchanged defaults');
+            type('types-before');
+            node('old-search-normal',['scripts/simSiteSearch.mjs']);assert(fs.readFileSync(out+'/logs/old-search-normal.stdout.log','utf8').includes('simSiteSearch: green.'));assert.equal(JSON.parse(old.get(keywordPath)).source,'f0fab3b07a51fc12');
+            node('generate-meta-parts',['scripts/genSeoMetaParts.mjs']);sameMetaPresence();
+            const {seoMetaPartFiles}=await import(pathToFileURL(path.join(ROOT,'scripts/genSeoMetaParts.mjs')).href),expectedMeta=await seoMetaPartFiles(ROOT);
+            const metaActual=new Map(metaPaths.map(p=>[path.basename(p),fs.readFileSync(p)]));metaValidate(metaActual,expectedMeta);
+            for(const p of metaPaths)if(!p.endsWith('/seoMetaPart12.ts'))assert(fs.readFileSync(p).equals(old.get(p)),'K_CATALOG_OTHER_META_FILES_HELD');
+            const metaFirst=new Map(metaPaths.map(p=>[p,fs.readFileSync(p)]));node('repeat-meta-parts',['scripts/genSeoMetaParts.mjs']);sameMetaPresence();for(const [p,b]of metaFirst)assert(fs.readFileSync(p).equals(b),'K_CATALOG_META_REPEAT_WHOLE_BYTES');
+            node('generate-search',['scripts/genSearchKeywords.mjs']);const keyword=fs.readFileSync(keywordPath);searchValidate(JSON.parse(old.get(keywordPath)),JSON.parse(keyword));node('repeat-search',['scripts/genSearchKeywords.mjs']);assert(fs.readFileSync(keywordPath).equals(keyword),'K_CATALOG_SEARCH_REPEAT_WHOLE_BYTES');node('new-search-normal',['scripts/simSiteSearch.mjs']);
+            const beforeSeedDelta=currentDelta(),preSeedBytes=new Map(targets.map(p=>[p,fs.readFileSync(p)]));
+            run('unqualified-seed-build','npm',['run','build']);sameMetaPresence();assert.deepEqual(currentDelta(),beforeSeedDelta,'K_CATALOG_SEED_NO_ADDITIONAL_TRACKED_WRITES');for(const [p,b]of preSeedBytes)assert(fs.readFileSync(p).equals(b),'K_CATALOG_SEED_DERIVED_SOURCE_HELD');
+            seedBefore=inventory('dist');fs.writeFileSync(out+'/seed-dist-before.json',JSON.stringify(seedBefore,null,2)+'\n',{flag:'wx'});run('archive-unqualified-seed','tar',['-czf',out+'/unqualified-seed-dist.tar.gz','dist']);const tar=fs.readFileSync(out+'/unqualified-seed-dist.tar.gz');fs.writeFileSync(out+'/unqualified-seed-dist.tar.gz.sha256',sha(tar)+'  unqualified-seed-dist.tar.gz\n',{flag:'wx'});
+            const entryHTML=fs.readFileSync('dist/index.html','utf8'),entry=entryHTML.match(/<script[^>]+type="module"[^>]+src="\/([^"]+\.js)"/)?.[1];assert(entry);assert(fs.readFileSync('dist/'+entry,'utf8').includes(newPrefix),'K_CATALOG_SEED_REGISTRY_COPY');for(const p of htmlPaths)assert(old.get(p).toString('utf8').includes(oldPrefix),'Actual old literal census scope');
+            const transport=node('prerender',['scripts/prerender.mjs'],{PRERENDER_ONLY:routes.join(',')});const log=fs.readFileSync(out+'/logs/prerender.stdout.log','utf8');assert(log.includes('prerendered 8 routes, 0 failed'),'K_CATALOG_EIGHT_ACTUAL_ROUTES');assert(log.includes('clock samples at 0, 5, 11 days:'),'K_CATALOG_UNCHANGED_THREE_CLOCK_SAMPLES');
+            for(const p of htmlPaths){snapshot(p,fs.readFileSync(p));assert(!fs.readFileSync(p).equals(old.get(p)));assert(fs.readFileSync('dist/'+p.slice('public/'.length)).equals(fs.readFileSync(p)));}
+            node('sitemap',['scripts/genSitemap.mjs']);
+            const beforeLedger=JSON.parse(old.get(ledgerPath)),afterLedger=JSON.parse(fs.readFileSync(ledgerPath));assert.equal(beforeLedger.__version,3);assert.equal(afterLedger.__version,beforeLedger.__version);assert.deepEqual(Object.keys(afterLedger),Object.keys(beforeLedger),'K_CATALOG_LEDGER_KEYS');
+            const generator=fs.readFileSync('scripts/genSitemap.mjs','utf8'),start=generator.indexOf('\nfunction snapshotFingerprint(route) {')+1,end=generator.indexOf('\nfunction lastmodFor(route)',start);assert(start>0&&end>start);const fingerprintSource=generator.slice(start,end).trim();fs.mkdirSync(out+'/inputs',{recursive:true});fs.writeFileSync(out+'/inputs/actual-snapshotFingerprint.mjs',fingerprintSource+'\n',{flag:'wx'});const fingerprint=new Function('fs','path','ROOT','createHash','return ('+fingerprintSource+');')(fs,path,ROOT,crypto.createHash);
+            function ledgerValidate(actual){assert.deepEqual(Object.keys(actual),Object.keys(beforeLedger),'K_CATALOG_LEDGER_KEYS');assert.equal(actual.__version,beforeLedger.__version);const changed=[];for(const route of Object.keys(beforeLedger)){if(route==='__version')continue;if(!routes.includes(route)){assert.deepEqual(actual[route],beforeLedger[route],'K_CATALOG_OTHER_LEDGER_ROWS');continue;}const fp=fingerprint(route);assert(fp);assert.equal(actual[route].hash,fp,'K_CATALOG_ACTUAL_GENERATOR_FINGERPRINT');if(beforeLedger[route].hash===fp)assert.deepEqual(actual[route],beforeLedger[route]);else{changed.push(route);assert.equal(actual[route].date,new Date().toISOString().slice(0,10));assert(actual[route].date>=beforeLedger[route].date);}}return changed;}
+            const ledgerChanged=ledgerValidate(afterLedger);assert(ledgerChanged.length<=7);assert(!Object.hasOwn(beforeLedger,'/search'));assert(!Object.hasOwn(afterLedger,'/search'));assert(!mapSitemap(fs.readFileSync(sitemapPath)).has('https://douknowball.com/search'));sitemapValidate(old.get(sitemapPath),fs.readFileSync(sitemapPath),afterLedger);
+            const outputRows=targets.map(saveGenerated),changed=outputRows.filter(r=>r.changed).map(r=>r.path);assert.deepEqual(currentDelta(),[...changed].sort(),'K_CATALOG_ONLY_ACTUAL_DECLARED_DERIVED_OUTPUTS');
+            const seedAfter=inventory('dist');assert.deepEqual(seedAfter.map(r=>r.file),seedBefore.map(r=>r.file),'K_CATALOG_DIST_PRESENCE');const allowedDist=new Set(htmlPaths.map(p=>'dist/'+p.slice(7)));for(let i=0;i<seedBefore.length;i++)if(!allowedDist.has(seedBefore[i].file))assert.deepEqual(seedAfter[i],seedBefore[i],'K_CATALOG_DIST_OTHER_BODIES_HELD');fs.writeFileSync(out+'/seed-dist-after.json',JSON.stringify(seedAfter,null,2)+'\n',{flag:'wx'});fs.writeFileSync(out+'/seed-dist-hold.json',JSON.stringify({status:'UNQUALIFIED_SEED_ASSETS_HELD_ONLY_EIGHT_DOCUMENTS_GENERATED',allOtherBodiesHeld:true,selectedDocuments:htmlPaths,normalQualifiedBuilds:0})+'\n',{flag:'wx'});
+            const partPath=metaDir+'/seoMetaPart12.ts',part=fs.readFileSync(partPath),partText=part.toString('utf8');assert.equal(partText.split(newSeo).length-1,1);const stalePart=Buffer.from(partText.replace(newSeo,oldSeo)),restoredPart=Buffer.from(stalePart.toString('utf8').replace(oldSeo,newSeo));copyControl('meta-stale-description',part,stalePart,restoredPart,b=>{const m=new Map(metaActual);m.set('seoMetaPart12.ts',b);metaValidate(m,expectedMeta);},'ts');
+            const ts=createRequire(path.join(ROOT,'package.json'))('typescript'),sf=ts.createSourceFile(partPath,partText,ts.ScriptTarget.Latest,true),nodes=[];function visit(n){if(ts.isPropertyAssignment(n)&&n.name.text==='/club-manager')nodes.push(n);ts.forEachChild(n,visit);}visit(sf);assert.equal(nodes.length,1);const a=nodes[0].getStart(sf);let b=nodes[0].end;assert.equal(partText[b],',');b++;const span=partText.slice(a,b),missingPart=Buffer.from(partText.slice(0,a)+partText.slice(b)),restoredRow=Buffer.from(missingPart.toString('utf8').slice(0,a)+span+missingPart.toString('utf8').slice(a));copyControl('meta-cm-row-omission',part,missingPart,restoredRow,x=>{const m=new Map(metaActual);m.set('seoMetaPart12.ts',x);metaValidate(m,expectedMeta);},'ts');
+            const docPath=htmlPaths.find(p=>p.includes('/career-ladder/')),doc=fs.readFileSync(docPath),docText=doc.toString('utf8'),staleDoc=Buffer.from(docText.replaceAll(newPrefix,oldPrefix)),restoredDoc=Buffer.from(staleDoc.toString('utf8').replaceAll(oldPrefix,newPrefix));copyControl('snapshot-stale-description',doc,staleDoc,restoredDoc,x=>snapshot(docPath,x),'html');
+            const sitemapBytes=fs.readFileSync(sitemapPath),sitemapText=sitemapBytes.toString('utf8'),map=mapSitemap(sitemapBytes),otherURL=[...map.keys()].find(u=>!routes.some(r=>u==='https://douknowball.com'+r));assert(otherURL);const row=map.get(otherURL),at=sitemapText.indexOf(row);assert(at>=0&&sitemapText.indexOf(row,at+row.length)<0);const omit=Buffer.from(sitemapText.slice(0,at)+sitemapText.slice(at+row.length)),restore=Buffer.from(omit.toString('utf8').slice(0,at)+row+omit.toString('utf8').slice(at));copyControl('sitemap-row-omission',sitemapBytes,omit,restore,x=>sitemapValidate(old.get(sitemapPath),x,afterLedger),'xml');
+            const keywordObject=JSON.parse(keyword),otherKeywordRoute=Object.keys(keywordObject.k).find(p=>p!=='/club-manager');assert(otherKeywordRoute);const keywordFault=structuredClone(keywordObject);keywordFault.k[otherKeywordRoute]=keywordObject.k[otherKeywordRoute]+' copied output control';assert.notEqual(keywordFault.k[otherKeywordRoute],keywordObject.k[otherKeywordRoute]);const keywordRestore=structuredClone(keywordFault);keywordRestore.k[otherKeywordRoute]=keywordObject.k[otherKeywordRoute];const keywordFaultBytes=Buffer.from(JSON.stringify(keywordFault)+'\n'),keywordRestoreBytes=Buffer.from(JSON.stringify(keywordRestore)+'\n');copyControl('search-other-row',keyword,keywordFaultBytes,keywordRestoreBytes,b=>searchValidate(JSON.parse(old.get(keywordPath)),JSON.parse(b)),'json');controls.at(-1).route=otherKeywordRoute;assert(fs.readFileSync(keywordPath).equals(keyword));
+            const other=Object.keys(beforeLedger).find(k=>k!=='__version'&&!routes.includes(k));assert(other);const ledgerFault=structuredClone(afterLedger);ledgerFault[other]={...ledgerFault[other],hash:'0'.repeat(16)};assert.notDeepEqual(ledgerFault,afterLedger);const ledgerRestore=structuredClone(ledgerFault);ledgerRestore[other]=afterLedger[other];assert.deepEqual(ledgerRestore,afterLedger);fs.writeFileSync(out+'/controls/other-ledger-row.fault.json',JSON.stringify(ledgerFault,null,2)+'\n',{flag:'wx'});fs.writeFileSync(out+'/controls/other-ledger-row.restored.json',JSON.stringify(ledgerRestore,null,2)+'\n',{flag:'wx'});controls.push({...rejected('other-ledger-row',()=>ledgerValidate(ledgerFault)),changed:true,wholeObjectInverseExact:true,route:other});
+            type('types-after');sameMetaPresence();for(const [p,b]of generated)assert(fs.readFileSync(p).equals(b),'K_CATALOG_ACTUAL_OUTPUTS_HELD_AFTER_CONTROLS');assert.deepEqual(currentDelta(),[...changed].sort());
+            result={status:'ACTUAL_CATALOG_DERIVED_OUTPUTS_SEED_BUILD_UNQUALIFIED',product:process.env.PRODUCT_CORE,productTree:process.env.PRODUCT_TREE,normalQualifiedBuilds:0,unqualifiedSeedBuilds:1,seedTar:pin(tar),routes,intentionalNoindexSnapshot:'/search',maximumIndexableChangedRows:7,outputRows,changedPaths:changed,metaFiles:metaPaths.length,metaRepeatWholeBytes:true,other32MetaFilesHeld:true,search:{before:pin(old.get(keywordPath)),after:pin(keyword),sourceUnchanged:'f0fab3b07a51fc12',keySetHeld:true,otherRowsHeld:Object.keys(JSON.parse(keyword).k).filter(p=>p!=='/club-manager').length,wholeOutputMayBeIdentical:true,repeatWholeBytes:true,CMRowChanged:JSON.parse(old.get(keywordPath)).k['/club-manager']!==JSON.parse(keyword).k['/club-manager']},ledgerChangedKeys:ledgerChanged,ledgerFingerprintActualSourceSHA256:sha(Buffer.from(fingerprintSource)),allOtherLedgerRowsAndVersionHeld:true,sitemapMayBeByteIdentical:true,threeClockDefaultsHeld:true,controls,commands,prerenderTransport:transport,scope:'Only measured generator outputs and eight selected snapshots. No hand-written metadata/facts, no guide/fixture refresh, no arbitrary cap or clock change. Seed compiled output is explicitly unqualified. A new full normal build and native/public proofs are still required.'};
+            fs.writeFileSync(out+'/CATALOG-DERIVED-OUTPUTS.json',JSON.stringify(result,null,2)+'\n',{flag:'wx'});
+          }finally{
+            for(const [p,b]of old){fs.writeFileSync(p,b);assert(fs.readFileSync(p).equals(b));}
+            sameMetaPresence();fs.writeFileSync(out+'/output-restoration.json',JSON.stringify({paths:targets,wholeBytesRestored:true,metaPresenceHeld:true})+'\n',{flag:'wx'});
+          }
+          CATALOG_CONTROLLER
+          : > "$QA_OUT/transport/controller.log"
+          set +e
+          SIM_OFFLINE_RECEIPT="$QA_OUT/transport/controller.log" node --unhandled-rejections=strict "$QA_OUT/catalog-derived-controller.mjs" > "$QA_OUT/logs/controller.stdout.log" 2> "$QA_OUT/logs/controller.stderr.log"
+          native_exit=$?
+          printf '%s\n' "$native_exit" > "$QA_OUT/controller.exit" || exit 1
+          test "$native_exit" = 0 || exit "$native_exit"
+          test ! -s "$QA_OUT/transport/controller.log" || exit 1
+      - name: Always restore all forty-four derived targets and hold the complete checkout
+        if: always()
+        run: |
+          set -euo pipefail
+          node --input-type=module <<'RESTORE'
+          import fs from 'node:fs';import crypto from 'node:crypto';import assert from 'node:assert/strict';
+          const out=process.env.QA_OUT,rows=JSON.parse(fs.readFileSync(out+'/original-output-pins.json'));
+          for(const row of rows){const b=fs.readFileSync(out+'/original/'+row.path);assert.equal(b.length,row.bytes);assert.equal(crypto.createHash('sha256').update(b).digest('hex'),row.sha256);fs.writeFileSync(row.path,b);assert(fs.readFileSync(row.path).equals(b));}
+          const actual=fs.readdirSync('src/data/seoMetaParts').sort().map(n=>'src/data/seoMetaParts/'+n);assert.deepEqual(actual,rows.filter(r=>r.path.startsWith('src/data/seoMetaParts/')).map(r=>r.path).sort());
+          fs.writeFileSync(out+'/final-output-restoration.json',JSON.stringify({paths:rows.map(x=>x.path),wholeBytesRestored:true,metaPresenceHeld:true})+'\n');
+          RESTORE
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$QA_OUT/source-after.sha256"
+          git ls-files -s > "$QA_OUT/index-after.txt"
+          git ls-files -z > "$QA_OUT/tracked-after.bin"
+          for lock in package.json package-lock.json bun.lock bun.lockb; do if test -f "$lock"; then sha256sum "$lock"; fi; done > "$QA_OUT/locks-after.sha256"
+          git status --porcelain=v1 --untracked-files=all > "$QA_OUT/status-after.txt"
+          git diff --exit-code HEAD > "$QA_OUT/source-diff.txt"
+          cmp "$QA_OUT/source-before.sha256" "$QA_OUT/source-after.sha256"
+          cmp "$QA_OUT/index-before.txt" "$QA_OUT/index-after.txt"
+          cmp "$QA_OUT/tracked-before.bin" "$QA_OUT/tracked-after.bin"
+          cmp "$QA_OUT/locks-before.sha256" "$QA_OUT/locks-after.sha256"
+          test ! -s "$QA_OUT/status-after.txt"
+      - name: Pack complete source-generation evidence or fatal diagnostic
+        id: pack
+        if: always()
+        run: |
+          set -euo pipefail
+          archive="$RUNNER_TEMP/k-league-catalog-derived-$GITHUB_RUN_ID.tar.gz"
+          test ! -e "$archive"
+          set +e
+          tar -czf "$archive" -C "$QA_OUT" . > "$RUNNER_TEMP/k-league-catalog-derived-pack.log" 2>&1
+          pack_exit=$?
+          set -e
+          archive_bytes=0
+          if test -f "$archive"; then archive_bytes="$(stat -c %s "$archive")"; fi
+          if test "$pack_exit" = 0 && test "$archive_bytes" -le 50000000; then
+            sha256sum "$archive" > "$archive.sha256"
+            printf 'archive=%s\n' "$archive" >> "$GITHUB_OUTPUT"
+          else
+            fatal_dir="$RUNNER_TEMP/k-league-catalog-derived-fatal-$GITHUB_RUN_ID"
+            test ! -e "$fatal_dir"
+            mkdir -p "$fatal_dir"
+            for entry in "$QA_OUT"/*; do
+              if test "$(basename "$entry")" = unqualified-seed-dist.tar.gz; then continue; fi
+              cp -a "$entry" "$fatal_dir/"
+            done
+            cp "$RUNNER_TEMP/k-league-catalog-derived-pack.log" "$fatal_dir/full-pack.log"
+            printf '{"status":"FATAL_FULL_PACK_FAILED_OR_OVER_LIMIT","nativeTarExit":%s,"fullArchiveBytes":%s,"limitBytes":50000000,"seedTarBodyOmitted":true,"seedManifestAndHashRetainedWhenCreated":true,"qualificationCredit":false}\n' "$pack_exit" "$archive_bytes" > "$fatal_dir/FATAL-PACK.json"
+            diagnostic="$RUNNER_TEMP/k-league-catalog-derived-fatal-$GITHUB_RUN_ID.tar.gz"
+            tar -czf "$diagnostic" -C "$fatal_dir" .
+            test "$(stat -c %s "$diagnostic")" -le 50000000
+            sha256sum "$diagnostic" > "$diagnostic.sha256"
+            printf 'archive=%s\n' "$diagnostic" >> "$GITHUB_OUTPUT"
+            exit 1
+          fi
+          test -s "$QA_OUT/CATALOG-DERIVED-OUTPUTS.json"
+          test -s "$QA_OUT/final-output-restoration.json"
+          test -s "$QA_OUT/seed-dist-hold.json"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: k-league-catalog-derived-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            ${{ steps.pack.outputs.archive }}
+            ${{ steps.pack.outputs.archive }}.sha256
+          if-no-files-found: error
+          retention-days: 30
+          compression-level: 0
