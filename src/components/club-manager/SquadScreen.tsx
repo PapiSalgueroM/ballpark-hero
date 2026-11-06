@@ -6,9 +6,10 @@ import { cn } from '@/lib/utils';
 import { FlagImg } from '@/components/FlagImg';
 import {
   ROLE_INFO, roleOf, promiseMood, playingShare, windowWords, deservedRole, standingGap,
-  sellValue, renewalTerms, moneyIn, shownNation,
+  sellValue, renewalTerms, moneyIn, shownNation, careerHasKLeagueWorld,
 } from '@/lib/clubManager';
 import type { CMPlayer, CareerState, IncomingBid } from '@/lib/clubManager';
+import { kLeagueMember } from '@/data/kLeague2026';
 import { staffLevel } from '@/lib/clubManagerStaff';
 import { CmCardLink, CmHost } from '@/components/club-manager/CmCardLink';
 /* Round 978: who is just back from international duty, and who you rested. */
@@ -434,7 +435,7 @@ function SquadRow({ p, career, eraId, inXI, isCaptain, isOpen, onToggle, sortKey
           <span className="flex items-center gap-1.5 min-w-0">
             {nat ? <FlagImg name={nat} size={13} /> : null}
             <span title={p.name} className={cn('text-xs truncate', p.isYouth ? 'text-muted-foreground italic' : 'text-foreground')}>{p.name}</span>
-            {p.generated && <MadeUpTag className="text-[9px]" />}
+            {p.generated && <MadeUpTag className="text-[9px]" title={kLeagueMember(career.clubName) && careerHasKLeagueWorld(career) ? 'Not a real player. This club has no verified opening roster here, so its starting squad is generated.' : undefined} />}
             {inXI && <span className={cn(badge, 'text-primary border-primary/50')}>XI</span>}
             {/* Round 505: the armband, and any position he has learned in this save. */}
             {isCaptain && <span data-cm-captain-badge="1" title="Captain" className={cn(badge, 'text-yellow-400 border-yellow-400/60')}>C</span>}
