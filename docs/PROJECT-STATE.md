@@ -1,5 +1,18 @@
 
 
+## 2026-11-07 Soccer Grid pending selection ownership
+
+A submitted guess keeps its original square. If the player selects a different empty square while the answer is pending, the newer square stays selected and its search is available when the earlier answer settles. The one-line Hook change clears the selection only when it still points to the submitted square. The earlier guess keeps its normal result, scoring and allowance behavior.
+
+Active preflight 42347943728 verified the App route, uncommented Soccer catalog entry and indexable nonredirect saved snapshot before any new regression or fix. Original 42349496063 reproduced only the three expected selection failures. Fixed 42350567717 passed all 18 cases. Physical controls 42351066565 produced 54 rows and 51 passes; only the original Hook reproduced the three failures. The complete ordinary A-only case and all 14 prior cases stayed byte identical, and exact source restoration was verified.
+
+Full 42352684859 passed 18 fresh tests, the complete unit output comparisons, 20 readers, 16 original rounded download limits and the normal 850-file production build. Chromium covered unverified at 320x568, valid at 390x844 and invalid at 1280x900. All three kept the newer selection and returned search. The native evidence has 75 frames, 18 trusted actions, four measured wheels, six same-route navigation receipts and six reviewed viewport screenshots. Fixtures and validation were intercepted. No completion request was attempted.
+
+Clean 42353922159 passed fresh App types, the product-name fence and a normal production build. All 4,661 product source paths, 11 root configurations and 850 built file tuples matched the qualified full tree exactly.
+
+The product draft is stacked on PR530. This round's QA workflow, browser helper and admission scripts are outside the product draft. Main was observed at 56d8708c7731600b1c0cb0daeef684b5940ca742. Newer-main integration, merge and publish remain held. The master stays read-only; this bounded fix does not complete a master card.
+
+
 ## 2026-11-07 Fantasy Draft player pool recovery
 
 A failed player-pool read now shows Retry players. The draft keeps the same criterion, starting seat, turn and empty rosters while the retry is pending, then continues with the returned pool. Retry is hidden while the request is pending.
