@@ -317,3 +317,110 @@ describe('Soccer Career four historical real entries', () => {
     expect(localStorage.getItem(OTHER)).toBe('untouched');
   });
 });
+
+import { readSoccerHistoricalArrivals, hasSoccerHistoricalPlayer } from '@/lib/soccerHistoricalArrivals';
+import { worldSeasonTick } from '@/lib/soccerPhone';
+
+const LATER_FACTS = [
+  { id: 'soccer:mbappe', name: 'Kylian Mbappé', entryYear: 2015, entryClub: 'Monaco' },
+  { id: 'soccer:haaland', name: 'Erling Haaland', entryYear: 2016, entryClub: 'Bryne' },
+  { id: 'soccer:bellingham', name: 'Jude Bellingham', entryYear: 2019, entryClub: 'Birmingham City' },
+] as const;
+
+async function observeLaterStart(era: string, startYear: 2010 | 2015) {
+  const expected = LATER_FACTS.filter(p => p.entryYear > startYear);
+  const ui = await createFromUi(era), run = journey(ui.state, 2020);
+  const loaded = wholeLoad(run.state), repeated = wholeLoad(loaded.state);
+  const points = Array.from(new Set([startYear, ...expected.flatMap(p => [p.entryYear - 1, p.entryYear]), 2020])).sort();
+  const feed = [];
+  for (const point of points) {
+    const frame = run.frames.find(row => row.year === point);
+    expect(frame, 'SC_LATER_COMPLETE_EVENT_INPUT').toBeDefined();
+    const input = plain(frame!.state), before = serializeSoccerCareerSave(input);
+    const beforeStorage = storage(), beforeDraws = mainDraws.length, beforeUiDraws = uiDraws.length;
+    const view = render(<PhonePanel career={input} onAnswer={() => undefined} onMoney={() => undefined}
+      onBuyItem={() => undefined} onClose={() => undefined} />);
+    fireEvent.click(view.getByRole('button', { name: /SportsFeed/ }));
+    const region = view.queryByRole('region', { name: 'Real player arrivals' });
+    const presentNames = ['Neymar', ...LATER_FACTS.map(p => p.name)].filter(name =>
+      region && within(region).queryByText(name, { exact: true }));
+    const html = view.container.innerHTML, text = region?.textContent ?? '';
+    const links = region ? Array.from(region.querySelectorAll('a')).map(a => ({ href: a.getAttribute('href'), text: a.textContent })) : [];
+    fireEvent.click(view.getByRole('button', { name: /Home/ }));
+    fireEvent.click(view.getByRole('button', { name: /SportsFeed/ }));
+    feed.push({ year: point, frame, input, before, after: serializeSoccerCareerSave(input),
+      beforeStorage, afterStorage: storage(), beforeDraws, afterDraws: mainDraws.length,
+      beforeUiDraws, afterUiDraws: uiDraws.length, html, reopenedHtml: view.container.innerHTML, text, presentNames, links,
+      world: expected.map(p => ({ id: p.id, name: p.name, club: worldClubOf(input, p.name) })) });
+    cleanup();
+  }
+  const initial = arrival(ui.state) as (Versioned & { startYear?: number }) | undefined;
+  const tag = initial?.version === 3 ? plain(ui.state) : null;
+  const tagBefore = tag ? serializeSoccerCareerSave(tag) : null;
+  if (tag) (tag as unknown as { historicalArrivals: { startYear: number } }).historicalArrivals.startYear = startYear === 2010 ? 2015 : 2010;
+  const tagFault = tag ? serializeSoccerCareerSave(tag) : null;
+  const tagAccepted = tag ? readSoccerHistoricalArrivals(tag) : null;
+  if (tag) (tag as unknown as { historicalArrivals: { startYear: number } }).historicalArrivals.startYear = startYear;
+  const tagRestored = tag ? serializeSoccerCareerSave(tag) : null;
+  const registered = arrival(loaded.state)?.players ?? [];
+  const protection = registered.map(p => ({ id: p.id, name: LATER_FACTS.find(f => f.id === p.id)?.name ?? '',
+    protected: hasSoccerHistoricalPlayer(loaded.state, LATER_FACTS.find(f => f.id === p.id)?.name ?? '') }));
+  // Declared copied missing-cache boundary, not a naturally missing world registration.
+  const fallback = plain(loaded.state), fallbackBefore = serializeSoccerCareerSave(fallback);
+  const hadHaaland = Object.prototype.hasOwnProperty.call(fallback.phone!.clubs, 'Erling Haaland');
+  const formerClub = fallback.phone!.clubs['Erling Haaland'];
+  delete fallback.phone!.clubs['Erling Haaland'];
+  const fallbackPrepared = serializeSoccerCareerSave(fallback);
+  action = 'prepared-missing-cache-worldSeasonTick-2020';
+  const fallbackDrawsBefore = mainDraws.length;
+  const result = worldSeasonTick(fallback, { year: 2020, playerLeagueTitle: false, playerUcl: false, playerCup: false });
+  const fallbackAfter = serializeSoccerCareerSave(fallback);
+  const fallbackClub = worldClubOf(fallback, 'Erling Haaland');
+  const value = { schema: 'SC_LATER_START_FULL_EVENTS_V1', startYear, era, expected, ui, run, loaded, repeated, feed,
+    tagControl: { available: !!tag, before: tagBefore, fault: tagFault, accepted: tagAccepted, restored: tagRestored },
+    protection,
+    fallback: { condition: 'Complete actual loaded career copied; only its real Erling Haaland club property deleted before one public worldSeasonTick',
+      input: plain(loaded.state), before: fallbackBefore, prepared: fallbackPrepared, hadHaaland, formerClub,
+      after: fallbackAfter, state: fallback, result, club: fallbackClub, drawsBefore: fallbackDrawsBefore, drawsAfter: mainDraws.length },
+    uiDraws: plain(uiDraws), mainDraws: plain(mainDraws), storage: storage(), privateForkTapeCaptured: false };
+  retain('later-ui-' + startYear, value);
+  expect(initial, 'SC_LATER_REGISTRY').toEqual({ version: 3, startYear, players: [] });
+  expect(run.frames.every(frame => (arrival(frame.state)?.players ?? []).every(p => p.entryYear > startYear)),
+    'SC_LATER_FUTURE_ONLY').toBe(true);
+  for (const frame of run.frames)
+    expect(arrival(frame.state)?.players, 'SC_LATER_DUE_MATRIX').toEqual(expected.filter(p => p.entryYear <= frame.year).map(({ name, ...entry }) => entry));
+  expect(new Set(registered.map(p => p.id)).size, 'SC_LATER_EXACT_ONCE').toBe(expected.length);
+  expect(registered, 'SC_LATER_FINAL_REGISTRY').toEqual(expected.map(({ name, ...entry }) => entry));
+  for (const row of feed) {
+    const due = expected.filter(p => p.entryYear <= row.year);
+    expect(row.presentNames, 'SC_LATER_SAME_EVENT_FEED').toEqual(due.map(p => p.name));
+    expect(row.links, 'SC_LATER_SAME_EVENT_SOURCES').toHaveLength(due.length * 2);
+    for (const p of due) {
+      expect(row.text, 'SC_LATER_SOURCE_ENTRY_TEXT').toContain(p.entryYear + ' at ' + p.entryClub);
+      expect(row.world.find(w => w.id === p.id)?.club, 'SC_LATER_WORLD_OWNER').toBe(p.entryClub);
+    }
+    expect(row.after, 'SC_LATER_READ_ONLY_FEED').toBe(row.before);
+    expect(row.afterStorage, 'SC_LATER_READ_ONLY_STORAGE').toEqual(row.beforeStorage);
+    expect(row.afterDraws, 'SC_LATER_READ_ONLY_DRAWS').toBe(row.beforeDraws);
+    expect(row.afterUiDraws, 'SC_LATER_READ_ONLY_UI_DRAWS').toBe(row.beforeUiDraws);
+    expect(row.reopenedHtml, 'SC_LATER_FEED_REOPEN').toBe(row.html);
+  }
+  expect(loaded.loadedBytes, 'SC_LATER_RELOAD').toBe(loaded.bytes);
+  expect(repeated.loadedBytes, 'SC_LATER_REPEATED_RELOAD').toBe(repeated.bytes);
+  expect(repeated.bytes, 'SC_LATER_STABLE_RELOAD').toBe(loaded.loadedBytes);
+  for (const p of expected) expect(worldClubOf(loaded.state, p.name), 'SC_LATER_ERA_RESEED_OWNER').toBe(p.entryClub);
+  for (const p of protection) expect(p.protected, 'SC_LATER_REGISTERED_PROTECTION').toBe(true);
+  expect(tagBefore, 'SC_LATER_TAG_EFFECTIVE').not.toBe(tagFault);
+  expect(tagAccepted, 'SC_LATER_START_ASSOCIATION').toBeNull();
+  expect(tagRestored, 'SC_LATER_TAG_WHOLE_INVERSE').toBe(tagBefore);
+  expect(hadHaaland, 'SC_LATER_REAL_CACHE_INPUT').toBe(true);
+  expect(fallbackPrepared, 'SC_LATER_MISSING_CACHE_EFFECTIVE').not.toBe(fallbackBefore);
+  expect(fallbackClub, 'SC_LATER_OWN_FALLBACK').toBe('Bryne');
+  for (const row of run.priorArrivalWrites) expect(row.after, 'SC_LATER_CALLER_INPUT_HELD').toEqual(row.before);
+  expect(localStorage.getItem(OTHER), 'SC_LATER_UNRELATED_STORAGE').toBe('untouched');
+}
+
+describe('Soccer Career later historical starts', () => {
+  it('the actual 2010 UI admits only the three supported future entries', async () => { await observeLaterStart('2010-14', 2010); });
+  it('the actual 2015 UI admits only the two supported future entries', async () => { await observeLaterStart('2015-19', 2015); });
+});

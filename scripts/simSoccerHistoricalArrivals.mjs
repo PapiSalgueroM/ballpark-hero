@@ -14,14 +14,16 @@ const names = [
   'legacy unmarked APIs and opaque future save versions keep their complete state and draw path',
   'the authentic original version1 save keeps Neymar only and its original source card',
   'the actual newer era creation UI keeps its unmarked saved default',
+  'the actual 2010 UI admits only the three supported future entries',
+  'the actual 2015 UI admits only the two supported future entries',
 ];
 function validate(report) {
   const cases = report.testResults?.flatMap(suite => suite.assertionResults ?? []) ?? [];
-  assert.equal(cases.length, 6, 'SC_REAL_ENTRY_CASE_CENSUS');
+  assert.equal(cases.length, 8, 'SC_REAL_ENTRY_CASE_CENSUS');
   assert.deepEqual(cases.map(item => item.title).sort(), names.slice().sort(), 'SC_REAL_ENTRY_CASE_NAMES');
   assert.equal(report.success, true);
-  assert.equal(report.numTotalTests, 6);
-  assert.equal(report.numPassedTests, 6);
+  assert.equal(report.numTotalTests, 8);
+  assert.equal(report.numPassedTests, 8);
   assert.equal(report.numFailedTests, 0);
   assert(cases.every(item => item.status === 'passed' && item.failureMessages.length === 0));
   assert.equal(report.numPendingTests ?? 0, 0);
@@ -49,7 +51,7 @@ try {
   assert.throws(() => validate(changed), /SC_REAL_ENTRY_CASE_CENSUS/);
   changed.testResults[0].assertionResults.push(removed);
   assert.equal(JSON.stringify(changed), before, 'Whole copied report restored');
-  console.log('simSoccerHistoricalArrivals: 6 UI, save and phone outcomes green; missing-case control caught');
+  console.log('simSoccerHistoricalArrivals: 8 UI, save and phone outcomes green; missing-case control caught');
 } finally {
   fs.rmSync(out, { recursive: true, force: true });
 }

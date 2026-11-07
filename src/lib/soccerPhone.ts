@@ -1654,7 +1654,7 @@ export function worldSeasonTick(
      (worldClubOf). Generated names are seeded once, as before. */
   // Registered arrivals keep the career's saved club across era-table changes.
   for (const st of stars) {
-    if (s.historicalArrivals?.version === 2) {
+    if (s.historicalArrivals?.version === 2 || s.historicalArrivals?.version === 3) {
       const entry = soccerHistoricalEntryForName(s, st.name);
       if ((realNames && !entry) || !p.clubs[st.name]) p.clubs[st.name] = entry?.entryClub ?? st.club;
       continue;
