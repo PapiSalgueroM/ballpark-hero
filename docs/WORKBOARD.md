@@ -18203,3 +18203,16 @@ First full 42332294157 remains failed in browser acquisition. Refreshed full 423
 Clean run 42335163878 passed fresh App types, the product-name check and a normal build. It matched every one of the 4,659 product source paths, 11 root configs and 850 built files to the qualified full tree.
 
 Scope: final five-file draft on PR525, with QA-only source excluded. Main observed 636b31efd64b749d4900e3f5773681e0496addf6, newer-main integration held. Master409 stays read-only, PL-05 partial, Grade Transfer retired, old zips untouched. All local App/Git/runtime/PROJECT-STATE, exact-prefix workboard, companion and merge/publish holds persist.
+
+
+## 2026-11-07 Fantasy Draft player pool recovery
+
+A failed player-pool read now shows Retry players. The draft keeps the same criterion, starting seat, turn and empty rosters while the retry is pending, then continues with the returned pool. Retry is hidden while the request is pending.
+
+Active preflight 42337220745 verified the actual route, Soccer catalog entry and indexable nonredirect snapshot before any test or fix. First original 42339420436 remains failed at the evidence guard. Refreshed original 42340576340 reproduced both stuck pick 1 cases. Fixed 42342358470 passed all eight tests and preserved both normal cases and the full prior RAW. Physical controls 42343762336 passed 22 of 24 test rows, with the only two failures on the original Page. Complete test output and exact restoration were verified.
+
+Full 42345398413 passed eight tests, the complete fixed and prior RAW comparisons, 20 readers, 16 original rounded size limits, and a normal 850-file production build. Chromium verified three viewports (320x568 AI first, 390x844 user first, 1280x900 AI first), 82 complete frames, 18 trusted public actions, 3 measured wheels and 6 measured startup navigations. Nine viewport screenshots were reviewed. Each viewport saw a 503, one held retry, and legal user and AI picks. Criteria and pool responses were intercepted. No completion request was attempted.
+
+Clean 42346635855 passed fresh App types, the product-name check and the normal build. All 4,660 product source paths, 11 root configs and 850 built-file tuples matched the qualified full tree.
+
+The draft is stacked on PR526. QA workflow, browser helper and audit sources stay outside the product draft. Main was observed at ae08b4477c9fd47e3120ab797b45a2d5a375c17a; newer-main integration, merge and publish remain held. The master stays read-only. This is adjacent to FD-02 and FD-07 and does not complete either card.
