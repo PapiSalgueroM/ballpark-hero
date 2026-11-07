@@ -266,3 +266,10 @@ PR522 adds shared Squad phone name/badge wrapping only: product `2005`, current 
 
 CM-03 verified real rosters and all-sports historical entrant coverage remain incomplete. Old unrelated full-fleet reds remain unwaived. Russia15SC bridge remains research only, with no adopted data or policy. Continue the source and availability gates before importing more teams/leagues.
 
+## 2026-11-07: Russian league expansion live, next historical arrivals in progress
+
+[PR #527](https://github.com/PapiSalgueroM/ballpark-hero/pull/527) adds 15 current Russian clubs to Soccer Career alongside Zenit, with a 16-club, 30-match schedule. Club Manager keeps its current Russian league. The bridge excludes Russian clubs from UEFA club competitions from 2022. The previous K League expansion is still limited to its admitted current scope. SC-36, CM-03, CM-04 and CM-05 remain partial: full verified roster coverage, historical league depth and a persistent pyramid are still open.
+
+Live release `e83da178-a548-4af8-ab61-f3e514993136`; exact public assets, both route SEO checks and scoped IndexNow acceptance verified in [run 42345338581](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/42345338581). Existing suite failures remain tracked.
+
+Next: extend the existing real-player arrival timeline to 2010 and 2015 starts without changing old saves, then disclose recorded historical roster depth in the Club Manager picker. NBA 2005 and NFL 2006 are source intake only.

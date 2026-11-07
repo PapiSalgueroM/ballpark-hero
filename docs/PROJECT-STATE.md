@@ -1,3 +1,14 @@
+## 2026-11-07: Russian league expansion live
+
+[PR #527](https://github.com/PapiSalgueroM/ballpark-hero/pull/527) published from main `d151e61ee8fa1348e05b2dadd59b1aff2d226ee6`, App tree `3fe5bf9acace9f506c5f469e012be11c1dded94e`, Lovable deployment `e83da178-a548-4af8-ab61-f3e514993136`. This includes the previous K League and phone Squad releases.
+
+- Soccer Career gains 15 current Russian clubs alongside Zenit: a 16-club league with 30 home-and-away matches and 3/1/0 points. New clubs are available from the 2026 start. The existing 16-club Club Manager schedule still works. The club eligibility rule keeps Russian clubs out of UEFA club competitions from 2022; this does not model national-team eligibility or the midseason 2021/22 events.
+- The retirement confirmation now fits the 320px phone viewport. Russian historical starts still follow the existing club availability rules. Full historical Russian rosters, official palettes and a persistent promotion pyramid are outstanding. SC-36, CM-03, CM-04 and CM-05 remain partial.
+- [Qualification](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/42342436106) passed types, the build, all 20 output checks and the unchanged size caps. [Browser verification](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/42344217034) covered 320px, 390px and desktop, the retirement flow, the manager offer and full 30-match seasons, and a historical start and saved career restore. Existing suite failures are still tracked; the paired checks isolated the same failures on the baseline. The club-pool change accounts for the separately recorded Finish test difference.
+- [Public verification](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/42345338581) matched 73 assets to the tested build, passed raw page SEO on both routes, and got IndexNow HTTP 200 for those two URLs. This is a submission receipt, not proof of indexing.
+
+Next master-list work: extend verified future entrants in Soccer Career to 2010 and 2015 starts, then show the available historical roster count in Club Manager. NBA 2005 and NFL 2006 are still source review, with no player or save changes live.
+
 ## 2026-11-06: K League expansion and phone Squad names live
 
 Current live App source is `51e4ba9e100aa22dbe047999311c725baccae09d`, tree `b1f5ac6efe4d97a1645580c6b473d03616e471b7`. PR509 delivered the K slice as `15652350` / tree `4debc`, product `25193`; PR522 then delivered the one-component Squad layout from `2005`. Each App release was published once: K deployment `979de67b-e1bd-46d0-9115-e28f9939171a`, then UI deployment `7a36d673-a773-4196-9e2d-51f82b2ad3de`. The later documentation commit needs no publication.

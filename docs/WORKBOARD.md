@@ -17890,3 +17890,11 @@ Phone names now wrap above badges; narrow320 rows are taller. UI run42292541989:
 
 SC-36/CM-04 partial; CM-03 real rosters and all-sports historical future classes remain incomplete. Old unrelated reds unwaived. Next: continue verified team/league and real entrant coverage from the master list. Russia15 bridge remains unadopted research; Rubin traditional-colour corroboration does not establish official RGB or current brand specifications.
 
+<!-- russia-career-pr527-live -->
+## 2026-11-07: Russia expansion published
+
+[PR #527](https://github.com/PapiSalgueroM/ballpark-hero/pull/527), main `d151e61ee8fa1348e05b2dadd59b1aff2d226ee6`, live deployment `e83da178-a548-4af8-ab61-f3e514993136`. Soccer Career adds 15 Russian clubs alongside Zenit, with 16 clubs and 30 matches from the current start. Club Manager keeps its existing 16-club schedule. Russian clubs are excluded from UEFA club competitions from 2022. The phone retirement confirmation fits at 320px.
+
+Qualification run `42342436106`, browser run `42344217034`, public run `42345338581`. Public evidence: 73 asset bodies matched the build, two SEO checks passed and IndexNow accepted the two URLs. Existing suite failures remain tracked. Historical roster depth, verified palettes and promotion coverage are partial.
+
+Continue on the master list: verified Soccer Career arrivals for 2010 and 2015, then Club Manager historical roster snapshot disclosure. NBA 2005 and NFL 2006 intake remains unshipped.
