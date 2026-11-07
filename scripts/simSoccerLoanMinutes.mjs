@@ -104,7 +104,7 @@ function mulberry32(seed) { let value = seed >>> 0; return () => { value += 0x6D
    see its bytes reach only a length and a hash. */
 const currentSource = fs.readFileSync(path.join(ROOT, ENGINE), 'utf8').replaceAll('\r\n', '\n');
 const currentRaw = Buffer.from(currentSource);
-const from = '      for (let tier = currentClubTier + 1; tier <= 4 && offers.length < 2; tier++) {\n        const candidates = getClubsByTier(clubs, tier).filter(c => !exclude.has(c.name) && projectLeagueApps(state.overall, c.tier, c.name, 0).min >= 20);\n        if (!candidates.length) continue;';
+const from = '      for (let tier = currentClubTier + 1; tier <= 4 && offers.length < 2; tier++) {\n        const candidates = getClubsByTier(clubs, tier).filter(c => !exclude.has(c.name) && projectLeagueApps(state.overall, c.tier, c.name, 0, { league: c.league, year: nextSeasonYear(state) }).min >= 20);\n        if (!candidates.length) continue;';
 const to = '      for (let tier = currentClubTier + 1; tier <= 4 && offers.length < 2; tier++) {\n        const candidates = getClubsByTier(clubs, tier).filter(c => !exclude.has(c.name));\n        if (!candidates.length) continue;';
 const faultSource = replaceOne(currentSource, from, to), undoSource = replaceOne(faultSource, to, from);
 const baseSource = faultSource, baseRaw = Buffer.from(baseSource);
