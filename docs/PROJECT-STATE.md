@@ -1,5 +1,19 @@
 
 
+## 2026-11-06 Missing XI confirmation ownership
+
+An open Give up confirmation now belongs to the playing Daily or Unlimited round where it was opened. Switching mode clears that confirmation. Keeping the same mode preserves it, and a fresh confirmation still works in the current round. The Page change is one prop on the existing button.
+
+Active preflight 42321774793 preceded the regression. Original 42326812138 reproduced two business failures with six passes and 62 complete frames. An old Daily confirmation could reveal the new Unlimited round, and an old Unlimited confirmation could end a Daily that had one genuine miss. Fixed 42328761286 passed all eight scoped cases and kept both complete original preservation cases, covering 39 frames. Physical controls 42330070994 matched all three complete RAW references and produced 24 rows, 22 passes, two original-only reds, 186 frames and six whole preservation vectors.
+
+First full 42332294157 remains failed in browser acquisition. Refreshed full 42333756371 passed: eight cases with the entire fixed RAW held, 20 readers, 16 original rounded caps and 850 built files. Three browser viewports across six contexts produced six intentional forfeits, 366 frames, 111 actions and nine reviewed screenshots. Three intentional Daily completion requests were intercepted and aborted.
+
+Clean run 42335163878 passed fresh App types, the product-name check and a normal build. It matched every one of the 4,659 product source paths, 11 root configs and 850 built files to the qualified full tree.
+
+This bounded draft is stacked on PR525 and contains the Page fix, regression and three documentation files. QA workflow, native helper and audit code stay outside the product draft. Main was observed at 636b31efd64b749d4900e3f5773681e0496addf6; newer-main integration, merge and publish remain held. This supports the existing Missing XI integrity work without completing a master card.
+
+
+
 ## 2026-11-06: Soccer Connections result-owned streaks, bounded stacked draft
 
 Switching back to a finished Daily or Unlimited round now preserves the earned streak. Each mode owns its playing guard; a genuine new result still adds one or resets the existing global streak. Six Hook lines change, with no Page, Board, data, scoring, storage-format or shared-hook change.
