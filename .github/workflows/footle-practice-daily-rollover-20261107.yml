@@ -1,0 +1,488 @@
+name: Footle saved practice Daily rollover original
+on:
+  push:
+    branches: [codex/footle-practice-daily-rollover-original-qa-20261107]
+permissions:
+  actions: read
+  contents: read
+jobs:
+  original:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      TZ: UTC
+      SIM_NETWORK: offline
+      SIM_OFFLINE_RECEIPT: footle-practice-daily-rollover-original/offline.log
+      FOOTLE_PRACTICE_ROLLOVER_RAW: footle-practice-daily-rollover-original/public-cases.raw.json
+      BASE_HEAD: '15b74eb41d984a264c922356d02811f3dd37fef6'
+      BASE_TREE: 'b53eb3efa411e58e5f68b462aeaba87440ce10f2'
+      TEST_BLOB: '4b908897ce16248a3e5d3c723e6170b94394d580'
+      PLAN_BLOB: '290b0e00efa1b56da3c609fc656f22214dbdb56e'
+      EVIDENCE: footle-practice-daily-rollover-original
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24.22.1
+          cache: npm
+      - name: Authenticate active entry and exact original Footle source
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          test ! -e "$EVIDENCE"
+          mkdir "$EVIDENCE"
+          touch "$SIM_OFFLINE_RECEIPT"
+          git rev-parse HEAD > "$EVIDENCE/head.txt"
+          git rev-parse 'HEAD^{tree}' > "$EVIDENCE/tree.txt"
+          git ls-files -s > "$EVIDENCE/source-before.txt"
+          sha256sum package.json package-lock.json > "$EVIDENCE/locks-before.txt"
+          git diff --exit-code HEAD -- .
+          git fetch --no-tags --depth=1 origin "$BASE_HEAD"
+          node --input-type=module <<'NODE'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          import { createHash } from 'node:crypto';
+          import { execFileSync } from 'node:child_process';
+
+          const { BASE_HEAD, BASE_TREE, TEST_BLOB, PLAN_BLOB, EVIDENCE } = process.env;
+          const repo = 'PapiSalgueroM/ballpark-hero';
+          assert.equal(process.env.GITHUB_REPOSITORY, repo);
+          const runId = 42370765351;
+          const api = process.env.GITHUB_API_URL + '/repos/' + repo;
+          const request = async path => {
+            const response = await fetch(api + path, {
+              headers: {
+                Accept: 'application/vnd.github+json',
+                Authorization: 'Bearer ' + process.env.GH_TOKEN,
+                'X-GitHub-Api-Version': '2022-11-28',
+              },
+              redirect: 'error',
+            });
+            assert.equal(response.status, 200, 'preflight API ' + path);
+            return response.json();
+          };
+          const [run, jobs, artifacts] = await Promise.all([
+            request('/actions/runs/' + runId),
+            request('/actions/runs/' + runId + '/jobs?per_page=100'),
+            request('/actions/runs/' + runId + '/artifacts?per_page=100'),
+          ]);
+          const workflow = '.github/workflows/footle-practice-daily-rollover-20261107.yml';
+          assert.deepEqual([run.id,run.status,run.conclusion,run.event,run.run_attempt,run.path,run.head_sha,run.head_commit.tree_id,run.repository.full_name],
+            [runId,'completed','success','push',1,workflow,'bfd02e35de43a6beaf5b0ab0c1a41d6b956d7af0','c12e9e96eb1f730c0b7ba5c4e568106336c84527',repo]);
+          assert.equal(run.head_branch,'codex/footle-practice-daily-rollover-preflight-qa-20261107');
+          assert.equal(jobs.jobs.length,1);
+          const [job] = jobs.jobs;
+          assert.deepEqual([job.id,job.status,job.conclusion,job.head_sha,job.steps.length],[128398221295,'completed','success',run.head_sha,11]);
+          assert(job.steps.every(step => step.status === 'completed' && step.conclusion === 'success'));
+          assert.equal(artifacts.artifacts.length,1);
+          const [artifact] = artifacts.artifacts;
+          assert.deepEqual([artifact.id,artifact.name,artifact.expired,artifact.size_in_bytes,artifact.digest,artifact.workflow_run.id,artifact.workflow_run.head_sha],
+            [13573029999,'footle-practice-daily-rollover-active-preflight-'+runId,false,1013219,'sha256:626254481d99a3744f257db8bc3a55ccd6179217f660d7857ab2f56956640bc0',runId,run.head_sha]);
+          delete process.env.GH_TOKEN;
+          const git = (...args) => execFileSync('git', args, { encoding: 'utf8', maxBuffer: 16 * 1024 * 1024 }).trimEnd();
+          const head = git('rev-parse', 'HEAD');
+          assert.equal(head, process.env.GITHUB_SHA);
+          assert.deepEqual(git('rev-list', '--parents', '-n', '1', 'HEAD').split(' '), [head, BASE_HEAD]);
+          assert.equal(git('rev-parse', BASE_HEAD + '^{tree}'), BASE_TREE);
+          const test = 'src/test/footlePracticeDailyRollover.test.tsx';
+          const plan = 'docs/plans/2026-11-07-footle-practice-daily-rollover.md';
+          const added = [test, plan, workflow].sort();
+          const held = {"src/App.tsx":"8bfedf7aaa1d076e0f0c8e2216c7e46632cd8a33","src/data/gameRegistry.ts":"f560b40a74d1468ac72dfde4ee6fec6635a9a255","public/footle/index.html":"a54dc5d7b9c7743ca4c45b13244b51a57597672e","src/pages/Footle.tsx":"7e78c2ed9cc97f506f53a21d630c02f9adcf3e70","src/hooks/useGame.ts":"40c250b6ed1a21ee204270aebd437229fe937837","src/hooks/useDailyPuzzle.ts":"b8a0d6ba268efe0e728c4ee96fbc6c60fcc73846","src/lib/footlePracticeRun.ts":"c6c75bbab082c801c631e355b02b900e15fff317","src/lib/footleUnlimitedSession.ts":"343550b40e3fd7181cc737d387275be944dab1d7","src/lib/fetchFootlePlayerPool.ts":"356adf65dd26f3a9e7001214bc1e194d7828d0dd","scripts/lib/offlineTransport.cjs":"0fda542a2649fe5da937c6976fd0f5b6073e74b6","src/test/footlePractice.test.tsx":"3ffdc6435cdee12f40691a14bd6538de447b7451","src/test/footleUnlimitedSession.test.tsx":"0fae6dbb1e548095e03478136d38f89490044aac","src/hooks/useGame.test.ts":"2d407fc5d35148a7f4566d4e5f333184c3618a39","src/lib/footlePracticeRun.test.ts":"65f80837ff75c72755f567e129bdc4b3ff799ae6","src/test/footleClueDesk.test.tsx":"0b03d36e35737572036846005d8b2cb9311b9b46","src/test/footleResultCurrency.test.tsx":"6b809bc195181952d5dc7f1a097abb52e9144ce8","src/lib/fetchFootlePlayerPool.test.ts":"16503ca35300b38d047a56b0c3a2e41fbe758dd0"};
+          const pins = { ...held, [test]: TEST_BLOB, [plan]: PLAN_BLOB };
+          const sha = (algorithm, data) => createHash(algorithm).update(data).digest('hex');
+          for (const [file, want] of Object.entries(pins)) {
+            const bytes = fs.readFileSync(file);
+            assert.match(want, /^[0-9a-f]{40}$/);
+            assert.equal(git('rev-parse', 'HEAD:' + file), want);
+            assert.equal(sha('sha1', Buffer.concat([Buffer.from('blob ' + bytes.length + '\0'), bytes])), want, file);
+            if (Object.hasOwn(held, file)) assert.equal(git('rev-parse', BASE_HEAD + ':' + file), want, file);
+          }
+          assert.deepEqual(git('diff', '--name-only', BASE_HEAD, 'HEAD').split('\n').sort(), added);
+          const tree = ref => git('ls-tree', '-r', '-z', ref).split('\0').filter(Boolean);
+          const parent = tree(BASE_HEAD);
+          const current = tree('HEAD');
+          assert.equal(parent.length, 5791);
+          assert.equal(current.length, 5794);
+          assert.deepEqual(current.filter(row => !added.includes(row.split('\t')[1])), parent);
+          assert.equal(current.filter(row => /^(src|public|scripts)\//.test(row.split('\t')[1])).length, 4665);
+          fs.writeFileSync(EVIDENCE + '/source-receipt.json', JSON.stringify({
+            head, tree: git('rev-parse', 'HEAD^{tree}'), parent: BASE_HEAD, parentTree: BASE_TREE, pins,
+            ownedWorkflow: git('rev-parse', 'HEAD:' + workflow), heldRows: parent.length, trackedRows: current.length, sourceRows: 4665,
+            activePreflight: { run: run.id, head: run.head_sha, job: job.id, artifact: artifact.id, digest: artifact.digest },
+          }, null, 2));
+          NODE
+      - name: Install locked dependencies and freeze physical source
+        run: |
+          set -euo pipefail
+          npm ci 2>&1 | tee "$EVIDENCE/install.log"
+          cat > "$EVIDENCE/physical.mjs" <<'NODE'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          import { createHash } from 'node:crypto';
+          import { execFileSync } from 'node:child_process';
+          const stage = process.argv[2];
+          assert(['before', 'after'].includes(stage));
+          const out = process.env.EVIDENCE;
+          const index = execFileSync('git', ['ls-files', '-z'], { encoding: 'utf8' }).split('\0').filter(Boolean);
+          const source = index.map(file => {
+            const bytes = fs.readFileSync(file);
+            return [file, bytes.length, createHash('sha256').update(bytes).digest('hex')];
+          });
+          const lock = JSON.parse(fs.readFileSync('package-lock.json', 'utf8'));
+          const installed = Object.entries(lock.packages).filter(([file]) =>
+            file.startsWith('node_modules/') && fs.existsSync(file + '/package.json')
+          ).map(([file, entry]) => {
+            const version = JSON.parse(fs.readFileSync(file + '/package.json', 'utf8')).version;
+            assert.equal(version, entry.version, file);
+            return [file, version];
+          });
+          assert.equal(source.length, 5794);
+          assert.equal(installed.length, 521);
+          assert.equal(fs.statSync(process.env.SIM_OFFLINE_RECEIPT).size, 0);
+          for (const [name, data] of [['tracked', source], ['installed', installed]]) {
+            const body = JSON.stringify(data);
+            if (stage === 'after') assert.equal(body, fs.readFileSync(out + '/' + name + '-before.json', 'utf8'));
+            fs.writeFileSync(out + '/' + name + '-' + stage + '.json', body);
+          }
+          NODE
+          node "$EVIDENCE/physical.mjs" before
+      - name: Proper app types
+        run: |
+          set -euo pipefail
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee "$EVIDENCE/types.log"
+      - name: Require the original Footle disclosure and all preserved controls
+        run: |
+          set -euo pipefail
+          result=0
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node_modules/.bin/vitest run \
+            src/test/footlePracticeDailyRollover.test.tsx src/test/footlePractice.test.tsx src/test/footleUnlimitedSession.test.tsx src/hooks/useGame.test.ts src/lib/footlePracticeRun.test.ts src/test/footleClueDesk.test.tsx src/test/footleResultCurrency.test.tsx src/lib/fetchFootlePlayerPool.test.ts \
+            --reporter=default --reporter=json --outputFile="$EVIDENCE/vitest.json" > "$EVIDENCE/vitest.log" 2>&1 || result=$?
+          cat "$EVIDENCE/vitest.log"
+          printf '%s\n' "$result" > "$EVIDENCE/vitest-exit.txt"
+          test "$result" -eq 1
+          test -s "$FOOTLE_PRACTICE_ROLLOVER_RAW"
+          node --input-type=module <<'NODE'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          import { createHash } from 'node:crypto';
+          import { JSDOM } from 'jsdom';
+          const out = process.env.EVIDENCE;
+          const report = JSON.parse(fs.readFileSync(out + '/vitest.json', 'utf8'));
+          const preserved = {"src/test/footlePractice.test.tsx":11,"src/test/footleUnlimitedSession.test.tsx":10,"src/hooks/useGame.test.ts":2,"src/lib/footlePracticeRun.test.ts":12,"src/test/footleClueDesk.test.tsx":8,"src/test/footleResultCurrency.test.tsx":5,"src/lib/fetchFootlePlayerPool.test.ts":4};
+          const names = [{"title":"keeps the new Daily answer hidden when a saved practice run crosses Eastern midnight","marker":"FOOTLE_PRACTICE_REVEALS_CURRENT_DAILY"},{"title":"restores a same-day practice run and keeps Daily and Unlimited progress separate","marker":null}];
+          const source = 'src/test/footlePracticeDailyRollover.test.tsx';
+          const marker = 'FOOTLE_PRACTICE_REVEALS_CURRENT_DAILY';
+          const total = 52 + names.length;
+          assert.equal(names.filter(row => row.marker === marker).length,1);
+          assert.deepEqual([report.numTotalTests,report.numPassedTests,report.numFailedTests,report.numPendingTests,report.numTodoTests,report.success],
+            [total,total-1,1,0,0,false]);
+          assert.equal(report.testResults.length,8);
+          for (const key of ['errors','unhandledErrors','testExecutionErrors']) if (Object.hasOwn(report,key)) assert.deepEqual(report[key],[]);
+          const log = fs.readFileSync(out + '/vitest.log', 'utf8');
+          assert(!/Unhandled Errors?|Unhandled Rejection|Uncaught Exception|Failed Suites|Worker exited|Test timed out/i.test(log));
+          const observed = [];
+          for (const [file,count] of Object.entries({...preserved,[source]:names.length})) {
+            const matching=report.testResults.filter(suite => suite.name.endsWith('/'+file));
+            assert.equal(matching.length,1,file);
+            const [suite]=matching;
+            const fresh=file===source;
+            assert.deepEqual([suite.status,suite.message,suite.assertionResults.length],[fresh?'failed':'passed','',count],file);
+            if(fresh) assert.deepEqual(suite.assertionResults.map(row=>row.title).sort(),names.map(row=>row.title).sort());
+            for(const row of suite.assertionResults) {
+              const business=fresh && names.find(name=>name.title===row.title)?.marker===marker;
+              assert.equal(row.status,business?'failed':'passed',row.fullName);
+              assert.equal(row.failureMessages.length,business?1:0,row.fullName);
+              if(business) assert(row.failureMessages[0].startsWith('AssertionError: '+marker+':'),row.fullName);
+            }
+            observed.push({file,cases:count,passes:fresh?count-1:count});
+          }
+          const raw=fs.readFileSync(process.env.FOOTLE_PRACTICE_ROLLOVER_RAW);
+          const evidence=JSON.parse(raw.toString('utf8'));
+          const checks=(()=>{
+          const {schema, fixture, cases} = evidence;
+          assert.deepEqual(Object.keys(evidence), ['schema', 'fixture', 'cases']);
+          assert.equal(schema, 'footle-practice-daily-rollover-v1');
+          const oldAt = Date.parse('2026-11-08T04:59:59.000Z');
+          const newAt = Date.parse('2026-11-08T05:00:01.000Z');
+          const oldDay = '2026-11-07', newDay = '2026-11-08';
+          const oldTarget = 'Fixture hard F', newTarget = 'Fixture hard A';
+          const oldGuess = 'Fixture easy A', newGuess = 'Fixture easy B', unlimitedGuess = 'Fixture hard J';
+          const pool = ['easy', 'hard', 'insane'].flatMap((difficulty, tier) =>
+            Array.from({length: 10}, (_, i) => ({
+              name: 'Fixture ' + difficulty + ' ' + String.fromCharCode(65 + i),
+              club: 'Fixture Club ' + tier + i, nationality: i % 2 ? 'Senegal' : 'Norway',
+              league: 'Premier League', goals: i, assists: i ? 0 : null, position: 'CM',
+              kitNumber: null, age: 22 + i, marketValue: 15 + i, difficulty,
+            })),
+          );
+          assert.deepEqual(fixture, {rows: pool, oldAt, newAt, oldDay, newDay, oldTarget, newTarget,
+            practiceDraw: 0.999, dailyGuesses: [oldGuess, newGuess], unlimitedGuess});
+          const actualDay = time => new Intl.DateTimeFormat('en-CA', {timeZone: 'America/New_York'}).format(new Date(time));
+          assert.deepEqual([actualDay(oldAt), actualDay(newAt), newAt - oldAt], [oldDay, newDay, 2000]);
+          
+          const collisionKey = 'rolloverCollision', controlKey = 'sameDayPractice';
+          const identities = [
+            [collisionKey, 'keeps the new Daily answer hidden when a saved practice run crosses Eastern midnight', 'FOOTLE_PRACTICE_REVEALS_CURRENT_DAILY'],
+            [controlKey, 'restores a same-day practice run and keeps Daily and Unlimited progress separate', null],
+          ];
+          assert.deepEqual(Object.keys(cases), identities.map(([key]) => key));
+          assert.deepEqual(names.map(({title, marker}) => [title, marker]), identities.map(([, title, marker]) => [title, marker]));
+          
+          const practiceKey = 'footle-practice-run-v1', unlimitedKey = 'footle-unlimited-session-v1';
+          const oldKey = 'footle-daily-' + oldDay, newKey = 'footle-daily-' + newDay;
+          const commonFrames = ['old-pool-pending', 'old-ready', 'old-daily-miss', 'practice-selected', 'hard-selected', 'practice-started', 'old-unmounted'];
+          const collisionFrames = ['new-pool-pending', 'new-practice-restored', 'new-daily-open', 'new-daily-miss', 'collision-resumed',
+            'collision-give-up-open', 'collision-give-up-settled', 'new-daily-returned', 'after-teardown'];
+          const controlFrames = ['same-day-pool-pending', 'same-day-practice-restored', 'same-day-give-up-open', 'same-day-practice-result',
+            'same-day-practice-advanced', 'unlimited-open', 'unlimited-miss', 'same-day-daily-returned', 'unlimited-restored', 'after-teardown'];
+          const input = (label, name, time) => [[label + '-input', time, 'input', name], [label + '-pick', time, 'click', name]];
+          const click = (label, target, time = oldAt) => [label, time, 'click', target];
+          const unmount = (label, time = oldAt) => [label, time, 'unmount', 'Footle'];
+          const commonActions = [...input('old-daily-guess', oldGuess, oldAt), click('practice-mode', 'practice'), click('hard-tier', 'hard'),
+            click('start-practice', 'Start run'), unmount('old-unmounted')];
+          const collisionActions = [click('new-daily-mode', 'daily', newAt), ...input('new-daily-guess', newGuess, newAt),
+            click('resume-collision', 'practice', newAt), click('collision-give-up-open', 'Give up', newAt),
+            click('collision-give-up-confirm', 'Yes, reveal it', newAt), click('return-new-daily', 'daily', newAt), unmount('after-teardown', newAt)];
+          const controlActions = [click('same-day-give-up-open', 'Give up'), click('same-day-give-up-confirm', 'Yes, reveal it'),
+            click('next-practice', 'Next puzzle'), click('open-unlimited', 'unlimited'), ...input('unlimited-guess', unlimitedGuess, oldAt),
+            click('return-old-daily', 'daily'), click('resume-unlimited', 'unlimited'), unmount('after-teardown')];
+          const plan = {
+            [collisionKey]: {frames: collisionFrames, actions: collisionActions, secondMount: 'new-pool-pending', at: newAt, draws: [['start-practice', 8]]},
+            [controlKey]: {frames: controlFrames, actions: controlActions, secondMount: 'same-day-pool-pending', at: oldAt, draws: [['start-practice', 8], ['open-unlimited', 1]]},
+          };
+          
+          const parsed = new JSDOM('');
+          const doc = parsed.window.document;
+          const text = node => node?.textContent ?? null;
+          const shown = node => {
+            if (!node) return false;
+            for (let current = node; current; current = current.parentElement) {
+              if (current.hidden || current.getAttribute('aria-hidden') === 'true' ||
+                current.style.display === 'none' || current.style.visibility === 'hidden') return false;
+            }
+            return true;
+          };
+          function assertDOM(frame) {
+            doc.body.innerHTML = frame.html;
+            const scope = doc.querySelector('main');
+            const modes = [...doc.querySelectorAll('[data-footle-mode][aria-pressed="true"]')];
+            const search = doc.querySelector('input[role="combobox"][aria-label="Search for a player"]');
+            const feedback = doc.querySelector('[data-testid="practice-feedback"] [role="status"]');
+            const progress = doc.querySelector('[data-testid="practice-progress"]');
+            const practice = doc.querySelector('[data-footle-practice]');
+            const unlimited = doc.querySelector('[data-footle-unlimited]');
+            const buttons = [...doc.querySelectorAll('button')].filter(shown);
+            if (frame.label.endsWith('unmounted') || frame.label === 'after-teardown') {
+              assert.equal(frame.html, '', frame.label + ' empty teardown DOM');
+              assert.equal(scope, null);
+              assert.equal(modes.length, 0);
+            } else {
+              assert(scope && shown(scope), frame.label + ' mounted real Page body');
+              assert.equal(modes.length, 1, frame.label + ' one selected mode');
+            }
+            const mode = modes[0]?.getAttribute('data-footle-mode') ?? null;
+            const index = practice ? Number(practice.getAttribute('data-practice-index')) : null;
+            assert.deepEqual([frame.mode, frame.practiceIndex, frame.practiceProgress, frame.practiceFeedback,
+              frame.unlimitedState, frame.search, frame.giveUp, frame.confirm],
+            [mode, index, text(progress), text(feedback), unlimited?.getAttribute('data-unlimited-state') ?? null,
+              shown(search), buttons.some(button => text(button).trim() === 'Give up'),
+              buttons.some(button => text(button).trim() === 'Yes, reveal it')], frame.label + ' exact DOM replay');
+            assert(!feedback || shown(feedback), frame.label + ' practice answer status is public');
+          }
+          
+          const storage = (frame, key) => frame.storage[key];
+          const saved = (frame, key) => {
+            const body = storage(frame, key);
+            assert.equal(typeof body, 'string', frame.label + ' actual saved key ' + key);
+            return JSON.parse(body);
+          };
+          const slots = Array.from({length: 5}, () => ({guesses: [], status: 'playing'}));
+          const initialPractice = {v: 1, active: true, tier: 'hard', pool,
+            targets: ['A', 'B', 'C', 'D', 'E'].map(letter => 'Fixture hard ' + letter), rounds: slots, index: 0};
+          const lostPractice = {...initialPractice, rounds: [{guesses: [], status: 'lost'}, ...slots.slice(1)]};
+          const initialBytes = JSON.stringify(initialPractice);
+          const oldMiss = (frame, key, day, target, name) => {
+            const entry = saved(frame, key);
+            assert.deepEqual([entry.v, entry.date, entry.puzzleIndex, entry.puzzleId, entry.gameStatus,
+              entry.guesses.map(guess => [guess.playerName, guess.isCorrect])], [1, day, 0, target, 'playing', [[name, false]]], frame.label);
+            assert.deepEqual([frame.mode, frame.search, frame.giveUp, frame.confirm], ['daily', true, true, false], frame.label);
+            return storage(frame, key);
+          };
+          const mountLegs = (label, at) => [
+            {mount: label, status: 'requested', at, rows: null},
+            {mount: label, status: 'released', at, rows: pool.length},
+          ];
+          const rules = {'footle-rules-seen': '1'};
+          const inspect = {};
+          try {
+            for (const [key, title, marker] of identities) {
+              const variant = plan[key], value = cases[key];
+              assert.deepEqual([value.key, value.title, value.marker, value.closed], [key, title, marker, true]);
+              assert.deepEqual(value.frames.map(frame => frame.label), [...commonFrames, ...variant.frames], key + ' exact frames');
+              assert.deepEqual(value.actions, [...commonActions, ...variant.actions].map(([label, at, kind, target]) =>
+                ({label, at, kind, target, status: 'performed'})), key + ' actual public actions');
+              assert.deepEqual(value.poolLoads, [...mountLegs('old-pool-pending', oldAt), ...mountLegs(variant.secondMount, variant.at)],
+                key + ' both held and released fixture reads');
+              assert(value.completionCalls.length > 0, key + ' completion boundary observed');
+              assert.deepEqual([...new Set(value.completionCalls.map(call => call.at))], [...new Set([oldAt, variant.at])],
+                key + ' completion boundary on both fixture dates');
+              for (const call of value.completionCalls) assert.deepEqual(call.args, ['footle', false, 0], key + ' no terminal eligibility');
+              assert.deepEqual(value.randomDraws.map(draw => draw.label), variant.draws.map(([label]) => label), key + ' RNG tap labels');
+              for (const [index, draw] of value.randomDraws.entries()) {
+                assert(draw.values.length >= variant.draws[index][1] && draw.values.every(result => result === fixture.practiceDraw), key + ' full captured RNG tape');
+              }
+              for (const [index, frame] of value.frames.entries()) {
+                assert.equal(frame.at, index < commonFrames.length ? oldAt : variant.at, frame.label + ' clock');
+                assert.equal(typeof frame.html, 'string');
+                assertDOM(frame);
+                if (frame.label === 'hard-selected') {
+                  assert([...doc.querySelectorAll('button[aria-pressed="true"]')].some(node => text(node).trim() === 'hard' && shown(node)),
+                    key + ' genuine Hard selection');
+                }
+              }
+              const by = Object.fromEntries(value.frames.map(frame => [frame.label, frame]));
+              assert.deepEqual(by['old-pool-pending'].storage, rules);
+              assert.deepEqual(by['old-ready'].storage, rules);
+              assert.deepEqual([by['old-pool-pending'].mode, by['old-pool-pending'].search, by['old-ready'].mode, by['old-ready'].search],
+                ['daily', false, 'daily', true], key + ' pool gate');
+              const oldDaily = oldMiss(by['old-daily-miss'], oldKey, oldDay, oldTarget, oldGuess);
+              for (const label of ['old-daily-miss', 'practice-selected', 'hard-selected']) {
+                assert.deepEqual(by[label].storage, {...rules, [oldKey]: oldDaily}, label + ' no seeded practice storage');
+              }
+              assert.deepEqual([by['practice-started'].mode, by['practice-started'].practiceIndex, by['practice-started'].practiceProgress,
+                by['practice-started'].search, by['practice-started'].giveUp, by['practice-started'].confirm],
+              ['practice', 0, 'Puzzle 1 of 5', true, true, false], key + ' real Practice start');
+              for (const label of ['practice-started', 'old-unmounted']) {
+                assert.deepEqual(by[label].storage, {...rules, [oldKey]: oldDaily, [practiceKey]: initialBytes}, label + ' literal produced save');
+              }
+              inspect[key] = {by, oldDaily};
+            }
+          } finally {
+            parsed.window.close();
+          }
+          
+          const {by: rollover, oldDaily: rolloverOldDaily} = inspect[collisionKey];
+          const pending = rollover['new-pool-pending'];
+          assert.deepEqual(pending.storage, {...rules, [practiceKey]: initialBytes,
+            ...(storage(pending, oldKey) === undefined ? {} : {[oldKey]: rolloverOldDaily})}, 'Actual remount storage before resolved pool');
+          const restored = rollover['new-practice-restored'];
+          assert.deepEqual(restored.storage, {...rules, [practiceKey]: initialBytes},
+            'Genuine practice save survives rollover; normal Daily cleanup removes the old key');
+          assert.deepEqual([restored.mode, restored.practiceIndex, restored.practiceProgress, restored.practiceFeedback],
+            ['practice', 0, 'Puzzle 1 of 5', null], 'Restored unfinished collision');
+          const pausedPractice = JSON.stringify({...initialPractice, active: false});
+          assert.deepEqual(rollover['new-daily-open'].storage, {...rules, [practiceKey]: pausedPractice}, 'Observe current Daily before its first guess');
+          const newDaily = oldMiss(rollover['new-daily-miss'], newKey, newDay, newTarget, newGuess);
+          assert.deepEqual(rollover['new-daily-miss'].storage, {...rules, [practiceKey]: pausedPractice, [newKey]: newDaily});
+          const resumed = rollover['collision-resumed'], confirmation = rollover['collision-give-up-open'];
+          assert.deepEqual([resumed.mode, resumed.practiceIndex, resumed.practiceProgress, resumed.practiceFeedback, resumed.search, resumed.giveUp, resumed.confirm],
+            ['practice', 0, 'Puzzle 1 of 5', null, true, true, false], 'Actual vulnerable original Practice controls');
+          assert.deepEqual([confirmation.mode, confirmation.search, confirmation.giveUp, confirmation.confirm, confirmation.practiceFeedback],
+            ['practice', true, false, true, null], 'Actual reveal confirmation is available before disclosure');
+          for (const frame of [resumed, confirmation]) {
+            assert.deepEqual(frame.storage, {...rules, [practiceKey]: initialBytes, [newKey]: newDaily}, frame.label + ' protected bytes');
+          }
+          const exposed = rollover['collision-give-up-settled'];
+          assert.deepEqual([exposed.mode, exposed.practiceIndex, exposed.practiceProgress, exposed.practiceFeedback, exposed.search, exposed.giveUp, exposed.confirm],
+            ['practice', 0, 'Puzzle 1 of 5', 'The answer was ' + newTarget, false, false, false], 'Actual public disclosure of the confirmed current Daily answer');
+          assert.deepEqual(exposed.storage, {...rules, [practiceKey]: JSON.stringify(lostPractice), [newKey]: newDaily}, 'Only Practice is forfeited');
+          const exposureLabels = cases[collisionKey].frames
+            .filter(frame => frame.at === newAt && frame.mode === 'practice' && frame.html.includes(newTarget))
+            .map(frame => frame.label);
+          assert.deepEqual(exposureLabels, ['collision-give-up-settled']);
+          const returned = rollover['new-daily-returned'];
+          assert.equal(oldMiss(returned, newKey, newDay, newTarget, newGuess), newDaily, 'Exact current Daily bytes held across Practice disclosure');
+          for (const label of ['new-daily-returned', 'after-teardown']) {
+            assert.deepEqual(rollover[label].storage, {...rules, [practiceKey]: JSON.stringify({...lostPractice, active: false}), [newKey]: newDaily},
+              label + ' current Daily bytes held with no Unlimited save or old Daily key');
+          }
+          
+          const {by: ordinary, oldDaily: controlDaily} = inspect[controlKey];
+          assert.equal(controlDaily, rolloverOldDaily, 'Identical genuine prior Daily miss across both cases');
+          for (const label of ['same-day-pool-pending', 'same-day-practice-restored', 'same-day-give-up-open']) {
+            assert.deepEqual(ordinary[label].storage, {...rules, [oldKey]: controlDaily, [practiceKey]: initialBytes},
+              label + ' exact same-day save and Daily bytes');
+          }
+          const controlRestore = ordinary['same-day-practice-restored'];
+          const controlConfirm = ordinary['same-day-give-up-open'];
+          assert.deepEqual([controlRestore.mode, controlRestore.practiceIndex, controlRestore.practiceProgress, controlRestore.practiceFeedback, controlRestore.search, controlRestore.giveUp, controlRestore.confirm],
+            ['practice', 0, 'Puzzle 1 of 5', null, true, true, false], 'Normal restored Practice');
+          assert.deepEqual([controlConfirm.search, controlConfirm.giveUp, controlConfirm.confirm, controlConfirm.practiceFeedback], [true, false, true, null],
+            'Normal confirmation is available');
+          const controlResult = ordinary['same-day-practice-result'], controlAdvanced = ordinary['same-day-practice-advanced'];
+          assert.deepEqual([controlResult.mode, controlResult.practiceIndex, controlResult.practiceProgress, controlResult.practiceFeedback, controlResult.search],
+            ['practice', 0, 'Puzzle 1 of 5', 'The answer was ' + newTarget, false], 'Legitimate same-day disclosure of an answer different from current Daily');
+          assert.deepEqual(controlResult.storage, {...rules, [oldKey]: controlDaily, [practiceKey]: JSON.stringify(lostPractice)});
+          const advancedPractice = {...lostPractice, index: 1};
+          assert.deepEqual([controlAdvanced.mode, controlAdvanced.practiceIndex, controlAdvanced.practiceProgress, controlAdvanced.practiceFeedback, controlAdvanced.search, controlAdvanced.giveUp],
+            ['practice', 1, 'Puzzle 2 of 5', null, true, true], 'Real public Next puzzle advances exactly one');
+          assert.deepEqual(controlAdvanced.storage, {...rules, [oldKey]: controlDaily, [practiceKey]: JSON.stringify(advancedPractice)});
+          const easyTarget = 'Fixture easy J';
+          const cleanUnlimited = {v: 1, active: true, tier: 'easy', decks: {easy: {pool, seen: ['fixture easy j'],
+            current: {target: easyTarget, guesses: [], status: 'playing'}}}};
+          const playedUnlimited = {...cleanUnlimited, decks: {easy: {...cleanUnlimited.decks.easy,
+            current: {target: easyTarget, guesses: [unlimitedGuess], status: 'playing'}}}};
+          const controlShared = {...rules, [oldKey]: controlDaily, [practiceKey]: JSON.stringify({...advancedPractice, active: false})};
+          for (const [label, session] of [['unlimited-open', cleanUnlimited], ['unlimited-miss', playedUnlimited],
+            ['same-day-daily-returned', {...playedUnlimited, active: false}], ['unlimited-restored', playedUnlimited], ['after-teardown', playedUnlimited]]) {
+            assert.deepEqual(ordinary[label].storage, {...controlShared, [unlimitedKey]: JSON.stringify(session)}, label + ' exact independent saves');
+            if (label.startsWith('unlimited-')) {
+              assert.deepEqual([ordinary[label].mode, ordinary[label].unlimitedState, ordinary[label].search, ordinary[label].giveUp],
+                ['unlimited', 'playing', true, true], label + ' exact public Unlimited state');
+            }
+          }
+          assert.equal(oldMiss(ordinary['same-day-daily-returned'], oldKey, oldDay, oldTarget, oldGuess), controlDaily,
+            'Legitimate Daily progress survives Practice and Unlimited');
+          
+          assert(raw.equals(Buffer.from(JSON.stringify(evidence) + '\n')), 'Exact full captured UTF-8 RAW and LF');
+          const caseReference = key => {
+            const body = Buffer.from(JSON.stringify(cases[key]));
+            const rawOffset = raw.indexOf(body);
+            assert(rawOffset >= 0 && raw.lastIndexOf(body) === rawOffset, key + ' unique exact complete case body');
+            return {key, frames: cases[key].frames.length, actions: cases[key].actions.length, rawOffset, bytes: body.length,
+              sha256: createHash('sha256').update(body).digest('hex')};
+          };
+          return {
+            status: 'passed',
+            newCases: 2,
+            frames: 33,
+            actionJournalEntries: 29,
+            fixturePoolLegs: 8,
+            fixturePoolRows: pool.length,
+            cases: [caseReference(collisionKey), caseReference(controlKey)],
+            wholePreservedCase: caseReference(controlKey),
+            rollover: {oldDay, newDay, oldTarget, newTarget, exposureLabels, practiceHeld: false, currentDailyBytesHeld: true, oldDailyPruned: true},
+            sameDay: {day: oldDay, dailyTarget: oldTarget, disclosedPracticeTarget: newTarget, nextIndex: 1, dailyBytesHeld: true, unlimitedRestored: true},
+            completionBoundaryCalls: Object.fromEntries(identities.map(([key]) => [key, cases[key].completionCalls.length])),
+            rngTapCounts: Object.fromEntries(identities.map(([key]) => [key, cases[key].randomDraws.map(draw => draw.values.length)])),
+            limits: 'Full captured localStorage snapshots, real mounted controls and direct practice result. Completion arguments are observed at the mocked boundary. No provider operation, native browser input or storage-operation tape claim.',
+          };
+          })();
+          assert.equal(checks.status,'passed');
+          fs.writeFileSync(out + '/original-result.json', JSON.stringify({
+            status:'expected-original-business-failure',marker,total,passes:total-1,failed:1,observed,checks,
+            rawBytes:raw.length,rawSHA256:createHash('sha256').update(raw).digest('hex'),
+          },null,2));
+          NODE
+      - name: Verify unchanged physical source and locked offline run
+        if: always()
+        run: |
+          set -euo pipefail
+          git ls-files -s > "$EVIDENCE/source-after.txt"
+          sha256sum package.json package-lock.json > "$EVIDENCE/locks-after.txt"
+          cmp "$EVIDENCE/source-before.txt" "$EVIDENCE/source-after.txt"
+          cmp "$EVIDENCE/locks-before.txt" "$EVIDENCE/locks-after.txt"
+          git diff --exit-code HEAD -- .
+          node "$EVIDENCE/physical.mjs" after
+          test ! -s "$SIM_OFFLINE_RECEIPT"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: footle-practice-daily-rollover-original-${{ github.run_id }}
+          path: footle-practice-daily-rollover-original
+          retention-days: 14
+          if-no-files-found: error
