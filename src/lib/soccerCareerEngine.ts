@@ -3950,7 +3950,7 @@ function careerClubAllowed(club: Pick<ClubData, 'name'>, year?: number): boolean
    the loan screen can QUOTE the same bands the simulation draws from. One
    table, two readers, so the projection printed on an offer card can never
    disagree with the season that follows it. Pure arithmetic, no rolls. */
-export function projectLeagueApps(overall: number, clubTier: number, clubName: string, seasonsAtClub: number): { min: number; max: number } {
+function leagueAppsBand(overall: number, clubTier: number, clubName: string, seasonsAtClub: number): { min: number; max: number } {
   const clubAvg = clubAverageRating(clubTier);
   const diff = overall - clubAvg;
   const isEliteClub = ELITE_CLUBS.includes(clubName);
@@ -3970,6 +3970,12 @@ export function projectLeagueApps(overall: number, clubTier: number, clubName: s
   if (diff >= 5) return { min: 26, max: 34 };
   if (diff >= -5) return { min: 20, max: 30 };
   return { min: 8, max: 18 };
+}
+
+export function projectLeagueApps(overall: number, clubTier: number, clubName: string, seasonsAtClub: number, context?: { league: string; year: number }): { min: number; max: number } {
+  const band = leagueAppsBand(overall, clubTier, clubName, seasonsAtClub);
+  return context?.league === "Russian Premier League" && context.year >= 2026
+    ? { min: Math.min(band.min, 30), max: Math.min(band.max, 30) } : band;
 }
 
 /* Round 1523: a season reads the morale he pressed on, the number the hub showed him, not the one the summer's
@@ -4030,6 +4036,11 @@ export function calcAppearances(overall: number, clubTier: number, age: number, 
       }
     }
   }
+
+  /* The existing draws stay fixed; current league size and suspended entry change only their credited apps. */
+  const russiaYear = state?.currentClubCountry === "Russia" ? (state.seasons[state.seasons.length - 1]?.year ?? 0) + 1 : 0;
+  if (russiaYear >= 2026 && state?.currentLeague === "Russian Premier League") leagueApps = Math.min(leagueApps, 30);
+  if (russiaYear >= 2022) uclApps = 0;
 
   // --- Domestic cup appearances (0-7) ---
   let cupApps = 0;
@@ -4118,6 +4129,7 @@ export function calcAppearances(overall: number, clubTier: number, age: number, 
     apps = Math.max(1, apps - clamp(missedApps, 0, injurySevere ? 34 : 12));
   }
 
+  if (russiaYear >= 2026 && state?.currentLeague === "Russian Premier League") leagueApps = Math.min(leagueApps, 30, apps);
   return { apps, leagueApps, injured, injuryWeeks, injuryName, injurySevere };
 }
 
@@ -4549,7 +4561,7 @@ export function determineLoanOffers(state: CareerState, clubs: ClubData[]): Cont
   if (state.age > 23 || state.contractYearsLeft < 2) return null;
   if (state.currentClubTier > 2) return null;
   const seasonsAtClub = state.seasons.filter(ss => ss.club === state.currentClub && ss.type === "playing").length;
-  const here = projectLeagueApps(state.overall, state.currentClubTier, state.currentClub, seasonsAtClub);
+  const here = projectLeagueApps(state.overall, state.currentClubTier, state.currentClub, seasonsAtClub, { league: state.currentLeague, year: nextSeasonYear(state) });
   /* real minutes already on the table means no loan market */
   if (here.max >= 24) return null;
   const lastSeason = state.seasons[state.seasons.length - 1];
@@ -4563,7 +4575,7 @@ export function determineLoanOffers(state: CareerState, clubs: ClubData[]): Cont
   const offers: ContractOffer[] = [];
   for (let tier = state.currentClubTier + 1; tier <= 4 && offers.length < 2; tier++) {
     const candidates = getClubsByTier(pool, tier).filter(c =>
-      !exclude.has(c.name) && projectLeagueApps(state.overall, c.tier, c.name, 0).min >= 20,
+      !exclude.has(c.name) && projectLeagueApps(state.overall, c.tier, c.name, 0, { league: c.league, year: nextSeasonYear(state) }).min >= 20,
     );
     if (candidates.length === 0) continue;
     const club = pickAcrossLeagues(candidates);
@@ -4682,7 +4694,7 @@ export function seasonStrikes(state: CareerState): string[] {
   if (!last || last.type !== "playing") return [];
   const strikes: string[] = [];
   const seasonsHere = state.seasons.filter(s => s.club === last.club && s.type === "playing").length;
-  const band = projectLeagueApps(state.overall, last.clubTier, last.club, Math.max(0, seasonsHere - 1));
+  const band = projectLeagueApps(state.overall, last.clubTier, last.club, Math.max(0, seasonsHere - 1), { league: last.club === state.currentClub ? state.currentLeague : FALLBACK_CLUBS.find(club => club.name === last.club)?.league ?? "", year: last.year });
   /* League games only, against a league projection. Comparing total
      appearances to this band was the first draft and it was wrong in the
      player's favour: a fringe man at a giant plays eight league games, six in
@@ -4753,7 +4765,7 @@ export function determineTransferSituation(state: CareerState, clubs: ClubData[]
       /* Same shape as the ordinary loan window: the contract and the wage
          stay where they are, only the football moves. */
       for (let tier = currentClubTier + 1; tier <= 4 && offers.length < 2; tier++) {
-        const candidates = getClubsByTier(clubs, tier).filter(c => !exclude.has(c.name) && projectLeagueApps(state.overall, c.tier, c.name, 0).min >= 20);
+        const candidates = getClubsByTier(clubs, tier).filter(c => !exclude.has(c.name) && projectLeagueApps(state.overall, c.tier, c.name, 0, { league: c.league, year: nextSeasonYear(state) }).min >= 20);
         if (!candidates.length) continue;
         const club = pickAcrossLeagues(candidates);
         exclude.add(club.name);
@@ -4904,7 +4916,7 @@ export function requestTransferDecision(prev: CareerState, clubs: ClubData[]): C
   const offer = makeOffer(pool, tier, prev.overall, prev.age, new Set([prev.currentClub]), prev.marketValue, prev.seasons, false, candidates);
   return storeTransferBriefResult(prev, { status: offer ? 'offered' : 'no_match', offer,
     eligibleCount: option.eligibleCount, matchingCount: option.matchingCount,
-    projection: offer ? projectLeagueApps(prev.overall, offer.club.tier, offer.club.name, 0) : null });
+    projection: offer ? projectLeagueApps(prev.overall, offer.club.tier, offer.club.name, 0, { league: offer.club.league, year: nextSeasonYear(prev) }) : null });
 }
 
 /* ─── Init career ─── */
@@ -6107,7 +6119,7 @@ function playPendingProSeason(s: CareerState, clubs: ClubData[]): CareerState {
     Object.assign(s, endCareerMentorForMove(s, s.currentClub));
     prepareLeagueWorld(s, clubs, season.year + 1);
     const backSeasons = s.seasons.filter(ss => ss.club === back.parentClub && ss.type === "playing").length;
-    const nextHere = projectLeagueApps(s.overall, s.currentClubTier, back.parentClub, backSeasons);
+    const nextHere = projectLeagueApps(s.overall, s.currentClubTier, back.parentClub, backSeasons, { league: s.currentLeague, year: season.year + 1 });
     if (nextHere.min >= 20) {
       s.morale = clamp(s.morale + 5, 0, 100);
       s.events.push(`🔙 Loan over. Back at ${back.parentClub}, and this time they are planning around you: about ${nextHere.min} to ${nextHere.max} league games on the table.`);

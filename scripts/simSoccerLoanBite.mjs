@@ -69,7 +69,7 @@ const ENGINE = path.join(ROOT, 'src/lib/soccerCareerEngine.ts');
 const { careerStep } = await import(pathToFileURL(path.join(ROOT, 'scripts/lib/careerStep.mjs')).href);
 
 const RULE = 20;
-const FILTER = ' && projectLeagueApps(state.overall, c.tier, c.name, 0).min >= 20);';
+const FILTER = ' && projectLeagueApps(state.overall, c.tier, c.name, 0, { league: c.league, year: nextSeasonYear(state) }).min >= 20);';
 const CONTROL = process.env.SOCCER_LOAN_BITE_CONTROL || '';
 const CONTROLS = { strict26: [3, 5], nofilter: [2, 4, 5] };
 if (CONTROL && !CONTROLS[CONTROL]) { console.error(`unknown control "${CONTROL}"`); process.exit(1); }
