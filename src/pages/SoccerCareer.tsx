@@ -2385,11 +2385,12 @@ function TransferWindowCard({ situation, career, clubs, onCareer, onAcceptOffer,
   /* Round 217: the projection quoted here is drawn from the same band table
      the season simulation rolls from, so this line can never overpromise. */
   const seasonsHere = career.seasons.filter(ss => ss.club === career.currentClub && ss.type === "playing").length;
-  const projHere = projectLeagueApps(career.overall, career.currentClubTier, career.currentClub, seasonsHere);
+  const projHere = projectLeagueApps(career.overall, career.currentClubTier, career.currentClub, seasonsHere, { league: career.currentLeague, year: nextSeasonYear(career) });
   /* Release BS fix: quoted on the wage before a loyalty cut, as signExtension signs it */
   const uncutWage = loyaltyUncutWage(career);
   const extension = soccerExtensionQuote({ ...career, weeklyWage: uncutWage });
   const briefResult = transferBriefResult(career, projectLeagueApps);
+  const briefProjection = briefResult?.offer ? projectLeagueApps(career.overall, briefResult.offer.club.tier, briefResult.offer.club.name, 0, { league: briefResult.offer.club.league, year: nextSeasonYear(career) }) : briefResult?.projection;
   if (situation.type === "club_move") return <div data-club-move data-club-move-mode={situation.mode} className="space-y-3 rounded-xl border border-border bg-card p-4">
     <h3 className="text-lg font-black">{situation.mode === "loan" ? "🛫 Your club arranged a loan" : "📤 Your club sold you"}</h3>
     <p className="text-sm font-semibold">{situation.fromClub} → {situation.toClub}</p>
@@ -2421,7 +2422,7 @@ function TransferWindowCard({ situation, career, clubs, onCareer, onAcceptOffer,
       {briefResult && <div data-transfer-brief-result={briefResult.status} className="space-y-2 rounded-xl border border-border bg-card p-3 text-xs">
         <p className="font-bold">{briefResult.status === 'offered' ? 'A club matched your brief' : briefResult.status === 'no_match' ? 'No clubs matched your brief' : 'No response this window'}</p>
         <p className="text-muted-foreground">{briefResult.status === 'offered'
-          ? `${briefResult.offer?.club.name}${briefResult.projection ? ` projects about ${briefResult.projection.min} to ${briefResult.projection.max} league games` : ''}. Review the actual contract before signing.`
+          ? `${briefResult.offer?.club.name}${briefProjection ? ` projects about ${briefProjection.min} to ${briefProjection.max} league games` : ''}. Review the actual contract before signing.`
           : briefResult.status === 'no_match' ? 'Your priority found no destination among the eligible clubs. You are staying for now.'
             : 'The transfer request did not bring an offer. You are staying for now.'}</p>
         <p className="text-muted-foreground">This response is fixed for the window.</p>
@@ -2443,7 +2444,7 @@ function TransferWindowCard({ situation, career, clubs, onCareer, onAcceptOffer,
             </p>
           </div>
           {career.pendingLoanOffers.map(offer => {
-            const lp = projectLeagueApps(career.overall, offer.club.tier, offer.club.name, 0);
+            const lp = projectLeagueApps(career.overall, offer.club.tier, offer.club.name, 0, { league: offer.club.league, year: nextSeasonYear(career) });
             return (
               <div key={offer.club.name} className="bg-card border border-border rounded-xl p-3 space-y-2">
                 <div className="flex items-center justify-between gap-2">
@@ -2531,7 +2532,7 @@ function TransferWindowCard({ situation, career, clubs, onCareer, onAcceptOffer,
                     <div className="text-xs text-muted-foreground">{loanLeagueLine(offer.club, career)}season long loan</div>
                   </div>
                   <div className="text-right text-xs shrink-0">
-                    <div className="font-bold text-foreground">about {projectLeagueApps(career.overall, offer.club.tier, offer.club.name, 0).min} to {projectLeagueApps(career.overall, offer.club.tier, offer.club.name, 0).max}</div>
+                    <div className="font-bold text-foreground">about {projectLeagueApps(career.overall, offer.club.tier, offer.club.name, 0, { league: offer.club.league, year: nextSeasonYear(career) }).min} to {projectLeagueApps(career.overall, offer.club.tier, offer.club.name, 0, { league: offer.club.league, year: nextSeasonYear(career) }).max}</div>
                     <div className="text-muted-foreground">league games</div>
                   </div>
                 </div>
@@ -4920,7 +4921,7 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
           <div role="dialog" aria-modal="true" aria-label="Retire?" tabIndex={-1} ref={focusDialogOnMount} onKeyDown={escapeCloses(() => setShowRetireConfirm(false))} className="bg-card border-2 border-border rounded-xl p-6 max-w-sm w-full space-y-4" onClick={e => e.stopPropagation()}>
             <h3 className="text-lg font-black text-center">🚪 Retire?</h3>
             <p className="text-sm text-muted-foreground text-center">Are you sure you want to retire? Your career will end here.</p>
-            <div className="flex gap-3">
+            <div className="flex flex-col gap-3 sm:flex-row">
               <Button onClick={() => setShowRetireConfirm(false)} variant="outline" className="flex-1 h-10 font-bold">Cancel</Button>
               <Button onClick={() => { setShowRetireConfirm(false); onManualRetire(); }} className="flex-1 h-10 font-bold bg-red-600 hover:bg-red-500 text-black">Confirm Retirement</Button>
             </div>
