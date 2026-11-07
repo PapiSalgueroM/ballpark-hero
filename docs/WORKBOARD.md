@@ -18259,3 +18259,10 @@ Full 42362896967 passed 32 fresh cases, 20 built readers, 16 original rounded do
 Clean 42363679672 passed fresh App types, the product-name fence and normal production build. All 4,663 product source paths, 11 root configurations and 850 built file tuples matched the qualified full tree.
 
 The draft is stacked on PR535. Main was observed at 56d8708c7731600b1c0cb0daeef684b5940ca742. The merge and publish holds continue. This bounded fix does not close a master card.
+
+
+### 2026-11-07 Soccer continuation, Rarity Round crowd panel ownership
+
+A Rarity Round reveal owns its crowd response. Advancing or restarting invalidates that reveal. A late response can no longer fill the next round's pending panel or overwrite its displayed picks. Rank, points, normalization and request behavior passed the frozen regression.
+
+Stacked on PR536. Both original failures, both fixed passes, physical restoration, native response order and the exact clean build join were verified. [Original](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/42366132461) · [Fixed](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/42367425437) · [Physical controls](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/42368193168) · [Full](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/42368926851) · [Clean](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/42370093231)
