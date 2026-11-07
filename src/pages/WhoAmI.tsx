@@ -108,6 +108,8 @@ const WhoAmI = () => {
 
   const startGame = (guessBudget: number) => {
     if (!data) return;
+    pendingLookupRef.current = null;
+    setChecking(false);
     setBudget(guessBudget);
     setSecret(prev => pickSecret(buildWhoAmISecretPool(difficulty, data.pool), prev?.name));
     setGuesses([]);
@@ -130,13 +132,14 @@ const WhoAmI = () => {
      not reach this closure. A lookup that fails costs the player nothing: the
      guess is refused with a line to try again rather than scored against a
      club and a value nobody fetched. */
-  const checkingRef = useRef(false);
+  const pendingLookupRef = useRef<symbol | null>(null);
   const [checking, setChecking] = useState(false);
   const [lookupFailed, setLookupFailed] = useState(false);
   const submitGuess = async (entity: PlayerEntity) => {
-    if (phase !== 'playing' || !data || !secret || checkingRef.current) return;
+    if (phase !== 'playing' || !data || !secret || pendingLookupRef.current) return;
     if (guessedPeople.has(entity.personKey ?? whoAmIPersonKey(entity.rawName || entity.name))) return;
-    checkingRef.current = true;
+    const lookup = Symbol();
+    pendingLookupRef.current = lookup;
     setChecking(true);
     setLookupFailed(false);
     /* Cleared here, not after the lookup: PlayerAutocomplete sets the box to
@@ -145,7 +148,8 @@ const WhoAmI = () => {
        an await flashes the list back open under the player. */
     setGuessInput('');
     const p = await whoAmIPlayerFromEntity(entity);
-    checkingRef.current = false;
+    if (pendingLookupRef.current !== lookup) return;
+    pendingLookupRef.current = null;
     setChecking(false);
     if (!p) {
       setLookupFailed(true);
@@ -166,6 +170,8 @@ const WhoAmI = () => {
   // revealCard with the answer) rather than a separate code path.
   const giveUp = () => {
     if (phase !== 'playing') return;
+    pendingLookupRef.current = null;
+    setChecking(false);
     setPhase('lost');
   };
 

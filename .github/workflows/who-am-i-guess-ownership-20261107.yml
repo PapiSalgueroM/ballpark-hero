@@ -1,7 +1,7 @@
-name: Who Am I lookup ownership original
+name: Who Am I lookup ownership fixed
 on:
   push:
-    branches: [codex/who-am-i-guess-ownership-original-collector-refresh-qa-20261107]
+    branches: [codex/who-am-i-guess-ownership-fixed-qa-20261107]
 permissions:
   contents: read
   actions: read
@@ -15,12 +15,12 @@ jobs:
     env:
       SIM_NETWORK: offline
       SIM_OFFLINE_RECEIPT: who-am-i-guess-ownership-evidence/offline.log
-      WHO_AM_I_STAGE: original
-      WHO_AM_I_PARENT: '5584945095a494802c6a9d865db560e78cd5069e'
+      WHO_AM_I_STAGE: fixed
+      WHO_AM_I_PARENT: '5acdb362dc33d19197399697160c8e11de2dac23'
       WHO_AM_I_BASE: '5584945095a494802c6a9d865db560e78cd5069e'
       WHO_AM_I_BASE_TREE: 'b60eb586ad32b5565a3857bf6032d5b3b1f25a89'
       WHO_AM_I_ORIGINAL_PAGE: '931e60e5075768b677c2013f99131c1867f27b68'
-      WHO_AM_I_PAGE: '931e60e5075768b677c2013f99131c1867f27b68'
+      WHO_AM_I_PAGE: '76c3c1d99a4c0b6752df0c3b27cd548f88d51fae'
       WHO_AM_I_TEST: 'bb08f3b9b2dc6e87a5fc3ab7d090b86893c642c1'
       WHO_AM_I_PLAN: '273ab6bfc2e924ea1b41f20c56ef2e2c5404cc2d'
     steps:
@@ -76,7 +76,7 @@ jobs:
             'public/who-am-i/index.html': 'cd4d7ab7de79d9742bfbebea4de649ada9349fea',
             'src/lib/whoAmI.ts': '8b6da5c480857fa8b7164d50c322eaccd0f6a8af',
           };
-          const refs = {"preflight":{"run":42360463415,"artifact":13569019820,"name":"who-am-i-guess-ownership-active-preflight-42360463415","head":"bdad351fa28aa980bfbec4ace01f908d3dde19b7","tree":"7c10f937d72d40956446abb3a57b3ae78d4f1d9e","zipBytes":1012454,"zipSHA256":"268a1725b5d68d2ac709c7f4d0bcad28a50690d24ee7ec3139db949d27454972","files":{"active-route-preflight.json":"4380a1c37b0e4a1cf46049b0784173dfc90c1b2372edaa80a3dce2539ae59708","active-snapshot.html":"b49bf1be24461b284516f5aff01422d3cb38e2440454694142e74c3c45982e20","source-join.json":"db7338e0a76498455ebaa494af7d93606baa36bca53eb306d44172499fba20fb","final-holds.json":"6f20dc7937f02cadd4411339221977a545b089bca5bbd3db97efe4a2efc86f5e"}}};
+          const refs = {"original":{"run":42361790574,"artifact":13569369009,"name":"who-am-i-guess-ownership-original-42361790574","head":"5acdb362dc33d19197399697160c8e11de2dac23","tree":"d7a4d1609b3e600e72ecf5fac7c3382835472ff9","zipBytes":2344078,"zipSHA256":"2fe80f575753ef6da7653888e010b85fe82d5daa4c3d85cb4e6ef930e8043b48","files":{"admission.json":"76c041c396f46a3952e0b43e436d1c5401cee58a9959bf85afb796736e43e690","source-join.json":"71d5c38d0d48e69cbf0d46b4253efa89a5896b9846a7f20dde420bc3100953ff","final-holds.json":"eec8428156d1c6ee3ec8817a551db825769d3c1e66d4d7eebc61a882412e5fce","case-original/raw.json":"75f0498a90853bdb1e1329b7e759629344b30509c17fa3162e913fbc06adb297","case-original/vitest.json":"efa5c6d5b26a3c72bf1cd53d03dca127a75aa3f26c78fa0b7573983953dbc503","case-original/exit-code.txt":"4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"}}};
           const hash = (algorithm, body) => createHash(algorithm).update(body).digest('hex');
           const gitBlob = body => createHash('sha1').update('blob ' + body.length + '\0').update(body).digest('hex');
           const options = { maxBuffer: 64 * 1024 * 1024 };
@@ -339,7 +339,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: who-am-i-guess-ownership-original-${{ github.run_id }}
+          name: who-am-i-guess-ownership-fixed-${{ github.run_id }}
           path: who-am-i-guess-ownership-evidence
           retention-days: 14
           if-no-files-found: error
