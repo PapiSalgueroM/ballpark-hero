@@ -41,6 +41,11 @@
  * the phone's pins are head e054da81 and base 3a8b55c1. The rows are still unchanged.
  * scripts/simSoccerWorldTruth.mjs section 6 proves every value on every run.
  *
+ * The pinned pre-arrival tree uses the original phone-3 row (33 full inverse rows). The later historical-arrival
+ * reader uses phone-3-entry and phone-3-legacy (34 full rows), retaining per-ID lookup, legacy fallback and
+ * saved-club protection. Source selection and receipt validation require exactly one complete known layout;
+ * the original round's file pins above remain historical provenance, not pins for the later source.
+ *
  * Every row is required exactly once at its turn, so this cannot go quietly idle when the source moves under it.
  * Line endings are read as LF by every caller. Rows are regenerated, never hand edited, after any change to the
  * four files (docs/audits/ROUND-1329-NOTES.md holds the recipe).
@@ -92,9 +97,12 @@ const EDITS = [
   { name: "phone-2", file: "src/lib/soccerPhone.ts",
     from: "\n/* LAST_REAL_YEAR (2032: past it the era pools run out of people who could\n   plausibly still be playing, so the world generates its own names) lives in\n   soccerWorldTruth.ts since Round 1329, so the quiz reads the same year. */\n",
     to: "\n/* Past this the era pools run out of people who could plausibly still be\n   playing, so the world generates its own names, exactly like the Ballon d'Or\n   already does past 2032. Nobody real gets a fictional future. */\nconst LAST_REAL_YEAR = 2032;\n" },
-  { name: "phone-3", file: "src/lib/soccerPhone.ts",
-    from: "\n  /* Seed anybody new into the map at their era club, then let the map rule.\n     Round 1329: a real man is never moved by the sim, so in a real names year\n     every one of them sits at the club his era pool gives for this season\n     (careerEras.ts), which is where the Ballon d'Or night finds him too\n     (worldClubOf). Generated names are seeded once, as before. */\n  for (const st of stars) if (realNames || !p.clubs[st.name]) p.clubs[st.name] = st.club;\n",
-    to: "\n  // Seed anybody new into the map at their era club, then let the map rule.\n  for (const st of stars) if (!p.clubs[st.name]) p.clubs[st.name] = st.club;\n" },
+  { name: "phone-3-entry", file: "src/lib/soccerPhone.ts",
+    from: "      const entry = soccerHistoricalEntryForName(s, st.name);\n      if ((realNames && !entry) || !p.clubs[st.name]) p.clubs[st.name] = entry?.entryClub ?? st.club;",
+    to: "      const entry = soccerHistoricalEntryForName(s, st.name);\n      if (!p.clubs[st.name]) p.clubs[st.name] = entry?.entryClub ?? st.club;" },
+  { name: "phone-3-legacy", file: "src/lib/soccerPhone.ts",
+    from: "    const entry = hasSoccerHistoricalPlayer(s, st.name) ? readSoccerHistoricalArrivals(s)!.players[0] : undefined;\n    if ((realNames && !entry) || !p.clubs[st.name]) p.clubs[st.name] = entry?.entryClub ?? st.club;",
+    to: "    const entry = hasSoccerHistoricalPlayer(s, st.name) ? readSoccerHistoricalArrivals(s)!.players[0] : undefined;\n    if (!p.clubs[st.name]) p.clubs[st.name] = entry?.entryClub ?? st.club;" },
   { name: "phone-4", file: "src/lib/soccerPhone.ts",
     from: "  const movedAlready = new Set<string>();\n  /* Round 1329: every draw of a move is still made and counted, so the\n     season's later draws do not move, but only a generated man changes clubs:\n     a real one stays where his era pool put him. */\n  let drawnMoves = 0;\n  for (const st of movers) {",
     to: "  const movedAlready = new Set<string>();\n  for (const st of movers) {" },
@@ -172,6 +180,24 @@ const EDITS = [
     to: "        <div className=\"text-[11px] font-bold truncate\">{latest?.short ?? \"Last\"} {latest?.year ?? \"\"}</div>\n        <div className=\"text-[9px] text-muted-foreground truncate\">{latest?.champion ?? \"\"} won it</div>\n      </button>" },
 ];
 
+
+/* The pinned pre-arrival tree has one phone-3 row. Current readers have two
+   narrower rows; their per-ID and legacy saved-club logic stays in place. */
+const HISTORICAL_PHONE_ROW = { name: "phone-3", file: "src/lib/soccerPhone.ts",
+    from: "\n  /* Seed anybody new into the map at their era club, then let the map rule.\n     Round 1329: a real man is never moved by the sim, so in a real names year\n     every one of them sits at the club his era pool gives for this season\n     (careerEras.ts), which is where the Ballon d'Or night finds him too\n     (worldClubOf). Generated names are seeded once, as before. */\n  for (const st of stars) if (realNames || !p.clubs[st.name]) p.clubs[st.name] = st.club;\n",
+    to: "\n  // Seed anybody new into the map at their era club, then let the map rule.\n  for (const st of stars) if (!p.clubs[st.name]) p.clubs[st.name] = st.club;\n" };
+const HISTORICAL_EDITS = EDITS.flatMap(row => row.name === 'phone-3-entry' ? [HISTORICAL_PHONE_ROW] : row.name === 'phone-3-legacy' ? [] : [row]);
+
+function rowsForSource(relative, source) {
+  if (relative !== PHONE) return EDITS.filter(row => row.file === relative);
+  const historical = source.split(HISTORICAL_PHONE_ROW.from).length - 1;
+  const entry = source.split(EDITS.find(row => row.name === 'phone-3-entry').from).length - 1;
+  const legacy = source.split(EDITS.find(row => row.name === 'phone-3-legacy').from).length - 1;
+  assert((historical === 1 && entry === 0 && legacy === 0) || (historical === 0 && entry === 1 && legacy === 1),
+    'Round 1329 phone layout must be exactly historical phone-3 or current phone-3-entry plus phone-3-legacy');
+  return (historical === 1 ? HISTORICAL_EDITS : EDITS).filter(row => row.file === relative);
+}
+
 export const WORLD_TRUTH_FILES = Object.keys(WORLD_TRUTH_SHA256);
 export const WORLD_TRUTH_ADDITIONS = EDITS.map(row => row.name);
 
@@ -185,9 +211,9 @@ export function worldTruthPatches() {
  * did not edit comes back as it was. `receipt` gains one row per edit made, for the harness's proof.
  */
 export function inverseWorldTruth(relative, source, receipt = []) {
-  const rows = EDITS.filter(row => row.file === relative);
-  if (rows.length === 0) return source;
   let out = source.split('\r\n').join('\n');
+  const rows = rowsForSource(relative, out);
+  if (rows.length === 0) return source;
   for (const row of rows) {
     assert.equal(out.split(row.from).length, 2, `the ${row.name} row of Round 1329's inverse must be in ${relative} exactly once at its turn`);
     out = out.replace(row.from, () => row.to);
@@ -220,8 +246,11 @@ export function worldTruthReceiptProblem(receipt, required = [ENGINE, PHONE]) {
   for (const row of receipt) seen.set(row.file, [...(seen.get(row.file) || []), row.addition]);
   for (const file of required) if (!seen.has(file)) return `Round 1329's inverse never ran on ${file}`;
   for (const [file, got] of seen) {
-    const want = EDITS.filter(row => row.file === file).map(row => row.name);
-    if (got.join() !== want.join()) return `Round 1329's inverse ran ${got.join(' ')} on ${file}, not ${want.join(' ')}`;
+    const historical = file === PHONE && got.includes('phone-3');
+    const arrivals = file === PHONE && (got.includes('phone-3-entry') || got.includes('phone-3-legacy'));
+    if (file === PHONE && historical === arrivals) return 'Round 1329 phone receipt must name exactly one historical or current layout';
+    const want = (historical ? HISTORICAL_EDITS : EDITS).filter(row => row.file === file).map(row => row.name);
+    if (got.length !== want.length || got.join() !== want.join()) return `Round 1329's inverse ran ${got.length} rows (${got.join(' ')}) on ${file}, not ${want.length} (${want.join(' ')})`;
   }
   return '';
 }
