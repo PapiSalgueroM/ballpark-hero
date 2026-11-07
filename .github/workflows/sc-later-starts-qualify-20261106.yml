@@ -1,0 +1,429 @@
+name: Later historical starts, shared raw preservation and unchanged build gates
+on:
+  push:
+    branches: [codex/sc-later-starts-qualify-20261106]
+permissions:
+  contents: read
+concurrency:
+  group: sc-later-starts-qualify-20261106
+  cancel-in-progress: false
+jobs:
+  qualify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    defaults:
+      run:
+        shell: bash
+    env:
+      BASE_CORE: ae08b4477c9fd47e3120ab797b45a2d5a375c17a
+      BASE_TREE: 3d76259d5982b579ebbbdfefbff6276b674127a2
+      PRODUCT_CORE: 25b263816ac416ef885df7e9f1ce2fd782927c44
+      PRODUCT_TREE: 5f6ef45062b696e0eea44006093f5824bd02ff7b
+      PRODUCT_FILES: '[{"path":"src/pages/SoccerCareer.tsx","before":"cfc3f03fefd752b6125ab72d7cc806e32e9c3f66","after":"4a2ff4f357a643da0b7993650f68d9b67bb5cd1a"},{"path":"src/lib/soccerHistoricalArrivals.ts","before":"c57d5048ffbce45c33051873e799a7e79dcdc561","after":"f01a8f4159813c38f9e26d7dd4f4b80f7d87fa82"},{"path":"src/lib/soccerPhone.ts","before":"e01df0bf20e7813830eebe298c8c792b3992c078","after":"5b34017436a20d0dd311f0520ccd274fa80523a6"},{"path":"src/components/soccer-career/PhonePanel.tsx","before":"3f9a00c0ecb06fc15a820e8d6588097f7692baac","after":"74d22f73796e6ef5615f0b443cbf5b8fab41b1d5"},{"path":"src/test/soccerHistoricalRealEntry.test.tsx","before":"bec3f78f30501551fcd69bb3c88b8c8bf68c11d9","after":"e524b70753c266f9234ffe74454971a2190281f1"},{"path":"scripts/simSoccerHistoricalArrivals.mjs","before":"02c559fcde4e731fedb02aaefaf83945815928a5","after":"d90233a65c95d754dcbe8b3ca2e6b81f1fbdd276"}]'
+      PLAYWRIGHT_BROWSERS_PATH: /home/runner/.cache/ms-playwright
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 3
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24.22.2'
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: '1.4.4'
+      - name: Bind the published baseline, exact six-path product and sole QA addition
+        run: |
+          set -euo pipefail
+          export QA_OUT="$RUNNER_TEMP/sc-later-starts-qualification-evidence"
+          export QA_BASE_SRC="$RUNNER_TEMP/sc-later-starts-published-original"
+          mkdir -p "$QA_OUT/logs" "$QA_OUT/transport"
+          echo "QA_OUT=$QA_OUT" >> "$GITHUB_ENV"
+          echo "QA_BASE_SRC=$QA_BASE_SRC" >> "$GITHUB_ENV"
+          [[ "$BASE_CORE" =~ ^[0-9a-f]{40}$ && "$BASE_TREE" =~ ^[0-9a-f]{40}$ && "$PRODUCT_CORE" =~ ^[0-9a-f]{40}$ && "$PRODUCT_TREE" =~ ^[0-9a-f]{40}$ ]]
+          git fetch --no-tags --depth=1 origin +refs/heads/main:refs/remotes/origin/main
+          test "$(git rev-parse refs/remotes/origin/main)" = "$BASE_CORE"
+          test "$(git rev-parse HEAD^)" = "$PRODUCT_CORE"
+          test "$(git rev-parse "$PRODUCT_CORE^{tree}")" = "$PRODUCT_TREE"
+          test "$(git rev-parse "$BASE_CORE^{tree}")" = "$BASE_TREE"
+          git worktree add --detach "$QA_BASE_SRC" "$BASE_CORE"
+          node --input-type=module <<'BIND'
+          import fs from 'node:fs';import assert from 'node:assert/strict';import {execFileSync} from 'node:child_process';
+          const e=process.env,out=e.QA_OUT,git=(...a)=>execFileSync('git',a,{encoding:'utf8'}).trim();
+          const expected=JSON.parse(e.PRODUCT_FILES),workflow='.github/workflows/sc-later-starts-qualify-20261106.yml';
+          assert.deepEqual(git('rev-list','--parents','-n','1',e.PRODUCT_CORE).split(' '),[e.PRODUCT_CORE,e.BASE_CORE],'SIX_PATH_SOLE_PUBLISHED_PARENT');
+          assert.deepEqual(git('rev-list','--parents','-n','1','HEAD').split(' '),[git('rev-parse','HEAD'),e.PRODUCT_CORE]);
+          assert.equal(expected.length,6);assert.equal(new Set(expected.map(r=>r.path)).size,6);
+          const delta=git('diff-tree','--no-commit-id','--name-only','-r',e.BASE_CORE,e.PRODUCT_CORE).split('\n').filter(Boolean).sort();
+          assert.deepEqual(delta,expected.map(r=>r.path).sort());
+          for(const r of expected)for(const[core,digest]of[[e.BASE_CORE,r.before],[e.PRODUCT_CORE,r.after]])assert.equal(git('ls-tree',core,'--',r.path),'100644 blob '+digest+'\t'+r.path);
+          assert.equal(git('ls-tree',e.PRODUCT_CORE,'--',workflow),'');
+          assert.deepEqual(git('diff-tree','--no-commit-id','--name-only','-r','HEAD').split('\n').filter(Boolean),[workflow]);
+          fs.copyFileSync(workflow,out+'/workflow.yml');
+          fs.writeFileSync(out+'/source-role.json',JSON.stringify({base:{commit:e.BASE_CORE,tree:e.BASE_TREE},product:{commit:e.PRODUCT_CORE,tree:e.PRODUCT_TREE,files:expected},qa:{commit:git('rev-parse','HEAD'),tree:git('rev-parse','HEAD^{tree}'),soleAddition:workflow},scope:'Exact six-path later historical starts. Published Russia baseline is actual, not inferred. Scoped checks only; prior fleet diagnostics are unwaived.'},null,2)+'\n',{flag:'wx'});
+          BIND
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$QA_OUT/source-before.sha256"
+          git ls-files --stage > "$QA_OUT/index-before.txt"
+          git status --porcelain=v1 --untracked-files=all > "$QA_OUT/status-before.txt"
+          sha256sum package.json package-lock.json bun.lock bun.lockb > "$QA_OUT/locks-before.sha256"
+          (cd "$QA_BASE_SRC"; git ls-files -z | sort -z | xargs -0 sha256sum) > "$QA_OUT/baseline-source-before.sha256"
+          (cd "$QA_BASE_SRC"; git ls-files --stage) > "$QA_OUT/baseline-index-before.txt"
+          (cd "$QA_BASE_SRC"; git status --porcelain=v1 --untracked-files=all) > "$QA_OUT/baseline-status-before.txt"
+          (cd "$QA_BASE_SRC"; sha256sum package.json package-lock.json bun.lock bun.lockb) > "$QA_OUT/baseline-locks-before.sha256"
+          test ! -s "$QA_OUT/status-before.txt"
+          test ! -s "$QA_OUT/baseline-status-before.txt"
+      - name: Install held app and required build tools
+        run: |
+          set -euo pipefail
+          test "$(bun --version)" = 1.4.4
+          bun --version > "$QA_OUT/logs/bun-version.log"
+          node --version > "$QA_OUT/logs/node-version.log"
+          bun install --frozen-lockfile > "$QA_OUT/logs/bun-install.log" 2>&1
+          node -p "JSON.stringify({router:require('react-router-dom/package.json').version,vite:require('vite/package.json').version,rollup:JSON.parse(require('fs').readFileSync('node_modules/rollup/package.json','utf8')).version})" > "$QA_OUT/logs/build-versions.json"
+          git diff --exit-code HEAD -- package.json package-lock.json bun.lock bun.lockb
+          npm install --prefix "$RUNNER_TEMP/russia-bridge-tools" --package-lock=false --no-audit --no-fund playwright@1.64.0 > "$QA_OUT/logs/playwright-install.log" 2>&1
+          test ! -e node_modules/playwright
+          test ! -e node_modules/playwright-core
+          ln -s "$RUNNER_TEMP/russia-bridge-tools/node_modules/playwright" node_modules/playwright
+          ln -s "$RUNNER_TEMP/russia-bridge-tools/node_modules/playwright-core" node_modules/playwright-core
+          "$RUNNER_TEMP/russia-bridge-tools/node_modules/.bin/playwright" install --with-deps chromium > "$QA_OUT/logs/chromium-install.log" 2>&1
+          python3 -m pip install --target "$RUNNER_TEMP/russia-bridge-python" fonttools pillow > "$QA_OUT/logs/python-install.log" 2>&1
+          echo "PYTHONPATH=$RUNNER_TEMP/russia-bridge-python" >> "$GITHUB_ENV"
+      - name: Share held dependencies with the immutable original
+        run: |
+          set -euo pipefail
+          test "$(node --version)" = v24.22.2
+          ln -s "$GITHUB_WORKSPACE/node_modules" "$QA_BASE_SRC/node_modules"
+      - name: Proper application types
+        run: |
+          set -euo pipefail
+          export GIT_NO_LAZY_FETCH=1
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          : > "$QA_OUT/transport/types.log"
+          set +e
+          SIM_OFFLINE_RECEIPT="$QA_OUT/transport/types.log" node_modules/.bin/tsc --noEmit -p tsconfig.app.json > "$QA_OUT/logs/types.log" 2>&1
+          native_exit=$?
+          printf '%s\n' "$native_exit" > "$QA_OUT/types.exit" || exit 1
+          test "$native_exit" = 0 || exit "$native_exit"
+          test ! -s "$QA_OUT/transport/types.log" || exit 1
+          set -e
+          printf '%s\n' '{"command":"node_modules/.bin/tsc --noEmit -p tsconfig.app.json","exit":0}' > "$QA_OUT/types-passed.json"
+          test ! -s "$QA_OUT/transport/types.log"
+      - name: Paired permanent historical cases and directly affected guards
+        timeout-minutes: 25
+        run: |
+          set -euo pipefail
+          export GIT_NO_LAZY_FETCH=1
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          run_model() {
+            local name="$1"
+            shift
+            local receipt="$QA_OUT/transport/$name.log"
+            : > "$receipt"
+            set +e
+            SIM_OFFLINE_RECEIPT="$receipt" "$@" > "$QA_OUT/logs/$name.log" 2>&1
+            local native_exit=$?
+            set -e
+            printf '%s\n' "$native_exit" > "$QA_OUT/logs/$name.exit"
+            cat "$QA_OUT/logs/$name.log"
+            return 0
+          }
+          run_model historical-baseline-types bash -c 'cd "$QA_BASE_SRC" && node_modules/.bin/tsc --noEmit -p tsconfig.app.json'
+          test ! -e "$QA_OUT/historical-baseline-raw"
+          test ! -e "$QA_OUT/historical-candidate-raw"
+          run_model historical-baseline bash -c 'cd "$QA_BASE_SRC" && SC_HISTORICAL_ENTRY_EVIDENCE="$QA_OUT/historical-baseline-raw" node scripts/simSoccerHistoricalArrivals.mjs'
+          run_model historical-candidate env SC_HISTORICAL_ENTRY_EVIDENCE="$QA_OUT/historical-candidate-raw" node scripts/simSoccerHistoricalArrivals.mjs
+          run_model historical-shared-raw-admission node --input-type=module <<'HISTORICAL_RAW'
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import assert from 'node:assert/strict';
+          import crypto from 'node:crypto';
+          const out=process.env.QA_OUT,sha=b=>crypto.createHash('sha256').update(b).digest('hex');
+          const oldNames=['entry','continuity','phone-card','legacy','original-v1','newer-ui'].map(n=>n+'.json');
+          const newNames=['later-ui-2010.json','later-ui-2015.json'];
+          const facts=[
+           {id:'soccer:mbappe',name:'Kylian Mbappé',entryYear:2015,entryClub:'Monaco'},
+           {id:'soccer:haaland',name:'Erling Haaland',entryYear:2016,entryClub:'Bryne'},
+           {id:'soccer:bellingham',name:'Jude Bellingham',entryYear:2019,entryClub:'Birmingham City'}
+          ];
+          function readRole(role,names){
+           const dir=path.join(out,'historical-'+role+'-raw'),stat=fs.lstatSync(dir);assert(stat.isDirectory()&&!stat.isSymbolicLink(),'SC_LATER_RAW_DIRECTORY');
+           const found=fs.readdirSync(dir).sort();assert.deepEqual(found,names.slice().sort(),'SC_LATER_RAW_CENSUS');
+           return Object.fromEntries(names.map(file=>{
+            const full=path.join(dir,file),s=fs.lstatSync(full);assert(s.isFile()&&!s.isSymbolicLink(),'SC_LATER_RAW_ORDINARY');
+            const body=fs.readFileSync(full),value=JSON.parse(body);assert(Array.isArray(value.importDraws)&&value.importDraws.length>0,'SC_LATER_IMPORT_TAPE');
+            return[file,{file:'historical-'+role+'-raw/'+file,body,value,pin:{file:'historical-'+role+'-raw/'+file,bytes:body.length,sha256:sha(body)}}];
+           }));
+          }
+          function equalShared(a,b){assert.deepEqual(b,a,'SC_LATER_SHARED_COMPLETE_RAW');}
+          const clone=v=>JSON.parse(JSON.stringify(v));
+          const tag=s=>s.historicalArrivals,entry=({name,...row})=>row;
+          function checkLater(book,startYear){
+           assert(Array.isArray(book.importDraws)&&book.importDraws.length>0,'SC_LATER_IMPORT_TAPE');
+           const v=book.value,expected=facts.filter(p=>p.entryYear>startYear);
+           assert.equal(v.schema,'SC_LATER_START_FULL_EVENTS_V1');assert.equal(v.startYear,startYear);
+           assert.equal(v.era,startYear===2010?'2010-14':'2015-19');assert.deepEqual(v.expected,expected);
+           assert.deepEqual(tag(v.ui.state),{version:3,startYear,players:[]},'SC_LATER_INITIAL');
+           assert.equal(v.ui.state.seasons[0].year,startYear,'SC_LATER_START_YEAR');
+           assert(Array.isArray(v.run.frames)&&v.run.frames.length>1,'SC_LATER_COMPLETE_FRAMES');
+           for(const frame of v.run.frames){
+            assert.equal(frame.year,frame.state.seasons.at(-1).year);
+            assert.deepEqual(tag(frame.state),{version:3,startYear,players:expected.filter(p=>p.entryYear<=frame.year).map(entry)},'SC_LATER_DUE_MATRIX');
+            assert.equal(typeof frame.saved,'string');assert(frame.saved.length>0);assert(Number.isInteger(frame.drawsThrough));
+           }
+           assert.equal(v.run.frames.at(-1).year,2020);assert.deepEqual(v.run.frames.at(-1).state,v.run.state);
+           const registered=tag(v.loaded.state).players;
+           assert.deepEqual(registered,expected.map(entry),'SC_LATER_FINAL_REGISTRY');
+           assert.equal(new Set(registered.map(p=>p.id)).size,expected.length,'SC_LATER_EXACT_ONCE');
+           assert.equal(v.loaded.bytes,v.loaded.loadedBytes,'SC_LATER_RELOAD');
+           assert.equal(v.repeated.bytes,v.repeated.loadedBytes,'SC_LATER_REPEATED_RELOAD');
+           assert.equal(v.repeated.bytes,v.loaded.loadedBytes,'SC_LATER_STABLE_RELOAD');
+           assert.deepEqual(v.repeated.state,v.loaded.state,'SC_LATER_STABLE_STATE');
+           const points=Array.from(new Set([startYear,...expected.flatMap(p=>[p.entryYear-1,p.entryYear]),2020])).sort();
+           assert.deepEqual(v.feed.map(r=>r.year),points,'SC_LATER_BOUNDARY_CENSUS');
+           for(const row of v.feed){
+            const due=expected.filter(p=>p.entryYear<=row.year),frame=v.run.frames.find(r=>r.year===row.year);
+            assert.deepEqual(row.frame,frame,'SC_LATER_ACTUAL_FRAME');assert.deepEqual(row.input,frame.state,'SC_LATER_SAME_EVENT_INPUT');
+            assert.deepEqual(row.presentNames,due.map(p=>p.name),'SC_LATER_SAME_EVENT_FEED');assert.equal(row.links.length,due.length*2);
+            for(const p of due){
+             assert(row.text.includes(p.entryYear+' at '+p.entryClub),'SC_LATER_SOURCE_ENTRY_TEXT');
+             assert.equal(row.world.find(w=>w.id===p.id)?.club,p.entryClub,'SC_LATER_WORLD_OWNER');
+            }
+            assert.equal(row.after,row.before);assert.deepEqual(row.afterStorage,row.beforeStorage);
+            assert.equal(row.afterDraws,row.beforeDraws);assert.equal(row.afterUiDraws,row.beforeUiDraws);
+            assert.equal(row.reopenedHtml,row.html);assert.equal(typeof row.html,'string');
+           }
+           assert.deepEqual(v.protection,expected.map(p=>({id:p.id,name:p.name,protected:true})));
+           const tc=v.tagControl;assert.equal(tc.available,true);assert.notEqual(tc.before,tc.fault);assert.equal(tc.accepted,null);assert.equal(tc.restored,tc.before);
+           const fb=v.fallback;assert.equal(fb.hadHaaland,true);assert.notEqual(fb.prepared,fb.before);assert.equal(fb.club,'Bryne');
+           assert.deepEqual(fb.input,v.loaded.state);assert.equal(fb.state.phone.clubs['Erling Haaland'],'Bryne');
+           assert.equal(v.privateForkTapeCaptured,false);
+           for(const row of v.run.priorArrivalWrites)assert.deepEqual(row.after,row.before,'SC_LATER_CALLER_INPUT_HELD');
+           for(const values of[book.importDraws,v.uiDraws,v.mainDraws])assert(Array.isArray(values)&&values.length>0);
+           assert.equal(v.storage['historical-entry-unrelated'],'untouched');
+           return{startYear,cells:expected.map(entry),frames:v.run.frames.length,feedYears:points,exactOnce:registered.length,reloadBytesHeld:true,readOnlyFeedHeld:true,privateForkTapeCaptured:false,preparedFallback:true};
+          }
+          for(const[name,count]of[['historical-baseline',6],['historical-candidate',8]]){
+           assert.equal(fs.readFileSync(path.join(out,'logs',name+'.exit'),'utf8'),'0\n','SC_LATER_HEALTHY_SIM_NATIVE');
+           assert.equal(fs.readFileSync(path.join(out,'transport',name+'.log')).length,0);
+           const log=fs.readFileSync(path.join(out,'logs',name+'.log'),'utf8');
+           const closing='simSoccerHistoricalArrivals: '+count+' UI, save and phone outcomes green; missing-case control caught';
+           assert.equal(log.split(closing).length-1,1,'SC_LATER_EXISTING_CENSUS_CONTROL_CLOSING');
+          }
+          const baseline=readRole('baseline',oldNames),candidate=readRole('candidate',[...oldNames,...newNames]);
+          for(const file of oldNames)equalShared(baseline[file].body,candidate[file].body);
+          const later=newNames.map((file,i)=>checkLater(candidate[file].value,i===0?2010:2015));assert.equal(later.reduce((n,r)=>n+r.cells.length,0),5);
+          const controls=[];
+          const first=oldNames[0],body=candidate[first].body,changed=Buffer.concat([body,Buffer.from('\n')]);
+          assert.notDeepEqual(changed,body);assert.throws(()=>equalShared(baseline[first].body,changed),/SC_LATER_SHARED_COMPLETE_RAW/);
+          assert.deepEqual(changed.subarray(0,-1),body);
+          controls.push({name:'shared-whole-raw-append',source:candidate[first].pin,mutation:{kind:'append',bytesHex:'0a',index:body.length},fault:{bytes:changed.length,sha256:sha(changed)},owned:'SC_LATER_SHARED_COMPLETE_RAW',wholeInverse:true});
+          const input=candidate[newNames[0]].value,fault=clone(input),frame=fault.value.run.frames.find(r=>tag(r.state).players.length);
+          assert(frame);const old=frame.state.historicalArrivals.players[0].entryClub;frame.state.historicalArrivals.players[0].entryClub=old+' copied fault';
+          assert.notDeepEqual(fault,input);assert.throws(()=>checkLater(fault,2010),/SC_LATER_DUE_MATRIX/);
+          frame.state.historicalArrivals.players[0].entryClub=old;assert.deepEqual(fault,input);
+          controls.push({name:'actual-entry-club',source:candidate[newNames[0]].pin,mutation:{frame:fault.value.run.frames.indexOf(frame),player:0,key:'entryClub',before:old,after:old+' copied fault'},owned:'SC_LATER_DUE_MATRIX',wholeInverse:true});
+          const pins=rows=>Object.values(rows).map(row=>row.pin);
+          fs.writeFileSync(path.join(out,'HISTORICAL-RAW-ADMISSION.json'),JSON.stringify({
+           schema:'SC_LATER_HISTORICAL_RAW_ADMISSION_V1',status:'SIX_SHARED_COMPLETE_RAW_AND_FIVE_FUTURE_CELLS_PASSED',
+           baseline:{commit:process.env.BASE_CORE,tree:process.env.BASE_TREE,files:pins(baseline)},
+           candidate:{commit:process.env.PRODUCT_CORE,tree:process.env.PRODUCT_TREE,files:pins(candidate)},
+           sharedCompleteByteEqual:oldNames,later,controls,
+           evidenceCoupling:'Each permanent sim invokes Vitest once. Its existing omission control mutates only a completed copied report in memory, never reruns or rewrites raw evidence. Both native0 and exact closing lines are required.',
+           limits:['Conditional on the captured natural UI/main streams; no private fork tape claim.','Missing-cache probe is explicitly prepared.','No native or public browser coverage.']
+          },null,2)+'\n',{flag:'wx'});
+          console.log('Historical raw admission: complete shared6 bytes held,5 future identity cells and2 effective copied-data controls passed.');
+          HISTORICAL_RAW
+          run_model simCareerFacts node scripts/simCareerFacts.mjs
+          run_model simCareerEras node scripts/simCareerEras.mjs
+          run_model simSaveKeeper node scripts/simSaveKeeper.mjs
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$QA_OUT/source-after-models.sha256"
+          git ls-files --stage > "$QA_OUT/index-after-models.txt"
+          sha256sum package.json package-lock.json bun.lock bun.lockb > "$QA_OUT/locks-after-models.sha256"
+          git status --porcelain=v1 --untracked-files=all > "$QA_OUT/status-after-models.txt"
+          cmp "$QA_OUT/source-before.sha256" "$QA_OUT/source-after-models.sha256"
+          cmp "$QA_OUT/index-before.txt" "$QA_OUT/index-after-models.txt"
+          cmp "$QA_OUT/locks-before.sha256" "$QA_OUT/locks-after-models.sha256"
+          test ! -s "$QA_OUT/status-after-models.txt"
+          (cd "$QA_BASE_SRC"; git ls-files -z | sort -z | xargs -0 sha256sum) > "$QA_OUT/baseline-source-after-models.sha256"
+          (cd "$QA_BASE_SRC"; git ls-files --stage) > "$QA_OUT/baseline-index-after-models.txt"
+          (cd "$QA_BASE_SRC"; sha256sum package.json package-lock.json bun.lock bun.lockb) > "$QA_OUT/baseline-locks-after-models.sha256"
+          (cd "$QA_BASE_SRC"; git status --porcelain=v1 --untracked-files=all) > "$QA_OUT/baseline-status-after-models.txt"
+          cmp "$QA_OUT/baseline-source-before.sha256" "$QA_OUT/baseline-source-after-models.sha256"
+          cmp "$QA_OUT/baseline-index-before.txt" "$QA_OUT/baseline-index-after-models.txt"
+          cmp "$QA_OUT/baseline-locks-before.sha256" "$QA_OUT/baseline-locks-after-models.sha256"
+          test ! -s "$QA_OUT/baseline-status-after-models.txt"
+          node --input-type=module <<'FOCUSED_MODELS'
+          import fs from 'node:fs';import assert from 'node:assert/strict';import crypto from 'node:crypto';
+          const out=process.env.QA_OUT,sha=body=>crypto.createHash('sha256').update(body).digest('hex');
+          const names=["historical-baseline-types","historical-baseline","historical-candidate","historical-shared-raw-admission","simCareerFacts","simCareerEras","simSaveKeeper"];
+          const rows=names.map(name=>{
+            const exitFile='logs/'+name+'.exit',exit=fs.readFileSync(out+'/'+exitFile,'utf8');assert(/^(0|[1-9][0-9]{0,2})\n$/.test(exit));const nativeExit=Number(exit);assert(nativeExit<=255);
+            const logFile='logs/'+name+'.log',log=fs.readFileSync(out+'/'+logFile),transportFile='transport/'+name+'.log',transport=fs.readFileSync(out+'/'+transportFile);
+            return{name,nativeExit,exitFile,log:{file:logFile,bytes:log.length,sha256:sha(log)},transport:{file:transportFile,bytes:transport.length,sha256:sha(transport),empty:transport.length===0},passed:nativeExit===0&&transport.length===0};
+          });
+          fs.writeFileSync(out+'/MODEL-OUTCOMES.json',JSON.stringify({schema:'SC_LATER_STARTS_FOCUSED_MODEL_OUTCOMES_V1',status:'FOCUSED_OUTCOMES_RETAINED',rows,allScopedPassed:rows.every(r=>r.passed),failedOutcomes:rows.filter(r=>!r.passed).map(r=>r.name),fullFleetRun:false,priorFleetDiagnosticsWaived:false,sourceIndexLocksAndStatusHeld:true},null,2)+'\n',{flag:'wx'});
+          assert(rows.every(r=>r.passed),'SC_LATER_SCOPED_MODEL_OR_ADMISSION_RED');
+          FOCUSED_MODELS
+      - name: Normal build, all twenty output readers and unchanged caps
+        timeout-minutes: 25
+        run: |
+          set -euo pipefail
+          export GIT_NO_LAZY_FETCH=1
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          classify_receipt() {
+            local name="$1" receipt="$2"
+            local allowed='^\[SIM_OFFLINE_BLOCK\] external browser route continue https://fonts\.(googleapis|gstatic)\.com$'
+            if [[ "$name" == sweep-weight ]]; then
+              allowed="$allowed|^\[SIM_OFFLINE_BLOCK\] external browser route continue https://flagcdn\.com$"
+            elif [[ "$name" != build ]]; then
+              if [[ -s "$receipt" ]]; then cat "$receipt"; return 1; fi
+              return 0
+            fi
+            local status=0
+            grep -Ev "$allowed" "$receipt" || status=$?
+            if [[ "$status" == 1 ]]; then return 0; fi
+            return 1
+          }
+          run_gate() {
+            local name="$1"
+            shift
+            local receipt="$QA_OUT/transport/$name.log"
+            : > "$receipt"
+            set +e
+            SIM_OFFLINE_RECEIPT="$receipt" "$@" 2>&1 | tee "$QA_OUT/logs/$name.log"
+            local pipe_status=("${PIPESTATUS[@]}")
+            set -e
+            printf '%s\n' "${pipe_status[0]}" > "$QA_OUT/logs/$name.exit"
+            printf '%s\n' "${pipe_status[1]}" > "$QA_OUT/logs/$name-tee.exit"
+            test "${pipe_status[0]}" = 0 && test "${pipe_status[1]}" = 0 || return 1
+            local transport_exit=0
+            classify_receipt "$name" "$receipt" || transport_exit=$?
+            printf '%s\n' "$transport_exit" > "$QA_OUT/logs/$name-transport.exit"
+            if [[ "$transport_exit" != 0 ]]; then
+              echo "Unexpected blocked transport in $name" >&2
+              return 1
+            fi
+            # Every refusal is retained and counted, never credited as zero transport.
+            if [[ -s "$receipt" ]]; then
+              wc -l "$receipt" | tee "$QA_OUT/logs/$name-blocked-attempts.txt"
+            fi
+          }
+          run_gate build npm run build
+          printf '%s\n' '{"command":"npm run build","exit":0}' > "$QA_OUT/build-passed.json"
+          find dist -type f -print0 | sort -z | xargs -0 sha256sum > "$QA_OUT/dist-before.sha256"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import path from 'node:path';import zlib from 'node:zlib';import crypto from 'node:crypto';import assert from 'node:assert/strict';
+          const assets=fs.readdirSync('dist/assets').filter(file=>/\.(js|css)$/.test(file)).sort().map(file=>{
+            const bytes=fs.readFileSync(path.join('dist/assets',file));return{file,bytes:bytes.length,gzipBytes:zlib.gzipSync(bytes).length,sha256:crypto.createHash('sha256').update(bytes).digest('hex')};
+          });
+          const soccer=assets.filter(row=>/^SoccerCareer-.*\.js$/.test(row.file));
+          assert.equal(soccer.length,1);
+          fs.writeFileSync(process.env.QA_OUT+'/soccer-chunk-sizes.json',JSON.stringify({status:'MEASURED_BUILT_CHUNKS_NO_NEW_CAP',soccer,allBuiltAssets:assets,limits:'Individual built chunk raw/gzip sizes only. Actual route critical-body proof comes from the unchanged sweepWeight window and all16 original caps, including Soccer840KiB. No headroom or full-download total is inferred from this chunk list.'},null,2)+'\n',{flag:'wx'});
+          console.log('RUSSIA_BRIDGE_BUILT_CHUNK_SIZES '+JSON.stringify(soccer));
+          NODE
+          tar -czf "$QA_OUT/completed-dist.tar.gz" dist
+          sha256sum "$QA_OUT/completed-dist.tar.gz" > "$QA_OUT/completed-dist.tar.gz.sha256"
+          tar -tzf "$QA_OUT/completed-dist.tar.gz" > "$QA_OUT/completed-dist-members.txt"
+          export BASE=http://127.0.0.1:4173
+          export SWEEP_BASE="$BASE"
+          export SWEEP_OFFLINE=1
+          export SIM_OFFLINE_RECEIPT="$QA_OUT/transport/server.log"
+          : > "$SIM_OFFLINE_RECEIPT"
+          node scripts/lib/hostLikeServer.mjs dist 4173 > "$QA_OUT/logs/server.log" 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid" 2>/dev/null || true' EXIT
+          ready=0
+          for attempt in $(seq 1 40); do
+            if curl --fail --silent "$BASE/" > /dev/null; then ready=1; break; fi
+            kill -0 "$server_pid"
+            sleep 1
+          done
+          test "$ready" = 1
+          run_gate sweep-weight node scripts/sweepWeight.mjs
+          readers=(
+            simAdsense simBrand simHeadTags simHiddenPages simHubs
+            simIndexNow simIndexing simInternalLinks simNoRivalNames simPrerender
+            simPrerenderBoot simRetiredRoutes simSchema simSitemap simSnapshotAssets
+            simSiteSearch simGuideHeadings simHarnessAnchors
+          )
+          for reader in "${readers[@]}"; do
+            run_gate "$reader" node "scripts/$reader.mjs"
+          done
+          run_gate simSeoTitles node scripts/simSeoTitles.mjs
+          run_gate simSeoMetaSplit env SEO_SPLIT_ONLY=/soccer-career,/club-manager,/nba-my-career node scripts/simSeoMetaSplit.mjs
+          test ! -s "$QA_OUT/transport/server.log"
+      - name: Always preserve both source roles and locks
+        if: always()
+        run: |
+          set -euo pipefail
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$QA_OUT/source-after.sha256"
+          git ls-files --stage > "$QA_OUT/index-after.txt"
+          git status --porcelain=v1 --untracked-files=all > "$QA_OUT/status-after.txt"
+          sha256sum package.json package-lock.json bun.lock bun.lockb > "$QA_OUT/locks-after.sha256"
+          cmp "$QA_OUT/source-before.sha256" "$QA_OUT/source-after.sha256"
+          cmp "$QA_OUT/index-before.txt" "$QA_OUT/index-after.txt"
+          cmp "$QA_OUT/locks-before.sha256" "$QA_OUT/locks-after.sha256"
+          test ! -s "$QA_OUT/status-after.txt"
+          (cd "$QA_BASE_SRC"; git ls-files -z | sort -z | xargs -0 sha256sum) > "$QA_OUT/baseline-source-after.sha256"
+          (cd "$QA_BASE_SRC"; git ls-files --stage) > "$QA_OUT/baseline-index-after.txt"
+          (cd "$QA_BASE_SRC"; git status --porcelain=v1 --untracked-files=all) > "$QA_OUT/baseline-status-after.txt"
+          (cd "$QA_BASE_SRC"; sha256sum package.json package-lock.json bun.lock bun.lockb) > "$QA_OUT/baseline-locks-after.sha256"
+          cmp "$QA_OUT/baseline-source-before.sha256" "$QA_OUT/baseline-source-after.sha256"
+          cmp "$QA_OUT/baseline-index-before.txt" "$QA_OUT/baseline-index-after.txt"
+          cmp "$QA_OUT/baseline-locks-before.sha256" "$QA_OUT/baseline-locks-after.sha256"
+          test ! -s "$QA_OUT/baseline-status-after.txt"
+          printf '0\n' > "$QA_OUT/final-source-holds.exit"
+      - name: Close the focused historical release evidence
+        run: |
+          set -euo pipefail
+          find dist -type f -print0 | sort -z | xargs -0 sha256sum > "$QA_OUT/dist-after.sha256"
+          cmp "$QA_OUT/dist-before.sha256" "$QA_OUT/dist-after.sha256"
+          node --input-type=module <<'CLOSE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';import crypto from 'node:crypto';
+          const e=process.env,out=e.QA_OUT,read=f=>fs.readFileSync(out+'/'+f),sha=b=>crypto.createHash('sha256').update(b).digest('hex');
+          const models=JSON.parse(read('MODEL-OUTCOMES.json'));
+          assert.equal(models.schema,'SC_LATER_STARTS_FOCUSED_MODEL_OUTCOMES_V1');assert.equal(models.allScopedPassed,true);assert.equal(models.fullFleetRun,false);assert.equal(models.priorFleetDiagnosticsWaived,false);assert.deepEqual(models.failedOutcomes,[]);
+          assert.deepEqual(models.rows.map(r=>r.name),["historical-baseline-types","historical-baseline","historical-candidate","historical-shared-raw-admission","simCareerFacts","simCareerEras","simSaveKeeper"]);
+          for(const row of models.rows){assert.equal(row.nativeExit,0);assert.equal(row.passed,true);assert.equal(read(row.exitFile).toString(),'0\n');assert.equal(read(row.transport.file).length,0);assert.equal(read(row.log.file).length,row.log.bytes);assert.equal(sha(read(row.log.file)),row.log.sha256);}
+          assert.equal(read('types.exit').toString(),'0\n');assert.equal(read('transport/types.log').length,0);
+          assert.equal(read('final-source-holds.exit').toString(),'0\n');
+          const readers=['simAdsense','simBrand','simHeadTags','simHiddenPages','simHubs','simIndexNow','simIndexing','simInternalLinks','simNoRivalNames','simPrerender','simPrerenderBoot','simRetiredRoutes','simSchema','simSitemap','simSnapshotAssets','simSiteSearch','simGuideHeadings','simHarnessAnchors','simSeoTitles','simSeoMetaSplit'];
+          for(const name of['build','sweep-weight',...readers])for(const suffix of['.exit','-tee.exit','-transport.exit'])assert.equal(read('logs/'+name+suffix).toString(),'0\n','SC_LATER_BUILD_GATE_NOT_ZERO '+name+suffix);
+          const rawFile='HISTORICAL-RAW-ADMISSION.json',raw=read(rawFile),admission=JSON.parse(raw);
+          assert.equal(admission.status,'SIX_SHARED_COMPLETE_RAW_AND_FIVE_FUTURE_CELLS_PASSED');assert.equal(admission.sharedCompleteByteEqual.length,6);
+          assert.equal(admission.later.reduce((n,r)=>n+r.cells.length,0),5);
+          const pin={file:rawFile,bytes:raw.length,sha256:sha(raw)};
+          fs.writeFileSync(out+'/qualification.json',JSON.stringify({status:'SC_LATER_STARTS_FOCUSED_MODEL_AND_BUILD_PASSED',product:{commit:e.PRODUCT_CORE,tree:e.PRODUCT_TREE},baseline:{commit:e.BASE_CORE,tree:e.BASE_TREE},historicalRawAdmission:pin,baselineCases:6,candidateCases:8,sharedCompleteRaw:6,futureIdentityCells:5,scopedModelOutcomes:models.rows.map(r=>r.name),properTypes:true,normalBuilds:1,readers,unchangedCaps:16,fullSuite:false,priorFleetDiagnosticsWaived:false,browser:false,public:false},null,2)+'\n',{flag:'wx'});
+          CLOSE
+      - name: Mark any retained completed output without final qualification as diagnostic only
+        if: always()
+        run: |
+          set -euo pipefail
+          node --input-type=module <<'DIST_DIAGNOSTIC'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const out=process.env.QA_OUT,hasDist=fs.existsSync(out+'/completed-dist.tar.gz'),qualified=fs.existsSync(out+'/qualification.json');
+          if(hasDist&&!qualified){
+           const models=fs.existsSync(out+'/MODEL-OUTCOMES.json')?JSON.parse(fs.readFileSync(out+'/MODEL-OUTCOMES.json')):null;
+           const exits=fs.readdirSync(out+'/logs').filter(name=>name.endsWith('.exit')).sort().map(file=>({file:'logs/'+file,native:fs.readFileSync(out+'/logs/'+file,'utf8')}));
+           fs.writeFileSync(out+'/UNQUALIFIED-COMPLETED-DIST.json',JSON.stringify({status:'DIAGNOSTIC_COMPLETED_DIST_NOT_QUALIFIED',product:{commit:process.env.PRODUCT_CORE,tree:process.env.PRODUCT_TREE},qualification:false,allScopedModelsPassed:models?.allScopedPassed??false,failedModelOutcomes:models?.failedOutcomes??null,recordedExits:exits,meaning:'Completed output retained for diagnosis only. No missing or red scoped outcome, admission, transport, source hold, build, reader or cap is waived. Full fleet was not run.'},null,2)+'\n',{flag:'wx'});
+          }else if(qualified){assert(hasDist);assert.equal(JSON.parse(fs.readFileSync(out+'/qualification.json')).status,'SC_LATER_STARTS_FOCUSED_MODEL_AND_BUILD_PASSED');}
+          DIST_DIAGNOSTIC
+      - name: Retain the complete native packet
+        if: always()
+        run: |
+          set -euo pipefail
+          cd "$QA_OUT"
+          find . -type f ! -name manifest.sha256 -print0 | sort -z | xargs -0 sha256sum > manifest.sha256
+          tar -czf "$RUNNER_TEMP/sc-later-starts-qualification.tar.gz" .
+          cd "$RUNNER_TEMP"
+          sha256sum sc-later-starts-qualification.tar.gz > sc-later-starts-qualification.tar.gz.sha256
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: sc-later-starts-qualification
+          path: |
+            ${{ runner.temp }}/sc-later-starts-qualification.tar.gz
+            ${{ runner.temp }}/sc-later-starts-qualification.tar.gz.sha256
+          compression-level: 0
+          retention-days: 30
