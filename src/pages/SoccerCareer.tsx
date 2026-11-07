@@ -4921,7 +4921,7 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
           <div role="dialog" aria-modal="true" aria-label="Retire?" tabIndex={-1} ref={focusDialogOnMount} onKeyDown={escapeCloses(() => setShowRetireConfirm(false))} className="bg-card border-2 border-border rounded-xl p-6 max-w-sm w-full space-y-4" onClick={e => e.stopPropagation()}>
             <h3 className="text-lg font-black text-center">🚪 Retire?</h3>
             <p className="text-sm text-muted-foreground text-center">Are you sure you want to retire? Your career will end here.</p>
-            <div className="flex gap-3">
+            <div className="flex flex-col gap-3 sm:flex-row">
               <Button onClick={() => setShowRetireConfirm(false)} variant="outline" className="flex-1 h-10 font-bold">Cancel</Button>
               <Button onClick={() => { setShowRetireConfirm(false); onManualRetire(); }} className="flex-1 h-10 font-bold bg-red-600 hover:bg-red-500 text-black">Confirm Retirement</Button>
             </div>
