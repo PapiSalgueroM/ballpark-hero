@@ -1,29 +1,34 @@
-name: Soccer Grid fixed selection ownership evidence
+name: Soccer Grid selection ownership full qualification
 on:
   push:
-    branches: [codex/soccer-grid-selection-ownership-fixed-qa-20261107]
+    branches: [codex/soccer-grid-selection-ownership-full-qa-20261107]
 permissions:
   contents: read
   actions: read
 jobs:
-  fixed:
+  qualify:
     runs-on: ubuntu-latest
-    timeout-minutes: 25
+    timeout-minutes: 45
     defaults:
       run:
         shell: bash
     env:
       SIM_NETWORK: offline
-      SIM_OFFLINE_RECEIPT: soccer-grid-selection-ownership-fixed/offline.log
+      SIM_OFFLINE_RECEIPT: soccer-grid-selection-ownership-full/offline.log
       TZ: UTC
-      SOCCER_GRID_FIXED_BASE_HEAD: '3652840048ba386c3f66f5d18b0f0b554740b50b'
-      SOCCER_GRID_FIXED_BASE_TREE: '5dd1da768a75acefd5ed0061a5bde523af01698c'
-      SOCCER_GRID_FIXED_BASE_TRACKED_ROWS: '5786'
-      SOCCER_GRID_FIXED_SCOPED_SOURCE_ROWS: '4661'
-      SOCCER_GRID_FIXED_LOCKED_VERSIONS: '521'
-      SOCCER_GRID_FIXED_TEST_BLOB: 'bda5963ef068981f9d5c81c4767192e9e47f05b5'
-      SOCCER_GRID_FIXED_PLAN_BLOB: 'af9c485b73a30903cd72af884b521ecab6d8eeb2'
-      SOCCER_GRID_FIXED_HOOK_BLOB: '9b724907eae0a2fbf9e20d38f60d226281051693'
+      SOCCER_GRID_FULL_BASE_HEAD: '740ab572fea80ed4d817d0fa3b739cd5412a6f00'
+      SOCCER_GRID_FULL_BASE_TREE: '562bed1b146d037a47b6bf4ff9a5d99021740604'
+      SOCCER_GRID_FULL_BASE_TRACKED_ROWS: '5786'
+      SOCCER_GRID_FULL_SCOPED_SOURCE_ROWS: '4662'
+      SOCCER_GRID_FULL_LOCKED_VERSIONS: '521'
+      SOCCER_GRID_FULL_TEST_BLOB: 'bda5963ef068981f9d5c81c4767192e9e47f05b5'
+      SOCCER_GRID_FULL_PLAN_BLOB: 'af9c485b73a30903cd72af884b521ecab6d8eeb2'
+      SOCCER_GRID_SELECTION_HOOK_BLOB: '9b724907eae0a2fbf9e20d38f60d226281051693'
+      SOCCER_GRID_SELECTION_NATIVE_HELPER_BLOB: '6653a8d8bb60cd29243a9634ac2ba09d7cd2d0a0'
+      SOCCER_GRID_SELECTION_NATIVE_OUTER_BLOB: 'bc0e1b1e42fda2601612c0b0c8ab5b5f6e645989'
+      SOCCER_GRID_SELECTION_CONTROLS_REFERENCE_JSON: '{"run":42351066565,"job":128339104165,"artifact":13565223258,"head":"2264389687f5a95ce7b195e6ed891ffc38dbcc42","tree":"f1be383a949787774128a9aa6992af6b87210a94","workflow":"95626c53414f4bfb05db6f40ef23180ce8ad9c73","runner":"ccaf33942eb91b911b09db56b93053d5f8ef931f","zipBytes":18463108,"zipSHA256":"b645398755c015fec99741c158cb7ce1a0167c29d59fc984dde254aff1874638","bodyCount":146,"bodyBytes":36739384}'
+      ENGINES: chromium
+      SEO_SPLIT_BASE_REF: 3b14650d360b010b25b525de33a5f32f33de2798
     steps:
       - uses: actions/checkout@v4
         with:
@@ -33,12 +38,18 @@ jobs:
         with:
           node-version: 24.22.1
           cache: npm
-      - name: Exact qualified original parent with only the reviewed Hook plan and workflow changes
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.4.4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Exact qualified fixed parent with only the workflow and native helper changes
         run: |
           set -euo pipefail
-          if grep -En '__[A-Z][A-Z0-9_]*__' .github/workflows/soccer-grid-selection-ownership-20261106.yml; then echo 'Unresolved fixed qualification binding'; exit 1; fi
-          for value in "$SOCCER_GRID_FIXED_TEST_BLOB" "$SOCCER_GRID_FIXED_PLAN_BLOB" "$SOCCER_GRID_FIXED_HOOK_BLOB"; do [[ "$value" =~ ^[a-f0-9]{40}$ ]]; done
-          out=soccer-grid-selection-ownership-fixed
+          if grep -En '__[A-Z][A-Z0-9_]*__' .github/workflows/soccer-grid-selection-ownership-20261106.yml; then echo 'Unresolved full qualification binding'; exit 1; fi
+          for value in "$SOCCER_GRID_FULL_TEST_BLOB" "$SOCCER_GRID_FULL_PLAN_BLOB" "$SOCCER_GRID_SELECTION_HOOK_BLOB" "$SOCCER_GRID_SELECTION_NATIVE_HELPER_BLOB" "$SOCCER_GRID_SELECTION_NATIVE_OUTER_BLOB"; do [[ "$value" =~ ^[a-f0-9]{40}$ ]]; done
+          out=soccer-grid-selection-ownership-full
           test ! -e "$out"
           mkdir "$out"
           touch "$out/offline.log"
@@ -47,38 +58,38 @@ jobs:
           git ls-files -s > "$out/source-before.txt"
           sha256sum package.json package-lock.json > "$out/locks-before.txt"
           git diff --exit-code HEAD -- .
-          git fetch --no-tags --depth=1 origin "$SOCCER_GRID_FIXED_BASE_HEAD"
+          git fetch --no-tags --depth=1 origin "$SEO_SPLIT_BASE_REF"
           node --input-type=module <<'NODE'
           import fs from 'node:fs';
           import assert from 'node:assert/strict';
           import {execFileSync} from 'node:child_process';
           import {createHash} from 'node:crypto';
-          const out='soccer-grid-selection-ownership-fixed',env=process.env,base=env.SOCCER_GRID_FIXED_BASE_HEAD,baseTree=env.SOCCER_GRID_FIXED_BASE_TREE;
+          const out='soccer-grid-selection-ownership-full',env=process.env,base=env.SOCCER_GRID_FULL_BASE_HEAD,baseTree=env.SOCCER_GRID_FULL_BASE_TREE;
           const workflow='.github/workflows/soccer-grid-selection-ownership-20261106.yml',test='src/test/soccerGridSelectionOwnership.test.tsx',plan='docs/plans/2026-11-07-soccer-grid-selection-ownership.md';
-          const hook='src/hooks/useSoccerGrid.ts',owned=new Set([workflow,hook,plan]);
+          const hook='src/hooks/useSoccerGrid.ts',helper='scripts/qa/playSoccerGridSelectionOwnership.mjs',owned=new Set([workflow,helper]);
           const git=args=>execFileSync('git',args,{encoding:'utf8',maxBuffer:16*1024*1024});
           const at=(ref,file)=>git(['rev-parse',ref+':'+file]).trim(),tree=ref=>git(['ls-tree','-r','-z',ref]).split('\0').filter(Boolean);
           const fileOf=row=>row.split('\t')[1],scope=rows=>rows.filter(row=>/^(src|public|scripts)\//.test(fileOf(row))).length;
           const sha=bytes=>createHash('sha256').update(bytes).digest('hex');
           const blob=bytes=>createHash('sha1').update(Buffer.from('blob '+bytes.length+'\0')).update(bytes).digest('hex');
           const head=git(['rev-parse','HEAD']).trim(),current=tree('HEAD'),parent=tree(base);
-          const baseTracked=Number(env.SOCCER_GRID_FIXED_BASE_TRACKED_ROWS),scoped=Number(env.SOCCER_GRID_FIXED_SCOPED_SOURCE_ROWS);
+          const baseTracked=Number(env.SOCCER_GRID_FULL_BASE_TRACKED_ROWS),scoped=Number(env.SOCCER_GRID_FULL_SCOPED_SOURCE_ROWS);
           assert.equal(head,env.GITHUB_SHA);
           assert.equal(git(['rev-parse',base+'^{tree}']).trim(),baseTree);
           assert.deepEqual(git(['rev-list','--parents','-n','1','HEAD']).trim().split(' '),[head,base]);
-          assert.deepEqual([parent.length,current.length,scope(parent),scope(current)],[baseTracked,baseTracked,scoped,scoped]);
+          assert.deepEqual([parent.length,current.length,scope(parent),scope(current)],[baseTracked,baseTracked+1,scoped-1,scoped]);
           const held=parent.filter(row=>!owned.has(fileOf(row)));
-          assert.equal(held.length,baseTracked-owned.size);
-          assert.deepEqual(current.filter(row=>!owned.has(fileOf(row))),held,'Every other original path mode and blob stays held');
-          assert.deepEqual(git(['diff','--name-status',base,'HEAD']).trim().split('\n').sort(),[...owned].map(file=>'M\t'+file).sort());
-          for(const file of owned)assert.equal(git(['ls-tree','HEAD','--',file]).split(' ')[0],git(['ls-tree',base,'--',file]).split(' ')[0]);
-          assert.equal(at(base,workflow),'2e225558a10a24bd65f47d61db1bc0a40bd6d022');
-          const pins={'src/App.tsx':'8bfedf7aaa1d076e0f0c8e2216c7e46632cd8a33','src/data/gameRegistry.ts':'f560b40a74d1468ac72dfde4ee6fec6635a9a255','public/soccer-grid/index.html':'65fcae9819d92e53462c9f7826bd7d2fa2012fe4','src/pages/SoccerGrid.tsx':'fd793d83fef33fa075fcac53e97453cdbf83fff7','src/hooks/useSoccerGrid.ts':'1c84994a36c8ac51e4020823d899c2342be60271','src/components/soccer-grid/SoccerGridSearch.tsx':'14450f17982a89cc5de886d89fa1a78462ff509f','src/components/soccer-grid/SoccerGridBoard.tsx':'15007fda66e6a52bf13727d934dcc796bb30f3bb','src/test/soccerGridSubmissionOwnership.test.tsx':'7cb7f94a73ce7340243e7bdae6d6759e2c1a6f11','scripts/lib/offlineTransport.cjs':'0fda542a2649fe5da937c6976fd0f5b6073e74b6','index.html':'12598fe720eec4fc88d3d33c53ede612d018150c','package.json':'2ff64986fb76ebc51b706f2fd24765768874008a','package-lock.json':'97d6f12a052f25f400462938c241789a083f0bfe','vite.config.ts':'0112b6ac4f2ad80b2fc04f9ec2f7185300913e7d','tailwind.config.ts':'f83c4f4032d359bc9285828eac3b0961a46c6b17','postcss.config.js':'2aa7205d4b402a1bdfbe07110c61df920b370066','tsconfig.json':'6b68d80b7d92d0c4a5d774897f2bedfa95b42669','tsconfig.app.json':'51f581dd91641b4c1f1219f646788e73cf6bf00c','tsconfig.node.json':'3133162c20350e1741b94b8d2ff77b811bec8363','bun.lockb':'5d9d33a3bf4f45fa099e2aa3014149e034981149','bun.lock':'dff081dcd34a1aa928ddc90d910774a6b855dfe3'};
-          pins[test]=env.SOCCER_GRID_FIXED_TEST_BLOB;
-          pins[plan]='b3ad8ebbe63d28244bef9c1e98d56a1cd18fa3f8';
-          for(const [file,want] of Object.entries(pins))assert.equal(at(base,file),want,file+' admitted original parent');
-          pins[plan]=env.SOCCER_GRID_FIXED_PLAN_BLOB;
-          pins[hook]=env.SOCCER_GRID_FIXED_HOOK_BLOB;
+          assert.equal(held.length,baseTracked-1);
+          assert.deepEqual(current.filter(row=>!owned.has(fileOf(row))),held,'Every other fixed path mode and blob stays held');
+          assert.deepEqual(git(['diff','--name-status',base,'HEAD']).trim().split('\n').sort(),['A\t'+helper,'M\t'+workflow].sort());
+          assert.equal(git(['ls-tree','HEAD','--',workflow]).split(' ')[0],git(['ls-tree',base,'--',workflow]).split(' ')[0]);
+          assert.equal(git(['ls-tree','HEAD','--',helper]).split(' ')[0],'100644');
+          assert.equal(at(base,workflow),'45e0cbcd5029f7b3e3e4204d3f9850c1ccb96e46');
+          const pins={'src/App.tsx':'8bfedf7aaa1d076e0f0c8e2216c7e46632cd8a33','src/data/gameRegistry.ts':'f560b40a74d1468ac72dfde4ee6fec6635a9a255','public/soccer-grid/index.html':'65fcae9819d92e53462c9f7826bd7d2fa2012fe4','src/pages/SoccerGrid.tsx':'fd793d83fef33fa075fcac53e97453cdbf83fff7','src/hooks/useSoccerGrid.ts':env.SOCCER_GRID_SELECTION_HOOK_BLOB,'src/components/soccer-grid/SoccerGridSearch.tsx':'14450f17982a89cc5de886d89fa1a78462ff509f','src/components/soccer-grid/SoccerGridBoard.tsx':'15007fda66e6a52bf13727d934dcc796bb30f3bb','src/test/soccerGridSubmissionOwnership.test.tsx':'7cb7f94a73ce7340243e7bdae6d6759e2c1a6f11','scripts/lib/offlineTransport.cjs':'0fda542a2649fe5da937c6976fd0f5b6073e74b6','index.html':'12598fe720eec4fc88d3d33c53ede612d018150c','package.json':'2ff64986fb76ebc51b706f2fd24765768874008a','package-lock.json':'97d6f12a052f25f400462938c241789a083f0bfe','vite.config.ts':'0112b6ac4f2ad80b2fc04f9ec2f7185300913e7d','tailwind.config.ts':'f83c4f4032d359bc9285828eac3b0961a46c6b17','postcss.config.js':'2aa7205d4b402a1bdfbe07110c61df920b370066','tsconfig.json':'6b68d80b7d92d0c4a5d774897f2bedfa95b42669','tsconfig.app.json':'51f581dd91641b4c1f1219f646788e73cf6bf00c','tsconfig.node.json':'3133162c20350e1741b94b8d2ff77b811bec8363','bun.lockb':'5d9d33a3bf4f45fa099e2aa3014149e034981149','bun.lock':'dff081dcd34a1aa928ddc90d910774a6b855dfe3'};
+          pins[test]=env.SOCCER_GRID_FULL_TEST_BLOB;
+          pins[plan]=env.SOCCER_GRID_FULL_PLAN_BLOB;
+          for(const [file,want] of Object.entries(pins))assert.equal(at(base,file),want,file+' admitted fixed parent');
+          pins[helper]=env.SOCCER_GRID_SELECTION_NATIVE_HELPER_BLOB;
           for(const [file,want] of Object.entries(pins)){
             assert.equal(at('HEAD',file),want,file+' current tree');
             assert.equal(blob(fs.readFileSync(file)),want,file+' physical bytes');
@@ -88,28 +99,28 @@ jobs:
           assert.equal(fs.statSync('public/soccer-grid/index.html').size,22206);
           const files=git(['ls-files','-z']).split('\0').filter(Boolean);
           const physical=files.map(file=>{const bytes=fs.readFileSync(file);return{file,bytes:bytes.length,sha256:sha(bytes)};});
-          assert.equal(physical.length,baseTracked);
+          assert.equal(physical.length,baseTracked+1);
           fs.writeFileSync(out+'/tracked-before.json',JSON.stringify(physical));
           fs.writeFileSync(out+'/source-join.json',JSON.stringify({
-            status:'passed',base,baseTree,head,tree:git(['rev-parse','HEAD^{tree}']).trim(),heldRows:held.length,baseTrackedRows:baseTracked,
-            trackedRows:current.length,baseScopedRows:scoped,scopedSourceRows:scoped,rootConfigurations:configs.map(file=>({file,blob:pins[file]})),
+            status:'passed',head,tree:git(['rev-parse','HEAD^{tree}']).trim(),parent:base,fixedHead:base,fixedTree:baseTree,heldFixedRows:held.length,fixedTrackedRows:baseTracked,
+            trackedRows:current.length,sourceRows:scoped,cleanSourceRows:scoped-1,rootConfigurations:configs.map(file=>({file,blob:pins[file]})),
             ownedLeaves:[...owned],workflowBlob:at('HEAD',workflow),pins,snapshotBytes:22206,
-            limits:'Fixed source qualification. Only the reviewed Hook, plan and workflow changed from the qualified original. The Page, both tests and other product inputs stayed held.'
+            limits:'Full source qualification. Only the workflow and tracked native helper differ from the qualified fixed parent.'
           },null,2));
           NODE
       - name: Locked dependency install and all installed version pins
         run: |
           set -euo pipefail
-          npm ci 2>&1 | tee soccer-grid-selection-ownership-fixed/install.log
+          npm ci 2>&1 | tee soccer-grid-selection-ownership-full/install.log
           node --input-type=module <<'NODE'
-          import fs from 'node:fs';import assert from 'node:assert/strict';const lock=JSON.parse(fs.readFileSync('package-lock.json')),rows=Object.keys(lock.packages).filter(p=>p.startsWith('node_modules/')&&fs.existsSync(p+'/package.json')).map(p=>[p,JSON.parse(fs.readFileSync(p+'/package.json')).version]);assert.equal(rows.length,Number(process.env.SOCCER_GRID_FIXED_LOCKED_VERSIONS));for(const[p,v]of rows)assert.equal(v,lock.packages[p].version,p);fs.writeFileSync('soccer-grid-selection-ownership-fixed/installed-before.json',JSON.stringify(rows));assert.equal(fs.statSync('soccer-grid-selection-ownership-fixed/offline.log').size,0);
+          import fs from 'node:fs';import assert from 'node:assert/strict';const lock=JSON.parse(fs.readFileSync('package-lock.json')),rows=Object.keys(lock.packages).filter(p=>p.startsWith('node_modules/')&&fs.existsSync(p+'/package.json')).map(p=>[p,JSON.parse(fs.readFileSync(p+'/package.json')).version]);assert.equal(rows.length,Number(process.env.SOCCER_GRID_FULL_LOCKED_VERSIONS));for(const[p,v]of rows)assert.equal(v,lock.packages[p].version,p);fs.writeFileSync('soccer-grid-selection-ownership-full/installed-before.json',JSON.stringify(rows));assert.equal(fs.statSync('soccer-grid-selection-ownership-full/offline.log').size,0);
           NODE
       - name: Actual direct route React lazy Soccer object and inert snapshot
         run: |
           set -euo pipefail
           NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node --input-type=module <<'NODE'
           import fs from 'node:fs';import assert from 'node:assert/strict';import ts from 'typescript';import {JSDOM} from 'jsdom';import {createHash} from 'node:crypto';
-          const out='soccer-grid-selection-ownership-fixed',route='/soccer-grid',component='SoccerGrid',label='Soccer Grid',appText=fs.readFileSync('src/App.tsx','utf8'),catalogText=fs.readFileSync('src/data/gameRegistry.ts','utf8'),app=ts.createSourceFile('src/App.tsx',appText,ts.ScriptTarget.Latest,true,ts.ScriptKind.TSX),catalog=ts.createSourceFile('src/data/gameRegistry.ts',catalogText,ts.ScriptTarget.Latest,true,ts.ScriptKind.TS);assert.deepEqual(app.parseDiagnostics,[]);assert.deepEqual(catalog.parseDiagnostics,[]);
+          const out='soccer-grid-selection-ownership-full',route='/soccer-grid',component='SoccerGrid',label='Soccer Grid',appText=fs.readFileSync('src/App.tsx','utf8'),catalogText=fs.readFileSync('src/data/gameRegistry.ts','utf8'),app=ts.createSourceFile('src/App.tsx',appText,ts.ScriptTarget.Latest,true,ts.ScriptKind.TSX),catalog=ts.createSourceFile('src/data/gameRegistry.ts',catalogText,ts.ScriptTarget.Latest,true,ts.ScriptKind.TS);assert.deepEqual(app.parseDiagnostics,[]);assert.deepEqual(catalog.parseDiagnostics,[]);
           const all=(root,predicate)=>{const found=[];const visit=node=>{if(predicate(node))found.push(node);ts.forEachChild(node,visit);};visit(root);return found;},attrs=(node,name)=>node.attributes.properties.filter(p=>ts.isJsxAttribute(p)&&p.name.text===name);
           const routes=all(app,node=>(ts.isJsxSelfClosingElement(node)||ts.isJsxOpeningElement(node))&&node.tagName.getText(app)==='Route').filter(node=>attrs(node,'path').some(p=>p.initializer&&ts.isStringLiteralLike(p.initializer)&&p.initializer.text===route));assert.equal(routes.length,1,'One actual direct public JSX Route');assert(ts.isJsxSelfClosingElement(routes[0]),'Direct self-closing route');assert.equal(attrs(routes[0],'path').length,1);const elements=attrs(routes[0],'element');assert.equal(elements.length,1);const element=elements[0].initializer;assert(element&&ts.isJsxExpression(element)&&element.expression&&ts.isJsxSelfClosingElement(element.expression));assert.equal(element.expression.tagName.getText(app),component,'Direct Soccer Grid mount, no Navigate');
           const declarations=all(app,node=>ts.isVariableDeclaration(node)&&ts.isIdentifier(node.name)&&node.name.text===component);assert.equal(declarations.length,1);const init=declarations[0].initializer;assert(init&&ts.isCallExpression(init)&&ts.isIdentifier(init.expression)&&init.expression.text==='lazy');assert.equal(init.arguments.length,1);const factory=init.arguments[0];assert(ts.isArrowFunction(factory)&&factory.parameters.length===0);const load=factory.body;assert(ts.isCallExpression(load)&&load.expression.kind===ts.SyntaxKind.ImportKeyword&&load.arguments.length===1&&ts.isStringLiteralLike(load.arguments[0]));assert.equal(load.arguments[0].text,'./pages/SoccerGrid');const reactLazy=all(app,node=>ts.isImportDeclaration(node)&&ts.isStringLiteralLike(node.moduleSpecifier)&&node.moduleSpecifier.text==='react'&&node.importClause?.namedBindings&&ts.isNamedImports(node.importClause.namedBindings)).flatMap(node=>node.importClause.namedBindings.elements).filter(node=>node.name.text==='lazy'&&(node.propertyName?.text??node.name.text)==='lazy');assert.equal(reactLazy.length,1,'lazy is the actual named React import');
@@ -120,8 +131,8 @@ jobs:
       - name: Proper App types on the fixed Hook and unchanged reviewed test
         run: |
           set -euo pipefail
-          node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee soccer-grid-selection-ownership-fixed/types.log
-      - name: Authenticate actual completed original qualification and retain all 47 bodies
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee soccer-grid-selection-ownership-full/types.log
+      - name: Authenticate completed fixed and controls ZIPs with nested original and preflight bodies
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
@@ -131,100 +142,139 @@ jobs:
           import assert from 'node:assert/strict';
           import {execFileSync} from 'node:child_process';
           import {createHash} from 'node:crypto';
-          const out='soccer-grid-selection-ownership-fixed',ref=out+'/original-packet';
-          const repo='repos/PapiSalgueroM/ballpark-hero/actions',workflow='.github/workflows/soccer-grid-selection-ownership-20261106.yml';
-          const pin={"run":42349496063,"job":128334385101,"artifact":13565515753,"head":"3652840048ba386c3f66f5d18b0f0b554740b50b","tree":"5dd1da768a75acefd5ed0061a5bde523af01698c","workflowBlob":"2e225558a10a24bd65f47d61db1bc0a40bd6d022","branch":"codex/soccer-grid-selection-ownership-original-qa-20261107","zipBytes":3075242,"zipSHA256":"2274c11d7d2ecf6ac6cb2476bdec93795d2e1c62b10a3c8adb37f927ad7f5646","bodyCount":47,"bodyBytes":7453065,"raw":{"file":"raw.json","bytes":382432,"sha256":"67943d453cdf661bbcf0f1dfe24392d13bea374937cb199047d7e8cd2e71e9e1"},"prior":{"file":"prior-submission-raw.json","bytes":667882,"sha256":"7519caac4e812d063b8fc74ae832ddc8215be67fcb20c73c5b4946c74d27f55a"},"aOnly":{"key":"aOnly","frames":7,"offset":788,"bytes":81284,"sha256":"da562826df59b2352b24c48154ca5aff83e49852a825a44797a322e79bd1c62f"}};
-          const bodies=[{"file":"active-route-preflight.json","bytes":1289,"sha256":"abe40598134ed47076bd3dd50bbc724d969d35d5bd21d9932cc0851296aa8ee9"},{"file":"active-snapshot.html","bytes":22206,"sha256":"1192edbcd5e66208e50a5e5c7578b933687a5480fa0453638bea45211ac15823"},{"file":"final-holds.json","bytes":429,"sha256":"ae8bcee49dcc9829c181a3ec94ab0c20ef69a6e0030f27f3c2add06a4bfc12fc"},{"file":"head.txt","bytes":41,"sha256":"3eb521b6167bdfdaf5b8d793f11e8a93843802b190e34bd57336ff03731d4ce3"},{"file":"install.log","bytes":1391,"sha256":"4c9a3c6ce59c8cf4be9c4dd507616dffd2c943bfc8a8c00b8e9edde4875673a2"},{"file":"installed-after.json","bytes":22175,"sha256":"1268d6ef069c4189836716fed6ebe4dd324c661cacf53981b6a227608aa383e8"},{"file":"installed-before.json","bytes":22175,"sha256":"1268d6ef069c4189836716fed6ebe4dd324c661cacf53981b6a227608aa383e8"},{"file":"locks-after.txt","bytes":163,"sha256":"d316e23dae0f11f4fabcf8edd97204c9b780c6da8a0f6307c86940cbdd28e3d7"},{"file":"locks-before.txt","bytes":163,"sha256":"d316e23dae0f11f4fabcf8edd97204c9b780c6da8a0f6307c86940cbdd28e3d7"},{"file":"offline.log","bytes":0,"sha256":"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"},{"file":"original-admission.json","bytes":16948,"sha256":"74060d7b9d749e72462e0a1e0f14b30696c1b03440c60c83be2b3f92229ca119"},{"file":"owned.json","bytes":8912,"sha256":"af062f2aa718fa2d8d03b42a9873d7b9ab40f3f21ca2835a90a2331ac7f8e8cb"},{"file":"owned.log","bytes":313,"sha256":"8dc5437c1d8420cbf7f194a9ec83f30c062b25550a626df9addf7dfce7225c6a"},{"file":"preflight-artifact.json","bytes":798,"sha256":"1f6aa1c02bc1f0a4b89f298b8a58858793ec6f7a83d5e37e057d1caab196762e"},{"file":"preflight-custody.json","bytes":2933,"sha256":"15e11982fc168839887b634dbbc5ea1b290d810a53ade3beb704db813c0045ac"},{"file":"preflight-jobs.json","bytes":3006,"sha256":"d37a714d6aa5231c3f38512114171df8ba9187e94f80158a2d29c6e3681c6043"},{"file":"preflight-packet/active-route-preflight.json","bytes":1289,"sha256":"abe40598134ed47076bd3dd50bbc724d969d35d5bd21d9932cc0851296aa8ee9"},{"file":"preflight-packet/active-snapshot.html","bytes":22206,"sha256":"1192edbcd5e66208e50a5e5c7578b933687a5480fa0453638bea45211ac15823"},{"file":"preflight-packet/final-holds.json","bytes":396,"sha256":"c119a145008729162d10f859b15b368a5958ac2a36b7bce468c111219827cef4"},{"file":"preflight-packet/head.txt","bytes":41,"sha256":"f89ce26144cc903b92816af3ff1e4c5434a74ef158aab79d289452a30e0821d3"},{"file":"preflight-packet/install.log","bytes":1391,"sha256":"8c5e1fedc985fa1e9a12898cf38d57c9d9fbf8bd7022f9fe6308684122ad0a1e"},{"file":"preflight-packet/installed-after.json","bytes":22175,"sha256":"1268d6ef069c4189836716fed6ebe4dd324c661cacf53981b6a227608aa383e8"},{"file":"preflight-packet/installed-before.json","bytes":22175,"sha256":"1268d6ef069c4189836716fed6ebe4dd324c661cacf53981b6a227608aa383e8"},{"file":"preflight-packet/locks-after.txt","bytes":163,"sha256":"d316e23dae0f11f4fabcf8edd97204c9b780c6da8a0f6307c86940cbdd28e3d7"},{"file":"preflight-packet/locks-before.txt","bytes":163,"sha256":"d316e23dae0f11f4fabcf8edd97204c9b780c6da8a0f6307c86940cbdd28e3d7"},{"file":"preflight-packet/offline.log","bytes":0,"sha256":"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"},{"file":"preflight-packet/source-after.txt","bytes":502356,"sha256":"7c1e3337b53d44b4125b2dc3bafc6c40993ca56fc2b50126de5a62d9c65eef65"},{"file":"preflight-packet/source-before.txt","bytes":502356,"sha256":"7c1e3337b53d44b4125b2dc3bafc6c40993ca56fc2b50126de5a62d9c65eef65"},{"file":"preflight-packet/source-join.json","bytes":3271,"sha256":"154e65630ed5e63dcdb31f2d1c11fbf6bbb702bed0c0569a0fe77e1a404e4268"},{"file":"preflight-packet/tracked-after.json","bytes":794395,"sha256":"eb244ba8936c8e8ebeb9c65c540df1efaf26080a6f39767d508e200c12ff9b46"},{"file":"preflight-packet/tracked-before.json","bytes":794395,"sha256":"eb244ba8936c8e8ebeb9c65c540df1efaf26080a6f39767d508e200c12ff9b46"},{"file":"preflight-packet/tree.txt","bytes":41,"sha256":"213e8f3964247092441c869a881c085a0297e903e7ff7ff7f1b0e9cab939bbed"},{"file":"preflight-reference-after.json","bytes":604,"sha256":"96cd977b8979a9136bc10eef3903490c1cfc160d5c38d3160b8f8b9ac1ba67a4"},{"file":"preflight-reference-before.json","bytes":604,"sha256":"96cd977b8979a9136bc10eef3903490c1cfc160d5c38d3160b8f8b9ac1ba67a4"},{"file":"preflight-run.json","bytes":13088,"sha256":"aa24befc31dbe06585de3bddc2460d5ceb6ffed2293699eb480a8db6510bfbc5"},{"file":"preflight.zip","bytes":1011829,"sha256":"190db3e6214b1587fc4dcca3f6c368072d0755deb4c3fd09a5264926a05583be"},{"file":"prior-submission-raw.json","bytes":667882,"sha256":"7519caac4e812d063b8fc74ae832ddc8215be67fcb20c73c5b4946c74d27f55a"},{"file":"raw.json","bytes":382432,"sha256":"67943d453cdf661bbcf0f1dfe24392d13bea374937cb199047d7e8cd2e71e9e1"},{"file":"report-errors.json","bytes":8656,"sha256":"d42fc2c65fe0252d4085ccd9a000b6de94320e89c48c7cf64a50d1b68a96dc3b"},{"file":"source-after.txt","bytes":502560,"sha256":"73b321600e9abc640fb69b4f5465513f9b9c836188bf9103ce103c3e75ea5661"},{"file":"source-before.txt","bytes":502560,"sha256":"73b321600e9abc640fb69b4f5465513f9b9c836188bf9103ce103c3e75ea5661"},{"file":"source-join.json","bytes":3652,"sha256":"fc9faeebcbe92052c954df360f8d91517722e83e2d6929816e5b0aa618f7f59c"},{"file":"test-exit.txt","bytes":2,"sha256":"4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"},{"file":"tracked-after.json","bytes":794700,"sha256":"26542c0fe3d181e9341ec639881dbf71e0b1fe72ffd44c8ba30b673f14eb8376"},{"file":"tracked-before.json","bytes":794700,"sha256":"26542c0fe3d181e9341ec639881dbf71e0b1fe72ffd44c8ba30b673f14eb8376"},{"file":"tree.txt","bytes":41,"sha256":"fd96c77fa653d5478bd22693ec1c2fc56dd95d373b1eec0263742a408d175a48"},{"file":"types.log","bytes":0,"sha256":"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"}];
-          const command=(name,args)=>execFileSync(name,args,{maxBuffer:64*1024*1024});
+          const out='soccer-grid-selection-ownership-full',workflow='.github/workflows/soccer-grid-selection-ownership-20261106.yml',helper='scripts/qa/playSoccerGridSelectionOwnership.mjs';
+          const fixed={"run":42350567717,"job":128337594874,"artifact":13565521874,"zipBytes":7182844,"head":"740ab572fea80ed4d817d0fa3b739cd5412a6f00","tree":"562bed1b146d037a47b6bf4ff9a5d99021740604","workflow":"45e0cbcd5029f7b3e3e4204d3f9850c1ccb96e46","zipSHA256":"e7e7c2cec04c65c530217101bbae2c8f325673d1cdc5cdd284f301c816e462c5","rawBytes":391364,"rawSHA256":"c9bc6b5b2f950a73c2456306a31cc2c2dafe7efba87e0be2c26751a880fcb821","bodyCount":79,"bodyBytes":14407294,"branch":"codex/soccer-grid-selection-ownership-fixed-qa-20261107"};
+          const originalPin={"run":42349496063,"job":128334385101,"artifact":13565515753,"head":"3652840048ba386c3f66f5d18b0f0b554740b50b","tree":"5dd1da768a75acefd5ed0061a5bde523af01698c","workflowBlob":"2e225558a10a24bd65f47d61db1bc0a40bd6d022","branch":"codex/soccer-grid-selection-ownership-original-qa-20261107","zipBytes":3075242,"zipSHA256":"2274c11d7d2ecf6ac6cb2476bdec93795d2e1c62b10a3c8adb37f927ad7f5646","bodyCount":47,"bodyBytes":7453065,"raw":{"file":"raw.json","bytes":382432,"sha256":"67943d453cdf661bbcf0f1dfe24392d13bea374937cb199047d7e8cd2e71e9e1"},"prior":{"file":"prior-submission-raw.json","bytes":667882,"sha256":"7519caac4e812d063b8fc74ae832ddc8215be67fcb20c73c5b4946c74d27f55a"},"aOnly":{"key":"aOnly","frames":7,"offset":788,"bytes":81284,"sha256":"da562826df59b2352b24c48154ca5aff83e49852a825a44797a322e79bd1c62f"}};
+          const controls=JSON.parse(process.env.SOCCER_GRID_SELECTION_CONTROLS_REFERENCE_JSON);
+          const fixedPins=[{"file":"active-route-preflight.json","bytes":1289,"sha256":"abe40598134ed47076bd3dd50bbc724d969d35d5bd21d9932cc0851296aa8ee9"},{"file":"active-snapshot.html","bytes":22206,"sha256":"1192edbcd5e66208e50a5e5c7578b933687a5480fa0453638bea45211ac15823"},{"file":"final-holds.json","bytes":434,"sha256":"cecf7db3190531a28817b0810f467513450651f55f51964be49d8fb07f9b82e8"},{"file":"fixed-admission.json","bytes":24732,"sha256":"a277889778a12236e5e6b1910210b740baf75e065ed28714e3f910438fdf89f3"},{"file":"head.txt","bytes":41,"sha256":"8e09be3b3d47226069488aa4ec7cc26fc879957c10235a8aa7f3f4cbeae834e1"},{"file":"install.log","bytes":1391,"sha256":"71011704a4f508e7c9c0b1fb4507e5590a6e6b7e1810254bd6d0865ff31b468c"},{"file":"installed-after.json","bytes":22175,"sha256":"1268d6ef069c4189836716fed6ebe4dd324c661cacf53981b6a227608aa383e8"},{"file":"installed-before.json","bytes":22175,"sha256":"1268d6ef069c4189836716fed6ebe4dd324c661cacf53981b6a227608aa383e8"},{"file":"locks-after.txt","bytes":163,"sha256":"d316e23dae0f11f4fabcf8edd97204c9b780c6da8a0f6307c86940cbdd28e3d7"},{"file":"locks-before.txt","bytes":163,"sha256":"d316e23dae0f11f4fabcf8edd97204c9b780c6da8a0f6307c86940cbdd28e3d7"},{"file":"offline.log","bytes":0,"sha256":"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"},{"file":"original-artifact.json","bytes":789,"sha256":"069cc17d5bc87c609fcc300880404ebe4b3b48089603881d16f3792f64a58417"},{"file":"original-custody.json","bytes":11659,"sha256":"aa7adacb84e856817f281e93549c4bc3833d01452442ff8512f60167588f8ebd"},{"file":"original-jobs.json","bytes":3651,"sha256":"34ebc7c93a0aaf2a4fbed3c62c2348eb50cec193b31f23472c7fce52cbb65921"},{"file":"original-packet/active-route-preflight.json","bytes":1289,"sha256":"abe40598134ed47076bd3dd50bbc724d969d35d5bd21d9932cc0851296aa8ee9"},{"file":"original-packet/active-snapshot.html","bytes":22206,"sha256":"1192edbcd5e66208e50a5e5c7578b933687a5480fa0453638bea45211ac15823"},{"file":"original-packet/final-holds.json","bytes":429,"sha256":"ae8bcee49dcc9829c181a3ec94ab0c20ef69a6e0030f27f3c2add06a4bfc12fc"},{"file":"original-packet/head.txt","bytes":41,"sha256":"3eb521b6167bdfdaf5b8d793f11e8a93843802b190e34bd57336ff03731d4ce3"},{"file":"original-packet/install.log","bytes":1391,"sha256":"4c9a3c6ce59c8cf4be9c4dd507616dffd2c943bfc8a8c00b8e9edde4875673a2"},{"file":"original-packet/installed-after.json","bytes":22175,"sha256":"1268d6ef069c4189836716fed6ebe4dd324c661cacf53981b6a227608aa383e8"},{"file":"original-packet/installed-before.json","bytes":22175,"sha256":"1268d6ef069c4189836716fed6ebe4dd324c661cacf53981b6a227608aa383e8"},{"file":"original-packet/locks-after.txt","bytes":163,"sha256":"d316e23dae0f11f4fabcf8edd97204c9b780c6da8a0f6307c86940cbdd28e3d7"},{"file":"original-packet/locks-before.txt","bytes":163,"sha256":"d316e23dae0f11f4fabcf8edd97204c9b780c6da8a0f6307c86940cbdd28e3d7"},{"file":"original-packet/offline.log","bytes":0,"sha256":"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"},{"file":"original-packet/original-admission.json","bytes":16948,"sha256":"74060d7b9d749e72462e0a1e0f14b30696c1b03440c60c83be2b3f92229ca119"},{"file":"original-packet/owned.json","bytes":8912,"sha256":"af062f2aa718fa2d8d03b42a9873d7b9ab40f3f21ca2835a90a2331ac7f8e8cb"},{"file":"original-packet/owned.log","bytes":313,"sha256":"8dc5437c1d8420cbf7f194a9ec83f30c062b25550a626df9addf7dfce7225c6a"},{"file":"original-packet/preflight-artifact.json","bytes":798,"sha256":"1f6aa1c02bc1f0a4b89f298b8a58858793ec6f7a83d5e37e057d1caab196762e"},{"file":"original-packet/preflight-custody.json","bytes":2933,"sha256":"15e11982fc168839887b634dbbc5ea1b290d810a53ade3beb704db813c0045ac"},{"file":"original-packet/preflight-jobs.json","bytes":3006,"sha256":"d37a714d6aa5231c3f38512114171df8ba9187e94f80158a2d29c6e3681c6043"},{"file":"original-packet/preflight-packet/active-route-preflight.json","bytes":1289,"sha256":"abe40598134ed47076bd3dd50bbc724d969d35d5bd21d9932cc0851296aa8ee9"},{"file":"original-packet/preflight-packet/final-holds.json","bytes":396,"sha256":"c119a145008729162d10f859b15b368a5958ac2a36b7bce468c111219827cef4"},{"file":"original-packet/preflight-packet/active-snapshot.html","bytes":22206,"sha256":"1192edbcd5e66208e50a5e5c7578b933687a5480fa0453638bea45211ac15823"},{"file":"original-packet/preflight-packet/head.txt","bytes":41,"sha256":"f89ce26144cc903b92816af3ff1e4c5434a74ef158aab79d289452a30e0821d3"},{"file":"original-packet/preflight-packet/install.log","bytes":1391,"sha256":"8c5e1fedc985fa1e9a12898cf38d57c9d9fbf8bd7022f9fe6308684122ad0a1e"},{"file":"original-packet/preflight-packet/installed-after.json","bytes":22175,"sha256":"1268d6ef069c4189836716fed6ebe4dd324c661cacf53981b6a227608aa383e8"},{"file":"original-packet/preflight-packet/installed-before.json","bytes":22175,"sha256":"1268d6ef069c4189836716fed6ebe4dd324c661cacf53981b6a227608aa383e8"},{"file":"original-packet/preflight-packet/locks-after.txt","bytes":163,"sha256":"d316e23dae0f11f4fabcf8edd97204c9b780c6da8a0f6307c86940cbdd28e3d7"},{"file":"original-packet/preflight-packet/locks-before.txt","bytes":163,"sha256":"d316e23dae0f11f4fabcf8edd97204c9b780c6da8a0f6307c86940cbdd28e3d7"},{"file":"original-packet/preflight-packet/offline.log","bytes":0,"sha256":"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"},{"file":"original-packet/preflight-packet/source-after.txt","bytes":502356,"sha256":"7c1e3337b53d44b4125b2dc3bafc6c40993ca56fc2b50126de5a62d9c65eef65"},{"file":"original-packet/preflight-packet/source-before.txt","bytes":502356,"sha256":"7c1e3337b53d44b4125b2dc3bafc6c40993ca56fc2b50126de5a62d9c65eef65"},{"file":"original-packet/preflight-packet/source-join.json","bytes":3271,"sha256":"154e65630ed5e63dcdb31f2d1c11fbf6bbb702bed0c0569a0fe77e1a404e4268"},{"file":"original-packet/preflight-packet/tracked-after.json","bytes":794395,"sha256":"eb244ba8936c8e8ebeb9c65c540df1efaf26080a6f39767d508e200c12ff9b46"},{"file":"original-packet/preflight-packet/tracked-before.json","bytes":794395,"sha256":"eb244ba8936c8e8ebeb9c65c540df1efaf26080a6f39767d508e200c12ff9b46"},{"file":"original-packet/preflight-packet/tree.txt","bytes":41,"sha256":"213e8f3964247092441c869a881c085a0297e903e7ff7ff7f1b0e9cab939bbed"},{"file":"original-packet/preflight-reference-after.json","bytes":604,"sha256":"96cd977b8979a9136bc10eef3903490c1cfc160d5c38d3160b8f8b9ac1ba67a4"},{"file":"original-packet/preflight-reference-before.json","bytes":604,"sha256":"96cd977b8979a9136bc10eef3903490c1cfc160d5c38d3160b8f8b9ac1ba67a4"},{"file":"original-packet/preflight-run.json","bytes":13088,"sha256":"aa24befc31dbe06585de3bddc2460d5ceb6ffed2293699eb480a8db6510bfbc5"},{"file":"original-packet/preflight.zip","bytes":1011829,"sha256":"190db3e6214b1587fc4dcca3f6c368072d0755deb4c3fd09a5264926a05583be"},{"file":"original-packet/prior-submission-raw.json","bytes":667882,"sha256":"7519caac4e812d063b8fc74ae832ddc8215be67fcb20c73c5b4946c74d27f55a"},{"file":"original-packet/raw.json","bytes":382432,"sha256":"67943d453cdf661bbcf0f1dfe24392d13bea374937cb199047d7e8cd2e71e9e1"},{"file":"original-packet/report-errors.json","bytes":8656,"sha256":"d42fc2c65fe0252d4085ccd9a000b6de94320e89c48c7cf64a50d1b68a96dc3b"},{"file":"original-packet/source-after.txt","bytes":502560,"sha256":"73b321600e9abc640fb69b4f5465513f9b9c836188bf9103ce103c3e75ea5661"},{"file":"original-packet/source-before.txt","bytes":502560,"sha256":"73b321600e9abc640fb69b4f5465513f9b9c836188bf9103ce103c3e75ea5661"},{"file":"original-packet/source-join.json","bytes":3652,"sha256":"fc9faeebcbe92052c954df360f8d91517722e83e2d6929816e5b0aa618f7f59c"},{"file":"original-packet/test-exit.txt","bytes":2,"sha256":"4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"},{"file":"original-packet/tracked-after.json","bytes":794700,"sha256":"26542c0fe3d181e9341ec639881dbf71e0b1fe72ffd44c8ba30b673f14eb8376"},{"file":"original-packet/tracked-before.json","bytes":794700,"sha256":"26542c0fe3d181e9341ec639881dbf71e0b1fe72ffd44c8ba30b673f14eb8376"},{"file":"original-packet/tree.txt","bytes":41,"sha256":"fd96c77fa653d5478bd22693ec1c2fc56dd95d373b1eec0263742a408d175a48"},{"file":"original-packet/types.log","bytes":0,"sha256":"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"},{"file":"original-reference-after.json","bytes":600,"sha256":"7b8c400b5c31972d57ae17491b596d89875dcdaf58f64ddf326069f4f0f1abd1"},{"file":"original-reference-before.json","bytes":600,"sha256":"7b8c400b5c31972d57ae17491b596d89875dcdaf58f64ddf326069f4f0f1abd1"},{"file":"original-run.json","bytes":13095,"sha256":"6739fb753cf3e6359ea3976e26aa3e1feb22c60317d3aabb1cd2b93a285a2230"},{"file":"original.zip","bytes":3075242,"sha256":"2274c11d7d2ecf6ac6cb2476bdec93795d2e1c62b10a3c8adb37f927ad7f5646"},{"file":"owned.json","bytes":7543,"sha256":"fa710dc3ad2df82f0edc3cee0d7a1fc62eb919843d1dc4d4e8abb9f3ae163148"},{"file":"owned.log","bytes":310,"sha256":"53aedda5c36bb3cb134aab59f7e4619f6ac1fc76d465114ef7c248ffeec9263b"},{"file":"preserve-aOnly.literal.json","bytes":81284,"sha256":"da562826df59b2352b24c48154ca5aff83e49852a825a44797a322e79bd1c62f"},{"file":"prior-submission-raw.json","bytes":667882,"sha256":"7519caac4e812d063b8fc74ae832ddc8215be67fcb20c73c5b4946c74d27f55a"},{"file":"raw.json","bytes":391364,"sha256":"c9bc6b5b2f950a73c2456306a31cc2c2dafe7efba87e0be2c26751a880fcb821"},{"file":"report-errors.json","bytes":7198,"sha256":"d28a72c255758c93a2f63b16749843c6c69fbc37b2cc496309d4e22e700d6bd7"},{"file":"source-after.txt","bytes":502560,"sha256":"759eedda17b386f46cddac1332605984c8c52724fc9a64d686f01c4a5e47a649"},{"file":"source-before.txt","bytes":502560,"sha256":"759eedda17b386f46cddac1332605984c8c52724fc9a64d686f01c4a5e47a649"},{"file":"source-join.json","bytes":3680,"sha256":"08ec99914c3006d054d56dd88c7e7ec8f5e8153cf26b2e89d0e63047cb56b5f6"},{"file":"test-exit.txt","bytes":2,"sha256":"9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"},{"file":"tracked-after.json","bytes":794700,"sha256":"6a8ca521136cc7e5889c2aee550da6ccec0fdb0db55c855d6b76cc63998a18e2"},{"file":"tracked-before.json","bytes":794700,"sha256":"6a8ca521136cc7e5889c2aee550da6ccec0fdb0db55c855d6b76cc63998a18e2"},{"file":"tree.txt","bytes":41,"sha256":"3f8ddba1de885414b9bdead18bd7dd9e52bb476a0e2fd85a2dcfc59e5ac98783"},{"file":"types.log","bytes":0,"sha256":"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"}];
+          const controlsPins=[{"file":"arms/fixed/admission.json","bytes":685,"sha256":"905d88c4fed7426a3aef0249a7d88dcc08363e73f2bc6579cea12af9b4365754"},{"file":"arms/fixed/hook.ts","bytes":17440,"sha256":"b3ca32994f099c26a5b295d999b1c46526c590e9502d57cae7baddc38c5f326d"},{"file":"arms/fixed/owned.json","bytes":7536,"sha256":"24bc6d5e312e071af7799eab64aca7add6bad024fdf80f6bb66d7cfa4603b0bf"},{"file":"arms/fixed/owned.log","bytes":324,"sha256":"48d9ccb75fa3479ae11830c5110fb99f191acb3ff6c0f7397e1e6f4a63a09463"},{"file":"arms/fixed/preserve-aOnly.literal.json","bytes":81284,"sha256":"da562826df59b2352b24c48154ca5aff83e49852a825a44797a322e79bd1c62f"},{"file":"arms/fixed/prior-submission-raw.json","bytes":667882,"sha256":"7519caac4e812d063b8fc74ae832ddc8215be67fcb20c73c5b4946c74d27f55a"},{"file":"arms/fixed/raw.json","bytes":391364,"sha256":"c9bc6b5b2f950a73c2456306a31cc2c2dafe7efba87e0be2c26751a880fcb821"},{"file":"arms/fixed/source-after.txt","bytes":502560,"sha256":"37ccdfbc419f6c68b20a7a2eacf2d764c5cfb44f0c933897c1624f412dc46602"},{"file":"arms/fixed/source-before.txt","bytes":502560,"sha256":"37ccdfbc419f6c68b20a7a2eacf2d764c5cfb44f0c933897c1624f412dc46602"},{"file":"arms/fixed/tracked-after.json","bytes":933566,"sha256":"5f0d30a4f43f64b9b34e056699d5578484ca4f7deb39aadba599636853d38a74"},{"file":"arms/fixed/tracked-before.json","bytes":933566,"sha256":"5f0d30a4f43f64b9b34e056699d5578484ca4f7deb39aadba599636853d38a74"},{"file":"arms/fixed/types-process.json","bytes":220,"sha256":"9ca99655ceb332c0038d6d037e24124bd2b9e3e75a7800a9f6ca29ec3340ab18"},{"file":"arms/fixed/types.log","bytes":0,"sha256":"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"},{"file":"arms/fixed/vitest-process.json","bytes":436,"sha256":"13f74acc2730d5f387088594b33a9376cbc62fc1bee8ed2264ddafcb4e7ec2ea"},{"file":"arms/original/admission.json","bytes":2399,"sha256":"4fe78d13c76bbda770122d75723b70b7484ba4abd87d054f907fe605ba1ee836"},{"file":"arms/original/hook.ts","bytes":17378,"sha256":"e263b1d89bfa691b0665666f668e43f9cf18cfa6987b6e1701c0ea37ca01085e"},{"file":"arms/original/owned.json","bytes":8922,"sha256":"c6c9d451322e518a70537f3e4212951ba4672447764fefac05a0582842baa242"},{"file":"arms/original/owned.log","bytes":327,"sha256":"622f1cc07cc6439eef1c8533da7ae64f831ec478a0b95894a2b2447c278bd00f"},{"file":"arms/original/preserve-aOnly.literal.json","bytes":81284,"sha256":"da562826df59b2352b24c48154ca5aff83e49852a825a44797a322e79bd1c62f"},{"file":"arms/original/prior-submission-raw.json","bytes":667882,"sha256":"7519caac4e812d063b8fc74ae832ddc8215be67fcb20c73c5b4946c74d27f55a"},{"file":"arms/original/raw.json","bytes":382432,"sha256":"67943d453cdf661bbcf0f1dfe24392d13bea374937cb199047d7e8cd2e71e9e1"},{"file":"arms/original/source-after.txt","bytes":502560,"sha256":"37ccdfbc419f6c68b20a7a2eacf2d764c5cfb44f0c933897c1624f412dc46602"},{"file":"arms/original/source-before.txt","bytes":502560,"sha256":"37ccdfbc419f6c68b20a7a2eacf2d764c5cfb44f0c933897c1624f412dc46602"},{"file":"arms/original/tracked-after.json","bytes":933566,"sha256":"176ed83e26a8be132c1458c77c60462f8525ea3dfddce04bec282e33100f96fe"},{"file":"arms/original/types-process.json","bytes":220,"sha256":"9ca99655ceb332c0038d6d037e24124bd2b9e3e75a7800a9f6ca29ec3340ab18"},{"file":"arms/original/tracked-before.json","bytes":933566,"sha256":"176ed83e26a8be132c1458c77c60462f8525ea3dfddce04bec282e33100f96fe"},{"file":"arms/original/types.log","bytes":0,"sha256":"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"},{"file":"arms/original/vitest-process.json","bytes":439,"sha256":"bddb3c1d34ca9873ec1d06ec824e6e6fabd231335224d3aaf7331f72ac2d6489"},{"file":"arms/restored/admission.json","bytes":688,"sha256":"8eb8b4c619049f2cb5309f5b3552d1f22ae3b40bb3b466e677decc643a886941"},{"file":"arms/restored/hook.ts","bytes":17440,"sha256":"b3ca32994f099c26a5b295d999b1c46526c590e9502d57cae7baddc38c5f326d"},{"file":"arms/restored/owned.json","bytes":7526,"sha256":"0e3f267b85fb777b880facbe0a191662b2f5f726519492d4b8bd170c6f66e149"},{"file":"arms/restored/owned.log","bytes":327,"sha256":"c187a1a9db21ea20d911d7180518201986bb6b1ad1f926f69ef620ae289f62a3"},{"file":"arms/restored/preserve-aOnly.literal.json","bytes":81284,"sha256":"da562826df59b2352b24c48154ca5aff83e49852a825a44797a322e79bd1c62f"},{"file":"arms/restored/prior-submission-raw.json","bytes":667882,"sha256":"7519caac4e812d063b8fc74ae832ddc8215be67fcb20c73c5b4946c74d27f55a"},{"file":"arms/restored/raw.json","bytes":391364,"sha256":"c9bc6b5b2f950a73c2456306a31cc2c2dafe7efba87e0be2c26751a880fcb821"},{"file":"arms/restored/source-after.txt","bytes":502560,"sha256":"37ccdfbc419f6c68b20a7a2eacf2d764c5cfb44f0c933897c1624f412dc46602"},{"file":"arms/restored/source-before.txt","bytes":502560,"sha256":"37ccdfbc419f6c68b20a7a2eacf2d764c5cfb44f0c933897c1624f412dc46602"},{"file":"arms/restored/tracked-after.json","bytes":933566,"sha256":"5f0d30a4f43f64b9b34e056699d5578484ca4f7deb39aadba599636853d38a74"},{"file":"arms/restored/tracked-before.json","bytes":933566,"sha256":"5f0d30a4f43f64b9b34e056699d5578484ca4f7deb39aadba599636853d38a74"},{"file":"arms/restored/types-process.json","bytes":220,"sha256":"9ca99655ceb332c0038d6d037e24124bd2b9e3e75a7800a9f6ca29ec3340ab18"},{"file":"arms/restored/types.log","bytes":0,"sha256":"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"},{"file":"arms/restored/vitest-process.json","bytes":439,"sha256":"67031cc47b50f624a4fb6a1a9cb9de1b295a3a5b045041d1b1b73497aa910b28"},{"file":"control-runner.mjs","bytes":20096,"sha256":"0e53df489d594a9c3b113a9f49d53a037bd48eb03d2a28ca9f1ad565cd9835db"},{"file":"controls-admission.json","bytes":6628,"sha256":"89c4045e292a26f8ae1204b969070e57d69f8acfccbfef0d1ca159ba31951a4d"},{"file":"controls.log","bytes":119,"sha256":"c55276a5022b2c76020fb9b363595b88085e50f9e79e73c1afb6b3674890b93c"},{"file":"fixed-hook-after.ts","bytes":17440,"sha256":"b3ca32994f099c26a5b295d999b1c46526c590e9502d57cae7baddc38c5f326d"},{"file":"fixed-hook-before.ts","bytes":17440,"sha256":"b3ca32994f099c26a5b295d999b1c46526c590e9502d57cae7baddc38c5f326d"},{"file":"fixed-reference/artifact.json","bytes":783,"sha256":"00bc80360c9ed7e5881b074144884e667d83b51d191fd551d44e5ec676a33714"},{"file":"fixed-reference/artifact.zip","bytes":7182844,"sha256":"e7e7c2cec04c65c530217101bbae2c8f325673d1cdc5cdd284f301c816e462c5"},{"file":"fixed-reference/jobs.json","bytes":3658,"sha256":"449e426523349e8a08b9763348ca1f0807379408095839907a16ce4dfaa81b7b"},{"file":"fixed-reference/packet/active-route-preflight.json","bytes":1289,"sha256":"abe40598134ed47076bd3dd50bbc724d969d35d5bd21d9932cc0851296aa8ee9"},{"file":"fixed-reference/packet/active-snapshot.html","bytes":22206,"sha256":"1192edbcd5e66208e50a5e5c7578b933687a5480fa0453638bea45211ac15823"},{"file":"fixed-reference/packet/final-holds.json","bytes":434,"sha256":"cecf7db3190531a28817b0810f467513450651f55f51964be49d8fb07f9b82e8"},{"file":"fixed-reference/packet/fixed-admission.json","bytes":24732,"sha256":"a277889778a12236e5e6b1910210b740baf75e065ed28714e3f910438fdf89f3"},{"file":"fixed-reference/packet/head.txt","bytes":41,"sha256":"8e09be3b3d47226069488aa4ec7cc26fc879957c10235a8aa7f3f4cbeae834e1"},{"file":"fixed-reference/packet/install.log","bytes":1391,"sha256":"71011704a4f508e7c9c0b1fb4507e5590a6e6b7e1810254bd6d0865ff31b468c"},{"file":"fixed-reference/packet/installed-after.json","bytes":22175,"sha256":"1268d6ef069c4189836716fed6ebe4dd324c661cacf53981b6a227608aa383e8"},{"file":"fixed-reference/packet/installed-before.json","bytes":22175,"sha256":"1268d6ef069c4189836716fed6ebe4dd324c661cacf53981b6a227608aa383e8"},{"file":"fixed-reference/packet/locks-after.txt","bytes":163,"sha256":"d316e23dae0f11f4fabcf8edd97204c9b780c6da8a0f6307c86940cbdd28e3d7"},{"file":"fixed-reference/packet/locks-before.txt","bytes":163,"sha256":"d316e23dae0f11f4fabcf8edd97204c9b780c6da8a0f6307c86940cbdd28e3d7"},{"file":"fixed-reference/packet/offline.log","bytes":0,"sha256":"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"},{"file":"fixed-reference/packet/original-artifact.json","bytes":789,"sha256":"069cc17d5bc87c609fcc300880404ebe4b3b48089603881d16f3792f64a58417"},{"file":"fixed-reference/packet/original-custody.json","bytes":11659,"sha256":"aa7adacb84e856817f281e93549c4bc3833d01452442ff8512f60167588f8ebd"},{"file":"fixed-reference/packet/original-jobs.json","bytes":3651,"sha256":"34ebc7c93a0aaf2a4fbed3c62c2348eb50cec193b31f23472c7fce52cbb65921"},{"file":"fixed-reference/packet/original-packet/active-route-preflight.json","bytes":1289,"sha256":"abe40598134ed47076bd3dd50bbc724d969d35d5bd21d9932cc0851296aa8ee9"},{"file":"fixed-reference/packet/original-packet/final-holds.json","bytes":429,"sha256":"ae8bcee49dcc9829c181a3ec94ab0c20ef69a6e0030f27f3c2add06a4bfc12fc"},{"file":"fixed-reference/packet/original-packet/active-snapshot.html","bytes":22206,"sha256":"1192edbcd5e66208e50a5e5c7578b933687a5480fa0453638bea45211ac15823"},{"file":"fixed-reference/packet/original-packet/head.txt","bytes":41,"sha256":"3eb521b6167bdfdaf5b8d793f11e8a93843802b190e34bd57336ff03731d4ce3"},{"file":"fixed-reference/packet/original-packet/install.log","bytes":1391,"sha256":"4c9a3c6ce59c8cf4be9c4dd507616dffd2c943bfc8a8c00b8e9edde4875673a2"},{"file":"fixed-reference/packet/original-packet/installed-after.json","bytes":22175,"sha256":"1268d6ef069c4189836716fed6ebe4dd324c661cacf53981b6a227608aa383e8"},{"file":"fixed-reference/packet/original-packet/installed-before.json","bytes":22175,"sha256":"1268d6ef069c4189836716fed6ebe4dd324c661cacf53981b6a227608aa383e8"},{"file":"fixed-reference/packet/original-packet/locks-after.txt","bytes":163,"sha256":"d316e23dae0f11f4fabcf8edd97204c9b780c6da8a0f6307c86940cbdd28e3d7"},{"file":"fixed-reference/packet/original-packet/locks-before.txt","bytes":163,"sha256":"d316e23dae0f11f4fabcf8edd97204c9b780c6da8a0f6307c86940cbdd28e3d7"},{"file":"fixed-reference/packet/original-packet/offline.log","bytes":0,"sha256":"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"},{"file":"fixed-reference/packet/original-packet/original-admission.json","bytes":16948,"sha256":"74060d7b9d749e72462e0a1e0f14b30696c1b03440c60c83be2b3f92229ca119"},{"file":"fixed-reference/packet/original-packet/owned.json","bytes":8912,"sha256":"af062f2aa718fa2d8d03b42a9873d7b9ab40f3f21ca2835a90a2331ac7f8e8cb"},{"file":"fixed-reference/packet/original-packet/owned.log","bytes":313,"sha256":"8dc5437c1d8420cbf7f194a9ec83f30c062b25550a626df9addf7dfce7225c6a"},{"file":"fixed-reference/packet/original-packet/preflight-artifact.json","bytes":798,"sha256":"1f6aa1c02bc1f0a4b89f298b8a58858793ec6f7a83d5e37e057d1caab196762e"},{"file":"fixed-reference/packet/original-packet/preflight-custody.json","bytes":2933,"sha256":"15e11982fc168839887b634dbbc5ea1b290d810a53ade3beb704db813c0045ac"},{"file":"fixed-reference/packet/original-packet/preflight-jobs.json","bytes":3006,"sha256":"d37a714d6aa5231c3f38512114171df8ba9187e94f80158a2d29c6e3681c6043"},{"file":"fixed-reference/packet/original-packet/preflight-packet/active-route-preflight.json","bytes":1289,"sha256":"abe40598134ed47076bd3dd50bbc724d969d35d5bd21d9932cc0851296aa8ee9"},{"file":"fixed-reference/packet/original-packet/preflight-packet/active-snapshot.html","bytes":22206,"sha256":"1192edbcd5e66208e50a5e5c7578b933687a5480fa0453638bea45211ac15823"},{"file":"fixed-reference/packet/original-packet/preflight-packet/final-holds.json","bytes":396,"sha256":"c119a145008729162d10f859b15b368a5958ac2a36b7bce468c111219827cef4"},{"file":"fixed-reference/packet/original-packet/preflight-packet/head.txt","bytes":41,"sha256":"f89ce26144cc903b92816af3ff1e4c5434a74ef158aab79d289452a30e0821d3"},{"file":"fixed-reference/packet/original-packet/preflight-packet/install.log","bytes":1391,"sha256":"8c5e1fedc985fa1e9a12898cf38d57c9d9fbf8bd7022f9fe6308684122ad0a1e"},{"file":"fixed-reference/packet/original-packet/preflight-packet/installed-after.json","bytes":22175,"sha256":"1268d6ef069c4189836716fed6ebe4dd324c661cacf53981b6a227608aa383e8"},{"file":"fixed-reference/packet/original-packet/preflight-packet/installed-before.json","bytes":22175,"sha256":"1268d6ef069c4189836716fed6ebe4dd324c661cacf53981b6a227608aa383e8"},{"file":"fixed-reference/packet/original-packet/preflight-packet/locks-after.txt","bytes":163,"sha256":"d316e23dae0f11f4fabcf8edd97204c9b780c6da8a0f6307c86940cbdd28e3d7"},{"file":"fixed-reference/packet/original-packet/preflight-packet/locks-before.txt","bytes":163,"sha256":"d316e23dae0f11f4fabcf8edd97204c9b780c6da8a0f6307c86940cbdd28e3d7"},{"file":"fixed-reference/packet/original-packet/preflight-packet/offline.log","bytes":0,"sha256":"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"},{"file":"fixed-reference/packet/original-packet/preflight-packet/source-after.txt","bytes":502356,"sha256":"7c1e3337b53d44b4125b2dc3bafc6c40993ca56fc2b50126de5a62d9c65eef65"},{"file":"fixed-reference/packet/original-packet/preflight-packet/source-before.txt","bytes":502356,"sha256":"7c1e3337b53d44b4125b2dc3bafc6c40993ca56fc2b50126de5a62d9c65eef65"},{"file":"fixed-reference/packet/original-packet/preflight-packet/source-join.json","bytes":3271,"sha256":"154e65630ed5e63dcdb31f2d1c11fbf6bbb702bed0c0569a0fe77e1a404e4268"},{"file":"fixed-reference/packet/original-packet/preflight-packet/tracked-after.json","bytes":794395,"sha256":"eb244ba8936c8e8ebeb9c65c540df1efaf26080a6f39767d508e200c12ff9b46"},{"file":"fixed-reference/packet/original-packet/preflight-packet/tracked-before.json","bytes":794395,"sha256":"eb244ba8936c8e8ebeb9c65c540df1efaf26080a6f39767d508e200c12ff9b46"},{"file":"fixed-reference/packet/original-packet/preflight-packet/tree.txt","bytes":41,"sha256":"213e8f3964247092441c869a881c085a0297e903e7ff7ff7f1b0e9cab939bbed"},{"file":"fixed-reference/packet/original-packet/preflight-reference-after.json","bytes":604,"sha256":"96cd977b8979a9136bc10eef3903490c1cfc160d5c38d3160b8f8b9ac1ba67a4"},{"file":"fixed-reference/packet/original-packet/preflight-reference-before.json","bytes":604,"sha256":"96cd977b8979a9136bc10eef3903490c1cfc160d5c38d3160b8f8b9ac1ba67a4"},{"file":"fixed-reference/packet/original-packet/preflight-run.json","bytes":13088,"sha256":"aa24befc31dbe06585de3bddc2460d5ceb6ffed2293699eb480a8db6510bfbc5"},{"file":"fixed-reference/packet/original-packet/preflight.zip","bytes":1011829,"sha256":"190db3e6214b1587fc4dcca3f6c368072d0755deb4c3fd09a5264926a05583be"},{"file":"fixed-reference/packet/original-packet/prior-submission-raw.json","bytes":667882,"sha256":"7519caac4e812d063b8fc74ae832ddc8215be67fcb20c73c5b4946c74d27f55a"},{"file":"fixed-reference/packet/original-packet/raw.json","bytes":382432,"sha256":"67943d453cdf661bbcf0f1dfe24392d13bea374937cb199047d7e8cd2e71e9e1"},{"file":"fixed-reference/packet/original-packet/report-errors.json","bytes":8656,"sha256":"d42fc2c65fe0252d4085ccd9a000b6de94320e89c48c7cf64a50d1b68a96dc3b"},{"file":"fixed-reference/packet/original-packet/source-after.txt","bytes":502560,"sha256":"73b321600e9abc640fb69b4f5465513f9b9c836188bf9103ce103c3e75ea5661"},{"file":"fixed-reference/packet/original-packet/source-before.txt","bytes":502560,"sha256":"73b321600e9abc640fb69b4f5465513f9b9c836188bf9103ce103c3e75ea5661"},{"file":"fixed-reference/packet/original-packet/source-join.json","bytes":3652,"sha256":"fc9faeebcbe92052c954df360f8d91517722e83e2d6929816e5b0aa618f7f59c"},{"file":"fixed-reference/packet/original-packet/test-exit.txt","bytes":2,"sha256":"4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"},{"file":"fixed-reference/packet/original-packet/tracked-before.json","bytes":794700,"sha256":"26542c0fe3d181e9341ec639881dbf71e0b1fe72ffd44c8ba30b673f14eb8376"},{"file":"fixed-reference/packet/original-packet/tracked-after.json","bytes":794700,"sha256":"26542c0fe3d181e9341ec639881dbf71e0b1fe72ffd44c8ba30b673f14eb8376"},{"file":"fixed-reference/packet/original-packet/tree.txt","bytes":41,"sha256":"fd96c77fa653d5478bd22693ec1c2fc56dd95d373b1eec0263742a408d175a48"},{"file":"fixed-reference/packet/original-reference-after.json","bytes":600,"sha256":"7b8c400b5c31972d57ae17491b596d89875dcdaf58f64ddf326069f4f0f1abd1"},{"file":"fixed-reference/packet/original-packet/types.log","bytes":0,"sha256":"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"},{"file":"fixed-reference/packet/original-reference-before.json","bytes":600,"sha256":"7b8c400b5c31972d57ae17491b596d89875dcdaf58f64ddf326069f4f0f1abd1"},{"file":"fixed-reference/packet/original-run.json","bytes":13095,"sha256":"6739fb753cf3e6359ea3976e26aa3e1feb22c60317d3aabb1cd2b93a285a2230"},{"file":"fixed-reference/packet/original.zip","bytes":3075242,"sha256":"2274c11d7d2ecf6ac6cb2476bdec93795d2e1c62b10a3c8adb37f927ad7f5646"},{"file":"fixed-reference/packet/owned.json","bytes":7543,"sha256":"fa710dc3ad2df82f0edc3cee0d7a1fc62eb919843d1dc4d4e8abb9f3ae163148"},{"file":"fixed-reference/packet/owned.log","bytes":310,"sha256":"53aedda5c36bb3cb134aab59f7e4619f6ac1fc76d465114ef7c248ffeec9263b"},{"file":"fixed-reference/packet/preserve-aOnly.literal.json","bytes":81284,"sha256":"da562826df59b2352b24c48154ca5aff83e49852a825a44797a322e79bd1c62f"},{"file":"fixed-reference/packet/prior-submission-raw.json","bytes":667882,"sha256":"7519caac4e812d063b8fc74ae832ddc8215be67fcb20c73c5b4946c74d27f55a"},{"file":"fixed-reference/packet/raw.json","bytes":391364,"sha256":"c9bc6b5b2f950a73c2456306a31cc2c2dafe7efba87e0be2c26751a880fcb821"},{"file":"fixed-reference/packet/report-errors.json","bytes":7198,"sha256":"d28a72c255758c93a2f63b16749843c6c69fbc37b2cc496309d4e22e700d6bd7"},{"file":"fixed-reference/packet/source-after.txt","bytes":502560,"sha256":"759eedda17b386f46cddac1332605984c8c52724fc9a64d686f01c4a5e47a649"},{"file":"fixed-reference/packet/source-before.txt","bytes":502560,"sha256":"759eedda17b386f46cddac1332605984c8c52724fc9a64d686f01c4a5e47a649"},{"file":"fixed-reference/packet/source-join.json","bytes":3680,"sha256":"08ec99914c3006d054d56dd88c7e7ec8f5e8153cf26b2e89d0e63047cb56b5f6"},{"file":"fixed-reference/packet/test-exit.txt","bytes":2,"sha256":"9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"},{"file":"fixed-reference/packet/tracked-after.json","bytes":794700,"sha256":"6a8ca521136cc7e5889c2aee550da6ccec0fdb0db55c855d6b76cc63998a18e2"},{"file":"fixed-reference/packet/tracked-before.json","bytes":794700,"sha256":"6a8ca521136cc7e5889c2aee550da6ccec0fdb0db55c855d6b76cc63998a18e2"},{"file":"fixed-reference/packet/tree.txt","bytes":41,"sha256":"3f8ddba1de885414b9bdead18bd7dd9e52bb476a0e2fd85a2dcfc59e5ac98783"},{"file":"fixed-reference/packet/types.log","bytes":0,"sha256":"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"},{"file":"fixed-reference/run.json","bytes":13101,"sha256":"dce855ec9c1f5f0c6070921c31df520c5cc23b69413bb1388cb693ee77821a53"},{"file":"head.txt","bytes":41,"sha256":"d6bb8a5d6b4e0b6befaf7b1abcfb6c6e80c93a8215d2553684870fd769328690"},{"file":"install.log","bytes":1391,"sha256":"ed68e342adc63f5e3c1b84b2569b1a840c7c47b34cc3c8f134cc97d5bd0671ba"},{"file":"installed-after.json","bytes":30513,"sha256":"55386e78aa6c2c38d7ae266f4c9ed89a3376d6653b733cbc6a886cb3e94b1861"},{"file":"installed-before.json","bytes":30513,"sha256":"55386e78aa6c2c38d7ae266f4c9ed89a3376d6653b733cbc6a886cb3e94b1861"},{"file":"locks-after.txt","bytes":314,"sha256":"c4d3d37c8be5418c6254ce652ab45c0f5d7e6c2c6d40d2f88443ccf1bd6e3f15"},{"file":"locks-before.txt","bytes":314,"sha256":"c4d3d37c8be5418c6254ce652ab45c0f5d7e6c2c6d40d2f88443ccf1bd6e3f15"},{"file":"offline.log","bytes":0,"sha256":"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"},{"file":"original-hook.ts","bytes":17378,"sha256":"e263b1d89bfa691b0665666f668e43f9cf18cfa6987b6e1701c0ea37ca01085e"},{"file":"physical-arms.json","bytes":4304,"sha256":"d5b42db8497c86ebfb1f7747d24d64e982315a00a4ecf7926c4acea6ff4f048b"},{"file":"source-after.txt","bytes":502560,"sha256":"37ccdfbc419f6c68b20a7a2eacf2d764c5cfb44f0c933897c1624f412dc46602"},{"file":"source-before.txt","bytes":502560,"sha256":"37ccdfbc419f6c68b20a7a2eacf2d764c5cfb44f0c933897c1624f412dc46602"},{"file":"source-join.json","bytes":540,"sha256":"66b3d4ee4c3c9a0717f8aab8da3ed4eda14c77de8e92f4af64fea624a01acdf6"},{"file":"tracked-after.json","bytes":933566,"sha256":"5f0d30a4f43f64b9b34e056699d5578484ca4f7deb39aadba599636853d38a74"},{"file":"tracked-before.json","bytes":933566,"sha256":"5f0d30a4f43f64b9b34e056699d5578484ca4f7deb39aadba599636853d38a74"},{"file":"tree.txt","bytes":41,"sha256":"a8ee1853b8ac9d189b0fb35c92de22c4ac28e651951758038351368503a11103"},{"file":"types-restored.log","bytes":0,"sha256":"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"}];
+          const command=(name,args)=>execFileSync(name,args,{maxBuffer:128*1024*1024});
           const read=file=>fs.readFileSync(out+'/'+file),json=file=>JSON.parse(read(file));
           const sha=bytes=>createHash('sha256').update(bytes).digest('hex');
-          const endpoints={
-            'original-run.json':'runs/'+pin.run,
-            'original-jobs.json':'runs/'+pin.run+'/jobs?per_page=100',
-            'original-artifact.json':'artifacts/'+pin.artifact,
-            'original.zip':'artifacts/'+pin.artifact+'/zip',
-          };
-          for(const [file,endpoint] of Object.entries(endpoints))fs.writeFileSync(out+'/'+file,command('gh',['api',repo+'/'+endpoint]),{flag:'wx'});
-          const run=json('original-run.json'),jobs=json('original-jobs.json'),meta=json('original-artifact.json');
-          const artifact=Object.hasOwn(meta,'artifacts')?(assert.equal(meta.artifacts.length,1),meta.artifacts[0]):meta;
-          assert.deepEqual([run.id,run.status,run.conclusion,run.head_sha,run.head_commit.tree_id,run.event,run.repository.full_name,run.path,run.head_branch,run.run_attempt],
-            [pin.run,'completed','success',pin.head,pin.tree,'push','PapiSalgueroM/ballpark-hero',workflow,pin.branch,1]);
-          assert.equal(jobs.jobs.length,1);
-          const job=jobs.jobs[0];
-          assert.deepEqual([job.id,job.run_id,job.head_sha,job.status,job.conclusion,job.name,job.run_attempt],
-            [pin.job,pin.run,pin.head,'completed','success','original',1]);
-          assert.equal(job.steps.length,14);
-          assert(job.steps.every(row=>row.status==='completed'&&row.conclusion==='success'));
-          assert.deepEqual([artifact.id,artifact.name,artifact.expired,artifact.size_in_bytes,artifact.digest,artifact.workflow_run.id,artifact.workflow_run.head_sha,artifact.workflow_run.head_branch],
-            [pin.artifact,'soccer-grid-selection-ownership-original-'+pin.run,false,pin.zipBytes,'sha256:'+pin.zipSHA256,pin.run,pin.head,pin.branch]);
-          const zip=read('original.zip'),names=bodies.map(row=>row.file).sort();
-          assert.deepEqual([zip.length,sha(zip)],[pin.zipBytes,pin.zipSHA256]);
-          assert.equal(new Set(names).size,pin.bodyCount);
-          assert(names.every(file=>/^(?:preflight-packet\/)?[A-Za-z0-9._-]+$/.test(file)&&!file.split('/').some(piece=>piece==='.'||piece==='..')));
-          assert.deepEqual(command('unzip',['-Z1',out+'/original.zip']).toString('utf8').trimEnd().split('\n').sort(),names);
-          fs.mkdirSync(ref);
-          command('unzip',['-q',out+'/original.zip','-d',ref]);
-          const walk=(dir,prefix='')=>fs.readdirSync(dir,{withFileTypes:true}).flatMap(entry=>{
+          const blob=bytes=>createHash('sha1').update(Buffer.from('blob '+bytes.length+'\0')).update(bytes).digest('hex');
+          const safe=name=>/^[A-Za-z0-9._/-]+$/.test(name)&&name.split('/').every(piece=>piece&&piece!=='.'&&piece!=='..');
+          const sort=(a,b)=>a.file<b.file?-1:a.file>b.file?1:0;
+          const walk=(dir,prefix='')=>fs.readdirSync(out+'/'+dir,{withFileTypes:true}).flatMap(entry=>{
             assert(!entry.isSymbolicLink());
-            const file=prefix+entry.name;
-            if(entry.isDirectory())return walk(dir+'/'+entry.name,file+'/');
+            if(entry.isDirectory())return walk(dir+'/'+entry.name,prefix+entry.name+'/');
             assert(entry.isFile());
-            return [file];
+            return [prefix+entry.name];
           });
-          assert.deepEqual(walk(ref).sort(),names);
-          for(const row of bodies){
-            const actual=fs.readFileSync(ref+'/'+row.file);
-            assert.deepEqual([actual.length,sha(actual)],[row.bytes,row.sha256],row.file);
-            assert(actual.equals(command('unzip',['-p',out+'/original.zip',row.file])),row.file+' exact archive body');
+          const inventory=dir=>walk(dir).map(file=>{const bytes=read(dir+'/'+file);return{file,bytes:bytes.length,sha256:sha(bytes)};}).sort(sort);
+          const zipEntries=file=>command('unzip',['-Z1',out+'/'+file]).toString('utf8').trimEnd().split('\n').sort();
+          function verifyPacket(dir,zip,ref,pins){
+            const bytes=read(zip),names=pins.map(row=>row.file).sort();
+            assert.deepEqual([bytes.length,sha(bytes)],[ref.zipBytes,ref.zipSHA256]);
+            assert.equal(new Set(names).size,ref.bodyCount);
+            assert(names.every(safe));
+            assert.deepEqual(zipEntries(zip),names);
+            assert.deepEqual(inventory(dir),[...pins].sort(sort));
+            for(const row of pins)assert(read(dir+'/'+row.file).equals(command('unzip',['-p',out+'/'+zip,row.file])),row.file+' exact archived body');
+            assert.equal(pins.reduce((total,row)=>total+row.bytes,0),ref.bodyBytes);
           }
-          assert.equal(bodies.reduce((sum,row)=>sum+row.bytes,0),pin.bodyBytes);
-          const originalRead=file=>read('original-packet/'+file),originalJson=file=>JSON.parse(originalRead(file));
-          assert.equal(originalRead('head.txt').toString('utf8').trim(),pin.head);
-          assert.equal(originalRead('tree.txt').toString('utf8').trim(),pin.tree);
-          const current=json('source-join.json'),previous=originalJson('source-join.json'),holds=originalJson('final-holds.json');
-          assert.deepEqual([previous.status,previous.head,previous.tree,previous.workflowBlob,previous.trackedRows,previous.scopedSourceRows,previous.heldRows],
-            ['passed',pin.head,pin.tree,pin.workflowBlob,5786,4661,5783]);
-          assert.deepEqual([current.base,current.baseTree,current.heldRows],[pin.head,pin.tree,5783]);
-          assert.deepEqual([holds.status,holds.trackedBodies,holds.scopedSourceRows,holds.rootConfigurations,holds.installedLockedVersions,holds.offlineBytes],
-            ['passed',5786,4661,11,521,0]);
-          for(const key of ['indexUnchanged','sourceBytesUnchanged','locksUnchanged','retainedPreflightHeld'])assert.equal(holds[key],true);
-          const index=bytes=>bytes.toString('utf8').trimEnd().split('\n').filter(row=>!current.ownedLeaves.includes(row.split('\t')[1]));
-          assert.deepEqual(index(read('source-before.txt')),index(originalRead('source-before.txt')));
-          const held=rows=>rows.filter(row=>!current.ownedLeaves.includes(row.file));
-          assert.equal(held(json('tracked-before.json')).length,5783);
-          assert.deepEqual(held(json('tracked-before.json')),held(originalJson('tracked-before.json')));
-          for(const file of ['active-route-preflight.json','active-snapshot.html','installed-before.json','locks-before.txt'])
-            assert(read(file).equals(originalRead(file)),file+' exact original join');
-          for(const [before,after] of [['source-before.txt','source-after.txt'],['tracked-before.json','tracked-after.json'],['locks-before.txt','locks-after.txt'],['installed-before.json','installed-after.json']])
-            assert(originalRead(before).equals(originalRead(after)),before+' held in the qualified original');
-          assert.equal(originalRead('types.log').length,0);
-          assert.equal(originalRead('offline.log').length,0);
-          const receipt=originalJson('original-admission.json'),proof=receipt.newProof;
-          assert.deepEqual([receipt.status,receipt.actualCases,receipt.actualPasses,receipt.actualFailures,receipt.newFrames,receipt.priorFrames],
+          function acquire(role,ref,pins,steps){
+            const dir=role+'-reference',zip=dir+'/artifact.zip';
+            const repo='repos/PapiSalgueroM/ballpark-hero/actions';
+            const sources={'run.json':'runs/'+ref.run,'jobs.json':'runs/'+ref.run+'/jobs?per_page=100','artifact.json':'artifacts/'+ref.artifact,'artifact.zip':'artifacts/'+ref.artifact+'/zip'};
+            fs.mkdirSync(out+'/'+dir);
+            for(const [file,endpoint] of Object.entries(sources))fs.writeFileSync(out+'/'+dir+'/'+file,command('gh',['api',repo+'/'+endpoint]),{flag:'wx'});
+            const run=json(dir+'/run.json'),jobs=json(dir+'/jobs.json'),meta=json(dir+'/artifact.json');
+            const artifact=Object.hasOwn(meta,'artifacts')?(assert.equal(meta.artifacts.length,1),meta.artifacts[0]):meta;
+            assert.deepEqual([run.id,run.status,run.conclusion,run.head_sha,run.head_commit.tree_id,run.event,run.path,run.repository.full_name,run.head_branch],
+              [ref.run,'completed','success',ref.head,ref.tree,'push',workflow,'PapiSalgueroM/ballpark-hero',ref.branch]);
+            assert.equal(jobs.jobs.length,1);
+            const job=jobs.jobs[0];
+            assert.deepEqual([job.id,job.run_id,job.head_sha,job.status,job.conclusion,job.name],[ref.job,ref.run,ref.head,'completed','success',role]);
+            assert.equal(job.steps.length,steps);
+            assert(job.steps.every(step=>step.status==='completed'&&step.conclusion==='success'));
+            assert.deepEqual([artifact.id,artifact.name,artifact.expired,artifact.size_in_bytes,artifact.digest,artifact.workflow_run.id,artifact.workflow_run.head_sha],
+              [ref.artifact,'soccer-grid-selection-ownership-'+role+'-'+ref.run,false,ref.zipBytes,'sha256:'+ref.zipSHA256,ref.run,ref.head]);
+            const bytes=read(zip),names=pins.map(row=>row.file).sort();
+            assert.deepEqual([bytes.length,sha(bytes)],[ref.zipBytes,ref.zipSHA256]);
+            assert(names.every(safe)&&new Set(names).size===ref.bodyCount);
+            assert.deepEqual(zipEntries(zip),names);
+            const packet=dir+'/packet';
+            fs.mkdirSync(out+'/'+packet);
+            command('unzip',['-q',out+'/'+zip,'-d',out+'/'+packet]);
+            verifyPacket(packet,zip,ref,pins);
+            fs.writeFileSync(out+'/'+role+'-bodies-before.json',JSON.stringify(inventory(dir)),{flag:'wx'});
+            return packet;
+          }
+
+          assert.deepEqual(Object.keys(controls).sort(),['run','job','artifact','head','tree','workflow','runner','zipBytes','zipSHA256','bodyCount','bodyBytes'].sort());
+          for(const key of ['run','job','artifact','zipBytes','bodyCount','bodyBytes'])assert(Number.isSafeInteger(controls[key])&&controls[key]>0,key);
+          for(const key of ['head','tree','workflow','runner'])assert.match(controls[key],/^[a-f0-9]{40}$/);
+          assert.match(controls.zipSHA256,/^[a-f0-9]{64}$/);
+          controls.branch='codex/soccer-grid-selection-ownership-controls-qa-20261107';
+          const fixedDir=acquire('fixed',fixed,fixedPins,14),controlsDir=acquire('controls',controls,controlsPins,12);
+          const fixedAdmission=json(fixedDir+'/fixed-admission.json'),fixedHolds=json(fixedDir+'/final-holds.json'),source=json('source-join.json');
+          const original=json(fixedDir+'/original-custody.json'),originalDir=fixedDir+'/original-packet';
+          assert.deepEqual([original.status,original.run,original.job,original.artifact,original.head,original.tree,original.bodyCount,original.bodyBytes],
+            ['passed-completed-original-qualification-custody',originalPin.run,originalPin.job,originalPin.artifact,originalPin.head,originalPin.tree,47,7453065]);
+          verifyPacket(originalDir,fixedDir+'/original.zip',originalPin,original.allBodyPins);
+          const preflight=json(originalDir+'/preflight-custody.json'),preflightDir=originalDir+'/preflight-packet';
+          assert.deepEqual([preflight.status,preflight.run,preflight.artifact,preflight.bodyCount],['passed-completed-active-preflight-custody',42347943728,13564731202,16]);
+          verifyPacket(preflightDir,originalDir+'/preflight.zip',preflight,preflight.allBodyPins);
+          const originalAdmission=json(originalDir+'/original-admission.json');
+          assert.deepEqual([originalAdmission.status,originalAdmission.actualCases,originalAdmission.actualPasses,originalAdmission.actualFailures,originalAdmission.newFrames,originalAdmission.priorFrames],
             ['passed-original-soccer-grid-selection-ownership-business-red-qualification',18,15,3,32,56]);
-          assert.deepEqual(receipt.businessFailures.map(({key,title,marker})=>({key,title,marker})),[{"key":"valid","title":"keeps a newer empty cell selected after the submitted cell is filled","marker":"SG_SELECTION_VALID"},{"key":"unverified","title":"keeps a newer empty cell selected after a free unverified answer","marker":"SG_SELECTION_UNVERIFIED"},{"key":"invalid","title":"keeps a newer empty cell selected through a wrong guess and flash cleanup","marker":"SG_SELECTION_INVALID"}]);
-          assert(receipt.businessFailures.every(row=>row.message.startsWith('AssertionError: '+row.marker+':')));
-          assert.deepEqual([proof.actions,proof.domReplays,proof.requestsSettled,proof.transportLegs],[28,24,22,70]);
-          assert.deepEqual(proof.wholePreservationCases,[pin.aOnly]);
-          assert.equal(receipt.preflight.status,'passed-completed-active-preflight-custody');
-          assert.equal(receipt.preflight.bodyCount,16);
-          assert.equal(names.filter(file=>file.startsWith('preflight-packet/')).length,16);
-          for(const row of [pin.raw,pin.prior]){
-            const bytes=originalRead(row.file);
-            assert.deepEqual([bytes.length,sha(bytes)],[row.bytes,row.sha256],row.file);
+          assert.deepEqual(originalAdmission.newProof.wholePreservationCases,[originalPin.aOnly]);
+          assert.deepEqual(originalAdmission.businessFailures.map(row=>row.marker),['SG_SELECTION_VALID','SG_SELECTION_UNVERIFIED','SG_SELECTION_INVALID']);
+          assert.deepEqual([fixedAdmission.status,fixedAdmission.actualCases,fixedAdmission.actualPasses,fixedAdmission.actualFailures,fixedAdmission.newFrames,fixedAdmission.priorFrames,fixedAdmission.wholeAOnlyLiteralHeld,fixedAdmission.wholePriorRawLiteralHeld],
+            ['passed-fixed-soccer-grid-selection-ownership-qualification',18,18,0,32,56,true,true]);
+          assert.deepEqual([fixedAdmission.source.head,fixedAdmission.source.tree,fixedAdmission.source.workflowBlob],[fixed.head,fixed.tree,fixed.workflow]);
+          assert.deepEqual([fixedHolds.status,fixedHolds.trackedBodies,fixedHolds.scopedSourceRows,fixedHolds.rootConfigurations,fixedHolds.installedLockedVersions,fixedHolds.offlineBytes],
+            ['passed',5786,4661,11,521,0]);
+          for(const key of ['indexUnchanged','sourceBytesUnchanged','locksUnchanged','retainedOriginalHeld'])assert.equal(fixedHolds[key],true);
+          assert.deepEqual([source.fixedHead,source.fixedTree,source.heldFixedRows],[fixed.head,fixed.tree,5785]);
+          const omitIndex=(bytes,exceptions)=>bytes.toString('utf8').trimEnd().split('\n').filter(line=>!exceptions.includes(line.split('\t')[1]));
+          assert.deepEqual(omitIndex(read('source-before.txt'),[workflow,helper]),omitIndex(read(fixedDir+'/source-before.txt'),[workflow]));
+          assert.deepEqual(json('tracked-before.json').filter(row=>![workflow,helper].includes(row.file)),json(fixedDir+'/tracked-before.json').filter(row=>row.file!==workflow));
+          for(const file of ['active-route-preflight.json','active-snapshot.html','locks-before.txt','installed-before.json'])assert(read(file).equals(read(fixedDir+'/'+file)),file+' exact admitted fixed bytes');
+          for(const name of ['types.log','offline.log'])assert.equal(read(fixedDir+'/'+name).length,0);
+          const freshRefRaw=read(fixedDir+'/raw.json'),oldRaw=read(originalDir+'/raw.json'),prior=read(originalDir+'/prior-submission-raw.json');
+          assert.deepEqual([freshRefRaw.length,sha(freshRefRaw),oldRaw.length,sha(oldRaw),prior.length,sha(prior)],[fixed.rawBytes,fixed.rawSHA256,originalPin.raw.bytes,originalPin.raw.sha256,originalPin.prior.bytes,originalPin.prior.sha256]);
+          const vector=oldRaw.subarray(originalPin.aOnly.offset,originalPin.aOnly.offset+originalPin.aOnly.bytes);
+          assert.equal(sha(vector),originalPin.aOnly.sha256);
+          assert(read(fixedDir+'/preserve-aOnly.literal.json').equals(vector));
+          assert(read(fixedDir+'/prior-submission-raw.json').equals(prior));
+          const controlsAdmission=json(controlsDir+'/controls-admission.json'),physical=json(controlsDir+'/physical-arms.json'),controlSource=json(controlsDir+'/source-join.json');
+          assert.equal(controlsAdmission.status,'passed-three-physical-grid-selection-control-arms');
+          assert.deepEqual(controlsAdmission.totals,{arms:3,rows:54,passes:51,namedOriginalBusinessReds:3,newFrames:96,priorFrames:168,actions:84,requests:66,transportLegs:210,wholeAOnlyVectors:3,wholeAOnlyFrames:21});
+          assert.deepEqual([controlSource.head,controlSource.tree,controlSource.workflowBlob,controlSource.untrackedRunnerBlob,controlSource.fixedHead,controlSource.fixedTree,controlSource.heldFixedRows],
+            [controls.head,controls.tree,controls.workflow,controls.runner,fixed.head,fixed.tree,5785]);
+          assert.deepEqual([controlsAdmission.fixedReference.run,controlsAdmission.fixedReference.artifact,controlsAdmission.fixedReference.head,controlsAdmission.fixedReference.tree,controlsAdmission.fixedReference.zipSHA256,controlsAdmission.fixedReference.bodyCount],
+            [fixed.run,fixed.artifact,fixed.head,fixed.tree,fixed.zipSHA256,79]);
+          assert.equal(blob(read(controlsDir+'/control-runner.mjs')),controls.runner);
+          assert.equal(controlsAdmission.exactSourceIndexLocksInstalledOfflineRestored,true);
+          assert.deepEqual([physical.error,physical.restorationError,physical.exactSourceIndexLocksInstalledOfflineRestored],[null,null,true]);
+          assert.deepEqual(controlsAdmission.arms,physical.arms);
+          assert.deepEqual(physical.arms.map(row=>[row.name,row.rows,row.passes,row.failures.map(error=>error.marker),row.changedPhysicalPaths]),[
+            ['fixed',18,18,[],[]],['original',18,15,['SG_SELECTION_VALID','SG_SELECTION_UNVERIFIED','SG_SELECTION_INVALID'],['src/hooks/useSoccerGrid.ts']],['restored',18,18,[],[]],
+          ]);
+          assert(read(controlsDir+'/fixed-reference/artifact.zip').equals(read('fixed-reference/artifact.zip')));
+          for(const row of fixedPins)assert(read(controlsDir+'/fixed-reference/packet/'+row.file).equals(read(fixedDir+'/'+row.file)),row.file+' exact controls-nested fixed body');
+          for(const arm of physical.arms){
+            const dir=controlsDir+'/arms/'+arm.name;
+            assert(read(dir+'/raw.json').equals(arm.name==='original'?oldRaw:freshRefRaw));
+            assert(read(dir+'/prior-submission-raw.json').equals(prior));
+            assert(read(dir+'/preserve-aOnly.literal.json').equals(vector));
           }
-          const literal=originalRead(pin.raw.file).subarray(pin.aOnly.offset,pin.aOnly.offset+pin.aOnly.bytes);
-          assert.equal(sha(literal),pin.aOnly.sha256);
-          assert.equal(JSON.parse(literal).key,'aOnly');
-          fs.writeFileSync(out+'/original-custody.json',JSON.stringify({status:'passed-completed-original-qualification-custody',...pin,allBodyPins:bodies,
-            heldOriginalRows:5783,installedVersions:521,offlineBytes:0,preflight:receipt.preflight},null,2));
-          const files=[...Object.keys(endpoints),'original-custody.json'];
-          fs.writeFileSync(out+'/original-reference-before.json',JSON.stringify(files.map(file=>{const bytes=read(file);return{file,bytes:bytes.length,sha256:sha(bytes)};})));
+          for(const [before,after] of [['source-before.txt','source-after.txt'],['tracked-before.json','tracked-after.json'],['locks-before.txt','locks-after.txt'],['installed-before.json','installed-after.json']])
+            assert(read(controlsDir+'/'+before).equals(read(controlsDir+'/'+after)),before+' exact physical controls restoration');
+          assert.deepEqual(omitIndex(read(controlsDir+'/source-before.txt'),[workflow]),omitIndex(read(fixedDir+'/source-before.txt'),[workflow]));
+          assert.equal(read(controlsDir+'/types-restored.log').length,0);
+          assert.equal(read(controlsDir+'/offline.log').length,0);
+          fs.writeFileSync(out+'/packet-custody.json',JSON.stringify({
+            status:'passed',fixed,controls,original:{run:original.run,job:original.job,artifact:original.artifact,head:original.head,tree:original.tree,bodyCount:original.bodyCount},
+            preflight:{run:preflight.run,artifact:preflight.artifact,bodyCount:preflight.bodyCount},controlsRerun:false,
+            controlsChecks:{status:'passed',totals:controlsAdmission.totals,completeRoleRawHeld:true,wholePriorHeld:true,wholeAOnlyHeld:true,sourceRestored:true},
+          },null,2)+'\n',{flag:'wx'});
           NODE
       - name: One actual fixed Vitest invocation with the same Page regression and held prior suite
         run: |
           set -euo pipefail
-          out=soccer-grid-selection-ownership-fixed
+          out=soccer-grid-selection-ownership-full
           set +e
           SOCCER_GRID_SELECTION_RAW="$PWD/$out/raw.json" SC_GRID_OWNERSHIP_RAW="$PWD/$out/prior-submission-raw.json" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node_modules/.bin/vitest run src/test/soccerGridSelectionOwnership.test.tsx src/test/soccerGridSubmissionOwnership.test.tsx --reporter=json --testTimeout=60000 --no-file-parallelism --outputFile="$out/owned.json" > "$out/owned.log" 2>&1
           status=$?
@@ -235,7 +285,7 @@ jobs:
           import assert from 'node:assert/strict';
           import {createHash} from 'node:crypto';
           import {JSDOM} from 'jsdom';
-          const out='soccer-grid-selection-ownership-fixed',read=file=>fs.readFileSync(out+'/'+file),json=file=>JSON.parse(read(file));
+          const out='soccer-grid-selection-ownership-full',read=file=>fs.readFileSync(out+'/'+file),json=file=>JSON.parse(read(file));
           const sha=bytes=>createHash('sha256').update(bytes).digest('hex');
           const reportExists=fs.existsSync(out+'/owned.json'),report=reportExists?json('owned.json'):null,exit=read('test-exit.txt').toString('utf8').trim();
           fs.writeFileSync(out+'/report-errors.json',JSON.stringify({
@@ -507,15 +557,15 @@ jobs:
           assert.equal(newProof.status,'passed','Reviewed fixed RAW oracle must complete');
           assert(Number.isSafeInteger(newProof.frames)&&newProof.frames>0);
           assert.deepEqual(newProof.cases.map(row=>row.key),newCases.map(row=>row.key));
-          const source=json('source-join.json'),original=json('original-custody.json');
+          const source=json('source-join.json'),original=json('fixed-reference/packet/original-custody.json');
           assert.equal(original.status,'passed-completed-original-qualification-custody');
-          const originalRaw=read('original-packet/'+original.raw.file);
+          const originalRaw=read('fixed-reference/packet/original-packet/'+original.raw.file);
           const [fixedAOnly]=newProof.wholePreservationCases;
           assert.deepEqual(newProof.wholePreservationCases,[original.aOnly]);
           const fixedLiteral=rawBytes.subarray(fixedAOnly.offset,fixedAOnly.offset+fixedAOnly.bytes);
           const originalLiteral=originalRaw.subarray(original.aOnly.offset,original.aOnly.offset+original.aOnly.bytes);
           assert(fixedLiteral.equals(originalLiteral),'Whole literal A-only case, including every captured byte');
-          assert(priorRawBytes.equals(read('original-packet/'+original.prior.file)),'Entire unchanged prior suite RAW, including every captured byte');
+          assert(priorRawBytes.equals(read('fixed-reference/packet/original-packet/'+original.prior.file)),'Entire unchanged prior suite RAW, including every captured byte');
           fs.writeFileSync(out+'/preserve-aOnly.literal.json',fixedLiteral,{flag:'wx'});
           fs.writeFileSync(out+'/fixed-admission.json',JSON.stringify({
             status:'passed-fixed-soccer-grid-selection-ownership-qualification',
@@ -527,61 +577,876 @@ jobs:
           },null,2));
           console.log('PASS fixed Soccer Grid all 18 rows, 32 new and 56 prior frames, retained B selection and both complete literal preserves');
           NODE
-      - name: Final whole source index locks installed versions and offline holds
+      - name: Literal fresh Grid unit RAW joins to completed fixed and original
+        run: |
+          set -euo pipefail
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          import {createHash} from 'node:crypto';
+          const out='soccer-grid-selection-ownership-full';
+          const read=file=>fs.readFileSync(out+'/'+file),json=file=>JSON.parse(read(file));
+          const sha=bytes=>createHash('sha256').update(bytes).digest('hex');
+          const custody=json('packet-custody.json'),unit=json('fixed-admission.json');
+          assert.equal(custody.status,'passed');
+          assert.equal(unit.status,'passed-fixed-soccer-grid-selection-ownership-qualification');
+          const fresh=read('raw.json'),prior=read('prior-submission-raw.json'),preserve=read('preserve-aOnly.literal.json');
+          assert(fresh.equals(read('fixed-reference/packet/raw.json')),'Whole fresh fixed RAW equals completed fixed reference');
+          assert(prior.equals(read('fixed-reference/packet/prior-submission-raw.json')),'Whole fresh prior RAW equals completed fixed reference');
+          assert(preserve.equals(read('fixed-reference/packet/preserve-aOnly.literal.json')),'Whole A-only case equals completed fixed reference');
+          const [literal]=unit.newProof.wholePreservationCases;
+          assert(fresh.subarray(literal.offset,literal.offset+literal.bytes).equals(preserve));
+          assert.deepEqual([fresh.length,sha(fresh),preserve.length,sha(preserve)],[custody.fixed.rawBytes,custody.fixed.rawSHA256,literal.bytes,literal.sha256]);
+          const tuple=(file,bytes)=>({file,bytes:bytes.length,sha256:sha(bytes)});
+          fs.writeFileSync(out+'/fixed-raw-join.json',JSON.stringify({
+            status:'passed',fixedHead:custody.fixed.head,fixedTree:custody.fixed.tree,raw:tuple('raw.json',fresh),prior:tuple('prior-submission-raw.json',prior),
+            wholeAOnly:literal,freshUnitRAWByteEqual:true,freshPriorRAWByteEqual:true,freshAOnlyByteEqual:true,
+          },null,2)+'\n',{flag:'wx'});
+          NODE
+      - name: Normal production build and retained bytes
+        id: build
+        run: |
+          set -euo pipefail
+          NODE_OPTIONS="--max-old-space-size=6144" npm run build 2>&1 | tee soccer-grid-selection-ownership-full/build.log
+          tar -czf soccer-grid-selection-ownership-full/dist.tgz dist
+          sha256sum soccer-grid-selection-ownership-full/dist.tgz > soccer-grid-selection-ownership-full/dist.sha256
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import {createHash} from 'node:crypto';import assert from 'node:assert/strict';
+          const walk=dir=>fs.readdirSync(dir,{withFileTypes:true}).sort((a,b)=>a.name.localeCompare(b.name)).flatMap(e=>e.isDirectory()?walk(dir+'/'+e.name):e.isFile()?[dir+'/'+e.name]:[]);
+          const rows=walk('dist').map(file=>{const b=fs.readFileSync(file);return {file,bytes:b.length,sha256:createHash('sha256').update(b).digest('hex')};});
+          assert.equal(rows.length,850);fs.writeFileSync('soccer-grid-selection-ownership-full/dist-before.json',JSON.stringify(rows));
+          NODE
+      - name: Isolated pinned Playwright and Chromium
+        id: browser_setup
+        timeout-minutes: 12
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          python -m pip install fonttools pillow
+          npm install --prefix "$RUNNER_TEMP/soccer-grid-selection-ownership-browser" --no-save --package-lock=false playwright@1.64.1 2>&1 | tee soccer-grid-selection-ownership-full/browser-install.log
+          test ! -e node_modules/playwright
+          ln -s "$RUNNER_TEMP/soccer-grid-selection-ownership-browser/node_modules/playwright" node_modules/playwright
+          node "$RUNNER_TEMP/soccer-grid-selection-ownership-browser/node_modules/playwright/cli.js" install --with-deps chromium 2>&1 | tee soccer-grid-selection-ownership-full/chromium-install.log
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const before=JSON.parse(fs.readFileSync('soccer-grid-selection-ownership-full/installed-before.json'));
+          const after=before.map(([p])=>[p,JSON.parse(fs.readFileSync(p+'/package.json')).version]);assert.deepEqual(after,before);
+          const pw=JSON.parse(fs.readFileSync('node_modules/playwright/package.json'));assert.equal(pw.version,'1.64.1');
+          fs.writeFileSync('soccer-grid-selection-ownership-full/installed-after.json',JSON.stringify(after));fs.writeFileSync('soccer-grid-selection-ownership-full/browser-package.json',JSON.stringify({version:pw.version,target:fs.realpathSync('node_modules/playwright')}));
+          NODE
+      - name: All required built readers and existing source fences
+        if: ${{ !cancelled() && steps.build.outcome == 'success' && steps.browser_setup.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          export ONLY="simAdsense,simBrand,simHeadTags,simHiddenPages,simHubs,simIndexNow,simIndexing,simInternalLinks,simNoRivalNames,simPrerender,simPrerenderBoot,simRetiredRoutes,simSchema,simSitemap,simSnapshotAssets,simSiteSearch,simGuideHeadings,simSeoMetaSplit,simHomeCopy,simHarnessAnchors"
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/runAllSims.mjs --browser 2>&1 | tee soccer-grid-selection-ownership-full/readers.log
+      - name: All original route download limits
+        if: ${{ !cancelled() && steps.build.outcome == 'success' && steps.browser_setup.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          node scripts/lib/hostLikeServer.mjs dist 4173 > soccer-grid-selection-ownership-full/weight-host.log 2>&1 &
+          grid_selection_host_pid=$!
+          trap 'kill "$grid_selection_host_pid" 2>/dev/null || true' EXIT
+          sleep 2
+          SWEEP_OFFLINE=1 BASE=http://127.0.0.1:4173 NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/sweepWeight.mjs 2>&1 | tee soccer-grid-selection-ownership-full/weight.log
+      - name: Three actual native viewport journeys with reviewed read-only outer
+        id: native
+        timeout-minutes: 15
+        if: ${{ !cancelled() && steps.build.outcome == 'success' && steps.browser_setup.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          out=soccer-grid-selection-ownership-full
+          cat > "$out/native-admission-script.mjs" <<'GRID_SELECTION_NATIVE_OUTER'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import { createHash } from 'node:crypto';
+          import { execFileSync } from 'node:child_process';
+          import { JSDOM } from 'jsdom';
+
+          const HOOK = '9b724907eae0a2fbf9e20d38f60d226281051693';
+          const HELPER = '6653a8d8bb60cd29243a9634ac2ba09d7cd2d0a0';
+          const FIXED = {"run":42350567717,"artifact":13565521874,"head":"740ab572fea80ed4d817d0fa3b739cd5412a6f00","tree":"562bed1b146d037a47b6bf4ff9a5d99021740604","workflow":"45e0cbcd5029f7b3e3e4204d3f9850c1ccb96e46","zipBytes":7182844,"zipSHA256":"e7e7c2cec04c65c530217101bbae2c8f325673d1cdc5cdd284f301c816e462c5","rawBytes":391364,"rawSHA256":"c9bc6b5b2f950a73c2456306a31cc2c2dafe7efba87e0be2c26751a880fcb821"};
+          const CONTROLS = {"run":42351066565,"artifact":13565223258,"head":"2264389687f5a95ce7b195e6ed891ffc38dbcc42","tree":"f1be383a949787774128a9aa6992af6b87210a94","zipBytes":18463108,"zipSHA256":"b645398755c015fec99741c158cb7ce1a0167c29d59fc984dde254aff1874638","admissionBytes":6628,"admissionSHA256":"89c4045e292a26f8ae1204b969070e57d69f8acfccbfef0d1ca159ba31951a4d"};
+          const ROUTE = '/soccer-grid';
+          const HOOK_FILE = 'src/hooks/useSoccerGrid.ts';
+          const HELPER_FILE = 'scripts/qa/playSoccerGridSelectionOwnership.mjs';
+          const WORKFLOW = '.github/workflows/soccer-grid-selection-ownership-20261106.yml';
+          const configs = ['index.html','package.json','package-lock.json','vite.config.ts','tailwind.config.ts','postcss.config.js','tsconfig.json','tsconfig.app.json','tsconfig.node.json','bun.lockb','bun.lock'];
+          const locks = ['package.json','package-lock.json'];
+          const pins = {
+            [HOOK_FILE]: HOOK, [HELPER_FILE]: HELPER,
+            'src/pages/SoccerGrid.tsx': 'fd793d83fef33fa075fcac53e97453cdbf83fff7',
+            'src/components/soccer-grid/SoccerGridBoard.tsx': '15007fda66e6a52bf13727d934dcc796bb30f3bb',
+            'src/components/soccer-grid/SoccerGridSearch.tsx': '14450f17982a89cc5de886d89fa1a78462ff509f',
+            'src/test/soccerGridSelectionOwnership.test.tsx': 'bda5963ef068981f9d5c81c4767192e9e47f05b5',
+            'src/test/soccerGridSubmissionOwnership.test.tsx': '7cb7f94a73ce7340243e7bdae6d6759e2c1a6f11',
+            'docs/plans/2026-11-07-soccer-grid-selection-ownership.md': 'af9c485b73a30903cd72af884b521ecab6d8eeb2',
+            'src/App.tsx': '8bfedf7aaa1d076e0f0c8e2216c7e46632cd8a33',
+            'src/data/gameRegistry.ts': 'f560b40a74d1468ac72dfde4ee6fec6635a9a255',
+            'public/soccer-grid/index.html': '65fcae9819d92e53462c9f7826bd7d2fa2012fe4',
+          };
+          const env = process.env, root = path.resolve(process.cwd());
+          assert.equal(process.argv.length, 3, 'Exact browser evidence directory argument');
+          const evidenceRoot = path.resolve(process.argv[2]);
+          assert.equal(evidenceRoot, path.resolve(env.SOCCER_GRID_SELECTION_BROWSER_OUT));
+          assert.equal(env.SOCCER_GRID_SELECTION_HOOK_BLOB, HOOK);
+          assert.equal(env.SIM_NETWORK, 'offline');
+          assert.equal(process.version, 'v24.22.1');
+          assert.match(HELPER, /^[0-9a-f]{40}$/);
+          const read = file => fs.readFileSync(file);
+          const parse = bytes => JSON.parse(bytes.toString('utf8'));
+          const json = file => parse(read(file));
+          const digest = (algorithm, bytes) => createHash(algorithm).update(bytes).digest('hex');
+          const sha = bytes => digest('sha256', bytes);
+          const blob = bytes => digest('sha1', Buffer.concat([Buffer.from('blob ' + bytes.length + '\0'), bytes]));
+          const git = (...args) => execFileSync('git', args, {encoding:'utf8',maxBuffer:16*1024*1024});
+          const equal = assert.deepEqual;
+          const safe = file => typeof file === 'string' && /^[a-zA-Z0-9._/-]+$/.test(file) && file.split('/').every(piece => piece && piece !== '.' && piece !== '..');
+          const tuple = (dir, file) => {
+            assert(safe(file), 'Safe relative body path');
+            const full = path.join(dir, file);
+            assert(fs.lstatSync(full).isFile(), file + ' regular body');
+            const bytes = read(full);
+            return {file, bytes: bytes.length, sha256: sha(bytes)};
+          };
+          const body = file => read(path.join(evidenceRoot, file));
+          const ev = file => parse(body(file));
+          const refOf = file => tuple(evidenceRoot, file);
+          function inventory(dir, prefix = '') {
+            return fs.readdirSync(path.join(dir,prefix),{withFileTypes:true}).flatMap(entry => {
+              const file = prefix + entry.name;
+              assert(safe(file));
+              if (entry.isDirectory()) return inventory(dir, file + '/');
+              assert(entry.isFile(), file + ' closed evidence must be a regular file');
+              return [file];
+            });
+          }
+          const sortedFiles = rows => [...rows].sort();
+          const references = new Map();
+          function checkRef(ref) {
+            assert(ref && safe(ref.file) && Number.isSafeInteger(ref.bytes) && ref.bytes >= 0);
+            assert.match(ref.sha256, /^[0-9a-f]{64}$/);
+            const actual = references.get(ref.file);
+            assert(actual, ref.file + ' is declared in closed evidence');
+            equal({file:ref.file,bytes:ref.bytes,sha256:ref.sha256},actual);
+            return body(ref.file);
+          }
+          const manifest = ev('body-manifest.json');
+          assert.equal(manifest.version,1);
+          const manifestFiles = manifest.files.map(ref => ref.file);
+          assert.equal(new Set(manifestFiles).size,manifestFiles.length);
+          equal(sortedFiles(manifestFiles),sortedFiles(inventory(evidenceRoot).filter(file => file !== 'body-manifest.json')));
+          for (const ref of manifest.files) {
+            const actual = refOf(ref.file);
+            equal(ref,actual);
+            references.set(ref.file,actual);
+          }
+          equal([manifest.filesCount,manifest.bodyBytes],[manifestFiles.length,manifest.files.reduce((n,row)=>n+row.bytes,0)]);
+          const report = ev('report.json'), raw = ev('raw.json');
+          equal([report.version,raw.version,report.status,report.route,raw.route],[1,1,'passed',ROUTE,ROUTE]);
+
+          function verifyReferenceIdentities() {
+            const fBase=path.resolve(env.SOCCER_GRID_SELECTION_FIXED_REFERENCE);
+            const cBase=path.resolve(env.SOCCER_GRID_SELECTION_CONTROLS_REFERENCE);
+            const f=path.join(fBase,'packet'), c=path.join(cBase,'packet');
+            const u=path.resolve(env.SOCCER_GRID_SELECTION_FULL_UNIT);
+            for (const [dir, base, pin] of [[f,fBase,FIXED],[c,cBase,CONTROLS]]) {
+              const run=json(path.join(base,'run.json')), meta=json(path.join(base,'artifact.json'));
+              const artifact=meta.artifacts?.[0]??meta;
+              if(meta.artifacts) assert.equal(meta.artifacts.length,1);
+              equal([run.id,run.status,run.conclusion,run.head_sha,run.head_commit.tree_id,run.path,artifact.id,artifact.workflow_run.id,artifact.workflow_run.head_sha,artifact.size_in_bytes,artifact.digest],
+                [pin.run,'completed','success',pin.head,pin.tree,WORKFLOW,pin.artifact,pin.run,pin.head,pin.zipBytes,'sha256:'+pin.zipSHA256]);
+              equal([read(path.join(dir,'head.txt')).toString('utf8').trim(),read(path.join(dir,'tree.txt')).toString('utf8').trim()],[pin.head,pin.tree]);
+            }
+            const fixedRaw = read(path.join(f,'raw.json')), prior = read(path.join(f,'prior-submission-raw.json'));
+            equal([fixedRaw.length,sha(fixedRaw),prior.length,sha(prior)],[FIXED.rawBytes,FIXED.rawSHA256,667882,'7519caac4e812d063b8fc74ae832ddc8215be67fcb20c73c5b4946c74d27f55a']);
+            assert(fixedRaw.equals(read(path.join(u,'raw.json'))), 'Fresh full new RAW joins fixed');
+            assert(prior.equals(read(path.join(u,'prior-submission-raw.json'))), 'Fresh full prior RAW joins fixed');
+            const aOnly = fixedRaw.subarray(788,788+81284);
+            assert.equal(sha(aOnly),'da562826df59b2352b24c48154ca5aff83e49852a825a44797a322e79bd1c62f');
+            assert(aOnly.equals(read(path.join(f,'preserve-aOnly.literal.json'))));
+            assert(aOnly.equals(read(path.join(u,'preserve-aOnly.literal.json'))));
+            const fixed = json(path.join(f,'fixed-admission.json'));
+            equal([fixed.status,fixed.source.head,fixed.source.tree,fixed.source.workflowBlob,fixed.actualCases,fixed.actualPasses,fixed.actualFailures,fixed.wholeAOnlyLiteralHeld,fixed.wholePriorRawLiteralHeld],
+              ['passed-fixed-soccer-grid-selection-ownership-qualification',FIXED.head,FIXED.tree,FIXED.workflow,18,18,0,true,true]);
+            const controlBody = read(path.join(c,'controls-admission.json')), control = parse(controlBody);
+            equal([controlBody.length,sha(controlBody)],[CONTROLS.admissionBytes,CONTROLS.admissionSHA256]);
+            equal([control.status,control.source.head,control.source.tree,control.fixedReference.head,control.fixedReference.tree,control.exactSourceIndexLocksInstalledOfflineRestored],
+              ['passed-three-physical-grid-selection-control-arms',CONTROLS.head,CONTROLS.tree,FIXED.head,FIXED.tree,true]);
+            equal(control.arms.map(arm=>[arm.name,arm.rows,arm.passes,arm.failures.length]),[['fixed',18,18,0],['original',18,15,3],['restored',18,18,0]]);
+            return {fixed,control,fixture:parse(fixedRaw).fixture};
+          }
+          const admitted = verifyReferenceIdentities();
+          const PAGE=pins['src/pages/SoccerGrid.tsx'];
+          equal([report.hook,raw.hook,report.page,raw.page,report.helper,raw.helper],[HOOK,HOOK,PAGE,PAGE,HELPER,HELPER]);
+
+          const head = git('rev-parse','HEAD').trim(), tree = git('rev-parse','HEAD^{tree}').trim();
+          assert.equal(head,env.GITHUB_SHA);
+          equal([report.head,report.tree],[head,tree]);
+          equal(git('rev-list','--parents','-n','1','HEAD').trim().split(' '),[head,FIXED.head]);
+          assert.equal(git('rev-parse',FIXED.head+'^{tree}').trim(),FIXED.tree);
+          function treeRows(ref) {
+            const list = git('ls-tree','-r','-z',ref).split('\0').filter(Boolean).map(line=>{
+              const matched = /^(100644|100755) blob ([a-f0-9]{40})\t(.+)$/.exec(line);
+              assert(matched);
+              return [matched[3],{mode:matched[1],blob:matched[2]}];
+            });
+            assert.equal(new Set(list.map(row=>row[0])).size,list.length);
+            return new Map(list);
+          }
+          const old = treeRows(FIXED.head), current = treeRows(head);
+          assert.equal(old.get(WORKFLOW)?.blob,FIXED.workflow);
+          equal([old.size,current.size],[5786,5787]);
+          const changed = [...old].filter(([file,previous]) => previous.blob!==current.get(file)?.blob || previous.mode!==current.get(file)?.mode).map(row=>row[0]);
+          const added = [...current.keys()].filter(file=>!old.has(file));
+          equal([changed,added],[[WORKFLOW],[HELPER_FILE]]);
+          const scoped = rows => [...rows.keys()].filter(file=>/^(src|public|scripts)\//.test(file)).length;
+          equal([scoped(old),scoped(current)],[4661,4662]);
+          for (const file of configs) {
+            assert(old.has(file) && current.has(file));
+            equal(old.get(file),current.get(file));
+          }
+          for (const [file,want] of Object.entries(pins)) assert.equal(current.get(file)?.blob,want,file);
+          const index = git('ls-files','--stage','-z');
+          const indexRows = new Map(index.split('\0').filter(Boolean).map(line=>{
+            const match=/^(100644|100755) ([a-f0-9]{40}) 0\t(.+)$/.exec(line);
+            assert(match);
+            return [match[3],{mode:match[1],blob:match[2]}];
+          }));
+          equal(indexRows,current);
+          const physicalSource = [...current].map(([file,row])=>{
+            const stat=fs.lstatSync(path.join(root,file)), data=read(path.join(root,file));
+            assert(stat.isFile());
+            assert.equal(Boolean(stat.mode&0o111),row.mode==='100755',file);
+            assert.equal(blob(data),row.blob,file+' exact physical source');
+            return {file,bytes:data.length,sha256:sha(data)};
+          });
+          const physicalDist = inventory(root,'dist/').map(file=>tuple(root,file));
+          assert.equal(physicalDist.length,850);
+          const offlinePath=path.resolve(env.SIM_OFFLINE_RECEIPT);
+          const offline = tuple(root,path.relative(root,offlinePath));
+          assert.equal(offline.bytes,0);
+          const lock = json(path.join(root,'package-lock.json'));
+          const installed = Object.keys(lock.packages).filter(file=>file.startsWith('node_modules/')&&fs.existsSync(path.join(root,file,'package.json')))
+            .map(file=>[file,json(path.join(root,file,'package.json')).version]);
+          assert.equal(installed.length,521);
+          for (const [file,version] of installed) assert.equal(version,lock.packages[file].version,file);
+          const built = tuple(root,'dist/soccer-grid/index.html');
+          const builtDOM = new JSDOM(read(path.join(root,built.file)).toString('utf8'));
+          const builtDoc = builtDOM.window.document;
+          assert.equal(builtDoc.querySelector('link[rel=canonical]')?.getAttribute('href'),'https://douknowball.com'+ROUTE);
+          assert.equal(builtDoc.querySelectorAll('#dukb-snapshot').length,1);
+          const boot = builtDoc.querySelector('script[type=module][src]')?.getAttribute('src');
+          assert(boot?.startsWith('/assets/'));
+          builtDOM.window.close();
+          equal([report.builtDocument,report.builtModule],[built,boot]);
+
+          function checkPNG(ref, width, height) {
+            const bytes = checkRef(ref);
+            assert(bytes.subarray(0,8).equals(Buffer.from([137,80,78,71,13,10,26,10])));
+            equal([bytes.readUInt32BE(8),bytes.subarray(12,16).toString('ascii'),bytes.readUInt32BE(16),bytes.readUInt32BE(20)],[13,'IHDR',width,height]);
+          }
+          function checkLayout(value, width, height, actuated) {
+            const {rect,center,chrome,ancestors} = value;
+            equal(value.viewport,{width,height});
+            assert(rect.width>0 && rect.height>0);
+            assert([rect.x,rect.y,rect.right,rect.bottom,center.x,center.y,chrome.top,chrome.bottom].every(Number.isFinite));
+            assert(rect.x>=0 && rect.right<=width && rect.y>=chrome.top && rect.bottom<=height-chrome.bottom);
+            assert(center.x>=rect.x && center.x<=rect.right && center.y>=rect.y && center.y<=rect.bottom);
+            for (const a of ancestors) {
+              if (a.cx) assert(rect.x>=a.x && rect.right<=a.right, 'Operated target wholly within horizontal ancestor clip');
+              if (a.cy) assert(rect.y>=a.y && rect.bottom<=a.bottom, 'Operated target wholly within vertical ancestor clip');
+            }
+            equal([value.qualified,value.usedForActuation,value.hit,value.enabled],[true,actuated,true,true]);
+          }
+          const expectFrame = (value, selected, disabled, status, guesses, correct) => {
+            const dom = new JSDOM(value.html);
+            try {
+              const doc = dom.window.document;
+              const cells = [...doc.querySelectorAll('button[data-grid-cell-status]')];
+              assert.equal(cells.length,9);
+              equal(cells.map(node=>node.dataset.gridCellStatus),[status,...Array(8).fill('empty')]);
+              equal(cells.map(node=>node.disabled),[status==='correct',...Array(8).fill(false)]);
+              equal(cells.flatMap((node,i)=>node.classList.contains('ring-2')?[i]:[]),selected===null?[]:[selected]);
+              const game = doc.querySelector('main') ?? doc.body;
+              const text = game.textContent.replace(/\s+/g,' ').trim();
+              assert(text.includes('Correct: '+correct+'/9') && text.includes('Guesses left: '+guesses));
+              if (status==='correct') {
+                assert.equal(cells[0].querySelector('[title]')?.getAttribute('title'),'Fixture Aster');
+                assert(cells[0].textContent.includes('Only you!'));
+              }
+              const prompt = [...doc.querySelectorAll('p')].find(node=>node.textContent.trim().startsWith('Find a player who:'));
+              const search = doc.querySelector('input[role="combobox"][aria-label="Search for a player"]');
+              if (selected===null) equal([prompt ?? null,search],[null,null]);
+              else {
+                const target=selected===0?0:1;
+                equal([...prompt.querySelectorAll('span')].map(node=>node.textContent),['Fixture Row '+target,'Fixture Column '+target]);
+                equal([search.disabled,search.value,search.form.querySelector('button[type=submit]').disabled],[disabled,'',true]);
+              }
+            } finally {
+              dom.window.close();
+            }
+          };
+          const cleanStorage = storage => Object.fromEntries(Object.entries(storage).filter(([key])=>!key.startsWith('soccer-grid-daily-')));
+          function dailyBytes(storage, verdict) {
+            const saves = Object.entries(storage).filter(([key])=>key.startsWith('soccer-grid-daily-'));
+            if (verdict==='unverified') { equal(saves,[]); return null; }
+            assert.equal(saves.length,1);
+            const [key,value] = saves[0], parsed=JSON.parse(value);
+            assert.match(parsed.date,/^\d{4}-\d{2}-\d{2}$/);
+            assert.equal(key,'soccer-grid-daily-'+parsed.date);
+            const guesses = verdict==='valid' ? [{t:'ok',cellIndex:0,playerName:'Fixture Aster',rarity:101}] : [{t:'x'}];
+            assert.equal(value,JSON.stringify({v:1,date:parsed.date,puzzleIndex:0,puzzleId:admitted.fixture.puzzle.id,guesses,gameStatus:'playing'}));
+            return {key,value};
+          }
+
+          function wireSpec(fixture, verdict) {
+            const puzzle=fixture.puzzle;
+            const selector='/rest/v1/soccer_grid_selections';
+            const a=[['puzzle_id','eq.'+puzzle.id],['cell_index','eq.0']];
+            const verdictBody=verdict==='valid'?{valid:true,fullName:'Fixture Aster'}:verdict==='unverified'?{valid:false,unverified:true}:{valid:false};
+            const spec=[
+              {kind:'puzzles',method:'GET',pathname:'/rest/v1/soccer_grid_puzzles',query:[['select','puzzle_id,rows_json,cols_json'],['order','sort_order.asc']],status:200,reply:[{puzzle_id:puzzle.id,rows_json:puzzle.rows,cols_json:puzzle.cols}]},
+              {kind:'players',method:'GET',pathname:'/rest/v1/career_players',query:[['select','id,player_name,nationality,position'],['order','player_name.asc']],status:200,reply:fixture.players},
+              {kind:'seasons',method:'GET',pathname:'/rest/v1/career_seasons',query:[['select','player_id,season,club,goals,assists,appearances,market_value,sort_order'],['order','player_id.asc,sort_order.asc'],['offset','0'],['limit','1000']],status:200,reply:fixture.seasons},
+              {kind:'validator',method:'POST',pathname:'/functions/v1/soccer-grid-validate',query:[],status:200,request:{playerName:'Fixture Aster',rowAttribute:'Fixture Row 0',colAttribute:'Fixture Column 0'},reply:verdictBody},
+            ];
+            if(verdict==='valid')spec.push(
+              {kind:'rarityTotal',method:'HEAD',pathname:selector,query:[['select','*'],...a],status:200},
+              {kind:'rarityPlayer',method:'HEAD',pathname:selector,query:[['select','*'],...a,['player_name','eq.fixture aster']],status:200},
+              {kind:'selectionInsert',method:'POST',pathname:selector,query:[],status:201,request:{puzzle_id:puzzle.id,cell_index:0,player_name:'fixture aster'}},
+            );
+            return spec;
+          }
+
+          function orderedTuples(rows) {
+            assert(Array.isArray(rows));
+            assert.equal(new Set(rows.map(row=>row.file)).size,rows.length);
+            return [...rows].sort((a,b)=>a.file<b.file?-1:a.file>b.file?1:0);
+          }
+          function readExpanded(refs) { return refs.map(ref=>parse(checkRef(ref))); }
+          function checkHolds() {
+            for (const key of ['sourceHeld','distHeld','locksHeld','installedHeld','offlineHeld','indexHeld']) assert.equal(report[key],true,key);
+            for (const key of ['source','dist','locks','installed','offline']) equal(report[key+'Before'],report[key+'After'],key+' complete before/after hold');
+            equal(orderedTuples(report.sourceBefore),orderedTuples(physicalSource));
+            equal(orderedTuples(report.distBefore),orderedTuples(physicalDist));
+            equal(report.locksBefore,locks.map(file=>tuple(root,file)));
+            equal(report.installedBefore,installed);
+            equal(report.offlineBefore,offline);
+            assert.equal(checkRef(report.indexBefore).toString('utf8'),index);
+            assert.equal(checkRef(report.indexAfter).toString('utf8'),index);
+          }
+          checkHolds();
+          const boundedInputs = parse(checkRef(report.qualifiedInput));
+          equal(raw.qualifiedInput,report.qualifiedInput);
+          equal(raw.responseBodies,report.responseBodies);
+          equal(raw.limits,report.limits);
+          for (const ref of Object.values(report.responseBodies)) checkRef(ref);
+          equal(report.raw,refOf('raw.json'));
+          checkRef(report.raw);
+          equal([boundedInputs.fixed.run,boundedInputs.fixed.artifact,boundedInputs.fixed.head,boundedInputs.fixed.tree,boundedInputs.fixed.newRawBytes,boundedInputs.fixed.newRawSHA256],
+            [FIXED.run,FIXED.artifact,FIXED.head,FIXED.tree,FIXED.rawBytes,FIXED.rawSHA256]);
+          equal([Number(boundedInputs.controls.run),Number(boundedInputs.controls.artifact),boundedInputs.controls.head,boundedInputs.controls.tree,Number(boundedInputs.controls.admissionBytes),boundedInputs.controls.admissionSHA256],
+            [CONTROLS.run,CONTROLS.artifact,CONTROLS.head,CONTROLS.tree,CONTROLS.admissionBytes,CONTROLS.admissionSHA256]);
+          equal(boundedInputs.current,{head,tree,workflow:current.get(WORKFLOW).blob,helper:HELPER,hook:HOOK});
+          equal(boundedInputs.sourceJoin,{fixedTracked:5786,currentTracked:5787,fixedScoped:4661,currentScoped:4662,rootConfigs:11,heldFixedRows:5785,changed:[WORKFLOW],added:[HELPER_FILE]});
+          equal([boundedInputs.freshUnitRAWByteEqual,boundedInputs.freshPriorRAWByteEqual,boundedInputs.wholeAOnlyLiteralEqual],[true,true,true]);
+          const expectedWidths = [[320,568,'unverified'],[390,844,'valid'],[1280,900,'invalid']];
+          equal(report.journeys.map(journey=>[journey.width,journey.height,journey.verdict]),expectedWidths);
+          assert(report.journeys.every(journey=>journey.status==='passed'&&journey.contexts.length===1));
+          const contexts = report.journeys.flatMap(journey=>journey.contexts);
+          assert.equal(raw.contexts.length,contexts.length);
+          const outputContexts=[];
+          const photos=[];
+          for (const [i,ctx] of contexts.entries()) {
+            const wire = raw.contexts[i];
+            equal([ctx.width,ctx.height,ctx.verdict],expectedWidths[i]);
+            equal([ctx.id,ctx.status],[String(ctx.width),'passed']);
+            assert(!ctx.error&&!ctx.closeError&&!ctx.failureObservation);
+            for (const key of ['webSockets','errors','assetErrors','routeErrors']) equal(ctx[key],[],key+' empty');
+            const tapes={};
+            for (const key of ['frames','actions','preparations','layouts','wheels']) {
+              tapes[key]=readExpanded(ctx[key]);
+              equal(wire[key],tapes[key],key+' entire RAW bodies');
+            }
+            equal(wire,{...ctx,...tapes},'Complete actual RAW context projection');
+            const byFrame=new Map(ctx.frames.map((ref,n)=>[ref.file,{ref,value:tapes.frames[n]}]));
+            assert.equal(byFrame.size,ctx.frames.length);
+            function frame(ref) {
+              const actual=byFrame.get(ref.file);
+              assert(actual,ref.file+' actual context frame');
+              equal(ref,actual.ref);
+              return actual.value;
+            }
+            const get=key=>frame(ctx.checkpoints[key]);
+            const states=tapes.frames;
+            assert(states.length>0 && states.every((value,n)=>Number.isFinite(value.at)&&(!n||value.at>=states[n-1].at)));
+            const active = new URL(ROUTE,report.base).href;
+            assert(states.every(value=>value.url===active && Number.isFinite(value.timeOrigin) && value.timeOrigin===states[0].timeOrigin));
+            assert(ctx.navigations.length>0);
+            assert(ctx.navigations.every((value,n)=>value.url===active&&Number.isFinite(value.at)&&value.at<=states[0].at&&(!n||value.at>=ctx.navigations[n-1].at)));
+            equal([ctx.documentResponse.url,ctx.documentResponse.status,ctx.documentResponse.file,ctx.documentResponse.bytes,ctx.documentResponse.sha256],[active,200,built.file,built.bytes,built.sha256]);
+            const ready=get('ready'), pendingA=get('a-pending'), pendingB=get('b-pending'), settled=get('a-settled');
+            assert(get('entry').at<=ready.at&&ready.at<=pendingA.at&&pendingA.at<=pendingB.at&&pendingB.at<=settled.at);
+            for (const label of [...admitted.fixture.puzzle.rows,...admitted.fixture.puzzle.cols].map(row=>row.label)) {
+              assert(ready.html.includes('>'+label+'<'),label+' real ready Board criterion');
+            }
+            expectFrame(ready,null,false,'empty',15,0);
+            expectFrame(pendingA,0,true,'empty',15,0);
+            expectFrame(pendingB,4,true,'empty',15,0);
+            const valid=ctx.verdict==='valid', wrong=ctx.verdict==='invalid';
+            expectFrame(settled,4,false,valid?'correct':wrong?'wrong':'empty',valid||wrong?14:15,valid?1:0);
+            const outcome=wrong?get('a-flash-cleared'):settled;
+            const final=get('final');
+            expectFrame(final,4,false,valid?'correct':'empty',valid||wrong?14:15,valid?1:0);
+            if(ctx.verdict==='unverified') assert(settled.toasts.some(toast=>toast.visible&&toast.title==="Couldn't verify that answer, please try again."));
+            assert(ready.timer.length===0&&settled.timer.length===0&&final.timer.length===0);
+            if(wrong) {
+              expectFrame(outcome,4,false,'empty',14,0);
+              equal([settled.capture,outcome.capture],['passive-mutation','passive-mutation']);
+              equal([ctx.wrongFlash.wrong,ctx.wrongFlash.cleared],[ctx.checkpoints['a-settled'],ctx.checkpoints['a-flash-cleared']]);
+              equal([ctx.wrongFlash.wrongAt,ctx.wrongFlash.clearedAt,ctx.wrongFlash.durationMs],[settled.at,outcome.at,outcome.at-settled.at]);
+              assert(ctx.wrongFlash.armedAt<=ctx.release.at&&ctx.release.at<=settled.at&&outcome.at>settled.at);
+            } else {
+              equal([ctx.release.armedAt,settled.capture],[null,'live']);
+            }
+            equal(dailyBytes(ready.storage,'unverified'),null);
+            equal(dailyBytes(pendingA.storage,'unverified'),null);
+            equal(dailyBytes(pendingB.storage,'unverified'),null);
+            const daily=dailyBytes(settled.storage,ctx.verdict);
+            equal(dailyBytes(final.storage,ctx.verdict),daily);
+            equal(dailyBytes(outcome.storage,ctx.verdict),daily);
+            equal(cleanStorage(pendingB.storage),cleanStorage(final.storage));
+            equal(pendingB.sessionStorage,final.sessionStorage);
+            const saveEvents=ctx.storageEvents.filter(event=>event.key?.startsWith('soccer-grid-daily-'));
+            if(daily) {
+              assert.equal(saveEvents.length,1);
+              equal([saveEvents[0].type,saveEvents[0].key,saveEvents[0].newValue,saveEvents[0].storageId.isLocalStorage],['domStorageItemAdded',daily.key,daily.value,true]);
+              assert(saveEvents[0].at>=pendingB.at);
+            } else equal(saveEvents,[]);
+
+            const expectedActions=['reject-cookies','enter-grid','select-a','type-a','submit-a','select-b'];
+            equal(tapes.actions.map(row=>row.name),expectedActions);
+            const layoutRefs=new Map(ctx.layouts.map((ref,n)=>[ref.file,{ref,value:tapes.layouts[n]}]));
+            const byAction=new Map();
+            function observedEvents(events,before,after) {
+              assert(events.length>0);
+              for (const event of events) {
+                assert(Number.isFinite(event.at) && event.at>=before.at);
+                if(event.type!=='scroll') assert(event.at<=after.at);
+                assert(ctx.events.some(actual=>JSON.stringify(actual)===JSON.stringify(event)),'Actual event in retained complete context tape');
+              }
+            }
+            for (const action of tapes.actions) {
+              const before=frame(action.before), after=frame(action.after);
+              assert(before.at<=after.at);
+              observedEvents(action.events,before,after);
+              const layout=layoutRefs.get(action.layout.file);
+              assert(layout);
+              equal(action.layout,layout.ref);
+              checkLayout(layout.value,ctx.width,ctx.height,true);
+              if(action.name==='type-a') {
+                assert.equal(action.method,'typing');
+                equal([action.requested,action.focusIdentityHeld,before.focus.isSearch,after.focus.isSearch,after.search.value],['Fixture Aster',true,true,true,'Fixture Aster']);
+                const inputEvents=action.events.filter(event=>event.type==='input');
+                assert(inputEvents.length>0&&inputEvents.every(event=>event.trusted&&event.targetRole==='combobox'&&event.targetLabel==='Search for a player'));
+                assert.equal(inputEvents.at(-1).value,'Fixture Aster');
+              } else {
+                assert.equal(action.method,'mouse');
+                 const trio=action.events.filter(event=>['pointerdown','pointerup','click'].includes(event.type));
+                equal(trio.map(event=>event.type),['pointerdown','pointerup','click']);
+                assert(trio.every(event=>event.trusted&&event.pointerType==='mouse'));
+                const click=trio[2], g=layout.value;
+                equal([click.targetTag,click.targetText,click.targetLabel,click.cellIndex],[g.tag,g.text,g.label,g.cellIndex]);
+                assert(Math.abs(click.x-g.center.x)<=1&&Math.abs(click.y-g.center.y)<=1);
+                const targetIndex={'select-a':0,'select-b':4}[action.name];
+                if(targetIndex!==undefined) assert.equal(click.cellIndex,targetIndex);
+                if(action.name==='submit-a') assert.equal(click.targetText,'Submit');
+                if(action.name==='reject-cookies') assert(click.inCookieChoices&&click.targetText==='Reject all');
+                if(action.name==='enter-grid') assert(click.inDialog&&click.targetText==="Let's Play!");
+              }
+              byAction.set(action.name,{action,before,after});
+            }
+            const entry=get('entry'), reject=byAction.get('reject-cookies'), enter=byAction.get('enter-grid');
+            assert(entry.dialog.open&&entry.dialog.ownsFocus&&entry.dialog.title==='How to Play Soccer Grid'&&entry.cookieChoices);
+            equal([entry.storage['cookie-consent-v2']??null,entry.daily],[null,{}]);
+            assert(reject.after.dialog.open&&!reject.after.cookieChoices&&!enter.after.dialog.open);
+            const consent=JSON.parse(reject.after.storage['cookie-consent-v2']);
+            equal([consent.version,consent.advertising,consent.analytics,ready.storage['sg-rules-seen']],[2,false,false,'1']);
+            for (const wheel of tapes.wheels) {
+              const before=frame(wheel.before), after=frame(wheel.after);
+              observedEvents(wheel.events,before,after);
+              const events=wheel.events.filter(event=>event.type==='wheel');
+              assert(events.length>0&&events.every(event=>event.trusted&&event.deltaMode===0));
+              equal([events.reduce((n,event)=>n+event.deltaX,0),events.reduce((n,event)=>n+event.deltaY,0)],[wheel.deltaX,wheel.deltaY]);
+              assert(wheel.point.x>=0&&wheel.point.x<ctx.width&&wheel.point.y>=0&&wheel.point.y<ctx.height);
+            }
+            assert(byAction.get('submit-a').before.at<=pendingA.at&&pendingA.at<=byAction.get('select-b').after.at&&byAction.get('select-b').before.at<=pendingB.at);
+            equal(ctx.screenshots.map(ref=>ref.name),['pending','settled']);
+            for (const photo of ctx.screenshots) {
+              checkPNG(photo,ctx.width,ctx.height);
+              equal(photo.viewport,{width:ctx.width,height:ctx.height});
+              const before=frame(photo.before), after=frame(photo.after);
+              assert(before.at<=after.at);
+              const layout=layoutRefs.get(photo.layout.file);
+              assert(layout);
+              equal(photo.layout,layout.ref);
+              checkLayout(layout.value,ctx.width,ctx.height,false);
+              equal([photo.context,photo.verdict,photo.focusIdentityHeld],[ctx.id,ctx.verdict,true]);
+              if(photo.name==='pending') {
+                for(const value of [before,after]) expectFrame(value,4,true,'empty',15,0);
+                assert(pendingB.at<=before.at);
+              } else {
+                for(const value of [before,after]) expectFrame(value,4,false,valid?'correct':'empty',valid||wrong?14:15,valid?1:0);
+                assert(outcome.at<=before.at&&after.at<=final.at);
+              }
+              photos.push(photo);
+            }
+
+            assert(ctx.requests.every((row,i)=>row.sequence===i));
+            const expectedWire=wireSpec(admitted.fixture,ctx.verdict);
+            const observedWire=ctx.requests.filter(row=>row.wireKind);
+            equal(sortedFiles(observedWire.map(row=>row.wireKind)),sortedFiles(expectedWire.map(row=>row.kind)));
+            equal(sortedFiles(ctx.wireResponses.map(row=>row.wireKind)),sortedFiles(expectedWire.map(row=>row.kind)));
+            const api='https://flawuiqbvjobmkfkauhw.supabase.co';
+            const byWire=new Map(observedWire.map(row=>[row.wireKind,row]));
+            for (const expected of expectedWire) {
+              const request=byWire.get(expected.kind), url=new URL(request.url);
+              equal([url.origin,url.pathname,request.method,request.outcome,request.status],[api,expected.pathname,expected.method,'fulfilled',expected.status]);
+              equal([...url.searchParams],request.query);
+              equal([...request.query].sort(),[...expected.query].sort());
+              equal(request.headers.origin,report.base);
+              if(expected.request) {
+                const requestBytes=Buffer.from(request.body.utf8);
+                equal([request.body.bytes,request.body.sha256,parse(requestBytes)],[requestBytes.length,sha(requestBytes),expected.request]);
+              } else equal(request.body,null);
+              const receipt=ctx.wireResponses.find(row=>row.wireKind===expected.kind);
+              equal([receipt.sequence,receipt.method,receipt.url,receipt.status,receipt.responseBody],
+                [request.sequence,expected.method,request.url,expected.status,request.responseBody]);
+              assert([request.at,request.finishedAt,receipt.at,receipt.receivedAt].every(Number.isFinite));
+              assert(receipt.at>=request.at && receipt.receivedAt>=receipt.at && request.finishedAt>=request.at);
+              for(const [header,value] of Object.entries(request.responseHeaders)) assert.equal(receipt.headers[header],value);
+              if(expected.reply!==undefined) {
+                const response=checkRef(receipt.responseBody);
+                equal(parse(response),expected.reply);
+                equal(receipt.observedBody,{bytes:response.length,sha256:sha(response)});
+              } else {
+                equal(receipt.responseBody,null);
+                if(expected.method==='HEAD') {
+                  assert(request.headers.prefer?.split(',').some(value=>value.trim()==='count=exact'));
+                  equal([receipt.headers['content-range'],receipt.observedBody],['*/0',null]);
+                } else equal(receipt.observedBody,{bytes:0,sha256:sha(Buffer.alloc(0))});
+              }
+            }
+            const validator=byWire.get('validator');
+            equal(validator.release,ctx.release);
+            equal(ctx.release.bPending,ctx.checkpoints['b-pending']);
+            const pendingPhoto=ctx.screenshots.find(photo=>photo.name==='pending');
+            equal(ctx.release.pendingPNG,pendingPhoto);
+            assert([ctx.release.at,validator.at,validator.releasedAt].every(Number.isFinite));
+            assert(validator.at<=pendingA.at&&frame(pendingPhoto.after).at<=ctx.release.at&&ctx.release.at<=validator.releasedAt&&validator.releasedAt<=settled.at);
+            assert(byAction.get('select-b').after.at<=ctx.release.at);
+            equal(observedWire.slice(3).map(row=>row.wireKind),valid?['validator','rarityTotal','rarityPlayer','selectionInsert']:['validator']);
+            for(const value of [pendingA,pendingB,frame(pendingPhoto.after)]) {
+              const held=value.network.wire.filter(row=>row.outcome==='waiting-for-release');
+              equal(held.map(row=>[row.wireKind,row.releasedAt,row.status]),[['validator',null,null]]);
+            }
+            const loopback=new URL(report.base).origin;
+            assert(/^http:\/\/127\.0\.0\.1:\d+$/.test(loopback));
+            for (const row of ctx.firstPartyReads) {
+              assert(new URL(row.url).origin===loopback&&['GET','HEAD'].includes(row.method));
+              assert.equal(row.outcome,'continued-local-read');
+            }
+            const distByFile=new Map(physicalDist.map(row=>[row.file,row]));
+            for(const row of ctx.firstPartyResponses) {
+              const url=new URL(row.url), relative=url.pathname===ROUTE?'dist/soccer-grid/index.html':'dist'+decodeURIComponent(url.pathname);
+              assert(url.origin===loopback&&row.status>=200&&row.status<300);
+              const physical=distByFile.get(relative);
+              assert(physical);
+              equal(row.dist,physical);
+              equal(row.body,row.method==='HEAD'?null:physical);
+              assert(ctx.firstPartyReads.some(read=>read.method===row.method&&read.url===row.url));
+            }
+            for(const pathTest of [value=>value===boot,value=>/\/assets\/SoccerGrid-[^/]+\.js$/.test(value)]) {
+              assert(ctx.firstPartyResponses.some(row=>row.resourceType==='script'&&row.body&&pathTest(new URL(row.url).pathname)), 'Actual built module receipt');
+            }
+            const cors=ctx.requests.filter(row=>row.corsFor);
+            for (const request of cors) {
+              const expected=expectedWire.find(item=>item.kind===request.corsFor),url=new URL(request.url);
+              assert(expected);
+              equal([url.origin,url.pathname,request.method,request.headers['access-control-request-method'],request.status,request.outcome,request.body],
+                [api,expected.pathname,'OPTIONS',expected.method,204,'admitted-cors-fulfilled',null]);
+              equal([...url.searchParams].sort(),[...expected.query].sort());
+            }
+            for(const request of ctx.requests.filter(row=>!row.corsFor&&!row.wireKind)) {
+              assert.equal(request.outcome,'known-foreign-refused');
+              const url=new URL(request.url);
+              const allowed={
+                'known-font':request.method==='GET'&&((url.hostname==='fonts.googleapis.com'&&url.pathname==='/css2')||(url.hostname==='fonts.gstatic.com'&&url.pathname.startsWith('/s/'))),
+                'known-flag':request.method==='GET'&&url.hostname==='flagcdn.com'&&/^\/w(?:20|40|80|160|320)\/(?:[a-z]{2}|gb-(?:eng|sct|wls|nir))\.png$/.test(url.pathname)&&!url.search,
+                'known-live-score':url.origin===api&&url.pathname==='/rest/v1/live_scores',
+                'known-completion-history':url.origin===api&&url.pathname==='/rest/v1/game_completions',
+              };
+              assert(allowed[request.refusal]&&request.body===null);
+              assert(request.method==='GET'||request.method==='OPTIONS'&&request.headers['access-control-request-method']==='GET');
+            }
+            equal(ctx.requests.filter(row=>row.method==='POST'&&row.path==='/rest/v1/game_completions'),[]);
+
+            const measured={
+              frames:tapes.frames.length,actions:tapes.actions.length,preparations:tapes.preparations.length,layouts:tapes.layouts.length,
+              wheels:tapes.wheels.length,viewportPNGs:ctx.screenshots.length,navigations:ctx.navigations.length,firstPartyReads:ctx.firstPartyReads.length,
+              firstPartyResponses:ctx.firstPartyResponses.length,corsPreflights:cors.length,
+              startupMouseClicks:tapes.actions.filter(row=>row.kind==='startup'&&row.method==='mouse').length,
+              businessMouseClicks:tapes.actions.filter(row=>row.kind==='business'&&row.method==='mouse').length,
+              typings:tapes.actions.filter(row=>row.method==='typing').length,validatorAttempts:observedWire.filter(row=>row.wireKind==='validator').length,
+              rarityReads:observedWire.filter(row=>row.method==='HEAD').length,selectionWritesIntercepted:observedWire.filter(row=>row.wireKind==='selectionInsert').length,
+              puzzleReads:observedWire.filter(row=>row.wireKind==='puzzles').length,careerReads:observedWire.filter(row=>['players','seasons'].includes(row.wireKind)).length,
+              actualWireResponses:ctx.wireResponses.length,completionAttempts:0,
+            };
+            equal(ctx.census,measured);
+            outputContexts.push({
+              width:ctx.width,height:ctx.height,verdict:ctx.verdict,
+              frames:tapes.frames.length,actions:tapes.actions.length,
+              startupClicks:tapes.actions.filter(action=>['reject-cookies','enter-grid'].includes(action.name)).length,
+              mouseActions:tapes.actions.filter(action=>action.method==='mouse').length,
+              keyboardActions:measured.typings,
+              layouts:tapes.layouts.length,preparations:tapes.preparations.length,wheels:tapes.wheels.length,
+              navigations:ctx.navigations.length,viewportPNGs:ctx.screenshots.length,
+              firstPartyReads:ctx.firstPartyReads.length,corsRequests:cors.length,helperCensus:measured,
+              validatorAttempts:observedWire.filter(row=>row.wireKind==='validator').length,
+              rarityReads:observedWire.filter(row=>row.wireKind==='rarityTotal'||row.wireKind==='rarityPlayer').length,
+              selectionWritesIntercepted:observedWire.filter(row=>row.wireKind==='selectionInsert').length,completionAttempts:0,
+              daily:daily?{key:daily.key,bytes:Buffer.byteLength(daily.value),sha256:sha(Buffer.from(daily.value))}:null,
+            });
+          }
+          assert.equal(new Set(photos.map(photo=>photo.file)).size,6);
+          const sortPhotos=items=>[...items].sort((a,b)=>a.file<b.file?-1:a.file>b.file?1:0);
+          equal(sortPhotos(photos),sortPhotos(report.screenshots));
+          const actualHelperCensus={journeys:report.journeys.length,contexts:outputContexts.length,
+            ...Object.fromEntries(Object.keys(outputContexts[0].helperCensus).map(key=>[key,outputContexts.reduce((n,row)=>n+row.helperCensus[key],0)]))};
+          equal(report.census,actualHelperCensus);
+          const measureKeys=['frames','actions','startupClicks','mouseActions','keyboardActions','layouts','preparations','wheels','navigations','viewportPNGs','firstPartyReads','corsRequests','validatorAttempts','rarityReads','selectionWritesIntercepted','completionAttempts'];
+          const census={journeys:report.journeys.length,contexts:outputContexts.length,
+            ...Object.fromEntries(measureKeys.map(key=>[key,outputContexts.reduce((n,row)=>n+row[key],0)]))};
+          equal([census.journeys,census.contexts,census.viewportPNGs,census.validatorAttempts,census.rarityReads,census.selectionWritesIntercepted,census.completionAttempts],[3,3,6,3,2,1,0]);
+          const result = {
+            status:'passed',route:ROUTE,hook:HOOK,helper:HELPER,census,qualifiedInput:boundedInputs,
+            currentSource:{head,tree,workflow:current.get(WORKFLOW).blob,trackedBodies:current.size,scopedSourceRows:scoped(current),heldFixedRows:old.size-1,
+              rootConfigurations:configs.length,distBodies:physicalDist.length,installedVersions:installed.length},
+            evidence:{report:refOf('report.json'),raw:refOf('raw.json'),bodyManifest:refOf('body-manifest.json'),qualifiedInput:report.qualifiedInput,
+              filesCount:manifest.filesCount,bodyBytes:manifest.bodyBytes,responseBodies:report.responseBodies},
+            holds:{source:true,dist:true,locks:true,installed521:true,offline:true,index:true,fullNewRawLiteral:true,fullPriorRawLiteral:true,fullAOnlyLiteral:true},
+            measured:{contexts:outputContexts,viewportPNGs:census.viewportPNGs},
+            boundaries:report.limits,
+          };
+          process.stdout.write(JSON.stringify(result,null,2)+'\n');
+          GRID_SELECTION_NATIVE_OUTER
+          test "$(git hash-object "$out/native-admission-script.mjs")" = "$SOCCER_GRID_SELECTION_NATIVE_OUTER_BLOB"
+          test -z "$(git ls-files -- "$out/native-admission-script.mjs")"
+          export SOCCER_GRID_SELECTION_BROWSER_OUT="$PWD/$out/browser"
+          export SOCCER_GRID_SELECTION_FIXED_REFERENCE="$PWD/$out/fixed-reference"
+          export SOCCER_GRID_SELECTION_FULL_UNIT="$PWD/$out"
+          export SOCCER_GRID_SELECTION_CONTROLS_REFERENCE="$PWD/$out/controls-reference"
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          node scripts/qa/playSoccerGridSelectionOwnership.mjs 2>&1 | tee "$out/browser.log"
+          node "$out/native-admission-script.mjs" "$out/browser" > "$out/native-admission.json" 2> "$out/native-admission.log" || { cat "$out/native-admission.log"; exit 1; }
+      - name: Bind actual fresh units native readers caps and retained control evidence
+        run: |
+          set -euo pipefail
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          import {createHash} from 'node:crypto';
+          const out='soccer-grid-selection-ownership-full',env=process.env;
+          const read=file=>JSON.parse(fs.readFileSync(out+'/'+file)),sha=bytes=>createHash('sha256').update(bytes).digest('hex');
+          const native=read('native-admission.json'),unit=read('fixed-admission.json'),source=read('source-join.json'),custody=read('packet-custody.json'),raw=read('fixed-raw-join.json');
+          assert.deepEqual([source.status,source.head,source.trackedRows,source.sourceRows,source.cleanSourceRows,source.rootConfigurations.length,source.heldFixedRows],
+            ['passed',env.GITHUB_SHA,5787,4662,4661,11,5785]);
+          assert.deepEqual([source.parent,source.fixedHead,source.fixedTree],[custody.fixed.head,custody.fixed.head,custody.fixed.tree]);
+          assert.deepEqual([raw.status,raw.fixedHead,raw.fixedTree,raw.raw.bytes,raw.raw.sha256,raw.freshUnitRAWByteEqual,raw.freshPriorRAWByteEqual,raw.freshAOnlyByteEqual],
+            ['passed',custody.fixed.head,custody.fixed.tree,custody.fixed.rawBytes,custody.fixed.rawSHA256,true,true,true]);
+          assert.deepEqual([unit.status,unit.actualCases,unit.actualPasses,unit.actualFailures,unit.newFrames,unit.priorFrames,unit.newProof.actions,unit.newProof.requestsSettled,unit.newProof.transportLegs],
+            ['passed-fixed-soccer-grid-selection-ownership-qualification',18,18,0,32,56,28,22,70]);
+          assert.deepEqual([unit.wholeAOnlyLiteralHeld,unit.wholePriorRawLiteralHeld],[true,true]);
+          assert.deepEqual(unit.newProof.wholePreservationCases,[raw.wholeAOnly]);
+          assert.deepEqual([custody.status,custody.controlsRerun,custody.controlsChecks.status],['passed',false,'passed']);
+          const nativeChecks=(()=>{
+          const workflow='.github/workflows/soccer-grid-selection-ownership-20261106.yml';
+          const helperFile='scripts/qa/playSoccerGridSelectionOwnership.mjs';
+          const hook=env.SOCCER_GRID_SELECTION_HOOK_BLOB,helper=env.SOCCER_GRID_SELECTION_NATIVE_HELPER_BLOB;
+          const {census,qualifiedInput,currentSource,evidence,holds,boundaries,measured}=native;
+          assert.deepEqual(Object.keys(native).sort(),['status','route','hook','helper','census','qualifiedInput','currentSource','evidence','holds','measured','boundaries'].sort());
+          assert.deepEqual(Object.keys(evidence).sort(),['report','raw','bodyManifest','qualifiedInput','filesCount','bodyBytes','responseBodies'].sort());
+          assert.deepEqual([native.status,native.route,native.hook,native.helper],['passed','/soccer-grid',hook,helper]);
+          assert.deepEqual(currentSource,{head:source.head,tree:source.tree,workflow:source.workflowBlob,
+            trackedBodies:source.trackedRows,scopedSourceRows:source.sourceRows,heldFixedRows:source.heldFixedRows,
+            rootConfigurations:source.rootConfigurations.length,distBodies:read('dist-before.json').length,installedVersions:read('installed-before.json').length});
+          assert.deepEqual(holds,{source:true,dist:true,locks:true,installed521:true,offline:true,index:true,
+            fullNewRawLiteral:true,fullPriorRawLiteral:true,fullAOnlyLiteral:true});
+          const bodyTuple=(file,bytes)=>({file,bytes:bytes.length,sha256:sha(bytes)});
+          const nativeBody=(tuple,file)=>{
+            assert.equal(tuple.file,file);
+            const path=out+'/browser/'+file;
+            assert(fs.lstatSync(path).isFile(),file+' is a retained regular file');
+            const bytes=fs.readFileSync(path);
+            assert(bytes.length>0,file+' is not empty');
+            assert.deepEqual(tuple,bodyTuple(file,bytes));
+            return bytes;
+          };
+          const report=JSON.parse(nativeBody(evidence.report,'report.json'));
+          const browserRaw=JSON.parse(nativeBody(evidence.raw,'raw.json'));
+          const manifest=JSON.parse(nativeBody(evidence.bodyManifest,'body-manifest.json'));
+          const input=JSON.parse(nativeBody(evidence.qualifiedInput,'qualified-input-binding.json'));
+          assert.deepEqual(qualifiedInput,input);
+          const controlBytes=fs.readFileSync(out+'/controls-reference/packet/controls-admission.json');
+          assert.deepEqual(input.fixed,{run:custody.fixed.run,artifact:custody.fixed.artifact,head:custody.fixed.head,tree:custody.fixed.tree,
+            newRawBytes:raw.raw.bytes,newRawSHA256:raw.raw.sha256});
+          assert.deepEqual(input.controls,{run:String(custody.controls.run),artifact:String(custody.controls.artifact),head:custody.controls.head,tree:custody.controls.tree,
+            admissionBytes:String(controlBytes.length),admissionSHA256:sha(controlBytes)});
+          assert.deepEqual(input.priorRaw,{bytes:raw.prior.bytes,sha256:raw.prior.sha256});
+          assert.deepEqual(input.wholeAOnly,raw.wholeAOnly);
+          assert.deepEqual([input.freshUnitRAWByteEqual,input.freshPriorRAWByteEqual,input.wholeAOnlyLiteralEqual],
+            [raw.freshUnitRAWByteEqual,raw.freshPriorRAWByteEqual,raw.freshAOnlyByteEqual]);
+          assert.deepEqual(input.current,{head:source.head,tree:source.tree,workflow:source.workflowBlob,helper,hook});
+          assert.deepEqual(input.sourceJoin,{fixedTracked:source.fixedTrackedRows,currentTracked:source.trackedRows,
+            fixedScoped:source.cleanSourceRows,currentScoped:source.sourceRows,rootConfigs:source.rootConfigurations.length,
+            heldFixedRows:source.heldFixedRows,changed:[workflow],added:[helperFile]});
+          const page=source.pins['src/pages/SoccerGrid.tsx'];
+          assert.deepEqual([report.status,report.route,report.hook,report.helper,report.page,report.head,report.tree],
+            ['passed',native.route,hook,helper,page,source.head,source.tree]);
+          assert.deepEqual([browserRaw.route,browserRaw.hook,browserRaw.helper,browserRaw.page],[native.route,hook,helper,page]);
+          assert.deepEqual([report.raw,report.qualifiedInput,browserRaw.qualifiedInput],[evidence.raw,evidence.qualifiedInput,evidence.qualifiedInput]);
+          assert.deepEqual(boundaries,report.limits);
+          assert.deepEqual(boundaries,browserRaw.limits);
+          assert.deepEqual(report.sourceBefore,read('tracked-before.json'));
+          assert.deepEqual(report.distBefore,read('dist-before.json'));
+          assert.deepEqual(report.installedBefore,read('installed-before.json'));
+          const bodyRefs=[evidence.report,evidence.raw,evidence.qualifiedInput];
+          const kinds=['puzzles','players','seasons','valid','unverified','invalid'];
+          assert.deepEqual(Object.keys(evidence.responseBodies).sort(),[...kinds].sort());
+          assert.deepEqual(report.responseBodies,evidence.responseBodies);
+          assert.deepEqual(browserRaw.responseBodies,evidence.responseBodies);
+          for(const kind of kinds){
+            const tuple=evidence.responseBodies[kind];
+            nativeBody(tuple,'wire/'+kind+'.json');
+            bodyRefs.push(tuple);
+          }
+          assert.deepEqual([manifest.version,manifest.filesCount,manifest.bodyBytes],[1,evidence.filesCount,evidence.bodyBytes]);
+          const manifestFiles=new Map(manifest.files.map(tuple=>[tuple.file,tuple]));
+          assert.equal(manifestFiles.size,manifest.filesCount);
+          assert.equal(manifest.files.length,manifest.filesCount);
+          assert.equal(manifest.files.reduce((total,tuple)=>total+tuple.bytes,0),manifest.bodyBytes);
+          for(const tuple of bodyRefs)assert.deepEqual(manifestFiles.get(tuple.file),tuple);
+          const actualCensus=report.census;
+          assert.deepEqual([census.journeys,census.contexts,census.viewportPNGs,census.validatorAttempts,census.rarityReads,census.selectionWritesIntercepted,census.completionAttempts],
+            [3,3,6,3,2,1,0]);
+          const contexts=report.journeys.flatMap(journey=>journey.contexts);
+          const widths=[[320,568,'unverified'],[390,844,'valid'],[1280,900,'invalid']];
+          assert.deepEqual(report.journeys.map(journey=>[journey.width,journey.height,journey.verdict]),widths);
+          assert(report.journeys.every(journey=>journey.status==='passed'&&journey.contexts.length===1));
+          assert.deepEqual([contexts.length,browserRaw.contexts.length,measured.contexts.length,measured.viewportPNGs],[3,3,3,6]);
+          const measuredKeys=['frames','actions','layouts','preparations','wheels','navigations','viewportPNGs','firstPartyReads','validatorAttempts','rarityReads','selectionWritesIntercepted','completionAttempts'];
+          const joined=contexts.map((context,index)=>{
+            const contextRaw=browserRaw.contexts[index], counted=context.census;
+            const settlementIndex=context.frames.findIndex(ref=>ref.file===context.checkpoints['a-settled'].file);
+            assert(settlementIndex>=0);
+            const save=Object.entries(contextRaw.frames[settlementIndex].storage).filter(([key])=>key.startsWith('soccer-grid-daily-'));
+            assert.equal(save.length,context.verdict==='unverified'?0:1);
+            const daily=save.length?{key:save[0][0],bytes:Buffer.byteLength(save[0][1]),sha256:sha(Buffer.from(save[0][1]))}:null;
+            return {width:context.width,height:context.height,verdict:context.verdict,
+              ...Object.fromEntries(measuredKeys.map(key=>[key,counted[key]])),
+              startupClicks:counted.startupMouseClicks,mouseActions:counted.startupMouseClicks+counted.businessMouseClicks,
+              keyboardActions:counted.typings,corsRequests:counted.corsPreflights,helperCensus:counted,daily};
+          });
+          assert.deepEqual(measured,{contexts:joined,viewportPNGs:census.viewportPNGs});
+          const sum=(rows,key)=>rows.reduce((total,row)=>{assert(Number.isSafeInteger(row[key])&&row[key]>=0,key);return total+row[key];},0);
+          assert.deepEqual(census,{journeys:report.journeys.length,contexts:contexts.length,
+            ...Object.fromEntries([...measuredKeys,'startupClicks','mouseActions','keyboardActions','corsRequests'].map(key=>[key,sum(joined,key)]))});
+          assert.deepEqual(actualCensus,{journeys:report.journeys.length,contexts:contexts.length,
+            ...Object.fromEntries(Object.keys(contexts[0].census).map(key=>[key,sum(contexts.map(context=>context.census),key)]))});
+          return {status:native.status,journeys:census.journeys,contexts:census.contexts,viewportPNGs:census.viewportPNGs};
+          })();
+          assert.deepEqual(Object.keys(nativeChecks).sort(),['status','journeys','contexts','viewportPNGs'].sort());
+          assert.deepEqual([nativeChecks.status,nativeChecks.journeys,nativeChecks.contexts,nativeChecks.viewportPNGs],['passed',3,3,6]);
+          const readers=fs.readFileSync(out+'/readers.log','utf8'),wanted='simAdsense,simBrand,simHeadTags,simHiddenPages,simHubs,simIndexNow,simIndexing,simInternalLinks,simNoRivalNames,simPrerender,simPrerenderBoot,simRetiredRoutes,simSchema,simSitemap,simSnapshotAssets,simSiteSearch,simGuideHeadings,simSeoMetaSplit,simHomeCopy,simHarnessAnchors'.split(',').map(name=>name+'.mjs').sort(),actual=[...readers.matchAll(/^\s+PASS\s+(sim[A-Za-z0-9]+\.mjs)/gm)].map(match=>match[1]).sort();assert.deepEqual(actual,wanted);assert(!/^\s+FAIL\s+/m.test(readers));
+          const weight=fs.readFileSync(out+'/weight.log','utf8'),caps=[...weight.matchAll(/^\s+(\/\S*)\s+\d+K gz over\s+\d+ files \(budget (\d+)K, [\d.]+K to the tenth\)/gm)].map(match=>[match[1],Number(match[2])]);assert.deepEqual(caps,[['/',245],['/club-manager',648],['/soccer-career',840],['/stadium-tycoon',305],['/wonderkid-factory',278],['/minefield',295],['/footle',354],['/nfl-my-career',499],['/front-office',390],['/soccer-grid',320],['/leaderboard',266],['/manager-hot-seat',672],['/deadline-day',680],['/transfer-path',381],['/nba-front-office',397],['/nhl-front-office',379]]);assert(weight.includes('sweepWeight: green.'));
+          const tar=fs.readFileSync(out+'/dist.tgz'),distFiles=read('dist-before.json').length;
+          assert.equal(distFiles,850);
+          fs.writeFileSync(out+'/admission.json',JSON.stringify({
+            status:'passed',qualification:'fresh-soccer-grid-selection-ownership-full-scope',head:source.head,tree:source.tree,
+            hook:env.SOCCER_GRID_SELECTION_HOOK_BLOB,helper:env.SOCCER_GRID_SELECTION_NATIVE_HELPER_BLOB,nativeOuter:env.SOCCER_GRID_SELECTION_NATIVE_OUTER_BLOB,
+            originalRun:custody.original.run,originalHead:custody.original.head,originalTree:custody.original.tree,originalArtifact:custody.original.artifact,
+            fixedRun:custody.fixed.run,fixedHead:custody.fixed.head,fixedTree:custody.fixed.tree,fixedArtifact:custody.fixed.artifact,
+            controlsRun:custody.controls.run,controlsHead:custody.controls.head,controlsTree:custody.controls.tree,controlsArtifact:custody.controls.artifact,controlsRerun:false,
+            unit:{actualCases:unit.actualCases,actualPasses:unit.actualPasses,actualFailures:unit.actualFailures,newFrames:unit.newFrames,priorFrames:unit.priorFrames,
+              totalFrames:unit.newFrames+unit.priorFrames,actions:unit.newProof.actions,requests:unit.newProof.requestsSettled,transportLegs:unit.newProof.transportLegs,
+              wholeAOnlyLiteralHeld:unit.wholeAOnlyLiteralHeld,wholePriorRawLiteralHeld:unit.wholePriorRawLiteralHeld,wholeFixedRawLiteralHeld:raw.freshUnitRAWByteEqual},
+            unitCommands:1,wholePreservedCases:unit.newProof.wholePreservationCases,wholePreservedFrames:raw.wholeAOnly.frames,
+            trackedBodies:source.trackedRows,sourceRows:source.sourceRows,cleanSourceRows:source.cleanSourceRows,rootConfigurations:source.rootConfigurations.length,
+            distFiles,distTar:{file:'dist.tgz',bytes:tar.length,sha256:sha(tar)},readers:actual.length,readerRows:actual,immutableCaps:caps.length,capRows:caps,
+            nativeJourneys:nativeChecks.journeys,nativeContexts:nativeChecks.contexts,nativePngs:nativeChecks.viewportPNGs,nativeReceipt:native,
+            controlsReceipt:custody.controlsChecks,preflight:custody.preflight,
+            limits:'Fresh fixed unit, ordinary build and actual native Grid evidence on the exact product tree plus QA workflow and helper. Completed original and physical controls are retained evidence. Each native width has one controlled fictional A verdict and one newer empty B selection.'
+          },null,2)+'\n',{flag:'wx'});
+          NODE
+      - name: Whole tracked physical source dist references locks521 versions and offline held
         if: always()
         run: |
           set -euo pipefail
-          git ls-files -s > soccer-grid-selection-ownership-fixed/source-after.txt
-          cmp soccer-grid-selection-ownership-fixed/source-before.txt soccer-grid-selection-ownership-fixed/source-after.txt
+          out=soccer-grid-selection-ownership-full
+          git ls-files -s > "$out/source-after.txt"
+          cmp "$out/source-before.txt" "$out/source-after.txt"
           git diff --exit-code HEAD -- .
-          sha256sum package.json package-lock.json > soccer-grid-selection-ownership-fixed/locks-after.txt
-          cmp soccer-grid-selection-ownership-fixed/locks-before.txt soccer-grid-selection-ownership-fixed/locks-after.txt
-          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node --input-type=module <<'NODE'
-          import fs from 'node:fs';import assert from 'node:assert/strict';import {execFileSync} from 'node:child_process';import {createHash} from 'node:crypto';
-          const out='soccer-grid-selection-ownership-fixed',files=execFileSync('git',['ls-files','-z'],{encoding:'utf8'}).split('\0').filter(Boolean),rows=files.map(file=>{const bytes=fs.readFileSync(file);return{file,bytes:bytes.length,sha256:createHash('sha256').update(bytes).digest('hex')};});assert.deepEqual(rows,JSON.parse(fs.readFileSync(out+'/tracked-before.json')));fs.writeFileSync(out+'/tracked-after.json',JSON.stringify(rows));
-          const lock=JSON.parse(fs.readFileSync('package-lock.json')),before=JSON.parse(fs.readFileSync(out+'/installed-before.json')),after=Object.keys(lock.packages).filter(p=>p.startsWith('node_modules/')&&fs.existsSync(p+'/package.json')).map(p=>[p,JSON.parse(fs.readFileSync(p+'/package.json')).version]);assert.equal(after.length,Number(process.env.SOCCER_GRID_FIXED_LOCKED_VERSIONS));for(const[p,v]of after)assert.equal(v,lock.packages[p].version,p);assert.deepEqual(after,before);fs.writeFileSync(out+'/installed-after.json',JSON.stringify(after));assert.equal(fs.statSync(out+'/offline.log').size,0);let retainedOriginalHeld=false;
-          if(fs.existsSync(out+'/original-custody.json')){
-            const receipt=JSON.parse(fs.readFileSync(out+'/original-custody.json'));
-            const refs=JSON.parse(fs.readFileSync(out+'/original-reference-before.json'));
-            const sha=bytes=>createHash('sha256').update(bytes).digest('hex');
-            assert.deepEqual(refs.map(row=>row.file).sort(),['original-artifact.json','original-custody.json','original-jobs.json','original-run.json','original.zip'].sort());
-            const check=(root,row)=>{
-              const file=root+'/'+row.file;
-              const stat=fs.lstatSync(file);
-              assert(stat.isFile()&&!stat.isSymbolicLink());
-              const bytes=fs.readFileSync(file);
-              assert.deepEqual([bytes.length,sha(bytes)],[row.bytes,row.sha256],row.file);
-            };
-            for(const row of refs)check(out,row);
-            const ref=out+'/original-packet';
-            const walk=(dir,prefix='')=>fs.readdirSync(dir,{withFileTypes:true}).flatMap(entry=>{
-              assert(!entry.isSymbolicLink());
-              const file=prefix+entry.name;
-              if(entry.isDirectory())return walk(dir+'/'+entry.name,file+'/');
-              assert(entry.isFile());
-              return [file];
-            });
-            assert.deepEqual(walk(ref).sort(),receipt.allBodyPins.map(row=>row.file).sort());
-            for(const row of receipt.allBodyPins)check(ref,row);
-            fs.writeFileSync(out+'/original-reference-after.json',JSON.stringify(refs));
-            retainedOriginalHeld=true;
+          sha256sum package.json package-lock.json > "$out/locks-after.txt"
+          cmp "$out/locks-before.txt" "$out/locks-after.txt"
+          if [[ -f "$out/dist.sha256" ]]; then sha256sum --check "$out/dist.sha256"; fi
+          if [[ -f "$out/native-admission-script.mjs" ]]; then
+            test "$(git hash-object "$out/native-admission-script.mjs")" = "$SOCCER_GRID_SELECTION_NATIVE_OUTER_BLOB"
+            test -z "$(git ls-files -- "$out/native-admission-script.mjs")"
+          fi
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import assert from 'node:assert/strict';
+          import {execFileSync} from 'node:child_process';
+          import {createHash} from 'node:crypto';
+          const out='soccer-grid-selection-ownership-full',read=file=>JSON.parse(fs.readFileSync(out+'/'+file)),sha=bytes=>createHash('sha256').update(bytes).digest('hex');
+          const write=(file,value)=>fs.writeFileSync(out+'/'+file,JSON.stringify(value));
+          const files=execFileSync('git',['ls-files','-z'],{encoding:'utf8'}).split('\0').filter(Boolean);
+          const detail=file=>{const bytes=fs.readFileSync(file);return{file,bytes:bytes.length,sha256:sha(bytes)};};
+          const rows=files.map(detail);
+          assert.equal(rows.length,5787);assert.deepEqual(rows,read('tracked-before.json'));write('tracked-after.json',rows);
+          const lock=JSON.parse(fs.readFileSync('package-lock.json')),before=read('installed-before.json');
+          const after=Object.keys(lock.packages).filter(file=>file.startsWith('node_modules/')&&fs.existsSync(file+'/package.json')).map(file=>[file,JSON.parse(fs.readFileSync(file+'/package.json')).version]);
+          assert.equal(after.length,521);for(const [file,version] of after)assert.equal(version,lock.packages[file].version,file);
+          assert.deepEqual(after,before);write('installed-after.json',after);
+          const offlineBytes=fs.statSync(out+'/offline.log').size;assert.equal(offlineBytes,0);
+          const walk=(base,dir)=>fs.readdirSync(path.join(base,dir),{withFileTypes:true}).sort((a,b)=>a.name.localeCompare(b.name)).flatMap(entry=>{
+            const file=path.join(dir,entry.name);assert(!entry.isSymbolicLink(),file);
+            if(entry.isDirectory())return walk(base,file);assert(entry.isFile(),file);return[file];
+          });
+          let distHeld=false,retainedPacketsHeld=false;
+          if(fs.existsSync(out+'/dist-before.json')){
+            const dist=walk('.','dist').map(detail);assert.equal(dist.length,850);assert.deepEqual(dist,read('dist-before.json'));write('dist-after.json',dist);distHeld=true;
           }
-          if(fs.existsSync(out+'/fixed-admission.json')){
-            assert(retainedOriginalHeld,'Qualified fixed requires all original bodies and refs held');
-            const proof=JSON.parse(fs.readFileSync(out+'/fixed-admission.json'));
-            const sha=bytes=>createHash('sha256').update(bytes).digest('hex');
-            const [preserve]=proof.newProof.wholePreservationCases;
-            for(const row of [proof.raw,proof.priorRaw,{...preserve,file:'preserve-aOnly.literal.json'}]){
-              const bytes=fs.readFileSync(out+'/'+row.file);
-              assert.deepEqual([bytes.length,sha(bytes)],[row.bytes,row.sha256],row.file+' retained fixed evidence');
+          if(fs.existsSync(out+'/packet-custody.json')){
+            for(const prefix of ['fixed','controls']){
+              const dir=prefix+'-reference',expected=read(prefix+'-bodies-before.json');
+              assert.deepEqual(walk(out,dir).sort(),expected.map(row=>dir+'/'+row.file).sort());
+              const bodies=expected.map(row=>({...detail(path.join(out,dir,row.file)),file:row.file}));
+              assert.deepEqual(bodies,expected);
+              write(prefix+'-bodies-after.json',bodies);
             }
+            retainedPacketsHeld=true;
           }
-          fs.writeFileSync(out+'/final-holds.json',JSON.stringify({status:'passed',trackedBodies:rows.length,scopedSourceRows:Number(process.env.SOCCER_GRID_FIXED_SCOPED_SOURCE_ROWS),rootConfigurations:11,installedLockedVersions:after.length,indexUnchanged:true,sourceBytesUnchanged:true,locksUnchanged:true,retainedOriginalHeld,offlineBytes:0,limits:'Physical source/index/locks/version/offline holds only. Unit qualification remains separate and the completed workflow conclusion is required.'},null,2));console.log('PASS exact tracked physical source/index/locks/installed versions and zero-byte offline receipt held');
+          if(fs.existsSync(out+'/admission.json'))assert(distHeld&&retainedPacketsHeld,'Full admission requires dist and every retained reference hold');
+          write('final-holds.json',{status:'passed',trackedBodies:rows.length,scopedSourceRows:4662,cleanSourceRows:4661,rootConfigurations:11,installedLockedVersions:after.length,indexUnchanged:true,sourceBytesUnchanged:true,locksUnchanged:true,distHeld,retainedPacketsHeld,offlineBytes,limits:'Final physical and custody holds. Complete qualification requires the separate admission and successful workflow conclusion.'});
           NODE
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: soccer-grid-selection-ownership-fixed-${{ github.run_id }}
-          path: soccer-grid-selection-ownership-fixed
+          name: soccer-grid-selection-ownership-full-${{ github.run_id }}
+          path: soccer-grid-selection-ownership-full
           retention-days: 14
           if-no-files-found: error
