@@ -316,3 +316,44 @@ After actual original admission and independent archive review, consider only a 
 A later fixed run must pass every actual new/prior case and preserve both complete new baseline objects literally, including strings, IDs and all tapes. Physical original/restored controls follow actual fixed admission. Normal build, all required readers, unchanged route caps, bounded native journeys, clean-source/build join and final docs follow their own source reviews and actual packet admissions.
 
 No whitespace/ID/tape normalization can substitute for the whole-object preservation proof. No provider truth, backend write, native gesture/accessibility, async race, cross-tab, new-day, full test/sim-suite, integration or release claim is made here.
+
+## Fixed-stage contract and qualified-original bindings
+
+The preceding c706 original-first plan is retained verbatim as its historical source record. The original run below completed its declared business-red qualification and received independent actual admission. The fixed stage remains pending; the binding table records its authenticated original reference and independently reviewed Page-local source.
+
+The fixed execution is separately pending. Its only App source change is the independently reviewed `key={playMode}` on the existing GiveUpButton at Page line 360. The key makes the existing child confirmation state belong to the active Daily or Unlimited view. Same-mode renders retain that child, while a mode change remounts its local confirmation state. No shared GiveUpButton, Daily logic, selector, completion hook, roster, lockfile or test source changes are part of this fix.
+
+| Required input | Strict binding |
+| --- | --- |
+| Qualified original run | 42326812138 |
+| Original source head | eecf9e47eb5cf867c9a7c8fc2c1cd5e5b0487ca3 |
+| Original source tree | b1236874603e9af23efd67248395f2b6bd9a3122 |
+| Original artifact | 13555371817 |
+| Original ZIP bytes | 3141136 |
+| Original ZIP SHA256 | f1afd8c60d1e292cd8717f299703024db814c4afedbe2be80768f6b2838312c7 |
+| Original complete RAW bytes | 2106788 |
+| Original complete RAW SHA256 | 3fa20b460e959934027510183edce2fbc858b9a999f7c75d5c474e299bb168e3 |
+| Independent actual original audit | 50e8e20b8c692e2c047599766ff835495015950f0f6c1b3422af649b06a6ff96 |
+| Reviewed fixed Page blob | 4692624a6ce6435b881ce4671df6169696a75858 |
+| Independent fixed-source review | ada40929b95eae097eaa0ae48a7dd0f1dc855a7b8198838bcadb8eec4e69ae4b |
+
+The entire original archive inventory is pinned in the fixed workflow and retained with all actual bodies. Its source must show original Page 8734, held test a637, original plan c706 and original workflow 756d, with actual 8 rows/6passes/2precise business reds and62 complete frames/44 journal entries. Original business failures remain original failures; they supply no fixed outcome.
+
+The two original whole preservation case pins are authenticated and remain literal comparison inputs:
+
+[{"key":"currentRound","frames":21,"bytes":755723,"sha256":"bdd5f880a735033f836a687e1923a69dc51eb15fa8560ee1a522cbbdab1ddd23","rawOffset":450,"entireCaseLiteral":true},{"key":"normalConfirmation","frames":18,"bytes":644606,"sha256":"de44a88f3f96a874d6576a50eb51ab2999e67946c471aa518b08b91f92f2135e","rawOffset":756174,"entireCaseLiteral":true}]
+
+Use the same unchanged a637 test, complete 62-frame/44-journal capture schema and one JSON-only two-file invocation. Keep testTimeout=60000, no-file-parallelism, default hookTimeout=10000, proper App types and all 521 locked versions. Prior a178 still supplies only its four fresh report rows.
+
+Both formerly harmful cross-mode paths must now retain a playing destination round. The old confirmation opportunity is recorded as publicly absent, never silently skipped without a journal entry. The newly entered Unlimited keeps the legitimate Daily miss and saved bytes with 0 completion. Returning to Daily keeps the exact one-miss log, playing status, saved bytes and 0 completion. Ordinary current-round Give up/Yes, Keep playing, same-mode confirmation, duplicate behavior, 70/100/0 scoring, genuine new lineups and finished Daily restore remain held.
+
+A green fixed report requires 8 actual passes and 0 failures, with all 62 captures and44 journal entries complete. Every after-teardown frame must show pendingResponses=0 and fakeTimers=0 before later test cleanup. Do not convert a partial/setup/runtime failure into a planned business result.
+
+Both entire original currentRound and normalConfirmation case objects (39 frames) must literally equal the fresh fixed objects, including every timestamp, result.props.at, HTML ID, storage/session string, selector/render/action/transport/RNG/completion tape and all metadata. Authenticate the complete original RAW first, locate each whole case body in its actual bytes and compare complete byte slices. No projected fields, removed IDs or whitespace/clock/tape normalization may replace that join. Entire harmful-case RAW equality is not expected because the actual destination outcome changes.
+
+The fixed QA branch is codex/soccer-missing-xi-confirmation-fixed-qa-20261106. Relative to PR525, only the reviewed Page plus owned held test, updated plan and standalone QA workflow may differ. All 5778 other base paths/modes/blobs and all 11 configs remain held. Relative to qualified original, exclude only Page/plan/workflow and hold all 5779 other rows, including a637 and its legacy helpers. The tracked/scoped census remains 5782/4659. Physical source, index, locks, all 521 versions and 0 offline badcalls must hold before/final.
+
+Controls, normal build/readers/unchanged caps, native journeys, clean-source/build join and final state/board docs remain later gates. No native, real-provider/backend-write, full-suite, integration, merge, publish or release credit follows from this template.
+
+
+The actual original reference is run 42326812138 at eecf9e47eb5cf867c9a7c8fc2c1cd5e5b0487ca3/tree b1236874603e9af23efd67248395f2b6bd9a3122. Its root audit closes all 45 actual ZIP bodies, all 62 complete frames and storage operation replays, the 5,782-row source index, all 521 versions, proper types, index/locks/physical holds and offline badcalls=0. It admits exactly 8 rows, 6 passes and the 2 named original business AssertionErrors, with 44 action journal entries and 14 actual query legs. The original independent literal preservation audit is df0278a33d3e130191e147db0ffb5281dd49791bd0f133703ead250d5ae51bca. These original business failures are retained as evidence and are not successful fixed tests.
