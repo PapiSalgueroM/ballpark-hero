@@ -1,0 +1,345 @@
+name: Who Am I lookup ownership original
+on:
+  push:
+    branches: [codex/who-am-i-guess-ownership-original-qa-20261107]
+permissions:
+  contents: read
+  actions: read
+jobs:
+  qualify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        shell: bash
+    env:
+      SIM_NETWORK: offline
+      SIM_OFFLINE_RECEIPT: who-am-i-guess-ownership-evidence/offline.log
+      WHO_AM_I_STAGE: original
+      WHO_AM_I_PARENT: '5584945095a494802c6a9d865db560e78cd5069e'
+      WHO_AM_I_BASE: '5584945095a494802c6a9d865db560e78cd5069e'
+      WHO_AM_I_BASE_TREE: 'b60eb586ad32b5565a3857bf6032d5b3b1f25a89'
+      WHO_AM_I_ORIGINAL_PAGE: '931e60e5075768b677c2013f99131c1867f27b68'
+      WHO_AM_I_PAGE: '931e60e5075768b677c2013f99131c1867f27b68'
+      WHO_AM_I_TEST: 'e7137c9b2858f38b83978972999d1a9ff632d131'
+      WHO_AM_I_PLAN: '273ab6bfc2e924ea1b41f20c56ef2e2c5404cc2d'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 3
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24.22.1
+          cache: npm
+      - name: Capture exact source and install locked dependencies
+        run: |
+          set -euo pipefail
+          out=who-am-i-guess-ownership-evidence
+          mkdir "$out"
+          touch "$out/offline.log"
+          git rev-parse HEAD > "$out/head.txt"
+          git rev-parse 'HEAD^{tree}' > "$out/tree.txt"
+          git ls-files -s > "$out/source-before.txt"
+          sha256sum package.json package-lock.json > "$out/locks-before.txt"
+          git fetch --no-tags --depth=1 origin "$WHO_AM_I_BASE"
+          npm ci 2>&1 | tee "$out/install.log"
+      - name: Qualify exact source and authenticate the prior evidence
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          out=who-am-i-guess-ownership-evidence
+          cat > "$out/qualification.mjs" <<'NODE'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import { createHash } from 'node:crypto';
+          import { execFileSync, spawnSync } from 'node:child_process';
+          
+          const out = 'who-am-i-guess-ownership-evidence';
+          const workflow = '.github/workflows/who-am-i-guess-ownership-20261107.yml';
+          const page = 'src/pages/WhoAmI.tsx';
+          const test = 'src/test/whoAmIGuessOwnership.test.tsx';
+          const table = 'src/test/playerSearchIdentity.test.ts';
+          const plan = 'docs/plans/2026-11-07-who-am-i-guess-ownership.md';
+          const stage = process.env.WHO_AM_I_STAGE;
+          const { WHO_AM_I_PARENT: parent, WHO_AM_I_BASE: base, WHO_AM_I_BASE_TREE: baseTree,
+            WHO_AM_I_PAGE: pageBlob, WHO_AM_I_ORIGINAL_PAGE: originalPage, WHO_AM_I_TEST: testBlob, WHO_AM_I_PLAN: planBlob } = process.env;
+          const pinned = {
+            [page]: pageBlob,
+            [test]: testBlob,
+            [plan]: planBlob,
+            [table]: '1286ab4853aacac662c6759fdcf990c8e350090c',
+            'src/App.tsx': '8bfedf7aaa1d076e0f0c8e2216c7e46632cd8a33',
+            'src/data/gameRegistry.ts': 'f560b40a74d1468ac72dfde4ee6fec6635a9a255',
+            'public/who-am-i/index.html': 'cd4d7ab7de79d9742bfbebea4de649ada9349fea',
+            'src/lib/whoAmI.ts': '8b6da5c480857fa8b7164d50c322eaccd0f6a8af',
+          };
+          const refs = {"preflight":{"run":42360463415,"artifact":13569019820,"name":"who-am-i-guess-ownership-active-preflight-42360463415","head":"bdad351fa28aa980bfbec4ace01f908d3dde19b7","tree":"7c10f937d72d40956446abb3a57b3ae78d4f1d9e","zipBytes":1012454,"zipSHA256":"268a1725b5d68d2ac709c7f4d0bcad28a50690d24ee7ec3139db949d27454972","files":{"active-route-preflight.json":"4380a1c37b0e4a1cf46049b0784173dfc90c1b2372edaa80a3dce2539ae59708","active-snapshot.html":"b49bf1be24461b284516f5aff01422d3cb38e2440454694142e74c3c45982e20","source-join.json":"db7338e0a76498455ebaa494af7d93606baa36bca53eb306d44172499fba20fb","final-holds.json":"6f20dc7937f02cadd4411339221977a545b089bca5bbd3db97efe4a2efc86f5e"}}};
+          const hash = (algorithm, body) => createHash(algorithm).update(body).digest('hex');
+          const gitBlob = body => createHash('sha1').update('blob ' + body.length + '\0').update(body).digest('hex');
+          const options = { maxBuffer: 64 * 1024 * 1024 };
+          const cmd = (program, args) => execFileSync(program, args, options);
+          const git = (...args) => cmd('git', args).toString('utf8');
+          const sha256 = body => hash('sha256', body);
+          const read = file => fs.readFileSync(path.join(out,file));
+          const readJSON = file => JSON.parse(read(file));
+          const write = (file, body) => fs.writeFileSync(path.join(out,file),body);
+          const json = (file, value) => write(file, JSON.stringify(value,null,2) + '\n');
+          const sorted = items => [...items].sort();
+          const trees = ref => new Map(git('ls-tree','-r','-z',ref).split('\0').filter(Boolean).map(row => {
+            const match = /^(100(?:644|755)) blob ([a-f0-9]{40})\t(.+)$/.exec(row);
+            assert(match,row);
+            return [match[3], [match[1],match[2]]];
+          }));
+          const changed = (left,right) => sorted(new Set([...left.keys(),...right.keys()]))
+            .filter(name => JSON.stringify(left.get(name)) !== JSON.stringify(right.get(name)));
+          const physical = tree => [...tree].map(([file,[mode,blob]]) => {
+            const body = fs.readFileSync(file);
+            const stat = fs.lstatSync(file);
+            assert(stat.isFile(), file);
+            assert.equal((stat.mode & 0o111) !== 0, mode === '100755', file);
+            assert.equal(gitBlob(body),blob,file);
+            return {file,mode,blob,bytes:body.length,sha256:sha256(body)};
+          });
+          const locked = () => {
+            const lock = JSON.parse(fs.readFileSync('package-lock.json'));
+            const rows = Object.entries(lock.packages).filter(([file]) => file.startsWith('node_modules/') && fs.existsSync(file+'/package.json'))
+              .map(([file,pin]) => {
+                const version = JSON.parse(fs.readFileSync(file+'/package.json')).version;
+                assert.equal(version,pin.version,file);
+                return [file,version];
+              });
+            assert.equal(rows.length,521);
+            return rows;
+          };
+          const zipPath = role => path.join(out,'reference-'+role+'.zip');
+          function refFile(role,file) {
+            return cmd('unzip',['-p',zipPath(role),file]);
+          }
+          function reference(role,pin) {
+            const root = 'repos/PapiSalgueroM/ballpark-hero/actions/';
+            const run = JSON.parse(cmd('gh',['api',root+'runs/'+pin.run]));
+            const meta = JSON.parse(cmd('gh',['api',root+'artifacts/'+pin.artifact]));
+            assert.deepEqual([run.id,run.status,run.conclusion,run.event,run.path,run.head_sha,run.head_commit.tree_id,run.repository.full_name],
+              [pin.run,'completed','success','push',workflow,pin.head,pin.tree,'PapiSalgueroM/ballpark-hero']);
+            assert.deepEqual([meta.id,meta.name,meta.expired,meta.size_in_bytes,meta.digest,meta.workflow_run.id,meta.workflow_run.head_sha],
+              [pin.artifact,pin.name,false,pin.zipBytes,'sha256:'+pin.zipSHA256,pin.run,pin.head]);
+            const zip = cmd('gh',['api',root+'artifacts/'+pin.artifact+'/zip']);
+            assert.deepEqual([zip.length,sha256(zip)],[pin.zipBytes,pin.zipSHA256]);
+            fs.writeFileSync(zipPath(role),zip);
+            const names = cmd('unzip',['-Z1',zipPath(role)]).toString().trimEnd().split('\n');
+            assert.equal(new Set(names).size,names.length);
+            for (const name of names) {
+              assert(!name.startsWith('/') && !name.includes('\\') && name.replace(/\/$/,'').split('/').every(part => part && part!=='.' && part!=='..'),name);
+            }
+            assert.equal(refFile(role,'head.txt').toString().trim(),pin.head);
+            assert.equal(refFile(role,'tree.txt').toString().trim(),pin.tree);
+            for (const [file,expected] of Object.entries(pin.files)) assert.equal(sha256(refFile(role,file)),expected,file);
+            json('reference-'+role+'-metadata.json',{run:run.id,artifact:meta.id,head:run.head_sha,tree:run.head_commit.tree_id,bytes:zip.length,sha256:sha256(zip),bodies:names.filter(x=>!x.endsWith('/')).length,files:pin.files});
+          }
+          function prepare() {
+            assert(['original','fixed','controls'].includes(stage));
+            const head = git('rev-parse','HEAD').trim();
+            const tree = git('rev-parse','HEAD^{tree}').trim();
+            assert.equal(head,process.env.GITHUB_SHA);
+            assert.deepEqual(git('rev-list','--parents','-n','1','HEAD').trim().split(' '),[head,parent]);
+            assert.equal(git('rev-parse',base+'^{tree}').trim(),baseTree);
+            const old = trees(base), before = trees(parent), current = trees(head);
+            const exact = stage==='original' ? [workflow,plan,test] : [workflow,page,plan,test];
+            assert.equal(old.size,5787);
+            assert.equal(current.size,5790);
+            assert.equal([...current.keys()].filter(f=>/^(src|public|scripts)\//.test(f)).length,4663);
+            assert.deepEqual(changed(old,current),sorted(exact));
+            assert.deepEqual(changed(before,current),sorted(stage==='original'?exact:stage==='fixed'?[workflow,page]:[workflow]));
+            assert.equal(old.get(page)[1],originalPage);
+            for (const [name,blob] of Object.entries(pinned)) assert.deepEqual(current.get(name),['100644',blob],name);
+            assert.equal(git('status','--porcelain','--untracked-files=no'),'');
+            json('source-join.json',{status:'passed',head,tree,parent,base,baseTree,workflowBlob:current.get(workflow)[1],tracked:current.size,scoped:4663,heldBase:old.size-(stage==='original'?0:1),changes:sorted(exact),pinned});
+            json('tracked-before.json',physical(current));
+            json('installed-before.json',locked());
+            for (const [role,pin] of Object.entries(refs)) reference(role,pin);
+          }
+          const expectedCases = {"abandonedResult":{"title":"keeps the confirmed Give up result when its exact guess settles late","marker":"WHO_AM_I_ABANDONED_LOOKUP","frames":[{"label":"case-a-guess-pending","original":{"phase":"playing","checking":true,"history":[],"completionCount":0},"fixed":{"phase":"playing","checking":true,"history":[],"completionCount":0}},{"label":"case-a-given-up","original":{"phase":"lost","headline":"Out of guesses","revealedName":"Fixture Abandon 00","history":[],"completionCount":1},"fixed":{"phase":"lost","headline":"Out of guesses","revealedName":"Fixture Abandon 00","history":[],"completionCount":1}},{"label":"old-guess-delivered","original":{"phase":"won","headline":"Found him in 1 guess","revealedName":"Fixture Abandon 00","checking":false,"history":["Fixture Abandon 00"],"completionCount":1},"fixed":{"phase":"lost","headline":"Out of guesses","revealedName":"Fixture Abandon 00","history":[],"completionCount":1}}],"completions":{"original":1,"fixed":1}},"replayedRound":{"title":"does not let an old exact guess finish the new case","marker":"WHO_AM_I_REPLAYED_LOOKUP","frames":[{"label":"case-a-guess-pending","original":{"phase":"playing","checking":true,"history":[],"completionCount":0},"fixed":{"phase":"playing","checking":true,"history":[],"completionCount":0}},{"label":"case-a-given-up","original":{"phase":"lost","headline":"Out of guesses","revealedName":"Fixture Replay 00","history":[],"completionCount":1},"fixed":{"phase":"lost","headline":"Out of guesses","revealedName":"Fixture Replay 00","history":[],"completionCount":1}},{"label":"case-b-started","original":{"phase":"playing","guess":"Guess 1 of 25","remaining":"25 left","history":[],"completionCount":1},"fixed":{"phase":"playing","guess":"Guess 1 of 25","remaining":"25 left","history":[],"completionCount":1}},{"label":"old-guess-delivered","original":{"phase":"won","headline":"Found him in 1 guess","revealedName":"Fixture Replay 01","checking":false,"history":["Fixture Replay 00"],"completionCount":2},"fixed":{"phase":"playing","guess":"Guess 1 of 25","remaining":"25 left","checking":false,"history":[],"completionCount":1}}],"completions":{"original":2,"fixed":1}},"keepPlaying":{"title":"settles a current exact guess after Keep playing","marker":null,"frames":[{"label":"case-a-guess-pending","original":{"phase":"playing","checking":true,"history":[],"completionCount":0},"fixed":{"phase":"playing","checking":true,"history":[],"completionCount":0}},{"label":"kept-playing","original":{"phase":"playing","checking":true,"history":[],"completionCount":0},"fixed":{"phase":"playing","checking":true,"history":[],"completionCount":0}},{"label":"old-guess-delivered","original":{"phase":"won","headline":"Found him in 1 guess","revealedName":"Fixture Keep 00","checking":false,"history":["Fixture Keep 00"],"completionCount":1},"fixed":{"phase":"won","headline":"Found him in 1 guess","revealedName":"Fixture Keep 00","checking":false,"history":["Fixture Keep 00"],"completionCount":1}}],"completions":{"original":1,"fixed":1}}};
+          const names = Object.keys(expectedCases);
+          function proofBody(raw, role) {
+            const fixed = role !== 'original';
+            assert.equal(raw.schema,'who-am-i-lookup-ownership-v1');
+            assert.deepEqual(sorted(Object.keys(raw.cases)),sorted(names));
+            const result = {};
+            for (const name of names) {
+              const c = raw.cases[name], pin = expectedCases[name];
+              assert.deepEqual([c.key,c.title,c.marker,c.closed],[name,pin.title,pin.marker,true]);
+              assert(Array.isArray(c.frames) && c.frames.length >= pin.frames.length,name+' actual public frames');
+              assert.equal(new Set(c.frames.map(f=>f.label)).size,c.frames.length);
+              const frames = new Map(c.frames.map(f=>[f.label,f]));
+              const samples = pin.frames.map(({label,original,fixed:corrected})=>{
+                const frame = frames.get(label);
+                assert(frame,label);
+                const wanted = fixed ? corrected : original;
+                const actual = Object.fromEntries(Object.keys(wanted).map(k=>[k,frame[k]]));
+                assert.deepEqual(actual,wanted,name+' public frame '+label);
+                return {label,...actual};
+              });
+              if(pin.completions)assert.equal(c.completions.length,fixed?pin.completions.fixed:pin.completions.original);
+              assert(c.actions.length>0&&c.queries.length>0,name+' real actions and SDK legs');
+              result[name] = {frames:c.frames.length,samples,actions:c.actions.length,queries:c.queries.length,completions:c.completions.length,randomDraws:c.randomDraws.length};
+            }
+            return result;
+          }
+          function preserveCases(fixedBytes, originalBytes) {
+            const fixed = JSON.parse(fixedBytes), original = JSON.parse(originalBytes);
+            for (const [body,raw] of [[fixedBytes,fixed],[originalBytes,original]]) {
+              assert(body.equals(Buffer.from(JSON.stringify(raw,null,2)+'\n')),'Exact captured RAW serialization');
+            }
+            const held = names.filter(name=>!expectedCases[name].marker);
+            assert(held.length>0);
+            for (const name of held) {
+              const fixedCase = Buffer.from(JSON.stringify(fixed.cases[name],null,2));
+              const originalCase = Buffer.from(JSON.stringify(original.cases[name],null,2));
+              assert(fixedCase.equals(originalCase),name+' whole preserved case bytes');
+            }
+          }
+          
+          function runArm(role, expectedBlob) {
+            assert.equal(gitBlob(fs.readFileSync(page)),expectedBlob,role+' physical Page before test');
+            assert.equal(git('rev-parse',':'+page).trim(),pageBlob,role+' committed Page index stays fixed');
+            const dir = path.join(out,'case-'+role);
+            fs.mkdirSync(dir);
+            const target = name => path.resolve(dir,name);
+            const proc = spawnSync('node_modules/.bin/vitest',['run',test,table,'--reporter=json','--testTimeout=60000','--no-file-parallelism','--outputFile='+target('vitest.json')],{
+              env:{...process.env,WHO_AM_I_LOOKUP_OWNERSHIP_RAW:target('raw.json')},encoding:'utf8',maxBuffer:16*1024*1024,
+            });
+            fs.writeFileSync(target('vitest.log'),(proc.stdout||'')+(proc.stderr||''));
+            fs.writeFileSync(target('exit-code.txt'),String(proc.status)+'\n');
+            process.stdout.write(proc.stdout||'');
+            process.stderr.write(proc.stderr||'');
+            assert.ifError(proc.error);
+            assert.equal(proc.signal,null);
+            const report = JSON.parse(fs.readFileSync(target('vitest.json')));
+            const rawBytes = fs.readFileSync(target('raw.json'));
+            const raw = JSON.parse(rawBytes);
+            const reds = role === 'original' ? names.filter(name=>expectedCases[name].marker).length : 0;
+            const total = names.length + 29;
+            assert.deepEqual([proc.status,report.numTotalTests,report.numPassedTests,report.numFailedTests,report.numPendingTests,report.numTodoTests],
+              [reds?1:0,total,total-reds,reds,0,0]);
+            assert.equal(report.success,reds===0);
+            assert.equal(report.testResults.length,2);
+            for (const suite of report.testResults) assert.equal(suite.message,'','No suite or hook error');
+            for (const key of ['numRuntimeErrorTestSuites','numUnhandledErrors','numTodoTests']) if (Object.hasOwn(report,key)) assert.equal(report[key],0);
+            for (const key of ['unhandledErrors','testExecutionErrors']) if (Object.hasOwn(report,key)) assert.deepEqual(report[key],[]);
+            assert(!/Unhandled Errors|Unhandled Rejection|Uncaught Exception|Failed to resolve import|No test files found|SyntaxError|ReferenceError|TypeError|timed out/i.test((proc.stdout||'')+(proc.stderr||'')),'No runtime, loading or setup failure in the log');
+            const byFile = file => {
+              const rows = report.testResults.filter(s=>s.name.endsWith('/'+file));
+              assert.equal(rows.length,1,file);
+              return rows[0].assertionResults;
+            };
+            const fresh = byFile(test);
+            const prior = byFile(table);
+            assert.equal(prior.length,29);
+            assert.equal(fresh.length,names.length);
+            assert(prior.every(r=>r.status==='passed'&&!r.failureMessages.length));
+            for (const name of names) {
+              const pin = expectedCases[name], row = fresh.find(r=>r.title===pin.title);
+              assert(row,name);
+              const fails = role==='original' && pin.marker;
+              assert.equal(row.status,fails?'failed':'passed',name);
+              assert.equal(row.failureMessages.length,fails?1:0,name);
+              if (fails) assert(row.failureMessages[0].startsWith('AssertionError: '+pin.marker+':'),name+' exact named business assertion');
+            }
+            const proof = proofBody(raw,role);
+            assert.equal(gitBlob(fs.readFileSync(page)),expectedBlob,role+' physical Page after test');
+            const summary = {role,page:expectedBlob,rows:total,passes:total-reds,failures:reds,report:sorted([...fresh,...prior].map(r=>r.fullName)),proof,rawBytes:rawBytes.length,rawSHA256:sha256(rawBytes)};
+            return {summary,raw,rawBytes};
+          }
+          function tests() {
+            const arms = [];
+            let preservedCurrentLookups = false, exactRoleRaw = false;
+            if (stage === 'original') {
+              const actual = runArm('original',originalPage);
+              arms.push(actual.summary);
+            } else if (stage === 'fixed') {
+              const actual = runArm('fixed',pageBlob);
+              const originalRaw = refFile('original','case-original/raw.json');
+              preserveCases(actual.rawBytes,originalRaw);
+              preservedCurrentLookups = true;
+              arms.push(actual.summary);
+            } else if (stage === 'controls') {
+              const fixed = runArm('fixed',pageBlob);
+              assert(fixed.rawBytes.equals(refFile('fixed','case-fixed/raw.json')),'Fixed complete role RAW');
+              const original = cmd('git',['show',base+':'+page]);
+              const restore = fs.readFileSync(page);
+              assert.notEqual(pageBlob,originalPage);
+              assert.equal(gitBlob(original),originalPage);
+              let reverted;
+              try {
+                fs.writeFileSync(page,original);
+                assert.equal(git('diff','--name-only','HEAD','--','.').trim(),page);
+                reverted = runArm('original',originalPage);
+                assert(reverted.rawBytes.equals(refFile('original','case-original/raw.json')),'Original complete role RAW');
+              } finally {
+                fs.writeFileSync(page,restore);
+              }
+              assert.equal(git('diff','--name-only','HEAD','--','.').trim(),'');
+              const restored = runArm('restored',pageBlob);
+              assert(restored.rawBytes.equals(fixed.rawBytes),'Restored complete role RAW');
+              preserveCases(restored.rawBytes,reverted.rawBytes);
+              preservedCurrentLookups = true;
+              exactRoleRaw = true;
+              arms.push(fixed.summary,reverted.summary,restored.summary);
+            } else {
+              throw Error(stage);
+            }
+            const source = readJSON('source-join.json');
+            json('admission.json',{status:'passed',stage,source,arms,totals:{roles:arms.length,rows:arms.reduce((n,a)=>n+a.rows,0),passes:arms.reduce((n,a)=>n+a.passes,0),failures:arms.reduce((n,a)=>n+a.failures,0)},preservedCurrentLookups,exactRoleRaw,previousIdentityCasesPerRole:29});
+            console.log('PASS Who Am I '+stage+' evidence, actual roles: '+arms.map(a=>a.role+' '+a.passes+'/'+a.rows).join(', '));
+          }
+          function final() {
+            const current = trees('HEAD');
+            const tracked = physical(current);
+            const versions = locked();
+            assert.deepEqual(tracked,readJSON('tracked-before.json'));
+            assert.deepEqual(versions,readJSON('installed-before.json'));
+            assert(read('source-before.txt').equals(read('source-after.txt')));
+            assert(read('locks-before.txt').equals(read('locks-after.txt')));
+            assert.equal(read('offline.log').length,0);
+            assert.equal(read('types.log').length,0);
+            assert.equal(gitBlob(fs.readFileSync(page)),pageBlob);
+            for (const [role,pin] of Object.entries(refs)) {
+              const zip = fs.readFileSync(zipPath(role));
+              assert.deepEqual([zip.length,sha256(zip)],[pin.zipBytes,pin.zipSHA256],role+' retained ZIP');
+            }
+            json('tracked-after.json',tracked);
+            json('installed-after.json',versions);
+            json('final-holds.json',{status:'passed',tracked:tracked.length,scoped:4663,installed:versions.length,indexHeld:true,physicalSourceHeld:true,lockHeld:true,offlineBytes:0,page:pageBlob});
+          }
+          const action = process.argv[2];
+          assert(['prepare','test','final'].includes(action));
+          ({prepare,test:tests,final})[action]();
+          NODE
+          node "$out/qualification.mjs" prepare
+      - name: Proper App types
+        run: |
+          set -euo pipefail
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee who-am-i-guess-ownership-evidence/types.log
+      - name: Run the public lookup and existing player identity tests
+        run: |
+          set -euo pipefail
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node who-am-i-guess-ownership-evidence/qualification.mjs test
+      - name: Join physical source index lock versions and offline receipts
+        if: always()
+        run: |
+          set -euo pipefail
+          out=who-am-i-guess-ownership-evidence
+          git ls-files -s > "$out/source-after.txt"
+          sha256sum package.json package-lock.json > "$out/locks-after.txt"
+          git diff --exit-code HEAD -- .
+          node "$out/qualification.mjs" final
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: who-am-i-guess-ownership-original-${{ github.run_id }}
+          path: who-am-i-guess-ownership-evidence
+          retention-days: 14
+          if-no-files-found: error
