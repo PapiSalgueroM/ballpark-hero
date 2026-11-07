@@ -1,0 +1,350 @@
+name: Who Am I lookup ownership clean source and build join
+on:
+  push:
+    branches: [codex/who-am-i-guess-ownership-clean-join-qa-20261107]
+permissions:
+  contents: read
+  actions: read
+jobs:
+  closeout:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        shell: bash
+    env:
+      SIM_NETWORK: offline
+      SIM_OFFLINE_RECEIPT: who-am-i-guess-ownership-clean-join/offline.log
+      WHO_AM_I_REFERENCE_ARTIFACT: '13570073797'
+      WHO_AM_I_REFERENCE_RUN: '42362896967'
+      WHO_AM_I_REFERENCE_ZIP: '1b9756b774062a5d011598e86538507c20945a06a3d351587aac84c3096e2e22'
+      WHO_AM_I_REFERENCE_TAR: 'ddf61720d2fa65ac9ed8f32a316b68330703f5f280b002734e9159f3b3969e97'
+      WHO_AM_I_REFERENCE_HEAD: 'aa1f9d6727eb67b3f556cdc5c1b261c275396516'
+      WHO_AM_I_REFERENCE_TREE: 'a29017939e36956827d95d532ee187631d864007'
+      WHO_AM_I_REFERENCE_ZIP_BYTES: '37550902'
+      WHO_AM_I_NATIVE_HELPER: '07024f3428468510b8de9a37b388032a40af8524'
+      WHO_AM_I_NATIVE_OUTER: 'e67470d4c3c0b2a4d076c6019f8f9e8f88e71f54'
+      WHO_AM_I_FIXED_PAGE_BLOB: '76c3c1d99a4c0b6752df0c3b27cd548f88d51fae'
+      WHO_AM_I_QUALIFIED_PLAN_BLOB: '273ab6bfc2e924ea1b41f20c56ef2e2c5404cc2d'
+      WHO_AM_I_QUALIFIED_TEST_BLOB: 'bb08f3b9b2dc6e87a5fc3ab7d090b86893c642c1'
+      WHO_AM_I_REFERENCE_DIST_MANIFEST: '04595e52079910b5b693d03b84a3a54118c6fd9d81f9dfcf1516f40e341f2914'
+      WHO_AM_I_REFERENCE_WORKFLOW: '2231707a9d92069264ef144163124061239b23dd'
+      WHO_AM_I_CLEAN_PRODUCT_BASE: '5584945095a494802c6a9d865db560e78cd5069e'
+      WHO_AM_I_CLEAN_PRODUCT_BASE_TREE: 'b60eb586ad32b5565a3857bf6032d5b3b1f25a89'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 3
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24.22.1
+          cache: npm
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.4.4
+      - name: Locked dependencies and clean source receipts
+        run: |
+          set -euo pipefail
+          if grep -Eq '__[A-Z][A-Z0-9_]*__' .github/workflows/who-am-i-guess-ownership-20261107.yml; then echo 'Unresolved clean qualification template binding'; exit 1; fi
+          [[ "$WHO_AM_I_REFERENCE_ARTIFACT" =~ ^[1-9][0-9]*$ ]]
+          [[ "$WHO_AM_I_REFERENCE_RUN" =~ ^[1-9][0-9]*$ ]]
+          [[ "$WHO_AM_I_REFERENCE_ZIP" =~ ^[a-f0-9]{64}$ ]]
+          [[ "$WHO_AM_I_REFERENCE_TAR" =~ ^[a-f0-9]{64}$ ]]
+          [[ "$WHO_AM_I_REFERENCE_ZIP_BYTES" =~ ^[1-9][0-9]*$ ]]
+          [[ "$WHO_AM_I_REFERENCE_DIST_MANIFEST" =~ ^[a-f0-9]{64}$ ]]
+          for value in "$WHO_AM_I_REFERENCE_HEAD" "$WHO_AM_I_REFERENCE_TREE" "$WHO_AM_I_NATIVE_HELPER" "$WHO_AM_I_NATIVE_OUTER" "$WHO_AM_I_REFERENCE_WORKFLOW" "$WHO_AM_I_FIXED_PAGE_BLOB" "$WHO_AM_I_QUALIFIED_PLAN_BLOB" "$WHO_AM_I_QUALIFIED_TEST_BLOB"; do [[ "$value" =~ ^[a-f0-9]{40}$ ]]; done
+          test ! -e who-am-i-guess-ownership-clean-join
+          mkdir who-am-i-guess-ownership-clean-join
+          touch who-am-i-guess-ownership-clean-join/offline.log
+          git rev-parse HEAD > who-am-i-guess-ownership-clean-join/head.txt
+          git rev-parse 'HEAD^{tree}' > who-am-i-guess-ownership-clean-join/tree.txt
+          git ls-files -s > who-am-i-guess-ownership-clean-join/source-before.txt
+          sha256sum package.json package-lock.json > who-am-i-guess-ownership-clean-join/locks-before.txt
+          npm ci
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const lock=JSON.parse(fs.readFileSync('package-lock.json'));
+          const rows=Object.keys(lock.packages).filter(p=>p.startsWith('node_modules/')&&fs.existsSync(p+'/package.json')).map(p=>[p,JSON.parse(fs.readFileSync(p+'/package.json')).version]);
+          assert.equal(rows.length,521);for(const[p,v]of rows)assert.equal(v,lock.packages[p].version,p);fs.writeFileSync('who-am-i-guess-ownership-clean-join/installed-before.json',JSON.stringify(rows));
+          NODE
+      - name: Proper app types
+        run: |
+          set -euo pipefail
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee who-am-i-guess-ownership-clean-join/types.log
+      - name: Authenticate the completed full reference before extraction
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          gh api "repos/PapiSalgueroM/ballpark-hero/actions/runs/$WHO_AM_I_REFERENCE_RUN" > who-am-i-guess-ownership-clean-join/reference-run.json
+          gh api "repos/PapiSalgueroM/ballpark-hero/actions/artifacts/$WHO_AM_I_REFERENCE_ARTIFACT" > who-am-i-guess-ownership-clean-join/reference-artifact.json
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          const env = process.env;
+          const read = file => JSON.parse(fs.readFileSync('who-am-i-guess-ownership-clean-join/' + file));
+          const run = read('reference-run.json'), artifact = read('reference-artifact.json');
+          assert.deepEqual(
+            [run.id, run.status, run.conclusion, run.event, run.path, run.repository.full_name, run.head_sha, run.head_commit.tree_id],
+            [Number(env.WHO_AM_I_REFERENCE_RUN), 'completed', 'success', 'push', '.github/workflows/who-am-i-guess-ownership-20261107.yml', 'PapiSalgueroM/ballpark-hero', env.WHO_AM_I_REFERENCE_HEAD, env.WHO_AM_I_REFERENCE_TREE],
+          );
+          assert.deepEqual(
+            [artifact.id, artifact.name, artifact.expired, artifact.size_in_bytes, artifact.digest, artifact.workflow_run.id, artifact.workflow_run.head_sha],
+            [Number(env.WHO_AM_I_REFERENCE_ARTIFACT), 'who-am-i-guess-ownership-full-' + run.id, false, Number(env.WHO_AM_I_REFERENCE_ZIP_BYTES), 'sha256:' + env.WHO_AM_I_REFERENCE_ZIP, run.id, run.head_sha],
+          );
+          NODE
+          gh api "repos/PapiSalgueroM/ballpark-hero/actions/artifacts/$WHO_AM_I_REFERENCE_ARTIFACT/zip" > "$RUNNER_TEMP/who-am-i-guess-ownership-full-reference.zip"
+          test "$(wc -c < "$RUNNER_TEMP/who-am-i-guess-ownership-full-reference.zip")" -eq "$WHO_AM_I_REFERENCE_ZIP_BYTES"
+          echo "$WHO_AM_I_REFERENCE_ZIP  $RUNNER_TEMP/who-am-i-guess-ownership-full-reference.zip" | sha256sum --check
+          unzip -Z1 "$RUNNER_TEMP/who-am-i-guess-ownership-full-reference.zip" > who-am-i-guess-ownership-clean-join/reference-zip-entries.txt
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          const names = fs.readFileSync('who-am-i-guess-ownership-clean-join/reference-zip-entries.txt', 'utf8').trimEnd().split('\n');
+          assert.equal(new Set(names).size, names.length, 'Unique admitted ZIP paths');
+          for (const name of names) {
+            assert(name.length && !name.includes('\\') && !name.startsWith('/'), 'Relative ZIP path');
+            assert(name.replace(/\/$/, '').split('/').every(part => part && part !== '.' && part !== '..'), 'Safe ZIP path');
+          }
+          for (const file of ['head.txt', 'tree.txt', 'admission.json', 'unit-admission.json', 'native-admission.json', 'final-holds.json', 'source-before.txt', 'source-after.txt', 'dist-before.json', 'dist-after.json', 'dist.tgz']) {
+            assert(names.includes(file), file + ' required authenticated body');
+          }
+          NODE
+          mkdir "$RUNNER_TEMP/who-am-i-guess-ownership-full-reference" "$RUNNER_TEMP/who-am-i-guess-ownership-full-reference-dist"
+          unzip -q "$RUNNER_TEMP/who-am-i-guess-ownership-full-reference.zip" -d "$RUNNER_TEMP/who-am-i-guess-ownership-full-reference"
+          test -z "$(find "$RUNNER_TEMP/who-am-i-guess-ownership-full-reference" -type l -print -quit)"
+          echo "$WHO_AM_I_REFERENCE_TAR  $RUNNER_TEMP/who-am-i-guess-ownership-full-reference/dist.tgz" | sha256sum --check
+          tar -tzf "$RUNNER_TEMP/who-am-i-guess-ownership-full-reference/dist.tgz" > who-am-i-guess-ownership-clean-join/reference-tar-entries.txt
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          const names = fs.readFileSync('who-am-i-guess-ownership-clean-join/reference-tar-entries.txt', 'utf8').trimEnd().split('\n');
+          assert.equal(new Set(names).size, names.length, 'Unique admitted dist tar paths');
+          for (const name of names) {
+            assert(name.startsWith('dist/') && !name.includes('\\'), 'Tar stays under dist');
+            assert(name.replace(/\/$/, '').split('/').every(part => part && part !== '.' && part !== '..'), 'Safe tar path');
+          }
+          NODE
+          tar -xzf "$RUNNER_TEMP/who-am-i-guess-ownership-full-reference/dist.tgz" -C "$RUNNER_TEMP/who-am-i-guess-ownership-full-reference-dist"
+          cp "$RUNNER_TEMP/who-am-i-guess-ownership-full-reference/source-before.txt" who-am-i-guess-ownership-clean-join/reference-source.txt
+      - name: Fresh unchanged product-name fence on clean source
+        run: |
+          set -euo pipefail
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simNoRivalNames.mjs 2>&1 | tee who-am-i-guess-ownership-clean-join/no-rival.log
+      - name: Clean production build
+        run: |
+          set -euo pipefail
+          NODE_OPTIONS="--max-old-space-size=6144" npm run build 2>&1 | tee who-am-i-guess-ownership-clean-join/build.log
+      - name: Join exact clean product source and all 850 built files
+        id: join
+        env:
+          WHO_AM_I_REFERENCE_DIR: ${{ runner.temp }}/who-am-i-guess-ownership-full-reference
+          WHO_AM_I_REFERENCE_DIST: ${{ runner.temp }}/who-am-i-guess-ownership-full-reference-dist/dist
+        run: |
+          set -euo pipefail
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import assert from 'node:assert/strict';
+          import {createHash} from 'node:crypto';
+          import {execFileSync} from 'node:child_process';
+          const env = process.env;
+          const out = 'who-am-i-guess-ownership-clean-join';
+          const ref = env.WHO_AM_I_REFERENCE_DIR;
+          const read = file => JSON.parse(fs.readFileSync(path.join(ref, file)));
+          const bytes = file => fs.readFileSync(path.join(ref, file));
+          const readOutput = file => JSON.parse(fs.readFileSync(path.join(out, file)));
+          const sha = bytes => createHash('sha256').update(bytes).digest('hex');
+          const blob = bytes => createHash('sha1').update('blob ' + bytes.length + '\0').update(bytes).digest('hex');
+          const git = (...args) => execFileSync('git', args, {encoding:'utf8', maxBuffer:16 * 1024 * 1024});
+          const workflow = '.github/workflows/who-am-i-guess-ownership-20261107.yml';
+          const helper = 'scripts/qa/playWhoAmIGuessOwnership.mjs';
+          const page = 'src/pages/WhoAmI.tsx';
+          const test = 'src/test/whoAmIGuessOwnership.test.tsx';
+          const plan = 'docs/plans/2026-11-07-who-am-i-guess-ownership.md';
+          const configs = ['index.html','package.json','package-lock.json','vite.config.ts','tailwind.config.ts','postcss.config.js','tsconfig.json','tsconfig.app.json','tsconfig.node.json','bun.lockb','bun.lock'];
+          const sourceScope = file => /^(?:src|public|scripts)\//.test(file);
+          const fullOnly = new Set([workflow, helper]);
+          const denied = ['scripts/qa/checkWhoAmIGuessOwnership.mjs','scripts/qa/admitWhoAmIGuessOwnership.mjs'];
+          const pins = {
+            [page]: env.WHO_AM_I_FIXED_PAGE_BLOB,
+            [test]: env.WHO_AM_I_QUALIFIED_TEST_BLOB,
+            [plan]: env.WHO_AM_I_QUALIFIED_PLAN_BLOB,
+            'src/App.tsx': '8bfedf7aaa1d076e0f0c8e2216c7e46632cd8a33',
+            'src/data/gameRegistry.ts': 'f560b40a74d1468ac72dfde4ee6fec6635a9a255',
+            'public/who-am-i/index.html': 'cd4d7ab7de79d9742bfbebea4de649ada9349fea',
+            'src/lib/whoAmI.ts': '8b6da5c480857fa8b7164d50c322eaccd0f6a8af',
+            'src/components/game/GiveUpButton.tsx': '2462260a7b5f1d5d3b70915df2428d5d4397b0a0',
+            'src/components/game/PlayerAutocomplete.tsx': 'a0bd500b63306c75e0dea251cb6fb67ea2ed9452',
+            'src/lib/playerSearch.ts': '0d19f2c23735eb30512dc7fc3a447eacef5e128f',
+            'src/lib/fetchAllRows.ts': '16a6d21750405e7a647576ff513ed8ee11d5ba6b',
+            'src/test/playerSearchIdentity.test.ts': '1286ab4853aacac662c6759fdcf990c8e350090c',
+            'scripts/lib/offlineTransport.cjs': '0fda542a2649fe5da937c6976fd0f5b6073e74b6',
+            'src/data/seoMeta.ts': 'cf7a5142e59b97048d27b5ece9a6588a92073728',
+          };
+          const indexRows = (body, separator = '\n') => {
+            const rows = body.split(separator).filter(Boolean).map(line => {
+              const matched = /^(100(?:644|755)) ([0-9a-f]{40}) 0\t(.+)$/.exec(line);
+              assert(matched, 'Actual regular path/mode/blob index tuple');
+              return [matched[3], {mode:matched[1], blob:matched[2]}];
+            });
+            assert.equal(new Set(rows.map(([file]) => file)).size, rows.length, 'Unique index paths');
+            return new Map(rows);
+          };
+          const treeRows = commit => {
+            const rows = git('ls-tree', '-r', '-z', commit).split('\0').filter(Boolean).map(line => {
+              const matched = /^(100(?:644|755)) blob ([0-9a-f]{40})\t(.+)$/.exec(line);
+              assert(matched, 'Actual regular path/mode/blob tree tuple');
+              return [matched[3], {mode:matched[1], blob:matched[2]}];
+            });
+            assert.equal(new Set(rows.map(([file]) => file)).size, rows.length, 'Unique tree paths');
+            return new Map(rows);
+          };
+          const ordered = rows => [...rows].sort(([left],[right]) => left.localeCompare(right));
+          const cleanHead = git('rev-parse', 'HEAD').trim(), cleanTree = git('rev-parse', 'HEAD^{tree}').trim();
+          assert.deepEqual(git('rev-list', '--parents', '-n', '1', 'HEAD').trim().split(' '), [cleanHead, env.WHO_AM_I_CLEAN_PRODUCT_BASE], 'Clean QA is the direct PR535 child');
+          assert.equal(git('rev-parse', env.WHO_AM_I_CLEAN_PRODUCT_BASE + '^{tree}').trim(), env.WHO_AM_I_CLEAN_PRODUCT_BASE_TREE);
+          assert.equal(fs.readFileSync(out + '/head.txt','utf8').trim(), cleanHead);
+          assert.equal(fs.readFileSync(out + '/tree.txt','utf8').trim(), cleanTree);
+          const base = treeRows(env.WHO_AM_I_CLEAN_PRODUCT_BASE);
+          const current = indexRows(fs.readFileSync(out + '/source-before.txt', 'utf8'));
+          const old = indexRows(fs.readFileSync(out + '/reference-source.txt', 'utf8'));
+          assert.deepEqual(ordered(indexRows(git('ls-files','--stage','-z'),'\0')), ordered(current));
+          assert.deepEqual(ordered(treeRows(cleanHead)), ordered(current), 'Clean index joins exact committed tree tuples');
+          assert.deepEqual([base.size,current.size,old.size],[5787,5790,5791]);
+          const allowedClean = [page, test, plan, workflow];
+          const cleanDelta = [...new Set([...base.keys(), ...current.keys()])].filter(file => {
+            const before = base.get(file), after = current.get(file);
+            return before?.mode !== after?.mode || before?.blob !== after?.blob;
+          }).sort();
+          assert.deepEqual(cleanDelta, [...allowedClean].sort(), 'Exactly one product Page change and three owned new leaves');
+          assert.equal(base.get(page)?.blob, '931e60e5075768b677c2013f99131c1867f27b68');
+          assert.equal(current.get(page)?.mode, base.get(page)?.mode);
+          for (const file of [test, plan, workflow]) assert(!base.has(file) && current.get(file)?.mode === '100644', file + ' exact owned new leaf');
+          assert(!current.has(helper), 'Tracked full browser helper is excluded from clean QA');
+          assert.equal(old.get(helper)?.blob, env.WHO_AM_I_NATIVE_HELPER);
+          assert.equal(old.get(workflow)?.blob, env.WHO_AM_I_REFERENCE_WORKFLOW);
+          assert(current.get(workflow)?.blob && current.get(workflow).blob !== old.get(workflow).blob, 'Clean QA uses its own workflow body');
+          for (const file of denied) assert(!old.has(file) && !current.has(file), file + ' untracked QA source');
+          for (const [file,want] of Object.entries(pins)) {
+            assert.equal(current.get(file)?.blob, want, file + ' exact clean pin');
+            assert.equal(old.get(file)?.blob, want, file + ' exact full pin');
+          }
+          const product = (rows, omit) => ordered([...rows].filter(([file]) => !omit.has(file)));
+          assert.deepEqual(product(current,new Set([workflow])), product(old,fullOnly), 'All 5789 product path/mode/blob tuples are identical');
+          assert.deepEqual([base,current,old].map(rows => [...rows.keys()].filter(sourceScope).length), [4662,4663,4664]);
+          const scoped = (rows, omit) => ordered([...rows].filter(([file]) => (sourceScope(file) || configs.includes(file)) && !omit.has(file)));
+          const sourceConfigRows = scoped(current,new Set());
+          assert.equal(sourceConfigRows.length, 4674);
+          assert.deepEqual(sourceConfigRows,scoped(old,fullOnly),'Every 4663 code and 11 root configuration path/mode/blob tuple');
+          for (const file of configs) assert(current.has(file) && old.has(file),file + ' required root configuration');
+          for (const [file,tuple] of current) {
+            const stat = fs.lstatSync(file);
+            assert(stat.isFile(),file + ' physical regular source body');
+            assert.equal((stat.mode & 0o111) !== 0, tuple.mode === '100755',file + ' physical source executable mode');
+            assert.equal(blob(fs.readFileSync(file)),tuple.blob,file + ' physical source bytes join tree');
+          }
+
+          const inventory = (directory,prefix = '') => fs.readdirSync(directory,{withFileTypes:true}).sort((a,b) => a.name.localeCompare(b.name)).flatMap(entry => {
+            const file = path.join(directory,entry.name);
+            const relative = prefix + entry.name;
+            if (entry.isDirectory()) return inventory(file,relative + '/');
+            assert(entry.isFile(),relative + ' regular dist file');
+            const body = fs.readFileSync(file);
+            return [{path:relative,bytes:body.length,sha256:sha(body)}];
+          });
+          const actual = inventory('dist'), reference = inventory(env.WHO_AM_I_REFERENCE_DIST);
+          assert.deepEqual([actual.length,reference.length],[850,850]);
+          assert.deepEqual(actual,reference,'Every clean built path and byte equals the qualified full build');
+          const distManifestSHA256 = sha(JSON.stringify(reference));
+          assert.equal(distManifestSHA256,env.WHO_AM_I_REFERENCE_DIST_MANIFEST);
+          const retainedManifest = read('dist-before.json').map(row => {
+            assert.deepEqual(Object.keys(row).sort(),['bytes','file','sha256']);
+            assert(row.file.startsWith('dist/'));
+            return {path:row.file.slice(5),bytes:row.bytes,sha256:row.sha256};
+          });
+          assert.deepEqual(retainedManifest,reference,'Exact full retained build inventory and tar join');
+          assert(bytes('dist-before.json').equals(bytes('dist-after.json')));
+          assert(bytes('source-before.txt').equals(bytes('source-after.txt')));
+          assert(bytes('source-before.txt').equals(fs.readFileSync(out + '/reference-source.txt')));
+          const referenceHead = bytes('head.txt').toString('utf8').trim(), referenceTree = bytes('tree.txt').toString('utf8').trim();
+          const run = readOutput('reference-run.json'), meta = readOutput('reference-artifact.json');
+          assert.deepEqual([referenceHead,referenceTree],[env.WHO_AM_I_REFERENCE_HEAD,env.WHO_AM_I_REFERENCE_TREE]);
+          const full = read('admission.json'), native = read('native-admission.json'), unit = read('unit-admission.json'), holds = read('final-holds.json');
+          assert.deepEqual([full.status,full.qualification,full.head,full.tree,full.page,full.test,full.plan,full.helper,full.nativeOuter], [
+            'passed','fresh-who-am-i-guess-ownership-full-scope',referenceHead,referenceTree,env.WHO_AM_I_FIXED_PAGE_BLOB,env.WHO_AM_I_QUALIFIED_TEST_BLOB,env.WHO_AM_I_QUALIFIED_PLAN_BLOB,env.WHO_AM_I_NATIVE_HELPER,env.WHO_AM_I_NATIVE_OUTER,
+          ]);
+          assert.deepEqual([full.trackedBodies,full.sourceRows,full.cleanSourceRows,full.rootConfigurations,full.distFiles,full.immutableCaps,full.readers],[5791,4664,4663,11,850,16,20]);
+          assert.deepEqual(full.unit,unit);
+          assert.deepEqual([full.unitCommands,unit.commands,unit.status,unit.actualPasses,unit.actualFailures,unit.wholeQualifiedFixedRAWBytesHeld,full.controlsRerun],[1,1,'passed',unit.actualCases,0,true,false]);
+          assert(Number.isSafeInteger(unit.actualCases)&&unit.actualCases>0);
+          assert.deepEqual([full.raw.status,full.raw.raw,full.raw.freshUnitRAWByteEqual,full.distTupleSHA256],['passed',unit.raw,true,distManifestSHA256]);
+          assert.deepEqual(full.nativeReceipt,native);
+          assert.deepEqual([native.status,native.route,native.page,native.helper],['passed','/who-am-i',env.WHO_AM_I_FIXED_PAGE_BLOB,env.WHO_AM_I_NATIVE_HELPER]);
+          assert.deepEqual([holds.status,holds.trackedBodies,holds.scopedSourceRows,holds.cleanSourceRows,holds.rootConfigurations,holds.installedLockedVersions,holds.indexUnchanged,holds.sourceBytesUnchanged,holds.locksUnchanged,holds.distHeld,holds.retainedPacketsHeld,holds.offlineBytes],
+            ['passed',5791,4664,4663,11,521,true,true,true,true,true,0]);
+          assert.deepEqual(full.distTar,{file:'dist.tgz',bytes:bytes('dist.tgz').length,sha256:env.WHO_AM_I_REFERENCE_TAR});
+          assert.equal(sha(bytes('dist.tgz')),env.WHO_AM_I_REFERENCE_TAR);
+          assert.equal(blob(bytes('native-admission-script.mjs')),env.WHO_AM_I_NATIVE_OUTER);
+          const referenceChecks = (() => {
+            const exact={"run":42362896967,"artifact":13570073797,"head":"aa1f9d6727eb67b3f556cdc5c1b261c275396516","tree":"a29017939e36956827d95d532ee187631d864007","workflow":"2231707a9d92069264ef144163124061239b23dd","helper":"07024f3428468510b8de9a37b388032a40af8524","outer":"e67470d4c3c0b2a4d076c6019f8f9e8f88e71f54","zipBytes":37550902,"zipSHA256":"1b9756b774062a5d011598e86538507c20945a06a3d351587aac84c3096e2e22","tarSHA256":"ddf61720d2fa65ac9ed8f32a316b68330703f5f280b002734e9159f3b3969e97","distTupleSHA256":"04595e52079910b5b693d03b84a3a54118c6fd9d81f9dfcf1516f40e341f2914","nativeCensus":{"journeys":3,"contexts":3,"viewportPNGs":9,"abandonResults":3,"replays":3,"overlapSettlements":3,"acceptedCurrentGuesses":3,"lookupReads":6,"completionAttempts":3,"frames":111,"actions":30,"mouseActions":15,"keyboardActions":9,"typingActions":6,"wheels":2,"navigations":6,"firstPartyResponses":99,"searchReads":12,"bootReads":9,"corsPreflights":0}};
+            const bodies=[{"file":"admission.json","bytes":15042,"sha256":"c362ff99c6bf54c5bdcf7262804df3740e307344df814074f33eb7b1594ad1f2"},{"file":"source-join.json","bytes":3787,"sha256":"eb169e9ab6a6b734c7e77e5395077a96ba014839a57da84b38ccb5ace4913419"},{"file":"unit-admission.json","bytes":518,"sha256":"009b790e3aa76b9c4c46f187ebf12cdc1b50d69049312a84d21a8ef3010f78ee"},{"file":"fixed-raw-join.json","bytes":329,"sha256":"d37b947d2b2239abf435096ed8557c8079a809fdcc4864d5f1f07f377b9d8fb2"},{"file":"packet-custody.json","bytes":2433,"sha256":"aa577f53bb63963e303d119ffdb02df00b1f91cd6e4619d07fcf5aa0482b6f94"},{"file":"native-admission.json","bytes":5412,"sha256":"41dfd5bbe2db88e82932125e647a8ba46ebaf12acb4868b6df4f6e88efb059e1"},{"file":"final-holds.json","bytes":378,"sha256":"7cf6ccd6b4117fbcbe856557618f7ceb386add68a19a42e5710c094127bca6eb"},{"file":"case-fixed/raw.json","bytes":274774,"sha256":"04c43f5f3558d6b65b6ab0cdfe0257d0a258078d35926352f28ab083a9a22418"},{"file":"controls-reference/packet/admission.json","bytes":25374,"sha256":"9327a36964efce44c376cdf71733aa437c500a2899592ce7e8cb1af0abe306fd"}];
+            const photos=[{"file":"browser/1280-case-a-reveal.png","bytes":86034,"sha256":"59deb5df24748a5103ad17847cd2a3a2cbca9f3eb9350bfa0e70cfec88a5dc28"},{"file":"browser/1280-case-b-scored.png","bytes":105926,"sha256":"a5532495a7d1545752417ce8c597e8d65a6d57e893fe2c5c402a41fb3e9ff605"},{"file":"browser/1280-case-b-still-pending.png","bytes":109787,"sha256":"1f6734f4f26e59a44061110810d652115504b8a0d58351b0706a0d62f19037b6"},{"file":"browser/320-case-a-reveal.png","bytes":34051,"sha256":"a4b36ceea104ee45d12a2e70b4ee2e447a99285c03be40d1e2a8983dbd099759"},{"file":"browser/320-case-b-scored.png","bytes":40221,"sha256":"88e202480eacb9f3f9b4e057f59e4c49c3f66ab6de6047d71cb71d5929b9ca41"},{"file":"browser/320-case-b-still-pending.png","bytes":38958,"sha256":"0451babf1eabf24659117f8a8d06a4935632cebe1e70a33a8a5019ab537c6ea4"},{"file":"browser/390-case-a-reveal.png","bytes":55241,"sha256":"ecb84a01bd1d363c43b69f0ee3a1f1106b7bf61dc53731cab645d1cab41690ab"},{"file":"browser/390-case-b-scored.png","bytes":72102,"sha256":"d5c46373f4621b59860e631ee94ffac6ee5eb1ea72f9b10985887cfa9a08761c"},{"file":"browser/390-case-b-still-pending.png","bytes":72704,"sha256":"c4b9a931d2536e4f7450adb986e028855eee56e2358a7f85525bd06cd9a38faa"}];
+            for(const pin of [...bodies,...photos]) {
+              const body=bytes(pin.file);
+              assert.deepEqual([body.length,sha(body)],[pin.bytes,pin.sha256],pin.file+' exact admitted body');
+            }
+            assert.deepEqual([run.id,meta.id,referenceHead,referenceTree,env.WHO_AM_I_REFERENCE_WORKFLOW,env.WHO_AM_I_NATIVE_HELPER,env.WHO_AM_I_NATIVE_OUTER,meta.size_in_bytes,meta.digest,distManifestSHA256],
+              [exact.run,exact.artifact,exact.head,exact.tree,exact.workflow,exact.helper,exact.outer,exact.zipBytes,'sha256:'+exact.zipSHA256,exact.distTupleSHA256]);
+            assert.deepEqual([run.status,run.conclusion,full.distTar.sha256],['completed','success',exact.tarSHA256]);
+            const source=read('source-join.json'),custody=read('packet-custody.json'),raw=read('fixed-raw-join.json'),control=read('controls-reference/packet/admission.json');
+            assert.deepEqual([source.status,source.head,source.tree,source.workflowBlob,source.trackedRows,source.sourceRows,source.cleanSourceRows,source.heldFixedRows],
+              ['passed',exact.head,exact.tree,exact.workflow,5791,4664,4663,5789]);
+            assert.deepEqual([unit.actualCases,unit.actualPasses,unit.actualFailures,custody.status,custody.controlsRerun,raw.status,raw.freshUnitRAWByteEqual],
+              [32,32,0,'passed',false,'passed',true]);
+            assert.deepEqual(control.totals,{roles:3,rows:96,passes:94,failures:2});
+            assert(control.preservedCurrentLookups&&control.exactRoleRaw);
+            assert(bytes('case-fixed/raw.json').equals(bytes('fixed-reference/packet/case-fixed/raw.json')));
+            assert.deepEqual(native.census,exact.nativeCensus);
+            return {status:'passed',referenceRun:exact.run,referenceArtifact:exact.artifact,exactReceiptPins:bodies,retainedNativePNGs:photos.length,
+              actualNativeCensus:native.census,wholeFixedRawHeld:true,physicalControlsRetained:true};
+          })();
+          assert.equal(referenceChecks.status,'passed','Reviewed actual full receipt validator must complete');
+          const result = {
+            status:'passed', cleanHead, cleanTree, cleanProductBase:env.WHO_AM_I_CLEAN_PRODUCT_BASE, cleanProductBaseTree:env.WHO_AM_I_CLEAN_PRODUCT_BASE_TREE,
+            cleanDelta, referenceRun:run.id, referenceWorkflowHead:referenceHead, referenceApp:referenceHead, referenceTree,
+            referenceQualification:full.qualification, referenceArtifact:meta.id, referenceZipSHA256:env.WHO_AM_I_REFERENCE_ZIP,
+            referenceTarSHA256:env.WHO_AM_I_REFERENCE_TAR, referenceWorkflowBlob:env.WHO_AM_I_REFERENCE_WORKFLOW,
+            heldProductRows:5789, sourceRows:4663, sourceAndConfigurationRows:sourceConfigRows.length,
+            rootConfigurations:configs.map(file => ({file,...current.get(file)})),
+            excludedFullQA:[...fullOnly], finalProductForbiddenPaths:[...fullOnly,...denied], generatedPatches:[],
+            distFiles:actual.length, distManifestSHA256, dist:actual, referenceChecks,
+            limits:'Fresh clean types, product-name fence, normal production build and exact source and built-byte join. Unit, native, control, reader and cap evidence comes from the authenticated full reference. The frozen qualified plan is held. Final product excludes this round QA workflow, helper, outer and controller. No provider or release credit.',
+          };
+          fs.writeFileSync(out + '/reference-build-join.json',JSON.stringify(result,null,2));
+          console.log('PASS all 4663 source paths, 11 root configurations and 850 built file bodies');
+          NODE
+      - name: Final source locks installed versions and offline holds
+        if: always()
+        run: |
+          set -euo pipefail
+          git ls-files -s > who-am-i-guess-ownership-clean-join/source-after.txt
+          cmp who-am-i-guess-ownership-clean-join/source-before.txt who-am-i-guess-ownership-clean-join/source-after.txt
+          git diff --exit-code HEAD -- .
+          sha256sum package.json package-lock.json > who-am-i-guess-ownership-clean-join/locks-after.txt
+          cmp who-am-i-guess-ownership-clean-join/locks-before.txt who-am-i-guess-ownership-clean-join/locks-after.txt
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const before=JSON.parse(fs.readFileSync('who-am-i-guess-ownership-clean-join/installed-before.json')),lock=JSON.parse(fs.readFileSync('package-lock.json'));
+          const after=Object.keys(lock.packages).filter(p=>p.startsWith('node_modules/')&&fs.existsSync(p+'/package.json')).map(p=>[p,JSON.parse(fs.readFileSync(p+'/package.json')).version]);assert.equal(after.length,521);for(const[p,v]of after)assert.equal(v,lock.packages[p].version,p);assert.deepEqual(after,before);
+          fs.writeFileSync('who-am-i-guess-ownership-clean-join/installed-final.json',JSON.stringify(after));
+          assert(fs.existsSync('who-am-i-guess-ownership-clean-join/offline.log'));assert.equal(fs.statSync('who-am-i-guess-ownership-clean-join/offline.log').size,0);
+          NODE
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: who-am-i-guess-ownership-clean-build-join-${{ github.run_id }}
+          path: who-am-i-guess-ownership-clean-join
+          retention-days: 14
+          if-no-files-found: error
