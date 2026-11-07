@@ -17898,3 +17898,12 @@ SC-36/CM-04 partial; CM-03 real rosters and all-sports historical future classes
 Qualification run `42342436106`, browser run `42344217034`, public run `42345338581`. Public evidence: 73 asset bodies matched the build, two SEO checks passed and IndexNow accepted the two URLs. Existing suite failures remain tracked. Historical roster depth, verified palettes and promotion coverage are partial.
 
 Continue on the master list: verified Soccer Career arrivals for 2010 and 2015, then Club Manager historical roster snapshot disclosure. NBA 2005 and NFL 2006 intake remains unshipped.
+
+<!-- sc-historical-arrivals-pr529-live -->
+## 2026-11-07: Soccer Career 2010 and 2015 arrivals published
+
+[PR #529](https://github.com/PapiSalgueroM/ballpark-hero/pull/529), main `cef43e538e2266974cc4d2e96eb5996a6e2bdce9`, live deployment `d1268cef-456a-487f-80e2-9d1edba677bb`. New 2010 starts see Mbappé, Haaland and Bellingham as they reach their real first-team entry years. New 2015 starts see Haaland and Bellingham. Older save formats are held. The cards appear in SportsFeed.
+
+Qualification `42346216682`: six shared saves match, five new cases pass, types, build, 20 output checks and all 16 existing caps pass. Phone `42348568920`: two fresh starts, two admitted 2020 saves and both reloads pass. [Public verification](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/42349349485) matched 64 compiled assets to the tested build, passed the Soccer Career SEO check and got IndexNow HTTP 200 for that URL.
+
+Continue CM-03 historical roster snapshot counts. Ekstraklasa, NBA 2005 and NFL 2006 are still source intake.
