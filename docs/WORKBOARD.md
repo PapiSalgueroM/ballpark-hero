@@ -18190,3 +18190,16 @@ Six Hook lines separate Daily/Unlimited playing guards. Qualified original422994
 First two original attempts remain FAILED. First full42310224824 remains FAILED at modal-hidden Daily readiness, with3 failure frames/0 actions/0 PNGs. Reviewed helper112c changes only readiness and the scoped existing HowTo reopen selector; outercc9341 only binds that identity. No App, fixture, action or oracle change. Fresh full42314201077 at03555/tree597 passed14 unit/158 exact RAW,normal850 build,20 readers,16 unchanged caps and actual3 native journeys/6 contexts/15 genuine results/670 frames/270 receipts/525 layouts/29 wheels/12 measured navigations/9 reviewed PNGs/6 aborted completion POSTs. Independent native and nonnative audits passed without reclassifying prior failures.
 
 Clean42318149296 at6b8e411609b16b320c03dfa3f8af10d8a09e15e1/tree7981a6c4a973f5b46f8c5bf83bb32fd4b80e7a0b: fresh proper types/name fence/normal build and exact4658 source+11 root configuration mode/blob joins, every850 built body byte-identical to the admitted full build. Final five-file product on codex/soccer-connections-streak-clean-20261106 excludes all round QA workflows/helpers/controllers. Master409 unchanged, PL-05 partial, Grade Transfer retired. Main externally observed636b31efd64b749d4900e3f5773681e0496addf6; new-main integration unqualified. All local App/Git/runtime/PROJECT-STATE, exact-prefix workboard, companion and merge/publish holds persist. No backend/provider/full-suite/terminal-restore/pool-race/cross-tab/physical-touch/release claim.
+
+
+## 2026-11-06 Missing XI confirmation ownership
+
+Switching between Daily and Unlimited now clears the outgoing round's Give up confirmation. The existing current-round confirmation still opens, cancels and forfeits normally. The one-line Page key leaves shared round, persistence, completion, scoring and data code held.
+
+Preflight 42321774793 confirmed the active entry. Original 42326812138 recorded both cross-mode harms with 6 passes, 2 business reds and 62 complete frames. Fixed 42328761286 passed all 8 cases and held both whole original preservation cases. Physical controls 42330070994 yielded 24 rows, 22 passes, 2 original-only reds, 186 frames and 6 whole literal case vectors, with all three complete RAWs and the exact restored Page.
+
+First full 42332294157 remains failed in browser acquisition. Refreshed full 42333756371 passed: eight cases with the entire fixed RAW held, 20 readers, 16 original rounded caps and 850 built files. Three browser viewports across six contexts produced six intentional forfeits, 366 frames, 111 actions and nine reviewed screenshots. Three intentional Daily completion requests were intercepted and aborted.
+
+Clean run 42335163878 passed fresh App types, the product-name check and a normal build. It matched every one of the 4,659 product source paths, 11 root configs and 850 built files to the qualified full tree.
+
+Scope: final five-file draft on PR525, with QA-only source excluded. Main observed 636b31efd64b749d4900e3f5773681e0496addf6, newer-main integration held. Master409 stays read-only, PL-05 partial, Grade Transfer retired, old zips untouched. All local App/Git/runtime/PROJECT-STATE, exact-prefix workboard, companion and merge/publish holds persist.
