@@ -15,7 +15,13 @@ interface SoccerHistoricalArrivalsV2 {
   players: SoccerHistoricalEntry[];
 }
 
-export type SoccerHistoricalArrivals = SoccerHistoricalArrivalsV1 | SoccerHistoricalArrivalsV2;
+interface SoccerHistoricalArrivalsV3 {
+  version: 3;
+  startYear: 2010 | 2015;
+  players: SoccerHistoricalEntry[];
+}
+
+export type SoccerHistoricalArrivals = SoccerHistoricalArrivalsV1 | SoccerHistoricalArrivalsV2 | SoccerHistoricalArrivalsV3;
 
 interface SoccerHistoricalArrivalsV1 {
   version: 1;
@@ -24,6 +30,14 @@ interface SoccerHistoricalArrivalsV1 {
 
 export function readSoccerHistoricalArrivals(s: CareerState): SoccerHistoricalArrivals | null {
   const value = s.historicalArrivals;
+  if (value?.version === 3) {
+    if ((value.startYear !== 2010 && value.startYear !== 2015) || s.seasons[0]?.year !== value.startYear) return null;
+    const eligible = SOCCER_HISTORICAL_PLAYERS.filter(entry => entry.entryYear > value.startYear);
+    if (!Array.isArray(value.players) || value.players.length > eligible.length ||
+        new Set(value.players.map(p => p?.id)).size !== value.players.length) return null;
+    return value.players.every(p => p && eligible.some(entry =>
+      p.id === entry.id && p.entryYear === entry.entryYear && p.entryClub === entry.entryClub)) ? value : null;
+  }
   if (value?.version === 2) {
     if (!Array.isArray(value.players) || value.players.length > SOCCER_HISTORICAL_PLAYERS.length ||
         new Set(value.players.map(p => p?.id)).size !== value.players.length) return null;
@@ -40,16 +54,16 @@ export function soccerHistoricalEntryForName(s: CareerState, name: string): Socc
 }
 
 export function hasSoccerHistoricalPlayer(s: CareerState, name: string): boolean {
-  if (s.historicalArrivals?.version === 2) return !!soccerHistoricalEntryForName(s, name);
+  if (s.historicalArrivals?.version === 2 || s.historicalArrivals?.version === 3) return !!soccerHistoricalEntryForName(s, name);
   return name === 'Neymar' && readSoccerHistoricalArrivals(s)?.players.length === 1;
 }
 
 /** Admit a sourced identity after the career actually commits its calendar year. Draws nothing. */
 export function recordSoccerHistoricalArrivals(s: CareerState, year: number): void {
   const arrivals = readSoccerHistoricalArrivals(s);
-  if (arrivals?.version === 2) {
+  if (arrivals?.version === 2 || arrivals?.version === 3) {
     if (!Number.isSafeInteger(year) || !s.phone) return;
-    const added = SOCCER_HISTORICAL_PLAYERS.filter(entry => entry.entryYear <= year &&
+    const added = SOCCER_HISTORICAL_PLAYERS.filter(entry => (arrivals.version !== 3 || entry.entryYear > arrivals.startYear) && entry.entryYear <= year &&
       !arrivals.players.some(player => player.id === entry.id));
     const players = [...arrivals.players, ...added.map(({ id, entryYear, entryClub }) => ({ id, entryYear, entryClub }))];
     const clubs = { ...s.phone.clubs };
