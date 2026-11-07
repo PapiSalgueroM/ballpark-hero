@@ -1,0 +1,462 @@
+name: Soccer Fantasy Draft player-pool recovery clean build join
+on:
+  push:
+    branches: [codex/soccer-fantasy-draft-pool-error-clean-join-qa-20261106]
+permissions:
+  contents: read
+  actions: read
+jobs:
+  closeout:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        shell: bash
+    env:
+      SIM_NETWORK: offline
+      SIM_OFFLINE_RECEIPT: fantasy-draft-pool-error-clean-join/offline.log
+      FANTASY_REFERENCE_ARTIFACT: '13563027883'
+      FANTASY_REFERENCE_RUN: '42345398413'
+      FANTASY_REFERENCE_ZIP: 'cfd8ebe6ffbd1cbba1d18c2f6551063155510de6256f3b953b92ca62f7b059e2'
+      FANTASY_REFERENCE_TAR: '4b92d933dff179cba56d6671dd30fbab302b4ddd115f05cab89954708708d5a8'
+      FANTASY_REFERENCE_HEAD: '683e3c7d8389df23ba185071dcdbb4591d3a9506'
+      FANTASY_REFERENCE_TREE: 'ec4a2d418f749e55e6f726788d6fd2357eaa117e'
+      FANTASY_REFERENCE_ZIP_BYTES: '80486547'
+      FANTASY_NATIVE_HELPER: 'e833a17e1b33bbcc49322870b87571b09f3bbdc1'
+      FANTASY_NATIVE_OUTER: 'ac6e3e37cc3e328c7fa2737413bbe16393624ca8'
+      FANTASY_FIXED_PAGE_BLOB: 'a1ec7dda9bd2c7a7fc674b5471fc0dad63a67509'
+      FANTASY_QUALIFIED_PLAN_BLOB: '702926007f2f1887c7e0758b4ee6cafd91f7d8e4'
+      FANTASY_QUALIFIED_TEST_BLOB: 'ab43be6a72f000cbf50c0bb557408e1f7108201c'
+      FANTASY_REFERENCE_DIST_MANIFEST: '6d51d995e68abdfa2d629ef5f367c07fb1bac326f6e80120561e7e91b5d341bb'
+      FANTASY_REFERENCE_WORKFLOW: '041bc1160ec6847f8378e8af075166646c9b621c'
+      FANTASY_CLEAN_PRODUCT_BASE: 'beaa2d99f74219fbbccf112f461862278cf5ead0'
+      FANTASY_CLEAN_PRODUCT_BASE_TREE: '5d19ebc7d16c92a8a338f1cfcdeb94f2f65a6608'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 3
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24.22.1
+          cache: npm
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.4.4
+      - name: Locked dependencies and clean source receipts
+        run: |
+          set -euo pipefail
+          if grep -Eq '__[A-Z][A-Z0-9_]*__' .github/workflows/fantasy-draft-pool-error-20261106.yml; then echo 'Unresolved clean qualification template binding'; exit 1; fi
+          [[ "$FANTASY_REFERENCE_ARTIFACT" =~ ^[1-9][0-9]*$ ]]
+          [[ "$FANTASY_REFERENCE_RUN" =~ ^[1-9][0-9]*$ ]]
+          [[ "$FANTASY_REFERENCE_ZIP" =~ ^[a-f0-9]{64}$ ]]
+          [[ "$FANTASY_REFERENCE_TAR" =~ ^[a-f0-9]{64}$ ]]
+          [[ "$FANTASY_REFERENCE_ZIP_BYTES" =~ ^[1-9][0-9]*$ ]]
+          [[ "$FANTASY_REFERENCE_DIST_MANIFEST" =~ ^[a-f0-9]{64}$ ]]
+          for value in "$FANTASY_REFERENCE_HEAD" "$FANTASY_REFERENCE_TREE" "$FANTASY_NATIVE_HELPER" "$FANTASY_NATIVE_OUTER" "$FANTASY_REFERENCE_WORKFLOW" "$FANTASY_FIXED_PAGE_BLOB" "$FANTASY_QUALIFIED_PLAN_BLOB" "$FANTASY_QUALIFIED_TEST_BLOB"; do [[ "$value" =~ ^[a-f0-9]{40}$ ]]; done
+          test ! -e fantasy-draft-pool-error-clean-join
+          mkdir fantasy-draft-pool-error-clean-join
+          touch fantasy-draft-pool-error-clean-join/offline.log
+          git rev-parse HEAD > fantasy-draft-pool-error-clean-join/head.txt
+          git rev-parse 'HEAD^{tree}' > fantasy-draft-pool-error-clean-join/tree.txt
+          git ls-files -s > fantasy-draft-pool-error-clean-join/source-before.txt
+          sha256sum package.json package-lock.json > fantasy-draft-pool-error-clean-join/locks-before.txt
+          npm ci
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const lock=JSON.parse(fs.readFileSync('package-lock.json'));
+          const rows=Object.keys(lock.packages).filter(p=>p.startsWith('node_modules/')&&fs.existsSync(p+'/package.json')).map(p=>[p,JSON.parse(fs.readFileSync(p+'/package.json')).version]);
+          assert.equal(rows.length,521);for(const[p,v]of rows)assert.equal(v,lock.packages[p].version,p);fs.writeFileSync('fantasy-draft-pool-error-clean-join/installed-before.json',JSON.stringify(rows));
+          NODE
+      - name: Proper app types
+        run: |
+          set -euo pipefail
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee fantasy-draft-pool-error-clean-join/types.log
+      - name: Authenticate the completed full reference before extraction
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          gh api "repos/PapiSalgueroM/ballpark-hero/actions/runs/$FANTASY_REFERENCE_RUN" > fantasy-draft-pool-error-clean-join/reference-run.json
+          gh api "repos/PapiSalgueroM/ballpark-hero/actions/artifacts/$FANTASY_REFERENCE_ARTIFACT" > fantasy-draft-pool-error-clean-join/reference-artifact.json
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          const env = process.env;
+          const read = file => JSON.parse(fs.readFileSync('fantasy-draft-pool-error-clean-join/' + file));
+          const run = read('reference-run.json'), artifact = read('reference-artifact.json');
+          assert.deepEqual(
+            [run.id, run.status, run.conclusion, run.event, run.path, run.repository.full_name, run.head_sha, run.head_commit.tree_id],
+            [Number(env.FANTASY_REFERENCE_RUN), 'completed', 'success', 'push', '.github/workflows/fantasy-draft-pool-error-20261106.yml', 'PapiSalgueroM/ballpark-hero', env.FANTASY_REFERENCE_HEAD, env.FANTASY_REFERENCE_TREE],
+          );
+          assert.deepEqual(
+            [artifact.id, artifact.name, artifact.expired, artifact.size_in_bytes, artifact.digest, artifact.workflow_run.id, artifact.workflow_run.head_sha],
+            [Number(env.FANTASY_REFERENCE_ARTIFACT), 'fantasy-draft-pool-error-qualified-' + run.id, false, Number(env.FANTASY_REFERENCE_ZIP_BYTES), 'sha256:' + env.FANTASY_REFERENCE_ZIP, run.id, run.head_sha],
+          );
+          NODE
+          gh api "repos/PapiSalgueroM/ballpark-hero/actions/artifacts/$FANTASY_REFERENCE_ARTIFACT/zip" > "$RUNNER_TEMP/fantasy-draft-pool-error-full-reference.zip"
+          test "$(wc -c < "$RUNNER_TEMP/fantasy-draft-pool-error-full-reference.zip")" -eq "$FANTASY_REFERENCE_ZIP_BYTES"
+          echo "$FANTASY_REFERENCE_ZIP  $RUNNER_TEMP/fantasy-draft-pool-error-full-reference.zip" | sha256sum --check
+          unzip -Z1 "$RUNNER_TEMP/fantasy-draft-pool-error-full-reference.zip" > fantasy-draft-pool-error-clean-join/reference-zip-entries.txt
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          const names = fs.readFileSync('fantasy-draft-pool-error-clean-join/reference-zip-entries.txt', 'utf8').trimEnd().split('\n');
+          assert.equal(new Set(names).size, names.length, 'Unique admitted ZIP paths');
+          for (const name of names) {
+            assert(name.length && !name.includes('\\') && !name.startsWith('/'), 'Relative ZIP path');
+            assert(name.replace(/\/$/, '').split('/').every(part => part && part !== '.' && part !== '..'), 'Safe ZIP path');
+          }
+          for (const file of ['head.txt', 'tree.txt', 'admission.json', 'fixed-admission.json', 'native-admission.json', 'final-holds.json', 'source-before.txt', 'source-after.txt', 'dist-before.json', 'dist-after.json', 'dist.tgz']) {
+            assert(names.includes(file), file + ' required authenticated body');
+          }
+          NODE
+          mkdir "$RUNNER_TEMP/fantasy-draft-pool-error-full-reference" "$RUNNER_TEMP/fantasy-draft-pool-error-full-reference-dist"
+          unzip -q "$RUNNER_TEMP/fantasy-draft-pool-error-full-reference.zip" -d "$RUNNER_TEMP/fantasy-draft-pool-error-full-reference"
+          test -z "$(find "$RUNNER_TEMP/fantasy-draft-pool-error-full-reference" -type l -print -quit)"
+          echo "$FANTASY_REFERENCE_TAR  $RUNNER_TEMP/fantasy-draft-pool-error-full-reference/dist.tgz" | sha256sum --check
+          tar -tzf "$RUNNER_TEMP/fantasy-draft-pool-error-full-reference/dist.tgz" > fantasy-draft-pool-error-clean-join/reference-tar-entries.txt
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          const names = fs.readFileSync('fantasy-draft-pool-error-clean-join/reference-tar-entries.txt', 'utf8').trimEnd().split('\n');
+          assert.equal(new Set(names).size, names.length, 'Unique admitted dist tar paths');
+          for (const name of names) {
+            assert(name.startsWith('dist/') && !name.includes('\\'), 'Tar stays under dist');
+            assert(name.replace(/\/$/, '').split('/').every(part => part && part !== '.' && part !== '..'), 'Safe tar path');
+          }
+          NODE
+          tar -xzf "$RUNNER_TEMP/fantasy-draft-pool-error-full-reference/dist.tgz" -C "$RUNNER_TEMP/fantasy-draft-pool-error-full-reference-dist"
+          cp "$RUNNER_TEMP/fantasy-draft-pool-error-full-reference/source-before.txt" fantasy-draft-pool-error-clean-join/reference-source.txt
+      - name: Fresh unchanged product-name fence on clean source
+        run: |
+          set -euo pipefail
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simNoRivalNames.mjs 2>&1 | tee fantasy-draft-pool-error-clean-join/no-rival.log
+      - name: Clean production build
+        run: |
+          set -euo pipefail
+          NODE_OPTIONS="--max-old-space-size=6144" npm run build 2>&1 | tee fantasy-draft-pool-error-clean-join/build.log
+      - name: Join exact clean product source and all 850 built files
+        id: join
+        env:
+          FANTASY_REFERENCE_DIR: ${{ runner.temp }}/fantasy-draft-pool-error-full-reference
+          FANTASY_REFERENCE_DIST: ${{ runner.temp }}/fantasy-draft-pool-error-full-reference-dist/dist
+        run: |
+          set -euo pipefail
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import assert from 'node:assert/strict';
+          import {createHash} from 'node:crypto';
+          import {execFileSync} from 'node:child_process';
+          const env = process.env;
+          const out = 'fantasy-draft-pool-error-clean-join';
+          const ref = env.FANTASY_REFERENCE_DIR;
+          const read = file => JSON.parse(fs.readFileSync(path.join(ref, file)));
+          const bytes = file => fs.readFileSync(path.join(ref, file));
+          const readOutput = file => JSON.parse(fs.readFileSync(path.join(out, file)));
+          const sha = bytes => createHash('sha256').update(bytes).digest('hex');
+          const blob = bytes => createHash('sha1').update('blob ' + bytes.length + '\0').update(bytes).digest('hex');
+          const git = (...args) => execFileSync('git', args, {encoding:'utf8', maxBuffer:16 * 1024 * 1024});
+          const workflow = '.github/workflows/fantasy-draft-pool-error-20261106.yml';
+          const helper = 'scripts/qa/playFantasyDraftPoolRecovery.mjs';
+          const page = 'src/pages/FantasyDraft.tsx';
+          const test = 'src/test/fantasyDraftPoolRecovery.test.tsx';
+          const plan = 'docs/plans/2026-11-06-fantasy-draft-pool-error.md';
+          const configs = ['index.html','package.json','package-lock.json','vite.config.ts','tailwind.config.ts','postcss.config.js','tsconfig.json','tsconfig.app.json','tsconfig.node.json','bun.lockb','bun.lock'];
+          const sourceScope = file => /^(?:src|public|scripts)\//.test(file);
+          const fullOnly = new Set([workflow, helper]);
+          const denied = ['scripts/qa/checkFantasyDraftPoolRecovery.mjs','scripts/qa/admitFantasyDraftPoolRecovery.mjs'];
+          const pins = {
+            [page]: env.FANTASY_FIXED_PAGE_BLOB,
+            [test]: env.FANTASY_QUALIFIED_TEST_BLOB,
+            [plan]: env.FANTASY_QUALIFIED_PLAN_BLOB,
+            'src/components/fantasy-draft/PlayerPool.tsx': '08a84d008390d68293482de3e818fada9120c5b3',
+            'src/components/fantasy-draft/DraftRoster.tsx': '61d938308edcded2adffc810c01b7d9c12fd3a35',
+            'src/lib/fantasyCriteria.ts': 'f6f7d27ee0af80e4386e650a9d7128cd89702f90',
+            'src/lib/searchDiscard.ts': '2ae5bc4d6b728e9d5e0f102ece352e59708a0b16',
+            'src/lib/completions.ts': '61daf9b6c528f884551cd1d42f71357681c8728a',
+            'src/test/fantasyDraftCriteriaStart.test.tsx': '4e9d54803677696454ef0cbbf155182192e03769',
+            'src/test/fantasyDraftFormation.test.tsx': '4db9e392fdc40f01e2c668342e45eafcf37b79f6',
+            'src/App.tsx': '8bfedf7aaa1d076e0f0c8e2216c7e46632cd8a33',
+            'src/data/gameRegistry.ts': 'f560b40a74d1468ac72dfde4ee6fec6635a9a255',
+            'public/fantasy-draft/index.html': 'c2d51909d1e2f4b50c8b37f504d1cd5fdd0f47f5',
+          };
+          const indexRows = (body, separator = '\n') => {
+            const rows = body.split(separator).filter(Boolean).map(line => {
+              const matched = /^(100(?:644|755)) ([0-9a-f]{40}) 0\t(.+)$/.exec(line);
+              assert(matched, 'Actual regular path/mode/blob index tuple');
+              return [matched[3], {mode:matched[1], blob:matched[2]}];
+            });
+            assert.equal(new Set(rows.map(([file]) => file)).size, rows.length, 'Unique index paths');
+            return new Map(rows);
+          };
+          const treeRows = commit => {
+            const rows = git('ls-tree', '-r', '-z', commit).split('\0').filter(Boolean).map(line => {
+              const matched = /^(100(?:644|755)) blob ([0-9a-f]{40})\t(.+)$/.exec(line);
+              assert(matched, 'Actual regular path/mode/blob tree tuple');
+              return [matched[3], {mode:matched[1], blob:matched[2]}];
+            });
+            assert.equal(new Set(rows.map(([file]) => file)).size, rows.length, 'Unique tree paths');
+            return new Map(rows);
+          };
+          const ordered = rows => [...rows].sort(([left],[right]) => left.localeCompare(right));
+          const cleanHead = git('rev-parse', 'HEAD').trim(), cleanTree = git('rev-parse', 'HEAD^{tree}').trim();
+          assert.deepEqual(git('rev-list', '--parents', '-n', '1', 'HEAD').trim().split(' '), [cleanHead, env.FANTASY_CLEAN_PRODUCT_BASE], 'Clean QA is the direct PR526 child');
+          assert.equal(git('rev-parse', env.FANTASY_CLEAN_PRODUCT_BASE + '^{tree}').trim(), env.FANTASY_CLEAN_PRODUCT_BASE_TREE);
+          assert.equal(fs.readFileSync(out + '/head.txt','utf8').trim(), cleanHead);
+          assert.equal(fs.readFileSync(out + '/tree.txt','utf8').trim(), cleanTree);
+          const base = treeRows(env.FANTASY_CLEAN_PRODUCT_BASE);
+          const current = indexRows(fs.readFileSync(out + '/source-before.txt', 'utf8'));
+          const old = indexRows(fs.readFileSync(out + '/reference-source.txt', 'utf8'));
+          assert.deepEqual(ordered(indexRows(git('ls-files','--stage','-z'),'\0')), ordered(current));
+          assert.deepEqual(ordered(treeRows(cleanHead)), ordered(current), 'Clean index joins exact committed tree tuples');
+          assert.deepEqual([base.size,current.size,old.size],[5781,5784,5785]);
+          const allowedClean = [page, test, plan, workflow];
+          const cleanDelta = [...new Set([...base.keys(), ...current.keys()])].filter(file => {
+            const before = base.get(file), after = current.get(file);
+            return before?.mode !== after?.mode || before?.blob !== after?.blob;
+          }).sort();
+          assert.deepEqual(cleanDelta, [...allowedClean].sort(), 'Exactly one product Page change and three owned new leaves');
+          assert.equal(base.get(page)?.blob, 'd1b38c9aaae0ead2c68d746866e0ccb3b47adccd');
+          assert.equal(current.get(page)?.mode, base.get(page)?.mode);
+          for (const file of [test, plan, workflow]) assert(!base.has(file) && current.get(file)?.mode === '100644', file + ' exact owned new leaf');
+          assert(!current.has(helper), 'Tracked full browser helper is excluded from clean QA');
+          assert.equal(old.get(helper)?.blob, env.FANTASY_NATIVE_HELPER);
+          assert.equal(old.get(workflow)?.blob, env.FANTASY_REFERENCE_WORKFLOW);
+          assert(current.get(workflow)?.blob && current.get(workflow).blob !== old.get(workflow).blob, 'Clean QA uses its own workflow body');
+          for (const file of denied) assert(!old.has(file) && !current.has(file), file + ' untracked QA source');
+          for (const [file,want] of Object.entries(pins)) {
+            assert.equal(current.get(file)?.blob, want, file + ' exact clean pin');
+            assert.equal(old.get(file)?.blob, want, file + ' exact full pin');
+          }
+          const product = (rows, omit) => ordered([...rows].filter(([file]) => !omit.has(file)));
+          assert.deepEqual(product(current,new Set([workflow])), product(old,fullOnly), 'All 5783 product path/mode/blob tuples are identical');
+          assert.deepEqual([base,current,old].map(rows => [...rows.keys()].filter(sourceScope).length), [4659,4660,4661]);
+          const scoped = (rows, omit) => ordered([...rows].filter(([file]) => (sourceScope(file) || configs.includes(file)) && !omit.has(file)));
+          const sourceConfigRows = scoped(current,new Set());
+          assert.equal(sourceConfigRows.length, 4671);
+          assert.deepEqual(sourceConfigRows,scoped(old,fullOnly),'Every 4660 code and 11 root configuration path/mode/blob tuple');
+          for (const file of configs) assert(current.has(file) && old.has(file),file + ' required root configuration');
+          for (const [file,tuple] of current) {
+            const stat = fs.lstatSync(file);
+            assert(stat.isFile(),file + ' physical regular source body');
+            assert.equal((stat.mode & 0o111) !== 0, tuple.mode === '100755',file + ' physical source executable mode');
+            assert.equal(blob(fs.readFileSync(file)),tuple.blob,file + ' physical source bytes join tree');
+          }
+
+          const inventory = (directory,prefix = '') => fs.readdirSync(directory,{withFileTypes:true}).sort((a,b) => a.name.localeCompare(b.name)).flatMap(entry => {
+            const file = path.join(directory,entry.name);
+            const relative = prefix + entry.name;
+            if (entry.isDirectory()) return inventory(file,relative + '/');
+            assert(entry.isFile(),relative + ' regular dist file');
+            const body = fs.readFileSync(file);
+            return [{path:relative,bytes:body.length,sha256:sha(body)}];
+          });
+          const actual = inventory('dist'), reference = inventory(env.FANTASY_REFERENCE_DIST);
+          assert.deepEqual([actual.length,reference.length],[850,850]);
+          assert.deepEqual(actual,reference,'Every clean built path and byte equals the qualified full build');
+          const distManifestSHA256 = sha(JSON.stringify(reference));
+          assert.equal(distManifestSHA256,env.FANTASY_REFERENCE_DIST_MANIFEST);
+          const retainedManifest = read('dist-before.json').map(row => {
+            assert.deepEqual(Object.keys(row).sort(),['bytes','file','sha256']);
+            assert(row.file.startsWith('dist/'));
+            return {path:row.file.slice(5),bytes:row.bytes,sha256:row.sha256};
+          });
+          assert.deepEqual(retainedManifest,reference,'Exact full retained build inventory and tar join');
+          assert(bytes('dist-before.json').equals(bytes('dist-after.json')));
+          assert(bytes('source-before.txt').equals(bytes('source-after.txt')));
+          assert(bytes('source-before.txt').equals(fs.readFileSync(out + '/reference-source.txt')));
+          const referenceHead = bytes('head.txt').toString('utf8').trim(), referenceTree = bytes('tree.txt').toString('utf8').trim();
+          const run = readOutput('reference-run.json'), meta = readOutput('reference-artifact.json');
+          assert.deepEqual([referenceHead,referenceTree],[env.FANTASY_REFERENCE_HEAD,env.FANTASY_REFERENCE_TREE]);
+          const full = read('admission.json'), native = read('native-admission.json'), unit = read('fixed-admission.json'), holds = read('final-holds.json');
+          assert.deepEqual([full.status,full.qualification,full.head,full.tree,full.page,full.helper,full.nativeOuter], [
+            'passed','fresh-fantasy-draft-pool-recovery-full-scope',referenceHead,referenceTree,env.FANTASY_FIXED_PAGE_BLOB,env.FANTASY_NATIVE_HELPER,env.FANTASY_NATIVE_OUTER,
+          ]);
+          assert.deepEqual([full.trackedBodies,full.sourceRows,full.cleanSourceRows,full.rootConfigurations,full.distFiles,full.immutableCaps,full.readers.length],[5785,4661,4660,11,850,16,20]);
+          assert.deepEqual([full.unitCases,full.unitCommands,full.newFrames,full.priorFrames,full.rawFrames,full.actionJournalEntries,full.queryLegs,full.wholePreservedFrames,full.wholeQualifiedFixedRAWBytesHeld,full.wholeQualifiedPriorRAWBytesHeld],[8,1,66,14,80,58,22,29,true,true]);
+          assert.deepEqual(full.wholePreservedCases,['normalUser','normalAi']);
+          assert.deepEqual(full.nativeReceipt,native);
+          assert.deepEqual([full.nativeJourneys,full.nativeContexts,full.nativePngs],[3,3,9]);
+          assert.deepEqual(full.distTar,{bytes:bytes('dist.tgz').length,sha256:env.FANTASY_REFERENCE_TAR});
+          assert.equal(sha(bytes('dist.tgz')),env.FANTASY_REFERENCE_TAR);
+          assert.equal(blob(bytes('native-admission-script.mjs')),env.FANTASY_NATIVE_OUTER);
+          // Clean reference receipt for the authenticated completed full run.
+          const referenceChecks = (() => {
+            const source = read('source-join.json');
+            const custody = read('packet-custody.json');
+            const join = read('fixed-raw-join.json');
+            const fixed = read('fixed-reference/fixed-admission.json');
+            const controls = read('controls-reference/controls-admission.json');
+            const original = read('original-packet/original-admission.json');
+            const admitted = {"run":42345398413,"artifact":13563027883,"head":"683e3c7d8389df23ba185071dcdbb4591d3a9506","tree":"ec4a2d418f749e55e6f726788d6fd2357eaa117e","workflow":"041bc1160ec6847f8378e8af075166646c9b621c","helper":"e833a17e1b33bbcc49322870b87571b09f3bbdc1","outer":"ac6e3e37cc3e328c7fa2737413bbe16393624ca8","zipBytes":80486547,"zipSHA256":"cfd8ebe6ffbd1cbba1d18c2f6551063155510de6256f3b953b92ca62f7b059e2","tar":{"bytes":6988695,"sha256":"4b92d933dff179cba56d6671dd30fbab302b4ddd115f05cab89954708708d5a8"},"distManifestSHA256":"6d51d995e68abdfa2d629ef5f367c07fb1bac326f6e80120561e7e91b5d341bb"};
+            assert.deepEqual([run.id, meta.id, referenceHead, referenceTree, source.workflowBlob, full.helper, full.nativeOuter,
+              meta.size_in_bytes, meta.digest, distManifestSHA256], [admitted.run, admitted.artifact, admitted.head, admitted.tree,
+              admitted.workflow, admitted.helper, admitted.outer, admitted.zipBytes, 'sha256:' + admitted.zipSHA256, admitted.distManifestSHA256]);
+            assert.deepEqual(full.distTar, admitted.tar);
+            const receiptPins = [{"file":"admission.json","bytes":19969,"sha256":"aa3ff8d4e1c5bfcf801f272b003a74626689c34ef863c11468c9ec94995f7340"},{"file":"fixed-admission.json","bytes":14285,"sha256":"e823ed39df4a98a5eff713524bcb25374bfe1baaed07618e8cfec5568795a7bd"},{"file":"native-admission.json","bytes":7988,"sha256":"c3e0e3da9bf7ca9c1a2f272423a6f4d665006b2e0d47b43d9e61d394057161aa"},{"file":"packet-custody.json","bytes":11133,"sha256":"e7dac229f7e5fe7ccbfe43358c12495f65fb0724ee5f5c47913ee7dbb8ea3b1a"},{"file":"fixed-raw-join.json","bytes":636,"sha256":"4d2a87a707b63df9f2446f185ffbc5270502a0b8567bbee28e5bed06fb0e0250"},{"file":"source-join.json","bytes":4858,"sha256":"e3aa583c84576d129bcb116f9c97f13880fe92aa8a4318fe05cc12403b3f921a"},{"file":"final-holds.json","bytes":409,"sha256":"7f83f6ad90292615e22c8c93dc33951373dba924ce0d4195405b6d255455db67"}];
+            for (const expected of receiptPins) {
+              const actualBody = bytes(expected.file);
+              assert.deepEqual([actualBody.length, sha(actualBody)], [expected.bytes, expected.sha256], expected.file + ' exact admitted full receipt');
+            }
+            assert.deepEqual([source.status, source.head, source.tree, source.workflowBlob, source.trackedRows, source.sourceRows, source.cleanSourceRows, source.heldFixedRows],
+              ['passed', referenceHead, referenceTree, env.FANTASY_REFERENCE_WORKFLOW, 5785, 4661, 4660, 5783]);
+            assert.equal(source.rootConfigurations.length, 11);
+            assert.deepEqual([run.status, run.conclusion, run.head_sha, run.head_commit.tree_id, meta.workflow_run.id, meta.workflow_run.head_sha],
+              ['completed', 'success', referenceHead, referenceTree, run.id, referenceHead]);
+
+            assert.deepEqual([unit.status, unit.actualCases, unit.actualPasses, unit.actualFailures, unit.totalNewFrames, unit.totalPriorFrames, unit.totalFrames,
+              unit.actionJournalEntries, unit.exactQueryLegs, unit.DOMFramesReplayed], ['passed-fixed-fantasy-pool-recovery-qualification', 8, 8, 0, 66, 14, 80, 58, 22, 58]);
+            assert.deepEqual([unit.source.head, unit.source.tree, unit.source.workflow, unit.source.page, unit.source.trackedBodies, unit.source.scopedSourceRows],
+              [referenceHead, referenceTree, source.workflowBlob, full.page, 5785, 4661]);
+            assert.deepEqual([fixed.source.head, fixed.source.tree, fixed.source.page], [custody.fixed.head, custody.fixed.tree, full.page]);
+            assert.deepEqual([unit.firstFailedOriginalRun, unit.firstFailedOriginalConclusion], [42339420436, 'failure']);
+            const failed = read('first-failed-run.json');
+            assert.deepEqual([failed.id, failed.status, failed.conclusion], [42339420436, 'completed', 'failure']);
+            const report = read('owned.json');
+            const rows = report.testResults.flatMap(suite => suite.assertionResults);
+            assert.deepEqual([report.success, report.numTotalTests, report.numPassedTests, report.numFailedTests, rows.length], [true, 8, 8, 0, 8]);
+            assert.equal(report.testResults.length, 2);
+            for (const suite of report.testResults) assert.equal(suite.message, '');
+            assert(rows.every(row => row.status === 'passed' && row.failureMessages.length === 0));
+            assert.equal(bytes('test-exit.txt').toString('utf8').trim(), '0');
+
+            const fresh = bytes('raw.json'), prior = bytes('criteria-start-raw.json');
+            assert(fresh.equals(bytes('fixed-reference/raw.json')));
+            assert(prior.equals(bytes('fixed-reference/criteria-start-raw.json')));
+            assert(prior.equals(bytes('original-packet/criteria-start-raw.json')));
+            assert.deepEqual([join.status, join.currentHead, join.currentTree, join.fixedHead, join.fixedTree, join.bytes, join.sha256,
+              join.priorBytes, join.priorSHA256, join.freshUnitRAWByteEqual, join.freshPriorRAWByteEqual, join.wholePreservedFrames],
+            ['passed', referenceHead, referenceTree, custody.fixed.head, custody.fixed.tree, fresh.length, sha(fresh), prior.length, sha(prior), true, true, 29]);
+            assert.deepEqual(unit.wholePreserves, fixed.wholePreserves);
+            assert.deepEqual(unit.wholePreserves.map(row => [row.key, row.frames]), [['normalUser', 13], ['normalAi', 16]]);
+            for (const row of unit.wholePreserves) {
+              assert.equal(row.file, 'preserve-' + row.key + '.json');
+              const whole = bytes(row.file);
+              assert.deepEqual([whole.length, sha(whole), row.entireCaseLiteral, row.literalBytesEqualOriginal], [row.bytes, row.sha256, true, true]);
+              assert(whole.equals(fresh.subarray(row.offset, row.offset + row.bytes)));
+              assert(whole.equals(bytes('original-packet/' + row.file)));
+              assert(whole.equals(bytes('fixed-reference/' + row.file)));
+            }
+
+            assert.deepEqual([custody.status, custody.controlsRerun, custody.controlsChecks.status], ['passed', false, 'passed']);
+            assert.deepEqual(full.controlsReceipt, custody.controlsChecks);
+            assert.deepEqual(custody.controlsChecks.admission, controls);
+            for (const kind of ['original', 'fixed', 'controls']) {
+              const role = custody[kind];
+              assert.deepEqual([full[kind + 'Run'], full[kind + 'Head'], full[kind + 'Tree'], full[kind + 'Artifact']],
+                [role.run, role.head, role.tree, role.artifact]);
+            }
+            assert.deepEqual([original.actualCases, original.actualPasses, original.actualFailures], [8, 6, 2]);
+            assert.deepEqual([controls.status, controls.summary.completedArms, controls.summary.actualRows, controls.summary.actualPasses,
+              controls.summary.actualNamedBusinessReds, controls.summary.totalFrames, controls.summary.wholePreservationVectors],
+            ['passed-three-physical-pool-recovery-control-arms', 3, 24, 22, 2, 240, 6]);
+            for (const key of ['allTrackedRestored', 'indexHeld', 'locksHeld', 'installed521Held', 'offlineHeld']) assert.equal(controls.summary[key], true);
+            assert.deepEqual(controls.summary.arms.map(row => row.name), ['fixed', 'original', 'restored']);
+            for (const arm of controls.summary.arms) {
+              const dir = 'controls-reference/arms/' + arm.name + '/';
+              assert(bytes(dir + 'raw.json').equals(arm.name === 'original' ? bytes('original-packet/raw.json') : fresh));
+              assert(bytes(dir + 'criteria-start-raw.json').equals(prior));
+              for (const row of unit.wholePreserves) assert(bytes(dir + row.file).equals(bytes(row.file)));
+            }
+
+            assert.deepEqual([native.status, native.route, native.page, native.helper], ['passed', '/fantasy-draft', full.page, full.helper]);
+            assert.deepEqual(native.currentSource, {
+              head: referenceHead, tree: referenceTree, workflow: source.workflowBlob, trackedBodies: 5785,
+              scopedSourceRows: 4661, heldFixedRows: 5783, rootConfigurations: 11, distBodies: 850, installedVersions: 521,
+            });
+            assert.deepEqual(native.holds, {
+              source: true, dist: true, locks: true, installed521: true, offline: true,
+              index: true, fullNewRawLiteral: true, fullPriorRawLiteral: true,
+            });
+            const evidence = native.evidence;
+            const expectedFiles = {bodyManifest:'body-manifest.json', report:'report.json', raw:'raw.json',
+              qualifiedInput:'qualified-input-binding.json', indexBefore:'index-before.txt', indexAfter:'index-after.txt'};
+            for (const [key, file] of Object.entries(expectedFiles)) {
+              const body = bytes('browser/' + file);
+              assert.deepEqual(evidence[key], {file, bytes:body.length, sha256:sha(body)});
+            }
+            const manifest = read('browser/body-manifest.json'), browserReport = read('browser/report.json');
+            assert.deepEqual([manifest.files.length, manifest.filesCount, manifest.bodyBytes],
+              [evidence.filesCount, evidence.filesCount, evidence.bodyBytes]);
+            assert.equal(manifest.files.reduce((sum, row) => sum + row.bytes, 0), evidence.bodyBytes);
+            assert.deepEqual(native.qualifiedInput, read('browser/qualified-input-binding.json'));
+            assert.deepEqual([native.qualifiedInput.fixed.head, native.qualifiedInput.fixed.tree, native.qualifiedInput.controls.head, native.qualifiedInput.controls.tree],
+              [custody.fixed.head, custody.fixed.tree, custody.controls.head, custody.controls.tree]);
+            assert.deepEqual(native.census, browserReport.census);
+            const admittedNativeCensus = {"journeys":3,"contexts":3,"observedSeats":[{"width":320,"height":568,"seat":"ai"},{"width":390,"height":844,"seat":"user"},{"width":1280,"height":900,"seat":"ai"}],"userFirst":1,"aiFirst":2,"actions":18,"frames":82,"preparations":24,"layouts":39,"wheels":3,"screenshots":9,"navigations":6,"startupMouseClicks":6,"startupEscapeKeys":3,"businessMouseClicks":9,"criterionReads":3,"playerReads":6,"actualWireResponses":9,"corsRequests":0,"firstPartyReads":96,"storageEvents":18,"humanPicks":3,"aiPicks":4,"completionAttempts":0};
+            assert.deepEqual(native.census, admittedNativeCensus);
+            assert.deepEqual([evidence.filesCount, evidence.bodyBytes], [188, 25299970]);
+            assert.deepEqual(native.boundaries, browserReport.limits);
+            assert.deepEqual(full.nativeObservedSeats, native.census.observedSeats);
+            assert.deepEqual(native.census.observedSeats.map(row => [row.width,row.height]), [[320,568],[390,844],[1280,900]]);
+            assert(native.census.observedSeats.every(row => row.seat === 'user' || row.seat === 'ai'));
+            const userFirst = native.census.observedSeats.filter(row => row.seat === 'user').length;
+            const aiFirst = 3 - userFirst;
+            assert.deepEqual([native.census.userFirst,native.census.aiFirst,native.census.aiPicks,native.census.frames],
+              [userFirst,aiFirst,2*userFirst+aiFirst,26*userFirst+25*aiFirst+2*native.census.wheels]);
+            assert.deepEqual([native.census.journeys,native.census.contexts,native.measured.viewportPNGs,native.census.completionAttempts], [3,3,9,0]);
+
+            const readerLog = bytes('readers.log').toString('utf8');
+            const readers = [...readerLog.matchAll(/^\s+PASS\s+(sim[A-Za-z0-9]+\.mjs)/gm)].map(match => match[1]).sort();
+            assert.deepEqual(readers, [...full.readers].sort());
+            assert.equal(readers.length,20);
+            assert(!/^\s+FAIL\s+/m.test(readerLog));
+            const weight = bytes('weight.log').toString('utf8');
+            const caps = [...weight.matchAll(/^\s+(\/\S*)\s+\d+K gz over\s+\d+ files \(budget (\d+)K, [\d.]+K to the tenth\)/gm)]
+              .map(match => [match[1], Number(match[2])]);
+            assert.deepEqual(caps, full.capRows);
+            assert.equal(caps.length, 16);
+            assert(weight.includes('sweepWeight: green.'));
+            assert.deepEqual([holds.status, holds.trackedBodies, holds.scopedSourceRows, holds.cleanSourceRows, holds.rootConfigurations,
+              holds.installedLockedVersions, holds.indexUnchanged, holds.sourceBytesUnchanged, holds.locksUnchanged,
+              holds.distHeld, holds.retainedPacketsHeld, holds.offlineBytes], ['passed',5785,4661,4660,11,521,true,true,true,true,true,0]);
+            assert.equal(bytes('types.log').length, 0);
+            assert.equal(bytes('offline.log').length, 0);
+            return {
+              status:'passed', fullRun:run.id, fullHead:referenceHead, fullTree:referenceTree, fullArtifact:meta.id,
+              retainedUnitCases:rows.length, retainedFrames:unit.totalFrames, wholePreservedFrames:29, entireNewAndPriorRawHeld:true,
+              retainedControls:controls.summary.completedArms, retainedReaders:readers, retainedCaps:caps,
+              retainedNativeContexts:native.census.contexts, retainedNativePNGs:native.measured.viewportPNGs, observedSeats:native.census.observedSeats,
+              referenceFinalHolds:holds,
+            };
+          })();
+          assert.equal(referenceChecks.status,'passed','Reviewed actual full receipt validator must complete');
+          const result = {
+            status:'passed', cleanHead, cleanTree, cleanProductBase:env.FANTASY_CLEAN_PRODUCT_BASE, cleanProductBaseTree:env.FANTASY_CLEAN_PRODUCT_BASE_TREE,
+            cleanDelta, referenceRun:run.id, referenceWorkflowHead:referenceHead, referenceApp:referenceHead, referenceTree,
+            referenceQualification:full.qualification, referenceArtifact:meta.id, referenceZipSHA256:env.FANTASY_REFERENCE_ZIP,
+            referenceTarSHA256:env.FANTASY_REFERENCE_TAR, referenceWorkflowBlob:env.FANTASY_REFERENCE_WORKFLOW,
+            heldProductRows:5783, sourceRows:4660, sourceAndConfigurationRows:sourceConfigRows.length,
+            rootConfigurations:configs.map(file => ({file,...current.get(file)})),
+            excludedFullQA:[...fullOnly], finalProductForbiddenPaths:[...fullOnly,...denied], generatedPatches:[],
+            distFiles:actual.length, distManifestSHA256, dist:actual, referenceChecks,
+            limits:'Fresh clean types, product-name fence, normal production build and exact source and built-byte join. Unit, native, control, reader and cap evidence comes from the authenticated full reference. The frozen qualified plan is held. Final product excludes this round QA workflow, helper, outer and controller. No provider or release credit.',
+          };
+          fs.writeFileSync(out + '/reference-build-join.json',JSON.stringify(result,null,2));
+          console.log('PASS all 4660 source paths, 11 root configurations and 850 built file bodies');
+          NODE
+      - name: Final source locks installed versions and offline holds
+        if: always()
+        run: |
+          set -euo pipefail
+          git ls-files -s > fantasy-draft-pool-error-clean-join/source-after.txt
+          cmp fantasy-draft-pool-error-clean-join/source-before.txt fantasy-draft-pool-error-clean-join/source-after.txt
+          git diff --exit-code HEAD -- .
+          sha256sum package.json package-lock.json > fantasy-draft-pool-error-clean-join/locks-after.txt
+          cmp fantasy-draft-pool-error-clean-join/locks-before.txt fantasy-draft-pool-error-clean-join/locks-after.txt
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const before=JSON.parse(fs.readFileSync('fantasy-draft-pool-error-clean-join/installed-before.json')),lock=JSON.parse(fs.readFileSync('package-lock.json'));
+          const after=Object.keys(lock.packages).filter(p=>p.startsWith('node_modules/')&&fs.existsSync(p+'/package.json')).map(p=>[p,JSON.parse(fs.readFileSync(p+'/package.json')).version]);assert.equal(after.length,521);for(const[p,v]of after)assert.equal(v,lock.packages[p].version,p);assert.deepEqual(after,before);
+          fs.writeFileSync('fantasy-draft-pool-error-clean-join/installed-final.json',JSON.stringify(after));
+          assert(fs.existsSync('fantasy-draft-pool-error-clean-join/offline.log'));assert.equal(fs.statSync('fantasy-draft-pool-error-clean-join/offline.log').size,0);
+          NODE
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: fantasy-draft-pool-error-clean-build-join-${{ github.run_id }}
+          path: fantasy-draft-pool-error-clean-join
+          retention-days: 14
+          if-no-files-found: error
