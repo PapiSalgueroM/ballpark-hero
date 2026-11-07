@@ -18244,3 +18244,18 @@ First full 42357333216 remains failed at the missing SEO baseline and an incorre
 Clean 42359167917 passed fresh App types, the product-name fence and the normal production build. All 4,662 product source paths, 11 root configurations and 850 built file tuples matched the qualified full tree.
 
 The product draft is stacked on PR534. Main was observed at 56d8708c7731600b1c0cb0daeef684b5940ca742. The merge and publish holds continue. This bounded fix does not close a master card.
+
+
+## 2026-11-07 Who Am I pending lookup ownership
+
+Each Who Am I player lookup now belongs to the round that started it. Confirming Give up discards the pending lookup. Play again opens a fresh round that can accept a new guess even while the previous reply is still arriving.
+
+Active preflight 42360463415 verified the App route, uncommented Soccer catalog entry and canonical indexable nonredirect snapshot before the regression or fix. Original attempts 42361149072 and 42361427440 remain failed at test typing and the result heading collector. Qualified original 42361790574 reproduced a late exact guess rewriting the abandoned result and a late exact guess falsely winning the replay with a second completion.
+
+Fixed 42362221393 passed all 32 cases, including the 29 prior player identity cases. The complete Keep playing trace stayed byte identical. Physical controls 42362517871 reproduced exactly the two named failures on the original Page, passed the fixed and restored Page, and verified exact source restoration.
+
+Full 42362896967 passed 32 fresh cases, 20 built readers, 16 original rounded download limits and a normal 850-file production build. Three Chromium viewports held two distinct fictional replies across Give up and Play again. The newer lookup stayed pending after the older reply arrived, then only the newer guess used a try. Nine viewport screenshots were reviewed. The legitimate Give up completion attempts were intercepted locally.
+
+Clean 42363679672 passed fresh App types, the product-name fence and normal production build. All 4,663 product source paths, 11 root configurations and 850 built file tuples matched the qualified full tree.
+
+The draft is stacked on PR535. Main was observed at 56d8708c7731600b1c0cb0daeef684b5940ca742. The merge and publish holds continue. This bounded fix does not close a master card.
