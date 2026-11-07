@@ -373,7 +373,7 @@ export function useSoccerGrid() {
         // Network error, don't count the guess
       } finally {
         setValidating(false);
-        setActiveCell(null);
+        setActiveCell((currentCell) => currentCell === capturedCell ? null : currentCell);
       }
     },
     [activeCell, gameStatus, validating, isOvertime, overtimeDisplayCells, cells, puzzle, puzzleKey, settings, getCurrentProgress, takeNewerDailySave, getRowCol, fetchRarity, addDailyGuess, startTimerIfNeeded, todayStr],

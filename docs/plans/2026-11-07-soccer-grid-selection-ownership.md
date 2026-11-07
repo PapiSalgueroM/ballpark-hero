@@ -27,3 +27,12 @@ Original checkout must be the exact PR530 product with only this regression, pla
 Make the smallest source change that preserves the visible newer B selection while retaining ordinary cleanup for A. Keep the Page, Board, Search, storage schema, outcome ownership, timing, scoring, rarity, completion and backend contracts held. Qualify fixed tests and literal normal/prior comparisons, physical original/fixed controls, native browser paths and exact clean source/build joins before a draft. The scope is this one selection transition, not general cross-tab or retry redesign.
 
 All local App/Git/runtime/PROJECT-STATE, exact-prefix workboard, companion, real-data/backend, newer-main integration and merge/publish holds continue. Master remains read-only, Grade Transfer retired, old zips untouched. No App fix, new original run or product draft exists at the time this plan is written.
+
+
+## 2026-11-07 Original admission and focused fix
+
+Original run 42349496063 succeeded as an original-only reproduction. Independent actual audit 30573b539ea96d0eb18658ae7e0398698398888c0bdec2de390b5f0dca90f81a verified all 47 artifact bodies, including the complete nested 16-body active preflight. Fifteen of 18 test rows passed. Only the three named selection assertions failed. In all three cases the actual Board accepted B while A was pending, the Search stayed disabled, and A's valid, invalid or unverified outcome followed the existing rules. The original cleanup then removed B and its criteria and search. The scope is loss of selection.
+
+The ordinary A-only case is a complete 7-frame preservation vector, offset 788, 81284 bytes, SHA256 da562826df59b2352b24c48154ca5aff83e49852a825a44797a322e79bd1c62f. All 14 unchanged prior cases passed. Their entire 667882-byte RAW has SHA256 7519caac4e812d063b8fc74ae832ddc8215be67fcb20c73c5b4946c74d27f55a. Fresh fixed output must keep both literally.
+
+The proposed Hook change updates only the selection cleanup. It clears the current selection if it still points to captured cell A, and returns the current value when the player has moved to another cell. The existing validation flag, outcome guards and business behavior are held. The unchanged new and prior suites will test the fixed source. No fixed, controls, full, clean or release result is claimed by this source candidate.
