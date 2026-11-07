@@ -1,7 +1,7 @@
-name: Sports Bingo solo pack clock fixed
+name: Sports Bingo solo pack clock controls
 on:
   push:
-    branches: [codex/sports-bingo-pack-clock-fixed-qa-20261107]
+    branches: [codex/sports-bingo-pack-clock-controls-qa-20261107]
 permissions:
   contents: read
   actions: read
@@ -15,8 +15,8 @@ jobs:
     env:
       SIM_NETWORK: offline
       SIM_OFFLINE_RECEIPT: sports-bingo-pack-clock-evidence/offline.log
-      SPORTS_STAGE: fixed
-      SPORTS_PARENT: 'e1b8528e840774a5e75c34ce00fa506eca2ea97d'
+      SPORTS_STAGE: controls
+      SPORTS_PARENT: '4e5772bfc3b5896b94f7e2d53165174cac1d8c79'
       SPORTS_BASE: '27e1d6508fb207dfd2647994d50f0783d9baec1b'
       SPORTS_BASE_TREE: 'feb8ac00d54366ac66398a28c6c89c2f2e41f484'
       SPORTS_ORIGINAL_PAGE: '0d6c8657921ad483eeee7dc50f1a92d5bfbd9a05'
@@ -76,7 +76,7 @@ jobs:
             'public/sports-bingo/index.html': '044451271149c1e08160d70cec2019860e284004',
             'src/lib/sportsBingo.ts': 'b1f29ad32de3567cad907d35d684a53e59f34616',
           };
-          const refs = {"original":{"run":42356173110,"artifact":13568026864,"name":"sports-bingo-pack-clock-original-42356173110","head":"e1b8528e840774a5e75c34ce00fa506eca2ea97d","tree":"fe000275215598bbb86e271d702af12e78df1ab3","zipBytes":2333788,"zipSHA256":"de2e4ca3f369fc38eb68182f399ab7ce4f47f85cf7ee50a122e080fa24b6d7eb","files":{"admission.json":"4d3bce7127d9344ffb84e727c9fbef6d1e40461166b547ab27f0c8bd8249cb0c","source-join.json":"b5a19d51da02322739007f6ac8b340fab79f9698cb14050894a90873c3cad49d","final-holds.json":"f7e67a5c8b66a9df6603bf67c875768bcced4ee9a36be22a44a38c01e984f7f5","case-original/raw.json":"2a9ec49df6aa1e0011ed1d19fb68a2631e657f406ff8ef9cbb09fb1f7ff9ed7f","case-original/vitest.json":"a6b42ae489d21df857427376a6b60f50f8eab5d6ac1460b5922fdd782e7029a6","case-original/exit-code.txt":"4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"}}};
+          const refs = {"original":{"run":42356173110,"artifact":13568026864,"name":"sports-bingo-pack-clock-original-42356173110","head":"e1b8528e840774a5e75c34ce00fa506eca2ea97d","tree":"fe000275215598bbb86e271d702af12e78df1ab3","zipBytes":2333788,"zipSHA256":"de2e4ca3f369fc38eb68182f399ab7ce4f47f85cf7ee50a122e080fa24b6d7eb","files":{"admission.json":"4d3bce7127d9344ffb84e727c9fbef6d1e40461166b547ab27f0c8bd8249cb0c","source-join.json":"b5a19d51da02322739007f6ac8b340fab79f9698cb14050894a90873c3cad49d","final-holds.json":"f7e67a5c8b66a9df6603bf67c875768bcced4ee9a36be22a44a38c01e984f7f5","case-original/raw.json":"2a9ec49df6aa1e0011ed1d19fb68a2631e657f406ff8ef9cbb09fb1f7ff9ed7f","case-original/vitest.json":"a6b42ae489d21df857427376a6b60f50f8eab5d6ac1460b5922fdd782e7029a6","case-original/exit-code.txt":"4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"}},"fixed":{"run":42356583184,"artifact":13568250895,"name":"sports-bingo-pack-clock-fixed-42356583184","head":"4e5772bfc3b5896b94f7e2d53165174cac1d8c79","tree":"f7b72519d8c59f1f7686aa6d98cd3c5f5b33161e","zipBytes":3652108,"zipSHA256":"637f6075ae1aaec89dab3e037fc261def7cdee31cd3922dd888c9885f6052947","files":{"admission.json":"148c0c24c3a4a9abcbb18b9adfa0e0dbcdf7aa656cf8d55548a83fe2bb7aa90b","source-join.json":"45445c83e008e5df7b8a2a5c1371a6b93dd0e2edd66f01c5e1fc16a1857069a7","final-holds.json":"f902a3323b40967516611f70d37662002a4b6e8907c16ddb6b20feccce36b345","case-fixed/raw.json":"ca469ab3572fe40d781d74a620bfe9a19dc859d6caec16e976f2b848915c691b","case-fixed/vitest.json":"2f510658a6116ed90e6cae0e793dc8d397c9433afa4535802957f4c81d626a3e","case-fixed/exit-code.txt":"9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"}}};
           const hash = (algorithm, body) => createHash(algorithm).update(body).digest('hex');
           const gitBlob = body => createHash('sha1').update('blob ' + body.length + '\0').update(body).digest('hex');
           const options = { maxBuffer: 64 * 1024 * 1024 };
@@ -329,7 +329,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: sports-bingo-pack-clock-fixed-${{ github.run_id }}
+          name: sports-bingo-pack-clock-controls-${{ github.run_id }}
           path: sports-bingo-pack-clock-evidence
           retention-days: 14
           if-no-files-found: error
