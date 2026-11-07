@@ -1,145 +1,365 @@
-name: Rarity Round crowd panel ownership fixed
+name: Rarity Round crowd panel ownership full qualification
 on:
   push:
-    branches: [codex/rarity-round-crowd-ownership-fixed-qa-20261107]
+    branches: [codex/rarity-round-crowd-ownership-full-qa-20261107]
 permissions:
-  actions: read
   contents: read
+  actions: read
 jobs:
-  fixed:
+  qualify:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 45
+    defaults:
+      run:
+        shell: bash
     env:
-      TZ: UTC
       SIM_NETWORK: offline
-      SIM_OFFLINE_RECEIPT: rarity-round-crowd-ownership-fixed/offline.log
-      RARITY_STAGE: fixed
-      BASE_HEAD: 'b74ad1c3f44582c04d64ffe34f10541185423475'
-      BASE_TREE: '53b589dd3a5acbb963ff9c593ccd12257b2388b4'
-      ORIGINAL_PAGE: '4a7bd374dfd888a13e5067340b58483a255dde5b'
-      FIXED_PAGE: '7c38b10a808cdf083bf5d1ed2f9d15b0a3cae93a'
-      TEST_BLOB: '5d983f1d199893480d47235321e31dd85a913ac4'
-      PLAN_BLOB: '285c47d684e01e66182e48b5b869612d65c12af6'
-      EVIDENCE: rarity-round-crowd-ownership-fixed
+      SIM_OFFLINE_RECEIPT: rarity-round-crowd-ownership-full/offline.log
+      TZ: UTC
+      SEO_SPLIT_BASE_REF: 3b14650d360b010b25b525de33a5f32f33de2798
+      RARITY_ROUND_PRODUCT_BASE: 'b74ad1c3f44582c04d64ffe34f10541185423475'
+      RARITY_ROUND_PRODUCT_BASE_TREE: '53b589dd3a5acbb963ff9c593ccd12257b2388b4'
+      RARITY_ROUND_FIXED_HEAD: '52652b5eaca96d03ef6b8c4dc39e55a314a00a00'
+      RARITY_ROUND_FIXED_TREE: '9dd996d8621a87e55f073d2df684bb80e17f5cd3'
+      RARITY_ROUND_FIXED_WORKFLOW: '9b8c5e7cb6dde27fa568f915fe723932125d6e0b'
+      RARITY_ROUND_TEST: '5d983f1d199893480d47235321e31dd85a913ac4'
+      RARITY_ROUND_PLAN: '285c47d684e01e66182e48b5b869612d65c12af6'
+      RARITY_ROUND_CROWD_OWNERSHIP_PAGE_BLOB: '7c38b10a808cdf083bf5d1ed2f9d15b0a3cae93a'
+      RARITY_ROUND_HELPER: '22560d69503a8ac69c8b220bfb9a0b27651996bb'
+      RARITY_ROUND_OUTER: 'a16d22a72af0b6664e9b047d5e329e18b6abf00a'
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 2
+          fetch-depth: 4
           persist-credentials: false
       - uses: actions/setup-node@v4
         with:
           node-version: 24.22.1
           cache: npm
-      - name: Capture source and authenticate admitted Rarity artifacts
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.4.4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Exact qualified fixed parent and clean product scope
+        run: |
+          set -euo pipefail
+          if grep -En '__[A-Z][A-Z0-9_]*__' .github/workflows/rarity-round-crowd-ownership-20261107.yml; then echo 'Unresolved full qualification binding'; exit 1; fi
+          for value in "$RARITY_ROUND_FIXED_HEAD" "$RARITY_ROUND_FIXED_TREE" "$RARITY_ROUND_FIXED_WORKFLOW" "$RARITY_ROUND_TEST" "$RARITY_ROUND_PLAN" "$RARITY_ROUND_CROWD_OWNERSHIP_PAGE_BLOB" "$RARITY_ROUND_HELPER" "$RARITY_ROUND_OUTER"; do [[ "$value" =~ ^[a-f0-9]{40}$ ]]; done
+          out=rarity-round-crowd-ownership-full
+          test ! -e "$out"
+          mkdir "$out"
+          touch "$out/offline.log"
+          git rev-parse HEAD > "$out/head.txt"
+          git rev-parse 'HEAD^{tree}' > "$out/tree.txt"
+          git ls-files -s > "$out/source-before.txt"
+          sha256sum package.json package-lock.json > "$out/locks-before.txt"
+          git diff --exit-code HEAD -- .
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          import {execFileSync} from 'node:child_process';
+          import {createHash} from 'node:crypto';
+          const out='rarity-round-crowd-ownership-full',env=process.env;
+          const base=env.RARITY_ROUND_PRODUCT_BASE,fixed=env.RARITY_ROUND_FIXED_HEAD;
+          const workflow='.github/workflows/rarity-round-crowd-ownership-20261107.yml',helper='scripts/qa/playRarityRoundCrowdOwnership.mjs';
+          const page='src/pages/RarityRound.tsx',test='src/test/rarityRoundCrowdOwnership.test.tsx',plan='docs/plans/2026-11-07-rarity-round-crowd-ownership.md';
+          const git=(...args)=>execFileSync('git',args,{encoding:'utf8',maxBuffer:16*1024*1024});
+          const at=(ref,file)=>git('rev-parse',ref+':'+file).trim();
+          const tree=ref=>git('ls-tree','-r','-z',ref).split('\0').filter(Boolean);
+          const fileOf=row=>row.split('\t')[1],scope=rows=>rows.filter(row=>/^(src|public|scripts)\//.test(fileOf(row))).length;
+          const hash=(kind,body)=>createHash(kind).update(body).digest('hex');
+          const blob=bytes=>createHash('sha1').update('blob '+bytes.length+'\0').update(bytes).digest('hex');
+          const head=git('rev-parse','HEAD').trim(),headTree=git('rev-parse','HEAD^{tree}').trim();
+          assert.equal(head,env.GITHUB_SHA);
+          assert.deepEqual(git('rev-list','--parents','-n','1','HEAD').trim().split(' '),[head,fixed]);
+          assert.deepEqual([git('rev-parse',base+'^{tree}').trim(),git('rev-parse',fixed+'^{tree}').trim()],[env.RARITY_ROUND_PRODUCT_BASE_TREE,env.RARITY_ROUND_FIXED_TREE]);
+          const product=tree(base),prior=tree(fixed),current=tree(head);
+          assert.deepEqual([product.length,prior.length,current.length,scope(product),scope(prior),scope(current)],[5789,5792,5793,4663,4664,4665]);
+          assert.deepEqual(git('diff','--name-status',base,fixed).trim().split('\n').sort(),['M\t'+page,'A\t'+test,'A\t'+plan,'A\t'+workflow].sort());
+          assert.deepEqual(git('diff','--name-status',fixed,head).trim().split('\n').sort(),['M\t'+workflow,'A\t'+helper].sort());
+          const held=prior.filter(row=>fileOf(row)!==workflow);
+          assert.equal(held.length,5791);
+          assert.deepEqual(current.filter(row=>![workflow,helper].includes(fileOf(row))),held);
+          assert.equal(at(fixed,workflow),env.RARITY_ROUND_FIXED_WORKFLOW);
+          assert.equal(at(base,page),'4a7bd374dfd888a13e5067340b58483a255dde5b');
+          const pins={
+            [page]:env.RARITY_ROUND_CROWD_OWNERSHIP_PAGE_BLOB,[test]:env.RARITY_ROUND_TEST,[plan]:env.RARITY_ROUND_PLAN,[helper]:env.RARITY_ROUND_HELPER,
+            'src/App.tsx':'8bfedf7aaa1d076e0f0c8e2216c7e46632cd8a33','src/data/gameRegistry.ts':'f560b40a74d1468ac72dfde4ee6fec6635a9a255',
+            'public/rarity-round/index.html': '26482f1a578d7fa972f9efa54bc69212332e8c22',
+            'src/lib/rarityRound.ts': 'ef8ed3977ede009210a10ce747dcca8e6d2b080f',
+            'src/components/game/PlayerAutocomplete.tsx': 'a0bd500b63306c75e0dea251cb6fb67ea2ed9452',
+            'src/lib/playerSearch.ts': '0d19f2c23735eb30512dc7fc3a447eacef5e128f',
+            'src/lib/fetchAllRows.ts': '16a6d21750405e7a647576ff513ed8ee11d5ba6b',
+            'src/lib/completions.ts': '61daf9b6c528f884551cd1d42f71357681c8728a',
+            'scripts/lib/offlineTransport.cjs': '0fda542a2649fe5da937c6976fd0f5b6073e74b6',
+            'src/data/seoMeta.ts': 'cf7a5142e59b97048d27b5ece9a6588a92073728',
+          };
+          const configs=['index.html','package.json','package-lock.json','vite.config.ts','tailwind.config.ts','postcss.config.js','tsconfig.json','tsconfig.app.json','tsconfig.node.json','bun.lockb','bun.lock'];
+          for (const file of configs) pins[file]=at(base,file);
+          for (const [file,want] of Object.entries(pins)) {
+            assert.equal(at(head,file),want,file);
+            if(file!==helper) assert.equal(at(fixed,file),want,file+' held fixed');
+          }
+          const index=git('ls-files','--stage','-z').split('\0').filter(Boolean).map(row=>row.replace(' 0\t','\t').replace(/^(100(?:644|755)) /,'$1 blob '));
+          assert.deepEqual([...index].sort(),[...current].sort(),'All actual index tuples equal the committed tree');
+          const byFile=new Map(current.map(row=>[fileOf(row),row]));
+          for(const file of [page,test,plan,workflow,helper])assert(byFile.get(file).startsWith('100644 blob '),file+' exact source mode');
+          const physical=git('ls-files','-z').split('\0').filter(Boolean).map(file=>{
+            const bytes=fs.readFileSync(file),stat=fs.lstatSync(file);
+            assert(stat.isFile(),file+' regular source body');
+            const row=byFile.get(file);
+            assert.equal((stat.mode&0o111)!==0,row.startsWith('100755 '),file+' physical source mode');
+            assert.equal(blob(bytes),row.split(' ')[2].split('\t')[0],file+' physical source blob');
+            return {file,bytes:bytes.length,sha256:hash('sha256',bytes)};
+          });
+          assert.equal(physical.length,5793);
+          fs.writeFileSync(out+'/tracked-before.json',JSON.stringify(physical));
+          fs.writeFileSync(out+'/source-join.json',JSON.stringify({status:'passed',head,tree:headTree,parent:fixed,fixedHead:fixed,fixedTree:env.RARITY_ROUND_FIXED_TREE,
+            productBase:base,productBaseTree:env.RARITY_ROUND_PRODUCT_BASE_TREE,trackedRows:5793,fixedTrackedRows:5792,heldFixedRows:5791,
+            sourceRows:4665,cleanSourceRows:4664,rootConfigurations:configs.map(file=>({file,blob:pins[file]})),
+            workflowBlob:at(head,workflow),helperBlob:at(head,helper),pins},null,2));
+          NODE
+      - name: Locked dependencies and all installed version pins
+        run: |
+          set -euo pipefail
+          npm ci 2>&1 | tee rarity-round-crowd-ownership-full/install.log
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          const lock=JSON.parse(fs.readFileSync('package-lock.json'));
+          const rows=Object.keys(lock.packages).filter(file=>file.startsWith('node_modules/')&&fs.existsSync(file+'/package.json')).map(file=>[file,JSON.parse(fs.readFileSync(file+'/package.json')).version]);
+          assert.equal(rows.length,521);
+          for(const [file,version] of rows)assert.equal(version,lock.packages[file].version,file);
+          fs.writeFileSync('rarity-round-crowd-ownership-full/installed-before.json',JSON.stringify(rows));
+          assert.equal(fs.statSync('rarity-round-crowd-ownership-full/offline.log').size,0);
+          NODE
+      - name: Actual direct route React lazy Soccer object and inert snapshot
+        run: |
+          set -euo pipefail
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';import ts from 'typescript';import {JSDOM} from 'jsdom';import {createHash} from 'node:crypto';
+          const out='rarity-round-crowd-ownership-full',route='/rarity-round',component='RarityRound',label='Rarity Round',appText=fs.readFileSync('src/App.tsx','utf8'),catalogText=fs.readFileSync('src/data/gameRegistry.ts','utf8'),app=ts.createSourceFile('src/App.tsx',appText,ts.ScriptTarget.Latest,true,ts.ScriptKind.TSX),catalog=ts.createSourceFile('src/data/gameRegistry.ts',catalogText,ts.ScriptTarget.Latest,true,ts.ScriptKind.TS);assert.deepEqual(app.parseDiagnostics,[]);assert.deepEqual(catalog.parseDiagnostics,[]);
+          const all=(root,predicate)=>{const found=[];const visit=node=>{if(predicate(node))found.push(node);ts.forEachChild(node,visit);};visit(root);return found;},attrs=(node,name)=>node.attributes.properties.filter(p=>ts.isJsxAttribute(p)&&p.name.text===name);
+          const routes=all(app,node=>(ts.isJsxSelfClosingElement(node)||ts.isJsxOpeningElement(node))&&node.tagName.getText(app)==='Route').filter(node=>attrs(node,'path').some(p=>p.initializer&&ts.isStringLiteralLike(p.initializer)&&p.initializer.text===route));assert.equal(routes.length,1,'One actual direct public JSX Route');assert(ts.isJsxSelfClosingElement(routes[0]),'Direct self-closing route');assert.equal(attrs(routes[0],'path').length,1);const elements=attrs(routes[0],'element');assert.equal(elements.length,1);const element=elements[0].initializer;assert(element&&ts.isJsxExpression(element)&&element.expression&&ts.isJsxSelfClosingElement(element.expression));assert.equal(element.expression.tagName.getText(app),component,'Direct Rarity Round mount, no Navigate');
+          const declarations=all(app,node=>ts.isVariableDeclaration(node)&&ts.isIdentifier(node.name)&&node.name.text===component);assert.equal(declarations.length,1);const init=declarations[0].initializer;assert(init&&ts.isCallExpression(init)&&ts.isIdentifier(init.expression)&&init.expression.text==='lazy');assert.equal(init.arguments.length,1);const factory=init.arguments[0];assert(ts.isArrowFunction(factory)&&factory.parameters.length===0);const load=factory.body;assert(ts.isCallExpression(load)&&load.expression.kind===ts.SyntaxKind.ImportKeyword&&load.arguments.length===1&&ts.isStringLiteralLike(load.arguments[0]));assert.equal(load.arguments[0].text,'./pages/RarityRound');const reactLazy=all(app,node=>ts.isImportDeclaration(node)&&ts.isStringLiteralLike(node.moduleSpecifier)&&node.moduleSpecifier.text==='react'&&node.importClause?.namedBindings&&ts.isNamedImports(node.importClause.namedBindings)).flatMap(node=>node.importClause.namedBindings.elements).filter(node=>node.name.text==='lazy'&&(node.propertyName?.text??node.name.text)==='lazy');assert.equal(reactLazy.length,1,'lazy is the actual named React import');
+          const prop=(node,name)=>{const found=node.properties.filter(p=>ts.isPropertyAssignment(p)&&(ts.isIdentifier(p.name)||ts.isStringLiteralLike(p.name))&&p.name.text===name);assert(found.length<=1,'No duplicate catalog property: '+name);return found[0]?.initializer;},defs=all(catalog,node=>ts.isVariableDeclaration(node)&&ts.isIdentifier(node.name)&&node.name.text==='CATEGORIES');assert.equal(defs.length,1);const categories=defs[0].initializer;assert(categories&&ts.isArrayLiteralExpression(categories));const soccer=categories.elements.filter(node=>ts.isObjectLiteralExpression(node)&&prop(node,'title')&&ts.isStringLiteralLike(prop(node,'title'))&&prop(node,'title').text==='Soccer');assert.equal(soccer.length,1);const games=prop(soccer[0],'games');assert(games&&ts.isArrayLiteralExpression(games));const entries=games.elements.filter(node=>ts.isObjectLiteralExpression(node)&&prop(node,'path')&&ts.isStringLiteralLike(prop(node,'path'))&&prop(node,'path').text===route);assert.equal(entries.length,1,'One actual uncommented Soccer catalog object');const catalogLabel=prop(entries[0],'label');assert(catalogLabel&&ts.isStringLiteralLike(catalogLabel));assert.equal(catalogLabel.text,label,'Exact actual Soccer label');
+          const file='public/rarity-round/index.html',bytes=fs.readFileSync(file);assert.equal(bytes.length,21742);const dom=new JSDOM(bytes.toString('utf8')),doc=dom.window.document,canonicals=[...doc.querySelectorAll('link[rel]')].filter(node=>node.getAttribute('rel').toLowerCase().split(/\s+/).includes('canonical'));assert.equal(canonicals.length,1);assert.equal(canonicals[0].getAttribute('href'),'https://douknowball.com'+route);const snapshots=[...doc.querySelectorAll('#dukb-snapshot')];assert.equal(snapshots.length,1);const snapshot=snapshots[0],snapshotText=snapshot.textContent.trim();assert(snapshotText.length>500,'Actual readable saved game content');const headings=[...snapshot.querySelectorAll('h1')].map(node=>node.textContent.trim().replace(/\s+/g,' ').toUpperCase());assert(headings.includes('RARITY ROUND'),'Actual saved game heading');const metas=[...doc.querySelectorAll('meta')],retired=metas.filter(node=>['dukb-retired-from','dukb-retired-to'].includes((node.getAttribute('name')||'').toLowerCase())),refresh=metas.filter(node=>(node.getAttribute('http-equiv')||'').trim().toLowerCase()==='refresh'),robots=metas.filter(node=>['robots','googlebot','bingbot'].includes((node.getAttribute('name')||'').toLowerCase()));assert.equal(retired.length,0,'No actual retired-route markers');assert.equal(refresh.length,0,'No actual redirect meta');assert(robots.every(node=>!/(?:^|[\s,])(?:noindex|none)(?:[\s,]|$)/i.test(node.getAttribute('content')||'')),'Active snapshot remains indexable');
+          fs.copyFileSync(file,out+'/active-snapshot.html');fs.writeFileSync(out+'/active-route-preflight.json',JSON.stringify({status:'passed',route,component,label,routeNode:routes[0].getText(app),reactLazyImport:reactLazy[0].parent.parent.parent.getText(app),lazyDeclaration:declarations[0].getText(app),catalogObject:entries[0].getText(catalog),snapshot:{file,bytes:bytes.length,sha256:createHash('sha256').update(bytes).digest('hex'),canonical:canonicals[0].getAttribute('href'),snapshotTextLength:snapshotText.length,headings,retiredMarkers:retired.length,metaRefresh:refresh.length,robots:robots.map(node=>({name:node.getAttribute('name'),content:node.getAttribute('content')}))},parsers:{typescript:ts.version,html:'Inert JSDOM, scripts/resources not enabled'},limits:'Actual AST nodes and inert DOM elements, never comments or a dormant Page file. Active source/public entry preflight only. No crowd panel ownership reproduction, game test, App fix, build, browser journey, real-data truth or release claim. Native route reachability remains unqualified.'},null,2));dom.window.close();console.log('PASS actual direct Rarity Round route, React lazy Page import, labeled Soccer catalog object and indexable nonredirect snapshot');
+          NODE
+      - name: Proper App types
+        run: |
+          set -euo pipefail
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee rarity-round-crowd-ownership-full/types.log
+      - name: Authenticate completed active original fixed and physical controls archives
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
-          test ! -e "$EVIDENCE"
-          mkdir "$EVIDENCE"
-          touch "$SIM_OFFLINE_RECEIPT"
-          git rev-parse HEAD > "$EVIDENCE/head.txt"
-          git rev-parse 'HEAD^{tree}' > "$EVIDENCE/tree.txt"
-          git ls-files -s > "$EVIDENCE/source-before.txt"
-          sha256sum package.json package-lock.json > "$EVIDENCE/locks-before.txt"
-          git diff --exit-code HEAD -- .
-          git fetch --no-tags --depth=1 origin "$BASE_HEAD"
-          cat > "$EVIDENCE/qualify.mjs" <<'NODE'
-          import assert from 'node:assert/strict';
+          node --input-type=module <<'NODE'
           import fs from 'node:fs';
           import path from 'node:path';
-          import { createHash } from 'node:crypto';
-          import { execFileSync, spawnSync } from 'node:child_process';
-          
-          const stage = process.env.RARITY_STAGE;
-          const out = process.env.EVIDENCE;
-          const page = 'src/pages/RarityRound.tsx';
-          const test = 'src/test/rarityRoundCrowdOwnership.test.tsx';
-          const plan = 'docs/plans/2026-11-07-rarity-round-crowd-ownership.md';
-          const workflow = '.github/workflows/rarity-round-crowd-ownership-20261107.yml';
-          const { BASE_HEAD: parent, BASE_TREE: parentTree, ORIGINAL_PAGE: originalPage, FIXED_PAGE: fixedPage, TEST_BLOB: testBlob, PLAN_BLOB: planBlob } = process.env;
-          const refs = {"original":{"run":42366132461,"job":128384489936,"steps":12,"artifact":13571383152,"name":"rarity-round-crowd-ownership-original-42366132461","head":"18328be0c2fd1fc4047fa52c9b9104c68929ddee","tree":"5ef388371d25f1f871162f04d6503f727549b2f6","workflow":"1752d3b50e5758ec5f13161edea66684d5f63184","zipBytes":1000690,"zipSHA256":"37dcbda51c1ac8d50da907fc31ff5f38c5362e75dca36c70bc36edd8e1512ccb","bodies":20,"files":{"head.txt":"e2b32221557f89a43b78d9af380c60a647402604331ef12a5b981b8edd7510aa","tree.txt":"c5b93ab7ee1bc8e1ade231c1740b06c2199f27bc01d5ccad38be6ba3a04e171d","source-receipt.json":"9900e40d5e3dfe052b7382efc618db903b659817f319f17abb9dcae4133cfbfb","original-result.json":"5ebf350846b8b1aa285fe71a2616aa7eaf2458663b64a18f9088d4a0633fd5aa","public-cases.raw.json":"a81bd4c4690a8b2bd8f0892af2d314d26ded00780722a4000871b8b49d19e5fe","vitest.json":"529d175017665a849c3c13187a8966c5156ce754d300b67c50a3d6adc5817dd7","vitest-exit.txt":"4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865","source-before.txt":"0371bd82ee5d51e21c98567a643c15a4c6e975195ffdb5359b5ef4b66dceac13","source-after.txt":"0371bd82ee5d51e21c98567a643c15a4c6e975195ffdb5359b5ef4b66dceac13","locks-before.txt":"d316e23dae0f11f4fabcf8edd97204c9b780c6da8a0f6307c86940cbdd28e3d7","locks-after.txt":"d316e23dae0f11f4fabcf8edd97204c9b780c6da8a0f6307c86940cbdd28e3d7","offline.log":"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855","types.log":"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"},"independentAuditSHA256":"4dd81a07e2bf81cacab868ea2ba6f143833c6a5bd18129826817f56fdf7e4056"}};
-          const options = { maxBuffer: 64 * 1024 * 1024 };
-          const cmd = (program, args) => execFileSync(program, args, options);
-          const git = (...args) => cmd('git', args).toString('utf8');
-          const hash = (algorithm, bytes) => createHash(algorithm).update(bytes).digest('hex');
-          const sha = bytes => hash('sha256', bytes);
-          const blob = bytes => hash('sha1', Buffer.concat([Buffer.from('blob ' + bytes.length + '\0'), bytes]));
-          const read = file => fs.readFileSync(path.join(out, file));
-          const json = file => JSON.parse(read(file));
-          const write = (file, body) => fs.writeFileSync(path.join(out, file), body);
-          const save = (file, value) => write(file, JSON.stringify(value, null, 2) + '\n');
-          const sorted = rows => [...rows].sort();
-          const tree = ref => new Map(git('ls-tree', '-r', '-z', ref).split('\0').filter(Boolean).map(row => {
-            const match = /^(100(?:644|755)) blob ([a-f0-9]{40})\t(.+)$/.exec(row);
-            assert(match, row);
-            return [match[3], [match[1], match[2]]];
-          }));
-          const source = () => ({
-            head: git('rev-parse', 'HEAD').trim(), tree: git('rev-parse', 'HEAD^{tree}').trim(), parent, parentTree,
-            page: fixedPage, test: testBlob, plan: planBlob, workflow: git('rev-parse', 'HEAD:' + workflow).trim(),
-            trackedRows: 5792, heldParentRows: 5788, sourceRows: 4664,
+          import assert from 'node:assert/strict';
+          import {execFileSync} from 'node:child_process';
+          import {createHash} from 'node:crypto';
+          const out='rarity-round-crowd-ownership-full',env=process.env;
+          const workflow='.github/workflows/rarity-round-crowd-ownership-20261107.yml',roleNames=['preflight','original','fixed','controls'];
+          const bindings={"preflight":{"run":42364767384,"job":128380392615,"jobName":"preflight","stepCount":11,"attempt":1,"head":"22941ced53837bf71d66f9e6a15761b3a311a869","tree":"687fbca552423ac16cb78188bbc15eee057a93f3","workflow":"117efbeae3a621b122eb7b3f53edcc12cf0df33c","branch":"codex/rarity-round-crowd-ownership-preflight-qa-20261107","artifact":13571043278,"artifactName":"rarity-round-crowd-ownership-active-preflight-42364767384","zipBytes":1012836,"zipSHA256":"df44d37065418462659aa5e2cb03fbd015753ddba35d900a72b91d0d38ea5dcb","bodyBytes":2669307,"bodies":[{"file":"active-route-preflight.json","bytes":1312,"sha256":"a842d22fa9600ec1426dc39522d7ddcd2fdc54d12f067c73df3d074f960be84f"},{"file":"active-snapshot.html","bytes":21742,"sha256":"d7f1f1d1539cf96926029469f3ef60f7d8c1b182f687aac46ffee3f3cadbb966"},{"file":"final-holds.json","bytes":396,"sha256":"24be52860535c0c6140269dbb99740ad9032716be733209ecd6c3a878a97ad72"},{"file":"head.txt","bytes":41,"sha256":"a6f4939810d8de9214f7b9ac2ee819a450f60472849315b6edd6c1c323ddaf5a"},{"file":"install.log","bytes":1391,"sha256":"ca6169ab92ec5e58de70ebe1d0df18b9e240d46d2caf61f52f5cbd5cc3d6f374"},{"file":"installed-after.json","bytes":22175,"sha256":"1268d6ef069c4189836716fed6ebe4dd324c661cacf53981b6a227608aa383e8"},{"file":"installed-before.json","bytes":22175,"sha256":"1268d6ef069c4189836716fed6ebe4dd324c661cacf53981b6a227608aa383e8"},{"file":"locks-after.txt","bytes":163,"sha256":"d316e23dae0f11f4fabcf8edd97204c9b780c6da8a0f6307c86940cbdd28e3d7"},{"file":"locks-before.txt","bytes":163,"sha256":"d316e23dae0f11f4fabcf8edd97204c9b780c6da8a0f6307c86940cbdd28e3d7"},{"file":"offline.log","bytes":0,"sha256":"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"},{"file":"source-after.txt","bytes":502934,"sha256":"0e60c390c1f669ee5381777bdef97128c9624392496efac0499bdb4beca92429"},{"file":"source-before.txt","bytes":502934,"sha256":"0e60c390c1f669ee5381777bdef97128c9624392496efac0499bdb4beca92429"},{"file":"source-join.json","bytes":3288,"sha256":"1963824d1aa64f660e9c8839d8182c5e296dae2c62e3296932512de0ba996d91"},{"file":"tracked-after.json","bytes":795276,"sha256":"f969705f29f3f54a65ace2276c82bbaf6ddd24595a60e8ebd063684f1fc05e83"},{"file":"tracked-before.json","bytes":795276,"sha256":"f969705f29f3f54a65ace2276c82bbaf6ddd24595a60e8ebd063684f1fc05e83"},{"file":"tree.txt","bytes":41,"sha256":"a3d703ba6390d2b312be8d0c9b6ca00c453ca1872b22da4dd92faafd34b85371"}],"independentAuditSHA256":"068d25f128ba583dcb88010a1228eb51a80a475f801019405f202d3d8bb19a65"},"original":{"run":42366132461,"job":128384489936,"jobName":"original","stepCount":12,"attempt":1,"head":"18328be0c2fd1fc4047fa52c9b9104c68929ddee","tree":"5ef388371d25f1f871162f04d6503f727549b2f6","workflow":"1752d3b50e5758ec5f13161edea66684d5f63184","branch":"codex/rarity-round-crowd-ownership-original-retry-qa-20261107","artifact":13571383152,"artifactName":"rarity-round-crowd-ownership-original-42366132461","zipBytes":1000690,"zipSHA256":"37dcbda51c1ac8d50da907fc31ff5f38c5362e75dca36c70bc36edd8e1512ccb","bodyBytes":2561978,"bodies":[{"file":"head.txt","bytes":41,"sha256":"e2b32221557f89a43b78d9af380c60a647402604331ef12a5b981b8edd7510aa"},{"file":"install.log","bytes":1391,"sha256":"bf86e4b925a056ccd09ca38aa2eccde10c309f0194bf8e700f06d38abb59e60c"},{"file":"installed-after.json","bytes":22175,"sha256":"1268d6ef069c4189836716fed6ebe4dd324c661cacf53981b6a227608aa383e8"},{"file":"installed-before.json","bytes":22175,"sha256":"1268d6ef069c4189836716fed6ebe4dd324c661cacf53981b6a227608aa383e8"},{"file":"locks-after.txt","bytes":163,"sha256":"d316e23dae0f11f4fabcf8edd97204c9b780c6da8a0f6307c86940cbdd28e3d7"},{"file":"locks-before.txt","bytes":163,"sha256":"d316e23dae0f11f4fabcf8edd97204c9b780c6da8a0f6307c86940cbdd28e3d7"},{"file":"offline.log","bytes":0,"sha256":"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"},{"file":"original-result.json","bytes":479,"sha256":"5ebf350846b8b1aa285fe71a2616aa7eaf2458663b64a18f9088d4a0633fd5aa"},{"file":"physical.mjs","bytes":1368,"sha256":"b01c0da30b8f2c9679ef9cb5b18a2ad96cbf21eb1ebcc5e84c8b2722fdac886d"},{"file":"public-cases.raw.json","bytes":187817,"sha256":"a81bd4c4690a8b2bd8f0892af2d314d26ded00780722a4000871b8b49d19e5fe"},{"file":"source-after.txt","bytes":503132,"sha256":"0371bd82ee5d51e21c98567a643c15a4c6e975195ffdb5359b5ef4b66dceac13"},{"file":"source-before.txt","bytes":503132,"sha256":"0371bd82ee5d51e21c98567a643c15a4c6e975195ffdb5359b5ef4b66dceac13"},{"file":"source-receipt.json","bytes":875,"sha256":"9900e40d5e3dfe052b7382efc618db903b659817f319f17abb9dcae4133cfbfb"},{"file":"tracked-after.json","bytes":656567,"sha256":"b2a064abd6ff76cd18c06fdb00a939657b557ae5b9b6b622f44f12f6aa118b5e"},{"file":"tracked-before.json","bytes":656567,"sha256":"b2a064abd6ff76cd18c06fdb00a939657b557ae5b9b6b622f44f12f6aa118b5e"},{"file":"tree.txt","bytes":41,"sha256":"c5b93ab7ee1bc8e1ade231c1740b06c2199f27bc01d5ccad38be6ba3a04e171d"},{"file":"types.log","bytes":0,"sha256":"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"},{"file":"vitest-exit.txt","bytes":2,"sha256":"4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"},{"file":"vitest.json","bytes":1974,"sha256":"529d175017665a849c3c13187a8966c5156ce754d300b67c50a3d6adc5817dd7"},{"file":"vitest.log","bytes":3916,"sha256":"0d060e69ae8873e4f327fbd34d031524bfaed3accff631e4a27eebebf3e18f3a"}],"independentAuditSHA256":"4dd81a07e2bf81cacab868ea2ba6f143833c6a5bd18129826817f56fdf7e4056"},"fixed":{"run":42367425437,"job":128388327828,"jobName":"fixed","stepCount":12,"attempt":1,"head":"52652b5eaca96d03ef6b8c4dc39e55a314a00a00","tree":"9dd996d8621a87e55f073d2df684bb80e17f5cd3","workflow":"9b8c5e7cb6dde27fa568f915fe723932125d6e0b","branch":"codex/rarity-round-crowd-ownership-fixed-qa-20261107","artifact":13572023105,"artifactName":"rarity-round-crowd-ownership-fixed-42367425437","zipBytes":2003317,"zipSHA256":"b7e0dec79c5033c0ec07e671dce25f8b56f6fec9bfcdf8bca5164856355507ca","bodyBytes":3579123,"bodies":[{"file":"admission.json","bytes":2961,"sha256":"3816c2b2ab76ef16b348026c5b7af1475370a9988644eb019c4b81ceb485ba76"},{"file":"fixed/public-cases.raw.json","bytes":186786,"sha256":"abc9f818b64a8305ae116f1f39650f12f4531aa65c4ac44ab8fa59d97c18df96"},{"file":"fixed/result.json","bytes":359,"sha256":"56ae47ca7318e011b7043d6353958e74836ed407d60689bb6f89a0e1c14c9102"},{"file":"fixed/vitest-exit.txt","bytes":2,"sha256":"9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"},{"file":"fixed/vitest.json","bytes":1338,"sha256":"d57e511b1869ee17fabe4a245b801a8633c4a71a3037b6c528ad3adf626b0b89"},{"file":"fixed/vitest.log","bytes":796,"sha256":"9608489573e81ec702514714b7b413918d1f665a5196753fef76685c0470dd21"},{"file":"head.txt","bytes":41,"sha256":"e9167de6d93f973cecffbc7603d45dc850f0bd5267a1b10fdfc8b5fc0451fd76"},{"file":"install.log","bytes":1391,"sha256":"d651a8a648cf49826fc49d6f9f86117c379640c742679fe5f388e25b202cb0d1"},{"file":"installed-after.json","bytes":22175,"sha256":"1268d6ef069c4189836716fed6ebe4dd324c661cacf53981b6a227608aa383e8"},{"file":"installed-before.json","bytes":22175,"sha256":"1268d6ef069c4189836716fed6ebe4dd324c661cacf53981b6a227608aa383e8"},{"file":"locks-after.txt","bytes":163,"sha256":"d316e23dae0f11f4fabcf8edd97204c9b780c6da8a0f6307c86940cbdd28e3d7"},{"file":"locks-before.txt","bytes":163,"sha256":"d316e23dae0f11f4fabcf8edd97204c9b780c6da8a0f6307c86940cbdd28e3d7"},{"file":"offline.log","bytes":0,"sha256":"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"},{"file":"physical.mjs","bytes":1368,"sha256":"b01c0da30b8f2c9679ef9cb5b18a2ad96cbf21eb1ebcc5e84c8b2722fdac886d"},{"file":"qualify.mjs","bytes":14604,"sha256":"e5a8ea119769d55449711b36823bdacb817a47076b803524c3d366590a3b30f3"},{"file":"reference-original-metadata.json","bytes":1753,"sha256":"3ed361b8befc13bcb841fc2a4b904d89207c909963d5844f8e234aa6b86c1619"},{"file":"reference-original.zip","bytes":1000690,"sha256":"37dcbda51c1ac8d50da907fc31ff5f38c5362e75dca36c70bc36edd8e1512ccb"},{"file":"source-after.txt","bytes":503132,"sha256":"9343d63dfb3fef54d7f9b3f00be55bcd36cd97c8280ebcfabd5574fb217d76d6"},{"file":"source-before.txt","bytes":503132,"sha256":"9343d63dfb3fef54d7f9b3f00be55bcd36cd97c8280ebcfabd5574fb217d76d6"},{"file":"source-receipt.json","bytes":2919,"sha256":"cb5e9e7b43d35de2df35e0bb2503429b61b877fb2f99f5373ac4db5d31467cc5"},{"file":"tracked-after.json","bytes":656567,"sha256":"8ba8dc9f8e72c690c806e2d9809b898743edfd585e23f747dbe155c812866aaf"},{"file":"tracked-before.json","bytes":656567,"sha256":"8ba8dc9f8e72c690c806e2d9809b898743edfd585e23f747dbe155c812866aaf"},{"file":"tree.txt","bytes":41,"sha256":"528aa11527c2a21d41b22dc4039275bde2d1c7c70172288b6c9f2fb871ea1e8c"},{"file":"types.log","bytes":0,"sha256":"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"}],"independentAuditSHA256":"80ec81c73540c95e19407103b5e415072bd1baca210790365e2ae182d7a86469"},"controls":{"run":42368193168,"job":128390631569,"jobName":"controls","stepCount":12,"attempt":1,"head":"2e7aa5bce01943a6201393bd901259a4b2720ce6","tree":"72541d022e0cb48f88da39b86cd4662cd94ac4c2","workflow":"f7656e63862efd4fcbfc942d0f5c22af19f904c0","branch":"codex/rarity-round-crowd-ownership-controls-qa-20261107","artifact":13572209507,"artifactName":"rarity-round-crowd-ownership-controls-42368193168","zipBytes":4026580,"zipSHA256":"eb68fed5905a3449687fa40ec6db2c8ef2ca78aedbf4102e4467c3fedace8e61","bodyBytes":5974453,"bodies":[{"file":"admission.json","bytes":5768,"sha256":"ff01e404a0ed7ffa4bfb53659b56a5bbd5a5e71144532ad91ae0b07e12978e1b"},{"file":"fixed/public-cases.raw.json","bytes":186786,"sha256":"abc9f818b64a8305ae116f1f39650f12f4531aa65c4ac44ab8fa59d97c18df96"},{"file":"fixed/result.json","bytes":358,"sha256":"aaef60cad14d4f3e5e55139ac2a755611f2d27e146ca4942bb1ae7aff51d3040"},{"file":"fixed/vitest-exit.txt","bytes":2,"sha256":"9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"},{"file":"fixed/vitest.json","bytes":1339,"sha256":"437621c2a027d0ca18bb9afe7b64d946d4c2aeba10193a4b881cd06d0047fa43"},{"file":"fixed/vitest.log","bytes":799,"sha256":"ef48382cdc6f5195119cadc372ee938f61371e90a3d27d2912f14d21983fce27"},{"file":"head.txt","bytes":41,"sha256":"8dd6e8d2e32e7ff049cf8072f8dfae7f71d0b7fb1c86ff2ad362fd43e0e63fd1"},{"file":"install.log","bytes":1391,"sha256":"300042b8392722dac409f49368b10280f4db5541e5c09b14fbd5258e0f497a15"},{"file":"installed-after.json","bytes":22175,"sha256":"1268d6ef069c4189836716fed6ebe4dd324c661cacf53981b6a227608aa383e8"},{"file":"installed-before.json","bytes":22175,"sha256":"1268d6ef069c4189836716fed6ebe4dd324c661cacf53981b6a227608aa383e8"},{"file":"locks-after.txt","bytes":163,"sha256":"d316e23dae0f11f4fabcf8edd97204c9b780c6da8a0f6307c86940cbdd28e3d7"},{"file":"locks-before.txt","bytes":163,"sha256":"d316e23dae0f11f4fabcf8edd97204c9b780c6da8a0f6307c86940cbdd28e3d7"},{"file":"offline.log","bytes":0,"sha256":"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"},{"file":"original/public-cases.raw.json","bytes":187817,"sha256":"a81bd4c4690a8b2bd8f0892af2d314d26ded00780722a4000871b8b49d19e5fe"},{"file":"original/result.json","bytes":362,"sha256":"d6943c50d1f1e1d10062803d44644a9212c4feb441f6d044ef5ec80d7062f2d5"},{"file":"original/vitest-exit.txt","bytes":2,"sha256":"4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"},{"file":"original/vitest.json","bytes":1980,"sha256":"d66501612ef13c8e1951bcfcb9ed4cbd515137ee1a422ac7c9b9d94cf5dba3d7"},{"file":"original/vitest.log","bytes":3923,"sha256":"b7d00b1ca35597923a275ae79835704791f0db0cd535c57443866736236176f0"},{"file":"physical-page-control.json","bytes":324,"sha256":"7333343fdfd547d532e72a05fac300ceb7e474b5a33659873868111ad2bd3591"},{"file":"physical.mjs","bytes":1368,"sha256":"b01c0da30b8f2c9679ef9cb5b18a2ad96cbf21eb1ebcc5e84c8b2722fdac886d"},{"file":"qualify.mjs","bytes":16302,"sha256":"1adc3393b0ba645eb9a7e723e5a31222fe019921f0efc9469d375ce1dd60cab0"},{"file":"reference-fixed-metadata.json","bytes":1855,"sha256":"9b02ad4af336081000a5aa2dcab40a92090f18c866f39dec2b903c784a7caebd"},{"file":"reference-fixed.zip","bytes":2003317,"sha256":"b7e0dec79c5033c0ec07e671dce25f8b56f6fec9bfcdf8bca5164856355507ca"},{"file":"reference-original-metadata.json","bytes":1753,"sha256":"3ed361b8befc13bcb841fc2a4b904d89207c909963d5844f8e234aa6b86c1619"},{"file":"reference-original.zip","bytes":1000690,"sha256":"37dcbda51c1ac8d50da907fc31ff5f38c5362e75dca36c70bc36edd8e1512ccb"},{"file":"restored/public-cases.raw.json","bytes":186786,"sha256":"abc9f818b64a8305ae116f1f39650f12f4531aa65c4ac44ab8fa59d97c18df96"},{"file":"restored/result.json","bytes":361,"sha256":"680c9951e8d248964c55a1bd9a7b7dc5fbad156fe0d871c271ff64b60c83d85b"},{"file":"restored/vitest-exit.txt","bytes":2,"sha256":"9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"},{"file":"restored/vitest.json","bytes":1331,"sha256":"c6be8b287a2144c9291fac07b8c91292a3c5767b9d2a1c0e673f1714928a09d1"},{"file":"restored/vitest.log","bytes":802,"sha256":"344daa2359b2fdd57232704b4c9cf6116669e888807381f1d356517461b26e26"},{"file":"source-after.txt","bytes":503132,"sha256":"49f67966766c4b1bc1cc10368ae6248403586bfcd452dea4f93401158428af3e"},{"file":"source-before.txt","bytes":503132,"sha256":"49f67966766c4b1bc1cc10368ae6248403586bfcd452dea4f93401158428af3e"},{"file":"source-receipt.json","bytes":4879,"sha256":"f81a1a895495991c5701bc3e35a92e82d58f5b232de23c85b5a90b9bae8768d1"},{"file":"tracked-after.json","bytes":656567,"sha256":"1e7a3196aaa85ed840d37769b96350d012bbc6c27b73a39b2fe6b474cb670a98"},{"file":"tracked-before.json","bytes":656567,"sha256":"1e7a3196aaa85ed840d37769b96350d012bbc6c27b73a39b2fe6b474cb670a98"},{"file":"tree.txt","bytes":41,"sha256":"29b0fb72dc25f4ac03feaf36ce4fd6559466e4748b4cc236e8830b99b4740508"},{"file":"types.log","bytes":0,"sha256":"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"}],"independentAuditSHA256":"1ad20f30d9a8278f39765bc74d3086f34b6ee51e1e3156bdbd4a2ef988ef0a04"}};
+          assert.deepEqual(Object.keys(bindings).sort(),[...roleNames].sort());
+          const hash=bytes=>createHash('sha256').update(bytes).digest('hex');
+          const read=(role,file)=>fs.readFileSync(path.join(out,role+'-reference',file));
+          const json=(role,file)=>JSON.parse(read(role,file));
+          const packet=(role,file)=>read(role,'packet/'+file);
+          const packetJSON=(role,file)=>JSON.parse(packet(role,file));
+          const command=(bin,...args)=>execFileSync(bin,args,{maxBuffer:256*1024*1024});
+          const tuple=(file,bytes)=>({file,bytes:bytes.length,sha256:hash(bytes)});
+          const safe=name=>typeof name==='string'&&/^[A-Za-z0-9._/-]+$/.test(name)&&name.split('/').every(part=>part&&part!=='.'&&part!=='..');
+          const walk=(dir,prefix='')=>fs.readdirSync(dir,{withFileTypes:true}).flatMap(entry=>{
+            const file=prefix+entry.name;
+            if(entry.isDirectory())return walk(path.join(dir,entry.name),file+'/');
+            assert(entry.isFile()&&!entry.isSymbolicLink(),file+' regular retained body');
+            return [file];
           });
-          const zip = role => path.join(out, 'reference-' + role + '.zip');
-          const refFile = (role, name) => cmd('unzip', ['-p', zip(role), name]);
-          
-          function authenticate(role, pin) {
-            const prefix = 'repos/PapiSalgueroM/ballpark-hero/actions/';
-            const api = endpoint => JSON.parse(cmd('gh', ['api', prefix + endpoint]));
-            const run = api('runs/' + pin.run);
-            const jobs = api('runs/' + pin.run + '/jobs?per_page=100').jobs;
-            const artifact = api('artifacts/' + pin.artifact);
-            assert.deepEqual([run.id, run.status, run.conclusion, run.event, run.run_attempt, run.path, run.head_sha, run.head_commit.tree_id, run.repository.full_name],
-              [pin.run, 'completed', 'success', 'push', 1, workflow, pin.head, pin.tree, 'PapiSalgueroM/ballpark-hero']);
-            assert.equal(jobs.length, 1);
-            assert.deepEqual([jobs[0].id, jobs[0].conclusion, jobs[0].head_sha, jobs[0].steps.length], [pin.job, 'success', pin.head, pin.steps]);
-            assert(jobs[0].steps.every(step => step.conclusion === 'success'));
-            assert.deepEqual([artifact.id, artifact.name, artifact.expired, artifact.size_in_bytes, artifact.digest, artifact.workflow_run.id, artifact.workflow_run.head_sha],
-              [pin.artifact, pin.name, false, pin.zipBytes, 'sha256:' + pin.zipSHA256, pin.run, pin.head]);
-            const bytes = cmd('gh', ['api', prefix + 'artifacts/' + pin.artifact + '/zip']);
-            assert.deepEqual([bytes.length, sha(bytes)], [pin.zipBytes, pin.zipSHA256]);
-            fs.writeFileSync(zip(role), bytes);
-            const names = cmd('unzip', ['-Z1', zip(role)]).toString().trimEnd().split('\n');
-            assert.equal(new Set(names).size, names.length);
-            for (const name of names) {
-              assert(!name.startsWith('/') && !name.includes('\\') && name.replace(/\/$/, '').split('/').every(part => part && part !== '.' && part !== '..'), name);
+          const source=JSON.parse(fs.readFileSync(out+'/source-join.json'));
+          const receipts={};
+          for(const role of roleNames){
+            const pin=bindings[role],dir=path.join(out,role+'-reference'),archive=path.join(dir,'artifact.zip');
+            assert([pin.run,pin.job,pin.artifact,pin.zipBytes,pin.bodyBytes,pin.stepCount,pin.attempt].every(value=>Number.isSafeInteger(value)&&value>0));
+            assert([pin.head,pin.tree,pin.workflow].every(value=>/^[a-f0-9]{40}$/.test(value)));
+            assert(/^[a-f0-9]{64}$/.test(pin.zipSHA256));
+            assert(pin.branch.startsWith('codex/')&&pin.artifactName.endsWith('-'+pin.run)&&pin.jobName);
+            assert(Array.isArray(pin.bodies)&&pin.bodies.length>0);
+            assert(pin.bodies.every(row=>safe(row.file)&&Number.isSafeInteger(row.bytes)&&row.bytes>=0&&/^[a-f0-9]{64}$/.test(row.sha256)));
+            const names=pin.bodies.map(row=>row.file).sort();
+            assert.equal(new Set(names).size,names.length);
+            assert.equal(pin.bodies.reduce((sum,row)=>sum+row.bytes,0),pin.bodyBytes);
+            fs.mkdirSync(dir);
+            const endpoint='repos/PapiSalgueroM/ballpark-hero/actions/';
+            for(const [file,url] of Object.entries({'run.json':'runs/'+pin.run,'jobs.json':'runs/'+pin.run+'/jobs?per_page=100',
+              'artifact.json':'artifacts/'+pin.artifact,'artifact.zip':'artifacts/'+pin.artifact+'/zip'}))
+              fs.writeFileSync(path.join(dir,file),command('gh','api',endpoint+url),{flag:'wx'});
+            const run=json(role,'run.json'),jobs=json(role,'jobs.json'),meta=json(role,'artifact.json');
+            const artifact=meta.artifacts?.[0]??meta;
+            if(meta.artifacts)assert.equal(meta.artifacts.length,1);
+            assert.deepEqual([run.id,run.status,run.conclusion,run.head_sha,run.head_commit.tree_id,run.event,run.repository.full_name,run.path,run.head_branch,run.run_attempt],
+              [pin.run,'completed','success',pin.head,pin.tree,'push','PapiSalgueroM/ballpark-hero',workflow,pin.branch,pin.attempt]);
+            assert.equal(jobs.jobs.length,1);
+            const job=jobs.jobs[0];
+            assert.deepEqual([job.id,job.run_id,job.head_sha,job.name,job.status,job.conclusion,job.run_attempt,job.steps.length],
+              [pin.job,pin.run,pin.head,pin.jobName,'completed','success',pin.attempt,pin.stepCount]);
+            assert(job.steps.every(row=>row.status==='completed'&&row.conclusion==='success'));
+            assert.deepEqual([artifact.id,artifact.name,artifact.expired,artifact.size_in_bytes,artifact.digest,artifact.workflow_run.id,artifact.workflow_run.head_sha,artifact.workflow_run.head_branch],
+              [pin.artifact,pin.artifactName,false,pin.zipBytes,'sha256:'+pin.zipSHA256,pin.run,pin.head,pin.branch]);
+            const archiveBytes=read(role,'artifact.zip');
+            assert.deepEqual([archiveBytes.length,hash(archiveBytes)],[pin.zipBytes,pin.zipSHA256]);
+            assert.deepEqual(command('unzip','-Z1',archive).toString('utf8').trimEnd().split('\n').sort(),names);
+            const dirPacket=path.join(dir,'packet');
+            fs.mkdirSync(dirPacket);
+            command('unzip','-q',archive,'-d',dirPacket);
+            assert.deepEqual(walk(dirPacket).sort(),names);
+            for(const row of pin.bodies){
+              const body=packet(role,row.file);
+              assert.deepEqual(tuple(row.file,body),row);
+              assert(body.equals(command('unzip','-p',archive,row.file)),row.file+' exact archived and extracted bytes');
             }
-            assert.equal(names.filter(name => !name.endsWith('/')).length, pin.bodies);
-            assert.equal(refFile(role, 'head.txt').toString().trim(), pin.head);
-            assert.equal(refFile(role, 'tree.txt').toString().trim(), pin.tree);
-            for (const [name, digest] of Object.entries(pin.files)) assert.equal(sha(refFile(role, name)), digest, name);
-            save('reference-' + role + '-metadata.json', { ...pin, authenticated: true });
+            assert.equal(packet(role,'head.txt').toString('utf8').trim(),pin.head);
+            assert.equal(packet(role,'tree.txt').toString('utf8').trim(),pin.tree);
+            const {bodies,...roleMetadata}=pin;
+            receipts[role]={...roleMetadata,bodyCount:bodies.length};
+            const inventory=walk(dir).sort().map(file=>tuple(file,read(role,file)));
+            fs.writeFileSync(out+'/'+role+'-reference-before.json',JSON.stringify(inventory),{flag:'wx'});
           }
-          
-          function prepare() {
-            assert(['fixed', 'controls'].includes(stage));
-            assert.equal(process.env.GITHUB_SHA, source().head);
-            assert.deepEqual(git('rev-list', '--parents', '-n', '1', 'HEAD').trim().split(' '), [source().head, parent]);
-            assert.equal(git('rev-parse', parent + '^{tree}').trim(), parentTree);
-            const old = tree(parent);
-            const current = tree('HEAD');
-            const owned = sorted([workflow, page, test, plan]);
-            assert.equal(old.size, 5789);
-            assert.equal(current.size, 5792);
-            assert.equal([...current.keys()].filter(file => /^(src|public|scripts)\//.test(file)).length, 4664);
-            const changed = sorted(new Set([...old.keys(), ...current.keys()])).filter(file =>
-              JSON.stringify(old.get(file)) !== JSON.stringify(current.get(file)));
-            assert.deepEqual(changed, owned);
-            assert.deepEqual(old.get(page), ['100644', originalPage]);
-            for (const [file, pin] of [[page, fixedPage], [test, testBlob], [plan, planBlob], [workflow, source().workflow]]) {
-              assert.deepEqual(current.get(file), ['100644', pin], file);
-              assert.equal(blob(fs.readFileSync(file)), pin, file);
+          assert.deepEqual([receipts.fixed.head,receipts.fixed.tree,receipts.fixed.workflow],[source.fixedHead,source.fixedTree,env.RARITY_ROUND_FIXED_WORKFLOW]);
+          const fullRead=file=>fs.readFileSync(path.join(out,file));
+          const helper='scripts/qa/playRarityRoundCrowdOwnership.mjs';
+          const omit=(body,paths)=>body.toString('utf8').trimEnd().split('\n').filter(line=>!paths.includes(line.split('\t')[1]));
+          assert.deepEqual(omit(fullRead('source-before.txt'),[workflow,helper]),omit(packet('fixed','source-before.txt'),[workflow]),'All 5791 held fixed index tuples');
+          const sourceRows=(rows,paths)=>rows.filter(row=>!paths.includes(row.file)).map(({file,bytes,sha256})=>({file,bytes,sha256})).sort((a,b)=>a.file<b.file?-1:a.file>b.file?1:0);
+          const heldFull=sourceRows(JSON.parse(fullRead('tracked-before.json')),[workflow,helper]);
+          assert.equal(heldFull.length,5791);
+          assert.deepEqual(heldFull,sourceRows(packetJSON('fixed','tracked-before.json').map(([file,bytes,sha256])=>({file,bytes,sha256})),[workflow]),'All 5791 held fixed physical source tuples');
+          assert(fullRead('locks-before.txt').equals(packet('fixed','locks-before.txt')),'Exact fixed lock bytes');
+          assert.deepEqual(JSON.parse(fullRead('installed-before.json')),packetJSON('fixed','installed-before.json'),'All 521 held fixed locked versions');
+          assert.deepEqual([receipts.preflight.run,receipts.preflight.artifact,receipts.preflight.head,receipts.preflight.tree,
+            receipts.preflight.workflow,receipts.preflight.zipBytes,receipts.preflight.zipSHA256,receipts.preflight.bodyCount],
+            [42364767384,13571043278,'22941ced53837bf71d66f9e6a15761b3a311a869','687fbca552423ac16cb78188bbc15eee057a93f3',
+             '117efbeae3a621b122eb7b3f53edcc12cf0df33c',1012836,'df44d37065418462659aa5e2cb03fbd015753ddba35d900a72b91d0d38ea5dcb',16]);
+          const originalSource=packetJSON('original','source-receipt.json');
+          assert.deepEqual(originalSource.activePreflight,{run:receipts.preflight.run,head:receipts.preflight.head,
+            job:receipts.preflight.job,artifact:receipts.preflight.artifact,digest:'sha256:'+receipts.preflight.zipSHA256});
+          for(const file of ['active-route-preflight.json','active-snapshot.html'])
+            assert(fullRead(file).equals(packet('preflight',file)),file+' exact actual active-entry join');
+          const referenceChecks=(()=>{
+          const pinOriginal=receipts.original,pinFixed=receipts.fixed,pinControls=receipts.controls;
+          assert.deepEqual([pinOriginal.run,pinOriginal.artifact,pinOriginal.head,pinOriginal.tree,pinOriginal.workflow,pinOriginal.zipBytes,pinOriginal.zipSHA256,pinOriginal.bodyCount],
+            [42366132461,13571383152,'18328be0c2fd1fc4047fa52c9b9104c68929ddee','5ef388371d25f1f871162f04d6503f727549b2f6',
+             '1752d3b50e5758ec5f13161edea66684d5f63184',1000690,'37dcbda51c1ac8d50da907fc31ff5f38c5362e75dca36c70bc36edd8e1512ccb',20]);
+          assert.deepEqual([pinFixed.bodyCount,pinControls.bodyCount],[24,37]);
+          for(const role of ['preflight','original','fixed','controls']){
+            for(const [key,ext] of [['source','txt'],['tracked','json'],['installed','json'],['locks','txt']])
+              assert(packet(role,key+'-before.'+ext).equals(packet(role,key+'-after.'+ext)),role+' exact physical '+key+' holds');
+            assert.equal(packetJSON(role,'installed-before.json').length,521);
+            assert.equal(packet(role,'offline.log').length,0);
+            if(role!=='preflight')assert.equal(packet(role,'types.log').length,0);
+          }
+          const fixedPage=env.RARITY_ROUND_CROWD_OWNERSHIP_PAGE_BLOB;
+          const oldPage='4a7bd374dfd888a13e5067340b58483a255dde5b';
+          const pagePath='src/pages/RarityRound.tsx';
+          const oldSource=packetJSON('original','source-receipt.json');
+          assert.deepEqual([oldSource.head,oldSource.tree,oldSource.parent,oldSource.parentTree,oldSource.ownedWorkflow,oldSource.trackedRows,oldSource.heldRows,
+            oldSource.pins[pagePath],oldSource.pins['src/test/rarityRoundCrowdOwnership.test.tsx'],oldSource.pins['docs/plans/2026-11-07-rarity-round-crowd-ownership.md']],
+            [pinOriginal.head,pinOriginal.tree,source.productBase,source.productBaseTree,pinOriginal.workflow,5792,5789,oldPage,env.RARITY_ROUND_TEST,env.RARITY_ROUND_PLAN]);
+          const oldRaw=packet('original','public-cases.raw.json');
+          const fixedRaw=packet('fixed','fixed/public-cases.raw.json');
+          const oldResult=packetJSON('original','original-result.json');
+          const expectedMarkers=['RARITY_OLD_CROWD_WHILE_CURRENT_PENDING','RARITY_OLD_CROWD_AFTER_CURRENT_SETTLED'];
+          assert.deepEqual([oldResult.status,oldResult.rawBytes,oldResult.rawSHA256,oldResult.tests.map(test=>test.marker)],
+            ['expected-original-business-failures',oldRaw.length,hash(oldRaw),expectedMarkers]);
+          const bindings={original:pinOriginal,fixed:pinFixed};
+          const stageAdmission={};
+          for(const [role,pin] of [['fixed',pinFixed],['controls',pinControls]]){
+            const admitted=packetJSON(role,'admission.json'),stageSource=packetJSON(role,'source-receipt.json');
+            assert.deepEqual([admitted.stage,admitted.status,admitted.physicalRestored,admitted.offlineBytes],[role,'passed',true,0]);
+            assert.deepEqual(admitted.source,{head:pin.head,tree:pin.tree,parent:source.productBase,parentTree:source.productBaseTree,
+              page:fixedPage,test:env.RARITY_ROUND_TEST,plan:env.RARITY_ROUND_PLAN,workflow:pin.workflow,trackedRows:5792,heldParentRows:5788,sourceRows:4664});
+            for(const [key,value] of Object.entries(admitted.source))assert.deepEqual(stageSource[key],value,role+' source '+key);
+            assert.deepEqual(stageSource.references,admitted.references);
+            const referenceRoles=role==='fixed'?['original']:['original','fixed'];
+            assert.deepEqual(Object.keys(admitted.references).sort(),[...referenceRoles].sort());
+            for(const refRole of referenceRoles){
+              const binding=admitted.references[refRole],prior=bindings[refRole];
+              assert.deepEqual([binding.run,binding.artifact,binding.head,binding.tree,binding.workflow,binding.zipBytes,binding.zipSHA256],
+                [prior.run,prior.artifact,prior.head,prior.tree,prior.workflow,prior.zipBytes,prior.zipSHA256]);
+              assert(packet(role,'reference-'+refRole+'.zip').equals(read(refRole,'artifact.zip')),role+' exact nested '+refRole+' archive');
             }
-            assert.equal(git('status', '--porcelain', '--untracked-files=no'), '');
-            assert.deepEqual(Object.keys(refs).sort(), stage === 'fixed' ? ['original'] : ['fixed', 'original']);
-            for (const [role, pin] of Object.entries(refs)) authenticate(role, pin);
-            save('source-receipt.json', { ...source(), pins: { [page]: fixedPage, [test]: testBlob, [plan]: planBlob }, owned, references: refs });
+            const arms=role==='fixed'?['fixed']:['fixed','original','restored'];
+            assert.deepEqual(Object.keys(admitted.runs),arms);
+            for(const arm of arms){
+              const isOriginal=arm==='original',raw=packet(role,arm+'/public-cases.raw.json'),report=packet(role,arm+'/vitest.json');
+              const result=packetJSON(role,arm+'/result.json');
+              assert.deepEqual(result,admitted.runs[arm]);
+              assert.deepEqual([result.role,result.code,result.passed,result.failed,result.rawBytes,result.rawSHA256,result.reportSHA256,
+                result.wholeOriginal,result.fixedOriginalDifferenceRestricted,result.wholeFixedReference],
+                [arm,isOriginal?1:0,isOriginal?0:2,isOriginal?2:0,raw.length,hash(raw),hash(report),isOriginal,!isOriginal,role==='controls'&&!isOriginal]);
+              assert(raw.equals(isOriginal?oldRaw:fixedRaw),role+' exact '+arm+' RAW join');
+              const parsed=JSON.parse(report),[suite]=parsed.testResults;
+              assert.deepEqual([parsed.numTotalTests,parsed.numPassedTests,parsed.numFailedTests,parsed.numPendingTests,parsed.numTodoTests,parsed.success,parsed.testResults.length],
+                [2,isOriginal?0:2,isOriginal?2:0,0,0,!isOriginal,1]);
+              assert.deepEqual([suite.status,suite.message], [isOriginal?'failed':'passed','']);
+              for(const [i,test] of suite.assertionResults.entries()){
+                assert.equal(test.status,isOriginal?'failed':'passed');
+                assert.equal(test.failureMessages.length,isOriginal?1:0);
+                if(isOriginal)assert(test.failureMessages[0].startsWith('AssertionError: '+expectedMarkers[i]+':'));
+              }
+            }
+            stageAdmission[role]=admitted;
           }
-          
-          const markers = new Map([
-            ['keeps the next crowd panel empty while its own read is pending', 'RARITY_OLD_CROWD_WHILE_CURRENT_PENDING'],
-            ['keeps the current crowd panel when the old category settles last', 'RARITY_OLD_CROWD_AFTER_CURRENT_SETTLED'],
-          ]);
+          const physical=packetJSON('controls','physical-page-control.json');
+          assert.deepEqual(physical,{onlyPhysicalPath:pagePath,originalPage:oldPage,fixedPage,restoredPage:fixedPage,
+            changedPageVerified:true,indexUnchanged:true,restoredExactFixed:true});
+          assert.deepEqual(stageAdmission.controls.source.page,stageAdmission.fixed.source.page);
+          return {status:'passed',preflightRetained:true,original:{cases:2,passes:0,namedBusinessFailures:2},
+            fixed:{cases:2,passes:2},controls:{arms:3,cases:6,passes:4,namedBusinessFailures:2,physicalRestored:true,wholeRoleRawHeld:true}};
+          })();
+          assert.equal(referenceChecks?.status,'passed','Actual original/fixed/controls semantic reference gate');
+          fs.writeFileSync(out+'/packet-custody.json',JSON.stringify({status:'passed',...receipts,referenceChecks,controlsRerun:false},null,2)+'\n',{flag:'wx'});
+          NODE
+      - name: One fresh Rarity Round fixed unit command
+        run: |
+          set -euo pipefail
+          out=rarity-round-crowd-ownership-full
+          result=0
+          RARITY_ROUND_CROWD_OWNERSHIP_RAW="$PWD/$out/public-cases.raw.json" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node_modules/.bin/vitest run \
+            src/test/rarityRoundCrowdOwnership.test.tsx --reporter=default --reporter=json \
+            --outputFile="$PWD/$out/vitest.json" > "$out/vitest.log" 2>&1 || result=$?
+          cat "$out/vitest.log"
+          printf '%s\n' "$result" > "$out/vitest-exit.txt"
+          test "$result" -eq 0
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          import {createHash} from 'node:crypto';
+          const out='rarity-round-crowd-ownership-full';
+          const read=file=>fs.readFileSync(out+'/'+file),json=file=>JSON.parse(read(file));
+          const sha=bytes=>createHash('sha256').update(bytes).digest('hex');
+          const report=json('vitest.json'),log=read('vitest.log').toString('utf8');
+          assert.deepEqual([report.success,report.numTotalTests,report.numPassedTests,report.numFailedTests,report.numPendingTests,report.numTodoTests],
+            [true,2,2,0,0,0]);
+          assert.equal(report.testResults.length,1);
+          const [suite]=report.testResults,testRows=suite.assertionResults;
+          assert(suite.name.endsWith('/src/test/rarityRoundCrowdOwnership.test.tsx'));
+          assert.deepEqual([suite.status,suite.message,testRows.length],['passed','',2]);
+          for(const row of testRows)assert.deepEqual([row.status,row.failureMessages],['passed',[]]);
+          for(const key of ['numRuntimeErrorTestSuites','numUnhandledErrors'])if(Object.hasOwn(report,key))assert.equal(report[key],0);
+          for(const key of ['errors','unhandledErrors','testExecutionErrors'])if(Object.hasOwn(report,key))assert.deepEqual(report[key],[]);
+          assert(!/Unhandled Errors|Unhandled Rejection|Uncaught Exception|Failed to resolve import|No test files found|SyntaxError|ReferenceError|TypeError|timed out/i.test(log));
+          const rawFile='public-cases.raw.json',rawBytes=read(rawFile),raw=JSON.parse(rawBytes);
+          assert(rawBytes.equals(read('fixed-reference/packet/fixed/'+rawFile)),'Entire fresh fixed RAW equals completed fixed reference');
+          const fixed=json('fixed-reference/packet/admission.json'),custody=json('packet-custody.json');
+          assert.deepEqual([fixed.stage,fixed.status,fixed.runs.fixed.code,fixed.runs.fixed.rawBytes,fixed.runs.fixed.rawSHA256,custody.status],
+            ['fixed','passed',0,rawBytes.length,sha(rawBytes),'passed']);
+          const unitChecks=(()=>{
           const crowdA = [{ name: 'Fixture A Six', picks: 2 }, { name: 'Fixture A Five', picks: 1 }];
           const crowdB = [{ name: 'Fixture B Six', picks: 3 }, { name: 'Fixture B Five', picks: 2 }];
           const panelStart = '<div class="mx-auto max-w-sm rounded-xl border border-border bg-surface-1 px-4 py-3 text-left"><p class="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground mb-1.5">👥 What everyone else picked</p>';
@@ -179,144 +399,605 @@ jobs:
             }
             assert.deepEqual(raw, expected, 'Only the three stale panel frames and redundant completion observations differ');
           }
-          function runRole(role, wantOriginal) {
-            fs.mkdirSync(path.join(out, role));
-            const rawName = role + '/public-cases.raw.json';
-            const reportName = role + '/vitest.json';
-            const logName = role + '/vitest.log';
-            const proc = spawnSync('node_modules/.bin/vitest', ['run', test, '--reporter=default', '--reporter=json', '--outputFile=' + path.join(out, reportName)], {
-              ...options, env: { ...process.env, NODE_OPTIONS: '--require=' + process.cwd() + '/scripts/lib/offlineTransport.cjs',
-                RARITY_ROUND_CROWD_OWNERSHIP_RAW: path.join(out, rawName) },
-            });
-            const log = Buffer.concat([proc.stdout ?? Buffer.alloc(0), proc.stderr ?? Buffer.alloc(0)]);
-            write(logName, log);
-            process.stdout.write(log);
-            write(role + '/vitest-exit.txt', String(proc.status) + '\n');
-            assert.ifError(proc.error);
-            assert.equal(proc.signal, null);
-            assert.equal(proc.status, wantOriginal ? 1 : 0, role);
-            assert(!/Unhandled Errors?|Unhandled Rejection|Uncaught Exception|Failed Suites|Worker exited|Test timed out/i.test(log.toString()));
-            const report = json(reportName);
-            assert.deepEqual([report.numTotalTests, report.numPassedTests, report.numFailedTests, report.numPendingTests, report.numTodoTests, report.success],
-              [2, wantOriginal ? 0 : 2, wantOriginal ? 2 : 0, 0, 0, !wantOriginal]);
-            for (const key of ['errors', 'unhandledErrors']) if (Object.hasOwn(report, key)) assert.deepEqual(report[key], []);
-            assert.equal(report.testResults.length, 1);
-            const [suite] = report.testResults;
-            assert(suite.name.endsWith('/' + test));
-            assert.deepEqual([suite.status, suite.message, suite.assertionResults.length], [wantOriginal ? 'failed' : 'passed', '', 2]);
-            assert.deepEqual(sorted(suite.assertionResults.map(row => row.title)), sorted(markers.keys()));
-            for (const row of suite.assertionResults) {
-              assert.equal(row.status, wantOriginal ? 'failed' : 'passed', row.title);
-              assert.equal(row.failureMessages.length, wantOriginal ? 1 : 0);
-              if (wantOriginal) assert(row.failureMessages[0].startsWith('AssertionError: ' + markers.get(row.title) + ':'));
+          const original=JSON.parse(read('original-reference/packet/public-cases.raw.json'));
+          assert.deepEqual(testRows.map(row=>row.title),[
+            'keeps the next crowd panel empty while its own read is pending',
+            'keeps the current crowd panel when the old category settles last',
+          ]);
+          assert.deepEqual([raw.schema,raw.instant,raw.debounceMs],['rarity-round-crowd-ownership-v1','2026-11-12T17:00:00.000Z',200]);
+          assert.deepEqual(Object.keys(raw.cases),['oldWhileCurrentPending','oldAfterCurrentSettled']);
+          compareRaw(raw,original);
+          for(const [key,scenario] of Object.entries(raw.cases)){
+            const frames=new Map(scenario.frames.map(frame=>[frame.label,frame]));
+            assert.deepEqual([scenario.unexpected,scenario.closed,scenario.requests.length],[[],true,10]);
+            assert.deepEqual([frames.get('after-unmount').phase,frames.get('after-unmount').html,frames.get('after-unmount').timers],['unmounted','',0]);
+            for(const label of ['b-revealed-held','deliver-a','deliver-b']){
+              const frame=frames.get(label);
+              assert.deepEqual([frame.result.answer,frame.result.rank,frame.result.points,frame.subtotal,frame.next],
+                ['Fixture B Four','Ranked 4 of 6 by fame in this category',40,'· Rarity Round score so far: 120',true]);
             }
-            const raw = read(rawName);
-            const old = refFile('original', 'public-cases.raw.json');
-            if (wantOriginal) assert(raw.equals(old), 'Complete original RAW must match qualified original');
-            else compareRaw(JSON.parse(raw), JSON.parse(old));
-            if (stage === 'controls' && !wantOriginal) {
-              assert(raw.equals(refFile('fixed', 'fixed/public-cases.raw.json')), 'Complete fixed RAW must match qualified fixed');
-            }
-            const result = { role, code: proc.status, passed: report.numPassedTests, failed: report.numFailedTests,
-              rawBytes: raw.length, rawSHA256: sha(raw), reportSHA256: sha(read(reportName)), wholeOriginal: wantOriginal,
-              fixedOriginalDifferenceRestricted: !wantOriginal, wholeFixedReference: stage === 'controls' && !wantOriginal };
-            save(role + '/result.json', result);
-            return result;
+            assert.deepEqual(frames.get('deliver-b').crowd,crowdB);
+            assert.deepEqual(frames.get('deliver-a').crowd,key==='oldWhileCurrentPending'?null:crowdB);
           }
-          function qualify() {
-            const fixed = fs.readFileSync(page);
-            const old = cmd('git', ['show', parent + ':' + page]);
-            const index = git('ls-files', '-s');
-            const locks = ['package.json', 'package-lock.json'].map(file => sha(fs.readFileSync(file)));
-            assert.deepEqual([blob(fixed), blob(old)],[fixedPage, originalPage]);
-            const runs = { fixed: runRole('fixed', false) };
-            if (stage === 'controls') {
-              try {
-                fs.writeFileSync(page, old);
-                assert.equal(blob(fs.readFileSync(page)), originalPage);
-                assert.equal(git('diff', '--name-only', 'HEAD', '--', '.').trim(), page);
-                assert.equal(git('ls-files', '-s'), index);
-                runs.original = runRole('original', true);
-              } finally {
-                fs.writeFileSync(page, fixed);
-                assert(fs.readFileSync(page).equals(fixed));
-              }
-              assert.equal(git('diff', '--name-only', 'HEAD', '--', '.'), '');
-              runs.restored = runRole('restored', false);
-              assert(read('restored/public-cases.raw.json').equals(read('fixed/public-cases.raw.json')));
-              save('physical-page-control.json', { onlyPhysicalPath: page, originalPage, fixedPage, restoredPage: blob(fs.readFileSync(page)),
-                changedPageVerified: true, indexUnchanged: git('ls-files', '-s') === index, restoredExactFixed: true });
-            }
-            assert(fs.readFileSync(page).equals(fixed));
-            assert.equal(git('ls-files', '-s'), index);
-            assert.deepEqual(['package.json','package-lock.json'].map(file => sha(fs.readFileSync(file))), locks);
-            assert.equal(fs.statSync(process.env.SIM_OFFLINE_RECEIPT).size, 0);
-            save('admission.json', { stage, status: 'passed', runs, references: refs, source: source(), physicalRestored: true, offlineBytes: 0 });
-          }
-          const mode = process.argv[2];
-          if (mode === 'prepare') prepare();
-          else if (mode === 'qualify') qualify();
-          else throw new Error('Unknown Rarity qualification mode');
+          return {status:'passed',cases:2,frames:28,actions:26,requests:20,
+            ownedChangedPanelFrames:3,wholeCurrentResultHeld:true,completeOtherCapturedStateHeld:true};
+          })();
+          assert.equal(unitChecks?.status,'passed','Actual fresh fixed semantic gate');
+          const rawRef={file:rawFile,bytes:rawBytes.length,sha256:sha(rawBytes)};
+          fs.writeFileSync(out+'/unit-admission.json',JSON.stringify({status:'passed',actualCases:testRows.length,actualPasses:report.numPassedTests,actualFailures:report.numFailedTests,
+            commands:1,raw:rawRef,wholeQualifiedFixedRAWBytesHeld:true,unitChecks},null,2)+'\n',{flag:'wx'});
+          fs.writeFileSync(out+'/fixed-raw-join.json',JSON.stringify({status:'passed',fixedHead:custody.fixed.head,fixedTree:custody.fixed.tree,raw:rawRef,
+            freshUnitRAWByteEqual:true},null,2)+'\n',{flag:'wx'});
           NODE
-          node "$EVIDENCE/qualify.mjs" prepare
-      - name: Install locked dependencies and freeze physical source
+      - name: Normal production build and retained bytes
+        id: build
         run: |
           set -euo pipefail
-          npm ci 2>&1 | tee "$EVIDENCE/install.log"
-          cat > "$EVIDENCE/physical.mjs" <<'NODE'
+          NODE_OPTIONS="--max-old-space-size=6144" npm run build 2>&1 | tee rarity-round-crowd-ownership-full/build.log
+          tar -czf rarity-round-crowd-ownership-full/dist.tgz dist
+          sha256sum rarity-round-crowd-ownership-full/dist.tgz > rarity-round-crowd-ownership-full/dist.sha256
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import {createHash} from 'node:crypto';import assert from 'node:assert/strict';
+          const walk=dir=>fs.readdirSync(dir,{withFileTypes:true}).sort((a,b)=>a.name.localeCompare(b.name)).flatMap(e=>e.isDirectory()?walk(dir+'/'+e.name):e.isFile()?[dir+'/'+e.name]:[]);
+          const rows=walk('dist').map(file=>{const b=fs.readFileSync(file);return {file,bytes:b.length,sha256:createHash('sha256').update(b).digest('hex')};});
+          assert.equal(rows.length,850);fs.writeFileSync('rarity-round-crowd-ownership-full/dist-before.json',JSON.stringify(rows));
+          NODE
+      - name: Isolated pinned Playwright and Chromium
+        id: browser_setup
+        timeout-minutes: 12
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          python -m pip install fonttools pillow
+          npm install --prefix "$RUNNER_TEMP/rarity-round-crowd-ownership-browser" --no-save --package-lock=false playwright@1.64.1 2>&1 | tee rarity-round-crowd-ownership-full/browser-install.log
+          test ! -e node_modules/playwright
+          ln -s "$RUNNER_TEMP/rarity-round-crowd-ownership-browser/node_modules/playwright" node_modules/playwright
+          node "$RUNNER_TEMP/rarity-round-crowd-ownership-browser/node_modules/playwright/cli.js" install --with-deps chromium 2>&1 | tee rarity-round-crowd-ownership-full/chromium-install.log
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const before=JSON.parse(fs.readFileSync('rarity-round-crowd-ownership-full/installed-before.json'));
+          const after=before.map(([p])=>[p,JSON.parse(fs.readFileSync(p+'/package.json')).version]);assert.deepEqual(after,before);
+          const pw=JSON.parse(fs.readFileSync('node_modules/playwright/package.json'));assert.equal(pw.version,'1.64.1');
+          fs.writeFileSync('rarity-round-crowd-ownership-full/installed-after.json',JSON.stringify(after));fs.writeFileSync('rarity-round-crowd-ownership-full/browser-package.json',JSON.stringify({version:pw.version,target:fs.realpathSync('node_modules/playwright')}));
+          NODE
+      - name: All required built readers and existing source fences
+        if: ${{ !cancelled() && steps.build.outcome == 'success' && steps.browser_setup.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          git fetch --no-tags --depth=1 origin "$SEO_SPLIT_BASE_REF"
+          export ONLY="simAdsense,simBrand,simHeadTags,simHiddenPages,simHubs,simIndexNow,simIndexing,simInternalLinks,simNoRivalNames,simPrerender,simPrerenderBoot,simRetiredRoutes,simSchema,simSitemap,simSnapshotAssets,simSiteSearch,simGuideHeadings,simSeoMetaSplit,simHomeCopy,simHarnessAnchors"
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/runAllSims.mjs --browser 2>&1 | tee rarity-round-crowd-ownership-full/readers.log
+      - name: All original route download limits
+        if: ${{ !cancelled() && steps.build.outcome == 'success' && steps.browser_setup.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          node scripts/lib/hostLikeServer.mjs dist 4173 > rarity-round-crowd-ownership-full/weight-host.log 2>&1 &
+          rarity_round_crowd_host_pid=$!
+          trap 'kill "$rarity_round_crowd_host_pid" 2>/dev/null || true' EXIT
+          sleep 2
+          SWEEP_OFFLINE=1 BASE=http://127.0.0.1:4173 NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/sweepWeight.mjs 2>&1 | tee rarity-round-crowd-ownership-full/weight.log
+      - name: Actual native Rarity Round viewport journeys and reviewed outer
+        id: native
+        timeout-minutes: 15
+        if: ${{ !cancelled() && steps.build.outcome == 'success' && steps.browser_setup.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          out=rarity-round-crowd-ownership-full
+          cat > "$out/native-admission-script.mjs" <<'RARITY_ROUND_NATIVE_OUTER'
+          // Read-only closure and measurement join for the Rarity Round browser packet.
           import assert from 'node:assert/strict';
           import fs from 'node:fs';
-          import { createHash } from 'node:crypto';
-          import { execFileSync } from 'node:child_process';
-          const stage = process.argv[2];
-          assert(['before', 'after'].includes(stage));
-          const out = process.env.EVIDENCE;
-          const index = execFileSync('git', ['ls-files', '-z'], { encoding: 'utf8' }).split('\0').filter(Boolean);
-          const source = index.map(file => {
-            const bytes = fs.readFileSync(file);
-            return [file, bytes.length, createHash('sha256').update(bytes).digest('hex')];
-          });
-          const lock = JSON.parse(fs.readFileSync('package-lock.json', 'utf8'));
-          const installed = Object.entries(lock.packages).filter(([file]) =>
-            file.startsWith('node_modules/') && fs.existsSync(file + '/package.json')
-          ).map(([file, entry]) => {
-            const version = JSON.parse(fs.readFileSync(file + '/package.json', 'utf8')).version;
-            assert.equal(version, entry.version, file);
-            return [file, version];
-          });
-          assert.equal(source.length, 5792);
-          assert.equal(installed.length, 521);
-          assert.equal(fs.statSync(process.env.SIM_OFFLINE_RECEIPT).size, 0);
-          for (const [name, data] of [['tracked', source], ['installed', installed]]) {
-            const body = JSON.stringify(data);
-            if (stage === 'after') assert.equal(body, fs.readFileSync(out + '/' + name + '-before.json', 'utf8'));
-            fs.writeFileSync(out + '/' + name + '-' + stage + '.json', body);
+          import path from 'node:path';
+          import {createHash} from 'node:crypto';
+          import {execFileSync} from 'node:child_process';
+          import {JSDOM} from 'jsdom';
+          
+          const PAGE='7c38b10a808cdf083bf5d1ed2f9d15b0a3cae93a',HELPER='22560d69503a8ac69c8b220bfb9a0b27651996bb';
+          const env=process.env,root=path.resolve(process.cwd());
+          const out=path.resolve(process.argv[2]??'');
+          const full=path.resolve(env.RARITY_ROUND_CROWD_OWNERSHIP_FULL_UNIT);
+          const fixed=path.resolve(env.RARITY_ROUND_CROWD_OWNERSHIP_FIXED_REFERENCE);
+          const controls=path.resolve(env.RARITY_ROUND_CROWD_OWNERSHIP_CONTROLS_REFERENCE);
+          assert.equal(process.argv.length,3);
+          assert.equal(out,path.resolve(env.RARITY_ROUND_CROWD_OWNERSHIP_BROWSER_OUT));
+          assert.deepEqual([out,fixed,controls].map(file=>path.dirname(file)),Array(3).fill(full));
+          assert.equal(env.RARITY_ROUND_CROWD_OWNERSHIP_PAGE_BLOB,PAGE);
+          const route='/rarity-round',helperFile='scripts/qa/playRarityRoundCrowdOwnership.mjs';
+          const workflowFile='.github/workflows/rarity-round-crowd-ownership-20261107.yml';
+          const backend='https://flawuiqbvjobmkfkauhw.supabase.co';
+          const equal=assert.deepEqual;
+          const sha=bytes=>createHash('sha256').update(bytes).digest('hex');
+          const blob=bytes=>createHash('sha1').update(Buffer.from('blob '+bytes.length+'\0')).update(bytes).digest('hex');
+          const read=(...parts)=>fs.readFileSync(path.join(...parts));
+          const json=(...parts)=>JSON.parse(read(...parts));
+          const tuple=(file,bytes)=>({file,bytes:bytes.length,sha256:sha(bytes)});
+          const safe=file=>/^[A-Za-z0-9._/-]+$/.test(file)&&file.split('/').every(piece=>piece&&piece!=='.'&&piece!=='..');
+          function ref(file){
+            assert(safe(file));
+            assert(fs.lstatSync(path.join(out,file)).isFile());
+            return tuple(file,read(out,file));
           }
+          const referenced=new Set(['report.json','raw.json']);
+          function check(row){
+            equal(row,ref(row.file));
+            referenced.add(row.file);
+            return read(out,row.file);
+          }
+          function files(dir,prefix=''){
+            return fs.readdirSync(dir,{withFileTypes:true}).flatMap(entry=>{
+              const file=prefix+entry.name;
+              if(entry.isDirectory())return files(path.join(dir,entry.name),file+'/');
+              assert(entry.isFile());
+              return [file];
+            });
+          }
+          const manifest=json(out,'body-manifest.json'),report=json(out,'report.json'),raw=json(out,'raw.json');
+          assert.equal(manifest.version,1);
+          const names=manifest.files.map(row=>row.file);
+          equal(new Set(names).size,manifest.filesCount);
+          equal(manifest.files.length,manifest.filesCount);
+          equal(manifest.bodyBytes,manifest.files.reduce((sum,row)=>sum+row.bytes,0));
+          equal(files(out).sort(),[...names,'body-manifest.json'].sort());
+          for(const row of manifest.files)equal(row,ref(row.file));
+          equal([report.version,raw.version,report.status,report.route,raw.route,report.page,raw.page,report.helper,raw.helper],
+            [1,1,'passed',route,route,PAGE,PAGE,HELPER,HELPER]);
+          equal(report.raw,ref('raw.json'));
+          equal(report.binding,raw.binding);
+          equal(report.fixture,raw.fixture);
+          equal(report.wire,raw.wire);
+          const binding=JSON.parse(check(report.binding)),fixture=JSON.parse(check(report.fixture));
+          const unit=read(full,'public-cases.raw.json'),fixedUnit=read(fixed,'packet','fixed','public-cases.raw.json');
+          equal(binding.fullUnit,tuple('public-cases.raw.json',unit));
+          assert(unit.equals(fixedUnit));
+          equal([unit.length,sha(unit)],[binding.fixed.rawBytes,binding.fixed.rawSHA256]);
+          const original=path.join(full,'original-reference'),originalRaw=read(original,'packet','public-cases.raw.json');
+          equal([binding.original.run,binding.original.artifact,binding.original.rawBytes,binding.original.rawSHA256],
+            [42366132461,13571383152,187817,'a81bd4c4690a8b2bd8f0892af2d314d26ded00780722a4000871b8b49d19e5fe']);
+          equal([originalRaw.length,sha(originalRaw)],[binding.original.rawBytes,binding.original.rawSHA256]);
+          const admitted=JSON.parse(unit),baseline=JSON.parse(originalRaw);
+          equal([admitted.schema,admitted.instant,admitted.debounceMs],['rarity-round-crowd-ownership-v1','2026-11-12T17:00:00.000Z',200]);
+          equal([admitted.instant,admitted.fixtures,fixture],[baseline.instant,baseline.fixtures,baseline.fixtures]);
+          equal(Object.values(fixture).map(f=>[f.id,f.answer,f.rank,f.points,f.pool.length]),
+            [['position-forward','Fixture A Two',2,80,6],['position-right-winger','Fixture B Four',4,40,6]]);
+          const keys=['oldWhileCurrentPending','oldAfterCurrentSettled'];
+          const roles=['a','b'].flatMap(side=>['pool','search-direct','search-prominence','insert','crowd'].map(name=>side+'-'+name));
+          const specs=new Map();
+          equal(report.wire.map(spec=>spec.role),roles);
+          for(const spec of report.wire){
+            const all=[baseline,admitted].flatMap(source=>keys.map(key=>source.cases[key].requests.filter(request=>request.role===spec.role)));
+            for(const requests of all){
+              assert.equal(requests.length,1,spec.role+' exact unit wire role');
+              const [request]=requests;
+              equal([spec.method,spec.url,spec.query,spec.requestBody,spec.status],[request.method,request.url,request.query,request.body,request.status]);
+              equal(spec.body.file,'wire/'+spec.role+'.body');
+              const bytes=request.rows===null?Buffer.alloc(0):Buffer.from(JSON.stringify(request.rows));
+              assert(check(spec.body).equals(bytes));
+            }
+            specs.set(spec.role,spec);
+          }
+          assert(safe(binding.controls.admissionFile));
+          const admittedControl=read(controls,'packet',binding.controls.admissionFile);
+          equal([admittedControl.length,sha(admittedControl)],[binding.controls.admissionBytes,binding.controls.admissionSHA256]);
+          for(const [directory,pin] of [[original,binding.original],[fixed,binding.fixed],[controls,binding.controls]]){
+            const run=json(directory,'run.json'),meta=json(directory,'artifact.json');
+            if(Object.hasOwn(meta,'artifacts'))assert.equal(meta.artifacts.length,1);
+            const artifact=meta.artifacts?.[0]??meta;
+            const zip=read(directory,'artifact.zip');
+            equal([run.id,run.status,run.conclusion,run.head_sha,run.head_commit.tree_id,artifact.id,artifact.workflow_run.id,artifact.workflow_run.head_sha,
+              artifact.size_in_bytes,artifact.digest,zip.length,sha(zip)],
+              [pin.run,'completed','success',pin.head,pin.tree,pin.artifact,pin.run,pin.head,pin.zipBytes,'sha256:'+pin.zipSHA256,pin.zipBytes,pin.zipSHA256]);
+          }
+          const git=(...args)=>execFileSync('git',args,{encoding:'utf8',maxBuffer:16*1024*1024});
+          const head=git('rev-parse','HEAD').trim(),tree=git('rev-parse','HEAD^{tree}').trim();
+          assert.equal(head,env.GITHUB_SHA);
+          equal(git('rev-list','--parents','-n','1','HEAD').trim().split(' '),[head,binding.fixed.head]);
+          assert.equal(git('rev-parse',binding.fixed.head+'^{tree}').trim(),binding.fixed.tree);
+          equal(git('diff','--name-status',binding.fixed.head,'HEAD').trim().split('\n').sort(),['A\t'+helperFile,'M\t'+workflowFile].sort());
+          assert.equal(blob(read(root,helperFile)),HELPER);
+          assert.equal(blob(read(root,'src/pages/RarityRound.tsx')),PAGE);
+          const source={head,tree,workflow:git('rev-parse','HEAD:'+workflowFile).trim(),trackedBodies:5793,scopedSourceRows:4665,heldFixedRows:5791,
+            rootConfigurations:11,distBodies:850,installedVersions:521};
+          equal(report.source,source);
+          equal(binding.source,source);
+          equal([binding.page,binding.helper],[PAGE,HELPER]);
+          equal(report.before,report.after);
+          equal(report.before.source,json(full,'tracked-before.json'));
+          equal(report.before.dist,json(full,'dist-before.json'));
+          equal(report.before.installed,json(full,'installed-before.json'));
+          equal([report.before.source.length,report.before.dist.length,report.before.installed.length,report.before.offline.bytes],[5793,850,521,0]);
+          assert(check(report.indexBefore).equals(check(report.indexAfter)));
+          assert(check(report.indexBefore).equals(Buffer.from(git('ls-files','--stage','-z'))));
+          const holds={source:true,dist:true,locks:true,installed521:true,offline:true,index:true,fullUnitLiteral:true};
+          equal(report.holds,holds);
+          git('diff','--exit-code','HEAD','--','.');
+          const routeURL=new URL(route,report.base).href;
+          assert(/^http:\/\/127\.0\.0\.1:\d+$/.test(report.base));
+          const widths=[[320,568],[390,844],[1280,900]],photoFiles=[];
+          equal(report.journeys.map(row=>[row.width,row.height]),widths);
+          equal(raw.journeys.length,3);
+          const built=new Map(report.before.dist.map(row=>[row.file,row]));
+          const entryDocPath='dist/rarity-round/index.html',entryDoc=read(root,entryDocPath);
+          equal(tuple(entryDocPath,entryDoc),built.get(entryDocPath));
+          const entryDOM=new JSDOM(entryDoc.toString('utf8'));
+          let entryPath;
+          try{
+            const modules=[...entryDOM.window.document.head.querySelectorAll('script[type="module"][src^="/assets/"]')];
+            assert.equal(modules.length,1,'one exact built Rarity Round entry module');
+            entryPath=modules[0].getAttribute('src');
+            assert(/^\/assets\/index-[^/]+\.js$/.test(entryPath));
+            assert(entryDOM.window.document.querySelector('script[src="/prerender-boot.js"]'));
+          }finally{entryDOM.window.close();}
+          assert.equal(report.entryPath,entryPath);
+          const words=node=>node?.textContent?.replace(/\s+/g,' ').trim()??'';
+          const crowdB=[{name:'Fixture B Six',picks:3},{name:'Fixture B Five',picks:2}];
+          const actionPlan=[
+            ['reject-cookies','mouse'],['focus-a','mouse'],['type-a','typing'],['select-a','keyboard'],['lock-a','mouse'],
+            ['next-round','mouse'],['focus-b','mouse'],['type-b','typing'],['select-b','keyboard'],['lock-b','mouse'],
+          ];
+          const photoLabels=['b-both-held','b-after-first','b-after-second'];
+          const baseFrames=[
+            'reject-cookies-before','reject-cookies-after','a-playing','focus-a-before','focus-a-after','type-a-before','type-a-after','a-option',
+            'select-a-before','select-a-after','lock-a-before','lock-a-after','a-revealed-held','next-round-before','next-round-after','b-playing',
+            'focus-b-before','focus-b-after','type-b-before','type-b-after','b-option','select-b-before','select-b-after','lock-b-before','lock-b-after',
+            'b-revealed-held','b-both-held-photo-before','b-both-held-photo-after',
+          ];
+          function geometry(g,width,height){
+            equal(g.viewport,{width,height});
+            const {rect:r,clip:c,center}=g;
+            assert([r.x,r.y,r.right,r.bottom,r.width,r.height,c.left,c.top,c.right,c.bottom,center.x,center.y].every(Number.isFinite));
+            assert(g.hit&&g.enabled&&r.width>0&&r.height>0&&r.x>=c.left&&r.right<=c.right&&r.y>=c.top&&r.bottom<=c.bottom);
+            assert(c.left>=0&&c.top>=0&&c.right<=width&&c.bottom<=height);
+            assert(center.x>=r.x&&center.x<=r.right&&center.y>=r.y&&center.y<=r.bottom);
+          }
+          function checkDOM(frame){
+            assert(typeof frame.html==='string');
+            const dom=new JSDOM(frame.html);
+            try{
+              const doc=dom.window.document,main=doc.querySelector('main#dukb-main');
+              assert(main);
+              equal(words(main.querySelector('h1')),frame.heading);
+              const spans=[...main.querySelectorAll('span')].map(words),ps=[...main.querySelectorAll('p')];
+              equal(spans.find(value=>/^Round \d+ of \d+$/.test(value))??null,frame.round);
+              equal(spans.find(value=>value.includes('Rarity Round score so far:'))??null,frame.subtotal);
+              equal(ps.map(words).find(value=>value===fixture.a.prompt||value===fixture.b.prompt)??null,frame.prompt);
+              const rank=ps.find(node=>/^Ranked \d+ of \d+ by fame in this category$/.test(words(node)));
+              equal(rank?{answer:words(rank.previousElementSibling),rank:words(rank),points:Number(words(rank.nextElementSibling)),
+                pointsLabel:words(rank.nextElementSibling?.nextElementSibling)}:null,frame.result);
+              const crowd=ps.find(node=>words(node).endsWith('What everyone else picked'))?.parentElement;
+              equal(crowd?[...crowd.children].slice(1).map(row=>{
+                const [name,picks]=[...row.querySelectorAll('span')].map(words);
+                return {name:name.replace(/^\d+\.\s*/,''),picks:Number.parseInt(picks,10)};
+              }):null,frame.crowd);
+              const buttons=[...main.querySelectorAll('button')],lock=buttons.find(button=>words(button)==='Lock in answer');
+              equal([buttons.some(button=>!button.disabled&&words(button)==='Next round'),!!lock&&!lock.disabled],[frame.next,frame.lockEnabled]);
+              const combo=main.querySelector('input[role=combobox]');
+              equal(!!combo,!!frame.combo);
+              if(combo){
+                equal([combo.getAttribute('placeholder'),combo.getAttribute('value')??'',combo.getAttribute('aria-expanded')],
+                  ['Search for a player...',frame.combo.value,frame.combo.expanded]);
+                const box=doc.getElementById(combo.getAttribute('aria-controls'));
+                equal([...box?.querySelectorAll('[role=option]')??[]].map(node=>words(node.firstElementChild)),frame.combo.options.map(option=>option.name));
+              }
+            }finally{dom.window.close();}
+          }
+          function reveal(frame,side,crowd){
+            const f=fixture[side];
+            equal([frame.phase,frame.round,frame.prompt,frame.subtotal,frame.result,frame.crowd,frame.next,frame.combo],
+              ['revealed','Round '+(side==='a'?1:2)+' of 5',f.prompt,'· Rarity Round score so far: '+(side==='a'?80:120),
+                {answer:f.answer,rank:'Ranked '+f.rank+' of 6 by fame in this category',points:f.points,pointsLabel:'points (lower is better)'},crowd,true,null]);
+          }
+          const measured=report.journeys.map((row,i)=>{
+            const [width,height]=widths[i],caseKey=width===390?keys[1]:keys[0],schedule=caseKey===keys[0]?['a','b']:['b','a'];
+            const frames=row.frames.map(ref=>JSON.parse(check(ref)));
+            equal(raw.journeys[i],{...row,frames});
+            equal([row.id,row.status,row.width,row.height,row.caseKey,row.schedule],[String(width),'passed',width,height,caseKey,schedule]);
+            equal(row.errors,[]);
+            const [first,second]=schedule.map(side=>'delivered-'+side);
+            equal(row.checkpoints,{aPlaying:'a-playing',aHeld:'a-revealed-held',bPlaying:'b-playing',bHeld:'b-revealed-held',first,second});
+            equal(frames.map(frame=>frame.name),[...baseFrames,first,'b-after-first-photo-before','b-after-first-photo-after',second,
+              'b-after-second-photo-before','b-after-second-photo-after']);
+            const byName=new Map(frames.map(frame=>[frame.name,frame]));
+            for(const [n,frame] of frames.entries()){
+              equal([frame.url,frame.visible,frame.viewport,frame.fixedAt],[routeURL,'visible',{width,height},Date.parse(admitted.instant)]);
+              assert(Number.isFinite(frame.at)&&Number.isFinite(frame.browserMs)&&(!n||(frame.at>=frames[n-1].at&&frame.browserMs>=frames[n-1].browserMs)));
+              checkDOM(frame);
+            }
+            const ready=byName.get('a-playing'),aHeld=byName.get('a-revealed-held'),bPlaying=byName.get('b-playing'),
+              bHeld=byName.get('b-revealed-held'),firstBody=byName.get(first),secondBody=byName.get(second);
+            const consent=JSON.parse(ready.storage.local['cookie-consent-v2']);
+            equal([ready.phase,ready.heading,ready.round,ready.prompt,ready.help,ready.dialog,ready.cookie,consent.version,consent.analytics,consent.advertising],
+              ['playing','RARITY ROUND','Round 1 of 5',fixture.a.prompt,true,false,false,2,false,false]);
+            assert(ready.html.includes("Today's categories, 2026-11-12"));
+            reveal(aHeld,'a',null);equal(aHeld.pending,['a-crowd']);
+            equal([bPlaying.phase,bPlaying.round,bPlaying.prompt,bPlaying.subtotal,bPlaying.pending],
+              ['playing','Round 2 of 5',fixture.b.prompt,'· Rarity Round score so far: 80',['a-crowd']]);
+            reveal(bHeld,'b',null);equal(bHeld.pending,['a-crowd','b-crowd']);
+            reveal(firstBody,'b',schedule[0]==='b'?crowdB:null);
+            equal(firstBody.pending,[schedule[1]+'-crowd']);
+            reveal(secondBody,'b',crowdB);equal(secondBody.pending,[]);
+            for(const state of [aHeld,bPlaying,bHeld,firstBody,secondBody])equal(state.storage,ready.storage);
+            equal(row.actions.map(action=>[action.label,action.method]),actionPlan);
+            for(const action of row.actions){
+              equal([action.before,action.after],[action.label+'-before',action.label+'-after']);
+              const before=byName.get(action.before),after=byName.get(action.after),g=action.layout;
+              geometry(g,width,height);
+              for(const event of action.events){
+                assert(event.trusted&&event.browserMs>=before.browserMs&&event.browserMs<=after.browserMs);
+                assert(row.events.some(rawEvent=>JSON.stringify(rawEvent)===JSON.stringify(event)));
+              }
+              if(action.method==='mouse'){
+                equal(action.events.map(event=>event.type),['pointerdown','pointerup','click']);
+                assert(action.events.every(event=>event.pointerType==='mouse'&&event.tag===g.tag&&event.text===g.text));
+                assert(Math.abs(action.events[2].x-g.center.x)<=1&&Math.abs(action.events[2].y-g.center.y)<=1);
+                const names={'reject-cookies':'Reject all','lock-a':'Lock in answer','lock-b':'Lock in answer','next-round':'Next round'};
+                if(action.label.startsWith('focus-')){
+                  assert(after.combo?.focus);
+                  equal([g.tag,g.text],['INPUT','']);
+                }else equal(g.text,names[action.label]);
+              }else{
+                const f=fixture[action.label.endsWith('-a')?'a':'b'];
+                assert(before.combo?.focus);
+                if(action.method==='keyboard'){
+                  equal(action.key,'Enter');
+                  equal(action.events.map(event=>[event.type,event.key]),[['keydown','Enter'],['keyup','Enter']]);
+                  equal(before.combo.options.map(option=>option.name),[f.answer]);
+                  equal([action.events[0].tag,action.events[0].role,after.combo.value,after.lockEnabled],['INPUT','combobox',f.answer,true]);
+                }else{
+                  equal([action.text,before.combo.value,after.combo.value],[f.answer,'',f.answer]);
+                  equal(action.events.map(event=>[event.type,event.tag,event.role,event.data,event.value]),[['input','INPUT','combobox',f.answer,f.answer]]);
+                }
+              }
+            }
+            for(const wheel of row.wheels){
+              assert(wheel.x>=0&&wheel.x<width&&wheel.y>=0&&wheel.y<height);
+              assert(wheel.events.length>0&&wheel.events.every(event=>event.type==='wheel'&&event.trusted&&event.deltaMode===0&&row.events.some(rawEvent=>JSON.stringify(rawEvent)===JSON.stringify(event))));
+              equal(wheel.events.reduce((sum,event)=>sum+event.deltaY,0),wheel.delta);
+            }
+            equal(row.screenshots.map(item=>item.label),photoLabels);
+            for(const [n,item] of row.screenshots.entries()){
+              const bytes=check({file:item.file,bytes:item.bytes,sha256:item.sha256}),marker=[bHeld,firstBody,secondBody][n];
+              equal([bytes.subarray(0,8).toString('hex'),bytes.readUInt32BE(8),bytes.subarray(12,16).toString('ascii'),bytes.readUInt32BE(16),bytes.readUInt32BE(20)],
+                ['89504e470d0a1a0a',13,'IHDR',width,height]);
+              equal([item.before,item.after],[item.label+'-photo-before',item.label+'-photo-after']);
+              geometry(item.layout,width,height);
+              for(const name of [item.before,item.after]){
+                const frame=byName.get(name);
+                reveal(frame,'b',marker.crowd);
+                equal([frame.pending,frame.storage],[marker.pending,marker.storage]);
+              }
+              photoFiles.push(item.file);
+            }
+            assert(row.navigations.length>0&&row.navigations.every((nav,n)=>nav.url===routeURL&&nav.at<=ready.at&&(!n||nav.at>=row.navigations[n-1].at)));
+            for(const response of row.firstParty){
+              assert.equal(new URL(response.url).origin,report.base);
+              equal([response.status,response.body],[200,built.get(response.body.file)]);
+            }
+            assert(row.firstParty.some(response=>response.url===routeURL&&response.type==='document'&&response.body.file===entryDocPath));
+            assert(row.firstParty.some(response=>response.url===report.base+'/prerender-boot.js'&&response.type==='script'&&response.body.file==='dist/prerender-boot.js'));
+            assert(row.firstParty.some(response=>response.url===report.base+entryPath&&response.type==='script'&&response.body.file==='dist'+entryPath));
+            assert(row.firstParty.some(response=>response.type==='script'&&/^dist\/assets\/RarityRound-[^/]+\.js$/.test(response.body.file)));
+            const fulfilled=row.requests.filter(request=>request.outcome==='local-fixture');
+            equal(fulfilled.map(request=>request.role).sort(),[...roles].sort());
+            equal(row.responses.map(response=>response.role).sort(),[...roles].sort());
+            for(const request of row.requests){
+              const url=new URL(request.url),spec=specs.get(request.role);
+              equal(request.query,[...url.searchParams]);
+              if(request.outcome==='local-fixture'){
+                assert(spec);
+                const pin=new URL(spec.url);
+                equal([url.origin,url.pathname,request.method,[...request.query].sort(),request.requestBody,request.body],
+                  [pin.origin,pin.pathname,spec.method,[...spec.query].sort(),spec.requestBody,spec.body]);
+                assert(Number.isFinite(request.fulfilledAt)&&request.fulfilledAt>=request.at);
+              }else if(request.outcome==='local-cors'){
+                equal([url.origin,request.method,request.requestBody],[backend,'OPTIONS',null]);
+                assert([...specs.values()].some(candidate=>candidate.method===request.forMethod&&new URL(candidate.url).pathname===url.pathname&&
+                  JSON.stringify([...candidate.query].sort())===JSON.stringify([...request.query].sort())));
+              }else{
+                assert.equal(request.outcome,'blocked');
+                const reads=url.origin===backend&&['/rest/v1/live_scores','/rest/v1/game_completions'].includes(url.pathname)&&['GET','OPTIONS'].includes(request.method);
+                const assets=request.method==='GET'&&((url.hostname==='fonts.googleapis.com'&&url.pathname==='/css2')||
+                  (url.hostname==='fonts.gstatic.com'&&url.pathname.startsWith('/s/'))||(url.hostname==='flagcdn.com'&&/^\/w(?:20|40|80|160|320)\/(?:[a-z]{2}|gb-(?:eng|sct|wls|nir))\.png$/.test(url.pathname)&&!url.search));
+                assert(reads||assets);
+              }
+            }
+            for(const response of row.responses){
+              const spec=specs.get(response.role);
+              equal([response.status,response.method,response.body],[spec.status,spec.method,spec.body]);
+              assert(fulfilled.some(request=>request.role===response.role&&request.url===response.url&&request.at<=response.at));
+            }
+            equal(row.deliveries.map(item=>[item.role,item.beforeResponses]),schedule.map(side=>[side+'-crowd',0]));
+            const requests=Object.fromEntries(fulfilled.map(item=>[item.role,item])),responses=Object.fromEntries(row.responses.map(item=>[item.role,item]));
+            const aReq=requests['a-crowd'],bReq=requests['b-crowd'];
+            assert(requests['a-insert'].at<=aReq.at&&requests['b-insert'].at<=bReq.at);
+            assert(aReq.at<=aReq.heldAt&&aReq.heldAt<=aHeld.at&&aHeld.at<=bPlaying.at&&bPlaying.at<=bReq.heldAt&&bReq.at<=bReq.heldAt&&bReq.heldAt<=bHeld.at);
+            for(const [n,delivery] of row.deliveries.entries()){
+              const request=requests[delivery.role],response=responses[delivery.role];
+              const before=n?firstBody:bHeld,after=n?secondBody:firstBody;
+              equal(request.releaseAt,delivery.at);
+              assert(request.fulfilledAt>=delivery.at&&before.at<=delivery.at&&delivery.at<=response.at&&response.at<=after.at);
+            }
+            const completions=row.requests.filter(item=>item.method==='POST'&&new URL(item.url).pathname==='/rest/v1/game_completions');
+            equal(completions,[]);
+            const inserts=row.responses.filter(item=>item.role.endsWith('-insert'));
+            equal(inserts.map(item=>[item.role,item.status,item.body.bytes]).sort(),[['a-insert',201,0],['b-insert',201,0]]);
+            return {width,height,caseKey,schedule,frames:frames.length,actions:row.actions.length,mouseActions:row.actions.filter(action=>action.method==='mouse').length,
+              keyboardActions:row.actions.filter(action=>action.method==='keyboard').length,typingActions:row.actions.filter(action=>action.method==='typing').length,
+              wheels:row.wheels.length,navigations:row.navigations.length,viewportPNGs:row.screenshots.length,roundsRevealed:2,roundAdvances:1,
+              crowdReads:row.responses.filter(item=>item.role.endsWith('-crowd')).length,localPickInserts:inserts.length,completionAttempts:completions.length,
+              firstPartyResponses:row.firstParty.length,poolReads:row.responses.filter(item=>item.role.endsWith('-pool')).length,
+              searchReads:row.responses.filter(item=>item.role.includes('-search-')).length,corsPreflights:row.requests.filter(req=>req.outcome==='local-cors').length,
+              settled:{aHeldAt:aReq.heldAt,bHeldAt:bReq.heldAt,firstDeliveryAt:row.deliveries[0].at,firstBodyAt:responses[row.deliveries[0].role].at,
+                firstFrameAt:firstBody.at,secondDeliveryAt:row.deliveries[1].at,secondBodyAt:responses[row.deliveries[1].role].at,secondFrameAt:secondBody.at,
+                firstCrowd:firstBody.crowd,secondCrowd:secondBody.crowd,bPoints:secondBody.result.points,bSubtotal:secondBody.subtotal}};
+          });
+          assert.equal(new Set(photoFiles).size,9);
+          equal([...referenced].sort(),[...names].sort());
+          const sum=key=>measured.reduce((total,row)=>total+row[key],0);
+          const census={journeys:measured.length,contexts:measured.length,viewportPNGs:sum('viewportPNGs'),
+            oldWhileCurrentPending:measured.filter(row=>row.caseKey===keys[0]).length,oldAfterCurrentSettled:measured.filter(row=>row.caseKey===keys[1]).length,
+            roundsRevealed:sum('roundsRevealed'),roundAdvances:sum('roundAdvances'),crowdReads:sum('crowdReads'),localPickInserts:sum('localPickInserts'),
+            completionAttempts:sum('completionAttempts'),frames:sum('frames'),actions:sum('actions'),mouseActions:sum('mouseActions'),
+            keyboardActions:sum('keyboardActions'),typingActions:sum('typingActions'),wheels:sum('wheels'),navigations:sum('navigations'),
+            firstPartyResponses:sum('firstPartyResponses'),poolReads:sum('poolReads'),searchReads:sum('searchReads'),corsPreflights:sum('corsPreflights')};
+          equal(census,report.census);
+          const result={status:'passed',route,page:PAGE,helper:HELPER,currentSource:source,census,
+            evidence:{report:ref('report.json'),raw:ref('raw.json'),bodyManifest:ref('body-manifest.json'),binding:report.binding,fixture:report.fixture,
+              filesCount:manifest.filesCount,bodyBytes:manifest.bodyBytes},
+            holds,measured,boundaries:report.limits};
+          process.stdout.write(JSON.stringify(result,null,2)+'\n');
+          RARITY_ROUND_NATIVE_OUTER
+          test "$(git hash-object "$out/native-admission-script.mjs")" = "$RARITY_ROUND_OUTER"
+          test -z "$(git ls-files -- "$out/native-admission-script.mjs")"
+          export RARITY_ROUND_CROWD_OWNERSHIP_BROWSER_OUT="$PWD/$out/browser"
+          export RARITY_ROUND_CROWD_OWNERSHIP_FULL_UNIT="$PWD/$out"
+          export RARITY_ROUND_CROWD_OWNERSHIP_FIXED_REFERENCE="$PWD/$out/fixed-reference"
+          export RARITY_ROUND_CROWD_OWNERSHIP_CONTROLS_REFERENCE="$PWD/$out/controls-reference"
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          node scripts/qa/playRarityRoundCrowdOwnership.mjs 2>&1 | tee "$out/browser.log"
+          node "$out/native-admission-script.mjs" "$out/browser" > "$out/native-admission.json" 2> "$out/native-admission.log" || { cat "$out/native-admission.log"; exit 1; }
+      - name: Admit actual fresh units build native and retained controls scope
+        run: |
+          set -euo pipefail
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          import {createHash} from 'node:crypto';
+          const out='rarity-round-crowd-ownership-full',env=process.env;
+          const bytes=file=>fs.readFileSync(out+'/'+file),read=file=>JSON.parse(bytes(file));
+          const sha=value=>createHash('sha256').update(value).digest('hex');
+          const source=read('source-join.json'),custody=read('packet-custody.json'),unit=read('unit-admission.json'),raw=read('fixed-raw-join.json'),native=read('native-admission.json');
+          assert.deepEqual([source.status,source.head,source.trackedRows,source.sourceRows,source.cleanSourceRows,source.rootConfigurations.length,source.heldFixedRows],
+            ['passed',env.GITHUB_SHA,5793,4665,4664,11,5791]);
+          assert.deepEqual([source.parent,source.fixedHead,source.fixedTree,source.helperBlob],[custody.fixed.head,custody.fixed.head,custody.fixed.tree,env.RARITY_ROUND_HELPER]);
+          assert.deepEqual([custody.status,custody.controlsRerun,custody.referenceChecks.status,unit.status,unit.commands,unit.actualCases,unit.actualPasses,unit.actualFailures,unit.wholeQualifiedFixedRAWBytesHeld],
+            ['passed',false,'passed','passed',1,unit.actualCases,unit.actualCases,0,true]);
+          assert.deepEqual([raw.status,raw.fixedHead,raw.fixedTree,raw.raw,raw.freshUnitRAWByteEqual],['passed',custody.fixed.head,custody.fixed.tree,unit.raw,true]);
+          const nativeChecks=(()=>{
+          const c=native.census;
+          const expected={journeys:3,contexts:3,viewportPNGs:9,oldWhileCurrentPending:2,oldAfterCurrentSettled:1,
+            roundsRevealed:6,roundAdvances:3,crowdReads:6,localPickInserts:6,completionAttempts:0,frames:102,actions:30,
+            mouseActions:18,keyboardActions:6,typingActions:6,poolReads:6,searchReads:12};
+          for(const [key,value] of Object.entries(expected))assert.equal(c[key],value,key);
+          assert.deepEqual(native.currentSource,{head:source.head,tree:source.tree,workflow:source.workflowBlob,trackedBodies:5793,
+            scopedSourceRows:4665,heldFixedRows:5791,rootConfigurations:11,distBodies:850,installedVersions:521});
+          assert.deepEqual(native.holds,{source:true,dist:true,locks:true,installed521:true,offline:true,index:true,fullUnitLiteral:true});
+          const rows=native.measured;
+          assert.deepEqual(rows.map(row=>[row.width,row.height,row.caseKey,row.schedule]),[
+            [320,568,'oldWhileCurrentPending',['a','b']],
+            [390,844,'oldAfterCurrentSettled',['b','a']],
+            [1280,900,'oldWhileCurrentPending',['a','b']],
+          ]);
+          const b=[{name:'Fixture B Six',picks:3},{name:'Fixture B Five',picks:2}];
+          for(const row of rows){
+            const t=row.settled;
+            assert.deepEqual([row.frames,row.actions,row.mouseActions,row.keyboardActions,row.typingActions,row.viewportPNGs,
+              row.roundsRevealed,row.roundAdvances,row.crowdReads,row.localPickInserts,row.completionAttempts,row.poolReads,row.searchReads],
+              [34,10,6,2,2,3,2,1,2,2,0,2,4]);
+            assert.deepEqual([t.firstCrowd,t.secondCrowd,t.bPoints,t.bSubtotal],
+              [row.caseKey==='oldAfterCurrentSettled'?b:null,b,40,'· Rarity Round score so far: 120']);
+            const timeline=[t.aHeldAt,t.bHeldAt,t.firstDeliveryAt,t.firstBodyAt,t.firstFrameAt,t.secondDeliveryAt,t.secondBodyAt,t.secondFrameAt];
+            assert(timeline.every((value,index)=>Number.isFinite(value)&&(!index||value>=timeline[index-1])));
+          }
+          for(const key of ['wheels','navigations','firstPartyResponses','corsPreflights']){
+            assert(rows.every(row=>Number.isInteger(row[key])&&row[key]>=0),key);
+            assert.equal(c[key],rows.reduce((sum,row)=>sum+row[key],0),key);
+          }
+          const e=native.evidence;
+          for(const [key,file] of Object.entries({report:'report.json',raw:'raw.json',bodyManifest:'body-manifest.json',
+            binding:'qualified-input.json',fixture:'fixture.json'})){
+            const body=bytes('browser/'+file);
+            assert.deepEqual(e[key],{file,bytes:body.length,sha256:sha(body)});
+          }
+          const manifest=read('browser/body-manifest.json'),binding=read('browser/qualified-input.json');
+          assert.deepEqual([manifest.version,manifest.files.length,manifest.filesCount,e.filesCount,manifest.bodyBytes,e.bodyBytes],
+            [1,127,127,127,manifest.files.reduce((sum,row)=>sum+row.bytes,0),manifest.files.reduce((sum,row)=>sum+row.bytes,0)]);
+          assert.deepEqual([binding.source,binding.page,binding.helper,binding.fullUnit],[native.currentSource,native.page,native.helper,unit.raw]);
+          for(const role of ['original','fixed','controls']){
+            for(const key of ['run','artifact','head','tree','zipBytes','zipSHA256'])assert.equal(binding[role][key],custody[role][key],role+' '+key);
+          }
+          return {status:'passed',actualCensus:c,actualViewportRows:rows,localPickInserts:6,completionAttempts:0,wholeFreshUnitHeld:true};
+          })();
+          assert.equal(nativeChecks?.status,'passed','Reviewed actual native validator must complete');
+          assert.deepEqual([native.status,native.route,native.page,native.helper],['passed','/rarity-round',env.RARITY_ROUND_CROWD_OWNERSHIP_PAGE_BLOB,env.RARITY_ROUND_HELPER]);
+          const expected='simAdsense,simBrand,simHeadTags,simHiddenPages,simHubs,simIndexNow,simIndexing,simInternalLinks,simNoRivalNames,simPrerender,simPrerenderBoot,simRetiredRoutes,simSchema,simSitemap,simSnapshotAssets,simSiteSearch,simGuideHeadings,simSeoMetaSplit,simHomeCopy,simHarnessAnchors'.split(',').map(name=>name+'.mjs').sort();
+          const readers=bytes('readers.log').toString('utf8'),readerRows=[...readers.matchAll(/^\s+PASS\s+(sim[A-Za-z0-9]+\.mjs)/gm)].map(row=>row[1]).sort();
+          assert.deepEqual(readerRows,expected);assert(!/^\s+FAIL\s+/m.test(readers));
+          const weight=bytes('weight.log').toString('utf8');
+          const capRows=[...weight.matchAll(/^\s+(\/\S*)\s+\d+K gz over\s+\d+ files \(budget (\d+)K, [\d.]+K to the tenth\)/gm)].map(row=>[row[1],Number(row[2])]);
+          assert.deepEqual(capRows,[['/',245],['/club-manager',648],['/soccer-career',840],['/stadium-tycoon',305],['/wonderkid-factory',278],['/minefield',295],['/footle',354],['/nfl-my-career',499],['/front-office',390],['/soccer-grid',320],['/leaderboard',266],['/manager-hot-seat',672],['/deadline-day',680],['/transfer-path',381],['/nba-front-office',397],['/nhl-front-office',379]]);
+          assert(weight.includes('sweepWeight: green.'));
+          const tar=bytes('dist.tgz'),distFiles=read('dist-before.json').length;
+          assert.equal(distFiles,850);
+          const normalized=read('dist-before.json').map(row=>{assert(row.file.startsWith('dist/'));return {path:row.file.slice(5),bytes:row.bytes,sha256:row.sha256};});
+          fs.writeFileSync(out+'/admission.json',JSON.stringify({
+            status:'passed',qualification:'fresh-rarity-round-crowd-ownership-full-scope',head:source.head,tree:source.tree,page:env.RARITY_ROUND_CROWD_OWNERSHIP_PAGE_BLOB,test:env.RARITY_ROUND_TEST,plan:env.RARITY_ROUND_PLAN,
+            helper:env.RARITY_ROUND_HELPER,nativeOuter:env.RARITY_ROUND_OUTER,preflight:custody.preflight,original:custody.original,fixed:custody.fixed,controls:custody.controls,controlsRerun:false,
+            unit,unitCommands:1,raw,trackedBodies:source.trackedRows,sourceRows:source.sourceRows,cleanSourceRows:source.cleanSourceRows,rootConfigurations:source.rootConfigurations.length,
+            distFiles,distTar:{file:'dist.tgz',bytes:tar.length,sha256:sha(tar)},distTupleSHA256:sha(JSON.stringify(normalized)),
+            readers:readerRows.length,readerRows,immutableCaps:capRows.length,capRows,nativeReceipt:native,nativeChecks,referenceChecks:custody.referenceChecks,
+            limits:'Fresh fixed units, normal production build, all readers and caps, native Rarity Round and full source holds. Active preflight, original, fixed and controls are retained admitted evidence. No controls rerun or release claim.',
+          },null,2)+'\n',{flag:'wx'});
           NODE
-          node "$EVIDENCE/physical.mjs" before
-      - name: Proper app types
-        run: |
-          set -euo pipefail
-          node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee "$EVIDENCE/types.log"
-      - name: Run frozen public Rarity tests for the exact fixed roles
-        run: |
-          set -euo pipefail
-          node "$EVIDENCE/qualify.mjs" qualify
-      - name: Verify unchanged physical source and locked offline run
+      - name: Final physical source index locks versions build and reference holds
         if: always()
         run: |
           set -euo pipefail
-          git ls-files -s > "$EVIDENCE/source-after.txt"
-          sha256sum package.json package-lock.json > "$EVIDENCE/locks-after.txt"
-          cmp "$EVIDENCE/source-before.txt" "$EVIDENCE/source-after.txt"
-          cmp "$EVIDENCE/locks-before.txt" "$EVIDENCE/locks-after.txt"
+          out=rarity-round-crowd-ownership-full
+          git ls-files -s > "$out/source-after.txt"
+          cmp "$out/source-before.txt" "$out/source-after.txt"
           git diff --exit-code HEAD -- .
-          node "$EVIDENCE/physical.mjs" after
-          test ! -s "$SIM_OFFLINE_RECEIPT"
+          sha256sum package.json package-lock.json > "$out/locks-after.txt"
+          cmp "$out/locks-before.txt" "$out/locks-after.txt"
+          if [[ -f "$out/dist.sha256" ]]; then sha256sum --check "$out/dist.sha256"; fi
+          if [[ -f "$out/native-admission-script.mjs" ]]; then
+            test "$(git hash-object "$out/native-admission-script.mjs")" = "$RARITY_ROUND_OUTER"
+            test -z "$(git ls-files -- "$out/native-admission-script.mjs")"
+          fi
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import assert from 'node:assert/strict';
+          import {execFileSync} from 'node:child_process';
+          import {createHash} from 'node:crypto';
+          const out='rarity-round-crowd-ownership-full',read=file=>JSON.parse(fs.readFileSync(out+'/'+file));
+          const write=(file,body)=>fs.writeFileSync(out+'/'+file,JSON.stringify(body));
+          const sha=bytes=>createHash('sha256').update(bytes).digest('hex');
+          const tuple=(file,bytes)=>({file,bytes:bytes.length,sha256:sha(bytes)});
+          const tracked=execFileSync('git',['ls-files','-z'],{encoding:'utf8',maxBuffer:16*1024*1024}).split('\0').filter(Boolean);
+          const source=tracked.map(file=>tuple(file,fs.readFileSync(file)));
+          assert.equal(source.length,5793);assert.deepEqual(source,read('tracked-before.json'));write('tracked-after.json',source);
+          const lock=JSON.parse(fs.readFileSync('package-lock.json'));
+          const versions=Object.keys(lock.packages).filter(file=>file.startsWith('node_modules/')&&fs.existsSync(file+'/package.json')).map(file=>[file,JSON.parse(fs.readFileSync(file+'/package.json')).version]);
+          assert.equal(versions.length,521);for(const [file,version] of versions)assert.equal(version,lock.packages[file].version,file);
+          assert.deepEqual(versions,read('installed-before.json'));write('installed-after.json',versions);
+          const offlineBytes=fs.statSync(out+'/offline.log').size;assert.equal(offlineBytes,0);
+          const walk=(dir,prefix='')=>fs.readdirSync(dir,{withFileTypes:true}).sort((a,b)=>a.name.localeCompare(b.name)).flatMap(entry=>{
+            const file=prefix+entry.name;
+            if(entry.isDirectory())return walk(path.join(dir,entry.name),file+'/');
+            assert(entry.isFile()&&!entry.isSymbolicLink(),file+' actual regular retained body');return[file];
+          });
+          let distHeld=false,retainedPacketsHeld=false;
+          if(fs.existsSync(out+'/dist-before.json')){
+            const dist=walk('dist','dist/').map(file=>tuple(file,fs.readFileSync(file)));
+            assert.equal(dist.length,850);assert.deepEqual(dist,read('dist-before.json'));write('dist-after.json',dist);distHeld=true;
+          }
+          if(fs.existsSync(out+'/packet-custody.json')){
+            for(const role of ['preflight','original','fixed','controls']){
+              const dir=out+'/'+role+'-reference',before=read(role+'-reference-before.json');
+              const after=walk(dir).sort().map(file=>tuple(file,fs.readFileSync(path.join(dir,file))));
+              assert.deepEqual(after,before);write(role+'-reference-after.json',after);
+            }
+            retainedPacketsHeld=true;
+          }
+          if(fs.existsSync(out+'/admission.json'))assert(distHeld&&retainedPacketsHeld);
+          write('final-holds.json',{status:'passed',trackedBodies:source.length,scopedSourceRows:4665,cleanSourceRows:4664,rootConfigurations:11,installedLockedVersions:versions.length,
+            indexUnchanged:true,sourceBytesUnchanged:true,locksUnchanged:true,distHeld,retainedPacketsHeld,offlineBytes,
+            limits:'Final physical and custody holds. Full admission and completed workflow success are separate.'});
+          NODE
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: rarity-round-crowd-ownership-fixed-${{ github.run_id }}
-          path: rarity-round-crowd-ownership-fixed
+          name: rarity-round-crowd-ownership-full-${{ github.run_id }}
+          path: rarity-round-crowd-ownership-full
           retention-days: 14
           if-no-files-found: error
