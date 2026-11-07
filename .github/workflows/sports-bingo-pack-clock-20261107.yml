@@ -1,7 +1,7 @@
-name: Sports Bingo solo pack clock original
+name: Sports Bingo solo pack clock fixed
 on:
   push:
-    branches: [codex/sports-bingo-pack-clock-original-qa-20261107]
+    branches: [codex/sports-bingo-pack-clock-fixed-qa-20261107]
 permissions:
   contents: read
   actions: read
@@ -15,12 +15,12 @@ jobs:
     env:
       SIM_NETWORK: offline
       SIM_OFFLINE_RECEIPT: sports-bingo-pack-clock-evidence/offline.log
-      SPORTS_STAGE: original
-      SPORTS_PARENT: '27e1d6508fb207dfd2647994d50f0783d9baec1b'
+      SPORTS_STAGE: fixed
+      SPORTS_PARENT: 'e1b8528e840774a5e75c34ce00fa506eca2ea97d'
       SPORTS_BASE: '27e1d6508fb207dfd2647994d50f0783d9baec1b'
       SPORTS_BASE_TREE: 'feb8ac00d54366ac66398a28c6c89c2f2e41f484'
       SPORTS_ORIGINAL_PAGE: '0d6c8657921ad483eeee7dc50f1a92d5bfbd9a05'
-      SPORTS_PAGE: '0d6c8657921ad483eeee7dc50f1a92d5bfbd9a05'
+      SPORTS_PAGE: 'b34c07f28a8d4005e68c307631c2c146aca3a9fc'
       SPORTS_TEST: '86929500edcba1bf7171cd15c513e16951495994'
       SPORTS_PLAN: '1900d29a989e923bf3566b618fa970dc68cc3149'
     steps:
@@ -76,7 +76,7 @@ jobs:
             'public/sports-bingo/index.html': '044451271149c1e08160d70cec2019860e284004',
             'src/lib/sportsBingo.ts': 'b1f29ad32de3567cad907d35d684a53e59f34616',
           };
-          const refs = {"preflight":{"run":42354812249,"artifact":13566254534,"name":"sports-bingo-pack-clock-active-preflight-42354812249","head":"26e7ec987a55b84d623944fa9f92e64482562020","tree":"1f6051d7592d960cfd17397f435538708456df5d","zipBytes":1013648,"zipSHA256":"9c824396b4bbc897e436b5ff044581744d0c7ea22b27c11fdc81a49da1ebe0a8","files":{"active-route-preflight.json":"907f00063746e00164ffc0b7a5618e44d51bd77a8582222811b11b3dc886c346","active-snapshot.html":"c154ac90dd5b65c47cd8f0711f2c732e6edf736f97a5332c042503aa8171d2b8","source-join.json":"8e2ee149864fec728645f5101aa0d5b3af0b2e842a326523ab895608ab2bfcad","final-holds.json":"23a553539ffdf1a4e550e0fad35a1c69c0e73a076d6581f7940dced0a2fe2825"}}};
+          const refs = {"original":{"run":42356173110,"artifact":13568026864,"name":"sports-bingo-pack-clock-original-42356173110","head":"e1b8528e840774a5e75c34ce00fa506eca2ea97d","tree":"fe000275215598bbb86e271d702af12e78df1ab3","zipBytes":2333788,"zipSHA256":"de2e4ca3f369fc38eb68182f399ab7ce4f47f85cf7ee50a122e080fa24b6d7eb","files":{"admission.json":"4d3bce7127d9344ffb84e727c9fbef6d1e40461166b547ab27f0c8bd8249cb0c","source-join.json":"b5a19d51da02322739007f6ac8b340fab79f9698cb14050894a90873c3cad49d","final-holds.json":"f7e67a5c8b66a9df6603bf67c875768bcced4ee9a36be22a44a38c01e984f7f5","case-original/raw.json":"2a9ec49df6aa1e0011ed1d19fb68a2631e657f406ff8ef9cbb09fb1f7ff9ed7f","case-original/vitest.json":"a6b42ae489d21df857427376a6b60f50f8eab5d6ac1460b5922fdd782e7029a6","case-original/exit-code.txt":"4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"}}};
           const hash = (algorithm, body) => createHash(algorithm).update(body).digest('hex');
           const gitBlob = body => createHash('sha1').update('blob ' + body.length + '\0').update(body).digest('hex');
           const options = { maxBuffer: 64 * 1024 * 1024 };
@@ -247,6 +247,11 @@ jobs:
             } else if (stage === 'fixed') {
               const actual = runArm('fixed',pageBlob);
               const before = JSON.parse(refFile('original','case-original/raw.json'));
+              const originalRaw = refFile('original','case-original/raw.json');
+              const marker = Buffer.from('    "automaticAndFinish": ');
+              const fixedStart = actual.rawBytes.indexOf(marker), originalStart = originalRaw.indexOf(marker);
+              assert(fixedStart >= 0 && originalStart >= 0,'Whole ordinary raw case boundary');
+              assert(actual.rawBytes.subarray(fixedStart).equals(originalRaw.subarray(originalStart)),'Complete ordinary pack and Finish literal byte preservation');
               assert.deepEqual(actual.raw.cases.automaticAndFinish,before.cases.automaticAndFinish,'Complete ordinary pack and Finish preservation');
               preservedAutomatic = true;
               arms.push(actual.summary);
@@ -324,7 +329,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: sports-bingo-pack-clock-original-${{ github.run_id }}
+          name: sports-bingo-pack-clock-fixed-${{ github.run_id }}
           path: sports-bingo-pack-clock-evidence
           retention-days: 14
           if-no-files-found: error
