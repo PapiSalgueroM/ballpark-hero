@@ -1,20 +1,20 @@
-name: Soccer Missing XI fixed confirmation ownership evidence
+name: Soccer Missing XI confirmation ownership full qualification
 on:
   push:
-    branches: [codex/soccer-missing-xi-confirmation-fixed-qa-20261106]
+    branches: [codex/soccer-missing-xi-confirmation-full-qa-20261106]
 permissions:
   contents: read
   actions: read
 jobs:
-  preflight:
+  qualify:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 45
     defaults:
       run:
         shell: bash
     env:
       SIM_NETWORK: offline
-      SIM_OFFLINE_RECEIPT: missing-xi-confirmation-fixed/offline.log
+      SIM_OFFLINE_RECEIPT: missing-xi-confirmation-ownership-qualified/offline.log
       TZ: UTC
       MISSING_XI_ORIGINAL_RUN: "42326812138"
       MISSING_XI_ORIGINAL_HEAD: "eecf9e47eb5cf867c9a7c8fc2c1cd5e5b0487ca3"
@@ -24,6 +24,26 @@ jobs:
       MISSING_XI_ORIGINAL_ZIP_SHA256: "f1afd8c60d1e292cd8717f299703024db814c4afedbe2be80768f6b2838312c7"
       MISSING_XI_ORIGINAL_RAW_BYTES: "2106788"
       MISSING_XI_ORIGINAL_RAW_SHA256: "3fa20b460e959934027510183edce2fbc858b9a999f7c75d5c474e299bb168e3"
+      ENGINES: chromium
+      SEO_SPLIT_BASE_REF: 3b14650d360b010b25b525de33a5f32f33de2798
+      MISSING_XI_FIXED_RUN: '42328761286'
+      MISSING_XI_FIXED_HEAD: '6bba111e659e3898e6f165fe438994e2adcfce6b'
+      MISSING_XI_FIXED_TREE: '04ddf69f473a7fea24c0cbd75cc83910720505b5'
+      MISSING_XI_FIXED_ARTIFACT: '13556676028'
+      MISSING_XI_FIXED_ZIP_BYTES: '7372300'
+      MISSING_XI_FIXED_ZIP_SHA256: '82ace77c7454fd8b225a5609e056a9e3324225d8c4795d7d7f389f54ab29aedc'
+      MISSING_XI_FIXED_RAW_BYTES: '2078763'
+      MISSING_XI_FIXED_RAW_SHA256: '2f6abf3c61339dd4c972dc3af6a6ede99a6855a185ede72241835cefcce5bb34'
+      MISSING_XI_CONTROLS_RUN: '42330070994'
+      MISSING_XI_CONTROLS_HEAD: '20dc929a38a6bd1b22d411799b4a1fca0320c390'
+      MISSING_XI_CONTROLS_TREE: 'd38d34dd5c88ee5aa1823517171bd779dc4b89f6'
+      MISSING_XI_CONTROLS_ARTIFACT: '13557416072'
+      MISSING_XI_CONTROLS_ZIP_BYTES: '28555235'
+      MISSING_XI_CONTROLS_ZIP_SHA256: '5beb774e67a74c4f52c3eb7afaee24b3037564093681359894e1a7ce0dea988b'
+      MISSING_XI_CONTROLS_RUNNER_BLOB: '4bbf437e72d78f03670d63e4e081a3e94893ccbf'
+      MISSING_XI_CONFIRMATION_PAGE_BLOB: '4692624a6ce6435b881ce4671df6169696a75858'
+      MISSING_XI_NATIVE_HELPER_BLOB: '9ec7a5fb80752b07ae74a9a17475ca93ba57bb2c'
+      MISSING_XI_NATIVE_OUTER_BLOB: '0d0cfece2e463b305e4d1937e73b6dd14b761bf4'
     steps:
       - uses: actions/checkout@v4
         with:
@@ -33,43 +53,99 @@ jobs:
         with:
           node-version: 24.22.1
           cache: npm
-      - name: Exact PR525 fixed Page plus held regression owned plan and workflow
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.4.4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Exact completed fixed parent and only owned full QA changes
         run: |
           set -euo pipefail
-          if grep -En '__[A-Z][A-Z0-9_]*__' .github/workflows/missing-xi-confirmation-20261106.yml; then echo 'Unresolved fixed qualification template binding'; exit 1; fi
-          test ! -e missing-xi-confirmation-fixed
-          mkdir missing-xi-confirmation-fixed
-          touch missing-xi-confirmation-fixed/offline.log
-          git rev-parse HEAD > missing-xi-confirmation-fixed/head.txt
-          git rev-parse 'HEAD^{tree}' > missing-xi-confirmation-fixed/tree.txt
-          git ls-files -s > missing-xi-confirmation-fixed/source-before.txt
-          sha256sum package.json package-lock.json > missing-xi-confirmation-fixed/locks-before.txt
+          if grep -En '__[A-Z][A-Z0-9_]*__' .github/workflows/missing-xi-confirmation-20261106.yml; then echo 'Unresolved full qualification template binding'; exit 1; fi
+          for value in "$MISSING_XI_CONTROLS_RUN" "$MISSING_XI_CONTROLS_ARTIFACT" "$MISSING_XI_CONTROLS_ZIP_BYTES"; do [[ "$value" =~ ^[1-9][0-9]*$ ]]; done
+          for value in "$MISSING_XI_CONTROLS_HEAD" "$MISSING_XI_CONTROLS_TREE" "$MISSING_XI_CONTROLS_RUNNER_BLOB" "$MISSING_XI_NATIVE_OUTER_BLOB"; do [[ "$value" =~ ^[a-f0-9]{40}$ ]]; done
+          [[ "$MISSING_XI_CONTROLS_ZIP_SHA256" =~ ^[a-f0-9]{64}$ ]]
+          test ! -e missing-xi-confirmation-ownership-qualified
+          test ! -e dist
+          mkdir missing-xi-confirmation-ownership-qualified
+          touch missing-xi-confirmation-ownership-qualified/offline.log
+          git rev-parse HEAD > missing-xi-confirmation-ownership-qualified/head.txt
+          git rev-parse 'HEAD^{tree}' > missing-xi-confirmation-ownership-qualified/tree.txt
+          git ls-files -s > missing-xi-confirmation-ownership-qualified/source-before.txt
+          sha256sum package.json package-lock.json > missing-xi-confirmation-ownership-qualified/locks-before.txt
           git diff --exit-code HEAD -- .
-          git fetch --no-tags --depth=1 origin a7af7ecd4a7c2ce2df95ce33cc3d03537dcdc836
-          test "$(git rev-parse 'a7af7ecd4a7c2ce2df95ce33cc3d03537dcdc836^{tree}')" = fee34832cb8924251f217ed8f77cf225ec5fdc68
+          git fetch --no-tags --depth=1 origin "$MISSING_XI_FIXED_HEAD"
+          git fetch --no-tags --depth=1 origin "$MISSING_XI_CONTROLS_HEAD"
+          git fetch --no-tags --depth=1 origin "$SEO_SPLIT_BASE_REF"
+          test "$(git rev-parse "$MISSING_XI_FIXED_HEAD^{tree}")" = "$MISSING_XI_FIXED_TREE"
+          test "$(git rev-parse "$MISSING_XI_CONTROLS_HEAD^{tree}")" = "$MISSING_XI_CONTROLS_TREE"
+          test "$(git rev-parse "$SEO_SPLIT_BASE_REF:src/data/seoMeta.ts")" = cf7a5142e59b97048d27b5ece9a6588a92073728
           node --input-type=module <<'NODE'
-          import fs from 'node:fs';import assert from 'node:assert/strict';import {execFileSync} from 'node:child_process';import {createHash} from 'node:crypto';
-          const out='missing-xi-confirmation-fixed',base='a7af7ecd4a7c2ce2df95ce33cc3d03537dcdc836',workflow='.github/workflows/missing-xi-confirmation-20261106.yml',owned=new Set([workflow,'src/pages/MissingXi.tsx','src/test/missingXiConfirmationOwnership.test.tsx','docs/plans/2026-11-06-missing-xi-confirmation-ownership.md']),at=(ref,file)=>execFileSync('git',['rev-parse',ref+':'+file],{encoding:'utf8'}).trim(),sha=bytes=>createHash('sha256').update(bytes).digest('hex');
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          import {execFileSync} from 'node:child_process';
+          import {createHash} from 'node:crypto';
+          const out='missing-xi-confirmation-ownership-qualified',env=process.env;
+          const workflow='.github/workflows/missing-xi-confirmation-20261106.yml';
+          const helper='scripts/qa/playMissingXiConfirmationOwnership.mjs';
+          const git=args=>execFileSync('git',args,{encoding:'utf8',maxBuffer:32*1024*1024});
+          const at=(ref,file)=>git(['rev-parse',ref+':'+file]).trim();
+          const tree=ref=>git(['ls-tree','-r','-z',ref]).split('\0').filter(Boolean);
+          const sha=bytes=>createHash('sha256').update(bytes).digest('hex');
+          const blob=bytes=>createHash('sha1').update(Buffer.from('blob '+bytes.length+'\0')).update(bytes).digest('hex');
+          const pathOf=row=>row.split('\t')[1];
+          const scoped=rows=>rows.filter(row=>/^(?:src|public|scripts)\//.test(pathOf(row)));
+          const owned=new Set([workflow,helper]);
+          const held=rows=>rows.filter(row=>!owned.has(pathOf(row)));
+          const head=git(['rev-parse','HEAD']).trim(),fixed=env.MISSING_XI_FIXED_HEAD,controls=env.MISSING_XI_CONTROLS_HEAD;
+          assert.equal(head,env.GITHUB_SHA);
+          assert.deepEqual(git(['rev-list','--parents','-n','1','HEAD']).trim().split(' '),[head,fixed],'Exact sole fixed parent');
+          const fixedTree=tree(fixed),current=tree('HEAD'),controlsTree=tree(controls);
+          assert.deepEqual([fixedTree.length,current.length,controlsTree.length],[5782,5783,5782]);
+          assert.deepEqual([scoped(fixedTree).length,scoped(current).length,scoped(controlsTree).length],[4659,4660,4659]);
+          assert.equal(held(current).length,5781);
+          assert.deepEqual(held(current),held(fixedTree),'All other5781 mode/path/blob tuples held from completed fixed');
+          assert.deepEqual(held(controlsTree),held(fixedTree),'Completed controls held the same product source');
+          assert.deepEqual(git(['diff','--name-only',fixed,'HEAD','--','.']).trim().split('\n').sort(),[workflow,helper].sort());
+          assert.deepEqual(git(['diff','--name-only',fixed,controls,'--','.']).trim().split('\n'),[workflow]);
+          assert(!fixedTree.some(row=>pathOf(row)===helper));
+          for(const file of ['scripts/qa/checkMissingXiConfirmationOwnership.mjs','scripts/qa/admitMissingXiConfirmationOwnership.mjs']){
+            assert(!current.some(row=>pathOf(row)===file),'Untracked QA source must remain absent: '+file);
+          }
           const pins={'src/App.tsx':'8bfedf7aaa1d076e0f0c8e2216c7e46632cd8a33','src/data/gameRegistry.ts':'f560b40a74d1468ac72dfde4ee6fec6635a9a255','public/missing-xi/index.html':'e7fe5d02933d73db401c4badb130eb2bb76ed0c3','src/pages/MissingXi.tsx':'4692624a6ce6435b881ce4671df6169696a75858','src/lib/missingXi.ts':'41d645db94fee5dd2fe22d19c353c9b8d2ca739a','src/hooks/useDailyPuzzle.ts':'b8a0d6ba268efe0e728c4ee96fbc6c60fcc73846','src/hooks/useGameCompletion.ts':'b104822551fd5d9b1c5d6ddb14f01c79e5a662b2','src/components/game/GiveUpButton.tsx':'2462260a7b5f1d5d3b70915df2428d5d4397b0a0','package.json':'2ff64986fb76ebc51b706f2fd24765768874008a','package-lock.json':'97d6f12a052f25f400462938c241789a083f0bfe','index.html':'12598fe720eec4fc88d3d33c53ede612d018150c','vite.config.ts':'0112b6ac4f2ad80b2fc04f9ec2f7185300913e7d','tailwind.config.ts':'f83c4f4032d359bc9285828eac3b0961a46c6b17','postcss.config.js':'2aa7205d4b402a1bdfbe07110c61df920b370066','tsconfig.json':'6b68d80b7d92d0c4a5d774897f2bedfa95b42669','tsconfig.app.json':'51f581dd91641b4c1f1219f646788e73cf6bf00c','tsconfig.node.json':'3133162c20350e1741b94b8d2ff77b811bec8363','bun.lockb':'5d9d33a3bf4f45fa099e2aa3014149e034981149','bun.lock':'dff081dcd34a1aa928ddc90d910774a6b855dfe3','src/test/missingXiLineupView.test.tsx':'a178e2a9d0078391d3b206c7f5578a4faa889889','src/test/dailyReload/mocks.ts':'00b4aabacdf38d7a9fae4bd26cd201c20d88d619','src/test/dailyReload/harness.tsx':'85f5b5573581d0862e58e2f188bf231ac9b5cfab','vitest.config.ts':'ed2a9dc677f77dfe95c061064eeff5782b856864','src/test/missingXiConfirmationOwnership.test.tsx':'a637f262571576e6637c8a24f5c9f34352e2f2bb','docs/plans/2026-11-06-missing-xi-confirmation-ownership.md':'e1b2364ad41459bb6a23a298f4aee9174a991264'};
+          pins[helper]=env.MISSING_XI_NATIVE_HELPER_BLOB;
+          for(const [file,want] of Object.entries(pins)){
+            assert.equal(at('HEAD',file),want,file+' current tree');
+            if(file!==helper)assert.equal(at(fixed,file),want,file+' qualified fixed tree');
+            assert.equal(blob(fs.readFileSync(file)),want,file+' actual physical body');
+          }
           const configs=["index.html","package.json","package-lock.json","vite.config.ts","tailwind.config.ts","postcss.config.js","tsconfig.json","tsconfig.app.json","tsconfig.node.json","bun.lockb","bun.lock"];assert.equal(configs.length,11);
-          for(const[file,want]of Object.entries(pins)){assert.equal(at('HEAD',file),want,file+' current index');if(!owned.has(file))assert.equal(at(base,file),want,file+' PR525 base');const bytes=fs.readFileSync(file);assert.equal(createHash('sha1').update(Buffer.concat([Buffer.from('blob '+bytes.length+'\0'),bytes])).digest('hex'),want,file+' actual physical body');}assert.equal(at(base,'src/pages/MissingXi.tsx'),'8734de7d4ab5b6848538cc079804f10f038b39e1','Reviewed original Page held at PR525');assert.equal(fs.statSync('public/missing-xi/index.html').size,21382,'Actual UTF-8 snapshot byte count');
-          const tree=ref=>execFileSync('git',['ls-tree','-r','-z',ref],{encoding:'utf8',maxBuffer:16*1024*1024}).split('\0').filter(Boolean),held=rows=>rows.filter(row=>!owned.has(row.split('\t')[1])),head=execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim();assert.deepEqual(held(tree('HEAD')),held(tree(base)),'Every unowned tracked product path, mode and blob equals PR525');assert.equal(tree(base).length,5779,'All actual PR525 base tracked paths');assert.equal(held(tree('HEAD')).length,5778,'Every base path except owned Page held');assert.equal(tree('HEAD').filter(row=>/^(?:src|public|scripts)\//.test(row.split('\t')[1])).length,4659,'Base scoped source plus only new test held');assert.deepEqual(execFileSync('git',['diff','--name-only',base,'HEAD'],{encoding:'utf8'}).trim().split('\n').sort(),[...owned].sort(),'Only owned Page, test, plan and QA workflow differ from PR525');
-          fs.writeFileSync(out+'/source-join.json',JSON.stringify({status:'passed',base,baseTree:'fee34832cb8924251f217ed8f77cf225ec5fdc68',head,heldRows:held(tree('HEAD')).length,baseTrackedRows:5779,trackedRows:5782,baseScopedRows:4658,scopedSourceRows:4659,rootConfigurations:configs.map(file=>({file,blob:pins[file]})),ownedLeaves:[...owned],workflowBlob:at('HEAD',workflow),pins,snapshotBytes:21382,limits:'Fixed unit evidence on PR525 plus only reviewed owned Page, held regression, owned plan and QA workflow. No controller or other product change.'},null,2));
-          const files=execFileSync('git',['ls-files','-z'],{encoding:'utf8'}).split('\0').filter(Boolean),physical=files.map(file=>{const bytes=fs.readFileSync(file);return{file,bytes:bytes.length,sha256:sha(bytes)};});assert.equal(files.length,5782,'Exact base plus owned test, plan and QA workflow, with reviewed Page edit');assert.equal(physical.filter(row=>/^(?:src|public|scripts)\//.test(row.file)).length,4659);fs.writeFileSync(out+'/tracked-before.json',JSON.stringify(physical));assert.equal(fs.statSync(out+'/offline.log').size,0);
+          const files=git(['ls-files','-z']).split('\0').filter(Boolean);
+          assert.equal(files.length,5783);
+          const physical=files.map(file=>{const bytes=fs.readFileSync(file);return {file,bytes:bytes.length,sha256:sha(bytes)};});
+          fs.writeFileSync(out+'/tracked-before.json',JSON.stringify(physical));
+          fs.writeFileSync(out+'/source-join.json',JSON.stringify({
+            status:'passed',head,tree:git(['rev-parse','HEAD^{tree}']).trim(),fixedHead:fixed,fixedTree:env.MISSING_XI_FIXED_TREE,
+            controlsHead:controls,controlsTree:env.MISSING_XI_CONTROLS_TREE,heldRows:5781,ownedLeaves:[workflow,helper],
+            trackedRows:5783,baseScopedRows:4658,sourceRows:4660,cleanSourceRows:4659,
+            rootConfigurations:configs.map(file=>({file,blob:pins[file]})),pins,workflowBlob:at('HEAD',workflow),
+            limits:'Completed fixed is the sole parent. Full QA adds only the native helper and replaces the QA workflow.'
+          },null,2));
           NODE
       - name: Locked dependency install and all521 installed versions
         run: |
           set -euo pipefail
-          npm ci 2>&1 | tee missing-xi-confirmation-fixed/install.log
+          npm ci 2>&1 | tee missing-xi-confirmation-ownership-qualified/install.log
           node --input-type=module <<'NODE'
-          import fs from 'node:fs';import assert from 'node:assert/strict';const lock=JSON.parse(fs.readFileSync('package-lock.json')),rows=Object.keys(lock.packages).filter(p=>p.startsWith('node_modules/')&&fs.existsSync(p+'/package.json')).map(p=>[p,JSON.parse(fs.readFileSync(p+'/package.json')).version]);assert.equal(rows.length,521);for(const[p,v]of rows)assert.equal(v,lock.packages[p].version,p);fs.writeFileSync('missing-xi-confirmation-fixed/installed-before.json',JSON.stringify(rows));assert.equal(fs.statSync('missing-xi-confirmation-fixed/offline.log').size,0);
+          import fs from 'node:fs';import assert from 'node:assert/strict';const lock=JSON.parse(fs.readFileSync('package-lock.json')),rows=Object.keys(lock.packages).filter(p=>p.startsWith('node_modules/')&&fs.existsSync(p+'/package.json')).map(p=>[p,JSON.parse(fs.readFileSync(p+'/package.json')).version]);assert.equal(rows.length,521);for(const[p,v]of rows)assert.equal(v,lock.packages[p].version,p);fs.writeFileSync('missing-xi-confirmation-ownership-qualified/installed-before.json',JSON.stringify(rows));assert.equal(fs.statSync('missing-xi-confirmation-ownership-qualified/offline.log').size,0);
           NODE
       - name: Actual direct route React lazy Soccer object and inert snapshot
         run: |
           set -euo pipefail
           NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node --input-type=module <<'NODE'
           import fs from 'node:fs';import assert from 'node:assert/strict';import ts from 'typescript';import {JSDOM} from 'jsdom';import {createHash} from 'node:crypto';
-          const out='missing-xi-confirmation-fixed',route='/missing-xi',component='MissingXi',label='Missing XI',appText=fs.readFileSync('src/App.tsx','utf8'),catalogText=fs.readFileSync('src/data/gameRegistry.ts','utf8'),app=ts.createSourceFile('src/App.tsx',appText,ts.ScriptTarget.Latest,true,ts.ScriptKind.TSX),catalog=ts.createSourceFile('src/data/gameRegistry.ts',catalogText,ts.ScriptTarget.Latest,true,ts.ScriptKind.TS);assert.deepEqual(app.parseDiagnostics,[]);assert.deepEqual(catalog.parseDiagnostics,[]);
+          const out='missing-xi-confirmation-ownership-qualified',route='/missing-xi',component='MissingXi',label='Missing XI',appText=fs.readFileSync('src/App.tsx','utf8'),catalogText=fs.readFileSync('src/data/gameRegistry.ts','utf8'),app=ts.createSourceFile('src/App.tsx',appText,ts.ScriptTarget.Latest,true,ts.ScriptKind.TSX),catalog=ts.createSourceFile('src/data/gameRegistry.ts',catalogText,ts.ScriptTarget.Latest,true,ts.ScriptKind.TS);assert.deepEqual(app.parseDiagnostics,[]);assert.deepEqual(catalog.parseDiagnostics,[]);
           const all=(root,predicate)=>{const found=[];const visit=node=>{if(predicate(node))found.push(node);ts.forEachChild(node,visit);};visit(root);return found;},attrs=(node,name)=>node.attributes.properties.filter(p=>ts.isJsxAttribute(p)&&p.name.text===name);
           const routes=all(app,node=>(ts.isJsxSelfClosingElement(node)||ts.isJsxOpeningElement(node))&&node.tagName.getText(app)==='Route').filter(node=>attrs(node,'path').some(p=>p.initializer&&ts.isStringLiteralLike(p.initializer)&&p.initializer.text===route));assert.equal(routes.length,1,'One actual direct public JSX Route');assert(ts.isJsxSelfClosingElement(routes[0]),'Direct self-closing route');assert.equal(attrs(routes[0],'path').length,1);const elements=attrs(routes[0],'element');assert.equal(elements.length,1);const element=elements[0].initializer;assert(element&&ts.isJsxExpression(element)&&element.expression&&ts.isJsxSelfClosingElement(element.expression));assert.equal(element.expression.tagName.getText(app),component,'Direct Missing XI mount, no Navigate');
           const declarations=all(app,node=>ts.isVariableDeclaration(node)&&ts.isIdentifier(node.name)&&node.name.text===component);assert.equal(declarations.length,1);const init=declarations[0].initializer;assert(init&&ts.isCallExpression(init)&&ts.isIdentifier(init.expression)&&init.expression.text==='lazy');assert.equal(init.arguments.length,1);const factory=init.arguments[0];assert(ts.isArrowFunction(factory)&&factory.parameters.length===0);const load=factory.body;assert(ts.isCallExpression(load)&&load.expression.kind===ts.SyntaxKind.ImportKeyword&&load.arguments.length===1&&ts.isStringLiteralLike(load.arguments[0]));assert.equal(load.arguments[0].text,'./pages/MissingXi');const reactLazy=all(app,node=>ts.isImportDeclaration(node)&&ts.isStringLiteralLike(node.moduleSpecifier)&&node.moduleSpecifier.text==='react'&&node.importClause?.namedBindings&&ts.isNamedImports(node.importClause.namedBindings)).flatMap(node=>node.importClause.namedBindings.elements).filter(node=>node.name.text==='lazy'&&(node.propertyName?.text??node.name.text)==='lazy');assert.equal(reactLazy.length,1,'lazy is the actual named React import');
@@ -80,35 +156,35 @@ jobs:
       - name: Proper App types on reviewed fixed Page and held regression
         run: |
           set -euo pipefail
-          node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee missing-xi-confirmation-fixed/types.log
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee missing-xi-confirmation-ownership-qualified/types.log
       - name: Retain authenticated qualified original packet and complete literal reference
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
-          gh api "repos/PapiSalgueroM/ballpark-hero/actions/runs/$MISSING_XI_ORIGINAL_RUN" > missing-xi-confirmation-fixed/original-run.json
-          gh api "repos/PapiSalgueroM/ballpark-hero/actions/runs/$MISSING_XI_ORIGINAL_RUN/jobs?per_page=100" > missing-xi-confirmation-fixed/original-jobs.json
-          gh api "repos/PapiSalgueroM/ballpark-hero/actions/artifacts/$MISSING_XI_ORIGINAL_ARTIFACT" > missing-xi-confirmation-fixed/original-artifact.json
-          gh api "repos/PapiSalgueroM/ballpark-hero/actions/artifacts/$MISSING_XI_ORIGINAL_ARTIFACT/zip" > missing-xi-confirmation-fixed/original.zip
-          echo "$MISSING_XI_ORIGINAL_ZIP_SHA256  missing-xi-confirmation-fixed/original.zip" | sha256sum --check
-          unzip -Z1 missing-xi-confirmation-fixed/original.zip > missing-xi-confirmation-fixed/original-entries.txt
+          gh api "repos/PapiSalgueroM/ballpark-hero/actions/runs/$MISSING_XI_ORIGINAL_RUN" > missing-xi-confirmation-ownership-qualified/original-run.json
+          gh api "repos/PapiSalgueroM/ballpark-hero/actions/runs/$MISSING_XI_ORIGINAL_RUN/jobs?per_page=100" > missing-xi-confirmation-ownership-qualified/original-jobs.json
+          gh api "repos/PapiSalgueroM/ballpark-hero/actions/artifacts/$MISSING_XI_ORIGINAL_ARTIFACT" > missing-xi-confirmation-ownership-qualified/original-artifact.json
+          gh api "repos/PapiSalgueroM/ballpark-hero/actions/artifacts/$MISSING_XI_ORIGINAL_ARTIFACT/zip" > missing-xi-confirmation-ownership-qualified/original.zip
+          echo "$MISSING_XI_ORIGINAL_ZIP_SHA256  missing-xi-confirmation-ownership-qualified/original.zip" | sha256sum --check
+          unzip -Z1 missing-xi-confirmation-ownership-qualified/original.zip > missing-xi-confirmation-ownership-qualified/original-entries.txt
           node --input-type=module <<'NODE'
           import fs from 'node:fs';import assert from 'node:assert/strict';
-          const out='missing-xi-confirmation-fixed',env=process.env,read=file=>JSON.parse(fs.readFileSync(out+'/'+file)),run=read('original-run.json'),jobs=read('original-jobs.json'),meta=read('original-artifact.json'),artifacts=Object.hasOwn(meta,'artifacts')?meta.artifacts:[meta];
+          const out='missing-xi-confirmation-ownership-qualified',env=process.env,read=file=>JSON.parse(fs.readFileSync(out+'/'+file)),run=read('original-run.json'),jobs=read('original-jobs.json'),meta=read('original-artifact.json'),artifacts=Object.hasOwn(meta,'artifacts')?meta.artifacts:[meta];
           assert.equal(run.id,Number(env.MISSING_XI_ORIGINAL_RUN));assert.equal(run.status,'completed');assert.equal(run.conclusion,'success');assert.equal(run.head_sha,env.MISSING_XI_ORIGINAL_HEAD);assert.equal(run.head_commit.tree_id,env.MISSING_XI_ORIGINAL_TREE);assert.equal(run.repository.full_name,'PapiSalgueroM/ballpark-hero');assert.equal(run.path,'.github/workflows/missing-xi-confirmation-20261106.yml');
           assert.equal(jobs.jobs.length,1);assert.equal(jobs.jobs[0].run_id,run.id);assert.equal(jobs.jobs[0].head_sha,run.head_sha);assert.equal(jobs.jobs[0].status,'completed');assert.equal(jobs.jobs[0].conclusion,'success');assert(jobs.jobs[0].steps.length>0);for(const step of jobs.jobs[0].steps){assert.equal(step.status,'completed');assert.equal(step.conclusion,'success');}
           assert(Array.isArray(artifacts)&&artifacts.length===1);const artifact=artifacts[0];assert.equal(artifact.id,Number(env.MISSING_XI_ORIGINAL_ARTIFACT));assert.equal(artifact.workflow_run.id,run.id);assert.equal(artifact.workflow_run.head_sha,run.head_sha);assert.equal(artifact.expired,false);assert.equal(artifact.size_in_bytes,Number(env.MISSING_XI_ORIGINAL_ZIP_BYTES));assert.equal(artifact.digest,'sha256:'+env.MISSING_XI_ORIGINAL_ZIP_SHA256);assert.equal(fs.statSync(out+'/original.zip').size,Number(env.MISSING_XI_ORIGINAL_ZIP_BYTES));
           const expected=JSON.parse(String.raw`[{"file":"active-route-preflight.json","bytes":1282,"sha256":"848b254a2a3d5f013c69538164c6c3f12e3cf2a63ee704db608cbeb138eed9fa"},{"file":"active-snapshot.html","bytes":21382,"sha256":"92e2821ae08f31061a2f6dcacb457486b3b6d3311dd79dcf95b7585658a0d41d"},{"file":"final-holds.json","bytes":403,"sha256":"75c582dd31ae82bacbe51e46d60f7d6c37cc84c95f5393768e67509c1decbc4c"},{"file":"head.txt","bytes":41,"sha256":"edb2b9e511fd0e74d50d1e63445a41576d4a9c29295a23de65ab2a63ca31a84b"},{"file":"install.log","bytes":1391,"sha256":"c936e0bff4759906eaa8478484b6f3a261b1e3db15dcdc80f797ea2da3cf76da"},{"file":"installed-after.json","bytes":22175,"sha256":"1268d6ef069c4189836716fed6ebe4dd324c661cacf53981b6a227608aa383e8"},{"file":"installed-before.json","bytes":22175,"sha256":"1268d6ef069c4189836716fed6ebe4dd324c661cacf53981b6a227608aa383e8"},{"file":"locks-after.txt","bytes":163,"sha256":"d316e23dae0f11f4fabcf8edd97204c9b780c6da8a0f6307c86940cbdd28e3d7"},{"file":"locks-before.txt","bytes":163,"sha256":"d316e23dae0f11f4fabcf8edd97204c9b780c6da8a0f6307c86940cbdd28e3d7"},{"file":"offline.log","bytes":0,"sha256":"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"},{"file":"original-admission.json","bytes":7337,"sha256":"416a3d00e422eccfee30952b089bd5755bcd77f57d83faa12263ec584b961544"},{"file":"owned.json","bytes":4689,"sha256":"60117cf854b8dfb6856e170df36de7a3fd0170cca96a2b02d0b65132c598eb58"},{"file":"owned.log","bytes":113,"sha256":"2a099dc7c981417166e0251cff84662ce55aa2e9330e5fa3c808ed66f5707fe1"},{"file":"preflight-artifact.json","bytes":789,"sha256":"98efce701f40b88e9ad7c5cfe0dfd7106c57b22accc28246fb0c93993826c5c8"},{"file":"preflight-custody.json","bytes":3044,"sha256":"edc5c8ae13d698a4f0ae5550bc27538583d7db94da9ce3d4e5d3a3786d3a26d1"},{"file":"preflight-entries.txt","bytes":275,"sha256":"720ad81144b25bcaf49fd904a2e8bbbfabdecf53509b64d3dc0161b533ac8ee6"},{"file":"preflight-jobs.json","bytes":2987,"sha256":"13fcb7e5b27ed4740a61b5a92fab7f14c262b3f9960203fb56a0b65d3206575b"},{"file":"preflight-packet/active-route-preflight.json","bytes":1282,"sha256":"848b254a2a3d5f013c69538164c6c3f12e3cf2a63ee704db608cbeb138eed9fa"},{"file":"preflight-packet/active-snapshot.html","bytes":21382,"sha256":"92e2821ae08f31061a2f6dcacb457486b3b6d3311dd79dcf95b7585658a0d41d"},{"file":"preflight-packet/final-holds.json","bytes":396,"sha256":"7b57a585de1e6e033af516bc220fe9ea2894a90e2b92b66da643b8e7b28ca796"},{"file":"preflight-packet/head.txt","bytes":41,"sha256":"666b3fba885ea2aba7cb5359f1f91f79991d016057cb0717f34321c535fbfd5d"},{"file":"preflight-packet/install.log","bytes":1391,"sha256":"8c5e1fedc985fa1e9a12898cf38d57c9d9fbf8bd7022f9fe6308684122ad0a1e"},{"file":"preflight-packet/installed-after.json","bytes":22175,"sha256":"1268d6ef069c4189836716fed6ebe4dd324c661cacf53981b6a227608aa383e8"},{"file":"preflight-packet/installed-before.json","bytes":22175,"sha256":"1268d6ef069c4189836716fed6ebe4dd324c661cacf53981b6a227608aa383e8"},{"file":"preflight-packet/locks-after.txt","bytes":163,"sha256":"d316e23dae0f11f4fabcf8edd97204c9b780c6da8a0f6307c86940cbdd28e3d7"},{"file":"preflight-packet/locks-before.txt","bytes":163,"sha256":"d316e23dae0f11f4fabcf8edd97204c9b780c6da8a0f6307c86940cbdd28e3d7"},{"file":"preflight-packet/offline.log","bytes":0,"sha256":"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"},{"file":"preflight-packet/source-after.txt","bytes":501947,"sha256":"bca74a9597de3cc8dc233678d8ba3c6a548f60a42e0195509843baf7eef4aa39"},{"file":"preflight-packet/source-before.txt","bytes":501947,"sha256":"bca74a9597de3cc8dc233678d8ba3c6a548f60a42e0195509843baf7eef4aa39"},{"file":"preflight-packet/source-join.json","bytes":3110,"sha256":"5d6be5c14a590455029ab6867516546d0bd39f4235fb1332947f048cde9da5eb"},{"file":"preflight-packet/tracked-after.json","bytes":793782,"sha256":"61a19360565dcd7ed8da0b8beee01bbbe49d8a93453c0e37a3cc7434cda39b4a"},{"file":"preflight-packet/tracked-before.json","bytes":793782,"sha256":"61a19360565dcd7ed8da0b8beee01bbbe49d8a93453c0e37a3cc7434cda39b4a"},{"file":"preflight-packet/tree.txt","bytes":41,"sha256":"f73a0fe286fd7a1339a2c1c81cb6cd7e3912edf3d21712af0b5e947d03fada3f"},{"file":"preflight-run.json","bytes":13048,"sha256":"082581ef08dff17086e4f9e63fa28b3cf954ef532322bff4ec2355a044f314cb"},{"file":"preflight.zip","bytes":1010823,"sha256":"6d6f73ed8b43679c72f1282c7b8bf9b71a75ddd8c29ea9cc2879c1ebc685edac"},{"file":"raw.json","bytes":2106788,"sha256":"3fa20b460e959934027510183edce2fbc858b9a999f7c75d5c474e299bb168e3"},{"file":"report-errors.json","bytes":4518,"sha256":"ab6507346396b3da884282708c87d4df08e6682f0c7551913f7f858225c74e68"},{"file":"source-after.txt","bytes":502155,"sha256":"09555c45cc36c6d5e70f4f4c15cbb19cb8a9dc47130f127a58bee74909912be2"},{"file":"source-before.txt","bytes":502155,"sha256":"09555c45cc36c6d5e70f4f4c15cbb19cb8a9dc47130f127a58bee74909912be2"},{"file":"source-join.json","bytes":3812,"sha256":"24f7808fa0597c08f4f5c11ecc6669f7f3c257d7c84e76affbd1391fd8a02cee"},{"file":"test-exit.txt","bytes":2,"sha256":"4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"},{"file":"tracked-after.json","bytes":794092,"sha256":"1619e84ac8d2cb36c10443cbba826c2f2f51637e29ea03b029567a790dd4c63b"},{"file":"tracked-before.json","bytes":794092,"sha256":"1619e84ac8d2cb36c10443cbba826c2f2f51637e29ea03b029567a790dd4c63b"},{"file":"tree.txt","bytes":41,"sha256":"4aec1774062aaa976672294e972bdd43e53589c4622d31227440eabd709db7e8"},{"file":"types.log","bytes":0,"sha256":"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"}]`),entries=fs.readFileSync(out+'/original-entries.txt','utf8').trimEnd().split('\n');assert.equal(expected.length,45);assert.equal(new Set(expected.map(row=>row.file)).size,45);assert.equal(new Set(entries).size,entries.length);assert.deepEqual([...entries].sort(),expected.map(row=>row.file).sort());for(const name of entries)assert(name&&!name.endsWith('/')&&!name.startsWith('/')&&!name.includes('\\')&&!name.split('/').includes('..'));fs.writeFileSync(out+'/original-body-pins.json',JSON.stringify(expected,null,2));
           NODE
-          mkdir missing-xi-confirmation-fixed/original-packet
-          unzip -q missing-xi-confirmation-fixed/original.zip -d missing-xi-confirmation-fixed/original-packet
+          mkdir missing-xi-confirmation-ownership-qualified/original-packet
+          unzip -q missing-xi-confirmation-ownership-qualified/original.zip -d missing-xi-confirmation-ownership-qualified/original-packet
           node --input-type=module <<'NODE'
           import fs from 'node:fs';import assert from 'node:assert/strict';import {createHash} from 'node:crypto';
-          const out='missing-xi-confirmation-fixed',ref=out+'/original-packet',env=process.env,read=file=>JSON.parse(fs.readFileSync(ref+'/'+file)),sha=bytes=>createHash('sha256').update(bytes).digest('hex'),expected=JSON.parse(fs.readFileSync(out+'/original-body-pins.json'));
+          const out='missing-xi-confirmation-ownership-qualified',ref=out+'/original-packet',env=process.env,read=file=>JSON.parse(fs.readFileSync(ref+'/'+file)),sha=bytes=>createHash('sha256').update(bytes).digest('hex'),expected=JSON.parse(fs.readFileSync(out+'/original-body-pins.json'));
           const walk=(dir,prefix='')=>fs.readdirSync(dir,{withFileTypes:true}).sort((a,b)=>a.name.localeCompare(b.name)).flatMap(entry=>{assert(!entry.isSymbolicLink());const file=prefix+entry.name;return entry.isDirectory()?walk(dir+'/'+entry.name,file+'/'):(assert(entry.isFile()),[file]);});assert.deepEqual(walk(ref).sort(),expected.map(row=>row.file).sort());
           for(const row of expected){const bytes=fs.readFileSync(ref+'/'+row.file);assert.equal(bytes.length,row.bytes,row.file);assert.equal(sha(bytes),row.sha256,row.file);}assert.equal(expected.length,45);assert.equal(fs.readFileSync(ref+'/head.txt','utf8').trim(),env.MISSING_XI_ORIGINAL_HEAD);assert.equal(fs.readFileSync(ref+'/tree.txt','utf8').trim(),env.MISSING_XI_ORIGINAL_TREE);
           const originalSource=read('source-join.json');assert.equal(originalSource.status,'passed');assert.equal(originalSource.head,env.MISSING_XI_ORIGINAL_HEAD);assert.equal(originalSource.base,'a7af7ecd4a7c2ce2df95ce33cc3d03537dcdc836');assert.equal(originalSource.baseTree,'fee34832cb8924251f217ed8f77cf225ec5fdc68');assert.equal(originalSource.heldRows,5779);assert.equal(originalSource.trackedRows,5782);assert.equal(originalSource.scopedSourceRows,4659);assert.equal(originalSource.workflowBlob,'756d1c732be058526e807cfaffe498ac19fb4907');assert.equal(originalSource.pins['src/pages/MissingXi.tsx'],'8734de7d4ab5b6848538cc079804f10f038b39e1');assert.equal(originalSource.pins['src/test/missingXiConfirmationOwnership.test.tsx'],'a637f262571576e6637c8a24f5c9f34352e2f2bb');assert.equal(originalSource.pins['docs/plans/2026-11-06-missing-xi-confirmation-ownership.md'],'c706b73cd297b9e5fb21a4c714a28bbceb411783');
-          const exceptions=new Set(['.github/workflows/missing-xi-confirmation-20261106.yml','src/pages/MissingXi.tsx','docs/plans/2026-11-06-missing-xi-confirmation-ownership.md']),held=text=>text.trimEnd().split('\n').filter(row=>!exceptions.has(row.split('\t')[1]));const before=held(fs.readFileSync(out+'/source-before.txt','utf8')),old=held(fs.readFileSync(ref+'/source-before.txt','utf8'));assert.equal(old.length,5779);assert.deepEqual(before,old,'Every qualified-original path/mode/blob except only Page/plan/workflow held, including the exact test');
+          const exceptions=new Set(['.github/workflows/missing-xi-confirmation-20261106.yml','src/pages/MissingXi.tsx','docs/plans/2026-11-06-missing-xi-confirmation-ownership.md','scripts/qa/playMissingXiConfirmationOwnership.mjs']),held=text=>text.trimEnd().split('\n').filter(row=>!exceptions.has(row.split('\t')[1]));const before=held(fs.readFileSync(out+'/source-before.txt','utf8')),old=held(fs.readFileSync(ref+'/source-before.txt','utf8'));assert.equal(old.length,5779);assert.deepEqual(before,old,'Every qualified-original path/mode/blob except Page/plan/workflow and the full native helper held, including the exact test');
           const previousPhysical=read('tracked-before.json'),physical=JSON.parse(fs.readFileSync(out+'/tracked-before.json')),oldMap=new Map(previousPhysical.filter(row=>!exceptions.has(row.file)).map(row=>[row.file,row]));assert.equal(oldMap.size,5779);for(const row of physical.filter(row=>!exceptions.has(row.file)))assert.deepEqual(row,oldMap.get(row.file),'Complete held original physical receipt '+row.file);
           for(const pair of[['source-before.txt','source-after.txt'],['tracked-before.json','tracked-after.json'],['locks-before.txt','locks-after.txt'],['installed-before.json','installed-after.json']])assert(fs.readFileSync(ref+'/'+pair[0]).equals(fs.readFileSync(ref+'/'+pair[1])),pair.join(' exact original before/final bytes'));for(const file of['locks-before.txt','installed-before.json'])assert(fs.readFileSync(out+'/'+file).equals(fs.readFileSync(ref+'/'+file)));assert.equal(fs.statSync(ref+'/offline.log').size,0);assert.equal(read('final-holds.json').status,'passed');
           const admission=read('original-admission.json'),report=read('owned.json'),rows=report.testResults.flatMap(s=>s.assertionResults),rawBytes=fs.readFileSync(ref+'/raw.json'),raw=JSON.parse(rawBytes);assert.equal(admission.status,'qualified-original-confirmation-business-reds-and-two-whole-preserves');assert.deepEqual([admission.actualCases,admission.actualPasses,admission.actualBusinessFailures,admission.rawFrames,admission.actionJournalEntries],[8,6,2,62,44]);assert.equal(admission.priorRAW,false);assert.equal(rawBytes.length,Number(env.MISSING_XI_ORIGINAL_RAW_BYTES));assert.equal(sha(rawBytes),env.MISSING_XI_ORIGINAL_RAW_SHA256);assert.equal(admission.raw.bytes,rawBytes.length);assert.equal(admission.raw.sha256,sha(rawBytes));assert.deepEqual([report.numTotalTests,report.numPassedTests,report.numFailedTests,rows.length],[8,6,2,8]);assert.equal(fs.readFileSync(ref+'/test-exit.txt','utf8').trim(),'1');
@@ -116,17 +192,252 @@ jobs:
           fs.writeFileSync(out+'/original-custody.json',JSON.stringify({status:'passed-qualified-original-custody',run:Number(env.MISSING_XI_ORIGINAL_RUN),head:env.MISSING_XI_ORIGINAL_HEAD,tree:env.MISSING_XI_ORIGINAL_TREE,artifact:Number(env.MISSING_XI_ORIGINAL_ARTIFACT),ZIPBytes:Number(env.MISSING_XI_ORIGINAL_ZIP_BYTES),ZIPSHA256:env.MISSING_XI_ORIGINAL_ZIP_SHA256,bodyCount:45,bodyBytes:expected.reduce((n,r)=>n+r.bytes,0),rawBytes:rawBytes.length,rawSHA256:sha(rawBytes),actualCases:8,passes:6,namedBusinessFailures:2,rawFrames:62,actionJournalEntries:44,wholePreservedCases:admission.wholePreservedCases,priorRAW:false,heldOriginalRows:5779,limits:'Authenticated original business-red evidence and complete body custody only. Original remains its declared2business-red/6pass qualification; no fixed or native outcome is supplied by this input.'},null,2));console.log('PASS qualified original45actual bodies,8rows/6passes/2precise business reds/62frames/44journal retained without normalization');
           NODE
 
+      - name: Authenticate and retain all completed fixed and controls archive bodies
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          out=missing-xi-confirmation-ownership-qualified
+          repo=repos/PapiSalgueroM/ballpark-hero/actions
+          for prefix in fixed controls; do
+            if [[ "$prefix" = fixed ]]; then
+              run="$MISSING_XI_FIXED_RUN"
+              artifact="$MISSING_XI_FIXED_ARTIFACT"
+            else
+              run="$MISSING_XI_CONTROLS_RUN"
+              artifact="$MISSING_XI_CONTROLS_ARTIFACT"
+            fi
+            gh api "$repo/runs/$run" > "$out/$prefix-run.json"
+            gh api "$repo/runs/$run/jobs?per_page=100" > "$out/$prefix-jobs.json"
+            gh api "$repo/artifacts/$artifact" > "$out/$prefix-artifact.json"
+            gh api "$repo/artifacts/$artifact/zip" > "$out/$prefix.zip"
+          done
+          cat > "$out/fixed-body-pins.json" <<'FIXED_BODY_PINS'
+          [{"file":"active-route-preflight.json","bytes":1282,"sha256":"848b254a2a3d5f013c69538164c6c3f12e3cf2a63ee704db608cbeb138eed9fa"},{"file":"active-snapshot.html","bytes":21382,"sha256":"92e2821ae08f31061a2f6dcacb457486b3b6d3311dd79dcf95b7585658a0d41d"},{"file":"final-holds.json","bytes":400,"sha256":"262ac9f84c97b30773cf4e31c7b83a9d6b8abc3f4d6438d58d6b6bc7fc70abff"},{"file":"fixed-admission.json","bytes":6138,"sha256":"b0067b45800cca98f19aec419e3671a4097ce933f867f9f6b35b9909045b9608"},{"file":"head.txt","bytes":41,"sha256":"08fad4cc50ac71e2aead5d8df824dd2cccc659ad0e61b9eeee8655c425a376a8"},{"file":"install.log","bytes":1391,"sha256":"0a090aef8e839aca0cbe2078e21ea5569cf79f672ecbadebecd602fa8d1c3ea5"},{"file":"installed-after.json","bytes":22175,"sha256":"1268d6ef069c4189836716fed6ebe4dd324c661cacf53981b6a227608aa383e8"},{"file":"installed-before.json","bytes":22175,"sha256":"1268d6ef069c4189836716fed6ebe4dd324c661cacf53981b6a227608aa383e8"},{"file":"locks-after.txt","bytes":163,"sha256":"d316e23dae0f11f4fabcf8edd97204c9b780c6da8a0f6307c86940cbdd28e3d7"},{"file":"locks-before.txt","bytes":163,"sha256":"d316e23dae0f11f4fabcf8edd97204c9b780c6da8a0f6307c86940cbdd28e3d7"},{"file":"offline.log","bytes":0,"sha256":"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"},{"file":"original-artifact.json","bytes":780,"sha256":"012c28ea26b53bdecb8051b0c1592b3e5f2f7159fc44d751d48d1e67f62bc2d1"},{"file":"original-body-pins.json","bytes":6623,"sha256":"315e4e87604b87537380dfa14cfde80f135b96edbc6e18c157672e559473de4d"},{"file":"original-custody.json","bytes":1326,"sha256":"d4924edcafe9d691796e24d6614b4565756c76ff94e4e7003fa04bbca338438c"},{"file":"original-entries.txt","bytes":1041,"sha256":"1adefa94e269a9c501e224c0caeb07f48fce18c6bc8f50ca263a779858237c9e"},{"file":"original-jobs.json","bytes":3629,"sha256":"dd21e3350ee3b1f960e12abf123acd5e3232d727eb9f204acda1e7bcbdb152d7"},{"file":"original-packet/active-route-preflight.json","bytes":1282,"sha256":"848b254a2a3d5f013c69538164c6c3f12e3cf2a63ee704db608cbeb138eed9fa"},{"file":"original-packet/active-snapshot.html","bytes":21382,"sha256":"92e2821ae08f31061a2f6dcacb457486b3b6d3311dd79dcf95b7585658a0d41d"},{"file":"original-packet/final-holds.json","bytes":403,"sha256":"75c582dd31ae82bacbe51e46d60f7d6c37cc84c95f5393768e67509c1decbc4c"},{"file":"original-packet/head.txt","bytes":41,"sha256":"edb2b9e511fd0e74d50d1e63445a41576d4a9c29295a23de65ab2a63ca31a84b"},{"file":"original-packet/install.log","bytes":1391,"sha256":"c936e0bff4759906eaa8478484b6f3a261b1e3db15dcdc80f797ea2da3cf76da"},{"file":"original-packet/installed-after.json","bytes":22175,"sha256":"1268d6ef069c4189836716fed6ebe4dd324c661cacf53981b6a227608aa383e8"},{"file":"original-packet/installed-before.json","bytes":22175,"sha256":"1268d6ef069c4189836716fed6ebe4dd324c661cacf53981b6a227608aa383e8"},{"file":"original-packet/locks-after.txt","bytes":163,"sha256":"d316e23dae0f11f4fabcf8edd97204c9b780c6da8a0f6307c86940cbdd28e3d7"},{"file":"original-packet/locks-before.txt","bytes":163,"sha256":"d316e23dae0f11f4fabcf8edd97204c9b780c6da8a0f6307c86940cbdd28e3d7"},{"file":"original-packet/offline.log","bytes":0,"sha256":"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"},{"file":"original-packet/original-admission.json","bytes":7337,"sha256":"416a3d00e422eccfee30952b089bd5755bcd77f57d83faa12263ec584b961544"},{"file":"original-packet/owned.json","bytes":4689,"sha256":"60117cf854b8dfb6856e170df36de7a3fd0170cca96a2b02d0b65132c598eb58"},{"file":"original-packet/owned.log","bytes":113,"sha256":"2a099dc7c981417166e0251cff84662ce55aa2e9330e5fa3c808ed66f5707fe1"},{"file":"original-packet/preflight-artifact.json","bytes":789,"sha256":"98efce701f40b88e9ad7c5cfe0dfd7106c57b22accc28246fb0c93993826c5c8"},{"file":"original-packet/preflight-custody.json","bytes":3044,"sha256":"edc5c8ae13d698a4f0ae5550bc27538583d7db94da9ce3d4e5d3a3786d3a26d1"},{"file":"original-packet/preflight-entries.txt","bytes":275,"sha256":"720ad81144b25bcaf49fd904a2e8bbbfabdecf53509b64d3dc0161b533ac8ee6"},{"file":"original-packet/preflight-jobs.json","bytes":2987,"sha256":"13fcb7e5b27ed4740a61b5a92fab7f14c262b3f9960203fb56a0b65d3206575b"},{"file":"original-packet/preflight-packet/active-route-preflight.json","bytes":1282,"sha256":"848b254a2a3d5f013c69538164c6c3f12e3cf2a63ee704db608cbeb138eed9fa"},{"file":"original-packet/preflight-packet/active-snapshot.html","bytes":21382,"sha256":"92e2821ae08f31061a2f6dcacb457486b3b6d3311dd79dcf95b7585658a0d41d"},{"file":"original-packet/preflight-packet/final-holds.json","bytes":396,"sha256":"7b57a585de1e6e033af516bc220fe9ea2894a90e2b92b66da643b8e7b28ca796"},{"file":"original-packet/preflight-packet/head.txt","bytes":41,"sha256":"666b3fba885ea2aba7cb5359f1f91f79991d016057cb0717f34321c535fbfd5d"},{"file":"original-packet/preflight-packet/install.log","bytes":1391,"sha256":"8c5e1fedc985fa1e9a12898cf38d57c9d9fbf8bd7022f9fe6308684122ad0a1e"},{"file":"original-packet/preflight-packet/installed-after.json","bytes":22175,"sha256":"1268d6ef069c4189836716fed6ebe4dd324c661cacf53981b6a227608aa383e8"},{"file":"original-packet/preflight-packet/installed-before.json","bytes":22175,"sha256":"1268d6ef069c4189836716fed6ebe4dd324c661cacf53981b6a227608aa383e8"},{"file":"original-packet/preflight-packet/locks-after.txt","bytes":163,"sha256":"d316e23dae0f11f4fabcf8edd97204c9b780c6da8a0f6307c86940cbdd28e3d7"},{"file":"original-packet/preflight-packet/locks-before.txt","bytes":163,"sha256":"d316e23dae0f11f4fabcf8edd97204c9b780c6da8a0f6307c86940cbdd28e3d7"},{"file":"original-packet/preflight-packet/offline.log","bytes":0,"sha256":"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"},{"file":"original-packet/preflight-packet/source-after.txt","bytes":501947,"sha256":"bca74a9597de3cc8dc233678d8ba3c6a548f60a42e0195509843baf7eef4aa39"},{"file":"original-packet/preflight-packet/source-before.txt","bytes":501947,"sha256":"bca74a9597de3cc8dc233678d8ba3c6a548f60a42e0195509843baf7eef4aa39"},{"file":"original-packet/preflight-packet/source-join.json","bytes":3110,"sha256":"5d6be5c14a590455029ab6867516546d0bd39f4235fb1332947f048cde9da5eb"},{"file":"original-packet/preflight-packet/tracked-after.json","bytes":793782,"sha256":"61a19360565dcd7ed8da0b8beee01bbbe49d8a93453c0e37a3cc7434cda39b4a"},{"file":"original-packet/preflight-packet/tracked-before.json","bytes":793782,"sha256":"61a19360565dcd7ed8da0b8beee01bbbe49d8a93453c0e37a3cc7434cda39b4a"},{"file":"original-packet/preflight-packet/tree.txt","bytes":41,"sha256":"f73a0fe286fd7a1339a2c1c81cb6cd7e3912edf3d21712af0b5e947d03fada3f"},{"file":"original-packet/preflight-run.json","bytes":13048,"sha256":"082581ef08dff17086e4f9e63fa28b3cf954ef532322bff4ec2355a044f314cb"},{"file":"original-packet/preflight.zip","bytes":1010823,"sha256":"6d6f73ed8b43679c72f1282c7b8bf9b71a75ddd8c29ea9cc2879c1ebc685edac"},{"file":"original-packet/raw.json","bytes":2106788,"sha256":"3fa20b460e959934027510183edce2fbc858b9a999f7c75d5c474e299bb168e3"},{"file":"original-packet/report-errors.json","bytes":4518,"sha256":"ab6507346396b3da884282708c87d4df08e6682f0c7551913f7f858225c74e68"},{"file":"original-packet/source-after.txt","bytes":502155,"sha256":"09555c45cc36c6d5e70f4f4c15cbb19cb8a9dc47130f127a58bee74909912be2"},{"file":"original-packet/source-before.txt","bytes":502155,"sha256":"09555c45cc36c6d5e70f4f4c15cbb19cb8a9dc47130f127a58bee74909912be2"},{"file":"original-packet/source-join.json","bytes":3812,"sha256":"24f7808fa0597c08f4f5c11ecc6669f7f3c257d7c84e76affbd1391fd8a02cee"},{"file":"original-packet/test-exit.txt","bytes":2,"sha256":"4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"},{"file":"original-packet/tracked-after.json","bytes":794092,"sha256":"1619e84ac8d2cb36c10443cbba826c2f2f51637e29ea03b029567a790dd4c63b"},{"file":"original-packet/tracked-before.json","bytes":794092,"sha256":"1619e84ac8d2cb36c10443cbba826c2f2f51637e29ea03b029567a790dd4c63b"},{"file":"original-packet/tree.txt","bytes":41,"sha256":"4aec1774062aaa976672294e972bdd43e53589c4622d31227440eabd709db7e8"},{"file":"original-packet/types.log","bytes":0,"sha256":"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"},{"file":"original-run.json","bytes":13073,"sha256":"71139f7ac33e514922d6fbd2890832d46a37aefb7f480cd30a0eb3553873fe6b"},{"file":"original.zip","bytes":3141136,"sha256":"f1afd8c60d1e292cd8717f299703024db814c4afedbe2be80768f6b2838312c7"},{"file":"owned.json","bytes":4029,"sha256":"6e15c7c13e1bae7d672aafec2e256395774ecc9e1fc628d0d36819dbc91b5bdc"},{"file":"owned.log","bytes":110,"sha256":"0d1e86aa92cbb11f958df5a2169ff76dce37187b46c9b547102405fd04142d95"},{"file":"raw.json","bytes":2078763,"sha256":"2f6abf3c61339dd4c972dc3af6a6ede99a6855a185ede72241835cefcce5bb34"},{"file":"report-errors.json","bytes":3810,"sha256":"99138aa8118187a0b81a75bf04724856e1a9aa6f57616641a7def4d5fd453920"},{"file":"source-after.txt","bytes":502155,"sha256":"fdfda677628b955772386c518ba6c508cadc1236072150807d94519892ae2970"},{"file":"source-before.txt","bytes":502155,"sha256":"fdfda677628b955772386c518ba6c508cadc1236072150807d94519892ae2970"},{"file":"source-join.json","bytes":3838,"sha256":"8e9a18e122daef08cbff0cc774e13abfdcd04b3f78e80927afe1e39be0375774"},{"file":"test-exit.txt","bytes":2,"sha256":"9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"},{"file":"tracked-after.json","bytes":794092,"sha256":"3f42ccfd241f9098c6e30a81b1f18592a6bce1b35395a071c7094b50a37cdeb1"},{"file":"tracked-before.json","bytes":794092,"sha256":"3f42ccfd241f9098c6e30a81b1f18592a6bce1b35395a071c7094b50a37cdeb1"},{"file":"tree.txt","bytes":41,"sha256":"b4bc9a1e4ab3f22560e018d0ced1d284a01ae87609ecbe48abd2a759f78349dc"},{"file":"types.log","bytes":0,"sha256":"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"}]
+          FIXED_BODY_PINS
+          cat > "$out/controls-body-pins.json" <<'CONTROLS_BODY_PINS'
+          [{"file":"arms/fixed-artifact.json","bytes":774,"sha256":"d9a29fd864f30187d7bbce7567224c0dd701bdef66f92f771ae44211a640b1eb"},{"file":"arms/fixed-jobs.json","bytes":3634,"sha256":"b1a359f2b5acf2cae79dab9063d91fd033031974002adeab4ae799ae0e1473ad"},{"file":"arms/fixed-page-after.tsx","bytes":25331,"sha256":"00abb55e2d6bdd51276e20ed9b5a2166f84bd0aef1fb67b7df41c756fdbca34e"},{"file":"arms/fixed-page-before.tsx","bytes":25331,"sha256":"00abb55e2d6bdd51276e20ed9b5a2166f84bd0aef1fb67b7df41c756fdbca34e"},{"file":"arms/fixed-reference.zip","bytes":7372300,"sha256":"82ace77c7454fd8b225a5609e056a9e3324225d8c4795d7d7f389f54ab29aedc"},{"file":"arms/fixed-run.json","bytes":13059,"sha256":"1c512f157ec741b3e25ca8c4924f894cef4a104771bc1700a01d8264b6e3d5c9"},{"file":"arms/fixed/admission.json","bytes":3039,"sha256":"f1f3c3a4b5e3ceac32af7dee10f91cf397bf3fbaa7e1922b7761122a69ef4ec9"},{"file":"arms/fixed/child.json","bytes":452,"sha256":"fef1a562a35abc9bec161d03d41c3f0390212f0c4d30facf90f3e07151bc52f1"},{"file":"arms/fixed/installed-after.json","bytes":30513,"sha256":"55386e78aa6c2c38d7ae266f4c9ed89a3376d6653b733cbc6a886cb3e94b1861"},{"file":"arms/fixed/locks-after.json","bytes":284,"sha256":"9c444271236893622b725d5f317b87e76e6df3a6d3a43ad5d97ff23dcc8f9965"},{"file":"arms/fixed/owned.json","bytes":4013,"sha256":"3894f851e3b1cd21e4f9094e9d7532a8e0b713484d94aa2e634ebc9dd9f1bbc7"},{"file":"arms/fixed/owned.log","bytes":124,"sha256":"a85864ef22e3635cefbed18af74717d52b53092f422b21e9a18cb58de50b1c47"},{"file":"arms/fixed/raw.json","bytes":2078763,"sha256":"2f6abf3c61339dd4c972dc3af6a6ede99a6855a185ede72241835cefcce5bb34"},{"file":"arms/fixed/report-errors.json","bytes":3772,"sha256":"b5ea333defc3d36c5c91cf4728193d2d75f39587d8147471b263489e639feb62"},{"file":"arms/fixed/source-after.txt","bytes":502155,"sha256":"6930a6c725285820e86588ec15730d8423d883f6e99283ce15186e847d42fe61"},{"file":"arms/fixed/source-before.txt","bytes":502155,"sha256":"6930a6c725285820e86588ec15730d8423d883f6e99283ce15186e847d42fe61"},{"file":"arms/fixed/source.json","bytes":408,"sha256":"6b7573377279c0e028e4350c72c53a9766d5ba35194246b8b26d8ac93143c3c4"},{"file":"arms/fixed/tracked-after.json","bytes":1401204,"sha256":"e588a77cc71f913db7d2a43e93f5a3ddf827862d4a68008efa4e38517c9b8a9c"},{"file":"arms/fixed/tracked-before.json","bytes":1401204,"sha256":"e588a77cc71f913db7d2a43e93f5a3ddf827862d4a68008efa4e38517c9b8a9c"},{"file":"arms/fixed/working-diff.patch","bytes":0,"sha256":"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"},{"file":"arms/fixed/working-page.tsx","bytes":25331,"sha256":"00abb55e2d6bdd51276e20ed9b5a2166f84bd0aef1fb67b7df41c756fdbca34e"},{"file":"arms/installed-after.json","bytes":30513,"sha256":"55386e78aa6c2c38d7ae266f4c9ed89a3376d6653b733cbc6a886cb3e94b1861"},{"file":"arms/installed-before.json","bytes":30513,"sha256":"55386e78aa6c2c38d7ae266f4c9ed89a3376d6653b733cbc6a886cb3e94b1861"},{"file":"arms/locks-after.json","bytes":284,"sha256":"9c444271236893622b725d5f317b87e76e6df3a6d3a43ad5d97ff23dcc8f9965"},{"file":"arms/locks-before.json","bytes":284,"sha256":"9c444271236893622b725d5f317b87e76e6df3a6d3a43ad5d97ff23dcc8f9965"},{"file":"arms/original/admission.json","bytes":3192,"sha256":"edee396f6755a25539e7de5638bfb35226c80a254446e013657800e449c81367"},{"file":"arms/original/child.json","bytes":455,"sha256":"48269d8d4e1bf79d44303ccd1223d66df9bd2f9cc177253d86c31ecc3b429f58"},{"file":"arms/original/installed-after.json","bytes":30513,"sha256":"55386e78aa6c2c38d7ae266f4c9ed89a3376d6653b733cbc6a886cb3e94b1861"},{"file":"arms/original/locks-after.json","bytes":284,"sha256":"9c444271236893622b725d5f317b87e76e6df3a6d3a43ad5d97ff23dcc8f9965"},{"file":"arms/original/owned.json","bytes":4675,"sha256":"455de2935cb12c61c594da1e7061470e5f2c95ac7ba8223bbcf1b76f89bc6f41"},{"file":"arms/original/owned.log","bytes":127,"sha256":"90f19019f9c3b7fed58cf2c0ca42cd04222e204c0cd1b376d1a5be902a690fab"},{"file":"arms/original/raw.json","bytes":2106788,"sha256":"3fa20b460e959934027510183edce2fbc858b9a999f7c75d5c474e299bb168e3"},{"file":"arms/original/report-errors.json","bytes":4480,"sha256":"ed39ce32619011a5a5f41af8a36f765f7b9a34403d6978f442151c4a4df33e59"},{"file":"arms/original/source-after.txt","bytes":502155,"sha256":"6930a6c725285820e86588ec15730d8423d883f6e99283ce15186e847d42fe61"},{"file":"arms/original/source-before.txt","bytes":502155,"sha256":"6930a6c725285820e86588ec15730d8423d883f6e99283ce15186e847d42fe61"},{"file":"arms/original/source.json","bytes":520,"sha256":"5619d3b148efd3cc0e9341032d35e25d21c445d848ae452cc6eb96f574d59390"},{"file":"arms/original/tracked-after.json","bytes":1401204,"sha256":"cbb4cdcde50ffe844434940500d9959a4ba8872d9046be30b67a43ec7dc3840a"},{"file":"arms/original/tracked-before.json","bytes":1401204,"sha256":"cbb4cdcde50ffe844434940500d9959a4ba8872d9046be30b67a43ec7dc3840a"},{"file":"arms/original/working-diff.patch","bytes":499,"sha256":"c5ff38ffb234fd365538754bbdd51b70c50f2b9371a182fff5adf8a7474e7251"},{"file":"arms/original/working-page.tsx","bytes":25316,"sha256":"772d351f0ce9174cc4008fdfba960a279eaab648ab2f17152624ffca7d3e5b60"},{"file":"arms/reference-custody.json","bytes":22727,"sha256":"c2195e9264ab1d335a51230d36e69494ce0e514e9b25604a7ab318e8ecef23fe"},{"file":"arms/restored/admission.json","bytes":3042,"sha256":"a34d63caa82a306b3242c509a4b4dc305c5647c134205827416f127096e64d16"},{"file":"arms/restored/child.json","bytes":455,"sha256":"1e5f5a3c7d3fe93e7327dfe46a89bb5229f6ec7cebe83e9c21988ea15e8a3988"},{"file":"arms/restored/installed-after.json","bytes":30513,"sha256":"55386e78aa6c2c38d7ae266f4c9ed89a3376d6653b733cbc6a886cb3e94b1861"},{"file":"arms/restored/locks-after.json","bytes":284,"sha256":"9c444271236893622b725d5f317b87e76e6df3a6d3a43ad5d97ff23dcc8f9965"},{"file":"arms/restored/owned.json","bytes":4035,"sha256":"9d464f547427eb33c79d6471c6e527f450341798aab12a0c0a88f16d7d68515f"},{"file":"arms/restored/owned.log","bytes":127,"sha256":"cb2c96f24e3abbaf500d2ccf1ff24cd06aad1a3cd22258c29027e0a2dd316c25"},{"file":"arms/restored/raw.json","bytes":2078763,"sha256":"2f6abf3c61339dd4c972dc3af6a6ede99a6855a185ede72241835cefcce5bb34"},{"file":"arms/restored/report-errors.json","bytes":3772,"sha256":"b5ea333defc3d36c5c91cf4728193d2d75f39587d8147471b263489e639feb62"},{"file":"arms/restored/source-after.txt","bytes":502155,"sha256":"6930a6c725285820e86588ec15730d8423d883f6e99283ce15186e847d42fe61"},{"file":"arms/restored/source-before.txt","bytes":502155,"sha256":"6930a6c725285820e86588ec15730d8423d883f6e99283ce15186e847d42fe61"},{"file":"arms/restored/source.json","bytes":411,"sha256":"5e8c95d525176bfa4e5a2a335c8b7ef7a20d9746687e586f26d51fde39f6062b"},{"file":"arms/restored/tracked-after.json","bytes":1401204,"sha256":"e588a77cc71f913db7d2a43e93f5a3ddf827862d4a68008efa4e38517c9b8a9c"},{"file":"arms/restored/tracked-before.json","bytes":1401204,"sha256":"e588a77cc71f913db7d2a43e93f5a3ddf827862d4a68008efa4e38517c9b8a9c"},{"file":"arms/restored/working-diff.patch","bytes":0,"sha256":"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"},{"file":"arms/restored/working-page.tsx","bytes":25331,"sha256":"00abb55e2d6bdd51276e20ed9b5a2166f84bd0aef1fb67b7df41c756fdbca34e"},{"file":"arms/source-after.txt","bytes":502155,"sha256":"6930a6c725285820e86588ec15730d8423d883f6e99283ce15186e847d42fe61"},{"file":"arms/source-before.txt","bytes":502155,"sha256":"6930a6c725285820e86588ec15730d8423d883f6e99283ce15186e847d42fe61"},{"file":"arms/summary.json","bytes":13820,"sha256":"08946b89380b430b63d46db53978a14fa69e0d15d6f01e377f12406751de0acf"},{"file":"arms/tracked-after.json","bytes":1401204,"sha256":"e588a77cc71f913db7d2a43e93f5a3ddf827862d4a68008efa4e38517c9b8a9c"},{"file":"arms/tracked-before.json","bytes":1401204,"sha256":"e588a77cc71f913db7d2a43e93f5a3ddf827862d4a68008efa4e38517c9b8a9c"},{"file":"control-runner.mjs","bytes":34851,"sha256":"e59b8d1e8b4fccf8f4fe0dc9a4fbadfeec15129c9558fad265abaee8c5a87e87"},{"file":"controller.log","bytes":394,"sha256":"e234ae64f6e3037fa9f8464251672e7df405763ecf5ee0e895f7d7e2189c7eb6"},{"file":"controls-admission.json","bytes":14969,"sha256":"8970939f89da271ff703a0d2419fe2abf3c57473499bea587ff5d6880f20232a"},{"file":"final-holds.json","bytes":360,"sha256":"5ce305a174dcf203d0b721bb7e3166032a263bd64795d1b9214f4d61103bd6df"},{"file":"fixed-entries.txt","bytes":2270,"sha256":"cd24a1c362fd22b97cd9e75a11993fdea864f5c52d7d268bbb4cf278ae44fd3f"},{"file":"fixed-reference-inputs-before.json","bytes":450,"sha256":"983031265999793298f1bab398064697ca4cc76ad3674a6975183b370b12c0a3"},{"file":"fixed-reference/artifact.json","bytes":774,"sha256":"d9a29fd864f30187d7bbce7567224c0dd701bdef66f92f771ae44211a640b1eb"},{"file":"fixed-reference/artifact.zip","bytes":7372300,"sha256":"82ace77c7454fd8b225a5609e056a9e3324225d8c4795d7d7f389f54ab29aedc"},{"file":"fixed-reference/jobs.json","bytes":3634,"sha256":"b1a359f2b5acf2cae79dab9063d91fd033031974002adeab4ae799ae0e1473ad"},{"file":"fixed-reference/packet/active-route-preflight.json","bytes":1282,"sha256":"848b254a2a3d5f013c69538164c6c3f12e3cf2a63ee704db608cbeb138eed9fa"},{"file":"fixed-reference/packet/active-snapshot.html","bytes":21382,"sha256":"92e2821ae08f31061a2f6dcacb457486b3b6d3311dd79dcf95b7585658a0d41d"},{"file":"fixed-reference/packet/final-holds.json","bytes":400,"sha256":"262ac9f84c97b30773cf4e31c7b83a9d6b8abc3f4d6438d58d6b6bc7fc70abff"},{"file":"fixed-reference/packet/fixed-admission.json","bytes":6138,"sha256":"b0067b45800cca98f19aec419e3671a4097ce933f867f9f6b35b9909045b9608"},{"file":"fixed-reference/packet/head.txt","bytes":41,"sha256":"08fad4cc50ac71e2aead5d8df824dd2cccc659ad0e61b9eeee8655c425a376a8"},{"file":"fixed-reference/packet/install.log","bytes":1391,"sha256":"0a090aef8e839aca0cbe2078e21ea5569cf79f672ecbadebecd602fa8d1c3ea5"},{"file":"fixed-reference/packet/installed-after.json","bytes":22175,"sha256":"1268d6ef069c4189836716fed6ebe4dd324c661cacf53981b6a227608aa383e8"},{"file":"fixed-reference/packet/installed-before.json","bytes":22175,"sha256":"1268d6ef069c4189836716fed6ebe4dd324c661cacf53981b6a227608aa383e8"},{"file":"fixed-reference/packet/locks-after.txt","bytes":163,"sha256":"d316e23dae0f11f4fabcf8edd97204c9b780c6da8a0f6307c86940cbdd28e3d7"},{"file":"fixed-reference/packet/locks-before.txt","bytes":163,"sha256":"d316e23dae0f11f4fabcf8edd97204c9b780c6da8a0f6307c86940cbdd28e3d7"},{"file":"fixed-reference/packet/offline.log","bytes":0,"sha256":"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"},{"file":"fixed-reference/packet/original-artifact.json","bytes":780,"sha256":"012c28ea26b53bdecb8051b0c1592b3e5f2f7159fc44d751d48d1e67f62bc2d1"},{"file":"fixed-reference/packet/original-body-pins.json","bytes":6623,"sha256":"315e4e87604b87537380dfa14cfde80f135b96edbc6e18c157672e559473de4d"},{"file":"fixed-reference/packet/original-custody.json","bytes":1326,"sha256":"d4924edcafe9d691796e24d6614b4565756c76ff94e4e7003fa04bbca338438c"},{"file":"fixed-reference/packet/original-entries.txt","bytes":1041,"sha256":"1adefa94e269a9c501e224c0caeb07f48fce18c6bc8f50ca263a779858237c9e"},{"file":"fixed-reference/packet/original-jobs.json","bytes":3629,"sha256":"dd21e3350ee3b1f960e12abf123acd5e3232d727eb9f204acda1e7bcbdb152d7"},{"file":"fixed-reference/packet/original-packet/active-route-preflight.json","bytes":1282,"sha256":"848b254a2a3d5f013c69538164c6c3f12e3cf2a63ee704db608cbeb138eed9fa"},{"file":"fixed-reference/packet/original-packet/active-snapshot.html","bytes":21382,"sha256":"92e2821ae08f31061a2f6dcacb457486b3b6d3311dd79dcf95b7585658a0d41d"},{"file":"fixed-reference/packet/original-packet/final-holds.json","bytes":403,"sha256":"75c582dd31ae82bacbe51e46d60f7d6c37cc84c95f5393768e67509c1decbc4c"},{"file":"fixed-reference/packet/original-packet/head.txt","bytes":41,"sha256":"edb2b9e511fd0e74d50d1e63445a41576d4a9c29295a23de65ab2a63ca31a84b"},{"file":"fixed-reference/packet/original-packet/install.log","bytes":1391,"sha256":"c936e0bff4759906eaa8478484b6f3a261b1e3db15dcdc80f797ea2da3cf76da"},{"file":"fixed-reference/packet/original-packet/installed-after.json","bytes":22175,"sha256":"1268d6ef069c4189836716fed6ebe4dd324c661cacf53981b6a227608aa383e8"},{"file":"fixed-reference/packet/original-packet/installed-before.json","bytes":22175,"sha256":"1268d6ef069c4189836716fed6ebe4dd324c661cacf53981b6a227608aa383e8"},{"file":"fixed-reference/packet/original-packet/locks-after.txt","bytes":163,"sha256":"d316e23dae0f11f4fabcf8edd97204c9b780c6da8a0f6307c86940cbdd28e3d7"},{"file":"fixed-reference/packet/original-packet/locks-before.txt","bytes":163,"sha256":"d316e23dae0f11f4fabcf8edd97204c9b780c6da8a0f6307c86940cbdd28e3d7"},{"file":"fixed-reference/packet/original-packet/offline.log","bytes":0,"sha256":"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"},{"file":"fixed-reference/packet/original-packet/original-admission.json","bytes":7337,"sha256":"416a3d00e422eccfee30952b089bd5755bcd77f57d83faa12263ec584b961544"},{"file":"fixed-reference/packet/original-packet/owned.json","bytes":4689,"sha256":"60117cf854b8dfb6856e170df36de7a3fd0170cca96a2b02d0b65132c598eb58"},{"file":"fixed-reference/packet/original-packet/owned.log","bytes":113,"sha256":"2a099dc7c981417166e0251cff84662ce55aa2e9330e5fa3c808ed66f5707fe1"},{"file":"fixed-reference/packet/original-packet/preflight-artifact.json","bytes":789,"sha256":"98efce701f40b88e9ad7c5cfe0dfd7106c57b22accc28246fb0c93993826c5c8"},{"file":"fixed-reference/packet/original-packet/preflight-custody.json","bytes":3044,"sha256":"edc5c8ae13d698a4f0ae5550bc27538583d7db94da9ce3d4e5d3a3786d3a26d1"},{"file":"fixed-reference/packet/original-packet/preflight-entries.txt","bytes":275,"sha256":"720ad81144b25bcaf49fd904a2e8bbbfabdecf53509b64d3dc0161b533ac8ee6"},{"file":"fixed-reference/packet/original-packet/preflight-jobs.json","bytes":2987,"sha256":"13fcb7e5b27ed4740a61b5a92fab7f14c262b3f9960203fb56a0b65d3206575b"},{"file":"fixed-reference/packet/original-packet/preflight-packet/active-route-preflight.json","bytes":1282,"sha256":"848b254a2a3d5f013c69538164c6c3f12e3cf2a63ee704db608cbeb138eed9fa"},{"file":"fixed-reference/packet/original-packet/preflight-packet/active-snapshot.html","bytes":21382,"sha256":"92e2821ae08f31061a2f6dcacb457486b3b6d3311dd79dcf95b7585658a0d41d"},{"file":"fixed-reference/packet/original-packet/preflight-packet/final-holds.json","bytes":396,"sha256":"7b57a585de1e6e033af516bc220fe9ea2894a90e2b92b66da643b8e7b28ca796"},{"file":"fixed-reference/packet/original-packet/preflight-packet/head.txt","bytes":41,"sha256":"666b3fba885ea2aba7cb5359f1f91f79991d016057cb0717f34321c535fbfd5d"},{"file":"fixed-reference/packet/original-packet/preflight-packet/install.log","bytes":1391,"sha256":"8c5e1fedc985fa1e9a12898cf38d57c9d9fbf8bd7022f9fe6308684122ad0a1e"},{"file":"fixed-reference/packet/original-packet/preflight-packet/installed-after.json","bytes":22175,"sha256":"1268d6ef069c4189836716fed6ebe4dd324c661cacf53981b6a227608aa383e8"},{"file":"fixed-reference/packet/original-packet/preflight-packet/installed-before.json","bytes":22175,"sha256":"1268d6ef069c4189836716fed6ebe4dd324c661cacf53981b6a227608aa383e8"},{"file":"fixed-reference/packet/original-packet/preflight-packet/locks-after.txt","bytes":163,"sha256":"d316e23dae0f11f4fabcf8edd97204c9b780c6da8a0f6307c86940cbdd28e3d7"},{"file":"fixed-reference/packet/original-packet/preflight-packet/locks-before.txt","bytes":163,"sha256":"d316e23dae0f11f4fabcf8edd97204c9b780c6da8a0f6307c86940cbdd28e3d7"},{"file":"fixed-reference/packet/original-packet/preflight-packet/offline.log","bytes":0,"sha256":"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"},{"file":"fixed-reference/packet/original-packet/preflight-packet/source-after.txt","bytes":501947,"sha256":"bca74a9597de3cc8dc233678d8ba3c6a548f60a42e0195509843baf7eef4aa39"},{"file":"fixed-reference/packet/original-packet/preflight-packet/source-before.txt","bytes":501947,"sha256":"bca74a9597de3cc8dc233678d8ba3c6a548f60a42e0195509843baf7eef4aa39"},{"file":"fixed-reference/packet/original-packet/preflight-packet/source-join.json","bytes":3110,"sha256":"5d6be5c14a590455029ab6867516546d0bd39f4235fb1332947f048cde9da5eb"},{"file":"fixed-reference/packet/original-packet/preflight-packet/tracked-after.json","bytes":793782,"sha256":"61a19360565dcd7ed8da0b8beee01bbbe49d8a93453c0e37a3cc7434cda39b4a"},{"file":"fixed-reference/packet/original-packet/preflight-packet/tracked-before.json","bytes":793782,"sha256":"61a19360565dcd7ed8da0b8beee01bbbe49d8a93453c0e37a3cc7434cda39b4a"},{"file":"fixed-reference/packet/original-packet/preflight-packet/tree.txt","bytes":41,"sha256":"f73a0fe286fd7a1339a2c1c81cb6cd7e3912edf3d21712af0b5e947d03fada3f"},{"file":"fixed-reference/packet/original-packet/preflight-run.json","bytes":13048,"sha256":"082581ef08dff17086e4f9e63fa28b3cf954ef532322bff4ec2355a044f314cb"},{"file":"fixed-reference/packet/original-packet/preflight.zip","bytes":1010823,"sha256":"6d6f73ed8b43679c72f1282c7b8bf9b71a75ddd8c29ea9cc2879c1ebc685edac"},{"file":"fixed-reference/packet/original-packet/raw.json","bytes":2106788,"sha256":"3fa20b460e959934027510183edce2fbc858b9a999f7c75d5c474e299bb168e3"},{"file":"fixed-reference/packet/original-packet/report-errors.json","bytes":4518,"sha256":"ab6507346396b3da884282708c87d4df08e6682f0c7551913f7f858225c74e68"},{"file":"fixed-reference/packet/original-packet/source-after.txt","bytes":502155,"sha256":"09555c45cc36c6d5e70f4f4c15cbb19cb8a9dc47130f127a58bee74909912be2"},{"file":"fixed-reference/packet/original-packet/source-before.txt","bytes":502155,"sha256":"09555c45cc36c6d5e70f4f4c15cbb19cb8a9dc47130f127a58bee74909912be2"},{"file":"fixed-reference/packet/original-packet/source-join.json","bytes":3812,"sha256":"24f7808fa0597c08f4f5c11ecc6669f7f3c257d7c84e76affbd1391fd8a02cee"},{"file":"fixed-reference/packet/original-packet/test-exit.txt","bytes":2,"sha256":"4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"},{"file":"fixed-reference/packet/original-packet/tracked-after.json","bytes":794092,"sha256":"1619e84ac8d2cb36c10443cbba826c2f2f51637e29ea03b029567a790dd4c63b"},{"file":"fixed-reference/packet/original-packet/tracked-before.json","bytes":794092,"sha256":"1619e84ac8d2cb36c10443cbba826c2f2f51637e29ea03b029567a790dd4c63b"},{"file":"fixed-reference/packet/original-packet/tree.txt","bytes":41,"sha256":"4aec1774062aaa976672294e972bdd43e53589c4622d31227440eabd709db7e8"},{"file":"fixed-reference/packet/original-packet/types.log","bytes":0,"sha256":"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"},{"file":"fixed-reference/packet/original-run.json","bytes":13073,"sha256":"71139f7ac33e514922d6fbd2890832d46a37aefb7f480cd30a0eb3553873fe6b"},{"file":"fixed-reference/packet/original.zip","bytes":3141136,"sha256":"f1afd8c60d1e292cd8717f299703024db814c4afedbe2be80768f6b2838312c7"},{"file":"fixed-reference/packet/owned.json","bytes":4029,"sha256":"6e15c7c13e1bae7d672aafec2e256395774ecc9e1fc628d0d36819dbc91b5bdc"},{"file":"fixed-reference/packet/owned.log","bytes":110,"sha256":"0d1e86aa92cbb11f958df5a2169ff76dce37187b46c9b547102405fd04142d95"},{"file":"fixed-reference/packet/raw.json","bytes":2078763,"sha256":"2f6abf3c61339dd4c972dc3af6a6ede99a6855a185ede72241835cefcce5bb34"},{"file":"fixed-reference/packet/report-errors.json","bytes":3810,"sha256":"99138aa8118187a0b81a75bf04724856e1a9aa6f57616641a7def4d5fd453920"},{"file":"fixed-reference/packet/source-after.txt","bytes":502155,"sha256":"fdfda677628b955772386c518ba6c508cadc1236072150807d94519892ae2970"},{"file":"fixed-reference/packet/source-before.txt","bytes":502155,"sha256":"fdfda677628b955772386c518ba6c508cadc1236072150807d94519892ae2970"},{"file":"fixed-reference/packet/source-join.json","bytes":3838,"sha256":"8e9a18e122daef08cbff0cc774e13abfdcd04b3f78e80927afe1e39be0375774"},{"file":"fixed-reference/packet/test-exit.txt","bytes":2,"sha256":"9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"},{"file":"fixed-reference/packet/tracked-after.json","bytes":794092,"sha256":"3f42ccfd241f9098c6e30a81b1f18592a6bce1b35395a071c7094b50a37cdeb1"},{"file":"fixed-reference/packet/tracked-before.json","bytes":794092,"sha256":"3f42ccfd241f9098c6e30a81b1f18592a6bce1b35395a071c7094b50a37cdeb1"},{"file":"fixed-reference/packet/tree.txt","bytes":41,"sha256":"b4bc9a1e4ab3f22560e018d0ced1d284a01ae87609ecbe48abd2a759f78349dc"},{"file":"fixed-reference/packet/types.log","bytes":0,"sha256":"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"},{"file":"fixed-reference/run.json","bytes":13059,"sha256":"1c512f157ec741b3e25ca8c4924f894cef4a104771bc1700a01d8264b6e3d5c9"},{"file":"head.txt","bytes":41,"sha256":"da08a4f5fe18d8131161835098c7c1b16d61c8aa97ff2bdb3d96010d52338e42"},{"file":"installed-after.json","bytes":22175,"sha256":"1268d6ef069c4189836716fed6ebe4dd324c661cacf53981b6a227608aa383e8"},{"file":"installed-before.json","bytes":22175,"sha256":"1268d6ef069c4189836716fed6ebe4dd324c661cacf53981b6a227608aa383e8"},{"file":"locks-after.txt","bytes":163,"sha256":"d316e23dae0f11f4fabcf8edd97204c9b780c6da8a0f6307c86940cbdd28e3d7"},{"file":"locks-before.txt","bytes":163,"sha256":"d316e23dae0f11f4fabcf8edd97204c9b780c6da8a0f6307c86940cbdd28e3d7"},{"file":"offline.log","bytes":0,"sha256":"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"},{"file":"source-after.txt","bytes":502155,"sha256":"6930a6c725285820e86588ec15730d8423d883f6e99283ce15186e847d42fe61"},{"file":"source-before.txt","bytes":502155,"sha256":"6930a6c725285820e86588ec15730d8423d883f6e99283ce15186e847d42fe61"},{"file":"source-join.json","bytes":2453,"sha256":"2a1ecdc87702b32a6ebba283c3d017355e8aa4716e9866009ef5ff9ca697ad1f"},{"file":"tracked-after.json","bytes":794092,"sha256":"f738557474109427ef885b65c880c206e2b47e4758a957ff2197e8a3e9e5a611"},{"file":"tracked-before.json","bytes":794092,"sha256":"f738557474109427ef885b65c880c206e2b47e4758a957ff2197e8a3e9e5a611"},{"file":"tree.txt","bytes":41,"sha256":"1dc9137330b015735c967a882bb5dda1a8e3b606bc1093de8eae85aee58dd0c8"},{"file":"types-after.log","bytes":0,"sha256":"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"},{"file":"types-before.log","bytes":0,"sha256":"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"}]
+          CONTROLS_BODY_PINS
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import assert from 'node:assert/strict';
+          import {execFileSync} from 'node:child_process';
+          import {createHash} from 'node:crypto';
+          const out='missing-xi-confirmation-ownership-qualified',env=process.env;
+          const sha=bytes=>createHash('sha256').update(bytes).digest('hex');
+          const body=file=>fs.readFileSync(path.join(out,file));
+          const json=file=>JSON.parse(body(file));
+          const command=(exe,args)=>execFileSync(exe,args,{maxBuffer:64*1024*1024});
+          const details=file=>{const bytes=body(file);return {file,bytes:bytes.length,sha256:sha(bytes)};};
+          const walk=dir=>fs.readdirSync(path.join(out,dir),{withFileTypes:true}).sort((a,b)=>a.name.localeCompare(b.name)).flatMap(entry=>{
+            const file=path.join(dir,entry.name);assert(!entry.isSymbolicLink(),file);
+            if(entry.isDirectory())return walk(file);assert(entry.isFile(),file);return[file];
+          });
+          const inventory=dir=>walk(dir).map(details);
+          const workflow='.github/workflows/missing-xi-confirmation-20261106.yml';
+          const refs={};
+          for(const prefix of ['fixed','controls']){
+            const key='MISSING_XI_'+prefix.toUpperCase()+'_',want=field=>env[key+field];
+            const run=json(prefix+'-run.json'),jobs=json(prefix+'-jobs.json'),meta=json(prefix+'-artifact.json');
+            const artifacts=Object.hasOwn(meta,'artifacts')?meta.artifacts:[meta];
+            assert(Array.isArray(artifacts)&&artifacts.length===1);
+            const artifact=artifacts[0],repo='PapiSalgueroM/ballpark-hero';
+            assert.deepEqual([run.id,run.status,run.conclusion,run.head_sha,run.head_commit.tree_id,run.path,run.event,run.repository.full_name,run.head_repository.full_name],[Number(want('RUN')),'completed','success',want('HEAD'),want('TREE'),workflow,'push',repo,repo]);
+            assert.equal(jobs.total_count,1);assert.equal(jobs.jobs.length,1);
+            assert.deepEqual([jobs.jobs[0].run_id,jobs.jobs[0].head_sha,jobs.jobs[0].status,jobs.jobs[0].conclusion],[run.id,run.head_sha,'completed','success']);
+            assert.deepEqual([artifact.id,artifact.name,artifact.expired,artifact.size_in_bytes,artifact.digest,artifact.workflow_run.id,artifact.workflow_run.head_sha],[Number(want('ARTIFACT')),'missing-xi-confirmation-'+prefix+'-'+run.id,false,Number(want('ZIP_BYTES')),'sha256:'+want('ZIP_SHA256'),run.id,run.head_sha]);
+            const zip=details(prefix+'.zip');
+            assert.deepEqual([zip.bytes,zip.sha256],[Number(want('ZIP_BYTES')),want('ZIP_SHA256')]);
+            const expected=json(prefix+'-body-pins.json'),zipPath=path.join(out,zip.file),dir=prefix+'-reference';
+            assert(Array.isArray(expected)&&expected.length>0);
+            if(prefix==='fixed')assert.equal(expected.length,75);
+            for(const pin of expected){
+              assert.deepEqual(Object.keys(pin).sort(),['bytes','file','sha256']);
+              assert.match(pin.file,/^[A-Za-z0-9._/-]+$/);
+              assert(pin.file.split('/').every(part=>part&&part!=='.'&&part!=='..'),pin.file);
+              assert(Number.isSafeInteger(pin.bytes)&&pin.bytes>=0,pin.file);
+              assert.match(pin.sha256,/^[a-f0-9]{64}$/);
+            }
+            const names=expected.map(pin=>pin.file).sort();
+            assert.equal(new Set(names).size,names.length);
+            const listed=command('unzip',['-Z1',zipPath]).toString('utf8').trimEnd().split('\n').sort();
+            assert.deepEqual(listed,names,prefix+' exact safe ZIP entries before extraction');
+            fs.writeFileSync(path.join(out,prefix+'-zip-entries.txt'),listed.join('\n')+'\n');
+            assert(!fs.existsSync(path.join(out,dir)));
+            fs.mkdirSync(path.join(out,dir));
+            command('unzip',['-q',zipPath,'-d',path.join(out,dir)]);
+            assert.deepEqual(walk(dir).map(file=>file.slice(dir.length+1)).sort(),names,prefix+' closed extracted packet');
+            for(const pin of expected){
+              const bytes=body(dir+'/'+pin.file);
+              assert.deepEqual([bytes.length,sha(bytes)],[pin.bytes,pin.sha256],prefix+'/'+pin.file);
+              assert(bytes.equals(command('unzip',['-p',zipPath,pin.file])),prefix+'/'+pin.file+' exact archive body');
+            }
+            assert.equal(body(dir+'/head.txt').toString().trim(),want('HEAD'));
+            assert.equal(body(dir+'/tree.txt').toString().trim(),want('TREE'));
+            const index=command('git',['ls-tree','-r','-z',want('HEAD')]).toString().split('\0').filter(Boolean).map(row=>{
+              const match=/^([0-9]{6}) blob ([a-f0-9]{40})\t(.+)$/.exec(row);assert(match,row);
+              return match[1]+' '+match[2]+' 0\t'+match[3];
+            }).sort();
+            assert.equal(index.length,5782);
+            assert.deepEqual(body(dir+'/source-before.txt').toString().trimEnd().split('\n').sort(),index,prefix+' retained index joins immutable Git tree');
+            for(const [before,after] of [['source-before.txt','source-after.txt'],['tracked-before.json','tracked-after.json'],['locks-before.txt','locks-after.txt'],['installed-before.json','installed-after.json']]){
+              assert(body(dir+'/'+before).equals(body(dir+'/'+after)),prefix+' '+before+' '+after);
+            }
+            for(const file of ['locks-before.txt','installed-before.json'])assert(body(dir+'/'+file).equals(body(file)),prefix+' '+file+' holds in fresh full');
+            const holds=json(dir+'/final-holds.json');
+            assert.deepEqual([holds.status,holds.trackedBodies,holds.scopedSourceRows,holds.installedLockedVersions,holds.indexUnchanged,holds.sourceBytesUnchanged,holds.locksUnchanged,holds.offlineBytes,body(dir+'/offline.log').length],['passed',5782,4659,521,true,true,true,0,0]);
+            refs[prefix]={run:run.id,head:run.head_sha,tree:want('TREE'),artifact:artifact.id,ZIPBytes:zip.bytes,ZIPSHA256:zip.sha256,bodyCount:expected.length,bodyBytes:expected.reduce((sum,pin)=>sum+pin.bytes,0)};
+          }
+          const fixedDir='fixed-reference',controlsDir='controls-reference',fixed=refs.fixed,controls=refs.controls;
+          const fixedProof=json(fixedDir+'/fixed-admission.json'),original=json('original-custody.json'),fixedRaw=details(fixedDir+'/raw.json');
+          assert.deepEqual([fixedRaw.bytes,fixedRaw.sha256],[Number(env.MISSING_XI_FIXED_RAW_BYTES),env.MISSING_XI_FIXED_RAW_SHA256]);
+          assert.deepEqual([fixedProof.status,fixedProof.actualCases,fixedProof.actualPasses,fixedProof.actualFailures,fixedProof.rawFrames,fixedProof.actionJournalEntries,fixedProof.priorRAW],['fixed-eight-cases-passed-two-literal-whole-preserves',8,8,0,62,44,false]);
+          assert.deepEqual([fixedProof.raw.bytes,fixedProof.raw.sha256],[fixedRaw.bytes,fixedRaw.sha256]);
+          assert.deepEqual(fixedProof.wholePreservedCases.map(row=>[row.key,row.literalBytesEqualOriginal]),[['currentRound',true],['normalConfirmation',true]]);
+          assert.equal(fixedProof.source.page,env.MISSING_XI_CONFIRMATION_PAGE_BLOB);
+          assert.equal(fixedProof.source.newTest,'a637f262571576e6637c8a24f5c9f34352e2f2bb');
+          assert.equal(fixedProof.source.plan,'e1b2364ad41459bb6a23a298f4aee9174a991264');
+          assert(body(fixedDir+'/original.zip').equals(body('original.zip')),'Exact qualified original ZIP also retained inside fixed');
+          const originalBodies=inventory('original-packet');
+          assert.equal(originalBodies.length,45);
+          for(const pin of originalBodies)assert(body(pin.file).equals(body(fixedDir+'/'+pin.file)),pin.file+' also literally held inside completed fixed');
+          const controlsChecks=(()=>{
+            const read=file=>body(controlsDir+'/'+file),parse=file=>JSON.parse(read(file));
+            const blob=bytes=>createHash('sha1').update(Buffer.from('blob '+bytes.length+'\0')).update(bytes).digest('hex');
+            const page='src/pages/MissingXi.tsx',workflow='.github/workflows/missing-xi-confirmation-20261106.yml';
+            const originalBlob='8734de7d4ab5b6848538cc079804f10f038b39e1',fixedBlob=env.MISSING_XI_CONFIRMATION_PAGE_BLOB;
+            const originalPage=read('arms/original/working-page.tsx'),fixedPage=command('git',['cat-file','blob',fixedBlob]);
+            assert.equal(blob(originalPage),originalBlob);assert.equal(blob(fixedPage),fixedBlob);
+            const restoredLine='<GiveUpButton key={playMode} onGiveUp={giveUp} />',originalLine='<GiveUpButton onGiveUp={giveUp} />';
+            const fixedText=fixedPage.toString('utf8');
+            assert.equal(fixedText.split(restoredLine).length,2);
+            assert(Buffer.from(fixedText.replace(restoredLine,originalLine)).equals(originalPage),'Unique physical Page inverse');
+            const proof=parse('controls-admission.json'),summary=parse('arms/summary.json'),retained=parse('arms/reference-custody.json');
+            const passed='passed-three-physical-confirmation-control-arms';
+            assert.equal(proof.status,passed);assert.equal(summary.status,passed);assert.deepEqual(proof.summary,summary);
+            assert.deepEqual([proof.fixedReferenceBodyCount,proof.retainedFixedReferenceBodiesHeld,proof.retainedFixedReferenceInputsHeld,proof.properTypesBeforeAfter],[75,true,true,true]);
+            assert.deepEqual([summary.head,summary.tree,summary.error,summary.restorationError],[controls.head,controls.tree,null,null]);
+            assert.deepEqual([summary.completedArms,summary.actualRows,summary.actualPasses,summary.actualNamedBusinessReds,summary.rawFrames,summary.actionJournalEntries,summary.wholePreservationVectors,summary.priorRAW],[3,24,22,2,186,132,6,false]);
+            for(const key of ['allTrackedRestored','indexHeld','locksHeld','installed521Held','offlineHeld'])assert.equal(summary[key],true,key);
+            const runner=read('control-runner.mjs'),runnerBlob=blob(runner);
+            assert.equal(runnerBlob,env.MISSING_XI_CONTROLS_RUNNER_BLOB);
+            const runnerRef={file:'control-runner.mjs',bytes:runner.length,sha256:sha(runner),blob:runnerBlob,tracked:false};
+            assert.deepEqual(summary.runnerSource,runnerRef);assert.deepEqual(retained.runnerSource,runnerRef);
+            for(const [file,want] of Object.entries(summary.pins)){
+              assert.equal(command('git',['rev-parse',controls.head+':'+file]).toString().trim(),want,file+' qualified controls');
+              assert.equal(command('git',['rev-parse',fixed.head+':'+file]).toString().trim(),want,file+' qualified fixed');
+            }
+            assert.equal(summary.pins[page],fixedBlob);
+            assert.deepEqual(summary.fixedBinding,{run:String(fixed.run),head:fixed.head,tree:fixed.tree,artifact:String(fixed.artifact),zipBytes:String(fixed.ZIPBytes),zipSHA256:fixed.ZIPSHA256,rawBytes:String(fixedRaw.bytes),rawSHA256:fixedRaw.sha256});
+            assert.deepEqual(retained.fixedBinding,summary.fixedBinding);
+            assert.equal(retained.fixedSourceJoinedPhysicalBodies,5781);assert.equal(retained.originalArchive.bodyCount,45);
+            assert.deepEqual([retained.fixedArchive.bodyCount,retained.fixedArchive.bytes,retained.fixedArchive.sha256],[75,fixed.ZIPBytes,fixed.ZIPSHA256]);
+            assert(read('fixed-reference/artifact.zip').equals(body('fixed.zip')));
+            assert(read('arms/fixed-reference.zip').equals(body('fixed.zip')));
+            for(const pin of json('fixed-body-pins.json'))assert(read('fixed-reference/packet/'+pin.file).equals(body(fixedDir+'/'+pin.file)),pin.file+' exact nested fixed body');
+            for(const file of ['run.json','jobs.json','artifact.json'])assert(read('fixed-reference/'+file).equals(read('arms/fixed-'+file)));
+            const originalRaw=body('original-packet/raw.json'),completedFixedRaw=body(fixedDir+'/raw.json');
+            assert.deepEqual(summary.originalRaw,{bytes:originalRaw.length,sha256:sha(originalRaw)});
+            assert.deepEqual(summary.fixedRaw,{bytes:completedFixedRaw.length,sha256:sha(completedFixedRaw)});
+            assert.deepEqual([retained.completeOriginalRawSHA256,retained.completeFixedRawSHA256,retained.priorRAW],[summary.originalRaw.sha256,summary.fixedRaw.sha256,false]);
+            const topIndex=read('source-before.txt');
+            for(const phase of ['before','after'])assert(read('arms/source-'+phase+'.txt').equals(topIndex));
+            for(const file of ['types-before.log','types-after.log','offline.log'])assert.equal(read(file).length,0,file);
+            assert(read('arms/fixed-page-before.tsx').equals(fixedPage));assert(read('arms/fixed-page-after.tsx').equals(fixedPage));
+            assert(read('arms/tracked-before.json').equals(read('arms/tracked-after.json')));
+            const baseline=parse('arms/tracked-before.json'),topPhysical=parse('tracked-before.json');
+            const modes=topIndex.toString().trimEnd().split('\n').map(line=>{
+              const m=/^(100644|100755) ([a-f0-9]{40}) 0\t(.+)$/.exec(line);assert(m,line);
+              return{file:m[3],blob:m[2],physicalMode:parseInt(m[1].slice(-3),8)};
+            });
+            assert.equal(baseline.length,5782);assert.equal(modes.length,5782);
+            assert.deepEqual(baseline.map(({file,bytes,sha256})=>({file,bytes,sha256})),topPhysical);
+            assert.deepEqual(baseline.map(({file,blob,physicalMode})=>({file,blob,physicalMode})),modes);
+            const locks=['package.json','package-lock.json'].map(file=>topPhysical.find(row=>row.file===file));
+            const installed=parse('installed-before.json');assert.equal(installed.length,521);
+            for(const phase of ['before','after']){
+              assert.deepEqual(parse('arms/locks-'+phase+'.json'),locks);
+              assert.deepEqual(parse('arms/installed-'+phase+'.json'),installed);
+            }
+            assert.deepEqual(topPhysical.filter(row=>row.file!==workflow),json(fixedDir+'/tracked-before.json').filter(row=>row.file!==workflow),'Exact other5781 retained fixed physical bodies');
+            assert.deepEqual(summary.arms.map(arm=>arm.name),['fixed','original','restored']);
+            const markers=['MX_CONFIRM_DAILY_TO_UNLIMITED','MX_CONFIRM_UNLIMITED_TO_DAILY'];
+            const failedTitles=['keeps an old Daily confirmation from ending the newly entered Unlimited round','keeps an old Unlimited confirmation from prematurely losing the unfinished Daily'];
+            const matrix=summary.arms.map(arm=>{
+              const {name}=arm,dir='arms/'+name+'/',isOriginal=name==='original',reds=isOriginal?2:0;
+              assert.deepEqual(parse(dir+'admission.json'),arm);
+              assert.deepEqual([arm.status,arm.actualRows,arm.actualPasses,arm.actualNamedBusinessReds,arm.rawFrames,arm.actionJournalEntries,arm.boundedQueries,arm.priorCases,arm.priorRAW,arm.offlineBytes],['passed',8,8-reds,reds,62,44,14,4,false,0]);
+              const observed=Object.values(arm.observations).map(value=>[value.mode,value.phase,value.dailyStatus,value.score,value.completionCalls]);
+              assert.deepEqual(observed,isOriginal?[['unlimited','revealed','playing',0,0],['daily','revealed','lost',0,1]]:[['unlimited','playing','playing',null,0],['daily','playing','playing',null,0]]);
+              const physical=read(dir+'working-page.tsx'),expectedPage=isOriginal?originalPage:fixedPage;
+              assert(physical.equals(expectedPage),name+' literal physical Page body');
+              const sourceReceipt=parse(dir+'source.json'),changed=isOriginal?[page]:[],pageBlob=isOriginal?originalBlob:fixedBlob;
+              const actualSource={name,changedPhysicalPaths:changed,physicalPageBlob:pageBlob,physicalPageBytes:physical.length,physicalPageSHA256:sha(physical),indexPageBlob:fixedBlob,indexIntentionallyHeld:true,sourceInverseChecked:true,expectedFailedBusinessMarkers:isOriginal?markers:[]};
+              assert.deepEqual(sourceReceipt,actualSource);for(const [key,value] of Object.entries(actualSource))assert.deepEqual(arm[key],value,key);
+              assert.equal(blob(physical),pageBlob);
+              const patch=read(dir+'working-diff.patch').toString();
+              if(isOriginal)assert.deepEqual(patch.split('\n').filter(line=>line.startsWith('diff --git ')),['diff --git a/'+page+' b/'+page]);
+              else assert.equal(patch,'');
+              for(const phase of ['before','after'])assert(read(dir+'source-'+phase+'.txt').equals(topIndex));
+              assert(read(dir+'tracked-before.json').equals(read(dir+'tracked-after.json')));
+              assert.deepEqual(parse(dir+'tracked-before.json'),baseline.map(row=>row.file===page?{...row,bytes:physical.length,blob:pageBlob,sha256:sha(physical)}:row),name+' exact complete physical body and mode matrix');
+              assert.deepEqual(parse(dir+'locks-after.json'),locks);
+              assert.deepEqual(parse(dir+'installed-after.json'),installed);
+              for(const key of ['everyOtherTrackedBodyAndModeHeld','indexHeld','locksHeld','installed521Held'])assert.equal(arm[key],true,key);
+              const child=parse(dir+'child.json');
+              assert.deepEqual([child.command,child.status,child.signal,child.error,child.processTimeoutMs],['node_modules/.bin/vitest',isOriginal?1:0,null,null,600000]);
+              assert.equal(child.args.length,7);
+              assert.deepEqual(child.args.slice(0,6),['run','src/test/missingXiConfirmationOwnership.test.tsx','src/test/missingXiLineupView.test.tsx','--reporter=json','--testTimeout=60000','--no-file-parallelism']);
+              assert(child.args[6].startsWith('--outputFile=/')&&child.args[6].endsWith('/missing-xi-confirmation-controls/'+dir+'owned.json'));
+              const report=parse(dir+'owned.json'),errors=parse(dir+'report-errors.json');
+              assert.deepEqual([report.numTotalTests,report.numPassedTests,report.numFailedTests,report.numPendingTests,report.numTodoTests,report.success],[8,8-reds,reds,0,0,!isOriginal]);
+              assert.deepEqual([errors.unhandledErrors,errors.testExecutionErrors],[null,null]);
+              assert.deepEqual(errors.runtimeCounters,{numRuntimeErrorTestSuites:{present:false},numUnhandledErrors:{present:false}});
+              assert.equal(report.testResults.length,2);
+              const rows=report.testResults.flatMap(suite=>suite.assertionResults),failures=rows.filter(row=>row.status==='failed'),passes=rows.filter(row=>row.status==='passed');
+              assert.deepEqual([rows.length,failures.length,passes.length],[8,reds,8-reds]);
+              assert.deepEqual(arm.actualFailedTitles,failures.map(row=>row.title));
+              assert.deepEqual(arm.actualPassedTitles,passes.map(row=>row.title));
+              assert.deepEqual(failures.map(row=>row.title),isOriginal?failedTitles:[]);
+              assert.equal(report.testResults.find(suite=>suite.name.endsWith('/missingXiLineupView.test.tsx')).assertionResults.filter(row=>row.status==='passed').length,4);
+              for(const [i,row] of failures.entries()){
+                assert.equal(row.failureMessages.length,1);
+                assert(row.failureMessages[0].startsWith('AssertionError: '+markers[i]+':'));
+              }
+              for(const row of passes)assert.deepEqual(row.failureMessages,[]);
+              const armRaw=read(dir+'raw.json'),reference=isOriginal?originalRaw:completedFixedRaw;
+              assert(armRaw.equals(reference),name+' exact entire qualified RAW');
+              assert.deepEqual(arm.raw,{file:'raw.json',bytes:armRaw.length,sha256:sha(armRaw),literalByteEqualReference:isOriginal?'qualified-original':'completed-fixed'});
+              assert.deepEqual(arm.wholePreservationVectors,fixedProof.wholePreservedCases);
+              for(const pin of arm.wholePreservationVectors){
+                const actual=armRaw.subarray(pin.rawOffset,pin.rawOffset+pin.bytes),baselineCase=originalRaw.subarray(pin.originalRawOffset,pin.originalRawOffset+pin.bytes);
+                assert.equal(actual.length,pin.bytes);assert.equal(sha(actual),pin.sha256);assert(actual.equals(baselineCase));
+              }
+              return{name,physicalPageBlob:pageBlob,changedPhysicalPaths:changed,actualRows:rows.length,actualPasses:passes.length,actualNamedBusinessReds:failures.length,rawFrames:arm.rawFrames,actionJournalEntries:arm.actionJournalEntries,boundedQueries:arm.boundedQueries,wholePreservationVectors:arm.wholePreservationVectors.length,raw:arm.raw};
+            });
+            return{status:'passed',completedControlsRun:controls.run,controlsArtifact:controls.artifact,bodyCount:controls.bodyCount,runnerBlob,actualRows:summary.actualRows,actualPasses:summary.actualPasses,actualNamedBusinessReds:summary.actualNamedBusinessReds,rawFrames:summary.rawFrames,actionJournalEntries:summary.actionJournalEntries,boundedQueries:matrix.reduce((sum,arm)=>sum+arm.boundedQueries,0),wholePreservationVectors:summary.wholePreservationVectors,priorRAW:false,allCompleteRAWLiteral:true,physicalSourceMatrixHeld:true,controlsRerun:false,matrix};
+          })();
+          assert.equal(controlsChecks.status,'passed');
+          for(const [prefix,dir] of [['original','original-packet'],['fixed',fixedDir],['controls',controlsDir]]){
+            fs.writeFileSync(path.join(out,prefix+'-bodies-before.json'),JSON.stringify(inventory(dir)));
+          }
+          const topReferenceFiles=['original','fixed','controls'].flatMap(prefix=>[prefix+'-run.json',prefix+'-jobs.json',prefix+'-artifact.json',prefix+'.zip',prefix+'-body-pins.json',prefix+'-bodies-before.json']);
+          fs.writeFileSync(path.join(out,'packet-custody.json'),JSON.stringify({status:'passed',original,fixed,controls,fixedRaw,controlsChecks,controlsRerun:false},null,2));
+          topReferenceFiles.push('original-entries.txt','original-custody.json','fixed-zip-entries.txt','controls-zip-entries.txt','packet-custody.json');
+          fs.writeFileSync(path.join(out,'reference-top-before.json'),JSON.stringify(topReferenceFiles.map(details)));
+          NODE
       - name: Actual fixed ownership cases and unchanged prior4 in one JSON-only Vitest run
         run: |
           set -euo pipefail
           set +e
-          MISSING_XI_CONFIRMATION_RAW="$PWD/missing-xi-confirmation-fixed/raw.json" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node_modules/.bin/vitest run src/test/missingXiConfirmationOwnership.test.tsx src/test/missingXiLineupView.test.tsx --reporter=json --testTimeout=60000 --no-file-parallelism --outputFile=missing-xi-confirmation-fixed/owned.json > missing-xi-confirmation-fixed/owned.log 2>&1
+          MISSING_XI_CONFIRMATION_RAW="$PWD/missing-xi-confirmation-ownership-qualified/raw.json" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node_modules/.bin/vitest run src/test/missingXiConfirmationOwnership.test.tsx src/test/missingXiLineupView.test.tsx --reporter=json --testTimeout=60000 --no-file-parallelism --outputFile=missing-xi-confirmation-ownership-qualified/owned.json > missing-xi-confirmation-ownership-qualified/owned.log 2>&1
           status=$?
           set -e
-          printf '%s\n' "$status" > missing-xi-confirmation-fixed/test-exit.txt
+          printf '%s\n' "$status" > missing-xi-confirmation-ownership-qualified/test-exit.txt
           node --input-type=module <<'NODE'
           import fs from 'node:fs';import assert from 'node:assert/strict';import {createHash} from 'node:crypto';import {JSDOM} from 'jsdom';import domQueries from '@testing-library/dom';
-          const out='missing-xi-confirmation-fixed',read=file=>JSON.parse(fs.readFileSync(out+'/'+file)),sha=bytes=>createHash('sha256').update(bytes).digest('hex'),reportExists=fs.existsSync(out+'/owned.json'),report=reportExists?read('owned.json'):null,exit=fs.readFileSync(out+'/test-exit.txt','utf8').trim();
+          const out='missing-xi-confirmation-ownership-qualified',read=file=>JSON.parse(fs.readFileSync(out+'/'+file)),sha=bytes=>createHash('sha256').update(bytes).digest('hex'),reportExists=fs.existsSync(out+'/owned.json'),report=reportExists?read('owned.json'):null,exit=fs.readFileSync(out+'/test-exit.txt','utf8').trim();
           fs.writeFileSync(out+'/report-errors.json',JSON.stringify({reportExists,exit,runtimeCounters:report?Object.fromEntries(['numRuntimeErrorTestSuites','numUnhandledErrors'].map(key=>[key,Object.hasOwn(report,key)?{present:true,value:report[key]}:{present:false}])):null,unhandledErrors:report?.unhandledErrors??null,testExecutionErrors:report?.testExecutionErrors??null,suites:report?.testResults?.map(suite=>({name:suite.name,status:suite.status,message:suite.message??null,assertions:suite.assertionResults.map(row=>({title:row.title,fullName:row.fullName,status:row.status,failureMessages:row.failureMessages,failureDetails:row.failureDetails??null}))}))??null},null,2));
           assert(reportExists,'Actual JSON-only Vitest report exists');assert.equal(report.success,true);assert.equal(exit,'0','Actual fixed all-pass invocation exit');
           const contract=JSON.parse(String.raw`{"version":1,"testBlob":"a637f262571576e6637c8a24f5c9f34352e2f2bb","cases":[{"key":"currentRound","title":"preserves current-round cancel same-mode progress and a genuine Daily finish across restore","marker":"MX_CONFIRM_CURRENT_ROUND_PRESERVED","status":"passed","frames":21,"labels":["before-mount","mounted-help","ready","daily-first-searched","daily-first-picked","daily-first-missed","daily-duplicate-searched","daily-duplicate-picked","duplicate-rejected","current-daily-armed","same-mode-still-armed","current-round-kept","daily-second-searched","daily-second-picked","daily-second-won","same-mode-finished","finished-unmounted","restored-mounted-help","restored-ready","before-teardown","after-teardown"],"actionJournalEntries":15},{"key":"normalConfirmation","title":"preserves ordinary same-round confirmations scoring and fresh Unlimited lineups","marker":"MX_CONFIRM_NORMAL_CONFIRMATIONS_PRESERVED","status":"passed","frames":18,"labels":["before-mount","mounted-help","ready","daily-ordinary-armed","daily-ordinary-lost","ordinary-unlimited-start","unlimited-first-searched","unlimited-first-picked","unlimited-first-won","ordinary-new-lineup","unlimited-first-miss-searched","unlimited-first-miss-picked","unlimited-first-miss-missed","unlimited-ordinary-armed","unlimited-ordinary-lost","ordinary-finished-daily-return","before-teardown","after-teardown"],"actionJournalEntries":14},{"key":"dailyToUnlimited","title":"keeps an old Daily confirmation from ending the newly entered Unlimited round","marker":"MX_CONFIRM_DAILY_TO_UNLIMITED","status":"passed","frames":11,"labels":["before-mount","mounted-help","ready","daily-progress-searched","daily-progress-picked","daily-progress-missed","old-daily-armed","new-unlimited-current","old-daily-confirmation-opportunity","before-teardown","after-teardown"],"actionJournalEntries":7},{"key":"unlimitedToDaily","title":"keeps an old Unlimited confirmation from prematurely losing the unfinished Daily","marker":"MX_CONFIRM_UNLIMITED_TO_DAILY","status":"passed","frames":12,"labels":["before-mount","mounted-help","ready","daily-progress-searched","daily-progress-picked","daily-progress-missed","unlimited-current","old-unlimited-armed","unfinished-daily-current","old-unlimited-confirmation-opportunity","before-teardown","after-teardown"],"actionJournalEntries":8}],"schema":{"environment":"MISSING_XI_CONFIRMATION_RAW","mustBeAbsolute":true,"write":"afterAll JSON.stringify complete object without projection","topKeys":["version","scope","limits","cases"],"caseKeys":["key","title","frames","closed"],"frameKeys":["label","at","clock","page","daily","storage","sessionStorage","storageOps","globalRNG","selectors","transport","unexpectedTransport","pendingResponses","completions","renders","results","actions","focus"],"clockKeys":["now","fakeTimers"],"pageKeys":["html","bodyHTML","text","mode","phase","puzzle","controls","input","options","messages","result"],"pageMode":"daily|unlimited|null","pagePhase":"playing|revealed|unmounted-or-loading","pagePuzzle":"full actual selector ActivePuzzle {lineup,candidate} for selected public mode, or null","controlKeys":["📅 Daily","∞ Unlimited","Give up","Yes, reveal it","Keep playing","Lock in guess","Play Unlimited","New Lineup"],"controlValueKeys":["present","disabled","html"],"inputKeys":["value","disabled","expanded","controls","html"],"optionKeys":["text","html"],"resultKeys":["html","text","props"],"resultPropsKeys":["at","won","outcomeEmoji","headline","statRow","emojiGrid","share","playAgainLabel","onPlayAgainCallable"],"dailyKeys":["puzzle","guesses","gameStatus","isLoading","todayStr","puzzleIndex","functions"],"dailyPuzzle":"actual shared SENTINEL puzzle, not the Page's curated ActivePuzzle","dailyFunctions":"names of actual unchanged functions retained by pass-through wrapper; no replacement outputs","storage":"complete sorted key -> exact string|null snapshot read with original Storage.getItem to keep observation reads out of App tape","storageOpKeys":["at","area","method","args","result"],"storageOps":"complete pass-through getItem/setItem/removeItem/clear/key across Storage.prototype with area local/session/other; original undefined marked {undefined:true}; actual side effects preserved","rngKeys":["index","at","value"],"rng":"complete Math.random calls after per-case instrumentation, constant unit value0.3141592653589793; selector ranges separately identify actual calls, no normalization/filter/drop or startup attribution","selectorKeys":["kind","at","args","result","rngStart","rngEnd"],"selector":"pass-through actual pickDailyPuzzle/pickUnlimitedPuzzle result; every actual Unlimited picker calls real Math.random twice, Daily has its own private seeded PRNG","transportKeys":["at","table","steps","signalAbortedAtStart","settledAt","signalAbortedAtEnd","signalEvents","response"],"stepKeys":["method","args"],"transportResponse":{"data":[],"error":null},"transportAbortEventKeys":["at","type"],"completionKeys":["at","args"],"completion":"actual useGameCompletion invocation of isolated external recordCompletion boundary, no backend forwarding","renderKeys":["at","daily"],"renders":"all actual shared daily hook return observations, not a claim to record each private Page state render","actionKinds":{"click":["kind","at","name","available","disabled"],"old-confirmation-opportunity":["kind","at","name","available","disabled"],"help-dismiss":["kind","at","name","available"],"type":["kind","at","name"],"select-option":["kind","at","name","requestedName","available","html"]},"focusKeys":["tag","text","html"],"teardown":"Every healthy case captures before-teardown and after-teardown before its first named assertion and sets closed true. A setup/action interruption retains interrupted-before/after-teardown frames instead of hiding partial evidence.","rejectionScope":"Vitest's real errors/unhandled report must independently be empty. Test does not swallow rejection events or manufacture a no-rejection field.","sessionStorage":"complete sorted sessionStorage key -> exact string|null snapshot, separate from local storage","publicOptionSelection":"Compare actual option text by unchanged normalizeName; record actual displayed selected name plus requested typed name, and assert miss logs against actual displayed selection. No alias/lineup mutation.","resultSeam":"Only explicit section[role=status] adapter is a result, never autocomplete div[role=status]. Actual Page-computed props/statLine are retained by the adapter."},"transport":{"boundary":"actual playerSearch -> mocked exact read-only Supabase query builder; actual PlayerAutocomplete merges unchanged local roster names","table":"player_market_values","select":"player_name, market_value_usd, year, club, nationality, position, age, person_key","directMethods":["select","ilike","order","order","order","limit","abortSignal"],"directPredicate":["name_folded","%actual normalized query%"],"directLimit":200,"poolMethods":["select","order","order","order","limit","abortSignal"],"poolLimit":1000,"poolCondition":"actual normalized query length <=24, per unchanged playerSearch","order":[["market_value_usd",{"ascending":false}],["year",{"ascending":false}],["player_name",{"ascending":true}]],"response":{"data":[],"error":null},"unknown":"unknown table/projection/method sequence/order/limit/predicate records unexpected and throws; insert/upsert/update/delete/rpc refuse, no live client","fixtures":"No invented XI, no new real-data facts. All selected names derive at runtime from held curated lineup/roster. No supplied search rows."},"unitClock":{"fixedDate":"2026-11-06T17:00:00.000Z","fake":["Date","setTimeout","clearTimeout","setInterval","clearInterval"],"searchAdvanceMS":201,"otherActionsAdvanceMS":0,"scope":"unit-only, no native timing/trust/geometry claim"},"expectedFrames":62,"expectedActionJournalEntries":44,"wholePreserveKeys":["currentRound","normalConfirmation"],"expectedOriginalBusinessOutcomes":{"dailyToUnlimited":{"oldArmedMode":"daily","oldDailyGuesses":"one actual distinct held-roster miss","newMode":"unlimited","actualOldYesExpectedPresent":true,"afterOldYes":{"phase":"revealed","won":false,"score":0,"emojiGrid":"three white squares and Missed it","dailyStatus":"playing","dailyGuesses":"same one legitimate miss","allDailyStorageBytesHeld":true,"completionCalls":0},"firstAssertion":"after.page.phase equals playing, original predicted revealed"},"unlimitedToDaily":{"oldArmedMode":"unlimited","returnedDailyGuesses":"same legitimate one miss","actualOldYesExpectedPresent":true,"afterOldYes":{"dailyStatus":"lost","dailyGuesses":"[{t:miss,name:actual wrong roster name},{t:give}]","mode":"daily","phase":"revealed","won":false,"score":0,"completionCalls":1,"completionArgs":["/missing-xi",0,"Fixture Unit Player",0]},"firstAssertion":"after.daily.gameStatus equals playing, original predicted lost"},"preserves":{"currentRound":"one miss, duplicate rejected without new guess, same-mode confirmation retained, Keep playing preserves current public observations, true second-answer win70, one completion70, finished remount holds exact saved log/result and no second completion","normalConfirmation":"ordinary Daily Yes loses0/completes0 once, actual Unlimited correct first answer100, New Lineup actual second draw, one Unlimited miss then ordinary Yes loses0 without extra guess or Daily mutation/completion, return finished Daily holds saved result"}},"originalCaseStatuses":[{"key":"currentRound","status":"passed","marker":"MX_CONFIRM_CURRENT_ROUND_PRESERVED","title":"preserves current-round cancel same-mode progress and a genuine Daily finish across restore"},{"key":"normalConfirmation","status":"passed","marker":"MX_CONFIRM_NORMAL_CONFIRMATIONS_PRESERVED","title":"preserves ordinary same-round confirmations scoring and fresh Unlimited lineups"},{"key":"dailyToUnlimited","status":"failed","marker":"MX_CONFIRM_DAILY_TO_UNLIMITED","title":"keeps an old Daily confirmation from ending the newly entered Unlimited round"},{"key":"unlimitedToDaily","status":"failed","marker":"MX_CONFIRM_UNLIMITED_TO_DAILY","title":"keeps an old Unlimited confirmation from prematurely losing the unfinished Daily"}]}`),legacyTitles=["offers two native pressed-state view buttons and starts on the existing pitch","shows eleven ordered positions and ten complete names with a named blank while keeping the answer out of both views","keeps the selected guess puzzle daily log and completion count unchanged while repeatedly switching views","reveals the correct eleventh full name after the real winning guess and preserves the finished daily across reload and view switches"],assertionRows=report.testResults.flatMap(suite=>suite.assertionResults),log=fs.readFileSync(out+'/owned.log','utf8');
@@ -209,24 +520,874 @@ jobs:
           const result={status:'fixed-eight-cases-passed-two-literal-whole-preserves',actualCases:assertionRows.length,actualPasses:report.numPassedTests,actualFailures:report.numFailedTests,newCases:contract.cases.length,newPasses:expectedNewPasses,priorCases:legacyRows.length,priorPasses:legacyRows.length,priorRAW:false,rawFrames:totalFrames,actionJournalEntries:totalJournal,actualQueries:actualQueryRows,domFrames,newRows,legacyRows,caseSummaries,wholePreservedCases,raw:{file:'raw.json',bytes:rawBytes.length,sha256:sha(rawBytes)},originalRun:Number(process.env.MISSING_XI_ORIGINAL_RUN),originalHead:process.env.MISSING_XI_ORIGINAL_HEAD,originalArtifact:Number(process.env.MISSING_XI_ORIGINAL_ARTIFACT),originalRAWBytes:originalBytes.length,originalRAWSHA256:sha(originalBytes),source:{page:source.pins['src/pages/MissingXi.tsx'],originalPage:'8734de7d4ab5b6848538cc079804f10f038b39e1',lib:source.pins['src/lib/missingXi.ts'],giveUp:source.pins['src/components/game/GiveUpButton.tsx'],daily:source.pins['src/hooks/useDailyPuzzle.ts'],completion:source.pins['src/hooks/useGameCompletion.ts'],newTest:source.pins['src/test/missingXiConfirmationOwnership.test.tsx'],priorTest:source.pins['src/test/missingXiLineupView.test.tsx'],plan:source.pins['docs/plans/2026-11-06-missing-xi-confirmation-ownership.md']},observedFixed:{dailyToUnlimited:{oldConfirmationAvailable:actD.available,mode:afterD.page.mode,phase:afterD.page.phase,dailyStatus:afterD.daily.gameStatus,dailyGuesses:afterD.daily.guesses,savedBytesHeld:true,completionCalls:afterD.completions.length},unlimitedToDaily:{oldConfirmationAvailable:actU.available,mode:afterU.page.mode,phase:afterU.page.phase,dailyStatus:afterU.daily.gameStatus,dailyGuesses:afterU.daily.guesses,savedBytesHeld:true,completionCalls:afterU.completions.length}},limits:'Actual fixed unit qualification only after all bound inputs and fresh execution. Qualified original remains its declared6passes/2business reds. Two entire39frame preservation case objects are literally byte-equal to authenticated original, including all result.props.at/clock/storage/HTML IDs/tapes. Whole harmful-case RAW equality is not expected. Prior4 remains fresh report-only. No controls/build/native/provider/backend-write/full-suite/integration/release credit.'};
           same([result.actualCases,result.actualPasses,result.actualFailures,result.rawFrames,result.actionJournalEntries],[8,8,0,62,44]);fs.writeFileSync(out+'/fixed-admission.json',JSON.stringify(result,null,2));console.log('PASS fixed8actual/8passes/0failures/62complete RAW frames/44action journal entries;2entire39frame cases literal-original and4legacy report-only passes');
           NODE
-      - name: Final whole source index locks installed521 and offline holds
+      - name: Literal fresh unit RAW join to the qualified fixed reference
+        run: |
+          set -euo pipefail
+          out=missing-xi-confirmation-ownership-qualified
+          cmp "$out/raw.json" "$out/fixed-reference/raw.json"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          import {createHash} from 'node:crypto';
+          const out='missing-xi-confirmation-ownership-qualified',env=process.env;
+          const raw=fs.readFileSync(out+'/raw.json'),reference=fs.readFileSync(out+'/fixed-reference/raw.json');
+          const bytes=raw.length,sha256=createHash('sha256').update(raw).digest('hex');
+          assert(raw.equals(reference));assert.equal(bytes,Number(env.MISSING_XI_FIXED_RAW_BYTES));assert.equal(sha256,env.MISSING_XI_FIXED_RAW_SHA256);
+          fs.writeFileSync(out+'/fixed-raw-join.json',JSON.stringify({status:'passed',bytes,sha256,fixedHead:env.MISSING_XI_FIXED_HEAD,freshUnitRAWByteEqual:true},null,2));
+          NODE
+      - name: Normal production build and retained bytes
+        id: build
+        run: |
+          set -euo pipefail
+          NODE_OPTIONS="--max-old-space-size=6144" npm run build 2>&1 | tee missing-xi-confirmation-ownership-qualified/build.log
+          tar -czf missing-xi-confirmation-ownership-qualified/dist.tgz dist
+          sha256sum missing-xi-confirmation-ownership-qualified/dist.tgz > missing-xi-confirmation-ownership-qualified/dist.sha256
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import {createHash} from 'node:crypto';import assert from 'node:assert/strict';
+          const walk=dir=>fs.readdirSync(dir,{withFileTypes:true}).sort((a,b)=>a.name.localeCompare(b.name)).flatMap(e=>e.isDirectory()?walk(dir+'/'+e.name):e.isFile()?[dir+'/'+e.name]:[]);
+          const rows=walk('dist').map(file=>{const b=fs.readFileSync(file);return {file,bytes:b.length,sha256:createHash('sha256').update(b).digest('hex')};});
+          assert.equal(rows.length,850);fs.writeFileSync('missing-xi-confirmation-ownership-qualified/dist-before.json',JSON.stringify(rows));
+          NODE
+      - name: Isolated pinned Playwright and Chromium
+        id: browser_setup
+        timeout-minutes: 12
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          python -m pip install fonttools pillow
+          npm install --prefix "$RUNNER_TEMP/missing-xi-confirmation-browser" --no-save --package-lock=false playwright@1.64.1 2>&1 | tee missing-xi-confirmation-ownership-qualified/browser-install.log
+          test ! -e node_modules/playwright
+          ln -s "$RUNNER_TEMP/missing-xi-confirmation-browser/node_modules/playwright" node_modules/playwright
+          node "$RUNNER_TEMP/missing-xi-confirmation-browser/node_modules/playwright/cli.js" install --with-deps chromium 2>&1 | tee missing-xi-confirmation-ownership-qualified/chromium-install.log
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const before=JSON.parse(fs.readFileSync('missing-xi-confirmation-ownership-qualified/installed-before.json'));
+          const after=before.map(([p])=>[p,JSON.parse(fs.readFileSync(p+'/package.json')).version]);assert.deepEqual(after,before);
+          const pw=JSON.parse(fs.readFileSync('node_modules/playwright/package.json'));assert.equal(pw.version,'1.64.1');
+          fs.writeFileSync('missing-xi-confirmation-ownership-qualified/installed-after.json',JSON.stringify(after));fs.writeFileSync('missing-xi-confirmation-ownership-qualified/browser-package.json',JSON.stringify({version:pw.version,target:fs.realpathSync('node_modules/playwright')}));
+          NODE
+      - name: All required built readers and existing source fences
+        if: ${{ !cancelled() && steps.build.outcome == 'success' && steps.browser_setup.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          export ONLY="simAdsense,simBrand,simHeadTags,simHiddenPages,simHubs,simIndexNow,simIndexing,simInternalLinks,simNoRivalNames,simPrerender,simPrerenderBoot,simRetiredRoutes,simSchema,simSitemap,simSnapshotAssets,simSiteSearch,simGuideHeadings,simSeoMetaSplit,simHomeCopy,simHarnessAnchors"
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/runAllSims.mjs --browser 2>&1 | tee missing-xi-confirmation-ownership-qualified/readers.log
+      - name: All original route download limits
+        if: ${{ !cancelled() && steps.build.outcome == 'success' && steps.browser_setup.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          node scripts/lib/hostLikeServer.mjs dist 4173 > missing-xi-confirmation-ownership-qualified/weight-host.log 2>&1 &
+          missing_xi_host_pid=$!
+          trap 'kill "$missing_xi_host_pid" 2>/dev/null || true' EXIT
+          sleep 2
+          SWEEP_OFFLINE=1 BASE=http://127.0.0.1:4173 NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/sweepWeight.mjs 2>&1 | tee missing-xi-confirmation-ownership-qualified/weight.log
+      - name: Three actual native viewport journeys with reviewed read-only outer
+        id: native
+        timeout-minutes: 15
+        if: ${{ !cancelled() && steps.build.outcome == 'success' && steps.browser_setup.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          out=missing-xi-confirmation-ownership-qualified
+          cat > "$out/native-admission-script.mjs" <<'MISSING_XI_NATIVE_OUTER'
+          // Read-only Missing XI native evidence verifier. Writes a single receipt to stdout on success.
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import {createHash} from 'node:crypto';
+          import {execFileSync} from 'node:child_process';
+          import {createRequire} from 'node:module';
+          
+          assert(process.env.CI,'Remote CI only');
+          assert.equal(process.env.SIM_NETWORK,'offline');
+          assert.equal(process.argv.length,3,'node OUTER EVIDENCE_DIR');
+          const ROOT=process.cwd(),OUT=path.resolve(process.argv[2]);
+          const {JSDOM}=createRequire(path.join(ROOT,'package.json'))('jsdom');
+          assert(OUT.startsWith(ROOT+path.sep),'Evidence must be inside the checkout');
+          assert(!/^(?:src|public|scripts|dist|node_modules|\.git)(?:[\\/]|$)/.test(path.relative(ROOT,OUT)));
+          assert(fs.lstatSync(OUT).isDirectory()&&!fs.lstatSync(OUT).isSymbolicLink());
+          const ROUTE='/missing-xi',HELPER_PATH='scripts/qa/playMissingXiConfirmationOwnership.mjs';
+          const QUALIFIED_HEAD='6bba111e659e3898e6f165fe438994e2adcfce6b',QUALIFIED_TREE='04ddf69f473a7fea24c0cbd75cc83910720505b5';
+          const PAGE='4692624a6ce6435b881ce4671df6169696a75858',UNIT_BYTES='2078763',UNIT_SHA='2f6abf3c61339dd4c972dc3af6a6ede99a6855a185ede72241835cefcce5bb34',HELPER='9ec7a5fb80752b07ae74a9a17475ca93ba57bb2c';
+          for(const value of[QUALIFIED_HEAD,QUALIFIED_TREE,PAGE,HELPER])assert(/^[0-9a-f]{40}$/.test(value),'Exact bound source identity');
+          assert(/^[1-9][0-9]*$/.test(UNIT_BYTES)&&Number.isSafeInteger(Number(UNIT_BYTES))&&/^[0-9a-f]{64}$/.test(UNIT_SHA),'Exact bound admitted unit RAW');
+          assert.equal(process.env.MISSING_XI_CONFIRMATION_PAGE_BLOB,PAGE);
+          const WIDTHS=[[320,568],[390,844],[1280,900]];
+          const sha=b=>createHash('sha256').update(b).digest('hex');
+          const blob=b=>createHash('sha1').update(Buffer.concat([Buffer.from('blob '+b.length+'\0'),b])).digest('hex');
+          const eq=(a,b,label)=>assert.deepEqual(a,b,label);
+          const finite=(n,label)=>assert(Number.isFinite(n),label);
+          const keys=(o,want,label)=>eq(Object.keys(o).sort(),[...want].sort(),label);
+          const safe=(root,file)=>{assert(typeof file==='string'&&file.length&&!file.includes('\\')&&!path.posix.isAbsolute(file)&&!file.split('/').some(x=>!x||x==='.'||x==='..'),'Safe relative file');const p=path.resolve(root,file);assert(p.startsWith(root+path.sep));assert(fs.lstatSync(p).isFile()&&!fs.lstatSync(p).isSymbolicLink(),'Regular body '+file);return p;};
+          const walk=(root,prefix='')=>fs.readdirSync(path.join(root,prefix),{withFileTypes:true}).sort((a,b)=>a.name.localeCompare(b.name)).flatMap(e=>{assert(!e.isSymbolicLink(),'No symlink evidence');const f=prefix+e.name;return e.isDirectory()?walk(root,f+'/'):(assert(e.isFile()),[f]);});
+          const receipt=(root,file)=>{const b=fs.readFileSync(safe(root,file));return{file,bytes:b.length,sha256:sha(b)};};
+          const actualFiles=walk(OUT),manifestBytes=fs.readFileSync(safe(OUT,'body-manifest.json')),manifest=JSON.parse(manifestBytes);
+          keys(manifest,['version','files','filesCount','bodyBytes','limits'],'Closed body manifest fields');
+          assert(typeof manifest.limits==='string'&&manifest.limits.length);
+          eq(manifest.version,1);assert(Array.isArray(manifest.files));eq(manifest.filesCount,manifest.files.length);
+          const bodyMap=new Map();let bodyBytes=0;
+          for(const r of manifest.files){keys(r,['file','bytes','sha256'],'Manifest tuple');assert(!bodyMap.has(r.file));assert(r.file!=='body-manifest.json'&&actualFiles.includes(r.file));assert(Number.isSafeInteger(r.bytes)&&r.bytes>=0&&/^[a-f0-9]{64}$/.test(r.sha256));eq(receipt(OUT,r.file),r,'Actual evidence body '+r.file);bodyMap.set(r.file,r);bodyBytes+=r.bytes;}
+          eq(manifest.bodyBytes,bodyBytes);eq([...bodyMap.keys()].sort(),actualFiles.filter(f=>f!=='body-manifest.json').sort(),'Manifest closes every actual body');
+          let referenceOccurrences=0;const referenced=new Set(),parsed=new Map();
+          const ref=r=>{assert(r&&typeof r==='object');const entry=bodyMap.get(r.file);assert(entry,'Reference belongs to manifest '+r.file);eq({file:r.file,bytes:r.bytes,sha256:r.sha256},entry,'Complete reference tuple');referenceOccurrences++;referenced.add(r.file);return fs.readFileSync(safe(OUT,r.file));};
+          const json=r=>{ref(r);if(!parsed.has(r.file))parsed.set(r.file,JSON.parse(fs.readFileSync(safe(OUT,r.file))));return parsed.get(r.file);};
+          const named=name=>json(bodyMap.get(name));
+          const report=named('report.json');
+          keys(report,["version","status","route","page","helper","pins","qualifiedInput","sourceBefore","distBefore","locksBefore","installedBefore","offlineBefore","indexBefore","activeEntry","journeys","screenshots","checks","limits","base","browserVersion","nodeVersion","census","sourceAfter","distAfter","locksAfter","installedAfter","offlineAfter","indexAfter","sourceHeld","distHeld","locksHeld","installedHeld","offlineHeld","indexHeld","raw"],'Complete successful native report');
+          eq([report.version,report.status,report.route,report.page,report.helper],[1,'passed',ROUTE,PAGE,HELPER],'Actual complete helper pass');
+          assert(!report.error&&!report.holdError);assert(Number.isInteger(report.checks)&&report.checks>0);
+          assert(typeof report.browserVersion==='string'&&report.browserVersion.length);eq(report.nodeVersion,'24.22.1');
+          const base=new URL(report.base);
+          eq([base.protocol,base.hostname,base.pathname,base.search,base.hash,base.username,base.password],['http:','127.0.0.1','/','','','','']);
+          assert(base.port);eq(report.base,base.origin);
+          const URL_ACTIVE=report.base+ROUTE,raw=json(report.raw);
+          eq(report.raw.file,'raw.json');
+          keys(raw,['version','route','page','qualifiedInput','limits','contexts'],'Complete RAW envelope');
+          eq([raw.version,raw.route,raw.page],[1,ROUTE,PAGE]);eq(raw.qualifiedInput,report.qualifiedInput);eq(raw.limits,report.limits);
+          assert(Array.isArray(report.limits)&&report.limits.length===5&&report.limits.every(s=>typeof s==='string'&&s.length));
+          
+          const git=(...args)=>execFileSync('git',args,{cwd:ROOT,encoding:'utf8',maxBuffer:16*1024*1024}).trimEnd();
+          const fullHead=git('rev-parse','HEAD'),fullTree=git('rev-parse','HEAD^{tree}');
+          assert(/^[0-9a-f]{40}$/.test(fullHead)&&/^[0-9a-f]{40}$/.test(fullTree));
+          if(process.env.GITHUB_SHA)eq(fullHead,process.env.GITHUB_SHA,'Actual full checkout trigger');
+          assert(fullHead!==QUALIFIED_HEAD&&fullTree!==QUALIFIED_TREE,'Full execution and admitted fixed reference remain separate source roles');
+          eq(ref(bodyMap.get('head.txt')),Buffer.from(fullHead+'\n'),'Exact actual full head body');
+          eq(ref(bodyMap.get('tree.txt')),Buffer.from(fullTree+'\n'),'Exact actual full tree body');
+          eq(report.qualifiedInput.file,'qualified-input-binding.json');
+          const inputBinding=json(report.qualifiedInput);
+          keys(inputBinding,['qualifiedSourceHead','qualifiedSourceTree','page','unitRAWBytes','unitRAWSHA256','freshUnitRAWByteEqual','currentHead','currentTree','scope'],'Qualified input binding fields');
+          eq([inputBinding.qualifiedSourceHead,inputBinding.qualifiedSourceTree,inputBinding.page,inputBinding.unitRAWBytes,inputBinding.unitRAWSHA256,inputBinding.freshUnitRAWByteEqual,inputBinding.currentHead,inputBinding.currentTree],[QUALIFIED_HEAD,QUALIFIED_TREE,PAGE,Number(UNIT_BYTES),UNIT_SHA,true,fullHead,fullTree]);
+          assert(typeof inputBinding.scope==='string'&&inputBinding.scope.length);
+          const fixedRef=process.env.MISSING_XI_CONFIRMATION_FIXED_REFERENCE,unitPath=process.env.MISSING_XI_CONFIRMATION_UNIT_RAW;
+          assert(fixedRef&&unitPath,'Read the same separately authenticated fixed and fresh unit inputs as helper');
+          const fixedRoot=path.resolve(ROOT,fixedRef),freshFile=path.resolve(ROOT,unitPath);
+          eq(fs.readFileSync(safe(fixedRoot,'head.txt'),'utf8').trim(),QUALIFIED_HEAD);
+          eq(fs.readFileSync(safe(fixedRoot,'tree.txt'),'utf8').trim(),QUALIFIED_TREE);
+          assert(fs.lstatSync(freshFile).isFile()&&!fs.lstatSync(freshFile).isSymbolicLink());
+          const admittedFixedRaw=fs.readFileSync(safe(fixedRoot,'raw.json')),freshUnitRaw=fs.readFileSync(freshFile);
+          for(const b of[admittedFixedRaw,freshUnitRaw])eq([b.length,sha(b)],[Number(UNIT_BYTES),UNIT_SHA],'Physical unit RAW binding');
+          assert(freshUnitRaw.equals(admittedFixedRaw),'Full fresh unit RAW literally equals the qualified fixed RAW');
+          
+          const EXPECTED_PINS={
+           "src/pages/MissingXi.tsx": PAGE,
+           "src/lib/missingXi.ts": "41d645db94fee5dd2fe22d19c353c9b8d2ca739a",
+           "src/hooks/useDailyPuzzle.ts": "b8a0d6ba268efe0e728c4ee96fbc6c60fcc73846",
+           "src/hooks/useGameCompletion.ts": "b104822551fd5d9b1c5d6ddb14f01c79e5a662b2",
+           "src/lib/completions.ts": "61daf9b6c528f884551cd1d42f71357681c8728a",
+           "src/components/game/GiveUpButton.tsx": "2462260a7b5f1d5d3b70915df2428d5d4397b0a0",
+           "src/components/FlagImg.tsx": "f415a12892f747ecf07414e61710584ca98be6a8",
+           "src/components/game/PlayerAutocomplete.tsx": "a0bd500b63306c75e0dea251cb6fb67ea2ed9452",
+           "src/lib/playerSearch.ts": "0d19f2c23735eb30512dc7fc3a447eacef5e128f",
+           "src/lib/nameFold.ts": "abb3e270fa1c87e78aa3871598c06571ff44a069",
+           "src/components/game/RulesGate.tsx": "ad59d4218dbd3790cad1ae7dac52fd27f459f15d",
+           "src/components/game/ResultScreen.tsx": "dd6a06380851ab68d3b85c3a567d77c99e88b386",
+           "src/components/ui/dialog.tsx": "401b3b2aa4c9404d98d9f05bc3f88ce5eb6b19cd",
+           "src/components/CookieConsent.tsx": "7ffba7ff4099c051d949cd20fe31bc75332f215b",
+           "src/App.tsx": "8bfedf7aaa1d076e0f0c8e2216c7e46632cd8a33",
+           "src/data/gameRegistry.ts": "f560b40a74d1468ac72dfde4ee6fec6635a9a255",
+           "public/missing-xi/index.html": "e7fe5d02933d73db401c4badb130eb2bb76ed0c3",
+           "src/index.css": "775df500bd7c9730e5b04aedd3d6b2a1564d49b4",
+           "scripts/lib/answerConsent.mjs": "c6d16997e4c06e8b35dcfd0bab5efcad3069d899",
+           "package.json": "2ff64986fb76ebc51b706f2fd24765768874008a",
+           "package-lock.json": "97d6f12a052f25f400462938c241789a083f0bfe"
+          };
+          eq(report.pins,EXPECTED_PINS);
+          for(const[file,want]of Object.entries(EXPECTED_PINS))eq(blob(fs.readFileSync(safe(ROOT,file))),want,'Physical reviewed pin '+file);
+          eq(blob(fs.readFileSync(safe(ROOT,HELPER_PATH))),HELPER,'Physical reviewed helper');
+          eq([report.indexBefore.file,report.indexAfter.file],['index-before.txt','index-after.txt']);
+          for(const name of['source','dist','locks','installed','offline','index'])eq(report[name+'Held'],true,name+' held');
+          for(const name of['source','dist','locks','installed','offline'])eq(report[name+'Before'],report[name+'After'],name+' complete before/after tuples');
+          const beforeIndex=ref(report.indexBefore),afterIndex=ref(report.indexAfter);
+          assert(beforeIndex.equals(afterIndex),'Literal index bytes held');
+          const indexNow=execFileSync('git',['ls-files','-s'],{cwd:ROOT});assert(indexNow.equals(beforeIndex),'Current actual index equals helper index');
+          const index=beforeIndex.toString('utf8').trimEnd().split('\n').map(line=>{const m=/^(100644|100755) ([a-f0-9]{40}) 0\t(.+)$/.exec(line);assert(m,'Stage0 regular tracked file');return{mode:m[1],blob:m[2],file:m[3]};});
+          assert(new Set(index.map(r=>r.file)).size===index.length);
+          eq(report.sourceBefore.length,5783,'Full physical tracked count');eq(index.length,report.sourceBefore.length);
+          eq(report.sourceBefore.map(r=>r.file),index.map(r=>r.file),'Complete indexed physical paths');
+          for(let i=0;i<index.length;i++){const row=index[i],r=report.sourceBefore[i],b=fs.readFileSync(safe(ROOT,row.file));eq(receipt(ROOT,row.file),r,'Actual physical tracked body');eq(blob(b),row.blob,'Actual indexed blob '+row.file);}
+          const scoped=index.filter(r=>/^(?:src|public|scripts)\//.test(r.file));eq(scoped.length,4660,'Full scoped source count');
+          eq(report.distBefore.length,850);eq(report.distBefore,walk(ROOT,'dist/').map(f=>receipt(ROOT,f)),'Every current dist body');
+          eq(report.locksBefore,['package.json','package-lock.json'].map(f=>receipt(ROOT,f)));
+          const lock=JSON.parse(fs.readFileSync(safe(ROOT,'package-lock.json')));
+          const installed=Object.keys(lock.packages).filter(p=>p.startsWith('node_modules/')&&fs.existsSync(path.join(ROOT,p,'package.json'))).map(p=>[p,JSON.parse(fs.readFileSync(safe(ROOT,p+'/package.json'))).version]);
+          eq(installed.length,521);for(const[p,v]of installed)eq(v,lock.packages[p].version,p+' locked version');eq(report.installedBefore,installed);
+          assert(process.env.SIM_OFFLINE_RECEIPT);const offlinePath=path.resolve(ROOT,process.env.SIM_OFFLINE_RECEIPT),offlineBytes=fs.readFileSync(offlinePath);eq(offlineBytes.length,0);
+          eq(report.offlineBefore,{file:path.relative(ROOT,offlinePath),bytes:0,sha256:sha(offlineBytes)});
+          const indexTree=git('ls-tree','-r','HEAD').split('\n');
+          eq(indexTree,index.map(r=>r.mode+' blob '+r.blob+'\t'+r.file),'Every stage0 index tuple agrees with actual full tree');
+          eq(report.activeEntry.snapshot,receipt(ROOT,'public/missing-xi/index.html'));
+          eq([report.activeEntry.snapshot.bytes,report.activeEntry.canonical],[21382,'https://douknowball.com'+ROUTE]);
+          const saved=new JSDOM(fs.readFileSync(safe(ROOT,'public/missing-xi/index.html'),'utf8')),sd=saved.window.document;
+          eq(sd.querySelector('link[rel=canonical]')?.getAttribute('href'),report.activeEntry.canonical);
+          eq(sd.querySelectorAll('#dukb-snapshot').length,1);assert(sd.querySelector('#dukb-snapshot').textContent.trim().length>500);
+          assert([...sd.querySelectorAll('#dukb-snapshot h1')].some(n=>n.textContent.trim()==='MISSING XI'));
+          assert(![...sd.querySelectorAll('meta')].some(n=>/^dukb-retired-/i.test(n.getAttribute('name')||'')||(n.getAttribute('http-equiv')||'').toLowerCase()==='refresh'||(['robots','googlebot','bingbot'].includes((n.getAttribute('name')||'').toLowerCase())&&/(?:^|[\s,])(?:noindex|none)(?:[\s,]|$)/i.test(n.getAttribute('content')||''))));
+          saved.window.close();
+          
+          function geometry(g,width,height){
+           finite(g.at,'Measured geometry time');
+           for(const n of[g.rect.x,g.rect.y,g.rect.width,g.rect.height,g.rect.right,g.rect.bottom,g.center.x,g.center.y,g.chrome.top,g.chrome.bottom])finite(n,'Finite geometry');
+           assert(Math.abs(g.rect.x+g.rect.width-g.rect.right)<0.01&&Math.abs(g.rect.y+g.rect.height-g.rect.bottom)<0.01);
+           eq(g.center,{x:g.rect.x+g.rect.width/2,y:g.rect.y+g.rect.height/2});
+           assert(g.chrome.top>=0&&g.chrome.bottom>=0);assert(Array.isArray(g.ancestors));
+           for(const c of g.ancestors){for(const k of['x','y','right','bottom','scrollTop','scrollHeight','clientHeight'])finite(c[k],'Clip/scroll geometry');for(const k of['cx','cy','scrollableY'])assert(typeof c[k]==='boolean');assert(c.right>=c.x&&c.bottom>=c.y);}
+           for(const k of['hit','enabled','meets44'])assert(typeof g[k]==='boolean');eq(g.meets44,g.rect.width>=44&&g.rect.height>=44);
+           return g.rect.width>0&&g.rect.height>0&&g.rect.x>=0&&g.rect.right<=width&&g.rect.y>=g.chrome.top&&g.rect.bottom<=height-g.chrome.bottom&&g.ancestors.every(c=>(!c.cx||(g.rect.x>=c.x&&g.rect.right<=c.right))&&(!c.cy||(g.rect.y>=c.y&&g.rect.bottom<=c.bottom)))&&g.hit&&g.enabled;
+          }
+          const CONTROL_NAMES=['📅 Daily','∞ Unlimited','Give up','Yes, reveal it','Keep playing','Lock in guess','Play Unlimited','New Lineup','Pitch','Lineup'];
+          const CORE=['url','timeOrigin','mode','phase','storage','sessionStorage','dailyKeys','dailySave','match','lineup','draft','controls','messages','result'];
+          const PROGRESS=['mode','phase','storage','sessionStorage','dailySave','dailyKeys','match','lineup','messages'];
+          const stable=(a,b,label)=>{for(const k of CORE)eq(a[k],b[k],label+' '+k);};
+          const progress=(a,b,label)=>{
+           for(const k of PROGRESS)eq(a[k],b[k],label+' '+k);
+           const pick=f=>[f.draft?.value,f.draft?.disabled,f.controls['Lock in guess'].present,f.controls['Lock in guess'].disabled];
+           eq(pick(a),pick(b),label+' current draft and pick readiness');
+          };
+          const chronological=(list,label)=>{
+           assert(Array.isArray(list),label+' is a complete tape');
+           for(let i=0;i<list.length;i++){finite(list[i].at,label);if(i)assert(list[i].at>=list[i-1].at,label+' chronology');}
+          };
+          const stringRecord=(o,label)=>{
+           assert(o&&typeof o==='object'&&!Array.isArray(o),label+' record');
+           for(const value of Object.values(o))assert(typeof value==='string',label+' literal stored value');
+          };
+          const LATIN={'ø':'o','Ø':'o','đ':'d','Đ':'d','ð':'d','Ð':'d','ł':'l','Ł':'l','æ':'ae','Æ':'ae','œ':'oe','Œ':'oe','ß':'ss','þ':'th','Þ':'th','ħ':'h','Ħ':'h','ı':'i','İ':'i','ŋ':'n','Ŋ':'n'};
+          const fold=value=>value.replace(/\p{Cf}/gu,'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[øØđĐðÐłŁæÆœŒßþÞħĦıİŋŊ]/g,c=>LATIN[c]).toLowerCase().trim().replace(/\s+/g,' ');
+          function frameDOM(f,width,height){
+           keys(f,['at','url','timeOrigin','visibility','viewport','documentWidth','scroll','mode','phase','storage','sessionStorage','dailyKeys','dailySave','match','lineup','controls','draft','options','messages','result','dialog','cookieChoices','focus','html','text'],'Complete actual frame');
+           finite(f.at,'Frame wall time');finite(f.timeOrigin,'Frame document origin');assert(f.timeOrigin>0&&f.at>=f.timeOrigin);
+           eq([f.url,f.viewport,f.visibility],[URL_ACTIVE,{width,height},'visible']);assert(f.documentWidth>0&&f.documentWidth<=width);
+           keys(f.scroll,['x','y'],'Actual scroll');finite(f.scroll.x);finite(f.scroll.y);
+           stringRecord(f.storage,'Local storage');stringRecord(f.sessionStorage,'Session storage');
+           eq(f.dailyKeys,Object.keys(f.storage).filter(k=>/^missing-xi-daily-/.test(k)));assert(f.dailyKeys.length<=1);
+           eq(f.dailySave,f.dailyKeys.length===1?JSON.parse(f.storage[f.dailyKeys[0]]):null);
+           eq(typeof f.cookieChoices,'boolean');
+           const dom=new JSDOM(f.html??''),d=dom.window.document;
+           try{
+            const main=d.querySelector('main#dukb-main'),buttons=[...(main?.querySelectorAll('button')||[])],text=b=>b.textContent.trim(),byName=name=>buttons.find(b=>text(b)===name);
+            eq(main?.outerHTML??null,f.html,'Full inert-parsed main HTML');eq(main?.textContent??null,f.text,'Full main text');
+            const daily=byName('📅 Daily'),unlimited=byName('∞ Unlimited');
+            eq(f.mode,daily?.classList.contains('bg-background')?'daily':unlimited?.classList.contains('bg-background')?'unlimited':null,'Actual active mode');
+            const expectedControls=Object.fromEntries(CONTROL_NAMES.map(name=>{const b=byName(name);return[name,{present:!!b,disabled:b?b.disabled:null,html:b?.outerHTML??null}];}));
+            eq(f.controls,expectedControls,'Every declared public button/disabled/HTML field');
+            const result=[...(main?.querySelectorAll('div[role=status]')||[])].find(e=>[...e.querySelectorAll('h2')].some(h=>['Missed it this time.','First guess! Perfect recall.','Nice work, you found him.'].includes(text(h))))??null;
+            eq(f.phase,result?'revealed':byName('Lock in guess')?'playing':'boot-or-loading','Actual result status div, never autocomplete status');
+            eq(f.result,result?{heading:result.querySelector('h2')?.textContent,html:result.outerHTML,text:result.textContent,stats:[...result.querySelectorAll('.cm-rise')].map(e=>({label:e.querySelector('span:first-child')?.textContent,value:e.querySelector('span:nth-child(2)')?.textContent})),emojiGrid:result.querySelector('.whitespace-pre-wrap')?.textContent}:null,'Actual result heading/full HTML/score/emoji');
+            const match=[...(main?.querySelectorAll('div')||[])].find(e=>['bg-surface-1','rounded-2xl','p-5','text-center'].every(c=>e.classList.contains(c)))??null;
+            eq(f.match,match?{text:match.textContent,html:match.outerHTML}:null,'Public match body');
+            const view=main?.querySelector('[role=group][aria-label="Lineup view"]'),lineup=main?.querySelector('ol[aria-label="Starting lineup"]');
+            const rows=lineup?[...lineup.querySelectorAll(':scope>li')].map(li=>({label:li.getAttribute('aria-label'),position:li.querySelector(':scope>span:first-child')?.textContent,name:li.querySelector(':scope>span:nth-child(2)')?.textContent,text:li.textContent,html:li.outerHTML})):[];
+            eq(f.lineup,{view:view?.querySelector('button[aria-pressed=true]')?.textContent??null,rows,html:lineup?.outerHTML??null,viewHTML:view?.outerHTML??null},'Actual complete public lineup, only visible row identity');
+            const input=main?.querySelector('input[role=combobox]'),list=input?d.getElementById(input.getAttribute('aria-controls')):null;
+            if(input){
+             keys(f.draft,['value','disabled','expanded','listboxId','html'],'Actual input fields');eq(typeof f.draft.value,'string');
+             eq([f.draft.disabled,f.draft.expanded,f.draft.listboxId,f.draft.html],[input.disabled,input.getAttribute('aria-expanded'),input.getAttribute('aria-controls'),input.outerHTML]);
+             // value is a live property. Its trusted event path is checked separately from its serialized attribute.
+            }else eq(f.draft,null);
+            eq(f.options,list?[...list.querySelectorAll('[role=option]')].map(e=>({name:e.textContent,text:e.textContent,selected:e.getAttribute('aria-selected'),html:e.outerHTML})):[],'Complete actual option rows');
+            eq(f.messages,[...(main?.querySelectorAll('p,span')||[])].map(e=>e.textContent).filter(t=>t?.startsWith('Already tried:')||t?.startsWith('Guess ')||t?.includes('You already tried that name.')||t?.startsWith('💡')),'Actual guess and hint text');
+            keys(f.dialog,['open','labelledBy','title','html','ownsFocus'],'Actual dialog state');eq(typeof f.dialog.open,'boolean');
+            keys(f.focus,['tag','text','label','html','insideMain','insideDialog'],'Actual focus state');eq(typeof f.focus.insideMain,'boolean');eq(typeof f.focus.insideDialog,'boolean');
+            eq(f.dialog.ownsFocus,f.focus.insideDialog);
+            if(f.dialog.open){
+             assert(typeof f.dialog.html==='string');
+             const t=d.createElement('template');t.innerHTML=f.dialog.html;const dialog=t.content.querySelector('[role=dialog]');
+             assert(dialog);eq(dialog.outerHTML,f.dialog.html);eq(dialog.getAttribute('aria-labelledby'),f.dialog.labelledBy);eq(dialog.querySelector('h2')?.textContent??null,f.dialog.title);
+             if(f.dialog.ownsFocus)assert(f.dialog.html.includes(f.focus.html),'Actual focus markup in owned dialog');
+            }else eq([f.dialog.labelledBy,f.dialog.title,f.dialog.html,f.dialog.ownsFocus],[null,null,null,false]);
+            if(f.focus.insideMain)assert(typeof f.focus.html==='string'&&f.html?.includes(f.focus.html),'Actual focus markup in main');
+            if(f.focus.tag==='INPUT'&&f.focus.insideMain&&f.draft?.html===f.focus.html){eq(f.focus.text,input.textContent);eq(f.focus.label,input.getAttribute('aria-label'));}
+           }finally{dom.window.close();}
+          }
+          function rejectedConsent(f){
+           const record=f.storage['cookie-consent-v2'];
+           if(record){
+            const v=JSON.parse(record);
+            if(v&&v.version===2&&typeof v.advertising==='boolean'&&typeof v.analytics==='boolean'&&Number.isFinite(v.updatedAt)&&v.updatedAt>=0&&v.updatedAt<=f.at&&f.at-v.updatedAt<180*24*60*60*1000)return !v.advertising&&!v.analytics;
+           }
+           return f.storage['cookie-consent']==='essential';
+          }
+          function storageReplay(c,final,miss,lost){
+           chronological(c.storageEvents,'Complete CDP storage tape');
+           const areas={local:new Map(),session:new Map()},dailyValues=[];
+           for(const e of c.storageEvents){
+            assert(e.storageId&&typeof e.storageId.isLocalStorage==='boolean');
+            if(Object.hasOwn(e.storageId,'securityOrigin'))eq(new URL(e.storageId.securityOrigin).origin,report.base,'Actual CDP origin');
+            const local=e.storageId.isLocalStorage,area=local?areas.local:areas.session;
+            if(e.type==='domStorageItemsCleared')area.clear();
+            else{
+             assert(typeof e.key==='string');
+             if(e.type==='domStorageItemAdded'){assert(!area.has(e.key));assert(typeof e.newValue==='string');area.set(e.key,e.newValue);}
+             else if(e.type==='domStorageItemUpdated'){assert(area.has(e.key));eq(area.get(e.key),e.oldValue,'Literal previous CDP value');assert(typeof e.newValue==='string');area.set(e.key,e.newValue);}
+             else if(e.type==='domStorageItemRemoved'){assert(area.has(e.key));area.delete(e.key);}
+             else assert.fail('Unknown CDP storage event');
+             if(local&&/^missing-xi-daily-/.test(e.key)){assert(['domStorageItemAdded','domStorageItemUpdated'].includes(e.type),'No native Daily removal');dailyValues.push({key:e.key,value:e.newValue});}
+            }
+           }
+           eq(Object.fromEntries(areas.local),final.storage,'Every actual local CDP event replays to complete final local bytes');
+           eq(Object.fromEntries(areas.session),final.sessionStorage,'Every actual session CDP event replays to complete final session bytes');
+           const key=miss.dailyKeys[0];assert(key);
+           const values=[{key,value:miss.storage[key]}];if(lost)values.push({key,value:lost.storage[key]});
+           eq(dailyValues,values,'Only the actual miss and intentional Daily forfeit change persisted Daily values');
+          }
+          const EVENT_TYPES=['pointerdown','pointerup','click','keydown','keyup','beforeinput','input','wheel','scroll'];
+          function eventTape(c){
+           chronological(c.events,'Complete passive native event tape');
+           for(const e of c.events){
+            keys(e,['at','type','trusted','pointerType','key','data','inputType','deltaX','deltaY','deltaMode','targetTag','targetRole','targetText','targetValue','targetLabel','inDialog','dialogOwner'],'Complete passive event body');
+            assert(EVENT_TYPES.includes(e.type));eq(typeof e.trusted,'boolean');eq(typeof e.inDialog,'boolean');
+            for(const k of['pointerType','key','data','inputType','targetTag','targetRole','targetText','targetLabel','dialogOwner'])assert(e[k]===null||typeof e[k]==='string','Actual event '+k);
+            assert(e.targetValue===null||typeof e.targetValue==='string'||(e.targetTag==='LI'&&Number.isFinite(e.targetValue)),'Actual event targetValue');
+            for(const k of['deltaX','deltaY','deltaMode'])assert(e[k]===null||Number.isFinite(e[k]),'Actual event '+k);
+           }
+          }
+          function transport(c,baseline,yesBefore,settled){
+           chronological(c.navigations,'Complete main navigation tape');assert(c.navigations.length>=1);
+           for(const n of c.navigations){eq(n.url,URL_ACTIVE);assert(n.at<=baseline.firstFrameAt);}
+           chronological(c.firstPartyReads,'Complete local read tape');
+           assert(c.firstPartyReads.some(r=>r.url===URL_ACTIVE&&r.method==='GET'&&r.at<=baseline.at),'Actual route document read before baseline');
+           for(const r of c.firstPartyReads){eq(new URL(r.url).origin,report.base);assert(['GET','HEAD'].includes(r.method));eq(r.outcome,'continued-local-read');}
+           chronological(c.webSockets,'Complete WebSocket refusal tape');for(const ws of c.webSockets)eq(ws.outcome,'refused-closed');
+           chronological(c.requests,'Complete foreign interception tape');
+           const inputEvents=c.events.filter(e=>e.type==='input'&&e.trusted&&e.targetRole==='combobox'&&typeof e.targetValue==='string');
+           const reads=[],posts=[];
+           for(const r of c.requests){
+            const u=new URL(r.url);eq(r.path,u.pathname);eq(r.query,[...u.searchParams]);eq(u.protocol,'https:');eq([u.username,u.password,u.port,u.hash],['','','','']);
+            finite(r.finishedAt,'Settled foreign request');assert(r.finishedAt>=r.at);
+            assert(r.headers&&typeof r.headers==='object'&&!Array.isArray(r.headers));assert(!r.error);
+            for(const[k,v]of Object.entries(r.headers)){
+             if(['authorization','apikey','cookie'].includes(k)){keys(v,['redacted','bytes','sha256'],'Secret header digest only');eq(v.redacted,true);assert(Number.isInteger(v.bytes)&&v.bytes>=0&&/^[0-9a-f]{64}$/.test(v.sha256));}
+             else eq(typeof v,'string');
+            }
+            const supabase=u.hostname==='flawuiqbvjobmkfkauhw.supabase.co',search=supabase&&u.pathname==='/rest/v1/player_market_values',completion=supabase&&u.pathname==='/rest/v1/game_completions',q=Object.fromEntries(u.searchParams);
+            if((search||completion)&&r.method==='OPTIONS'){
+             eq(r.outcome,search?'search-cors':'completion-cors');eq(r.body,null);eq(r.headers['access-control-request-method'],search?'GET':'POST');
+            }else if(search&&r.method==='GET'){
+             eq(r.outcome,'empty-search-fulfilled');eq(r.body,null);eq(r.response,[]);
+             const direct=Object.hasOwn(q,'name_folded');
+             eq(new Set(u.searchParams.keys()).size,r.query.length,'Every search key unique');
+             eq(Object.keys(q).sort(),direct?['limit','name_folded','order','select']:['limit','order','select']);
+             eq([q.select,q.order,q.limit],['player_name,market_value_usd,year,club,nationality,position,age,person_key','market_value_usd.desc,year.desc,player_name.asc',direct?'200':'1000']);
+             eq([r.headers.range??null,r.headers['range-unit']??null,r.headers['accept-profile']],[null,null,'public']);
+             const observed=inputEvents.filter(e=>e.at<=r.at).map(e=>fold(e.targetValue));
+             if(direct)assert(observed.some(n=>n.length>=2&&q.name_folded==='ilike.%'+n+'%'),'Exact already observed trusted public input predicate');
+             else assert(observed.some(n=>n.length>=2&&n.length<=24),'Actual previously observed eligible public input');
+             reads.push(r);
+            }else if(completion&&r.method==='POST'){
+             eq([c.scenario,r.outcome],['B','completion-aborted']);eq(r.query,[]);
+             const p=JSON.parse(r.body);keys(p,['game','player_name','score'],'Exact actual completion POST fields');eq(p,r.payload);
+             eq([p.game,p.score],['missing-xi',0]);assert(typeof p.player_name==='string'&&p.player_name.length);
+             assert(yesBefore&&settled&&r.at>=yesBefore.at&&r.finishedAt<=settled.at,'Only the intentional current Daily confirmation owns this completed abort');
+             posts.push(r);
+            }else{
+             eq([r.method,r.body,r.outcome],['GET',null,'known-foreign-refused']);
+             const fonts=(u.hostname==='fonts.googleapis.com'&&u.pathname==='/css2')||(u.hostname==='fonts.gstatic.com'&&u.pathname.startsWith('/s/'));
+             const flags=u.hostname==='flagcdn.com'&&/^\/w(?:20|40|80|160|320)\/(?:[a-z]{2}|gb-(?:eng|sct|wls|nir))\.png$/.test(u.pathname)&&u.search==='';
+             const live=supabase&&u.pathname==='/rest/v1/live_scores';
+             assert(fonts||flags||live||completion,'No unsupported foreign application endpoint');
+             eq(r.refusal,fonts?'known-font':flags?'known-flag':live?'known-live-score':'known-completion-history');
+             if(live){eq([q.select,q.order,q.limit],['*','start_at.asc','150']);const dates=u.searchParams.getAll('start_at');eq(dates.length,2);assert(dates.some(v=>v.startsWith('gte.'))&&dates.some(v=>v.startsWith('lte.'))&&[...u.searchParams.keys()].every(k=>['select','order','limit','start_at'].includes(k)));}
+             if(completion){eq(Object.keys(q).sort(),['limit','order','player_name','select']);eq([q.select,q.order,q.limit],['game,completed_on','completed_on.desc','500']);assert(q.player_name?.startsWith('eq.'));}
+            }
+           }
+           eq(posts.length,c.scenario==='A'?0:1,'Only genuine intentional Daily loss has a recorded aborted POST');
+           return{reads:reads.length,posts:posts.length};
+          }
+          function auditContext(c,width,height,scenario){
+           const id=width+'-'+scenario;
+           eq([c.id,c.scenario,c.width,c.height,c.status],[id,scenario,width,height,'passed']);
+           assert(!c.error&&!c.closeError);finite(c.closingAt,'Actual context closure');
+           for(const k of['errors','assetErrors','routeErrors'])eq(c[k],[],'No runtime or transport errors');
+           for(const k of['frames','actions','preparations','layouts','wheels','typings','observedClose','screenshots']){
+            assert(Array.isArray(c[k]));eq(new Set(c[k].map(r=>r.file)).size,c[k].length,k+' has no duplicate body');
+           }
+           eventTape(c);
+           const eventKeys=c.events.map(e=>JSON.stringify(e)),ownedEvents=new Set();
+           let eventCursor=0;
+           const eventsBetween=(events,before,after,label)=>{
+            assert(Array.isArray(events)&&events.length>0,label+' has actual native events');
+            assert(events.every(e=>e.at>=before.at&&e.at<=after.at),label+' actual event wall time is inside its frames');
+            const expected=events.map(e=>JSON.stringify(e));
+            const i=eventKeys.findIndex((key,i)=>i>=eventCursor&&key===expected[0]&&expected.every((s,j)=>eventKeys[i+j]===s));
+            assert(i>=0,label+' complete ordered contiguous event tape slice');
+            for(let j=i;j<i+events.length;j++)ownedEvents.add(j);
+            eventCursor=i+events.length;
+           };
+           const frames=[],actions=[],preparations=[],layouts=[],wheels=[],typings=[],observedClose=[],photos=[];
+           const consumed={frames:0,actions:0,preparations:0,layouts:0,wheels:0,typings:0,observedClose:0,screenshots:0};
+           const numbered=(part,i,name)=>id+'/'+part+'/'+String(i).padStart(3,'0')+'-'+name+'.json';
+           const take=(part,name,bodyList)=>{
+            const i=consumed[part]++,r=c[part][i];
+            assert(r,part+' missing '+name);
+            eq(r.file,numbered(part,i,name),part+' actual source order');
+            const value=json(r);bodyList.push(value);return{r,value};
+           };
+           const frame=(r,name)=>{
+            const actual=take('frames',name,frames);eq(r,actual.r,'Reference is the exact next full context frame');
+            const f=actual.value;frameDOM(f,width,height);
+            if(frames.length>1){eq(f.timeOrigin,frames[0].timeOrigin,'Same actual document throughout');assert(f.at>=frames.at(-2).at,'Full chronological native frame tape');}
+            return f;
+           };
+           let baseline=null;
+           const layout=(r,fileName,name,kind,actuation)=>{
+            const g=take('layouts',fileName,layouts);eq(r,g.r,'Exact measured layout reference');
+            eq([g.value.name,g.value.kind,g.value.usedForActuation,g.value.qualified],[name,kind,actuation,true]);
+            assert(geometry(g.value,width,height),'Whole visible, clipped, enabled, center-hit geometry '+name);
+            return g.value;
+           };
+           const prepare=(name,kind)=>{
+            const {value:p}=take('preparations',name,preparations);
+            eq([p.name,p.kind],[name,kind]);assert(typeof p.scope==='string'&&p.scope.length);
+            assert(Array.isArray(p.wheels)&&p.wheels.length<=17,'Actual bounded wheel preparation');
+            p.wheels.forEach((ref,i)=>{
+             const own=take('wheels',name,wheels);eq(ref,own.r,'Each actual wheel belongs to its exact preparation');
+             const w=own.value;eq(w.name,name);eq(w.deltaX,0);assert(Number.isInteger(w.deltaY)&&w.deltaY!==0);
+             const before=frame(w.before,name+'-wheel-'+i+'-before'),after=frame(w.after,name+'-wheel-'+i+'-after');
+             const g=w.geometryBefore;assert(!geometry(g,width,height),'Wheel only repairs actual unqualified geometry');geometry(w.geometryAfter,width,height);
+             assert(g.at<=before.at&&w.geometryAfter.at>=after.at);
+             const top=Math.max(g.chrome.top,...g.ancestors.filter(a=>a.cy).map(a=>a.y)),bottom=Math.min(height-g.chrome.bottom,...g.ancestors.filter(a=>a.cy).map(a=>a.bottom));
+             assert(g.rect.width>0&&g.rect.height>0&&g.rect.height<=bottom-top);
+             assert(g.rect.x>=0&&g.rect.right<=width&&g.ancestors.every(a=>!a.cx||(g.rect.x>=a.x&&g.rect.right<=a.right)));
+             eq(w.deltaY,g.rect.y<top?Math.floor(g.rect.y-top-8):g.rect.bottom>bottom?Math.ceil(g.rect.bottom-bottom+8):0,'Actual measured vertical clip remedy');
+             const container=g.ancestors.find(a=>a.scrollableY&&Math.min(a.bottom,height-g.chrome.bottom)>Math.max(a.y,g.chrome.top)),vt=container?Math.max(container.y,g.chrome.top,0):g.chrome.top,vb=container?Math.min(container.bottom,height-g.chrome.bottom):height-g.chrome.bottom;
+             eq(w.point,{x:container?Math.max(2,Math.min(width-2,(Math.max(0,container.x)+Math.min(width,container.right))/2)):width/2,y:(vt+vb)/2});
+             assert(w.point.x>=0&&w.point.x<=width&&w.point.y>=0&&w.point.y<=height);
+             eventsBetween(w.events,before,after,'Native wheel '+name);
+             const wheel=w.events.filter(e=>e.type==='wheel');
+             eq(wheel.length,1);eq([wheel[0].trusted,wheel[0].deltaMode,wheel[0].deltaX,wheel[0].deltaY],[true,0,0,w.deltaY]);
+             assert(Math.abs(w.geometryAfter.rect.y-g.rect.y)>.5||JSON.stringify(w.geometryAfter.ancestors.map(a=>a.scrollTop))!==JSON.stringify(g.ancestors.map(a=>a.scrollTop))||after.scroll.y!==before.scroll.y,'Actual wheel changed geometry or scroll');
+             if(baseline)stable(before,after,'Wheel holds current game');
+            });
+            return{ref:p.layout,value:layout(p.layout,name,name,kind,kind!=='display')};
+           };
+           const act=(name,kind,method)=>{
+            const a=take('actions',name,actions).value;eq([a.name,a.kind,a.method],[name,kind,method]);return a;
+           };
+           const mouse=(name,target,kind='business',tag='BUTTON')=>{
+            const prepared=prepare(name,kind),a=act(name,kind,'mouse'),g=layout(a.layout,name+'-click',name,kind,true);
+            eq([prepared.value.tag,prepared.value.text,prepared.value.label],[g.tag,g.text,g.label],'Same actual prepared and clicked target identity');
+            eq([g.tag,a.targetText],[tag,g.text]);if(target!==null)eq(a.targetText,target,'Exact public target '+name);
+            const before=frame(a.before,name+'-before'),after=frame(a.after,name+'-after');assert(g.at<=before.at);
+            eventsBetween(a.events,before,after,'Native mouse '+name);
+            const sequence=[];
+            for(const type of['pointerdown','pointerup','click']){
+             const rows=a.events.filter(e=>e.type===type);eq(rows.length,1,'Single actual '+type+' '+name);
+             const e=rows[0];sequence.push(a.events.indexOf(e));eq([e.trusted,e.targetTag,e.targetText,e.targetLabel],[true,tag,g.text,g.label]);
+             if(type!=='click'||e.pointerType!==null)eq(e.pointerType,'mouse','Actual Playwright mouse pointer type');
+             if(tag==='INPUT')eq(e.targetRole,'combobox','Actual focused autocomplete');
+            }
+            assert(sequence[0]<sequence[1]&&sequence[1]<sequence[2],'Pointer down/up/click chronology');
+            return{a,before,after};
+           };
+           const escape=()=>{
+            const name='startup-owned-help-escape',i=consumed.observedClose++,r=c.observedClose[i];eq(r.file,id+'/observed-close-'+i+'.json');
+            const close=json(r);observedClose.push(close);
+            eq([close.name,close.usedForActuation,close.geometry.tag,close.geometry.text],[name,false,'BUTTON','Close']);
+            eq(close.qualifiedForClick,geometry(close.geometry,width,height),'Close observation only, no actual click qualification credit');
+            const a=act(name,'startup','keyboard');eq([a.key,a.observedClose],['Escape',r]);
+            const before=frame(a.before,name+'-before'),after=frame(a.after,name+'-after');
+            eq([before.dialog.open,before.dialog.title,before.dialog.ownsFocus,before.focus.insideDialog],[true,'How to Play Missing XI',true,true]);
+            assert(before.dialog.labelledBy);eq(a.owner,before.dialog.labelledBy);
+            eventsBetween(a.events,before,after,'Native dialog-owned Escape');
+            const keys=a.events.filter(e=>e.type==='keydown');eq(keys.length,1);eq([keys[0].trusted,keys[0].key,keys[0].inDialog,keys[0].dialogOwner],[true,'Escape',true,a.owner]);
+            eq(after.dialog.open,false,'Actual help dismissal');
+           };
+           const cpNames=[],checkpoint=name=>{
+            assert(Object.hasOwn(c.checkpoints,name));cpNames.push(name);return frame(c.checkpoints[name],name);
+           };
+           const photo=(name,tag,target)=>{
+            const p=c.screenshots[consumed.screenshots++],prepared=prepare(name+'-photo','display');
+            eq(prepared.value.tag,tag);if(target!==null)eq(prepared.value.text,target);
+            eq([p.name,p.context,p.scenario,p.viewport,p.focusIdentityHeld,p.file],[name,id,scenario,{width,height},true,id+'-'+name+'.png']);
+            const bytes=ref(p);
+            assert(bytes.length>=33);eq(bytes.subarray(0,8),Buffer.from([137,80,78,71,13,10,26,10]));eq(bytes.readUInt32BE(8),13);
+            eq(bytes.toString('ascii',12,16),'IHDR');eq([bytes.readUInt32BE(16),bytes.readUInt32BE(20)],[width,height]);
+            const before=frame(p.before,name+'-photo-before'),after=frame(p.after,name+'-photo-after');
+            stable(before,after,'Viewport photograph holds game');eq(before.scroll,after.scroll,'Viewport photograph holds scroll');
+            photos.push(p);return{before,after};
+           };
+           const combobox=f=>{
+            assert(f.draft&&f.draft.listboxId&&f.focus.insideMain);
+            eq([f.focus.tag,f.focus.html],['INPUT',f.draft.html],'Actual focused combobox owner');
+           };
+           const key=(name,value)=>{
+            const prepared=prepare(name+'-input','keyboard'),a=act(name,'business','keyboard');
+            eq(a.key,value);eq(a.layout,prepared.ref);eq(prepared.value.tag,'INPUT');
+            const before=frame(a.before,name+'-before'),after=frame(a.after,name+'-after');combobox(before);eq(a.inputOwner,before.draft.listboxId);
+            eventsBetween(a.events,before,after,'Actual owned '+value+' '+name);
+            const down=a.events.filter(e=>e.type==='keydown');eq(down.length,1);eq([down[0].trusted,down[0].key,down[0].targetTag,down[0].targetRole],[true,value,'INPUT','combobox']);
+            eq(down[0].targetValue,before.draft.value,'Native key begins with actual draft value');
+            return{a,before,after};
+           };
+           const selectedRows=f=>f.options.filter(o=>o.selected==='true');
+           let arrowCount=0;
+           const nextActionName=()=>{
+            const r=c.actions[consumed.actions];return r?.file.slice(r.file.lastIndexOf('/')+1).replace(/^\d+-/,'').replace(/\.json$/,'');
+           };
+           const shownRow=f=>{
+            eq(f.lineup.view,'Lineup');eq(f.lineup.rows.length,11);
+            const blanks=f.lineup.rows.filter(row=>row.label?.startsWith('Missing player ('));
+            eq(blanks.length,1);eq(blanks[0].name,'Missing player');assert(blanks[0].position);
+            const row=f.lineup.rows.find(row=>!row.label&&row.name&&row.name.trim()!=='Missing player');
+            assert(row?.position&&row.name.trim().length,'Actual shown nonblank Starting lineup row');
+            return row;
+           };
+           const pick=(prefix,shown)=>{
+            const requested=shown.name.trim();
+            const focus=mouse(prefix+'-focus',null,'business','INPUT');combobox(focus.after);eq(shownRow(focus.before),shown);
+            const prepared=prepare(prefix+'-typing','typing');
+            const t=take('typings',prefix,typings),a=act(prefix+'-typing','business','typing');
+            eq([a.requested,a.typing,a.before,a.after,a.events],[requested,t.r,t.value.before,t.value.after,t.value.events]);
+            eq([t.value.name,t.value.requested,t.value.shownRow,t.value.layout,t.value.focusIdentityHeld],[prefix,requested,shown,prepared.ref,true]);
+            eq(prepared.value.tag,'INPUT');
+            const before=frame(a.before,prefix+'-type-before'),after=frame(a.after,prefix+'-type-after');
+            combobox(before);combobox(after);eq(before.draft.value,'');eq(after.draft.value,requested);
+            eq(after.draft.listboxId,before.draft.listboxId);
+            assert(after.options.some(o=>fold(o.name)===fold(requested)),'Actual local roster option for the shown name');
+            eventsBetween(a.events,before,after,'Native typing '+prefix);
+            // Playwright 1.64.1 uses press for US layout characters and insertText for others.
+            // Compare actual trusted input values and their complete tape, without an invented key triplet census.
+            const inputs=a.events.filter(e=>e.type==='input');
+            assert(inputs.length>0);
+            let length=0;
+            for(const e of inputs){eq([e.trusted,e.targetTag,e.targetRole],[true,'INPUT','combobox']);assert(typeof e.targetValue==='string'&&e.targetValue.length>=length&&requested.startsWith(e.targetValue),'Trusted typing progresses through actual requested spelling');length=e.targetValue.length;}
+            eq(inputs.at(-1).targetValue,requested,'Last actual trusted input has the complete requested spelling');
+            let localArrows=0;
+            while(nextActionName()===prefix+'-arrow-'+localArrows){
+             assert(localArrows<63,'Bounded actual public ArrowDown path');
+             const step=key(prefix+'-arrow-'+localArrows,'ArrowDown');
+             eq(step.after.draft.value,requested);assert(selectedRows(step.after).length<=1);
+             localArrows++;arrowCount++;
+            }
+            const option=prepare(prefix+'-highlighted-option','keyboard-option'),enter=key(prefix+'-enter','Enter');
+            const selected=selectedRows(enter.before);eq(selected.length,1);
+            const selectedName=selected[0].name.trim();eq(fold(selectedName),fold(requested));
+            eq([enter.a.selectedName,enter.a.requested,enter.a.shownRow,enter.a.highlightedOption,enter.a.optionLayout],[selectedName,requested,shown,selected[0],option.ref]);
+            eq([option.value.tag,option.value.text],['BUTTON',selectedName]);
+            eq([enter.after.draft.value,enter.after.controls['Lock in guess'].present,enter.after.controls['Lock in guess'].disabled,enter.after.options.length],[selectedName,true,false,0],'Actual Enter commits highlighted shown name');
+            return{selectedName,after:enter.after};
+           };
+           const playing=(s,mode,label)=>eq([s.mode,s.phase,s.result],[mode,'playing',null],label);
+           const confirmation=s=>eq([s.controls['Give up'].present,s.controls['Yes, reveal it'].present,s.controls['Keep playing'].present],[false,true,true],'Actual current confirmation exposed');
+           const noOld=s=>eq([s.controls['Give up'].present,s.controls['Yes, reveal it'].present,s.controls['Keep playing'].present],[true,false,false],'Actual idle Give up and no previous confirmation');
+           const mode=(name,destination)=>{
+            const step=mouse(name,destination==='daily'?'📅 Daily':'∞ Unlimited');
+            eq([step.after.mode,step.after.dialog.open],[destination,false]);
+            return step;
+           };
+           const arm=(name,mode)=>{
+            const step=mouse(name,'Give up');playing(step.before,mode,name+' before');noOld(step.before);
+            playing(step.after,mode,name+' after');confirmation(step.after);return step;
+           };
+           const cancel=(name,mode,before)=>{
+            const step=mouse(name,'Keep playing');playing(step.before,mode,name+' before');confirmation(step.before);
+            playing(step.after,mode,name+' after');noOld(step.after);
+            progress(before,step.before,name+' pre-action checkpoint');progress(before,step.after,name+' preserves immediate progress');return step;
+           };
+           const lose=(name,mode,grid)=>{
+            const step=mouse(name,'Yes, reveal it');playing(step.before,mode,name+' before');confirmation(step.before);
+            const f=step.after;eq([f.mode,f.phase,f.result?.heading],[mode,'revealed','Missed it this time.']);
+            eq(f.result.stats,[{label:'Score',value:'0'}]);eq(f.result.emojiGrid.split('\n')[1],grid);
+            return step;
+           };
+           const savedHeld=(a,b,label)=>{
+            eq(a.storage,b.storage,label+' every saved local byte');eq(a.dailyKeys,b.dailyKeys);eq(a.dailySave,b.dailySave,label+' exact persisted Daily log');
+           };
+          
+           const dailyLossHeld=(a,b,label)=>{eq([a.mode,a.phase,a.result?.heading,a.result?.stats,a.result?.emojiGrid], [b.mode,b.phase,b.result?.heading,b.result?.stats,b.result?.emojiGrid],label+' genuine Daily result');savedHeld(a,b,label);};
+          
+           escape();
+           const reject=mouse('startup-reject-all','Reject all','startup');
+           eq([reject.before.cookieChoices,reject.after.cookieChoices],[true,false]);
+           assert(rejectedConsent(reject.after),'Actual rejected optional cookie consent persisted');
+           baseline=checkpoint('baseline');
+           eq(c.baseline,c.checkpoints.baseline);ref(c.baseline);
+           playing(baseline,'daily','Actual fresh Daily baseline');noOld(baseline);
+           eq([baseline.dialog.open,baseline.cookieChoices,baseline.dailyKeys,baseline.dailySave],[false,false,[],null]);
+           assert(rejectedConsent(baseline)&&!Object.keys(baseline.storage).some(k=>k.startsWith('sb-')&&k.endsWith('-auth-token')),'Actual signed out baseline');
+          
+           const lineup=mouse('show-public-lineup','Lineup'),shown=shownRow(lineup.after);
+           const picked=pick('actual-daily-miss',shown),locked=mouse('actual-daily-miss-lock','Lock in guess'),miss=locked.after;
+           eq([locked.before.draft.value,locked.before.controls['Lock in guess'].disabled],[picked.selectedName,false]);
+           playing(miss,'daily','Actual one Daily miss');eq(miss.draft.value,'');
+           eq(miss.dailyKeys.length,1);eq([miss.dailySave?.guesses,miss.dailySave?.gameStatus],[[{t:'miss',name:picked.selectedName}],'playing']);
+           assert(miss.messages.includes('Already tried: '+picked.selectedName)&&miss.messages.includes('Guess 2 of 3')&&miss.messages.some(t=>t.startsWith('💡')));
+           let loss,settled;
+           const wantedSettlements=[];
+           if(scenario==='A'){
+            arm('A-arm-daily','daily');
+            const switched=mode('A-enter-unlimited','unlimited');
+            confirmation(switched.before);eq(switched.before.mode,'daily');
+            playing(switched.after,'unlimited','New Unlimited remains playing');noOld(switched.after);
+            savedHeld(switched.after,miss,'Abandoned Daily confirmation');eq(switched.after.sessionStorage,miss.sessionStorage);eq(switched.after.draft.value,'');
+            assert(switched.after.messages.includes('Guess 1 of 3'));
+            const unlimited=checkpoint('A-new-unlimited');playing(unlimited,'unlimited','New Unlimited checkpoint');noOld(unlimited);savedHeld(unlimited,miss,'New Unlimited checkpoint');eq(unlimited.draft.value,'');
+            const png=photo('new-unlimited-old-confirmation-gone','BUTTON','Give up');
+            playing(png.before,'unlimited','Viewport actual fresh Unlimited');noOld(png.before);savedHeld(png.before,miss,'Unlimited viewport holds Daily');
+            arm('A-arm-current-unlimited','unlimited');
+            cancel('A-keep-current-unlimited','unlimited',checkpoint('A-before-current-cancel'));
+            arm('A-rearm-current-unlimited','unlimited');
+            loss=lose('A-current-unlimited-yes','unlimited','⬜⬜⬜');
+            savedHeld(loss.after,miss,'Ordinary Unlimited forfeit holds Daily');
+            wantedSettlements.push({name:'A-intentional-current-unlimited-forfeit',mode:'unlimited',outcome:'lost',score:0,frame:loss.a.after});
+            const next=mouse('A-new-lineup','New Lineup');
+            eq([next.before.mode,next.before.phase,next.before.controls['New Lineup'].present],['unlimited','revealed',true]);
+            playing(next.after,'unlimited','Actual fresh Unlimited after New Lineup');noOld(next.after);eq(next.after.draft.value,'');
+            assert(next.after.messages.includes('Guess 1 of 3'));savedHeld(next.after,miss,'New Lineup holds Daily');
+            const fresh=checkpoint('A-final-playing');playing(fresh,'unlimited','Fresh round checkpoint');noOld(fresh);savedHeld(fresh,miss,'Fresh round checkpoint');eq(fresh.draft.value,'');
+           }else{
+            const entered=mode('B-enter-unlimited','unlimited');playing(entered.after,'unlimited','Real Unlimited entry');noOld(entered.after);
+            arm('B-arm-unlimited','unlimited');
+            const returned=mode('B-return-daily','daily');confirmation(returned.before);eq(returned.before.mode,'unlimited');
+            playing(returned.after,'daily','Unfinished Daily remains playing');noOld(returned.after);
+            savedHeld(returned.after,miss,'Abandoned Unlimited confirmation');eq(returned.after.match,miss.match);
+            const unfinished=checkpoint('B-returned-daily');playing(unfinished,'daily','Returned Daily checkpoint');noOld(unfinished);savedHeld(unfinished,miss,'Returned Daily checkpoint');eq(unfinished.match,miss.match);
+            const png=photo('unfinished-daily-old-confirmation-gone','BUTTON','Give up');
+            playing(png.before,'daily','Viewport unfinished Daily');noOld(png.before);savedHeld(png.before,miss,'Returned Daily viewport');
+            arm('B-arm-current-daily','daily');
+            const same=mode('B-same-daily','daily');confirmation(same.after);savedHeld(same.after,miss,'Same-mode confirmation');
+            const pitch=mouse('B-current-pitch-view','Pitch');eq(pitch.after.lineup.view,'Pitch');confirmation(pitch.after);
+            const listed=mouse('B-current-lineup-view','Lineup');const shownAgain=shownRow(listed.after);confirmation(listed.after);
+            const edited=pick('B-current-draft-edit',shownAgain);confirmation(edited.after);savedHeld(edited.after,miss,'Ordinary draft editing while armed');
+            cancel('B-keep-current-daily','daily',checkpoint('B-before-current-cancel'));
+            arm('B-rearm-current-daily','daily');
+            loss=lose('B-current-daily-yes','daily','🟥⬜⬜');
+            eq(loss.after.dailyKeys,miss.dailyKeys);
+            eq([loss.after.dailySave?.guesses,loss.after.dailySave?.gameStatus],[[{t:'miss',name:picked.selectedName},{t:'give'}],'lost']);
+            wantedSettlements.push({name:'B-intentional-current-daily-forfeit',mode:'daily',outcome:'lost',score:0,frame:loss.a.after});
+            settled=checkpoint('B-legitimate-daily-loss');dailyLossHeld(settled,loss.after,'Settled intentional Daily loss');
+            const lostPhoto=photo('legitimate-current-daily-loss','DIV',null);dailyLossHeld(lostPhoto.before,loss.after,'Viewport intentional Daily result');
+           }
+           const final=checkpoint('final');eq(c.final,c.checkpoints.final);ref(c.final);
+           if(scenario==='A'){playing(final,'unlimited','Actual final fresh round');noOld(final);savedHeld(final,miss,'Actual final fresh round');eq(final.draft.value,'');}
+           else dailyLossHeld(final,loss.after,'Actual final intentional Daily loss');
+           eq(c.settlements,wantedSettlements,'Exactly the genuine intentional forfeit has an actual settlement');
+           for(const item of c.settlements)ref(item.frame);
+           eq(Object.keys(c.checkpoints),cpNames,'Every actual checkpoint accounted in source order');
+           for(const[k,count]of Object.entries(consumed))eq(count,c[k].length,'Every actual '+k+' body accounted in source order');
+           assert(c.closingAt>=final.at,'Final full frame precedes context closure');
+           for(let i=0;i<c.events.length;i++)if(c.events[i].trusted&&c.events[i].type!=='scroll')assert(ownedEvents.has(i),'Every trusted actuation belongs to an actual operation receipt');
+           const firstReveal=frames.findIndex(f=>f.phase==='revealed');assert(firstReveal>=0);
+           eq(c.frames[firstReveal],loss.a.after,'Only the intentional current confirmation produces a captured reveal');
+           storageReplay(c,final,miss,scenario==='B'?loss.after:null);
+           const requests=transport(c,{at:baseline.at,firstFrameAt:frames[0].at},loss.before,settled);
+          
+           const census={
+            businessMouseClicks:actions.filter(a=>a.kind==='business'&&a.method==='mouse').length,
+            startupMouseClicks:actions.filter(a=>a.kind==='startup'&&a.method==='mouse').length,
+            startupEscapeKeys:actions.filter(a=>a.kind==='startup'&&a.method==='keyboard'&&a.key==='Escape').length,
+            businessArrowKeys:arrowCount,businessEnterKeys:actions.filter(a=>a.kind==='business'&&a.method==='keyboard'&&a.key==='Enter').length,
+            typings:typings.length,terminalResults:c.settlements.length,completionPosts:requests.posts,screenshots:photos.length,
+            frames:frames.length,actions:actions.length,preparations:preparations.length,layouts:layouts.length,wheels:wheels.length,navigations:c.navigations.length,searchReads:requests.reads
+           };
+           eq([census.businessMouseClicks,census.startupMouseClicks,census.startupEscapeKeys,census.typings,census.businessEnterKeys,census.terminalResults,census.completionPosts,census.screenshots],
+            scenario==='A'?[10,1,1,1,1,1,0,1]:[14,1,1,2,2,1,1,2]);
+           eq([census.frames,census.actions,census.preparations,census.layouts,observedClose.length],[
+            (scenario==='A'?35:49)+2*arrowCount+2*wheels.length,(scenario==='A'?14:20)+arrowCount,
+            (scenario==='A'?15:23)+arrowCount,(scenario==='A'?26:38)+arrowCount,1]);
+           eq(c.census,census,'Every actual context count independently derived');
+           const projection={id:c.id,scenario:c.scenario,width:c.width,height:c.height,status:c.status,events:c.events,storageEvents:c.storageEvents,navigations:c.navigations,requests:c.requests,firstPartyReads:c.firstPartyReads,webSockets:c.webSockets,frames,actions,preparations,layouts,wheels,typings,observedClose,settlements:c.settlements,checkpoints:c.checkpoints,census:c.census,errors:c.errors,assetErrors:c.assetErrors,routeErrors:c.routeErrors};
+           return{projection,census,photos,observedClose:observedClose.length,localReads:c.firstPartyReads.length,foreignRequests:c.requests.length,storageEvents:c.storageEvents.length,nativeEvents:c.events.length};
+          }
+          
+          const completed=[];
+          eq(report.journeys.length,3);eq(raw.contexts.length,6);
+          for(let j=0;j<WIDTHS.length;j++){
+           const[width,height]=WIDTHS[j],journey=report.journeys[j];
+           eq([journey.width,journey.height,journey.status],[width,height,'passed']);assert(!journey.error);eq(journey.contexts.length,2);
+           for(const [i,scenario] of ['A','B'].entries()){
+            const actual=auditContext(journey.contexts[i],width,height,scenario);
+            eq(raw.contexts[completed.length],actual.projection,'Complete RAW context equals every actual body, scalar and unstripped tape');
+            completed.push(actual);
+           }
+          }
+          const photos=completed.flatMap(c=>c.photos);
+          eq(new Set(report.screenshots.map(r=>r.file)).size,report.screenshots.length,'No duplicate global viewport PNG');
+          for(const r of report.screenshots)ref(r);
+          const byFile=(a,b)=>a.file.localeCompare(b.file);
+          eq([...report.screenshots].sort(byFile),[...photos].sort(byFile),'Complete global screenshot tuples, without inventing cross-journey scheduling order');
+          const sum=k=>completed.reduce((n,c)=>n+c.census[k],0),measured=k=>completed.reduce((n,c)=>n+c[k],0);
+          const census={journeys:3,contexts:6,businessMouseClicks:sum('businessMouseClicks'),startupMouseClicks:sum('startupMouseClicks'),startupEscapeKeys:sum('startupEscapeKeys'),typings:sum('typings'),businessArrowKeys:sum('businessArrowKeys'),businessEnterKeys:sum('businessEnterKeys'),terminalResults:sum('terminalResults'),completionPosts:sum('completionPosts'),screenshots:sum('screenshots'),frames:sum('frames'),actions:sum('actions'),preparations:sum('preparations'),layouts:sum('layouts'),wheels:sum('wheels'),navigations:sum('navigations'),searchReads:sum('searchReads')};
+          eq([census.businessMouseClicks,census.startupMouseClicks,census.startupEscapeKeys,census.typings,census.businessEnterKeys,census.terminalResults,census.completionPosts,census.screenshots,measured('observedClose')],[72,6,6,9,9,6,3,9,6]);
+          eq([census.frames,census.actions],[252+2*census.businessArrowKeys+2*census.wheels,102+census.businessArrowKeys]);
+          eq(report.census,census,'Complete actual report census reconstructed from independent context evidence');
+          for(const file of bodyMap.keys())assert(referenced.has(file),'Every actual evidence body has a typed verified reference '+file);
+          const output={
+           status:'passed',route:ROUTE,page:PAGE,helper:HELPER,
+           qualifiedInput:{head:QUALIFIED_HEAD,tree:QUALIFIED_TREE,unitRAWBytes:Number(UNIT_BYTES),unitRAWSHA256:UNIT_SHA,freshUnitRAWByteEqual:true},
+           currentSource:{head:fullHead,tree:fullTree},
+           census:{journeys:3,contexts:6,terminalResults:6,businessMouseClicks:72,startupMouseClicks:6,startupEscapeKeys:6,typings:9,businessEnterKeys:9,completionAttempts:3,viewportPNGs:9,distBodies:850,installedVersions:521,sourceBodies:report.sourceBefore.length},
+           measured:{businessArrowKeys:census.businessArrowKeys,frames:census.frames,actions:census.actions,preparations:census.preparations,layouts:census.layouts,wheels:census.wheels,navigations:census.navigations,searchReads:census.searchReads,firstPartyReads:measured('localReads'),foreignRequests:measured('foreignRequests'),storageEvents:measured('storageEvents'),nativeEvents:measured('nativeEvents'),observedClose:measured('observedClose'),verifiedReferenceOccurrences:referenceOccurrences,uniqueVerifiedBodies:bodyMap.size,bodyBytes},
+           evidence:{report:bodyMap.get('report.json'),raw:report.raw,qualifiedInput:report.qualifiedInput,manifest:{file:'body-manifest.json',bytes:manifestBytes.length,sha256:sha(manifestBytes)}},
+           holds:{source:true,scopedSourceRows:scoped.length,cleanScopedSourceRows:scoped.length-1,dist:true,index:true,locks:true,installed521:true,offlineZero:true},
+           boundaries:report.limits.concat(['Complete literal native RAW and every file body are retained. The outer checks trusted actual input values without treating Unicode text insertion as physical key triplets.',
+           'Native CDP proves persisted changed values and final local/session storage; identical-value API writes are not observable here.',
+           'Public blank and visible lineup rows are the only identity inputs. Same-content lineups are allowed; no hidden candidate, generator or RNG attribution.',
+           'Actual viewport PNG bytes and headers are admitted; visual review is separate. Qualified fixed packet custody and product source join are separate full workflow gates.'])
+          };
+          process.stdout.write(JSON.stringify(output,null,2)+'\n');
+          MISSING_XI_NATIVE_OUTER
+          test "$(git hash-object "$out/native-admission-script.mjs")" = "$MISSING_XI_NATIVE_OUTER_BLOB"
+          test -z "$(git ls-files -- "$out/native-admission-script.mjs")"
+          export MISSING_XI_CONFIRMATION_BROWSER_OUT="$PWD/$out/browser"
+          export MISSING_XI_CONFIRMATION_UNIT_RAW="$PWD/$out/raw.json"
+          export MISSING_XI_CONFIRMATION_FIXED_REFERENCE="$PWD/$out/fixed-reference"
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          node scripts/qa/playMissingXiConfirmationOwnership.mjs 2>&1 | tee "$out/browser.log"
+          node "$out/native-admission-script.mjs" "$out/browser" > "$out/native-admission.json" 2> "$out/native-admission.log" || { cat "$out/native-admission.log"; exit 1; }
+      - name: Bind actual unit native reader cap and retained control evidence
+        run: |
+          set -euo pipefail
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          import {createHash} from 'node:crypto';
+          const out='missing-xi-confirmation-ownership-qualified',env=process.env,read=file=>JSON.parse(fs.readFileSync(out+'/'+file));
+          const native=read('native-admission.json'),unit=read('fixed-admission.json'),source=read('source-join.json'),custody=read('packet-custody.json'),raw=read('fixed-raw-join.json');
+          assert.equal(source.status,'passed');assert.equal(source.head,env.GITHUB_SHA);assert.deepEqual([source.baseScopedRows,source.trackedRows,source.sourceRows,source.cleanSourceRows,source.rootConfigurations.length],[4658,5783,4660,4659,11]);
+          assert.deepEqual([raw.status,raw.bytes,raw.sha256,raw.fixedHead,raw.freshUnitRAWByteEqual],['passed',Number(env.MISSING_XI_FIXED_RAW_BYTES),env.MISSING_XI_FIXED_RAW_SHA256,env.MISSING_XI_FIXED_HEAD,true]);
+          assert.deepEqual([unit.status,unit.actualCases,unit.actualPasses,unit.actualFailures,unit.rawFrames,unit.actionJournalEntries,unit.priorRAW],['fixed-eight-cases-passed-two-literal-whole-preserves',8,8,0,62,44,false]);
+          assert.deepEqual(unit.wholePreservedCases.map(row=>[row.key,row.literalBytesEqualOriginal]),[['currentRound',true],['normalConfirmation',true]]);
+          assert.equal(custody.status,'passed');assert.equal(custody.controlsRerun,false);assert.equal(custody.controlsChecks.status,'passed');
+          const nativeChecks=(()=>{
+            const keys=(object,expected)=>assert.deepEqual(Object.keys(object).sort(),[...expected].sort());
+            keys(native,['status','route','page','helper','qualifiedInput','currentSource','census','measured','evidence','holds','boundaries']);
+            assert.deepEqual([native.status,native.route,native.page,native.helper],['passed','/missing-xi',env.MISSING_XI_CONFIRMATION_PAGE_BLOB,env.MISSING_XI_NATIVE_HELPER_BLOB]);
+            assert.equal(env.MISSING_XI_NATIVE_OUTER_BLOB,'0d0cfece2e463b305e4d1937e73b6dd14b761bf4');
+            assert.deepEqual(native.currentSource,{head:source.head,tree:source.tree});
+            assert.deepEqual(native.qualifiedInput,{head:custody.fixed.head,tree:custody.fixed.tree,unitRAWBytes:raw.bytes,unitRAWSHA256:raw.sha256,freshUnitRAWByteEqual:true});
+            assert.equal(raw.freshUnitRAWByteEqual,true);
+            assert.notEqual(native.currentSource.head,native.qualifiedInput.head);
+            assert.notEqual(native.currentSource.tree,native.qualifiedInput.tree);
+            assert.deepEqual(native.census,{
+              journeys:3,contexts:6,terminalResults:6,businessMouseClicks:72,startupMouseClicks:6,startupEscapeKeys:6,
+              typings:9,businessEnterKeys:9,completionAttempts:3,viewportPNGs:9,distBodies:850,installedVersions:521,sourceBodies:5783
+            });
+            assert.equal(native.census.sourceBodies,source.trackedRows);
+            assert.deepEqual(native.holds,{source:true,scopedSourceRows:source.sourceRows,cleanScopedSourceRows:source.cleanSourceRows,dist:true,index:true,locks:true,installed521:true,offlineZero:true});
+            const measured=native.measured;
+            keys(measured,['businessArrowKeys','frames','actions','preparations','layouts','wheels','navigations','searchReads','firstPartyReads','foreignRequests','storageEvents','nativeEvents','observedClose','verifiedReferenceOccurrences','uniqueVerifiedBodies','bodyBytes']);
+            for(const [key,value] of Object.entries(measured))assert(Number.isSafeInteger(value)&&value>=0,key);
+            const arrows=measured.businessArrowKeys,wheels=measured.wheels;
+            assert(arrows<=63*native.census.typings);
+            assert.deepEqual([measured.frames,measured.actions,measured.preparations,measured.layouts,measured.observedClose],[252+2*arrows+2*wheels,102+arrows,114+arrows,192+arrows,6]);
+            assert(measured.navigations>=native.census.contexts&&measured.firstPartyReads>=native.census.contexts);
+            assert(measured.foreignRequests>=measured.searchReads+native.census.completionAttempts);
+            assert(measured.verifiedReferenceOccurrences>=measured.uniqueVerifiedBodies&&measured.uniqueVerifiedBodies>0);
+            keys(native.evidence,['report','raw','qualifiedInput','manifest']);
+            const ref=(key,file)=>{
+              const bytes=fs.readFileSync(out+'/browser/'+file),tuple={file,bytes:bytes.length,sha256:createHash('sha256').update(bytes).digest('hex')};
+              assert.deepEqual(native.evidence[key],tuple,key+' actual outer-verified body');
+              assert(bytes.length>0);
+              return bytes;
+            };
+            const report=JSON.parse(ref('report','report.json')),manifest=JSON.parse(ref('manifest','body-manifest.json'));
+            const binding=JSON.parse(ref('qualifiedInput','qualified-input-binding.json'));
+            ref('raw','raw.json');
+            assert.deepEqual([report.status,report.route,report.page,report.helper],[native.status,native.route,native.page,native.helper]);
+            assert.deepEqual(report.raw,native.evidence.raw);
+            assert.deepEqual(report.qualifiedInput,native.evidence.qualifiedInput);
+            const {scope,...bindings}=binding;
+            assert(typeof scope==='string'&&scope.length>0);
+            assert.deepEqual(bindings,{
+              qualifiedSourceHead:custody.fixed.head,qualifiedSourceTree:custody.fixed.tree,page:native.page,
+              unitRAWBytes:raw.bytes,unitRAWSHA256:raw.sha256,freshUnitRAWByteEqual:true,currentHead:source.head,currentTree:source.tree
+            });
+            assert.deepEqual([manifest.version,manifest.filesCount,manifest.files.length,manifest.bodyBytes],[1,measured.uniqueVerifiedBodies,measured.uniqueVerifiedBodies,measured.bodyBytes]);
+            assert.equal(manifest.files.reduce((sum,entry)=>sum+entry.bytes,0),manifest.bodyBytes);
+            for(const key of ['report','raw','qualifiedInput']){
+              const actual=native.evidence[key],matching=manifest.files.filter(entry=>entry.file===actual.file);
+              assert.deepEqual(matching,[actual]);
+            }
+            const {journeys,contexts,terminalResults,businessMouseClicks,startupMouseClicks,startupEscapeKeys,typings,businessEnterKeys,completionAttempts,viewportPNGs}=native.census;
+            assert.deepEqual(report.census,{
+              journeys,contexts,terminalResults,businessMouseClicks,startupMouseClicks,startupEscapeKeys,typings,businessEnterKeys,
+              completionPosts:completionAttempts,screenshots:viewportPNGs,businessArrowKeys:arrows,wheels,frames:measured.frames,
+              actions:measured.actions,preparations:measured.preparations,layouts:measured.layouts,navigations:measured.navigations,searchReads:measured.searchReads
+            });
+            assert.equal(report.journeys.length,journeys);assert.equal(report.screenshots.length,viewportPNGs);
+            assert.deepEqual(report.sourceBefore,read('tracked-before.json'));
+            assert.deepEqual(report.distBefore,read('dist-before.json'));
+            assert.deepEqual(report.installedBefore,read('installed-before.json'));
+            assert(Array.isArray(native.boundaries)&&native.boundaries.length>0&&native.boundaries.every(value=>typeof value==='string'&&value.length>0));
+            return{status:'passed',journeys,contexts,terminalResults,viewportPNGs};
+          })();
+          assert.equal(nativeChecks.status,'passed');
+          const readers=fs.readFileSync(out+'/readers.log','utf8'),wanted='simAdsense,simBrand,simHeadTags,simHiddenPages,simHubs,simIndexNow,simIndexing,simInternalLinks,simNoRivalNames,simPrerender,simPrerenderBoot,simRetiredRoutes,simSchema,simSitemap,simSnapshotAssets,simSiteSearch,simGuideHeadings,simSeoMetaSplit,simHomeCopy,simHarnessAnchors'.split(',').map(name=>name+'.mjs').sort(),actual=[...readers.matchAll(/^\s+PASS\s+(sim[A-Za-z0-9]+\.mjs)/gm)].map(match=>match[1]).sort();assert.deepEqual(actual,wanted);assert(!/^\s+FAIL\s+/m.test(readers));
+          const weight=fs.readFileSync(out+'/weight.log','utf8'),caps=[...weight.matchAll(/^\s+(\/\S*)\s+\d+K gz over\s+\d+ files \(budget (\d+)K, [\d.]+K to the tenth\)/gm)].map(match=>[match[1],Number(match[2])]);assert.deepEqual(caps,[['/',245],['/club-manager',648],['/soccer-career',840],['/stadium-tycoon',305],['/wonderkid-factory',278],['/minefield',295],['/footle',354],['/nfl-my-career',499],['/front-office',390],['/soccer-grid',320],['/leaderboard',266],['/manager-hot-seat',672],['/deadline-day',680],['/transfer-path',381],['/nba-front-office',397],['/nhl-front-office',379]]);assert(weight.includes('sweepWeight: green.'));
+          const tar=fs.readFileSync(out+'/dist.tgz'),distFiles=read('dist-before.json').length;
+          assert.equal(distFiles,850);
+          fs.writeFileSync(out+'/admission.json',JSON.stringify({
+            status:'passed',qualification:'fresh-missing-xi-confirmation-full-scope',head:source.head,tree:source.tree,
+            page:env.MISSING_XI_CONFIRMATION_PAGE_BLOB,helper:env.MISSING_XI_NATIVE_HELPER_BLOB,nativeOuter:env.MISSING_XI_NATIVE_OUTER_BLOB,
+            originalRun:custody.original.run,originalHead:custody.original.head,originalTree:custody.original.tree,originalArtifact:custody.original.artifact,
+            fixedRun:custody.fixed.run,fixedHead:custody.fixed.head,fixedTree:custody.fixed.tree,fixedArtifact:custody.fixed.artifact,
+            controlsRun:custody.controls.run,controlsHead:custody.controls.head,controlsTree:custody.controls.tree,controlsArtifact:custody.controls.artifact,controlsRerun:false,
+            unitCases:unit.actualCases,unitCommands:1,rawFrames:unit.rawFrames,actionJournalEntries:unit.actionJournalEntries,priorRAW:unit.priorRAW,
+            wholePreservedCases:unit.wholePreservedCases.map(row=>row.key),wholeQualifiedFixedRAWBytesHeld:raw.freshUnitRAWByteEqual,
+            sourceRows:source.sourceRows,cleanSourceRows:source.cleanSourceRows,rootConfigurations:source.rootConfigurations.length,
+            distFiles,distTar:{bytes:tar.length,sha256:createHash('sha256').update(tar).digest('hex')},readers:actual,immutableCaps:caps.length,capRows:caps,
+            nativeJourneys:nativeChecks.journeys,nativeContexts:nativeChecks.contexts,nativeTerminalResults:nativeChecks.terminalResults,nativePngs:nativeChecks.viewportPNGs,
+            nativeReceipt:native,controlsReceipt:custody.controlsChecks,
+            limits:'Fresh source types unit build readers caps and native qualification for this pinned QA tree. Controls are retained completed evidence. External writes are outside the native scope.'
+          },null,2));
+          NODE
+      - name: Whole tracked physical source dist references locks521 versions and offline held
         if: always()
         run: |
           set -euo pipefail
-          git ls-files -s > missing-xi-confirmation-fixed/source-after.txt
-          cmp missing-xi-confirmation-fixed/source-before.txt missing-xi-confirmation-fixed/source-after.txt
+          out=missing-xi-confirmation-ownership-qualified
+          git ls-files -s > "$out/source-after.txt"
+          cmp "$out/source-before.txt" "$out/source-after.txt"
           git diff --exit-code HEAD -- .
-          sha256sum package.json package-lock.json > missing-xi-confirmation-fixed/locks-after.txt
-          cmp missing-xi-confirmation-fixed/locks-before.txt missing-xi-confirmation-fixed/locks-after.txt
-          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node --input-type=module <<'NODE'
-          import fs from 'node:fs';import assert from 'node:assert/strict';import {execFileSync} from 'node:child_process';import {createHash} from 'node:crypto';
-          const out='missing-xi-confirmation-fixed',files=execFileSync('git',['ls-files','-z'],{encoding:'utf8'}).split('\0').filter(Boolean),rows=files.map(file=>{const bytes=fs.readFileSync(file);return{file,bytes:bytes.length,sha256:createHash('sha256').update(bytes).digest('hex')};});assert.deepEqual(rows,JSON.parse(fs.readFileSync(out+'/tracked-before.json')));fs.writeFileSync(out+'/tracked-after.json',JSON.stringify(rows));
-          const lock=JSON.parse(fs.readFileSync('package-lock.json')),before=JSON.parse(fs.readFileSync(out+'/installed-before.json')),after=Object.keys(lock.packages).filter(p=>p.startsWith('node_modules/')&&fs.existsSync(p+'/package.json')).map(p=>[p,JSON.parse(fs.readFileSync(p+'/package.json')).version]);assert.equal(after.length,521);for(const[p,v]of after)assert.equal(v,lock.packages[p].version,p);assert.deepEqual(after,before);fs.writeFileSync(out+'/installed-after.json',JSON.stringify(after));assert.equal(fs.statSync(out+'/offline.log').size,0);fs.writeFileSync(out+'/final-holds.json',JSON.stringify({status:'passed',trackedBodies:rows.length,scopedSourceRows:4659,rootConfigurations:11,installedLockedVersions:521,indexUnchanged:true,sourceBytesUnchanged:true,locksUnchanged:true,offlineBytes:0,limits:'Physical source/index/locks/version/offline holds only. Fixed business census is separate and the completed workflow conclusion is required.'},null,2));console.log('PASS exact tracked physical source/index/locks/521 versions and zero-byte offline receipt held');
+          sha256sum package.json package-lock.json > "$out/locks-after.txt"
+          cmp "$out/locks-before.txt" "$out/locks-after.txt"
+          if [[ -f "$out/dist.sha256" ]]; then sha256sum --check "$out/dist.sha256"; fi
+          if [[ -f "$out/native-admission-script.mjs" ]]; then
+            test "$(git hash-object "$out/native-admission-script.mjs")" = "$MISSING_XI_NATIVE_OUTER_BLOB"
+            test -z "$(git ls-files -- "$out/native-admission-script.mjs")"
+          fi
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import assert from 'node:assert/strict';
+          import {execFileSync} from 'node:child_process';
+          import {createHash} from 'node:crypto';
+          const out='missing-xi-confirmation-ownership-qualified',read=file=>JSON.parse(fs.readFileSync(out+'/'+file)),sha=bytes=>createHash('sha256').update(bytes).digest('hex');
+          const write=(file,value)=>fs.writeFileSync(out+'/'+file,JSON.stringify(value));
+          const files=execFileSync('git',['ls-files','-z'],{encoding:'utf8'}).split('\0').filter(Boolean);
+          const detail=file=>{const bytes=fs.readFileSync(file);return{file,bytes:bytes.length,sha256:sha(bytes)};};
+          const rows=files.map(detail);
+          assert.equal(rows.length,5783);assert.deepEqual(rows,read('tracked-before.json'));write('tracked-after.json',rows);
+          const lock=JSON.parse(fs.readFileSync('package-lock.json')),before=read('installed-before.json');
+          const after=Object.keys(lock.packages).filter(file=>file.startsWith('node_modules/')&&fs.existsSync(file+'/package.json')).map(file=>[file,JSON.parse(fs.readFileSync(file+'/package.json')).version]);
+          assert.equal(after.length,521);for(const [file,version] of after)assert.equal(version,lock.packages[file].version,file);
+          assert.deepEqual(after,before);write('installed-after.json',after);
+          const offlineBytes=fs.statSync(out+'/offline.log').size;assert.equal(offlineBytes,0);
+          const walk=(base,dir)=>fs.readdirSync(path.join(base,dir),{withFileTypes:true}).sort((a,b)=>a.name.localeCompare(b.name)).flatMap(entry=>{
+            const file=path.join(dir,entry.name);assert(!entry.isSymbolicLink(),file);
+            if(entry.isDirectory())return walk(base,file);assert(entry.isFile(),file);return[file];
+          });
+          let distHeld=false,retainedPacketsHeld=false;
+          if(fs.existsSync(out+'/dist-before.json')){
+            const dist=walk('.','dist').map(detail);assert.equal(dist.length,850);assert.deepEqual(dist,read('dist-before.json'));write('dist-after.json',dist);distHeld=true;
+          }
+          if(fs.existsSync(out+'/reference-top-before.json')){
+            const detailRef=file=>({...detail(path.join(out,file)),file});
+            const refs=read('reference-top-before.json').map(row=>detailRef(row.file));
+            assert.deepEqual(refs,read('reference-top-before.json'));write('reference-top-after.json',refs);
+            for(const [prefix,dir] of [['original','original-packet'],['fixed','fixed-reference'],['controls','controls-reference']]){
+              const bodies=walk(out,dir).map(detailRef);
+              assert.deepEqual(bodies,read(prefix+'-bodies-before.json'));write(prefix+'-bodies-after.json',bodies);
+            }
+            retainedPacketsHeld=true;
+          }
+          if(fs.existsSync(out+'/admission.json'))assert(distHeld&&retainedPacketsHeld,'Full admission requires dist and every retained reference hold');
+          write('final-holds.json',{status:'passed',trackedBodies:rows.length,scopedSourceRows:4660,cleanSourceRows:4659,rootConfigurations:11,installedLockedVersions:after.length,indexUnchanged:true,sourceBytesUnchanged:true,locksUnchanged:true,distHeld,retainedPacketsHeld,offlineBytes,limits:'Final physical and custody holds. Complete qualification requires the separate admission and successful workflow conclusion.'});
           NODE
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: missing-xi-confirmation-fixed-${{ github.run_id }}
-          path: missing-xi-confirmation-fixed
+          name: missing-xi-confirmation-ownership-qualified-${{ github.run_id }}
+          path: missing-xi-confirmation-ownership-qualified
           retention-days: 14
           if-no-files-found: error
