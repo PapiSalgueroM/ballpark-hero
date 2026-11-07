@@ -1,7 +1,7 @@
-name: Who Am I lookup ownership fixed
+name: Who Am I lookup ownership controls
 on:
   push:
-    branches: [codex/who-am-i-guess-ownership-fixed-qa-20261107]
+    branches: [codex/who-am-i-guess-ownership-controls-qa-20261107]
 permissions:
   contents: read
   actions: read
@@ -15,8 +15,8 @@ jobs:
     env:
       SIM_NETWORK: offline
       SIM_OFFLINE_RECEIPT: who-am-i-guess-ownership-evidence/offline.log
-      WHO_AM_I_STAGE: fixed
-      WHO_AM_I_PARENT: '5acdb362dc33d19197399697160c8e11de2dac23'
+      WHO_AM_I_STAGE: controls
+      WHO_AM_I_PARENT: '6713d0d2396d077f5a4c52ead9afe809458480b5'
       WHO_AM_I_BASE: '5584945095a494802c6a9d865db560e78cd5069e'
       WHO_AM_I_BASE_TREE: 'b60eb586ad32b5565a3857bf6032d5b3b1f25a89'
       WHO_AM_I_ORIGINAL_PAGE: '931e60e5075768b677c2013f99131c1867f27b68'
@@ -76,7 +76,7 @@ jobs:
             'public/who-am-i/index.html': 'cd4d7ab7de79d9742bfbebea4de649ada9349fea',
             'src/lib/whoAmI.ts': '8b6da5c480857fa8b7164d50c322eaccd0f6a8af',
           };
-          const refs = {"original":{"run":42361790574,"artifact":13569369009,"name":"who-am-i-guess-ownership-original-42361790574","head":"5acdb362dc33d19197399697160c8e11de2dac23","tree":"d7a4d1609b3e600e72ecf5fac7c3382835472ff9","zipBytes":2344078,"zipSHA256":"2fe80f575753ef6da7653888e010b85fe82d5daa4c3d85cb4e6ef930e8043b48","files":{"admission.json":"76c041c396f46a3952e0b43e436d1c5401cee58a9959bf85afb796736e43e690","source-join.json":"71d5c38d0d48e69cbf0d46b4253efa89a5896b9846a7f20dde420bc3100953ff","final-holds.json":"eec8428156d1c6ee3ec8817a551db825769d3c1e66d4d7eebc61a882412e5fce","case-original/raw.json":"75f0498a90853bdb1e1329b7e759629344b30509c17fa3162e913fbc06adb297","case-original/vitest.json":"efa5c6d5b26a3c72bf1cd53d03dca127a75aa3f26c78fa0b7573983953dbc503","case-original/exit-code.txt":"4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"}}};
+          const refs = {"original":{"run":42361790574,"artifact":13569369009,"name":"who-am-i-guess-ownership-original-42361790574","head":"5acdb362dc33d19197399697160c8e11de2dac23","tree":"d7a4d1609b3e600e72ecf5fac7c3382835472ff9","zipBytes":2344078,"zipSHA256":"2fe80f575753ef6da7653888e010b85fe82d5daa4c3d85cb4e6ef930e8043b48","files":{"admission.json":"76c041c396f46a3952e0b43e436d1c5401cee58a9959bf85afb796736e43e690","source-join.json":"71d5c38d0d48e69cbf0d46b4253efa89a5896b9846a7f20dde420bc3100953ff","final-holds.json":"eec8428156d1c6ee3ec8817a551db825769d3c1e66d4d7eebc61a882412e5fce","case-original/raw.json":"75f0498a90853bdb1e1329b7e759629344b30509c17fa3162e913fbc06adb297","case-original/vitest.json":"efa5c6d5b26a3c72bf1cd53d03dca127a75aa3f26c78fa0b7573983953dbc503","case-original/exit-code.txt":"4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"}},"fixed":{"run":42362221393,"artifact":13569588361,"name":"who-am-i-guess-ownership-fixed-42362221393","head":"6713d0d2396d077f5a4c52ead9afe809458480b5","tree":"f1ee6cbb42e3ebc3298e54f02aa99ca7bef4f25d","zipBytes":3672379,"zipSHA256":"30f0bd05c215e2a4cef038d39c6aef4ef566ae6946cba8ea3d0a0a464d32edcc","files":{"admission.json":"ab265b3ea91338cd5c92a101f8201294330546d45abda935faf7f8fba1aa7708","source-join.json":"63e174c9d2fa136766423e24c6d6405dea1787012fc38b00b4d831eb91e3ea8e","final-holds.json":"434b451c242847c1a499541cfc7966c3b8b51cf349bb27a88a4ee249fd2f35c7","case-fixed/raw.json":"04c43f5f3558d6b65b6ab0cdfe0257d0a258078d35926352f28ab083a9a22418","case-fixed/vitest.json":"84c8a6fe260773765173088637f013ded94b63da52ca2ece2befa8d2ab1e7be5","case-fixed/exit-code.txt":"9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"}}};
           const hash = (algorithm, body) => createHash(algorithm).update(body).digest('hex');
           const gitBlob = body => createHash('sha1').update('blob ' + body.length + '\0').update(body).digest('hex');
           const options = { maxBuffer: 64 * 1024 * 1024 };
@@ -339,7 +339,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: who-am-i-guess-ownership-fixed-${{ github.run_id }}
+          name: who-am-i-guess-ownership-controls-${{ github.run_id }}
           path: who-am-i-guess-ownership-evidence
           retention-days: 14
           if-no-files-found: error
