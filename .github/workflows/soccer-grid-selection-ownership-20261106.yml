@@ -1,29 +1,23 @@
-name: Soccer Grid fixed selection ownership evidence
+name: Soccer Grid physical selection ownership controls
 on:
   push:
-    branches: [codex/soccer-grid-selection-ownership-fixed-qa-20261107]
+    branches: [codex/soccer-grid-selection-ownership-controls-qa-20261107]
 permissions:
   contents: read
   actions: read
 jobs:
-  fixed:
+  controls:
     runs-on: ubuntu-latest
     timeout-minutes: 25
     defaults:
       run:
         shell: bash
     env:
-      SIM_NETWORK: offline
-      SIM_OFFLINE_RECEIPT: soccer-grid-selection-ownership-fixed/offline.log
       TZ: UTC
-      SOCCER_GRID_FIXED_BASE_HEAD: '3652840048ba386c3f66f5d18b0f0b554740b50b'
-      SOCCER_GRID_FIXED_BASE_TREE: '5dd1da768a75acefd5ed0061a5bde523af01698c'
-      SOCCER_GRID_FIXED_BASE_TRACKED_ROWS: '5786'
-      SOCCER_GRID_FIXED_SCOPED_SOURCE_ROWS: '4661'
-      SOCCER_GRID_FIXED_LOCKED_VERSIONS: '521'
-      SOCCER_GRID_FIXED_TEST_BLOB: 'bda5963ef068981f9d5c81c4767192e9e47f05b5'
-      SOCCER_GRID_FIXED_PLAN_BLOB: 'af9c485b73a30903cd72af884b521ecab6d8eeb2'
-      SOCCER_GRID_FIXED_HOOK_BLOB: '9b724907eae0a2fbf9e20d38f60d226281051693'
+      SIM_NETWORK: offline
+      SIM_OFFLINE_RECEIPT: soccer-grid-selection-ownership-controls/offline.log
+      GRID_FIXED_REFERENCE: '{"run":42350567717,"job":128337594874,"artifact":13565521874,"zipBytes":7182844,"head":"740ab572fea80ed4d817d0fa3b739cd5412a6f00","tree":"562bed1b146d037a47b6bf4ff9a5d99021740604","workflow":"45e0cbcd5029f7b3e3e4204d3f9850c1ccb96e46","zipSHA256":"e7e7c2cec04c65c530217101bbae2c8f325673d1cdc5cdd284f301c816e462c5","rawBytes":391364,"rawSHA256":"c9bc6b5b2f950a73c2456306a31cc2c2dafe7efba87e0be2c26751a880fcb821","bodyPins":[{"file":"active-route-preflight.json","bytes":1289,"sha256":"abe40598134ed47076bd3dd50bbc724d969d35d5bd21d9932cc0851296aa8ee9"},{"file":"active-snapshot.html","bytes":22206,"sha256":"1192edbcd5e66208e50a5e5c7578b933687a5480fa0453638bea45211ac15823"},{"file":"final-holds.json","bytes":434,"sha256":"cecf7db3190531a28817b0810f467513450651f55f51964be49d8fb07f9b82e8"},{"file":"fixed-admission.json","bytes":24732,"sha256":"a277889778a12236e5e6b1910210b740baf75e065ed28714e3f910438fdf89f3"},{"file":"head.txt","bytes":41,"sha256":"8e09be3b3d47226069488aa4ec7cc26fc879957c10235a8aa7f3f4cbeae834e1"},{"file":"install.log","bytes":1391,"sha256":"71011704a4f508e7c9c0b1fb4507e5590a6e6b7e1810254bd6d0865ff31b468c"},{"file":"installed-after.json","bytes":22175,"sha256":"1268d6ef069c4189836716fed6ebe4dd324c661cacf53981b6a227608aa383e8"},{"file":"installed-before.json","bytes":22175,"sha256":"1268d6ef069c4189836716fed6ebe4dd324c661cacf53981b6a227608aa383e8"},{"file":"locks-after.txt","bytes":163,"sha256":"d316e23dae0f11f4fabcf8edd97204c9b780c6da8a0f6307c86940cbdd28e3d7"},{"file":"locks-before.txt","bytes":163,"sha256":"d316e23dae0f11f4fabcf8edd97204c9b780c6da8a0f6307c86940cbdd28e3d7"},{"file":"offline.log","bytes":0,"sha256":"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"},{"file":"original-artifact.json","bytes":789,"sha256":"069cc17d5bc87c609fcc300880404ebe4b3b48089603881d16f3792f64a58417"},{"file":"original-custody.json","bytes":11659,"sha256":"aa7adacb84e856817f281e93549c4bc3833d01452442ff8512f60167588f8ebd"},{"file":"original-jobs.json","bytes":3651,"sha256":"34ebc7c93a0aaf2a4fbed3c62c2348eb50cec193b31f23472c7fce52cbb65921"},{"file":"original-packet/active-route-preflight.json","bytes":1289,"sha256":"abe40598134ed47076bd3dd50bbc724d969d35d5bd21d9932cc0851296aa8ee9"},{"file":"original-packet/active-snapshot.html","bytes":22206,"sha256":"1192edbcd5e66208e50a5e5c7578b933687a5480fa0453638bea45211ac15823"},{"file":"original-packet/final-holds.json","bytes":429,"sha256":"ae8bcee49dcc9829c181a3ec94ab0c20ef69a6e0030f27f3c2add06a4bfc12fc"},{"file":"original-packet/head.txt","bytes":41,"sha256":"3eb521b6167bdfdaf5b8d793f11e8a93843802b190e34bd57336ff03731d4ce3"},{"file":"original-packet/install.log","bytes":1391,"sha256":"4c9a3c6ce59c8cf4be9c4dd507616dffd2c943bfc8a8c00b8e9edde4875673a2"},{"file":"original-packet/installed-after.json","bytes":22175,"sha256":"1268d6ef069c4189836716fed6ebe4dd324c661cacf53981b6a227608aa383e8"},{"file":"original-packet/installed-before.json","bytes":22175,"sha256":"1268d6ef069c4189836716fed6ebe4dd324c661cacf53981b6a227608aa383e8"},{"file":"original-packet/locks-after.txt","bytes":163,"sha256":"d316e23dae0f11f4fabcf8edd97204c9b780c6da8a0f6307c86940cbdd28e3d7"},{"file":"original-packet/locks-before.txt","bytes":163,"sha256":"d316e23dae0f11f4fabcf8edd97204c9b780c6da8a0f6307c86940cbdd28e3d7"},{"file":"original-packet/offline.log","bytes":0,"sha256":"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"},{"file":"original-packet/original-admission.json","bytes":16948,"sha256":"74060d7b9d749e72462e0a1e0f14b30696c1b03440c60c83be2b3f92229ca119"},{"file":"original-packet/owned.json","bytes":8912,"sha256":"af062f2aa718fa2d8d03b42a9873d7b9ab40f3f21ca2835a90a2331ac7f8e8cb"},{"file":"original-packet/owned.log","bytes":313,"sha256":"8dc5437c1d8420cbf7f194a9ec83f30c062b25550a626df9addf7dfce7225c6a"},{"file":"original-packet/preflight-artifact.json","bytes":798,"sha256":"1f6aa1c02bc1f0a4b89f298b8a58858793ec6f7a83d5e37e057d1caab196762e"},{"file":"original-packet/preflight-custody.json","bytes":2933,"sha256":"15e11982fc168839887b634dbbc5ea1b290d810a53ade3beb704db813c0045ac"},{"file":"original-packet/preflight-jobs.json","bytes":3006,"sha256":"d37a714d6aa5231c3f38512114171df8ba9187e94f80158a2d29c6e3681c6043"},{"file":"original-packet/preflight-packet/active-route-preflight.json","bytes":1289,"sha256":"abe40598134ed47076bd3dd50bbc724d969d35d5bd21d9932cc0851296aa8ee9"},{"file":"original-packet/preflight-packet/final-holds.json","bytes":396,"sha256":"c119a145008729162d10f859b15b368a5958ac2a36b7bce468c111219827cef4"},{"file":"original-packet/preflight-packet/active-snapshot.html","bytes":22206,"sha256":"1192edbcd5e66208e50a5e5c7578b933687a5480fa0453638bea45211ac15823"},{"file":"original-packet/preflight-packet/head.txt","bytes":41,"sha256":"f89ce26144cc903b92816af3ff1e4c5434a74ef158aab79d289452a30e0821d3"},{"file":"original-packet/preflight-packet/install.log","bytes":1391,"sha256":"8c5e1fedc985fa1e9a12898cf38d57c9d9fbf8bd7022f9fe6308684122ad0a1e"},{"file":"original-packet/preflight-packet/installed-after.json","bytes":22175,"sha256":"1268d6ef069c4189836716fed6ebe4dd324c661cacf53981b6a227608aa383e8"},{"file":"original-packet/preflight-packet/installed-before.json","bytes":22175,"sha256":"1268d6ef069c4189836716fed6ebe4dd324c661cacf53981b6a227608aa383e8"},{"file":"original-packet/preflight-packet/locks-after.txt","bytes":163,"sha256":"d316e23dae0f11f4fabcf8edd97204c9b780c6da8a0f6307c86940cbdd28e3d7"},{"file":"original-packet/preflight-packet/locks-before.txt","bytes":163,"sha256":"d316e23dae0f11f4fabcf8edd97204c9b780c6da8a0f6307c86940cbdd28e3d7"},{"file":"original-packet/preflight-packet/offline.log","bytes":0,"sha256":"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"},{"file":"original-packet/preflight-packet/source-after.txt","bytes":502356,"sha256":"7c1e3337b53d44b4125b2dc3bafc6c40993ca56fc2b50126de5a62d9c65eef65"},{"file":"original-packet/preflight-packet/source-before.txt","bytes":502356,"sha256":"7c1e3337b53d44b4125b2dc3bafc6c40993ca56fc2b50126de5a62d9c65eef65"},{"file":"original-packet/preflight-packet/source-join.json","bytes":3271,"sha256":"154e65630ed5e63dcdb31f2d1c11fbf6bbb702bed0c0569a0fe77e1a404e4268"},{"file":"original-packet/preflight-packet/tracked-after.json","bytes":794395,"sha256":"eb244ba8936c8e8ebeb9c65c540df1efaf26080a6f39767d508e200c12ff9b46"},{"file":"original-packet/preflight-packet/tracked-before.json","bytes":794395,"sha256":"eb244ba8936c8e8ebeb9c65c540df1efaf26080a6f39767d508e200c12ff9b46"},{"file":"original-packet/preflight-packet/tree.txt","bytes":41,"sha256":"213e8f3964247092441c869a881c085a0297e903e7ff7ff7f1b0e9cab939bbed"},{"file":"original-packet/preflight-reference-after.json","bytes":604,"sha256":"96cd977b8979a9136bc10eef3903490c1cfc160d5c38d3160b8f8b9ac1ba67a4"},{"file":"original-packet/preflight-reference-before.json","bytes":604,"sha256":"96cd977b8979a9136bc10eef3903490c1cfc160d5c38d3160b8f8b9ac1ba67a4"},{"file":"original-packet/preflight-run.json","bytes":13088,"sha256":"aa24befc31dbe06585de3bddc2460d5ceb6ffed2293699eb480a8db6510bfbc5"},{"file":"original-packet/preflight.zip","bytes":1011829,"sha256":"190db3e6214b1587fc4dcca3f6c368072d0755deb4c3fd09a5264926a05583be"},{"file":"original-packet/prior-submission-raw.json","bytes":667882,"sha256":"7519caac4e812d063b8fc74ae832ddc8215be67fcb20c73c5b4946c74d27f55a"},{"file":"original-packet/raw.json","bytes":382432,"sha256":"67943d453cdf661bbcf0f1dfe24392d13bea374937cb199047d7e8cd2e71e9e1"},{"file":"original-packet/report-errors.json","bytes":8656,"sha256":"d42fc2c65fe0252d4085ccd9a000b6de94320e89c48c7cf64a50d1b68a96dc3b"},{"file":"original-packet/source-after.txt","bytes":502560,"sha256":"73b321600e9abc640fb69b4f5465513f9b9c836188bf9103ce103c3e75ea5661"},{"file":"original-packet/source-before.txt","bytes":502560,"sha256":"73b321600e9abc640fb69b4f5465513f9b9c836188bf9103ce103c3e75ea5661"},{"file":"original-packet/source-join.json","bytes":3652,"sha256":"fc9faeebcbe92052c954df360f8d91517722e83e2d6929816e5b0aa618f7f59c"},{"file":"original-packet/test-exit.txt","bytes":2,"sha256":"4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"},{"file":"original-packet/tracked-after.json","bytes":794700,"sha256":"26542c0fe3d181e9341ec639881dbf71e0b1fe72ffd44c8ba30b673f14eb8376"},{"file":"original-packet/tracked-before.json","bytes":794700,"sha256":"26542c0fe3d181e9341ec639881dbf71e0b1fe72ffd44c8ba30b673f14eb8376"},{"file":"original-packet/tree.txt","bytes":41,"sha256":"fd96c77fa653d5478bd22693ec1c2fc56dd95d373b1eec0263742a408d175a48"},{"file":"original-packet/types.log","bytes":0,"sha256":"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"},{"file":"original-reference-after.json","bytes":600,"sha256":"7b8c400b5c31972d57ae17491b596d89875dcdaf58f64ddf326069f4f0f1abd1"},{"file":"original-reference-before.json","bytes":600,"sha256":"7b8c400b5c31972d57ae17491b596d89875dcdaf58f64ddf326069f4f0f1abd1"},{"file":"original-run.json","bytes":13095,"sha256":"6739fb753cf3e6359ea3976e26aa3e1feb22c60317d3aabb1cd2b93a285a2230"},{"file":"original.zip","bytes":3075242,"sha256":"2274c11d7d2ecf6ac6cb2476bdec93795d2e1c62b10a3c8adb37f927ad7f5646"},{"file":"owned.json","bytes":7543,"sha256":"fa710dc3ad2df82f0edc3cee0d7a1fc62eb919843d1dc4d4e8abb9f3ae163148"},{"file":"owned.log","bytes":310,"sha256":"53aedda5c36bb3cb134aab59f7e4619f6ac1fc76d465114ef7c248ffeec9263b"},{"file":"preserve-aOnly.literal.json","bytes":81284,"sha256":"da562826df59b2352b24c48154ca5aff83e49852a825a44797a322e79bd1c62f"},{"file":"prior-submission-raw.json","bytes":667882,"sha256":"7519caac4e812d063b8fc74ae832ddc8215be67fcb20c73c5b4946c74d27f55a"},{"file":"raw.json","bytes":391364,"sha256":"c9bc6b5b2f950a73c2456306a31cc2c2dafe7efba87e0be2c26751a880fcb821"},{"file":"report-errors.json","bytes":7198,"sha256":"d28a72c255758c93a2f63b16749843c6c69fbc37b2cc496309d4e22e700d6bd7"},{"file":"source-after.txt","bytes":502560,"sha256":"759eedda17b386f46cddac1332605984c8c52724fc9a64d686f01c4a5e47a649"},{"file":"source-before.txt","bytes":502560,"sha256":"759eedda17b386f46cddac1332605984c8c52724fc9a64d686f01c4a5e47a649"},{"file":"source-join.json","bytes":3680,"sha256":"08ec99914c3006d054d56dd88c7e7ec8f5e8153cf26b2e89d0e63047cb56b5f6"},{"file":"test-exit.txt","bytes":2,"sha256":"9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"},{"file":"tracked-after.json","bytes":794700,"sha256":"6a8ca521136cc7e5889c2aee550da6ccec0fdb0db55c855d6b76cc63998a18e2"},{"file":"tracked-before.json","bytes":794700,"sha256":"6a8ca521136cc7e5889c2aee550da6ccec0fdb0db55c855d6b76cc63998a18e2"},{"file":"tree.txt","bytes":41,"sha256":"3f8ddba1de885414b9bdead18bd7dd9e52bb476a0e2fd85a2dcfc59e5ac98783"},{"file":"types.log","bytes":0,"sha256":"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"}]}'
+      GRID_CONTROLS_RUNNER_BLOB: 'ccaf33942eb91b911b09db56b93053d5f8ef931f'
     steps:
       - uses: actions/checkout@v4
         with:
@@ -33,555 +27,438 @@ jobs:
         with:
           node-version: 24.22.1
           cache: npm
-      - name: Exact qualified original parent with only the reviewed Hook plan and workflow changes
+      - name: Exact qualified fixed parent and workflow-only delta
         run: |
           set -euo pipefail
-          if grep -En '__[A-Z][A-Z0-9_]*__' .github/workflows/soccer-grid-selection-ownership-20261106.yml; then echo 'Unresolved fixed qualification binding'; exit 1; fi
-          for value in "$SOCCER_GRID_FIXED_TEST_BLOB" "$SOCCER_GRID_FIXED_PLAN_BLOB" "$SOCCER_GRID_FIXED_HOOK_BLOB"; do [[ "$value" =~ ^[a-f0-9]{40}$ ]]; done
-          out=soccer-grid-selection-ownership-fixed
+          workflow=.github/workflows/soccer-grid-selection-ownership-20261106.yml
+          if grep -Eq '__[A-Z][A-Z0-9_]*__' "$workflow"; then echo 'Unresolved controls binding'; exit 1; fi
+          [[ "$GRID_CONTROLS_RUNNER_BLOB" =~ ^[a-f0-9]{40}$ ]]
+          out=soccer-grid-selection-ownership-controls
           test ! -e "$out"
           mkdir "$out"
           touch "$out/offline.log"
           git rev-parse HEAD > "$out/head.txt"
           git rev-parse 'HEAD^{tree}' > "$out/tree.txt"
           git ls-files -s > "$out/source-before.txt"
-          sha256sum package.json package-lock.json > "$out/locks-before.txt"
+          sha256sum package.json package-lock.json bun.lock bun.lockb > "$out/locks-before.txt"
           git diff --exit-code HEAD -- .
-          git fetch --no-tags --depth=1 origin "$SOCCER_GRID_FIXED_BASE_HEAD"
           node --input-type=module <<'NODE'
-          import fs from 'node:fs';
           import assert from 'node:assert/strict';
+          import fs from 'node:fs';
           import {execFileSync} from 'node:child_process';
-          import {createHash} from 'node:crypto';
-          const out='soccer-grid-selection-ownership-fixed',env=process.env,base=env.SOCCER_GRID_FIXED_BASE_HEAD,baseTree=env.SOCCER_GRID_FIXED_BASE_TREE;
-          const workflow='.github/workflows/soccer-grid-selection-ownership-20261106.yml',test='src/test/soccerGridSelectionOwnership.test.tsx',plan='docs/plans/2026-11-07-soccer-grid-selection-ownership.md';
-          const hook='src/hooks/useSoccerGrid.ts',owned=new Set([workflow,hook,plan]);
-          const git=args=>execFileSync('git',args,{encoding:'utf8',maxBuffer:16*1024*1024});
-          const at=(ref,file)=>git(['rev-parse',ref+':'+file]).trim(),tree=ref=>git(['ls-tree','-r','-z',ref]).split('\0').filter(Boolean);
-          const fileOf=row=>row.split('\t')[1],scope=rows=>rows.filter(row=>/^(src|public|scripts)\//.test(fileOf(row))).length;
-          const sha=bytes=>createHash('sha256').update(bytes).digest('hex');
-          const blob=bytes=>createHash('sha1').update(Buffer.from('blob '+bytes.length+'\0')).update(bytes).digest('hex');
-          const head=git(['rev-parse','HEAD']).trim(),current=tree('HEAD'),parent=tree(base);
-          const baseTracked=Number(env.SOCCER_GRID_FIXED_BASE_TRACKED_ROWS),scoped=Number(env.SOCCER_GRID_FIXED_SCOPED_SOURCE_ROWS);
-          assert.equal(head,env.GITHUB_SHA);
-          assert.equal(git(['rev-parse',base+'^{tree}']).trim(),baseTree);
-          assert.deepEqual(git(['rev-list','--parents','-n','1','HEAD']).trim().split(' '),[head,base]);
-          assert.deepEqual([parent.length,current.length,scope(parent),scope(current)],[baseTracked,baseTracked,scoped,scoped]);
-          const held=parent.filter(row=>!owned.has(fileOf(row)));
-          assert.equal(held.length,baseTracked-owned.size);
-          assert.deepEqual(current.filter(row=>!owned.has(fileOf(row))),held,'Every other original path mode and blob stays held');
-          assert.deepEqual(git(['diff','--name-status',base,'HEAD']).trim().split('\n').sort(),[...owned].map(file=>'M\t'+file).sort());
-          for(const file of owned)assert.equal(git(['ls-tree','HEAD','--',file]).split(' ')[0],git(['ls-tree',base,'--',file]).split(' ')[0]);
-          assert.equal(at(base,workflow),'2e225558a10a24bd65f47d61db1bc0a40bd6d022');
-          const pins={'src/App.tsx':'8bfedf7aaa1d076e0f0c8e2216c7e46632cd8a33','src/data/gameRegistry.ts':'f560b40a74d1468ac72dfde4ee6fec6635a9a255','public/soccer-grid/index.html':'65fcae9819d92e53462c9f7826bd7d2fa2012fe4','src/pages/SoccerGrid.tsx':'fd793d83fef33fa075fcac53e97453cdbf83fff7','src/hooks/useSoccerGrid.ts':'1c84994a36c8ac51e4020823d899c2342be60271','src/components/soccer-grid/SoccerGridSearch.tsx':'14450f17982a89cc5de886d89fa1a78462ff509f','src/components/soccer-grid/SoccerGridBoard.tsx':'15007fda66e6a52bf13727d934dcc796bb30f3bb','src/test/soccerGridSubmissionOwnership.test.tsx':'7cb7f94a73ce7340243e7bdae6d6759e2c1a6f11','scripts/lib/offlineTransport.cjs':'0fda542a2649fe5da937c6976fd0f5b6073e74b6','index.html':'12598fe720eec4fc88d3d33c53ede612d018150c','package.json':'2ff64986fb76ebc51b706f2fd24765768874008a','package-lock.json':'97d6f12a052f25f400462938c241789a083f0bfe','vite.config.ts':'0112b6ac4f2ad80b2fc04f9ec2f7185300913e7d','tailwind.config.ts':'f83c4f4032d359bc9285828eac3b0961a46c6b17','postcss.config.js':'2aa7205d4b402a1bdfbe07110c61df920b370066','tsconfig.json':'6b68d80b7d92d0c4a5d774897f2bedfa95b42669','tsconfig.app.json':'51f581dd91641b4c1f1219f646788e73cf6bf00c','tsconfig.node.json':'3133162c20350e1741b94b8d2ff77b811bec8363','bun.lockb':'5d9d33a3bf4f45fa099e2aa3014149e034981149','bun.lock':'dff081dcd34a1aa928ddc90d910774a6b855dfe3'};
-          pins[test]=env.SOCCER_GRID_FIXED_TEST_BLOB;
-          pins[plan]='b3ad8ebbe63d28244bef9c1e98d56a1cd18fa3f8';
-          for(const [file,want] of Object.entries(pins))assert.equal(at(base,file),want,file+' admitted original parent');
-          pins[plan]=env.SOCCER_GRID_FIXED_PLAN_BLOB;
-          pins[hook]=env.SOCCER_GRID_FIXED_HOOK_BLOB;
-          for(const [file,want] of Object.entries(pins)){
-            assert.equal(at('HEAD',file),want,file+' current tree');
-            assert.equal(blob(fs.readFileSync(file)),want,file+' physical bytes');
+          const out='soccer-grid-selection-ownership-controls', workflow='.github/workflows/soccer-grid-selection-ownership-20261106.yml';
+          const ref=JSON.parse(process.env.GRID_FIXED_REFERENCE);
+          for (const key of ['run','job','artifact','zipBytes','rawBytes']) assert(Number.isSafeInteger(ref[key]) && ref[key]>0,key);
+          for (const key of ['head','tree','workflow']) assert.match(ref[key],/^[a-f0-9]{40}$/);
+          for (const key of ['zipSHA256','rawSHA256']) assert.match(ref[key],/^[a-f0-9]{64}$/);
+          assert(Array.isArray(ref.bodyPins) && ref.bodyPins.length>47);
+          assert.equal(new Set(ref.bodyPins.map(row=>row.file)).size,ref.bodyPins.length);
+          for (const row of ref.bodyPins) {
+            assert.deepEqual(Object.keys(row).sort(),['bytes','file','sha256']);
+            assert(Number.isSafeInteger(row.bytes) && row.bytes>=0);
+            assert.match(row.sha256,/^[a-f0-9]{64}$/);
           }
-          const configs=['index.html','package.json','package-lock.json','vite.config.ts','tailwind.config.ts','postcss.config.js','tsconfig.json','tsconfig.app.json','tsconfig.node.json','bun.lockb','bun.lock'];
-          assert.equal(configs.length,11);
-          assert.equal(fs.statSync('public/soccer-grid/index.html').size,22206);
-          const files=git(['ls-files','-z']).split('\0').filter(Boolean);
-          const physical=files.map(file=>{const bytes=fs.readFileSync(file);return{file,bytes:bytes.length,sha256:sha(bytes)};});
-          assert.equal(physical.length,baseTracked);
-          fs.writeFileSync(out+'/tracked-before.json',JSON.stringify(physical));
-          fs.writeFileSync(out+'/source-join.json',JSON.stringify({
-            status:'passed',base,baseTree,head,tree:git(['rev-parse','HEAD^{tree}']).trim(),heldRows:held.length,baseTrackedRows:baseTracked,
-            trackedRows:current.length,baseScopedRows:scoped,scopedSourceRows:scoped,rootConfigurations:configs.map(file=>({file,blob:pins[file]})),
-            ownedLeaves:[...owned],workflowBlob:at('HEAD',workflow),pins,snapshotBytes:22206,
-            limits:'Fixed source qualification. Only the reviewed Hook, plan and workflow changed from the qualified original. The Page, both tests and other product inputs stayed held.'
-          },null,2));
+          const git=(...args)=>execFileSync('git',args,{encoding:'utf8',maxBuffer:16*1024*1024});
+          const head=git('rev-parse','HEAD').trim(), tree=git('rev-parse','HEAD^{tree}').trim();
+          assert.equal(head,process.env.GITHUB_SHA);
+          assert.deepEqual(git('rev-list','--parents','-n','1','HEAD').trim().split(' '),[head,ref.head]);
+          assert.equal(git('rev-parse',ref.head+'^{tree}').trim(),ref.tree);
+          assert.equal(git('rev-parse',ref.head+':'+workflow).trim(),ref.workflow);
+          assert.equal(git('diff','--name-status',ref.head,'HEAD').trim(),'M\t'+workflow);
+          const rows=revision=>git('ls-tree','-r','-z',revision).split('\0').filter(Boolean);
+          const file=row=>row.split('\t')[1], scope=rows=>rows.filter(row=>/^(src|public|scripts)\//.test(file(row)));
+          const current=rows(head), parent=rows(ref.head), held=rows=>rows.filter(row=>file(row)!==workflow);
+          assert.deepEqual([current.length,parent.length,held(current).length,scope(current).length],[5786,5786,5785,4661]);
+          assert.deepEqual(held(current),held(parent));
+          fs.writeFileSync(out+'/source-join.json',JSON.stringify({status:'passed',head,tree,fixedHead:ref.head,fixedTree:ref.tree,
+            workflowBlob:git('rev-parse','HEAD:'+workflow).trim(),untrackedRunnerBlob:process.env.GRID_CONTROLS_RUNNER_BLOB,
+            trackedRows:current.length,heldFixedRows:held(current).length,scopedSourceRows:scope(current).length,onlyChanged:workflow},null,2));
           NODE
-      - name: Locked dependency install and all installed version pins
+      - name: Fresh locked install
         run: |
           set -euo pipefail
-          npm ci 2>&1 | tee soccer-grid-selection-ownership-fixed/install.log
-          node --input-type=module <<'NODE'
-          import fs from 'node:fs';import assert from 'node:assert/strict';const lock=JSON.parse(fs.readFileSync('package-lock.json')),rows=Object.keys(lock.packages).filter(p=>p.startsWith('node_modules/')&&fs.existsSync(p+'/package.json')).map(p=>[p,JSON.parse(fs.readFileSync(p+'/package.json')).version]);assert.equal(rows.length,Number(process.env.SOCCER_GRID_FIXED_LOCKED_VERSIONS));for(const[p,v]of rows)assert.equal(v,lock.packages[p].version,p);fs.writeFileSync('soccer-grid-selection-ownership-fixed/installed-before.json',JSON.stringify(rows));assert.equal(fs.statSync('soccer-grid-selection-ownership-fixed/offline.log').size,0);
-          NODE
-      - name: Actual direct route React lazy Soccer object and inert snapshot
-        run: |
-          set -euo pipefail
-          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node --input-type=module <<'NODE'
-          import fs from 'node:fs';import assert from 'node:assert/strict';import ts from 'typescript';import {JSDOM} from 'jsdom';import {createHash} from 'node:crypto';
-          const out='soccer-grid-selection-ownership-fixed',route='/soccer-grid',component='SoccerGrid',label='Soccer Grid',appText=fs.readFileSync('src/App.tsx','utf8'),catalogText=fs.readFileSync('src/data/gameRegistry.ts','utf8'),app=ts.createSourceFile('src/App.tsx',appText,ts.ScriptTarget.Latest,true,ts.ScriptKind.TSX),catalog=ts.createSourceFile('src/data/gameRegistry.ts',catalogText,ts.ScriptTarget.Latest,true,ts.ScriptKind.TS);assert.deepEqual(app.parseDiagnostics,[]);assert.deepEqual(catalog.parseDiagnostics,[]);
-          const all=(root,predicate)=>{const found=[];const visit=node=>{if(predicate(node))found.push(node);ts.forEachChild(node,visit);};visit(root);return found;},attrs=(node,name)=>node.attributes.properties.filter(p=>ts.isJsxAttribute(p)&&p.name.text===name);
-          const routes=all(app,node=>(ts.isJsxSelfClosingElement(node)||ts.isJsxOpeningElement(node))&&node.tagName.getText(app)==='Route').filter(node=>attrs(node,'path').some(p=>p.initializer&&ts.isStringLiteralLike(p.initializer)&&p.initializer.text===route));assert.equal(routes.length,1,'One actual direct public JSX Route');assert(ts.isJsxSelfClosingElement(routes[0]),'Direct self-closing route');assert.equal(attrs(routes[0],'path').length,1);const elements=attrs(routes[0],'element');assert.equal(elements.length,1);const element=elements[0].initializer;assert(element&&ts.isJsxExpression(element)&&element.expression&&ts.isJsxSelfClosingElement(element.expression));assert.equal(element.expression.tagName.getText(app),component,'Direct Soccer Grid mount, no Navigate');
-          const declarations=all(app,node=>ts.isVariableDeclaration(node)&&ts.isIdentifier(node.name)&&node.name.text===component);assert.equal(declarations.length,1);const init=declarations[0].initializer;assert(init&&ts.isCallExpression(init)&&ts.isIdentifier(init.expression)&&init.expression.text==='lazy');assert.equal(init.arguments.length,1);const factory=init.arguments[0];assert(ts.isArrowFunction(factory)&&factory.parameters.length===0);const load=factory.body;assert(ts.isCallExpression(load)&&load.expression.kind===ts.SyntaxKind.ImportKeyword&&load.arguments.length===1&&ts.isStringLiteralLike(load.arguments[0]));assert.equal(load.arguments[0].text,'./pages/SoccerGrid');const reactLazy=all(app,node=>ts.isImportDeclaration(node)&&ts.isStringLiteralLike(node.moduleSpecifier)&&node.moduleSpecifier.text==='react'&&node.importClause?.namedBindings&&ts.isNamedImports(node.importClause.namedBindings)).flatMap(node=>node.importClause.namedBindings.elements).filter(node=>node.name.text==='lazy'&&(node.propertyName?.text??node.name.text)==='lazy');assert.equal(reactLazy.length,1,'lazy is the actual named React import');
-          const prop=(node,name)=>{const found=node.properties.filter(p=>ts.isPropertyAssignment(p)&&(ts.isIdentifier(p.name)||ts.isStringLiteralLike(p.name))&&p.name.text===name);assert(found.length<=1,'No duplicate catalog property: '+name);return found[0]?.initializer;},defs=all(catalog,node=>ts.isVariableDeclaration(node)&&ts.isIdentifier(node.name)&&node.name.text==='CATEGORIES');assert.equal(defs.length,1);const categories=defs[0].initializer;assert(categories&&ts.isArrayLiteralExpression(categories));const soccer=categories.elements.filter(node=>ts.isObjectLiteralExpression(node)&&prop(node,'title')&&ts.isStringLiteralLike(prop(node,'title'))&&prop(node,'title').text==='Soccer');assert.equal(soccer.length,1);const games=prop(soccer[0],'games');assert(games&&ts.isArrayLiteralExpression(games));const entries=games.elements.filter(node=>ts.isObjectLiteralExpression(node)&&prop(node,'path')&&ts.isStringLiteralLike(prop(node,'path'))&&prop(node,'path').text===route);assert.equal(entries.length,1,'One actual uncommented Soccer catalog object');const catalogLabel=prop(entries[0],'label');assert(catalogLabel&&ts.isStringLiteralLike(catalogLabel));assert.equal(catalogLabel.text,label,'Exact actual Soccer label');
-          const file='public/soccer-grid/index.html',bytes=fs.readFileSync(file);assert.equal(bytes.length,22206);const dom=new JSDOM(bytes.toString('utf8')),doc=dom.window.document,canonicals=[...doc.querySelectorAll('link[rel]')].filter(node=>node.getAttribute('rel').toLowerCase().split(/\s+/).includes('canonical'));assert.equal(canonicals.length,1);assert.equal(canonicals[0].getAttribute('href'),'https://douknowball.com'+route);const snapshots=[...doc.querySelectorAll('#dukb-snapshot')];assert.equal(snapshots.length,1);const snapshot=snapshots[0],snapshotText=snapshot.textContent.trim();assert(snapshotText.length>500,'Actual readable saved game content');const headings=[...snapshot.querySelectorAll('h1')].map(node=>node.textContent.trim().replace(/\s+/g,' ').toUpperCase());assert(headings.includes('⚽SOCCER GRID'),'Actual saved game heading');const metas=[...doc.querySelectorAll('meta')],retired=metas.filter(node=>['dukb-retired-from','dukb-retired-to'].includes((node.getAttribute('name')||'').toLowerCase())),refresh=metas.filter(node=>(node.getAttribute('http-equiv')||'').trim().toLowerCase()==='refresh'),robots=metas.filter(node=>['robots','googlebot','bingbot'].includes((node.getAttribute('name')||'').toLowerCase()));assert.equal(retired.length,0,'No actual retired-route markers');assert.equal(refresh.length,0,'No actual redirect meta');assert(robots.every(node=>!/(?:^|[\s,])(?:noindex|none)(?:[\s,]|$)/i.test(node.getAttribute('content')||'')),'Active snapshot remains indexable');
-          fs.copyFileSync(file,out+'/active-snapshot.html');fs.writeFileSync(out+'/active-route-preflight.json',JSON.stringify({status:'passed',route,component,label,routeNode:routes[0].getText(app),reactLazyImport:reactLazy[0].parent.parent.parent.getText(app),lazyDeclaration:declarations[0].getText(app),catalogObject:entries[0].getText(catalog),snapshot:{file,bytes:bytes.length,sha256:createHash('sha256').update(bytes).digest('hex'),canonical:canonicals[0].getAttribute('href'),snapshotTextLength:snapshotText.length,headings,retiredMarkers:retired.length,metaRefresh:refresh.length,robots:robots.map(node=>({name:node.getAttribute('name'),content:node.getAttribute('content')}))},parsers:{typescript:ts.version,html:'Inert JSDOM, scripts/resources not enabled'},limits:'Actual AST nodes and inert DOM elements, never comments or a dormant Page file. Active source/public entry preflight only. No selection ownership reproduction, game test, App fix, build, browser journey, real-data truth or release claim. Native route reachability remains unqualified.'},null,2));dom.window.close();console.log('PASS actual direct Soccer Grid route, React lazy Page import, labeled Soccer catalog object and indexable nonredirect snapshot');
-          NODE
-      - name: Proper App types on the fixed Hook and unchanged reviewed test
-        run: |
-          set -euo pipefail
-          node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee soccer-grid-selection-ownership-fixed/types.log
-      - name: Authenticate actual completed original qualification and retain all 47 bodies
+          npm ci 2>&1 | tee soccer-grid-selection-ownership-controls/install.log
+      - name: Authenticate and retain the completed fixed archive
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
           node --input-type=module <<'NODE'
-          import fs from 'node:fs';
           import assert from 'node:assert/strict';
-          import {execFileSync} from 'node:child_process';
+          import fs from 'node:fs';
           import {createHash} from 'node:crypto';
-          const out='soccer-grid-selection-ownership-fixed',ref=out+'/original-packet';
-          const repo='repos/PapiSalgueroM/ballpark-hero/actions',workflow='.github/workflows/soccer-grid-selection-ownership-20261106.yml';
-          const pin={"run":42349496063,"job":128334385101,"artifact":13565515753,"head":"3652840048ba386c3f66f5d18b0f0b554740b50b","tree":"5dd1da768a75acefd5ed0061a5bde523af01698c","workflowBlob":"2e225558a10a24bd65f47d61db1bc0a40bd6d022","branch":"codex/soccer-grid-selection-ownership-original-qa-20261107","zipBytes":3075242,"zipSHA256":"2274c11d7d2ecf6ac6cb2476bdec93795d2e1c62b10a3c8adb37f927ad7f5646","bodyCount":47,"bodyBytes":7453065,"raw":{"file":"raw.json","bytes":382432,"sha256":"67943d453cdf661bbcf0f1dfe24392d13bea374937cb199047d7e8cd2e71e9e1"},"prior":{"file":"prior-submission-raw.json","bytes":667882,"sha256":"7519caac4e812d063b8fc74ae832ddc8215be67fcb20c73c5b4946c74d27f55a"},"aOnly":{"key":"aOnly","frames":7,"offset":788,"bytes":81284,"sha256":"da562826df59b2352b24c48154ca5aff83e49852a825a44797a322e79bd1c62f"}};
-          const bodies=[{"file":"active-route-preflight.json","bytes":1289,"sha256":"abe40598134ed47076bd3dd50bbc724d969d35d5bd21d9932cc0851296aa8ee9"},{"file":"active-snapshot.html","bytes":22206,"sha256":"1192edbcd5e66208e50a5e5c7578b933687a5480fa0453638bea45211ac15823"},{"file":"final-holds.json","bytes":429,"sha256":"ae8bcee49dcc9829c181a3ec94ab0c20ef69a6e0030f27f3c2add06a4bfc12fc"},{"file":"head.txt","bytes":41,"sha256":"3eb521b6167bdfdaf5b8d793f11e8a93843802b190e34bd57336ff03731d4ce3"},{"file":"install.log","bytes":1391,"sha256":"4c9a3c6ce59c8cf4be9c4dd507616dffd2c943bfc8a8c00b8e9edde4875673a2"},{"file":"installed-after.json","bytes":22175,"sha256":"1268d6ef069c4189836716fed6ebe4dd324c661cacf53981b6a227608aa383e8"},{"file":"installed-before.json","bytes":22175,"sha256":"1268d6ef069c4189836716fed6ebe4dd324c661cacf53981b6a227608aa383e8"},{"file":"locks-after.txt","bytes":163,"sha256":"d316e23dae0f11f4fabcf8edd97204c9b780c6da8a0f6307c86940cbdd28e3d7"},{"file":"locks-before.txt","bytes":163,"sha256":"d316e23dae0f11f4fabcf8edd97204c9b780c6da8a0f6307c86940cbdd28e3d7"},{"file":"offline.log","bytes":0,"sha256":"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"},{"file":"original-admission.json","bytes":16948,"sha256":"74060d7b9d749e72462e0a1e0f14b30696c1b03440c60c83be2b3f92229ca119"},{"file":"owned.json","bytes":8912,"sha256":"af062f2aa718fa2d8d03b42a9873d7b9ab40f3f21ca2835a90a2331ac7f8e8cb"},{"file":"owned.log","bytes":313,"sha256":"8dc5437c1d8420cbf7f194a9ec83f30c062b25550a626df9addf7dfce7225c6a"},{"file":"preflight-artifact.json","bytes":798,"sha256":"1f6aa1c02bc1f0a4b89f298b8a58858793ec6f7a83d5e37e057d1caab196762e"},{"file":"preflight-custody.json","bytes":2933,"sha256":"15e11982fc168839887b634dbbc5ea1b290d810a53ade3beb704db813c0045ac"},{"file":"preflight-jobs.json","bytes":3006,"sha256":"d37a714d6aa5231c3f38512114171df8ba9187e94f80158a2d29c6e3681c6043"},{"file":"preflight-packet/active-route-preflight.json","bytes":1289,"sha256":"abe40598134ed47076bd3dd50bbc724d969d35d5bd21d9932cc0851296aa8ee9"},{"file":"preflight-packet/active-snapshot.html","bytes":22206,"sha256":"1192edbcd5e66208e50a5e5c7578b933687a5480fa0453638bea45211ac15823"},{"file":"preflight-packet/final-holds.json","bytes":396,"sha256":"c119a145008729162d10f859b15b368a5958ac2a36b7bce468c111219827cef4"},{"file":"preflight-packet/head.txt","bytes":41,"sha256":"f89ce26144cc903b92816af3ff1e4c5434a74ef158aab79d289452a30e0821d3"},{"file":"preflight-packet/install.log","bytes":1391,"sha256":"8c5e1fedc985fa1e9a12898cf38d57c9d9fbf8bd7022f9fe6308684122ad0a1e"},{"file":"preflight-packet/installed-after.json","bytes":22175,"sha256":"1268d6ef069c4189836716fed6ebe4dd324c661cacf53981b6a227608aa383e8"},{"file":"preflight-packet/installed-before.json","bytes":22175,"sha256":"1268d6ef069c4189836716fed6ebe4dd324c661cacf53981b6a227608aa383e8"},{"file":"preflight-packet/locks-after.txt","bytes":163,"sha256":"d316e23dae0f11f4fabcf8edd97204c9b780c6da8a0f6307c86940cbdd28e3d7"},{"file":"preflight-packet/locks-before.txt","bytes":163,"sha256":"d316e23dae0f11f4fabcf8edd97204c9b780c6da8a0f6307c86940cbdd28e3d7"},{"file":"preflight-packet/offline.log","bytes":0,"sha256":"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"},{"file":"preflight-packet/source-after.txt","bytes":502356,"sha256":"7c1e3337b53d44b4125b2dc3bafc6c40993ca56fc2b50126de5a62d9c65eef65"},{"file":"preflight-packet/source-before.txt","bytes":502356,"sha256":"7c1e3337b53d44b4125b2dc3bafc6c40993ca56fc2b50126de5a62d9c65eef65"},{"file":"preflight-packet/source-join.json","bytes":3271,"sha256":"154e65630ed5e63dcdb31f2d1c11fbf6bbb702bed0c0569a0fe77e1a404e4268"},{"file":"preflight-packet/tracked-after.json","bytes":794395,"sha256":"eb244ba8936c8e8ebeb9c65c540df1efaf26080a6f39767d508e200c12ff9b46"},{"file":"preflight-packet/tracked-before.json","bytes":794395,"sha256":"eb244ba8936c8e8ebeb9c65c540df1efaf26080a6f39767d508e200c12ff9b46"},{"file":"preflight-packet/tree.txt","bytes":41,"sha256":"213e8f3964247092441c869a881c085a0297e903e7ff7ff7f1b0e9cab939bbed"},{"file":"preflight-reference-after.json","bytes":604,"sha256":"96cd977b8979a9136bc10eef3903490c1cfc160d5c38d3160b8f8b9ac1ba67a4"},{"file":"preflight-reference-before.json","bytes":604,"sha256":"96cd977b8979a9136bc10eef3903490c1cfc160d5c38d3160b8f8b9ac1ba67a4"},{"file":"preflight-run.json","bytes":13088,"sha256":"aa24befc31dbe06585de3bddc2460d5ceb6ffed2293699eb480a8db6510bfbc5"},{"file":"preflight.zip","bytes":1011829,"sha256":"190db3e6214b1587fc4dcca3f6c368072d0755deb4c3fd09a5264926a05583be"},{"file":"prior-submission-raw.json","bytes":667882,"sha256":"7519caac4e812d063b8fc74ae832ddc8215be67fcb20c73c5b4946c74d27f55a"},{"file":"raw.json","bytes":382432,"sha256":"67943d453cdf661bbcf0f1dfe24392d13bea374937cb199047d7e8cd2e71e9e1"},{"file":"report-errors.json","bytes":8656,"sha256":"d42fc2c65fe0252d4085ccd9a000b6de94320e89c48c7cf64a50d1b68a96dc3b"},{"file":"source-after.txt","bytes":502560,"sha256":"73b321600e9abc640fb69b4f5465513f9b9c836188bf9103ce103c3e75ea5661"},{"file":"source-before.txt","bytes":502560,"sha256":"73b321600e9abc640fb69b4f5465513f9b9c836188bf9103ce103c3e75ea5661"},{"file":"source-join.json","bytes":3652,"sha256":"fc9faeebcbe92052c954df360f8d91517722e83e2d6929816e5b0aa618f7f59c"},{"file":"test-exit.txt","bytes":2,"sha256":"4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"},{"file":"tracked-after.json","bytes":794700,"sha256":"26542c0fe3d181e9341ec639881dbf71e0b1fe72ffd44c8ba30b673f14eb8376"},{"file":"tracked-before.json","bytes":794700,"sha256":"26542c0fe3d181e9341ec639881dbf71e0b1fe72ffd44c8ba30b673f14eb8376"},{"file":"tree.txt","bytes":41,"sha256":"fd96c77fa653d5478bd22693ec1c2fc56dd95d373b1eec0263742a408d175a48"},{"file":"types.log","bytes":0,"sha256":"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"}];
-          const command=(name,args)=>execFileSync(name,args,{maxBuffer:64*1024*1024});
-          const read=file=>fs.readFileSync(out+'/'+file),json=file=>JSON.parse(read(file));
-          const sha=bytes=>createHash('sha256').update(bytes).digest('hex');
-          const endpoints={
-            'original-run.json':'runs/'+pin.run,
-            'original-jobs.json':'runs/'+pin.run+'/jobs?per_page=100',
-            'original-artifact.json':'artifacts/'+pin.artifact,
-            'original.zip':'artifacts/'+pin.artifact+'/zip',
-          };
-          for(const [file,endpoint] of Object.entries(endpoints))fs.writeFileSync(out+'/'+file,command('gh',['api',repo+'/'+endpoint]),{flag:'wx'});
-          const run=json('original-run.json'),jobs=json('original-jobs.json'),meta=json('original-artifact.json');
-          const artifact=Object.hasOwn(meta,'artifacts')?(assert.equal(meta.artifacts.length,1),meta.artifacts[0]):meta;
-          assert.deepEqual([run.id,run.status,run.conclusion,run.head_sha,run.head_commit.tree_id,run.event,run.repository.full_name,run.path,run.head_branch,run.run_attempt],
-            [pin.run,'completed','success',pin.head,pin.tree,'push','PapiSalgueroM/ballpark-hero',workflow,pin.branch,1]);
+          import {execFileSync} from 'node:child_process';
+          const ref=JSON.parse(process.env.GRID_FIXED_REFERENCE), out='soccer-grid-selection-ownership-controls/fixed-reference';
+          const repo='repos/PapiSalgueroM/ballpark-hero/actions', command=(name,args)=>execFileSync(name,args,{maxBuffer:128*1024*1024});
+          const fetch=endpoint=>command('gh',['api',repo+'/'+endpoint]);
+          fs.mkdirSync(out);
+          const sources={'run.json':'runs/'+ref.run,'jobs.json':'runs/'+ref.run+'/jobs?per_page=100','artifact.json':'artifacts/'+ref.artifact};
+          for (const [file,endpoint] of Object.entries(sources)) fs.writeFileSync(out+'/'+file,fetch(endpoint),{flag:'wx'});
+          const read=file=>JSON.parse(fs.readFileSync(out+'/'+file)), run=read('run.json'), jobs=read('jobs.json'), metadata=read('artifact.json');
+          const artifact=Object.hasOwn(metadata,'artifacts')?(assert.equal(metadata.artifacts.length,1),metadata.artifacts[0]):metadata;
+          assert.deepEqual([run.id,run.status,run.conclusion,run.head_sha,run.head_commit.tree_id,run.event,run.path,run.repository.full_name],
+            [ref.run,'completed','success',ref.head,ref.tree,'push','.github/workflows/soccer-grid-selection-ownership-20261106.yml','PapiSalgueroM/ballpark-hero']);
           assert.equal(jobs.jobs.length,1);
           const job=jobs.jobs[0];
-          assert.deepEqual([job.id,job.run_id,job.head_sha,job.status,job.conclusion,job.name,job.run_attempt],
-            [pin.job,pin.run,pin.head,'completed','success','original',1]);
-          assert.equal(job.steps.length,14);
-          assert(job.steps.every(row=>row.status==='completed'&&row.conclusion==='success'));
-          assert.deepEqual([artifact.id,artifact.name,artifact.expired,artifact.size_in_bytes,artifact.digest,artifact.workflow_run.id,artifact.workflow_run.head_sha,artifact.workflow_run.head_branch],
-            [pin.artifact,'soccer-grid-selection-ownership-original-'+pin.run,false,pin.zipBytes,'sha256:'+pin.zipSHA256,pin.run,pin.head,pin.branch]);
-          const zip=read('original.zip'),names=bodies.map(row=>row.file).sort();
-          assert.deepEqual([zip.length,sha(zip)],[pin.zipBytes,pin.zipSHA256]);
-          assert.equal(new Set(names).size,pin.bodyCount);
-          assert(names.every(file=>/^(?:preflight-packet\/)?[A-Za-z0-9._-]+$/.test(file)&&!file.split('/').some(piece=>piece==='.'||piece==='..')));
-          assert.deepEqual(command('unzip',['-Z1',out+'/original.zip']).toString('utf8').trimEnd().split('\n').sort(),names);
-          fs.mkdirSync(ref);
-          command('unzip',['-q',out+'/original.zip','-d',ref]);
-          const walk=(dir,prefix='')=>fs.readdirSync(dir,{withFileTypes:true}).flatMap(entry=>{
-            assert(!entry.isSymbolicLink());
-            const file=prefix+entry.name;
-            if(entry.isDirectory())return walk(dir+'/'+entry.name,file+'/');
-            assert(entry.isFile());
-            return [file];
-          });
-          assert.deepEqual(walk(ref).sort(),names);
-          for(const row of bodies){
-            const actual=fs.readFileSync(ref+'/'+row.file);
-            assert.deepEqual([actual.length,sha(actual)],[row.bytes,row.sha256],row.file);
-            assert(actual.equals(command('unzip',['-p',out+'/original.zip',row.file])),row.file+' exact archive body');
-          }
-          assert.equal(bodies.reduce((sum,row)=>sum+row.bytes,0),pin.bodyBytes);
-          const originalRead=file=>read('original-packet/'+file),originalJson=file=>JSON.parse(originalRead(file));
-          assert.equal(originalRead('head.txt').toString('utf8').trim(),pin.head);
-          assert.equal(originalRead('tree.txt').toString('utf8').trim(),pin.tree);
-          const current=json('source-join.json'),previous=originalJson('source-join.json'),holds=originalJson('final-holds.json');
-          assert.deepEqual([previous.status,previous.head,previous.tree,previous.workflowBlob,previous.trackedRows,previous.scopedSourceRows,previous.heldRows],
-            ['passed',pin.head,pin.tree,pin.workflowBlob,5786,4661,5783]);
-          assert.deepEqual([current.base,current.baseTree,current.heldRows],[pin.head,pin.tree,5783]);
-          assert.deepEqual([holds.status,holds.trackedBodies,holds.scopedSourceRows,holds.rootConfigurations,holds.installedLockedVersions,holds.offlineBytes],
-            ['passed',5786,4661,11,521,0]);
-          for(const key of ['indexUnchanged','sourceBytesUnchanged','locksUnchanged','retainedPreflightHeld'])assert.equal(holds[key],true);
-          const index=bytes=>bytes.toString('utf8').trimEnd().split('\n').filter(row=>!current.ownedLeaves.includes(row.split('\t')[1]));
-          assert.deepEqual(index(read('source-before.txt')),index(originalRead('source-before.txt')));
-          const held=rows=>rows.filter(row=>!current.ownedLeaves.includes(row.file));
-          assert.equal(held(json('tracked-before.json')).length,5783);
-          assert.deepEqual(held(json('tracked-before.json')),held(originalJson('tracked-before.json')));
-          for(const file of ['active-route-preflight.json','active-snapshot.html','installed-before.json','locks-before.txt'])
-            assert(read(file).equals(originalRead(file)),file+' exact original join');
-          for(const [before,after] of [['source-before.txt','source-after.txt'],['tracked-before.json','tracked-after.json'],['locks-before.txt','locks-after.txt'],['installed-before.json','installed-after.json']])
-            assert(originalRead(before).equals(originalRead(after)),before+' held in the qualified original');
-          assert.equal(originalRead('types.log').length,0);
-          assert.equal(originalRead('offline.log').length,0);
-          const receipt=originalJson('original-admission.json'),proof=receipt.newProof;
-          assert.deepEqual([receipt.status,receipt.actualCases,receipt.actualPasses,receipt.actualFailures,receipt.newFrames,receipt.priorFrames],
-            ['passed-original-soccer-grid-selection-ownership-business-red-qualification',18,15,3,32,56]);
-          assert.deepEqual(receipt.businessFailures.map(({key,title,marker})=>({key,title,marker})),[{"key":"valid","title":"keeps a newer empty cell selected after the submitted cell is filled","marker":"SG_SELECTION_VALID"},{"key":"unverified","title":"keeps a newer empty cell selected after a free unverified answer","marker":"SG_SELECTION_UNVERIFIED"},{"key":"invalid","title":"keeps a newer empty cell selected through a wrong guess and flash cleanup","marker":"SG_SELECTION_INVALID"}]);
-          assert(receipt.businessFailures.every(row=>row.message.startsWith('AssertionError: '+row.marker+':')));
-          assert.deepEqual([proof.actions,proof.domReplays,proof.requestsSettled,proof.transportLegs],[28,24,22,70]);
-          assert.deepEqual(proof.wholePreservationCases,[pin.aOnly]);
-          assert.equal(receipt.preflight.status,'passed-completed-active-preflight-custody');
-          assert.equal(receipt.preflight.bodyCount,16);
-          assert.equal(names.filter(file=>file.startsWith('preflight-packet/')).length,16);
-          for(const row of [pin.raw,pin.prior]){
-            const bytes=originalRead(row.file);
-            assert.deepEqual([bytes.length,sha(bytes)],[row.bytes,row.sha256],row.file);
-          }
-          const literal=originalRead(pin.raw.file).subarray(pin.aOnly.offset,pin.aOnly.offset+pin.aOnly.bytes);
-          assert.equal(sha(literal),pin.aOnly.sha256);
-          assert.equal(JSON.parse(literal).key,'aOnly');
-          fs.writeFileSync(out+'/original-custody.json',JSON.stringify({status:'passed-completed-original-qualification-custody',...pin,allBodyPins:bodies,
-            heldOriginalRows:5783,installedVersions:521,offlineBytes:0,preflight:receipt.preflight},null,2));
-          const files=[...Object.keys(endpoints),'original-custody.json'];
-          fs.writeFileSync(out+'/original-reference-before.json',JSON.stringify(files.map(file=>{const bytes=read(file);return{file,bytes:bytes.length,sha256:sha(bytes)};})));
+          assert.deepEqual([job.id,job.run_id,job.head_sha,job.status,job.conclusion],[ref.job,ref.run,ref.head,'completed','success']);
+          assert(job.steps.length>0 && job.steps.every(step=>step.status==='completed'&&step.conclusion==='success'));
+          assert.deepEqual([artifact.id,artifact.name,artifact.expired,artifact.size_in_bytes,artifact.digest,artifact.workflow_run.id,artifact.workflow_run.head_sha],
+            [ref.artifact,'soccer-grid-selection-ownership-fixed-'+ref.run,false,ref.zipBytes,'sha256:'+ref.zipSHA256,ref.run,ref.head]);
+          const zip=fetch('artifacts/'+ref.artifact+'/zip');
+          assert.deepEqual([zip.length,createHash('sha256').update(zip).digest('hex')],[ref.zipBytes,ref.zipSHA256]);
+          fs.writeFileSync(out+'/artifact.zip',zip,{flag:'wx'});
+          const entries=command('unzip',['-Z1',out+'/artifact.zip']).toString('utf8').trimEnd().split('\n');
+          assert.equal(new Set(entries).size,entries.length);
+          assert(entries.every(file=>/^[A-Za-z0-9._/-]+$/.test(file)&&file.split('/').every(part=>part&&part!=='.'&&part!=='..')));
+          assert.deepEqual([...entries].sort(),ref.bodyPins.map(row=>row.file).sort());
+          fs.mkdirSync(out+'/packet');
+          command('unzip',['-q',out+'/artifact.zip','-d',out+'/packet']);
           NODE
-      - name: One actual fixed Vitest invocation with the same Page regression and held prior suite
+      - name: Three fresh physical Hook control arms
         run: |
           set -euo pipefail
-          out=soccer-grid-selection-ownership-fixed
-          set +e
-          SOCCER_GRID_SELECTION_RAW="$PWD/$out/raw.json" SC_GRID_OWNERSHIP_RAW="$PWD/$out/prior-submission-raw.json" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node_modules/.bin/vitest run src/test/soccerGridSelectionOwnership.test.tsx src/test/soccerGridSubmissionOwnership.test.tsx --reporter=json --testTimeout=60000 --no-file-parallelism --outputFile="$out/owned.json" > "$out/owned.log" 2>&1
-          status=$?
-          set -e
-          printf '%s\n' "$status" > "$out/test-exit.txt"
-          node --input-type=module <<'NODE'
-          import fs from 'node:fs';
+          out=soccer-grid-selection-ownership-controls
+          test ! -e "$out/control-runner.mjs"
+          cat > "$out/control-runner.mjs" <<'GRID_CONTROL_RUNNER'
           import assert from 'node:assert/strict';
-          import {createHash} from 'node:crypto';
-          import {JSDOM} from 'jsdom';
-          const out='soccer-grid-selection-ownership-fixed',read=file=>fs.readFileSync(out+'/'+file),json=file=>JSON.parse(read(file));
-          const sha=bytes=>createHash('sha256').update(bytes).digest('hex');
-          const reportExists=fs.existsSync(out+'/owned.json'),report=reportExists?json('owned.json'):null,exit=read('test-exit.txt').toString('utf8').trim();
-          fs.writeFileSync(out+'/report-errors.json',JSON.stringify({
-            reportExists,exit,
-            runtimeCounters:report?Object.fromEntries(['numRuntimeErrorTestSuites','numUnhandledErrors'].map(key=>[key,Object.hasOwn(report,key)?{present:true,value:report[key]}:{present:false}])):null,
-            unhandledErrors:report?.unhandledErrors??null,testExecutionErrors:report?.testExecutionErrors??null,
-            suites:report?.testResults?.map(suite=>({name:suite.name,status:suite.status,message:suite.message??null,
-              assertions:suite.assertionResults.map(row=>({title:row.title,fullName:row.fullName,status:row.status,failureMessages:row.failureMessages,failureDetails:row.failureDetails??null}))}))??null,
-          },null,2));
-          assert(reportExists,'Actual JSON-only Vitest report exists');
-          assert.equal(exit,'0','Fixed actual test exit must be zero');
-          const contract={"version":1,"cases":[{"key":"aOnly","title":"clears the only selected cell after an ordinary valid guess","status":"passed","marker":null,"verdict":"valid","switchToB":false,"labels":["before-mount","ready","a-selected","a-query","a-pending","a-settled","after-teardown"],"actions":["mount","select-a","type-a","submit-a","release-a","unmount"]},{"key":"valid","title":"keeps a newer empty cell selected after the submitted cell is filled","status":"passed","marker":null,"verdict":"valid","switchToB":true,"labels":["before-mount","ready","a-selected","a-query","a-pending","b-selected-pending","a-settled","after-teardown"],"actions":["mount","select-a","type-a","submit-a","select-empty-b","release-a","unmount"]},{"key":"unverified","title":"keeps a newer empty cell selected after a free unverified answer","status":"passed","marker":null,"verdict":"unverified","switchToB":true,"labels":["before-mount","ready","a-selected","a-query","a-pending","b-selected-pending","a-settled","after-teardown"],"actions":["mount","select-a","type-a","submit-a","select-empty-b","release-a","unmount"]},{"key":"invalid","title":"keeps a newer empty cell selected through a wrong guess and flash cleanup","status":"passed","marker":null,"verdict":"invalid","switchToB":true,"labels":["before-mount","ready","a-selected","a-query","a-pending","b-selected-pending","a-settled","a-flash-cleared","after-teardown"],"actions":["mount","select-a","type-a","submit-a","select-empty-b","release-a","advance-flash-timer","unmount"]}]};
-          const priorContract=[
-            {"key":"validator","title":"SG_OWNERSHIP_VALIDATOR ignores a pending success for a cell another tab filled","labels":["ready","pending-boundary","eight-committed-before-storage-event","storage-adopted-eight-before-release","pending-response-settled"],"statesPerFrame":2},
-            {"key":"rarity","title":"SG_OWNERSHIP_RARITY ignores a success whose rarity read waited while another tab filled its cell","labels":["ready","pending-boundary","eight-committed-before-storage-event","storage-adopted-eight-before-release","pending-response-settled"],"statesPerFrame":2},
-            {"key":"insert","title":"SG_OWNERSHIP_INSERT does not append a duplicate after an already initiated write resolves","labels":["ready","pending-boundary","eight-committed-before-storage-event","storage-adopted-eight-before-release","pending-response-settled"],"statesPerFrame":2},
-            {"key":"wrong","title":"SG_OWNERSHIP_WRONG does not burn a guess or flash a filled cell after a late invalid verdict","labels":["ready","pending-boundary","eight-committed-before-storage-event","storage-adopted-eight-before-release","pending-response-settled"],"statesPerFrame":2},
-            {"key":"batch","title":"SG_OWNERSHIP_BATCH reads adopted progress before React renders the storage event","labels":["ready","pending-validator","eight-committed-before-batch","storage-event-before-render-and-release","batch-settled"],"statesPerFrame":2},
-            {"key":"rules","title":"SG_OWNERSHIP_RULES refuses an old callback after settings change in the same batch","labels":["ready","old-rule-pending","rule-change-before-render-and-release","new-rule-settled"],"statesPerFrame":1},
-            {"key":"valid","title":"SG_OWNERSHIP_PRESERVE_VALID keeps an ordinary untimed success and its complete save","labels":["ready","valid-settled"],"statesPerFrame":1},
-            {"key":"invalid","title":"SG_OWNERSHIP_PRESERVE_WRONG keeps ordinary wrong-guess cost and flash cleanup","labels":["ready","wrong-flash","flash-cleared"],"statesPerFrame":1},
-            {"key":"retry","title":"SG_OWNERSHIP_PRESERVE_RETRY keeps an unverified answer free","labels":["ready","pending","free-settled"],"statesPerFrame":1},
-            {"key":"exhausted","title":"SG_OWNERSHIP_PRESERVE_EXHAUSTED keeps exhausted checking free","labels":["ready","pending","free-settled"],"statesPerFrame":1},
-            {"key":"rejected","title":"SG_OWNERSHIP_PRESERVE_REJECTED keeps a rejected validator free","labels":["ready","pending","free-settled"],"statesPerFrame":1},
-            {"key":"ninth","title":"SG_OWNERSHIP_PRESERVE_NINTH commits a genuinely distinct ninth cell and records 900 once","labels":["ready","eight-committed-before-storage-event","storage-adopted-eight-before-release","distinct-ninth-won","other-tab-follows-win"],"statesPerFrame":2},
-            {"key":"overtimeValid","title":"SG_OWNERSHIP_PRESERVE_OVERTIME_VALID keeps a genuine Overtime success separate","labels":["ready","untimed-main-lost","overtime-entered","overtime-settled"],"statesPerFrame":1},
-            {"key":"overtimeWrong","title":"SG_OWNERSHIP_PRESERVE_OVERTIME_WRONG keeps repeated Overtime misses unlimited","labels":["ready","untimed-main-lost","overtime-entered","overtime-settled"],"statesPerFrame":1},
-          ];
-          assert.equal(contract.version,1);
-          assert(Array.isArray(contract.cases)&&contract.cases.length===4);
-          const newCases=contract.cases;
-          assert.equal(new Set(newCases.map(row=>row.key)).size,newCases.length);
-          for(const row of newCases){
-            assert(typeof row.key==='string'&&row.key.length>0&&typeof row.title==='string'&&row.title.length>0);
-            assert.equal(row.status,'passed');
-            assert.equal(row.marker,null);
-          }
-          const expectedTitles=[...newCases,...priorContract].map(row=>row.title);
-          assert.equal(new Set(expectedTitles).size,expectedTitles.length);
-          const rows=report.testResults.flatMap(suite=>suite.assertionResults),log=read('owned.log').toString('utf8');
-          assert.deepEqual([report.success,report.numTotalTests,report.numPassedTests,report.numFailedTests,report.numPendingTests,rows.length],
-            [true,expectedTitles.length,expectedTitles.length,0,0,expectedTitles.length]);
-          assert.deepEqual(report.testResults.map(suite=>suite.name.split('/').at(-1)).sort(),
-            ['soccerGridSelectionOwnership.test.tsx','soccerGridSubmissionOwnership.test.tsx'].sort());
-          for(const suite of report.testResults){
-            assert.equal(suite.message,'','No suite or hook errors');
-            assert.equal(suite.status,'passed');
-          }
-          for(const key of ['numRuntimeErrorTestSuites','numUnhandledErrors','numTodoTests'])if(Object.hasOwn(report,key))assert.equal(report[key],0);
-          for(const key of ['unhandledErrors','testExecutionErrors'])if(Object.hasOwn(report,key))assert.deepEqual(report[key],[]);
-          assert(!/Unhandled Errors|Unhandled Rejection|Uncaught Exception|Failed to resolve import|No test files found|SyntaxError|ReferenceError|TypeError|timed out/i.test(log));
-          const actualRow=title=>{
-            const matches=rows.filter(row=>row.title===title);
-            assert.equal(matches.length,1,'Exact actual row '+title);
-            return matches[0];
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import { createHash } from 'node:crypto';
+          import { execFileSync, spawnSync } from 'node:child_process';
+
+          const env = process.env;
+          const reference = JSON.parse(env.GRID_FIXED_REFERENCE);
+          const out = path.resolve('soccer-grid-selection-ownership-controls');
+          const retained = out + '/fixed-reference';
+          const fixed = retained + '/packet';
+          const hook = 'src/hooks/useSoccerGrid.ts';
+          const workflow = '.github/workflows/soccer-grid-selection-ownership-20261106.yml';
+          const test = 'src/test/soccerGridSelectionOwnership.test.tsx';
+          const priorTest = 'src/test/soccerGridSubmissionOwnership.test.tsx';
+          const plan = 'docs/plans/2026-11-07-soccer-grid-selection-ownership.md';
+          const read = file => fs.readFileSync(file);
+          const json = file => JSON.parse(read(file));
+          const write = (file, value) => fs.writeFileSync(file, JSON.stringify(value, null, 2) + '\n', {flag: 'wx'});
+          const put = (file, body) => fs.writeFileSync(file, body, {flag: 'wx'});
+          const hash = (algorithm, bytes) => createHash(algorithm).update(bytes).digest('hex');
+          const sha = bytes => hash('sha256', bytes);
+          const blob = bytes => hash('sha1', Buffer.concat([Buffer.from('blob ' + bytes.length + '\0'), bytes]));
+          const git = (...args) => execFileSync('git', args, {encoding: 'utf8', maxBuffer: 16 * 1024 * 1024});
+          const pins = {
+            [hook]: '9b724907eae0a2fbf9e20d38f60d226281051693',
+            [test]: 'bda5963ef068981f9d5c81c4767192e9e47f05b5',
+            [priorTest]: '7cb7f94a73ce7340243e7bdae6d6759e2c1a6f11',
+            [plan]: 'af9c485b73a30903cd72af884b521ecab6d8eeb2',
           };
-          const reportRows=[];
-          for(const expected of newCases){
-            const row=actualRow(expected.title);
-            assert.equal(row.status,expected.status);
-            assert.deepEqual(row.failureMessages,[]);
-            reportRows.push({key:expected.key,title:row.title,status:row.status});
-          }
-          for(const expected of priorContract){
-            const row=actualRow(expected.title);
-            assert.equal(row.status,'passed');
-            assert.deepEqual(row.failureMessages,[]);
-          }
-          const rawBytes=read('raw.json'),priorRawBytes=read('prior-submission-raw.json');
-          for(const bytes of [rawBytes,priorRawBytes]){
-            assert(bytes.length>0&&bytes.at(-1)===10);
-            assert(Buffer.from(bytes.toString('utf8')).equals(bytes),'Literal UTF-8 RAW');
-          }
-          const raw=JSON.parse(rawBytes),priorRaw=JSON.parse(priorRawBytes);
-          assert.deepEqual(Object.keys(priorRaw),['version','fixture','caseTitles','cases']);
-          assert.equal(priorRaw.version,1);
-          const priorFixture={
-            id:'generated-submission-ownership',
-            rows:Array.from({length:3},(_,i)=>({label:'Generated Row '+i,type:'club'})),
-            cols:Array.from({length:3},(_,i)=>({label:'Generated Column '+i,type:'club'})),
+          const originalHookBlob = '1c84994a36c8ac51e4020823d899c2342be60271';
+          const original = {
+            run: 42349496063, artifact: 13565515753, head: '3652840048ba386c3f66f5d18b0f0b554740b50b',
+            tree: '5dd1da768a75acefd5ed0061a5bde523af01698c', zipBytes: 3075242,
+            zipSHA256: '2274c11d7d2ecf6ac6cb2476bdec93795d2e1c62b10a3c8adb37f927ad7f5646',
+            bodies: 47, bodyBytes: 7453065, rawBytes: 382432,
+            rawSHA256: '67943d453cdf661bbcf0f1dfe24392d13bea374937cb199047d7e8cd2e71e9e1',
+            priorBytes: 667882, priorSHA256: '7519caac4e812d063b8fc74ae832ddc8215be67fcb20c73c5b4946c74d27f55a',
+            aOnly: {key: 'aOnly', frames: 7, offset: 788, bytes: 81284, sha256: 'da562826df59b2352b24c48154ca5aff83e49852a825a44797a322e79bd1c62f'},
           };
-          assert.deepEqual(priorRaw.fixture,priorFixture);
-          assert.deepEqual(priorRaw.caseTitles,priorContract.map(row=>row.title));
-          assert.deepEqual(Object.keys(priorRaw.cases),priorContract.map(row=>row.key));
-          let priorFrames=0,priorStates=0;
-          const priorCases=[];
-          for(const expected of priorContract){
-            const actual=priorRaw.cases[expected.key];
-            assert.deepEqual(Object.keys(actual),['title','frames','requests','draws','deferred','unexpected','unusedReplies']);
-            assert.equal(actual.title,expected.title);
-            assert.deepEqual(actual.frames.map(frame=>frame.label),expected.labels);
-            assert(Array.isArray(actual.requests)&&Array.isArray(actual.draws)&&Array.isArray(actual.deferred));
-            assert(actual.draws.every(value=>value===0.37));
-            assert(actual.deferred.every(entry=>typeof entry.name==='string'&&entry.settled===true));
-            assert.deepEqual(actual.unexpected,[]);
-            assert.deepEqual(Object.keys(actual.unusedReplies),['validator','count','insert']);
-            assert(Object.values(actual.unusedReplies).every(value=>Number.isSafeInteger(value)&&value>=0));
-            for(const frame of actual.frames){
-              assert.deepEqual(Object.keys(frame),['label','at','states']);
-              assert(Number.isFinite(frame.at));
-              assert.equal(frame.states.length,expected.statesPerFrame);
-              priorStates+=frame.states.length;
+          const configs = ['index.html','package.json','package-lock.json','vite.config.ts','tailwind.config.ts','postcss.config.js','tsconfig.json','tsconfig.app.json','tsconfig.node.json','bun.lockb','bun.lock'];
+          const offline = env.SIM_OFFLINE_RECEIPT;
+          assert.equal(process.version, 'v24.22.1');
+          assert.equal(env.SIM_NETWORK, 'offline');
+          assert(path.isAbsolute(offline) && fs.statSync(offline).size === 0);
+          assert.match(env.NODE_OPTIONS, /--require=.*scripts\/lib\/offlineTransport\.cjs/);
+          assert.equal(blob(read(process.argv[1])), env.GRID_CONTROLS_RUNNER_BLOB);
+          assert.equal(git('ls-files', '--', path.relative(process.cwd(), process.argv[1])).trim(), '');
+
+          function body(file) {
+            const stat = fs.lstatSync(file);
+            assert(stat.isFile(), file + ' is a regular file');
+            const bytes = read(file);
+            return {file, bytes: bytes.length, sha256: sha(bytes)};
+          }
+          function bind(file, bytes, digest) {
+            const actual = body(file);
+            assert.deepEqual([actual.bytes, actual.sha256], [bytes, digest], file);
+          }
+          function inventory(dir) {
+            const files = [];
+            const visit = relative => {
+              for (const entry of fs.readdirSync(path.join(dir, relative), {withFileTypes: true})) {
+                const file = relative + entry.name;
+                if (entry.isDirectory()) visit(file + '/');
+                else {
+                  assert(entry.isFile(), file + ' is a regular reference body');
+                  const tuple = body(path.join(dir, file));
+                  files.push({...tuple, file});
+                }
+              }
+            };
+            visit('');
+            return files.sort((a, b) => a.file < b.file ? -1 : a.file > b.file ? 1 : 0);
+          }
+          function zipNames(file) {
+            const names = execFileSync('unzip', ['-Z1', file], {encoding: 'utf8'}).trimEnd().split('\n');
+            assert.equal(new Set(names).size, names.length);
+            assert(names.every(name => /^[A-Za-z0-9._/-]+$/.test(name) && name.split('/').every(part => part && part !== '.' && part !== '..')));
+            return names.sort();
+          }
+
+          bind(retained + '/artifact.zip', reference.zipBytes, reference.zipSHA256);
+          const actualFixed = inventory(fixed);
+          assert.deepEqual(actualFixed, [...reference.bodyPins].sort((a, b) => a.file < b.file ? -1 : a.file > b.file ? 1 : 0));
+          assert.deepEqual(zipNames(retained + '/artifact.zip'), actualFixed.map(row => row.file));
+          const originalDir = fixed + '/original-packet';
+          const originalZip = fixed + '/original.zip';
+          bind(originalZip, original.zipBytes, original.zipSHA256);
+          const actualOriginal = inventory(originalDir);
+          assert.equal(actualOriginal.length, original.bodies);
+          assert.equal(actualOriginal.reduce((total, row) => total + row.bytes, 0), original.bodyBytes);
+          assert.deepEqual(zipNames(originalZip), actualOriginal.map(row => row.file));
+          for (const row of actualOriginal) {
+            const archived = execFileSync('unzip', ['-p', originalZip, row.file], {maxBuffer: 16 * 1024 * 1024});
+            assert(archived.equals(read(path.join(originalDir, row.file))), 'Literal retained original body ' + row.file);
+          }
+          const originalProof = json(originalDir + '/original-admission.json');
+          assert.deepEqual([originalProof.status, originalProof.source.head, originalProof.source.tree, originalProof.actualCases, originalProof.actualPasses, originalProof.actualFailures],
+            ['passed-original-soccer-grid-selection-ownership-business-red-qualification', original.head, original.tree, 18, 15, 3]);
+          const fixedProof = json(fixed + '/fixed-admission.json');
+          assert.deepEqual([fixedProof.status, fixedProof.source.head, fixedProof.source.tree, fixedProof.actualCases, fixedProof.actualPasses, fixedProof.actualFailures],
+            ['passed-fixed-soccer-grid-selection-ownership-qualification', reference.head, reference.tree, 18, 18, 0]);
+          assert.deepEqual([fixedProof.source.workflowBlob, fixedProof.newFrames, fixedProof.priorFrames, fixedProof.wholeAOnlyLiteralHeld, fixedProof.wholePriorRawLiteralHeld], [reference.workflow,32,56,true,true]);
+          assert.deepEqual([fixedProof.original.run, fixedProof.original.artifact, fixedProof.original.head, fixedProof.original.tree], [original.run,original.artifact,original.head,original.tree]);
+          for (const [file, want] of Object.entries(pins)) assert.equal(fixedProof.source.pins[file],want,file+' admitted fixed source');
+          const fixedHolds = json(fixed + '/final-holds.json');
+          assert.deepEqual([fixedHolds.status, fixedHolds.trackedBodies, fixedHolds.scopedSourceRows, fixedHolds.rootConfigurations, fixedHolds.installedLockedVersions, fixedHolds.offlineBytes], ['passed', 5786, 4661, 11, 521, 0]);
+          for (const key of ['indexUnchanged', 'sourceBytesUnchanged', 'locksUnchanged', 'retainedOriginalHeld']) assert.equal(fixedHolds[key], true);
+          assert.equal(read(fixed + '/types.log').length, 0);
+          assert(read(fixed + '/source-before.txt').equals(read(fixed + '/source-after.txt')));
+          bind(fixed + '/raw.json', reference.rawBytes, reference.rawSHA256);
+          bind(originalDir + '/raw.json', original.rawBytes, original.rawSHA256);
+          bind(originalDir + '/prior-submission-raw.json', original.priorBytes, original.priorSHA256);
+          const originalRaw = read(originalDir + '/raw.json'), fixedRaw = read(fixed + '/raw.json'), priorRaw = read(originalDir + '/prior-submission-raw.json');
+          assert(!fixedRaw.equals(originalRaw), 'Qualified fixed changed the affected outcomes');
+          assert(read(fixed + '/prior-submission-raw.json').equals(priorRaw), 'Whole qualified prior RAW unchanged');
+          const preserve = originalRaw.subarray(original.aOnly.offset, original.aOnly.offset + original.aOnly.bytes);
+          assert.equal(sha(preserve), original.aOnly.sha256);
+          assert.equal(JSON.parse(preserve).key, 'aOnly');
+          assert(fixedRaw.subarray(original.aOnly.offset, original.aOnly.offset + original.aOnly.bytes).equals(preserve), 'Whole fixed A-only literal equals original');
+          assert(read(fixed + '/preserve-aOnly.literal.json').equals(preserve));
+
+          const index = Buffer.from(git('ls-files', '-s'));
+          assert(index.equals(read(out + '/source-before.txt')));
+          const indexRows = index.toString('utf8').trimEnd().split('\n').map(line => {
+            const match = /^(100644|100755) ([a-f0-9]{40}) 0\t(.+)$/.exec(line);
+            assert(match);
+            return {file: match[3], mode: match[1], blob: match[2]};
+          });
+          assert.equal(new Set(indexRows.map(row => row.file)).size, 5786);
+          assert.equal(indexRows.filter(row => /^(src|public|scripts)\//.test(row.file)).length, 4661);
+          const product = bytes => bytes.toString('utf8').trimEnd().split('\n').filter(line => line.split('\t')[1] !== workflow);
+          assert.deepEqual(product(index), product(read(fixed + '/source-before.txt')), 'All 5785 fixed source tuples held');
+          const before = indexRows.map(row => {
+            const stat = fs.lstatSync(row.file);
+            assert(stat.isFile());
+            assert.equal(Boolean(stat.mode & 0o111), row.mode === '100755', row.file + ' mode');
+            assert.equal(blob(read(row.file)), row.blob, row.file + ' tracked blob');
+            return body(row.file);
+          });
+          assert.deepEqual(before.filter(row => row.file !== workflow), json(fixed + '/tracked-before.json').filter(row => row.file !== workflow));
+          const indexMap = new Map(indexRows.map(row => [row.file, row]));
+          for (const [file, want] of Object.entries(pins)) assert.equal(indexMap.get(file)?.blob, want, file);
+          for (const file of configs) assert(indexMap.has(file), 'Required root configuration ' + file);
+          const locked = json('package-lock.json');
+          const versions = () => Object.keys(locked.packages)
+            .filter(file => file.startsWith('node_modules/') && fs.existsSync(file + '/package.json'))
+            .map(file => [file, json(file + '/package.json').version]);
+          const installedBefore = versions();
+          assert.equal(installedBefore.length, 521);
+          for (const [file, version] of installedBefore) assert.equal(version, locked.packages[file].version, file);
+          assert.deepEqual(installedBefore, json(fixed + '/installed-before.json'));
+          write(out + '/installed-before.json', installedBefore);
+          write(out + '/tracked-before.json', before);
+          const lockFiles = ['package.json', 'package-lock.json', 'bun.lock', 'bun.lockb'];
+          const lockBodies = lockFiles.map(file => [file, read(file)]);
+
+          const fixedHook = read(hook);
+          const oldLine = '        setValidating(false);\n        setActiveCell(null);';
+          const newLine = '        setValidating(false);\n        setActiveCell((currentCell) => currentCell === capturedCell ? null : currentCell);';
+          const fixedText = fixedHook.toString('utf8');
+          assert.equal(fixedText.split(newLine).length, 2, 'One exact fixed selection region');
+          const oldText = fixedText.replace(newLine, () => oldLine);
+          assert.equal(oldText.split(oldLine).length, 2, 'One exact original selection region');
+          assert.equal(oldText.replace(oldLine, () => newLine), fixedText, 'Exact full Hook inverse');
+          const oldHook = Buffer.from(oldText);
+          assert(!oldHook.equals(fixedHook), 'Required physical control change');
+          assert.equal(blob(oldHook), originalHookBlob);
+          put(out + '/fixed-hook-before.ts', fixedHook);
+          put(out + '/original-hook.ts', oldHook);
+
+          function held(isOriginal) {
+            assert(Buffer.from(git('ls-files', '-s')).equals(index), 'Index stays fixed');
+            const actual = indexRows.map(row => {
+              assert.equal(Boolean(fs.lstatSync(row.file).mode & 0o111), row.mode === '100755', row.file + ' mode held');
+              return body(row.file);
+            });
+            const changes = actual.filter((row, i) => row.sha256 !== before[i].sha256 || row.bytes !== before[i].bytes).map(row => row.file);
+            assert.deepEqual(changes, isOriginal ? [hook] : [], 'Only physical Hook changes in original arm');
+            assert.equal(blob(read(hook)), isOriginal ? originalHookBlob : pins[hook]);
+            for (const [file, bytes] of lockBodies) assert(read(file).equals(bytes), file);
+            assert.deepEqual(versions(), installedBefore);
+            assert.equal(fs.statSync(offline).size, 0);
+            return actual;
+          }
+          function child(command, args, log, childEnv = env) {
+            const result = spawnSync(command, args, {env: childEnv, encoding: 'utf8', timeout: 600000, maxBuffer: 64 * 1024 * 1024});
+            put(log, (result.stdout || '') + (result.stderr || ''));
+            return {command, args, exit: result.status, signal: result.signal, error: result.error?.message ?? null};
+          }
+
+          const expectedRows = originalProof.reportRows;
+          assert.deepEqual(expectedRows.map(row => [row.key,row.status]), [['aOnly','passed'],['valid','failed'],['unverified','failed'],['invalid','failed']]);
+          const markers = new Map(originalProof.businessFailures.map(row => [row.key,row.marker]));
+          assert.deepEqual([...markers.values()], ['SG_SELECTION_VALID','SG_SELECTION_UNVERIFIED','SG_SELECTION_INVALID']);
+          const prior = JSON.parse(priorRaw);
+          assert.equal(prior.caseTitles.length, 14);
+
+          function runArm(name) {
+            const originalArm = name === 'original';
+            const dir = out + '/arms/' + name;
+            fs.mkdirSync(dir);
+            const expectedHook = originalArm ? oldHook : fixedHook;
+            if (!read(hook).equals(expectedHook)) fs.writeFileSync(hook, expectedHook);
+            const physical = held(originalArm);
+            put(dir + '/hook.ts', read(hook));
+            put(dir + '/source-before.txt', index);
+            write(dir + '/tracked-before.json', physical);
+            const types = child(process.execPath, ['node_modules/typescript/bin/tsc','--noEmit','-p','tsconfig.app.json'], dir + '/types.log');
+            write(dir + '/types-process.json', types);
+            assert.deepEqual([types.exit,types.signal,types.error,read(dir + '/types.log').length], [0,null,null,0]);
+            const args = ['run',test,priorTest,'--reporter=json','--testTimeout=60000','--no-file-parallelism','--outputFile=' + dir + '/owned.json'];
+            const result = child('node_modules/.bin/vitest', args, dir + '/owned.log',
+              {...env, SOCCER_GRID_SELECTION_RAW: dir + '/raw.json', SC_GRID_OWNERSHIP_RAW: dir + '/prior-submission-raw.json'});
+            write(dir + '/vitest-process.json', result);
+            assert.deepEqual([result.exit,result.signal,result.error], [originalArm ? 1 : 0,null,null]);
+            const report = json(dir + '/owned.json');
+            const rows = report.testResults.flatMap(suite => suite.assertionResults);
+            assert.deepEqual([report.success,report.numTotalTests,report.numPassedTests,report.numFailedTests,report.numPendingTests,rows.length],
+              [!originalArm,18,originalArm ? 15 : 18,originalArm ? 3 : 0,0,18]);
+            assert.deepEqual(report.testResults.map(suite => path.basename(suite.name)).sort(), [path.basename(test),path.basename(priorTest)].sort());
+            for (const suite of report.testResults) assert.equal(suite.message, '');
+            for (const key of ['numRuntimeErrorTestSuites','numUnhandledErrors','numTodoTests']) if (Object.hasOwn(report,key)) assert.equal(report[key],0);
+            for (const key of ['unhandledErrors','testExecutionErrors']) if (Object.hasOwn(report,key)) assert.deepEqual(report[key],[]);
+            assert(!/Unhandled Errors|Unhandled Rejection|Uncaught Exception|Failed to resolve import|No test files found|SyntaxError|ReferenceError|TypeError|timed out/i.test(read(dir + '/owned.log').toString('utf8')));
+            const one = title => {
+              const matching = rows.filter(row => row.title === title);
+              assert.equal(matching.length, 1, title);
+              return matching[0];
+            };
+            const businessFailures = [];
+            for (const item of expectedRows) {
+              const row = one(item.title);
+              const red = originalArm && item.status === 'failed';
+              assert.equal(row.status, red ? 'failed' : 'passed');
+              if (red) {
+                const marker = markers.get(item.key);
+                assert.equal(row.failureMessages.length,1);
+                assert(row.failureMessages[0].startsWith('AssertionError: ' + marker + ':'));
+                assert(!/STACK_TRACE_ERROR|TypeError|ReferenceError|SyntaxError|timed out|Timeout/i.test(row.failureMessages[0]));
+                businessFailures.push({key:item.key,marker,message:row.failureMessages[0]});
+              } else assert.deepEqual(row.failureMessages, []);
             }
-            priorFrames+=actual.frames.length;
-            priorCases.push({key:expected.key,title:actual.title,frames:actual.frames.length,statesPerFrame:expected.statesPerFrame});
+            for (const title of prior.caseTitles) {
+              const row = one(title);
+              assert.deepEqual([row.status,row.failureMessages], ['passed',[]]);
+            }
+            const fresh = read(dir + '/raw.json'), freshPrior = read(dir + '/prior-submission-raw.json');
+            assert(fresh.equals(originalArm ? originalRaw : fixedRaw), name + ' complete role-qualified new RAW');
+            assert(freshPrior.equals(priorRaw), name + ' complete qualified prior RAW');
+            const vector = fresh.subarray(original.aOnly.offset, original.aOnly.offset + original.aOnly.bytes);
+            assert(vector.equals(preserve), name + ' complete A-only case');
+            put(dir + '/preserve-aOnly.literal.json', vector);
+            const freshCases = JSON.parse(fresh).cases;
+            assert.deepEqual(freshCases.map(row => row.key), expectedRows.map(row => row.key));
+            const newFrames = freshCases.reduce((n,row) => n + row.frames.length, 0);
+            const actions = freshCases.reduce((n,row) => n + row.actions.length, 0);
+            const requestRows = freshCases.flatMap(row => row.frames.at(-1).requests);
+            const legs = requestRows.reduce((n,row) => n + row.calls.length, 0);
+            const priorFrames = Object.values(JSON.parse(freshPrior).cases).reduce((n,row) => n + row.frames.length, 0);
+            assert.deepEqual([newFrames,priorFrames,actions,requestRows.length,legs], [32,56,28,22,70]);
+            const after = held(originalArm);
+            assert.deepEqual(after, physical);
+            put(dir + '/source-after.txt', Buffer.from(git('ls-files','-s')));
+            write(dir + '/tracked-after.json', after);
+            const arm = {name,physicalHookBlob:blob(read(hook)),changedPhysicalPaths:originalArm ? [hook] : [],
+              rows:rows.length,passes:report.numPassedTests,failures:businessFailures,newFrames,priorFrames,actions,requests:requestRows.length,transportLegs:legs,
+              raw:{bytes:fresh.length,sha256:sha(fresh)},priorRaw:{bytes:freshPrior.length,sha256:sha(freshPrior)},wholeAOnly:original.aOnly};
+            write(dir + '/admission.json', arm);
+            return arm;
           }
-          assert.deepEqual([priorCases.length,priorFrames,priorStates],[14,56,86]);
-          const priorProof={status:'passed',file:'prior-submission-raw.json',bytes:priorRawBytes.length,sha256:sha(priorRawBytes),cases:priorCases,frames:priorFrames,states:priorStates};
-          const checkKeys=(object,keys)=>assert.deepEqual(Object.keys(object),keys.split(' '));
-          const equal=assert.deepEqual;
-          const now=Date.parse('2026-11-05T17:00:00Z'), day='2026-11-05', dailyKey='soccer-grid-daily-'+day;
-          const name='Fixture Aster', id='fixture-selection-ownership', playerId='fixture-player-aster';
-          const attributes=kind=>[0,1,2].map(i=>({type:'club',label:'Fixture '+kind+' '+i}));
-          const puzzle={id,rows:attributes('Row'),cols:attributes('Column')};
-          const players=[{id:playerId,player_name:name,nationality:'Fixture Nation',position:'Forward'}];
-          const seasons=[{player_id:playerId,season:'Fixture Season',club:'Fixture Club',goals:0,assists:0,appearances:1,market_value:1,sort_order:0}];
-          const scope='Real Page, Board, Search, hook, Daily storage and read adapters. Fictional SDK replies and isolated shell. JSDOM events and fake unit time.';
-          const baseStorage={local:{'fixture-unrelated-local':'held','sg-rules-seen':'1'},session:{'fixture-unrelated-session':'held'}};
-          const aPrompt=[puzzle.rows[0].label,puzzle.cols[0].label], bPrompt=[puzzle.rows[1].label,puzzle.cols[1].label];
-          const searchState=frame=>frame.search&&[frame.search.value,frame.search.disabled,frame.search.submitDisabled];
-          const selection=frame=>({selected:frame.selected,prompt:frame.prompt?.labels??null,searchEnabled:frame.search?!frame.search.disabled:null});
-          const aSelection={selected:[0],prompt:aPrompt,searchEnabled:false}, bSelection={selected:[4],prompt:bPrompt,searchEnabled:false};
-          const noSelection={selected:[],prompt:null,searchEnabled:null};
-          const call=(method,...args)=>({method,args}), ok=data=>({data,error:null});
-          const ordered={ascending:true}, from=table=>call('from',table), playerTable='soccer_grid_selections';
-          const readSpecs={
-            soccer_grid_puzzles:{calls:[from('soccer_grid_puzzles'),call('select','puzzle_id, rows_json, cols_json'),call('order','sort_order',ordered)],reply:ok([{puzzle_id:id,rows_json:puzzle.rows,cols_json:puzzle.cols}])},
-            career_players:{calls:[from('career_players'),call('select','id, player_name, nationality, position'),call('order','player_name',ordered)],reply:ok(players)},
-            career_seasons:{calls:[from('career_seasons'),call('select','player_id, season, club, goals, assists, appearances, market_value, sort_order'),call('order','player_id',ordered),call('order','sort_order',ordered),call('range',0,999)],reply:ok(seasons)},
-          };
-          const validatorCalls=[call('invoke','soccer-grid-validate',{body:{playerName:name,rowAttribute:aPrompt[0],colAttribute:aPrompt[1]}})];
-          const rarity=[from(playerTable),call('select','*',{count:'exact',head:true}),call('eq','puzzle_id',id),call('eq','cell_index',0)];
-          const validSideEffects={
-            rarityTotal:{calls:rarity,reply:{...ok(null),count:0}},
-            rarityPlayer:{calls:[...rarity,call('eq','player_name',name.toLowerCase())],reply:{...ok(null),count:0}},
-            insert:{calls:[from(playerTable),call('insert',{puzzle_id:id,cell_index:0,player_name:name.toLowerCase()})],reply:ok(null)},
-          };
 
-          checkKeys(raw,'version fixture scope cases');
-          equal([raw.version,raw.fixture,raw.scope],[1,{puzzle,players,seasons},scope]);
-          equal(raw.cases.map(row=>row.key),newCases.map(row=>row.key));
-          const rawText=rawBytes.toString('utf8');
-          equal(rawText,JSON.stringify(raw)+'\n','Retain the complete compact RAW serialization');
-          const prefix=JSON.stringify({version:raw.version,fixture:raw.fixture,scope:raw.scope}).slice(0,-1)+',"cases":[';
-          assert(rawText.startsWith(prefix));
-          let caseOffset=Buffer.byteLength(prefix),newFrames=0,newActions=0,domReplays=0,requestsSettled=0,transportLegs=0;
-          const caseProofs=[];
-
-          function replayGridDOM(frame) {
-            const dom=new JSDOM(frame.html);
+          const arms = [];
+          let failure, restorationFailure;
+          fs.mkdirSync(out + '/arms');
+          try {
+            for (const name of ['fixed','original','restored']) arms.push(runArm(name));
+          } catch (error) {
+            failure = error;
+          } finally {
             try {
-              const root=dom.window.document.querySelector('main');
-              assert(root&&root.outerHTML===frame.html,'Captured mounted Page HTML replays exactly');
-              const cells=[...root.querySelectorAll('button[data-grid-cell-status]')].map((node,index)=>({
-                index,status:node.getAttribute('data-grid-cell-status'),selected:node.classList.contains('ring-2'),disabled:node.disabled,
-                player:node.querySelector('[title]')?.getAttribute('title')??null,text:node.textContent,html:node.outerHTML,
-              }));
-              equal(cells,frame.cells);
-              equal(cells.filter(cell=>cell.selected).map(cell=>cell.index),frame.selected);
-              const prompt=[...root.querySelectorAll('p')].find(node=>node.textContent.trim().startsWith('Find a player who:'));
-              equal(frame.prompt,prompt?{labels:[...prompt.querySelectorAll('span')].map(node=>node.textContent),text:prompt.textContent,html:prompt.outerHTML}:null);
-              const score=label=>[...root.querySelectorAll('span')].find(node=>node.textContent.trim().startsWith(label))?.textContent.trim()??null;
-              equal([frame.correct,frame.guessesLeft],[score('Correct:'),score('Guesses left:')]);
-              const box=root.querySelector('input[role="combobox"][aria-label="Search for a player"]');
-              if(!box) equal(frame.search,null);
-              else {
-                checkKeys(frame.search,'value disabled focused submitDisabled options html');
-                assert.equal(typeof frame.search.focused,'boolean');
-                equal([frame.search.disabled,frame.search.submitDisabled,frame.search.html],[box.disabled,box.form.querySelector('button[type="submit"]').disabled,box.form.outerHTML]);
-                equal(frame.search.options,[...root.querySelectorAll('[role="option"]')].map(node=>({text:node.textContent,html:node.outerHTML})));
-              }
-            } finally { dom.window.close(); }
+              if (!read(hook).equals(fixedHook)) fs.writeFileSync(hook, fixedHook);
+              assert(read(hook).equals(fixedHook));
+              const restored = held(false);
+              assert.deepEqual(restored,before);
+              git('diff','--exit-code','HEAD','--','.');
+              put(out + '/fixed-hook-after.ts', read(hook));
+              write(out + '/tracked-after.json', restored);
+              write(out + '/installed-after.json', versions());
+            } catch (error) {
+              restorationFailure = error;
+            }
+            write(out + '/physical-arms.json', {arms,error:failure?.message ?? null,restorationError:restorationFailure?.message ?? null,
+              exactSourceIndexLocksInstalledOfflineRestored:!restorationFailure});
           }
-
-          for(const [caseIndex,packet] of raw.cases.entries()) {
-            const expected=newCases[caseIndex], valid=expected.verdict==='valid', wrong=expected.verdict==='invalid';
-            const free=expected.verdict==='unverified';
-            checkKeys(packet,'key title verdict switchToB complete error frames actions');
-            equal([packet.key,packet.title,packet.verdict,packet.switchToB,packet.complete,packet.error],
-              [expected.key,expected.title,expected.verdict,expected.switchToB,true,null]);
-            equal(packet.frames.map(frame=>frame.label),expected.labels);
-            equal(packet.actions.map(action=>action.name),expected.actions);
-            const frames=Object.fromEntries(packet.frames.map(frame=>[frame.label,frame]));
-            const pending=frames['a-pending'], settled=frames['a-settled'], end=frames['after-teardown'];
-            const validatorReply=ok(valid?{valid:true,fullName:name}:free?{valid:false,unverified:true}:{valid:false});
-            const readKeys=Object.keys(readSpecs).sort();
-            const daily=free?null:JSON.stringify({v:1,date:day,puzzleIndex:0,puzzleId:id,guesses:valid?[{t:'ok',cellIndex:0,playerName:name,rarity:101}]:[{t:'x'}],gameStatus:'playing'});
-            const writes=daily===null?[]:[{at:now,area:'local',key:dailyKey,value:daily}];
-            const toasts=free?[["Couldn't verify that answer, please try again."]]:[];
-            const loadedReads=frames.ready.requests;
-            equal(loadedReads.map(row=>row.key).sort(),readKeys);
-            for(const row of loadedReads) equal(row,{key:row.key,at:now,calls:readSpecs[row.key].calls,settledAt:now,reply:readSpecs[row.key].reply});
-            const pendingRequests=[...loadedReads,{key:'validator',at:now,calls:validatorCalls,settledAt:null,reply:null}];
-            const settledRequests=[...loadedReads,{key:'validator',at:now,calls:validatorCalls,settledAt:now,reply:validatorReply},
-              ...(valid?Object.entries(validSideEffects).map(([key,spec])=>({key,at:now,calls:spec.calls,settledAt:now,reply:spec.reply})):[])];
-            const actionDetails={mount:null,'select-a':{index:0,disabled:false},'type-a':{value:name},'submit-a':{name},
-              'select-empty-b':{index:4,disabled:false,status:'empty'},'release-a':{verdict:expected.verdict},
-              'advance-flash-timer':{milliseconds:1500},unmount:null};
-            for(const action of packet.actions) equal(action,{name:action.name,at:now+(wrong&&action.name==='unmount'?1500:0),details:actionDetails[action.name]});
-
-            for(const [index,frame] of packet.frames.entries()) {
-              checkKeys(frame,'label at timers mounted html cells selected prompt search correct guessesLeft storage daily writes requests toasts completions unexpected');
-              const completed=index>=expected.labels.indexOf('a-settled'), mounted=index>0&&index<packet.frames.length-1;
-              const pendingFrame=frame.label==='a-pending'||frame.label==='b-selected-pending';
-              const at=now+(wrong&&(frame.label==='a-flash-cleared'||frame.label==='after-teardown')?1500:0);
-              equal([frame.at,frame.mounted],[at,mounted]);
-              assert(Number.isSafeInteger(frame.timers)&&frame.timers>=0);
-              const dailyHere=completed?daily:null;
-              equal(frame.daily,dailyHere);
-              equal(frame.storage,{local:dailyHere===null?baseStorage.local:{...baseStorage.local,[dailyKey]:dailyHere},session:baseStorage.session});
-              equal(frame.writes,completed?writes:[]);
-              equal(frame.toasts,completed?toasts:[]);
-              equal(frame.requests,completed?settledRequests:pendingFrame?pendingRequests:index===0?[]:loadedReads);
-              equal([frame.completions,frame.unexpected],[[],[]]);
-              if(!mounted) equal([frame.html,frame.cells,frame.selected,frame.prompt,frame.search,frame.correct,frame.guessesLeft],[null,[],[],null,null,null,null]);
-              else {
-                const status=completed&&valid?'correct':wrong&&frame.label==='a-settled'?'wrong':'empty';
-                equal(frame.cells.map(cell=>[cell.index,cell.status,cell.disabled,cell.player]),
-                  Array.from({length:9},(_,i)=>[i,i===0?status:'empty',i===0&&status==='correct',i===0&&status==='correct'?name:null]));
-                equal([frame.correct,frame.guessesLeft],[completed&&valid?'Correct: 1/9':'Correct: 0/9',completed&&!free?'Guesses left: 14':'Guesses left: 15']);
-                if(completed&&valid) assert(frame.cells[0].text.includes('Only you!'));
-                replayGridDOM(frame);
-                domReplays++;
-              }
-            }
-
-            equal(selection(frames.ready),noSelection);
-            equal(selection(frames['a-selected']),{...aSelection,searchEnabled:true});
-            equal(searchState(frames['a-selected']),['',false,true]);
-            equal(selection(frames['a-query']),{...aSelection,searchEnabled:true});
-            equal(searchState(frames['a-query']),[name,false,false]);
-            equal(frames['a-query'].search.options.length,1);
-            assert(frames['a-query'].search.options[0].text.includes(name));
-            equal(selection(pending),aSelection);
-            equal(searchState(pending),['',true,true]);
-            if(expected.switchToB){
-              const selectedB=frames['b-selected-pending'];
-              equal(selection(selectedB),bSelection);
-              equal(searchState(selectedB),['',true,true]);
-              equal([selectedB.cells[4].status,selectedB.cells[4].disabled],['empty',false]);
-            }
-            const settledSelection=[selection(settled),...(wrong?[selection(frames['a-flash-cleared'])]:[])];
-            const expectedSelection=expected.switchToB?{...bSelection,searchEnabled:true}:noSelection;
-            equal(settledSelection,Array(wrong?2:1).fill(expectedSelection),'B stays selected and searchable after A settles or its wrong flash clears');
-            if(expected.switchToB){
-              equal(searchState(settled),['',false,true]);
-              if(wrong)equal(searchState(frames['a-flash-cleared']),['',false,true]);
-            }
-            equal(end.timers,0);
-            if(wrong) assert(settled.timers>0,'Actual wrong flash timer pending before the observed 1500 ms advance');
-
-            const caseBytes=Buffer.from(JSON.stringify(packet));
-            assert(rawBytes.subarray(caseOffset,caseOffset+caseBytes.length).equals(caseBytes));
-            const literal={offset:caseOffset,bytes:caseBytes.length,sha256:sha(caseBytes)};
-            caseOffset+=caseBytes.length+(caseIndex<raw.cases.length-1?1:0);
-            newFrames+=packet.frames.length;
-            newActions+=packet.actions.length;
-            requestsSettled+=end.requests.length;
-            transportLegs+=end.requests.reduce((total,row)=>total+row.calls.length,0);
-            caseProofs.push({key:packet.key,title:packet.title,frames:packet.frames.length,actions:packet.actions.length,
-              requests:end.requests.length,settledSelection,dailyBytes:daily===null?0:Buffer.byteLength(daily),
-              pendingSelection:selection(frames['b-selected-pending']??pending),teardownTimers:end.timers,literal});
-          }
-          equal(rawBytes.subarray(caseOffset).toString('utf8'),']}\n');
-          equal([newFrames,newActions,domReplays,requestsSettled,transportLegs],[32,28,24,22,70]);
-          const newProof={status:'passed',frames:newFrames,actions:newActions,domReplays,requestsSettled,transportLegs,cases:caseProofs,
-            wholePreservationCases:[{key:caseProofs[0].key,frames:caseProofs[0].frames,...caseProofs[0].literal}],
-            limits:'Four fixed Page unit scenarios, fictional SDK boundary and fake time. B remains selected and searchable across the three original business failures.'};
-          assert.equal(newProof.status,'passed','Reviewed fixed RAW oracle must complete');
-          assert(Number.isSafeInteger(newProof.frames)&&newProof.frames>0);
-          assert.deepEqual(newProof.cases.map(row=>row.key),newCases.map(row=>row.key));
-          const source=json('source-join.json'),original=json('original-custody.json');
-          assert.equal(original.status,'passed-completed-original-qualification-custody');
-          const originalRaw=read('original-packet/'+original.raw.file);
-          const [fixedAOnly]=newProof.wholePreservationCases;
-          assert.deepEqual(newProof.wholePreservationCases,[original.aOnly]);
-          const fixedLiteral=rawBytes.subarray(fixedAOnly.offset,fixedAOnly.offset+fixedAOnly.bytes);
-          const originalLiteral=originalRaw.subarray(original.aOnly.offset,original.aOnly.offset+original.aOnly.bytes);
-          assert(fixedLiteral.equals(originalLiteral),'Whole literal A-only case, including every captured byte');
-          assert(priorRawBytes.equals(read('original-packet/'+original.prior.file)),'Entire unchanged prior suite RAW, including every captured byte');
-          fs.writeFileSync(out+'/preserve-aOnly.literal.json',fixedLiteral,{flag:'wx'});
-          fs.writeFileSync(out+'/fixed-admission.json',JSON.stringify({
-            status:'passed-fixed-soccer-grid-selection-ownership-qualification',
-            actualCases:rows.length,actualPasses:report.numPassedTests,actualFailures:report.numFailedTests,
-            newCases:newCases.length,priorCases:priorCases.length,newFrames:newProof.frames,priorFrames,
-            raw:{file:'raw.json',bytes:rawBytes.length,sha256:sha(rawBytes)},priorRaw:priorProof,newProof,
-            wholeAOnlyLiteralHeld:true,wholePriorRawLiteralHeld:true,reportRows,source,original,
-            limits:'Fixed unit evidence only. Fictional transport, fake time and real Page/Board/Search/hook/Daily-save path. No native browser, build, provider or release qualification.',
-          },null,2));
-          console.log('PASS fixed Soccer Grid all 18 rows, 32 new and 56 prior frames, retained B selection and both complete literal preserves');
-          NODE
-      - name: Final whole source index locks installed versions and offline holds
+          if (restorationFailure) throw restorationFailure;
+          if (failure) throw failure;
+          const totals = {
+            arms:arms.length,rows:arms.reduce((n,row) => n + row.rows,0),passes:arms.reduce((n,row) => n + row.passes,0),
+            namedOriginalBusinessReds:arms.reduce((n,row) => n + row.failures.length,0),
+            newFrames:arms.reduce((n,row) => n + row.newFrames,0),priorFrames:arms.reduce((n,row) => n + row.priorFrames,0),
+            actions:arms.reduce((n,row) => n + row.actions,0),requests:arms.reduce((n,row) => n + row.requests,0),
+            transportLegs:arms.reduce((n,row) => n + row.transportLegs,0),wholeAOnlyVectors:arms.length,wholeAOnlyFrames:arms.length * original.aOnly.frames,
+          };
+          assert.deepEqual(Object.values(totals), [3,54,51,3,96,168,84,66,210,3,21]);
+          write(out + '/controls-admission.json', {status:'passed-three-physical-grid-selection-control-arms',totals,arms,
+            source:json(out + '/source-join.json'),fixedReference:{run:reference.run,artifact:reference.artifact,head:reference.head,tree:reference.tree,workflow:reference.workflow,
+              zipBytes:reference.zipBytes,zipSHA256:reference.zipSHA256,bodyCount:actualFixed.length,rawBytes:fixedRaw.length,rawSHA256:sha(fixedRaw)},
+            originalReference:original,exactSourceIndexLocksInstalledOfflineRestored:true,
+            limits:'Three fresh serialized JSDOM unit processes. Physical Hook inverse and exact restoration. Whole role-qualified RAW, prior RAW and A-only vectors. No build, browser, provider or release claim.'});
+          console.log('PASS three physical Grid selection arms, 54 tests, 51 passes, three original-only business failures, exact restoration');
+          GRID_CONTROL_RUNNER
+          export SIM_OFFLINE_RECEIPT="$PWD/$out/offline.log"
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node "$out/control-runner.mjs" 2>&1 | tee "$out/controls.log"
+      - name: Final restored source index locks installed versions and offline receipt
         if: always()
         run: |
           set -euo pipefail
-          git ls-files -s > soccer-grid-selection-ownership-fixed/source-after.txt
-          cmp soccer-grid-selection-ownership-fixed/source-before.txt soccer-grid-selection-ownership-fixed/source-after.txt
+          out=soccer-grid-selection-ownership-controls
+          git ls-files -s > "$out/source-after.txt"
+          cmp "$out/source-before.txt" "$out/source-after.txt"
           git diff --exit-code HEAD -- .
-          sha256sum package.json package-lock.json > soccer-grid-selection-ownership-fixed/locks-after.txt
-          cmp soccer-grid-selection-ownership-fixed/locks-before.txt soccer-grid-selection-ownership-fixed/locks-after.txt
-          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node --input-type=module <<'NODE'
-          import fs from 'node:fs';import assert from 'node:assert/strict';import {execFileSync} from 'node:child_process';import {createHash} from 'node:crypto';
-          const out='soccer-grid-selection-ownership-fixed',files=execFileSync('git',['ls-files','-z'],{encoding:'utf8'}).split('\0').filter(Boolean),rows=files.map(file=>{const bytes=fs.readFileSync(file);return{file,bytes:bytes.length,sha256:createHash('sha256').update(bytes).digest('hex')};});assert.deepEqual(rows,JSON.parse(fs.readFileSync(out+'/tracked-before.json')));fs.writeFileSync(out+'/tracked-after.json',JSON.stringify(rows));
-          const lock=JSON.parse(fs.readFileSync('package-lock.json')),before=JSON.parse(fs.readFileSync(out+'/installed-before.json')),after=Object.keys(lock.packages).filter(p=>p.startsWith('node_modules/')&&fs.existsSync(p+'/package.json')).map(p=>[p,JSON.parse(fs.readFileSync(p+'/package.json')).version]);assert.equal(after.length,Number(process.env.SOCCER_GRID_FIXED_LOCKED_VERSIONS));for(const[p,v]of after)assert.equal(v,lock.packages[p].version,p);assert.deepEqual(after,before);fs.writeFileSync(out+'/installed-after.json',JSON.stringify(after));assert.equal(fs.statSync(out+'/offline.log').size,0);let retainedOriginalHeld=false;
-          if(fs.existsSync(out+'/original-custody.json')){
-            const receipt=JSON.parse(fs.readFileSync(out+'/original-custody.json'));
-            const refs=JSON.parse(fs.readFileSync(out+'/original-reference-before.json'));
-            const sha=bytes=>createHash('sha256').update(bytes).digest('hex');
-            assert.deepEqual(refs.map(row=>row.file).sort(),['original-artifact.json','original-custody.json','original-jobs.json','original-run.json','original.zip'].sort());
-            const check=(root,row)=>{
-              const file=root+'/'+row.file;
-              const stat=fs.lstatSync(file);
-              assert(stat.isFile()&&!stat.isSymbolicLink());
-              const bytes=fs.readFileSync(file);
-              assert.deepEqual([bytes.length,sha(bytes)],[row.bytes,row.sha256],row.file);
-            };
-            for(const row of refs)check(out,row);
-            const ref=out+'/original-packet';
-            const walk=(dir,prefix='')=>fs.readdirSync(dir,{withFileTypes:true}).flatMap(entry=>{
-              assert(!entry.isSymbolicLink());
-              const file=prefix+entry.name;
-              if(entry.isDirectory())return walk(dir+'/'+entry.name,file+'/');
-              assert(entry.isFile());
-              return [file];
-            });
-            assert.deepEqual(walk(ref).sort(),receipt.allBodyPins.map(row=>row.file).sort());
-            for(const row of receipt.allBodyPins)check(ref,row);
-            fs.writeFileSync(out+'/original-reference-after.json',JSON.stringify(refs));
-            retainedOriginalHeld=true;
-          }
-          if(fs.existsSync(out+'/fixed-admission.json')){
-            assert(retainedOriginalHeld,'Qualified fixed requires all original bodies and refs held');
-            const proof=JSON.parse(fs.readFileSync(out+'/fixed-admission.json'));
-            const sha=bytes=>createHash('sha256').update(bytes).digest('hex');
-            const [preserve]=proof.newProof.wholePreservationCases;
-            for(const row of [proof.raw,proof.priorRaw,{...preserve,file:'preserve-aOnly.literal.json'}]){
-              const bytes=fs.readFileSync(out+'/'+row.file);
-              assert.deepEqual([bytes.length,sha(bytes)],[row.bytes,row.sha256],row.file+' retained fixed evidence');
-            }
-          }
-          fs.writeFileSync(out+'/final-holds.json',JSON.stringify({status:'passed',trackedBodies:rows.length,scopedSourceRows:Number(process.env.SOCCER_GRID_FIXED_SCOPED_SOURCE_ROWS),rootConfigurations:11,installedLockedVersions:after.length,indexUnchanged:true,sourceBytesUnchanged:true,locksUnchanged:true,retainedOriginalHeld,offlineBytes:0,limits:'Physical source/index/locks/version/offline holds only. Unit qualification remains separate and the completed workflow conclusion is required.'},null,2));console.log('PASS exact tracked physical source/index/locks/installed versions and zero-byte offline receipt held');
-          NODE
+          sha256sum package.json package-lock.json bun.lock bun.lockb > "$out/locks-after.txt"
+          cmp "$out/locks-before.txt" "$out/locks-after.txt"
+          test -f "$out/offline.log"
+          test ! -s "$out/offline.log"
+          if [[ -f "$out/controls-admission.json" ]]; then
+            cmp "$out/fixed-hook-before.ts" "$out/fixed-hook-after.ts"
+            cmp "$out/tracked-before.json" "$out/tracked-after.json"
+            cmp "$out/installed-before.json" "$out/installed-after.json"
+            node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee "$out/types-restored.log"
+            test ! -s "$out/types-restored.log"
+            test ! -s "$out/offline.log"
+          fi
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: soccer-grid-selection-ownership-fixed-${{ github.run_id }}
-          path: soccer-grid-selection-ownership-fixed
+          name: soccer-grid-selection-ownership-controls-${{ github.run_id }}
+          path: soccer-grid-selection-ownership-controls
           retention-days: 14
           if-no-files-found: error
