@@ -1,5 +1,13 @@
 
 
+## 2026-11-07 Soccer continuation, Rarity Round crowd panel ownership
+
+A Rarity Round reveal owns its crowd response. Advancing or restarting invalidates that reveal. A late response can no longer fill the next round's pending panel or overwrite its displayed picks. Rank, points, normalization and request behavior passed the frozen regression.
+
+The original reproduced both stale displays. The first original attempt failed at test typing and remains archived. The fixed Page passed both cases, and the physical controls reproduced both failures on the original and passed on the fixed and restored Page. Three Chromium viewports covered both response orders. The clean build matched 4,664 source paths, 11 configurations and 850 built files. [Original](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/42366132461) · [Fixed](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/42367425437) · [Physical controls](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/42368193168) · [Full](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/42368926851) · [Clean](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/42370093231)
+
+
+
 ## 2026-11-07 Who Am I pending lookup ownership
 
 Each Who Am I player lookup now belongs to the round that started it. Confirming Give up discards the pending lookup. Play again opens a fresh round that can accept a new guess even while the previous reply is still arriving.
