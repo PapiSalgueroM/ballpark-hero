@@ -281,3 +281,11 @@ Next: extend the existing real-player arrival timeline to 2010 and 2015 starts w
 The [focused qualification](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/42346216682) and [phone verification](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/42348568920) passed. [Public verification](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/42349349485) matched 64 compiled assets to the tested build, passed the Soccer Career SEO check and got IndexNow HTTP 200 for that URL. Existing fleet diagnostics remain tracked.
 
 Next: CM-03 recorded historical roster counts at club selection. Continue the source gates for Ekstraklasa after the count slice. NBA 2005 and NFL 2006 source intake stays open.
+
+## 2026-11-07: Club Manager recorded historical roster counts
+
+[PR #532](https://github.com/PapiSalgueroM/ballpark-hero/pull/532) shows the selected historical club's recorded snapshot row count before the player takes the job. Blackpool six and Arsenal 35 passed the 2010/11 phone checks. Current Gangwon still shows generated squad. The existing roster data and job creation path are unchanged. CM-03 remains partial, with player-level provenance, coverage and migration work open.
+
+[Qualification](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/42349735958) passed. [Public verification](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/42350742966) matched all seven compiled files, passed the Club Manager live SEO check and submitted only that URL to IndexNow.
+
+Next: the 18-club Ekstraklasa membership intake is corroborated. Preserve the Legia identity; proposed new clubs need a dated and measured Soccer Career integration.

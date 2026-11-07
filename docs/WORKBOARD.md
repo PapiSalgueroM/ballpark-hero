@@ -17907,3 +17907,12 @@ Continue on the master list: verified Soccer Career arrivals for 2010 and 2015, 
 Qualification `42346216682`: six shared saves match, five new cases pass, types, build, 20 output checks and all 16 existing caps pass. Phone `42348568920`: two fresh starts, two admitted 2020 saves and both reloads pass. [Public verification](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/42349349485) matched 64 compiled assets to the tested build, passed the Soccer Career SEO check and got IndexNow HTTP 200 for that URL.
 
 Continue CM-03 historical roster snapshot counts. Ekstraklasa, NBA 2005 and NFL 2006 are still source intake.
+
+<!-- cm-historical-roster-pr532-live -->
+## 2026-11-07: Club Manager roster snapshot counts published
+
+[PR #532](https://github.com/PapiSalgueroM/ballpark-hero/pull/532), main `c3b5ca4afaf9b4dadcd748f340e8e8e3e4a1a1dd`, live deployment `510b1df1-2172-42c0-90f9-d9f9c997b840`. At historical club selection, the picker shows the number of players recorded in the selected snapshot. Blackpool six and Arsenal 35 were verified for 2010/11. The existing partial and generated squad disclosures remain. CM-03 stays partial.
+
+Qualification `42349735958`: normal build, all 20 output checks and 16 size caps, three phone contexts and four photos passed. [Public verification](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/42350742966) matched all seven compiled files, passed the Club Manager live SEO check and submitted only that URL to IndexNow.
+
+Continue the Ekstraklasa 17-club Soccer Career intake and dated load design. No new Polish clubs are live yet.
