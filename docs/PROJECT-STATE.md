@@ -1,3 +1,15 @@
+## 2026-11-07: Soccer Career historical arrivals from 2010 and 2015 live
+
+[PR #529](https://github.com/PapiSalgueroM/ballpark-hero/pull/529) published from main `cef43e538e2266974cc4d2e96eb5996a6e2bdce9`, App tree `5f6ef45062b696e0eea44006093f5824bd02ff7b`, Lovable deployment `d1268cef-456a-487f-80e2-9d1edba677bb`.
+
+New 2010 and 2015 saves now show sourced arrivals in the phone's SportsFeed as their real entry years are reached. A 2010 start adds Mbappé in 2015, Haaland in 2016 and Bellingham in 2019. A 2015 start adds Haaland and Bellingham. Earlier save formats and start behavior are preserved, including Neymar in the existing 2005 start. This is a dated arrival timeline; playable future rosters and full cross-sport entrant coverage remain open under SC-36 and the historical draft work.
+
+[Qualification](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/42346216682) passed types, six byte-identical shared cases, five new start/player cases, the normal build, 20 output checks and the unchanged 16 route caps. [Phone verification](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/42348568920) passed fresh 2010 and 2015 starts, two qualified 2020 saves, five arrival cards and both reloads. Existing fleet diagnostics remain tracked.
+
+[Public verification](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/42349349485) matched 64 compiled assets to the tested build, passed the Soccer Career SEO check and got IndexNow HTTP 200 for that URL.
+
+Next: CM-03 historical roster snapshot count at club selection. Poland's 18-club Ekstraklasa membership and proposed 17 additional identities have source intake; there is no live Polish expansion yet. NBA 2005 and NFL 2006 remain source intake.
+
 ## 2026-11-07: Russian league expansion live
 
 [PR #527](https://github.com/PapiSalgueroM/ballpark-hero/pull/527) published from main `d151e61ee8fa1348e05b2dadd59b1aff2d226ee6`, App tree `3fe5bf9acace9f506c5f469e012be11c1dded94e`, Lovable deployment `e83da178-a548-4af8-ab61-f3e514993136`. This includes the previous K League and phone Squad releases.

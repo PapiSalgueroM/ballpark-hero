@@ -273,3 +273,11 @@ CM-03 verified real rosters and all-sports historical entrant coverage remain in
 Live release `e83da178-a548-4af8-ab61-f3e514993136`; exact public assets, both route SEO checks and scoped IndexNow acceptance verified in [run 42345338581](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/42345338581). Existing suite failures remain tracked.
 
 Next: extend the existing real-player arrival timeline to 2010 and 2015 starts without changing old saves, then disclose recorded historical roster depth in the Club Manager picker. NBA 2005 and NFL 2006 are source intake only.
+
+## 2026-11-07: Real arrivals for Soccer Career 2010 and 2015 starts
+
+[PR #529](https://github.com/PapiSalgueroM/ballpark-hero/pull/529) extends the SportsFeed timeline for fresh 2010 and 2015 careers. Verified entry years for Mbappé (2015), Haaland (2016) and Bellingham (2019) produce five start/player cases. Earlier save formats are held. SC-36 remains partial: this delivers sourced arrivals and retains simulated career outcomes; it does not complete the playable future population.
+
+The [focused qualification](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/42346216682) and [phone verification](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/42348568920) passed. [Public verification](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/42349349485) matched 64 compiled assets to the tested build, passed the Soccer Career SEO check and got IndexNow HTTP 200 for that URL. Existing fleet diagnostics remain tracked.
+
+Next: CM-03 recorded historical roster counts at club selection. Continue the source gates for Ekstraklasa after the count slice. NBA 2005 and NFL 2006 source intake stays open.
