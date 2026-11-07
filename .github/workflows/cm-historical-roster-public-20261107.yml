@@ -1,0 +1,312 @@
+name: CM historical roster public delivery and scoped search closeout
+on:
+  push:
+    branches: [codex/cm-historical-roster-public-20261107]
+permissions:
+  contents: read
+concurrency:
+  group: cm-historical-roster-public-20261107
+  cancel-in-progress: false
+jobs:
+  delivery:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    env:
+      PRODUCT_CORE: a311f9a70a03a41a7912a5f9a1ce8e7aff323f11
+      PRODUCT_TREE: 133fcd3d26a4d237178e5c7efee723048da0aef2
+      PUBLIC_MAIN: c3b5ca4afaf9b4dadcd748f340e8e8e3e4a1a1dd
+      PUBLIC_DEPLOYMENT: 510b1df1-2172-42c0-90f9-d9f9c997b840
+      PUBLIC_INPUT: '{"schema":"CM_HISTORICAL_ROSTER_PUBLIC_BINDINGS_V1","qualification":{"product":{"commit":"a311f9a70a03a41a7912a5f9a1ce8e7aff323f11","tree":"133fcd3d26a4d237178e5c7efee723048da0aef2"},"run":42349735958,"job":128335116244,"artifact":13564648811,"qa":"286f9d10ac9d21aa6c1e1b7c1db47f669502ec04","qaTree":"5c8379cb806ec51e434d1e3e59efafc346e45508","workflowBlob":"b2887df95c8307a2c847c2095638de3e567159a5","ordinaryPhotos":4,"qualificationSHA256":"c53a6e9536dc245bc7dfeb64b7ef87df582d4a5d84cf1ebac6b2c855287d58f4","independentAdmissionSHA256":"7c670eedb0461c3a098a4763de2e16b128ba672263319868df35269f33381f08","browserReportSHA256":"61d5b6b48790596321ef1ecd73dd5b21549c21560d279997895f2e0ca50ddf58","compiledOwnerProofSHA256":"f24354ca7ab98d77ad9d911428dd969549b64ea641e0ee6e696f6954730d4a14","distDigest":"d76d6f867781a3fa60e79f03e71d03ca26d2a8a195f73ddd50f454cbb2612d3e"},"referenceDocument":{"file":"club-manager/index.html","bytes":64107,"sha256":"557cf270b3261cc1fe95208822137ecaf420ae963811a3271f7da9f5df9e6e2a"},"declarations":{"module":"/assets/index-CvAbEKZ9.js","styles":["/assets/index-lOVfTVeW.css","/assets/index-lOVfTVeW.css"],"boot":"/prerender-boot.js"},"pins":[{"file":"assets/index-CvAbEKZ9.js","bytes":798737,"sha256":"b7b36494418fa3ea53403b4d541390d3aa0f941d8eda39a1ce1c9b65c402680b","roles":["entry"]},{"file":"prerender-boot.js","bytes":3049,"sha256":"c5da547fd0b4b0920dfeb100f3d5f3f73ca5317e38135ddc132649cd43f85c70","roles":["boot"]},{"file":"assets/ClubManager-CNkrBGs8.js","bytes":88471,"sha256":"1391dbc6a612ee4d9dc2a395b60980ce14d5cea920127eca043f155919206d8f","roles":["club-manager"]},{"file":"assets/ClubManagerTeamPicker-BUp-zqoC.js","bytes":3915,"sha256":"840333c93089f63ab906ce4bb6ea2f49864d4da8f8a5d9f4b2bf32eefcce3bdc","roles":["team-picker"]},{"file":"assets/clubManagerEra2010-CiScj6R7.js","bytes":77314,"sha256":"0a522c3ca565a12b5561d60c583e446cd7e93fab6e2031895ac27ab9d52f876a","roles":["era-2010"]},{"file":"assets/index-lOVfTVeW.css","bytes":206847,"sha256":"2a17ca58363647d97671ae4095cd02954a64c9444f9f29e62660735e2f783118","roles":["style"]},{"file":"assets/clubManager-_bRRCowL.js","bytes":920899,"sha256":"a231db3d2f774ab56f162e01461bd4453b4ca777a8dbfa03c546aef33b3be6dc","roles":["era-loader"]}]}'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24.22.2'
+      - name: Bind the sole QA addition to the actual published product
+        shell: bash
+        run: |
+          set -euo pipefail
+          export QA_OUT="$RUNNER_TEMP/cm-historical-roster-public"
+          mkdir "$QA_OUT"
+          mkdir "$QA_OUT/logs"
+          printf 'QA_OUT=%s\n' "$QA_OUT" >> "$GITHUB_ENV"
+          test "$(node --version)" = v24.22.2
+          [[ "$PRODUCT_CORE" =~ ^[a-f0-9]{40}$ && "$PRODUCT_TREE" =~ ^[a-f0-9]{40}$ && "$PUBLIC_MAIN" =~ ^[a-f0-9]{40}$ ]]
+          [[ "$PUBLIC_DEPLOYMENT" =~ ^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$ ]]
+          [[ "$PUBLIC_INPUT" != *MUST_BIND* ]]
+          test "$(git show -s --format=%P HEAD)" = "$PUBLIC_MAIN"
+          test "$(git show -s --format=%T HEAD^)" = "$PRODUCT_TREE"
+          test "$(git diff --name-status HEAD^ HEAD)" = $'A\t.github/workflows/cm-historical-roster-public-20261107.yml'
+          git rev-parse HEAD > "$QA_OUT/qa-head.txt"
+          git rev-parse HEAD^{tree} > "$QA_OUT/qa-tree.txt"
+          git rev-parse HEAD^ > "$QA_OUT/published-main.txt"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$QA_OUT/source-before.sha256"
+          git ls-files --stage > "$QA_OUT/index-before.txt"
+          git status --porcelain=v1 --untracked-files=all > "$QA_OUT/status-before.txt"
+          sha256sum package.json package-lock.json bun.lock bun.lockb > "$QA_OUT/locks-before.sha256"
+          test ! -s "$QA_OUT/status-before.txt"
+          test ! -e dist
+          cp .github/workflows/cm-historical-roster-public-20261107.yml "$QA_OUT/workflow.yml"
+      - name: Verify one published route and its observed compiled owner bodies
+        shell: bash
+        run: |
+          set +e
+          set -uo pipefail
+          node --input-type=module > "$QA_OUT/logs/http-delivery.log" 2>&1 <<'HTTP_NODE'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          import {createHash} from 'node:crypto';
+          
+          const e=process.env,out=e.QA_OUT,origin='https://douknowball.com',route='/club-manager';
+          const input=JSON.parse(e.PUBLIC_INPUT);
+          const {qualification,declarations:expected,pins}=input;
+          const sha=b=>createHash('sha256').update(b).digest('hex');
+          const save=(name,body)=>fs.writeFileSync(out+'/'+name,body,{flag:'wx'});
+          const json=(name,value)=>save(name,JSON.stringify(value,null,2)+'\n');
+          const product={commit:e.PRODUCT_CORE,tree:e.PRODUCT_TREE};
+          assert.equal(input.schema,'CM_HISTORICAL_ROSTER_PUBLIC_BINDINGS_V1');
+          assert.deepEqual(qualification.product,product);
+          for(const key of ['run','job','artifact'])assert(Number.isSafeInteger(qualification[key])&&qualification[key]>0,key);
+          assert.equal(qualification.ordinaryPhotos,4);
+          for(const key of ['qa','qaTree','workflowBlob'])assert.match(qualification[key],/^[a-f0-9]{40}$/,key);
+          for(const key of ['qualificationSHA256','independentAdmissionSHA256','browserReportSHA256','compiledOwnerProofSHA256','distDigest'])
+            assert.match(qualification[key],/^[a-f0-9]{64}$/,key);
+          const bodyPin=pin=>{
+            assert(Number.isSafeInteger(pin.bytes)&&pin.bytes>0);
+            assert.match(pin.sha256,/^[a-f0-9]{64}$/);
+          };
+          bodyPin(input.referenceDocument);
+          assert.equal(input.referenceDocument.file,'club-manager/index.html');
+          assert.match(expected.module,/^\/assets\/[a-zA-Z0-9_.-]+\.js$/);
+          assert(Array.isArray(expected.styles)&&expected.styles.length>0);
+          for(const style of expected.styles)assert.match(style,/^\/assets\/[a-zA-Z0-9_.-]+\.css$/);
+          assert.equal(expected.boot,'/prerender-boot.js');
+          assert.equal(new Set(pins.map(pin=>pin.file)).size,pins.length);
+          const roles=new Map();
+          const styles=[];
+          for(const pin of pins){
+            assert(/^(?:assets\/[a-zA-Z0-9_.-]+\.(?:js|css)|prerender-boot\.js)$/.test(pin.file));
+            bodyPin(pin);
+            assert(Array.isArray(pin.roles)&&pin.roles.length>0&&new Set(pin.roles).size===pin.roles.length);
+            for(const role of pin.roles){
+              if(role==='style'){
+                assert(pin.file.endsWith('.css'));
+                styles.push('/'+pin.file);
+              }else{
+                assert(pin.file.endsWith('.js')&&['entry','boot','club-manager','team-picker','era-2010','era-loader'].includes(role)&&!roles.has(role));
+                roles.set(role,'/'+pin.file);
+              }
+            }
+          }
+          assert.deepEqual([...roles.keys()].sort(),['boot','club-manager','entry','era-2010','era-loader','team-picker']);
+          assert.equal(roles.get('entry'),expected.module);
+          assert.equal(roles.get('boot'),expected.boot);
+          assert.deepEqual([...new Set(expected.styles)].sort(),styles.sort());
+          json('reference-authority.json',{product,main:e.PUBLIC_MAIN,deployment:e.PUBLIC_DEPLOYMENT,input});
+          const report={schema:'CM_HISTORICAL_ROSTER_PUBLIC_DELIVERY_V1',status:'failed',product,main:e.PUBLIC_MAIN,
+            deployment:e.PUBLIC_DEPLOYMENT,route,reference:input.referenceDocument,readiness:[],responses:[],controls:[]};
+          
+          async function capture(path,label){
+            const row={path,label,started:new Date().toISOString()};
+            report.responses.push(row);
+            try{
+              const response=await fetch(origin+path,{method:'GET',cache:'no-store',redirect:'error',signal:AbortSignal.timeout(15000)});
+              const body=Buffer.from(await response.arrayBuffer());
+              Object.assign(row,{status:response.status,url:response.url,headers:Object.fromEntries(response.headers),
+                file:label+'.body',bytes:body.length,sha256:sha(body)});
+              save(row.file,body);
+              return {row,body};
+            }catch(error){row.error=String(error.stack??error);throw error;}
+            finally{row.finished=new Date().toISOString();json(label+'.json',row);}
+          }
+          function deployment(row,kind){
+            assert.equal(row.url,origin+row.path,'EXACT_PUBLIC_RESPONSE_URL');
+            assert.equal(row.status,200,'HTTP_STATUS_200');
+            assert((row.headers['x-deployment-id']??'').split('.').includes(e.PUBLIC_DEPLOYMENT),'EXPECTED_DEPLOYMENT_ID');
+            const type=(row.headers['content-type']??'').split(';')[0].trim().toLowerCase();
+            assert((kind==='html'?['text/html']:kind==='css'?['text/css']:['text/javascript','application/javascript']).includes(type),'EXPECTED_MEDIA_TYPE');
+          }
+          function declarations(body){
+            const html=body.toString('utf8').replace(/<!--[\s\S]*?-->/g,'');
+            const attrs=s=>Object.fromEntries([...s.matchAll(/([^\s=/>]+)(?:\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s"'=<>]+)))?/g)]
+              .map(m=>[m[1].toLowerCase(),m[2]??m[3]??m[4]??'']));
+            const scripts=[...html.matchAll(/<script\b([^>]*)>[\s\S]*?<\/script\s*>/gi)].map(m=>({tag:m[0],a:attrs(m[1])}));
+            const staticHTML=html.replace(/<script\b[^>]*>[\s\S]*?<\/script\s*>/gi,'').replace(/<style\b[^>]*>[\s\S]*?<\/style\s*>/gi,'');
+            const links=[...staticHTML.matchAll(/<link\b([^>]*)>/gi)].map(m=>attrs(m[1]));
+            const modules=scripts.filter(s=>s.a.type==='module'&&(s.a.src??'').startsWith('/assets/'));
+            const styles=links.filter(a=>(a.rel??'').split(/\s+/).includes('stylesheet')&&(a.href??'').startsWith('/assets/'));
+            assert.deepEqual(modules.map(s=>s.a.src),[expected.module],'CM_MODULE_DECLARATIONS');
+            assert.deepEqual(styles.map(s=>s.href),expected.styles,'CM_CSS_DECLARATIONS');
+            const boot=scripts.filter(s=>s.a.src===expected.boot);
+            assert(boot.length===1&&Object.hasOwn(boot[0].a,'defer'),'CM_BOOT_DECLARATION');
+            return {moduleTag:modules[0].tag,module:modules[0].a.src,styles:styles.map(s=>s.href),boot:boot[0].a.src};
+          }
+          function bodyMatches(body,pin){assert(body.length===pin.bytes&&sha(body)===pin.sha256,'CRITICAL_BODY_BYTES');}
+          function rejected(label,marker,fn){
+            assert.throws(fn,{name:'AssertionError',message:new RegExp('^'+marker)});
+            report.controls.push({label,rejectedBy:marker,changed:true,wholeInverseExact:true,actualHeld:true});
+          }
+          try{
+            let cm;
+            for(let i=1;i<=8;i++){
+              const attempt={attempt:i};report.readiness.push(attempt);
+              try{
+                const value=await capture(route,'club-manager-attempt-'+i);
+                deployment(value.row,'html');
+                attempt.declarations=declarations(value.body);
+                attempt.ready=true;cm=value;break;
+              }catch(error){attempt.error=String(error.message??error);}
+              if(i<8)await new Promise(resolve=>setTimeout(resolve,3000));
+            }
+            assert(cm,'CM_ENTRY_READINESS_EXHAUSTED');
+            report.document=cm.row;
+            const raw=cm.body.toString('utf8'),moduleTag=declarations(cm.body).moduleTag,at=raw.indexOf(moduleTag);
+            assert(at>=0&&raw.indexOf(moduleTag,at+1)<0,'CM_ONE_EXACT_MODULE_CONTROL_SOURCE');
+            const fault=raw.slice(0,at)+raw.slice(at+moduleTag.length);
+            assert.notEqual(fault,raw);save('control-module-omitted.html',fault);
+            rejected('module-omission','CM_MODULE_DECLARATIONS',()=>declarations(Buffer.from(fault)));
+            assert(Buffer.from(fault.slice(0,at)+moduleTag+fault.slice(at)).equals(cm.body),'CM_MODULE_WHOLE_INVERSE');
+            const copy={...cm.row,headers:{...cm.row.headers,'x-deployment-id':'copied-wrong'}};
+            assert.notDeepEqual(copy,cm.row);json('control-deployment-header.json',copy);
+            rejected('deployment-mutation','EXPECTED_DEPLOYMENT_ID',()=>deployment(copy,'html'));
+            copy.headers['x-deployment-id']=cm.row.headers['x-deployment-id'];
+            assert.deepEqual(copy,cm.row);
+            report.deliveredAssets=[];
+            for(let i=0;i<pins.length;i++){
+              const pin=pins[i],value=await capture('/'+pin.file,'critical-'+(i+1));
+              deployment(value.row,pin.file.endsWith('.css')?'css':'js');
+              bodyMatches(value.body,pin);
+              report.deliveredAssets.push({pin,response:value.row});
+              if(pin.roles.includes('team-picker')){
+                const fault=Buffer.from(value.body);fault[0]^=1;
+                assert(!fault.equals(value.body));save('control-picker-byte-mutated.body',fault);
+                rejected('picker-body-mutation','CRITICAL_BODY_BYTES',()=>bodyMatches(fault,pin));
+                fault[0]^=1;assert(fault.equals(value.body),'CM_PICKER_BODY_WHOLE_INVERSE');
+              }
+            }
+            assert.equal(report.controls.length,3);
+            report.status='passed';
+          }catch(error){report.error=String(error.stack??error);process.exitCode=1;}
+          finally{
+            report.finished=new Date().toISOString();
+            json('HTTP-DELIVERY.json',report);
+            console.log(JSON.stringify({status:report.status,route,responses:report.responses.length,controls:report.controls.length,error:report.error??null}));
+          }
+          HTTP_NODE
+          native_exit=$?
+          printf '%s\n' "$native_exit" > "$QA_OUT/logs/http-delivery.exit" || exit 1
+          cat "$QA_OUT/logs/http-delivery.log" || exit 1
+          exit "$native_exit"
+      - name: Install only held HTML parser and HTTP request tools
+        shell: bash
+        run: |
+          set +e
+          set -uo pipefail
+          tools="$RUNNER_TEMP/cm-historical-roster-public-http-tools"
+          test ! -e "$tools" || exit 1
+          test "$(node -p "JSON.parse(require('fs').readFileSync('package-lock.json','utf8')).packages['node_modules/jsdom'].version")" = 20.0.3 || exit 1
+          npm install --prefix "$tools" --package-lock=false --no-audit --no-fund jsdom@20.0.3 playwright@1.64.0 > "$QA_OUT/logs/http-tools-install.log" 2>&1
+          native_exit=$?
+          printf '%s\n' "$native_exit" > "$QA_OUT/logs/http-tools-install.exit" || exit 1
+          test "$native_exit" = 0 || exit "$native_exit"
+          test ! -e node_modules || exit 1
+          mkdir node_modules || exit 1
+          ln -s "$tools/node_modules/jsdom" node_modules/jsdom || exit 1
+          ln -s "$tools/node_modules/playwright" node_modules/playwright || exit 1
+          ln -s "$tools/node_modules/playwright-core" node_modules/playwright-core || exit 1
+          test "$(node -p "JSON.parse(require('fs').readFileSync('node_modules/jsdom/package.json','utf8')).version")" = 20.0.3 || exit 1
+          test "$(node -p "require('playwright/package.json').version")" = 1.64.0 || exit 1
+          node --version > "$QA_OUT/logs/node-version.log"
+      - name: Existing live SEO audit on only Club Manager
+        shell: bash
+        run: |
+          set +e
+          set -uo pipefail
+          unset NODE_OPTIONS
+          test "$(cat "$QA_OUT/logs/http-delivery.exit")" = 0 || exit 1
+          node scripts/auditLive.mjs /club-manager > "$QA_OUT/logs/audit-live.stdout.log" 2> "$QA_OUT/logs/audit-live.stderr.log"
+          native_exit=$?
+          printf '%s\n' "$native_exit" > "$QA_OUT/logs/audit-live.exit" || exit 1
+          test "$native_exit" = 0 || exit "$native_exit"
+          grep -F '1 of 1 answered cleanly, 0 did not.' "$QA_OUT/logs/audit-live.stdout.log"
+      - name: Existing IndexNow submission limited to Club Manager
+        shell: bash
+        run: |
+          set +e
+          set -uo pipefail
+          unset NODE_OPTIONS
+          test "$(cat "$QA_OUT/logs/audit-live.exit")" = 0 || exit 1
+          URLS=/club-manager node scripts/indexnowSubmit.mjs > "$QA_OUT/logs/indexnow.stdout.log" 2> "$QA_OUT/logs/indexnow.stderr.log"
+          native_exit=$?
+          printf '%s\n' "$native_exit" > "$QA_OUT/logs/indexnow.exit" || exit 1
+          test "$native_exit" = 0 || exit "$native_exit"
+          grep -F '1 URLs to submit for douknowball.com' "$QA_OUT/logs/indexnow.stdout.log" || exit 1
+          grep -F 'key file verified live' "$QA_OUT/logs/indexnow.stdout.log" || exit 1
+          grep -E 'accepted \(HTTP (200|202)\)' "$QA_OUT/logs/indexnow.stdout.log"
+      - name: Always hold complete source, index, locks and status
+        if: always() && env.QA_OUT != ''
+        shell: bash
+        run: |
+          set -euo pipefail
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$QA_OUT/source-after.sha256"
+          git ls-files --stage > "$QA_OUT/index-after.txt"
+          git status --porcelain=v1 --untracked-files=all > "$QA_OUT/status-after.txt"
+          sha256sum package.json package-lock.json bun.lock bun.lockb > "$QA_OUT/locks-after.sha256"
+          for role in source index status locks; do
+            case "$role" in source|locks) suffix=sha256;; *) suffix=txt;; esac
+            cmp "$QA_OUT/$role-before.$suffix" "$QA_OUT/$role-after.$suffix"
+          done
+          test ! -s "$QA_OUT/status-after.txt"
+          test "$(git rev-parse HEAD)" = "$(cat "$QA_OUT/qa-head.txt")"
+          test "$(git rev-parse HEAD^{tree})" = "$(cat "$QA_OUT/qa-tree.txt")"
+          test ! -e dist
+          printf '0\n' > "$QA_OUT/logs/final-source-holds.exit"
+      - name: Close delivery and the exact scoped audit and submission
+        shell: bash
+        run: |
+          set -euo pipefail
+          node --input-type=module <<'CLOSE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          import {createHash} from 'node:crypto';
+          const e=process.env,out=e.QA_OUT,read=file=>fs.readFileSync(out+'/'+file),sha=b=>createHash('sha256').update(b).digest('hex');
+          const http=JSON.parse(read('HTTP-DELIVERY.json')),authority=JSON.parse(read('reference-authority.json'));
+          for(const name of ['http-delivery','http-tools-install','audit-live','indexnow','final-source-holds'])
+            assert.equal(read('logs/'+name+'.exit').toString(),'0\n',name);
+          assert.equal(http.status,'passed');
+          assert.equal(http.route,'/club-manager');
+          assert.equal(http.deployment,e.PUBLIC_DEPLOYMENT);
+          assert.equal(http.main,e.PUBLIC_MAIN);
+          assert.deepEqual(http.product,authority.product);
+          assert.deepEqual(authority.input,JSON.parse(e.PUBLIC_INPUT));
+          assert.deepEqual(http.controls.map(row=>row.label),['module-omission','deployment-mutation','picker-body-mutation']);
+          assert(http.controls.every(row=>row.changed&&row.wholeInverseExact&&row.actualHeld));
+          assert.deepEqual(http.deliveredAssets.map(row=>row.pin),authority.input.pins);
+          for(const row of http.responses.filter(row=>row.file)){const body=read(row.file);assert.equal(body.length,row.bytes);assert.equal(sha(body),row.sha256);}
+          fs.writeFileSync(out+'/public-closeout.json',JSON.stringify({status:'CM_HISTORICAL_ROSTER_DELIVERY_AND_SCOPED_INDEXNOW_PASSED',
+            product:http.product,main:http.main,deployment:http.deployment,route:http.route,qualification:authority.input.qualification,
+            deliveredAssets:http.deliveredAssets.map(row=>row.pin),controls:3,sourceHeld:true,indexHeld:true,locksHeld:true,
+            AppBuilds:0,browserGameplay:false,publishingActions:0},null,2)+'\n',{flag:'wx'});
+          CLOSE
+      - name: Retain complete public evidence
+        if: always() && env.QA_OUT != ''
+        shell: bash
+        run: |
+          set -euo pipefail
+          pack="$RUNNER_TEMP/cm-historical-roster-public-pack"
+          mkdir "$pack"
+          tar -czf "$pack/cm-historical-roster-public.tar.gz" -C "$QA_OUT" .
+          test "$(stat -c %s "$pack/cm-historical-roster-public.tar.gz")" -le 50000000
+          cd "$pack"
+          sha256sum cm-historical-roster-public.tar.gz > cm-historical-roster-public.tar.gz.sha256
+      - uses: actions/upload-artifact@v4
+        if: always() && env.QA_OUT != ''
+        with:
+          name: cm-historical-roster-public
+          path: ${{ runner.temp }}/cm-historical-roster-public-pack/*
+          if-no-files-found: error
+          retention-days: 14
+          compression-level: 0
