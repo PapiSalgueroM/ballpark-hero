@@ -71,6 +71,7 @@ const FantasyDraft = () => {
   const [loadingCriteria, setLoadingCriteria] = useState(true);
   const [players, setPlayers] = useState<DraftPlayer[]>([]);
   const [loadingPlayers, setLoadingPlayers] = useState(false);
+  const [playersError, setPlayersError] = useState(false);
 
   // Draft state
   const [userFirst, setUserFirst] = useState(true);
@@ -141,21 +142,29 @@ const FantasyDraft = () => {
     fetchCriteria();
   }, []);
 
-  // Fetch players when draft starts
-  useEffect(() => {
-    if (!started) return;
-    const fetchPlayers = async () => {
-      setLoadingPlayers(true);
-      const { data } = await supabase
+  // The initial load and a retry use the same player read.
+  const fetchPlayers = useCallback(async () => {
+    setLoadingPlayers(true);
+    setPlayersError(false);
+    try {
+      const { data, error } = await supabase
         .from('fantasy_draft_players')
         .select('id, name, position, nationality, market_value_millions, dominant_foot, age' as any)
         .order('name');
-      if (data) setPlayers(data as unknown as DraftPlayer[]);
+      if (error) setPlayersError(true);
+      else if (data) setPlayers(data as unknown as DraftPlayer[]);
+    } catch {
+      setPlayersError(true);
+    } finally {
       setLoadingPlayers(false);
-    };
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!started) return;
     setUserFirst(Math.random() < 0.5);
     fetchPlayers();
-  }, [started]);
+  }, [started, fetchPlayers]);
 
   const draftPlayer = useCallback((player: DraftPlayer, side: 'user' | 'ai') => {
     if (side === 'user') setUserTeam((prev) => [...prev, player]);
@@ -385,6 +394,13 @@ const FantasyDraft = () => {
                 {loadingPlayers ? (
                   <div className="flex items-center justify-center py-12">
                     <Loader2 className="w-8 h-8 animate-spin text-primary" />
+                  </div>
+                ) : playersError ? (
+                  <div role="alert" className="space-y-3 py-6 text-center">
+                    <p className="text-sm text-muted-foreground">Couldn't load the players.</p>
+                    <Button onClick={fetchPlayers} className="min-h-[44px]">
+                      Retry players
+                    </Button>
                   </div>
                 ) : (
                   <>
