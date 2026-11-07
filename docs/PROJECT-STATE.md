@@ -1,3 +1,13 @@
+## 2026-11-07: Club Manager historical roster counts live
+
+[PR #532](https://github.com/PapiSalgueroM/ballpark-hero/pull/532) published from main `c3b5ca4afaf9b4dadcd748f340e8e8e3e4a1a1dd`, App tree `133fcd3d26a4d237178e5c7efee723048da0aef2`, Lovable deployment `510b1df1-2172-42c0-90f9-d9f9c997b840`.
+
+Select a historical club to see how many players are recorded in its roster snapshot before taking the job. In 2010/11, Blackpool shows six and keeps its partial data badge. Arsenal shows 35. These are recorded snapshot rows; playable squad construction still applies its existing cap and generated depth. Current clubs retain their existing disclosures. CM-03 remains partial because inspectable player provenance, roster-date coverage and migrations are still open.
+
+[Qualification](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/42349735958) passed proper types, one build, 20 output checks, all 16 existing size caps, three phone contexts and four photos. Phone checks held the complete save state through club selection. [Public verification](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/42350742966) matched all seven compiled files, passed the Club Manager live SEO check and submitted only that URL to IndexNow.
+
+Next league work: the Ekstraklasa intake verifies all 18 current clubs, including held Legia Warsaw. The proposed 17 additions still need the dated pool integration, load timing and measured size check. Historical player population and NBA/NFL draft intake remain open.
+
 ## 2026-11-07: Soccer Career historical arrivals from 2010 and 2015 live
 
 [PR #529](https://github.com/PapiSalgueroM/ballpark-hero/pull/529) published from main `cef43e538e2266974cc4d2e96eb5996a6e2bdce9`, App tree `5f6ef45062b696e0eea44006093f5824bd02ff7b`, Lovable deployment `d1268cef-456a-487f-80e2-9d1edba677bb`.
