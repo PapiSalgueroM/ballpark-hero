@@ -3652,11 +3652,13 @@
         "Fakel Voronezh"
       ],
       "size": 16,
-      "games": null,
-      "shape": null,
-      "shapeUnread": "Round 1052 read this format for Club Manager (research.json fact ru-format); it is not restated here while the generator holds the league and no page read states its points rule",
-      "points": null,
-      "pointsUnread": "no page note read for this league states three points for a win, so the rule is not stated here until one does",
+      "games": 30,
+      "shape": "plain",
+      "points": [
+        3,
+        1,
+        0
+      ],
       "membership": [
         {
           "url": "https://site.web.api.espn.com/apis/v2/sports/soccer/rus.1/standings?season=2026",
@@ -3679,7 +3681,75 @@
           "says": "news article listing the participants, dated 2026-07-23: names all 16, the two promoted and the two relegated clubs (Round 1052's read, scripts/data/gatheredSquads/russia2026/research.json)"
         }
       ],
-      "format": []
+      "format": [
+        {
+          "url": "https://premierliga.ru/about/",
+          "publisher": "Russian Premier League",
+          "publisherGroup": "Russian Premier League",
+          "read": "2026-11-06",
+          "says": "double round robin at home and away; 30 rounds; three points for a win, one for a draw and zero for a loss",
+          "access": "Actual indexed full section in search output. Direct open returned BadRequest; documents page captcha not bypassed."
+        },
+        {
+          "url": "https://www.livesport.ru/football/rfpl/calendar/",
+          "publisher": "LiveSport.Ru",
+          "publisherGroup": "LiveSport.Ru",
+          "read": "2026-11-06",
+          "says": "2026-2027season; 16clubs; double round robin; 30rounds; three points for a win, one for a draw and zero for a loss",
+          "access": "Direct actual page text, rules section lines691-700"
+        },
+        {
+          "url": "https://www.sport-express.ru/football/rfpl/news/raspisanie-matchey-1-go-tura-rpl-kalendar-igrrpl-sezona-2026-27-glavnye-daty-chempionata-rossii-po-futbolu-2441638/",
+          "publisher": "Sport-Express",
+          "publisherGroup": "Sport-Express",
+          "read": "2026-11-06",
+          "says": "2026-27season; 16clubs; double round robin homeaway; 30rounds; 240totalgames",
+          "access": "Direct actual article text lines153-193",
+          "published": "2026-07-23"
+        }
+      ],
+      "scope": "2026-27 format only, retained as the latest known rule in later simulated seasons. No historic format, fixture, tiebreak, cup or promotion rule is added.",
+      "continentalEntry": {
+        "association": "Russia",
+        "excludedFromSeason": 2022,
+        "until": "further notice",
+        "simulationPolicy": "Carry the last verified restriction into future simulated seasons until sourced rules change; no reinstatement year is asserted.",
+        "resolutionLimit": "The real suspension began on 28 February 2022 during 2021-22. The game's year-level exclusion starts with 2022-23 and does not model the within-season cutoff.",
+        "sources": [
+          {
+            "url": "https://www.uefa.com/news-media/news/0275-150c9887cacb-882c686f407f-1000--uefa-decisions-for-upcoming-competitions-relating-to-the-ong/",
+            "publisher": "UEFA",
+            "publisherGroup": "UEFA",
+            "read": "2026-11-06",
+            "published": "2022-05-02",
+            "says": "Explicit no affiliated clubs in2022/23 UEFA club competitions; coefficient points are not admission."
+          },
+          {
+            "url": "https://www.uefa.com/uefachampionsleague/clubs/",
+            "publisher": "UEFA",
+            "publisherGroup": "UEFA",
+            "read": "2026-11-06",
+            "says": "Current2026/27 page, line172, until-further-notice suspension."
+          },
+          {
+            "url": "https://www.euronews.com/2026/06/07/uefa-extends-ban-on-russian-national-teams-and-clubs-from-competitions-for-202627-season",
+            "publisher": "Euronews",
+            "publisherGroup": "Euronews",
+            "read": "2026-11-06",
+            "published": "2026-06-07",
+            "says": "Independent current2026/27 continued exclusion."
+          },
+          {
+            "url": "https://www.bbc.co.uk/sport/athletics/60560567",
+            "publisher": "BBC Sport",
+            "publisherGroup": "BBC",
+            "read": "2026-11-06",
+            "published": "2022-02-28",
+            "says": "Russian clubs suspended until further notice on 28 February 2022.",
+            "access": "Actual indexed article text, direct HTML is not credited here."
+          }
+        ]
+      }
     },
     "K League 1": {
       "season": "2026",
@@ -4176,7 +4246,7 @@
     }
   },
   "clubColours": {
-    "about": "Round 1100. Verified home-colour words and decorative game renderings for career pool clubs. The fact is the colour in words, from two sources; hex is this game's rendering of that word and nothing more. scripts/lib/careerClubPool.mjs POOL_COLORS and the added Ligue 2, Serie B and Segunda Division Club Manager colours use only the records listed here.",
+    "about": "Round 1100. Verified home-colour words and decorative game renderings for career pool clubs. The fact is the colour in words, from two sources; hex is this game's rendering of that word and nothing more. scripts/lib/careerClubPool.mjs POOL_COLORS and the added Ligue 2, Serie B and Segunda Division Club Manager colours use only the records listed here. Russia entries add narrow display words only; Rodina's white marker is specific to its 2026-27 home kit and Krasnodar's green is the shared word while the full-palette source disagreement stays recorded.",
     "clubs": {
       "Macarthur FC": {
         "colour": "black, with thin white pinstripes",
@@ -5143,11 +5213,410 @@
           }
         ],
         "scope": "1982 lineage does not backdate JejuSK name. Exact founding day and timeless secondary colour held. Old names are not merged into BucheonFC1995."
+      },
+      "Akhmat Grozny": {
+        "colour": "green",
+        "hex": "#0a7040",
+        "hexRendering": "Approximate decorative marker using the site's existing palette, not official RGB, a full palette or a kit design.",
+        "sources": [
+          {
+            "url": "https://fc-akhmat.ru/news/fc-akhmat/klub/v-novyy-sezon-akhmat-vstupaet-v-novoy-forme-/",
+            "publisher": "RFC Akhmat Grozny",
+            "publisherGroup": "RFC Akhmat Grozny",
+            "read": "2026-11-06",
+            "says": "Akhmat Grozny: green, white. Named club-colour words or explicitly qualified traditional subset from the retained research."
+          },
+          {
+            "url": "https://www.sport.ru/football/fc_ahmat_groznyy/",
+            "publisher": "Sport.ru",
+            "publisherGroup": "Sport.ru",
+            "read": "2026-11-06",
+            "says": "Akhmat Grozny: green, white. Named club-colour words or explicitly qualified traditional subset from the retained research."
+          }
+        ],
+        "scope": "Named club-colour words or explicitly qualified traditional subset from the retained research.",
+        "limits": [
+          "The primary statement is2024. No2026/27 complete kit palette is asserted."
+        ]
+      },
+      "Akron Tolyatti": {
+        "colour": "red",
+        "hex": "#d02128",
+        "hexRendering": "Approximate decorative marker using the site's existing palette, not official RGB, a full palette or a kit design.",
+        "sources": [
+          {
+            "url": "https://fcakron.ru/club",
+            "publisher": "FC Akron",
+            "publisherGroup": "FC Akron",
+            "read": "2026-11-06",
+            "says": "Akron Tolyatti: red, black. Explicit club-colour words only. The separate country addendum supplies the second explicit Russia identifier."
+          },
+          {
+            "url": "https://torpedo.ru/media/news/45894/",
+            "publisher": "FC Torpedo Moscow",
+            "publisherGroup": "FC Torpedo Moscow",
+            "read": "2026-11-06",
+            "says": "Akron Tolyatti: red, black. Explicit club-colour words only. The separate country addendum supplies the second explicit Russia identifier."
+          }
+        ],
+        "scope": "Explicit club-colour words only. The separate country addendum supplies the second explicit Russia identifier.",
+        "limits": []
+      },
+      "Baltika": {
+        "colour": "blue",
+        "hex": "#1b3f94",
+        "hexRendering": "Approximate decorative marker using the site's existing palette, not official RGB, a full palette or a kit design.",
+        "sources": [
+          {
+            "url": "https://www.fc-baltika.ru/news/ustupili_zenitu/",
+            "publisher": "FC Baltika Kaliningrad",
+            "publisherGroup": "FC Baltika Kaliningrad",
+            "read": "2026-11-06",
+            "says": "Baltika: blue, white. Named club-colour words or explicitly qualified traditional subset from the retained research."
+          },
+          {
+            "url": "https://www.sport.ru/football/fk_baltika_kaliningrad/",
+            "publisher": "Sport.ru",
+            "publisherGroup": "Sport.ru",
+            "read": "2026-11-06",
+            "says": "Baltika: blue, white. Named club-colour words or explicitly qualified traditional subset from the retained research."
+          },
+          {
+            "url": "https://stavka.tv/teams/soccer/fc-baltika-kaliningrad",
+            "publisher": "Stavka TV",
+            "publisherGroup": "Stavka TV",
+            "read": "2026-11-06",
+            "says": "Baltika: blue, white. Named club-colour words or explicitly qualified traditional subset from the retained research."
+          }
+        ],
+        "scope": "Named club-colour words or explicitly qualified traditional subset from the retained research.",
+        "limits": [
+          "Only the blue/white traditional subset is used. Additional light-blue, dated kit shades and the design concept are not merged into a complete current palette."
+        ]
+      },
+      "CSKA Moscow": {
+        "colour": "red",
+        "hex": "#d02128",
+        "hexRendering": "Approximate decorative marker using the site's existing palette, not official RGB, a full palette or a kit design.",
+        "sources": [
+          {
+            "url": "https://pfc-cska.com/ru/novosti/vse-novosti/32339-vazhen-kazhdiy-novaya-forma-pfk-cska-ot-primera-na-sezon-20262027/",
+            "publisher": "PFC CSKA Moscow",
+            "publisherGroup": "PFC CSKA Moscow",
+            "read": "2026-11-06",
+            "says": "CSKA Moscow: red, blue. Named contemporary club-colour words only, not a complete brand or kit specification."
+          },
+          {
+            "url": "https://www.sport.ru/football/pfk_tsska_moskva/",
+            "publisher": "Sport.ru",
+            "publisherGroup": "Sport.ru",
+            "read": "2026-11-06",
+            "says": "CSKA Moscow: red, blue. Named contemporary club-colour words only, not a complete brand or kit specification."
+          }
+        ],
+        "scope": "Named contemporary club-colour words only, not a complete brand or kit specification.",
+        "limits": []
+      },
+      "Dynamo Makhachkala": {
+        "colour": "white",
+        "hex": "#d9d9d9",
+        "hexRendering": "Approximate decorative marker using the site's existing palette, not official RGB, a full palette or a kit design.",
+        "sources": [
+          {
+            "url": "https://pfcsochi.ru/news/2025-2026/nash-sopernik-dinamo-makhachkala/",
+            "publisher": "PFC Sochi",
+            "publisherGroup": "PFC Sochi",
+            "read": "2026-11-06",
+            "says": "Dynamo Makhachkala: white, light blue. Two explicit 2024/2025 colour-word statements for the revived senior club, not a complete 2026/27 brand specification."
+          },
+          {
+            "url": "https://md-gazeta.ru/sport/144422",
+            "publisher": "Molodezh Dagestana",
+            "publisherGroup": "Molodezh Dagestana",
+            "read": "2026-11-06",
+            "says": "Dynamo Makhachkala: white, light blue. Two explicit 2024/2025 colour-word statements for the revived senior club, not a complete 2026/27 brand specification."
+          }
+        ],
+        "scope": "Two explicit 2024/2025 colour-word statements for the revived senior club, not a complete 2026/27 brand specification.",
+        "limits": [
+          "The own-club readable colour-word gap remains open. No former FC Makhachkala or Dynamo Moscow source was substituted."
+        ]
+      },
+      "Dynamo Moscow": {
+        "colour": "white",
+        "hex": "#d9d9d9",
+        "hexRendering": "Approximate decorative marker using the site's existing palette, not official RGB, a full palette or a kit design.",
+        "sources": [
+          {
+            "url": "https://fcdynamo.ru/news/tribuna-v-tolko-domasniaia/",
+            "publisher": "FC Dynamo Moscow",
+            "publisherGroup": "FC Dynamo Moscow",
+            "read": "2026-11-06",
+            "says": "Dynamo Moscow: white, light blue. Named club-colour words or explicitly qualified traditional subset from the retained research."
+          },
+          {
+            "url": "https://www.sport.ru/football/fk_dinamo_moskva/",
+            "publisher": "Sport.ru",
+            "publisherGroup": "Sport.ru",
+            "read": "2026-11-06",
+            "says": "Dynamo Moscow: white, light blue. Named club-colour words or explicitly qualified traditional subset from the retained research."
+          }
+        ],
+        "scope": "Named club-colour words or explicitly qualified traditional subset from the retained research.",
+        "limits": []
+      },
+      "Fakel Voronezh": {
+        "colour": "blue",
+        "hex": "#1b3f94",
+        "hexRendering": "Approximate decorative marker using the site's existing palette, not official RGB, a full palette or a kit design.",
+        "sources": [
+          {
+            "url": "https://fakelfc.ru/news/view/10111-okrasili-tulu-v-sine-belye-cveta",
+            "publisher": "FC Fakel Voronezh",
+            "publisherGroup": "FC Fakel Voronezh",
+            "read": "2026-11-06",
+            "says": "Fakel Voronezh: blue, white. The official2026 first-team report uses blue-white in its title; Sport.ru explicitly lists white and blue as club colours. This closes the word family, not a formal complete brand guide or numeric palette."
+          },
+          {
+            "url": "https://www.sport.ru/football/fk_fakel_voronej/",
+            "publisher": "Sport.ru",
+            "publisherGroup": "Sport.ru",
+            "read": "2026-11-06",
+            "says": "Fakel Voronezh: blue, white. The official2026 first-team report uses blue-white in its title; Sport.ru explicitly lists white and blue as club colours. This closes the word family, not a formal complete brand guide or numeric palette."
+          }
+        ],
+        "scope": "The official2026 first-team report uses blue-white in its title; Sport.ru explicitly lists white and blue as club colours. This closes the word family, not a formal complete brand guide or numeric palette.",
+        "limits": [
+          "The own-club symbol page contained no readable colour words. No crest or downloadable artwork was used.",
+          "Unrelated legacy-looking stadium/profile fields were excluded from the independent reference."
+        ]
+      },
+      "Krasnodar": {
+        "colour": "green",
+        "hex": "#0a7040",
+        "hexRendering": "Approximate decorative marker using the site's existing palette, not official RGB, a full palette or a kit design.",
+        "sources": [
+          {
+            "url": "https://fckrasnodar.ru/en/club/card/",
+            "publisher": "FC Krasnodar",
+            "publisherGroup": "FC Krasnodar",
+            "read": "2026-11-06",
+            "says": "Krasnodar: green. Narrow shared word only. Own club and Sport.ru report black/green; DFB reports green/white/blue. Green is common to all three."
+          },
+          {
+            "url": "https://www.sport.ru/football/fk_krasnodar/",
+            "publisher": "Sport.ru",
+            "publisherGroup": "Sport.ru",
+            "read": "2026-11-06",
+            "says": "Krasnodar: green. Narrow shared word only. Own club and Sport.ru report black/green; DFB reports green/white/blue. Green is common to all three."
+          },
+          {
+            "url": "https://datencenter.dfb.de/vereine/fk-krasnodar",
+            "publisher": "DFB Datencenter",
+            "publisherGroup": "DFB Datencenter",
+            "read": "2026-11-06",
+            "says": "Krasnodar: green. Narrow shared word only. Own club and Sport.ru report black/green; DFB reports green/white/blue. Green is common to all three."
+          }
+        ],
+        "scope": "Narrow shared word only. Own club and Sport.ru report black/green; DFB reports green/white/blue. Green is common to all three.",
+        "limits": [
+          "Full DFB field disagreement and unknown cause are retained in the pinned continuation. No complete palette agreement, official RGB, historical explanation or majority-vote deletion is asserted.",
+          "Single decorative green marker is a proposed display choice. Black, white or blue are not silently treated as a second shared core colour."
+        ]
+      },
+      "Krylia Sovetov": {
+        "colour": "green",
+        "hex": "#0a7040",
+        "hexRendering": "Approximate decorative marker using the site's existing palette, not official RGB, a full palette or a kit design.",
+        "sources": [
+          {
+            "url": "https://old.pfcks.ru/cgi-bin/news.cgi?n=18825",
+            "publisher": "PFC Krylya Sovetov Samara",
+            "publisherGroup": "PFC Krylya Sovetov Samara",
+            "read": "2026-11-06",
+            "says": "Krylia Sovetov: green, white, blue. Named club-colour words or explicitly qualified traditional subset from the retained research."
+          },
+          {
+            "url": "https://old.pfcks.ru/cgi-bin/news.cgi?find=&id=19&im=10&iy=2000&lg=i&n=22607&pd=27&pm=8&py=2026&type=fnd",
+            "publisher": "PFC Krylya Sovetov Samara",
+            "publisherGroup": "PFC Krylya Sovetov Samara",
+            "read": "2026-11-06",
+            "says": "Krylia Sovetov: green, white, blue. Named club-colour words or explicitly qualified traditional subset from the retained research."
+          },
+          {
+            "url": "https://www.sport.ru/football/krylya_sovetov_samara/",
+            "publisher": "Sport.ru",
+            "publisherGroup": "Sport.ru",
+            "read": "2026-11-06",
+            "says": "Krylia Sovetov: green, white, blue. Named club-colour words or explicitly qualified traditional subset from the retained research."
+          }
+        ],
+        "scope": "Named club-colour words or explicitly qualified traditional subset from the retained research.",
+        "limits": [
+          "The evidence names green, white and blue. The proposed two-chip subset omits white as a display choice only. No historical save is recoloured."
+        ]
+      },
+      "Lokomotiv Moscow": {
+        "colour": "red",
+        "hex": "#d02128",
+        "hexRendering": "Approximate decorative marker using the site's existing palette, not official RGB, a full palette or a kit design.",
+        "sources": [
+          {
+            "url": "https://www.fclm.ru/history/jerseys/",
+            "publisher": "FC Lokomotiv Moscow",
+            "publisherGroup": "FC Lokomotiv Moscow",
+            "read": "2026-11-06",
+            "says": "Lokomotiv Moscow: red, green. Named contemporary club-colour words only, not a complete brand or kit specification."
+          },
+          {
+            "url": "https://www.sport.ru/football/fk_lokomotiv_moskva/",
+            "publisher": "Sport.ru",
+            "publisherGroup": "Sport.ru",
+            "read": "2026-11-06",
+            "says": "Lokomotiv Moscow: red, green. Named contemporary club-colour words only, not a complete brand or kit specification."
+          }
+        ],
+        "scope": "Named contemporary club-colour words only, not a complete brand or kit specification.",
+        "limits": [
+          "The official history records earlier red-white kits. This research does not recolour historical saves."
+        ]
+      },
+      "Orenburg": {
+        "colour": "blue",
+        "hex": "#1b3f94",
+        "hexRendering": "Approximate decorative marker using the site's existing palette, not official RGB, a full palette or a kit design.",
+        "sources": [
+          {
+            "url": "https://fcorenburg.ru/club/istoriya.html",
+            "publisher": "FC Orenburg",
+            "publisherGroup": "FC Orenburg",
+            "read": "2026-11-06",
+            "says": "Orenburg: blue, white. Russian sine-belye and siniy/belyy support blue and white words only. No exact shade, numeric mapping, complete brand system or kit design follows."
+          },
+          {
+            "url": "https://www.sport.ru/football/fk_orenburg/",
+            "publisher": "Sport.ru",
+            "publisherGroup": "Sport.ru",
+            "read": "2026-11-06",
+            "says": "Orenburg: blue, white. Russian sine-belye and siniy/belyy support blue and white words only. No exact shade, numeric mapping, complete brand system or kit design follows."
+          }
+        ],
+        "scope": "Russian sine-belye and siniy/belyy support blue and white words only. No exact shade, numeric mapping, complete brand system or kit design follows.",
+        "limits": [
+          "The independent profile also contains other legacy-looking metadata. Stadium capacity, founding date and all unrelated profile facts were excluded."
+        ]
+      },
+      "Rodina Moscow": {
+        "colour": "white",
+        "hex": "#d9d9d9",
+        "hexRendering": "Approximate decorative marker using the site's existing palette, not official RGB, a full palette or a kit design.",
+        "sources": [
+          {
+            "url": "https://t.me/s/fcrodina?before=24620",
+            "publisher": "FC Rodina Moscow, club Telegram",
+            "publisherGroup": "FC Rodina Moscow, club Telegram",
+            "read": "2026-11-06",
+            "says": "Rodina Moscow: white. Season-specific white home-kit word for2026/27 after the new logo. This is deliberately not called a traditional or complete current brand palette."
+          },
+          {
+            "url": "https://www.championat.com/football/news-6553646-rodina-predstavila-komplekt-domashnej-formy-na-sezon-2026-2027.html",
+            "publisher": "Championat",
+            "publisherGroup": "Championat",
+            "read": "2026-11-06",
+            "says": "Rodina Moscow: white. Season-specific white home-kit word for2026/27 after the new logo. This is deliberately not called a traditional or complete current brand palette.",
+            "published": "2026-07-21"
+          },
+          {
+            "url": "https://www.sport-express.ru/football/rfpl/reviews/vse-formy-klubov-rpl-sezona-2026-27-zenit-krasnodar-spartak-dinamo-i-drugie-foto-2441477/",
+            "publisher": "Sport-Express",
+            "publisherGroup": "Sport-Express",
+            "read": "2026-11-06",
+            "says": "Rodina Moscow: white. Season-specific white home-kit word for2026/27 after the new logo. This is deliberately not called a traditional or complete current brand palette."
+          }
+        ],
+        "scope": "Season-specific white home-kit word for2026/27 after the new logo. This is deliberately not called a traditional or complete current brand palette.",
+        "limits": [
+          "Two separate sports publishers report the same club-announcement origin; they are not claimed as independent primary investigations. The own channel is additionally directly readable and associated by Championat's exact source link.",
+          "The pinned continuation retains older lime/grey wording and two2025/26 light-blue/white fields. Neither is silently promoted to the complete post-rebrand palette.",
+          "The row supports only a proposed decorative white marker. Any consumer requiring a two-colour traditional palette must hold this row until that separate question is resolved.",
+          "Championat's unrelated founding, owner, coach and season statements are not imported."
+        ]
+      },
+      "Rostov": {
+        "colour": "yellow",
+        "hex": "#f5d800",
+        "hexRendering": "Approximate decorative marker using the site's existing palette, not official RGB, a full palette or a kit design.",
+        "sources": [
+          {
+            "url": "https://fc-rostov.ru/club/about",
+            "publisher": "FC Rostov",
+            "publisherGroup": "FC Rostov",
+            "read": "2026-11-06",
+            "says": "Rostov: yellow, blue. Named club-colour words or explicitly qualified traditional subset from the retained research."
+          },
+          {
+            "url": "https://www.sport.ru/football/fk_rostov/",
+            "publisher": "Sport.ru",
+            "publisherGroup": "Sport.ru",
+            "read": "2026-11-06",
+            "says": "Rostov: yellow, blue. Named club-colour words or explicitly qualified traditional subset from the retained research."
+          }
+        ],
+        "scope": "Named club-colour words or explicitly qualified traditional subset from the retained research.",
+        "limits": []
+      },
+      "Rubin Kazan": {
+        "colour": "burgundy",
+        "hex": "#7d1c2a",
+        "hexRendering": "Approximate decorative marker using the site's existing palette, not official RGB, a full palette or a kit design.",
+        "sources": [
+          {
+            "url": "https://www.sport.ru/football/fk_rubin_kazan/page20/",
+            "publisher": "Sport.ru",
+            "publisherGroup": "Sport.ru",
+            "read": "2026-11-06",
+            "says": "Rubin Kazan: ruby or burgundy family, green, white as reserve. Traditional word family only, with white specifically reserve in Sport Mail. Publisher word variants are not a measured shade equivalence."
+          },
+          {
+            "url": "https://sportmail.ru/team/280/about/",
+            "publisher": "Sport Mail",
+            "publisherGroup": "Sport Mail",
+            "read": "2026-11-06",
+            "says": "Rubin Kazan: ruby or burgundy family, green, white as reserve. Traditional word family only, with white specifically reserve in Sport Mail. Publisher word variants are not a measured shade equivalence."
+          }
+        ],
+        "scope": "Traditional word family only, with white specifically reserve in Sport Mail. Publisher word variants are not a measured shade equivalence.",
+        "limits": [
+          "Pinned Rubin addendum and independent peer supersede only the earlier green/white word gap. Other page sections contain stale kit, coach and roster material and are not current-season authority."
+        ]
+      },
+      "Spartak Moscow": {
+        "colour": "red",
+        "hex": "#d02128",
+        "hexRendering": "Approximate decorative marker using the site's existing palette, not official RGB, a full palette or a kit design.",
+        "sources": [
+          {
+            "url": "https://spartak.com/media/news/4271b011-149e-4b92-8412-b744dda430f2",
+            "publisher": "FC Spartak Moscow",
+            "publisherGroup": "FC Spartak Moscow",
+            "read": "2026-11-06",
+            "says": "Spartak Moscow: red, white. Named contemporary club-colour words only, not a complete brand or kit specification."
+          },
+          {
+            "url": "https://www.sport.ru/football/fk_spartak_moskva/",
+            "publisher": "Sport.ru",
+            "publisherGroup": "Sport.ru",
+            "read": "2026-11-06",
+            "says": "Spartak Moscow: red, white. Named contemporary club-colour words only, not a complete brand or kit specification."
+          }
+        ],
+        "scope": "Named contemporary club-colour words only, not a complete brand or kit specification.",
+        "limits": []
       }
     }
   },
   "clubSince": {
-    "about": "Round 1100. Since when the game offers each generated pool club. Every generated club has exactly one decision here. shipped: one of the 51 rows Round 1013 shipped; it stays in every era exactly as main had it (their first seasons were never two sourced: an open item, see scripts/simCareerClubPool.mjs). held: a club Round 1100 brought in. The game knows it as a 2026-27 club and nothing earlier, so it is not offered, drawn or met in any season before heldBefore until its first season as a professional club under this name is read from two sources that are not wikis; then it moves to since with that year (a year of 1990 or earlier means every era). Nothing here is a founding date and none is claimed. One place a held club is named earlier: a past league table. Where the Round 1036 league ledgers (scripts/data/leagueSeasons) hold the club in that league that season from two sources, that season's table and fixtures print its name; it is still not offered in the market, drawn in a continental tie or played as a derby before heldBefore. The eight K League 1 additions stay held to the first supported catalogue season, 2026, even where their professional history is older. This is game availability, not a claimed founding or first-professional date.",
+    "about": "Round 1100. Since when the game offers each generated pool club. Every generated club has exactly one decision here. shipped: one of the 51 rows Round 1013 shipped; it stays in every era exactly as main had it (their first seasons were never two sourced: an open item, see scripts/simCareerClubPool.mjs). held: a club Round 1100 brought in. The game knows it as a 2026-27 club and nothing earlier, so it is not offered, drawn or met in any season before heldBefore until its first season as a professional club under this name is read from two sources that are not wikis; then it moves to since with that year (a year of 1990 or earlier means every era). Nothing here is a founding date and none is claimed. One place a held club is named earlier: a past league table. Where the Round 1036 league ledgers (scripts/data/leagueSeasons) hold the club in that league that season from two sources, that season's table and fixtures print its name; it is still not offered in the market, drawn in a continental tie or played as a derby before heldBefore. The eight K League 1 additions stay held to the first supported catalogue season, 2026, even where their professional history is older. This is game availability, not a claimed founding or first-professional date. The fifteen Russia additions use the same first supported catalogue season2026. This does not assert a founding date or earlier league membership.",
     "heldBefore": 2026,
     "shipped": [
       "Bournemouth",
@@ -5529,12 +5998,29 @@
         "FC Anyang",
         "Incheon United",
         "Jeju SK"
+      ],
+      "Russian Premier League": [
+        "Akhmat Grozny",
+        "Akron Tolyatti",
+        "Baltika",
+        "CSKA Moscow",
+        "Dynamo Makhachkala",
+        "Dynamo Moscow",
+        "Fakel Voronezh",
+        "Krasnodar",
+        "Krylia Sovetov",
+        "Lokomotiv Moscow",
+        "Orenburg",
+        "Rodina Moscow",
+        "Rostov",
+        "Rubin Kazan",
+        "Spartak Moscow"
       ]
     },
     "since": {}
   },
   "clubCountries": {
-    "about": "Round 1100. Pool clubs whose country is not their league's (scripts/lib/careerClubPool.mjs CLUB_COUNTRY, beside the rows Club Manager's own clubCountry holds). Each one Round 1100 adds is read from two hosts; the three Welsh clubs shipped with Round 1013, read then from goal.com and footballgroundguide.com (2026-10-05, the generator's own comment).",
+    "about": "Round 1100. Pool clubs whose country is not their league's (scripts/lib/careerClubPool.mjs CLUB_COUNTRY, beside the rows Club Manager's own clubCountry holds). Each one Round 1100 adds is read from two hosts; the three Welsh clubs shipped with Round 1013, read then from goal.com and footballgroundguide.com (2026-10-05, the generator's own comment). Russia native-country records also preserve the two-publisher evidence for its newly offered Career clubs. These are provenance records, not country-override rules.",
     "clubs": {
       "Cardiff City": {
         "country": "Wales",
@@ -5601,6 +6087,291 @@
             "access": "direct text read",
             "locator": "Associacions table, Futbol Club Andorra (FCA) row",
             "asOf": "current public registry at retrieval; no season asserted"
+          }
+        ]
+      },
+      "Akhmat Grozny": {
+        "country": "Russia",
+        "sources": [
+          {
+            "url": "https://www.uefa.com/uefaeuropaleague/clubs/86795--akhmat/",
+            "publisher": "UEFA",
+            "publisherGroup": "UEFA",
+            "read": "2026-11-06",
+            "says": "Identifies Akhmat Grozny with Russia. Country only; other profile fields are not adopted."
+          },
+          {
+            "url": "https://www.sport.ru/football/fc_ahmat_groznyy/",
+            "publisher": "Sport.ru",
+            "publisherGroup": "Sport.ru",
+            "read": "2026-11-06",
+            "says": "Identifies Akhmat Grozny with Russia. Country only; other profile fields are not adopted."
+          }
+        ]
+      },
+      "Akron Tolyatti": {
+        "country": "Russia",
+        "sources": [
+          {
+            "url": "https://ru.uefa.com/nationalassociations/teams/2613142--fc-akron-tolyatti/",
+            "publisher": "UEFA",
+            "publisherGroup": "UEFA",
+            "read": "2026-11-06",
+            "says": "Identifies Akron Tolyatti with Russia. Country only; other profile fields are not adopted."
+          },
+          {
+            "url": "https://torpedo.ru/media/news/45894/",
+            "publisher": "FC Torpedo Moscow",
+            "publisherGroup": "FC Torpedo Moscow",
+            "read": "2026-11-06",
+            "says": "Identifies Akron Tolyatti with Russia. Country only; other profile fields are not adopted."
+          }
+        ]
+      },
+      "Baltika": {
+        "country": "Russia",
+        "sources": [
+          {
+            "url": "https://www.uefa.com/nationalassociations/teams/64498--baltika/",
+            "publisher": "UEFA",
+            "publisherGroup": "UEFA",
+            "read": "2026-11-06",
+            "says": "Identifies Baltika with Russia. Country only; other profile fields are not adopted."
+          },
+          {
+            "url": "https://www.sport.ru/football/fk_baltika_kaliningrad/",
+            "publisher": "Sport.ru",
+            "publisherGroup": "Sport.ru",
+            "read": "2026-11-06",
+            "says": "Identifies Baltika with Russia. Country only; other profile fields are not adopted."
+          }
+        ]
+      },
+      "CSKA Moscow": {
+        "country": "Russia",
+        "sources": [
+          {
+            "url": "https://www.uefa.com/nationalassociations/teams/54266--cska-moskva/squad/",
+            "publisher": "UEFA",
+            "publisherGroup": "UEFA",
+            "read": "2026-11-06",
+            "says": "Identifies CSKA Moscow with Russia. Country only; other profile fields are not adopted."
+          },
+          {
+            "url": "https://www.sport.ru/football/pfk_tsska_moskva/",
+            "publisher": "Sport.ru",
+            "publisherGroup": "Sport.ru",
+            "read": "2026-11-06",
+            "says": "Identifies CSKA Moscow with Russia. Country only; other profile fields are not adopted."
+          }
+        ]
+      },
+      "Dynamo Makhachkala": {
+        "country": "Russia",
+        "sources": [
+          {
+            "url": "https://fr.uefa.com/nationalassociations/teams/2613652--dynamo-makhachkala/",
+            "publisher": "UEFA",
+            "publisherGroup": "UEFA",
+            "read": "2026-11-06",
+            "says": "Identifies Dynamo Makhachkala with Russia. Country only; other profile fields are not adopted."
+          },
+          {
+            "url": "https://www.sofascore.com/football/team/dinamo-makhachkala/362016",
+            "publisher": "Sofascore",
+            "publisherGroup": "Sofascore",
+            "read": "2026-11-06",
+            "says": "Identifies Dynamo Makhachkala with Russia. Country only; other profile fields are not adopted."
+          }
+        ]
+      },
+      "Dynamo Moscow": {
+        "country": "Russia",
+        "sources": [
+          {
+            "url": "https://www.uefa.com/uefaeuropaleague/clubs/52704/",
+            "publisher": "UEFA",
+            "publisherGroup": "UEFA",
+            "read": "2026-11-06",
+            "says": "Identifies Dynamo Moscow with Russia. Country only; other profile fields are not adopted."
+          },
+          {
+            "url": "https://www.sport.ru/football/fk_dinamo_moskva/",
+            "publisher": "Sport.ru",
+            "publisherGroup": "Sport.ru",
+            "read": "2026-11-06",
+            "says": "Identifies Dynamo Moscow with Russia. Country only; other profile fields are not adopted."
+          }
+        ]
+      },
+      "Fakel Voronezh": {
+        "country": "Russia",
+        "sources": [
+          {
+            "url": "https://www.uefa.com/nationalassociations/teams/2603841--fakel/",
+            "publisher": "UEFA",
+            "publisherGroup": "UEFA",
+            "read": "2026-11-06",
+            "says": "Identifies Fakel Voronezh with Russia. Country only; other profile fields are not adopted."
+          },
+          {
+            "url": "https://www.sport.ru/football/fk_fakel_voronej/",
+            "publisher": "Sport.ru",
+            "publisherGroup": "Sport.ru",
+            "read": "2026-11-06",
+            "says": "Identifies Fakel Voronezh with Russia. Country only; other profile fields are not adopted."
+          }
+        ]
+      },
+      "Krasnodar": {
+        "country": "Russia",
+        "sources": [
+          {
+            "url": "https://www.uefa.com/uefachampionsleague/clubs/2601038--krasnodar/",
+            "publisher": "UEFA",
+            "publisherGroup": "UEFA",
+            "read": "2026-11-06",
+            "says": "Identifies Krasnodar with Russia. Country only; other profile fields are not adopted."
+          },
+          {
+            "url": "https://www.sport.ru/football/fk_krasnodar/",
+            "publisher": "Sport.ru",
+            "publisherGroup": "Sport.ru",
+            "read": "2026-11-06",
+            "says": "Identifies Krasnodar with Russia. Country only; other profile fields are not adopted."
+          }
+        ]
+      },
+      "Krylia Sovetov": {
+        "country": "Russia",
+        "sources": [
+          {
+            "url": "https://www.uefa.com/uefaeuropaleague/clubs/58954--krylya-sovetov/",
+            "publisher": "UEFA",
+            "publisherGroup": "UEFA",
+            "read": "2026-11-06",
+            "says": "Identifies Krylia Sovetov with Russia. Country only; other profile fields are not adopted."
+          },
+          {
+            "url": "https://www.sport.ru/football/krylya_sovetov_samara/",
+            "publisher": "Sport.ru",
+            "publisherGroup": "Sport.ru",
+            "read": "2026-11-06",
+            "says": "Identifies Krylia Sovetov with Russia. Country only; other profile fields are not adopted."
+          }
+        ]
+      },
+      "Lokomotiv Moscow": {
+        "country": "Russia",
+        "sources": [
+          {
+            "url": "https://www.uefa.com/nationalassociations/teams/53065--lokomotiv-moskva/",
+            "publisher": "UEFA",
+            "publisherGroup": "UEFA",
+            "read": "2026-11-06",
+            "says": "Identifies Lokomotiv Moscow with Russia. Country only; other profile fields are not adopted."
+          },
+          {
+            "url": "https://www.sport.ru/football/fk_lokomotiv_moskva/",
+            "publisher": "Sport.ru",
+            "publisherGroup": "Sport.ru",
+            "read": "2026-11-06",
+            "says": "Identifies Lokomotiv Moscow with Russia. Country only; other profile fields are not adopted."
+          }
+        ]
+      },
+      "Orenburg": {
+        "country": "Russia",
+        "sources": [
+          {
+            "url": "https://www.uefa.com/nationalassociations/teams/2605047--orenburg/",
+            "publisher": "UEFA",
+            "publisherGroup": "UEFA",
+            "read": "2026-11-06",
+            "says": "Identifies Orenburg with Russia. Country only; other profile fields are not adopted."
+          },
+          {
+            "url": "https://www.sport.ru/football/fk_orenburg/",
+            "publisher": "Sport.ru",
+            "publisherGroup": "Sport.ru",
+            "read": "2026-11-06",
+            "says": "Identifies Orenburg with Russia. Country only; other profile fields are not adopted."
+          }
+        ]
+      },
+      "Rodina Moscow": {
+        "country": "Russia",
+        "sources": [
+          {
+            "url": "https://www.sofascore.com/football/team/rodina-moscow/322699",
+            "publisher": "Sofascore",
+            "publisherGroup": "Sofascore",
+            "read": "2026-11-06",
+            "says": "Identifies Rodina Moscow with Russia. Country only; other profile fields are not adopted."
+          },
+          {
+            "url": "https://www.flashscore.com/team/rodina-moscow/nHLtKDh0/results/",
+            "publisher": "Flashscore",
+            "publisherGroup": "Flashscore",
+            "read": "2026-11-06",
+            "says": "Identifies Rodina Moscow with Russia. Country only; other profile fields are not adopted."
+          }
+        ]
+      },
+      "Rostov": {
+        "country": "Russia",
+        "sources": [
+          {
+            "url": "https://www.uefa.com/nationalassociations/teams/64500--rostov/",
+            "publisher": "UEFA",
+            "publisherGroup": "UEFA",
+            "read": "2026-11-06",
+            "says": "Identifies Rostov with Russia. Country only; other profile fields are not adopted."
+          },
+          {
+            "url": "https://www.sport.ru/football/fk_rostov/",
+            "publisher": "Sport.ru",
+            "publisherGroup": "Sport.ru",
+            "read": "2026-11-06",
+            "says": "Identifies Rostov with Russia. Country only; other profile fields are not adopted."
+          }
+        ]
+      },
+      "Rubin Kazan": {
+        "country": "Russia",
+        "sources": [
+          {
+            "url": "https://www.sport.ru/football/fk_rubin_kazan/",
+            "publisher": "Sport.ru",
+            "publisherGroup": "Sport.ru",
+            "read": "2026-11-06",
+            "says": "Identifies Rubin Kazan with Russia. Country only; other profile fields are not adopted."
+          },
+          {
+            "url": "https://www.sofascore.com/football/team/rubin-kazan/2333",
+            "publisher": "Sofascore",
+            "publisherGroup": "Sofascore",
+            "read": "2026-11-06",
+            "says": "Identifies Rubin Kazan with Russia. Country only; other profile fields are not adopted."
+          }
+        ]
+      },
+      "Spartak Moscow": {
+        "country": "Russia",
+        "sources": [
+          {
+            "url": "https://www.uefa.com/nationalassociations/teams/50068--spartak-moskva/",
+            "publisher": "UEFA",
+            "publisherGroup": "UEFA",
+            "read": "2026-11-06",
+            "says": "Identifies Spartak Moscow with Russia. Country only; other profile fields are not adopted."
+          },
+          {
+            "url": "https://www.sport.ru/football/fk_spartak_moskva/",
+            "publisher": "Sport.ru",
+            "publisherGroup": "Sport.ru",
+            "read": "2026-11-06",
+            "says": "Identifies Spartak Moscow with Russia. Country only; other profile fields are not adopted."
           }
         ]
       }
