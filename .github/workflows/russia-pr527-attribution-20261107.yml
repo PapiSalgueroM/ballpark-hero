@@ -1,0 +1,202 @@
+name: Read only paired PR527 legacy outcome attribution
+on:
+  push:
+    branches: [codex/russia-pr527-attribution-20261107]
+permissions:
+  contents: read
+concurrency:
+  group: russia-pr527-attribution-20261107
+  cancel-in-progress: false
+jobs:
+  paired:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    defaults:
+      run:
+        shell: bash
+    env:
+      CORE: 57a079eb7289d2a54f11f9d798e6c6ab9e2d2082
+      TREE: 3fe5bf9acace9f506c5f469e012be11c1dded94e
+      BASE_CORE: 636b31efd64b749d4900e3f5773681e0496addf6
+      BASE_TREE: 9b6671db9c6f56db7bfd572521cf4e37cf7011a7
+      BASE_QA: 1cc08ce611872bd4a89281dcf20502585c8a8157
+      BASE_QA_TREE: 88da3481338ee90d01263d7d4353e516272efd10
+      SIM_NETWORK: offline
+      PLAYWRIGHT_BROWSERS_PATH: /home/runner/.cache/ms-playwright
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: 57a079eb7289d2a54f11f9d798e6c6ab9e2d2082
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24.22.2'
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: '1.4.4'
+      - name: Bind the exact candidate and two helper baseline role
+        run: |
+          set -euo pipefail
+          QA_OUT="$RUNNER_TEMP/pr527-paired"
+          QA_BASE_SRC="$RUNNER_TEMP/pr527-baseline-qa"
+          export QA_OUT QA_BASE_SRC
+          test ! -e "$QA_OUT"
+          test ! -e "$QA_BASE_SRC"
+          mkdir -p "$QA_OUT"/{current,baseline,logs,transport,font-cache}
+          printf 'QA_OUT=%s\nQA_BASE_SRC=%s\nCAREER_PRACTICE_FONT_CACHE=%s\n' "$QA_OUT" "$QA_BASE_SRC" "$QA_OUT/font-cache" >> "$GITHUB_ENV"
+          git fetch --no-tags origin refs/heads/codex/russia-baseline-qa-role-20261106:refs/remotes/origin/codex/russia-baseline-qa-role-20261106
+          test "$(git rev-parse refs/remotes/origin/codex/russia-baseline-qa-role-20261106)" = "$BASE_QA"
+          test "$(git rev-parse HEAD)" = "$CORE"
+          test "$(git rev-parse HEAD^{tree})" = "$TREE"
+          test "$(git rev-parse "$BASE_CORE^{tree}")" = "$BASE_TREE"
+          test "$(git rev-parse "$BASE_QA^{tree}")" = "$BASE_QA_TREE"
+          test "$(git rev-parse "$BASE_QA^")" = "$BASE_CORE"
+          test "$(git diff --name-only "$BASE_CORE" "$BASE_QA")" = $'scripts/lib/careerLeagueWorld1175.mjs\nscripts/lib/careerWorldTruth1329.mjs'
+          test "$(git rev-parse "$BASE_QA:scripts/lib/careerLeagueWorld1175.mjs")" = ebcbe1083dd105732418d417cd86dacbb674daf7
+          test "$(git rev-parse "$BASE_QA:scripts/lib/careerWorldTruth1329.mjs")" = e4601cf0e83b356cc61c43f9d6d9ecd51908f66c
+          test -z "$(git diff "$BASE_CORE" "$BASE_QA" -- src scripts/data public package.json package-lock.json bun.lock bun.lockb)"
+          git worktree add --detach "$QA_BASE_SRC" "$BASE_QA"
+          git show "$GITHUB_SHA:.github/workflows/russia-pr527-attribution-20261107.yml" > "$QA_OUT/workflow.yml"
+          test "$(git rev-parse "$GITHUB_SHA^")" = "$CORE"
+          test "$(git diff --name-status --no-renames "$CORE" "$GITHUB_SHA")" = $'A\t.github/workflows/russia-pr527-attribution-20261107.yml'
+          for role in current baseline; do
+            root="$GITHUB_WORKSPACE"
+            if test "$role" = baseline; then root="$QA_BASE_SRC"; fi
+            (cd "$root"; git rev-parse HEAD; git rev-parse HEAD^{tree}) > "$QA_OUT/$role/source-role.txt"
+            (cd "$root"; git ls-files -z | sort -z | xargs -0 sha256sum) > "$QA_OUT/$role/source-before.sha256"
+            (cd "$root"; git ls-files --stage) > "$QA_OUT/$role/index-before.txt"
+            (cd "$root"; sha256sum package.json package-lock.json bun.lock bun.lockb) > "$QA_OUT/$role/locks-before.sha256"
+            (cd "$root"; git status --porcelain=v1 --untracked-files=all) > "$QA_OUT/$role/status-before.txt"
+            test ! -s "$QA_OUT/$role/status-before.txt"
+            test ! -e "$root/career-press-market-artifacts"
+            test ! -e "$root/career-practice-lifecycle-artifacts"
+          done
+          cmp "$QA_OUT/current/locks-before.sha256" "$QA_OUT/baseline/locks-before.sha256"
+          for file in scripts/simCareerPressMarket.mjs scripts/qa/careerPressMarketKit.mjs scripts/simManagerWorldContinuity.mjs scripts/qa/managerWorldContinuityKit.mjs scripts/simCareerDerbies.mjs scripts/qa/careerPractice1076.mjs scripts/simUsBoardParity.mjs; do
+            cmp "$GITHUB_WORKSPACE/$file" "$QA_BASE_SRC/$file"
+          done
+      - name: Install the same held dependencies and real practice font bytes
+        run: |
+          set -euo pipefail
+          test "$(node --version)" = v24.22.2
+          test "$(bun --version)" = 1.4.4
+          bun install --frozen-lockfile > "$QA_OUT/logs/bun-install.log" 2>&1
+          git diff --exit-code HEAD -- package.json package-lock.json bun.lock bun.lockb
+          npm install --prefix "$RUNNER_TEMP/pr527-tools" --package-lock=false --no-audit --no-fund playwright@1.64.0 > "$QA_OUT/logs/playwright-install.log" 2>&1
+          test ! -e node_modules/playwright
+          test ! -e node_modules/playwright-core
+          ln -s "$RUNNER_TEMP/pr527-tools/node_modules/playwright" node_modules/playwright
+          ln -s "$RUNNER_TEMP/pr527-tools/node_modules/playwright-core" node_modules/playwright-core
+          "$RUNNER_TEMP/pr527-tools/node_modules/.bin/playwright" install --with-deps chromium > "$QA_OUT/logs/chromium-install.log" 2>&1
+          test ! -e "$QA_BASE_SRC/node_modules"
+          ln -s "$GITHUB_WORKSPACE/node_modules" "$QA_BASE_SRC/node_modules"
+          node scripts/qa/careerPractice1076.mjs --prefetch-fonts-only > "$QA_OUT/logs/practice-font-prefetch.log" 2>&1
+          find "$QA_OUT/font-cache" -type f -print0 | sort -z | xargs -0 sha256sum > "$QA_OUT/font-cache-before.sha256"
+      - name: Materialize whole ordinary output retention
+        run: |
+          set -euo pipefail
+          cat > "$QA_OUT/retain.mjs" <<'RETAIN'
+          import fs from 'node:fs';import path from 'node:path';import crypto from 'node:crypto';import assert from 'node:assert/strict';
+          const [root,target]=process.argv.slice(2),out=process.env.QA_OUT,sha=b=>crypto.createHash('sha256').update(b).digest('hex');
+          assert(path.isAbsolute(root)&&path.isAbsolute(target));assert(target.startsWith(path.resolve(out)+path.sep));assert(!fs.existsSync(target),'OWNED_OUTPUT_TARGET_FRESH');assert(['career-press-market-artifacts','career-practice-lifecycle-artifacts'].includes(path.basename(root)),'ONLY_DECLARED_FIXED_OUTPUT');assert([process.env.GITHUB_WORKSPACE,process.env.QA_BASE_SRC].some(checkout=>path.resolve(root)===path.join(path.resolve(checkout),path.basename(root))&&fs.realpathSync(path.dirname(root))===fs.realpathSync(checkout)),'EXACT_RESOLVED_CHECKOUT_OUTPUT');assert(fs.lstatSync(root).isDirectory()&&!fs.lstatSync(root).isSymbolicLink(),'OWNED_OUTPUT_DIRECTORY');
+          const census=base=>{const rows=[];function walk(rel=''){for(const d of fs.readdirSync(path.join(base,rel),{withFileTypes:true})){const file=path.posix.join(rel,d.name),s=fs.lstatSync(path.join(base,file));assert(!s.isSymbolicLink());if(s.isDirectory()){rows.push({file,type:'directory'});walk(file);}else{assert(s.isFile());const b=fs.readFileSync(path.join(base,file));rows.push({file,type:'file',bytes:b.length,sha256:sha(b)});}}}walk();return rows.sort((a,b)=>a.file<b.file?-1:a.file>b.file?1:0);};
+          const before=census(root);fs.writeFileSync(target+'.before.json',JSON.stringify(before)+'\n',{flag:'wx'});fs.renameSync(root,target);const after=census(target);assert.deepEqual(after,before,'WHOLE_OWNED_OUTPUT_RENAME');fs.writeFileSync(target+'.after.json',JSON.stringify(after)+'\n',{flag:'wx'});
+          RETAIN
+          node --check "$QA_OUT/retain.mjs"
+      - name: Run only the five actual permanent commands on each role
+        run: |
+          set -euo pipefail
+          export GIT_NO_LAZY_FETCH=1
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          for role in baseline current; do
+            root="$GITHUB_WORKSPACE"
+            if test "$role" = baseline; then root="$QA_BASE_SRC"; fi
+            export MANAGER_WORLD_CONTINUITY_ARTIFACTS="$QA_OUT/$role/manager-continuity"
+            test ! -e "$MANAGER_WORLD_CONTINUITY_ARTIFACTS"
+            for name in press manager-continuity derbies practice us-board-parity; do
+              receipt="$QA_OUT/transport/$role-$name.log"
+              : > "$receipt"
+              if test "$name" = press; then test ! -e "$root/career-press-market-artifacts"; fi
+              if test "$name" = practice; then test ! -e "$root/career-practice-lifecycle-artifacts"; fi
+              set +e
+              case "$name" in
+                press) (cd "$root"; SIM_OFFLINE_RECEIPT="$receipt" node scripts/simCareerPressMarket.mjs) > "$QA_OUT/logs/$role-$name.stdout" 2> "$QA_OUT/logs/$role-$name.stderr" ;;
+                manager-continuity) (cd "$root"; SIM_OFFLINE_RECEIPT="$receipt" node scripts/simManagerWorldContinuity.mjs) > "$QA_OUT/logs/$role-$name.stdout" 2> "$QA_OUT/logs/$role-$name.stderr" ;;
+                derbies) (cd "$root"; SIM_OFFLINE_RECEIPT="$receipt" node scripts/simCareerDerbies.mjs) > "$QA_OUT/logs/$role-$name.stdout" 2> "$QA_OUT/logs/$role-$name.stderr" ;;
+                practice) (cd "$root"; SIM_OFFLINE_RECEIPT="$receipt" xvfb-run -a node scripts/qa/careerPractice1076.mjs) > "$QA_OUT/logs/$role-$name.stdout" 2> "$QA_OUT/logs/$role-$name.stderr" ;;
+                us-board-parity) (cd "$root"; SIM_OFFLINE_RECEIPT="$receipt" node scripts/simUsBoardParity.mjs) > "$QA_OUT/logs/$role-$name.stdout" 2> "$QA_OUT/logs/$role-$name.stderr" ;;
+              esac
+              native=$?
+              set -e
+              printf '%s\n' "$native" > "$QA_OUT/logs/$role-$name.exit"
+              cat "$QA_OUT/logs/$role-$name.stdout"
+              cat "$QA_OUT/logs/$role-$name.stderr" >&2
+              if test "$name" = practice && test -s "$receipt"; then
+                test -z "$(grep -Ev '^\[SIM_OFFLINE_BLOCK\] external browser route continue https://fonts\.(googleapis|gstatic)\.com$' "$receipt")"
+              else
+                test ! -s "$receipt"
+              fi
+              printf '0\n' > "$QA_OUT/logs/$role-$name-transport.exit"
+              if test "$name" = press && test -d "$root/career-press-market-artifacts"; then
+                node "$QA_OUT/retain.mjs" "$root/career-press-market-artifacts" "$QA_OUT/$role/press"
+              elif test "$name" = practice && test -d "$root/career-practice-lifecycle-artifacts"; then
+                node "$QA_OUT/retain.mjs" "$root/career-practice-lifecycle-artifacts" "$QA_OUT/$role/practice"
+              fi
+            done
+          done
+      - name: Always retain any partial fixed output and hold both source roles
+        if: always()
+        run: |
+          set -euo pipefail
+          for role in current baseline; do
+            root="$GITHUB_WORKSPACE"
+            if test "$role" = baseline; then root="$QA_BASE_SRC"; fi
+            if test -f "$QA_OUT/retain.mjs"; then
+              for spec in 'career-press-market-artifacts press' 'career-practice-lifecycle-artifacts practice'; do
+                read -r fixed target <<< "$spec"
+                if test -e "$root/$fixed"; then node "$QA_OUT/retain.mjs" "$root/$fixed" "$QA_OUT/$role/$target"; fi
+              done
+            fi
+            (cd "$root"; git ls-files -z | sort -z | xargs -0 sha256sum) > "$QA_OUT/$role/source-after.sha256"
+            (cd "$root"; git ls-files --stage) > "$QA_OUT/$role/index-after.txt"
+            (cd "$root"; sha256sum package.json package-lock.json bun.lock bun.lockb) > "$QA_OUT/$role/locks-after.sha256"
+            (cd "$root"; git status --porcelain=v1 --untracked-files=all) > "$QA_OUT/$role/status-after.txt"
+            cmp "$QA_OUT/$role/source-before.sha256" "$QA_OUT/$role/source-after.sha256"
+            cmp "$QA_OUT/$role/index-before.txt" "$QA_OUT/$role/index-after.txt"
+            cmp "$QA_OUT/$role/locks-before.sha256" "$QA_OUT/$role/locks-after.sha256"
+            test ! -s "$QA_OUT/$role/status-after.txt"
+          done
+          find "$QA_OUT/font-cache" -type f -print0 | sort -z | xargs -0 sha256sum > "$QA_OUT/font-cache-after.sha256"
+          cmp "$QA_OUT/font-cache-before.sha256" "$QA_OUT/font-cache-after.sha256"
+          printf '0\n' > "$QA_OUT/source-holds.exit"
+      - name: Record all ten real native outcomes without qualification
+        run: |
+          set -euo pipefail
+          node --input-type=module <<'OUTCOMES'
+          import fs from 'node:fs';import path from 'node:path';import crypto from 'node:crypto';import assert from 'node:assert/strict';
+          const out=process.env.QA_OUT,sha=b=>crypto.createHash('sha256').update(b).digest('hex'),pin=file=>{const b=fs.readFileSync(path.join(out,file));return{file,bytes:b.length,sha256:sha(b)};},rows=[];
+          assert.equal(fs.readFileSync(out+'/source-holds.exit','utf8'),'0\n');
+          for(const role of['baseline','current'])for(const name of['press','manager-continuity','derbies','practice','us-board-parity']){const prefix='logs/'+role+'-'+name,nativeExit=Number(fs.readFileSync(out+'/'+prefix+'.exit','utf8'));assert(Number.isInteger(nativeExit)&&nativeExit>=0&&nativeExit<=255);assert.equal(fs.readFileSync(out+'/'+prefix+'-transport.exit','utf8'),'0\n');const transport=pin('transport/'+role+'-'+name+'.log'),actualTransportRows=fs.readFileSync(path.join(out,transport.file),'utf8').split('\n').filter(Boolean);if(name!=='practice')assert.equal(transport.bytes,0);else assert(actualTransportRows.every(row=>/^\[SIM_OFFLINE_BLOCK\] external browser route continue https:\/\/fonts\.(googleapis|gstatic)\.com$/.test(row)));rows.push({role,name,nativeExit,passed:nativeExit===0,stdout:pin(prefix+'.stdout'),stderr:pin(prefix+'.stderr'),transport:{...transport,actualRows:actualTransportRows,empty:transport.bytes===0,classification:'Empty except exact physically blocked practice font attempts, all raw rows retained'}});}
+          fs.writeFileSync(out+'/OUTCOMES.json',JSON.stringify({schema:'PR527_PAIRED_EXISTING_SCRIPT_OUTCOMES_V1',status:'DIAGNOSTIC_NATIVE_RESULTS_RETAINED_NOT_RELEASE_QUALIFICATION',candidate:{commit:process.env.CORE,tree:process.env.TREE},baseline:{commit:process.env.BASE_CORE,tree:process.env.BASE_TREE},baselineQA:{commit:process.env.BASE_QA,tree:process.env.BASE_QA_TREE,scope:'Exactly two tracked test helper compatibility fixes; all App/data equals main636'},rows,sourceHeld:true,allNativePassed:rows.every(r=>r.passed),newModelOrGoldenEdits:false,classification:'PENDING_INDEPENDENT_FULL_OUTPUT_ATTRIBUTION'},null,2)+'\n',{flag:'wx'});
+          OUTCOMES
+      - name: Retain every ordinary diagnostic output
+        if: always()
+        run: |
+          set -euo pipefail
+          cd "$QA_OUT"
+          test -z "$(find . ! -type f ! -type d -print)"
+          find . -type f ! -path './manifest.sha256' -print0 | sort -z | xargs -0 sha256sum > manifest.sha256
+          tar -I 'xz -6' -cf "$RUNNER_TEMP/pr527-paired-attribution.tar.xz" .
+          cd "$RUNNER_TEMP"
+          sha256sum pr527-paired-attribution.tar.xz > pr527-paired-attribution.tar.xz.sha256
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: pr527-paired-attribution
+          path: |
+            ${{ runner.temp }}/pr527-paired-attribution.tar.xz
+            ${{ runner.temp }}/pr527-paired-attribution.tar.xz.sha256
+          if-no-files-found: error
+          compression-level: 0
+          retention-days: 30
