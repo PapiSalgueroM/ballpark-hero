@@ -1,5 +1,6 @@
 import { cn } from '@/lib/utils';
 import { FlagImg } from '@/components/FlagImg';
+import { eraRostersRaw, type CMEra } from '@/lib/clubManagerEras';
 
 type TeamRow = {
   name: string;
@@ -19,11 +20,13 @@ type TeamRow = {
 type Props = {
   rows: readonly TeamRow[];
   editing: boolean;
+  historicalEra?: Pick<CMEra, 'id' | 'label'>;
   onPick: (name: string) => void;
   onCreate: () => void;
 };
 
-export default function ClubManagerTeamPicker({ rows, editing, onPick, onCreate }: Props) {
+export default function ClubManagerTeamPicker({ rows, editing, historicalEra, onPick, onCreate }: Props) {
+  const historicalRosters = historicalEra && eraRostersRaw(historicalEra.id);
   return (
     <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
       {rows.map(c => (
@@ -71,6 +74,11 @@ export default function ClubManagerTeamPicker({ rows, editing, onPick, onCreate 
               {c.boardText}
             </span>
           </div>
+          {c.selected && historicalEra && (
+            <div className="mt-1 text-[10px] text-muted-foreground">
+              {historicalRosters?.[c.name]?.length ?? 0} players recorded in the {historicalEra.label} roster snapshot.
+            </div>
+          )}
         </button>
       ))}
       {/* Round 964: a founded club is placed against the real lineups, so

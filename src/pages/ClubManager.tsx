@@ -699,6 +699,7 @@ const ClubManager = () => {
                 <ScreenLoading><ClubManagerTeamPicker
                   rows={rows}
                   editing={editing}
+                  historicalEra={historicPick ? era : undefined}
                   onPick={name => g.chooseClub(name, pickEra)}
                   onCreate={() => { g.chooseClub(''); setPickStep('custom'); }}
                 /></ScreenLoading>
