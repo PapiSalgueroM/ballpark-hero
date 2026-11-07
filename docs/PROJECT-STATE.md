@@ -1,4 +1,19 @@
 
+
+## 2026-11-06: Soccer Connections result-owned streaks, bounded stacked draft
+
+Switching back to a finished Daily or Unlimited round now preserves the earned streak. Each mode owns its playing guard; a genuine new result still adds one or resets the existing global streak. Six Hook lines change, with no Page, Board, data, scoring, storage-format or shared-hook change.
+
+Active preflight42288173600 preceded tests/fix. Qualified original42299438424 demonstrated three business failures with eleven passes and158 complete frames. Fixed42302611326 passed14/158 with three entire original preservation objects and literal prior RAW held. Physical controls42306623173 produced42 rows,39 passes,3 original-only business reds,474 frames and33 whole vectors. Both earlier original attempts remain FAILED, with their actual type/deadline diagnoses retained.
+
+First full42310224824 stays FAILED before native actions: the instructions modal hides the Daily accessibility role. Three complete failure frames, zero actions and zero PNGs are retained. Two helper acquisition selectors were corrected after independent actual DOM/source review, with no App, fixture, action or oracle change.
+
+Fresh full42314201077 succeeded at03555bf4ea4c64db2d2ef65bbf78a1662b086e2e/tree597bca5d6ea03b4f6df5482934b4ebe9b6ea7bc1. Proper types,14 scoped unit cases/158 exact RAW frames, normal850 build,20 required readers and16 unchanged original caps passed. Independently admitted native proof covers3 viewports,6 contexts,15 genuine results,670 frames,270 receipts,525 layouts,29 wheels,12 measured startup navigations,9 reviewed PNGs and6 intercepted/aborted completion POSTs. Unit API tapes and whole native persisted state show the old win/loss views preserve earnings; genuine results still settle normally.
+
+Clean join42318149296 at6b8e411609b16b320c03dfa3f8af10d8a09e15e1/tree7981a6c4a973f5b46f8c5bf83bb32fd4b80e7a0b passed fresh proper types/name fence/normal build and all521 locked versions/source/index/locks/offline0 holds. Every4658 product source path/mode/blob plus11 root configurations joins the successful full source; every850 built body matches path/length/SHA256. Clean inherits the separately audited unit/native/readers/caps evidence and does not rerun those stages. Final docs follow the frozen plan505c.
+
+This five-file delivery is Hook+test+plan+remote PROJECT-STATE+WORKBOARD stacked on PR523. Every round QA workflow/helper/controller is excluded. Master409 remains unchanged, PL-05 partial, Grade Transfer retired, and all local App/Git/runtime/PROJECT-STATE, append-only local workboard, companion and merge/publish holds remain. No real-data/backend write, asynchronous terminal-restore/pool-race/cross-tab/physical-touch/full-suite or release claim. Main was observed at636b31efd64b749d4900e3f5773681e0496addf6 after external work; integration with it remains unqualified. No rebase, merge or publish by this round.
+
 ## 2026-11-06: Alphabet Sprint elapsed deadline, bounded stacked draft
 
 Alphabet Sprint now records a deadline only after a successful opening draw. The existing timer displays elapsed time remaining, and Submit and Skip reject entries at or after that deadline before changing answers, draws, streak, feedback or score. Existing zero-time settlement still owns best-score storage and completion. Entry-time admission preserves a legitimate predeadline synchronous answer. Page changes are five bounded regions; the library, pool, scoring, resolver, save format and snapshot remain held.
