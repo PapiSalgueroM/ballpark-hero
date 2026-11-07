@@ -1,0 +1,330 @@
+name: Sports Bingo solo pack clock original
+on:
+  push:
+    branches: [codex/sports-bingo-pack-clock-original-qa-20261107]
+permissions:
+  contents: read
+  actions: read
+jobs:
+  qualify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        shell: bash
+    env:
+      SIM_NETWORK: offline
+      SIM_OFFLINE_RECEIPT: sports-bingo-pack-clock-evidence/offline.log
+      SPORTS_STAGE: original
+      SPORTS_PARENT: '27e1d6508fb207dfd2647994d50f0783d9baec1b'
+      SPORTS_BASE: '27e1d6508fb207dfd2647994d50f0783d9baec1b'
+      SPORTS_BASE_TREE: 'feb8ac00d54366ac66398a28c6c89c2f2e41f484'
+      SPORTS_ORIGINAL_PAGE: '0d6c8657921ad483eeee7dc50f1a92d5bfbd9a05'
+      SPORTS_PAGE: '0d6c8657921ad483eeee7dc50f1a92d5bfbd9a05'
+      SPORTS_TEST: '86929500edcba1bf7171cd15c513e16951495994'
+      SPORTS_PLAN: '1900d29a989e923bf3566b618fa970dc68cc3149'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 3
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24.22.1
+          cache: npm
+      - name: Capture exact source and install locked dependencies
+        run: |
+          set -euo pipefail
+          out=sports-bingo-pack-clock-evidence
+          mkdir "$out"
+          touch "$out/offline.log"
+          git rev-parse HEAD > "$out/head.txt"
+          git rev-parse 'HEAD^{tree}' > "$out/tree.txt"
+          git ls-files -s > "$out/source-before.txt"
+          sha256sum package.json package-lock.json > "$out/locks-before.txt"
+          git fetch --no-tags --depth=1 origin "$SPORTS_BASE"
+          npm ci 2>&1 | tee "$out/install.log"
+      - name: Qualify exact source and authenticate the prior evidence
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          out=sports-bingo-pack-clock-evidence
+          cat > "$out/qualification.mjs" <<'NODE'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import { createHash } from 'node:crypto';
+          import { execFileSync, spawnSync } from 'node:child_process';
+          
+          const out = 'sports-bingo-pack-clock-evidence';
+          const workflow = '.github/workflows/sports-bingo-pack-clock-20261107.yml';
+          const page = 'src/pages/SportsBingo.tsx';
+          const test = 'src/test/sportsBingoPackClock.test.tsx';
+          const table = 'src/test/sportsBingoTable.test.tsx';
+          const plan = 'docs/plans/2026-11-07-sports-bingo-pack-clock.md';
+          const stage = process.env.SPORTS_STAGE;
+          const { SPORTS_PARENT: parent, SPORTS_BASE: base, SPORTS_BASE_TREE: baseTree,
+            SPORTS_PAGE: pageBlob, SPORTS_ORIGINAL_PAGE: originalPage, SPORTS_TEST: testBlob, SPORTS_PLAN: planBlob } = process.env;
+          const pinned = {
+            [page]: pageBlob,
+            [test]: testBlob,
+            [plan]: planBlob,
+            [table]: '500536d0aae1e6341992c72401129c39db9a81fd',
+            'src/App.tsx': '8bfedf7aaa1d076e0f0c8e2216c7e46632cd8a33',
+            'src/data/gameRegistry.ts': 'f560b40a74d1468ac72dfde4ee6fec6635a9a255',
+            'public/sports-bingo/index.html': '044451271149c1e08160d70cec2019860e284004',
+            'src/lib/sportsBingo.ts': 'b1f29ad32de3567cad907d35d684a53e59f34616',
+          };
+          const refs = {"preflight":{"run":42354812249,"artifact":13566254534,"name":"sports-bingo-pack-clock-active-preflight-42354812249","head":"26e7ec987a55b84d623944fa9f92e64482562020","tree":"1f6051d7592d960cfd17397f435538708456df5d","zipBytes":1013648,"zipSHA256":"9c824396b4bbc897e436b5ff044581744d0c7ea22b27c11fdc81a49da1ebe0a8","files":{"active-route-preflight.json":"907f00063746e00164ffc0b7a5618e44d51bd77a8582222811b11b3dc886c346","active-snapshot.html":"c154ac90dd5b65c47cd8f0711f2c732e6edf736f97a5332c042503aa8171d2b8","source-join.json":"8e2ee149864fec728645f5101aa0d5b3af0b2e842a326523ab895608ab2bfcad","final-holds.json":"23a553539ffdf1a4e550e0fad35a1c69c0e73a076d6581f7940dced0a2fe2825"}}};
+          const hash = (algorithm, body) => createHash(algorithm).update(body).digest('hex');
+          const gitBlob = body => createHash('sha1').update('blob ' + body.length + '\0').update(body).digest('hex');
+          const options = { maxBuffer: 64 * 1024 * 1024 };
+          const cmd = (program, args) => execFileSync(program, args, options);
+          const git = (...args) => cmd('git', args).toString('utf8');
+          const sha256 = body => hash('sha256', body);
+          const read = file => fs.readFileSync(path.join(out,file));
+          const readJSON = file => JSON.parse(read(file));
+          const write = (file, body) => fs.writeFileSync(path.join(out,file),body);
+          const json = (file, value) => write(file, JSON.stringify(value,null,2) + '\n');
+          const sorted = items => [...items].sort();
+          const trees = ref => new Map(git('ls-tree','-r','-z',ref).split('\0').filter(Boolean).map(row => {
+            const match = /^(100(?:644|755)) blob ([a-f0-9]{40})\t(.+)$/.exec(row);
+            assert(match,row);
+            return [match[3], [match[1],match[2]]];
+          }));
+          const changed = (left,right) => sorted(new Set([...left.keys(),...right.keys()]))
+            .filter(name => JSON.stringify(left.get(name)) !== JSON.stringify(right.get(name)));
+          const physical = tree => [...tree].map(([file,[mode,blob]]) => {
+            const body = fs.readFileSync(file);
+            const stat = fs.lstatSync(file);
+            assert(stat.isFile(), file);
+            assert.equal((stat.mode & 0o111) !== 0, mode === '100755', file);
+            assert.equal(gitBlob(body),blob,file);
+            return {file,mode,blob,bytes:body.length,sha256:sha256(body)};
+          });
+          const locked = () => {
+            const lock = JSON.parse(fs.readFileSync('package-lock.json'));
+            const rows = Object.entries(lock.packages).filter(([file]) => file.startsWith('node_modules/') && fs.existsSync(file+'/package.json'))
+              .map(([file,pin]) => {
+                const version = JSON.parse(fs.readFileSync(file+'/package.json')).version;
+                assert.equal(version,pin.version,file);
+                return [file,version];
+              });
+            assert.equal(rows.length,521);
+            return rows;
+          };
+          const zipPath = role => path.join(out,'reference-'+role+'.zip');
+          function refFile(role,file) {
+            return cmd('unzip',['-p',zipPath(role),file]);
+          }
+          function reference(role,pin) {
+            const root = 'repos/PapiSalgueroM/ballpark-hero/actions/';
+            const run = JSON.parse(cmd('gh',['api',root+'runs/'+pin.run]));
+            const meta = JSON.parse(cmd('gh',['api',root+'artifacts/'+pin.artifact]));
+            assert.deepEqual([run.id,run.status,run.conclusion,run.event,run.path,run.head_sha,run.head_commit.tree_id,run.repository.full_name],
+              [pin.run,'completed','success','push',workflow,pin.head,pin.tree,'PapiSalgueroM/ballpark-hero']);
+            assert.deepEqual([meta.id,meta.name,meta.expired,meta.size_in_bytes,meta.digest,meta.workflow_run.id,meta.workflow_run.head_sha],
+              [pin.artifact,pin.name,false,pin.zipBytes,'sha256:'+pin.zipSHA256,pin.run,pin.head]);
+            const zip = cmd('gh',['api',root+'artifacts/'+pin.artifact+'/zip']);
+            assert.deepEqual([zip.length,sha256(zip)],[pin.zipBytes,pin.zipSHA256]);
+            fs.writeFileSync(zipPath(role),zip);
+            const names = cmd('unzip',['-Z1',zipPath(role)]).toString().trimEnd().split('\n');
+            assert.equal(new Set(names).size,names.length);
+            for (const name of names) {
+              assert(!name.startsWith('/') && !name.includes('\\') && name.replace(/\/$/,'').split('/').every(part => part && part!=='.' && part!=='..'),name);
+            }
+            assert.equal(refFile(role,'head.txt').toString().trim(),pin.head);
+            assert.equal(refFile(role,'tree.txt').toString().trim(),pin.tree);
+            for (const [file,expected] of Object.entries(pin.files)) assert.equal(sha256(refFile(role,file)),expected,file);
+            json('reference-'+role+'-metadata.json',{run:run.id,artifact:meta.id,head:run.head_sha,tree:run.head_commit.tree_id,bytes:zip.length,sha256:sha256(zip),bodies:names.filter(x=>!x.endsWith('/')).length,files:pin.files});
+          }
+          function prepare() {
+            assert(['original','fixed','controls'].includes(stage));
+            const head = git('rev-parse','HEAD').trim();
+            const tree = git('rev-parse','HEAD^{tree}').trim();
+            assert.equal(head,process.env.GITHUB_SHA);
+            assert.deepEqual(git('rev-list','--parents','-n','1','HEAD').trim().split(' '),[head,parent]);
+            assert.equal(git('rev-parse',base+'^{tree}').trim(),baseTree);
+            const old = trees(base), before = trees(parent), current = trees(head);
+            const exact = stage==='original' ? [workflow,plan,test] : [workflow,page,plan,test];
+            assert.equal(old.size,5785);
+            assert.equal(current.size,5788);
+            assert.equal([...current.keys()].filter(f=>/^(src|public|scripts)\//.test(f)).length,4662);
+            assert.deepEqual(changed(old,current),sorted(exact));
+            assert.deepEqual(changed(before,current),sorted(stage==='original'?exact:stage==='fixed'?[workflow,page]:[workflow]));
+            assert.equal(old.get(page)[1],originalPage);
+            for (const [name,blob] of Object.entries(pinned)) assert.deepEqual(current.get(name),['100644',blob],name);
+            assert.equal(git('status','--porcelain','--untracked-files=no'),'');
+            json('source-join.json',{status:'passed',head,tree,parent,base,baseTree,workflowBlob:current.get(workflow)[1],tracked:current.size,scoped:4662,heldBase:old.size-(stage==='original'?0:1),changes:sorted(exact),pinned});
+            json('tracked-before.json',physical(current));
+            json('installed-before.json',locked());
+            for (const [role,pin] of Object.entries(refs)) reference(role,pin);
+          }
+          const expectedCases = {"manualFirstTick":{"title":"gives a manually opened pack its own first full second","marker":"SPORTS_BINGO_MANUAL_FIRST_TICK","frames":[["old-phase-900",[1,15],[1,15]],["manual-open",[2,15],[2,15]],["old-first-tick",[2,14],[2,15]],["new-age-999",[2,14],[2,15]],["new-first-tick",[2,14],[2,14]]]},"manualFullWindow":{"title":"keeps a manually opened pack available until its own full window expires","marker":"SPORTS_BINGO_MANUAL_FULL_WINDOW","frames":[["old-phase-900",[1,15],[1,15]],["manual-open",[2,15],[2,15]],["old-expiry",[3,15],[2,1]],["new-age-14999",[3,15],[2,1]],["new-expiry",[3,15],[3,15]]]},"automaticAndFinish":{"title":"advances two automatic windows and records a public Finish exactly once","marker":null,"frames":[["first-age-14999",[1,1],[1,1]],["first-expiry",[2,15],[2,15]],["second-age-14999",[2,1],[2,1]],["second-expiry",[3,15],[3,15]],["manual-open-10",[10,15],[10,15]],["finished",[null,null],[null,null]],["finished-plus-1000",[null,null],[null,null]]]}};
+          const names = Object.keys(expectedCases);
+          function proofBody(raw, role) {
+            const fixed = role !== 'original';
+            assert.equal(raw.schema,'sports-bingo-pack-clock-v1');
+            assert.deepEqual(sorted(Object.keys(raw.cases)),sorted(names));
+            assert.equal(raw.fixture.rows.length,120);
+            assert.equal(raw.seedDraw,0.42);
+            const result = {};
+            for (const name of names) {
+              const c = raw.cases[name], pin = expectedCases[name];
+              assert.equal(c.key,name);
+              assert.equal(c.title,pin.title);
+              if (pin.marker) assert.equal(c.marker,pin.marker);
+              assert(Array.isArray(c.frames) && c.frames.length >= pin.frames.length,name+' complete public frames');
+              assert.equal(new Set(c.frames.map(f=>f.label)).size,c.frames.length);
+              const frames = new Map(c.frames.map(f=>[f.label,f]));
+              const samples = pin.frames.map(([label])=>{
+                const frame = frames.get(label);
+                assert(frame,label);
+                return [frame.label,frame.pack,frame.seconds];
+              });
+              assert.deepEqual(samples,pin.frames.map(([label,first,fixedValue])=>[label,...(fixed ? fixedValue : first)]),name+' actual public pack and time samples');
+              result[name] = {frames:c.frames.length,samples,actions:c.actions.length,queries:c.queries.length,completions:c.completions.length,randomDraws:c.randomDraws.length};
+            }
+            return result;
+          }
+          function runArm(role, expectedBlob) {
+            assert.equal(gitBlob(fs.readFileSync(page)),expectedBlob,role+' physical Page before test');
+            assert.equal(git('rev-parse',':'+page).trim(),pageBlob,role+' committed Page index stays fixed');
+            const dir = path.join(out,'case-'+role);
+            fs.mkdirSync(dir);
+            const target = name => path.resolve(dir,name);
+            const proc = spawnSync('node_modules/.bin/vitest',['run',test,table,'--reporter=json','--testTimeout=60000','--no-file-parallelism','--outputFile='+target('vitest.json')],{
+              env:{...process.env,SPORTS_BINGO_PACK_CLOCK_RAW:target('raw.json')},encoding:'utf8',maxBuffer:16*1024*1024,
+            });
+            fs.writeFileSync(target('vitest.log'),(proc.stdout||'')+(proc.stderr||''));
+            fs.writeFileSync(target('exit-code.txt'),String(proc.status)+'\n');
+            process.stdout.write(proc.stdout||'');
+            process.stderr.write(proc.stderr||'');
+            assert.ifError(proc.error);
+            assert.equal(proc.signal,null);
+            const report = JSON.parse(fs.readFileSync(target('vitest.json')));
+            const rawBytes = fs.readFileSync(target('raw.json'));
+            const raw = JSON.parse(rawBytes);
+            const reds = role === 'original' ? 2 : 0;
+            assert.deepEqual([proc.status,report.numTotalTests,report.numPassedTests,report.numFailedTests,report.numPendingTests,report.numTodoTests],
+              [reds?1:0,8,8-reds,reds,0,0]);
+            assert.equal(report.success,reds===0);
+            assert.equal(report.testResults.length,2);
+            for (const suite of report.testResults) assert.equal(suite.message,'','No suite or hook error');
+            for (const key of ['numRuntimeErrorTestSuites','numUnhandledErrors','numTodoTests']) if (Object.hasOwn(report,key)) assert.equal(report[key],0);
+            for (const key of ['unhandledErrors','testExecutionErrors']) if (Object.hasOwn(report,key)) assert.deepEqual(report[key],[]);
+            assert(!/Unhandled Errors|Unhandled Rejection|Uncaught Exception|Failed to resolve import|No test files found|SyntaxError|ReferenceError|TypeError|timed out/i.test((proc.stdout||'')+(proc.stderr||'')),'No runtime, loading or setup failure in the log');
+            const byFile = file => {
+              const rows = report.testResults.filter(s=>s.name.endsWith('/'+file));
+              assert.equal(rows.length,1,file);
+              return rows[0].assertionResults;
+            };
+            const fresh = byFile(test);
+            const prior = byFile(table);
+            assert.equal(prior.length,5);
+            assert.equal(fresh.length,names.length);
+            assert(prior.every(r=>r.status==='passed'&&!r.failureMessages.length));
+            for (const name of names) {
+              const pin = expectedCases[name], row = fresh.find(r=>r.title===pin.title);
+              assert(row,name);
+              const fails = role==='original' && pin.marker;
+              assert.equal(row.status,fails?'failed':'passed',name);
+              assert.equal(row.failureMessages.length,fails?1:0,name);
+              if (fails) assert(row.failureMessages[0].startsWith('AssertionError: '+pin.marker+':'),name+' exact named business assertion');
+            }
+            const proof = proofBody(raw,role);
+            assert.equal(gitBlob(fs.readFileSync(page)),expectedBlob,role+' physical Page after test');
+            const summary = {role,page:expectedBlob,rows:8,passes:8-reds,failures:reds,report:sorted([...fresh,...prior].map(r=>r.fullName)),proof,rawBytes:rawBytes.length,rawSHA256:sha256(rawBytes)};
+            return {summary,raw,rawBytes};
+          }
+          function tests() {
+            const arms = [];
+            let preservedAutomatic = false, exactRoleRaw = false;
+            if (stage === 'original') {
+              const actual = runArm('original',originalPage);
+              arms.push(actual.summary);
+            } else if (stage === 'fixed') {
+              const actual = runArm('fixed',pageBlob);
+              const before = JSON.parse(refFile('original','case-original/raw.json'));
+              assert.deepEqual(actual.raw.cases.automaticAndFinish,before.cases.automaticAndFinish,'Complete ordinary pack and Finish preservation');
+              preservedAutomatic = true;
+              arms.push(actual.summary);
+            } else if (stage === 'controls') {
+              const fixed = runArm('fixed',pageBlob);
+              assert(fixed.rawBytes.equals(refFile('fixed','case-fixed/raw.json')),'Fixed complete role RAW');
+              const original = cmd('git',['show',base+':'+page]);
+              const restore = fs.readFileSync(page);
+              assert.notEqual(pageBlob,originalPage);
+              assert.equal(gitBlob(original),originalPage);
+              let reverted;
+              try {
+                fs.writeFileSync(page,original);
+                assert.equal(git('diff','--name-only','HEAD','--','.').trim(),page);
+                reverted = runArm('original',originalPage);
+                assert(reverted.rawBytes.equals(refFile('original','case-original/raw.json')),'Original complete role RAW');
+              } finally {
+                fs.writeFileSync(page,restore);
+              }
+              assert.equal(git('diff','--name-only','HEAD','--','.').trim(),'');
+              const restored = runArm('restored',pageBlob);
+              assert(restored.rawBytes.equals(fixed.rawBytes),'Restored complete role RAW');
+              assert.deepEqual(restored.raw.cases.automaticAndFinish,reverted.raw.cases.automaticAndFinish,'Complete ordinary progression and final Finish hold in every physical arm');
+              preservedAutomatic = true;
+              exactRoleRaw = true;
+              arms.push(fixed.summary,reverted.summary,restored.summary);
+            } else {
+              throw Error(stage);
+            }
+            const source = readJSON('source-join.json');
+            json('admission.json',{status:'passed',stage,source,arms,totals:{roles:arms.length,rows:arms.reduce((n,a)=>n+a.rows,0),passes:arms.reduce((n,a)=>n+a.passes,0),failures:arms.reduce((n,a)=>n+a.failures,0)},preservedAutomatic,exactRoleRaw,previousTableCasesPerRole:5});
+            console.log('PASS Sports Bingo '+stage+' evidence, actual roles: '+arms.map(a=>a.role+' '+a.passes+'/'+a.rows).join(', '));
+          }
+          function final() {
+            const current = trees('HEAD');
+            const tracked = physical(current);
+            const versions = locked();
+            assert.deepEqual(tracked,readJSON('tracked-before.json'));
+            assert.deepEqual(versions,readJSON('installed-before.json'));
+            assert(read('source-before.txt').equals(read('source-after.txt')));
+            assert(read('locks-before.txt').equals(read('locks-after.txt')));
+            assert.equal(read('offline.log').length,0);
+            assert.equal(read('types.log').length,0);
+            assert.equal(gitBlob(fs.readFileSync(page)),pageBlob);
+            for (const [role,pin] of Object.entries(refs)) {
+              const zip = fs.readFileSync(zipPath(role));
+              assert.deepEqual([zip.length,sha256(zip)],[pin.zipBytes,pin.zipSHA256],role+' retained ZIP');
+            }
+            json('tracked-after.json',tracked);
+            json('installed-after.json',versions);
+            json('final-holds.json',{status:'passed',tracked:tracked.length,scoped:4662,installed:versions.length,indexHeld:true,physicalSourceHeld:true,lockHeld:true,offlineBytes:0,page:pageBlob});
+          }
+          const action = process.argv[2];
+          assert(['prepare','test','final'].includes(action));
+          ({prepare,test:tests,final})[action]();
+          NODE
+          node "$out/qualification.mjs" prepare
+      - name: Proper App types
+        run: |
+          set -euo pipefail
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee sports-bingo-pack-clock-evidence/types.log
+      - name: Run the actual public pack and existing table tests
+        run: |
+          set -euo pipefail
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node sports-bingo-pack-clock-evidence/qualification.mjs test
+      - name: Join physical source index lock versions and offline receipts
+        if: always()
+        run: |
+          set -euo pipefail
+          out=sports-bingo-pack-clock-evidence
+          git ls-files -s > "$out/source-after.txt"
+          sha256sum package.json package-lock.json > "$out/locks-after.txt"
+          git diff --exit-code HEAD -- .
+          node "$out/qualification.mjs" final
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: sports-bingo-pack-clock-original-${{ github.run_id }}
+          path: sports-bingo-pack-clock-evidence
+          retention-days: 14
+          if-no-files-found: error
