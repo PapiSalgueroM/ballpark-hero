@@ -1,0 +1,98 @@
+name: Soccer Grid selection ownership active source preflight
+on:
+  push:
+    branches: [codex/soccer-grid-selection-ownership-preflight-qa-20261106]
+permissions:
+  contents: read
+jobs:
+  preflight:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        shell: bash
+    env:
+      SIM_NETWORK: offline
+      SIM_OFFLINE_RECEIPT: soccer-grid-selection-ownership-active-preflight/offline.log
+      TZ: UTC
+      SOCCER_GRID_PREFLIGHT_BASE_HEAD: '7d9e1cbe3cc7ee838b2e4e5d381c4dd34faa9f0b'
+      SOCCER_GRID_PREFLIGHT_BASE_TREE: '23d931fe27906490f1e79eb057e7a1d6a11804b9'
+      SOCCER_GRID_PREFLIGHT_BASE_TRACKED_ROWS: '5783'
+      SOCCER_GRID_PREFLIGHT_SCOPED_SOURCE_ROWS: '4660'
+      SOCCER_GRID_PREFLIGHT_LOCKED_VERSIONS: '521'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24.22.1
+          cache: npm
+      - name: Exact admitted parent product source and physical before receipts
+        run: |
+          set -euo pipefail
+          if grep -Eq '__[A-Z][A-Z0-9_]*__' .github/workflows/soccer-grid-selection-ownership-20261106.yml; then echo 'Unresolved active preflight binding'; exit 1; fi
+          for value in "$SOCCER_GRID_PREFLIGHT_BASE_HEAD" "$SOCCER_GRID_PREFLIGHT_BASE_TREE"; do [[ "$value" =~ ^[a-f0-9]{40}$ ]]; done
+          for value in "$SOCCER_GRID_PREFLIGHT_BASE_TRACKED_ROWS" "$SOCCER_GRID_PREFLIGHT_SCOPED_SOURCE_ROWS" "$SOCCER_GRID_PREFLIGHT_LOCKED_VERSIONS"; do [[ "$value" =~ ^[1-9][0-9]*$ ]]; done
+          test ! -e soccer-grid-selection-ownership-active-preflight
+          mkdir soccer-grid-selection-ownership-active-preflight
+          touch soccer-grid-selection-ownership-active-preflight/offline.log
+          git rev-parse HEAD > soccer-grid-selection-ownership-active-preflight/head.txt
+          git rev-parse 'HEAD^{tree}' > soccer-grid-selection-ownership-active-preflight/tree.txt
+          git ls-files -s > soccer-grid-selection-ownership-active-preflight/source-before.txt
+          sha256sum package.json package-lock.json > soccer-grid-selection-ownership-active-preflight/locks-before.txt
+          git diff --exit-code HEAD -- .
+          git fetch --no-tags --depth=1 origin "$SOCCER_GRID_PREFLIGHT_BASE_HEAD"
+          test "$(git rev-parse "$SOCCER_GRID_PREFLIGHT_BASE_HEAD^{tree}")" = "$SOCCER_GRID_PREFLIGHT_BASE_TREE"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';import {execFileSync} from 'node:child_process';import {createHash} from 'node:crypto';
+          const out='soccer-grid-selection-ownership-active-preflight',base=process.env.SOCCER_GRID_PREFLIGHT_BASE_HEAD,baseTree=process.env.SOCCER_GRID_PREFLIGHT_BASE_TREE,workflow='.github/workflows/soccer-grid-selection-ownership-20261106.yml',at=(ref,file)=>execFileSync('git',['rev-parse',ref+':'+file],{encoding:'utf8'}).trim(),sha=bytes=>createHash('sha256').update(bytes).digest('hex');
+          const pins={'src/App.tsx':'8bfedf7aaa1d076e0f0c8e2216c7e46632cd8a33','src/data/gameRegistry.ts':'f560b40a74d1468ac72dfde4ee6fec6635a9a255','public/soccer-grid/index.html':'65fcae9819d92e53462c9f7826bd7d2fa2012fe4','src/pages/SoccerGrid.tsx':'fd793d83fef33fa075fcac53e97453cdbf83fff7','src/hooks/useSoccerGrid.ts':'1c84994a36c8ac51e4020823d899c2342be60271','src/components/soccer-grid/SoccerGridSearch.tsx':'14450f17982a89cc5de886d89fa1a78462ff509f','src/components/soccer-grid/SoccerGridBoard.tsx':'15007fda66e6a52bf13727d934dcc796bb30f3bb','src/test/soccerGridSubmissionOwnership.test.tsx':'7cb7f94a73ce7340243e7bdae6d6759e2c1a6f11','scripts/lib/offlineTransport.cjs':'0fda542a2649fe5da937c6976fd0f5b6073e74b6','index.html':'12598fe720eec4fc88d3d33c53ede612d018150c','package.json':'2ff64986fb76ebc51b706f2fd24765768874008a','package-lock.json':'97d6f12a052f25f400462938c241789a083f0bfe','vite.config.ts':'0112b6ac4f2ad80b2fc04f9ec2f7185300913e7d','tailwind.config.ts':'f83c4f4032d359bc9285828eac3b0961a46c6b17','postcss.config.js':'2aa7205d4b402a1bdfbe07110c61df920b370066','tsconfig.json':'6b68d80b7d92d0c4a5d774897f2bedfa95b42669','tsconfig.app.json':'51f581dd91641b4c1f1219f646788e73cf6bf00c','tsconfig.node.json':'3133162c20350e1741b94b8d2ff77b811bec8363','bun.lockb':'5d9d33a3bf4f45fa099e2aa3014149e034981149','bun.lock':'dff081dcd34a1aa928ddc90d910774a6b855dfe3'};
+          const configs=["index.html","package.json","package-lock.json","vite.config.ts","tailwind.config.ts","postcss.config.js","tsconfig.json","tsconfig.app.json","tsconfig.node.json","bun.lockb","bun.lock"];assert.equal(configs.length,11);
+          for(const[file,want]of Object.entries(pins)){assert.equal(at('HEAD',file),want,file+' current index');assert.equal(at(base,file),want,file+' admitted parent');const bytes=fs.readFileSync(file);assert.equal(createHash('sha1').update(Buffer.concat([Buffer.from('blob '+bytes.length+'\0'),bytes])).digest('hex'),want,file+' actual physical body');}assert.equal(fs.statSync('public/soccer-grid/index.html').size,22206,'Actual UTF-8 snapshot byte count');
+          const tree=ref=>execFileSync('git',['ls-tree','-r','-z',ref],{encoding:'utf8',maxBuffer:16*1024*1024}).split('\0').filter(Boolean),held=rows=>rows.filter(row=>row.split('\t')[1]!==workflow),head=execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim();assert.equal(head,process.env.GITHUB_SHA);assert.deepEqual(execFileSync('git',['rev-list','--parents','-n','1','HEAD'],{encoding:'utf8'}).trim().split(' '),[head,base],'Exact sole product parent');const baseTrackedRows=Number(process.env.SOCCER_GRID_PREFLIGHT_BASE_TRACKED_ROWS),scopedSourceRows=Number(process.env.SOCCER_GRID_PREFLIGHT_SCOPED_SOURCE_ROWS),trackedRows=baseTrackedRows+1;assert([baseTrackedRows,scopedSourceRows,trackedRows,Number(process.env.SOCCER_GRID_PREFLIGHT_LOCKED_VERSIONS)].every(Number.isSafeInteger));assert.deepEqual(held(tree('HEAD')),held(tree(base)),'Every tracked product path, mode and blob equals admitted parent');assert.equal(tree(base).length,baseTrackedRows,'All actual parent tracked paths');assert.equal(tree('HEAD').length,trackedRows);assert.equal(held(tree('HEAD')).length,baseTrackedRows,'Every parent path held');assert.equal(tree('HEAD').filter(row=>/^(?:src|public|scripts)\//.test(row.split('\t')[1])).length,scopedSourceRows,'All parent scoped source paths held');assert.deepEqual(execFileSync('git',['diff','--name-only',base,'HEAD'],{encoding:'utf8'}).trim().split('\n'),[workflow],'Only owned standalone QA workflow differs from the admitted parent');
+          fs.writeFileSync(out+'/source-join.json',JSON.stringify({status:'passed',base,baseTree,head,heldRows:held(tree('HEAD')).length,baseTrackedRows,trackedRows,baseScopedRows:scopedSourceRows,scopedSourceRows,rootConfigurations:configs.map(file=>({file,blob:pins[file]})),onlyOwnedLeaf:workflow,workflowBlob:at('HEAD',workflow),pins,snapshotBytes:22206,limits:'Preflight-only QA workflow on the exact admitted parent product source. No new test, App fix, plan or product data change.'},null,2));
+          const files=execFileSync('git',['ls-files','-z'],{encoding:'utf8'}).split('\0').filter(Boolean),physical=files.map(file=>{const bytes=fs.readFileSync(file);return{file,bytes:bytes.length,sha256:sha(bytes)};});assert.equal(files.length,trackedRows,'Exact base plus one standalone QA workflow');assert.equal(physical.filter(row=>/^(?:src|public|scripts)\//.test(row.file)).length,scopedSourceRows);fs.writeFileSync(out+'/tracked-before.json',JSON.stringify(physical));assert.equal(fs.statSync(out+'/offline.log').size,0);
+          NODE
+      - name: Locked dependency install and all installed version pins
+        run: |
+          set -euo pipefail
+          npm ci 2>&1 | tee soccer-grid-selection-ownership-active-preflight/install.log
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';const lock=JSON.parse(fs.readFileSync('package-lock.json')),rows=Object.keys(lock.packages).filter(p=>p.startsWith('node_modules/')&&fs.existsSync(p+'/package.json')).map(p=>[p,JSON.parse(fs.readFileSync(p+'/package.json')).version]);assert.equal(rows.length,Number(process.env.SOCCER_GRID_PREFLIGHT_LOCKED_VERSIONS));for(const[p,v]of rows)assert.equal(v,lock.packages[p].version,p);fs.writeFileSync('soccer-grid-selection-ownership-active-preflight/installed-before.json',JSON.stringify(rows));assert.equal(fs.statSync('soccer-grid-selection-ownership-active-preflight/offline.log').size,0);
+          NODE
+      - name: Actual direct route React lazy Soccer object and inert snapshot
+        run: |
+          set -euo pipefail
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';import ts from 'typescript';import {JSDOM} from 'jsdom';import {createHash} from 'node:crypto';
+          const out='soccer-grid-selection-ownership-active-preflight',route='/soccer-grid',component='SoccerGrid',label='Soccer Grid',appText=fs.readFileSync('src/App.tsx','utf8'),catalogText=fs.readFileSync('src/data/gameRegistry.ts','utf8'),app=ts.createSourceFile('src/App.tsx',appText,ts.ScriptTarget.Latest,true,ts.ScriptKind.TSX),catalog=ts.createSourceFile('src/data/gameRegistry.ts',catalogText,ts.ScriptTarget.Latest,true,ts.ScriptKind.TS);assert.deepEqual(app.parseDiagnostics,[]);assert.deepEqual(catalog.parseDiagnostics,[]);
+          const all=(root,predicate)=>{const found=[];const visit=node=>{if(predicate(node))found.push(node);ts.forEachChild(node,visit);};visit(root);return found;},attrs=(node,name)=>node.attributes.properties.filter(p=>ts.isJsxAttribute(p)&&p.name.text===name);
+          const routes=all(app,node=>(ts.isJsxSelfClosingElement(node)||ts.isJsxOpeningElement(node))&&node.tagName.getText(app)==='Route').filter(node=>attrs(node,'path').some(p=>p.initializer&&ts.isStringLiteralLike(p.initializer)&&p.initializer.text===route));assert.equal(routes.length,1,'One actual direct public JSX Route');assert(ts.isJsxSelfClosingElement(routes[0]),'Direct self-closing route');assert.equal(attrs(routes[0],'path').length,1);const elements=attrs(routes[0],'element');assert.equal(elements.length,1);const element=elements[0].initializer;assert(element&&ts.isJsxExpression(element)&&element.expression&&ts.isJsxSelfClosingElement(element.expression));assert.equal(element.expression.tagName.getText(app),component,'Direct Soccer Grid mount, no Navigate');
+          const declarations=all(app,node=>ts.isVariableDeclaration(node)&&ts.isIdentifier(node.name)&&node.name.text===component);assert.equal(declarations.length,1);const init=declarations[0].initializer;assert(init&&ts.isCallExpression(init)&&ts.isIdentifier(init.expression)&&init.expression.text==='lazy');assert.equal(init.arguments.length,1);const factory=init.arguments[0];assert(ts.isArrowFunction(factory)&&factory.parameters.length===0);const load=factory.body;assert(ts.isCallExpression(load)&&load.expression.kind===ts.SyntaxKind.ImportKeyword&&load.arguments.length===1&&ts.isStringLiteralLike(load.arguments[0]));assert.equal(load.arguments[0].text,'./pages/SoccerGrid');const reactLazy=all(app,node=>ts.isImportDeclaration(node)&&ts.isStringLiteralLike(node.moduleSpecifier)&&node.moduleSpecifier.text==='react'&&node.importClause?.namedBindings&&ts.isNamedImports(node.importClause.namedBindings)).flatMap(node=>node.importClause.namedBindings.elements).filter(node=>node.name.text==='lazy'&&(node.propertyName?.text??node.name.text)==='lazy');assert.equal(reactLazy.length,1,'lazy is the actual named React import');
+          const prop=(node,name)=>{const found=node.properties.filter(p=>ts.isPropertyAssignment(p)&&(ts.isIdentifier(p.name)||ts.isStringLiteralLike(p.name))&&p.name.text===name);assert(found.length<=1,'No duplicate catalog property: '+name);return found[0]?.initializer;},defs=all(catalog,node=>ts.isVariableDeclaration(node)&&ts.isIdentifier(node.name)&&node.name.text==='CATEGORIES');assert.equal(defs.length,1);const categories=defs[0].initializer;assert(categories&&ts.isArrayLiteralExpression(categories));const soccer=categories.elements.filter(node=>ts.isObjectLiteralExpression(node)&&prop(node,'title')&&ts.isStringLiteralLike(prop(node,'title'))&&prop(node,'title').text==='Soccer');assert.equal(soccer.length,1);const games=prop(soccer[0],'games');assert(games&&ts.isArrayLiteralExpression(games));const entries=games.elements.filter(node=>ts.isObjectLiteralExpression(node)&&prop(node,'path')&&ts.isStringLiteralLike(prop(node,'path'))&&prop(node,'path').text===route);assert.equal(entries.length,1,'One actual uncommented Soccer catalog object');const catalogLabel=prop(entries[0],'label');assert(catalogLabel&&ts.isStringLiteralLike(catalogLabel));assert.equal(catalogLabel.text,label,'Exact actual Soccer label');
+          const file='public/soccer-grid/index.html',bytes=fs.readFileSync(file);assert.equal(bytes.length,22206);const dom=new JSDOM(bytes.toString('utf8')),doc=dom.window.document,canonicals=[...doc.querySelectorAll('link[rel]')].filter(node=>node.getAttribute('rel').toLowerCase().split(/\s+/).includes('canonical'));assert.equal(canonicals.length,1);assert.equal(canonicals[0].getAttribute('href'),'https://douknowball.com'+route);const snapshots=[...doc.querySelectorAll('#dukb-snapshot')];assert.equal(snapshots.length,1);const snapshot=snapshots[0],snapshotText=snapshot.textContent.trim();assert(snapshotText.length>500,'Actual readable saved game content');const headings=[...snapshot.querySelectorAll('h1')].map(node=>node.textContent.trim().replace(/\s+/g,' ').toUpperCase());assert(headings.includes('⚽SOCCER GRID'),'Actual saved game heading');const metas=[...doc.querySelectorAll('meta')],retired=metas.filter(node=>['dukb-retired-from','dukb-retired-to'].includes((node.getAttribute('name')||'').toLowerCase())),refresh=metas.filter(node=>(node.getAttribute('http-equiv')||'').trim().toLowerCase()==='refresh'),robots=metas.filter(node=>['robots','googlebot','bingbot'].includes((node.getAttribute('name')||'').toLowerCase()));assert.equal(retired.length,0,'No actual retired-route markers');assert.equal(refresh.length,0,'No actual redirect meta');assert(robots.every(node=>!/(?:^|[\s,])(?:noindex|none)(?:[\s,]|$)/i.test(node.getAttribute('content')||'')),'Active snapshot remains indexable');
+          fs.copyFileSync(file,out+'/active-snapshot.html');fs.writeFileSync(out+'/active-route-preflight.json',JSON.stringify({status:'passed',route,component,label,routeNode:routes[0].getText(app),reactLazyImport:reactLazy[0].parent.parent.parent.getText(app),lazyDeclaration:declarations[0].getText(app),catalogObject:entries[0].getText(catalog),snapshot:{file,bytes:bytes.length,sha256:createHash('sha256').update(bytes).digest('hex'),canonical:canonicals[0].getAttribute('href'),snapshotTextLength:snapshotText.length,headings,retiredMarkers:retired.length,metaRefresh:refresh.length,robots:robots.map(node=>({name:node.getAttribute('name'),content:node.getAttribute('content')}))},parsers:{typescript:ts.version,html:'Inert JSDOM, scripts/resources not enabled'},limits:'Actual AST nodes and inert DOM elements, never comments or a dormant Page file. Active source/public entry preflight only. No selection ownership reproduction, game test, App fix, build, browser journey, real-data truth or release claim. Native route reachability remains unqualified.'},null,2));dom.window.close();console.log('PASS actual direct Soccer Grid route, React lazy Page import, labeled Soccer catalog object and indexable nonredirect snapshot');
+          NODE
+      - name: Final whole source index locks installed versions and offline holds
+        if: always()
+        run: |
+          set -euo pipefail
+          git ls-files -s > soccer-grid-selection-ownership-active-preflight/source-after.txt
+          cmp soccer-grid-selection-ownership-active-preflight/source-before.txt soccer-grid-selection-ownership-active-preflight/source-after.txt
+          git diff --exit-code HEAD -- .
+          sha256sum package.json package-lock.json > soccer-grid-selection-ownership-active-preflight/locks-after.txt
+          cmp soccer-grid-selection-ownership-active-preflight/locks-before.txt soccer-grid-selection-ownership-active-preflight/locks-after.txt
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';import {execFileSync} from 'node:child_process';import {createHash} from 'node:crypto';
+          const out='soccer-grid-selection-ownership-active-preflight',files=execFileSync('git',['ls-files','-z'],{encoding:'utf8'}).split('\0').filter(Boolean),rows=files.map(file=>{const bytes=fs.readFileSync(file);return{file,bytes:bytes.length,sha256:createHash('sha256').update(bytes).digest('hex')};});assert.deepEqual(rows,JSON.parse(fs.readFileSync(out+'/tracked-before.json')));fs.writeFileSync(out+'/tracked-after.json',JSON.stringify(rows));
+          const lock=JSON.parse(fs.readFileSync('package-lock.json')),before=JSON.parse(fs.readFileSync(out+'/installed-before.json')),after=Object.keys(lock.packages).filter(p=>p.startsWith('node_modules/')&&fs.existsSync(p+'/package.json')).map(p=>[p,JSON.parse(fs.readFileSync(p+'/package.json')).version]);assert.equal(after.length,Number(process.env.SOCCER_GRID_PREFLIGHT_LOCKED_VERSIONS));for(const[p,v]of after)assert.equal(v,lock.packages[p].version,p);assert.deepEqual(after,before);fs.writeFileSync(out+'/installed-after.json',JSON.stringify(after));assert.equal(fs.statSync(out+'/offline.log').size,0);fs.writeFileSync(out+'/final-holds.json',JSON.stringify({status:'passed',trackedBodies:rows.length,scopedSourceRows:Number(process.env.SOCCER_GRID_PREFLIGHT_SCOPED_SOURCE_ROWS),rootConfigurations:11,installedLockedVersions:after.length,indexUnchanged:true,sourceBytesUnchanged:true,locksUnchanged:true,offlineBytes:0,limits:'Physical source/index/locks/version/offline holds only. Preflight outcome is separate and the completed workflow conclusion is required.'},null,2));console.log('PASS exact tracked physical source/index/locks/installed versions and zero-byte offline receipt held');
+          NODE
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: soccer-grid-selection-ownership-active-preflight-${{ github.run_id }}
+          path: soccer-grid-selection-ownership-active-preflight
+          retention-days: 14
+          if-no-files-found: error
