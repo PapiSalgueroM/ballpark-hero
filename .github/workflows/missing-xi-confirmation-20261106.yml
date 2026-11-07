@@ -1,0 +1,209 @@
+name: Soccer Missing XI confirmation ownership clean build join
+on:
+  push:
+    branches: [codex/soccer-missing-xi-confirmation-clean-join-qa-20261106]
+permissions:
+  contents: read
+  actions: read
+jobs:
+  closeout:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        shell: bash
+    env:
+      SIM_NETWORK: offline
+      SIM_OFFLINE_RECEIPT: missing-xi-confirmation-clean-join/offline.log
+      MISSING_XI_REFERENCE_ARTIFACT: '13558089028'
+      MISSING_XI_REFERENCE_RUN: '42333756371'
+      MISSING_XI_REFERENCE_ZIP: '7c38751eb61b98179d0d8f834639ec2e460a01f39fc7bc718055fa9b53177cbb'
+      MISSING_XI_REFERENCE_TAR: '84a2e29a5abb4b6f7880c0b90c8681e15530402a186390f36e8c1e52ffb3d008'
+      MISSING_XI_REFERENCE_HEAD: '855dade8a15f0862a344cad416356b7faccfedfe'
+      MISSING_XI_REFERENCE_TREE: 'e69687a5c7c2ca546454caef3414ac9cbf62ae3c'
+      MISSING_XI_REFERENCE_ZIP_BYTES: '94850441'
+      MISSING_XI_NATIVE_HELPER: '18fb57b98d70841ae08c4b2011f0d9bf4ef39674'
+      MISSING_XI_NATIVE_OUTER: 'f5616b4a079cee059f45f814fdd2d6cb6f744dee'
+      MISSING_XI_FIXED_PAGE_BLOB: '4692624a6ce6435b881ce4671df6169696a75858'
+      MISSING_XI_QUALIFIED_PLAN_BLOB: 'e1b2364ad41459bb6a23a298f4aee9174a991264'
+      MISSING_XI_QUALIFIED_TEST_BLOB: 'a637f262571576e6637c8a24f5c9f34352e2f2bb'
+      MISSING_XI_REFERENCE_DIST_MANIFEST: '446761fefdd890b5be982a0c57399d18cc8be96d877b0833023f9b0ee6fc4e9e'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 3
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24.22.1
+          cache: npm
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.4.4
+      - name: Locked dependencies and clean source receipts
+        run: |
+          set -euo pipefail
+          if grep -Eq '__[A-Z][A-Z0-9_]*__' .github/workflows/missing-xi-confirmation-20261106.yml; then echo 'Unresolved clean qualification template binding'; exit 1; fi
+          [[ "$MISSING_XI_REFERENCE_ARTIFACT" =~ ^[0-9]+$ ]]
+          [[ "$MISSING_XI_REFERENCE_RUN" =~ ^[0-9]+$ ]]
+          [[ "$MISSING_XI_REFERENCE_ZIP" =~ ^[a-f0-9]{64}$ ]]
+          [[ "$MISSING_XI_REFERENCE_TAR" =~ ^[a-f0-9]{64}$ ]]
+          [[ "$MISSING_XI_REFERENCE_ZIP_BYTES" =~ ^[1-9][0-9]*$ ]]
+          [[ "$MISSING_XI_REFERENCE_DIST_MANIFEST" =~ ^[a-f0-9]{64}$ ]]
+          for value in "$MISSING_XI_REFERENCE_HEAD" "$MISSING_XI_REFERENCE_TREE" "$MISSING_XI_NATIVE_HELPER" "$MISSING_XI_NATIVE_OUTER" "$MISSING_XI_FIXED_PAGE_BLOB" "$MISSING_XI_QUALIFIED_PLAN_BLOB" "$MISSING_XI_QUALIFIED_TEST_BLOB"; do [[ "$value" =~ ^[a-f0-9]{40}$ ]]; done
+          test ! -e missing-xi-confirmation-clean-join
+          mkdir missing-xi-confirmation-clean-join
+          touch missing-xi-confirmation-clean-join/offline.log
+          git rev-parse HEAD > missing-xi-confirmation-clean-join/head.txt
+          git rev-parse 'HEAD^{tree}' > missing-xi-confirmation-clean-join/tree.txt
+          git ls-files -s > missing-xi-confirmation-clean-join/source-before.txt
+          sha256sum package.json package-lock.json > missing-xi-confirmation-clean-join/locks-before.txt
+          npm ci
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const lock=JSON.parse(fs.readFileSync('package-lock.json'));
+          const rows=Object.keys(lock.packages).filter(p=>p.startsWith('node_modules/')&&fs.existsSync(p+'/package.json')).map(p=>[p,JSON.parse(fs.readFileSync(p+'/package.json')).version]);
+          assert.equal(rows.length,521);for(const[p,v]of rows)assert.equal(v,lock.packages[p].version,p);fs.writeFileSync('missing-xi-confirmation-clean-join/installed-before.json',JSON.stringify(rows));
+          NODE
+      - name: Proper app types
+        run: node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee missing-xi-confirmation-clean-join/types.log
+      - name: Pinned reference qualification artifact
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          gh api "repos/PapiSalgueroM/ballpark-hero/actions/runs/$MISSING_XI_REFERENCE_RUN" > missing-xi-confirmation-clean-join/reference-run.json
+          gh api "repos/PapiSalgueroM/ballpark-hero/actions/artifacts/$MISSING_XI_REFERENCE_ARTIFACT" > missing-xi-confirmation-clean-join/reference-artifact.json
+          gh api "repos/PapiSalgueroM/ballpark-hero/actions/artifacts/$MISSING_XI_REFERENCE_ARTIFACT/zip" > "$RUNNER_TEMP/missing-xi-confirmation-reference.zip"
+          echo "$MISSING_XI_REFERENCE_ZIP  $RUNNER_TEMP/missing-xi-confirmation-reference.zip" | sha256sum --check
+          mkdir -p "$RUNNER_TEMP/missing-xi-confirmation-reference" "$RUNNER_TEMP/missing-xi-confirmation-reference-dist"
+          unzip -q "$RUNNER_TEMP/missing-xi-confirmation-reference.zip" -d "$RUNNER_TEMP/missing-xi-confirmation-reference"
+          echo "$MISSING_XI_REFERENCE_TAR  $RUNNER_TEMP/missing-xi-confirmation-reference/dist.tgz" | sha256sum --check
+          tar -xzf "$RUNNER_TEMP/missing-xi-confirmation-reference/dist.tgz" -C "$RUNNER_TEMP/missing-xi-confirmation-reference-dist"
+          cp "$RUNNER_TEMP/missing-xi-confirmation-reference/source-before.txt" missing-xi-confirmation-clean-join/reference-source.txt
+      - name: Fresh unchanged product-name fence on clean source
+        run: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simNoRivalNames.mjs 2>&1 | tee missing-xi-confirmation-clean-join/no-rival.log
+      - name: Clean production build
+        run: NODE_OPTIONS="--max-old-space-size=6144" npm run build 2>&1 | tee missing-xi-confirmation-clean-join/build.log
+      - name: Exact clean product source and every built byte joined to successful full qualification
+        id: join
+        env:
+          MISSING_XI_REFERENCE_DIR: ${{ runner.temp }}/missing-xi-confirmation-reference
+          MISSING_XI_REFERENCE_DIST: ${{ runner.temp }}/missing-xi-confirmation-reference-dist/dist
+        run: |
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import path from 'node:path';import assert from 'node:assert/strict';import {createHash} from 'node:crypto';
+          const sha=bytes=>createHash('sha256').update(bytes).digest('hex');
+          const readIndex=file=>new Map(fs.readFileSync(file,'utf8').trim().split('\n').map(line=>{const m=/^[0-9]+ ([0-9a-f]{40}) 0\t(.+)$/.exec(line);assert(m,'Actual source row');return [m[2],m[1]];}));
+          const old=readIndex('missing-xi-confirmation-clean-join/reference-source.txt'),current=readIndex('missing-xi-confirmation-clean-join/source-before.txt');
+          const excluded=new Set(['scripts/qa/playMissingXiConfirmationOwnership.mjs']);
+          assert.equal(old.get('scripts/qa/playMissingXiConfirmationOwnership.mjs'),process.env.MISSING_XI_NATIVE_HELPER);assert.equal(old.size,5783,'Qualified full is5779base plus test/plan/workflow/helper');assert.equal(current.size,5782,'Clean QA is5779base plus test/plan/workflow');
+          for(const file of['scripts/qa/checkMissingXiConfirmationOwnership.mjs','scripts/qa/admitMissingXiConfirmationOwnership.mjs'])assert(!old.has(file)&&!current.has(file),'Remote-only controller/old helper absent from full and clean source: '+file);
+          for(const file of excluded)assert(!current.has(file),'Remote-only evidence helper absent from clean tree: '+file);
+          const configs=['index.html','package.json','package-lock.json','vite.config.ts','tailwind.config.ts','postcss.config.js','tsconfig.json','tsconfig.app.json','tsconfig.node.json','bun.lockb','bun.lock'];
+          assert.equal(configs.length,11);for(const file of configs){assert(current.has(file)&&old.has(file),'All11 root configurations present: '+file);assert.equal(current.get(file),old.get(file),'Exact qualified root configuration: '+file);}
+          const pins={'src/pages/MissingXi.tsx':process.env.MISSING_XI_FIXED_PAGE_BLOB,'src/lib/missingXi.ts':'41d645db94fee5dd2fe22d19c353c9b8d2ca739a','src/test/missingXiConfirmationOwnership.test.tsx':process.env.MISSING_XI_QUALIFIED_TEST_BLOB,'src/test/missingXiLineupView.test.tsx':'a178e2a9d0078391d3b206c7f5578a4faa889889','public/missing-xi/index.html':'e7fe5d02933d73db401c4badb130eb2bb76ed0c3','docs/plans/2026-11-06-missing-xi-confirmation-ownership.md':process.env.MISSING_XI_QUALIFIED_PLAN_BLOB,'src/hooks/useConnections.ts':'4b855e80db09fcff02154cf44d3357d0d0ffa1c6','src/hooks/useFootballConnect4.ts':'630d21236f9f82ad4e728caad64dc4139bab7b57','src/pages/AlphabetSprint.tsx':'f6a2b471abdf3ec5b21daa928348e11a3232019b','src/hooks/useGradeTransfer.ts':'5e677e844f8af33de27c206673fcf66849ad5930'};
+          for(const[file,want]of Object.entries(pins)){assert.equal(current.get(file),want,file+' clean pin');assert.equal(old.get(file),want,file+' qualified full pin');}
+          const scoped=map=>[...map].filter(([p])=>/^(?:src|public|scripts)\//.test(p)&&!excluded.has(p)).sort(([a],[b])=>a.localeCompare(b));
+          const indexedModes=file=>fs.readFileSync(file,'utf8').trim().split('\n').map(line=>{const m=/^([0-9]+) ([0-9a-f]{40}) 0\t(.+)$/.exec(line);assert(m,'Actual path/mode/blob index row');return[m[3],m[1],m[2]];}).filter(([p])=>(/^(?:src|public|scripts)\//.test(p)||configs.includes(p))&&!excluded.has(p)).sort(([a],[b])=>a.localeCompare(b));assert.deepEqual(indexedModes('missing-xi-confirmation-clean-join/source-before.txt'),indexedModes('missing-xi-confirmation-clean-join/reference-source.txt'),'Every qualified source/root path, mode and blob held');
+          assert.equal([...old.keys()].filter(file=>/^(?:src|public|scripts)\//.test(file)).length,4660,'Qualified full includes exactly one native helper');const sourceRows=scoped(current);assert.equal(sourceRows.length,4659);assert.deepEqual(sourceRows,scoped(old),'Every other source/public/script blob held, including exact committed generated files');
+          const inventory=dir=>fs.readdirSync(dir,{withFileTypes:true}).sort((a,b)=>a.name.localeCompare(b.name)).flatMap(e=>e.isDirectory()?inventory(path.join(dir,e.name)).map(r=>({...r,path:e.name+'/'+r.path})):[{path:e.name,bytes:fs.statSync(path.join(dir,e.name)).size,sha256:sha(fs.readFileSync(path.join(dir,e.name)))}]);
+          const actual=inventory('dist'),reference=inventory(process.env.MISSING_XI_REFERENCE_DIST);
+          assert.equal(actual.length,850);assert.deepEqual(actual,reference,'Every byte of every built file matches the pinned reference build');assert.equal(sha(JSON.stringify(reference)),process.env.MISSING_XI_REFERENCE_DIST_MANIFEST,'Actual admitted full850body manifest');
+          const ref=process.env.MISSING_XI_REFERENCE_DIR,read=file=>JSON.parse(fs.readFileSync(path.join(ref,file))),meta=JSON.parse(fs.readFileSync('missing-xi-confirmation-clean-join/reference-artifact.json')),referenceHead=fs.readFileSync(path.join(ref,'head.txt'),'utf8').trim();
+          assert.equal(meta.id,Number(process.env.MISSING_XI_REFERENCE_ARTIFACT));assert.equal(meta.expired,false);assert.equal(meta.size_in_bytes,Number(process.env.MISSING_XI_REFERENCE_ZIP_BYTES));assert.equal(meta.digest,'sha256:'+process.env.MISSING_XI_REFERENCE_ZIP);assert.match(referenceHead,/^[a-f0-9]{40}$/);assert.equal(meta.workflow_run.head_sha,referenceHead);const run=JSON.parse(fs.readFileSync('missing-xi-confirmation-clean-join/reference-run.json'));assert.equal(run.id,Number(process.env.MISSING_XI_REFERENCE_RUN));assert.equal(run.id,meta.workflow_run.id);assert.equal(run.head_sha,referenceHead);assert.equal(referenceHead,process.env.MISSING_XI_REFERENCE_HEAD);assert.equal(run.head_commit.tree_id,process.env.MISSING_XI_REFERENCE_TREE);assert.equal(fs.readFileSync(path.join(ref,'tree.txt'),'utf8').trim(),process.env.MISSING_XI_REFERENCE_TREE);assert.equal(run.status,'completed');assert.equal(run.conclusion,'success');assert.equal(meta.name,'missing-xi-confirmation-ownership-qualified-'+run.id);
+          const full=read('admission.json'),native=read('native-admission.json'),unit=read('fixed-admission.json'),holds=read('final-holds.json');
+          const referenceChecks=(()=>{
+            const env=process.env;
+            const bytes=file=>fs.readFileSync(path.join(ref,file));
+            const refTree=env.MISSING_XI_REFERENCE_TREE;
+            assert.deepEqual([run.event,run.path,run.repository.full_name],['push','.github/workflows/missing-xi-confirmation-20261106.yml','PapiSalgueroM/ballpark-hero']);
+            assert.deepEqual([full.status,full.qualification,full.head,full.tree,full.page,full.helper,full.nativeOuter],
+              ['passed','fresh-missing-xi-confirmation-full-scope',referenceHead,refTree,env.MISSING_XI_FIXED_PAGE_BLOB,env.MISSING_XI_NATIVE_HELPER,env.MISSING_XI_NATIVE_OUTER]);
+            const outer=bytes('native-admission-script.mjs');
+            assert.equal(createHash('sha1').update(Buffer.from('blob '+outer.length+'\0')).update(outer).digest('hex'),env.MISSING_XI_NATIVE_OUTER);
+            assert.deepEqual([full.originalRun,full.originalHead,full.originalTree,full.originalArtifact],[42326812138,'eecf9e47eb5cf867c9a7c8fc2c1cd5e5b0487ca3','b1236874603e9af23efd67248395f2b6bd9a3122',13555371817]);
+            assert.deepEqual([full.fixedRun,full.fixedHead,full.fixedTree,full.fixedArtifact],[42328761286,'6bba111e659e3898e6f165fe438994e2adcfce6b','04ddf69f473a7fea24c0cbd75cc83910720505b5',13556676028]);
+            assert.deepEqual([full.controlsRun,full.controlsHead,full.controlsTree,full.controlsArtifact,full.controlsRerun],[42330070994,'20dc929a38a6bd1b22d411799b4a1fca0320c390','d38d34dd5c88ee5aa1823517171bd779dc4b89f6',13557416072,false]);
+            const controls=full.controlsReceipt;
+            assert.deepEqual([controls.status,controls.completedControlsRun,controls.controlsArtifact,controls.bodyCount,controls.runnerBlob,controls.actualRows,controls.actualPasses,controls.actualNamedBusinessReds,controls.rawFrames,controls.actionJournalEntries,controls.boundedQueries,controls.wholePreservationVectors,controls.priorRAW,controls.allCompleteRAWLiteral,controls.physicalSourceMatrixHeld,controls.controlsRerun],
+              ['passed',full.controlsRun,full.controlsArtifact,160,'4bbf437e72d78f03670d63e4e081a3e94893ccbf',24,22,2,186,132,42,6,false,true,true,false]);
+            assert.deepEqual(controls.matrix.map(arm=>[arm.name,arm.physicalPageBlob,arm.actualPasses,arm.actualNamedBusinessReds,arm.wholePreservationVectors]),
+              [['fixed',full.page,8,0,2],['original','8734de7d4ab5b6848538cc079804f10f038b39e1',6,2,2],['restored',full.page,8,0,2]]);
+            assert.deepEqual([full.unitCases,full.unitCommands,full.rawFrames,full.actionJournalEntries,full.priorRAW,full.wholePreservedCases,full.wholeQualifiedFixedRAWBytesHeld],
+              [8,1,62,44,false,['currentRound','normalConfirmation'],true]);
+            assert.deepEqual([unit.status,unit.actualCases,unit.actualPasses,unit.actualFailures,unit.newCases,unit.newPasses,unit.priorCases,unit.priorPasses,unit.priorRAW,unit.rawFrames,unit.actionJournalEntries,unit.actualQueries],
+              ['fixed-eight-cases-passed-two-literal-whole-preserves',8,8,0,4,4,4,4,false,62,44,14]);
+            assert.deepEqual([unit.source.page,unit.source.newTest,unit.source.plan],[full.page,env.MISSING_XI_QUALIFIED_TEST_BLOB,env.MISSING_XI_QUALIFIED_PLAN_BLOB]);
+            assert.deepEqual(unit.wholePreservedCases.map(row=>[row.key,row.frames,row.bytes,row.sha256,row.entireCaseLiteral,row.literalBytesEqualOriginal]),[
+              ['currentRound',21,755723,'bdd5f880a735033f836a687e1923a69dc51eb15fa8560ee1a522cbbdab1ddd23',true,true],
+              ['normalConfirmation',18,644606,'de44a88f3f96a874d6576a50eb51ab2999e67946c471aa518b08b91f92f2135e',true,true]
+            ]);
+            const raw=bytes('raw.json'),rawSHA=sha(raw),rawJoin=read('fixed-raw-join.json');
+            assert(raw.equals(bytes('fixed-reference/raw.json')));
+            assert.deepEqual([raw.length,rawSHA],[2078763,'2f6abf3c61339dd4c972dc3af6a6ede99a6855a185ede72241835cefcce5bb34']);
+            assert.deepEqual(unit.raw,{file:'raw.json',bytes:raw.length,sha256:rawSHA});
+            assert.deepEqual(rawJoin,{status:'passed',bytes:raw.length,sha256:rawSHA,fixedHead:full.fixedHead,freshUnitRAWByteEqual:true});
+            const originalRAW=bytes('original-packet/raw.json');
+            assert.deepEqual([originalRAW.length,sha(originalRAW)],[2106788,'3fa20b460e959934027510183edce2fbc858b9a999f7c75d5c474e299bb168e3']);
+            for(const pin of unit.wholePreservedCases){
+              const slice=raw.subarray(pin.rawOffset,pin.rawOffset+pin.bytes);
+              assert.equal(slice.length,pin.bytes);assert.equal(sha(slice),pin.sha256);
+              assert(slice.equals(originalRAW.subarray(pin.originalRawOffset,pin.originalRawOffset+pin.bytes)));
+            }
+            assert.deepEqual(full.nativeReceipt,native);
+            assert.deepEqual([native.status,native.route,native.page,native.helper],['passed','/missing-xi',full.page,full.helper]);
+            assert.deepEqual(native.currentSource,{head:referenceHead,tree:refTree});
+            assert.deepEqual(native.qualifiedInput,{head:full.fixedHead,tree:full.fixedTree,unitRAWBytes:raw.length,unitRAWSHA256:rawSHA,freshUnitRAWByteEqual:true});
+            assert.deepEqual(native.census,{journeys:3,contexts:6,terminalResults:6,businessMouseClicks:72,startupMouseClicks:6,startupEscapeKeys:6,typings:9,businessEnterKeys:9,completionAttempts:3,viewportPNGs:9,distBodies:850,installedVersions:521,sourceBodies:5783});
+            assert.deepEqual([full.nativeJourneys,full.nativeContexts,full.nativeTerminalResults,full.nativePngs],[native.census.journeys,native.census.contexts,native.census.terminalResults,native.census.viewportPNGs]);
+            const m=native.measured;
+            for(const key of ['businessArrowKeys','wheels','navigations','searchReads','frames','actions','preparations','layouts','observedClose','uniqueVerifiedBodies','verifiedReferenceOccurrences','bodyBytes'])assert(Number.isSafeInteger(m[key])&&m[key]>=0,key);
+            assert.deepEqual([m.frames,m.actions,m.preparations,m.layouts,m.observedClose],[252+2*m.businessArrowKeys+2*m.wheels,102+m.businessArrowKeys,114+m.businessArrowKeys,192+m.businessArrowKeys,6]);
+            assert(m.navigations>=6&&m.uniqueVerifiedBodies>0&&m.verifiedReferenceOccurrences>=m.uniqueVerifiedBodies&&m.bodyBytes>0);
+            assert.deepEqual(native.holds,{source:true,scopedSourceRows:4660,cleanScopedSourceRows:4659,dist:true,index:true,locks:true,installed521:true,offlineZero:true});
+            for(const [key,file] of [['report','report.json'],['raw','raw.json'],['qualifiedInput','qualified-input-binding.json'],['manifest','body-manifest.json']]){
+              const actualBody=bytes('browser/'+file);
+              assert.deepEqual(native.evidence[key],{file,bytes:actualBody.length,sha256:sha(actualBody)});
+            }
+            const readers=['simAdsense','simBrand','simHeadTags','simHiddenPages','simHubs','simIndexNow','simIndexing','simInternalLinks','simNoRivalNames','simPrerender','simPrerenderBoot','simRetiredRoutes','simSchema','simSitemap','simSnapshotAssets','simSiteSearch','simGuideHeadings','simSeoMetaSplit','simHomeCopy','simHarnessAnchors'].map(name=>name+'.mjs').sort();
+            assert.deepEqual(full.readers,readers);
+            assert.deepEqual(full.capRows,[['/',245],['/club-manager',648],['/soccer-career',840],['/stadium-tycoon',305],['/wonderkid-factory',278],['/minefield',295],['/footle',354],['/nfl-my-career',499],['/front-office',390],['/soccer-grid',320],['/leaderboard',266],['/manager-hot-seat',672],['/deadline-day',680],['/transfer-path',381],['/nba-front-office',397],['/nhl-front-office',379]]);
+            assert.deepEqual([full.sourceRows,full.cleanSourceRows,full.rootConfigurations,full.distFiles,full.immutableCaps],[4660,4659,11,850,16]);
+            assert.deepEqual([holds.status,holds.trackedBodies,holds.scopedSourceRows,holds.cleanSourceRows,holds.rootConfigurations,holds.installedLockedVersions,holds.indexUnchanged,holds.sourceBytesUnchanged,holds.locksUnchanged,holds.distHeld,holds.retainedPacketsHeld,holds.offlineBytes],
+              ['passed',5783,4660,4659,11,521,true,true,true,true,true,0]);
+            for(const [before,after] of [['source-before.txt','source-after.txt'],['tracked-before.json','tracked-after.json'],['locks-before.txt','locks-after.txt'],['installed-before.json','installed-after.json'],['dist-before.json','dist-after.json']])assert(bytes(before).equals(bytes(after)),before+' full exact final bytes');
+            assert.equal(bytes('offline.log').length,0);
+            const tar=bytes('dist.tgz');
+            assert.deepEqual(full.distTar,{bytes:tar.length,sha256:env.MISSING_XI_REFERENCE_TAR});
+            const fullDist=read('dist-before.json').map(({file,bytes,sha256})=>{assert(file.startsWith('dist/'));return{path:file.slice(5),bytes,sha256};});
+            assert.deepEqual(fullDist,reference);
+            assert.equal(sha(JSON.stringify(fullDist)),env.MISSING_XI_REFERENCE_DIST_MANIFEST);
+            return{status:'passed',fullHead:referenceHead,fullTree:refTree,unitCases:full.unitCases,rawFrames:full.rawFrames,wholePreservedCases:full.wholePreservedCases,wholeFixedRAWLiteral:true,nativeCensus:native.census,nativeMeasured:m,retainedControlsRun:full.controlsRun,controlsRerun:false,readers:readers.length,immutableCaps:full.immutableCaps,fullSourceRows:full.sourceRows,cleanSourceRows:full.cleanSourceRows,distFiles:full.distFiles,distManifestSHA256:env.MISSING_XI_REFERENCE_DIST_MANIFEST};
+          })();
+          const result={status:'passed',referenceRun:run.id,referenceWorkflowHead:referenceHead,referenceApp:referenceHead,referenceQualification:full.qualification,referenceArtifact:meta.id,referenceZipSHA256:process.env.MISSING_XI_REFERENCE_ZIP,referenceTarSHA256:process.env.MISSING_XI_REFERENCE_TAR,sourceRows:sourceRows.length,rootConfigurations:configs.map(file=>({file,blob:current.get(file)})),remoteOnlyHelpers:[...excluded],forbiddenControllers:['scripts/qa/checkMissingXiConfirmationOwnership.mjs'],forbiddenNativeOuter:['scripts/qa/admitMissingXiConfirmationOwnership.mjs'],finalProductForbiddenWorkflow:'.github/workflows/missing-xi-confirmation-20261106.yml',generatedPatches:[],distFiles:actual.length,distManifestSHA256:sha(JSON.stringify(actual)),dist:actual,referenceChecks,limits:'Fresh clean proper types/name fence/normal production build and exact source/build join only. No unit/native/reader/cap rerun. All4659 product source paths plus11 root configurations and every850 built-file byte bind this clean tree to the completed successful normal full run, whose workflow head is its physical source head. The reviewed owned plan blob is held; final plan/PROJECT-STATE/WORKBOARD docs follow separately. Other docs and QA workflow are outside this code join; final product diff must exclude this round QA workflow/helper/outer/controller and retain all product source. This join does not independently admit native behavior, terminal async restore, cross-tab ownership, real-player/provider/backend writes or release.'};
+          fs.writeFileSync('missing-xi-confirmation-clean-join/reference-build-join.json',JSON.stringify(result,null,2));console.log('PASS all '+sourceRows.length+' source rows and every '+actual.length+' built file held');
+          NODE
+      - name: Final source locks installed versions and offline holds
+        if: always()
+        run: |
+          set -euo pipefail
+          git ls-files -s > missing-xi-confirmation-clean-join/source-after.txt
+          cmp missing-xi-confirmation-clean-join/source-before.txt missing-xi-confirmation-clean-join/source-after.txt
+          git diff --exit-code HEAD -- .
+          sha256sum package.json package-lock.json > missing-xi-confirmation-clean-join/locks-after.txt
+          cmp missing-xi-confirmation-clean-join/locks-before.txt missing-xi-confirmation-clean-join/locks-after.txt
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const before=JSON.parse(fs.readFileSync('missing-xi-confirmation-clean-join/installed-before.json')),lock=JSON.parse(fs.readFileSync('package-lock.json'));
+          const after=Object.keys(lock.packages).filter(p=>p.startsWith('node_modules/')&&fs.existsSync(p+'/package.json')).map(p=>[p,JSON.parse(fs.readFileSync(p+'/package.json')).version]);assert.equal(after.length,521);for(const[p,v]of after)assert.equal(v,lock.packages[p].version,p);assert.deepEqual(after,before);
+          fs.writeFileSync('missing-xi-confirmation-clean-join/installed-final.json',JSON.stringify(after));
+          assert(fs.existsSync('missing-xi-confirmation-clean-join/offline.log'));assert.equal(fs.statSync('missing-xi-confirmation-clean-join/offline.log').size,0);
+          NODE
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: missing-xi-confirmation-ownership-clean-build-join-${{ github.run_id }}
+          path: missing-xi-confirmation-clean-join
+          retention-days: 14
+          if-no-files-found: error

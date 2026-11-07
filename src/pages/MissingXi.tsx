@@ -357,7 +357,7 @@ const MissingXi = () => {
                   Lock in guess
                 </button>
                 <div className="flex justify-center">
-                  <GiveUpButton onGiveUp={giveUp} />
+                  <GiveUpButton key={playMode} onGiveUp={giveUp} />
                 </div>
               </div>
             )}
