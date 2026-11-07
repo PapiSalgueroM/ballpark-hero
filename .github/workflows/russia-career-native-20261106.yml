@@ -1,0 +1,403 @@
+name: Russia Career native on authenticated completed output
+on:
+  push:
+    branches: [codex/russia-career-native-v2-20261106]
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: russia-career-native-20261106
+  cancel-in-progress: false
+jobs:
+  native:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    env:
+      PRODUCT_CORE: 57a079eb7289d2a54f11f9d798e6c6ab9e2d2082
+      PRODUCT_TREE: 3fe5bf9acace9f506c5f469e012be11c1dded94e
+      PRODUCT_FILES: '[{"path":"scripts/data/soccerCareerFacts.json","before":"3020b7ebbc6a17013b3c7ab6a30558b675e35257","after":"59eb8da54e7bc205f78781c7786dd20b02bd82bd"},{"path":"scripts/lib/careerClubPool.mjs","before":"3abec590896605188a4fc0cc7d122fc3be8438c3","after":"f5416cca123c9b3792588182f59350689e7f09e8"},{"path":"scripts/lib/careerLeagueWorld1175.mjs","before":"c75128e88071d329b2fe8d973af897fe2207dd91","after":"ebcbe1083dd105732418d417cd86dacbb674daf7"},{"path":"scripts/lib/careerWorldTruth1329.mjs","before":"8dc0dce77a13188eb939f78b0eb1850ba81a39f2","after":"e4601cf0e83b356cc61c43f9d6d9ecd51908f66c"},{"path":"scripts/simCareerClubPool.mjs","before":"4f2493986069d7486e05560fbfd021455f27f1f7","after":"17d303564c35ffb5c985db3922f42809bc2c032f"},{"path":"scripts/simCareerTransferBrief.mjs","before":"fa92535cd6d76da2f511f47047686814d95afed8","after":"c862fb6ef41b74d30eb67c77702e191eaca59f86"},{"path":"scripts/simRussiaCareerBridge.mjs","before":null,"after":"d18f445c7f4b50ccfd2a4a534bf82f2df7223f80"},{"path":"scripts/simSoccerLoanBite.mjs","before":"3bcc6289e2f5281635a19529a9ace41ebd718a93","after":"962a77a8ed83a3b61406cc79a673f1fd33d302b8"},{"path":"scripts/simSoccerLoanMinutes.mjs","before":"b1ee6f150c2f0b8c084784441f31aa35fa755aa8","after":"1cd5acb973c152be736879e2f5a67fc9db64d629"},{"path":"src/data/leagueFormat.ts","before":"802650466c0c4439f12c741e7d1ae28957280f9b","after":"54d431b2d963d10f0980a1c54d5aaf2b5963ff10"},{"path":"src/data/soccerCareerClubPool.ts","before":"522399403d4a5816680d0d5d2e19e3fda650d71d","after":"50d91e61a50459b60388a8f25551b353192842e5"},{"path":"src/lib/clubManager.ts","before":"a089f29e8f1adee4090927937bac4d50017ae7cf","after":"0735c1eda13393b8a6da605aa3c880fa276090bb"},{"path":"src/lib/soccerCareerContinental.ts","before":"44d4acee04504ac92382a986b3e2cfd5301d4ac1","after":"fe278d5fe50492374206e5846701db0c31fa6b01"},{"path":"src/lib/soccerCareerDerby.ts","before":"e25062b2b6560957feb414fd709b7bbc5b4af7ba","after":"895f15bbd52c3766325664e01da4627e6110d2d9"},{"path":"src/lib/soccerCareerEngine.ts","before":"663eab42df957f156b35e931d81f9f643ea1a7f4","after":"393d2b61b3d59cba721527f3ca47282171729a1f"},{"path":"src/lib/soccerCareerLeague.ts","before":"cf7772161d902d2bb82d7f5cb6b3bdc5d04a9659","after":"009b5c36a28e0f64076c9f6b302cba8af7fd3094"},{"path":"src/lib/soccerCareerTransferBrief.ts","before":"74718f3b76923c77a55c87e5c150c366f0d482ce","after":"fab5f9491750e3615adeed75fbedcd80d700e260"},{"path":"src/pages/SoccerCareer.tsx","before":"08a93b48a2bfcd42883b24c72e8f64f49caec6aa","after":"cfc3f03fefd752b6125ab72d7cc806e32e9c3f66"}]'
+      BROWSER_BLOB: 53294c8183e153d2fc34cb39984d6751b8359dcf
+      READY_BLOB: 671f460aa088d42b44c435a03594cf26695d6e09
+      BRIDGE_BLOB: d18f445c7f4b50ccfd2a4a534bf82f2df7223f80
+      GENERATOR_INDEPENDENT_SHA: d7d26139dd067bf1878054940986896a65e7860c7a5a3421f70c300fd7fac1a7
+      NATIVE_ADDITIONS: '[".github/workflows/russia-career-native-20261106.yml","scripts/qa/russiaCareerNativeBrowser.mjs","scripts/qa/nativeScrollReady.mjs"]'
+      QUALIFICATION_INPUT: '{"run":42342436106,"job":128312868070,"qa":"ad3ad1dc24b2415e060d590e05a1fbfec3b048a4","qaTree":"16b71955e82e8f8a2d385cdfa65afb07079acfa8","branch":"codex/russia-career-qualify-v16-20261106","workflowPath":".github/workflows/russia-career-qualify-20261106.yml","workflowBlob":"283f24aba541edd2d0d761fd188b5ca37b9c1b85","artifact":13562272295,"artifactName":"russia-career-qualification","attempt":1,"zipBytes":177332643,"zipSHA256":"50292039b8f4d5976e32c4855e2955b51abdba61519f65e6735579f2bf1d9e7c","innerEntry":"russia-career-qualification.tar.gz","innerBytes":177332186,"innerSHA256":"abc20aeedc6ab6611357ad652dd818a70e3e9b87f9bcd08653945dd3c5fb6fe8","regularFiles":24435,"totalRegularBytes":559105212,"independentAdmissionSHA256":"e9630aeca0237271bcb0a250ca8b154ec9ff35e91fc98b27c330650e04c9c574","bridgeAdmissionSHA256":"733a83866811f23566e9788f96ee764174ec73a6a475964974bb2351fb207799","distFiles":852,"distBytes":23873481,"distDigest":"8c5869cf90c1237267f315fefad073b57c8fa99c551c71a67fe2c13f7c158341","filePins":[{"file":"workflow.yml","bytes":47996,"sha256":"49aa4426415b0aae31be5280688f136ab3dab4b575dbd2accbdc50cbf1731929"},{"file":"source-role.json","bytes":8335,"sha256":"71bc8a410ad99bbda93cd4e338c3d25fd21533a3dd92a6cd858dc98a67e0e0fa"},{"file":"qualification.json","bytes":2110,"sha256":"3cf78c0eafdb53380a83bd4f99e0cf7487b818c8d183a7c17f5eaed0fc4cca54"},{"file":"bridge-source.mjs","bytes":45393,"sha256":"e493d32784ced379c21a1d7aad2abc10f3f1f49bfdbcd4e83f26b4a360e05e43"},{"file":"bridge/BRIDGE.json","bytes":922734,"sha256":"8eb9442a7c22d6a426ef34ca5053127ea6c481925b0031d3cfd61193fe32be96"},{"file":"bridge/PHYSICAL-CONTROLS.json","bytes":4168,"sha256":"7681c2e929950092ee78f63fe95c522f548cf7a4ee863017187da158ac786c1c"},{"file":"bridge/cases/current-russia-manager-market.json.gz","bytes":341,"sha256":"9eabd23528ae1472ed1a223ef10827d36e10211e2c1750114b97a933af691a40"},{"file":"bridge/cases/catalogue.json.gz","bytes":14998,"sha256":"8a5a50f77c19ce3d4c7bda00a68ae5bc25f442e37ec64a4e183c21ef9f16167a"},{"file":"source-before.sha256","bytes":590816,"sha256":"d0e2004ff217a257371b5138650f1a7a50c203730e5fb05dc2eb0ea2ecbe6645"},{"file":"source-after.sha256","bytes":590816,"sha256":"d0e2004ff217a257371b5138650f1a7a50c203730e5fb05dc2eb0ea2ecbe6645"},{"file":"index-before.txt","bytes":498848,"sha256":"90ab3b8e06e9de574e2ab65603571c5760251b0447fab561fcdc81e4a043422d"},{"file":"index-after.txt","bytes":498848,"sha256":"90ab3b8e06e9de574e2ab65603571c5760251b0447fab561fcdc81e4a043422d"},{"file":"locks-before.sha256","bytes":314,"sha256":"c4d3d37c8be5418c6254ce652ab45c0f5d7e6c2c6d40d2f88443ccf1bd6e3f15"},{"file":"locks-after.sha256","bytes":314,"sha256":"c4d3d37c8be5418c6254ce652ab45c0f5d7e6c2c6d40d2f88443ccf1bd6e3f15"},{"file":"status-before.txt","bytes":0,"sha256":"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"},{"file":"status-after.txt","bytes":0,"sha256":"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"},{"file":"baseline-source-before.sha256","bytes":590597,"sha256":"9aba7f84ba23e138bea3d7e9997ef57e2e67ac01396dfda93033f1a240816620"},{"file":"baseline-source-after.sha256","bytes":590597,"sha256":"9aba7f84ba23e138bea3d7e9997ef57e2e67ac01396dfda93033f1a240816620"},{"file":"baseline-index-before.txt","bytes":498661,"sha256":"8f0f97e2c1c276d0d4553c41e9f6e1826a74be3f5f5eeb51dcb2591568dfda47"},{"file":"baseline-index-after.txt","bytes":498661,"sha256":"8f0f97e2c1c276d0d4553c41e9f6e1826a74be3f5f5eeb51dcb2591568dfda47"},{"file":"baseline-locks-before.sha256","bytes":314,"sha256":"c4d3d37c8be5418c6254ce652ab45c0f5d7e6c2c6d40d2f88443ccf1bd6e3f15"},{"file":"baseline-locks-after.sha256","bytes":314,"sha256":"c4d3d37c8be5418c6254ce652ab45c0f5d7e6c2c6d40d2f88443ccf1bd6e3f15"},{"file":"baseline-status-before.txt","bytes":0,"sha256":"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"},{"file":"baseline-status-after.txt","bytes":0,"sha256":"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"},{"file":"dist-before.sha256","bytes":86752,"sha256":"2e8a147754c7736e490cd6a3012ddd223564c65525f83f2aa128103dec6ff54a"},{"file":"dist-after.sha256","bytes":86752,"sha256":"2e8a147754c7736e490cd6a3012ddd223564c65525f83f2aa128103dec6ff54a"},{"file":"completed-dist.tar.gz","bytes":6999395,"sha256":"a92b7b1bbfe3db39958f774d3f2929b99674ef8ad695db23428b13eac59d33f3"},{"file":"completed-dist.tar.gz.sha256","bytes":132,"sha256":"7805a22d0eb15acae1ec4cd741946a4a190acd51183cb99ddb3d3813116434fd"},{"file":"completed-dist-members.txt","bytes":34670,"sha256":"8066aa58c952ada35ffd6831568aee5dcfe93cc74812ecd323d082d8327768d0"},{"file":"build-passed.json","bytes":37,"sha256":"38383c0cdba06305c37ec1134a06aa8631f2058c4a667e5df167bb129e0f3d9b"},{"file":"logs/bridge.exit","bytes":2,"sha256":"9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"},{"file":"logs/bridge-controls.exit","bytes":2,"sha256":"9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"},{"file":"transport/bridge.log","bytes":0,"sha256":"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"},{"file":"transport/bridge-controls.log","bytes":0,"sha256":"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"},{"file":"manifest.sha256","bytes":3924656,"sha256":"1df6673a82132443c8c5cf47ade2601e076dc22bd1c84c165ad925cd59473ac4"},{"file":"types.exit","bytes":2,"sha256":"9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"},{"file":"types-passed.json","bytes":75,"sha256":"f80953007ecd091c9ff14a8b6a402bf746f91cd318c09cf7ead15f3e04941ba9"},{"file":"logs/types.log","bytes":0,"sha256":"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"},{"file":"transport/types.log","bytes":0,"sha256":"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"},{"file":"MODEL-OUTCOMES.json","bytes":43573,"sha256":"4613422252e8397f9988265cf02e07d933e70c43da1dc87f6a233cca4ecdfadf"},{"file":"baseline-regression-admission.json","bytes":4808,"sha256":"9763f973634920673db7c0da7a4017e89857451520661053997e97e695725687"}]}'
+      QUALIFICATION_REQUIRED_FILES: '["workflow.yml","source-role.json","qualification.json","bridge-source.mjs","bridge/BRIDGE.json","bridge/PHYSICAL-CONTROLS.json","bridge/cases/current-russia-manager-market.json.gz","bridge/cases/catalogue.json.gz","source-before.sha256","source-after.sha256","index-before.txt","index-after.txt","locks-before.sha256","locks-after.sha256","status-before.txt","status-after.txt","baseline-source-before.sha256","baseline-source-after.sha256","baseline-index-before.txt","baseline-index-after.txt","baseline-locks-before.sha256","baseline-locks-after.sha256","baseline-status-before.txt","baseline-status-after.txt","dist-before.sha256","dist-after.sha256","completed-dist.tar.gz","completed-dist.tar.gz.sha256","completed-dist-members.txt","build-passed.json","logs/bridge.exit","logs/bridge-controls.exit","transport/bridge.log","transport/bridge-controls.log","manifest.sha256","types.exit","types-passed.json","logs/types.log","transport/types.log","MODEL-OUTCOMES.json","baseline-regression-admission.json"]'
+      ORIGINAL_NATIVE_INPUT: '{"run":42272859035,"job":128081619825,"qa":"ef849def2f41fac7d7a37150cbea040d360c262a","qaTree":"33b10eca6218fa97de52556d65bba6b46f724319","branch":"codex/k-league-native-v6-20261106","workflowPath":".github/workflows/k-league-native-20261105.yml","workflowBlob":"d18095ab2e726b6265ae6540cbcd15828aaca1f4","artifact":13531897565,"artifactName":"k-league-native","attempt":1,"zipBytes":29459981,"zipSHA256":"a69e9f7df59d737ae4a728fedebe9f8b3098b9adbb2668679ff690fdc19c849a","innerEntry":"k-league-native.tar.xz","innerBytes":29459560,"innerSHA256":"94ed521cd50036ab9578af4b4ee07fca6db0083374ee033769b918ec24548ec9","regularFiles":1962,"totalRegularBytes":220628653,"independentAdmissionSHA256":"e1a8c8cd7bb546a779caca45e3912691645c24421c0e36efd05aa7e7d522b916","filePins":[{"file":"workflow.yml","bytes":46412,"sha256":"191851d8a352aa070ea42da65b8a0d3647b3c90714ec60e088e7f21b7b85003e"},{"file":"browser/frames/k-sc-current-320-122.json.gz","bytes":31781,"sha256":"b4b65f686c5d5843a931da0d97ea47e847a3f684f66f2cf1b2769f70f168063b"}]}'
+      PLAYWRIGHT_BROWSERS_PATH: /home/runner/.cache/ms-playwright
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+          filter: blob:none
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24.22.2'
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: '1.4.4'
+      - name: Bind exactly three native QA additions on the qualified product
+        shell: bash
+        run: |
+          set -euo pipefail
+          QA_OUT="$RUNNER_TEMP/russia-career-native"
+          QA_REF="$RUNNER_TEMP/russia-career-native-inputs"
+          QA_DIST="$RUNNER_TEMP/russia-career-native-dist"
+          export QA_OUT QA_REF QA_DIST
+          test ! -e "$QA_OUT"
+          test ! -e "$QA_REF"
+          test ! -e "$QA_DIST"
+          mkdir -p "$QA_OUT"/{logs,input,transport} "$QA_REF" "$QA_DIST"
+          printf 'QA_OUT=%s\nQA_REF=%s\nQA_DIST=%s\n' "$QA_OUT" "$QA_REF" "$QA_DIST" >> "$GITHUB_ENV"
+          node --input-type=module <<'BIND'
+          import fs from 'node:fs';import assert from 'node:assert/strict';import{execFileSync}from'node:child_process';
+          const e=process.env,git=(...args)=>execFileSync('git',args,{encoding:'utf8'}).trim();
+          for(const name of['PRODUCT_CORE','PRODUCT_TREE','BROWSER_BLOB','READY_BLOB','BRIDGE_BLOB'])assert.match(e[name],/^[a-f0-9]{40}$/,name);
+          assert.match(e.GENERATOR_INDEPENDENT_SHA,/^[a-f0-9]{64}$/);assert(!e.QUALIFICATION_INPUT.includes('MUST_BIND'),'RUSSIA_NATIVE_ALL_ACTUAL_INPUT_FIELDS_BOUND');
+          assert.equal(git('rev-parse','HEAD^'),e.PRODUCT_CORE);assert.equal(git('rev-parse','HEAD^^{tree}'),e.PRODUCT_TREE);
+          const expected=JSON.parse(e.NATIVE_ADDITIONS),delta=git('diff','--name-status','--no-renames','HEAD^','HEAD').split('\n').filter(Boolean).map(row=>row.split('\t'));
+          assert(delta.every(row=>row.length===2&&row[0]==='A'));assert.deepEqual(delta.map(row=>row[1]).sort(),expected.slice().sort());
+          assert.equal(git('hash-object','scripts/qa/russiaCareerNativeBrowser.mjs'),e.BROWSER_BLOB);assert.equal(git('hash-object','scripts/qa/nativeScrollReady.mjs'),e.READY_BLOB);
+          const vector=object=>Object.fromEntries(git('ls-tree','-r','--full-tree',object).split('\n').filter(Boolean).map(line=>{const m=/^([0-7]{6}) (blob|commit) ([a-f0-9]{40})\t(.+)$/.exec(line);assert(m);return[m[4],{mode:m[1],type:m[2],sha:m[3]}];})),inverse=vector('HEAD'),product=vector(e.PRODUCT_CORE);for(const file of expected){assert.equal(product[file],undefined);assert.equal(inverse[file].mode,'100644');assert.equal(inverse[file].type,'blob');delete inverse[file];}assert.deepEqual(inverse,product,'RUSSIA_NATIVE_THREE_ADDITION_WHOLE_TREE_INVERSE');
+          assert.equal(git('status','--porcelain=v1','--untracked-files=all'),'');
+          fs.writeFileSync(e.QA_OUT+'/qa-delta.json',JSON.stringify({product:{commit:e.PRODUCT_CORE,tree:e.PRODUCT_TREE},qa:{commit:git('rev-parse','HEAD'),tree:git('rev-parse','HEAD^{tree}')},delta,wholeLeafVectorInverseExact:true,AppBuilds:0},null,2)+'\n',{flag:'wx'});
+          fs.copyFileSync(expected[0],e.QA_OUT+'/workflow.yml');
+          fs.writeFileSync(e.QA_OUT+'/workflow-source.json',JSON.stringify({path:expected[0],gitBlob:git('hash-object',expected[0]),helper:e.BROWSER_BLOB,scrollReady:e.READY_BLOB})+'\n',{flag:'wx'});
+          BIND
+          git ls-files -z > "$QA_OUT/tracked-before.bin"
+          git ls-files -z | xargs -0 sha256sum > "$QA_OUT/source-before.sha256"
+          git ls-files -s > "$QA_OUT/index-before.txt"
+          git status --porcelain=v1 --untracked-files=all > "$QA_OUT/status-before.txt"
+          test ! -s "$QA_OUT/status-before.txt"
+          cp package-lock.json "$QA_OUT/lock-before.json"
+          node --input-type=module -e 'import fs from "node:fs";import crypto from "node:crypto";const sha=b=>crypto.createHash("sha256").update(b).digest("hex");fs.writeFileSync(process.env.QA_OUT+"/all-locks-before.json",JSON.stringify(Object.fromEntries(["package.json","package-lock.json","bun.lock","bun.lockb","yarn.lock","pnpm-lock.yaml"].map(p=>[p,fs.existsSync(p)?sha(fs.readFileSync(p)):null])))+"\n");'
+          git rev-parse HEAD HEAD^ 'HEAD^{tree}' > "$QA_OUT/source-identity.txt"
+      - name: Materialize the pinned scoped qualification function
+        shell: bash
+        run: |
+          set -euo pipefail
+          common="$QA_OUT/input/scoped-common-auth.mjs"
+          test ! -e "$common"
+          cat > "$common" <<'SCOPED_AUTH'
+          function admitScopedQualification(root,qualification,product){
+           const fail='RUSSIA_SCOPED_MODEL_OUTCOME',receiptFail='RUSSIA_SCOPED_BASELINE_RECEIPT',decisionFail='RUSSIA_SCOPED_BASELINE_DECISION';
+           const expectedNames=['bridge','bridge-controls','simCareerClubPool','simCareerFacts','simCareerEras','fallback-local-mode-absent','fallback-control-absent','simCareerFallback','fallback-read-admission','simCareerLeagueFinish','simCareerLeagueSeasons','simCareerLeagueWorld','simCareerDomesticCup','simCareerContinental','simSoccerCareerUcl','simLoanSpell','simCareerTransferBrief','simSoccerCareerSavedLoan','simSoccerLoanBite','simSoccerLoanMinutes','simTransferBriefPageControl','simSaveKeeper','simHomeFront','simHomeFront-output','simSoccerCareerRecords','simSoccerCareerRecords-output','records-admission','records-owned-cleanup','transfer-brief-output-retain'];
+           const redNames=['simCareerLeagueFinish','simCareerLeagueSeasons','simCareerLeagueWorld'],zeroNames=expectedNames.filter(name=>!redNames.includes(name));
+           const baseline={commit:'636b31efd64b749d4900e3f5773681e0496addf6',tree:'9b6671db9c6f56db7bfd572521cf4e37cf7011a7'};
+           const baselineQA={commit:'1cc08ce611872bd4a89281dcf20502585c8a8157',tree:'88da3481338ee90d01263d7d4353e516272efd10',helperRows:[
+            {path:'scripts/lib/careerLeagueWorld1175.mjs',mode:'100644',before:'c75128e88071d329b2fe8d973af897fe2207dd91',after:'ebcbe1083dd105732418d417cd86dacbb674daf7'},
+            {path:'scripts/lib/careerWorldTruth1329.mjs',mode:'100644',before:'8dc0dce77a13188eb939f78b0eb1850ba81a39f2',after:'e4601cf0e83b356cc61c43f9d6d9ecd51908f66c'}]};
+           const specifications=[
+            {name:redNames[0],sections:['4'],findings:4,decisions:['FULL_RUSSIA_SOURCE_INVERSE_EQUAL'],evidence:'paired-finish-admission.json',closing:'simCareerLeagueFinish: 4 failure(s) in section(s) 4'},
+            {name:redNames[1],sections:['a'],findings:582,decisions:['FULL_ORDERED_BASELINE_LOOKUP_AND_FAILURES_EQUAL'],evidence:'paired-seasons-admission.json',closing:'simCareerLeagueSeasons: 582 failures (sections a)'},
+            {name:redNames[2],sections:['A'],findings:1,decisions:['EXACT_PREEXISTING_K_PARTIAL_FORMAT_LIMIT'],evidence:'world-partial-format-admission.json',closing:'simCareerLeagueWorld: 1 failure(s) in section(s) A'}];
+           const bytes=file=>{safe(file);return fs.readFileSync(path.join(root,file));};
+           function pinned(pin,file){
+            assert(pin&&typeof pin==='object',receiptFail);assert.equal(pin.file,file,receiptFail);safe(file);
+            assert(Number.isSafeInteger(pin.bytes)&&pin.bytes>=0,receiptFail);assert.match(pin.sha256,/^[a-f0-9]{64}$/,receiptFail);
+            const body=bytes(file);assert.equal(body.length,pin.bytes,receiptFail+' '+file);assert.equal(sha(body),pin.sha256,receiptFail+' '+file);return body;
+           }
+           assert.equal(qualification.status,'SCOPED_RUSSIA_BUILD_AND_BRIDGE_PASSED_WITH_TWO_INHERITED_REDS_AND_ATTRIBUTED_FINISH_CHANGE',receiptFail);assert.equal(qualification.allOriginalOutcomesPassed,false,receiptFail);
+           const receiptBytes=pinned(qualification.baselineRegressionAdmission,'baseline-regression-admission.json');
+           assert.deepEqual(qualification.baselineRegressionAdmission,q.filePins.find(row=>row.file==='baseline-regression-admission.json'),receiptFail);
+           const outcomePin=q.filePins.find(row=>row.file==='MODEL-OUTCOMES.json'),outcomeBytes=pinned(outcomePin,'MODEL-OUTCOMES.json');
+           const outcomes=JSON.parse(outcomeBytes),regression=JSON.parse(receiptBytes);
+           function validate(models,receipt){
+            assert.equal(models.schema,'RUSSIA_COMPLETE_MODEL_OUTCOME_COLLECTION_V1',fail);assert.equal(models.status,'SOURCE_CLEAN_MODEL_OUTCOMES_COLLECTED',fail);
+            assert.deepEqual(models.product,product,fail);assert.equal(models.collectorShellSuccessIsNotModelSuccess,true,fail);assert.equal(models.allOriginalOutcomesPassed,false,fail);assert.equal(models.qualification,false,fail);assert.equal(models.modelSourceIndexLocksAndStatusHeld,true,fail);
+            assert.equal(models.independentGuards,16,fail);assert.equal(models.smokes,3,fail);assert.equal(models.bridgeCommands,2,fail);
+            assert.equal(models.rows.length,29,fail);assert.deepEqual(models.rows.map(row=>row.name),expectedNames,fail);assert.deepEqual(models.failedOutcomes,redNames,fail);
+            for(const row of models.rows){const red=redNames.includes(row.name);assert.equal(row.nativeExit,red?1:0,fail+' '+row.name);assert.equal(row.passed,!red,fail+' '+row.name);}
+            assert.equal(receipt.schema,'RUSSIA_BASELINE_REGRESSION_ADMISSION_V2',receiptFail);assert.equal(receipt.status,'TWO_INHERITED_REDS_AND_ONE_SOURCE_ATTRIBUTED_CHANGE_RETAINED',receiptFail);assert.deepEqual(receipt.product,product,receiptFail);
+            assert.deepEqual(receipt.baseline,baseline,receiptFail);assert.deepEqual({...receipt.baselineQA,helperRows:receipt.baselineQA.helperRows.slice().sort((a,b)=>a.path<b.path?-1:a.path>b.path?1:0)},baselineQA,receiptFail);
+            assert.deepEqual(receipt.originalOutcomeFile,outcomePin,receiptFail);assert.deepEqual(receipt.redOutcomeNames,redNames,receiptFail);assert.deepEqual(receipt.inheritedRedOutcomeNames,redNames.slice(1),receiptFail);assert.deepEqual(receipt.sourceAttributedRedOutcomeNames,redNames.slice(0,1),receiptFail);assert.equal(receipt.zeroOutcomeNames.length,26,receiptFail);assert.deepEqual(receipt.zeroOutcomeNames.slice().sort(),zeroNames.slice().sort(),receiptFail);
+            assert.equal(receipt.models.length,3,receiptFail);assert.deepEqual(receipt.models.map(row=>row.name),redNames,receiptFail);
+            for(let i=0;i<specifications.length;i++){const want=specifications[i],model=receipt.models[i];assert.equal(model.nativeExit,1,receiptFail);assert.equal(model.passed,false,receiptFail);assert.deepEqual(model.sections,want.sections,receiptFail);assert.equal(model.findings,want.findings,receiptFail);assert(want.decisions.includes(model.decision),decisionFail+' '+want.name);assert.equal(model.evidence.admission.file,want.evidence,receiptFail);}
+           }
+           validate(outcomes,regression);
+           for(const row of outcomes.rows){
+            assert.equal(row.exitFile,'logs/'+row.name+'.exit',fail);assert.equal(bytes(row.exitFile).toString('utf8'),row.nativeExit+'\n',fail+' native '+row.name);
+            const log=pinned(row.log,'logs/'+row.name+'.log');assert.equal(row.transport.empty,true,fail);assert.equal(row.transport.bytes,0,fail);assert.equal(pinned(row.transport,'transport/'+row.name+'.log').length,0,fail);
+            const spec=specifications.find(value=>value.name===row.name);if(spec)assert.equal(log.toString('utf8').split('\n').filter(line=>line===spec.closing).length,1,fail+' closing '+row.name);
+           }
+           assert.equal(bytes('logs/simCareerLeagueFinish.log').toString('utf8').split('\n').filter(line=>line.startsWith('  FAIL:')).length,4,fail+' Finish findings');
+           assert.equal(bytes('logs/simCareerLeagueWorld.log').toString('utf8').split('\n').filter(line=>line==='  FAIL [A]: K League 1: its format is read from two hosts (split) and it has neither a size row nor an odd row').length,1,fail+' World finding');
+           for(let i=0;i<specifications.length;i++){const value=JSON.parse(pinned(regression.models[i].evidence.admission,specifications[i].evidence));assert(value&&typeof value==='object'&&!Array.isArray(value),receiptFail);if(i===0){assert.equal(value.baselineNativeExit,0,receiptFail);assert.equal(value.removedNativeExit,0,receiptFail);assert.equal(value.fullRawFilesCompared,128,receiptFail);assert.equal(value.completeCareerRows,16,receiptFail);assert.equal(value.noFieldsOmitted,true,receiptFail);}}
+           const controls=[];
+           for(const kind of['native-red-preserved','decision-not-unresolved']){
+            const copiedModels=structuredClone(outcomes),copiedReceipt=structuredClone(regression),before=JSON.stringify({models:copiedModels,receipt:copiedReceipt});
+            if(kind==='native-red-preserved'){copiedModels.rows.find(row=>row.name===redNames[0]).nativeExit=0;copiedModels.rows.find(row=>row.name===redNames[0]).passed=true;}else copiedReceipt.models[0].decision='UNRESOLVED';
+            const fault=JSON.stringify({models:copiedModels,receipt:copiedReceipt});assert.notEqual(fault,before,receiptFail);
+            let error;try{validate(copiedModels,copiedReceipt);}catch(found){error=found;}assert(error instanceof assert.AssertionError,receiptFail);assert(error.message.startsWith(kind==='native-red-preserved'?fail:decisionFail),receiptFail);
+            const restored=JSON.stringify({models:outcomes,receipt:regression});assert.equal(restored,before,receiptFail);validate(outcomes,regression);
+            const file='scoped-qualification-'+kind+'-control.json';fs.writeFileSync(path.join(out,'input',file),JSON.stringify({kind,before:JSON.parse(before),fault:JSON.parse(fault),restored:JSON.parse(restored),changed:true,owned:{name:error.name,message:error.message},wholeInverse:true},null,2)+'\n',{flag:'wx'});controls.push({kind,file,changed:true,wholeInverse:true});
+           }
+           fs.writeFileSync(path.join(out,'input','scoped-qualification-admission.json'),JSON.stringify({schema:'RUSSIA_SCOPED_QUALIFICATION_CONSUMER_ADMISSION_V1',status:qualification.status,product,baseline,baselineQA,originalOutcomeFile:outcomePin,baselineRegressionAdmission:qualification.baselineRegressionAdmission,redNativeExitsPreserved:3,zeroNativeExits:26,allOriginalOutcomesPassed:false,inheritedRedOutcomeNames:regression.inheritedRedOutcomeNames,sourceAttributedRedOutcomeNames:regression.sourceAttributedRedOutcomeNames,models:regression.models.map(({name,sections,findings,decision})=>({name,nativeExit:1,passed:false,sections,findings,decision})),controls,deepPairedEvidenceAuthority:q.independentAdmissionSHA256,scope:'Scoped qualification only. The two inherited red outcomes and one source-attributed Finish change remain native1 and passedfalse. No full-suite or browser credit from this admission.'},null,2)+'\n',{flag:'wx'});
+          }
+          SCOPED_AUTH
+          printf '%s  %s\n' 'd1b20f51687e5aa09bd362683d227601d81f44cde6d546c16c88ed6e87fb82d7' "$common" | sha256sum -c -
+      - name: Authenticate the completed qualification and exact retained legacy input
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          auth="$QA_OUT/input/auth-complete.mjs"
+          test ! -e "$auth"
+          cat > "$auth" <<'AUTH_PREFIX'
+          import fs from 'node:fs';import path from 'node:path';import crypto from 'node:crypto';import assert from 'node:assert/strict';import{spawnSync}from'node:child_process';import{gunzipSync}from'node:zlib';
+          const e=process.env,out=e.QA_OUT,ref=e.QA_REF,sha=b=>crypto.createHash('sha256').update(b).digest('hex'),blob=b=>crypto.createHash('sha1').update(Buffer.from('blob '+b.length+'\0')).update(b).digest('hex');
+          const native=(label,command,args,binary=false)=>{const r=spawnSync(command,args,{encoding:binary?null:'utf8',maxBuffer:128*1024*1024});fs.writeFileSync(path.join(out,'input',label+'.native.json'),JSON.stringify({command:[command,...args],status:r.status,signal:r.signal,error:r.error?String(r.error):null})+'\n');fs.writeFileSync(path.join(out,'input',label+'.stderr.log'),r.stderr??'');if(!binary)fs.writeFileSync(path.join(out,'input',label+'.stdout.log'),r.stdout??'');assert.equal(r.status,0,label);assert.equal(r.signal,null);assert.equal(r.error,undefined);return r.stdout;};
+          const nativeFile=(label,command,args,file)=>{
+           const fd=fs.openSync(file,'wx');let r;
+           try{r=spawnSync(command,args,{encoding:null,stdio:['ignore',fd,'pipe'],maxBuffer:128*1024*1024});}finally{fs.closeSync(fd);}
+           fs.writeFileSync(path.join(out,'input',label+'.native.json'),JSON.stringify({command:[command,...args],status:r.status,signal:r.signal,error:r.error?String(r.error):null})+'\n');
+           fs.writeFileSync(path.join(out,'input',label+'.stderr.log'),r.stderr??'');
+           assert.equal(r.status,0,label);assert.equal(r.signal,null);assert.equal(r.error,undefined);
+           const hash=crypto.createHash('sha256'),block=Buffer.alloc(1024*1024),input=fs.openSync(file,'r');
+           try{for(;;){const count=fs.readSync(input,block,0,block.length,null);if(count===0)break;hash.update(block.subarray(0,count));}}finally{fs.closeSync(input);}
+           return{bytes:fs.statSync(file).size,sha256:hash.digest('hex')};
+          };
+          const api=(label,url)=>JSON.parse(native(label,'gh',['api','repos/PapiSalgueroM/ballpark-hero/'+url]));
+          const safe=value=>{assert(typeof value==='string'&&value.length>0&&!value.startsWith('/')&&!/^[a-zA-Z]:/.test(value)&&!value.includes('\\')&&!value.includes('\0'),'RUSSIA_NATIVE_SAFE_PATH');assert(!value.split('/').includes('..'),'RUSSIA_NATIVE_SAFE_PATH');};
+          const norm=value=>value.replace(/^\.\//,'').replace(/\/$/,'');
+          const inventory=dir=>{const rows=[];function walk(rel=''){for(const entry of fs.readdirSync(path.join(dir,rel),{withFileTypes:true})){const file=path.posix.join(rel,entry.name);if(entry.isDirectory())walk(file);else{assert(entry.isFile());const bytes=fs.readFileSync(path.join(dir,file));rows.push({file,bytes:bytes.length,sha256:sha(bytes)});}}}walk();return rows.sort((a,b)=>a.file<b.file?-1:a.file>b.file?1:0);};
+          const hashMap=bytes=>Object.fromEntries(bytes.toString('utf8').trim().split('\n').filter(Boolean).map(line=>{const m=/^([a-f0-9]{64}) [ *](.+)$/.exec(line);assert(m,'RUSSIA_NATIVE_SHA_LEDGER');safe(m[2]);return[m[2],m[1]];}));
+          const sourceVector=object=>Object.fromEntries(native('git-vector-'+object,'git',['ls-tree','-r','-z','--full-tree',object]).split('\0').filter(Boolean).map(value=>{const m=/^([0-7]{6}) (blob|commit) ([a-f0-9]{40})\t([\s\S]+)$/.exec(value);assert(m);safe(m[4]);return[m[4],{mode:m[1],type:m[2],sha:m[3]}];}));
+          const q=JSON.parse(e.QUALIFICATION_INPUT),n=JSON.parse(e.ORIGINAL_NATIVE_INPUT),required=JSON.parse(e.QUALIFICATION_REQUIRED_FILES);
+          for(const pin of[q,n]){for(const key of['run','job','artifact','attempt','zipBytes','innerBytes','regularFiles','totalRegularBytes'])assert(Number.isSafeInteger(pin[key])&&pin[key]>0,key);for(const key of['qa','qaTree','workflowBlob'])assert.match(pin[key],/^[a-f0-9]{40}$/,key);for(const key of['zipSHA256','innerSHA256','independentAdmissionSHA256'])assert.match(pin[key],/^[a-f0-9]{64}$/,key);assert(Array.isArray(pin.filePins)&&pin.filePins.length>0);assert.equal(new Set(pin.filePins.map(row=>row.file)).size,pin.filePins.length);}
+          assert.match(q.bridgeAdmissionSHA256,/^[a-f0-9]{64}$/);assert.match(q.distDigest,/^[a-f0-9]{64}$/);assert(Number.isSafeInteger(q.distFiles)&&q.distFiles>0&&Number.isSafeInteger(q.distBytes)&&q.distBytes>0);
+          assert.deepEqual(q.filePins.map(row=>row.file).slice().sort(),required.slice().sort(),'RUSSIA_NATIVE_EXACT_QUALIFICATION_INPUT_PINS');
+          for(const p of[...q.filePins,...n.filePins]){safe(p.file);assert(Number.isSafeInteger(p.bytes)&&p.bytes>=0);assert.match(p.sha256,/^[a-f0-9]{64}$/);}
+          function fetchInput(role,pin){
+           const run=api(role+'-run','actions/runs/'+pin.run),job=api(role+'-job','actions/jobs/'+pin.job),artifact=api(role+'-artifact','actions/artifacts/'+pin.artifact),commit=api(role+'-commit','git/commits/'+pin.qa);
+           assert.equal(run.status,'completed');assert.equal(run.conclusion,'success');assert.equal(run.head_sha,pin.qa);assert.equal(run.head_branch,pin.branch);assert.equal(run.run_attempt,pin.attempt);assert.equal(run.path,pin.workflowPath);
+           assert.equal(job.id,pin.job);assert.equal(job.run_id,pin.run);assert.equal(job.run_attempt,pin.attempt);assert.equal(job.conclusion,'success');
+           assert.equal(artifact.id,pin.artifact);assert.equal(artifact.name,pin.artifactName);assert.equal(artifact.expired,false);assert.equal(artifact.size_in_bytes,pin.zipBytes);assert.equal(artifact.workflow_run.id,pin.run);assert.equal(artifact.workflow_run.head_sha,pin.qa);
+           assert.equal(commit.sha,pin.qa);assert.equal(commit.tree.sha,pin.qaTree);
+           const dir=path.join(ref,role);fs.mkdirSync(dir);const zipFile=path.join(dir,'original.zip'),zip=nativeFile(role+'-sole-original-acquisition','gh',['api','repos/PapiSalgueroM/ballpark-hero/actions/artifacts/'+pin.artifact+'/zip'],zipFile);assert.equal(zip.bytes,pin.zipBytes);assert.equal(zip.sha256,pin.zipSHA256);
+           const entries=native(role+'-zip-list','unzip',['-Z1',zipFile]).trim().split('\n');assert.deepEqual(entries.slice().sort(),[pin.innerEntry,pin.innerEntry+'.sha256'].sort());entries.forEach(safe);
+           const innerFile=path.join(dir,pin.innerEntry),inner=nativeFile(role+'-zip-inner','unzip',['-p',zipFile,pin.innerEntry],innerFile);assert.equal(inner.bytes,pin.innerBytes);assert.equal(inner.sha256,pin.innerSHA256);
+           const checksum=native(role+'-zip-checksum','unzip',['-p',zipFile,pin.innerEntry+'.sha256']);assert.equal(checksum.trim().split('\n').length,1);const c=/^([a-f0-9]{64}) [ *](.+)$/.exec(checksum.trim());assert(c);assert.equal(c[1],pin.innerSHA256);assert.equal(path.basename(c[2]),pin.innerEntry);
+           const names=native(role+'-tar-list','tar',['-tf',innerFile]).trim().split('\n');names.forEach(safe);const normalized=names.map(norm).filter(value=>value&&value!=='.');assert.equal(new Set(normalized).size,normalized.length,'RUSSIA_NATIVE_NO_DUPLICATE_TAR_PATHS');assert(native(role+'-tar-types','tar',['-tvf',innerFile]).trim().split('\n').every(value=>value.startsWith('-')||value.startsWith('d')),'RUSSIA_NATIVE_ORDINARY_TAR_TYPES');
+           const root=path.join(dir,'evidence');fs.mkdirSync(root);native(role+'-tar-extract','tar',['-xf',innerFile,'-C',root]);const rows=inventory(root);assert.equal(rows.length,pin.regularFiles);assert.equal(rows.reduce((sum,row)=>sum+row.bytes,0),pin.totalRegularBytes);
+           fs.writeFileSync(path.join(out,'input',role+'-whole-original-inventory.json'),JSON.stringify(rows)+'\n',{flag:'wx'});
+           for(const row of pin.filePins){const bytes=fs.readFileSync(path.join(root,row.file));assert.equal(bytes.length,row.bytes,role+' '+row.file+' bytes');assert.equal(sha(bytes),row.sha256,role+' '+row.file+' SHA');const target=path.join(out,'input',role.toLowerCase(),row.file);fs.mkdirSync(path.dirname(target),{recursive:true});fs.writeFileSync(target,bytes,{flag:'wx'});}
+           const workflow=fs.readFileSync(path.join(root,'workflow.yml'));assert.equal(blob(workflow),pin.workflowBlob,role+' actual workflow');
+           fs.writeFileSync(path.join(out,'input',role+'-authority.json'),JSON.stringify({pin,commit,onlySoleOriginalFetched:true,allRegularBodiesHashed:true,regularFiles:rows.length,totalRegularBytes:rows.reduce((sum,row)=>sum+row.bytes,0)},null,2)+'\n',{flag:'wx'});return{root,commit,rows};
+          }
+          const qualified=fetchInput('QUALIFICATION',q),original=fetchInput('ORIGINAL_NATIVE',n),qualificationRoot=qualified.root;
+          const producerManifest=hashMap(fs.readFileSync(path.join(qualificationRoot,'manifest.sha256'))),manifestRows=Object.entries(producerManifest).map(([file,digest])=>[norm(file),digest]);assert.equal(new Set(manifestRows.map(row=>row[0])).size,manifestRows.length);assert.deepEqual(Object.fromEntries(manifestRows),Object.fromEntries(qualified.rows.filter(row=>row.file!=='manifest.sha256').map(row=>[row.file,row.sha256])),'RUSSIA_NATIVE_FULL_QUALIFICATION_MANIFEST');
+          
+          assert.deepEqual(qualified.commit.parents.map(row=>row.sha),[e.PRODUCT_CORE]);
+          const role=JSON.parse(fs.readFileSync(path.join(qualificationRoot,'source-role.json'))),qualification=JSON.parse(fs.readFileSync(path.join(qualificationRoot,'qualification.json'))),bridge=JSON.parse(fs.readFileSync(path.join(qualificationRoot,'bridge/BRIDGE.json'))),controls=JSON.parse(fs.readFileSync(path.join(qualificationRoot,'bridge/PHYSICAL-CONTROLS.json')));
+          assert.deepEqual(role.base,{commit:'636b31efd64b749d4900e3f5773681e0496addf6',tree:'9b6671db9c6f56db7bfd572521cf4e37cf7011a7'});assert.deepEqual(role.product,{commit:e.PRODUCT_CORE,tree:e.PRODUCT_TREE,files:JSON.parse(e.PRODUCT_FILES)});assert.equal(role.qa.commit,q.qa);assert.equal(role.qa.tree,q.qaTree);assert.equal(role.qa.soleAddition,q.workflowPath);
+          AUTH_PREFIX
+          cat "$QA_OUT/input/scoped-common-auth.mjs" >> "$auth"
+          cat >> "$auth" <<'AUTH_SUFFIX'
+          
+          assert.equal(qualification.status,'SCOPED_RUSSIA_BUILD_AND_BRIDGE_PASSED_WITH_TWO_INHERITED_REDS_AND_ATTRIBUTED_FINISH_CHANGE');admitScopedQualification(qualificationRoot,qualification,{commit:e.PRODUCT_CORE,tree:e.PRODUCT_TREE});assert.deepEqual(qualification.product,{commit:e.PRODUCT_CORE,tree:e.PRODUCT_TREE});assert.equal(qualification.normalBuilds,1);assert.equal(qualification.properTypes,true);assert.equal(qualification.unchangedCaps,16);assert.equal(qualification.smokes,3);assert.equal(qualification.fullSuite,false);assert.equal(qualification.browser,false);assert.equal(qualification.public,false);
+          const readers=['simAdsense','simBrand','simHeadTags','simHiddenPages','simHubs','simIndexNow','simIndexing','simInternalLinks','simNoRivalNames','simPrerender','simPrerenderBoot','simRetiredRoutes','simSchema','simSitemap','simSnapshotAssets','simSiteSearch','simGuideHeadings','simHarnessAnchors','simSeoTitles','simSeoMetaSplit'];assert.deepEqual(qualification.readers,readers);
+          assert.equal(bridge.status,'passed');assert.equal(bridge.schema,'RUSSIA_CAREER_BRIDGE_V1');assert.equal(bridge.control,null);assert.deepEqual(bridge.failures,[]);assert.equal(controls.status,'passed');assert.equal(controls.results.length,10);for(const row of controls.results){assert.equal(row.native,1);assert.equal(row.owned,true);}
+          assert.match(e.BRIDGE_BLOB,/^[a-f0-9]{40}$/);assert.equal(blob(fs.readFileSync(path.join(qualificationRoot,'bridge-source.mjs'))),e.BRIDGE_BLOB);
+          const same=(before,after)=>{const a=fs.readFileSync(path.join(qualificationRoot,before)),b=fs.readFileSync(path.join(qualificationRoot,after));assert(a.equals(b),'RUSSIA_NATIVE_QUALIFICATION_HOLD '+before);return a;};
+          const qualifiedSource=hashMap(same('source-before.sha256','source-after.sha256'));same('index-before.txt','index-after.txt');same('locks-before.sha256','locks-after.sha256');same('baseline-source-before.sha256','baseline-source-after.sha256');same('baseline-index-before.txt','baseline-index-after.txt');same('baseline-locks-before.sha256','baseline-locks-after.sha256');
+          for(const file of['status-before.txt','status-after.txt','baseline-status-before.txt','baseline-status-after.txt'])assert.equal(fs.readFileSync(path.join(qualificationRoot,file)).length,0,file);
+          for(const file of['types.exit','logs/bridge.exit','logs/bridge-controls.exit'])assert.equal(fs.readFileSync(path.join(qualificationRoot,file),'utf8'),'0\n',file);
+          for(const file of['transport/types.log','transport/bridge.log','transport/bridge-controls.log'])assert.equal(fs.readFileSync(path.join(qualificationRoot,file)).length,0,file);
+          const fourLocks=hashMap(fs.readFileSync(path.join(qualificationRoot,'locks-before.sha256')));assert.deepEqual(Object.keys(fourLocks).sort(),['package.json','package-lock.json','bun.lock','bun.lockb'].sort());for(const[file,digest]of Object.entries(fourLocks))assert.equal(sha(fs.readFileSync(file)),digest,'RUSSIA_NATIVE_FOUR_LOCK_SOURCE_ASSOCIATION '+file);
+          const productVector=sourceVector(e.PRODUCT_CORE),qualifiedTree=api('qualification-tree','git/trees/'+q.qaTree+'?recursive=1');assert.equal(qualifiedTree.truncated,false);assert.equal(qualifiedTree.sha,q.qaTree);const qualifiedVector=Object.fromEntries(qualifiedTree.tree.filter(row=>row.type!=='tree').map(row=>[row.path,{mode:row.mode,type:row.type,sha:row.sha}]));
+          assert.deepEqual(qualifiedVector[q.workflowPath],{mode:'100644',type:'blob',sha:q.workflowBlob});delete qualifiedVector[q.workflowPath];assert.deepEqual(qualifiedVector,productVector,'RUSSIA_NATIVE_QUALIFIER_ONE_ADDITION_TREE_INVERSE');
+          assert.equal(qualifiedSource[q.workflowPath],sha(fs.readFileSync(path.join(qualificationRoot,'workflow.yml'))));delete qualifiedSource[q.workflowPath];const current=hashMap(fs.readFileSync(path.join(out,'source-before.sha256'))),additions=JSON.parse(e.NATIVE_ADDITIONS);
+          function validateSource(map){assert.deepEqual(Object.keys(map).sort(),[...Object.keys(qualifiedSource),...additions].sort(),'RUSSIA_NATIVE_QUALIFIED_SOURCE_MAP');for(const[file,digest]of Object.entries(qualifiedSource))assert.equal(map[file],digest,'RUSSIA_NATIVE_QUALIFIED_SOURCE_MAP '+file);}
+          validateSource(current);const copied={...current},key=Object.keys(qualifiedSource)[0],old=copied[key];copied[key]='0'.repeat(64);assert.notEqual(copied[key],old);let sourceError;try{validateSource(copied);}catch(found){sourceError=found;}assert(sourceError instanceof assert.AssertionError);assert.match(sourceError.message,/^RUSSIA_NATIVE_QUALIFIED_SOURCE_MAP/);copied[key]=old;assert.deepEqual(copied,current);
+          const indexRows=fs.readFileSync(path.join(qualificationRoot,'index-before.txt'),'utf8').trim().split('\n').map(line=>{const match=/^([0-7]{6}) ([a-f0-9]{40}) 0\t(.+)$/.exec(line);assert(match);return[match[3],{mode:match[1],type:'blob',sha:match[2]}];});const qualifiedIndex=Object.fromEntries(indexRows);assert.deepEqual(qualifiedIndex[q.workflowPath],{mode:'100644',type:'blob',sha:q.workflowBlob});delete qualifiedIndex[q.workflowPath];assert.deepEqual(qualifiedIndex,productVector,'RUSSIA_NATIVE_QUALIFIED_INDEX_INVERSE');
+          const tarFile=path.join(qualificationRoot,'completed-dist.tar.gz'),tar=fs.readFileSync(tarFile),tarPin=q.filePins.find(row=>row.file==='completed-dist.tar.gz');assert.equal(tar.length,tarPin.bytes);assert.equal(sha(tar),tarPin.sha256);
+          const tarNames=native('completed-dist-list','tar',['-tzf',tarFile]).trim().split('\n');tarNames.forEach(value=>{safe(value);assert(value==='dist/'||value.startsWith('dist/'));});assert(native('completed-dist-types','tar',['-tvzf',tarFile]).trim().split('\n').every(value=>value.startsWith('-')||value.startsWith('d')));native('completed-dist-extract','tar',['-xzf',tarFile,'--strip-components=1','-C',e.QA_DIST]);
+          const dist=inventory(e.QA_DIST),distMap=hashMap(same('dist-before.sha256','dist-after.sha256'));assert.equal(dist.length,q.distFiles);assert.equal(dist.reduce((sum,row)=>sum+row.bytes,0),q.distBytes);assert.equal(sha(JSON.stringify(dist)),q.distDigest);
+          assert.deepEqual(Object.keys(distMap).sort(),dist.map(row=>'dist/'+row.file).sort());for(const row of dist)assert.equal(distMap['dist/'+row.file],row.sha256,row.file);
+          function rawCase(label){const file='cases/'+label+'.json.gz',pins=bridge.cases.filter(row=>row.file===file);assert.equal(pins.length,1);const pin=pins[0],stored=fs.readFileSync(path.join(qualificationRoot,'bridge',file)),decoded=gunzipSync(stored);assert.equal(stored.length,pin.bytes);assert.equal(sha(stored),pin.sha256);assert.equal(decoded.length,pin.decodedBytes);assert.equal(sha(decoded),pin.decodedSHA256);fs.writeFileSync(path.join(out,'input',label+'.json'),decoded,{flag:'wx'});return JSON.parse(decoded);}
+          const market=rawCase('current-russia-manager-market'),catalogue=rawCase('catalogue');assert.equal(market.label,'current-russia-manager-market');assert.equal(market.error,undefined);assert.equal(market.value.length,16);assert.deepEqual(bridge.russiaManagerMarketTuple,market.value[0]);assert.equal(catalogue.members.length,16);assert.equal(catalogue.hand.length,190);assert.equal(catalogue.pool.length,349);assert(catalogue.members.every(row=>row.country==='Russia'&&row.tier===2&&row.league==='Russian Premier League'));
+          const marketClub=market.value.find(row=>row.name==='Krasnodar');assert(marketClub);assert.equal(marketClub.country,'Russia');assert.equal(marketClub.league,'Russian Premier League');assert(Number.isInteger(marketClub.tier)&&marketClub.tier>=1&&marketClub.tier<=4);
+          const briefs={1:'Win the league. Nothing else counts.',2:'Get us into Europe.',3:'Mid table is fine. Stability is the job.',4:'Stay up. That is the whole brief.'};const offer={club:marketClub.name,country:marketClub.country,tier:marketClub.tier,league:marketClub.league,brief:briefs[marketClub.tier],reason:'They wanted someone who knows the country and the league.',budget:marketClub.budget};
+          const fixtureRelative='browser/frames/k-sc-current-320-122.json.gz',fixtureFile=path.join(original.root,fixtureRelative),fixture=fs.readFileSync(fixtureFile),decoded=gunzipSync(fixture);assert.equal(decoded.length,139511);assert.equal(sha(decoded),'60ccbf520b423f37a2eb2e7fc34b20076eefd3ac72ebbed7727631437db6e7e3');const frame=JSON.parse(decoded);assert.equal(frame.sequence,122);assert.equal(frame.label,'Attributes complete saved career returned');assert.equal(frame.value.careerState.currentClub,'Jeonbuk Motors Youth');assert.equal(frame.value.careerState.currentClubCountry,'South Korea');assert.equal(frame.value.careerState.phase,'youth');assert.equal(frame.value.local.soccerCareerSave,frame.value.careerRaw);
+          const requiredSources=['src/pages/SoccerCareer.tsx','src/lib/soccerCareerEngine.ts','src/lib/soccerCareerContinental.ts','src/lib/soccerCareerLeague.ts','src/data/soccerCareerClubPool.ts','src/lib/soccerCareerSave.ts','src/lib/saveFence.ts','src/lib/completions.ts','src/integrations/supabase/client.ts','src/lib/managerJobMarket.ts','src/lib/managerOffers.ts'];const sourcePins=requiredSources.map(file=>{assert(productVector[file]);return{path:file,gitBlob:productVector[file].sha};});
+          const manifest={schema:'RUSSIA_SC_NATIVE_SOURCE_DIST_V1',status:'QUALIFIED_BUILD_AND_RUSSIA_BRIDGE_BOUND',product:{commit:e.PRODUCT_CORE,tree:e.PRODUCT_TREE},admissions:{generator:e.GENERATOR_INDEPENDENT_SHA,bridge:q.bridgeAdmissionSHA256,build:q.independentAdmissionSHA256,originalNative:n.independentAdmissionSHA256},sourceBefore:current,sourceAfter:current,sourcePins,distBefore:dist,distDigest:q.distDigest,russia:{clubs:catalogue.members},preparedManagerOffer:{marketClub,offer,source:{admission:q.bridgeAdmissionSHA256,marketPath:'src/lib/managerJobMarket.ts',marketGitBlob:'82e11ce8c1c76b780059969674a26ad368bd4db4',sourceCase:'input/current-russia-manager-market.json',kind:'EXPLICIT_PREPARED_PENDING_OFFER_NOT_NATURALLY_DRAWN'}},legacyFixture:{file:fixtureFile,storedBytes:fixture.length,storedSHA256:sha(fixture),decodedBytes:decoded.length,decodedSHA256:sha(decoded),sequence:122,label:frame.label,sourceNativeAdmission:n.independentAdmissionSHA256}};
+          fs.writeFileSync(path.join(out,'input','native-manifest.json'),JSON.stringify(manifest,null,2)+'\n',{flag:'wx'});
+          fs.writeFileSync(path.join(out,'input','source-and-dist-authentication.json'),JSON.stringify({status:'ACTUAL_INPUTS_AUTHENTICATED_NO_BROWSER_CREDIT',product:manifest.product,qualification:q,originalNative:n,qualificationOneAdditionInverse:true,fullSourceMapInverse:true,indexInverse:true,canonicalSourceDigestControl:{changed:true,owned:{name:sourceError.name,message:sourceError.message},wholeInverseExact:true},preparedOfferIsExplicit:true,AppBuilds:0,modelOrFixtureGeneration:false},null,2)+'\n',{flag:'wx'});
+          fs.writeFileSync(path.join(out,'input-reference-before.json'),JSON.stringify(inventory(ref))+'\n',{flag:'wx'});fs.writeFileSync(path.join(out,'dist-before.json'),JSON.stringify(dist)+'\n',{flag:'wx'});
+          AUTH_SUFFIX
+          printf '%s  %s\n' '4af53ab6a0a1213786b4110d9806bc13567e42c61fe49ec3e11f119b705a734e' "$auth" | sha256sum -c -
+          node --input-type=module < "$auth"
+      - name: Install held App and browser runtime only
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(bun --version)" = 1.4.4
+          bun --version > "$QA_OUT/logs/bun-version.log"
+          node --version > "$QA_OUT/logs/node-version.log"
+          bun install --frozen-lockfile > "$QA_OUT/logs/bun-install.log" 2>&1
+          git diff --exit-code HEAD -- package.json package-lock.json bun.lock bun.lockb
+          npm install --prefix "$RUNNER_TEMP/real-entry-browser-tools" --package-lock=false --no-audit --no-fund playwright@1.64.0 > "$QA_OUT/logs/playwright-install.log" 2>&1
+          test ! -e node_modules/playwright
+          test ! -e node_modules/playwright-core
+          ln -s "$RUNNER_TEMP/real-entry-browser-tools/node_modules/playwright" node_modules/playwright
+          ln -s "$RUNNER_TEMP/real-entry-browser-tools/node_modules/playwright-core" node_modules/playwright-core
+          "$RUNNER_TEMP/real-entry-browser-tools/node_modules/.bin/playwright" install --with-deps chromium > "$QA_OUT/logs/chromium-install.log" 2>&1
+      - name: Syntax only for the reviewed native helper and held scroll companion
+        shell: bash
+        run: |
+          set +e
+          set -uo pipefail
+          export SIM_NETWORK=offline GIT_NO_LAZY_FETCH=1
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          for role in helper ready; do
+            if test "$role" = helper; then file=scripts/qa/russiaCareerNativeBrowser.mjs; else file=scripts/qa/nativeScrollReady.mjs; fi
+            export SIM_OFFLINE_RECEIPT="$QA_OUT/transport/syntax-$role.log"
+            : > "$SIM_OFFLINE_RECEIPT" || exit 1
+            node --check "$file" > "$QA_OUT/logs/syntax-$role.log" 2>&1
+            native_exit=$?
+            printf '%s\n' "$native_exit" > "$QA_OUT/logs/syntax-$role.exit" || exit 1
+            test "$native_exit" = 0 || exit "$native_exit"
+            test ! -s "$SIM_OFFLINE_RECEIPT" || exit 1
+          done
+      - name: Proper App types before native browser
+        shell: bash
+        run: |
+          set +e
+          set -uo pipefail
+          export SIM_NETWORK=offline GIT_NO_LAZY_FETCH=1
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          export SIM_OFFLINE_RECEIPT="$QA_OUT/transport/types.log"
+          : > "$SIM_OFFLINE_RECEIPT" || exit 1
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json > "$QA_OUT/logs/types.log" 2>&1
+          native_exit=$?
+          printf '%s\n' "$native_exit" > "$QA_OUT/logs/types.exit" || exit 1
+          test "$native_exit" = 0 || exit "$native_exit"
+          test ! -s "$SIM_OFFLINE_RECEIPT" || exit 1
+      - name: Five scoped Russia player and manager contexts on the same completed dist
+        shell: bash
+        run: |
+          set +e
+          set -uo pipefail
+          export SIM_NETWORK=offline GIT_NO_LAZY_FETCH=1
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          export SIM_OFFLINE_RECEIPT="$QA_OUT/transport/server.log"
+          : > "$SIM_OFFLINE_RECEIPT" || exit 1
+          node scripts/lib/hostLikeServer.mjs "$QA_DIST" 4173 > "$QA_OUT/logs/server.log" 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid" 2>/dev/null || true' EXIT
+          ready=0
+          for i in $(seq 1 40); do
+            if curl --fail --silent http://127.0.0.1:4173/soccer-career > /dev/null; then ready=1; break; fi
+            sleep 0.25
+          done
+          test "$ready" = 1 || exit 1
+          export SIM_OFFLINE_RECEIPT="$QA_OUT/transport/browser.log"
+          : > "$SIM_OFFLINE_RECEIPT" || exit 1
+          node --unhandled-rejections=strict scripts/qa/russiaCareerNativeBrowser.mjs --manifest "$QA_OUT/input/native-manifest.json" --dist "$QA_DIST" --out "$QA_OUT/browser" --base-url http://127.0.0.1:4173 > "$QA_OUT/logs/browser.log" 2>&1
+          native_exit=$?
+          printf '%s\n' "$native_exit" > "$QA_OUT/logs/browser.exit" || exit 1
+          test ! -s "$SIM_OFFLINE_RECEIPT" || exit 1
+          test ! -s "$QA_OUT/transport/server.log" || exit 1
+          exit "$native_exit"
+      - name: Always hold complete tracked source index locks inputs and completed dist
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          git ls-files -z > "$QA_OUT/tracked-after.bin"
+          git ls-files -z | xargs -0 sha256sum > "$QA_OUT/source-after.sha256"
+          git ls-files -s > "$QA_OUT/index-after.txt"
+          git status --porcelain=v1 --untracked-files=all > "$QA_OUT/status-after.txt"
+          cp package-lock.json "$QA_OUT/lock-after.json"
+          node --input-type=module <<'HOLDS'
+          import fs from 'node:fs';import path from 'node:path';import crypto from 'node:crypto';import assert from 'node:assert/strict';import{gunzipSync}from'node:zlib';
+          const out=process.env.QA_OUT,sha=b=>crypto.createHash('sha256').update(b).digest('hex'),errors=[];
+          const inventory=dir=>{const rows=[];function walk(rel=''){for(const entry of fs.readdirSync(path.join(dir,rel),{withFileTypes:true})){const file=path.posix.join(rel,entry.name);if(entry.isDirectory())walk(file);else{assert(entry.isFile());const bytes=fs.readFileSync(path.join(dir,file));rows.push({file,bytes:bytes.length,sha256:sha(bytes)});}}}walk();return rows.sort((a,b)=>a.file<b.file?-1:a.file>b.file?1:0);};
+          function compare(before,after,label){try{assert(fs.readFileSync(out+'/'+before).equals(fs.readFileSync(out+'/'+after)),label);}catch(error){errors.push({label,error:String(error.stack||error)});}}
+          for(const pair of[['tracked-before.bin','tracked-after.bin','tracked'],['source-before.sha256','source-after.sha256','source'],['index-before.txt','index-after.txt','index'],['lock-before.json','lock-after.json','package-lock']])compare(...pair);
+          for(const name of['status-before.txt','status-after.txt'])try{assert.equal(fs.readFileSync(out+'/'+name).length,0,name);}catch(error){errors.push({label:name,error:String(error.stack||error)});}
+          const locks=Object.fromEntries(['package.json','package-lock.json','bun.lock','bun.lockb','yarn.lock','pnpm-lock.yaml'].map(file=>[file,fs.existsSync(file)?sha(fs.readFileSync(file)):null]));fs.writeFileSync(out+'/all-locks-after.json',JSON.stringify(locks)+'\n');
+          try{assert.deepEqual(locks,JSON.parse(fs.readFileSync(out+'/all-locks-before.json')));}catch(error){errors.push({label:'all-locks',error:String(error.stack||error)});}
+          for(const [root,before,after,label]of[[process.env.QA_REF,'input-reference-before.json','input-reference-after.json','complete-original-inputs'],[process.env.QA_DIST,'dist-before.json','dist-after.json','completed-dist']]){if(!fs.existsSync(out+'/'+before)){errors.push({label,error:'Input baseline was not prepared; no hold credit.'});continue;}try{const bytes=Buffer.from(JSON.stringify(inventory(root))+'\n');fs.writeFileSync(out+'/'+after,bytes);assert(bytes.equals(fs.readFileSync(out+'/'+before)),label);}catch(error){errors.push({label,error:String(error.stack||error)});}}
+          fs.writeFileSync(out+'/source-dist-input-held.json',JSON.stringify({status:errors.length?'HOLD_FAILED':'SOURCE_INDEX_LOCKS_INPUT_AND_DIST_HELD',source:!errors.some(row=>row.label==='source'),index:!errors.some(row=>row.label==='index'),tracked:!errors.some(row=>row.label==='tracked'),locks:!errors.some(row=>/lock/.test(row.label)),completeInputHeld:!errors.some(row=>row.label==='complete-original-inputs'),completedDistHeld:!errors.some(row=>row.label==='completed-dist'),cleanStatus:!errors.some(row=>/status/.test(row.label)),errors,AppBuilds:0,modelOrFixtureGeneration:false,browserAdmission:'Separate native-admission.json only if all actual commands and retained evidence pass.'},null,2)+'\n',{flag:'wx'});
+          assert.equal(errors.length,0,'RUSSIA_NATIVE_ALL_SOURCE_INPUT_DIST_HOLDS');
+          HOLDS
+          printf '0\n' > "$QA_OUT/logs/final-source-holds.exit" || exit 1
+      - name: Admit complete actual native data and ordinary target census
+        shell: bash
+        run: |
+          set -euo pipefail
+          node --input-type=module <<'ADMIT'
+          import fs from 'node:fs';import path from 'node:path';import crypto from 'node:crypto';import assert from 'node:assert/strict';import{gunzipSync}from'node:zlib';
+          const out=process.env.QA_OUT,sha=b=>crypto.createHash('sha256').update(b).digest('hex'),manifest=JSON.parse(fs.readFileSync(out+'/input/native-manifest.json')),report=JSON.parse(fs.readFileSync(out+'/browser/report.json')),held=JSON.parse(fs.readFileSync(out+'/source-dist-input-held.json'));
+          assert.equal(held.status,'SOURCE_INDEX_LOCKS_INPUT_AND_DIST_HELD');assert.equal(report.status,'passed');for(const key of['sourceHeld','distHeld','fixtureHeld'])assert.equal(report[key],true);
+          assert.deepEqual(report.product,manifest.product);assert.equal(report.authority.manifestSHA256,sha(fs.readFileSync(out+'/input/native-manifest.json')));assert.equal(report.authority.distDigest,manifest.distDigest);assert.deepEqual(report.authority.admissions,manifest.admissions);
+          for(const name of['syntax-helper','syntax-ready','types','browser']){assert.equal(fs.readFileSync(out+'/logs/'+name+'.exit','utf8'),'0\n',name);assert.equal(fs.readFileSync(out+'/transport/'+name+'.log').length,0,name);}
+          assert.equal(fs.readFileSync(out+'/transport/server.log').length,0);assert.deepEqual(fs.readdirSync(out+'/transport').sort(),['browser.log','server.log','syntax-helper.log','syntax-ready.log','types.log'].sort());
+          assert.deepEqual(report.contexts.map(row=>[row.width,row.flow]),[[320,'russia-current'],[390,'russia-current'],[1280,'russia-current'],[390,'russia-historical'],[390,'legacy-save']]);
+          assert.equal(report.screenshots.length,23);assert.equal(new Set(report.screenshots).size,23);
+          for(const c of report.contexts){
+           assert.equal(c.status,'passed');assert(c.frames.length>0&&c.assetBodies.length>0&&c.documentRequests.length>0&&c.documentBodies.length>0);assert.equal(c.photos.length,c.flow==='russia-current'?7:1);
+           assert.equal(c.finalNativeCensus.closed,true);assert.equal(c.finalNativeCensus.unownedMutations,0);assert.equal(c.finalNativeCensus.providerWritesPassed,0);assert.equal(c.finalNativeCensus.blockedActivityAttempts.length,c.flow==='russia-current'?2:0);
+           if(c.flow==='russia-current'){assert.equal(c.russiaProgression.status,'passed');assert.equal(c.russiaProgression.preparation.wholeInverseExact,true);assert.equal(c.russiaProgression.preparation.inverseRaw,c.russiaProgression.preparation.before.value.careerRaw);assert.equal(c.activityControls.status,'COPIED_ACTUAL_ACTIVITY_GUARDS_PASSED');assert.equal(c.activityControls.controls.length,2);for(const row of c.activityControls.controls){assert.equal(row.wholeInverseExact,true);assert.equal(row.actualHeld,true);}assert.equal(c.russiaProgression.controls.length,2);for(const row of c.russiaProgression.controls){assert.equal(row.wholeInverseExact,true);assert.equal(row.actualHeld,true);}}
+           if(c.flow==='legacy-save'){assert.equal(c.legacy.status,'passed');assert.equal(c.legacy.control.changed,true);assert.equal(c.legacy.control.wholeInverseExact,true);}
+           for(const key of['documentControl','assetControls']){assert.equal(c[key].changed,true);assert.equal(c[key].wholeInverseExact,true);assert.equal(c[key].actualHeld,true);}
+           for(const row of c.frames){const stored=fs.readFileSync(out+'/browser/'+row.file),decoded=gunzipSync(stored);assert.equal(stored.length,row.bytes);assert.equal(sha(stored),row.sha256);assert.equal(decoded.length,row.decodedBytes);assert.equal(sha(decoded),row.decodedSHA256);const value=JSON.parse(decoded);assert.equal(value.sequence,row.sequence);assert.equal(value.label,row.label);}
+           for(const row of[...c.assetBodies,...c.documentBodies]){const bytes=fs.readFileSync(out+'/browser/'+row.file);assert.equal(bytes.length,row.bytes);assert.equal(sha(bytes),row.sha256);const reference=manifest.distBefore.find(value=>value.file===row.path);assert(reference);assert.equal(row.bytes,reference.bytes);assert.equal(row.sha256,reference.sha256);}
+           for(const key of['unexpectedConsole','unexpectedPageErrors','unexpectedExternalAborts','localHttpErrors','assetErrors'])assert.equal(c[key].length,0,key);
+          }
+          const images=report.screenshots.map(file=>{assert(/^[a-z0-9-]+\.png$/.test(file));const bytes=fs.readFileSync(out+'/browser/'+file);assert(bytes.length>8&&bytes.subarray(0,8).equals(Buffer.from([137,80,78,71,13,10,26,10])));return{file,bytes:bytes.length,sha256:sha(bytes)};});fs.writeFileSync(out+'/screenshots.json',JSON.stringify(images,null,2)+'\n',{flag:'wx'});
+          fs.writeFileSync(out+'/native-admission.json',JSON.stringify({status:'FIVE_SC_CONTEXTS_AND23_ORDINARY_TARGETS_RETAINED',product:manifest.product,authority:report.authority,sourceHeld:true,distHeld:true,fixtureHeld:true,allContextsPassed:true,ordinaryPhotos:23,visualReview:'PENDING_INDEPENDENT_VIEW_OF_ALL_ACTUAL_IMAGES',activity:'Six source-owned player activity POST attempts across three current contexts, physically blocked and fully counted. No provider write passed.',AppBuilds:0,modelOrFixtureGeneration:false,public:false},null,2)+'\n',{flag:'wx'});
+          ADMIT
+          printf '0\n' > "$QA_OUT/logs/native-admission.exit" || exit 1
+      - name: Retain bounded complete native proof or fatal diagnostic
+        id: evidence
+        if: always()
+        shell: bash
+        run: |
+          set +e
+          set -uo pipefail
+          archive="$RUNNER_TEMP/russia-career-native.tar.xz"
+          tar -I 'xz -9' -cf "$archive" -C "$QA_OUT" . > "$RUNNER_TEMP/russia-career-native-pack.log" 2>&1
+          pack_exit=$?
+          printf '%s\n' "$pack_exit" > "$QA_OUT/pack-native.exit" || exit 1
+          if [[ "$pack_exit" == 0 && -f "$archive" && "$(stat -c %s "$archive")" -le 50000000 ]]; then
+            sha256sum "$archive" > "$archive.sha256" || exit 1
+            printf 'archive=%s\n' "$archive" >> "$GITHUB_OUTPUT" || exit 1
+            exit 0
+          fi
+          printf '%s\n' 'DIAGNOSTIC_ONLY_NO_COMPLETE_NATIVE_OR_IMAGE_PROOF: full pack failed or exceeded50000000bytes' > "$QA_OUT/DIAGNOSTIC-ONLY.txt" || exit 1
+          cp "$RUNNER_TEMP/russia-career-native-pack.log" "$QA_OUT/pack.log" || exit 1
+          node --input-type=module <<'DIAGNOSTIC'
+          import fs from 'node:fs';import path from 'node:path';import crypto from 'node:crypto';
+          const root=process.env.QA_OUT,sha=b=>crypto.createHash('sha256').update(b).digest('hex'),rows=[];
+          function walk(rel=''){for(const entry of fs.readdirSync(path.join(root,rel),{withFileTypes:true})){const file=path.posix.join(rel,entry.name);if(entry.isDirectory())walk(file);else if(entry.isFile()){const bytes=fs.readFileSync(path.join(root,file));rows.push({file,bytes:bytes.length,sha256:sha(bytes)});}}}walk();
+          fs.writeFileSync(root+'/fatal-full-output-inventory.json',JSON.stringify({status:'DIAGNOSTIC_ONLY',completeNativeProof:false,fullArchive:fs.existsSync(path.join(process.env.RUNNER_TEMP,'russia-career-native.tar.xz'))?{bytes:fs.statSync(path.join(process.env.RUNNER_TEMP,'russia-career-native.tar.xz')).size,sha256:sha(fs.readFileSync(path.join(process.env.RUNNER_TEMP,'russia-career-native.tar.xz')))}:null,fullOutput:rows.sort((a,b)=>a.file<b.file?-1:a.file>b.file?1:0),omittedFromDiagnostic:['browser/frames','browser/bodies','ordinary and failure PNG files'],note:'Successful evidence is never truncated. This diagnostic has no runtime or image qualification.'},null,2)+'\n');
+          DIAGNOSTIC
+          test "$?" = 0 || exit 1
+          diagnostic="$RUNNER_TEMP/russia-career-native-diagnostic.tar.gz"
+          diagnostic_dir="$RUNNER_TEMP/russia-career-native-diagnostic"
+          mkdir -p "$diagnostic_dir/logs" "$diagnostic_dir/transport" "$diagnostic_dir/input" "$diagnostic_dir/browser" || exit 1
+          find "$QA_OUT" -maxdepth 1 -type f -exec cp '{}' "$diagnostic_dir/" \; || exit 1
+          cp -R "$QA_OUT/logs/." "$diagnostic_dir/logs/" || exit 1
+          cp -R "$QA_OUT/transport/." "$diagnostic_dir/transport/" || exit 1
+          cp -R "$QA_OUT/input/." "$diagnostic_dir/input/" || exit 1
+          if test -d "$QA_OUT/browser"; then find "$QA_OUT/browser" -maxdepth 1 -type f -name '*.json' -exec cp '{}' "$diagnostic_dir/browser/" \; || exit 1; fi
+          tar -czf "$diagnostic" -C "$diagnostic_dir" . || exit 1
+          test "$(stat -c %s "$diagnostic")" -le 50000000 || exit 1
+          sha256sum "$diagnostic" > "$diagnostic.sha256" || exit 1
+          printf 'archive=%s\n' "$diagnostic" >> "$GITHUB_OUTPUT" || exit 1
+          exit 1
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: russia-career-native
+          path: |
+            ${{ steps.evidence.outputs.archive }}
+            ${{ steps.evidence.outputs.archive }}.sha256
+          if-no-files-found: error
+          retention-days: 14
+          compression-level: 0
