@@ -1,0 +1,599 @@
+name: CM historical roster snapshot disclosure
+on:
+  push:
+    branches: [codex/cm-historical-roster-qualify-v2-20261106]
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: cm-historical-roster-qualify-v2-20261106
+  cancel-in-progress: false
+jobs:
+  qualify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    defaults:
+      run:
+        shell: bash
+    env:
+      BASE_CORE: d587c355f63640298927a4533a267451b734965b
+      BASE_TREE: 73920406425c9b908f09f70e6f570c76609bd4fd
+      PRODUCT_CORE: a311f9a70a03a41a7912a5f9a1ce8e7aff323f11
+      PRODUCT_TREE: 133fcd3d26a4d237178e5c7efee723048da0aef2
+      BASELINE_BUILD: '{"run":42346216682,"job":128324418224,"attempt":1,"artifact":13563419806,"artifactName":"sc-later-starts-qualification","qa":"9e46de0297d90088728919b304881f653afa8da0","qaTree":"7c9d0760d0d5ec7fb29896c73c9ca72608452521","workflowPath":".github/workflows/sc-later-starts-qualify-20261106.yml","workflowBlob":"1890fe3a274ee94faf82e80f78e2e0e42c5e6601","branch":"codex/sc-later-starts-qualify-20261106","entry":"sc-later-starts-qualification.tar.gz","zip":{"bytes":24616950,"sha256":"c3b15eef2ea314f632d599ce4889aa3cdb6ae3f759c4aad790330eefc37829f7"},"inner":{"bytes":24616483,"sha256":"d040e6a8f3a19b532b259a37e3b4d440e00014ed0c7584001067cc079fadd1c6"},"regularFiles":197,"buildProduct":"25b263816ac416ef885df7e9f1ce2fd782927c44","buildTree":"5f6ef45062b696e0eea44006093f5824bd02ff7b","distDigest":"0ed4e26952e69c08ac3164e439037191b5d881a7ab1d2b0ee7eb98009b7c6e3a","qualification":{"bytes":1436,"sha256":"ad9bdc9ab6e49e9c90edde330e2063a9117967f8507531af3853acdceafcccc7"},"sourceRole":{"bytes":1818,"sha256":"a8a40c6ce8867cb406ed123697453d9bb0b4e72f06c963994ce4bfdfb11f6897"},"dist":{"bytes":6993844,"sha256":"02dc2bb5c97cbba9489603ac348ce324b37f783dfb1beee74ea328bc21fae32f"},"ledger":{"bytes":86752,"sha256":"b17a3c7904fd95fe75fe44eba76d3582ccde1831f747320d811ac32c1788745b"},"independentAdmissionSHA256":"99ea2e11c9eada05b6b45700e57a4aaee910ededcd4a4279d736725078d1c255"}'
+      BASELINE_CLOSEOUT_DOCS: '[{"path":"docs/EXPANSION-IMPLEMENTATION-LEDGER.md","before":"b7b65a18e477c90307157717414786b2f7ce6f35","after":"406aeeb2125e241cdc3fd021b78944dbf3aec89a"},{"path":"docs/PROJECT-STATE.md","before":"50ace06c187f52bea60feae22c13be7a2985b7ad","after":"e88856e9b0e9e00345b20cce3f7250f347b2154a"},{"path":"docs/WORKBOARD.md","before":"399e34c5566c12d7a6c2be4a32d8d52c2a28bba6","after":"90512f2156b20e8d809a3514f1529161da3885fc"}]'
+      BROWSER_BLOB: 94f77177476d709b3301ca6fd20a632dc3e6e001
+      ENGINES: chromium
+      PLAYWRIGHT_BROWSERS_PATH: /home/runner/.cache/ms-playwright
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 3
+          filter: blob:none
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24.22.2'
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: '1.4.4'
+      - name: Bind two product files and two QA additions
+        run: |
+          set -euo pipefail
+          export QA_OUT="$RUNNER_TEMP/cm-roster-evidence" QA_REF="$RUNNER_TEMP/cm-roster-original"
+          mkdir "$QA_OUT" "$QA_REF"
+          mkdir "$QA_OUT/logs" "$QA_OUT/transport" "$QA_OUT/input"
+          printf '%s\n' "QA_OUT=$QA_OUT" "QA_REF=$QA_REF" "SEO_SPLIT_BASE_REF=$BASE_CORE" >> "$GITHUB_ENV"
+          test "$(node --version)" = v24.22.2
+          node --input-type=module <<'SOURCE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          import {execFileSync} from 'node:child_process';
+          const e=process.env, out=e.QA_OUT;
+          const git=(...args)=>execFileSync('git',args,{encoding:'utf8'}).trim();
+          for(const key of ['BASE_CORE','BASE_TREE','PRODUCT_CORE','PRODUCT_TREE','BROWSER_BLOB'])assert.match(e[key],/^[a-f0-9]{40}$/,key);
+          for(const key of ['BASELINE_BUILD','BASELINE_CLOSEOUT_DOCS'])assert(!e[key].includes('MUST_BIND'),key);
+          const baseline={commit:e.BASE_CORE,tree:e.BASE_TREE};
+          const product={commit:e.PRODUCT_CORE,tree:e.PRODUCT_TREE};
+          const qa={commit:git('rev-parse','HEAD'),tree:git('rev-parse','HEAD^{tree}')};
+          assert.equal(git('rev-parse','HEAD^'),product.commit);
+          assert.equal(git('rev-parse',product.commit+'^'),baseline.commit);
+          for(const role of [baseline,product])assert.equal(git('rev-parse',role.commit+'^{tree}'),role.tree);
+          const files=[
+            {path:'src/components/club-manager/ClubManagerTeamPicker.tsx',before:'c6ef33e8ce54e1d964dda157dd5a6b12e899ef89',after:'342842555d27ff1948fd78b937778357aad604bb'},
+            {path:'src/pages/ClubManager.tsx',before:'e6ced533f6c6d5a76190dbc1042f9120d8bb39ea',after:'280a320f142d5e1d33c5e837f119d0ffee69d856'}
+          ];
+          const helper='scripts/qa/cmHistoricalRosterBrowser.mjs',workflow='.github/workflows/cm-historical-roster-qualify-20261106.yml';
+          assert.deepEqual(git('diff','--name-status','--no-renames',baseline.commit,product.commit).split('\n'),files.map(row=>'M\t'+row.path));
+          assert.deepEqual(git('diff','--name-status','--no-renames',product.commit,qa.commit).split('\n'),['A\t'+workflow,'A\t'+helper]);
+          for(const row of files){
+            assert.equal(git('ls-tree',baseline.commit,row.path),'100644 blob '+row.before+'\t'+row.path);
+            assert.equal(git('ls-tree',product.commit,row.path),'100644 blob '+row.after+'\t'+row.path);
+          }
+          assert.equal(git('ls-tree',qa.commit,helper),'100644 blob '+e.BROWSER_BLOB+'\t'+helper);
+          for(const role of [baseline,product])assert.equal(git('rev-parse',role.commit+':src/data/clubManagerEra2010.ts'),'1f34b2305279348a0b5ba2d5b056aa4ac47499a2');
+          fs.copyFileSync(workflow,out+'/workflow.yml',fs.constants.COPYFILE_EXCL);
+          fs.copyFileSync(helper,out+'/browser-helper.mjs',fs.constants.COPYFILE_EXCL);
+          fs.writeFileSync(out+'/source-role.json',JSON.stringify({baseline,product:{...product,files},qa:{...qa,additions:[workflow,helper]}},null,2)+'\n',{flag:'wx'});
+          SOURCE
+          git show "$BASE_CORE:src/data/seoMeta.ts" > "$QA_OUT/input/seo-base.ts"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$QA_OUT/source-before.sha256"
+          git ls-files --stage > "$QA_OUT/index-before.txt"
+          git status --porcelain=v1 --untracked-files=all > "$QA_OUT/status-before.txt"
+          sha256sum package.json package-lock.json bun.lock bun.lockb > "$QA_OUT/locks-before.sha256"
+          test ! -s "$QA_OUT/status-before.txt"
+      - name: Authenticate the admitted baseline artifact and exact completed dist
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          node --input-type=module <<'AUTH'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import {spawnSync} from 'node:child_process';
+          import {createHash} from 'node:crypto';
+          
+          const e = process.env, ref = e.QA_REF, out = e.QA_OUT, pin = JSON.parse(e.BASELINE_BUILD);
+          const sha = body => createHash('sha256').update(body).digest('hex');
+          const write = (name, value) => fs.writeFileSync(path.join(out, 'input', name), JSON.stringify(value, null, 2) + '\n', {flag:'wx'});
+          function call(label, command, args, destination) {
+            const fd = destination ? fs.openSync(destination, 'wx') : null;
+            let result;
+            try {
+              result = spawnSync(command, args, {stdio:['ignore', fd ?? 'pipe', 'pipe'], encoding:null, maxBuffer:16*1024*1024});
+            } finally { if (fd !== null) fs.closeSync(fd); }
+            write(label+'.command.json', {command, args, nativeExit:result.status, signal:result.signal,
+              error:result.error ? String(result.error) : null, stderr:result.stderr?.toString('utf8') ?? ''});
+            if (result.error) throw result.error;
+            assert.equal(result.signal, null, label);
+            assert.equal(result.status, 0, label);
+            return destination ? null : result.stdout.toString('utf8');
+          }
+          function api(label, uri) {
+            const value = JSON.parse(call(label, 'gh', ['api','repos/'+e.GITHUB_REPOSITORY+'/'+uri]));
+            if (label !== 'baseline-tree') write(label+'.json', value);
+            return value;
+          }
+          function filePin(file) {
+            const hash = createHash('sha256'), chunk = Buffer.alloc(1024*1024), fd = fs.openSync(file, 'r');
+            let bytes = 0;
+            try {
+              for (let n; (n = fs.readSync(fd, chunk, 0, chunk.length, null)) > 0;) {
+                bytes += n;
+                hash.update(chunk.subarray(0,n));
+              }
+            } finally { fs.closeSync(fd); }
+            return {bytes, sha256:hash.digest('hex')};
+          }
+          function safe(name) {
+            assert(typeof name === 'string' && name && !name.startsWith('/') && !name.includes('\\') &&
+              !name.includes('\0') && !/^[a-z]:/i.test(name) && !name.split('/').includes('..'), 'safe archive member');
+            return name.replace(/^\.\//, '').replace(/\/$/, '');
+          }
+          function extract(label, archive, destination, prefix = '') {
+            const names = call(label+'-list', 'tar', ['-tf', archive]).trimEnd().split('\n').map(safe);
+            assert.equal(new Set(names).size, names.length, 'Unique canonical archive members');
+            if (prefix) assert(names.every(name => name === prefix || name.startsWith(prefix+'/')));
+            const types = call(label+'-types', 'tar', ['-tvf', archive]).trimEnd().split('\n');
+            assert.equal(types.length, names.length);
+            assert(types.every(row => row.startsWith('-') || row.startsWith('d')), 'Ordinary files and directories only');
+            fs.mkdirSync(destination);
+            call(label+'-extract', 'tar', ['-xf', archive, ...(prefix ? ['--strip-components=1'] : []), '-C', destination]);
+          }
+          function inventory(root) {
+            const rows = [];
+            function walk(dir = '') {
+              for (const entry of fs.readdirSync(path.join(root,dir), {withFileTypes:true})) {
+                const file = path.posix.join(dir, entry.name);
+                if (entry.isDirectory()) walk(file);
+                else { assert(entry.isFile()); rows.push({file, ...filePin(path.join(root,file))}); }
+              }
+            }
+            walk();
+            return rows.sort((a,b) => a.file < b.file ? -1 : a.file > b.file ? 1 : 0);
+          }
+          function ledger(bytes, rows, prefix = '') {
+            const map = new Map();
+            for (const line of bytes.toString('utf8').trimEnd().split('\n')) {
+              const hit = /^([a-f0-9]{64})  (.+)$/.exec(line);
+              assert(hit, 'Exact ordinary checksum record');
+              const name = safe(hit[2]);
+              assert(name.startsWith(prefix));
+              const file = name.slice(prefix.length);
+              assert(file && !map.has(file), 'Unique ledger member');
+              map.set(file, hit[1]);
+            }
+            assert.equal(map.size, rows.length);
+            for (const row of rows) assert.equal(map.get(row.file), row.sha256, row.file);
+          }
+          for (const key of ['run','job','artifact','attempt','regularFiles']) assert(Number.isSafeInteger(pin[key]) && pin[key] > 0, key);
+          for (const key of ['qa','qaTree','workflowBlob','buildProduct']) assert.match(pin[key], /^[a-f0-9]{40}$/, key);
+          for (const key of ['distDigest','independentAdmissionSHA256']) assert.match(pin[key], /^[a-f0-9]{64}$/, key);
+          for (const key of ['zip','inner','qualification','sourceRole','dist','ledger']) {
+            assert(Number.isSafeInteger(pin[key]?.bytes) && pin[key].bytes > 0, key);
+            assert.match(pin[key].sha256, /^[a-f0-9]{64}$/, key);
+          }
+          const qualified = {commit:'25b263816ac416ef885df7e9f1ce2fd782927c44',tree:'5f6ef45062b696e0eea44006093f5824bd02ff7b'};
+          assert.equal(pin.buildProduct, qualified.commit);
+          assert.equal(pin.buildTree, qualified.tree);
+          const published = {commit:e.BASE_CORE,tree:e.BASE_TREE};
+          const docPins = JSON.parse(e.BASELINE_CLOSEOUT_DOCS);
+          const canonical = [
+            ['docs/EXPANSION-IMPLEMENTATION-LEDGER.md','b7b65a18e477c90307157717414786b2f7ce6f35'],
+            ['docs/PROJECT-STATE.md','50ace06c187f52bea60feae22c13be7a2985b7ad'],
+            ['docs/WORKBOARD.md','399e34c5566c12d7a6c2be4a32d8d52c2a28bba6'],
+          ];
+          assert(Array.isArray(docPins));
+          assert.deepEqual(docPins.map(({path,before})=>[path,before]),canonical,'Exact three canonical closeout paths and before blobs');
+          for (const pin of docPins) {
+            assert.deepEqual(Object.keys(pin).sort(), ['after','before','path']);
+            assert.match(pin.after,/^[a-f0-9]{40}$/);
+            assert.notEqual(pin.after,pin.before);
+          }
+          function treeRows(label,spec) {
+            const literal=call(label,'git',['ls-tree','-z',spec]), entries=literal.split('\0');
+            assert.equal(entries.pop(),'');
+            const rows=entries.map(line=>{
+              const hit=/^(040000|100644|100755|120000|160000) (tree|blob|commit) ([a-f0-9]{40})\t([^/\0]+)$/.exec(line);
+              assert(hit,'Exact direct Git tree row');
+              const [,mode,type,sha,name]=hit;
+              assert.equal(type,mode==='040000'?'tree':mode==='160000'?'commit':'blob');
+              return {mode,type,sha,name};
+            });
+            assert.equal(new Set(rows.map(row=>row.name)).size,rows.length);
+            return rows;
+          }
+          function treeID(rows) {
+            const body=Buffer.concat(rows.flatMap(({mode,name,sha})=>[
+              Buffer.from((mode==='040000'?'40000':mode)+' '+name+'\0'),Buffer.from(sha,'hex')
+            ]));
+            return createHash('sha1').update('tree '+body.length+'\0').update(body).digest('hex');
+          }
+          function replaceEntry(rows,name,mode,before,after,marker) {
+            const index=rows.findIndex(row=>row.name===name);
+            assert(index>=0&&rows[index].mode===mode&&rows[index].sha===before,marker);
+            return rows.map((row,i)=>i===index?{...row,sha:after}:row);
+          }
+          const actualRoot=treeRows('published-root-tree',published.commit);
+          const actualDocs=treeRows('published-docs-tree',published.commit+':docs');
+          const docsID=treeID(actualDocs);
+          assert.equal(treeID(actualRoot),published.tree,'Exact published root tree');
+          assert(actualRoot.some(row=>row.name==='docs'&&row.mode==='040000'&&row.sha===docsID),'Exact published docs tree');
+          const inverseDocs=docPins.reduce((rows,pin)=>replaceEntry(rows,pin.path.slice(5),'100644',pin.after,pin.before,'CM_ROSTER_EXACT_DOC_PIN'),actualDocs);
+          const inverseDocsID=treeID(inverseDocs);
+          const inverseRoot=replaceEntry(actualRoot,'docs','040000',docsID,inverseDocsID,'CM_ROSTER_EXACT_DOC_TREE');
+          function requireQualified(rows) {
+            assert.equal(treeID(rows),qualified.tree,'CM_ROSTER_EXACT_QUALIFIED_TREE');
+          }
+          requireQualified(inverseRoot);
+          const forwardDocs=docPins.reduce((rows,pin)=>replaceEntry(rows,pin.path.slice(5),'100644',pin.before,pin.after,'CM_ROSTER_EXACT_DOC_PIN'),inverseDocs);
+          assert.deepEqual(forwardDocs,actualDocs);
+          assert.deepEqual(replaceEntry(inverseRoot,'docs','040000',inverseDocsID,treeID(forwardDocs),'CM_ROSTER_EXACT_DOC_TREE'),actualRoot);
+          const guard= inverseRoot.find(row=>row.name==='package.json');
+          assert(guard&&guard.mode==='100644');
+          const faultSHA='0'.repeat(40);
+          assert.notEqual(faultSHA,guard.sha);
+          const fault=replaceEntry(inverseRoot,'package.json',guard.mode,guard.sha,faultSHA,'CM_ROSTER_COPIED_INPUT');
+          assert.throws(()=>requireQualified(fault),{name:'AssertionError',message:/^CM_ROSTER_EXACT_QUALIFIED_TREE/});
+          assert.deepEqual(replaceEntry(fault,'package.json',guard.mode,faultSHA,guard.sha,'CM_ROSTER_COPIED_INPUT'),inverseRoot);
+          const example=docPins[0];
+          assert.notEqual(faultSHA,example.after);
+          assert.throws(()=>replaceEntry(actualDocs,example.path.slice(5),'100644',faultSHA,example.before,'CM_ROSTER_EXACT_DOC_PIN'),
+            {name:'AssertionError',message:'CM_ROSTER_EXACT_DOC_PIN'});
+          write('baseline-closeout-source-equivalence.json',{
+            status:'EXACT_THREE_DOCS_WHOLE_TREE_INVERSE_PASSED',qualified,published,docs:docPins,
+            roots:{published:actualRoot,publishedDocs:actualDocs,qualified:inverseRoot,qualifiedDocs:inverseDocs},
+            controls:{nonDocBuildInputChangedAndRejected:true,nonDocWholeInverse:true,wrongAfterDocPinRejected:true},
+            wholeInverse:qualified.tree,wholeForward:published.tree,
+            scope:'Exactly three canonical documentation blobs changed. Every other tree entry and its entire subtree is held.'
+          });
+          assert.equal(pin.artifactName, 'sc-later-starts-qualification');
+          assert.equal(pin.entry, 'sc-later-starts-qualification.tar.gz');
+          assert.match(pin.workflowPath, /^\.github\/workflows\/[a-z0-9-]+\.yml$/);
+          assert(pin.branch.startsWith('codex/'));
+          const run = api('baseline-run','actions/runs/'+pin.run);
+          const job = api('baseline-job','actions/jobs/'+pin.job);
+          const artifact = api('baseline-artifact','actions/artifacts/'+pin.artifact);
+          assert.equal(run.status, 'completed');
+          assert.equal(run.conclusion, 'success');
+          assert.equal(run.event, 'push');
+          assert.equal(run.head_sha, pin.qa);
+          assert.equal(run.head_branch, pin.branch);
+          assert.equal(run.path, pin.workflowPath);
+          assert.equal(run.run_attempt, pin.attempt);
+          assert.equal(job.id, pin.job);
+          assert.equal(job.run_id, pin.run);
+          assert.equal(job.conclusion, 'success');
+          assert.equal(artifact.id, pin.artifact);
+          assert.equal(artifact.workflow_run.id, pin.run);
+          assert.equal(artifact.name, pin.artifactName);
+          assert.equal(artifact.size_in_bytes, pin.zip.bytes);
+          assert.equal(artifact.expired, false);
+          const commit = api('baseline-qa','git/commits/'+pin.qa);
+          assert.equal(commit.tree.sha, pin.qaTree);
+          assert.deepEqual(commit.parents.map(parent => parent.sha), [pin.buildProduct]);
+          const tree = api('baseline-tree','git/trees/'+pin.qaTree+'?recursive=1');
+          assert.equal(tree.truncated, false);
+          const wf = tree.tree.filter(row => row.path === pin.workflowPath);
+          assert.equal(wf.length, 1);
+          assert.equal(wf[0].sha, pin.workflowBlob);
+          assert.equal(wf[0].mode, '100644');
+          const zip = path.join(ref,'original.zip'), inner = path.join(ref,'evidence.tar.gz'), evidence = path.join(ref,'evidence');
+          call('baseline-original','gh',['api','repos/'+e.GITHUB_REPOSITORY+'/actions/artifacts/'+pin.artifact+'/zip'],zip);
+          assert.deepEqual(filePin(zip), pin.zip);
+          const entries = call('baseline-zip-list','unzip',['-Z1',zip]).trimEnd().split('\n');
+          entries.forEach(safe);
+          assert.deepEqual(entries.sort(), [pin.entry,pin.entry+'.sha256'].sort());
+          call('baseline-inner','unzip',['-p',zip,pin.entry],inner);
+          assert.deepEqual(filePin(inner), pin.inner);
+          assert.equal(call('baseline-inner-checksum','unzip',['-p',zip,pin.entry+'.sha256']).trim().split(/\s+/)[0],pin.inner.sha256);
+          extract('baseline-evidence',inner,evidence);
+          const rows = inventory(evidence);
+          assert.equal(rows.length, pin.regularFiles);
+          const read = file => fs.readFileSync(path.join(evidence,file));
+          ledger(read('manifest.sha256'), rows.filter(row => row.file !== 'manifest.sha256'));
+          for (const [key,file] of Object.entries({qualification:'qualification.json',sourceRole:'source-role.json',dist:'completed-dist.tar.gz',ledger:'dist-before.sha256'}))
+            assert.deepEqual(filePin(path.join(evidence,file)), pin[key], file);
+          const qualification = JSON.parse(read('qualification.json')), roles = JSON.parse(read('source-role.json'));
+          assert.equal(qualification.status, 'SC_LATER_STARTS_FOCUSED_MODEL_AND_BUILD_PASSED');
+          assert.deepEqual(qualification.product, qualified);
+          assert.equal(qualification.properTypes, true);
+          assert.equal(qualification.normalBuilds, 1);
+          assert.equal(qualification.readers.length, 20);
+          assert.equal(qualification.unchangedCaps, 16);
+          assert.equal(roles.qa.commit, pin.qa);
+          assert.equal(roles.qa.tree, pin.qaTree);
+          assert.equal(roles.product.commit, pin.buildProduct);
+          assert.equal(roles.product.tree, qualified.tree);
+          for (const name of ['types.exit','final-source-holds.exit','logs/build.exit','logs/build-tee.exit','logs/build-transport.exit'])
+            assert.equal(read(name).toString(), '0\n', name);
+          for (const stem of ['source','dist']) assert(read(stem+'-before.sha256').equals(read(stem+'-after.sha256')), stem);
+          const baseline = path.join(ref,'baseline-dist');
+          extract('baseline-completed-dist', path.join(evidence,'completed-dist.tar.gz'), baseline, 'dist');
+          const distBefore = inventory(baseline);
+          ledger(read('dist-before.sha256'), distBefore, 'dist/');
+          assert.equal(sha(JSON.stringify(distBefore)), pin.distDigest);
+          write('baseline-original-authenticated.json', {status:'EXACT_ADMITTED_BASELINE_DIST_AUTHENTICATED',pin,qualification,archiveFiles:rows.length});
+          write('baseline-dist-before.json', distBefore);
+          AUTH
+      - name: Install held app and required build tools
+        run: |
+          set -euo pipefail
+          test "$(bun --version)" = 1.4.4
+          bun --version > "$QA_OUT/logs/bun-version.log"
+          node --version > "$QA_OUT/logs/node-version.log"
+          bun install --frozen-lockfile > "$QA_OUT/logs/bun-install.log" 2>&1
+          node -p "JSON.stringify({router:require('react-router-dom/package.json').version,vite:require('vite/package.json').version,rollup:JSON.parse(require('fs').readFileSync('node_modules/rollup/package.json','utf8')).version})" > "$QA_OUT/logs/build-versions.json"
+          git diff --exit-code HEAD -- package.json package-lock.json bun.lock bun.lockb
+          npm install --prefix "$RUNNER_TEMP/cm-roster-tools" --package-lock=false --no-audit --no-fund playwright@1.64.0 > "$QA_OUT/logs/playwright-install.log" 2>&1
+          test ! -e node_modules/playwright
+          test ! -e node_modules/playwright-core
+          ln -s "$RUNNER_TEMP/cm-roster-tools/node_modules/playwright" node_modules/playwright
+          ln -s "$RUNNER_TEMP/cm-roster-tools/node_modules/playwright-core" node_modules/playwright-core
+          "$RUNNER_TEMP/cm-roster-tools/node_modules/.bin/playwright" install --with-deps chromium > "$QA_OUT/logs/chromium-install.log" 2>&1
+          python3 -m pip install --target "$RUNNER_TEMP/cm-roster-python" fonttools pillow > "$QA_OUT/logs/python-install.log" 2>&1
+          echo "PYTHONPATH=$RUNNER_TEMP/cm-roster-python" >> "$GITHUB_ENV"
+      - name: Proper application types
+        run: |
+          set -euo pipefail
+          export GIT_NO_LAZY_FETCH=1
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          : > "$QA_OUT/transport/types.log"
+          set +e
+          SIM_OFFLINE_RECEIPT="$QA_OUT/transport/types.log" node_modules/.bin/tsc --noEmit -p tsconfig.app.json > "$QA_OUT/logs/types.log" 2>&1
+          native_exit=$?
+          printf '%s\n' "$native_exit" > "$QA_OUT/types.exit" || exit 1
+          test "$native_exit" = 0 || exit "$native_exit"
+          test ! -s "$QA_OUT/transport/types.log" || exit 1
+          set -e
+          printf '%s\n' '{"command":"node_modules/.bin/tsc --noEmit -p tsconfig.app.json","exit":0}' > "$QA_OUT/types-passed.json"
+          test ! -s "$QA_OUT/transport/types.log"
+      - name: Normal build, all twenty output readers and unchanged caps
+        timeout-minutes: 25
+        run: |
+          set -euo pipefail
+          export GIT_NO_LAZY_FETCH=1
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          classify_receipt() {
+            local name="$1" receipt="$2"
+            local allowed='^\[SIM_OFFLINE_BLOCK\] external browser route continue https://fonts\.(googleapis|gstatic)\.com$'
+            if [[ "$name" == sweep-weight ]]; then
+              allowed="$allowed|^\[SIM_OFFLINE_BLOCK\] external browser route continue https://flagcdn\.com$"
+            elif [[ "$name" != build ]]; then
+              if [[ -s "$receipt" ]]; then cat "$receipt"; return 1; fi
+              return 0
+            fi
+            local status=0
+            grep -Ev "$allowed" "$receipt" || status=$?
+            if [[ "$status" == 1 ]]; then return 0; fi
+            return 1
+          }
+          run_gate() {
+            local name="$1"
+            shift
+            local receipt="$QA_OUT/transport/$name.log"
+            : > "$receipt"
+            set +e
+            SIM_OFFLINE_RECEIPT="$receipt" "$@" 2>&1 | tee "$QA_OUT/logs/$name.log"
+            local pipe_status=("${PIPESTATUS[@]}")
+            set -e
+            printf '%s\n' "${pipe_status[0]}" > "$QA_OUT/logs/$name.exit"
+            printf '%s\n' "${pipe_status[1]}" > "$QA_OUT/logs/$name-tee.exit"
+            test "${pipe_status[0]}" = 0 && test "${pipe_status[1]}" = 0 || return 1
+            local transport_exit=0
+            classify_receipt "$name" "$receipt" || transport_exit=$?
+            printf '%s\n' "$transport_exit" > "$QA_OUT/logs/$name-transport.exit"
+            if [[ "$transport_exit" != 0 ]]; then
+              echo "Unexpected blocked transport in $name" >&2
+              return 1
+            fi
+            # Every refusal is retained and counted, never credited as zero transport.
+            if [[ -s "$receipt" ]]; then
+              wc -l "$receipt" | tee "$QA_OUT/logs/$name-blocked-attempts.txt"
+            fi
+          }
+          run_gate build npm run build
+          printf '%s\n' '{"command":"npm run build","exit":0}' > "$QA_OUT/build-passed.json"
+          find dist -type f -print0 | sort -z | xargs -0 sha256sum > "$QA_OUT/dist-before.sha256"
+          tar -czf "$QA_OUT/completed-dist.tar.gz" dist
+          sha256sum "$QA_OUT/completed-dist.tar.gz" > "$QA_OUT/completed-dist.tar.gz.sha256"
+          tar -tzf "$QA_OUT/completed-dist.tar.gz" > "$QA_OUT/completed-dist-members.txt"
+          export BASE=http://127.0.0.1:4173
+          export SWEEP_BASE="$BASE"
+          export SWEEP_OFFLINE=1
+          export SIM_OFFLINE_RECEIPT="$QA_OUT/transport/server.log"
+          : > "$SIM_OFFLINE_RECEIPT"
+          node scripts/lib/hostLikeServer.mjs dist 4173 > "$QA_OUT/logs/server.log" 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid" 2>/dev/null || true' EXIT
+          ready=0
+          for attempt in $(seq 1 40); do
+            if curl --fail --silent "$BASE/" > /dev/null; then ready=1; break; fi
+            kill -0 "$server_pid"
+            sleep 1
+          done
+          test "$ready" = 1
+          run_gate sweep-weight node scripts/sweepWeight.mjs
+          readers=(
+            simAdsense simBrand simHeadTags simHiddenPages simHubs
+            simIndexNow simIndexing simInternalLinks simNoRivalNames simPrerender
+            simPrerenderBoot simRetiredRoutes simSchema simSitemap simSnapshotAssets
+            simSiteSearch simGuideHeadings simHarnessAnchors
+          )
+          for reader in "${readers[@]}"; do
+            run_gate "$reader" node "scripts/$reader.mjs"
+          done
+          run_gate simSeoTitles node scripts/simSeoTitles.mjs
+          run_gate simSeoMetaSplit env SEO_SPLIT_ONLY=/soccer-career,/club-manager,/nba-my-career node scripts/simSeoMetaSplit.mjs
+          test ! -s "$QA_OUT/transport/server.log"
+      - name: Run fresh native roster disclosure and controls
+        timeout-minutes: 10
+        run: |
+          set -euo pipefail
+          node --input-type=module <<'MANIFEST'
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import assert from 'node:assert/strict';
+          import {createHash} from 'node:crypto';
+          const e=process.env,out=e.QA_OUT,sha=b=>createHash('sha256').update(b).digest('hex');
+          const read=file=>JSON.parse(fs.readFileSync(out+'/'+file));
+          function inventory(root){
+            const rows=[];
+            function walk(rel=''){
+              for(const node of fs.readdirSync(path.join(root,rel),{withFileTypes:true})){
+                const file=path.posix.join(rel,node.name);
+                if(node.isDirectory())walk(file);
+                else{assert(node.isFile());const bytes=fs.readFileSync(path.join(root,file));rows.push({file,bytes:bytes.length,sha256:sha(bytes)});}
+              }
+            }
+            walk();
+            return rows.sort((a,b)=>a.file<b.file?-1:a.file>b.file?1:0);
+          }
+          const role=read('source-role.json'),baseline=read('input/baseline-dist-before.json');
+          const bridge=read('input/baseline-closeout-source-equivalence.json');
+          assert.equal(bridge.status,'EXACT_THREE_DOCS_WHOLE_TREE_INVERSE_PASSED');
+          assert.deepEqual(bridge.published,role.baseline);
+          assert.equal(bridge.wholeInverse,bridge.qualified.tree);
+          const candidate=inventory(path.resolve('dist'));
+          const data={
+            schema:'CM_HISTORICAL_ROSTER_INPUT_V1',
+            status:'EXACT_BASELINE_AND_CANDIDATE_COMPLETED_DIST_BOUND',
+            roles:{
+              baseline:{product:bridge.qualified,publishedBaseline:bridge.published,distPath:path.join(e.QA_REF,'baseline-dist'),distBefore:baseline,distDigest:sha(JSON.stringify(baseline))},
+              candidate:{product:{commit:role.product.commit,tree:role.product.tree},distPath:path.resolve('dist'),distBefore:candidate,distDigest:sha(JSON.stringify(candidate))},
+            }
+          };
+          assert.equal(data.roles.baseline.distDigest,JSON.parse(e.BASELINE_BUILD).distDigest);
+          fs.writeFileSync(out+'/browser-manifest.json',JSON.stringify(data,null,2)+'\n',{flag:'wx'});
+          MANIFEST
+          export GIT_NO_LAZY_FETCH=1
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          : > "$QA_OUT/transport/baseline-server.log"
+          : > "$QA_OUT/transport/candidate-server.log"
+          : > "$QA_OUT/transport/browser.log"
+          SIM_OFFLINE_RECEIPT="$QA_OUT/transport/baseline-server.log" node scripts/lib/hostLikeServer.mjs "$QA_REF/baseline-dist" 4173 > "$QA_OUT/logs/baseline-server.log" 2>&1 &
+          base_pid=$!
+          SIM_OFFLINE_RECEIPT="$QA_OUT/transport/candidate-server.log" node scripts/lib/hostLikeServer.mjs dist 4174 > "$QA_OUT/logs/candidate-server.log" 2>&1 &
+          candidate_pid=$!
+          trap 'kill "$base_pid" "$candidate_pid" 2>/dev/null || true' EXIT
+          for port in 4173 4174; do
+            ready=0
+            for attempt in $(seq 1 40); do
+              if curl --fail --silent "http://127.0.0.1:$port/club-manager" > /dev/null; then ready=1; break; fi
+              kill -0 "$base_pid" "$candidate_pid"
+              sleep 1
+            done
+            test "$ready" = 1
+          done
+          set +e
+          SIM_OFFLINE_RECEIPT="$QA_OUT/transport/browser.log" node --unhandled-rejections=strict scripts/qa/cmHistoricalRosterBrowser.mjs --manifest "$QA_OUT/browser-manifest.json" --out "$QA_OUT/browser" > "$QA_OUT/logs/browser.log" 2>&1
+          native_exit=$?
+          set -e
+          printf '%s\n' "$native_exit" > "$QA_OUT/logs/browser.exit"
+          cat "$QA_OUT/logs/browser.log"
+          test "$native_exit" = 0
+          for name in baseline-server candidate-server browser; do test ! -s "$QA_OUT/transport/$name.log"; done
+      - name: Always hold exact source, index, locks and admitted inputs
+        if: always() && env.QA_OUT != ''
+        run: |
+          set -euo pipefail
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$QA_OUT/source-after.sha256"
+          git ls-files --stage > "$QA_OUT/index-after.txt"
+          git status --porcelain=v1 --untracked-files=all > "$QA_OUT/status-after.txt"
+          sha256sum package.json package-lock.json bun.lock bun.lockb > "$QA_OUT/locks-after.sha256"
+          cmp "$QA_OUT/source-before.sha256" "$QA_OUT/source-after.sha256"
+          cmp "$QA_OUT/index-before.txt" "$QA_OUT/index-after.txt"
+          cmp "$QA_OUT/status-before.txt" "$QA_OUT/status-after.txt"
+          cmp "$QA_OUT/locks-before.sha256" "$QA_OUT/locks-after.sha256"
+          test ! -s "$QA_OUT/status-after.txt"
+          if [[ -f "$QA_OUT/dist-before.sha256" ]]; then
+            find dist -type f -print0 | sort -z | xargs -0 sha256sum > "$QA_OUT/dist-after.sha256"
+            cmp "$QA_OUT/dist-before.sha256" "$QA_OUT/dist-after.sha256"
+          fi
+          if [[ -f "$QA_OUT/input/baseline-original-authenticated.json" ]]; then
+            node --input-type=module <<'INPUTS'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          const e=process.env,out=e.QA_OUT,ref=e.QA_REF,pin=JSON.parse(e.BASELINE_BUILD);
+          fs.writeFileSync(out+'/input/baseline-hold-commands.txt',pin.zip.sha256+'  '+ref+'/original.zip\n'+pin.inner.sha256+'  '+ref+'/evidence.tar.gz\n',{flag:'wx'});
+          assert.equal(JSON.parse(fs.readFileSync(out+'/input/baseline-original-authenticated.json')).pin.zip.sha256,pin.zip.sha256);
+          INPUTS
+            sha256sum --check "$QA_OUT/input/baseline-hold-commands.txt" > "$QA_OUT/input/baseline-original-held.log"
+            (cd "$QA_REF/evidence"; find . -type f ! -path './manifest.sha256' -print0 | sort -z | xargs -0 sha256sum) > "$QA_OUT/input/baseline-evidence-after.sha256"
+            cmp "$QA_REF/evidence/manifest.sha256" "$QA_OUT/input/baseline-evidence-after.sha256"
+            (cd "$QA_REF"; find baseline-dist -type f -print0 | sort -z | xargs -0 sha256sum) > "$QA_OUT/input/baseline-dist-after.sha256"
+            sed 's#  dist/#  baseline-dist/#' "$QA_REF/evidence/dist-before.sha256" > "$QA_OUT/input/baseline-dist-held-reference.sha256"
+            cmp "$QA_OUT/input/baseline-dist-held-reference.sha256" "$QA_OUT/input/baseline-dist-after.sha256"
+          fi
+          printf '0\n' > "$QA_OUT/final-source-holds.exit"
+      - name: Close the exact source-only roster disclosure scope
+        run: |
+          set -euo pipefail
+          node --input-type=module <<'CLOSE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          import {createHash} from 'node:crypto';
+          const out=process.env.QA_OUT,read=file=>fs.readFileSync(out+'/'+file),sha=b=>createHash('sha256').update(b).digest('hex');
+          for(const file of ['types.exit','logs/browser.exit','final-source-holds.exit'])assert.equal(read(file).toString(),'0\n');
+          for(const name of ['types','baseline-server','candidate-server','browser'])assert.equal(read('transport/'+name+'.log').length,0);
+          const readers=['simAdsense','simBrand','simHeadTags','simHiddenPages','simHubs','simIndexNow','simIndexing','simInternalLinks','simNoRivalNames','simPrerender','simPrerenderBoot','simRetiredRoutes','simSchema','simSitemap','simSnapshotAssets','simSiteSearch','simGuideHeadings','simHarnessAnchors','simSeoTitles','simSeoMetaSplit'];
+          for(const name of ['build','sweep-weight',...readers])for(const suffix of ['.exit','-tee.exit','-transport.exit'])assert.equal(read('logs/'+name+suffix).toString(),'0\n');
+          const body=read('browser/report.json'),report=JSON.parse(body),manifest=read('browser-manifest.json');
+          assert.equal(report.status,'passed');assert.equal(report.authority.manifestSHA256,sha(manifest));
+          assert.deepEqual(report.contexts.map(row=>[row.role,row.case,row.width,row.status,row.protocolHeld]),[['baseline','historical',390,'passed',true],['candidate','historical',320,'passed',true],['candidate','current',320,'passed',true]]);
+          assert.equal(report.completeDistInputsHeld,true);assert.equal(report.screenshots.length,4);
+          const files=report.screenshots.map(row=>{
+            const body=read('browser/'+row.file);assert.equal(body.length,row.bytes);assert.equal(sha(body),row.sha256);return {file:row.file,bytes:row.bytes,sha256:row.sha256};
+          });
+          fs.writeFileSync(out+'/qualification.json',JSON.stringify({status:'CM_HISTORICAL_ROSTER_DISCLOSURE_QUALIFIED',scope:'Snapshot row count at selected historical club before job. CM-03 remains partial.',product:JSON.parse(read('source-role.json')).product,properTypes:true,normalBuilds:1,readers,unchangedCaps:16,contexts:3,screenshots:files,browserReport:{file:'browser/report.json',bytes:body.length,sha256:sha(body)},fullSuite:false,public:false},null,2)+'\n',{flag:'wx'});
+          CLOSE
+      - name: Retain bounded complete roster disclosure proof or fatal diagnostic
+        id: evidence
+        if: always() && env.QA_OUT != ''
+        shell: bash
+        run: |
+          set +e
+          set -uo pipefail
+          (cd "$QA_OUT"; find . -type f ! -path './manifest.sha256' -print0 | sort -z | xargs -0 sha256sum > manifest.sha256) || exit 1
+          archive="$RUNNER_TEMP/cm-historical-roster.tar.xz"
+          tar -I 'xz -9' -cf "$archive" -C "$QA_OUT" . > "$RUNNER_TEMP/cm-historical-roster-pack.log" 2>&1
+          pack_exit=$?
+          printf '%s\n' "$pack_exit" > "$QA_OUT/pack-native.exit" || exit 1
+          if [[ "$pack_exit" == 0 && -f "$archive" && "$(stat -c %s "$archive")" -le 50000000 ]]; then
+            sha256sum "$archive" > "$archive.sha256" || exit 1
+            printf 'archive=%s\n' "$archive" >> "$GITHUB_OUTPUT" || exit 1
+            exit 0
+          fi
+          printf '%s\n' 'DIAGNOSTIC_ONLY_NO_COMPLETE_NATIVE_OR_IMAGE_PROOF: full pack failed or exceeded50000000bytes' > "$QA_OUT/DIAGNOSTIC-ONLY.txt" || exit 1
+          cp "$RUNNER_TEMP/cm-historical-roster-pack.log" "$QA_OUT/pack.log" || exit 1
+          node --input-type=module <<'DIAGNOSTIC'
+          import fs from 'node:fs';import path from 'node:path';import crypto from 'node:crypto';
+          const root=process.env.QA_OUT,sha=b=>crypto.createHash('sha256').update(b).digest('hex'),rows=[];
+          function walk(rel=''){for(const entry of fs.readdirSync(path.join(root,rel),{withFileTypes:true})){const file=path.posix.join(rel,entry.name);if(entry.isDirectory())walk(file);else if(entry.isFile()){const bytes=fs.readFileSync(path.join(root,file));rows.push({file,bytes:bytes.length,sha256:sha(bytes)});}}}walk();
+          fs.writeFileSync(root+'/fatal-full-output-inventory.json',JSON.stringify({status:'DIAGNOSTIC_ONLY',completeNativeProof:false,fullArchive:fs.existsSync(path.join(process.env.RUNNER_TEMP,'cm-historical-roster.tar.xz'))?{bytes:fs.statSync(path.join(process.env.RUNNER_TEMP,'cm-historical-roster.tar.xz')).size,sha256:sha(fs.readFileSync(path.join(process.env.RUNNER_TEMP,'cm-historical-roster.tar.xz')))}:null,fullOutput:rows.sort((a,b)=>a.file<b.file?-1:a.file>b.file?1:0),omittedFromDiagnostic:['browser/frames','browser/bodies','ordinary and failure PNG files'],note:'Successful evidence is never truncated. This diagnostic has no runtime or image qualification.'},null,2)+'\n');
+          DIAGNOSTIC
+          test "$?" = 0 || exit 1
+          diagnostic="$RUNNER_TEMP/cm-historical-roster-diagnostic.tar.gz"
+          diagnostic_dir="$RUNNER_TEMP/cm-historical-roster-diagnostic"
+          mkdir -p "$diagnostic_dir/logs" "$diagnostic_dir/transport" "$diagnostic_dir/input" "$diagnostic_dir/browser" || exit 1
+          find "$QA_OUT" -maxdepth 1 -type f -exec cp '{}' "$diagnostic_dir/" \; || exit 1
+          cp -R "$QA_OUT/logs/." "$diagnostic_dir/logs/" || exit 1
+          cp -R "$QA_OUT/transport/." "$diagnostic_dir/transport/" || exit 1
+          cp -R "$QA_OUT/input/." "$diagnostic_dir/input/" || exit 1
+          if test -d "$QA_OUT/browser"; then find "$QA_OUT/browser" -maxdepth 1 -type f -name '*.json' -exec cp '{}' "$diagnostic_dir/browser/" \; || exit 1; fi
+          tar -czf "$diagnostic" -C "$diagnostic_dir" . || exit 1
+          test "$(stat -c %s "$diagnostic")" -le 50000000 || exit 1
+          sha256sum "$diagnostic" > "$diagnostic.sha256" || exit 1
+          printf 'archive=%s\n' "$diagnostic" >> "$GITHUB_OUTPUT" || exit 1
+          exit 1
+      - uses: actions/upload-artifact@v4
+        if: always() && steps.evidence.outputs.archive != ''
+        with:
+          name: cm-historical-roster
+          path: |
+            ${{ steps.evidence.outputs.archive }}
+            ${{ steps.evidence.outputs.archive }}.sha256
+          if-no-files-found: error
+          retention-days: 14
+          compression-level: 0
