@@ -18229,3 +18229,18 @@ Full 42352684859 passed 18 fresh tests, the complete unit output comparisons, 20
 Clean 42353922159 passed fresh App types, the product-name fence and a normal production build. All 4,661 product source paths, 11 root configurations and 850 built file tuples matched the qualified full tree exactly.
 
 The product draft is stacked on PR530. This round's QA workflow, browser helper and admission scripts are outside the product draft. Main was observed at 56d8708c7731600b1c0cb0daeef684b5940ca742. Newer-main integration, merge and publish remain held. The master stays read-only; this bounded fix does not complete a master card.
+
+
+## 2026-11-07 Sports Bingo solo pack clock
+
+Opening a new solo Sports Bingo pack now starts its own 15-second countdown. The Page restarts the existing interval when the pack index changes.
+
+Active preflight 42354812249 verified the App route, uncommented Soccer catalog entry and canonical indexable nonredirect snapshot before the regression or fix. Original 42356173110 reproduced both timing failures. A pack opened after 900 ms lost its first displayed second after another 100 ms and closed after 14.1 seconds. Fixed 42356583184 passed all eight cases. The next pack held for one full second before its first decrement and opened its successor at 15 seconds. Ordinary progression and Finish stayed byte identical, and all five pass-device cases passed.
+
+Physical controls 42356912987 reproduced both failures on the original Page and passed all eight cases on the fixed and restored Page. The complete role outputs and exact source restoration were verified.
+
+First full 42357333216 remains failed at the missing SEO baseline and an incorrect browser bootstrap expectation. Refreshed full 42358326196 passed eight fresh tests, the existing Sports Bingo sim, 20 built readers, 16 original rounded download limits and a normal 850-file production build. Three Chromium viewports used a controlled clock to verify the manual and automatic pack boundaries with a fictional intercepted player pool. Six viewport screenshots were reviewed.
+
+Clean 42359167917 passed fresh App types, the product-name fence and the normal production build. All 4,662 product source paths, 11 root configurations and 850 built file tuples matched the qualified full tree.
+
+The product draft is stacked on PR534. Main was observed at 56d8708c7731600b1c0cb0daeef684b5940ca742. The merge and publish holds continue. This bounded fix does not close a master card.
