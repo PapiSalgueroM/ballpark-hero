@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useMemo } from 'react';
+import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { Loader2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { GameShell } from '@/components/game/GameShell';
@@ -67,6 +67,7 @@ const RarityRound = () => {
   // most said answers, real crowd data), and end the run with your rank
   // among everyone who played today.
   const [crowdPicks, setCrowdPicks] = useState<{ answer: string; n: number }[] | null>(null);
+  const crowdRevealRef = useRef<symbol | null>(null);
   const [todayStanding, setTodayStanding] = useState<{ rank: number; total: number } | null>(null);
 
   const currentCategory = rounds[roundIndex];
@@ -76,6 +77,7 @@ const RarityRound = () => {
   // return). The loading/error UI is decided entirely in the JSX below.
 
   const startRun = useCallback((nextPlayMode: PlayMode, nextRarityMode: RarityMode) => {
+    crowdRevealRef.current = null;
     setPlayMode(nextPlayMode);
     setRarityMode(nextRarityMode);
     const categories = nextPlayMode === 'daily' ? pickDailyCategories(CATEGORIES) : pickRandomCategories(CATEGORIES);
@@ -171,6 +173,8 @@ const RarityRound = () => {
 
     // Log the pick (fire and forget) then pull the crowd's most-said answers
     // for this category so the reveal can show them.
+    const crowdReveal = Symbol();
+    crowdRevealRef.current = crowdReveal;
     setCrowdPicks(null);
     try {
       (supabase.from as any)('rarity_round_guesses')
@@ -182,7 +186,7 @@ const RarityRound = () => {
             .order('created_at', { ascending: false })
             .limit(400)
             .then(({ data }: { data: { answer: string }[] | null }) => {
-              if (!data || data.length === 0) return;
+              if (crowdRevealRef.current !== crowdReveal || !data || data.length === 0) return;
               /* ROUND 361: only count answers that are really in this
                  category's pool. rarity_round_guesses takes anonymous inserts
                  and answer is free text, and this panel is headed "What
@@ -215,6 +219,7 @@ const RarityRound = () => {
   };
 
   const nextRound = () => {
+    crowdRevealRef.current = null;
     const nextIndex = roundIndex + 1;
     if (nextIndex >= rounds.length) {
       setPhase('done');

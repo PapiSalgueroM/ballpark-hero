@@ -1,0 +1,342 @@
+name: Rarity Round crowd panel ownership clean source and build join
+on:
+  push:
+    branches: [codex/rarity-round-crowd-ownership-clean-join-qa-20261107]
+permissions:
+  contents: read
+  actions: read
+jobs:
+  closeout:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        shell: bash
+    env:
+      SIM_NETWORK: offline
+      SIM_OFFLINE_RECEIPT: rarity-round-crowd-ownership-clean-join/offline.log
+      RARITY_ROUND_REFERENCE_ARTIFACT: '13572413954'
+      RARITY_ROUND_REFERENCE_RUN: '42368926851'
+      RARITY_ROUND_REFERENCE_ZIP: '78c6198f00d1700fdb22c6938832d196aed3ca2ba577bfb50587cebaf4860115'
+      RARITY_ROUND_REFERENCE_TAR: '4dafc421fde5641f2a8bf0c7d35ce029885122c5a2952911ea8426a2aee0b6b4'
+      RARITY_ROUND_REFERENCE_HEAD: '0e987fc976b12c115efff899fc8f511c8fa1ac05'
+      RARITY_ROUND_REFERENCE_TREE: 'd8099df2da4b36f0cfd281e06c0373f4923389d9'
+      RARITY_ROUND_REFERENCE_ZIP_BYTES: '26527165'
+      RARITY_ROUND_NATIVE_HELPER: '22560d69503a8ac69c8b220bfb9a0b27651996bb'
+      RARITY_ROUND_NATIVE_OUTER: 'a16d22a72af0b6664e9b047d5e329e18b6abf00a'
+      RARITY_ROUND_FIXED_PAGE_BLOB: '7c38b10a808cdf083bf5d1ed2f9d15b0a3cae93a'
+      RARITY_ROUND_QUALIFIED_PLAN_BLOB: '285c47d684e01e66182e48b5b869612d65c12af6'
+      RARITY_ROUND_QUALIFIED_TEST_BLOB: '5d983f1d199893480d47235321e31dd85a913ac4'
+      RARITY_ROUND_REFERENCE_DIST_MANIFEST: 'ca8ccbff3b559da17268c045ab738c943a702c19e02f6992d29e3e40c89fdef4'
+      RARITY_ROUND_REFERENCE_WORKFLOW: 'bcfd58a4258577406b23c7ab141286434817f227'
+      RARITY_ROUND_CLEAN_PRODUCT_BASE: 'b74ad1c3f44582c04d64ffe34f10541185423475'
+      RARITY_ROUND_CLEAN_PRODUCT_BASE_TREE: '53b589dd3a5acbb963ff9c593ccd12257b2388b4'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 3
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24.22.1
+          cache: npm
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.4.4
+      - name: Locked dependencies and clean source receipts
+        run: |
+          set -euo pipefail
+          if grep -Eq '__[A-Z][A-Z0-9_]*__' .github/workflows/rarity-round-crowd-ownership-20261107.yml; then echo 'Unresolved clean qualification template binding'; exit 1; fi
+          [[ "$RARITY_ROUND_REFERENCE_ARTIFACT" =~ ^[1-9][0-9]*$ ]]
+          [[ "$RARITY_ROUND_REFERENCE_RUN" =~ ^[1-9][0-9]*$ ]]
+          [[ "$RARITY_ROUND_REFERENCE_ZIP" =~ ^[a-f0-9]{64}$ ]]
+          [[ "$RARITY_ROUND_REFERENCE_TAR" =~ ^[a-f0-9]{64}$ ]]
+          [[ "$RARITY_ROUND_REFERENCE_ZIP_BYTES" =~ ^[1-9][0-9]*$ ]]
+          [[ "$RARITY_ROUND_REFERENCE_DIST_MANIFEST" =~ ^[a-f0-9]{64}$ ]]
+          for value in "$RARITY_ROUND_REFERENCE_HEAD" "$RARITY_ROUND_REFERENCE_TREE" "$RARITY_ROUND_NATIVE_HELPER" "$RARITY_ROUND_NATIVE_OUTER" "$RARITY_ROUND_REFERENCE_WORKFLOW" "$RARITY_ROUND_FIXED_PAGE_BLOB" "$RARITY_ROUND_QUALIFIED_PLAN_BLOB" "$RARITY_ROUND_QUALIFIED_TEST_BLOB"; do [[ "$value" =~ ^[a-f0-9]{40}$ ]]; done
+          test ! -e rarity-round-crowd-ownership-clean-join
+          mkdir rarity-round-crowd-ownership-clean-join
+          touch rarity-round-crowd-ownership-clean-join/offline.log
+          git rev-parse HEAD > rarity-round-crowd-ownership-clean-join/head.txt
+          git rev-parse 'HEAD^{tree}' > rarity-round-crowd-ownership-clean-join/tree.txt
+          git ls-files -s > rarity-round-crowd-ownership-clean-join/source-before.txt
+          sha256sum package.json package-lock.json > rarity-round-crowd-ownership-clean-join/locks-before.txt
+          npm ci
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const lock=JSON.parse(fs.readFileSync('package-lock.json'));
+          const rows=Object.keys(lock.packages).filter(p=>p.startsWith('node_modules/')&&fs.existsSync(p+'/package.json')).map(p=>[p,JSON.parse(fs.readFileSync(p+'/package.json')).version]);
+          assert.equal(rows.length,521);for(const[p,v]of rows)assert.equal(v,lock.packages[p].version,p);fs.writeFileSync('rarity-round-crowd-ownership-clean-join/installed-before.json',JSON.stringify(rows));
+          NODE
+      - name: Proper app types
+        run: |
+          set -euo pipefail
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee rarity-round-crowd-ownership-clean-join/types.log
+      - name: Authenticate the completed full reference before extraction
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          gh api "repos/PapiSalgueroM/ballpark-hero/actions/runs/$RARITY_ROUND_REFERENCE_RUN" > rarity-round-crowd-ownership-clean-join/reference-run.json
+          gh api "repos/PapiSalgueroM/ballpark-hero/actions/artifacts/$RARITY_ROUND_REFERENCE_ARTIFACT" > rarity-round-crowd-ownership-clean-join/reference-artifact.json
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          const env = process.env;
+          const read = file => JSON.parse(fs.readFileSync('rarity-round-crowd-ownership-clean-join/' + file));
+          const run = read('reference-run.json'), artifact = read('reference-artifact.json');
+          assert.deepEqual(
+            [run.id, run.status, run.conclusion, run.event, run.path, run.repository.full_name, run.head_sha, run.head_commit.tree_id],
+            [Number(env.RARITY_ROUND_REFERENCE_RUN), 'completed', 'success', 'push', '.github/workflows/rarity-round-crowd-ownership-20261107.yml', 'PapiSalgueroM/ballpark-hero', env.RARITY_ROUND_REFERENCE_HEAD, env.RARITY_ROUND_REFERENCE_TREE],
+          );
+          assert.deepEqual(
+            [artifact.id, artifact.name, artifact.expired, artifact.size_in_bytes, artifact.digest, artifact.workflow_run.id, artifact.workflow_run.head_sha],
+            [Number(env.RARITY_ROUND_REFERENCE_ARTIFACT), 'rarity-round-crowd-ownership-full-' + run.id, false, Number(env.RARITY_ROUND_REFERENCE_ZIP_BYTES), 'sha256:' + env.RARITY_ROUND_REFERENCE_ZIP, run.id, run.head_sha],
+          );
+          NODE
+          gh api "repos/PapiSalgueroM/ballpark-hero/actions/artifacts/$RARITY_ROUND_REFERENCE_ARTIFACT/zip" > "$RUNNER_TEMP/rarity-round-crowd-ownership-full-reference.zip"
+          test "$(wc -c < "$RUNNER_TEMP/rarity-round-crowd-ownership-full-reference.zip")" -eq "$RARITY_ROUND_REFERENCE_ZIP_BYTES"
+          echo "$RARITY_ROUND_REFERENCE_ZIP  $RUNNER_TEMP/rarity-round-crowd-ownership-full-reference.zip" | sha256sum --check
+          unzip -Z1 "$RUNNER_TEMP/rarity-round-crowd-ownership-full-reference.zip" > rarity-round-crowd-ownership-clean-join/reference-zip-entries.txt
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          const names = fs.readFileSync('rarity-round-crowd-ownership-clean-join/reference-zip-entries.txt', 'utf8').trimEnd().split('\n');
+          assert.equal(new Set(names).size, names.length, 'Unique admitted ZIP paths');
+          for (const name of names) {
+            assert(name.length && !name.includes('\\') && !name.startsWith('/'), 'Relative ZIP path');
+            assert(name.replace(/\/$/, '').split('/').every(part => part && part !== '.' && part !== '..'), 'Safe ZIP path');
+          }
+          for (const file of ['head.txt', 'tree.txt', 'admission.json', 'unit-admission.json', 'native-admission.json', 'final-holds.json', 'source-before.txt', 'source-after.txt', 'dist-before.json', 'dist-after.json', 'dist.tgz']) {
+            assert(names.includes(file), file + ' required authenticated body');
+          }
+          NODE
+          mkdir "$RUNNER_TEMP/rarity-round-crowd-ownership-full-reference" "$RUNNER_TEMP/rarity-round-crowd-ownership-full-reference-dist"
+          unzip -q "$RUNNER_TEMP/rarity-round-crowd-ownership-full-reference.zip" -d "$RUNNER_TEMP/rarity-round-crowd-ownership-full-reference"
+          test -z "$(find "$RUNNER_TEMP/rarity-round-crowd-ownership-full-reference" -type l -print -quit)"
+          echo "$RARITY_ROUND_REFERENCE_TAR  $RUNNER_TEMP/rarity-round-crowd-ownership-full-reference/dist.tgz" | sha256sum --check
+          tar -tzf "$RUNNER_TEMP/rarity-round-crowd-ownership-full-reference/dist.tgz" > rarity-round-crowd-ownership-clean-join/reference-tar-entries.txt
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          const names = fs.readFileSync('rarity-round-crowd-ownership-clean-join/reference-tar-entries.txt', 'utf8').trimEnd().split('\n');
+          assert.equal(new Set(names).size, names.length, 'Unique admitted dist tar paths');
+          for (const name of names) {
+            assert(name.startsWith('dist/') && !name.includes('\\'), 'Tar stays under dist');
+            assert(name.replace(/\/$/, '').split('/').every(part => part && part !== '.' && part !== '..'), 'Safe tar path');
+          }
+          NODE
+          tar -xzf "$RUNNER_TEMP/rarity-round-crowd-ownership-full-reference/dist.tgz" -C "$RUNNER_TEMP/rarity-round-crowd-ownership-full-reference-dist"
+          cp "$RUNNER_TEMP/rarity-round-crowd-ownership-full-reference/source-before.txt" rarity-round-crowd-ownership-clean-join/reference-source.txt
+      - name: Fresh unchanged product-name fence on clean source
+        run: |
+          set -euo pipefail
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simNoRivalNames.mjs 2>&1 | tee rarity-round-crowd-ownership-clean-join/no-rival.log
+      - name: Clean production build
+        run: |
+          set -euo pipefail
+          NODE_OPTIONS="--max-old-space-size=6144" npm run build 2>&1 | tee rarity-round-crowd-ownership-clean-join/build.log
+      - name: Join exact clean product source and all 850 built files
+        id: join
+        env:
+          RARITY_ROUND_REFERENCE_DIR: ${{ runner.temp }}/rarity-round-crowd-ownership-full-reference
+          RARITY_ROUND_REFERENCE_DIST: ${{ runner.temp }}/rarity-round-crowd-ownership-full-reference-dist/dist
+        run: |
+          set -euo pipefail
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import assert from 'node:assert/strict';
+          import {createHash} from 'node:crypto';
+          import {execFileSync} from 'node:child_process';
+          const env = process.env;
+          const out = 'rarity-round-crowd-ownership-clean-join';
+          const ref = env.RARITY_ROUND_REFERENCE_DIR;
+          const read = file => JSON.parse(fs.readFileSync(path.join(ref, file)));
+          const bytes = file => fs.readFileSync(path.join(ref, file));
+          const readOutput = file => JSON.parse(fs.readFileSync(path.join(out, file)));
+          const sha = bytes => createHash('sha256').update(bytes).digest('hex');
+          const blob = bytes => createHash('sha1').update('blob ' + bytes.length + '\0').update(bytes).digest('hex');
+          const git = (...args) => execFileSync('git', args, {encoding:'utf8', maxBuffer:16 * 1024 * 1024});
+          const workflow = '.github/workflows/rarity-round-crowd-ownership-20261107.yml';
+          const helper = 'scripts/qa/playRarityRoundCrowdOwnership.mjs';
+          const page = 'src/pages/RarityRound.tsx';
+          const test = 'src/test/rarityRoundCrowdOwnership.test.tsx';
+          const plan = 'docs/plans/2026-11-07-rarity-round-crowd-ownership.md';
+          const configs = ['index.html','package.json','package-lock.json','vite.config.ts','tailwind.config.ts','postcss.config.js','tsconfig.json','tsconfig.app.json','tsconfig.node.json','bun.lockb','bun.lock'];
+          const sourceScope = file => /^(?:src|public|scripts)\//.test(file);
+          const fullOnly = new Set([workflow, helper]);
+          const denied = ['scripts/qa/checkRarityRoundCrowdOwnership.mjs','scripts/qa/admitRarityRoundCrowdOwnership.mjs'];
+          const pins = {
+            [page]: env.RARITY_ROUND_FIXED_PAGE_BLOB,
+            [test]: env.RARITY_ROUND_QUALIFIED_TEST_BLOB,
+            [plan]: env.RARITY_ROUND_QUALIFIED_PLAN_BLOB,
+            'src/App.tsx': '8bfedf7aaa1d076e0f0c8e2216c7e46632cd8a33',
+            'src/data/gameRegistry.ts': 'f560b40a74d1468ac72dfde4ee6fec6635a9a255',
+            'public/rarity-round/index.html': '26482f1a578d7fa972f9efa54bc69212332e8c22',
+            'src/lib/rarityRound.ts': 'ef8ed3977ede009210a10ce747dcca8e6d2b080f',
+            'src/components/game/PlayerAutocomplete.tsx': 'a0bd500b63306c75e0dea251cb6fb67ea2ed9452',
+            'src/lib/playerSearch.ts': '0d19f2c23735eb30512dc7fc3a447eacef5e128f',
+            'src/lib/fetchAllRows.ts': '16a6d21750405e7a647576ff513ed8ee11d5ba6b',
+            'src/lib/completions.ts': '61daf9b6c528f884551cd1d42f71357681c8728a',
+            'scripts/lib/offlineTransport.cjs': '0fda542a2649fe5da937c6976fd0f5b6073e74b6',
+            'src/data/seoMeta.ts': 'cf7a5142e59b97048d27b5ece9a6588a92073728',
+          };
+          const indexRows = (body, separator = '\n') => {
+            const rows = body.split(separator).filter(Boolean).map(line => {
+              const matched = /^(100(?:644|755)) ([0-9a-f]{40}) 0\t(.+)$/.exec(line);
+              assert(matched, 'Actual regular path/mode/blob index tuple');
+              return [matched[3], {mode:matched[1], blob:matched[2]}];
+            });
+            assert.equal(new Set(rows.map(([file]) => file)).size, rows.length, 'Unique index paths');
+            return new Map(rows);
+          };
+          const treeRows = commit => {
+            const rows = git('ls-tree', '-r', '-z', commit).split('\0').filter(Boolean).map(line => {
+              const matched = /^(100(?:644|755)) blob ([0-9a-f]{40})\t(.+)$/.exec(line);
+              assert(matched, 'Actual regular path/mode/blob tree tuple');
+              return [matched[3], {mode:matched[1], blob:matched[2]}];
+            });
+            assert.equal(new Set(rows.map(([file]) => file)).size, rows.length, 'Unique tree paths');
+            return new Map(rows);
+          };
+          const ordered = rows => [...rows].sort(([left],[right]) => left.localeCompare(right));
+          const cleanHead = git('rev-parse', 'HEAD').trim(), cleanTree = git('rev-parse', 'HEAD^{tree}').trim();
+          assert.deepEqual(git('rev-list', '--parents', '-n', '1', 'HEAD').trim().split(' '), [cleanHead, env.RARITY_ROUND_CLEAN_PRODUCT_BASE], 'Clean QA is the direct PR536 child');
+          assert.equal(git('rev-parse', env.RARITY_ROUND_CLEAN_PRODUCT_BASE + '^{tree}').trim(), env.RARITY_ROUND_CLEAN_PRODUCT_BASE_TREE);
+          assert.equal(fs.readFileSync(out + '/head.txt','utf8').trim(), cleanHead);
+          assert.equal(fs.readFileSync(out + '/tree.txt','utf8').trim(), cleanTree);
+          const base = treeRows(env.RARITY_ROUND_CLEAN_PRODUCT_BASE);
+          const current = indexRows(fs.readFileSync(out + '/source-before.txt', 'utf8'));
+          const old = indexRows(fs.readFileSync(out + '/reference-source.txt', 'utf8'));
+          assert.deepEqual(ordered(indexRows(git('ls-files','--stage','-z'),'\0')), ordered(current));
+          assert.deepEqual(ordered(treeRows(cleanHead)), ordered(current), 'Clean index joins exact committed tree tuples');
+          assert.deepEqual([base.size,current.size,old.size],[5789,5792,5793]);
+          const allowedClean = [page, test, plan, workflow];
+          const cleanDelta = [...new Set([...base.keys(), ...current.keys()])].filter(file => {
+            const before = base.get(file), after = current.get(file);
+            return before?.mode !== after?.mode || before?.blob !== after?.blob;
+          }).sort();
+          assert.deepEqual(cleanDelta, [...allowedClean].sort(), 'Exactly one product Page change and three owned new leaves');
+          assert.equal(base.get(page)?.blob, '4a7bd374dfd888a13e5067340b58483a255dde5b');
+          assert.equal(current.get(page)?.mode, base.get(page)?.mode);
+          for (const file of [test, plan, workflow]) assert(!base.has(file) && current.get(file)?.mode === '100644', file + ' exact owned new leaf');
+          assert(!current.has(helper), 'Tracked full browser helper is excluded from clean QA');
+          assert.equal(old.get(helper)?.blob, env.RARITY_ROUND_NATIVE_HELPER);
+          assert.equal(old.get(workflow)?.blob, env.RARITY_ROUND_REFERENCE_WORKFLOW);
+          assert(current.get(workflow)?.blob && current.get(workflow).blob !== old.get(workflow).blob, 'Clean QA uses its own workflow body');
+          for (const file of denied) assert(!old.has(file) && !current.has(file), file + ' untracked QA source');
+          for (const [file,want] of Object.entries(pins)) {
+            assert.equal(current.get(file)?.blob, want, file + ' exact clean pin');
+            assert.equal(old.get(file)?.blob, want, file + ' exact full pin');
+          }
+          const product = (rows, omit) => ordered([...rows].filter(([file]) => !omit.has(file)));
+          assert.deepEqual(product(current,new Set([workflow])), product(old,fullOnly), 'All 5791 product path/mode/blob tuples are identical');
+          assert.deepEqual([base,current,old].map(rows => [...rows.keys()].filter(sourceScope).length), [4663,4664,4665]);
+          const scoped = (rows, omit) => ordered([...rows].filter(([file]) => (sourceScope(file) || configs.includes(file)) && !omit.has(file)));
+          const sourceConfigRows = scoped(current,new Set());
+          assert.equal(sourceConfigRows.length, 4675);
+          assert.deepEqual(sourceConfigRows,scoped(old,fullOnly),'Every 4664 code and 11 root configuration path/mode/blob tuple');
+          for (const file of configs) assert(current.has(file) && old.has(file),file + ' required root configuration');
+          for (const [file,tuple] of current) {
+            const stat = fs.lstatSync(file);
+            assert(stat.isFile(),file + ' physical regular source body');
+            assert.equal((stat.mode & 0o111) !== 0, tuple.mode === '100755',file + ' physical source executable mode');
+            assert.equal(blob(fs.readFileSync(file)),tuple.blob,file + ' physical source bytes join tree');
+          }
+
+          const inventory = (directory,prefix = '') => fs.readdirSync(directory,{withFileTypes:true}).sort((a,b) => a.name.localeCompare(b.name)).flatMap(entry => {
+            const file = path.join(directory,entry.name);
+            const relative = prefix + entry.name;
+            if (entry.isDirectory()) return inventory(file,relative + '/');
+            assert(entry.isFile(),relative + ' regular dist file');
+            const body = fs.readFileSync(file);
+            return [{path:relative,bytes:body.length,sha256:sha(body)}];
+          });
+          const actual = inventory('dist'), reference = inventory(env.RARITY_ROUND_REFERENCE_DIST);
+          assert.deepEqual([actual.length,reference.length],[850,850]);
+          assert.deepEqual(actual,reference,'Every clean built path and byte equals the qualified full build');
+          const distManifestSHA256 = sha(JSON.stringify(reference));
+          assert.equal(distManifestSHA256,env.RARITY_ROUND_REFERENCE_DIST_MANIFEST);
+          const retainedManifest = read('dist-before.json').map(row => {
+            assert.deepEqual(Object.keys(row).sort(),['bytes','file','sha256']);
+            assert(row.file.startsWith('dist/'));
+            return {path:row.file.slice(5),bytes:row.bytes,sha256:row.sha256};
+          });
+          assert.deepEqual(retainedManifest,reference,'Exact full retained build inventory and tar join');
+          assert(bytes('dist-before.json').equals(bytes('dist-after.json')));
+          assert(bytes('source-before.txt').equals(bytes('source-after.txt')));
+          assert(bytes('source-before.txt').equals(fs.readFileSync(out + '/reference-source.txt')));
+          const referenceHead = bytes('head.txt').toString('utf8').trim(), referenceTree = bytes('tree.txt').toString('utf8').trim();
+          const run = readOutput('reference-run.json'), meta = readOutput('reference-artifact.json');
+          assert.deepEqual([referenceHead,referenceTree],[env.RARITY_ROUND_REFERENCE_HEAD,env.RARITY_ROUND_REFERENCE_TREE]);
+          const full = read('admission.json'), native = read('native-admission.json'), unit = read('unit-admission.json'), holds = read('final-holds.json');
+          assert.deepEqual([full.status,full.qualification,full.head,full.tree,full.page,full.test,full.plan,full.helper,full.nativeOuter], [
+            'passed','fresh-rarity-round-crowd-ownership-full-scope',referenceHead,referenceTree,env.RARITY_ROUND_FIXED_PAGE_BLOB,env.RARITY_ROUND_QUALIFIED_TEST_BLOB,env.RARITY_ROUND_QUALIFIED_PLAN_BLOB,env.RARITY_ROUND_NATIVE_HELPER,env.RARITY_ROUND_NATIVE_OUTER,
+          ]);
+          assert.deepEqual([full.trackedBodies,full.sourceRows,full.cleanSourceRows,full.rootConfigurations,full.distFiles,full.immutableCaps,full.readers],[5793,4665,4664,11,850,16,20]);
+          assert.deepEqual(full.unit,unit);
+          assert.deepEqual([full.unitCommands,unit.commands,unit.status,unit.actualPasses,unit.actualFailures,unit.wholeQualifiedFixedRAWBytesHeld,full.controlsRerun],[1,1,'passed',unit.actualCases,0,true,false]);
+          assert.equal(unit.actualCases,2,'Two actual fresh fixed cases from the admitted full reference');
+          assert.deepEqual([full.raw.status,full.raw.raw,full.raw.freshUnitRAWByteEqual,full.distTupleSHA256],['passed',unit.raw,true,distManifestSHA256]);
+          assert.deepEqual(full.nativeReceipt,native);
+          assert.deepEqual([native.status,native.route,native.page,native.helper],['passed','/rarity-round',env.RARITY_ROUND_FIXED_PAGE_BLOB,env.RARITY_ROUND_NATIVE_HELPER]);
+          assert.deepEqual([holds.status,holds.trackedBodies,holds.scopedSourceRows,holds.cleanSourceRows,holds.rootConfigurations,holds.installedLockedVersions,holds.indexUnchanged,holds.sourceBytesUnchanged,holds.locksUnchanged,holds.distHeld,holds.retainedPacketsHeld,holds.offlineBytes],
+            ['passed',5793,4665,4664,11,521,true,true,true,true,true,0]);
+          assert.deepEqual(full.distTar,{file:'dist.tgz',bytes:bytes('dist.tgz').length,sha256:env.RARITY_ROUND_REFERENCE_TAR});
+          assert.equal(sha(bytes('dist.tgz')),env.RARITY_ROUND_REFERENCE_TAR);
+          assert.equal(blob(bytes('native-admission-script.mjs')),env.RARITY_ROUND_NATIVE_OUTER);
+          const exactEvidence = [{"file":"admission.json","bytes":18725,"sha256":"b0df1ade58bc52440c88ed334ae545c2e34cc623111b7c17e11f79d70e018275"},{"file":"unit-admission.json","bytes":537,"sha256":"2ac3f7e97714e9ff07814551a2effa7341eaf44f29b01893ffba0c0d2b9608db"},{"file":"native-admission.json","bytes":6544,"sha256":"1bfbdb1962e4cc1f9ed1cdec4fe01cf23182dad1e8300f326116acb261317cdb"},{"file":"fixed-raw-join.json","bytes":331,"sha256":"73ce1264d6f8e15368601e2718449be8bcc38839c8e136b9d566cfcb97477ac9"},{"file":"packet-custody.json","bytes":3415,"sha256":"93b0a67aa2174754b17ece40279c0db1b092cbeb8734f351d5c9d69dbc2fa946"},{"file":"final-holds.json","bytes":378,"sha256":"0d988f622acf7a031f2b589797062484b865ca8f2de28c69636a05667eeb0f62"},{"file":"source-join.json","bytes":3712,"sha256":"b0dc89e5a350d970a7c4396fb257bc195eff8915059fb804c6982dbe1e001059"},{"file":"active-route-preflight.json","bytes":1312,"sha256":"a842d22fa9600ec1426dc39522d7ddcd2fdc54d12f067c73df3d074f960be84f"},{"file":"active-snapshot.html","bytes":21742,"sha256":"d7f1f1d1539cf96926029469f3ef60f7d8c1b182f687aac46ffee3f3cadbb966"},{"file":"public-cases.raw.json","bytes":186786,"sha256":"abc9f818b64a8305ae116f1f39650f12f4531aa65c4ac44ab8fa59d97c18df96"},{"file":"browser/body-manifest.json","bytes":21355,"sha256":"19aa9215de73651f5352f58ddf4a10d75efbcbce2cfbe46eaad20b519ca91143"},{"file":"browser/1280-b-after-first.png","bytes":82189,"sha256":"12001e0408522e9dd8f4ac071f9133c5586ea4840d83d19021cda002d18684c0"},{"file":"browser/1280-b-after-second.png","bytes":85151,"sha256":"5a9847aefbdcf2ffa38459d7d12f4e905789c47c2048e48a74688abf99ea0cf2"},{"file":"browser/1280-b-both-held.png","bytes":82189,"sha256":"12001e0408522e9dd8f4ac071f9133c5586ea4840d83d19021cda002d18684c0"},{"file":"browser/320-b-after-first.png","bytes":28984,"sha256":"e7132fd6d42d553b39d636a6d280a06f1c3aa10c78a68d3b547a3ec8543f3564"},{"file":"browser/320-b-after-second.png","bytes":31718,"sha256":"cbb1973be652d44593716171cb3faa411ba5ba68f5a7cdc9d167296c3badd6c2"},{"file":"browser/320-b-both-held.png","bytes":28984,"sha256":"e7132fd6d42d553b39d636a6d280a06f1c3aa10c78a68d3b547a3ec8543f3564"},{"file":"browser/390-b-after-first.png","bytes":63323,"sha256":"cdf7bb64bfd9e2250921a6000d02185df977f8cfc507d1e8c492e0489c0d3a8a"},{"file":"browser/390-b-after-second.png","bytes":63323,"sha256":"cdf7bb64bfd9e2250921a6000d02185df977f8cfc507d1e8c492e0489c0d3a8a"},{"file":"browser/390-b-both-held.png","bytes":60515,"sha256":"def239586d7a682ca85d0a0a18795284ddc0c4b8ae413a4ad2060db83167415b"}];
+          for (const pin of exactEvidence) {
+            const body = bytes(pin.file);
+            assert.deepEqual([body.length,sha(body)],[pin.bytes,pin.sha256],pin.file);
+          }
+          const joinedUnit = read('fixed-raw-join.json');
+          const custody = read('packet-custody.json');
+          const original = custody.original;
+          const fixed = custody.fixed;
+          const controls = custody.controls;
+          assert.deepEqual([original.run,fixed.run,controls.run],[42366132461,42367425437,42368193168]);
+          assert.deepEqual([joinedUnit.status,joinedUnit.raw.sha256,joinedUnit.freshUnitRAWByteEqual],['passed',unit.raw.sha256,true]);
+          assert.equal(native.status,'passed');
+          const referenceChecks = {status:'passed', exactEvidenceBodies:exactEvidence.length, retainedPNGs:9,
+            originalRun:original.run,fixedRun:fixed.run,controlsRun:controls.run,nativeExact:true,freshUnitExact:true,
+            independentFullSHA256:'8fab99bb91b5ba9b8216f15a25c34117407155331f32cb204c5ac6c941432c53',independentNativeSHA256:'adc20c9d82a1709e126c6ba9daba824bd2a89b0e4ab9ee5422272d9447d35c8f'};
+          assert.equal(referenceChecks.status,'passed','Reviewed actual full receipt validator must complete');
+          const result = {
+            status:'passed', cleanHead, cleanTree, cleanProductBase:env.RARITY_ROUND_CLEAN_PRODUCT_BASE, cleanProductBaseTree:env.RARITY_ROUND_CLEAN_PRODUCT_BASE_TREE,
+            cleanDelta, referenceRun:run.id, referenceWorkflowHead:referenceHead, referenceApp:referenceHead, referenceTree,
+            referenceQualification:full.qualification, referenceArtifact:meta.id, referenceZipSHA256:env.RARITY_ROUND_REFERENCE_ZIP,
+            referenceTarSHA256:env.RARITY_ROUND_REFERENCE_TAR, referenceWorkflowBlob:env.RARITY_ROUND_REFERENCE_WORKFLOW,
+            heldProductRows:5791, sourceRows:4664, sourceAndConfigurationRows:sourceConfigRows.length,
+            rootConfigurations:configs.map(file => ({file,...current.get(file)})),
+            excludedFullQA:[...fullOnly], finalProductForbiddenPaths:[...fullOnly,...denied], generatedPatches:[],
+            distFiles:actual.length, distManifestSHA256, dist:actual, referenceChecks,
+            limits:'Fresh clean types, product-name fence, normal production build and exact source and built-byte join. Unit, native, control, reader and cap evidence comes from the authenticated full reference. The frozen qualified plan is held. Final product excludes this round QA workflow, helper, outer and controller. No provider or release credit.',
+          };
+          fs.writeFileSync(out + '/reference-build-join.json',JSON.stringify(result,null,2));
+          console.log('PASS all 4664 source paths, 11 root configurations and 850 built file bodies');
+          NODE
+      - name: Final source locks installed versions and offline holds
+        if: always()
+        run: |
+          set -euo pipefail
+          git ls-files -s > rarity-round-crowd-ownership-clean-join/source-after.txt
+          cmp rarity-round-crowd-ownership-clean-join/source-before.txt rarity-round-crowd-ownership-clean-join/source-after.txt
+          git diff --exit-code HEAD -- .
+          sha256sum package.json package-lock.json > rarity-round-crowd-ownership-clean-join/locks-after.txt
+          cmp rarity-round-crowd-ownership-clean-join/locks-before.txt rarity-round-crowd-ownership-clean-join/locks-after.txt
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const before=JSON.parse(fs.readFileSync('rarity-round-crowd-ownership-clean-join/installed-before.json')),lock=JSON.parse(fs.readFileSync('package-lock.json'));
+          const after=Object.keys(lock.packages).filter(p=>p.startsWith('node_modules/')&&fs.existsSync(p+'/package.json')).map(p=>[p,JSON.parse(fs.readFileSync(p+'/package.json')).version]);assert.equal(after.length,521);for(const[p,v]of after)assert.equal(v,lock.packages[p].version,p);assert.deepEqual(after,before);
+          fs.writeFileSync('rarity-round-crowd-ownership-clean-join/installed-final.json',JSON.stringify(after));
+          assert(fs.existsSync('rarity-round-crowd-ownership-clean-join/offline.log'));assert.equal(fs.statSync('rarity-round-crowd-ownership-clean-join/offline.log').size,0);
+          NODE
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: rarity-round-crowd-ownership-clean-build-join-${{ github.run_id }}
+          path: rarity-round-crowd-ownership-clean-join
+          retention-days: 14
+          if-no-files-found: error
