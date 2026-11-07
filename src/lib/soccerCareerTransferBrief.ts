@@ -21,7 +21,7 @@ export interface SoccerTransferBrief {
   minimumApps?: 18 | 26;
   result?: TransferBriefResult;
 }
-export type TransferBriefProjection = (overall: number, tier: number, club: string, seasonsAtClub: number, context?: { league: string; year: number }) => TransferBriefBand;
+export type TransferBriefProjection = (overall: number, tier: number, club: string, seasonsAtClub: number) => TransferBriefBand;
 export interface TransferBriefOption {
   id: TransferBriefPriority; label: string; eligibleCount: number; matchingCount: number;
   tiers: number[]; projection: TransferBriefBand | null;
@@ -92,10 +92,6 @@ function currentWindow(career: CareerState): boolean {
     && !!career.transferSituation && ['no_interest', 'one_offer', 'dream_club'].includes(career.transferSituation.type);
 }
 
-function projectFor(career: CareerState, club: ClubData, project: TransferBriefProjection): TransferBriefBand {
-  return project(career.overall, club.tier, club.name, 0, { league: club.league, year: (career.seasons[career.seasons.length - 1]?.year ?? 0) + 1 });
-}
-
 export function readTransferBrief(career: CareerState, project?: TransferBriefProjection): SoccerTransferBrief | null {
   const value: unknown = career.transferBrief;
   const context = contextOf(career);
@@ -114,13 +110,8 @@ export function readTransferBrief(career: CareerState, project?: TransferBriefPr
     if (offer) {
       if (clubKeyOf(offer.club.name) === clubKeyOf(career.currentClub)
         || (value.priority === 'home' && offer.club.country !== career.nationality) || !project) return null;
-      const band = projectFor(career, offer.club, project);
-      const saved = value.result.projection!;
-      const exact = validBand(band) && band.min === saved.min && band.max === saved.max;
-      const legacy = offer.club.league === 'Russian Premier League' && context.lastYear + 1 >= 2026
-        ? project(career.overall, offer.club.tier, offer.club.name, 0) : band;
-      const exactLegacy = validBand(legacy) && legacy.min === saved.min && legacy.max === saved.max;
-      if (!validBand(band) || (!exact && !exactLegacy)
+      const band = project(career.overall, offer.club.tier, offer.club.name, 0);
+      if (!validBand(band) || band.min !== value.result.projection!.min || band.max !== value.result.projection!.max
         || band.min < ((value.minimumApps as 18 | 26 | undefined) ?? 0)) return null;
     }
   } else if (!currentWindow(career)) return null;
@@ -145,7 +136,7 @@ export function setTransferBrief(career: CareerState, priority: TransferBriefPri
 function candidatesFor(career: CareerState, priority: TransferBriefPriority, eligible: readonly ClubData[], project: TransferBriefProjection, minimumApps: TransferBriefMinimum = 0): ClubData[] {
   let clubs = eligible.filter(club => validClub(club) && clubKeyOf(club.name) !== clubKeyOf(career.currentClub));
   if (minimumApps) clubs = clubs.filter(club => {
-    const band = projectFor(career, club, project);
+    const band = project(career.overall, club.tier, club.name, 0);
     return validBand(band) && band.min >= minimumApps;
   });
   if (priority === 'home') return clubs.filter(club => club.country === career.nationality);
@@ -153,14 +144,14 @@ function candidatesFor(career: CareerState, priority: TransferBriefPriority, eli
     const tier = Math.min(...clubs.map(club => club.tier));
     return clubs.filter(club => club.tier === tier);
   }
-  const bands = clubs.map(club => ({ club, band: projectFor(career, club, project) }))
+  const bands = clubs.map(club => ({ club, band: project(career.overall, club.tier, club.name, 0) }))
     .filter(row => validBand(row.band));
   const min = Math.max(...bands.map(row => row.band.min));
   const max = Math.max(...bands.filter(row => row.band.min === min).map(row => row.band.max));
   return bands.filter(row => row.band.min === min && row.band.max === max).map(row => row.club);
 }
 function poolBand(career: CareerState, clubs: readonly ClubData[], project: TransferBriefProjection): TransferBriefBand | null {
-  const bands = clubs.map(club => projectFor(career, club, project)).filter(validBand);
+  const bands = clubs.map(club => project(career.overall, club.tier, club.name, 0)).filter(validBand);
   return bands.length ? { min: Math.min(...bands.map(band => band.min)), max: Math.max(...bands.map(band => band.max)) } : null;
 }
 export function transferBriefCandidates(career: CareerState, eligible: readonly ClubData[], project: TransferBriefProjection): ClubData[] {
