@@ -1,0 +1,1058 @@
+name: Russia Career bridge, model and unchanged build gates
+on:
+  push:
+    branches: [codex/russia-career-qualify-v10-20261106]
+permissions:
+  contents: read
+concurrency:
+  group: russia-career-qualify-20261106
+  cancel-in-progress: false
+jobs:
+  qualify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    defaults:
+      run:
+        shell: bash
+    env:
+      BASE_CORE: 636b31efd64b749d4900e3f5773681e0496addf6
+      BASE_TREE: 9b6671db9c6f56db7bfd572521cf4e37cf7011a7
+      PRODUCT_CORE: 1764ada4effee9889d0d24667e84e7ea89869dc3
+      PRODUCT_TREE: 6a6617227f22f50a5b3f730433264e8efd0fa0f2
+      PRODUCT_FILES: '[{"path":"scripts/data/soccerCareerFacts.json","before":"3020b7ebbc6a17013b3c7ab6a30558b675e35257","after":"59eb8da54e7bc205f78781c7786dd20b02bd82bd"},{"path":"scripts/lib/careerClubPool.mjs","before":"3abec590896605188a4fc0cc7d122fc3be8438c3","after":"f5416cca123c9b3792588182f59350689e7f09e8"},{"path":"scripts/lib/careerLeagueWorld1175.mjs","before":"c75128e88071d329b2fe8d973af897fe2207dd91","after":"ebcbe1083dd105732418d417cd86dacbb674daf7"},{"path":"scripts/lib/careerWorldTruth1329.mjs","before":"8dc0dce77a13188eb939f78b0eb1850ba81a39f2","after":"e4601cf0e83b356cc61c43f9d6d9ecd51908f66c"},{"path":"scripts/simCareerClubPool.mjs","before":"4f2493986069d7486e05560fbfd021455f27f1f7","after":"17d303564c35ffb5c985db3922f42809bc2c032f"},{"path":"scripts/simRussiaCareerBridge.mjs","before":null,"after":"178cb92b88d18bf45c5a6b861e0c2ad510fadfcf"},{"path":"scripts/simSoccerLoanBite.mjs","before":"3bcc6289e2f5281635a19529a9ace41ebd718a93","after":"962a77a8ed83a3b61406cc79a673f1fd33d302b8"},{"path":"scripts/simSoccerLoanMinutes.mjs","before":"b1ee6f150c2f0b8c084784441f31aa35fa755aa8","after":"1cd5acb973c152be736879e2f5a67fc9db64d629"},{"path":"src/data/leagueFormat.ts","before":"802650466c0c4439f12c741e7d1ae28957280f9b","after":"54d431b2d963d10f0980a1c54d5aaf2b5963ff10"},{"path":"src/data/soccerCareerClubPool.ts","before":"522399403d4a5816680d0d5d2e19e3fda650d71d","after":"50d91e61a50459b60388a8f25551b353192842e5"},{"path":"src/lib/clubManager.ts","before":"a089f29e8f1adee4090927937bac4d50017ae7cf","after":"0735c1eda13393b8a6da605aa3c880fa276090bb"},{"path":"src/lib/soccerCareerContinental.ts","before":"44d4acee04504ac92382a986b3e2cfd5301d4ac1","after":"fe278d5fe50492374206e5846701db0c31fa6b01"},{"path":"src/lib/soccerCareerDerby.ts","before":"e25062b2b6560957feb414fd709b7bbc5b4af7ba","after":"895f15bbd52c3766325664e01da4627e6110d2d9"},{"path":"src/lib/soccerCareerEngine.ts","before":"663eab42df957f156b35e931d81f9f643ea1a7f4","after":"393d2b61b3d59cba721527f3ca47282171729a1f"},{"path":"src/lib/soccerCareerLeague.ts","before":"cf7772161d902d2bb82d7f5cb6b3bdc5d04a9659","after":"009b5c36a28e0f64076c9f6b302cba8af7fd3094"},{"path":"src/lib/soccerCareerTransferBrief.ts","before":"74718f3b76923c77a55c87e5c150c366f0d482ce","after":"fab5f9491750e3615adeed75fbedcd80d700e260"},{"path":"src/pages/SoccerCareer.tsx","before":"08a93b48a2bfcd42883b24c72e8f64f49caec6aa","after":"7a8a81467627be0e1d9d3c2e09c741b7953fec74"}]'
+      BASE_QA_CORE: 1cc08ce611872bd4a89281dcf20502585c8a8157
+      BASE_QA_TREE: 88da3481338ee90d01263d7d4353e516272efd10
+      BASELINE_QA_FILES: '[{"path":"scripts/lib/careerLeagueWorld1175.mjs","mode":"100644","before":"c75128e88071d329b2fe8d973af897fe2207dd91","after":"ebcbe1083dd105732418d417cd86dacbb674daf7"},{"path":"scripts/lib/careerWorldTruth1329.mjs","mode":"100644","before":"8dc0dce77a13188eb939f78b0eb1850ba81a39f2","after":"e4601cf0e83b356cc61c43f9d6d9ecd51908f66c"}]'
+      RUSSIA_REMOVED_CORE: a2e0d66639b521be922614a0b8468f2e469c6d60
+      RUSSIA_REMOVED_TREE: 69f0fcd28360ca24924f26acddd4a338542d6d46
+      RUSSIA_REVERSE_FILES: '[{"path":"src/data/leagueFormat.ts","mode":"100644","current":"54d431b2d963d10f0980a1c54d5aaf2b5963ff10","russiaRemoved":"802650466c0c4439f12c741e7d1ae28957280f9b"},{"path":"src/data/soccerCareerClubPool.ts","mode":"100644","current":"50d91e61a50459b60388a8f25551b353192842e5","russiaRemoved":"522399403d4a5816680d0d5d2e19e3fda650d71d"},{"path":"src/lib/clubManager.ts","mode":"100644","current":"0735c1eda13393b8a6da605aa3c880fa276090bb","russiaRemoved":"a089f29e8f1adee4090927937bac4d50017ae7cf"},{"path":"src/lib/soccerCareerContinental.ts","mode":"100644","current":"fe278d5fe50492374206e5846701db0c31fa6b01","russiaRemoved":"44d4acee04504ac92382a986b3e2cfd5301d4ac1"},{"path":"src/lib/soccerCareerDerby.ts","mode":"100644","current":"895f15bbd52c3766325664e01da4627e6110d2d9","russiaRemoved":"e25062b2b6560957feb414fd709b7bbc5b4af7ba"},{"path":"src/lib/soccerCareerEngine.ts","mode":"100644","current":"393d2b61b3d59cba721527f3ca47282171729a1f","russiaRemoved":"663eab42df957f156b35e931d81f9f643ea1a7f4"},{"path":"src/lib/soccerCareerLeague.ts","mode":"100644","current":"009b5c36a28e0f64076c9f6b302cba8af7fd3094","russiaRemoved":"cf7772161d902d2bb82d7f5cb6b3bdc5d04a9659"},{"path":"src/lib/soccerCareerTransferBrief.ts","mode":"100644","current":"fab5f9491750e3615adeed75fbedcd80d700e260","russiaRemoved":"74718f3b76923c77a55c87e5c150c366f0d482ce"},{"path":"src/pages/SoccerCareer.tsx","mode":"100644","current":"7a8a81467627be0e1d9d3c2e09c741b7953fec74","russiaRemoved":"08a93b48a2bfcd42883b24c72e8f64f49caec6aa"}]'
+      FINISH_SCRIPT_CLOSURE: '[{"path":"scripts/lib/careerAwardGenerations1318.mjs","mode":"100644","git":"93bedc429204e4a8075cb1d6b5fafee8c30f9b83"},{"path":"scripts/lib/careerAwardsNight1172.mjs","mode":"100644","git":"8d2361b9629c7c22bf588ec85e2c5eb8399bddd3"},{"path":"scripts/lib/careerDeckFair1327.mjs","mode":"100644","git":"b99fcd3ed84ac6b616367da3d439c4c79022ce04"},{"path":"scripts/lib/careerDevelopmentAttribution1185.mjs","mode":"100644","git":"22a0e6e7830aa489aede6b7e5584cc713fc73521"},{"path":"scripts/lib/careerDiscipline1176.mjs","mode":"100644","git":"f8122fd4c192e02744ebec2fb81892cf6c97259d"},{"path":"scripts/lib/careerLeagueWorld1175.mjs","mode":"100644","git":"ebcbe1083dd105732418d417cd86dacbb674daf7"},{"path":"scripts/lib/careerLifeChainBF.mjs","mode":"100644","git":"ac50944916d582e266bafaa00a1c49981459d5ad"},{"path":"scripts/lib/careerNextTenAttribution1197.mjs","mode":"100644","git":"c9fe76d14f7d33298cc6c7c8215aa9c8fddf5b10"},{"path":"scripts/lib/careerSoccerAwards1525.mjs","mode":"100644","git":"7c55be6fca4dcfea874543431a10931dbe462772"},{"path":"scripts/lib/careerSoccerDeck1334.mjs","mode":"100644","git":"cb15a38b58b61226dc0201630db33304c8bc7fb7"},{"path":"scripts/lib/careerSoccerMorale1523.mjs","mode":"100644","git":"af334e87a77a055b65ec2fee023dcf3ac83c2110"},{"path":"scripts/lib/careerSoccerOwner1524.mjs","mode":"100644","git":"adb297a0955f220f24972ff20dd990828ff64e4c"},{"path":"scripts/lib/careerStoryRoleAttribution1190.mjs","mode":"100644","git":"c1ba5b025cd11428bd68c5598e5a6ce4f942a51d"},{"path":"scripts/lib/careerVeteranPay1262.mjs","mode":"100644","git":"23d78a0037098e1fb72766c4b03088607f186bcb"},{"path":"scripts/lib/careerWorldTruth1329.mjs","mode":"100644","git":"e4601cf0e83b356cc61c43f9d6d9ecd51908f66c"},{"path":"scripts/lib/soccerContractBaseline1177.mjs","mode":"100644","git":"c3c89a743abde24c10872435d1861d01f0d23cfd"},{"path":"scripts/lib/soccerTrain1178.mjs","mode":"100644","git":"464be6083428ee4ed224a8d3392d210c4b0393f5"},{"path":"scripts/simCareerLeagueFinish.mjs","mode":"100644","git":"079fba58522f778553abdd11aa2e10e9d0e0f4ac"}]'
+      ORIGINAL_MODEL_NAMES: '["bridge","bridge-controls","simCareerClubPool","simCareerFacts","simCareerEras","fallback-local-mode-absent","fallback-control-absent","simCareerFallback","fallback-read-admission","simCareerLeagueFinish","simCareerLeagueSeasons","simCareerLeagueWorld","simCareerDomesticCup","simCareerContinental","simSoccerCareerUcl","simLoanSpell","simCareerTransferBrief","simSoccerCareerSavedLoan","simSoccerLoanBite","simSoccerLoanMinutes","simTransferBriefPageControl","simSaveKeeper","simHomeFront","simHomeFront-output","simSoccerCareerRecords","simSoccerCareerRecords-output","records-admission","records-owned-cleanup","transfer-brief-output-retain"]'
+      FINISH_V8_WITNESSED_CURRENT_DIFFS: '[{"seed":3,"changes":[{"path":["rival","club"],"beforePresent":true,"afterPresent":true,"before":"River Plate","after":"Sevilla"},{"path":["phone","feed","7"],"beforePresent":true,"afterPresent":true,"before":"🔄 Aurélien Dubois has left Zenit for River Plate.","after":"🔄 Aurélien Dubois has left Baltika for Sevilla."},{"path":["phone","rivalClub"],"beforePresent":true,"afterPresent":true,"before":"River Plate","after":"Sevilla"}]},{"seed":4,"changes":[{"path":["rival","club"],"beforePresent":true,"afterPresent":true,"before":"Inter Milan","after":"Arsenal"},{"path":["phone","feed","2"],"beforePresent":true,"afterPresent":true,"before":"🔄 Jules Weber has left Monterrey for Inter Milan.","after":"🔄 Jules Weber has left Monterrey for Arsenal."},{"path":["phone","rivalClub"],"beforePresent":true,"afterPresent":true,"before":"Inter Milan","after":"Arsenal"}]},{"seed":6,"changes":[{"path":["rival","club"],"beforePresent":true,"afterPresent":true,"before":"Newcastle","after":"Roma"},{"path":["phone","rivalClub"],"beforePresent":true,"afterPresent":true,"before":"Newcastle","after":"Roma"}]},{"seed":9,"changes":[{"path":["rival","club"],"beforePresent":true,"afterPresent":true,"before":"LAFC","after":"Rostov"},{"path":["phone","feed","7"],"beforePresent":true,"afterPresent":true,"before":"🔄 Aurélien Silva has left Zamalek for LAFC.","after":"🔄 Aurélien Silva has left Zamalek for Rostov."},{"path":["phone","rivalClub"],"beforePresent":true,"afterPresent":true,"before":"LAFC","after":"Rostov"}]},{"seed":10,"changes":[{"path":["rival","club"],"beforePresent":true,"afterPresent":true,"before":"Bayern Munich","after":"PSG"},{"path":["pendingBallonDor","nominees","5","club"],"beforePresent":true,"afterPresent":true,"before":"Bayern Munich","after":"PSG"},{"path":["pendingBallonDor","nominees","5","points"],"beforePresent":true,"afterPresent":true,"before":53,"after":40},{"path":["pendingBallonDor","nominees","5","trophies","0"],"beforePresent":true,"afterPresent":true,"before":"UCL","after":"League"},{"path":["phone","rivalClub"],"beforePresent":true,"afterPresent":true,"before":"Bayern Munich","after":"PSG"}]},{"seed":13,"changes":[{"path":["rival","club"],"beforePresent":true,"afterPresent":true,"before":"Club Brugge","after":"Zenit"},{"path":["phone","rivalClub"],"beforePresent":true,"afterPresent":true,"before":"Club Brugge","after":"Zenit"}]},{"seed":14,"changes":[{"path":["rival","club"],"beforePresent":true,"afterPresent":true,"before":"Marseille","after":"Al Hilal"},{"path":["phone","rivalClub"],"beforePresent":true,"afterPresent":true,"before":"Marseille","after":"Al Hilal"}]},{"seed":16,"changes":[{"path":["rival","club"],"beforePresent":true,"afterPresent":true,"before":"Ajax","after":"Boca Juniors"},{"path":["pendingBallonDor","nominees","7","name"],"beforePresent":true,"afterPresent":true,"before":"Kenan Hernández","after":"Stuart Ashcroft"},{"path":["pendingBallonDor","nominees","7","nationality"],"beforePresent":true,"afterPresent":true,"before":"Indonesia","after":"England"},{"path":["pendingBallonDor","nominees","7","position"],"beforePresent":true,"afterPresent":true,"before":"ST","after":"LW"},{"path":["pendingBallonDor","nominees","7","club"],"beforePresent":true,"afterPresent":true,"before":"Ajax","after":"Man City"},{"path":["pendingBallonDor","nominees","7","points"],"beforePresent":true,"afterPresent":true,"before":35,"after":33},{"path":["pendingBallonDor","nominees","7","goals"],"beforePresent":true,"afterPresent":true,"before":28,"after":25},{"path":["pendingBallonDor","nominees","7","trophies","0"],"beforePresent":true,"afterPresent":true,"before":"League","after":"Cup"},{"path":["pendingBallonDor","nominees","7","generatedId"],"beforePresent":false,"afterPresent":true,"before":null,"after":7},{"path":["pendingBallonDor","nominees","7","generatedAge"],"beforePresent":false,"afterPresent":true,"before":null,"after":20},{"path":["pendingBallonDor","nominees","8","name"],"beforePresent":true,"afterPresent":true,"before":"Stuart Ashcroft","after":"Maxi Escalante"},{"path":["pendingBallonDor","nominees","8","nationality"],"beforePresent":true,"afterPresent":true,"before":"England","after":"Colombia"},{"path":["pendingBallonDor","nominees","8","position"],"beforePresent":true,"afterPresent":true,"before":"LW","after":"CM"},{"path":["pendingBallonDor","nominees","8","club"],"beforePresent":true,"afterPresent":true,"before":"Man City","after":"Liverpool"},{"path":["pendingBallonDor","nominees","8","points"],"beforePresent":true,"afterPresent":true,"before":33,"after":32},{"path":["pendingBallonDor","nominees","8","goals"],"beforePresent":true,"afterPresent":true,"before":25,"after":11},{"path":["pendingBallonDor","nominees","8","trophies","0"],"beforePresent":true,"afterPresent":true,"before":"Cup","after":"League"},{"path":["pendingBallonDor","nominees","8","generatedId"],"beforePresent":true,"afterPresent":true,"before":7,"after":6},{"path":["pendingBallonDor","nominees","8","generatedAge"],"beforePresent":true,"afterPresent":true,"before":20,"after":21},{"path":["pendingBallonDor","nominees","9","name"],"beforePresent":true,"afterPresent":true,"before":"Maxi Escalante","after":"Ferdi Doornbos"},{"path":["pendingBallonDor","nominees","9","nationality"],"beforePresent":true,"afterPresent":true,"before":"Colombia","after":"Belgium"},{"path":["pendingBallonDor","nominees","9","position"],"beforePresent":true,"afterPresent":true,"before":"CM","after":"LW"},{"path":["pendingBallonDor","nominees","9","club"],"beforePresent":true,"afterPresent":true,"before":"Liverpool","after":"AC Milan"},{"path":["pendingBallonDor","nominees","9","points"],"beforePresent":true,"afterPresent":true,"before":32,"after":25},{"path":["pendingBallonDor","nominees","9","goals"],"beforePresent":true,"afterPresent":true,"before":11,"after":27},{"path":["pendingBallonDor","nominees","9","trophies","0"],"beforePresent":true,"afterPresent":false,"before":"League","after":null},{"path":["pendingBallonDor","nominees","9","generatedId"],"beforePresent":true,"afterPresent":true,"before":6,"after":0},{"path":["pendingBallonDor","nominees","9","generatedAge"],"beforePresent":true,"afterPresent":true,"before":21,"after":23},{"path":["phone","rivalClub"],"beforePresent":true,"afterPresent":true,"before":"Ajax","after":"Boca Juniors"}]}]'
+      PLAYWRIGHT_BROWSERS_PATH: /home/runner/.cache/ms-playwright
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24.22.2'
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: '1.4.4'
+      - name: Bind the complete product and sole qualification-only addition
+        run: |
+          set -euo pipefail
+          export QA_OUT="$RUNNER_TEMP/russia-career-qualification-evidence"
+          export QA_BASE_SRC="$RUNNER_TEMP/russia-career-qualification-original"
+          mkdir -p "$QA_OUT/logs" "$QA_OUT/transport"
+          echo "QA_OUT=$QA_OUT" >> "$GITHUB_ENV"
+          echo "QA_BASE_SRC=$QA_BASE_SRC" >> "$GITHUB_ENV"
+          export QA_BASE_QA_SRC="$RUNNER_TEMP/russia-career-qualification-baseline-qa"
+          export QA_RUSSIA_REMOVED_SRC="$RUNNER_TEMP/russia-career-qualification-russia-removed"
+          echo "QA_BASE_QA_SRC=$QA_BASE_QA_SRC" >> "$GITHUB_ENV"
+          echo "QA_RUSSIA_REMOVED_SRC=$QA_RUSSIA_REMOVED_SRC" >> "$GITHUB_ENV"
+          [[ "$PRODUCT_CORE" =~ ^[0-9a-f]{40}$ && "$PRODUCT_TREE" =~ ^[0-9a-f]{40}$ ]]
+          cat > "$QA_OUT/transferBriefOutputRetainer.mjs" <<'TRANSFER_RETAINER'
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import assert from 'node:assert/strict';
+          import { createHash } from 'node:crypto';
+          import { fileURLToPath } from 'node:url';
+          
+          const [mode, flag, ...extra] = process.argv.slice(2);
+          assert(['prepare', 'retain'].includes(mode) && extra.length === 0 &&
+            (flag === undefined || (mode === 'retain' && flag === '--required')), 'TRANSFER_BRIEF_RETAINER_ARGUMENTS');
+          assert(process.env.GITHUB_WORKSPACE && process.env.QA_OUT, 'TRANSFER_BRIEF_RETAINER_PATH_ENV');
+          const root = fs.realpathSync(process.env.GITHUB_WORKSPACE), out = fs.realpathSync(process.env.QA_OUT);
+          assert.equal(fs.realpathSync('.'), root, 'TRANSFER_BRIEF_RETAINER_REPO_CWD');
+          const relativeOut = path.relative(root, out);
+          assert(relativeOut === '..' || relativeOut.startsWith('..' + path.sep) || path.isAbsolute(relativeOut), 'TRANSFER_BRIEF_RETAINER_OUTSIDE_REPO');
+          const ordinary = file => {
+            const stat = fs.lstatSync(file);
+            assert(!stat.isSymbolicLink() && (stat.isFile() || stat.isDirectory()), 'TRANSFER_BRIEF_RETAINER_ORDINARY ' + file);
+            return stat;
+          };
+          assert(ordinary(out).isDirectory(), 'TRANSFER_BRIEF_RETAINER_OUT_DIRECTORY');
+          const exists = file => { try { fs.lstatSync(file); return true; } catch (e) { if (e.code === 'ENOENT') return false; throw e; } };
+          const source = path.join(root, 'career-transfer-brief-artifacts');
+          const parent = path.join(out, 'model-artifacts'), target = path.join(parent, 'transfer-brief');
+          const preparedFile = path.join(out, 'transfer-brief-owned-before.json');
+          const beforeFile = path.join(out, 'transfer-brief-output-census-before.json');
+          const receiptFile = path.join(out, 'transfer-brief-output-retention.json');
+          const sha = bytes => createHash('sha256').update(bytes).digest('hex');
+          const selfSHA256 = sha(fs.readFileSync(fileURLToPath(import.meta.url)));
+          const write = (file, value) => fs.writeFileSync(file, JSON.stringify(value, null, 2) + '\n', { flag: 'wx' });
+          const read = file => { assert(ordinary(file).isFile()); return JSON.parse(fs.readFileSync(file, 'utf8')); };
+          const paths = { root, out, source, target, selfSHA256 };
+          const checkPaths = value => { for (const [key, val] of Object.entries(paths)) assert.equal(value[key], val, 'TRANSFER_BRIEF_RETAINER_OWNERSHIP ' + key); };
+          function census(base) {
+            const rows = [];
+            function visit(relative) {
+              const file = relative === '.' ? base : path.join(base, ...relative.split('/')), stat = ordinary(file);
+              if (stat.isFile()) {
+                const bytes = fs.readFileSync(file), row = { path: relative, kind: 'file', bytes: bytes.length, sha256: sha(bytes) };
+                rows.push(row); return row;
+              }
+              const children = fs.readdirSync(file).sort().map(name => {
+                const child = visit(relative === '.' ? name : relative + '/' + name);
+                return { name, kind: child.kind, ...(child.kind === 'file' ? { bytes: child.bytes } : {}), sha256: child.sha256 };
+              });
+              const row = { path: relative, kind: 'directory', entries: children.length,
+                sha256: sha(Buffer.from(JSON.stringify(children))) };
+              rows.push(row); return row;
+            }
+            assert(ordinary(base).isDirectory(), 'TRANSFER_BRIEF_RETAINER_DIRECTORY');
+            visit('.');
+            rows.sort((a, b) => a.path < b.path ? -1 : a.path > b.path ? 1 : 0);
+            const files = rows.filter(row => row.kind === 'file');
+            return { rows, files: files.length, directories: rows.length - files.length,
+              bytes: files.reduce((sum, row) => sum + row.bytes, 0) };
+          }
+          function requiredRaw(value) {
+            assert(value.files > 0, 'TRANSFER_BRIEF_RETAINER_REQUIRED_RAW');
+            for (const file of ['outcomes.json', 'native-fixtures.json', 'neutral-season-ere-101.json',
+              'page-control-baseline.json', 'page-control-fault.json', 'page-control-receipt.json'])
+              assert(value.rows.some(row => row.path === file && row.kind === 'file' && row.bytes > 0), 'TRANSFER_BRIEF_RETAINER_REQUIRED_RAW ' + file);
+          }
+          if (mode === 'prepare') {
+            assert(!exists(source) && !exists(target), 'TRANSFER_BRIEF_RETAINER_FRESH_FIXED_DIRECTORY');
+            assert(!exists(preparedFile) && !exists(beforeFile) && !exists(receiptFile), 'TRANSFER_BRIEF_RETAINER_FRESH_RECEIPTS');
+            if (!exists(parent)) fs.mkdirSync(parent);
+            assert(ordinary(parent).isDirectory(), 'TRANSFER_BRIEF_RETAINER_PARENT');
+            write(preparedFile, { schema: 'TRANSFER_BRIEF_OUTPUT_OWNERSHIP_V1', ...paths, status: 'FRESH_ABSENCE_CONFIRMED',
+              sourceAbsent: true, targetAbsent: true, allGuardSuccessClaimed: false });
+            console.log('TransferBrief output: fixed source and target absent before the owned guards.');
+          } else {
+            const prepared = read(preparedFile); checkPaths(prepared);
+            assert.equal(prepared.status, 'FRESH_ABSENCE_CONFIRMED');
+            assert(ordinary(parent).isDirectory(), 'TRANSFER_BRIEF_RETAINER_PARENT');
+            const required = flag === '--required';
+            if (exists(receiptFile)) {
+              const receipt = read(receiptFile); checkPaths(receipt);
+              assert(!exists(source), 'TRANSFER_BRIEF_RETAINER_SOURCE_STILL_ABSENT');
+              if (receipt.status === 'NOT_CREATED_BEFORE_EARLIER_FAILURE') {
+                assert(!exists(target), 'TRANSFER_BRIEF_RETAINER_NO_UNOWNED_TARGET');
+                assert(!required, 'TRANSFER_BRIEF_RETAINER_REQUIRED_RAW');
+              } else {
+                assert(['REQUIRED_RAW_DIRECTORY_RETAINED', 'RAW_DIRECTORY_RETAINED_AFTER_EARLIER_FAILURE',
+                  'EMPTY_DIRECTORY_RETAINED_AFTER_EARLIER_FAILURE'].includes(receipt.status), 'TRANSFER_BRIEF_RETAINER_KNOWN_STATUS');
+                assert.equal(receipt.wholeDirectoryRename, true); assert.equal(receipt.allOrdinary, true);
+                assert(exists(target), 'TRANSFER_BRIEF_RETAINER_RETAINED_DIRECTORY');
+                assert.deepEqual(census(target), receipt.after, 'TRANSFER_BRIEF_RETAINER_IDEMPOTENT_ALL_BYTES');
+                assert.deepEqual(receipt.before, receipt.after, 'TRANSFER_BRIEF_RETAINER_RENAME_ALL_BYTES');
+                if (required) requiredRaw(receipt.after);
+              }
+              console.log('TransferBrief output: prior receipt rechecked, no files changed.');
+            } else if (!exists(source)) {
+              assert(!exists(target) && !exists(beforeFile), 'TRANSFER_BRIEF_RETAINER_NO_UNOWNED_RETAINED_DIRECTORY');
+              assert(!required, 'TRANSFER_BRIEF_RETAINER_REQUIRED_RAW');
+              write(receiptFile, { schema: 'TRANSFER_BRIEF_OUTPUT_RETENTION_V1', ...paths,
+                status: 'NOT_CREATED_BEFORE_EARLIER_FAILURE', required: false, sourceAbsent: true, targetAbsent: true,
+                allGuardSuccessClaimed: false });
+              console.log('TransferBrief output: not created before earlier failure; no guard success is claimed.');
+            } else {
+              assert(!exists(target) && !exists(beforeFile), 'TRANSFER_BRIEF_RETAINER_FRESH_TARGET');
+              const before = census(source);
+              if (required) requiredRaw(before);
+              write(beforeFile, { schema: 'TRANSFER_BRIEF_OUTPUT_CENSUS_V1', ...paths, before });
+              assert.equal(fs.statSync(source).dev, fs.statSync(parent).dev, 'TRANSFER_BRIEF_RETAINER_RENAME_FILESYSTEM');
+              fs.renameSync(source, target);
+              assert(!exists(source), 'TRANSFER_BRIEF_RETAINER_SOURCE_RELOCATED');
+              const after = census(target);
+              assert.deepEqual(after, before, 'TRANSFER_BRIEF_RETAINER_WHOLE_RENAME_BYTES');
+              write(receiptFile, { schema: 'TRANSFER_BRIEF_OUTPUT_RETENTION_V1', ...paths,
+                status: required ? 'REQUIRED_RAW_DIRECTORY_RETAINED' : before.files ? 'RAW_DIRECTORY_RETAINED_AFTER_EARLIER_FAILURE' : 'EMPTY_DIRECTORY_RETAINED_AFTER_EARLIER_FAILURE',
+                required, before, after, wholeDirectoryRename: true, allOrdinary: true,
+                sourceAbsent: true, completeRelativePathsAndBodiesHeld: true, allGuardSuccessClaimed: false });
+              console.log('TransferBrief output: whole ordinary directory renamed and every body verified, ' + after.files + ' files.');
+            }
+          }
+          TRANSFER_RETAINER
+          set +e
+          node "$QA_OUT/transferBriefOutputRetainer.mjs" prepare > "$QA_OUT/logs/transfer-brief-output-prepare.log" 2>&1
+          native_exit=$?
+          set -e
+          printf '%s\n' "$native_exit" > "$QA_OUT/logs/transfer-brief-output-prepare.exit"
+          cat "$QA_OUT/logs/transfer-brief-output-prepare.log"
+          test "$native_exit" = 0
+          test "$(git rev-parse refs/remotes/origin/main)" = "$BASE_CORE"
+          test "$(git rev-parse HEAD^)" = "$PRODUCT_CORE"
+          test "$(git rev-parse "$PRODUCT_CORE^{tree}")" = "$PRODUCT_TREE"
+          test "$(git rev-parse "$BASE_CORE^{tree}")" = "$BASE_TREE"
+          git fetch --no-tags origin refs/heads/codex/russia-baseline-qa-role-20261106:refs/remotes/origin/codex/russia-baseline-qa-role-20261106 refs/heads/codex/russia-removed-qa-role-20261106:refs/remotes/origin/codex/russia-removed-qa-role-20261106
+          test "$(git rev-parse refs/remotes/origin/codex/russia-baseline-qa-role-20261106)" = "$BASE_QA_CORE"
+          test "$(git rev-parse refs/remotes/origin/codex/russia-removed-qa-role-20261106)" = "$RUSSIA_REMOVED_CORE"
+          test "$(git rev-parse refs/remotes/origin/main)" = "$BASE_CORE"
+          test "$(git rev-parse "$BASE_QA_CORE^{tree}")" = "$BASE_QA_TREE"
+          test "$(git rev-parse "$RUSSIA_REMOVED_CORE^{tree}")" = "$RUSSIA_REMOVED_TREE"
+          git worktree add --detach "$QA_BASE_SRC" "$BASE_CORE"
+          git worktree add --detach "$QA_BASE_QA_SRC" "$BASE_QA_CORE"
+          node --input-type=module <<'BIND'
+          import fs from 'node:fs';import assert from 'node:assert/strict';import {execFileSync} from 'node:child_process';
+          const e=process.env,out=e.QA_OUT,git=(...a)=>execFileSync('git',a,{encoding:'utf8'}).trim();
+          const expected=JSON.parse(e.PRODUCT_FILES),workflow='.github/workflows/russia-career-qualify-20261106.yml';
+          const delta=git('diff-tree','--no-commit-id','--name-only','-r',e.BASE_CORE,e.PRODUCT_CORE).split('\n').filter(Boolean).sort();
+          assert.deepEqual(delta,expected.map(r=>r.path).sort());
+          for(const r of expected){if(r.before===null)assert.equal(git('ls-tree',e.BASE_CORE,'--',r.path),'');else assert.equal(git('rev-parse',e.BASE_CORE+':'+r.path),r.before);assert.equal(git('rev-parse',e.PRODUCT_CORE+':'+r.path),r.after);}
+          const qaDelta=git('diff-tree','--no-commit-id','--name-only','-r','HEAD').split('\n').filter(Boolean);
+          assert.deepEqual(qaDelta,[workflow]);
+          assert.equal(expected.length,17);
+          const helperRows=JSON.parse(e.BASELINE_QA_FILES),closure=JSON.parse(e.FINISH_SCRIPT_CLOSURE);
+          assert.deepEqual(git('rev-list','--parents','-n','1',e.BASE_QA_CORE).split(' '),[e.BASE_QA_CORE,e.BASE_CORE]);
+          assert.equal(helperRows.length,2);
+          assert.deepEqual(git('diff-tree','--no-commit-id','--name-only','-r',e.BASE_CORE,e.BASE_QA_CORE).split('\n').filter(Boolean).sort(),helperRows.map(r=>r.path).sort());
+          for(const row of helperRows)for(const[core,digest]of[[e.BASE_CORE,row.before],[e.BASE_QA_CORE,row.after]])assert.equal(git('ls-tree',core,'--',row.path),row.mode+' blob '+digest+'\t'+row.path);
+          assert.equal(git('rev-parse',e.BASE_QA_CORE+':src'),git('rev-parse',e.BASE_CORE+':src'));
+          assert.equal(closure.length,18);assert.equal(new Set(closure.map(r=>r.path)).size,18);
+          for(const row of closure){
+            for(const core of[e.PRODUCT_CORE,e.BASE_QA_CORE,e.RUSSIA_REMOVED_CORE])assert.equal(git('ls-tree',core,'--',row.path),row.mode+' blob '+row.git+'\t'+row.path,'FINISH_EXECUTED_SCRIPT_CLOSURE '+row.path);
+            assert.deepEqual(fs.readFileSync(row.path),fs.readFileSync(e.QA_BASE_QA_SRC+'/'+row.path),'FINISH_EXECUTED_SCRIPT_BYTES '+row.path);
+          }
+          const leaf='.tmp-fx/career-records-tests.json';assert(!fs.existsSync(leaf));fs.writeFileSync(out+'/records-leaf-owned-before.txt','absent before this owned smoke\n');
+          fs.copyFileSync(workflow,out+'/workflow.yml');
+          fs.copyFileSync('scripts/simRussiaCareerBridge.mjs',out+'/bridge-source.mjs');
+          fs.writeFileSync(out+'/source-role.json',JSON.stringify({base:{commit:e.BASE_CORE,tree:e.BASE_TREE},product:{commit:e.PRODUCT_CORE,tree:e.PRODUCT_TREE,files:expected},baselineQA:{commit:e.BASE_QA_CORE,tree:e.BASE_QA_TREE,helperRows},optionalFinishSourceAttribution:{commit:e.RUSSIA_REMOVED_CORE,tree:e.RUSSIA_REMOVED_TREE,files:JSON.parse(e.RUSSIA_REVERSE_FILES)},qa:{commit:git('rev-parse','HEAD'),tree:git('rev-parse','HEAD^{tree}'),soleAddition:workflow},scope:'Fresh focused model qualification, original comparisons and owned syntax/model controls, proper App types, one normal build,20 output readers,3 smokes and16 unchanged route caps. No new browser or public gameplay claim.'},null,2)+'\n');
+          BIND
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$QA_OUT/source-before.sha256"
+          git ls-files --stage > "$QA_OUT/index-before.txt"
+          git status --porcelain=v1 --untracked-files=all > "$QA_OUT/status-before.txt"
+          sha256sum package.json package-lock.json bun.lock bun.lockb > "$QA_OUT/locks-before.sha256"
+          (cd "$QA_BASE_SRC"; git ls-files -z | sort -z | xargs -0 sha256sum) > "$QA_OUT/baseline-source-before.sha256"
+          (cd "$QA_BASE_SRC"; git ls-files --stage) > "$QA_OUT/baseline-index-before.txt"
+          (cd "$QA_BASE_SRC"; git status --porcelain=v1 --untracked-files=all) > "$QA_OUT/baseline-status-before.txt"
+          (cd "$QA_BASE_SRC"; sha256sum package.json package-lock.json bun.lock bun.lockb) > "$QA_OUT/baseline-locks-before.sha256"
+          test ! -s "$QA_OUT/status-before.txt"
+          test ! -s "$QA_OUT/baseline-status-before.txt"
+          (cd "$QA_BASE_QA_SRC"; git ls-files -z | sort -z | xargs -0 sha256sum) > "$QA_OUT/baseline-qa-source-before.sha256"
+          (cd "$QA_BASE_QA_SRC"; git ls-files --stage) > "$QA_OUT/baseline-qa-index-before.txt"
+          (cd "$QA_BASE_QA_SRC"; sha256sum package.json package-lock.json bun.lock bun.lockb) > "$QA_OUT/baseline-qa-locks-before.sha256"
+          (cd "$QA_BASE_QA_SRC"; git status --porcelain=v1 --untracked-files=all) > "$QA_OUT/baseline-qa-status-before.txt"
+          test ! -s "$QA_OUT/baseline-qa-status-before.txt"
+      - name: Install held app and required build tools
+        run: |
+          set -euo pipefail
+          test "$(bun --version)" = 1.4.4
+          bun --version > "$QA_OUT/logs/bun-version.log"
+          node --version > "$QA_OUT/logs/node-version.log"
+          bun install --frozen-lockfile > "$QA_OUT/logs/bun-install.log" 2>&1
+          node -p "JSON.stringify({router:require('react-router-dom/package.json').version,vite:require('vite/package.json').version,rollup:JSON.parse(require('fs').readFileSync('node_modules/rollup/package.json','utf8')).version})" > "$QA_OUT/logs/build-versions.json"
+          git diff --exit-code HEAD -- package.json package-lock.json bun.lock bun.lockb
+          npm install --prefix "$RUNNER_TEMP/russia-bridge-tools" --package-lock=false --no-audit --no-fund playwright@1.64.0 > "$QA_OUT/logs/playwright-install.log" 2>&1
+          test ! -e node_modules/playwright
+          test ! -e node_modules/playwright-core
+          ln -s "$RUNNER_TEMP/russia-bridge-tools/node_modules/playwright" node_modules/playwright
+          ln -s "$RUNNER_TEMP/russia-bridge-tools/node_modules/playwright-core" node_modules/playwright-core
+          "$RUNNER_TEMP/russia-bridge-tools/node_modules/.bin/playwright" install --with-deps chromium > "$QA_OUT/logs/chromium-install.log" 2>&1
+          python3 -m pip install --target "$RUNNER_TEMP/russia-bridge-python" fonttools pillow > "$QA_OUT/logs/python-install.log" 2>&1
+          echo "PYTHONPATH=$RUNNER_TEMP/russia-bridge-python" >> "$GITHUB_ENV"
+      - name: Share held dependencies with the immutable original
+        run: |
+          set -euo pipefail
+          test "$(node --version)" = v24.22.2
+          ln -s "$GITHUB_WORKSPACE/node_modules" "$QA_BASE_SRC/node_modules"
+          ln -s "$GITHUB_WORKSPACE/node_modules" "$QA_BASE_QA_SRC/node_modules"
+      - name: Proper application types
+        run: |
+          set -euo pipefail
+          export GIT_NO_LAZY_FETCH=1
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          : > "$QA_OUT/transport/types.log"
+          set +e
+          SIM_OFFLINE_RECEIPT="$QA_OUT/transport/types.log" node_modules/.bin/tsc --noEmit -p tsconfig.app.json > "$QA_OUT/logs/types.log" 2>&1
+          native_exit=$?
+          printf '%s\n' "$native_exit" > "$QA_OUT/types.exit" || exit 1
+          test "$native_exit" = 0 || exit "$native_exit"
+          test ! -s "$QA_OUT/transport/types.log" || exit 1
+          set -e
+          printf '%s\n' '{"command":"node_modules/.bin/tsc --noEmit -p tsconfig.app.json","exit":0}' > "$QA_OUT/types-passed.json"
+          test ! -s "$QA_OUT/transport/types.log"
+      - name: Materialize the exact Finish comparison module
+        run: |
+          set -euo pipefail
+          [[ ! -e "$QA_OUT/pairedFinishBaseline.mjs" && ! -L "$QA_OUT/pairedFinishBaseline.mjs" ]]
+          cat > "$QA_OUT/pairedFinishBaseline.mjs" <<'PAIRED_FINISH_SOURCE'
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import assert from 'node:assert/strict';
+          import crypto from 'node:crypto';
+          import {spawnSync,execFileSync} from 'node:child_process';
+          const e=process.env,out=e.QA_OUT,sha=b=>crypto.createHash('sha256').update(b).digest('hex');
+          const git=(...args)=>execFileSync('git',args,{cwd:e.GITHUB_WORKSPACE,encoding:'utf8',maxBuffer:50_000_000}).trim();
+          const pin=file=>{const body=fs.readFileSync(path.join(out,file));return{file,bytes:body.length,sha256:sha(body)};};
+          const put=(file,value)=>{const target=path.join(out,file);fs.mkdirSync(path.dirname(target),{recursive:true});fs.writeFileSync(target,JSON.stringify(value,null,2)+'\n',{flag:'wx'});return pin(file);};
+          const harness='scripts/simCareerLeagueFinish.mjs',expectedHarness='079fba58522f778553abdd11aa2e10e9d0e0f4ac';
+          const blob=b=>crypto.createHash('sha1').update(Buffer.concat([Buffer.from('blob '+b.length+'\0'),b])).digest('hex');
+          const rawNames=[];for(let seed=1;seed<=16;seed++)for(const arm of['current','attributed','historical','original'])for(const kind of['state','draws'])rawNames.push(seed+'-'+arm+'-'+kind+'.json');
+          const endings=[
+           n=>n+' independent original careers differ from the unchanged baseline (the list before the train)',
+           n=>n+' careers moved with the train and the development edits both taken out: something other than those rounds changed a career',
+           n=>n+' careers moved after guarded attribution: the main Math.random stream or another complete state field changed',
+           n=>n+' complete random draw vectors differ from the independent original'
+          ];
+          const measuredCurrentResiduals=[[1,2,3,4,5,6,7,8,9,10,11,13,15,16],[2,3,7,8,11,15,16],[2,3,4,5,7,8,16],[2,3,8,11,13,16]];
+          function role(root,name,directory){
+           assert(['simCareerLeagueFinish','baseline-simCareerLeagueFinish','russia-removed-simCareerLeagueFinish'].includes(name),'FINISH_ROLE');
+           const current=name==='simCareerLeagueFinish',nativeExit=current?1:0;
+           assert.equal(blob(fs.readFileSync(path.join(root,harness))),expectedHarness,'FINISH_UNCHANGED_HARNESS');
+           const reportFile=directory+'/healthy/report.json',report=JSON.parse(fs.readFileSync(path.join(out,reportFile)));
+           assert.equal(report.control,'');assert.equal(report.sourceHeld,true);assert.deepEqual(report.sourceAfter,report.sourceBefore);assert.deepEqual(report.red,current?[4]:[]);
+           assert.equal(report.careers.length,16,'FINISH_CASE_CENSUS');assert.deepEqual(report.careers.map(r=>r.seed),Array.from({length:16},(_,i)=>i+1));
+           for(const r of report.careers){for(const k of['originalMatches','historicalMatches','matches','drawEqual'])assert.equal(typeof r[k],'boolean');for(const k of['baseline','beforeTrain','originalDigest','currentDigest','attributedDigest','historicalDigest'])assert.match(r[k],/^[0-9a-f]{16}$/);}
+           const residuals=['originalMatches','historicalMatches','matches','drawEqual'].map(key=>report.careers.filter(r=>!r[key]).map(r=>r.seed));
+           assert.deepEqual(residuals,current?measuredCurrentResiduals:[[],[],[],[]],'FINISH_EXACT_MEASURED_RESIDUAL_MEMBERSHIPS');
+           const wanted=current?residuals.map((rows,i)=>'  FAIL: '+endings[i](rows.length)):[];
+           const stderr=fs.readFileSync(path.join(out,'logs',name+'.stderr'),'utf8'),stdout=fs.readFileSync(path.join(out,'logs',name+'.stdout'),'utf8');
+           const exactRed='simCareerLeagueFinish: 4 failure(s) in section(s) 4';
+           if(current)assert.equal(stderr,[...wanted,exactRed].join('\n')+'\n','FINISH_EXACT_CURRENT_SECTION4_FAILURES');
+           else {
+            assert.equal(stderr,'','FINISH_GREEN_ROLE_STDERR_EMPTY');
+            const closing=/^simCareerLeagueFinish: green\. \d+ careers, \d+ seasons, \d+ in a verified league; finish and title agree, the ladder holds, the historical stream holds after documented attribution and the elite boost reads the era\.$/;
+            assert.equal(stdout.split('\n').filter(line=>closing.test(line)).length,1,'FINISH_EXACT_GREEN_CLOSING');
+           }
+           assert(!/^.*FAIL/m.test(stdout),'FINISH_OTHER_FAILURE');assert.equal(fs.readFileSync(path.join(out,'logs',name+'.exit'),'utf8'),String(nativeExit)+'\n');
+           assert.equal(fs.readFileSync(path.join(out,'transport',name+'.log')).length,0,'FINISH_TRANSPORT');
+           const raw={};for(const file of rawNames){const relative=directory+'/healthy/'+file,target=path.join(out,relative),stat=fs.lstatSync(target);assert(stat.isFile()&&!stat.isSymbolicLink());const body=fs.readFileSync(target);JSON.parse(body);raw[file]={body,pin:pin(relative)};}
+           const actual=fs.readdirSync(path.join(out,directory,'healthy')).sort();
+           assert.deepEqual(actual,[...rawNames,'report.json','currentEngine.ts','attributedEngine.ts'].sort(),'FINISH_RAW128_AND_SOURCE_CENSUS');
+           const engineFiles=['currentEngine.ts','attributedEngine.ts'].map(file=>directory+'/healthy/'+file);
+           assert.deepEqual(fs.readFileSync(path.join(out,engineFiles[0])),fs.readFileSync(path.join(root,'src/lib/soccerCareerEngine.ts')),'FINISH_ACTUAL_CURRENT_ENGINE_COPY');
+           assert.notDeepEqual(fs.readFileSync(path.join(out,engineFiles[1])),fs.readFileSync(path.join(out,engineFiles[0])),'FINISH_EFFECTIVE_ATTRIBUTED_ENGINE_COPY');
+           return{root,name,directory,nativeExit,report,raw,residuals,failures:wanted,evidence:{report:pin(reportFile),stdout:pin('logs/'+name+'.stdout'),stderr:pin('logs/'+name+'.stderr'),native:pin('logs/'+name+'.exit'),transport:pin('transport/'+name+'.log'),engineCopies:engineFiles.map(pin),raw:rawNames.map(file=>raw[file].pin)}};
+          }
+          function equalRoles(a,b){
+           assert.deepEqual(b.report.careers,a.report.careers,'FINISH_COMPLETE_CASES_EQUAL');assert.deepEqual(b.residuals,a.residuals);assert.deepEqual(b.failures,a.failures);
+           for(const file of rawNames)assert.deepEqual(b.raw[file].body,a.raw[file].body,'FINISH_FULL_RAW_EQUAL '+file);
+          }
+          function paths(before,after,route=[]){
+           if(JSON.stringify(before)===JSON.stringify(after))return[];
+           if(!before||!after||typeof before!=='object'||typeof after!=='object'||Array.isArray(before)!==Array.isArray(after))return[{path:route,beforePresent:before!==undefined,afterPresent:after!==undefined,before:before??null,after:after??null}];
+           return[...new Set([...Object.keys(before),...Object.keys(after)])].flatMap(key=>paths(before[key],after[key],[...route,key]));
+          }
+          function captureRemoved(when){
+            const x=(...args)=>execFileSync('git',args,{cwd:e.QA_RUSSIA_REMOVED_SRC,encoding:'utf8',maxBuffer:50_000_000});
+            const files=x('ls-files').trimEnd().split('\n'),source=files.map(file=>({file,sha256:sha(fs.readFileSync(path.join(e.QA_RUSSIA_REMOVED_SRC,file)))}));
+            return{source,index:x('ls-files','--stage'),status:x('status','--porcelain=v1','--untracked-files=all'),locks:['package.json','package-lock.json','bun.lock','bun.lockb'].map(file=>({file,sha256:sha(fs.readFileSync(path.join(e.QA_RUSSIA_REMOVED_SRC,file)))})),when};
+          }
+          if(process.argv[2]==='--final-removed-holds'){
+           assert.equal(process.argv.length,3);
+           const before=JSON.parse(fs.readFileSync(path.join(out,'paired-finish/removed-source-before.json')));
+           const after=captureRemoved('final');assert.deepEqual({...after,when:'before'},before,'FINISH_REMOVED_FINAL_HOLDS');
+           put('paired-finish/removed-final-source-held.json',{after,sourceHeld:true});process.exit(0);
+          }
+          assert.equal(process.argv.length,2);
+          const baseline=role(e.QA_BASE_QA_SRC,'baseline-simCareerLeagueFinish','paired-finish/baseline'),current=role(e.GITHUB_WORKSPACE,'simCareerLeagueFinish','model-artifacts/career-league-finish');
+          let direct=true,directError;try{equalRoles(baseline,current);}catch(error){direct=false;directError={name:error.name,message:error.message};}
+          assert.equal(direct,false,'FINISH_CANDIDATE_ONLY_CHANGE_EXPECTED');
+          const actualCurrentStateDiffs=[];
+          for(let seed=1;seed<=16;seed++){
+           const draw=seed+'-current-draws.json',state=seed+'-current-state.json';
+           assert.deepEqual(current.raw[draw].body,baseline.raw[draw].body,'FINISH_CURRENT_COMPLETE_DRAWS_HELD '+seed);
+           const before=JSON.parse(baseline.raw[state].body),after=JSON.parse(current.raw[state].body);
+           assert.deepEqual(after.seasons,before.seasons,'FINISH_CURRENT_COMPLETE_PLAYER_SEASONS_HELD '+seed);
+           const changes=paths(before,after);if(changes.length)actualCurrentStateDiffs.push({seed,changes});else assert.deepEqual(current.raw[state].body,baseline.raw[state].body,'FINISH_UNCHANGED_CURRENT_STATE_FULL_BYTES '+seed);
+          }
+          const witnessedCurrentStateDiffs=JSON.parse(e.FINISH_V8_WITNESSED_CURRENT_DIFFS);
+          const ordered=rows=>rows.map(row=>({seed:row.seed,changes:row.changes.slice().sort((a,b)=>JSON.stringify(a.path)<JSON.stringify(b.path)?-1:JSON.stringify(a.path)>JSON.stringify(b.path)?1:0)}));
+          assert.equal(witnessedCurrentStateDiffs.length,8);assert.equal(witnessedCurrentStateDiffs.reduce((n,r)=>n+r.changes.length,0),49);
+          assert.deepEqual(ordered(actualCurrentStateDiffs),ordered(witnessedCurrentStateDiffs),'FINISH_EXACT_CURRENT_STATE_DIFFS');
+          const currentStateDiffPin=put('paired-finish/current-state-leaf-differences.json',{all16CompleteCurrentDrawTapesHeld:true,all16CompletePlayerSeasonArraysHeld:true,actualCurrentStateDiffs});
+          const originalSourceRows=report=>report.originalSources.map(row=>JSON.stringify([row.relative,row.head,row.sha256])).sort();
+          assert.equal(originalSourceRows(baseline.report).length,90);
+          assert.deepEqual(originalSourceRows(current.report),originalSourceRows(baseline.report),'FINISH_ORIGINAL_CERTIFIED_SOURCE_ROWS_HELD');
+          const differences=[];
+          if(!direct){
+           for(const file of rawNames){const a=baseline.raw[file].body,b=current.raw[file].body;if(a.equals(b))continue;let first=0;while(first<Math.min(a.length,b.length)&&a[first]===b[first])first++;
+            const detail=put('paired-finish/direct-diff/'+file,{file,firstByte:first,baseline:baseline.raw[file].pin,current:current.raw[file].pin,completeJSONDifferences:paths(JSON.parse(a),JSON.parse(b))});differences.push(detail);
+           }
+           put('paired-finish/direct-case-differences.json',{baseline:baseline.report.careers,current:current.report.careers,baselineResiduals:baseline.residuals,currentResiduals:current.residuals,completeDifferences:paths(baseline.report.careers,current.report.careers)});
+          }
+          let removed=null;
+          if(!direct){
+           assert.match(e.RUSSIA_REMOVED_CORE,/^[a-f0-9]{40}$/);assert.match(e.RUSSIA_REMOVED_TREE,/^[a-f0-9]{40}$/);
+           assert.equal(git('rev-parse',e.RUSSIA_REMOVED_CORE+'^{tree}'),e.RUSSIA_REMOVED_TREE);
+           assert.deepEqual(git('rev-list','--parents','-n','1',e.RUSSIA_REMOVED_CORE).split(' '),[e.RUSSIA_REMOVED_CORE,e.PRODUCT_CORE]);
+           const vector=JSON.parse(e.RUSSIA_REVERSE_FILES),names=git('diff-tree','--no-commit-id','--name-only','-r',e.PRODUCT_CORE,e.RUSSIA_REMOVED_CORE).split('\n').filter(Boolean).sort();
+           assert.equal(vector.length,9);assert.deepEqual(names,vector.map(r=>r.path).sort());
+           for(const row of vector){assert.equal(git('rev-parse',e.PRODUCT_CORE+':'+row.path),row.current);assert.equal(git('rev-parse',e.RUSSIA_REMOVED_CORE+':'+row.path),row.russiaRemoved);}
+           assert.equal(git('rev-parse',e.RUSSIA_REMOVED_CORE+':src'),git('rev-parse',e.BASE_CORE+':src'),'FINISH_REMOVED_ALL_SRC_EXACT636');
+           execFileSync('git',['worktree','add','--detach',e.QA_RUSSIA_REMOVED_SRC,e.RUSSIA_REMOVED_CORE],{cwd:e.GITHUB_WORKSPACE});
+           fs.symlinkSync(path.join(e.GITHUB_WORKSPACE,'node_modules'),path.join(e.QA_RUSSIA_REMOVED_SRC,'node_modules'),'dir');
+           for(const {path:file} of JSON.parse(e.FINISH_SCRIPT_CLOSURE))assert.deepEqual(fs.readFileSync(path.join(e.QA_RUSSIA_REMOVED_SRC,file)),fs.readFileSync(path.join(e.QA_BASE_QA_SRC,file)),'FINISH_REMOVED_COMPLETE_SCRIPT_CLOSURE '+file);
+           const before=captureRemoved('before');assert.equal(before.status,'');put('paired-finish/removed-source-before.json',before);
+           const name='russia-removed-simCareerLeagueFinish',receipt=path.join(out,'transport',name+'.log');fs.writeFileSync(receipt,'',{flag:'wx'});
+           const result=spawnSync(process.execPath,[harness],{cwd:e.QA_RUSSIA_REMOVED_SRC,env:{...e,SIM_OFFLINE_RECEIPT:receipt,SIM_LEAGUE_FINISH_ARTIFACTS:path.join(out,'paired-finish/removed')},encoding:'utf8',timeout:240000,maxBuffer:100_000_000});
+           fs.writeFileSync(path.join(out,'logs',name+'.stdout'),result.stdout??'',{flag:'wx'});fs.writeFileSync(path.join(out,'logs',name+'.stderr'),result.stderr??'',{flag:'wx'});
+           fs.writeFileSync(path.join(out,'logs',name+'.log'),(result.stdout??'')+(result.stderr??''),{flag:'wx'});fs.writeFileSync(path.join(out,'logs',name+'.exit'),String(result.status??255)+'\n',{flag:'wx'});
+           assert(!result.error&&!result.signal&&result.status!==null,'FINISH_REMOVED_NATIVE_COMPLETION');
+           const after=captureRemoved('after');assert.deepEqual({...after,when:'before'},before,'FINISH_REMOVED_ALL_SOURCE_INDEX_LOCK_STATUS_HELD');put('paired-finish/removed-source-held.json',{before,after,sourceHeld:true});
+           removed=role(e.QA_RUSSIA_REMOVED_SRC,name,'paired-finish/removed');equalRoles(baseline,removed);
+          }
+          const first=rawNames[0],rawBody=baseline.raw[first].body,control=Buffer.concat([rawBody,Buffer.from('\n')]);
+          assert(!control.equals(rawBody));
+          const rawCopy={...baseline,raw:{...baseline.raw,[first]:{...baseline.raw[first],body:control}}};
+          assert.throws(()=>equalRoles(baseline,rawCopy),/FINISH_FULL_RAW_EQUAL/);
+          rawCopy.raw[first].body=control.subarray(0,-1);equalRoles(baseline,rawCopy);
+          const copy={...baseline,report:JSON.parse(JSON.stringify(baseline.report))},saved=JSON.stringify(copy.report),last=copy.report.careers.pop();
+          assert.notEqual(JSON.stringify(copy.report),saved);assert.throws(()=>equalRoles(baseline,copy),/FINISH_COMPLETE_CASES_EQUAL/);
+          copy.report.careers.push(last);assert.equal(JSON.stringify(copy.report),saved);equalRoles(baseline,copy);
+          assert(removed&&baseline.nativeExit===0&&removed.nativeExit===0&&current.nativeExit===1&&differences.length>0,'FINISH_GREEN_SOURCE_INVERSE_REQUIRED');
+          put('paired-finish-admission.json',{schema:'RUSSIA_FINISH_CANDIDATE_CHANGE_ATTRIBUTION_V2',status:'FULL_RUSSIA_SOURCE_INVERSE_EQUAL',
+           baseline:{commit:e.BASE_QA_CORE,tree:e.BASE_QA_TREE,evidence:baseline.evidence},current:{commit:e.PRODUCT_CORE,tree:e.PRODUCT_TREE,evidence:current.evidence},
+           directEqual:direct,directError,differences,removed:removed?{commit:e.RUSSIA_REMOVED_CORE,tree:e.RUSSIA_REMOVED_TREE,evidence:removed.evidence,fullSourceInverse:true}:null,
+           fullRawFilesCompared:128,completeCareerRows:16,baselineNativeExit:0,removedNativeExit:0,currentNativeExit:1,currentPassed:false,currentSections:['4'],currentFindings:4,currentStateDiffPin,all16CurrentDrawTapesHeld:true,all16CompletePlayerSeasonsHeld:true,originalCertifiedSourceRowsHeld:90,
+           currentFailureLines:current.failures,baselineFailureLines:baseline.failures,currentResiduals:current.residuals,baselineResiduals:baseline.residuals,
+           controls:[{kind:'actual-full-body-append',source:baseline.raw[rawNames[0]].pin,effective:true,owned:'FINISH_FULL_RAW_EQUAL',wholeInverse:true},{kind:'actual-case-omission',source:baseline.evidence.report,effective:true,owned:'FINISH_COMPLETE_CASES_EQUAL',wholeInverse:true}],
+           noFieldsOmitted:true,noNewSeeds:true,normalHarnessHeld:true,scope:'Candidate-only Finish change. Green main and green full Russia-source inverse reproduce all128 state/draw bodies and16 cases. Current native1 remains red. Its complete player seasons and draws hold; exact witnessed rival/phone/nominee differences are retained.'});
+          console.log('Finish paired source-scope admission retained; current native1 stays red.');
+          PAIRED_FINISH_SOURCE
+          node --check "$QA_OUT/pairedFinishBaseline.mjs"
+      - name: Materialize the exact Seasons observer module
+        run: |
+          set -euo pipefail
+          [[ ! -e "$QA_OUT/seasonsPairedBaseline.mjs" && ! -L "$QA_OUT/seasonsPairedBaseline.mjs" ]]
+          cat > "$QA_OUT/seasonsPairedBaseline.mjs" <<'PAIRED_SEASONS_SOURCE'
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import crypto from 'node:crypto';
+          import cp from 'node:child_process';
+          import assert from 'node:assert/strict';
+          import { gzipSync, gunzipSync } from 'node:zlib';
+          const KNOWN={"zipBytes":15978538,"zipSHA256":"9a8036d064cec27c83a68e186dc5f345446c8aa512471a590ae7a489f364bd60","entryBytes":17832372,"entrySHA256":"feb9af8d9542b5e9ba9802a276c381e309ed31d473f277a5972a3fc4123cb668","failures":582,"rows":17892,"knownFailureRawBytes":59005,"knownFailureRawSHA256":"f744184ab95c38f65ceaf65b289dbc87c44bbfb875bda17010dcf1dfb17b19a3","canonicalAlgorithm":"UTF8(section + NUL + message + LF), ordered rows","canonicalSHA256":"118d67bc12ac5528c0d5c8caebea4750b3386c9c2fe15108df0e4c1b70527a00"};
+          const KNOWN_FAILURES_GZ="H4sIAAAAAAACCs2dS2/bRhSF/4rgdQYgKb/YXV7IpimCGsim6IKxGYeNRRqSHNQp+t/LdFQNZ+YSHWvO1fGuQZKPpx8cWZ5z5+q3v0427fW2G/qTn06akxcnq3azaW7b8Vev1+1q6NtNuyjrujR19dNi+6Vd3A3D14f7xaZ53Cyu2nXXLl6+sL/R3ty2682iH8b/bG4f2pO/XzyJ/rV9nCP2T4atmu31l/ZmsR0WTb946PtmNf5q1a4+tevF8Nk9qFlcN+MDvAeuus1m/NPDevzdz83dyO1u2n7bbR/TYyxNfapnzNJBxiyMbuzU1Gd6xiwdZMzC6MbOTH2uZ8zSQcYsjGusKqrKVEslY3s6wtgeRjd2ZqpzPWOWDjJmYQxjH9v10Dcq3yhD9OGuQhJX1LmpL5REWTRClCUxRH3oNv8mKExdQjX54MMl+RyaIo1XKB+cqYj6uvR6fGXsdb6OQnTGa3hAIoqqirIwpYqoPTpb1J7EFVWaslISZdEIUZbEFXVqyjMlURaNEGVJDFFvV/fDXffjn/+FqS+hokL04aJCElfUpalrJVEWjRBlSURRVVFUplhqiNqjs0XtSVxRS1OcKomyaIQoS+KKOjPFuZIoi0aIsiSuqHNTXCiJsmiEKEviirowxaWSKItGiLIkqij8+6gQDRDFfx81ZjgzpdJr1A6NEGVJXFHnplR6jdqhEaIsiSvq0pS1kiiLRoiyJKqoqjRVpSNqhwaI2pG4ouBFTIhGiOJVMC7D0lRK78x3aIQoS+KKOjWV0tuDHRohypIYot4PN/aoB/9DcYg+XFRI4oqC/1AcohGieD8Uf2huhm+NyuRGiM7oYAISVxR8YCNEI0TxRjU+NHftejX8+LI+NQX6Sypg56gKUGRX8DOpiA1xxTuVmoSAH0tFbIgr3sHUJAT8ZCpiQ1zxzqYmIS5NUWu5smyIK4siu6pNWWi5smyIK4viusKPI0RshCviQMIkBHwiIWJDXPFmEiYhKlMutVxZNsSVRZFdwYuHiA1xxaseJiHg3UPEhrjitQ+TEPD6IWJDXPEKiKtmdX8zrDudCUaBfrgvAUY3Bp9FF+ggY7yJdC9GZeqlnjFLBxmzMLox+DU3gQ4yxrvm5sWAH5YKdJAx3pGpFwN+airQQcZ4Z6deDPjlGoEOMsa7YuPFgM8eC3SQMd4EshcDPoQs0EHGeKPILoZGnyjQEcaoraIXA94CCXSQMV4T5MWAd0ECHWSM1wd5MeCNkEAHGeO1Ql4MeC8k0EHGeN2QFwPeDgl0kDFeQ+TFgHdEAh1kjNcTTWPgmyKBjjFGbIu8GPAORKCDjPF6EC/G0pR672B3dJAxC6Mbg3dHAh1kjNcfeTHgDZJABxnjtUheDHiPJNBBxp5DlzTGuDCl3jvYHR1kzMLoxuA3gAQ6yBjvHpAXozaV3jvYHR1kzMLYxqrCVHrvYHd0jLEdjG4Mft1MoIOM8S6deTHg984EOsgY7/bZx+667b/rdG8RO2NPW4giu8KvtAvZEFe8xm0SAt63RWyIK17XNgkBb9oiNsQVr2X7L8R4GFeYolRxtWfnu9qjGK5etX37bfxzg8rPQQL9cF8CjG0M/x5VoGOMEd+jvtxc75aAwUcQQ/ThrkISUZRGbxuis0VRG1uXAV7XhmiEKF5R+77dfp+fln7Tfes2419blAddX/fYPzz93I1/J4b1T+H8n6X9MxQsyS9PGEvu9SnPUtqrk6YleSoaY8nNROdZShuH1rQkT0JjLLk56DxLaSPQmpbk6WeMJTf7nGcpbexZ05J86oKx5E5d8iylHbloWpLPWzCW3HlLnqW0wxZNS/JJC8aSO2nJs5R2zKJpST5jwVhyZyx5ltIOWDQt1aYotCxZdr4ly6FZmj2DAljyzqAyLCUfQGlaKk1RaVmy7HxLlsO0JN8ZmPm/eooid10gT1HaTQFNRfIlAYAidz8gT1Ha1QBNRfLpEkCRO1vKU5R2sqSpSB5qByhy8+x5itJG2RUVzcwy5iuajDFmKUqcYNRUJI/iARS5Kbw8RWkDeJqK5M4JoMjVTXmK0pomTUXy6BhAkZsay1OUNjCmqGimh8tXNKngshQltm+aiuThMIAiNxeWpyhtJExTkbxcG6DIrdbOU5S2WFtTkfzpigBF7tMV8xSlfbqihqKrpuu35u22a/u+1SrdZh5yuLcZ4LMQqNHHzTwEKJDX0EVRNKq6mYcABfLKuyiKRos38xCgQF6vF0XRKPhmHgIUyKv8oiga3d/MQ4ACeW1gFEWjpJh5CFAgr7bwoyj1FzMPQQmkNhpRFPiJ9MwTgPZ4Z9RRFPhh9cwTgPZ4x9dRFHk+EmnPjUmC7KVNSx7FHrwFmHkC0B6vF4iiyGtukPbcqhuQvbR1N0exJ6+8Qdpza29A9tJW3xzD3sz6G6C9yQocjL3ENThHsSd/dALSnvsABZC9tI9ROIo9eZEQ0p5bJgSyl7ZQ6Cj25KVCSHtusRDIXtpyoaPYg5fyM08A2uPV9FEUedkQ0p5bOASyl7Z06Cj24NMOM08A2uPNP0RR4IMQM08A2uONRkRR5IVESHtuKRHIXtpioqPYg0+YzDwBaI83cxJGwQ+fzDwBZ484jhJFgc+lzDwBaI83qRJFkT/mHGnPfdo5yF7ah55r2Pu17VYblX+xAflwWwGIMuoz9Nv79u6uGx+hdXVcekTG7I+EewbqVO6TS4+AqSPeLveDqFwylx4BU0e8cu4HUbl5Lj0Cpo54D90PonIdXXoETB3xcrofROWOuvQImDrijXU/iMrFdekRMHXEa+yTIGPjVJkCe9Qu8jHe9rhn4A1/j1Tiw7wRb5X6QeClrMiHeeMVsn4QfB0r8lHeiFVsEARexIp8mDdeCRsEgVewIh/mjVe/BkHg5avIh3njFa9BEPxdaIkP80a8Ge0HgReuIh/mjVe2BkHwF8slPswb8Zq5HwR/21ziw7wR7577QeD1qsiHeeNVq0EQ/NV9iQ/zRrzI7wVRuM8v8VHenklZo3LJX+LDvBGv/PtB5M+BwXlznwQD8Zb2WTBH8IbfmCDxYd6I+xP8IPDaXuTDvPEq+1+a/vpRq4YO4IfrCkBUURqlcwAHiOIVzfsIGrVLAAeI4lUtV8P1l+bhT7VNJiE+Y8QoRJF1qewtCfEQXcRdJS6EypaSEA/RRdxM4kKo7CQJ8RBdxD0kLoTKBpIQD9FF3DqyC6HRqEfsfFfUJn0SAt6iR2yIK157PgmBX4IRsiGuiIsvXAj8youQDXFFXHPhQuAXXIRsiCviUgsXAr/OImRDXBFXWLgQ+OUVIRviiriwwoXAr6oI2RBXxPUU+xAKiylCNsIVcxmFC4FfQxGyIa6IqydcCPzSiZANcUVcNOFC4FdMhGyIK95005vujxGk0cMG5MM9BSCGpXcPXX/brO61rj/E/MN1xSy2MY3j95iPMcY7hN+n0DiaieEAXdTDmWkK+OlMDMfo4p3PTFLgvynGcIgu4rfFaQr4xG8Mx+jizfpOU8AHfWM4RhdvxHeaAj7fG8MxuniTvdMU8LHeGI7RxRvonaaAT/PGcIwu3hzvu3XbD5/udPbYxvAMXRGLrQt+GhjDMbp454Gvhoe74VZpz28MP1xXzFLT9fs/m5AKq33mAAA=";
+          const OPS=[{"label":"declare observer","before":"const shown = {};\n","after":"const shown = {};\nconst lookupObservationFile = process.env.SOCCER_LEAGUE_LOOKUP_OBSERVATION;\nif (!lookupObservationFile || !path.isAbsolute(lookupObservationFile)) throw new Error('SOCCER_LEAGUE_LOOKUP_OBSERVATION must be an absolute evidence path');\nconst lookupObservation = { rows: [], failures: [] };\n"},{"label":"retain every failure","before":"  failures += 1; red.add(section);\n","after":"  failures += 1; red.add(section);\n  lookupObservation.failures.push({ section, message: m });\n"},{"label":"retain each real lookup result","before":"    const m = L.clubLedgerSeason(c.name, y);\n    ok(!(m && m.canon === null)","after":"    const m = L.clubLedgerSeason(c.name, y);\n    lookupObservation.rows.push({ club: structuredClone(c), year: y, expected: want, actual: { league: got, key: L.leagueKeyInYear(c, y), ledger: m } });\n    ok(!(m && m.canon === null)"},{"label":"retain completed section A before later setup","before":"/* ─── b. PLAYED ─── */\n","after":"fs.mkdirSync(path.dirname(lookupObservationFile), { recursive: true });\nfs.writeFileSync(lookupObservationFile, JSON.stringify({\n  schema: 'soccer-league-lookup-observation-v1',\n  scope: 'Actual section A results from the unchanged assertion loop. Later sections retain their normal behavior; this file is written before section B and is not a full-harness pass receipt.',\n  source: {\n    trackedHarness: createHash('sha256').update(fs.readFileSync(path.join(ROOT, 'scripts/simCareerLeagueSeasons.mjs'))).digest('hex'),\n    observedHarness: createHash('sha256').update(fs.readFileSync(fileURLToPath(import.meta.url))).digest('hex'),\n    league: createHash('sha256').update(fs.readFileSync(path.join(ROOT, 'src/lib/soccerCareerLeague.ts'))).digest('hex'),\n    generatedSeasons: createHash('sha256').update(fs.readFileSync(path.join(ROOT, 'src/data/careerLeagueSeasons.ts'))).digest('hex'),\n    canonicalPool: createHash('sha256').update(fs.readFileSync(path.join(ROOT, 'src/data/soccerCareerClubPool.ts'))).digest('hex'),\n  },\n  listSeason: LIST_SEASON, world: WORLD, ledgers,\n  answers, placed, seasonsIn, canonIn, failureCounts: { ...shown },\n  ...lookupObservation,\n}, null, 2) + '\\n');\n\n/* ─── b. PLAYED ─── */\n"}];
+          
+          const sha=b=>crypto.createHash('sha256').update(b).digest('hex');
+          const git=b=>crypto.createHash('sha1').update(Buffer.concat([Buffer.from('blob '+b.length+'\0'),b])).digest('hex');
+          const OUT=path.resolve(process.env.QA_OUT??''),ROOT=path.resolve(process.env.GITHUB_WORKSPACE??''),BASE=path.resolve(process.env.QA_BASE_QA_SRC??'');
+          for(const key of ['QA_OUT','GITHUB_WORKSPACE','QA_BASE_QA_SRC'])assert(process.env[key]&&path.isAbsolute(process.env[key]),'SEASONS_REQUIRED_ABSOLUTE_ENV '+key);
+          assert.notEqual(ROOT,BASE,'SEASONS_SEPARATE_SOURCE_ROLES');
+          const AREA=path.join(OUT,'paired-seasons'),ADMISSION=path.join(OUT,'paired-seasons-admission.json');
+          assert(!fs.existsSync(ADMISSION),'SEASONS_FRESH_ADMISSION');
+          const launcher="import { pathToFileURL } from 'node:url';\nconst [original, observed] = process.argv.slice(2);\nif (process.argv.length !== 4 || !original || !observed) throw new Error('STAFF_OBSERVER_LAUNCHER_ARGUMENTS');\nprocess.argv[1] = original;\nprocess.argv.splice(2);\nawait import(pathToFileURL(observed).href);\n";
+          assert.equal(Buffer.byteLength(launcher),301);assert.equal(git(Buffer.from(launcher)),'fb1fd264f7ba4bfdbc2c76f826b2698a298e2288');
+          const write=(file,body)=>{fs.mkdirSync(path.dirname(file),{recursive:true});fs.writeFileSync(file,body,{flag:'wx'});return{file:path.relative(OUT,file).split(path.sep).join('/'),bytes:body.length,sha256:sha(body)};};
+          const json=(file,value)=>write(file,Buffer.from(JSON.stringify(value,null,2)+'\n'));
+          const read=file=>JSON.parse(fs.readFileSync(file,'utf8'));
+          const relative=p=>path.relative(OUT,p).split(path.sep).join('/');
+          const bodyPin=file=>{const b=fs.readFileSync(file);return{file:relative(file),bytes:b.length,sha256:sha(b)};};
+          const canonicalFailures=rows=>rows.map(row=>{
+            assert.deepEqual(Object.keys(row).sort(),['message','section'],'SEASONS_FAILURE_ROW_SHAPE');
+            assert.equal(row.section,'a','SEASONS_FAILURE_SECTION');
+            assert.equal(typeof row.message,'string');assert(!/[\0\r\n]/.test(row.message),'SEASONS_CANONICAL_FAILURE_TEXT');
+            return row.section+'\0'+row.message+'\n';
+          }).join('');
+          const knownRaw=gunzipSync(Buffer.from(KNOWN_FAILURES_GZ,'base64'));
+          assert.equal(knownRaw.length,KNOWN.knownFailureRawBytes);assert.equal(sha(knownRaw),KNOWN.knownFailureRawSHA256);
+          const knownFailures=JSON.parse(knownRaw);assert.equal(knownFailures.length,582);
+          assert.equal(sha(Buffer.from(canonicalFailures(knownFailures))),KNOWN.canonicalSHA256,'SEASONS_AUTHENTICATED_ORDERED_582');
+          function census(dir){
+            assert(fs.lstatSync(dir).isDirectory()&&!fs.lstatSync(dir).isSymbolicLink(),'SEASONS_ARTIFACT_DIRECTORY');
+            const rows=[];function walk(at){for(const name of fs.readdirSync(at).sort()){const full=path.join(at,name),s=fs.lstatSync(full);assert(!s.isSymbolicLink(),'SEASONS_NO_SYMLINK');if(s.isDirectory())walk(full);else{assert(s.isFile(),'SEASONS_REGULAR_RAW');const b=fs.readFileSync(full);rows.push({file:path.relative(dir,full).split(path.sep).join('/'),bytes:b.length,sha256:sha(b)});}}}walk(dir);return rows;
+          }
+          function observedSource(raw){
+            assert.equal(git(raw),'d9e77ab7a84f166ad2026bdd9e4d9d6afb22496e','SEASONS_CANONICAL_HARNESS');
+            let body=raw.toString('utf8');const operations=[];
+            for(const op of OPS){const at=body.indexOf(op.before);assert(at>=0&&body.indexOf(op.before,at+op.before.length)<0,'SEASONS_OBSERVER_UNIQUE '+op.label);
+              operations.push({...op,index:at});body=body.slice(0,at)+op.after+body.slice(at+op.before.length);}
+            let inverse=body;
+            for(const op of [...operations].reverse()){assert.equal(inverse.slice(op.index,op.index+op.after.length),op.after);inverse=inverse.slice(0,op.index)+op.before+inverse.slice(op.index+op.after.length);}
+            assert.equal(inverse,raw.toString('utf8'),'SEASONS_OBSERVER_WHOLE_SOURCE_INVERSE');return{body:Buffer.from(body),operations};
+          }
+          function validateObservation(v,role,source){
+            const clubs=role==='baseline'?524:539;
+            assert.equal(v.schema,'soccer-league-lookup-observation-v1','SEASONS_OBSERVATION_SCHEMA');
+            assert.equal(v.listSeason,2026,'SEASONS_OBSERVATION_YEAR');
+            assert.equal(v.world.length,clubs,'SEASONS_OBSERVATION_CENSUS');
+            assert.equal(v.rows.length,clubs*36,'SEASONS_OBSERVATION_CENSUS');assert.equal(v.answers,clubs*36,'SEASONS_OBSERVATION_CENSUS');
+            assert.equal(new Set(v.world.map(c=>c.id)).size,clubs,'SEASONS_CLUB_ID_CENSUS');
+            for(let i=0;i<clubs;i++)for(let j=0;j<36;j++){const row=v.rows[i*36+j];assert.deepEqual(row.club,v.world[i],'SEASONS_ORDERED_CLUB_ROW');assert.equal(row.year,1990+j,'SEASONS_ORDERED_YEAR_ROW');}
+            assert.deepEqual(v.failureCounts,{a:582},'SEASONS_COMPLETE_FINDING_CENSUS');
+            assert.deepEqual(v.failures,knownFailures,'SEASONS_ORDERED_BASELINE_FAILURES');
+            assert.equal(sha(Buffer.from(canonicalFailures(v.failures))),KNOWN.canonicalSHA256,'SEASONS_ORDERED_582_HASH');
+            if(source){assert.equal(v.source.trackedHarness,source.originalSHA256);assert.equal(v.source.observedHarness,source.observerSHA256);
+              for(const [field,file] of [['league','src/lib/soccerCareerLeague.ts'],['generatedSeasons','src/data/careerLeagueSeasons.ts'],['canonicalPool','src/data/soccerCareerClubPool.ts']])
+                assert.equal(v.source[field],sha(fs.readFileSync(path.join(source.root,file))),'SEASONS_OBSERVED_SOURCE '+field);}
+          }
+          function pair(base,current){
+            validateObservation(base,'baseline');validateObservation(current,'current');
+            assert.deepEqual(current.world.slice(0,base.world.length),base.world,'SEASONS_OLD_CLUBS_HELD');
+            assert.deepEqual(current.rows.slice(0,base.rows.length),base.rows,'SEASONS_OLD_ROWS_HELD');
+            const added=current.world.slice(base.world.length),newRows=current.rows.slice(base.rows.length);
+            assert.equal(added.length,15,'SEASONS_NEW_RUSSIA_CENSUS');assert.equal(newRows.length,540,'SEASONS_NEW_RUSSIA_CENSUS');
+            assert(added.every(c=>c.country==='Russia'&&c.league==='Russian Premier League'),'SEASONS_NEW_RUSSIA_DOMAIN');
+            for(const row of newRows)assert.deepEqual(row.actual,{league:null,key:null,ledger:null},'SEASONS_NEW_RUSSIA_HISTORICAL_UNKNOWN');
+            assert.deepEqual(current.failures,base.failures,'SEASONS_ORDERED_BASELINE_FAILURES');
+          }
+          const roles=[];
+          for(const [role,sourceRoot,normalName] of [['current',ROOT,'simCareerLeagueSeasons'],['baseline',BASE,'baseline-simCareerLeagueSeasons']]){
+            const original=path.join(sourceRoot,'scripts/simCareerLeagueSeasons.mjs'),copy=path.join(sourceRoot,'scripts/.qa-russia-seasons-observer.mjs');
+            const roleDir=path.join(AREA,role),normalDir=path.join(roleDir,'normal'),observedDir=path.join(roleDir,'observed');
+            assert(fs.existsSync(normalDir),'SEASONS_NORMAL_ARTIFACTS_REQUIRED');
+            assert(!fs.existsSync(observedDir)&&!fs.existsSync(copy),'SEASONS_FRESH_OBSERVER_OWNERSHIP');fs.mkdirSync(observedDir);
+            const normalRaw=fs.readFileSync(original),observer=observedSource(normalRaw),normalInventory=census(normalDir);
+            assert(normalInventory.some(r=>r.file==='report.json'),'SEASONS_COMPLETE_NORMAL_REPLAY_REPORT');
+            const normalExitFile=path.join(OUT,'logs',normalName+'.exit'),normalStdout=path.join(OUT,'logs',normalName+'.stdout'),normalStderr=path.join(OUT,'logs',normalName+'.stderr'),normalTransport=path.join(OUT,'transport',normalName+'.log');
+            assert.equal(fs.readFileSync(normalExitFile,'utf8').trim(),'1','SEASONS_ORIGINAL_NORMAL_NATIVE_1');
+            assert.equal(fs.statSync(normalTransport).size,0,'SEASONS_ORIGINAL_NORMAL_OFFLINE');
+            const observationFile=path.join(observedDir,'lookup-observation.json'),observedName=(role==='baseline'?'baseline-':'')+'observed-simCareerLeagueSeasons',transport=path.join(OUT,'transport',observedName+'.log');
+            const launchFile=path.join(roleDir,'observer-launcher.mjs');
+            write(launchFile,Buffer.from(launcher));write(path.join(roleDir,'original-source.mjs'),normalRaw);write(path.join(roleDir,'observed-source.mjs'),observer.body);json(path.join(roleDir,'observer-operations.json'),observer.operations);
+            write(transport,Buffer.alloc(0));fs.writeFileSync(copy,observer.body,{flag:'wx'});
+            let result,cleanup;
+            try{
+              const args=['--require',path.join(ROOT,'scripts/lib/offlineTransport.cjs'),launchFile,original,copy];
+              const env={...process.env,SIM_NETWORK:'offline',SIM_OFFLINE_RECEIPT:transport,SIM_LEAGUE_SEASONS_ARTIFACTS:observedDir,SOCCER_LEAGUE_LOOKUP_OBSERVATION:observationFile};
+              result=cp.spawnSync(process.execPath,args,{cwd:sourceRoot,env,encoding:null,maxBuffer:64*1024*1024});
+              assert(Buffer.isBuffer(result.stdout)&&Buffer.isBuffer(result.stderr),'SEASONS_COMPLETE_CHILD_STREAMS');
+              const stdout=write(path.join(OUT,'logs',observedName+'.stdout'),result.stdout),stderr=write(path.join(OUT,'logs',observedName+'.stderr'),result.stderr),native=json(path.join(roleDir,'observed-native.json'),{command:[process.execPath,...args],cwd:sourceRoot,status:result.status,signal:result.signal,error:result.error?{name:result.error.name,message:result.error.message}:null,stdout,stderr,transport:bodyPin(transport),originalFilenameArgv:true});
+              assert.equal(result.error,undefined,'SEASONS_OBSERVER_CHILD_ERROR');assert.equal(result.signal,null,'SEASONS_OBSERVER_CHILD_SIGNAL');
+              assert.equal(result.status,1,'SEASONS_OBSERVED_NATIVE_1');assert.equal(fs.statSync(transport).size,0,'SEASONS_OBSERVED_OFFLINE');
+              assert.deepEqual(result.stdout,fs.readFileSync(normalStdout),'SEASONS_NORMAL_STDOUT_BYTES_EXACT');
+              assert.deepEqual(result.stderr,fs.readFileSync(normalStderr),'SEASONS_NORMAL_STDERR_BYTES_EXACT');
+              const stdoutText=result.stdout.toString('utf8'),stderrText=result.stderr.toString('utf8');
+              assert.equal((stdoutText+'\n'+stderrText).split('\n').filter(l=>l==='simCareerLeagueSeasons: 582 failures (sections a)').length,1,'SEASONS_EXACT_NORMAL_RED_CLOSING');
+              const observedInventory=census(observedDir).filter(r=>r.file!=='lookup-observation.json');
+              assert.deepEqual(observedInventory,normalInventory,'SEASONS_COMPLETE_NORMAL_OBSERVER_ARTIFACT_BYTES_EXACT');
+              const observation=read(observationFile),source={root:sourceRoot,originalSHA256:sha(normalRaw),observerSHA256:sha(observer.body)};
+              validateObservation(observation,role,source);
+              roles.push({role,normalNative:1,observedNative:1,normalStreams:{stdout:bodyPin(normalStdout),stderr:bodyPin(normalStderr),transport:bodyPin(normalTransport)},observedStreams:{stdout,stderr,transport:bodyPin(transport),native},source,observation,observationPin:bodyPin(observationFile),completeReplayArtifactCensus:normalInventory,normalObserverFullBytesEqual:true});
+            }finally{
+              const st=fs.lstatSync(copy);assert(st.isFile()&&!st.isSymbolicLink(),'SEASONS_OWNED_COPY_REGULAR');
+              const actual=fs.readFileSync(copy);cleanup=json(path.join(roleDir,'cleanup-current-copy.json'),{actualCopy:write(path.join(roleDir,'cleanup-current-copy.mjs'),actual),expectedSHA256:sha(observer.body),copyExact:actual.equals(observer.body),originalSourceHeld:fs.readFileSync(original).equals(normalRaw)});
+              assert.deepEqual(actual,observer.body,'SEASONS_OWNED_COPY_BODY_BEFORE_UNLINK');assert.deepEqual(fs.readFileSync(original),normalRaw,'SEASONS_TRACKED_SOURCE_HELD');
+              fs.unlinkSync(copy);json(path.join(roleDir,'cleanup-complete.json'),{cleanup,ownedCopyAbsent:!fs.existsSync(copy),trackedOriginalHeld:true});
+            }
+          }
+          assert.equal(roles.length,2);
+          const current=roles.find(r=>r.role==='current').observation,base=roles.find(r=>r.role==='baseline').observation;
+          pair(base,current);
+          const controlRoot=path.join(AREA,'copied-controls');assert(!fs.existsSync(controlRoot),'SEASONS_FRESH_COPIED_CONTROLS');fs.mkdirSync(controlRoot);
+          const copiedControls=[];
+          for(const [name,marker,edit] of [
+            ['row-omission','SEASONS_OBSERVATION_CENSUS',v=>v.rows.pop()],
+            ['old-row-value','SEASONS_OLD_ROWS_HELD',v=>{v.rows[0].actual.league=v.rows[0].actual.league===null?'copied-control':null;}],
+            ['ordered-failure','SEASONS_ORDERED_BASELINE_FAILURES',v=>{[v.failures[0],v.failures[1]]=[v.failures[1],v.failures[0]];}],
+          ]){
+            const before=JSON.stringify(current),fault=structuredClone(current);edit(fault);
+            assert.notEqual(JSON.stringify(fault),before,'SEASONS_COPIED_CONTROL_CHANGED');
+            assert.throws(()=>pair(base,fault),e=>e.name==='AssertionError'&&e.message.includes(marker),'SEASONS_COPIED_CONTROL_OWNERSHIP '+name);
+            const pins={before:write(path.join(controlRoot,name+'.before.json.gz'),gzipSync(Buffer.from(before),{level:9})),fault:write(path.join(controlRoot,name+'.fault.json.gz'),gzipSync(Buffer.from(JSON.stringify(fault)),{level:9}))};
+            const restored=JSON.parse(before);pair(base,restored);assert.equal(JSON.stringify(restored),before,'SEASONS_COPIED_CONTROL_WHOLE_INVERSE');
+            pins.restored=write(path.join(controlRoot,name+'.restored.json.gz'),gzipSync(Buffer.from(JSON.stringify(restored)),{level:9}));
+            copiedControls.push({name,marker,changed:true,owned:true,fullInverse:true,pins});
+          }
+          const receipt={schema:'RUSSIA_SEASONS_PAIRED_BASELINE_DATA_ADMISSION_V1',status:'FULL_ORDERED_BASELINE_LOOKUP_AND_FAILURES_EQUAL',qualification:false,
+            knownPriorWitness:{zipBytes:KNOWN.zipBytes,zipSHA256:KNOWN.zipSHA256,entryBytes:KNOWN.entryBytes,entrySHA256:KNOWN.entrySHA256,ordered582Algorithm:KNOWN.canonicalAlgorithm,ordered582SHA256:KNOWN.canonicalSHA256},
+            oldRows:18864,currentRows:19404,newRussiaRows:540,completeOrderedFailures:582,all540NewHistoricalResultsUnknown:true,allOldFullRowsAndClubsHeld:true,copiedControls,
+            roles:roles.map(({observation,...r})=>({...r,completeRows:observation.rows.length,completeFailures:observation.failures.length,ordered582SHA256:sha(Buffer.from(canonicalFailures(observation.failures)))})),
+            scope:'Data admission of unchanged native1 normals and exact passive captures, not a green model gate. Full original/observed streams, complete replay files and source/helper authority remain retained. Outer runner owns complete source/index/four-lock/status comparison.'};
+          json(ADMISSION,receipt);
+          console.log('Seasons paired baseline data admitted; both original and observed normals remain native1/582.');
+          PAIRED_SEASONS_SOURCE
+          node --check "$QA_OUT/seasonsPairedBaseline.mjs"
+      - name: Materialize the exact scoped policy reader
+        run: |
+          set -euo pipefail
+          [[ ! -e "$QA_OUT/baselineRegressionAdmission.mjs" && ! -L "$QA_OUT/baselineRegressionAdmission.mjs" ]]
+          cat > "$QA_OUT/baselineRegressionAdmission.mjs" <<'BASELINE_POLICY_SOURCE'
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import assert from 'node:assert/strict';
+          import crypto from 'node:crypto';
+          const e=process.env,out=e.QA_OUT,sha=b=>crypto.createHash('sha256').update(b).digest('hex');
+          const pin=file=>{const body=fs.readFileSync(path.join(out,file));return{file,bytes:body.length,sha256:sha(body)};};
+          const json=file=>JSON.parse(fs.readFileSync(path.join(out,file)));
+          const write=(file,value)=>{fs.writeFileSync(path.join(out,file),JSON.stringify(value,null,2)+'\n',{flag:'wx'});return pin(file);};
+          const names=JSON.parse(e.ORIGINAL_MODEL_NAMES),redNames=['simCareerLeagueFinish','simCareerLeagueSeasons','simCareerLeagueWorld'];
+          assert.equal(names.length,29);assert.equal(new Set(names).size,29);
+          const collection=json('MODEL-OUTCOMES.json');assert.equal(collection.status,'SOURCE_CLEAN_MODEL_OUTCOMES_COLLECTED');
+          assert.equal(collection.collectorShellSuccessIsNotModelSuccess,true);assert.equal(collection.allOriginalOutcomesPassed,false);
+          assert.deepEqual(collection.rows.map(r=>r.name),names);assert.deepEqual(collection.failedOutcomes,redNames);
+          for(const row of collection.rows){
+           const expected=redNames.includes(row.name)?1:0;assert.equal(row.nativeExit,expected,'SCOPED_NATIVE_OUTCOME '+row.name);
+           assert.equal(row.passed,expected===0);assert.equal(fs.readFileSync(path.join(out,row.exitFile),'utf8'),String(expected)+'\n');
+           const log=fs.readFileSync(path.join(out,row.log.file)),transport=fs.readFileSync(path.join(out,row.transport.file));
+           assert.equal(log.length,row.log.bytes);assert.equal(sha(log),row.log.sha256);assert.equal(transport.length,0);assert.equal(row.transport.empty,true);assert.equal(row.transport.bytes,0);assert.equal(sha(transport),row.transport.sha256);
+          }
+          for(const name of['paired-finish-policy','paired-seasons-policy']){
+           assert.equal(fs.readFileSync(path.join(out,'logs',name+'.exit'),'utf8'),'0\n','SCOPED_PAIRED_ADMISSION_NATIVE');
+           assert.equal(fs.readFileSync(path.join(out,'transport',name+'.log')).length,0,'SCOPED_PAIRED_ADMISSION_TRANSPORT');
+          }
+          const finish=json('paired-finish-admission.json'),seasons=json('paired-seasons-admission.json');
+          assert.equal(finish.schema,'RUSSIA_FINISH_CANDIDATE_CHANGE_ATTRIBUTION_V2');assert.equal(finish.status,'FULL_RUSSIA_SOURCE_INVERSE_EQUAL');assert.equal(finish.baselineNativeExit,0);assert.equal(finish.removedNativeExit,0);assert.equal(finish.all16CurrentDrawTapesHeld,true);assert.equal(finish.all16CompletePlayerSeasonsHeld,true);assert.equal(finish.originalCertifiedSourceRowsHeld,90);assert.equal(finish.fullRawFilesCompared,128);assert.equal(finish.completeCareerRows,16);assert.equal(finish.noFieldsOmitted,true);assert.equal(finish.currentNativeExit,1);assert.equal(finish.currentPassed,false);assert.equal(finish.currentFindings,4);assert.deepEqual(finish.currentSections,['4']);
+          assert.equal(seasons.status,'FULL_ORDERED_BASELINE_LOOKUP_AND_FAILURES_EQUAL');assert.equal(seasons.oldRows,18864);assert.equal(seasons.currentRows,19404);assert.equal(seasons.newRussiaRows,540);assert.equal(seasons.completeOrderedFailures,582);assert.equal(seasons.all540NewHistoricalResultsUnknown,true);assert.equal(seasons.allOldFullRowsAndClubsHeld,true);
+          assert.equal(seasons.roles.length,2);for(const role of seasons.roles){assert.equal(role.normalNative,1);assert.equal(role.observedNative,1);assert.equal(role.normalObserverFullBytesEqual,true);}
+          const worldMessage='  FAIL [A]: K League 1: its format is read from two hosts (split) and it has neither a size row nor an odd row';
+          const worldFile='logs/simCareerLeagueWorld.log',worldText=fs.readFileSync(path.join(out,worldFile),'utf8');
+          assert.deepEqual(worldText.split(/\r?\n/).filter(line=>/^  FAIL \[/.test(line)),[worldMessage],'SCOPED_EXACT_K_PARTIAL_ONLY');
+          assert.equal(worldText.split('simCareerLeagueWorld: 1 failure(s) in section(s) A').length-1,1,'SCOPED_WORLD_EXACT_CLOSING');
+          const facts=JSON.parse(fs.readFileSync(path.join(e.GITHUB_WORKSPACE,'scripts/data/soccerCareerFacts.json'))),baseFacts=JSON.parse(fs.readFileSync(path.join(e.QA_BASE_SRC,'scripts/data/soccerCareerFacts.json')));
+          assert.deepEqual(facts.leagueWorld['K League 1'],baseFacts.leagueWorld['K League 1'],'SCOPED_K_FACTS_HELD');
+          const worldPin=write('world-partial-format-admission.json',{schema:'RUSSIA_EXISTING_K_PARTIAL_FORMAT_ADMISSION_V1',status:'EXACT_PREEXISTING_K_PARTIAL_FORMAT_LIMIT',nativeExit:1,passed:false,sections:['A'],findings:1,actualFailure:worldMessage,log:pin(worldFile),kFactsWholeEqual636:true,scope:'The existing K split model remains partial. This is the exact one existing format-ledger finding, never a green model result. No claim of a full K season table or all-fleet pass.'});
+          write('baseline-regression-admission.json',{
+           schema:'RUSSIA_BASELINE_REGRESSION_ADMISSION_V2',status:'TWO_INHERITED_REDS_AND_ONE_SOURCE_ATTRIBUTED_CHANGE_RETAINED',
+           product:{commit:e.PRODUCT_CORE,tree:e.PRODUCT_TREE},baseline:{commit:e.BASE_CORE,tree:e.BASE_TREE},
+           baselineQA:{commit:e.BASE_QA_CORE,tree:e.BASE_QA_TREE,helperRows:JSON.parse(e.BASELINE_QA_FILES)},
+           originalOutcomeFile:pin('MODEL-OUTCOMES.json'),zeroOutcomeNames:names.filter(name=>!redNames.includes(name)),redOutcomeNames:redNames,inheritedRedOutcomeNames:redNames.slice(1),sourceAttributedRedOutcomeNames:redNames.slice(0,1),
+           models:[
+           {name:redNames[0],nativeExit:1,passed:false,sections:['4'],findings:4,decision:finish.status,evidence:{admission:pin('paired-finish-admission.json')}},
+           {name:redNames[1],nativeExit:1,passed:false,sections:['a'],findings:582,decision:seasons.status,evidence:{admission:pin('paired-seasons-admission.json')}},
+           {name:redNames[2],nativeExit:1,passed:false,sections:['A'],findings:1,decision:'EXACT_PREEXISTING_K_PARTIAL_FORMAT_LIMIT',evidence:{admission:worldPin}}
+           ],
+           allOriginalOutcomesPassed:false,unclassifiedFailures:[],noModelOrGoldenChange:true,noNativeRedConvertedToGreen:true,
+           scope:'Bounded Russia release regression envelope only. Two inherited reds remain red, and the separate candidate-only Finish change is source-attributed. Its main and exact source inverse both pass, while current native1 stays red. All other original outcomes, build/caps/readers/types/source holds remain required independently.'
+          });
+          console.log('Two inherited reds and one source-attributed candidate change retained; no native1 changed to green.');
+          BASELINE_POLICY_SOURCE
+          node --check "$QA_OUT/baselineRegressionAdmission.mjs"
+      - name: Focused bridge, owned faults and affected model guards
+        timeout-minutes: 25
+        run: |
+          set -euo pipefail
+          export GIT_NO_LAZY_FETCH=1
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          export RUSSIA_BASE_ROOT="$QA_BASE_SRC"
+          export RUSSIA_EVIDENCE_ROOT="$QA_OUT/bridge"
+          export SIM_LEAGUE_FINISH_ARTIFACTS="$QA_OUT/model-artifacts/career-league-finish"
+          export SOCCER_LOAN_MINUTES_OUT="$QA_OUT/model-artifacts/loan-minutes"
+          test ! -e "$QA_OUT/fallback-read"
+          mkdir -p "$QA_OUT/fallback-read"
+          cat > "$QA_OUT/fallback-read/preload.cjs" <<'FALLBACK_PRELOAD'
+          'use strict';
+          const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict'),crypto=require('node:crypto');
+          const nativeFetch=globalThis.fetch;
+          const workspace=process.env.GITHUB_WORKSPACE,out=path.join(process.env.QA_OUT,'fallback-read');
+          const client=fs.readFileSync(path.join(workspace,'src/integrations/supabase/client.ts'),'utf8');
+          const origin=/SUPABASE_URL\s*=\s*["']([^"']+)["']/.exec(client)?.[1];
+          assert.equal(origin,'https://flawuiqbvjobmkfkauhw.supabase.co','FALLBACK_READ_SOURCE_ORIGIN');
+          const offline=require(path.join(workspace,'scripts/lib/offlineTransport.cjs')),offlineFetch=globalThis.fetch;
+          const paths=new Set(['/rest/v1/career_players','/rest/v1/career_seasons']);
+          const queryKeys=new Set(['select','order','offset','limit','player_name','player_id']);
+          const sha=b=>crypto.createHash('sha256').update(b).digest('hex');
+          function requestGuard(row){
+           assert.equal(row.method,'GET','FALLBACK_READ_METHOD');
+           assert.equal(row.origin,origin,'FALLBACK_READ_ORIGIN');
+           assert(paths.has(row.path),'FALLBACK_READ_TABLE');
+           assert.equal(row.hasBody,false,'FALLBACK_READ_BODY');
+           assert.equal(row.hasDispatcher,false,'FALLBACK_READ_DISPATCHER');
+           assert(row.query.every(([key])=>queryKeys.has(key)),'FALLBACK_READ_QUERY');
+          }
+          function responseGuard(row){
+           assert(![301,302,303,307,308].includes(row.status),'FALLBACK_READ_REDIRECT');
+           assert.equal(row.urlMatched,true,'FALLBACK_READ_RESPONSE_URL');
+           assert([200,206].includes(row.status),'FALLBACK_READ_HTTP200_OR206');
+          }
+          const healthy={method:'GET',origin,path:'/rest/v1/career_players',query:[['select','id']],hasBody:false,hasDispatcher:false};
+          requestGuard(healthy);responseGuard({status:200,urlMatched:true});responseGuard({status:206,urlMatched:true});
+          let probeDispatches=0;
+          const probes=[];
+          for(const[name,patch,marker,response]of[
+           ['post',{method:'POST'},'FALLBACK_READ_METHOD'],
+           ['host',{origin:'https://invalid.example'},'FALLBACK_READ_ORIGIN'],
+           ['table',{path:'/rest/v1/other_table'},'FALLBACK_READ_TABLE'],
+           ['body',{hasBody:true},'FALLBACK_READ_BODY'],
+           ['dispatcher',{hasDispatcher:true},'FALLBACK_READ_DISPATCHER'],
+           ['query',{query:[['apikey','unlogged-probe']]},'FALLBACK_READ_QUERY'],
+           ['redirect',{},'FALLBACK_READ_REDIRECT',{status:302,urlMatched:true}],
+           ['response-url',{},'FALLBACK_READ_RESPONSE_URL',{status:200,urlMatched:false}],
+           ['http-status',{},'FALLBACK_READ_HTTP200_OR206',{status:503,urlMatched:true}]
+          ]){
+           const before=JSON.stringify({request:healthy,response:{status:200,urlMatched:true}});
+           const fault=JSON.parse(before);Object.assign(fault.request,patch);if(response)fault.response=response;
+           assert.notEqual(JSON.stringify(fault),before);let error;
+           try{requestGuard(fault.request);responseGuard(fault.response);probeDispatches++;}catch(found){error=found;}
+           assert(error instanceof assert.AssertionError);assert(error.message.startsWith(marker));
+           probes.push({name,marker,changed:true,rejected:true,networkDispatches:0});
+          }
+          assert.equal(probeDispatches,0);
+          fs.writeFileSync(path.join(out,'probes.json'),JSON.stringify({scope:'Source-shaped data controls before the normal harness, not actual network requests',probes,networkDispatches:probeDispatches})+'\n',{flag:'wx'});
+          const rows=[];let sequence=0;
+          process.on('exit',nativeExit=>fs.writeFileSync(path.join(out,'summary.json'),JSON.stringify({mode:'EXACT_PUBLIC_GET_ONLY',nativeExit,requests:rows,networkWrites:0,headersRetained:false})+'\n',{flag:'wx'}));
+          globalThis.fetch=async(input,options={})=>{
+           const request=new Request(input,options),url=new URL(request.url);
+           if(offline.isLoopback(request.url))return offlineFetch(input,options);
+           const row={sequence:sequence+1,method:request.method,origin:url.origin,path:url.pathname,query:[...url.searchParams],hasBody:request.body!==null,hasDispatcher:options.dispatcher!==undefined};
+           try{requestGuard(row);}catch{ return offlineFetch(input,options); }
+           sequence++;rows.push(row);
+           const tag=String(sequence).padStart(3,'0'),record=path.join(out,'request-'+tag+'.json'),body=path.join(out,'response-'+tag+'.json');
+           row.bodyFile='response-'+tag+'.json';row.complete=false;fs.writeFileSync(body,'',{flag:'wx'});
+           const save=()=>fs.writeFileSync(record,JSON.stringify(row)+'\n');
+           save();
+           try{
+            const response=await nativeFetch(request,{redirect:'manual'});
+            row.status=response.status;row.urlMatched=response.url===request.url;save();
+            for await(const chunk of response.clone().body??[])fs.appendFileSync(body,chunk);
+            row.complete=true;responseGuard(row);return response;
+           }catch(error){row.error={name:error.name,code:error.code??null};throw error;}
+           finally{const bytes=fs.readFileSync(body);row.bytes=bytes.length;row.sha256=sha(bytes);save();}
+          };
+          FALLBACK_PRELOAD
+          # A collected shell success records an outcome; it never means the model passed.
+          run_model() {
+            local name="$1"
+            shift
+            local receipt="$QA_OUT/transport/$name.log"
+            : > "$receipt"
+            set +e
+            local native_exit
+            if [[ "$name" == simCareerLeagueFinish || "$name" == baseline-simCareerLeagueFinish || "$name" == simCareerLeagueSeasons || "$name" == baseline-simCareerLeagueSeasons ]]; then
+              SIM_OFFLINE_RECEIPT="$receipt" "$@" > "$QA_OUT/logs/$name.stdout" 2> "$QA_OUT/logs/$name.stderr"
+              native_exit=$?
+              cat "$QA_OUT/logs/$name.stdout" "$QA_OUT/logs/$name.stderr" > "$QA_OUT/logs/$name.log" || exit 1
+            else
+              SIM_OFFLINE_RECEIPT="$receipt" "$@" > "$QA_OUT/logs/$name.log" 2>&1
+              native_exit=$?
+            fi
+            set -e
+            printf '%s\n' "$native_exit" > "$QA_OUT/logs/$name.exit"
+            cat "$QA_OUT/logs/$name.log"
+            return 0
+          }
+          for key in SIM_LEAGUE_FINISH_CONTROL SIM_LEAGUE_FINISH_ATTRIBUTION SIM_LEAGUE_FINISH_CHAIN_REF SIM_LEAGUE_SEASONS_CONTROL SIM_LEAGUE_SEASONS_BASE SIM_LEAGUE_SEASONS_SEED SIM_LEAGUE_SEASONS_PER_START SIM_LEAGUE_SEASONS_BASELINE; do
+            test -z "${!key+x}"
+          done
+          run_model simCareerLeagueFinish node scripts/simCareerLeagueFinish.mjs
+          run_model baseline-simCareerLeagueFinish bash -c 'cd "$QA_BASE_QA_SRC" && SIM_LEAGUE_FINISH_ARTIFACTS="$QA_OUT/paired-finish/baseline" node scripts/simCareerLeagueFinish.mjs'
+          run_model paired-finish-policy node "$QA_OUT/pairedFinishBaseline.mjs"
+          test "$(cat "$QA_OUT/logs/paired-finish-policy.exit")" = 0
+          test ! -s "$QA_OUT/transport/paired-finish-policy.log"
+          run_model simCareerLeagueSeasons env SIM_NETWORK=offline SIM_LEAGUE_SEASONS_ARTIFACTS="$QA_OUT/paired-seasons/current/normal" node scripts/simCareerLeagueSeasons.mjs
+          run_model baseline-simCareerLeagueSeasons bash -c 'cd "$QA_BASE_QA_SRC" && SIM_NETWORK=offline SIM_LEAGUE_SEASONS_ARTIFACTS="$QA_OUT/paired-seasons/baseline/normal" node scripts/simCareerLeagueSeasons.mjs'
+          run_model paired-seasons-policy node "$QA_OUT/seasonsPairedBaseline.mjs"
+          test "$(cat "$QA_OUT/logs/paired-seasons-policy.exit")" = 0
+          test ! -s "$QA_OUT/transport/paired-seasons-policy.log"
+          run_model bridge node scripts/simRussiaCareerBridge.mjs
+          run_model bridge-controls node scripts/simRussiaCareerBridge.mjs --controls
+          guards=(
+            simCareerClubPool simCareerFacts simCareerEras simCareerFallback
+            simCareerLeagueFinish simCareerLeagueSeasons simCareerLeagueWorld
+            simCareerDomesticCup simCareerContinental simSoccerCareerUcl
+            simLoanSpell simCareerTransferBrief simSoccerCareerSavedLoan
+            simSoccerLoanBite simSoccerLoanMinutes simTransferBriefPageControl
+          )
+          for guard in "${guards[@]}"; do
+            if [[ "$guard" == simCareerLeagueFinish || "$guard" == simCareerLeagueSeasons ]]; then
+              test -s "$QA_OUT/logs/$guard.exit"
+            elif [[ "$guard" == simCareerFallback ]]; then
+              run_model fallback-local-mode-absent test -z "${CAREER_FALLBACK_LOCAL_ONLY:-}"
+              run_model fallback-control-absent test -z "${CAREER_CONTROL:-}"
+              run_model "$guard" env SIM_NETWORK=live NODE_OPTIONS="--require=$QA_OUT/fallback-read/preload.cjs" node "scripts/$guard.mjs"
+              run_model fallback-read-admission bash -c 'test "$(cat "$QA_OUT/logs/simCareerFallback.exit")" = 0 && test ! -s "$QA_OUT/transport/simCareerFallback.log" && node --input-type=module' <<'FALLBACK_READ'
+          import fs from 'node:fs';import path from 'node:path';import crypto from 'node:crypto';import assert from 'node:assert/strict';
+          const out=path.join(process.env.QA_OUT,'fallback-read'),log=fs.readFileSync(process.env.QA_OUT+'/logs/simCareerFallback.log','utf8');
+          const summary=JSON.parse(fs.readFileSync(path.join(out,'summary.json'))),probe=JSON.parse(fs.readFileSync(path.join(out,'probes.json')));
+          assert.equal(summary.mode,'EXACT_PUBLIC_GET_ONLY');assert.equal(summary.nativeExit,0);assert.equal(summary.networkWrites,0);assert.equal(summary.headersRetained,false);
+          assert.equal(probe.networkDispatches,0);assert.equal(probe.probes.length,9);assert(probe.probes.every(row=>row.changed&&row.rejected&&row.networkDispatches===0));
+          assert(!/LIVE SECTIONS SKIPPED|FAIL:|Supabase unreachable/.test(log));
+          for(let i=1;i<=6;i++)assert.equal(log.split('\n').filter(line=>line.startsWith(i+') ')).length,1,'FALLBACK_READ_FULL_SECTION_'+i);
+          assert(log.includes('read fresh, identical'));assert(/30 players, \d+ season rows compared/.test(log));assert(log.includes('every file club among them'));
+          assert.equal(log.split('\n').filter(line=>line==='simCareerFallback: green. The fallback is a byte for byte bake of the live career tables and every row has the shape a real season has.').length,1);
+          const rows=summary.requests;assert(rows.length>61);assert(rows.every(row=>row.method==='GET'&&row.origin==='https://flawuiqbvjobmkfkauhw.supabase.co'&&row.complete&&[200,206].includes(row.status)&&row.urlMatched&&!row.hasBody&&!row.hasDispatcher&&!row.error));
+          for(const row of rows){const bytes=fs.readFileSync(path.join(out,row.bodyFile));assert.equal(bytes.length,row.bytes);assert.equal(crypto.createHash('sha256').update(bytes).digest('hex'),row.sha256);assert(Array.isArray(JSON.parse(bytes)));}
+          const count=(table,key)=>rows.filter(row=>row.path==='/rest/v1/'+table&&row.query.some(([name])=>name===key)).length;
+          assert.equal(count('career_players','player_name'),30);assert.equal(count('career_seasons','player_id'),30);
+          const bulkPlayers=rows.filter(row=>row.path==='/rest/v1/career_players'&&!row.query.some(([key])=>key==='player_name')),bulkSeasons=rows.filter(row=>row.path==='/rest/v1/career_seasons'&&!row.query.some(([key])=>key==='player_id'));
+          assert.equal(bulkPlayers.length,1);assert(bulkSeasons.length>0);assert.equal(rows.length,61+bulkSeasons.length);
+          fs.writeFileSync(process.env.QA_OUT+'/fallback-read-admitted.json',JSON.stringify({status:'FULL_UNCHANGED_FALLBACK_GUARD_LIVE_READ_PASSED',requestCount:rows.length,bulkPlayers:1,bulkSeasonPages:bulkSeasons.length,individualPlayerReads:30,individualSeasonReads:30,methods:['GET'],tables:['career_players','career_seasons'],networkWrites:0,allSixSections:true,probeControls:9,allPublicResponseBodiesRetained:true,headersRetained:false})+'\n',{flag:'wx'});
+          FALLBACK_READ
+            elif [[ "$guard" == simSoccerCareerSavedLoan ]]; then
+              run_model "$guard" env SIM_NETWORK=offline node "scripts/$guard.mjs"
+            else
+              run_model "$guard" node "scripts/$guard.mjs"
+            fi
+          done
+          run_model simSaveKeeper node scripts/simSaveKeeper.mjs
+          run_model simHomeFront node scripts/simHomeFront.mjs
+          run_model simHomeFront-output grep -F '7) Continue playing:' "$QA_OUT/logs/simHomeFront.log"
+          run_model simSoccerCareerRecords node scripts/simSoccerCareerRecords.mjs
+          run_model simSoccerCareerRecords-output grep -F 'simSoccerCareerRecords: 12 outcome checks green, three effective controls caught' "$QA_OUT/logs/simSoccerCareerRecords.log"
+          run_model records-admission bash -c 'test "$(cat "$QA_OUT/logs/simSoccerCareerRecords.exit")" = 0 && test "$(cat "$QA_OUT/logs/simSoccerCareerRecords-output.exit")" = 0 && test ! -s "$QA_OUT/transport/simSoccerCareerRecords.log" && node --input-type=module' <<'RECORDS'
+          import fs from 'node:fs';import path from 'node:path';import crypto from 'node:crypto';import assert from 'node:assert/strict';
+          const out=process.env.QA_OUT,leaf=path.resolve('.tmp-fx/career-records-tests.json');
+          assert(fs.existsSync(out+'/records-leaf-owned-before.txt'));
+          const dir=fs.lstatSync(path.dirname(leaf)),stat=fs.lstatSync(leaf);
+          assert(dir.isDirectory()&&!dir.isSymbolicLink());assert(stat.isFile()&&!stat.isSymbolicLink());
+          assert.equal(fs.realpathSync(path.dirname(leaf)),path.join(fs.realpathSync('.'),'.tmp-fx'));
+          const bytes=fs.readFileSync(leaf),report=JSON.parse(bytes),rows=report.testResults.flatMap(x=>x.assertionResults);
+          assert.equal(report.numTotalTests,12);assert.equal(report.numPassedTests,11);assert.equal(report.numFailedTests,1);
+          assert.equal(rows.length,12);assert.equal(rows.filter(x=>x.status==='passed').length,11);assert.equal(rows.filter(x=>x.status==='failed').length,1);
+          fs.writeFileSync(out+'/records-last-control-tests.json',bytes,{flag:'wx'});assert.deepEqual(fs.readFileSync(out+'/records-last-control-tests.json'),bytes);
+          fs.unlinkSync(leaf);
+          fs.writeFileSync(out+'/records-output-retention.json',JSON.stringify({sourceLeaf:'.tmp-fx/career-records-tests.json',retained:'records-last-control-tests.json',bytes:bytes.length,sha256:crypto.createHash('sha256').update(bytes).digest('hex'),nativeSimExit:0,ordinaryNonSymlinkLeaf:true,copyReadBackExact:true,removedOnlyExactLeaf:true,meaning:'Last negative-control report has1failed and11passed. Healthy12 outcomes and3 effective controls are in the full native log.'},null,2)+'\n');
+          RECORDS
+          run_model records-owned-cleanup node --input-type=module <<'RECORDS_COLLECTOR_CLEANUP'
+          import fs from 'node:fs';import path from 'node:path';import assert from 'node:assert/strict';
+          const out=process.env.QA_OUT,leaf=path.resolve('.tmp-fx/career-records-tests.json');
+          if(fs.existsSync(leaf)){
+            assert.equal(fs.readFileSync(out+'/records-leaf-owned-before.txt','utf8'),'absent before this owned smoke\n');
+            assert(fs.lstatSync(path.dirname(leaf)).isDirectory()&&!fs.lstatSync(path.dirname(leaf)).isSymbolicLink());
+            assert(fs.lstatSync(leaf).isFile()&&!fs.lstatSync(leaf).isSymbolicLink());
+            assert.equal(fs.realpathSync(path.dirname(leaf)),path.join(fs.realpathSync('.'),'.tmp-fx'));
+            const body=fs.readFileSync(leaf),copy=out+'/records-earlier-failure-owned-leaf.json';
+            fs.writeFileSync(copy,body,{flag:'wx'});assert.deepEqual(fs.readFileSync(copy),body);
+            fs.unlinkSync(leaf);
+          }
+          RECORDS_COLLECTOR_CLEANUP
+          retainer_args=(retain)
+          if [[ "$(cat "$QA_OUT/logs/simCareerTransferBrief.exit")" == 0 && "$(cat "$QA_OUT/logs/simTransferBriefPageControl.exit")" == 0 && ! -s "$QA_OUT/transport/simCareerTransferBrief.log" && ! -s "$QA_OUT/transport/simTransferBriefPageControl.log" ]]; then
+            retainer_args+=(--required)
+          fi
+          run_model transfer-brief-output-retain node "$QA_OUT/transferBriefOutputRetainer.mjs" "${retainer_args[@]}"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$QA_OUT/source-after-models.sha256"
+          git ls-files --stage > "$QA_OUT/index-after-models.txt"
+          sha256sum package.json package-lock.json bun.lock bun.lockb > "$QA_OUT/locks-after-models.sha256"
+          git status --porcelain=v1 --untracked-files=all > "$QA_OUT/status-after-models.txt"
+          cmp "$QA_OUT/source-before.sha256" "$QA_OUT/source-after-models.sha256"
+          cmp "$QA_OUT/index-before.txt" "$QA_OUT/index-after-models.txt"
+          cmp "$QA_OUT/locks-before.sha256" "$QA_OUT/locks-after-models.sha256"
+          test ! -s "$QA_OUT/status-after-models.txt"
+          (cd "$QA_BASE_SRC"; git ls-files -z | sort -z | xargs -0 sha256sum) > "$QA_OUT/baseline-source-after-models.sha256"
+          (cd "$QA_BASE_SRC"; git ls-files --stage) > "$QA_OUT/baseline-index-after-models.txt"
+          (cd "$QA_BASE_SRC"; sha256sum package.json package-lock.json bun.lock bun.lockb) > "$QA_OUT/baseline-locks-after-models.sha256"
+          (cd "$QA_BASE_SRC"; git status --porcelain=v1 --untracked-files=all) > "$QA_OUT/baseline-status-after-models.txt"
+          cmp "$QA_OUT/baseline-source-before.sha256" "$QA_OUT/baseline-source-after-models.sha256"
+          cmp "$QA_OUT/baseline-index-before.txt" "$QA_OUT/baseline-index-after-models.txt"
+          cmp "$QA_OUT/baseline-locks-before.sha256" "$QA_OUT/baseline-locks-after-models.sha256"
+          test ! -s "$QA_OUT/baseline-status-after-models.txt"
+          (cd "$QA_BASE_QA_SRC"; git ls-files -z | sort -z | xargs -0 sha256sum) > "$QA_OUT/baseline-qa-source-after-models.sha256"
+          (cd "$QA_BASE_QA_SRC"; git ls-files --stage) > "$QA_OUT/baseline-qa-index-after-models.txt"
+          (cd "$QA_BASE_QA_SRC"; sha256sum package.json package-lock.json bun.lock bun.lockb) > "$QA_OUT/baseline-qa-locks-after-models.sha256"
+          (cd "$QA_BASE_QA_SRC"; git status --porcelain=v1 --untracked-files=all) > "$QA_OUT/baseline-qa-status-after-models.txt"
+          cmp "$QA_OUT/baseline-qa-source-before.sha256" "$QA_OUT/baseline-qa-source-after-models.sha256"
+          cmp "$QA_OUT/baseline-qa-index-before.txt" "$QA_OUT/baseline-qa-index-after-models.txt"
+          cmp "$QA_OUT/baseline-qa-locks-before.sha256" "$QA_OUT/baseline-qa-locks-after-models.sha256"
+          test ! -s "$QA_OUT/baseline-qa-status-after-models.txt"
+          node --input-type=module <<'MODEL_OUTCOMES'
+          import fs from 'node:fs';import assert from 'node:assert/strict';import crypto from 'node:crypto';
+          const out=process.env.QA_OUT,sha=body=>crypto.createHash('sha256').update(body).digest('hex');
+          const names=["bridge","bridge-controls","simCareerClubPool","simCareerFacts","simCareerEras","fallback-local-mode-absent","fallback-control-absent","simCareerFallback","fallback-read-admission","simCareerLeagueFinish","simCareerLeagueSeasons","simCareerLeagueWorld","simCareerDomesticCup","simCareerContinental","simSoccerCareerUcl","simLoanSpell","simCareerTransferBrief","simSoccerCareerSavedLoan","simSoccerLoanBite","simSoccerLoanMinutes","simTransferBriefPageControl","simSaveKeeper","simHomeFront","simHomeFront-output","simSoccerCareerRecords","simSoccerCareerRecords-output","records-admission","records-owned-cleanup","transfer-brief-output-retain"];
+          const rows=names.map(name=>{
+           const exitFile='logs/'+name+'.exit',exit=fs.readFileSync(out+'/'+exitFile,'utf8');assert(/^(0|[1-9][0-9]{0,2})\n$/.test(exit),'MODEL_NATIVE_STATUS_PRESENT '+name);
+           const nativeExit=Number(exit);assert(nativeExit<=255,'MODEL_NATIVE_STATUS_RANGE');
+           const logFile='logs/'+name+'.log',log=fs.readFileSync(out+'/'+logFile),transportFile='transport/'+name+'.log',transport=fs.readFileSync(out+'/'+transportFile);
+           return{name,nativeExit,exitFile,log:{file:logFile,bytes:log.length,sha256:sha(log)},transport:{file:transportFile,bytes:transport.length,sha256:sha(transport),empty:transport.length===0},passed:nativeExit===0&&transport.length===0};
+          });
+          assert.equal(rows.length,29);assert.equal(new Set(rows.map(row=>row.name)).size,29);
+          fs.writeFileSync(out+'/MODEL-OUTCOMES.json',JSON.stringify({schema:'RUSSIA_COMPLETE_MODEL_OUTCOME_COLLECTION_V1',status:'SOURCE_CLEAN_MODEL_OUTCOMES_COLLECTED',collectorShellSuccessIsNotModelSuccess:true,allOriginalOutcomesPassed:rows.every(row=>row.passed),failedOutcomes:rows.filter(row=>!row.passed).map(row=>row.name),product:{commit:process.env.PRODUCT_CORE,tree:process.env.PRODUCT_TREE},independentGuards:16,smokes:3,bridgeCommands:2,rows,modelSourceIndexLocksAndStatusHeld:true,qualification:false},null,2)+'\n',{flag:'wx'});
+          console.log('Collected all29 native/admission outcomes; reds='+rows.filter(row=>!row.passed).length+'. Final all-zero qualification is separate.');
+          MODEL_OUTCOMES
+          run_model scoped-baseline-policy node "$QA_OUT/baselineRegressionAdmission.mjs"
+          test "$(cat "$QA_OUT/logs/scoped-baseline-policy.exit")" = 0
+          test ! -s "$QA_OUT/transport/scoped-baseline-policy.log"
+      - name: Normal build, all twenty output readers and unchanged caps
+        timeout-minutes: 25
+        run: |
+          set -euo pipefail
+          export GIT_NO_LAZY_FETCH=1
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          classify_receipt() {
+            local name="$1" receipt="$2"
+            local allowed='^\[SIM_OFFLINE_BLOCK\] external browser route continue https://fonts\.(googleapis|gstatic)\.com$'
+            if [[ "$name" == sweep-weight ]]; then
+              allowed="$allowed|^\[SIM_OFFLINE_BLOCK\] external browser route continue https://flagcdn\.com$"
+            elif [[ "$name" != build ]]; then
+              if [[ -s "$receipt" ]]; then cat "$receipt"; return 1; fi
+              return 0
+            fi
+            local status=0
+            grep -Ev "$allowed" "$receipt" || status=$?
+            if [[ "$status" == 1 ]]; then return 0; fi
+            return 1
+          }
+          run_gate() {
+            local name="$1"
+            shift
+            local receipt="$QA_OUT/transport/$name.log"
+            : > "$receipt"
+            set +e
+            SIM_OFFLINE_RECEIPT="$receipt" "$@" 2>&1 | tee "$QA_OUT/logs/$name.log"
+            local pipe_status=("${PIPESTATUS[@]}")
+            set -e
+            printf '%s\n' "${pipe_status[0]}" > "$QA_OUT/logs/$name.exit"
+            printf '%s\n' "${pipe_status[1]}" > "$QA_OUT/logs/$name-tee.exit"
+            test "${pipe_status[0]}" = 0 && test "${pipe_status[1]}" = 0 || return 1
+            local transport_exit=0
+            classify_receipt "$name" "$receipt" || transport_exit=$?
+            printf '%s\n' "$transport_exit" > "$QA_OUT/logs/$name-transport.exit"
+            if [[ "$transport_exit" != 0 ]]; then
+              echo "Unexpected blocked transport in $name" >&2
+              return 1
+            fi
+            # Every refusal is retained and counted, never credited as zero transport.
+            if [[ -s "$receipt" ]]; then
+              wc -l "$receipt" | tee "$QA_OUT/logs/$name-blocked-attempts.txt"
+            fi
+          }
+          run_gate build npm run build
+          printf '%s\n' '{"command":"npm run build","exit":0}' > "$QA_OUT/build-passed.json"
+          find dist -type f -print0 | sort -z | xargs -0 sha256sum > "$QA_OUT/dist-before.sha256"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import path from 'node:path';import zlib from 'node:zlib';import crypto from 'node:crypto';import assert from 'node:assert/strict';
+          const assets=fs.readdirSync('dist/assets').filter(file=>/\.(js|css)$/.test(file)).sort().map(file=>{
+            const bytes=fs.readFileSync(path.join('dist/assets',file));return{file,bytes:bytes.length,gzipBytes:zlib.gzipSync(bytes).length,sha256:crypto.createHash('sha256').update(bytes).digest('hex')};
+          });
+          const soccer=assets.filter(row=>/^SoccerCareer-.*\.js$/.test(row.file));
+          assert.equal(soccer.length,1);
+          fs.writeFileSync(process.env.QA_OUT+'/soccer-chunk-sizes.json',JSON.stringify({status:'MEASURED_BUILT_CHUNKS_NO_NEW_CAP',soccer,allBuiltAssets:assets,limits:'Individual built chunk raw/gzip sizes only. Actual route critical-body proof comes from the unchanged sweepWeight window and all16 original caps, including Soccer840KiB. No headroom or full-download total is inferred from this chunk list.'},null,2)+'\n',{flag:'wx'});
+          console.log('RUSSIA_BRIDGE_BUILT_CHUNK_SIZES '+JSON.stringify(soccer));
+          NODE
+          tar -czf "$QA_OUT/completed-dist.tar.gz" dist
+          sha256sum "$QA_OUT/completed-dist.tar.gz" > "$QA_OUT/completed-dist.tar.gz.sha256"
+          tar -tzf "$QA_OUT/completed-dist.tar.gz" > "$QA_OUT/completed-dist-members.txt"
+          export BASE=http://127.0.0.1:4173
+          export SWEEP_BASE="$BASE"
+          export SWEEP_OFFLINE=1
+          export SIM_OFFLINE_RECEIPT="$QA_OUT/transport/server.log"
+          : > "$SIM_OFFLINE_RECEIPT"
+          node scripts/lib/hostLikeServer.mjs dist 4173 > "$QA_OUT/logs/server.log" 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid" 2>/dev/null || true' EXIT
+          ready=0
+          for attempt in $(seq 1 40); do
+            if curl --fail --silent "$BASE/" > /dev/null; then ready=1; break; fi
+            kill -0 "$server_pid"
+            sleep 1
+          done
+          test "$ready" = 1
+          run_gate sweep-weight node scripts/sweepWeight.mjs
+          readers=(
+            simAdsense simBrand simHeadTags simHiddenPages simHubs
+            simIndexNow simIndexing simInternalLinks simNoRivalNames simPrerender
+            simPrerenderBoot simRetiredRoutes simSchema simSitemap simSnapshotAssets
+            simSiteSearch simGuideHeadings simHarnessAnchors
+          )
+          for reader in "${readers[@]}"; do
+            run_gate "$reader" node "scripts/$reader.mjs"
+          done
+          run_gate simSeoTitles node scripts/simSeoTitles.mjs
+          run_gate simSeoMetaSplit env SEO_SPLIT_ONLY=/soccer-career,/club-manager,/nba-my-career node scripts/simSeoMetaSplit.mjs
+          test ! -s "$QA_OUT/transport/server.log"
+      - name: Retain any owned records diagnostic after an earlier failure
+        if: always()
+        run: |
+          set -euo pipefail
+          node --input-type=module <<'RECORDS_FAILURE'
+          import fs from 'node:fs';import path from 'node:path';import assert from 'node:assert/strict';
+          const out=process.env.QA_OUT,leaf=path.resolve('.tmp-fx/career-records-tests.json');
+          if(fs.existsSync(leaf)){
+            assert.equal(fs.readFileSync(out+'/records-leaf-owned-before.txt','utf8'),'absent before this owned smoke\n');
+            assert(fs.lstatSync(path.dirname(leaf)).isDirectory()&&!fs.lstatSync(path.dirname(leaf)).isSymbolicLink());
+            assert(fs.lstatSync(leaf).isFile()&&!fs.lstatSync(leaf).isSymbolicLink());
+            assert.equal(fs.realpathSync(path.dirname(leaf)),path.join(fs.realpathSync('.'),'.tmp-fx'));
+            const body=fs.readFileSync(leaf),copy=out+'/records-earlier-failure-owned-leaf.json';
+            fs.writeFileSync(copy,body,{flag:'wx'});assert.deepEqual(fs.readFileSync(copy),body);
+            fs.unlinkSync(leaf);
+          }
+          RECORDS_FAILURE
+      - name: Retain the complete owned TransferBrief output after success or failure
+        if: always()
+        run: |
+          set -euo pipefail
+          set +e
+          node "$QA_OUT/transferBriefOutputRetainer.mjs" retain > "$QA_OUT/logs/transfer-brief-output-retain-always.log" 2>&1
+          native_exit=$?
+          set -e
+          printf '%s\n' "$native_exit" > "$QA_OUT/logs/transfer-brief-output-retain-always.exit"
+          cat "$QA_OUT/logs/transfer-brief-output-retain-always.log"
+          test "$native_exit" = 0
+      - name: Always preserve both source roles and locks
+        if: always()
+        run: |
+          set -euo pipefail
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$QA_OUT/source-after.sha256"
+          git ls-files --stage > "$QA_OUT/index-after.txt"
+          git status --porcelain=v1 --untracked-files=all > "$QA_OUT/status-after.txt"
+          sha256sum package.json package-lock.json bun.lock bun.lockb > "$QA_OUT/locks-after.sha256"
+          cmp "$QA_OUT/source-before.sha256" "$QA_OUT/source-after.sha256"
+          cmp "$QA_OUT/index-before.txt" "$QA_OUT/index-after.txt"
+          cmp "$QA_OUT/locks-before.sha256" "$QA_OUT/locks-after.sha256"
+          test ! -s "$QA_OUT/status-after.txt"
+          (cd "$QA_BASE_SRC"; git ls-files -z | sort -z | xargs -0 sha256sum) > "$QA_OUT/baseline-source-after.sha256"
+          (cd "$QA_BASE_SRC"; git ls-files --stage) > "$QA_OUT/baseline-index-after.txt"
+          (cd "$QA_BASE_SRC"; git status --porcelain=v1 --untracked-files=all) > "$QA_OUT/baseline-status-after.txt"
+          (cd "$QA_BASE_SRC"; sha256sum package.json package-lock.json bun.lock bun.lockb) > "$QA_OUT/baseline-locks-after.sha256"
+          cmp "$QA_OUT/baseline-source-before.sha256" "$QA_OUT/baseline-source-after.sha256"
+          cmp "$QA_OUT/baseline-index-before.txt" "$QA_OUT/baseline-index-after.txt"
+          cmp "$QA_OUT/baseline-locks-before.sha256" "$QA_OUT/baseline-locks-after.sha256"
+          test ! -s "$QA_OUT/baseline-status-after.txt"
+          (cd "$QA_BASE_QA_SRC"; git ls-files -z | sort -z | xargs -0 sha256sum) > "$QA_OUT/baseline-qa-source-after.sha256"
+          (cd "$QA_BASE_QA_SRC"; git ls-files --stage) > "$QA_OUT/baseline-qa-index-after.txt"
+          (cd "$QA_BASE_QA_SRC"; sha256sum package.json package-lock.json bun.lock bun.lockb) > "$QA_OUT/baseline-qa-locks-after.sha256"
+          (cd "$QA_BASE_QA_SRC"; git status --porcelain=v1 --untracked-files=all) > "$QA_OUT/baseline-qa-status-after.txt"
+          cmp "$QA_OUT/baseline-qa-source-before.sha256" "$QA_OUT/baseline-qa-source-after.sha256"
+          cmp "$QA_OUT/baseline-qa-index-before.txt" "$QA_OUT/baseline-qa-index-after.txt"
+          cmp "$QA_OUT/baseline-qa-locks-before.sha256" "$QA_OUT/baseline-qa-locks-after.sha256"
+          test ! -s "$QA_OUT/baseline-qa-status-after.txt"
+          if [[ -d "$QA_RUSSIA_REMOVED_SRC" ]]; then
+            node "$QA_OUT/pairedFinishBaseline.mjs" --final-removed-holds
+          fi
+          printf '0\n' > "$QA_OUT/final-source-holds.exit"
+      - name: Close the fresh compiled output
+        run: |
+          set -euo pipefail
+          find dist -type f -print0 | sort -z | xargs -0 sha256sum > "$QA_OUT/dist-after.sha256"
+          cmp "$QA_OUT/dist-before.sha256" "$QA_OUT/dist-after.sha256"
+          node --input-type=module <<'CLOSE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';import crypto from 'node:crypto';
+          const collectionOut=process.env.QA_OUT,collection=JSON.parse(fs.readFileSync(collectionOut+'/MODEL-OUTCOMES.json'));
+          assert.equal(collection.status,'SOURCE_CLEAN_MODEL_OUTCOMES_COLLECTED');assert.equal(collection.collectorShellSuccessIsNotModelSuccess,true);
+          const expectedModelNames=["bridge","bridge-controls","simCareerClubPool","simCareerFacts","simCareerEras","fallback-local-mode-absent","fallback-control-absent","simCareerFallback","fallback-read-admission","simCareerLeagueFinish","simCareerLeagueSeasons","simCareerLeagueWorld","simCareerDomesticCup","simCareerContinental","simSoccerCareerUcl","simLoanSpell","simCareerTransferBrief","simSoccerCareerSavedLoan","simSoccerLoanBite","simSoccerLoanMinutes","simTransferBriefPageControl","simSaveKeeper","simHomeFront","simHomeFront-output","simSoccerCareerRecords","simSoccerCareerRecords-output","records-admission","records-owned-cleanup","transfer-brief-output-retain"];
+          assert.deepEqual(collection.rows.map(row=>row.name),expectedModelNames);assert.equal(collection.rows.length,29);
+          const redNames=['simCareerLeagueFinish','simCareerLeagueSeasons','simCareerLeagueWorld'];
+          const policyFile='baseline-regression-admission.json',policyBody=fs.readFileSync(collectionOut+'/'+policyFile),policy=JSON.parse(policyBody),policySHA=crypto.createHash('sha256').update(policyBody).digest('hex');
+          assert.equal(fs.readFileSync(collectionOut+'/logs/scoped-baseline-policy.exit','utf8'),'0\n');assert.equal(fs.readFileSync(collectionOut+'/transport/scoped-baseline-policy.log').length,0);
+          assert.equal(policy.schema,'RUSSIA_BASELINE_REGRESSION_ADMISSION_V2');assert.equal(policy.status,'TWO_INHERITED_REDS_AND_ONE_SOURCE_ATTRIBUTED_CHANGE_RETAINED');assert.deepEqual(policy.redOutcomeNames,redNames);assert.deepEqual(policy.inheritedRedOutcomeNames,redNames.slice(1));assert.deepEqual(policy.sourceAttributedRedOutcomeNames,redNames.slice(0,1));
+          assert.deepEqual(policy.zeroOutcomeNames,expectedModelNames.filter(name=>!redNames.includes(name)));assert.equal(policy.zeroOutcomeNames.length,26);
+          assert.deepEqual(policy.product,{commit:process.env.PRODUCT_CORE,tree:process.env.PRODUCT_TREE});
+          for(const row of collection.rows){
+           const native=redNames.includes(row.name)?1:0;
+           assert.equal(fs.readFileSync(collectionOut+'/'+row.exitFile,'utf8'),String(native)+'\n','SCOPED_ORIGINAL_MODEL_NATIVE '+row.name);
+           assert.equal(row.nativeExit,native);assert.equal(row.transport.empty,true);assert.equal(fs.readFileSync(collectionOut+'/'+row.transport.file).length,0,'ORIGINAL_MODEL_TRANSPORT_RED '+row.name);assert.equal(row.passed,native===0);
+          }
+          assert.equal(collection.allOriginalOutcomesPassed,false);assert.deepEqual(collection.failedOutcomes,redNames);
+          assert.equal(fs.readFileSync(collectionOut+'/types.exit','utf8'),'0\n');
+          assert.equal(fs.readFileSync(collectionOut+'/final-source-holds.exit','utf8'),'0\n');
+          const buildNames=['build','sweep-weight','simAdsense','simBrand','simHeadTags','simHiddenPages','simHubs','simIndexNow','simIndexing','simInternalLinks','simNoRivalNames','simPrerender','simPrerenderBoot','simRetiredRoutes','simSchema','simSitemap','simSnapshotAssets','simSiteSearch','simGuideHeadings','simHarnessAnchors','simSeoTitles','simSeoMetaSplit'];
+          for(const name of buildNames)for(const suffix of['.exit','-tee.exit','-transport.exit'])
+           assert.equal(fs.readFileSync(collectionOut+'/logs/'+name+suffix,'utf8'),'0\n','ORIGINAL_BUILD_GATE_NOT_ZERO '+name+suffix);
+          assert.equal(JSON.parse(fs.readFileSync(collectionOut+'/fallback-read-admitted.json')).status,'FULL_UNCHANGED_FALLBACK_GUARD_LIVE_READ_PASSED');
+          assert.equal(JSON.parse(fs.readFileSync(collectionOut+'/records-output-retention.json')).nativeSimExit,0);
+          const out=process.env.QA_OUT,bridge=JSON.parse(fs.readFileSync(out+'/bridge/BRIDGE.json')),controls=JSON.parse(fs.readFileSync(out+'/bridge/PHYSICAL-CONTROLS.json'));
+          assert.equal(bridge.status,'passed');assert.equal(controls.status,'passed');
+          assert.equal(controls.results.length,10);for(const r of controls.results){assert.equal(r.native,1);assert.equal(r.owned,true);}
+          const readers=['simAdsense','simBrand','simHeadTags','simHiddenPages','simHubs','simIndexNow','simIndexing','simInternalLinks','simNoRivalNames','simPrerender','simPrerenderBoot','simRetiredRoutes','simSchema','simSitemap','simSnapshotAssets','simSiteSearch','simGuideHeadings','simHarnessAnchors','simSeoTitles','simSeoMetaSplit'];
+          fs.writeFileSync(out+'/qualification.json',JSON.stringify({status:'SCOPED_RUSSIA_BUILD_AND_BRIDGE_PASSED_WITH_TWO_INHERITED_REDS_AND_ATTRIBUTED_FINISH_CHANGE',allOriginalOutcomesPassed:false,baselineRegressionAdmission:{file:policyFile,bytes:policyBody.length,sha256:policySHA},product:{commit:process.env.PRODUCT_CORE,tree:process.env.PRODUCT_TREE},bridgeCases:bridge.cases.length,physicalControls:10,properTypes:true,normalBuilds:1,readers,unchangedCaps:16,smokes:3,fullSuite:false,browser:false,public:false},null,2)+'\n');
+          CLOSE
+      - name: Mark any retained completed output without final qualification as diagnostic only
+        if: always()
+        run: |
+          set -euo pipefail
+          node --input-type=module <<'DIST_DIAGNOSTIC'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const out=process.env.QA_OUT,hasDist=fs.existsSync(out+'/completed-dist.tar.gz'),qualified=fs.existsSync(out+'/qualification.json');
+          if(hasDist&&!qualified){
+           const models=fs.existsSync(out+'/MODEL-OUTCOMES.json')?JSON.parse(fs.readFileSync(out+'/MODEL-OUTCOMES.json')):null;
+           const exits=fs.readdirSync(out+'/logs').filter(name=>name.endsWith('.exit')).sort().map(file=>({file:'logs/'+file,native:fs.readFileSync(out+'/logs/'+file,'utf8')}));
+           fs.writeFileSync(out+'/UNQUALIFIED-COMPLETED-DIST.json',JSON.stringify({status:'DIAGNOSTIC_COMPLETED_DIST_NOT_QUALIFIED',product:{commit:process.env.PRODUCT_CORE,tree:process.env.PRODUCT_TREE},qualification:false,allOriginalModelsPassed:models?.allOriginalOutcomesPassed??false,failedModelOutcomes:models?.failedOutcomes??null,recordedExits:exits,meaning:'Completed output retained for diagnosis only. No missing or red model, admission, transport, source hold, build, reader or cap is waived.'},null,2)+'\n',{flag:'wx'});
+          }else if(qualified){assert(hasDist);assert.equal(JSON.parse(fs.readFileSync(out+'/qualification.json')).status,'SCOPED_RUSSIA_BUILD_AND_BRIDGE_PASSED_WITH_TWO_INHERITED_REDS_AND_ATTRIBUTED_FINISH_CHANGE');}
+          DIST_DIAGNOSTIC
+      - name: Retain the complete native packet
+        if: always()
+        run: |
+          set -euo pipefail
+          cd "$QA_OUT"
+          find . -type f ! -name manifest.sha256 -print0 | sort -z | xargs -0 sha256sum > manifest.sha256
+          tar -czf "$RUNNER_TEMP/russia-career-qualification.tar.gz" .
+          cd "$RUNNER_TEMP"
+          sha256sum russia-career-qualification.tar.gz > russia-career-qualification.tar.gz.sha256
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: russia-career-qualification
+          path: |
+            ${{ runner.temp }}/russia-career-qualification.tar.gz
+            ${{ runner.temp }}/russia-career-qualification.tar.gz.sha256
+          compression-level: 0
+          retention-days: 30
