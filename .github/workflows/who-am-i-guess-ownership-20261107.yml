@@ -1,345 +1,897 @@
-name: Who Am I lookup ownership fixed
+name: Who Am I lookup ownership full qualification
 on:
   push:
-    branches: [codex/who-am-i-guess-ownership-fixed-qa-20261107]
+    branches: [codex/who-am-i-guess-ownership-full-qa-20261107]
 permissions:
   contents: read
   actions: read
 jobs:
   qualify:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 45
     defaults:
       run:
         shell: bash
     env:
       SIM_NETWORK: offline
-      SIM_OFFLINE_RECEIPT: who-am-i-guess-ownership-evidence/offline.log
-      WHO_AM_I_STAGE: fixed
-      WHO_AM_I_PARENT: '5acdb362dc33d19197399697160c8e11de2dac23'
-      WHO_AM_I_BASE: '5584945095a494802c6a9d865db560e78cd5069e'
-      WHO_AM_I_BASE_TREE: 'b60eb586ad32b5565a3857bf6032d5b3b1f25a89'
-      WHO_AM_I_ORIGINAL_PAGE: '931e60e5075768b677c2013f99131c1867f27b68'
-      WHO_AM_I_PAGE: '76c3c1d99a4c0b6752df0c3b27cd548f88d51fae'
+      SIM_OFFLINE_RECEIPT: who-am-i-guess-ownership-full/offline.log
+      TZ: UTC
+      SEO_SPLIT_BASE_REF: 3b14650d360b010b25b525de33a5f32f33de2798
+      WHO_AM_I_PRODUCT_BASE: '5584945095a494802c6a9d865db560e78cd5069e'
+      WHO_AM_I_PRODUCT_BASE_TREE: 'b60eb586ad32b5565a3857bf6032d5b3b1f25a89'
+      WHO_AM_I_FIXED_HEAD: '6713d0d2396d077f5a4c52ead9afe809458480b5'
+      WHO_AM_I_FIXED_TREE: 'f1ee6cbb42e3ebc3298e54f02aa99ca7bef4f25d'
+      WHO_AM_I_FIXED_WORKFLOW: '042cf998b2196c2d1c777fc517f47acee8c1d914'
       WHO_AM_I_TEST: 'bb08f3b9b2dc6e87a5fc3ab7d090b86893c642c1'
       WHO_AM_I_PLAN: '273ab6bfc2e924ea1b41f20c56ef2e2c5404cc2d'
+      WHO_AM_I_GUESS_OWNERSHIP_PAGE_BLOB: '76c3c1d99a4c0b6752df0c3b27cd548f88d51fae'
+      WHO_AM_I_HELPER: '07024f3428468510b8de9a37b388032a40af8524'
+      WHO_AM_I_OUTER: 'e67470d4c3c0b2a4d076c6019f8f9e8f88e71f54'
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 3
+          fetch-depth: 4
           persist-credentials: false
       - uses: actions/setup-node@v4
         with:
           node-version: 24.22.1
           cache: npm
-      - name: Capture exact source and install locked dependencies
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.4.4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Exact qualified fixed parent and clean product scope
         run: |
           set -euo pipefail
-          out=who-am-i-guess-ownership-evidence
+          if grep -En '__[A-Z][A-Z0-9_]*__' .github/workflows/who-am-i-guess-ownership-20261107.yml; then echo 'Unresolved full qualification binding'; exit 1; fi
+          for value in "$WHO_AM_I_FIXED_HEAD" "$WHO_AM_I_FIXED_TREE" "$WHO_AM_I_FIXED_WORKFLOW" "$WHO_AM_I_TEST" "$WHO_AM_I_PLAN" "$WHO_AM_I_GUESS_OWNERSHIP_PAGE_BLOB" "$WHO_AM_I_HELPER" "$WHO_AM_I_OUTER"; do [[ "$value" =~ ^[a-f0-9]{40}$ ]]; done
+          out=who-am-i-guess-ownership-full
+          test ! -e "$out"
           mkdir "$out"
           touch "$out/offline.log"
           git rev-parse HEAD > "$out/head.txt"
           git rev-parse 'HEAD^{tree}' > "$out/tree.txt"
           git ls-files -s > "$out/source-before.txt"
           sha256sum package.json package-lock.json > "$out/locks-before.txt"
-          git fetch --no-tags --depth=1 origin "$WHO_AM_I_BASE"
-          npm ci 2>&1 | tee "$out/install.log"
-      - name: Qualify exact source and authenticate the prior evidence
+          git diff --exit-code HEAD -- .
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          import {execFileSync} from 'node:child_process';
+          import {createHash} from 'node:crypto';
+          const out='who-am-i-guess-ownership-full',env=process.env;
+          const base=env.WHO_AM_I_PRODUCT_BASE,fixed=env.WHO_AM_I_FIXED_HEAD;
+          const workflow='.github/workflows/who-am-i-guess-ownership-20261107.yml',helper='scripts/qa/playWhoAmIGuessOwnership.mjs';
+          const page='src/pages/WhoAmI.tsx',test='src/test/whoAmIGuessOwnership.test.tsx',plan='docs/plans/2026-11-07-who-am-i-guess-ownership.md';
+          const git=(...args)=>execFileSync('git',args,{encoding:'utf8',maxBuffer:16*1024*1024});
+          const at=(ref,file)=>git('rev-parse',ref+':'+file).trim();
+          const tree=ref=>git('ls-tree','-r','-z',ref).split('\0').filter(Boolean);
+          const fileOf=row=>row.split('\t')[1],scope=rows=>rows.filter(row=>/^(src|public|scripts)\//.test(fileOf(row))).length;
+          const hash=(kind,body)=>createHash(kind).update(body).digest('hex');
+          const blob=bytes=>createHash('sha1').update('blob '+bytes.length+'\0').update(bytes).digest('hex');
+          const head=git('rev-parse','HEAD').trim(),headTree=git('rev-parse','HEAD^{tree}').trim();
+          assert.equal(head,env.GITHUB_SHA);
+          assert.deepEqual(git('rev-list','--parents','-n','1','HEAD').trim().split(' '),[head,fixed]);
+          assert.deepEqual([git('rev-parse',base+'^{tree}').trim(),git('rev-parse',fixed+'^{tree}').trim()],[env.WHO_AM_I_PRODUCT_BASE_TREE,env.WHO_AM_I_FIXED_TREE]);
+          const product=tree(base),prior=tree(fixed),current=tree(head);
+          assert.deepEqual([product.length,prior.length,current.length,scope(product),scope(prior),scope(current)],[5787,5790,5791,4662,4663,4664]);
+          assert.deepEqual(git('diff','--name-status',base,fixed).trim().split('\n').sort(),['M\t'+page,'A\t'+test,'A\t'+plan,'A\t'+workflow].sort());
+          assert.deepEqual(git('diff','--name-status',fixed,head).trim().split('\n').sort(),['M\t'+workflow,'A\t'+helper].sort());
+          const held=prior.filter(row=>fileOf(row)!==workflow);
+          assert.equal(held.length,5789);
+          assert.deepEqual(current.filter(row=>![workflow,helper].includes(fileOf(row))),held);
+          assert.equal(at(fixed,workflow),env.WHO_AM_I_FIXED_WORKFLOW);
+          assert.equal(at(base,page),'931e60e5075768b677c2013f99131c1867f27b68');
+          const pins={
+            [page]:env.WHO_AM_I_GUESS_OWNERSHIP_PAGE_BLOB,[test]:env.WHO_AM_I_TEST,[plan]:env.WHO_AM_I_PLAN,[helper]:env.WHO_AM_I_HELPER,
+            'src/App.tsx':'8bfedf7aaa1d076e0f0c8e2216c7e46632cd8a33','src/data/gameRegistry.ts':'f560b40a74d1468ac72dfde4ee6fec6635a9a255',
+            'public/who-am-i/index.html': 'cd4d7ab7de79d9742bfbebea4de649ada9349fea',
+            'src/lib/whoAmI.ts': '8b6da5c480857fa8b7164d50c322eaccd0f6a8af',
+            'src/components/game/GiveUpButton.tsx': '2462260a7b5f1d5d3b70915df2428d5d4397b0a0',
+            'src/components/game/PlayerAutocomplete.tsx': 'a0bd500b63306c75e0dea251cb6fb67ea2ed9452',
+            'src/lib/playerSearch.ts': '0d19f2c23735eb30512dc7fc3a447eacef5e128f',
+            'src/lib/fetchAllRows.ts': '16a6d21750405e7a647576ff513ed8ee11d5ba6b',
+            'src/test/playerSearchIdentity.test.ts': '1286ab4853aacac662c6759fdcf990c8e350090c',
+            'scripts/lib/offlineTransport.cjs': '0fda542a2649fe5da937c6976fd0f5b6073e74b6',
+            'src/data/seoMeta.ts': 'cf7a5142e59b97048d27b5ece9a6588a92073728',
+          };
+          const configs=['index.html','package.json','package-lock.json','vite.config.ts','tailwind.config.ts','postcss.config.js','tsconfig.json','tsconfig.app.json','tsconfig.node.json','bun.lockb','bun.lock'];
+          for (const file of configs) pins[file]=at(base,file);
+          for (const [file,want] of Object.entries(pins)) {
+            assert.equal(at(head,file),want,file);
+            if(file!==helper) assert.equal(at(fixed,file),want,file+' held fixed');
+          }
+          const index=git('ls-files','--stage','-z').split('\0').filter(Boolean).map(row=>row.replace(' 0\t','\t').replace(/^(100(?:644|755)) /,'$1 blob '));
+          assert.deepEqual([...index].sort(),[...current].sort(),'All actual index tuples equal the committed tree');
+          const byFile=new Map(current.map(row=>[fileOf(row),row]));
+          for(const file of [page,test,plan,workflow,helper])assert(byFile.get(file).startsWith('100644 blob '),file+' exact source mode');
+          const physical=git('ls-files','-z').split('\0').filter(Boolean).map(file=>{
+            const bytes=fs.readFileSync(file),stat=fs.lstatSync(file);
+            assert(stat.isFile(),file+' regular source body');
+            const row=byFile.get(file);
+            assert.equal((stat.mode&0o111)!==0,row.startsWith('100755 '),file+' physical source mode');
+            assert.equal(blob(bytes),row.split(' ')[2].split('\t')[0],file+' physical source blob');
+            return {file,bytes:bytes.length,sha256:hash('sha256',bytes)};
+          });
+          assert.equal(physical.length,5791);
+          fs.writeFileSync(out+'/tracked-before.json',JSON.stringify(physical));
+          fs.writeFileSync(out+'/source-join.json',JSON.stringify({status:'passed',head,tree:headTree,parent:fixed,fixedHead:fixed,fixedTree:env.WHO_AM_I_FIXED_TREE,
+            productBase:base,productBaseTree:env.WHO_AM_I_PRODUCT_BASE_TREE,trackedRows:5791,fixedTrackedRows:5790,heldFixedRows:5789,
+            sourceRows:4664,cleanSourceRows:4663,rootConfigurations:configs.map(file=>({file,blob:pins[file]})),
+            workflowBlob:at(head,workflow),helperBlob:at(head,helper),pins},null,2));
+          NODE
+      - name: Locked dependencies and all installed version pins
+        run: |
+          set -euo pipefail
+          npm ci 2>&1 | tee who-am-i-guess-ownership-full/install.log
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          const lock=JSON.parse(fs.readFileSync('package-lock.json'));
+          const rows=Object.keys(lock.packages).filter(file=>file.startsWith('node_modules/')&&fs.existsSync(file+'/package.json')).map(file=>[file,JSON.parse(fs.readFileSync(file+'/package.json')).version]);
+          assert.equal(rows.length,521);
+          for(const [file,version] of rows)assert.equal(version,lock.packages[file].version,file);
+          fs.writeFileSync('who-am-i-guess-ownership-full/installed-before.json',JSON.stringify(rows));
+          assert.equal(fs.statSync('who-am-i-guess-ownership-full/offline.log').size,0);
+          NODE
+      - name: Actual direct route React lazy Soccer object and inert snapshot
+        run: |
+          set -euo pipefail
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';import ts from 'typescript';import {JSDOM} from 'jsdom';import {createHash} from 'node:crypto';
+          const out='who-am-i-guess-ownership-full',route='/who-am-i',component='WhoAmI',label='Who Am I?',appText=fs.readFileSync('src/App.tsx','utf8'),catalogText=fs.readFileSync('src/data/gameRegistry.ts','utf8'),app=ts.createSourceFile('src/App.tsx',appText,ts.ScriptTarget.Latest,true,ts.ScriptKind.TSX),catalog=ts.createSourceFile('src/data/gameRegistry.ts',catalogText,ts.ScriptTarget.Latest,true,ts.ScriptKind.TS);assert.deepEqual(app.parseDiagnostics,[]);assert.deepEqual(catalog.parseDiagnostics,[]);
+          const all=(root,predicate)=>{const found=[];const visit=node=>{if(predicate(node))found.push(node);ts.forEachChild(node,visit);};visit(root);return found;},attrs=(node,name)=>node.attributes.properties.filter(p=>ts.isJsxAttribute(p)&&p.name.text===name);
+          const routes=all(app,node=>(ts.isJsxSelfClosingElement(node)||ts.isJsxOpeningElement(node))&&node.tagName.getText(app)==='Route').filter(node=>attrs(node,'path').some(p=>p.initializer&&ts.isStringLiteralLike(p.initializer)&&p.initializer.text===route));assert.equal(routes.length,1,'One actual direct public JSX Route');assert(ts.isJsxSelfClosingElement(routes[0]),'Direct self-closing route');assert.equal(attrs(routes[0],'path').length,1);const elements=attrs(routes[0],'element');assert.equal(elements.length,1);const element=elements[0].initializer;assert(element&&ts.isJsxExpression(element)&&element.expression&&ts.isJsxSelfClosingElement(element.expression));assert.equal(element.expression.tagName.getText(app),component,'Direct Who Am I? mount, no Navigate');
+          const declarations=all(app,node=>ts.isVariableDeclaration(node)&&ts.isIdentifier(node.name)&&node.name.text===component);assert.equal(declarations.length,1);const init=declarations[0].initializer;assert(init&&ts.isCallExpression(init)&&ts.isIdentifier(init.expression)&&init.expression.text==='lazy');assert.equal(init.arguments.length,1);const factory=init.arguments[0];assert(ts.isArrowFunction(factory)&&factory.parameters.length===0);const load=factory.body;assert(ts.isCallExpression(load)&&load.expression.kind===ts.SyntaxKind.ImportKeyword&&load.arguments.length===1&&ts.isStringLiteralLike(load.arguments[0]));assert.equal(load.arguments[0].text,'./pages/WhoAmI');const reactLazy=all(app,node=>ts.isImportDeclaration(node)&&ts.isStringLiteralLike(node.moduleSpecifier)&&node.moduleSpecifier.text==='react'&&node.importClause?.namedBindings&&ts.isNamedImports(node.importClause.namedBindings)).flatMap(node=>node.importClause.namedBindings.elements).filter(node=>node.name.text==='lazy'&&(node.propertyName?.text??node.name.text)==='lazy');assert.equal(reactLazy.length,1,'lazy is the actual named React import');
+          const prop=(node,name)=>{const found=node.properties.filter(p=>ts.isPropertyAssignment(p)&&(ts.isIdentifier(p.name)||ts.isStringLiteralLike(p.name))&&p.name.text===name);assert(found.length<=1,'No duplicate catalog property: '+name);return found[0]?.initializer;},defs=all(catalog,node=>ts.isVariableDeclaration(node)&&ts.isIdentifier(node.name)&&node.name.text==='CATEGORIES');assert.equal(defs.length,1);const categories=defs[0].initializer;assert(categories&&ts.isArrayLiteralExpression(categories));const soccer=categories.elements.filter(node=>ts.isObjectLiteralExpression(node)&&prop(node,'title')&&ts.isStringLiteralLike(prop(node,'title'))&&prop(node,'title').text==='Soccer');assert.equal(soccer.length,1);const games=prop(soccer[0],'games');assert(games&&ts.isArrayLiteralExpression(games));const entries=games.elements.filter(node=>ts.isObjectLiteralExpression(node)&&prop(node,'path')&&ts.isStringLiteralLike(prop(node,'path'))&&prop(node,'path').text===route);assert.equal(entries.length,1,'One actual uncommented Soccer catalog object');const catalogLabel=prop(entries[0],'label');assert(catalogLabel&&ts.isStringLiteralLike(catalogLabel));assert.equal(catalogLabel.text,label,'Exact actual Soccer label');
+          const file='public/who-am-i/index.html',bytes=fs.readFileSync(file);assert.equal(bytes.length,21563);const dom=new JSDOM(bytes.toString('utf8')),doc=dom.window.document,canonicals=[...doc.querySelectorAll('link[rel]')].filter(node=>node.getAttribute('rel').toLowerCase().split(/\s+/).includes('canonical'));assert.equal(canonicals.length,1);assert.equal(canonicals[0].getAttribute('href'),'https://douknowball.com'+route);const snapshots=[...doc.querySelectorAll('#dukb-snapshot')];assert.equal(snapshots.length,1);const snapshot=snapshots[0],snapshotText=snapshot.textContent.trim();assert(snapshotText.length>500,'Actual readable saved game content');const headings=[...snapshot.querySelectorAll('h1')].map(node=>node.textContent.trim().replace(/\s+/g,' ').toUpperCase());assert(headings.includes('WHO AM I?'),'Actual saved game heading');const metas=[...doc.querySelectorAll('meta')],retired=metas.filter(node=>['dukb-retired-from','dukb-retired-to'].includes((node.getAttribute('name')||'').toLowerCase())),refresh=metas.filter(node=>(node.getAttribute('http-equiv')||'').trim().toLowerCase()==='refresh'),robots=metas.filter(node=>['robots','googlebot','bingbot'].includes((node.getAttribute('name')||'').toLowerCase()));assert.equal(retired.length,0,'No actual retired-route markers');assert.equal(refresh.length,0,'No actual redirect meta');assert(robots.every(node=>!/(?:^|[\s,])(?:noindex|none)(?:[\s,]|$)/i.test(node.getAttribute('content')||'')),'Active snapshot remains indexable');
+          fs.copyFileSync(file,out+'/active-snapshot.html');fs.writeFileSync(out+'/active-route-preflight.json',JSON.stringify({status:'passed',route,component,label,routeNode:routes[0].getText(app),reactLazyImport:reactLazy[0].parent.parent.parent.getText(app),lazyDeclaration:declarations[0].getText(app),catalogObject:entries[0].getText(catalog),snapshot:{file,bytes:bytes.length,sha256:createHash('sha256').update(bytes).digest('hex'),canonical:canonicals[0].getAttribute('href'),snapshotTextLength:snapshotText.length,headings,retiredMarkers:retired.length,metaRefresh:refresh.length,robots:robots.map(node=>({name:node.getAttribute('name'),content:node.getAttribute('content')}))},parsers:{typescript:ts.version,html:'Inert JSDOM, scripts/resources not enabled'},limits:'Actual AST nodes and inert DOM elements, never comments or a dormant Page file. Active source/public entry preflight only. No lookup ownership reproduction, game test, App fix, build, browser journey, real-data truth or release claim. Native route reachability remains unqualified.'},null,2));dom.window.close();console.log('PASS actual direct Who Am I? route, React lazy Page import, labeled Soccer catalog object and indexable nonredirect snapshot');
+          NODE
+      - name: Proper App types
+        run: |
+          set -euo pipefail
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee who-am-i-guess-ownership-full/types.log
+      - name: Authenticate completed original fixed and physical controls archives
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
-          out=who-am-i-guess-ownership-evidence
-          cat > "$out/qualification.mjs" <<'NODE'
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import assert from 'node:assert/strict';
+          import {execFileSync} from 'node:child_process';
+          import {createHash} from 'node:crypto';
+          const out='who-am-i-guess-ownership-full',env=process.env;
+          const workflow='.github/workflows/who-am-i-guess-ownership-20261107.yml',roleNames=['original','fixed','controls'];
+          const bindings={"original":{"run":42361790574,"job":128371532212,"jobName":"qualify","stepCount":12,"attempt":1,"artifact":13569369009,"artifactName":"who-am-i-guess-ownership-original-42361790574","head":"5acdb362dc33d19197399697160c8e11de2dac23","tree":"d7a4d1609b3e600e72ecf5fac7c3382835472ff9","workflow":"5d1a2429c8918192d869d1a4d80f3bf5f3969e27","branch":"codex/who-am-i-guess-ownership-original-collector-refresh-qa-20261107","zipBytes":2344078,"zipSHA256":"2fe80f575753ef6da7653888e010b85fe82d5daa4c3d85cb4e6ef930e8043b48","bodyBytes":5186049,"bodies":[{"file":"admission.json","bytes":9607,"sha256":"76c041c396f46a3952e0b43e436d1c5401cee58a9959bf85afb796736e43e690"},{"file":"case-original/exit-code.txt","bytes":2,"sha256":"4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"},{"file":"case-original/raw.json","bytes":288634,"sha256":"75f0498a90853bdb1e1329b7e759629344b30509c17fa3162e913fbc06adb297"},{"file":"case-original/vitest.json","bytes":13779,"sha256":"efa5c6d5b26a3c72bf1cd53d03dca127a75aa3f26c78fa0b7573983953dbc503"},{"file":"case-original/vitest.log","bytes":129,"sha256":"33c1ad8975411fc4aa13fcb3b60c2e00ddf454105a2aabc86ea5b98d469b646d"},{"file":"final-holds.json","bytes":228,"sha256":"eec8428156d1c6ee3ec8817a551db825769d3c1e66d4d7eebc61a882412e5fce"},{"file":"head.txt","bytes":41,"sha256":"593dc28d4c0f802cbb6ce518d22bacc625028013a151a3fe4ddced47bd9dab51"},{"file":"install.log","bytes":1391,"sha256":"ed68e342adc63f5e3c1b84b2569b1a840c7c47b34cc3c8f134cc97d5bd0671ba"},{"file":"installed-after.json","bytes":30513,"sha256":"55386e78aa6c2c38d7ae266f4c9ed89a3376d6653b733cbc6a886cb3e94b1861"},{"file":"installed-before.json","bytes":30513,"sha256":"55386e78aa6c2c38d7ae266f4c9ed89a3376d6653b733cbc6a886cb3e94b1861"},{"file":"locks-after.txt","bytes":163,"sha256":"d316e23dae0f11f4fabcf8edd97204c9b780c6da8a0f6307c86940cbdd28e3d7"},{"file":"locks-before.txt","bytes":163,"sha256":"d316e23dae0f11f4fabcf8edd97204c9b780c6da8a0f6307c86940cbdd28e3d7"},{"file":"offline.log","bytes":0,"sha256":"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"},{"file":"qualification.mjs","bytes":18886,"sha256":"9bbb595c7f668092b1c8a7e260090b8873de72da2408d1125c24ac8b02b33bc8"},{"file":"reference-preflight-metadata.json","bytes":676,"sha256":"095696bde2713e78f00b6412e9ebcfdcdd2e65ad7ebe1bd5d2467e8fc249718f"},{"file":"reference-preflight.zip","bytes":1012454,"sha256":"268a1725b5d68d2ac709c7f4d0bcad28a50690d24ee7ec3139db949d27454972"},{"file":"source-after.txt","bytes":502930,"sha256":"d1d4d94711f8ed0ca8097c34442751669b479c601371721315555de2e58e4a71"},{"file":"source-before.txt","bytes":502930,"sha256":"d1d4d94711f8ed0ca8097c34442751669b479c601371721315555de2e58e4a71"},{"file":"source-join.json","bytes":1261,"sha256":"71d5c38d0d48e69cbf0d46b4253efa89a5896b9846a7f20dde420bc3100953ff"},{"file":"tracked-after.json","bytes":1385854,"sha256":"cc1b9789e775e31989c8260c7e34aa871ec4ea097cd69a9a0574c7d3b1b3a02e"},{"file":"tracked-before.json","bytes":1385854,"sha256":"cc1b9789e775e31989c8260c7e34aa871ec4ea097cd69a9a0574c7d3b1b3a02e"},{"file":"tree.txt","bytes":41,"sha256":"4b187c96e7288ca2f3b410a94eac8acdb07a825df8dae8b956cafa7a6a928828"},{"file":"types.log","bytes":0,"sha256":"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"}]},"fixed":{"run":42362221393,"job":128372802530,"jobName":"qualify","stepCount":12,"attempt":1,"artifact":13569588361,"artifactName":"who-am-i-guess-ownership-fixed-42362221393","head":"6713d0d2396d077f5a4c52ead9afe809458480b5","tree":"f1ee6cbb42e3ebc3298e54f02aa99ca7bef4f25d","workflow":"042cf998b2196c2d1c777fc517f47acee8c1d914","branch":"codex/who-am-i-guess-ownership-fixed-qa-20261107","zipBytes":3672379,"zipSHA256":"30f0bd05c215e2a4cef038d39c6aef4ef566ae6946cba8ea3d0a0a464d32edcc","bodyBytes":6503414,"bodies":[{"file":"admission.json","bytes":9470,"sha256":"ab265b3ea91338cd5c92a101f8201294330546d45abda935faf7f8fba1aa7708"},{"file":"case-fixed/raw.json","bytes":274774,"sha256":"04c43f5f3558d6b65b6ab0cdfe0257d0a258078d35926352f28ab083a9a22418"},{"file":"case-fixed/exit-code.txt","bytes":2,"sha256":"9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"},{"file":"case-fixed/vitest.json","bytes":13127,"sha256":"84c8a6fe260773765173088637f013ded94b63da52ca2ece2befa8d2ab1e7be5"},{"file":"case-fixed/vitest.log","bytes":126,"sha256":"d0c1d8dca45c7cfa45f6119c1b905a8059b6624165215a564760022f41ee85c4"},{"file":"final-holds.json","bytes":228,"sha256":"434b451c242847c1a499541cfc7966c3b8b51cf349bb27a88a4ee249fd2f35c7"},{"file":"head.txt","bytes":41,"sha256":"8cb86e76928cbab7656392b76ad414115b03477e4bf0a6fd9756ec2c731b1164"},{"file":"install.log","bytes":1391,"sha256":"4c9a3c6ce59c8cf4be9c4dd507616dffd2c943bfc8a8c00b8e9edde4875673a2"},{"file":"installed-after.json","bytes":30513,"sha256":"55386e78aa6c2c38d7ae266f4c9ed89a3376d6653b733cbc6a886cb3e94b1861"},{"file":"installed-before.json","bytes":30513,"sha256":"55386e78aa6c2c38d7ae266f4c9ed89a3376d6653b733cbc6a886cb3e94b1861"},{"file":"locks-after.txt","bytes":163,"sha256":"d316e23dae0f11f4fabcf8edd97204c9b780c6da8a0f6307c86940cbdd28e3d7"},{"file":"locks-before.txt","bytes":163,"sha256":"d316e23dae0f11f4fabcf8edd97204c9b780c6da8a0f6307c86940cbdd28e3d7"},{"file":"offline.log","bytes":0,"sha256":"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"},{"file":"qualification.mjs","bytes":19058,"sha256":"d37a23563dad5d4f7104981101d85db365f1f93f9dd75ba60eca1c2d1fd18138"},{"file":"reference-original-metadata.json","bytes":869,"sha256":"2adfa2a1e572bde92b0160abc8edf1802ec991553645df86e5fc5a82e69d3809"},{"file":"reference-original.zip","bytes":2344078,"sha256":"2fe80f575753ef6da7653888e010b85fe82d5daa4c3d85cb4e6ef930e8043b48"},{"file":"source-after.txt","bytes":502930,"sha256":"ba1bcf0ed92ec5fa8ab6da313f6d0598d2d5d06e7567a7131ae6d8cfe098a961"},{"file":"source-before.txt","bytes":502930,"sha256":"ba1bcf0ed92ec5fa8ab6da313f6d0598d2d5d06e7567a7131ae6d8cfe098a961"},{"file":"source-join.json","bytes":1289,"sha256":"63e174c9d2fa136766423e24c6d6405dea1787012fc38b00b4d831eb91e3ea8e"},{"file":"tracked-after.json","bytes":1385854,"sha256":"9dfb047b1032747fc48c235a5e811ddf3cf45d2f17b73bf105ae8a84f8fc3129"},{"file":"tracked-before.json","bytes":1385854,"sha256":"9dfb047b1032747fc48c235a5e811ddf3cf45d2f17b73bf105ae8a84f8fc3129"},{"file":"tree.txt","bytes":41,"sha256":"d3ca05f52912de0493470e6916c96db411b970030abf1b5e65b6d93e3c9b6e59"},{"file":"types.log","bytes":0,"sha256":"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"}]},"controls":{"run":42362517871,"job":128373682530,"jobName":"qualify","stepCount":12,"attempt":1,"artifact":13570079080,"artifactName":"who-am-i-guess-ownership-controls-42362517871","head":"22fbb8a4e509d903dbf0127b3218660d234221c0","tree":"1b20bc5437855d0981ae2fb9dbb060867507d75e","workflow":"3c9a68892357003cbcaa0f0b84c9477918eff9e0","branch":"codex/who-am-i-guess-ownership-controls-qa-20261107","zipBytes":7390268,"zipSHA256":"69abb8fe51dd61efbc819009e9fb27d93928d8ee5482a9c7bd2fc10239694de1","bodyBytes":10783951,"bodies":[{"file":"admission.json","bytes":25374,"sha256":"9327a36964efce44c376cdf71733aa437c500a2899592ce7e8cb1af0abe306fd"},{"file":"case-fixed/exit-code.txt","bytes":2,"sha256":"9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"},{"file":"case-fixed/raw.json","bytes":274774,"sha256":"04c43f5f3558d6b65b6ab0cdfe0257d0a258078d35926352f28ab083a9a22418"},{"file":"case-fixed/vitest.json","bytes":13119,"sha256":"c6108d4fef85c670405c13013d55ca18252933363b6f69a253f38f3fb6b14fb7"},{"file":"case-fixed/vitest.log","bytes":126,"sha256":"d0c1d8dca45c7cfa45f6119c1b905a8059b6624165215a564760022f41ee85c4"},{"file":"case-original/exit-code.txt","bytes":2,"sha256":"4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"},{"file":"case-original/raw.json","bytes":288634,"sha256":"75f0498a90853bdb1e1329b7e759629344b30509c17fa3162e913fbc06adb297"},{"file":"case-original/vitest.json","bytes":13785,"sha256":"c743b242c2d6644abc93e0170cb979b4976a591639bb22a4afcd8c73b29f0e2f"},{"file":"case-original/vitest.log","bytes":129,"sha256":"33c1ad8975411fc4aa13fcb3b60c2e00ddf454105a2aabc86ea5b98d469b646d"},{"file":"case-restored/exit-code.txt","bytes":2,"sha256":"9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"},{"file":"case-restored/raw.json","bytes":274774,"sha256":"04c43f5f3558d6b65b6ab0cdfe0257d0a258078d35926352f28ab083a9a22418"},{"file":"case-restored/vitest.json","bytes":13105,"sha256":"ccb3c6c3acfaf4f3d34f59782a86f1cd7643ed9b8f88237beca3fc3a15a486cc"},{"file":"case-restored/vitest.log","bytes":129,"sha256":"a4d919e09cc260f8f95af7e417e402fb9ac805e5c5f2ca6ef4a0942e4adeff9f"},{"file":"final-holds.json","bytes":228,"sha256":"434b451c242847c1a499541cfc7966c3b8b51cf349bb27a88a4ee249fd2f35c7"},{"file":"head.txt","bytes":41,"sha256":"c95710a9a92cf60adf1a38a990a926bb4617b8db8cbafc452d2bfc4461969953"},{"file":"install.log","bytes":1391,"sha256":"8c5e1fedc985fa1e9a12898cf38d57c9d9fbf8bd7022f9fe6308684122ad0a1e"},{"file":"installed-after.json","bytes":30513,"sha256":"55386e78aa6c2c38d7ae266f4c9ed89a3376d6653b733cbc6a886cb3e94b1861"},{"file":"installed-before.json","bytes":30513,"sha256":"55386e78aa6c2c38d7ae266f4c9ed89a3376d6653b733cbc6a886cb3e94b1861"},{"file":"locks-after.txt","bytes":163,"sha256":"d316e23dae0f11f4fabcf8edd97204c9b780c6da8a0f6307c86940cbdd28e3d7"},{"file":"locks-before.txt","bytes":163,"sha256":"d316e23dae0f11f4fabcf8edd97204c9b780c6da8a0f6307c86940cbdd28e3d7"},{"file":"offline.log","bytes":0,"sha256":"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"},{"file":"qualification.mjs","bytes":19900,"sha256":"d50e2a598527407286a39fa07b2ec88dede244f783b5175425987c4f0924b33c"},{"file":"reference-fixed-metadata.json","bytes":860,"sha256":"7a11173e6a439cde73cf7db2141243b6e2ef103a5eb4acb2649889743514231f"},{"file":"reference-fixed.zip","bytes":3672379,"sha256":"30f0bd05c215e2a4cef038d39c6aef4ef566ae6946cba8ea3d0a0a464d32edcc"},{"file":"reference-original-metadata.json","bytes":869,"sha256":"2adfa2a1e572bde92b0160abc8edf1802ec991553645df86e5fc5a82e69d3809"},{"file":"reference-original.zip","bytes":2344078,"sha256":"2fe80f575753ef6da7653888e010b85fe82d5daa4c3d85cb4e6ef930e8043b48"},{"file":"source-after.txt","bytes":502930,"sha256":"0d93e24fee0c355c068f6f678c44af30a07a38ff5fad4200975c6a8c892a8a3b"},{"file":"source-before.txt","bytes":502930,"sha256":"0d93e24fee0c355c068f6f678c44af30a07a38ff5fad4200975c6a8c892a8a3b"},{"file":"source-join.json","bytes":1289,"sha256":"d8d8e7518def9de6d0399989c00a0a52f6a6e61e19613d9bab19ae8e3640df3b"},{"file":"tracked-after.json","bytes":1385854,"sha256":"f26a4e8eb3fd37aa397f6ae74f9f1ff0935239a0263038cf18b8806e9d3efd00"},{"file":"tracked-before.json","bytes":1385854,"sha256":"f26a4e8eb3fd37aa397f6ae74f9f1ff0935239a0263038cf18b8806e9d3efd00"},{"file":"tree.txt","bytes":41,"sha256":"583b0c996aee2bff57be54f3c7cd9a4f3baf63068c46ecd91be6d96e8c7d8606"},{"file":"types.log","bytes":0,"sha256":"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"}]}};
+          assert.deepEqual(Object.keys(bindings).sort(),[...roleNames].sort());
+          const hash=bytes=>createHash('sha256').update(bytes).digest('hex');
+          const read=(role,file)=>fs.readFileSync(path.join(out,role+'-reference',file));
+          const json=(role,file)=>JSON.parse(read(role,file));
+          const packet=(role,file)=>read(role,'packet/'+file);
+          const packetJSON=(role,file)=>JSON.parse(packet(role,file));
+          const command=(bin,...args)=>execFileSync(bin,args,{maxBuffer:256*1024*1024});
+          const tuple=(file,bytes)=>({file,bytes:bytes.length,sha256:hash(bytes)});
+          const safe=name=>typeof name==='string'&&/^[A-Za-z0-9._/-]+$/.test(name)&&name.split('/').every(part=>part&&part!=='.'&&part!=='..');
+          const walk=(dir,prefix='')=>fs.readdirSync(dir,{withFileTypes:true}).flatMap(entry=>{
+            const file=prefix+entry.name;
+            if(entry.isDirectory())return walk(path.join(dir,entry.name),file+'/');
+            assert(entry.isFile()&&!entry.isSymbolicLink(),file+' regular retained body');
+            return [file];
+          });
+          const source=JSON.parse(fs.readFileSync(out+'/source-join.json'));
+          const receipts={};
+          for(const role of roleNames){
+            const pin=bindings[role],dir=path.join(out,role+'-reference'),archive=path.join(dir,'artifact.zip');
+            assert([pin.run,pin.job,pin.artifact,pin.zipBytes,pin.bodyBytes,pin.stepCount,pin.attempt].every(value=>Number.isSafeInteger(value)&&value>0));
+            assert([pin.head,pin.tree,pin.workflow].every(value=>/^[a-f0-9]{40}$/.test(value)));
+            assert(/^[a-f0-9]{64}$/.test(pin.zipSHA256));
+            assert(pin.branch.startsWith('codex/')&&pin.artifactName.endsWith('-'+pin.run)&&pin.jobName);
+            assert(Array.isArray(pin.bodies)&&pin.bodies.length>0);
+            assert(pin.bodies.every(row=>safe(row.file)&&Number.isSafeInteger(row.bytes)&&row.bytes>=0&&/^[a-f0-9]{64}$/.test(row.sha256)));
+            const names=pin.bodies.map(row=>row.file).sort();
+            assert.equal(new Set(names).size,names.length);
+            assert.equal(pin.bodies.reduce((sum,row)=>sum+row.bytes,0),pin.bodyBytes);
+            fs.mkdirSync(dir);
+            const endpoint='repos/PapiSalgueroM/ballpark-hero/actions/';
+            for(const [file,url] of Object.entries({'run.json':'runs/'+pin.run,'jobs.json':'runs/'+pin.run+'/jobs?per_page=100',
+              'artifact.json':'artifacts/'+pin.artifact,'artifact.zip':'artifacts/'+pin.artifact+'/zip'}))
+              fs.writeFileSync(path.join(dir,file),command('gh','api',endpoint+url),{flag:'wx'});
+            const run=json(role,'run.json'),jobs=json(role,'jobs.json'),meta=json(role,'artifact.json');
+            const artifact=meta.artifacts?.[0]??meta;
+            if(meta.artifacts)assert.equal(meta.artifacts.length,1);
+            assert.deepEqual([run.id,run.status,run.conclusion,run.head_sha,run.head_commit.tree_id,run.event,run.repository.full_name,run.path,run.head_branch,run.run_attempt],
+              [pin.run,'completed','success',pin.head,pin.tree,'push','PapiSalgueroM/ballpark-hero',workflow,pin.branch,pin.attempt]);
+            assert.equal(jobs.jobs.length,1);
+            const job=jobs.jobs[0];
+            assert.deepEqual([job.id,job.run_id,job.head_sha,job.name,job.status,job.conclusion,job.run_attempt,job.steps.length],
+              [pin.job,pin.run,pin.head,pin.jobName,'completed','success',pin.attempt,pin.stepCount]);
+            assert(job.steps.every(row=>row.status==='completed'&&row.conclusion==='success'));
+            assert.deepEqual([artifact.id,artifact.name,artifact.expired,artifact.size_in_bytes,artifact.digest,artifact.workflow_run.id,artifact.workflow_run.head_sha,artifact.workflow_run.head_branch],
+              [pin.artifact,pin.artifactName,false,pin.zipBytes,'sha256:'+pin.zipSHA256,pin.run,pin.head,pin.branch]);
+            const archiveBytes=read(role,'artifact.zip');
+            assert.deepEqual([archiveBytes.length,hash(archiveBytes)],[pin.zipBytes,pin.zipSHA256]);
+            assert.deepEqual(command('unzip','-Z1',archive).toString('utf8').trimEnd().split('\n').sort(),names);
+            const dirPacket=path.join(dir,'packet');
+            fs.mkdirSync(dirPacket);
+            command('unzip','-q',archive,'-d',dirPacket);
+            assert.deepEqual(walk(dirPacket).sort(),names);
+            for(const row of pin.bodies){
+              const body=packet(role,row.file);
+              assert.deepEqual(tuple(row.file,body),row);
+              assert(body.equals(command('unzip','-p',archive,row.file)),row.file+' exact archived and extracted bytes');
+            }
+            assert.equal(packet(role,'head.txt').toString('utf8').trim(),pin.head);
+            assert.equal(packet(role,'tree.txt').toString('utf8').trim(),pin.tree);
+            const {bodies,...roleMetadata}=pin;
+            receipts[role]={...roleMetadata,bodyCount:bodies.length};
+            const inventory=walk(dir).sort().map(file=>tuple(file,read(role,file)));
+            fs.writeFileSync(out+'/'+role+'-reference-before.json',JSON.stringify(inventory),{flag:'wx'});
+          }
+          assert.deepEqual([receipts.fixed.head,receipts.fixed.tree,receipts.fixed.workflow],[source.fixedHead,source.fixedTree,env.WHO_AM_I_FIXED_WORKFLOW]);
+          const fullRead=file=>fs.readFileSync(path.join(out,file));
+          const helper='scripts/qa/playWhoAmIGuessOwnership.mjs';
+          const omit=(body,paths)=>body.toString('utf8').trimEnd().split('\n').filter(line=>!paths.includes(line.split('\t')[1]));
+          assert.deepEqual(omit(fullRead('source-before.txt'),[workflow,helper]),omit(packet('fixed','source-before.txt'),[workflow]),'All 5789 held fixed index tuples');
+          const sourceRows=(rows,paths)=>rows.filter(row=>!paths.includes(row.file)).map(({file,bytes,sha256})=>({file,bytes,sha256})).sort((a,b)=>a.file<b.file?-1:a.file>b.file?1:0);
+          const heldFull=sourceRows(JSON.parse(fullRead('tracked-before.json')),[workflow,helper]);
+          assert.equal(heldFull.length,5789);
+          assert.deepEqual(heldFull,sourceRows(packetJSON('fixed','tracked-before.json'),[workflow]),'All 5789 held fixed physical source tuples');
+          assert(fullRead('locks-before.txt').equals(packet('fixed','locks-before.txt')),'Exact fixed lock bytes');
+          assert.deepEqual(JSON.parse(fullRead('installed-before.json')),packetJSON('fixed','installed-before.json'),'All 521 held fixed locked versions');
+          const preflightFile='reference-preflight.zip',preflight=packet('original',preflightFile);
+          assert.deepEqual([preflight.length,hash(preflight)],[1012454,'268a1725b5d68d2ac709c7f4d0bcad28a50690d24ee7ec3139db949d27454972']);
+          const preflightPath=path.join(out,'original-reference','packet',preflightFile);
+          for(const file of ['active-route-preflight.json','active-snapshot.html'])
+            assert(fullRead(file).equals(command('unzip','-p',preflightPath,file)),file+' exact actual active-entry join');
+          const referenceChecks=(()=>{
+          const loaded=Object.fromEntries(roleNames.map(role=>[role,packetJSON(role,'admission.json')]));
+          for(const role of roleNames){
+            const a=loaded[role],p=receipts[role],h=packetJSON(role,'final-holds.json'),s=packetJSON(role,'source-join.json');
+            assert.deepEqual([a.status,a.stage,s.status,s.head,s.tree,s.workflowBlob,s.base,s.tracked,s.scoped],
+              ['passed',role,'passed',p.head,p.tree,p.workflow,source.productBase,5790,4663]);
+            assert.deepEqual(a.source,s);
+            assert.deepEqual([h.status,h.tracked,h.scoped,h.installed,h.indexHeld,h.physicalSourceHeld,h.lockHeld,h.offlineBytes],
+              ['passed',5790,4663,521,true,true,true,0]);
+            for(const [key,ext] of [['source','txt'],['tracked','json'],['installed','json'],['locks','txt']]) {
+              assert(packet(role,key+'-before.'+ext).equals(packet(role,key+'-after.'+ext)),role+' whole '+key);
+            }
+            assert.equal(packet(role,'offline.log').length,0);
+            assert.equal(packet(role,'types.log').length,0);
+          }
+          const [old,green,controls]=roleNames.map(role=>loaded[role]);
+          assert.deepEqual(old.totals,{roles:1,rows:32,passes:30,failures:2});
+          assert.deepEqual(green.totals,{roles:1,rows:32,passes:32,failures:0});
+          assert.deepEqual(controls.totals,{roles:3,rows:96,passes:94,failures:2});
+          assert.deepEqual([green.preservedCurrentLookups,controls.preservedCurrentLookups,controls.exactRoleRaw],[true,true,true]);
+          assert.deepEqual(controls.arms.map(arm=>[arm.role,arm.page,arm.rows,arm.passes,arm.failures]),[
+           ['fixed',green.source.pinned['src/pages/WhoAmI.tsx'],32,32,0],
+           ['original',old.source.pinned['src/pages/WhoAmI.tsx'],32,30,2],
+           ['restored',green.source.pinned['src/pages/WhoAmI.tsx'],32,32,0],
+          ]);
+          for(const [left,right] of [['fixed','fixed'],['original','original'],['restored','fixed']]){
+            assert(packet('controls','case-'+left+'/raw.json').equals(packet(right,'case-'+right+'/raw.json')),left+' exact physical control role RAW');
+          }
+          const originalRaw=packetJSON('original','case-original/raw.json'),fixedRaw=packetJSON('fixed','case-fixed/raw.json');
+          assert.deepEqual(fixedRaw.cases.keepPlaying,originalRaw.cases.keepPlaying);
+          assert.deepEqual([green.source.parent,controls.source.parent],[receipts.original.head,receipts.fixed.head]);
+          return {status:'passed',totals:Object.fromEntries(roleNames.map(role=>[role,loaded[role].totals])),wholeCurrentLookupCaseHeld:true,physicalRoleRawHeld:true};
+          })();
+          assert.equal(referenceChecks?.status,'passed','Actual original/fixed/controls semantic reference gate');
+          fs.writeFileSync(out+'/packet-custody.json',JSON.stringify({status:'passed',...receipts,referenceChecks,controlsRerun:false},null,2)+'\n',{flag:'wx'});
+          NODE
+      - name: One fresh Who Am I fixed unit command
+        run: |
+          set -euo pipefail
+          out=who-am-i-guess-ownership-full
+          case_dir="$out/case-fixed"
+          mkdir "$case_dir"
+          set +e
+          WHO_AM_I_LOOKUP_OWNERSHIP_RAW="$PWD/$case_dir/raw.json" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node_modules/.bin/vitest run src/test/whoAmIGuessOwnership.test.tsx src/test/playerSearchIdentity.test.ts --reporter=json --testTimeout=60000 --no-file-parallelism --outputFile="$PWD/$case_dir/vitest.json" > "$case_dir/vitest.log" 2>&1
+          test_status=$?
+          set -e
+          printf '%s\n' "$test_status" > "$case_dir/exit-code.txt"
+          cat "$case_dir/vitest.log"
+          test "$test_status" -eq 0
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          import {createHash} from 'node:crypto';
+          const out='who-am-i-guess-ownership-full',caseDir='case-fixed';
+          const read=file=>fs.readFileSync(out+'/'+file),json=file=>JSON.parse(read(file));
+          const sha=bytes=>createHash('sha256').update(bytes).digest('hex');
+          const report=json(caseDir+'/vitest.json'),log=read(caseDir+'/vitest.log').toString('utf8');
+          const testRows=report.testResults.flatMap(suite=>suite.assertionResults);
+          assert(report.success&&report.numFailedTests===0&&report.numPendingTests===0&&testRows.length>0);
+          assert.deepEqual([report.numTotalTests,report.numPassedTests],[testRows.length,testRows.length]);
+          assert.deepEqual(report.testResults.map(suite=>suite.name.split('/').at(-1)).sort(),['whoAmIGuessOwnership.test.tsx','playerSearchIdentity.test.ts'].sort());
+          assert.equal(report.testResults.find(suite=>suite.name.split('/').at(-1)==='playerSearchIdentity.test.ts').assertionResults.length,29,'All held search identity cases');
+          for(const suite of report.testResults)assert.deepEqual([suite.status,suite.message],['passed','']);
+          for(const row of testRows)assert.deepEqual([row.status,row.failureMessages],['passed',[]]);
+          for(const key of ['numRuntimeErrorTestSuites','numUnhandledErrors','numTodoTests'])if(Object.hasOwn(report,key))assert.equal(report[key],0);
+          for(const key of ['unhandledErrors','testExecutionErrors'])if(Object.hasOwn(report,key))assert.deepEqual(report[key],[]);
+          assert(!/Unhandled Errors|Unhandled Rejection|Uncaught Exception|Failed to resolve import|No test files found|SyntaxError|ReferenceError|TypeError|timed out/i.test(log));
+          const rawFile=caseDir+'/raw.json',rawBytes=read(rawFile),raw=JSON.parse(rawBytes);
+          assert(rawBytes.equals(read('fixed-reference/packet/'+rawFile)),'Entire fresh fixed RAW equals completed fixed reference');
+          const fixed=json('fixed-reference/packet/admission.json'),custody=json('packet-custody.json');
+          assert.equal(custody.status,'passed');
+          const unitChecks=(()=>{
+          assert.deepEqual([report.numTotalTests,report.numPassedTests,report.numFailedTests],[32,32,0]);
+          assert.equal(fixed.stage,'fixed');
+          assert.deepEqual(fixed.totals,{roles:1,rows:32,passes:32,failures:0});
+          assert.equal(fixed.arms[0].rawSHA256,sha(rawBytes));
+          assert.deepEqual(testRows.map(row=>row.fullName).sort(),fixed.arms[0].report);
+          assert.equal(raw.schema,'who-am-i-lookup-ownership-v1');
+          assert.deepEqual(Object.keys(raw.cases),['abandonedResult','replayedRound','keepPlaying']);
+          const original=JSON.parse(read('original-reference/packet/case-original/raw.json'));
+          assert.deepEqual(raw.cases.keepPlaying,original.cases.keepPlaying);
+          assert.deepEqual(Object.values(raw.cases).map(c=>[c.frames.length,c.actions.length,c.queries.length,c.completions.length,c.closed]),[[11,10,6,1,true],[12,11,6,1,true],[11,10,6,1,true]]);
+          return {status:'passed',freshCases:3,heldIdentityCases:29,frames:34,actions:31,queries:18,queryLegs:135,wholeCurrentLookupCaseHeld:true};
+          })();
+          assert.equal(unitChecks?.status,'passed','Actual fresh fixed semantic and held-case gate');
+          const rawRef={file:rawFile,bytes:rawBytes.length,sha256:sha(rawBytes)};
+          fs.writeFileSync(out+'/unit-admission.json',JSON.stringify({status:'passed',actualCases:testRows.length,actualPasses:report.numPassedTests,actualFailures:report.numFailedTests,
+            commands:1,raw:rawRef,wholeQualifiedFixedRAWBytesHeld:true,unitChecks},null,2)+'\n',{flag:'wx'});
+          fs.writeFileSync(out+'/fixed-raw-join.json',JSON.stringify({status:'passed',fixedHead:custody.fixed.head,fixedTree:custody.fixed.tree,raw:rawRef,
+            freshUnitRAWByteEqual:true},null,2)+'\n',{flag:'wx'});
+          NODE
+      - name: Normal production build and retained bytes
+        id: build
+        run: |
+          set -euo pipefail
+          NODE_OPTIONS="--max-old-space-size=6144" npm run build 2>&1 | tee who-am-i-guess-ownership-full/build.log
+          tar -czf who-am-i-guess-ownership-full/dist.tgz dist
+          sha256sum who-am-i-guess-ownership-full/dist.tgz > who-am-i-guess-ownership-full/dist.sha256
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import {createHash} from 'node:crypto';import assert from 'node:assert/strict';
+          const walk=dir=>fs.readdirSync(dir,{withFileTypes:true}).sort((a,b)=>a.name.localeCompare(b.name)).flatMap(e=>e.isDirectory()?walk(dir+'/'+e.name):e.isFile()?[dir+'/'+e.name]:[]);
+          const rows=walk('dist').map(file=>{const b=fs.readFileSync(file);return {file,bytes:b.length,sha256:createHash('sha256').update(b).digest('hex')};});
+          assert.equal(rows.length,850);fs.writeFileSync('who-am-i-guess-ownership-full/dist-before.json',JSON.stringify(rows));
+          NODE
+      - name: Isolated pinned Playwright and Chromium
+        id: browser_setup
+        timeout-minutes: 12
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          python -m pip install fonttools pillow
+          npm install --prefix "$RUNNER_TEMP/who-am-i-guess-ownership-browser" --no-save --package-lock=false playwright@1.64.1 2>&1 | tee who-am-i-guess-ownership-full/browser-install.log
+          test ! -e node_modules/playwright
+          ln -s "$RUNNER_TEMP/who-am-i-guess-ownership-browser/node_modules/playwright" node_modules/playwright
+          node "$RUNNER_TEMP/who-am-i-guess-ownership-browser/node_modules/playwright/cli.js" install --with-deps chromium 2>&1 | tee who-am-i-guess-ownership-full/chromium-install.log
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const before=JSON.parse(fs.readFileSync('who-am-i-guess-ownership-full/installed-before.json'));
+          const after=before.map(([p])=>[p,JSON.parse(fs.readFileSync(p+'/package.json')).version]);assert.deepEqual(after,before);
+          const pw=JSON.parse(fs.readFileSync('node_modules/playwright/package.json'));assert.equal(pw.version,'1.64.1');
+          fs.writeFileSync('who-am-i-guess-ownership-full/installed-after.json',JSON.stringify(after));fs.writeFileSync('who-am-i-guess-ownership-full/browser-package.json',JSON.stringify({version:pw.version,target:fs.realpathSync('node_modules/playwright')}));
+          NODE
+      - name: All required built readers and existing source fences
+        if: ${{ !cancelled() && steps.build.outcome == 'success' && steps.browser_setup.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          git fetch --no-tags --depth=1 origin "$SEO_SPLIT_BASE_REF"
+          export ONLY="simAdsense,simBrand,simHeadTags,simHiddenPages,simHubs,simIndexNow,simIndexing,simInternalLinks,simNoRivalNames,simPrerender,simPrerenderBoot,simRetiredRoutes,simSchema,simSitemap,simSnapshotAssets,simSiteSearch,simGuideHeadings,simSeoMetaSplit,simHomeCopy,simHarnessAnchors"
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/runAllSims.mjs --browser 2>&1 | tee who-am-i-guess-ownership-full/readers.log
+      - name: All original route download limits
+        if: ${{ !cancelled() && steps.build.outcome == 'success' && steps.browser_setup.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          node scripts/lib/hostLikeServer.mjs dist 4173 > who-am-i-guess-ownership-full/weight-host.log 2>&1 &
+          who_am_i_lookup_host_pid=$!
+          trap 'kill "$who_am_i_lookup_host_pid" 2>/dev/null || true' EXIT
+          sleep 2
+          SWEEP_OFFLINE=1 BASE=http://127.0.0.1:4173 NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/sweepWeight.mjs 2>&1 | tee who-am-i-guess-ownership-full/weight.log
+      - name: Actual native Who Am I viewport journeys and reviewed outer
+        id: native
+        timeout-minutes: 15
+        if: ${{ !cancelled() && steps.build.outcome == 'success' && steps.browser_setup.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          out=who-am-i-guess-ownership-full
+          cat > "$out/native-admission-script.mjs" <<'WHO_AM_I_NATIVE_OUTER'
+          // Read-only closure and measurement join for the Who Am I browser packet.
           import assert from 'node:assert/strict';
           import fs from 'node:fs';
           import path from 'node:path';
-          import { createHash } from 'node:crypto';
-          import { execFileSync, spawnSync } from 'node:child_process';
+          import {createHash} from 'node:crypto';
+          import {execFileSync} from 'node:child_process';
+          import {JSDOM} from 'jsdom';
           
-          const out = 'who-am-i-guess-ownership-evidence';
-          const workflow = '.github/workflows/who-am-i-guess-ownership-20261107.yml';
-          const page = 'src/pages/WhoAmI.tsx';
-          const test = 'src/test/whoAmIGuessOwnership.test.tsx';
-          const table = 'src/test/playerSearchIdentity.test.ts';
-          const plan = 'docs/plans/2026-11-07-who-am-i-guess-ownership.md';
-          const stage = process.env.WHO_AM_I_STAGE;
-          const { WHO_AM_I_PARENT: parent, WHO_AM_I_BASE: base, WHO_AM_I_BASE_TREE: baseTree,
-            WHO_AM_I_PAGE: pageBlob, WHO_AM_I_ORIGINAL_PAGE: originalPage, WHO_AM_I_TEST: testBlob, WHO_AM_I_PLAN: planBlob } = process.env;
-          const pinned = {
-            [page]: pageBlob,
-            [test]: testBlob,
-            [plan]: planBlob,
-            [table]: '1286ab4853aacac662c6759fdcf990c8e350090c',
-            'src/App.tsx': '8bfedf7aaa1d076e0f0c8e2216c7e46632cd8a33',
-            'src/data/gameRegistry.ts': 'f560b40a74d1468ac72dfde4ee6fec6635a9a255',
-            'public/who-am-i/index.html': 'cd4d7ab7de79d9742bfbebea4de649ada9349fea',
-            'src/lib/whoAmI.ts': '8b6da5c480857fa8b7164d50c322eaccd0f6a8af',
-          };
-          const refs = {"original":{"run":42361790574,"artifact":13569369009,"name":"who-am-i-guess-ownership-original-42361790574","head":"5acdb362dc33d19197399697160c8e11de2dac23","tree":"d7a4d1609b3e600e72ecf5fac7c3382835472ff9","zipBytes":2344078,"zipSHA256":"2fe80f575753ef6da7653888e010b85fe82d5daa4c3d85cb4e6ef930e8043b48","files":{"admission.json":"76c041c396f46a3952e0b43e436d1c5401cee58a9959bf85afb796736e43e690","source-join.json":"71d5c38d0d48e69cbf0d46b4253efa89a5896b9846a7f20dde420bc3100953ff","final-holds.json":"eec8428156d1c6ee3ec8817a551db825769d3c1e66d4d7eebc61a882412e5fce","case-original/raw.json":"75f0498a90853bdb1e1329b7e759629344b30509c17fa3162e913fbc06adb297","case-original/vitest.json":"efa5c6d5b26a3c72bf1cd53d03dca127a75aa3f26c78fa0b7573983953dbc503","case-original/exit-code.txt":"4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"}}};
-          const hash = (algorithm, body) => createHash(algorithm).update(body).digest('hex');
-          const gitBlob = body => createHash('sha1').update('blob ' + body.length + '\0').update(body).digest('hex');
-          const options = { maxBuffer: 64 * 1024 * 1024 };
-          const cmd = (program, args) => execFileSync(program, args, options);
-          const git = (...args) => cmd('git', args).toString('utf8');
-          const sha256 = body => hash('sha256', body);
-          const read = file => fs.readFileSync(path.join(out,file));
-          const readJSON = file => JSON.parse(read(file));
-          const write = (file, body) => fs.writeFileSync(path.join(out,file),body);
-          const json = (file, value) => write(file, JSON.stringify(value,null,2) + '\n');
-          const sorted = items => [...items].sort();
-          const trees = ref => new Map(git('ls-tree','-r','-z',ref).split('\0').filter(Boolean).map(row => {
-            const match = /^(100(?:644|755)) blob ([a-f0-9]{40})\t(.+)$/.exec(row);
-            assert(match,row);
-            return [match[3], [match[1],match[2]]];
-          }));
-          const changed = (left,right) => sorted(new Set([...left.keys(),...right.keys()]))
-            .filter(name => JSON.stringify(left.get(name)) !== JSON.stringify(right.get(name)));
-          const physical = tree => [...tree].map(([file,[mode,blob]]) => {
-            const body = fs.readFileSync(file);
-            const stat = fs.lstatSync(file);
-            assert(stat.isFile(), file);
-            assert.equal((stat.mode & 0o111) !== 0, mode === '100755', file);
-            assert.equal(gitBlob(body),blob,file);
-            return {file,mode,blob,bytes:body.length,sha256:sha256(body)};
-          });
-          const locked = () => {
-            const lock = JSON.parse(fs.readFileSync('package-lock.json'));
-            const rows = Object.entries(lock.packages).filter(([file]) => file.startsWith('node_modules/') && fs.existsSync(file+'/package.json'))
-              .map(([file,pin]) => {
-                const version = JSON.parse(fs.readFileSync(file+'/package.json')).version;
-                assert.equal(version,pin.version,file);
-                return [file,version];
-              });
-            assert.equal(rows.length,521);
-            return rows;
-          };
-          const zipPath = role => path.join(out,'reference-'+role+'.zip');
-          function refFile(role,file) {
-            return cmd('unzip',['-p',zipPath(role),file]);
+          const PAGE='76c3c1d99a4c0b6752df0c3b27cd548f88d51fae',HELPER='07024f3428468510b8de9a37b388032a40af8524';
+          const env=process.env,root=path.resolve(process.cwd());
+          const out=path.resolve(process.argv[2]??'');
+          const full=path.resolve(env.WHO_AM_I_GUESS_OWNERSHIP_FULL_UNIT);
+          const fixed=path.resolve(env.WHO_AM_I_GUESS_OWNERSHIP_FIXED_REFERENCE);
+          const controls=path.resolve(env.WHO_AM_I_GUESS_OWNERSHIP_CONTROLS_REFERENCE);
+          assert.equal(process.argv.length,3);
+          assert.equal(out,path.resolve(env.WHO_AM_I_GUESS_OWNERSHIP_BROWSER_OUT));
+          assert.deepEqual([out,fixed,controls].map(file=>path.dirname(file)),Array(3).fill(full));
+          assert.equal(env.WHO_AM_I_GUESS_OWNERSHIP_PAGE_BLOB,PAGE);
+          const route='/who-am-i',helperFile='scripts/qa/playWhoAmIGuessOwnership.mjs';
+          const workflowFile='.github/workflows/who-am-i-guess-ownership-20261107.yml';
+          const backend='https://flawuiqbvjobmkfkauhw.supabase.co',poolPath='/rest/v1/player_market_values';
+          const equal=assert.deepEqual;
+          const sha=bytes=>createHash('sha256').update(bytes).digest('hex');
+          const blob=bytes=>createHash('sha1').update(Buffer.from('blob '+bytes.length+'\0')).update(bytes).digest('hex');
+          const read=(...parts)=>fs.readFileSync(path.join(...parts));
+          const json=(...parts)=>JSON.parse(read(...parts));
+          const tuple=(file,bytes)=>({file,bytes:bytes.length,sha256:sha(bytes)});
+          const safe=file=>/^[A-Za-z0-9._/-]+$/.test(file)&&file.split('/').every(piece=>piece&&piece!=='.'&&piece!=='..');
+          function ref(file){
+            assert(safe(file));
+            assert(fs.lstatSync(path.join(out,file)).isFile());
+            return tuple(file,read(out,file));
           }
-          function reference(role,pin) {
-            const root = 'repos/PapiSalgueroM/ballpark-hero/actions/';
-            const run = JSON.parse(cmd('gh',['api',root+'runs/'+pin.run]));
-            const meta = JSON.parse(cmd('gh',['api',root+'artifacts/'+pin.artifact]));
-            assert.deepEqual([run.id,run.status,run.conclusion,run.event,run.path,run.head_sha,run.head_commit.tree_id,run.repository.full_name],
-              [pin.run,'completed','success','push',workflow,pin.head,pin.tree,'PapiSalgueroM/ballpark-hero']);
-            assert.deepEqual([meta.id,meta.name,meta.expired,meta.size_in_bytes,meta.digest,meta.workflow_run.id,meta.workflow_run.head_sha],
-              [pin.artifact,pin.name,false,pin.zipBytes,'sha256:'+pin.zipSHA256,pin.run,pin.head]);
-            const zip = cmd('gh',['api',root+'artifacts/'+pin.artifact+'/zip']);
-            assert.deepEqual([zip.length,sha256(zip)],[pin.zipBytes,pin.zipSHA256]);
-            fs.writeFileSync(zipPath(role),zip);
-            const names = cmd('unzip',['-Z1',zipPath(role)]).toString().trimEnd().split('\n');
-            assert.equal(new Set(names).size,names.length);
-            for (const name of names) {
-              assert(!name.startsWith('/') && !name.includes('\\') && name.replace(/\/$/,'').split('/').every(part => part && part!=='.' && part!=='..'),name);
-            }
-            assert.equal(refFile(role,'head.txt').toString().trim(),pin.head);
-            assert.equal(refFile(role,'tree.txt').toString().trim(),pin.tree);
-            for (const [file,expected] of Object.entries(pin.files)) assert.equal(sha256(refFile(role,file)),expected,file);
-            json('reference-'+role+'-metadata.json',{run:run.id,artifact:meta.id,head:run.head_sha,tree:run.head_commit.tree_id,bytes:zip.length,sha256:sha256(zip),bodies:names.filter(x=>!x.endsWith('/')).length,files:pin.files});
+          const referenced=new Set(['report.json','raw.json']);
+          function check(row){
+            equal(row,ref(row.file));
+            referenced.add(row.file);
+            return read(out,row.file);
           }
-          function prepare() {
-            assert(['original','fixed','controls'].includes(stage));
-            const head = git('rev-parse','HEAD').trim();
-            const tree = git('rev-parse','HEAD^{tree}').trim();
-            assert.equal(head,process.env.GITHUB_SHA);
-            assert.deepEqual(git('rev-list','--parents','-n','1','HEAD').trim().split(' '),[head,parent]);
-            assert.equal(git('rev-parse',base+'^{tree}').trim(),baseTree);
-            const old = trees(base), before = trees(parent), current = trees(head);
-            const exact = stage==='original' ? [workflow,plan,test] : [workflow,page,plan,test];
-            assert.equal(old.size,5787);
-            assert.equal(current.size,5790);
-            assert.equal([...current.keys()].filter(f=>/^(src|public|scripts)\//.test(f)).length,4663);
-            assert.deepEqual(changed(old,current),sorted(exact));
-            assert.deepEqual(changed(before,current),sorted(stage==='original'?exact:stage==='fixed'?[workflow,page]:[workflow]));
-            assert.equal(old.get(page)[1],originalPage);
-            for (const [name,blob] of Object.entries(pinned)) assert.deepEqual(current.get(name),['100644',blob],name);
-            assert.equal(git('status','--porcelain','--untracked-files=no'),'');
-            json('source-join.json',{status:'passed',head,tree,parent,base,baseTree,workflowBlob:current.get(workflow)[1],tracked:current.size,scoped:4663,heldBase:old.size-(stage==='original'?0:1),changes:sorted(exact),pinned});
-            json('tracked-before.json',physical(current));
-            json('installed-before.json',locked());
-            for (const [role,pin] of Object.entries(refs)) reference(role,pin);
-          }
-          const expectedCases = {"abandonedResult":{"title":"keeps the confirmed Give up result when its exact guess settles late","marker":"WHO_AM_I_ABANDONED_LOOKUP","frames":[{"label":"case-a-guess-pending","original":{"phase":"playing","checking":true,"history":[],"completionCount":0},"fixed":{"phase":"playing","checking":true,"history":[],"completionCount":0}},{"label":"case-a-given-up","original":{"phase":"lost","headline":"Out of guesses","revealedName":"Fixture Abandon 00","history":[],"completionCount":1},"fixed":{"phase":"lost","headline":"Out of guesses","revealedName":"Fixture Abandon 00","history":[],"completionCount":1}},{"label":"old-guess-delivered","original":{"phase":"won","headline":"Found him in 1 guess","revealedName":"Fixture Abandon 00","checking":false,"history":["Fixture Abandon 00"],"completionCount":1},"fixed":{"phase":"lost","headline":"Out of guesses","revealedName":"Fixture Abandon 00","history":[],"completionCount":1}}],"completions":{"original":1,"fixed":1}},"replayedRound":{"title":"does not let an old exact guess finish the new case","marker":"WHO_AM_I_REPLAYED_LOOKUP","frames":[{"label":"case-a-guess-pending","original":{"phase":"playing","checking":true,"history":[],"completionCount":0},"fixed":{"phase":"playing","checking":true,"history":[],"completionCount":0}},{"label":"case-a-given-up","original":{"phase":"lost","headline":"Out of guesses","revealedName":"Fixture Replay 00","history":[],"completionCount":1},"fixed":{"phase":"lost","headline":"Out of guesses","revealedName":"Fixture Replay 00","history":[],"completionCount":1}},{"label":"case-b-started","original":{"phase":"playing","guess":"Guess 1 of 25","remaining":"25 left","history":[],"completionCount":1},"fixed":{"phase":"playing","guess":"Guess 1 of 25","remaining":"25 left","history":[],"completionCount":1}},{"label":"old-guess-delivered","original":{"phase":"won","headline":"Found him in 1 guess","revealedName":"Fixture Replay 01","checking":false,"history":["Fixture Replay 00"],"completionCount":2},"fixed":{"phase":"playing","guess":"Guess 1 of 25","remaining":"25 left","checking":false,"history":[],"completionCount":1}}],"completions":{"original":2,"fixed":1}},"keepPlaying":{"title":"settles a current exact guess after Keep playing","marker":null,"frames":[{"label":"case-a-guess-pending","original":{"phase":"playing","checking":true,"history":[],"completionCount":0},"fixed":{"phase":"playing","checking":true,"history":[],"completionCount":0}},{"label":"kept-playing","original":{"phase":"playing","checking":true,"history":[],"completionCount":0},"fixed":{"phase":"playing","checking":true,"history":[],"completionCount":0}},{"label":"old-guess-delivered","original":{"phase":"won","headline":"Found him in 1 guess","revealedName":"Fixture Keep 00","checking":false,"history":["Fixture Keep 00"],"completionCount":1},"fixed":{"phase":"won","headline":"Found him in 1 guess","revealedName":"Fixture Keep 00","checking":false,"history":["Fixture Keep 00"],"completionCount":1}}],"completions":{"original":1,"fixed":1}}};
-          const names = Object.keys(expectedCases);
-          function proofBody(raw, role) {
-            const fixed = role !== 'original';
-            assert.equal(raw.schema,'who-am-i-lookup-ownership-v1');
-            assert.deepEqual(sorted(Object.keys(raw.cases)),sorted(names));
-            const result = {};
-            for (const name of names) {
-              const c = raw.cases[name], pin = expectedCases[name];
-              assert.deepEqual([c.key,c.title,c.marker,c.closed],[name,pin.title,pin.marker,true]);
-              assert(Array.isArray(c.frames) && c.frames.length >= pin.frames.length,name+' actual public frames');
-              assert.equal(new Set(c.frames.map(f=>f.label)).size,c.frames.length);
-              const frames = new Map(c.frames.map(f=>[f.label,f]));
-              const samples = pin.frames.map(({label,original,fixed:corrected})=>{
-                const frame = frames.get(label);
-                assert(frame,label);
-                const wanted = fixed ? corrected : original;
-                const actual = Object.fromEntries(Object.keys(wanted).map(k=>[k,frame[k]]));
-                assert.deepEqual(actual,wanted,name+' public frame '+label);
-                return {label,...actual};
-              });
-              if(pin.completions)assert.equal(c.completions.length,fixed?pin.completions.fixed:pin.completions.original);
-              assert(c.actions.length>0&&c.queries.length>0,name+' real actions and SDK legs');
-              result[name] = {frames:c.frames.length,samples,actions:c.actions.length,queries:c.queries.length,completions:c.completions.length,randomDraws:c.randomDraws.length};
-            }
-            return result;
-          }
-          function preserveCases(fixedBytes, originalBytes) {
-            const fixed = JSON.parse(fixedBytes), original = JSON.parse(originalBytes);
-            for (const [body,raw] of [[fixedBytes,fixed],[originalBytes,original]]) {
-              assert(body.equals(Buffer.from(JSON.stringify(raw,null,2)+'\n')),'Exact captured RAW serialization');
-            }
-            const held = names.filter(name=>!expectedCases[name].marker);
-            assert(held.length>0);
-            for (const name of held) {
-              const fixedCase = Buffer.from(JSON.stringify(fixed.cases[name],null,2));
-              const originalCase = Buffer.from(JSON.stringify(original.cases[name],null,2));
-              assert(fixedCase.equals(originalCase),name+' whole preserved case bytes');
-            }
-          }
-          
-          function runArm(role, expectedBlob) {
-            assert.equal(gitBlob(fs.readFileSync(page)),expectedBlob,role+' physical Page before test');
-            assert.equal(git('rev-parse',':'+page).trim(),pageBlob,role+' committed Page index stays fixed');
-            const dir = path.join(out,'case-'+role);
-            fs.mkdirSync(dir);
-            const target = name => path.resolve(dir,name);
-            const proc = spawnSync('node_modules/.bin/vitest',['run',test,table,'--reporter=json','--testTimeout=60000','--no-file-parallelism','--outputFile='+target('vitest.json')],{
-              env:{...process.env,WHO_AM_I_LOOKUP_OWNERSHIP_RAW:target('raw.json')},encoding:'utf8',maxBuffer:16*1024*1024,
+          function files(dir,prefix=''){
+            return fs.readdirSync(dir,{withFileTypes:true}).flatMap(entry=>{
+              const file=prefix+entry.name;
+              if(entry.isDirectory())return files(path.join(dir,entry.name),file+'/');
+              assert(entry.isFile());
+              return [file];
             });
-            fs.writeFileSync(target('vitest.log'),(proc.stdout||'')+(proc.stderr||''));
-            fs.writeFileSync(target('exit-code.txt'),String(proc.status)+'\n');
-            process.stdout.write(proc.stdout||'');
-            process.stderr.write(proc.stderr||'');
-            assert.ifError(proc.error);
-            assert.equal(proc.signal,null);
-            const report = JSON.parse(fs.readFileSync(target('vitest.json')));
-            const rawBytes = fs.readFileSync(target('raw.json'));
-            const raw = JSON.parse(rawBytes);
-            const reds = role === 'original' ? names.filter(name=>expectedCases[name].marker).length : 0;
-            const total = names.length + 29;
-            assert.deepEqual([proc.status,report.numTotalTests,report.numPassedTests,report.numFailedTests,report.numPendingTests,report.numTodoTests],
-              [reds?1:0,total,total-reds,reds,0,0]);
-            assert.equal(report.success,reds===0);
-            assert.equal(report.testResults.length,2);
-            for (const suite of report.testResults) assert.equal(suite.message,'','No suite or hook error');
-            for (const key of ['numRuntimeErrorTestSuites','numUnhandledErrors','numTodoTests']) if (Object.hasOwn(report,key)) assert.equal(report[key],0);
-            for (const key of ['unhandledErrors','testExecutionErrors']) if (Object.hasOwn(report,key)) assert.deepEqual(report[key],[]);
-            assert(!/Unhandled Errors|Unhandled Rejection|Uncaught Exception|Failed to resolve import|No test files found|SyntaxError|ReferenceError|TypeError|timed out/i.test((proc.stdout||'')+(proc.stderr||'')),'No runtime, loading or setup failure in the log');
-            const byFile = file => {
-              const rows = report.testResults.filter(s=>s.name.endsWith('/'+file));
-              assert.equal(rows.length,1,file);
-              return rows[0].assertionResults;
-            };
-            const fresh = byFile(test);
-            const prior = byFile(table);
-            assert.equal(prior.length,29);
-            assert.equal(fresh.length,names.length);
-            assert(prior.every(r=>r.status==='passed'&&!r.failureMessages.length));
-            for (const name of names) {
-              const pin = expectedCases[name], row = fresh.find(r=>r.title===pin.title);
-              assert(row,name);
-              const fails = role==='original' && pin.marker;
-              assert.equal(row.status,fails?'failed':'passed',name);
-              assert.equal(row.failureMessages.length,fails?1:0,name);
-              if (fails) assert(row.failureMessages[0].startsWith('AssertionError: '+pin.marker+':'),name+' exact named business assertion');
-            }
-            const proof = proofBody(raw,role);
-            assert.equal(gitBlob(fs.readFileSync(page)),expectedBlob,role+' physical Page after test');
-            const summary = {role,page:expectedBlob,rows:total,passes:total-reds,failures:reds,report:sorted([...fresh,...prior].map(r=>r.fullName)),proof,rawBytes:rawBytes.length,rawSHA256:sha256(rawBytes)};
-            return {summary,raw,rawBytes};
           }
-          function tests() {
-            const arms = [];
-            let preservedCurrentLookups = false, exactRoleRaw = false;
-            if (stage === 'original') {
-              const actual = runArm('original',originalPage);
-              arms.push(actual.summary);
-            } else if (stage === 'fixed') {
-              const actual = runArm('fixed',pageBlob);
-              const originalRaw = refFile('original','case-original/raw.json');
-              preserveCases(actual.rawBytes,originalRaw);
-              preservedCurrentLookups = true;
-              arms.push(actual.summary);
-            } else if (stage === 'controls') {
-              const fixed = runArm('fixed',pageBlob);
-              assert(fixed.rawBytes.equals(refFile('fixed','case-fixed/raw.json')),'Fixed complete role RAW');
-              const original = cmd('git',['show',base+':'+page]);
-              const restore = fs.readFileSync(page);
-              assert.notEqual(pageBlob,originalPage);
-              assert.equal(gitBlob(original),originalPage);
-              let reverted;
-              try {
-                fs.writeFileSync(page,original);
-                assert.equal(git('diff','--name-only','HEAD','--','.').trim(),page);
-                reverted = runArm('original',originalPage);
-                assert(reverted.rawBytes.equals(refFile('original','case-original/raw.json')),'Original complete role RAW');
-              } finally {
-                fs.writeFileSync(page,restore);
+          const manifest=json(out,'body-manifest.json'),report=json(out,'report.json'),raw=json(out,'raw.json');
+          assert.equal(manifest.version,1);
+          const names=manifest.files.map(row=>row.file);
+          equal(new Set(names).size,manifest.filesCount);
+          equal(manifest.files.length,manifest.filesCount);
+          equal(manifest.bodyBytes,manifest.files.reduce((sum,row)=>sum+row.bytes,0));
+          equal(files(out).sort(),[...names,'body-manifest.json'].sort());
+          for(const row of manifest.files)equal(row,ref(row.file));
+          equal([report.version,raw.version,report.status,report.route,raw.route,report.page,raw.page,report.helper,raw.helper],
+            [1,1,'passed',route,route,PAGE,PAGE,HELPER,HELPER]);
+          equal(report.raw,ref('raw.json'));
+          equal(report.binding,raw.binding);
+          equal(report.fixture,raw.fixture);
+          equal(report.wire,raw.wire);
+          const binding=JSON.parse(check(report.binding));
+          const fixture=JSON.parse(check(report.fixture));
+          const unit=read(full,'case-fixed','raw.json'),fixedUnit=read(fixed,'packet','case-fixed','raw.json');
+          equal(binding.fullUnit,tuple('case-fixed/raw.json',unit));
+          assert(unit.equals(fixedUnit));
+          equal([unit.length,sha(unit)],[binding.fixed.rawBytes,binding.fixed.rawSHA256]);
+          const admittedUnit=JSON.parse(unit),[latest,carried,history]=admittedUnit.cases.keepPlaying.queries;
+          equal([admittedUnit.schema,latest.role,carried.role,history.role,fixture.schema],
+            ['who-am-i-lookup-ownership-v1','boot-current','boot-carried','boot-history','who-am-i-native-fixture-v1']);
+          equal([fixture.bootRows,fixture.carriedRows,fixture.historyRows],[latest.rows,carried.rows,history.rows]);
+          equal([fixture.bootRows.length,fixture.carriedRows.length,fixture.historyRows.length],[52,0,52]);
+          assert(fixture.bootRows.every(row=>row.year===2026&&row.age>0&&row.market_value_usd>0&&row.player_name.startsWith('Fixture Keep ')));
+          const pool=fixture.bootRows,old=fixture.outsideRows[0],current=fixture.outsideRows[1];
+          equal(fixture.outsideRows,['Alder','Birch'].map((name,i)=>({player_name:'Fixture Lookup '+name,person_key:'who-native-lookup-'+name.toLowerCase(),
+            nationality:'Fixture Nation',position:'Centre-Forward',club:'Fixture Lookup Club',market_value_usd:700000-i*100000,age:0,year:2026})));
+          assert(!pool.some(row=>fixture.outsideRows.some(extra=>row.person_key===extra.person_key||row.player_name===extra.player_name)));
+          const poolColumns='player_name,nationality,position,club,market_value_usd,age,year,person_key';
+          const searchColumns='player_name,market_value_usd,year,club,nationality,position,age,person_key';
+          const bootOrder='market_value_usd.desc,player_name.asc,id.asc',searchOrder='market_value_usd.desc,year.desc,player_name.asc';
+          const range={offset:'0',limit:'1000'},bootBase={select:poolColumns,age:'gt.0',order:bootOrder,...range};
+          const wireExpect=[
+            ['boot-current',{...bootBase,year:'eq.2026',market_value_usd:'gt.0'},pool],
+            ['boot-carried',{...bootBase,year:'eq.2025',market_value_usd:'gte.0'},[]],
+            ['boot-history',{select:'n:player_name,c:club,a:age,y:year,k:person_key',player_name:'in.('+pool.map(row=>row.player_name).join(',')+')',order:'id.asc',...range},fixture.historyRows],
+            ['search-a',{select:searchColumns,name_folded:'ilike.%'+old.player_name.toLowerCase()+'%',order:searchOrder,limit:'200'},[old]],
+            ['search-b',{select:searchColumns,name_folded:'ilike.%'+current.player_name.toLowerCase()+'%',order:searchOrder,limit:'200'},[current]],
+            ['search-prominence',{select:searchColumns,order:searchOrder,limit:'1000'},[...pool,old,current]],
+            ...fixture.outsideRows.map((row,i)=>[i?'lookup-b':'lookup-a',{select:poolColumns,person_key:'eq.'+row.person_key,year:'in.(2026,2025)',order:'year.desc,market_value_usd.desc',limit:'1'},[row]]),
+          ];
+          equal(report.wire.length,wireExpect.length);
+          const specs=new Map();
+          for(const [i,[role,query,rows]] of wireExpect.entries()){
+            const spec=report.wire[i];
+            equal([spec.role,spec.query,spec.body.file],[role,Object.entries(query).sort(),'wire/'+role+'.json']);
+            assert(check(spec.body).equals(Buffer.from(JSON.stringify(rows))));
+            specs.set(role,spec);
+          }
+          assert(safe(binding.controls.admissionFile));
+          const admittedControl=read(controls,'packet',binding.controls.admissionFile);
+          equal([admittedControl.length,sha(admittedControl)],[binding.controls.admissionBytes,binding.controls.admissionSHA256]);
+          for(const [directory,pin] of [[fixed,binding.fixed],[controls,binding.controls]]){
+            const run=json(directory,'run.json'),meta=json(directory,'artifact.json');
+            if(Object.hasOwn(meta,'artifacts'))assert.equal(meta.artifacts.length,1);
+            const artifact=meta.artifacts?.[0]??meta;
+            const zip=read(directory,'artifact.zip');
+            equal([run.id,run.status,run.conclusion,run.head_sha,run.head_commit.tree_id,artifact.id,artifact.workflow_run.id,artifact.workflow_run.head_sha,zip.length,sha(zip)],
+              [pin.run,'completed','success',pin.head,pin.tree,pin.artifact,pin.run,pin.head,pin.zipBytes,pin.zipSHA256]);
+          }
+          const git=(...args)=>execFileSync('git',args,{encoding:'utf8',maxBuffer:16*1024*1024});
+          const head=git('rev-parse','HEAD').trim(),tree=git('rev-parse','HEAD^{tree}').trim();
+          assert.equal(head,env.GITHUB_SHA);
+          equal(git('rev-list','--parents','-n','1','HEAD').trim().split(' '),[head,binding.fixed.head]);
+          assert.equal(git('rev-parse',binding.fixed.head+'^{tree}').trim(),binding.fixed.tree);
+          equal(git('diff','--name-status',binding.fixed.head,'HEAD').trim().split('\n').sort(),['A\t'+helperFile,'M\t'+workflowFile].sort());
+          assert.equal(blob(read(root,helperFile)),HELPER);
+          assert.equal(blob(read(root,'src/pages/WhoAmI.tsx')),PAGE);
+          const source={head,tree,workflow:git('rev-parse','HEAD:'+workflowFile).trim(),trackedBodies:5791,scopedSourceRows:4664,heldFixedRows:5789,rootConfigurations:11,distBodies:850,installedVersions:521};
+          equal(report.source,source);
+          equal(binding.source,source);
+          equal([binding.page,binding.helper],[PAGE,HELPER]);
+          equal(report.before,report.after);
+          equal(report.before.source,json(full,'tracked-before.json'));
+          equal(report.before.dist,json(full,'dist-before.json'));
+          equal(report.before.installed,json(full,'installed-before.json'));
+          equal([report.before.source.length,report.before.dist.length,report.before.installed.length,report.before.offline.bytes],[5791,850,521,0]);
+          assert(check(report.indexBefore).equals(check(report.indexAfter)));
+          assert(check(report.indexBefore).equals(Buffer.from(git('ls-files','--stage','-z'))));
+          const holds={source:true,dist:true,locks:true,installed521:true,offline:true,index:true,fullUnitLiteral:true};
+          equal(report.holds,holds);
+          git('diff','--exit-code','HEAD','--','.');
+          
+          const routeURL=new URL(route,report.base).href;
+          assert(/^http:\/\/127\.0\.0\.1:\d+$/.test(report.base));
+          const completionPath='/rest/v1/game_completions';
+          const widths=[[320,568],[390,844],[1280,900]],photoFiles=[];
+          equal(report.journeys.map(row=>[row.width,row.height]),widths);
+          equal(raw.journeys.length,3);
+          const built=new Map(report.before.dist.map(row=>[row.file,row]));
+          const entryDocPath='dist/who-am-i/index.html',entryDoc=read(root,entryDocPath);
+          equal(tuple(entryDocPath,entryDoc),built.get(entryDocPath));
+          const entryDOM=new JSDOM(entryDoc.toString('utf8'));
+          let entryPath;
+          try{
+            const modules=[...entryDOM.window.document.head.querySelectorAll('script[type="module"][src^="/assets/"]')];
+            assert.equal(modules.length,1,'one exact built Who Am I entry module');
+            entryPath=modules[0].getAttribute('src');
+            assert(/^\/assets\/index-[^/]+\.js$/.test(entryPath));
+            assert(entryDOM.window.document.querySelector('script[src="/prerender-boot.js"]'));
+          }finally{entryDOM.window.close();}
+          assert.equal(report.entryPath,entryPath);
+          const actionPlan=[
+            ['reject-cookies','mouse'],['close-rules','keyboard'],['start-casual','mouse'],['type-a','typing'],['select-a','keyboard'],
+            ['open-give-up','mouse'],['confirm-give-up','mouse'],['play-again','mouse'],['type-b','typing'],['select-b','keyboard'],
+          ];
+          const photoPlan=['case-a-reveal','case-b-still-pending','case-b-scored'];
+          const resultPointNames=['case-a-abandoned','case-b-held-after-a','case-b-accepted'];
+          const requiredCheckpoints={
+            ready:'mode-ready',aPlaying:'case-a-playing',aHeld:'case-a-held',aAbandoned:'case-a-abandoned',bPlaying:'case-b-playing',
+            bHeld:'case-b-held',bStillHeldAfterA:'case-b-held-after-a',bAccepted:'case-b-accepted',
+          };
+          const expectedFrameNames=[
+            'startup','reject-cookies-before','reject-cookies-after','close-rules-before','close-rules-after','mode-ready',
+            'start-casual-before','start-casual-after','case-a-playing','type-a-before','type-a-after','case-a-option',
+            'select-a-before','select-a-after','case-a-held','open-give-up-before','open-give-up-after','confirm-give-up-before','confirm-give-up-after',
+            'case-a-abandoned','case-a-reveal-photo-before','case-a-reveal-photo-after','play-again-before','play-again-after','case-b-playing',
+            'type-b-before','type-b-after','case-b-option','select-b-before','select-b-after','case-b-held','case-b-held-after-a',
+            'case-b-still-pending-photo-before','case-b-still-pending-photo-after','case-b-accepted','case-b-scored-photo-before','case-b-scored-photo-after',
+          ];
+          function geometry(g,width,height){
+            equal(g.viewport,{width,height});
+            const {rect:r,clip:c,center}=g;
+            assert([r.x,r.y,r.right,r.bottom,r.width,r.height,c.left,c.top,c.right,c.bottom,center.x,center.y].every(Number.isFinite));
+            assert(g.hit&&g.enabled&&r.width>0&&r.height>0&&r.x>=c.left&&r.right<=c.right&&r.y>=c.top&&r.bottom<=c.bottom);
+            assert(c.left>=0&&c.top>=0&&c.right<=width&&c.bottom<=height);
+            assert(center.x>=r.x&&center.x<=r.right&&center.y>=r.y&&center.y<=r.bottom);
+          }
+          const words=node=>node?.textContent?.replace(/\s+/g,' ').trim()??null;
+          function checkDOM(frame){
+            assert(typeof frame.html==='string');
+            const dom=new JSDOM(frame.html);
+            try{
+              const doc=dom.window.document,main=doc.querySelector('main#dukb-main');
+              assert(main);
+              assert.equal(words(main.querySelector('h1')),frame.heading);
+              const ps=[...main.querySelectorAll('p')].map(words);
+              equal(frame.checking,ps.includes('Checking his season...'));
+              equal(frame.lookupFailed,ps.includes("Couldn't pull up his season just then, so that one doesn't count. Pick him again."));
+              const combo=main.querySelector('input[role=combobox]');
+              equal(!!combo,!!frame.combo);
+              if(combo){
+                equal([combo.getAttribute('placeholder'),combo.getAttribute('value')??'',combo.getAttribute('aria-expanded')],
+                  ["Type any player's name (2+ letters)",frame.combo.value,frame.combo.expanded]);
+                const box=doc.getElementById(combo.getAttribute('aria-controls'));
+                equal([...box?.querySelectorAll('[role=option]')??[]].map(node=>words(node.firstElementChild)),frame.combo.options.map(option=>option.name));
+                const spans=[...main.querySelectorAll('span')].map(words);
+                assert(spans.includes('Guess '+frame.guess+' of '+frame.budget));
+                assert(spans.includes(frame.left+' left'));
               }
-              assert.equal(git('diff','--name-only','HEAD','--','.').trim(),'');
-              const restored = runArm('restored',pageBlob);
-              assert(restored.rawBytes.equals(fixed.rawBytes),'Restored complete role RAW');
-              preserveCases(restored.rawBytes,reverted.rawBytes);
-              preservedCurrentLookups = true;
-              exactRoleRaw = true;
-              arms.push(fixed.summary,reverted.summary,restored.summary);
-            } else {
-              throw Error(stage);
-            }
-            const source = readJSON('source-join.json');
-            json('admission.json',{status:'passed',stage,source,arms,totals:{roles:arms.length,rows:arms.reduce((n,a)=>n+a.rows,0),passes:arms.reduce((n,a)=>n+a.passes,0),failures:arms.reduce((n,a)=>n+a.failures,0)},preservedCurrentLookups,exactRoleRaw,previousIdentityCasesPerRole:29});
-            console.log('PASS Who Am I '+stage+' evidence, actual roles: '+arms.map(a=>a.role+' '+a.passes+'/'+a.rows).join(', '));
+              const title=[...main.querySelectorAll('h2')].find(node=>/^(Out of guesses|Found him in \d+ guess(?:es)?)$/.test(words(node)));
+              equal(words(title),frame.result?.title??null);
+              equal(words(title?.parentElement.querySelector('div.text-xl.font-bold')),frame.result?.answer??null);
+              const label=[...main.querySelectorAll('div')].find(node=>words(node)==='Last guess');
+              const last=label?.nextElementSibling;
+              equal(words(last?.querySelector('span.font-semibold.truncate')),frame.last?.name??null);
+              const score=words(last?.querySelector('span.font-bold.font-display'));
+              equal(score===null?null:Number(score),frame.last?.score??null);
+            }finally{dom.window.close();}
           }
-          function final() {
-            const current = trees('HEAD');
-            const tracked = physical(current);
-            const versions = locked();
-            assert.deepEqual(tracked,readJSON('tracked-before.json'));
-            assert.deepEqual(versions,readJSON('installed-before.json'));
-            assert(read('source-before.txt').equals(read('source-after.txt')));
-            assert(read('locks-before.txt').equals(read('locks-after.txt')));
-            assert.equal(read('offline.log').length,0);
-            assert.equal(read('types.log').length,0);
-            assert.equal(gitBlob(fs.readFileSync(page)),pageBlob);
-            for (const [role,pin] of Object.entries(refs)) {
-              const zip = fs.readFileSync(zipPath(role));
-              assert.deepEqual([zip.length,sha256(zip)],[pin.zipBytes,pin.zipSHA256],role+' retained ZIP');
-            }
-            json('tracked-after.json',tracked);
-            json('installed-after.json',versions);
-            json('final-holds.json',{status:'passed',tracked:tracked.length,scoped:4663,installed:versions.length,indexHeld:true,physicalSourceHeld:true,lockHeld:true,offlineBytes:0,page:pageBlob});
+          function game(frame,checking,guess,left,name){
+            equal([frame.phase,frame.heading,frame.checking,frame.lookupFailed,frame.guess,frame.budget,frame.left,frame.last?.name??null,frame.result],
+              ['playing','WHO AM I?',checking,false,guess,25,left,name,null]);
+            assert(frame.combo);
           }
-          const action = process.argv[2];
-          assert(['prepare','test','final'].includes(action));
-          ({prepare,test:tests,final})[action]();
+          const measured=report.journeys.map((row,i)=>{
+            const [width,height]=widths[i];
+            const frames=row.frames.map(ref=>JSON.parse(check(ref)));
+            equal(raw.journeys[i],{...row,frames});
+            equal([row.id,row.status,row.width,row.height],[String(width),'passed',width,height]);
+            equal(row.errors,[]);
+            equal(row.checkpoints,requiredCheckpoints);
+            equal(frames.map(frame=>frame.name),expectedFrameNames);
+            const byName=new Map(frames.map(frame=>[frame.name,frame]));
+            for(const [i,frame] of frames.entries()){
+              equal([frame.url,frame.visible,frame.viewport],[routeURL,'visible',{width,height}]);
+              assert(Number.isFinite(frame.at)&&(!i||frame.at>=frames[i-1].at));
+              checkDOM(frame);
+            }
+            const ready=byName.get(requiredCheckpoints.ready),aPlaying=byName.get(requiredCheckpoints.aPlaying),aHeld=byName.get(requiredCheckpoints.aHeld),
+              aAbandoned=byName.get(requiredCheckpoints.aAbandoned),bPlaying=byName.get(requiredCheckpoints.bPlaying),bHeld=byName.get(requiredCheckpoints.bHeld),
+              overlap=byName.get(requiredCheckpoints.bStillHeldAfterA),bAccepted=byName.get(requiredCheckpoints.bAccepted);
+            const startup=byName.get('startup'),consent=JSON.parse(ready.storage.local['cookie-consent-v2']);
+            equal([startup.dialog?.title,!!startup.cookie,ready.phase,ready.dialog,ready.cookie,consent.version,consent.advertising,consent.analytics],
+              ['How to Play Who Am I?',true,'mode',null,null,2,false,false]);
+            game(aPlaying,false,1,25,null);game(aHeld,true,1,25,null);
+            equal([aAbandoned.phase,aAbandoned.result?.title,aAbandoned.combo,aAbandoned.last],['lost','Out of guesses',null,null]);
+            assert(pool.some(player=>player.player_name===aAbandoned.result.answer));
+            const priorPlays=JSON.parse(aHeld.storage.local['dukb-local-completions']??'{"slugs":[]}');
+            const localPlays=JSON.parse(aAbandoned.storage.local['dukb-local-completions']);
+            assert(!priorPlays.slugs.includes('who-am-i')&&localPlays.slugs.includes('who-am-i'));
+            game(bPlaying,false,1,25,null);game(bHeld,true,1,25,null);game(overlap,true,1,25,null);
+            game(bAccepted,false,2,24,current.player_name);
+            assert(Number.isInteger(bAccepted.last.score)&&bAccepted.last.score>=0&&bAccepted.last.score<100);
+            assert(!bAccepted.html.includes(old.player_name));
+            for(const state of [bPlaying,bHeld,overlap,bAccepted])equal(state.storage,aAbandoned.storage);
+            equal([aHeld.combo.value,bHeld.combo.value,overlap.combo.value,bAccepted.combo.value],['','','','']);
+            equal(row.actions.map(action=>[action.label,action.method]),actionPlan);
+            for(const action of row.actions){
+              equal([action.before,action.after],[action.label+'-before',action.label+'-after']);
+              const before=byName.get(action.before),after=byName.get(action.after);
+              assert(before.at<=after.at);
+              if(action.layout)geometry(action.layout,width,height);
+              for(const event of action.events){
+                assert(event.trusted&&event.at>=before.at&&event.at<=after.at);
+                assert(row.events.some(rawEvent=>JSON.stringify(rawEvent)===JSON.stringify(event)));
+              }
+              if(action.method==='mouse'){
+                equal(action.events.map(event=>event.type),['pointerdown','pointerup','click']);
+                const g=action.layout,click=action.events[2];
+                assert(action.events.every(event=>event.pointerType==='mouse'&&event.tag===g.tag&&event.text===g.text));
+                assert(Math.abs(click.x-g.center.x)<=1&&Math.abs(click.y-g.center.y)<=1);
+                const names={'reject-cookies':'Reject all','start-casual':/Casual/,'open-give-up':'Give up','confirm-give-up':'Yes, reveal it','play-again':'Play again'};
+                const expected=names[action.label];
+                if(typeof expected==='string')equal(g.text,expected);else assert(expected.test(g.text));
+              }else if(action.method==='keyboard'){
+                const escape=action.label==='close-rules',key=escape?'Escape':'Enter';
+                equal(action.key,key);
+                equal(action.events.map(event=>[event.type,event.key]),[['keydown',key],['keyup',key]]);
+                if(escape)equal([action.layout,before.dialog?.title],[null,'How to Play Who Am I?']);
+                else{
+                  const player=action.label==='select-a'?old:current;
+                  assert(before.combo.focus);
+                  equal(before.combo.options.map(option=>option.name),[player.player_name]);
+                  equal([action.events[0].tag,action.events[0].role,after.combo.value],['INPUT','combobox','']);
+                }
+              }else{
+                const player=action.label==='type-a'?old:current;
+                assert(before.combo.focus&&before.combo.value==='');
+                equal([action.text,after.combo.value],[player.player_name,player.player_name]);
+                equal(action.events.map(event=>[event.type,event.tag,event.role,event.data,event.value]),
+                  [['input','INPUT','combobox',player.player_name,player.player_name]]);
+              }
+            }
+            for(const wheel of row.wheels){
+              assert(wheel.x>=0&&wheel.x<width&&wheel.y>=0&&wheel.y<height);
+              assert(wheel.events.length>0&&wheel.events.every(event=>event.type==='wheel'&&event.trusted&&event.deltaMode===0&&row.events.some(rawEvent=>JSON.stringify(rawEvent)===JSON.stringify(event))));
+              equal(wheel.events.reduce((sum,event)=>sum+event.deltaY,0),wheel.delta);
+            }
+            equal(row.screenshots.map(item=>item.label),photoPlan);
+            for(const [i,item] of row.screenshots.entries()){
+              const bytes=check({file:item.file,bytes:item.bytes,sha256:item.sha256}),marker=byName.get(resultPointNames[i]);
+              equal([bytes.subarray(0,8).toString('hex'),bytes.readUInt32BE(8),bytes.subarray(12,16).toString('ascii'),bytes.readUInt32BE(16),bytes.readUInt32BE(20)],
+                ['89504e470d0a1a0a',13,'IHDR',width,height]);
+              equal([item.before,item.after],[item.label+'-photo-before',item.label+'-photo-after']);
+              geometry(item.layout,width,height);
+              for(const name of [item.before,item.after]){
+                const frame=byName.get(name);
+                equal([frame.phase,frame.checking,frame.lookupFailed,frame.guess,frame.left,frame.last,frame.result?.answer??null,frame.storage],
+                  [marker.phase,marker.checking,marker.lookupFailed,marker.guess,marker.left,marker.last,marker.result?.answer??null,marker.storage]);
+              }
+              photoFiles.push(item.file);
+            }
+            assert(row.navigations.length>0&&row.navigations.every((nav,n)=>nav.url===routeURL&&nav.at<=ready.at&&(!n||nav.at>=row.navigations[n-1].at)));
+            for(const response of row.firstParty){
+              assert.equal(new URL(response.url).origin,report.base);
+              equal([response.status,response.body],[200,built.get(response.body.file)]);
+            }
+            assert(row.firstParty.some(response=>response.url===routeURL&&response.type==='document'&&response.body.file===entryDocPath));
+            assert(row.firstParty.some(response=>response.url===report.base+'/prerender-boot.js'&&response.type==='script'&&response.body.file==='dist/prerender-boot.js'));
+            assert(row.firstParty.some(response=>response.url===report.base+entryPath&&response.type==='script'&&response.body.file==='dist'+entryPath));
+            assert(row.firstParty.some(response=>response.type==='script'&&/^dist\/assets\/WhoAmI-[^/]+\.js$/.test(response.body.file)));
+            const expectedRoles=['boot-current','boot-carried','boot-history','search-a','search-b','search-prominence','search-prominence','lookup-a','lookup-b'].sort();
+            const fulfilled=row.requests.filter(request=>request.outcome==='local-fixture');
+            equal(fulfilled.map(request=>request.role).sort(),expectedRoles);
+            equal(row.responses.map(response=>response.role).sort(),expectedRoles);
+            for(const request of row.requests){
+              const url=new URL(request.url),spec=specs.get(request.role);
+              equal(request.query,[...url.searchParams]);
+              if(request.outcome==='local-fixture'){
+                assert(spec);
+                equal([url.origin,url.pathname,request.method,[...request.query].sort(),request.body],
+                  [backend,poolPath,'GET',spec.query,spec.body]);
+                assert(Number.isFinite(request.fulfilledAt)&&request.fulfilledAt>=request.at);
+              }else if(request.outcome==='local-cors'){
+                equal([url.origin,request.method],[backend,'OPTIONS']);
+                if(spec)equal([url.pathname,[...request.query].sort()],[poolPath,spec.query]);
+                else equal([url.pathname,request.role],[completionPath,'completion']);
+              }else if(request.outcome==='blocked'){
+                const reads=url.origin===backend&&['/rest/v1/live_scores',completionPath].includes(url.pathname)&&['GET','OPTIONS'].includes(request.method);
+                const assets=request.method==='GET'&&((url.hostname==='fonts.googleapis.com'&&url.pathname==='/css2')||
+                  (url.hostname==='fonts.gstatic.com'&&url.pathname.startsWith('/s/'))||(url.hostname==='flagcdn.com'&&/^\/w(?:20|40|80|160|320)\/(?:[a-z]{2}|gb-(?:eng|sct|wls|nir))\.png$/.test(url.pathname)&&!url.search));
+                assert(reads||assets);
+              }else{
+                equal([request.outcome,request.method,url.origin,url.pathname,request.query],['completion-aborted','POST',backend,completionPath,[]]);
+              }
+            }
+            for(const response of row.responses){
+              const spec=specs.get(response.role);
+              equal([response.status,response.body],[200,spec.body]);
+              assert(fulfilled.some(request=>request.role===response.role&&request.url===response.url&&request.at<=response.at));
+            }
+            equal(row.deliveries.map(item=>[item.role,item.beforeResponses]),[['lookup-a',0],['lookup-b',0]]);
+            const [aRelease,bRelease]=row.deliveries;
+            const aRequest=fulfilled.find(item=>item.role==='lookup-a'),bRequest=fulfilled.find(item=>item.role==='lookup-b');
+            const aResponse=row.responses.find(item=>item.role==='lookup-a'),bResponse=row.responses.find(item=>item.role==='lookup-b');
+            equal([aRequest.releaseAt,bRequest.releaseAt],[aRelease.at,bRelease.at]);
+            assert(aRequest.at<=aRequest.heldAt&&aRequest.heldAt<=aHeld.at&&aHeld.at<=aAbandoned.at);
+            assert(aAbandoned.at<=bRequest.heldAt&&bRequest.at<=bRequest.heldAt&&bRequest.heldAt<=bHeld.at&&bHeld.at<=aRelease.at);
+            assert(aRelease.at<=aResponse.at&&aResponse.at<=overlap.at&&overlap.at<=bRelease.at&&bRelease.at<=bResponse.at&&bResponse.at<=bAccepted.at);
+            assert(aRequest.fulfilledAt>=aRelease.at&&bRequest.fulfilledAt>=bRelease.at);
+            const completionRequests=row.requests.filter(item=>item.outcome==='completion-aborted');
+            equal([completionRequests.length,row.completion.length],[1,1]);
+            const [completion]=row.completion,[completionRequest]=completionRequests;
+            equal([completion.at,completion.url,completion.body],[completionRequest.at,completionRequest.url,completionRequest.body]);
+            equal(JSON.parse(check(completion.body)),completion.data);
+            equal(Object.keys(completion.data).sort(),['game','player_name']);
+            assert(completion.data.game==='who-am-i'&&typeof completion.data.player_name==='string'&&completion.data.player_name.length>0);
+            assert(byName.get('confirm-give-up-before').at<=completion.at&&completion.at<=aAbandoned.at&&aAbandoned.at<=bPlaying.at);
+            return {width,height,frames:frames.length,actions:row.actions.length,
+              mouseActions:row.actions.filter(action=>action.method==='mouse').length,keyboardActions:row.actions.filter(action=>action.method==='keyboard').length,
+              typingActions:row.actions.filter(action=>action.method==='typing').length,wheels:row.wheels.length,navigations:row.navigations.length,viewportPNGs:row.screenshots.length,
+              abandonResults:1,replays:1,overlapSettlements:1,acceptedCurrentGuesses:1,lookupReads:row.responses.filter(item=>item.role.startsWith('lookup-')).length,
+              completionAttempts:row.completion.length,firstPartyResponses:row.firstParty.length,searchReads:row.responses.filter(item=>item.role.startsWith('search-')).length,
+              bootReads:row.responses.filter(item=>item.role.startsWith('boot-')).length,corsPreflights:row.requests.filter(req=>req.outcome==='local-cors').length,
+              settled:{aHeldAt:aRequest.heldAt,aReleasedAt:aRelease.at,aBodyAt:aResponse.at,bHeldAt:bRequest.heldAt,
+                bStillHeldAfterAAt:overlap.at,bReleasedAt:bRelease.at,bBodyAt:bResponse.at,bAcceptedAt:bAccepted.at,acceptedName:bAccepted.last.name}};
+          });
+          assert.equal(new Set(photoFiles).size,9);
+          equal([...referenced].sort(),[...names].sort());
+          const sum=key=>measured.reduce((total,row)=>total+row[key],0);
+          const census={journeys:measured.length,contexts:measured.length,viewportPNGs:sum('viewportPNGs'),abandonResults:sum('abandonResults'),
+            replays:sum('replays'),overlapSettlements:sum('overlapSettlements'),acceptedCurrentGuesses:sum('acceptedCurrentGuesses'),
+            lookupReads:sum('lookupReads'),completionAttempts:sum('completionAttempts'),frames:sum('frames'),actions:sum('actions'),
+            mouseActions:sum('mouseActions'),keyboardActions:sum('keyboardActions'),typingActions:sum('typingActions'),wheels:sum('wheels'),
+            navigations:sum('navigations'),firstPartyResponses:sum('firstPartyResponses'),searchReads:sum('searchReads'),bootReads:sum('bootReads'),corsPreflights:sum('corsPreflights')};
+          equal(census,report.census);
+          const result={status:'passed',route,page:PAGE,helper:HELPER,currentSource:source,census,
+            evidence:{report:ref('report.json'),raw:ref('raw.json'),bodyManifest:ref('body-manifest.json'),binding:report.binding,fixture:report.fixture,
+              filesCount:manifest.filesCount,bodyBytes:manifest.bodyBytes},
+            holds,measured,boundaries:report.limits};
+          process.stdout.write(JSON.stringify(result,null,2)+'\n');
+          WHO_AM_I_NATIVE_OUTER
+          test "$(git hash-object "$out/native-admission-script.mjs")" = "$WHO_AM_I_OUTER"
+          test -z "$(git ls-files -- "$out/native-admission-script.mjs")"
+          export WHO_AM_I_GUESS_OWNERSHIP_BROWSER_OUT="$PWD/$out/browser"
+          export WHO_AM_I_GUESS_OWNERSHIP_FULL_UNIT="$PWD/$out"
+          export WHO_AM_I_GUESS_OWNERSHIP_FIXED_REFERENCE="$PWD/$out/fixed-reference"
+          export WHO_AM_I_GUESS_OWNERSHIP_CONTROLS_REFERENCE="$PWD/$out/controls-reference"
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          node scripts/qa/playWhoAmIGuessOwnership.mjs 2>&1 | tee "$out/browser.log"
+          node "$out/native-admission-script.mjs" "$out/browser" > "$out/native-admission.json" 2> "$out/native-admission.log" || { cat "$out/native-admission.log"; exit 1; }
+      - name: Admit actual fresh units build native and retained controls scope
+        run: |
+          set -euo pipefail
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          import {createHash} from 'node:crypto';
+          const out='who-am-i-guess-ownership-full',env=process.env;
+          const bytes=file=>fs.readFileSync(out+'/'+file),read=file=>JSON.parse(bytes(file));
+          const sha=value=>createHash('sha256').update(value).digest('hex');
+          const source=read('source-join.json'),custody=read('packet-custody.json'),unit=read('unit-admission.json'),raw=read('fixed-raw-join.json'),native=read('native-admission.json');
+          assert.deepEqual([source.status,source.head,source.trackedRows,source.sourceRows,source.cleanSourceRows,source.rootConfigurations.length,source.heldFixedRows],
+            ['passed',env.GITHUB_SHA,5791,4664,4663,11,5789]);
+          assert.deepEqual([source.parent,source.fixedHead,source.fixedTree,source.helperBlob],[custody.fixed.head,custody.fixed.head,custody.fixed.tree,env.WHO_AM_I_HELPER]);
+          assert.deepEqual([custody.status,custody.controlsRerun,custody.referenceChecks.status,unit.status,unit.commands,unit.actualCases,unit.actualPasses,unit.actualFailures,unit.wholeQualifiedFixedRAWBytesHeld],
+            ['passed',false,'passed','passed',1,unit.actualCases,unit.actualCases,0,true]);
+          assert.deepEqual([raw.status,raw.fixedHead,raw.fixedTree,raw.raw,raw.freshUnitRAWByteEqual],['passed',custody.fixed.head,custody.fixed.tree,unit.raw,true]);
+          const nativeChecks=(()=>{
+          const c=native.census;
+          assert.deepEqual([c.journeys,c.contexts,c.viewportPNGs,c.abandonResults,c.replays,c.overlapSettlements,c.acceptedCurrentGuesses,c.lookupReads,c.completionAttempts,c.actions],[3,3,9,3,3,3,3,6,3,30]);
+          assert.deepEqual(native.measured.map(row=>[row.width,row.height]),[[320,568],[390,844],[1280,900]]);
+          for(const pin of [native.evidence.report,native.evidence.raw,native.evidence.bodyManifest]){
+            const body=bytes('browser/'+pin.file);
+            assert.deepEqual([body.length,sha(body)],[pin.bytes,pin.sha256]);
+          }
+          return {status:'passed',actualCensus:c,actualViewportRows:native.measured,locallyInterceptedLegitimateCompletions:3};
+          })();
+          assert.equal(nativeChecks?.status,'passed','Reviewed actual native validator must complete');
+          assert.deepEqual([native.status,native.route,native.page,native.helper],['passed','/who-am-i',env.WHO_AM_I_GUESS_OWNERSHIP_PAGE_BLOB,env.WHO_AM_I_HELPER]);
+          const expected='simAdsense,simBrand,simHeadTags,simHiddenPages,simHubs,simIndexNow,simIndexing,simInternalLinks,simNoRivalNames,simPrerender,simPrerenderBoot,simRetiredRoutes,simSchema,simSitemap,simSnapshotAssets,simSiteSearch,simGuideHeadings,simSeoMetaSplit,simHomeCopy,simHarnessAnchors'.split(',').map(name=>name+'.mjs').sort();
+          const readers=bytes('readers.log').toString('utf8'),readerRows=[...readers.matchAll(/^\s+PASS\s+(sim[A-Za-z0-9]+\.mjs)/gm)].map(row=>row[1]).sort();
+          assert.deepEqual(readerRows,expected);assert(!/^\s+FAIL\s+/m.test(readers));
+          const weight=bytes('weight.log').toString('utf8');
+          const capRows=[...weight.matchAll(/^\s+(\/\S*)\s+\d+K gz over\s+\d+ files \(budget (\d+)K, [\d.]+K to the tenth\)/gm)].map(row=>[row[1],Number(row[2])]);
+          assert.deepEqual(capRows,[['/',245],['/club-manager',648],['/soccer-career',840],['/stadium-tycoon',305],['/wonderkid-factory',278],['/minefield',295],['/footle',354],['/nfl-my-career',499],['/front-office',390],['/soccer-grid',320],['/leaderboard',266],['/manager-hot-seat',672],['/deadline-day',680],['/transfer-path',381],['/nba-front-office',397],['/nhl-front-office',379]]);
+          assert(weight.includes('sweepWeight: green.'));
+          const tar=bytes('dist.tgz'),distFiles=read('dist-before.json').length;
+          assert.equal(distFiles,850);
+          const normalized=read('dist-before.json').map(row=>{assert(row.file.startsWith('dist/'));return {path:row.file.slice(5),bytes:row.bytes,sha256:row.sha256};});
+          fs.writeFileSync(out+'/admission.json',JSON.stringify({
+            status:'passed',qualification:'fresh-who-am-i-guess-ownership-full-scope',head:source.head,tree:source.tree,page:env.WHO_AM_I_GUESS_OWNERSHIP_PAGE_BLOB,test:env.WHO_AM_I_TEST,plan:env.WHO_AM_I_PLAN,
+            helper:env.WHO_AM_I_HELPER,nativeOuter:env.WHO_AM_I_OUTER,original:custody.original,fixed:custody.fixed,controls:custody.controls,controlsRerun:false,
+            unit,unitCommands:1,raw,trackedBodies:source.trackedRows,sourceRows:source.sourceRows,cleanSourceRows:source.cleanSourceRows,rootConfigurations:source.rootConfigurations.length,
+            distFiles,distTar:{file:'dist.tgz',bytes:tar.length,sha256:sha(tar)},distTupleSHA256:sha(JSON.stringify(normalized)),
+            readers:readerRows.length,readerRows,immutableCaps:capRows.length,capRows,nativeReceipt:native,nativeChecks,referenceChecks:custody.referenceChecks,
+            limits:'Fresh fixed units, normal production build, all readers and caps, native Who Am I and full source holds. Original, fixed and controls are retained admitted evidence. No controls rerun or release claim.',
+          },null,2)+'\n',{flag:'wx'});
           NODE
-          node "$out/qualification.mjs" prepare
-      - name: Proper App types
-        run: |
-          set -euo pipefail
-          node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee who-am-i-guess-ownership-evidence/types.log
-      - name: Run the public lookup and existing player identity tests
-        run: |
-          set -euo pipefail
-          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node who-am-i-guess-ownership-evidence/qualification.mjs test
-      - name: Join physical source index lock versions and offline receipts
+      - name: Final physical source index locks versions build and reference holds
         if: always()
         run: |
           set -euo pipefail
-          out=who-am-i-guess-ownership-evidence
+          out=who-am-i-guess-ownership-full
           git ls-files -s > "$out/source-after.txt"
-          sha256sum package.json package-lock.json > "$out/locks-after.txt"
+          cmp "$out/source-before.txt" "$out/source-after.txt"
           git diff --exit-code HEAD -- .
-          node "$out/qualification.mjs" final
+          sha256sum package.json package-lock.json > "$out/locks-after.txt"
+          cmp "$out/locks-before.txt" "$out/locks-after.txt"
+          if [[ -f "$out/dist.sha256" ]]; then sha256sum --check "$out/dist.sha256"; fi
+          if [[ -f "$out/native-admission-script.mjs" ]]; then
+            test "$(git hash-object "$out/native-admission-script.mjs")" = "$WHO_AM_I_OUTER"
+            test -z "$(git ls-files -- "$out/native-admission-script.mjs")"
+          fi
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import assert from 'node:assert/strict';
+          import {execFileSync} from 'node:child_process';
+          import {createHash} from 'node:crypto';
+          const out='who-am-i-guess-ownership-full',read=file=>JSON.parse(fs.readFileSync(out+'/'+file));
+          const write=(file,body)=>fs.writeFileSync(out+'/'+file,JSON.stringify(body));
+          const sha=bytes=>createHash('sha256').update(bytes).digest('hex');
+          const tuple=(file,bytes)=>({file,bytes:bytes.length,sha256:sha(bytes)});
+          const tracked=execFileSync('git',['ls-files','-z'],{encoding:'utf8',maxBuffer:16*1024*1024}).split('\0').filter(Boolean);
+          const source=tracked.map(file=>tuple(file,fs.readFileSync(file)));
+          assert.equal(source.length,5791);assert.deepEqual(source,read('tracked-before.json'));write('tracked-after.json',source);
+          const lock=JSON.parse(fs.readFileSync('package-lock.json'));
+          const versions=Object.keys(lock.packages).filter(file=>file.startsWith('node_modules/')&&fs.existsSync(file+'/package.json')).map(file=>[file,JSON.parse(fs.readFileSync(file+'/package.json')).version]);
+          assert.equal(versions.length,521);for(const [file,version] of versions)assert.equal(version,lock.packages[file].version,file);
+          assert.deepEqual(versions,read('installed-before.json'));write('installed-after.json',versions);
+          const offlineBytes=fs.statSync(out+'/offline.log').size;assert.equal(offlineBytes,0);
+          const walk=(dir,prefix='')=>fs.readdirSync(dir,{withFileTypes:true}).sort((a,b)=>a.name.localeCompare(b.name)).flatMap(entry=>{
+            const file=prefix+entry.name;
+            if(entry.isDirectory())return walk(path.join(dir,entry.name),file+'/');
+            assert(entry.isFile()&&!entry.isSymbolicLink(),file+' actual regular retained body');return[file];
+          });
+          let distHeld=false,retainedPacketsHeld=false;
+          if(fs.existsSync(out+'/dist-before.json')){
+            const dist=walk('dist','dist/').map(file=>tuple(file,fs.readFileSync(file)));
+            assert.equal(dist.length,850);assert.deepEqual(dist,read('dist-before.json'));write('dist-after.json',dist);distHeld=true;
+          }
+          if(fs.existsSync(out+'/packet-custody.json')){
+            for(const role of ['original','fixed','controls']){
+              const dir=out+'/'+role+'-reference',before=read(role+'-reference-before.json');
+              const after=walk(dir).sort().map(file=>tuple(file,fs.readFileSync(path.join(dir,file))));
+              assert.deepEqual(after,before);write(role+'-reference-after.json',after);
+            }
+            retainedPacketsHeld=true;
+          }
+          if(fs.existsSync(out+'/admission.json'))assert(distHeld&&retainedPacketsHeld);
+          write('final-holds.json',{status:'passed',trackedBodies:source.length,scopedSourceRows:4664,cleanSourceRows:4663,rootConfigurations:11,installedLockedVersions:versions.length,
+            indexUnchanged:true,sourceBytesUnchanged:true,locksUnchanged:true,distHeld,retainedPacketsHeld,offlineBytes,
+            limits:'Final physical and custody holds. Full admission and completed workflow success are separate.'});
+          NODE
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: who-am-i-guess-ownership-fixed-${{ github.run_id }}
-          path: who-am-i-guess-ownership-evidence
+          name: who-am-i-guess-ownership-full-${{ github.run_id }}
+          path: who-am-i-guess-ownership-full
           retention-days: 14
           if-no-files-found: error
