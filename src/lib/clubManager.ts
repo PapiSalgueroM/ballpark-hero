@@ -5351,6 +5351,22 @@ const CLUB_COLORS: Record<string, string> = {
   'Tenerife': '#1b458f', 'Leganés': '#1b458f', 'Córdoba': '#0a7040',
   'Eldense': '#7d1c2a', 'FC Andorra': '#1b458f', 'Ceuta': '#d9d9d9',
   'Albacete': '#d9d9d9',
+  // Russia: decorative markers for the narrow words in soccerCareerFacts.json, no official RGB or full palettes.
+  'Akhmat Grozny': '#0a7040',
+  'Akron Tolyatti': '#d02128',
+  'Baltika': '#1b3f94',
+  'CSKA Moscow': '#d02128',
+  'Dynamo Makhachkala': '#d9d9d9',
+  'Dynamo Moscow': '#d9d9d9',
+  'Fakel Voronezh': '#1b3f94',
+  'Krasnodar': '#0a7040',
+  'Krylia Sovetov': '#0a7040',
+  'Lokomotiv Moscow': '#d02128',
+  'Orenburg': '#1b3f94',
+  'Rodina Moscow': '#d9d9d9',
+  'Rostov': '#f5d800',
+  'Rubin Kazan': '#7d1c2a',
+  'Spartak Moscow': '#d02128',
   ...Object.fromEntries(K_LEAGUE_2026.clubs.map(club => [club.name, club.color])),
 };
 
