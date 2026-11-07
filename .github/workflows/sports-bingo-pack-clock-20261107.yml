@@ -1,0 +1,352 @@
+name: Sports Bingo pack clock clean source and build join
+on:
+  push:
+    branches: [codex/sports-bingo-pack-clock-clean-join-qa-20261107]
+permissions:
+  contents: read
+  actions: read
+jobs:
+  closeout:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        shell: bash
+    env:
+      SIM_NETWORK: offline
+      SIM_OFFLINE_RECEIPT: sports-bingo-pack-clock-clean-join/offline.log
+      BINGO_REFERENCE_ARTIFACT: '13569180268'
+      BINGO_REFERENCE_RUN: '42358326196'
+      BINGO_REFERENCE_ZIP: '0a4808e87afeaa3232d3a363cbf4538244e8276c7c9cf20eb0f3e090d9bd6d27'
+      BINGO_REFERENCE_TAR: '3283826a0db89b8fc0be35a4211a87b671bae6a0f9e0e8bccd1a9052814107ad'
+      BINGO_REFERENCE_HEAD: '7d2f7dfffb94dde28dd7e1029e85d9b3905ee949'
+      BINGO_REFERENCE_TREE: '45453d0c88176cefa3ffd32f429015cbc8b92d29'
+      BINGO_REFERENCE_ZIP_BYTES: '37880338'
+      BINGO_NATIVE_HELPER: '6c2ae76a2b7dd1265a45e7cc98ee4621e1696326'
+      BINGO_NATIVE_OUTER: '283812ff9f4f6fd3b792603e568478a383368058'
+      BINGO_FIXED_PAGE_BLOB: 'b34c07f28a8d4005e68c307631c2c146aca3a9fc'
+      BINGO_QUALIFIED_PLAN_BLOB: '1900d29a989e923bf3566b618fa970dc68cc3149'
+      BINGO_QUALIFIED_TEST_BLOB: '86929500edcba1bf7171cd15c513e16951495994'
+      BINGO_REFERENCE_DIST_MANIFEST: '956d7202e2522bfad6733fd59c0957a422d8168ef2bebdf7272f0ed73d83bfd7'
+      BINGO_REFERENCE_WORKFLOW: '149a9043f3abdc7683658634c8bc5d67f67482a4'
+      BINGO_CLEAN_PRODUCT_BASE: '27e1d6508fb207dfd2647994d50f0783d9baec1b'
+      BINGO_CLEAN_PRODUCT_BASE_TREE: 'feb8ac00d54366ac66398a28c6c89c2f2e41f484'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 3
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24.22.1
+          cache: npm
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.4.4
+      - name: Locked dependencies and clean source receipts
+        run: |
+          set -euo pipefail
+          if grep -Eq '__[A-Z][A-Z0-9_]*__' .github/workflows/sports-bingo-pack-clock-20261107.yml; then echo 'Unresolved clean qualification template binding'; exit 1; fi
+          [[ "$BINGO_REFERENCE_ARTIFACT" =~ ^[1-9][0-9]*$ ]]
+          [[ "$BINGO_REFERENCE_RUN" =~ ^[1-9][0-9]*$ ]]
+          [[ "$BINGO_REFERENCE_ZIP" =~ ^[a-f0-9]{64}$ ]]
+          [[ "$BINGO_REFERENCE_TAR" =~ ^[a-f0-9]{64}$ ]]
+          [[ "$BINGO_REFERENCE_ZIP_BYTES" =~ ^[1-9][0-9]*$ ]]
+          [[ "$BINGO_REFERENCE_DIST_MANIFEST" =~ ^[a-f0-9]{64}$ ]]
+          for value in "$BINGO_REFERENCE_HEAD" "$BINGO_REFERENCE_TREE" "$BINGO_NATIVE_HELPER" "$BINGO_NATIVE_OUTER" "$BINGO_REFERENCE_WORKFLOW" "$BINGO_FIXED_PAGE_BLOB" "$BINGO_QUALIFIED_PLAN_BLOB" "$BINGO_QUALIFIED_TEST_BLOB"; do [[ "$value" =~ ^[a-f0-9]{40}$ ]]; done
+          test ! -e sports-bingo-pack-clock-clean-join
+          mkdir sports-bingo-pack-clock-clean-join
+          touch sports-bingo-pack-clock-clean-join/offline.log
+          git rev-parse HEAD > sports-bingo-pack-clock-clean-join/head.txt
+          git rev-parse 'HEAD^{tree}' > sports-bingo-pack-clock-clean-join/tree.txt
+          git ls-files -s > sports-bingo-pack-clock-clean-join/source-before.txt
+          sha256sum package.json package-lock.json > sports-bingo-pack-clock-clean-join/locks-before.txt
+          npm ci
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const lock=JSON.parse(fs.readFileSync('package-lock.json'));
+          const rows=Object.keys(lock.packages).filter(p=>p.startsWith('node_modules/')&&fs.existsSync(p+'/package.json')).map(p=>[p,JSON.parse(fs.readFileSync(p+'/package.json')).version]);
+          assert.equal(rows.length,521);for(const[p,v]of rows)assert.equal(v,lock.packages[p].version,p);fs.writeFileSync('sports-bingo-pack-clock-clean-join/installed-before.json',JSON.stringify(rows));
+          NODE
+      - name: Proper app types
+        run: |
+          set -euo pipefail
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee sports-bingo-pack-clock-clean-join/types.log
+      - name: Authenticate the completed full reference before extraction
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          gh api "repos/PapiSalgueroM/ballpark-hero/actions/runs/$BINGO_REFERENCE_RUN" > sports-bingo-pack-clock-clean-join/reference-run.json
+          gh api "repos/PapiSalgueroM/ballpark-hero/actions/artifacts/$BINGO_REFERENCE_ARTIFACT" > sports-bingo-pack-clock-clean-join/reference-artifact.json
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          const env = process.env;
+          const read = file => JSON.parse(fs.readFileSync('sports-bingo-pack-clock-clean-join/' + file));
+          const run = read('reference-run.json'), artifact = read('reference-artifact.json');
+          assert.deepEqual(
+            [run.id, run.status, run.conclusion, run.event, run.path, run.repository.full_name, run.head_sha, run.head_commit.tree_id],
+            [Number(env.BINGO_REFERENCE_RUN), 'completed', 'success', 'push', '.github/workflows/sports-bingo-pack-clock-20261107.yml', 'PapiSalgueroM/ballpark-hero', env.BINGO_REFERENCE_HEAD, env.BINGO_REFERENCE_TREE],
+          );
+          assert.deepEqual(
+            [artifact.id, artifact.name, artifact.expired, artifact.size_in_bytes, artifact.digest, artifact.workflow_run.id, artifact.workflow_run.head_sha],
+            [Number(env.BINGO_REFERENCE_ARTIFACT), 'sports-bingo-pack-clock-full-' + run.id, false, Number(env.BINGO_REFERENCE_ZIP_BYTES), 'sha256:' + env.BINGO_REFERENCE_ZIP, run.id, run.head_sha],
+          );
+          NODE
+          gh api "repos/PapiSalgueroM/ballpark-hero/actions/artifacts/$BINGO_REFERENCE_ARTIFACT/zip" > "$RUNNER_TEMP/sports-bingo-pack-clock-full-reference.zip"
+          test "$(wc -c < "$RUNNER_TEMP/sports-bingo-pack-clock-full-reference.zip")" -eq "$BINGO_REFERENCE_ZIP_BYTES"
+          echo "$BINGO_REFERENCE_ZIP  $RUNNER_TEMP/sports-bingo-pack-clock-full-reference.zip" | sha256sum --check
+          unzip -Z1 "$RUNNER_TEMP/sports-bingo-pack-clock-full-reference.zip" > sports-bingo-pack-clock-clean-join/reference-zip-entries.txt
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          const names = fs.readFileSync('sports-bingo-pack-clock-clean-join/reference-zip-entries.txt', 'utf8').trimEnd().split('\n');
+          assert.equal(new Set(names).size, names.length, 'Unique admitted ZIP paths');
+          for (const name of names) {
+            assert(name.length && !name.includes('\\') && !name.startsWith('/'), 'Relative ZIP path');
+            assert(name.replace(/\/$/, '').split('/').every(part => part && part !== '.' && part !== '..'), 'Safe ZIP path');
+          }
+          for (const file of ['head.txt', 'tree.txt', 'admission.json', 'unit-admission.json', 'native-admission.json', 'final-holds.json', 'source-before.txt', 'source-after.txt', 'dist-before.json', 'dist-after.json', 'dist.tgz']) {
+            assert(names.includes(file), file + ' required authenticated body');
+          }
+          NODE
+          mkdir "$RUNNER_TEMP/sports-bingo-pack-clock-full-reference" "$RUNNER_TEMP/sports-bingo-pack-clock-full-reference-dist"
+          unzip -q "$RUNNER_TEMP/sports-bingo-pack-clock-full-reference.zip" -d "$RUNNER_TEMP/sports-bingo-pack-clock-full-reference"
+          test -z "$(find "$RUNNER_TEMP/sports-bingo-pack-clock-full-reference" -type l -print -quit)"
+          echo "$BINGO_REFERENCE_TAR  $RUNNER_TEMP/sports-bingo-pack-clock-full-reference/dist.tgz" | sha256sum --check
+          tar -tzf "$RUNNER_TEMP/sports-bingo-pack-clock-full-reference/dist.tgz" > sports-bingo-pack-clock-clean-join/reference-tar-entries.txt
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          const names = fs.readFileSync('sports-bingo-pack-clock-clean-join/reference-tar-entries.txt', 'utf8').trimEnd().split('\n');
+          assert.equal(new Set(names).size, names.length, 'Unique admitted dist tar paths');
+          for (const name of names) {
+            assert(name.startsWith('dist/') && !name.includes('\\'), 'Tar stays under dist');
+            assert(name.replace(/\/$/, '').split('/').every(part => part && part !== '.' && part !== '..'), 'Safe tar path');
+          }
+          NODE
+          tar -xzf "$RUNNER_TEMP/sports-bingo-pack-clock-full-reference/dist.tgz" -C "$RUNNER_TEMP/sports-bingo-pack-clock-full-reference-dist"
+          cp "$RUNNER_TEMP/sports-bingo-pack-clock-full-reference/source-before.txt" sports-bingo-pack-clock-clean-join/reference-source.txt
+      - name: Fresh unchanged product-name fence on clean source
+        run: |
+          set -euo pipefail
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simNoRivalNames.mjs 2>&1 | tee sports-bingo-pack-clock-clean-join/no-rival.log
+      - name: Clean production build
+        run: |
+          set -euo pipefail
+          NODE_OPTIONS="--max-old-space-size=6144" npm run build 2>&1 | tee sports-bingo-pack-clock-clean-join/build.log
+      - name: Join exact clean product source and all 850 built files
+        id: join
+        env:
+          BINGO_REFERENCE_DIR: ${{ runner.temp }}/sports-bingo-pack-clock-full-reference
+          BINGO_REFERENCE_DIST: ${{ runner.temp }}/sports-bingo-pack-clock-full-reference-dist/dist
+        run: |
+          set -euo pipefail
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import assert from 'node:assert/strict';
+          import {createHash} from 'node:crypto';
+          import {execFileSync} from 'node:child_process';
+          const env = process.env;
+          const out = 'sports-bingo-pack-clock-clean-join';
+          const ref = env.BINGO_REFERENCE_DIR;
+          const read = file => JSON.parse(fs.readFileSync(path.join(ref, file)));
+          const bytes = file => fs.readFileSync(path.join(ref, file));
+          const readOutput = file => JSON.parse(fs.readFileSync(path.join(out, file)));
+          const sha = bytes => createHash('sha256').update(bytes).digest('hex');
+          const blob = bytes => createHash('sha1').update('blob ' + bytes.length + '\0').update(bytes).digest('hex');
+          const git = (...args) => execFileSync('git', args, {encoding:'utf8', maxBuffer:16 * 1024 * 1024});
+          const workflow = '.github/workflows/sports-bingo-pack-clock-20261107.yml';
+          const helper = 'scripts/qa/playSportsBingoPackClock.mjs';
+          const page = 'src/pages/SportsBingo.tsx';
+          const test = 'src/test/sportsBingoPackClock.test.tsx';
+          const plan = 'docs/plans/2026-11-07-sports-bingo-pack-clock.md';
+          const configs = ['index.html','package.json','package-lock.json','vite.config.ts','tailwind.config.ts','postcss.config.js','tsconfig.json','tsconfig.app.json','tsconfig.node.json','bun.lockb','bun.lock'];
+          const sourceScope = file => /^(?:src|public|scripts)\//.test(file);
+          const fullOnly = new Set([workflow, helper]);
+          const denied = ['scripts/qa/checkSportsBingoPackClock.mjs','scripts/qa/admitSportsBingoPackClock.mjs'];
+          const pins = {
+            [page]: env.BINGO_FIXED_PAGE_BLOB,
+            [test]: env.BINGO_QUALIFIED_TEST_BLOB,
+            [plan]: env.BINGO_QUALIFIED_PLAN_BLOB,
+            'src/App.tsx': '8bfedf7aaa1d076e0f0c8e2216c7e46632cd8a33',
+            'src/data/gameRegistry.ts': 'f560b40a74d1468ac72dfde4ee6fec6635a9a255',
+            'public/sports-bingo/index.html': '044451271149c1e08160d70cec2019860e284004',
+            'src/lib/sportsBingo.ts': 'b1f29ad32de3567cad907d35d684a53e59f34616',
+            'src/lib/squadDeal.ts': '726c554d99de4c285604e23cbe1d6def78477bcb',
+            'src/components/sports-bingo/BingoCardGrid.tsx': 'ee97f73aa1daa4ece1b85a08db68ffa32d38cfc3',
+            'src/components/sports-bingo/BingoPackList.tsx': '376a1e7da6f43713ec54732a91a34c348afcbec2',
+            'src/test/dailyReload/sports-bingo.driver.tsx': '0dd2587ed2dcfc652854e83ebeaf499368afc115',
+            'src/test/sportsBingoTable.test.tsx': '500536d0aae1e6341992c72401129c39db9a81fd',
+            'scripts/simSportsBingo.mjs': '35c2f85fedf2cc2f5b4871582c59bc4331822276',
+          };
+          const indexRows = (body, separator = '\n') => {
+            const rows = body.split(separator).filter(Boolean).map(line => {
+              const matched = /^(100(?:644|755)) ([0-9a-f]{40}) 0\t(.+)$/.exec(line);
+              assert(matched, 'Actual regular path/mode/blob index tuple');
+              return [matched[3], {mode:matched[1], blob:matched[2]}];
+            });
+            assert.equal(new Set(rows.map(([file]) => file)).size, rows.length, 'Unique index paths');
+            return new Map(rows);
+          };
+          const treeRows = commit => {
+            const rows = git('ls-tree', '-r', '-z', commit).split('\0').filter(Boolean).map(line => {
+              const matched = /^(100(?:644|755)) blob ([0-9a-f]{40})\t(.+)$/.exec(line);
+              assert(matched, 'Actual regular path/mode/blob tree tuple');
+              return [matched[3], {mode:matched[1], blob:matched[2]}];
+            });
+            assert.equal(new Set(rows.map(([file]) => file)).size, rows.length, 'Unique tree paths');
+            return new Map(rows);
+          };
+          const ordered = rows => [...rows].sort(([left],[right]) => left.localeCompare(right));
+          const cleanHead = git('rev-parse', 'HEAD').trim(), cleanTree = git('rev-parse', 'HEAD^{tree}').trim();
+          assert.deepEqual(git('rev-list', '--parents', '-n', '1', 'HEAD').trim().split(' '), [cleanHead, env.BINGO_CLEAN_PRODUCT_BASE], 'Clean QA is the direct PR534 child');
+          assert.equal(git('rev-parse', env.BINGO_CLEAN_PRODUCT_BASE + '^{tree}').trim(), env.BINGO_CLEAN_PRODUCT_BASE_TREE);
+          assert.equal(fs.readFileSync(out + '/head.txt','utf8').trim(), cleanHead);
+          assert.equal(fs.readFileSync(out + '/tree.txt','utf8').trim(), cleanTree);
+          const base = treeRows(env.BINGO_CLEAN_PRODUCT_BASE);
+          const current = indexRows(fs.readFileSync(out + '/source-before.txt', 'utf8'));
+          const old = indexRows(fs.readFileSync(out + '/reference-source.txt', 'utf8'));
+          assert.deepEqual(ordered(indexRows(git('ls-files','--stage','-z'),'\0')), ordered(current));
+          assert.deepEqual(ordered(treeRows(cleanHead)), ordered(current), 'Clean index joins exact committed tree tuples');
+          assert.deepEqual([base.size,current.size,old.size],[5785,5788,5789]);
+          const allowedClean = [page, test, plan, workflow];
+          const cleanDelta = [...new Set([...base.keys(), ...current.keys()])].filter(file => {
+            const before = base.get(file), after = current.get(file);
+            return before?.mode !== after?.mode || before?.blob !== after?.blob;
+          }).sort();
+          assert.deepEqual(cleanDelta, [...allowedClean].sort(), 'Exactly one product Page change and three owned new leaves');
+          assert.equal(base.get(page)?.blob, '0d6c8657921ad483eeee7dc50f1a92d5bfbd9a05');
+          assert.equal(current.get(page)?.mode, base.get(page)?.mode);
+          for (const file of [test, plan, workflow]) assert(!base.has(file) && current.get(file)?.mode === '100644', file + ' exact owned new leaf');
+          assert(!current.has(helper), 'Tracked full browser helper is excluded from clean QA');
+          assert.equal(old.get(helper)?.blob, env.BINGO_NATIVE_HELPER);
+          assert.equal(old.get(workflow)?.blob, env.BINGO_REFERENCE_WORKFLOW);
+          assert(current.get(workflow)?.blob && current.get(workflow).blob !== old.get(workflow).blob, 'Clean QA uses its own workflow body');
+          for (const file of denied) assert(!old.has(file) && !current.has(file), file + ' untracked QA source');
+          for (const [file,want] of Object.entries(pins)) {
+            assert.equal(current.get(file)?.blob, want, file + ' exact clean pin');
+            assert.equal(old.get(file)?.blob, want, file + ' exact full pin');
+          }
+          const product = (rows, omit) => ordered([...rows].filter(([file]) => !omit.has(file)));
+          assert.deepEqual(product(current,new Set([workflow])), product(old,fullOnly), 'All 5787 product path/mode/blob tuples are identical');
+          assert.deepEqual([base,current,old].map(rows => [...rows.keys()].filter(sourceScope).length), [4661,4662,4663]);
+          const scoped = (rows, omit) => ordered([...rows].filter(([file]) => (sourceScope(file) || configs.includes(file)) && !omit.has(file)));
+          const sourceConfigRows = scoped(current,new Set());
+          assert.equal(sourceConfigRows.length, 4673);
+          assert.deepEqual(sourceConfigRows,scoped(old,fullOnly),'Every 4662 code and 11 root configuration path/mode/blob tuple');
+          for (const file of configs) assert(current.has(file) && old.has(file),file + ' required root configuration');
+          for (const [file,tuple] of current) {
+            const stat = fs.lstatSync(file);
+            assert(stat.isFile(),file + ' physical regular source body');
+            assert.equal((stat.mode & 0o111) !== 0, tuple.mode === '100755',file + ' physical source executable mode');
+            assert.equal(blob(fs.readFileSync(file)),tuple.blob,file + ' physical source bytes join tree');
+          }
+
+          const inventory = (directory,prefix = '') => fs.readdirSync(directory,{withFileTypes:true}).sort((a,b) => a.name.localeCompare(b.name)).flatMap(entry => {
+            const file = path.join(directory,entry.name);
+            const relative = prefix + entry.name;
+            if (entry.isDirectory()) return inventory(file,relative + '/');
+            assert(entry.isFile(),relative + ' regular dist file');
+            const body = fs.readFileSync(file);
+            return [{path:relative,bytes:body.length,sha256:sha(body)}];
+          });
+          const actual = inventory('dist'), reference = inventory(env.BINGO_REFERENCE_DIST);
+          assert.deepEqual([actual.length,reference.length],[850,850]);
+          assert.deepEqual(actual,reference,'Every clean built path and byte equals the qualified full build');
+          const distManifestSHA256 = sha(JSON.stringify(reference));
+          assert.equal(distManifestSHA256,env.BINGO_REFERENCE_DIST_MANIFEST);
+          const retainedManifest = read('dist-before.json').map(row => {
+            assert.deepEqual(Object.keys(row).sort(),['bytes','file','sha256']);
+            assert(row.file.startsWith('dist/'));
+            return {path:row.file.slice(5),bytes:row.bytes,sha256:row.sha256};
+          });
+          assert.deepEqual(retainedManifest,reference,'Exact full retained build inventory and tar join');
+          assert(bytes('dist-before.json').equals(bytes('dist-after.json')));
+          assert(bytes('source-before.txt').equals(bytes('source-after.txt')));
+          assert(bytes('source-before.txt').equals(fs.readFileSync(out + '/reference-source.txt')));
+          const referenceHead = bytes('head.txt').toString('utf8').trim(), referenceTree = bytes('tree.txt').toString('utf8').trim();
+          const run = readOutput('reference-run.json'), meta = readOutput('reference-artifact.json');
+          assert.deepEqual([referenceHead,referenceTree],[env.BINGO_REFERENCE_HEAD,env.BINGO_REFERENCE_TREE]);
+          const full = read('admission.json'), native = read('native-admission.json'), unit = read('unit-admission.json'), holds = read('final-holds.json');
+          assert.deepEqual([full.status,full.qualification,full.head,full.tree,full.page,full.test,full.plan,full.helper,full.nativeOuter], [
+            'passed','fresh-sports-bingo-pack-clock-full-scope',referenceHead,referenceTree,env.BINGO_FIXED_PAGE_BLOB,env.BINGO_QUALIFIED_TEST_BLOB,env.BINGO_QUALIFIED_PLAN_BLOB,env.BINGO_NATIVE_HELPER,env.BINGO_NATIVE_OUTER,
+          ]);
+          assert.deepEqual([full.trackedBodies,full.sourceRows,full.cleanSourceRows,full.rootConfigurations,full.distFiles,full.immutableCaps,full.readers],[5789,4663,4662,11,850,16,20]);
+          assert.deepEqual(full.unit,unit);
+          assert.deepEqual([full.unitCommands,unit.commands,unit.status,unit.actualPasses,unit.actualFailures,unit.wholeQualifiedFixedRAWBytesHeld,full.controlsRerun],[1,1,'passed',unit.actualCases,0,true,false]);
+          assert(Number.isSafeInteger(unit.actualCases)&&unit.actualCases>0);
+          assert.deepEqual([full.raw.status,full.raw.raw,full.raw.freshUnitRAWByteEqual,full.distTupleSHA256],['passed',unit.raw,true,distManifestSHA256]);
+          assert.deepEqual(full.nativeReceipt,native);
+          const sim=bytes('sports-bingo-sim.log');
+          assert.deepEqual(full.sportsBingoSim,{status:'passed',file:'sports-bingo-sim.log',bytes:sim.length,sha256:sha(sim)});
+          assert(/^simSportsBingo: green\. Every card can be finished, and the packs play fair\.$/m.test(sim.toString('utf8')));
+          assert.deepEqual([native.status,native.route,native.page,native.helper],['passed','/sports-bingo',env.BINGO_FIXED_PAGE_BLOB,env.BINGO_NATIVE_HELPER]);
+          assert.deepEqual([holds.status,holds.trackedBodies,holds.scopedSourceRows,holds.cleanSourceRows,holds.rootConfigurations,holds.installedLockedVersions,holds.indexUnchanged,holds.sourceBytesUnchanged,holds.locksUnchanged,holds.distHeld,holds.retainedPacketsHeld,holds.offlineBytes],
+            ['passed',5789,4663,4662,11,521,true,true,true,true,true,0]);
+          assert.deepEqual(full.distTar,{file:'dist.tgz',bytes:bytes('dist.tgz').length,sha256:env.BINGO_REFERENCE_TAR});
+          assert.equal(sha(bytes('dist.tgz')),env.BINGO_REFERENCE_TAR);
+          assert.equal(blob(bytes('native-admission-script.mjs')),env.BINGO_NATIVE_OUTER);
+          const referenceChecks = (() => {
+            const exact={"run":42358326196,"artifact":13569180268,"head":"7d2f7dfffb94dde28dd7e1029e85d9b3905ee949","tree":"45453d0c88176cefa3ffd32f429015cbc8b92d29","workflow":"149a9043f3abdc7683658634c8bc5d67f67482a4","helper":"6c2ae76a2b7dd1265a45e7cc98ee4621e1696326","outer":"283812ff9f4f6fd3b792603e568478a383368058","zipBytes":37880338,"zipSHA256":"0a4808e87afeaa3232d3a363cbf4538244e8276c7c9cf20eb0f3e090d9bd6d27","tarSHA256":"3283826a0db89b8fc0be35a4211a87b671bae6a0f9e0e8bccd1a9052814107ad","distTupleSHA256":"956d7202e2522bfad6733fd59c0957a422d8168ef2bebdf7272f0ed73d83bfd7","nativeCensus":{"journeys":3,"contexts":3,"viewportPNGs":6,"manualBoundaries":3,"ordinaryAutoTransitions":3,"poolReads":3,"completionAttempts":0,"frames":111,"actions":9,"wheels":1,"navigations":6,"clockAdvances":72,"firstPartyResponses":117,"corsPreflights":0}};
+            const bodies=[{"file":"admission.json","bytes":12966,"sha256":"34d5d2153b8a462960c8c5cf8fbc50ed505442671b1ac1b243c43cd012eb857c"},{"file":"source-join.json","bytes":3834,"sha256":"6a674d487a3aa05ac185e2b0b39a7eea37926e884d2f9cd7b5ef5ec2f33fd6fc"},{"file":"unit-admission.json","bytes":487,"sha256":"2696fe3c2287141fdf557f7cf8476db86f73b4f516d58cb4f0ea09362b3c2724"},{"file":"fixed-raw-join.json","bytes":329,"sha256":"48011444e7527ecc504db696058cb6260039ccfa3a7c0c5a0297723e4d2e73fd"},{"file":"packet-custody.json","bytes":2400,"sha256":"7d73fbebe85303cf81b6dbba5f94ac475aecab2224d8b8cb67a784c842fc0183"},{"file":"native-admission.json","bytes":4217,"sha256":"8bd6ac20cb030be2ba94220cdd1522c42af1cef5c7e9f215a33040c85bfbc3a8"},{"file":"final-holds.json","bytes":378,"sha256":"fb3b846e8833643051db2cc4be862d5dd3e3cfa833e9b940343a673be8b5d529"},{"file":"sports-bingo-sim.log","bytes":757,"sha256":"4905fb7b0b9e11676cb707cbcea8f0603b84196207d4c721359e2178c43cbe75"},{"file":"case-fixed/raw.json","bytes":433600,"sha256":"ca469ab3572fe40d781d74a620bfe9a19dc859d6caec16e976f2b848915c691b"},{"file":"controls-reference/packet/admission.json","bytes":12197,"sha256":"d383cc5af653d31482bd21c0708f9e028f205ec4e101a0a52bc18ab10c3a44b9"}];
+            const photos=[{"file":"browser/1280-manual-reset.png","bytes":93534,"sha256":"16210da96db2fe7631f6bb4abf7db7d2813ba3ec91fe620ac4fd8c66d5f88771"},{"file":"browser/1280-ordinary-auto.png","bytes":94004,"sha256":"d0585ae4c9f877e4da1d93ba41f3ff4c88a51e331b4813862cb0042f1bde6779"},{"file":"browser/320-manual-reset.png","bytes":43383,"sha256":"42a7cf42cde5c239602045545399f76aecb78fb5c173ce51af7ddd0c60d82675"},{"file":"browser/320-ordinary-auto.png","bytes":45864,"sha256":"0a95286164b86a0fb7db88559b8d7d2f7a97be15d8b3a81e7cb31a10e6687ed9"},{"file":"browser/390-manual-reset.png","bytes":72322,"sha256":"bb0262b53a768efc1af157cb092f8724340dd9d3003a9b15cbe26f5ad7861828"},{"file":"browser/390-ordinary-auto.png","bytes":72430,"sha256":"ebde7daf2f8ac1625b7a18e55e61b598810d739b8c2709d8942057cc99469081"}];
+            for(const pin of [...bodies,...photos]) {
+              const body=bytes(pin.file);
+              assert.deepEqual([body.length,sha(body)],[pin.bytes,pin.sha256],pin.file+' exact admitted body');
+            }
+            assert.deepEqual([run.id,meta.id,referenceHead,referenceTree,env.BINGO_REFERENCE_WORKFLOW,env.BINGO_NATIVE_HELPER,env.BINGO_NATIVE_OUTER,meta.size_in_bytes,meta.digest,distManifestSHA256],
+              [exact.run,exact.artifact,exact.head,exact.tree,exact.workflow,exact.helper,exact.outer,exact.zipBytes,'sha256:'+exact.zipSHA256,exact.distTupleSHA256]);
+            assert.deepEqual([run.status,run.conclusion,full.distTar.sha256],['completed','success',exact.tarSHA256]);
+            const source=read('source-join.json'),custody=read('packet-custody.json'),raw=read('fixed-raw-join.json'),control=read('controls-reference/packet/admission.json');
+            assert.deepEqual([source.status,source.head,source.tree,source.workflowBlob,source.trackedRows,source.sourceRows,source.cleanSourceRows,source.heldFixedRows],
+              ['passed',exact.head,exact.tree,exact.workflow,5789,4663,4662,5787]);
+            assert.deepEqual([unit.actualCases,unit.actualPasses,unit.actualFailures,custody.status,custody.controlsRerun,raw.status,raw.freshUnitRAWByteEqual],
+              [8,8,0,'passed',false,'passed',true]);
+            assert.deepEqual(control.totals,{roles:3,rows:24,passes:22,failures:2});
+            assert(control.preservedAutomatic&&control.exactRoleRaw);
+            assert(bytes('case-fixed/raw.json').equals(bytes('fixed-reference/packet/case-fixed/raw.json')));
+            assert.deepEqual(native.census,exact.nativeCensus);
+            return {status:'passed',referenceRun:exact.run,referenceArtifact:exact.artifact,exactReceiptPins:bodies,retainedNativePNGs:photos.length,
+              actualNativeCensus:native.census,wholeFixedRawHeld:true,physicalControlsRetained:true,heldSportsBingoSim:true};
+          })();
+          assert.equal(referenceChecks.status,'passed','Reviewed actual full receipt validator must complete');
+          const result = {
+            status:'passed', cleanHead, cleanTree, cleanProductBase:env.BINGO_CLEAN_PRODUCT_BASE, cleanProductBaseTree:env.BINGO_CLEAN_PRODUCT_BASE_TREE,
+            cleanDelta, referenceRun:run.id, referenceWorkflowHead:referenceHead, referenceApp:referenceHead, referenceTree,
+            referenceQualification:full.qualification, referenceArtifact:meta.id, referenceZipSHA256:env.BINGO_REFERENCE_ZIP,
+            referenceTarSHA256:env.BINGO_REFERENCE_TAR, referenceWorkflowBlob:env.BINGO_REFERENCE_WORKFLOW,
+            heldProductRows:5787, sourceRows:4662, sourceAndConfigurationRows:sourceConfigRows.length,
+            rootConfigurations:configs.map(file => ({file,...current.get(file)})),
+            excludedFullQA:[...fullOnly], finalProductForbiddenPaths:[...fullOnly,...denied], generatedPatches:[],
+            distFiles:actual.length, distManifestSHA256, dist:actual, referenceChecks,
+            limits:'Fresh clean types, product-name fence, normal production build and exact source and built-byte join. Unit, native, control, held simulation, reader and cap evidence comes from the authenticated full reference. The frozen qualified plan is held. Final product excludes this round QA workflow, helper, outer and controller. No provider or release credit.',
+          };
+          fs.writeFileSync(out + '/reference-build-join.json',JSON.stringify(result,null,2));
+          console.log('PASS all 4662 source paths, 11 root configurations and 850 built file bodies');
+          NODE
+      - name: Final source locks installed versions and offline holds
+        if: always()
+        run: |
+          set -euo pipefail
+          git ls-files -s > sports-bingo-pack-clock-clean-join/source-after.txt
+          cmp sports-bingo-pack-clock-clean-join/source-before.txt sports-bingo-pack-clock-clean-join/source-after.txt
+          git diff --exit-code HEAD -- .
+          sha256sum package.json package-lock.json > sports-bingo-pack-clock-clean-join/locks-after.txt
+          cmp sports-bingo-pack-clock-clean-join/locks-before.txt sports-bingo-pack-clock-clean-join/locks-after.txt
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const before=JSON.parse(fs.readFileSync('sports-bingo-pack-clock-clean-join/installed-before.json')),lock=JSON.parse(fs.readFileSync('package-lock.json'));
+          const after=Object.keys(lock.packages).filter(p=>p.startsWith('node_modules/')&&fs.existsSync(p+'/package.json')).map(p=>[p,JSON.parse(fs.readFileSync(p+'/package.json')).version]);assert.equal(after.length,521);for(const[p,v]of after)assert.equal(v,lock.packages[p].version,p);assert.deepEqual(after,before);
+          fs.writeFileSync('sports-bingo-pack-clock-clean-join/installed-final.json',JSON.stringify(after));
+          assert(fs.existsSync('sports-bingo-pack-clock-clean-join/offline.log'));assert.equal(fs.statSync('sports-bingo-pack-clock-clean-join/offline.log').size,0);
+          NODE
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: sports-bingo-pack-clock-clean-build-join-${{ github.run_id }}
+          path: sports-bingo-pack-clock-clean-join
+          retention-days: 14
+          if-no-files-found: error
