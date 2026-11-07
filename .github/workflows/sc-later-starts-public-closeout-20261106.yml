@@ -1,0 +1,396 @@
+name: Soccer Career 2010 and 2015 public delivery and scoped SEO closeout
+on:
+  push:
+    branches: [codex/sc-later-starts-public-closeout-20261106]
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: sc-later-starts-public-closeout-20261106
+  cancel-in-progress: false
+jobs:
+  closeout:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      MAIN_CORE: cef43e538e2266974cc4d2e96eb5996a6e2bdce9
+      PRODUCT_CORE: 25b263816ac416ef885df7e9f1ce2fd782927c44
+      PRODUCT_TREE: 5f6ef45062b696e0eea44006093f5824bd02ff7b
+      PRODUCT_FILES: '[{"path":"src/pages/SoccerCareer.tsx","before":"cfc3f03fefd752b6125ab72d7cc806e32e9c3f66","after":"4a2ff4f357a643da0b7993650f68d9b67bb5cd1a"},{"path":"src/lib/soccerHistoricalArrivals.ts","before":"c57d5048ffbce45c33051873e799a7e79dcdc561","after":"f01a8f4159813c38f9e26d7dd4f4b80f7d87fa82"},{"path":"src/lib/soccerPhone.ts","before":"e01df0bf20e7813830eebe298c8c792b3992c078","after":"5b34017436a20d0dd311f0520ccd274fa80523a6"},{"path":"src/components/soccer-career/PhonePanel.tsx","before":"3f9a00c0ecb06fc15a820e8d6588097f7692baac","after":"74d22f73796e6ef5615f0b443cbf5b8fab41b1d5"},{"path":"src/test/soccerHistoricalRealEntry.test.tsx","before":"bec3f78f30501551fcd69bb3c88b8c8bf68c11d9","after":"e524b70753c266f9234ffe74454971a2190281f1"},{"path":"scripts/simSoccerHistoricalArrivals.mjs","before":"02c559fcde4e731fedb02aaefaf83945815928a5","after":"d90233a65c95d754dcbe8b3ca2e6b81f1fbdd276"}]'
+      DEPLOYMENT: d1268cef-456a-487f-80e2-9d1edba677bb
+      PUBLIC_WORKFLOW: .github/workflows/sc-later-starts-public-closeout-20261106.yml
+      NATIVE_ADDITIONS: '[".github/workflows/sc-later-starts-native-20261106.yml","scripts/qa/soccerHistoricalLaterNativeBrowser.mjs","scripts/qa/nativeScrollReady.mjs"]'
+      QUALIFICATION_INPUT: '{"run":42346216682,"job":128324418224,"qa":"9e46de0297d90088728919b304881f653afa8da0","qaTree":"7c9d0760d0d5ec7fb29896c73c9ca72608452521","branch":"codex/sc-later-starts-qualify-20261106","workflowPath":".github/workflows/sc-later-starts-qualify-20261106.yml","workflowBlob":"1890fe3a274ee94faf82e80f78e2e0e42c5e6601","artifact":13563419806,"artifactName":"sc-later-starts-qualification","attempt":1,"zipBytes":24616950,"zipSHA256":"c3b15eef2ea314f632d599ce4889aa3cdb6ae3f759c4aad790330eefc37829f7","innerEntry":"sc-later-starts-qualification.tar.gz","innerBytes":24616483,"innerSHA256":"d040e6a8f3a19b532b259a37e3b4d440e00014ed0c7584001067cc079fadd1c6","regularFiles":197,"totalRegularBytes":104612453,"independentAdmissionSHA256":"99ea2e11c9eada05b6b45700e57a4aaee910ededcd4a4279d736725078d1c255","rawAdmissionSHA256":"1cddb2473f65838ccb1313979bc7f2a2a97136ceeda86aec015b8f27714be42b","distFiles":852,"distBytes":23874311,"distDigest":"0ed4e26952e69c08ac3164e439037191b5d881a7ab1d2b0ee7eb98009b7c6e3a","filePins":[{"file":"workflow.yml","bytes":34617,"sha256":"d01226d6e6b4a8c12e48898fe97b537609ad0cb579b97d540b50364df83660cb"},{"file":"source-role.json","bytes":1818,"sha256":"a8a40c6ce8867cb406ed123697453d9bb0b4e72f06c963994ce4bfdfb11f6897"},{"file":"qualification.json","bytes":1436,"sha256":"ad9bdc9ab6e49e9c90edde330e2063a9117967f8507531af3853acdceafcccc7"},{"file":"HISTORICAL-RAW-ADMISSION.json","bytes":6036,"sha256":"1cddb2473f65838ccb1313979bc7f2a2a97136ceeda86aec015b8f27714be42b"},{"file":"historical-candidate-raw/later-ui-2010.json","bytes":9219139,"sha256":"8c767f09a4f5dd080b5e1520c0a049f31439869e8cf067ab3f23c7bb16c3fb58"},{"file":"historical-candidate-raw/later-ui-2015.json","bytes":3222809,"sha256":"d9e32a2d4a4b439231ded6e10a2278657e2e9cd3fbfe24a151d4ee779de89d6b"},{"file":"source-before.sha256","bytes":590818,"sha256":"6b1f3a4b3617fb20600767f73a61ea982e95dd9d9e6c5fa74197b208437fe58a"},{"file":"source-after.sha256","bytes":590818,"sha256":"6b1f3a4b3617fb20600767f73a61ea982e95dd9d9e6c5fa74197b208437fe58a"},{"file":"index-before.txt","bytes":498850,"sha256":"4c37f1aa19b7afe4cf13291939007b6cffbd24b452f2fbef4443cde64c795d0f"},{"file":"index-after.txt","bytes":498850,"sha256":"4c37f1aa19b7afe4cf13291939007b6cffbd24b452f2fbef4443cde64c795d0f"},{"file":"locks-before.sha256","bytes":314,"sha256":"c4d3d37c8be5418c6254ce652ab45c0f5d7e6c2c6d40d2f88443ccf1bd6e3f15"},{"file":"locks-after.sha256","bytes":314,"sha256":"c4d3d37c8be5418c6254ce652ab45c0f5d7e6c2c6d40d2f88443ccf1bd6e3f15"},{"file":"status-before.txt","bytes":0,"sha256":"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"},{"file":"status-after.txt","bytes":0,"sha256":"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"},{"file":"baseline-source-before.sha256","bytes":590697,"sha256":"c48642138ae97fd04ca8839f7496b67886691526d1c6f9f6f0a3aec8ca9666da"},{"file":"baseline-source-after.sha256","bytes":590697,"sha256":"c48642138ae97fd04ca8839f7496b67886691526d1c6f9f6f0a3aec8ca9666da"},{"file":"baseline-index-before.txt","bytes":498745,"sha256":"3d25a5ccffe9e976e64b4d3b7c9b9c513987e7163e0cecf6f89960b680bb2104"},{"file":"baseline-index-after.txt","bytes":498745,"sha256":"3d25a5ccffe9e976e64b4d3b7c9b9c513987e7163e0cecf6f89960b680bb2104"},{"file":"baseline-locks-before.sha256","bytes":314,"sha256":"c4d3d37c8be5418c6254ce652ab45c0f5d7e6c2c6d40d2f88443ccf1bd6e3f15"},{"file":"baseline-locks-after.sha256","bytes":314,"sha256":"c4d3d37c8be5418c6254ce652ab45c0f5d7e6c2c6d40d2f88443ccf1bd6e3f15"},{"file":"baseline-status-before.txt","bytes":0,"sha256":"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"},{"file":"baseline-status-after.txt","bytes":0,"sha256":"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"},{"file":"dist-before.sha256","bytes":86752,"sha256":"b17a3c7904fd95fe75fe44eba76d3582ccde1831f747320d811ac32c1788745b"},{"file":"dist-after.sha256","bytes":86752,"sha256":"b17a3c7904fd95fe75fe44eba76d3582ccde1831f747320d811ac32c1788745b"},{"file":"completed-dist.tar.gz","bytes":6993844,"sha256":"02dc2bb5c97cbba9489603ac348ce324b37f783dfb1beee74ea328bc21fae32f"},{"file":"completed-dist.tar.gz.sha256","bytes":151,"sha256":"6f6055f1d8f40ae0ca8f5cd2334e8d6138788cfcc5876c5d02c3312c73a1ad45"},{"file":"completed-dist-members.txt","bytes":34670,"sha256":"207d5a5f33333fb104adbebc99c95570f524bb1581df30079705c05b2f4557af"},{"file":"build-passed.json","bytes":37,"sha256":"38383c0cdba06305c37ec1134a06aa8631f2058c4a667e5df167bb129e0f3d9b"},{"file":"types.exit","bytes":2,"sha256":"9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"},{"file":"types-passed.json","bytes":75,"sha256":"f80953007ecd091c9ff14a8b6a402bf746f91cd318c09cf7ead15f3e04941ba9"},{"file":"logs/types.log","bytes":0,"sha256":"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"},{"file":"transport/types.log","bytes":0,"sha256":"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"},{"file":"logs/historical-baseline.exit","bytes":2,"sha256":"9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"},{"file":"logs/historical-baseline.log","bytes":164,"sha256":"d605ae8fdbee3c7a63e0cda00edae2aee748978b9f6d5a3a3ef3092b2df279c5"},{"file":"transport/historical-baseline.log","bytes":0,"sha256":"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"},{"file":"logs/historical-candidate.exit","bytes":2,"sha256":"9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"},{"file":"logs/historical-candidate.log","bytes":164,"sha256":"125073b44955089904abe2d498af3a13ae79581f8556a7f8a9f94a8986727bfb"},{"file":"transport/historical-candidate.log","bytes":0,"sha256":"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"},{"file":"logs/historical-shared-raw-admission.exit","bytes":2,"sha256":"9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"},{"file":"logs/historical-shared-raw-admission.log","bytes":122,"sha256":"fd460e53680ea43409053bef32de40068bcf14a1ed622275bd9fd3392573e6fd"},{"file":"transport/historical-shared-raw-admission.log","bytes":0,"sha256":"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"},{"file":"manifest.sha256","bytes":18679,"sha256":"44dbbb14082ae8652dc3c6b43c94002378a7c832ab48243ecfea3bbc53825afb"},{"sha256":"90784e69db8ae7b6bdda0dff14378007d629429975a1683d7805389dbeacd806","bytes":4028,"file":"MODEL-OUTCOMES.json"}],"fixtures":[{"startYear":2010,"file":"historical-candidate-raw/later-ui-2010.json","bytes":9219139,"sha256":"8c767f09a4f5dd080b5e1520c0a049f31439869e8cf067ab3f23c7bb16c3fb58","rawBytes":33180,"rawSHA256":"90ad0a2ad8685bda066c677b67fb4966281dcacd8ad7aee37910fb73f1981a0d","phase":"newspaper"},{"startYear":2015,"file":"historical-candidate-raw/later-ui-2015.json","bytes":3222809,"sha256":"d9e32a2d4a4b439231ded6e10a2278657e2e9cd3fbfe24a151d4ee779de89d6b","rawBytes":21279,"rawSHA256":"d15498f8f7917cf7e8c6ac491b78c589f693d94fa28ff0f9acab91ee6f140c74","phase":"newspaper"}]}'
+      NATIVE_INPUT: '{"run":42348568920,"job":128331581256,"attempt":1,"artifact":13563789728,"artifactName":"sc-later-starts-native","qa":"6a0e13f2a056573b506dabeaeb7cd5e900e3d749","qaTree":"38bcb3fd407cfdd0d1bc8cbfa8a028c883143a66","branch":"codex/sc-later-starts-native-v3-20261106","workflowPath":".github/workflows/sc-later-starts-native-20261106.yml","workflowBlob":"7b1f0b9ad720b194d1aa54402e2730a1b6767945","zipBytes":11794600,"zipSHA256":"53bffe49047455cad71283091b444b9e56c533b6f8d6a96cbf85d61910f80b02","innerEntry":"sc-later-starts-native.tar.xz","innerBytes":11794144,"innerSHA256":"71d13f1175e3ac43eddbc5c0c758800ef45ab6bd4346d6b5d8cafd884ddd6a8b","regularFiles":384,"totalRegularBytes":71197975,"independentAdmissionSHA256":"16762c75471f67ec5b43b92863137e9e85203c64684a222a501cf71830bc9f34","filePins":[{"file":"workflow.yml","bytes":57464,"sha256":"a5749ab6f9ffedab8f7bff85581d6feadd1195d5b2f77aa39b8de12a98f15f12"},{"file":"input/native-manifest.json","bytes":1429316,"sha256":"09ec8a9c7fe99f315c2b406c85ac69657b2071c0c23d11d5d8a513195f88fe81"},{"file":"browser/report.json","bytes":15049488,"sha256":"35ad6fd418582f694432c3a49e346f98e3a16f8107aa57b211486d349cd8d965"},{"file":"native-admission.json","bytes":2103,"sha256":"3c6b7fa22de7de9a6372930d887adc1442c8ad33ea08e5ad1f28cfb28c6cd67e"},{"file":"source-dist-input-held.json","bytes":392,"sha256":"01ee7aa7882c5a655eb099eb4586b8dc4ff253a3b4d4c132d0ebdedd00e78263"},{"file":"source-before.sha256","bytes":591032,"sha256":"c37f632145a467e2d10f7899efd1c9357011d0fae8745dbc422c3324e313ec1f"},{"file":"source-after.sha256","bytes":591032,"sha256":"c37f632145a467e2d10f7899efd1c9357011d0fae8745dbc422c3324e313ec1f"},{"file":"index-before.txt","bytes":499032,"sha256":"8cb55aa261227a5c4070dba41c8ae00715b5cc65f7f87baffeb67aa191689fe2"},{"file":"index-after.txt","bytes":499032,"sha256":"8cb55aa261227a5c4070dba41c8ae00715b5cc65f7f87baffeb67aa191689fe2"},{"file":"status-before.txt","bytes":0,"sha256":"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"},{"file":"status-after.txt","bytes":0,"sha256":"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"},{"file":"all-locks-before.json","bytes":367,"sha256":"b59da16476ca547e59e4703a0133041ace36e66737573b181ce7cd2b473e947c"},{"file":"all-locks-after.json","bytes":367,"sha256":"b59da16476ca547e59e4703a0133041ace36e66737573b181ce7cd2b473e947c"},{"file":"logs/native-admission.exit","bytes":2,"sha256":"9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"},{"file":"logs/browser.exit","bytes":2,"sha256":"9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"},{"file":"logs/final-source-holds.exit","bytes":2,"sha256":"9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"},{"file":"screenshots.json","bytes":1489,"sha256":"7614cd6dd82555f3cc3d43973110ae02fad33cd88bebd9b765bab18939c6af7a"}]}'
+      DELIVERY_BINDINGS: '{"entry":"assets/index-CLeZYGDa.js","stylesheet":"assets/index-lOVfTVeW.css","soccerCareer":"assets/SoccerCareer-D3FMUdFc.js","pins":[{"file":"assets/AppearanceBuilder-cpDbyNFK.js","bytes":33617,"sha256":"80139fa31b9ea36ad7068ec9a3b16b4f5b9ce73967ddbe90d57347245b9a6f4e"},{"file":"assets/CareerChanceWheel-DkyZKybM.js","bytes":2896,"sha256":"a9fb7aeac3dcfde94e4820d742f24924a5f87b1a00b54a4678318e941ac5f7ca"},{"file":"assets/Celebration-BrMVWDFW.js","bytes":1527,"sha256":"4bdabe9df240b102fd4430f3e0dafd74e94effe4cc9b7c30847007ef769a6cd4"},{"file":"assets/CelebrationStyles-C8XCaauh.js","bytes":2126,"sha256":"fabbdf8ae0d8f610d7155f290cede931fc11e5d1bf1a492e1dcb285e2bf649c8"},{"file":"assets/Confetti-tKEtpCym.js","bytes":904,"sha256":"51a3ce828e851d737f9252c55074dc0e4f8e20077072f1c232e854e59e14de2e"},{"file":"assets/FlagImg-DU2_XcAE.js","bytes":5846,"sha256":"09b0841822f83808e9084723d9b4f32d1b4a84b0d4795c3266db9e68673fb9aa"},{"file":"assets/GameHelp-Blv22E5z.js","bytes":1655,"sha256":"80beb9647b3de503e89a453c2e3a3c8201d0a66e9e52a2bfad049647557f2faa"},{"file":"assets/GameNavbar-CL8Wv4tN.js","bytes":10449,"sha256":"4305a37323a7f73a9005efe91908044e12fc5e28183ca2f6cae939e4318adf0a"},{"file":"assets/GameReportContext-CdDHkGUL.js","bytes":8563,"sha256":"fee2aca341078f049b72623d1126be79621b98c3818bd2e3b0cb6b27e4b83576"},{"file":"assets/GameSeoContent-d6PUSE5Q.js","bytes":7405,"sha256":"8252833bfed5590dd7aadd24b3436cfbbcaeadfedb1a601f5261beedd408f758"},{"file":"assets/HowToPlayPopover-CvzL39RK.js","bytes":1367,"sha256":"2e3c8551e842ac6c9d59a35fe86cdd6db63b66a69cf1db01fb4b6b317ba124a0"},{"file":"assets/PhonePanel-Bj-VQ-kZ.js","bytes":51190,"sha256":"9be1e9ae50845083b690ec9dd2807ed81e6a415f574bfc2ddb89ca9da7143fa5"},{"file":"assets/PlayerAvatar-B6dz0Dve.js","bytes":16500,"sha256":"540f83f66eb03891c56431b79f1ea3ed2ba750d0d6bb22161682525609791789"},{"file":"assets/ShareButtons-hgf7WyiZ.js","bytes":11646,"sha256":"97e1f4f0819618683e2ae267323489ebb18912dacb5b5c313b154bf613567a49"},{"file":"assets/SoccerCareer-D3FMUdFc.js","bytes":1392984,"sha256":"fcdb95fa606d291d5f6a49171cef2812089c670b40997c05a8dae455eb81e995"},{"file":"assets/SoccerCareerBuildEditor-Dfc46lsM.js","bytes":13351,"sha256":"a3e8a90f07fa42000e8a743c7e7e3bc74decfc9ec3250f23660910c52712eee8"},{"file":"assets/VictoryMoment-BLUBCp5Y.js","bytes":3669,"sha256":"7675896b8244eb9a91458d06aa0b454e2fc1a74c3a2d37a3a8e2dfec7e8526df"},{"file":"assets/arcade-CUT7KVjC.js","bytes":489,"sha256":"4111f89d2385fa6fe3ef19e7bb2713c60d58a84961d84be44f3762f09c9c1224"},{"file":"assets/arrow-left-DZlzizxX.js","bytes":333,"sha256":"c13a748f4d7a2a52f861115dfa7823189f90a22ccd716ddd617592c5e2ff6d90"},{"file":"assets/badges-BxPZtE2i.js","bytes":5813,"sha256":"8534db86fdf41b5f836746ba6f4000f9165bf8ff27342de944d2c8727261968c"},{"file":"assets/careerAwardsNight-B2tgOqvu.js","bytes":2575,"sha256":"6a974a6dec4d0ffb5f9d51e6ab7ac5e896aa1a10e6d6ab39e76895074c80a2d6"},{"file":"assets/careerBadges-B63pWGQv.js","bytes":16336,"sha256":"2696447ed3e6a5b1f5b4f155c22216c45fbea67388e1c221c86f93cd39d221e4"},{"file":"assets/careerRivalryChoices-B2c2ZYXB.js","bytes":5988,"sha256":"a4b123da1b68e0519315d81cfa28fae296916c7c5208e46da1daeca5fc3a527d"},{"file":"assets/chevron-down-D7Nb8JCA.js","bytes":296,"sha256":"2eb8580766cb0f779dbab5b8854c3f4374a14345b5d4af9900e8519781389c42"},{"file":"assets/chevron-up-0TxT2Ica.js","bytes":296,"sha256":"f9547ed8197599d957c096b446be7621b8fdc33324bd5506cbd0c9d605e303ea"},{"file":"assets/circle-help-tqP5ZD1Y.js","bytes":407,"sha256":"a24142e22b6ab567f2b9aee5eee44ebac73f2071f249869b1f80293550c62d05"},{"file":"assets/clubRivalries-DuNC-DyB.js","bytes":36634,"sha256":"5ea8ade9519709ad8788ca3f666d4f51ac64d465c83ffad40c91540135f03fdf"},{"file":"assets/confederationGroups-8jgsrX6T.js","bytes":1449,"sha256":"fd61f2c15ffacbbb463b39be678fa21e15d988f587359d4d1de1d52315cc0943"},{"file":"assets/copy-B1BBPKbN.js","bytes":405,"sha256":"ca3e12c4530dedaa3be4cfaa4f1f8ea60b2263dbbd65825a7921ffc3e663cf6b"},{"file":"assets/core-DjwxoHxa.js","bytes":18986,"sha256":"168c474234287d38ae1490c4c6de9169fa809715aadd91869898ff43b4dd6974"},{"file":"assets/dialogA11y-BCgxbiii.js","bytes":150,"sha256":"6436f8738bab1b88955f6b7fcd1414133f60345fade87214c06a004db8acb8b7"},{"file":"assets/flag-RMEPtQZd.js","bytes":388,"sha256":"60cce83adcc484f5059c60754069a9ef1bbd330d7319519cfd662056e9cf900f"},{"file":"assets/formatNumber-CGuttX8h.js","bytes":152,"sha256":"58dc28dd5f384db5153e394318702b8e573ed47cfeeb3498c564a267ad6d3f5c"},{"file":"assets/freeKick-DEB9jQVF.js","bytes":1965,"sha256":"f8a8f147ac275b891da73cd093848bb21b2c8b3001a9e9844489a0dc9631856d"},{"file":"assets/index-CLeZYGDa.js","bytes":798737,"sha256":"509ff845923ed91445881cf57b15d958d626c5b0e899a4d487c88f1db7e74331"},{"file":"assets/index-lOVfTVeW.css","bytes":206847,"sha256":"2a17ca58363647d97671ae4095cd02954a64c9444f9f29e62660735e2f783118"},{"file":"assets/input-BpC72LRw.js","bytes":580,"sha256":"984cc47c8bb0d2822c09e766fb561bb50e029a4523921d961c28474d18e08a11"},{"file":"assets/intlNames-DiJYNZJt.js","bytes":13296,"sha256":"a62e87891a274f570c1dd2f29b74023a108247f1f79afaadccb276287933aa55"},{"file":"assets/keyedRng-BKZQ2UGv.js","bytes":254,"sha256":"ed2516675a46f7b0ad18af1d9b335ef31cb58d91ba87656738edf333fcb22b5b"},{"file":"assets/keyedShuffle-CJAps3xO.js","bytes":144,"sha256":"d3a78deb57b4135d45c23a9507a0c0374b0b296a166155667b5b14c1fa14cacc"},{"file":"assets/label-Bn-j9VCK.js","bytes":554,"sha256":"cc495975667bac887ddda7b1f6b440347a803cf0f3d8d59f6bb6901f505f8104"},{"file":"assets/law-BvUdq2_w.js","bytes":289,"sha256":"4c0d4b3f9b4cafb0d93206bd946dcc129d4d4404f6fb7d27db592d1a5cac2f4d"},{"file":"assets/leagueCore--DUG-EXw.js","bytes":671,"sha256":"d4de939f32c16be245e082dc10ab932e36f78734720c82832a7b9e5e49577ec9"},{"file":"assets/lz-string-QJ42smNh.js","bytes":9211,"sha256":"07b722aed33a3408a7fb2852cf03d84188f2782c16bfe6040a8da057ceed7360"},{"file":"assets/managerOffers-EoQ6k_gA.js","bytes":3116,"sha256":"6d3f7af52d40a704720867847db92e1776f0730ea2369040e2dcbb54b63ed053"},{"file":"assets/medal-DIGQJjKN.js","bytes":604,"sha256":"6a75d117ebf521d1550fbae6fbec74d1ea26340f0f226dd16395676906978d18"},{"file":"assets/ownGoalRule-J3XQry1d.js","bytes":179,"sha256":"429872db3c8ff95d979e20c77adf793a66537433b1c4c5b49849cd000d60a144"},{"file":"assets/select-9M49iDav.js","bytes":21293,"sha256":"28c4fa1ecf0ba792978b295df17a3d1dfde614d9f97e31920b6a2648c2da7530"},{"file":"assets/seoMetaPart30-C2bf-ABQ.js","bytes":1935,"sha256":"fa322000c7ab681eb67b4f8b5f3d110159fec59feea13bf7ce8ccb344c5d7474"},{"file":"assets/soccer2-CUjzgX8T.js","bytes":113383,"sha256":"fa5ff7537e70c3dfcb745a30b7f4d7b4c4f522df726df77c9b86773f88c638dc"},{"file":"assets/soccerBootIds-BWkyFIXk.js","bytes":293,"sha256":"5e2ab21a19d43c52a07be5f295b188d90448aa4cd27dd69bdf014464929a736b"},{"file":"assets/soccerBoots-BK_dXNrV.js","bytes":2017,"sha256":"5bf0a4f627a4298097b07e6c41baa043308c73c2cb077b82879ccfd46d0d0bf1"},{"file":"assets/soccerCareerAppearance-ByX4ZtSC.js","bytes":6547,"sha256":"bb12711d5c1aee1dd533d275f8a768759a4a49f069dec9b9a8bb32d94f8ee883"},{"file":"assets/soccerDeck-COxluXUU.js","bytes":33352,"sha256":"dfa7a175fa959b58dc636c681833c5f1e7c13dc5e3ab44636770a899276992ed"},{"file":"assets/soccerInternational-FiWGI8ks.js","bytes":21073,"sha256":"238dc990e29f7820b45236694c325593a81f1bd852f74f856a2d4526d7843a47"},{"file":"assets/soccerMoments-CHvvBsN9.js","bytes":22243,"sha256":"3c7eda5b6250576f697e02cc1b20486e054286721933358da65c9e75cd6c737c"},{"file":"assets/star-B10uNzdm.js","bytes":641,"sha256":"c7ffc239de8918e45066f0732157cd4030484df9be34933994d8d8e67a6b9a5b"},{"file":"assets/throughBallDrill-B9fNBoXH.js","bytes":4784,"sha256":"ab5ddf11e0270d06e80ec67f0f60f4d657e9c41bc9c17157c4e4a3774a5b9b87"},{"file":"assets/uclFormatHistory-DwuhruDw.js","bytes":12334,"sha256":"ca54024ac47979e8a3222dae2210a42ff8dbc22794fcba8052b125f1a17a6d71"},{"file":"assets/useArrivalTop-Bn4BatWp.js","bytes":609,"sha256":"daeccc923a532734bad9b7202753c76cecd7c7a0ef494bf9625e240993a13ef8"},{"file":"assets/useCareerMoment-DqbE2Ods.js","bytes":287543,"sha256":"e9a8f52226133b0e3a6be825a89ac44cd954094a42f37b8408b33fb79cbd6c97"},{"file":"assets/useGameCompletion-Bc3Dq9HU.js","bytes":808,"sha256":"12f6b14cd004d19582994c31912b2e2cab49a06000933f86e967632c979ba669"},{"file":"assets/useRevealScroll-Cif_RHGS.js","bytes":1963,"sha256":"d3c233d1cb40d14346f871fa32b90a1272432439c411a14dba2bed1411ae60cd"},{"file":"prerender-boot.js","bytes":3049,"sha256":"c5da547fd0b4b0920dfeb100f3d5f3f73ca5317e38135ddc132649cd43f85c70"}]}'
+      QUALIFICATION_REQUIRED_FILES: '["workflow.yml","source-role.json","qualification.json","HISTORICAL-RAW-ADMISSION.json","historical-candidate-raw/later-ui-2010.json","historical-candidate-raw/later-ui-2015.json","source-before.sha256","source-after.sha256","index-before.txt","index-after.txt","locks-before.sha256","locks-after.sha256","status-before.txt","status-after.txt","baseline-source-before.sha256","baseline-source-after.sha256","baseline-index-before.txt","baseline-index-after.txt","baseline-locks-before.sha256","baseline-locks-after.sha256","baseline-status-before.txt","baseline-status-after.txt","dist-before.sha256","dist-after.sha256","completed-dist.tar.gz","completed-dist.tar.gz.sha256","completed-dist-members.txt","build-passed.json","types.exit","types-passed.json","logs/types.log","transport/types.log","logs/historical-baseline.exit","logs/historical-baseline.log","transport/historical-baseline.log","logs/historical-candidate.exit","logs/historical-candidate.log","transport/historical-candidate.log","logs/historical-shared-raw-admission.exit","logs/historical-shared-raw-admission.log","transport/historical-shared-raw-admission.log","manifest.sha256","MODEL-OUTCOMES.json"]'
+      NATIVE_REQUIRED_FILES: '["workflow.yml","input/native-manifest.json","browser/report.json","native-admission.json","source-dist-input-held.json","source-before.sha256","source-after.sha256","index-before.txt","index-after.txt","status-before.txt","status-after.txt","all-locks-before.json","all-locks-after.json","logs/native-admission.exit","logs/browser.exit","logs/final-source-holds.exit","screenshots.json"]'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24.22.2'
+      - name: Bind one QA workflow on the actual published merge
+        shell: bash
+        run: |
+          set -euo pipefail
+          QA_OUT="$RUNNER_TEMP/sc-later-starts-public-closeout"
+          QA_REF="$RUNNER_TEMP/sc-later-starts-public-closeout-inputs"
+          QA_DIST="$RUNNER_TEMP/sc-later-starts-public-closeout-dist"
+          export QA_OUT QA_REF QA_DIST
+          test ! -e "$QA_OUT"
+          test ! -e "$QA_REF"
+          test ! -e "$QA_DIST"
+          mkdir -p "$QA_OUT"/{input,logs} "$QA_REF" "$QA_DIST"
+          printf 'QA_OUT=%s\nQA_REF=%s\nQA_DIST=%s\n' "$QA_OUT" "$QA_REF" "$QA_DIST" >> "$GITHUB_ENV"
+          node --input-type=module <<'BIND'
+          import fs from 'node:fs';import assert from 'node:assert/strict';import{execFileSync}from'node:child_process';
+          const e=process.env,git=(...args)=>execFileSync('git',args,{encoding:'utf8'}).trim();
+          for(const key of['MAIN_CORE','PRODUCT_CORE','PRODUCT_TREE'])assert.match(e[key],/^[a-f0-9]{40}$/,key);
+          assert.match(e.DEPLOYMENT,/^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/);
+          for(const key of['QUALIFICATION_INPUT','NATIVE_INPUT','PRODUCT_FILES','DELIVERY_BINDINGS'])assert(!e[key].includes('MUST_BIND'),'PUBLIC_ALL_ACTUAL_FIELDS_BOUND '+key);
+          assert.equal(git('rev-parse','HEAD^'),e.MAIN_CORE);assert.equal(git('rev-parse','HEAD^^{tree}'),e.PRODUCT_TREE);
+          assert.equal(git('diff','--name-status','--no-renames','HEAD^','HEAD'),'A\t'+e.PUBLIC_WORKFLOW);
+          const vector=object=>Object.fromEntries(git('ls-tree','-r','--full-tree',object).split('\n').filter(Boolean).map(line=>{const m=/^([0-7]{6}) (blob|commit) ([a-f0-9]{40})\t(.+)$/.exec(line);assert(m);return[m[4],{mode:m[1],type:m[2],sha:m[3]}];})),current=vector('HEAD'),parent=vector('HEAD^');
+          assert.equal(parent[e.PUBLIC_WORKFLOW],undefined);assert.equal(current[e.PUBLIC_WORKFLOW].mode,'100644');assert.equal(current[e.PUBLIC_WORKFLOW].type,'blob');delete current[e.PUBLIC_WORKFLOW];assert.deepEqual(current,parent,'PUBLIC_SOLE_WORKFLOW_WHOLE_TREE_INVERSE');
+          assert.equal(git('status','--porcelain=v1','--untracked-files=all'),'');
+          fs.copyFileSync(e.PUBLIC_WORKFLOW,e.QA_OUT+'/workflow.yml');
+          fs.writeFileSync(e.QA_OUT+'/qa-delta.json',JSON.stringify({main:e.MAIN_CORE,product:e.PRODUCT_CORE,tree:e.PRODUCT_TREE,qa:{commit:git('rev-parse','HEAD'),tree:git('rev-parse','HEAD^{tree}')},soleAddition:e.PUBLIC_WORKFLOW,workflowBlob:git('hash-object',e.PUBLIC_WORKFLOW),wholeSourceInverse:true,AppBuilds:0,gameplay:false,deployActions:0},null,2)+'\n',{flag:'wx'});
+          BIND
+          git ls-files -z > "$QA_OUT/tracked-before.bin"
+          git ls-files -z | xargs -0 sha256sum > "$QA_OUT/source-before.sha256"
+          git ls-files -s > "$QA_OUT/index-before.txt"
+          git status --porcelain=v1 --untracked-files=all > "$QA_OUT/status-before.txt"
+          test ! -s "$QA_OUT/status-before.txt"
+          cp package-lock.json "$QA_OUT/lock-before.json"
+          node --input-type=module -e 'import fs from "node:fs";import crypto from "node:crypto";const sha=b=>crypto.createHash("sha256").update(b).digest("hex");fs.writeFileSync(process.env.QA_OUT+"/all-locks-before.json",JSON.stringify(Object.fromEntries(["package.json","package-lock.json","bun.lock","bun.lockb","yarn.lock","pnpm-lock.yaml"].map(p=>[p,fs.existsSync(p)?sha(fs.readFileSync(p)):null])))+"\n");'
+      - name: Materialize the pinned native admission source block
+        shell: bash
+        run: |
+          set -euo pipefail
+          block="$QA_OUT/input/native-input-auth.mjs"
+          test ! -e "$block"
+          cat > "$block" <<'NATIVE_AUTH'
+          const ns=json(observed.root,'source-dist-input-held.json'),nm=json(observed.root,'input/native-manifest.json'),nr=json(observed.root,'browser/report.json'),na=json(observed.root,'native-admission.json');
+          assert.equal(ns.status,'SOURCE_INDEX_LOCKS_INPUT_AND_DIST_HELD');
+          assert.equal(nm.schema,'SC_LATER_NATIVE_SOURCE_DIST_V1');assert.equal(nm.status,'QUALIFIED_BUILD_AND_REACT_UI_FIXTURES_BOUND');assert.deepEqual(nm.product,product);assert.equal(nm.distDigest,q.distDigest);
+          assert.deepEqual(nm.admissions,{qualification:q.independentAdmissionSHA256,rawAdmission:q.rawAdmissionSHA256});
+          assert.equal(nr.schema,'SC_LATER_NATIVE_BROWSER_V1');assert.equal(nr.status,'passed');assert.deepEqual(nr.product,product);
+          assert.deepEqual(nr.authority,{manifestSHA256:sha(read(observed.root,'input/native-manifest.json')),admissions:nm.admissions,distDigest:q.distDigest});
+          assert.equal(na.status,'FOUR_SC_CONTEXTS_AND_NINE_ORDINARY_PHOTOS_RETAINED');assert.deepEqual(na.product,product);assert.deepEqual(na.authority,nr.authority);assert.equal(na.allContextsPassed,true);
+          assert.deepEqual(na.genuineUIStarts,[2010,2015]);assert.deepEqual(na.admittedFixtureReadouts,[2010,2015]);assert.equal(na.fixtureEndYear,2020);assert.equal(na.fixtureReloads,2);assert.equal(na.ordinaryPhotos,9);assert.equal(na.browserAnnualProgression,false);
+          assert.deepEqual(na.cells.map(row=>[row.startYear,row.id]),[[2010,'soccer:mbappe'],[2010,'soccer:haaland'],[2010,'soccer:bellingham'],[2015,'soccer:haaland'],[2015,'soccer:bellingham']]);
+          assert.deepEqual(nr.contexts.map(row=>[row.flow,row.width,row.height]),['create-2010','create-2015','fixture-2010','fixture-2015'].map(flow=>[flow,390,844]));
+          for(const c of nr.contexts){assert.equal(c.status,'passed');assert.equal(c.finalNativeCensus.closed,true);assert.equal(c.finalNativeCensus.nonReadonly,0);}
+          for(const key of['sourceHeld','distHeld','fixturesHeld']){assert.equal(nr[key],true);assert.equal(na[key],true);}
+          const shots=json(observed.root,'screenshots.json');assert.equal(shots.length,9);assert.deepEqual(shots.map(row=>row.file),nr.screenshots);assert.equal(new Set(nr.screenshots).size,9);
+          for(const pin of shots){assert(/^[a-z0-9-]+\.png$/.test(pin.file));const body=read(observed.root,'browser/'+pin.file);assert.equal(body.length,pin.bytes);assert.equal(sha(body),pin.sha256);}
+          assert.deepEqual(nm.fixtures.map(pin=>pin.startYear),[2010,2015]);
+          for(const pin of nm.fixtures){
+           const file='historical-candidate-raw/later-ui-'+pin.startYear+'.json',body=read(qualified.root,file),nativeBody=read(observed.root,'browser/input/later-ui-'+pin.startYear+'.json'),save=Buffer.from(JSON.parse(body).value.repeated.loadedBytes);
+           assert(body.equals(nativeBody));assert.equal(body.length,pin.bytes);assert.equal(sha(body),pin.sha256);assert.equal(pin.rawAdmissionSHA256,q.rawAdmissionSHA256);assert.equal(save.length,pin.rawBytes);assert.equal(sha(save),pin.rawSHA256);
+          }
+          NATIVE_AUTH
+          printf '%s  %s\n' '362372ea6e94020158b912a3f5cec24ea20c5e3ac119beee35f7dd71c243835f' "$block" | sha256sum -c -
+      - name: Authenticate focused qualification and independently admitted native originals
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          auth="$QA_OUT/input/auth-complete.mjs"
+          test ! -e "$auth"
+          cat > "$auth" <<'AUTH_PREFIX'
+          import fs from 'node:fs';import path from 'node:path';import crypto from 'node:crypto';import assert from 'node:assert/strict';import{spawnSync}from'node:child_process';
+          const e=process.env,out=e.QA_OUT,ref=e.QA_REF,sha=b=>crypto.createHash('sha256').update(b).digest('hex'),blob=b=>crypto.createHash('sha1').update(Buffer.from('blob '+b.length+'\0')).update(b).digest('hex');
+          const native=(label,command,args,binary=false)=>{const r=spawnSync(command,args,{encoding:binary?null:'utf8',maxBuffer:128*1024*1024});fs.writeFileSync(path.join(out,'input',label+'.native.json'),JSON.stringify({command:[command,...args],status:r.status,signal:r.signal,error:r.error?String(r.error):null})+'\n');fs.writeFileSync(path.join(out,'input',label+'.stderr.log'),r.stderr??'');if(!binary)fs.writeFileSync(path.join(out,'input',label+'.stdout.log'),r.stdout??'');assert.equal(r.status,0,label);assert.equal(r.signal,null);assert.equal(r.error,undefined);return r.stdout;};
+          const api=(label,url)=>JSON.parse(native(label,'gh',['api','repos/PapiSalgueroM/ballpark-hero/'+url]));
+          const safe=value=>{assert(typeof value==='string'&&value.length>0&&!value.startsWith('/')&&!/^[a-zA-Z]:/.test(value)&&!value.includes('\\')&&!value.includes('\0'),'SC_LATER_PUBLIC_SAFE_PATH');assert(!value.split('/').includes('..'),'SC_LATER_PUBLIC_SAFE_PATH');};
+          const norm=value=>value.replace(/^\.\//,'').replace(/\/$/,'');
+          const inventory=dir=>{const rows=[];function walk(rel=''){for(const entry of fs.readdirSync(path.join(dir,rel),{withFileTypes:true})){const file=path.posix.join(rel,entry.name);if(entry.isDirectory())walk(file);else{assert(entry.isFile());const bytes=fs.readFileSync(path.join(dir,file));rows.push({file,bytes:bytes.length,sha256:sha(bytes)});}}}walk();return rows.sort((a,b)=>a.file<b.file?-1:a.file>b.file?1:0);};
+          const hashMap=bytes=>Object.fromEntries(bytes.toString('utf8').trim().split('\n').filter(Boolean).map(line=>{const m=/^([a-f0-9]{64}) [ *](.+)$/.exec(line);assert(m,'SC_LATER_PUBLIC_SHA_LEDGER');safe(m[2]);return[m[2],m[1]];}));
+          const sourceVector=object=>Object.fromEntries(native('git-vector-'+object,'git',['ls-tree','-r','-z','--full-tree',object]).split('\0').filter(Boolean).map(value=>{const m=/^([0-7]{6}) (blob|commit) ([a-f0-9]{40})\t([\s\S]+)$/.exec(value);assert(m);safe(m[4]);return[m[4],{mode:m[1],type:m[2],sha:m[3]}];}));
+          const q=JSON.parse(e.QUALIFICATION_INPUT),n=JSON.parse(e.NATIVE_INPUT);
+          assert.deepEqual(q.filePins.map(row=>row.file).slice().sort(),JSON.parse(e.QUALIFICATION_REQUIRED_FILES).sort(),'PUBLIC_EXACT_QUALIFICATION_INPUT_PINS');
+          assert.deepEqual(n.filePins.map(row=>row.file).slice().sort(),JSON.parse(e.NATIVE_REQUIRED_FILES).sort(),'PUBLIC_EXACT_NATIVE_INPUT_PINS');
+          for(const pin of[q,n]){
+           for(const key of['run','job','artifact','attempt','zipBytes','innerBytes','regularFiles','totalRegularBytes'])assert(Number.isSafeInteger(pin[key])&&pin[key]>0,key);
+           for(const key of['qa','qaTree','workflowBlob'])assert.match(pin[key],/^[a-f0-9]{40}$/,key);
+           for(const key of['zipSHA256','innerSHA256','independentAdmissionSHA256'])assert.match(pin[key],/^[a-f0-9]{64}$/,key);
+           for(const row of pin.filePins){safe(row.file);assert(Number.isSafeInteger(row.bytes)&&row.bytes>=0);assert.match(row.sha256,/^[a-f0-9]{64}$/);}
+          }
+          assert.equal(q.workflowPath,'.github/workflows/sc-later-starts-qualify-20261106.yml');assert.equal(q.artifactName,'sc-later-starts-qualification');assert.equal(q.innerEntry,'sc-later-starts-qualification.tar.gz');
+          assert.equal(n.workflowPath,'.github/workflows/sc-later-starts-native-20261106.yml');assert.equal(n.artifactName,'sc-later-starts-native');assert.equal(n.innerEntry,'sc-later-starts-native.tar.xz');
+          for(const key of['distDigest','rawAdmissionSHA256'])assert.match(q[key],/^[a-f0-9]{64}$/);
+          for(const key of['distFiles','distBytes'])assert(Number.isSafeInteger(q[key])&&q[key]>0,key);
+          assert.match(n.helperBlob,/^[a-f0-9]{40}$/);assert.match(q.baseline.commit,/^[a-f0-9]{40}$/);assert.match(q.baseline.tree,/^[a-f0-9]{40}$/);
+          function fetchInput(role,pin){
+           const run=api(role+'-run','actions/runs/'+pin.run),job=api(role+'-job','actions/jobs/'+pin.job),artifact=api(role+'-artifact','actions/artifacts/'+pin.artifact),commit=api(role+'-commit','git/commits/'+pin.qa);
+           assert.equal(run.status,'completed');assert.equal(run.conclusion,'success');assert.equal(run.head_sha,pin.qa);assert.equal(run.head_branch,pin.branch);assert.equal(run.run_attempt,pin.attempt);assert.equal(run.path,pin.workflowPath);
+           assert.equal(job.id,pin.job);assert.equal(job.run_id,pin.run);assert.equal(job.run_attempt,pin.attempt);assert.equal(job.conclusion,'success');
+           assert.equal(artifact.id,pin.artifact);assert.equal(artifact.name,pin.artifactName);assert.equal(artifact.expired,false);assert.equal(artifact.size_in_bytes,pin.zipBytes);assert.equal(artifact.workflow_run.id,pin.run);assert.equal(artifact.workflow_run.head_sha,pin.qa);
+           assert.equal(commit.sha,pin.qa);assert.equal(commit.tree.sha,pin.qaTree);
+           const dir=path.join(ref,role);fs.mkdirSync(dir);const zip=native(role+'-sole-original-acquisition','gh',['api','repos/PapiSalgueroM/ballpark-hero/actions/artifacts/'+pin.artifact+'/zip'],true);assert.equal(zip.length,pin.zipBytes);assert.equal(sha(zip),pin.zipSHA256);const zipFile=path.join(dir,'original.zip');fs.writeFileSync(zipFile,zip,{flag:'wx'});
+           const entries=native(role+'-zip-list','unzip',['-Z1',zipFile]).trim().split('\n');assert.deepEqual(entries.slice().sort(),[pin.innerEntry,pin.innerEntry+'.sha256'].sort());entries.forEach(safe);
+           const inner=native(role+'-zip-inner','unzip',['-p',zipFile,pin.innerEntry],true);assert.equal(inner.length,pin.innerBytes);assert.equal(sha(inner),pin.innerSHA256);const innerFile=path.join(dir,pin.innerEntry);fs.writeFileSync(innerFile,inner,{flag:'wx'});
+           const checksum=native(role+'-zip-checksum','unzip',['-p',zipFile,pin.innerEntry+'.sha256']);assert.equal(checksum.trim().split('\n').length,1);const c=/^([a-f0-9]{64}) [ *](.+)$/.exec(checksum.trim());assert(c);assert.equal(c[1],pin.innerSHA256);assert.equal(path.basename(c[2]),pin.innerEntry);
+           const names=native(role+'-tar-list','tar',['-tf',innerFile]).trim().split('\n');names.forEach(safe);const normalized=names.map(norm).filter(value=>value&&value!=='.');assert.equal(new Set(normalized).size,normalized.length,'SC_LATER_PUBLIC_NO_DUPLICATE_TAR_PATHS');assert(native(role+'-tar-types','tar',['-tvf',innerFile]).trim().split('\n').every(value=>value.startsWith('-')||value.startsWith('d')),'SC_LATER_PUBLIC_ORDINARY_TAR_TYPES');
+           const root=path.join(dir,'evidence');fs.mkdirSync(root);native(role+'-tar-extract','tar',['-xf',innerFile,'-C',root]);const rows=inventory(root);assert.equal(rows.length,pin.regularFiles);assert.equal(rows.reduce((sum,row)=>sum+row.bytes,0),pin.totalRegularBytes);
+           fs.writeFileSync(path.join(out,'input',role+'-whole-original-inventory.json'),JSON.stringify(rows)+'\n',{flag:'wx'});
+           for(const row of pin.filePins){const bytes=fs.readFileSync(path.join(root,row.file));assert.equal(bytes.length,row.bytes,role+' '+row.file+' bytes');assert.equal(sha(bytes),row.sha256,role+' '+row.file+' SHA');const target=path.join(out,'input',role.toLowerCase(),row.file);fs.mkdirSync(path.dirname(target),{recursive:true});fs.writeFileSync(target,bytes,{flag:'wx'});}
+           const workflow=fs.readFileSync(path.join(root,'workflow.yml'));assert.equal(blob(workflow),pin.workflowBlob,role+' actual workflow');
+           fs.writeFileSync(path.join(out,'input',role+'-authority.json'),JSON.stringify({pin,commit,onlySoleOriginalFetched:true,allRegularBodiesHashed:true,regularFiles:rows.length,totalRegularBytes:rows.reduce((sum,row)=>sum+row.bytes,0)},null,2)+'\n',{flag:'wx'});return{root,commit,rows};
+          }
+          
+          const qualified=fetchInput('QUALIFICATION',q),observed=fetchInput('NATIVE',n);
+          const read=(root,file)=>fs.readFileSync(path.join(root,file)),json=(root,file)=>JSON.parse(read(root,file));
+          const manifestBytes=read(qualified.root,'manifest.sha256'),producerManifest=hashMap(manifestBytes),manifestRows=Object.entries(producerManifest).map(([file,digest])=>[norm(file),digest]);assert.equal(manifestRows.length,manifestBytes.toString('utf8').trimEnd().split('\n').length);assert.equal(new Set(manifestRows.map(row=>row[0])).size,manifestRows.length);assert.deepEqual(Object.fromEntries(manifestRows),Object.fromEntries(qualified.rows.filter(row=>row.file!=='manifest.sha256').map(row=>[row.file,row.sha256])),'PUBLIC_COMPLETE_QUALIFICATION_MANIFEST');
+          assert.deepEqual(qualified.commit.parents.map(row=>row.sha),[e.PRODUCT_CORE]);assert.deepEqual(observed.commit.parents.map(row=>row.sha),[e.PRODUCT_CORE]);
+          const product={commit:e.PRODUCT_CORE,tree:e.PRODUCT_TREE},role=json(qualified.root,'source-role.json'),qualification=json(qualified.root,'qualification.json');
+          assert.deepEqual(role.product,{...product,files:JSON.parse(e.PRODUCT_FILES)});assert.equal(role.qa.commit,q.qa);assert.equal(role.qa.tree,q.qaTree);assert.equal(role.qa.soleAddition,q.workflowPath);
+          assert.equal(qualification.status,'SC_LATER_STARTS_FOCUSED_MODEL_AND_BUILD_PASSED');assert.deepEqual(qualification.product,product);
+          assert.deepEqual(qualification.baseline,q.baseline);assert.deepEqual(role.base,q.baseline);assert.equal(qualification.baselineCases,6);assert.equal(qualification.candidateCases,8);assert.equal(qualification.sharedCompleteRaw,6);assert.equal(qualification.futureIdentityCells,5);
+          assert.deepEqual(qualification.scopedModelOutcomes,['historical-baseline-types','historical-baseline','historical-candidate','historical-shared-raw-admission','simCareerFacts','simCareerEras','simSaveKeeper']);
+          assert.equal(qualification.properTypes,true);assert.equal(qualification.normalBuilds,1);assert.equal(qualification.unchangedCaps,16);assert.equal(qualification.priorFleetDiagnosticsWaived,false);
+          for(const key of['fullSuite','browser','public'])assert.equal(qualification[key],false);
+          const readers=['simAdsense','simBrand','simHeadTags','simHiddenPages','simHubs','simIndexNow','simIndexing','simInternalLinks','simNoRivalNames','simPrerender','simPrerenderBoot','simRetiredRoutes','simSchema','simSitemap','simSnapshotAssets','simSiteSearch','simGuideHeadings','simHarnessAnchors','simSeoTitles','simSeoMetaSplit'];
+          assert.deepEqual(qualification.readers,readers);
+          const rawFile='HISTORICAL-RAW-ADMISSION.json',rawBytes=read(qualified.root,rawFile),raw=JSON.parse(rawBytes);
+          assert.equal(sha(rawBytes),q.rawAdmissionSHA256);assert.deepEqual(qualification.historicalRawAdmission,{file:rawFile,bytes:rawBytes.length,sha256:q.rawAdmissionSHA256});
+          assert.equal(raw.schema,'SC_LATER_HISTORICAL_RAW_ADMISSION_V1');assert.equal(raw.status,'SIX_SHARED_COMPLETE_RAW_AND_FIVE_FUTURE_CELLS_PASSED');
+          const models=json(qualified.root,'MODEL-OUTCOMES.json');assert.equal(models.schema,'SC_LATER_STARTS_FOCUSED_MODEL_OUTCOMES_V1');assert.equal(models.status,'FOCUSED_OUTCOMES_RETAINED');
+          assert.equal(models.allScopedPassed,true);assert.deepEqual(models.failedOutcomes,[]);assert.equal(models.fullFleetRun,false);assert.equal(models.priorFleetDiagnosticsWaived,false);
+          assert.deepEqual(models.rows.map(row=>row.name),qualification.scopedModelOutcomes);
+          for(const row of models.rows){
+           assert.equal(row.nativeExit,0);assert.equal(row.passed,true);assert.equal(row.exitFile,'logs/'+row.name+'.exit');assert.equal(read(qualified.root,row.exitFile).toString(),'0\n');
+           for(const [pin,file]of[[row.log,'logs/'+row.name+'.log'],[row.transport,'transport/'+row.name+'.log']]){assert.equal(pin.file,file);const body=read(qualified.root,file);assert.equal(body.length,pin.bytes);assert.equal(sha(body),pin.sha256);}
+           assert.equal(row.transport.bytes,0);assert.equal(row.transport.empty,true);
+          }
+          assert.equal(read(qualified.root,'types.exit').toString(),'0\n');assert.equal(read(qualified.root,'transport/types.log').length,0);
+          const same=(root,a,b)=>{const x=read(root,a);assert(x.equals(read(root,b)),'PUBLIC_INPUT_HOLD '+a);return x;};
+          for(const root of[qualified.root,observed.root]){
+           for(const pair of[['source-before.sha256','source-after.sha256'],['index-before.txt','index-after.txt']])same(root,...pair);
+           for(const file of['status-before.txt','status-after.txt'])assert.equal(read(root,file).length,0,file);
+          }
+          same(qualified.root,'locks-before.sha256','locks-after.sha256');same(qualified.root,'baseline-source-before.sha256','baseline-source-after.sha256');same(qualified.root,'baseline-index-before.txt','baseline-index-after.txt');same(qualified.root,'baseline-locks-before.sha256','baseline-locks-after.sha256');
+          for(const file of['baseline-status-before.txt','baseline-status-after.txt'])assert.equal(read(qualified.root,file).length,0,file);
+          same(observed.root,'all-locks-before.json','all-locks-after.json');
+          AUTH_PREFIX
+          cat "$QA_OUT/input/native-input-auth.mjs" >> "$auth"
+          cat >> "$auth" <<'AUTH_SUFFIX'
+          const qualifiedSource=hashMap(read(qualified.root,'source-before.sha256'));assert.equal(qualifiedSource[q.workflowPath],sha(read(qualified.root,'workflow.yml')));delete qualifiedSource[q.workflowPath];
+          const nativeSource=hashMap(read(observed.root,'source-before.sha256'));for(const file of JSON.parse(e.NATIVE_ADDITIONS)){assert(nativeSource[file]);delete nativeSource[file];}assert.deepEqual(nativeSource,qualifiedSource,'PUBLIC_NATIVE_AND_QUALIFIED_PRODUCT_SOURCE');
+          const current=hashMap(fs.readFileSync(out+'/source-before.sha256'));assert(current[e.PUBLIC_WORKFLOW]);delete current[e.PUBLIC_WORKFLOW];assert.deepEqual(current,qualifiedSource,'PUBLIC_MERGED_SOURCE_AND_QUALIFIED_SOURCE');
+          const productVector=sourceVector('HEAD^');assert.equal(api('published-main-commit','git/commits/'+e.MAIN_CORE).tree.sha,e.PRODUCT_TREE);
+          const productCommit=api('qualified-product-commit','git/commits/'+product.commit);
+          assert.equal(productCommit.tree.sha,product.tree);assert.deepEqual(productCommit.parents.map(row=>row.sha),[q.baseline.commit]);
+          assert.equal(api('qualified-baseline-commit','git/commits/'+q.baseline.commit).tree.sha,q.baseline.tree);
+          const nativeAdditions=JSON.parse(e.NATIVE_ADDITIONS),qaIndex=(root)=>Object.fromEntries(read(root,'index-before.txt').toString('utf8').trimEnd().split('\n').map(line=>{const m=/^([0-7]{6}) ([a-f0-9]{40}) 0\t(.+)$/.exec(line);assert(m);return[m[3],{mode:m[1],type:'blob',sha:m[2]}];}));
+          for(const [label,pin,remove]of[['qualified',q,[q.workflowPath]],['native',n,JSON.parse(e.NATIVE_ADDITIONS)]]){
+           const tree=api(label+'-tree','git/trees/'+pin.qaTree+'?recursive=1');assert.equal(tree.truncated,false);assert.equal(tree.sha,pin.qaTree);
+           const vector=Object.fromEntries(tree.tree.filter(row=>row.type!=='tree').map(row=>[row.path,{mode:row.mode,type:row.type,sha:row.sha}]));
+           const index=qaIndex(label==='qualified'?qualified.root:observed.root);assert.deepEqual(index,vector,'PUBLIC_ORIGINAL_INDEX_TREE '+label);
+           assert.equal(vector[pin.workflowPath].sha,pin.workflowBlob);
+           if(label==='native'){assert.equal(vector[nativeAdditions[1]].sha,n.helperBlob);assert.equal(vector[nativeAdditions[2]].sha,'671f460aa088d42b44c435a03594cf26695d6e09');}
+           for(const file of remove){assert.equal(vector[file].mode,'100644');assert.equal(vector[file].type,'blob');delete vector[file];}
+           assert.deepEqual(vector,productVector,'PUBLIC_'+label+'_WHOLE_QA_SOURCE_INVERSE');
+          }
+          const tarFile=path.join(qualified.root,'completed-dist.tar.gz'),tarPin=q.filePins.find(row=>row.file==='completed-dist.tar.gz');assert(tarPin);assert.equal(read(qualified.root,'completed-dist.tar.gz').length,tarPin.bytes);assert.equal(sha(read(qualified.root,'completed-dist.tar.gz')),tarPin.sha256);
+          const names=native('completed-dist-list','tar',['-tzf',tarFile]).trim().split('\n');names.forEach(value=>{safe(value);assert(value==='dist/'||value.startsWith('dist/'));});assert.equal(new Set(names.map(norm)).size,names.length);assert(native('completed-dist-types','tar',['-tvzf',tarFile]).trim().split('\n').every(value=>value.startsWith('-')||value.startsWith('d')));
+          native('completed-dist-extract','tar',['-xzf',tarFile,'--strip-components=1','-C',e.QA_DIST]);
+          for(const file of['logs/native-admission.exit','logs/browser.exit','logs/final-source-holds.exit'])assert.equal(read(observed.root,file).toString(),'0\n',file);
+          const dist=inventory(e.QA_DIST);assert.equal(dist.length,q.distFiles);assert.equal(dist.reduce((sum,row)=>sum+row.bytes,0),q.distBytes);assert.equal(sha(JSON.stringify(dist)),q.distDigest);assert.deepEqual(nm.distBefore,dist,'PUBLIC_NATIVE_COMPLETED_DIST_EQUALITY');
+          const distMap=hashMap(same(qualified.root,'dist-before.sha256','dist-after.sha256'));assert.deepEqual(Object.keys(distMap).sort(),dist.map(row=>'dist/'+row.file).sort());for(const row of dist)assert.equal(distMap['dist/'+row.file],row.sha256);
+          const selected=JSON.parse(e.DELIVERY_BINDINGS),owners=[selected.entry,selected.stylesheet,selected.soccerCareer,'prerender-boot.js'];
+          assert(owners.every(file=>typeof file==='string'&&file.length>0));owners.forEach(safe);assert.equal(new Set(owners).size,owners.length);
+          assert.equal(new Set(selected.pins.map(row=>row.file)).size,selected.pins.length);for(const pin of selected.pins){const actual=dist.find(row=>row.file===pin.file);assert.deepEqual(pin,actual,'PUBLIC_EXACT_DELIVERY_PIN_MEMBER');}
+          const nativeAssets=[...new Set(nr.contexts.flatMap(c=>c.assetBodies.map(row=>row.path)))].sort();const expected=[...new Set([...nativeAssets,...owners])].sort();assert.deepEqual(selected.pins.map(row=>row.file).sort(),expected,'PUBLIC_EXACT_NATIVE_ASSET_AND_ROUTE_OWNER_CENSUS');
+          for(const c of nr.contexts)for(const row of c.assetBodies){const actual=dist.find(value=>value.file===row.path);assert(actual);assert.equal(row.bytes,actual.bytes);assert.equal(row.sha256,actual.sha256);}
+          assert.match(selected.entry,/^assets\/.+\.js$/);assert.match(selected.stylesheet,/^assets\/.+\.css$/);assert.match(selected.soccerCareer,/^assets\/.+\.js$/);assert(nativeAssets.includes(selected.soccerCareer),'PUBLIC_SC_OWNER_OBSERVED');
+          fs.writeFileSync(out+'/delivery-bindings.json',JSON.stringify(selected,null,2)+'\n',{flag:'wx'});
+          fs.writeFileSync(out+'/reference-authority.json',JSON.stringify({schema:'SC_LATER_PUBLIC_DELIVERY_AUTHORITY_V1',product,main:e.MAIN_CORE,deployment:e.DEPLOYMENT,qualification:q,native:n,selectedAssets:expected,qualificationAndNativeSourcesEqual:true,sourceWholeQAInverses:true,scope:'Completed qualification output and independently admitted native evidence. HTTP delivery and existing SEO/submission only.'},null,2)+'\n',{flag:'wx'});
+          fs.writeFileSync(out+'/input-reference-before.json',JSON.stringify(inventory(ref))+'\n',{flag:'wx'});fs.writeFileSync(out+'/dist-before.json',JSON.stringify(dist)+'\n',{flag:'wx'});
+          AUTH_SUFFIX
+          printf '%s  %s\n' '6ab45fa3c6037933c9f8ac6ac284394446436ecea99b5502e8a36d661edbc1d6' "$auth" | sha256sum -c -
+          set +e
+          node --input-type=module < "$auth"
+          native_exit=$?
+          printf '%s\n' "$native_exit" > "$QA_OUT/logs/reference-auth.exit" || exit 1
+          exit "$native_exit"
+      - name: Retain exact delivered HTML declarations and compiled bodies
+        shell: bash
+        run: |
+          set +e
+          set -uo pipefail
+          node --input-type=module <<'HTTP'
+          import fs from 'node:fs';import path from 'node:path';import{createHash}from'node:crypto';import assert from 'node:assert/strict';
+          const e=process.env,out=e.QA_OUT,origin='https://douknowball.com',pins=JSON.parse(fs.readFileSync(out+'/delivery-bindings.json')),sha=b=>createHash('sha256').update(b).digest('hex');
+          const report={schema:'SC_LATER_PUBLIC_HTTP_DELIVERY_V1',status:'failed',origin,product:{commit:e.PRODUCT_CORE,tree:e.PRODUCT_TREE},main:e.MAIN_CORE,deployment:e.DEPLOYMENT,bindings:pins,readiness:[],responses:[],controls:[],scope:'Raw root and Soccer Career HTML declarations plus the exact native-observed and route-owner compiled asset census. No browser gameplay, host-script execution, full HTML equality or new model qualification.'};
+          const save=(name,bytes)=>fs.writeFileSync(out+'/'+name,bytes,{flag:'wx'}),json=(name,value)=>save(name,JSON.stringify(value,null,2)+'\n');
+          async function capture(route,label){
+           const row={path:route,label,started:new Date().toISOString()};report.responses.push(row);
+           try{const response=await fetch(origin+route,{method:'GET',cache:'no-store',redirect:'error',signal:AbortSignal.timeout(15000)}),body=Buffer.from(await response.arrayBuffer());Object.assign(row,{status:response.status,url:response.url,headers:Object.fromEntries(response.headers),file:label+'.body',bytes:body.length,sha256:sha(body)});save(row.file,body);assert.equal(row.url,origin+route,'PUBLIC_EXACT_RESPONSE_URL');return{row,body};}
+           catch(error){row.error=String(error.stack??error);throw error;}finally{row.finished=new Date().toISOString();json(label+'.json',row);}
+          }
+          function deployment(row){assert.equal(row.status,200,'PUBLIC_HTTP_STATUS');assert((row.headers['x-deployment-id']??'').split('.').includes(e.DEPLOYMENT),'PUBLIC_EXPECTED_DEPLOYMENT');}
+          function shape(body){
+           const html=body.toString('utf8').replace(/<!--[\s\S]*?-->/g,''),attrs=s=>Object.fromEntries([...s.matchAll(/([^\s=/>]+)(?:\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s"'=<>]+)))?/g)].map(m=>[m[1].toLowerCase(),m[2]??m[3]??m[4]??'']));
+           const scripts=[...html.matchAll(/<script\b([^>]*)>[\s\S]*?<\/script\s*>/gi)].map(m=>({tag:m[0],a:attrs(m[1])})),staticHTML=html.replace(/<script\b[^>]*>[\s\S]*?<\/script\s*>/gi,'').replace(/<style\b[^>]*>[\s\S]*?<\/style\s*>/gi,''),links=[...staticHTML.matchAll(/<link\b([^>]*)>/gi)].map(m=>attrs(m[1]));
+           const modules=scripts.filter(s=>s.a.type==='module'&&(s.a.src??'').startsWith('/assets/')),styles=links.filter(a=>(a.rel??'').split(/\s+/).includes('stylesheet')&&(a.href??'').startsWith('/assets/')),boots=scripts.filter(s=>s.a.src==='/prerender-boot.js');
+           return{modules:modules.map(s=>s.a.src),styles:styles.map(a=>a.href),boots:boots.map(s=>({src:s.a.src,defer:Object.hasOwn(s.a,'defer')})),moduleTag:modules.length===1?modules[0].tag:null};
+          }
+          const routes=[['ROOT','/','index.html'],['SC','/soccer-career','soccer-career/index.html']];
+          const references=Object.fromEntries(routes.map(([kind,,file])=>{const value=shape(fs.readFileSync(path.join(e.QA_DIST,file)));assert.deepEqual(value.modules,['/'+pins.entry],'PUBLIC_REFERENCE_ENTRY');assert(value.styles.length>0&&value.styles.every(value=>value==='/'+pins.stylesheet),'PUBLIC_REFERENCE_CSS');if(kind!=='ROOT')assert.deepEqual(value.boots,[{src:'/prerender-boot.js',defer:true}],'PUBLIC_REFERENCE_BOOT');return[kind,value];}));
+          function declarations(body,kind){const value=shape(body),reference=references[kind];for(const key of['modules','styles','boots'])assert.deepEqual(value[key],reference[key],'PUBLIC_'+kind+'_DECLARATIONS');return value;}
+          function bodyMatches(body,pin){assert.equal(body.length,pin.bytes,'PUBLIC_COMPILED_BODY');assert.equal(sha(body),pin.sha256,'PUBLIC_COMPILED_BODY');}
+          function rejected(label,marker,fn){let error;try{fn();}catch(found){error=found;}assert(error instanceof assert.AssertionError,'PUBLIC_CONTROL_REJECTED '+label);assert(error.message.startsWith(marker),'PUBLIC_CONTROL_OWNED '+label);report.controls.push({label,owned:{name:error.name,message:error.message},changed:true,wholeInverseExact:true});}
+          try{
+           let root;
+           for(let i=1;i<=8;i++){const attempt={attempt:i};report.readiness.push(attempt);try{const value=await capture('/','root-attempt-'+i);deployment(value.row);attempt.declarations=declarations(value.body,'ROOT');attempt.ready=true;root=value;break;}catch(error){attempt.error=String(error.message??error);}if(i<8)await new Promise(resolve=>setTimeout(resolve,3000));}
+           assert(root,'PUBLIC_ROOT_READINESS_EXHAUSTED');
+           for(const[kind,route]of routes.slice(1)){const value=await capture(route,kind.toLowerCase());deployment(value.row);value.row.declarations=declarations(value.body,kind);json(kind.toLowerCase()+'-declarations.json',value.row.declarations);}
+           const before=Buffer.from(root.body),rootShape=declarations(root.body,'ROOT'),rootText=root.body.toString('utf8'),moduleAt=rootText.indexOf(rootShape.moduleTag),faultHTML=rootText.slice(0,moduleAt)+rootText.slice(moduleAt+rootShape.moduleTag.length);assert.notEqual(faultHTML,rootText,'PUBLIC_CONTROL_MODULE_CHANGED');save('control-root-module-omitted.html',faultHTML);rejected('root-module-omission','PUBLIC_ROOT_DECLARATIONS',()=>declarations(Buffer.from(faultHTML),'ROOT'));assert.equal(faultHTML.slice(0,moduleAt)+rootShape.moduleTag+faultHTML.slice(moduleAt),rootText,'PUBLIC_MODULE_WHOLE_INVERSE');assert(root.body.equals(before),'PUBLIC_ROOT_ACTUAL_HELD');
+           const wrong={...root.row,headers:{...root.row.headers,'x-deployment-id':'wrong'}};json('control-deployment-mutated.json',wrong);rejected('deployment-mutation','PUBLIC_EXPECTED_DEPLOYMENT',()=>deployment(wrong));wrong.headers['x-deployment-id']=root.row.headers['x-deployment-id'];assert.deepEqual(wrong,root.row,'PUBLIC_HEADER_WHOLE_INVERSE');
+           for(let i=0;i<pins.pins.length;i++){const pin=pins.pins[i],value=await capture('/'+pin.file,'asset-'+(i+1));assert.equal(value.row.status,200,'PUBLIC_HTTP_STATUS');bodyMatches(value.body,pin);if(pin.file==='prerender-boot.js'){const fault=Buffer.from(value.body);fault[0]^=1;assert(!fault.equals(value.body),'PUBLIC_CONTROL_BODY_CHANGED');save('control-boot-byte-mutated.body',fault);rejected('boot-body-mutation','PUBLIC_COMPILED_BODY',()=>bodyMatches(fault,pin));fault[0]^=1;assert(fault.equals(value.body),'PUBLIC_BODY_WHOLE_INVERSE');}}
+           assert.equal(report.controls.length,3);report.status='passed';
+          }catch(error){report.error=String(error.stack??error);process.exitCode=1;}
+          finally{report.finished=new Date().toISOString();json('HTTP-DELIVERY.json',report);console.log(JSON.stringify({status:report.status,responses:report.responses.length,assets:pins.pins.length,controls:report.controls.length,error:report.error??null}));}
+          HTTP
+          native_exit=$?
+          printf '%s\n' "$native_exit" > "$QA_OUT/logs/http-delivery.exit" || exit 1
+          exit "$native_exit"
+      - name: Install only held HTML parser and HTTP request tools
+        shell: bash
+        run: |
+          set +e
+          set -uo pipefail
+          tools="$RUNNER_TEMP/sc-later-starts-public-http-tools"
+          test ! -e "$tools" || exit 1
+          test "$(node -p "JSON.parse(require('fs').readFileSync('package-lock.json','utf8')).packages['node_modules/jsdom'].version")" = 20.0.3 || exit 1
+          npm install --prefix "$tools" --package-lock=false --no-audit --no-fund jsdom@20.0.3 playwright@1.64.0 > "$QA_OUT/logs/http-tools-install.log" 2>&1
+          native_exit=$?
+          printf '%s\n' "$native_exit" > "$QA_OUT/logs/http-tools-install.exit" || exit 1
+          test "$native_exit" = 0 || exit "$native_exit"
+          test ! -e node_modules || exit 1
+          mkdir node_modules || exit 1
+          ln -s "$tools/node_modules/jsdom" node_modules/jsdom || exit 1
+          ln -s "$tools/node_modules/playwright" node_modules/playwright || exit 1
+          ln -s "$tools/node_modules/playwright-core" node_modules/playwright-core || exit 1
+          test "$(node -p "JSON.parse(require('fs').readFileSync('node_modules/jsdom/package.json','utf8')).version")" = 20.0.3 || exit 1
+          test "$(node -p "require('playwright/package.json').version")" = 1.64.0 || exit 1
+          node --version > "$QA_OUT/logs/node-version.log"
+      - name: Existing live SEO audit on only Soccer Career
+        shell: bash
+        run: |
+          set +e
+          set -uo pipefail
+          unset NODE_OPTIONS
+          test "$(cat "$QA_OUT/logs/http-delivery.exit")" = 0 || exit 1
+          node scripts/auditLive.mjs /soccer-career > "$QA_OUT/logs/audit-live.stdout.log" 2> "$QA_OUT/logs/audit-live.stderr.log"
+          native_exit=$?
+          printf '%s\n' "$native_exit" > "$QA_OUT/logs/audit-live.exit" || exit 1
+          test "$native_exit" = 0 || exit "$native_exit"
+          grep -F '1 of 1 answered cleanly, 0 did not.' "$QA_OUT/logs/audit-live.stdout.log"
+      - name: Existing IndexNow submission limited to Soccer Career
+        shell: bash
+        run: |
+          set +e
+          set -uo pipefail
+          unset NODE_OPTIONS
+          test "$(cat "$QA_OUT/logs/audit-live.exit")" = 0 || exit 1
+          URLS=/soccer-career node scripts/indexnowSubmit.mjs > "$QA_OUT/logs/indexnow.stdout.log" 2> "$QA_OUT/logs/indexnow.stderr.log"
+          native_exit=$?
+          printf '%s\n' "$native_exit" > "$QA_OUT/logs/indexnow.exit" || exit 1
+          test "$native_exit" = 0 || exit "$native_exit"
+          grep -F '1 URLs to submit for douknowball.com' "$QA_OUT/logs/indexnow.stdout.log" || exit 1
+          grep -F 'key file verified live' "$QA_OUT/logs/indexnow.stdout.log" || exit 1
+          grep -E 'accepted \(HTTP (200|202)\)' "$QA_OUT/logs/indexnow.stdout.log"
+      - name: Always hold source index locks complete original inputs and completed output
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          git ls-files -z > "$QA_OUT/tracked-after.bin"
+          git ls-files -z | xargs -0 sha256sum > "$QA_OUT/source-after.sha256"
+          git ls-files -s > "$QA_OUT/index-after.txt"
+          git status --porcelain=v1 --untracked-files=all > "$QA_OUT/status-after.txt"
+          cp package-lock.json "$QA_OUT/lock-after.json"
+          node --input-type=module <<'HOLDS'
+          import fs from 'node:fs';import path from 'node:path';import crypto from 'node:crypto';import assert from 'node:assert/strict';
+          const out=process.env.QA_OUT,sha=b=>crypto.createHash('sha256').update(b).digest('hex'),errors=[];
+          const inventory=dir=>{const rows=[];function walk(rel=''){for(const entry of fs.readdirSync(path.join(dir,rel),{withFileTypes:true})){const file=path.posix.join(rel,entry.name);if(entry.isDirectory())walk(file);else{assert(entry.isFile());const bytes=fs.readFileSync(path.join(dir,file));rows.push({file,bytes:bytes.length,sha256:sha(bytes)});}}}walk();return rows.sort((a,b)=>a.file<b.file?-1:a.file>b.file?1:0);};
+          function compare(before,after,label){try{assert(fs.readFileSync(out+'/'+before).equals(fs.readFileSync(out+'/'+after)),label);}catch(error){errors.push({label,error:String(error.stack||error)});}}
+          for(const pair of[['tracked-before.bin','tracked-after.bin','tracked'],['source-before.sha256','source-after.sha256','source'],['index-before.txt','index-after.txt','index'],['lock-before.json','lock-after.json','package-lock']])compare(...pair);
+          for(const name of['status-before.txt','status-after.txt'])try{assert.equal(fs.readFileSync(out+'/'+name).length,0,name);}catch(error){errors.push({label:name,error:String(error.stack||error)});}
+          const locks=Object.fromEntries(['package.json','package-lock.json','bun.lock','bun.lockb','yarn.lock','pnpm-lock.yaml'].map(file=>[file,fs.existsSync(file)?sha(fs.readFileSync(file)):null]));fs.writeFileSync(out+'/all-locks-after.json',JSON.stringify(locks)+'\n');
+          try{assert.deepEqual(locks,JSON.parse(fs.readFileSync(out+'/all-locks-before.json')));}catch(error){errors.push({label:'all-locks',error:String(error.stack||error)});}
+          for(const [root,before,after,label]of[[process.env.QA_REF,'input-reference-before.json','input-reference-after.json','complete-original-inputs'],[process.env.QA_DIST,'dist-before.json','dist-after.json','completed-dist']]){if(!fs.existsSync(out+'/'+before)){errors.push({label,error:'Input baseline was not prepared; no hold credit.'});continue;}try{const bytes=Buffer.from(JSON.stringify(inventory(root))+'\n');fs.writeFileSync(out+'/'+after,bytes);assert(bytes.equals(fs.readFileSync(out+'/'+before)),label);}catch(error){errors.push({label,error:String(error.stack||error)});}}
+          fs.writeFileSync(out+'/source-dist-input-held.json',JSON.stringify({status:errors.length?'HOLD_FAILED':'SOURCE_INDEX_LOCKS_INPUT_AND_DIST_HELD',source:!errors.some(row=>row.label==='source'),index:!errors.some(row=>row.label==='index'),tracked:!errors.some(row=>row.label==='tracked'),locks:!errors.some(row=>/lock/.test(row.label)),completeInputHeld:!errors.some(row=>row.label==='complete-original-inputs'),completedDistHeld:!errors.some(row=>row.label==='completed-dist'),cleanStatus:!errors.some(row=>/status/.test(row.label)),errors,AppBuilds:0,modelOrFixtureGeneration:false,publicAdmission:'Separate public-closeout.json only after delivery, audit and scoped submission succeed.'},null,2)+'\n',{flag:'wx'});
+          assert.equal(errors.length,0,'RUSSIA_NATIVE_ALL_SOURCE_INPUT_DIST_HOLDS');
+          HOLDS
+          printf '0\n' > "$QA_OUT/logs/final-source-holds.exit" || exit 1
+      - name: Close only delivery SEO and scoped submission evidence
+        shell: bash
+        run: |
+          set +e
+          set -uo pipefail
+          node --input-type=module <<'ADMIT'
+          import fs from 'node:fs';import assert from 'node:assert/strict';import{createHash}from'node:crypto';
+          const e=process.env,out=e.QA_OUT,sha=b=>createHash('sha256').update(b).digest('hex'),read=file=>fs.readFileSync(out+'/'+file),http=JSON.parse(read('HTTP-DELIVERY.json')),held=JSON.parse(read('source-dist-input-held.json')),authority=JSON.parse(read('reference-authority.json'));
+          for(const file of['reference-auth','http-delivery','http-tools-install','audit-live','indexnow','final-source-holds'])assert.equal(read('logs/'+file+'.exit').toString(),'0\n',file);
+          assert.equal(http.status,'passed');assert.equal(http.controls.length,3);assert.deepEqual(http.controls.map(row=>row.label),['root-module-omission','deployment-mutation','boot-body-mutation']);assert.equal(held.status,'SOURCE_INDEX_LOCKS_INPUT_AND_DIST_HELD');assert.deepEqual(authority.product,http.product);assert.equal(http.main,e.MAIN_CORE);assert.equal(http.deployment,e.DEPLOYMENT);
+          for(const row of http.responses.filter(row=>row.file)){const bytes=read(row.file);assert.equal(bytes.length,row.bytes);assert.equal(sha(bytes),row.sha256);}
+          fs.writeFileSync(out+'/public-closeout.json',JSON.stringify({status:'SC_LATER_STARTS_DELIVERY_AND_SINGLE_ROUTE_SEO_INDEXNOW_PASSED',product:http.product,main:e.MAIN_CORE,deployment:e.DEPLOYMENT,qualificationAdmission:authority.qualification.independentAdmissionSHA256,nativeAdmission:authority.native.independentAdmissionSHA256,deliveredAssets:http.bindings.pins,routes:['/soccer-career'],controls:3,sourceHeld:true,inputsHeld:true,completedDistHeld:true,AppBuilds:0,modelCalls:0,browserGameplay:false,publishingActions:0,scope:'Delivered compiled bytes, raw HTML declarations, unchanged Soccer Career SEO audit and single-URL IndexNow acceptance. No indexing guarantee or new public gameplay/protocol claim.'},null,2)+'\n',{flag:'wx'});
+          ADMIT
+          native_exit=$?
+          printf '%s\n' "$native_exit" > "$QA_OUT/logs/public-closeout.exit" || exit 1
+          exit "$native_exit"
+      - name: Retain bounded complete delivery proof or fatal diagnostic
+        id: evidence
+        if: always()
+        shell: bash
+        run: |
+          set +e
+          set -uo pipefail
+          archive="$RUNNER_TEMP/sc-later-starts-public-closeout.tar.xz"
+          tar -I 'xz -9' -cf "$archive" -C "$QA_OUT" . > "$RUNNER_TEMP/sc-later-starts-public-closeout-pack.log" 2>&1
+          pack_exit=$?
+          printf '%s\n' "$pack_exit" > "$QA_OUT/pack-native.exit" || exit 1
+          if [[ "$pack_exit" == 0 && -f "$archive" && "$(stat -c %s "$archive")" -le 50000000 ]]; then
+            sha256sum "$archive" > "$archive.sha256" || exit 1
+            printf 'archive=%s\n' "$archive" >> "$GITHUB_OUTPUT" || exit 1
+            exit 0
+          fi
+          printf '%s\n' 'DIAGNOSTIC_ONLY_NO_COMPLETE_PUBLIC_DELIVERY_PROOF: full pack failed or exceeded50000000bytes' > "$QA_OUT/DIAGNOSTIC-ONLY.txt" || exit 1
+          cp "$RUNNER_TEMP/sc-later-starts-public-closeout-pack.log" "$QA_OUT/pack.log" || exit 1
+          node --input-type=module <<'DIAGNOSTIC'
+          import fs from 'node:fs';import path from 'node:path';import crypto from 'node:crypto';
+          const root=process.env.QA_OUT,sha=b=>crypto.createHash('sha256').update(b).digest('hex'),rows=[];
+          function walk(rel=''){for(const entry of fs.readdirSync(path.join(root,rel),{withFileTypes:true})){const file=path.posix.join(rel,entry.name);if(entry.isDirectory())walk(file);else if(entry.isFile()){const bytes=fs.readFileSync(path.join(root,file));rows.push({file,bytes:bytes.length,sha256:sha(bytes)});}}}walk();
+          fs.writeFileSync(root+'/fatal-full-output-inventory.json',JSON.stringify({status:'DIAGNOSTIC_ONLY',completePublicDeliveryProof:false,fullArchive:fs.existsSync(path.join(process.env.RUNNER_TEMP,'sc-later-starts-public-closeout.tar.xz'))?{bytes:fs.statSync(path.join(process.env.RUNNER_TEMP,'sc-later-starts-public-closeout.tar.xz')).size,sha256:sha(fs.readFileSync(path.join(process.env.RUNNER_TEMP,'sc-later-starts-public-closeout.tar.xz')))}:null,fullOutput:rows.sort((a,b)=>a.file<b.file?-1:a.file>b.file?1:0),omittedFromDiagnostic:['delivered *.body and copied *.html files'],note:'Successful evidence is never truncated. This diagnostic has no delivery, SEO or submission qualification.'},null,2)+'\n');
+          DIAGNOSTIC
+          test "$?" = 0 || exit 1
+          diagnostic="$RUNNER_TEMP/sc-later-starts-public-closeout-diagnostic.tar.gz"
+          diagnostic_dir="$RUNNER_TEMP/sc-later-starts-public-closeout-diagnostic"
+          mkdir -p "$diagnostic_dir/logs" "$diagnostic_dir/input" || exit 1
+          find "$QA_OUT" -maxdepth 1 -type f ! -name '*.body' ! -name '*.html' -exec cp '{}' "$diagnostic_dir/" \; || exit 1
+          cp -R "$QA_OUT/logs/." "$diagnostic_dir/logs/" || exit 1
+          cp -R "$QA_OUT/input/." "$diagnostic_dir/input/" || exit 1
+          tar -czf "$diagnostic" -C "$diagnostic_dir" . || exit 1
+          test "$(stat -c %s "$diagnostic")" -le 50000000 || exit 1
+          sha256sum "$diagnostic" > "$diagnostic.sha256" || exit 1
+          printf 'archive=%s\n' "$diagnostic" >> "$GITHUB_OUTPUT" || exit 1
+          exit 1
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: sc-later-starts-public-closeout
+          path: |
+            ${{ steps.evidence.outputs.archive }}
+            ${{ steps.evidence.outputs.archive }}.sha256
+          if-no-files-found: error
+          retention-days: 14
+          compression-level: 0
