@@ -1,0 +1,347 @@
+name: Soccer Grid selection ownership clean source and build join
+on:
+  push:
+    branches: [codex/soccer-grid-selection-ownership-clean-join-qa-20261107]
+permissions:
+  contents: read
+  actions: read
+jobs:
+  closeout:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        shell: bash
+    env:
+      SIM_NETWORK: offline
+      SIM_OFFLINE_RECEIPT: soccer-grid-selection-ownership-clean-join/offline.log
+      GRID_REFERENCE_ARTIFACT: '13567030071'
+      GRID_REFERENCE_RUN: '42352684859'
+      GRID_REFERENCE_ZIP: '1dab365a83f0583804f58159c3b2b825ad3bffe40f14d50288cce468a3e994c1'
+      GRID_REFERENCE_TAR: '4ea203d6386082e262ef6ae719970e0d0e595ea963e6327524439aa1f3c3781d'
+      GRID_REFERENCE_HEAD: 'ebf0b1dab27ff8d9ad0f784a368027b740829649'
+      GRID_REFERENCE_TREE: '9c0ff5ec707a988463eee46712bd2153256be947'
+      GRID_REFERENCE_ZIP_BYTES: '64353728'
+      GRID_NATIVE_HELPER: '6653a8d8bb60cd29243a9634ac2ba09d7cd2d0a0'
+      GRID_NATIVE_OUTER: 'bc0e1b1e42fda2601612c0b0c8ab5b5f6e645989'
+      GRID_FIXED_HOOK_BLOB: '9b724907eae0a2fbf9e20d38f60d226281051693'
+      GRID_QUALIFIED_PLAN_BLOB: 'af9c485b73a30903cd72af884b521ecab6d8eeb2'
+      GRID_QUALIFIED_TEST_BLOB: 'bda5963ef068981f9d5c81c4767192e9e47f05b5'
+      GRID_REFERENCE_DIST_MANIFEST: '10b1a290480cbe1ba69ccbafedafd48c5c82951d7fdd68cbd58fe78cb20f8a70'
+      GRID_REFERENCE_WORKFLOW: '2712779a898328ab7862908d7914a36ef401246e'
+      GRID_CLEAN_PRODUCT_BASE: '7d9e1cbe3cc7ee838b2e4e5d381c4dd34faa9f0b'
+      GRID_CLEAN_PRODUCT_BASE_TREE: '23d931fe27906490f1e79eb057e7a1d6a11804b9'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 3
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24.22.1
+          cache: npm
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.4.4
+      - name: Locked dependencies and clean source receipts
+        run: |
+          set -euo pipefail
+          if grep -Eq '__[A-Z][A-Z0-9_]*__' .github/workflows/soccer-grid-selection-ownership-20261106.yml; then echo 'Unresolved clean qualification template binding'; exit 1; fi
+          [[ "$GRID_REFERENCE_ARTIFACT" =~ ^[1-9][0-9]*$ ]]
+          [[ "$GRID_REFERENCE_RUN" =~ ^[1-9][0-9]*$ ]]
+          [[ "$GRID_REFERENCE_ZIP" =~ ^[a-f0-9]{64}$ ]]
+          [[ "$GRID_REFERENCE_TAR" =~ ^[a-f0-9]{64}$ ]]
+          [[ "$GRID_REFERENCE_ZIP_BYTES" =~ ^[1-9][0-9]*$ ]]
+          [[ "$GRID_REFERENCE_DIST_MANIFEST" =~ ^[a-f0-9]{64}$ ]]
+          for value in "$GRID_REFERENCE_HEAD" "$GRID_REFERENCE_TREE" "$GRID_NATIVE_HELPER" "$GRID_NATIVE_OUTER" "$GRID_REFERENCE_WORKFLOW" "$GRID_FIXED_HOOK_BLOB" "$GRID_QUALIFIED_PLAN_BLOB" "$GRID_QUALIFIED_TEST_BLOB"; do [[ "$value" =~ ^[a-f0-9]{40}$ ]]; done
+          test ! -e soccer-grid-selection-ownership-clean-join
+          mkdir soccer-grid-selection-ownership-clean-join
+          touch soccer-grid-selection-ownership-clean-join/offline.log
+          git rev-parse HEAD > soccer-grid-selection-ownership-clean-join/head.txt
+          git rev-parse 'HEAD^{tree}' > soccer-grid-selection-ownership-clean-join/tree.txt
+          git ls-files -s > soccer-grid-selection-ownership-clean-join/source-before.txt
+          sha256sum package.json package-lock.json > soccer-grid-selection-ownership-clean-join/locks-before.txt
+          npm ci
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const lock=JSON.parse(fs.readFileSync('package-lock.json'));
+          const rows=Object.keys(lock.packages).filter(p=>p.startsWith('node_modules/')&&fs.existsSync(p+'/package.json')).map(p=>[p,JSON.parse(fs.readFileSync(p+'/package.json')).version]);
+          assert.equal(rows.length,521);for(const[p,v]of rows)assert.equal(v,lock.packages[p].version,p);fs.writeFileSync('soccer-grid-selection-ownership-clean-join/installed-before.json',JSON.stringify(rows));
+          NODE
+      - name: Proper app types
+        run: |
+          set -euo pipefail
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee soccer-grid-selection-ownership-clean-join/types.log
+      - name: Authenticate the completed full reference before extraction
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          gh api "repos/PapiSalgueroM/ballpark-hero/actions/runs/$GRID_REFERENCE_RUN" > soccer-grid-selection-ownership-clean-join/reference-run.json
+          gh api "repos/PapiSalgueroM/ballpark-hero/actions/artifacts/$GRID_REFERENCE_ARTIFACT" > soccer-grid-selection-ownership-clean-join/reference-artifact.json
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          const env = process.env;
+          const read = file => JSON.parse(fs.readFileSync('soccer-grid-selection-ownership-clean-join/' + file));
+          const run = read('reference-run.json'), artifact = read('reference-artifact.json');
+          assert.deepEqual(
+            [run.id, run.status, run.conclusion, run.event, run.path, run.repository.full_name, run.head_sha, run.head_commit.tree_id],
+            [Number(env.GRID_REFERENCE_RUN), 'completed', 'success', 'push', '.github/workflows/soccer-grid-selection-ownership-20261106.yml', 'PapiSalgueroM/ballpark-hero', env.GRID_REFERENCE_HEAD, env.GRID_REFERENCE_TREE],
+          );
+          assert.deepEqual(
+            [artifact.id, artifact.name, artifact.expired, artifact.size_in_bytes, artifact.digest, artifact.workflow_run.id, artifact.workflow_run.head_sha],
+            [Number(env.GRID_REFERENCE_ARTIFACT), 'soccer-grid-selection-ownership-full-' + run.id, false, Number(env.GRID_REFERENCE_ZIP_BYTES), 'sha256:' + env.GRID_REFERENCE_ZIP, run.id, run.head_sha],
+          );
+          NODE
+          gh api "repos/PapiSalgueroM/ballpark-hero/actions/artifacts/$GRID_REFERENCE_ARTIFACT/zip" > "$RUNNER_TEMP/soccer-grid-selection-ownership-full-reference.zip"
+          test "$(wc -c < "$RUNNER_TEMP/soccer-grid-selection-ownership-full-reference.zip")" -eq "$GRID_REFERENCE_ZIP_BYTES"
+          echo "$GRID_REFERENCE_ZIP  $RUNNER_TEMP/soccer-grid-selection-ownership-full-reference.zip" | sha256sum --check
+          unzip -Z1 "$RUNNER_TEMP/soccer-grid-selection-ownership-full-reference.zip" > soccer-grid-selection-ownership-clean-join/reference-zip-entries.txt
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          const names = fs.readFileSync('soccer-grid-selection-ownership-clean-join/reference-zip-entries.txt', 'utf8').trimEnd().split('\n');
+          assert.equal(new Set(names).size, names.length, 'Unique admitted ZIP paths');
+          for (const name of names) {
+            assert(name.length && !name.includes('\\') && !name.startsWith('/'), 'Relative ZIP path');
+            assert(name.replace(/\/$/, '').split('/').every(part => part && part !== '.' && part !== '..'), 'Safe ZIP path');
+          }
+          for (const file of ['head.txt', 'tree.txt', 'admission.json', 'fixed-admission.json', 'native-admission.json', 'final-holds.json', 'source-before.txt', 'source-after.txt', 'dist-before.json', 'dist-after.json', 'dist.tgz']) {
+            assert(names.includes(file), file + ' required authenticated body');
+          }
+          NODE
+          mkdir "$RUNNER_TEMP/soccer-grid-selection-ownership-full-reference" "$RUNNER_TEMP/soccer-grid-selection-ownership-full-reference-dist"
+          unzip -q "$RUNNER_TEMP/soccer-grid-selection-ownership-full-reference.zip" -d "$RUNNER_TEMP/soccer-grid-selection-ownership-full-reference"
+          test -z "$(find "$RUNNER_TEMP/soccer-grid-selection-ownership-full-reference" -type l -print -quit)"
+          echo "$GRID_REFERENCE_TAR  $RUNNER_TEMP/soccer-grid-selection-ownership-full-reference/dist.tgz" | sha256sum --check
+          tar -tzf "$RUNNER_TEMP/soccer-grid-selection-ownership-full-reference/dist.tgz" > soccer-grid-selection-ownership-clean-join/reference-tar-entries.txt
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          const names = fs.readFileSync('soccer-grid-selection-ownership-clean-join/reference-tar-entries.txt', 'utf8').trimEnd().split('\n');
+          assert.equal(new Set(names).size, names.length, 'Unique admitted dist tar paths');
+          for (const name of names) {
+            assert(name.startsWith('dist/') && !name.includes('\\'), 'Tar stays under dist');
+            assert(name.replace(/\/$/, '').split('/').every(part => part && part !== '.' && part !== '..'), 'Safe tar path');
+          }
+          NODE
+          tar -xzf "$RUNNER_TEMP/soccer-grid-selection-ownership-full-reference/dist.tgz" -C "$RUNNER_TEMP/soccer-grid-selection-ownership-full-reference-dist"
+          cp "$RUNNER_TEMP/soccer-grid-selection-ownership-full-reference/source-before.txt" soccer-grid-selection-ownership-clean-join/reference-source.txt
+      - name: Fresh unchanged product-name fence on clean source
+        run: |
+          set -euo pipefail
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simNoRivalNames.mjs 2>&1 | tee soccer-grid-selection-ownership-clean-join/no-rival.log
+      - name: Clean production build
+        run: |
+          set -euo pipefail
+          NODE_OPTIONS="--max-old-space-size=6144" npm run build 2>&1 | tee soccer-grid-selection-ownership-clean-join/build.log
+      - name: Join exact clean product source and all 850 built files
+        id: join
+        env:
+          GRID_REFERENCE_DIR: ${{ runner.temp }}/soccer-grid-selection-ownership-full-reference
+          GRID_REFERENCE_DIST: ${{ runner.temp }}/soccer-grid-selection-ownership-full-reference-dist/dist
+        run: |
+          set -euo pipefail
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import assert from 'node:assert/strict';
+          import {createHash} from 'node:crypto';
+          import {execFileSync} from 'node:child_process';
+          const env = process.env;
+          const out = 'soccer-grid-selection-ownership-clean-join';
+          const ref = env.GRID_REFERENCE_DIR;
+          const read = file => JSON.parse(fs.readFileSync(path.join(ref, file)));
+          const bytes = file => fs.readFileSync(path.join(ref, file));
+          const readOutput = file => JSON.parse(fs.readFileSync(path.join(out, file)));
+          const sha = bytes => createHash('sha256').update(bytes).digest('hex');
+          const blob = bytes => createHash('sha1').update('blob ' + bytes.length + '\0').update(bytes).digest('hex');
+          const git = (...args) => execFileSync('git', args, {encoding:'utf8', maxBuffer:16 * 1024 * 1024});
+          const workflow = '.github/workflows/soccer-grid-selection-ownership-20261106.yml';
+          const helper = 'scripts/qa/playSoccerGridSelectionOwnership.mjs';
+          const hook = 'src/hooks/useSoccerGrid.ts';
+          const test = 'src/test/soccerGridSelectionOwnership.test.tsx';
+          const plan = 'docs/plans/2026-11-07-soccer-grid-selection-ownership.md';
+          const configs = ['index.html','package.json','package-lock.json','vite.config.ts','tailwind.config.ts','postcss.config.js','tsconfig.json','tsconfig.app.json','tsconfig.node.json','bun.lockb','bun.lock'];
+          const sourceScope = file => /^(?:src|public|scripts)\//.test(file);
+          const fullOnly = new Set([workflow, helper]);
+          const denied = ['scripts/qa/checkSoccerGridSelectionOwnership.mjs','scripts/qa/admitSoccerGridSelectionOwnership.mjs'];
+          const pins = {
+            [hook]: env.GRID_FIXED_HOOK_BLOB,
+            [test]: env.GRID_QUALIFIED_TEST_BLOB,
+            [plan]: env.GRID_QUALIFIED_PLAN_BLOB,
+            'src/pages/SoccerGrid.tsx': 'fd793d83fef33fa075fcac53e97453cdbf83fff7',
+            'src/components/soccer-grid/SoccerGridSearch.tsx': '14450f17982a89cc5de886d89fa1a78462ff509f',
+            'src/components/soccer-grid/SoccerGridBoard.tsx': '15007fda66e6a52bf13727d934dcc796bb30f3bb',
+            'src/test/soccerGridSubmissionOwnership.test.tsx': '7cb7f94a73ce7340243e7bdae6d6759e2c1a6f11',
+            'src/App.tsx': '8bfedf7aaa1d076e0f0c8e2216c7e46632cd8a33',
+            'src/data/gameRegistry.ts': 'f560b40a74d1468ac72dfde4ee6fec6635a9a255',
+            'public/soccer-grid/index.html': '65fcae9819d92e53462c9f7826bd7d2fa2012fe4',
+          };
+          const indexRows = (body, separator = '\n') => {
+            const rows = body.split(separator).filter(Boolean).map(line => {
+              const matched = /^(100(?:644|755)) ([0-9a-f]{40}) 0\t(.+)$/.exec(line);
+              assert(matched, 'Actual regular path/mode/blob index tuple');
+              return [matched[3], {mode:matched[1], blob:matched[2]}];
+            });
+            assert.equal(new Set(rows.map(([file]) => file)).size, rows.length, 'Unique index paths');
+            return new Map(rows);
+          };
+          const treeRows = commit => {
+            const rows = git('ls-tree', '-r', '-z', commit).split('\0').filter(Boolean).map(line => {
+              const matched = /^(100(?:644|755)) blob ([0-9a-f]{40})\t(.+)$/.exec(line);
+              assert(matched, 'Actual regular path/mode/blob tree tuple');
+              return [matched[3], {mode:matched[1], blob:matched[2]}];
+            });
+            assert.equal(new Set(rows.map(([file]) => file)).size, rows.length, 'Unique tree paths');
+            return new Map(rows);
+          };
+          const ordered = rows => [...rows].sort(([left],[right]) => left.localeCompare(right));
+          const cleanHead = git('rev-parse', 'HEAD').trim(), cleanTree = git('rev-parse', 'HEAD^{tree}').trim();
+          assert.deepEqual(git('rev-list', '--parents', '-n', '1', 'HEAD').trim().split(' '), [cleanHead, env.GRID_CLEAN_PRODUCT_BASE], 'Clean QA is the direct PR530 child');
+          assert.equal(git('rev-parse', env.GRID_CLEAN_PRODUCT_BASE + '^{tree}').trim(), env.GRID_CLEAN_PRODUCT_BASE_TREE);
+          assert.equal(fs.readFileSync(out + '/head.txt','utf8').trim(), cleanHead);
+          assert.equal(fs.readFileSync(out + '/tree.txt','utf8').trim(), cleanTree);
+          const base = treeRows(env.GRID_CLEAN_PRODUCT_BASE);
+          const current = indexRows(fs.readFileSync(out + '/source-before.txt', 'utf8'));
+          const old = indexRows(fs.readFileSync(out + '/reference-source.txt', 'utf8'));
+          assert.deepEqual(ordered(indexRows(git('ls-files','--stage','-z'),'\0')), ordered(current));
+          assert.deepEqual(ordered(treeRows(cleanHead)), ordered(current), 'Clean index joins exact committed tree tuples');
+          assert.deepEqual([base.size,current.size,old.size],[5783,5786,5787]);
+          const allowedClean = [hook, test, plan, workflow];
+          const cleanDelta = [...new Set([...base.keys(), ...current.keys()])].filter(file => {
+            const before = base.get(file), after = current.get(file);
+            return before?.mode !== after?.mode || before?.blob !== after?.blob;
+          }).sort();
+          assert.deepEqual(cleanDelta, [...allowedClean].sort(), 'Exactly one product Hook change and three owned new leaves');
+          assert.equal(base.get(hook)?.blob, '1c84994a36c8ac51e4020823d899c2342be60271');
+          assert.equal(current.get(hook)?.mode, base.get(hook)?.mode);
+          for (const file of [test, plan, workflow]) assert(!base.has(file) && current.get(file)?.mode === '100644', file + ' exact owned new leaf');
+          assert(!current.has(helper), 'Tracked full browser helper is excluded from clean QA');
+          assert.equal(old.get(helper)?.blob, env.GRID_NATIVE_HELPER);
+          assert.equal(old.get(workflow)?.blob, env.GRID_REFERENCE_WORKFLOW);
+          assert(current.get(workflow)?.blob && current.get(workflow).blob !== old.get(workflow).blob, 'Clean QA uses its own workflow body');
+          for (const file of denied) assert(!old.has(file) && !current.has(file), file + ' untracked QA source');
+          for (const [file,want] of Object.entries(pins)) {
+            assert.equal(current.get(file)?.blob, want, file + ' exact clean pin');
+            assert.equal(old.get(file)?.blob, want, file + ' exact full pin');
+          }
+          const product = (rows, omit) => ordered([...rows].filter(([file]) => !omit.has(file)));
+          assert.deepEqual(product(current,new Set([workflow])), product(old,fullOnly), 'All 5785 product path/mode/blob tuples are identical');
+          assert.deepEqual([base,current,old].map(rows => [...rows.keys()].filter(sourceScope).length), [4660,4661,4662]);
+          const scoped = (rows, omit) => ordered([...rows].filter(([file]) => (sourceScope(file) || configs.includes(file)) && !omit.has(file)));
+          const sourceConfigRows = scoped(current,new Set());
+          assert.equal(sourceConfigRows.length, 4672);
+          assert.deepEqual(sourceConfigRows,scoped(old,fullOnly),'Every 4661 code and 11 root configuration path/mode/blob tuple');
+          for (const file of configs) assert(current.has(file) && old.has(file),file + ' required root configuration');
+          for (const [file,tuple] of current) {
+            const stat = fs.lstatSync(file);
+            assert(stat.isFile(),file + ' physical regular source body');
+            assert.equal((stat.mode & 0o111) !== 0, tuple.mode === '100755',file + ' physical source executable mode');
+            assert.equal(blob(fs.readFileSync(file)),tuple.blob,file + ' physical source bytes join tree');
+          }
+
+          const inventory = (directory,prefix = '') => fs.readdirSync(directory,{withFileTypes:true}).sort((a,b) => a.name.localeCompare(b.name)).flatMap(entry => {
+            const file = path.join(directory,entry.name);
+            const relative = prefix + entry.name;
+            if (entry.isDirectory()) return inventory(file,relative + '/');
+            assert(entry.isFile(),relative + ' regular dist file');
+            const body = fs.readFileSync(file);
+            return [{path:relative,bytes:body.length,sha256:sha(body)}];
+          });
+          const actual = inventory('dist'), reference = inventory(env.GRID_REFERENCE_DIST);
+          assert.deepEqual([actual.length,reference.length],[850,850]);
+          assert.deepEqual(actual,reference,'Every clean built path and byte equals the qualified full build');
+          const distManifestSHA256 = sha(JSON.stringify(reference));
+          assert.equal(distManifestSHA256,env.GRID_REFERENCE_DIST_MANIFEST);
+          const retainedManifest = read('dist-before.json').map(row => {
+            assert.deepEqual(Object.keys(row).sort(),['bytes','file','sha256']);
+            assert(row.file.startsWith('dist/'));
+            return {path:row.file.slice(5),bytes:row.bytes,sha256:row.sha256};
+          });
+          assert.deepEqual(retainedManifest,reference,'Exact full retained build inventory and tar join');
+          assert(bytes('dist-before.json').equals(bytes('dist-after.json')));
+          assert(bytes('source-before.txt').equals(bytes('source-after.txt')));
+          assert(bytes('source-before.txt').equals(fs.readFileSync(out + '/reference-source.txt')));
+          const referenceHead = bytes('head.txt').toString('utf8').trim(), referenceTree = bytes('tree.txt').toString('utf8').trim();
+          const run = readOutput('reference-run.json'), meta = readOutput('reference-artifact.json');
+          assert.deepEqual([referenceHead,referenceTree],[env.GRID_REFERENCE_HEAD,env.GRID_REFERENCE_TREE]);
+          const full = read('admission.json'), native = read('native-admission.json'), unit = read('fixed-admission.json'), holds = read('final-holds.json');
+          assert.deepEqual([full.status,full.qualification,full.head,full.tree,full.hook,full.helper,full.nativeOuter], [
+            'passed','fresh-soccer-grid-selection-ownership-full-scope',referenceHead,referenceTree,env.GRID_FIXED_HOOK_BLOB,env.GRID_NATIVE_HELPER,env.GRID_NATIVE_OUTER,
+          ]);
+          assert.deepEqual([full.trackedBodies,full.sourceRows,full.cleanSourceRows,full.rootConfigurations,full.distFiles,full.immutableCaps,full.readers],[5787,4662,4661,11,850,16,20]);
+          assert.deepEqual(full.unit,{actualCases:18,actualPasses:18,actualFailures:0,newFrames:32,priorFrames:56,totalFrames:88,actions:28,requests:22,transportLegs:70,wholeAOnlyLiteralHeld:true,wholePriorRawLiteralHeld:true,wholeFixedRawLiteralHeld:true});
+          assert.deepEqual(full.nativeReceipt,native);
+          assert.deepEqual([full.nativeJourneys,full.nativeContexts,full.nativePngs],[3,3,6]);
+          assert.deepEqual(full.distTar,{file:'dist.tgz',bytes:bytes('dist.tgz').length,sha256:env.GRID_REFERENCE_TAR});
+          assert.equal(sha(bytes('dist.tgz')),env.GRID_REFERENCE_TAR);
+          assert.equal(blob(bytes('native-admission-script.mjs')),env.GRID_NATIVE_OUTER);
+          const referenceChecks = (() => {
+            const admitted = {"run":42352684859,"job":128343999903,"artifact":13567030071,"head":"ebf0b1dab27ff8d9ad0f784a368027b740829649","tree":"9c0ff5ec707a988463eee46712bd2153256be947","workflow":"2712779a898328ab7862908d7914a36ef401246e","helper":"6653a8d8bb60cd29243a9634ac2ba09d7cd2d0a0","outer":"bc0e1b1e42fda2601612c0b0c8ab5b5f6e645989","zipBytes":64353728,"zipSHA256":"1dab365a83f0583804f58159c3b2b825ad3bffe40f14d50288cce468a3e994c1","bodies":467,"bodyBytes":109643365,"tarSHA256":"4ea203d6386082e262ef6ae719970e0d0e595ea963e6327524439aa1f3c3781d","distTupleSHA256":"10b1a290480cbe1ba69ccbafedafd48c5c82951d7fdd68cbd58fe78cb20f8a70","nativeCensus":{"journeys":3,"contexts":3,"frames":75,"actions":18,"startupClicks":6,"mouseActions":15,"keyboardActions":3,"layouts":48,"preparations":24,"wheels":4,"navigations":6,"viewportPNGs":6,"firstPartyReads":123,"corsRequests":0,"validatorAttempts":3,"rarityReads":2,"selectionWritesIntercepted":1,"completionAttempts":0},"rootVisualSix":"0fff14e914a3d17e1272bf2da811e08f6e9c25a10930507fcaa6b5c7acb18d79","rootNonnativeAudit":"4877be129cb7c75facbbc71222ee65fbb309ae2411ff01f77d8c542d3e0738a1","independentNativeAudit":"a7329bc880b9e7b41e3097b0eb5929816c1c2184a9b5b6eb0fbca401cc54c0ee","independentNonnativeAudit":"200be3c9c1fb5afa0f4463e5062c7fef9e32a469b2b330bfe25ad2d266b6b21b"};
+            const bodies = [{"file":"admission.json","bytes":14066,"sha256":"52c64e94659dfba598cde9f4120dbfe47aee5405cdb44b890099f95ba85c3590"},{"file":"fixed-admission.json","bytes":24798,"sha256":"8cd85523ae8b05f1ac412b84557d31799063d0ffc3433e58b5e5de3e0fadccd5"},{"file":"native-admission.json","bytes":9391,"sha256":"dd95fe3b413e78bc8db4d4915f2e09441c7a470d19323a25471def060f9bceaf"},{"file":"packet-custody.json","bytes":2010,"sha256":"503c0b6a22d8f0f6c1f36164677e372d84a4d985d7b9b98e3ab5d2501e82baa3"},{"file":"source-join.json","bytes":3744,"sha256":"ae4dac2d81e4a22f58c1f0142bf2dc300afefb416f7f19d63afa47da164f5c2a"},{"file":"fixed-raw-join.json","bytes":724,"sha256":"0b1da639c5c3e2de8db12d909b0516b6810faf6bbc31beb57ca0ca7a81a95373"},{"file":"final-holds.json","bytes":409,"sha256":"b32c283886ebf3f66b4868b943f80100e87cda68771336c039bbd51a43bb49a7"},{"file":"raw.json","bytes":391364,"sha256":"c9bc6b5b2f950a73c2456306a31cc2c2dafe7efba87e0be2c26751a880fcb821"},{"file":"prior-submission-raw.json","bytes":667882,"sha256":"7519caac4e812d063b8fc74ae832ddc8215be67fcb20c73c5b4946c74d27f55a"},{"file":"preserve-aOnly.literal.json","bytes":81284,"sha256":"da562826df59b2352b24c48154ca5aff83e49852a825a44797a322e79bd1c62f"},{"file":"controls-reference/packet/controls-admission.json","bytes":6628,"sha256":"89c4045e292a26f8ae1204b969070e57d69f8acfccbfef0d1ca159ba31951a4d"}];
+            const photos = [{"file":"browser/1280-pending.png","bytes":83838,"sha256":"36c8b261de9700227ef9044c581fbd9c408bf7f8a5ff4374f122a440083553ab"},{"file":"browser/1280-settled.png","bytes":84558,"sha256":"09cb2392f7a70572cc811325fcfb11a771a946af468318e88e6d343a0eb74e6d"},{"file":"browser/320-pending.png","bytes":36726,"sha256":"02845d520868a0960dec532febfb9a812d13a9611c1399bdbad8b01f813badea"},{"file":"browser/320-settled.png","bytes":42471,"sha256":"88e31f994168953a28e1422e1a1f7a99c90d25c930feeef7cecac6ec4f00f964"},{"file":"browser/390-pending.png","bytes":56401,"sha256":"d940913ada21f84bfef05e59ce8888ea6830c4dbe36c4d19f4a7e9d4adf01298"},{"file":"browser/390-settled.png","bytes":62812,"sha256":"d61a5df0ad806087f0e6dedc74a8b9d7ea0754a7041d145a4a4030ef5cb7fb04"}];
+            for (const row of [...bodies,...photos]) {
+              const b = bytes(row.file);
+              assert.deepEqual([b.length,sha(b)],[row.bytes,row.sha256],row.file+' exact admitted full body');
+            }
+            assert.deepEqual([run.id,meta.id,referenceHead,referenceTree,env.GRID_REFERENCE_WORKFLOW,env.GRID_NATIVE_HELPER,env.GRID_NATIVE_OUTER,meta.size_in_bytes,meta.digest,distManifestSHA256],
+              [admitted.run,admitted.artifact,admitted.head,admitted.tree,admitted.workflow,admitted.helper,admitted.outer,admitted.zipBytes,'sha256:'+admitted.zipSHA256,admitted.distTupleSHA256]);
+            assert.deepEqual([run.status,run.conclusion,full.head,full.tree,full.distTar.sha256],['completed','success',admitted.head,admitted.tree,admitted.tarSHA256]);
+            const source=read('source-join.json'), custody=read('packet-custody.json'), raw=read('fixed-raw-join.json');
+            assert.deepEqual([source.status,source.head,source.tree,source.workflowBlob,source.trackedRows,source.sourceRows,source.cleanSourceRows,source.heldFixedRows],
+              ['passed',admitted.head,admitted.tree,admitted.workflow,5787,4662,4661,5785]);
+            assert.equal(source.rootConfigurations.length,11);
+            assert.deepEqual([custody.status,custody.controlsRerun,raw.status,raw.freshUnitRAWByteEqual,raw.freshPriorRAWByteEqual,raw.freshAOnlyByteEqual],['passed',false,'passed',true,true,true]);
+            assert.deepEqual([unit.status,unit.actualCases,unit.actualPasses,unit.actualFailures,unit.newFrames,unit.priorFrames],
+              ['passed-fixed-soccer-grid-selection-ownership-qualification',18,18,0,32,56]);
+            for (const file of ['raw.json','prior-submission-raw.json','preserve-aOnly.literal.json']) assert(bytes(file).equals(bytes('fixed-reference/packet/'+file)),file+' entire fresh full unit bytes');
+            const ctrl=read('controls-reference/packet/controls-admission.json');
+            assert.deepEqual([ctrl.status,ctrl.source.head,ctrl.source.tree,ctrl.exactSourceIndexLocksInstalledOfflineRestored,ctrl.totals.arms,ctrl.totals.rows,ctrl.totals.passes,ctrl.totals.namedOriginalBusinessReds],
+              ['passed-three-physical-grid-selection-control-arms','2264389687f5a95ce7b195e6ed891ffc38dbcc42','f1be383a949787774128a9aa6992af6b87210a94',true,3,54,51,3]);
+            assert.deepEqual(native.census,admitted.nativeCensus);
+            assert.deepEqual([native.status,native.route,native.hook,native.helper,native.census.contexts,native.census.viewportPNGs,native.census.validatorAttempts,native.census.rarityReads,native.census.selectionWritesIntercepted,native.census.completionAttempts],
+              ['passed','/soccer-grid',env.GRID_FIXED_HOOK_BLOB,admitted.helper,3,6,3,2,1,0]);
+            assert.deepEqual([holds.status,holds.trackedBodies,holds.scopedSourceRows,holds.cleanSourceRows,holds.rootConfigurations,holds.installedLockedVersions,holds.indexUnchanged,holds.sourceBytesUnchanged,holds.locksUnchanged,holds.distHeld,holds.retainedPacketsHeld,holds.offlineBytes],
+              ['passed',5787,4662,4661,11,521,true,true,true,true,true,0]);
+            return {status:'passed',referenceRun:admitted.run,referenceArtifact:admitted.artifact,exactReceiptPins:bodies,retainedNativePNGs:photos.length,actualNativeCensus:native.census,completeUnitAndControlReferencesHeld:true};
+          })();
+          assert.equal(referenceChecks.status,'passed','Reviewed actual full receipt validator must complete');
+          const result = {
+            status:'passed', cleanHead, cleanTree, cleanProductBase:env.GRID_CLEAN_PRODUCT_BASE, cleanProductBaseTree:env.GRID_CLEAN_PRODUCT_BASE_TREE,
+            cleanDelta, referenceRun:run.id, referenceWorkflowHead:referenceHead, referenceApp:referenceHead, referenceTree,
+            referenceQualification:full.qualification, referenceArtifact:meta.id, referenceZipSHA256:env.GRID_REFERENCE_ZIP,
+            referenceTarSHA256:env.GRID_REFERENCE_TAR, referenceWorkflowBlob:env.GRID_REFERENCE_WORKFLOW,
+            heldProductRows:5785, sourceRows:4661, sourceAndConfigurationRows:sourceConfigRows.length,
+            rootConfigurations:configs.map(file => ({file,...current.get(file)})),
+            excludedFullQA:[...fullOnly], finalProductForbiddenPaths:[...fullOnly,...denied], generatedPatches:[],
+            distFiles:actual.length, distManifestSHA256, dist:actual, referenceChecks,
+            limits:'Fresh clean types, product-name fence, normal production build and exact source and built-byte join. Unit, native, control, reader and cap evidence comes from the authenticated full reference. The frozen qualified plan is held. Final product excludes this round QA workflow, helper, outer and controller. No provider or release credit.',
+          };
+          fs.writeFileSync(out + '/reference-build-join.json',JSON.stringify(result,null,2));
+          console.log('PASS all 4661 source paths, 11 root configurations and 850 built file bodies');
+          NODE
+      - name: Final source locks installed versions and offline holds
+        if: always()
+        run: |
+          set -euo pipefail
+          git ls-files -s > soccer-grid-selection-ownership-clean-join/source-after.txt
+          cmp soccer-grid-selection-ownership-clean-join/source-before.txt soccer-grid-selection-ownership-clean-join/source-after.txt
+          git diff --exit-code HEAD -- .
+          sha256sum package.json package-lock.json > soccer-grid-selection-ownership-clean-join/locks-after.txt
+          cmp soccer-grid-selection-ownership-clean-join/locks-before.txt soccer-grid-selection-ownership-clean-join/locks-after.txt
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const before=JSON.parse(fs.readFileSync('soccer-grid-selection-ownership-clean-join/installed-before.json')),lock=JSON.parse(fs.readFileSync('package-lock.json'));
+          const after=Object.keys(lock.packages).filter(p=>p.startsWith('node_modules/')&&fs.existsSync(p+'/package.json')).map(p=>[p,JSON.parse(fs.readFileSync(p+'/package.json')).version]);assert.equal(after.length,521);for(const[p,v]of after)assert.equal(v,lock.packages[p].version,p);assert.deepEqual(after,before);
+          fs.writeFileSync('soccer-grid-selection-ownership-clean-join/installed-final.json',JSON.stringify(after));
+          assert(fs.existsSync('soccer-grid-selection-ownership-clean-join/offline.log'));assert.equal(fs.statSync('soccer-grid-selection-ownership-clean-join/offline.log').size,0);
+          NODE
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: soccer-grid-selection-ownership-clean-build-join-${{ github.run_id }}
+          path: soccer-grid-selection-ownership-clean-join
+          retention-days: 14
+          if-no-files-found: error
