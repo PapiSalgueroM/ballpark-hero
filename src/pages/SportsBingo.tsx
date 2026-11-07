@@ -197,7 +197,7 @@ export default function SportsBingo() {
       });
     }, 1000);
     return () => clearInterval(t);
-  }, [ticking]);
+  }, [ticking, packIndex]);
 
   useEffect(() => {
     if (secondsLeft !== 0) return;
