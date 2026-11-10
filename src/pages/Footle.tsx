@@ -41,6 +41,7 @@ const Index = () => {
     isLoading,
     isLoadingPool,
     practiceRun,
+    practiceBlock,
     practiceSaveFailed,
     practiceComplete,
     practiceReady,
@@ -66,7 +67,7 @@ const Index = () => {
   const unlimitedPanel = useRevealScroll<HTMLElement>(`${mode}:${difficulty}:${unlimitedDeck?.seen.length}:${gameStatus}:${unlimitedPaused}`, {
     enabled: inUnlimited && !isLoadingPool && (gameStatus !== 'playing' || guesses.length === 0), skipFirst: false,
   });
-  const practicePlaying = inPractice && !!practiceRun && !practiceComplete;
+  const practicePlaying = inPractice && !!practiceRun && !practiceComplete && !!targetPlayer;
   const searchArea = useRevealScroll<HTMLDivElement>(returnSerial);
   const practicePanel = useRevealScroll<HTMLElement>(`${inPractice}:${practiceRun?.index}:${gameStatus}`, { enabled: inPractice && !showRules, skipFirst: false });
   const reviewGuesses = useMemo(() => {
@@ -367,7 +368,9 @@ const Index = () => {
                 <ol className="mt-3 grid grid-cols-5 gap-2" aria-label="Run progress">
                   {practiceRun.rounds.map((round, index) => <li key={index} aria-current={index === practiceRun.index ? 'step' : undefined} className={cn('rounded-lg border py-2 text-center text-sm font-semibold', round.status === 'won' ? 'border-correct bg-correct/15 text-foreground' : round.status === 'lost' ? 'border-border bg-secondary text-muted-foreground' : index === practiceRun.index ? 'border-primary text-primary' : 'border-border text-muted-foreground')}><span aria-hidden="true">{round.status === 'won' ? '✓' : round.status === 'lost' ? '×' : index + 1}</span><span className="sr-only">Puzzle {index + 1}: {round.status === 'won' ? 'solved' : round.status === 'lost' ? 'missed' : index === practiceRun.index ? 'current' : 'up next'}</span></li>)}
                 </ol>
-                {gameStatus !== 'playing' && targetPlayer ? (
+                {practiceBlock ? (
+                  <p role="status" className="mt-3 text-sm text-muted-foreground">{practiceBlock === 'loading' ? "Checking today's Daily..." : "Finish today's Daily to resume this puzzle."}</p>
+                ) : gameStatus !== 'playing' && targetPlayer ? (
                   <div className="mt-4" data-testid="practice-feedback">
                     <p role="status" className="font-semibold text-foreground">{gameStatus === 'won' ? 'Solved!' : 'The answer was'} {targetPlayer.name}</p>
                     <p className="mt-1 text-sm text-muted-foreground">{targetPlayer.club} · <FlagImg name={targetPlayer.nationality} size={12} showLabel /> · {targetPlayer.position}</p>
