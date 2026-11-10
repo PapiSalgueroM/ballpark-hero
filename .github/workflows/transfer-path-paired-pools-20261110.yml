@@ -1,0 +1,408 @@
+name: Transfer Path paired puzzle and career pools original
+on:
+  push:
+    branches: [codex/transfer-path-paired-pools-original-qa-20261110]
+permissions:
+  actions: read
+  contents: read
+jobs:
+  original:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      TZ: UTC
+      SIM_NETWORK: offline
+      SIM_OFFLINE_RECEIPT: transfer-path-paired-pools-original/offline.log
+      TRANSFER_PATH_PAIRED_POOLS_RAW: transfer-path-paired-pools-original/public-cases.raw.json
+      BASE_HEAD: 'c9b082d04b51e1538eb78fa7791b43579fd09783'
+      BASE_TREE: '96ee0f16e764285a6bb6ed63085c6812da7ec77a'
+      TEST_BLOB: '07b839786a9bf59b94e52a28a56080a5caca5cb4'
+      PLAN_BLOB: 'b9c2732f435354a2805a70dc6aed14aa3ce97d82'
+      EVIDENCE: transfer-path-paired-pools-original
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24.22.1
+          cache: npm
+      - name: Authenticate active entry and exact original Transfer Path source
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          test ! -e "$EVIDENCE"
+          mkdir "$EVIDENCE"
+          touch "$SIM_OFFLINE_RECEIPT"
+          git rev-parse HEAD > "$EVIDENCE/head.txt"
+          git rev-parse 'HEAD^{tree}' > "$EVIDENCE/tree.txt"
+          git ls-files -s > "$EVIDENCE/source-before.txt"
+          sha256sum package.json package-lock.json > "$EVIDENCE/locks-before.txt"
+          git diff --exit-code HEAD -- .
+          git fetch --no-tags --depth=1 origin "$BASE_HEAD"
+          node --input-type=module <<'NODE'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          import { createHash } from 'node:crypto';
+          import { execFileSync } from 'node:child_process';
+
+          const { BASE_HEAD, BASE_TREE, TEST_BLOB, PLAN_BLOB, EVIDENCE } = process.env;
+          const repo = 'PapiSalgueroM/ballpark-hero';
+          assert.equal(process.env.GITHUB_REPOSITORY, repo);
+          const runId = 42770957656;
+          const api = process.env.GITHUB_API_URL + '/repos/' + repo;
+          const request = async path => {
+            const response = await fetch(api + path, {
+              headers: {
+                Accept: 'application/vnd.github+json',
+                Authorization: 'Bearer ' + process.env.GH_TOKEN,
+                'X-GitHub-Api-Version': '2022-11-28',
+              },
+              redirect: 'error',
+            });
+            assert.equal(response.status, 200, 'preflight API ' + path);
+            return response.json();
+          };
+          const [run, jobs, artifacts] = await Promise.all([
+            request('/actions/runs/' + runId),
+            request('/actions/runs/' + runId + '/jobs?per_page=100'),
+            request('/actions/runs/' + runId + '/artifacts?per_page=100'),
+          ]);
+          const workflow = '.github/workflows/transfer-path-paired-pools-20261110.yml';
+          assert.deepEqual([run.id,run.status,run.conclusion,run.event,run.run_attempt,run.path,run.head_sha,run.head_commit.tree_id,run.repository.full_name],
+            [runId,'completed','success','push',1,workflow,'12bf3ddedc670859c98907b12227ce4f3db27e48','52873da939dfdc3b1c1e23c0956ce343997f465f',repo]);
+          assert.equal(run.head_branch,'codex/transfer-path-paired-pools-preflight-qa-20261110');
+          assert.equal(jobs.jobs.length,1);
+          const [job] = jobs.jobs;
+          assert.deepEqual([job.id,job.status,job.conclusion,job.head_sha,job.steps.length],[129678374522,'completed','success',run.head_sha,11]);
+          assert(job.steps.every(step => step.status === 'completed' && step.conclusion === 'success'));
+          assert.equal(artifacts.artifacts.length,1);
+          const [artifact] = artifacts.artifacts;
+          assert.deepEqual([artifact.id,artifact.name,artifact.expired,artifact.size_in_bytes,artifact.digest,artifact.workflow_run.id,artifact.workflow_run.head_sha],
+            [13741971510,'transfer-path-paired-pools-active-preflight-'+runId,false,1014067,'sha256:1b3eaa6d75bdf7b90feee5e5f1c8e77ba5719243247dd8bb71430a2ed6943070',runId,run.head_sha]);
+          delete process.env.GH_TOKEN;
+          const git = (...args) => execFileSync('git', args, { encoding: 'utf8', maxBuffer: 16 * 1024 * 1024 }).trimEnd();
+          const head = git('rev-parse', 'HEAD');
+          assert.equal(head, process.env.GITHUB_SHA);
+          assert.deepEqual(git('rev-list', '--parents', '-n', '1', 'HEAD').split(' '), [head, BASE_HEAD]);
+          assert.equal(git('rev-parse', BASE_HEAD + '^{tree}'), BASE_TREE);
+          const test = 'src/hooks/useTransferPathPairedPools.test.ts';
+          const plan = 'docs/plans/2026-11-10-transfer-path-paired-pools.md';
+          const added = [test, plan, workflow].sort();
+          const held = {"src/App.tsx":"8bfedf7aaa1d076e0f0c8e2216c7e46632cd8a33","src/data/gameRegistry.ts":"f560b40a74d1468ac72dfde4ee6fec6635a9a255","public/transfer-path/index.html":"55a6a96c96a21de551bf12efbe53757e1bdd2af3","src/pages/TransferPath.tsx":"74e48159c539079a99b358e738a3a2c828359e69","src/components/transfer-path/TransferPathBoard.tsx":"d5993545f48a198bf9e4a32ad181bad339ef366e","src/hooks/useTransferPath.ts":"005fbf70b087ae9ea47e2ede3f099355456ecfb5","src/hooks/useTransferPath.test.ts":"fe49779c37bd733dafb56bb2276e759c634d6d8e","src/hooks/useTransferPathGuidance.test.ts":"38a39efeedeb115aec9f92f2ca2fd3b9fbed9db2","src/hooks/useDailyPuzzle.ts":"b8a0d6ba268efe0e728c4ee96fbc6c60fcc73846","src/lib/fetchCareerPlayers.ts":"05ba3b3e7893599e3566f00e75ca05e80ab6e872","src/lib/fetchTransferPathPuzzles.ts":"5cb9e10959b935207eec2e10880a87cf3abe4deb","src/lib/transferPathGraph.ts":"a848c5dfd30d7e376173540d1f32e498f9f07d2c","src/data/transferPathPuzzles.ts":"de47215436238890cc573ed9080fcb176b89a3eb","scripts/lib/offlineTransport.cjs":"0fda542a2649fe5da937c6976fd0f5b6073e74b6","index.html":"12598fe720eec4fc88d3d33c53ede612d018150c","package.json":"2ff64986fb76ebc51b706f2fd24765768874008a","package-lock.json":"97d6f12a052f25f400462938c241789a083f0bfe","vite.config.ts":"0112b6ac4f2ad80b2fc04f9ec2f7185300913e7d","tailwind.config.ts":"f83c4f4032d359bc9285828eac3b0961a46c6b17","postcss.config.js":"2aa7205d4b402a1bdfbe07110c61df920b370066","tsconfig.json":"6b68d80b7d92d0c4a5d774897f2bedfa95b42669","tsconfig.app.json":"51f581dd91641b4c1f1219f646788e73cf6bf00c","tsconfig.node.json":"3133162c20350e1741b94b8d2ff77b811bec8363","bun.lockb":"5d9d33a3bf4f45fa099e2aa3014149e034981149","bun.lock":"dff081dcd34a1aa928ddc90d910774a6b855dfe3"};
+          const pins = { ...held, [test]: TEST_BLOB, [plan]: PLAN_BLOB };
+          const sha = (algorithm, data) => createHash(algorithm).update(data).digest('hex');
+          for (const [file, want] of Object.entries(pins)) {
+            const bytes = fs.readFileSync(file);
+            assert.match(want, /^[0-9a-f]{40}$/);
+            assert.equal(git('rev-parse', 'HEAD:' + file), want);
+            assert.equal(sha('sha1', Buffer.concat([Buffer.from('blob ' + bytes.length + '\0'), bytes])), want, file);
+            if (Object.hasOwn(held, file)) assert.equal(git('rev-parse', BASE_HEAD + ':' + file), want, file);
+          }
+          assert.deepEqual(git('diff', '--name-only', BASE_HEAD, 'HEAD').split('\n').sort(), added);
+          const tree = ref => git('ls-tree', '-r', '-z', ref).split('\0').filter(Boolean);
+          const parent = tree(BASE_HEAD);
+          const current = tree('HEAD');
+          assert.equal(parent.length, 5793);
+          assert.equal(current.length, 5796);
+          assert.deepEqual(current.filter(row => !added.includes(row.split('\t')[1])), parent);
+          assert.equal(current.filter(row => /^(src|public|scripts)\//.test(row.split('\t')[1])).length, 4666);
+          fs.writeFileSync(EVIDENCE + '/source-receipt.json', JSON.stringify({
+            head, tree: git('rev-parse', 'HEAD^{tree}'), parent: BASE_HEAD, parentTree: BASE_TREE, pins,
+            ownedWorkflow: git('rev-parse', 'HEAD:' + workflow), heldRows: parent.length, trackedRows: current.length, sourceRows: 4666,
+            activePreflight: { run: run.id, head: run.head_sha, job: job.id, artifact: artifact.id, digest: artifact.digest },
+          }, null, 2));
+          NODE
+      - name: Install locked dependencies and freeze physical source
+        run: |
+          set -euo pipefail
+          npm ci 2>&1 | tee "$EVIDENCE/install.log"
+          cat > "$EVIDENCE/physical.mjs" <<'NODE'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          import { createHash } from 'node:crypto';
+          import { execFileSync } from 'node:child_process';
+          const stage = process.argv[2];
+          assert(['before', 'after'].includes(stage));
+          const out = process.env.EVIDENCE;
+          const index = execFileSync('git', ['ls-files', '-z'], { encoding: 'utf8' }).split('\0').filter(Boolean);
+          const source = index.map(file => {
+            const bytes = fs.readFileSync(file);
+            return [file, bytes.length, createHash('sha256').update(bytes).digest('hex')];
+          });
+          const lock = JSON.parse(fs.readFileSync('package-lock.json', 'utf8'));
+          const installed = Object.entries(lock.packages).filter(([file]) =>
+            file.startsWith('node_modules/') && fs.existsSync(file + '/package.json')
+          ).map(([file, entry]) => {
+            const version = JSON.parse(fs.readFileSync(file + '/package.json', 'utf8')).version;
+            assert.equal(version, entry.version, file);
+            return [file, version];
+          });
+          assert.equal(source.length, 5796);
+          assert.equal(installed.length, 521);
+          assert.equal(fs.statSync(process.env.SIM_OFFLINE_RECEIPT).size, 0);
+          for (const [name, data] of [['tracked', source], ['installed', installed]]) {
+            const body = JSON.stringify(data);
+            if (stage === 'after') assert.equal(body, fs.readFileSync(out + '/' + name + '-before.json', 'utf8'));
+            fs.writeFileSync(out + '/' + name + '-' + stage + '.json', body);
+          }
+          NODE
+          node "$EVIDENCE/physical.mjs" before
+      - name: Proper app types
+        run: |
+          set -euo pipefail
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee "$EVIDENCE/types.log"
+      - name: Require both original pool mismatches and all preserved controls
+        run: |
+          set -euo pipefail
+          result=0
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node_modules/.bin/vitest run \
+            src/hooks/useTransferPathPairedPools.test.ts src/hooks/useTransferPath.test.ts src/hooks/useTransferPathGuidance.test.ts \
+            --reporter=default --reporter=json --outputFile="$EVIDENCE/vitest.json" > "$EVIDENCE/vitest.log" 2>&1 || result=$?
+          cat "$EVIDENCE/vitest.log"
+          printf '%s\n' "$result" > "$EVIDENCE/vitest-exit.txt"
+          test "$result" -eq 1
+          test -s "$TRANSFER_PATH_PAIRED_POOLS_RAW"
+          node --input-type=module <<'NODE'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          import { createHash } from 'node:crypto';
+          const out = process.env.EVIDENCE;
+          const report = JSON.parse(fs.readFileSync(out + '/vitest.json', 'utf8'));
+          const preserved = {"src/hooks/useTransferPath.test.ts":2,"src/hooks/useTransferPathGuidance.test.ts":8};
+          const names = [{"title":"uses the live puzzle and career pools when both arrive","marker":null},{"title":"keeps both bundled pools when both providers are empty","marker":null},{"title":"keeps both bundled pools when only live puzzles arrive","marker":"TRANSFER_PATH_PUZZLES_ONLY"},{"title":"keeps both bundled pools when only live careers arrive","marker":"TRANSFER_PATH_PLAYERS_ONLY"}];
+          const source = 'src/hooks/useTransferPathPairedPools.test.ts';
+          const total = 10 + names.length;
+          const failures = names.filter(row => row.marker);
+          assert.equal(failures.length,2);assert.equal(new Set(failures.map(row=>row.marker)).size,2);
+          assert.deepEqual([report.numTotalTests,report.numPassedTests,report.numFailedTests,report.numPendingTests,report.numTodoTests,report.success],
+            [total,total-2,2,0,0,false]);
+          assert.equal(report.testResults.length,3);
+          for (const key of ['errors','unhandledErrors','testExecutionErrors']) if (Object.hasOwn(report,key)) assert.deepEqual(report[key],[]);
+          const log = fs.readFileSync(out + '/vitest.log', 'utf8');
+          assert(!/Unhandled Errors?|Unhandled Rejection|Uncaught Exception|Failed Suites|Worker exited|Test timed out/i.test(log));
+          const observed = [];
+          for (const [file,count] of Object.entries({...preserved,[source]:names.length})) {
+            const matching=report.testResults.filter(suite => suite.name.endsWith('/'+file));
+            assert.equal(matching.length,1,file);
+            const [suite]=matching;
+            const fresh=file===source;
+            assert.deepEqual([suite.status,suite.message,suite.assertionResults.length],[fresh?'failed':'passed','',count],file);
+            if(fresh) assert.deepEqual(suite.assertionResults.map(row=>row.title).sort(),names.map(row=>row.title).sort());
+            for(const row of suite.assertionResults) {
+              const business=fresh ? names.find(name=>name.title===row.title)?.marker : null;
+              assert.equal(row.status,business?'failed':'passed',row.fullName);
+              assert.equal(row.failureMessages.length,business?1:0,row.fullName);
+              if(business) assert(row.failureMessages[0].startsWith('AssertionError: '+business+':'),row.fullName);
+            }
+            observed.push({file,cases:count,passes:fresh?count-2:count});
+          }
+          const raw=fs.readFileSync(process.env.TRANSFER_PATH_PAIRED_POOLS_RAW);
+          const evidence=JSON.parse(raw.toString('utf8'));
+          const checks=(()=>{
+          const dateET = '2026-11-06';
+          const now = '2026-11-07T02:30:00.000Z';
+          const saveKey = 'transfer-path-daily-' + dateET;
+          const families = {};
+          for (const family of ['Bundled', 'Live']) {
+            const puzzles = [];
+            const players = [];
+            for (const round of ['Daily', 'First', 'Second']) {
+              const prefix = 'Fixture ' + family + ' ' + round;
+              const clubA = prefix + ' Club A';
+              const clubB = prefix + ' Club B';
+              const spell = (club, season) => ({ club, season, goals: 0, assists: 0, appearances: 1, marketValue: 1 });
+              const player = (suffix, career) => ({ name: prefix + ' ' + suffix, nationality: 'Fixture Nation', position: 'CM', career });
+              puzzles.push({
+                id: 'fixture-' + family.toLowerCase() + '-' + round.toLowerCase(),
+                playerA: prefix + ' Start', playerB: prefix + ' Target', minSteps: 2,
+                hint: prefix + ' route hint', active: null, europe: null,
+              });
+              players.push(
+                player('Start', [spell(clubA, '2020-2021')]),
+                player('Bridge', [spell(clubA, '2020-2021'), spell(clubB, '2021-2022')]),
+                player('Target', [spell(clubB, '2021-2022')]),
+                player('Wrong Season', [spell(clubA, '2019-2020')]),
+              );
+            }
+            families[family.toLowerCase()] = { puzzles, players };
+          }
+          
+          const scenarios = [
+            { key: 'pairedLive', puzzleFamily: 'live', careerFamily: 'live', first: 'puzzles', marker: null },
+            { key: 'pairedFallback', puzzleFamily: 'bundled', careerFamily: 'bundled', first: 'players', marker: null },
+            { key: 'puzzlesOnly', puzzleFamily: 'live', careerFamily: 'bundled', first: 'puzzles', marker: 'TRANSFER_PATH_PUZZLES_ONLY' },
+            { key: 'playersOnly', puzzleFamily: 'bundled', careerFamily: 'live', first: 'players', marker: 'TRANSFER_PATH_PLAYERS_ONLY' },
+          ];
+          const sha = bytes => createHash('sha256').update(bytes).digest('hex');
+          assert.deepStrictEqual(Object.keys(evidence), ['schema', 'now', 'dateET', 'fixtures', 'cases']);
+          assert.strictEqual(evidence.schema, 1);
+          assert.strictEqual(evidence.now, now);
+          const etParts = new Intl.DateTimeFormat('en', {
+            timeZone: 'America/New_York', year: 'numeric', month: '2-digit', day: '2-digit',
+          }).formatToParts(new Date(now));
+          const et = Object.fromEntries(etParts.map(({ type, value }) => [type, value]));
+          assert.strictEqual([et.year, et.month, et.day].join('-'), dateET);
+          assert.strictEqual(evidence.dateET, dateET);
+          assert.strictEqual(new Date(now).toISOString().slice(0, 10), '2026-11-07');
+          assert.strictEqual(Number(dateET.replace(/-/g, '')) % 3, 0);
+          assert.deepStrictEqual(evidence.fixtures, families);
+          assert.deepStrictEqual(Object.keys(evidence.cases), scenarios.map(({ key }) => key));
+          assert.ok(raw.equals(Buffer.from(JSON.stringify(evidence, null, 2) + '\n')), 'exact RAW serialization');
+          
+          function puzzleParts(family, index) {
+            const { puzzles, players } = families[family];
+            const bridge = players[index * 4 + 1];
+            return {
+              puzzle: puzzles[index], bridge: bridge.name, wrong: players[index * 4 + 3].name,
+              clubA: bridge.career[0].club, clubB: bridge.career[1].club,
+            };
+          }
+          
+          const caseChecks = [];
+          for (const { key, puzzleFamily, careerFamily, first, marker } of scenarios) {
+            const packet = evidence.cases[key];
+            const paired = puzzleFamily === careerFamily;
+            const intended = paired ? puzzleFamily : 'bundled';
+            const delivered = { puzzles: puzzleFamily === 'live', players: careerFamily === 'live', first };
+            const second = first === 'puzzles' ? 'players' : 'puzzles';
+            const providers = [
+              { pool: 'puzzles', phase: 'requested', rows: null },
+              { pool: 'players', phase: 'requested', rows: null },
+              ...[first, second].map(pool => ({
+                pool, phase: 'resolved', rows: delivered[pool] ? (pool === 'puzzles' ? 3 : 12) : 0,
+              })),
+            ];
+            const daily = puzzleParts(puzzleFamily, 0);
+            const expectedDaily = puzzleParts(intended, 0);
+            const expectedUnlimited = puzzleParts(intended, 1);
+            const terminal = paired ? 'won' : 'gaveup';
+            const firstStep = { t: 'step', player: daily.bridge, club: daily.clubA };
+            const targetStep = { t: 'step', player: daily.puzzle.playerB, club: daily.clubB };
+            const save = (guesses, gameStatus) => JSON.stringify({
+              v: 1, date: dateET, puzzleIndex: 0, puzzleId: daily.puzzle.id, guesses, gameStatus,
+            });
+            const saveTape = paired
+              ? [
+                save([firstStep], 'playing'),
+                save([firstStep, targetStep], 'playing'),
+                save([firstStep, targetStep, { t: 'won' }], 'won'),
+              ]
+              : [save([{ t: 'give' }], 'lost')];
+            const saved = saveTape[saveTape.length - 1];
+            const writes = saveTape.map(value => ({ area: 'local', key: saveKey, value }));
+          
+            const invoke = (label, type) => ({ label, type, name: null, result: null });
+            const move = (label, name, club) => ({ label, type: 'move', name, result: { ok: club !== null, club } });
+            const actions = [
+              move('daily-wrong-season', expectedDaily.wrong, null),
+              move('daily-bridge', expectedDaily.bridge, paired ? expectedDaily.clubA : null),
+              ...(!paired ? [invoke('daily-terminal', 'give-up')] : []),
+              invoke('unlimited-ready', 'switch-to-unlimited'),
+              move('unlimited-bridge', expectedUnlimited.bridge, paired ? expectedUnlimited.clubA : null),
+              ...(!paired ? [invoke('unlimited-terminal', 'give-up')] : []),
+              invoke('unlimited-next', 'next-puzzle'),
+            ];
+          
+            function frame(label, index, status, dailyFinished, poolPending = false) {
+              const family = poolPending ? 'bundled' : puzzleFamily;
+              const careers = poolPending ? 'bundled' : careerFamily;
+              const { puzzle, bridge, clubA, clubB } = puzzleParts(family, index);
+              const mode = index === 0 ? 'daily' : 'unlimited';
+              const won = status === 'won';
+              const moreHelp = status === 'building' && family === careers ? {
+                doors: {
+                  total: 1, onRoute: 1, byClub: [{ club: clubA, players: 1, onRoute: 1 }],
+                  intoTotal: 1, into: [{ club: clubB, players: 1 }],
+                },
+                lines: [
+                  '🔎 From ' + puzzle.playerA + ', 1 pool player shared a season with him: ' + clubA + ' 1. He is on a shortest route.',
+                  '🎯 Into ' + puzzle.playerB + ': 1 pool player, through ' + clubB + '.',
+                ],
+              } : null;
+              return {
+                label, puzzle, chain: won ? [puzzle.playerA, bridge, puzzle.playerB] : [puzzle.playerA],
+                connections: won ? [null, clubA, clubB] : [null],
+                status, score: won ? 1000 : 0, mode, unlimitedIndex: index === 2 ? 1 : 0,
+                isLoading: false, isLoadingPool: poolPending, rule: 'classic', activeRule: 'classic',
+                ruleLocked: mode === 'daily' && dailyFinished, dailyRuleBlocked: false,
+                ruleAvailability: { classic: 3, active: 0, europe: 0 },
+                optimal: 2, hint: puzzle.hint, stranded: false, moreHelp, revealPath: null,
+                names: families[careers].players.map(player => player.name),
+                storage: { local: dailyFinished ? { [saveKey]: saved } : {}, session: {} },
+                completion: ['transfer-path', dailyFinished, dailyFinished && paired ? 1000 : 0, dailyFinished && paired ? 1 : 0],
+              };
+            }
+          
+            const frames = [
+              frame('mounted', 0, 'building', false, true),
+              frame('first-settled', 0, 'building', false, true),
+              frame('daily-ready', 0, 'building', false),
+              frame('daily-wrong-season', 0, 'building', false),
+              frame('daily-bridge', 0, paired ? 'won' : 'building', paired),
+              frame('daily-terminal', 0, terminal, true),
+              frame('unlimited-ready', 1, 'building', true),
+              frame('unlimited-bridge', 1, paired ? 'won' : 'building', true),
+              frame('unlimited-terminal', 1, terminal, true),
+              frame('unlimited-next', 2, 'building', true),
+              frame('unmounted', 2, 'building', true),
+            ];
+            for (const [i, expected] of frames.entries()) {
+              const observed = packet.frames[i];
+              assert.ok(observed, key + ' missing ' + expected.label);
+              if (i < 2) {
+                // Pool pending is the behavior under test. Retain early Daily-loading values without assuming a React effect count.
+                assert.strictEqual(typeof observed.isLoading, 'boolean', key + ' ' + expected.label + ' Daily loading value');
+                expected.isLoading = observed.isLoading;
+              }
+              assert.deepStrictEqual(observed, expected, key + ' ' + expected.label);
+            }
+            assert.deepStrictEqual(packet, { key, delivered, frames, actions, providers, writes, closed: true }, key + ' complete trace');
+          
+            const literal = Buffer.from(JSON.stringify(packet, null, 2).replace(/\n/g, '\n    '));
+            const rawOffset = raw.indexOf(literal);
+            assert.ok(rawOffset >= 0 && raw.lastIndexOf(literal) === rawOffset, key + ' single literal RAW case body');
+            caseChecks.push({
+              key, marker, puzzleFamily, careerFamily, frames: packet.frames.length,
+              actions: packet.actions.length, providerEvents: packet.providers.length, saveWrites: packet.writes.length,
+              dailyStatus: packet.frames[5].status, dailyScore: packet.frames[5].score,
+              unlimitedStatus: packet.frames[8].status, unlimitedScore: packet.frames[8].score,
+              rawOffset, rawBytes: literal.length, rawSHA256: sha(literal),
+            });
+          }
+          const sum = field => caseChecks.reduce((total, row) => total + row[field], 0);
+          return {
+            status: 'passed', scope: 'fictional-hook-pool-pairing', cases: caseChecks.length,
+            frames: sum('frames'), actions: sum('actions'), providerEvents: sum('providerEvents'), saveWrites: sum('saveWrites'),
+            rawBytes: raw.length, rawSHA256: sha(raw), dateET,
+            pairedCases: caseChecks.filter(row => row.marker === null).map(row => row.key),
+            mixedCases: caseChecks.filter(row => row.marker !== null).map(row => row.key),
+            caseChecks,
+          };
+          })();
+          assert.equal(checks.status,'passed');
+          fs.writeFileSync(out + '/original-result.json', JSON.stringify({
+            status:'expected-original-business-failures',markers:failures.map(row=>row.marker),total,passes:total-2,failed:2,observed,checks,
+            rawBytes:raw.length,rawSHA256:createHash('sha256').update(raw).digest('hex'),
+          },null,2));
+          NODE
+      - name: Verify unchanged physical source and locked offline run
+        if: always()
+        run: |
+          set -euo pipefail
+          git ls-files -s > "$EVIDENCE/source-after.txt"
+          sha256sum package.json package-lock.json > "$EVIDENCE/locks-after.txt"
+          cmp "$EVIDENCE/source-before.txt" "$EVIDENCE/source-after.txt"
+          cmp "$EVIDENCE/locks-before.txt" "$EVIDENCE/locks-after.txt"
+          git diff --exit-code HEAD -- .
+          node "$EVIDENCE/physical.mjs" after
+          test ! -s "$SIM_OFFLINE_RECEIPT"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: transfer-path-paired-pools-original-${{ github.run_id }}
+          path: transfer-path-paired-pools-original
+          retention-days: 14
+          if-no-files-found: error
