@@ -1,10 +1,17 @@
-import type { UsCareerCore } from './usCareerSport';
+import type { UsCareerCore, UsCareerSport, UsCareerWaiver } from './usCareerSport';
 import type { UsSport } from './usCareerToCoach';
 import { isFarewellSeason } from './careerRetirement';
 import { extensionLeverage, pushExtension, type ExtensionTalk, type ExtPushArgs } from './usCareerExtension';
 import { faLeverage, faTotalValue, pushFaOffer, type FaWindow, type FaOffer, type FaPushArgs } from './usCareerFreeAgency';
 
-export interface MarketContext { sport: UsSport; year: number; team: string; contractYears: number; salary: number }
+export interface MarketContext {
+  sport: UsSport;
+  year: number;
+  team: string;
+  contractYears: number;
+  salary: number;
+  waiver?: UsCareerWaiver;
+}
 export type MarketResult = 'raised' | 'held' | 'withdrawn';
 export interface MarketWheel {
   probabilities: Record<MarketResult, number>;
@@ -28,11 +35,24 @@ const text = (s: unknown): s is string => typeof s === 'string' && s.trim().leng
 const object = (v: unknown): v is Record<string, unknown> => !!v && typeof v === 'object' && !Array.isArray(v);
 const results: MarketResult[] = ['raised', 'held', 'withdrawn'];
 
+export function hasCurrentWaiver(c: UsCareerCore, sport: UsSport): c is UsCareerCore & { waiver: UsCareerWaiver } {
+  const waiver = c.waiver;
+  return sport === 'nba' && !c.retired && !c.summer && c.contractYears === 0 && c.salary === 0
+    && (c.suspendedSeasons ?? 0) === 0 && !isFarewellSeason(c.retirement, c.year)
+    && object(waiver) && Number.isSafeInteger(waiver.year) && waiver.year > 0 && waiver.year === c.year
+    && text(waiver.team) && waiver.team === c.team;
+}
+
 export function marketContext(c: UsCareerCore, sport: UsSport): MarketContext {
-  return { sport, year: c.year, team: c.team, contractYears: c.contractYears, salary: c.salary };
+  const context = { sport, year: c.year, team: c.team, contractYears: c.contractYears, salary: c.salary };
+  return hasCurrentWaiver(c, sport) ? { ...context, waiver: { year: c.waiver.year, team: c.waiver.team } } : context;
 }
 function contextMatches(v: unknown, c: UsCareerCore, sport: UsSport): v is MarketContext {
   if (!object(v) || c.retired) return false;
+  if (c.waiver !== undefined) {
+    if (!hasCurrentWaiver(c, sport) || !object(v.waiver)
+      || v.waiver.year !== c.waiver.year || v.waiver.team !== c.waiver.team) return false;
+  } else if (v.waiver !== undefined) return false;
   return v.sport === sport && Number.isSafeInteger(v.year) && v.year === c.year && text(v.team) && v.team === c.team
     && Number.isSafeInteger(v.contractYears) && v.contractYears === c.contractYears && money(v.salary) && v.salary === c.salary;
 }
@@ -44,8 +64,8 @@ function validExtension(v: unknown, team: string): v is ExtensionTalk {
   return !v.pulled && object(o) && years(o.years) && money(o.salary)
     && ['eager', 'fair', 'reluctant'].includes(o.mood as string) && text(o.line);
 }
-function validWindow(v: unknown, team: string, farewell: boolean): v is FaWindow {
-  if (!object(v) || !text(v.note) || !Array.isArray(v.offers) || v.offers.length < 1 || v.offers.length > 4) return false;
+function validWindow(v: unknown, team: string, farewell: boolean, waiver: boolean): v is FaWindow {
+  if (!object(v) || !text(v.note) || !Array.isArray(v.offers) || v.offers.length < 1 || v.offers.length > (waiver ? 3 : 4)) return false;
   const seen = new Set<string>();
   let incumbent = 0;
   for (const o of v.offers) {
@@ -55,10 +75,10 @@ function validWindow(v: unknown, team: string, farewell: boolean): v is FaWindow
       || typeof o.incumbent !== 'boolean' || typeof o.pushed !== 'boolean' || typeof o.gone !== 'boolean'
       || (o.gone && !o.pushed)) return false;
     seen.add(o.team);
-    if (o.incumbent) { incumbent++; if (o.team !== team || o.gone) return false; }
+    if (o.incumbent) { incumbent++; if (waiver || o.team !== team || o.gone) return false; }
     else if (o.team === team) return false;
   }
-  return incumbent === 1 && v.offers[0].incumbent === true && v.offers.some(o => !o.gone);
+  return (waiver || (incumbent === 1 && v.offers[0].incumbent === true)) && v.offers.some(o => !o.gone);
 }
 function validWheel(v: unknown): v is MarketWheel {
   if (!object(v) || !text(v.label) || !(v.offerIndex === null || (Number.isSafeInteger(v.offerIndex) && (v.offerIndex as number) >= 0 && (v.offerIndex as number) <= 3)) || !object(v.probabilities) || !results.includes(v.result as MarketResult) || typeof v.seen !== 'boolean'
@@ -69,7 +89,9 @@ function validWheel(v: unknown): v is MarketWheel {
     && (p[v.result as MarketResult] as number) > 0;
 }
 /** Reads only a complete talk for this exact unplayed contract year. */
-export function restoreMarketTalk(value: unknown, c: UsCareerCore, sport: UsSport): UsCareerMarketTalk | null {
+export function restoreMarketTalk<C extends UsCareerCore>(
+  value: unknown, c: C, sport: UsSport, waiver?: UsCareerSport<C>['waiver'],
+): UsCareerMarketTalk | null {
   if (!object(value) || !contextMatches(value.context, c, sport)
     || !(value.reply === null || typeof value.reply === 'string') || (value.wheel !== undefined && !validWheel(value.wheel))) return null;
   if (value.kind === 'extension') {
@@ -81,7 +103,9 @@ export function restoreMarketTalk(value: unknown, c: UsCareerCore, sport: UsSpor
         || (wheel.result === 'withdrawn') !== value.talk.pulled || (wheel.result !== 'withdrawn' && !value.talk.offer)) return null;
     }
   } else if (value.kind === 'freeagency') {
-    if (c.contractYears > 0 || !validWindow(value.window, c.team, isFarewellSeason(c.retirement, c.year))) return null;
+    const waived = value.context.waiver !== undefined;
+    if (c.contractYears > 0 || !validWindow(value.window, c.team, isFarewellSeason(c.retirement, c.year), waived)) return null;
+    if (waived && (!waiver || !value.window.offers.every(offer => waiver.acceptsOffer(c, offer)))) return null;
     if (value.wheel) {
       const wheel = value.wheel as MarketWheel;
       const target = wheel.offerIndex !== null ? value.window.offers[wheel.offerIndex] : null;
