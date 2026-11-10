@@ -93,6 +93,12 @@ const NICKNAMES: Record<string, string> = {
 };
 const resolve = (n: string) => NICKNAMES[norm(n)] ?? norm(n);
 
+// The current roster labels and the verified spellings in the stint archive.
+const ROSTER_STINT_ALIASES = new Map([
+  ["jr smith", "j r smith"],
+  ["robert williams iii", "robert williams"],
+]);
+
 // Join explicit dotted initials for comparison without changing the stored fold.
 const initialsKey = (name: string) =>
   norm((name || "").replace(/(^|\s)((?:[a-z]\.\s*)+[a-z]\.)(?=\s+[a-z])/gi,
@@ -112,15 +118,16 @@ function json(body: unknown, corsHeaders: Record<string, string>, status = 200) 
 async function lookup(sb: any, name: string): Promise<Stint[] | null> {
   const target = resolve(name);
   const COLS = "player_name, team, first_season, last_season";
+  const archiveName = ROSTER_STINT_ALIASES.get(target);
   /* The last word of the RESOLVED name, against the folded column. Resolved so
      a nickname is searched as the man it names; folded so an accent cannot hide
      him. */
   const token = target.split(" ").slice(-1)[0] || target;
-  let { data, error } = await sb
-    .from("nba_player_team_stints")
-    .select(COLS)
-    .ilike("name_folded", `%${token}%`)
-    .limit(LOOKUP_LIMIT);
+  const query = sb.from("nba_player_team_stints").select(COLS);
+  const foldedQuery = archiveName
+    ? query.in("name_folded", [target, archiveName])
+    : query.ilike("name_folded", `%${token}%`);
+  let { data, error } = await foldedQuery.limit(LOOKUP_LIMIT);
   if (error) {
     /* The folded column is filled by migration. If it is ever missing, fall
        back to the old raw search rather than answering "no such player" for
@@ -135,6 +142,11 @@ async function lookup(sb: any, name: string): Promise<Stint[] | null> {
   const rows = (data ?? []) as Stint[];
   const exact = rows.filter((r) => resolve(r.player_name) === target);
   if (exact.length > 0) return exact;
+  if (archiveName) {
+    if (error || rows.length >= LOOKUP_LIMIT) return null;
+    const stints = rows.filter((row) => norm(row.player_name) === archiveName);
+    return stints.length > 0 ? stints : null;
+  }
   if (!error && rows.length < LOOKUP_LIMIT) {
     const key = initialsKey(name);
     const alternate = rows.filter((r) => initialsKey(r.player_name) === key);
