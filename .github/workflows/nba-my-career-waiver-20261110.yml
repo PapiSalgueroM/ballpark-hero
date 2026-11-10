@@ -1,0 +1,170 @@
+name: NBA My Career waiver original board characterization
+on:
+  push:
+    branches: [codex/nba-my-career-waiver-original-qa-20261110]
+permissions:
+  contents: read
+  actions: read
+jobs:
+  original:
+    runs-on: ubuntu-latest
+    timeout-minutes: 17
+    defaults:
+      run:
+        shell: bash
+    env:
+      EVIDENCE: nba-my-career-waiver-original
+      SIM_NETWORK: offline
+      SIM_OFFLINE_RECEIPT: nba-my-career-waiver-original/offline.log
+      TZ: UTC
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24.22.1'
+          cache: npm
+      - name: Verify exact held board, test source, and admitted active-entry run
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          mkdir "$EVIDENCE"
+          touch "$SIM_OFFLINE_RECEIPT"
+          git rev-parse HEAD > "$EVIDENCE/head.txt"
+          git rev-parse 'HEAD^{tree}' > "$EVIDENCE/tree.txt"
+          git ls-files -s > "$EVIDENCE/source-before.txt"
+          sha256sum package.json package-lock.json > "$EVIDENCE/locks-before.txt"
+          git diff --exit-code HEAD -- .
+          node --input-type=module <<'NODE'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          import {createHash} from 'node:crypto';
+          import {execFileSync} from 'node:child_process';
+          const inputs={"base":{"pr":544,"head":"0c0873c72b7ed48f3889ed5b798f984fab830410","tree":"38c8aba6e00c0751f703c2c0053b87ab0018ab48"},"preflight":{"run":42856243507,"job":129969927513,"artifact":13782812304,"head":"3e47edfe28a938d053b893e123baea6292987fcf","tree":"8f9cf628a6e7c9ddf0c97253cead72783baec70c","path":".github/workflows/nba-my-career-waiver-20261110.yml","zipBytes":1020554,"zipSHA256":"69b0307db287bc95966a0ae5a446379ff11298fa683e291c57dad883d71a6b17","auditSHA256":"73725ceab22b64b48522b24c194a9525c78edeb4b05086c0b106ac5d3e892357"},"test":{"file":"nba-career-waiver-original-test-draft.tsx","path":"src/test/nbaCareerWaiver.test.tsx","bytes":3985,"sha256":"307cc793fbe2eb8982ff40f22472ea49185a9fc2030d7eeb9e816889845802d2","blob":"2dd64d7ddaa8185abe079f8440defe4caef09e4e","eligibleMarker":"NBA_WAIVER_REQUEST_MISSING_ELIGIBLE","priorBlob":null,"expected":{"tests":4,"failed":1,"passed":3},"preflightRun":42856243507},"workflow":".github/workflows/nba-my-career-waiver-20261110.yml","heldTests":{"src/test/usCareerMarketBoard.test.tsx":{"blob":"c3ffdbe2f11b4676027a53b0045fed277edaaa23","tests":10},"src/test/usCareerMarketSecondTab.test.tsx":{"blob":"2b323d359d87de80811902f568259bbc6cc8c499","tests":12},"src/test/usCareerMarketUi.test.tsx":{"blob":"4953fa86968708435d8caf114a823f05f3360925","tests":17}}};
+          const {base,preflight,test,workflow,heldTests}=inputs,out=process.env.EVIDENCE;
+          const repo='PapiSalgueroM/ballpark-hero';
+          const git=(...args)=>execFileSync('git',args,{encoding:'utf8',maxBuffer:16*1024*1024}).trimEnd();
+          const sha=body=>createHash('sha256').update(body).digest('hex');
+          const blob=body=>createHash('sha1').update(Buffer.from('blob '+body.length+'\0')).update(body).digest('hex');
+          const head=git('rev-parse','HEAD'),tree=git('rev-parse','HEAD^{tree}');
+          assert.equal(head,process.env.GITHUB_SHA);
+          assert.equal(process.env.GITHUB_REPOSITORY,repo);
+          assert.deepEqual(git('rev-list','--parents','-n','1',head).split(' '),[head,base.head]);
+          assert.equal(git('rev-parse',base.head+'^{tree}'),base.tree);
+          const rows=ref=>git('ls-tree','-r','-z',ref).split('\0').filter(Boolean);
+          const path=row=>row.split('\t')[1];
+          const prev=rows(base.head),curr=rows(head);
+          assert.deepEqual([prev.length,curr.length],[5803,5805]);
+          assert.deepEqual(prev,curr.filter(row=>![workflow,test.path].includes(path(row))));
+          assert.equal(curr.filter(row=>/^(src|public|scripts)\//.test(path(row))).length,4670);
+          assert.deepEqual(git('diff','--name-status','--no-renames',base.head,head).split('\n').sort(),['A\t'+workflow,'A\t'+test.path].sort());
+          const testBytes=fs.readFileSync(test.path);
+          assert.deepEqual([testBytes.length,sha(testBytes),blob(testBytes)],[test.bytes,test.sha256,test.blob]);
+          for(const [file,pin] of Object.entries(heldTests))assert.equal(blob(fs.readFileSync(file)),pin.blob);
+          const api=process.env.GITHUB_API_URL+'/repos/'+repo;
+          const get=async suffix=>{
+            const r=await fetch(api+suffix,{headers:{Accept:'application/vnd.github+json',Authorization:'Bearer '+process.env.GH_TOKEN,
+              'X-GitHub-Api-Version':'2022-11-28'},redirect:'error'});
+            assert.equal(r.status,200,suffix);
+            return r.json();
+          };
+          const [run,jobs,artifacts]=await Promise.all([get('/actions/runs/'+preflight.run),get('/actions/runs/'+preflight.run+'/jobs?per_page=100'),get('/actions/runs/'+preflight.run+'/artifacts?per_page=100')]);
+          assert.deepEqual([run.id,run.status,run.conclusion,run.head_sha,run.head_commit.tree_id,run.path,run.event,run.run_attempt],
+            [preflight.run,'completed','success',preflight.head,preflight.tree,preflight.path,'push',1]);
+          assert.deepEqual([jobs.jobs.length,artifacts.artifacts.length],[1,1]);
+          const [job]=jobs.jobs,[archive]=artifacts.artifacts;
+          assert.deepEqual([job.id,job.steps.length,archive.id,archive.expired,archive.size_in_bytes,archive.digest],
+            [preflight.job,11,preflight.artifact,false,preflight.zipBytes,'sha256:'+preflight.zipSHA256]);
+          assert(job.steps.every(s=>s.status==='completed'&&s.conclusion==='success'));
+          fs.copyFileSync(test.path,out+'/candidate-test.tsx');
+          fs.copyFileSync(workflow,out+'/candidate-workflow.yml');
+          fs.writeFileSync(out+'/source-join.json',JSON.stringify({status:'passed',head,tree,parent:base.head,parentTree:base.tree,workflow:git('rev-parse','HEAD:'+workflow),
+            trackedRows:5805,heldRows:5803,scopedRows:4670,inputs},null,2)+'\n');
+          NODE
+      - name: Install the locked dependencies and type check the original board
+        run: |
+          set -euo pipefail
+          npm ci 2>&1 | tee "$EVIDENCE/install.log"
+          cat > "$EVIDENCE/physical.mjs" <<'NODE'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          import {createHash} from 'node:crypto';
+          import {execFileSync} from 'node:child_process';
+          const stage=process.argv[2],out=process.env.EVIDENCE;
+          assert(['before','after'].includes(stage));
+          const files=execFileSync('git',['ls-files','-z'],{encoding:'utf8'}).split('\0').filter(Boolean);
+          const source=files.map(file=>{
+            const body=fs.readFileSync(file);
+            return [file,body.length,createHash('sha256').update(body).digest('hex')];
+          });
+          const lock=JSON.parse(fs.readFileSync('package-lock.json','utf8'));
+          const installed=Object.entries(lock.packages).filter(([file])=>file.startsWith('node_modules/')&&fs.existsSync(file+'/package.json')).map(([file,entry])=>{
+            const version=JSON.parse(fs.readFileSync(file+'/package.json','utf8')).version;
+            assert.equal(version,entry.version,file);
+            return [file,version];
+          });
+          assert.deepEqual([source.length,installed.length,fs.statSync(process.env.SIM_OFFLINE_RECEIPT).size],[5805,521,0]);
+          for(const [name,data] of [['tracked',source],['installed',installed]]){
+            const body=JSON.stringify(data);
+            if(stage==='after')assert.equal(body,fs.readFileSync(out+'/'+name+'-before.json','utf8'));
+            fs.writeFileSync(out+'/'+name+'-'+stage+'.json',body);
+          }
+          NODE
+          node "$EVIDENCE/physical.mjs" before
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee "$EVIDENCE/types.log"
+      - name: Require the exact eligible waiver mismatch and unchanged market guards
+        run: |
+          set -euo pipefail
+          result=0
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" timeout --signal=TERM 100s \
+            node_modules/.bin/vitest run src/test/nbaCareerWaiver.test.tsx src/test/usCareerMarketBoard.test.tsx src/test/usCareerMarketSecondTab.test.tsx src/test/usCareerMarketUi.test.tsx \
+            --testTimeout=60000 --no-file-parallelism --reporter=json --outputFile="$EVIDENCE/vitest-result.json" > "$EVIDENCE/test.log" 2>&1 || result=$?
+          cat "$EVIDENCE/test.log"
+          printf '%s\n' "$result" > "$EVIDENCE/test-exit.txt"
+          test "$result" -eq 1
+          test ! -s "$SIM_OFFLINE_RECEIPT"
+          node --input-type=module <<'NODE'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          const out=process.env.EVIDENCE;
+          const read=name=>JSON.parse(fs.readFileSync(out+'/'+name,'utf8'));
+          const vitest=read('vitest-result.json'),source=read('source-join.json');
+          assert.deepEqual([vitest.numTotalTests,vitest.numFailedTests,vitest.numPassedTests,vitest.numPendingTests,vitest.numTodoTests,vitest.success],[43,1,42,0,0,false]);
+          const {test,heldTests}=source.inputs;
+          const file=name=>vitest.testResults.find(row=>row.name.endsWith('/'+name));
+          assert.equal(vitest.testResults.length,4);
+          const waiver=file(test.path);
+          assert.equal(waiver?.status,'failed');
+          const names=['offers the waiver request on an eligible unhappy NBA season hub','keeps the request off the NBA hub at morale 55',
+            'keeps the request off an unhappy NFL hub','restores ordinary NBA free agency with its incumbent offer'];
+          assert.deepEqual(waiver.assertionResults.map(a=>[a.title,a.status]),names.map((name,i)=>[name,i===0?'failed':'passed']));
+          assert.equal(waiver.assertionResults[0].failureMessages.length,1);
+          assert(waiver.assertionResults[0].failureMessages[0].includes(test.eligibleMarker));
+          for(const [path,pin] of Object.entries(heldTests)){
+            const result=file(path);
+            assert.equal(result?.status,'passed',path);
+            assert.equal(result.assertionResults.length,pin.tests,path);
+            assert(result.assertionResults.every(row=>row.status==='passed'),path);
+          }
+          fs.writeFileSync(out+'/admission.json',JSON.stringify({status:'passed',testExit:1,expectedMarker:test.eligibleMarker,
+            total:43,failed:1,passed:42,newCases:waiver.assertionResults.map(a=>[a.title,a.status]),heldCases:39,source},null,2)+'\n');
+          NODE
+      - name: Confirm complete source, index, lock, and offline receipts
+        if: ${{ !cancelled() }}
+        run: |
+          set -euo pipefail
+          git diff --exit-code HEAD -- .
+          git ls-files -s > "$EVIDENCE/source-after.txt"
+          cmp "$EVIDENCE/source-before.txt" "$EVIDENCE/source-after.txt"
+          sha256sum package.json package-lock.json > "$EVIDENCE/locks-after.txt"
+          cmp "$EVIDENCE/locks-before.txt" "$EVIDENCE/locks-after.txt"
+          test ! -s "$SIM_OFFLINE_RECEIPT"
+          node "$EVIDENCE/physical.mjs" after
+      - uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: nba-my-career-waiver-original
+          path: nba-my-career-waiver-original/
+          if-no-files-found: error
