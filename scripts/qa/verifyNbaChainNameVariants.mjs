@@ -1,4 +1,4 @@
-/* Remote-only fictional receipt for the exact NBA Chain edge resolver. */
+/* Remote-only fictional receipts for NBA Chain initials and resolver guards. */
 import '../lib/offlineTransport.cjs';
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
@@ -8,20 +8,23 @@ import vm from 'node:vm';
 import ts from 'typescript';
 
 assert(process.env.CI && process.env.SIM_NETWORK === 'offline', 'Remote offline QA only');
-assert(process.env.NBA_CHAIN_NAME_VARIANTS_RAW, 'Exact RAW evidence destination is required');
+assert(process.env.NBA_CHAIN_NAME_VARIANTS_RAW && process.env.NBA_CHAIN_NAME_VARIANTS_GUARDS_RAW, 'Both exact RAW evidence destinations are required');
 const root = process.cwd();
 const output = path.resolve(root, process.env.NBA_CHAIN_NAME_VARIANTS_RAW);
-assert(output.startsWith(root + path.sep), 'The receipt stays in the isolated checkout');
+const guardOutput = path.resolve(root, process.env.NBA_CHAIN_NAME_VARIANTS_GUARDS_RAW);
+assert(output !== guardOutput && [output, guardOutput].every(file => file.startsWith(root + path.sep)), 'Both receipts stay in the isolated checkout');
 
 const edgePath = 'supabase/functions/nba-chain-validate/index.ts';
 const originalBlob = 'ae48e575f499f4ad6ca9d4930aae30bd636652b3';
-const expectedBlob = process.env.NBA_CHAIN_NAME_VARIANTS_EDGE_BLOB || originalBlob;
+const fixedBlob = '02ad604c9115af575d57eb648bfb7a3e48dbef2d';
+const expectedBlob = process.env.NBA_CHAIN_NAME_VARIANTS_EDGE_BLOB || fixedBlob;
 assert.match(expectedBlob, /^[a-f0-9]{40}$/);
 const edgeBytes = readFileSync(path.join(root, edgePath));
 const blob = createHash('sha1').update('blob ' + edgeBytes.length + '\0').update(edgeBytes).digest('hex');
 const sourceSHA = createHash('sha256').update(edgeBytes).digest('hex');
 assert.equal(blob, expectedBlob, 'Exact physically held edge handler');
 if (blob === originalBlob) assert.equal(sourceSHA, 'ea05cc652d9e361e69f636feab23c96c594a20bc78955501615a69a65b7af6d5');
+if (blob === fixedBlob) assert.equal(sourceSHA, '831f2d7b064f2f8e87626823ccab4e46d74aed7ac13b2ae4c2100c5996cc5446');
 assert.equal(ts.version, '5.8.3', 'Exact locked TypeScript version');
 
 const expectedImports = [
@@ -101,6 +104,70 @@ const inputs = [
   ], "fault"),
 ];
 
+const compactAvery = stint("Fixture JR Avery", "fixture jr avery", "FIC", 2020, 2023);
+const exactLane = stint("Fixture Exact Lane", "fixture exact lane", "FIC", 2020, 2023);
+const dottedAvery = stint("Fixture J.R. Avery", "fixture j r avery", "FIC", 2020, 2023);
+const dottedAveryOtherTeam = stint("Fixture J.R. Avery", "fixture j r avery", "FXO", 2020, 2023);
+const capFillers = Array.from({ length: 400 }, (_, index) => {
+  const suffix = String(index).padStart(3, '0');
+  return stint('Fixture Filler ' + suffix + ' Avery', 'fixture filler ' + suffix + ' avery', 'FXO', 2020, 2023);
+});
+const guardInput = (id, previousPlayer, newPlayer, stints, foldedErrorToken = null) => ({
+  id, kind: 'guard', request: { previousPlayer, newPlayer },
+  fixture: { stints, teams, rejectFoldedToken: null, foldedErrorToken },
+});
+const alternateAvery = stint('Fixture Jr Avery', 'fixture jr avery', 'FXO', 2016, 2018);
+const keyedAvery = { ...compactAvery, person_key: 'fixture-avery-one' };
+const keyedAlternateAvery = { ...alternateAvery, person_key: 'fixture-avery-one' };
+const identityGuard = (id, rows, error = null) => {
+  const fixture = guardInput(id, 'Fixture Lead Harbor', 'Fixture J.R. Avery', [harbor, compactAvery, alternateAvery]);
+  fixture.fixture.identity = { rows, error };
+  return fixture;
+};
+const guardInputs = [
+  guardInput("reverse-compact-input-dotted-row", "Fixture Lead Harbor", "Fixture JR Avery", [
+    harbor,
+    dottedAvery,
+  ]),
+  guardInput("spaced-initials-stay-distinct", "Fixture Lead Harbor", "Fixture J R Avery", [
+    harbor,
+    compactAvery,
+  ]),
+  guardInput("resolved-self-link", "Fixture J.R. Avery", "Fixture JR Avery", [
+    compactAvery,
+  ]),
+  guardInput("exact-spelling-precedence", "Fixture Lead Harbor", "Fixture J.R. Avery", [
+    harbor,
+    compactAvery,
+    dottedAveryOtherTeam,
+  ]),
+  guardInput("ambiguous-dotted-initials", "Fixture Lead Harbor", "Fixture J.R. Kai T.V. Avery", [
+    harbor,
+    stint("Fixture JR Kai T.V. Avery", "fixture jr kai t v avery", "FIC", 2020, 2023),
+    stint("Fixture J.R. Kai TV Avery", "fixture j r kai tv avery", "FIC", 2020, 2023),
+  ]),
+  guardInput("truncated-folded-fallback", "Fixture Lead Harbor", "Fixture J.R. Avery", [
+    harbor,
+    compactAvery,
+    ...capFillers,
+  ]),
+  guardInput("folded-error-raw-exact-only", "Fixture Lead Harbor", "Fixture J.R. Avery", [
+    harbor,
+    compactAvery,
+  ], "avery"),
+  guardInput("folded-error-raw-exact-positive", "Fixture Lead Harbor", "Fixture Exact Lane", [
+    harbor,
+    exactLane,
+  ], "lane"),
+  identityGuard('keyed-multiple-stints-reordered', [keyedAlternateAvery, keyedAvery]),
+  identityGuard('conflicting-person-keys', [keyedAvery, { ...keyedAlternateAvery, person_key: 'fixture-avery-two' }]),
+  identityGuard('mixed-keyed-and-unkeyed-stints', [keyedAvery, { ...keyedAlternateAvery, person_key: null }]),
+  identityGuard('blank-person-keys', [{ ...keyedAvery, person_key: '  ' }, { ...keyedAlternateAvery, person_key: '  ' }]),
+  identityGuard('same-count-changed-stint-tuple', [keyedAvery, { ...keyedAlternateAvery, team: 'FIC' }]),
+  identityGuard('partial-identity-read', [keyedAvery]),
+  identityGuard('failed-identity-read', [], 'Fictional keyed stint read failed'),
+];
+
 const expectedOutcomes = [
   {
     valid: true,
@@ -109,10 +176,9 @@ const expectedOutcomes = [
     fullName: "Fixture JR Avery",
   },
   {
-    valid: true,
-    connection: "Fixture Comets (2020-2021)",
-    reason: "Fixture Rowan Timber and Fixture Lead Harbor were teammates on the Fixture Comets in 2020-2021.",
-    fullName: "Fixture Rowan Timber",
+    valid: false,
+    reason: "Fixture Rowan Timber III does not appear in our NBA records (1949-2024).",
+    fullName: "Fixture Rowan Timber III",
   },
   {
     valid: true,
@@ -147,6 +213,59 @@ const expectedOutcomes = [
     reason: "Something went wrong verifying that one, so it cannot be counted.",
   },
 ];
+
+const identityUnverified = {
+  valid: false,
+  unverified: true,
+  reason: "We couldn't confirm that player's identity. Try another spelling.",
+};
+const expectedGuards = [
+  {
+    valid: true,
+    connection: "Fixture Comets (2020-2021)",
+    reason: "Fixture J.R. Avery and Fixture Lead Harbor were teammates on the Fixture Comets in 2020-2021.",
+    fullName: "Fixture J.R. Avery",
+  },
+  {
+    valid: false,
+    reason: "Fixture J R Avery does not appear in our NBA records (1949-2024).",
+    fullName: "Fixture J R Avery",
+  },
+  {
+    valid: false,
+    reason: "That is the same player.",
+  },
+  {
+    valid: false,
+    reason: "Fixture J.R. Avery and Fixture Lead Harbor were never teammates.",
+    fullName: "Fixture J.R. Avery",
+  },
+  identityUnverified,
+  {
+    valid: false,
+    reason: "Fixture J.R. Avery does not appear in our NBA records (1949-2024).",
+    fullName: "Fixture J.R. Avery",
+  },
+  {
+    valid: false,
+    reason: "Fixture J.R. Avery does not appear in our NBA records (1949-2024).",
+    fullName: "Fixture J.R. Avery",
+  },
+  {
+    valid: true,
+    connection: "Fixture Comets (2020-2021)",
+    reason: "Fixture Exact Lane and Fixture Lead Harbor were teammates on the Fixture Comets in 2020-2021.",
+    fullName: "Fixture Exact Lane",
+  },
+  expectedOutcomes[0],
+  identityUnverified,
+  identityUnverified,
+  identityUnverified,
+  identityUnverified,
+  identityUnverified,
+  identityUnverified,
+];
+
 const healthyReadBoundaries = [
   [
     ["nba_player_team_stints","name_folded","%harbor%",["Fixture Lead Harbor"],null],
@@ -175,11 +294,88 @@ const healthyReadBoundaries = [
   ],
 ];
 
+const guardReadBoundaries = [
+  [
+    ["nba_player_team_stints","ilike","name_folded","%harbor%",1,null],
+    ["nba_player_team_stints","ilike","name_folded","%avery%",1,null],
+    ["nba_team_codes","eq","team_code","FIC",1,null],
+  ],
+  [
+    ["nba_player_team_stints","ilike","name_folded","%harbor%",1,null],
+    ["nba_player_team_stints","ilike","name_folded","%avery%",1,null],
+  ],
+  [
+    ["nba_player_team_stints","ilike","name_folded","%avery%",1,null],
+    ["nba_player_team_stints","ilike","name_folded","%avery%",1,null],
+  ],
+  [
+    ["nba_player_team_stints","ilike","name_folded","%harbor%",1,null],
+    ["nba_player_team_stints","ilike","name_folded","%avery%",2,null],
+  ],
+  [
+    ["nba_player_team_stints","ilike","name_folded","%harbor%",1,null],
+    ["nba_player_team_stints","ilike","name_folded","%avery%",2,null],
+  ],
+  [
+    ["nba_player_team_stints","ilike","name_folded","%harbor%",1,null],
+    ["nba_player_team_stints","ilike","name_folded","%avery%",400,null],
+  ],
+  [
+    ["nba_player_team_stints","ilike","name_folded","%harbor%",1,null],
+    ["nba_player_team_stints","ilike","name_folded","%avery%",null,"Fictional folded column unavailable"],
+    ["nba_player_team_stints","ilike","player_name","%Avery%",1,null],
+  ],
+  [
+    ["nba_player_team_stints","ilike","name_folded","%harbor%",1,null],
+    ["nba_player_team_stints","ilike","name_folded","%lane%",null,"Fictional folded column unavailable"],
+    ["nba_player_team_stints","ilike","player_name","%Lane%",1,null],
+    ["nba_team_codes","eq","team_code","FIC",1,null],
+  ],
+  [
+    ["nba_player_team_stints","ilike","name_folded","%harbor%",1,null],
+    ["nba_player_team_stints","ilike","name_folded","%avery%",2,null],
+    ["nba_player_team_stints","eq","name_folded","fixture jr avery",2,null],
+    ["nba_team_codes","eq","team_code","FIC",1,null],
+  ],
+  [
+    ["nba_player_team_stints","ilike","name_folded","%harbor%",1,null],
+    ["nba_player_team_stints","ilike","name_folded","%avery%",2,null],
+    ["nba_player_team_stints","eq","name_folded","fixture jr avery",2,null],
+  ],
+  [
+    ["nba_player_team_stints","ilike","name_folded","%harbor%",1,null],
+    ["nba_player_team_stints","ilike","name_folded","%avery%",2,null],
+    ["nba_player_team_stints","eq","name_folded","fixture jr avery",2,null],
+  ],
+  [
+    ["nba_player_team_stints","ilike","name_folded","%harbor%",1,null],
+    ["nba_player_team_stints","ilike","name_folded","%avery%",2,null],
+    ["nba_player_team_stints","eq","name_folded","fixture jr avery",2,null],
+  ],
+  [
+    ["nba_player_team_stints","ilike","name_folded","%harbor%",1,null],
+    ["nba_player_team_stints","ilike","name_folded","%avery%",2,null],
+    ["nba_player_team_stints","eq","name_folded","fixture jr avery",2,null],
+  ],
+  [
+    ["nba_player_team_stints","ilike","name_folded","%harbor%",1,null],
+    ["nba_player_team_stints","ilike","name_folded","%avery%",2,null],
+    ["nba_player_team_stints","eq","name_folded","fixture jr avery",1,null],
+  ],
+  [
+    ["nba_player_team_stints","ilike","name_folded","%harbor%",1,null],
+    ["nba_player_team_stints","ilike","name_folded","%avery%",2,null],
+    ["nba_player_team_stints","eq","name_folded","fixture jr avery",null,"Fictional keyed stint read failed"],
+  ],
+];
+
 const fixtureOrigin = 'https://fixture.invalid';
 const fixtureKey = 'fixture-service-role-no-network';
 const requestOrigin = 'https://douknowball.com';
 const stintsColumns = 'player_name, team, first_season, last_season';
+const identityColumns = stintsColumns + ', person_key';
 const readError = 'Fictional stint read failed';
+const foldedError = 'Fictional folded column unavailable';
 const fixtureEnv = { SUPABASE_URL: fixtureOrigin, SUPABASE_SERVICE_ROLE_KEY: fixtureKey };
 const harnessErrors = [];
 let active;
@@ -199,8 +395,29 @@ function fixtureClient(url, key) {
       return {
         select(columns) {
           const stintTable = table === 'nba_player_team_stints';
-          guard(columns === (stintTable ? stintsColumns : 'team_name'), 'Unexpected fixture projection');
+          const keyedStints = stintTable && columns === identityColumns;
+          guard(keyedStints || columns === (stintTable ? stintsColumns : 'team_name'), 'Unexpected fixture projection');
           const calls = [['select', columns]];
+          if (keyedStints) {
+            return {
+              eq(column, spelling) {
+                const identity = active.fixture.identity;
+                guard(identity && column === 'name_folded' && spelling === 'fixture jr avery', 'Unexpected keyed fixture filter');
+                calls.push(['eq', column, spelling]);
+                return {
+                  limit(limit) {
+                    guard(limit === 400, 'Unexpected keyed fixture lookup limit');
+                    calls.push(['limit', limit]);
+                    const { rows, error } = identity;
+                    const data = error ? null : rows.filter(row => row.name_folded === spelling).slice(0, limit)
+                      .map(({ player_name, team, first_season, last_season, person_key }) => ({ player_name, team, first_season, last_season, person_key }));
+                    active.reads.push({ table, calls, data, error });
+                    return Promise.resolve({ data, error: error ? { message: error } : null });
+                  },
+                };
+              },
+            };
+          }
           if (stintTable) {
             return {
               ilike(column, pattern) {
@@ -214,13 +431,15 @@ function fixtureClient(url, key) {
                     calls.push(['limit', limit]);
                     const token = match[1].toLowerCase();
                     const failed = column === 'name_folded' && token === active.fixture.rejectFoldedToken;
-                    const data = failed ? null : active.fixture.stints
+                    const fallback = column === 'name_folded' && token === active.fixture.foldedErrorToken;
+                    const error = failed ? readError : fallback ? foldedError : null;
+                    const data = error ? null : active.fixture.stints
                       .filter(row => row[column].toLowerCase().includes(token))
                       .slice(0, limit)
                       .map(({ player_name, team, first_season, last_season }) => ({ player_name, team, first_season, last_season }));
-                    active.reads.push({ table, calls, data, error: failed ? readError : null });
+                    active.reads.push({ table, calls, data, error });
                     if (failed) return Promise.reject(new Error(readError));
-                    return Promise.resolve({ data, error: null });
+                    return Promise.resolve({ data, error: fallback ? { message: foldedError } : null });
                   },
                 };
               },
@@ -288,28 +507,34 @@ new vm.Script(transpiled.outputText, { filename: edgePath }).runInContext(contex
 assert.deepEqual(loaded, expectedImports.map(([url]) => url), 'Only two exact local module stubs loaded');
 assert.equal(typeof handle, 'function');
 
-const cases = [];
-for (const input of inputs) {
-  active = { ...input, envReads: [], clientCalls: 0, reads: [], logs: [] };
-  const response = await handle(new Request(fixtureOrigin + '/functions/v1/nba-chain-validate', {
-    method: 'POST',
-    headers: { 'content-type': 'application/json', origin: requestOrigin },
-    body: JSON.stringify(input.request),
-  }));
-  active.outcome = {
-    status: response.status,
-    contentType: response.headers.get('content-type'),
-    allowOrigin: response.headers.get('access-control-allow-origin'),
-    body: await response.json(),
-  };
-  cases.push(active);
-  active = undefined;
+async function runInputs(list) {
+  const cases = [];
+  for (const input of list) {
+    active = { ...input, envReads: [], clientCalls: 0, reads: [], logs: [] };
+    const response = await handle(new Request(fixtureOrigin + '/functions/v1/nba-chain-validate', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json', origin: requestOrigin },
+      body: JSON.stringify(input.request),
+    }));
+    active.outcome = {
+      status: response.status,
+      contentType: response.headers.get('content-type'),
+      allowOrigin: response.headers.get('access-control-allow-origin'),
+      body: await response.json(),
+    };
+    cases.push(active);
+    active = undefined;
+  }
+  return cases;
 }
+const cases = await runInputs(inputs);
+const guardCases = await runInputs(guardInputs);
 writeFileSync(output, JSON.stringify({ schema: 'nba-chain-name-variants-v1', source, cases }) + '\n', { flag: 'wx' });
+writeFileSync(guardOutput, JSON.stringify({ schema: 'nba-chain-name-variants-fixed-guards-v1', source, cases: guardCases }) + '\n', { flag: 'wx' });
 
 assert.deepEqual(harnessErrors, [], 'Only exact fixture transport calls were used');
 if (process.env.SIM_OFFLINE_RECEIPT) assert.equal(statSync(process.env.SIM_OFFLINE_RECEIPT).size, 0, 'No live transport');
-for (const row of cases) {
+for (const row of [...cases, ...guardCases]) {
   assert.deepEqual(row.envReads, ['SUPABASE_URL', 'SUPABASE_SERVICE_ROLE_KEY'], row.id);
   assert.equal(row.clientCalls, 1, row.id);
   assert.deepEqual([row.outcome.status, row.outcome.contentType, row.outcome.allowOrigin], [200, 'application/json', requestOrigin], row.id);
@@ -326,5 +551,21 @@ for (const [index, row] of cases.slice(2).entries()) {
 }
 const actualVariantVector = cases.slice(0, 2).map(row => row.outcome.body);
 assert.deepEqual(actualVariantVector, expectedOutcomes.slice(0, 2),
-  'NBA_CHAIN_NAME_VARIANTS: both independent fictional identity variants must resolve to their overlapping teammates');
-console.log('PASS exact fictional NBA Chain name variants and six healthy controls');
+  'NBA_CHAIN_NAME_VARIANTS: dotted initials resolve and an unproven suffix stays distinct');
+assert.equal(cases.reduce((sum, row) => sum + row.reads.length, 0), 18);
+for (const [index, row] of guardCases.entries()) {
+  const boundaries = row.reads.map(read => [
+    read.table, ...read.calls[1],
+    Array.isArray(read.data) ? read.data.length : read.data === null ? null : 1, read.error,
+  ]);
+  assert.deepEqual(boundaries, guardReadBoundaries[index], row.id);
+  assert.deepEqual(row.outcome.body, expectedGuards[index], row.id);
+  const expectedLogs = row.fixture.foldedErrorToken ? [{
+    level: 'log',
+    label: 'nba-chain-validate: name_folded unavailable (' + foldedError + '), falling back to the raw column',
+    detail: null,
+  }] : [];
+  assert.deepEqual(row.logs, expectedLogs, row.id);
+}
+assert.equal(guardCases.reduce((sum, row) => sum + row.reads.length, 0), 42);
+console.log('PASS exact fictional NBA Chain initials, held suffix rejection, six healthy cases and fifteen guards');
