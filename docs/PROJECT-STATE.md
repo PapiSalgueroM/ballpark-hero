@@ -1,3 +1,11 @@
+## 2026-11-10: Football Grid Adrian Peterson correction staged
+
+The November 5 Titans and Seahawks cell rejected Adrian Peterson, the 2007 draft pick. The answer key missed both 2021 teams because the Tennessee stint is absent from the roster snapshot and Seattle lists him as development squad. Official game records confirm three Tennessee appearances and one Seattle appearance. The generator and guarded migration add those two teams to GSIS `00-0025394` and update the displayed career span to `2007-2021`. [NFL career stats](https://www.nfl.com/players/adrian-peterson/stats/career) · [Titans roster report](https://www.tennesseetitans.com/news/titans-make-13-roster-moves-on-the-active-roster-practice-squad-and-injured-rese) · [Seahawks game recap](https://www.seahawks.com/news/instant-lookback-adrian-peterson-gets-first-start-first-touchdown-for-seattle)
+
+The 2002 Chicago namesake remains separate. The corrected label and old saves share the same rarity and duplicate-check key. The phone browser accepted the corrected answer and restored it after a cold reload. Chicago and a single-stint removal both reproduced the refusal. An old September 22 save kept its exact bytes and refused a second pick of the same player under the corrected label.
+
+Full regeneration matched the 22,008-row key. The migration rehearsal changed the four expected fields on one row, replayed exactly and rejected eight drift cases. Publish the compatibility change before applying the answer-key migration. Keep admin report `bddda70d` open until the public answer key passes.
+
 ## 2026-11-07: Club Manager historical roster counts live
 
 [PR #532](https://github.com/PapiSalgueroM/ballpark-hero/pull/532) published from main `c3b5ca4afaf9b4dadcd748f340e8e8e3e4a1a1dd`, App tree `133fcd3d26a4d237178e5c7efee723048da0aef2`, Lovable deployment `510b1df1-2172-42c0-90f9-d9f9c997b840`.

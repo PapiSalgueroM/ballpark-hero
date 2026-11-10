@@ -35,7 +35,8 @@
                current code by season through scripts/lib/nflFranchiseCodes.mjs
                (STL 1980 is the Cardinals, STL 1999 is the Rams); the 39
                codes of the modern table are merged through nfl_team_codes.
-     seasons   first and last roster season under the same rule.
+               Verified regular season appearances fill scoped roster gaps.
+     seasons   first and last season under the same rule.
      pos       the distinct raw position codes on those rows (QB, WR, OLB;
                the old files use coarse codes like DB, DL, OL and SPEC).
                Raw on purpose: mapping a label like "Defensive Back" onto
@@ -78,6 +79,15 @@ export const ROSTER_STATUSES = ['ACT', 'RES', 'INA'];
 export const OLD_ROSTER_STATUSES = ['ACT', 'RES', 'INA', 'PUP'];
 export const OLD_SEASONS = { from: 1970, to: 2001 };
 export const DRAFT_TABLE_COMPLETE_FROM = 1990;
+
+/* Report bddda70d: the 2021 roster snapshot omits TEN and only shows SEA as
+   DEV. Actual games for both are recorded under this GSIS id in the weekly
+   stats and confirmed by the NFL and Vikings.
+   https://www.nfl.com/players/adrian-peterson/stats/career
+   https://www.vikings.com/news/adrian-peterson-ring-of-honor-inductee-2026 */
+const VERIFIED_ROSTER_APPEARANCES = [
+  { id: '00-0025394', season: 2021, teams: ['SEA', 'TEN'] },
+];
 
 const client = fs.readFileSync(path.join(ROOT, 'src', 'integrations', 'supabase', 'client.ts'), 'utf8');
 const URL_ = client.match(/SUPABASE_URL\s*=\s*["']([^"']+)["']/)[1];
@@ -230,6 +240,14 @@ export function buildKey({ rosters = [], oldRosters = [], stats = [], picks = []
     byId.set(id, e);
   }
 
+  for (const { id, season, teams } of VERIFIED_ROSTER_APPEARANCES) {
+    const player = byId.get(id);
+    if (!player?.anyRoster) continue;
+    for (const team of teams) player.teams.add(team);
+    player.first = Math.min(player.first, season);
+    player.last = Math.max(player.last, season);
+  }
+
   const players = [];
   for (const e of byId.values()) {
     if (!e.anyRoster || e.teams.size === 0) continue;
@@ -340,7 +358,7 @@ export function renderFile(players, sources) {
       draft: 'nfl_draft_picks 1936 to 2025, treated as complete from 1990',
     },
     rules: {
-      teams: `roster rows with status in ${ROSTER_STATUSES.join(', ')} (${OLD_ROSTER_STATUSES.join(', ')} in the 1970 to 2001 files), historical codes mapped to the franchise's current code by season, modern codes merged through nfl_team_codes`,
+      teams: `roster rows with status in ${ROSTER_STATUSES.join(', ')} (${OLD_ROSTER_STATUSES.join(', ')} in the 1970 to 2001 files), historical codes mapped to the franchise's current code by season, modern codes merged through nfl_team_codes; scoped verified regular season appearances also count toward teams and season span`,
       identity: 'gsis_id where any row carries one; otherwise name plus birth date, bridged to a gsis_id when a row of the same name and birth date has one',
       pos: 'distinct raw roster position codes on those rows',
       draft: 'roster draft_number and draft_club when present; else the nfl_draft_picks row matching name and entry year; else, with no entry year, the one pick row of that name in the three drafts up to the first season; else undrafted when the entry year is 1990 or later and no pick within a year matches; else null',
