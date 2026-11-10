@@ -71,20 +71,20 @@ try {
   const report = JSON.parse(await readFile(reportFile, 'utf8'));
   assert.equal(Number(report.numUnhandledErrors ?? 0), 0); assert.equal(report.numPendingTests, 0);
   const rows = report.testResults.flatMap(file => file.assertionResults);
-  assert.equal(rows.length, 19);
+  assert.equal(rows.length, 20);
   if (control) {
     const intended = mutations[control][4].map(key => titles[key]);
-    assert.equal(run.status, 1); assert.equal(report.numFailedTests, intended.length); assert.equal(report.numPassedTests, 19 - intended.length);
+    assert.equal(run.status, 1); assert.equal(report.numFailedTests, intended.length); assert.equal(report.numPassedTests, 20 - intended.length);
     for (const title of intended) assert.equal(rows.filter(row => row.title === title).length, 1);
     for (const row of rows) assert.equal(row.status, intended.includes(row.title) ? 'failed' : 'passed', row.fullName);
     console.log(`simPlayerBingoLoad ${control}: real executable anchors changed in a disposable page or loader.`);
-    console.log(`simPlayerBingoLoad ${control}: ${intended.length} exact lifecycle or transport outcomes reject the control, ${19 - intended.length} independent cases pass.`);
+    console.log(`simPlayerBingoLoad ${control}: ${intended.length} exact lifecycle or transport outcomes reject the control, ${20 - intended.length} independent cases pass.`);
     console.log(`simPlayerBingoLoad ${control}: complete query predicates, paged transforms, banked score, replay and null-failure baselines hold.`);
     console.log(`simPlayerBingoLoad ${control}: ${rows.find(row => row.status === 'failed').failureMessages[0].split('\n')[0]}`);
   } else {
     if (run.status !== 0) process.stdout.write(output);
-    assert.equal(run.status, 0); assert.equal(report.numPassedTests, 19); assert.equal(report.numFailedTests, 0);
-    console.log('simPlayerBingoLoad: 19 actual page and loader outcomes pass, no pending or unhandled cases.');
+    assert.equal(run.status, 0); assert.equal(report.numPassedTests, 20); assert.equal(report.numFailedTests, 0);
+    console.log('simPlayerBingoLoad: 20 actual page and loader outcomes pass, no pending or unhandled cases.');
     console.log('simPlayerBingoLoad: latest and paged history peaks are three each, all 17 fixture queries and 280 players retained.');
     console.log('simPlayerBingoLoad: existing select/filter/order/range predicates and complete historical transforms match independent fixtures.');
     console.log('simPlayerBingoLoad: caller cancellation and failed reads abort siblings and stop queued work, with no partial playable data.');

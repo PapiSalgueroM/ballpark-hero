@@ -1,40 +1,36 @@
-name: Player Bingo birth-year boundary original
+name: Player Bingo birth-year boundary fixed
 on:
   push:
-    branches: [codex/player-bingo-birth-year-original-qa-20261110]
+    branches: [codex/player-bingo-birth-year-fixed-qa-20261110]
 permissions:
   actions: read
   contents: read
 jobs:
-  original:
+  fixed:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     env:
       TZ: UTC
       SIM_NETWORK: offline
-      SIM_OFFLINE_RECEIPT: player-bingo-birth-year-original/offline.log
-      PLAYER_BINGO_BIRTH_YEAR_RAW: player-bingo-birth-year-original/public-cases.raw.json
-      BASE_HEAD: '4ba9773714dfb05418a63ade900e27b1a5b078e7'
-      BASE_TREE: '6336b32fadad82db8d7f04200ec3c6fdc7e23b87'
-      TEST_BLOB: '8fed620437ee3a544dd5e186b457ad1b2d619343'
-      PLAN_BLOB: '47f7f202eb3fbe75ec5b18307511bff41c78cd42'
-      EVIDENCE: player-bingo-birth-year-original
+      SIM_OFFLINE_RECEIPT: player-bingo-birth-year-fixed/offline.log
+      PLAYER_BINGO_BIRTH_YEAR_RAW: player-bingo-birth-year-fixed/public-cases.raw.json
+      EVIDENCE: player-bingo-birth-year-fixed
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 2
+          fetch-depth: 3
           persist-credentials: false
       - uses: actions/setup-node@v4
         with:
           node-version: 24.22.1
           cache: npm
-      - name: Authenticate the admitted active entry and exact original Player Bingo source
+      - name: Authenticate admitted inputs and exact isolated role source
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
           test ! -e "$EVIDENCE"
-          if grep -Eq '__[A-Z][A-Z0-9_]*__' .github/workflows/player-bingo-birth-year-20261110.yml; then echo 'Unresolved original binding'; exit 1; fi
+          if grep -Eq '__[A-Z][A-Z0-9_]*__' .github/workflows/player-bingo-birth-year-20261110.yml; then echo 'Unresolved role binding'; exit 1; fi
           mkdir "$EVIDENCE"
           touch "$SIM_OFFLINE_RECEIPT"
           git rev-parse HEAD > "$EVIDENCE/head.txt"
@@ -42,102 +38,112 @@ jobs:
           git ls-files -s > "$EVIDENCE/source-before.txt"
           sha256sum package.json package-lock.json > "$EVIDENCE/locks-before.txt"
           git diff --exit-code HEAD -- .
-          git fetch --no-tags --depth=1 origin "$BASE_HEAD"
           node --input-type=module <<'NODE'
           import assert from 'node:assert/strict';
           import fs from 'node:fs';
           import { createHash } from 'node:crypto';
           import { execFileSync } from 'node:child_process';
 
-          const { BASE_HEAD, BASE_TREE, TEST_BLOB, PLAN_BLOB, EVIDENCE } = process.env;
+          const out = process.env.EVIDENCE;
           const repo = 'PapiSalgueroM/ballpark-hero';
+          const workflow = '.github/workflows/player-bingo-birth-year-20261110.yml';
+          const productParent = '4ba9773714dfb05418a63ade900e27b1a5b078e7';
+          const productTree = '6336b32fadad82db8d7f04200ec3c6fdc7e23b87';
+          const plan = 'docs/plans/2026-11-10-player-bingo-birth-year.md';
+          const roles = { original: {"run":42813505581,"job":129820612478,"artifact":13763032974,"steps":12,"zipBytes":1037461,"zipSHA256":"791be9d50c101b6e7e24528ba2e7306c266649a69330884704d1bf31a2ab5c88","head":"d1ff57bf7a6bc611a8bd1f56e28f8dc58f950bbe","tree":"e1ad2d43e06856ea3c49e6819e770ad7f94cd38c","workflow":"4c82704255808f138c20f96be03fed1ad310ffce","branch":"codex/player-bingo-birth-year-original-qa-20261110","auditSHA256":"be83ea9923697a6723b8afc2672066dd30f87d153d2097fd4f41d0e923737251","raw":{"bytes":2142,"sha256":"87b4a2ec7d841e89e5f85638f0e52d4e8706587fa760faee0540985a1d84b637"}} };
+          const pins = {"scripts/simPlayerBingoLoad.mjs":{"before":"b93fbf4f3a15258a2c88fdc75773593502897b53","after":"b76c0794a40f87f54e3766111d6a9f9f16eff548"},"src/lib/playerBingo.ts":{"before":"897f538765323a68a86d1d068db4fc182b52d1a5","after":"885fab96ef9f463d5447245c6f1f4937ce68aafa"},"src/test/playerBingoTransport.test.ts":{"before":"8fed620437ee3a544dd5e186b457ad1b2d619343","after":"9494d6e391350d9da76aa7a6a1e0f5022df3e62b"},"src/test/playerBingoWorldCupAlias.test.ts":{"before":"d11c81a71407314c3a5bedc88c27c91a4fe16c81","after":"b6f57a7f4f1b14a95e90912f54cdbcc34cc3491c"}};
+          const paths = ['scripts/simPlayerBingoLoad.mjs','src/lib/playerBingo.ts','src/test/playerBingoTransport.test.ts','src/test/playerBingoWorldCupAlias.test.ts'];
+          const heldOriginal = {
+            'scripts/simPlayerBingoLoad.mjs':'b93fbf4f3a15258a2c88fdc75773593502897b53',
+            'src/lib/playerBingo.ts':'897f538765323a68a86d1d068db4fc182b52d1a5',
+            'src/test/playerBingoWorldCupAlias.test.ts':'d11c81a71407314c3a5bedc88c27c91a4fe16c81',
+          };
+          const git = (...args) => execFileSync('git', args, { encoding: 'utf8', maxBuffer: 16 * 1024 * 1024 }).trimEnd();
+          const bytes = (...args) => execFileSync('git', args, { maxBuffer: 16 * 1024 * 1024 });
+          const hash = (algorithm, body) => createHash(algorithm).update(body).digest('hex');
+          const blob = body => hash('sha1', Buffer.concat([Buffer.from('blob ' + body.length + '\0'), body]));
+          const head = git('rev-parse','HEAD');
+          const tree = ref => git('ls-tree','-r','-z',ref).split('\0').filter(Boolean);
+          const at = (ref,file) => git('rev-parse',ref+':'+file);
+          const original = roles.original;
+          const parent = original;
+          assert.equal(head, process.env.GITHUB_SHA);
           assert.equal(process.env.GITHUB_REPOSITORY, repo);
-          const runId = 42810749109;
+          assert.deepEqual(git('rev-list','--parents','-n','1','HEAD').split(' '),[head,parent.head]);
+          assert.equal(git('rev-parse', parent.head+'^{tree}'), parent.tree);
+          assert.equal(git('rev-parse', productParent+'^{tree}'), productTree);
+          assert.deepEqual(git('rev-list','--parents','-n','1',original.head).split(' '),[original.head,productParent]);
+          assert.equal(at(original.head,plan),'47f7f202eb3fbe75ec5b18307511bff41c78cd42');
+          assert.equal(at('HEAD',plan),at(original.head,plan));
+          assert.deepEqual(Object.keys(pins).sort(),paths);
+          for (const [file, pair] of Object.entries(pins)) {
+            assert.deepEqual(Object.keys(pair).sort(),['after','before']);
+            assert.match(pair.before,/^[0-9a-f]{40}$/);
+            assert.match(pair.after,/^[0-9a-f]{40}$/);
+            assert.notEqual(pair.before,pair.after,file);
+            assert.equal(at(original.head,file),pair.before,file);
+            if (Object.hasOwn(heldOriginal,file)) assert.equal(pair.before,heldOriginal[file],file);
+            assert.equal(at('HEAD',file),pair.after,file);
+            assert.equal(blob(fs.readFileSync(file)),pair.after,file);
+          }
+          const fixedHead = head;
+          const fixedChanges = [...paths,workflow].sort();
+          const exactDelta = (base, current, files, heldRows) => {
+            assert.deepEqual(git('diff','--name-status','--no-renames',base,current).split('\n').sort(),files.map(file=>'M\t'+file).sort());
+            const previous = tree(base), next = tree(current);
+            const hold = rows => rows.filter(row => !files.includes(row.split('\t')[1]));
+            assert.deepEqual([previous.length,next.length,hold(previous).length],[5802,5802,heldRows]);
+            assert.deepEqual(hold(previous),hold(next));
+            for (const file of files) {
+              for (const rows of [previous,next]) assert(rows.some(row => row.startsWith('100644 blob ') && row.split('\t')[1] === file),file);
+            }
+          };
+          exactDelta(original.head,fixedHead,fixedChanges,5797);
+          
+          assert.equal(tree('HEAD').filter(row => /^(src|public|scripts)\//.test(row.split('\t')[1])).length,4669);
+          const configs = ['index.html','package.json','package-lock.json','vite.config.ts','tailwind.config.ts','postcss.config.js','tsconfig.json','tsconfig.app.json','tsconfig.node.json','bun.lockb','bun.lock'];
+          for (const file of configs) assert.equal(at('HEAD',file),at(original.head,file),file);
+          assert.equal(at('HEAD','src/pages/PlayerBingo.tsx'),'e26d20a48216f9eb3a1faf62389d561814dcbe99');
+          assert.equal(at('HEAD','public/player-bingo/index.html'),'af701f7f56f498defe0da719fcae5b63c0dd1b91');
           const api = process.env.GITHUB_API_URL + '/repos/' + repo;
           const request = async path => {
-            const response = await fetch(api + path, {
-              headers: {
-                Accept: 'application/vnd.github+json',
-                Authorization: 'Bearer ' + process.env.GH_TOKEN,
-                'X-GitHub-Api-Version': '2022-11-28',
-              },
-              redirect: 'error',
-            });
-            assert.equal(response.status, 200, 'preflight API ' + path);
+            const response = await fetch(api+path,{headers:{Accept:'application/vnd.github+json',Authorization:'Bearer '+process.env.GH_TOKEN,'X-GitHub-Api-Version':'2022-11-28'},redirect:'error'});
+            assert.equal(response.status,200,path);
             return response.json();
           };
-          const [run, jobs, artifacts] = await Promise.all([
-            request('/actions/runs/' + runId),
-            request('/actions/runs/' + runId + '/jobs?per_page=100'),
-            request('/actions/runs/' + runId + '/artifacts?per_page=100'),
-          ]);
-          const workflow = '.github/workflows/player-bingo-birth-year-20261110.yml';
-          assert.deepEqual([run.id,run.status,run.conclusion,run.event,run.run_attempt,run.path,run.head_sha,run.head_commit.tree_id,run.repository.full_name],
-            [runId,'completed','success','push',1,workflow,'d63a914fe2ec22c079b41819dd1ca45b7898f94d','995e79995a123fdcdf213e42abaa305bb89cebb5',repo]);
-          assert.equal(run.head_branch,'codex/player-bingo-birth-year-preflight-qa-20261110');
-          assert.equal(jobs.jobs.length,1);
-          const [job] = jobs.jobs;
-          assert.deepEqual([job.id,job.status,job.conclusion,job.head_sha,job.steps.length],[129811240337,'completed','success',run.head_sha,11]);
-          assert(job.steps.every(step => step.status === 'completed' && step.conclusion === 'success'));
-          assert.equal(artifacts.artifacts.length,1);
-          const [artifact] = artifacts.artifacts;
-          assert.deepEqual([artifact.id,artifact.name,artifact.expired,artifact.size_in_bytes,artifact.digest,artifact.workflow_run.id,artifact.workflow_run.head_sha],
-            [13761423919,'player-bingo-birth-year-active-preflight-'+runId,false,1014761,'sha256:07f932555762c1bef251c5396de675dbe359c5b3d2470e726690c1846013d576',runId,run.head_sha]);
+          for (const [role,pin] of Object.entries(roles)) {
+            for (const value of [pin.run,pin.job,pin.artifact,pin.steps,pin.zipBytes,pin.raw.bytes]) assert(Number.isSafeInteger(value) && value > 0);
+            for (const value of [pin.zipSHA256,pin.auditSHA256,pin.raw.sha256]) assert.match(value,/^[0-9a-f]{64}$/);
+            assert.equal(git('rev-parse',pin.head+'^{tree}'),pin.tree);
+            assert.equal(at(pin.head,workflow),pin.workflow);
+            const [run,jobs,artifact] = await Promise.all([
+              request('/actions/runs/'+pin.run),request('/actions/runs/'+pin.run+'/jobs?per_page=100'),request('/actions/artifacts/'+pin.artifact),
+            ]);
+            assert.deepEqual([run.id,run.status,run.conclusion,run.event,run.run_attempt,run.path,run.head_sha,run.head_commit.tree_id,run.head_branch,run.repository.full_name],
+              [pin.run,'completed','success','push',1,workflow,pin.head,pin.tree,pin.branch,repo],role);
+            assert.equal(jobs.jobs.length,1,role);
+            const [job] = jobs.jobs;
+            assert.deepEqual([job.id,job.run_id,job.name,job.status,job.conclusion,job.head_sha,job.steps.length],
+              [pin.job,pin.run,role,'completed','success',pin.head,pin.steps],role);
+            assert(job.steps.every(step => step.status === 'completed' && step.conclusion === 'success'),role);
+            assert.deepEqual([artifact.id,artifact.name,artifact.expired,artifact.size_in_bytes,artifact.digest,artifact.workflow_run.id,artifact.workflow_run.head_sha],
+              [pin.artifact,'player-bingo-birth-year-'+role+'-'+pin.run,false,pin.zipBytes,'sha256:'+pin.zipSHA256,pin.run,pin.head],role);
+          }
           delete process.env.GH_TOKEN;
-          const git = (...args) => execFileSync('git', args, { encoding: 'utf8', maxBuffer: 16 * 1024 * 1024 }).trimEnd();
-          const head = git('rev-parse', 'HEAD');
-          assert.equal(head, process.env.GITHUB_SHA);
-          assert.deepEqual(git('rev-list', '--parents', '-n', '1', 'HEAD').split(' '), [head, BASE_HEAD]);
-          assert.equal(git('rev-parse', BASE_HEAD + '^{tree}'), BASE_TREE);
-          const test = 'src/test/playerBingoTransport.test.ts';
-          const plan = 'docs/plans/2026-11-10-player-bingo-birth-year.md';
-          const originalTestBlob = '36cb2768a5f2c422fabc22eaf5627b750b2f4682';
-          const owned = [test, plan, workflow].sort();
-          const held = {"src/App.tsx":"8bfedf7aaa1d076e0f0c8e2216c7e46632cd8a33","src/data/gameRegistry.ts":"f560b40a74d1468ac72dfde4ee6fec6635a9a255","public/player-bingo/index.html":"af701f7f56f498defe0da719fcae5b63c0dd1b91","src/pages/PlayerBingo.tsx":"e26d20a48216f9eb3a1faf62389d561814dcbe99","src/lib/playerBingo.ts":"897f538765323a68a86d1d068db4fc182b52d1a5","src/test/playerBingoBirthYear.test.ts":"59fe4931902a6a5ca8798c9083f637418a236759","scripts/lib/offlineTransport.cjs":"0fda542a2649fe5da937c6976fd0f5b6073e74b6","index.html":"12598fe720eec4fc88d3d33c53ede612d018150c","package.json":"2ff64986fb76ebc51b706f2fd24765768874008a","package-lock.json":"97d6f12a052f25f400462938c241789a083f0bfe","vite.config.ts":"0112b6ac4f2ad80b2fc04f9ec2f7185300913e7d","tailwind.config.ts":"f83c4f4032d359bc9285828eac3b0961a46c6b17","postcss.config.js":"2aa7205d4b402a1bdfbe07110c61df920b370066","tsconfig.json":"6b68d80b7d92d0c4a5d774897f2bedfa95b42669","tsconfig.app.json":"51f581dd91641b4c1f1219f646788e73cf6bf00c","tsconfig.node.json":"3133162c20350e1741b94b8d2ff77b811bec8363","bun.lockb":"5d9d33a3bf4f45fa099e2aa3014149e034981149","bun.lock":"dff081dcd34a1aa928ddc90d910774a6b855dfe3","src/test/playerBingoWorldCupAlias.test.ts":"d11c81a71407314c3a5bedc88c27c91a4fe16c81","scripts/data/auctionMarketRows.json":"10181182a3cb8500a1d0b53d654ae5d4e4bb5ca7","scripts/data/cmBirthDates2026.json":"5b4e48d93927c80d385579b714563cca26d73acc"};
-          const pins = { ...held, [test]: TEST_BLOB, [plan]: PLAN_BLOB };
-          const sha = (algorithm, data) => createHash(algorithm).update(data).digest('hex');
-          for (const [file, want] of Object.entries(pins)) {
-            const bytes = fs.readFileSync(file);
-            assert.match(want, /^[0-9a-f]{40}$/);
-            assert.equal(git('rev-parse', 'HEAD:' + file), want);
-            assert.equal(sha('sha1', Buffer.concat([Buffer.from('blob ' + bytes.length + '\0'), bytes])), want, file);
-            if (Object.hasOwn(held, file)) assert.equal(git('rev-parse', BASE_HEAD + ':' + file), want, file);
+          const bodies = {};
+          for (const file of [...paths,plan,workflow]) {
+            for (const [role,ref] of [['original',original.head],['candidate','HEAD']]) {
+              const body = bytes('show',ref+':'+file), name = role+'-'+file.slice(file.lastIndexOf('/')+1);
+              fs.writeFileSync(out+'/'+name,body);
+              bodies[name] = {path:file,bytes:body.length,sha256:hash('sha256',body),blob:blob(body)};
+              assert.equal(bodies[name].blob,at(ref,file),file);
+            }
           }
-          assert.equal(git('rev-parse', BASE_HEAD + ':' + test), originalTestBlob);
-          assert.notEqual(TEST_BLOB, originalTestBlob);
-          assert.deepEqual(git('diff', '--name-status', '--no-renames', BASE_HEAD, 'HEAD').split('\n').sort(),
-            ['M\t' + test, 'A\t' + plan, 'A\t' + workflow].sort());
-          const tree = ref => git('ls-tree', '-r', '-z', ref).split('\0').filter(Boolean);
-          const parent = tree(BASE_HEAD);
-          const current = tree('HEAD');
-          assert.equal(parent.length, 5800);
-          assert.equal(current.length, 5802);
-          const hold = rows => rows.filter(row => !owned.includes(row.split('\t')[1]));
-          assert.equal(hold(parent).length, 5799);
-          assert.deepEqual(hold(current), hold(parent));
-          for (const file of owned) {
-            assert(current.some(row => row.startsWith('100644 blob ') && row.split('\t')[1] === file), file);
-          }
-          assert(parent.some(row => row === '100644 blob ' + originalTestBlob + '\t' + test));
-          const selected = {
-            'original-transport-test.ts': execFileSync('git', ['show', BASE_HEAD + ':' + test]),
-            'candidate-transport-test.ts': fs.readFileSync(test),
-            'held-player-bingo-page.tsx': fs.readFileSync('src/pages/PlayerBingo.tsx'),
-            'held-player-bingo-lib.ts': fs.readFileSync('src/lib/playerBingo.ts'),
-            'candidate-plan.md': fs.readFileSync(plan),
-            'candidate-workflow.yml': fs.readFileSync(workflow),
-          };
-          const selectedBodies = Object.entries(selected).map(([file, bytes]) => {
-            fs.writeFileSync(EVIDENCE + '/' + file, bytes);
-            return { file, bytes: bytes.length, sha256: sha('sha256', bytes) };
-          });
-          assert.equal(current.filter(row => /^(src|public|scripts)\//.test(row.split('\t')[1])).length, 4669);
-          fs.writeFileSync(EVIDENCE + '/source-receipt.json', JSON.stringify({
-            head, tree: git('rev-parse', 'HEAD^{tree}'), parent: BASE_HEAD, parentTree: BASE_TREE, pins,
-            ownedWorkflow: git('rev-parse', 'HEAD:' + workflow), originalTestBlob, owned, selectedBodies,
-            parentRows: parent.length, heldRows: hold(parent).length, trackedRows: current.length, sourceRows: 4669, rootConfigurations: 11,
-            activePreflight: { run: run.id, head: run.head_sha, job: job.id, artifact: artifact.id, digest: artifact.digest, independentAuditSHA256: 'ac0c6a780adf38d07c25d18bc5b9455b76581b28726061c0e9b284ae72c14f6c' },
-          }, null, 2));
+          fs.writeFileSync(out+'/source-receipt.json',JSON.stringify({
+            status:'passed',head,tree:git('rev-parse','HEAD^{tree}'),parent:parent.head,parentTree:parent.tree,
+            productParent,productTree,roles,pins,bodies,ownedWorkflow:at('HEAD',workflow),heldRows:5797,trackedRows:5802,sourceRows:4669,rootConfigurations:11,
+            activePreflight:{run:42810749109,job:129811240337,artifact:13761423919,independentAuditSHA256:'ac0c6a780adf38d07c25d18bc5b9455b76581b28726061c0e9b284ae72c14f6c'},
+          },null,2));
           NODE
       - name: Install locked dependencies and freeze physical source
         run: |
@@ -178,7 +184,7 @@ jobs:
         run: |
           set -euo pipefail
           node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee "$EVIDENCE/types.log"
-      - name: Require the original Bingo birth-year mismatch and held behavior
+      - name: Require fresh fixed birth-year and held Bingo outcomes
         run: |
           set -euo pipefail
           result=0
@@ -187,7 +193,7 @@ jobs:
             --reporter=default --reporter=json --outputFile="$EVIDENCE/vitest.json" > "$EVIDENCE/vitest.log" 2>&1 || result=$?
           cat "$EVIDENCE/vitest.log"
           printf '%s\n' "$result" > "$EVIDENCE/vitest-exit.txt"
-          test "$result" -eq 1
+          test "$result" -eq 0
           test -s "$PLAYER_BINGO_BIRTH_YEAR_RAW"
           node --input-type=module <<'NODE'
           import assert from 'node:assert/strict';
@@ -199,13 +205,12 @@ jobs:
           const suites = { [source]: 12, 'src/test/playerBingoBirthYear.test.ts': 2, 'src/test/playerBingoWorldCupAlias.test.ts': 9 };
           const heldTransportTitles = ["preserves query predicates row transforms and complete paged output","limits latest-row chunk requests to three while preserving all seven chunks","limits paged history chunk requests to three without truncating seven pages","forwards one owned signal to every existing query kind","starts no reads when the caller already abandoned the load","caller cancellation stops queued latest chunks and never starts history","caller cancellation stops queued history chunks and further pagination","a failed latest request aborts siblings and pending chunks without partial data","a failed history request aborts siblings and pending chunks without partial data","a failed World Cup read cancels other initial pool requests immediately","a just-resolved latest chunk cannot start queued work after cancellation"];
           const freshTitle = "BINGO_SQUAD_BIRTH_YEAR_BAND uses a reliable squad birth date for the correct age tile";
-          const marker = 'BINGO_SQUAD_BIRTH_YEAR_BAND';
           assert.equal(typeof freshTitle, 'string');
           assert(freshTitle.length > 0 && !heldTransportTitles.includes(freshTitle));
           const total = Object.values(suites).reduce((sum, count) => sum + count, 0);
           assert.equal(total, 23);
           assert.deepEqual([report.numTotalTests,report.numPassedTests,report.numFailedTests,report.numPendingTests,report.numTodoTests,report.success],
-            [total,total-1,1,0,0,false]);
+            [total,total,0,0,0,true]);
           assert.equal(report.testResults.length, 3);
           for (const key of ['errors','unhandledErrors','testExecutionErrors']) if (Object.hasOwn(report,key)) assert.deepEqual(report[key],[]);
           const log = fs.readFileSync(out + '/vitest.log', 'utf8');
@@ -216,36 +221,42 @@ jobs:
             assert.equal(matching.length, 1, file);
             const [suite] = matching;
             const transport = file === source;
-            assert.deepEqual([suite.status,suite.message,suite.assertionResults.length],[transport?'failed':'passed','',count],file);
+            assert.deepEqual([suite.status,suite.message,suite.assertionResults.length],['passed','',count],file);
             if (transport) assert.deepEqual(suite.assertionResults.map(row => row.title).sort(), [...heldTransportTitles, freshTitle].sort());
             for (const row of suite.assertionResults) {
-              const expectedRed = transport && row.title === freshTitle;
-              assert.equal(row.status, expectedRed ? 'failed' : 'passed', row.fullName);
-              assert.equal(row.failureMessages.length, expectedRed ? 1 : 0, row.fullName);
-              if (expectedRed) assert(row.failureMessages[0].startsWith('AssertionError: ' + marker + ':'), row.fullName);
+              assert.deepEqual([row.status,row.failureMessages.length],['passed',0],row.fullName);
             }
-            observed.push({file,cases:count,passes:count-(transport?1:0)});
+            observed.push({file,cases:count,passes:count});
           }
           const raw=fs.readFileSync(process.env.PLAYER_BINGO_BIRTH_YEAR_RAW);
           const evidence=JSON.parse(raw.toString('utf8'));
           const checks=(()=>{
-          const expected = {"schema":"player-bingo-squad-birth-year-band-v1","poolSize":280,"bands":[{"id":"age-29-plus","label":"Born 1996 or earlier"},{"id":"born-1997-to-1999","label":"Born 1997 to 1999"},{"id":"born-2000-to-2003","label":"Born 2000 to 2003"},{"id":"age-21-under","label":"Born 2004 or later"}],"worldCup":[{"columns":["player_name","world_cup_year","nationality"],"range":[0,999]},{"columns":["player_name","world_cup_year","nationality"],"range":[1000,1999]}],"rows":[{"id":"jan1-boundary","name":"Fictional871-000","age":26,"year":2026,"nationality":"Fixture / Alternate","matches":[false,true,false,false],"support":[false,true,false,false]},{"id":"dec31-adjacent","name":"Fictional871-001","age":26,"year":2026,"nationality":"Fixture","matches":[false,true,false,false],"support":[false,true,false,false]},{"id":"jan27-snapshot-offset","name":"Fictional871-002","age":26,"year":2026,"nationality":"Fixture","matches":[false,true,false,false],"support":[false,true,false,false]},{"id":"legacy-middle","name":"Fictional871-003","age":25,"year":2026,"nationality":"Fixture","matches":[false,false,true,false],"support":[false,false,true,false]},{"id":"wrong-country","name":"Fictional871-004","age":26,"year":2026,"nationality":"Fixture / Alternate","matches":[false,true,false,false],"support":[false,true,false,false]},{"id":"conflicting-dob","name":"Fictional871-005","age":26,"year":2026,"nationality":"Fixture","matches":[false,true,false,false],"support":[false,true,false,false]},{"id":"invalid-dob","name":"Fictional871-006","age":26,"year":2026,"nationality":"Fixture","matches":[false,true,false,false],"support":[false,true,false,false]},{"id":"implausible-dob","name":"Fictional871-007","age":26,"year":2026,"nationality":"Fixture","matches":[false,true,false,false],"support":[false,true,false,false]},{"id":"legacy-oldest","name":"Fictional871-008","age":30,"year":2026,"nationality":"Fixture","matches":[true,false,false,false],"support":[true,false,false,false]},{"id":"legacy-youngest","name":"Fictional871-009","age":21,"year":2026,"nationality":"Fixture","matches":[false,false,false,true],"support":[false,false,false,true]}]};
-          assert.deepEqual(evidence,expected,'Exact observed original transport, eligibility and support');
-          assert.equal(raw.toString('utf8'),JSON.stringify(expected)+'\n','Exact original compact evidence bytes');
+          const expected = {"schema":"player-bingo-squad-birth-year-band-v1","poolSize":280,"bands":[{"id":"age-29-plus","label":"Born 1996 or earlier"},{"id":"born-1997-to-1999","label":"Born 1997 to 1999"},{"id":"born-2000-to-2003","label":"Born 2000 to 2003"},{"id":"age-21-under","label":"Born 2004 or later"}],"worldCup":[{"columns":["player_name","world_cup_year","nationality","date_of_birth"],"range":[0,999]},{"columns":["player_name","world_cup_year","nationality","date_of_birth"],"range":[1000,1999]}],"rows":[{"id":"jan1-boundary","name":"Fictional871-000","age":26,"year":2026,"nationality":"Fixture / Alternate","matches":[false,false,true,false],"support":[false,false,true,false]},{"id":"dec31-adjacent","name":"Fictional871-001","age":26,"year":2026,"nationality":"Fixture","matches":[false,true,false,false],"support":[false,true,false,false]},{"id":"jan27-snapshot-offset","name":"Fictional871-002","age":26,"year":2026,"nationality":"Fixture","matches":[false,false,true,false],"support":[false,false,true,false]},{"id":"legacy-middle","name":"Fictional871-003","age":25,"year":2026,"nationality":"Fixture","matches":[false,false,true,false],"support":[false,false,true,false]},{"id":"wrong-country","name":"Fictional871-004","age":26,"year":2026,"nationality":"Fixture / Alternate","matches":[false,true,false,false],"support":[false,true,false,false]},{"id":"conflicting-dob","name":"Fictional871-005","age":26,"year":2026,"nationality":"Fixture","matches":[false,true,false,false],"support":[false,true,false,false]},{"id":"invalid-dob","name":"Fictional871-006","age":26,"year":2026,"nationality":"Fixture","matches":[false,true,false,false],"support":[false,true,false,false]},{"id":"implausible-dob","name":"Fictional871-007","age":26,"year":2026,"nationality":"Fixture","matches":[false,true,false,false],"support":[false,true,false,false]},{"id":"legacy-oldest","name":"Fictional871-008","age":30,"year":2026,"nationality":"Fixture","matches":[true,false,false,false],"support":[true,false,false,false]},{"id":"legacy-youngest","name":"Fictional871-009","age":21,"year":2026,"nationality":"Fixture","matches":[false,false,false,true],"support":[false,false,false,true]}]};
+          assert.deepEqual(evidence,expected,'Exact fixed transport, eligibility and support');
+          assert.equal(raw.toString('utf8'),JSON.stringify(expected)+'\n','Exact fixed compact evidence bytes');
           const [jan1,dec31,jan27]=evidence.rows;
           for(const row of [jan1,jan27]) {
-            assert.deepEqual(row.matches,[false,true,false,false],row.id);
+            assert.deepEqual(row.matches,[false,false,true,false],row.id);
             assert.deepEqual(row.support,row.matches,row.id);
           }
-          assert.deepEqual(dec31.matches,jan1.matches,'Adjacent 1999 control shares the original fallback band');
-          return {status:'passed',cases:evidence.rows.length,bands:evidence.bands.map(({id})=>id),pages:evidence.worldCup.map(({range})=>range),originalWrong:[jan1.id,jan27.id],originalAdjacentControl:dec31.id};
+          assert.deepEqual(dec31.matches,[false,true,false,false],'Adjacent 1999 control remains in the older band');
+          return {status:'passed',cases:evidence.rows.length,bands:evidence.bands.map(({id})=>id),pages:evidence.worldCup.map(({range})=>range),fixedWrong:[jan1.id,jan27.id],adjacentControl:dec31.id};
           })();
           assert.equal(checks.status,'passed');
-          fs.writeFileSync(out + '/original-result.json', JSON.stringify({
-            status:'expected-original-bingo-birth-year-mismatch',marker,freshTitle,total,passes:total-1,failed:1,observed,checks,
-            rawBytes:raw.length,rawSHA256:createHash('sha256').update(raw).digest('hex'),
-          },null,2));
+          const rawSHA256 = createHash('sha256').update(raw).digest('hex');
+          const original = JSON.parse(fs.readFileSync(out+'/source-receipt.json','utf8')).roles.original.raw;
+          assert.notEqual(rawSHA256,original.sha256);
+          fs.writeFileSync(out + '/fixed-result.json',JSON.stringify({
+            status:'fixed-bingo-squad-birth-year-band',freshTitle,total,passes:total,failed:0,observed,checks,
+            rawBytes:raw.length,rawSHA256,original,
+          },null,2)+'\n',{flag:'wx'});
           NODE
+      - name: Preserve held Bingo loader and page simulation
+        run: |
+          set -euo pipefail
+          env -u PLAYER_BINGO_BIRTH_YEAR_RAW NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simPlayerBingoLoad.mjs 2>&1 | tee "$EVIDENCE/simPlayerBingoLoad.log"
+          grep -Fq 'simPlayerBingoLoad: 20 actual page and loader outcomes pass, no pending or unhandled cases.' "$EVIDENCE/simPlayerBingoLoad.log"
+          grep -Fq 'simPlayerBingoLoad: CRLF bindings proved, raw source bytes held, owned copies cleaned; fictional transport only, no browser or live calls.' "$EVIDENCE/simPlayerBingoLoad.log"
       - name: Verify unchanged physical source and locked offline run
         if: always()
         run: |
@@ -260,7 +271,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: player-bingo-birth-year-original-${{ github.run_id }}
-          path: player-bingo-birth-year-original
+          name: player-bingo-birth-year-fixed-${{ github.run_id }}
+          path: player-bingo-birth-year-fixed
           retention-days: 14
           if-no-files-found: error

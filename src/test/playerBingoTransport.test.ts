@@ -145,7 +145,7 @@ describe('Player Bingo bounded cancellable transport', () => {
       expect(pages.map(query => query.calls.find(([method]) => method === 'range')![1])).toEqual(group.length === 80 ? [[0, 999], [1000, 1999]] : [[0, 999]]);
       for (const query of pages) expect(query.calls.filter(([method]) => method !== 'abortSignal')).toEqual([['select', ['player_name, nationality, position, club, year, age, market_value_usd, goals, assists, matches, yellow_cards, red_cards']], ['in', ['player_name', group]], ['order', ['id', { ascending: true }]], ['range', query.calls.find(([method]) => method === 'range')![1]]]);
     }
-    expect(transport.queries.find(query => query.phase === 'wc')!.calls.filter(([method]) => method !== 'abortSignal')).toEqual([['select', ['player_name, world_cup_year, nationality']], ['gte', ['world_cup_year', 2010]], ['order', ['id', { ascending: true }]], ['range', [0, 999]]]);
+    expect(transport.queries.find(query => query.phase === 'wc')!.calls.filter(([method]) => method !== 'abortSignal')).toEqual([['select', ['player_name, world_cup_year, nationality, date_of_birth']], ['gte', ['world_cup_year', 2010]], ['order', ['id', { ascending: true }]], ['range', [0, 999]]]);
     expect(transport.queries.find(query => query.phase === 'awards')!.calls.filter(([method]) => method !== 'abortSignal')).toEqual([['select', ['player_name, rank, award_type']]]);
     for (const player of data!.pool) {
       expect(data!.clubHistory.get(player.name)).toEqual(new Set(['fixture current', ...Array.from({ length: 13 }, (_, i) => `fixture history ${i + 1}`)]));
@@ -299,6 +299,6 @@ it('BINGO_SQUAD_BIRTH_YEAR_BAND uses a reliable squad birth date for the correct
       const mask = ageBands.map(({ id }) => id === fixture.band);
       return { id: fixture.id, matches: mask, support: mask };
     });
-  expect(membership(false)).toEqual(expected(false));
+  expect(membership(false), 'BINGO_SQUAD_BIRTH_YEAR_BAND: adjacent years and ambiguous squad records must keep their expected bands').toEqual(expected(false));
   expect(membership(true), 'BINGO_SQUAD_BIRTH_YEAR_BAND: compatible 2000 dates must move both eligibility and support').toEqual(expected(true));
 });
