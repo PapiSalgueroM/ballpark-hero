@@ -1,40 +1,34 @@
-name: Fantasy Draft empty player pool original
+name: Fantasy Draft empty pool fixed and physical controls
 on:
   push:
-    branches: [codex/fantasy-draft-empty-pool-original-retry-qa-20261110]
+    branches: [codex/fantasy-draft-empty-pool-fixed-controls-qa-20261110]
 permissions:
   actions: read
   contents: read
 jobs:
-  original:
+  fixed-controls:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 18
     env:
       TZ: UTC
       SIM_NETWORK: offline
-      SIM_OFFLINE_RECEIPT: fantasy-draft-empty-pool-original/offline.log
-      FD_POOL_RECOVERY_RAW: fantasy-draft-empty-pool-original/public-cases.raw.json
-      BASE_HEAD: '71a7184a1c546767932ec259617d53d60a178901'
-      BASE_TREE: '57574165d664a30ba69dad567a412d7b9111ac50'
-      HELPER_BLOB: '2f202331b41768892e888b4daa97bd54c4048446'
-      PLAN_BLOB: 'f090008f80c10ee1fd220e19516d636d2f6adf39'
-      EVIDENCE: fantasy-draft-empty-pool-original
+      EVIDENCE: fantasy-draft-empty-pool-fixed-controls
+      SIM_OFFLINE_RECEIPT: fantasy-draft-empty-pool-fixed-controls/offline.log
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 2
+          fetch-depth: 3
           persist-credentials: false
       - uses: actions/setup-node@v4
         with:
           node-version: 24.22.1
           cache: npm
-      - name: Authenticate admitted active entry and exact original Fantasy Draft source
+      - name: Authenticate exact original, fixed source, and retained original RAW
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
           test ! -e "$EVIDENCE"
-          if grep -Eq '__[A-Z][A-Z0-9_]*__' .github/workflows/fantasy-draft-empty-pool-20261110.yml; then echo 'Unresolved original workflow binding'; exit 1; fi
           mkdir "$EVIDENCE"
           touch "$SIM_OFFLINE_RECEIPT"
           git rev-parse HEAD > "$EVIDENCE/head.txt"
@@ -45,78 +39,74 @@ jobs:
           node --input-type=module <<'NODE'
           import assert from 'node:assert/strict';
           import fs from 'node:fs';
-          import { createHash } from 'node:crypto';
-          import { execFileSync } from 'node:child_process';
-
-          const { BASE_HEAD, BASE_TREE, HELPER_BLOB, PLAN_BLOB, EVIDENCE: out } = process.env;
-          const repo = 'PapiSalgueroM/ballpark-hero';
-          const workflow = '.github/workflows/fantasy-draft-empty-pool-20261110.yml';
-          const helper = 'src/test/fantasyDraftPoolRecovery.test.tsx';
-          const plan = 'docs/plans/2026-11-10-fantasy-draft-empty-pool.md';
-          const edge = 'src/pages/FantasyDraft.tsx';
-          const preflight = {"run":42846374711,"job":129934813961,"artifact":13777284411,"steps":11,"zipBytes":1015269,"zipSHA256":"bb09a8ebad7621ebc7d4cf619170d853f03ed0223569cb711cc1d88da3d05ea6","head":"1c7d596c845fff2ec9ed03cb8394a11ce214c714","tree":"4dceaa18dce325107fc99f459ac00a2d5e3ad844","branch":"codex/fantasy-draft-empty-pool-preflight-qa-20261110","workflow":"51b1d2247a8f5795f4fe106dc8aa1743c0099409","independentAuditSHA256":"4f78c5d42f30cec04edd97d5d360943950d997d265107c07daaab61d1f760838"};
-          const held = {"src/App.tsx":"8bfedf7aaa1d076e0f0c8e2216c7e46632cd8a33","src/data/gameRegistry.ts":"f560b40a74d1468ac72dfde4ee6fec6635a9a255","public/fantasy-draft/index.html":"c2d51909d1e2f4b50c8b37f504d1cd5fdd0f47f5","public/prerender-boot.js":"85939d3b80ef41b26ff6cbefb53a66e383d1a797","src/pages/FantasyDraft.tsx":"a1ec7dda9bd2c7a7fc674b5471fc0dad63a67509","src/lib/fantasyCriteria.ts":"f6f7d27ee0af80e4386e650a9d7128cd89702f90","src/test/fantasyDraftPoolRecovery.test.tsx":"ab43be6a72f000cbf50c0bb557408e1f7108201c","supabase/functions/fantasy-draft-daily/index.ts":"8a717f89d3545593cc37b37631dd0a5929dac80d","src/test/fantasyDraftCriteriaStart.test.tsx":"4e9d54803677696454ef0cbbf155182192e03769","scripts/lib/offlineTransport.cjs":"0fda542a2649fe5da937c6976fd0f5b6073e74b6","scripts/lib/hostLikeServer.mjs":"21059d5e8114669df61106c125d5272d357b6236","index.html":"12598fe720eec4fc88d3d33c53ede612d018150c","package.json":"2ff64986fb76ebc51b706f2fd24765768874008a","package-lock.json":"97d6f12a052f25f400462938c241789a083f0bfe","vite.config.ts":"0112b6ac4f2ad80b2fc04f9ec2f7185300913e7d","tailwind.config.ts":"f83c4f4032d359bc9285828eac3b0961a46c6b17","postcss.config.js":"2aa7205d4b402a1bdfbe07110c61df920b370066","tsconfig.json":"6b68d80b7d92d0c4a5d774897f2bedfa95b42669","tsconfig.app.json":"51f581dd91641b4c1f1219f646788e73cf6bf00c","tsconfig.node.json":"3133162c20350e1741b94b8d2ff77b811bec8363","bun.lockb":"5d9d33a3bf4f45fa099e2aa3014149e034981149","bun.lock":"dff081dcd34a1aa928ddc90d910774a6b855dfe3"};
+          import {createHash} from 'node:crypto';
+          import {execFileSync} from 'node:child_process';
+          const inputs = {"base":{"pr":543,"head":"71a7184a1c546767932ec259617d53d60a178901","tree":"57574165d664a30ba69dad567a412d7b9111ac50"},"original":{"run":42849772916,"job":129946912061,"artifact":13779408695,"steps":11,"zipBytes":1411799,"zipSHA256":"93a616e1969e2ef32ad10fddd1af561fa5b6e02aa594e04d7997e37e6bb45589","head":"0391e62a0704270e9fbd06d44f339c9e54b450d3","tree":"01d825fa15a845a5cdfcb07bb74267dc0cc4e854","workflow":"d5b45558af1eee4cddff2e5c20669d51ba315801","path":".github/workflows/fantasy-draft-empty-pool-20261110.yml","branch":"codex/fantasy-draft-empty-pool-original-retry-qa-20261110","auditSHA256":"6422570d421d9c26093651520f4086ca618475b14ce4bdf58b86a78b2ca17a85","raw":{"bytes":6461011,"sha256":"7394808c1e25a04a8db26889c1428822f343d369cc89b9ec888ec5d673f0cb0d"}},"page":{"path":"src/pages/FantasyDraft.tsx","blob":"328b8632eea964f0010465d9e7bcd04990819853","bytes":25890,"sha256":"e34a7fa46c434d1a8f82da61bf8535228df1997ff83d84264bbcaae754e0f066","priorBlob":"a1ec7dda9bd2c7a7fc674b5471fc0dad63a67509","priorBytes":25883,"priorSHA256":"1d87eebfd41c85576edf2fc28f9f7d3df738e87dc143e8fce807d406885e6560"},"test":{"path":"src/test/fantasyDraftPoolRecovery.test.tsx","blob":"2f202331b41768892e888b4daa97bd54c4048446","sha256":"6e023d5273d08a3beca11de130dcd9b0311dceea3a9fb5ade85bb29d38841f8b","bytes":29976},"plan":{"path":"docs/plans/2026-11-10-fantasy-draft-empty-pool.md","blob":"f090008f80c10ee1fd220e19516d636d2f6adf39","sha256":"cd88200e546d7e00b079fcef1646f1fd42d37305d42317b83eeb15d6d3a1a01d","bytes":896}};
+          const {original,base,page,test,plan}=inputs;
+          const out=process.env.EVIDENCE,repo='PapiSalgueroM/ballpark-hero';
+          const git=(...args)=>execFileSync('git',args,{encoding:'utf8',maxBuffer:16*1024*1024}).trimEnd();
+          const hash=(algorithm,body)=>createHash(algorithm).update(body).digest('hex');
+          const blob=body=>hash('sha1',Buffer.concat([Buffer.from('blob '+body.length+'\0'),body]));
+          const head=git('rev-parse','HEAD'),tree=git('rev-parse','HEAD^{tree}');
           assert.equal(process.env.GITHUB_REPOSITORY,repo);
-          const api = process.env.GITHUB_API_URL + '/repos/' + repo;
-          const request = async path => {
-            const response = await fetch(api+path,{headers:{
-              Accept:'application/vnd.github+json',Authorization:'Bearer '+process.env.GH_TOKEN,
-              'X-GitHub-Api-Version':'2022-11-28',
-            },redirect:'error'});
-            assert.equal(response.status,200,path);
+          assert.equal(process.env.GITHUB_SHA,head);
+          assert.deepEqual(git('rev-list','--parents','-n','1',head).split(' '),[head,original.head]);
+          assert.deepEqual(git('rev-list','--parents','-n','1',original.head).split(' '),[original.head,base.head]);
+          assert.equal(git('rev-parse',base.head+'^{tree}'),base.tree);
+          assert.equal(git('rev-parse',original.head+'^{tree}'),original.tree);
+          assert.equal(git('rev-parse',original.head+':'+original.path),original.workflow);
+          const diff=git('diff','--name-status','--no-renames',original.head,head).split('\n').sort();
+          assert.deepEqual(diff,['M\t'+page.path,'M\t'+original.path].sort());
+          const all=ref=>git('ls-tree','-r','-z',ref).split('\0').filter(Boolean);
+          const held=rows=>rows.filter(x=>![page.path,original.path].includes(x.split('\t')[1]));
+          const before=all(original.head),after=all(head);
+          assert.deepEqual([before.length,after.length,held(after).length],[5804,5804,5802]);
+          assert.deepEqual(held(before),held(after));
+          assert.equal(after.filter(row=>/^(src|public|scripts)\//.test(row.split('\t')[1])).length,4669);
+          const initialPage=execFileSync('git',['show',original.head+':'+page.path]);
+          const fixedPage=fs.readFileSync(page.path);
+          assert.deepEqual([blob(initialPage),initialPage.length,hash('sha256',initialPage)],[page.priorBlob,page.priorBytes,page.priorSHA256]);
+          assert.deepEqual([blob(fixedPage),fixedPage.length,hash('sha256',fixedPage)],[page.blob,page.bytes,page.sha256]);
+          assert.equal(blob(fs.readFileSync(test.path)),test.blob);
+          assert.equal(blob(fs.readFileSync(plan.path)),plan.blob);
+          const api=process.env.GITHUB_API_URL+'/repos/'+repo;
+          const get=async suffix=>{
+            const response=await fetch(api+suffix,{headers:{Accept:'application/vnd.github+json',Authorization:'Bearer '+process.env.GH_TOKEN,
+              'X-GitHub-Api-Version':'2022-11-28'},redirect:'error'});
+            assert.equal(response.status,200,suffix);
             return response.json();
           };
-          const [run,jobs,artifacts] = await Promise.all([
-            request('/actions/runs/'+preflight.run),request('/actions/runs/'+preflight.run+'/jobs?per_page=100'),
-            request('/actions/runs/'+preflight.run+'/artifacts?per_page=100'),
-          ]);
-          assert.deepEqual([run.id,run.status,run.conclusion,run.event,run.run_attempt,run.path,run.head_sha,run.head_commit.tree_id,run.head_branch,run.repository.full_name],
-            [preflight.run,'completed','success','push',1,workflow,preflight.head,preflight.tree,preflight.branch,repo]);
+          const [run,jobs,artifacts]=await Promise.all([get('/actions/runs/'+original.run),get('/actions/runs/'+original.run+'/jobs?per_page=100'),get('/actions/runs/'+original.run+'/artifacts?per_page=100')]);
+          assert.deepEqual([run.id,run.status,run.conclusion,run.event,run.run_attempt,run.path,run.head_sha,run.head_commit.tree_id,run.head_branch],
+            [original.run,'completed','success','push',1,original.path,original.head,original.tree,original.branch]);
           assert.equal(jobs.jobs.length,1);
-          const [job] = jobs.jobs;
-          assert.deepEqual([job.id,job.run_id,job.name,job.status,job.conclusion,job.head_sha,job.steps.length],
-            [preflight.job,preflight.run,'preflight','completed','success',preflight.head,preflight.steps]);
-          assert(job.steps.every(step => step.status==='completed' && step.conclusion==='success'));
           assert.equal(artifacts.artifacts.length,1);
-          const [artifact] = artifacts.artifacts;
-          assert.deepEqual([artifact.id,artifact.name,artifact.expired,artifact.size_in_bytes,artifact.digest,artifact.workflow_run.id,artifact.workflow_run.head_sha],
-            [preflight.artifact,'fantasy-draft-empty-pool-active-preflight-'+preflight.run,false,preflight.zipBytes,'sha256:'+preflight.zipSHA256,preflight.run,preflight.head]);
-          delete process.env.GH_TOKEN;
-          const git = (...args) => execFileSync('git',args,{encoding:'utf8',maxBuffer:16*1024*1024}).trimEnd();
-          const sha = (algorithm,body) => createHash(algorithm).update(body).digest('hex');
-          const blob = body => sha('sha1',Buffer.concat([Buffer.from('blob '+body.length+'\0'),body]));
-          const head = git('rev-parse','HEAD');
-          assert.equal(head,process.env.GITHUB_SHA);
-          assert.deepEqual(git('rev-list','--parents','-n','1','HEAD').split(' '),[head,BASE_HEAD]);
-          assert.equal(git('rev-parse',BASE_HEAD+'^{tree}'),BASE_TREE);
-          const pins = {...held,[helper]:HELPER_BLOB,[plan]:PLAN_BLOB};
-          for(const [file,want] of Object.entries(pins)){
-            assert.match(want,/^[0-9a-f]{40}$/);
-            assert.equal(git('rev-parse','HEAD:'+file),want,file);
-            assert.equal(blob(fs.readFileSync(file)),want,file+' physical bytes');
-            if(Object.hasOwn(held,file)) assert.equal(git('rev-parse',BASE_HEAD+':'+file),held[file],file+' admitted base');
-          }
-          const owned = [helper,plan,workflow].sort();
-          assert.deepEqual(git('diff','--name-status','--no-renames',BASE_HEAD,'HEAD').split('\n').sort(),owned.map(file=>(file===helper?'M':'A')+'\t'+file).sort());
-          const tree = ref => git('ls-tree','-r','-z',ref).split('\0').filter(Boolean);
-          const pathOf = row => row.split('\t')[1];
-          const previous = tree(BASE_HEAD), current = tree('HEAD');
-          assert.deepEqual([previous.length,current.length],[5802,5804]);
-          assert.deepEqual(current.filter(row => !owned.includes(pathOf(row))),previous.filter(row => pathOf(row)!==helper));
-          assert.deepEqual(current.filter(row => owned.includes(pathOf(row))).map(row => row.split(' ')[0]),['100644','100644','100644']);
-          assert.equal(current.filter(row => /^(src|public|scripts)\//.test(pathOf(row))).length,4669);
-          const selected = { 'held-fantasy-draft-page.tsx':edge, 'candidate-test.tsx':helper, 'candidate-plan.md':plan, 'candidate-workflow.yml':workflow };
-          const selectedBodies = Object.entries(selected).map(([file,path]) => {
-            const bytes = fs.readFileSync(path);
-            fs.writeFileSync(out+'/'+file,bytes);
-            return {file,path,bytes:bytes.length,sha256:sha('sha256',bytes),blob:blob(bytes)};
-          });
-          fs.writeFileSync(out+'/source-receipt.json',JSON.stringify({
-            status:'passed',head,tree:git('rev-parse','HEAD^{tree}'),parent:BASE_HEAD,parentTree:BASE_TREE,basePR:543,
-            activePreflight:preflight,route:'/fantasy-draft',category:'Soccer',owned,pins,selectedBodies,
-            heldRows:5801,trackedRows:5804,scopedSourceRows:4669,rootConfigurations:11,productUnchanged:true,
-          },null,2)+'\n');
+          const [job]=jobs.jobs,[artifact]=artifacts.artifacts;
+          assert.deepEqual([job.id,job.name,job.conclusion,job.steps.length],[original.job,'original','success',original.steps]);
+          assert(job.steps.every(row=>row.status==='completed'&&row.conclusion==='success'));
+          assert.deepEqual([artifact.id,artifact.size_in_bytes,artifact.digest,artifact.expired,artifact.workflow_run.id,artifact.workflow_run.head_sha],
+            [original.artifact,original.zipBytes,'sha256:'+original.zipSHA256,false,original.run,original.head]);
+          fs.writeFileSync(out+'/held-original-page.tsx',initialPage);
+          fs.writeFileSync(out+'/candidate-fixed-page.tsx',fixedPage);
+          fs.copyFileSync(test.path,out+'/candidate-test.tsx');
+          fs.copyFileSync(original.path,out+'/candidate-workflow.yml');
+          fs.writeFileSync(out+'/source-receipt.json',JSON.stringify({status:'passed',head,tree,parent:original.head,parentTree:original.tree,
+            workflow:git('rev-parse','HEAD:'+original.path),inputs,trackedRows:5804,heldRows:5802,scopedSourceRows:4669,rootConfigurations:11},null,2)+'\n');
           NODE
+          original_id=$(node -p "require('./$EVIDENCE/source-receipt.json').inputs.original.artifact")
+          original_size=$(node -p "require('./$EVIDENCE/source-receipt.json').inputs.original.zipBytes")
+          original_sha=$(node -p "require('./$EVIDENCE/source-receipt.json').inputs.original.zipSHA256")
+          original_zip="$RUNNER_TEMP/fantasy-draft-empty-original.zip"
+          gh api "repos/PapiSalgueroM/ballpark-hero/actions/artifacts/$original_id/zip" > "$original_zip"
+          test "$(wc -c < "$original_zip")" -eq "$original_size"
+          printf '%s  %s\n' "$original_sha" "$original_zip" | sha256sum -c -
+          unzip -Z1 "$original_zip" > "$EVIDENCE/original-zip-entries.txt"
+          test "$(grep -Fxc 'public-cases.raw.json' "$EVIDENCE/original-zip-entries.txt")" -eq 1
+          unzip -p "$original_zip" public-cases.raw.json > "$EVIDENCE/original-reference.raw.json"
+          raw_size=$(node -p "require('./$EVIDENCE/source-receipt.json').inputs.original.raw.bytes")
+          raw_sha=$(node -p "require('./$EVIDENCE/source-receipt.json').inputs.original.raw.sha256")
+          test "$(wc -c < "$EVIDENCE/original-reference.raw.json")" -eq "$raw_size"
+          printf '%s  %s\n' "$raw_sha" "$EVIDENCE/original-reference.raw.json" | sha256sum -c -
       - name: Install locked dependencies, freeze physical source, and verify app types
         run: |
           set -euo pipefail
@@ -153,117 +143,254 @@ jobs:
           NODE
           node "$EVIDENCE/physical.mjs" before
           node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee "$EVIDENCE/types.log"
-      - name: Require the original Fantasy Draft empty player-pool mismatch
+      - name: Run the fixed Page, physical original rollback, and exact restoration
         run: |
           set -euo pipefail
-          test ! -e "$FD_POOL_RECOVERY_RAW"
-          export FD_POOL_RECOVERY_RAW="$PWD/$FD_POOL_RECOVERY_RAW"
-          result=0
-          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" timeout --signal=TERM 90s \
-            node_modules/.bin/vitest run src/test/fantasyDraftPoolRecovery.test.tsx src/test/fantasyDraftCriteriaStart.test.tsx --testTimeout=60000 --no-file-parallelism --reporter=json --outputFile="$EVIDENCE/vitest-result.json" > "$EVIDENCE/helper.log" 2>&1 || result=$?
-          cat "$EVIDENCE/helper.log"
-          printf '%s\n' "$result" > "$EVIDENCE/helper-exit.txt"
-          test "$result" -eq 1
-          test -s "$FD_POOL_RECOVERY_RAW"
-          test ! -s "$SIM_OFFLINE_RECEIPT"
-          node --input-type=module <<'NODE'
+          cat > "$EVIDENCE/fixed-validator.mjs" <<'FD_EMPTY_VALIDATOR'
+          import assert from 'node:assert/strict';
+          import { createHash } from 'node:crypto';
+          
+          const UNDER25 = 'Under 25s: Every player must be 25 or younger';
+          const POOL_FILE = '/src/test/fantasyDraftPoolRecovery.test.tsx';
+          const CRITERIA_FILE = '/src/test/fantasyDraftCriteriaStart.test.tsx';
+          const POOL_CALLS = [
+            ['from', ['fantasy_draft_players']],
+            ['select', ['id, name, position, nationality, market_value_millions, dominant_foot, age']],
+            ['order', ['name']],
+          ];
+          const CASES = [
+            ['normalUser', 'user', 'success', 'preserves ordinary user-first pool admission legal picks and the snake AI turns', null],
+            ['normalAi', 'ai', 'success', 'preserves ordinary AI-first pool admission legal picks and the snake AI turns', null],
+            ['errorUser', 'user', 'resolved-error', 'recovers the user-first round through a public retry after a resolved pool error', null],
+            ['errorAi', 'ai', 'resolved-error', 'recovers the AI-first round through a public retry after a resolved pool error', null],
+            ['nullUser', 'user', 'resolved-null', 'recovers the user-first round after a successful null player-pool reply', 'FD_POOL_EMPTY_NULL_USER'],
+            ['nullAi', 'ai', 'resolved-null', 'recovers the AI-first round after a successful null player-pool reply', 'FD_POOL_EMPTY_NULL_AI'],
+            ['emptyUser', 'user', 'resolved-empty', 'recovers the user-first round after a successful empty player-pool reply', 'FD_POOL_EMPTY_ARRAY_USER'],
+            ['emptyAi', 'ai', 'resolved-empty', 'recovers the AI-first round after a successful empty player-pool reply', 'FD_POOL_EMPTY_ARRAY_AI'],
+          ];
+          const CRITERIA_TITLES = [
+            'FD_RULES_PENDING_SUCCESS refuses premature admission and resumes after the deferred callback',
+            'FD_RULES_PENDING_REJECTION refuses premature admission and resumes after the deferred callback',
+            'FD_RULES_SETTLED_NULL preserves permissive picks and the original AI turn sequence',
+            'FD_RULES_SETTLED_LEGACY preserves permissive picks and the original AI turn sequence',
+          ];
+          const FINISH = {
+            user: { turn: 'user', round: 2, pick: 4, total: 22, human: ['Fixture FWD 00'], ai: ['Fixture FWD 01', 'Fixture FWD 02'] },
+            ai: { turn: 'user', round: 3, pick: 6, total: 22, human: ['Fixture FWD 00', 'Fixture FWD 01'], ai: ['Fixture FWD 05', 'Fixture MID 00', 'Fixture MID 01'] },
+          };
+          
+          const rawPin = raw => ({ bytes: raw.length, sha256: createHash('sha256').update(raw).digest('hex') });
+          const playerReads = frame => frame.transport.filter(read => read.kind === 'players');
+          const pickOne = seat => ({ turn: seat, round: 1, pick: 1, total: 22, human: [], ai: [] });
+          const successfulReply = data => ({ data, error: null, count: null, status: 200, statusText: 'OK' });
+          const rosterNames = (page, side) => page.rosters[side]?.slots.filter(slot => slot.name !== null).map(slot => slot.name) ?? [];
+          function progress({ page }) {
+            assert(page, 'Expected an actual mounted draft frame');
+            const { turn, round, pick, total } = page;
+            return { turn, round, pick, total, human: rosterNames(page, 'human'), ai: rosterNames(page, 'ai') };
+          }
+          function parseRaw(raw) {
+            assert(Buffer.isBuffer(raw) && raw.length > 0, 'Exact retained RAW bytes are required');
+            const text = raw.toString('utf8');
+            const evidence = JSON.parse(text);
+            assert.equal(text, JSON.stringify(evidence) + '\n', 'Canonical compact RAW');
+            assert.equal(evidence.version, 1);
+            assert.equal(evidence.criteria, UNDER25);
+            assert.equal(evidence.fixture.length, 27);
+            assert(evidence.fixture.every(row => row.id.startsWith('fixture-') && row.name.startsWith('Fixture ')));
+            assert.deepEqual(evidence.cases.map(row => [row.key, row.seat, row.firstPoolResponse, row.title]), CASES.map(row => row.slice(0, 4)));
+            return evidence;
+          }
+          
+          function unitResults(vitest, rollback) {
+            const failed = rollback ? 4 : 0;
+            assert.deepEqual([
+              vitest.numTotalTests, vitest.numFailedTests, vitest.numPassedTests,
+              vitest.numPendingTests, vitest.numTodoTests, vitest.success,
+            ], [12, failed, 12 - failed, 0, 0, !rollback], 'Exact unit result census');
+            assert.equal(vitest.testResults.length, 2, 'Exactly the two qualified suites');
+            const pool = vitest.testResults.find(suite => suite.name.endsWith(POOL_FILE));
+            const criteria = vitest.testResults.find(suite => suite.name.endsWith(CRITERIA_FILE));
+            assert(pool && criteria, 'Exact pool and criteria suite paths');
+            assert.deepEqual([pool.status, criteria.status], [rollback ? 'failed' : 'passed', 'passed'], 'Exact physical test-file statuses');
+            assert.deepEqual(pool.assertionResults.map(row => row.title), CASES.map(row => row[3]));
+            assert.deepEqual(criteria.assertionResults.map(row => row.title), CRITERIA_TITLES);
+            assert(criteria.assertionResults.every(row => row.status === 'passed' && row.failureMessages.length === 0));
+            const errors = [];
+            for (const [index, row] of pool.assertionResults.entries()) {
+              const marker = CASES[index][4];
+              if (rollback && marker) {
+                assert.equal(row.status, 'failed', row.title);
+                assert.equal(row.failureMessages.length, 1, row.title);
+                const message = row.failureMessages[0].replace(/\x1b\[[0-9;]*m/g, '');
+                assert(message.startsWith('AssertionError: ' + marker + ':'), row.title);
+                assert(!/UnhandledPromiseRejection|ERR_MODULE_NOT_FOUND|ERR_UNKNOWN_FILE_EXTENSION|SIM_OFFLINE_BLOCK/i.test(message));
+                errors.push(marker);
+              } else {
+                assert.equal(row.status, 'passed', row.title);
+                assert.deepEqual(row.failureMessages, [], row.title);
+              }
+            }
+            return { tests: 12, passed: 12 - failed, failed, criteria: CRITERIA_TITLES, markers: errors };
+          }
+          
+          function observeCase(testCase, fixture, rollback) {
+            const { key, seat, firstPoolResponse: reply, frames, complete, error } = testCase;
+            const empty = reply === 'resolved-null' || reply === 'resolved-empty';
+            assert.deepEqual([complete, error], [true, null], key);
+            assert(frames.every(frame => !frame.failures.length && !frame.unexpectedTransport.length && !frame.completions.length), key);
+            const byLabel = new Map(frames.map(frame => [frame.label, frame]));
+            assert.equal(byLabel.size, frames.length, key + ' unique frames');
+            const frame = label => {
+              assert(byLabel.has(label), key + ' missing frame ' + label);
+              return byLabel.get(label);
+            };
+            const pending = frame('first-pool-pending');
+            const settled = frame(empty ? 'first-pool-' + reply : reply === 'success' ? 'first-pool-success' : 'first-pool-error');
+            const final = frame('legal-progress-complete');
+            const teardown = frames.at(-1);
+            assert.deepEqual([teardown.label, teardown.page, teardown.pendingResponses, teardown.clock.fakeTimers], ['after-teardown', null, 0, 0], key);
+            assert.deepEqual(progress(pending), pickOne(seat), key + ' opening seat and pick');
+            assert.equal(pending.pendingResponses, 1, key + ' initial read in flight');
+            const [first] = playerReads(settled);
+            assert(first && first.settledAt !== null && first.consumedAt !== null, key + ' actual first player reply');
+            assert.deepEqual(first.calls.map(call => [call.method, call.args]), POOL_CALLS, key);
+            const allPlayers = playerReads(final);
+            const criteriaReads = final.transport.filter(read => read.kind === 'criteria');
+            assert.equal(criteriaReads.length, 1, key + ' held single daily criteria read');
+            assert.deepEqual(criteriaReads[0].response, { data: { criteria: UNDER25 }, error: null }, key);
+            assert.equal(final.page.criterion, UNDER25, key + ' held rule');
+            const retryButton = settled.page.retry.filter(button => button.disabled === false);
+            const tried = final.actions.find(action => action.name === 'retry-player-pool');
+            const delivered = final.actions.find(action => action.name === 'settle-retry-pool');
+            if (empty) assert.deepEqual(first.response, successfulReply(reply === 'resolved-null' ? null : []), key);
+            else if (reply === 'success') assert.deepEqual(first.response, successfulReply(fixture), key);
+            else assert.deepEqual([first.response.status, first.response.error.code], [503, 'FIXTURE_POOL_UNAVAILABLE'], key);
+          
+            const stillStuck = rollback && empty;
+            assert.deepEqual(progress(final), stillStuck ? pickOne(seat) : FINISH[seat], key + ' exact final pick and rosters');
+            if (stillStuck) {
+              for (const hold of [settled, frame('error-after-service-wait'), frame('retry-pending'), frame('duplicate-retry-pending'), frame('retry-pool-settled'), final]) {
+                assert.deepEqual(progress(hold), pickOne(seat), key + ' rollback held pick');
+                assert.deepEqual(hold.page.retry, [], key + ' rollback has no Retry');
+                assert.equal(playerReads(hold).length, 1, key + ' rollback has no second read');
+              }
+              assert.deepEqual([tried?.details.clicked, delivered?.details.delivered], [false, false], key);
+            } else if (reply !== 'success') {
+              assert.deepEqual([settled.page.retry.length, retryButton.map(button => button.text?.trim())], [1, ['Retry players']], key);
+              const waiting = frame('error-after-service-wait');
+              assert.deepEqual([waiting.page.retry.length, playerReads(waiting).length, waiting.draws], [1, 1, settled.draws], key);
+              const recovered = frame('retry-pool-settled');
+              for (const hold of [settled, waiting, frame('retry-pending'), frame('duplicate-retry-pending'), recovered]) {
+                assert.deepEqual(progress(hold), pickOne(seat), key + ' same seat and pick through Retry');
+                assert.equal(hold.page.criterion, UNDER25, key);
+              }
+              for (const label of ['retry-pending', 'duplicate-retry-pending']) {
+                const inFlight = frame(label);
+                assert.deepEqual([inFlight.pendingResponses, inFlight.page.retry.length, playerReads(inFlight).length], [1, 0, 2], key);
+              }
+              assert.deepEqual([tried?.details.clicked, delivered?.details.delivered, recovered.pendingResponses, recovered.draws],
+                [true, true, 0, settled.draws], key);
+              assert.equal(final.actions.find(action => action.name === 'duplicate-retry-opportunity')?.details.clicked, false, key);
+              assert.equal(allPlayers.length, 2, key + ' exactly one Retry read');
+              const second = allPlayers[1];
+              assert.deepEqual(second.calls.map(call => [call.method, call.args]), POOL_CALLS, key);
+              assert(second.consumedAt !== null && second.settledAt !== null, key + ' actual second settled reply');
+              assert.deepEqual(second.response, successfulReply(fixture), key + ' exact nonempty fictional retry pool');
+              assert.equal(recovered.page.retry.length, 0, key);
+            } else {
+              assert.equal(allPlayers.length, 1, key + ' healthy nonempty success reads once');
+              assert.deepEqual(settled.page.retry, [], key);
+            }
+            return { case: key, seat, firstResponse: reply, firstStatus: first.response.status, firstEnabledRetries: retryButton.length,
+              lastPick: final.page.pick, playerReads: allPlayers.length };
+          }
+          
+          /** Receives authenticated retained RAW buffers and the parsed role-specific Vitest JSON report. */
+          export function validateFantasyDraftEmptyPool({ mode, raw, vitest, exitCode, originalRaw, fixedRaw }) {
+            assert(['fixed', 'original', 'restored'].includes(mode), 'Exact physical Page role');
+            const rollback = mode === 'original';
+            assert.equal(exitCode, rollback ? 1 : 0, 'Expected runner process exit for the role');
+            const evidence = parseRaw(raw);
+            const original = parseRaw(originalRaw);
+            assert.deepEqual([evidence.version, evidence.scope, evidence.criteria, evidence.fixture, evidence.cases.slice(0, 4)],
+              [original.version, original.scope, original.criteria, original.fixture, original.cases.slice(0, 4)],
+              'Exact four existing pool RAW cases and fixtures remain held');
+            if (rollback) assert(raw.equals(originalRaw), 'Physical original reproduces the entire authenticated original RAW');
+            if (mode === 'fixed') assert(!raw.equals(originalRaw), 'Fixed RAW must demonstrate a change');
+            if (mode === 'restored') assert(Buffer.isBuffer(fixedRaw) && raw.equals(fixedRaw), 'Restored RAW exactly reproduces the fixed role');
+            const unit = unitResults(vitest, rollback);
+            return { status: 'passed', mode, exitCode, ...unit, raw: rawPin(raw), originalRaw: rawPin(originalRaw),
+              restoredMatchesFixed: mode === 'restored' ? true : null,
+              cases: evidence.cases.map(testCase => observeCase(testCase, evidence.fixture, rollback)) };
+          }
+          FD_EMPTY_VALIDATOR
+          cat > "$EVIDENCE/control-driver.mjs" <<'NODE'
           import assert from 'node:assert/strict';
           import fs from 'node:fs';
-          import { createHash } from 'node:crypto';
-
-          const out = process.env.EVIDENCE;
-          const marker = 'FD_POOL_EMPTY_';
-          const log = fs.readFileSync(out+'/helper.log','utf8');
-          const vitest = JSON.parse(fs.readFileSync(out+'/vitest-result.json','utf8'));
-          assert.deepEqual([vitest.numTotalTests,vitest.numFailedTests,vitest.numPassedTests,vitest.numPendingTests,vitest.numTodoTests,vitest.success],
-            [12,4,8,0,0,false],'Exactly four expected failures and eight healthy outcomes');
-          assert.equal(vitest.testResults.length,2);
-          const suite = suffix => vitest.testResults.find(row=>row.name.endsWith(suffix));
-          const poolSuite=suite('/src/test/fantasyDraftPoolRecovery.test.tsx'),criteriaSuite=suite('/src/test/fantasyDraftCriteriaStart.test.tsx');
-          assert.deepEqual([poolSuite.status,criteriaSuite.status],['failed','passed'],'Exact physical test-file outcomes');
-          assert.equal(poolSuite.assertionResults.length,8);
-          assert.equal(criteriaSuite.assertionResults.length,4);
-          assert(criteriaSuite.assertionResults.every(row=>row.status==='passed'&&row.failureMessages.length===0));
-          const errors=poolSuite.assertionResults.filter(row=>row.status==='failed').map(row=>{
-            assert.equal(row.failureMessages.length,1);
-            const message=row.failureMessages[0].replace(/\x1b\[[0-9;]*m/g,'');
-            assert(message.startsWith('AssertionError: '+marker),'Only owned actual empty pool failures');
-            return {title:row.title,message:message.split('\n')[0]};
-          });
-          assert.equal(errors.length,4);
-          assert(!/UnhandledPromiseRejection|ERR_MODULE_NOT_FOUND|ERR_UNKNOWN_FILE_EXTENSION|SIM_OFFLINE_BLOCK|Unhandled Errors/i.test(log));
-          const raw = fs.readFileSync(process.env.FD_POOL_RECOVERY_RAW);
-          const evidence = JSON.parse(raw.toString('utf8'));
-          const checks = (() => {
-          assert.equal(raw.toString('utf8'),JSON.stringify(evidence)+'\n');
-          assert.equal(evidence.version,1);
-          assert.equal(evidence.criteria,'Under 25s: Every player must be 25 or younger');
-          assert.equal(evidence.fixture.length,27);
-          assert(evidence.fixture.every(p=>p.id.startsWith('fixture-')&&p.name.startsWith('Fixture ')));
-          const expected=[
-            ['normalUser','user','success',null],['normalAi','ai','success',null],
-            ['errorUser','user','resolved-error',null],['errorAi','ai','resolved-error',null],
-            ['nullUser','user','resolved-null','FD_POOL_EMPTY_NULL_USER'],['nullAi','ai','resolved-null','FD_POOL_EMPTY_NULL_AI'],
-            ['emptyUser','user','resolved-empty','FD_POOL_EMPTY_ARRAY_USER'],['emptyAi','ai','resolved-empty','FD_POOL_EMPTY_ARRAY_AI'],
-          ];
-          assert.deepEqual(evidence.cases.map(c=>[c.key,c.seat,c.firstPoolResponse]),expected.map(row=>row.slice(0,3)));
-          assert.deepEqual(errors.map(e=>e.message.match(/^AssertionError: (FD_POOL_EMPTY_[A-Z_]+)\b/)?.[1]),expected.slice(4).map(row=>row[3]));
-          const poolRows=new Map(poolSuite.assertionResults.map(row=>[row.title,row]));
-          assert.equal(poolRows.size,8);
-          const formation = (p,side) => p?.rosters[side]?.slots.filter(s=>s.name!==null).map(s=>s.name)??[];
-          const progress=p=>({turn:p?.turn,round:p?.round,pick:p?.pick,total:p?.total,human:formation(p,'human'),ai:formation(p,'ai')});
-          const finalBySeat={
-            user:{turn:'user',round:2,pick:4,total:22,human:['Fixture FWD 00'],ai:['Fixture FWD 01','Fixture FWD 02']},
-            ai:{turn:'user',round:3,pick:6,total:22,human:['Fixture FWD 00','Fixture FWD 01'],ai:['Fixture FWD 05','Fixture MID 00','Fixture MID 01']},
-          };
-          const observation=evidence.cases.map((c,i)=>{
-            const row=poolRows.get(c.title),marker=expected[i][3],byLabel=name=>c.frames.find(f=>f.label===name);
-            assert.equal(row?.status,marker?'failed':'passed',c.key);
-            if(marker)assert(errors.some(e=>e.title===c.title&&e.message.startsWith('AssertionError: '+marker+':')),c.key);
-            else assert.deepEqual(row.failureMessages,[],c.key);
-            assert.equal(c.complete,true,c.key);
-            assert.equal(c.error,null,c.key);
-            assert(c.frames.every(f=>f.failures.length===0&&f.unexpectedTransport.length===0&&f.completions.length===0),c.key);
-            const pending=byLabel('first-pool-pending');
-            const settled=byLabel(marker?'first-pool-'+c.firstPoolResponse:c.firstPoolResponse==='success'?'first-pool-success':'first-pool-error');
-            assert(pending&&settled,c.key+' exact pending and response labels');
-            const final=byLabel('legal-progress-complete'),last=c.frames.at(-1);
-            assert.equal(last.label,'after-teardown',c.key);
-            assert.equal(last.page,null,c.key);
-            assert.equal(last.pendingResponses,0,c.key);
-            assert.equal(last.clock.fakeTimers,0,c.key);
-            const firstPlayers=settled.transport.find(r=>r.kind==='players');
-            assert(firstPlayers&&firstPlayers.response&&firstPlayers.settledAt!==null,c.key);
-            assert.deepEqual(firstPlayers.calls.map(v=>[v.method,v.args]),[
-              ['from',['fantasy_draft_players']],['select',['id, name, position, nationality, market_value_millions, dominant_foot, age']],['order',['name']],
-            ],c.key);
-            const heldAtOne={turn:c.seat,round:1,pick:1,total:22,human:[],ai:[]};
-            assert.deepEqual(progress(pending.page),heldAtOne,c.key);
-            if(marker){
-              assert.deepEqual(firstPlayers.response,{data:c.firstPoolResponse==='resolved-null'?null:[],error:null,count:null,status:200,statusText:'OK'},c.key);
-              assert.deepEqual(progress(settled.page),heldAtOne,c.key);
-              assert.deepEqual(progress(final.page),heldAtOne,c.key);
-              assert.deepEqual(settled.page.retry,[],c.key);
-              assert.equal(final.actions.find(a=>a.name==='retry-player-pool')?.details.clicked,false,c.key);
-              assert.equal(final.actions.find(a=>a.name==='settle-retry-pool')?.details.delivered,false,c.key);
-              assert.equal(final.transport.filter(r=>r.kind==='players').length,1,c.key);
-            }else{
-              assert.deepEqual(progress(final.page),finalBySeat[c.seat],c.key);
-              const count=c.firstPoolResponse==='resolved-error'?2:1;
-              assert.equal(final.transport.filter(r=>r.kind==='players').length,count,c.key);
+          import path from 'node:path';
+          import {createHash} from 'node:crypto';
+          import {execFileSync,spawnSync} from 'node:child_process';
+          import {validateFantasyDraftEmptyPool} from './fixed-validator.mjs';
+          const out=process.env.EVIDENCE,source=JSON.parse(fs.readFileSync(out+'/source-receipt.json'));
+          const {page,test}=source.inputs;
+          const originalRaw=fs.readFileSync(out+'/original-reference.raw.json');
+          const fixedPage=fs.readFileSync(out+'/candidate-fixed-page.tsx');
+          const originalPage=fs.readFileSync(out+'/held-original-page.tsx');
+          const sha=body=>createHash('sha256').update(body).digest('hex');
+          const git=(...args)=>execFileSync('git',args,{encoding:'utf8',maxBuffer:16*1024*1024});
+          const index=git('ls-files','-s');
+          const held=JSON.parse(fs.readFileSync(out+'/tracked-before.json')).filter(([file])=>file!==page.path);
+          assert.equal(held.length,5803);
+          const verify=(mode,body)=>{
+            assert.equal(git('ls-files','-s'),index);
+            const expected=mode==='original'?'M\t'+page.path:'';
+            assert.equal(git('diff','--name-status','--no-renames','HEAD').trimEnd(),expected);
+            assert(fs.readFileSync(page.path).equals(body));
+            assert.equal(fs.statSync(process.env.SIM_OFFLINE_RECEIPT).size,0);
+            for(const [file,bytes,hash] of held){
+              const current=fs.readFileSync(file);
+              assert.deepEqual([current.length,sha(current)],[bytes,hash],file);
             }
-            return {case:c.key,seat:c.seat,response:c.firstPoolResponse,marker,firstStatus:firstPlayers.response.status,
-              firstRetryButtons:settled.page.retry.length,lastPick:final.page.pick,playerReads:final.transport.filter(r=>r.kind==='players').length};
-          });
-          return {status:'passed',cases:observation.length,expectedFailures:4,heldPoolPasses:4,heldCriteriaPasses:4,observations:observation,
-            limits:'Fictional successful-empty pool replies. This source finding does not establish a reported live cause.'};
-          })();
-          assert.equal(checks.status,'passed');
-          fs.writeFileSync(out+'/original-result.json',JSON.stringify({
-            status:'expected-original-fantasy-draft-empty-pool-mismatch',marker,expectedProcessExit:1,
-            assertions:errors,rawBytes:raw.length,rawSHA256:createHash('sha256').update(raw).digest('hex'),checks,
-          },null,2)+'\n',{flag:'wx'});
+          };
+          const modes=['fixed','original','restored'],results={};
+          let fixedRaw;
+          try {
+            for(const mode of modes){
+              const body=mode==='original'?originalPage:fixedPage;
+              if(mode!=='fixed'){
+                assert(!fs.readFileSync(page.path).equals(body),mode+' physical changed Page');
+                fs.writeFileSync(page.path,body);
+              }
+              verify(mode,body);
+              const dir=out+'/'+mode;
+              fs.mkdirSync(dir);
+              const rawPath=path.resolve(dir,'public-cases.raw.json');
+              const result=spawnSync(process.execPath,['node_modules/vitest/vitest.mjs','run',test.path,'src/test/fantasyDraftCriteriaStart.test.tsx',
+                '--testTimeout=60000','--no-file-parallelism','--reporter=json','--outputFile='+dir+'/vitest-result.json'],{
+                env:{...process.env,FD_POOL_RECOVERY_RAW:rawPath,NODE_OPTIONS:'--require='+process.cwd()+'/scripts/lib/offlineTransport.cjs'},
+                timeout:180000,maxBuffer:16*1024*1024,
+              });
+              assert.equal(result.error,undefined,mode);
+              assert.equal(result.signal,null,mode);
+              const log=Buffer.concat([result.stdout??Buffer.alloc(0),result.stderr??Buffer.alloc(0)]);
+              fs.writeFileSync(dir+'/helper.log',log);
+              fs.writeFileSync(dir+'/helper-exit.txt',String(result.status)+'\n');
+              assert(!/UnhandledPromiseRejection|ERR_MODULE_NOT_FOUND|ERR_UNKNOWN_FILE_EXTENSION|SIM_OFFLINE_BLOCK|Unhandled Errors/i.test(log.toString('utf8')));
+              const raw=fs.readFileSync(rawPath),vitest=JSON.parse(fs.readFileSync(dir+'/vitest-result.json'));
+              results[mode]=validateFantasyDraftEmptyPool({mode,raw,vitest,exitCode:result.status,originalRaw,fixedRaw});
+              if(mode==='fixed') fixedRaw=raw;
+              assert.equal(results[mode].status,'passed',mode);
+              verify(mode,body);
+            }
+          } finally {
+            if(!fs.readFileSync(page.path).equals(fixedPage))fs.writeFileSync(page.path,fixedPage);
+          }
+          verify('restored',fixedPage);
+          fs.writeFileSync(out+'/admission.json',JSON.stringify({status:'passed',roles:modes,onlyPhysicalProductPath:page.path,
+            exactRestoredPage:true,exactRestoredRaw:true,exactOriginalRaw:true,results},null,2)+'\n',{flag:'wx'});
           NODE
+          node "$EVIDENCE/control-driver.mjs" 2>&1 | tee "$EVIDENCE/control-driver.log"
       - name: Verify unchanged physical source and locked offline run
         if: always()
         run: |
@@ -278,7 +405,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: fantasy-draft-empty-pool-original-${{ github.run_id }}
-          path: fantasy-draft-empty-pool-original
+          name: fantasy-draft-empty-pool-fixed-controls-${{ github.run_id }}
+          path: fantasy-draft-empty-pool-fixed-controls
           retention-days: 14
           if-no-files-found: error
