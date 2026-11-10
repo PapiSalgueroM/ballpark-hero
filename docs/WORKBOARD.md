@@ -18280,3 +18280,10 @@ Stacked on PR537. Original reproduction, fixed regression, two-file physical res
 Transfer Path now uses a matching puzzle list and career graph. It adopts the live pair when both loads return data. If either is empty, it keeps both bundled pools.
 
 Stacked on PR538. The original, fixed, one-file physical controls, production browser journeys and clean source/build comparison passed. The reported named player links require separate evidence. [Original](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/42772737404) · [Fixed](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/42773696472) · [Physical controls](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/42774360903) · [Full](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/42775616085) · [Clean](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/42777198821)
+
+
+### 2026-11-10 Player feedback, CFB Dynasty ordinary scoring
+
+College Football Dynasty now uses the existing score draw for a small shutout range. Other ordinary coordinator-adjusted totals start at two. Legacy scoring and the existing winner and draw order are preserved.
+
+Stacked on PR539. The 1.75% shutout draw cutoff came from discovery measurements and was checked on a separate set of seasons. Exact one-file controls restored the four expected assertion failures and then matched the fixed RAW bytes again. [Original](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/42779683354) · [Calibration](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/42782336455) · [Fixed](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/42783901125) · [Physical controls](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/42785309166) · [Full](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/42786929158) · [Clean](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/42789210980)

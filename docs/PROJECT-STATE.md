@@ -1,5 +1,13 @@
 
 
+## 2026-11-10 Player feedback, CFB Dynasty ordinary scoring
+
+College Football Dynasty now uses the existing score draw for a small shutout range. Other ordinary coordinator-adjusted totals start at two. Legacy scoring and the existing winner and draw order are preserved.
+
+The original produced 24-1 and the fixed engine produced 24-2 with the same draws. Both cutoff orientations passed, the legacy result matched byte for byte, and both existing simulation harnesses passed. Six browser sessions verified 24-2 and 24-0, the schedule, and the saved scores after reload. The clean rebuild matched 4,668 source files, 11 configurations and all 850 built files. [Original](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/42779683354) · [Calibration](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/42782336455) · [Fixed](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/42783901125) · [Physical controls](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/42785309166) · [Full](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/42786929158) · [Clean](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/42789210980)
+
+
+
 ## 2026-11-10 Player feedback, Transfer Path pool loading
 
 Transfer Path now uses a matching puzzle list and career graph. It adopts the live pair when both loads return data. If either is empty, it keeps both bundled pools.
