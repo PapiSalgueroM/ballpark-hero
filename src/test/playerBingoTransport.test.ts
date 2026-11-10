@@ -1,6 +1,7 @@
 // Fictional rows at a local Postgrest boundary test the actual loader and transforms.
+import { writeFileSync } from 'node:fs';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { fetchBingoData } from '@/lib/playerBingo';
+import { buildCriteria, fetchBingoData } from '@/lib/playerBingo';
 
 type Response = { data: unknown[] | null; error: unknown };
 type Query = { table: string; calls: [string, unknown[]][]; signal?: AbortSignal; phase: string; settled: boolean; finish: (reply: Response) => void };
@@ -45,13 +46,76 @@ vi.mock('@/integrations/supabase/client', () => ({
 const names = Array.from({ length: 280 }, (_, i) => `Fictional871-${String(i).padStart(3, '0')}`);
 const indexOf = (name: string) => names.indexOf(name);
 const row = (name: string, yearsAgo = 0) => ({ player_name: name, nationality: 'Fixture', position: 'Fixture', club: yearsAgo ? `Fixture History ${yearsAgo}` : 'Fixture Current', market_value_usd: 5_000_000 + indexOf(name), age: 24 - yearsAgo, year: 2026 - yearsAgo, goals: yearsAgo, assists: 2, matches: 3, yellow_cards: 4, red_cards: 0 });
+const birthYearCases = [
+  { id: 'jan1-boundary', age: 26, nationality: 'Fixture / Alternate', band: 'born-2000-to-2003', regression: true },
+  { id: 'dec31-adjacent', age: 26, nationality: 'Fixture', band: 'born-1997-to-1999', regression: false },
+  { id: 'jan27-snapshot-offset', age: 26, nationality: 'Fixture', band: 'born-2000-to-2003', regression: true },
+  { id: 'legacy-middle', age: 25, nationality: 'Fixture', band: 'born-2000-to-2003', regression: false },
+  { id: 'wrong-country', age: 26, nationality: 'Fixture / Alternate', band: 'born-1997-to-1999', regression: false },
+  { id: 'conflicting-dob', age: 26, nationality: 'Fixture', band: 'born-1997-to-1999', regression: false },
+  { id: 'invalid-dob', age: 26, nationality: 'Fixture', band: 'born-1997-to-1999', regression: false },
+  { id: 'implausible-dob', age: 26, nationality: 'Fixture', band: 'born-1997-to-1999', regression: false },
+  { id: 'legacy-oldest', age: 30, nationality: 'Fixture', band: 'age-29-plus', regression: false },
+  { id: 'legacy-youngest', age: 21, nationality: 'Fixture', band: 'age-21-under', regression: false },
+] as const;
+const birthYearCasesByName = new Map(birthYearCases.map((fixture, index) => [names[index], fixture]));
+const ageBands = [
+  { id: 'age-29-plus', label: 'Born 1996 or earlier' },
+  { id: 'born-1997-to-1999', label: 'Born 1997 to 1999' },
+  { id: 'born-2000-to-2003', label: 'Born 2000 to 2003' },
+  { id: 'age-21-under', label: 'Born 2004 or later' },
+] as const;
+let useBirthYearFixture = false;
+
+function birthYearMarketRow(name: string, yearsAgo = 0) {
+  const held = row(name, yearsAgo);
+  const fixture = birthYearCasesByName.get(name);
+  return fixture ? { ...held, age: fixture.age - yearsAgo, nationality: fixture.nationality } : held;
+}
+
+function squadRow(index: number, date_of_birth: string, nationality = 'Fixture', world_cup_year = 2022) {
+  return { player_name: ' ' + names[index].toLowerCase() + ' ', world_cup_year, nationality, date_of_birth };
+}
+
+const firstSquadRows = [
+  squadRow(0, '2000-01-01', ' fixture '),
+  squadRow(1, '1999-12-31'),
+  squadRow(4, '2000-01-27', 'Alternate'),
+  squadRow(5, '2000-01-27'),
+  squadRow(6, '2000-02-30'),
+  squadRow(7, '2004-01-01'),
+];
+const birthYearSquadRows = [
+  ...firstSquadRows,
+  ...Array.from({ length: 1000 - firstSquadRows.length }, (_, index) => ({
+    player_name: 'Fictional squad filler ' + index, world_cup_year: 2018, nationality: 'Fixture', date_of_birth: null,
+  })),
+  squadRow(0, '2000-01-01', 'Fixture', 2018),
+  squadRow(2, '2000-01-27'),
+  squadRow(5, '1999-12-31', 'Fixture', 2018),
+];
+
+function squadQuery(query: Query) {
+  const columns = String(query.calls.find(([method]) => method === 'select')![1][0]).split(',').map(column => column.trim());
+  const range = query.calls.find(([method]) => method === 'range')![1] as [number, number];
+  return { columns, range };
+}
+
 function answer(query: Query): Response {
   if (query.phase === 'seed') return { data: names.map(player_name => ({ player_name })), error: null };
+  if (query.phase === 'wc' && useBirthYearFixture) {
+    const { columns, range: [from, to] } = squadQuery(query);
+    const data = birthYearSquadRows.slice(from, to + 1).map(row => Object.fromEntries(
+      columns.map(column => [column, row[column as keyof typeof row]]),
+    ));
+    return { data, error: null };
+  }
   if (query.phase === 'wc' || query.phase === 'awards') return { data: [], error: null };
   const selected = query.calls.find(([method]) => method === 'in')![1][1] as string[];
-  if (query.phase === 'latest') return { data: selected.flatMap(name => [row(name, 1), row(name)]), error: null };
+  const marketRow = useBirthYearFixture ? birthYearMarketRow : row;
+  if (query.phase === 'latest') return { data: selected.flatMap(name => [marketRow(name, 1), marketRow(name)]), error: null };
   const [from, to] = query.calls.find(([method]) => method === 'range')![1] as number[];
-  return { data: selected.flatMap(name => Array.from({ length: 14 }, (_, i) => row(name, i))).slice(from, to + 1), error: null };
+  return { data: selected.flatMap(name => Array.from({ length: 14 }, (_, i) => marketRow(name, i))).slice(from, to + 1), error: null };
 }
 async function flush() { for (let i = 0; i < 30; i++) await Promise.resolve(); }
 async function drain() {
@@ -81,7 +145,7 @@ describe('Player Bingo bounded cancellable transport', () => {
       expect(pages.map(query => query.calls.find(([method]) => method === 'range')![1])).toEqual(group.length === 80 ? [[0, 999], [1000, 1999]] : [[0, 999]]);
       for (const query of pages) expect(query.calls.filter(([method]) => method !== 'abortSignal')).toEqual([['select', ['player_name, nationality, position, club, year, age, market_value_usd, goals, assists, matches, yellow_cards, red_cards']], ['in', ['player_name', group]], ['order', ['id', { ascending: true }]], ['range', query.calls.find(([method]) => method === 'range')![1]]]);
     }
-    expect(transport.queries.find(query => query.phase === 'wc')!.calls.filter(([method]) => method !== 'abortSignal')).toEqual([['select', ['player_name, world_cup_year, nationality']], ['gte', ['world_cup_year', 2010]], ['order', ['id', { ascending: true }]], ['range', [0, 999]]]);
+    expect(transport.queries.find(query => query.phase === 'wc')!.calls.filter(([method]) => method !== 'abortSignal')).toEqual([['select', ['player_name, world_cup_year, nationality, date_of_birth']], ['gte', ['world_cup_year', 2010]], ['order', ['id', { ascending: true }]], ['range', [0, 999]]]);
     expect(transport.queries.find(query => query.phase === 'awards')!.calls.filter(([method]) => method !== 'abortSignal')).toEqual([['select', ['player_name, rank, award_type']]]);
     for (const player of data!.pool) {
       expect(data!.clubHistory.get(player.name)).toEqual(new Set(['fixture current', ...Array.from({ length: 13 }, (_, i) => `fixture history ${i + 1}`)]));
@@ -180,4 +244,61 @@ describe('Player Bingo bounded cancellable transport', () => {
     expect(transport.queries.filter(query => query.phase === 'latest')).toHaveLength(3);
     expect(transport.queries.filter(query => query.phase === 'history')).toHaveLength(0);
   });
+});
+
+it('BINGO_SQUAD_BIRTH_YEAR_BAND uses a reliable squad birth date for the correct age tile', async () => {
+  useBirthYearFixture = true;
+  let data: Awaited<ReturnType<typeof fetchBingoData>>;
+  try {
+    data = await fetchBingoData();
+  } finally {
+    useBirthYearFixture = false;
+  }
+  if (!data) throw new Error('Fictional Player Bingo data was unavailable');
+  const criteria = buildCriteria(data);
+  const bands = ageBands.map(({ id }) => {
+    const matches = criteria.filter(criterion => criterion.id === id);
+    expect(matches).toHaveLength(1);
+    return matches[0];
+  });
+  const rows = birthYearCases.map((fixture, index) => {
+    const name = names[index];
+    const player = data.pool.find(candidate => candidate.name === name);
+    if (!player) throw new Error('Fictional Player Bingo player was unavailable: ' + name);
+    return {
+      id: fixture.id, name, age: player.age, year: player.year, nationality: player.nationality,
+      matches: bands.map(criterion => criterion.test(player, data)),
+      support: bands.map(criterion => criterion.support.includes(name)),
+    };
+  });
+  const worldCup = transport.queries.filter(query => query.phase === 'wc').map(squadQuery);
+  const raw = {
+    schema: 'player-bingo-squad-birth-year-band-v1',
+    poolSize: data.pool.length,
+    bands: bands.map(({ id, label }) => ({ id, label })),
+    worldCup,
+    rows,
+  };
+  const rawPath = process.env.PLAYER_BINGO_BIRTH_YEAR_RAW;
+  if (rawPath) writeFileSync(rawPath, JSON.stringify(raw) + '\n', { flag: 'wx' });
+
+  expect(data.pool.map(player => player.name)).toEqual([...names].reverse());
+  expect(raw.bands).toEqual(ageBands);
+  expect(transport.queries).toHaveLength(18);
+  expect(worldCup.map(query => query.range)).toEqual([[0, 999], [1000, 1999]]);
+  expect(rows.map(({ name, age, year, nationality }) => [name, age, year, nationality])).toEqual(
+    birthYearCases.map((fixture, index) => [names[index], fixture.age, 2026, fixture.nationality]),
+  );
+  expect(bands.map(criterion => criterion.support.filter(name => !birthYearCasesByName.has(name)))).toEqual([
+    [], [], names.slice(birthYearCases.length).reverse(), [],
+  ]);
+  const membership = (regression: boolean) => rows.filter((_, index) => birthYearCases[index].regression === regression)
+    .map(({ id, matches, support }) => ({ id, matches, support }));
+  const expected = (regression: boolean) => birthYearCases.filter(fixture => fixture.regression === regression)
+    .map(fixture => {
+      const mask = ageBands.map(({ id }) => id === fixture.band);
+      return { id: fixture.id, matches: mask, support: mask };
+    });
+  expect(membership(false), 'BINGO_SQUAD_BIRTH_YEAR_BAND: adjacent years and ambiguous squad records must keep their expected bands').toEqual(expected(false));
+  expect(membership(true), 'BINGO_SQUAD_BIRTH_YEAR_BAND: compatible 2000 dates must move both eligibility and support').toEqual(expected(true));
 });

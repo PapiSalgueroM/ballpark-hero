@@ -18294,3 +18294,10 @@ Stacked on PR539. The 1.75% shutout draw cutoff came from discovery measurements
 NBA Perfect Season Daily uses the date from when the page opened for its wheel, season seed, theme and save. A fresh page starts the new Eastern day. The draft column stays inside the phone viewport.
 
 Stacked on PR540. The broad R0180 bug report does not identify this cause. The separate 20-0 request remains tracked. [Preflight](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/42792020594) · [Original](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/42794877575) · [Fixed](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/42803273446) · [Physical controls](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/42804263707) · [Full](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/42805429127) · [Clean](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/42808329697)
+
+
+### 2026-11-10 Player feedback, Player Bingo birth-year bands
+
+Player Bingo uses the existing World Cup squad date to place a player in the correct birth-year band when the normalized name, primary country and market age agree. Missing, invalid or conflicting dates keep the existing age estimate.
+
+Stacked on PR541. R0008's reported session and deployed row remain unverified. The new regression and browser journeys use fictional data. [Active entry](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/42810749109) · [Original](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/42813505581) · [Fixed](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/42815490778) · [Physical controls](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/42816407557) · [Full](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/42821117398) · [Clean join](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/42824518601)
