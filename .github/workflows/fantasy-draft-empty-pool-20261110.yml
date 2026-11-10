@@ -1,0 +1,955 @@
+name: Fantasy Draft empty pool full and clean production proof
+on:
+  push:
+    branches: [codex/fantasy-draft-empty-pool-full-clean-qa-20261110]
+permissions:
+  actions: read
+  contents: read
+jobs:
+  full-clean:
+    runs-on: ubuntu-latest
+    timeout-minutes: 32
+    env:
+      TZ: UTC
+      SIM_NETWORK: offline
+      SEO_SPLIT_BASE_REF: '3b14650d360b010b25b525de33a5f32f33de2798'
+      EVIDENCE: fantasy-draft-empty-pool-full-clean
+      SIM_OFFLINE_RECEIPT: fantasy-draft-empty-pool-full-clean/offline.log
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24.22.1
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Join exact clean candidate with qualified source and fixed unit fixture
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          test ! -e "$EVIDENCE"
+          mkdir "$EVIDENCE"
+          touch "$SIM_OFFLINE_RECEIPT"
+          git rev-parse HEAD > "$EVIDENCE/head.txt"
+          git rev-parse 'HEAD^{tree}' > "$EVIDENCE/tree.txt"
+          git ls-files -s > "$EVIDENCE/source-before.txt"
+          sha256sum package.json package-lock.json > "$EVIDENCE/locks-before.txt"
+          git diff --exit-code HEAD -- .
+          node --input-type=module <<'NODE'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          import {createHash} from 'node:crypto';
+          import {execFileSync} from 'node:child_process';
+
+          const inputs={"base":{"pr":543,"head":"71a7184a1c546767932ec259617d53d60a178901","tree":"57574165d664a30ba69dad567a412d7b9111ac50"},"qualified":{"run":42850968546,"job":129951206533,"artifact":13781041294,"steps":11,"zipBytes":2682452,"zipSHA256":"0fe93b0e011b4a5e02f310c6498e8947a0cd6e536c2f7e59133326a4b62f963e","head":"b72403765a30c5d01ae380490d792524bfbdc666","tree":"4c13ca3e21e210caa48e594bc107a86f3c61084f","workflow":"a6b5fb1fb4f4b5f098405b77f3daf8e266e31d42","path":".github/workflows/fantasy-draft-empty-pool-20261110.yml","branch":"codex/fantasy-draft-empty-pool-fixed-controls-qa-20261110","auditSHA256":"4592e93fe2bd9ec05d1631e35ca0d38881201de49a7776b52fa9eb07ca69fda1","raw":{"bytes":6538847,"sha256":"91e377ec6c7861a5fd90938b445bfc48349d72527d0efc17db70e06dc37c4995"}},"page":{"path":"src/pages/FantasyDraft.tsx","blob":"328b8632eea964f0010465d9e7bcd04990819853","bytes":25890,"sha256":"e34a7fa46c434d1a8f82da61bf8535228df1997ff83d84264bbcaae754e0f066","priorBlob":"a1ec7dda9bd2c7a7fc674b5471fc0dad63a67509","priorBytes":25883,"priorSHA256":"1d87eebfd41c85576edf2fc28f9f7d3df738e87dc143e8fce807d406885e6560"},"test":{"path":"src/test/fantasyDraftPoolRecovery.test.tsx","blob":"2f202331b41768892e888b4daa97bd54c4048446","sha256":"6e023d5273d08a3beca11de130dcd9b0311dceea3a9fb5ade85bb29d38841f8b","bytes":29976},"plan":{"path":"docs/plans/2026-11-10-fantasy-draft-empty-pool.md","blob":"f090008f80c10ee1fd220e19516d636d2f6adf39","sha256":"cd88200e546d7e00b079fcef1646f1fd42d37305d42317b83eeb15d6d3a1a01d","bytes":896}};
+          const {base,qualified,page,test,plan}=inputs;
+          const out=process.env.EVIDENCE,repo='PapiSalgueroM/ballpark-hero',workflow=qualified.path;
+          const git=(...args)=>execFileSync('git',args,{encoding:'utf8',maxBuffer:16*1024*1024}).trimEnd();
+          const sha=(algorithm,body)=>createHash(algorithm).update(body).digest('hex');
+          const blob=body=>sha('sha1',Buffer.concat([Buffer.from('blob '+body.length+'\0'),body]));
+          const head=git('rev-parse','HEAD'),tree=git('rev-parse','HEAD^{tree}');
+          assert.equal(head,process.env.GITHUB_SHA);
+          assert.equal(process.env.GITHUB_REPOSITORY,repo);
+          assert.deepEqual(git('rev-list','--parents','-n','1',head).split(' '),[head,base.head]);
+          assert.equal(git('rev-parse',base.head+'^{tree}'),base.tree);
+          git('fetch','--no-tags','--depth=1','origin',qualified.head);
+          assert.equal(git('rev-parse',qualified.head+'^{tree}'),qualified.tree);
+          assert.equal(git('rev-parse',qualified.head+':'+workflow),qualified.workflow);
+          const all=ref=>git('ls-tree','-r','-z',ref).split('\0').filter(Boolean);
+          const at=row=>row.split('\t')[1];
+          const owned=[page.path,test.path,plan.path,workflow];
+          const held=rows=>rows.filter(row=>!owned.includes(at(row)));
+          const prev=all(base.head),curr=all(head),passed=all(qualified.head);
+          assert.deepEqual([prev.length,curr.length,held(curr).length,passed.length],[5802,5804,5800,5804]);
+          assert.deepEqual(held(curr),held(prev));
+          assert.deepEqual(curr.filter(row=>at(row)!==workflow),passed.filter(row=>at(row)!==workflow));
+          assert.deepEqual(git('diff','--name-status','--no-renames',base.head,head).split('\n').sort(),
+            ['M\t'+page.path,'M\t'+test.path,'A\t'+plan.path,'A\t'+workflow].sort());
+          for(const item of [page,test,plan]){
+            const body=fs.readFileSync(item.path);
+            assert.deepEqual([body.length,sha('sha256',body),blob(body)],[item.bytes,item.sha256,item.blob]);
+          }
+          const configs=new Set(['index.html','package.json','package-lock.json','bun.lock','bun.lockb','vite.config.ts','tailwind.config.ts',
+            'postcss.config.js','tsconfig.json','tsconfig.app.json','tsconfig.node.json']);
+          const scoped=curr.filter(row=>/^(src|public|scripts)\//.test(at(row))||configs.has(at(row)));
+          assert.equal(scoped.length,4680);
+          assert.equal(scoped.filter(row=>configs.has(at(row))).length,11);
+          const api=process.env.GITHUB_API_URL+'/repos/'+repo;
+          const get=async suffix=>{
+            const response=await fetch(api+suffix,{headers:{Accept:'application/vnd.github+json',Authorization:'Bearer '+process.env.GH_TOKEN,
+              'X-GitHub-Api-Version':'2022-11-28'},redirect:'error'});
+            assert.equal(response.status,200,suffix);
+            return response.json();
+          };
+          const [run,jobs,artifacts]=await Promise.all([get('/actions/runs/'+qualified.run),get('/actions/runs/'+qualified.run+'/jobs?per_page=100'),get('/actions/runs/'+qualified.run+'/artifacts?per_page=100')]);
+          assert.deepEqual([run.id,run.status,run.conclusion,run.event,run.run_attempt,run.path,run.head_sha,run.head_commit.tree_id,run.head_branch],
+            [qualified.run,'completed','success','push',1,workflow,qualified.head,qualified.tree,qualified.branch]);
+          assert.deepEqual([jobs.jobs.length,artifacts.artifacts.length],[1,1]);
+          const [job]=jobs.jobs,[archive]=artifacts.artifacts;
+          assert.deepEqual([job.id,job.name,job.steps.length,archive.id,archive.size_in_bytes,archive.digest,archive.expired,archive.workflow_run.id,archive.workflow_run.head_sha],
+            [qualified.job,'fixed-controls',qualified.steps,qualified.artifact,qualified.zipBytes,'sha256:'+qualified.zipSHA256,false,qualified.run,qualified.head]);
+          assert(job.steps.every(step=>step.status==='completed'&&step.conclusion==='success'));
+          fs.copyFileSync(workflow,out+'/candidate-workflow.yml');
+          fs.copyFileSync(page.path,out+'/candidate-page.tsx');
+          fs.copyFileSync(test.path,out+'/candidate-test.tsx');
+          fs.writeFileSync(out+'/code-config-tuples.txt',scoped.join('\n')+'\n');
+          fs.writeFileSync(out+'/source-join.json',JSON.stringify({status:'passed',head,tree,parent:base.head,parentTree:base.tree,
+            workflow:git('rev-parse','HEAD:'+workflow),trackedRows:5804,heldRows:5800,scopedSourceRows:4669,rootConfigurations:11,codeConfigRows:4680,
+            fullProductJoinsQualifiedFixedControls:true,inputs},null,2)+'\n');
+          NODE
+          fixed_id=$(node -p "require('./$EVIDENCE/source-join.json').inputs.qualified.artifact")
+          fixed_size=$(node -p "require('./$EVIDENCE/source-join.json').inputs.qualified.zipBytes")
+          fixed_sha=$(node -p "require('./$EVIDENCE/source-join.json').inputs.qualified.zipSHA256")
+          fixed_zip="$RUNNER_TEMP/fantasy-draft-empty-fixed-controls.zip"
+          gh api "repos/PapiSalgueroM/ballpark-hero/actions/artifacts/$fixed_id/zip" > "$fixed_zip"
+          test "$(wc -c < "$fixed_zip")" -eq "$fixed_size"
+          printf '%s  %s\n' "$fixed_sha" "$fixed_zip" | sha256sum -c -
+          unzip -Z1 "$fixed_zip" > "$EVIDENCE/fixed-zip-entries.txt"
+          test "$(grep -Fxc 'fixed/public-cases.raw.json' "$EVIDENCE/fixed-zip-entries.txt")" -eq 1
+          unzip -p "$fixed_zip" fixed/public-cases.raw.json > "$EVIDENCE/fixed-reference.raw.json"
+          raw_size=$(node -p "require('./$EVIDENCE/source-join.json').inputs.qualified.raw.bytes")
+          raw_sha=$(node -p "require('./$EVIDENCE/source-join.json').inputs.qualified.raw.sha256")
+          test "$(wc -c < "$EVIDENCE/fixed-reference.raw.json")" -eq "$raw_size"
+          printf '%s  %s\n' "$raw_sha" "$EVIDENCE/fixed-reference.raw.json" | sha256sum -c -
+      - name: Install locked dependencies, freeze physical source, and verify app types
+        run: |
+          set -euo pipefail
+          npm ci 2>&1 | tee "$EVIDENCE/install.log"
+          cat > "$EVIDENCE/physical.mjs" <<'NODE'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          import { createHash } from 'node:crypto';
+          import { execFileSync } from 'node:child_process';
+          const stage = process.argv[2];
+          assert(['before', 'after'].includes(stage));
+          const out = process.env.EVIDENCE;
+          const index = execFileSync('git', ['ls-files', '-z'], { encoding: 'utf8' }).split('\0').filter(Boolean);
+          const source = index.map(file => {
+            const bytes = fs.readFileSync(file);
+            return [file, bytes.length, createHash('sha256').update(bytes).digest('hex')];
+          });
+          const lock = JSON.parse(fs.readFileSync('package-lock.json', 'utf8'));
+          const installed = Object.entries(lock.packages).filter(([file]) =>
+            file.startsWith('node_modules/') && fs.existsSync(file + '/package.json')
+          ).map(([file, entry]) => {
+            const version = JSON.parse(fs.readFileSync(file + '/package.json', 'utf8')).version;
+            assert.equal(version, entry.version, file);
+            return [file, version];
+          });
+          assert.equal(source.length, 5804);
+          assert.equal(installed.length, 521);
+          assert.equal(fs.statSync(process.env.SIM_OFFLINE_RECEIPT).size, 0);
+          for (const [name, data] of [['tracked', source], ['installed', installed]]) {
+            const body = JSON.stringify(data);
+            if (stage === 'after') assert.equal(body, fs.readFileSync(out + '/' + name + '-before.json', 'utf8'));
+            fs.writeFileSync(out + '/' + name + '-' + stage + '.json', body);
+          }
+          NODE
+          node "$EVIDENCE/physical.mjs" before
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee "$EVIDENCE/types.log"
+      - name: Preserve focused pool, daily criteria, and formation outcomes
+        run: |
+          set -euo pipefail
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node_modules/.bin/vitest run \
+            src/test/fantasyDraftPoolRecovery.test.tsx src/test/fantasyDraftCriteriaStart.test.tsx src/test/fantasyDraftFormation.test.tsx \
+            --testTimeout=60000 --no-file-parallelism --reporter=json --outputFile="$EVIDENCE/unit.json" 2>&1 | tee "$EVIDENCE/unit.log"
+          test ! -s "$SIM_OFFLINE_RECEIPT"
+      - name: Build the qualified production tree and retain every file
+        id: build
+        run: |
+          set -euo pipefail
+          test ! -e dist
+          NODE_OPTIONS="--max-old-space-size=6144" npm run build 2>&1 | tee "$EVIDENCE/build.log"
+          cat > "$EVIDENCE/dist-measure.mjs" <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          import {createHash} from 'node:crypto';
+          const [root,label]=process.argv.slice(2);
+          assert.equal(root,'dist');
+          assert(['before','after','fresh'].includes(label));
+          const walk=dir=>fs.readdirSync(dir,{withFileTypes:true}).flatMap(entry=>{
+            const file=dir+'/'+entry.name;
+            if(entry.isDirectory())return walk(file);
+            assert(entry.isFile(),file);
+            return [file];
+          });
+          const files=walk(root).sort((a,b)=>a.localeCompare(b));
+          assert.equal(files.length,850);
+          assert.equal(new Set(files).size,850);
+          const list=files.map(file=>{
+            const body=fs.readFileSync(file);
+            return {file,bytes:body.length,sha256:createHash('sha256').update(body).digest('hex')};
+          });
+          fs.writeFileSync(process.env.EVIDENCE+'/dist-'+label+'.json',JSON.stringify(list),{flag:'wx'});
+          NODE
+          node "$EVIDENCE/dist-measure.mjs" dist before
+          tar -czf "$EVIDENCE/dist.tgz" dist
+          sha256sum "$EVIDENCE/dist.tgz" > "$EVIDENCE/dist.sha256"
+      - name: Isolated pinned Playwright and Chromium
+        id: browser_setup
+        timeout-minutes: 12
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          python -m pip install fonttools pillow
+          npm install --prefix "$RUNNER_TEMP/fantasy-draft-empty-pool-browser" --no-save --package-lock=false playwright@1.64.1 2>&1 | tee fantasy-draft-empty-pool-full-clean/browser-install.log
+          test ! -e node_modules/playwright
+          test ! -e node_modules/playwright-core
+          ln -s "$RUNNER_TEMP/fantasy-draft-empty-pool-browser/node_modules/playwright" node_modules/playwright
+          ln -s "$RUNNER_TEMP/fantasy-draft-empty-pool-browser/node_modules/playwright-core" node_modules/playwright-core
+          node "$RUNNER_TEMP/fantasy-draft-empty-pool-browser/node_modules/playwright/cli.js" install --with-deps chromium 2>&1 | tee fantasy-draft-empty-pool-full-clean/chromium-install.log
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const before=JSON.parse(fs.readFileSync('fantasy-draft-empty-pool-full-clean/installed-before.json'));
+          const after=before.map(([p])=>[p,JSON.parse(fs.readFileSync(p+'/package.json')).version]);assert.deepEqual(after,before);
+          const {createRequire}=await import('node:module');
+          const require=createRequire(process.cwd()+'/package.json');
+          const target=fs.realpathSync('node_modules/playwright'),coreTarget=fs.realpathSync('node_modules/playwright-core');
+          const pw=JSON.parse(fs.readFileSync(target+'/package.json')),core=JSON.parse(fs.readFileSync(coreTarget+'/package.json'));
+          assert.deepEqual([pw.version,core.version],['1.64.1','1.64.1']);
+          const coreEntry=require.resolve('playwright-core');
+          assert(coreEntry.startsWith(coreTarget+'/'));
+          assert.equal(createRequire(target+'/package.json').resolve('playwright-core'),coreEntry);
+          fs.writeFileSync('fantasy-draft-empty-pool-full-clean/installed-after.json',JSON.stringify(after));
+          fs.writeFileSync('fantasy-draft-empty-pool-full-clean/browser-package.json',JSON.stringify({
+            version:pw.version,target,coreVersion:core.version,coreTarget,coreEntry,sharedOfflineGuardResolution:true,
+          }));
+          NODE
+      - name: All required built readers and existing source fences
+        if: ${{ !cancelled() && steps.build.outcome == 'success' && steps.browser_setup.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          git fetch --no-tags --depth=1 origin "$SEO_SPLIT_BASE_REF"
+          export ONLY="simAdsense,simBrand,simHeadTags,simHiddenPages,simHubs,simIndexNow,simIndexing,simInternalLinks,simNoRivalNames,simPrerender,simPrerenderBoot,simRetiredRoutes,simSchema,simSitemap,simSnapshotAssets,simSiteSearch,simGuideHeadings,simSeoMetaSplit,simHomeCopy,simHarnessAnchors"
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/runAllSims.mjs --browser 2>&1 | tee fantasy-draft-empty-pool-full-clean/readers.log
+      - name: All original route download limits
+        if: ${{ !cancelled() && steps.build.outcome == 'success' && steps.browser_setup.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          test ! -s "$SIM_OFFLINE_RECEIPT"
+          test ! -e "$EVIDENCE/weight-asset-blocks.jsonl"
+          touch "$EVIDENCE/weight-asset-blocks.jsonl"
+          owned_weight="$PWD/$(mktemp --suffix=.mjs scripts/.bingo-sweepWeight.XXXXXX)"
+          weight_host_pid=''
+          cleanup_weight() {
+            if test -n "$weight_host_pid"; then
+              kill "$weight_host_pid" 2>/dev/null || true
+              wait "$weight_host_pid" 2>/dev/null || true
+            fi
+            rm -f -- "$owned_weight"
+          }
+          trap cleanup_weight EXIT
+          node --input-type=module - "$owned_weight" <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          import path from 'node:path';
+          import { createHash } from 'node:crypto';
+          import { execFileSync } from 'node:child_process';
+
+          const spec={"file":"scripts/sweepWeight.mjs","blob":"5a92a68cc0225d5e633c19e041087e7c6c4254e8","bytes":104848,"sha256":"afdd281ce2984ca34158194a0d6102bd053f2f8d242bc844c19f8f536b08d627","changedBytes":105985,"changedSHA256":"b7edf531df56816d5b5103f4c08686790f083b4940f6c6abf7664dc3108de8b6","changedBlob":"2375a75116c540fde0fdd94c3cee074968905b47","anchorOffset":90355,"anchor":"  if (process.env.SWEEP_OFFLINE === '1') await ctx.route(/supabase\\.co/, r => r.abort());","change":"  if (process.env.SWEEP_OFFLINE === '1') {\n    await ctx.route(/supabase\\.co/, r => r.abort());\n    await ctx.route(url => url.origin === 'https://fonts.googleapis.com' || url.origin === 'https://flagcdn.com', async r => {\n      const request = r.request();\n      const url = new URL(request.url());\n      const type = request.resourceType();\n      const fonts = url.origin === 'https://fonts.googleapis.com' && url.pathname === '/css2' &&\n        JSON.stringify([...url.searchParams]) === JSON.stringify([\n          ['family', 'Space Grotesk:wght@400;500;600;700'],\n          ['family', 'Inter:wght@400;500;600;700'],\n          ['display', 'swap'],\n        ]) && type === 'stylesheet';\n      const flag = url.origin === 'https://flagcdn.com' &&\n        /^\\/w(?:20|40|80|160|320)\\/[a-z]{2}(?:-[a-z]{3})?\\.png$/.test(url.pathname) &&\n        !url.search && type === 'image';\n      if (request.method() !== 'GET' || (!fonts && !flag)) return r.fallback();\n      await r.abort('blockedbyclient');\n      fs.appendFileSync(process.env.PLAYER_BINGO_WEIGHT_ASSET_RECEIPT, JSON.stringify({\n        route, url: url.href, method: request.method(), resourceType: type, disposition: 'aborted-before-network',\n      }) + '\\n');\n    });\n  }"};
+          const [target]=process.argv.slice(2),out=process.env.EVIDENCE;
+          const src=fs.readFileSync(spec.file);
+          const sha=(algorithm,bytes)=>createHash(algorithm).update(bytes).digest('hex');
+          const blob=bytes=>sha('sha1',Buffer.concat([Buffer.from('blob '+bytes.length+'\0'),bytes]));
+          assert.equal(path.dirname(target),path.resolve('scripts'));
+          assert.match(path.basename(target),/^\.bingo-sweepWeight\.[A-Za-z0-9]+\.mjs$/);
+          assert(fs.lstatSync(target).isFile()&&fs.statSync(target).size===0);
+          assert.deepEqual([src.length,sha('sha256',src),blob(src)],[spec.bytes,spec.sha256,spec.blob]);
+          assert.equal(execFileSync('git',['rev-parse','HEAD:'+spec.file],{encoding:'utf8'}).trim(),spec.blob);
+          const original=src.toString('utf8');
+          assert.equal(original.split(spec.anchor).length,2);
+          assert.equal(Buffer.byteLength(original.slice(0,original.indexOf(spec.anchor))),spec.anchorOffset);
+          const changed=original.replace(spec.anchor,spec.change);
+          assert.equal(changed.split(spec.change).length,2);
+          assert.equal(changed.replace(spec.change,spec.anchor),original);
+          const prepared=Buffer.from(changed);
+          assert.deepEqual([prepared.length,sha('sha256',prepared),blob(prepared)],[spec.changedBytes,spec.changedSHA256,spec.changedBlob]);
+          fs.writeFileSync(target,prepared);
+          fs.writeFileSync(out+'/weight-source-proof.json',JSON.stringify({
+            status:'passed',file:spec.file,blob:spec.blob,bytes:spec.bytes,sha256:spec.sha256,
+            changedBlob:spec.changedBlob,changedBytes:spec.changedBytes,changedSHA256:spec.changedSHA256,
+            anchorOffset:spec.anchorOffset,anchorBytes:Buffer.byteLength(spec.anchor),replacementBytes:Buffer.byteLength(spec.change),
+            exactWholeInverse:true,trackedSourceChanged:false,temporarySibling:true,
+          },null,2)+'\n',{flag:'wx'});
+          NODE
+          node scripts/lib/hostLikeServer.mjs dist 4173 > "$EVIDENCE/weight-host.log" 2>&1 &
+          weight_host_pid=$!
+          weight_ready=0
+          for attempt in $(seq 1 40); do
+            kill -0 "$weight_host_pid"
+            if curl --noproxy '*' --silent --fail --max-time 1 http://127.0.0.1:4173/ -o /dev/null; then
+              weight_ready=1
+              break
+            fi
+            sleep 0.25
+          done
+          test "$weight_ready" -eq 1
+          PLAYER_BINGO_WEIGHT_ASSET_RECEIPT="$PWD/$EVIDENCE/weight-asset-blocks.jsonl" SWEEP_OFFLINE=1 \
+            BASE=http://127.0.0.1:4173 NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" \
+            node "$owned_weight" 2>&1 | tee "$EVIDENCE/weight.log"
+          test ! -s "$SIM_OFFLINE_RECEIPT"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+
+          const out=process.env.EVIDENCE;
+          const raw=fs.readFileSync(out+'/weight-asset-blocks.jsonl','utf8');
+          assert(raw.endsWith('\n'));
+          const records=raw.trimEnd().split('\n').map(line=>JSON.parse(line));
+          const log=fs.readFileSync(out+'/weight.log','utf8');
+          const caps=log.split('\n').map(line=>/^\s+(\/\S*)\s+\d+K gz over/.exec(line)?.[1]).filter(Boolean);
+          assert.equal(caps.length,16);
+          const fonts=new Set();
+          let flags=0;
+          for(const item of records){
+            const url=new URL(item.url);
+            assert(caps.includes(item.route));
+            assert.deepEqual([item.method,item.disposition],['GET','aborted-before-network']);
+            if(url.origin==='https://fonts.googleapis.com'){
+              assert.deepEqual([item.resourceType,url.pathname,[...url.searchParams]],['stylesheet','/css2',[
+                ['family','Space Grotesk:wght@400;500;600;700'],
+                ['family','Inter:wght@400;500;600;700'],
+                ['display','swap'],
+              ]]);
+              fonts.add(item.route);
+            }else{
+              assert.deepEqual([item.resourceType,url.origin,url.search],['image','https://flagcdn.com','']);
+              assert.match(url.pathname,/^\/w(?:20|40|80|160|320)\/[a-z]{2}(?:-[a-z]{3})?\.png$/);
+              flags++;
+            }
+          }
+          assert.deepEqual([...fonts].sort(),[...caps].sort());
+          assert(flags>0,'At least one exact Flagcdn image intercepted');
+          console.log('PASS explicit offline weight asset blocks across all 16 budget routes');
+          NODE
+      - name: Native successful-empty Fantasy Draft recovery across three viewports
+        id: native
+        timeout-minutes: 12
+        run: |
+          set -euo pipefail
+          cat > "$EVIDENCE/native-helper.mjs" <<'FD_EMPTY_NATIVE'
+          // Remote CI browser proof for successful empty Fantasy Draft player-pool replies.
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import { createHash, randomUUID } from 'node:crypto';
+          import { pathToFileURL } from 'node:url';
+          
+          assert.equal(process.env.CI, 'true');
+          assert.equal(process.env.SIM_NETWORK, 'offline');
+          assert(process.env.SIM_OFFLINE_RECEIPT);
+          const root = process.cwd();
+          const held = name => pathToFileURL(path.join(root, 'scripts/lib', name)).href;
+          await import(held('offlineTransport.cjs'));
+          const { default: playwright } = await import(held('playwrightLoader.mjs'));
+          const { answerConsent, storedConsent } = await import(held('answerConsent.mjs'));
+          
+          const base = process.env.FD_EMPTY_POOL_BASE;
+          assert(/^http:\/\/127\.0\.0\.1:[1-9]\d{0,4}$/.test(base || ''));
+          assert.equal(new URL(base).origin, base);
+          const target = base + '/fantasy-draft';
+          const backend = 'https://flawuiqbvjobmkfkauhw.supabase.co';
+          const dailyPath = '/functions/v1/fantasy-draft-daily';
+          const poolPath = '/rest/v1/fantasy_draft_players';
+          const poolQuery = [['select', 'id,name,position,nationality,market_value_millions,dominant_foot,age'], ['order', 'name.asc']];
+          const criteria = 'Under 25s: Every player must be 25 or younger';
+          const widths = [[320, 780], [390, 844], [1280, 900]];
+          const plans = widths.flatMap(([width, height]) => ['null', 'array'].flatMap(reply => ['user', 'ai'].map(seat =>
+            ({ id: [width, reply, seat].join('-'), width, height, reply, seat }))));
+          
+          function evidencePath(name) {
+            const value = process.env[name];
+            assert(value, name);
+            const resolved = path.resolve(root, value);
+            const relative = path.relative(root, resolved);
+            assert(relative && !relative.startsWith('..') && !path.isAbsolute(relative));
+            assert(!/^(?:src|public|scripts|dist|node_modules|\.git)(?:[\\/]|$)/.test(relative));
+            return resolved;
+          }
+          const out = evidencePath('FD_EMPTY_POOL_BROWSER_OUT');
+          const fixedRaw = fs.readFileSync(evidencePath('FD_EMPTY_POOL_FIXED_RAW'));
+          const fixed = JSON.parse(fixedRaw);
+          const fixture = [
+            ...[['GK', 4, 10], ['DEF', 8, 20], ['MID', 6, 30], ['FWD', 8, 40]].flatMap(([position, count, value]) =>
+              Array.from({length: count}, (_, index) => ({
+                id: 'fixture-' + position + '-' + index, name: 'Fixture ' + position + ' ' + String(index).padStart(2, '0'),
+                position, nationality: 'Fixture Country', dominant_foot: 'Right', market_value_millions: value, age: 24,
+              }))),
+            {id: 'fixture-veteran', name: 'Fixture Veteran FWD', position: 'FWD', nationality: 'Fixture Country', dominant_foot: 'Right', market_value_millions: 900, age: 40},
+          ];
+          assert.deepEqual([fixed.version, fixed.criteria, fixed.fixture], [1, criteria, fixture]);
+          assert.deepEqual(fixed.cases.map(row => [row.key, row.complete]), [
+            ['normalUser', true], ['normalAi', true], ['errorUser', true], ['errorAi', true],
+            ['nullUser', true], ['nullAi', true], ['emptyUser', true], ['emptyAi', true],
+          ]);
+          const eligible = new Set(fixture.filter(player => player.age <= 25).map(player => player.name));
+          const documentBody = fs.readFileSync(path.join(root, 'dist/fantasy-draft/index.html'));
+          assert(documentBody.length > 10000 && documentBody.length < 100000);
+          assert(!fs.existsSync(out), 'Fresh native evidence directory required');
+          fs.mkdirSync(out, {recursive: true});
+          
+          const stamp = () => Date.now();
+          const bodyRef = body => ({bytes: body.length, sha256: createHash('sha256').update(body).digest('hex')});
+          const json = value => Buffer.from(JSON.stringify(value) + '\n');
+          const compact = value => Buffer.from(JSON.stringify(value));
+          const describeFile = (file, body) => ({file, ...bodyRef(body)});
+          const write = (file, body) => {
+            fs.writeFileSync(path.join(out, file), body, {flag: 'wx'});
+            return describeFile(file, body);
+          };
+          const wireBody = {
+            criteria: compact({criteria}), null: compact(null), array: compact([]), retry: compact(fixture),
+          };
+          const report = {
+            version: 1, status: 'running', target, fixedRaw: bodyRef(fixedRaw), nodeVersion: process.versions.node,
+            files: {document: write('built-document.html', documentBody), fixture: write('fixture.json', wireBody.retry)},
+            wireBodies: Object.fromEntries(Object.entries(wireBody).map(([kind, body]) => [kind, bodyRef(body)])),
+            cases: [],
+          };
+          const pause = ms => new Promise(resolve => setTimeout(resolve, ms));
+          async function until(read, predicate, label, timeout = 12000) {
+            const deadline = stamp() + timeout;
+            do {
+              const value = await read();
+              if (predicate(value)) return value;
+              await pause(40);
+            } while (stamp() < deadline);
+            throw new Error(label);
+          }
+          function deferred() {
+            let release;
+            const promise = new Promise(resolve => { release = resolve; });
+            return {promise, release};
+          }
+          
+          function refusal(url, method, noBody) {
+            if (method !== 'GET' || !noBody) return null;
+            if (url.origin === 'https://fonts.googleapis.com' && url.pathname === '/css2') return 'font';
+            if (url.origin === 'https://fonts.gstatic.com' && url.pathname.startsWith('/s/')) return 'font';
+            if (url.origin === 'https://flagcdn.com' && /^\/w(?:20|40|80|160|320)\/(?:[a-z]{2}|gb-(?:eng|sct|wls|nir))\.png$/.test(url.pathname) && !url.search) return 'flag';
+            if (url.origin !== backend) return null;
+            const query = Object.fromEntries(url.searchParams);
+            if (url.pathname === '/rest/v1/live_scores') {
+              const dates = url.searchParams.getAll('start_at');
+              assert.equal(url.searchParams.size, 5);
+              assert.deepEqual([query.select, query.order, query.limit], ['*', 'start_at.asc', '150']);
+              assert(dates.length === 2 && dates.some(value => value.startsWith('gte.')) && dates.some(value => value.startsWith('lte.')));
+              return 'live-score';
+            }
+            if (url.pathname === '/rest/v1/game_completions') {
+              assert.deepEqual([...url.searchParams.keys()].sort(), ['limit', 'order', 'player_name', 'select']);
+              assert.deepEqual([query.select, query.order, query.limit], ['game,completed_on', 'completed_on.desc', '500']);
+              assert(query.player_name?.startsWith('eq.'));
+              return 'completion-history';
+            }
+            return null;
+          }
+          
+          async function run(browser, plan) {
+            const {id, width, height, reply, seat} = plan;
+            const touch = width < 1000;
+            const context = await browser.newContext({ viewport: {width, height}, isMobile: touch, hasTouch: touch, serviceWorkers: 'block' });
+            const nonce = randomUUID();
+            const entry = {seat, round: 1, pick: 1, total: 22, human: [], ai: []};
+            const raw = {
+              ...plan, status: 'running', documentRequests: [], documentResponse: null, local: [], wire: [], responses: [],
+              cors: [], knownRefused: [], problems: [], webSockets: [], snapshots: {}, actions: [], screenshots: [], externalForwards: 0,
+            };
+            const firstGate = deferred();
+            const retryGate = deferred();
+            const pendingRoutes = new Set();
+            const pendingResponses = new Set();
+            let page, outcome;
+            function track(pending, task) {
+              pending.add(task);
+              task.catch(error => raw.problems.push(String(error.stack || error))).finally(() => pending.delete(task));
+              return task;
+            }
+            const poolReads = () => raw.wire.filter(request => request.method === 'GET');
+            const hasResponse = kind => raw.responses.some(row => row.kind === kind);
+            const hasRequest = kind => raw.wire.some(row => row.kind === kind);
+            const guardProblems = () => assert.deepEqual([raw.problems, raw.webSockets], [[], []], id);
+            const waitFor = (read, predicate, label) => until(async () => {
+              guardProblems();
+              return read();
+            }, predicate, id + ' ' + label);
+          
+            try {
+              await context.routeWebSocket('**/*', socket => {
+                raw.webSockets.push(socket.url());
+                socket.close();
+              });
+              await context.route('**/*', route => track(pendingRoutes, (async () => {
+                const request = route.request();
+                const url = new URL(request.url());
+                const method = request.method();
+                const noBody = request.postDataBuffer() === null;
+                try {
+                  if (url.origin === base) {
+                    assert(noBody && ['GET', 'HEAD'].includes(method), 'Unowned local request');
+                    if (request.isNavigationRequest() || request.resourceType() === 'document') {
+                      assert(page && request.frame() === page.mainFrame());
+                      assert.deepEqual([url.href, method, request.redirectedFrom(), raw.documentRequests.length], [target, 'GET', null, 0]);
+                      const row = {url: url.href, method, resourceType: request.resourceType(), mainFrame: true, redirected: false, at: stamp()};
+                      raw.documentRequests.push(row);
+                      const fetched = await route.fetch({maxRedirects: 0, maxRetries: 0});
+                      assert.deepEqual([fetched.url(), fetched.status(), fetched.headers().location ?? null], [target, 200, null]);
+                      const bytes = await fetched.body();
+                      assert(bytes.equals(documentBody));
+                      Object.assign(row, {status: fetched.status(), body: bodyRef(bytes), servedAt: stamp()});
+                      await route.fulfill({response: fetched});
+                    } else {
+                      assert(raw.local.length < 180);
+                      raw.local.push({path: url.pathname, method, resourceType: request.resourceType(), at: stamp()});
+                      await route.continue();
+                    }
+                    return;
+                  }
+                  const daily = url.origin === backend && url.pathname === dailyPath;
+                  const players = url.origin === backend && url.pathname === poolPath;
+                  if (daily || players) {
+                    const query = [...url.searchParams];
+                    assert.deepEqual(query, daily ? [] : poolQuery);
+                    assert(noBody);
+                    const headers = await request.allHeaders();
+                    const expectedMethod = daily ? 'POST' : 'GET';
+                    const allowOrigin = {'access-control-allow-origin': base};
+                    if (method === 'OPTIONS') {
+                      assert(raw.cors.length < 3);
+                      assert.deepEqual([headers.origin, headers['access-control-request-method']], [base, expectedMethod]);
+                      const asked = (headers['access-control-request-headers'] || '').split(',').map(value => value.trim()).filter(Boolean);
+                      assert(asked.length && asked.every(name => ['accept-profile', 'apikey', 'authorization', 'content-type', 'x-client-info'].includes(name)));
+                      raw.cors.push({path: url.pathname, method, query, expectedMethod, asked, status: 204, at: stamp()});
+                      await route.fulfill({status: 204, headers: {...allowOrigin, 'access-control-allow-methods': expectedMethod + ',OPTIONS', 'access-control-allow-headers': asked.join(',')}});
+                      return;
+                    }
+                    assert.deepEqual([method, headers.origin, Boolean(headers.authorization), Boolean(headers.apikey)], [expectedMethod, base, true, true]);
+                    const kind = daily ? 'criteria' : poolReads().length === 0 ? reply : 'retry';
+                    if (daily) {
+                      assert.equal(raw.wire.length, 0);
+                    } else {
+                      assert.deepEqual([headers['accept-profile'], headers.range ?? null, headers['range-unit'] ?? null], ['public', null, null]);
+                      assert(hasResponse('criteria') && poolReads().length < 2);
+                      if (kind === 'retry') assert(hasResponse(reply));
+                    }
+                    const row = {kind, method, path: url.pathname, query, at: stamp(), requestBody: null, forwarded: false};
+                    raw.wire.push(row);
+                    if (players) assert(await (kind === 'retry' ? retryGate : firstGate).promise, 'Pool route closed before fixture release');
+                    const body = wireBody[kind];
+                    Object.assign(row, {status: 200, response: bodyRef(body), releasedAt: stamp()});
+                    await route.fulfill({status: 200, contentType: 'application/json', headers: allowOrigin, body});
+                    row.fulfilledAt = stamp();
+                    return;
+                  }
+                  const kind = refusal(url, method, noBody);
+                  assert(kind, 'Unexpected outbound request ' + method + ' ' + url.origin + url.pathname);
+                  assert(raw.knownRefused.length < 24);
+                  raw.knownRefused.push({kind, origin: url.origin, path: url.pathname, queryKeys: [...url.searchParams.keys()], method, at: stamp(), forwarded: false});
+                  await route.abort();
+                } catch (error) {
+                  raw.problems.push(String(error.stack || error));
+                  await route.abort().catch(() => {});
+                }
+              })()));
+          
+              page = await context.newPage();
+              page.setDefaultTimeout(10000);
+              page.on('pageerror', error => raw.problems.push(String(error.stack || error)));
+              page.on('requestfailed', request => {
+                if (new URL(request.url()).origin === base) raw.problems.push('Failed local request: ' + request.url());
+              });
+              page.on('response', response => {
+                const url = new URL(response.url());
+                if (url.origin === base) {
+                  if (!response.ok()) raw.problems.push('Unsuccessful local response: ' + response.status() + ' ' + url.pathname);
+                  return;
+                }
+                const method = response.request().method();
+                if (url.origin !== backend || !(method === 'POST' && url.pathname === dailyPath || method === 'GET' && url.pathname === poolPath)) return;
+                const observedAt = stamp();
+                const wire = raw.wire.at(-1);
+                void track(pendingResponses, (async () => {
+                  assert(wire && wire.method === method && wire.path === url.pathname && !hasResponse(wire.kind));
+                  assert.deepEqual([response.status(), response.headers()['content-type'], response.request().redirectedFrom()], [200, 'application/json', null]);
+                  const bytes = await response.body();
+                  assert(bytes.equals(wireBody[wire.kind]));
+                  raw.responses.push({kind: wire.kind, url: url.href, method, status: 200, observedAt, receivedAt: stamp(), body: bodyRef(bytes)});
+                })());
+              });
+              await page.addInitScript(({nonce, seed}) => {
+                Object.defineProperty(window, '__fdEmptyPoolNonce', {value: nonce});
+                const original = Math.random;
+                let seedUses = 0;
+                const clicks = [];
+                Object.defineProperty(window, '__fdEmptyPoolEvidence', {value: () => ({seedUses, clicks: clicks.slice()})});
+                document.addEventListener('click', event => {
+                  const button = event.target.closest?.('button');
+                  if (!event.isTrusted || !button?.closest('main#dukb-main')) return;
+                  const label = button.querySelector('p')?.textContent.trim() || button.textContent.trim();
+                  clicks.push({label, trusted: event.isTrusted, pointerType: event.pointerType || null, at: Date.now()});
+                  if (label === 'Start Draft') {
+                    Math.random = () => {
+                      Math.random = original;
+                      seedUses++;
+                      return seed;
+                    };
+                  }
+                }, true);
+              }, {nonce, seed: seat === 'user' ? 0.1 : 0.9});
+          
+              const navigation = await page.goto(target, {waitUntil: 'domcontentloaded'});
+              assert(navigation);
+              assert.deepEqual([navigation.url(), navigation.status(), navigation.request().method(), navigation.request().redirectedFrom(),
+                navigation.request().redirectedTo(), navigation.headers().location ?? null], [target, 200, 'GET', null, null, null]);
+              const actualDocument = await navigation.body();
+              assert(actualDocument.equals(documentBody));
+              raw.documentResponse = {url: navigation.url(), status: navigation.status(), method: navigation.request().method(),
+                redirected: false, receivedAt: stamp(), body: bodyRef(actualDocument)};
+              const press = locator => touch ? locator.tap() : locator.click();
+              assert.equal(await answerConsent(page, {wait: 8000, press}), 'rejected');
+              assert.equal(await storedConsent(page), 'rejected');
+              raw.consent = 'rejected';
+              const main = page.locator('main#dukb-main');
+              const button = name => main.getByRole('button', {name, exact: true});
+              const start = button('Start Draft');
+              const retry = main.getByRole('alert').getByRole('button', {name: 'Retry players', exact: true});
+              const read = () => page.evaluate(criteria => {
+                const main = document.querySelector('main#dukb-main');
+                const text = node => node?.textContent.trim() ?? null;
+                const byText = (root, selector, label) => [...(root?.querySelectorAll(selector) || [])].find(node => text(node) === label);
+                const ownText = element => [...element.childNodes].filter(node => node.nodeType === 3).map(node => node.textContent).join('').trim();
+                const badge = [...(main?.querySelectorAll('div') || [])].find(node => ['Your Pick', 'AI is picking...'].includes(ownText(node)));
+                const parts = /Round (\d+) \u2022 Pick (\d+)\/(\d+)/.exec(badge?.textContent || '');
+                const criterion = byText(main, 'p,span', criteria);
+                const roster = label => {
+                  const root = byText(main, 'span', label)?.parentElement?.parentElement;
+                  const slots = [...(root?.querySelectorAll('[data-draft-slot]') || [])];
+                  return {slots: slots.length, players: slots.map(slot => slot.querySelector('[title]')?.title).filter(Boolean)};
+                };
+                const human = roster('Your XI'), ai = roster('AI XI');
+                const pool = byText(main, 'h3', 'Player Pool')?.parentElement?.parentElement;
+                const cards = [...(pool?.querySelectorAll('button') || [])].filter(card => card.querySelector('p'))
+                  .map(card => ({name: text(card.querySelector('p')), disabled: card.disabled}));
+                const alert = main?.querySelector('[role=alert]');
+                const retry = byText(alert, 'button', 'Retry players');
+                const start = byText(main, 'button', 'Start Draft');
+                const property = Object.getOwnPropertyDescriptor(window, '__fdEmptyPoolNonce');
+                return {
+                  url: location.href, nonce: property?.value ?? null, immutableNonce: property?.writable === false && property?.configurable === false,
+                  width: innerWidth, height: innerHeight, scrollWidth: document.documentElement.scrollWidth, visible: document.visibilityState === 'visible',
+                  signedOut: !Object.keys(localStorage).some(key => key.startsWith('sb-') && key.endsWith('-auth-token')),
+                  progress: {seat: badge ? (ownText(badge) === 'Your Pick' ? 'user' : 'ai') : null, round: parts ? Number(parts[1]) : null,
+                    pick: parts ? Number(parts[2]) : null, total: parts ? Number(parts[3]) : null, human: human.players, ai: ai.players},
+                  criterion: text(criterion), ruleMode: text(criterion?.nextElementSibling), formation: ['Your formation', 'AI formation'].map(label => text(main?.querySelector('[aria-label="' + label + '"]'))),
+                  alert: text(alert?.querySelector('p')), retryCount: [...(main?.querySelectorAll('button') || [])].filter(button => text(button) === 'Retry players').length,
+                  retryEnabled: retry ? !retry.disabled : null, loading: Boolean(main?.querySelector('svg.w-8.h-8.animate-spin.text-primary')),
+                  startEnabled: start ? !start.disabled : null, pool: Boolean(pool), status: text(pool?.querySelector('[role=status]')), cards,
+                  slots: [human.slots, ai.slots], completed: Boolean(main?.textContent.includes('Draft Complete!')),
+                  ...window.__fdEmptyPoolEvidence(),
+                };
+              }, criteria);
+              const hold = state => {
+                assert.deepEqual(state.progress, entry, id + ' same initial seat and empty draft');
+                assert.deepEqual([state.criterion, state.ruleMode], [criteria, 'Enforced']);
+                assert.deepEqual(state.formation, raw.snapshots.firstPending.formation);
+              };
+              const save = (label, state) => {
+                assert.deepEqual([state.url, state.nonce, state.immutableNonce, state.width, state.height, state.visible, state.signedOut, state.completed],
+                  [target, nonce, true, width, height, true, true, false], id + ' direct active document');
+                assert(state.scrollWidth <= width, id + ' no horizontal document overflow');
+                raw.snapshots[label] = {...state, playerReads: poolReads().length, recordedAt: stamp()};
+                return state;
+              };
+              const photo = async (name, locator) => {
+                await locator.scrollIntoViewIfNeeded();
+                const bytes = await page.screenshot({animations: 'disabled', fullPage: false});
+                raw.screenshots.push(write(id + '-' + name + '.png', bytes));
+              };
+          
+              const ready = save('ready', await waitFor(read, state => state.startEnabled && state.criterion === criteria && hasResponse('criteria'), 'daily rule ready'));
+              assert.deepEqual([ready.seedUses, ready.clicks, poolReads().length], [0, [], 0]);
+              await press(start);
+              const firstPending = save('firstPending', await waitFor(read, state => state.loading && state.progress.seat === seat && hasRequest(reply), 'first player request held'));
+              hold(firstPending);
+              assert(firstPending.formation.every(value => value?.includes('GK 0/1')));
+              assert.deepEqual([firstPending.seedUses, firstPending.retryCount, firstPending.pool, poolReads().length], [1, 0, false, 1]);
+              firstGate.release(true);
+              const empty = save('empty', await waitFor(read, state => state.retryEnabled && hasResponse(reply), 'successful empty response shows Retry'));
+              hold(empty);
+              assert.deepEqual([empty.alert, empty.retryCount, empty.loading, empty.pool, empty.slots, poolReads().length],
+                ["Couldn't load the players.", 1, false, false, [0, 0], 1]);
+              await photo('empty', retry);
+              await pause(2300);
+              const idle = save('emptyIdle', await read());
+              hold(idle);
+              assert.deepEqual([idle.retryEnabled, idle.retryCount, idle.loading, idle.pool, poolReads().length], [true, 1, false, false, 1]);
+              assert(raw.snapshots.emptyIdle.recordedAt - raw.snapshots.empty.recordedAt >= 2300);
+          
+              await press(retry);
+              const retryPending = save('retryPending', await waitFor(read, state => state.loading && hasRequest('retry'), 'public Retry made second held read'));
+              hold(retryPending);
+              assert.deepEqual([retryPending.alert, retryPending.retryCount, retryPending.pool, poolReads().length], [null, 0, false, 2]);
+              assert.deepEqual(retryPending.clicks.map(click => click.label), ['Start Draft', 'Retry players']);
+              assert(retryPending.clicks[0].at <= poolReads()[0].at, 'Trusted Start precedes initial read');
+              assert(raw.snapshots.emptyIdle.recordedAt <= retryPending.clicks[1].at && retryPending.clicks[1].at <= poolReads()[1].at,
+                'Idle observation and trusted Retry precede second read');
+              retryGate.release(true);
+              const admitted = save('admitted', await waitFor(read, state => state.pool && hasResponse('retry'), 'successful retry populates actual pool'));
+              hold(admitted);
+              assert.deepEqual([admitted.status, admitted.cards.length, admitted.retryCount, admitted.loading, admitted.slots],
+                ['Showing 10 of 26 available players.', 10, 0, false, [11, 11]]);
+          
+              const humanReady = save('humanReady', seat === 'user' ? admitted :
+                await waitFor(read, state => state.progress.seat === 'user' && state.progress.pick === 2, 'AI starts only once recovered'));
+              const candidate = humanReady.cards.find(card => !card.disabled);
+              assert(candidate && eligible.has(candidate.name));
+              const player = main.locator('button').filter({has: page.getByText(candidate.name, {exact: true})});
+              await press(player);
+              const finalPick = seat === 'user' ? 4 : 3;
+              const resumed = save('resumed', await waitFor(read, state => state.progress.seat === 'user' && state.progress.pick === finalPick, 'human and AI make legal picks'));
+              assert.deepEqual([resumed.progress.round, resumed.progress.total, resumed.progress.human, resumed.progress.ai.length],
+                [2, 22, [candidate.name], seat === 'user' ? 2 : 1]);
+              const used = [...resumed.progress.human, ...resumed.progress.ai];
+              assert(new Set(used).size === used.length && used.every(name => eligible.has(name)));
+              assert.deepEqual([resumed.criterion, resumed.ruleMode, resumed.retryCount, resumed.loading, resumed.pool, resumed.seedUses],
+                [criteria, 'Enforced', 0, false, true, 1]);
+              assert.deepEqual(resumed.clicks.map(click => click.label), ['Start Draft', 'Retry players', candidate.name]);
+              assert(resumed.clicks.every(click => click.trusted && click.pointerType === (touch ? 'touch' : 'mouse')));
+              raw.actions = resumed.clicks;
+              await photo('resumed', main.locator('div.inline-flex.items-center').filter({hasText: /^\s*Your Pick\s*Round 2 \u2022 Pick [34]\/22\s*$/}));
+              await page.waitForLoadState('networkidle');
+              assert.deepEqual(await page.evaluate(() => [location.href, window.__fdEmptyPoolNonce]), [target, nonce]);
+              assert.deepEqual(raw.wire.map(row => [row.kind, row.method, row.status]), [['criteria', 'POST', 200], [reply, 'GET', 200], ['retry', 'GET', 200]]);
+              assert.deepEqual(raw.responses.map(row => [row.kind, row.method, row.status]), [['criteria', 'POST', 200], [reply, 'GET', 200], ['retry', 'GET', 200]]);
+              assert.equal(raw.documentRequests.length, 1);
+              outcome = {humanPicks: resumed.progress.human.length, aiPicks: resumed.progress.ai.length, playerReads: 2, criterionReads: 1,
+                documentReads: 1, browserResponses: 3, trustedClicks: 3, screenshots: 2, externalForwards: 0};
+            } catch (error) {
+              raw.error = String(error.stack || error);
+            } finally {
+              firstGate.release(false);
+              retryGate.release(false);
+              await Promise.allSettled([...pendingRoutes, ...pendingResponses]);
+              await context.close().catch(error => raw.problems.push(String(error.stack || error)));
+              await Promise.allSettled([...pendingRoutes, ...pendingResponses]);
+            }
+            if (outcome) {
+              try {
+                guardProblems();
+                assert(raw.local.length > 0);
+                assert(raw.wire.every(row => row.at <= row.releasedAt && row.releasedAt <= row.fulfilledAt));
+                assert(raw.wire.every(row => !row.forwarded) && raw.knownRefused.every(row => !row.forwarded));
+                assert.equal(raw.documentRequests.length, 1);
+                assert.equal(raw.wire.length, 3);
+                assert.equal(raw.responses.length, 3);
+              } catch (error) {
+                raw.error = String(error.stack || error);
+              }
+            }
+            raw.status = raw.error ? 'failed' : 'passed';
+            return {...plan, status: raw.status, ...(raw.error ? {error: raw.error} : {census: outcome}),
+              raw: write(id + '.json', json(raw)), screenshots: raw.screenshots};
+          }
+          
+          let browser;
+          try {
+            browser = await playwright.chromium.launch({headless: true});
+            report.browserVersion = browser.version();
+            const workers = await Promise.allSettled(widths.map(async ([width]) => {
+              for (const plan of plans.filter(row => row.width === width)) report.cases.push(await run(browser, plan));
+            }));
+            report.cases.sort((left, right) => plans.findIndex(row => row.id === left.id) - plans.findIndex(row => row.id === right.id));
+            const failedWorker = workers.find(worker => worker.status === 'rejected');
+            if (failedWorker) throw failedWorker.reason;
+            assert.deepEqual(report.cases.map(row => [row.id, row.status]), plans.map(row => [row.id, 'passed']));
+            report.census = Object.fromEntries(Object.keys(report.cases[0].census).map(key =>
+              [key, report.cases.reduce((sum, row) => sum + row.census[key], 0)]));
+            assert.deepEqual(report.census, {humanPicks: 12, aiPicks: 18, playerReads: 24, criterionReads: 12,
+              documentReads: 12, browserResponses: 36, trustedClicks: 36, screenshots: 24, externalForwards: 0});
+            await browser.close();
+            browser = null;
+            report.status = 'passed';
+            console.log('PASS 12 native Fantasy Draft empty-pool recovery journeys');
+          } catch (error) {
+            report.status = 'failed';
+            report.error = String(error.stack || error);
+            throw error;
+          } finally {
+            if (browser) await browser.close().catch(error => { report.browserCloseError = String(error.stack || error); });
+            write('report.json', json(report));
+          }
+          FD_EMPTY_NATIVE
+          printf '%s  %s\n' '8be8665666264ba991661a1d8ee7876ffde30c75db078534dc6a625f3e71e3c9' "$EVIDENCE/native-helper.mjs" | sha256sum -c -
+          touch "$EVIDENCE/browser.transport.log"
+          node scripts/lib/hostLikeServer.mjs dist 4174 > "$EVIDENCE/browser-host.log" 2>&1 &
+          host=$!
+          trap 'kill "$host" 2>/dev/null || true; wait "$host" 2>/dev/null || true' EXIT
+          ready=0
+          for attempt in $(seq 1 40); do
+            kill -0 "$host"
+            if curl --noproxy '*' --silent --fail --max-time 1 http://127.0.0.1:4174/ -o /dev/null; then ready=1; break; fi
+            sleep 0.25
+          done
+          test "$ready" -eq 1
+          result=0
+          CI=true FD_EMPTY_POOL_BASE=http://127.0.0.1:4174 FD_EMPTY_POOL_BROWSER_OUT="$EVIDENCE/browser" \
+            FD_EMPTY_POOL_FIXED_RAW="$PWD/$EVIDENCE/fixed-reference.raw.json" \
+            SIM_OFFLINE_RECEIPT="$PWD/$EVIDENCE/browser.transport.log" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" \
+            node "$EVIDENCE/native-helper.mjs" > "$EVIDENCE/browser.log" 2>&1 || result=$?
+          printf '%s\n' "$result" > "$EVIDENCE/browser-exit.txt"
+          cat "$EVIDENCE/browser.log"
+          test "$result" -eq 0
+          test ! -s "$EVIDENCE/browser.transport.log"
+      - name: Fresh production rebuild, complete byte comparison, and admission
+        run: |
+          set -euo pipefail
+          node "$EVIDENCE/dist-measure.mjs" dist after
+          cmp "$EVIDENCE/dist-before.json" "$EVIDENCE/dist-after.json"
+          test ! -e "$RUNNER_TEMP/fantasy-draft-empty-first-dist"
+          mv dist "$RUNNER_TEMP/fantasy-draft-empty-first-dist"
+          NODE_OPTIONS="--max-old-space-size=6144" npm run build 2>&1 | tee "$EVIDENCE/fresh-build.log"
+          node "$EVIDENCE/dist-measure.mjs" dist fresh
+          cmp "$EVIDENCE/dist-before.json" "$EVIDENCE/dist-fresh.json"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          import {createHash} from 'node:crypto';
+          const out=process.env.EVIDENCE;
+          const read=file=>fs.readFileSync(out+'/'+file);
+          const json=file=>JSON.parse(read(file));
+          const sha=body=>createHash('sha256').update(body).digest('hex');
+          const source=json('source-join.json'),native=json('browser/report.json'),unit=json('unit.json');
+          assert.equal(unit.success,true);
+          assert.deepEqual([unit.numFailedTests,unit.numPendingTests,unit.numTodoTests],[0,0,0]);
+          assert.deepEqual([unit.numTotalTests,unit.numPassedTests],[15,15]);
+          assert.deepEqual(unit.testResults.map(s=>[s.name.split('/').at(-1),s.assertionResults.length]).sort((a,b)=>a[0].localeCompare(b[0])),
+            [['fantasyDraftCriteriaStart.test.tsx',4],['fantasyDraftFormation.test.tsx',3],['fantasyDraftPoolRecovery.test.tsx',8]]);
+          assert(unit.testResults.every(s=>s.status==='passed'&&s.assertionResults.every(row=>row.status==='passed'&&row.failureMessages.length===0)));
+          assert(read('readers.log').toString('utf8').includes('All 20 harnesses green.'));
+          const weight=read('weight.log').toString('utf8');
+          assert(weight.includes('sweepWeight: green.'));
+          assert.equal(weight.split('\n').filter(line=>/^\s+\/\S*\s+\d+K gz over/.test(line)).length,16);
+          assert.deepEqual([read('offline.log').length,read('browser.transport.log').length],[0,0]);
+          const dist=json('dist-fresh.json');
+          assert.equal(dist.length,850);
+          const checked=(()=>{
+          const target='http://127.0.0.1:4174/fantasy-draft';
+          const census={"humanPicks":12,"aiPicks":18,"playerReads":24,"criterionReads":12,"documentReads":12,"browserResponses":36,"trustedClicks":36,"screenshots":24,"externalForwards":0};
+          const expectedWire={"criteria":{"bytes":60,"sha256":"ddf428a9b97b966d8898ee997817f45d7761f95662de1f1a77ec8b57571c6659"},"null":{"bytes":4,"sha256":"74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b"},"array":{"bytes":2,"sha256":"4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"},"retry":{"bytes":4209,"sha256":"d903ce9ed14be109bf32da37f8f844fc14591639829690cabe312a94c33b5454"}};
+          const refs=(file,body)=>({file,bytes:body.length,sha256:sha(body)});
+          assert.deepEqual([native.version,native.status,native.target,native.nodeVersion],[1,'passed',target,'24.22.1']);
+          assert.deepEqual(native.census,census);
+          assert.deepEqual(native.wireBodies,expectedWire);
+          assert.deepEqual(native.fixedRaw,source.inputs.qualified.raw);
+          const doc=read('browser/built-document.html'),fixture=read('browser/fixture.json');
+          assert.deepEqual(native.files,{document:refs('built-document.html',doc),fixture:refs('fixture.json',fixture)});
+          assert.deepEqual({bytes:fixture.length,sha256:sha(fixture)},expectedWire.retry);
+          assert.deepEqual(JSON.parse(fixture),json('fixed-reference.raw.json').fixture);
+          assert.deepEqual(dist.find(row=>row.file==='dist/fantasy-draft/index.html'),{file:'dist/fantasy-draft/index.html',bytes:doc.length,sha256:sha(doc)});
+          assert(fs.readFileSync('dist/fantasy-draft/index.html').equals(doc));
+          const cases=[[320,780],[390,844],[1280,900]].flatMap(([width,height])=>
+            ['null','array'].flatMap(reply=>['user','ai'].map(seat=>({id:[width,reply,seat].join('-'),width,height,reply,seat}))));
+          const steps=['ready','firstPending','empty','emptyIdle','retryPending','admitted','humanReady','resumed'];
+          assert.deepEqual(native.cases.map(({id,width,height,reply,seat,status})=>({id,width,height,reply,seat,status})),cases.map(x=>({...x,status:'passed'})));
+          const names=new Set(JSON.parse(fixture).filter(p=>p.age<=25).map(p=>p.name));
+          const nonces=new Set();
+          const docBody={bytes:doc.length,sha256:sha(doc)};
+          const entries=['report.json','built-document.html','fixture.json'];
+          for(const row of native.cases){
+            const {id,width,height,reply,seat}=row;
+            const body=read('browser/'+id+'.json'),raw=JSON.parse(body),frames=raw.snapshots;
+            assert.deepEqual(row.raw,refs(id+'.json',body));
+            assert.deepEqual([raw.id,raw.width,raw.height,raw.reply,raw.seat,raw.status],[id,width,height,reply,seat,'passed']);
+            assert.deepEqual(row.census,{humanPicks:1,aiPicks:seat==='user'?2:1,playerReads:2,criterionReads:1,documentReads:1,
+              browserResponses:3,trustedClicks:3,screenshots:2,externalForwards:0});
+            assert.deepEqual([raw.problems,raw.webSockets,raw.externalForwards,raw.consent],[[],[],0,'rejected']);
+            assert(raw.local.length>0);
+            assert.equal(raw.documentRequests.length,1);
+            const [req]=raw.documentRequests;
+            assert.deepEqual([req.url,req.method,req.resourceType,req.mainFrame,req.redirected,req.status,req.body],
+              [target,'GET','document',true,false,200,docBody]);
+            assert.deepEqual([raw.documentResponse.url,raw.documentResponse.method,raw.documentResponse.status,raw.documentResponse.redirected,raw.documentResponse.body],
+              [target,'GET',200,false,docBody]);
+            const order=['criteria',reply,'retry'];
+            assert.deepEqual(raw.wire.map(x=>x.kind),order);
+            assert.deepEqual(raw.responses.map(x=>x.kind),order);
+            for(const [i,kind] of order.entries()){
+              const req=raw.wire[i],res=raw.responses[i],method=i===0?'POST':'GET',path=i===0?'/functions/v1/fantasy-draft-daily':'/rest/v1/fantasy_draft_players';
+              assert.deepEqual([req.method,req.path,req.status,req.requestBody,req.forwarded,req.response],[method,path,200,null,false,expectedWire[kind]]);
+              assert.deepEqual([res.method,res.status,new URL(res.url).pathname,res.body],[method,200,path,expectedWire[kind]]);
+              assert(req.at<=req.releasedAt&&req.releasedAt<=req.fulfilledAt);
+              assert.deepEqual(req.query,i===0?[]:[['select','id,name,position,nationality,market_value_millions,dominant_foot,age'],['order','name.asc']]);
+            }
+            assert(raw.knownRefused.every(x=>x.forwarded===false));
+            assert.deepEqual(Object.keys(frames),steps);
+            const nonce=frames.ready.nonce;
+            assert.match(nonce,/^[0-9a-f-]{36}$/);
+            assert(!nonces.has(nonce));
+            nonces.add(nonce);
+            assert.deepEqual(steps.map(k=>frames[k].playerReads),[0,1,1,1,2,2,2,2]);
+            for(const f of Object.values(frames)){
+              assert.deepEqual([f.url,f.width,f.height,f.nonce,f.immutableNonce,f.signedOut,f.completed],[target,width,height,nonce,true,true,false]);
+              assert(f.scrollWidth<=width&&f.visible);
+            }
+            const opening={seat,round:1,pick:1,total:22,human:[],ai:[]};
+            for(const k of ['firstPending','empty','emptyIdle','retryPending','admitted']){
+              assert.deepEqual(frames[k].progress,opening);
+              assert.deepEqual([frames[k].criterion,frames[k].ruleMode],['Under 25s: Every player must be 25 or younger','Enforced']);
+            }
+            for(const k of ['empty','emptyIdle']){
+              const f=frames[k];
+              assert.deepEqual([f.retryCount,f.retryEnabled,f.loading,f.pool,f.slots],[1,true,false,false,[0,0]]);
+            }
+            assert(frames.emptyIdle.recordedAt-frames.empty.recordedAt>=2300);
+            assert.deepEqual([frames.retryPending.retryCount,frames.retryPending.loading,frames.retryPending.pool],[0,true,false]);
+            assert.deepEqual([frames.admitted.retryCount,frames.admitted.loading,frames.admitted.pool,frames.admitted.slots],[0,false,true,[11,11]]);
+            const resumed=frames.resumed.progress,used=[...resumed.human,...resumed.ai];
+            assert.deepEqual([resumed.seat,resumed.round,resumed.pick,resumed.total,resumed.human.length,resumed.ai.length],
+              ['user',2,seat==='user'?4:3,22,1,seat==='user'?2:1]);
+            assert(new Set(used).size===used.length&&used.every(name=>names.has(name)));
+            assert.deepEqual(raw.actions.map(a=>a.label),['Start Draft','Retry players',resumed.human[0]]);
+            assert(raw.actions.every(a=>a.trusted&&a.pointerType===(width<1000?'touch':'mouse')));
+            assert(raw.actions[0].at<=raw.wire[1].at&&raw.actions[1].at>=frames.emptyIdle.recordedAt&&raw.actions[1].at<=raw.wire[2].at);
+            const photos=['empty','resumed'].map(k=>{
+              const file=id+'-'+k+'.png',png=read('browser/'+file);
+              assert(png.subarray(0,8).equals(Buffer.from([137,80,78,71,13,10,26,10])));
+              assert.deepEqual([png.readUInt32BE(16),png.readUInt32BE(20)],[width,height]);
+              return refs(file,png);
+            });
+            assert.deepEqual(row.screenshots,photos);
+            assert.deepEqual(raw.screenshots,photos);
+            entries.push(id+'.json',...photos.map(x=>x.file));
+          }
+          assert.deepEqual(fs.readdirSync(out+'/browser').sort(),entries.sort());
+          return {status:'passed',cases:12,census,exactBuiltDocument:native.files.document,reportSHA256:sha(read('browser/report.json')),
+            scope:'Native isolated HTTP200 null and empty-list recovery for both seats across three widths.'};
+          })();
+          assert.equal(checked.status,'passed');
+          fs.writeFileSync(out+'/full-clean-result.json',JSON.stringify({status:'passed',head:source.head,tree:source.tree,
+            codeConfigRows:source.codeConfigRows,productionBuilds:2,distFiles:dist.length,distTupleSHA256:sha(read('dist-fresh.json')),
+            builtReaders:20,routeCaps:16,unitPassed:unit.numPassedTests,native:checked,sourceOfflineBytes:0,browserOfflineBytes:0,
+            scope:'Fixed source, built route and fresh byte-identical rebuild. Fictional data and no publication.'},null,2)+'\n',{flag:'wx'});
+          NODE
+      - name: Verify unchanged physical source and locked offline run
+        if: always()
+        run: |
+          set -euo pipefail
+          git ls-files -s > "$EVIDENCE/source-after.txt"
+          sha256sum package.json package-lock.json > "$EVIDENCE/locks-after.txt"
+          cmp "$EVIDENCE/source-before.txt" "$EVIDENCE/source-after.txt"
+          cmp "$EVIDENCE/locks-before.txt" "$EVIDENCE/locks-after.txt"
+          git diff --exit-code HEAD -- .
+          node "$EVIDENCE/physical.mjs" after
+          test ! -s "$SIM_OFFLINE_RECEIPT"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: fantasy-draft-empty-pool-full-clean-${{ github.run_id }}
+          path: fantasy-draft-empty-pool-full-clean
+          retention-days: 30
+          if-no-files-found: error
