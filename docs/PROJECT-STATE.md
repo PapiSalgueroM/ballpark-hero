@@ -1,5 +1,13 @@
 
 
+## 2026-11-10 Player feedback, NBA Perfect Season Daily midnight
+
+NBA Perfect Season Daily uses the date from when the page opened for its wheel, season seed, theme and save. A fresh page starts the new Eastern day. The draft column stays inside the phone viewport.
+
+The synthetic original entered Daily after midnight with the next day's wheel and 47-35 simulation while saving the prior date. The fixed crossover matched the mounted day's wheel and 43-39 simulation. All six component tests passed. Restoring the original Page brought back the named date failure. Restoring the fixed Page recovered the exact results. The unchanged phone draft overflowed after landing. Nine Chromium journeys across three widths verified six picks, the dated 82-game save and containment of the wheel and result. The clean rebuild matched 4,669 source files, 11 configurations and all 850 built files. [Preflight](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/42792020594) · [Original](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/42794877575) · [Fixed](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/42803273446) · [Physical controls](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/42804263707) · [Full](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/42805429127) · [Clean](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/42808329697) · [Original phone layout](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/42801633730)
+
+
+
 ## 2026-11-10 Player feedback, CFB Dynasty ordinary scoring
 
 College Football Dynasty now uses the existing score draw for a small shutout range. Other ordinary coordinator-adjusted totals start at two. Legacy scoring and the existing winner and draw order are preserved.

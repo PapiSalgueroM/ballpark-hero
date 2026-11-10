@@ -128,7 +128,7 @@ const PerfectSeasonNba = () => {
         setPhase('daily-locked');
         return;
       }
-      dailyPicker.current = makeDailyPicker(SPORT_KEY);
+      dailyPicker.current = makeDailyPicker(SPORT_KEY, todayStr);
     }
     setIndex([]);
     setPhase('boot');
@@ -542,7 +542,7 @@ const PerfectSeasonNba = () => {
         )}
 
         {(phase === 'spin' || phase === 'spinning' || phase === 'draft') && (
-          <div className="grid md:grid-cols-[1fr_260px] gap-5">
+          <div className="grid grid-cols-1 md:grid-cols-[1fr_260px] gap-5">
             <div>
               <div className="bg-card border border-border rounded-2xl p-5 mb-4 text-center">
                 <div className="text-xs uppercase tracking-wider text-muted-foreground mb-2">
