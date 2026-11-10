@@ -1,24 +1,24 @@
-name: NBA Perfect Season Daily date original
+name: NBA Perfect Season original mobile layout diagnostic
 on:
   push:
-    branches: [codex/nba-perfect-season-daily-date-original-retry-qa-20261110]
+    branches: [codex/nba-perfect-season-daily-date-original-layout-qa-20261110]
 permissions:
   actions: read
   contents: read
 jobs:
-  original:
+  layout:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 25
     env:
       TZ: UTC
       SIM_NETWORK: offline
-      SIM_OFFLINE_RECEIPT: nba-perfect-season-daily-date-original/offline.log
-      NBA_DAILY_DATE_RAW: nba-perfect-season-daily-date-original/public-cases.raw.json
-      BASE_HEAD: '7868fa0995bce7544c28b4776ef6505f585fb969'
-      BASE_TREE: '85f0484c30da21813e77e564d88510d3a796b531'
-      TEST_BLOB: '7c398ac1ded8cf96d5d0720ca426a2e1fe6ddc92'
-      PLAN_BLOB: '2c302ff50b614cbe3d08ee6321a213788e74e793'
-      EVIDENCE: nba-perfect-season-daily-date-original
+      EVIDENCE: nba-perfect-season-daily-date-original-layout
+      SIM_OFFLINE_RECEIPT: nba-perfect-season-daily-date-original-layout/offline.log
+      NBA_DAILY_DATE_ORIGINAL_HEAD: 'a97c23de034006e383349c8bebfedaf72a906346'
+      NBA_DAILY_DATE_ORIGINAL_TREE: '1b3c406cb5d9efd817c3e6241f557b690f4ccc89'
+      NBA_DAILY_DATE_ORIGINAL_WORKFLOW: 'f2f1102c4347140263895c01d9124d3a2d832b20'
+      NBA_DAILY_DATE_PRODUCT_BLOB: 'edf47ea61379dfd23e6df85266d8954d74b7cdef'
+      NBA_DAILY_DATE_HELPER_BLOB: '95c5218604e4dfb272e4a3dc33aa8fb262cbc623'
     steps:
       - uses: actions/checkout@v4
         with:
@@ -28,9 +28,10 @@ jobs:
         with:
           node-version: 24.22.1
           cache: npm
-      - name: Authenticate active entry and exact original NBA Perfect Season source
-        env:
-          GH_TOKEN: ${{ github.token }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Exact qualified original parent and sole native QA scope
         run: |
           set -euo pipefail
           test ! -e "$EVIDENCE"
@@ -41,79 +42,25 @@ jobs:
           git ls-files -s > "$EVIDENCE/source-before.txt"
           sha256sum package.json package-lock.json > "$EVIDENCE/locks-before.txt"
           git diff --exit-code HEAD -- .
-          git fetch --no-tags --depth=1 origin "$BASE_HEAD"
           node --input-type=module <<'NODE'
-          import assert from 'node:assert/strict';
-          import fs from 'node:fs';
-          import { createHash } from 'node:crypto';
-          import { execFileSync } from 'node:child_process';
-
-          const { BASE_HEAD, BASE_TREE, TEST_BLOB, PLAN_BLOB, EVIDENCE } = process.env;
-          const repo = 'PapiSalgueroM/ballpark-hero';
-          assert.equal(process.env.GITHUB_REPOSITORY, repo);
-          const runId = 42792020594;
-          const api = process.env.GITHUB_API_URL + '/repos/' + repo;
-          const request = async path => {
-            const response = await fetch(api + path, {
-              headers: {
-                Accept: 'application/vnd.github+json',
-                Authorization: 'Bearer ' + process.env.GH_TOKEN,
-                'X-GitHub-Api-Version': '2022-11-28',
-              },
-              redirect: 'error',
-            });
-            assert.equal(response.status, 200, 'preflight API ' + path);
-            return response.json();
-          };
-          const [run, jobs, artifacts] = await Promise.all([
-            request('/actions/runs/' + runId),
-            request('/actions/runs/' + runId + '/jobs?per_page=100'),
-            request('/actions/runs/' + runId + '/artifacts?per_page=100'),
-          ]);
-          const workflow = '.github/workflows/nba-perfect-season-daily-date-20261110.yml';
-          assert.deepEqual([run.id,run.status,run.conclusion,run.event,run.run_attempt,run.path,run.head_sha,run.head_commit.tree_id,run.repository.full_name],
-            [runId,'completed','success','push',1,workflow,'fb68443be3e925c1390b9d026477919ae00121ff','560d41291ab753e21ba25753da936c5c27e760a4',repo]);
-          assert.equal(run.head_branch,'codex/nba-perfect-season-daily-date-preflight-qa-20261110');
-          assert.equal(jobs.jobs.length,1);
-          const [job] = jobs.jobs;
-          assert.deepEqual([job.id,job.status,job.conclusion,job.head_sha,job.steps.length],[129747563141,'completed','success',run.head_sha,11]);
-          assert(job.steps.every(step => step.status === 'completed' && step.conclusion === 'success'));
-          assert.equal(artifacts.artifacts.length,1);
-          const [artifact] = artifacts.artifacts;
-          assert.deepEqual([artifact.id,artifact.name,artifact.expired,artifact.size_in_bytes,artifact.digest,artifact.workflow_run.id,artifact.workflow_run.head_sha],
-            [13752550399,'nba-perfect-season-daily-date-active-preflight-'+runId,false,1014572,'sha256:89c1a0798e94ae61d6c20630674f1f36ac77884b6e3845697b5a89c5c49023ee',runId,run.head_sha]);
-          delete process.env.GH_TOKEN;
-          const git = (...args) => execFileSync('git', args, { encoding: 'utf8', maxBuffer: 16 * 1024 * 1024 }).trimEnd();
-          const head = git('rev-parse', 'HEAD');
-          assert.equal(head, process.env.GITHUB_SHA);
-          assert.deepEqual(git('rev-list', '--parents', '-n', '1', 'HEAD').split(' '), [head, BASE_HEAD]);
-          assert.equal(git('rev-parse', BASE_HEAD + '^{tree}'), BASE_TREE);
-          const test = 'src/test/perfectSeasonNbaDailyDate.test.tsx';
-          const plan = 'docs/plans/2026-11-10-nba-perfect-season-daily-date.md';
-          const added = [test, plan, workflow].sort();
-          const held = {"src/App.tsx":"8bfedf7aaa1d076e0f0c8e2216c7e46632cd8a33","src/data/gameRegistry.ts":"f560b40a74d1468ac72dfde4ee6fec6635a9a255","public/perfect-season-nba/index.html":"5a2d6aa77968adbbd67ee298f30ae865cf9bc4cf","src/pages/PerfectSeasonNba.tsx":"edf47ea61379dfd23e6df85266d8954d74b7cdef","src/lib/perfectSeason.ts":"2acc9b8498e15b53c9eebc87ea45d3dd77ec2de6","src/lib/perfectSeasonNba.ts":"4509bdb6c6026170189ed144ce514340ba3e4090","src/lib/perfectSeasonThemes.ts":"39113aad5dc330ccbd677b4c541a42da974b05e6","src/test/perfectSeasonNbaRetry.test.tsx":"6cf90f7d3bc132de8c463d880c2ad056ec03f854","scripts/lib/offlineTransport.cjs":"0fda542a2649fe5da937c6976fd0f5b6073e74b6","index.html":"12598fe720eec4fc88d3d33c53ede612d018150c","package.json":"2ff64986fb76ebc51b706f2fd24765768874008a","package-lock.json":"97d6f12a052f25f400462938c241789a083f0bfe","vite.config.ts":"0112b6ac4f2ad80b2fc04f9ec2f7185300913e7d","tailwind.config.ts":"f83c4f4032d359bc9285828eac3b0961a46c6b17","postcss.config.js":"2aa7205d4b402a1bdfbe07110c61df920b370066","tsconfig.json":"6b68d80b7d92d0c4a5d774897f2bedfa95b42669","tsconfig.app.json":"51f581dd91641b4c1f1219f646788e73cf6bf00c","tsconfig.node.json":"3133162c20350e1741b94b8d2ff77b811bec8363","bun.lockb":"5d9d33a3bf4f45fa099e2aa3014149e034981149","bun.lock":"dff081dcd34a1aa928ddc90d910774a6b855dfe3","src/lib/dateUtils.ts":"12c9de0ed37b0797492f3e936bcba70bdc03d585"};
-          const pins = { ...held, [test]: TEST_BLOB, [plan]: PLAN_BLOB };
-          const sha = (algorithm, data) => createHash(algorithm).update(data).digest('hex');
-          for (const [file, want] of Object.entries(pins)) {
-            const bytes = fs.readFileSync(file);
-            assert.match(want, /^[0-9a-f]{40}$/);
-            assert.equal(git('rev-parse', 'HEAD:' + file), want);
-            assert.equal(sha('sha1', Buffer.concat([Buffer.from('blob ' + bytes.length + '\0'), bytes])), want, file);
-            if (Object.hasOwn(held, file)) assert.equal(git('rev-parse', BASE_HEAD + ':' + file), want, file);
-          }
-          assert.deepEqual(git('diff', '--name-only', BASE_HEAD, 'HEAD').split('\n').sort(), added);
-          const tree = ref => git('ls-tree', '-r', '-z', ref).split('\0').filter(Boolean);
-          const parent = tree(BASE_HEAD);
-          const current = tree('HEAD');
-          assert.equal(parent.length, 5798);
-          assert.equal(current.length, 5801);
-          assert.deepEqual(current.filter(row => !added.includes(row.split('\t')[1])), parent);
-          assert.equal(current.filter(row => /^(src|public|scripts)\//.test(row.split('\t')[1])).length, 4669);
-          fs.writeFileSync(EVIDENCE + '/source-receipt.json', JSON.stringify({
-            head, tree: git('rev-parse', 'HEAD^{tree}'), parent: BASE_HEAD, parentTree: BASE_TREE, pins,
-            ownedWorkflow: git('rev-parse', 'HEAD:' + workflow), heldRows: parent.length, trackedRows: current.length, sourceRows: 4669,
-            activePreflight: { run: run.id, head: run.head_sha, job: job.id, artifact: artifact.id, digest: artifact.digest, independentAuditSHA256: '1196cf142851fad8eebfb4c7173ceb4166aaaf7f1824590eba68b4af7369ccc9' },
-          }, null, 2));
+          import assert from 'node:assert/strict';import fs from 'node:fs';import {execFileSync} from 'node:child_process';
+          const env=process.env,out=env.EVIDENCE,head=env.GITHUB_SHA,originalHead=env.NBA_DAILY_DATE_ORIGINAL_HEAD,originalTree=env.NBA_DAILY_DATE_ORIGINAL_TREE;
+          const workflow='.github/workflows/nba-perfect-season-daily-date-20261110.yml',helper='scripts/qa/playNbaPerfectSeasonDailyDateLayout.mjs';
+          const git=(...args)=>execFileSync('git',args,{encoding:'utf8',maxBuffer:16*1024*1024}).trimEnd();
+          const tree=ref=>git('ls-tree','-r','-z',ref).split('\0').filter(Boolean),held=rows=>rows.filter(row=>![workflow,helper].includes(row.split('\t')[1]));
+          assert.deepEqual(git('rev-list','--parents','-n','1','HEAD').split(' '),[head,originalHead]);
+          assert.equal(git('rev-parse',originalHead+'^{tree}'),originalTree);
+          assert.equal(git('rev-parse',originalHead+':'+workflow),env.NBA_DAILY_DATE_ORIGINAL_WORKFLOW);
+          assert.equal(git('rev-parse','HEAD:'+helper),env.NBA_DAILY_DATE_HELPER_BLOB);
+          assert.equal(git('rev-parse','HEAD:src/pages/PerfectSeasonNba.tsx'),env.NBA_DAILY_DATE_PRODUCT_BLOB);
+          assert.equal(git('rev-parse','HEAD:src/test/perfectSeasonNbaDailyDate.test.tsx'),'7c398ac1ded8cf96d5d0720ca426a2e1fe6ddc92');
+          assert.equal(git('rev-parse','HEAD:docs/plans/2026-11-10-nba-perfect-season-daily-date.md'),'2c302ff50b614cbe3d08ee6321a213788e74e793');
+          const before=tree(originalHead),after=tree('HEAD');
+          assert.deepEqual([before.length,after.length,held(before).length],[5801,5802,5800]);
+          assert.deepEqual(held(after),held(before));
+          assert.equal(after.filter(row=>/^(src|public|scripts)\//.test(row.split('\t')[1])).length,4670);
+          assert.deepEqual(git('diff','--name-status',originalHead,'HEAD').split('\n').sort(),['A\t'+helper,'M\t'+workflow].sort());
+          fs.writeFileSync(out+'/source-join.json',JSON.stringify({status:'passed',head,tree:git('rev-parse','HEAD^{tree}'),originalHead,originalTree,workflow:git('rev-parse','HEAD:'+workflow),helperBlob:env.NBA_DAILY_DATE_HELPER_BLOB,pins:{'src/pages/PerfectSeasonNba.tsx':env.NBA_DAILY_DATE_PRODUCT_BLOB},heldRows:5800,trackedRows:5802,scopedSourceRows:4670,rootConfigurations:11},null,2));
           NODE
       - name: Install locked dependencies and freeze physical source
         run: |
@@ -140,7 +87,7 @@ jobs:
             assert.equal(version, entry.version, file);
             return [file, version];
           });
-          assert.equal(source.length, 5801);
+          assert.equal(source.length, 5802);
           assert.equal(installed.length, 521);
           assert.equal(fs.statSync(process.env.SIM_OFFLINE_RECEIPT).size, 0);
           for (const [name, data] of [['tracked', source], ['installed', installed]]) {
@@ -154,106 +101,102 @@ jobs:
         run: |
           set -euo pipefail
           node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee "$EVIDENCE/types.log"
-      - name: Require the original Daily date mismatch and held retry behavior
+      - name: Actual direct route React lazy Pro Basketball object and inert snapshot
         run: |
           set -euo pipefail
-          result=0
-          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node_modules/.bin/vitest run \
-            src/test/perfectSeasonNbaDailyDate.test.tsx src/test/perfectSeasonNbaRetry.test.tsx \
-            --reporter=default --reporter=json --outputFile="$EVIDENCE/vitest.json" > "$EVIDENCE/vitest.log" 2>&1 || result=$?
-          cat "$EVIDENCE/vitest.log"
-          printf '%s\n' "$result" > "$EVIDENCE/vitest-exit.txt"
-          test "$result" -eq 1
-          test -s "$NBA_DAILY_DATE_RAW"
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';import ts from 'typescript';import {JSDOM} from 'jsdom';import {createHash} from 'node:crypto';
+          const out=process.env.EVIDENCE,route='/perfect-season-nba',component='PerfectSeasonNba',label='82-0 NBA Perfect Season',appText=fs.readFileSync('src/App.tsx','utf8'),catalogText=fs.readFileSync('src/data/gameRegistry.ts','utf8'),app=ts.createSourceFile('src/App.tsx',appText,ts.ScriptTarget.Latest,true,ts.ScriptKind.TSX),catalog=ts.createSourceFile('src/data/gameRegistry.ts',catalogText,ts.ScriptTarget.Latest,true,ts.ScriptKind.TS);assert.deepEqual(app.parseDiagnostics,[]);assert.deepEqual(catalog.parseDiagnostics,[]);
+          const all=(root,predicate)=>{const found=[];const visit=node=>{if(predicate(node))found.push(node);ts.forEachChild(node,visit);};visit(root);return found;},attrs=(node,name)=>node.attributes.properties.filter(p=>ts.isJsxAttribute(p)&&p.name.text===name);
+          const routes=all(app,node=>(ts.isJsxSelfClosingElement(node)||ts.isJsxOpeningElement(node))&&node.tagName.getText(app)==='Route').filter(node=>attrs(node,'path').some(p=>p.initializer&&ts.isStringLiteralLike(p.initializer)&&p.initializer.text===route));assert.equal(routes.length,1,'One actual direct public JSX Route');assert(ts.isJsxSelfClosingElement(routes[0]),'Direct self-closing route');assert.equal(attrs(routes[0],'path').length,1);const elements=attrs(routes[0],'element');assert.equal(elements.length,1);const element=elements[0].initializer;assert(element&&ts.isJsxExpression(element)&&element.expression&&ts.isJsxSelfClosingElement(element.expression));assert.equal(element.expression.tagName.getText(app),component,'Direct 82-0 NBA Perfect Season mount, no Navigate');
+          const declarations=all(app,node=>ts.isVariableDeclaration(node)&&ts.isIdentifier(node.name)&&node.name.text===component);assert.equal(declarations.length,1);const init=declarations[0].initializer;assert(init&&ts.isCallExpression(init)&&ts.isIdentifier(init.expression)&&init.expression.text==='lazy');assert.equal(init.arguments.length,1);const factory=init.arguments[0];assert(ts.isArrowFunction(factory)&&factory.parameters.length===0);const load=factory.body;assert(ts.isCallExpression(load)&&load.expression.kind===ts.SyntaxKind.ImportKeyword&&load.arguments.length===1&&ts.isStringLiteralLike(load.arguments[0]));assert.equal(load.arguments[0].text,'./pages/PerfectSeasonNba');const reactLazy=all(app,node=>ts.isImportDeclaration(node)&&ts.isStringLiteralLike(node.moduleSpecifier)&&node.moduleSpecifier.text==='react'&&node.importClause?.namedBindings&&ts.isNamedImports(node.importClause.namedBindings)).flatMap(node=>node.importClause.namedBindings.elements).filter(node=>node.name.text==='lazy'&&(node.propertyName?.text??node.name.text)==='lazy');assert.equal(reactLazy.length,1,'lazy is the actual named React import');
+          const prop=(node,name)=>{const found=node.properties.filter(p=>ts.isPropertyAssignment(p)&&(ts.isIdentifier(p.name)||ts.isStringLiteralLike(p.name))&&p.name.text===name);assert(found.length<=1,'No duplicate catalog property: '+name);return found[0]?.initializer;},defs=all(catalog,node=>ts.isVariableDeclaration(node)&&ts.isIdentifier(node.name)&&node.name.text==='CATEGORIES');assert.equal(defs.length,1);const categories=defs[0].initializer;assert(categories&&ts.isArrayLiteralExpression(categories));const category=categories.elements.filter(node=>ts.isObjectLiteralExpression(node)&&prop(node,'title')&&ts.isStringLiteralLike(prop(node,'title'))&&prop(node,'title').text==='Pro Basketball');assert.equal(category.length,1);const games=prop(category[0],'games');assert(games&&ts.isArrayLiteralExpression(games));const entries=games.elements.filter(node=>ts.isObjectLiteralExpression(node)&&prop(node,'path')&&ts.isStringLiteralLike(prop(node,'path'))&&prop(node,'path').text===route);assert.equal(entries.length,1,'One actual uncommented Pro Basketball catalog object');const catalogLabel=prop(entries[0],'label');assert(catalogLabel&&ts.isStringLiteralLike(catalogLabel));assert.equal(catalogLabel.text,label,'Exact actual Pro Basketball label');
+          const file='public/perfect-season-nba/index.html',bytes=fs.readFileSync(file);assert.equal(bytes.length,22450);const dom=new JSDOM(bytes.toString('utf8')),doc=dom.window.document,canonicals=[...doc.querySelectorAll('link[rel]')].filter(node=>node.getAttribute('rel').toLowerCase().split(/\s+/).includes('canonical'));assert.equal(canonicals.length,1);assert.equal(canonicals[0].getAttribute('href'),'https://douknowball.com'+route);const snapshots=[...doc.querySelectorAll('#dukb-snapshot')];assert.equal(snapshots.length,1);const snapshot=snapshots[0],snapshotText=snapshot.textContent.trim();assert(snapshotText.length>500,'Actual readable saved game content');const headings=[...snapshot.querySelectorAll('h1')].map(node=>node.textContent.trim().replace(/\s+/g,' ').toUpperCase());assert(headings.includes('82-0 NBA PERFECT SEASON'),'Actual saved game heading');const metas=[...doc.querySelectorAll('meta')],retired=metas.filter(node=>['dukb-retired-from','dukb-retired-to'].includes((node.getAttribute('name')||'').toLowerCase())),refresh=metas.filter(node=>(node.getAttribute('http-equiv')||'').trim().toLowerCase()==='refresh'),robots=metas.filter(node=>['robots','googlebot','bingbot'].includes((node.getAttribute('name')||'').toLowerCase()));assert.equal(retired.length,0,'No actual retired-route markers');assert.equal(refresh.length,0,'No actual redirect meta');assert(robots.every(node=>!/(?:^|[\s,])(?:noindex|none)(?:[\s,]|$)/i.test(node.getAttribute('content')||'')),'Active snapshot remains indexable');
+          fs.copyFileSync(file,out+'/active-snapshot.html');fs.writeFileSync(out+'/active-route-preflight.json',JSON.stringify({status:'passed',route,component,label,routeNode:routes[0].getText(app),reactLazyImport:reactLazy[0].parent.parent.parent.getText(app),lazyDeclaration:declarations[0].getText(app),catalogObject:entries[0].getText(catalog),snapshot:{file,bytes:bytes.length,sha256:createHash('sha256').update(bytes).digest('hex'),canonical:canonicals[0].getAttribute('href'),snapshotTextLength:snapshotText.length,headings,retiredMarkers:retired.length,metaRefresh:refresh.length,robots:robots.map(node=>({name:node.getAttribute('name'),content:node.getAttribute('content')}))},parsers:{typescript:ts.version,html:'Inert JSDOM, scripts/resources not enabled'},limits:'Actual AST nodes and inert DOM elements, never comments or a dormant Page file. Active source/public entry preflight only. No simulated score reproduction, game test, App fix, build, browser journey, real-data truth or release claim. Native route reachability remains unqualified.'},null,2));dom.window.close();console.log('PASS actual direct 82-0 NBA Perfect Season route, React lazy Page import, labeled Pro Basketball catalog object and indexable nonredirect snapshot');
+          NODE
+      - name: Authenticate admitted original game and first full diagnostic context
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
           node --input-type=module <<'NODE'
           import assert from 'node:assert/strict';
           import fs from 'node:fs';
-          import { createHash } from 'node:crypto';
-          const out = process.env.EVIDENCE;
-          const report = JSON.parse(fs.readFileSync(out + '/vitest.json', 'utf8'));
-          const preserved = {"src/test/perfectSeasonNbaRetry.test.tsx":5};
-          const names = [{"title":"keeps the mounted Eastern day's wheel and season after midnight","marker":"NBA_DAILY_PICKER_MOUNT_DATE"}];
-          const source = 'src/test/perfectSeasonNbaDailyDate.test.tsx';
-          const total = 5 + names.length;
-          const failures = names.filter(row => row.marker);
-          assert.equal(failures.length,1);
-          assert.deepEqual([report.numTotalTests,report.numPassedTests,report.numFailedTests,report.numPendingTests,report.numTodoTests,report.success],
-            [total,total-1,1,0,0,false]);
-          assert.equal(report.testResults.length,2);
-          for (const key of ['errors','unhandledErrors','testExecutionErrors']) if (Object.hasOwn(report,key)) assert.deepEqual(report[key],[]);
-          const log = fs.readFileSync(out + '/vitest.log', 'utf8');
-          assert(!/Unhandled Errors?|Unhandled Rejection|Uncaught Exception|Failed Suites|Worker exited|Test timed out/i.test(log));
-          const observed = [];
-          for (const [file,count] of Object.entries({...preserved,[source]:names.length})) {
-            const matching=report.testResults.filter(suite => suite.name.endsWith('/'+file));
-            assert.equal(matching.length,1,file);
-            const [suite]=matching;
-            const fresh=file===source;
-            assert.deepEqual([suite.status,suite.message,suite.assertionResults.length],[fresh?'failed':'passed','',count],file);
-            if(fresh) assert.deepEqual(suite.assertionResults.map(row=>row.title).sort(),names.map(row=>row.title).sort());
-            for(const row of suite.assertionResults) {
-              const business=fresh ? names.find(name=>name.title===row.title)?.marker : null;
-              assert.equal(row.status,business?'failed':'passed',row.fullName);
-              assert.equal(row.failureMessages.length,business?1:0,row.fullName);
-              if(business) assert(row.failureMessages[0].startsWith('AssertionError: '+business+':'),row.fullName);
-            }
-            observed.push({file,cases:count,passes:fresh?count-1:count});
+          import {execFileSync} from 'node:child_process';
+          const pins={"original":{"run":42794877575,"job":129757351999,"artifact":13753555313,"head":"a97c23de034006e383349c8bebfedaf72a906346","tree":"1b3c406cb5d9efd817c3e6241f557b690f4ccc89","sha":"524be2b6deb37de8ecf65bf2e401b6026033fa9d8e3c5afeb6399714809b4899","independentAuditSHA256":"006716cfb39d49447e6a5b4f89eabb94ae6c2633211bb164ab12d0daef92e56a"},"firstFull":{"run":42798378759,"job":129769276486,"artifact":13755069937,"head":"506664e9b04c6d7ffc11c5899b3f557d35a0c19b","tree":"75baceeeee43ed8c09f6986648cb5faf78c3431e","sha":"65d6f160f6498d8587c2e7ed3b4b6873391e8be9ba598daf3a6ba5811196fdf5","rawSHA256":"9dbd2692b62781051be6dcfa644accea93c228f634784d39f00aaed6c67f7398"}};
+          const api='repos/PapiSalgueroM/ballpark-hero/actions/';
+          const get=x=>JSON.parse(execFileSync('gh',['api',api+x]));
+          for(const [role,p] of Object.entries(pins)){
+            const run=get('runs/'+p.run), jobs=get('runs/'+p.run+'/jobs?per_page=100').jobs, archive=get('artifacts/'+p.artifact);
+            const expected=role==='original'?'success':'failure';
+            assert.deepEqual([run.id,run.head_sha,run.head_commit.tree_id,run.status,run.conclusion,run.event,run.run_attempt],
+              [p.run,p.head,p.tree,'completed',expected,'push',1]);
+            assert.equal(jobs.length,1);
+            assert.deepEqual([jobs[0].id,jobs[0].conclusion],[p.job,expected]);
+            assert.deepEqual([archive.id,archive.expired,archive.digest,archive.workflow_run.id,archive.workflow_run.head_sha],[p.artifact,false,'sha256:'+p.sha,p.run,p.head]);
           }
-          const raw=fs.readFileSync(process.env.NBA_DAILY_DATE_RAW);
-          const evidence=JSON.parse(raw.toString('utf8'));
-          const checks=(()=>{
-          assert.deepEqual(Object.keys(evidence),['schema','title','fixture','journeys']);
-          assert.deepEqual([evidence.schema,evidence.title],['nba-perfect-season-daily-date-v1',"keeps the mounted Eastern day's wheel and season after midnight"]);
-          const slots=['PG','SG','SF','PF','C','SIXTH'],previous='2026-11-09',current='2026-11-10';
-          const groups={MOD:2015,MID:2000};
-          const expectedRows=Object.entries(groups).flatMap(([prefix,start])=>Array.from({length:8},(_,i)=>{
-            const year=start+i,team=prefix+String(i+1).padStart(2,'0');
-            return {season:year+'-'+String((year+1)%100).padStart(2,'0'),team,teamName:'Daily Date Club '+team};
-          }));
-          assert.deepEqual(evidence.fixture,{source:'Synthetic NBA archive fixtures',slots,index:expectedRows,rating:80});
-          const forecast={
-            before:[previous,previous,'MOD',[3,5,4,6,6,4],1326654265],
-            crossover:[previous,current,'MOD',[4,6,8,8,7,5],1249224418],
-            after:[current,current,'MID',[4,6,8,8,7,5],1249224418],
-          };
-          assert.deepEqual(Object.keys(evidence.journeys),Object.keys(forecast));
-          const instants={ [previous]:Date.parse('2026-11-10T04:59:40Z'),[current]:Date.parse('2026-11-10T05:00:01Z') };
-          const measured={};
-          for(const [role,[mount,entry,prefix,ordinals,seed]] of Object.entries(forecast)){
-            const j=evidence.journeys[role];
-            assert.deepEqual([Date.parse(j.mountInstant),Date.parse(j.entryInstant),j.mountET,j.entryET,j.finishET,j.archiveRequestsBeforeEntry],
-              [instants[mount],instants[entry],mount,entry,entry,0]);
-            assert.deepEqual(j.indexRequests,[{oldWheel:false}]);
-            assert.equal(j.theme,prefix==='MOD'?"Today's theme: Three-Point Boom":"Today's theme: 2000s Basketball");
-            assert.equal(j.wheel.length,6);
-            for(const [i,slot] of slots.entries()){
-              const x=j.wheel[i],team=prefix+String(ordinals[i]).padStart(2,'0'),row=expectedRows.find(e=>e.team===team);
-              const picked='Daily Date Fixture '+team+' '+slot;
-              assert.deepEqual(x,{slot,archiveRow:row,landed:row.season+' '+row.teamName,pickedPlayer:picked,lineupPlayer:i<5?picked:null});
-            }
-            assert.equal(j.simulation.length,1);
-            const sim=j.simulation[0],result=sim.result;
-            assert.deepEqual([sim.sport,sim.games,sim.seed],['nba',82,seed]);
-            assert(Number.isFinite(sim.overall));
-            assert.equal(result.games.length,82);assert(result.games.every(x=>typeof x==='boolean'));
-            assert.deepEqual([result.wins,result.losses,result.perfect],[result.games.filter(Boolean).length,result.games.filter(x=>!x).length,result.wins===82]);
-            assert.equal(j.resultText,result.wins+'-'+result.losses);
-            assert.deepEqual(Object.keys(j.savedAttempts),[previous,current]);
-            assert.equal(j.savedAttempts[mount===previous?current:previous],null);
-            const save=j.savedAttempts[mount];
-            assert.deepEqual([save.v,save.date,save.spins,save.teamNames,save.sim],[1,mount,6,j.wheel.map(x=>x.landed),result]);
-            assert.equal(j.completions.length,1);assert.deepEqual(j.completions[0].slice(0,2),['/perfect-season-nba',result.wins]);
-            measured[role]={mountET:mount,entryET:entry,savedET:save.date,theme:j.theme,teams:j.wheel.map(x=>x.archiveRow.team),seed,wins:result.wins,losses:result.losses};
-          }
-          assert.notEqual(measured.before.seed,measured.crossover.seed);
-          assert.equal(measured.crossover.seed,measured.after.seed);
-          return {status:'passed',journeys:3,spins:18,games:246,measured};
-          })();
-          assert.equal(checks.status,'passed');
-          fs.writeFileSync(out + '/original-result.json', JSON.stringify({
-            status:'expected-original-daily-date-mismatch',markers:failures.map(row=>row.marker),total,passes:total-1,failed:1,observed,checks,
-            rawBytes:raw.length,rawSHA256:createHash('sha256').update(raw).digest('hex'),
-          },null,2));
+          fs.writeFileSync(process.env.EVIDENCE+'/reference-context.json',JSON.stringify(pins,null,2)+'\n',{flag:'wx'});
+          NODE
+      - name: Normal production build and retained bytes
+        id: build
+        run: |
+          set -euo pipefail
+          NODE_OPTIONS="--max-old-space-size=6144" npm run build 2>&1 | tee nba-perfect-season-daily-date-original-layout/build.log
+          tar -czf nba-perfect-season-daily-date-original-layout/dist.tgz dist
+          sha256sum nba-perfect-season-daily-date-original-layout/dist.tgz > nba-perfect-season-daily-date-original-layout/dist.sha256
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import {createHash} from 'node:crypto';import assert from 'node:assert/strict';
+          const walk=dir=>fs.readdirSync(dir,{withFileTypes:true}).sort((a,b)=>a.name.localeCompare(b.name)).flatMap(e=>e.isDirectory()?walk(dir+'/'+e.name):e.isFile()?[dir+'/'+e.name]:[]);
+          const rows=walk('dist').map(file=>{const b=fs.readFileSync(file);return {file,bytes:b.length,sha256:createHash('sha256').update(b).digest('hex')};});
+          assert.equal(rows.length,850);fs.writeFileSync('nba-perfect-season-daily-date-original-layout/dist-before.json',JSON.stringify(rows));
+          NODE
+      - name: Isolated pinned Playwright and Chromium
+        id: browser_setup
+        timeout-minutes: 12
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          python -m pip install fonttools pillow
+          npm install --prefix "$RUNNER_TEMP/nba-perfect-season-daily-date-browser" --no-save --package-lock=false playwright@1.64.1 2>&1 | tee nba-perfect-season-daily-date-original-layout/browser-install.log
+          test ! -e node_modules/playwright
+          ln -s "$RUNNER_TEMP/nba-perfect-season-daily-date-browser/node_modules/playwright" node_modules/playwright
+          node "$RUNNER_TEMP/nba-perfect-season-daily-date-browser/node_modules/playwright/cli.js" install --with-deps chromium 2>&1 | tee nba-perfect-season-daily-date-original-layout/chromium-install.log
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const before=JSON.parse(fs.readFileSync('nba-perfect-season-daily-date-original-layout/installed-before.json'));
+          const after=before.map(([p])=>[p,JSON.parse(fs.readFileSync(p+'/package.json')).version]);assert.deepEqual(after,before);
+          const pw=JSON.parse(fs.readFileSync('node_modules/playwright/package.json'));assert.equal(pw.version,'1.64.1');
+          fs.writeFileSync('nba-perfect-season-daily-date-original-layout/installed-after.json',JSON.stringify(after));fs.writeFileSync('nba-perfect-season-daily-date-original-layout/browser-package.json',JSON.stringify({version:pw.version,target:fs.realpathSync('node_modules/playwright')}));
+          NODE
+      - name: Measure the unchanged NBA draft layout in six native journeys
+        if: ${{ !cancelled() && steps.build.outcome == 'success' && steps.browser_setup.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          node scripts/lib/hostLikeServer.mjs dist 4174 > "$EVIDENCE/browser-host.log" 2>&1 &
+          layout_pid=$!
+          trap 'kill "$layout_pid" 2>/dev/null || true' EXIT
+          sleep 2
+          touch "$EVIDENCE/browser.transport.log"
+          status=0
+          BASE=http://127.0.0.1:4174 NBA_DAILY_NATIVE_OUT="$EVIDENCE/browser" \
+            SIM_OFFLINE_RECEIPT="$EVIDENCE/browser.transport.log" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" \
+            node scripts/qa/playNbaPerfectSeasonDailyDateLayout.mjs > "$EVIDENCE/browser.log" 2>&1 || status=$?
+          cat "$EVIDENCE/browser.log"
+          printf '%s\n' "$status" > "$EVIDENCE/browser-exit.txt"
+          test "$status" -eq 0
+          test ! -s "$EVIDENCE/browser.transport.log"
+          sha256sum --check "$EVIDENCE/dist.sha256"
+          node --input-type=module <<'NODE'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          import {createHash} from 'node:crypto';
+          const out=process.env.EVIDENCE;
+          const walk=dir=>fs.readdirSync(dir,{withFileTypes:true}).sort((a,b)=>a.name.localeCompare(b.name)).flatMap(e=>e.isDirectory()?walk(dir+'/'+e.name):e.isFile()?[dir+'/'+e.name]:[]);
+          const rows=walk('dist').map(file=>{const body=fs.readFileSync(file);return {file,bytes:body.length,sha256:createHash('sha256').update(body).digest('hex')};});
+          assert.equal(rows.length,850);
+          const before=fs.readFileSync(out+'/dist-before.json','utf8');
+          assert.equal(JSON.stringify(rows),before);
+          fs.writeFileSync(out+'/dist-after.json',before,{flag:'wx'});
           NODE
       - name: Verify unchanged physical source and locked offline run
         if: always()
@@ -269,7 +212,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: nba-perfect-season-daily-date-original-${{ github.run_id }}
-          path: nba-perfect-season-daily-date-original
-          retention-days: 14
+          name: nba-perfect-season-daily-date-original-layout-${{ github.run_id }}
+          path: nba-perfect-season-daily-date-original-layout
           if-no-files-found: error
+          retention-days: 30
