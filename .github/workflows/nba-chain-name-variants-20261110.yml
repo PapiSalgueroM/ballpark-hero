@@ -1,41 +1,38 @@
-name: NBA Chain name variants fixed
+name: NBA Chain name variants physical controls
 on:
   push:
-    branches: [codex/nba-chain-name-variants-fixed-qa-20261110]
+    branches: [codex/nba-chain-name-variants-controls-qa-20261110]
 permissions:
   actions: read
   contents: read
 jobs:
-  fixed:
+  controls:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     env:
       TZ: UTC
       SIM_NETWORK: offline
-      SIM_OFFLINE_RECEIPT: nba-chain-name-variants-fixed/offline.log
-      NBA_CHAIN_NAME_VARIANTS_RAW: nba-chain-name-variants-fixed/public-cases.raw.json
-      NBA_CHAIN_NAME_VARIANTS_GUARDS_RAW: nba-chain-name-variants-fixed/guards.raw.json
-      BASE_HEAD: '3157171b3e1b28c782a9f8e461490b5388f0cf84'
-      BASE_TREE: '18184f081259861ff9c4af92aad5741b5f85d036'
-      HELPER_BLOB: '69a08858a97456380f7cc54474fab9407f80769a'
-      EDGE_BLOB: '02ad604c9115af575d57eb648bfb7a3e48dbef2d'
-      EVIDENCE: nba-chain-name-variants-fixed
+      SIM_OFFLINE_RECEIPT: nba-chain-name-variants-controls/offline.log
+      NBA_CHAIN_NAME_VARIANTS_RAW: nba-chain-name-variants-controls/public-cases.raw.json
+      BASE_HEAD: 'b39737f96baaa8ccd3cf6618823d09f051c3bd1f'
+      BASE_TREE: '997cbecad66164a3113756b792f78458c775715f'
+      EVIDENCE: nba-chain-name-variants-controls
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 3
+          fetch-depth: 4
           persist-credentials: false
       - uses: actions/setup-node@v4
         with:
           node-version: 24.22.1
           cache: npm
-      - name: Authenticate admitted original and exact isolated NBA Chain fixed source
+      - name: Authenticate admitted fixed and original with exact controls source
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
           test ! -e "$EVIDENCE"
-          if grep -Eq '__[A-Z][A-Z0-9_]*__' .github/workflows/nba-chain-name-variants-20261110.yml; then echo 'Unresolved fixed workflow binding'; exit 1; fi
+          if grep -Eq '__[A-Z][A-Z0-9_]*__' .github/workflows/nba-chain-name-variants-20261110.yml; then echo 'Unresolved controls workflow binding'; exit 1; fi
           mkdir "$EVIDENCE"
           touch "$SIM_OFFLINE_RECEIPT"
           git rev-parse HEAD > "$EVIDENCE/head.txt"
@@ -49,23 +46,29 @@ jobs:
           import {createHash} from 'node:crypto';
           import {execFileSync} from 'node:child_process';
 
-          const {BASE_HEAD,BASE_TREE,HELPER_BLOB,EDGE_BLOB,EVIDENCE:out} = process.env;
-          const repo = 'PapiSalgueroM/ballpark-hero';
+          const {EVIDENCE:out,BASE_HEAD,BASE_TREE,GITHUB_SHA:head,GITHUB_REPOSITORY:repo} = process.env;
           const workflow = '.github/workflows/nba-chain-name-variants-20261110.yml';
           const helper = 'scripts/qa/verifyNbaChainNameVariants.mjs';
           const edge = 'supabase/functions/nba-chain-validate/index.ts';
           const plan = 'docs/plans/2026-11-10-nba-chain-name-variants.md';
-          const original = {"run":42828680593,"job":129872628739,"artifact":13770282082,"steps":11,"head":"3157171b3e1b28c782a9f8e461490b5388f0cf84","tree":"18184f081259861ff9c4af92aad5741b5f85d036","workflow":"0aba3f95767c0cc993861ab03845a79371b6171f","branch":"codex/nba-chain-name-variants-original-qa-20261110","zipBytes":1012888,"zipSHA256":"cb44f9b334006376d02d34972188fbe76d93cfac10d7d666cab24d9249b025cc","bodies":23,"auditSHA256":"155a562b7a714b1969d8bd399a972a2256a9da975416fb672ce7422a127bcf11","raw":{"bytes":12039,"sha256":"64963e612125e0ed61d8cbebb67e5e905a973d3f31ef966b52f0b2745ec06c07"}};
-          const activePreflight = {"run":42826929069,"job":129866574710,"artifact":13768498765,"steps":11,"zipBytes":1014998,"zipSHA256":"b6e53a25acf8551bf683e3424313a4723ec160b5d0ca382886893e791fc4cabc","head":"2ef86924da6f748e2032687d539593ebf2172d62","tree":"b1a7c02e4c05085384c7b821cc4da1c0c3fb36f5","branch":"codex/nba-chain-name-variants-preflight-qa-20261110","workflow":"8d80b3613ff28ca117b106f1e85b1847a591fe35","independentAuditSHA256":"a6de4b0128694c169313e08246e86a4e813abae0d761d006c38a28eeb95b52c8"};
-          const held = {"src/App.tsx":"8bfedf7aaa1d076e0f0c8e2216c7e46632cd8a33","src/data/gameRegistry.ts":"f560b40a74d1468ac72dfde4ee6fec6635a9a255","public/nba-chain/index.html":"dacd0541cfcde63e04c1e7c0c1f423937838702d","public/prerender-boot.js":"85939d3b80ef41b26ff6cbefb53a66e383d1a797","src/pages/NbaChain.tsx":"dac563a9781f6202d542f14f402b4ee40abe7602","src/hooks/useNbaChain.ts":"ce40e9a68144cc2b6117a49454e0faf66bc36ed8","src/lib/playerSearch.ts":"0d19f2c23735eb30512dc7fc3a447eacef5e128f","src/test/nbaChainFeedback.test.tsx":"162131a7a359207850fc0257c530317897c0171f","scripts/lib/offlineTransport.cjs":"0fda542a2649fe5da937c6976fd0f5b6073e74b6","scripts/lib/hostLikeServer.mjs":"21059d5e8114669df61106c125d5272d357b6236","index.html":"12598fe720eec4fc88d3d33c53ede612d018150c","package.json":"2ff64986fb76ebc51b706f2fd24765768874008a","package-lock.json":"97d6f12a052f25f400462938c241789a083f0bfe","vite.config.ts":"0112b6ac4f2ad80b2fc04f9ec2f7185300913e7d","tailwind.config.ts":"f83c4f4032d359bc9285828eac3b0961a46c6b17","postcss.config.js":"2aa7205d4b402a1bdfbe07110c61df920b370066","tsconfig.json":"6b68d80b7d92d0c4a5d774897f2bedfa95b42669","tsconfig.app.json":"51f581dd91641b4c1f1219f646788e73cf6bf00c","tsconfig.node.json":"3133162c20350e1741b94b8d2ff77b811bec8363","bun.lockb":"5d9d33a3bf4f45fa099e2aa3014149e034981149","bun.lock":"dff081dcd34a1aa928ddc90d910774a6b855dfe3","docs/plans/2026-11-10-nba-chain-name-variants.md":"75df55aba5a1cf955958338bfeb34df31a74a004"};
-          const profile = {"mode":"initials-only","rawBytes":12255,"rawSHA256":"ee81dfa94f68710fbb49a3e6cbce3ef31a90ef06e4ae6c9cd4680c879a8c459a","reads":18,"completion":"PASS exact fictional NBA Chain initials, held suffix rejection, six healthy cases and fifteen guards"};
-          assert.deepEqual(Object.keys(profile).sort(),['completion','mode','rawBytes','rawSHA256','reads']);
-          assert(['both-variants','initials-only'].includes(profile.mode),'Explicit qualified variant scope');
-          assert(Number.isSafeInteger(profile.rawBytes) && profile.rawBytes > 0);
-          assert.match(profile.rawSHA256,/^[a-f0-9]{64}$/);
-          assert(Number.isSafeInteger(profile.reads) && profile.reads > 0);
-          assert.match(profile.completion,/^PASS [\x20-\x7E]+$/);
-          assert.equal(process.env.GITHUB_REPOSITORY,repo);
+          const fixed = {"run":42832098036,"job":129884518587,"artifact":13771148572,"steps":11,"head":"b39737f96baaa8ccd3cf6618823d09f051c3bd1f","tree":"997cbecad66164a3113756b792f78458c775715f","workflow":"e2733391e2f32f43dcd8943846f90195e945c3a3","branch":"codex/nba-chain-name-variants-fixed-qa-20261110","zipBytes":1032396,"zipSHA256":"9e2db336ff9e93114eb5832af1906788a0fbb8637a8902078beb704451d7fc1d","auditSHA256":"cf14d1bfb55e295dac570d90869df1325689c2fc522f6a2befb15a8f01548d44","raw":{"bytes":12255,"sha256":"ee81dfa94f68710fbb49a3e6cbce3ef31a90ef06e4ae6c9cd4680c879a8c459a"},"guards":{"bytes":121336,"sha256":"15af751512a564970c75de203e4233ae192424305ea01e2d006fcbf905cb1307"}};
+          const original = {"run":42828680593,"job":129872628739,"artifact":13770282082,"steps":11,"head":"3157171b3e1b28c782a9f8e461490b5388f0cf84","tree":"18184f081259861ff9c4af92aad5741b5f85d036","workflow":"0aba3f95767c0cc993861ab03845a79371b6171f","branch":"codex/nba-chain-name-variants-original-qa-20261110","zipBytes":1012888,"zipSHA256":"cb44f9b334006376d02d34972188fbe76d93cfac10d7d666cab24d9249b025cc","auditSHA256":"155a562b7a714b1969d8bd399a972a2256a9da975416fb672ce7422a127bcf11","raw":{"bytes":12039,"sha256":"64963e612125e0ed61d8cbebb67e5e905a973d3f31ef966b52f0b2745ec06c07"}};
+          const originalEdge = 'ae48e575f499f4ad6ca9d4930aae30bd636652b3';
+          const fixedEdge = '02ad604c9115af575d57eb648bfb7a3e48dbef2d';
+          const fixedHelper = '69a08858a97456380f7cc54474fab9407f80769a';
+          const product = '09f9bfc46b7a3e1d56ea09b1e477d587c4b1d726';
+          const productTree = '6a5b0bf5535deeeb81e1d8106fb812b68e95cd48';
+          const git = (...args) => execFileSync('git',args,{encoding:'utf8',maxBuffer:16*1024*1024}).trimEnd();
+          const hash = (algorithm,body) => createHash(algorithm).update(body).digest('hex');
+          const blob = body => hash('sha1',Buffer.concat([Buffer.from('blob '+body.length+'\0'),body]));
+          assert.equal(repo,'PapiSalgueroM/ballpark-hero');
+          assert.equal(git('rev-parse','HEAD'),head);
+          assert.deepEqual([fixed.head,fixed.tree],[BASE_HEAD,BASE_TREE]);
+          assert.deepEqual([original.head,original.tree],['3157171b3e1b28c782a9f8e461490b5388f0cf84','18184f081259861ff9c4af92aad5741b5f85d036']);
+          assert.deepEqual(git('rev-list','--parents','-n','1',head).split(' '),[head,fixed.head]);
+          assert.deepEqual(git('rev-list','--parents','-n','1',fixed.head).split(' '),[fixed.head,original.head]);
+          assert.deepEqual(git('rev-list','--parents','-n','1',original.head).split(' '),[original.head,product]);
+          assert.equal(git('rev-parse',product+'^{tree}'),productTree);
           const api = process.env.GITHUB_API_URL+'/repos/'+repo;
           const request = async path => {
             const response = await fetch(api+path,{headers:{Accept:'application/vnd.github+json',
@@ -73,73 +76,55 @@ jobs:
             assert.equal(response.status,200,path);
             return response.json();
           };
-          const [run,jobs,artifact] = await Promise.all([
-            request('/actions/runs/'+original.run),request('/actions/runs/'+original.run+'/jobs?per_page=100'),
-            request('/actions/artifacts/'+original.artifact),
-          ]);
-          assert.deepEqual([run.id,run.status,run.conclusion,run.event,run.run_attempt,run.path,run.head_sha,run.head_commit.tree_id,run.head_branch,run.repository.full_name],
-            [original.run,'completed','success','push',1,workflow,BASE_HEAD,BASE_TREE,original.branch,repo]);
-          assert.deepEqual([jobs.total_count,jobs.jobs.length],[1,1]);
-          const [job] = jobs.jobs;
-          assert.deepEqual([job.id,job.run_id,job.name,job.status,job.conclusion,job.head_sha,job.steps.length],
-            [original.job,original.run,'original','completed','success',BASE_HEAD,original.steps]);
-          assert(job.steps.every(step=>step.status==='completed'&&step.conclusion==='success'));
-          assert.deepEqual([artifact.id,artifact.name,artifact.expired,artifact.size_in_bytes,artifact.digest,artifact.workflow_run.id,artifact.workflow_run.head_sha],
-            [original.artifact,'nba-chain-name-variants-original-'+original.run,false,original.zipBytes,'sha256:'+original.zipSHA256,original.run,BASE_HEAD]);
-          delete process.env.GH_TOKEN;
-          const git = (...args) => execFileSync('git',args,{encoding:'utf8',maxBuffer:16*1024*1024}).trimEnd();
-          const show = (ref,file) => execFileSync('git',['show',ref+':'+file],{maxBuffer:16*1024*1024});
-          const sha = (algorithm,body) => createHash(algorithm).update(body).digest('hex');
-          const blob = body => sha('sha1',Buffer.concat([Buffer.from('blob '+body.length+'\0'),body]));
-          const head = git('rev-parse','HEAD');
-          const productBase = '09f9bfc46b7a3e1d56ea09b1e477d587c4b1d726';
-          const productTree = '6a5b0bf5535deeeb81e1d8106fb812b68e95cd48';
-          assert.equal(head,process.env.GITHUB_SHA);
-          assert.deepEqual([BASE_HEAD,BASE_TREE],[original.head,original.tree]);
-          assert.deepEqual(git('rev-list','--parents','-n','1','HEAD').split(' '),[head,BASE_HEAD]);
-          assert.deepEqual(git('rev-list','--parents','-n','1',BASE_HEAD).split(' '),[BASE_HEAD,productBase]);
-          assert.equal(git('rev-parse',BASE_HEAD+'^{tree}'),BASE_TREE);
-          assert.equal(git('rev-parse',productBase+'^{tree}'),productTree);
-          assert.equal(git('rev-parse',BASE_HEAD+':'+workflow),original.workflow);
-          const originalEdge = 'ae48e575f499f4ad6ca9d4930aae30bd636652b3';
-          const originalHelper = '286218947229daf25c92d791325b6fa148e26f88';
-          assert.equal(git('rev-parse',BASE_HEAD+':'+edge),originalEdge);
-          assert.equal(git('rev-parse',BASE_HEAD+':'+helper),originalHelper);
-          assert.notEqual(EDGE_BLOB,originalEdge,'Fixed product handler actually changes');
-          const changed = [edge,workflow];
-          const helperChanged = HELPER_BLOB !== originalHelper;
-          if(helperChanged) changed.push(helper);
-          const pins = {...held,[helper]:HELPER_BLOB,[edge]:EDGE_BLOB};
-          for(const [file,want] of Object.entries(pins)){
-            assert.match(want,/^[0-9a-f]{40}$/);
-            assert.equal(git('rev-parse','HEAD:'+file),want,file);
-            assert.equal(blob(fs.readFileSync(file)),want,file+' physical bytes');
-            if(Object.hasOwn(held,file)) assert.equal(git('rev-parse',BASE_HEAD+':'+file),want,file+' admitted original');
+          for(const [role,pin] of [['original',original],['fixed',fixed]]){
+            for(const field of ['run','job','artifact','steps','zipBytes']) assert(Number.isSafeInteger(pin[field])&&pin[field]>0,role+' '+field);
+            assert.match(pin.auditSHA256,/^[0-9a-f]{64}$/);
+            assert.equal(git('rev-parse',pin.head+'^{tree}'),pin.tree);
+            assert.equal(git('rev-parse',pin.head+':'+workflow),pin.workflow);
+            const [run,jobs,artifact] = await Promise.all([
+              request('/actions/runs/'+pin.run),request('/actions/runs/'+pin.run+'/jobs?per_page=100'),request('/actions/artifacts/'+pin.artifact),
+            ]);
+            assert.deepEqual([run.id,run.status,run.conclusion,run.event,run.run_attempt,run.path,run.head_sha,run.head_commit.tree_id,run.head_branch,run.repository.full_name],
+              [pin.run,'completed','success','push',1,workflow,pin.head,pin.tree,pin.branch,repo]);
+            assert.deepEqual([jobs.total_count,jobs.jobs.length],[1,1]);
+            const [job] = jobs.jobs;
+            assert.deepEqual([job.id,job.run_id,job.name,job.status,job.conclusion,job.head_sha,job.steps.length],
+              [pin.job,pin.run,role,'completed','success',pin.head,pin.steps]);
+            assert(job.steps.every(step=>step.status==='completed'&&step.conclusion==='success'));
+            assert.deepEqual([artifact.id,artifact.name,artifact.expired,artifact.size_in_bytes,artifact.digest,artifact.workflow_run.id,artifact.workflow_run.head_sha],
+              [pin.artifact,'nba-chain-name-variants-'+role+'-'+pin.run,false,pin.zipBytes,'sha256:'+pin.zipSHA256,pin.run,pin.head]);
           }
-          assert.deepEqual(git('diff','--name-status','--no-renames',BASE_HEAD,'HEAD').split('\n').sort(),changed.map(file=>'M\t'+file).sort());
+          delete process.env.GH_TOKEN;
+          assert.deepEqual(original.raw,{bytes:12039,sha256:'64963e612125e0ed61d8cbebb67e5e905a973d3f31ef966b52f0b2745ec06c07'});
+          assert.deepEqual(fixed.raw,{bytes:12255,sha256:'ee81dfa94f68710fbb49a3e6cbce3ef31a90ef06e4ae6c9cd4680c879a8c459a'});
+          assert.deepEqual(fixed.guards,{bytes:121336,sha256:'15af751512a564970c75de203e4233ae192424305ea01e2d006fcbf905cb1307'});
+          assert.deepEqual(git('diff','--name-status','--no-renames',fixed.head,head).split('\n'),['M\t'+workflow]);
           const tree = ref => git('ls-tree','-r','-z',ref).split('\0').filter(Boolean);
           const pathOf = row => row.split('\t')[1];
-          const previous = tree(BASE_HEAD), current = tree('HEAD');
-          const hold = rows => rows.filter(row=>!changed.includes(pathOf(row)));
-          assert.deepEqual([previous.length,current.length,hold(previous).length],[5804,5804,helperChanged?5801:5802]);
-          assert.deepEqual(hold(current),hold(previous));
-          for(const rows of [previous,current]){
-            assert(rows.filter(row=>changed.includes(pathOf(row))).every(row=>row.startsWith('100644 blob ')));
-          }
-          assert.equal(current.filter(row=>/^(src|public|scripts)\//.test(pathOf(row))).length,4670);
-          const selected = [
-            ['original-edge.ts',edge,show(BASE_HEAD,edge)],['fixed-edge.ts',edge,fs.readFileSync(edge)],
-            ['original-helper.mjs',helper,show(BASE_HEAD,helper)],['fixed-helper.mjs',helper,fs.readFileSync(helper)],
-            ['candidate-plan.md',plan,fs.readFileSync(plan)],['candidate-workflow.yml',workflow,fs.readFileSync(workflow)],
-          ];
-          const selectedBodies = selected.map(([file,path,body])=>{
+          const held = rows => rows.filter(row=>pathOf(row)!==workflow);
+          const parentRows=tree(fixed.head),currentRows=tree(head);
+          assert.deepEqual([parentRows.length,currentRows.length,held(parentRows).length],[5804,5804,5803]);
+          assert.deepEqual(held(currentRows),held(parentRows));
+          assert.equal(currentRows.filter(row=>/^(src|public|scripts)\//.test(pathOf(row))).length,4670);
+          assert.equal(git('rev-parse','HEAD:'+plan),'75df55aba5a1cf955958338bfeb34df31a74a004');
+          assert.equal(git('rev-parse','HEAD:'+helper),fixedHelper);
+          assert.equal(git('rev-parse','HEAD:'+edge),fixedEdge);
+          assert.equal(git('rev-parse',original.head+':'+edge),originalEdge);
+          const originalBody=execFileSync('git',['show',original.head+':'+edge]);
+          const files={
+            'held-original-edge.ts':originalBody,'held-fixed-edge.ts':fs.readFileSync(edge),
+            'held-fixed-helper.mjs':fs.readFileSync(helper),'candidate-workflow.yml':fs.readFileSync(workflow),
+          };
+          assert.deepEqual([blob(files['held-original-edge.ts']),blob(files['held-fixed-edge.ts']),blob(files['held-fixed-helper.mjs'])],
+            [originalEdge,fixedEdge,fixedHelper]);
+          const selectedBodies=Object.entries(files).map(([file,body])=>{
             fs.writeFileSync(out+'/'+file,body);
-            return {file,path,bytes:body.length,sha256:sha('sha256',body),blob:blob(body)};
+            return {file,bytes:body.length,sha256:hash('sha256',body),blob:blob(body)};
           });
           fs.writeFileSync(out+'/source-receipt.json',JSON.stringify({
-            status:'passed',head,tree:git('rev-parse','HEAD^{tree}'),parent:BASE_HEAD,parentTree:BASE_TREE,productBase,productTree,basePR:542,
-            activePreflight,original,profile,changed:changed.sort(),helperChanged,originalEdge,originalHelper,pins,selectedBodies,
-            heldRows:hold(previous).length,trackedRows:5804,scopedSourceRows:4670,rootConfigurations:11,
+            status:'passed',head,tree:git('rev-parse','HEAD^{tree}'),parent:fixed.head,parentTree:fixed.tree,product,productTree,
+            workflow:git('rev-parse','HEAD:'+workflow),fixed,original,edge,helper,fixedEdge,originalEdge,fixedHelper,selectedBodies,
+            trackedRows:5804,heldRows:5803,scopedSourceRows:4670,rootConfigurations:11,
           },null,2)+'\n');
           NODE
       - name: Install locked dependencies, freeze physical source, and verify app types
@@ -178,108 +163,202 @@ jobs:
           NODE
           node "$EVIDENCE/physical.mjs" before
           node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee "$EVIDENCE/types.log"
-      - name: Require exactly the qualified NBA Chain fix scope and preserved controls
+      - name: Run fixed Edge, three physical controls and exact restoration
         run: |
           set -euo pipefail
-          test ! -e "$NBA_CHAIN_NAME_VARIANTS_RAW"
-          test ! -e "$NBA_CHAIN_NAME_VARIANTS_GUARDS_RAW"
-          profile_mode="$(node -p 'JSON.parse(require("node:fs").readFileSync(process.argv[1],"utf8")).profile.mode' "$EVIDENCE/source-receipt.json")"
-          result=0
-          NBA_CHAIN_NAME_VARIANTS_EDGE_BLOB="$EDGE_BLOB" NBA_CHAIN_NAME_VARIANTS_PROFILE="$profile_mode" \
-            NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" timeout --signal=TERM 90s \
-            node scripts/qa/verifyNbaChainNameVariants.mjs > "$EVIDENCE/helper.log" 2>&1 || result=$?
-          cat "$EVIDENCE/helper.log"
-          printf '%s\n' "$result" > "$EVIDENCE/helper-exit.txt"
-          test "$result" -eq 0
-          test -s "$NBA_CHAIN_NAME_VARIANTS_RAW"
-          test -s "$NBA_CHAIN_NAME_VARIANTS_GUARDS_RAW"
-          test ! -s "$SIM_OFFLINE_RECEIPT"
-          node --input-type=module <<'NODE'
+          cat > "$EVIDENCE/control-driver.mjs" <<'NODE'
           import assert from 'node:assert/strict';
           import fs from 'node:fs';
+          import path from 'node:path';
           import {createHash} from 'node:crypto';
+          import {execFileSync,spawnSync} from 'node:child_process';
 
-          const out = process.env.EVIDENCE;
-          const source = JSON.parse(fs.readFileSync(out+'/source-receipt.json','utf8'));
-          const {profile,original} = source;
-          const log = fs.readFileSync(out+'/helper.log','utf8');
-          assert.equal(log.trimEnd().split(/\r?\n/).at(-1),profile.completion,'Exact qualified helper completion line');
-          assert(!/^[A-Za-z]*Error(?: \[[A-Z_]+\])?:/m.test(log),'No Node exception');
-          assert(!/UnhandledPromiseRejection|ERR_MODULE_NOT_FOUND|ERR_UNKNOWN_FILE_EXTENSION|ERR_UNSUPPORTED_TYPESCRIPT_SYNTAX|SIM_OFFLINE_BLOCK/i.test(log),'Unrelated runtime or transport failure');
-          const raw = fs.readFileSync(process.env.NBA_CHAIN_NAME_VARIANTS_RAW);
-          const rawSHA256 = createHash('sha256').update(raw).digest('hex');
-          assert.deepEqual([raw.length,rawSHA256],[profile.rawBytes,profile.rawSHA256],'Exact fresh fixed RAW');
-          assert.notEqual(rawSHA256,original.raw.sha256,'Fresh fixed evidence actually differs');
-          const evidence = JSON.parse(raw.toString('utf8'));
-          assert.equal(raw.toString('utf8'),JSON.stringify(evidence)+'\n','Canonical complete RAW');
-          assert.equal(evidence.schema,'nba-chain-name-variants-v1');
-          const edge = source.selectedBodies.find(row=>row.file==='fixed-edge.ts');
-          assert.deepEqual([evidence.source.path,evidence.source.blob,evidence.source.sha256,evidence.source.typescript],
-            [edge.path,edge.blob,edge.sha256,'5.8.3'],'Actual locked synthetic invocation uses the exact fixed Edge body');
-          assert.deepEqual(evidence.source.imports,['https://deno.land/std@0.168.0/http/server.ts','https://esm.sh/@supabase/supabase-js@2.45.0']);
-          const ids = ['initials-variant','suffix-variant','exact-overlap','no-overlap','explicit-iii-no-jr-overlap',
-            'explicit-jr-no-iii-overlap','recent-coverage-gap','fixture-read-failure'];
-          assert.deepEqual(evidence.cases.map(row=>row.id),ids,'Exact eight existing case roles');
-          assert.deepEqual(evidence.cases.map(row=>row.kind),['variant','variant',...Array(6).fill('control')]);
-          assert.equal(evidence.cases.reduce((sum,row)=>sum+row.reads.length,0),profile.reads);
-          for(const row of evidence.cases){
-            assert.deepEqual([row.envReads,row.clientCalls],[['SUPABASE_URL','SUPABASE_SERVICE_ROLE_KEY'],1],row.id);
-            assert.deepEqual([row.outcome.status,row.outcome.contentType,row.outcome.allowOrigin],[200,'application/json','https://douknowball.com'],row.id);
+          const {EVIDENCE:out,SIM_OFFLINE_RECEIPT} = process.env;
+          const source = JSON.parse(fs.readFileSync(path.join(out,'source-receipt.json')));
+          const {fixed,original,edge,helper} = source;
+          const mutations = [{"name":"identity-key","anchor":"confirmed.some((r) => r.person_key !== personKey) || ","replacement":"","blob":"d31636b67cfc5d8bd054b1df1dac3fd4b0c47ac3","sha256":"bb80b799419a1666ed08802f712e7d1375637f39c4bcb939fdab2dfa244a8d66"},{"name":"stint-multiset","anchor":"stintKeys(confirmed) !== stintKeys(alternate)","replacement":"false","blob":"af40db3798444fabe669815c1346dabb412b3a1e","sha256":"5428d8379e6a7c114e60b0df78bc9aba25df43d9244c08a54570638c881c7c95"}];
+          const roleOrder = ['fixed','original','identity-key','stint-multiset','restored'];
+          assert.deepEqual(mutations.map(row=>row.name),roleOrder.slice(2,4));
+          const hash = (algorithm,body) => createHash(algorithm).update(body).digest('hex');
+          const blob = body => hash('sha1',Buffer.concat([Buffer.from('blob '+body.length+'\0'),body]));
+          const pin = body => ({bytes:body.length,sha256:hash('sha256',body)});
+          const git = (...args) => execFileSync('git',args,{maxBuffer:16*1024*1024});
+          const index = fs.readFileSync(path.join(out,'source-before.txt'));
+          const held = JSON.parse(fs.readFileSync(path.join(out,'tracked-before.json'))).filter(([file])=>file!==edge);
+          assert.equal(held.length,5803);
+          const verifyHeld = () => {
+            assert(git('ls-files','-s').equals(index));
+            assert.equal(fs.statSync(SIM_OFFLINE_RECEIPT).size,0);
+            for(const [file,bytes,sha256] of held) assert.deepEqual(pin(fs.readFileSync(file)),{bytes,sha256},file);
+          };
+          const fixedBody = fs.readFileSync(edge);
+          const originalBody = fs.readFileSync(path.join(out,'held-original-edge.ts'));
+          assert.deepEqual([blob(fixedBody),blob(originalBody)],[source.fixedEdge,source.originalEdge]);
+          assert(!originalBody.equals(fixedBody));
+          const text = fixedBody.toString('utf8');
+          assert(Buffer.from(text).equals(fixedBody));
+          const changed = new Map();
+          const distinct = new Set([source.fixedEdge,source.originalEdge]);
+          for(const row of mutations){
+            assert.deepEqual(Object.keys(row).sort(),['anchor','blob','name','replacement','sha256']);
+            assert(typeof row.anchor==='string'&&row.anchor.length>0&&typeof row.replacement==='string');
+            assert.notEqual(row.anchor,row.replacement,row.name);
+            const index = text.indexOf(row.anchor);
+            assert(index>=0&&text.indexOf(row.anchor,index+row.anchor.length)<0,row.name+' unique source anchor');
+            const patched = text.slice(0,index)+row.replacement+text.slice(index+row.anchor.length);
+            assert.equal(patched.slice(0,index)+row.anchor+patched.slice(index+row.replacement.length),text,row.name+' whole inverse');
+            const body = Buffer.from(patched);
+            assert.deepEqual([blob(body),pin(body).sha256],[row.blob,row.sha256],row.name+' full changed source fingerprints');
+            assert(!distinct.has(row.blob),row.name+' distinct changed source');
+            distinct.add(row.blob);
+            changed.set(row.name,{body,span:{offset:Buffer.byteLength(text.slice(0,index)),beforeBytes:Buffer.byteLength(row.anchor),afterBytes:Buffer.byteLength(row.replacement),wholeInverse:true}});
           }
-          const [initials,suffix,overlap,disjoint,iii,jr,recent,fault] = evidence.cases;
-          const suffixQualified = profile.mode==='both-variants';
-          assert.deepEqual([initials.outcome.body.valid,suffix.outcome.body.valid],[true,suffixQualified],'Exactly the selected variant scope');
-          if(!suffixQualified) assert.deepEqual(suffix.outcome.body,{
-            valid:false,reason:'Fixture Rowan Timber III does not appear in our NBA records (1949-2024).',fullName:'Fixture Rowan Timber III',
-          },'Unqualified suffix result stays literally closed');
-          assert.deepEqual([overlap,disjoint,iii,jr,recent,fault].map(row=>row.outcome.body.valid),[true,false,false,false,false,false]);
-          assert.equal(recent.outcome.body.coverageGap,true);
-          assert.equal(fault.outcome.body.unverified,true);
-          const checks = (() => {
-          assert.deepEqual([evidence.cases[0].request.newPlayer,evidence.cases[0].outcome.body.fullName],['Fixture J.R. Avery','Fixture JR Avery']);
-          assert.equal(evidence.cases[0].reads.length,3);
-          assert.equal(evidence.cases[0].reads[2].table,'nba_team_codes');
-          assert.deepEqual(evidence.cases[0].reads[1].calls[1],['ilike','name_folded','%avery%']);
-          assert.deepEqual(evidence.cases[1].reads[1].calls[1],['ilike','name_folded','%iii%']);
-          assert.equal(evidence.cases[1].reads[1].data.length,0);
-          return {status:'passed',initials:'canonical-accepted',suffix:'held-rejection',mainCases:8,mainReads:18};
-          })();
-          assert.equal(checks.status,'passed','Independent RAW contract for selected scope');
-          const guardsRaw = fs.readFileSync(process.env.NBA_CHAIN_NAME_VARIANTS_GUARDS_RAW);
-          const guards = JSON.parse(guardsRaw.toString('utf8'));
-          assert.equal(guardsRaw.toString('utf8'),JSON.stringify(guards)+'\n','Canonical complete focused guard evidence');
-          const guardChecks = (() => {
-          const expected={"file":"fixed-v3-expected-guards.compact.raw.json","sha256":"15af751512a564970c75de203e4233ae192424305ea01e2d006fcbf905cb1307","bytes":121336,"schema":"nba-chain-name-variants-fixed-guards-v1","cases":15,"reads":42};
-          assert.deepEqual([guardsRaw.length,createHash('sha256').update(guardsRaw).digest('hex')],[expected.bytes,expected.sha256]);
-          assert.equal(guards.schema,expected.schema);
-          assert.deepEqual(guards.source,evidence.source);
-          assert.equal(guards.cases.length,15);
-          assert.equal(guards.cases.reduce((sum,row)=>sum+row.reads.length,0),42);
-          const positives=['reverse-compact-input-dotted-row','folded-error-raw-exact-positive','keyed-multiple-stints-reordered'];
-          assert.deepEqual(guards.cases.filter(row=>row.outcome.body.valid).map(row=>row.id),positives);
-          const uncertain=['ambiguous-dotted-initials','conflicting-person-keys','mixed-keyed-and-unkeyed-stints','blank-person-keys',
-            'same-count-changed-stint-tuple','partial-identity-read','failed-identity-read'];
-          assert.deepEqual(guards.cases.filter(row=>row.outcome.body.unverified).map(row=>row.id),uncertain);
-          for(const row of guards.cases.filter(row=>row.outcome.body.unverified)){
-            assert.deepEqual(row.outcome.body,{valid:false,unverified:true,reason:"We couldn't confirm that player's identity. Try another spelling."});
-            assert(row.reads.every(read=>read.table==='nba_player_team_stints'));
+          const named = {
+            original:'NBA_CHAIN_NAME_VARIANTS: dotted initials resolve and an unproven suffix stays distinct',
+            'identity-key':'conflicting-person-keys',
+            'stint-multiset':'same-count-changed-stint-tuple',
+          };
+          const prefix = 'AssertionError [ERR_ASSERTION]: ';
+          const completion = 'PASS exact fictional NBA Chain initials, held suffix rejection, six healthy cases and fifteen guards';
+          const roleReads = {fixed:[18,42],original:[17,33],'identity-key':[18,44],'stint-multiset':[18,43],restored:[18,42]};
+          const readJson = (bytes,label) => {
+            const value=JSON.parse(bytes.toString('utf8'));
+            assert.equal(bytes.toString('utf8'),JSON.stringify(value)+'\n',label+' exact compact JSON');
+            return value;
+          };
+          const runs = {};
+          let fixedRaw,fixedGuardsRaw,fixedEvidence,fixedGuards;
+          verifyHeld();
+          try{
+            for(const role of roleOrder){
+              const red = Object.hasOwn(named,role);
+              const mutation = changed.get(role);
+              const body = role==='original'?originalBody:mutation?.body??fixedBody;
+              const dir=path.join(out,role);
+              fs.mkdirSync(dir);
+              if(role!=='fixed'){
+                assert(!fs.readFileSync(edge).equals(body),role+' actual physical source change');
+                fs.writeFileSync(edge,body);
+              }
+              assert(fs.readFileSync(edge).equals(body),role);
+              const diff=()=>git('diff','--name-only','HEAD').toString('utf8').trimEnd().split('\n').filter(Boolean);
+              assert.deepEqual(diff(),red?[edge]:[],role);
+              fs.writeFileSync(path.join(dir,'edge.ts'),body);
+              const main=path.join(dir,'public-cases.raw.json'),focused=path.join(dir,'guards.raw.json');
+              const result=spawnSync(process.execPath,[helper],{
+                env:{...process.env,NBA_CHAIN_NAME_VARIANTS_EDGE_BLOB:blob(body),NBA_CHAIN_NAME_VARIANTS_PROFILE:'initials-only',
+                  NBA_CHAIN_NAME_VARIANTS_RAW:main,NBA_CHAIN_NAME_VARIANTS_GUARDS_RAW:focused,
+                  NODE_OPTIONS:'--require='+process.cwd()+'/scripts/lib/offlineTransport.cjs'},
+                timeout:90000,maxBuffer:16*1024*1024,
+              });
+              const stdout=result.stdout||Buffer.alloc(0),stderr=result.stderr||Buffer.alloc(0);
+              const output=Buffer.concat([stdout,stderr]);
+              fs.writeFileSync(path.join(dir,'helper.log'),output);
+              fs.writeFileSync(path.join(dir,'helper-exit.txt'),String(result.status)+'\n');
+              process.stdout.write(stdout);process.stderr.write(stderr);
+              assert.equal(result.error,undefined,role);
+              assert.equal(result.signal,null,role);
+              assert.equal(result.status,red?1:0,role);
+              const log=output.toString('utf8');
+              const lines=log.trimEnd().split(/\r?\n/);
+              const errors=lines.filter(line=>/^[A-Za-z]*Error(?: \[[A-Z_]+\])?:/.test(line));
+              assert.deepEqual(errors,red?[prefix+named[role]]:[],role+' only expected actual exception');
+              if(red) assert(/scripts\/qa\/verifyNbaChainNameVariants\.mjs:\d+:\d+/.test(log),role+' reaches actual helper stack');
+              else assert.equal(lines.at(-1),completion,role+' exact complete positive');
+              assert(!/UnhandledPromiseRejection|ERR_MODULE_NOT_FOUND|ERR_UNKNOWN_FILE_EXTENSION|ERR_UNSUPPORTED_TYPESCRIPT_SYNTAX|SIM_OFFLINE_BLOCK/i.test(log),role+' no unrelated runtime failure');
+              const raw=fs.readFileSync(main),guardsRaw=fs.readFileSync(focused);
+              const evidence=readJson(raw,role+' main'),guards=readJson(guardsRaw,role+' guards');
+              assert.deepEqual([evidence.schema,guards.schema,evidence.cases.length,guards.cases.length],
+                ['nba-chain-name-variants-v1','nba-chain-name-variants-fixed-guards-v1',8,15],role);
+              assert.deepEqual(evidence.source,guards.source,role+' exact same physical product source in both receipts');
+              assert.deepEqual([evidence.source.path,evidence.source.blob,evidence.source.sha256,evidence.source.typescript],
+                [edge,blob(body),pin(body).sha256,'5.8.3'],role);
+              assert.deepEqual([evidence.cases,guards.cases].map(cases=>cases.reduce((sum,row)=>sum+row.reads.length,0)),roleReads[role],role+' exact bounded reads');
+              for(const row of [...evidence.cases,...guards.cases]){
+                assert.deepEqual([row.envReads,row.clientCalls],[['SUPABASE_URL','SUPABASE_SERVICE_ROLE_KEY'],1],role+' '+row.id);
+                assert.deepEqual([row.outcome.status,row.outcome.contentType,row.outcome.allowOrigin],[200,'application/json','https://douknowball.com'],role+' '+row.id);
+              }
+              if(role==='fixed'){
+                assert.deepEqual([pin(raw),pin(guardsRaw)],[fixed.raw,fixed.guards]);
+                fixedRaw=raw;fixedGuardsRaw=guardsRaw;fixedEvidence=evidence;fixedGuards=guards;
+              }else if(role==='restored'){
+                assert(raw.equals(fixedRaw)&&guardsRaw.equals(fixedGuardsRaw),'Exact complete restored fixed RAW bodies');
+              }else if(role==='original'){
+                assert.deepEqual(pin(raw),original.raw,'Original Edge rollback exactly rejoins admitted original main RAW');
+              }else{
+                assert.deepEqual({...evidence,source:fixedEvidence.source},fixedEvidence,role+' all main case outcomes and reads held');
+              }
+              const checks = (() => {
+              const expectations = [{"name":"identity-key","raw":{"bytes":12255,"sha256":"6c44eed4eab8f56831403ddf225d4262a34a8557365d79e685e4d42bf10a8f96","reads":18},"guards":{"bytes":121798,"sha256":"8b40a75c8ca3db6d71afb05a3f0c841130dd0989cd7d5c949b7fcffca758da74","reads":44},"changed":["conflicting-person-keys","mixed-keyed-and-unkeyed-stints"],"expectedOutcomes":[{"id":"conflicting-person-keys","fullName":"Fixture JR Avery","valid":true},{"id":"mixed-keyed-and-unkeyed-stints","fullName":"Fixture JR Avery","valid":true}]},{"name":"stint-multiset","raw":{"bytes":12255,"sha256":"30c5efd8b1ad531476628fe7e4338bef1df5a545137730db962dd0a1e9ac8fe6","reads":18},"guards":{"bytes":121567,"sha256":"b51f2e7a28d1343d60714c18bfc7fd5e5ad77b771a6d3062cfa636173b18336c","reads":43},"changed":["same-count-changed-stint-tuple"],"expectedOutcomes":[{"id":"same-count-changed-stint-tuple","fullName":"Fixture JR Avery","valid":true}]}];
+              const assertPin = (bytes, expected, name) => {
+                const actual = pin(bytes);
+                assert.equal(actual.bytes, expected.bytes, name + " byte count");
+                assert.equal(actual.sha256, expected.sha256, name + " SHA256");
+              };
+              const heldIds = fixedEvidence.cases.map((entry) => entry.id);
+              assert.deepEqual(evidence.cases.map((entry) => entry.id), heldIds);
+              assert.deepEqual(guards.cases.map((entry) => entry.id), fixedGuards.cases.map((entry) => entry.id));
+              const nameCase = (id) => evidence.cases.find((entry) => entry.id === id);
+              assert.equal(nameCase("suffix-variant").outcome.body.valid, false);
+              if (role === "fixed" || role === "restored") {
+                assertPin(raw, fixed.raw, role + " main");
+                assertPin(guardsRaw, fixed.guards, role + " guards");
+                assert.equal(nameCase("initials-variant").outcome.body.fullName, "Fixture JR Avery");
+                assert.deepEqual(raw, fixedRaw);
+                assert.deepEqual(guardsRaw, fixedGuardsRaw);
+                return { status: "passed", variant: "initials-variant", changedGuards: [], exactFixedReceipts: true };
+              }
+              if (role === "original") {
+                assertPin(raw, original.raw, role + " main");
+                assert.deepEqual(body, originalBody);
+                assert.equal(nameCase("initials-variant").outcome.body.valid, false);
+                const differing = evidence.cases.filter((entry, index) =>
+                  JSON.stringify(entry) !== JSON.stringify(fixedEvidence.cases[index]));
+                assert.deepEqual(differing.map((entry) => entry.id), ["initials-variant"]);
+                return { status: "passed", variant: "initials-variant", changedGuards: [], exactOriginalMainReceipt: true };
+              }
+              const expected = expectations.find((entry) => entry.name === role);
+              assert.ok(expected, "Bound mutation role");
+              assertPin(raw, expected.raw, role + " main");
+              assertPin(guardsRaw, expected.guards, role + " guards");
+              assert.deepEqual(evidence.cases, fixedEvidence.cases);
+              const changes = guards.cases.filter((entry, index) =>
+                JSON.stringify(entry) !== JSON.stringify(fixedGuards.cases[index]));
+              assert.deepEqual(changes.map((entry) => entry.id), expected.changed);
+              const proven = fixedGuards.cases.find((entry) => entry.id === "keyed-multiple-stints-reordered");
+              for (const entry of changes) {
+                const held = fixedGuards.cases.find((item) => item.id === entry.id);
+                assert.equal(held.outcome.body.valid, false);
+                assert.equal(held.outcome.body.unverified, true);
+                assert.equal(Object.hasOwn(held.outcome.body, "fullName"), false);
+                assert.deepEqual(entry.outcome, proven.outcome);
+                assert.deepEqual(entry.reads, [...held.reads, proven.reads.at(-1)]);
+                assert.deepEqual({ ...entry, reads: held.reads, outcome: held.outcome }, held);
+              }
+              return { status: "passed", unchangedMain: true, changedGuards: expected.expectedOutcomes };
+              })();
+              assert.equal(checks.status,'passed',role+' independent per-role RAW contract');
+              assert(fs.readFileSync(edge).equals(body),role+' physical Edge held through helper');
+              assert.deepEqual(diff(),red?[edge]:[],role);
+              verifyHeld();
+              runs[role]={edge:{blob:blob(body),...pin(body)},physicalSpan:mutation?.span??null,
+                main:{...pin(raw),cases:evidence.cases.length,reads:roleReads[role][0]},
+                guards:{...pin(guardsRaw),cases:guards.cases.length,reads:roleReads[role][1]},
+                exit:result.status,namedRed:red?named[role]:null,checks};
+            }
+          }finally{
+            if(!fs.readFileSync(edge).equals(fixedBody))fs.writeFileSync(edge,fixedBody);
           }
-          const self=guards.cases.find(row=>row.id==='resolved-self-link');
-          assert.deepEqual(self.outcome.body,{valid:false,reason:'That is the same player.'});
-          assert.equal(self.reads.length,2);
-          const keyed=guards.cases.find(row=>row.id==='keyed-multiple-stints-reordered');
-          assert.equal(keyed.outcome.body.fullName,'Fixture JR Avery');
-          assert(keyed.reads.some(read=>read.calls.some(call=>call[0]==='eq'&&call[1]==='name_folded')));
-          return {status:'passed',cases:15,reads:42,positives,uncertain,canonicalSelfLinkRejected:true};
-          })();
-          assert.equal(guardChecks.status,'passed','Independent focused guard contract');
-          fs.writeFileSync(out+'/fixed-result.json',JSON.stringify({
-            status:'fixed-nba-chain-name-variants',scope:profile.mode,expectedProcessExit:0,completion:profile.completion,
-            qualifiedVariants:suffixQualified?ids.slice(0,2):ids.slice(0,1),heldVariant:suffixQualified?null:suffix.id,
-            heldControls:ids.slice(2),cases:8,reads:profile.reads,rawBytes:raw.length,rawSHA256,original:original.raw,checks,
-            guards:{bytes:guardsRaw.length,sha256:createHash('sha256').update(guardsRaw).digest('hex'),checks:guardChecks},
+          assert(fs.readFileSync(edge).equals(fixedBody));
+          verifyHeld();
+          assert.equal(git('diff','--name-only','HEAD').length,0);
+          assert.equal(new Set(Object.values(runs).slice(0,4).map(row=>row.guards.sha256)).size,4);
+          fs.writeFileSync(path.join(out,'admission.json'),JSON.stringify({
+            status:'passed',roleOrder,cases:115,mainCases:40,guardCases:75,namedReds:3,onlyPhysicalProductPath:edge,
+            exactOriginalMainRaw:true,exactRestoredFixedEdgeAndBothRaw:true,runs,
           },null,2)+'\n',{flag:'wx'});
           NODE
+          node "$EVIDENCE/control-driver.mjs" 2>&1 | tee "$EVIDENCE/control-driver.log"
       - name: Verify unchanged physical source and locked offline run
         if: always()
         run: |
@@ -294,7 +373,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: nba-chain-name-variants-fixed-${{ github.run_id }}
-          path: nba-chain-name-variants-fixed
+          name: nba-chain-name-variants-controls-${{ github.run_id }}
+          path: nba-chain-name-variants-controls
           retention-days: 14
           if-no-files-found: error
