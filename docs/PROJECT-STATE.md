@@ -1,5 +1,21 @@
 
 
+## 2026-11-10 Player feedback, NBA Starting 5 former teams
+
+The roster table supplies one team per player. The dealt-team filter therefore excluded LeBron James from Cleveland, Paul George from Indiana and Alonzo Mourning from Charlotte even though the career records list those franchises. The same filter also excluded them from scoring.
+
+Search, pick validation and scoring share the dealt team's pool. A player from another current roster is included when the archive has the exact franchise code and the roster name identifies one player. The team spin starts the same cached read used by search and scoring. Failed reads can retry. The reported examples were checked with read-only records, and the simulation covers former-team search and scoring, wrong franchises and retry. The correction is unpublished. [Cavaliers](https://www.nba.com/cavaliers/releases/james-signing-2016) · [Pacers](https://www.nba.com/pacers/news/pacers-acquire-oladipo-and-sabonis) · [Mourning Hall of Fame record](https://www.hoophall.com/hall-of-famers/alonzo-mourning)
+
+## 2026-11-10 Player feedback, NBA Chain roster spellings
+
+The live autocomplete supplies JR Smith and Robert Williams III. The stint archive uses J.R. Smith and Robert Williams. The deployed validator rejects both roster spellings while accepting the corresponding archive spelling for the same teammate link. The original reported sessions are unavailable.
+
+The scoped correction checks the exact roster spelling first, then its verified archive spelling. It still requires a shared team and overlapping seasons. A missing or incomplete alias read yields a retry, and exact raw matches remain available if the folded column cannot be read. The NBA and independent career records corroborate the identities. [Smith NBA/AP](https://www.nba.com/news/los-angeles-lakers-jr-smith-orlando-restart) · [Smith career record](https://www.basketball-reference.com/players/s/smithjr01.html) · [Williams NBA game book](https://statsdmz.nba.com/pdfs/20220519/20220519_BOSMIA.pdf) · [Williams career record](https://www.basketball-reference.com/players/w/williro04.html)
+
+The offline edge replay uses the current relevant stint rows, including six unkeyed Smith stints and two unkeyed Williams stints. It fails on both reported links on PR544, then verifies both directions, self-link and wrong-team rejection, exact precedence and incomplete-read retry on the correction. The existing seven mounted NBA Chain checks and the fail-closed validator fence also pass. The correction is unpublished.
+
+Shared checks passed app TypeScript, the production build, four focused harnesses and all 16 download budgets with third-party traffic blocked. Chromium at 320, 390 and 1280 pixels filled a Starting 5 slot from a former-team fixture and mounted NBA Chain. The full metadata reader compared 172 pages and found one inherited Club Manager description difference against newer main. Both NBA heads and the full metadata table matched the PR544 baseline on the scoped comparison. The draft still needs integration with main and publication.
+
 ## 2026-11-10 Player feedback follow-up, Fantasy Draft empty player pool
 
 Fantasy Draft offers Retry players when the player pool returns a successful null or empty list. The opening seat, daily rule, pick and rosters stay in place during recovery. A later populated reply resumes the draft.
