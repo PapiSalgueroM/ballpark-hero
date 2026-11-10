@@ -1,0 +1,345 @@
+name: Transfer Path paired pools clean source and build join
+on:
+  push:
+    branches: [codex/transfer-path-paired-pools-clean-join-qa-20261110]
+permissions:
+  contents: read
+  actions: read
+jobs:
+  closeout:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        shell: bash
+    env:
+      SIM_NETWORK: offline
+      SIM_OFFLINE_RECEIPT: transfer-path-paired-pools-clean-join/offline.log
+      TRANSFER_PATH_PAIRED_POOLS_REFERENCE_ARTIFACT: '13743688878'
+      TRANSFER_PATH_PAIRED_POOLS_REFERENCE_RUN: '42775616085'
+      TRANSFER_PATH_PAIRED_POOLS_REFERENCE_ZIP: '66c2f8813bdcb79c15b7cbcb725d5b6171373290febd1fcc3212fc9610b797f3'
+      TRANSFER_PATH_PAIRED_POOLS_REFERENCE_TAR: '17a83cfc1c7401d1e08a0dd3d2c568dc1c94db1f159121d3e3e44db36feb1fa2'
+      TRANSFER_PATH_PAIRED_POOLS_REFERENCE_HEAD: '4b278310880f3d65789fe048d7c6a598a02f74b7'
+      TRANSFER_PATH_PAIRED_POOLS_REFERENCE_TREE: '4a80e6cb72e56db8c7176e2f96e83347fb4271a1'
+      TRANSFER_PATH_PAIRED_POOLS_REFERENCE_ZIP_BYTES: '24929130'
+      TRANSFER_PATH_PAIRED_POOLS_NATIVE_HELPER: '0133be40b673749cd769427ff8586360f10a734d'
+      TRANSFER_PATH_PAIRED_POOLS_NATIVE_OUTER: '52ee13660cadbba6bc9536aa7e13ad99f64f8f00'
+      TRANSFER_PATH_PAIRED_POOLS_FIXED_PAGE_BLOB: '74e48159c539079a99b358e738a3a2c828359e69'
+      TRANSFER_PATH_PAIRED_POOLS_FIXED_HOOK_BLOB: '285463286e53177997f01ef183576c1b271c18dd'
+      TRANSFER_PATH_PAIRED_POOLS_QUALIFIED_PLAN_BLOB: 'b9c2732f435354a2805a70dc6aed14aa3ce97d82'
+      TRANSFER_PATH_PAIRED_POOLS_QUALIFIED_TEST_BLOB: '07b839786a9bf59b94e52a28a56080a5caca5cb4'
+      TRANSFER_PATH_PAIRED_POOLS_REFERENCE_DIST_MANIFEST: '6d22193ed736d2d65c72aef57d82eae624b1c0f5a13be19ae4fce016b917662c'
+      TRANSFER_PATH_PAIRED_POOLS_REFERENCE_WORKFLOW: '4e2ff69cd2bc69a6b3b733b34b5a3613734e80bd'
+      TRANSFER_PATH_PAIRED_POOLS_CLEAN_PRODUCT_BASE: 'c9b082d04b51e1538eb78fa7791b43579fd09783'
+      TRANSFER_PATH_PAIRED_POOLS_CLEAN_PRODUCT_BASE_TREE: '96ee0f16e764285a6bb6ed63085c6812da7ec77a'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 3
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24.22.1
+          cache: npm
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.4.4
+      - name: Locked dependencies and clean source receipts
+        run: |
+          set -euo pipefail
+          if grep -Eq '__[A-Z][A-Z0-9_]*__' .github/workflows/transfer-path-paired-pools-20261110.yml; then echo 'Unresolved clean qualification template binding'; exit 1; fi
+          [[ "$TRANSFER_PATH_PAIRED_POOLS_REFERENCE_ARTIFACT" =~ ^[1-9][0-9]*$ ]]
+          [[ "$TRANSFER_PATH_PAIRED_POOLS_REFERENCE_RUN" =~ ^[1-9][0-9]*$ ]]
+          [[ "$TRANSFER_PATH_PAIRED_POOLS_REFERENCE_ZIP" =~ ^[a-f0-9]{64}$ ]]
+          [[ "$TRANSFER_PATH_PAIRED_POOLS_REFERENCE_TAR" =~ ^[a-f0-9]{64}$ ]]
+          [[ "$TRANSFER_PATH_PAIRED_POOLS_REFERENCE_ZIP_BYTES" =~ ^[1-9][0-9]*$ ]]
+          [[ "$TRANSFER_PATH_PAIRED_POOLS_REFERENCE_DIST_MANIFEST" =~ ^[a-f0-9]{64}$ ]]
+          for value in "$TRANSFER_PATH_PAIRED_POOLS_REFERENCE_HEAD" "$TRANSFER_PATH_PAIRED_POOLS_REFERENCE_TREE" "$TRANSFER_PATH_PAIRED_POOLS_NATIVE_HELPER" "$TRANSFER_PATH_PAIRED_POOLS_NATIVE_OUTER" "$TRANSFER_PATH_PAIRED_POOLS_REFERENCE_WORKFLOW" "$TRANSFER_PATH_PAIRED_POOLS_FIXED_PAGE_BLOB" "$TRANSFER_PATH_PAIRED_POOLS_FIXED_HOOK_BLOB" "$TRANSFER_PATH_PAIRED_POOLS_QUALIFIED_PLAN_BLOB" "$TRANSFER_PATH_PAIRED_POOLS_QUALIFIED_TEST_BLOB"; do [[ "$value" =~ ^[a-f0-9]{40}$ ]]; done
+          test ! -e transfer-path-paired-pools-clean-join
+          mkdir transfer-path-paired-pools-clean-join
+          touch transfer-path-paired-pools-clean-join/offline.log
+          git rev-parse HEAD > transfer-path-paired-pools-clean-join/head.txt
+          git rev-parse 'HEAD^{tree}' > transfer-path-paired-pools-clean-join/tree.txt
+          git ls-files -s > transfer-path-paired-pools-clean-join/source-before.txt
+          sha256sum package.json package-lock.json > transfer-path-paired-pools-clean-join/locks-before.txt
+          npm ci
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const lock=JSON.parse(fs.readFileSync('package-lock.json'));
+          const rows=Object.keys(lock.packages).filter(p=>p.startsWith('node_modules/')&&fs.existsSync(p+'/package.json')).map(p=>[p,JSON.parse(fs.readFileSync(p+'/package.json')).version]);
+          assert.equal(rows.length,521);for(const[p,v]of rows)assert.equal(v,lock.packages[p].version,p);fs.writeFileSync('transfer-path-paired-pools-clean-join/installed-before.json',JSON.stringify(rows));
+          NODE
+      - name: Proper app types
+        run: |
+          set -euo pipefail
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee transfer-path-paired-pools-clean-join/types.log
+      - name: Authenticate the completed full reference before extraction
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          gh api "repos/PapiSalgueroM/ballpark-hero/actions/runs/$TRANSFER_PATH_PAIRED_POOLS_REFERENCE_RUN" > transfer-path-paired-pools-clean-join/reference-run.json
+          gh api "repos/PapiSalgueroM/ballpark-hero/actions/artifacts/$TRANSFER_PATH_PAIRED_POOLS_REFERENCE_ARTIFACT" > transfer-path-paired-pools-clean-join/reference-artifact.json
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          const env = process.env;
+          const read = file => JSON.parse(fs.readFileSync('transfer-path-paired-pools-clean-join/' + file));
+          const run = read('reference-run.json'), artifact = read('reference-artifact.json');
+          assert.deepEqual(
+            [run.id, run.status, run.conclusion, run.event, run.path, run.repository.full_name, run.head_sha, run.head_commit.tree_id],
+            [Number(env.TRANSFER_PATH_PAIRED_POOLS_REFERENCE_RUN), 'completed', 'success', 'push', '.github/workflows/transfer-path-paired-pools-20261110.yml', 'PapiSalgueroM/ballpark-hero', env.TRANSFER_PATH_PAIRED_POOLS_REFERENCE_HEAD, env.TRANSFER_PATH_PAIRED_POOLS_REFERENCE_TREE],
+          );
+          assert.deepEqual(
+            [artifact.id, artifact.name, artifact.expired, artifact.size_in_bytes, artifact.digest, artifact.workflow_run.id, artifact.workflow_run.head_sha],
+            [Number(env.TRANSFER_PATH_PAIRED_POOLS_REFERENCE_ARTIFACT), 'transfer-path-paired-pools-full-' + run.id, false, Number(env.TRANSFER_PATH_PAIRED_POOLS_REFERENCE_ZIP_BYTES), 'sha256:' + env.TRANSFER_PATH_PAIRED_POOLS_REFERENCE_ZIP, run.id, run.head_sha],
+          );
+          NODE
+          gh api "repos/PapiSalgueroM/ballpark-hero/actions/artifacts/$TRANSFER_PATH_PAIRED_POOLS_REFERENCE_ARTIFACT/zip" > "$RUNNER_TEMP/transfer-path-paired-pools-full-reference.zip"
+          test "$(wc -c < "$RUNNER_TEMP/transfer-path-paired-pools-full-reference.zip")" -eq "$TRANSFER_PATH_PAIRED_POOLS_REFERENCE_ZIP_BYTES"
+          echo "$TRANSFER_PATH_PAIRED_POOLS_REFERENCE_ZIP  $RUNNER_TEMP/transfer-path-paired-pools-full-reference.zip" | sha256sum --check
+          unzip -Z1 "$RUNNER_TEMP/transfer-path-paired-pools-full-reference.zip" > transfer-path-paired-pools-clean-join/reference-zip-entries.txt
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          const names = fs.readFileSync('transfer-path-paired-pools-clean-join/reference-zip-entries.txt', 'utf8').trimEnd().split('\n');
+          assert.equal(new Set(names).size, names.length, 'Unique admitted ZIP paths');
+          for (const name of names) {
+            assert(name.length && !name.includes('\\') && !name.startsWith('/'), 'Relative ZIP path');
+            assert(name.replace(/\/$/, '').split('/').every(part => part && part !== '.' && part !== '..'), 'Safe ZIP path');
+          }
+          for (const file of ['head.txt', 'tree.txt', 'admission.json', 'unit-admission.json', 'native-admission.json', 'final-holds.json', 'source-before.txt', 'source-after.txt', 'dist-before.json', 'dist-after.json', 'dist.tgz']) {
+            assert(names.includes(file), file + ' required authenticated body');
+          }
+          NODE
+          mkdir "$RUNNER_TEMP/transfer-path-paired-pools-full-reference" "$RUNNER_TEMP/transfer-path-paired-pools-full-reference-dist"
+          unzip -q "$RUNNER_TEMP/transfer-path-paired-pools-full-reference.zip" -d "$RUNNER_TEMP/transfer-path-paired-pools-full-reference"
+          test -z "$(find "$RUNNER_TEMP/transfer-path-paired-pools-full-reference" -type l -print -quit)"
+          echo "$TRANSFER_PATH_PAIRED_POOLS_REFERENCE_TAR  $RUNNER_TEMP/transfer-path-paired-pools-full-reference/dist.tgz" | sha256sum --check
+          tar -tzf "$RUNNER_TEMP/transfer-path-paired-pools-full-reference/dist.tgz" > transfer-path-paired-pools-clean-join/reference-tar-entries.txt
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          const names = fs.readFileSync('transfer-path-paired-pools-clean-join/reference-tar-entries.txt', 'utf8').trimEnd().split('\n');
+          assert.equal(new Set(names).size, names.length, 'Unique admitted dist tar paths');
+          for (const name of names) {
+            assert(name.startsWith('dist/') && !name.includes('\\'), 'Tar stays under dist');
+            assert(name.replace(/\/$/, '').split('/').every(part => part && part !== '.' && part !== '..'), 'Safe tar path');
+          }
+          NODE
+          tar -xzf "$RUNNER_TEMP/transfer-path-paired-pools-full-reference/dist.tgz" -C "$RUNNER_TEMP/transfer-path-paired-pools-full-reference-dist"
+          cp "$RUNNER_TEMP/transfer-path-paired-pools-full-reference/source-before.txt" transfer-path-paired-pools-clean-join/reference-source.txt
+      - name: Fresh unchanged product-name fence on clean source
+        run: |
+          set -euo pipefail
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simNoRivalNames.mjs 2>&1 | tee transfer-path-paired-pools-clean-join/no-rival.log
+      - name: Clean production build
+        run: |
+          set -euo pipefail
+          NODE_OPTIONS="--max-old-space-size=6144" npm run build 2>&1 | tee transfer-path-paired-pools-clean-join/build.log
+      - name: Join exact clean product source and all 850 built files
+        id: join
+        env:
+          TRANSFER_PATH_PAIRED_POOLS_REFERENCE_DIR: ${{ runner.temp }}/transfer-path-paired-pools-full-reference
+          TRANSFER_PATH_PAIRED_POOLS_REFERENCE_DIST: ${{ runner.temp }}/transfer-path-paired-pools-full-reference-dist/dist
+        run: |
+          set -euo pipefail
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import assert from 'node:assert/strict';
+          import {createHash} from 'node:crypto';
+          import {execFileSync} from 'node:child_process';
+          const env = process.env;
+          const out = 'transfer-path-paired-pools-clean-join';
+          const ref = env.TRANSFER_PATH_PAIRED_POOLS_REFERENCE_DIR;
+          const read = file => JSON.parse(fs.readFileSync(path.join(ref, file)));
+          const bytes = file => fs.readFileSync(path.join(ref, file));
+          const readOutput = file => JSON.parse(fs.readFileSync(path.join(out, file)));
+          const sha = bytes => createHash('sha256').update(bytes).digest('hex');
+          const blob = bytes => createHash('sha1').update('blob ' + bytes.length + '\0').update(bytes).digest('hex');
+          const git = (...args) => execFileSync('git', args, {encoding:'utf8', maxBuffer:16 * 1024 * 1024});
+          const workflow = '.github/workflows/transfer-path-paired-pools-20261110.yml';
+          const helper = 'scripts/qa/playTransferPathPairedPools.mjs';
+          const page = 'src/pages/TransferPath.tsx', hook = 'src/hooks/useTransferPath.ts';
+          const test = 'src/hooks/useTransferPathPairedPools.test.ts';
+          const plan = 'docs/plans/2026-11-10-transfer-path-paired-pools.md';
+          const configs = ['index.html','package.json','package-lock.json','vite.config.ts','tailwind.config.ts','postcss.config.js','tsconfig.json','tsconfig.app.json','tsconfig.node.json','bun.lockb','bun.lock'];
+          const sourceScope = file => /^(?:src|public|scripts)\//.test(file);
+          const fullOnly = new Set([workflow, helper]);
+          const denied = ['scripts/qa/checkTransferPathPairedPools.mjs','scripts/qa/admitTransferPathPairedPools.mjs'];
+          const pins = {
+            [page]: env.TRANSFER_PATH_PAIRED_POOLS_FIXED_PAGE_BLOB,
+            [hook]: env.TRANSFER_PATH_PAIRED_POOLS_FIXED_HOOK_BLOB,
+            [test]: env.TRANSFER_PATH_PAIRED_POOLS_QUALIFIED_TEST_BLOB,
+            [plan]: env.TRANSFER_PATH_PAIRED_POOLS_QUALIFIED_PLAN_BLOB,
+            'src/App.tsx': '8bfedf7aaa1d076e0f0c8e2216c7e46632cd8a33',
+            'src/data/gameRegistry.ts': 'f560b40a74d1468ac72dfde4ee6fec6635a9a255',
+            'public/transfer-path/index.html': '55a6a96c96a21de551bf12efbe53757e1bdd2af3',
+            'src/components/transfer-path/TransferPathBoard.tsx': 'd5993545f48a198bf9e4a32ad181bad339ef366e',
+            'src/hooks/useTransferPath.test.ts': 'fe49779c37bd733dafb56bb2276e759c634d6d8e',
+            'src/hooks/useTransferPathGuidance.test.ts': '38a39efeedeb115aec9f92f2ca2fd3b9fbed9db2',
+            'src/hooks/useDailyPuzzle.ts': 'b8a0d6ba268efe0e728c4ee96fbc6c60fcc73846',
+            'src/lib/fetchCareerPlayers.ts': '05ba3b3e7893599e3566f00e75ca05e80ab6e872',
+            'src/lib/fetchTransferPathPuzzles.ts': '5cb9e10959b935207eec2e10880a87cf3abe4deb',
+            'src/lib/transferPathGraph.ts': 'a848c5dfd30d7e376173540d1f32e498f9f07d2c',
+            'src/data/transferPathPuzzles.ts': 'de47215436238890cc573ed9080fcb176b89a3eb',
+            'scripts/lib/offlineTransport.cjs': '0fda542a2649fe5da937c6976fd0f5b6073e74b6',
+          };
+          const indexRows = (body, separator = '\n') => {
+            const rows = body.split(separator).filter(Boolean).map(line => {
+              const matched = /^(100(?:644|755)) ([0-9a-f]{40}) 0\t(.+)$/.exec(line);
+              assert(matched, 'Actual regular path/mode/blob index tuple');
+              return [matched[3], {mode:matched[1], blob:matched[2]}];
+            });
+            assert.equal(new Set(rows.map(([file]) => file)).size, rows.length, 'Unique index paths');
+            return new Map(rows);
+          };
+          const treeRows = commit => {
+            const rows = git('ls-tree', '-r', '-z', commit).split('\0').filter(Boolean).map(line => {
+              const matched = /^(100(?:644|755)) blob ([0-9a-f]{40})\t(.+)$/.exec(line);
+              assert(matched, 'Actual regular path/mode/blob tree tuple');
+              return [matched[3], {mode:matched[1], blob:matched[2]}];
+            });
+            assert.equal(new Set(rows.map(([file]) => file)).size, rows.length, 'Unique tree paths');
+            return new Map(rows);
+          };
+          const ordered = rows => [...rows].sort(([left],[right]) => left.localeCompare(right));
+          const cleanHead = git('rev-parse', 'HEAD').trim(), cleanTree = git('rev-parse', 'HEAD^{tree}').trim();
+          assert.deepEqual(git('rev-list', '--parents', '-n', '1', 'HEAD').trim().split(' '), [cleanHead, env.TRANSFER_PATH_PAIRED_POOLS_CLEAN_PRODUCT_BASE], 'Clean QA is the direct PR538 child');
+          assert.equal(git('rev-parse', env.TRANSFER_PATH_PAIRED_POOLS_CLEAN_PRODUCT_BASE + '^{tree}').trim(), env.TRANSFER_PATH_PAIRED_POOLS_CLEAN_PRODUCT_BASE_TREE);
+          assert.equal(cleanHead, env.GITHUB_SHA);
+          assert.equal(fs.readFileSync(out + '/head.txt','utf8').trim(), cleanHead);
+          assert.equal(fs.readFileSync(out + '/tree.txt','utf8').trim(), cleanTree);
+          const base = treeRows(env.TRANSFER_PATH_PAIRED_POOLS_CLEAN_PRODUCT_BASE);
+          const current = indexRows(fs.readFileSync(out + '/source-before.txt', 'utf8'));
+          const old = indexRows(fs.readFileSync(out + '/reference-source.txt', 'utf8'));
+          assert.deepEqual(ordered(indexRows(git('ls-files','--stage','-z'),'\0')), ordered(current));
+          assert.deepEqual(ordered(treeRows(cleanHead)), ordered(current), 'Clean index joins exact committed tree tuples');
+          assert.deepEqual([base.size,current.size,old.size],[5793,5796,5797]);
+          const allowedClean = [hook, test, plan, workflow];
+          const cleanDelta = [...new Set([...base.keys(), ...current.keys()])].filter(file => {
+            const before = base.get(file), after = current.get(file);
+            return before?.mode !== after?.mode || before?.blob !== after?.blob;
+          }).sort();
+          assert.deepEqual(cleanDelta, [...allowedClean].sort(), 'Exactly one product source change and three owned new leaves');
+          assert.deepEqual([base.get(page)?.blob,base.get(hook)?.blob], ['74e48159c539079a99b358e738a3a2c828359e69','005fbf70b087ae9ea47e2ede3f099355456ecfb5']);
+          assert.equal(current.get(hook)?.mode, base.get(hook)?.mode);
+          for (const file of [test, plan, workflow]) assert(!base.has(file) && current.get(file)?.mode === '100644', file + ' exact owned new leaf');
+          assert(!current.has(helper), 'Tracked full browser helper is excluded from clean QA');
+          assert.equal(old.get(helper)?.blob, env.TRANSFER_PATH_PAIRED_POOLS_NATIVE_HELPER);
+          assert.equal(old.get(workflow)?.blob, env.TRANSFER_PATH_PAIRED_POOLS_REFERENCE_WORKFLOW);
+          assert(current.get(workflow)?.blob && current.get(workflow).blob !== old.get(workflow).blob, 'Clean QA uses its own workflow body');
+          for (const file of denied) assert(!old.has(file) && !current.has(file), file + ' untracked QA source');
+          for (const [file,want] of Object.entries(pins)) {
+            assert.equal(current.get(file)?.blob, want, file + ' exact clean pin');
+            assert.equal(old.get(file)?.blob, want, file + ' exact full pin');
+          }
+          const product = (rows, omit) => ordered([...rows].filter(([file]) => !omit.has(file)));
+          assert.deepEqual(product(current,new Set([workflow])), product(old,fullOnly), 'All 5795 product path/mode/blob tuples are identical');
+          assert.deepEqual([base,current,old].map(rows => [...rows.keys()].filter(sourceScope).length), [4665,4666,4667]);
+          const scoped = (rows, omit) => ordered([...rows].filter(([file]) => (sourceScope(file) || configs.includes(file)) && !omit.has(file)));
+          const sourceConfigRows = scoped(current,new Set());
+          assert.equal(sourceConfigRows.length, 4677);
+          assert.deepEqual(sourceConfigRows,scoped(old,fullOnly),'Every 4666 code and 11 root configuration path/mode/blob tuple');
+          for (const file of configs) assert(current.has(file) && old.has(file),file + ' required root configuration');
+          for (const [file,tuple] of current) {
+            const stat = fs.lstatSync(file);
+            assert(stat.isFile(),file + ' physical regular source body');
+            assert.equal((stat.mode & 0o111) !== 0, tuple.mode === '100755',file + ' physical source executable mode');
+            assert.equal(blob(fs.readFileSync(file)),tuple.blob,file + ' physical source bytes join tree');
+          }
+
+          const inventory = (directory,prefix = '') => fs.readdirSync(directory,{withFileTypes:true}).sort((a,b) => a.name.localeCompare(b.name)).flatMap(entry => {
+            const file = path.join(directory,entry.name);
+            const relative = prefix + entry.name;
+            if (entry.isDirectory()) return inventory(file,relative + '/');
+            assert(entry.isFile(),relative + ' regular dist file');
+            const body = fs.readFileSync(file);
+            return [{path:relative,bytes:body.length,sha256:sha(body)}];
+          });
+          const actual = inventory('dist'), reference = inventory(env.TRANSFER_PATH_PAIRED_POOLS_REFERENCE_DIST);
+          assert.deepEqual([actual.length,reference.length],[850,850]);
+          assert.deepEqual(actual,reference,'Every clean built path and byte equals the qualified full build');
+          const distManifestSHA256 = sha(JSON.stringify(reference));
+          assert.equal(distManifestSHA256,env.TRANSFER_PATH_PAIRED_POOLS_REFERENCE_DIST_MANIFEST);
+          const retainedManifest = read('dist-before.json').map(row => {
+            assert.deepEqual(Object.keys(row).sort(),['bytes','file','sha256']);
+            assert(row.file.startsWith('dist/'));
+            return {path:row.file.slice(5),bytes:row.bytes,sha256:row.sha256};
+          });
+          assert.deepEqual(retainedManifest,reference,'Exact full retained build inventory and tar join');
+          assert(bytes('dist-before.json').equals(bytes('dist-after.json')));
+          assert(bytes('source-before.txt').equals(bytes('source-after.txt')));
+          assert(bytes('source-before.txt').equals(fs.readFileSync(out + '/reference-source.txt')));
+          const referenceHead = bytes('head.txt').toString('utf8').trim(), referenceTree = bytes('tree.txt').toString('utf8').trim();
+          const run = readOutput('reference-run.json'), meta = readOutput('reference-artifact.json');
+          assert.deepEqual([referenceHead,referenceTree],[env.TRANSFER_PATH_PAIRED_POOLS_REFERENCE_HEAD,env.TRANSFER_PATH_PAIRED_POOLS_REFERENCE_TREE]);
+          const full = read('admission.json'), native = read('native-admission.json'), unit = read('unit-admission.json'), holds = read('final-holds.json');
+          assert.deepEqual([full.status,full.qualification,full.head,full.tree,full.page,full.hook,full.test,full.plan,full.helper,full.nativeOuter], [
+            'passed','fresh-transfer-path-paired-pools-full-scope',referenceHead,referenceTree,env.TRANSFER_PATH_PAIRED_POOLS_FIXED_PAGE_BLOB,env.TRANSFER_PATH_PAIRED_POOLS_FIXED_HOOK_BLOB,env.TRANSFER_PATH_PAIRED_POOLS_QUALIFIED_TEST_BLOB,env.TRANSFER_PATH_PAIRED_POOLS_QUALIFIED_PLAN_BLOB,env.TRANSFER_PATH_PAIRED_POOLS_NATIVE_HELPER,env.TRANSFER_PATH_PAIRED_POOLS_NATIVE_OUTER,
+          ]);
+          assert.deepEqual([full.trackedBodies,full.sourceRows,full.cleanSourceRows,full.rootConfigurations,full.distFiles,full.immutableCaps,full.readers],[5797,4667,4666,11,850,16,20]);
+          assert.deepEqual(full.unit,unit);
+          assert.deepEqual([full.unitCommands,unit.commands,unit.status,unit.actualPasses,unit.actualFailures,unit.wholeQualifiedFixedRAWBytesHeld,full.controlsRerun],[1,1,'passed',unit.actualCases,0,true,false]);
+          assert.deepEqual([unit.actualCases,unit.newCases,unit.heldCases],[14,4,10],'Exact fresh fixed and held cases from the admitted full reference');
+          assert.deepEqual([full.raw.status,full.raw.raw,full.raw.freshUnitRAWByteEqual,full.distTupleSHA256],['passed',unit.raw,true,distManifestSHA256]);
+          assert.deepEqual(full.nativeReceipt,native);
+          assert.deepEqual([native.status,native.route,native.page,native.hook,native.helper],['passed','/transfer-path',env.TRANSFER_PATH_PAIRED_POOLS_FIXED_PAGE_BLOB,env.TRANSFER_PATH_PAIRED_POOLS_FIXED_HOOK_BLOB,env.TRANSFER_PATH_PAIRED_POOLS_NATIVE_HELPER]);
+          assert.deepEqual([holds.status,holds.trackedBodies,holds.scopedSourceRows,holds.cleanSourceRows,holds.rootConfigurations,holds.installedLockedVersions,holds.indexUnchanged,holds.sourceBytesUnchanged,holds.locksUnchanged,holds.distHeld,holds.retainedPacketsHeld,holds.offlineBytes],
+            ['passed',5797,4667,4666,11,521,true,true,true,true,true,0]);
+          assert.deepEqual(full.distTar,{file:'dist.tgz',bytes:bytes('dist.tgz').length,sha256:env.TRANSFER_PATH_PAIRED_POOLS_REFERENCE_TAR});
+          assert.equal(sha(bytes('dist.tgz')),env.TRANSFER_PATH_PAIRED_POOLS_REFERENCE_TAR);
+          assert.equal(blob(bytes('native-admission-script.mjs')),env.TRANSFER_PATH_PAIRED_POOLS_NATIVE_OUTER);
+          const exactEvidence = [{"file":"admission.json","bytes":17234,"sha256":"e835e1fe9295601e357931a4b8a9186b4597415da4506a9b7dc597d755326cd7"},{"file":"unit-admission.json","bytes":2591,"sha256":"c9f9812a0163dd47e0025e1afa527ce6d7bee4bbadd7f411846ad6bd5be78875"},{"file":"native-admission.json","bytes":6623,"sha256":"d9bbf94f2d3a5c3c7ab48a1b6287ec82e04084be948e367fe4cef3182926b230"},{"file":"fixed-raw-join.json","bytes":331,"sha256":"f49c7d06e6202ebf75322facd10783c8fe03a7ef3f6cc24046c424f499089992"},{"file":"packet-custody.json","bytes":4205,"sha256":"ee5c673e19685900164d9ad2ea691b2fc0a6dc00b0200681a599ae50f9ee26d6"},{"file":"final-holds.json","bytes":378,"sha256":"35a72b79ff7b591ac33afb4d770d2640cac9bba90f51c859e893f49fb9f83a17"},{"file":"source-join.json","bytes":4018,"sha256":"6bae2c5f7b89ff9900d7ed9d15ace4b38754dcfc3cc95e87b60825c0d54d7d51"},{"file":"active-route-preflight.json","bytes":1308,"sha256":"fe02c0629d5ee15f9677f690ea95790bb750d7c9c3316620b0c0de1d06df1c44"},{"file":"active-snapshot.html","bytes":23149,"sha256":"4a3f9c4fab177618028541cc9c6f3cf79c2d1b45a8c78514ff97264b10e9e1e2"},{"file":"public-cases.raw.json","bytes":144543,"sha256":"bf5daaa5d936a3c78fabc8d5ac4ad8a77ab2b53416858958e56f39811c36a835"},{"file":"browser/body-manifest.json","bytes":3117,"sha256":"0a2ffc9f13d78501cf4e38e4168766058a05872e6ee1d5613190cdf54215c4a8"},{"file":"browser/report.json","bytes":10869,"sha256":"b5a3023fe39cd3b5d78cc11566769939748b1e3f3703f02e5e7ba7ee083c0127"},{"file":"browser/raw.json","bytes":680289,"sha256":"0d764141a69687a39aef875642ff94f8d9e94f196435e5b4591292d9fc1cc2f2"},{"file":"native-admission-script.mjs","bytes":13473,"sha256":"7634f471a5ae0b33f70987ec67a9eed9744e056788762d9f749ef3e1a114d583"},{"file":"browser/png/1280-careers-only-daily.png","bytes":85361,"sha256":"ef5603120e0eff5272e989c950e76cba5d98e1edf08d08307897c80b3332a9ef"},{"file":"browser/png/1280-careers-only-unlimited.png","bytes":66669,"sha256":"05ec13d62b620ca3bc59e68cbe04be0364266f50f28c79480e2c58de634c2ce9"},{"file":"browser/png/1280-puzzles-only-daily.png","bytes":85361,"sha256":"ef5603120e0eff5272e989c950e76cba5d98e1edf08d08307897c80b3332a9ef"},{"file":"browser/png/1280-puzzles-only-unlimited.png","bytes":66669,"sha256":"05ec13d62b620ca3bc59e68cbe04be0364266f50f28c79480e2c58de634c2ce9"},{"file":"browser/png/320-careers-only-daily.png","bytes":33634,"sha256":"39f895176b82ce2153734f71f7ec4e3680501670bdfd1a9edd5593b414c9a9b4"},{"file":"browser/png/320-careers-only-unlimited.png","bytes":35019,"sha256":"19b7712887bac49d93fe77db971337dfb51c4049db46c04d3b45635cb7068593"},{"file":"browser/png/320-puzzles-only-daily.png","bytes":33634,"sha256":"39f895176b82ce2153734f71f7ec4e3680501670bdfd1a9edd5593b414c9a9b4"},{"file":"browser/png/320-puzzles-only-unlimited.png","bytes":35019,"sha256":"19b7712887bac49d93fe77db971337dfb51c4049db46c04d3b45635cb7068593"},{"file":"browser/png/390-careers-only-daily.png","bytes":65666,"sha256":"1338e4e8e0a7be972732006ff0221fd8c8f7ea79f183bdccf0724faf86bdc7db"},{"file":"browser/png/390-careers-only-unlimited.png","bytes":52984,"sha256":"43a64750b7396f08f68ee85dedf3380d997aa88b182ef95811f8cb50798ce43d"},{"file":"browser/png/390-puzzles-only-daily.png","bytes":65666,"sha256":"1338e4e8e0a7be972732006ff0221fd8c8f7ea79f183bdccf0724faf86bdc7db"},{"file":"browser/png/390-puzzles-only-unlimited.png","bytes":52984,"sha256":"43a64750b7396f08f68ee85dedf3380d997aa88b182ef95811f8cb50798ce43d"}];
+          for (const pin of exactEvidence) {
+            const body = bytes(pin.file);
+            assert.deepEqual([body.length,sha(body)],[pin.bytes,pin.sha256],pin.file);
+          }
+          const joinedUnit = read('fixed-raw-join.json'), custody = read('packet-custody.json');
+          const roles = ['preflight','original','fixed','controls'];
+          assert.deepEqual(roles.map(role=>custody[role].run),[42770957656,42772737404,42773696472,42774360903]);
+          assert.deepEqual([joinedUnit.status,joinedUnit.raw.sha256,joinedUnit.freshUnitRAWByteEqual],['passed',unit.raw.sha256,true]);
+          assert.equal(native.status,'passed');
+          const referenceChecks = {status:'passed',exactEvidenceBodies:exactEvidence.length,retainedPNGs:12,
+            priorRoleRuns:Object.fromEntries(roles.map(role=>[role,custody[role].run])),
+            nativeExact:true,freshUnitExact:true,independentFullSHA256:'2e2de26d4056ba1460366b5321b806db340cb849c0935def18c771d6168b57d3',
+            independentNativeSHA256:'0266773007a6590d4e074d825364f45523409102acfc2c9de28231ba7157e127',rootVisualReviewSHA256:'e02104230d0363ed6f06a65785daae692552a31d5e6ea7671b2d714f1164131c'};
+          assert.equal(referenceChecks.status,'passed','Reviewed actual full receipt validator must complete');
+          const result = {
+            status:'passed', cleanHead, cleanTree, cleanProductBase:env.TRANSFER_PATH_PAIRED_POOLS_CLEAN_PRODUCT_BASE, cleanProductBaseTree:env.TRANSFER_PATH_PAIRED_POOLS_CLEAN_PRODUCT_BASE_TREE,
+            cleanDelta, referenceRun:run.id, referenceWorkflowHead:referenceHead, referenceApp:referenceHead, referenceTree,
+            referenceQualification:full.qualification, referenceArtifact:meta.id, referenceZipSHA256:env.TRANSFER_PATH_PAIRED_POOLS_REFERENCE_ZIP,
+            referenceTarSHA256:env.TRANSFER_PATH_PAIRED_POOLS_REFERENCE_TAR, referenceWorkflowBlob:env.TRANSFER_PATH_PAIRED_POOLS_REFERENCE_WORKFLOW,
+            heldProductRows:5795, sourceRows:4666, sourceAndConfigurationRows:sourceConfigRows.length,
+            rootConfigurations:configs.map(file => ({file,...current.get(file)})),
+            excludedFullQA:[...fullOnly], finalProductForbiddenPaths:[...fullOnly,...denied], generatedPatches:[],
+            distFiles:actual.length, distManifestSHA256, dist:actual, referenceChecks,
+            limits:'Fresh clean types, product-name fence, normal production build and exact source and built-byte join. Unit, native, control, reader and cap evidence comes from the authenticated full reference. The frozen qualified plan is held. Final product excludes this round QA workflow, helper, outer and controller. No provider or release credit.',
+          };
+          fs.writeFileSync(out + '/reference-build-join.json',JSON.stringify(result,null,2));
+          console.log('PASS all 4666 source paths, 11 root configurations and 850 built file bodies');
+          NODE
+      - name: Final source locks installed versions and offline holds
+        if: always()
+        run: |
+          set -euo pipefail
+          git ls-files -s > transfer-path-paired-pools-clean-join/source-after.txt
+          cmp transfer-path-paired-pools-clean-join/source-before.txt transfer-path-paired-pools-clean-join/source-after.txt
+          git diff --exit-code HEAD -- .
+          sha256sum package.json package-lock.json > transfer-path-paired-pools-clean-join/locks-after.txt
+          cmp transfer-path-paired-pools-clean-join/locks-before.txt transfer-path-paired-pools-clean-join/locks-after.txt
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const before=JSON.parse(fs.readFileSync('transfer-path-paired-pools-clean-join/installed-before.json')),lock=JSON.parse(fs.readFileSync('package-lock.json'));
+          const after=Object.keys(lock.packages).filter(p=>p.startsWith('node_modules/')&&fs.existsSync(p+'/package.json')).map(p=>[p,JSON.parse(fs.readFileSync(p+'/package.json')).version]);assert.equal(after.length,521);for(const[p,v]of after)assert.equal(v,lock.packages[p].version,p);assert.deepEqual(after,before);
+          fs.writeFileSync('transfer-path-paired-pools-clean-join/installed-final.json',JSON.stringify(after));
+          assert(fs.existsSync('transfer-path-paired-pools-clean-join/offline.log'));assert.equal(fs.statSync('transfer-path-paired-pools-clean-join/offline.log').size,0);
+          NODE
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: transfer-path-paired-pools-clean-build-join-${{ github.run_id }}
+          path: transfer-path-paired-pools-clean-join
+          retention-days: 14
+          if-no-files-found: error
