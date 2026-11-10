@@ -151,8 +151,8 @@ const FantasyDraft = () => {
         .from('fantasy_draft_players')
         .select('id, name, position, nationality, market_value_millions, dominant_foot, age' as any)
         .order('name');
-      if (error) setPlayersError(true);
-      else if (data) setPlayers(data as unknown as DraftPlayer[]);
+      if (error || !data?.length) setPlayersError(true);
+      else setPlayers(data as unknown as DraftPlayer[]);
     } catch {
       setPlayersError(true);
     } finally {
