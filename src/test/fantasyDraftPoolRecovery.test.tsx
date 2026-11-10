@@ -33,12 +33,13 @@ type Action = {
   requestsAfter: number | null;
   details: Record<string, unknown>;
 };
-type CaseKey = 'normalUser' | 'normalAi' | 'errorUser' | 'errorAi';
+type CaseKey = 'normalUser' | 'normalAi' | 'errorUser' | 'errorAi' | 'nullUser' | 'nullAi' | 'emptyUser' | 'emptyAi';
+type EmptyPoolResponse = 'resolved-null' | 'resolved-empty';
 type CasePacket = {
   key: CaseKey;
   title: string;
   seat: 'user' | 'ai';
-  firstPoolResponse: 'success' | 'resolved-error';
+  firstPoolResponse: 'success' | 'resolved-error' | EmptyPoolResponse;
   frames: Frame[];
   complete: boolean;
   error: { name: string; message: string } | null;
@@ -362,9 +363,10 @@ async function closeCase() {
   });
   capture('after-teardown'); closed = true;
 }
-async function runCase(key: CaseKey, title: string, seat: 'user' | 'ai', failFirst: boolean) {
+async function runCase(key: CaseKey, title: string, seat: 'user' | 'ai', failFirst: boolean | EmptyPoolResponse) {
   remote.randomValue = seat === 'user' ? 0.1 : 0.9;
-  packet = { key, title, seat, firstPoolResponse: failFirst ? 'resolved-error' : 'success', frames: [], complete: false, error: null };
+  const empty = typeof failFirst === 'string' ? failFirst : null;
+  packet = { key, title, seat, firstPoolResponse: empty ?? (failFirst ? 'resolved-error' : 'success'), frames: [], complete: false, error: null };
   raw.cases.push(packet);
   let beforeStart!: Frame, afterStart!: Frame, recoveryStart!: Frame, recovered!: Frame, final!: Frame;
   try {
@@ -376,8 +378,9 @@ async function runCase(key: CaseKey, title: string, seat: 'user' | 'ai', failFir
     await click('start-draft', 'Start Draft');
     afterStart = capture('first-pool-pending');
     const success: PoolReply = { data: pool.map(row => ({ ...row })), error: null, count: null, status: 200, statusText: 'OK' };
-    await deliver('settle-first-pool', 'players', 0, failFirst ? ERROR_REPLY : success);
-    recoveryStart = capture(failFirst ? 'first-pool-error' : 'first-pool-success');
+    const reply = empty ? { ...success, data: empty === 'resolved-null' ? null : [] } : failFirst ? ERROR_REPLY : success;
+    await deliver('settle-first-pool', 'players', 0, reply);
+    recoveryStart = capture(empty ? 'first-pool-' + empty : failFirst ? 'first-pool-error' : 'first-pool-success');
     if (failFirst) {
       await tick('service-recovered-without-user-retry', 4000);
       capture('error-after-service-wait');
@@ -536,4 +539,38 @@ describe('Fantasy Draft recovers its current round from a resolved player-pool e
     expect(progress(result.final), 'FD_POOL_AI_ERROR').toEqual(expectedProgress('ai'));
     assertPreservedRun(result, 'ai', true);
   });
+});
+
+describe('Fantasy Draft recovers its current round from an empty successful player-pool reply', () => {
+  const cases = [
+    ['nullUser', 'recovers the user-first round after a successful null player-pool reply', 'user', 'resolved-null', 'FD_POOL_EMPTY_NULL_USER'],
+    ['nullAi', 'recovers the AI-first round after a successful null player-pool reply', 'ai', 'resolved-null', 'FD_POOL_EMPTY_NULL_AI'],
+    ['emptyUser', 'recovers the user-first round after a successful empty player-pool reply', 'user', 'resolved-empty', 'FD_POOL_EMPTY_ARRAY_USER'],
+    ['emptyAi', 'recovers the AI-first round after a successful empty player-pool reply', 'ai', 'resolved-empty', 'FD_POOL_EMPTY_ARRAY_AI'],
+  ] as const;
+  for (const [key, title, seat, empty, marker] of cases) {
+    it(title, async () => {
+      const result = await runCase(key, title, seat, empty);
+      const retry = result.recoveryStart.page?.retry.filter(button => button.disabled === false)
+        .map(button => button.text?.trim());
+      expect({ retry, progress: progress(result.final) }, marker)
+        .toEqual({ retry: ['Retry players'], progress: expectedProgress(seat) });
+      assertPreservedRun(result, seat, true);
+
+      const opening = { turn: seat, round: 1, pick: 1, total: 22, human: [], ai: [] };
+      expect(progress(result.afterStart)).toEqual(opening);
+      for (const label of ['retry-pending', 'duplicate-retry-pending']) {
+        const frame = packet!.frames.find(item => item.label === label)!;
+        expect(progress(frame)).toEqual(opening);
+        expect(frame.page?.criterion).toBe(UNDER25);
+        expect(frame.pendingResponses).toBe(1);
+      }
+      expect(progress(result.recovered)).toEqual(opening);
+      expect(result.recovered.transport.filter(row => row.kind === 'players').map(row => row.response))
+        .toEqual([
+          { data: empty === 'resolved-null' ? null : [], error: null, count: null, status: 200, statusText: 'OK' },
+          { data: pool, error: null, count: null, status: 200, statusText: 'OK' },
+        ]);
+    });
+  }
 });
