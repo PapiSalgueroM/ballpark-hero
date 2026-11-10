@@ -18301,3 +18301,10 @@ Stacked on PR540. The broad R0180 bug report does not identify this cause. The s
 Player Bingo uses the existing World Cup squad date to place a player in the correct birth-year band when the normalized name, primary country and market age agree. Missing, invalid or conflicting dates keep the existing age estimate.
 
 Stacked on PR541. R0008's reported session and deployed row remain unverified. The new regression and browser journeys use fictional data. [Active entry](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/42810749109) · [Original](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/42813505581) · [Fixed](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/42815490778) · [Physical controls](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/42816407557) · [Full](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/42821117398) · [Clean join](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/42824518601)
+
+
+### 2026-11-10 Player feedback, NBA Chain dotted initials
+
+NBA Chain can validate dotted and compact initials for the same player. Exact spellings take precedence. When an alternate spelling finds multiple stints, validation requires one shared player key and the same complete set of stint records. An ambiguous match lets the player retry without spending the run.
+
+Stacked on PR542. R0016 was exercised with fictional records. The reported live session is unverified. R0018 remains open because the abbreviated name lacks a verified identity match. [Active entry](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/42826929069) · [Original](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/42828680593) · [Fixed](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/42832098036) · [Physical controls](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/42834318467) · [Clean build and browser](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/42835571480)
