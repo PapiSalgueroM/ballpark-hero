@@ -17,7 +17,8 @@ vi.mock('@/lib/clubManagerUiInfo', () => ({
   FACILITY_INFO: Object.fromEntries(['recruitment', 'coaching', 'facilities'].map(kind => [kind, { emoji: '', label: kind, blurb: kind }])),
 }));
 
-vi.mock('@/lib/clubManager', () => ({
+vi.mock('@/lib/clubManager', async importOriginal => ({
+  ...await importOriginal<typeof import('@/lib/clubManager')>(),
   SCOUT_REGIONS: [{ id: 'region', name: 'Region', flag: '' }],
   SCOUT_TRIPS: [{ weeks: 1 }, { weeks: 2 }],
   MAX_SCOUTS: 3,
@@ -37,9 +38,10 @@ const kids = [
   prospect('young-keeper', 'Young Keeper', 'GK', 16, 88, 5),
   prospect('young-defender', 'Young Defender', 'CB', 16, 72),
 ];
-function career(prospects = kids, budget = 10, squadSize = 10): CareerState {
+function career(prospects = kids, budget = 10, squadSize = 10, ownedAway = 0): CareerState {
   return {
     budget, squad: Array.from({ length: squadSize }, () => ({})),
+    loanedOut: Array.from({ length: ownedAway }, () => ({})),
     academy: { recruitment: 1, coaching: 1, facilities: 1, scouts: [], candidates: [], prospects, lastIntakeSeason: 1 },
   } as unknown as CareerState;
 }
@@ -119,8 +121,12 @@ describe('academy position and age filters', () => {
     expect(callbacks.onRelease).toHaveBeenCalledExactlyOnceWith('older-forward');
   });
 
-  it.each([{ budget: 4, squadSize: 10 }, { budget: 10, squadSize: 30 }])('keeps signing disabled for budget $budget and squad size $squadSize', ({ budget, squadSize }) => {
-    const { callbacks } = mount(career(kids, budget, squadSize));
+  it.each([
+    { budget: 4, squadSize: 10, ownedAway: 0 },
+    { budget: 10, squadSize: 30, ownedAway: 0 },
+    { budget: 10, squadSize: 29, ownedAway: 1 },
+  ])('keeps signing disabled for budget $budget, squad size $squadSize and $ownedAway on loan', ({ budget, squadSize, ownedAway }) => {
+    const { callbacks } = mount(career(kids, budget, squadSize, ownedAway));
     filter('GK', '16');
     const sign = screen.getByRole('button', { name: /^Sign him: / });
     expect(sign).toBeDisabled();
