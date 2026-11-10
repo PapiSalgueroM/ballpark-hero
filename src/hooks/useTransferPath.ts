@@ -102,8 +102,10 @@ export function useTransferPath(): TransferPathState {
     let cancelled = false;
     Promise.all([fetchTransferPathPuzzles(), fetchCareerPlayers()]).then(([puzzles, players]) => {
       if (cancelled) return;
-      if (puzzles.length > 0) setPuzzlePool(puzzles);
-      if (players.length > 0) setPlayerPool(players);
+      if (puzzles.length > 0 && players.length > 0) {
+        setPuzzlePool(puzzles);
+        setPlayerPool(players);
+      }
       setIsLoadingPool(false);
     });
     return () => { cancelled = true; };
