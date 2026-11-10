@@ -18273,3 +18273,10 @@ Stacked on PR536. Both original failures, both fixed passes, physical restoratio
 A saved Footle Practice puzzle now waits for the current Daily to load. If the same player is still today's unresolved Daily answer, Practice pauses without changing the saved round. Finishing the Daily lets the player resume that same round.
 
 Stacked on PR537. Original reproduction, fixed regression, two-file physical restoration, native resume and the clean build join passed. [Original](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/42372278434) · [Fixed](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/42762361123) · [Physical controls](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/42762970118) · [Full](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/42767078265) · [Clean](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/42768334595)
+
+
+### 2026-11-10 Player feedback, Transfer Path pool loading
+
+Transfer Path now uses a matching puzzle list and career graph. It adopts the live pair when both loads return data. If either is empty, it keeps both bundled pools.
+
+Stacked on PR538. The original, fixed, one-file physical controls, production browser journeys and clean source/build comparison passed. The reported named player links require separate evidence. [Original](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/42772737404) · [Fixed](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/42773696472) · [Physical controls](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/42774360903) · [Full](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/42775616085) · [Clean](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/42777198821)
