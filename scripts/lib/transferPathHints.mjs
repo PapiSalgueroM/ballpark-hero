@@ -344,6 +344,17 @@ export function parseActiveRefreshMigration(sql) {
 const RULE_ENTRY_REFRESH_ROW_RE = /^\s*\('((?:[^']|'')*)', '((?:[^']|'')*)', '((?:[^']|'')*)', '(classic|europe)', (\d+), '((?:[^']|'')*)', (\d+), '((?:[^']|'')*)'\),?$/gm;
 export const ROUND_784_MIGRATION = 'supabase/migrations/20261001120000_career_first_clubs.sql';
 export const CARVAJAL_MIGRATION = 'supabase/migrations/20261110192036_career_carvajal_madrid_2024_2025.sql';
+export const LIVERPOOL_MIGRATION = 'supabase/migrations/20261110195000_career_isak_van_dijk_liverpool_2025.sql';
+
+/** The two Liverpool spells must arrive together with their Active hint changes. */
+export function liverpoolCareerState(players) {
+  const counts = ['Alexander Isak', 'Virgil van Dijk'].map(name => players
+    .find(player => player.name === name)?.career
+    .filter(season => season.season === '2025-2026' && season.club === 'Liverpool').length);
+  if (counts.every(count => count === 0)) return 'before';
+  if (counts.every(count => count === 1)) return 'after';
+  return 'mixed';
+}
 
 /** Round 784: the rule entries a career migration rewrites in the same
  *  transaction as the careers, each beside the value it replaces:

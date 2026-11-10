@@ -58,6 +58,7 @@ export const CORRECTION_LEDGERS = [
   { file: 'scripts/data/careerFirstClubs.json', migration: 'supabase/migrations/20261001120000_career_first_clubs.sql' },
   { file: 'scripts/data/careerLampardNycfc2015.json', migration: 'supabase/migrations/20261110190817_career_lampard_nycfc_2015.sql' },
   { file: 'scripts/data/careerCarvajalMadrid2024.json', migration: 'supabase/migrations/20261110192036_career_carvajal_madrid_2024_2025.sql' },
+  { file: 'scripts/data/careerIsakVanDijkLiverpool2025.json', migration: 'supabase/migrations/20261110195000_career_isak_van_dijk_liverpool_2025.sql' },
 ];
 
 /** Every recorded correction the pool does not carry. Empty when it carries them all. */

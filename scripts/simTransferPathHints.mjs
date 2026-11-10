@@ -67,7 +67,7 @@ import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { build } from 'esbuild';
-import { CARVAJAL_MIGRATION, MODE_RULES, ROUND_784_MIGRATION, buildGraph, deriveHint, distances, expandCompactCareers, hintProblems, parseActiveRefreshMigration, parseActiveRestoreMigration, parseHint, parseRuleEntryRefresh, parseTransferPathCompanionMigration, ruleEntryRefreshState, ruleProblems, sharedClub } from './lib/transferPathHints.mjs';
+import { CARVAJAL_MIGRATION, LIVERPOOL_MIGRATION, MODE_RULES, ROUND_784_MIGRATION, buildGraph, deriveHint, distances, expandCompactCareers, hintProblems, liverpoolCareerState, parseActiveRefreshMigration, parseActiveRestoreMigration, parseHint, parseRuleEntryRefresh, parseTransferPathCompanionMigration, ruleEntryRefreshState, ruleProblems, sharedClub } from './lib/transferPathHints.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTROL = process.env.TPH_CONTROL || '';
@@ -88,6 +88,7 @@ const ACTIVE_RESTORE = path.join(ROOT, 'supabase/migrations/20260911190000_refre
    2026-09-07 restore holds 203 on 78 and is the other valid live state */
 const ACTIVE_RESTORE_ROWS = 212;
 const APPLIED_ACTIVE_ROWS = 203;
+const liverpoolRewrites = parseActiveRefreshMigration(fs.readFileSync(path.join(ROOT, LIVERPOOL_MIGRATION), 'utf8'));
 
 function checkRows(graph, rows, label) {
   let unreachable = 0, checked = 0;
@@ -215,6 +216,9 @@ console.log('3) the live tables, through the site\'s own fetchers');
         ? 'refreshed'
         : 'mixed';
     if (activeLiveState === 'mixed') fail(`live active hints are in a mixed state: ${liveActiveCount} complete, ${partialActive.length} partial; only the applied ${appliedRows.size} or the refreshed ${restoreRows.size} is valid`);
+    const liverpoolState = liverpoolCareerState(players);
+    if (liverpoolState === 'mixed' || (liverpoolState === 'after' && activeLiveState !== 'refreshed')) fail('live Liverpool seasons must arrive together after the full Active refresh');
+    const currentRestore = liverpoolState === 'after' ? new Map([...restoreRows, ...liverpoolRewrites]) : restoreRows;
     const livePuzzleIds = new Set(puzzles.map(puzzle => puzzle.id));
     for (const id of restoreRows.keys()) if (!livePuzzleIds.has(id)) {
       fail(`proposed active restore ${id} is absent from the live table`);
@@ -255,7 +259,7 @@ console.log('3) the live tables, through the site\'s own fetchers');
       let withPath = 0, same = 0, staleApplied = 0;
       if (rule === 'active') {
         for (const p of puzzles) {
-          const restore = restoreRows.get(p.id) ?? null;
+          const restore = currentRestore.get(p.id) ?? null;
           const proposed = restore ? { minSteps: restore.minSteps, hint: restore.hint } : null;
           if (restore && (restore.a !== p.playerA || restore.b !== p.playerB)) fail(`proposed active restore ${p.id} names ${restore.a} to ${restore.b}, live has ${p.playerA} to ${p.playerB}`);
           for (const pr of ruleProblems(rg, p.playerA, p.playerB, proposed)) fail(`proposed active restore ${p.id}: ${pr}`);
@@ -493,13 +497,31 @@ let r784Caught = false;
     if (stale && !byKey.has(key)) fail7(`${c.id} under ${rule}: the baked pool beats the applied entry and no career correction rewrites it`, key);
     if (!stale && byKey.has(key)) fail7(`${c.id} under ${rule}: a career correction rewrites an entry the baked pool does not beat`, key);
   }
-  const refresh = parseActiveRefreshMigration(fs.readFileSync(ACTIVE_RESTORE, 'utf8'));
-  const activeGraph = buildGraph(site.playersUnderRule(site.fallbackPlayers, 'active'));
-  for (const [id, r] of refresh) if (ruleProblems(activeGraph, r.a, r.b, { minSteps: r.minSteps, hint: r.hint }).length) fail7(`pending active refresh ${id} is beaten on the baked pool; a career change that moves an active minimum must rewrite it too`, `${id}|active`);
   if (r784.length !== ROUND_784_REWRITES) fail7(`the Round 784 migration rewrites ${r784.length} entries, expected ${ROUND_784_REWRITES}`, 'count');
   if (carvajal.length !== 5) fail7(`the Carvajal migration rewrites ${carvajal.length} entries, expected 5`, 'count');
   const classic = rows.filter(r => r.rule === 'classic').length;
-  console.log(`   ${rows.length} entries rewritten (${classic} classic, ${rows.length - classic} Europe), each the search's on the baked pool over the applied value it replaces; ${beaten} applied entries beaten on the baked pool; the pending active refresh holds on all ${refresh.size}`);
+  console.log(`   ${rows.length} entries rewritten (${classic} classic, ${rows.length - classic} Europe), each the search's on the baked pool over the applied value it replaces; ${beaten} applied entries beaten on the baked pool`);
+}
+
+console.log('8) the Liverpool seasons and their Active refresh entries');
+{
+  const refresh = parseActiveRefreshMigration(fs.readFileSync(ACTIVE_RESTORE, 'utf8'));
+  const companion = parseTransferPathCompanionMigration(fs.readFileSync(COMPANION, 'utf8')).desired;
+  const activeGraph = buildGraph(site.playersUnderRule(site.fallbackPlayers, 'active'));
+  if (liverpoolRewrites.size !== 4) fail(`the Liverpool correction rewrites ${liverpoolRewrites.size} Active entries, expected 4`);
+  if (liverpoolCareerState(site.fallbackPlayers) !== 'after') fail('the baked pool must contain both verified Liverpool seasons');
+  for (const [id, row] of liverpoolRewrites) {
+    const old = refresh.get(id);
+    if (!old || old.a !== row.a || old.b !== row.b || old.minSteps !== row.oldMinSteps || old.hint !== row.oldHint) fail(`${id}: Liverpool correction does not match the Active refresh entry it replaces`);
+    const next = deriveHint(activeGraph, row.a, row.b);
+    if (!next || next.minSteps !== row.minSteps || next.hint !== row.hint || row.minSteps >= row.oldMinSteps) fail(`${id}: Liverpool correction must carry the derived shorter Active path`);
+  }
+  for (const { id, playerA, playerB } of companion) {
+    const current = liverpoolRewrites.get(id) ?? refresh.get(id) ?? null;
+    const entry = current ? { minSteps: current.minSteps, hint: current.hint } : null;
+    for (const problem of ruleProblems(activeGraph, playerA, playerB, entry)) fail(`${id} under Active after the Liverpool correction: ${problem}`);
+  }
+  console.log(`   ${liverpoolRewrites.size} shorter entries over the verified refresh, all ${companion.length} retained pairs checked on the baked Active graph`);
 }
 
 console.log('');

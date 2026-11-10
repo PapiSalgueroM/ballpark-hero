@@ -1,0 +1,44 @@
+{
+  "checked": "2026-11-10",
+  "report": "Transfer Path tpa-771 lacked the Liverpool link between Alexander Isak and Virgil van Dijk.",
+  "scope": "Senior Liverpool club competitions in 2025-2026, including Van Dijk's Community Shield appearance. Market value 0 means no verified valuation.",
+  "sources": {
+    "lineup": "https://www.liverpoolfc.com/news/confirmed-liverpool-line-v-atletico-madrid-1",
+    "appearances": "https://www.lfchistory.net/season-archive/appearances/135",
+    "goals": "https://www.lfchistory.net/season-archive/goalscorers/135",
+    "assists": "https://www.lfchistory.net/season-archive/assists/135"
+  },
+  "added": [
+    {
+      "player": "Alexander Isak",
+      "playerId": "a0000001-0000-0000-0000-000000000060",
+      "season": "2025-2026",
+      "club": "Liverpool",
+      "appearances": 22,
+      "goals": 4,
+      "assists": 1,
+      "marketValue": 0,
+      "sortOrder": 8,
+      "sources": {
+        "clubHistory": "https://www.lfchistory.net/players/2438",
+        "independentStats": "https://www.footballdatabase.eu/en/player/details/288114-alexander-isak"
+      }
+    },
+    {
+      "player": "Virgil van Dijk",
+      "playerId": "a0000001-0000-0000-0000-000000000026",
+      "season": "2025-2026",
+      "club": "Liverpool",
+      "appearances": 55,
+      "goals": 8,
+      "assists": 3,
+      "marketValue": 0,
+      "sortOrder": 12,
+      "sources": {
+        "clubHistory": "https://www.lfchistory.net/players/1321",
+        "independentStats": "https://www.footballdatabase.eu/en/player/details/137796-virgil-van_dijk"
+      }
+    }
+  ],
+  "changed": []
+}

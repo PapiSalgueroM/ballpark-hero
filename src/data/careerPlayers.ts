@@ -8,7 +8,7 @@
  * paged 1,000 at a time ordered by player id then sort_order, and assists left
  * null where the league did not record them (never coerced to 0).
  *
- * 253 players, 3642 season rows, 201 of them with null assists.
+ * 253 players, 3644 season rows, 201 of them with null assists.
  * scripts/simCareerFallback.mjs fails when this file differs from a fresh bake.
  * Regenerate with: node scripts/bakeCareerPlayers.mjs
  */
@@ -17,7 +17,7 @@ import type { CareerPlayer } from '@/types/career';
 export const CAREER_FALLBACK_META = {
   generated: '2026-11-10',
   players: 253,
-  seasons: 3642,
+  seasons: 3644,
   nullAssists: 201,
 };
 
@@ -173,6 +173,7 @@ export const careerPlayers: CareerPlayer[] = [
       { season: "2022-2023", club: "Newcastle", goals: 10, assists: 2, appearances: 28, marketValue: 55 },
       { season: "2023-2024", club: "Newcastle", goals: 25, assists: 4, appearances: 40, marketValue: 80 },
       { season: "2024-2025", club: "Newcastle", goals: 18, assists: 3, appearances: 25, marketValue: 90 },
+      { season: "2025-2026", club: "Liverpool", goals: 4, assists: 1, appearances: 22, marketValue: 0 },
     ],
   },
   {
@@ -5209,6 +5210,7 @@ export const careerPlayers: CareerPlayer[] = [
       { season: "2022-2023", club: "Liverpool", goals: 3, assists: 2, appearances: 45, marketValue: 40 },
       { season: "2023-2024", club: "Liverpool", goals: 2, assists: 3, appearances: 42, marketValue: 30 },
       { season: "2024-2025", club: "Liverpool", goals: 2, assists: 1, appearances: 28, marketValue: 25 },
+      { season: "2025-2026", club: "Liverpool", goals: 8, assists: 3, appearances: 55, marketValue: 0 },
     ],
   },
   {
