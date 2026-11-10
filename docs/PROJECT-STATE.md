@@ -1,5 +1,13 @@
 
 
+## 2026-11-10 Player feedback, Transfer Path pool loading
+
+Transfer Path now uses a matching puzzle list and career graph. It adopts the live pair when both loads return data. If either is empty, it keeps both bundled pools.
+
+Both mixed loads rejected a valid bridge on the original. All 14 checks passed on the fixed hook. Reverting restored both failures, and restoring the fix matched the complete fixed trace. The production browser checks covered both partial loads at three widths. The clean rebuild matched 4,666 source paths, 11 configurations and 850 built files. [Original](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/42772737404) · [Fixed](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/42773696472) · [Physical controls](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/42774360903) · [Full](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/42775616085) · [Clean](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/42777198821)
+
+
+
 ## 2026-11-10 Soccer continuation, Footle saved Practice rollover
 
 A saved Footle Practice puzzle now waits for the current Daily to load. If the same player is still today's unresolved Daily answer, Practice pauses without changing the saved round. Finishing the Daily lets the player resume that same round.
