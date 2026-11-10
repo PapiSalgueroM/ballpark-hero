@@ -1,145 +1,380 @@
-name: Transfer Path paired pools fixed
+name: Transfer Path paired pools full qualification
 on:
   push:
-    branches: [codex/transfer-path-paired-pools-fixed-qa-20261110]
+    branches: [codex/transfer-path-paired-pools-full-qa-20261110]
 permissions:
-  actions: read
   contents: read
+  actions: read
 jobs:
-  fixed:
+  qualify:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 45
+    defaults:
+      run:
+        shell: bash
     env:
-      TZ: UTC
       SIM_NETWORK: offline
-      SIM_OFFLINE_RECEIPT: transfer-path-paired-pools-fixed/offline.log
-      TRANSFER_PATH_STAGE: fixed
-      BASE_HEAD: 'c9b082d04b51e1538eb78fa7791b43579fd09783'
-      BASE_TREE: '96ee0f16e764285a6bb6ed63085c6812da7ec77a'
-      ORIGINAL_HOOK: '005fbf70b087ae9ea47e2ede3f099355456ecfb5'
-      FIXED_HOOK: '285463286e53177997f01ef183576c1b271c18dd'
-      TEST_BLOB: '07b839786a9bf59b94e52a28a56080a5caca5cb4'
-      PLAN_BLOB: 'b9c2732f435354a2805a70dc6aed14aa3ce97d82'
-      EVIDENCE: transfer-path-paired-pools-fixed
+      SIM_OFFLINE_RECEIPT: transfer-path-paired-pools-full/offline.log
+      TZ: UTC
+      SEO_SPLIT_BASE_REF: 3b14650d360b010b25b525de33a5f32f33de2798
+      TRANSFER_PATH_PAIRED_POOLS_PRODUCT_BASE: 'c9b082d04b51e1538eb78fa7791b43579fd09783'
+      TRANSFER_PATH_PAIRED_POOLS_PRODUCT_BASE_TREE: '96ee0f16e764285a6bb6ed63085c6812da7ec77a'
+      TRANSFER_PATH_PAIRED_POOLS_FIXED_HEAD: '2fa24fba0a30b211b12e45953a119c36a223cbcd'
+      TRANSFER_PATH_PAIRED_POOLS_FIXED_TREE: '63ca6a735969c3f97f56879ec16ca6d317a38fa3'
+      TRANSFER_PATH_PAIRED_POOLS_FIXED_WORKFLOW: '8fa69b6204d083b3248560bf013e366f1637ff35'
+      TRANSFER_PATH_PAIRED_POOLS_TEST: '07b839786a9bf59b94e52a28a56080a5caca5cb4'
+      TRANSFER_PATH_PAIRED_POOLS_PLAN: 'b9c2732f435354a2805a70dc6aed14aa3ce97d82'
+      TRANSFER_PATH_PAIRED_POOLS_PAGE_BLOB: '74e48159c539079a99b358e738a3a2c828359e69'
+      TRANSFER_PATH_PAIRED_POOLS_HOOK_BLOB: '285463286e53177997f01ef183576c1b271c18dd'
+      TRANSFER_PATH_PAIRED_POOLS_HELPER: '0133be40b673749cd769427ff8586360f10a734d'
+      TRANSFER_PATH_PAIRED_POOLS_OUTER: '52ee13660cadbba6bc9536aa7e13ad99f64f8f00'
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 2
+          fetch-depth: 4
           persist-credentials: false
       - uses: actions/setup-node@v4
         with:
           node-version: 24.22.1
           cache: npm
-      - name: Capture source and authenticate admitted Transfer Path artifacts
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.4.4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Exact qualified fixed parent and clean product scope
+        run: |
+          set -euo pipefail
+          if grep -En '__[A-Z][A-Z0-9_]*__' .github/workflows/transfer-path-paired-pools-20261110.yml; then echo 'Unresolved full qualification binding'; exit 1; fi
+          for value in "$TRANSFER_PATH_PAIRED_POOLS_FIXED_HEAD" "$TRANSFER_PATH_PAIRED_POOLS_FIXED_TREE" "$TRANSFER_PATH_PAIRED_POOLS_FIXED_WORKFLOW" "$TRANSFER_PATH_PAIRED_POOLS_TEST" "$TRANSFER_PATH_PAIRED_POOLS_PLAN" "$TRANSFER_PATH_PAIRED_POOLS_PAGE_BLOB" "$TRANSFER_PATH_PAIRED_POOLS_HOOK_BLOB" "$TRANSFER_PATH_PAIRED_POOLS_HELPER" "$TRANSFER_PATH_PAIRED_POOLS_OUTER"; do [[ "$value" =~ ^[a-f0-9]{40}$ ]]; done
+          out=transfer-path-paired-pools-full
+          test ! -e "$out"
+          mkdir "$out"
+          touch "$out/offline.log"
+          git rev-parse HEAD > "$out/head.txt"
+          git rev-parse 'HEAD^{tree}' > "$out/tree.txt"
+          git ls-files -s > "$out/source-before.txt"
+          sha256sum package.json package-lock.json > "$out/locks-before.txt"
+          git diff --exit-code HEAD -- .
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          import {execFileSync} from 'node:child_process';
+          import {createHash} from 'node:crypto';
+          const out='transfer-path-paired-pools-full',env=process.env;
+          const base=env.TRANSFER_PATH_PAIRED_POOLS_PRODUCT_BASE,fixed=env.TRANSFER_PATH_PAIRED_POOLS_FIXED_HEAD;
+          const workflow='.github/workflows/transfer-path-paired-pools-20261110.yml',helper='scripts/qa/playTransferPathPairedPools.mjs';
+          const page='src/pages/TransferPath.tsx',hook='src/hooks/useTransferPath.ts',test='src/hooks/useTransferPathPairedPools.test.ts',plan='docs/plans/2026-11-10-transfer-path-paired-pools.md';
+          const git=(...args)=>execFileSync('git',args,{encoding:'utf8',maxBuffer:16*1024*1024});
+          const at=(ref,file)=>git('rev-parse',ref+':'+file).trim();
+          const tree=ref=>git('ls-tree','-r','-z',ref).split('\0').filter(Boolean);
+          const fileOf=row=>row.split('\t')[1],scope=rows=>rows.filter(row=>/^(src|public|scripts)\//.test(fileOf(row))).length;
+          const hash=(kind,body)=>createHash(kind).update(body).digest('hex');
+          const blob=bytes=>createHash('sha1').update('blob '+bytes.length+'\0').update(bytes).digest('hex');
+          const head=git('rev-parse','HEAD').trim(),headTree=git('rev-parse','HEAD^{tree}').trim();
+          assert.equal(head,env.GITHUB_SHA);
+          assert.deepEqual(git('rev-list','--parents','-n','1','HEAD').trim().split(' '),[head,fixed]);
+          assert.deepEqual([git('rev-parse',base+'^{tree}').trim(),git('rev-parse',fixed+'^{tree}').trim()],[env.TRANSFER_PATH_PAIRED_POOLS_PRODUCT_BASE_TREE,env.TRANSFER_PATH_PAIRED_POOLS_FIXED_TREE]);
+          const product=tree(base),prior=tree(fixed),current=tree(head);
+          assert.deepEqual([product.length,prior.length,current.length,scope(product),scope(prior),scope(current)],[5793,5796,5797,4665,4666,4667]);
+          assert.deepEqual(git('diff','--name-status',base,fixed).trim().split('\n').sort(),['M\t'+hook,'A\t'+test,'A\t'+plan,'A\t'+workflow].sort());
+          assert.deepEqual(git('diff','--name-status',fixed,head).trim().split('\n').sort(),['M\t'+workflow,'A\t'+helper].sort());
+          const held=prior.filter(row=>fileOf(row)!==workflow);
+          assert.equal(held.length,5795);
+          assert.deepEqual(current.filter(row=>![workflow,helper].includes(fileOf(row))),held);
+          assert.equal(at(fixed,workflow),env.TRANSFER_PATH_PAIRED_POOLS_FIXED_WORKFLOW);
+          assert.deepEqual([at(base,page),at(base,hook)],['74e48159c539079a99b358e738a3a2c828359e69','005fbf70b087ae9ea47e2ede3f099355456ecfb5']);
+          const pins={
+            [page]:env.TRANSFER_PATH_PAIRED_POOLS_PAGE_BLOB,[hook]:env.TRANSFER_PATH_PAIRED_POOLS_HOOK_BLOB,[test]:env.TRANSFER_PATH_PAIRED_POOLS_TEST,[plan]:env.TRANSFER_PATH_PAIRED_POOLS_PLAN,[helper]:env.TRANSFER_PATH_PAIRED_POOLS_HELPER,
+            'src/App.tsx': '8bfedf7aaa1d076e0f0c8e2216c7e46632cd8a33',
+            'src/data/gameRegistry.ts': 'f560b40a74d1468ac72dfde4ee6fec6635a9a255',
+            'public/transfer-path/index.html': '55a6a96c96a21de551bf12efbe53757e1bdd2af3',
+            'src/components/transfer-path/TransferPathBoard.tsx': 'd5993545f48a198bf9e4a32ad181bad339ef366e',
+            'src/hooks/useTransferPath.test.ts': 'fe49779c37bd733dafb56bb2276e759c634d6d8e',
+            'src/hooks/useTransferPathGuidance.test.ts': '38a39efeedeb115aec9f92f2ca2fd3b9fbed9db2',
+            'src/hooks/useDailyPuzzle.ts': 'b8a0d6ba268efe0e728c4ee96fbc6c60fcc73846',
+            'src/lib/fetchCareerPlayers.ts': '05ba3b3e7893599e3566f00e75ca05e80ab6e872',
+            'src/lib/fetchTransferPathPuzzles.ts': '5cb9e10959b935207eec2e10880a87cf3abe4deb',
+            'src/lib/transferPathGraph.ts': 'a848c5dfd30d7e376173540d1f32e498f9f07d2c',
+            'src/data/transferPathPuzzles.ts': 'de47215436238890cc573ed9080fcb176b89a3eb',
+            'scripts/lib/offlineTransport.cjs': '0fda542a2649fe5da937c6976fd0f5b6073e74b6',
+          };
+          assert.deepEqual([at(base,page),at(fixed,page)],[env.TRANSFER_PATH_PAIRED_POOLS_PAGE_BLOB,env.TRANSFER_PATH_PAIRED_POOLS_PAGE_BLOB]);
+          const configs=['index.html','package.json','package-lock.json','vite.config.ts','tailwind.config.ts','postcss.config.js','tsconfig.json','tsconfig.app.json','tsconfig.node.json','bun.lockb','bun.lock'];
+          for (const file of configs) pins[file]=at(base,file);
+          for (const [file,want] of Object.entries(pins)) {
+            assert.equal(at(head,file),want,file);
+            if(file!==helper) assert.equal(at(fixed,file),want,file+' held fixed');
+          }
+          const index=git('ls-files','--stage','-z').split('\0').filter(Boolean).map(row=>row.replace(' 0\t','\t').replace(/^(100(?:644|755)) /,'$1 blob '));
+          assert.deepEqual([...index].sort(),[...current].sort(),'All actual index tuples equal the committed tree');
+          const byFile=new Map(current.map(row=>[fileOf(row),row]));
+          for(const file of [page,hook,test,plan,workflow,helper])assert(byFile.get(file).startsWith('100644 blob '),file+' exact source mode');
+          const physical=git('ls-files','-z').split('\0').filter(Boolean).map(file=>{
+            const bytes=fs.readFileSync(file),stat=fs.lstatSync(file);
+            assert(stat.isFile(),file+' regular source body');
+            const row=byFile.get(file);
+            assert.equal((stat.mode&0o111)!==0,row.startsWith('100755 '),file+' physical source mode');
+            assert.equal(blob(bytes),row.split(' ')[2].split('\t')[0],file+' physical source blob');
+            return {file,bytes:bytes.length,sha256:hash('sha256',bytes)};
+          });
+          assert.equal(physical.length,5797);
+          fs.writeFileSync(out+'/tracked-before.json',JSON.stringify(physical));
+          fs.writeFileSync(out+'/source-join.json',JSON.stringify({status:'passed',head,tree:headTree,parent:fixed,fixedHead:fixed,fixedTree:env.TRANSFER_PATH_PAIRED_POOLS_FIXED_TREE,
+            productBase:base,productBaseTree:env.TRANSFER_PATH_PAIRED_POOLS_PRODUCT_BASE_TREE,trackedRows:5797,fixedTrackedRows:5796,heldFixedRows:5795,
+            sourceRows:4667,cleanSourceRows:4666,rootConfigurations:configs.map(file=>({file,blob:pins[file]})),
+            workflowBlob:at(head,workflow),helperBlob:at(head,helper),pins},null,2));
+          NODE
+      - name: Locked dependencies and all installed version pins
+        run: |
+          set -euo pipefail
+          npm ci 2>&1 | tee transfer-path-paired-pools-full/install.log
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          const lock=JSON.parse(fs.readFileSync('package-lock.json'));
+          const rows=Object.keys(lock.packages).filter(file=>file.startsWith('node_modules/')&&fs.existsSync(file+'/package.json')).map(file=>[file,JSON.parse(fs.readFileSync(file+'/package.json')).version]);
+          assert.equal(rows.length,521);
+          for(const [file,version] of rows)assert.equal(version,lock.packages[file].version,file);
+          fs.writeFileSync('transfer-path-paired-pools-full/installed-before.json',JSON.stringify(rows));
+          assert.equal(fs.statSync('transfer-path-paired-pools-full/offline.log').size,0);
+          NODE
+      - name: Actual direct route React lazy Soccer object and inert snapshot
+        run: |
+          set -euo pipefail
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';import ts from 'typescript';import {JSDOM} from 'jsdom';import {createHash} from 'node:crypto';
+          const out='transfer-path-paired-pools-full',route='/transfer-path',component='TransferPath',label='Transfer Path',appText=fs.readFileSync('src/App.tsx','utf8'),catalogText=fs.readFileSync('src/data/gameRegistry.ts','utf8'),app=ts.createSourceFile('src/App.tsx',appText,ts.ScriptTarget.Latest,true,ts.ScriptKind.TSX),catalog=ts.createSourceFile('src/data/gameRegistry.ts',catalogText,ts.ScriptTarget.Latest,true,ts.ScriptKind.TS);assert.deepEqual(app.parseDiagnostics,[]);assert.deepEqual(catalog.parseDiagnostics,[]);
+          const all=(root,predicate)=>{const found=[];const visit=node=>{if(predicate(node))found.push(node);ts.forEachChild(node,visit);};visit(root);return found;},attrs=(node,name)=>node.attributes.properties.filter(p=>ts.isJsxAttribute(p)&&p.name.text===name);
+          const routes=all(app,node=>(ts.isJsxSelfClosingElement(node)||ts.isJsxOpeningElement(node))&&node.tagName.getText(app)==='Route').filter(node=>attrs(node,'path').some(p=>p.initializer&&ts.isStringLiteralLike(p.initializer)&&p.initializer.text===route));assert.equal(routes.length,1,'One actual direct public JSX Route');assert(ts.isJsxSelfClosingElement(routes[0]),'Direct self-closing route');assert.equal(attrs(routes[0],'path').length,1);const elements=attrs(routes[0],'element');assert.equal(elements.length,1);const element=elements[0].initializer;assert(element&&ts.isJsxExpression(element)&&element.expression&&ts.isJsxSelfClosingElement(element.expression));assert.equal(element.expression.tagName.getText(app),component,'Direct Transfer Path mount, no Navigate');
+          const declarations=all(app,node=>ts.isVariableDeclaration(node)&&ts.isIdentifier(node.name)&&node.name.text===component);assert.equal(declarations.length,1);const init=declarations[0].initializer;assert(init&&ts.isCallExpression(init)&&ts.isIdentifier(init.expression)&&init.expression.text==='lazy');assert.equal(init.arguments.length,1);const factory=init.arguments[0];assert(ts.isArrowFunction(factory)&&factory.parameters.length===0);const load=factory.body;assert(ts.isCallExpression(load)&&load.expression.kind===ts.SyntaxKind.ImportKeyword&&load.arguments.length===1&&ts.isStringLiteralLike(load.arguments[0]));assert.equal(load.arguments[0].text,'./pages/TransferPath');const reactLazy=all(app,node=>ts.isImportDeclaration(node)&&ts.isStringLiteralLike(node.moduleSpecifier)&&node.moduleSpecifier.text==='react'&&node.importClause?.namedBindings&&ts.isNamedImports(node.importClause.namedBindings)).flatMap(node=>node.importClause.namedBindings.elements).filter(node=>node.name.text==='lazy'&&(node.propertyName?.text??node.name.text)==='lazy');assert.equal(reactLazy.length,1,'lazy is the actual named React import');
+          const prop=(node,name)=>{const found=node.properties.filter(p=>ts.isPropertyAssignment(p)&&(ts.isIdentifier(p.name)||ts.isStringLiteralLike(p.name))&&p.name.text===name);assert(found.length<=1,'No duplicate catalog property: '+name);return found[0]?.initializer;},defs=all(catalog,node=>ts.isVariableDeclaration(node)&&ts.isIdentifier(node.name)&&node.name.text==='CATEGORIES');assert.equal(defs.length,1);const categories=defs[0].initializer;assert(categories&&ts.isArrayLiteralExpression(categories));const soccer=categories.elements.filter(node=>ts.isObjectLiteralExpression(node)&&prop(node,'title')&&ts.isStringLiteralLike(prop(node,'title'))&&prop(node,'title').text==='Soccer');assert.equal(soccer.length,1);const games=prop(soccer[0],'games');assert(games&&ts.isArrayLiteralExpression(games));const entries=games.elements.filter(node=>ts.isObjectLiteralExpression(node)&&prop(node,'path')&&ts.isStringLiteralLike(prop(node,'path'))&&prop(node,'path').text===route);assert.equal(entries.length,1,'One actual uncommented Soccer catalog object');const catalogLabel=prop(entries[0],'label');assert(catalogLabel&&ts.isStringLiteralLike(catalogLabel));assert.equal(catalogLabel.text,label,'Exact actual Soccer label');
+          const file='public/transfer-path/index.html',bytes=fs.readFileSync(file);assert.equal(bytes.length,23149);const dom=new JSDOM(bytes.toString('utf8')),doc=dom.window.document,canonicals=[...doc.querySelectorAll('link[rel]')].filter(node=>node.getAttribute('rel').toLowerCase().split(/\s+/).includes('canonical'));assert.equal(canonicals.length,1);assert.equal(canonicals[0].getAttribute('href'),'https://douknowball.com'+route);const snapshots=[...doc.querySelectorAll('#dukb-snapshot')];assert.equal(snapshots.length,1);const snapshot=snapshots[0],snapshotText=snapshot.textContent.trim();assert(snapshotText.length>500,'Actual readable saved game content');const headings=[...snapshot.querySelectorAll('h1')].map(node=>node.textContent.trim().replace(/\s+/g,' ').toUpperCase());assert(headings.includes('TRANSFER PATH'),'Actual saved game heading');const metas=[...doc.querySelectorAll('meta')],retired=metas.filter(node=>['dukb-retired-from','dukb-retired-to'].includes((node.getAttribute('name')||'').toLowerCase())),refresh=metas.filter(node=>(node.getAttribute('http-equiv')||'').trim().toLowerCase()==='refresh'),robots=metas.filter(node=>['robots','googlebot','bingbot'].includes((node.getAttribute('name')||'').toLowerCase()));assert.equal(retired.length,0,'No actual retired-route markers');assert.equal(refresh.length,0,'No actual redirect meta');assert(robots.every(node=>!/(?:^|[\s,])(?:noindex|none)(?:[\s,]|$)/i.test(node.getAttribute('content')||'')),'Active snapshot remains indexable');
+          fs.copyFileSync(file,out+'/active-snapshot.html');fs.writeFileSync(out+'/active-route-preflight.json',JSON.stringify({status:'passed',route,component,label,routeNode:routes[0].getText(app),reactLazyImport:reactLazy[0].parent.parent.parent.getText(app),lazyDeclaration:declarations[0].getText(app),catalogObject:entries[0].getText(catalog),snapshot:{file,bytes:bytes.length,sha256:createHash('sha256').update(bytes).digest('hex'),canonical:canonicals[0].getAttribute('href'),snapshotTextLength:snapshotText.length,headings,retiredMarkers:retired.length,metaRefresh:refresh.length,robots:robots.map(node=>({name:node.getAttribute('name'),content:node.getAttribute('content')}))},parsers:{typescript:ts.version,html:'Inert JSDOM, scripts/resources not enabled'},limits:'Actual AST nodes and inert DOM elements, never comments or a dormant Page file. Active source/public entry preflight only. No paired pool reproduction, game test, App fix, build, browser journey, real-data truth or release claim. Native route reachability remains unqualified.'},null,2));dom.window.close();console.log('PASS actual direct Transfer Path route, React lazy Page import, labeled Soccer catalog object and indexable nonredirect snapshot');
+          NODE
+      - name: Proper App types
+        run: |
+          set -euo pipefail
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee transfer-path-paired-pools-full/types.log
+      - name: Authenticate completed active original fixed and physical controls archives
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
-          test ! -e "$EVIDENCE"
-          mkdir "$EVIDENCE"
-          touch "$SIM_OFFLINE_RECEIPT"
-          git rev-parse HEAD > "$EVIDENCE/head.txt"
-          git rev-parse 'HEAD^{tree}' > "$EVIDENCE/tree.txt"
-          git ls-files -s > "$EVIDENCE/source-before.txt"
-          sha256sum package.json package-lock.json > "$EVIDENCE/locks-before.txt"
-          git diff --exit-code HEAD -- .
-          git fetch --no-tags --depth=1 origin "$BASE_HEAD"
-          cat > "$EVIDENCE/qualify.mjs" <<'NODE'
-          import assert from 'node:assert/strict';
+          node --input-type=module <<'NODE'
           import fs from 'node:fs';
           import path from 'node:path';
-          import { createHash } from 'node:crypto';
-          import { execFileSync, spawnSync } from 'node:child_process';
-          
-          const stage = process.env.TRANSFER_PATH_STAGE;
-          const out = process.env.EVIDENCE;
-          const hook = 'src/hooks/useTransferPath.ts';
-          const test = 'src/hooks/useTransferPathPairedPools.test.ts';
-          const plan = 'docs/plans/2026-11-10-transfer-path-paired-pools.md';
-          const workflow = '.github/workflows/transfer-path-paired-pools-20261110.yml';
-          const { BASE_HEAD: parent, BASE_TREE: parentTree, ORIGINAL_HOOK: originalHook, FIXED_HOOK: fixedHook, TEST_BLOB: testBlob, PLAN_BLOB: planBlob } = process.env;
-          const refs = {"original":{"run":42772737404,"job":129684090378,"steps":12,"artifact":13742408553,"name":"transfer-path-paired-pools-original-42772737404","head":"a043c60be1dbe35356559eea04f1daa9c9bbb507","tree":"7cadf3278d570d3b4131ef6b6cf8f81ea372dc91","workflow":"53827ff8ad51e5c994ceceb62ad2b9a779f29eb0","zipBytes":1000350,"zipSHA256":"51dab8b63c09f54e557938a8d185f4d750e9fa8e0caffae20ab65eed9adb9ce8","bodies":20,"files":{"head.txt":"71a701f3d1196c8fae2c03ad19d1cc65bbb6c3bbcf6c1e3a92779b46251c8e7b","tree.txt":"b44c5d56ef0b3591d0fa4734131fc82ab3f58b1c8a518fa7fb17877c4a677d99","source-receipt.json":"f45293f1919343e6a21b2a9a3c86153231895e90167328d4bf955db038be8ce4","original-result.json":"b25769ce7332ac8314899fdc1407e001d8f1bb70a615bc727842fd77314b06d9","public-cases.raw.json":"09ddecbd9e7c9d4b59c3a51bc22bfe636d6301e77adf41ab9f68dd0fb51cec2e","vitest.json":"6e1cf3828b1db627fd1d627da3699d9ca3898f641cf860fe0d0ccdcdba78f4d5","vitest-exit.txt":"4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865","source-before.txt":"5c2c61fac488da3fb7db808ea9507506dca8819698ba4ef6c5689e797c44c044","source-after.txt":"5c2c61fac488da3fb7db808ea9507506dca8819698ba4ef6c5689e797c44c044","locks-before.txt":"d316e23dae0f11f4fabcf8edd97204c9b780c6da8a0f6307c86940cbdd28e3d7","locks-after.txt":"d316e23dae0f11f4fabcf8edd97204c9b780c6da8a0f6307c86940cbdd28e3d7","offline.log":"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855","types.log":"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"},"independentAuditSHA256":"aad90db93458b98dd6a4eaedd25260c96e1d76b177fd8272a4d2faa6e09e98ae"}};
-          const options = { maxBuffer: 64 * 1024 * 1024 };
-          const cmd = (program, args) => execFileSync(program, args, options);
-          const git = (...args) => cmd('git', args).toString('utf8');
-          const hash = (algorithm, bytes) => createHash(algorithm).update(bytes).digest('hex');
-          const sha = bytes => hash('sha256', bytes);
-          const blob = bytes => hash('sha1', Buffer.concat([Buffer.from('blob ' + bytes.length + '\0'), bytes]));
-          const read = file => fs.readFileSync(path.join(out, file));
-          const json = file => JSON.parse(read(file));
-          const write = (file, body) => fs.writeFileSync(path.join(out, file), body);
-          const save = (file, value) => write(file, JSON.stringify(value, null, 2) + '\n');
-          const sorted = rows => [...rows].sort();
-          const tree = ref => new Map(git('ls-tree', '-r', '-z', ref).split('\0').filter(Boolean).map(row => {
-            const match = /^(100(?:644|755)) blob ([a-f0-9]{40})\t(.+)$/.exec(row);
-            assert(match, row);
-            return [match[3], [match[1], match[2]]];
-          }));
-          const source = () => ({
-            head: git('rev-parse', 'HEAD').trim(), tree: git('rev-parse', 'HEAD^{tree}').trim(), parent, parentTree,
-            hook: fixedHook, test: testBlob, plan: planBlob, workflow: git('rev-parse', 'HEAD:' + workflow).trim(),
-            trackedRows: 5796, heldParentRows: 5792, sourceRows: 4666,
+          import assert from 'node:assert/strict';
+          import {execFileSync} from 'node:child_process';
+          import {createHash} from 'node:crypto';
+          const out='transfer-path-paired-pools-full',env=process.env;
+          const workflow='.github/workflows/transfer-path-paired-pools-20261110.yml',roleNames=['preflight','original','fixed','controls'];
+          const bindings={"preflight":{"run":42770957656,"job":129678374522,"jobName":"preflight","stepCount":11,"attempt":1,"head":"12bf3ddedc670859c98907b12227ce4f3db27e48","tree":"52873da939dfdc3b1c1e23c0956ce343997f465f","workflow":"3db82e7b3875d01e6b0f3adcd00cf03a69eaaccf","branch":"codex/transfer-path-paired-pools-preflight-qa-20261110","artifact":13741971510,"artifactName":"transfer-path-paired-pools-active-preflight-42770957656","zipBytes":1014067,"zipSHA256":"1b3eaa6d75bdf7b90feee5e5f1c8e77ba5719243247dd8bb71430a2ed6943070","bodyBytes":2673084,"bodies":[{"file":"active-route-preflight.json","bytes":1308,"sha256":"fe02c0629d5ee15f9677f690ea95790bb750d7c9c3316620b0c0de1d06df1c44"},{"file":"active-snapshot.html","bytes":23149,"sha256":"4a3f9c4fab177618028541cc9c6f3cf79c2d1b45a8c78514ff97264b10e9e1e2"},{"file":"final-holds.json","bytes":396,"sha256":"cc9b4c598e16838de9a0df69ebb394bbbc9af2046189680dd616b819ab187840"},{"file":"head.txt","bytes":41,"sha256":"7f82eb127eb26c27ca35f284d23abf0803777e1f58a7373f7a8cffd4468b6644"},{"file":"install.log","bytes":1391,"sha256":"20f30bd91ea49bf2ad243fc71c67bb7b11fd94b0d104bb1698dec4d1f88ed765"},{"file":"installed-after.json","bytes":22175,"sha256":"1268d6ef069c4189836716fed6ebe4dd324c661cacf53981b6a227608aa383e8"},{"file":"installed-before.json","bytes":22175,"sha256":"1268d6ef069c4189836716fed6ebe4dd324c661cacf53981b6a227608aa383e8"},{"file":"locks-after.txt","bytes":163,"sha256":"d316e23dae0f11f4fabcf8edd97204c9b780c6da8a0f6307c86940cbdd28e3d7"},{"file":"locks-before.txt","bytes":163,"sha256":"d316e23dae0f11f4fabcf8edd97204c9b780c6da8a0f6307c86940cbdd28e3d7"},{"file":"offline.log","bytes":0,"sha256":"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"},{"file":"source-after.txt","bytes":503332,"sha256":"6cf7292a16f53656dd98ee766240dbbed6b3d288ab576e0884d40bdd52e4c774"},{"file":"source-before.txt","bytes":503332,"sha256":"6cf7292a16f53656dd98ee766240dbbed6b3d288ab576e0884d40bdd52e4c774"},{"file":"source-join.json","bytes":3666,"sha256":"938ccf76ab45738c8a8c9108e8d9603702395a16efa4c0ca77892ca0eb54af3b"},{"file":"tracked-after.json","bytes":795876,"sha256":"5c6f57901892473156807a4e08750bd6f5cca74bbc8f3b0a853679d1d4b5c28e"},{"file":"tracked-before.json","bytes":795876,"sha256":"5c6f57901892473156807a4e08750bd6f5cca74bbc8f3b0a853679d1d4b5c28e"},{"file":"tree.txt","bytes":41,"sha256":"2538e70953018d1607ad5db92018354f9cd0055b1d75b71a98bf2b2414f5e487"}],"independentAuditSHA256":"6311cb3f7454fabe5438eda21fb70af08e552522a6a31330892a58260f54d847"},"original":{"run":42772737404,"job":129684090378,"jobName":"original","stepCount":12,"attempt":1,"head":"a043c60be1dbe35356559eea04f1daa9c9bbb507","tree":"7cadf3278d570d3b4131ef6b6cf8f81ea372dc91","workflow":"53827ff8ad51e5c994ceceb62ad2b9a779f29eb0","branch":"codex/transfer-path-paired-pools-original-qa-20261110","artifact":13742408553,"artifactName":"transfer-path-paired-pools-original-42772737404","zipBytes":1000350,"zipSHA256":"51dab8b63c09f54e557938a8d185f4d750e9fa8e0caffae20ab65eed9adb9ce8","bodyBytes":2534593,"bodies":[{"file":"head.txt","bytes":41,"sha256":"71a701f3d1196c8fae2c03ad19d1cc65bbb6c3bbcf6c1e3a92779b46251c8e7b"},{"file":"install.log","bytes":1391,"sha256":"799cefa92f9e2f133a6e66558fc6a19fb4976477279d111e282edffe8bde5eaf"},{"file":"installed-after.json","bytes":22175,"sha256":"1268d6ef069c4189836716fed6ebe4dd324c661cacf53981b6a227608aa383e8"},{"file":"installed-before.json","bytes":22175,"sha256":"1268d6ef069c4189836716fed6ebe4dd324c661cacf53981b6a227608aa383e8"},{"file":"locks-after.txt","bytes":163,"sha256":"d316e23dae0f11f4fabcf8edd97204c9b780c6da8a0f6307c86940cbdd28e3d7"},{"file":"locks-before.txt","bytes":163,"sha256":"d316e23dae0f11f4fabcf8edd97204c9b780c6da8a0f6307c86940cbdd28e3d7"},{"file":"offline.log","bytes":0,"sha256":"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"},{"file":"original-result.json","bytes":3181,"sha256":"b25769ce7332ac8314899fdc1407e001d8f1bb70a615bc727842fd77314b06d9"},{"file":"physical.mjs","bytes":1368,"sha256":"b8a42eeec052d2078e7d9a772aa6914b75d6f220dec022cad1fb5b6ffd8f0ea9"},{"file":"public-cases.raw.json","bytes":129748,"sha256":"09ddecbd9e7c9d4b59c3a51bc22bfe636d6301e77adf41ab9f68dd0fb51cec2e"},{"file":"source-after.txt","bytes":503529,"sha256":"5c2c61fac488da3fb7db808ea9507506dca8819698ba4ef6c5689e797c44c044"},{"file":"source-before.txt","bytes":503529,"sha256":"5c2c61fac488da3fb7db808ea9507506dca8819698ba4ef6c5689e797c44c044"},{"file":"source-receipt.json","bytes":2698,"sha256":"f45293f1919343e6a21b2a9a3c86153231895e90167328d4bf955db038be8ce4"},{"file":"tracked-after.json","bytes":657069,"sha256":"679da3a82903a38a121ffe9d84f1faa3e607b629a4fe80cf21dbc81d7bf6adec"},{"file":"tracked-before.json","bytes":657069,"sha256":"679da3a82903a38a121ffe9d84f1faa3e607b629a4fe80cf21dbc81d7bf6adec"},{"file":"tree.txt","bytes":41,"sha256":"b44c5d56ef0b3591d0fa4734131fc82ab3f58b1c8a518fa7fb17877c4a677d99"},{"file":"types.log","bytes":0,"sha256":"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"},{"file":"vitest-exit.txt","bytes":2,"sha256":"4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"},{"file":"vitest.json","bytes":6405,"sha256":"6e1cf3828b1db627fd1d627da3699d9ca3898f641cf860fe0d0ccdcdba78f4d5"},{"file":"vitest.log","bytes":23846,"sha256":"f62975864f3d0d1f3b8831c1e6f4e0e0a7aa8a48d1943e1c02c8654520c85875"}],"independentAuditSHA256":"aad90db93458b98dd6a4eaedd25260c96e1d76b177fd8272a4d2faa6e09e98ae"},"fixed":{"run":42773696472,"job":129687160094,"jobName":"fixed","stepCount":12,"attempt":1,"head":"2fa24fba0a30b211b12e45953a119c36a223cbcd","tree":"63ca6a735969c3f97f56879ec16ca6d317a38fa3","workflow":"8fa69b6204d083b3248560bf013e366f1637ff35","branch":"codex/transfer-path-paired-pools-fixed-qa-20261110","artifact":13742653309,"artifactName":"transfer-path-paired-pools-fixed-42773696472","zipBytes":2003616,"zipSHA256":"3d6371fdb198144713b6a9adde3c39a6e6e27a86b016e2faa262ef1af93e4d70","bodyBytes":3559167,"bodies":[{"file":"admission.json","bytes":7085,"sha256":"b67f549e10b6b590bece30cfc80a90af01a706a1676796987bd5d4e84e75b559"},{"file":"fixed/public-cases.raw.json","bytes":144543,"sha256":"bf5daaa5d936a3c78fabc8d5ac4ad8a77ab2b53416858958e56f39811c36a835"},{"file":"fixed/result.json","bytes":4009,"sha256":"7c29c66fccdb62d861298c3f228546e1653c35732395c15f347462d1b668f416"},{"file":"fixed/vitest-exit.txt","bytes":2,"sha256":"9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"},{"file":"fixed/vitest.json","bytes":5669,"sha256":"72b9cb568db444d28b88ecdfc5651e4406acb0a8245e7567206cda92bcc41183"},{"file":"fixed/vitest.log","bytes":5422,"sha256":"3a565447557b2cd6716c6e9e5ce332c7f0a356ce58a029940f2700a6ba6adf0b"},{"file":"head.txt","bytes":41,"sha256":"bf261031593edc70ae6547428dcf6b443edf92bfdb9228567c65e060987265a0"},{"file":"install.log","bytes":1391,"sha256":"0a090aef8e839aca0cbe2078e21ea5569cf79f672ecbadebecd602fa8d1c3ea5"},{"file":"installed-after.json","bytes":22175,"sha256":"1268d6ef069c4189836716fed6ebe4dd324c661cacf53981b6a227608aa383e8"},{"file":"installed-before.json","bytes":22175,"sha256":"1268d6ef069c4189836716fed6ebe4dd324c661cacf53981b6a227608aa383e8"},{"file":"locks-after.txt","bytes":163,"sha256":"d316e23dae0f11f4fabcf8edd97204c9b780c6da8a0f6307c86940cbdd28e3d7"},{"file":"locks-before.txt","bytes":163,"sha256":"d316e23dae0f11f4fabcf8edd97204c9b780c6da8a0f6307c86940cbdd28e3d7"},{"file":"offline.log","bytes":0,"sha256":"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"},{"file":"physical.mjs","bytes":1368,"sha256":"b8a42eeec052d2078e7d9a772aa6914b75d6f220dec022cad1fb5b6ffd8f0ea9"},{"file":"qualify.mjs","bytes":18704,"sha256":"c7556c7ace4d36692cc5073c57a913da5e56fabe96a2128deccaafac20370e15"},{"file":"reference-original-metadata.json","bytes":1751,"sha256":"e07b2cbd989d5f6cdaf830209cfd31ad11485c48499f66960360427b90aba05b"},{"file":"reference-original.zip","bytes":1000350,"sha256":"51dab8b63c09f54e557938a8d185f4d750e9fa8e0caffae20ab65eed9adb9ce8"},{"file":"source-after.txt","bytes":503529,"sha256":"318698a8b76f596e161160582708ac9d7dd3d1a19a71fc7c54b8eb1ad39de74d"},{"file":"source-before.txt","bytes":503529,"sha256":"318698a8b76f596e161160582708ac9d7dd3d1a19a71fc7c54b8eb1ad39de74d"},{"file":"source-receipt.json","bytes":2919,"sha256":"6e2c757ad06e220e559fd64ac7b9b306b897577a0f85498cea266cdf97f4016c"},{"file":"tracked-after.json","bytes":657069,"sha256":"29fce2df95b9cc2f81f8fb2528cbb96b623caaecb4cae135f7c459d9ec6a1d61"},{"file":"tracked-before.json","bytes":657069,"sha256":"29fce2df95b9cc2f81f8fb2528cbb96b623caaecb4cae135f7c459d9ec6a1d61"},{"file":"tree.txt","bytes":41,"sha256":"85d16f9605dd4cc6fa75509f1fde8fbd0badaad2c300a01757f41a6cbcce7c2f"},{"file":"types.log","bytes":0,"sha256":"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"}],"independentAuditSHA256":"6110edbcb40d9e8f225dd34edb9b26b104d1ca592f3aa00b61b6e1c5e22b54b9"},"controls":{"run":42774360903,"job":129689287116,"jobName":"controls","stepCount":12,"attempt":1,"head":"8b6c8fb9aaebca0ab6ac1b22683f80fc45ad9446","tree":"10175459e2895f224681d7cef349679b30ea8aec","workflow":"1ff1369ce3dc79892263c38058fb7a940ce5a30f","branch":"codex/transfer-path-paired-pools-controls-qa-20261110","artifact":13743931042,"artifactName":"transfer-path-paired-pools-controls-42774360903","zipBytes":4023081,"zipSHA256":"6e58c818291c41230bbb44af802e4fe91c59bbe2fea5c59ed26fb7f44f723ecf","bodyBytes":5895711,"bodies":[{"file":"admission.json","bytes":14039,"sha256":"118f1fcc44b7936906bbd3802849815aa8a8375c9450e4e1282924c31a68f85d"},{"file":"fixed/public-cases.raw.json","bytes":144543,"sha256":"bf5daaa5d936a3c78fabc8d5ac4ad8a77ab2b53416858958e56f39811c36a835"},{"file":"fixed/result.json","bytes":4008,"sha256":"e7c45926864285812a3e2a99090e770b308c2c4858ece0659f0557151600eb89"},{"file":"fixed/vitest-exit.txt","bytes":2,"sha256":"9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"},{"file":"fixed/vitest.json","bytes":5667,"sha256":"33b9ef955055c91dd6345c4134556cf88f1d3e76cef2ee87f4f3e631862de64e"},{"file":"fixed/vitest.log","bytes":5425,"sha256":"4e3c77af6e9a7d80415eba1b2a56788c4d27f0bb37b23248cf0dc085749ad88d"},{"file":"head.txt","bytes":41,"sha256":"98bf130ee34dff7e476ce7e848e31da3c6de3acb71db1dc6d00d08ffe5541233"},{"file":"install.log","bytes":1391,"sha256":"799cefa92f9e2f133a6e66558fc6a19fb4976477279d111e282edffe8bde5eaf"},{"file":"installed-after.json","bytes":22175,"sha256":"1268d6ef069c4189836716fed6ebe4dd324c661cacf53981b6a227608aa383e8"},{"file":"installed-before.json","bytes":22175,"sha256":"1268d6ef069c4189836716fed6ebe4dd324c661cacf53981b6a227608aa383e8"},{"file":"locks-after.txt","bytes":163,"sha256":"d316e23dae0f11f4fabcf8edd97204c9b780c6da8a0f6307c86940cbdd28e3d7"},{"file":"locks-before.txt","bytes":163,"sha256":"d316e23dae0f11f4fabcf8edd97204c9b780c6da8a0f6307c86940cbdd28e3d7"},{"file":"offline.log","bytes":0,"sha256":"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"},{"file":"original/public-cases.raw.json","bytes":129748,"sha256":"09ddecbd9e7c9d4b59c3a51bc22bfe636d6301e77adf41ab9f68dd0fb51cec2e"},{"file":"original/result.json","bytes":381,"sha256":"c818483860d0159b7d4b4fda794599d0d102335f2ce9d6c3b72884393b04e1db"},{"file":"original/vitest-exit.txt","bytes":2,"sha256":"4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"},{"file":"original/vitest.json","bytes":6414,"sha256":"5851f474f782756dcd6c7dc13870e696c2f84467013688c4da987a371d13de62"},{"file":"original/vitest.log","bytes":23855,"sha256":"fe5f62b7a5c137bbdac9877aafcd62191c45fc1a00703ba4a892859d8c0a95f8"},{"file":"physical-product-control.json","bytes":418,"sha256":"3882c263543841bd796e896a32a8c0f54214e7f1b5d1069bb70b71be087058ad"},{"file":"physical.mjs","bytes":1368,"sha256":"b8a42eeec052d2078e7d9a772aa6914b75d6f220dec022cad1fb5b6ffd8f0ea9"},{"file":"qualify.mjs","bytes":20400,"sha256":"9bb0c451e3d5ae7ba1d7f9fe131536089ea233b23fb3356578fcd9f1068794dc"},{"file":"reference-fixed-metadata.json","bytes":1853,"sha256":"e5ed984efa7ba83cc788d966983f4987f2725fc8892dcfa9c80c298c53802e2e"},{"file":"reference-fixed.zip","bytes":2003616,"sha256":"3d6371fdb198144713b6a9adde3c39a6e6e27a86b016e2faa262ef1af93e4d70"},{"file":"reference-original-metadata.json","bytes":1751,"sha256":"e07b2cbd989d5f6cdaf830209cfd31ad11485c48499f66960360427b90aba05b"},{"file":"reference-original.zip","bytes":1000350,"sha256":"51dab8b63c09f54e557938a8d185f4d750e9fa8e0caffae20ab65eed9adb9ce8"},{"file":"restored/public-cases.raw.json","bytes":144543,"sha256":"bf5daaa5d936a3c78fabc8d5ac4ad8a77ab2b53416858958e56f39811c36a835"},{"file":"restored/result.json","bytes":4011,"sha256":"6828abb776df77966b9300017f8bc25b2089b0c2730390f598a52038723c1b5b"},{"file":"restored/vitest-exit.txt","bytes":2,"sha256":"9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"},{"file":"restored/vitest.json","bytes":5665,"sha256":"23e259bc943928e41623210751277b195c562496d92761b3c1dff446198d85fd"},{"file":"restored/vitest.log","bytes":5428,"sha256":"6b60454d25b07787d96972f3d8ae37fdebaaac9db4085e6e2070565b9e790e85"},{"file":"source-after.txt","bytes":503529,"sha256":"382574ceae034ce5eecefbb5efe19f79e3b93caa8005ef01c5f0b25547099031"},{"file":"source-before.txt","bytes":503529,"sha256":"382574ceae034ce5eecefbb5efe19f79e3b93caa8005ef01c5f0b25547099031"},{"file":"source-receipt.json","bytes":4877,"sha256":"258eeb7a054d944b21441052faafcb23c85adafb771e0ad917721e8631e572d7"},{"file":"tracked-after.json","bytes":657069,"sha256":"064e3f3c2e42258cabc52bcef9a62e364981c4b15c35948379f4090f38b93b33"},{"file":"tracked-before.json","bytes":657069,"sha256":"064e3f3c2e42258cabc52bcef9a62e364981c4b15c35948379f4090f38b93b33"},{"file":"tree.txt","bytes":41,"sha256":"4aabebf57983af7a9c15b77988ef7f62ca4cd411c9ade3b29fe6de62f2cc5a00"},{"file":"types.log","bytes":0,"sha256":"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"}],"independentAuditSHA256":"457d964b32ef83960d8e9b77cad91e07c1dec4091bbb0a0ea0c7a479e58a37ae"}};
+          assert.deepEqual(Object.keys(bindings).sort(),[...roleNames].sort());
+          const hash=bytes=>createHash('sha256').update(bytes).digest('hex');
+          const read=(role,file)=>fs.readFileSync(path.join(out,role+'-reference',file));
+          const json=(role,file)=>JSON.parse(read(role,file));
+          const packet=(role,file)=>read(role,'packet/'+file);
+          const packetJSON=(role,file)=>JSON.parse(packet(role,file));
+          const command=(bin,...args)=>execFileSync(bin,args,{maxBuffer:256*1024*1024});
+          const tuple=(file,bytes)=>({file,bytes:bytes.length,sha256:hash(bytes)});
+          const safe=name=>typeof name==='string'&&/^[A-Za-z0-9._/-]+$/.test(name)&&name.split('/').every(part=>part&&part!=='.'&&part!=='..');
+          const walk=(dir,prefix='')=>fs.readdirSync(dir,{withFileTypes:true}).flatMap(entry=>{
+            const file=prefix+entry.name;
+            if(entry.isDirectory())return walk(path.join(dir,entry.name),file+'/');
+            assert(entry.isFile()&&!entry.isSymbolicLink(),file+' regular retained body');
+            return [file];
           });
-          const zip = role => path.join(out, 'reference-' + role + '.zip');
-          const refFile = (role, name) => cmd('unzip', ['-p', zip(role), name]);
-          
-          function authenticate(role, pin) {
-            const prefix = 'repos/PapiSalgueroM/ballpark-hero/actions/';
-            const api = endpoint => JSON.parse(cmd('gh', ['api', prefix + endpoint]));
-            const run = api('runs/' + pin.run);
-            const jobs = api('runs/' + pin.run + '/jobs?per_page=100').jobs;
-            const artifact = api('artifacts/' + pin.artifact);
-            assert.deepEqual([run.id, run.status, run.conclusion, run.event, run.run_attempt, run.path, run.head_sha, run.head_commit.tree_id, run.repository.full_name],
-              [pin.run, 'completed', 'success', 'push', 1, workflow, pin.head, pin.tree, 'PapiSalgueroM/ballpark-hero']);
-            assert.equal(jobs.length, 1);
-            assert.deepEqual([jobs[0].id, jobs[0].conclusion, jobs[0].head_sha, jobs[0].steps.length], [pin.job, 'success', pin.head, pin.steps]);
-            assert(jobs[0].steps.every(step => step.conclusion === 'success'));
-            assert.deepEqual([artifact.id, artifact.name, artifact.expired, artifact.size_in_bytes, artifact.digest, artifact.workflow_run.id, artifact.workflow_run.head_sha],
-              [pin.artifact, pin.name, false, pin.zipBytes, 'sha256:' + pin.zipSHA256, pin.run, pin.head]);
-            const bytes = cmd('gh', ['api', prefix + 'artifacts/' + pin.artifact + '/zip']);
-            assert.deepEqual([bytes.length, sha(bytes)], [pin.zipBytes, pin.zipSHA256]);
-            fs.writeFileSync(zip(role), bytes);
-            const names = cmd('unzip', ['-Z1', zip(role)]).toString().trimEnd().split('\n');
-            assert.equal(new Set(names).size, names.length);
-            for (const name of names) {
-              assert(!name.startsWith('/') && !name.includes('\\') && name.replace(/\/$/, '').split('/').every(part => part && part !== '.' && part !== '..'), name);
+          const source=JSON.parse(fs.readFileSync(out+'/source-join.json'));
+          const receipts={};
+          for(const role of roleNames){
+            const pin=bindings[role],dir=path.join(out,role+'-reference'),archive=path.join(dir,'artifact.zip');
+            assert([pin.run,pin.job,pin.artifact,pin.zipBytes,pin.bodyBytes,pin.stepCount,pin.attempt].every(value=>Number.isSafeInteger(value)&&value>0));
+            assert([pin.head,pin.tree,pin.workflow].every(value=>/^[a-f0-9]{40}$/.test(value)));
+            assert(/^[a-f0-9]{64}$/.test(pin.zipSHA256) && /^[a-f0-9]{64}$/.test(pin.independentAuditSHA256));
+            assert(pin.branch.startsWith('codex/')&&pin.artifactName.endsWith('-'+pin.run)&&pin.jobName);
+            assert(Array.isArray(pin.bodies)&&pin.bodies.length>0);
+            assert(pin.bodies.every(row=>safe(row.file)&&Number.isSafeInteger(row.bytes)&&row.bytes>=0&&/^[a-f0-9]{64}$/.test(row.sha256)));
+            const names=pin.bodies.map(row=>row.file).sort();
+            assert.equal(new Set(names).size,names.length);
+            assert.equal(pin.bodies.reduce((sum,row)=>sum+row.bytes,0),pin.bodyBytes);
+            fs.mkdirSync(dir);
+            const endpoint='repos/PapiSalgueroM/ballpark-hero/actions/';
+            for(const [file,url] of Object.entries({'run.json':'runs/'+pin.run,'jobs.json':'runs/'+pin.run+'/jobs?per_page=100',
+              'artifact.json':'artifacts/'+pin.artifact,'artifact.zip':'artifacts/'+pin.artifact+'/zip'}))
+              fs.writeFileSync(path.join(dir,file),command('gh','api',endpoint+url),{flag:'wx'});
+            const run=json(role,'run.json'),jobs=json(role,'jobs.json'),meta=json(role,'artifact.json');
+            const artifact=meta.artifacts?.[0]??meta;
+            if(meta.artifacts)assert.equal(meta.artifacts.length,1);
+            assert.deepEqual([run.id,run.status,run.conclusion,run.head_sha,run.head_commit.tree_id,run.event,run.repository.full_name,run.path,run.head_branch,run.run_attempt],
+              [pin.run,'completed','success',pin.head,pin.tree,'push','PapiSalgueroM/ballpark-hero',workflow,pin.branch,pin.attempt]);
+            assert.equal(jobs.jobs.length,1);
+            const job=jobs.jobs[0];
+            assert.deepEqual([job.id,job.run_id,job.head_sha,job.name,job.status,job.conclusion,job.run_attempt,job.steps.length],
+              [pin.job,pin.run,pin.head,pin.jobName,'completed','success',pin.attempt,pin.stepCount]);
+            assert(job.steps.every(row=>row.status==='completed'&&row.conclusion==='success'));
+            assert.deepEqual([artifact.id,artifact.name,artifact.expired,artifact.size_in_bytes,artifact.digest,artifact.workflow_run.id,artifact.workflow_run.head_sha,artifact.workflow_run.head_branch],
+              [pin.artifact,pin.artifactName,false,pin.zipBytes,'sha256:'+pin.zipSHA256,pin.run,pin.head,pin.branch]);
+            const archiveBytes=read(role,'artifact.zip');
+            assert.deepEqual([archiveBytes.length,hash(archiveBytes)],[pin.zipBytes,pin.zipSHA256]);
+            assert.deepEqual(command('unzip','-Z1',archive).toString('utf8').trimEnd().split('\n').sort(),names);
+            const dirPacket=path.join(dir,'packet');
+            fs.mkdirSync(dirPacket);
+            command('unzip','-q',archive,'-d',dirPacket);
+            assert.deepEqual(walk(dirPacket).sort(),names);
+            for(const row of pin.bodies){
+              const body=packet(role,row.file);
+              assert.deepEqual(tuple(row.file,body),row);
+              assert(body.equals(command('unzip','-p',archive,row.file)),row.file+' exact archived and extracted bytes');
             }
-            assert.equal(names.filter(name => !name.endsWith('/')).length, pin.bodies);
-            assert.equal(refFile(role, 'head.txt').toString().trim(), pin.head);
-            assert.equal(refFile(role, 'tree.txt').toString().trim(), pin.tree);
-            for (const [name, digest] of Object.entries(pin.files)) assert.equal(sha(refFile(role, name)), digest, name);
-            save('reference-' + role + '-metadata.json', { ...pin, authenticated: true });
+            assert.equal(packet(role,'head.txt').toString('utf8').trim(),pin.head);
+            assert.equal(packet(role,'tree.txt').toString('utf8').trim(),pin.tree);
+            const {bodies,...roleMetadata}=pin;
+            receipts[role]={...roleMetadata,bodyCount:bodies.length};
+            const inventory=walk(dir).sort().map(file=>tuple(file,read(role,file)));
+            fs.writeFileSync(out+'/'+role+'-reference-before.json',JSON.stringify(inventory),{flag:'wx'});
+          }
+          assert.deepEqual([receipts.fixed.head,receipts.fixed.tree,receipts.fixed.workflow],[source.fixedHead,source.fixedTree,env.TRANSFER_PATH_PAIRED_POOLS_FIXED_WORKFLOW]);
+          const fullRead=file=>fs.readFileSync(path.join(out,file));
+          const helper='scripts/qa/playTransferPathPairedPools.mjs';
+          const omit=(body,paths)=>body.toString('utf8').trimEnd().split('\n').filter(line=>!paths.includes(line.split('\t')[1]));
+          assert.deepEqual(omit(fullRead('source-before.txt'),[workflow,helper]),omit(packet('fixed','source-before.txt'),[workflow]),'All 5795 held fixed index tuples');
+          const sourceRows=(rows,paths)=>rows.filter(row=>!paths.includes(row.file)).map(({file,bytes,sha256})=>({file,bytes,sha256})).sort((a,b)=>a.file<b.file?-1:a.file>b.file?1:0);
+          const heldFull=sourceRows(JSON.parse(fullRead('tracked-before.json')),[workflow,helper]);
+          assert.equal(heldFull.length,5795);
+          assert.deepEqual(heldFull,sourceRows(packetJSON('fixed','tracked-before.json').map(([file,bytes,sha256])=>({file,bytes,sha256})),[workflow]),'All 5795 held fixed physical source tuples');
+          assert(fullRead('locks-before.txt').equals(packet('fixed','locks-before.txt')),'Exact fixed lock bytes');
+          assert.deepEqual(JSON.parse(fullRead('installed-before.json')),packetJSON('fixed','installed-before.json'),'All 521 held fixed locked versions');
+          assert.deepEqual([receipts.preflight.run,receipts.preflight.artifact,receipts.preflight.head,receipts.preflight.tree,
+            receipts.preflight.workflow,receipts.preflight.zipBytes,receipts.preflight.zipSHA256,receipts.preflight.bodyCount],
+            [42770957656,13741971510,'12bf3ddedc670859c98907b12227ce4f3db27e48','52873da939dfdc3b1c1e23c0956ce343997f465f',
+             '3db82e7b3875d01e6b0f3adcd00cf03a69eaaccf',1014067,'1b3eaa6d75bdf7b90feee5e5f1c8e77ba5719243247dd8bb71430a2ed6943070',16]);
+          const originalSource=packetJSON('original','source-receipt.json');
+          assert.deepEqual(originalSource.activePreflight,{run:receipts.preflight.run,head:receipts.preflight.head,
+            job:receipts.preflight.job,artifact:receipts.preflight.artifact,digest:'sha256:'+receipts.preflight.zipSHA256});
+          for(const file of ['active-route-preflight.json','active-snapshot.html'])
+            assert(fullRead(file).equals(packet('preflight',file)),file+' exact actual active-entry join');
+          const referenceChecks=(()=>{
+          const hookPath='src/hooks/useTransferPath.ts';
+          const testPath='src/hooks/useTransferPathPairedPools.test.ts';
+          const planPath='docs/plans/2026-11-10-transfer-path-paired-pools.md';
+          const oldHook='005fbf70b087ae9ea47e2ede3f099355456ecfb5';
+          const fixedHook='285463286e53177997f01ef183576c1b271c18dd';
+          const testBlob='07b839786a9bf59b94e52a28a56080a5caca5cb4';
+          const planBlob='b9c2732f435354a2805a70dc6aed14aa3ce97d82';
+          assert.deepEqual([source.productBase,source.productBaseTree],[
+            'c9b082d04b51e1538eb78fa7791b43579fd09783','96ee0f16e764285a6bb6ed63085c6812da7ec77a',
+          ]);
+          const roleIdentity=pin=>[pin.run,pin.job,pin.artifact,pin.head,pin.tree,pin.workflow,pin.zipBytes,pin.zipSHA256,pin.bodyCount,pin.stepCount,pin.independentAuditSHA256];
+          assert.deepEqual(roleIdentity(receipts.preflight),[
+            42770957656,129678374522,13741971510,'12bf3ddedc670859c98907b12227ce4f3db27e48','52873da939dfdc3b1c1e23c0956ce343997f465f',
+            '3db82e7b3875d01e6b0f3adcd00cf03a69eaaccf',1014067,'1b3eaa6d75bdf7b90feee5e5f1c8e77ba5719243247dd8bb71430a2ed6943070',16,11,
+            '6311cb3f7454fabe5438eda21fb70af08e552522a6a31330892a58260f54d847',
+          ]);
+          assert.deepEqual(roleIdentity(receipts.original),[
+            42772737404,129684090378,13742408553,'a043c60be1dbe35356559eea04f1daa9c9bbb507','7cadf3278d570d3b4131ef6b6cf8f81ea372dc91',
+            '53827ff8ad51e5c994ceceb62ad2b9a779f29eb0',1000350,'51dab8b63c09f54e557938a8d185f4d750e9fa8e0caffae20ab65eed9adb9ce8',20,12,
+            'aad90db93458b98dd6a4eaedd25260c96e1d76b177fd8272a4d2faa6e09e98ae',
+          ]);
+          assert.deepEqual([receipts.fixed.bodyCount,receipts.fixed.stepCount,receipts.controls.bodyCount,receipts.controls.stepCount],[24,12,37,12]);
+          for(const role of ['preflight','original','fixed','controls']){
+            for(const [name,ext] of [['source','txt'],['tracked','json'],['installed','json'],['locks','txt']])
+              assert(packet(role,name+'-before.'+ext).equals(packet(role,name+'-after.'+ext)),role+' exact '+name+' holds');
+            for(const file of ['installed-before.json','locks-before.txt'])
+              assert(packet(role,file).equals(packet('preflight',file)),role+' exact admitted '+file);
+            assert.equal(packetJSON(role,'installed-before.json').length,521);
+            assert.equal(packet(role,'offline.log').length,0);
+            if(role!=='preflight')assert.equal(packet(role,'types.log').length,0);
+          }
+          const route=packetJSON('preflight','active-route-preflight.json');
+          assert.deepEqual([route.status,route.route,route.component,route.label,route.snapshot.bytes,route.snapshot.sha256,
+            route.snapshot.canonical,route.snapshot.snapshotTextLength,route.snapshot.retiredMarkers,route.snapshot.metaRefresh,route.snapshot.robots],
+            ['passed','/transfer-path','TransferPath','Transfer Path',23149,'4a3f9c4fab177618028541cc9c6f3cf79c2d1b45a8c78514ff97264b10e9e1e2',
+              'https://douknowball.com/transfer-path',5804,0,0,[]]);
+          const snapshot=packet('preflight','active-snapshot.html');
+          assert.deepEqual([snapshot.length,hash(snapshot)],[route.snapshot.bytes,route.snapshot.sha256]);
+          
+          const originalSource=packetJSON('original','source-receipt.json');
+          const originalPin=receipts.original,preflightPin=receipts.preflight;
+          assert.deepEqual([originalSource.head,originalSource.tree,originalSource.parent,originalSource.parentTree,
+            originalSource.ownedWorkflow,originalSource.trackedRows,originalSource.heldRows,originalSource.sourceRows,
+            originalSource.pins[hookPath],originalSource.pins[testPath],originalSource.pins[planPath]],
+            [originalPin.head,originalPin.tree,source.productBase,source.productBaseTree,originalPin.workflow,5796,5793,4666,oldHook,testBlob,planBlob]);
+          assert.deepEqual(originalSource.activePreflight,{run:preflightPin.run,head:preflightPin.head,job:preflightPin.job,artifact:preflightPin.artifact,digest:'sha256:'+preflightPin.zipSHA256});
+          
+          const indexRows=role=>packet(role,'source-before.txt').toString('utf8').trimEnd().split('\n');
+          const omitIndex=(rows,omitted)=>rows.filter(row=>!omitted.includes(row.split('\t')[1]));
+          const indexPin=(rows,file,blob)=>assert.deepEqual(rows.filter(row=>row.split('\t')[1]===file),['100644 '+blob+' 0\t'+file],file);
+          const physicalRows=role=>packetJSON(role,'tracked-before.json').map(row=>Array.isArray(row)?row:[row.file,row.bytes,row.sha256]);
+          const omitPhysical=(rows,omitted)=>rows.filter(row=>!omitted.includes(row[0])).sort(([a],[b])=>a<b?-1:a>b?1:0);
+          for(const [previous,current,prevOmit,currentOmit,held] of [
+            ['preflight','original',[workflow],[workflow,testPath,planPath],5793],
+            ['original','fixed',[workflow,hookPath],[workflow,hookPath],5794],
+            ['fixed','controls',[workflow],[workflow],5795],
+          ]){
+            const oldIndex=omitIndex(indexRows(previous),prevOmit),newIndex=omitIndex(indexRows(current),currentOmit);
+            assert.equal(oldIndex.length,held);
+            assert.deepEqual(newIndex,oldIndex,current+' every held stage-zero path mode/blob tuple');
+            const oldPhysical=omitPhysical(physicalRows(previous),prevOmit),newPhysical=omitPhysical(physicalRows(current),currentOmit);
+            assert.equal(oldPhysical.length,held);
+            assert.deepEqual(newPhysical,oldPhysical,current+' every held physical source tuple');
+          }
+          for(const role of ['original','fixed','controls']){
+            const rows=indexRows(role);
+            assert.equal(rows.length,5796);
+            indexPin(rows,hookPath,role==='original'?oldHook:fixedHook);
+            indexPin(rows,testPath,testBlob);
+            indexPin(rows,planPath,planBlob);
+            indexPin(rows,workflow,receipts[role].workflow);
           }
           
-          function prepare() {
-            assert(['fixed', 'controls'].includes(stage));
-            assert.equal(process.env.GITHUB_SHA, source().head);
-            assert.deepEqual(git('rev-list', '--parents', '-n', '1', 'HEAD').trim().split(' '), [source().head, parent]);
-            assert.equal(git('rev-parse', parent + '^{tree}').trim(), parentTree);
-            const old = tree(parent);
-            const current = tree('HEAD');
-            const owned = sorted([workflow, hook, test, plan]);
-            assert.equal(old.size, 5793);
-            assert.equal(current.size, 5796);
-            assert.equal([...current.keys()].filter(file => /^(src|public|scripts)\//.test(file)).length, 4666);
-            const changed = sorted(new Set([...old.keys(), ...current.keys()])).filter(file =>
-              JSON.stringify(old.get(file)) !== JSON.stringify(current.get(file)));
-            assert.deepEqual(changed, owned);
-            assert.deepEqual(old.get(hook), ['100644', originalHook]);
-            for (const [file, pin] of [[hook, fixedHook], [test, testBlob], [plan, planBlob], [workflow, source().workflow]]) {
-              assert.deepEqual(current.get(file), ['100644', pin], file);
-              assert.equal(blob(fs.readFileSync(file)), pin, file);
+          const held={'src/hooks/useTransferPath.test.ts':2,'src/hooks/useTransferPathGuidance.test.ts':8};
+          const titles=new Map([
+            ['uses the live puzzle and career pools when both arrive',null],
+            ['keeps both bundled pools when both providers are empty',null],
+            ['keeps both bundled pools when only live puzzles arrive','TRANSFER_PATH_PUZZLES_ONLY'],
+            ['keeps both bundled pools when only live careers arrive','TRANSFER_PATH_PLAYERS_ONLY'],
+          ]);
+          const oldReport=packetJSON('original','vitest.json');
+          function inspectReport(parsed,isOriginal,log){
+            assert.deepEqual([parsed.numTotalTests,parsed.numPassedTests,parsed.numFailedTests,parsed.numPendingTests,parsed.numTodoTests,parsed.success,parsed.testResults.length],
+              [14,isOriginal?12:14,isOriginal?2:0,0,0,!isOriginal,3]);
+            assert(!/SIM_OFFLINE_BLOCK|Unhandled Errors?|Unhandled Rejection|Uncaught Exception|Failed Suites|Worker exited|Test timed out/i.test(log));
+            for(const key of ['numRuntimeErrorTestSuites','numUnhandledErrors'])if(Object.hasOwn(parsed,key))assert.equal(parsed[key],0);
+            for(const key of ['errors','unhandledErrors','testExecutionErrors'])if(Object.hasOwn(parsed,key))assert.deepEqual(parsed[key],[]);
+            for(const [file,count] of Object.entries({...held,[testPath]:4})){
+              const matches=parsed.testResults.filter(row=>row.name.endsWith('/'+file));
+              const old=oldReport.testResults.filter(row=>row.name.endsWith('/'+file));
+              assert.equal(matches.length,1,file);assert.equal(old.length,1,file);
+              const [suite]=matches,isNew=file===testPath;
+              assert.deepEqual([suite.status,suite.message,suite.assertionResults.length],[isOriginal&&isNew?'failed':'passed','',count],file);
+              assert.deepEqual(suite.assertionResults.map(row=>row.fullName).sort(),old[0].assertionResults.map(row=>row.fullName).sort(),file);
+              if(isNew)assert.deepEqual(suite.assertionResults.map(row=>row.title).sort(),[...titles.keys()].sort(),file);
+              for(const row of suite.assertionResults){
+                const marker=isNew&&isOriginal&&titles.get(row.title);
+                assert.deepEqual([row.status,row.failureMessages.length],[marker?'failed':'passed',marker?1:0],row.fullName);
+                if(marker)assert(row.failureMessages[0].startsWith('AssertionError: '+marker+':'),row.fullName);
+              }
             }
-            assert.equal(git('status', '--porcelain', '--untracked-files=no'), '');
-            assert.deepEqual(Object.keys(refs).sort(), stage === 'fixed' ? ['original'] : ['fixed', 'original']);
-            for (const [role, pin] of Object.entries(refs)) authenticate(role, pin);
-            save('source-receipt.json', { ...source(), pins: { [hook]: fixedHook, [test]: testBlob, [plan]: planBlob }, owned, references: refs });
           }
+          const originalRaw=packet('original','public-cases.raw.json');
+          const fixedRaw=packet('fixed','fixed/public-cases.raw.json');
+          const originalResult=packetJSON('original','original-result.json');
+          assert.deepEqual([originalResult.status,originalResult.total,originalResult.passes,originalResult.failed,originalResult.markers,originalResult.rawBytes,originalResult.rawSHA256],
+            ['expected-original-business-failures',14,12,2,[...titles.values()].filter(Boolean),originalRaw.length,hash(originalRaw)]);
+          const negative=originalResult.checks;
+          assert.deepEqual([negative.status,negative.cases,negative.frames,negative.actions,negative.providerEvents,negative.saveWrites,negative.rawBytes,negative.rawSHA256],
+            ['passed',4,44,24,16,8,originalRaw.length,hash(originalRaw)]);
+          assert.deepEqual(negative.caseChecks.map(row=>[row.key,row.marker,row.dailyStatus,row.dailyScore,row.unlimitedStatus,row.unlimitedScore]),[
+            ['pairedLive',null,'won',1000,'won',1000],['pairedFallback',null,'won',1000,'won',1000],
+            ['puzzlesOnly','TRANSFER_PATH_PUZZLES_ONLY','gaveup',0,'gaveup',0],['playersOnly','TRANSFER_PATH_PLAYERS_ONLY','gaveup',0,'gaveup',0],
+          ]);
+          inspectReport(oldReport,true,packet('original','vitest.log').toString('utf8'));
+          assert.equal(packet('original','vitest-exit.txt').toString('utf8').trim(),'1');
           
-          const heldCases = {"src/hooks/useTransferPath.test.ts":2,"src/hooks/useTransferPathGuidance.test.ts":8};
-          const markers = new Map([["uses the live puzzle and career pools when both arrive",null],["keeps both bundled pools when both providers are empty",null],["keeps both bundled pools when only live puzzles arrive","TRANSFER_PATH_PUZZLES_ONLY"],["keeps both bundled pools when only live careers arrive","TRANSFER_PATH_PLAYERS_ONLY"]]);
-          function compareRaw(raw, originalRaw) {
-            const evidence = JSON.parse(raw);
+          function compareFixed(raw,originalRaw){
+            const evidence=JSON.parse(raw);
             const sha256 = bytes => createHash('sha256').update(bytes).digest('hex');
             assert.ok(Buffer.isBuffer(originalRaw) && Buffer.isBuffer(raw), 'physical original and fresh RAW bodies');
             assert.strictEqual(originalRaw.length, 129748, 'admitted original RAW bytes');
@@ -148,7 +383,7 @@ jobs:
             const stringify = value => Buffer.from(JSON.stringify(value, null, 2) + '\n');
             assert.ok(originalRaw.equals(stringify(original)), 'entire admitted original RAW serialization');
             assert.ok(raw.equals(stringify(evidence)), 'entire fresh fixed RAW serialization');
-            
+          
             const keys = ['pairedLive', 'pairedFallback', 'puzzlesOnly', 'playersOnly'];
             assert.deepStrictEqual(Object.keys(original.cases), keys);
             assert.deepStrictEqual(Object.keys(evidence.cases), keys);
@@ -160,14 +395,14 @@ jobs:
               puzzlesOnly: { offset: 78546, bytes: 25657, sha256: 'cba2ff34228440e31ba65f25499fc56d408819cf21691286ef93e3dee7dfb8b8' },
               playersOnly: { offset: 104224, bytes: 25517, sha256: '6780ec9e0319d3eb08acd349441155f7e4c14ea6868945af72ee39c92b935f8d' },
             };
-            
+          
             function literalCase(body, packet) {
               const bytes = Buffer.from(JSON.stringify(packet, null, 2).replace(/\n/g, '\n    '));
               const offset = body.indexOf(bytes);
               assert.ok(offset >= 0 && body.lastIndexOf(bytes) === offset, packet.key + ' unique literal case body');
               return { bytes, pin: { offset, bytes: bytes.length, sha256: sha256(bytes) } };
             }
-            
+          
             const caseChecks = [];
             for (const key of keys) {
               const prior = original.cases[key];
@@ -180,7 +415,7 @@ jobs:
                 [true, 11, 5, 4, 3],
                 key + ' all fresh fixed trace tapes',
               );
-            
+          
               const paired = key === 'pairedLive' || key === 'pairedFallback';
               if (paired) {
                 assert.ok(after.bytes.equals(before.bytes), key + ' entire literal paired case held');
@@ -200,7 +435,7 @@ jobs:
                 const expectedLiteral = Buffer.from(JSON.stringify(expected, null, 2).replace(/\n/g, '\n    '));
                 assert.ok(after.bytes.equals(expectedLiteral), key + ' whole literal fixed case has exactly the reviewed substitution');
               }
-            
+          
               assert.deepStrictEqual(
                 [fresh.frames[5].status, fresh.frames[5].score, fresh.frames[8].status, fresh.frames[8].score],
                 ['won', 1000, 'won', 1000],
@@ -229,169 +464,589 @@ jobs:
               caseChecks,
             };
           }
-          function runRole(role, wantOriginal) {
-            fs.mkdirSync(path.join(out, role));
-            const rawName = role + '/public-cases.raw.json';
-            const reportName = role + '/vitest.json';
-            const logName = role + '/vitest.log';
-            const proc = spawnSync('node_modules/.bin/vitest', ['run', test, ...Object.keys(heldCases), '--reporter=default', '--reporter=json', '--outputFile=' + path.join(out, reportName)], {
-              ...options, env: { ...process.env, NODE_OPTIONS: '--require=' + process.cwd() + '/scripts/lib/offlineTransport.cjs',
-                TRANSFER_PATH_PAIRED_POOLS_RAW: path.join(out, rawName) },
+          const fixedChecks=compareFixed(fixedRaw,originalRaw);
+          assert.deepEqual([fixedChecks.status,fixedChecks.cases,fixedChecks.frames,fixedChecks.actions,fixedChecks.providerEvents,fixedChecks.saveWrites],['passed',4,44,20,16,12]);
+          
+          for(const role of ['fixed','controls']){
+            const pin=receipts[role];
+            const stage=packetJSON(role,'admission.json'),stageSource=packetJSON(role,'source-receipt.json');
+            assert.deepEqual([stage.stage,stage.status,stage.physicalRestored,stage.offlineBytes],[role,'passed',true,0]);
+            assert.deepEqual(stage.source,{
+              head:pin.head,tree:pin.tree,parent:source.productBase,parentTree:source.productBaseTree,
+              hook:fixedHook,test:testBlob,plan:planBlob,workflow:pin.workflow,trackedRows:5796,heldParentRows:5792,sourceRows:4666,
             });
-            const log = Buffer.concat([proc.stdout ?? Buffer.alloc(0), proc.stderr ?? Buffer.alloc(0)]);
-            write(logName, log);
-            process.stdout.write(log);
-            write(role + '/vitest-exit.txt', String(proc.status) + '\n');
-            assert.ifError(proc.error);
-            assert.equal(proc.signal, null);
-            assert.equal(proc.status, wantOriginal ? 1 : 0, role);
-            assert(!/Unhandled Errors?|Unhandled Rejection|Uncaught Exception|Failed Suites|Worker exited|Test timed out/i.test(log.toString()));
-            const report = json(reportName);
-            assert.deepEqual([report.numTotalTests, report.numPassedTests, report.numFailedTests, report.numPendingTests, report.numTodoTests, report.success],
-              [14, wantOriginal ? 12 : 14, wantOriginal ? 2 : 0, 0, 0, !wantOriginal]);
-            for (const key of ['errors', 'unhandledErrors', 'testExecutionErrors']) if (Object.hasOwn(report, key)) assert.deepEqual(report[key], []);
-            assert.equal(report.testResults.length, 3);
-            for (const [file, count] of Object.entries({...heldCases, [test]: markers.size})) {
-              const matches = report.testResults.filter(suite => suite.name.endsWith('/' + file));
-              assert.equal(matches.length, 1, file);
-              const [suite] = matches;
-              const isFresh = file === test;
-              assert.deepEqual([suite.status, suite.message, suite.assertionResults.length], [isFresh && wantOriginal ? 'failed' : 'passed', '', count], file);
-              if (isFresh) assert.deepEqual(sorted(suite.assertionResults.map(row => row.title)), sorted(markers.keys()));
-              for (const row of suite.assertionResults) {
-                const isBusinessFailure = isFresh && wantOriginal && !!markers.get(row.title);
-                assert.equal(row.status, isBusinessFailure ? 'failed' : 'passed', row.title);
-                assert.equal(row.failureMessages.length, isBusinessFailure ? 1 : 0);
-                if (isBusinessFailure) assert(row.failureMessages[0].startsWith('AssertionError: ' + markers.get(row.title) + ':'));
+            for(const [key,value] of Object.entries(stage.source))assert.deepEqual(stageSource[key],value,role+' source '+key);
+            assert.deepEqual(stageSource.owned,[workflow,hookPath,testPath,planPath].sort());
+            assert.deepEqual(stageSource.pins,{[hookPath]:fixedHook,[testPath]:testBlob,[planPath]:planBlob});
+            assert.deepEqual(stageSource.references,stage.references);
+            const refRoles=role==='fixed'?['original']:['fixed','original'];
+            assert.deepEqual(Object.keys(stage.references).sort(),refRoles);
+            for(const refRole of refRoles){
+              const ref=stage.references[refRole],expected=receipts[refRole];
+              assert.deepEqual([ref.run,ref.job,ref.artifact,ref.head,ref.tree,ref.workflow,ref.zipBytes,ref.zipSHA256,ref.bodies,ref.name,ref.steps,ref.independentAuditSHA256],
+                [expected.run,expected.job,expected.artifact,expected.head,expected.tree,expected.workflow,expected.zipBytes,expected.zipSHA256,expected.bodyCount,
+                  expected.artifactName,expected.stepCount,expected.independentAuditSHA256]);
+              assert.deepEqual(packetJSON(role,'reference-'+refRole+'-metadata.json'),{...ref,authenticated:true});
+              assert(packet(role,'reference-'+refRole+'.zip').equals(read(refRole,'artifact.zip')),role+' literal nested '+refRole+' archive');
+              const allBodies=new Map(bindings[refRole].bodies.map(row=>[row.file,row.sha256]));
+              assert(Object.keys(ref.files).length>0,role+' retained '+refRole+' explicit file pins');
+              for(const [file,digest] of Object.entries(ref.files)){
+                assert.equal(digest,allBodies.get(file),role+' admitted pin '+refRole+'/'+file);
+                assert.equal(hash(packet(refRole,file)),digest,role+' retained '+refRole+'/'+file);
               }
             }
-            const raw = read(rawName);
-            const old = refFile('original', 'public-cases.raw.json');
-            let checks = null;
-            if (wantOriginal) assert(raw.equals(old), 'Complete original RAW must match qualified original');
-            else {
-              checks = compareRaw(raw, old);
-              assert.equal(checks.status, 'passed');
+            const arms=role==='fixed'?['fixed']:['fixed','original','restored'];
+            assert.deepEqual(Object.keys(stage.runs),arms);
+            for(const arm of arms){
+              const isOriginal=arm==='original';
+              const raw=packet(role,arm+'/public-cases.raw.json'),report=packet(role,arm+'/vitest.json');
+              const result=packetJSON(role,arm+'/result.json');
+              assert.deepEqual(result,stage.runs[arm]);
+              assert.deepEqual([result.role,result.code,result.passed,result.failed,result.rawBytes,result.rawSHA256,result.reportSHA256,
+                result.wholeOriginal,result.fixedOriginalDifferenceRestricted,result.wholeFixedReference],
+                [arm,isOriginal?1:0,isOriginal?12:14,isOriginal?2:0,raw.length,hash(raw),hash(report),isOriginal,!isOriginal,role==='controls'&&!isOriginal]);
+              assert(raw.equals(isOriginal?originalRaw:fixedRaw),role+' whole admitted '+arm+' RAW bytes');
+              assert.deepEqual(result.checks,isOriginal?null:fixedChecks,role+' exact '+arm+' semantic proof');
+              assert.equal(packet(role,arm+'/vitest-exit.txt').toString('utf8').trim(),isOriginal?'1':'0');
+              inspectReport(JSON.parse(report),isOriginal,packet(role,arm+'/vitest.log').toString('utf8'));
             }
-            if (stage === 'controls' && !wantOriginal) {
-              assert(raw.equals(refFile('fixed', 'fixed/public-cases.raw.json')), 'Complete fixed RAW must match qualified fixed');
-            }
-            const result = { role, code: proc.status, passed: report.numPassedTests, failed: report.numFailedTests,
-              rawBytes: raw.length, rawSHA256: sha(raw), reportSHA256: sha(read(reportName)), wholeOriginal: wantOriginal,
-              fixedOriginalDifferenceRestricted: !wantOriginal, wholeFixedReference: stage === 'controls' && !wantOriginal, checks };
-            save(role + '/result.json', result);
-            return result;
           }
-          function qualify() {
-            const product = [[hook, fixedHook, originalHook]].map(([file, expectedFixed, expectedOriginal]) => {
-              const fixed = fs.readFileSync(file);
-              const original = cmd('git', ['show', parent + ':' + file]);
-              assert.deepEqual([blob(fixed), blob(original)], [expectedFixed, expectedOriginal], file);
-              return { file, fixed, original, expectedFixed, expectedOriginal };
-            });
-            const index = git('ls-files', '-s');
-            const locks = ['package.json', 'package-lock.json'].map(file => sha(fs.readFileSync(file)));
-            const runs = { fixed: runRole('fixed', false) };
-            if (stage === 'controls') {
-              try {
-                for (const {file, original, expectedOriginal} of product) {
-                  fs.writeFileSync(file, original);
-                  assert.equal(blob(fs.readFileSync(file)), expectedOriginal);
-                }
-                assert.deepEqual(git('diff', '--name-only', 'HEAD', '--', '.').trim().split('\n'), product.map(row => row.file));
-                assert.equal(git('ls-files', '-s'), index);
-                runs.original = runRole('original', true);
-              } finally {
-                const errors = [];
-                for (const {file, fixed} of product) {
-                  try {
-                    fs.writeFileSync(file, fixed);
-                    assert(fs.readFileSync(file).equals(fixed), file);
-                  } catch (error) { errors.push(error); }
-                }
-                if (errors.length) throw new AggregateError(errors, 'Transfer Path exact physical restoration');
-              }
-              assert.equal(git('diff', '--name-only', 'HEAD', '--', '.'), '');
-              runs.restored = runRole('restored', false);
-              assert(read('restored/public-cases.raw.json').equals(read('fixed/public-cases.raw.json')));
-              save('physical-product-control.json', {
-                onlyPhysicalPaths: product.map(row => row.file),
-                sources: product.map(row => ({
-                  file: row.file, original: row.expectedOriginal, fixed: row.expectedFixed, restored: blob(fs.readFileSync(row.file)),
-                })),
-                changedProductVerified: true, indexUnchanged: git('ls-files', '-s') === index, restoredExactFixed: true,
-              });
-            }
-            for (const {file, fixed} of product) assert(fs.readFileSync(file).equals(fixed), file);
-            assert.equal(git('ls-files', '-s'), index);
-            assert.deepEqual(['package.json','package-lock.json'].map(file => sha(fs.readFileSync(file))), locks);
-            assert.equal(fs.statSync(process.env.SIM_OFFLINE_RECEIPT).size, 0);
-            save('admission.json', { stage, status: 'passed', runs, references: refs, source: source(), physicalRestored: true, offlineBytes: 0 });
-          }
-          const mode = process.argv[2];
-          if (mode === 'prepare') prepare();
-          else if (mode === 'qualify') qualify();
-          else throw new Error('Unknown Transfer Path qualification mode');
+          const physical=packetJSON('controls','physical-product-control.json');
+          assert.deepEqual(physical,{
+            onlyPhysicalPaths:[hookPath],sources:[{file:hookPath,original:oldHook,fixed:fixedHook,restored:fixedHook}],
+            changedProductVerified:true,indexUnchanged:true,restoredExactFixed:true,
+          });
+          return {
+            status:'passed',preflightRetained:true,
+            original:{cases:14,passes:12,namedBusinessFailures:2,frames:44,actions:24,providerEvents:16,saveWrites:8,rawBytes:originalRaw.length,rawSHA256:hash(originalRaw)},
+            fixed:{cases:14,passes:14,namedBusinessFailures:0,frames:44,actions:20,providerEvents:16,saveWrites:12,rawBytes:fixedRaw.length,rawSHA256:hash(fixedRaw),
+              wholePairedCases:fixedChecks.wholePairedCases,restoredMixedCases:fixedChecks.restoredMixedCases},
+            controls:{arms:3,cases:42,passes:40,namedBusinessFailures:2,frames:132,actions:64,providerEvents:48,saveWrites:32,
+              physicalRestored:true,onlyPhysicalPaths:physical.onlyPhysicalPaths,wholeRoleRawHeld:true,rerun:false},
+          };
+          })();
+          assert.equal(referenceChecks?.status,'passed','Actual original/fixed/controls semantic reference gate');
+          fs.writeFileSync(out+'/packet-custody.json',JSON.stringify({status:'passed',...receipts,referenceChecks,controlsRerun:false},null,2)+'\n',{flag:'wx'});
           NODE
-          node "$EVIDENCE/qualify.mjs" prepare
-      - name: Install locked dependencies and freeze physical source
+      - name: One fresh Transfer Path fixed unit command
         run: |
           set -euo pipefail
-          npm ci 2>&1 | tee "$EVIDENCE/install.log"
-          cat > "$EVIDENCE/physical.mjs" <<'NODE'
+          out=transfer-path-paired-pools-full
+          result=0
+          TRANSFER_PATH_PAIRED_POOLS_RAW="$PWD/$out/public-cases.raw.json" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node_modules/.bin/vitest run \
+            src/hooks/useTransferPathPairedPools.test.ts src/hooks/useTransferPath.test.ts src/hooks/useTransferPathGuidance.test.ts \
+            --reporter=default --reporter=json \
+            --outputFile="$PWD/$out/vitest.json" > "$out/vitest.log" 2>&1 || result=$?
+          cat "$out/vitest.log"
+          printf '%s\n' "$result" > "$out/vitest-exit.txt"
+          test "$result" -eq 0
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          import {createHash} from 'node:crypto';
+          const out='transfer-path-paired-pools-full',env=process.env;
+          const read=file=>fs.readFileSync(out+'/'+file),json=file=>JSON.parse(read(file));
+          const sha=bytes=>createHash('sha256').update(bytes).digest('hex');
+          const report=json('vitest.json'),log=read('vitest.log').toString('utf8');
+          assert.deepEqual([report.success,report.numTotalTests,report.numPassedTests,report.numFailedTests,report.numPendingTests,report.numTodoTests],
+            [true,14,14,0,0,0]);
+          const newFile='src/hooks/useTransferPathPairedPools.test.ts';
+          const heldCounts={'src/hooks/useTransferPath.test.ts':2,'src/hooks/useTransferPathGuidance.test.ts':8};
+          const caseTitles=['uses the live puzzle and career pools when both arrive','keeps both bundled pools when both providers are empty','keeps both bundled pools when only live puzzles arrive','keeps both bundled pools when only live careers arrive'];
+          assert.equal(report.testResults.length,3);
+          const observed=[];
+          for(const [file,count] of Object.entries({[newFile]:4,...heldCounts})){
+            const matches=report.testResults.filter(suite=>suite.name.endsWith('/'+file));
+            assert.equal(matches.length,1,file);
+            const suite=matches[0],rows=suite.assertionResults;
+            assert.deepEqual([suite.status,suite.message,rows.length],['passed','',count],file);
+            if(file===newFile)assert.deepEqual(rows.map(row=>row.title).sort(),[...caseTitles].sort(),file);
+            for(const row of rows)assert.deepEqual([row.status,row.failureMessages],['passed',[]],row.fullName);
+            observed.push({file,cases:rows.length,passes:rows.length});
+          }
+          for(const key of ['numRuntimeErrorTestSuites','numUnhandledErrors'])if(Object.hasOwn(report,key))assert.equal(report[key],0);
+          for(const key of ['errors','unhandledErrors','testExecutionErrors'])if(Object.hasOwn(report,key))assert.deepEqual(report[key],[]);
+          assert(!/Unhandled Errors|Unhandled Rejection|Uncaught Exception|Failed to resolve import|No test files found|SyntaxError|ReferenceError|TypeError|timed out/i.test(log));
+          const rawFile='public-cases.raw.json',rawBytes=read(rawFile),raw=JSON.parse(rawBytes);
+          assert(rawBytes.equals(read('fixed-reference/packet/fixed/'+rawFile)),'Entire fresh fixed RAW equals completed fixed reference');
+          const fixed=json('fixed-reference/packet/admission.json'),custody=json('packet-custody.json');
+          assert.deepEqual([fixed.stage,fixed.status,fixed.runs.fixed.code,fixed.runs.fixed.passed,fixed.runs.fixed.failed,
+            fixed.runs.fixed.rawBytes,fixed.runs.fixed.rawSHA256,fixed.source.hook,custody.status],
+            ['fixed','passed',0,14,0,rawBytes.length,sha(rawBytes),env.TRANSFER_PATH_PAIRED_POOLS_HOOK_BLOB,'passed']);
+          const unitChecks=(()=>{
+          const admitted=read('fixed-reference/packet/fixed/'+rawFile);
+          assert(rawBytes.equals(admitted),'Whole fresh physical RAW matches admitted fixed');
+          assert(rawBytes.equals(Buffer.from(JSON.stringify(raw,null,2)+'\n')),'Literal fresh RAW serialization');
+          assert.deepEqual([observed.length,observed.reduce((sum,row)=>sum+row.cases,0),observed.reduce((sum,row)=>sum+row.passes,0)],[3,14,14]);
+          const fixedReportBody=read('fixed-reference/packet/fixed/vitest.json');
+          assert.equal(sha(fixedReportBody),fixed.runs.fixed.reportSHA256);
+          const fixedReport=JSON.parse(fixedReportBody);
+          assert.deepEqual([fixedReport.success,fixedReport.numTotalTests,fixedReport.numPassedTests,fixedReport.numFailedTests],[true,14,14,0]);
+          for(const suite of report.testResults){
+            const file=observed.find(row=>suite.name.endsWith('/'+row.file))?.file;
+            assert(file,'Exact fresh suite identity');
+            const completed=fixedReport.testResults.filter(row=>row.name.endsWith('/'+file));
+            assert.equal(completed.length,1,file);
+            assert.deepEqual(suite.assertionResults.map(row=>row.fullName).sort(),completed[0].assertionResults.map(row=>row.fullName).sort(),file+' exact admitted fixed suite titles');
+          }
+          
+          const prior=read('original-reference/packet/public-cases.raw.json');
+          const checks=fixed.runs.fixed.checks;
+          const reference=custody.referenceChecks;
+          assert.equal(reference.status,'passed');
+          assert.deepEqual([reference.fixed.cases,reference.fixed.passes,reference.fixed.namedBusinessFailures,reference.fixed.frames,reference.fixed.actions,
+            reference.fixed.providerEvents,reference.fixed.saveWrites,reference.fixed.rawBytes,reference.fixed.rawSHA256],
+            [14,14,0,44,20,16,12,rawBytes.length,sha(rawBytes)]);
+          assert.deepEqual([checks.status,checks.cases,checks.frames,checks.actions,checks.providerEvents,checks.saveWrites,
+            checks.rawBytes,checks.rawSHA256,checks.originalRawBytes,checks.originalRawSHA256],
+            ['passed',4,44,20,16,12,rawBytes.length,sha(rawBytes),prior.length,sha(prior)]);
+          assert.deepEqual([reference.original.rawBytes,reference.original.rawSHA256],[prior.length,sha(prior)]);
+          const keys=['pairedLive','pairedFallback','puzzlesOnly','playersOnly'];
+          assert.deepEqual(Object.keys(raw.cases),keys);
+          assert.deepEqual(checks.caseChecks.map(row=>row.key),keys);
+          assert.deepEqual(checks.wholePairedCases,keys.slice(0,2));
+          assert.deepEqual(checks.restoredMixedCases,keys.slice(2));
+          const measurements=checks.caseChecks.map(row=>{
+            const caseBody=raw.cases[row.key];
+            const bytes=Buffer.from(JSON.stringify(caseBody,null,2).replace(/\n/g,'\n    '));
+            const offset=rawBytes.indexOf(bytes);
+            assert(offset>=0&&offset===rawBytes.lastIndexOf(bytes),row.key+' unique literal fresh case');
+            assert.deepEqual({offset,bytes:bytes.length,sha256:sha(bytes)},row.fixed,row.key+' exact admitted fixed literal case');
+            const daily=caseBody.frames[5],unlimited=caseBody.frames[8];
+            assert.deepEqual([caseBody.closed,caseBody.frames.length,caseBody.actions.length,caseBody.providers.length,caseBody.writes.length,
+              daily.label,daily.status,daily.score,unlimited.label,unlimited.status,unlimited.score],
+              [true,11,5,4,3,'daily-terminal','won',1000,'unlimited-terminal','won',1000]);
+            return {
+              key:row.key,frames:caseBody.frames.length,actions:caseBody.actions.length,
+              providerEvents:caseBody.providers.length,saveWrites:caseBody.writes.length,
+              dailyScore:daily.score,unlimitedScore:unlimited.score,rawOffset:offset,bytes:bytes.length,sha256:sha(bytes),
+            };
+          });
+          return {
+            status:'passed',cases:14,newCases:4,heldCases:10,frames:44,actions:20,providerEvents:16,saveWrites:12,
+            wholeFreshFixedRawHeld:true,wholePairedCases:checks.wholePairedCases,restoredMixedCases:checks.restoredMixedCases,
+            wholeOriginalRawBytes:prior.length,wholeOriginalRawSHA256:sha(prior),measurements,
+          };
+          })();
+          assert.equal(unitChecks?.status,'passed','Actual fresh fixed semantic gate');
+          const rawRef={file:rawFile,bytes:rawBytes.length,sha256:sha(rawBytes)};
+          fs.writeFileSync(out+'/unit-admission.json',JSON.stringify({status:'passed',actualCases:report.numTotalTests,actualPasses:report.numPassedTests,actualFailures:report.numFailedTests,
+            newCases:4,heldCases:10,observed,commands:1,raw:rawRef,wholeQualifiedFixedRAWBytesHeld:true,unitChecks},null,2)+'\n',{flag:'wx'});
+          fs.writeFileSync(out+'/fixed-raw-join.json',JSON.stringify({status:'passed',fixedHead:custody.fixed.head,fixedTree:custody.fixed.tree,raw:rawRef,
+            freshUnitRAWByteEqual:true},null,2)+'\n',{flag:'wx'});
+          NODE
+      - name: Normal production build and retained bytes
+        id: build
+        run: |
+          set -euo pipefail
+          NODE_OPTIONS="--max-old-space-size=6144" npm run build 2>&1 | tee transfer-path-paired-pools-full/build.log
+          tar -czf transfer-path-paired-pools-full/dist.tgz dist
+          sha256sum transfer-path-paired-pools-full/dist.tgz > transfer-path-paired-pools-full/dist.sha256
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import {createHash} from 'node:crypto';import assert from 'node:assert/strict';
+          const walk=dir=>fs.readdirSync(dir,{withFileTypes:true}).sort((a,b)=>a.name.localeCompare(b.name)).flatMap(e=>e.isDirectory()?walk(dir+'/'+e.name):e.isFile()?[dir+'/'+e.name]:[]);
+          const rows=walk('dist').map(file=>{const b=fs.readFileSync(file);return {file,bytes:b.length,sha256:createHash('sha256').update(b).digest('hex')};});
+          assert.equal(rows.length,850);fs.writeFileSync('transfer-path-paired-pools-full/dist-before.json',JSON.stringify(rows));
+          NODE
+      - name: Isolated pinned Playwright and Chromium
+        id: browser_setup
+        timeout-minutes: 12
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          python -m pip install fonttools pillow
+          npm install --prefix "$RUNNER_TEMP/transfer-path-paired-pools-browser" --no-save --package-lock=false playwright@1.64.1 2>&1 | tee transfer-path-paired-pools-full/browser-install.log
+          test ! -e node_modules/playwright
+          ln -s "$RUNNER_TEMP/transfer-path-paired-pools-browser/node_modules/playwright" node_modules/playwright
+          node "$RUNNER_TEMP/transfer-path-paired-pools-browser/node_modules/playwright/cli.js" install --with-deps chromium 2>&1 | tee transfer-path-paired-pools-full/chromium-install.log
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const before=JSON.parse(fs.readFileSync('transfer-path-paired-pools-full/installed-before.json'));
+          const after=before.map(([p])=>[p,JSON.parse(fs.readFileSync(p+'/package.json')).version]);assert.deepEqual(after,before);
+          const pw=JSON.parse(fs.readFileSync('node_modules/playwright/package.json'));assert.equal(pw.version,'1.64.1');
+          fs.writeFileSync('transfer-path-paired-pools-full/installed-after.json',JSON.stringify(after));fs.writeFileSync('transfer-path-paired-pools-full/browser-package.json',JSON.stringify({version:pw.version,target:fs.realpathSync('node_modules/playwright')}));
+          NODE
+      - name: All required built readers and existing source fences
+        if: ${{ !cancelled() && steps.build.outcome == 'success' && steps.browser_setup.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          git fetch --no-tags --depth=1 origin "$SEO_SPLIT_BASE_REF"
+          export ONLY="simAdsense,simBrand,simHeadTags,simHiddenPages,simHubs,simIndexNow,simIndexing,simInternalLinks,simNoRivalNames,simPrerender,simPrerenderBoot,simRetiredRoutes,simSchema,simSitemap,simSnapshotAssets,simSiteSearch,simGuideHeadings,simSeoMetaSplit,simHomeCopy,simHarnessAnchors"
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/runAllSims.mjs --browser 2>&1 | tee transfer-path-paired-pools-full/readers.log
+      - name: All original route download limits
+        if: ${{ !cancelled() && steps.build.outcome == 'success' && steps.browser_setup.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          node scripts/lib/hostLikeServer.mjs dist 4173 > transfer-path-paired-pools-full/weight-host.log 2>&1 &
+          transfer_path_paired_pools_host_pid=$!
+          trap 'kill "$transfer_path_paired_pools_host_pid" 2>/dev/null || true' EXIT
+          sleep 2
+          SWEEP_OFFLINE=1 BASE=http://127.0.0.1:4173 NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/sweepWeight.mjs 2>&1 | tee transfer-path-paired-pools-full/weight.log
+      - name: Actual native Transfer Path viewport journeys and reviewed outer
+        id: native
+        timeout-minutes: 15
+        if: ${{ !cancelled() && steps.build.outcome == 'success' && steps.browser_setup.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          out=transfer-path-paired-pools-full
+          cat > "$out/native-admission-script.mjs" <<'TRANSFER_PATH_PAIRED_POOLS_NATIVE_OUTER'
+          // Read-only admission of the actual closed Transfer Path browser packet.
           import assert from 'node:assert/strict';
           import fs from 'node:fs';
+          import path from 'node:path';
           import { createHash } from 'node:crypto';
-          import { execFileSync } from 'node:child_process';
-          const stage = process.argv[2];
-          assert(['before', 'after'].includes(stage));
-          const out = process.env.EVIDENCE;
-          const index = execFileSync('git', ['ls-files', '-z'], { encoding: 'utf8' }).split('\0').filter(Boolean);
-          const source = index.map(file => {
-            const bytes = fs.readFileSync(file);
-            return [file, bytes.length, createHash('sha256').update(bytes).digest('hex')];
-          });
-          const lock = JSON.parse(fs.readFileSync('package-lock.json', 'utf8'));
-          const installed = Object.entries(lock.packages).filter(([file]) =>
-            file.startsWith('node_modules/') && fs.existsSync(file + '/package.json')
-          ).map(([file, entry]) => {
-            const version = JSON.parse(fs.readFileSync(file + '/package.json', 'utf8')).version;
-            assert.equal(version, entry.version, file);
-            return [file, version];
-          });
-          assert.equal(source.length, 5796);
-          assert.equal(installed.length, 521);
-          assert.equal(fs.statSync(process.env.SIM_OFFLINE_RECEIPT).size, 0);
-          for (const [name, data] of [['tracked', source], ['installed', installed]]) {
-            const body = JSON.stringify(data);
-            if (stage === 'after') assert.equal(body, fs.readFileSync(out + '/' + name + '-before.json', 'utf8'));
-            fs.writeFileSync(out + '/' + name + '-' + stage + '.json', body);
+          import { JSDOM } from 'jsdom';
+          
+          const p='TRANSFER_PATH_PAIRED_POOLS_',env=process.env,root=path.resolve(process.argv[2]);
+          const full=path.resolve(env[p+'FULL_UNIT']),fixed=path.resolve(env[p+'FIXED_REFERENCE']),controls=path.resolve(env[p+'CONTROLS_REFERENCE']);
+          const route='/transfer-path',day='2026-11-20',fixedDate='2026-11-21T02:30:00.000Z',key='transfer-path-daily-'+day;
+          const expectedSave=JSON.stringify({v:1,date:day,puzzleIndex:0,puzzleId:'tp-1',guesses:[{t:'give'}],gameStatus:'lost'});
+          const sha=body=>createHash('sha256').update(body).digest('hex');
+          const bytes=(dir,file)=>fs.readFileSync(path.join(dir,file));
+          const json=(dir,file)=>JSON.parse(bytes(dir,file));
+          const ref=(dir,file)=>{const body=bytes(dir,file);return {file,bytes:body.length,sha256:sha(body)};};
+          const eq=(actual,expected,label)=>assert.deepEqual(actual,expected,label);
+          function list(dir,prefix=''){
+            return fs.readdirSync(dir,{withFileTypes:true}).flatMap(item=>{
+              const file=prefix+item.name;
+              if(item.isDirectory())return list(path.join(dir,item.name),file+'/');
+              assert(item.isFile(),'Regular native evidence file '+file);
+              return [file];
+            });
           }
+          const raw=json(root,'raw.json'),report=json(root,'report.json'),manifest=json(root,'body-manifest.json');
+          eq(root,path.join(full,'browser'));
+          eq([raw.schema,raw.status,raw.route,raw.page,raw.hook,raw.helper,raw.day,raw.fixedDate],
+            [1,'passed',route,env[p+'PAGE_BLOB'],env[p+'HOOK_BLOB'],env[p+'HELPER'],day,fixedDate]);
+          assert(/^http:\/\/127\.0\.0\.1:\d+$/.test(raw.base)&&typeof raw.chromium==='string'&&raw.chromium.length>0);
+          const source=json(full,'source-join.json'),unit=json(full,'unit-admission.json'),joined=json(full,'fixed-raw-join.json'),custody=json(full,'packet-custody.json');
+          eq(raw.source,{head:source.head,tree:source.tree,trackedBodies:5797,sourceRows:4667,rootConfigurations:11,distBodies:850,installedVersions:521});
+          eq([source.status,source.head,source.trackedRows,source.sourceRows,source.rootConfigurations.length,source.helperBlob],
+            ['passed',env.GITHUB_SHA,5797,4667,11,raw.helper]);
+          eq([unit.status,unit.actualCases,unit.actualPasses,unit.actualFailures,unit.wholeQualifiedFixedRAWBytesHeld,joined.freshUnitRAWByteEqual,custody.status],
+            ['passed',14,14,0,true,true,'passed']);
+          eq(raw.inputs,{
+            full:['source-join.json','unit-admission.json','fixed-raw-join.json','packet-custody.json','tracked-before.json','dist-before.json',
+              'installed-before.json','public-cases.raw.json'].map(file=>ref(full,file)),
+            fixed:['packet/admission.json','packet/fixed/public-cases.raw.json'].map(file=>ref(fixed,file)),
+            controls:['packet/admission.json'].map(file=>ref(controls,file)),
+          });
+          assert(bytes(full,'public-cases.raw.json').equals(bytes(fixed,'packet/fixed/public-cases.raw.json')));
+          eq(bytes(full,'offline.log').length,0);
+          const built=new Map(json(full,'dist-before.json').map(row=>[row.file,row]));
+          eq(built.size,850);
+          const widths=[[320,568],[390,844],[1280,900]],cases=['puzzles-only','careers-only'];
+          const actionNames=[
+            ['reject-cookies','Reject all'],['open-help','How to play'],['close-help',"Let's Play!"],['pick-active','Active players only'],
+            ['open-daily-confirm','Give up and see a path'],['confirm-daily','Yes, reveal it'],['open-unlimited','Play unlimited under Active players only'],
+            ['pick-everyday','Everyday'],['open-unlimited-confirm','Give up and see a path'],['confirm-unlimited','Yes, reveal it'],['next-unlimited','Next Puzzle'],
+          ];
+          const D=['Zlatan Ibrahimović','Wayne Rooney'],U=['Lionel Messi','Neymar'],N=['Andrea Pirlo','Cristiano Ronaldo'];
+          const states=[
+            ['daily-ready','Daily Challenge',D,'Everyday','Optimal: 1 step',false,null,null,null],
+            ['daily-active-blocked','Daily Challenge',D,'Active players only','Optimal: 1 step',true,null,null,null],
+            ['daily-reveal','Daily Challenge',D,'Active players only','Optimal: 1 step',true,D,['Manchester United'],expectedSave],
+            ['unlimited-active','Unlimited #1',U,'Active players only','Optimal: 1 step under Active players only',false,null,null,expectedSave],
+            ['unlimited-ready','Unlimited #1',U,'Everyday','Optimal: 1 step',false,null,null,expectedSave],
+            ['unlimited-reveal','Unlimited #1',U,'Everyday','Optimal: 1 step',false,U,['Barcelona'],expectedSave],
+            ['unlimited-next','Unlimited #2',N,'Everyday','Optimal: 2 steps',false,null,null,expectedSave],
+          ];
+          const roles={puzzles:'transfer_path_puzzles',players:'career_players',seasons:'career_seasons'};
+          const query={
+            puzzles:{select:'puzzle_id,player_a,player_b,min_steps,hint,sort_order,active_min_steps,active_hint,europe_min_steps,europe_hint',
+              order:'sort_order.asc',offset:'0',limit:'1000'},
+            players:{select:'id,player_name,nationality,position',order:'player_name.asc'},
+            seasons:{select:'player_id,season,club,goals,assists,appearances,market_value,sort_order',order:'player_id.asc,sort_order.asc',offset:'0',limit:'1000'},
+          };
+          const roleKeys=Object.keys(roles),backend='https://flawuiqbvjobmkfkauhw.supabase.co';
+          const routeURL=raw.base+route,shots=[],fixtureRefs=[];
+          const totals={journeys:3,contexts:0,viewportPNGs:0,frames:0,trustedClicks:0,providerResponses:0,completionAttempts:0,navigations:0,localResponses:0,corsPreflights:0,blockedReads:0};
+          const mainFrame=(html,expected)=>{
+            const dom=new JSDOM(html);
+            try {
+              const main=dom.window.document.querySelector('main#dukb-main');
+              assert(main&&main.querySelector('h1').textContent.trim()==='TRANSFER PATH');
+              const txt=node=>node?.textContent?.replace(/\s+/g,' ').trim()??null;
+              const ps=[...main.querySelectorAll('p')];
+              const card=ps.find(p=>txt(p)==='Connect')?.parentElement;
+              const reveal=ps.find(p=>txt(p)==="Here's a path that works")?.parentElement;
+              assert(card&&ps.map(txt).some(value=>value?.includes(expected[1])));
+              eq([...card.querySelectorAll('p.font-bold')].map(txt),expected[2]);
+              eq([...main.querySelectorAll('[aria-label="Special rules"] button[aria-pressed="true"]')].map(txt),[expected[3]]);
+              assert(ps.map(txt).includes(expected[4]));
+              eq(ps.some(p=>txt(p)?.includes("Today's pair has no route under Active players only")),expected[5]);
+              eq(reveal?[...reveal.querySelectorAll('span.truncate')].map(txt):null,expected[6]);
+              eq(reveal?[...reveal.querySelectorAll('span.italic')].map(txt):null,expected[7]);
+              assert(!main.textContent.includes('No connecting path exists in the current player pool.'));
+            } finally { dom.window.close(); }
+          };
+          eq(Object.keys(raw.fixtureBodies),cases);
+          for(const scenario of cases){
+            eq(Object.keys(raw.fixtureBodies[scenario]),roleKeys);
+            const rows={};
+            for(const role of roleKeys){
+              const fixture=ref(root,'fixtures/'+scenario+'-'+role+'.json');
+              eq(raw.fixtureBodies[scenario][role],fixture);
+              fixtureRefs.push(fixture);
+              rows[role]=json(root,fixture.file);
+            }
+            if(scenario==='puzzles-only'){
+              eq(rows.players,[]);eq(rows.seasons,[]);
+              eq(rows.puzzles,[{puzzle_id:'fixture-provider-puzzle',player_a:'Fixture Provider First',player_b:'Fixture Provider Second',
+                min_steps:1,hint:'Fixture provider route',sort_order:1,active_min_steps:null,active_hint:null,europe_min_steps:null,europe_hint:null}]);
+            } else {
+              eq(rows.puzzles,[]);
+              eq(rows.players,[
+                {id:'00000000-0000-4000-8000-000000000001',player_name:'Fixture Provider First',nationality:'Fixture Nation',position:'CM'},
+                {id:'00000000-0000-4000-8000-000000000002',player_name:'Fixture Provider Second',nationality:'Fixture Nation',position:'CM'},
+              ]);
+              eq(rows.seasons,rows.players.map(({id})=>({player_id:id,season:'2020-2021',club:'Fixture Provider Club',
+                goals:0,assists:0,appearances:1,market_value:1,sort_order:1})));
+            }
+          }
+          eq(raw.journeys.map(row=>[row.width,row.height]),widths);
+          const rawRef=ref(root,'raw.json');
+          const reportRef=ref(root,'report.json');
+          const projected=raw.journeys.map(journey=>{
+            const {width,height}=journey;
+            eq(journey.contexts.map(row=>row.case),cases);
+            return {...journey,contexts:journey.contexts.map(row=>{
+              const id=width+'-'+row.case;
+              eq([row.id,row.status,row.errors],[id,'passed',[]]);
+              totals.contexts++;
+              eq(row.actions.map(action=>[action.label,action.name]),actionNames);
+              for(const action of row.actions){
+                const e=action.event;
+                eq([e.trusted,e.button,e.name,e.url],[true,true,action.name,routeURL]);
+                assert(Number.isFinite(e.x)&&e.x>=0&&e.x<width&&Number.isFinite(e.y)&&e.y>=0&&e.y<height);
+              }
+              totals.trustedClicks+=row.actions.length;
+              eq(row.frames.map(frame=>frame.label),states.map(item=>item[0]));
+              for(const [i,frame] of row.frames.entries()){
+                const state=states[i];
+                eq([frame.url,frame.date,frame.et],[routeURL,Date.parse(fixedDate),day]);
+                assert(frame.mode.includes(state[1]));
+                eq([frame.endpoints,frame.selected,frame.optimal,frame.blocked,frame.reveal,frame.clubs,frame.storage[key]??null,frame.noRoute],
+                  [state[2],[state[3]],state[4],state[5],state[6],state[7],state[8],false]);
+                mainFrame(frame.html,state);
+              }
+              totals.frames+=row.frames.length;
+              const providers=row.wire.filter(item=>item.outcome==='local-provider');
+              const completions=row.wire.filter(item=>item.outcome==='aborted-completion');
+              eq(providers.map(item=>item.role).sort(),[...roleKeys].sort());
+              eq(completions.length,1);
+              for(const item of row.wire){
+                const url=new URL(item.url);
+                assert(url.origin!==raw.base);
+                if(item.outcome==='local-provider'||item.outcome==='local-cors'&&item.role!=='completion'){
+                  eq([url.origin,url.pathname,item.body],[backend,'/rest/v1/'+roles[item.role],null]);
+                  eq([...url.searchParams].sort(),Object.entries(query[item.role]).sort());
+                  if(item.outcome==='local-provider'){
+                    eq([item.method,item.forMethod,item.response],['GET',null,raw.fixtureBodies[row.case][item.role]]);
+                  } else eq([item.method,item.forMethod],['OPTIONS','GET']);
+                }else if(item.role==='completion'){
+                  eq([url.origin,url.pathname,url.search],[backend,'/rest/v1/game_completions','']);
+                  if(item.outcome==='aborted-completion'){
+                    eq([item.method,item.forMethod],['POST',null]);
+                    const body=JSON.parse(item.body);
+                    eq([Object.keys(body).sort(),body.game,body.score],[['game','player_name','score'],'transfer-path',0]);
+                    assert(typeof body.player_name==='string'&&body.player_name.length>0);
+                  } else eq([item.outcome,item.method,item.forMethod,item.body],['local-cors','OPTIONS','POST',null]);
+                }else{
+                  eq([item.outcome,item.body],['blocked-read',null]);
+                  assert(['GET','HEAD'].includes(item.method)||item.method==='OPTIONS'&&['GET','HEAD'].includes(item.forMethod));
+                }
+              }
+              totals.providerResponses+=providers.length;
+              totals.completionAttempts+=completions.length;
+              totals.corsPreflights+=row.wire.filter(item=>item.outcome==='local-cors').length;
+              totals.blockedReads+=row.wire.filter(item=>item.outcome==='blocked-read').length;
+              assert(row.navigations.length>0);
+              for(const [i,navigation] of row.navigations.entries()){
+                eq(navigation.url,routeURL);
+                assert(Number.isFinite(navigation.at)&&(!i||navigation.at>=row.navigations[i-1].at));
+              }
+              totals.navigations+=row.navigations.length;
+              assert(row.local.some(row=>row.url===routeURL&&row.file==='dist/transfer-path/index.html'));
+              assert(row.local.some(row=>/^dist\/assets\/TransferPath-.*\.js$/.test(row.file)));
+              for(const local of row.local){
+                const {url,...tuple}=local;
+                assert(new URL(url).origin===raw.base);
+                eq(tuple,built.get(tuple.file));
+              }
+              totals.localResponses+=row.local.length;
+              eq(row.screenshots.map(shot=>shot.phase),['daily','unlimited']);
+              for(const {phase,...shot} of row.screenshots){
+                eq(shot,ref(root,'png/'+id+'-'+phase+'.png'));
+                const png=bytes(root,shot.file);
+                eq(png.subarray(0,8).toString('hex'),'89504e470d0a1a0a');
+                eq([png.subarray(12,16).toString('ascii'),png.readUInt32BE(16),png.readUInt32BE(20)],['IHDR',width,height]);
+                shots.push(shot);
+              }
+              totals.viewportPNGs+=row.screenshots.length;
+              return {id,case:row.case,status:'passed',frames:row.frames.map(frame=>frame.label),actions:row.actions.length,
+                providerResponses:providers.length,completionAttempts:completions.length,localResponses:row.local.length,
+                navigations:row.navigations.length,screenshots:row.screenshots,errors:[]};
+            })};
+          });
+          eq([totals.journeys,totals.contexts,totals.viewportPNGs,totals.frames,totals.trustedClicks,totals.providerResponses,totals.completionAttempts],
+            [3,6,12,42,66,18,6]);
+          eq(raw.census,totals);
+          eq(report,{...raw,raw:rawRef,journeys:projected});
+          const admitted=[rawRef,reportRef,...shots,...fixtureRefs].sort((a,b)=>a.file.localeCompare(b.file));
+          eq(manifest,admitted);
+          eq(list(root).sort(),['body-manifest.json',...admitted.map(row=>row.file)].sort());
+          console.log(JSON.stringify({
+            status:'passed',route,page:raw.page,hook:raw.hook,helper:raw.helper,source:raw.source,inputs:raw.inputs,census:totals,
+            evidence:{report:reportRef,raw:rawRef,bodyManifest:ref(root,'body-manifest.json'),screenshots:shots,fixtureBodies:fixtureRefs},
+            boundaries:{isolatedChromium:true,clock:'Date only',externalForwarding:false,autocomplete:false,liveProvider:false,fullGeometry:false},
+          },null,2));
+          TRANSFER_PATH_PAIRED_POOLS_NATIVE_OUTER
+          test "$(git hash-object "$out/native-admission-script.mjs")" = "$TRANSFER_PATH_PAIRED_POOLS_OUTER"
+          test -z "$(git ls-files -- "$out/native-admission-script.mjs")"
+          export TRANSFER_PATH_PAIRED_POOLS_BROWSER_OUT="$PWD/$out/browser"
+          export TRANSFER_PATH_PAIRED_POOLS_FULL_UNIT="$PWD/$out"
+          export TRANSFER_PATH_PAIRED_POOLS_FIXED_REFERENCE="$PWD/$out/fixed-reference"
+          export TRANSFER_PATH_PAIRED_POOLS_CONTROLS_REFERENCE="$PWD/$out/controls-reference"
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          node scripts/qa/playTransferPathPairedPools.mjs 2>&1 | tee "$out/browser.log"
+          node "$out/native-admission-script.mjs" "$out/browser" > "$out/native-admission.json" 2> "$out/native-admission.log" || { cat "$out/native-admission.log"; exit 1; }
+      - name: Admit actual fresh units build native and retained controls scope
+        run: |
+          set -euo pipefail
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          import {createHash} from 'node:crypto';
+          const out='transfer-path-paired-pools-full',env=process.env;
+          const bytes=file=>fs.readFileSync(out+'/'+file),read=file=>JSON.parse(bytes(file));
+          const sha=value=>createHash('sha256').update(value).digest('hex');
+          const source=read('source-join.json'),custody=read('packet-custody.json'),unit=read('unit-admission.json'),raw=read('fixed-raw-join.json'),native=read('native-admission.json');
+          assert.deepEqual([source.status,source.head,source.trackedRows,source.sourceRows,source.cleanSourceRows,source.rootConfigurations.length,source.heldFixedRows],
+            ['passed',env.GITHUB_SHA,5797,4667,4666,11,5795]);
+          assert.deepEqual([source.parent,source.fixedHead,source.fixedTree,source.helperBlob],[custody.fixed.head,custody.fixed.head,custody.fixed.tree,env.TRANSFER_PATH_PAIRED_POOLS_HELPER]);
+          assert.deepEqual([custody.status,custody.controlsRerun,custody.referenceChecks.status,unit.status,unit.commands,unit.actualCases,unit.actualPasses,unit.actualFailures,unit.wholeQualifiedFixedRAWBytesHeld],
+            ['passed',false,'passed','passed',1,14,14,0,true]);
+          assert.deepEqual([raw.status,raw.fixedHead,raw.fixedTree,raw.raw,raw.freshUnitRAWByteEqual],['passed',custody.fixed.head,custody.fixed.tree,unit.raw,true]);
+          const nativeChecks=(()=>{
+          const nativeBody=(file)=>{
+            const data=bytes('browser/'+file);
+            return {file,bytes:data.length,sha256:sha(data)};
+          };
+          assert.deepEqual([native.status,native.route,native.page,native.hook,native.helper],
+            ['passed','/transfer-path',env.TRANSFER_PATH_PAIRED_POOLS_PAGE_BLOB,env.TRANSFER_PATH_PAIRED_POOLS_HOOK_BLOB,env.TRANSFER_PATH_PAIRED_POOLS_HELPER]);
+          assert.deepEqual(native.source,{head:source.head,tree:source.tree,trackedBodies:5797,sourceRows:4667,
+            rootConfigurations:11,distBodies:850,installedVersions:521});
+          assert.deepEqual(native.boundaries,{isolatedChromium:true,clock:'Date only',externalForwarding:false,autocomplete:false,liveProvider:false,fullGeometry:false});
+          const c=native.census,e=native.evidence;
+          assert.deepEqual([c.journeys,c.contexts,c.viewportPNGs,c.frames,c.trustedClicks,c.providerResponses,c.completionAttempts],
+            [3,6,12,42,66,18,6]);
+          for(const field of ['navigations','localResponses','corsPreflights','blockedReads'])assert(Number.isInteger(c[field])&&c[field]>=0);
+          assert(c.navigations>=6&&c.localResponses>=12);
+          assert.deepEqual(e.report,nativeBody('report.json'));
+          assert.deepEqual(e.raw,nativeBody('raw.json'));
+          assert.deepEqual(e.bodyManifest,nativeBody('body-manifest.json'));
+          assert.deepEqual([e.screenshots.length,e.fixtureBodies.length],[12,6]);
+          for(const row of [...e.screenshots,...e.fixtureBodies]){
+            assert(/^(?:png\/(?:320|390|1280)-(?:puzzles-only|careers-only)-(?:daily|unlimited)\.png|fixtures\/(?:puzzles-only|careers-only)-(?:puzzles|players|seasons)\.json)$/.test(row.file));
+            assert.deepEqual(row,nativeBody(row.file));
+          }
+          assert.equal(new Set([...e.screenshots,...e.fixtureBodies].map(row=>row.file)).size,18);
+          assert.deepEqual(read('browser/body-manifest.json'),[e.raw,e.report,...e.screenshots,...e.fixtureBodies].sort((a,b)=>a.file.localeCompare(b.file)));
+          const nativeRaw=read('browser/raw.json'),nativeReport=read('browser/report.json');
+          assert.deepEqual([nativeRaw.status,nativeReport.status,nativeRaw.source,nativeRaw.census,nativeReport.census,nativeReport.raw],
+            ['passed','passed',native.source,c,c,e.raw]);
+          for(const row of native.inputs.full){
+            const body=bytes(row.file);
+            assert.deepEqual(row,{file:row.file,bytes:body.length,sha256:sha(body)});
+          }
+          assert.equal(native.inputs.full.find(row=>row.file==='public-cases.raw.json').sha256,raw.raw.sha256);
+          assert.equal(unit.actualCases,14);
+          assert.deepEqual([custody.status,custody.controlsRerun],['passed',false]);
+          return {status:'passed',journeys:c.journeys,contexts:c.contexts,viewportPNGs:c.viewportPNGs,
+            trustedClicks:c.trustedClicks,providerResponses:c.providerResponses,abortedCompletions:c.completionAttempts,bodyManifest:e.bodyManifest};
+          })();
+          assert.equal(nativeChecks?.status,'passed','Reviewed actual native validator must complete');
+          assert.deepEqual([native.status,native.route,native.page,native.hook,native.helper],['passed','/transfer-path',env.TRANSFER_PATH_PAIRED_POOLS_PAGE_BLOB,env.TRANSFER_PATH_PAIRED_POOLS_HOOK_BLOB,env.TRANSFER_PATH_PAIRED_POOLS_HELPER]);
+          const expected='simAdsense,simBrand,simHeadTags,simHiddenPages,simHubs,simIndexNow,simIndexing,simInternalLinks,simNoRivalNames,simPrerender,simPrerenderBoot,simRetiredRoutes,simSchema,simSitemap,simSnapshotAssets,simSiteSearch,simGuideHeadings,simSeoMetaSplit,simHomeCopy,simHarnessAnchors'.split(',').map(name=>name+'.mjs').sort();
+          const readers=bytes('readers.log').toString('utf8'),readerRows=[...readers.matchAll(/^\s+PASS\s+(sim[A-Za-z0-9]+\.mjs)/gm)].map(row=>row[1]).sort();
+          assert.deepEqual(readerRows,expected);assert(!/^\s+FAIL\s+/m.test(readers));
+          const weight=bytes('weight.log').toString('utf8');
+          const capRows=[...weight.matchAll(/^\s+(\/\S*)\s+\d+K gz over\s+\d+ files \(budget (\d+)K, [\d.]+K to the tenth\)/gm)].map(row=>[row[1],Number(row[2])]);
+          assert.deepEqual(capRows,[['/',245],['/club-manager',648],['/soccer-career',840],['/stadium-tycoon',305],['/wonderkid-factory',278],['/minefield',295],['/footle',354],['/nfl-my-career',499],['/front-office',390],['/soccer-grid',320],['/leaderboard',266],['/manager-hot-seat',672],['/deadline-day',680],['/transfer-path',381],['/nba-front-office',397],['/nhl-front-office',379]]);
+          assert(weight.includes('sweepWeight: green.'));
+          const tar=bytes('dist.tgz'),distFiles=read('dist-before.json').length;
+          assert.equal(distFiles,850);
+          const normalized=read('dist-before.json').map(row=>{assert(row.file.startsWith('dist/'));return {path:row.file.slice(5),bytes:row.bytes,sha256:row.sha256};});
+          fs.writeFileSync(out+'/admission.json',JSON.stringify({
+            status:'passed',qualification:'fresh-transfer-path-paired-pools-full-scope',head:source.head,tree:source.tree,page:env.TRANSFER_PATH_PAIRED_POOLS_PAGE_BLOB,hook:env.TRANSFER_PATH_PAIRED_POOLS_HOOK_BLOB,test:env.TRANSFER_PATH_PAIRED_POOLS_TEST,plan:env.TRANSFER_PATH_PAIRED_POOLS_PLAN,
+            helper:env.TRANSFER_PATH_PAIRED_POOLS_HELPER,nativeOuter:env.TRANSFER_PATH_PAIRED_POOLS_OUTER,preflight:custody.preflight,original:custody.original,fixed:custody.fixed,controls:custody.controls,controlsRerun:false,
+            unit,unitCommands:1,raw,trackedBodies:source.trackedRows,sourceRows:source.sourceRows,cleanSourceRows:source.cleanSourceRows,rootConfigurations:source.rootConfigurations.length,
+            distFiles,distTar:{file:'dist.tgz',bytes:tar.length,sha256:sha(tar)},distTupleSHA256:sha(JSON.stringify(normalized)),
+            readers:readerRows.length,readerRows,immutableCaps:capRows.length,capRows,nativeReceipt:native,nativeChecks,referenceChecks:custody.referenceChecks,
+            limits:'Fresh fixed units, normal production build, all readers and caps, native Transfer Path and full source holds. Active preflight, original, fixed and controls are retained admitted evidence. No controls rerun or release claim.',
+          },null,2)+'\n',{flag:'wx'});
           NODE
-          node "$EVIDENCE/physical.mjs" before
-      - name: Proper app types
-        run: |
-          set -euo pipefail
-          node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee "$EVIDENCE/types.log"
-      - name: Run frozen Transfer Path tests for the exact fixed roles
-        run: |
-          set -euo pipefail
-          node "$EVIDENCE/qualify.mjs" qualify
-      - name: Verify unchanged physical source and locked offline run
+      - name: Final physical source index locks versions build and reference holds
         if: always()
         run: |
           set -euo pipefail
-          git ls-files -s > "$EVIDENCE/source-after.txt"
-          sha256sum package.json package-lock.json > "$EVIDENCE/locks-after.txt"
-          cmp "$EVIDENCE/source-before.txt" "$EVIDENCE/source-after.txt"
-          cmp "$EVIDENCE/locks-before.txt" "$EVIDENCE/locks-after.txt"
+          out=transfer-path-paired-pools-full
+          git ls-files -s > "$out/source-after.txt"
+          cmp "$out/source-before.txt" "$out/source-after.txt"
           git diff --exit-code HEAD -- .
-          node "$EVIDENCE/physical.mjs" after
-          test ! -s "$SIM_OFFLINE_RECEIPT"
+          sha256sum package.json package-lock.json > "$out/locks-after.txt"
+          cmp "$out/locks-before.txt" "$out/locks-after.txt"
+          if [[ -f "$out/dist.sha256" ]]; then sha256sum --check "$out/dist.sha256"; fi
+          if [[ -f "$out/native-admission-script.mjs" ]]; then
+            test "$(git hash-object "$out/native-admission-script.mjs")" = "$TRANSFER_PATH_PAIRED_POOLS_OUTER"
+            test -z "$(git ls-files -- "$out/native-admission-script.mjs")"
+          fi
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import assert from 'node:assert/strict';
+          import {execFileSync} from 'node:child_process';
+          import {createHash} from 'node:crypto';
+          const out='transfer-path-paired-pools-full',read=file=>JSON.parse(fs.readFileSync(out+'/'+file));
+          const write=(file,body)=>fs.writeFileSync(out+'/'+file,JSON.stringify(body));
+          const sha=bytes=>createHash('sha256').update(bytes).digest('hex');
+          const tuple=(file,bytes)=>({file,bytes:bytes.length,sha256:sha(bytes)});
+          const tracked=execFileSync('git',['ls-files','-z'],{encoding:'utf8',maxBuffer:16*1024*1024}).split('\0').filter(Boolean);
+          const source=tracked.map(file=>tuple(file,fs.readFileSync(file)));
+          assert.equal(source.length,5797);assert.deepEqual(source,read('tracked-before.json'));write('tracked-after.json',source);
+          const lock=JSON.parse(fs.readFileSync('package-lock.json'));
+          const versions=Object.keys(lock.packages).filter(file=>file.startsWith('node_modules/')&&fs.existsSync(file+'/package.json')).map(file=>[file,JSON.parse(fs.readFileSync(file+'/package.json')).version]);
+          assert.equal(versions.length,521);for(const [file,version] of versions)assert.equal(version,lock.packages[file].version,file);
+          assert.deepEqual(versions,read('installed-before.json'));write('installed-after.json',versions);
+          const offlineBytes=fs.statSync(out+'/offline.log').size;assert.equal(offlineBytes,0);
+          const walk=(dir,prefix='')=>fs.readdirSync(dir,{withFileTypes:true}).sort((a,b)=>a.name.localeCompare(b.name)).flatMap(entry=>{
+            const file=prefix+entry.name;
+            if(entry.isDirectory())return walk(path.join(dir,entry.name),file+'/');
+            assert(entry.isFile()&&!entry.isSymbolicLink(),file+' actual regular retained body');return[file];
+          });
+          let distHeld=false,retainedPacketsHeld=false;
+          if(fs.existsSync(out+'/dist-before.json')){
+            const dist=walk('dist','dist/').map(file=>tuple(file,fs.readFileSync(file)));
+            assert.equal(dist.length,850);assert.deepEqual(dist,read('dist-before.json'));write('dist-after.json',dist);distHeld=true;
+          }
+          if(fs.existsSync(out+'/packet-custody.json')){
+            for(const role of ['preflight','original','fixed','controls']){
+              const dir=out+'/'+role+'-reference',before=read(role+'-reference-before.json');
+              const after=walk(dir).sort().map(file=>tuple(file,fs.readFileSync(path.join(dir,file))));
+              assert.deepEqual(after,before);write(role+'-reference-after.json',after);
+            }
+            retainedPacketsHeld=true;
+          }
+          if(fs.existsSync(out+'/admission.json'))assert(distHeld&&retainedPacketsHeld);
+          write('final-holds.json',{status:'passed',trackedBodies:source.length,scopedSourceRows:4667,cleanSourceRows:4666,rootConfigurations:11,installedLockedVersions:versions.length,
+            indexUnchanged:true,sourceBytesUnchanged:true,locksUnchanged:true,distHeld,retainedPacketsHeld,offlineBytes,
+            limits:'Final physical and custody holds. Full admission and completed workflow success are separate.'});
+          NODE
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: transfer-path-paired-pools-fixed-${{ github.run_id }}
-          path: transfer-path-paired-pools-fixed
+          name: transfer-path-paired-pools-full-${{ github.run_id }}
+          path: transfer-path-paired-pools-full
           retention-days: 14
           if-no-files-found: error
