@@ -1,24 +1,19 @@
-name: College Football Dynasty ordinary scoring fixed
+name: College Football Dynasty ordinary scoring physical controls
 on:
   push:
-    branches: [codex/cfb-dynasty-low-score-fixed-qa-20261110]
+    branches: [codex/cfb-dynasty-low-score-controls-qa-20261110]
 permissions:
   actions: read
   contents: read
 jobs:
-  fixed:
+  controls:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 20
     env:
       TZ: UTC
       SIM_NETWORK: offline
-      SIM_OFFLINE_RECEIPT: cfb-dynasty-low-score-fixed/offline.log
-      CFB_DYNASTY_LOW_SCORE_RAW: cfb-dynasty-low-score-fixed/public-cases.raw.json
-      CFB_DYNASTY_SCORE_BOUNDARY_RAW: cfb-dynasty-low-score-fixed/score-boundary.raw.json
-      BASE_HEAD: '078a6613532523fa8553ad4e52718fd7bc2e6576'
-      BASE_TREE: '3ae058504729d29e506730d750d31d897f83228c'
-      BOUNDARY_BLOB: '32b9be98b190c5c8d6d41d0c548498b58607bfa5'
-      EVIDENCE: cfb-dynasty-low-score-fixed
+      SIM_OFFLINE_RECEIPT: cfb-dynasty-low-score-controls/offline.log
+      EVIDENCE: cfb-dynasty-low-score-controls
     steps:
       - uses: actions/checkout@v4
         with:
@@ -28,7 +23,7 @@ jobs:
         with:
           node-version: 24.22.1
           cache: npm
-      - name: Authenticate original, calibration and exact fixed scoring source
+      - name: Authenticate admitted references and exact physical scoring sources
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
@@ -40,251 +35,347 @@ jobs:
           git rev-parse 'HEAD^{tree}' > "$EVIDENCE/tree.txt"
           git ls-files -s > "$EVIDENCE/source-before.txt"
           sha256sum package.json package-lock.json > "$EVIDENCE/locks-before.txt"
-          git diff --exit-code HEAD -- .
-          git fetch --no-tags --depth=1 origin "$BASE_HEAD"
-          node --input-type=module <<'NODE'
+          git fetch --no-tags --depth=1 origin 078a6613532523fa8553ad4e52718fd7bc2e6576
+          cat > "$EVIDENCE/qualify.mjs" <<'NODE'
           import assert from 'node:assert/strict';
           import fs from 'node:fs';
           import { createHash } from 'node:crypto';
-          import { execFileSync } from 'node:child_process';
+          import { execFileSync, spawnSync } from 'node:child_process';
 
-          const { BASE_HEAD, BASE_TREE, BOUNDARY_BLOB, EVIDENCE } = process.env;
+          const { EVIDENCE: out, GITHUB_SHA: head, SIM_OFFLINE_RECEIPT: offline } = process.env;
           const repo = 'PapiSalgueroM/ballpark-hero';
-          assert.equal(process.env.GITHUB_REPOSITORY, repo);
-          const runId = 42779683354;
-          const api = process.env.GITHUB_API_URL + '/repos/' + repo;
-          const request = async path => {
-            const response = await fetch(api + path, {
-              headers: {
-                Accept: 'application/vnd.github+json',
-                Authorization: 'Bearer ' + process.env.GH_TOKEN,
-                'X-GitHub-Api-Version': '2022-11-28',
-              },
-              redirect: 'error',
-            });
-            assert.equal(response.status, 200, 'original API ' + path);
-            return response.json();
-          };
-          const [run, jobs, artifacts] = await Promise.all([
-            request('/actions/runs/' + runId),
-            request('/actions/runs/' + runId + '/jobs?per_page=100'),
-            request('/actions/runs/' + runId + '/artifacts?per_page=100'),
-          ]);
           const workflow = '.github/workflows/cfb-dynasty-low-score-20261110.yml';
-          assert.deepEqual([run.id,run.status,run.conclusion,run.event,run.run_attempt,run.path,run.head_sha,run.head_commit.tree_id,run.repository.full_name],
-            [runId,'completed','success','push',1,workflow,'078a6613532523fa8553ad4e52718fd7bc2e6576','3ae058504729d29e506730d750d31d897f83228c',repo]);
-          assert.equal(run.head_branch,'codex/cfb-dynasty-low-score-original-qa-20261110');
-          assert.equal(jobs.jobs.length,1);
-          const [job] = jobs.jobs;
-          assert.deepEqual([job.id,job.status,job.conclusion,job.head_sha,job.steps.length],[129706427324,'completed','success',run.head_sha,12]);
-          assert(job.steps.every(step => step.status === 'completed' && step.conclusion === 'success'));
-          assert.equal(artifacts.artifacts.length,1);
-          const [artifact] = artifacts.artifacts;
-          assert.deepEqual([artifact.id,artifact.name,artifact.expired,artifact.size_in_bytes,artifact.digest,artifact.workflow_run.id,artifact.workflow_run.head_sha],
-            [13745716915,'cfb-dynasty-low-score-original-'+runId,false,1000260,'sha256:85f9e21f73d2dc6c51beb5336d1fb93e5d2851c847771b5c040cd28dc262edad',runId,run.head_sha]);
-          const failedId=42781023165;
-          const [failedRun,failedJobs,failedArtifacts]=await Promise.all([
-            request('/actions/runs/'+failedId),request('/actions/runs/'+failedId+'/jobs?per_page=100'),
-            request('/actions/runs/'+failedId+'/artifacts?per_page=100'),
+          const engine = 'src/lib/cfbDynasty.ts';
+          const refs = {
+            original: {"run":42779683354,"job":129706427324,"artifact":13745716915,"steps":12,"bodies":20,"head":"078a6613532523fa8553ad4e52718fd7bc2e6576","tree":"3ae058504729d29e506730d750d31d897f83228c","workflow":"aeba36724cfe71159d34dcc02dba94911f4fd6ab","branch":"codex/cfb-dynasty-low-score-original-qa-20261110","zipBytes":1000260,"zipSHA256":"85f9e21f73d2dc6c51beb5336d1fb93e5d2851c847771b5c040cd28dc262edad","auditSHA256":"d8a6b24bdad8511a7424e8d9392e3e0f17c1d273a2d78c40821dbd9486029c80","raw":{"bytes":220953,"sha256":"78876204ed6667d048d4027da511a234c0a8a173120c2989383ab09fcaad12a7"}},
+            fixed: {
+              head: '93b021bc1e3c256847a0553ade9995420b57de02', tree: '62a47af05f8f6da523f7c2a9e42b78981dcb7a78',
+              workflow: '0dbd300a3d900b3f42258e868653d07901acaeeb', branch: 'codex/cfb-dynasty-low-score-fixed-qa-20261110',
+              run: Number('42783901125'), job: Number('129720258016'), artifact: Number('13746984029'),
+              steps: Number('13'), bodies: Number('22'),
+              zipBytes: Number('1003481'), zipSHA256: '90e0dca085cf20eaad6d5e9ec6b7a5c5ba5809b426823d91f187ef5e792f9f55', auditSHA256: 'b0a90cbc6f9a760ec4db08262a3a482a3935f3f94de47e3f760d5521e986a590',
+              raw: { bytes: Number('220953'), sha256: '8fd0e4fd7cafa3ecb81833a906ab2732b4757d0e7b26bd1aedeee7dab821bc89' },
+              boundary: { bytes: Number('43716'), sha256: '3fc4693923540dfaa4f66fa008eec237f13391ae3d4010f9c54d2e7d1b738949' },
+            },
+          };
+          const enginePins = {
+            original: { bytes: 41501, blob: '3f038157f234d25fcae06860d1d8efeaa632fb9f', sha256: 'd297966d242be2007ad6025ecd057064e120b878d1b8ff8156ff53019b777d32' },
+            fixed: { bytes: 41767, blob: '65a4def674bfbcc5d16f6ad6b82138ebf0a793d1', sha256: '2197316397a80ca21d6631f37303c632b7cd4eafffff68c3f94d93a5e98f7ca9' },
+          };
+          const suites = {"src/components/cfb-dynasty/CfbDynastyBoard.test.tsx":["draws the recap again after a reload and does not replay the season","opens an older recap save on the recruiting trail instead of the final week","refuses to run the final week twice for one season"],"src/components/cfb-dynasty/CfbDynastyDepth.test.tsx":["plays a save from before coordinators existed without adding anything to it","gives a new dynasty its coordinators and a schedule with a strength","refuses a coordinator the pot cannot cover and changes nothing","lets a coordinator go, puts his pay back in the pot, and hires into the empty chair"],"src/lib/cfbDynastyLowScore.test.ts":["keeps neutral and legal low scores on the scheduled slate","keeps the depth-disabled legacy round","does not manufacture one point in ordinary coordinator-adjusted scoring"],"src/lib/cfbDynastyScoreBoundary.test.ts":["uses the strict shutout cutoff for the away loser","uses the strict shutout cutoff for the home loser","keeps staff caps and monotonic scores through the low-score floor"]};
+          const command = [
+            'run', 'src/lib/cfbDynastyLowScore.test.ts', 'src/lib/cfbDynastyScoreBoundary.test.ts',
+            'src/components/cfb-dynasty/CfbDynastyBoard.test.tsx', 'src/components/cfb-dynasty/CfbDynastyDepth.test.tsx',
+            '--reporter=default', '--reporter=json',
+          ];
+          const reds = new Map([
+            [suites['src/lib/cfbDynastyLowScore.test.ts'][2], 'CFB_DYNASTY_ORDINARY_ONE_POINT'],
+            [suites['src/lib/cfbDynastyScoreBoundary.test.ts'][0], 'CFB_DYNASTY_AWAY_LOSER_SCORE_CUTOFF'],
+            [suites['src/lib/cfbDynastyScoreBoundary.test.ts'][1], 'CFB_DYNASTY_HOME_LOSER_SCORE_CUTOFF'],
+            [suites['src/lib/cfbDynastyScoreBoundary.test.ts'][2], 'CFB_DYNASTY_LOW_SCORE_STAFF_CAP_FLOOR'],
           ]);
-          assert.deepEqual([failedRun.id,failedRun.status,failedRun.conclusion,failedRun.event,failedRun.run_attempt,failedRun.head_branch,failedRun.path,failedRun.head_sha,failedRun.head_commit.tree_id],
-            [failedId,'completed','failure','push',1,'codex/cfb-dynasty-low-score-calibration-qa-20261110',workflow,'aa5c7594ef2c56032bdace88f0ae4e48f6d69602','7e3a06dbf3b90b026ff1a40564e1ed44072952e5']);
-          assert.deepEqual(failedJobs.jobs.map(j=>[j.id,j.status,j.conclusion,j.steps.length]),[[129710831930,'completed','failure',12]]);
-          assert.deepEqual(failedJobs.jobs[0].steps.filter(step=>step.conclusion!=='success').map(step=>[step.number,step.conclusion]),[[7,'failure'],[17,'skipped']]);
-          assert.deepEqual(failedArtifacts.artifacts.map(a=>[a.id,a.name,a.size_in_bytes,a.digest,a.expired,a.workflow_run.id,a.workflow_run.head_sha]),
-            [[13746415510,'cfb-dynasty-low-score-calibration-'+failedId,2909679,'sha256:9913070a294c81189995e2c57b2d0288e4ee01fbe86a04c6bfd0ed42ac4b30fe',false,failedId,failedRun.head_sha]]);
-          const calibrationId=42782336455;
-          const [calibrationRun,calibrationJobs,calibrationArtifacts]=await Promise.all([
-            request('/actions/runs/'+calibrationId),request('/actions/runs/'+calibrationId+'/jobs?per_page=100'),
-            request('/actions/runs/'+calibrationId+'/artifacts?per_page=100'),
-          ]);
-          assert.deepEqual([calibrationRun.id,calibrationRun.status,calibrationRun.conclusion,calibrationRun.event,calibrationRun.run_attempt,calibrationRun.head_branch,calibrationRun.path,calibrationRun.head_sha,calibrationRun.head_commit.tree_id],
-            [calibrationId,'completed','success','push',1,'codex/cfb-dynasty-low-score-calibration-lower-qa-20261110',workflow,'132065e900ad15eeeb886709fcf008bd58ac2794','abe163de4f156f1a184f4e5282abfac35c7e457c']);
-          assert.deepEqual(calibrationJobs.jobs.map(job=>[job.id,job.status,job.conclusion,job.steps.length]),[[129715119655,'completed','success',12]]);
-          assert(calibrationJobs.jobs[0].steps.every(step=>step.status==='completed'&&step.conclusion==='success'));
-          assert.deepEqual(calibrationArtifacts.artifacts.map(a=>[a.id,a.name,a.size_in_bytes,a.digest,a.expired,a.workflow_run.id,a.workflow_run.head_sha]),
-            [[13746866709,'cfb-dynasty-low-score-calibration-'+calibrationId,2910228,'sha256:d22e208ae3acc5a14ccbbca4373b3cc807f2811b494ac5589e33192351040f63',false,calibrationId,calibrationRun.head_sha]]);
-          delete process.env.GH_TOKEN;
-          const git = (...args) => execFileSync('git', args, { encoding: 'utf8', maxBuffer: 16 * 1024 * 1024 }).trimEnd();
-          const head = git('rev-parse', 'HEAD');
-          assert.equal(head, process.env.GITHUB_SHA);
-          assert.deepEqual(git('rev-list', '--parents', '-n', '1', 'HEAD').split(' '), [head, BASE_HEAD]);
-          assert.equal(git('rev-parse', BASE_HEAD + '^{tree}'), BASE_TREE);
-          const test = 'src/lib/cfbDynastyScoreBoundary.test.ts';
-          const product = 'src/lib/cfbDynasty.ts';
-          const touched = [product,test,workflow].sort();
-          const held = {"src/App.tsx":"8bfedf7aaa1d076e0f0c8e2216c7e46632cd8a33","src/data/gameRegistry.ts":"f560b40a74d1468ac72dfde4ee6fec6635a9a255","public/cfb-dynasty/index.html":"b3849f578a8231129dafd356edc257adf9a9e1ca","src/lib/cfbDynasty.ts":"3f038157f234d25fcae06860d1d8efeaa632fb9f","src/lib/collegeProgram.ts":"12688e52d0745701a59d61c37879a23146be9d78","src/pages/CfbDynasty.tsx":"c0335415465e24e9b067611580aaf985f86681cd","src/components/cfb-dynasty/CfbDynastyBoard.tsx":"85786118b430b07ab9a56d69bf7dfa326d4acde5","src/components/cfb-dynasty/CfbDynastyBoard.test.tsx":"31b1aa2a905356afd9ff9b02a3fd8212a6a01466","src/components/cfb-dynasty/CfbDynastyDepth.test.tsx":"dae59dfb41a7e71c3673413582dd73487a6f12f6","scripts/simCfbDynasty.mjs":"a0a8e77f0a7e2ed31c337782da69a927da5d6b0c","scripts/simCfbStaff.mjs":"bbfdf5cf3b862c99f06c1f57b0ac591e34231a17","scripts/lib/offlineTransport.cjs":"0fda542a2649fe5da937c6976fd0f5b6073e74b6","index.html":"12598fe720eec4fc88d3d33c53ede612d018150c","package.json":"2ff64986fb76ebc51b706f2fd24765768874008a","package-lock.json":"97d6f12a052f25f400462938c241789a083f0bfe","vite.config.ts":"0112b6ac4f2ad80b2fc04f9ec2f7185300913e7d","tailwind.config.ts":"f83c4f4032d359bc9285828eac3b0961a46c6b17","postcss.config.js":"2aa7205d4b402a1bdfbe07110c61df920b370066","tsconfig.json":"6b68d80b7d92d0c4a5d774897f2bedfa95b42669","tsconfig.app.json":"51f581dd91641b4c1f1219f646788e73cf6bf00c","tsconfig.node.json":"3133162c20350e1741b94b8d2ff77b811bec8363","bun.lockb":"5d9d33a3bf4f45fa099e2aa3014149e034981149","bun.lock":"dff081dcd34a1aa928ddc90d910774a6b855dfe3"};
-          assert.equal(held[product],'3f038157f234d25fcae06860d1d8efeaa632fb9f');
-          delete held[product];
-          held['src/lib/cfbDynastyLowScore.test.ts']='4d71647df7137920ee6aa4b9982de70f0c1813b1';
-          held['docs/plans/2026-11-10-cfb-dynasty-low-score.md']='99ffc97340a08e918cee35c9f618268066f89b2f';
-          const pins = { ...held, [product]:'65a4def674bfbcc5d16f6ad6b82138ebf0a793d1', [test]:BOUNDARY_BLOB };
-          assert.equal(git('rev-parse', BASE_HEAD + ':' + product),'3f038157f234d25fcae06860d1d8efeaa632fb9f');
-          const sha = (algorithm, data) => createHash(algorithm).update(data).digest('hex');
-          for (const [file, want] of Object.entries(pins)) {
-            const bytes = fs.readFileSync(file);
-            assert.match(want, /^[0-9a-f]{40}$/);
-            assert.equal(git('rev-parse', 'HEAD:' + file), want);
-            assert.equal(sha('sha1', Buffer.concat([Buffer.from('blob ' + bytes.length + '\0'), bytes])), want, file);
-            if (Object.hasOwn(held, file)) assert.equal(git('rev-parse', BASE_HEAD + ':' + file), want, file);
+
+          const maxBuffer = 64 * 1024 * 1024;
+          const cmd = (file, ...args) => execFileSync(file, args, { maxBuffer });
+          const git = (...args) => cmd('git', ...args).toString('utf8');
+          const save = (file, value) => fs.writeFileSync(out + '/' + file, JSON.stringify(value, null, 2) + '\n');
+          const body = file => fs.readFileSync(out + '/' + file);
+          const hash = (algorithm, bytes) => createHash(algorithm).update(bytes).digest('hex');
+          const sha = bytes => hash('sha256', bytes);
+          const blob = bytes => hash('sha1', Buffer.concat([Buffer.from('blob ' + bytes.length + '\0'), bytes]));
+          const exact = (bytes, pin) => assert.deepEqual([bytes.length, sha(bytes)], [pin.bytes, pin.sha256]);
+          const zip = role => out + '/reference-' + role + '.zip';
+          const refBody = (role, file) => cmd('unzip', '-p', zip(role), file);
+          const parse = bytes => JSON.parse(bytes);
+
+          function authenticate(role, pin) {
+            assert([pin.run, pin.job, pin.artifact, pin.steps, pin.bodies, pin.zipBytes, pin.raw.bytes].every(value => Number.isSafeInteger(value) && value > 0));
+            for (const digest of [pin.zipSHA256, pin.auditSHA256, pin.raw.sha256]) assert.match(digest, /^[0-9a-f]{64}$/);
+            if (pin.boundary) {
+              assert(Number.isSafeInteger(pin.boundary.bytes) && pin.boundary.bytes > 0);
+              assert.match(pin.boundary.sha256, /^[0-9a-f]{64}$/);
+            }
+            const api = endpoint => parse(cmd('gh', 'api', 'repos/' + repo + '/actions/' + endpoint));
+            const run = api('runs/' + pin.run);
+            const jobs = api('runs/' + pin.run + '/jobs?per_page=100').jobs;
+            const artifacts = api('runs/' + pin.run + '/artifacts?per_page=100').artifacts;
+            assert.deepEqual([run.id, run.status, run.conclusion, run.event, run.run_attempt, run.path, run.head_sha, run.head_commit.tree_id, run.repository.full_name, run.head_branch],
+              [pin.run, 'completed', 'success', 'push', 1, workflow, pin.head, pin.tree, repo, pin.branch]);
+            assert.equal(jobs.length, 1);
+            const [job] = jobs;
+            assert.deepEqual([job.id, job.run_id, job.status, job.conclusion, job.head_sha, job.steps.length], [pin.job, pin.run, 'completed', 'success', pin.head, pin.steps]);
+            assert(job.steps.every(step => step.status === 'completed' && step.conclusion === 'success'));
+            assert.equal(artifacts.length, 1);
+            const [artifact] = artifacts;
+            assert.deepEqual([artifact.id, artifact.name, artifact.expired, artifact.size_in_bytes, artifact.digest, artifact.workflow_run.id, artifact.workflow_run.head_sha],
+              [pin.artifact, 'cfb-dynasty-low-score-' + role + '-' + pin.run, false, pin.zipBytes, 'sha256:' + pin.zipSHA256, pin.run, pin.head]);
+            const archive = cmd('gh', 'api', 'repos/' + repo + '/actions/artifacts/' + pin.artifact + '/zip');
+            exact(archive, { bytes: pin.zipBytes, sha256: pin.zipSHA256 });
+            fs.writeFileSync(zip(role), archive);
+            const names = cmd('unzip', '-Z', '-1', zip(role)).toString('utf8').trimEnd().split('\n');
+            assert.equal(names.length, pin.bodies);
+            assert.equal(new Set(names).size, pin.bodies);
+            assert(names.every(name => /^[a-zA-Z0-9_.-]+$/.test(name) && name !== '.' && name !== '..'));
+            assert.deepEqual([refBody(role, 'head.txt').toString().trim(), refBody(role, 'tree.txt').toString().trim()], [pin.head, pin.tree]);
+            const source = parse(refBody(role, 'source-receipt.json'));
+            assert.deepEqual([source.head, source.tree, source.ownedWorkflow], [pin.head, pin.tree, pin.workflow]);
+            exact(refBody(role, 'public-cases.raw.json'), pin.raw);
+            if (pin.boundary) {
+              exact(refBody(role, 'score-boundary.raw.json'), pin.boundary);
+              const fixed = parse(refBody(role, 'fixed-result.json'));
+              assert.deepEqual([fixed.status, fixed.cases, fixed.passed, fixed.failed], ['passed', 13, 13, 0]);
+              assert.deepEqual([fixed.originalFixedRaw.bytes, fixed.originalFixedRaw.sha256], [pin.raw.bytes, pin.raw.sha256]);
+              assert.deepEqual([fixed.boundary.bytes, fixed.boundary.sha256, fixed.boundary.rounds, fixed.boundary.games, fixed.boundary.draws], [pin.boundary.bytes, pin.boundary.sha256, 28, 616, 1848]);
+            }
+            save('reference-' + role + '.json', { run, jobs, artifact, names, independentAuditSHA256: pin.auditSHA256 });
           }
-          assert.deepEqual(git('diff', '--name-only', BASE_HEAD, 'HEAD').split('\n').sort(), touched);
-          const tree = ref => git('ls-tree', '-r', '-z', ref).split('\0').filter(Boolean);
-          const parent = tree(BASE_HEAD);
-          const current = tree('HEAD');
-          assert.equal(parent.length, 5798);
-          assert.equal(current.length, 5799);
-          assert.deepEqual(current.filter(row => !touched.includes(row.split('\t')[1])),parent.filter(row => !touched.includes(row.split('\t')[1])));
-          assert.equal(current.filter(row => /^(src|public|scripts)\//.test(row.split('\t')[1])).length, 4668);
-          fs.writeFileSync(EVIDENCE + '/source-receipt.json', JSON.stringify({
-            head, tree: git('rev-parse', 'HEAD^{tree}'), parent: BASE_HEAD, parentTree: BASE_TREE, pins,
-            ownedWorkflow: git('rev-parse', 'HEAD:' + workflow), heldRows: parent.length-2, trackedRows: current.length, sourceRows: 4668,
-            failedUpperTail: { run: failedId, job: 129710831930, artifact: 13746415510, zipSHA256: '9913070a294c81189995e2c57b2d0288e4ee01fbe86a04c6bfd0ed42ac4b30fe', rawSHA256: '3dc856968f4f6bd8c3eddd02264708647c8c19734ff47ad5660504ce08df02bf', independentAuditSHA256: '65f9b9f39365dd7a98d828d2c898f63c739bb83c7f92de22e28401f199ee3ef2', wholeSeasonTapeSHA256: 'f457bf4da992055a3a1c8c7ebd19ec6c8d4b02502a98a556ce06f9a77222bfdb' },
-            originalProof: { run: run.id, head: run.head_sha, job: job.id, artifact: artifact.id, digest: artifact.digest, independentAuditSHA256: 'd8a6b24bdad8511a7424e8d9392e3e0f17c1d273a2d78c40821dbd9486029c80', rawSHA256: '78876204ed6667d048d4027da511a234c0a8a173120c2989383ab09fcaad12a7' },
-            calibrationProof: {run:calibrationId,job:129715119655,artifact:13746866709,rawSHA256:'5a4a9e5244251022969798c8b0ff342f8fb503a3b4bfa7de24d7570b8b95f481',independentAuditSHA256:'0787495918358c4cf599fb0e452e9812a0af64c4f91b082217d26ea16b32bc1a',rate:0.0175},
-          }, null, 2));
+
+          const diff = () => git('diff', '--no-ext-diff', '--name-only', '-z', 'HEAD', '--').split('\0').filter(Boolean);
+          const index = () => cmd('git', 'ls-files', '-s');
+          const files = () => git('ls-files', '-z').split('\0').filter(Boolean);
+          function snapshots() {
+            const rows = files().map(file => {
+              const bytes = fs.readFileSync(file);
+              return [file, bytes.length, sha(bytes)];
+            });
+            const lock = parse(fs.readFileSync('package-lock.json'));
+            const installed = Object.entries(lock.packages).filter(([file]) =>
+              file.startsWith('node_modules/') && fs.existsSync(file + '/package.json')
+            ).map(([file, entry]) => {
+              const version = parse(fs.readFileSync(file + '/package.json')).version;
+              assert.equal(version, entry.version, file);
+              return [file, version];
+            });
+            assert.equal(rows.length, 5799);
+            assert.equal(installed.length, 521);
+            assert.equal(fs.statSync(offline).size, 0);
+            return { rows, installed };
+          }
+
+          function prepare() {
+            assert.equal(process.env.GITHUB_REPOSITORY, repo);
+            assert.deepEqual(git('rev-list', '--parents', '-n', '1', 'HEAD').trim().split(' '), [head, refs.fixed.head]);
+            assert.equal(git('rev-parse', refs.fixed.head + '^{tree}').trim(), refs.fixed.tree);
+            assert.equal(git('rev-parse', refs.original.head + '^{tree}').trim(), refs.original.tree);
+            assert.equal(git('rev-parse', refs.fixed.head + ':' + workflow).trim(), refs.fixed.workflow);
+            assert.deepEqual(git('diff', '--name-only', '-z', refs.fixed.head, head).split('\0').filter(Boolean), [workflow]);
+            const tree = ref => git('ls-tree', '-r', '-z', ref).split('\0').filter(Boolean);
+            const current = tree(head);
+            const fixed = tree(refs.fixed.head);
+            const other = rows => rows.filter(row => row.split('\t')[1] !== workflow);
+            assert.equal(current.length, 5799);
+            assert.equal(fixed.length, 5799);
+            assert.equal(current.filter(row => /^(src|public|scripts)\//.test(row.split('\t')[1])).length, 4668);
+            assert.equal(other(current).length, 5798);
+            assert.deepEqual(other(current), other(fixed));
+            assert.deepEqual(diff(), []);
+            for (const [role, pin] of Object.entries(refs)) authenticate(role, pin);
+            for (const [role, pin] of Object.entries(enginePins)) {
+              assert.equal(git('rev-parse', refs[role].head + ':' + engine).trim(), pin.blob);
+              const bytes = cmd('git', 'cat-file', 'blob', pin.blob);
+              exact(bytes, pin);
+              assert.equal(blob(bytes), pin.blob);
+              fs.writeFileSync(out + '/engine-' + role + '.ts', bytes);
+            }
+            assert(fs.readFileSync(engine).equals(body('engine-fixed.ts')));
+            const edits = [{"old":"function scoreFor(win: boolean, rng: () => number): number {\n  return win ? 24 + Math.floor(rng() * 32) : 3 + Math.floor(rng() * 25);\n}","next":"const CFB_SHUTOUT_RATE = 0.0175;\n\nfunction scoreFor(win: boolean, roll: number): number {\n  return win ? 24 + Math.floor(roll * 32) : 3 + Math.floor(roll * 25);\n}\n\nfunction scoreWithStaff(win: boolean, edge: number, rng: () => number): number {\n  const roll = rng();\n  // Keep the same shutout draws across staff ratings so the score cap still holds.\n  if (!win && roll < CFB_SHUTOUT_RATE) return 0;\n  return Math.max(2, Math.round(scoreFor(win, roll) + CFB_POINTS_PER_EDGE * edge));\n}"},{"old":"    let hs = scoreFor(homeWins, rng);\n    const as = scoreFor(!homeWins, rng);","next":"    let hs = scoreFor(homeWins, rng());\n    const as = scoreFor(!homeWins, rng());"},{"old":"  const hs = Math.max(0, Math.round(scoreFor(homeWins, rng) + CFB_POINTS_PER_EDGE * (h.off - a.def)));\n  const as = Math.max(0, Math.round(scoreFor(!homeWins, rng) + CFB_POINTS_PER_EDGE * (a.off - h.def)));","next":"  const hs = scoreWithStaff(homeWins, h.off - a.def, rng);\n  const as = scoreWithStaff(!homeWins, a.off - h.def, rng);"}];
+            const apply = (input, from, to) => edits.reduce((source, edit) => {
+              assert.equal(source.split(edit[from]).length, 2);
+              return source.replace(edit[from], () => edit[to]);
+            }, input.toString('utf8'));
+            const originalEngine = body('engine-original.ts');
+            const fixedEngine = body('engine-fixed.ts');
+            assert(!originalEngine.equals(fixedEngine));
+            assert(fixedEngine.equals(Buffer.from(apply(originalEngine, 'old', 'next'))));
+            assert(originalEngine.equals(Buffer.from(apply(fixedEngine, 'next', 'old'))));
+            save('source-receipt.json', {
+              head, tree: git('rev-parse', 'HEAD^{tree}').trim(),
+              workflow: git('rev-parse', 'HEAD:' + workflow).trim(), parent: refs.fixed.head, parentTree: refs.fixed.tree,
+              trackedRows: 5799, heldRows: 5798, sourceRows: 4668, rootConfigurations: 11, enginePins, references: refs,
+            });
+          }
+
+          function runRole(role, expectedEngine, indexBefore, before, locks) {
+            fs.mkdirSync(out + '/' + role);
+            const at = name => out + '/' + role + '/' + name;
+            const isOriginal = role === 'original';
+            const verifyPhysical = () => {
+              const expectedDiff = isOriginal ? [engine] : [];
+              assert.deepEqual(diff(), expectedDiff);
+              assert(index().equals(indexBefore));
+              assert(fs.readFileSync(engine).equals(expectedEngine));
+              const state = snapshots();
+              const wanted = before.rows.map(row => isOriginal && row[0] === engine
+                ? [engine, enginePins.original.bytes, enginePins.original.sha256] : row);
+              assert.deepEqual(state.rows, wanted);
+              assert.deepEqual(state.installed, before.installed);
+              assert(cmd('sha256sum', 'package.json', 'package-lock.json').equals(locks));
+              return {
+                engine: { blob: blob(expectedEngine), bytes: expectedEngine.length, sha256: sha(expectedEngine) },
+                trackedRows: state.rows.length, trackedSHA256: sha(JSON.stringify(state.rows)), diff: expectedDiff,
+                indexSHA256: sha(indexBefore), locksSHA256: sha(locks),
+                installedVersions: state.installed.length, installedSHA256: sha(JSON.stringify(state.installed)), offlineBytes: 0,
+              };
+            };
+            const physicalBefore = verifyPhysical();
+            fs.writeFileSync(at('engine.ts'), expectedEngine);
+            const result = spawnSync('node_modules/.bin/vitest', [...command, '--outputFile=' + at('vitest.json')], {
+              maxBuffer,
+              env: { ...process.env, NODE_OPTIONS: '--require=' + process.cwd() + '/scripts/lib/offlineTransport.cjs',
+                CFB_DYNASTY_LOW_SCORE_RAW: at('public-cases.raw.json'), CFB_DYNASTY_SCORE_BOUNDARY_RAW: at('score-boundary.raw.json') },
+            });
+            const log = Buffer.concat([result.stdout ?? Buffer.alloc(0), result.stderr ?? Buffer.alloc(0)]);
+            fs.writeFileSync(at('vitest.log'), log);
+            process.stdout.write(log);
+            fs.writeFileSync(at('vitest-exit.txt'), String(result.status) + '\n');
+            const physicalAfter = verifyPhysical();
+            assert.deepEqual(physicalAfter, physicalBefore);
+            assert.ifError(result.error);
+            assert.equal(result.signal, null);
+            assert.equal(result.status, isOriginal ? 1 : 0);
+            assert(!/SIM_OFFLINE_BLOCK|Unhandled Errors?|Unhandled Rejection|Uncaught Exception|Failed Suites|Worker exited|Test timed out/i.test(log.toString()));
+            const report = parse(fs.readFileSync(at('vitest.json')));
+            assert.deepEqual([report.success, report.numTotalTests, report.numPassedTests, report.numFailedTests, report.numPendingTests, report.numTodoTests],
+              [!isOriginal, 13, isOriginal ? 9 : 13, isOriginal ? 4 : 0, 0, 0]);
+            for (const key of ['errors', 'unhandledErrors', 'testExecutionErrors']) if (Object.hasOwn(report, key)) assert.deepEqual(report[key], []);
+            for (const key of ['numRuntimeErrorTestSuites', 'numUnhandledErrors']) if (Object.hasOwn(report, key)) assert.equal(report[key], 0);
+            assert.equal(report.testResults.length, 4);
+            const seenReds = [];
+            for (const [file, titles] of Object.entries(suites)) {
+              const matches = report.testResults.filter(suite => suite.name.endsWith('/' + file));
+              assert.equal(matches.length, 1, file);
+              const [suite] = matches;
+              const failed = isOriginal && titles.some(title => reds.has(title));
+              assert.deepEqual([suite.status, suite.message], [failed ? 'failed' : 'passed', '']);
+              assert.deepEqual(suite.assertionResults.map(row => row.title).sort(), [...titles].sort());
+              for (const row of suite.assertionResults) {
+                const marker = isOriginal && reds.get(row.title);
+                if (marker) {
+                  assert.equal(row.status, 'failed', row.title);
+                  assert.equal(row.failureMessages.length, 1, row.title);
+                  assert(row.failureMessages[0].startsWith('AssertionError: ' + marker + ':'), row.failureMessages[0]);
+                  seenReds.push(marker);
+                } else assert.deepEqual([row.status, row.failureMessages], ['passed', []], row.title);
+              }
+            }
+            assert.deepEqual(seenReds.sort(), isOriginal ? [...reds.values()].sort() : []);
+            const raw = fs.readFileSync(at('public-cases.raw.json'));
+            const boundary = fs.readFileSync(at('score-boundary.raw.json'));
+            const referenceRole = isOriginal ? 'original' : 'fixed';
+            assert(raw.equals(refBody(referenceRole, 'public-cases.raw.json')));
+            const fixedBoundary = refBody('fixed', 'score-boundary.raw.json');
+            if (isOriginal) verifyOriginalBoundary(boundary, fixedBoundary);
+            else assert(boundary.equals(fixedBoundary));
+            const tuple = data => ({ bytes: data.length, sha256: sha(data) });
+            const checks = {
+              cases: 13, passes: isOriginal ? 9 : 13, namedAssertionErrors: seenReds, referenceRole,
+              originalRegression: tuple(raw), boundary: tuple(boundary),
+              originalRegressionLiteral: true, boundaryLiteralToFixed: !isOriginal,
+              originalBoundaryExactExpectedDelta: isOriginal,
+              physical: { before: physicalBefore, after: physicalAfter },
+            };
+            save(role + '/result.json', checks);
+            return checks;
+          }
+
+          function verifyOriginalBoundary(actual, fixed) {
+            const expected = parse(fixed);
+            const cutoff = [1, 3, 1, 3, 1];
+            const staff = [0, 1, 2, 2, 3, 4, 4, 3, 2];
+            const scores = { awayCutoff: cutoff, homeCutoff: cutoff, staffFloor: [...staff, ...staff] };
+            for (const [key, values] of Object.entries(scores)) {
+              assert.equal(expected.cases[key].length, values.length);
+              for (const [i, row] of expected.cases[key].entries()) {
+                const homeLoser = row.side === 'home';
+                const score = values[i];
+                row.target[homeLoser ? 'hs' : 'as'] = score;
+                row.games[0][homeLoser ? 2 : 3] = score;
+                row.mySlate[0][homeLoser ? 'us' : 'them'] = score;
+              }
+            }
+            assert(actual.equals(Buffer.from(JSON.stringify(expected) + '\n')));
+          }
+
+          function qualify() {
+            const indexBefore = body('source-before.txt');
+            const locks = body('locks-before.txt');
+            assert(index().equals(indexBefore));
+            const before = snapshots();
+            assert.deepEqual(before, { rows: parse(body('tracked-before.json')), installed: parse(body('installed-before.json')) });
+            const fixedRows = parse(refBody('fixed', 'tracked-before.json'));
+            const held = rows => rows.filter(row => row[0] !== workflow);
+            assert.equal(held(before.rows).length, 5798);
+            assert.deepEqual(held(before.rows), held(fixedRows));
+            assert.deepEqual(before.installed, parse(refBody('fixed', 'installed-before.json')));
+            assert(locks.equals(refBody('fixed', 'locks-before.txt')));
+            const fixed = body('engine-fixed.ts');
+            const original = body('engine-original.ts');
+            const runs = {};
+            try {
+              runs.fixed = runRole('fixed', fixed, indexBefore, before, locks);
+              fs.writeFileSync(engine, original);
+              runs.original = runRole('original', original, indexBefore, before, locks);
+            } finally {
+              fs.writeFileSync(engine, fixed);
+              assert(fs.readFileSync(engine).equals(fixed));
+            }
+            runs.restored = runRole('restored', fixed, indexBefore, before, locks);
+            for (const file of ['public-cases.raw.json', 'score-boundary.raw.json']) assert(body('fixed/' + file).equals(body('restored/' + file)));
+            const after = snapshots();
+            assert.deepEqual(after, before);
+            save('admission.json', {
+              status: 'passed', roleOrder: Object.keys(runs), cases: 39, passes: 35, namedBusinessFailures: 4,
+              runs, references: refs, source: parse(body('source-receipt.json')),
+              onlyPhysicalProductPath: engine, restoredExactFixed: true, bothFixedRestoredRawBodiesLiteral: true,
+              installedVersions: 521, indexHeld: true, locksHeld: true, offlineBytes: 0,
+            });
+          }
+
+          function freeze() {
+            const before = snapshots();
+            assert.deepEqual(diff(), []);
+            assert(index().equals(body('source-before.txt')));
+            assert(fs.readFileSync(engine).equals(body('engine-fixed.ts')));
+            save('tracked-before.json', before.rows);
+            save('installed-before.json', before.installed);
+          }
+
+          function finalHolds() {
+            const after = snapshots();
+            assert.deepEqual(diff(), []);
+            assert(index().equals(body('source-before.txt')));
+            assert(fs.readFileSync(engine).equals(body('engine-fixed.ts')));
+            assert.deepEqual(after, { rows: parse(body('tracked-before.json')), installed: parse(body('installed-before.json')) });
+            assert(cmd('sha256sum', 'package.json', 'package-lock.json').equals(body('locks-before.txt')));
+            save('tracked-after.json', after.rows);
+            save('installed-after.json', after.installed);
+            save('final-holds.json', { status: 'passed', trackedRows: after.rows.length, installedVersions: after.installed.length, index: true, locks: true, engineRestored: true, offlineBytes: 0 });
+          }
+
+          const mode = process.argv[2];
+          if (mode === 'prepare') prepare();
+          else if (mode === 'freeze') freeze();
+          else if (mode === 'qualify') qualify();
+          else if (mode === 'final') finalHolds();
+          else throw new Error('Unknown CFB scoring controls mode');
           NODE
+          node "$EVIDENCE/qualify.mjs" prepare
       - name: Install locked dependencies and freeze physical source
         run: |
           set -euo pipefail
           npm ci 2>&1 | tee "$EVIDENCE/install.log"
-          cat > "$EVIDENCE/physical.mjs" <<'NODE'
-          import assert from 'node:assert/strict';
-          import fs from 'node:fs';
-          import { createHash } from 'node:crypto';
-          import { execFileSync } from 'node:child_process';
-          const stage = process.argv[2];
-          assert(['before', 'after'].includes(stage));
-          const out = process.env.EVIDENCE;
-          const index = execFileSync('git', ['ls-files', '-z'], { encoding: 'utf8' }).split('\0').filter(Boolean);
-          const source = index.map(file => {
-            const bytes = fs.readFileSync(file);
-            return [file, bytes.length, createHash('sha256').update(bytes).digest('hex')];
-          });
-          const lock = JSON.parse(fs.readFileSync('package-lock.json', 'utf8'));
-          const installed = Object.entries(lock.packages).filter(([file]) =>
-            file.startsWith('node_modules/') && fs.existsSync(file + '/package.json')
-          ).map(([file, entry]) => {
-            const version = JSON.parse(fs.readFileSync(file + '/package.json', 'utf8')).version;
-            assert.equal(version, entry.version, file);
-            return [file, version];
-          });
-          assert.equal(source.length, 5799);
-          assert.equal(installed.length, 521);
-          assert.equal(fs.statSync(process.env.SIM_OFFLINE_RECEIPT).size, 0);
-          for (const [name, data] of [['tracked', source], ['installed', installed]]) {
-            const body = JSON.stringify(data);
-            if (stage === 'after') assert.equal(body, fs.readFileSync(out + '/' + name + '-before.json', 'utf8'));
-            fs.writeFileSync(out + '/' + name + '-' + stage + '.json', body);
-          }
-          NODE
-          node "$EVIDENCE/physical.mjs" before
-      - name: Proper app types
+          node "$EVIDENCE/qualify.mjs" freeze
+      - name: Proper app types before controls
         run: |
           set -euo pipefail
-          node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee "$EVIDENCE/types.log"
-      - name: Verify fixed original cases and both shutout cutoff orientations
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee "$EVIDENCE/types-before.log"
+      - name: Run fixed, physical original and restored fixed scoring controls
+        run: node "$EVIDENCE/qualify.mjs" qualify
+      - name: Proper app types after restoration
         run: |
           set -euo pipefail
-          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node_modules/.bin/vitest run \
-            src/lib/cfbDynastyLowScore.test.ts src/lib/cfbDynastyScoreBoundary.test.ts \
-            src/components/cfb-dynasty/CfbDynastyBoard.test.tsx src/components/cfb-dynasty/CfbDynastyDepth.test.tsx \
-            --reporter=default --reporter=json --outputFile="$EVIDENCE/vitest.json" 2>&1 | tee "$EVIDENCE/vitest.log"
-          test -s "$CFB_DYNASTY_LOW_SCORE_RAW"
-          test -s "$CFB_DYNASTY_SCORE_BOUNDARY_RAW"
-          node --input-type=module <<'NODE'
-          import assert from 'node:assert/strict';
-          import fs from 'node:fs';
-          import { createHash } from 'node:crypto';
-          const out=process.env.EVIDENCE;
-          const report=JSON.parse(fs.readFileSync(out+'/vitest.json','utf8'));
-          const checks=(()=>{
-          assert.deepEqual([report.success,report.numTotalTests,report.numPassedTests,report.numFailedTests,report.numPendingTests,report.numTodoTests],[true,13,13,0,0,0]);
-          assert.equal(report.testResults.length,4);
-          for(const key of ['errors','unhandledErrors','testExecutionErrors']) if(Object.hasOwn(report,key)) assert.deepEqual(report[key],[]);
-          const expectedTests={
-            'src/lib/cfbDynastyLowScore.test.ts':["keeps neutral and legal low scores on the scheduled slate","keeps the depth-disabled legacy round","does not manufacture one point in ordinary coordinator-adjusted scoring"],
-            'src/lib/cfbDynastyScoreBoundary.test.ts':['uses the strict shutout cutoff for the away loser','uses the strict shutout cutoff for the home loser','keeps staff caps and monotonic scores through the low-score floor'],
-            'src/components/cfb-dynasty/CfbDynastyBoard.test.tsx':3,
-            'src/components/cfb-dynasty/CfbDynastyDepth.test.tsx':4,
-          };
-          for(const [file,titles] of Object.entries(expectedTests)){
-            const matching=report.testResults.filter(suite=>suite.name.endsWith('/'+file));
-            assert.equal(matching.length,1,file);
-            const [suite]=matching;
-            assert.deepEqual([suite.status,suite.message,suite.assertionResults.length],['passed','',Array.isArray(titles)?titles.length:titles]);
-            if(Array.isArray(titles))assert.deepEqual(suite.assertionResults.map(row=>row.title).sort(),titles.slice().sort());
-            for(const row of suite.assertionResults)assert.deepEqual([row.status,row.failureMessages],['passed',[]],row.fullName);
-          }
-          const digest=raw=>createHash('sha256').update(raw).digest('hex');
-          const original=fs.readFileSync(process.env.CFB_DYNASTY_LOW_SCORE_RAW);
-          assert.deepEqual([original.length,digest(original)],[220953,'8fd0e4fd7cafa3ecb81833a906ab2732b4757d0e7b26bd1aedeee7dab821bc89']);
-          const legacyMarker=Buffer.from('"legacy": {');
-          const legacyStart=original.indexOf(legacyMarker)+legacyMarker.length-1;
-          const legacyEnd=original.indexOf(Buffer.from(',\n    "ordinaryOne": {'),legacyStart);
-          assert(legacyStart>=legacyMarker.length-1&&legacyEnd>legacyStart);
-          const legacy=original.subarray(legacyStart,legacyEnd);
-          assert.deepEqual([legacy.length,digest(legacy)],[19906,'1c468d737ceb0e797c1725bf93ca60b1e350be455d74e0e53ac9d8b6b9fdc95b']);
-          const boundary=fs.readFileSync(process.env.CFB_DYNASTY_SCORE_BOUNDARY_RAW);
-          const r=JSON.parse(boundary.toString('utf8'));
-          const cutoff=0.0175,below=cutoff-2**-58,diagnostic=0.03;
-          assert.deepEqual(Object.keys(r),['schema','report','seed','cutoff','below','diagnostic','cases']);
-          assert.deepEqual([r.schema,r.report,r.seed,r.cutoff,r.below,r.diagnostic],[1,'R0004',539004,cutoff,below,diagnostic]);
-          assert.deepEqual(Object.keys(r.cases),['awayCutoff','homeCutoff','staffFloor']);
-          const base=r.cases.awayCutoff[0].week;
-          assert.equal(new Set(base.flat()).size,44);
-          assert.deepEqual(base[0],['ND','VT']);
-          const otherDraws=Array.from({length:21},()=>[0,0.625,0.32]).flat();
-          const cutoffSpecs=[['below-adjusted',below,60,70,0],['below-neutral',below,70,70,0],
-            ['at-adjusted',cutoff,60,70,2],['at-neutral',cutoff,70,70,3],['held-diagnostic',diagnostic,60,70,2]];
-          const levels=[65,70,75];
-          const staffSpecs=[
-            ...levels.map(oc=>['collision-'+oc,diagnostic,oc,81,2]),
-            ...levels.map((oc,i)=>['offense-'+oc,diagnostic,oc,70,[2,3,4][i]]),
-            ...levels.map((dc,i)=>['defense-'+dc,diagnostic,70,dc,[4,3,2][i]]),
-          ];
-          const forecast={
-            awayCutoff:cutoffSpecs.map(s=>['away',...s]),
-            homeCutoff:cutoffSpecs.map(s=>['home',...s]),
-            staffFloor:['away','home'].flatMap(side=>staffSpecs.map(s=>[side,...s])),
-          };
-          let rounds=0,games=0,draws=0;
-          const rows={};
-          for(const [key,specs] of Object.entries(forecast)){
-            const observations=r.cases[key];
-            assert.equal(observations.length,specs.length);
-            rows[key]=[];
-            for(const [i,[side,label,loserDraw,oc,dc,loserScore]] of specs.entries()){
-              const f=observations[i],homeWon=side==='away';
-              assert.deepEqual(Object.keys(f),['key','side','loserDraw','loserOC','winnerDC','initialDraws','week','draws','target','mySlate','games','winners']);
-              assert.deepEqual([f.key,f.side,f.loserDraw,f.loserOC,f.winnerDC,f.initialDraws],[label,side,loserDraw,oc,dc,3432]);
-              assert.deepEqual(f.week,base);
-              const [home,away]=base[0],winner=homeWon?home:away,hs=homeWon?24:loserScore,as=homeWon?loserScore:24;
-              assert.deepEqual(f.draws,[...(homeWon?[0,0.01,loserDraw]:[1-Number.EPSILON,loserDraw,0.01]),...otherDraws]);
-              assert.deepEqual(f.games,[[home,away,hs,as,winner],...base.slice(1).map(([h,a])=>[h,a,44,11,h])]);
-              assert.deepEqual([f.target.home,f.target.away,f.target.hs,f.target.as,f.target.winner],[home,away,hs,as,winner]);
-              assert.deepEqual(f.mySlate,[{round:1,opp:away,home:true,us:hs,them:as,won:homeWon,conference:f.target.conference,rivalry:false}]);
-              assert.deepEqual(f.winners,{home:homeWon?22:21,away:homeWon?0:1});
-              rows[key].push(loserScore);
-              rounds++;games+=f.games.length;draws+=f.draws.length;
-            }
-          }
-          assert.deepEqual([rounds,games,draws],[28,616,1848]);
-          return {status:'passed',cases:13,passed:13,failed:0,heldCases:7,originalCases:3,boundaryCases:3,
-            originalFixedRaw:{bytes:original.length,sha256:digest(original),exactFullPredictedBytes:true,legacyBytes:legacy.length,legacySHA256:digest(legacy)},
-            boundary:{bytes:boundary.length,sha256:digest(boundary),rounds,games,draws,cutoff,rows},ordinaryScore:[24,2]};
-          })();
-          assert.equal(checks.status,'passed');
-          fs.writeFileSync(out+'/fixed-result.json',JSON.stringify(checks,null,2)+'\n');
-          NODE
-      - name: Keep actual College Football Dynasty staff caps and legacy simulations green
-        run: |
-          set -euo pipefail
-          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCfbStaff.mjs 2>&1 | tee "$EVIDENCE/simCfbStaff.log"
-          grep -Fx 'simCfbStaff: all green' "$EVIDENCE/simCfbStaff.log"
-          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCfbDynasty.mjs 2>&1 | tee "$EVIDENCE/simCfbDynasty.log"
-          grep -Fx 'simCfbDynasty: all green' "$EVIDENCE/simCfbDynasty.log"
-      - name: Verify unchanged physical source and locked offline run
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee "$EVIDENCE/types-after.log"
+      - name: Verify exact physical restoration, locked versions and offline holds
         if: always()
         run: |
           set -euo pipefail
@@ -292,13 +383,12 @@ jobs:
           sha256sum package.json package-lock.json > "$EVIDENCE/locks-after.txt"
           cmp "$EVIDENCE/source-before.txt" "$EVIDENCE/source-after.txt"
           cmp "$EVIDENCE/locks-before.txt" "$EVIDENCE/locks-after.txt"
-          git diff --exit-code HEAD -- .
-          node "$EVIDENCE/physical.mjs" after
+          node "$EVIDENCE/qualify.mjs" final
           test ! -s "$SIM_OFFLINE_RECEIPT"
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: cfb-dynasty-low-score-fixed-${{ github.run_id }}
-          path: cfb-dynasty-low-score-fixed
+          name: cfb-dynasty-low-score-controls-${{ github.run_id }}
+          path: cfb-dynasty-low-score-controls
           retention-days: 14
           if-no-files-found: error
