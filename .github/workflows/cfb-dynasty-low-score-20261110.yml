@@ -1,0 +1,285 @@
+name: College Football Dynasty low-score lower-tail calibration
+on:
+  push:
+    branches: [codex/cfb-dynasty-low-score-calibration-lower-qa-20261110]
+permissions:
+  actions: read
+  contents: read
+jobs:
+  calibration:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      TZ: UTC
+      SIM_NETWORK: offline
+      SIM_OFFLINE_RECEIPT: cfb-dynasty-low-score-calibration/offline.log
+      CFB_DYNASTY_LOW_SCORE_CALIBRATION_RAW: cfb-dynasty-low-score-calibration/baseline-calibration.raw.json
+      BASE_HEAD: '6b773fc6cc8ace8ddc2c6c8ed2eb0a61602a0aca'
+      BASE_TREE: '600b98fa2b199254b4843d017bd3b3047ab2a572'
+      TEST_BLOB: '2ee21a16f460507329bfb6cab6177595617b6b3c'
+      EVIDENCE: cfb-dynasty-low-score-calibration
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24.22.1
+          cache: npm
+      - name: Authenticate the completed original and exact held calibration engine
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          test ! -e "$EVIDENCE"
+          mkdir "$EVIDENCE"
+          touch "$SIM_OFFLINE_RECEIPT"
+          git rev-parse HEAD > "$EVIDENCE/head.txt"
+          git rev-parse 'HEAD^{tree}' > "$EVIDENCE/tree.txt"
+          git ls-files -s > "$EVIDENCE/source-before.txt"
+          sha256sum package.json package-lock.json > "$EVIDENCE/locks-before.txt"
+          git diff --exit-code HEAD -- .
+          git fetch --no-tags --depth=1 origin "$BASE_HEAD"
+          node --input-type=module <<'NODE'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          import { createHash } from 'node:crypto';
+          import { execFileSync } from 'node:child_process';
+
+          const { BASE_HEAD, BASE_TREE, TEST_BLOB, EVIDENCE } = process.env;
+          const repo = 'PapiSalgueroM/ballpark-hero';
+          assert.equal(process.env.GITHUB_REPOSITORY, repo);
+          const runId = 42779683354;
+          const api = process.env.GITHUB_API_URL + '/repos/' + repo;
+          const request = async path => {
+            const response = await fetch(api + path, {
+              headers: {
+                Accept: 'application/vnd.github+json',
+                Authorization: 'Bearer ' + process.env.GH_TOKEN,
+                'X-GitHub-Api-Version': '2022-11-28',
+              },
+              redirect: 'error',
+            });
+            assert.equal(response.status, 200, 'original API ' + path);
+            return response.json();
+          };
+          const [run, jobs, artifacts] = await Promise.all([
+            request('/actions/runs/' + runId),
+            request('/actions/runs/' + runId + '/jobs?per_page=100'),
+            request('/actions/runs/' + runId + '/artifacts?per_page=100'),
+          ]);
+          const workflow = '.github/workflows/cfb-dynasty-low-score-20261110.yml';
+          assert.deepEqual([run.id,run.status,run.conclusion,run.event,run.run_attempt,run.path,run.head_sha,run.head_commit.tree_id,run.repository.full_name],
+            [runId,'completed','success','push',1,workflow,'078a6613532523fa8553ad4e52718fd7bc2e6576','3ae058504729d29e506730d750d31d897f83228c',repo]);
+          assert.equal(run.head_branch,'codex/cfb-dynasty-low-score-original-qa-20261110');
+          assert.equal(jobs.jobs.length,1);
+          const [job] = jobs.jobs;
+          assert.deepEqual([job.id,job.status,job.conclusion,job.head_sha,job.steps.length],[129706427324,'completed','success',run.head_sha,12]);
+          assert(job.steps.every(step => step.status === 'completed' && step.conclusion === 'success'));
+          assert.equal(artifacts.artifacts.length,1);
+          const [artifact] = artifacts.artifacts;
+          assert.deepEqual([artifact.id,artifact.name,artifact.expired,artifact.size_in_bytes,artifact.digest,artifact.workflow_run.id,artifact.workflow_run.head_sha],
+            [13745716915,'cfb-dynasty-low-score-original-'+runId,false,1000260,'sha256:85f9e21f73d2dc6c51beb5336d1fb93e5d2851c847771b5c040cd28dc262edad',runId,run.head_sha]);
+          const failedId=42781023165;
+          const [failedRun,failedJobs,failedArtifacts]=await Promise.all([
+            request('/actions/runs/'+failedId),request('/actions/runs/'+failedId+'/jobs?per_page=100'),
+            request('/actions/runs/'+failedId+'/artifacts?per_page=100'),
+          ]);
+          assert.deepEqual([failedRun.id,failedRun.status,failedRun.conclusion,failedRun.event,failedRun.run_attempt,failedRun.head_branch,failedRun.path,failedRun.head_sha,failedRun.head_commit.tree_id],
+            [failedId,'completed','failure','push',1,'codex/cfb-dynasty-low-score-calibration-qa-20261110',workflow,'aa5c7594ef2c56032bdace88f0ae4e48f6d69602','7e3a06dbf3b90b026ff1a40564e1ed44072952e5']);
+          assert.deepEqual(failedJobs.jobs.map(j=>[j.id,j.status,j.conclusion,j.steps.length]),[[129710831930,'completed','failure',12]]);
+          assert.deepEqual(failedJobs.jobs[0].steps.filter(step=>step.conclusion!=='success').map(step=>[step.number,step.conclusion]),[[7,'failure'],[17,'skipped']]);
+          assert.deepEqual(failedArtifacts.artifacts.map(a=>[a.id,a.name,a.size_in_bytes,a.digest,a.expired,a.workflow_run.id,a.workflow_run.head_sha]),
+            [[13746415510,'cfb-dynasty-low-score-calibration-'+failedId,2909679,'sha256:9913070a294c81189995e2c57b2d0288e4ee01fbe86a04c6bfd0ed42ac4b30fe',false,failedId,failedRun.head_sha]]);
+          delete process.env.GH_TOKEN;
+          const git = (...args) => execFileSync('git', args, { encoding: 'utf8', maxBuffer: 16 * 1024 * 1024 }).trimEnd();
+          const head = git('rev-parse', 'HEAD');
+          assert.equal(head, process.env.GITHUB_SHA);
+          assert.deepEqual(git('rev-list', '--parents', '-n', '1', 'HEAD').split(' '), [head, BASE_HEAD]);
+          assert.equal(git('rev-parse', BASE_HEAD + '^{tree}'), BASE_TREE);
+          const test = 'src/lib/cfbDynastyLowScoreBaselineCalibration.test.ts';
+          const added = [test, workflow].sort();
+          const held = {"src/App.tsx":"8bfedf7aaa1d076e0f0c8e2216c7e46632cd8a33","src/data/gameRegistry.ts":"f560b40a74d1468ac72dfde4ee6fec6635a9a255","public/cfb-dynasty/index.html":"b3849f578a8231129dafd356edc257adf9a9e1ca","src/lib/cfbDynasty.ts":"3f038157f234d25fcae06860d1d8efeaa632fb9f","src/lib/collegeProgram.ts":"12688e52d0745701a59d61c37879a23146be9d78","src/pages/CfbDynasty.tsx":"c0335415465e24e9b067611580aaf985f86681cd","src/components/cfb-dynasty/CfbDynastyBoard.tsx":"85786118b430b07ab9a56d69bf7dfa326d4acde5","src/components/cfb-dynasty/CfbDynastyBoard.test.tsx":"31b1aa2a905356afd9ff9b02a3fd8212a6a01466","src/components/cfb-dynasty/CfbDynastyDepth.test.tsx":"dae59dfb41a7e71c3673413582dd73487a6f12f6","scripts/simCfbDynasty.mjs":"a0a8e77f0a7e2ed31c337782da69a927da5d6b0c","scripts/simCfbStaff.mjs":"bbfdf5cf3b862c99f06c1f57b0ac591e34231a17","scripts/lib/offlineTransport.cjs":"0fda542a2649fe5da937c6976fd0f5b6073e74b6","index.html":"12598fe720eec4fc88d3d33c53ede612d018150c","package.json":"2ff64986fb76ebc51b706f2fd24765768874008a","package-lock.json":"97d6f12a052f25f400462938c241789a083f0bfe","vite.config.ts":"0112b6ac4f2ad80b2fc04f9ec2f7185300913e7d","tailwind.config.ts":"f83c4f4032d359bc9285828eac3b0961a46c6b17","postcss.config.js":"2aa7205d4b402a1bdfbe07110c61df920b370066","tsconfig.json":"6b68d80b7d92d0c4a5d774897f2bedfa95b42669","tsconfig.app.json":"51f581dd91641b4c1f1219f646788e73cf6bf00c","tsconfig.node.json":"3133162c20350e1741b94b8d2ff77b811bec8363","bun.lockb":"5d9d33a3bf4f45fa099e2aa3014149e034981149","bun.lock":"dff081dcd34a1aa928ddc90d910774a6b855dfe3"};
+          const pins = { ...held, [test]: TEST_BLOB };
+          const sha = (algorithm, data) => createHash(algorithm).update(data).digest('hex');
+          for (const [file, want] of Object.entries(pins)) {
+            const bytes = fs.readFileSync(file);
+            assert.match(want, /^[0-9a-f]{40}$/);
+            assert.equal(git('rev-parse', 'HEAD:' + file), want);
+            assert.equal(sha('sha1', Buffer.concat([Buffer.from('blob ' + bytes.length + '\0'), bytes])), want, file);
+            if (Object.hasOwn(held, file)) assert.equal(git('rev-parse', BASE_HEAD + ':' + file), want, file);
+          }
+          assert.deepEqual(git('diff', '--name-only', BASE_HEAD, 'HEAD').split('\n').sort(), added);
+          const tree = ref => git('ls-tree', '-r', '-z', ref).split('\0').filter(Boolean);
+          const parent = tree(BASE_HEAD);
+          const current = tree('HEAD');
+          assert.equal(parent.length, 5795);
+          assert.equal(current.length, 5797);
+          assert.deepEqual(current.filter(row => !added.includes(row.split('\t')[1])), parent);
+          assert.equal(current.filter(row => /^(src|public|scripts)\//.test(row.split('\t')[1])).length, 4667);
+          fs.writeFileSync(EVIDENCE + '/source-receipt.json', JSON.stringify({
+            head, tree: git('rev-parse', 'HEAD^{tree}'), parent: BASE_HEAD, parentTree: BASE_TREE, pins,
+            ownedWorkflow: git('rev-parse', 'HEAD:' + workflow), heldRows: parent.length, trackedRows: current.length, sourceRows: 4667,
+            failedUpperTail: { run: failedId, job: 129710831930, artifact: 13746415510, zipSHA256: '9913070a294c81189995e2c57b2d0288e4ee01fbe86a04c6bfd0ed42ac4b30fe', rawSHA256: '3dc856968f4f6bd8c3eddd02264708647c8c19734ff47ad5660504ce08df02bf', independentAuditSHA256: '65f9b9f39365dd7a98d828d2c898f63c739bb83c7f92de22e28401f199ee3ef2', wholeSeasonTapeSHA256: 'f457bf4da992055a3a1c8c7ebd19ec6c8d4b02502a98a556ce06f9a77222bfdb' },
+            originalProof: { run: run.id, head: run.head_sha, job: job.id, artifact: artifact.id, digest: artifact.digest, independentAuditSHA256: 'd8a6b24bdad8511a7424e8d9392e3e0f17c1d273a2d78c40821dbd9486029c80', rawSHA256: '78876204ed6667d048d4027da511a234c0a8a173120c2989383ab09fcaad12a7' },
+          }, null, 2));
+          NODE
+      - name: Install locked dependencies and freeze physical source
+        run: |
+          set -euo pipefail
+          npm ci 2>&1 | tee "$EVIDENCE/install.log"
+          cat > "$EVIDENCE/physical.mjs" <<'NODE'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          import { createHash } from 'node:crypto';
+          import { execFileSync } from 'node:child_process';
+          const stage = process.argv[2];
+          assert(['before', 'after'].includes(stage));
+          const out = process.env.EVIDENCE;
+          const index = execFileSync('git', ['ls-files', '-z'], { encoding: 'utf8' }).split('\0').filter(Boolean);
+          const source = index.map(file => {
+            const bytes = fs.readFileSync(file);
+            return [file, bytes.length, createHash('sha256').update(bytes).digest('hex')];
+          });
+          const lock = JSON.parse(fs.readFileSync('package-lock.json', 'utf8'));
+          const installed = Object.entries(lock.packages).filter(([file]) =>
+            file.startsWith('node_modules/') && fs.existsSync(file + '/package.json')
+          ).map(([file, entry]) => {
+            const version = JSON.parse(fs.readFileSync(file + '/package.json', 'utf8')).version;
+            assert.equal(version, entry.version, file);
+            return [file, version];
+          });
+          assert.equal(source.length, 5797);
+          assert.equal(installed.length, 521);
+          assert.equal(fs.statSync(process.env.SIM_OFFLINE_RECEIPT).size, 0);
+          for (const [name, data] of [['tracked', source], ['installed', installed]]) {
+            const body = JSON.stringify(data);
+            if (stage === 'after') assert.equal(body, fs.readFileSync(out + '/' + name + '-before.json', 'utf8'));
+            fs.writeFileSync(out + '/' + name + '-' + stage + '.json', body);
+          }
+          NODE
+          node "$EVIDENCE/physical.mjs" before
+      - name: Proper app types
+        run: |
+          set -euo pipefail
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee "$EVIDENCE/types.log"
+      - name: Measure original low scores with the real kickoff and scheduled rounds
+        run: |
+          set -euo pipefail
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node_modules/.bin/vitest run \
+            src/lib/cfbDynastyLowScoreBaselineCalibration.test.ts \
+            --reporter=default --reporter=json --outputFile="$EVIDENCE/vitest.json" 2>&1 | tee "$EVIDENCE/vitest.log"
+          test -s "$CFB_DYNASTY_LOW_SCORE_CALIBRATION_RAW"
+          node --input-type=module <<'NODE'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          import { createHash } from 'node:crypto';
+          const out=process.env.EVIDENCE;
+          const report=JSON.parse(fs.readFileSync(out+'/vitest.json','utf8'));
+          assert.deepEqual([report.success,report.numTotalTests,report.numPassedTests,report.numFailedTests,report.numPendingTests,report.numTodoTests],[true,1,1,0,0,0]);
+          assert.equal(report.testResults.length,1);
+          const [suite]=report.testResults;
+          assert(suite.name.endsWith('/src/lib/cfbDynastyLowScoreBaselineCalibration.test.ts'));
+          assert.deepEqual([suite.status,suite.message,suite.assertionResults.length],['passed','',1]);
+          const [row]=suite.assertionResults;
+          assert.deepEqual([row.title,row.status,row.failureMessages],['measures the held low-score baseline on discovery and holdout seasons','passed',[]]);
+          for(const key of ['errors','unhandledErrors','testExecutionErrors']) if(Object.hasOwn(report,key)) assert.deepEqual(report[key],[]);
+          const raw=fs.readFileSync(process.env.CFB_DYNASTY_LOW_SCORE_CALIBRATION_RAW);
+          const evidence=JSON.parse(raw.toString('utf8'));
+          const checks=(()=>{
+          assert.deepEqual(Object.keys(evidence),['schema','report','fixture','candidate','discovery','holdout','seasons']);
+          assert.deepEqual([evidence.schema,evidence.report],[1,'R0004']);
+          assert.deepEqual(evidence.fixture,{firstSeed:539004,seedStep:7919,seasons:192,discoverySeasons:128,holdoutSeasons:64,weeks:12,gamesPerWeek:22,kickoffTeam:'ALA'});
+          assert.equal(evidence.seasons.length,192);
+          const tapeMarker=Buffer.from(',"seasons":[');
+          const tapeMarkerOffset=raw.lastIndexOf(tapeMarker);
+          assert(tapeMarkerOffset>=0&&raw.subarray(-3).equals(Buffer.from(']}\n')));
+          const seasonTape=raw.subarray(tapeMarkerOffset+tapeMarker.length-1,raw.length-2);
+          assert.deepEqual([seasonTape.length,createHash('sha256').update(seasonTape).digest('hex')],[5107431,'f457bf4da992055a3a1c8c7ebd19ec6c8d4b02502a98a556ce06f9a77222bfdb']);
+          const scoreCounts=()=>({zero:0,one:0,two:0});
+          const labels=['zero','one','two'];
+          const countScore=(counts,value)=>{if(value>=0&&value<=2)counts[labels[value]]++;};
+          const make=()=>({seasons:0,rounds:0,games:0,kickoffDraws:0,roundDraws:0,scoreCounts:scoreCounts(),loserScores:scoreCounts(),
+            homeWinners:0,awayWinners:0,tiedScores:0,scoreWinnerConflicts:0,invalidScores:0,slateMismatches:0,drawMismatches:0,missingLoserDraws:0,bucket:[]});
+          const stats={discovery:make(),holdout:make()};
+          for(const [i,season] of evidence.seasons.entries()){
+            const split=i<128?'discovery':'holdout';
+            assert.deepEqual(Object.keys(season),['seed','split','kickoffDraws','rounds']);
+            assert.deepEqual([season.seed,season.split,season.kickoffDraws,season.rounds.length],[539004+i*7919,split,3432,12]);
+            let rng=season.seed;
+            const next=()=>{rng=(Math.imul(rng,1664525)+1013904223)>>>0;return rng/4294967296;};
+            for(let draw=0;draw<season.kickoffDraws;draw++)next();
+            const r=stats[split];
+            r.seasons++;
+            r.kickoffDraws+=season.kickoffDraws;
+            for(const [j,week] of season.rounds.entries()){
+              assert.deepEqual(Object.keys(week),['round','slate','games','draws']);
+              assert.deepEqual([week.round,week.slate.length,week.games.length,week.draws.length],[j+1,22,22,66]);
+              assert.deepEqual(week.draws,Array.from({length:66},next));
+              assert.equal(new Set(week.slate.flat()).size,44);
+              r.rounds++;
+              r.games+=week.games.length;
+              r.roundDraws+=week.draws.length;
+              for(const [k,game] of week.games.entries()){
+                assert.equal(game.length,5);
+                const [home,away,hs,as,winner]=game;
+                assert.deepEqual([home,away],week.slate[k]);
+                assert(Number.isInteger(hs)&&hs>=0&&Number.isInteger(as)&&as>=0&&hs!==as);
+                const homeWon=winner===home;
+                assert.equal(winner,hs>as?home:away);
+                countScore(r.scoreCounts,hs);
+                countScore(r.scoreCounts,as);
+                if(homeWon)r.homeWinners++;else r.awayWinners++;
+                const score=homeWon?as:hs,draw=week.draws[k*3+(homeWon?2:1)];
+                countScore(r.loserScores,score);
+                if(draw<0.04)r.bucket.push([draw,score]);
+              }
+            }
+          }
+          const zeroRate=stats.discovery.loserScores.zero/stats.discovery.games;
+          const rate=Math.round(zeroRate*2000)/2000;
+          assert(rate>0&&rate<=0.03);
+          assert.equal(rate,0.0175);
+          assert.deepEqual(evidence.candidate,{discoveryZeroRate:zeroRate,quantum:0.0005,rate,lowerInclusive:0,upperExclusive:rate,diagnosticLoserDraw:0.03});
+          const summaries={};
+          for(const [split,r] of Object.entries(stats)){
+            const {bucket,...summary}=r;
+            const count=max=>{
+              const scores=scoreCounts();
+              let draws=0;
+              for(const [draw,score] of bucket){
+                if(draw>=max)continue;
+                draws++;
+                countScore(scores,score);
+              }
+              return {draws,rate:draws/r.games,scores,otherScores:draws-scores.zero-scores.one-scores.two};
+            };
+            summaries[split]={...summary,firstBucket:count(0.04),sameDrawLowerTail:count(rate)};
+            assert.deepEqual(evidence[split],summaries[split]);
+          }
+          assert.deepEqual(Object.values(summaries).map(r=>[r.seasons,r.rounds,r.games,r.roundDraws]),[[128,1536,33792,101376],[64,768,16896,50688]]);
+          assert.deepEqual(Object.values(summaries).map(r=>[r.loserScores.zero,r.loserScores.one,r.loserScores.two,r.sameDrawLowerTail.draws]),[[585,617,883,580],[260,295,423,291]]);
+          return {status:'passed',seasons:192,rounds:2304,games:50688,roundDraws:152064,candidate:evidence.candidate,identicalFailedAttemptSeasonTape:{bytes:seasonTape.length,sha256:'f457bf4da992055a3a1c8c7ebd19ec6c8d4b02502a98a556ce06f9a77222bfdb'},...summaries};
+          })();
+          assert.equal(checks.status,'passed');
+          fs.writeFileSync(out+'/calibration-result.json',JSON.stringify({status:'passed',cases:1,checks,rawBytes:raw.length,rawSHA256:createHash('sha256').update(raw).digest('hex')},null,2)+'\n');
+          NODE
+      - name: Verify unchanged physical source and locked offline run
+        if: always()
+        run: |
+          set -euo pipefail
+          git ls-files -s > "$EVIDENCE/source-after.txt"
+          sha256sum package.json package-lock.json > "$EVIDENCE/locks-after.txt"
+          cmp "$EVIDENCE/source-before.txt" "$EVIDENCE/source-after.txt"
+          cmp "$EVIDENCE/locks-before.txt" "$EVIDENCE/locks-after.txt"
+          git diff --exit-code HEAD -- .
+          node "$EVIDENCE/physical.mjs" after
+          test ! -s "$SIM_OFFLINE_RECEIPT"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cfb-dynasty-low-score-calibration-${{ github.run_id }}
+          path: cfb-dynasty-low-score-calibration
+          retention-days: 14
+          if-no-files-found: error
