@@ -1,0 +1,516 @@
+name: Player Bingo birth-year clean source and build join
+on:
+  push:
+    branches: [codex/player-bingo-birth-year-clean-join-qa-20261110]
+permissions:
+  contents: read
+  actions: read
+jobs:
+  closeout:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        shell: bash
+    env:
+      TZ: UTC
+      SIM_NETWORK: offline
+      SIM_OFFLINE_RECEIPT: player-bingo-birth-year-clean-join/offline.log
+      PLAYER_BINGO_BIRTH_YEAR_REFERENCE_ARTIFACT: '13766814198'
+      PLAYER_BINGO_BIRTH_YEAR_REFERENCE_RUN: '42821117398'
+      PLAYER_BINGO_BIRTH_YEAR_REFERENCE_BRANCH: 'codex/player-bingo-birth-year-full-offline-retry-qa-20261110'
+      PLAYER_BINGO_BIRTH_YEAR_REFERENCE_JOB: '129846599749'
+      PLAYER_BINGO_BIRTH_YEAR_REFERENCE_STEPS: '24'
+      PLAYER_BINGO_BIRTH_YEAR_REFERENCE_ZIP: 'ffba57783eccdc6fc5b98067222c19e7ec0b9938c2e59688e0a0c59689aff7de'
+      PLAYER_BINGO_BIRTH_YEAR_REFERENCE_TAR: '78d585e2c403e6483efded0903e3eada34a50c9e85fff9f66936e8d186c8560f'
+      PLAYER_BINGO_BIRTH_YEAR_REFERENCE_HEAD: 'de0ba3f226664c1d10535e53e735059f517a339d'
+      PLAYER_BINGO_BIRTH_YEAR_REFERENCE_TREE: '5e6a5a128f5fb5f2ee71f5a0e26e105ab744ea0f'
+      PLAYER_BINGO_BIRTH_YEAR_REFERENCE_ZIP_BYTES: '11020611'
+      PLAYER_BINGO_BIRTH_YEAR_REFERENCE_BODY_COUNT: '208'
+      PLAYER_BINGO_BIRTH_YEAR_NATIVE_HELPER: '636ea1f9c770d6bf50c2afed7c3687d04d494649'
+      PLAYER_BINGO_BIRTH_YEAR_REFERENCE_AUDIT: '0f3ba03c84e9987d85eaa633e7e242f26b6bcd4fc5a495cd93f1cc2bb4965e65'
+      PLAYER_BINGO_BIRTH_YEAR_CONTROLS_HEAD: '57e561667aa42f7cbe9bcdd081e29065ef728215'
+      PLAYER_BINGO_BIRTH_YEAR_CONTROLS_TREE: '8682b0d81043bb991ea15a903a8b0317d678b992'
+      PLAYER_BINGO_BIRTH_YEAR_FIXED_LIB: '885fab96ef9f463d5447245c6f1f4937ce68aafa'
+      PLAYER_BINGO_BIRTH_YEAR_FIXED_LOAD_SIM: 'b76c0794a40f87f54e3766111d6a9f9f16eff548'
+      PLAYER_BINGO_BIRTH_YEAR_FIXED_TRANSPORT_TEST: '9494d6e391350d9da76aa7a6a1e0f5022df3e62b'
+      PLAYER_BINGO_BIRTH_YEAR_FIXED_WC_ALIAS_TEST: 'b6f57a7f4f1b14a95e90912f54cdbcc34cc3491c'
+      PLAYER_BINGO_BIRTH_YEAR_QUALIFIED_PLAN_BLOB: '47f7f202eb3fbe75ec5b18307511bff41c78cd42'
+      PLAYER_BINGO_BIRTH_YEAR_REFERENCE_DIST_MANIFEST: '40766004142bdebcc677fe3798d73dbcea54706f087002e2407daf4565ea53e2'
+      PLAYER_BINGO_BIRTH_YEAR_REFERENCE_WORKFLOW: '20eeaa29576c619317f67a9d2ef0a82a62b45fa2'
+      PLAYER_BINGO_BIRTH_YEAR_CLEAN_PRODUCT_BASE: '4ba9773714dfb05418a63ade900e27b1a5b078e7'
+      PLAYER_BINGO_BIRTH_YEAR_CLEAN_PRODUCT_BASE_TREE: '6336b32fadad82db8d7f04200ec3c6fdc7e23b87'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 3
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24.22.1
+          cache: npm
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.4.4
+      - name: Locked dependencies and clean source receipts
+        run: |
+          set -euo pipefail
+          if grep -Eq '__[A-Z][A-Z0-9_]*__' .github/workflows/player-bingo-birth-year-20261110.yml; then echo 'Unresolved clean qualification template binding'; exit 1; fi
+          [[ "$PLAYER_BINGO_BIRTH_YEAR_REFERENCE_ARTIFACT" =~ ^[1-9][0-9]*$ ]]
+          [[ "$PLAYER_BINGO_BIRTH_YEAR_REFERENCE_RUN" =~ ^[1-9][0-9]*$ ]]
+          [[ "$PLAYER_BINGO_BIRTH_YEAR_REFERENCE_BRANCH" =~ ^codex/player-bingo-birth-year-[a-z0-9-]+$ ]]
+          [[ "$PLAYER_BINGO_BIRTH_YEAR_REFERENCE_JOB" =~ ^[1-9][0-9]*$ ]]
+          [[ "$PLAYER_BINGO_BIRTH_YEAR_REFERENCE_STEPS" =~ ^[1-9][0-9]*$ ]]
+          [[ "$PLAYER_BINGO_BIRTH_YEAR_REFERENCE_AUDIT" =~ ^[a-f0-9]{64}$ ]]
+          [[ "$PLAYER_BINGO_BIRTH_YEAR_REFERENCE_ZIP" =~ ^[a-f0-9]{64}$ ]]
+          [[ "$PLAYER_BINGO_BIRTH_YEAR_REFERENCE_TAR" =~ ^[a-f0-9]{64}$ ]]
+          [[ "$PLAYER_BINGO_BIRTH_YEAR_REFERENCE_ZIP_BYTES" =~ ^[1-9][0-9]*$ ]]
+          [[ "$PLAYER_BINGO_BIRTH_YEAR_REFERENCE_DIST_MANIFEST" =~ ^[a-f0-9]{64}$ ]]
+          for value in "$PLAYER_BINGO_BIRTH_YEAR_REFERENCE_HEAD" "$PLAYER_BINGO_BIRTH_YEAR_REFERENCE_TREE" "$PLAYER_BINGO_BIRTH_YEAR_NATIVE_HELPER" "$PLAYER_BINGO_BIRTH_YEAR_REFERENCE_WORKFLOW" "$PLAYER_BINGO_BIRTH_YEAR_CONTROLS_HEAD" "$PLAYER_BINGO_BIRTH_YEAR_CONTROLS_TREE" "$PLAYER_BINGO_BIRTH_YEAR_FIXED_LIB" "$PLAYER_BINGO_BIRTH_YEAR_FIXED_LOAD_SIM" "$PLAYER_BINGO_BIRTH_YEAR_FIXED_TRANSPORT_TEST" "$PLAYER_BINGO_BIRTH_YEAR_FIXED_WC_ALIAS_TEST" "$PLAYER_BINGO_BIRTH_YEAR_QUALIFIED_PLAN_BLOB" "$PLAYER_BINGO_BIRTH_YEAR_CLEAN_PRODUCT_BASE" "$PLAYER_BINGO_BIRTH_YEAR_CLEAN_PRODUCT_BASE_TREE"; do [[ "$value" =~ ^[a-f0-9]{40}$ ]]; done
+          test ! -e player-bingo-birth-year-clean-join
+          mkdir player-bingo-birth-year-clean-join
+          touch player-bingo-birth-year-clean-join/offline.log
+          git rev-parse HEAD > player-bingo-birth-year-clean-join/head.txt
+          git rev-parse 'HEAD^{tree}' > player-bingo-birth-year-clean-join/tree.txt
+          git ls-files -s > player-bingo-birth-year-clean-join/source-before.txt
+          sha256sum package.json package-lock.json > player-bingo-birth-year-clean-join/locks-before.txt
+          npm ci 2>&1 | tee player-bingo-birth-year-clean-join/install.log
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const lock=JSON.parse(fs.readFileSync('package-lock.json'));
+          const rows=Object.keys(lock.packages).filter(p=>p.startsWith('node_modules/')&&fs.existsSync(p+'/package.json')).map(p=>[p,JSON.parse(fs.readFileSync(p+'/package.json')).version]);
+          assert.equal(rows.length,521);for(const[p,v]of rows)assert.equal(v,lock.packages[p].version,p);fs.writeFileSync('player-bingo-birth-year-clean-join/installed-before.json',JSON.stringify(rows));
+          NODE
+      - name: Proper app types
+        run: |
+          set -euo pipefail
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee player-bingo-birth-year-clean-join/types.log
+      - name: Authenticate the completed full reference before extraction
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          gh api "repos/PapiSalgueroM/ballpark-hero/actions/runs/$PLAYER_BINGO_BIRTH_YEAR_REFERENCE_RUN" > player-bingo-birth-year-clean-join/reference-run.json
+          gh api "repos/PapiSalgueroM/ballpark-hero/actions/runs/$PLAYER_BINGO_BIRTH_YEAR_REFERENCE_RUN/jobs?per_page=100" > player-bingo-birth-year-clean-join/reference-jobs.json
+          gh api "repos/PapiSalgueroM/ballpark-hero/actions/artifacts/$PLAYER_BINGO_BIRTH_YEAR_REFERENCE_ARTIFACT" > player-bingo-birth-year-clean-join/reference-artifact.json
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          const env = process.env;
+          const read = file => JSON.parse(fs.readFileSync('player-bingo-birth-year-clean-join/' + file));
+          const run = read('reference-run.json'), jobs = read('reference-jobs.json').jobs, artifact = read('reference-artifact.json');
+          assert.deepEqual(
+            [run.id, run.status, run.conclusion, run.event, run.run_attempt, run.path, run.repository.full_name, run.head_sha, run.head_commit.tree_id, run.head_branch],
+            [Number(env.PLAYER_BINGO_BIRTH_YEAR_REFERENCE_RUN), 'completed', 'success', 'push', 1, '.github/workflows/player-bingo-birth-year-20261110.yml', 'PapiSalgueroM/ballpark-hero', env.PLAYER_BINGO_BIRTH_YEAR_REFERENCE_HEAD, env.PLAYER_BINGO_BIRTH_YEAR_REFERENCE_TREE, env.PLAYER_BINGO_BIRTH_YEAR_REFERENCE_BRANCH],
+          );
+          assert.equal(jobs.length, 1);
+          const [job] = jobs;
+          assert.deepEqual([job.id, job.run_id, job.status, job.conclusion, job.head_sha, job.steps.length],
+            [Number(env.PLAYER_BINGO_BIRTH_YEAR_REFERENCE_JOB), run.id, 'completed', 'success', run.head_sha, Number(env.PLAYER_BINGO_BIRTH_YEAR_REFERENCE_STEPS)]);
+          assert(job.steps.every(step => step.status === 'completed' && step.conclusion === 'success'));
+          assert.deepEqual(
+            [artifact.id, artifact.name, artifact.expired, artifact.size_in_bytes, artifact.digest, artifact.workflow_run.id, artifact.workflow_run.head_sha, artifact.workflow_run.head_branch],
+            [Number(env.PLAYER_BINGO_BIRTH_YEAR_REFERENCE_ARTIFACT), 'player-bingo-birth-year-full-' + run.id, false, Number(env.PLAYER_BINGO_BIRTH_YEAR_REFERENCE_ZIP_BYTES), 'sha256:' + env.PLAYER_BINGO_BIRTH_YEAR_REFERENCE_ZIP, run.id, run.head_sha, run.head_branch],
+          );
+          NODE
+          git fetch --no-tags --depth=2 origin "$PLAYER_BINGO_BIRTH_YEAR_REFERENCE_HEAD"
+          test "$(git rev-parse "$PLAYER_BINGO_BIRTH_YEAR_REFERENCE_HEAD^{tree}")" = "$PLAYER_BINGO_BIRTH_YEAR_REFERENCE_TREE"
+          test "$(git rev-parse "$PLAYER_BINGO_BIRTH_YEAR_CONTROLS_HEAD^{tree}")" = "$PLAYER_BINGO_BIRTH_YEAR_CONTROLS_TREE"
+          gh api "repos/PapiSalgueroM/ballpark-hero/actions/artifacts/$PLAYER_BINGO_BIRTH_YEAR_REFERENCE_ARTIFACT/zip" > "$RUNNER_TEMP/player-bingo-birth-year-full-reference.zip"
+          test "$(wc -c < "$RUNNER_TEMP/player-bingo-birth-year-full-reference.zip")" -eq "$PLAYER_BINGO_BIRTH_YEAR_REFERENCE_ZIP_BYTES"
+          echo "$PLAYER_BINGO_BIRTH_YEAR_REFERENCE_ZIP  $RUNNER_TEMP/player-bingo-birth-year-full-reference.zip" | sha256sum --check
+          unzip -Z1 "$RUNNER_TEMP/player-bingo-birth-year-full-reference.zip" > player-bingo-birth-year-clean-join/reference-zip-entries.txt
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          const names = fs.readFileSync('player-bingo-birth-year-clean-join/reference-zip-entries.txt', 'utf8').trimEnd().split('\n');
+          assert.equal(new Set(names).size, names.length, 'Unique admitted ZIP paths');
+          assert.equal(names.filter(name=>!name.endsWith('/')).length,Number(process.env.PLAYER_BINGO_BIRTH_YEAR_REFERENCE_BODY_COUNT),'Exact regular ZIP body count');
+          for (const name of names) {
+            assert(name.length && !name.includes('\\') && !name.startsWith('/'), 'Relative ZIP path');
+            assert(name.replace(/\/$/, '').split('/').every(part => part && part !== '.' && part !== '..'), 'Safe ZIP path');
+          }
+          for (const file of ['head.txt', 'tree.txt', 'admission.json', 'unit-admission.json', 'native-admission.json', 'source-join.json', 'source-before.txt', 'source-after.txt', 'tracked-before.json', 'tracked-after.json', 'locks-before.txt', 'locks-after.txt', 'installed-before.json', 'installed-after.json', 'offline.log', 'browser.transport.log', 'prior-failed-full.json', 'weight-source-proof.json', 'weight-asset-blocks.jsonl', 'types.log', 'dist-before.json', 'dist-after.json', 'dist.tgz']) {
+            assert(names.includes(file), file + ' required authenticated body');
+          }
+          NODE
+          python3 - "$RUNNER_TEMP/player-bingo-birth-year-full-reference.zip" <<'PY'
+          import stat
+          import sys
+          import zipfile
+          with zipfile.ZipFile(sys.argv[1]) as archive:
+              for entry in archive.infolist():
+                  allowed = (0, stat.S_IFDIR) if entry.is_dir() else (0, stat.S_IFREG)
+                  if stat.S_IFMT(entry.external_attr >> 16) not in allowed:
+                      raise ValueError("Unexpected ZIP entry type: " + entry.filename)
+          PY
+          mkdir "$RUNNER_TEMP/player-bingo-birth-year-full-reference" "$RUNNER_TEMP/player-bingo-birth-year-full-reference-dist"
+          unzip -q "$RUNNER_TEMP/player-bingo-birth-year-full-reference.zip" -d "$RUNNER_TEMP/player-bingo-birth-year-full-reference"
+          test -z "$(find "$RUNNER_TEMP/player-bingo-birth-year-full-reference" -type l -print -quit)"
+          echo "$PLAYER_BINGO_BIRTH_YEAR_REFERENCE_TAR  $RUNNER_TEMP/player-bingo-birth-year-full-reference/dist.tgz" | sha256sum --check
+          tar -tzf "$RUNNER_TEMP/player-bingo-birth-year-full-reference/dist.tgz" > player-bingo-birth-year-clean-join/reference-tar-entries.txt
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          const names = fs.readFileSync('player-bingo-birth-year-clean-join/reference-tar-entries.txt', 'utf8').trimEnd().split('\n');
+          assert.equal(new Set(names).size, names.length, 'Unique admitted dist tar paths');
+          for (const name of names) {
+            assert(name.startsWith('dist/') && !name.includes('\\'), 'Tar stays under dist');
+            assert(name.replace(/\/$/, '').split('/').every(part => part && part !== '.' && part !== '..'), 'Safe tar path');
+          }
+          NODE
+          python3 - "$RUNNER_TEMP/player-bingo-birth-year-full-reference/dist.tgz" <<'PY'
+          import sys
+          import tarfile
+          with tarfile.open(sys.argv[1], "r:gz") as archive:
+              for entry in archive:
+                  if not (entry.isdir() or entry.isfile()):
+                      raise ValueError("Unexpected TAR entry type: " + entry.name)
+          PY
+          tar -xzf "$RUNNER_TEMP/player-bingo-birth-year-full-reference/dist.tgz" -C "$RUNNER_TEMP/player-bingo-birth-year-full-reference-dist"
+          cp "$RUNNER_TEMP/player-bingo-birth-year-full-reference/source-before.txt" player-bingo-birth-year-clean-join/reference-source.txt
+      - name: Fresh unchanged product-name fence on clean source
+        run: |
+          set -euo pipefail
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simNoRivalNames.mjs 2>&1 | tee player-bingo-birth-year-clean-join/no-rival.log
+      - name: Clean production build
+        run: |
+          set -euo pipefail
+          NODE_OPTIONS="--max-old-space-size=6144" npm run build 2>&1 | tee player-bingo-birth-year-clean-join/build.log
+      - name: Join exact clean product source and all 850 built files
+        id: join
+        env:
+          PLAYER_BINGO_BIRTH_YEAR_REFERENCE_DIR: ${{ runner.temp }}/player-bingo-birth-year-full-reference
+          PLAYER_BINGO_BIRTH_YEAR_REFERENCE_DIST: ${{ runner.temp }}/player-bingo-birth-year-full-reference-dist/dist
+        run: |
+          set -euo pipefail
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import assert from 'node:assert/strict';
+          import {createHash} from 'node:crypto';
+          import {execFileSync} from 'node:child_process';
+          const env = process.env;
+          const out = 'player-bingo-birth-year-clean-join';
+          const ref = env.PLAYER_BINGO_BIRTH_YEAR_REFERENCE_DIR;
+          const read = file => JSON.parse(fs.readFileSync(path.join(ref, file)));
+          const bytes = file => fs.readFileSync(path.join(ref, file));
+          const readOutput = file => JSON.parse(fs.readFileSync(path.join(out, file)));
+          const sha = bytes => createHash('sha256').update(bytes).digest('hex');
+          const blob = bytes => createHash('sha1').update('blob ' + bytes.length + '\0').update(bytes).digest('hex');
+          const git = (...args) => execFileSync('git', args, {encoding:'utf8', maxBuffer:16 * 1024 * 1024});
+          const workflow = '.github/workflows/player-bingo-birth-year-20261110.yml';
+          const helper = 'scripts/qa/playPlayerBingoBirthYear.mjs';
+          const lib = 'src/lib/playerBingo.ts';
+          const sim = 'scripts/simPlayerBingoLoad.mjs';
+          const transportTest = 'src/test/playerBingoTransport.test.ts';
+          const aliasTest = 'src/test/playerBingoWorldCupAlias.test.ts';
+          const plan = 'docs/plans/2026-11-10-player-bingo-birth-year.md';
+          const configs = ['index.html','package.json','package-lock.json','vite.config.ts','tailwind.config.ts','postcss.config.js','tsconfig.json','tsconfig.app.json','tsconfig.node.json','bun.lockb','bun.lock'];
+          const sourceScope = file => /^(?:src|public|scripts)\//.test(file);
+          const fullOnly = new Set([workflow, helper]);
+          const originalProductBlobs = {
+            [lib]:'897f538765323a68a86d1d068db4fc182b52d1a5',
+            [sim]:'b93fbf4f3a15258a2c88fdc75773593502897b53',
+            [transportTest]:'36cb2768a5f2c422fabc22eaf5627b750b2f4682',
+            [aliasTest]:'d11c81a71407314c3a5bedc88c27c91a4fe16c81',
+          };
+          const productPins = {
+            [lib]: env.PLAYER_BINGO_BIRTH_YEAR_FIXED_LIB,
+            [sim]: env.PLAYER_BINGO_BIRTH_YEAR_FIXED_LOAD_SIM,
+            [transportTest]: env.PLAYER_BINGO_BIRTH_YEAR_FIXED_TRANSPORT_TEST,
+            [aliasTest]: env.PLAYER_BINGO_BIRTH_YEAR_FIXED_WC_ALIAS_TEST,
+          };
+          const pins = {
+            ...productPins, [plan]: env.PLAYER_BINGO_BIRTH_YEAR_QUALIFIED_PLAN_BLOB,
+            'src/App.tsx':'8bfedf7aaa1d076e0f0c8e2216c7e46632cd8a33',
+            'src/data/gameRegistry.ts':'f560b40a74d1468ac72dfde4ee6fec6635a9a255',
+            'public/player-bingo/index.html':'af701f7f56f498defe0da719fcae5b63c0dd1b91',
+            'src/pages/PlayerBingo.tsx':'e26d20a48216f9eb3a1faf62389d561814dcbe99',
+            'src/test/playerBingoBirthYear.test.ts':'59fe4931902a6a5ca8798c9083f637418a236759',
+            'scripts/lib/offlineTransport.cjs':'0fda542a2649fe5da937c6976fd0f5b6073e74b6',
+          };
+          const indexRows = (body, separator = '\n') => {
+            const rows = body.split(separator).filter(Boolean).map(line => {
+              const matched = /^(100(?:644|755)) ([0-9a-f]{40}) 0\t(.+)$/.exec(line);
+              assert(matched, 'Actual regular path/mode/blob index tuple');
+              return [matched[3], {mode:matched[1], blob:matched[2]}];
+            });
+            assert.equal(new Set(rows.map(([file]) => file)).size, rows.length, 'Unique index paths');
+            return new Map(rows);
+          };
+          const treeRows = commit => {
+            const rows = git('ls-tree', '-r', '-z', commit).split('\0').filter(Boolean).map(line => {
+              const matched = /^(100(?:644|755)) blob ([0-9a-f]{40})\t(.+)$/.exec(line);
+              assert(matched, 'Actual regular path/mode/blob tree tuple');
+              return [matched[3], {mode:matched[1], blob:matched[2]}];
+            });
+            assert.equal(new Set(rows.map(([file]) => file)).size, rows.length, 'Unique tree paths');
+            return new Map(rows);
+          };
+          const ordered = rows => [...rows].sort(([left],[right]) => left.localeCompare(right));
+          const cleanHead = git('rev-parse', 'HEAD').trim(), cleanTree = git('rev-parse', 'HEAD^{tree}').trim();
+          assert.deepEqual(git('rev-list', '--parents', '-n', '1', 'HEAD').trim().split(' '), [cleanHead, env.PLAYER_BINGO_BIRTH_YEAR_CLEAN_PRODUCT_BASE], 'Clean QA is the direct PR541 child');
+          assert.equal(git('rev-parse', env.PLAYER_BINGO_BIRTH_YEAR_CLEAN_PRODUCT_BASE + '^{tree}').trim(), env.PLAYER_BINGO_BIRTH_YEAR_CLEAN_PRODUCT_BASE_TREE);
+          assert.equal(cleanHead, env.GITHUB_SHA);
+          assert.equal(fs.readFileSync(out + '/head.txt','utf8').trim(), cleanHead);
+          assert.equal(fs.readFileSync(out + '/tree.txt','utf8').trim(), cleanTree);
+          const base = treeRows(env.PLAYER_BINGO_BIRTH_YEAR_CLEAN_PRODUCT_BASE);
+          const current = indexRows(fs.readFileSync(out + '/source-before.txt', 'utf8'));
+          const old = indexRows(fs.readFileSync(out + '/reference-source.txt', 'utf8'));
+          assert.deepEqual(ordered(indexRows(git('ls-files','--stage','-z'),'\0')), ordered(current));
+          assert.deepEqual(ordered(treeRows(cleanHead)), ordered(current), 'Clean index joins exact committed tree tuples');
+          assert.deepEqual([base.size,current.size,old.size],[5800,5802,5803]);
+          const allowedClean = [...Object.keys(productPins),plan,workflow];
+          const cleanDelta = [...new Set([...base.keys(), ...current.keys()])].filter(file => {
+            const before = base.get(file), after = current.get(file);
+            return before?.mode !== after?.mode || before?.blob !== after?.blob;
+          }).sort();
+          assert.deepEqual(cleanDelta,allowedClean.slice().sort(),'Exactly four qualified bodies and two owned new leaves');
+          assert.equal(base.size-Object.keys(productPins).length,5796);
+          for (const [file,before] of Object.entries(originalProductBlobs)) {
+            assert.equal(base.get(file)?.blob,before,file+' exact PR541 original');
+            assert.equal(current.get(file)?.mode,base.get(file)?.mode,file+' held mode');
+            assert.notEqual(current.get(file)?.blob,before,file+' changed qualified product bytes');
+          }
+          for (const file of [plan,workflow]) assert(!base.has(file) && current.get(file)?.mode==='100644',file+' exact owned new leaf');
+          const fullHead = env.PLAYER_BINGO_BIRTH_YEAR_REFERENCE_HEAD;
+          const controlsHead = env.PLAYER_BINGO_BIRTH_YEAR_CONTROLS_HEAD;
+          assert.deepEqual(git('rev-list','--parents','-n','1',fullHead).trim().split(' '),[fullHead,controlsHead],'Full QA is the direct controls child');
+          assert.equal(git('rev-parse',fullHead+'^{tree}').trim(),env.PLAYER_BINGO_BIRTH_YEAR_REFERENCE_TREE);
+          assert.equal(git('rev-parse',controlsHead+'^{tree}').trim(),env.PLAYER_BINGO_BIRTH_YEAR_CONTROLS_TREE);
+          const controls = treeRows(controlsHead);
+          assert.equal(controls.size,5802);
+          assert.deepEqual(ordered(treeRows(fullHead)),ordered(old),'Actual full packet index joins the immutable full commit tree');
+          assert.deepEqual(git('diff','--name-status','--no-renames',controlsHead,fullHead).trim().split('\n').sort(),
+            ['A\t'+helper,'M\t'+workflow].sort(),'Full adds exactly the native helper and changes the workflow');
+          assert(!controls.has(helper));
+          assert.equal(old.get(helper)?.mode,'100644');
+          assert.equal(old.get(workflow)?.mode,controls.get(workflow)?.mode);
+          assert(!current.has(helper), 'Tracked full browser helper is excluded from clean QA');
+          assert.equal(old.get(helper)?.blob, env.PLAYER_BINGO_BIRTH_YEAR_NATIVE_HELPER);
+          assert.equal(old.get(workflow)?.blob, env.PLAYER_BINGO_BIRTH_YEAR_REFERENCE_WORKFLOW);
+          assert(current.get(workflow)?.blob && current.get(workflow).blob !== old.get(workflow).blob, 'Clean QA uses its own workflow body');
+          for (const [file,want] of Object.entries(pins)) {
+            assert.equal(current.get(file)?.blob, want, file + ' exact clean pin');
+            assert.equal(old.get(file)?.blob, want, file + ' exact full pin');
+          }
+          const product = (rows, omit) => ordered([...rows].filter(([file]) => !omit.has(file)));
+          const cleanProduct = product(current,new Set([workflow]));
+          const fullProduct = product(old,fullOnly);
+          assert.equal(cleanProduct.length,5801);
+          assert.deepEqual(cleanProduct,fullProduct,'All 5801 product path/mode/blob tuples are identical');
+          assert.deepEqual([base,current,old].map(rows => [...rows.keys()].filter(sourceScope).length), [4669,4669,4670]);
+          const scoped = (rows, omit) => ordered([...rows].filter(([file]) => (sourceScope(file) || configs.includes(file)) && !omit.has(file)));
+          const sourceConfigRows = scoped(current,new Set());
+          assert.equal(sourceConfigRows.length, 4680);
+          assert.deepEqual(sourceConfigRows,scoped(old,fullOnly),'Every 4669 code and 11 root configuration path/mode/blob tuple');
+          for (const file of configs) assert(current.has(file) && old.has(file),file + ' required root configuration');
+          for (const [file,tuple] of current) {
+            const stat = fs.lstatSync(file);
+            assert(stat.isFile(),file + ' physical regular source body');
+            assert.equal((stat.mode & 0o111) !== 0, tuple.mode === '100755',file + ' physical source executable mode');
+            assert.equal(blob(fs.readFileSync(file)),tuple.blob,file + ' physical source bytes join tree');
+          }
+
+          const inventory = (directory,prefix = '') => fs.readdirSync(directory,{withFileTypes:true}).sort((a,b) => a.name.localeCompare(b.name)).flatMap(entry => {
+            const file = path.join(directory,entry.name);
+            const relative = prefix + entry.name;
+            if (entry.isDirectory()) return inventory(file,relative + '/');
+            assert(entry.isFile(),relative + ' regular dist file');
+            const body = fs.readFileSync(file);
+            return [{path:relative,bytes:body.length,sha256:sha(body)}];
+          });
+          const actual = inventory('dist'), reference = inventory(env.PLAYER_BINGO_BIRTH_YEAR_REFERENCE_DIST);
+          assert.deepEqual([actual.length,reference.length],[850,850]);
+          assert.deepEqual(actual,reference,'Every clean built path and byte equals the qualified full build');
+          const distManifestSHA256 = sha(JSON.stringify(reference));
+          const sortFull = rows => rows.slice().sort((left,right) => left.file.localeCompare(right.file));
+          const retainedBefore = sortFull(read('dist-before.json'));
+          const retainedAfter = sortFull(read('dist-after.json'));
+          assert.deepEqual(retainedBefore,retainedAfter,'Exact full before/after build tuples');
+          const fullDistTupleSHA256 = sha(JSON.stringify(retainedAfter));
+          assert.equal(fullDistTupleSHA256,env.PLAYER_BINGO_BIRTH_YEAR_REFERENCE_DIST_MANIFEST);
+          const retainedManifest = retainedBefore.map(row => {
+            assert.deepEqual(Object.keys(row).sort(),['bytes','file','sha256']);
+            assert(row.file.startsWith('dist/'));
+            return {path:row.file.slice(5),bytes:row.bytes,sha256:row.sha256};
+          }).sort((left,right) => left.path.localeCompare(right.path));
+          assert.deepEqual(retainedManifest,reference.slice().sort((left,right) => left.path.localeCompare(right.path)),'Exact full retained build inventory and tar join');
+          for (const [before, after] of [['source-before.txt','source-after.txt'],['tracked-before.json','tracked-after.json'],['locks-before.txt','locks-after.txt'],['installed-before.json','installed-after.json']]) {
+            assert(bytes(before).equals(bytes(after)),before + ' held by actual full job');
+          }
+          assert(bytes('source-before.txt').equals(fs.readFileSync(out + '/reference-source.txt')));
+          assert(bytes('installed-before.json').equals(fs.readFileSync(out + '/installed-before.json')));
+          assert(bytes('locks-before.txt').equals(fs.readFileSync(out + '/locks-before.txt')));
+          assert.deepEqual([bytes('offline.log').length,bytes('types.log').length],[0,0]);
+          const referenceHead = bytes('head.txt').toString('utf8').trim(), referenceTree = bytes('tree.txt').toString('utf8').trim();
+          const run = readOutput('reference-run.json'), job = readOutput('reference-jobs.json').jobs[0], meta = readOutput('reference-artifact.json');
+          assert.deepEqual([referenceHead,referenceTree],[env.PLAYER_BINGO_BIRTH_YEAR_REFERENCE_HEAD,env.PLAYER_BINGO_BIRTH_YEAR_REFERENCE_TREE]);
+          const full = read('admission.json'), native = read('native-admission.json'), unit = read('unit-admission.json'), source = read('source-join.json');
+          assert.deepEqual([full.status,full.head,full.tree,full.distFiles,full.distTupleSHA256],
+            ['passed',referenceHead,referenceTree,850,fullDistTupleSHA256]);
+          assert.deepEqual(full.unit,unit);
+          assert.deepEqual(full.native,native);
+          assert.deepEqual(full.distTar,{bytes:bytes('dist.tgz').length,sha256:env.PLAYER_BINGO_BIRTH_YEAR_REFERENCE_TAR});
+          assert.equal(sha(bytes('dist.tgz')),env.PLAYER_BINGO_BIRTH_YEAR_REFERENCE_TAR);
+          assert.equal(source.status,'passed');
+          assert.deepEqual([source.head,source.tree],[referenceHead,referenceTree]);
+          assert.equal(unit.status,'passed');
+          assert.equal(native.status,'passed');
+          assert.deepEqual([full.readers,full.immutableCaps,full.controlsRerun],[20,16,false]);
+          assert.equal(job.name,'full');
+          assert.equal(bytes('dist-after.json').toString(),JSON.stringify(retainedAfter));
+          assert.equal(bytes('dist.sha256').toString().trim(),full.distTar.sha256+'  player-bingo-birth-year-full/dist.tgz');
+          const readerLog = bytes('readers.log').toString();
+          const weightLog = bytes('weight.log').toString();
+          assert(readerLog.includes('All 20 harnesses green.'));
+          assert(weightLog.includes('sweepWeight: green.'));
+          const capRows = weightLog.split('\n').filter(line => /^\s+\/\S*\s+\d+K gz over/.test(line));
+          assert.equal(capRows.length,16);
+          assert.deepEqual(full.capRows,capRows);
+          const evidencePins = [{"file":"active-route-preflight.json","bytes":1320,"sha256":"6c952238a008605284e78de712180921d76a11e6a3ef3e55a859e2d6c3951d6f"},{"file":"active-snapshot.html","bytes":22253,"sha256":"fefd391f77a38a10a831735de182a44e1ff05819f012d4902739b66f19c7f98f"},{"file":"admission.json","bytes":14412,"sha256":"60d9874154347ff635ed8a59743923198af42479aabb1bb9297b0eca36684678"},{"file":"browser-exit.txt","bytes":2,"sha256":"9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"},{"file":"browser-host.log","bytes":94,"sha256":"8be8e068c9b6c9dfcd46241ba131f4460a342b413d24a56c8f6e254b115f2c20"},{"file":"browser-install.log","bytes":24,"sha256":"4aaef3acc3c4b16766abf61c4f4aa2d3bd413e2fe822d3edd6cfa9d7e7334efa"},{"file":"browser-package.json","bytes":378,"sha256":"2b1e99e10ca7801f045d1fa500adb6b9698090f098b06e7dc631a7470e3e8be3"},{"file":"browser.log","bytes":56,"sha256":"cbf545e6da0660e4e024739a3f24511d7363f4df6ae82fad9613c0dfa102ee2f"},{"file":"browser.transport.log","bytes":0,"sha256":"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"},{"file":"browser/1280-conflict-fallback-after.png","bytes":54920,"sha256":"8e6895d61f9c9b5e78b298edac8912a4687cb6dcedf83e461b370a536b11cb37"},{"file":"browser/1280-conflict-fallback-before.png","bytes":53351,"sha256":"4ec2644fb7ead53059f8301eaba6a75ae6ad819163dba56e1cf997cb527abd44"},{"file":"browser/1280-dec31-correct-after.png","bytes":54775,"sha256":"29bd717ebae40ede22d3dcb2cc1ad79180046420b0de241c3e18504217c59076"},{"file":"browser/1280-dec31-correct-before.png","bytes":53429,"sha256":"3abaa1da3063a9acfcb755b8c3d2b9d3f099d81d56c2a813d014cd32213ccdb5"},{"file":"browser/1280-implausible-fallback-after.png","bytes":56018,"sha256":"dbf4166f3122f992f3478d1966c2633f25a9b4feca23fdd20b19aa4461cc2bfe"},{"file":"browser/1280-implausible-fallback-before.png","bytes":54288,"sha256":"29386e1cdb110b93a93d5eb1e625c8d6b71b9d25e36d09e8901d2f389525fe63"},{"file":"browser/1280-invalid-fallback-after.png","bytes":59561,"sha256":"963b42656ac18daa7571de293694409c12a3d0cccbcc7f08cd164254ba6facae"},{"file":"browser/1280-invalid-fallback-before.png","bytes":57802,"sha256":"9667e1b5974efeb9d482e382088d1636a40fa96e4f5bd8820f32cc59b780497d"},{"file":"browser/1280-jan1-correct-after.png","bytes":57798,"sha256":"79795ada6cee76d048031991a6701af4d2c678bd7188a1b4c21aa327fea21702"},{"file":"browser/1280-jan1-correct-before.png","bytes":56258,"sha256":"2b2b2cfbed5c6f8d87a270459c85f9ef8a04c403aac93be06bc208095fd5ad81"},{"file":"browser/1280-jan27-adjacent-after.png","bytes":53774,"sha256":"7d35048611dd56aceee11aa83f5117d50676bd91f3cbabdcfa11e68a96d63b85"},{"file":"browser/1280-jan27-adjacent-before.png","bytes":53799,"sha256":"377864a79ff797f3eb6252d8385c64f5b10da481374dfc35a5277370a06c773e"},{"file":"browser/1280-legacy-fallback-after.png","bytes":54748,"sha256":"c98395b6429a1c41643979da7c8af6235b764223bc5c90d2911280985ad857b9"},{"file":"browser/1280-legacy-fallback-before.png","bytes":53421,"sha256":"751f66cdd47ddc7a6e3ad2a175f50a3b9f86d5c1ac7f8ba9d09107de7b700348"},{"file":"browser/1280-wrong-country-fallback-after.png","bytes":54056,"sha256":"66c2546083446b6c62ba52d0157c18e67dd99dd63627bb7b077a26da8f576c95"},{"file":"browser/1280-wrong-country-fallback-before.png","bytes":52267,"sha256":"2d81046f2fa30806e00784b1984ce49898c311ab5c1d8c2c842914bd8e7b0e12"},{"file":"browser/320-conflict-fallback-after.png","bytes":44282,"sha256":"325c020a6875cd58605baedf92c5b5cc188f669ae3578928ced8dabb7b6f305e"},{"file":"browser/320-conflict-fallback-before.png","bytes":42757,"sha256":"c7e2e0ad19b431842d1ca4afb72d6b249989a7d90a0cc390a87934193c268fab"},{"file":"browser/320-dec31-correct-after.png","bytes":44370,"sha256":"620e42be37f7a33ef58e0acb41cb528340a97459d9f92f09e4a37aba4f582c51"},{"file":"browser/320-dec31-correct-before.png","bytes":43271,"sha256":"5f06cd17286ab4e262015c30160656d71b2a0974a650396c0d90adb3b84c621c"},{"file":"browser/320-implausible-fallback-after.png","bytes":45381,"sha256":"46ed7045d6c2797623bd094e8bc404c42de8acd224a687a4f8331632ddb28899"},{"file":"browser/320-implausible-fallback-before.png","bytes":44034,"sha256":"a786d0696bb4de623df49347a72786428c5a35b7a2fb03e791c5c6306ddc9f4c"},{"file":"browser/320-invalid-fallback-after.png","bytes":47239,"sha256":"60ad7b0d134446e54fc7690897301ed5836d501c1667d36b28171842d345a0f0"},{"file":"browser/320-invalid-fallback-before.png","bytes":45631,"sha256":"e8dbfb9693259473978fb0a36fdffe79e6c4e6dedde5dbae61edb3af33f28ea0"},{"file":"browser/320-jan1-correct-after.png","bytes":46277,"sha256":"90d2c60b597ec0a8367ea7ea2b554d5f64ca100f6bc0b15cf0fba3423a9cde88"},{"file":"browser/320-jan1-correct-before.png","bytes":44695,"sha256":"a680fad9a652085c2a34daf6a74a02dbbc6fda7a4b7dcd5588b517997d08402c"},{"file":"browser/320-jan27-adjacent-after.png","bytes":43476,"sha256":"c1ca01dbc9bf4f154cd2fa1af6dca4a022683c46b677973f250d54b71c2bdc51"},{"file":"browser/320-jan27-adjacent-before.png","bytes":42905,"sha256":"67496c4d634356796c7e87210b71edb51b667e6d56915e79beb33c89b7c22a37"},{"file":"browser/320-legacy-fallback-after.png","bytes":43467,"sha256":"329fb2c717019d4d59960f2df7b28a48ab4fc23aa45011239ebc19cd9bc42c31"},{"file":"browser/320-legacy-fallback-before.png","bytes":42480,"sha256":"8fc1d52bb818351f1680a17fd9ffa5d29368a828c79008594341f4ad264a06d1"},{"file":"browser/320-wrong-country-fallback-after.png","bytes":45128,"sha256":"8c29e548769626d16d8a5c5d9c348cccac826dc072436bf9c82781f4ac3e1c90"},{"file":"browser/320-wrong-country-fallback-before.png","bytes":43496,"sha256":"c0583b0b3eb8715e3ac300c6a4f10a833623e7f2d394048b17b1378f38aa45f5"},{"file":"browser/390-conflict-fallback-after.png","bytes":45682,"sha256":"d4cc43c5503eb8699292e0b91477d181a198d554797cb19fd9621aee0409a7cd"},{"file":"browser/390-conflict-fallback-before.png","bytes":43982,"sha256":"d915e396d0edbd030911622df79a29346c16b9bd07f2df1e395a546975e9b5df"},{"file":"browser/390-dec31-correct-after.png","bytes":46596,"sha256":"0aa198088647d3a98df7c92cb9f114032194d4fdc1003520f8d4b383694b1e75"},{"file":"browser/390-dec31-correct-before.png","bytes":45172,"sha256":"bd45ff18b81d6826a3efb5821255e3690d7362154d67bfc569bdb07b07025c45"},{"file":"browser/390-implausible-fallback-after.png","bytes":46314,"sha256":"78ddf83270c5cae259e141023cb7db1165761edbbd8b4282e9e9eba26495992b"},{"file":"browser/390-implausible-fallback-before.png","bytes":44771,"sha256":"1474923a2b71ae13e68c697d7f78726d321153917ad49438a0853944bef76b34"},{"file":"browser/390-invalid-fallback-after.png","bytes":49255,"sha256":"bbb70386565000a60027059b1c807fd6015ff82e43ce53d90d80632365429cad"},{"file":"browser/390-invalid-fallback-before.png","bytes":47385,"sha256":"baab7c70a981d6620fbea2db5c86bacb6f52dc80370bdd3290290aed7e7a7f45"},{"file":"browser/390-jan1-correct-after.png","bytes":47478,"sha256":"55b734c1467cf74272dc93602af7c63ae87e54f1002b94edb0ac6536a48abb99"},{"file":"browser/390-jan1-correct-before.png","bytes":46052,"sha256":"61c14aeb3e8c47309c7bce9eda2b4d57ffd04a1bfaad3ea9f9a016028af7b4c6"},{"file":"browser/390-jan27-adjacent-after.png","bytes":45173,"sha256":"5e8433d0c4a077d30a5fa4104f966a4e021ffb06339855bfc7d913198d5c2460"},{"file":"browser/390-jan27-adjacent-before.png","bytes":44668,"sha256":"2e65b365721aff46feab8ec039b555b6698068a3b5334ca5a363035adea3bad4"},{"file":"browser/390-legacy-fallback-after.png","bytes":45727,"sha256":"5253f77c73e98135d757ae6a2e1bf177b25a3ec6c4fd54b225816c429162871e"},{"file":"browser/390-legacy-fallback-before.png","bytes":44370,"sha256":"7c588185cf3c7ac94f051310cfe4e8fb9b0d59e4f663a7cdc948940a2f33ac17"},{"file":"browser/390-wrong-country-fallback-after.png","bytes":47004,"sha256":"1d97bca767a3bb376953c73794d6f5658f901e88281c8fa24c4a29a497e6d353"},{"file":"browser/390-wrong-country-fallback-before.png","bytes":45238,"sha256":"873eace8268de09ad5aa8f1a158f2adc6ea0caf312b361f21068a759b49de075"},{"file":"browser/built-document.html","bytes":22871,"sha256":"951e1bdf094d14b6e9bd03468e016416174ec3472bc8475ae5a9476f42aa7c25"},{"file":"browser/fictional-fixture.json","bytes":2164804,"sha256":"be8fccc861d1727dce95f8f08dd0d048a7fb1afc2fd72643d63917868f0123da"},{"file":"browser/report.json","bytes":1242235,"sha256":"278f2a0f2f498904d1eb6aed47a18fe01bd7e03f4832083b2b4326565d8e8eb4"},{"file":"build.log","bytes":97208,"sha256":"56ea30616063472c5de0d2eba1129eb636b46f33ff66b6a5559e32ed8b19f19f"},{"file":"candidate-native-helper.mjs","bytes":26155,"sha256":"d14a8107d016c2c6bb138a776196b46f3a89388f1deda05b74bd6e74e1095d1c"},{"file":"candidate-workflow.yml","bytes":66066,"sha256":"214023c36edde5d60923fb014435c9072d09f2170e3ca1c6b4e4143b3bfb0b5a"},{"file":"chromium-install.log","bytes":16464,"sha256":"70b64fdc6623d9520341b6c5746faebac5885d9c5850fc529885c35d4535d9de"},{"file":"dist-after.json","bytes":115729,"sha256":"40766004142bdebcc677fe3798d73dbcea54706f087002e2407daf4565ea53e2"},{"file":"dist-before.json","bytes":115729,"sha256":"d6dbbd2fe2a47859164231d06577d7f3e9680b8facc8ac129eb17a58f9b59308"},{"file":"dist.sha256","bytes":104,"sha256":"223fc4bbe55fc9af64fe90caf52f1c08edbce1740192dad075d46bf9cc6c39ae"},{"file":"dist.tgz","bytes":6987323,"sha256":"78d585e2c403e6483efded0903e3eada34a50c9e85fff9f66936e8d186c8560f"},{"file":"fixed-result.json","bytes":1168,"sha256":"a1c364cd7ae948eb900046c30dfcdea4778a3d431698a69bd4df7845e379c9d6"},{"file":"head.txt","bytes":41,"sha256":"a53a45501b6f29c110a76995846ce73c6130389547d4604012350dd8a9af3753"},{"file":"install.log","bytes":1391,"sha256":"09318115fd87245179a56fa440df69aa6432582df02db4e656519faf77349b58"},{"file":"installed-after.json","bytes":22175,"sha256":"1268d6ef069c4189836716fed6ebe4dd324c661cacf53981b6a227608aa383e8"},{"file":"installed-before.json","bytes":22175,"sha256":"1268d6ef069c4189836716fed6ebe4dd324c661cacf53981b6a227608aa383e8"},{"file":"locks-after.txt","bytes":163,"sha256":"d316e23dae0f11f4fabcf8edd97204c9b780c6da8a0f6307c86940cbdd28e3d7"},{"file":"locks-before.txt","bytes":163,"sha256":"d316e23dae0f11f4fabcf8edd97204c9b780c6da8a0f6307c86940cbdd28e3d7"},{"file":"native-admission.json","bytes":8072,"sha256":"d7062e6edb7326c0159f2f44932f91599b33a1ea1f1572e602122a59f7f9863a"},{"file":"native-consumer.mjs","bytes":12131,"sha256":"8c178a120ca4ca8e2286a1a4cf3e3212fb797c0c41ef1abc6c4ae1a782ac5a47"},{"file":"offline.log","bytes":0,"sha256":"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"},{"file":"packet-custody.json","bytes":2215,"sha256":"b54c33a5b08b127a67d7c350d5dd0499420e02eec81cbe08ba311ecbdbdaf9e1"},{"file":"physical.mjs","bytes":1368,"sha256":"4adbe4838f3d8980f6672720e7f6d03e34bc9aecfbdc03a14e41e36fb4578d14"},{"file":"prior-failed-full.json","bytes":1285,"sha256":"8dd141033ab809c2da21f0bc0d2812659870495734848f4594c528b4aa7d1489"},{"file":"public-cases.raw.json","bytes":2174,"sha256":"5747e56b6b64e3c06801475aac72e24d69d2aa43a44d00f9e840b4c2d7925ba0"},{"file":"readers.log","bytes":1076,"sha256":"d14582e969146c5f2cf39e86a9c3ef2a5dc6e0da23216b5cfc10928ddc142fde"},{"file":"sim-alias/units/fixed/output.log","bytes":622,"sha256":"7c91d4bbd96d5802734ccf0a10e3b4976c3291930c30dfab2f49464c81975275"},{"file":"sim-alias/units/fixed/playerBingo.ts.before","bytes":54755,"sha256":"dd87795e3079ace09572f6ca8e42d511721c60b3a655c7e770555d0d87c14855"},{"file":"sim-alias/units/fixed/source-after.json","bytes":1378,"sha256":"af0ed8f3db1bd62935ba30ade055bc46a448ea62f28a7f809de6d10b61b093c5"},{"file":"sim-alias/units/fixed/source-before.json","bytes":1378,"sha256":"af0ed8f3db1bd62935ba30ade055bc46a448ea62f28a7f809de6d10b61b093c5"},{"file":"sim-alias/units/fixed/unit.json","bytes":3553,"sha256":"d869ed3e07e2db74700bd913471a894b7604693475dac475b8561f26dc89c311"},{"file":"sim-alias/units/fixed/verdict.json","bytes":333,"sha256":"70d0a596d7605a9f48070c94406cd750ddd6f25c391e67f6501cd2ab8da2b153"},{"file":"sim-categories/actual-playerBingo.ts","bytes":54755,"sha256":"dd87795e3079ace09572f6ca8e42d511721c60b3a655c7e770555d0d87c14855"},{"file":"sim-categories/control-born1997.json","bytes":419,"sha256":"d98370b8ada8d5d1933fe9f3c3f0b23a4a6cc62e9de7c861f962fbadbd413ddf"},{"file":"sim-categories/control-born1997/output.log","bytes":3460,"sha256":"91f0cabc8f373cdc8e624fb5d04c6f90474a90bb57d1e80262c4c8ed23aa24ac"},{"file":"sim-categories/control-born1997/source-copy.ts","bytes":54750,"sha256":"23e94be9458652ccc9ff21d149e6e47a846ec6e7216dd80594038d04be58e2dc"},{"file":"sim-categories/control-born1997/unit.json","bytes":5078,"sha256":"8a725c39de1a520ce8da9f1ff9a0859b6c39cd84f39b7587be138650ba427709"},{"file":"sim-categories/control-born1997/verdict.json","bytes":265,"sha256":"8d6773b9481b9adc5c23a29191785d4f4ceaca0a1de379e7ffed23390e005bb4"},{"file":"sim-categories/control-born2000.json","bytes":419,"sha256":"6a5967b16ec538f72e437fd04b8016f965b45ab8ca287d7ccb778b659bce23eb"},{"file":"sim-categories/control-born2000/output.log","bytes":3459,"sha256":"0bcd0b71d009cddc1c28130814467f14814fb93be9899bec43bed9e38bd7a034"},{"file":"sim-categories/control-born2000/source-copy.ts","bytes":54750,"sha256":"ca70019bd2951f3a82fee3cdf262eeabe1637f375a370d8ecd19b22f8cfbdbcb"},{"file":"sim-categories/control-born2000/unit.json","bytes":5076,"sha256":"f5f717230c794dbe53c15a6deeea6ffadf940bded410107069832541f522ce73"},{"file":"sim-categories/control-born2000/verdict.json","bytes":265,"sha256":"d59c99dff114d1a5c1930dc3c8d8f7aa97a46acdfaceff357c54accd8ccd8cf8"},{"file":"sim-categories/control-contributions30.json","bytes":457,"sha256":"0279148277a5f7d2a8b1eaeec3b60fa4ffe54e985105cf7e3933c8831150aed7"},{"file":"sim-categories/control-contributions30/output.log","bytes":3521,"sha256":"b983b59564c887bced8574a18f148de52cf20ea749ae7a72e0a22e8a3995fe6f"},{"file":"sim-categories/control-contributions30/source-copy.ts","bytes":54726,"sha256":"2e72bce3785c8e493809851fcfd84b3419e7c48c6554a639fb9b3b97848cf7fd"},{"file":"sim-categories/control-contributions30/unit.json","bytes":5077,"sha256":"c444b8b737ce1cb38c39602de64864004451df086be4112ccf90b39ad8f438e2"},{"file":"sim-categories/control-contributions30/verdict.json","bytes":286,"sha256":"665b8b93d192166524bb61b1a67b0df53e5d39b37c61875bdbfb13a200729f2c"},{"file":"sim-categories/control-double10.json","bytes":457,"sha256":"ed16a6c4c7f53566026f51a8d1e21b11a033c8283aa228d580810d4908c14cd6"},{"file":"sim-categories/control-double10/output.log","bytes":3526,"sha256":"0629f1d28b938ecd9d965b64b5c75ae5cd8899353d3ffc611c88d9854d24b587"},{"file":"sim-categories/control-double10/source-copy.ts","bytes":54712,"sha256":"9703a98b51b9b437d62396ae3e89836139f2b903a6077ecd028d20374114f01f"},{"file":"sim-categories/control-double10/unit.json","bytes":5078,"sha256":"e2ace6b93778a68c378ea099e304a1d8ac87b2c5f8fbc7eb4ebce7a04c5fe114"},{"file":"sim-categories/control-double10/verdict.json","bytes":279,"sha256":"7edd37e5a4cf1ae1b57c9c8f23ed66d7723c182e6201a27974d7eef9c9f440a0"},{"file":"sim-categories/control-full-back.json","bytes":441,"sha256":"a1cee905921d4af9e6d95b8185757e792c7b78f9d564138676bd58991fc9cfa9"},{"file":"sim-categories/control-full-back/output.log","bytes":3467,"sha256":"c79bb98f1c1e29b6def26c03c880bb662ba2ea938e9e25910654d49c13637135"},{"file":"sim-categories/control-full-back/source-copy.ts","bytes":54730,"sha256":"db1b2053ab4acb0708aa9a30350ff4dcfad37a3b539a7cc0069165519ca773be"},{"file":"sim-categories/control-full-back/unit.json","bytes":5106,"sha256":"f4c244c3920aa8efcfda384c2349f49a013104dc3b009668117cbfa2cc78c084"},{"file":"sim-categories/control-full-back/verdict.json","bytes":266,"sha256":"48d3b9e69277226c913268ef31aa4837944b58ff039fe6f19c5019c74f1e447b"},{"file":"sim-categories/control-group-season-attack.json","bytes":393,"sha256":"a4f215d858e078e7ddd14963af8ef118951fea8268295cca33c5070d2a3edcea"},{"file":"sim-categories/control-group-season-attack/output.log","bytes":3414,"sha256":"bcd4e22c7f6080a6877ca8e2e027541a95849e175ba62de08f504fb650efff94"},{"file":"sim-categories/control-group-season-attack/source-copy.ts","bytes":54817,"sha256":"aa6723b5f6b902aeed877d9107d1477a1083ce8f6551b62125d9a0cb93bd1e63"},{"file":"sim-categories/control-group-season-attack/unit.json","bytes":5052,"sha256":"7381f332500555e1128894efd229ad34943ffd8f8df0596d2089dc46143001e1"},{"file":"sim-categories/control-group-season-attack/verdict.json","bytes":277,"sha256":"33c75c2785eb2358d7f24c5ca84997bda2f58f22126bf99333ac8808d08d2c36"},{"file":"sim-categories/control-group-season-discipline.json","bytes":401,"sha256":"c59bc56388074be550fc2b4e74692d2a64e5ad0c8bf0b290a589c2199663ace1"},{"file":"sim-categories/control-group-season-discipline/output.log","bytes":3418,"sha256":"2d47c7ba9869f3d80e9a62a64098c324aa94edef749eb8798c72df9686120e22"},{"file":"sim-categories/control-group-season-discipline/source-copy.ts","bytes":54848,"sha256":"9005d05e00844b23aea20478463e9d46d168f42ee744d603f190b320a85f0d33"},{"file":"sim-categories/control-group-season-discipline/unit.json","bytes":5059,"sha256":"4353477534a058b63b7e67f535477c48d49976b28907d1e136cfeee474de6888"},{"file":"sim-categories/control-group-season-discipline/verdict.json","bytes":281,"sha256":"8cd6b32244a014e4fda913340853510d06131ed0cdd35fb640685aa80c8f4649"},{"file":"sim-categories/control-group-season-matches.json","bytes":395,"sha256":"89398f11c7334eb99d21e1d19b9943676de5b39a4ca1716fc066d3177f2ad549"},{"file":"sim-categories/control-group-season-matches/output.log","bytes":3416,"sha256":"8f85e27b816727b06e74d736a1a86f4fc3ee9dfc2be674edfcc764b264a11e62"},{"file":"sim-categories/control-group-season-matches/source-copy.ts","bytes":54848,"sha256":"8eab7c8818ae3b09255e64bb194118e89ad4d921133dd5d0b539b9cccf06efb0"},{"file":"sim-categories/control-group-season-matches/unit.json","bytes":5062,"sha256":"6fbe3a9f85ae2c4000f69cff34cd912848c1c99c3cfb559f83bb05748ef8f98d"},{"file":"sim-categories/control-group-season-matches/verdict.json","bytes":278,"sha256":"2718fe6a21d0ca592fec4a883831748267062c83a708105b56dff5847051d7b9"},{"file":"sim-categories/control-known-red.json","bytes":355,"sha256":"e8ad7d1932abbaa0fbeed7073df6a5fe6af64de0f0ff909d09e6ffbbb309c94c"},{"file":"sim-categories/control-known-red/output.log","bytes":3546,"sha256":"6eb92539f128779533aaf634b1c4e76b280b04a3ecb973ba51783121231030bd"},{"file":"sim-categories/control-known-red/source-copy.ts","bytes":54762,"sha256":"e23030b0f55e5c485aa6fde2a5e1216fc3d7f35f4abe13495897934d5a4d4e47"},{"file":"sim-categories/control-known-red/unit.json","bytes":5077,"sha256":"49abe3095cc2060b8a1e8a58fe991eaa3c02f2f096dd3a9615351265cb383572"},{"file":"sim-categories/control-known-red/verdict.json","bytes":282,"sha256":"75574e0630f55de530946dde045f5e6af75788fa8f0f55e64cd7586114be2b80"},{"file":"sim-categories/control-matches40nored.json","bytes":459,"sha256":"0c2b4be3886da8814adb18393c6d2513b2ee2ef1f6497247f62d02dc6a0bc962"},{"file":"sim-categories/control-matches40nored/output.log","bytes":3551,"sha256":"e27572404d81639e3a0ef5dcfec35c70422914014a48c92fd7c2ec22b29bf7ca"},{"file":"sim-categories/control-matches40nored/source-copy.ts","bytes":54722,"sha256":"3f12390871cac93a6337751a0f78737e190c78592e13fd8c7f7a003aebbd19ed"},{"file":"sim-categories/control-matches40nored/unit.json","bytes":5078,"sha256":"addfec3ff551b80721396c62328bc750fd1b5cd66ea085f3916d0a9da905f7be"},{"file":"sim-categories/control-matches40nored/verdict.json","bytes":287,"sha256":"be4745033955bdd4e0d5275b4b570fad1681295fb55999bdb61dc7e0691c4360"},{"file":"sim-categories/control-matches50.json","bytes":434,"sha256":"a9428e5ab35c57ce483fca1b806b2add424f519babeb0ac2d8690db82a021a0d"},{"file":"sim-categories/control-matches50/output.log","bytes":3545,"sha256":"9b72782a79a8f44f35c44b09140056f139f02ff52ae739f464699bc8bf186ca7"},{"file":"sim-categories/control-matches50/source-copy.ts","bytes":54737,"sha256":"2d5e51ee80720a5cb1cef5b55c1ea797df2099f9136aaf8cc559874104003cb3"},{"file":"sim-categories/control-matches50/unit.json","bytes":5076,"sha256":"005e499c24edad159ce41d597bd1f282cc9ba6d79a830e1b5466943236e2b91c"},{"file":"sim-categories/control-matches50/verdict.json","bytes":246,"sha256":"84aeee70c58ae94a8edb011a1bdaad18c85971837237b432c131399278a2dbb9"},{"file":"sim-categories/control-same-season.json","bytes":529,"sha256":"93b5e3a574243bb4d52aa11c048c66a3d9bacc0a405ffa9475dc647b9b0505f4"},{"file":"sim-categories/control-same-season/output.log","bytes":3528,"sha256":"8750a6b7619a6ce3d859f337ab3e003bb04f6da224b3a8fc970aca9f02f9899c"},{"file":"sim-categories/control-same-season/source-copy.ts","bytes":54784,"sha256":"655695f6f7a98a26860cfdfe8e50dd86c81a79dd6c1bfaff41939728623cef17"},{"file":"sim-categories/control-same-season/unit.json","bytes":5076,"sha256":"1e7e3518924ec8d3f801325296a948d139a84a3e438a214bb3d0d41abd0e5de4"},{"file":"sim-categories/control-same-season/verdict.json","bytes":282,"sha256":"c4e2fc6806bf993963f512cea24714f3b6e75176bdfaba80b7c05c10c4928038"},{"file":"sim-categories/control-support-gate.json","bytes":437,"sha256":"3e9a4f7f880a840921d76b022bc83de7ffae69d9e4f21fe50c0ede72f242fc33"},{"file":"sim-categories/control-support-gate/output.log","bytes":3368,"sha256":"c6a19f3a4a4401deaf95615809be720a693f6729686cec6d093461238547a608"},{"file":"sim-categories/control-support-gate/source-copy.ts","bytes":54724,"sha256":"444850421373b1944c9c1f6d5658924ced1ac51dfef1e2c82d032550fbdb65cd"},{"file":"sim-categories/control-support-gate/unit.json","bytes":5074,"sha256":"909aecb1ecc6a10d0893222f258d152ad1b19bfae60dabca3713520addda7858"},{"file":"sim-categories/control-support-gate/verdict.json","bytes":285,"sha256":"60302377eda24128cd44d627acbcd9c85cdf7974c54eae579e31764f165f65e1"},{"file":"sim-categories/control-value30.json","bytes":421,"sha256":"4b24d66d322130ce435381b646cc132a5c5987663728da5274ba5a04c4ccaaec"},{"file":"sim-categories/control-value30/output.log","bytes":3405,"sha256":"1cf671d2fd41114addff6f509710b531a9e9ee90fcc9942d0fffd2b6a87587b4"},{"file":"sim-categories/control-value30/source-copy.ts","bytes":54746,"sha256":"44536020fec42bf65d9966584c0aff417848224a100652489798de03b7db7ea2"},{"file":"sim-categories/control-value30/unit.json","bytes":5078,"sha256":"96457243c30709c6c9e7512774ba6b43dba7f9e634dfcf16b4e1881bdeb9679e"},{"file":"sim-categories/control-value30/verdict.json","bytes":269,"sha256":"41817e2aa33289cf95b13291c82ed12d644c15414968ba4de642dbd824d7827e"},{"file":"sim-categories/control-value50.json","bytes":422,"sha256":"0584b79198b30c8af1a3f768f5a383a0305a1150486a75a4c2b34ae83f4f7d12"},{"file":"sim-categories/control-value50/output.log","bytes":3406,"sha256":"516c9b94f60fac07e1fbbc9e6539cb5942b4e73517a03b18923e6545d5c4c562"},{"file":"sim-categories/control-value50/source-copy.ts","bytes":54745,"sha256":"470de681782bdc74a0d2a9778fcc9506d261942046ab76bdcc813b65ca1b3966"},{"file":"sim-categories/control-value50/unit.json","bytes":5078,"sha256":"223150ac43a47077940c7063b5dbc588942b92914ecb4987b853948212bef69e"},{"file":"sim-categories/control-value50/verdict.json","bytes":269,"sha256":"5cb92bb7d3f93ddd32766ec544f92757b194b7e4c25f30663f24de28115a954d"},{"file":"sim-categories/control-winger.json","bytes":442,"sha256":"41bb1f3e54fe748b4afef93d2905a0963e40957b4cee5840a7925874073fdca9"},{"file":"sim-categories/control-winger/output.log","bytes":3464,"sha256":"448e1ca76625b748b6f29f21e3bbd4d8e08655daac4170304d4167f9d46b9104"},{"file":"sim-categories/control-winger/source-copy.ts","bytes":54723,"sha256":"c4c6d8ad2473b73eb4e61ea1c64ce2d4b26689c44e34470714a6367a530267f1"},{"file":"sim-categories/control-winger/unit.json","bytes":5097,"sha256":"07962e678131b8f05cc763d933cbee53999d31b460789af17ed6b18a1291b085"},{"file":"sim-categories/control-winger/verdict.json","bytes":263,"sha256":"27643fb394ceed7b3ebc7ba89523cd43bda2078843a04aa7eb4953705897e04a"},{"file":"sim-categories/control-yellows10red.json","bytes":467,"sha256":"f14fa3916c3670050bb10faea0d2b88b3e70f86fe922cb0242e2043da0ed5379"},{"file":"sim-categories/control-yellows10red/output.log","bytes":3486,"sha256":"00be75b3c8a0b4118dec6ca30a97be27c3fbe120bab1d0c2de964b213381292f"},{"file":"sim-categories/control-yellows10red/source-copy.ts","bytes":54710,"sha256":"badcc4a1103bd0795a2678b6835101f1a65d28cbd7f6f47a309b3c73d7daf69e"},{"file":"sim-categories/control-yellows10red/unit.json","bytes":5076,"sha256":"6d0fb0fc1ff9568be6671822ad32301364ad6ce2ed53670547cdb0f7616d7246"},{"file":"sim-categories/control-yellows10red/verdict.json","bytes":285,"sha256":"da3e9fce28d23a37459e1ee9e21d8a39ac180f4248a2cd7eb1bbbbc507d5ed79"},{"file":"sim-categories/normal/output.log","bytes":640,"sha256":"3d0d6a96fb26b3c906190da9ffdebc7c81fb8adf092053d57f1aa5e102a18732"},{"file":"sim-categories/normal/unit.json","bytes":3935,"sha256":"f0abc03b453cbe83df181ef2c511badc93637c64d589be3b92555f632d84c967"},{"file":"sim-categories/normal/verdict.json","bytes":111,"sha256":"6183e7725a2842a719174719a967de6355ae3ce10d3014cbacd3ac468237368b"},{"file":"sim-categories/original-control/output.log","bytes":15100,"sha256":"aea2193817b5d5764315d4c03e98e9ed86c3e418e6854a12607112dfed930d3f"},{"file":"sim-categories/original-control/source-copy.ts","bytes":48557,"sha256":"b446d6febc197d9210a01624bd41f71a31cd65efad5ff566fdf64db0ebf792ac"},{"file":"sim-categories/original-control/unit.json","bytes":14275,"sha256":"3cd5ab6e989a44b20c6c6a238a085da0ce56b3d2f31b74a685c79f256c18667a"},{"file":"sim-categories/original-control/verdict.json","bytes":941,"sha256":"df9a3b203773857847542169349e176f6aa0fbc19116617dd685cf22710f461a"},{"file":"sim-categories/original-playerBingo.ts","bytes":48557,"sha256":"b446d6febc197d9210a01624bd41f71a31cd65efad5ff566fdf64db0ebf792ac"},{"file":"sim-categories/restored/output.log","bytes":641,"sha256":"b5e1d6f1348028ec25e41ac09b9a4acf620a69097398766e116b624670332bc0"},{"file":"sim-categories/restored/source-copy.ts","bytes":54755,"sha256":"dd87795e3079ace09572f6ca8e42d511721c60b3a655c7e770555d0d87c14855"},{"file":"sim-categories/restored/unit.json","bytes":3935,"sha256":"a20bf94b1ddec43fc734adb2e48e2cd77ce98b30e4378ed861b2815383a4db16"},{"file":"sim-categories/restored/verdict.json","bytes":175,"sha256":"28194b9d2636826f5e515c7e21cf26c0bf532e5c87552a12a22b16af19e7865e"},{"file":"sim-categories/source-after.json","bytes":1341,"sha256":"2f974912d5e316f4c3ee9b933b5bcd2aa2cd08def2b56ce1152f263338f3601c"},{"file":"sim-categories/source-before.json","bytes":1341,"sha256":"2f974912d5e316f4c3ee9b933b5bcd2aa2cd08def2b56ce1152f263338f3601c"},{"file":"sim-categories/verdict.json","bytes":7000,"sha256":"fda154e1be924154591a0894413ae7973b7457ade3578dd6732e58e3bb2a401a"},{"file":"simPlayerBingoCategories.log","bytes":1699,"sha256":"95e0d3bd568a2bf26f2228b8d0981ba47cdea9730d4394d2298911cb9a7605c7"},{"file":"simPlayerBingoLoad.log","bytes":819,"sha256":"fe2aa5b1761f725dcc5026176c563c4e98c659bdb3cfa6edb56feff03fbf57b8"},{"file":"simPlayerBingoWorldCupAlias.log","bytes":436,"sha256":"a023e6dc8ff32a2f980b5a313cecb2a28dd85782df83659f72117362b7816bb7"},{"file":"source-after.txt","bytes":504186,"sha256":"f0604ff3e8b07435a094053652fbb4e91d986042c5ed835e0c9adcf1ada40b2f"},{"file":"source-before.txt","bytes":504186,"sha256":"f0604ff3e8b07435a094053652fbb4e91d986042c5ed835e0c9adcf1ada40b2f"},{"file":"source-join.json","bytes":819,"sha256":"73e07d938c29fa92937629c7f49d3cf70e40fa62470ffa2f4208f5ac8ea71310"},{"file":"tracked-after.json","bytes":657910,"sha256":"cb6f83f93ceae674dbf894d2f335bbe2cef658a49872cfa7f193494350fa3a1d"},{"file":"tracked-before.json","bytes":657910,"sha256":"cb6f83f93ceae674dbf894d2f335bbe2cef658a49872cfa7f193494350fa3a1d"},{"file":"tree.txt","bytes":41,"sha256":"1ad57e667a88edc3099aa4ae6b85ce5ee5b11559ec8e6d16a9e3eb178594dab5"},{"file":"types.log","bytes":0,"sha256":"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"},{"file":"unit-admission.json","bytes":1696,"sha256":"a6577913056220bb80a2f4ac5652d901773167010c7b1e9f6a32bb1594a00ea3"},{"file":"vitest-exit.txt","bytes":2,"sha256":"9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"},{"file":"vitest.json","bytes":8878,"sha256":"0900b1fd5d09624332204d87d2466c947290f7149f31ca47b954ae91e0e65427"},{"file":"vitest.log","bytes":1130,"sha256":"251a6303321ea9783b34384c132c6364d5856b2c815c8156a462f7e1f632956e"},{"file":"weight-asset-blocks.jsonl","bytes":4388,"sha256":"8bea97bdba907d7fba52abd3f87c54e5cf45224e04179cab374795f8b37c2589"},{"file":"weight-host.log","bytes":94,"sha256":"4726949dc1c36cb030c5969a52e17e3cd2aa4ee53995c81312bb7cb0db607966"},{"file":"weight-source-proof.json","bytes":553,"sha256":"4cc9340295fd72691126b392af098265ed8688e4b79da77b42f202b4d7cedbdc"},{"file":"weight.log","bytes":1919,"sha256":"06ba3dad0a85ca2d0940789dd44b47748fed8b603d716d009a2ee67d94c462da"}];
+          const requiredBodies = ['active-route-preflight.json','active-snapshot.html','admission.json','dist-before.json','dist-after.json',
+            'dist.sha256','dist.tgz','head.txt','tree.txt','native-admission.json','packet-custody.json','readers.log',
+            'source-before.txt','source-join.json','unit-admission.json','weight.log','offline.log','browser.transport.log',
+            'prior-failed-full.json','weight-source-proof.json','weight-asset-blocks.jsonl'];
+          const safeRelative = file => typeof file==='string' && /^[A-Za-z0-9._/-]+$/.test(file)
+            && file.split('/').every(part => part && part!=='.' && part!=='..');
+          assert(Array.isArray(evidencePins));
+          assert.equal(evidencePins.length,Number(env.PLAYER_BINGO_BIRTH_YEAR_REFERENCE_BODY_COUNT),'Every retained regular body is independently pinned');
+          assert.equal(new Set(evidencePins.map(pin => pin.file)).size,evidencePins.length);
+          for (const file of requiredBodies) assert(evidencePins.some(pin => pin.file===file),file+' required independently pinned evidence');
+          for (const pin of evidencePins) {
+            assert(safeRelative(pin.file),pin.file+' safe evidence path');
+            const body = bytes(pin.file);
+            assert.deepEqual(pin,{file:pin.file,bytes:body.length,sha256:sha(body)},pin.file+' independently admitted exact body');
+          }
+          const referenceChecks = (() => {
+          const entry=read('active-route-preflight.json');
+          assert.deepEqual([entry.status,entry.route,entry.component,entry.catalogCategory,entry.snapshot.canonical],
+            ['passed','/player-bingo','PlayerBingo','Soccer','https://douknowball.com/player-bingo']);
+          assert.deepEqual([entry.snapshot.metaRefresh,entry.snapshot.retiredMarkers,entry.snapshot.robots],[0,0,[]]);
+          assert.deepEqual([entry.snapshot.bytes,entry.snapshot.sha256],[22253,'fefd391f77a38a10a831735de182a44e1ff05819f012d4902739b66f19c7f98f']);
+          assert.equal(sha(bytes('active-snapshot.html')),entry.snapshot.sha256);
+          assert.deepEqual([source.status,source.head,source.tree,source.parent,source.parentTree,source.trackedRows,source.heldRows,source.scopedSourceRows,source.rootConfigurations],
+            ['passed',referenceHead,referenceTree,env.PLAYER_BINGO_BIRTH_YEAR_CONTROLS_HEAD,env.PLAYER_BINGO_BIRTH_YEAR_CONTROLS_TREE,5803,5801,4670,11]);
+          assert.equal(source.helperBlob,env.PLAYER_BINGO_BIRTH_YEAR_NATIVE_HELPER);
+          assert.equal(blob(bytes('candidate-native-helper.mjs')),source.helperBlob);
+          assert.equal(blob(bytes('candidate-workflow.yml')),env.PLAYER_BINGO_BIRTH_YEAR_REFERENCE_WORKFLOW);
+          for(const [file,expected] of Object.entries(source.pins)){
+            assert.equal(current.get(file).blob,expected,file);
+            assert.equal(old.get(file).blob,expected,file);
+          }
+          const custody=read('packet-custody.json');
+          assert.equal(custody.status,'passed');
+          assert.deepEqual(custody.authenticated.map(row=>row.role),['original','fixed','controls']);
+          assert.equal(custody.authenticated[2].head,source.parent);
+          assert.equal(custody.authenticated[2].tree,source.parentTree);
+          assert(custody.authenticated.every(row=>/^[a-f0-9]{64}$/.test(row.auditSHA256)));
+          assert.deepEqual([unit.status,unit.resultStatus,unit.total,unit.passes,unit.failed,unit.rawBytes,unit.rawSHA256],[
+            'passed','fixed-bingo-squad-birth-year-band',23,23,0,2174,'5747e56b6b64e3c06801475aac72e24d69d2aa43a44d00f9e840b4c2d7925ba0',
+          ]);
+          assert.equal(sha(bytes('public-cases.raw.json')),unit.rawSHA256);
+          assert.equal(bytes('public-cases.raw.json').length,unit.rawBytes);
+          assert.deepEqual(unit.original,custody.authenticated[0].raw);
+          assert.deepEqual(unit.logs.map(row=>row.file),['simPlayerBingoLoad.log','simPlayerBingoWorldCupAlias.log','simPlayerBingoCategories.log']);
+          for(const pin of unit.logs)assert.deepEqual({file:pin.file,bytes:bytes(pin.file).length,sha256:sha(bytes(pin.file))},pin);
+          assert.deepEqual([native.status,native.schema,native.route,native.offlineBytes],[
+            'passed','player-bingo-birth-year-native-admission-v1','http://127.0.0.1:4174/player-bingo',0,
+          ]);
+          assert.equal(native.helperSHA256,sha(bytes('candidate-native-helper.mjs')));
+          assert.equal(native.reportSHA256,sha(bytes('browser/report.json')));
+          assert.equal(bytes('browser.transport.log').length,0);
+          assert.equal(bytes('browser-exit.txt').toString('utf8').trim(),'0');
+          assert.deepEqual(native.totals,{cases:24,documents:24,fixtureGets:576,squadPages:48,locks:21,adjacentRejections:3,pngs:48});
+          const cohort=['jan1-correct','jan27-adjacent','dec31-correct','wrong-country-fallback','conflict-fallback','invalid-fallback','implausible-fallback','legacy-fallback'];
+          assert.deepEqual(native.cases,[320,390,1280].flatMap(width=>cohort.map(id=>width+'-'+id)));
+          assert.equal(native.heldBodies.length,51);
+          assert.equal(new Set(native.heldBodies.map(row=>row.file)).size,51);
+          for(const pin of native.heldBodies){
+            const pinned=evidencePins.find(row=>row.file==='browser/'+pin.file);
+            assert(pinned,pin.file+' actual body independently pinned');
+            assert.deepEqual(pinned,{...pin,file:'browser/'+pin.file});
+          }
+          const direct=actual.find(row=>row.path==='player-bingo/index.html');
+          assert(direct);
+          assert.deepEqual(native.builtDocument,{distFile:'dist/player-bingo/index.html',file:'built-document.html',bytes:direct.bytes,sha256:direct.sha256});
+          assert.equal(sha(bytes('browser/built-document.html')),direct.sha256);
+          assert.deepEqual(full.native,native);
+          assert.deepEqual(full.unit,unit);
+          const failedPrimary=read('prior-failed-full.json');
+          assert.deepEqual(failedPrimary,{"status":"retained-failed-full","run":42817494193,"job":129834184697,"artifact":13765363965,"steps":24,"branch":"codex/player-bingo-birth-year-full-qa-20261110","head":"887e17c3f5eb936f7e78b4ac0e83a985be3896ab","tree":"cf49f89d079a73775f6a70c5f2466afa2ba75396","workflow":"a00f51b88428aadf4ac2147b51228780335007ac","zipBytes":10668817,"zipSHA256":"703e28f98a575cafbcf2c0345842aefdf9c2d85c1cac3bb7519a86e47358576d","zipBodies":202,"conclusion":"failure","failedSteps":["Admit exact Player Bingo native journeys and production files","Verify unchanged physical source and locked offline run"],"offline":{"bytes":1584,"sha256":"e4edb72087346caab00e734396c27ab00ba3a115c37a534079f02afad9e70f16","count":20,"tags":{"[SIM_OFFLINE_BLOCK] external browser route continue https://fonts.googleapis.com":16,"[SIM_OFFLINE_BLOCK] external browser route continue https://flagcdn.com":4}},"nativeAdmission":{"bytes":8072,"sha256":"10f8970dcaa5358c9d2029a898261e98522b6bd6f2a4546685f6693ba36c6434","nativeOfflineBytes":0},"packet":"full-failed-42817494193","nativeAuditSHA256":"9770c3ca3dd51818606d02532d4f3b3a14511d065abd8dde00af3b8fd0aedb06"});
+          const sweepSource=read('weight-source-proof.json');
+          assert.deepEqual(sweepSource,{"status":"passed","file":"scripts/sweepWeight.mjs","blob":"5a92a68cc0225d5e633c19e041087e7c6c4254e8","bytes":104848,"sha256":"afdd281ce2984ca34158194a0d6102bd053f2f8d242bc844c19f8f536b08d627","changedBlob":"2375a75116c540fde0fdd94c3cee074968905b47","changedBytes":105985,"changedSHA256":"b7edf531df56816d5b5103f4c08686790f083b4940f6c6abf7664dc3108de8b6","anchorOffset":90355,"anchorBytes":89,"replacementBytes":1226,"exactWholeInverse":true,"trackedSourceChanged":false,"temporarySibling":true});
+          const assetRaw=bytes('weight-asset-blocks.jsonl').toString('utf8');
+          assert(assetRaw.endsWith('\n'));
+          const assetRows=assetRaw.trimEnd().split('\n').map(row=>JSON.parse(row));
+          const capPaths=capRows.map(row=>/^\s+(\/\S*)\s+\d+K gz over/.exec(row)[1]);
+          const stylesheetRoutes=new Set();
+          let flagCount=0;
+          for(const row of assetRows){
+            assert.deepEqual(Object.keys(row),['route','url','method','resourceType','disposition']);
+            assert(capPaths.includes(row.route));
+            assert.deepEqual([row.method,row.disposition],['GET','aborted-before-network']);
+            const url=new URL(row.url);
+            if(url.origin==='https://fonts.googleapis.com'){
+              assert.deepEqual([row.resourceType,url.pathname,[...url.searchParams]],['stylesheet','/css2',[
+                ['family','Space Grotesk:wght@400;500;600;700'],
+                ['family','Inter:wght@400;500;600;700'],
+                ['display','swap'],
+              ]]);
+              stylesheetRoutes.add(row.route);
+            }else{
+              assert.deepEqual([row.resourceType,url.origin,url.search],['image','https://flagcdn.com','']);
+              assert.match(url.pathname,/^\/w(?:20|40|80|160|320)\/[a-z]{2}(?:-[a-z]{3})?\.png$/);
+              flagCount++;
+            }
+          }
+          assert.deepEqual([...stylesheetRoutes].sort(),capPaths.slice().sort());
+          assert(flagCount>0);
+          assert.deepEqual([bytes('offline.log').length,bytes('browser.transport.log').length],[0,0]);
+          return {status:'passed',qualification:'fresh-player-bingo-birth-year-full-scope',failedPrimaryRun:failedPrimary.run,weightScopedAborts:assetRows.length,nativeCases:native.cases.length,heldNativeBodies:native.heldBodies.length,
+            fixtureGets:native.totals.fixtureGets,eligibleLocks:native.totals.locks,adjacentRejections:native.totals.adjacentRejections,
+            activeSnapshotSHA256:entry.snapshot.sha256,fullUnitRawSHA256:unit.rawSHA256,fullNativeReportSHA256:native.reportSHA256};
+          })();
+          assert.equal(referenceChecks.status,'passed','Reviewed actual full semantic receipt validator must complete');
+          assert.equal(referenceChecks.qualification,'fresh-player-bingo-birth-year-full-scope');
+          const result = {
+            status:'passed', cleanHead, cleanTree, cleanProductBase:env.PLAYER_BINGO_BIRTH_YEAR_CLEAN_PRODUCT_BASE, cleanProductBaseTree:env.PLAYER_BINGO_BIRTH_YEAR_CLEAN_PRODUCT_BASE_TREE,
+            cleanDelta, referenceRun:run.id, referenceJob:job.id, referenceWorkflowHead:referenceHead, referenceApp:referenceHead, referenceTree,
+            referenceQualification:referenceChecks.qualification, referenceArtifact:meta.id, referenceZipSHA256:env.PLAYER_BINGO_BIRTH_YEAR_REFERENCE_ZIP,
+            referenceTarSHA256:env.PLAYER_BINGO_BIRTH_YEAR_REFERENCE_TAR, referenceWorkflowBlob:env.PLAYER_BINGO_BIRTH_YEAR_REFERENCE_WORKFLOW,
+            referenceIndependentAuditSHA256:env.PLAYER_BINGO_BIRTH_YEAR_REFERENCE_AUDIT, referenceDistTupleSHA256:fullDistTupleSHA256,
+            heldProductRows:5801, baseHeldRows:5796, sourceRows:4669, sourceAndConfigurationRows:sourceConfigRows.length,
+            referenceControlsParent:controlsHead, referenceControlsTree:env.PLAYER_BINGO_BIRTH_YEAR_CONTROLS_TREE,
+            rootConfigurations:configs.map(file => ({file,...current.get(file)})),
+            excludedFullQA:[...fullOnly], finalProductForbiddenPaths:[...fullOnly], generatedPatches:[],
+            distFiles:actual.length, distManifestSHA256, dist:actual, referenceChecks,
+            limits:'Fresh clean types, product-name fence, normal production build and exact source and built-byte join. Separate unit, native, control, reader and cap evidence is retained from the authenticated full reference. The frozen qualified plan is held. Final product excludes the round QA workflow and native helper. Scope is the PR541 stack.',
+          };
+          fs.writeFileSync(out + '/reference-build-join.json',JSON.stringify(result,null,2));
+          console.log('PASS all 4669 source paths, 11 root configurations and 850 built file bodies');
+          NODE
+      - name: Final source locks installed versions and offline holds
+        if: always()
+        run: |
+          set -euo pipefail
+          git ls-files -s > player-bingo-birth-year-clean-join/source-after.txt
+          cmp player-bingo-birth-year-clean-join/source-before.txt player-bingo-birth-year-clean-join/source-after.txt
+          git diff --exit-code HEAD -- .
+          sha256sum package.json package-lock.json > player-bingo-birth-year-clean-join/locks-after.txt
+          cmp player-bingo-birth-year-clean-join/locks-before.txt player-bingo-birth-year-clean-join/locks-after.txt
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const before=JSON.parse(fs.readFileSync('player-bingo-birth-year-clean-join/installed-before.json')),lock=JSON.parse(fs.readFileSync('package-lock.json'));
+          const after=Object.keys(lock.packages).filter(p=>p.startsWith('node_modules/')&&fs.existsSync(p+'/package.json')).map(p=>[p,JSON.parse(fs.readFileSync(p+'/package.json')).version]);assert.equal(after.length,521);for(const[p,v]of after)assert.equal(v,lock.packages[p].version,p);assert.deepEqual(after,before);
+          fs.writeFileSync('player-bingo-birth-year-clean-join/installed-final.json',JSON.stringify(after));
+          assert(fs.existsSync('player-bingo-birth-year-clean-join/offline.log'));assert.equal(fs.statSync('player-bingo-birth-year-clean-join/offline.log').size,0);
+          NODE
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: player-bingo-birth-year-clean-build-join-${{ github.run_id }}
+          path: player-bingo-birth-year-clean-join
+          retention-days: 14
+          if-no-files-found: error
