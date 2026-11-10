@@ -1,0 +1,720 @@
+name: NBA Perfect Season Daily date clean source and build join
+on:
+  push:
+    branches: [codex/nba-perfect-season-daily-date-clean-join-qa-20261110]
+permissions:
+  contents: read
+  actions: read
+jobs:
+  closeout:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        shell: bash
+    env:
+      TZ: UTC
+      SIM_NETWORK: offline
+      SIM_OFFLINE_RECEIPT: nba-perfect-season-daily-date-clean-join/offline.log
+      NBA_PERFECT_SEASON_DAILY_DATE_REFERENCE_ARTIFACT: '13757929631'
+      NBA_PERFECT_SEASON_DAILY_DATE_REFERENCE_RUN: '42805429127'
+      NBA_PERFECT_SEASON_DAILY_DATE_REFERENCE_BRANCH: 'codex/nba-perfect-season-daily-date-full-draft-width-retry-qa-20261110'
+      NBA_PERFECT_SEASON_DAILY_DATE_REFERENCE_JOB: '129793214377'
+      NBA_PERFECT_SEASON_DAILY_DATE_REFERENCE_STEPS: '22'
+      NBA_PERFECT_SEASON_DAILY_DATE_REFERENCE_ZIP: '3921015421e9869e62658aea5e7630fbfdf25a1b6074915131a366ec33df5dfe'
+      NBA_PERFECT_SEASON_DAILY_DATE_REFERENCE_TAR: '1e96e5f3fec6ecb162821abcb2ae8fb1a530f7b036354209fe29eea61cb7ced2'
+      NBA_PERFECT_SEASON_DAILY_DATE_REFERENCE_HEAD: '1c2811600bdcb5ac6add7bdf381b1de7790a59ba'
+      NBA_PERFECT_SEASON_DAILY_DATE_REFERENCE_TREE: 'bec0860eeafe1e9f68f04b2937c1c301d3879c50'
+      NBA_PERFECT_SEASON_DAILY_DATE_REFERENCE_ZIP_BYTES: '17004086'
+      NBA_PERFECT_SEASON_DAILY_DATE_NATIVE_HELPER: '089eadebb2c0f761fcef8c6dfafb98f1bf8cf6be'
+      NBA_PERFECT_SEASON_DAILY_DATE_REFERENCE_AUDIT: 'd856449736815145f4e80e0e721f5bcd6478d32e38d9cb229bf7f577b8805a9c'
+      NBA_PERFECT_SEASON_DAILY_DATE_FIXED_PAGE_BLOB: '100652f3ed6b50c9fe2fae54e6386d4d6f932769'
+      NBA_PERFECT_SEASON_DAILY_DATE_QUALIFIED_PLAN_BLOB: '2c302ff50b614cbe3d08ee6321a213788e74e793'
+      NBA_PERFECT_SEASON_DAILY_DATE_QUALIFIED_TEST_BLOB: '7c398ac1ded8cf96d5d0720ca426a2e1fe6ddc92'
+      NBA_PERFECT_SEASON_DAILY_DATE_REFERENCE_DIST_MANIFEST: '248665016ab3ce7ceeffab34f2a322f0f72bb15613603d10aa19aa07a3c10154'
+      NBA_PERFECT_SEASON_DAILY_DATE_REFERENCE_WORKFLOW: '02faf2c37f610f7cfebcdccd2375c8b7f3306ca2'
+      NBA_PERFECT_SEASON_DAILY_DATE_CLEAN_PRODUCT_BASE: '7868fa0995bce7544c28b4776ef6505f585fb969'
+      NBA_PERFECT_SEASON_DAILY_DATE_CLEAN_PRODUCT_BASE_TREE: '85f0484c30da21813e77e564d88510d3a796b531'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 3
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24.22.1
+          cache: npm
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.4.4
+      - name: Locked dependencies and clean source receipts
+        run: |
+          set -euo pipefail
+          if grep -Eq '__[A-Z][A-Z0-9_]*__' .github/workflows/nba-perfect-season-daily-date-20261110.yml; then echo 'Unresolved clean qualification template binding'; exit 1; fi
+          [[ "$NBA_PERFECT_SEASON_DAILY_DATE_REFERENCE_ARTIFACT" =~ ^[1-9][0-9]*$ ]]
+          [[ "$NBA_PERFECT_SEASON_DAILY_DATE_REFERENCE_RUN" =~ ^[1-9][0-9]*$ ]]
+          [[ "$NBA_PERFECT_SEASON_DAILY_DATE_REFERENCE_BRANCH" =~ ^codex/nba-perfect-season-daily-date-[a-z0-9-]+$ ]]
+          [[ "$NBA_PERFECT_SEASON_DAILY_DATE_REFERENCE_JOB" =~ ^[1-9][0-9]*$ ]]
+          [[ "$NBA_PERFECT_SEASON_DAILY_DATE_REFERENCE_STEPS" =~ ^[1-9][0-9]*$ ]]
+          [[ "$NBA_PERFECT_SEASON_DAILY_DATE_REFERENCE_AUDIT" =~ ^[a-f0-9]{64}$ ]]
+          [[ "$NBA_PERFECT_SEASON_DAILY_DATE_REFERENCE_ZIP" =~ ^[a-f0-9]{64}$ ]]
+          [[ "$NBA_PERFECT_SEASON_DAILY_DATE_REFERENCE_TAR" =~ ^[a-f0-9]{64}$ ]]
+          [[ "$NBA_PERFECT_SEASON_DAILY_DATE_REFERENCE_ZIP_BYTES" =~ ^[1-9][0-9]*$ ]]
+          [[ "$NBA_PERFECT_SEASON_DAILY_DATE_REFERENCE_DIST_MANIFEST" =~ ^[a-f0-9]{64}$ ]]
+          for value in "$NBA_PERFECT_SEASON_DAILY_DATE_REFERENCE_HEAD" "$NBA_PERFECT_SEASON_DAILY_DATE_REFERENCE_TREE" "$NBA_PERFECT_SEASON_DAILY_DATE_NATIVE_HELPER" "$NBA_PERFECT_SEASON_DAILY_DATE_REFERENCE_WORKFLOW" "$NBA_PERFECT_SEASON_DAILY_DATE_FIXED_PAGE_BLOB" "$NBA_PERFECT_SEASON_DAILY_DATE_QUALIFIED_PLAN_BLOB" "$NBA_PERFECT_SEASON_DAILY_DATE_QUALIFIED_TEST_BLOB"; do [[ "$value" =~ ^[a-f0-9]{40}$ ]]; done
+          test ! -e nba-perfect-season-daily-date-clean-join
+          mkdir nba-perfect-season-daily-date-clean-join
+          touch nba-perfect-season-daily-date-clean-join/offline.log
+          git rev-parse HEAD > nba-perfect-season-daily-date-clean-join/head.txt
+          git rev-parse 'HEAD^{tree}' > nba-perfect-season-daily-date-clean-join/tree.txt
+          git ls-files -s > nba-perfect-season-daily-date-clean-join/source-before.txt
+          sha256sum package.json package-lock.json > nba-perfect-season-daily-date-clean-join/locks-before.txt
+          npm ci 2>&1 | tee nba-perfect-season-daily-date-clean-join/install.log
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const lock=JSON.parse(fs.readFileSync('package-lock.json'));
+          const rows=Object.keys(lock.packages).filter(p=>p.startsWith('node_modules/')&&fs.existsSync(p+'/package.json')).map(p=>[p,JSON.parse(fs.readFileSync(p+'/package.json')).version]);
+          assert.equal(rows.length,521);for(const[p,v]of rows)assert.equal(v,lock.packages[p].version,p);fs.writeFileSync('nba-perfect-season-daily-date-clean-join/installed-before.json',JSON.stringify(rows));
+          NODE
+      - name: Proper app types
+        run: |
+          set -euo pipefail
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee nba-perfect-season-daily-date-clean-join/types.log
+      - name: Authenticate the completed full reference before extraction
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          gh api "repos/PapiSalgueroM/ballpark-hero/actions/runs/$NBA_PERFECT_SEASON_DAILY_DATE_REFERENCE_RUN" > nba-perfect-season-daily-date-clean-join/reference-run.json
+          gh api "repos/PapiSalgueroM/ballpark-hero/actions/runs/$NBA_PERFECT_SEASON_DAILY_DATE_REFERENCE_RUN/jobs?per_page=100" > nba-perfect-season-daily-date-clean-join/reference-jobs.json
+          gh api "repos/PapiSalgueroM/ballpark-hero/actions/artifacts/$NBA_PERFECT_SEASON_DAILY_DATE_REFERENCE_ARTIFACT" > nba-perfect-season-daily-date-clean-join/reference-artifact.json
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          const env = process.env;
+          const read = file => JSON.parse(fs.readFileSync('nba-perfect-season-daily-date-clean-join/' + file));
+          const run = read('reference-run.json'), jobs = read('reference-jobs.json').jobs, artifact = read('reference-artifact.json');
+          assert.deepEqual(
+            [run.id, run.status, run.conclusion, run.event, run.run_attempt, run.path, run.repository.full_name, run.head_sha, run.head_commit.tree_id, run.head_branch],
+            [Number(env.NBA_PERFECT_SEASON_DAILY_DATE_REFERENCE_RUN), 'completed', 'success', 'push', 1, '.github/workflows/nba-perfect-season-daily-date-20261110.yml', 'PapiSalgueroM/ballpark-hero', env.NBA_PERFECT_SEASON_DAILY_DATE_REFERENCE_HEAD, env.NBA_PERFECT_SEASON_DAILY_DATE_REFERENCE_TREE, env.NBA_PERFECT_SEASON_DAILY_DATE_REFERENCE_BRANCH],
+          );
+          assert.equal(jobs.length, 1);
+          const [job] = jobs;
+          assert.deepEqual([job.id, job.run_id, job.status, job.conclusion, job.head_sha, job.steps.length],
+            [Number(env.NBA_PERFECT_SEASON_DAILY_DATE_REFERENCE_JOB), run.id, 'completed', 'success', run.head_sha, Number(env.NBA_PERFECT_SEASON_DAILY_DATE_REFERENCE_STEPS)]);
+          assert(job.steps.every(step => step.status === 'completed' && step.conclusion === 'success'));
+          assert.deepEqual(
+            [artifact.id, artifact.name, artifact.expired, artifact.size_in_bytes, artifact.digest, artifact.workflow_run.id, artifact.workflow_run.head_sha, artifact.workflow_run.head_branch],
+            [Number(env.NBA_PERFECT_SEASON_DAILY_DATE_REFERENCE_ARTIFACT), 'nba-perfect-season-daily-date-full-' + run.id, false, Number(env.NBA_PERFECT_SEASON_DAILY_DATE_REFERENCE_ZIP_BYTES), 'sha256:' + env.NBA_PERFECT_SEASON_DAILY_DATE_REFERENCE_ZIP, run.id, run.head_sha, run.head_branch],
+          );
+          NODE
+          gh api "repos/PapiSalgueroM/ballpark-hero/actions/artifacts/$NBA_PERFECT_SEASON_DAILY_DATE_REFERENCE_ARTIFACT/zip" > "$RUNNER_TEMP/nba-perfect-season-daily-date-full-reference.zip"
+          test "$(wc -c < "$RUNNER_TEMP/nba-perfect-season-daily-date-full-reference.zip")" -eq "$NBA_PERFECT_SEASON_DAILY_DATE_REFERENCE_ZIP_BYTES"
+          echo "$NBA_PERFECT_SEASON_DAILY_DATE_REFERENCE_ZIP  $RUNNER_TEMP/nba-perfect-season-daily-date-full-reference.zip" | sha256sum --check
+          unzip -Z1 "$RUNNER_TEMP/nba-perfect-season-daily-date-full-reference.zip" > nba-perfect-season-daily-date-clean-join/reference-zip-entries.txt
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          const names = fs.readFileSync('nba-perfect-season-daily-date-clean-join/reference-zip-entries.txt', 'utf8').trimEnd().split('\n');
+          assert.equal(new Set(names).size, names.length, 'Unique admitted ZIP paths');
+          for (const name of names) {
+            assert(name.length && !name.includes('\\') && !name.startsWith('/'), 'Relative ZIP path');
+            assert(name.replace(/\/$/, '').split('/').every(part => part && part !== '.' && part !== '..'), 'Safe ZIP path');
+          }
+          for (const file of ['head.txt', 'tree.txt', 'admission.json', 'unit-admission.json', 'native-admission.json', 'source-join.json', 'source-before.txt', 'source-after.txt', 'tracked-before.json', 'tracked-after.json', 'locks-before.txt', 'locks-after.txt', 'installed-before.json', 'installed-after.json', 'offline.log', 'types.log', 'dist-before.json', 'dist-after.json', 'dist.tgz']) {
+            assert(names.includes(file), file + ' required authenticated body');
+          }
+          NODE
+          mkdir "$RUNNER_TEMP/nba-perfect-season-daily-date-full-reference" "$RUNNER_TEMP/nba-perfect-season-daily-date-full-reference-dist"
+          unzip -q "$RUNNER_TEMP/nba-perfect-season-daily-date-full-reference.zip" -d "$RUNNER_TEMP/nba-perfect-season-daily-date-full-reference"
+          test -z "$(find "$RUNNER_TEMP/nba-perfect-season-daily-date-full-reference" -type l -print -quit)"
+          echo "$NBA_PERFECT_SEASON_DAILY_DATE_REFERENCE_TAR  $RUNNER_TEMP/nba-perfect-season-daily-date-full-reference/dist.tgz" | sha256sum --check
+          tar -tzf "$RUNNER_TEMP/nba-perfect-season-daily-date-full-reference/dist.tgz" > nba-perfect-season-daily-date-clean-join/reference-tar-entries.txt
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          const names = fs.readFileSync('nba-perfect-season-daily-date-clean-join/reference-tar-entries.txt', 'utf8').trimEnd().split('\n');
+          assert.equal(new Set(names).size, names.length, 'Unique admitted dist tar paths');
+          for (const name of names) {
+            assert(name.startsWith('dist/') && !name.includes('\\'), 'Tar stays under dist');
+            assert(name.replace(/\/$/, '').split('/').every(part => part && part !== '.' && part !== '..'), 'Safe tar path');
+          }
+          NODE
+          tar -xzf "$RUNNER_TEMP/nba-perfect-season-daily-date-full-reference/dist.tgz" -C "$RUNNER_TEMP/nba-perfect-season-daily-date-full-reference-dist"
+          cp "$RUNNER_TEMP/nba-perfect-season-daily-date-full-reference/source-before.txt" nba-perfect-season-daily-date-clean-join/reference-source.txt
+      - name: Fresh unchanged product-name fence on clean source
+        run: |
+          set -euo pipefail
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simNoRivalNames.mjs 2>&1 | tee nba-perfect-season-daily-date-clean-join/no-rival.log
+      - name: Clean production build
+        run: |
+          set -euo pipefail
+          NODE_OPTIONS="--max-old-space-size=6144" npm run build 2>&1 | tee nba-perfect-season-daily-date-clean-join/build.log
+      - name: Join exact clean product source and all 850 built files
+        id: join
+        env:
+          NBA_PERFECT_SEASON_DAILY_DATE_REFERENCE_DIR: ${{ runner.temp }}/nba-perfect-season-daily-date-full-reference
+          NBA_PERFECT_SEASON_DAILY_DATE_REFERENCE_DIST: ${{ runner.temp }}/nba-perfect-season-daily-date-full-reference-dist/dist
+        run: |
+          set -euo pipefail
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import assert from 'node:assert/strict';
+          import {createHash} from 'node:crypto';
+          import {execFileSync} from 'node:child_process';
+          const env = process.env;
+          const out = 'nba-perfect-season-daily-date-clean-join';
+          const ref = env.NBA_PERFECT_SEASON_DAILY_DATE_REFERENCE_DIR;
+          const read = file => JSON.parse(fs.readFileSync(path.join(ref, file)));
+          const bytes = file => fs.readFileSync(path.join(ref, file));
+          const readOutput = file => JSON.parse(fs.readFileSync(path.join(out, file)));
+          const sha = bytes => createHash('sha256').update(bytes).digest('hex');
+          const blob = bytes => createHash('sha1').update('blob ' + bytes.length + '\0').update(bytes).digest('hex');
+          const git = (...args) => execFileSync('git', args, {encoding:'utf8', maxBuffer:16 * 1024 * 1024});
+          const workflow = '.github/workflows/nba-perfect-season-daily-date-20261110.yml';
+          const helper = 'scripts/qa/playNbaPerfectSeasonDailyDate.mjs';
+          const page = 'src/pages/PerfectSeasonNba.tsx';
+          const test = 'src/test/perfectSeasonNbaDailyDate.test.tsx';
+          const plan = 'docs/plans/2026-11-10-nba-perfect-season-daily-date.md';
+          const configs = ['index.html','package.json','package-lock.json','vite.config.ts','tailwind.config.ts','postcss.config.js','tsconfig.json','tsconfig.app.json','tsconfig.node.json','bun.lockb','bun.lock'];
+          const sourceScope = file => /^(?:src|public|scripts)\//.test(file);
+          const fullOnly = new Set([workflow, helper]);
+          const pins = {
+            [page]: env.NBA_PERFECT_SEASON_DAILY_DATE_FIXED_PAGE_BLOB,
+            [test]: env.NBA_PERFECT_SEASON_DAILY_DATE_QUALIFIED_TEST_BLOB,
+            [plan]: env.NBA_PERFECT_SEASON_DAILY_DATE_QUALIFIED_PLAN_BLOB,
+            'src/App.tsx':'8bfedf7aaa1d076e0f0c8e2216c7e46632cd8a33',
+            'src/data/gameRegistry.ts':'f560b40a74d1468ac72dfde4ee6fec6635a9a255',
+            'public/perfect-season-nba/index.html':'5a2d6aa77968adbbd67ee298f30ae865cf9bc4cf',
+            'src/lib/perfectSeason.ts':'2acc9b8498e15b53c9eebc87ea45d3dd77ec2de6',
+            'src/lib/perfectSeasonNba.ts':'4509bdb6c6026170189ed144ce514340ba3e4090',
+            'src/lib/perfectSeasonThemes.ts':'39113aad5dc330ccbd677b4c541a42da974b05e6',
+            'src/test/perfectSeasonNbaRetry.test.tsx':'6cf90f7d3bc132de8c463d880c2ad056ec03f854',
+            'scripts/lib/offlineTransport.cjs':'0fda542a2649fe5da937c6976fd0f5b6073e74b6',
+            'src/lib/dateUtils.ts':'12c9de0ed37b0797492f3e936bcba70bdc03d585',
+          };
+          const indexRows = (body, separator = '\n') => {
+            const rows = body.split(separator).filter(Boolean).map(line => {
+              const matched = /^(100(?:644|755)) ([0-9a-f]{40}) 0\t(.+)$/.exec(line);
+              assert(matched, 'Actual regular path/mode/blob index tuple');
+              return [matched[3], {mode:matched[1], blob:matched[2]}];
+            });
+            assert.equal(new Set(rows.map(([file]) => file)).size, rows.length, 'Unique index paths');
+            return new Map(rows);
+          };
+          const treeRows = commit => {
+            const rows = git('ls-tree', '-r', '-z', commit).split('\0').filter(Boolean).map(line => {
+              const matched = /^(100(?:644|755)) blob ([0-9a-f]{40})\t(.+)$/.exec(line);
+              assert(matched, 'Actual regular path/mode/blob tree tuple');
+              return [matched[3], {mode:matched[1], blob:matched[2]}];
+            });
+            assert.equal(new Set(rows.map(([file]) => file)).size, rows.length, 'Unique tree paths');
+            return new Map(rows);
+          };
+          const ordered = rows => [...rows].sort(([left],[right]) => left.localeCompare(right));
+          const cleanHead = git('rev-parse', 'HEAD').trim(), cleanTree = git('rev-parse', 'HEAD^{tree}').trim();
+          assert.deepEqual(git('rev-list', '--parents', '-n', '1', 'HEAD').trim().split(' '), [cleanHead, env.NBA_PERFECT_SEASON_DAILY_DATE_CLEAN_PRODUCT_BASE], 'Clean QA is the direct PR540 child');
+          assert.equal(git('rev-parse', env.NBA_PERFECT_SEASON_DAILY_DATE_CLEAN_PRODUCT_BASE + '^{tree}').trim(), env.NBA_PERFECT_SEASON_DAILY_DATE_CLEAN_PRODUCT_BASE_TREE);
+          assert.equal(cleanHead, env.GITHUB_SHA);
+          assert.equal(fs.readFileSync(out + '/head.txt','utf8').trim(), cleanHead);
+          assert.equal(fs.readFileSync(out + '/tree.txt','utf8').trim(), cleanTree);
+          const base = treeRows(env.NBA_PERFECT_SEASON_DAILY_DATE_CLEAN_PRODUCT_BASE);
+          const current = indexRows(fs.readFileSync(out + '/source-before.txt', 'utf8'));
+          const old = indexRows(fs.readFileSync(out + '/reference-source.txt', 'utf8'));
+          assert.deepEqual(ordered(indexRows(git('ls-files','--stage','-z'),'\0')), ordered(current));
+          assert.deepEqual(ordered(treeRows(cleanHead)), ordered(current), 'Clean index joins exact committed tree tuples');
+          assert.deepEqual([base.size,current.size,old.size],[5798,5801,5802]);
+          const allowedClean = [page, test, plan, workflow];
+          const cleanDelta = [...new Set([...base.keys(), ...current.keys()])].filter(file => {
+            const before = base.get(file), after = current.get(file);
+            return before?.mode !== after?.mode || before?.blob !== after?.blob;
+          }).sort();
+          assert.deepEqual(cleanDelta, [...allowedClean].sort(), 'Exactly one Page change and three owned new leaves');
+          assert.equal(base.get(page)?.blob, 'edf47ea61379dfd23e6df85266d8954d74b7cdef');
+          assert.equal(current.get(page)?.mode, base.get(page)?.mode);
+          for (const file of [test, plan, workflow]) assert(!base.has(file) && current.get(file)?.mode === '100644', file + ' exact owned new leaf');
+          assert(!current.has(helper), 'Tracked full browser helper is excluded from clean QA');
+          assert.equal(old.get(helper)?.blob, env.NBA_PERFECT_SEASON_DAILY_DATE_NATIVE_HELPER);
+          assert.equal(old.get(workflow)?.blob, env.NBA_PERFECT_SEASON_DAILY_DATE_REFERENCE_WORKFLOW);
+          assert(current.get(workflow)?.blob && current.get(workflow).blob !== old.get(workflow).blob, 'Clean QA uses its own workflow body');
+          for (const [file,want] of Object.entries(pins)) {
+            assert.equal(current.get(file)?.blob, want, file + ' exact clean pin');
+            assert.equal(old.get(file)?.blob, want, file + ' exact full pin');
+          }
+          const product = (rows, omit) => ordered([...rows].filter(([file]) => !omit.has(file)));
+          const cleanProduct = product(current,new Set([workflow]));
+          const fullProduct = product(old,fullOnly);
+          assert.equal(cleanProduct.length,5800);
+          assert.deepEqual(cleanProduct,fullProduct,'All 5800 product path/mode/blob tuples are identical');
+          assert.deepEqual([base,current,old].map(rows => [...rows.keys()].filter(sourceScope).length), [4668,4669,4670]);
+          const scoped = (rows, omit) => ordered([...rows].filter(([file]) => (sourceScope(file) || configs.includes(file)) && !omit.has(file)));
+          const sourceConfigRows = scoped(current,new Set());
+          assert.equal(sourceConfigRows.length, 4680);
+          assert.deepEqual(sourceConfigRows,scoped(old,fullOnly),'Every 4669 code and 11 root configuration path/mode/blob tuple');
+          for (const file of configs) assert(current.has(file) && old.has(file),file + ' required root configuration');
+          for (const [file,tuple] of current) {
+            const stat = fs.lstatSync(file);
+            assert(stat.isFile(),file + ' physical regular source body');
+            assert.equal((stat.mode & 0o111) !== 0, tuple.mode === '100755',file + ' physical source executable mode');
+            assert.equal(blob(fs.readFileSync(file)),tuple.blob,file + ' physical source bytes join tree');
+          }
+
+          const inventory = (directory,prefix = '') => fs.readdirSync(directory,{withFileTypes:true}).sort((a,b) => a.name.localeCompare(b.name)).flatMap(entry => {
+            const file = path.join(directory,entry.name);
+            const relative = prefix + entry.name;
+            if (entry.isDirectory()) return inventory(file,relative + '/');
+            assert(entry.isFile(),relative + ' regular dist file');
+            const body = fs.readFileSync(file);
+            return [{path:relative,bytes:body.length,sha256:sha(body)}];
+          });
+          const actual = inventory('dist'), reference = inventory(env.NBA_PERFECT_SEASON_DAILY_DATE_REFERENCE_DIST);
+          assert.deepEqual([actual.length,reference.length],[850,850]);
+          assert.deepEqual(actual,reference,'Every clean built path and byte equals the qualified full build');
+          const distManifestSHA256 = sha(JSON.stringify(reference));
+          const sortFull = rows => rows.slice().sort((left,right) => left.file.localeCompare(right.file));
+          const retainedBefore = sortFull(read('dist-before.json'));
+          const retainedAfter = sortFull(read('dist-after.json'));
+          assert.deepEqual(retainedBefore,retainedAfter,'Exact full before/after build tuples');
+          const fullDistTupleSHA256 = sha(JSON.stringify(retainedAfter));
+          assert.equal(fullDistTupleSHA256,env.NBA_PERFECT_SEASON_DAILY_DATE_REFERENCE_DIST_MANIFEST);
+          const retainedManifest = retainedBefore.map(row => {
+            assert.deepEqual(Object.keys(row).sort(),['bytes','file','sha256']);
+            assert(row.file.startsWith('dist/'));
+            return {path:row.file.slice(5),bytes:row.bytes,sha256:row.sha256};
+          }).sort((left,right) => left.path.localeCompare(right.path));
+          assert.deepEqual(retainedManifest,reference.slice().sort((left,right) => left.path.localeCompare(right.path)),'Exact full retained build inventory and tar join');
+          for (const [before, after] of [['source-before.txt','source-after.txt'],['tracked-before.json','tracked-after.json'],['locks-before.txt','locks-after.txt'],['installed-before.json','installed-after.json']]) {
+            assert(bytes(before).equals(bytes(after)),before + ' held by actual full job');
+          }
+          assert(bytes('source-before.txt').equals(fs.readFileSync(out + '/reference-source.txt')));
+          assert(bytes('installed-before.json').equals(fs.readFileSync(out + '/installed-before.json')));
+          assert(bytes('locks-before.txt').equals(fs.readFileSync(out + '/locks-before.txt')));
+          assert.deepEqual([bytes('offline.log').length,bytes('types.log').length],[0,0]);
+          const referenceHead = bytes('head.txt').toString('utf8').trim(), referenceTree = bytes('tree.txt').toString('utf8').trim();
+          const run = readOutput('reference-run.json'), job = readOutput('reference-jobs.json').jobs[0], meta = readOutput('reference-artifact.json');
+          assert.deepEqual([referenceHead,referenceTree],[env.NBA_PERFECT_SEASON_DAILY_DATE_REFERENCE_HEAD,env.NBA_PERFECT_SEASON_DAILY_DATE_REFERENCE_TREE]);
+          const full = read('admission.json'), native = read('native-admission.json'), unit = read('unit-admission.json'), source = read('source-join.json');
+          assert.deepEqual([full.status,full.head,full.tree,full.distFiles,full.distTupleSHA256],
+            ['passed',referenceHead,referenceTree,850,fullDistTupleSHA256]);
+          assert.deepEqual(full.unit,unit);
+          assert.deepEqual(full.native,native);
+          assert.deepEqual(full.distTar,{bytes:bytes('dist.tgz').length,sha256:env.NBA_PERFECT_SEASON_DAILY_DATE_REFERENCE_TAR});
+          assert.equal(sha(bytes('dist.tgz')),env.NBA_PERFECT_SEASON_DAILY_DATE_REFERENCE_TAR);
+          const referenceChecks = (() => {
+            const evidencePins = [{"file":"active-route-preflight.json","bytes":1373,"sha256":"c8d2b6f2e8e4cef0ab0e09de9193a6a4d0c73e800c5cc238e91bdad10859e0d5"},{"file":"active-snapshot.html","bytes":22450,"sha256":"20ab58b5991364e2f2fb33b6dc2a08e81ec5d91c24f9bc2f36bf860fe293dd20"},{"file":"admission.json","bytes":6734,"sha256":"0f6134ffce65a0cb760b9127b15fbb2fb1492cccb7231ed4e76ce9888f3c94c1"},{"file":"browser-exit.txt","bytes":2,"sha256":"9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"},{"file":"browser.log","bytes":50,"sha256":"eb7f1600ce148b5f56de9c8a51418ebcce6602cff36d6125445ec96eb8970d00"},{"file":"browser.transport.log","bytes":0,"sha256":"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"},{"file":"browser/built-document.html","bytes":23068,"sha256":"70ea3633a01231f83f481ac19a641cd9be10d4599fc387a95fc5ca874e33ce1b"},{"file":"browser/fictional-archive.json","bytes":517484,"sha256":"64c359055ee05445790eb34dc4a290463d08dfa75b0b33d271c10c33ba3d7c7b"},{"file":"browser/report.json","bytes":144623,"sha256":"0faa97f5bdf812957676f60a4bee65c276b0e7544d116257c00807bfe4ea399a"},{"file":"dist-before.json","bytes":115729,"sha256":"db32d0ca686f1da8367d99ac093f67607cc6b5dfad670dcbaf49c7bac8d837d9"},{"file":"dist-after.json","bytes":115729,"sha256":"248665016ab3ce7ceeffab34f2a322f0f72bb15613603d10aa19aa07a3c10154"},{"file":"dist.sha256","bytes":110,"sha256":"82a9e86b61626398e3846006fe6634c46e4bf6190209e5d3ea6ade5f9a17c1c2"},{"file":"dist.tgz","bytes":6985026,"sha256":"1e96e5f3fec6ecb162821abcb2ae8fb1a530f7b036354209fe29eea61cb7ced2"},{"file":"head.txt","bytes":41,"sha256":"6c5f699bc1308a00b3cd5bc6d4973bc78ac1ac36a1f947251175b6c10a3a23f6"},{"file":"tree.txt","bytes":41,"sha256":"f118a9dd69f32c262d18d520797511d286dfae07f6f0bee9017c452acb44aeef"},{"file":"native-admission.json","bytes":3161,"sha256":"7fb587866f3192e38729e6d15bd382dbf73078dcb1a1429a2f9d42b753c8db9e"},{"file":"native-consumer.mjs","bytes":10895,"sha256":"2c553f51a40afb72e16e6cbd402f04a69beb7d9738af98306af428754fcf4209"},{"file":"packet-custody.json","bytes":3274,"sha256":"d11a05e61a22e0926f0a0101439e0843793f8736bac9580d5766ddf6d0951513"},{"file":"public-cases.raw.json","bytes":10907,"sha256":"6312bf05efe96265ecb689f2756efda3a65caea3b7ef6bd418a699836b1e6eb8"},{"file":"readers.log","bytes":1076,"sha256":"4402f3d1184bdb2eea295dcfb3c922316972bc737c3f03b4ac70661122ac67a2"},{"file":"weight.log","bytes":1919,"sha256":"573c564d555eae3fe2d65e8240d2233b5902bc158787d9c7431b8fee5c1e7f4d"},{"file":"source-before.txt","bytes":504098,"sha256":"d8b283616f482ebaf489fdc6ab3bd5c925cb9d644dd49eadbc72b4c49a992307"},{"file":"source-join.json","bytes":565,"sha256":"79cbcacb2eaeed5d75ea8010b71ccba59ff70c04d52fa46834883e699e6332a0"},{"file":"unit-admission.json","bytes":545,"sha256":"62cac0f2187fd9f3e9b91e6654b76fc5dd42ec38d74929dfb69e7190c1eb74dd"},{"file":"preflight-reference-before.json","bytes":2438,"sha256":"1547fce45da7c94c7aa37b42847e5599325fb133f4f1c19a6354761ac2b0e728"},{"file":"original-reference-before.json","bytes":2903,"sha256":"638b35f7a152219b16d7e82c865243d3db6838a7ea6f14ee485b0dbdaef0d589"},{"file":"fixed-reference-before.json","bytes":2898,"sha256":"299fe5bd027ccb8c6c7ebb2c55646e71d729519c2fc505f31df582e3de0928d5"},{"file":"controls-reference-before.json","bytes":4596,"sha256":"be1cd0fb72e223048969973eeff764774b84928edd80f0df14b3e5de73227ecd"},{"file":"browser/320-before-first-wheel.png","bytes":9150,"sha256":"f00096d155732d784ed7640a215a88e8495a57b27ea0de9bc7ec491fa695e4a2"},{"file":"browser/320-before-result.png","bytes":79298,"sha256":"ffcb1638f99a72d48429f8eca7052d44620101bc01aa2ae97bf37c783750a60b"},{"file":"browser/320-crossover-first-wheel.png","bytes":9150,"sha256":"f00096d155732d784ed7640a215a88e8495a57b27ea0de9bc7ec491fa695e4a2"},{"file":"browser/320-crossover-result.png","bytes":79454,"sha256":"c997c8223046f957834c26faa774835dff458410490292f3f191994264c77cd6"},{"file":"browser/320-after-first-wheel.png","bytes":8730,"sha256":"c78e50d51a1af9a7eedd432002f770d05717c8a81f483d9356b3b79ff775cb29"},{"file":"browser/320-after-result.png","bytes":79093,"sha256":"3608601c30bb964a7d7a343465486d297373c0600f71bd7e7bec633b5f0cb03a"},{"file":"browser/390-before-first-wheel.png","bytes":8703,"sha256":"ab479785944c1264545c1f554b32e36abaf0f910639078c4d1b5c6deb70fbe13"},{"file":"browser/390-before-result.png","bytes":82035,"sha256":"a16b5cba899f3b9c40879448bb4084efac162916c9c428ada94aa3b5780b336c"},{"file":"browser/390-crossover-first-wheel.png","bytes":8703,"sha256":"ab479785944c1264545c1f554b32e36abaf0f910639078c4d1b5c6deb70fbe13"},{"file":"browser/390-crossover-result.png","bytes":82183,"sha256":"8d265081ca7328a953b6b4cfcf3dc0074122c44afcb6c83fb5edec5085779497"},{"file":"browser/390-after-first-wheel.png","bytes":8299,"sha256":"bc08516d903330112116d3cc2702aa7edf796586f435b85413aaf7ea47f254d4"},{"file":"browser/390-after-result.png","bytes":80694,"sha256":"55d56f1799d4de903c676269ade849564d727555d35892aa2076f432c4b19254"},{"file":"browser/1280-before-first-wheel.png","bytes":9488,"sha256":"88aa3d915bcfcb1b70757c55e93b9760a5ba8de595639cbc3bec924fd31cb7a9"},{"file":"browser/1280-before-result.png","bytes":77555,"sha256":"b9ead9cfe3113e558efb8f96370475b835210b195458b06b1f7f6517dcebfc90"},{"file":"browser/1280-crossover-first-wheel.png","bytes":9488,"sha256":"88aa3d915bcfcb1b70757c55e93b9760a5ba8de595639cbc3bec924fd31cb7a9"},{"file":"browser/1280-crossover-result.png","bytes":77711,"sha256":"3afe1e44c98b3c7522ea0c74d0d1aa07c1e22e0f7c1dfc949d083e60f2d38d65"},{"file":"browser/1280-after-first-wheel.png","bytes":9391,"sha256":"ab9c932be5382d51648be6991c367b621ca1bed75c866ac387ac2876d0ad6b9e"},{"file":"browser/1280-after-result.png","bytes":77138,"sha256":"143a21a5aa2d7c77cc7f71a4add3ce91d75ba230adb0fb96a4cfa7da46d6b0de"}];
+            const roles = ['preflight', 'original', 'fixed', 'controls'];
+            const widths = [320, 390, 1280];
+            const cases = ['before', 'crossover', 'after'];
+            const nativeImages = widths.flatMap(width => cases.flatMap(id => [
+              'browser/' + width + '-' + id + '-first-wheel.png',
+              'browser/' + width + '-' + id + '-result.png',
+            ]));
+            const requiredBodies = [
+              'active-route-preflight.json', 'active-snapshot.html', 'admission.json',
+              'browser-exit.txt', 'browser.log', 'browser.transport.log',
+              'browser/built-document.html', 'browser/fictional-archive.json', 'browser/report.json',
+              'dist-before.json', 'dist-after.json', 'dist.sha256', 'dist.tgz',
+              'head.txt', 'tree.txt', 'native-admission.json', 'native-consumer.mjs', 'packet-custody.json',
+              'public-cases.raw.json', 'readers.log', 'weight.log', 'source-before.txt', 'source-join.json', 'unit-admission.json',
+              ...roles.map(role => role + '-reference-before.json'),
+              ...nativeImages,
+            ];
+            const fileOrder = (a, b) => a.localeCompare(b);
+            assert.deepEqual(evidencePins.map(pin => pin.file).sort(fileOrder), requiredBodies.slice().sort(fileOrder));
+            for (const pin of evidencePins) {
+              const body = bytes(pin.file);
+              assert.deepEqual(pin, {file:pin.file,bytes:body.length,sha256:sha(body)},pin.file + ' exact independently admitted body');
+            }
+            const marker = 'NBA_DAILY_PICKER_MOUNT_DATE';
+            assert.deepEqual([full.status,full.head,full.tree,full.readers,full.immutableCaps,full.distFiles,full.controlsRerun],
+              ['passed',referenceHead,referenceTree,20,16,850,false]);
+            assert.deepEqual([source.status,source.head,source.tree,source.workflow,source.helperBlob],
+              ['passed',referenceHead,referenceTree,env.NBA_PERFECT_SEASON_DAILY_DATE_REFERENCE_WORKFLOW,env.NBA_PERFECT_SEASON_DAILY_DATE_NATIVE_HELPER]);
+            assert.deepEqual([source.heldRows,source.trackedRows,source.scopedSourceRows,source.rootConfigurations],
+              [5800,5802,4670,11]);
+            assert.equal(source.pins[page],env.NBA_PERFECT_SEASON_DAILY_DATE_FIXED_PAGE_BLOB);
+            assert.equal(source.helperBlob,'089eadebb2c0f761fcef8c6dfafb98f1bf8cf6be');
+            assert.deepEqual([current.size,sourceConfigRows.length - configs.length,sourceConfigRows.length,actual.length],
+              [5801,4669,4680,850]);
+            assert.equal(job.name,'full');
+            assert.equal(bytes('dist-after.json').toString(), JSON.stringify(retainedAfter));
+            assert.equal(full.distTupleSHA256,sha(bytes('dist-after.json')));
+            assert.equal(bytes('dist.sha256').toString().trim(), full.distTar.sha256 + '  nba-perfect-season-daily-date-full/dist.tgz');
+            assert(bytes('readers.log').toString().includes('All 20 harnesses green.'));
+            const weightLog = bytes('weight.log').toString();
+            assert(weightLog.includes('sweepWeight: green.'));
+            const capRows = weightLog.split('\n').filter(line => /^\s+\/\S*\s+\d+K gz over/.test(line));
+            assert.equal(capRows.length,16);
+            assert.deepEqual(full.capRows,capRows);
+
+            const custody = read('packet-custody.json');
+            assert.deepEqual(Object.keys(custody).sort(),['status',...roles,'referenceChecks','controlsRerun'].sort());
+            assert.deepEqual([custody.status,custody.controlsRerun],['passed',false]);
+            assert.deepEqual(custody.referenceChecks,{
+              status:'passed',originalCases:6,originalNamedBusinessFailures:1,fixedCases:6,
+              controlsCases:18,controlsPasses:17,controlsNamedReds:1,allRawJoins:true,
+            });
+            assert.deepEqual(
+              [custody.preflight.run,custody.preflight.job,custody.preflight.artifact,custody.preflight.head,custody.preflight.tree,custody.preflight.workflow,custody.preflight.independentAuditSHA256],
+              [42792020594,129747563141,13752550399,'fb68443be3e925c1390b9d026477919ae00121ff','560d41291ab753e21ba25753da936c5c27e760a4',
+                '86b1df9fab877b25cf661656de4de3f7a0ea46f1','1196cf142851fad8eebfb4c7173ceb4166aaaf7f1824590eba68b4af7369ccc9'],
+            );
+            assert.deepEqual(
+              [custody.original.run,custody.original.job,custody.original.artifact,custody.original.head,custody.original.tree,custody.original.workflow,custody.original.independentAuditSHA256],
+              [42794877575,129757351999,13753555313,'a97c23de034006e383349c8bebfedaf72a906346','1b3c406cb5d9efd817c3e6241f557b690f4ccc89',
+                'f2f1102c4347140263895c01d9124d3a2d832b20','006716cfb39d49447e6a5b4f89eabb94ae6c2633211bb164ab12d0daef92e56a'],
+            );
+            assert.deepEqual([custody.fixed.head,custody.fixed.tree],[source.fixedHead,source.fixedTree]);
+            for(const key of ['run','job','artifact']) assert.equal(new Set(roles.map(role=>custody[role][key])).size,4);
+            const safeRelative = file => typeof file === 'string' && /^[A-Za-z0-9._/-]+$/.test(file)
+              && file.split('/').every(part => part && part !== '.' && part !== '..');
+            function walkReference(directory, prefix = '') {
+              return fs.readdirSync(directory,{withFileTypes:true}).flatMap(entry => {
+                const relative = prefix + entry.name, child = path.join(directory,entry.name);
+                if (entry.isDirectory()) return walkReference(child,relative + '/');
+                assert(entry.isFile(),relative + ' regular reference file');
+                return [relative];
+              });
+            }
+            const roleBytes = (role,file) => bytes(role + '-reference/packet/' + file);
+            const roleJson = (role,file) => JSON.parse(roleBytes(role,file));
+            for (const role of roles) {
+              const pin = custody[role];
+              assert([pin.run,pin.job,pin.artifact,pin.stepCount,pin.attempt,pin.bodyCount,pin.bodyBytes,pin.zipBytes].every(value => Number.isSafeInteger(value) && value > 0));
+              assert([pin.head,pin.tree,pin.workflow].every(value => /^[a-f0-9]{40}$/.test(value)));
+              assert([pin.zipSHA256,pin.independentAuditSHA256].every(value => /^[a-f0-9]{64}$/.test(value)));
+              const directory = role + '-reference';
+              const inventory = read(directory + '-before.json');
+              const names = walkReference(path.join(ref,directory)).sort(fileOrder);
+              assert.deepEqual(inventory.map(row => row.file).sort(fileOrder),names);
+              const packetRows = inventory.filter(row => row.file.startsWith('packet/'));
+              assert.deepEqual([packetRows.length,packetRows.reduce((sum,row)=>sum+row.bytes,0)],[pin.bodyCount,pin.bodyBytes]);
+              for (const tuple of inventory) {
+                assert(safeRelative(tuple.file));
+                const body = bytes(directory + '/' + tuple.file);
+                assert.deepEqual(tuple,{file:tuple.file,bytes:body.length,sha256:sha(body)});
+              }
+              const archive = bytes(directory + '/artifact.zip');
+              assert.deepEqual([archive.length,sha(archive)],[pin.zipBytes,pin.zipSHA256]);
+              const roleRun = read(directory + '/run.json');
+              const roleJobs = read(directory + '/jobs.json');
+              const artifactResponse = read(directory + '/artifact.json');
+              const roleArtifact = artifactResponse.artifacts?.[0] ?? artifactResponse;
+              if (artifactResponse.artifacts) assert.equal(artifactResponse.artifacts.length,1);
+              assert.deepEqual([roleRun.id,roleRun.head_sha,roleRun.head_commit.tree_id,roleRun.head_branch,roleRun.run_attempt,roleRun.status,roleRun.conclusion],
+                [pin.run,pin.head,pin.tree,pin.branch,pin.attempt,'completed','success']);
+              assert.deepEqual([roleJobs.total_count,roleJobs.jobs.length],[1,1]);
+              const [roleJob] = roleJobs.jobs;
+              assert.deepEqual([roleJob.id,roleJob.run_id,roleJob.head_sha,roleJob.name,roleJob.status,roleJob.conclusion,roleJob.steps.length],
+                [pin.job,pin.run,pin.head,pin.jobName,'completed','success',pin.stepCount]);
+              assert(roleJob.steps.every(step => step.status === 'completed' && step.conclusion === 'success'));
+              assert.deepEqual([roleArtifact.id,roleArtifact.name,roleArtifact.size_in_bytes,roleArtifact.digest,roleArtifact.expired,roleArtifact.workflow_run.id],
+                [pin.artifact,pin.artifactName,pin.zipBytes,'sha256:' + pin.zipSHA256,false,pin.run]);
+              assert.equal(roleBytes(role,'head.txt').toString().trim(),pin.head);
+              assert.equal(roleBytes(role,'tree.txt').toString().trim(),pin.tree);
+            }
+            for (const file of ['active-route-preflight.json','active-snapshot.html']) assert(bytes(file).equals(roleBytes('preflight',file)));
+            const active = read('active-route-preflight.json');
+            assert.deepEqual([active.status,active.route,active.component,active.label,active.snapshot.bytes,active.snapshot.canonical],
+              ['passed','/perfect-season-nba','PerfectSeasonNba','82-0 NBA Perfect Season',22450,'https://douknowball.com/perfect-season-nba']);
+            assert.equal(active.snapshot.sha256,sha(bytes('active-snapshot.html')));
+            assert.deepEqual([active.snapshot.retiredMarkers,active.snapshot.metaRefresh],[0,0]);
+
+            const originalRaw = {bytes:10899,sha256:'27786f71819e483f6d95cf9e2de0be77945f94a4a39ef818379452d9899a4486'};
+            const fixedRaw = {bytes:10907,sha256:'6312bf05efe96265ecb689f2756efda3a65caea3b7ef6bd418a699836b1e6eb8'};
+            const sameFields = ['wheel','simulation','resultText','savedAttempts','completions'];
+            assert.deepEqual(unit,{
+              status:'passed',qualification:'fresh-fixed-mounted-daily-date',total:6,passes:6,failed:0,wholeFixedRAWHeld:true,
+              rawBytes:fixedRaw.bytes,rawSHA256:fixedRaw.sha256,original:originalRaw,sameMountedDayFields:sameFields,
+              journeys:3,spins:18,games:246,
+            });
+            const originals = roleJson('original','original-result.json'), fixed = roleJson('fixed','fixed-result.json');
+            assert.deepEqual([originals.status,originals.total,originals.passes,originals.failed,originals.markers],
+              ['expected-original-daily-date-mismatch',6,5,1,[marker]]);
+            assert.deepEqual([fixed.status,fixed.total,fixed.passes,fixed.failed,fixed.journeys,fixed.spins,fixed.games,fixed.original,fixed.sameMountedDayFields],
+              ['fixed-mounted-daily-date',6,6,0,3,18,246,originalRaw,sameFields]);
+            const fixedSource = roleJson('fixed','source-receipt.json');
+            assert.deepEqual([fixedSource.ownedWorkflow,fixedSource.trackedRows,fixedSource.sourceRows,fixedSource.pins[page]],
+              [custody.fixed.workflow,5801,4669,source.pins[page]]);
+            for (const [role,expected] of [['original',originalRaw],['fixed',fixedRaw]]) {
+              const raw = roleBytes(role,'public-cases.raw.json');
+              assert.deepEqual({bytes:raw.length,sha256:sha(raw)},expected);
+            }
+            const unitRaw = bytes('public-cases.raw.json');
+            assert(unitRaw.equals(roleBytes('fixed','public-cases.raw.json')));
+            assert.deepEqual({bytes:unitRaw.length,sha256:sha(unitRaw)},fixedRaw);
+            const {journeys:unitJourneys} = JSON.parse(unitRaw);
+            const [before,crossed,fresh] = [unitJourneys.before,unitJourneys.crossover,unitJourneys.after];
+            assert.deepEqual([before.mountET,crossed.mountET,crossed.entryET,fresh.mountET],['2026-11-09','2026-11-09','2026-11-10','2026-11-10']);
+            assert.deepEqual([before.simulation[0].seed,crossed.simulation[0].seed,fresh.simulation[0].seed],[1326654265,1326654265,1249224418]);
+            for (const field of sameFields) assert.deepEqual(crossed[field],before[field]);
+
+            const control = roleJson('controls','admission.json'), controlSource = roleJson('controls','source-receipt.json');
+            const controlOrder = ['fixed','original','restored'];
+            assert.deepEqual([control.status,control.roleOrder,control.cases,control.passes,control.namedBusinessFailures,
+              control.onlyPhysicalProductPath,control.restoredExactFixed,control.bothFixedRestoredRawBodiesLiteral],
+              ['passed',controlOrder,18,17,1,page,true,true]);
+            for (const role of ['original','fixed']) {
+              const prior = custody[role], input = controlSource.inputs[role];
+              assert.deepEqual([input.run,input.job,input.artifact,input.head,input.tree,input.workflow,input.auditSHA256],
+                [prior.run,prior.job,prior.artifact,prior.head,prior.tree,prior.workflow,prior.independentAuditSHA256]);
+            }
+            for (const role of controlOrder) {
+              const red = role === 'original', prior = red ? 'original' : 'fixed';
+              const raw = roleBytes('controls',role + '/public-cases.raw.json'), row = control.runs[role];
+              assert.deepEqual([row.cases,row.passes,row.namedBusinessFailures,row.reference],[6,red ? 5 : 6,red ? [marker] : [],custody[prior].run]);
+              assert(raw.equals(roleBytes(prior,'public-cases.raw.json')));
+              assert.deepEqual(row.raw,{bytes:raw.length,sha256:sha(raw)});
+            }
+            assert.equal(bytes('browser-exit.txt').toString().trim(),'0');
+            assert.equal(bytes('browser.transport.log').length,0);
+            assert.equal(bytes('browser.log').toString().trimEnd().split(/\r?\n/).at(-1),'PASS NBA Perfect Season Daily date native browser');
+            assert.equal(sha(bytes('native-consumer.mjs')),'2c553f51a40afb72e16e6cbd402f04a69beb7d9738af98306af428754fcf4209');
+
+            const retainedNative = (() => {
+              const out = path.join(ref,'browser');
+              const helperSHA = 'c9976591c3cdc3c9a63c6b633cf63e003b967996e91524927330fb8895022811';
+              const heldBodies = [];
+              function readRef(ref, file) {
+                assert.equal(ref.file, file);
+                const bytes = fs.readFileSync(path.join(out, file));
+                assert(bytes.length > 0);
+                assert.equal(ref.bytes, bytes.length);
+                assert.equal(ref.sha256, sha(bytes));
+                heldBodies.push({ file, bytes: ref.bytes, sha256: ref.sha256 });
+                return bytes;
+              }
+              function checkImage(ref, name) {
+                const png = readRef(ref, name);
+                assert.equal(png.subarray(0, 8).toString('hex'), '89504e470d0a1a0a');
+                assert.equal(png.subarray(12, 16).toString(), 'IHDR');
+                assert(png.readUInt32BE(16) > 0 && png.readUInt32BE(20) > 0);
+              }
+              const reportBody = fs.readFileSync(path.join(out, 'report.json'));
+              heldBodies.push({ file: 'report.json', bytes: reportBody.length, sha256: sha(reportBody) });
+              const report = JSON.parse(reportBody);
+              assert.equal(report.schema, 'nba-perfect-season-daily-date-native-v4');
+              assert.equal(report.status, 'pass');
+              assert.deepEqual(report.errors, []);
+              const url = new URL(report.route);
+              assert.equal(url.protocol, 'http:');
+              assert(['127.0.0.1', 'localhost', '[::1]'].includes(url.hostname));
+              assert.equal(url.href, url.origin + '/perfect-season-nba');
+
+              const widths = [320, 390, 1280];
+              const heights = [740, 900, 1000];
+              const cases = ['before', 'crossover', 'after'];
+              const slots = ['PG', 'SG', 'SF', 'PF', 'C', 'SIXTH'];
+              const mountDays = ['2026-11-09', '2026-11-09', '2026-11-10'];
+              const entryDays = ['2026-11-09', '2026-11-10', '2026-11-10'];
+              const mountInstants = ['2026-11-10T04:59:40.000Z', '2026-11-10T04:59:40.000Z', '2026-11-10T05:00:01.000Z'];
+              const entryInstants = ['2026-11-10T04:59:40.000Z', '2026-11-10T05:00:01.000Z', '2026-11-10T05:00:01.000Z'];
+              const ordinals = [[51, 76, 74, 106, 103, 64], [70, 93, 135, 149, 121, 76]];
+              assert.deepEqual(report.widths, widths);
+              assert.deepEqual(report.cases.map(row => row.id), widths.flatMap(width => cases.map(id => width + '-' + id)));
+
+              const fixture = JSON.parse(readRef(report.fixture, 'fictional-archive.json'));
+              assert.deepEqual([fixture.priorOrdinals, fixture.nextOrdinals], ordinals);
+              const entryAt = (prefix, start, index) => {
+                const year = start + index % 8;
+                return { team: prefix + String(index).padStart(3, '0'), season: year + '-' + String(year + 1).slice(-2) };
+              };
+              const entries = Array.from({ length: 300 }, (_, index) => index < 150
+                ? entryAt('FXM', 2015, index)
+                : entryAt('FXD', 2000, index - 150));
+              assert.deepEqual(fixture.entries, entries);
+              const playerName = (team, slot) => 'Daily Native Fixture ' + team + ' ' + slot;
+              assert.deepEqual(fixture.rawRows, entries.flatMap(({ team, season }, index) =>
+                ['PG', 'SG', 'SF', 'PF', 'C', 'PG', 'SG'].map((position, i) => ({
+                  id: 2100 - index * 7 - i, team, season, player_name: playerName(team, slots[i] ?? 'Reserve'),
+                  position, minutes: 2000 - i * 10, pts: 800, trb: 400, ast: 300,
+                }))));
+              assert.equal(report.builtDocument.distFile, 'dist/perfect-season-nba/index.html');
+              assert(readRef(report.builtDocument, 'built-document.html').equals(fs.readFileSync(path.join(env.NBA_PERFECT_SEASON_DAILY_DATE_REFERENCE_DIST, report.builtDocument.distFile.slice(5)))));
+
+              const nonces = new Set();
+              const totals = { documents: 0, index: 0, squad: 0, completion: 0, images: 0 };
+              const allActions = new Set(['aborted', 'local-preflight', 'local-index', 'local-squad', 'local-empty-read', 'local-write-acknowledgement']);
+              for (const row of report.cases) {
+                const widthIndex = widths.indexOf(row.width);
+                const caseIndex = cases.indexOf(row.journey);
+                assert(widthIndex >= 0 && caseIndex >= 0);
+                assert.equal(row.id, row.width + '-' + row.journey);
+                assert.equal(row.height, heights[widthIndex]);
+                assert.equal(row.touch, widthIndex !== 2);
+                assert.equal(row.status, 'pass');
+                assert.deepEqual(row.pageErrors, []);
+                assert.deepEqual(row.routeErrors, []);
+                const expectedDocument = {
+                  url: url.href, method: 'GET', resourceType: 'document', navigationRequest: true, mainFrame: true, redirectedFrom: null,
+                };
+                assert.deepEqual(row.documents, [expectedDocument]);
+                assert.deepEqual(row.documentInterceptions, [expectedDocument]);
+                assert(row.frameEvents.every(value => typeof value === 'string'));
+                assert.deepEqual(row.served, {
+                  url: url.href, status: 200, request: expectedDocument, redirectedTo: null, locationHeader: null,
+                  contentType: 'text/html; charset=utf-8', ...report.builtDocument,
+                });
+                totals.documents++;
+
+                const [mountedDay, enteredDay] = [mountDays[caseIndex], entryDays[caseIndex]];
+                assert.match(row.mount.nonce, /^[a-f0-9-]{36}$/);
+                assert(!nonces.has(row.mount.nonce));
+                nonces.add(row.mount.nonce);
+                for (const [when, day, instant] of [
+                  [row.mount, mountedDay, mountInstants[caseIndex]],
+                  [row.entry, enteredDay, entryInstants[caseIndex]],
+                  [row.finish, enteredDay, entryInstants[caseIndex]],
+                ]) {
+                  assert.deepEqual([when.eastern, when.instant], [day, instant]);
+                  assert.equal(when.url, url.href);
+                  assert.equal(when.nonce, row.mount.nonce);
+                }
+                assert.equal(row.archiveRequestsBeforeEntry, 0);
+                const after = caseIndex === 2;
+                const expectedWheel = ordinals[Number(after)].map(i => entries[(after ? 150 : 0) + i]);
+                assert.equal(row.theme, "Today's theme: " + (after ? '2000s Basketball' : 'Three-Point Boom'));
+                assert(row.intercepts.every(record => allActions.has(record.action)));
+                for (const item of row.intercepts) {
+                  const intercepted = new URL(item.url);
+                  if (item.action === 'aborted') {
+                    assert(intercepted.origin !== url.origin || !['GET', 'HEAD'].includes(item.method));
+                    continue;
+                  }
+                  assert(intercepted.hostname.endsWith('.supabase.co'));
+                  if (item.action === 'local-preflight') assert.equal(item.method, 'OPTIONS');
+                  if (item.action === 'local-empty-read') assert(['GET', 'HEAD'].includes(item.method));
+                  if (item.action === 'local-write-acknowledgement') assert(!['GET', 'HEAD', 'OPTIONS'].includes(item.method));
+                  if (item.action === 'local-index' || item.action === 'local-squad') {
+                    assert.equal(item.method, 'GET');
+                    assert.equal(intercepted.pathname, '/rest/v1/bref_nba_player_seasons');
+                  }
+                }
+                const index = row.intercepts.filter(item => item.action === 'local-index').sort((a, b) => a.start - b.start);
+                assert.deepEqual(index.map(({ start, limit, rows }) => [start, limit, rows]),
+                  Array.from({ length: 15 }, (_, i) => [i * 1000, 1000, [1000, 1000, 100][i] ?? 0]));
+                const squads = row.intercepts.filter(item => item.action === 'local-squad');
+                assert.deepEqual(squads.map(({ team, season, rows }) => ({ team, season, rows })),
+                  expectedWheel.map(({ team, season }) => ({ team, season, rows: 7 })));
+                totals.index += index.length;
+                totals.squad += squads.length;
+
+                assert.deepEqual(row.wheel, expectedWheel.map(({ team, season }, i) => ({
+                  slot: slots[i], team, season, landing: season + ' ' + team,
+                  pickedPlayer: playerName(team, slots[i]), lineupPlayer: i === 5 ? null : playerName(team, slots[i]),
+                  assignment: i === 5 ? 'automatic' : 'explicit',
+                  slotButtonText: i === 5 ? null : slots[i],
+                  nextAction: i === 5 ? 'Skip to result' : null,
+                })));
+                const otherDay = mountedDay === mountDays[0] ? entryDays[2] : mountDays[0];
+                assert.deepEqual(Object.keys(row.saves).sort(), ['2026-11-09', '2026-11-10']);
+                assert.equal(row.saves[otherDay], null);
+                const saved = row.saves[mountedDay];
+                assert.deepEqual([saved.v, saved.date, saved.spins, saved.themeId],
+                  [1, mountedDay, 6, after ? 'two-thousands-nba' : 'three-point-boom']);
+                assert.deepEqual(saved.teamNames, row.wheel.map(item => item.landing));
+                assert.equal(saved.sim.games.length, 82);
+                assert(saved.sim.games.every(value => typeof value === 'boolean'));
+                assert.equal(saved.sim.wins, saved.sim.games.filter(Boolean).length);
+                assert.equal(saved.sim.wins + saved.sim.losses, 82);
+                assert.equal(saved.sim.perfect, saved.sim.wins === 82);
+                assert.equal(saved.overall, saved.sim.overall);
+                assert.equal(row.resultText, saved.sim.wins + '-' + saved.sim.losses);
+                assert.equal(row.verdictScore, row.resultText);
+                assert(row.resultMeta?.startsWith('Daily · ' + mountedDay + ' ·'));
+                assert(row.resultShare?.split('\n').includes('Daily · ' + mountedDay));
+                const completions = row.intercepts.filter(item => item.completion);
+                assert.equal(completions.length, 1);
+                const [completion] = completions;
+                assert.equal(completion.action, 'local-write-acknowledgement');
+                assert.equal(completion.method, 'POST');
+                assert.equal(new URL(completion.url).pathname, '/rest/v1/game_completions');
+                assert.deepEqual(completion.completion, { game: 'perfect-season-nba', score: saved.sim.wins });
+                totals.completion++;
+
+                for (const geometry of [row.firstWheelLayout, row.resultLayout]) {
+                  assert.deepEqual([geometry.width, geometry.height], [row.width, row.height]);
+                  assert(geometry.scrollWidth > 0 && geometry.scrollWidth <= row.width + 1);
+                  const { x, right, width, height } = geometry.rect;
+                  assert([x, right, width, height].every(Number.isFinite));
+                  assert(x >= -1 && right <= row.width + 1 && width > 0 && height > 0);
+                }
+                checkImage(row.firstWheelImage, row.id + '-first-wheel.png');
+                checkImage(row.resultImage, row.id + '-result.png');
+                totals.images += 2;
+              }
+
+              for (const width of widths) {
+                const [before, crossed, fresh] = report.cases.filter(row => row.width === width);
+                assert.deepEqual(crossed.wheel, before.wheel);
+                assert.deepEqual(crossed.saves, before.saves);
+                assert.notDeepEqual(fresh.saves[entryDays[2]].sim.games, before.saves[mountDays[0]].sim.games);
+              }
+              for (const id of cases) {
+                const [first, ...rest] = report.cases.filter(row => row.journey === id);
+                for (const row of rest) {
+                  assert.deepEqual(row.wheel, first.wheel);
+                  assert.deepEqual(row.saves, first.saves);
+                }
+              }
+              assert.deepEqual(totals, { documents: 9, index: 135, squad: 54, completion: 9, images: 18 });
+              assert.equal(heldBodies.length, 21);
+              assert.deepEqual(fs.readdirSync(out).sort(), heldBodies.map(row => row.file).sort());
+              return {
+                status: 'passed', schema: 'nba-perfect-season-daily-date-native-admission-v4',
+                helperSHA, reportSHA: sha(reportBody), route: url.href, cases: report.cases.map(row => row.id),
+                totals, offlineBytes: 0, heldBodies,
+              };
+            })();
+            assert.deepEqual(native,retainedNative,'All actual v4 native evidence rejoins its exact original admission');
+            assert.equal(native.route,'http://127.0.0.1:4174/perfect-season-nba');
+            assert.deepEqual(native.totals,{documents:9,index:135,squad:54,completion:9,images:18});
+            return {
+              status:'passed',qualification:'fresh-nba-perfect-season-daily-date-full-scope',
+              referenceIndependentAuditSHA256:env.NBA_PERFECT_SEASON_DAILY_DATE_REFERENCE_AUDIT,
+              exactEvidenceBodies:evidencePins.length,priorRuns:Object.fromEntries(roles.map(role=>[role,custody[role].run])),
+              unitCases:6,nativeCases:9,nativeBodies:21,retainedPNGs:18,readers:20,immutableCaps:16,
+              fullTracked:5802,fullSource:4670,cleanTracked:5801,cleanSource:4669,cleanSourceAndConfiguration:4680,distFiles:850,
+            };
+          })();
+          assert.equal(referenceChecks.status,'passed','Reviewed actual full receipt validator must complete');
+          assert.equal(referenceChecks.qualification,'fresh-nba-perfect-season-daily-date-full-scope');
+          const result = {
+            status:'passed', cleanHead, cleanTree, cleanProductBase:env.NBA_PERFECT_SEASON_DAILY_DATE_CLEAN_PRODUCT_BASE, cleanProductBaseTree:env.NBA_PERFECT_SEASON_DAILY_DATE_CLEAN_PRODUCT_BASE_TREE,
+            cleanDelta, referenceRun:run.id, referenceJob:job.id, referenceWorkflowHead:referenceHead, referenceApp:referenceHead, referenceTree,
+            referenceQualification:referenceChecks.qualification, referenceArtifact:meta.id, referenceZipSHA256:env.NBA_PERFECT_SEASON_DAILY_DATE_REFERENCE_ZIP,
+            referenceTarSHA256:env.NBA_PERFECT_SEASON_DAILY_DATE_REFERENCE_TAR, referenceWorkflowBlob:env.NBA_PERFECT_SEASON_DAILY_DATE_REFERENCE_WORKFLOW,
+            referenceIndependentAuditSHA256:env.NBA_PERFECT_SEASON_DAILY_DATE_REFERENCE_AUDIT, referenceDistTupleSHA256:fullDistTupleSHA256,
+            heldProductRows:5800, sourceRows:4669, sourceAndConfigurationRows:sourceConfigRows.length,
+            rootConfigurations:configs.map(file => ({file,...current.get(file)})),
+            excludedFullQA:[...fullOnly], finalProductForbiddenPaths:[...fullOnly], generatedPatches:[],
+            distFiles:actual.length, distManifestSHA256, dist:actual, referenceChecks,
+            limits:'Fresh clean types, product-name fence, normal production build and exact source and built-byte join. Separate unit, native, control, reader and cap evidence is retained from the authenticated full reference. The frozen qualified plan is held. Final product excludes the round QA workflow and native helper. Scope is the PR540 stack.',
+          };
+          fs.writeFileSync(out + '/reference-build-join.json',JSON.stringify(result,null,2));
+          console.log('PASS all 4669 source paths, 11 root configurations and 850 built file bodies');
+          NODE
+      - name: Final source locks installed versions and offline holds
+        if: always()
+        run: |
+          set -euo pipefail
+          git ls-files -s > nba-perfect-season-daily-date-clean-join/source-after.txt
+          cmp nba-perfect-season-daily-date-clean-join/source-before.txt nba-perfect-season-daily-date-clean-join/source-after.txt
+          git diff --exit-code HEAD -- .
+          sha256sum package.json package-lock.json > nba-perfect-season-daily-date-clean-join/locks-after.txt
+          cmp nba-perfect-season-daily-date-clean-join/locks-before.txt nba-perfect-season-daily-date-clean-join/locks-after.txt
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const before=JSON.parse(fs.readFileSync('nba-perfect-season-daily-date-clean-join/installed-before.json')),lock=JSON.parse(fs.readFileSync('package-lock.json'));
+          const after=Object.keys(lock.packages).filter(p=>p.startsWith('node_modules/')&&fs.existsSync(p+'/package.json')).map(p=>[p,JSON.parse(fs.readFileSync(p+'/package.json')).version]);assert.equal(after.length,521);for(const[p,v]of after)assert.equal(v,lock.packages[p].version,p);assert.deepEqual(after,before);
+          fs.writeFileSync('nba-perfect-season-daily-date-clean-join/installed-final.json',JSON.stringify(after));
+          assert(fs.existsSync('nba-perfect-season-daily-date-clean-join/offline.log'));assert.equal(fs.statSync('nba-perfect-season-daily-date-clean-join/offline.log').size,0);
+          NODE
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: nba-perfect-season-daily-date-clean-build-join-${{ github.run_id }}
+          path: nba-perfect-season-daily-date-clean-join
+          retention-days: 14
+          if-no-files-found: error
