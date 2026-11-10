@@ -1,3 +1,11 @@
+## 2026-11-10: Transfer Path Lampard and Villa correction staged
+
+Everyday puzzle `tp-6` refused David Villa after Frank Lampard because both career pools lacked Lampard's 2015 New York City FC season. The source ledger records his 10 appearances, three goals and one assist. The bundled pool and a guarded migration each add that one row. [MLS season totals](https://matchcenter.newyorkcityfc.com/news/new-york-city-fc-s-frank-lampard-honored-by-british-monarchy-sideline-287754) · [D.C. United lineup](https://www.dcunited.com/news/dc-united-clinches-berth-audi-2015-mls-cup-playoffs)
+
+The browser finished Lampard to Villa to Messi in two steps on phone and desktop. Removing only the staged row reproduced the rejection. Europe Only still refuses the NYCFC link, and all 885 published puzzles keep their valid saved hints and shortest lengths. A local copy of the 3,640 canonical seasons produced the exact bundled pool after applying the migration. Replaying the migration left the result unchanged.
+
+The live migration and app release are pending. Keep the admin report open until the public game accepts the route.
+
 ## 2026-11-07: Club Manager historical roster counts live
 
 [PR #532](https://github.com/PapiSalgueroM/ballpark-hero/pull/532) published from main `c3b5ca4afaf9b4dadcd748f340e8e8e3e4a1a1dd`, App tree `133fcd3d26a4d237178e5c7efee723048da0aef2`, Lovable deployment `510b1df1-2172-42c0-90f9-d9f9c997b840`.

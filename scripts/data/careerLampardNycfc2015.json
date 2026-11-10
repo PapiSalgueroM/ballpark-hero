@@ -1,0 +1,26 @@
+{
+  "checked": "2026-11-10",
+  "report": "Transfer Path Everyday puzzle tp-6 refused David Villa after Frank Lampard.",
+  "scope": "Lampard's 2015 senior appearances for New York City FC were all in MLS. Market value 0 means no verified valuation.",
+  "sources": {
+    "clubMatchReport": "https://www.newyorkcityfc.com/news/new-york-city-fc-dc-united-recap",
+    "opponentMatchReport": "https://www.dcunited.com/news/dc-united-clinches-berth-audi-2015-mls-cup-playoffs",
+    "leagueSeasonTotals": "https://matchcenter.newyorkcityfc.com/news/new-york-city-fc-s-frank-lampard-honored-by-british-monarchy-sideline-287754",
+    "independentSeasonTotals": "https://www.statscrew.com/soccer/stats/p-lampafra001",
+    "allCompetitions": "https://fbref.com/en/squads/64e81410/2015/roster/New-York-City-FC-Roster-Details"
+  },
+  "added": [
+    {
+      "player": "Frank Lampard",
+      "playerId": "a0000001-0000-0000-0000-000000000133",
+      "season": "2015",
+      "club": "New York City FC",
+      "appearances": 10,
+      "goals": 3,
+      "assists": 1,
+      "marketValue": 0,
+      "sortOrder": 13
+    }
+  ],
+  "changed": []
+}
