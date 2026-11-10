@@ -1,5 +1,13 @@
 
 
+## 2026-11-10 Soccer continuation, Footle saved Practice rollover
+
+A saved Footle Practice puzzle now waits for the current Daily to load. If the same player is still today's unresolved Daily answer, Practice pauses without changing the saved round. Finishing the Daily lets the player resume that same round.
+
+The original run reproduced the answer disclosure and Practice loss. All 54 fixed cases passed. Physical controls reproduced the failure on the original Page and hook and held the full fixed and restored traces. Three Chromium viewports exercised the Eastern-midnight pause, Daily solve and same-round resume. The clean build matched 4,665 source paths, 11 configurations and 850 built files. [Original](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/42372278434) · [Fixed](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/42762361123) · [Physical controls](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/42762970118) · [Full](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/42767078265) · [Clean](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/42768334595) The first two full attempts stopped at browser harness checks for document identity and click geometry. [First attempt](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/42763699498) · [Second attempt](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/42765448262)
+
+
+
 ## 2026-11-07 Soccer continuation, Rarity Round crowd panel ownership
 
 A Rarity Round reveal owns its crowd response. Advancing or restarting invalidates that reveal. A late response can no longer fill the next round's pending panel or overwrite its displayed picks. Rank, points, normalization and request behavior passed the frozen regression.

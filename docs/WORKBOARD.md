@@ -18266,3 +18266,10 @@ The draft is stacked on PR535. Main was observed at 56d8708c7731600b1c0cb0daeef6
 A Rarity Round reveal owns its crowd response. Advancing or restarting invalidates that reveal. A late response can no longer fill the next round's pending panel or overwrite its displayed picks. Rank, points, normalization and request behavior passed the frozen regression.
 
 Stacked on PR536. Both original failures, both fixed passes, physical restoration, native response order and the exact clean build join were verified. [Original](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/42366132461) · [Fixed](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/42367425437) · [Physical controls](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/42368193168) · [Full](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/42368926851) · [Clean](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/42370093231)
+
+
+### 2026-11-10 Soccer continuation, Footle saved Practice rollover
+
+A saved Footle Practice puzzle now waits for the current Daily to load. If the same player is still today's unresolved Daily answer, Practice pauses without changing the saved round. Finishing the Daily lets the player resume that same round.
+
+Stacked on PR537. Original reproduction, fixed regression, two-file physical restoration, native resume and the clean build join passed. [Original](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/42372278434) · [Fixed](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/42762361123) · [Physical controls](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/42762970118) · [Full](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/42767078265) · [Clean](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/42768334595)
