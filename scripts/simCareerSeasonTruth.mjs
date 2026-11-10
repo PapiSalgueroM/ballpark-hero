@@ -5,11 +5,11 @@
    projection tranche, not relabeled as completed-season fact.
 
    1. The ledger matches the seed, historical fallback and Git evidence.
-   2. The current fallback's 2025-2026 rows are exactly the 27 researched
-      tuples (Round 531: the fallback is baked from the live table).
+   2. The fallback carries the 27 researched tuples and two verified Liverpool
+      replacements. The historical Transfer Path pull retains its 27 spells.
    3. Two exact, fail-closed migrations cover all 77 live seed tuples.
    4. The 27 later researched live tuples remain outside the quarantine.
-   5. After both migrations are applied, live must equal those 27 tuples.
+   5. Live holds either the original 27 tuples or those 27 plus both replacements.
 
    Set CAREER_SEASON_LOCAL_ONLY=1 to run sections 1 through 4 without reading
    live state. The live section remains mandatory in the normal suite.
@@ -21,9 +21,10 @@
      SIM_CAREER_SEASON_CONTROL=migration
      SIM_CAREER_SEASON_CONTROL=preserve
      SIM_CAREER_SEASON_CONTROL=live
+     SIM_CAREER_SEASON_CONTROL=partial
 
    Each control changes an in-memory fixture, then must turn only its own
-   section red. All six controls work with CAREER_SEASON_LOCAL_ONLY=1.
+   section red. All controls work with CAREER_SEASON_LOCAL_ONLY=1.
 
    Run locally:
      CAREER_SEASON_LOCAL_ONLY=1 node scripts/simCareerSeasonTruth.mjs
@@ -36,7 +37,7 @@ import { fileURLToPath } from 'node:url';
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTROL = process.env.SIM_CAREER_SEASON_CONTROL || '';
 const LOCAL_ONLY = process.env.CAREER_SEASON_LOCAL_ONLY === '1';
-const CONTROLS = ['sources', 'evidence', 'fallback', 'migration', 'preserve', 'live'];
+const CONTROLS = ['sources', 'evidence', 'fallback', 'migration', 'preserve', 'live', 'partial'];
 if (CONTROL && !CONTROLS.includes(CONTROL)) {
   console.error('Unknown control "' + CONTROL + '". Expected ' + CONTROLS.join(', '));
   process.exit(1);
@@ -207,6 +208,11 @@ function checkMigrationShape(parsed, expectedCount) {
 }
 
 const ledger = JSON.parse(read('scripts/data/careerSeasonTruth.json'));
+const replacementLedger = JSON.parse(read('scripts/data/careerIsakVanDijkLiverpool2025.json'));
+const replacements = replacementLedger.added;
+if (!Array.isArray(replacements)) abort('The Liverpool replacement ledger has no additions array');
+const originalRows = ledger.preservedResearchedLiveRows;
+const verifiedRows = [...originalRows, ...replacements];
 
 section = 1;
 console.log('1) Ledger provenance matches the seed, fallback snapshot and Git history');
@@ -301,7 +307,7 @@ console.log('1) Ledger provenance matches the seed, fallback snapshot and Git hi
 }
 
 section = 2;
-console.log('2) Current fallback carries exactly the 27 researched 2025-2026 rows and no projection');
+console.log('2) Current fallback carries the 27 original rows and two verified Liverpool rows');
 {
   const fallbackRows = parseFallback(read('src/data/careerPlayers.ts'));
   if (fallbackRows.length < 1500) abort('fallback parser found only ' + fallbackRows.length + ' season rows');
@@ -311,13 +317,8 @@ console.log('2) Current fallback carries exactly the 27 researched 2025-2026 row
     if (fallbackRows.length !== before + 1) abort('fallback control changed nothing');
     console.log('   NEGATIVE CONTROL ON: restored one quarantined fallback tuple in memory');
   }
-  /* Round 531: the fallback is baked from the live table, so it carries the
-     same 27 researched 2025-2026 tuples section 5 pins on live, and nothing
-     else from that season. Before the bake the file was hand typed and the
-     rule was simply "none", because every 2025-2026 row it had was a
-     projection. */
   const currentSeason = fallbackRows.filter(row => row.season === '2025-2026');
-  compareSets('fallback 2025-2026 rows', ledger.preservedResearchedLiveRows, currentSeason, tupleKey);
+  compareSets('fallback 2025-2026 rows', verifiedRows, currentSeason, tupleKey);
   const present = new Set(fallbackRows.map(tupleKey));
   const lingering = ledger.fallbackProjectionRows.filter(row => present.has(tupleKey(row)));
   if (lingering.length) fail(lingering.length + ' exact quarantined fallback tuple(s) remain');
@@ -340,7 +341,7 @@ console.log('2) Current fallback carries exactly the 27 researched 2025-2026 row
   if (puzzleIds.length !== impact.retainedPuzzleCount || puzzleIds.length !== 885) fail('Transfer Path pull has ' + puzzleIds.length + ' puzzles instead of 885');
 
   console.log('   ' + fallbackRows.length + ' fallback seasons and ' + transferRows.length + ' Transfer Path spells parsed');
-  console.log('   all 77 projected tuples absent, 27 researched spells preserved, 17 unreachable puzzles quarantined');
+  console.log('   all 77 projected tuples absent, 27 historical spells preserved, 17 unreachable puzzles quarantined');
 }
 
 section = 3;
@@ -368,7 +369,7 @@ console.log('3) Two fail-closed migrations cover all 77 exact live seed tuples')
 }
 
 section = 4;
-console.log('4) The 27 later researched live tuples stay outside quarantine');
+console.log('4) The 27 original tuples and two verified replacements stay outside quarantine');
 {
   const preserved = clone(ledger.preservedResearchedLiveRows);
   if (CONTROL === 'preserve') {
@@ -394,14 +395,50 @@ console.log('4) The 27 later researched live tuples stay outside quarantine');
   const migrationKeys = new Set(migrationRows.map(liveTupleKey));
   const endangered = preserved.filter(row => migrationKeys.has(liveTupleKey(row)));
   if (endangered.length) fail(endangered.length + ' preserved tuple(s) are named by a quarantine migration');
-  console.log('   27 exact July research tuples are unique and disjoint from all 77 quarantine tuples');
+  const targets = [
+    'Alexander Isak|2025-2026|Liverpool|a0000001-0000-0000-0000-000000000060|8',
+    'Virgil van Dijk|2025-2026|Liverpool|a0000001-0000-0000-0000-000000000026|12',
+  ];
+  const replacementKey = row => [transferTupleKey(row), row.playerId, row.sortOrder].join('|');
+  compareSets('Liverpool replacement targets', targets, replacements.map(replacementKey), key => key);
+  if (!Array.isArray(replacementLedger.changed) || replacementLedger.changed.length !== 0) {
+    fail('Liverpool replacement ledger must add rows without changing existing tuples');
+  }
+
+  for (const row of replacements) {
+    const hosts = new Set();
+    for (const source of Object.values(row.sources ?? {}).flat()) {
+      try {
+        const url = new URL(source);
+        if (url.protocol !== 'https:') throw new Error('expected HTTPS');
+        hosts.add(url.hostname.replace(/^www\./, ''));
+      } catch {
+        fail(row.player + ' has an invalid source URL: ' + source);
+      }
+    }
+    if (hosts.size < 2) fail(row.player + ' needs two independent source hosts');
+    const stats = [row.appearances, row.goals, row.assists];
+    if (!stats.every(value => Number.isInteger(value) && value >= 0) || row.appearances === 0 || row.marketValue !== 0) {
+      fail(row.player + ' needs complete match totals and the unknown market value marker');
+    }
+    const seed = ledger.liveSeedRows.find(old => transferTupleKey(old) === transferTupleKey(row));
+    if (!seed || stats.every((value, index) => value === [seed.appearances, seed.goals, seed.assists][index])) {
+      fail(row.player + ' must replace a quarantined spell with verified match totals');
+    }
+  }
+  console.log('   27 exact July tuples preserved, 77 quarantined tuples excluded, two verified replacement targets checked');
 }
 
 section = 5;
-console.log('5) Live 2025-2026 state equals the 27 preserved researched tuples');
+console.log('5) Live 2025-2026 state is the exact 27-row or 29-row stage');
 {
   let liveRows = null;
-  if (LOCAL_ONLY && CONTROL !== 'live') {
+  if (CONTROL === 'partial') {
+    liveRows = clone(verifiedRows);
+    const removed = liveRows.pop();
+    if (liveRows.length !== 28 || removed?.player !== replacements.at(-1)?.player) abort('partial control did not remove one replacement');
+    console.log('   NEGATIVE CONTROL ON: removed one replacement from the verified live-response fixture');
+  } else if (LOCAL_ONLY && CONTROL !== 'live') {
     console.log('   SKIPPED BY CAREER_SEASON_LOCAL_ONLY=1. Live is not claimed checked.');
   } else if (LOCAL_ONLY && CONTROL === 'live') {
     liveRows = clone(ledger.preservedResearchedLiveRows);
@@ -415,7 +452,7 @@ console.log('5) Live 2025-2026 state equals the 27 preserved researched tuples')
     const key = client.match(/SUPABASE_PUBLISHABLE_KEY\s*=\s*["']([^"']+)["']/)?.[1];
     if (!url || !key) abort('Could not read the pinned Supabase URL and public key');
     const endpoint = new URL(url + '/rest/v1/career_seasons');
-    endpoint.searchParams.set('select', 'season,club,goals,assists,appearances,market_value,sort_order,career_players!inner(player_name)');
+    endpoint.searchParams.set('select', 'player_id,season,club,goals,assists,appearances,market_value,sort_order,career_players!inner(player_name)');
     endpoint.searchParams.set('season', 'eq.2025-2026');
     endpoint.searchParams.set('limit', '500');
     let response;
@@ -429,6 +466,7 @@ console.log('5) Live 2025-2026 state equals the 27 preserved researched tuples')
     if (!Array.isArray(body)) abort('Live query returned a non-array response');
     liveRows = body.map(row => ({
       player: row.career_players?.player_name,
+      playerId: row.player_id,
       season: row.season,
       club: row.club,
       goals: row.goals,
@@ -446,18 +484,26 @@ console.log('5) Live 2025-2026 state equals the 27 preserved researched tuples')
   }
 
   if (liveRows) {
-    compareSets('live preserved state', ledger.preservedResearchedLiveRows, liveRows, liveTupleKey);
+    const before = liveRows.length === originalRows.length;
+    const after = liveRows.length === verifiedRows.length;
+    if (!before && !after) fail('live has ' + liveRows.length + ' 2025-2026 rows, expected 27 before or 29 after');
+    compareSets('live preserved state', before ? originalRows : verifiedRows, liveRows, liveTupleKey);
     const seedKeys = new Set(ledger.liveSeedRows.map(liveTupleKey));
     const lingering = liveRows.filter(row => seedKeys.has(liveTupleKey(row)));
     if (lingering.length) fail(lingering.length + ' seed-derived live tuple(s) remain');
-    if (liveRows.length !== 27) fail('live has ' + liveRows.length + ' 2025-2026 rows instead of 27');
-    console.log('   ' + liveRows.length + ' exact live tuples checked against the preservation fixture');
+    if (after) {
+      for (const expected of replacements) {
+        const actual = liveRows.find(row => liveTupleKey(row) === liveTupleKey(expected));
+        if (actual && actual.playerId !== expected.playerId) fail(expected.player + ' has the wrong live player identity');
+      }
+    }
+    if (failures[section] === 0) console.log('   ' + liveRows.length + ' exact live tuples checked, Liverpool replacements ' + (before ? 'pending' : 'applied'));
   }
 }
 
 const total = Object.values(failures).reduce((sum, count) => sum + count, 0);
 if (CONTROL) {
-  const ownSection = { sources: 1, evidence: 1, fallback: 2, migration: 3, preserve: 4, live: 5 }[CONTROL];
+  const ownSection = { sources: 1, evidence: 1, fallback: 2, migration: 3, preserve: 4, live: 5, partial: 5 }[CONTROL];
   const otherFailures = Object.entries(failures)
     .filter(([number]) => Number(number) !== ownSection)
     .reduce((sum, [, count]) => sum + count, 0);

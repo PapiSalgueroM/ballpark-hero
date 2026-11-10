@@ -65,7 +65,7 @@ import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { build } from 'esbuild';
 import {
-  CARVAJAL_MIGRATION, MODE_RULES, ROUND_784_MIGRATION, buildGraph, distances, expandCompactCareers, parseActiveRefreshMigration, parseActiveRestoreMigration, parseRuleEntryRefresh, parseTransferPathCompanionMigration, ruleEntryRefreshState, ruleProblems, sharedClub, shortestPath,
+  CARVAJAL_MIGRATION, LIVERPOOL_MIGRATION, MODE_RULES, ROUND_784_MIGRATION, buildGraph, distances, expandCompactCareers, liverpoolCareerState, parseActiveRefreshMigration, parseActiveRestoreMigration, parseRuleEntryRefresh, parseTransferPathCompanionMigration, ruleEntryRefreshState, ruleProblems, sharedClub, shortestPath,
 } from './lib/transferPathHints.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -271,6 +271,10 @@ console.log('3) the live table, through the site\'s own fetcher');
         ? 'refreshed'
         : 'mixed';
     if (activeLiveState === 'mixed') fail(`live active hints are in a mixed state: ${liveActiveCount} complete, ${partialActive.length} partial; only the applied ${appliedRows.size} or the refreshed ${restoreRows.size} is valid`);
+    const liverpoolState = liverpoolCareerState(players);
+    if (liverpoolState === 'mixed' || (liverpoolState === 'after' && activeLiveState !== 'refreshed')) fail('live Liverpool seasons must arrive together after the full Active refresh');
+    const liverpoolRewrites = parseActiveRefreshMigration(fs.readFileSync(path.join(ROOT, LIVERPOOL_MIGRATION), 'utf8'));
+    const currentRestore = liverpoolState === 'after' ? new Map([...restoreRows, ...liverpoolRewrites]) : restoreRows;
     const livePuzzleIds = new Set(puzzles.map(puzzle => puzzle.id));
     for (const id of restoreRows.keys()) if (!livePuzzleIds.has(id)) fail(`proposed active restore ${id} is absent from the live table`);
     const everyday = buildGraph(players);
@@ -299,7 +303,7 @@ console.log('3) the live table, through the site\'s own fetcher');
       let same = 0, withPath = 0, staleApplied = 0;
       if (rule === 'active') {
         for (const p of puzzles) {
-          const restore = restoreRows.get(p.id) ?? null;
+          const restore = currentRestore.get(p.id) ?? null;
           const proposed = restore ? { minSteps: restore.minSteps, hint: restore.hint } : null;
           if (restore && (restore.a !== p.playerA || restore.b !== p.playerB)) fail(`proposed active restore ${p.id} names ${restore.a} to ${restore.b}, live has ${p.playerA} to ${p.playerB}`);
           for (const pr of ruleProblems(graph, p.playerA, p.playerB, proposed)) fail(`proposed active restore ${p.id}: ${pr}`);

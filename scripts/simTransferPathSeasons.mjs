@@ -56,6 +56,8 @@
  *                          Section 4 goes red.
  *   TPS_CONTROL=nocarvajal remove only Carvajal's 2024-2025 Real Madrid row.
  *                          Section 7 goes red.
+ *   TPS_CONTROL=noisak / novandijk remove one Liverpool season at a time.
+ *                          Section 8 goes red.
  *
  * Run: node scripts/simTransferPathSeasons.mjs
  */
@@ -66,7 +68,7 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 import { build } from 'esbuild';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const CONTROLS = ['exactonly', 'overlap', 'page', 'pageshare', 'nolampard', 'nocarvajal'];
+const CONTROLS = ['exactonly', 'overlap', 'page', 'pageshare', 'nolampard', 'nocarvajal', 'noisak', 'novandijk'];
 const CONTROL = process.env.TPS_CONTROL || '';
 if (CONTROL && !CONTROLS.includes(CONTROL)) { console.error(`TPS_CONTROL=${CONTROL} is not a control this harness knows (${CONTROLS.join(', ')})`); process.exit(1); }
 let failures = 0;
@@ -399,7 +401,38 @@ console.log('7) the reported Endrick and Dani Carvajal link');
   console.log(`   Everyday: ${everydayLink ?? 'refused'}. Europe Only: ${europeLink ?? 'refused'}.`);
 }
 
+let missingLiverpoolLink = false;
+console.log('8) the reported Liverpool link between Alexander Isak and Virgil van Dijk');
+{
+  const excluded = { noisak: 'Alexander Isak', novandijk: 'Virgil van Dijk' }[CONTROL];
+  let pool = page.fallbackPlayers;
+  if (excluded) {
+    const player = pool.find(p => p.name === excluded);
+    const career = player?.career.filter(s => s.season !== '2025-2026' || s.club !== 'Liverpool');
+    if (!career || career.length !== player.career.length - 1) {
+      console.error(`control ${CONTROL} must remove exactly one Liverpool season`);
+      process.exit(1);
+    }
+    pool = pool.map(p => p === player ? { ...p, career } : p);
+  }
+  const links = ['classic', 'europe', 'active'].map(rule => {
+    const keys = page.clubSeasonsOf(page.playersUnderRule(pool, rule));
+    return page.shareClub(keys, 'Alexander Isak', 'Virgil van Dijk');
+  });
+  missingLiverpoolLink = links.some(link => link !== 'Liverpool');
+  if (missingLiverpoolLink) fail('all three rules must link Isak and Van Dijk at Liverpool');
+  console.log(`   Everyday, Europe Only, Active: ${links.map(link => link ?? 'refused').join(', ')}.`);
+}
+
 console.log('');
+if (CONTROL === 'noisak' || CONTROL === 'novandijk') {
+  if (failures === 1 && missingLiverpoolLink) {
+    console.log(`simTransferPathSeasons control (${CONTROL}): only the reported link failed.`);
+    process.exit(0);
+  }
+  console.error(`simTransferPathSeasons control (${CONTROL}): expected exactly the reported link to fail.`);
+  process.exit(1);
+}
 if (CONTROL === 'nocarvajal') {
   if (failures === 1 && missingCarvajalLink) {
     console.log('simTransferPathSeasons control (nocarvajal): only the reported link failed.');

@@ -1,3 +1,11 @@
+## 2026-11-10: Transfer Path Isak and Van Dijk correction staged
+
+Transfer Path `tpa-771` lacked the 2025/26 Liverpool link between Alexander Isak and Virgil van Dijk. The two verified career seasons record 22 appearances, four goals and one assist for Isak, and 55 appearances, eight goals and three assists for Van Dijk. [Liverpool team sheet](https://www.liverpoolfc.com/news/confirmed-liverpool-line-v-atletico-madrid-1) · [Season appearances](https://www.lfchistory.net/season-archive/appearances/135) · [Goals](https://www.lfchistory.net/season-archive/goalscorers/135) · [Assists](https://www.lfchistory.net/season-archive/assists/135)
+
+The migration adds both seasons and shortens the Active routes for `tpa-207`, `tpa-275`, `tpa-470` and `tpa-846`. It requires the exact 212-entry Active refresh. The local rehearsal rejected the 203-entry state, applied the existing refresh, then added exactly the two seasons and four hints. Exact replay and 15 rejection or rollback checks passed. The career truth gate accepts the 27 original researched tuples before release and those 27 plus both verified replacements after release.
+
+Phone and desktop finished `tpa-771` through Isak and Van Dijk in three steps. Removing either row reproduced the refusal. The shorter Active `tpa-470` also finished in three steps on phone. The draft follows PR548. Apply the verified Active refresh before the Liverpool migration and keep report `b8d1d865` open until the public puzzle passes.
+
 ## 2026-11-10: Transfer Path Endrick and Carvajal correction staged
 
 Everyday `tpa-781` refused Dani Carvajal after Endrick. Both career pools lacked Carvajal's 2024/25 Real Madrid season. Add the one season with 12 appearances, one goal and one assist. The assist was for Endrick against Stuttgart. [Season totals](https://www.maxifoot.fr/joueur/daniel-carvajal-38524.htm) · [Stuttgart match report](https://www.bundesliga.com/en/bundesliga/news/real-madrid-stuttgart-live-champions-league-blog-preview-report-mbappe-bellingham-28883)
