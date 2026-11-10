@@ -1,0 +1,250 @@
+name: Soccer Grid forward evidence original
+on:
+  push:
+    branches: [codex/soccer-grid-forward-evidence-original-qa-20261110]
+permissions:
+  actions: read
+  contents: read
+jobs:
+  original:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      TZ: UTC
+      SIM_NETWORK: offline
+      SIM_OFFLINE_RECEIPT: soccer-grid-forward-evidence-original/offline.log
+      SOCCER_GRID_FORWARD_RAW: soccer-grid-forward-evidence-original/public-cases.raw.json
+      BASE_HEAD: '71a7184a1c546767932ec259617d53d60a178901'
+      BASE_TREE: '57574165d664a30ba69dad567a412d7b9111ac50'
+      HELPER_BLOB: '234247d51e1ffe4c23ac7667eb5a8958469b9032'
+      PLAN_BLOB: 'b76ceeab5926903b17db9246f45eec160b01f034'
+      EVIDENCE: soccer-grid-forward-evidence-original
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24.22.1
+          cache: npm
+      - name: Authenticate admitted active entry and exact original Soccer Grid source
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          test ! -e "$EVIDENCE"
+          if grep -Eq '__[A-Z][A-Z0-9_]*__' .github/workflows/soccer-grid-forward-evidence-20261110.yml; then echo 'Unresolved original workflow binding'; exit 1; fi
+          mkdir "$EVIDENCE"
+          touch "$SIM_OFFLINE_RECEIPT"
+          git rev-parse HEAD > "$EVIDENCE/head.txt"
+          git rev-parse 'HEAD^{tree}' > "$EVIDENCE/tree.txt"
+          git ls-files -s > "$EVIDENCE/source-before.txt"
+          sha256sum package.json package-lock.json > "$EVIDENCE/locks-before.txt"
+          git diff --exit-code HEAD -- .
+          node --input-type=module <<'NODE'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          import { createHash } from 'node:crypto';
+          import { execFileSync } from 'node:child_process';
+
+          const { BASE_HEAD, BASE_TREE, HELPER_BLOB, PLAN_BLOB, EVIDENCE: out } = process.env;
+          const repo = 'PapiSalgueroM/ballpark-hero';
+          const workflow = '.github/workflows/soccer-grid-forward-evidence-20261110.yml';
+          const helper = 'scripts/qa/verifySoccerGridForwardOriginal.mjs';
+          const plan = 'docs/plans/2026-11-10-soccer-grid-forward-evidence.md';
+          const edge = 'supabase/functions/soccer-grid-validate/index.ts';
+          const preflight = {"run":42838041279,"job":129905405455,"artifact":13774852886,"steps":11,"zipBytes":1015425,"zipSHA256":"dbd69629d778378af65097f64a1ab365569f94b70bb2b62ca1a545e385856b02","head":"e282ffb5924c9b35134913dd6692284d095ea57b","tree":"edbed204b30613c8cc1e02fe9e018719f8f775e9","branch":"codex/soccer-grid-forward-evidence-preflight-qa-20261110","workflow":"0d3bf7c02f8a505fde876f6573354ae1da4177a2","independentAuditSHA256":"4f2d9d0ef46c2252ffae79992c802dc5360aa238679e62c26a549a8d6ff344bf"};
+          const held = {"src/App.tsx":"8bfedf7aaa1d076e0f0c8e2216c7e46632cd8a33","src/data/gameRegistry.ts":"f560b40a74d1468ac72dfde4ee6fec6635a9a255","public/soccer-grid/index.html":"65fcae9819d92e53462c9f7826bd7d2fa2012fe4","public/prerender-boot.js":"85939d3b80ef41b26ff6cbefb53a66e383d1a797","src/pages/SoccerGrid.tsx":"fd793d83fef33fa075fcac53e97453cdbf83fff7","src/hooks/useSoccerGrid.ts":"9b724907eae0a2fbf9e20d38f60d226281051693","src/lib/fetchSoccerGridPuzzles.ts":"66f9bdc37d429fda0af9bbc72e856727cb342871","supabase/functions/soccer-grid-validate/index.ts":"dfdad23cf37e62791fa132ac6b85811cfc9950a9","scripts/simSoccerGridLabels.mjs":"a821c7217119d8176f810e4b95935ba67953299d","scripts/lib/offlineTransport.cjs":"0fda542a2649fe5da937c6976fd0f5b6073e74b6","scripts/lib/hostLikeServer.mjs":"21059d5e8114669df61106c125d5272d357b6236","index.html":"12598fe720eec4fc88d3d33c53ede612d018150c","package.json":"2ff64986fb76ebc51b706f2fd24765768874008a","package-lock.json":"97d6f12a052f25f400462938c241789a083f0bfe","vite.config.ts":"0112b6ac4f2ad80b2fc04f9ec2f7185300913e7d","tailwind.config.ts":"f83c4f4032d359bc9285828eac3b0961a46c6b17","postcss.config.js":"2aa7205d4b402a1bdfbe07110c61df920b370066","tsconfig.json":"6b68d80b7d92d0c4a5d774897f2bedfa95b42669","tsconfig.app.json":"51f581dd91641b4c1f1219f646788e73cf6bf00c","tsconfig.node.json":"3133162c20350e1741b94b8d2ff77b811bec8363","bun.lockb":"5d9d33a3bf4f45fa099e2aa3014149e034981149","bun.lock":"dff081dcd34a1aa928ddc90d910774a6b855dfe3"};
+          assert.equal(process.env.GITHUB_REPOSITORY,repo);
+          const api = process.env.GITHUB_API_URL + '/repos/' + repo;
+          const request = async path => {
+            const response = await fetch(api+path,{headers:{
+              Accept:'application/vnd.github+json',Authorization:'Bearer '+process.env.GH_TOKEN,
+              'X-GitHub-Api-Version':'2022-11-28',
+            },redirect:'error'});
+            assert.equal(response.status,200,path);
+            return response.json();
+          };
+          const [run,jobs,artifacts] = await Promise.all([
+            request('/actions/runs/'+preflight.run),request('/actions/runs/'+preflight.run+'/jobs?per_page=100'),
+            request('/actions/runs/'+preflight.run+'/artifacts?per_page=100'),
+          ]);
+          assert.deepEqual([run.id,run.status,run.conclusion,run.event,run.run_attempt,run.path,run.head_sha,run.head_commit.tree_id,run.head_branch,run.repository.full_name],
+            [preflight.run,'completed','success','push',1,workflow,preflight.head,preflight.tree,preflight.branch,repo]);
+          assert.equal(jobs.jobs.length,1);
+          const [job] = jobs.jobs;
+          assert.deepEqual([job.id,job.run_id,job.name,job.status,job.conclusion,job.head_sha,job.steps.length],
+            [preflight.job,preflight.run,'preflight','completed','success',preflight.head,preflight.steps]);
+          assert(job.steps.every(step => step.status==='completed' && step.conclusion==='success'));
+          assert.equal(artifacts.artifacts.length,1);
+          const [artifact] = artifacts.artifacts;
+          assert.deepEqual([artifact.id,artifact.name,artifact.expired,artifact.size_in_bytes,artifact.digest,artifact.workflow_run.id,artifact.workflow_run.head_sha],
+            [preflight.artifact,'soccer-grid-forward-evidence-active-preflight-'+preflight.run,false,preflight.zipBytes,'sha256:'+preflight.zipSHA256,preflight.run,preflight.head]);
+          delete process.env.GH_TOKEN;
+          const git = (...args) => execFileSync('git',args,{encoding:'utf8',maxBuffer:16*1024*1024}).trimEnd();
+          const sha = (algorithm,body) => createHash(algorithm).update(body).digest('hex');
+          const blob = body => sha('sha1',Buffer.concat([Buffer.from('blob '+body.length+'\0'),body]));
+          const head = git('rev-parse','HEAD');
+          assert.equal(head,process.env.GITHUB_SHA);
+          assert.deepEqual(git('rev-list','--parents','-n','1','HEAD').split(' '),[head,BASE_HEAD]);
+          assert.equal(git('rev-parse',BASE_HEAD+'^{tree}'),BASE_TREE);
+          const pins = {...held,[helper]:HELPER_BLOB,[plan]:PLAN_BLOB};
+          for(const [file,want] of Object.entries(pins)){
+            assert.match(want,/^[0-9a-f]{40}$/);
+            assert.equal(git('rev-parse','HEAD:'+file),want,file);
+            assert.equal(blob(fs.readFileSync(file)),want,file+' physical bytes');
+            if(Object.hasOwn(held,file)) assert.equal(git('rev-parse',BASE_HEAD+':'+file),want,file+' admitted base');
+          }
+          const owned = [helper,plan,workflow].sort();
+          assert.deepEqual(git('diff','--name-status','--no-renames',BASE_HEAD,'HEAD').split('\n').sort(),owned.map(file=>'A\t'+file).sort());
+          const tree = ref => git('ls-tree','-r','-z',ref).split('\0').filter(Boolean);
+          const pathOf = row => row.split('\t')[1];
+          const previous = tree(BASE_HEAD), current = tree('HEAD');
+          assert.deepEqual([previous.length,current.length],[5802,5805]);
+          assert.deepEqual(current.filter(row => !owned.includes(pathOf(row))),previous);
+          assert.deepEqual(current.filter(row => owned.includes(pathOf(row))).map(row => row.split(' ')[0]),['100644','100644','100644']);
+          assert.equal(current.filter(row => /^(src|public|scripts)\//.test(pathOf(row))).length,4670);
+          const selected = { 'held-soccer-grid-edge.ts':edge, 'candidate-helper.mjs':helper, 'candidate-plan.md':plan, 'candidate-workflow.yml':workflow };
+          const selectedBodies = Object.entries(selected).map(([file,path]) => {
+            const bytes = fs.readFileSync(path);
+            fs.writeFileSync(out+'/'+file,bytes);
+            return {file,path,bytes:bytes.length,sha256:sha('sha256',bytes),blob:blob(bytes)};
+          });
+          fs.writeFileSync(out+'/source-receipt.json',JSON.stringify({
+            status:'passed',head,tree:git('rev-parse','HEAD^{tree}'),parent:BASE_HEAD,parentTree:BASE_TREE,basePR:543,
+            activePreflight:preflight,route:'/soccer-grid',category:'Soccer',owned,pins,selectedBodies,
+            heldRows:5802,trackedRows:5805,scopedSourceRows:4670,rootConfigurations:11,productUnchanged:true,
+          },null,2)+'\n');
+          NODE
+      - name: Install locked dependencies, freeze physical source, and verify app types
+        run: |
+          set -euo pipefail
+          npm ci 2>&1 | tee "$EVIDENCE/install.log"
+          cat > "$EVIDENCE/physical.mjs" <<'NODE'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          import { createHash } from 'node:crypto';
+          import { execFileSync } from 'node:child_process';
+          const stage = process.argv[2];
+          assert(['before', 'after'].includes(stage));
+          const out = process.env.EVIDENCE;
+          const index = execFileSync('git', ['ls-files', '-z'], { encoding: 'utf8' }).split('\0').filter(Boolean);
+          const source = index.map(file => {
+            const bytes = fs.readFileSync(file);
+            return [file, bytes.length, createHash('sha256').update(bytes).digest('hex')];
+          });
+          const lock = JSON.parse(fs.readFileSync('package-lock.json', 'utf8'));
+          const installed = Object.entries(lock.packages).filter(([file]) =>
+            file.startsWith('node_modules/') && fs.existsSync(file + '/package.json')
+          ).map(([file, entry]) => {
+            const version = JSON.parse(fs.readFileSync(file + '/package.json', 'utf8')).version;
+            assert.equal(version, entry.version, file);
+            return [file, version];
+          });
+          assert.equal(source.length, 5805);
+          assert.equal(installed.length, 521);
+          assert.equal(fs.statSync(process.env.SIM_OFFLINE_RECEIPT).size, 0);
+          for (const [name, data] of [['tracked', source], ['installed', installed]]) {
+            const body = JSON.stringify(data);
+            if (stage === 'after') assert.equal(body, fs.readFileSync(out + '/' + name + '-before.json', 'utf8'));
+            fs.writeFileSync(out + '/' + name + '-' + stage + '.json', body);
+          }
+          NODE
+          node "$EVIDENCE/physical.mjs" before
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee "$EVIDENCE/types.log"
+      - name: Require the original Soccer Grid missing-position mismatch
+        run: |
+          set -euo pipefail
+          test ! -e "$SOCCER_GRID_FORWARD_RAW"
+          result=0
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" timeout --signal=TERM 90s \
+            node scripts/qa/verifySoccerGridForwardOriginal.mjs > "$EVIDENCE/helper.log" 2>&1 || result=$?
+          cat "$EVIDENCE/helper.log"
+          printf '%s\n' "$result" > "$EVIDENCE/helper-exit.txt"
+          test "$result" -eq 1
+          test -s "$SOCCER_GRID_FORWARD_RAW"
+          test ! -s "$SIM_OFFLINE_RECEIPT"
+          node --input-type=module <<'NODE'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          import { createHash } from 'node:crypto';
+
+          const out = process.env.EVIDENCE;
+          const marker = 'SOCCER_GRID_FORWARD_STINT_POSITION';
+          const log = fs.readFileSync(out+'/helper.log','utf8');
+          const errors = log.split(/\r?\n/).filter(line => /^[A-Za-z]*Error(?: \[[A-Z_]+\])?:/.test(line));
+          assert.equal(errors.length,1,'Only one actual exception line');
+          assert.equal(errors[0],'AssertionError [ERR_ASSERTION]: '+marker+': both null-position orientations resolve from a matching winner squad','Exact expected original assertion');
+          assert(/scripts\/qa\/verifySoccerGridForwardOriginal\.mjs:\d+:\d+/.test(log),'Named exception reaches the actual helper');
+          assert(!/UnhandledPromiseRejection|ERR_MODULE_NOT_FOUND|ERR_UNKNOWN_FILE_EXTENSION|ERR_UNSUPPORTED_TYPESCRIPT_SYNTAX|SIM_OFFLINE_BLOCK/i.test(log),'Unrelated runtime or transport failure');
+          const raw = fs.readFileSync(process.env.SOCCER_GRID_FORWARD_RAW);
+          const evidence = JSON.parse(raw.toString('utf8'));
+          const checks = (() => {
+          assert.equal(raw.length,23634,'Exact forecast compact fixture receipt bytes');
+          assert.equal(createHash('sha256').update(raw).digest('hex'),'de29aea6a3f50d22ddd9ec939ddb7beca4e0032c1a153e3238a89e79a23c7aae');
+          assert.equal(raw.toString('utf8'),JSON.stringify(evidence)+'\n');
+          assert.equal(evidence.schema,'soccer-grid-forward-stint-position-v1');
+          assert.deepEqual(evidence.source,{
+            path:'supabase/functions/soccer-grid-validate/index.ts',blob:'dfdad23cf37e62791fa132ac6b85811cfc9950a9',
+            sha256:'cf122ea239b6c9e0102a403ec747cfed219ee8ad3413ecc41fc0cee64c8fc856',typescript:'5.8.3',
+            imports:['https://deno.land/std@0.168.0/http/server.ts','https://esm.sh/@supabase/supabase-js@2'],
+          });
+          const ids=['null-stint-row','null-stint-column','absent-stints','complete-position','wrong-stint-position','incomplete-squad'];
+          const valid=[false,false,true,true,false,false];
+          const positions=[[null],[null],[],['Forward'],['Midfielder'],[]];
+          const forward='Forward (FWD)',winner='2014 World Cup Winner',name='Fixture Arden Vale';
+          const unverified={valid:false,unverified:true,exhausted:false,reason:"Couldn't verify your answer right now, please try again.",fullName:null};
+          const accepted={valid:true,reason:'Verified from career records.',fullName:name};
+          assert.deepEqual(evidence.cases.map(c=>c.id),ids);
+          const observations=evidence.cases.map((c,i)=>{
+            const [rowAttribute,colAttribute]=i===1?[winner,forward]:[forward,winner];
+            assert.deepEqual(c.request,{playerName:name,rowAttribute,colAttribute});
+            assert.equal(c.kind,i<2?'variant':'control');
+            assert.deepEqual(c.fixture.stints.map(s=>[s.player_name,s.nationality,s.position]),positions[i].map(p=>[name,'Germany',p]));
+            assert.equal(c.fixture.squad.length,i===5?14:23);
+            assert.deepEqual(c.fixture.squad[0],{player_name:name,position:'FW'});
+            assert.equal(c.fixture.squad.filter(s=>s.player_name===name).length,1);
+            const cacheKey=[name,rowAttribute,colAttribute].join('|').toLowerCase();
+            assert.deepEqual(c.reads,[
+              {table:'ai_validation_cache',calls:[['select','verdict'],['eq','game','soccer-grid'],['eq','cache_key',cacheKey],['maybeSingle']],data:null,error:null},
+              {table:'soccer_player_club_stints',calls:[['select','player_name, club, nationality, position, first_year, last_year, debut_year, debut_age'],
+                ['eq','name_folded',name.toLowerCase()],['limit',60]],data:c.fixture.stints,error:null},
+              {table:'world_cup_players',calls:[['select','player_name, position'],['eq','world_cup_year',2014],['eq','nationality','Germany'],['limit',40]],data:c.fixture.squad,error:null},
+            ]);
+            assert.deepEqual([c.envReads,c.clientCalls,c.serveCalls,c.fetchCalls,c.logs],[
+              ['GEMINI_API_KEY','LOVABLE_API_KEY','SUPABASE_URL','SUPABASE_SERVICE_ROLE_KEY'],1,1,0,[],
+            ]);
+            const expected=valid[i]?accepted:unverified;
+            assert.deepEqual(c.outcome,{status:200,contentType:'application/json',allowOrigin:'https://douknowball.com',body:expected});
+            assert.deepEqual(c.writes,valid[i]?[{table:'ai_validation_cache',calls:[['upsert',{game:'soccer-grid',cache_key:cacheKey,verdict:accepted}]],data:null,error:null}]:[]);
+            return {id:c.id,valid:c.outcome.body.valid,unverified:c.outcome.body.unverified===true,reads:c.reads.length,syntheticCacheWrites:c.writes.length};
+          });
+          return {status:'passed',cases:observations.length,reads:18,syntheticCacheWrites:2,
+            originalMismatches:ids.slice(0,2),healthyControls:ids.slice(2),observations,
+            limits:'Fictional dated winner and position crossing. The original reporter board and session remain open.'};
+          })();
+          assert.equal(checks.status,'passed');
+          fs.writeFileSync(out+'/original-result.json',JSON.stringify({
+            status:'expected-original-soccer-grid-forward-evidence-mismatch',marker,expectedProcessExit:1,
+            assertion:errors[0],rawBytes:raw.length,rawSHA256:createHash('sha256').update(raw).digest('hex'),checks,
+          },null,2)+'\n',{flag:'wx'});
+          NODE
+      - name: Verify unchanged physical source and locked offline run
+        if: always()
+        run: |
+          set -euo pipefail
+          git ls-files -s > "$EVIDENCE/source-after.txt"
+          sha256sum package.json package-lock.json > "$EVIDENCE/locks-after.txt"
+          cmp "$EVIDENCE/source-before.txt" "$EVIDENCE/source-after.txt"
+          cmp "$EVIDENCE/locks-before.txt" "$EVIDENCE/locks-after.txt"
+          git diff --exit-code HEAD -- .
+          node "$EVIDENCE/physical.mjs" after
+          test ! -s "$SIM_OFFLINE_RECEIPT"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: soccer-grid-forward-evidence-original-${{ github.run_id }}
+          path: soccer-grid-forward-evidence-original
+          retention-days: 14
+          if-no-files-found: error
