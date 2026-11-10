@@ -18287,3 +18287,10 @@ Stacked on PR538. The original, fixed, one-file physical controls, production br
 College Football Dynasty now uses the existing score draw for a small shutout range. Other ordinary coordinator-adjusted totals start at two. Legacy scoring and the existing winner and draw order are preserved.
 
 Stacked on PR539. The 1.75% shutout draw cutoff came from discovery measurements and was checked on a separate set of seasons. Exact one-file controls restored the four expected assertion failures and then matched the fixed RAW bytes again. [Original](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/42779683354) · [Calibration](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/42782336455) · [Fixed](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/42783901125) · [Physical controls](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/42785309166) · [Full](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/42786929158) · [Clean](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/42789210980)
+
+
+### 2026-11-10 Player feedback, NBA Perfect Season Daily midnight
+
+NBA Perfect Season Daily uses the date from when the page opened for its wheel, season seed, theme and save. A fresh page starts the new Eastern day. The draft column stays inside the phone viewport.
+
+Stacked on PR540. The broad R0180 bug report does not identify this cause. The separate 20-0 request remains tracked. [Preflight](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/42792020594) · [Original](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/42794877575) · [Fixed](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/42803273446) · [Physical controls](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/42804263707) · [Full](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/42805429127) · [Clean](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/42808329697)
