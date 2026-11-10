@@ -1,0 +1,380 @@
+name: Footle saved practice Daily rollover fixed
+on:
+  push:
+    branches: [codex/footle-practice-daily-rollover-fixed-qa-20261107]
+permissions:
+  actions: read
+  contents: read
+jobs:
+  fixed:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      TZ: UTC
+      SIM_NETWORK: offline
+      SIM_OFFLINE_RECEIPT: footle-practice-daily-rollover-fixed/offline.log
+      FOOTLE_STAGE: fixed
+      BASE_HEAD: '15b74eb41d984a264c922356d02811f3dd37fef6'
+      BASE_TREE: 'b53eb3efa411e58e5f68b462aeaba87440ce10f2'
+      ORIGINAL_PAGE: '7e78c2ed9cc97f506f53a21d630c02f9adcf3e70'
+      FIXED_PAGE: 'fe0b9bd8896d6f8888b0bbd860cede4e0a2c304c'
+      ORIGINAL_HOOK: '40c250b6ed1a21ee204270aebd437229fe937837'
+      FIXED_HOOK: '17fc817ad6873a09a9bac08d01174a40687d6a8b'
+      TEST_BLOB: '4b908897ce16248a3e5d3c723e6170b94394d580'
+      PLAN_BLOB: '290b0e00efa1b56da3c609fc656f22214dbdb56e'
+      EVIDENCE: footle-practice-daily-rollover-fixed
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24.22.1
+          cache: npm
+      - name: Capture source and authenticate admitted Footle artifacts
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          test ! -e "$EVIDENCE"
+          mkdir "$EVIDENCE"
+          touch "$SIM_OFFLINE_RECEIPT"
+          git rev-parse HEAD > "$EVIDENCE/head.txt"
+          git rev-parse 'HEAD^{tree}' > "$EVIDENCE/tree.txt"
+          git ls-files -s > "$EVIDENCE/source-before.txt"
+          sha256sum package.json package-lock.json > "$EVIDENCE/locks-before.txt"
+          git diff --exit-code HEAD -- .
+          git fetch --no-tags --depth=1 origin "$BASE_HEAD"
+          cat > "$EVIDENCE/qualify.mjs" <<'NODE'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import { createHash } from 'node:crypto';
+          import { execFileSync, spawnSync } from 'node:child_process';
+          
+          const stage = process.env.FOOTLE_STAGE;
+          const out = process.env.EVIDENCE;
+          const page = 'src/pages/Footle.tsx';
+          const hook = 'src/hooks/useGame.ts';
+          const test = 'src/test/footlePracticeDailyRollover.test.tsx';
+          const plan = 'docs/plans/2026-11-07-footle-practice-daily-rollover.md';
+          const workflow = '.github/workflows/footle-practice-daily-rollover-20261107.yml';
+          const { BASE_HEAD: parent, BASE_TREE: parentTree, ORIGINAL_PAGE: originalPage, FIXED_PAGE: fixedPage, ORIGINAL_HOOK: originalHook, FIXED_HOOK: fixedHook, TEST_BLOB: testBlob, PLAN_BLOB: planBlob } = process.env;
+          const refs = {"original":{"run":42372278434,"job":128402686625,"steps":12,"artifact":13574116606,"name":"footle-practice-daily-rollover-original-42372278434","head":"88ea45f429e44fb7174fa3f591bccea29a6647d6","tree":"d7a4261b66840811c85d961f4b75133a30157e80","workflow":"0c85d16199094da0e93872c2596db1c9a9e77c84","zipBytes":1012534,"zipSHA256":"f3324359cdbf179319cdd56ba3d14094115015367801971791e02886bf42f56b","bodies":20,"files":{"head.txt":"7b6f1c7e49de44b9dd2aeb348bb3b06bbd6097a24da9b790e812508afb4d13f6","tree.txt":"86a218f5635bdfaef64d95fd3681982930259de8c3f8cb2aa76b2411d845a144","source-receipt.json":"49e877ce618eb4edb80b14794bf3cd1bc5776a336ec5b811e8afa79a126ee2cb","original-result.json":"4aa97e369df279403ab110a79ba19f92e1fe58aff2fc402d2b42ee3fa09e29de","public-cases.raw.json":"f4cf10f6244c8ad9ce66df7c1be66334b07e9e52e7db18286a5ece4372b0ce0f","vitest.json":"2d0a6c81e840072774e709cdf2e6d3a88381df2d5a3fa5357a34e44e1163268f","vitest-exit.txt":"4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865","source-before.txt":"9afa47fddf7adb4268d23c8b5cd327675230aa35c1938705f6e86df4bedcad28","source-after.txt":"9afa47fddf7adb4268d23c8b5cd327675230aa35c1938705f6e86df4bedcad28","locks-before.txt":"d316e23dae0f11f4fabcf8edd97204c9b780c6da8a0f6307c86940cbdd28e3d7","locks-after.txt":"d316e23dae0f11f4fabcf8edd97204c9b780c6da8a0f6307c86940cbdd28e3d7","offline.log":"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855","types.log":"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"},"independentAuditSHA256":"6ef4bc42d276d5dfcc7071f8fe46292aafd63a417a07294720ce8ff8fad439d5"}};
+          const options = { maxBuffer: 64 * 1024 * 1024 };
+          const cmd = (program, args) => execFileSync(program, args, options);
+          const git = (...args) => cmd('git', args).toString('utf8');
+          const hash = (algorithm, bytes) => createHash(algorithm).update(bytes).digest('hex');
+          const sha = bytes => hash('sha256', bytes);
+          const blob = bytes => hash('sha1', Buffer.concat([Buffer.from('blob ' + bytes.length + '\0'), bytes]));
+          const read = file => fs.readFileSync(path.join(out, file));
+          const json = file => JSON.parse(read(file));
+          const write = (file, body) => fs.writeFileSync(path.join(out, file), body);
+          const save = (file, value) => write(file, JSON.stringify(value, null, 2) + '\n');
+          const sorted = rows => [...rows].sort();
+          const tree = ref => new Map(git('ls-tree', '-r', '-z', ref).split('\0').filter(Boolean).map(row => {
+            const match = /^(100(?:644|755)) blob ([a-f0-9]{40})\t(.+)$/.exec(row);
+            assert(match, row);
+            return [match[3], [match[1], match[2]]];
+          }));
+          const source = () => ({
+            head: git('rev-parse', 'HEAD').trim(), tree: git('rev-parse', 'HEAD^{tree}').trim(), parent, parentTree,
+            page: fixedPage, hook: fixedHook, test: testBlob, plan: planBlob, workflow: git('rev-parse', 'HEAD:' + workflow).trim(),
+            trackedRows: 5794, heldParentRows: 5789, sourceRows: 4665,
+          });
+          const zip = role => path.join(out, 'reference-' + role + '.zip');
+          const refFile = (role, name) => cmd('unzip', ['-p', zip(role), name]);
+          
+          function authenticate(role, pin) {
+            const prefix = 'repos/PapiSalgueroM/ballpark-hero/actions/';
+            const api = endpoint => JSON.parse(cmd('gh', ['api', prefix + endpoint]));
+            const run = api('runs/' + pin.run);
+            const jobs = api('runs/' + pin.run + '/jobs?per_page=100').jobs;
+            const artifact = api('artifacts/' + pin.artifact);
+            assert.deepEqual([run.id, run.status, run.conclusion, run.event, run.run_attempt, run.path, run.head_sha, run.head_commit.tree_id, run.repository.full_name],
+              [pin.run, 'completed', 'success', 'push', 1, workflow, pin.head, pin.tree, 'PapiSalgueroM/ballpark-hero']);
+            assert.equal(jobs.length, 1);
+            assert.deepEqual([jobs[0].id, jobs[0].conclusion, jobs[0].head_sha, jobs[0].steps.length], [pin.job, 'success', pin.head, pin.steps]);
+            assert(jobs[0].steps.every(step => step.conclusion === 'success'));
+            assert.deepEqual([artifact.id, artifact.name, artifact.expired, artifact.size_in_bytes, artifact.digest, artifact.workflow_run.id, artifact.workflow_run.head_sha],
+              [pin.artifact, pin.name, false, pin.zipBytes, 'sha256:' + pin.zipSHA256, pin.run, pin.head]);
+            const bytes = cmd('gh', ['api', prefix + 'artifacts/' + pin.artifact + '/zip']);
+            assert.deepEqual([bytes.length, sha(bytes)], [pin.zipBytes, pin.zipSHA256]);
+            fs.writeFileSync(zip(role), bytes);
+            const names = cmd('unzip', ['-Z1', zip(role)]).toString().trimEnd().split('\n');
+            assert.equal(new Set(names).size, names.length);
+            for (const name of names) {
+              assert(!name.startsWith('/') && !name.includes('\\') && name.replace(/\/$/, '').split('/').every(part => part && part !== '.' && part !== '..'), name);
+            }
+            assert.equal(names.filter(name => !name.endsWith('/')).length, pin.bodies);
+            assert.equal(refFile(role, 'head.txt').toString().trim(), pin.head);
+            assert.equal(refFile(role, 'tree.txt').toString().trim(), pin.tree);
+            for (const [name, digest] of Object.entries(pin.files)) assert.equal(sha(refFile(role, name)), digest, name);
+            save('reference-' + role + '-metadata.json', { ...pin, authenticated: true });
+          }
+          
+          function prepare() {
+            assert(['fixed', 'controls'].includes(stage));
+            assert.equal(process.env.GITHUB_SHA, source().head);
+            assert.deepEqual(git('rev-list', '--parents', '-n', '1', 'HEAD').trim().split(' '), [source().head, parent]);
+            assert.equal(git('rev-parse', parent + '^{tree}').trim(), parentTree);
+            const old = tree(parent);
+            const current = tree('HEAD');
+            const owned = sorted([workflow, page, hook, test, plan]);
+            assert.equal(old.size, 5791);
+            assert.equal(current.size, 5794);
+            assert.equal([...current.keys()].filter(file => /^(src|public|scripts)\//.test(file)).length, 4665);
+            const changed = sorted(new Set([...old.keys(), ...current.keys()])).filter(file =>
+              JSON.stringify(old.get(file)) !== JSON.stringify(current.get(file)));
+            assert.deepEqual(changed, owned);
+            assert.deepEqual(old.get(page), ['100644', originalPage]);
+            assert.deepEqual(old.get(hook), ['100644', originalHook]);
+            for (const [file, pin] of [[page, fixedPage], [hook, fixedHook], [test, testBlob], [plan, planBlob], [workflow, source().workflow]]) {
+              assert.deepEqual(current.get(file), ['100644', pin], file);
+              assert.equal(blob(fs.readFileSync(file)), pin, file);
+            }
+            assert.equal(git('status', '--porcelain', '--untracked-files=no'), '');
+            assert.deepEqual(Object.keys(refs).sort(), stage === 'fixed' ? ['original'] : ['fixed', 'original']);
+            for (const [role, pin] of Object.entries(refs)) authenticate(role, pin);
+            save('source-receipt.json', { ...source(), pins: { [page]: fixedPage, [hook]: fixedHook, [test]: testBlob, [plan]: planBlob }, owned, references: refs });
+          }
+          
+          const heldCases = {"src/test/footlePractice.test.tsx":11,"src/test/footleUnlimitedSession.test.tsx":10,"src/hooks/useGame.test.ts":2,"src/lib/footlePracticeRun.test.ts":12,"src/test/footleClueDesk.test.tsx":8,"src/test/footleResultCurrency.test.tsx":5,"src/lib/fetchFootlePlayerPool.test.ts":4};
+          const markers = new Map([["keeps the new Daily answer hidden when a saved practice run crosses Eastern midnight","FOOTLE_PRACTICE_REVEALS_CURRENT_DAILY"],["restores a same-day practice run and keeps Daily and Unlimited progress separate",null]]);
+          const { JSDOM } = process.argv[2] === 'qualify' ? await import('jsdom') : {};
+          
+          function compareRaw(raw, original) {
+            assert.equal(raw.schema, 'footle-practice-daily-rollover-v1');
+            const expected = structuredClone(original);
+            const practiceKey = 'footle-practice-run-v1';
+            const rollover = expected.cases.rolloverCollision;
+            const by = (caseBody, label) => {
+              const rows = caseBody.frames.filter(frame => frame.label === label);
+              assert.equal(rows.length, 1, label);
+              return rows[0];
+            };
+            const save = by(rollover, 'practice-started').storage[practiceKey];
+            const puzzle = JSON.parse(save);
+            assert.deepEqual([puzzle.index, puzzle.active, puzzle.targets[0], puzzle.rounds[0].status],
+              [0, true, original.fixture.newTarget, 'playing']);
+            const parked = JSON.stringify({ ...puzzle, active: false });
+            const guardFrames = [
+              ['rolloverCollision', 'new-pool-pending', "Checking today's Daily..."],
+              ['rolloverCollision', 'new-practice-restored', "Finish today's Daily to resume this puzzle."],
+              ['rolloverCollision', 'collision-resumed', "Finish today's Daily to resume this puzzle."],
+              ['rolloverCollision', 'collision-give-up-open', "Finish today's Daily to resume this puzzle."],
+              ['rolloverCollision', 'collision-give-up-settled', "Finish today's Daily to resume this puzzle."],
+              ['sameDayPractice', 'same-day-pool-pending', "Checking today's Daily..."],
+            ];
+            for (const [key, label, status] of guardFrames) {
+              const fixed = by(raw.cases[key], label);
+              const old = by(expected.cases[key], label);
+              assert.deepEqual([fixed.mode, fixed.practiceIndex, fixed.practiceProgress, fixed.practiceFeedback, fixed.search, fixed.giveUp, fixed.confirm],
+                ['practice', 0, 'Puzzle 1 of 5', null, false, false, false], label);
+              const dom = new JSDOM(fixed.html);
+              try {
+                const doc = dom.window.document;
+                const panel = doc.querySelector('main [data-footle-practice]');
+                assert(panel && panel.querySelectorAll('[role="status"]').length === 1, label + ' one pause status');
+                assert.equal(panel.querySelector('[role="status"]').textContent, status, label);
+                assert.equal(doc.querySelector('[role="combobox"], [data-footle-clue-desk], [data-footle-clue-empty]'), null, label);
+                assert(![...doc.querySelectorAll('button')].some(button => ['Give up', 'Yes, reveal it'].includes(button.textContent.trim())), label);
+                assert(!doc.body.textContent.includes(original.fixture.newTarget), label + ' no Daily answer');
+              } finally {
+                dom.window.close();
+              }
+              assert.notEqual(old.html, fixed.html, label + ' effective protection');
+              old.html = fixed.html;
+              old.practiceFeedback = null;
+              old.search = false;
+              old.giveUp = false;
+              old.confirm = false;
+            }
+            const lost = by(rollover, 'collision-give-up-settled');
+            const oldLost = JSON.parse(lost.storage[practiceKey]);
+            assert.deepEqual([oldLost.active, oldLost.rounds[0].status], [true, 'lost']);
+            lost.storage[practiceKey] = save;
+            for (const label of ['new-daily-returned', 'after-teardown']) {
+              const previous = by(rollover, label);
+              assert.deepEqual([JSON.parse(previous.storage[practiceKey]).active, JSON.parse(previous.storage[practiceKey]).rounds[0].status], [false, 'lost']);
+              previous.storage[practiceKey] = parked;
+            }
+            for (const label of ['collision-give-up-open', 'collision-give-up-confirm']) {
+              const entry = rollover.actions.find(action => action.label === label);
+              assert.equal(entry.status, 'performed');
+              entry.status = 'unavailable';
+            }
+            const collapse = rows => rows.filter((row, i) => i === 0 || JSON.stringify(row) !== JSON.stringify(rows[i - 1]));
+            for (const key of ['rolloverCollision', 'sameDayPractice']) {
+              const old = expected.cases[key];
+              const fixed = raw.cases[key];
+              assert(fixed.closed && old.closed);
+              assert(fixed.completionCalls.length > 0 && fixed.completionCalls.every(call => JSON.stringify(call.args) === '["footle",false,0]'));
+              assert.deepEqual(collapse(fixed.completionCalls), collapse(old.completionCalls), key + ' same completion observations');
+              old.completionCalls = fixed.completionCalls;
+            }
+            assert.deepEqual(raw, expected, 'Only the six guarded Practice frames, protected save and two unavailable actions may differ');
+          }
+          function runRole(role, wantOriginal) {
+            fs.mkdirSync(path.join(out, role));
+            const rawName = role + '/public-cases.raw.json';
+            const reportName = role + '/vitest.json';
+            const logName = role + '/vitest.log';
+            const proc = spawnSync('node_modules/.bin/vitest', ['run', test, ...Object.keys(heldCases), '--reporter=default', '--reporter=json', '--outputFile=' + path.join(out, reportName)], {
+              ...options, env: { ...process.env, NODE_OPTIONS: '--require=' + process.cwd() + '/scripts/lib/offlineTransport.cjs',
+                FOOTLE_PRACTICE_ROLLOVER_RAW: path.join(out, rawName) },
+            });
+            const log = Buffer.concat([proc.stdout ?? Buffer.alloc(0), proc.stderr ?? Buffer.alloc(0)]);
+            write(logName, log);
+            process.stdout.write(log);
+            write(role + '/vitest-exit.txt', String(proc.status) + '\n');
+            assert.ifError(proc.error);
+            assert.equal(proc.signal, null);
+            assert.equal(proc.status, wantOriginal ? 1 : 0, role);
+            assert(!/Unhandled Errors?|Unhandled Rejection|Uncaught Exception|Failed Suites|Worker exited|Test timed out/i.test(log.toString()));
+            const report = json(reportName);
+            assert.deepEqual([report.numTotalTests, report.numPassedTests, report.numFailedTests, report.numPendingTests, report.numTodoTests, report.success],
+              [54, wantOriginal ? 53 : 54, wantOriginal ? 1 : 0, 0, 0, !wantOriginal]);
+            for (const key of ['errors', 'unhandledErrors', 'testExecutionErrors']) if (Object.hasOwn(report, key)) assert.deepEqual(report[key], []);
+            assert.equal(report.testResults.length, 8);
+            for (const [file, count] of Object.entries({...heldCases, [test]: markers.size})) {
+              const matches = report.testResults.filter(suite => suite.name.endsWith('/' + file));
+              assert.equal(matches.length, 1, file);
+              const [suite] = matches;
+              const isFresh = file === test;
+              assert.deepEqual([suite.status, suite.message, suite.assertionResults.length], [isFresh && wantOriginal ? 'failed' : 'passed', '', count], file);
+              if (isFresh) assert.deepEqual(sorted(suite.assertionResults.map(row => row.title)), sorted(markers.keys()));
+              for (const row of suite.assertionResults) {
+                const isBusinessFailure = isFresh && wantOriginal && !!markers.get(row.title);
+                assert.equal(row.status, isBusinessFailure ? 'failed' : 'passed', row.title);
+                assert.equal(row.failureMessages.length, isBusinessFailure ? 1 : 0);
+                if (isBusinessFailure) assert(row.failureMessages[0].startsWith('AssertionError: ' + markers.get(row.title) + ':'));
+              }
+            }
+            const raw = read(rawName);
+            const old = refFile('original', 'public-cases.raw.json');
+            if (wantOriginal) assert(raw.equals(old), 'Complete original RAW must match qualified original');
+            else compareRaw(JSON.parse(raw), JSON.parse(old));
+            if (stage === 'controls' && !wantOriginal) {
+              assert(raw.equals(refFile('fixed', 'fixed/public-cases.raw.json')), 'Complete fixed RAW must match qualified fixed');
+            }
+            const result = { role, code: proc.status, passed: report.numPassedTests, failed: report.numFailedTests,
+              rawBytes: raw.length, rawSHA256: sha(raw), reportSHA256: sha(read(reportName)), wholeOriginal: wantOriginal,
+              fixedOriginalDifferenceRestricted: !wantOriginal, wholeFixedReference: stage === 'controls' && !wantOriginal };
+            save(role + '/result.json', result);
+            return result;
+          }
+          function qualify() {
+            const product = [[hook, fixedHook, originalHook], [page, fixedPage, originalPage]].map(([file, expectedFixed, expectedOriginal]) => {
+              const fixed = fs.readFileSync(file);
+              const original = cmd('git', ['show', parent + ':' + file]);
+              assert.deepEqual([blob(fixed), blob(original)], [expectedFixed, expectedOriginal], file);
+              return { file, fixed, original, expectedFixed, expectedOriginal };
+            });
+            const index = git('ls-files', '-s');
+            const locks = ['package.json', 'package-lock.json'].map(file => sha(fs.readFileSync(file)));
+            const runs = { fixed: runRole('fixed', false) };
+            if (stage === 'controls') {
+              try {
+                for (const {file, original, expectedOriginal} of product) {
+                  fs.writeFileSync(file, original);
+                  assert.equal(blob(fs.readFileSync(file)), expectedOriginal);
+                }
+                assert.deepEqual(git('diff', '--name-only', 'HEAD', '--', '.').trim().split('\n'), product.map(row => row.file));
+                assert.equal(git('ls-files', '-s'), index);
+                runs.original = runRole('original', true);
+              } finally {
+                const errors = [];
+                for (const {file, fixed} of product) {
+                  try {
+                    fs.writeFileSync(file, fixed);
+                    assert(fs.readFileSync(file).equals(fixed), file);
+                  } catch (error) { errors.push(error); }
+                }
+                if (errors.length) throw new AggregateError(errors, 'Footle exact physical restoration');
+              }
+              assert.equal(git('diff', '--name-only', 'HEAD', '--', '.'), '');
+              runs.restored = runRole('restored', false);
+              assert(read('restored/public-cases.raw.json').equals(read('fixed/public-cases.raw.json')));
+              save('physical-product-control.json', {
+                onlyPhysicalPaths: product.map(row => row.file),
+                sources: product.map(row => ({
+                  file: row.file, original: row.expectedOriginal, fixed: row.expectedFixed, restored: blob(fs.readFileSync(row.file)),
+                })),
+                changedProductVerified: true, indexUnchanged: git('ls-files', '-s') === index, restoredExactFixed: true,
+              });
+            }
+            for (const {file, fixed} of product) assert(fs.readFileSync(file).equals(fixed), file);
+            assert.equal(git('ls-files', '-s'), index);
+            assert.deepEqual(['package.json','package-lock.json'].map(file => sha(fs.readFileSync(file))), locks);
+            assert.equal(fs.statSync(process.env.SIM_OFFLINE_RECEIPT).size, 0);
+            save('admission.json', { stage, status: 'passed', runs, references: refs, source: source(), physicalRestored: true, offlineBytes: 0 });
+          }
+          const mode = process.argv[2];
+          if (mode === 'prepare') prepare();
+          else if (mode === 'qualify') qualify();
+          else throw new Error('Unknown Footle qualification mode');
+          NODE
+          node "$EVIDENCE/qualify.mjs" prepare
+      - name: Install locked dependencies and freeze physical source
+        run: |
+          set -euo pipefail
+          npm ci 2>&1 | tee "$EVIDENCE/install.log"
+          cat > "$EVIDENCE/physical.mjs" <<'NODE'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          import { createHash } from 'node:crypto';
+          import { execFileSync } from 'node:child_process';
+          const stage = process.argv[2];
+          assert(['before', 'after'].includes(stage));
+          const out = process.env.EVIDENCE;
+          const index = execFileSync('git', ['ls-files', '-z'], { encoding: 'utf8' }).split('\0').filter(Boolean);
+          const source = index.map(file => {
+            const bytes = fs.readFileSync(file);
+            return [file, bytes.length, createHash('sha256').update(bytes).digest('hex')];
+          });
+          const lock = JSON.parse(fs.readFileSync('package-lock.json', 'utf8'));
+          const installed = Object.entries(lock.packages).filter(([file]) =>
+            file.startsWith('node_modules/') && fs.existsSync(file + '/package.json')
+          ).map(([file, entry]) => {
+            const version = JSON.parse(fs.readFileSync(file + '/package.json', 'utf8')).version;
+            assert.equal(version, entry.version, file);
+            return [file, version];
+          });
+          assert.equal(source.length, 5794);
+          assert.equal(installed.length, 521);
+          assert.equal(fs.statSync(process.env.SIM_OFFLINE_RECEIPT).size, 0);
+          for (const [name, data] of [['tracked', source], ['installed', installed]]) {
+            const body = JSON.stringify(data);
+            if (stage === 'after') assert.equal(body, fs.readFileSync(out + '/' + name + '-before.json', 'utf8'));
+            fs.writeFileSync(out + '/' + name + '-' + stage + '.json', body);
+          }
+          NODE
+          node "$EVIDENCE/physical.mjs" before
+      - name: Proper app types
+        run: |
+          set -euo pipefail
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee "$EVIDENCE/types.log"
+      - name: Run frozen Footle and preserved tests for the exact fixed roles
+        run: |
+          set -euo pipefail
+          node "$EVIDENCE/qualify.mjs" qualify
+      - name: Verify unchanged physical source and locked offline run
+        if: always()
+        run: |
+          set -euo pipefail
+          git ls-files -s > "$EVIDENCE/source-after.txt"
+          sha256sum package.json package-lock.json > "$EVIDENCE/locks-after.txt"
+          cmp "$EVIDENCE/source-before.txt" "$EVIDENCE/source-after.txt"
+          cmp "$EVIDENCE/locks-before.txt" "$EVIDENCE/locks-after.txt"
+          git diff --exit-code HEAD -- .
+          node "$EVIDENCE/physical.mjs" after
+          test ! -s "$SIM_OFFLINE_RECEIPT"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: footle-practice-daily-rollover-fixed-${{ github.run_id }}
+          path: footle-practice-daily-rollover-fixed
+          retention-days: 14
+          if-no-files-found: error
