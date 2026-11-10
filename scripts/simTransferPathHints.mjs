@@ -67,7 +67,7 @@ import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { build } from 'esbuild';
-import { MODE_RULES, ROUND_784_MIGRATION, buildGraph, deriveHint, distances, expandCompactCareers, hintProblems, parseActiveRefreshMigration, parseActiveRestoreMigration, parseHint, parseRuleEntryRefresh, parseTransferPathCompanionMigration, ruleEntryRefreshState, ruleProblems, sharedClub } from './lib/transferPathHints.mjs';
+import { CARVAJAL_MIGRATION, MODE_RULES, ROUND_784_MIGRATION, buildGraph, deriveHint, distances, expandCompactCareers, hintProblems, parseActiveRefreshMigration, parseActiveRestoreMigration, parseHint, parseRuleEntryRefresh, parseTransferPathCompanionMigration, ruleEntryRefreshState, ruleProblems, sharedClub } from './lib/transferPathHints.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTROL = process.env.TPH_CONTROL || '';
@@ -227,13 +227,21 @@ console.log('3) the live tables, through the site\'s own fetchers');
        the careers and the hints moved together. */
     const r784 = parseRuleEntryRefresh(fs.readFileSync(path.join(ROOT, ROUND_784_MIGRATION), 'utf8'));
     const liveById = new Map(puzzles.map(p => [p.id, p]));
-    const r784State = ruleEntryRefreshState(r784, (id, rule) => {
+    const liveEntry = (id, rule) => {
       const p = liveById.get(id);
       if (!p) return null;
       return rule === 'classic' ? { minSteps: p.minSteps, hint: p.hint } : (p[rule] ?? null);
-    });
+    };
+    const r784State = ruleEntryRefreshState(r784, liveEntry);
     if (r784State === 'mixed') fail(`live Transfer Path entries are in a mixed state against the ${r784.length} Round 784 rewrites: only all before or all after is valid`);
-    const r784Europe = new Map(r784State === 'after' ? r784.filter(r => r.rule === 'europe').map(r => [r.id, r]) : []);
+    const carvajal = parseRuleEntryRefresh(fs.readFileSync(path.join(ROOT, CARVAJAL_MIGRATION), 'utf8'));
+    const carvajalState = ruleEntryRefreshState(carvajal, liveEntry);
+    if (carvajalState === 'mixed') fail('live Carvajal puzzle entries must be all before or all after the correction');
+    const appliedRewrites = [
+      ...(r784State === 'after' ? r784 : []),
+      ...(carvajalState === 'after' ? carvajal : []),
+    ];
+    const europeRewrites = new Map(appliedRewrites.filter(r => r.rule === 'europe').map(r => [r.id, r]));
     console.log(r784State === 'after'
       ? `   the Round 784 career rows and their ${r784.length} Transfer Path rewrites are applied`
       : r784State === 'before'
@@ -271,7 +279,7 @@ console.log('3) the live tables, through the site\'s own fetchers');
         const entry = p[rule] ?? null;
         if (entry) withPath += 1;
         const companion = companionRows.get(p.id);
-        const rewrite = r784Europe.get(p.id);
+        const rewrite = europeRewrites.get(p.id);
         const expected = rewrite
           ? { minSteps: rewrite.minSteps, hint: rewrite.hint }
           : companion?.europeMinSteps === null || companion?.europeMinSteps === undefined
@@ -279,11 +287,11 @@ console.log('3) the live tables, through the site\'s own fetchers');
             : { minSteps: companion.europeMinSteps, hint: companion.europeHint };
         if (!companion) fail(`live ${p.id} is absent from the applied companion`);
         else if (companion.playerA !== p.playerA || companion.playerB !== p.playerB) fail(`applied companion ${p.id} names ${companion.playerA} to ${companion.playerB}, live has ${p.playerA} to ${p.playerB}`);
-        else if ((entry === null) !== (expected === null) || (entry && (entry.minSteps !== expected.minSteps || entry.hint !== expected.hint))) fail(`live ${p.id} under Europe differs from the applied companion${rewrite ? ' as the Round 784 migration rewrites it' : ''}`);
+        else if ((entry === null) !== (expected === null) || (entry && (entry.minSteps !== expected.minSteps || entry.hint !== expected.hint))) fail(`live ${p.id} under Europe differs from the applied companion${rewrite ? ' with its career correction' : ''}`);
         else same += 1;
         for (const pr of ruleProblems(rg, p.playerA, p.playerB, entry ? { minSteps: entry.minSteps, hint: entry.hint } : null)) fail(`live ${p.id} under ${rule}: ${pr}`);
       }
-      console.log(`   ${same} of ${puzzles.length} live rows match the applied companion${r784Europe.size ? ` with the ${r784Europe.size} Round 784 rewrites` : ''} under ${rule}, ${withPath} with a path, on ${rg.names.length} players`);
+      console.log(`   ${same} of ${puzzles.length} live rows match the applied companion${europeRewrites.size ? ` with ${europeRewrites.size} career rewrites` : ''} under ${rule}, ${withPath} with a path, on ${rg.names.length} players`);
     }
   }
   }
@@ -435,7 +443,7 @@ console.log('4) the wording');
   console.log(`   ${hints.length + site.fallbackPuzzles.length} hints read, longest ${longest} characters`);
 }
 
-console.log('7) the Round 784 career rows and the Transfer Path entries they rewrite');
+console.log('7) the career corrections and the Transfer Path entries they rewrite');
 let r784Caught = false;
 {
   const ROUND_784_REWRITES = 8;
@@ -443,37 +451,38 @@ let r784Caught = false;
     fail(m);
     if ((CONTROL === 'r784min' && key === 'tpa-285|classic') || (CONTROL === 'r784drop' && key === 'tpa-640|europe')) r784Caught = true;
   };
-  const rows = parseRuleEntryRefresh(fs.readFileSync(path.join(ROOT, ROUND_784_MIGRATION), 'utf8'));
+  const r784 = parseRuleEntryRefresh(fs.readFileSync(path.join(ROOT, ROUND_784_MIGRATION), 'utf8'));
   if (CONTROL === 'r784min') {
-    const r = rows.find(x => x.id === 'tpa-285' && x.rule === 'classic');
+    const r = r784.find(x => x.id === 'tpa-285' && x.rule === 'classic');
     if (!r) { console.error('control cannot run: tpa-285 classic is not in the parsed Round 784 rows'); process.exit(1); }
     r.minSteps += 1;
     console.log('   NEGATIVE CONTROL ON: tpa-285 is rewritten one step too high, this section must report it');
   }
   if (CONTROL === 'r784drop') {
-    const i = rows.findIndex(x => x.id === 'tpa-640' && x.rule === 'europe');
+    const i = r784.findIndex(x => x.id === 'tpa-640' && x.rule === 'europe');
     if (i < 0) { console.error('control cannot run: tpa-640 Europe is not in the parsed Round 784 rows'); process.exit(1); }
-    rows.splice(i, 1);
+    r784.splice(i, 1);
     console.log('   NEGATIVE CONTROL ON: tpa-640 Europe is dropped from the rewrite, this section must report it');
   }
   const companion = new Map(parseTransferPathCompanionMigration(fs.readFileSync(COMPANION, 'utf8')).desired.map(r => [r.id, r]));
   const applied = (c, rule) => rule === 'classic'
     ? { minSteps: c.minSteps, hint: c.hint }
     : c.europeMinSteps === null ? null : { minSteps: c.europeMinSteps, hint: c.europeHint };
-  /* the baked pool is the tables as they stand after the Round 784 migration */
+  const carvajal = parseRuleEntryRefresh(fs.readFileSync(path.join(ROOT, CARVAJAL_MIGRATION), 'utf8'));
+  const rows = [...r784, ...carvajal];
   const graphs = { classic: buildGraph(site.fallbackPlayers), europe: buildGraph(site.playersUnderRule(site.fallbackPlayers, 'europe')) };
   const byKey = new Map();
   for (const r of rows) {
     const key = `${r.id}|${r.rule}`;
-    if (byKey.has(key)) fail7(`the Round 784 migration rewrites ${r.id} under ${r.rule} twice`, key);
+    if (byKey.has(key)) fail7(`the career corrections rewrite ${r.id} under ${r.rule} twice`, key);
     byKey.set(key, r);
     const c = companion.get(r.id);
-    if (!c) { fail7(`the Round 784 migration rewrites ${r.id}, which the applied companion does not carry`, key); continue; }
-    if (c.playerA !== r.a || c.playerB !== r.b) fail7(`the Round 784 migration names ${r.id} as ${r.a} to ${r.b}, the companion has ${c.playerA} to ${c.playerB}`, key);
+    if (!c) { fail7(`a career correction rewrites ${r.id}, which the applied companion does not carry`, key); continue; }
+    if (c.playerA !== r.a || c.playerB !== r.b) fail7(`a career correction names ${r.id} as ${r.a} to ${r.b}, the companion has ${c.playerA} to ${c.playerB}`, key);
     const old = applied(c, r.rule);
-    if (!old || old.minSteps !== r.oldMinSteps || old.hint !== r.oldHint) fail7(`${r.id} under ${r.rule}: the value the Round 784 migration replaces is not the applied companion's`, key);
+    if (!old || old.minSteps !== r.oldMinSteps || old.hint !== r.oldHint) fail7(`${r.id} under ${r.rule}: the value the career correction replaces is not the applied companion's`, key);
     const d = deriveHint(graphs[r.rule], r.a, r.b);
-    if (!d || d.minSteps !== r.minSteps || d.hint !== r.hint) fail7(`${r.id} under ${r.rule}: the Round 784 migration writes ${r.minSteps} "${r.hint}", the search on the baked pool says ${d ? `${d.minSteps} "${d.hint}"` : 'no path'}`, key);
+    if (!d || d.minSteps !== r.minSteps || d.hint !== r.hint) fail7(`${r.id} under ${r.rule}: the career correction writes ${r.minSteps} "${r.hint}", the search on the baked pool says ${d ? `${d.minSteps} "${d.hint}"` : 'no path'}`, key);
     if (/[\u2013\u2014]/.test(r.hint) || r.hint.length > 200) fail7(`${r.id} under ${r.rule}: the rewritten hint has a long dash or runs past 200 characters`, key);
   }
   let beaten = 0;
@@ -481,13 +490,14 @@ let r784Caught = false;
     const key = `${c.id}|${rule}`;
     const stale = ruleProblems(graphs[rule], c.playerA, c.playerB, applied(c, rule)).length > 0;
     if (stale) beaten += 1;
-    if (stale && !byKey.has(key)) fail7(`${c.id} under ${rule}: the baked pool beats the applied entry and the Round 784 migration does not rewrite it`, key);
-    if (!stale && byKey.has(key)) fail7(`${c.id} under ${rule}: the Round 784 migration rewrites an entry the baked pool does not beat`, key);
+    if (stale && !byKey.has(key)) fail7(`${c.id} under ${rule}: the baked pool beats the applied entry and no career correction rewrites it`, key);
+    if (!stale && byKey.has(key)) fail7(`${c.id} under ${rule}: a career correction rewrites an entry the baked pool does not beat`, key);
   }
   const refresh = parseActiveRefreshMigration(fs.readFileSync(ACTIVE_RESTORE, 'utf8'));
   const activeGraph = buildGraph(site.playersUnderRule(site.fallbackPlayers, 'active'));
   for (const [id, r] of refresh) if (ruleProblems(activeGraph, r.a, r.b, { minSteps: r.minSteps, hint: r.hint }).length) fail7(`pending active refresh ${id} is beaten on the baked pool; a career change that moves an active minimum must rewrite it too`, `${id}|active`);
-  if (rows.length !== ROUND_784_REWRITES) fail7(`the Round 784 migration rewrites ${rows.length} entries, ${ROUND_784_REWRITES} were derived on 2026-10-01; move this only with the pool change that explains it`, 'count');
+  if (r784.length !== ROUND_784_REWRITES) fail7(`the Round 784 migration rewrites ${r784.length} entries, expected ${ROUND_784_REWRITES}`, 'count');
+  if (carvajal.length !== 5) fail7(`the Carvajal migration rewrites ${carvajal.length} entries, expected 5`, 'count');
   const classic = rows.filter(r => r.rule === 'classic').length;
   console.log(`   ${rows.length} entries rewritten (${classic} classic, ${rows.length - classic} Europe), each the search's on the baked pool over the applied value it replaces; ${beaten} applied entries beaten on the baked pool; the pending active refresh holds on all ${refresh.size}`);
 }

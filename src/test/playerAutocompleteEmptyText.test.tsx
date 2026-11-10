@@ -21,7 +21,7 @@ vi.mock('@/lib/playerSearch', async importOriginal => {
   const real = await importOriginal<typeof import('@/lib/playerSearch')>();
   return {
     ...real,
-    searchPlayers: vi.fn(async ({ query, signal }: SearchPlayersOptions) => {
+    searchPlayers: vi.fn(async ({ query, signal, exclude }: SearchPlayersOptions) => {
       const key = real.normalizeName(query);
       calls.push(key);
       if (holds.has(key)) await new Promise<void>(resolve => releases.set(key, resolve));
@@ -29,7 +29,7 @@ vi.mock('@/lib/playerSearch', async importOriginal => {
       if (signal?.aborted) return { results: [], error: null };
       const reply = replies.get(key) ?? { results: [], error: null };
       if (reply === 'reject') throw new Error('fixture network down');
-      return reply;
+      return { ...reply, results: reply.results.filter(p => !exclude?.has(real.normalizeName(p.name))) };
     }),
   };
 });
@@ -52,7 +52,7 @@ const board = {
   rule: 'classic', activeRule: 'classic', setRule: () => {}, ruleLocked: true, dailyRuleBlocked: false,
   ruleAvailability: { classic: 3, active: 0, europe: 0 }, optimal: 3, hint: 'Head hint.', stranded: false,
   moreHelp: null as null | { doors: unknown; lines: string[] },
-  addPlayer: () => ({ ok: false, club: null }), giveUp: () => {}, revealPath: null,
+  addPlayer: vi.fn((_name: string) => ({ ok: false, club: null as string | null })), giveUp: () => {}, revealPath: null,
   switchToUnlimited: () => {}, nextPuzzle: () => {},
   /* Round 1010a review: the punctuated and short form names a player types
      without the hyphen, the apostrophe or the full name. */
@@ -99,7 +99,14 @@ function draw(initial: string, props: { emptyText?: string; onNoResults?: (q: st
   return { type: (v: string) => act(() => setText(v)) };
 }
 
-beforeEach(() => { replies.clear(); holds.clear(); releases.clear(); calls.length = 0; });
+beforeEach(() => {
+  replies.clear(); holds.clear(); releases.clear(); calls.length = 0;
+  board.optimal = 3;
+  board.puzzle.minSteps = 3;
+  board.chain = ['Alisson Becker', 'Martin Ødegaard'];
+  board.connections = [null, 'Fixture FC'];
+  board.addPlayer.mockReset().mockReturnValue({ ok: false, club: null });
+});
 afterEach(() => cleanup());
 
 describe('PlayerAutocomplete emptyText and onNoResults', () => {
@@ -172,13 +179,58 @@ describe('Transfer Path board: the empty list says why', () => {
   }
 
   it("names the target by surname: the chain or target text, not 'not in the pool'", async () => {
+    replies.set('oyarzabal', { results: [entity('Mikel Oyarzabal')], error: null });
     expect((await typeIntoBoard('oyarzabal')).textContent).toBe(CHAIN_TEXT);
+    expect(screen.queryByRole('option')).toBeNull();
   });
 
   it('an accented chain name typed plain is left out of the list and gets the same text', async () => {
+    replies.set('odegaard', { results: [entity('Martin Ødegaard')], error: null });
     expect((await typeIntoBoard('odegaard')).textContent).toBe(CHAIN_TEXT);
+    expect(screen.queryByRole('option')).toBeNull();
     const exclude = vi.mocked(searchPlayers).mock.calls.at(-1)![0].exclude as Set<string>;
     expect([...exclude].sort()).toEqual(['alisson becker', 'martin odegaard', 'mikel oyarzabal']);
+  });
+
+  it('direct puzzle: offers the target in the actual autocomplete', async () => {
+    board.optimal = 1;
+    board.puzzle.minSteps = 1;
+    board.chain = ['Alisson Becker'];
+    board.connections = [null];
+    replies.set('oyarzabal', { results: [entity('Mikel Oyarzabal')], error: null });
+    render(<TransferPathBoard />);
+    fireEvent.change(screen.getByRole('combobox'), { target: { value: 'oyarzabal' } });
+    await waitFor(() => expect(screen.queryAllByRole('option')).toHaveLength(1));
+    expect(screen.getByRole('option').textContent).toContain('Mikel Oyarzabal');
+    const exclude = vi.mocked(searchPlayers).mock.calls.at(-1)![0].exclude as Set<string>;
+    expect(exclude.has('mikel oyarzabal')).toBe(false);
+  });
+
+  it('direct puzzle: selecting the target calls the board move callback', async () => {
+    board.optimal = 1;
+    board.puzzle.minSteps = 1;
+    board.chain = ['Alisson Becker'];
+    board.connections = [null];
+    board.addPlayer.mockReturnValue({ ok: true, club: 'Fixture FC' });
+    replies.set('oyarzabal', { results: [entity('Mikel Oyarzabal')], error: null });
+    render(<TransferPathBoard />);
+    fireEvent.change(screen.getByRole('combobox'), { target: { value: 'oyarzabal' } });
+    await waitFor(() => expect(screen.queryAllByRole('option')).toHaveLength(1));
+    fireEvent.pointerDown(screen.getByRole('option'));
+    expect(board.addPlayer).toHaveBeenCalledTimes(1);
+    expect(board.addPlayer).toHaveBeenCalledWith('Mikel Oyarzabal');
+    expect((screen.getByRole('combobox') as HTMLInputElement).value).toBe('');
+  });
+
+  it('preservation: a played accented name stays excluded in a direct puzzle', async () => {
+    board.optimal = 1;
+    board.puzzle.minSteps = 1;
+    replies.set('odegaard', { results: [entity('Martin Ødegaard')], error: null });
+    expect((await typeIntoBoard('odegaard')).textContent).toContain('Already in your chain');
+    expect(screen.queryByRole('option')).toBeNull();
+    const exclude = vi.mocked(searchPlayers).mock.calls.at(-1)![0].exclude as Set<string>;
+    expect(exclude.has('martin odegaard')).toBe(true);
+    expect(board.addPlayer).not.toHaveBeenCalled();
   });
 
   it('the target typed without his punctuation still gets the chain or target text', async () => {
