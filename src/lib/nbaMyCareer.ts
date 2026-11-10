@@ -28,6 +28,7 @@ import { getNbaCorruptionEvents } from './nbaCareerCorruption';
 // Round 179: the shared free agency engine, one implementation for all four sports.
 import { buildFaWindow } from './usCareerFreeAgency';
 import type { FaWindow, FaPushArgs } from './usCareerFreeAgency';
+import type { UsCareerWaiver } from './usCareerSport';
 import { buildExtension, type ExtensionTalk, type ExtPushArgs } from './usCareerExtension';
 // Round 184: the shared press room, same one-engine pattern.
 import { buildPressMoment, pressFactsFrom, applyPressChoice } from './usCareerPress';
@@ -160,6 +161,8 @@ export interface NbaCareerState {
   health: number;
   salary: number;
   contractYears: number;
+  waiver?: UsCareerWaiver;
+  waiverCount?: number;
   seasons: NbaSeasonLine[];
   rings: number;
   mvps: number;

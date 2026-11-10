@@ -1,31 +1,31 @@
-name: NBA My Career waiver original board characterization
+name: NBA My Career waiver fixed and physical controls
 on:
   push:
-    branches: [codex/nba-my-career-waiver-original-qa-20261110]
+    branches: [codex/nba-my-career-waiver-fixed-controls-retry-qa-20261110]
 permissions:
   contents: read
   actions: read
 jobs:
-  original:
+  fixed-controls:
     runs-on: ubuntu-latest
-    timeout-minutes: 17
+    timeout-minutes: 19
     defaults:
       run:
         shell: bash
     env:
-      EVIDENCE: nba-my-career-waiver-original
+      EVIDENCE: nba-my-career-waiver-fixed-controls
       SIM_NETWORK: offline
-      SIM_OFFLINE_RECEIPT: nba-my-career-waiver-original/offline.log
+      SIM_OFFLINE_RECEIPT: nba-my-career-waiver-fixed-controls/offline.log
       TZ: UTC
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 2
+          fetch-depth: 3
       - uses: actions/setup-node@v4
         with:
           node-version: '24.22.1'
           cache: npm
-      - name: Verify exact held board, test source, and admitted active-entry run
+      - name: Authenticate exact original, fixed source, and retained original outcomes
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
@@ -42,26 +42,34 @@ jobs:
           import fs from 'node:fs';
           import {createHash} from 'node:crypto';
           import {execFileSync} from 'node:child_process';
-          const inputs={"base":{"pr":544,"head":"0c0873c72b7ed48f3889ed5b798f984fab830410","tree":"38c8aba6e00c0751f703c2c0053b87ab0018ab48"},"preflight":{"run":42856243507,"job":129969927513,"artifact":13782812304,"head":"3e47edfe28a938d053b893e123baea6292987fcf","tree":"8f9cf628a6e7c9ddf0c97253cead72783baec70c","path":".github/workflows/nba-my-career-waiver-20261110.yml","zipBytes":1020554,"zipSHA256":"69b0307db287bc95966a0ae5a446379ff11298fa683e291c57dad883d71a6b17","auditSHA256":"73725ceab22b64b48522b24c194a9525c78edeb4b05086c0b106ac5d3e892357"},"test":{"file":"nba-career-waiver-original-test-draft.tsx","path":"src/test/nbaCareerWaiver.test.tsx","bytes":3985,"sha256":"307cc793fbe2eb8982ff40f22472ea49185a9fc2030d7eeb9e816889845802d2","blob":"2dd64d7ddaa8185abe079f8440defe4caef09e4e","eligibleMarker":"NBA_WAIVER_REQUEST_MISSING_ELIGIBLE","priorBlob":null,"expected":{"tests":4,"failed":1,"passed":3},"preflightRun":42856243507},"workflow":".github/workflows/nba-my-career-waiver-20261110.yml","heldTests":{"src/test/usCareerMarketBoard.test.tsx":{"blob":"c3ffdbe2f11b4676027a53b0045fed277edaaa23","tests":10},"src/test/usCareerMarketSecondTab.test.tsx":{"blob":"2b323d359d87de80811902f568259bbc6cc8c499","tests":12},"src/test/usCareerMarketUi.test.tsx":{"blob":"4953fa86968708435d8caf114a823f05f3360925","tests":17}}};
-          const {base,preflight,test,workflow,heldTests}=inputs,out=process.env.EVIDENCE;
-          const repo='PapiSalgueroM/ballpark-hero';
+          const inputs={"base":{"pr":544,"head":"0c0873c72b7ed48f3889ed5b798f984fab830410","tree":"38c8aba6e00c0751f703c2c0053b87ab0018ab48"},"original":{"run":42857916783,"job":129975891720,"artifact":13783886995,"head":"a0fbfa684a2740095678ec12ae7498c3d00f441a","tree":"76c696efe0ce41956fa90816b3dc9698221a54e0","workflow":"532bd4f6f7bfe35905e7e89b04286cba8002ccce","path":".github/workflows/nba-my-career-waiver-20261110.yml","zipBytes":1001553,"zipSHA256":"b8866be17835864ccd4c178c05d50f717f15250d252f7bdddc324a3de3135248","auditSHA256":"3bce0bc2a411a22822947870bbb3cc3e7cff0d0e8baeb5f40ee73fc559a59867","admissionSHA256":"64de1dcf7aacf1ad853a6beb4849bd1185426a8f31e2702cfef213b4ebec8b64","vitestSHA256":"fded1146943c2c87ce93f623b86298babb53de089eb2df4c1eb3408e794931c3"},"product":[{"path":"src/lib/usCareerSport.ts","file":"usCareerSport-waiver-fixed-v2.ts","bytes":18335,"sha256":"7775a5e58a76dd85fe0f757f2ac54b0c899a76d6efaae3ab44165801118cfeb9","blob":"23f35cfca91dedc96a07d78978622560359e45e5","priorBytes":18039,"priorSHA256":"a807d530f427955afb5dbeffbd3c8d484b507874679b63ea166c406a330a2f40","priorBlob":"4223154dd2a79c54ca1b359858576ffeb7d515d7"},{"path":"src/lib/nbaCareerSport.ts","file":"nbaCareerSport-waiver-fixed-v3.ts","bytes":9481,"sha256":"b363f523498011026e305edf67d16158b3d291f88655853e8e2f021ae728cf69","blob":"578a205d7e09d4471f2c9d68652feae7e5ce6632","priorBytes":8661,"priorSHA256":"b4a2f678612d1b6f361d46d88a4feaa02cffb75f1fd0d1e459251eab1c7473be","priorBlob":"e9bc724661032a18da1e7f5086d961b9aa7132a6"},{"path":"src/lib/usCareerMarket.ts","file":"usCareerMarket-waiver-fixed-v2.ts","bytes":10932,"sha256":"7c989111bbceacbdf37bbde916ffa11254171f999ab9a4e0a79929847c928dbe","blob":"146bc9825c3dc101cffd5f01619bc08d11ee4f75","priorBytes":9740,"priorSHA256":"8205eed12739b25c8dbfe3c897abb7db34901a625b35829073b64eb2e599fb2b","priorBlob":"6222b2c95228d71603a2eea1732a22678b1f1f70"},{"path":"src/lib/nbaMyCareer.ts","file":"nbaMyCareer-waiver-fixed-v2.ts","bytes":87373,"sha256":"bfd62352e14e000463c5ed55c71c091bf44128903732364fe21e21f1fec27a34","blob":"faeda497c62ba6b13eb5a1843018e8b19341a566","priorBytes":87267,"priorSHA256":"2ba4dd6323043fcac73a8c9eabcdf77a09ba827d58b124b077024016519c1987","priorBlob":"c988aaa195da6ab00aa542a28b61c5abd9c107d8"},{"path":"src/components/us-career/USCareerActionConfirm.tsx","file":"us-career-action-confirm-waiver-proposal.tsx","bytes":4025,"sha256":"d90913d4cde42ce2eeaee00604727caf8e319405b9656a2d45ce80984b4e44c4","blob":"9953fffec70daaffd53468cc21a04c099b544919","priorBytes":3755,"priorSHA256":"b8913056e34907801eb03716460ddd2cd0bf0e42bac9b05a55f15aba0c0aabd1","priorBlob":"45b685b271f0f84c612ff68dac0d5f3c39546e80"},{"path":"src/components/us-career/FreeAgencyPanel.tsx","file":"free-agency-panel-waiver-proposal.tsx","bytes":16955,"sha256":"23a9fb770040c2a5f47b45d4d07463404c9cf05411979cd4450fb317691d8823","blob":"a4279900260d508fdec265d0c917ab5357c97a12","priorBytes":16586,"priorSHA256":"340b2eb105c58e103ce096d236d2b3d520e317a963118b94cbafa5b7ac152b79","priorBlob":"1d32d94e38245f2b919a7762f90076991b562a9f"},{"path":"src/components/us-career/UsCareerBoard.tsx","file":"us-career-board-waiver-v3-proposal.tsx","bytes":122212,"sha256":"74f13435b92ba2d4a5a042de1a5fb7f83d0dd398c0112efd056e3bf064218989","blob":"676e8499e28597b89ac0160503a2494aa12bb85c","priorBytes":116143,"priorSHA256":"ada70d72f44aee8685d8c7ec9580c5b85379a028af02e93b09a1d5fb86c1ad41","priorBlob":"09794d5779453495bb92cc02af079d01ce992773"}],"test":{"path":"src/test/nbaCareerWaiver.test.tsx","file":"nba-career-waiver-fixed-test-v4-draft.tsx","bytes":22352,"sha256":"933dbda216b3e409674287733a1a53ce0f1fd479fff4d0b5eb55aeb79cb4d5a1","blob":"6a2006854eb3ced97ac3362e998b487c20cf81c6","priorBytes":3985,"priorSHA256":"307cc793fbe2eb8982ff40f22472ea49185a9fc2030d7eeb9e816889845802d2","priorBlob":"2dd64d7ddaa8185abe079f8440defe4caef09e4e","marker":"NBA_WAIVER_REQUEST_MISSING_ELIGIBLE"},"titles":["offers the waiver request on an eligible unhappy NBA season hub","keeps the request off the NBA hub at morale 55","keeps the request off an unhappy NFL hub","restores ordinary NBA free agency with its incumbent offer","cancels a waiver confirmation without a draw or save write and returns focus","keeps the unplayed historical year and record across release, reload and signing","stale hub Play and a stale open confirmation cannot overwrite a newer saved release","does not let a second tab sign a consumed waiver market","retries a refused release save with the exact prepared market and no redraw","cannot retry a refused release over a newer saved release from another tab","refuses a malformed waiver offer and rebuilds only outside offers on deliberate reopen","keeps the last outside offer available after negotiation and restores the spent push","protects a newer signed waiver career from a stale hub initially at morale 55","keeps the exact pending release through a transient read refusal on Retry save","rejects a well-shaped out-of-era waiver offer and recovers historical outside offers"],"heldTests":{"src/test/usCareerMarketBoard.test.tsx":{"blob":"c3ffdbe2f11b4676027a53b0045fed277edaaa23","tests":10},"src/test/usCareerMarketSecondTab.test.tsx":{"blob":"2b323d359d87de80811902f568259bbc6cc8c499","tests":12},"src/test/usCareerMarketUi.test.tsx":{"blob":"4953fa86968708435d8caf114a823f05f3360925","tests":17}}};
+          const {base,original,product,test,heldTests}=inputs,out=process.env.EVIDENCE;
+          const repo='PapiSalgueroM/ballpark-hero',workflow=original.path;
           const git=(...args)=>execFileSync('git',args,{encoding:'utf8',maxBuffer:16*1024*1024}).trimEnd();
           const sha=body=>createHash('sha256').update(body).digest('hex');
           const blob=body=>createHash('sha1').update(Buffer.from('blob '+body.length+'\0')).update(body).digest('hex');
           const head=git('rev-parse','HEAD'),tree=git('rev-parse','HEAD^{tree}');
           assert.equal(head,process.env.GITHUB_SHA);
           assert.equal(process.env.GITHUB_REPOSITORY,repo);
-          assert.deepEqual(git('rev-list','--parents','-n','1',head).split(' '),[head,base.head]);
+          assert.deepEqual(git('rev-list','--parents','-n','1',head).split(' '),[head,original.head]);
+          assert.equal(git('rev-parse',original.head+'^{tree}'),original.tree);
+          assert.equal(git('rev-parse',original.head+'^'),base.head);
           assert.equal(git('rev-parse',base.head+'^{tree}'),base.tree);
+          assert.equal(git('rev-parse',original.head+':'+workflow),original.workflow);
           const rows=ref=>git('ls-tree','-r','-z',ref).split('\0').filter(Boolean);
           const path=row=>row.split('\t')[1];
-          const prev=rows(base.head),curr=rows(head);
-          assert.deepEqual([prev.length,curr.length],[5803,5805]);
-          assert.deepEqual(prev,curr.filter(row=>![workflow,test.path].includes(path(row))));
+          const owned=[...product.map(p=>p.path),workflow,test.path];
+          const prev=rows(original.head),curr=rows(head);
+          assert.deepEqual([prev.length,curr.length],[5805,5805]);
+          assert.deepEqual(prev.filter(row=>!owned.includes(path(row))),curr.filter(row=>!owned.includes(path(row))));
           assert.equal(curr.filter(row=>/^(src|public|scripts)\//.test(path(row))).length,4670);
-          assert.deepEqual(git('diff','--name-status','--no-renames',base.head,head).split('\n').sort(),['A\t'+workflow,'A\t'+test.path].sort());
-          const testBytes=fs.readFileSync(test.path);
-          assert.deepEqual([testBytes.length,sha(testBytes),blob(testBytes)],[test.bytes,test.sha256,test.blob]);
+          assert.deepEqual(git('diff','--name-status','--no-renames',original.head,head).split('\n').sort(),owned.map(p=>'M\t'+p).sort());
+          for(const pin of [...product,test]){
+            const bytes=fs.readFileSync(pin.path);
+            assert.deepEqual([bytes.length,sha(bytes),blob(bytes)],[pin.bytes,pin.sha256,pin.blob]);
+            const held=execFileSync('git',['show',original.head+':'+pin.path],{maxBuffer:4*1024*1024});
+            assert.deepEqual([held.length,sha(held),blob(held)],[pin.priorBytes,pin.priorSHA256,pin.priorBlob]);
+          }
           for(const [file,pin] of Object.entries(heldTests))assert.equal(blob(fs.readFileSync(file)),pin.blob);
           const api=process.env.GITHUB_API_URL+'/repos/'+repo;
           const get=async suffix=>{
@@ -70,20 +78,29 @@ jobs:
             assert.equal(r.status,200,suffix);
             return r.json();
           };
-          const [run,jobs,artifacts]=await Promise.all([get('/actions/runs/'+preflight.run),get('/actions/runs/'+preflight.run+'/jobs?per_page=100'),get('/actions/runs/'+preflight.run+'/artifacts?per_page=100')]);
+          const [run,jobs,artifacts]=await Promise.all([get('/actions/runs/'+original.run),get('/actions/runs/'+original.run+'/jobs?per_page=100'),get('/actions/runs/'+original.run+'/artifacts?per_page=100')]);
           assert.deepEqual([run.id,run.status,run.conclusion,run.head_sha,run.head_commit.tree_id,run.path,run.event,run.run_attempt],
-            [preflight.run,'completed','success',preflight.head,preflight.tree,preflight.path,'push',1]);
+            [original.run,'completed','success',original.head,original.tree,workflow,'push',1]);
           assert.deepEqual([jobs.jobs.length,artifacts.artifacts.length],[1,1]);
           const [job]=jobs.jobs,[archive]=artifacts.artifacts;
-          assert.deepEqual([job.id,job.steps.length,archive.id,archive.expired,archive.size_in_bytes,archive.digest],
-            [preflight.job,11,preflight.artifact,false,preflight.zipBytes,'sha256:'+preflight.zipSHA256]);
+          assert.deepEqual([job.id,job.steps.length,archive.id,archive.expired,archive.size_in_bytes,archive.digest,archive.workflow_run.id,archive.workflow_run.head_sha],
+            [original.job,11,original.artifact,false,original.zipBytes,'sha256:'+original.zipSHA256,original.run,original.head]);
           assert(job.steps.every(s=>s.status==='completed'&&s.conclusion==='success'));
           fs.copyFileSync(test.path,out+'/candidate-test.tsx');
           fs.copyFileSync(workflow,out+'/candidate-workflow.yml');
-          fs.writeFileSync(out+'/source-join.json',JSON.stringify({status:'passed',head,tree,parent:base.head,parentTree:base.tree,workflow:git('rev-parse','HEAD:'+workflow),
-            trackedRows:5805,heldRows:5803,scopedRows:4670,inputs},null,2)+'\n');
+          fs.writeFileSync(out+'/source-join.json',JSON.stringify({status:'passed',head,tree,parent:original.head,parentTree:original.tree,workflow:git('rev-parse','HEAD:'+workflow),
+            trackedRows:5805,heldRows:5805-owned.length,scopedRows:4670,inputs},null,2)+'\n');
           NODE
-      - name: Install the locked dependencies and type check the original board
+          original_id=$(node -p "require('./$EVIDENCE/source-join.json').inputs.original.artifact")
+          original_len=$(node -p "require('./$EVIDENCE/source-join.json').inputs.original.zipBytes")
+          original_sha=$(node -p "require('./$EVIDENCE/source-join.json').inputs.original.zipSHA256")
+          original_zip="$RUNNER_TEMP/nba-waiver-original-exact.zip"
+          gh api "repos/PapiSalgueroM/ballpark-hero/actions/artifacts/$original_id/zip" > "$original_zip"
+          test "$(wc -c < "$original_zip")" -eq "$original_len"
+          printf '%s  %s\n' "$original_sha" "$original_zip" | sha256sum -c -
+          unzip -p "$original_zip" admission.json > "$EVIDENCE/prior-admission.json"
+          unzip -p "$original_zip" vitest-result.json > "$EVIDENCE/prior-vitest-result.json"
+      - name: Install locked dependencies, freeze physical source, and verify app types
         run: |
           set -euo pipefail
           npm ci 2>&1 | tee "$EVIDENCE/install.log"
@@ -114,43 +131,104 @@ jobs:
           NODE
           node "$EVIDENCE/physical.mjs" before
           node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee "$EVIDENCE/types.log"
-      - name: Require the exact eligible waiver mismatch and unchanged market guards
+      - name: Exercise fixed, physically restored original, and exact fixed restoration
         run: |
           set -euo pipefail
-          result=0
-          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" timeout --signal=TERM 100s \
-            node_modules/.bin/vitest run src/test/nbaCareerWaiver.test.tsx src/test/usCareerMarketBoard.test.tsx src/test/usCareerMarketSecondTab.test.tsx src/test/usCareerMarketUi.test.tsx \
-            --testTimeout=60000 --no-file-parallelism --reporter=json --outputFile="$EVIDENCE/vitest-result.json" > "$EVIDENCE/test.log" 2>&1 || result=$?
-          cat "$EVIDENCE/test.log"
-          printf '%s\n' "$result" > "$EVIDENCE/test-exit.txt"
-          test "$result" -eq 1
-          test ! -s "$SIM_OFFLINE_RECEIPT"
-          node --input-type=module <<'NODE'
+          cat > "$EVIDENCE/control-driver.mjs" <<'NODE'
           import assert from 'node:assert/strict';
           import fs from 'node:fs';
+          import {createHash} from 'node:crypto';
+          import {execFileSync, spawnSync} from 'node:child_process';
           const out=process.env.EVIDENCE;
-          const read=name=>JSON.parse(fs.readFileSync(out+'/'+name,'utf8'));
-          const vitest=read('vitest-result.json'),source=read('source-join.json');
-          assert.deepEqual([vitest.numTotalTests,vitest.numFailedTests,vitest.numPassedTests,vitest.numPendingTests,vitest.numTodoTests,vitest.success],[43,1,42,0,0,false]);
-          const {test,heldTests}=source.inputs;
-          const file=name=>vitest.testResults.find(row=>row.name.endsWith('/'+name));
-          assert.equal(vitest.testResults.length,4);
-          const waiver=file(test.path);
-          assert.equal(waiver?.status,'failed');
-          const names=['offers the waiver request on an eligible unhappy NBA season hub','keeps the request off the NBA hub at morale 55',
-            'keeps the request off an unhappy NFL hub','restores ordinary NBA free agency with its incumbent offer'];
-          assert.deepEqual(waiver.assertionResults.map(a=>[a.title,a.status]),names.map((name,i)=>[name,i===0?'failed':'passed']));
-          assert.equal(waiver.assertionResults[0].failureMessages.length,1);
-          assert(waiver.assertionResults[0].failureMessages[0].includes(test.eligibleMarker));
-          for(const [path,pin] of Object.entries(heldTests)){
-            const result=file(path);
-            assert.equal(result?.status,'passed',path);
-            assert.equal(result.assertionResults.length,pin.tests,path);
-            assert(result.assertionResults.every(row=>row.status==='passed'),path);
+          const read=file=>fs.readFileSync(out+'/'+file);
+          const json=file=>JSON.parse(read(file));
+          const sha=bytes=>createHash('sha256').update(bytes).digest('hex');
+          const git=(...args)=>execFileSync('git',args,{maxBuffer:16*1024*1024});
+          const source=json('source-join.json'),{original,product,test,heldTests,titles}=source.inputs;
+          const prior=json('prior-admission.json'),priorVitest=json('prior-vitest-result.json');
+          assert.deepEqual([sha(read('prior-admission.json')),sha(read('prior-vitest-result.json'))],[original.admissionSHA256,original.vitestSHA256]);
+          assert.deepEqual([prior.status,prior.total,prior.failed,prior.passed,prior.expectedMarker],['passed',43,1,42,test.marker]);
+          assert.deepEqual([priorVitest.numTotalTests,priorVitest.numFailedTests,priorVitest.numPassedTests],[43,1,42]);
+          const files=[test.path,...Object.keys(heldTests)];
+          const saved=new Map(product.map(pin=>[pin.path,fs.readFileSync(pin.path)]));
+          const held=new Map(product.map(pin=>[pin.path,git('show',original.head+':'+pin.path)]));
+          const changed=git('ls-files','-z').toString().split('\0').filter(Boolean);
+          const frozen=new Map(json('tracked-before.json').map(([p,bytes,digest])=>[p,[bytes,digest]]));
+          const own=new Map(product.map(pin=>[pin.path,pin]));
+          function verifyPhysical(role){
+            const red=role==='original';
+            assert.equal(changed.length,5805);
+            const pins=changed.map(path=>{
+              const body=fs.readFileSync(path),current=[body.length,sha(body)],pin=own.get(path);
+              assert.deepEqual(current,red&&pin?[pin.priorBytes,pin.priorSHA256]:frozen.get(path),role+' '+path);
+              return [path,...current];
+            });
+            return {role,tracked:pins.length,held:pins.length-product.length,product:pins.filter(([path])=>own.has(path)),physicalSHA256:sha(JSON.stringify(pins))};
           }
-          fs.writeFileSync(out+'/admission.json',JSON.stringify({status:'passed',testExit:1,expectedMarker:test.eligibleMarker,
-            total:43,failed:1,passed:42,newCases:waiver.assertionResults.map(a=>[a.title,a.status]),heldCases:39,source},null,2)+'\n');
+          function run(role){
+            const red=role==='original',root=out+'/'+role;
+            fs.mkdirSync(root);
+            const before=verifyPhysical(role);
+            const result=spawnSync('timeout',['--signal=TERM','100s','node_modules/.bin/vitest','run',...files,'--testTimeout=60000',
+              '--no-file-parallelism','--reporter=json','--outputFile='+root+'/vitest-result.json'],{
+              env:{...process.env,NODE_OPTIONS:'--require='+process.cwd()+'/scripts/lib/offlineTransport.cjs'},encoding:'utf8',maxBuffer:12*1024*1024,
+            });
+            fs.writeFileSync(root+'/test.log',(result.stdout??'')+(result.stderr??''));
+            fs.writeFileSync(root+'/test-exit.txt',String(result.status)+'\n');
+            assert.equal(result.error,undefined);
+            assert.equal(result.signal,null);
+            assert.equal(result.status,red?1:0);
+            assert.equal(fs.statSync(process.env.SIM_OFFLINE_RECEIPT).size,0);
+            const log=read(role+'/test.log').toString();
+            assert(log.includes('/'+root+'/vitest-result.json'));
+            assert(!/UnhandledPromiseRejection|ERR_MODULE_NOT_FOUND|ERR_UNKNOWN_FILE_EXTENSION|SIM_OFFLINE_BLOCK|Unhandled Errors/i.test(log));
+            const vitest=json(role+'/vitest-result.json');
+            assert.deepEqual([vitest.numTotalTests,vitest.numFailedTests,vitest.numPassedTests,vitest.numPendingTests,vitest.numTodoTests,vitest.success],
+              [54,red?12:0,red?42:54,0,0,!red]);
+            assert.equal(vitest.testResults.length,4);
+            const suite=path=>vitest.testResults.find(row=>row.name.endsWith('/'+path));
+            const waiver=suite(test.path);
+            assert.equal(waiver.status,red?'failed':'passed');
+            assert.deepEqual(waiver.assertionResults.map(row=>[row.title,row.status]),titles.map((title,i)=>[title,red&&(i===0||i>=4)?'failed':'passed']));
+            if(red){
+              assert.deepEqual(waiver.assertionResults.slice(0,4).map(row=>[row.title,row.status]),prior.newCases);
+              const [first,...more]=waiver.assertionResults.filter(row=>row.status==='failed');
+              assert.equal(first.failureMessages.length,1);
+              assert(first.failureMessages[0].includes('AssertionError: '+test.marker));
+              assert(more.every(row=>row.failureMessages.length===1&&row.failureMessages[0].includes(
+                'TestingLibraryElementError: Unable to find an accessible element with the role "button" and name "Request a waiver"')));
+            }
+            for(const [path,pin] of Object.entries(heldTests)){
+              const result=suite(path);
+              assert.equal(result?.status,'passed',path);
+              assert.equal(result.assertionResults.length,pin.tests,path);
+              assert(result.assertionResults.every(row=>row.status==='passed'),path);
+            }
+            const after=verifyPhysical(role);
+            assert.deepEqual(after,before);
+            fs.writeFileSync(root+'/physical.json',JSON.stringify(after,null,2)+'\n');
+            const admitted={role,tests:54,failed:red?12:0,passed:red?42:54,exit:result.status,physical:after,
+              outcomes:waiver.assertionResults.map(row=>[row.title,row.status])};
+            process.stdout.write(JSON.stringify(admitted)+'\n');
+            return admitted;
+          }
+          const fixed=run('fixed');
+          let control;
+          try {
+            for(const [path,body] of held)fs.writeFileSync(path,body);
+            control=run('original');
+          } finally {
+            for(const [path,body] of saved)fs.writeFileSync(path,body);
+          }
+          const restored=run('restored');
+          assert.deepEqual(restored.outcomes,fixed.outcomes);
+          assert.equal(restored.physical.physicalSHA256,fixed.physical.physicalSHA256);
+          assert.notEqual(control.physical.physicalSHA256,fixed.physical.physicalSHA256);
+          assert.equal(git('diff','--name-only','HEAD','--','.').length,0);
+          fs.writeFileSync(out+'/admission.json',JSON.stringify({status:'passed',roles:[fixed,control,restored],
+            exactlyRestored:true,originalCasesMatchAdmitted:true,ownedProductPaths:product.map(p=>p.path)},null,2)+'\n');
           NODE
+          node "$EVIDENCE/control-driver.mjs" 2>&1 | tee "$EVIDENCE/control-driver.log"
       - name: Confirm complete source, index, lock, and offline receipts
         if: ${{ !cancelled() }}
         run: |
@@ -165,6 +243,6 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}
         with:
-          name: nba-my-career-waiver-original
-          path: nba-my-career-waiver-original/
+          name: nba-my-career-waiver-fixed-controls
+          path: nba-my-career-waiver-fixed-controls/
           if-no-files-found: error

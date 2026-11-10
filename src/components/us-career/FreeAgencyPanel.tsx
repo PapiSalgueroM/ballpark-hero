@@ -46,6 +46,7 @@ interface Props {
   onWheelContinue?: () => void;
   compare?: boolean;
   reviewSigning?: boolean;
+  waived?: boolean;
   odds?: Record<MarketResult, number>[];
 }
 
@@ -63,7 +64,7 @@ interface SigningReview {
   offer: FaOffer;
 }
 
-export default function FreeAgencyPanel({ window: w, sportNoun, talkLine, onPush, onSign, wheel, onWheelContinue, compare = false, reviewSigning = false, odds }: Props) {
+export default function FreeAgencyPanel({ window: w, sportNoun, talkLine, onPush, onSign, wheel, onWheelContinue, compare = false, reviewSigning = false, waived = false, odds }: Props) {
   const [intent, setIntent] = useState<PushIntent | null>(null);
   const [comparing, setComparing] = useState(false);
   const [review, setReview] = useState<SigningReview | null>(null);
@@ -199,9 +200,18 @@ export default function FreeAgencyPanel({ window: w, sportNoun, talkLine, onPush
       <div className="cm-rise rounded-2xl border border-gold/40 bg-card p-4 text-center">
         <p className="font-display text-lg font-bold text-foreground">🖊️ Free agency</p>
         <p className="mt-1 text-xs text-muted-foreground">
-          Your deal is up. Every {sportNoun} below is a real destination with its own money,
-          length and roster. You can push any offer for more, once. Push too hard and an
-          offer can disappear, but your own {sportNoun} never walks away.
+          {waived ? (
+            <>
+              Your team waived you and ended your deal. Sign with another team to keep playing.
+              You can push any offer for more once. An offer can disappear, but the last live offer stays open.
+            </>
+          ) : (
+            <>
+              Your deal is up. Every {sportNoun} below is a real destination with its own money,
+              length and roster. You can push any offer for more, once. Push too hard and an
+              offer can disappear, but your own {sportNoun} never walks away.
+            </>
+          )}
           {compare && <> Your offers and each spent push survive reload. A wheel reveals the saved negotiation, never another attempt. For example, a 30% chance fills 30 of 100 equal parts; it does not promise a raise.</>}
         </p>
         <p className="mt-1 text-[11px] font-semibold text-gold">{w.note}</p>

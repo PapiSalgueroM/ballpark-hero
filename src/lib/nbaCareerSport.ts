@@ -13,7 +13,7 @@ import {
   nbaEventDeck,
   NBA_SPEND_ITEMS, buyNbaItem, getNbaSpendItem,
   nbaShouldRetire, nbaLegacyOf, nbaCareerTotals, nbaRollTeamQuality, nbaTeamLabelOf,
-  buildNbaFaWindow, nbaFaPushArgs, buildNbaExtension, nbaExtPushArgs,
+  buildNbaFaWindow, nbaFaPushArgs, buildNbaExtension, nbaExtPushArgs, nbaEraTeamIds,
   nbaAssignRole, nbaCampBattle, enableNbaDraft2004, hasNbaDraft2004,
   type NbaCareerPos, type NbaCareerState, type NbaSeasonLine,
 } from '@/lib/nbaMyCareer';
@@ -25,12 +25,13 @@ import { nbaEarnedBadges, nbaFanComments, nbaFollowers, nbaHeadlinesFor } from '
 import { NBA_BADGES, intlBadgeFactsOf } from '@/lib/careerBadges';
 import { nbaUnreadInboxCount, answerNbaInboxMessage, nbaDraftNightInbox, NBA_CALENDAR } from '@/lib/nbaCareerInbox';
 import { dismissNbaRivalryEvent, resolveNbaRivalryChoice } from '@/lib/nbaCareerRivalryEvents';
-import type { UsCareerSport } from '@/lib/usCareerSport';
+import type { UsCareerCore, UsCareerSport } from '@/lib/usCareerSport';
 import { repairBankOnLoad, withBankFloor } from '@/lib/usCareerBank';
 import { NBA_CAREER_HALL } from '@/lib/nbaCareerHall';
 import { NBA_CAREER_INTL_LAZY } from '@/lib/nbaCareerIntlGate';
 import { nbaSeasonReview } from '@/lib/usCareerSeasonReview';
 import { usSeasonHeldLine } from '@/data/usSeasonLengths';
+import { isFarewellSeason } from '@/lib/careerRetirement';
 
 /* The key this career saves under. It stays a named constant so the home
    page's Continue fence (simHomeFront section 7) can find where every save
@@ -103,6 +104,19 @@ export const NBA_CAREER_SPORT: UsCareerSport<NbaCareerState, NbaSeasonLine> = wi
   buildExtension: buildNbaExtension,
   extPushArgs: nbaExtPushArgs,
   buildFaWindow: buildNbaFaWindow,
+  waiver: {
+    canRequest: (c: UsCareerCore) => !c.retired && c.waiver === undefined && !c.summer
+      && (c.suspendedSeasons ?? 0) === 0 && !isFarewellSeason(c.retirement, c.year)
+      && Number.isSafeInteger(c.year) && c.year > 0
+      && Number.isSafeInteger(c.contractYears) && c.contractYears > 0
+      && Number.isFinite(c.morale) && c.morale < 55 && nbaEraTeamIds(c.eraId).includes(c.team),
+    buildMarket: (c, quality, rng) => {
+      const window = buildNbaFaWindow(c, quality, rng);
+      return { ...window, offers: window.offers.filter(offer => !offer.incumbent) };
+    },
+    acceptsOffer: (c, offer) => nbaEraTeamIds(c.eraId).includes(offer.team)
+      && offer.label === nbaTeamLabelOf(offer.team, c.eraId),
+  },
   faPushArgs: nbaFaPushArgs,
   faSportNoun: 'franchise',
   seasonWord: 'season',
