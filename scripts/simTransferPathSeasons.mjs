@@ -54,6 +54,8 @@
  *                          Section 4 goes red.
  *   TPS_CONTROL=pageshare  the page's link test drops the crossed match.
  *                          Section 4 goes red.
+ *   TPS_CONTROL=nocarvajal remove only Carvajal's 2024-2025 Real Madrid row.
+ *                          Section 7 goes red.
  *
  * Run: node scripts/simTransferPathSeasons.mjs
  */
@@ -64,7 +66,7 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 import { build } from 'esbuild';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const CONTROLS = ['exactonly', 'overlap', 'page', 'pageshare', 'nolampard'];
+const CONTROLS = ['exactonly', 'overlap', 'page', 'pageshare', 'nolampard', 'nocarvajal'];
 const CONTROL = process.env.TPS_CONTROL || '';
 if (CONTROL && !CONTROLS.includes(CONTROL)) { console.error(`TPS_CONTROL=${CONTROL} is not a control this harness knows (${CONTROLS.join(', ')})`); process.exit(1); }
 let failures = 0;
@@ -375,7 +377,37 @@ console.log('6) the reported Everyday link: Frank Lampard, David Villa, Lionel M
   console.log(`   Everyday: ${lampardVilla ?? 'refused'} then ${villaMessi ?? 'refused'}. Europe Only: ${europeLink ?? 'refused'}.`);
 }
 
+let missingCarvajalLink = false;
+console.log('7) the reported Endrick and Dani Carvajal link');
+{
+  let pool = page.fallbackPlayers;
+  if (CONTROL === 'nocarvajal') {
+    const carvajal = pool.find(p => p.name === 'Dani Carvajal');
+    const career = carvajal?.career.filter(s => s.season !== '2024-2025' || s.club !== 'Real Madrid');
+    if (!career || career.length !== carvajal.career.length - 1) {
+      console.error('control nocarvajal must remove exactly one Real Madrid season');
+      process.exit(1);
+    }
+    pool = pool.map(p => p === carvajal ? { ...p, career } : p);
+  }
+  const everyday = page.clubSeasonsOf(pool);
+  const europe = page.clubSeasonsOf(page.playersUnderRule(pool, 'europe'));
+  const everydayLink = page.shareClub(everyday, 'Endrick', 'Dani Carvajal');
+  const europeLink = page.shareClub(europe, 'Endrick', 'Dani Carvajal');
+  missingCarvajalLink = everydayLink !== 'Real Madrid' || europeLink !== 'Real Madrid';
+  if (missingCarvajalLink) fail('the bundled Everyday and Europe Only pools must link Endrick to Carvajal at Real Madrid');
+  console.log(`   Everyday: ${everydayLink ?? 'refused'}. Europe Only: ${europeLink ?? 'refused'}.`);
+}
+
 console.log('');
+if (CONTROL === 'nocarvajal') {
+  if (failures === 1 && missingCarvajalLink) {
+    console.log('simTransferPathSeasons control (nocarvajal): only the reported link failed.');
+    process.exit(0);
+  }
+  console.error('simTransferPathSeasons control (nocarvajal): expected exactly the reported link to fail.');
+  process.exit(1);
+}
 if (CONTROL === 'nolampard') {
   if (failures === 1 && missingLampardLink) {
     console.log('simTransferPathSeasons control (nolampard): only the reported link failed.');

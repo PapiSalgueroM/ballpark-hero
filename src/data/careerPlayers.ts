@@ -8,7 +8,7 @@
  * paged 1,000 at a time ordered by player id then sort_order, and assists left
  * null where the league did not record them (never coerced to 0).
  *
- * 253 players, 3641 season rows, 201 of them with null assists.
+ * 253 players, 3642 season rows, 201 of them with null assists.
  * scripts/simCareerFallback.mjs fails when this file differs from a fresh bake.
  * Regenerate with: node scripts/bakeCareerPlayers.mjs
  */
@@ -17,7 +17,7 @@ import type { CareerPlayer } from '@/types/career';
 export const CAREER_FALLBACK_META = {
   generated: '2026-11-10',
   players: 253,
-  seasons: 3641,
+  seasons: 3642,
   nullAssists: 201,
 };
 
@@ -984,6 +984,7 @@ export const careerPlayers: CareerPlayer[] = [
       { season: "2021-2022", club: "Real Madrid", goals: 1, assists: 8, appearances: 42, marketValue: 22 },
       { season: "2022-2023", club: "Real Madrid", goals: 2, assists: 5, appearances: 46, marketValue: 18 },
       { season: "2023-2024", club: "Real Madrid", goals: 4, assists: 5, appearances: 42, marketValue: 15 },
+      { season: "2024-2025", club: "Real Madrid", goals: 1, assists: 1, appearances: 12, marketValue: 0 },
     ],
   },
   {

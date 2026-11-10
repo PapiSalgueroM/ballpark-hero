@@ -1,3 +1,13 @@
+## 2026-11-10: Transfer Path Endrick and Carvajal correction staged
+
+Everyday `tpa-781` refused Dani Carvajal after Endrick. Both career pools lacked Carvajal's 2024/25 Real Madrid season. Add the one season with 12 appearances, one goal and one assist. The assist was for Endrick against Stuttgart. [Season totals](https://www.maxifoot.fr/joueur/daniel-carvajal-38524.htm) · [Stuttgart match report](https://www.bundesliga.com/en/bundesliga/news/real-madrid-stuttgart-live-champions-league-blog-preview-report-mbappe-bellingham-28883)
+
+The migration refreshes five entries across `tpa-679`, `tpa-730` and `tpa-902` in the same transaction. The latter two now have direct routes in Everyday and Europe Only, so the board reuses PR244's one-step target selection. `tpa-781` keeps its three-step minimum. The 20 bundled puzzles and Active entries keep their existing values.
+
+The local migration rehearsal covered all 253 players and 885 live puzzle rows. It matched the 3,642-season bake after both staged corrections, replayed unchanged and rolled back on a mismatched hint. The production build passed phone and desktop for `tpa-781` with a single-row removal control. Both direct puzzles won on the first pick and restored the same win after reload in both rules.
+
+The draft follows PR547. Release the target selection change before applying the career and puzzle migration. Keep report `18445d32` open until the public puzzle passes.
+
 ## 2026-11-10: Transfer Path Lampard and Villa correction staged
 
 Everyday puzzle `tp-6` refused David Villa after Frank Lampard because both career pools lacked Lampard's 2015 New York City FC season. The source ledger records his 10 appearances, three goals and one assist. The bundled pool and a guarded migration each add that one row. [MLS season totals](https://matchcenter.newyorkcityfc.com/news/new-york-city-fc-s-frank-lampard-honored-by-british-monarchy-sideline-287754) · [D.C. United lineup](https://www.dcunited.com/news/dc-united-clinches-berth-audi-2015-mls-cup-playoffs)
