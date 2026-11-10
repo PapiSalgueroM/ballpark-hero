@@ -22,6 +22,7 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { render, act } from '@testing-library/react';
 import { CM_ROSTERS, CM_PARTIAL } from '@/data/clubManagerRosters';
+import type { MarketPlayer } from '@/lib/clubManager';
 
 vi.mock('@/lib/completions', () => ({
   recordCompletion: vi.fn(),
@@ -134,7 +135,9 @@ describe('Club Manager: a refused write is said out loud', () => {
   it('a refused press on the transfer desk says why, and one that goes through clears it', async () => {
     /* Round 634 review: a refused door used to be a dead button. */
     const r = await booted();
-    const card = api.market.find((m: any) => m.price <= api.career.budget / 4);
+    const affordable = (m: MarketPlayer) => m.price <= api.career.budget / 4 && !m.joinedThisSeason;
+    const card = api.market.find(affordable);
+    expect(card).toBeDefined();
     act(() => api.buy(card));
     expect(api.deskNote).toBeNull();
     /* The same card again: he is in the squad now, the press the screen could
@@ -142,7 +145,8 @@ describe('Club Manager: a refused write is said out loud', () => {
     act(() => api.buy(card));
     console.log(`  second press on ${card.name}: "${api.deskNote}"`);
     expect(api.deskNote).toMatch(/already in your squad/);
-    const other = api.market.find((m: any) => m.price <= api.career.budget / 4);
+    const other = api.market.find(affordable);
+    expect(other).toBeDefined();
     act(() => api.buy(other));
     expect(api.deskNote).toBeNull();
     /* The loan desk: out, back, and out again is refused with the rule. */
