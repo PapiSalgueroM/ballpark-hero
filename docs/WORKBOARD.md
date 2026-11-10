@@ -18308,3 +18308,10 @@ Stacked on PR541. R0008's reported session and deployed row remain unverified. T
 NBA Chain can validate dotted and compact initials for the same player. Exact spellings take precedence. When an alternate spelling finds multiple stints, validation requires one shared player key and the same complete set of stint records. An ambiguous match lets the player retry without spending the run.
 
 Stacked on PR542. R0016 was exercised with fictional records. The reported live session is unverified. R0018 remains open because the abbreviated name lacks a verified identity match. [Active entry](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/42826929069) · [Original](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/42828680593) · [Fixed](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/42832098036) · [Physical controls](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/42834318467) · [Clean build and browser](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/42835571480)
+
+
+### 2026-11-10 Player feedback follow-up, Fantasy Draft empty player pool
+
+Fantasy Draft offers Retry players when the player pool returns a successful null or empty list. The opening seat, daily rule, pick and rosters stay in place during recovery. A later populated reply resumes the draft.
+
+Stacked on PR543. This fixture proves a recovery issue found during feedback review. The R0038 and R0153 sessions remain unverified. [Active entry](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/42846374711) · [Original](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/42849772916) · [Fixed and rollback](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/42850968546) · [Production and clean rebuild](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/42852554715)
