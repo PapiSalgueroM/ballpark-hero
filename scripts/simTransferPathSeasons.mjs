@@ -64,7 +64,7 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 import { build } from 'esbuild';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const CONTROLS = ['exactonly', 'overlap', 'page', 'pageshare'];
+const CONTROLS = ['exactonly', 'overlap', 'page', 'pageshare', 'nolampard'];
 const CONTROL = process.env.TPS_CONTROL || '';
 if (CONTROL && !CONTROLS.includes(CONTROL)) { console.error(`TPS_CONTROL=${CONTROL} is not a control this harness knows (${CONTROLS.join(', ')})`); process.exit(1); }
 let failures = 0;
@@ -115,7 +115,7 @@ if (CONTROL === 'page' || CONTROL === 'pageshare') {
 const ENTRY = path.join(os.tmpdir(), 'tps-entry.mjs'), BUNDLE = path.join(os.tmpdir(), 'tps-bundle.mjs');
 const p = f => f.replaceAll('\\', '/');
 globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };
-fs.writeFileSync(ENTRY, `export { buildSeasonIndex, clubSeasonsOf, linkedFrom, shareClub } from '${p(graphTsPath)}';\nexport { isEuropeanClub, playersUnderRule } from '${p(ROOT)}/src/lib/transferPathModes.ts';\n`);
+fs.writeFileSync(ENTRY, `export { buildSeasonIndex, clubSeasonsOf, linkedFrom, shareClub } from '${p(graphTsPath)}';\nexport { isEuropeanClub, playersUnderRule } from '${p(ROOT)}/src/lib/transferPathModes.ts';\nexport { careerPlayers as fallbackPlayers } from '${p(ROOT)}/src/data/careerPlayers.ts';\n`);
 await build({ entryPoints: [ENTRY], bundle: true, format: 'esm', platform: 'node', outfile: BUNDLE, logLevel: 'error', alias: { '@': path.join(ROOT, 'src') } });
 const page = await import(pathToFileURL(BUNDLE).href);
 
@@ -349,7 +349,41 @@ console.log('5) the chain from the report: Julián Álvarez, Enzo Fernández, Mo
   if (oldRow) fail('the old rule already linked Julián Álvarez and Enzo Fernández, so this harness is not measuring the reported defect');
 }
 
+let missingLampardLink = false;
+console.log('6) the reported Everyday link: Frank Lampard, David Villa, Lionel Messi');
+{
+  let pool = page.fallbackPlayers;
+  if (CONTROL === 'nolampard') {
+    const lampard = pool.find(p => p.name === 'Frank Lampard');
+    const career = lampard?.career.filter(s => s.season !== '2015' || s.club !== 'New York City FC');
+    if (!career || career.length !== lampard.career.length - 1) {
+      console.error('control nolampard must remove exactly one New York City FC season');
+      process.exit(1);
+    }
+    pool = pool.map(p => p === lampard ? { ...p, career } : p);
+  }
+  const keys = page.clubSeasonsOf(pool);
+  const lampardVilla = page.shareClub(keys, 'Frank Lampard', 'David Villa');
+  const villaMessi = page.shareClub(keys, 'David Villa', 'Lionel Messi');
+  missingLampardLink = lampardVilla !== 'New York City FC';
+  if (missingLampardLink) fail('the bundled Everyday pool must link Lampard to Villa at New York City FC');
+  if (villaMessi !== 'Barcelona') fail('the bundled Everyday pool must link Villa to Messi at Barcelona');
+
+  const europe = page.clubSeasonsOf(page.playersUnderRule(pool, 'europe'));
+  const europeLink = page.shareClub(europe, 'Frank Lampard', 'David Villa');
+  if (europeLink !== null) fail('Europe Only must refuse the New York City FC link');
+  console.log(`   Everyday: ${lampardVilla ?? 'refused'} then ${villaMessi ?? 'refused'}. Europe Only: ${europeLink ?? 'refused'}.`);
+}
+
 console.log('');
+if (CONTROL === 'nolampard') {
+  if (failures === 1 && missingLampardLink) {
+    console.log('simTransferPathSeasons control (nolampard): only the reported link failed.');
+    process.exit(0);
+  }
+  console.error('simTransferPathSeasons control (nolampard): expected exactly the reported link to fail.');
+  process.exit(1);
+}
 if (CONTROL) {
   if (failures > 0) { console.log(`simTransferPathSeasons control (${CONTROL}): green. The planted rule was reported (${failures} finding${failures === 1 ? '' : 's'}).`); process.exit(0); }
   console.error(`simTransferPathSeasons control (${CONTROL}): RED. The planted rule went unreported.`); process.exit(1);

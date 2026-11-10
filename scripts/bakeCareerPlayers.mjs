@@ -56,6 +56,7 @@ const SEASON_FLOOR = 3640;
    recorded correction, because the bake would silently undo it. */
 export const CORRECTION_LEDGERS = [
   { file: 'scripts/data/careerFirstClubs.json', migration: 'supabase/migrations/20261001120000_career_first_clubs.sql' },
+  { file: 'scripts/data/careerLampardNycfc2015.json', migration: 'supabase/migrations/20261110190817_career_lampard_nycfc_2015.sql' },
 ];
 
 /** Every recorded correction the pool does not carry. Empty when it carries them all. */
@@ -64,7 +65,10 @@ export function correctionProblems(players, ledger) {
   const byName = new Map(players.map(p => [p.name, p]));
   for (const r of ledger.added ?? []) {
     const p = byName.get(r.player);
-    const has = p?.career.some(s => s.season === r.season && s.club === r.club && s.goals === r.goals && s.appearances === r.appearances);
+    const has = p?.career.some(s => s.season === r.season && s.club === r.club
+      && s.goals === r.goals && s.appearances === r.appearances
+      && (!Object.hasOwn(r, 'assists') || s.assists === r.assists)
+      && (!Object.hasOwn(r, 'marketValue') || s.marketValue === r.marketValue));
     if (!has) problems.push(`${r.player} ${r.season} ${r.club} (${r.appearances} apps, ${r.goals} goals) is recorded as added and is not in the read`);
   }
   for (const c of ledger.changed ?? []) {
