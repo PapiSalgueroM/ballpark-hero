@@ -1,149 +1,441 @@
-name: Footle saved practice Daily rollover fixed
+name: Footle saved practice Daily rollover full qualification
 on:
   push:
-    branches: [codex/footle-practice-daily-rollover-fixed-qa-20261107]
+    branches: [codex/footle-practice-daily-rollover-full-pointer-qa-20261107]
 permissions:
-  actions: read
   contents: read
+  actions: read
 jobs:
-  fixed:
+  qualify:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 45
+    defaults:
+      run:
+        shell: bash
     env:
-      TZ: UTC
       SIM_NETWORK: offline
-      SIM_OFFLINE_RECEIPT: footle-practice-daily-rollover-fixed/offline.log
-      FOOTLE_STAGE: fixed
-      BASE_HEAD: '15b74eb41d984a264c922356d02811f3dd37fef6'
-      BASE_TREE: 'b53eb3efa411e58e5f68b462aeaba87440ce10f2'
-      ORIGINAL_PAGE: '7e78c2ed9cc97f506f53a21d630c02f9adcf3e70'
-      FIXED_PAGE: 'fe0b9bd8896d6f8888b0bbd860cede4e0a2c304c'
-      ORIGINAL_HOOK: '40c250b6ed1a21ee204270aebd437229fe937837'
-      FIXED_HOOK: '17fc817ad6873a09a9bac08d01174a40687d6a8b'
-      TEST_BLOB: '4b908897ce16248a3e5d3c723e6170b94394d580'
-      PLAN_BLOB: '290b0e00efa1b56da3c609fc656f22214dbdb56e'
-      EVIDENCE: footle-practice-daily-rollover-fixed
+      SIM_OFFLINE_RECEIPT: footle-practice-daily-rollover-full/offline.log
+      TZ: UTC
+      SEO_SPLIT_BASE_REF: 3b14650d360b010b25b525de33a5f32f33de2798
+      FOOTLE_PRACTICE_ROLLOVER_PRODUCT_BASE: '15b74eb41d984a264c922356d02811f3dd37fef6'
+      FOOTLE_PRACTICE_ROLLOVER_PRODUCT_BASE_TREE: 'b53eb3efa411e58e5f68b462aeaba87440ce10f2'
+      FOOTLE_PRACTICE_ROLLOVER_FIXED_HEAD: '8182fa2db6e7ae1b36e95b9fcf187d7173a382a9'
+      FOOTLE_PRACTICE_ROLLOVER_FIXED_TREE: 'dc1eca03ab8a7f543f6413a6b0700c574cc585bf'
+      FOOTLE_PRACTICE_ROLLOVER_FIXED_WORKFLOW: '37c388584d13014d691c82c42b18d7387ef39a22'
+      FOOTLE_PRACTICE_ROLLOVER_TEST: '4b908897ce16248a3e5d3c723e6170b94394d580'
+      FOOTLE_PRACTICE_ROLLOVER_PLAN: '290b0e00efa1b56da3c609fc656f22214dbdb56e'
+      FOOTLE_PRACTICE_ROLLOVER_PAGE_BLOB: 'fe0b9bd8896d6f8888b0bbd860cede4e0a2c304c'
+      FOOTLE_PRACTICE_ROLLOVER_HOOK_BLOB: '17fc817ad6873a09a9bac08d01174a40687d6a8b'
+      FOOTLE_PRACTICE_ROLLOVER_HELPER: '9b999f66f519c5e23024d1ed0728b2184191eee3'
+      FOOTLE_PRACTICE_ROLLOVER_OUTER: '35a1de2327dccd5ecb8c2ecba149c312d112d701'
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 2
+          fetch-depth: 4
           persist-credentials: false
       - uses: actions/setup-node@v4
         with:
           node-version: 24.22.1
           cache: npm
-      - name: Capture source and authenticate admitted Footle artifacts
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.4.4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Exact qualified fixed parent and clean product scope
+        run: |
+          set -euo pipefail
+          if grep -En '__[A-Z][A-Z0-9_]*__' .github/workflows/footle-practice-daily-rollover-20261107.yml; then echo 'Unresolved full qualification binding'; exit 1; fi
+          for value in "$FOOTLE_PRACTICE_ROLLOVER_FIXED_HEAD" "$FOOTLE_PRACTICE_ROLLOVER_FIXED_TREE" "$FOOTLE_PRACTICE_ROLLOVER_FIXED_WORKFLOW" "$FOOTLE_PRACTICE_ROLLOVER_TEST" "$FOOTLE_PRACTICE_ROLLOVER_PLAN" "$FOOTLE_PRACTICE_ROLLOVER_PAGE_BLOB" "$FOOTLE_PRACTICE_ROLLOVER_HOOK_BLOB" "$FOOTLE_PRACTICE_ROLLOVER_HELPER" "$FOOTLE_PRACTICE_ROLLOVER_OUTER"; do [[ "$value" =~ ^[a-f0-9]{40}$ ]]; done
+          out=footle-practice-daily-rollover-full
+          test ! -e "$out"
+          mkdir "$out"
+          touch "$out/offline.log"
+          git rev-parse HEAD > "$out/head.txt"
+          git rev-parse 'HEAD^{tree}' > "$out/tree.txt"
+          git ls-files -s > "$out/source-before.txt"
+          sha256sum package.json package-lock.json > "$out/locks-before.txt"
+          git diff --exit-code HEAD -- .
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          import {execFileSync} from 'node:child_process';
+          import {createHash} from 'node:crypto';
+          const out='footle-practice-daily-rollover-full',env=process.env;
+          const base=env.FOOTLE_PRACTICE_ROLLOVER_PRODUCT_BASE,fixed=env.FOOTLE_PRACTICE_ROLLOVER_FIXED_HEAD;
+          const workflow='.github/workflows/footle-practice-daily-rollover-20261107.yml',helper='scripts/qa/playFootlePracticeDailyRollover.mjs';
+          const page='src/pages/Footle.tsx',hook='src/hooks/useGame.ts',test='src/test/footlePracticeDailyRollover.test.tsx',plan='docs/plans/2026-11-07-footle-practice-daily-rollover.md';
+          const git=(...args)=>execFileSync('git',args,{encoding:'utf8',maxBuffer:16*1024*1024});
+          const at=(ref,file)=>git('rev-parse',ref+':'+file).trim();
+          const tree=ref=>git('ls-tree','-r','-z',ref).split('\0').filter(Boolean);
+          const fileOf=row=>row.split('\t')[1],scope=rows=>rows.filter(row=>/^(src|public|scripts)\//.test(fileOf(row))).length;
+          const hash=(kind,body)=>createHash(kind).update(body).digest('hex');
+          const blob=bytes=>createHash('sha1').update('blob '+bytes.length+'\0').update(bytes).digest('hex');
+          const head=git('rev-parse','HEAD').trim(),headTree=git('rev-parse','HEAD^{tree}').trim();
+          assert.equal(head,env.GITHUB_SHA);
+          assert.deepEqual(git('rev-list','--parents','-n','1','HEAD').trim().split(' '),[head,fixed]);
+          assert.deepEqual([git('rev-parse',base+'^{tree}').trim(),git('rev-parse',fixed+'^{tree}').trim()],[env.FOOTLE_PRACTICE_ROLLOVER_PRODUCT_BASE_TREE,env.FOOTLE_PRACTICE_ROLLOVER_FIXED_TREE]);
+          const product=tree(base),prior=tree(fixed),current=tree(head);
+          assert.deepEqual([product.length,prior.length,current.length,scope(product),scope(prior),scope(current)],[5791,5794,5795,4664,4665,4666]);
+          assert.deepEqual(git('diff','--name-status',base,fixed).trim().split('\n').sort(),['M\t'+page,'M\t'+hook,'A\t'+test,'A\t'+plan,'A\t'+workflow].sort());
+          assert.deepEqual(git('diff','--name-status',fixed,head).trim().split('\n').sort(),['M\t'+workflow,'A\t'+helper].sort());
+          const held=prior.filter(row=>fileOf(row)!==workflow);
+          assert.equal(held.length,5793);
+          assert.deepEqual(current.filter(row=>![workflow,helper].includes(fileOf(row))),held);
+          assert.equal(at(fixed,workflow),env.FOOTLE_PRACTICE_ROLLOVER_FIXED_WORKFLOW);
+          assert.deepEqual([at(base,page),at(base,hook)],['7e78c2ed9cc97f506f53a21d630c02f9adcf3e70','40c250b6ed1a21ee204270aebd437229fe937837']);
+          const pins={
+            [page]:env.FOOTLE_PRACTICE_ROLLOVER_PAGE_BLOB,[hook]:env.FOOTLE_PRACTICE_ROLLOVER_HOOK_BLOB,[test]:env.FOOTLE_PRACTICE_ROLLOVER_TEST,[plan]:env.FOOTLE_PRACTICE_ROLLOVER_PLAN,[helper]:env.FOOTLE_PRACTICE_ROLLOVER_HELPER,
+            'src/App.tsx': '8bfedf7aaa1d076e0f0c8e2216c7e46632cd8a33',
+            'src/data/gameRegistry.ts': 'f560b40a74d1468ac72dfde4ee6fec6635a9a255',
+            'public/footle/index.html': 'a54dc5d7b9c7743ca4c45b13244b51a57597672e',
+            'src/hooks/useDailyPuzzle.ts': 'b8a0d6ba268efe0e728c4ee96fbc6c60fcc73846',
+            'src/lib/footlePracticeRun.ts': 'c6c75bbab082c801c631e355b02b900e15fff317',
+            'src/lib/footleUnlimitedSession.ts': '343550b40e3fd7181cc737d387275be944dab1d7',
+            'src/lib/fetchFootlePlayerPool.ts': '356adf65dd26f3a9e7001214bc1e194d7828d0dd',
+            'scripts/lib/offlineTransport.cjs': '0fda542a2649fe5da937c6976fd0f5b6073e74b6',
+            'src/test/footlePractice.test.tsx': '3ffdc6435cdee12f40691a14bd6538de447b7451',
+            'src/test/footleUnlimitedSession.test.tsx': '0fae6dbb1e548095e03478136d38f89490044aac',
+            'src/hooks/useGame.test.ts': '2d407fc5d35148a7f4566d4e5f333184c3618a39',
+            'src/lib/footlePracticeRun.test.ts': '65f80837ff75c72755f567e129bdc4b3ff799ae6',
+            'src/test/footleClueDesk.test.tsx': '0b03d36e35737572036846005d8b2cb9311b9b46',
+            'src/test/footleResultCurrency.test.tsx': '6b809bc195181952d5dc7f1a097abb52e9144ce8',
+            'src/lib/fetchFootlePlayerPool.test.ts': '16503ca35300b38d047a56b0c3a2e41fbe758dd0',
+            'src/lib/dateUtils.ts': '12c9de0ed37b0797492f3e936bcba70bdc03d585',
+            'src/components/game/PlayerSearch.tsx': '5a9be8e9b1adaf6b28deb0a9738430f284c1247b',
+            'src/components/game/GiveUpButton.tsx': '2462260a7b5f1d5d3b70915df2428d5d4397b0a0',
+            'src/test/fixtures/footlePracticePlayers.ts': '3a5ae57bf78e1bfe0e92059bfac1df73da871abd',
+            'vitest.config.ts': 'ed2a9dc677f77dfe95c061064eeff5782b856864',
+            'src/test/setup.ts': 'df00cdf5c54e8c8efc71e46d7585ae76acb4fc8d',
+            'src/data/seoMeta.ts': 'cf7a5142e59b97048d27b5ece9a6588a92073728',
+          };
+          const configs=['index.html','package.json','package-lock.json','vite.config.ts','tailwind.config.ts','postcss.config.js','tsconfig.json','tsconfig.app.json','tsconfig.node.json','bun.lockb','bun.lock'];
+          for (const file of configs) pins[file]=at(base,file);
+          for (const [file,want] of Object.entries(pins)) {
+            assert.equal(at(head,file),want,file);
+            if(file!==helper) assert.equal(at(fixed,file),want,file+' held fixed');
+          }
+          const index=git('ls-files','--stage','-z').split('\0').filter(Boolean).map(row=>row.replace(' 0\t','\t').replace(/^(100(?:644|755)) /,'$1 blob '));
+          assert.deepEqual([...index].sort(),[...current].sort(),'All actual index tuples equal the committed tree');
+          const byFile=new Map(current.map(row=>[fileOf(row),row]));
+          for(const file of [page,hook,test,plan,workflow,helper])assert(byFile.get(file).startsWith('100644 blob '),file+' exact source mode');
+          const physical=git('ls-files','-z').split('\0').filter(Boolean).map(file=>{
+            const bytes=fs.readFileSync(file),stat=fs.lstatSync(file);
+            assert(stat.isFile(),file+' regular source body');
+            const row=byFile.get(file);
+            assert.equal((stat.mode&0o111)!==0,row.startsWith('100755 '),file+' physical source mode');
+            assert.equal(blob(bytes),row.split(' ')[2].split('\t')[0],file+' physical source blob');
+            return {file,bytes:bytes.length,sha256:hash('sha256',bytes)};
+          });
+          assert.equal(physical.length,5795);
+          fs.writeFileSync(out+'/tracked-before.json',JSON.stringify(physical));
+          fs.writeFileSync(out+'/source-join.json',JSON.stringify({status:'passed',head,tree:headTree,parent:fixed,fixedHead:fixed,fixedTree:env.FOOTLE_PRACTICE_ROLLOVER_FIXED_TREE,
+            productBase:base,productBaseTree:env.FOOTLE_PRACTICE_ROLLOVER_PRODUCT_BASE_TREE,trackedRows:5795,fixedTrackedRows:5794,heldFixedRows:5793,
+            sourceRows:4666,cleanSourceRows:4665,rootConfigurations:configs.map(file=>({file,blob:pins[file]})),
+            workflowBlob:at(head,workflow),helperBlob:at(head,helper),pins},null,2));
+          NODE
+      - name: Locked dependencies and all installed version pins
+        run: |
+          set -euo pipefail
+          npm ci 2>&1 | tee footle-practice-daily-rollover-full/install.log
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          const lock=JSON.parse(fs.readFileSync('package-lock.json'));
+          const rows=Object.keys(lock.packages).filter(file=>file.startsWith('node_modules/')&&fs.existsSync(file+'/package.json')).map(file=>[file,JSON.parse(fs.readFileSync(file+'/package.json')).version]);
+          assert.equal(rows.length,521);
+          for(const [file,version] of rows)assert.equal(version,lock.packages[file].version,file);
+          fs.writeFileSync('footle-practice-daily-rollover-full/installed-before.json',JSON.stringify(rows));
+          assert.equal(fs.statSync('footle-practice-daily-rollover-full/offline.log').size,0);
+          NODE
+      - name: Actual direct route React lazy Soccer object and inert snapshot
+        run: |
+          set -euo pipefail
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';import ts from 'typescript';import {JSDOM} from 'jsdom';import {createHash} from 'node:crypto';
+          const out='footle-practice-daily-rollover-full',route='/footle',component='Footle',label='Footle',appText=fs.readFileSync('src/App.tsx','utf8'),catalogText=fs.readFileSync('src/data/gameRegistry.ts','utf8'),app=ts.createSourceFile('src/App.tsx',appText,ts.ScriptTarget.Latest,true,ts.ScriptKind.TSX),catalog=ts.createSourceFile('src/data/gameRegistry.ts',catalogText,ts.ScriptTarget.Latest,true,ts.ScriptKind.TS);assert.deepEqual(app.parseDiagnostics,[]);assert.deepEqual(catalog.parseDiagnostics,[]);
+          const all=(root,predicate)=>{const found=[];const visit=node=>{if(predicate(node))found.push(node);ts.forEachChild(node,visit);};visit(root);return found;},attrs=(node,name)=>node.attributes.properties.filter(p=>ts.isJsxAttribute(p)&&p.name.text===name);
+          const routes=all(app,node=>(ts.isJsxSelfClosingElement(node)||ts.isJsxOpeningElement(node))&&node.tagName.getText(app)==='Route').filter(node=>attrs(node,'path').some(p=>p.initializer&&ts.isStringLiteralLike(p.initializer)&&p.initializer.text===route));assert.equal(routes.length,1,'One actual direct public JSX Route');assert(ts.isJsxSelfClosingElement(routes[0]),'Direct self-closing route');assert.equal(attrs(routes[0],'path').length,1);const elements=attrs(routes[0],'element');assert.equal(elements.length,1);const element=elements[0].initializer;assert(element&&ts.isJsxExpression(element)&&element.expression&&ts.isJsxSelfClosingElement(element.expression));assert.equal(element.expression.tagName.getText(app),component,'Direct Footle mount, no Navigate');
+          const declarations=all(app,node=>ts.isVariableDeclaration(node)&&ts.isIdentifier(node.name)&&node.name.text===component);assert.equal(declarations.length,1);const init=declarations[0].initializer;assert(init&&ts.isCallExpression(init)&&ts.isIdentifier(init.expression)&&init.expression.text==='lazy');assert.equal(init.arguments.length,1);const factory=init.arguments[0];assert(ts.isArrowFunction(factory)&&factory.parameters.length===0);const load=factory.body;assert(ts.isCallExpression(load)&&load.expression.kind===ts.SyntaxKind.ImportKeyword&&load.arguments.length===1&&ts.isStringLiteralLike(load.arguments[0]));assert.equal(load.arguments[0].text,'./pages/Footle');const reactLazy=all(app,node=>ts.isImportDeclaration(node)&&ts.isStringLiteralLike(node.moduleSpecifier)&&node.moduleSpecifier.text==='react'&&node.importClause?.namedBindings&&ts.isNamedImports(node.importClause.namedBindings)).flatMap(node=>node.importClause.namedBindings.elements).filter(node=>node.name.text==='lazy'&&(node.propertyName?.text??node.name.text)==='lazy');assert.equal(reactLazy.length,1,'lazy is the actual named React import');
+          const prop=(node,name)=>{const found=node.properties.filter(p=>ts.isPropertyAssignment(p)&&(ts.isIdentifier(p.name)||ts.isStringLiteralLike(p.name))&&p.name.text===name);assert(found.length<=1,'No duplicate catalog property: '+name);return found[0]?.initializer;},defs=all(catalog,node=>ts.isVariableDeclaration(node)&&ts.isIdentifier(node.name)&&node.name.text==='CATEGORIES');assert.equal(defs.length,1);const categories=defs[0].initializer;assert(categories&&ts.isArrayLiteralExpression(categories));const soccer=categories.elements.filter(node=>ts.isObjectLiteralExpression(node)&&prop(node,'title')&&ts.isStringLiteralLike(prop(node,'title'))&&prop(node,'title').text==='Soccer');assert.equal(soccer.length,1);const games=prop(soccer[0],'games');assert(games&&ts.isArrayLiteralExpression(games));const entries=games.elements.filter(node=>ts.isObjectLiteralExpression(node)&&prop(node,'path')&&ts.isStringLiteralLike(prop(node,'path'))&&prop(node,'path').text===route);assert.equal(entries.length,1,'One actual uncommented Soccer catalog object');const catalogLabel=prop(entries[0],'label');assert(catalogLabel&&ts.isStringLiteralLike(catalogLabel));assert.equal(catalogLabel.text,label,'Exact actual Soccer label');
+          const file='public/footle/index.html',bytes=fs.readFileSync(file);assert.equal(bytes.length,21873);const dom=new JSDOM(bytes.toString('utf8')),doc=dom.window.document,canonicals=[...doc.querySelectorAll('link[rel]')].filter(node=>node.getAttribute('rel').toLowerCase().split(/\s+/).includes('canonical'));assert.equal(canonicals.length,1);assert.equal(canonicals[0].getAttribute('href'),'https://douknowball.com'+route);const snapshots=[...doc.querySelectorAll('#dukb-snapshot')];assert.equal(snapshots.length,1);const snapshot=snapshots[0],snapshotText=snapshot.textContent.trim();assert(snapshotText.length>500,'Actual readable saved game content');const headings=[...snapshot.querySelectorAll('h1')].map(node=>node.textContent.trim().replace(/\s+/g,' ').toUpperCase());assert(headings.includes('FOOTLE'),'Actual saved game heading');const metas=[...doc.querySelectorAll('meta')],retired=metas.filter(node=>['dukb-retired-from','dukb-retired-to'].includes((node.getAttribute('name')||'').toLowerCase())),refresh=metas.filter(node=>(node.getAttribute('http-equiv')||'').trim().toLowerCase()==='refresh'),robots=metas.filter(node=>['robots','googlebot','bingbot'].includes((node.getAttribute('name')||'').toLowerCase()));assert.equal(retired.length,0,'No actual retired-route markers');assert.equal(refresh.length,0,'No actual redirect meta');assert(robots.every(node=>!/(?:^|[\s,])(?:noindex|none)(?:[\s,]|$)/i.test(node.getAttribute('content')||'')),'Active snapshot remains indexable');
+          fs.copyFileSync(file,out+'/active-snapshot.html');fs.writeFileSync(out+'/active-route-preflight.json',JSON.stringify({status:'passed',route,component,label,routeNode:routes[0].getText(app),reactLazyImport:reactLazy[0].parent.parent.parent.getText(app),lazyDeclaration:declarations[0].getText(app),catalogObject:entries[0].getText(catalog),snapshot:{file,bytes:bytes.length,sha256:createHash('sha256').update(bytes).digest('hex'),canonical:canonicals[0].getAttribute('href'),snapshotTextLength:snapshotText.length,headings,retiredMarkers:retired.length,metaRefresh:refresh.length,robots:robots.map(node=>({name:node.getAttribute('name'),content:node.getAttribute('content')}))},parsers:{typescript:ts.version,html:'Inert JSDOM, scripts/resources not enabled'},limits:'Actual AST nodes and inert DOM elements, never comments or a dormant Page file. Active source/public entry preflight only. No saved practice Daily rollover reproduction, game test, App fix, build, browser journey, real-data truth or release claim. Native route reachability remains unqualified.'},null,2));dom.window.close();console.log('PASS actual direct Footle route, React lazy Page import, labeled Soccer catalog object and indexable nonredirect snapshot');
+          NODE
+      - name: Proper App types
+        run: |
+          set -euo pipefail
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee footle-practice-daily-rollover-full/types.log
+      - name: Authenticate completed active original fixed and physical controls archives
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
-          test ! -e "$EVIDENCE"
-          mkdir "$EVIDENCE"
-          touch "$SIM_OFFLINE_RECEIPT"
-          git rev-parse HEAD > "$EVIDENCE/head.txt"
-          git rev-parse 'HEAD^{tree}' > "$EVIDENCE/tree.txt"
-          git ls-files -s > "$EVIDENCE/source-before.txt"
-          sha256sum package.json package-lock.json > "$EVIDENCE/locks-before.txt"
-          git diff --exit-code HEAD -- .
-          git fetch --no-tags --depth=1 origin "$BASE_HEAD"
-          cat > "$EVIDENCE/qualify.mjs" <<'NODE'
-          import assert from 'node:assert/strict';
+          node --input-type=module <<'NODE'
           import fs from 'node:fs';
           import path from 'node:path';
-          import { createHash } from 'node:crypto';
-          import { execFileSync, spawnSync } from 'node:child_process';
-          
-          const stage = process.env.FOOTLE_STAGE;
-          const out = process.env.EVIDENCE;
-          const page = 'src/pages/Footle.tsx';
-          const hook = 'src/hooks/useGame.ts';
-          const test = 'src/test/footlePracticeDailyRollover.test.tsx';
-          const plan = 'docs/plans/2026-11-07-footle-practice-daily-rollover.md';
-          const workflow = '.github/workflows/footle-practice-daily-rollover-20261107.yml';
-          const { BASE_HEAD: parent, BASE_TREE: parentTree, ORIGINAL_PAGE: originalPage, FIXED_PAGE: fixedPage, ORIGINAL_HOOK: originalHook, FIXED_HOOK: fixedHook, TEST_BLOB: testBlob, PLAN_BLOB: planBlob } = process.env;
-          const refs = {"original":{"run":42372278434,"job":128402686625,"steps":12,"artifact":13574116606,"name":"footle-practice-daily-rollover-original-42372278434","head":"88ea45f429e44fb7174fa3f591bccea29a6647d6","tree":"d7a4261b66840811c85d961f4b75133a30157e80","workflow":"0c85d16199094da0e93872c2596db1c9a9e77c84","zipBytes":1012534,"zipSHA256":"f3324359cdbf179319cdd56ba3d14094115015367801971791e02886bf42f56b","bodies":20,"files":{"head.txt":"7b6f1c7e49de44b9dd2aeb348bb3b06bbd6097a24da9b790e812508afb4d13f6","tree.txt":"86a218f5635bdfaef64d95fd3681982930259de8c3f8cb2aa76b2411d845a144","source-receipt.json":"49e877ce618eb4edb80b14794bf3cd1bc5776a336ec5b811e8afa79a126ee2cb","original-result.json":"4aa97e369df279403ab110a79ba19f92e1fe58aff2fc402d2b42ee3fa09e29de","public-cases.raw.json":"f4cf10f6244c8ad9ce66df7c1be66334b07e9e52e7db18286a5ece4372b0ce0f","vitest.json":"2d0a6c81e840072774e709cdf2e6d3a88381df2d5a3fa5357a34e44e1163268f","vitest-exit.txt":"4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865","source-before.txt":"9afa47fddf7adb4268d23c8b5cd327675230aa35c1938705f6e86df4bedcad28","source-after.txt":"9afa47fddf7adb4268d23c8b5cd327675230aa35c1938705f6e86df4bedcad28","locks-before.txt":"d316e23dae0f11f4fabcf8edd97204c9b780c6da8a0f6307c86940cbdd28e3d7","locks-after.txt":"d316e23dae0f11f4fabcf8edd97204c9b780c6da8a0f6307c86940cbdd28e3d7","offline.log":"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855","types.log":"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"},"independentAuditSHA256":"6ef4bc42d276d5dfcc7071f8fe46292aafd63a417a07294720ce8ff8fad439d5"}};
-          const options = { maxBuffer: 64 * 1024 * 1024 };
-          const cmd = (program, args) => execFileSync(program, args, options);
-          const git = (...args) => cmd('git', args).toString('utf8');
-          const hash = (algorithm, bytes) => createHash(algorithm).update(bytes).digest('hex');
-          const sha = bytes => hash('sha256', bytes);
-          const blob = bytes => hash('sha1', Buffer.concat([Buffer.from('blob ' + bytes.length + '\0'), bytes]));
-          const read = file => fs.readFileSync(path.join(out, file));
-          const json = file => JSON.parse(read(file));
-          const write = (file, body) => fs.writeFileSync(path.join(out, file), body);
-          const save = (file, value) => write(file, JSON.stringify(value, null, 2) + '\n');
-          const sorted = rows => [...rows].sort();
-          const tree = ref => new Map(git('ls-tree', '-r', '-z', ref).split('\0').filter(Boolean).map(row => {
-            const match = /^(100(?:644|755)) blob ([a-f0-9]{40})\t(.+)$/.exec(row);
-            assert(match, row);
-            return [match[3], [match[1], match[2]]];
-          }));
-          const source = () => ({
-            head: git('rev-parse', 'HEAD').trim(), tree: git('rev-parse', 'HEAD^{tree}').trim(), parent, parentTree,
-            page: fixedPage, hook: fixedHook, test: testBlob, plan: planBlob, workflow: git('rev-parse', 'HEAD:' + workflow).trim(),
-            trackedRows: 5794, heldParentRows: 5789, sourceRows: 4665,
+          import assert from 'node:assert/strict';
+          import {execFileSync} from 'node:child_process';
+          import {createHash} from 'node:crypto';
+          const out='footle-practice-daily-rollover-full',env=process.env;
+          const workflow='.github/workflows/footle-practice-daily-rollover-20261107.yml',roleNames=['preflight','original','fixed','controls'];
+          const bindings={"preflight":{"run":42370765351,"job":128398221295,"jobName":"preflight","stepCount":11,"attempt":1,"head":"bfd02e35de43a6beaf5b0ab0c1a41d6b956d7af0","tree":"c12e9e96eb1f730c0b7ba5c4e568106336c84527","workflow":"d7f429698bcc3fd4be25e1901a86c7d07b1c93f5","branch":"codex/footle-practice-daily-rollover-preflight-qa-20261107","artifact":13573029999,"artifactName":"footle-practice-daily-rollover-active-preflight-42370765351","zipBytes":1013219,"zipSHA256":"626254481d99a3744f257db8bc3a55ccd6179217f660d7857ab2f56956640bc0","bodyBytes":2670741,"bodies":[{"file":"active-route-preflight.json","bytes":1227,"sha256":"d0d075fe58dede3ccb9bac846ad0b044c3bc1c0fa0303a94a87d3e42b31715a1"},{"file":"active-snapshot.html","bytes":21873,"sha256":"ac1fd903f79599a6b221fb71def37684d8964db25f683470e995eb2e4fdd0911"},{"file":"final-holds.json","bytes":396,"sha256":"a7f902787eaefac0aced50b16954b8ff56bde8b2067c9c84d90b9dc677e87185"},{"file":"head.txt","bytes":41,"sha256":"9bdec894ae10065b8b00a24ae464f29fb368cd254b353428f0c085cd1cddb8a5"},{"file":"install.log","bytes":1391,"sha256":"ed68e342adc63f5e3c1b84b2569b1a840c7c47b34cc3c8f134cc97d5bd0671ba"},{"file":"installed-after.json","bytes":22175,"sha256":"1268d6ef069c4189836716fed6ebe4dd324c661cacf53981b6a227608aa383e8"},{"file":"installed-before.json","bytes":22175,"sha256":"1268d6ef069c4189836716fed6ebe4dd324c661cacf53981b6a227608aa383e8"},{"file":"locks-after.txt","bytes":163,"sha256":"d316e23dae0f11f4fabcf8edd97204c9b780c6da8a0f6307c86940cbdd28e3d7"},{"file":"locks-before.txt","bytes":163,"sha256":"d316e23dae0f11f4fabcf8edd97204c9b780c6da8a0f6307c86940cbdd28e3d7"},{"file":"offline.log","bytes":0,"sha256":"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"},{"file":"source-after.txt","bytes":503134,"sha256":"369b500fceb852a2d6de638363bd42e24b6f0a5e3debfcd4727564aeca286d10"},{"file":"source-before.txt","bytes":503134,"sha256":"369b500fceb852a2d6de638363bd42e24b6f0a5e3debfcd4727564aeca286d10"},{"file":"source-join.json","bytes":3674,"sha256":"c4f085798a18c29d2de1371aac3e0461e8d49f37e6cbbefb419758f87a1d6ff0"},{"file":"tracked-after.json","bytes":795577,"sha256":"d995a6f43684c826f2aa22eae297fdb3c54f52e85ee90321dbec360b543ec7a8"},{"file":"tracked-before.json","bytes":795577,"sha256":"d995a6f43684c826f2aa22eae297fdb3c54f52e85ee90321dbec360b543ec7a8"},{"file":"tree.txt","bytes":41,"sha256":"469d1c2aa560ef5a4d3abfbf4ad014369e5be86825fc7d3391d608e04615cdcb"}],"independentAuditSHA256":"59aac55234e9f9ee6a0427d9628dfe7a2eda0b7e7d6245c36385a5c3b505dab8"},"original":{"run":42372278434,"job":128402686625,"jobName":"original","stepCount":12,"attempt":1,"head":"88ea45f429e44fb7174fa3f591bccea29a6647d6","tree":"d7a4261b66840811c85d961f4b75133a30157e80","workflow":"0c85d16199094da0e93872c2596db1c9a9e77c84","branch":"codex/footle-practice-daily-rollover-original-qa-20261107","artifact":13574116606,"artifactName":"footle-practice-daily-rollover-original-42372278434","zipBytes":1012534,"zipSHA256":"f3324359cdbf179319cdd56ba3d14094115015367801971791e02886bf42f56b","bodyBytes":2814206,"bodies":[{"file":"head.txt","bytes":41,"sha256":"7b6f1c7e49de44b9dd2aeb348bb3b06bbd6097a24da9b790e812508afb4d13f6"},{"file":"install.log","bytes":1391,"sha256":"71011704a4f508e7c9c0b1fb4507e5590a6e6b7e1810254bd6d0865ff31b468c"},{"file":"installed-after.json","bytes":22175,"sha256":"1268d6ef069c4189836716fed6ebe4dd324c661cacf53981b6a227608aa383e8"},{"file":"installed-before.json","bytes":22175,"sha256":"1268d6ef069c4189836716fed6ebe4dd324c661cacf53981b6a227608aa383e8"},{"file":"locks-after.txt","bytes":163,"sha256":"d316e23dae0f11f4fabcf8edd97204c9b780c6da8a0f6307c86940cbdd28e3d7"},{"file":"locks-before.txt","bytes":163,"sha256":"d316e23dae0f11f4fabcf8edd97204c9b780c6da8a0f6307c86940cbdd28e3d7"},{"file":"offline.log","bytes":0,"sha256":"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"},{"file":"original-result.json","bytes":3018,"sha256":"4aa97e369df279403ab110a79ba19f92e1fe58aff2fc402d2b42ee3fa09e29de"},{"file":"physical.mjs","bytes":1368,"sha256":"8260e1972fef30ff36a419cc16ee020a6057945b65094b9369f0b4c1aec2c3a3"},{"file":"public-cases.raw.json","bytes":416182,"sha256":"f4cf10f6244c8ad9ce66df7c1be66334b07e9e52e7db18286a5ece4372b0ce0f"},{"file":"source-after.txt","bytes":503336,"sha256":"9afa47fddf7adb4268d23c8b5cd327675230aa35c1938705f6e86df4bedcad28"},{"file":"source-before.txt","bytes":503336,"sha256":"9afa47fddf7adb4268d23c8b5cd327675230aa35c1938705f6e86df4bedcad28"},{"file":"source-receipt.json","bytes":2196,"sha256":"49e877ce618eb4edb80b14794bf3cd1bc5776a336ec5b811e8afa79a126ee2cb"},{"file":"tracked-after.json","bytes":656824,"sha256":"1aefcdc04e7fa7ca73ea43eb3b0ea1db77d3bb8855d42354c44d032c93faaf38"},{"file":"tracked-before.json","bytes":656824,"sha256":"1aefcdc04e7fa7ca73ea43eb3b0ea1db77d3bb8855d42354c44d032c93faaf38"},{"file":"tree.txt","bytes":41,"sha256":"86a218f5635bdfaef64d95fd3681982930259de8c3f8cb2aa76b2411d845a144"},{"file":"types.log","bytes":0,"sha256":"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"},{"file":"vitest-exit.txt","bytes":2,"sha256":"4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"},{"file":"vitest.json","bytes":19689,"sha256":"2d0a6c81e840072774e709cdf2e6d3a88381df2d5a3fa5357a34e44e1163268f"},{"file":"vitest.log","bytes":5282,"sha256":"19b25176a7c0ccf0e7e7333e21e7a52769acd4a3f9bd316b9c6c1643ef2c8d2f"}],"independentAuditSHA256":"6ef4bc42d276d5dfcc7071f8fe46292aafd63a417a07294720ce8ff8fad439d5"},"fixed":{"run":42762361123,"job":129650819535,"jobName":"fixed","stepCount":12,"attempt":1,"head":"8182fa2db6e7ae1b36e95b9fcf187d7173a382a9","tree":"dc1eca03ab8a7f543f6413a6b0700c574cc585bf","workflow":"37c388584d13014d691c82c42b18d7387ef39a22","branch":"codex/footle-practice-daily-rollover-fixed-qa-20261107","artifact":13738475972,"artifactName":"footle-practice-daily-rollover-fixed-42762361123","zipBytes":2027497,"zipSHA256":"14f5421845e706302280d44f268558a297fde19b5e692683e31f5f56d46fd202","bodyBytes":3830570,"bodies":[{"file":"admission.json","bytes":3020,"sha256":"7e1577210ce5b381c003e01aa00727d0d4b1b0f07075c8c1de884db97aea03d3"},{"file":"fixed/public-cases.raw.json","bytes":400361,"sha256":"2144a7989776a6847d384e828fbeaf69a523a7da64ca2d4a13c4560745839788"},{"file":"fixed/result.json","bytes":360,"sha256":"ac4b3c00399dcdbf58a8ccdc06b6dfc9f20ea37b8c5d84d3f7236380509c403f"},{"file":"fixed/vitest-exit.txt","bytes":2,"sha256":"9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"},{"file":"fixed/vitest.json","bytes":19326,"sha256":"da4f6f249b6493386530d8c80b4bcdd5f7554bc393ffcb3c41d1a58d90d05c55"},{"file":"fixed/vitest.log","bytes":4104,"sha256":"4653fc03da4dbdbcd91b09f744eb3c265d26db6a88ebca73a8f78d7806310f2c"},{"file":"head.txt","bytes":41,"sha256":"3622a33ebefb2b46ee3cdca016230b2a165ea1a821f5549b6b5819ea496b63c0"},{"file":"install.log","bytes":1391,"sha256":"3fc9028c9a856f770d3fb723a02a9c61f3afefcacbbadfdf380fde9735a72a1e"},{"file":"installed-after.json","bytes":22175,"sha256":"1268d6ef069c4189836716fed6ebe4dd324c661cacf53981b6a227608aa383e8"},{"file":"installed-before.json","bytes":22175,"sha256":"1268d6ef069c4189836716fed6ebe4dd324c661cacf53981b6a227608aa383e8"},{"file":"locks-after.txt","bytes":163,"sha256":"d316e23dae0f11f4fabcf8edd97204c9b780c6da8a0f6307c86940cbdd28e3d7"},{"file":"locks-before.txt","bytes":163,"sha256":"d316e23dae0f11f4fabcf8edd97204c9b780c6da8a0f6307c86940cbdd28e3d7"},{"file":"offline.log","bytes":0,"sha256":"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"},{"file":"physical.mjs","bytes":1368,"sha256":"8260e1972fef30ff36a419cc16ee020a6057945b65094b9369f0b4c1aec2c3a3"},{"file":"qualify.mjs","bytes":18196,"sha256":"76469df83df55960191c4888c14ea7a724963771e9ceeba9292eff75d8311b8a"},{"file":"reference-original-metadata.json","bytes":1755,"sha256":"8a7aa8fb32d45c5af7074c373c18bb920468b9bae88f78f1321fae2a68ea2864"},{"file":"reference-original.zip","bytes":1012534,"sha256":"f3324359cdbf179319cdd56ba3d14094115015367801971791e02886bf42f56b"},{"file":"source-after.txt","bytes":503336,"sha256":"6ff40ed8ca63fb8209ef129a3441b90ae8c8f79ee25852778c808b416fac0aeb"},{"file":"source-before.txt","bytes":503336,"sha256":"6ff40ed8ca63fb8209ef129a3441b90ae8c8f79ee25852778c808b416fac0aeb"},{"file":"source-receipt.json","bytes":3075,"sha256":"b8d429a06f09eced83c686be9e9511a206c704e349cc8367b78debff0014fdda"},{"file":"tracked-after.json","bytes":656824,"sha256":"22331c467bdf537e8abee8d560c85d998cc64a75670e986ab6216b630cd1ac5f"},{"file":"tracked-before.json","bytes":656824,"sha256":"22331c467bdf537e8abee8d560c85d998cc64a75670e986ab6216b630cd1ac5f"},{"file":"tree.txt","bytes":41,"sha256":"94cec5edde14642368a7d8db735c1ea48bbdc35a274be55a0fd0736a62916227"},{"file":"types.log","bytes":0,"sha256":"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"}],"independentAuditSHA256":"6b4e84c8b08e58e8fa03427820a4740e865c179af4a834e3f0acbebff0b4ae15"},"controls":{"run":42762970118,"job":129652769830,"jobName":"controls","stepCount":12,"attempt":1,"head":"3d2e49351089708ef3be747d602b59c320ebbf16","tree":"36fc4b5abda4bc4c65fa3ec501b52fda97530c51","workflow":"91c42b0d5ff002af642d575baf52b0a21493a478","branch":"codex/footle-practice-daily-rollover-controls-qa-20261107","artifact":13738333067,"artifactName":"footle-practice-daily-rollover-controls-42762970118","zipBytes":4096348,"zipSHA256":"9e069f57bec9794ddb67e954078cc1e686530ae9df07ad7bd06b000e06b83f93","bodyBytes":6733065,"bodies":[{"file":"admission.json","bytes":5831,"sha256":"9b04f2c40c4e3bc65af35e5bb84460b17fbc5833ba94c966e27e94c23f2b4f4c"},{"file":"fixed/public-cases.raw.json","bytes":400361,"sha256":"2144a7989776a6847d384e828fbeaf69a523a7da64ca2d4a13c4560745839788"},{"file":"fixed/result.json","bytes":359,"sha256":"1ee947ef3da577eee034676231e25b2c982b5ff2534e76ed87f7aa9c01b7b916"},{"file":"fixed/vitest-exit.txt","bytes":2,"sha256":"9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"},{"file":"fixed/vitest.json","bytes":19308,"sha256":"64d6c0c3a8e41ff0767463610511497b4d493eb6e072d8a28994c76a7f5adb5a"},{"file":"fixed/vitest.log","bytes":4106,"sha256":"64ddf88b008362b785063707961bedbdf3aed2ec26076ff7053e6b9fd66fe75b"},{"file":"head.txt","bytes":41,"sha256":"bbf2530272ed91b1adb1232cb2f441321891906bbd5bba7ea776e26ffafb2c13"},{"file":"install.log","bytes":1391,"sha256":"3fc9028c9a856f770d3fb723a02a9c61f3afefcacbbadfdf380fde9735a72a1e"},{"file":"installed-after.json","bytes":22175,"sha256":"1268d6ef069c4189836716fed6ebe4dd324c661cacf53981b6a227608aa383e8"},{"file":"installed-before.json","bytes":22175,"sha256":"1268d6ef069c4189836716fed6ebe4dd324c661cacf53981b6a227608aa383e8"},{"file":"locks-after.txt","bytes":163,"sha256":"d316e23dae0f11f4fabcf8edd97204c9b780c6da8a0f6307c86940cbdd28e3d7"},{"file":"locks-before.txt","bytes":163,"sha256":"d316e23dae0f11f4fabcf8edd97204c9b780c6da8a0f6307c86940cbdd28e3d7"},{"file":"offline.log","bytes":0,"sha256":"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"},{"file":"original/public-cases.raw.json","bytes":416182,"sha256":"f4cf10f6244c8ad9ce66df7c1be66334b07e9e52e7db18286a5ece4372b0ce0f"},{"file":"original/result.json","bytes":363,"sha256":"9251fd47c0d65e8d45ec676c0d0627a2968030aa23e8753ee454076874bdcc0e"},{"file":"original/vitest-exit.txt","bytes":2,"sha256":"4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"},{"file":"original/vitest.json","bytes":19676,"sha256":"de009ff33a996e0276414ac6322f722faceacc2a7ce47ed5585d98cdd07bd8a0"},{"file":"original/vitest.log","bytes":5623,"sha256":"4af0efa9b3e9898a86a64f378ee6db21882f33f4c0be00a324ad9a11e0b8907a"},{"file":"physical-product-control.json","bytes":663,"sha256":"1a42793f0103b35181090ec32cb545af0e13d6e98af5646e886524986dab520f"},{"file":"physical.mjs","bytes":1368,"sha256":"8260e1972fef30ff36a419cc16ee020a6057945b65094b9369f0b4c1aec2c3a3"},{"file":"qualify.mjs","bytes":19896,"sha256":"6c81823cc28c055d669b723c2d94dcf2e2a4f9de2e625de081b72e6094a957c9"},{"file":"reference-fixed-metadata.json","bytes":1857,"sha256":"39dd2d0b857ef4f40cd86a6649bedd690779bd91a9e66037c5d0b3bef97f8c56"},{"file":"reference-fixed.zip","bytes":2027497,"sha256":"14f5421845e706302280d44f268558a297fde19b5e692683e31f5f56d46fd202"},{"file":"reference-original-metadata.json","bytes":1755,"sha256":"8a7aa8fb32d45c5af7074c373c18bb920468b9bae88f78f1321fae2a68ea2864"},{"file":"reference-original.zip","bytes":1012534,"sha256":"f3324359cdbf179319cdd56ba3d14094115015367801971791e02886bf42f56b"},{"file":"restored/public-cases.raw.json","bytes":400361,"sha256":"2144a7989776a6847d384e828fbeaf69a523a7da64ca2d4a13c4560745839788"},{"file":"restored/result.json","bytes":362,"sha256":"e038624a14cd17ee276fba8f17f3ccc9a1df25bf81472a743d9d1f02577d99bf"},{"file":"restored/vitest-exit.txt","bytes":2,"sha256":"9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"},{"file":"restored/vitest.json","bytes":19342,"sha256":"100679154680bd88135cc392ad012b8150c54f77d5d6d9e3469f143e8d636d59"},{"file":"restored/vitest.log","bytes":4109,"sha256":"96d338b765bfb59b38aa54d71b15d555c8f195edca6e5405c8cc69c84f7c828a"},{"file":"source-after.txt","bytes":503336,"sha256":"84e6b88289865c589a013560971e94bcf6281f6a1657c1a06627bbebc96a29c0"},{"file":"source-before.txt","bytes":503336,"sha256":"84e6b88289865c589a013560971e94bcf6281f6a1657c1a06627bbebc96a29c0"},{"file":"source-receipt.json","bytes":5037,"sha256":"77eea250874e583101f65115e5f4bddfc13c80fb8d63a09f1dc902f06b376387"},{"file":"tracked-after.json","bytes":656824,"sha256":"197ec5f147b0926c1c10d6845a4f5b8601fbe39bfd5f17e0bb2e1fdf3f79a926"},{"file":"tracked-before.json","bytes":656824,"sha256":"197ec5f147b0926c1c10d6845a4f5b8601fbe39bfd5f17e0bb2e1fdf3f79a926"},{"file":"tree.txt","bytes":41,"sha256":"19f289c3464dd95698d5160b545a87e21d395b2883b73aac73815c8920ac8623"},{"file":"types.log","bytes":0,"sha256":"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"}],"independentAuditSHA256":"4d21b0e82e135bf86bdacbb7a7b83e25957c0d14a8c499c1c6bd646471245858"}};
+          assert.deepEqual(Object.keys(bindings).sort(),[...roleNames].sort());
+          const hash=bytes=>createHash('sha256').update(bytes).digest('hex');
+          const read=(role,file)=>fs.readFileSync(path.join(out,role+'-reference',file));
+          const json=(role,file)=>JSON.parse(read(role,file));
+          const packet=(role,file)=>read(role,'packet/'+file);
+          const packetJSON=(role,file)=>JSON.parse(packet(role,file));
+          const command=(bin,...args)=>execFileSync(bin,args,{maxBuffer:256*1024*1024});
+          const tuple=(file,bytes)=>({file,bytes:bytes.length,sha256:hash(bytes)});
+          const safe=name=>typeof name==='string'&&/^[A-Za-z0-9._/-]+$/.test(name)&&name.split('/').every(part=>part&&part!=='.'&&part!=='..');
+          const walk=(dir,prefix='')=>fs.readdirSync(dir,{withFileTypes:true}).flatMap(entry=>{
+            const file=prefix+entry.name;
+            if(entry.isDirectory())return walk(path.join(dir,entry.name),file+'/');
+            assert(entry.isFile()&&!entry.isSymbolicLink(),file+' regular retained body');
+            return [file];
           });
-          const zip = role => path.join(out, 'reference-' + role + '.zip');
-          const refFile = (role, name) => cmd('unzip', ['-p', zip(role), name]);
-          
-          function authenticate(role, pin) {
-            const prefix = 'repos/PapiSalgueroM/ballpark-hero/actions/';
-            const api = endpoint => JSON.parse(cmd('gh', ['api', prefix + endpoint]));
-            const run = api('runs/' + pin.run);
-            const jobs = api('runs/' + pin.run + '/jobs?per_page=100').jobs;
-            const artifact = api('artifacts/' + pin.artifact);
-            assert.deepEqual([run.id, run.status, run.conclusion, run.event, run.run_attempt, run.path, run.head_sha, run.head_commit.tree_id, run.repository.full_name],
-              [pin.run, 'completed', 'success', 'push', 1, workflow, pin.head, pin.tree, 'PapiSalgueroM/ballpark-hero']);
-            assert.equal(jobs.length, 1);
-            assert.deepEqual([jobs[0].id, jobs[0].conclusion, jobs[0].head_sha, jobs[0].steps.length], [pin.job, 'success', pin.head, pin.steps]);
-            assert(jobs[0].steps.every(step => step.conclusion === 'success'));
-            assert.deepEqual([artifact.id, artifact.name, artifact.expired, artifact.size_in_bytes, artifact.digest, artifact.workflow_run.id, artifact.workflow_run.head_sha],
-              [pin.artifact, pin.name, false, pin.zipBytes, 'sha256:' + pin.zipSHA256, pin.run, pin.head]);
-            const bytes = cmd('gh', ['api', prefix + 'artifacts/' + pin.artifact + '/zip']);
-            assert.deepEqual([bytes.length, sha(bytes)], [pin.zipBytes, pin.zipSHA256]);
-            fs.writeFileSync(zip(role), bytes);
-            const names = cmd('unzip', ['-Z1', zip(role)]).toString().trimEnd().split('\n');
-            assert.equal(new Set(names).size, names.length);
-            for (const name of names) {
-              assert(!name.startsWith('/') && !name.includes('\\') && name.replace(/\/$/, '').split('/').every(part => part && part !== '.' && part !== '..'), name);
+          const source=JSON.parse(fs.readFileSync(out+'/source-join.json'));
+          const receipts={};
+          for(const role of roleNames){
+            const pin=bindings[role],dir=path.join(out,role+'-reference'),archive=path.join(dir,'artifact.zip');
+            assert([pin.run,pin.job,pin.artifact,pin.zipBytes,pin.bodyBytes,pin.stepCount,pin.attempt].every(value=>Number.isSafeInteger(value)&&value>0));
+            assert([pin.head,pin.tree,pin.workflow].every(value=>/^[a-f0-9]{40}$/.test(value)));
+            assert(/^[a-f0-9]{64}$/.test(pin.zipSHA256) && /^[a-f0-9]{64}$/.test(pin.independentAuditSHA256));
+            assert(pin.branch.startsWith('codex/')&&pin.artifactName.endsWith('-'+pin.run)&&pin.jobName);
+            assert(Array.isArray(pin.bodies)&&pin.bodies.length>0);
+            assert(pin.bodies.every(row=>safe(row.file)&&Number.isSafeInteger(row.bytes)&&row.bytes>=0&&/^[a-f0-9]{64}$/.test(row.sha256)));
+            const names=pin.bodies.map(row=>row.file).sort();
+            assert.equal(new Set(names).size,names.length);
+            assert.equal(pin.bodies.reduce((sum,row)=>sum+row.bytes,0),pin.bodyBytes);
+            fs.mkdirSync(dir);
+            const endpoint='repos/PapiSalgueroM/ballpark-hero/actions/';
+            for(const [file,url] of Object.entries({'run.json':'runs/'+pin.run,'jobs.json':'runs/'+pin.run+'/jobs?per_page=100',
+              'artifact.json':'artifacts/'+pin.artifact,'artifact.zip':'artifacts/'+pin.artifact+'/zip'}))
+              fs.writeFileSync(path.join(dir,file),command('gh','api',endpoint+url),{flag:'wx'});
+            const run=json(role,'run.json'),jobs=json(role,'jobs.json'),meta=json(role,'artifact.json');
+            const artifact=meta.artifacts?.[0]??meta;
+            if(meta.artifacts)assert.equal(meta.artifacts.length,1);
+            assert.deepEqual([run.id,run.status,run.conclusion,run.head_sha,run.head_commit.tree_id,run.event,run.repository.full_name,run.path,run.head_branch,run.run_attempt],
+              [pin.run,'completed','success',pin.head,pin.tree,'push','PapiSalgueroM/ballpark-hero',workflow,pin.branch,pin.attempt]);
+            assert.equal(jobs.jobs.length,1);
+            const job=jobs.jobs[0];
+            assert.deepEqual([job.id,job.run_id,job.head_sha,job.name,job.status,job.conclusion,job.run_attempt,job.steps.length],
+              [pin.job,pin.run,pin.head,pin.jobName,'completed','success',pin.attempt,pin.stepCount]);
+            assert(job.steps.every(row=>row.status==='completed'&&row.conclusion==='success'));
+            assert.deepEqual([artifact.id,artifact.name,artifact.expired,artifact.size_in_bytes,artifact.digest,artifact.workflow_run.id,artifact.workflow_run.head_sha,artifact.workflow_run.head_branch],
+              [pin.artifact,pin.artifactName,false,pin.zipBytes,'sha256:'+pin.zipSHA256,pin.run,pin.head,pin.branch]);
+            const archiveBytes=read(role,'artifact.zip');
+            assert.deepEqual([archiveBytes.length,hash(archiveBytes)],[pin.zipBytes,pin.zipSHA256]);
+            assert.deepEqual(command('unzip','-Z1',archive).toString('utf8').trimEnd().split('\n').sort(),names);
+            const dirPacket=path.join(dir,'packet');
+            fs.mkdirSync(dirPacket);
+            command('unzip','-q',archive,'-d',dirPacket);
+            assert.deepEqual(walk(dirPacket).sort(),names);
+            for(const row of pin.bodies){
+              const body=packet(role,row.file);
+              assert.deepEqual(tuple(row.file,body),row);
+              assert(body.equals(command('unzip','-p',archive,row.file)),row.file+' exact archived and extracted bytes');
             }
-            assert.equal(names.filter(name => !name.endsWith('/')).length, pin.bodies);
-            assert.equal(refFile(role, 'head.txt').toString().trim(), pin.head);
-            assert.equal(refFile(role, 'tree.txt').toString().trim(), pin.tree);
-            for (const [name, digest] of Object.entries(pin.files)) assert.equal(sha(refFile(role, name)), digest, name);
-            save('reference-' + role + '-metadata.json', { ...pin, authenticated: true });
+            assert.equal(packet(role,'head.txt').toString('utf8').trim(),pin.head);
+            assert.equal(packet(role,'tree.txt').toString('utf8').trim(),pin.tree);
+            const {bodies,...roleMetadata}=pin;
+            receipts[role]={...roleMetadata,bodyCount:bodies.length};
+            const inventory=walk(dir).sort().map(file=>tuple(file,read(role,file)));
+            fs.writeFileSync(out+'/'+role+'-reference-before.json',JSON.stringify(inventory),{flag:'wx'});
+          }
+          assert.deepEqual([receipts.fixed.head,receipts.fixed.tree,receipts.fixed.workflow],[source.fixedHead,source.fixedTree,env.FOOTLE_PRACTICE_ROLLOVER_FIXED_WORKFLOW]);
+          const fullRead=file=>fs.readFileSync(path.join(out,file));
+          const helper='scripts/qa/playFootlePracticeDailyRollover.mjs';
+          const omit=(body,paths)=>body.toString('utf8').trimEnd().split('\n').filter(line=>!paths.includes(line.split('\t')[1]));
+          assert.deepEqual(omit(fullRead('source-before.txt'),[workflow,helper]),omit(packet('fixed','source-before.txt'),[workflow]),'All 5793 held fixed index tuples');
+          const sourceRows=(rows,paths)=>rows.filter(row=>!paths.includes(row.file)).map(({file,bytes,sha256})=>({file,bytes,sha256})).sort((a,b)=>a.file<b.file?-1:a.file>b.file?1:0);
+          const heldFull=sourceRows(JSON.parse(fullRead('tracked-before.json')),[workflow,helper]);
+          assert.equal(heldFull.length,5793);
+          assert.deepEqual(heldFull,sourceRows(packetJSON('fixed','tracked-before.json').map(([file,bytes,sha256])=>({file,bytes,sha256})),[workflow]),'All 5793 held fixed physical source tuples');
+          assert(fullRead('locks-before.txt').equals(packet('fixed','locks-before.txt')),'Exact fixed lock bytes');
+          assert.deepEqual(JSON.parse(fullRead('installed-before.json')),packetJSON('fixed','installed-before.json'),'All 521 held fixed locked versions');
+          assert.deepEqual([receipts.preflight.run,receipts.preflight.artifact,receipts.preflight.head,receipts.preflight.tree,
+            receipts.preflight.workflow,receipts.preflight.zipBytes,receipts.preflight.zipSHA256,receipts.preflight.bodyCount],
+            [42370765351,13573029999,'bfd02e35de43a6beaf5b0ab0c1a41d6b956d7af0','c12e9e96eb1f730c0b7ba5c4e568106336c84527',
+             'd7f429698bcc3fd4be25e1901a86c7d07b1c93f5',1013219,'626254481d99a3744f257db8bc3a55ccd6179217f660d7857ab2f56956640bc0',16]);
+          const originalSource=packetJSON('original','source-receipt.json');
+          assert.deepEqual(originalSource.activePreflight,{run:receipts.preflight.run,head:receipts.preflight.head,
+            job:receipts.preflight.job,artifact:receipts.preflight.artifact,digest:'sha256:'+receipts.preflight.zipSHA256});
+          for(const file of ['active-route-preflight.json','active-snapshot.html'])
+            assert(fullRead(file).equals(packet('preflight',file)),file+' exact actual active-entry join');
+          const referenceChecks=(()=>{
+          const originalPin=receipts.original,fixedPin=receipts.fixed,controlPin=receipts.controls;
+          assert.deepEqual([originalPin.run,originalPin.artifact,originalPin.head,originalPin.tree,originalPin.workflow,
+            originalPin.zipBytes,originalPin.zipSHA256,originalPin.bodyCount,originalPin.independentAuditSHA256], [
+            42372278434,13574116606,'88ea45f429e44fb7174fa3f591bccea29a6647d6','d7a4261b66840811c85d961f4b75133a30157e80',
+            '0c85d16199094da0e93872c2596db1c9a9e77c84',1012534,'f3324359cdbf179319cdd56ba3d14094115015367801971791e02886bf42f56b',
+            20,'6ef4bc42d276d5dfcc7071f8fe46292aafd63a417a07294720ce8ff8fad439d5',
+          ]);
+          assert.deepEqual([receipts.preflight.bodyCount,fixedPin.bodyCount,controlPin.bodyCount],[16,24,37]);
+          for(const role of ['preflight','original','fixed','controls']){
+            for(const [key,ext] of [['source','txt'],['tracked','json'],['installed','json'],['locks','txt']])
+              assert(packet(role,key+'-before.'+ext).equals(packet(role,key+'-after.'+ext)),role+' exact '+key+' holds');
+            assert(packet(role,'installed-before.json').equals(packet('preflight','installed-before.json')),role+' exact 521 locked versions');
+            assert.equal(packetJSON(role,'installed-before.json').length,521);
+            assert.equal(packet(role,'offline.log').length,0);
+            if(role!=='preflight')assert.equal(packet(role,'types.log').length,0);
           }
           
-          function prepare() {
-            assert(['fixed', 'controls'].includes(stage));
-            assert.equal(process.env.GITHUB_SHA, source().head);
-            assert.deepEqual(git('rev-list', '--parents', '-n', '1', 'HEAD').trim().split(' '), [source().head, parent]);
-            assert.equal(git('rev-parse', parent + '^{tree}').trim(), parentTree);
-            const old = tree(parent);
-            const current = tree('HEAD');
-            const owned = sorted([workflow, page, hook, test, plan]);
-            assert.equal(old.size, 5791);
-            assert.equal(current.size, 5794);
-            assert.equal([...current.keys()].filter(file => /^(src|public|scripts)\//.test(file)).length, 4665);
-            const changed = sorted(new Set([...old.keys(), ...current.keys()])).filter(file =>
-              JSON.stringify(old.get(file)) !== JSON.stringify(current.get(file)));
-            assert.deepEqual(changed, owned);
-            assert.deepEqual(old.get(page), ['100644', originalPage]);
-            assert.deepEqual(old.get(hook), ['100644', originalHook]);
-            for (const [file, pin] of [[page, fixedPage], [hook, fixedHook], [test, testBlob], [plan, planBlob], [workflow, source().workflow]]) {
-              assert.deepEqual(current.get(file), ['100644', pin], file);
-              assert.equal(blob(fs.readFileSync(file)), pin, file);
-            }
-            assert.equal(git('status', '--porcelain', '--untracked-files=no'), '');
-            assert.deepEqual(Object.keys(refs).sort(), stage === 'fixed' ? ['original'] : ['fixed', 'original']);
-            for (const [role, pin] of Object.entries(refs)) authenticate(role, pin);
-            save('source-receipt.json', { ...source(), pins: { [page]: fixedPage, [hook]: fixedHook, [test]: testBlob, [plan]: planBlob }, owned, references: refs });
+          const pagePath='src/pages/Footle.tsx',hookPath='src/hooks/useGame.ts';
+          const testPath='src/test/footlePracticeDailyRollover.test.tsx',planPath='docs/plans/2026-11-07-footle-practice-daily-rollover.md';
+          const oldPage='7e78c2ed9cc97f506f53a21d630c02f9adcf3e70',oldHook='40c250b6ed1a21ee204270aebd437229fe937837';
+          const fixedPage=env.FOOTLE_PRACTICE_ROLLOVER_PAGE_BLOB,fixedHook=env.FOOTLE_PRACTICE_ROLLOVER_HOOK_BLOB;
+          const oldSource=packetJSON('original','source-receipt.json');
+          assert.deepEqual([oldSource.head,oldSource.tree,oldSource.parent,oldSource.parentTree,oldSource.ownedWorkflow,oldSource.trackedRows,
+            oldSource.heldRows,oldSource.sourceRows,oldSource.pins[pagePath],oldSource.pins[hookPath],oldSource.pins[testPath],oldSource.pins[planPath]],
+            [originalPin.head,originalPin.tree,source.productBase,source.productBaseTree,originalPin.workflow,5794,5791,4665,
+             oldPage,oldHook,env.FOOTLE_PRACTICE_ROLLOVER_TEST,env.FOOTLE_PRACTICE_ROLLOVER_PLAN]);
+          assert.notEqual(fixedPage,oldPage);
+          assert.notEqual(fixedHook,oldHook);
+          const oldRaw=packet('original','public-cases.raw.json');
+          const fixedRaw=packet('fixed','fixed/public-cases.raw.json');
+          const oldResult=packetJSON('original','original-result.json');
+          const marker='FOOTLE_PRACTICE_REVEALS_CURRENT_DAILY';
+          assert.deepEqual([oldResult.status,oldResult.marker,oldResult.total,oldResult.passes,oldResult.failed,oldResult.rawBytes,oldResult.rawSHA256],
+            ['expected-original-business-failure',marker,54,53,1,416182,'f4cf10f6244c8ad9ce66df7c1be66334b07e9e52e7db18286a5ece4372b0ce0f']);
+          assert.deepEqual([oldRaw.length,hash(oldRaw)],[oldResult.rawBytes,oldResult.rawSHA256]);
+          const oldProof=oldResult.checks;
+          assert.deepEqual([oldProof.status,oldProof.newCases,oldProof.frames,oldProof.actionJournalEntries,oldProof.fixturePoolLegs,
+            oldProof.rollover.exposureLabels,oldProof.rollover.practiceHeld,oldProof.rollover.currentDailyBytesHeld,oldProof.rollover.oldDailyPruned],
+            ['passed',2,33,29,8,['collision-give-up-settled'],false,true,true]);
+          const sourceCases=JSON.parse(oldRaw).cases;
+          assert.deepEqual(oldProof.cases.map(row=>[row.key,row.frames,row.actions]),[['rolloverCollision',16,14],['sameDayPractice',17,15]]);
+          for(const proof of oldProof.cases){
+            const bytes=Buffer.from(JSON.stringify(sourceCases[proof.key]));
+            assert.deepEqual([bytes.length,hash(bytes),oldRaw.indexOf(bytes),oldRaw.lastIndexOf(bytes)],[proof.bytes,proof.sha256,proof.rawOffset,proof.rawOffset]);
           }
+          assert.deepEqual(oldProof.wholePreservedCase,oldProof.cases[1]);
           
-          const heldCases = {"src/test/footlePractice.test.tsx":11,"src/test/footleUnlimitedSession.test.tsx":10,"src/hooks/useGame.test.ts":2,"src/lib/footlePracticeRun.test.ts":12,"src/test/footleClueDesk.test.tsx":8,"src/test/footleResultCurrency.test.tsx":5,"src/lib/fetchFootlePlayerPool.test.ts":4};
-          const markers = new Map([["keeps the new Daily answer hidden when a saved practice run crosses Eastern midnight","FOOTLE_PRACTICE_REVEALS_CURRENT_DAILY"],["restores a same-day practice run and keeps Daily and Unlimited progress separate",null]]);
-          const { JSDOM } = process.argv[2] === 'qualify' ? await import('jsdom') : {};
-          
+          const held={"src/test/footlePractice.test.tsx":11,"src/test/footleUnlimitedSession.test.tsx":10,"src/hooks/useGame.test.ts":2,"src/lib/footlePracticeRun.test.ts":12,"src/test/footleClueDesk.test.tsx":8,"src/test/footleResultCurrency.test.tsx":5,"src/lib/fetchFootlePlayerPool.test.ts":4};
+          const exactNewTitles=["keeps the new Daily answer hidden when a saved practice run crosses Eastern midnight","restores a same-day practice run and keeps Daily and Unlimited progress separate"];
+          const suiteCounts={...held,[testPath]:2};
+          const oldReport=packetJSON('original','vitest.json');
+          function inspectReport(parsed,isOriginal,log){
+            assert.deepEqual([parsed.numTotalTests,parsed.numPassedTests,parsed.numFailedTests,parsed.numPendingTests,parsed.numTodoTests,
+              parsed.success,parsed.testResults.length],[54,isOriginal?53:54,isOriginal?1:0,0,0,!isOriginal,8]);
+            assert(!/SIM_OFFLINE_BLOCK|Unhandled Errors?|Unhandled Rejection|Uncaught Exception|Failed Suites|Worker exited|Test timed out/i.test(log));
+            for(const field of ['numRuntimeErrorTestSuites','numUnhandledErrors'])if(Object.hasOwn(parsed,field))assert.equal(parsed[field],0);
+            for(const field of ['errors','unhandledErrors','testExecutionErrors'])if(Object.hasOwn(parsed,field))assert.deepEqual(parsed[field],[]);
+            for(const [file,count] of Object.entries(suiteCounts)){
+              const candidates=parsed.testResults.filter(suite=>suite.name.endsWith('/'+file));
+              const old=oldReport.testResults.filter(suite=>suite.name.endsWith('/'+file));
+              assert.equal(candidates.length,1,file);assert.equal(old.length,1,file);
+              const [suite]=candidates,isNew=file===testPath;
+              assert.deepEqual([suite.status,suite.message,suite.assertionResults.length],[isNew&&isOriginal?'failed':'passed','',count],file);
+              assert.deepEqual(suite.assertionResults.map(row=>row.fullName).sort(),old[0].assertionResults.map(row=>row.fullName).sort(),file);
+              if(isNew)assert.deepEqual(suite.assertionResults.map(row=>row.title).sort(),[...exactNewTitles].sort(),file);
+              for(const row of suite.assertionResults){
+                const red=isNew&&isOriginal&&row.title===exactNewTitles[0];
+                assert.deepEqual([row.status,row.failureMessages.length],[red?'failed':'passed',red?1:0],row.fullName);
+                if(red)assert(row.failureMessages[0].startsWith('AssertionError: '+marker+':'),row.fullName);
+              }
+            }
+          }
+          inspectReport(oldReport,true,packet('original','vitest.log').toString('utf8'));
+          assert.equal(packet('original','vitest-exit.txt').toString('utf8').trim(),'1');
+          for(const [role,pin] of [['fixed',fixedPin],['controls',controlPin]]){
+            const admitted=packetJSON(role,'admission.json'),stageSource=packetJSON(role,'source-receipt.json');
+            assert.deepEqual([admitted.stage,admitted.status,admitted.physicalRestored,admitted.offlineBytes],[role,'passed',true,0]);
+            assert.deepEqual(admitted.source,{head:pin.head,tree:pin.tree,parent:source.productBase,parentTree:source.productBaseTree,
+              page:fixedPage,hook:fixedHook,test:env.FOOTLE_PRACTICE_ROLLOVER_TEST,plan:env.FOOTLE_PRACTICE_ROLLOVER_PLAN,workflow:pin.workflow,
+              trackedRows:5794,heldParentRows:5789,sourceRows:4665});
+            for(const [key,value] of Object.entries(admitted.source))assert.deepEqual(stageSource[key],value,role+' source '+key);
+            assert.deepEqual(stageSource.references,admitted.references);
+            assert.deepEqual(stageSource.owned,[workflow,hookPath,pagePath,testPath,planPath].sort());
+            const referenceRoles=role==='fixed'?['original']:['fixed','original'];
+            assert.deepEqual(Object.keys(admitted.references).sort(),referenceRoles);
+            for(const refRole of referenceRoles){
+              const bound=admitted.references[refRole],prior=receipts[refRole];
+              assert.deepEqual([bound.run,bound.job,bound.artifact,bound.head,bound.tree,bound.workflow,bound.zipBytes,bound.zipSHA256,bound.bodies,bound.name,bound.steps],
+                [prior.run,prior.job,prior.artifact,prior.head,prior.tree,prior.workflow,prior.zipBytes,prior.zipSHA256,prior.bodyCount,prior.artifactName,prior.stepCount]);
+              if(Object.hasOwn(bound,'independentAuditSHA256'))assert.equal(bound.independentAuditSHA256,prior.independentAuditSHA256);
+              assert.deepEqual(packetJSON(role,'reference-'+refRole+'-metadata.json'),{...bound,authenticated:true});
+              assert(packet(role,'reference-'+refRole+'.zip').equals(read(refRole,'artifact.zip')),role+' exact nested '+refRole+' archive');
+              for(const [file,digest] of Object.entries(bound.files))assert.equal(hash(packet(refRole,file)),digest,role+' exact retained '+refRole+'/'+file);
+            }
+            const arms=role==='fixed'?['fixed']:['fixed','original','restored'];
+            assert.deepEqual(Object.keys(admitted.runs),arms);
+            for(const arm of arms){
+              const isOriginal=arm==='original',raw=packet(role,arm+'/public-cases.raw.json'),report=packet(role,arm+'/vitest.json');
+              const result=packetJSON(role,arm+'/result.json');
+              assert.deepEqual(result,admitted.runs[arm]);
+              assert.deepEqual([result.role,result.code,result.passed,result.failed,result.rawBytes,result.rawSHA256,result.reportSHA256,
+                result.wholeOriginal,result.fixedOriginalDifferenceRestricted,result.wholeFixedReference],
+                [arm,isOriginal?1:0,isOriginal?53:54,isOriginal?1:0,raw.length,hash(raw),hash(report),isOriginal,!isOriginal,role==='controls'&&!isOriginal]);
+              assert(raw.equals(isOriginal?oldRaw:fixedRaw),role+' exact '+arm+' RAW bytes');
+              assert.equal(packet(role,arm+'/vitest-exit.txt').toString('utf8').trim(),isOriginal?'1':'0');
+              inspectReport(JSON.parse(report),isOriginal,packet(role,arm+'/vitest.log').toString('utf8'));
+            }
+          }
+          const physical=packetJSON('controls','physical-product-control.json');
+          assert.deepEqual(physical,{
+            onlyPhysicalPaths:[hookPath,pagePath],
+            sources:[
+              {file:hookPath,original:oldHook,fixed:fixedHook,restored:fixedHook},
+              {file:pagePath,original:oldPage,fixed:fixedPage,restored:fixedPage},
+            ],
+            changedProductVerified:true,indexUnchanged:true,restoredExactFixed:true,
+          });
+          return {status:'passed',preflightRetained:true,original:{cases:54,passes:53,namedBusinessFailures:1,rawSHA256:hash(oldRaw)},
+            fixed:{cases:54,passes:54,rawSHA256:hash(fixedRaw)},controls:{arms:3,cases:162,passes:161,namedBusinessFailures:1,
+              physicalRestored:true,onlyPhysicalPaths:physical.onlyPhysicalPaths,wholeRoleRawHeld:true}};
+          })();
+          assert.equal(referenceChecks?.status,'passed','Actual original/fixed/controls semantic reference gate');
+          fs.writeFileSync(out+'/packet-custody.json',JSON.stringify({status:'passed',...receipts,referenceChecks,controlsRerun:false},null,2)+'\n',{flag:'wx'});
+          NODE
+      - name: One fresh Footle fixed unit command
+        run: |
+          set -euo pipefail
+          out=footle-practice-daily-rollover-full
+          result=0
+          FOOTLE_PRACTICE_ROLLOVER_RAW="$PWD/$out/public-cases.raw.json" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node_modules/.bin/vitest run \
+            src/test/footlePracticeDailyRollover.test.tsx src/test/footlePractice.test.tsx src/test/footleUnlimitedSession.test.tsx src/hooks/useGame.test.ts src/lib/footlePracticeRun.test.ts src/test/footleClueDesk.test.tsx src/test/footleResultCurrency.test.tsx src/lib/fetchFootlePlayerPool.test.ts \
+            --reporter=default --reporter=json \
+            --outputFile="$PWD/$out/vitest.json" > "$out/vitest.log" 2>&1 || result=$?
+          cat "$out/vitest.log"
+          printf '%s\n' "$result" > "$out/vitest-exit.txt"
+          test "$result" -eq 0
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          import {createHash} from 'node:crypto';
+          import {JSDOM} from 'jsdom';
+          const out='footle-practice-daily-rollover-full',env=process.env;
+          const read=file=>fs.readFileSync(out+'/'+file),json=file=>JSON.parse(read(file));
+          const sha=bytes=>createHash('sha256').update(bytes).digest('hex');
+          const report=json('vitest.json'),log=read('vitest.log').toString('utf8');
+          assert.deepEqual([report.success,report.numTotalTests,report.numPassedTests,report.numFailedTests,report.numPendingTests,report.numTodoTests],
+            [true,54,54,0,0,0]);
+          const newFile='src/test/footlePracticeDailyRollover.test.tsx';
+          const heldCounts={"src/test/footlePractice.test.tsx":11,"src/test/footleUnlimitedSession.test.tsx":10,"src/hooks/useGame.test.ts":2,"src/lib/footlePracticeRun.test.ts":12,"src/test/footleClueDesk.test.tsx":8,"src/test/footleResultCurrency.test.tsx":5,"src/lib/fetchFootlePlayerPool.test.ts":4};
+          const caseTitles=["keeps the new Daily answer hidden when a saved practice run crosses Eastern midnight","restores a same-day practice run and keeps Daily and Unlimited progress separate"];
+          assert.equal(report.testResults.length,8);
+          const observed=[];
+          for(const [file,count] of Object.entries({[newFile]:2,...heldCounts})){
+            const matches=report.testResults.filter(suite=>suite.name.endsWith('/'+file));
+            assert.equal(matches.length,1,file);
+            const suite=matches[0],rows=suite.assertionResults;
+            assert.deepEqual([suite.status,suite.message,rows.length],['passed','',count],file);
+            if(file===newFile)assert.deepEqual(rows.map(row=>row.title).sort(),[...caseTitles].sort(),file);
+            for(const row of rows)assert.deepEqual([row.status,row.failureMessages],['passed',[]],row.fullName);
+            observed.push({file,cases:rows.length,passes:rows.length});
+          }
+          for(const key of ['numRuntimeErrorTestSuites','numUnhandledErrors'])if(Object.hasOwn(report,key))assert.equal(report[key],0);
+          for(const key of ['errors','unhandledErrors','testExecutionErrors'])if(Object.hasOwn(report,key))assert.deepEqual(report[key],[]);
+          assert(!/Unhandled Errors|Unhandled Rejection|Uncaught Exception|Failed to resolve import|No test files found|SyntaxError|ReferenceError|TypeError|timed out/i.test(log));
+          const rawFile='public-cases.raw.json',rawBytes=read(rawFile),raw=JSON.parse(rawBytes);
+          assert(rawBytes.equals(read('fixed-reference/packet/fixed/'+rawFile)),'Entire fresh fixed RAW equals completed fixed reference');
+          const fixed=json('fixed-reference/packet/admission.json'),custody=json('packet-custody.json');
+          assert.deepEqual([fixed.stage,fixed.status,fixed.runs.fixed.code,fixed.runs.fixed.passed,fixed.runs.fixed.failed,
+            fixed.runs.fixed.rawBytes,fixed.runs.fixed.rawSHA256,fixed.source.page,fixed.source.hook,custody.status],
+            ['fixed','passed',0,54,0,rawBytes.length,sha(rawBytes),env.FOOTLE_PRACTICE_ROLLOVER_PAGE_BLOB,env.FOOTLE_PRACTICE_ROLLOVER_HOOK_BLOB,'passed']);
+          const unitChecks=(()=>{
           function compareRaw(raw, original) {
             assert.equal(raw.schema, 'footle-practice-daily-rollover-v1');
             const expected = structuredClone(original);
@@ -216,165 +508,735 @@ jobs:
             }
             assert.deepEqual(raw, expected, 'Only the six guarded Practice frames, protected save and two unavailable actions may differ');
           }
-          function runRole(role, wantOriginal) {
-            fs.mkdirSync(path.join(out, role));
-            const rawName = role + '/public-cases.raw.json';
-            const reportName = role + '/vitest.json';
-            const logName = role + '/vitest.log';
-            const proc = spawnSync('node_modules/.bin/vitest', ['run', test, ...Object.keys(heldCases), '--reporter=default', '--reporter=json', '--outputFile=' + path.join(out, reportName)], {
-              ...options, env: { ...process.env, NODE_OPTIONS: '--require=' + process.cwd() + '/scripts/lib/offlineTransport.cjs',
-                FOOTLE_PRACTICE_ROLLOVER_RAW: path.join(out, rawName) },
-            });
-            const log = Buffer.concat([proc.stdout ?? Buffer.alloc(0), proc.stderr ?? Buffer.alloc(0)]);
-            write(logName, log);
-            process.stdout.write(log);
-            write(role + '/vitest-exit.txt', String(proc.status) + '\n');
-            assert.ifError(proc.error);
-            assert.equal(proc.signal, null);
-            assert.equal(proc.status, wantOriginal ? 1 : 0, role);
-            assert(!/Unhandled Errors?|Unhandled Rejection|Uncaught Exception|Failed Suites|Worker exited|Test timed out/i.test(log.toString()));
-            const report = json(reportName);
-            assert.deepEqual([report.numTotalTests, report.numPassedTests, report.numFailedTests, report.numPendingTests, report.numTodoTests, report.success],
-              [54, wantOriginal ? 53 : 54, wantOriginal ? 1 : 0, 0, 0, !wantOriginal]);
-            for (const key of ['errors', 'unhandledErrors', 'testExecutionErrors']) if (Object.hasOwn(report, key)) assert.deepEqual(report[key], []);
-            assert.equal(report.testResults.length, 8);
-            for (const [file, count] of Object.entries({...heldCases, [test]: markers.size})) {
-              const matches = report.testResults.filter(suite => suite.name.endsWith('/' + file));
-              assert.equal(matches.length, 1, file);
-              const [suite] = matches;
-              const isFresh = file === test;
-              assert.deepEqual([suite.status, suite.message, suite.assertionResults.length], [isFresh && wantOriginal ? 'failed' : 'passed', '', count], file);
-              if (isFresh) assert.deepEqual(sorted(suite.assertionResults.map(row => row.title)), sorted(markers.keys()));
-              for (const row of suite.assertionResults) {
-                const isBusinessFailure = isFresh && wantOriginal && !!markers.get(row.title);
-                assert.equal(row.status, isBusinessFailure ? 'failed' : 'passed', row.title);
-                assert.equal(row.failureMessages.length, isBusinessFailure ? 1 : 0);
-                if (isBusinessFailure) assert(row.failureMessages[0].startsWith('AssertionError: ' + markers.get(row.title) + ':'));
-              }
-            }
-            const raw = read(rawName);
-            const old = refFile('original', 'public-cases.raw.json');
-            if (wantOriginal) assert(raw.equals(old), 'Complete original RAW must match qualified original');
-            else compareRaw(JSON.parse(raw), JSON.parse(old));
-            if (stage === 'controls' && !wantOriginal) {
-              assert(raw.equals(refFile('fixed', 'fixed/public-cases.raw.json')), 'Complete fixed RAW must match qualified fixed');
-            }
-            const result = { role, code: proc.status, passed: report.numPassedTests, failed: report.numFailedTests,
-              rawBytes: raw.length, rawSHA256: sha(raw), reportSHA256: sha(read(reportName)), wholeOriginal: wantOriginal,
-              fixedOriginalDifferenceRestricted: !wantOriginal, wholeFixedReference: stage === 'controls' && !wantOriginal };
-            save(role + '/result.json', result);
-            return result;
+          
+          const oldBody=read('original-reference/packet/public-cases.raw.json');
+          assert.deepEqual([oldBody.length,sha(oldBody)],[416182,'f4cf10f6244c8ad9ce66df7c1be66334b07e9e52e7db18286a5ece4372b0ce0f']);
+          const original=JSON.parse(oldBody);
+          assert(rawBytes.equals(Buffer.from(JSON.stringify(raw)+'\n')),'Literal fresh RAW serialization');
+          assert.deepEqual(Object.keys(raw.cases),['rolloverCollision','sameDayPractice']);
+          assert.deepEqual([observed.length,observed.reduce((sum,row)=>sum+row.cases,0),observed.reduce((sum,row)=>sum+row.passes,0)],[8,54,54]);
+          const fixedReport=json('fixed-reference/packet/fixed/vitest.json');
+          assert.equal(sha(read('fixed-reference/packet/fixed/vitest.json')),fixed.runs.fixed.reportSHA256);
+          for(const freshSuite of report.testResults){
+            const file=observed.find(row=>freshSuite.name.endsWith('/'+row.file))?.file;
+            assert(file,'Fresh exact suite identity');
+            const matches=fixedReport.testResults.filter(suite=>suite.name.endsWith('/'+file));
+            assert.equal(matches.length,1,file);
+            assert.deepEqual(freshSuite.assertionResults.map(row=>row.fullName).sort(),matches[0].assertionResults.map(row=>row.fullName).sort(),file+' held completed fixed suite titles');
           }
-          function qualify() {
-            const product = [[hook, fixedHook, originalHook], [page, fixedPage, originalPage]].map(([file, expectedFixed, expectedOriginal]) => {
-              const fixed = fs.readFileSync(file);
-              const original = cmd('git', ['show', parent + ':' + file]);
-              assert.deepEqual([blob(fixed), blob(original)], [expectedFixed, expectedOriginal], file);
-              return { file, fixed, original, expectedFixed, expectedOriginal };
-            });
-            const index = git('ls-files', '-s');
-            const locks = ['package.json', 'package-lock.json'].map(file => sha(fs.readFileSync(file)));
-            const runs = { fixed: runRole('fixed', false) };
-            if (stage === 'controls') {
-              try {
-                for (const {file, original, expectedOriginal} of product) {
-                  fs.writeFileSync(file, original);
-                  assert.equal(blob(fs.readFileSync(file)), expectedOriginal);
-                }
-                assert.deepEqual(git('diff', '--name-only', 'HEAD', '--', '.').trim().split('\n'), product.map(row => row.file));
-                assert.equal(git('ls-files', '-s'), index);
-                runs.original = runRole('original', true);
-              } finally {
-                const errors = [];
-                for (const {file, fixed} of product) {
-                  try {
-                    fs.writeFileSync(file, fixed);
-                    assert(fs.readFileSync(file).equals(fixed), file);
-                  } catch (error) { errors.push(error); }
-                }
-                if (errors.length) throw new AggregateError(errors, 'Footle exact physical restoration');
-              }
-              assert.equal(git('diff', '--name-only', 'HEAD', '--', '.'), '');
-              runs.restored = runRole('restored', false);
-              assert(read('restored/public-cases.raw.json').equals(read('fixed/public-cases.raw.json')));
-              save('physical-product-control.json', {
-                onlyPhysicalPaths: product.map(row => row.file),
-                sources: product.map(row => ({
-                  file: row.file, original: row.expectedOriginal, fixed: row.expectedFixed, restored: blob(fs.readFileSync(row.file)),
-                })),
-                changedProductVerified: true, indexUnchanged: git('ls-files', '-s') === index, restoredExactFixed: true,
-              });
-            }
-            for (const {file, fixed} of product) assert(fs.readFileSync(file).equals(fixed), file);
-            assert.equal(git('ls-files', '-s'), index);
-            assert.deepEqual(['package.json','package-lock.json'].map(file => sha(fs.readFileSync(file))), locks);
-            assert.equal(fs.statSync(process.env.SIM_OFFLINE_RECEIPT).size, 0);
-            save('admission.json', { stage, status: 'passed', runs, references: refs, source: source(), physicalRestored: true, offlineBytes: 0 });
-          }
-          const mode = process.argv[2];
-          if (mode === 'prepare') prepare();
-          else if (mode === 'qualify') qualify();
-          else throw new Error('Unknown Footle qualification mode');
+          compareRaw(raw,original);
+          const measurements=Object.entries(raw.cases).map(([key,value])=>{
+            assert(value.closed,key+' complete teardown');
+            const content=Buffer.from(JSON.stringify(value));
+            const rawOffset=rawBytes.indexOf(content);
+            assert(rawOffset>=0&&rawOffset===rawBytes.lastIndexOf(content),key+' literal contiguous case');
+            return {key,frames:value.frames.length,actions:value.actions.length,poolLegs:value.poolLoads.length,
+              completionBoundaryCalls:value.completionCalls.length,rawOffset,bytes:content.length,sha256:sha(content)};
+          });
+          assert.deepEqual(measurements.map(row=>[row.key,row.frames,row.actions,row.poolLegs]),
+            [['rolloverCollision',16,14,4],['sameDayPractice',17,15,4]]);
+          const rollover=raw.cases.rolloverCollision,control=raw.cases.sameDayPractice;
+          const frame=(scenario,label)=>scenario.frames.find(row=>row.label===label);
+          const practiceKey='footle-practice-run-v1',dailyKey='footle-daily-'+raw.fixture.newDay;
+          const collision=frame(rollover,'collision-give-up-settled');
+          const noExposure=rollover.frames.every(row=>row.at!==raw.fixture.newAt||row.mode!=='practice'||!row.html.includes(raw.fixture.newTarget));
+          assert(noExposure);
+          assert.equal(collision.storage[practiceKey],frame(rollover,'practice-started').storage[practiceKey]);
+          assert.equal(collision.storage[dailyKey],frame(rollover,'new-daily-miss').storage[dailyKey]);
+          assert.equal(frame(control,'same-day-practice-result').practiceFeedback,'The answer was Fixture hard A');
+          assert.equal(frame(control,'same-day-practice-advanced').practiceProgress,'Puzzle 2 of 5');
+          assert.deepEqual([frame(control,'unlimited-restored').unlimitedState,frame(control,'unlimited-restored').search],['playing',true]);
+          return {status:'passed',cases:54,newCases:2,heldCases:52,frames:33,actions:29,fixturePoolLegs:8,ownedGuardFrames:6,
+            wholeFreshFixedRawHeld:true,completeOtherCapturedStateHeld:true,currentDailyBytesHeld:true,protectedPracticeBytesHeld:true,
+            sameDayGameplayHeldWithStartupGuard:true,measurements};
+          })();
+          assert.equal(unitChecks?.status,'passed','Actual fresh fixed semantic gate');
+          const rawRef={file:rawFile,bytes:rawBytes.length,sha256:sha(rawBytes)};
+          fs.writeFileSync(out+'/unit-admission.json',JSON.stringify({status:'passed',actualCases:report.numTotalTests,actualPasses:report.numPassedTests,actualFailures:report.numFailedTests,
+            newCases:2,heldCases:52,observed,commands:1,raw:rawRef,wholeQualifiedFixedRAWBytesHeld:true,unitChecks},null,2)+'\n',{flag:'wx'});
+          fs.writeFileSync(out+'/fixed-raw-join.json',JSON.stringify({status:'passed',fixedHead:custody.fixed.head,fixedTree:custody.fixed.tree,raw:rawRef,
+            freshUnitRAWByteEqual:true},null,2)+'\n',{flag:'wx'});
           NODE
-          node "$EVIDENCE/qualify.mjs" prepare
-      - name: Install locked dependencies and freeze physical source
+      - name: Normal production build and retained bytes
+        id: build
         run: |
           set -euo pipefail
-          npm ci 2>&1 | tee "$EVIDENCE/install.log"
-          cat > "$EVIDENCE/physical.mjs" <<'NODE'
+          NODE_OPTIONS="--max-old-space-size=6144" npm run build 2>&1 | tee footle-practice-daily-rollover-full/build.log
+          tar -czf footle-practice-daily-rollover-full/dist.tgz dist
+          sha256sum footle-practice-daily-rollover-full/dist.tgz > footle-practice-daily-rollover-full/dist.sha256
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import {createHash} from 'node:crypto';import assert from 'node:assert/strict';
+          const walk=dir=>fs.readdirSync(dir,{withFileTypes:true}).sort((a,b)=>a.name.localeCompare(b.name)).flatMap(e=>e.isDirectory()?walk(dir+'/'+e.name):e.isFile()?[dir+'/'+e.name]:[]);
+          const rows=walk('dist').map(file=>{const b=fs.readFileSync(file);return {file,bytes:b.length,sha256:createHash('sha256').update(b).digest('hex')};});
+          assert.equal(rows.length,850);fs.writeFileSync('footle-practice-daily-rollover-full/dist-before.json',JSON.stringify(rows));
+          NODE
+      - name: Isolated pinned Playwright and Chromium
+        id: browser_setup
+        timeout-minutes: 12
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          python -m pip install fonttools pillow
+          npm install --prefix "$RUNNER_TEMP/footle-practice-daily-rollover-browser" --no-save --package-lock=false playwright@1.64.1 2>&1 | tee footle-practice-daily-rollover-full/browser-install.log
+          test ! -e node_modules/playwright
+          ln -s "$RUNNER_TEMP/footle-practice-daily-rollover-browser/node_modules/playwright" node_modules/playwright
+          node "$RUNNER_TEMP/footle-practice-daily-rollover-browser/node_modules/playwright/cli.js" install --with-deps chromium 2>&1 | tee footle-practice-daily-rollover-full/chromium-install.log
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const before=JSON.parse(fs.readFileSync('footle-practice-daily-rollover-full/installed-before.json'));
+          const after=before.map(([p])=>[p,JSON.parse(fs.readFileSync(p+'/package.json')).version]);assert.deepEqual(after,before);
+          const pw=JSON.parse(fs.readFileSync('node_modules/playwright/package.json'));assert.equal(pw.version,'1.64.1');
+          fs.writeFileSync('footle-practice-daily-rollover-full/installed-after.json',JSON.stringify(after));fs.writeFileSync('footle-practice-daily-rollover-full/browser-package.json',JSON.stringify({version:pw.version,target:fs.realpathSync('node_modules/playwright')}));
+          NODE
+      - name: All required built readers and existing source fences
+        if: ${{ !cancelled() && steps.build.outcome == 'success' && steps.browser_setup.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          git fetch --no-tags --depth=1 origin "$SEO_SPLIT_BASE_REF"
+          export ONLY="simAdsense,simBrand,simHeadTags,simHiddenPages,simHubs,simIndexNow,simIndexing,simInternalLinks,simNoRivalNames,simPrerender,simPrerenderBoot,simRetiredRoutes,simSchema,simSitemap,simSnapshotAssets,simSiteSearch,simGuideHeadings,simSeoMetaSplit,simHomeCopy,simHarnessAnchors"
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/runAllSims.mjs --browser 2>&1 | tee footle-practice-daily-rollover-full/readers.log
+      - name: All original route download limits
+        if: ${{ !cancelled() && steps.build.outcome == 'success' && steps.browser_setup.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          node scripts/lib/hostLikeServer.mjs dist 4173 > footle-practice-daily-rollover-full/weight-host.log 2>&1 &
+          footle_practice_rollover_host_pid=$!
+          trap 'kill "$footle_practice_rollover_host_pid" 2>/dev/null || true' EXIT
+          sleep 2
+          SWEEP_OFFLINE=1 BASE=http://127.0.0.1:4173 NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/sweepWeight.mjs 2>&1 | tee footle-practice-daily-rollover-full/weight.log
+      - name: Actual native Footle viewport journeys and reviewed outer
+        id: native
+        timeout-minutes: 15
+        if: ${{ !cancelled() && steps.build.outcome == 'success' && steps.browser_setup.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          out=footle-practice-daily-rollover-full
+          cat > "$out/native-admission-script.mjs" <<'FOOTLE_PRACTICE_ROLLOVER_NATIVE_OUTER'
+          // Read-only admission of the closed Footle native evidence packet.
           import assert from 'node:assert/strict';
           import fs from 'node:fs';
-          import { createHash } from 'node:crypto';
-          import { execFileSync } from 'node:child_process';
-          const stage = process.argv[2];
-          assert(['before', 'after'].includes(stage));
-          const out = process.env.EVIDENCE;
-          const index = execFileSync('git', ['ls-files', '-z'], { encoding: 'utf8' }).split('\0').filter(Boolean);
-          const source = index.map(file => {
-            const bytes = fs.readFileSync(file);
-            return [file, bytes.length, createHash('sha256').update(bytes).digest('hex')];
-          });
-          const lock = JSON.parse(fs.readFileSync('package-lock.json', 'utf8'));
-          const installed = Object.entries(lock.packages).filter(([file]) =>
-            file.startsWith('node_modules/') && fs.existsSync(file + '/package.json')
-          ).map(([file, entry]) => {
-            const version = JSON.parse(fs.readFileSync(file + '/package.json', 'utf8')).version;
-            assert.equal(version, entry.version, file);
-            return [file, version];
-          });
-          assert.equal(source.length, 5794);
-          assert.equal(installed.length, 521);
-          assert.equal(fs.statSync(process.env.SIM_OFFLINE_RECEIPT).size, 0);
-          for (const [name, data] of [['tracked', source], ['installed', installed]]) {
-            const body = JSON.stringify(data);
-            if (stage === 'after') assert.equal(body, fs.readFileSync(out + '/' + name + '-before.json', 'utf8'));
-            fs.writeFileSync(out + '/' + name + '-' + stage + '.json', body);
+          import path from 'node:path';
+          import {createHash} from 'node:crypto';
+          import {execFileSync} from 'node:child_process';
+          import {JSDOM} from 'jsdom';
+          import {frozenMarketRows} from '../scripts/qa/footle995-fixtures.mjs';
+          
+          const PAGE='fe0b9bd8896d6f8888b0bbd860cede4e0a2c304c',HOOK='17fc817ad6873a09a9bac08d01174a40687d6a8b',HELPER='9b999f66f519c5e23024d1ed0728b2184191eee3';
+          const FIXED={"run":42762361123,"artifact":13738475972,"head":"8182fa2db6e7ae1b36e95b9fcf187d7173a382a9","tree":"dc1eca03ab8a7f543f6413a6b0700c574cc585bf","zipBytes":2027497,"zipSHA256":"14f5421845e706302280d44f268558a297fde19b5e692683e31f5f56d46fd202","rawBytes":400361,"rawSHA256":"2144a7989776a6847d384e828fbeaf69a523a7da64ca2d4a13c4560745839788"},CONTROLS={"run":42762970118,"artifact":13738333067,"head":"3d2e49351089708ef3be747d602b59c320ebbf16","tree":"36fc4b5abda4bc4c65fa3ec501b52fda97530c51","zipBytes":4096348,"zipSHA256":"9e069f57bec9794ddb67e954078cc1e686530ae9df07ad7bd06b000e06b83f93","admissionBytes":5831,"admissionSHA256":"9b04f2c40c4e3bc65af35e5bb84460b17fbc5833ba94c966e27e94c23f2b4f4c"};
+          const env=process.env,root=process.cwd(),route='/footle';
+          const full=path.resolve(env.FOOTLE_PRACTICE_ROLLOVER_FULL_UNIT);
+          const fixed=path.resolve(env.FOOTLE_PRACTICE_ROLLOVER_FIXED_REFERENCE);
+          const controls=path.resolve(env.FOOTLE_PRACTICE_ROLLOVER_CONTROLS_REFERENCE);
+          const out=path.resolve(process.argv[2]??'');
+          const helperFile='scripts/qa/playFootlePracticeDailyRollover.mjs',workflowFile='.github/workflows/footle-practice-daily-rollover-20261107.yml';
+          const equal=assert.deepEqual,read=(...p)=>fs.readFileSync(path.join(...p)),json=(...p)=>JSON.parse(read(...p));
+          const sha=body=>createHash('sha256').update(body).digest('hex');
+          const tuple=(file,body)=>({file,bytes:body.length,sha256:sha(body)});
+          const safe=file=>typeof file==='string'&&/^[A-Za-z0-9._/-]+$/.test(file)&&file.split('/').every(s=>s&&s!=='.'&&s!=='..');
+          const git=(...args)=>execFileSync('git',args,{cwd:root,encoding:'utf8',maxBuffer:16*1024*1024});
+          const blob=body=>createHash('sha1').update(Buffer.from('blob '+body.length+'\0')).update(body).digest('hex');
+          equal([out,fixed,controls],[path.join(full,'browser'),path.join(full,'fixed-reference'),path.join(full,'controls-reference')]);
+          equal([out,env.FOOTLE_PRACTICE_ROLLOVER_PAGE_BLOB,env.FOOTLE_PRACTICE_ROLLOVER_HOOK_BLOB,env.FOOTLE_PRACTICE_ROLLOVER_HELPER],
+            [path.resolve(env.FOOTLE_PRACTICE_ROLLOVER_BROWSER_OUT),PAGE,HOOK,HELPER]);
+          assert(env.CI&&env.SIM_NETWORK==='offline'&&process.versions.node==='24.22.1');
+          
+          function walk(dir,prefix=''){
+            return fs.readdirSync(dir,{withFileTypes:true}).sort((a,b)=>a.name.localeCompare(b.name)).flatMap(entry=>{
+              const file=prefix+entry.name;
+              if(entry.isDirectory())return walk(path.join(dir,entry.name),file+'/');
+              assert(entry.isFile(),file+' regular evidence body');return [file];
+            });
           }
+          const manifest=json(out,'body-manifest.json'),report=json(out,'report.json'),raw=json(out,'raw.json');
+          assert.equal(manifest.version,1);
+          const manifestNames=manifest.files.map(row=>row.file);
+          assert.equal(new Set(manifestNames).size,manifestNames.length);
+          assert(manifestNames.every(safe)&&!manifestNames.includes('body-manifest.json'));
+          equal([...manifestNames].sort(),walk(out).filter(file=>file!=='body-manifest.json').sort());
+          const manifestByFile=new Map(manifest.files.map(row=>[row.file,row]));
+          const referenced=new Set(['report.json','raw.json']);
+          for(const row of manifest.files)equal(tuple(row.file,read(out,row.file)),row);
+          function check({file,bytes,sha256}){
+            assert(safe(file));
+            equal(manifestByFile.get(file),{file,bytes,sha256});
+            referenced.add(file);
+            return read(out,file);
+          }
+          const head=git('rev-parse','HEAD').trim(),tree=git('rev-parse','HEAD^{tree}').trim(),workflow=git('rev-parse','HEAD:'+workflowFile).trim();
+          const source={head,tree,workflow,trackedBodies:5795,scopedSourceRows:4666,heldFixedRows:5793,rootConfigurations:11,distBodies:850,installedVersions:521};
+          equal([report.version,report.status,report.route,report.page,report.hook,report.helper,head,report.source],
+            [1,'passed',route,PAGE,HOOK,HELPER,env.GITHUB_SHA,source]);
+          assert(!report.error&&!report.closeError&&!report.holdError&&!report.hostError);
+          equal([blob(read(root,'src/pages/Footle.tsx')),blob(read(root,'src/hooks/useGame.ts')),blob(read(root,helperFile)),blob(read(root,workflowFile))],
+            [PAGE,HOOK,HELPER,workflow]);
+          equal(git('rev-list','--parents','-n','1','HEAD').trim().split(' '),[head,FIXED.head]);
+          assert.equal(git('rev-parse',FIXED.head+'^{tree}').trim(),FIXED.tree);
+          equal(git('diff','--name-status',FIXED.head,'HEAD').trim().split('\n').sort(),['A\t'+helperFile,'M\t'+workflowFile].sort());
+          git('diff','--exit-code','HEAD','--','.');
+          const status=json(full,'source-join.json');
+          equal([status.status,status.head,status.tree,status.fixedHead,status.fixedTree,status.trackedRows,status.sourceRows,status.cleanSourceRows,status.rootConfigurations.length,status.heldFixedRows],
+            ['passed',head,tree,FIXED.head,FIXED.tree,5795,4666,4665,11,5793]);
+          const tracked=git('ls-files','-z').split('\0').filter(Boolean).map(file=>tuple(file,read(root,file)));
+          const dist=walk(path.join(root,'dist'),'dist/').map(file=>tuple(file,read(root,file)));
+          equal([tracked.length,dist.length],[5795,850]);
+          equal([tracked,dist],[json(full,'tracked-before.json'),json(full,'dist-before.json')]);
+          const installed=json(full,'installed-before.json'),lock=json(root,'package-lock.json');
+          equal(installed,Object.keys(lock.packages).filter(file=>file.startsWith('node_modules/')&&fs.existsSync(path.join(root,file,'package.json')))
+            .map(file=>[file,json(root,file,'package.json').version]));
+          assert.equal(installed.length,521);
+          for(const [file,version] of installed)assert.equal(version,lock.packages[file].version,file);
+          const locks=['package.json','package-lock.json','bun.lock','bun.lockb'].map(file=>tuple(file,read(root,file)));
+          const offline=tuple(env.SIM_OFFLINE_RECEIPT,read(root,env.SIM_OFFLINE_RECEIPT));
+          assert.equal(offline.bytes,0);
+          const inventory={source:tracked,dist,locks,installed,offline};
+          equal([report.before,report.after],[inventory,inventory]);
+          const index=Buffer.from(git('ls-files','--stage','-z'));
+          assert(check(report.indexBefore).equals(index)&&check(report.indexAfter).equals(index));
+          
+          const custody=json(full,'packet-custody.json');
+          assert.equal(custody.status,'passed');
+          for(const [role,dir,pin] of [['fixed',fixed,FIXED],['controls',controls,CONTROLS]]){
+            const run=json(dir,'run.json'),metadata=json(dir,'artifact.json');
+            if(metadata.artifacts)assert.equal(metadata.artifacts.length,1);
+            const artifact=metadata.artifacts?.[0]??metadata;
+            equal([run.id,run.status,run.conclusion,run.head_sha,run.head_commit.tree_id],[pin.run,'completed','success',pin.head,pin.tree]);
+            equal([artifact.id,artifact.workflow_run.id,artifact.workflow_run.head_sha,artifact.size_in_bytes,artifact.digest],
+              [pin.artifact,pin.run,pin.head,pin.zipBytes,'sha256:'+pin.zipSHA256]);
+            const zip=read(dir,'artifact.zip');
+            equal([zip.length,sha(zip)],[pin.zipBytes,pin.zipSHA256]);
+            equal([read(dir,'packet','head.txt').toString().trim(),read(dir,'packet','tree.txt').toString().trim()],[pin.head,pin.tree]);
+            for(const key of ['run','artifact','head','tree','zipBytes','zipSHA256'])assert.equal(custody[role][key],pin[key]);
+          }
+          const unit=read(full,'public-cases.raw.json'),fixedUnit=read(fixed,'packet','fixed','public-cases.raw.json'),controlBody=read(controls,'packet','admission.json');
+          assert(unit.equals(fixedUnit));
+          equal([fixedUnit.length,sha(fixedUnit),controlBody.length,sha(controlBody)],
+            [FIXED.rawBytes,FIXED.rawSHA256,CONTROLS.admissionBytes,CONTROLS.admissionSHA256]);
+          const binding=JSON.parse(check(report.binding));
+          equal(binding,{fixed:FIXED,controls:CONTROLS,fullUnit:tuple('public-cases.raw.json',unit),source,page:PAGE,hook:HOOK,helper:HELPER});
+          
+          const dates={a:'2026-11-08T04:59:59.000Z',b:'2026-11-08T05:00:01.000Z'},days={a:'2026-11-07',b:'2026-11-08'};
+          const named=n=>'Practice Fixture Famous '+String(n).padStart(3,'0');
+          const answerA=named(83),answerB=named(81),dailyMiss=named(1),practiceMiss=named(2);
+          const hard=Array.from({length:6},(_,i)=>named(i+81));
+          const runKey='footle-practice-run-v1',unlimitedKey='footle-unlimited-session-v1',guestKey='dukb-guest-handle';
+          const dailyKey=side=>'footle-daily-'+days[side];
+          const recordKeys=['dukb-local-completions','dukb-streaks-v1','dukb-play-diary-v1'];
+          const pendingText="Checking today's Daily...",pausedText="Finish today's Daily to resume this puzzle.";
+          const fixture=report.fixture,bodies=fixture.bodies;
+          equal([fixture.dates,fixture.days,fixture.answerA,fixture.answerB,fixture.dailyMiss,fixture.practiceMiss,fixture.hard],
+            [dates,days,answerA,answerB,dailyMiss,practiceMiss,hard]);
+          const clubSource=read(root,'src/lib/fetchFootlePlayerPool.ts').toString().split('export const INSANE_CLUB_LEAGUE:')[1].split('\n};')[0];
+          const clubList=[...clubSource.replace(/\/\/[^\n]*/g,'').matchAll(/'([^'\n]+)'\s*:/g)].map(m=>m[1]);
+          assert.equal(new Set(clubList).size,137);
+          equal(fixture.clubChunks,[clubList.slice(0,69),clubList.slice(69)]);
+          equal(Object.keys(bodies).sort(),['empty','famous','obscure-1','obscure-2']);
+          const fresh=frozenMarketRows();
+          for(const [role,rows] of [['empty',[]],['famous',fresh.famous.slice(0,86)],
+            ...fixture.clubChunks.map((chunk,i)=>['obscure-'+(i+1),chunk.includes('Udinese Calcio')?fresh.obscure:[]])]){
+            assert(check(bodies[role]).equals(Buffer.from(JSON.stringify(rows))));
+          }
+          const sameQuery=(a,b)=>JSON.stringify([...a].sort())===JSON.stringify([...b].sort());
+          const marketCommon=[['select','player_name,position,age,nationality,club,market_value_usd,goals,assists'],
+            ['year','eq.2026'],['age','not.is.null'],['order','market_value_usd.desc,player_name.asc']];
+          const queries={
+            famous:[...marketCommon,['limit','300']],
+            ...Object.fromEntries(fixture.clubChunks.map((chunk,i)=>['obscure-'+(i+1),[...marketCommon,['limit','1000'],
+              ['market_value_usd','gt.0'],['market_value_usd','lt.8000000'],['club','in.('+chunk.join(',')+')']]])),
+          };
+          const marketRoles=Object.keys(queries),backend='https://flawuiqbvjobmkfkauhw.supabase.co';
+          function spec(role,guest){
+            if(marketRoles.includes(role))return ['GET','/rest/v1/player_market_values',queries[role],null,bodies[role]];
+            if(role==='standing')return ['POST','/rest/v1/rpc/daily_score_standing',[],{p_game:'footle',p_edges:[0,100,300,500,700],p_score:600,p_player:guest},bodies.empty];
+            if(role==='badge-history')return ['GET','/rest/v1/game_completions',[['select','game,completed_on'],['player_name','eq.'+guest],['order','completed_on.desc'],['limit','500']],null,bodies.empty];
+            if(role==='completion')return ['POST','/rest/v1/game_completions',[],{game:'footle',score:600,player_name:guest},null];
+            throw Error('Unknown Footle role '+role);
+          }
+          const docPath='dist/footle/index.html',distByFile=new Map(dist.map(row=>[row.file,row]));
+          function appEntry(file){
+            const dom=new JSDOM(read(root,file).toString());
+            try{return [...dom.window.document.querySelectorAll('script[type="module"][src]')].map(node=>node.getAttribute('src')).filter(src=>/^\/assets\/index-[^/]+\.js$/.test(src));}
+            finally{dom.window.close();}
+          }
+          const direct=appEntry(docPath),boot=direct.length===0;
+          equal(report.boot,boot);
+          if(boot){
+            const dom=new JSDOM(read(root,docPath).toString());
+            try{assert([...dom.window.document.scripts].some(s=>/^\/prerender-boot\.js(?:\?|$)/.test(s.getAttribute('src')??'')));}
+            finally{dom.window.close();}
+          }
+          equal(boot?appEntry('dist/index.html'):direct,[report.entryPath]);
+          const base=report.base;
+          assert(/^http:\/\/127\.0\.0\.1:\d+$/.test(base));
+          const routeURL=base+route,widths=[[320,568],[390,844],[1280,900]];
+          equal(report.journeys.map(row=>[row.width,row.height]),widths);
+          assert.equal(typeof report.chromium,'string');
+          
+          function checkFrame(frame){
+            const dom=new JSDOM(frame.html),doc=dom.window.document;
+            try{
+              const main=doc.querySelector('main#dukb-main'),p=main?.querySelector('[data-footle-practice]');
+              const text=node=>node?.textContent?.replace(/\s+/g,' ').trim()??null;
+              assert(main);
+              const mode=main.querySelector('[data-footle-mode][aria-pressed=true]')?.getAttribute('data-footle-mode')??null;
+              const buttons=[...main.querySelectorAll('button')];
+              const actions=Object.fromEntries(Object.keys(frame.actions).map(label=>[label,
+                buttons.filter(node=>text(node)===label).map(node=>!node.disabled&&node.getAttribute('aria-disabled')!=='true')]));
+              equal([frame.heading,frame.mainText,frame.mode,frame.practiceIndex,frame.progress,frame.practiceStatus,frame.practiceFeedback,frame.practiceReceipt,frame.actions,frame.dialog,frame.cookie],
+                [text(main.querySelector('h1')),text(main),mode,p?Number(p.getAttribute('data-practice-index')):null,text(p?.querySelector('[data-testid=practice-progress]')),
+                  text(p?.querySelector('[role=status]')),text(p?.querySelector('[data-testid=practice-feedback] [role=status]')),
+                  text(p?.querySelector('[data-footle-practice-result]')),actions,!!doc.querySelector('[role=dialog]'),!!doc.querySelector('[role=region][aria-label="Cookie choices"]')],frame.name);
+              const combo=main.querySelector('input[role=combobox]');
+              equal(combo?[combo.value,combo.disabled]:null,frame.combo?[frame.combo.value,frame.combo.disabled]:null,frame.name);
+              if(frame.name==='b-legitimate-practice-forfeit-confirm-after'&&frame.practiceReceipt){
+                const receipt=p.querySelector('[data-footle-practice-result]');
+                const answers=[...receipt.querySelectorAll('ol > li')];
+                assert.equal(answers.length,5);
+                equal(text(answers[4].querySelectorAll('p')[1]),answerB);
+                assert(text(answers[4].querySelector('p')).includes('Missed'));
+              }
+            }finally{dom.window.close();}
+          }
+          function geometry(g,width,height,operate=true){
+            const {rect:r,clip:c,center}=g;
+            equal(g.viewport,{width,height});
+            assert([r.x,r.y,r.width,r.height,r.right,r.bottom,c.left,c.top,c.right,c.bottom,center.x,center.y].every(Number.isFinite));
+            assert(r.width>0&&r.height>0&&r.x>=c.left-1&&r.right<=c.right+1&&r.y>=c.top-1&&r.bottom<=c.bottom+1);
+            assert(center.x>=0&&center.x<width&&center.y>=0&&center.y<height);
+            if(operate)assert(g.enabled&&g.hit);
+          }
+          const daily=(f,side,target,status,guesses)=>{
+            const saved=JSON.parse(f.storage.local[dailyKey(side)]);
+            equal([f.mode,saved.date,saved.puzzleId,saved.gameStatus],['daily',days[side],target,status],f.name);
+            equal(saved.guesses.map(g=>[g.playerName,g.isCorrect]),guesses,f.name);
+            return f.storage.local[dailyKey(side)];
+          };
+          const practice=f=>JSON.parse(f.storage.local[runKey]);
+          const bytes=f=>f.storage.local[runKey];
+          const records=f=>recordKeys.map(key=>f.storage.local[key]??null);
+          function beforeCompletion(frame){
+            const [count,streakRaw,diaryRaw]=records(frame);
+            const streak=JSON.parse(streakRaw??'null'),diary=JSON.parse(diaryRaw??'null');
+            equal([count,streak?.totalPlays??0,streak?.totalPoints??0,streak?.perGame?.footle??null,diary?.global.days??[],diary?.perGame?.footle??null],
+              [null,0,0,null,[],null],frame.name);
+          }
+          function afterCompletion(frame){
+            const [countRaw,streakRaw,diaryRaw]=records(frame),streak=JSON.parse(streakRaw),diary=JSON.parse(diaryRaw);
+            equal(JSON.parse(countRaw),{date:days.b,slugs:['footle']});
+            equal([streak.totalPlays,streak.totalPoints,streak.global,streak.perGame.footle,diary.global.days,diary.perGame.footle.days],
+              [1,600,{current:1,longest:1,lastDate:days.b},{current:1,longest:1,lastDate:days.b},[days.b],[days.b]],frame.name);
+          }
+          const allFrames=[];
+          const measured=report.journeys.map(row=>{
+            const {id,width,height,predecessors:i,guest}=row;
+            equal([id,row.status,row.errors],[String(width),'passed',[]]);
+            assert(Number.isInteger(i)&&i>=0&&i<=4&&typeof guest==='string'&&guest);
+            const frames=row.frames.map(ref=>{
+              assert(ref.file.startsWith(id+'/frames/')&&ref.file.endsWith('-'+ref.name+'.json'));
+              const frame=JSON.parse(check(ref));
+              equal(frame.name,ref.name);checkFrame(frame);
+              equal([frame.url,frame.fixedAt,frame.day,frame.viewport.width,frame.viewport.height,frame.heading],
+                [routeURL,Date.parse(dates[frame.document]),days[frame.document],width,height,'FOOTLE']);
+              assert(frame.viewport.scrollWidth<=width&&Number.isFinite(frame.at)&&Number.isFinite(frame.browserMs)&&Number.isFinite(frame.timeOrigin));
+              return frame;
+            });
+            const fm=new Map(frames.map(f=>[f.name,f]));
+            assert.equal(fm.size,frames.length);
+            const get=name=>{const f=fm.get(name);assert(f,'required frame '+name);return f;};
+            const at=name=>frames.indexOf(get(name));
+            allFrames.push(frames);
+            equal(row.documents.map(d=>d.side),['a','b']);
+            assert.notEqual(row.documents[0].browserDocument.loaderId,row.documents[1].browserDocument.loaderId);
+            equal(row.navigations.map(n=>n.document),row.navigations.map(n=>n.document).sort());
+            for(const d of row.documents){
+              const mounted=get('day-'+d.side+'-mounted'),view=frames.filter(f=>f.document===d.side);
+              equal([d.firstFrame,d.fixedAt,d.day,d.timeOrigin],[mounted.name,mounted.fixedAt,mounted.day,mounted.timeOrigin]);
+              const {frameId,loaderId,url}=d.browserDocument;
+              assert(typeof frameId==='string'&&frameId&&typeof loaderId==='string'&&loaderId);
+              assert.equal(url,mounted.url);
+              assert(view[0]===mounted&&d.closedAt>=view[view.length-1].at);
+              assert(view.every((f,n)=>f.timeOrigin===d.timeOrigin&&(!n||f.at>=view[n-1].at&&f.browserMs>=view[n-1].browserMs)));
+              const nav=row.navigations.filter(n=>n.document===d.side);
+              assert(nav.length>=1&&nav.length<=2);
+              assert(nav.every((n,k)=>n.url===routeURL&&Number.isFinite(n.at)&&n.at<=mounted.at&&(!k||n.at>=nav[k-1].at)));
+              const served=row.firstParty.filter(item=>item.document===d.side);
+              equal(served.filter(item=>item.type==='document').map(item=>[item.url,item.body.file]),[[routeURL,docPath]]);
+              assert(served.some(item=>item.type==='script'&&new URL(item.url).pathname===report.entryPath));
+              assert(served.some(item=>item.type==='script'&&/^dist\/assets\/Footle-[^/]+\.js$/.test(item.body.file)));
+              if(boot)assert(served.some(item=>item.body.file==='dist/index.html'&&new URL(item.url).pathname==='/'));
+              for(const item of served){
+                const url=new URL(item.url);
+                equal([item.status,url.origin],[200,base]);
+                const file=url.pathname===route?docPath:url.pathname==='/'?'dist/index.html':'dist'+decodeURIComponent(url.pathname);
+                equal(item.body,distByFile.get(file));
+                assert(Number.isFinite(item.at)&&item.at<=d.closedAt);
+              }
+            }
+            assert(row.documents[0].closedAt<=get('day-b-mounted').at);
+            const guess=label=>[label+'-focus',label+'-type',label+'-pick'];
+            const planA=['dismiss-help','reject-cookies',...guess('a-daily-miss'),'start-practice-mode','select-hard','start-run'];
+            for(let n=0;n<i;n++)planA.push('a-predecessor-'+n+'-open','a-predecessor-'+n+'-confirm','a-advance-'+n);
+            planA.push(...guess('a-practice-miss'));
+            const planB=['b-show-daily',...guess('b-daily-miss'),'b-revisit-paused-practice','b-return-to-daily',
+              ...guess('b-daily-solve'),'b-resume-practice','b-legitimate-practice-forfeit-open','b-legitimate-practice-forfeit-confirm'];
+            equal(row.actions.map(a=>[a.document,a.label]),[...planA.map(a=>['a',a]),...planB.map(a=>['b',a])]);
+            equal([row.actions.length,frames.length],[23+3*i,2*(23+3*i)+13]);
+            const photoLabels=['pending','paused','resumed'];
+            const labels=['day-a-mounted','day-a-ready','day-a-collision-saved','day-b-mounted','day-b-pool-pending','day-b-pool-paused','day-b-daily-won',
+              ...row.actions.flatMap(a=>[a.label+'-before',a.label+'-after']),...photoLabels.flatMap(a=>[a+'-photo-before',a+'-photo-after'])];
+            equal([...fm.keys()].sort(),labels.sort());
+            equal(row.events.map(t=>t.document),['a','b']);
+            const typedNames={'a-daily-miss-type':dailyMiss,'a-practice-miss-type':practiceMiss,'b-daily-miss-type':dailyMiss,'b-daily-solve-type':answerB};
+            const targetNames={'dismiss-help':"Let's Play!",'reject-cookies':'Reject all','select-hard':'hard','start-run':'Start run',
+              'b-resume-practice':'Resume five-puzzle run','b-legitimate-practice-forfeit-open':'Give up','b-legitimate-practice-forfeit-confirm':'Yes, reveal it'};
+            const pickedNames={'a-daily-miss-pick':dailyMiss,'a-practice-miss-pick':practiceMiss,'b-daily-miss-pick':dailyMiss,'b-daily-solve-pick':answerB};
+            for(const a of row.actions){
+              const [before,after]=[get(a.before),get(a.after)];
+              equal([a.before,a.after,before.document,after.document],[a.label+'-before',a.label+'-after',a.document,a.document]);
+              assert.equal(at(a.after),at(a.before)+1);
+              assert(a.events.every(e=>e.trusted&&e.browserMs>=before.browserMs&&e.browserMs<=after.browserMs));
+              geometry(a.layout,width,height);
+              if(Object.hasOwn(typedNames,a.label)){
+                const text=typedNames[a.label];
+                equal([a.method,a.value,before.combo,after.combo?.value],['typing',text,{value:'',disabled:false,focused:true},text]);
+                equal(a.events.map(e=>[e.type,e.tag,e.role,e.data,e.value]),[['input','INPUT','combobox',text,text]]);
+              }else{
+                assert.equal(a.method,'mouse');
+                equal(a.events.map(e=>e.type),['pointerdown','pointerup','click']);
+                assert(a.events.every(e=>e.pointerType==='mouse'&&e.tag===a.layout.tag&&e.text===a.layout.text
+                  &&Math.abs(e.x-a.layout.center.x)<=1&&Math.abs(e.y-a.layout.center.y)<=1));
+                if(Object.hasOwn(targetNames,a.label))assert.equal(a.layout.text,targetNames[a.label]);
+                if(Object.hasOwn(pickedNames,a.label))assert(a.layout.role==='option'&&a.layout.text.startsWith(pickedNames[a.label]));
+                if(a.label.endsWith('-focus'))equal([a.layout.tag,a.layout.role,after.combo?.focused],['INPUT','combobox',true]);
+                if(/^a-predecessor-\d+-open$/.test(a.label))assert.equal(a.layout.text,'Give up');
+                if(/^a-predecessor-\d+-confirm$/.test(a.label))assert.equal(a.layout.text,'Yes, reveal it');
+                if(/^a-advance-\d+$/.test(a.label))assert.equal(a.layout.text,'Next puzzle');
+              }
+            }
+            for(const t of row.events){
+              const byDocument=rows=>rows.filter(item=>item.document===t.document);
+              const actionEvents=byDocument(row.actions).flatMap(a=>a.events);
+              equal(t.items.filter(e=>e.type!=='wheel'),actionEvents);
+              equal(t.items.filter(e=>e.type==='wheel'),byDocument(row.wheels).flatMap(w=>w.events));
+            }
+            for(const w of row.wheels){
+              assert(w.x>=0&&w.x<width&&w.y>=0&&w.y<height&&Number.isInteger(w.delta)&&w.delta!==0);
+              equal([w.before.viewport,w.after.viewport],[{width,height},{width,height}]);
+              assert(w.events.every(e=>e.type==='wheel'&&e.trusted&&e.deltaMode===0));
+              assert.equal(w.events.reduce((total,e)=>total+e.deltaY,0),w.delta);
+            }
+            const ready=get('day-a-ready'),start=get('start-run-after'),a=get('day-a-collision-saved'),saved=bytes(a);
+            equal([get('dismiss-help-before').dialog,get('reject-cookies-before').dialog,get('reject-cookies-before').cookie,ready.dialog,ready.cookie],[true,false,true,false,false]);
+            equal([ready.mode,ready.storage.local[guestKey],ready.storage.local['footle-rules-seen']],['daily',guest,'1']);
+            assert(!Object.hasOwn(ready.storage.local,runKey)&&!Object.hasOwn(ready.storage.local,dailyKey('a')));
+            const consent=JSON.parse(ready.storage.local['cookie-consent-v2']);
+            equal([consent.version,consent.analytics,consent.advertising],[2,false,false]);
+            const oldDaily=daily(get('a-daily-miss-pick-after'),'a',answerA,'playing',[[dailyMiss,false]]);
+            const initial=practice(start),aRun=practice(a),targets=initial.targets;
+            equal([start.mode,initial.active,initial.tier,initial.index],['practice',true,'hard',0]);
+            equal([...targets].sort(),hard.filter(name=>name!==answerA).sort());
+            equal(initial.rounds,Array.from({length:5},()=>({guesses:[],status:'playing'})));
+            assert.equal(targets.indexOf(answerB),i);
+            assert.equal(initial.pool.filter(player=>player.difficulty==='hard').length,6);
+            for(let n=0;n<i;n++){
+              const failed=get('a-predecessor-'+n+'-confirm-after'),advance=get('a-advance-'+n+'-after');
+              equal([failed.practiceIndex,failed.practiceFeedback,practice(failed).rounds[n],advance.practiceIndex],
+                [n,'The answer was '+targets[n],{guesses:[],status:'lost'},n+1]);
+            }
+            const expectedRounds=initial.rounds.map((round,n)=>n<i?{guesses:[],status:'lost'}:n===i?{guesses:[practiceMiss],status:'playing'}:round);
+            equal(aRun,{...initial,index:i,rounds:expectedRounds});
+            equal([a.mode,a.practiceIndex,a.storage.local[dailyKey('a')],a.completionAttempts],['practice',i,oldDaily,0]);
+            const pending=get('day-b-pool-pending'),paused=get('day-b-pool-paused'),again=get('b-revisit-paused-practice-after');
+            for(const [f,status,held] of [[pending,pendingText,[...marketRoles].sort()],[paused,pausedText,[]],[again,pausedText,[]]]){
+              equal([f.mode,f.practiceStatus,f.practiceFeedback,f.practiceReceipt,f.practiceIndex,bytes(f),f.combo,f.heldB,f.completionAttempts],
+                ['practice',status,null,null,i,saved,null,held,0],f.name);
+              assert(!f.mainText.includes(answerB)&&!f.actions['Give up'].some(Boolean)&&!f.actions['Yes, reveal it'].some(Boolean));
+              assert(!Object.hasOwn(f.storage.local,unlimitedKey));beforeCompletion(f);
+            }
+            beforeCompletion(a);
+            assert(!Object.hasOwn(paused.storage.local,dailyKey('a'))&&!Object.hasOwn(paused.storage.local,dailyKey('b')));
+            const miss=daily(get('b-daily-miss-pick-after'),'b',answerB,'playing',[[dailyMiss,false]]);
+            assert.equal(again.storage.local[dailyKey('b')],miss);
+            const won=get('day-b-daily-won'),wonBytes=daily(won,'b',answerB,'won',[[dailyMiss,false],[answerB,true]]);
+            assert(won.mainText.includes('Correct!')&&won.mainText.includes(answerB)&&won.actions['Resume five-puzzle run'].includes(true));
+            afterCompletion(won);
+            const resumed=get('b-resume-practice-after');
+            equal([resumed.mode,resumed.practiceIndex,resumed.practiceStatus,resumed.practiceFeedback,bytes(resumed),resumed.storage.local[dailyKey('b')],resumed.completionAttempts],
+              ['practice',i,null,null,saved,wonBytes,1]);
+            assert(resumed.combo&&!resumed.combo.disabled&&resumed.actions['Give up'].includes(true)&&!resumed.mainText.includes(answerB));
+            const finished=get('b-legitimate-practice-forfeit-confirm-after');
+            equal(practice(finished),{...aRun,rounds:aRun.rounds.map((round,n)=>n===i?{...round,status:'lost'}:round)});
+            equal([finished.mode,finished.practiceIndex,finished.storage.local[dailyKey('b')],finished.completionAttempts,records(finished)],
+              ['practice',i,wonBytes,1,records(won)]);
+            if(i<4)equal([finished.practiceFeedback,finished.practiceReceipt],['The answer was '+answerB,null]);
+            else assert(finished.practiceFeedback===null&&finished.practiceReceipt?.includes('Run complete')
+              &&finished.practiceReceipt.includes('0 of 5 solved')&&finished.practiceReceipt.includes(answerB));
+            const practiceEvents=(document)=>row.storageEvents.filter(e=>e.document===document&&e.change.storageId?.isLocalStorage&&e.change.key===runKey);
+            const expectedA=[bytes(start)];
+            for(let n=0;n<i;n++)expectedA.push(bytes(get('a-predecessor-'+n+'-confirm-after')),bytes(get('a-advance-'+n+'-after')));
+            expectedA.push(saved);
+            equal(practiceEvents('a').map(e=>e.change.newValue),expectedA);
+            equal(practiceEvents('b').map(e=>e.change.newValue),[
+              bytes(get('b-show-daily-after')),bytes(again),bytes(get('b-return-to-daily-after')),bytes(resumed),bytes(finished)]);
+            for(const document of ['a','b']){
+              const events=practiceEvents(document);
+              let prior=document==='a'?undefined:saved;
+              for(const e of events){
+                equal([e.change.storageId.securityOrigin,e.change.oldValue,e.kind],[base,prior,prior===undefined?'domStorageItemAdded':'domStorageItemUpdated']);
+                prior=e.change.newValue;
+              }
+            }
+            equal(row.screenshots.map(photo=>photo.label),photoLabels);
+            for(const photo of row.screenshots){
+              const body=check(photo),before=get(photo.before),after=get(photo.after);
+              equal([photo.file,photo.document,before.document,after.document],[id+'-'+photo.label+'.png','b','b','b']);
+              assert.equal(body.subarray(0,8).toString('hex'),'89504e470d0a1a0a');
+              assert.equal(body.subarray(12,16).toString(),'IHDR');
+              equal([body.readUInt32BE(16),body.readUInt32BE(20)],[width,height]);
+              geometry(photo.layout,width,height,false);
+              equal([before.name,after.name],[photo.label+'-photo-before',photo.label+'-photo-after']);
+              assert.equal(at(after.name),at(before.name)+1);
+              equal(after.storage,before.storage);
+              for(const f of [before,after]){
+                equal([f.mode,bytes(f),f.practiceIndex],['practice',saved,i]);
+                if(photo.label==='resumed'){
+                  equal([f.practiceStatus,f.practiceFeedback,f.storage.local[dailyKey('b')],f.completionAttempts],[null,null,wonBytes,1]);
+                  assert(f.combo&&!f.combo.disabled&&f.actions['Give up'].includes(true));
+                }else{
+                  equal([f.practiceStatus,f.practiceFeedback,f.combo,f.completionAttempts],[photo.label==='pending'?pendingText:pausedText,null,null,0]);
+                  assert(!f.mainText.includes(answerB)&&!f.actions['Give up'].some(Boolean)&&!f.actions['Yes, reveal it'].some(Boolean));
+                  equal(f.heldB,photo.label==='pending'?[...marketRoles].sort():[]);
+                }
+              }
+            }
+            const release=row.release;
+            equal(release.roles,[...marketRoles].sort());
+            assert(Number.isFinite(release.at)&&release.at>=get('pending-photo-after').at&&release.at<=paused.at);
+            const acted=row.requests.filter(r=>r.role);
+            const expectedRequestRoles=[...marketRoles.map(role=>'a:'+role),...marketRoles.map(role=>'b:'+role),'b:completion','b:standing','b:badge-history'].sort();
+            equal(acted.map(r=>r.document+':'+r.role).sort(),expectedRequestRoles);
+            for(const r of row.requests){
+              const url=new URL(r.url);
+              equal(r.query,[...url.searchParams]);
+              assert(['a','b'].includes(r.document)&&Number.isFinite(r.at));
+              if(r.outcome==='local-cors'){
+                const [method,pathname,query]=spec(r.corsRole,guest);
+                equal([url.origin,r.method,r.forMethod,url.pathname,r.body],[backend,'OPTIONS',method,pathname,null]);
+                assert(sameQuery(r.query,query));
+                continue;
+              }
+              if(r.outcome==='refused'){
+                const background=url.origin===backend&&url.pathname==='/rest/v1/live_scores'&&(r.method==='GET'||r.method==='OPTIONS'&&r.forMethod==='GET');
+                const asset=r.method==='GET'&&((url.hostname==='fonts.googleapis.com'&&url.pathname==='/css2')||
+                  (url.hostname==='fonts.gstatic.com'&&url.pathname.startsWith('/s/'))||
+                  (url.hostname==='flagcdn.com'&&/^\/w(?:20|40|80|160|320)\/(?:[a-z]{2}|gb-(?:eng|sct|wls|nir))\.png$/.test(url.pathname)&&!url.search));
+                assert(!r.role&&(background||asset));
+                continue;
+              }
+              const [method,pathname,query,body,response]=spec(r.role,guest);
+              equal([url.origin,r.method,url.pathname,r.body===null?null:JSON.parse(r.body)],[backend,method,pathname,body]);
+              assert(sameQuery(r.query,query));
+              if(r.role==='completion'){
+                equal([r.document,r.outcome,r.failure,r.response],['b','aborted-completion','net::ERR_FAILED',undefined]);
+                assert(r.at>=get('b-daily-solve-pick-before').at&&r.at<=won.at);
+                continue;
+              }
+              equal([r.outcome,r.response],['local-fixture',response]);
+              assert(Number.isFinite(r.fulfilledAt)&&r.fulfilledAt>=r.at);
+              const delivery=row.responses.filter(item=>item.document===r.document&&item.role===r.role);
+              assert.equal(delivery.length,1);
+              const d=delivery[0];
+              equal([d.url,d.method,d.status,d.body],[r.url,r.method,200,response]);
+              assert(d.at>=r.at);
+              if(r.document==='b'&&marketRoles.includes(r.role)){
+                assert(r.heldAt>=r.at&&r.heldAt<=pending.at&&r.releasedAt===release.at&&d.at>=release.at&&d.at<=paused.at);
+              }
+              if(r.document==='a')assert(d.at<=ready.at&&!Object.hasOwn(r,'heldAt'));
+              if(['standing','badge-history'].includes(r.role))assert(r.at>=get('b-daily-solve-pick-before').at&&d.at<=won.at);
+            }
+            equal(row.responses.map(r=>r.document+':'+r.role).sort(),expectedRequestRoles.filter(role=>role!=='b:completion'));
+            return {id,width,height,predecessors:i,documents:row.documents.length,viewportPNGs:row.screenshots.length,
+              marketReads:row.responses.filter(r=>marketRoles.includes(r.role)).length,dailyWins:1,completionAttempts:acted.filter(r=>r.role==='completion').length,
+              standingReads:row.responses.filter(r=>r.role==='standing').length,badgeReads:row.responses.filter(r=>r.role==='badge-history').length,
+              resumed:1,legitimateForfeits:1,priorPracticeForfeits:i,frames:frames.length,actions:row.actions.length,
+              mouseActions:row.actions.filter(a=>a.method==='mouse').length,typingActions:row.actions.filter(a=>a.method==='typing').length,
+              wheels:row.wheels.length,navigations:row.navigations.length,firstPartyResponses:row.firstParty.length,
+              corsPreflights:row.requests.filter(r=>r.outcome==='local-cors').length,
+              savedPractice:{bytes:Buffer.byteLength(saved),sha256:sha(saved)},dailyWon:{bytes:Buffer.byteLength(wonBytes),sha256:sha(wonBytes)},
+              pendingText,pausedText,practiceReceipt:i===4?'run-complete':'ordinary-feedback',completionScore:600};
+          });
+          equal(raw,{...report,journeys:report.journeys.map((row,i)=>({...row,frames:allFrames[i]}))});
+          equal([...referenced].sort(),[...manifestNames].sort());
+          const keys=['documents','viewportPNGs','marketReads','dailyWins','completionAttempts','standingReads','badgeReads','resumed','legitimateForfeits',
+            'priorPracticeForfeits','frames','actions','mouseActions','typingActions','wheels','navigations','firstPartyResponses','corsPreflights'];
+          const census={journeys:measured.length,contexts:measured.length,
+            ...Object.fromEntries(keys.map(key=>[key,measured.reduce((sum,r)=>sum+r[key],0)]))};
+          equal(census,report.census);
+          equal([census.journeys,census.contexts,census.documents,census.viewportPNGs,census.marketReads,census.dailyWins,census.completionAttempts,
+            census.standingReads,census.badgeReads,census.resumed,census.legitimateForfeits],[3,3,6,9,18,3,3,3,3,3,3]);
+          const evidence={filesCount:manifest.files.length,bodyBytes:manifest.files.reduce((sum,row)=>sum+row.bytes,0),
+            report:tuple('report.json',read(out,'report.json')),raw:tuple('raw.json',read(out,'raw.json')),
+            bodyManifest:tuple('body-manifest.json',read(out,'body-manifest.json')),qualifiedInput:report.binding,
+            indexBefore:report.indexBefore,indexAfter:report.indexAfter,responseBodies:bodies};
+          const holds={source:true,dist:true,locks:true,installed521:true,offline:true,index:true,fullUnitLiteral:true,qualifiedFixed:true,qualifiedControls:true};
+          console.log(JSON.stringify({status:'passed',route,page:PAGE,hook:HOOK,helper:HELPER,currentSource:source,census,measured,evidence,holds,
+            boundaries:report.limits},null,2));
+          FOOTLE_PRACTICE_ROLLOVER_NATIVE_OUTER
+          test "$(git hash-object "$out/native-admission-script.mjs")" = "$FOOTLE_PRACTICE_ROLLOVER_OUTER"
+          test -z "$(git ls-files -- "$out/native-admission-script.mjs")"
+          export FOOTLE_PRACTICE_ROLLOVER_BROWSER_OUT="$PWD/$out/browser"
+          export FOOTLE_PRACTICE_ROLLOVER_FULL_UNIT="$PWD/$out"
+          export FOOTLE_PRACTICE_ROLLOVER_FIXED_REFERENCE="$PWD/$out/fixed-reference"
+          export FOOTLE_PRACTICE_ROLLOVER_CONTROLS_REFERENCE="$PWD/$out/controls-reference"
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          node scripts/qa/playFootlePracticeDailyRollover.mjs 2>&1 | tee "$out/browser.log"
+          node "$out/native-admission-script.mjs" "$out/browser" > "$out/native-admission.json" 2> "$out/native-admission.log" || { cat "$out/native-admission.log"; exit 1; }
+      - name: Admit actual fresh units build native and retained controls scope
+        run: |
+          set -euo pipefail
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          import {createHash} from 'node:crypto';
+          const out='footle-practice-daily-rollover-full',env=process.env;
+          const bytes=file=>fs.readFileSync(out+'/'+file),read=file=>JSON.parse(bytes(file));
+          const sha=value=>createHash('sha256').update(value).digest('hex');
+          const source=read('source-join.json'),custody=read('packet-custody.json'),unit=read('unit-admission.json'),raw=read('fixed-raw-join.json'),native=read('native-admission.json');
+          assert.deepEqual([source.status,source.head,source.trackedRows,source.sourceRows,source.cleanSourceRows,source.rootConfigurations.length,source.heldFixedRows],
+            ['passed',env.GITHUB_SHA,5795,4666,4665,11,5793]);
+          assert.deepEqual([source.parent,source.fixedHead,source.fixedTree,source.helperBlob],[custody.fixed.head,custody.fixed.head,custody.fixed.tree,env.FOOTLE_PRACTICE_ROLLOVER_HELPER]);
+          assert.deepEqual([custody.status,custody.controlsRerun,custody.referenceChecks.status,unit.status,unit.commands,unit.actualCases,unit.actualPasses,unit.actualFailures,unit.wholeQualifiedFixedRAWBytesHeld],
+            ['passed',false,'passed','passed',1,54,54,0,true]);
+          assert.deepEqual([raw.status,raw.fixedHead,raw.fixedTree,raw.raw,raw.freshUnitRAWByteEqual],['passed',custody.fixed.head,custody.fixed.tree,unit.raw,true]);
+          const nativeChecks=(()=>{
+          const c=native.census;
+          const fixedCounts={journeys:3,contexts:3,documents:6,viewportPNGs:9,marketReads:18,dailyWins:3,
+            completionAttempts:3,standingReads:3,badgeReads:3,resumed:3,legitimateForfeits:3};
+          for(const [key,want] of Object.entries(fixedCounts))assert.equal(c[key],want,key);
+          assert.deepEqual(native.currentSource,{head:source.head,tree:source.tree,workflow:source.workflowBlob,trackedBodies:5795,
+            scopedSourceRows:4666,heldFixedRows:5793,rootConfigurations:11,distBodies:850,installedVersions:521});
+          assert.deepEqual(native.holds,{source:true,dist:true,locks:true,installed521:true,offline:true,index:true,fullUnitLiteral:true,
+            qualifiedFixed:true,qualifiedControls:true});
+          const rows=native.measured;
+          assert.deepEqual(rows.map(r=>[r.width,r.height]),[[320,568],[390,844],[1280,900]]);
+          for(const row of rows){
+            assert(Number.isInteger(row.predecessors)&&row.predecessors>=0&&row.predecessors<=4);
+            assert.deepEqual([row.id,row.documents,row.viewportPNGs,row.marketReads,row.dailyWins,row.completionAttempts,row.standingReads,row.badgeReads,
+              row.resumed,row.legitimateForfeits,row.completionScore,row.priorPracticeForfeits],
+              [String(row.width),2,3,6,1,1,1,1,1,1,600,row.predecessors]);
+            assert.deepEqual([row.actions,row.frames,row.mouseActions,row.typingActions],
+              [23+3*row.predecessors,2*row.actions+13,row.actions-4,4]);
+            assert.deepEqual([row.pendingText,row.pausedText,row.practiceReceipt],
+              ["Checking today's Daily...","Finish today's Daily to resume this puzzle.",row.predecessors===4?'run-complete':'ordinary-feedback']);
+            for(const key of ['wheels','navigations','firstPartyResponses','corsPreflights'])assert(Number.isSafeInteger(row[key])&&row[key]>=0,key);
+            assert(row.navigations>=2&&row.navigations<=4);
+            for(const key of ['savedPractice','dailyWon'])
+              assert(Number.isSafeInteger(row[key].bytes)&&row[key].bytes>0&&/^[a-f0-9]{64}$/.test(row[key].sha256),key);
+          }
+          for(const key of Object.keys(c).filter(key=>!['journeys','contexts'].includes(key)))
+            assert.equal(c[key],rows.reduce((sum,row)=>sum+row[key],0),key+' complete actual census');
+          const e=native.evidence;
+          const tuple=(file,body)=>({file,bytes:body.length,sha256:sha(body)});
+          for(const [key,file] of [['report','report.json'],['raw','raw.json'],['bodyManifest','body-manifest.json'],['qualifiedInput','qualified-input.json'],
+            ['indexBefore','index-before.bin'],['indexAfter','index-after.bin']]){
+            assert.deepEqual(e[key],tuple(file,bytes('browser/'+file)));
+          }
+          assert(bytes('browser/index-before.bin').equals(bytes('browser/index-after.bin')));
+          const manifest=read('browser/body-manifest.json'),binding=read('browser/qualified-input.json'),report=read('browser/report.json');
+          assert.equal(manifest.version,1);
+          assert.deepEqual([e.filesCount,e.bodyBytes],[manifest.files.length,manifest.files.reduce((sum,row)=>sum+row.bytes,0)]);
+          assert.deepEqual([report.status,report.census,report.source,report.limits],['passed',c,native.currentSource,native.boundaries]);
+          assert.deepEqual([binding.source,binding.page,binding.hook,binding.helper,binding.fullUnit],
+            [native.currentSource,native.page,native.hook,native.helper,unit.raw]);
+          for(const role of ['fixed','controls']){
+            for(const key of ['run','artifact','head','tree','zipBytes','zipSHA256'])assert.equal(binding[role][key],custody[role][key],role+' '+key);
+          }
+          assert.deepEqual(e.responseBodies,report.fixture.bodies);
+          for(const row of Object.values(e.responseBodies))assert.deepEqual(row,tuple(row.file,bytes('browser/'+row.file)));
+          assert.equal(bytes(env.SIM_OFFLINE_RECEIPT.split('/').at(-1)).length,0);
+          return {status:'passed',...c,measured:rows,report:e.report,raw:e.raw,bodyManifest:e.bodyManifest,qualifiedInput:e.qualifiedInput,
+            holds:native.holds,boundaries:native.boundaries};
+          })();
+          assert.equal(nativeChecks?.status,'passed','Reviewed actual native validator must complete');
+          assert.deepEqual([native.status,native.route,native.page,native.hook,native.helper],['passed','/footle',env.FOOTLE_PRACTICE_ROLLOVER_PAGE_BLOB,env.FOOTLE_PRACTICE_ROLLOVER_HOOK_BLOB,env.FOOTLE_PRACTICE_ROLLOVER_HELPER]);
+          const expected='simAdsense,simBrand,simHeadTags,simHiddenPages,simHubs,simIndexNow,simIndexing,simInternalLinks,simNoRivalNames,simPrerender,simPrerenderBoot,simRetiredRoutes,simSchema,simSitemap,simSnapshotAssets,simSiteSearch,simGuideHeadings,simSeoMetaSplit,simHomeCopy,simHarnessAnchors'.split(',').map(name=>name+'.mjs').sort();
+          const readers=bytes('readers.log').toString('utf8'),readerRows=[...readers.matchAll(/^\s+PASS\s+(sim[A-Za-z0-9]+\.mjs)/gm)].map(row=>row[1]).sort();
+          assert.deepEqual(readerRows,expected);assert(!/^\s+FAIL\s+/m.test(readers));
+          const weight=bytes('weight.log').toString('utf8');
+          const capRows=[...weight.matchAll(/^\s+(\/\S*)\s+\d+K gz over\s+\d+ files \(budget (\d+)K, [\d.]+K to the tenth\)/gm)].map(row=>[row[1],Number(row[2])]);
+          assert.deepEqual(capRows,[['/',245],['/club-manager',648],['/soccer-career',840],['/stadium-tycoon',305],['/wonderkid-factory',278],['/minefield',295],['/footle',354],['/nfl-my-career',499],['/front-office',390],['/soccer-grid',320],['/leaderboard',266],['/manager-hot-seat',672],['/deadline-day',680],['/transfer-path',381],['/nba-front-office',397],['/nhl-front-office',379]]);
+          assert(weight.includes('sweepWeight: green.'));
+          const tar=bytes('dist.tgz'),distFiles=read('dist-before.json').length;
+          assert.equal(distFiles,850);
+          const normalized=read('dist-before.json').map(row=>{assert(row.file.startsWith('dist/'));return {path:row.file.slice(5),bytes:row.bytes,sha256:row.sha256};});
+          fs.writeFileSync(out+'/admission.json',JSON.stringify({
+            status:'passed',qualification:'fresh-footle-practice-daily-rollover-full-scope',head:source.head,tree:source.tree,page:env.FOOTLE_PRACTICE_ROLLOVER_PAGE_BLOB,hook:env.FOOTLE_PRACTICE_ROLLOVER_HOOK_BLOB,test:env.FOOTLE_PRACTICE_ROLLOVER_TEST,plan:env.FOOTLE_PRACTICE_ROLLOVER_PLAN,
+            helper:env.FOOTLE_PRACTICE_ROLLOVER_HELPER,nativeOuter:env.FOOTLE_PRACTICE_ROLLOVER_OUTER,preflight:custody.preflight,original:custody.original,fixed:custody.fixed,controls:custody.controls,controlsRerun:false,
+            unit,unitCommands:1,raw,trackedBodies:source.trackedRows,sourceRows:source.sourceRows,cleanSourceRows:source.cleanSourceRows,rootConfigurations:source.rootConfigurations.length,
+            distFiles,distTar:{file:'dist.tgz',bytes:tar.length,sha256:sha(tar)},distTupleSHA256:sha(JSON.stringify(normalized)),
+            readers:readerRows.length,readerRows,immutableCaps:capRows.length,capRows,nativeReceipt:native,nativeChecks,referenceChecks:custody.referenceChecks,
+            limits:'Fresh fixed units, normal production build, all readers and caps, native Footle and full source holds. Active preflight, original, fixed and controls are retained admitted evidence. No controls rerun or release claim.',
+          },null,2)+'\n',{flag:'wx'});
           NODE
-          node "$EVIDENCE/physical.mjs" before
-      - name: Proper app types
-        run: |
-          set -euo pipefail
-          node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee "$EVIDENCE/types.log"
-      - name: Run frozen Footle and preserved tests for the exact fixed roles
-        run: |
-          set -euo pipefail
-          node "$EVIDENCE/qualify.mjs" qualify
-      - name: Verify unchanged physical source and locked offline run
+      - name: Final physical source index locks versions build and reference holds
         if: always()
         run: |
           set -euo pipefail
-          git ls-files -s > "$EVIDENCE/source-after.txt"
-          sha256sum package.json package-lock.json > "$EVIDENCE/locks-after.txt"
-          cmp "$EVIDENCE/source-before.txt" "$EVIDENCE/source-after.txt"
-          cmp "$EVIDENCE/locks-before.txt" "$EVIDENCE/locks-after.txt"
+          out=footle-practice-daily-rollover-full
+          git ls-files -s > "$out/source-after.txt"
+          cmp "$out/source-before.txt" "$out/source-after.txt"
           git diff --exit-code HEAD -- .
-          node "$EVIDENCE/physical.mjs" after
-          test ! -s "$SIM_OFFLINE_RECEIPT"
+          sha256sum package.json package-lock.json > "$out/locks-after.txt"
+          cmp "$out/locks-before.txt" "$out/locks-after.txt"
+          if [[ -f "$out/dist.sha256" ]]; then sha256sum --check "$out/dist.sha256"; fi
+          if [[ -f "$out/native-admission-script.mjs" ]]; then
+            test "$(git hash-object "$out/native-admission-script.mjs")" = "$FOOTLE_PRACTICE_ROLLOVER_OUTER"
+            test -z "$(git ls-files -- "$out/native-admission-script.mjs")"
+          fi
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import assert from 'node:assert/strict';
+          import {execFileSync} from 'node:child_process';
+          import {createHash} from 'node:crypto';
+          const out='footle-practice-daily-rollover-full',read=file=>JSON.parse(fs.readFileSync(out+'/'+file));
+          const write=(file,body)=>fs.writeFileSync(out+'/'+file,JSON.stringify(body));
+          const sha=bytes=>createHash('sha256').update(bytes).digest('hex');
+          const tuple=(file,bytes)=>({file,bytes:bytes.length,sha256:sha(bytes)});
+          const tracked=execFileSync('git',['ls-files','-z'],{encoding:'utf8',maxBuffer:16*1024*1024}).split('\0').filter(Boolean);
+          const source=tracked.map(file=>tuple(file,fs.readFileSync(file)));
+          assert.equal(source.length,5795);assert.deepEqual(source,read('tracked-before.json'));write('tracked-after.json',source);
+          const lock=JSON.parse(fs.readFileSync('package-lock.json'));
+          const versions=Object.keys(lock.packages).filter(file=>file.startsWith('node_modules/')&&fs.existsSync(file+'/package.json')).map(file=>[file,JSON.parse(fs.readFileSync(file+'/package.json')).version]);
+          assert.equal(versions.length,521);for(const [file,version] of versions)assert.equal(version,lock.packages[file].version,file);
+          assert.deepEqual(versions,read('installed-before.json'));write('installed-after.json',versions);
+          const offlineBytes=fs.statSync(out+'/offline.log').size;assert.equal(offlineBytes,0);
+          const walk=(dir,prefix='')=>fs.readdirSync(dir,{withFileTypes:true}).sort((a,b)=>a.name.localeCompare(b.name)).flatMap(entry=>{
+            const file=prefix+entry.name;
+            if(entry.isDirectory())return walk(path.join(dir,entry.name),file+'/');
+            assert(entry.isFile()&&!entry.isSymbolicLink(),file+' actual regular retained body');return[file];
+          });
+          let distHeld=false,retainedPacketsHeld=false;
+          if(fs.existsSync(out+'/dist-before.json')){
+            const dist=walk('dist','dist/').map(file=>tuple(file,fs.readFileSync(file)));
+            assert.equal(dist.length,850);assert.deepEqual(dist,read('dist-before.json'));write('dist-after.json',dist);distHeld=true;
+          }
+          if(fs.existsSync(out+'/packet-custody.json')){
+            for(const role of ['preflight','original','fixed','controls']){
+              const dir=out+'/'+role+'-reference',before=read(role+'-reference-before.json');
+              const after=walk(dir).sort().map(file=>tuple(file,fs.readFileSync(path.join(dir,file))));
+              assert.deepEqual(after,before);write(role+'-reference-after.json',after);
+            }
+            retainedPacketsHeld=true;
+          }
+          if(fs.existsSync(out+'/admission.json'))assert(distHeld&&retainedPacketsHeld);
+          write('final-holds.json',{status:'passed',trackedBodies:source.length,scopedSourceRows:4666,cleanSourceRows:4665,rootConfigurations:11,installedLockedVersions:versions.length,
+            indexUnchanged:true,sourceBytesUnchanged:true,locksUnchanged:true,distHeld,retainedPacketsHeld,offlineBytes,
+            limits:'Final physical and custody holds. Full admission and completed workflow success are separate.'});
+          NODE
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: footle-practice-daily-rollover-fixed-${{ github.run_id }}
-          path: footle-practice-daily-rollover-fixed
+          name: footle-practice-daily-rollover-full-${{ github.run_id }}
+          path: footle-practice-daily-rollover-full
           retention-days: 14
           if-no-files-found: error
