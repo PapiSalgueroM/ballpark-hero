@@ -1,0 +1,224 @@
+name: NBA Chain name variants original
+on:
+  push:
+    branches: [codex/nba-chain-name-variants-original-qa-20261110]
+permissions:
+  actions: read
+  contents: read
+jobs:
+  original:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      TZ: UTC
+      SIM_NETWORK: offline
+      SIM_OFFLINE_RECEIPT: nba-chain-name-variants-original/offline.log
+      NBA_CHAIN_NAME_VARIANTS_RAW: nba-chain-name-variants-original/public-cases.raw.json
+      BASE_HEAD: '09f9bfc46b7a3e1d56ea09b1e477d587c4b1d726'
+      BASE_TREE: '6a5b0bf5535deeeb81e1d8106fb812b68e95cd48'
+      HELPER_BLOB: '286218947229daf25c92d791325b6fa148e26f88'
+      PLAN_BLOB: '75df55aba5a1cf955958338bfeb34df31a74a004'
+      EVIDENCE: nba-chain-name-variants-original
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24.22.1
+          cache: npm
+      - name: Authenticate admitted active entry and exact original NBA Chain source
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          test ! -e "$EVIDENCE"
+          if grep -Eq '__[A-Z][A-Z0-9_]*__' .github/workflows/nba-chain-name-variants-20261110.yml; then echo 'Unresolved original workflow binding'; exit 1; fi
+          mkdir "$EVIDENCE"
+          touch "$SIM_OFFLINE_RECEIPT"
+          git rev-parse HEAD > "$EVIDENCE/head.txt"
+          git rev-parse 'HEAD^{tree}' > "$EVIDENCE/tree.txt"
+          git ls-files -s > "$EVIDENCE/source-before.txt"
+          sha256sum package.json package-lock.json > "$EVIDENCE/locks-before.txt"
+          git diff --exit-code HEAD -- .
+          node --input-type=module <<'NODE'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          import { createHash } from 'node:crypto';
+          import { execFileSync } from 'node:child_process';
+
+          const { BASE_HEAD, BASE_TREE, HELPER_BLOB, PLAN_BLOB, EVIDENCE: out } = process.env;
+          const repo = 'PapiSalgueroM/ballpark-hero';
+          const workflow = '.github/workflows/nba-chain-name-variants-20261110.yml';
+          const helper = 'scripts/qa/verifyNbaChainNameVariants.mjs';
+          const plan = 'docs/plans/2026-11-10-nba-chain-name-variants.md';
+          const edge = 'supabase/functions/nba-chain-validate/index.ts';
+          const preflight = {"run":42826929069,"job":129866574710,"artifact":13768498765,"steps":11,"zipBytes":1014998,"zipSHA256":"b6e53a25acf8551bf683e3424313a4723ec160b5d0ca382886893e791fc4cabc","head":"2ef86924da6f748e2032687d539593ebf2172d62","tree":"b1a7c02e4c05085384c7b821cc4da1c0c3fb36f5","branch":"codex/nba-chain-name-variants-preflight-qa-20261110","workflow":"8d80b3613ff28ca117b106f1e85b1847a591fe35","independentAuditSHA256":"a6de4b0128694c169313e08246e86a4e813abae0d761d006c38a28eeb95b52c8"};
+          const held = {"src/App.tsx":"8bfedf7aaa1d076e0f0c8e2216c7e46632cd8a33","src/data/gameRegistry.ts":"f560b40a74d1468ac72dfde4ee6fec6635a9a255","public/nba-chain/index.html":"dacd0541cfcde63e04c1e7c0c1f423937838702d","public/prerender-boot.js":"85939d3b80ef41b26ff6cbefb53a66e383d1a797","src/pages/NbaChain.tsx":"dac563a9781f6202d542f14f402b4ee40abe7602","src/hooks/useNbaChain.ts":"ce40e9a68144cc2b6117a49454e0faf66bc36ed8","src/lib/playerSearch.ts":"0d19f2c23735eb30512dc7fc3a447eacef5e128f","supabase/functions/nba-chain-validate/index.ts":"ae48e575f499f4ad6ca9d4930aae30bd636652b3","src/test/nbaChainFeedback.test.tsx":"162131a7a359207850fc0257c530317897c0171f","scripts/lib/offlineTransport.cjs":"0fda542a2649fe5da937c6976fd0f5b6073e74b6","scripts/lib/hostLikeServer.mjs":"21059d5e8114669df61106c125d5272d357b6236","index.html":"12598fe720eec4fc88d3d33c53ede612d018150c","package.json":"2ff64986fb76ebc51b706f2fd24765768874008a","package-lock.json":"97d6f12a052f25f400462938c241789a083f0bfe","vite.config.ts":"0112b6ac4f2ad80b2fc04f9ec2f7185300913e7d","tailwind.config.ts":"f83c4f4032d359bc9285828eac3b0961a46c6b17","postcss.config.js":"2aa7205d4b402a1bdfbe07110c61df920b370066","tsconfig.json":"6b68d80b7d92d0c4a5d774897f2bedfa95b42669","tsconfig.app.json":"51f581dd91641b4c1f1219f646788e73cf6bf00c","tsconfig.node.json":"3133162c20350e1741b94b8d2ff77b811bec8363","bun.lockb":"5d9d33a3bf4f45fa099e2aa3014149e034981149","bun.lock":"dff081dcd34a1aa928ddc90d910774a6b855dfe3"};
+          assert.equal(process.env.GITHUB_REPOSITORY,repo);
+          const api = process.env.GITHUB_API_URL + '/repos/' + repo;
+          const request = async path => {
+            const response = await fetch(api+path,{headers:{
+              Accept:'application/vnd.github+json',Authorization:'Bearer '+process.env.GH_TOKEN,
+              'X-GitHub-Api-Version':'2022-11-28',
+            },redirect:'error'});
+            assert.equal(response.status,200,path);
+            return response.json();
+          };
+          const [run,jobs,artifacts] = await Promise.all([
+            request('/actions/runs/'+preflight.run),request('/actions/runs/'+preflight.run+'/jobs?per_page=100'),
+            request('/actions/runs/'+preflight.run+'/artifacts?per_page=100'),
+          ]);
+          assert.deepEqual([run.id,run.status,run.conclusion,run.event,run.run_attempt,run.path,run.head_sha,run.head_commit.tree_id,run.head_branch,run.repository.full_name],
+            [preflight.run,'completed','success','push',1,workflow,preflight.head,preflight.tree,preflight.branch,repo]);
+          assert.equal(jobs.jobs.length,1);
+          const [job] = jobs.jobs;
+          assert.deepEqual([job.id,job.run_id,job.name,job.status,job.conclusion,job.head_sha,job.steps.length],
+            [preflight.job,preflight.run,'preflight','completed','success',preflight.head,preflight.steps]);
+          assert(job.steps.every(step => step.status==='completed' && step.conclusion==='success'));
+          assert.equal(artifacts.artifacts.length,1);
+          const [artifact] = artifacts.artifacts;
+          assert.deepEqual([artifact.id,artifact.name,artifact.expired,artifact.size_in_bytes,artifact.digest,artifact.workflow_run.id,artifact.workflow_run.head_sha],
+            [preflight.artifact,'nba-chain-name-variants-active-preflight-'+preflight.run,false,preflight.zipBytes,'sha256:'+preflight.zipSHA256,preflight.run,preflight.head]);
+          delete process.env.GH_TOKEN;
+          const git = (...args) => execFileSync('git',args,{encoding:'utf8',maxBuffer:16*1024*1024}).trimEnd();
+          const sha = (algorithm,body) => createHash(algorithm).update(body).digest('hex');
+          const blob = body => sha('sha1',Buffer.concat([Buffer.from('blob '+body.length+'\0'),body]));
+          const head = git('rev-parse','HEAD');
+          assert.equal(head,process.env.GITHUB_SHA);
+          assert.deepEqual(git('rev-list','--parents','-n','1','HEAD').split(' '),[head,BASE_HEAD]);
+          assert.equal(git('rev-parse',BASE_HEAD+'^{tree}'),BASE_TREE);
+          const pins = {...held,[helper]:HELPER_BLOB,[plan]:PLAN_BLOB};
+          for(const [file,want] of Object.entries(pins)){
+            assert.match(want,/^[0-9a-f]{40}$/);
+            assert.equal(git('rev-parse','HEAD:'+file),want,file);
+            assert.equal(blob(fs.readFileSync(file)),want,file+' physical bytes');
+            if(Object.hasOwn(held,file)) assert.equal(git('rev-parse',BASE_HEAD+':'+file),want,file+' admitted base');
+          }
+          const owned = [helper,plan,workflow].sort();
+          assert.deepEqual(git('diff','--name-status','--no-renames',BASE_HEAD,'HEAD').split('\n').sort(),owned.map(file=>'A\t'+file).sort());
+          const tree = ref => git('ls-tree','-r','-z',ref).split('\0').filter(Boolean);
+          const pathOf = row => row.split('\t')[1];
+          const previous = tree(BASE_HEAD), current = tree('HEAD');
+          assert.deepEqual([previous.length,current.length],[5801,5804]);
+          assert.deepEqual(current.filter(row => !owned.includes(pathOf(row))),previous);
+          assert.deepEqual(current.filter(row => owned.includes(pathOf(row))).map(row => row.split(' ')[0]),['100644','100644','100644']);
+          assert.equal(current.filter(row => /^(src|public|scripts)\//.test(pathOf(row))).length,4670);
+          const selected = { 'held-nba-chain-edge.ts':edge, 'candidate-helper.mjs':helper, 'candidate-plan.md':plan, 'candidate-workflow.yml':workflow };
+          const selectedBodies = Object.entries(selected).map(([file,path]) => {
+            const bytes = fs.readFileSync(path);
+            fs.writeFileSync(out+'/'+file,bytes);
+            return {file,path,bytes:bytes.length,sha256:sha('sha256',bytes),blob:blob(bytes)};
+          });
+          fs.writeFileSync(out+'/source-receipt.json',JSON.stringify({
+            status:'passed',head,tree:git('rev-parse','HEAD^{tree}'),parent:BASE_HEAD,parentTree:BASE_TREE,basePR:542,
+            activePreflight:preflight,route:'/nba-chain',category:'Pro Basketball',owned,pins,selectedBodies,
+            heldRows:5801,trackedRows:5804,scopedSourceRows:4670,rootConfigurations:11,productUnchanged:true,
+          },null,2)+'\n');
+          NODE
+      - name: Install locked dependencies, freeze physical source, and verify app types
+        run: |
+          set -euo pipefail
+          npm ci 2>&1 | tee "$EVIDENCE/install.log"
+          cat > "$EVIDENCE/physical.mjs" <<'NODE'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          import { createHash } from 'node:crypto';
+          import { execFileSync } from 'node:child_process';
+          const stage = process.argv[2];
+          assert(['before', 'after'].includes(stage));
+          const out = process.env.EVIDENCE;
+          const index = execFileSync('git', ['ls-files', '-z'], { encoding: 'utf8' }).split('\0').filter(Boolean);
+          const source = index.map(file => {
+            const bytes = fs.readFileSync(file);
+            return [file, bytes.length, createHash('sha256').update(bytes).digest('hex')];
+          });
+          const lock = JSON.parse(fs.readFileSync('package-lock.json', 'utf8'));
+          const installed = Object.entries(lock.packages).filter(([file]) =>
+            file.startsWith('node_modules/') && fs.existsSync(file + '/package.json')
+          ).map(([file, entry]) => {
+            const version = JSON.parse(fs.readFileSync(file + '/package.json', 'utf8')).version;
+            assert.equal(version, entry.version, file);
+            return [file, version];
+          });
+          assert.equal(source.length, 5804);
+          assert.equal(installed.length, 521);
+          assert.equal(fs.statSync(process.env.SIM_OFFLINE_RECEIPT).size, 0);
+          for (const [name, data] of [['tracked', source], ['installed', installed]]) {
+            const body = JSON.stringify(data);
+            if (stage === 'after') assert.equal(body, fs.readFileSync(out + '/' + name + '-before.json', 'utf8'));
+            fs.writeFileSync(out + '/' + name + '-' + stage + '.json', body);
+          }
+          NODE
+          node "$EVIDENCE/physical.mjs" before
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee "$EVIDENCE/types.log"
+      - name: Require the original NBA Chain name variant mismatch
+        run: |
+          set -euo pipefail
+          test ! -e "$NBA_CHAIN_NAME_VARIANTS_RAW"
+          result=0
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" timeout --signal=TERM 90s \
+            node scripts/qa/verifyNbaChainNameVariants.mjs > "$EVIDENCE/helper.log" 2>&1 || result=$?
+          cat "$EVIDENCE/helper.log"
+          printf '%s\n' "$result" > "$EVIDENCE/helper-exit.txt"
+          test "$result" -eq 1
+          test -s "$NBA_CHAIN_NAME_VARIANTS_RAW"
+          test ! -s "$SIM_OFFLINE_RECEIPT"
+          node --input-type=module <<'NODE'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          import { createHash } from 'node:crypto';
+
+          const out = process.env.EVIDENCE;
+          const marker = 'NBA_CHAIN_NAME_VARIANTS';
+          const log = fs.readFileSync(out+'/helper.log','utf8');
+          const errors = log.split(/\r?\n/).filter(line => /^[A-Za-z]*Error(?: \[[A-Z_]+\])?:/.test(line));
+          assert.equal(errors.length,1,'Only one actual exception line');
+          assert(errors[0].startsWith('AssertionError [ERR_ASSERTION]: '+marker+':'),'Exact expected original assertion');
+          assert(/scripts\/qa\/verifyNbaChainNameVariants\.mjs:\d+:\d+/.test(log),'Named exception reaches the actual helper');
+          assert(!/UnhandledPromiseRejection|ERR_MODULE_NOT_FOUND|ERR_UNKNOWN_FILE_EXTENSION|ERR_UNSUPPORTED_TYPESCRIPT_SYNTAX|SIM_OFFLINE_BLOCK/i.test(log),'Unrelated runtime or transport failure');
+          const raw = fs.readFileSync(process.env.NBA_CHAIN_NAME_VARIANTS_RAW);
+          const evidence = JSON.parse(raw.toString('utf8'));
+          const checks = (() => {
+          const expected={"schema":"nba-chain-name-variants-v1","source":{"path":"supabase/functions/nba-chain-validate/index.ts","blob":"ae48e575f499f4ad6ca9d4930aae30bd636652b3","sha256":"ea05cc652d9e361e69f636feab23c96c594a20bc78955501615a69a65b7af6d5","typescript":"5.8.3","imports":["https://deno.land/std@0.168.0/http/server.ts","https://esm.sh/@supabase/supabase-js@2.45.0"]},"cases":[{"id":"initials-variant","kind":"variant","request":{"previousPlayer":"Fixture Lead Harbor","newPlayer":"Fixture J.R. Avery"},"fixture":{"stints":[{"player_name":"Fixture Lead Harbor","name_folded":"fixture lead harbor","team":"FIC","first_season":2019,"last_season":2021},{"player_name":"Fixture JR Avery","name_folded":"fixture jr avery","team":"FIC","first_season":2020,"last_season":2023}],"teams":[{"team_code":"FIC","team_name":"Fixture Comets"},{"team_code":"FXO","team_name":"Fixture Lynx"}],"rejectFoldedToken":null},"envReads":["SUPABASE_URL","SUPABASE_SERVICE_ROLE_KEY"],"clientCalls":1,"reads":[{"table":"nba_player_team_stints","calls":[["select","player_name, team, first_season, last_season"],["ilike","name_folded","%harbor%"],["limit",400]],"data":[{"player_name":"Fixture Lead Harbor","team":"FIC","first_season":2019,"last_season":2021}],"error":null},{"table":"nba_player_team_stints","calls":[["select","player_name, team, first_season, last_season"],["ilike","name_folded","%avery%"],["limit",400]],"data":[{"player_name":"Fixture JR Avery","team":"FIC","first_season":2020,"last_season":2023}],"error":null}],"logs":[],"outcome":{"status":200,"contentType":"application/json","allowOrigin":"https://douknowball.com","body":{"valid":false,"reason":"Fixture J.R. Avery does not appear in our NBA records (1949-2024).","fullName":"Fixture J.R. Avery"}}},{"id":"suffix-variant","kind":"variant","request":{"previousPlayer":"Fixture Lead Harbor","newPlayer":"Fixture Rowan Timber III"},"fixture":{"stints":[{"player_name":"Fixture Lead Harbor","name_folded":"fixture lead harbor","team":"FIC","first_season":2019,"last_season":2021},{"player_name":"Fixture Rowan Timber","name_folded":"fixture rowan timber","team":"FIC","first_season":2020,"last_season":2023}],"teams":[{"team_code":"FIC","team_name":"Fixture Comets"},{"team_code":"FXO","team_name":"Fixture Lynx"}],"rejectFoldedToken":null},"envReads":["SUPABASE_URL","SUPABASE_SERVICE_ROLE_KEY"],"clientCalls":1,"reads":[{"table":"nba_player_team_stints","calls":[["select","player_name, team, first_season, last_season"],["ilike","name_folded","%harbor%"],["limit",400]],"data":[{"player_name":"Fixture Lead Harbor","team":"FIC","first_season":2019,"last_season":2021}],"error":null},{"table":"nba_player_team_stints","calls":[["select","player_name, team, first_season, last_season"],["ilike","name_folded","%iii%"],["limit",400]],"data":[],"error":null}],"logs":[],"outcome":{"status":200,"contentType":"application/json","allowOrigin":"https://douknowball.com","body":{"valid":false,"reason":"Fixture Rowan Timber III does not appear in our NBA records (1949-2024).","fullName":"Fixture Rowan Timber III"}}},{"id":"exact-overlap","kind":"control","request":{"previousPlayer":"Fixture Lead Harbor","newPlayer":"Fixture Exact Lane"},"fixture":{"stints":[{"player_name":"Fixture Lead Harbor","name_folded":"fixture lead harbor","team":"FIC","first_season":2019,"last_season":2021},{"player_name":"Fixture Exact Lane","name_folded":"fixture exact lane","team":"FIC","first_season":2020,"last_season":2023}],"teams":[{"team_code":"FIC","team_name":"Fixture Comets"},{"team_code":"FXO","team_name":"Fixture Lynx"}],"rejectFoldedToken":null},"envReads":["SUPABASE_URL","SUPABASE_SERVICE_ROLE_KEY"],"clientCalls":1,"reads":[{"table":"nba_player_team_stints","calls":[["select","player_name, team, first_season, last_season"],["ilike","name_folded","%harbor%"],["limit",400]],"data":[{"player_name":"Fixture Lead Harbor","team":"FIC","first_season":2019,"last_season":2021}],"error":null},{"table":"nba_player_team_stints","calls":[["select","player_name, team, first_season, last_season"],["ilike","name_folded","%lane%"],["limit",400]],"data":[{"player_name":"Fixture Exact Lane","team":"FIC","first_season":2020,"last_season":2023}],"error":null},{"table":"nba_team_codes","calls":[["select","team_name"],["eq","team_code","FIC"],["maybeSingle"]],"data":{"team_name":"Fixture Comets"},"error":null}],"logs":[],"outcome":{"status":200,"contentType":"application/json","allowOrigin":"https://douknowball.com","body":{"valid":true,"connection":"Fixture Comets (2020-2021)","reason":"Fixture Exact Lane and Fixture Lead Harbor were teammates on the Fixture Comets in 2020-2021.","fullName":"Fixture Exact Lane"}}},{"id":"no-overlap","kind":"control","request":{"previousPlayer":"Fixture Lead Harbor","newPlayer":"Fixture Late Stone"},"fixture":{"stints":[{"player_name":"Fixture Lead Harbor","name_folded":"fixture lead harbor","team":"FIC","first_season":2019,"last_season":2021},{"player_name":"Fixture Late Stone","name_folded":"fixture late stone","team":"FIC","first_season":2022,"last_season":2023}],"teams":[{"team_code":"FIC","team_name":"Fixture Comets"},{"team_code":"FXO","team_name":"Fixture Lynx"}],"rejectFoldedToken":null},"envReads":["SUPABASE_URL","SUPABASE_SERVICE_ROLE_KEY"],"clientCalls":1,"reads":[{"table":"nba_player_team_stints","calls":[["select","player_name, team, first_season, last_season"],["ilike","name_folded","%harbor%"],["limit",400]],"data":[{"player_name":"Fixture Lead Harbor","team":"FIC","first_season":2019,"last_season":2021}],"error":null},{"table":"nba_player_team_stints","calls":[["select","player_name, team, first_season, last_season"],["ilike","name_folded","%stone%"],["limit",400]],"data":[{"player_name":"Fixture Late Stone","team":"FIC","first_season":2022,"last_season":2023}],"error":null}],"logs":[],"outcome":{"status":200,"contentType":"application/json","allowOrigin":"https://douknowball.com","body":{"valid":false,"reason":"Fixture Late Stone and Fixture Lead Harbor were never teammates.","fullName":"Fixture Late Stone"}}},{"id":"explicit-iii-no-jr-overlap","kind":"control","request":{"previousPlayer":"Fixture Lead Harbor","newPlayer":"Fixture Rowan Timber III"},"fixture":{"stints":[{"player_name":"Fixture Lead Harbor","name_folded":"fixture lead harbor","team":"FIC","first_season":2019,"last_season":2021},{"player_name":"Fixture Rowan Timber Jr","name_folded":"fixture rowan timber jr","team":"FIC","first_season":2020,"last_season":2023},{"player_name":"Fixture Rowan Timber III","name_folded":"fixture rowan timber iii","team":"FXO","first_season":2020,"last_season":2023}],"teams":[{"team_code":"FIC","team_name":"Fixture Comets"},{"team_code":"FXO","team_name":"Fixture Lynx"}],"rejectFoldedToken":null},"envReads":["SUPABASE_URL","SUPABASE_SERVICE_ROLE_KEY"],"clientCalls":1,"reads":[{"table":"nba_player_team_stints","calls":[["select","player_name, team, first_season, last_season"],["ilike","name_folded","%harbor%"],["limit",400]],"data":[{"player_name":"Fixture Lead Harbor","team":"FIC","first_season":2019,"last_season":2021}],"error":null},{"table":"nba_player_team_stints","calls":[["select","player_name, team, first_season, last_season"],["ilike","name_folded","%iii%"],["limit",400]],"data":[{"player_name":"Fixture Rowan Timber III","team":"FXO","first_season":2020,"last_season":2023}],"error":null}],"logs":[],"outcome":{"status":200,"contentType":"application/json","allowOrigin":"https://douknowball.com","body":{"valid":false,"reason":"Fixture Rowan Timber III and Fixture Lead Harbor were never teammates.","fullName":"Fixture Rowan Timber III"}}},{"id":"explicit-jr-no-iii-overlap","kind":"control","request":{"previousPlayer":"Fixture Lead Summit","newPlayer":"Fixture Rowan Timber Jr"},"fixture":{"stints":[{"player_name":"Fixture Lead Summit","name_folded":"fixture lead summit","team":"FXO","first_season":2019,"last_season":2021},{"player_name":"Fixture Rowan Timber Jr","name_folded":"fixture rowan timber jr","team":"FIC","first_season":2020,"last_season":2023},{"player_name":"Fixture Rowan Timber III","name_folded":"fixture rowan timber iii","team":"FXO","first_season":2020,"last_season":2023}],"teams":[{"team_code":"FIC","team_name":"Fixture Comets"},{"team_code":"FXO","team_name":"Fixture Lynx"}],"rejectFoldedToken":null},"envReads":["SUPABASE_URL","SUPABASE_SERVICE_ROLE_KEY"],"clientCalls":1,"reads":[{"table":"nba_player_team_stints","calls":[["select","player_name, team, first_season, last_season"],["ilike","name_folded","%summit%"],["limit",400]],"data":[{"player_name":"Fixture Lead Summit","team":"FXO","first_season":2019,"last_season":2021}],"error":null},{"table":"nba_player_team_stints","calls":[["select","player_name, team, first_season, last_season"],["ilike","name_folded","%jr%"],["limit",400]],"data":[{"player_name":"Fixture Rowan Timber Jr","team":"FIC","first_season":2020,"last_season":2023}],"error":null}],"logs":[],"outcome":{"status":200,"contentType":"application/json","allowOrigin":"https://douknowball.com","body":{"valid":false,"reason":"Fixture Rowan Timber Jr and Fixture Lead Summit were never teammates.","fullName":"Fixture Rowan Timber Jr"}}},{"id":"recent-coverage-gap","kind":"control","request":{"previousPlayer":"Fixture Current Vale","newPlayer":"Fixture Current Reed"},"fixture":{"stints":[{"player_name":"Fixture Current Vale","name_folded":"fixture current vale","team":"FIC","first_season":2023,"last_season":2024},{"player_name":"Fixture Current Reed","name_folded":"fixture current reed","team":"FXO","first_season":2024,"last_season":2024}],"teams":[{"team_code":"FIC","team_name":"Fixture Comets"},{"team_code":"FXO","team_name":"Fixture Lynx"}],"rejectFoldedToken":null},"envReads":["SUPABASE_URL","SUPABASE_SERVICE_ROLE_KEY"],"clientCalls":1,"reads":[{"table":"nba_player_team_stints","calls":[["select","player_name, team, first_season, last_season"],["ilike","name_folded","%vale%"],["limit",400]],"data":[{"player_name":"Fixture Current Vale","team":"FIC","first_season":2023,"last_season":2024}],"error":null},{"table":"nba_player_team_stints","calls":[["select","player_name, team, first_season, last_season"],["ilike","name_folded","%reed%"],["limit",400]],"data":[{"player_name":"Fixture Current Reed","team":"FXO","first_season":2024,"last_season":2024}],"error":null}],"logs":[],"outcome":{"status":200,"contentType":"application/json","allowOrigin":"https://douknowball.com","body":{"valid":false,"reason":"We cannot confirm Fixture Current Reed and Fixture Current Vale shared a roster. Our NBA records currently run through 2024, so a 2025-26 pairing may be missing.","fullName":"Fixture Current Reed","coverageGap":true}}},{"id":"fixture-read-failure","kind":"control","request":{"previousPlayer":"Fixture Lead Harbor","newPlayer":"Fixture Read Fault"},"fixture":{"stints":[{"player_name":"Fixture Lead Harbor","name_folded":"fixture lead harbor","team":"FIC","first_season":2019,"last_season":2021},{"player_name":"Fixture Read Fault","name_folded":"fixture read fault","team":"FIC","first_season":2020,"last_season":2023}],"teams":[{"team_code":"FIC","team_name":"Fixture Comets"},{"team_code":"FXO","team_name":"Fixture Lynx"}],"rejectFoldedToken":"fault"},"envReads":["SUPABASE_URL","SUPABASE_SERVICE_ROLE_KEY"],"clientCalls":1,"reads":[{"table":"nba_player_team_stints","calls":[["select","player_name, team, first_season, last_season"],["ilike","name_folded","%harbor%"],["limit",400]],"data":[{"player_name":"Fixture Lead Harbor","team":"FIC","first_season":2019,"last_season":2021}],"error":null},{"table":"nba_player_team_stints","calls":[["select","player_name, team, first_season, last_season"],["ilike","name_folded","%fault%"],["limit",400]],"data":null,"error":"Fictional stint read failed"}],"logs":[{"level":"error","label":"nba-chain-validate error:","detail":"Fictional stint read failed"}],"outcome":{"status":200,"contentType":"application/json","allowOrigin":"https://douknowball.com","body":{"valid":false,"unverified":true,"reason":"Something went wrong verifying that one, so it cannot be counted."}}}]};
+          assert.deepEqual(evidence,expected,'Exact observed unchanged resolver trace');
+          assert.equal(raw.toString('utf8'),JSON.stringify(expected)+'\n','Exact compact original raw bytes');
+          const [initials,suffix,overlap,disjoint,iii,jr,recent,fault]=evidence.cases;
+          assert.deepEqual([initials.id,suffix.id],['initials-variant','suffix-variant']);
+          assert.deepEqual([initials.reads[1].calls[1],initials.reads[1].data.length],
+            [['ilike','name_folded','%avery%'],1],'Initials row arrives at the original exact comparison');
+          assert.deepEqual([suffix.reads[1].calls[1],suffix.reads[1].data.length],
+            [['ilike','name_folded','%iii%'],0],'Suffix token excludes the independently paired fixture row');
+          assert.deepEqual([initials,suffix,overlap,disjoint,iii,jr,recent,fault].map(row=>row.outcome.body.valid),
+            [false,false,true,false,false,false,false,false]);
+          assert.equal(recent.outcome.body.coverageGap,true);
+          assert.equal(fault.outcome.body.unverified,true);
+          assert.equal(evidence.cases.reduce((count,row)=>count+row.reads.length,0),17);
+          return {status:'passed',cases:8,reads:17,originalMismatches:[initials.id,suffix.id],
+            heldControls:[overlap,disjoint,iii,jr,recent,fault].map(row=>row.id)};
+          })();
+          assert.equal(checks.status,'passed');
+          fs.writeFileSync(out+'/original-result.json',JSON.stringify({
+            status:'expected-original-nba-chain-name-variants-mismatch',marker,expectedProcessExit:1,
+            assertion:errors[0],rawBytes:raw.length,rawSHA256:createHash('sha256').update(raw).digest('hex'),checks,
+          },null,2)+'\n',{flag:'wx'});
+          NODE
+      - name: Verify unchanged physical source and locked offline run
+        if: always()
+        run: |
+          set -euo pipefail
+          git ls-files -s > "$EVIDENCE/source-after.txt"
+          sha256sum package.json package-lock.json > "$EVIDENCE/locks-after.txt"
+          cmp "$EVIDENCE/source-before.txt" "$EVIDENCE/source-after.txt"
+          cmp "$EVIDENCE/locks-before.txt" "$EVIDENCE/locks-after.txt"
+          git diff --exit-code HEAD -- .
+          node "$EVIDENCE/physical.mjs" after
+          test ! -s "$SIM_OFFLINE_RECEIPT"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: nba-chain-name-variants-original-${{ github.run_id }}
+          path: nba-chain-name-variants-original
+          retention-days: 14
+          if-no-files-found: error
