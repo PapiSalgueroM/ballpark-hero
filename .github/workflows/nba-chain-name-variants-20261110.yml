@@ -1,0 +1,657 @@
+name: NBA Chain initials clean build and browser replay
+on:
+  push:
+    branches: [codex/nba-chain-initials-clean-join-qa-20261110]
+permissions:
+  actions: read
+  contents: read
+jobs:
+  closeout:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      TZ: UTC
+      SIM_NETWORK: offline
+      SIM_OFFLINE_RECEIPT: nba-chain-initials-clean/offline.log
+      EVIDENCE: nba-chain-initials-clean
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24.22.1
+          cache: npm
+      - name: Authenticate exact product source and qualified reference runs
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          test ! -e "$EVIDENCE"
+          mkdir "$EVIDENCE"
+          touch "$SIM_OFFLINE_RECEIPT"
+          git rev-parse HEAD > "$EVIDENCE/head.txt"
+          git rev-parse 'HEAD^{tree}' > "$EVIDENCE/tree.txt"
+          git ls-files -s > "$EVIDENCE/source-before.txt"
+          sha256sum package.json package-lock.json > "$EVIDENCE/locks-before.txt"
+          git diff --exit-code HEAD -- .
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          import {createHash} from 'node:crypto';
+          import {execFileSync} from 'node:child_process';
+
+          const input={"base":{"pr":542,"head":"09f9bfc46b7a3e1d56ea09b1e477d587c4b1d726","tree":"6a5b0bf5535deeeb81e1d8106fb812b68e95cd48"},"edge":{"path":"supabase/functions/nba-chain-validate/index.ts","blob":"02ad604c9115af575d57eb648bfb7a3e48dbef2d","priorBlob":"ae48e575f499f4ad6ca9d4930aae30bd636652b3","bytes":12455,"sha256":"831f2d7b064f2f8e87626823ccab4e46d74aed7ac13b2ae4c2100c5996cc5446"},"plan":{"path":"docs/plans/2026-11-10-nba-chain-name-variants.md","blob":"75df55aba5a1cf955958338bfeb34df31a74a004","bytes":1508,"sha256":"545aec962d6beb37822e6e89d57647c4b9e302ee6646b06fb7d72c457b29b3ae"},"reference":{"cleanHead":"e5687772a043c04aa47d7a60939e065bb7fe530d","cleanTree":"7a1260cbc110c62ebc0e56d2b98fb41082371c37","distTupleSHA256":"40766004142bdebcc677fe3798d73dbcea54706f087002e2407daf4565ea53e2","distFiles":850,"codeConfigRows":4680,"allQualifiedBuiltReadersAndCapsInheritedByExactBytes":true},"fixtures":{"main":{"bytes":12255,"sha256":"ee81dfa94f68710fbb49a3e6cbce3ef31a90ef06e4ae6c9cd4680c879a8c459a"},"guards":{"bytes":121336,"sha256":"15af751512a564970c75de203e4233ae192424305ea01e2d006fcbf905cb1307"}},"roles":[{"role":"nba-original","run":42828680593,"job":129872628739,"artifact":13770282082,"steps":11,"zipBytes":1012888,"zipSHA256":"cb44f9b334006376d02d34972188fbe76d93cfac10d7d666cab24d9249b025cc","head":"3157171b3e1b28c782a9f8e461490b5388f0cf84","tree":"18184f081259861ff9c4af92aad5741b5f85d036","workflowPath":".github/workflows/nba-chain-name-variants-20261110.yml","branch":"codex/nba-chain-name-variants-original-qa-20261110","jobName":"original","artifactName":"nba-chain-name-variants-original-42828680593","auditSHA256":"155a562b7a714b1969d8bd399a972a2256a9da975416fb672ce7422a127bcf11"},{"role":"nba-fixed","run":42832098036,"job":129884518587,"artifact":13771148572,"steps":11,"zipBytes":1032396,"zipSHA256":"9e2db336ff9e93114eb5832af1906788a0fbb8637a8902078beb704451d7fc1d","head":"b39737f96baaa8ccd3cf6618823d09f051c3bd1f","tree":"997cbecad66164a3113756b792f78458c775715f","workflowPath":".github/workflows/nba-chain-name-variants-20261110.yml","branch":"codex/nba-chain-name-variants-fixed-qa-20261110","jobName":"fixed","artifactName":"nba-chain-name-variants-fixed-42832098036","auditSHA256":"cf14d1bfb55e295dac570d90869df1325689c2fc522f6a2befb15a8f01548d44"},{"role":"nba-controls","run":42834318467,"job":129892342813,"artifact":13771889733,"steps":11,"zipBytes":1094102,"zipSHA256":"1ce8cda9b9f137affd4f124b9959429329614735693b5aac40de8ed7d61c4d6c","head":"5df9d1bf790d12825a5e72c642369fee8b790e86","tree":"bb571ffb6f32bbc38017d0c977cd5252ef5ebbf2","workflowPath":".github/workflows/nba-chain-name-variants-20261110.yml","branch":"codex/nba-chain-name-variants-controls-qa-20261110","jobName":"controls","artifactName":"nba-chain-name-variants-controls-42834318467","auditSHA256":"e3051862c85c00b9d657988e5752f8267cdcd3a0b05f0f6aaea94ac74a8338e2"},{"role":"bingo-full","run":42821117398,"job":129846599749,"artifact":13766814198,"steps":24,"zipBytes":11020611,"zipSHA256":"ffba57783eccdc6fc5b98067222c19e7ec0b9938c2e59688e0a0c59689aff7de","head":"de0ba3f226664c1d10535e53e735059f517a339d","tree":"5e6a5a128f5fb5f2ee71f5a0e26e105ab744ea0f","workflowPath":".github/workflows/player-bingo-birth-year-20261110.yml","branch":"codex/player-bingo-birth-year-full-offline-retry-qa-20261110","jobName":"full","artifactName":"player-bingo-birth-year-full-42821117398","auditSHA256":"0f3ba03c84e9987d85eaa633e7e242f26b6bcd4fc5a495cd93f1cc2bb4965e65"},{"role":"bingo-clean","run":42824518601,"job":129858213059,"artifact":13768202135,"steps":16,"zipBytes":678715,"zipSHA256":"5d3ddf306ebfc4bd3ca14bd03ee7ae2e630bf0d2e30c7c7af6b3e9713199d64e","head":"e5687772a043c04aa47d7a60939e065bb7fe530d","tree":"7a1260cbc110c62ebc0e56d2b98fb41082371c37","workflowPath":".github/workflows/player-bingo-birth-year-20261110.yml","branch":"codex/player-bingo-birth-year-clean-join-qa-20261110","jobName":"closeout","artifactName":"player-bingo-birth-year-clean-build-join-42824518601","auditSHA256":"36c7531707d03a025564eab655a18ddca262b66821e073a86a6b68fd03158d6a"}]};
+          const {EVIDENCE:out,GITHUB_SHA:head,GITHUB_REPOSITORY:repo}=process.env;
+          const {base,edge,plan,reference,fixtures,roles}=input;
+          const workflow='.github/workflows/nba-chain-name-variants-20261110.yml';
+          const git=(...args)=>execFileSync('git',args,{encoding:'utf8',maxBuffer:16*1024*1024}).trimEnd();
+          const sha=(algorithm,data)=>createHash(algorithm).update(data).digest('hex');
+          const bytes=fs.readFileSync(edge.path);
+          assert.equal(repo,'PapiSalgueroM/ballpark-hero');
+          assert.equal(base.pr,542);
+          assert.deepEqual(git('rev-list','--parents','-n','1',head).split(' '),[head,base.head]);
+          assert.equal(git('rev-parse',base.head+'^{tree}'),base.tree);
+          assert.equal(git('rev-parse',base.head+':'+edge.path),edge.priorBlob);
+          assert.equal(git('rev-parse','HEAD:'+edge.path),edge.blob);
+          assert.deepEqual([bytes.length,sha('sha256',bytes),sha('sha1',Buffer.concat([Buffer.from('blob '+bytes.length+'\0'),bytes]))],
+            [edge.bytes,edge.sha256,edge.blob]);
+          assert.equal(git('rev-parse','HEAD:'+plan.path),plan.blob);
+          const tree=ref=>git('ls-tree','-r','-z',ref).split('\0').filter(Boolean);
+          const prior=tree(base.head),current=tree(head),owned=[workflow,edge.path,plan.path];
+          const hold=rows=>rows.filter(row=>!owned.includes(row.split('\t')[1]));
+          assert.deepEqual([prior.length,current.length,hold(prior).length],[5801,5803,5800]);
+          assert.deepEqual(hold(current),hold(prior));
+          assert.deepEqual(git('diff','--name-status','--no-renames',base.head,'HEAD').split('\n').sort(),['A\t'+workflow,'M\t'+edge.path,'A\t'+plan.path].sort());
+          const configs=new Set(['index.html','package.json','package-lock.json','bun.lock','bun.lockb','vite.config.ts','tailwind.config.ts','postcss.config.js','tsconfig.json','tsconfig.app.json','tsconfig.node.json']);
+          const scope=rows=>rows.filter(row=>{
+            const file=row.split('\t')[1];return /^(src|public|scripts)\//.test(file)||configs.has(file);
+          });
+          const scoped=scope(current);
+          assert.equal(scoped.length,4680);
+          assert.deepEqual(scoped,scope(prior));
+          execFileSync('git',['fetch','--no-tags','--depth=1','origin',reference.cleanHead],{stdio:'inherit'});
+          assert.equal(git('rev-parse',reference.cleanHead+'^{tree}'),reference.cleanTree);
+          assert.deepEqual(scoped,scope(tree(reference.cleanHead)));
+          const request=async path=>{
+            const url=process.env.GITHUB_API_URL+'/repos/'+repo+path;
+            const res=await fetch(url,{headers:{Accept:'application/vnd.github+json',Authorization:'Bearer '+process.env.GH_TOKEN,'X-GitHub-Api-Version':'2022-11-28'},redirect:'error'});
+            assert.equal(res.status,200,path);
+            return res.json();
+          };
+          assert.deepEqual(roles.map(row=>row.role),['nba-original','nba-fixed','nba-controls','bingo-full','bingo-clean']);
+          for(const want of roles){
+            assert.match(want.auditSHA256,/^[a-f0-9]{64}$/);
+            const [run,jobs,artifacts]=await Promise.all([
+              request('/actions/runs/'+want.run),request('/actions/runs/'+want.run+'/jobs?per_page=100'),
+              request('/actions/runs/'+want.run+'/artifacts?per_page=100'),
+            ]);
+            assert.deepEqual([run.id,run.status,run.conclusion,run.event,run.run_attempt,run.path,run.head_branch,run.head_sha,run.head_commit.tree_id],
+              [want.run,'completed','success','push',1,want.workflowPath,want.branch,want.head,want.tree],want.role);
+            assert.equal(jobs.jobs.length,1);
+            const [job]=jobs.jobs;
+            assert.deepEqual([job.id,job.name,job.status,job.conclusion,job.head_sha,job.steps.length],
+              [want.job,want.jobName,'completed','success',want.head,want.steps],want.role);
+            assert(job.steps.every(step=>step.status==='completed'&&step.conclusion==='success'),want.role);
+            assert.equal(artifacts.artifacts.length,1);
+            const [artifact]=artifacts.artifacts;
+            assert.deepEqual([artifact.id,artifact.name,artifact.expired,artifact.size_in_bytes,artifact.digest,artifact.workflow_run.id,artifact.workflow_run.head_sha],
+              [want.artifact,want.artifactName,false,want.zipBytes,'sha256:'+want.zipSHA256,want.run,want.head],want.role);
+          }
+          fs.writeFileSync(out+'/input-receipt.json',JSON.stringify(input,null,2)+'\n');
+          fs.writeFileSync(out+'/code-config-tuples.txt',scoped.join('\n')+'\n');
+          fs.writeFileSync(out+'/source-join.json',JSON.stringify({
+            status:'passed',head,tree:git('rev-parse','HEAD^{tree}'),parent:base.head,parentTree:base.tree,
+            workflow:git('rev-parse','HEAD:'+workflow),edge,plan,reference,
+            trackedRows:5803,heldRows:5800,scopedSourceRows:4669,rootConfigurations:11,codeConfigRows:scoped.length,
+          },null,2)+'\n');
+          fs.copyFileSync(edge.path,out+'/candidate-edge.ts');
+          fs.copyFileSync(workflow,out+'/candidate-workflow.yml');
+          assert(fixtures.main.bytes>0&&fixtures.guards.bytes>0);
+          NODE
+          fixed_artifact=$(node -p "require('./$EVIDENCE/input-receipt.json').roles[1].artifact")
+          fixed_size=$(node -p "require('./$EVIDENCE/input-receipt.json').roles[1].zipBytes")
+          fixed_digest=$(node -p "require('./$EVIDENCE/input-receipt.json').roles[1].zipSHA256")
+          gh api "repos/PapiSalgueroM/ballpark-hero/actions/artifacts/$fixed_artifact/zip" > "$RUNNER_TEMP/nba-chain-fixed-reference.zip"
+          test "$(wc -c < "$RUNNER_TEMP/nba-chain-fixed-reference.zip")" -eq "$fixed_size"
+          printf '%s  %s\n' "$fixed_digest" "$RUNNER_TEMP/nba-chain-fixed-reference.zip" | sha256sum -c -
+          unzip -Z1 "$RUNNER_TEMP/nba-chain-fixed-reference.zip" > "$EVIDENCE/fixed-zip-entries.txt"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          const entries=fs.readFileSync(process.env.EVIDENCE+'/fixed-zip-entries.txt','utf8').trimEnd().split('\n');
+          assert.equal(new Set(entries).size,entries.length);
+          for(const file of entries)assert(/^[a-zA-Z0-9._/-]+$/.test(file)&&!file.startsWith('/')&&file.replace(/\/$/,'').split('/').every(p=>p&&p!=='.'&&p!=='..'));
+          assert.equal(entries.filter(file=>!file.endsWith('/')).length,26);
+          for(const file of ['public-cases.raw.json','guards.raw.json'])assert(entries.includes(file));
+          NODE
+          unzip -p "$RUNNER_TEMP/nba-chain-fixed-reference.zip" public-cases.raw.json > "$EVIDENCE/fixed-main.raw.json"
+          unzip -p "$RUNNER_TEMP/nba-chain-fixed-reference.zip" guards.raw.json > "$EVIDENCE/fixed-guards.raw.json"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          import {createHash} from 'node:crypto';
+          const out=process.env.EVIDENCE;
+          const {fixtures}=JSON.parse(fs.readFileSync(out+'/input-receipt.json'));
+          for(const key of ['main','guards']){
+            const bytes=fs.readFileSync(out+'/fixed-'+key+'.raw.json');
+            assert.deepEqual({bytes:bytes.length,sha256:createHash('sha256').update(bytes).digest('hex')},fixtures[key]);
+          }
+          NODE
+      - name: Verify locked dependencies and app types
+        run: |
+          set -euo pipefail
+          npm ci 2>&1 | tee "$EVIDENCE/install.log"
+          cat > "$EVIDENCE/physical.mjs" <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          import {createHash} from 'node:crypto';
+          import {execFileSync} from 'node:child_process';
+          const phase=process.argv[2],out=process.env.EVIDENCE;
+          assert(['before','after'].includes(phase));
+          const index=execFileSync('git',['ls-files','-z'],{encoding:'utf8'}).split('\0').filter(Boolean);
+          const source=index.map(file=>{
+            const body=fs.readFileSync(file);
+            return [file,body.length,createHash('sha256').update(body).digest('hex')];
+          });
+          const lock=JSON.parse(fs.readFileSync('package-lock.json'));
+          const installed=Object.entries(lock.packages).filter(([file])=>file.startsWith('node_modules/')&&fs.existsSync(file+'/package.json')).map(([file,want])=>{
+            const version=JSON.parse(fs.readFileSync(file+'/package.json')).version;
+            assert.equal(version,want.version,file);
+            return [file,version];
+          });
+          assert.deepEqual([source.length,installed.length,fs.statSync(process.env.SIM_OFFLINE_RECEIPT).size],[5803,521,0]);
+          for(const [name,value] of [['tracked',source],['installed',installed]]){
+            const body=JSON.stringify(value);
+            if(phase==='after')assert.equal(body,fs.readFileSync(out+'/'+name+'-before.json','utf8'));
+            fs.writeFileSync(out+'/'+name+'-'+phase+'.json',body);
+          }
+          NODE
+          node "$EVIDENCE/physical.mjs" before
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee "$EVIDENCE/types.log"
+      - name: Preserve seven held client outcomes and the product-name fence
+        run: |
+          set -euo pipefail
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simNbaChainFeedback.mjs 2>&1 | tee "$EVIDENCE/simNbaChainFeedback.log"
+          grep -Fq 'simNbaChainFeedback: seven actual Page/hook/search/result outcomes pass.' "$EVIDENCE/simNbaChainFeedback.log"
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simNoRivalNames.mjs 2>&1 | tee "$EVIDENCE/no-rival.log"
+      - name: Fresh clean production build and exact qualified byte join
+        run: |
+          set -euo pipefail
+          NODE_OPTIONS="--max-old-space-size=6144" npm run build 2>&1 | tee "$EVIDENCE/build.log"
+          cat > "$EVIDENCE/dist-check.mjs" <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          import {createHash} from 'node:crypto';
+          const out=process.env.EVIDENCE,phase=process.argv[2];
+          assert(['before','after'].includes(phase));
+          const {reference}=JSON.parse(fs.readFileSync(out+'/input-receipt.json'));
+          const sha=bytes=>createHash('sha256').update(bytes).digest('hex');
+          const walk=dir=>fs.readdirSync(dir,{withFileTypes:true}).flatMap(entry=>{
+            const file=dir+'/'+entry.name;
+            if(entry.isDirectory())return walk(file);
+            assert(entry.isFile(),file);
+            const body=fs.readFileSync(file);
+            return [{file,bytes:body.length,sha256:sha(body)}];
+          });
+          const rows=walk('dist').sort((a,b)=>a.file.localeCompare(b.file)),raw=JSON.stringify(rows);
+          assert.equal(new Set(rows.map(row=>row.file)).size,850);
+          assert.equal(rows.length,850);
+          assert.equal(sha(raw),reference.distTupleSHA256,'Every fresh built file matches the independently qualified PR542 reference');
+          if(phase==='after')assert.equal(raw,fs.readFileSync(out+'/dist-before.json','utf8'));
+          fs.writeFileSync(out+'/dist-'+phase+'.json',raw);
+          NODE
+          node "$EVIDENCE/dist-check.mjs" before
+      - name: Install pinned isolated browser and shared offline guard
+        timeout-minutes: 12
+        run: |
+          set -euo pipefail
+          npm install --prefix "$RUNNER_TEMP/nba-chain-clean-browser" --no-save --package-lock=false playwright@1.64.1 2>&1 | tee "$EVIDENCE/browser-install.log"
+          test ! -e node_modules/playwright
+          test ! -e node_modules/playwright-core
+          ln -s "$RUNNER_TEMP/nba-chain-clean-browser/node_modules/playwright" node_modules/playwright
+          ln -s "$RUNNER_TEMP/nba-chain-clean-browser/node_modules/playwright-core" node_modules/playwright-core
+          node "$RUNNER_TEMP/nba-chain-clean-browser/node_modules/playwright/cli.js" install --with-deps chromium 2>&1 | tee "$EVIDENCE/chromium-install.log"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          import {createRequire} from 'node:module';
+          const target=fs.realpathSync('node_modules/playwright'),coreTarget=fs.realpathSync('node_modules/playwright-core');
+          const require=createRequire(process.cwd()+'/package.json'),coreEntry=require.resolve('playwright-core');
+          assert.deepEqual([JSON.parse(fs.readFileSync(target+'/package.json')).version,JSON.parse(fs.readFileSync(coreTarget+'/package.json')).version],['1.64.1','1.64.1']);
+          assert(coreEntry.startsWith(coreTarget+'/'));
+          assert.equal(createRequire(target+'/package.json').resolve('playwright-core'),coreEntry);
+          fs.writeFileSync(process.env.EVIDENCE+'/browser-package.json',JSON.stringify({version:'1.64.1',coreVersion:'1.64.1',target,coreTarget,coreEntry}));
+          NODE
+      - name: Replay exact qualified Edge results through the built NBA Chain route
+        timeout-minutes: 10
+        run: |
+          set -euo pipefail
+          cat > "$EVIDENCE/native-helper.mjs" <<'NBA_CHAIN_NATIVE'
+          /* Built NBA Chain UI proof with exact fixed Edge response replay in remote CI. */
+          import assert from 'node:assert/strict';
+          import { createHash } from 'node:crypto';
+          import { mkdirSync, readFileSync, statSync, writeFileSync } from 'node:fs';
+          import { createRequire } from 'node:module';
+          import path from 'node:path';
+          import { pathToFileURL } from 'node:url';
+          
+          assert.equal(process.env.CI, '1', 'Remote CI only');
+          assert.equal(process.env.SIM_NETWORK, 'offline', 'Offline transport required');
+          const root = process.cwd();
+          const require = createRequire(path.join(root, 'package.json'));
+          const loadShared = file => import(pathToFileURL(path.join(root, 'scripts/lib', file)).href);
+          await loadShared('offlineTransport.cjs');
+          const { default: pw } = await loadShared('playwrightLoader.mjs');
+          const { answerConsent } = await loadShared('answerConsent.mjs');
+          assert.equal(require('playwright/package.json').version, '1.64.1');
+          assert.equal(require('playwright-core/package.json').version, '1.64.1');
+          assert.equal(pw.chromium, require('playwright-core').chromium, 'Browser uses the guarded core instance');
+          
+          const base = 'http://127.0.0.1:4174';
+          assert.equal(new URL(process.env.BASE).href, base + '/');
+          const publicUrl = base + '/nba-chain';
+          const fixtureOrigin = 'https://flawuiqbvjobmkfkauhw.supabase.co';
+          const providerPath = '/rest/v1/nba_players_extended_v2';
+          const validatorPath = '/functions/v1/nba-chain-validate';
+          const retryMessage = "We couldn't confirm that player's identity. Try another spelling.";
+          const distFile = 'dist/nba-chain/index.html';
+          const documentBody = readFileSync(path.join(root, distFile));
+          assert.match(documentBody.toString('utf8'), /<div id="dukb-snapshot">/);
+          const out = path.resolve(root, process.env.NBA_CHAIN_NATIVE_OUT);
+          assert(out.startsWith(root + path.sep), 'Use a new evidence directory inside the runner checkout');
+          const receipt = process.env.SIM_OFFLINE_RECEIPT;
+          assert(receipt, 'Offline transport receipt required');
+          assert.equal(statSync(receipt).size, 0);
+          const sha256 = body => createHash('sha256').update(body).digest('hex');
+          const pin = body => ({ bytes: body.length, sha256: sha256(body) });
+          
+          function loadReplay(role, schema, id, playerId) {
+            const bytes = readFileSync(process.env['NBA_CHAIN_FIXED_' + role + '_RAW']);
+            const input = pin(bytes);
+            assert.match(process.env['NBA_CHAIN_FIXED_' + role + '_SHA256'], /^[a-f0-9]{64}$/);
+            assert.equal(input.sha256, process.env['NBA_CHAIN_FIXED_' + role + '_SHA256']);
+            const raw = JSON.parse(bytes);
+            assert.equal(raw.schema, schema);
+            assert.equal(raw.source.path, 'supabase/functions/nba-chain-validate/index.ts');
+            const matches = raw.cases.filter(item => item.id === id);
+            assert.equal(matches.length, 1);
+            const { request, outcome } = matches[0];
+            assert.deepEqual(Object.keys(request).sort(), ['newPlayer', 'previousPlayer']);
+            assert.match(request.newPlayer, /^Fixture [A-Za-z. ]+ [A-Za-z]+$/);
+            assert.match(request.previousPlayer, /^Fixture /);
+            assert.equal(outcome.status, 200);
+            assert.equal(outcome.contentType, 'application/json');
+            const body = Buffer.from(JSON.stringify(outcome.body));
+            const words = request.newPlayer.split(' ');
+            const last = words.pop();
+            // The held autocomplete title-cases words and retains their periods.
+            const option = request.newPlayer.toLowerCase().replace(/(^| )[a-z]/g, letter => letter.toUpperCase());
+            const providerRow = { first_name: words.join(' '), last_name: last, player_id: playerId, team: null, position: null };
+            return { body, providerBody: Buffer.from(JSON.stringify([providerRow])), providerRow,
+              option, status: outcome.status, contentType: outcome.contentType, outcome: outcome.body,
+              proof: { id, schema, source: raw.source, input, request, response: pin(body) } };
+          }
+          
+          const accepted = loadReplay('MAIN', 'nba-chain-name-variants-v1', 'initials-variant', 1);
+          const deferred = loadReplay('GUARD', 'nba-chain-name-variants-fixed-guards-v1', 'ambiguous-dotted-initials', 2);
+          assert.deepEqual(accepted.proof.source, deferred.proof.source);
+          assert.equal(accepted.proof.request.newPlayer, 'Fixture J.R. Avery');
+          assert.equal(accepted.option, 'Fixture J.r. Avery');
+          assert.equal(accepted.outcome.valid, true);
+          assert.equal(accepted.outcome.fullName, 'Fixture JR Avery');
+          assert(accepted.outcome.connection);
+          assert.deepEqual(deferred.outcome, { valid: false, unverified: true, reason: retryMessage });
+          assert.notEqual(deferred.option.toLowerCase(), accepted.outcome.fullName.toLowerCase());
+          const stages = [accepted, deferred];
+          
+          function directRequest(request, page) {
+            return request.isNavigationRequest() && request.resourceType() === 'document' && request.frame() === page.mainFrame();
+          }
+          
+          function requestReceipt(request) {
+            return { url: request.url(), method: request.method(), resourceType: request.resourceType(),
+              redirectedFrom: request.redirectedFrom()?.url() ?? null, redirectedTo: request.redirectedTo()?.url() ?? null };
+          }
+          
+          function cors(request) {
+            return { 'access-control-allow-origin': base, 'access-control-allow-methods': 'GET,POST,OPTIONS',
+              'access-control-allow-headers': request.headers()['access-control-request-headers']
+                || 'authorization,apikey,content-type,x-client-info,accept-profile,x-supabase-api-version' };
+          }
+          
+          function providerRead(url, stage, row) {
+            const query = url.searchParams;
+            const limit = query.get('limit');
+            assert(['200', '1000'].includes(limit));
+            const direct = limit === '200';
+            const keys = direct ? ['limit', 'or', 'order', 'select'] : ['limit', 'order', 'select'];
+            assert.deepEqual([...query.keys()].sort(), keys);
+            assert.equal(query.get('select')?.replace(/\s/g, ''), 'last_name,first_name,player_id,team,position');
+            assert.equal(query.get('order'), 'player_id.asc,last_name.asc');
+            if (direct) assert.equal(query.get('or'), '(first_name.ilike.%Fixture%,last_name.ilike.%Fixture%)');
+            else assert(stage.proof.request.newPlayer.length <= 24, 'Prominence fallback only for short queries');
+            row.providerReads.push({ caseId: stage.proof.id, method: 'GET', path: providerPath, query: Object.fromEntries(query),
+              kind: direct ? 'direct' : 'prominence', row: stage.providerRow, response: pin(stage.providerBody) });
+          }
+          
+          function knownBackground(url, method, resourceType) {
+            return method === 'GET' && (
+              (url.origin === 'https://fonts.googleapis.com' && url.pathname === '/css2' && resourceType === 'stylesheet')
+              || (url.origin === 'https://flagcdn.com' && /^\/w\d+\/[a-z-]+\.png$/.test(url.pathname) && resourceType === 'image')
+              || (url.origin === fixtureOrigin && url.pathname === '/rest/v1/live_scores' && resourceType === 'fetch')
+            );
+          }
+          
+          async function observe(browser, width, height, touch) {
+            const context = await browser.newContext({ viewport: { width, height }, isMobile: touch, hasTouch: touch,
+              serviceWorkers: 'block', deviceScaleFactor: 1, reducedMotion: 'reduce' });
+            const row = { viewport: { width, height, touch }, directRequests: [], directInterceptions: [], mainFrameUrls: [],
+              providerReads: [], validatorPosts: [], preflights: [], blocked: [], routeErrors: [], pageErrors: [],
+              loopbackReads: 0, externalForwards: 0 };
+            const pending = new Set();
+            let page;
+            let stage;
+            let previousPlayer;
+            async function intercept(route) {
+              const request = route.request();
+              const url = new URL(request.url());
+              const method = request.method();
+              const resourceType = request.resourceType();
+              if (page && directRequest(request, page)) row.directInterceptions.push(requestReceipt(request));
+              if (url.origin === base && ['GET', 'HEAD'].includes(method)) {
+                row.loopbackReads++;
+                return route.continue();
+              }
+              const fixture = url.origin === fixtureOrigin && [providerPath, validatorPath].includes(url.pathname);
+              if (fixture && method === 'OPTIONS') {
+                row.preflights.push({ path: url.pathname, method });
+                return route.fulfill({ status: 204, headers: cors(request) });
+              }
+              if (fixture && url.pathname === providerPath && method === 'GET') {
+                assert(stage, 'Provider requested during a selected fixture stage');
+                providerRead(url, stage, row);
+                return route.fulfill({ status: 200, headers: cors(request), contentType: 'application/json', body: stage.providerBody });
+              }
+              if (fixture && url.pathname === validatorPath && method === 'POST') {
+                assert(stage && previousPlayer && !url.search);
+                assert.equal(row.validatorPosts.length, stages.indexOf(stage), 'Exactly one validator POST per selection');
+                const posted = request.postDataJSON();
+                assert.deepEqual(posted, { previousPlayer, newPlayer: stage.option });
+                assert.equal(posted.newPlayer.toLowerCase(), stage.proof.request.newPlayer.toLowerCase());
+                row.validatorPosts.push({ caseId: stage.proof.id, method, path: validatorPath, posted,
+                  status: stage.status, contentType: stage.contentType, response: stage.proof.response });
+                return route.fulfill({ status: stage.status, headers: cors(request), contentType: stage.contentType, body: stage.body });
+              }
+              row.blocked.push({ origin: url.origin, path: url.pathname, method, resourceType,
+                knownBackground: knownBackground(url, method, resourceType) });
+              return route.abort('blockedbyclient');
+            }
+          
+            try {
+              await context.addInitScript(url => {
+                if (window === window.top && location.href === url) {
+                  Object.defineProperty(window, '__dukbNbaChainReplayDocument', { value: crypto.randomUUID() });
+                }
+              }, publicUrl);
+              await context.route('**/*', route => {
+                const work = intercept(route).catch(async error => {
+                  row.routeErrors.push(String(error.stack || error));
+                  await route.abort('blockedbyclient').catch(() => {});
+                });
+                pending.add(work);
+                void work.finally(() => pending.delete(work));
+                return work;
+              });
+              page = await context.newPage();
+              page.on('pageerror', error => row.pageErrors.push(error.message));
+              page.on('request', request => {
+                if (directRequest(request, page)) row.directRequests.push(requestReceipt(request));
+              });
+              page.on('framenavigated', frame => {
+                if (frame === page.mainFrame()) row.mainFrameUrls.push(frame.url());
+              });
+              const activate = locator => touch ? locator.tap() : locator.click();
+              const response = await page.goto(publicUrl, { waitUntil: 'domcontentloaded' });
+              assert(response, 'Direct NBA Chain response');
+              const headers = response.headers();
+              row.served = { url: response.url(), status: response.status(), location: headers.location ?? null,
+                contentType: headers['content-type'], request: requestReceipt(response.request()) };
+              const direct = { url: publicUrl, method: 'GET', resourceType: 'document', redirectedFrom: null, redirectedTo: null };
+              assert.deepEqual(row.served, { url: publicUrl, status: 200, location: null,
+                contentType: 'text/html; charset=utf-8', request: direct });
+              const servedBody = await response.body();
+              assert(documentBody.equals(servedBody), 'Direct response matches built route bytes');
+              row.served.body = pin(servedBody);
+              row.consent = await answerConsent(page, { press: activate });
+              assert(['rejected', 'absent'].includes(row.consent));
+          
+              const box = page.getByRole('combobox', { name: 'Enter NBA player name...', exact: true });
+              const chain = page.locator('[data-nba-chain-list]');
+              const end = page.getByRole('button', { name: 'End Game', exact: true });
+              const retry = page.getByText(retryMessage, { exact: true });
+              const score = count => page.getByText('Chain: ' + count, { exact: true });
+              const best = count => page.getByText('Best: ' + count, { exact: true });
+              async function state(count) {
+                assert(await score(count).isVisible(), 'Displayed score');
+                assert(await best(count).isVisible(), 'Displayed best score');
+                assert(await end.isVisible(), 'Still playing');
+                await page.waitForFunction(() => {
+                  const input = document.querySelector('input[aria-label="Enter NBA player name..."]');
+                  return input && !input.disabled && input.value === '';
+                });
+                return {
+                  names: await chain.locator('[data-nba-chain-name]').allTextContents(),
+                  connections: await chain.locator('[data-nba-chain-connection]').allTextContents(),
+                  score: await score(count).innerText(), best: await best(count).innerText(),
+                  retry: await retry.isVisible() ? await retry.innerText() : null,
+                  playing: await end.isVisible(),
+                  document: await page.evaluate(() => ({
+                    nonce: window.__dukbNbaChainReplayDocument, url: location.href, viewport: [innerWidth, innerHeight],
+                  })),
+                };
+              }
+          
+              async function select(next, previous) {
+                stage = next;
+                previousPlayer = previous;
+                await box.fill(stage.proof.request.newPlayer);
+                const option = page.getByRole('option', { name: stage.option, exact: true });
+                await option.waitFor({ state: 'visible' });
+                assert.equal(await page.getByRole('option').count(), 1);
+                assert.equal(await option.innerText(), stage.option);
+                await activate(option);
+              }
+          
+              await box.waitFor({ state: 'visible' });
+              row.before = await state(0);
+              assert.equal(row.before.names.length, 1);
+              const [starter] = row.before.names;
+              assert(starter?.trim() && !starter.startsWith('Fixture '), 'Actual visible starter from the built route');
+              row.starter = starter;
+              assert.deepEqual([row.before.connections, row.before.retry], [[], null]);
+              await select(accepted, starter);
+              await score(1).waitFor({ state: 'visible' });
+              row.accepted = await state(1);
+              assert.deepEqual(row.accepted.names, [starter, accepted.outcome.fullName]);
+              assert.deepEqual(row.accepted.connections, [accepted.outcome.connection]);
+              assert.equal(row.accepted.retry, null);
+              await select(deferred, accepted.outcome.fullName);
+              await retry.waitFor({ state: 'visible' });
+              row.deferred = await state(1);
+              assert.deepEqual(row.deferred, { ...row.accepted, retry: retryMessage });
+              assert.match(row.before.document.nonce, /^[a-f0-9-]{36}$/);
+              assert.deepEqual(row.before.document, row.accepted.document);
+              assert.equal(row.before.document.url, publicUrl);
+              assert.deepEqual(row.before.document.viewport, [width, height]);
+          
+              await Promise.all([...pending]);
+              assert.deepEqual(row.directRequests, [direct]);
+              assert.deepEqual(row.directInterceptions, [direct]);
+              assert(row.mainFrameUrls.includes(publicUrl));
+              assert(row.mainFrameUrls.every(url => url === 'about:blank' || url === publicUrl));
+              for (const item of stages) {
+                const kinds = row.providerReads.filter(read => read.caseId === item.proof.id).map(read => read.kind).sort();
+                assert.deepEqual(kinds, item.proof.request.newPlayer.length <= 24 ? ['direct', 'prominence'] : ['direct']);
+              }
+              assert.deepEqual(row.validatorPosts.map(post => post.caseId), stages.map(item => item.proof.id));
+              assert(row.loopbackReads > 0);
+              assert.deepEqual(row.routeErrors, []);
+              assert.deepEqual(row.pageErrors, []);
+              assert.deepEqual(row.blocked.filter(item => !item.knownBackground), [], 'Only named background requests may be aborted');
+              return row;
+            } finally {
+              await context.close();
+            }
+          }
+          
+          const browser = await pw.chromium.launch({ headless: true });
+          const cases = [];
+          try {
+            for (const [width, height, touch] of [[320, 780, true], [390, 844, true], [1280, 900, false]]) {
+              cases.push(await observe(browser, width, height, touch));
+            }
+          } finally {
+            await browser.close();
+          }
+          assert.equal(new Set(cases.map(row => row.before.document.nonce)).size, cases.length);
+          const offlineBytes = statSync(receipt).size;
+          assert.equal(offlineBytes, 0);
+          mkdirSync(out);
+          const builtDocument = { file: 'built-document.html', path: distFile, ...pin(documentBody) };
+          writeFileSync(path.join(out, builtDocument.file), documentBody, { flag: 'wx' });
+          const report = {
+            schema: 'nba-chain-initials-native-replay-v1', status: 'passed', route: publicUrl, builtDocument,
+            boundary: 'Actual built UI with fictional autocomplete and separately admitted Edge response replay. The Edge resolver was not executed by this browser helper.',
+            replay: { accepted: accepted.proof, deferred: deferred.proof },
+            cases,
+            totals: { cases: cases.length, directDocuments: cases.reduce((sum, row) => sum + row.directRequests.length, 0),
+              postedGuesses: cases.reduce((sum, row) => sum + row.validatorPosts.length, 0),
+              accepts: cases.length, deferrals: cases.length,
+              externalForwards: cases.reduce((sum, row) => sum + row.externalForwards, 0), offlineBytes },
+          };
+          writeFileSync(path.join(out, 'report.json'), JSON.stringify(report, null, 2) + '\n', { flag: 'wx' });
+          console.log(JSON.stringify({ schema: report.schema, ...report.totals }));
+          NBA_CHAIN_NATIVE
+          printf '%s  %s\n' '012d2bd79a1e33cf15b5f313f7e7bd2542e3dbe50ceea5124d259fbba2b0c24b' "$EVIDENCE/native-helper.mjs" | sha256sum -c -
+          touch "$EVIDENCE/browser.transport.log"
+          node scripts/lib/hostLikeServer.mjs dist 4174 > "$EVIDENCE/browser-host.log" 2>&1 &
+          host=$!
+          trap 'kill "$host" 2>/dev/null || true; wait "$host" 2>/dev/null || true' EXIT
+          ready=0
+          for attempt in $(seq 1 40); do
+            kill -0 "$host"
+            if curl --noproxy '*' --silent --fail --max-time 1 http://127.0.0.1:4174/ -o /dev/null; then ready=1; break; fi
+            sleep 0.25
+          done
+          test "$ready" -eq 1
+          main_sha=$(node -p "require('./$EVIDENCE/input-receipt.json').fixtures.main.sha256")
+          guard_sha=$(node -p "require('./$EVIDENCE/input-receipt.json').fixtures.guards.sha256")
+          result=0
+          CI=1 BASE=http://127.0.0.1:4174 NBA_CHAIN_NATIVE_OUT="$PWD/$EVIDENCE/browser" \
+            NBA_CHAIN_FIXED_MAIN_RAW="$PWD/$EVIDENCE/fixed-main.raw.json" NBA_CHAIN_FIXED_MAIN_SHA256="$main_sha" \
+            NBA_CHAIN_FIXED_GUARD_RAW="$PWD/$EVIDENCE/fixed-guards.raw.json" NBA_CHAIN_FIXED_GUARD_SHA256="$guard_sha" \
+            SIM_OFFLINE_RECEIPT="$PWD/$EVIDENCE/browser.transport.log" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" \
+            node "$EVIDENCE/native-helper.mjs" > "$EVIDENCE/browser.log" 2>&1 || result=$?
+          printf '%s\n' "$result" > "$EVIDENCE/browser-exit.txt"
+          cat "$EVIDENCE/browser.log"
+          test "$result" -eq 0
+          test ! -s "$EVIDENCE/browser.transport.log"
+      - name: Admit native replay and unchanged source and build bytes
+        run: |
+          set -euo pipefail
+          node "$EVIDENCE/dist-check.mjs" after
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          import {createHash} from 'node:crypto';
+          const out=process.env.EVIDENCE;
+          const read=file=>fs.readFileSync(out+'/'+file);
+          const json=file=>JSON.parse(read(file));
+          const sha=bytes=>createHash('sha256').update(bytes).digest('hex');
+          const source=json('source-join.json'),input=json('input-receipt.json'),report=json('browser/report.json');
+          const checks=(()=>{
+          const route='http://127.0.0.1:4174/nba-chain';
+          const direct={url:route,method:'GET',resourceType:'document',redirectedFrom:null,redirectedTo:null};
+          assert.deepEqual([report.status,report.schema,report.route],['passed','nba-chain-initials-native-replay-v1',route]);
+          assert.deepEqual(report.totals,{cases:3,directDocuments:3,postedGuesses:6,accepts:3,deferrals:3,externalForwards:0,offlineBytes:0});
+          assert.deepEqual(report.cases.map(row=>row.viewport),[
+            {width:320,height:780,touch:true},{width:390,height:844,touch:true},{width:1280,height:900,touch:false},
+          ]);
+          const main=json('fixed-main.raw.json'),guards=json('fixed-guards.raw.json');
+          const accept=main.cases.find(row=>row.id==='initials-variant');
+          const defer=guards.cases.find(row=>row.id==='ambiguous-dotted-initials');
+          const pin=bytes=>({bytes:bytes.length,sha256:sha(bytes)});
+          const expectedReplay=(raw,fixture,kind)=>({
+            id:fixture.id,schema:raw.schema,source:raw.source,input:input.fixtures[kind],
+            request:fixture.request,response:pin(Buffer.from(JSON.stringify(fixture.outcome.body))),
+          });
+          assert.deepEqual(report.replay,{accepted:expectedReplay(main,accept,'main'),deferred:expectedReplay(guards,defer,'guards')});
+          assert.equal(main.source.blob,source.edge.blob);
+          assert.equal(guards.source.blob,source.edge.blob);
+          const built=read('browser/built-document.html');
+          assert.deepEqual(report.builtDocument,{file:'built-document.html',path:'dist/nba-chain/index.html',...pin(built)});
+          const expectedDist=json('dist-after.json').find(row=>row.file==='dist/nba-chain/index.html');
+          assert.deepEqual(expectedDist,{file:'dist/nba-chain/index.html',...pin(built)});
+          assert.equal(sha(fs.readFileSync('dist/nba-chain/index.html')),sha(built));
+          const nonces=new Set();
+          const retry="We couldn't confirm that player's identity. Try another spelling.";
+          assert.deepEqual(defer.outcome.body,{valid:false,unverified:true,reason:retry});
+          for(const row of report.cases){
+            assert.deepEqual([row.directRequests,row.directInterceptions],[[direct],[direct]]);
+            assert.deepEqual(row.served,{url:route,status:200,location:null,contentType:'text/html; charset=utf-8',request:direct,body:pin(built)});
+            assert.deepEqual([row.routeErrors,row.pageErrors,row.externalForwards],[[],[],0]);
+            assert(row.loopbackReads>0);
+            assert(row.mainFrameUrls.includes(route)&&row.mainFrameUrls.every(url=>url===route||url==='about:blank'));
+            assert.deepEqual(row.providerReads.map(x=>x.caseId).sort(),['ambiguous-dotted-initials','initials-variant','initials-variant']);
+            assert(row.providerReads.every(x=>x.method==='GET'&&x.path==='/rest/v1/nba_players_extended_v2'));
+            assert.deepEqual(row.validatorPosts,[
+              {caseId:accept.id,method:'POST',path:'/functions/v1/nba-chain-validate',
+                posted:{previousPlayer:row.starter,newPlayer:'Fixture J.r. Avery'},status:200,contentType:'application/json',response:report.replay.accepted.response},
+              {caseId:defer.id,method:'POST',path:'/functions/v1/nba-chain-validate',
+                posted:{previousPlayer:'Fixture JR Avery',newPlayer:'Fixture J.r. Kai T.v. Avery'},status:200,contentType:'application/json',response:report.replay.deferred.response},
+            ]);
+            assert.deepEqual([row.before.names,row.before.connections,row.before.score,row.before.best,row.before.retry,row.before.playing],
+              [[row.starter],[],'Chain: 0','Best: 0',null,true]);
+            assert.deepEqual([row.accepted.names,row.accepted.connections,row.accepted.score,row.accepted.best,row.accepted.retry,row.accepted.playing],
+              [[row.starter,'Fixture JR Avery'],[accept.outcome.body.connection],'Chain: 1','Best: 1',null,true]);
+            assert.deepEqual(row.deferred,{...row.accepted,retry});
+            assert.deepEqual(row.before.document,row.accepted.document);
+            assert.deepEqual([row.before.document.url,row.before.document.viewport],[route,[row.viewport.width,row.viewport.height]]);
+            assert.match(row.before.document.nonce,/^[a-f0-9-]{36}$/);
+            assert(!nonces.has(row.before.document.nonce));
+            nonces.add(row.before.document.nonce);
+            assert(row.blocked.every(x=>x.knownBackground===true&&x.method==='GET'));
+          }
+          return {status:'passed',schema:report.schema,reportSHA256:sha(read('browser/report.json')),builtDocument:report.builtDocument,
+           totals:report.totals,scope:'Three native UI replays using exact admitted fictional Edge bodies.'};
+          })();
+          assert.equal(checks.status,'passed');
+          const dist=json('dist-after.json');
+          assert.equal(dist.length,850);
+          assert.equal(sha(read('dist-after.json')),input.reference.distTupleSHA256);
+          assert.deepEqual([read('offline.log').length,read('browser.transport.log').length],[0,0]);
+          fs.writeFileSync(out+'/clean-result.json',JSON.stringify({
+            status:'passed',head:source.head,tree:source.tree,edge:source.edge,codeConfigRows:source.codeConfigRows,
+            distFiles:dist.length,distTupleSHA256:sha(read('dist-after.json')),reference:input.reference,
+            native:checks,clientCases:7,limits:'Fresh exact build and browser replay of independently verified fictional Edge responses. No live backend or publication.',
+          },null,2)+'\n');
+          NODE
+      - name: Verify physical source and offline holds
+        if: always()
+        run: |
+          set -euo pipefail
+          git ls-files -s > "$EVIDENCE/source-after.txt"
+          sha256sum package.json package-lock.json > "$EVIDENCE/locks-after.txt"
+          cmp "$EVIDENCE/source-before.txt" "$EVIDENCE/source-after.txt"
+          cmp "$EVIDENCE/locks-before.txt" "$EVIDENCE/locks-after.txt"
+          git diff --exit-code HEAD -- .
+          node "$EVIDENCE/physical.mjs" after
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: nba-chain-initials-clean-${{ github.run_id }}
+          path: nba-chain-initials-clean
+          retention-days: 30
+          if-no-files-found: error

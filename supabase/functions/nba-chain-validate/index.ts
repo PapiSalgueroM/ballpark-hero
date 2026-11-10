@@ -93,15 +93,23 @@ const NICKNAMES: Record<string, string> = {
 };
 const resolve = (n: string) => NICKNAMES[norm(n)] ?? norm(n);
 
+// Join explicit dotted initials for comparison without changing the stored fold.
+const initialsKey = (name: string) =>
+  norm((name || "").replace(/(^|\s)((?:[a-z]\.\s*)+[a-z]\.)(?=\s+[a-z])/gi,
+    (_match, prefix: string, initials: string) => prefix + initials.replace(/[^a-z]/gi, "")));
+
+
 const DATA_LAST_SEASON = 2024; // bref_nba_player_seasons ends here
+const LOOKUP_LIMIT = 400;
 
 interface Stint { player_name: string; team: string; first_season: number; last_season: number; }
+type KeyedStint = Stint & { person_key: string | null };
 
 function json(body: unknown, corsHeaders: Record<string, string>, status = 200) {
   return new Response(JSON.stringify(body), { status, headers: { ...corsHeaders, "Content-Type": "application/json" } });
 }
 
-async function lookup(sb: any, name: string): Promise<Stint[]> {
+async function lookup(sb: any, name: string): Promise<Stint[] | null> {
   const target = resolve(name);
   const COLS = "player_name, team, first_season, last_season";
   /* The last word of the RESOLVED name, against the folded column. Resolved so
@@ -112,7 +120,7 @@ async function lookup(sb: any, name: string): Promise<Stint[]> {
     .from("nba_player_team_stints")
     .select(COLS)
     .ilike("name_folded", `%${token}%`)
-    .limit(400);
+    .limit(LOOKUP_LIMIT);
   if (error) {
     /* The folded column is filled by migration. If it is ever missing, fall
        back to the old raw search rather than answering "no such player" for
@@ -122,11 +130,34 @@ async function lookup(sb: any, name: string): Promise<Stint[]> {
       .from("nba_player_team_stints")
       .select(COLS)
       .ilike("player_name", `%${name.trim().split(/\s+/).slice(-1)[0]}%`)
-      .limit(400));
+      .limit(LOOKUP_LIMIT));
   }
   const rows = (data ?? []) as Stint[];
   const exact = rows.filter((r) => resolve(r.player_name) === target);
   if (exact.length > 0) return exact;
+  if (!error && rows.length < LOOKUP_LIMIT) {
+    const key = initialsKey(name);
+    const alternate = rows.filter((r) => initialsKey(r.player_name) === key);
+    if (alternate.length === 1) return alternate;
+    if (alternate.length > 1) {
+      const spelling = norm(alternate[0].player_name);
+      if (alternate.some((r) => norm(r.player_name) !== spelling)) return null;
+
+      // One spelling can cover multiple people. Require a shared archive key.
+      const { data: identified, error: identityError } = await sb
+        .from("nba_player_team_stints")
+        .select(`${COLS}, person_key`)
+        .eq("name_folded", spelling)
+        .limit(LOOKUP_LIMIT);
+      const confirmed = (identified ?? []) as KeyedStint[];
+      const personKey = confirmed[0]?.person_key;
+      const stintKeys = (stints: Stint[]) => stints.map((r) =>
+        JSON.stringify([r.player_name, r.team, r.first_season, r.last_season])).sort().join("\n");
+      if (identityError || confirmed.length !== alternate.length || !personKey?.trim() ||
+          confirmed.some((r) => r.person_key !== personKey) || stintKeys(confirmed) !== stintKeys(alternate)) return null;
+      return alternate;
+    }
+  }
   // unique-surname fallback
   const bySurname = rows.filter((r) => {
     const parts = resolve(r.player_name).split(" ");
@@ -162,6 +193,9 @@ serve(async (req) => {
     }
 
     const [prevStints, newStints] = await Promise.all([lookup(sb, previousPlayer), lookup(sb, newPlayer)]);
+    if (prevStints === null || newStints === null) {
+      return json({ valid: false, unverified: true, reason: "We couldn't confirm that player's identity. Try another spelling." }, corsHeaders);
+    }
     const properNew = newStints[0]?.player_name ?? newPlayer;
 
     if (newStints.length === 0) {
@@ -175,6 +209,10 @@ serve(async (req) => {
         { valid: false, reason: `We have no NBA record for ${previousPlayer}, so this link cannot be verified.`, fullName: properNew },
         corsHeaders,
       );
+    }
+
+    if (resolve(prevStints[0].player_name) === resolve(properNew)) {
+      return json({ valid: false, reason: "That is the same player." }, corsHeaders);
     }
 
     // Teammates: same team code with overlapping seasons.
