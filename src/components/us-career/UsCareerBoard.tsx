@@ -18,10 +18,9 @@ import UsCareerProgramme from '@/components/us-career/UsCareerProgramme';
 import { expireUsCareerProgramme, prepareUsCareerProgramme, restoreUsCareerProgramme, settleUsCareerProgramme, type ProgrammeCareer } from '@/lib/usCareerProgramme';
 // Round 179: real free agency, shared engine and shared screen.
 import { applyFaSigning, oneYearWindow } from '@/lib/usCareerFreeAgency';
-import type { FaWindow } from '@/lib/usCareerFreeAgency';
 import FreeAgencyPanel from '@/components/us-career/FreeAgencyPanel';
 /* Round 207: the extension talk, shared engine and shared card. */
-import { extensionDue, type ExtensionTalk } from '@/lib/usCareerExtension';
+import { extensionDue } from '@/lib/usCareerExtension';
 import { acknowledgeMarketWheel, declineMarketExtension, extensionMarketProbabilities, freeAgencyMarketProbabilities, openMarketExtension, openMarketFreeAgency, pushMarketExtension, pushMarketFreeAgency, restoreMarketTalk, type UsCareerMarketTalk } from '@/lib/usCareerMarket';
 import ExtensionCard from '@/components/us-career/ExtensionCard';
 // Round 186: the season curtain, shared engine and shared card.
@@ -57,7 +56,6 @@ import TrophyCase from '@/components/us-career/TrophyCase';
 /* Round 469: the money app, the gram, the rival card and the badges, on the
    same engines Soccer Career runs (careerMoney, careerSocial, careerBadges),
    bound per sport (nflCareerMoney.ts, nflCareerLoop.ts and their siblings). */
-import MoneyApp from '@/components/us-career/MoneyApp';
 import { SocialGram, RivalCard, BadgeGrid } from '@/components/us-career/SocialPanel';
 import type { MoneyAction } from '@/lib/careerMoney';
 import { fmtFollowers, pushHeadlines } from '@/lib/careerSocial';
@@ -90,6 +88,7 @@ import { hallWallKey, wallKeyOf } from '@/lib/usCareerHallWallKey';
 import type { HallWall } from '@/lib/usCareerHallWall';
 import { DIRTY_SENTENCE_NO_WASHERS, canDealWithDirtyMoney, washersLeft } from '@/lib/careerDirtyMoney';
 
+const MoneyApp = lazy(() => import('@/components/us-career/MoneyApp'));
 const UsCareerPractice = lazy(() => import('@/components/us-career/UsCareerPractice'));
 const CareerSeasonReview = lazy(() => import('@/components/us-career/CareerSeasonReview'));
 /* Round 1039: the retirement talk, the farewell banner and the Hall card load
@@ -147,6 +146,8 @@ const SAVE_TOAST_BUTTON = { height: 44, minWidth: 64, paddingLeft: 14, paddingRi
 
 export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
   const pendingSave = useRef<{ key: string; value: string | null } | null>(null);
+  const savedCareerBytes = useRef<string | null>(null);
+  const [saveConflict, setSaveConflict] = useState<'changed' | 'unreadable' | null>(null);
   const [saveFailure, setSaveFailure] = useState<'write' | 'remove' | null>(null);
   const saveFailed = saveFailure !== null;
   useEffect(() => {
@@ -281,20 +282,17 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
   }, [decisionOutcome]);
   const [lastLine, setLastLine] = useState<SeasonLine | null>(null);
   /* Offers and negotiations are saved for this exact unplayed contract year. */
-  const [faWindow, setFaWindow] = useState<FaWindow | null>(null);
-  const [extTalk, setExtTalk] = useState<ExtensionTalk | null>(null);
   /* Set when you have turned an extension down, so the same season
      does not ask twice. Cleared the moment a season is actually played. */
   const extDeclinedRef = useRef(false);
-  const [talkLine, setTalkLine] = useState<string | null>(null);
   const [marketTalk, setMarketState] = useState<UsCareerMarketTalk | null>(null);
+  const faWindow = marketTalk?.kind === 'freeagency' ? marketTalk.window : null;
+  const extTalk = marketTalk?.kind === 'extension' && !marketTalk.declined ? marketTalk.talk : null;
   const marketRef = useRef<UsCareerMarketTalk | null>(null);
+  const focusWaiverMarket = useRef(false);
   const setMarketTalk = useCallback((next: UsCareerMarketTalk | null) => {
     marketRef.current = next;
     setMarketState(next);
-    setExtTalk(next?.kind === 'extension' && !next.declined ? next.talk : null);
-    setFaWindow(next?.kind === 'freeagency' ? next.window : null);
-    setTalkLine(next?.reply ?? null);
   }, []);
   /* Round 186: the season curtain. Transient like the market window: never
      persisted, so a reload mid-reveal opens on the save's real screen. */
@@ -351,6 +349,12 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
   const revealRef = useRevealScroll<HTMLDivElement>(
     `${phase}:${pendingEvent?.id ?? ''}:${career?.seasons.length ?? 0}:${pushesMade}:${intlCallYear ?? ''}:${intlResult ? 'intl' : ''}:${reveal ? 'curtain' : ''}`,
   );
+
+  useEffect(() => {
+    if (phase !== 'freeagency' || !focusWaiverMarket.current) return;
+    focusWaiverMarket.current = false;
+    revealRef.current?.focus({ preventScroll: true });
+  }, [phase, revealRef]);
 
   /* Round 470: opening a hub box is a new screen, so it obeys the owner's no
      scroll rule like every other one. Measured on a 390 by 844 phone before
@@ -447,12 +451,15 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
 
   useEffect(() => {
     pendingSave.current = null;
+    savedCareerBytes.current = null;
+    setSaveConflict(null);
     setSaveFailure(null);
     setDecisionOutcome(null);
     consumedEvent.current = null;
     decisionReturn.current = false;
     try {
       const raw = localStorage.getItem(sport.saveKey);
+      savedCareerBytes.current = raw;
       if (!raw) return;
       const s = JSON.parse(raw) as SaveShape;
       if (!s.c) {
@@ -503,7 +510,7 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
       setCoach(co);
       const restoredPhase: Phase = !s.c.retired ? 'season' : s.phase === 'coach' && co ? 'coach' : 'retired';
       if (restoredPhase !== 'season') markRestoredFinish(sport.gameSlug);
-      const heldTalk = restoreMarketTalk(s.contractTalk, loaded, sport.slug);
+      const heldTalk = restoreMarketTalk(s.contractTalk, loaded, sport.slug, sport.waiver);
       setMarketTalk(heldTalk);
       extDeclinedRef.current = heldTalk?.kind === 'extension' && heldTalk.declined;
       if (heldTalk && !(heldTalk.kind === 'extension' && heldTalk.declined)) {
@@ -530,18 +537,40 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
     } catch { /* fresh */ }
   }, [sport]);
 
+  const checkWaiverSave = useCallback((pending?: string | null, confirming = false) =>
+    sport.waiver?.checkSave(sport.saveKey, savedCareerBytes.current, pending, confirming) ?? 'current', [sport]);
+
+  const waiverSaveMoved = (confirming = false) => {
+    const state = checkWaiverSave(undefined, confirming);
+    if (state === 'current') return false;
+    setSaveConflict(state);
+    return true;
+  };
+
   const retrySave = useCallback(() => {
     const pending = pendingSave.current;
     if (!pending || pending.key !== sport.saveKey) return;
+    const state = checkWaiverSave(pending.value);
+    if (state === 'changed') {
+      pendingSave.current = null;
+      setSaveFailure(null);
+      setSaveConflict(state);
+      return;
+    }
+    if (state === 'unreadable') {
+      setSaveFailure(pending.value === null ? 'remove' : 'write');
+      return;
+    }
     try {
       if (pending.value === null) localStorage.removeItem(pending.key);
       else localStorage.setItem(pending.key, pending.value);
+      savedCareerBytes.current = pending.value;
       pendingSave.current = null;
       setSaveFailure(null);
     } catch {
       setSaveFailure(pending.value === null ? 'remove' : 'write');
     }
-  }, [sport.saveKey]);
+  }, [sport.saveKey, checkWaiverSave]);
   /* Round 1144: while a save is refused the storage seam knows one is
      waiting here, so a reload the app makes on its own account (a new build,
      a stale chunk, the Season Center tile's Reload) retries it once first and
@@ -560,7 +589,7 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
     if (sport.hall) stampOnRetirement(c, sport.saveKey); // Round 1051: the calibration stamp, on the write that retires a career
     /* Release AO: the stamp stays above the write. Round 1084's saveValue holds the write's try (and the retry
        of a refused one), so the stamped career is what gets serialised, first time and on every retry. */
-    const heldTalk = restoreMarketTalk(marketRef.current, c, sport.slug);
+    const heldTalk = restoreMarketTalk(marketRef.current, c, sport.slug, sport.waiver);
     if (!heldTalk && marketRef.current) setMarketTalk(null);
     saveValue(JSON.stringify({ c, phase: ph, teamQuality: tq, coach: coachRef.current,
       ...(heldTalk ? { contractTalk: heldTalk } : {}) } satisfies SaveShape));
@@ -679,9 +708,35 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
      banned year). */
   const playedRef = useRef<CareerState | null>(null);
 
+  const canRequestWaiver = !!(career && sport.waiver && teamQuality != null && phase === 'season' &&
+    panel === 'none' && !practiceOpen && !marketTalk && !saveFailed && sport.waiver.canRequest(career));
+
+  const openWaiverMarket = (released: CareerState, quality: number) => {
+    if (!sport.waiver) return;
+    const talk = openMarketFreeAgency(released, sport.slug, sport.waiver.buildMarket(released, quality, Math.random), sport.waiver);
+    if (!restoreMarketTalk(talk, released, sport.slug, sport.waiver)) return;
+    focusWaiverMarket.current = true;
+    setCareer(released);
+    setMarketTalk(talk);
+    setPhase('freeagency');
+    persist(released, 'freeagency', quality);
+  };
+
+  const requestWaiver = () => {
+    if (!canRequestWaiver || !career || teamQuality == null || marketRef.current || pendingSave.current || waiverSaveMoved(true)) return;
+    const released = sport.waiver?.prepareRelease(career);
+    if (released) openWaiverMarket(released, teamQuality);
+  };
+
   const playSeason = () => {
     playedRef.current = null;
-    if (!career || teamQuality == null || practiceOpen) return;
+    if (!career || teamQuality == null || practiceOpen || waiverSaveMoved()) return;
+    if (sport.waiver && career.waiver !== undefined) {
+      if (!sport.waiver.hasCurrent(career) || pendingSave.current) return;
+      if (restoreMarketTalk(marketRef.current, career, sport.slug, sport.waiver)) setPhase('freeagency');
+      else openWaiverMarket(career, teamQuality);
+      return;
+    }
     /* Round 195: a played season counts as playing TODAY, the Round 159
        soccer rule reaching the American careers. Unscored on purpose: the
        scored completion stays the retirement legacy. */
@@ -729,7 +784,7 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
        the career, so the card's "play the year out and reach free agency" is
        false, and signing would pay the last year at a rate for years that
        never come (MLB's deck farewell leaves exactly one year on the deal). */
-    const existingTalk = restoreMarketTalk(marketRef.current, c, sport.slug);
+    const existingTalk = restoreMarketTalk(marketRef.current, c, sport.slug, sport.waiver);
     if (existingTalk && !(existingTalk.kind === 'extension' && existingTalk.declined)) {
       setPhase(existingTalk.kind === 'extension' ? 'extension' : 'freeagency');
       return;
@@ -907,11 +962,12 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
      still refused (pendingSave), because then the save is BEHIND this tab and must not win. One tab, the save
      in step: the two are byte equal and nothing changes. */
   const talkMovedElsewhere = (): boolean => {
+    if (waiverSaveMoved() || (sport.waiver && career?.waiver !== undefined && pendingSave.current)) return true;
     const held = marketRef.current;
     if (!career || !held || pendingSave.current) return false;
     try {
       const raw = localStorage.getItem(sport.saveKey);
-      const stored = raw ? restoreMarketTalk((JSON.parse(raw) as SaveShape).contractTalk, career, sport.slug) : null;
+      const stored = raw ? restoreMarketTalk((JSON.parse(raw) as SaveShape).contractTalk, career, sport.slug, sport.waiver) : null;
       if (!stored || JSON.stringify(stored) === JSON.stringify(held)) return false;
       setMarketTalk(stored);
       setPhase(stored.kind === 'freeagency' ? 'freeagency' : stored.declined ? 'season' : 'extension');
@@ -930,7 +986,6 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
     c.salary = o.salary;
     setCareer(c);
     setFeed(f => [`\u{1F58A}\uFE0F Extension signed: ${o.years} more year${o.years === 1 ? '' : 's'} at $${o.salary}M a year.`, ...f].slice(0, 6));
-    setExtTalk(null);
     setPhase('season');
     persist(c, 'season', teamQuality);
   };
@@ -965,6 +1020,7 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
     setMarketTalk(null);
     const c: CareerState = JSON.parse(JSON.stringify(career));
     const line = applyFaSigning(c, offer);
+    if (sport.waiver) delete c.waiver;
     /* Round 182: the new locker room has its own depth chart. A star walks
        in as the starter; a 78 joining a 91 contender can find out the ring
        chase costs him the huddle. */
@@ -972,8 +1028,6 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
     setCareer(c);
     setTeamQuality(offer.quality);
     setFeed(f => [line, ...(roleNote ? [roleNote] : []), ...f].slice(0, 6));
-    setFaWindow(null);
-    setTalkLine(null);
     setPhase('season');
     persist(c, 'season', offer.quality);
   };
@@ -988,6 +1042,7 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
     persist(career, 'freeagency', teamQuality);
   };
   const acknowledgeMarket = () => {
+    if (sport.waiver && career?.waiver !== undefined && talkMovedElsewhere()) return;
     const held = marketRef.current;
     if (!career || !held) return;
     const next = acknowledgeMarketWheel(held);
@@ -1086,11 +1141,12 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
   };
 
   const retireNow = () => {
-    if (!career) return;
+    if (!career || waiverSaveMoved()) return;
     const c: CareerState = JSON.parse(JSON.stringify(career));
     /* Round 1039: 'Hang them up now' writes the last season played as the last.
        With no Hall bound (the parity replay) the save stays the old one. */
     if (sport.hall) manualRetire(c);
+    if (sport.waiver) delete c.waiver;
     c.retired = true;
     setCareer(c);
     setPhase('retired');
@@ -1104,7 +1160,12 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
      talk is dropped first so the save carries no market for a retired man. */
   const retireFromMarket = (label: string): ReactNode => (!career || career.seasons.length < 6) ? null : (
     <div data-career-market-retire="" className="mt-2 flex justify-center">
-      <USCareerActionConfirm action="retire" sport={sport.label} onConfirm={() => { setMarketTalk(null); extDeclinedRef.current = false; retireNow(); }}>
+      <USCareerActionConfirm action="retire" sport={sport.label} onConfirm={() => {
+        if (sport.waiver && career.waiver !== undefined && talkMovedElsewhere()) return;
+        setMarketTalk(null);
+        extDeclinedRef.current = false;
+        retireNow();
+      }}>
         <button type="button" className="min-h-11 min-w-11 rounded-full px-4 text-xs font-semibold text-muted-foreground hover:text-destructive">{label}</button>
       </USCareerActionConfirm>
     </div>
@@ -1126,8 +1187,6 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
     setDecisionOutcome(null);
     consumedEvent.current = null;
     decisionReturn.current = false;
-    setFaWindow(null);
-    setTalkLine(null);
     setDraftDay(null);
     setRivalryOutcome(null);
     setPanel('none');
@@ -1205,6 +1264,11 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
     {startOver && <UsCareerStartOver sport={sport.label} onConfirm={reset} hallCard={hallOnRestart} hallKept={hallKept} />}
     {content}
   </div>;
+
+  const WaiverConflict = sport.waiver?.Conflict;
+  if (saveConflict && WaiverConflict) {
+    return <div ref={boardTop} className="rounded-xl border border-border bg-card p-4"><WaiverConflict kind={saveConflict} /></div>;
+  }
 
   if (phase === 'prospect' && prospect) {
     return withSaveStatus(<ProspectJourney sport={sport} prospect={prospect} onChange={advanceProspect} onJoin={joinCareer} onBack={() => {
@@ -1583,13 +1647,15 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
           /* Round 469: the money app. Savings, the market, the statement and
              the card school on the engine the flagship's phone runs, with the
              Round 56 shop as its fourth tab. */
-          <MoneyApp
-            host={career}
-            sport={sport.money}
-            incomeLine={`$${career.salary}M a year, ${Math.max(0, career.contractYears)} year${Math.max(0, career.contractYears) === 1 ? '' : 's'} left on the deal`}
-            onMoney={handleMoney}
-            shop={<UsShopPanel stock={sport.shopItems} career={career} onBuy={id => { const res = sport.buyItem(career, id); if (!res) return; setCareer(res.state); setFeed(f => [res.log, ...f].slice(0, 8)); persist(res.state, 'season', teamQuality); }} />}
-          />
+          <Suspense fallback={<p role="status">Opening The Bank...</p>}>
+            <MoneyApp
+              host={career}
+              sport={sport.money}
+              incomeLine={`$${career.salary}M a year, ${Math.max(0, career.contractYears)} year${Math.max(0, career.contractYears) === 1 ? '' : 's'} left on the deal`}
+              onMoney={handleMoney}
+              shop={<UsShopPanel stock={sport.shopItems} career={career} onBuy={id => { const res = sport.buyItem(career, id); if (!res) return; setCareer(res.state); setFeed(f => [res.log, ...f].slice(0, 8)); persist(res.state, 'season', teamQuality); }} />}
+            />
+          </Suspense>
         )}
         {/* Round 1500: the dirty money desk. Only in a playing season (the button under the heat meter is drawn
             only then); the desk applies the choice by the shared rule in its own lazy chunk, and the board writes
@@ -1775,6 +1841,10 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
      cards you actually get (a skipped card is never shown). */
   const place = career.summer ? summerPlace(career.summer) : null;
 
+  const waived = sport.waiver?.hasCurrent(career);
+  const WaiverUnavailable = sport.waiver?.Unavailable;
+  const WaiverRequest = sport.waiver?.Request;
+
   /* ------------------------------ season hub ------------------------------ */
   return withSaveStatus(
     <div className="space-y-4">
@@ -1785,14 +1855,16 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
           </span>
         )}
         <span className="rounded-full border border-border bg-card px-3 py-1 font-bold text-foreground">{career.name} · {career.pos}</span>
-        <span className="rounded-full border border-border bg-card px-3 py-1 text-muted-foreground">{sport.teamLabelOf(career.team)}</span>
+        <span className="rounded-full border border-border bg-card px-3 py-1 text-muted-foreground">{waived ? 'Former team: ' + sport.teamLabelOf(career.team, career.eraId) : sport.teamLabelOf(career.team)}</span>
         <span className="rounded-full border border-border bg-card px-3 py-1 text-muted-foreground">{career.year} · age {career.age}</span>
         <span className="rounded-full border border-border bg-card px-3 py-1 text-muted-foreground">OVR <b className="text-primary">{career.ovr}</b></span>
-        <span className="rounded-full border border-border bg-card px-3 py-1 text-muted-foreground">${career.salary}M x{Math.max(0, career.contractYears)}</span>
+        <span className="rounded-full border border-border bg-card px-3 py-1 text-muted-foreground">{waived ? 'Free agent' : <>${career.salary}M x{Math.max(0, career.contractYears)}</>}</span>
         {/* Round 182: the depth chart, on the shirt. */}
-        <span className={cn('rounded-full border px-3 py-1 font-bold', career.role === 'backup' ? 'border-border bg-card text-muted-foreground' : 'border-gold/40 bg-card text-gold')}>
-          {sport.roleBadge(career)}
-        </span>
+        {!waived && (
+          <span className={cn('rounded-full border px-3 py-1 font-bold', career.role === 'backup' ? 'border-border bg-card text-muted-foreground' : 'border-gold/40 bg-card text-gold')}>
+            {sport.roleBadge(career)}
+          </span>
+        )}
       </div>
 
       {/* Round 56: the heat meter, only once you have something to hide */}
@@ -1849,10 +1921,12 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
             retire={retireFromMarket('Retire now')} />
         </div>
       ) : phase === 'freeagency' && faWindow ? (
-        <div ref={revealRef}>
-          <FreeAgencyPanel window={faWindow} sportNoun={sport.faSportNoun} talkLine={talkLine} onPush={pushFa} onSign={signFa} wheel={marketTalk?.wheel} onWheelContinue={acknowledgeMarket} compare reviewSigning={sport.slug === 'nba' || sport.slug === 'nfl'} odds={faWindow.offers.map((_, index) => freeAgencyMarketProbabilities(faWindow, index, sport.faPushArgs(career, Math.random)))} />
+        <div ref={revealRef} tabIndex={waived ? -1 : undefined}>
+          <FreeAgencyPanel window={faWindow} intro={waived ? sport.waiver?.marketIntro : undefined} sportNoun={sport.faSportNoun} talkLine={marketTalk?.reply ?? null} onPush={pushFa} onSign={signFa} wheel={marketTalk?.wheel} onWheelContinue={acknowledgeMarket} compare reviewSigning={sport.slug === 'nba' || sport.slug === 'nfl'} odds={faWindow.offers.map((_, index) => freeAgencyMarketProbabilities(faWindow, index, sport.faPushArgs(career, Math.random)))} />
           {!(marketTalk?.wheel && !marketTalk.wheel.seen) && retireFromMarket('Retire instead')}
         </div>
+      ) : WaiverUnavailable && career.waiver !== undefined ? (
+        <WaiverUnavailable canReopen={!!waived} onReopen={playSeason} />
       ) : phase === 'event' && pendingEvent ? (
         <div ref={revealRef} data-career-event={pendingEvent.id} data-career-decision-event={pendingEvent.id} className={career.summer ? 'cm-rise rounded-2xl border border-gold/40 bg-card p-4' : 'rounded-2xl border border-gold/40 bg-card p-4'}>
           {/* Round 1038: where you are in the summer. Drawn only on a summer,
@@ -1907,6 +1981,7 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
             <Dumbbell className="h-4 w-4" /> Play the {career.year} season
           </button>
           <UsSeasonCentreEntry sport={sport} career={career} busy={practiceOpen} onPlay={playSeason} played={() => playedRef.current} />
+          {canRequestWaiver && WaiverRequest && <WaiverRequest onConfirm={requestWaiver} />}
           <p className="mt-2 text-xs text-muted-foreground">
             Career so far: {sport.careerSoFar(career)}
           </p>

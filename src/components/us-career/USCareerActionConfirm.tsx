@@ -13,10 +13,9 @@ import {
 
 type Sport = 'NFL' | 'NBA' | 'MLB' | 'NHL';
 type Action = 'retire' | 'restart' | 'retireCoach';
+type ConfirmCopy = { title: string; description: string; cancel: string; confirm: string };
 
-interface Props {
-  action: Action;
-  sport: Sport;
+interface CommonProps {
   onConfirm: () => void;
   children: ReactElement;
   /** Round 1569 (the lead's ruling R3): the career being cleared is retired and has a Hall of Fame card. The
@@ -27,9 +26,14 @@ interface Props {
   hallKept?: boolean;
 }
 
+type Props = CommonProps & (
+  | { action: Action; sport: Sport; copy?: never }
+  | { action?: never; sport?: never; copy: ConfirmCopy }
+);
+
 /* Round 1346: one copy table, so the coaching retirement reuses the prompt Round 886 proved
    (one accept per opening, Cancel first, focus back without scrolling, nothing on unmount). */
-const COPY: Record<Action, (sport: Sport, hallCard: boolean, hallKept: boolean) => { title: string; description: string; cancel: string; confirm: string }> = {
+const COPY: Record<Action, (sport: Sport, hallCard: boolean, hallKept: boolean) => ConfirmCopy> = {
   retire: () => ({
     title: 'Retire this player?',
     description: 'Your seasons and stats stay saved, and you can start or resume coaching afterward. You cannot play another season with this player.',
@@ -50,11 +54,12 @@ const COPY: Record<Action, (sport: Sport, hallCard: boolean, hallKept: boolean) 
   }),
 };
 
-export default function USCareerActionConfirm({ action, sport, onConfirm, children, hallCard = false, hallKept = false }: Props) {
+export default function USCareerActionConfirm(props: Props) {
+  const { onConfirm, children, hallCard = false, hallKept = false } = props;
   const [open, setOpen] = useState(false);
   const acceptedRef = useRef(false);
   const triggerRef = useRef<HTMLButtonElement>(null);
-  const copy = COPY[action](sport, hallCard, hallKept);
+  const copy = props.action === undefined ? props.copy : COPY[props.action](props.sport, hallCard, hallKept);
 
   const changeOpen = (nextOpen: boolean) => {
     if (nextOpen) acceptedRef.current = false;
