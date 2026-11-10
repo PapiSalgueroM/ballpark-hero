@@ -18,7 +18,7 @@
  * they were, and scripts/simUsBoardParity.mjs replays a fixture recorded from
  * the four old boards to hold that.
  */
-import type { ComponentType } from 'react';
+import type { ComponentType, ReactNode } from 'react';
 import type { CareerDraftEntry, PreDraftDescriptor, PreDraftState } from '@/lib/careerPreDraft';
 import type { PlayerAppearance } from '@/lib/soccerCareerAppearance';
 import type { CareerRival } from '@/lib/careerRival';
@@ -27,7 +27,7 @@ import type { RivalryEvent } from '@/lib/careerRivalryEvents';
 import type { RivalryChoiceCard } from '@/lib/careerRivalryChoices';
 import type { MoneyAction, MoneyOutcome, MoneySport } from '@/lib/careerMoney';
 import type { BadgeDef } from '@/lib/careerBadges';
-import type { FaPushArgs, FaWindow } from '@/lib/usCareerFreeAgency';
+import type { FaOffer, FaPushArgs, FaWindow } from '@/lib/usCareerFreeAgency';
 import type { ExtPushArgs, ExtensionTalk } from '@/lib/usCareerExtension';
 import type { UsSport } from '@/lib/usCareerToCoach';
 import type { TrainingBank, TrainingSport } from '@/lib/careerTraining';
@@ -56,6 +56,11 @@ export interface UsCareerSeason {
   salary: number;
 }
 
+export interface UsCareerWaiver {
+  year: number;
+  team: string;
+}
+
 /** The part of a career every sport keeps, which is all the board reads by name. */
 export interface UsCareerCore {
   name: string;
@@ -72,6 +77,8 @@ export interface UsCareerCore {
   health: number;
   salary: number;
   contractYears: number;
+  waiver?: UsCareerWaiver;
+  waiverCount?: number;
   seasons: UsCareerSeason[];
   retired: boolean;
   draftPick: number;
@@ -318,6 +325,18 @@ export interface UsCareerSport<C extends UsCareerCore = any, L extends UsCareerS
   buildExtension(c: C, rng: () => number): ExtensionTalk;
   extPushArgs(c: C, rng: () => number): ExtPushArgs;
   buildFaWindow(c: C, incumbentQuality: number, rng: () => number): FaWindow;
+  waiver?: {
+    canRequest(c: C): boolean;
+    buildMarket(c: C, quality: number, rng: () => number): FaWindow;
+    acceptsOffer(c: C, offer: FaOffer): boolean;
+    hasCurrent(c: UsCareerCore): boolean;
+    checkSave(key: string, previous: string | null, pending?: string | null, confirming?: boolean): 'current' | 'changed' | 'unreadable';
+    prepareRelease(c: C): C | null;
+    Request: ComponentType<{ onConfirm: () => void }>;
+    Unavailable: ComponentType<{ canReopen: boolean; onReopen: () => void }>;
+    Conflict: ComponentType<{ kind: 'changed' | 'unreadable' }>;
+    marketIntro: ReactNode;
+  };
   faPushArgs(c: C, rng: () => number): FaPushArgs;
   /** "franchise", "club" or "team": what the market calls who is bidding. */
   faSportNoun: string;

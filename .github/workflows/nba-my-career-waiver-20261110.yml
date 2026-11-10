@@ -1,0 +1,312 @@
+name: NBA My Career waiver route weight recovery
+on:
+  push:
+    branches: [codex/nba-my-career-waiver-weight-recovery-qa-20261110]
+permissions:
+  actions: read
+  contents: read
+jobs:
+  weight-recovery:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      TZ: UTC
+      SIM_NETWORK: offline
+      SEO_SPLIT_BASE_REF: '3b14650d360b010b25b525de33a5f32f33de2798'
+      EVIDENCE: nba-my-career-waiver-weight-recovery
+      SIM_OFFLINE_RECEIPT: nba-my-career-waiver-weight-recovery/offline.log
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24.22.1
+          cache: npm
+      - name: Verify the exact relocated waiver source and held base
+        run: |
+          set -euo pipefail
+          test ! -e "$EVIDENCE"
+          mkdir "$EVIDENCE"
+          touch "$SIM_OFFLINE_RECEIPT"
+          git rev-parse HEAD > "$EVIDENCE/head.txt"
+          git rev-parse 'HEAD^{tree}' > "$EVIDENCE/tree.txt"
+          git ls-files -s > "$EVIDENCE/source-before.txt"
+          sha256sum package.json package-lock.json > "$EVIDENCE/locks-before.txt"
+          git diff --exit-code HEAD -- .
+          node --input-type=module <<'NODE'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          import {createHash} from 'node:crypto';
+          import {execFileSync} from 'node:child_process';
+          const inputs={"base":{"pr":544,"head":"0c0873c72b7ed48f3889ed5b798f984fab830410","tree":"38c8aba6e00c0751f703c2c0053b87ab0018ab48"},"product":[{"path":"src/lib/usCareerSport.ts","file":"usCareerSport-waiver-weight-recovery.ts","bytes":18788,"sha256":"bd18d9cc85ba40e9f3c3deac3647816d2c931f1542436aa1d21b8165125104c2","blob":"c2c59aec389a9cb46a726b1b3140095b42da523b","priorBytes":18039,"priorSHA256":"a807d530f427955afb5dbeffbd3c8d484b507874679b63ea166c406a330a2f40","priorBlob":"4223154dd2a79c54ca1b359858576ffeb7d515d7"},{"path":"src/lib/nbaCareerSport.ts","file":"nbaCareerSport-waiver-weight-recovery-proposal.ts","bytes":11662,"sha256":"89a5e8815fff4b5c0c0d7cad0e0db64933c0f86ff7d62cb831fcfbf810eccd0c","blob":"8ea05369fe0cc94a09d9df29bb9018087520a3e9","priorBytes":8661,"priorSHA256":"b4a2f678612d1b6f361d46d88a4feaa02cffb75f1fd0d1e459251eab1c7473be","priorBlob":"e9bc724661032a18da1e7f5086d961b9aa7132a6"},{"path":"src/lib/usCareerMarket.ts","file":"usCareerMarket-waiver-weight-recovery.ts","bytes":10659,"sha256":"0345e54362bcf360d6f771de7265122ae07082a4b79531a0a76df69cc981b79c","blob":"88a9f9d0ebad0060594e335692230dfba7164b9f","priorBytes":9740,"priorSHA256":"8205eed12739b25c8dbfe3c897abb7db34901a625b35829073b64eb2e599fb2b","priorBlob":"6222b2c95228d71603a2eea1732a22678b1f1f70"},{"path":"src/lib/nbaMyCareer.ts","file":"nbaMyCareer-waiver-fixed-v2.ts","bytes":87373,"sha256":"bfd62352e14e000463c5ed55c71c091bf44128903732364fe21e21f1fec27a34","blob":"faeda497c62ba6b13eb5a1843018e8b19341a566","priorBytes":87267,"priorSHA256":"2ba4dd6323043fcac73a8c9eabcdf77a09ba827d58b124b077024016519c1987","priorBlob":"c988aaa195da6ab00aa542a28b61c5abd9c107d8"},{"path":"src/components/us-career/USCareerActionConfirm.tsx","file":"us-career-action-confirm-waiver-weight-proposal.tsx","bytes":3962,"sha256":"5567929084beb3e41ccc6666860f2412e59fcc42da41d5d4c351d80c8c187ee6","blob":"2b9518266a02be714ed2433eb630e888cc999b93","priorBytes":3755,"priorSHA256":"b8913056e34907801eb03716460ddd2cd0bf0e42bac9b05a55f15aba0c0aabd1","priorBlob":"45b685b271f0f84c612ff68dac0d5f3c39546e80"},{"path":"src/components/us-career/FreeAgencyPanel.tsx","file":"free-agency-panel-waiver-weight-proposal.tsx","bytes":16708,"sha256":"f4b2724aebe4c4e9c8cd6198b70d441d2e46b16028713aba53a01c93caff3a4b","blob":"c9ff04acaf4bf11686cac0f7e354d7518733d52f","priorBytes":16586,"priorSHA256":"340b2eb105c58e103ce096d236d2b3d520e317a963118b94cbafa5b7ac152b79","priorBlob":"1d32d94e38245f2b919a7762f90076991b562a9f"},{"path":"src/components/us-career/UsCareerBoard.tsx","file":"us-career-board-waiver-v4-weight-proposal.tsx","bytes":119678,"sha256":"df5addb469d548991bc37d55a13d94d87b0b31907d37df089153c8a2779fdd1b","blob":"6663e6ad19b42b4f63e3517405ed11d527644532","priorBytes":116143,"priorSHA256":"ada70d72f44aee8685d8c7ec9580c5b85379a028af02e93b09a1d5fb86c1ad41","priorBlob":"09794d5779453495bb92cc02af079d01ce992773"},{"path":"src/components/nba-my-career/NbaCareerWaiverUi.tsx","file":"nba-career-waiver-ui-weight-proposal.tsx","bytes":2089,"sha256":"fe68186e258bcb7d7f32c61269c84abd8b7a7acf873bbb5a7516e78909f9f8ff","blob":"b47748b28417ab5089a7d9375f634440dad7fc48","priorBytes":null,"priorSHA256":null,"priorBlob":null}],"test":{"path":"src/test/nbaCareerWaiver.test.tsx","file":"nba-career-waiver-fixed-test-v4-draft.tsx","bytes":22352,"sha256":"933dbda216b3e409674287733a1a53ce0f1fd479fff4d0b5eb55aeb79cb4d5a1","blob":"6a2006854eb3ced97ac3362e998b487c20cf81c6","priorBytes":3985,"priorSHA256":"307cc793fbe2eb8982ff40f22472ea49185a9fc2030d7eeb9e816889845802d2","priorBlob":"2dd64d7ddaa8185abe079f8440defe4caef09e4e","marker":"NBA_WAIVER_REQUEST_MISSING_ELIGIBLE"},"titles":["offers the waiver request on an eligible unhappy NBA season hub","keeps the request off the NBA hub at morale 55","keeps the request off an unhappy NFL hub","restores ordinary NBA free agency with its incumbent offer","cancels a waiver confirmation without a draw or save write and returns focus","keeps the unplayed historical year and record across release, reload and signing","stale hub Play and a stale open confirmation cannot overwrite a newer saved release","does not let a second tab sign a consumed waiver market","retries a refused release save with the exact prepared market and no redraw","cannot retry a refused release over a newer saved release from another tab","refuses a malformed waiver offer and rebuilds only outside offers on deliberate reopen","keeps the last outside offer available after negotiation and restores the spent push","protects a newer signed waiver career from a stale hub initially at morale 55","keeps the exact pending release through a transient read refusal on Retry save","rejects a well-shaped out-of-era waiver offer and recovers historical outside offers"],"workflow":".github/workflows/nba-my-career-waiver-20261110.yml","failedFull":{"run":42865101926,"job":130001214085,"artifact":13786324683,"head":"2f3d580ce515082c41a4769e0f00b3ca85ab8ad5","tree":"15bc8a52a6b255b57d66788de52a59713370e2d8","workflow":"0b5dd981c1771d78053eab4185361b9ac11f79e7","branch":"codex/nba-my-career-waiver-full-clean-qa-20261110","zipBytes":9251555,"zipSHA256":"7723dad4ef906c26335ec0b8f2d791866b3e8c9167b611d69ad4d0ebc95a4b09","bodies":65,"conclusion":"failure","weight":{"route":"/nfl-my-career","heldKiB":499.4,"actualKiB":500.5,"roundedKiB":501,"capKiB":499,"otherRoutesPassed":15},"nativeCases":6,"productionBuilds":2,"distFiles":850,"audit":{"file":"full-clean-failed-42865101926/INDEPENDENT-RETAINED-FULL-CLEAN-WEIGHT-FAILURE-AUDIT.json","sha256":"c6e603ccc8f59d1c5b2b7eae30c36dcce7bd65bc1bb6d3cea1d7f83e53d554b7"},"noCleanAdmission":true},"fixedControls":{"run":42863570921,"auditSHA256":"daf987b405a3b01ab12922ff34b14ef0a8f2c89d22c484a76811c2b9fa053f85"}};
+          const {base,product,test,workflow}=inputs,out=process.env.EVIDENCE;
+          const git=(...args)=>execFileSync('git',args,{encoding:'utf8',maxBuffer:16*1024*1024}).trimEnd();
+          const sha=body=>createHash('sha256').update(body).digest('hex');
+          const blob=body=>createHash('sha1').update(Buffer.from('blob '+body.length+'\0')).update(body).digest('hex');
+          const head=git('rev-parse','HEAD'),tree=git('rev-parse','HEAD^{tree}');
+          assert.equal(head,process.env.GITHUB_SHA);
+          assert.equal(process.env.GITHUB_REPOSITORY,'PapiSalgueroM/ballpark-hero');
+          assert.deepEqual(git('rev-list','--parents','-n','1',head).split(' '),[head,base.head]);
+          assert.equal(git('rev-parse',base.head+'^{tree}'),base.tree);
+          const rows=ref=>git('ls-tree','-r','-z',ref).split('\0').filter(Boolean);
+          const path=row=>row.split('\t')[1];
+          const owned=[...product.map(p=>p.path),test.path,workflow],prev=rows(base.head),curr=rows(head);
+          assert.deepEqual([prev.length,curr.length],[5803,5806]);
+          assert.deepEqual(prev.filter(row=>!owned.includes(path(row))),curr.filter(row=>!owned.includes(path(row))));
+          assert.deepEqual(git('diff','--name-status','--no-renames',base.head,head).split('\n').sort(),
+            [...product.map(p=>(p.priorBlob?'M':'A')+'\t'+p.path),'A\t'+test.path,'A\t'+workflow].sort());
+          for(const item of [...product,test]){
+            const bytes=fs.readFileSync(item.path);
+            assert.deepEqual([bytes.length,sha(bytes),blob(bytes)],[item.bytes,item.sha256,item.blob]);
+          }
+          const configs=new Set(['index.html','package.json','package-lock.json','bun.lock','bun.lockb','vite.config.ts','tailwind.config.ts','postcss.config.js','tsconfig.json','tsconfig.app.json','tsconfig.node.json']);
+          const scoped=curr.filter(row=>/^(src|public|scripts)\//.test(path(row))||configs.has(path(row)));
+          assert.equal(scoped.length,4682);
+          fs.copyFileSync(workflow,out+'/candidate-workflow.yml');
+          fs.copyFileSync(test.path,out+'/candidate-test.tsx');
+          fs.writeFileSync(out+'/code-config-tuples.txt',scoped.join('\n')+'\n');
+          fs.writeFileSync(out+'/source-join.json',JSON.stringify({status:'passed',head,tree,parent:base.head,parentTree:base.tree,workflow:git('rev-parse','HEAD:'+workflow),
+            trackedRows:5806,heldRows:5796,scopedSourceRows:4671,rootConfigurations:11,codeConfigRows:4682,inputs},null,2)+'\n');
+          NODE
+      - name: Install locked dependencies, freeze physical source, and verify app types
+        run: |
+          set -euo pipefail
+          npm ci 2>&1 | tee "$EVIDENCE/install.log"
+          cat > "$EVIDENCE/physical.mjs" <<'NODE'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          import { createHash } from 'node:crypto';
+          import { execFileSync } from 'node:child_process';
+          const stage = process.argv[2];
+          assert(['before', 'after'].includes(stage));
+          const out = process.env.EVIDENCE;
+          const index = execFileSync('git', ['ls-files', '-z'], { encoding: 'utf8' }).split('\0').filter(Boolean);
+          const source = index.map(file => {
+            const bytes = fs.readFileSync(file);
+            return [file, bytes.length, createHash('sha256').update(bytes).digest('hex')];
+          });
+          const lock = JSON.parse(fs.readFileSync('package-lock.json', 'utf8'));
+          const installed = Object.entries(lock.packages).filter(([file]) =>
+            file.startsWith('node_modules/') && fs.existsSync(file + '/package.json')
+          ).map(([file, entry]) => {
+            const version = JSON.parse(fs.readFileSync(file + '/package.json', 'utf8')).version;
+            assert.equal(version, entry.version, file);
+            return [file, version];
+          });
+          assert.equal(source.length, 5806);
+          assert.equal(installed.length, 521);
+          assert.equal(fs.statSync(process.env.SIM_OFFLINE_RECEIPT).size, 0);
+          for (const [name, data] of [['tracked', source], ['installed', installed]]) {
+            const body = JSON.stringify(data);
+            if (stage === 'after') assert.equal(body, fs.readFileSync(out + '/' + name + '-before.json', 'utf8'));
+            fs.writeFileSync(out + '/' + name + '-' + stage + '.json', body);
+          }
+          NODE
+          node "$EVIDENCE/physical.mjs" before
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee "$EVIDENCE/types.log"
+      - name: Preserve focused waiver, saved market, and second-tab outcomes
+        run: |
+          set -euo pipefail
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node_modules/.bin/vitest run \
+            src/test/nbaCareerWaiver.test.tsx src/test/usCareerMarketBoard.test.tsx src/test/usCareerMarketSecondTab.test.tsx src/test/usCareerMarketUi.test.tsx \
+            --testTimeout=60000 --no-file-parallelism --reporter=json --outputFile="$EVIDENCE/unit.json" 2>&1 | tee "$EVIDENCE/unit.log"
+          test ! -s "$SIM_OFFLINE_RECEIPT"
+      - name: Build the qualified production tree and retain every file
+        id: build
+        run: |
+          set -euo pipefail
+          test ! -e dist
+          NODE_OPTIONS="--max-old-space-size=6144" npm run build 2>&1 | tee "$EVIDENCE/build.log"
+          cat > "$EVIDENCE/dist-measure.mjs" <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          import {createHash} from 'node:crypto';
+          const [root,label]=process.argv.slice(2);
+          assert.equal(root,'dist');
+          assert(['before','after','fresh'].includes(label));
+          const walk=dir=>fs.readdirSync(dir,{withFileTypes:true}).flatMap(entry=>{
+            const file=dir+'/'+entry.name;
+            if(entry.isDirectory())return walk(file);
+            assert(entry.isFile(),file);
+            return [file];
+          });
+          const files=walk(root).sort((a,b)=>a.localeCompare(b));
+          assert.equal(files.length,850);
+          assert.equal(new Set(files).size,850);
+          const list=files.map(file=>{
+            const body=fs.readFileSync(file);
+            return {file,bytes:body.length,sha256:createHash('sha256').update(body).digest('hex')};
+          });
+          fs.writeFileSync(process.env.EVIDENCE+'/dist-'+label+'.json',JSON.stringify(list),{flag:'wx'});
+          NODE
+          node "$EVIDENCE/dist-measure.mjs" dist before
+          tar -czf "$EVIDENCE/dist.tgz" dist
+          sha256sum "$EVIDENCE/dist.tgz" > "$EVIDENCE/dist.sha256"
+      - name: Isolated pinned Playwright and Chromium
+        id: browser_setup
+        timeout-minutes: 12
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          npm install --prefix "$RUNNER_TEMP/nba-my-career-waiver-browser" --no-save --package-lock=false playwright@1.64.1 2>&1 | tee nba-my-career-waiver-weight-recovery/browser-install.log
+          test ! -e node_modules/playwright
+          test ! -e node_modules/playwright-core
+          ln -s "$RUNNER_TEMP/nba-my-career-waiver-browser/node_modules/playwright" node_modules/playwright
+          ln -s "$RUNNER_TEMP/nba-my-career-waiver-browser/node_modules/playwright-core" node_modules/playwright-core
+          node "$RUNNER_TEMP/nba-my-career-waiver-browser/node_modules/playwright/cli.js" install --with-deps chromium 2>&1 | tee nba-my-career-waiver-weight-recovery/chromium-install.log
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const before=JSON.parse(fs.readFileSync('nba-my-career-waiver-weight-recovery/installed-before.json'));
+          const after=before.map(([p])=>[p,JSON.parse(fs.readFileSync(p+'/package.json')).version]);assert.deepEqual(after,before);
+          const {createRequire}=await import('node:module');
+          const require=createRequire(process.cwd()+'/package.json');
+          const target=fs.realpathSync('node_modules/playwright'),coreTarget=fs.realpathSync('node_modules/playwright-core');
+          const pw=JSON.parse(fs.readFileSync(target+'/package.json')),core=JSON.parse(fs.readFileSync(coreTarget+'/package.json'));
+          assert.deepEqual([pw.version,core.version],['1.64.1','1.64.1']);
+          const coreEntry=require.resolve('playwright-core');
+          assert(coreEntry.startsWith(coreTarget+'/'));
+          assert.equal(createRequire(target+'/package.json').resolve('playwright-core'),coreEntry);
+          fs.writeFileSync('nba-my-career-waiver-weight-recovery/installed-after.json',JSON.stringify(after));
+          fs.writeFileSync('nba-my-career-waiver-weight-recovery/browser-package.json',JSON.stringify({
+            version:pw.version,target,coreVersion:core.version,coreTarget,coreEntry,sharedOfflineGuardResolution:true,
+          }));
+          NODE
+      - name: All original route download limits
+        if: ${{ !cancelled() && steps.build.outcome == 'success' && steps.browser_setup.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          test ! -s "$SIM_OFFLINE_RECEIPT"
+          test ! -e "$EVIDENCE/weight-asset-blocks.jsonl"
+          touch "$EVIDENCE/weight-asset-blocks.jsonl"
+          owned_weight="$PWD/$(mktemp --suffix=.mjs scripts/.bingo-sweepWeight.XXXXXX)"
+          weight_host_pid=''
+          cleanup_weight() {
+            if test -n "$weight_host_pid"; then
+              kill "$weight_host_pid" 2>/dev/null || true
+              wait "$weight_host_pid" 2>/dev/null || true
+            fi
+            rm -f -- "$owned_weight"
+          }
+          trap cleanup_weight EXIT
+          node --input-type=module - "$owned_weight" <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          import path from 'node:path';
+          import { createHash } from 'node:crypto';
+          import { execFileSync } from 'node:child_process';
+
+          const spec={"file":"scripts/sweepWeight.mjs","blob":"5a92a68cc0225d5e633c19e041087e7c6c4254e8","bytes":104848,"sha256":"afdd281ce2984ca34158194a0d6102bd053f2f8d242bc844c19f8f536b08d627","changedBytes":105985,"changedSHA256":"b7edf531df56816d5b5103f4c08686790f083b4940f6c6abf7664dc3108de8b6","changedBlob":"2375a75116c540fde0fdd94c3cee074968905b47","anchorOffset":90355,"anchor":"  if (process.env.SWEEP_OFFLINE === '1') await ctx.route(/supabase\\.co/, r => r.abort());","change":"  if (process.env.SWEEP_OFFLINE === '1') {\n    await ctx.route(/supabase\\.co/, r => r.abort());\n    await ctx.route(url => url.origin === 'https://fonts.googleapis.com' || url.origin === 'https://flagcdn.com', async r => {\n      const request = r.request();\n      const url = new URL(request.url());\n      const type = request.resourceType();\n      const fonts = url.origin === 'https://fonts.googleapis.com' && url.pathname === '/css2' &&\n        JSON.stringify([...url.searchParams]) === JSON.stringify([\n          ['family', 'Space Grotesk:wght@400;500;600;700'],\n          ['family', 'Inter:wght@400;500;600;700'],\n          ['display', 'swap'],\n        ]) && type === 'stylesheet';\n      const flag = url.origin === 'https://flagcdn.com' &&\n        /^\\/w(?:20|40|80|160|320)\\/[a-z]{2}(?:-[a-z]{3})?\\.png$/.test(url.pathname) &&\n        !url.search && type === 'image';\n      if (request.method() !== 'GET' || (!fonts && !flag)) return r.fallback();\n      await r.abort('blockedbyclient');\n      fs.appendFileSync(process.env.PLAYER_BINGO_WEIGHT_ASSET_RECEIPT, JSON.stringify({\n        route, url: url.href, method: request.method(), resourceType: type, disposition: 'aborted-before-network',\n      }) + '\\n');\n    });\n  }"};
+          const [target]=process.argv.slice(2),out=process.env.EVIDENCE;
+          const src=fs.readFileSync(spec.file);
+          const sha=(algorithm,bytes)=>createHash(algorithm).update(bytes).digest('hex');
+          const blob=bytes=>sha('sha1',Buffer.concat([Buffer.from('blob '+bytes.length+'\0'),bytes]));
+          assert.equal(path.dirname(target),path.resolve('scripts'));
+          assert.match(path.basename(target),/^\.bingo-sweepWeight\.[A-Za-z0-9]+\.mjs$/);
+          assert(fs.lstatSync(target).isFile()&&fs.statSync(target).size===0);
+          assert.deepEqual([src.length,sha('sha256',src),blob(src)],[spec.bytes,spec.sha256,spec.blob]);
+          assert.equal(execFileSync('git',['rev-parse','HEAD:'+spec.file],{encoding:'utf8'}).trim(),spec.blob);
+          const original=src.toString('utf8');
+          assert.equal(original.split(spec.anchor).length,2);
+          assert.equal(Buffer.byteLength(original.slice(0,original.indexOf(spec.anchor))),spec.anchorOffset);
+          const changed=original.replace(spec.anchor,spec.change);
+          assert.equal(changed.split(spec.change).length,2);
+          assert.equal(changed.replace(spec.change,spec.anchor),original);
+          const prepared=Buffer.from(changed);
+          assert.deepEqual([prepared.length,sha('sha256',prepared),blob(prepared)],[spec.changedBytes,spec.changedSHA256,spec.changedBlob]);
+          fs.writeFileSync(target,prepared);
+          fs.writeFileSync(out+'/weight-source-proof.json',JSON.stringify({
+            status:'passed',file:spec.file,blob:spec.blob,bytes:spec.bytes,sha256:spec.sha256,
+            changedBlob:spec.changedBlob,changedBytes:spec.changedBytes,changedSHA256:spec.changedSHA256,
+            anchorOffset:spec.anchorOffset,anchorBytes:Buffer.byteLength(spec.anchor),replacementBytes:Buffer.byteLength(spec.change),
+            exactWholeInverse:true,trackedSourceChanged:false,temporarySibling:true,
+          },null,2)+'\n',{flag:'wx'});
+          NODE
+          node scripts/lib/hostLikeServer.mjs dist 4173 > "$EVIDENCE/weight-host.log" 2>&1 &
+          weight_host_pid=$!
+          weight_ready=0
+          for attempt in $(seq 1 40); do
+            kill -0 "$weight_host_pid"
+            if curl --noproxy '*' --silent --fail --max-time 1 http://127.0.0.1:4173/ -o /dev/null; then
+              weight_ready=1
+              break
+            fi
+            sleep 0.25
+          done
+          test "$weight_ready" -eq 1
+          PLAYER_BINGO_WEIGHT_ASSET_RECEIPT="$PWD/$EVIDENCE/weight-asset-blocks.jsonl" SWEEP_OFFLINE=1 \
+            BASE=http://127.0.0.1:4173 NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" \
+            node "$owned_weight" 2>&1 | tee "$EVIDENCE/weight.log"
+          test ! -s "$SIM_OFFLINE_RECEIPT"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+
+          const out=process.env.EVIDENCE;
+          const raw=fs.readFileSync(out+'/weight-asset-blocks.jsonl','utf8');
+          assert(raw.endsWith('\n'));
+          const records=raw.trimEnd().split('\n').map(line=>JSON.parse(line));
+          const log=fs.readFileSync(out+'/weight.log','utf8');
+          const caps=log.split('\n').map(line=>/^\s+(\/\S*)\s+\d+K gz over/.exec(line)?.[1]).filter(Boolean);
+          assert.equal(caps.length,16);
+          const fonts=new Set();
+          let flags=0;
+          for(const item of records){
+            const url=new URL(item.url);
+            assert(caps.includes(item.route));
+            assert.deepEqual([item.method,item.disposition],['GET','aborted-before-network']);
+            if(url.origin==='https://fonts.googleapis.com'){
+              assert.deepEqual([item.resourceType,url.pathname,[...url.searchParams]],['stylesheet','/css2',[
+                ['family','Space Grotesk:wght@400;500;600;700'],
+                ['family','Inter:wght@400;500;600;700'],
+                ['display','swap'],
+              ]]);
+              fonts.add(item.route);
+            }else{
+              assert.deepEqual([item.resourceType,url.origin,url.search],['image','https://flagcdn.com','']);
+              assert.match(url.pathname,/^\/w(?:20|40|80|160|320)\/[a-z]{2}(?:-[a-z]{3})?\.png$/);
+              flags++;
+            }
+          }
+          assert.deepEqual([...fonts].sort(),[...caps].sort());
+          assert(flags>0,'At least one exact Flagcdn image intercepted');
+          console.log('PASS explicit offline weight asset blocks across all 16 budget routes');
+          NODE
+      - name: Admit the focused waiver and unchanged route budget outcomes
+        run: |
+          set -euo pipefail
+          node --input-type=module <<'NODE'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          const out=process.env.EVIDENCE,read=f=>fs.readFileSync(out+'/'+f,'utf8'),json=f=>JSON.parse(read(f));
+          const unit=json('unit.json'),source=json('source-join.json'),weight=read('weight.log');
+          assert.deepEqual([unit.numTotalTests,unit.numPassedTests,unit.numFailedTests,unit.success],[54,54,0,true]);
+          assert.equal(unit.testResults.length,4);
+          assert(unit.testResults.every(x=>x.status==='passed'&&x.assertionResults.every(y=>y.status==='passed')));
+          assert(weight.includes('sweepWeight: green.'));
+          const routes=weight.split('\n').filter(x=>/^\s+\/\S*\s+\d+K gz over/.test(x));
+          assert.equal(routes.length,16);
+          const nfl=routes.find(x=>x.includes('/nfl-my-career'));
+          assert(nfl&&nfl.includes('budget 499K'));
+          fs.writeFileSync(out+'/weight-recovery-result.json',JSON.stringify({status:'passed',source:{head:source.head,tree:source.tree,workflow:source.workflow},
+            codeConfigRows:4682,unitPassed:54,routeCaps:16,nfl:nfl.trim(),originalCapUnchanged:true,scope:'Focused recovery build and caps only.'},null,2)+'\n');
+          NODE
+      - name: Verify unchanged physical source and locked offline run
+        if: always()
+        run: |
+          set -euo pipefail
+          git ls-files -s > "$EVIDENCE/source-after.txt"
+          sha256sum package.json package-lock.json > "$EVIDENCE/locks-after.txt"
+          cmp "$EVIDENCE/source-before.txt" "$EVIDENCE/source-after.txt"
+          cmp "$EVIDENCE/locks-before.txt" "$EVIDENCE/locks-after.txt"
+          git diff --exit-code HEAD -- .
+          node "$EVIDENCE/physical.mjs" after
+          test ! -s "$SIM_OFFLINE_RECEIPT"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: nba-my-career-waiver-weight-recovery-${{ github.run_id }}
+          path: nba-my-career-waiver-weight-recovery
+          retention-days: 30
+          if-no-files-found: error
