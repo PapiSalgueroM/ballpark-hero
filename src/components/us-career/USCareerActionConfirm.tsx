@@ -12,7 +12,7 @@ import {
 } from '@/components/ui/alert-dialog';
 
 type Sport = 'NFL' | 'NBA' | 'MLB' | 'NHL';
-type Action = 'retire' | 'restart' | 'retireCoach';
+type Action = 'retire' | 'restart' | 'retireCoach' | 'waive';
 
 interface Props {
   action: Action;
@@ -47,6 +47,12 @@ const COPY: Record<Action, (sport: Sport, hallCard: boolean, hallKept: boolean) 
     description: 'Your coaching record and log stay saved. You cannot coach another season with this career.',
     cancel: 'Keep coaching',
     confirm: 'Retire from coaching',
+  }),
+  waive: () => ({
+    title: 'Request a waiver?',
+    description: 'Your team agrees to let you go. The rest of your deal in this career ends. Sign with another team before you play again.',
+    cancel: 'Keep my contract',
+    confirm: 'Confirm waiver',
   }),
 };
 
