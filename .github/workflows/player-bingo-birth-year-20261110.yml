@@ -1,36 +1,41 @@
-name: Player Bingo birth-year boundary controls
+name: Player Bingo birth-year bands production qualification
 on:
   push:
-    branches: [codex/player-bingo-birth-year-controls-qa-20261110]
+    branches: [codex/player-bingo-birth-year-full-offline-retry-qa-20261110]
 permissions:
   actions: read
   contents: read
 jobs:
-  controls:
+  full:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 45
     env:
       TZ: UTC
       SIM_NETWORK: offline
-      SIM_OFFLINE_RECEIPT: player-bingo-birth-year-controls/offline.log
-      PLAYER_BINGO_BIRTH_YEAR_RAW: player-bingo-birth-year-controls/public-cases.raw.json
-      EVIDENCE: player-bingo-birth-year-controls
+      SEO_SPLIT_BASE_REF: '3b14650d360b010b25b525de33a5f32f33de2798'
+      EVIDENCE: player-bingo-birth-year-full
+      SIM_OFFLINE_RECEIPT: player-bingo-birth-year-full/offline.log
+      PLAYER_BINGO_BIRTH_YEAR_RAW: player-bingo-birth-year-full/public-cases.raw.json
+      BINGO_NATIVE_HELPER_BLOB: '636ea1f9c770d6bf50c2afed7c3687d04d494649'
+      BINGO_NATIVE_HELPER_SHA256: 'd14a8107d016c2c6bb138a776196b46f3a89388f1deda05b74bd6e74e1095d1c'
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 4
+          fetch-depth: 5
           persist-credentials: false
       - uses: actions/setup-node@v4
         with:
           node-version: 24.22.1
           cache: npm
-      - name: Authenticate admitted inputs and exact isolated role source
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Authenticate qualified runs and exact product plus native scope
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
           test ! -e "$EVIDENCE"
-          if grep -Eq '__[A-Z][A-Z0-9_]*__' .github/workflows/player-bingo-birth-year-20261110.yml; then echo 'Unresolved role binding'; exit 1; fi
           mkdir "$EVIDENCE"
           touch "$SIM_OFFLINE_RECEIPT"
           git rev-parse HEAD > "$EVIDENCE/head.txt"
@@ -44,108 +49,110 @@ jobs:
           import { createHash } from 'node:crypto';
           import { execFileSync } from 'node:child_process';
 
-          const out = process.env.EVIDENCE;
-          const repo = 'PapiSalgueroM/ballpark-hero';
-          const workflow = '.github/workflows/player-bingo-birth-year-20261110.yml';
-          const productParent = '4ba9773714dfb05418a63ade900e27b1a5b078e7';
-          const productTree = '6336b32fadad82db8d7f04200ec3c6fdc7e23b87';
-          const plan = 'docs/plans/2026-11-10-player-bingo-birth-year.md';
-          const roles = { original: {"run":42813505581,"job":129820612478,"artifact":13763032974,"steps":12,"zipBytes":1037461,"zipSHA256":"791be9d50c101b6e7e24528ba2e7306c266649a69330884704d1bf31a2ab5c88","head":"d1ff57bf7a6bc611a8bd1f56e28f8dc58f950bbe","tree":"e1ad2d43e06856ea3c49e6819e770ad7f94cd38c","workflow":"4c82704255808f138c20f96be03fed1ad310ffce","branch":"codex/player-bingo-birth-year-original-qa-20261110","auditSHA256":"be83ea9923697a6723b8afc2672066dd30f87d153d2097fd4f41d0e923737251","raw":{"bytes":2142,"sha256":"87b4a2ec7d841e89e5f85638f0e52d4e8706587fa760faee0540985a1d84b637"}}, fixed: {"run":42815490778,"job":129827392210,"artifact":13764890039,"steps":13,"zipBytes":1068682,"zipSHA256":"5bc97eaeb125d42dac19a41597ab4044eaafc80bbf7db90ab5f58d2a8c2aafa3","head":"ce46cdf166331e4bfb079cb3975fdc69dc6c3b54","tree":"a6cc74f18706f26ae868f97b1d7d48e8a8597d6f","workflow":"53f5633a71baadb95a15c46ed59164356344a0b5","branch":"codex/player-bingo-birth-year-fixed-qa-20261110","auditSHA256":"d343d8068996ada563a73324438c0fdaf5a5993103b2964fa7fbf5b94005136a","raw":{"bytes":2174,"sha256":"5747e56b6b64e3c06801475aac72e24d69d2aa43a44d00f9e840b4c2d7925ba0"}} };
-          const pins = {"scripts/simPlayerBingoLoad.mjs":{"before":"b93fbf4f3a15258a2c88fdc75773593502897b53","after":"b76c0794a40f87f54e3766111d6a9f9f16eff548"},"src/lib/playerBingo.ts":{"before":"897f538765323a68a86d1d068db4fc182b52d1a5","after":"885fab96ef9f463d5447245c6f1f4937ce68aafa"},"src/test/playerBingoTransport.test.ts":{"before":"8fed620437ee3a544dd5e186b457ad1b2d619343","after":"9494d6e391350d9da76aa7a6a1e0f5022df3e62b"},"src/test/playerBingoWorldCupAlias.test.ts":{"before":"d11c81a71407314c3a5bedc88c27c91a4fe16c81","after":"b6f57a7f4f1b14a95e90912f54cdbcc34cc3491c"}};
-          const paths = ['scripts/simPlayerBingoLoad.mjs','src/lib/playerBingo.ts','src/test/playerBingoTransport.test.ts','src/test/playerBingoWorldCupAlias.test.ts'];
-          const heldOriginal = {
-            'scripts/simPlayerBingoLoad.mjs':'b93fbf4f3a15258a2c88fdc75773593502897b53',
-            'src/lib/playerBingo.ts':'897f538765323a68a86d1d068db4fc182b52d1a5',
-            'src/test/playerBingoWorldCupAlias.test.ts':'d11c81a71407314c3a5bedc88c27c91a4fe16c81',
+          const prior={"original":{"run":42813505581,"job":129820612478,"artifact":13763032974,"steps":12,"zipBytes":1037461,"zipSHA256":"791be9d50c101b6e7e24528ba2e7306c266649a69330884704d1bf31a2ab5c88","head":"d1ff57bf7a6bc611a8bd1f56e28f8dc58f950bbe","tree":"e1ad2d43e06856ea3c49e6819e770ad7f94cd38c","workflow":"4c82704255808f138c20f96be03fed1ad310ffce","branch":"codex/player-bingo-birth-year-original-qa-20261110","auditSHA256":"be83ea9923697a6723b8afc2672066dd30f87d153d2097fd4f41d0e923737251","raw":{"bytes":2142,"sha256":"87b4a2ec7d841e89e5f85638f0e52d4e8706587fa760faee0540985a1d84b637"}},"fixed":{"run":42815490778,"job":129827392210,"artifact":13764890039,"steps":13,"zipBytes":1068682,"zipSHA256":"5bc97eaeb125d42dac19a41597ab4044eaafc80bbf7db90ab5f58d2a8c2aafa3","head":"ce46cdf166331e4bfb079cb3975fdc69dc6c3b54","tree":"a6cc74f18706f26ae868f97b1d7d48e8a8597d6f","workflow":"53f5633a71baadb95a15c46ed59164356344a0b5","branch":"codex/player-bingo-birth-year-fixed-qa-20261110","auditSHA256":"d343d8068996ada563a73324438c0fdaf5a5993103b2964fa7fbf5b94005136a","raw":{"bytes":2174,"sha256":"5747e56b6b64e3c06801475aac72e24d69d2aa43a44d00f9e840b4c2d7925ba0"}},"controls":{"run":42816407557,"job":129830482712,"artifact":13764486668,"steps":12,"zipBytes":1181389,"zipSHA256":"536894b86040d2dc890df064ef08b24cf8d4b76f33e34d951672f7df939ea627","head":"57e561667aa42f7cbe9bcdd081e29065ef728215","tree":"8682b0d81043bb991ea15a903a8b0317d678b992","workflow":"92e62e3c263efb17ade14f902d690eef33b59ffe","branch":"codex/player-bingo-birth-year-controls-qa-20261110","auditSHA256":"cf6d7e00bf9f0a90a3200b02826314698d840ff77a6759c4c1b137e02256a80c","raw":{"bytes":2174,"sha256":"5747e56b6b64e3c06801475aac72e24d69d2aa43a44d00f9e840b4c2d7925ba0"}}};
+          const pins={"scripts/simPlayerBingoLoad.mjs":"b76c0794a40f87f54e3766111d6a9f9f16eff548","src/lib/playerBingo.ts":"885fab96ef9f463d5447245c6f1f4937ce68aafa","src/test/playerBingoTransport.test.ts":"9494d6e391350d9da76aa7a6a1e0f5022df3e62b","src/test/playerBingoWorldCupAlias.test.ts":"b6f57a7f4f1b14a95e90912f54cdbcc34cc3491c"};
+          const { EVIDENCE:out,GITHUB_SHA:head,GITHUB_REPOSITORY:repo }=process.env;
+          const workflow='.github/workflows/player-bingo-birth-year-20261110.yml';
+          const helper='scripts/qa/playPlayerBingoBirthYear.mjs';
+          const plan='docs/plans/2026-11-10-player-bingo-birth-year.md';
+          const git=(...args)=>execFileSync('git',args,{encoding:'utf8',maxBuffer:16*1024*1024}).trimEnd();
+          const sha=(algorithm,bytes)=>createHash(algorithm).update(bytes).digest('hex');
+          assert.equal(repo,'PapiSalgueroM/ballpark-hero');
+          assert.deepEqual(Object.keys(prior),['original','fixed','controls']);
+          const request=async path=>{
+            const url=process.env.GITHUB_API_URL+'/repos/'+repo+path;
+            const res=await fetch(url,{headers:{Accept:'application/vnd.github+json',Authorization:'Bearer '+process.env.GH_TOKEN,'X-GitHub-Api-Version':'2022-11-28'},redirect:'error'});
+            assert.equal(res.status,200,path);
+            return res.json();
           };
-          const git = (...args) => execFileSync('git', args, { encoding: 'utf8', maxBuffer: 16 * 1024 * 1024 }).trimEnd();
-          const bytes = (...args) => execFileSync('git', args, { maxBuffer: 16 * 1024 * 1024 });
-          const hash = (algorithm, body) => createHash(algorithm).update(body).digest('hex');
-          const blob = body => hash('sha1', Buffer.concat([Buffer.from('blob ' + body.length + '\0'), body]));
-          const head = git('rev-parse','HEAD');
-          const tree = ref => git('ls-tree','-r','-z',ref).split('\0').filter(Boolean);
-          const at = (ref,file) => git('rev-parse',ref+':'+file);
-          const original = roles.original;
-          const parent = roles.fixed;
-          assert.equal(head, process.env.GITHUB_SHA);
-          assert.equal(process.env.GITHUB_REPOSITORY, repo);
-          assert.deepEqual(git('rev-list','--parents','-n','1','HEAD').split(' '),[head,parent.head]);
-          assert.equal(git('rev-parse', parent.head+'^{tree}'), parent.tree);
-          assert.equal(git('rev-parse', productParent+'^{tree}'), productTree);
-          assert.deepEqual(git('rev-list','--parents','-n','1',original.head).split(' '),[original.head,productParent]);
-          assert.equal(at(original.head,plan),'47f7f202eb3fbe75ec5b18307511bff41c78cd42');
-          assert.equal(at('HEAD',plan),at(original.head,plan));
-          assert.deepEqual(Object.keys(pins).sort(),paths);
-          for (const [file, pair] of Object.entries(pins)) {
-            assert.deepEqual(Object.keys(pair).sort(),['after','before']);
-            assert.match(pair.before,/^[0-9a-f]{40}$/);
-            assert.match(pair.after,/^[0-9a-f]{40}$/);
-            assert.notEqual(pair.before,pair.after,file);
-            assert.equal(at(original.head,file),pair.before,file);
-            if (Object.hasOwn(heldOriginal,file)) assert.equal(pair.before,heldOriginal[file],file);
-            assert.equal(at('HEAD',file),pair.after,file);
-            assert.equal(blob(fs.readFileSync(file)),pair.after,file);
-          }
-          const fixedHead = roles.fixed.head;
-          const fixedChanges = [...paths,workflow].sort();
-          const exactDelta = (base, current, files, heldRows) => {
-            assert.deepEqual(git('diff','--name-status','--no-renames',base,current).split('\n').sort(),files.map(file=>'M\t'+file).sort());
-            const previous = tree(base), next = tree(current);
-            const hold = rows => rows.filter(row => !files.includes(row.split('\t')[1]));
-            assert.deepEqual([previous.length,next.length,hold(previous).length],[5802,5802,heldRows]);
-            assert.deepEqual(hold(previous),hold(next));
-            for (const file of files) {
-              for (const rows of [previous,next]) assert(rows.some(row => row.startsWith('100644 blob ') && row.split('\t')[1] === file),file);
-            }
-          };
-          exactDelta(original.head,fixedHead,fixedChanges,5797);
-          assert.deepEqual([roles.fixed.head,roles.fixed.tree],['ce46cdf166331e4bfb079cb3975fdc69dc6c3b54','a6cc74f18706f26ae868f97b1d7d48e8a8597d6f']);
-          assert.deepEqual(git('rev-list','--parents','-n','1',roles.fixed.head).split(' '),[roles.fixed.head,original.head]);
-          exactDelta(roles.fixed.head,'HEAD',[workflow],5801);
-          assert.equal(tree('HEAD').filter(row => /^(src|public|scripts)\//.test(row.split('\t')[1])).length,4669);
-          const configs = ['index.html','package.json','package-lock.json','vite.config.ts','tailwind.config.ts','postcss.config.js','tsconfig.json','tsconfig.app.json','tsconfig.node.json','bun.lockb','bun.lock'];
-          for (const file of configs) assert.equal(at('HEAD',file),at(original.head,file),file);
-          assert.equal(at('HEAD','src/pages/PlayerBingo.tsx'),'e26d20a48216f9eb3a1faf62389d561814dcbe99');
-          assert.equal(at('HEAD','public/player-bingo/index.html'),'af701f7f56f498defe0da719fcae5b63c0dd1b91');
-          const api = process.env.GITHUB_API_URL + '/repos/' + repo;
-          const request = async path => {
-            const response = await fetch(api+path,{headers:{Accept:'application/vnd.github+json',Authorization:'Bearer '+process.env.GH_TOKEN,'X-GitHub-Api-Version':'2022-11-28'},redirect:'error'});
-            assert.equal(response.status,200,path);
-            return response.json();
-          };
-          for (const [role,pin] of Object.entries(roles)) {
-            for (const value of [pin.run,pin.job,pin.artifact,pin.steps,pin.zipBytes,pin.raw.bytes]) assert(Number.isSafeInteger(value) && value > 0);
-            for (const value of [pin.zipSHA256,pin.auditSHA256,pin.raw.sha256]) assert.match(value,/^[0-9a-f]{64}$/);
-            assert.equal(git('rev-parse',pin.head+'^{tree}'),pin.tree);
-            assert.equal(at(pin.head,workflow),pin.workflow);
-            const [run,jobs,artifact] = await Promise.all([
-              request('/actions/runs/'+pin.run),request('/actions/runs/'+pin.run+'/jobs?per_page=100'),request('/actions/artifacts/'+pin.artifact),
+          const authenticated=[];
+          for(const [role,want] of Object.entries(prior)){
+            assert.match(want.auditSHA256,/^[a-f0-9]{64}$/);
+            assert.match(want.workflow,/^[a-f0-9]{40}$/);
+            const [run,jobs,artifacts]=await Promise.all([
+              request('/actions/runs/'+want.run),request('/actions/runs/'+want.run+'/jobs?per_page=100'),
+              request('/actions/runs/'+want.run+'/artifacts?per_page=100'),
             ]);
-            assert.deepEqual([run.id,run.status,run.conclusion,run.event,run.run_attempt,run.path,run.head_sha,run.head_commit.tree_id,run.head_branch,run.repository.full_name],
-              [pin.run,'completed','success','push',1,workflow,pin.head,pin.tree,pin.branch,repo],role);
+            assert.deepEqual([run.id,run.status,run.conclusion,run.event,run.run_attempt,run.path,run.head_branch,run.head_sha,run.head_commit.tree_id,run.repository.full_name],
+              [want.run,'completed','success','push',1,workflow,want.branch,want.head,want.tree,repo],role);
             assert.equal(jobs.jobs.length,1,role);
-            const [job] = jobs.jobs;
-            assert.deepEqual([job.id,job.run_id,job.name,job.status,job.conclusion,job.head_sha,job.steps.length],
-              [pin.job,pin.run,role,'completed','success',pin.head,pin.steps],role);
-            assert(job.steps.every(step => step.status === 'completed' && step.conclusion === 'success'),role);
+            const [job]=jobs.jobs;
+            assert.deepEqual([job.id,job.name,job.status,job.conclusion,job.head_sha,job.steps.length],
+              [want.job,role,'completed','success',want.head,want.steps],role);
+            assert(job.steps.every(step=>step.status==='completed'&&step.conclusion==='success'),role);
+            assert.equal(artifacts.artifacts.length,1,role);
+            const [artifact]=artifacts.artifacts;
             assert.deepEqual([artifact.id,artifact.name,artifact.expired,artifact.size_in_bytes,artifact.digest,artifact.workflow_run.id,artifact.workflow_run.head_sha],
-              [pin.artifact,'player-bingo-birth-year-'+role+'-'+pin.run,false,pin.zipBytes,'sha256:'+pin.zipSHA256,pin.run,pin.head],role);
+              [want.artifact,'player-bingo-birth-year-'+role+'-'+want.run,false,want.zipBytes,'sha256:'+want.zipSHA256,want.run,want.head],role);
+            assert.equal(git('rev-parse',want.head+':'+workflow),want.workflow,role);
+            authenticated.push({role,...want});
           }
+          const failed={"run":42817494193,"job":129834184697,"artifact":13765363965,"steps":24,"branch":"codex/player-bingo-birth-year-full-qa-20261110","head":"887e17c3f5eb936f7e78b4ac0e83a985be3896ab","tree":"cf49f89d079a73775f6a70c5f2466afa2ba75396","workflow":"a00f51b88428aadf4ac2147b51228780335007ac","zipBytes":10668817,"zipSHA256":"703e28f98a575cafbcf2c0345842aefdf9c2d85c1cac3bb7519a86e47358576d","zipBodies":202,"conclusion":"failure","failedSteps":["Admit exact Player Bingo native journeys and production files","Verify unchanged physical source and locked offline run"],"offline":{"bytes":1584,"sha256":"e4edb72087346caab00e734396c27ab00ba3a115c37a534079f02afad9e70f16","count":20,"tags":{"[SIM_OFFLINE_BLOCK] external browser route continue https://fonts.googleapis.com":16,"[SIM_OFFLINE_BLOCK] external browser route continue https://flagcdn.com":4}},"nativeAdmission":{"bytes":8072,"sha256":"10f8970dcaa5358c9d2029a898261e98522b6bd6f2a4546685f6693ba36c6434","nativeOfflineBytes":0},"packet":"full-failed-42817494193","nativeAuditSHA256":"9770c3ca3dd51818606d02532d4f3b3a14511d065abd8dde00af3b8fd0aedb06"};
+          assert.deepEqual([failed.conclusion,failed.offline.bytes,failed.offline.count,failed.nativeAdmission.nativeOfflineBytes,failed.zipBodies],
+            ['failure',1584,20,0,202]);
+          assert.match(failed.nativeAuditSHA256,/^[a-f0-9]{64}$/);
+          const [failedRun,failedJobs,failedArtifacts]=await Promise.all([
+            request('/actions/runs/'+failed.run),request('/actions/runs/'+failed.run+'/jobs?per_page=100'),
+            request('/actions/runs/'+failed.run+'/artifacts?per_page=100'),
+          ]);
+          assert.deepEqual([failedRun.id,failedRun.status,failedRun.conclusion,failedRun.event,failedRun.run_attempt,failedRun.path,failedRun.head_branch,failedRun.head_sha,failedRun.head_commit.tree_id],
+            [failed.run,'completed','failure','push',1,workflow,failed.branch,failed.head,failed.tree]);
+          assert.equal(failedJobs.jobs.length,1);
+          const [failedJob]=failedJobs.jobs;
+          assert.deepEqual([failedJob.id,failedJob.name,failedJob.status,failedJob.conclusion,failedJob.head_sha,failedJob.steps.length],
+            [failed.job,'full','completed','failure',failed.head,failed.steps]);
+          assert.deepEqual(failedJob.steps.filter(step=>step.conclusion==='failure').map(step=>step.name),failed.failedSteps);
+          for(const name of [
+            'Normal production build and retained bytes','All required built readers and existing source fences',
+            'All original route download limits','Actual native Player Bingo birth-year placement journeys',
+          ])assert(failedJob.steps.some(step=>step.name===name&&step.conclusion==='success'),name);
+          assert.equal(failedArtifacts.artifacts.length,1);
+          const [failedArtifact]=failedArtifacts.artifacts;
+          assert.deepEqual([failedArtifact.id,failedArtifact.name,failedArtifact.expired,failedArtifact.size_in_bytes,failedArtifact.digest,failedArtifact.workflow_run.id,failedArtifact.workflow_run.head_sha],
+            [failed.artifact,'player-bingo-birth-year-full-'+failed.run,false,failed.zipBytes,'sha256:'+failed.zipSHA256,failed.run,failed.head]);
+          fs.writeFileSync(out+'/prior-failed-full.json',JSON.stringify({
+            status:'retained-failed-full',...failed,
+          },null,2)+'\n',{flag:'wx'});
           delete process.env.GH_TOKEN;
-          const bodies = {};
-          for (const file of [...paths,plan,workflow]) {
-            for (const [role,ref] of [['original',original.head],['candidate','HEAD']]) {
-              const body = bytes('show',ref+':'+file), name = role+'-'+file.slice(file.lastIndexOf('/')+1);
-              fs.writeFileSync(out+'/'+name,body);
-              bodies[name] = {path:file,bytes:body.length,sha256:hash('sha256',body),blob:blob(body)};
-              assert.equal(bodies[name].blob,at(ref,file),file);
-            }
+          assert.deepEqual(git('rev-list','--parents','-n','1',head).split(' '),[head,prior.controls.head]);
+          assert.equal(git('rev-parse','HEAD~2'),prior.fixed.head);
+          assert.equal(git('rev-parse','HEAD~3'),prior.original.head);
+          assert.equal(git('rev-parse','HEAD~4'),'4ba9773714dfb05418a63ade900e27b1a5b078e7');
+          const controls=prior.controls.head;
+          assert.equal(git('rev-parse',controls+'^{tree}'),prior.controls.tree);
+          const tree=ref=>git('ls-tree','-r','-z',ref).split('\0').filter(Boolean);
+          const before=tree(controls),after=tree('HEAD'),owned=[workflow,helper];
+          const hold=rows=>rows.filter(row=>!owned.includes(row.split('\t')[1]));
+          assert.deepEqual([before.length,after.length,hold(before).length],[5802,5803,5801]);
+          assert.deepEqual(hold(after),hold(before));
+          assert.equal(after.filter(row=>/^(src|public|scripts)\//.test(row.split('\t')[1])).length,4670);
+          assert.deepEqual(git('diff','--name-status','--no-renames',controls,'HEAD').split('\n').sort(),['A\t'+helper,'M\t'+workflow].sort());
+          const scoped={
+            ...pins,[plan]:'47f7f202eb3fbe75ec5b18307511bff41c78cd42',
+            'src/pages/PlayerBingo.tsx':'e26d20a48216f9eb3a1faf62389d561814dcbe99',
+            'src/App.tsx':'8bfedf7aaa1d076e0f0c8e2216c7e46632cd8a33',
+            'src/data/gameRegistry.ts':'f560b40a74d1468ac72dfde4ee6fec6635a9a255',
+            'public/player-bingo/index.html':'af701f7f56f498defe0da719fcae5b63c0dd1b91',
+            [helper]:process.env.BINGO_NATIVE_HELPER_BLOB,
+            [workflow]:git('rev-parse','HEAD:'+workflow),
+          };
+          assert.deepEqual(Object.keys(pins).sort(),[
+            'scripts/simPlayerBingoLoad.mjs','src/lib/playerBingo.ts','src/test/playerBingoTransport.test.ts','src/test/playerBingoWorldCupAlias.test.ts',
+          ]);
+          for(const [file,expected] of Object.entries(scoped)){
+            const bytes=fs.readFileSync(file);
+            assert.equal(git('rev-parse','HEAD:'+file),expected,file);
+            assert.equal(sha('sha1',Buffer.concat([Buffer.from('blob '+bytes.length+'\0'),bytes])),expected,file);
           }
-          fs.writeFileSync(out+'/source-receipt.json',JSON.stringify({
-            status:'passed',head,tree:git('rev-parse','HEAD^{tree}'),parent:parent.head,parentTree:parent.tree,
-            productParent,productTree,roles,pins,bodies,ownedWorkflow:at('HEAD',workflow),heldRows:5801,trackedRows:5802,sourceRows:4669,rootConfigurations:11,
-            activePreflight:{run:42810749109,job:129811240337,artifact:13761423919,independentAuditSHA256:'ac0c6a780adf38d07c25d18bc5b9455b76581b28726061c0e9b284ae72c14f6c'},
+          const nativeBytes=fs.readFileSync(helper);
+          assert.equal(sha('sha256',nativeBytes),process.env.BINGO_NATIVE_HELPER_SHA256);
+          fs.copyFileSync(helper,out+'/candidate-native-helper.mjs');
+          fs.copyFileSync(workflow,out+'/candidate-workflow.yml');
+          fs.writeFileSync(out+'/source-join.json',JSON.stringify({
+            status:'passed',head,tree:git('rev-parse','HEAD^{tree}'),parent:controls,parentTree:prior.controls.tree,
+            workflow:scoped[workflow],helperBlob:scoped[helper],pins,heldRows:5801,trackedRows:5803,scopedSourceRows:4670,rootConfigurations:11,
           },null,2));
+          fs.writeFileSync(out+'/packet-custody.json',JSON.stringify({status:'passed',authenticated},null,2));
           NODE
       - name: Install locked dependencies and freeze physical source
         run: |
@@ -172,7 +179,7 @@ jobs:
             assert.equal(version, entry.version, file);
             return [file, version];
           });
-          assert.equal(source.length, 5802);
+          assert.equal(source.length, 5803);
           assert.equal(installed.length, 521);
           assert.equal(fs.statSync(process.env.SIM_OFFLINE_RECEIPT).size, 0);
           for (const [name, data] of [['tracked', source], ['installed', installed]]) {
@@ -186,176 +193,589 @@ jobs:
         run: |
           set -euo pipefail
           node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee "$EVIDENCE/types.log"
-      - name: Run fixed, three distinct physical controls, and exact restoration
+      - name: Actual direct route React lazy Soccer catalog object and inert snapshot
         run: |
           set -euo pipefail
-          cat > "$EVIDENCE/control-driver.mjs" <<'NODE'
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';import ts from 'typescript';import {JSDOM} from 'jsdom';import {createHash} from 'node:crypto';
+          const out=process.env.EVIDENCE,route='/player-bingo',component='PlayerBingo',label='Player Bingo',appText=fs.readFileSync('src/App.tsx','utf8'),catalogText=fs.readFileSync('src/data/gameRegistry.ts','utf8'),app=ts.createSourceFile('src/App.tsx',appText,ts.ScriptTarget.Latest,true,ts.ScriptKind.TSX),catalog=ts.createSourceFile('src/data/gameRegistry.ts',catalogText,ts.ScriptTarget.Latest,true,ts.ScriptKind.TS);assert.deepEqual(app.parseDiagnostics,[]);assert.deepEqual(catalog.parseDiagnostics,[]);
+          const all=(root,predicate)=>{const found=[];const visit=node=>{if(predicate(node))found.push(node);ts.forEachChild(node,visit);};visit(root);return found;},attrs=(node,name)=>node.attributes.properties.filter(p=>ts.isJsxAttribute(p)&&p.name.text===name);
+          const routes=all(app,node=>(ts.isJsxSelfClosingElement(node)||ts.isJsxOpeningElement(node))&&node.tagName.getText(app)==='Route').filter(node=>attrs(node,'path').some(p=>p.initializer&&ts.isStringLiteralLike(p.initializer)&&p.initializer.text===route));assert.equal(routes.length,1,'One actual direct public JSX Route');assert(ts.isJsxSelfClosingElement(routes[0]),'Direct self-closing route');assert.equal(attrs(routes[0],'path').length,1);const elements=attrs(routes[0],'element');assert.equal(elements.length,1);const element=elements[0].initializer;assert(element&&ts.isJsxExpression(element)&&element.expression&&ts.isJsxSelfClosingElement(element.expression));assert.equal(element.expression.tagName.getText(app),component,'Direct Player Bingo mount, no Navigate');
+          const declarations=all(app,node=>ts.isVariableDeclaration(node)&&ts.isIdentifier(node.name)&&node.name.text===component);assert.equal(declarations.length,1);const init=declarations[0].initializer;assert(init&&ts.isCallExpression(init)&&ts.isIdentifier(init.expression)&&init.expression.text==='lazy');assert.equal(init.arguments.length,1);const factory=init.arguments[0];assert(ts.isArrowFunction(factory)&&factory.parameters.length===0);const load=factory.body;assert(ts.isCallExpression(load)&&load.expression.kind===ts.SyntaxKind.ImportKeyword&&load.arguments.length===1&&ts.isStringLiteralLike(load.arguments[0]));assert.equal(load.arguments[0].text,'./pages/PlayerBingo');const reactLazy=all(app,node=>ts.isImportDeclaration(node)&&ts.isStringLiteralLike(node.moduleSpecifier)&&node.moduleSpecifier.text==='react'&&node.importClause?.namedBindings&&ts.isNamedImports(node.importClause.namedBindings)).flatMap(node=>node.importClause.namedBindings.elements).filter(node=>node.name.text==='lazy'&&(node.propertyName?.text??node.name.text)==='lazy');assert.equal(reactLazy.length,1,'lazy is the actual named React import');
+          const prop=(node,name)=>{const found=node.properties.filter(p=>ts.isPropertyAssignment(p)&&(ts.isIdentifier(p.name)||ts.isStringLiteralLike(p.name))&&p.name.text===name);assert(found.length<=1,'No duplicate catalog property: '+name);return found[0]?.initializer;},defs=all(catalog,node=>ts.isVariableDeclaration(node)&&ts.isIdentifier(node.name)&&node.name.text==='CATEGORIES');assert.equal(defs.length,1);const categories=defs[0].initializer;assert(categories&&ts.isArrayLiteralExpression(categories));const category=categories.elements.filter(node=>ts.isObjectLiteralExpression(node)&&prop(node,'title')&&ts.isStringLiteralLike(prop(node,'title'))&&prop(node,'title').text==='Soccer');assert.equal(category.length,1);const games=prop(category[0],'games');assert(games&&ts.isArrayLiteralExpression(games));const entries=games.elements.filter(node=>ts.isObjectLiteralExpression(node)&&prop(node,'path')&&ts.isStringLiteralLike(prop(node,'path'))&&prop(node,'path').text===route);assert.equal(entries.length,1,'One actual uncommented Soccer catalog object');const catalogLabel=prop(entries[0],'label');assert(catalogLabel&&ts.isStringLiteralLike(catalogLabel));assert.equal(catalogLabel.text,label,'Exact actual Soccer label');
+          const file='public/player-bingo/index.html',bytes=fs.readFileSync(file);assert.equal(bytes.length,22253);const dom=new JSDOM(bytes.toString('utf8')),doc=dom.window.document,canonicals=[...doc.querySelectorAll('link[rel]')].filter(node=>node.getAttribute('rel').toLowerCase().split(/\s+/).includes('canonical'));assert.equal(canonicals.length,1);assert(doc.head.contains(canonicals[0]),'Actual canonical is in the saved head');assert.equal(canonicals[0].getAttribute('href'),'https://douknowball.com'+route);const snapshots=[...doc.querySelectorAll('#dukb-snapshot')];assert.equal(snapshots.length,1);const snapshot=snapshots[0],snapshotText=snapshot.textContent.trim();assert(snapshotText.length>500,'Actual readable saved game content');const headings=[...snapshot.querySelectorAll('h1')].map(node=>node.textContent.trim().replace(/\s+/g,' ').toUpperCase());assert(headings.includes('PLAYER BINGO'),'Actual saved game heading');const metas=[...doc.querySelectorAll('meta')],retired=metas.filter(node=>['dukb-retired-from','dukb-retired-to'].includes((node.getAttribute('name')||'').toLowerCase())),refresh=metas.filter(node=>(node.getAttribute('http-equiv')||'').trim().toLowerCase()==='refresh'),robots=metas.filter(node=>['robots','googlebot','bingbot'].includes((node.getAttribute('name')||'').toLowerCase()));assert.equal(retired.length,0,'No actual retired-route markers');assert.equal(refresh.length,0,'No actual redirect meta');assert(robots.every(node=>!/(?:^|[\s,])(?:noindex|none)(?:[\s,]|$)/i.test(node.getAttribute('content')||'')),'Active snapshot remains indexable');
+          fs.copyFileSync(file,out+'/active-snapshot.html');fs.writeFileSync(out+'/active-route-preflight.json',JSON.stringify({status:'passed',route,component,label,catalogCategory:'Soccer',routeNode:routes[0].getText(app),reactLazyImport:reactLazy[0].parent.parent.parent.getText(app),lazyDeclaration:declarations[0].getText(app),catalogObject:entries[0].getText(catalog),snapshot:{file,bytes:bytes.length,sha256:createHash('sha256').update(bytes).digest('hex'),canonical:canonicals[0].getAttribute('href'),snapshotTextLength:snapshotText.length,headings,retiredMarkers:retired.length,metaRefresh:refresh.length,robots:robots.map(node=>({name:node.getAttribute('name'),content:node.getAttribute('content')}))},parsers:{typescript:ts.version,html:'Inert JSDOM, scripts/resources not enabled'},limits:'Actual AST nodes and inert DOM elements, never comments or a dormant Page file. Active source/public entry preflight only. No birth-year reproduction, game test, App fix, build, browser journey, real-data truth or release claim. Native route reachability remains unqualified.'},null,2));dom.window.close();console.log('PASS actual direct Player Bingo route, React lazy Page import, labeled Soccer catalog object and indexable nonredirect snapshot');
+          NODE
+      - name: Require fresh fixed birth-year and held Bingo outcomes
+        run: |
+          set -euo pipefail
+          result=0
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node_modules/.bin/vitest run \
+            src/test/playerBingoTransport.test.ts src/test/playerBingoBirthYear.test.ts src/test/playerBingoWorldCupAlias.test.ts \
+            --reporter=default --reporter=json --outputFile="$EVIDENCE/vitest.json" > "$EVIDENCE/vitest.log" 2>&1 || result=$?
+          cat "$EVIDENCE/vitest.log"
+          printf '%s\n' "$result" > "$EVIDENCE/vitest-exit.txt"
+          test "$result" -eq 0
+          test -s "$PLAYER_BINGO_BIRTH_YEAR_RAW"
+          node --input-type=module <<'NODE'
           import assert from 'node:assert/strict';
           import fs from 'node:fs';
-          import path from 'node:path';
           import { createHash } from 'node:crypto';
-          import { execFileSync, spawnSync } from 'node:child_process';
-
-          const { EVIDENCE: out, SIM_OFFLINE_RECEIPT } = process.env;
-          const { roles, pins } = JSON.parse(fs.readFileSync(path.join(out,'source-receipt.json')));
-          const controls = [{"name":"apply","anchor":"    applyBingoBirthYears(pool, wc.birthDates);","replacement":"    applyBingoBirthYears(pool, new Map());","blob":"e59cb28959b9ce3aca3e5d3d450403bbaa172d34","sha256":"fcab69881ed7758ff50249cbdbc0fbe12f286ad0156dbd0df3dcd43986d3254f"},{"name":"nationality","anchor":"  return name && country ? name + '\\0' + country : '';","replacement":"  return name && country ? name : '';","blob":"7aa2d946e388f18a502df42f337f0f6dc89f3b11","sha256":"5f89f4ed7f0432d6e8c31f0b4308c8da4c120dafd8d68efa447f8f7e547ee86f"},{"name":"conflict","anchor":"        if (previous !== date) birthDates.set(birthKey, previous === undefined ? date : null);","replacement":"        if (previous === undefined) birthDates.set(birthKey, date);","blob":"1d79b3674a990562d332168bd42a6e10224eb01f","sha256":"b6640b70414d155e081afef8108254ae2d4a0ba528749f5f2fb46a3f88b17fca"}];
-          const roleOrder = ['fixed','apply','nationality','conflict','restored'];
-          assert.deepEqual(controls.map(control => control.name),roleOrder.slice(1,-1));
-          const product = 'src/lib/playerBingo.ts';
-          const transport = 'src/test/playerBingoTransport.test.ts';
-          const suites = { [transport]:12, 'src/test/playerBingoBirthYear.test.ts':2, 'src/test/playerBingoWorldCupAlias.test.ts':9 };
+          const out = process.env.EVIDENCE;
+          const report = JSON.parse(fs.readFileSync(out + '/vitest.json', 'utf8'));
+          const source = 'src/test/playerBingoTransport.test.ts';
+          const suites = { [source]: 12, 'src/test/playerBingoBirthYear.test.ts': 2, 'src/test/playerBingoWorldCupAlias.test.ts': 9 };
           const heldTransportTitles = ["preserves query predicates row transforms and complete paged output","limits latest-row chunk requests to three while preserving all seven chunks","limits paged history chunk requests to three without truncating seven pages","forwards one owned signal to every existing query kind","starts no reads when the caller already abandoned the load","caller cancellation stops queued latest chunks and never starts history","caller cancellation stops queued history chunks and further pagination","a failed latest request aborts siblings and pending chunks without partial data","a failed history request aborts siblings and pending chunks without partial data","a failed World Cup read cancels other initial pool requests immediately","a just-resolved latest chunk cannot start queued work after cancellation"];
-          const title = 'BINGO_SQUAD_BIRTH_YEAR_BAND uses a reliable squad birth date for the correct age tile';
-          const marker = 'BINGO_SQUAD_BIRTH_YEAR_BAND';
-          const sha = (algorithm,body) => createHash(algorithm).update(body).digest('hex');
-          const blob = body => sha('sha1',Buffer.concat([Buffer.from('blob '+body.length+'\0'),body]));
-          const rawPin = body => ({bytes:body.length,sha256:sha('sha256',body)});
-          const git = (...args) => execFileSync('git',args,{maxBuffer:16*1024*1024});
-          const index = fs.readFileSync(path.join(out,'source-before.txt'));
-          const held = JSON.parse(fs.readFileSync(path.join(out,'tracked-before.json'))).filter(([file]) => file!==product);
-          assert.equal(held.length,5801);
-          const verifyHeld = () => {
-            assert(git('ls-files','-s').equals(index));
-            assert.equal(fs.statSync(SIM_OFFLINE_RECEIPT).size,0);
-            for (const [file,bytes,digest] of held) {
-              const body = fs.readFileSync(file);
-              assert.deepEqual(rawPin(body),{bytes,sha256:digest},file);
+          const freshTitle = "BINGO_SQUAD_BIRTH_YEAR_BAND uses a reliable squad birth date for the correct age tile";
+          assert.equal(typeof freshTitle, 'string');
+          assert(freshTitle.length > 0 && !heldTransportTitles.includes(freshTitle));
+          const total = Object.values(suites).reduce((sum, count) => sum + count, 0);
+          assert.equal(total, 23);
+          assert.deepEqual([report.numTotalTests,report.numPassedTests,report.numFailedTests,report.numPendingTests,report.numTodoTests,report.success],
+            [total,total,0,0,0,true]);
+          assert.equal(report.testResults.length, 3);
+          for (const key of ['errors','unhandledErrors','testExecutionErrors']) if (Object.hasOwn(report,key)) assert.deepEqual(report[key],[]);
+          const log = fs.readFileSync(out + '/vitest.log', 'utf8');
+          assert(!/Unhandled Errors?|Unhandled Rejection|Uncaught Exception|Failed Suites|Worker exited|Test timed out/i.test(log));
+          const observed = [];
+          for (const [file, count] of Object.entries(suites)) {
+            const matching = report.testResults.filter(suite => suite.name.endsWith('/' + file));
+            assert.equal(matching.length, 1, file);
+            const [suite] = matching;
+            const transport = file === source;
+            assert.deepEqual([suite.status,suite.message,suite.assertionResults.length],['passed','',count],file);
+            if (transport) assert.deepEqual(suite.assertionResults.map(row => row.title).sort(), [...heldTransportTitles, freshTitle].sort());
+            for (const row of suite.assertionResults) {
+              assert.deepEqual([row.status,row.failureMessages.length],['passed',0],row.fullName);
             }
-          };
-          const fixed = fs.readFileSync(product);
-          assert.equal(blob(fixed),pins[product].after);
-          const fixedText = fixed.toString('utf8');
-          assert(Buffer.from(fixedText).equals(fixed));
-          const distinct = new Set([blob(fixed),pins[product].before]);
-          const changedSources = new Map(controls.map(spec => {
-            assert.deepEqual(Object.keys(spec).sort(),['anchor','blob','name','replacement','sha256']);
-            assert(typeof spec.anchor === 'string' && spec.anchor.length>0 && typeof spec.replacement === 'string');
-            assert.notEqual(spec.anchor,spec.replacement,spec.name);
-            const offset = fixedText.indexOf(spec.anchor);
-            assert(offset>=0 && fixedText.indexOf(spec.anchor,offset+spec.anchor.length)<0,spec.name+' exact unique source anchor');
-            const changed = fixedText.slice(0,offset)+spec.replacement+fixedText.slice(offset+spec.anchor.length);
-            const inverse = changed.slice(0,offset)+spec.anchor+changed.slice(offset+spec.replacement.length);
-            assert.equal(inverse,fixedText,spec.name+' full inverse');
-            const body = Buffer.from(changed);
-            assert.equal(blob(body),spec.blob,spec.name);
-            assert.equal(sha('sha256',body),spec.sha256,spec.name);
-            assert(!distinct.has(spec.blob),spec.name+' must create a distinct full physical source');
-            distinct.add(spec.blob);
-            return [spec.name,{body,offset:Buffer.byteLength(fixedText.slice(0,offset)),beforeBytes:Buffer.byteLength(spec.anchor),afterBytes:Buffer.byteLength(spec.replacement)}];
-          }));
-          const older = [false,true,false,false], younger = [false,false,true,false];
-          const differences = {
-            apply: {'jan1-boundary':[younger,older],'jan27-snapshot-offset':[younger,older]},
-            nationality: {'wrong-country':[older,younger]},
-            conflict: {'conflicting-dob':[older,younger]},
-          };
-          const runs = {};
-          let fixedRaw, fixedEvidence;
-          verifyHeld();
-          try {
-            for (const role of roleOrder) {
-              const red = changedSources.has(role);
-              const control = changedSources.get(role);
-              const body = red ? control.body : fixed;
-              const dir = path.join(out,role);
-              fs.mkdirSync(dir);
-              if (role !== 'fixed') {
-                assert(!fs.readFileSync(product).equals(body),role+' must change physical bytes');
-                fs.writeFileSync(product,body);
-              }
-              assert(fs.readFileSync(product).equals(body),role);
-              const diff = () => git('diff','--name-only','HEAD').toString('utf8').trimEnd().split('\n').filter(Boolean);
-              assert.deepEqual(diff(),red?[product]:[],role);
-              fs.writeFileSync(path.join(dir,'playerBingo.ts'),body);
-              const rawPath = path.join(dir,'public-cases.raw.json'), reportPath = path.join(dir,'vitest.json');
-              const result = spawnSync(process.execPath,['node_modules/vitest/vitest.mjs','run',...Object.keys(suites),
-                '--reporter=default','--reporter=json','--outputFile='+reportPath],{
-                env:{...process.env,PLAYER_BINGO_BIRTH_YEAR_RAW:rawPath,NODE_OPTIONS:'--require='+process.cwd()+'/scripts/lib/offlineTransport.cjs'},
-                maxBuffer:16*1024*1024,timeout:120000,
-              });
-              const stdout = result.stdout || Buffer.alloc(0), stderr = result.stderr || Buffer.alloc(0);
-              const log = Buffer.concat([stdout,stderr]);
-              fs.writeFileSync(path.join(dir,'vitest.log'),log);
-              fs.writeFileSync(path.join(dir,'vitest-exit.txt'),String(result.status)+'\n');
-              process.stdout.write(stdout);
-              process.stderr.write(stderr);
-              assert.equal(result.error,undefined,role);
-              assert.equal(result.signal,null,role);
-              assert.equal(result.status,red?1:0,role);
-              assert(!/Unhandled Errors?|Unhandled Rejection|Uncaught Exception|Failed Suites|Worker exited|Test timed out/i.test(log.toString('utf8')),role);
-              const report = JSON.parse(fs.readFileSync(reportPath));
-              assert.deepEqual([report.numTotalTests,report.numPassedTests,report.numFailedTests,report.numPendingTests,report.numTodoTests,report.success],
-                [23,red?22:23,red?1:0,0,0,!red],role);
-              assert.equal(report.testResults.length,3,role);
-              for (const key of ['errors','unhandledErrors','testExecutionErrors']) if (Object.hasOwn(report,key)) assert.deepEqual(report[key],[]);
-              for (const [file,count] of Object.entries(suites)) {
-                const matching = report.testResults.filter(suite => suite.name.endsWith('/'+file));
-                assert.equal(matching.length,1,file);
-                const [suite] = matching;
-                const redSuite = red && file===transport;
-                assert.deepEqual([suite.status,suite.message,suite.assertionResults.length],[redSuite?'failed':'passed','',count],file);
-                if (file===transport) assert.deepEqual(suite.assertionResults.map(row => row.title).sort(),[...heldTransportTitles,title].sort());
-                for (const row of suite.assertionResults) {
-                  const expectedRed = redSuite && row.title===title;
-                  assert.deepEqual([row.status,row.failureMessages.length],[expectedRed?'failed':'passed',expectedRed?1:0],row.fullName);
-                  if (expectedRed) assert(row.failureMessages[0].startsWith('AssertionError: '+marker+':'),row.fullName);
-                }
-              }
-              const raw = fs.readFileSync(rawPath);
-              const evidence = JSON.parse(raw);
-              assert(raw.equals(Buffer.from(JSON.stringify(evidence)+'\n')),role+' exact compact encoding');
-              assert.equal(evidence.schema,'player-bingo-squad-birth-year-band-v1');
-              assert.equal(evidence.rows.length,10);
-              assert.deepEqual(evidence.worldCup,[
-                {columns:['player_name','world_cup_year','nationality','date_of_birth'],range:[0,999]},
-                {columns:['player_name','world_cup_year','nationality','date_of_birth'],range:[1000,1999]},
-              ]);
-              if (role==='fixed') {
-                assert.deepEqual(rawPin(raw),roles.fixed.raw);
-                fixedRaw = raw;
-                fixedEvidence = evidence;
-              } else if (role==='restored') {
-                assert(raw.equals(fixedRaw),'Restored raw bytes exactly equal the fixed run');
-              } else {
-                const expected = structuredClone(fixedEvidence);
-                for (const [id,[before,after]] of Object.entries(differences[role])) {
-                  const matches = expected.rows.filter(row => row.id===id);
-                  assert.equal(matches.length,1,id);
-                  const [row] = matches;
-                  assert.deepEqual([row.matches,row.support],[before,before],id);
-                  row.matches = after;
-                  row.support = after;
-                }
-                assert.deepEqual(evidence,expected,role+' only changes the exact intended matches and support vectors');
-                assert(!raw.equals(fixedRaw),role);
-                if (role==='apply') {
-                  const originalProjection = structuredClone(evidence);
-                  originalProjection.worldCup.forEach(query => {query.columns = query.columns.slice(0,3);});
-                  assert.deepEqual(rawPin(Buffer.from(JSON.stringify(originalProjection)+'\n')),roles.original.raw,'Same original behavior apart from the held four-column query');
-                }
-              }
-              assert(fs.readFileSync(product).equals(body),role+' product bytes held through test');
-              assert.deepEqual(diff(),red?[product]:[],role);
-              verifyHeld();
-              runs[role] = {
-                cases:23,passes:red?22:23,namedBusinessFailures:red?[marker]:[],changedRows:red?Object.keys(differences[role]):[],
-                source:{blob:blob(body),...rawPin(body)},raw:rawPin(raw),
-                physicalSpan:red?{offset:control.offset,beforeBytes:control.beforeBytes,afterBytes:control.afterBytes,wholeInverse:true}:null,
-              };
-            }
-            assert.equal(new Set(Object.values(runs).slice(0,4).map(run => run.raw.sha256)).size,4,'All three controls have distinct actual evidence');
-          } finally {
-            if (!fs.readFileSync(product).equals(fixed)) fs.writeFileSync(product,fixed);
+            observed.push({file,cases:count,passes:count});
           }
-          assert(fs.readFileSync(product).equals(fixed));
-          verifyHeld();
-          assert.equal(git('diff','--name-only','HEAD').length,0);
-          fs.writeFileSync(path.join(out,'admission.json'),JSON.stringify({
-            status:'passed',roleOrder,cases:115,passes:112,namedBusinessFailures:3,onlyPhysicalProductPath:product,
-            restoredExactFixed:true,fixedRestoredRawLiteral:true,originalBehaviorApartFromProjection:true,runs,
+          const raw=fs.readFileSync(process.env.PLAYER_BINGO_BIRTH_YEAR_RAW);
+          const evidence=JSON.parse(raw.toString('utf8'));
+          const checks=(()=>{
+          const expected = {"schema":"player-bingo-squad-birth-year-band-v1","poolSize":280,"bands":[{"id":"age-29-plus","label":"Born 1996 or earlier"},{"id":"born-1997-to-1999","label":"Born 1997 to 1999"},{"id":"born-2000-to-2003","label":"Born 2000 to 2003"},{"id":"age-21-under","label":"Born 2004 or later"}],"worldCup":[{"columns":["player_name","world_cup_year","nationality","date_of_birth"],"range":[0,999]},{"columns":["player_name","world_cup_year","nationality","date_of_birth"],"range":[1000,1999]}],"rows":[{"id":"jan1-boundary","name":"Fictional871-000","age":26,"year":2026,"nationality":"Fixture / Alternate","matches":[false,false,true,false],"support":[false,false,true,false]},{"id":"dec31-adjacent","name":"Fictional871-001","age":26,"year":2026,"nationality":"Fixture","matches":[false,true,false,false],"support":[false,true,false,false]},{"id":"jan27-snapshot-offset","name":"Fictional871-002","age":26,"year":2026,"nationality":"Fixture","matches":[false,false,true,false],"support":[false,false,true,false]},{"id":"legacy-middle","name":"Fictional871-003","age":25,"year":2026,"nationality":"Fixture","matches":[false,false,true,false],"support":[false,false,true,false]},{"id":"wrong-country","name":"Fictional871-004","age":26,"year":2026,"nationality":"Fixture / Alternate","matches":[false,true,false,false],"support":[false,true,false,false]},{"id":"conflicting-dob","name":"Fictional871-005","age":26,"year":2026,"nationality":"Fixture","matches":[false,true,false,false],"support":[false,true,false,false]},{"id":"invalid-dob","name":"Fictional871-006","age":26,"year":2026,"nationality":"Fixture","matches":[false,true,false,false],"support":[false,true,false,false]},{"id":"implausible-dob","name":"Fictional871-007","age":26,"year":2026,"nationality":"Fixture","matches":[false,true,false,false],"support":[false,true,false,false]},{"id":"legacy-oldest","name":"Fictional871-008","age":30,"year":2026,"nationality":"Fixture","matches":[true,false,false,false],"support":[true,false,false,false]},{"id":"legacy-youngest","name":"Fictional871-009","age":21,"year":2026,"nationality":"Fixture","matches":[false,false,false,true],"support":[false,false,false,true]}]};
+          assert.deepEqual(evidence,expected,'Exact fixed transport, eligibility and support');
+          assert.equal(raw.toString('utf8'),JSON.stringify(expected)+'\n','Exact fixed compact evidence bytes');
+          const [jan1,dec31,jan27]=evidence.rows;
+          for(const row of [jan1,jan27]) {
+            assert.deepEqual(row.matches,[false,false,true,false],row.id);
+            assert.deepEqual(row.support,row.matches,row.id);
+          }
+          assert.deepEqual(dec31.matches,[false,true,false,false],'Adjacent 1999 control remains in the older band');
+          return {status:'passed',cases:evidence.rows.length,bands:evidence.bands.map(({id})=>id),pages:evidence.worldCup.map(({range})=>range),fixedWrong:[jan1.id,jan27.id],adjacentControl:dec31.id};
+          })();
+          assert.equal(checks.status,'passed');
+          const rawSHA256 = createHash('sha256').update(raw).digest('hex');
+          const original = JSON.parse(fs.readFileSync(out+'/packet-custody.json','utf8')).authenticated.find(row=>row.role==='original').raw;
+          assert.notEqual(rawSHA256,original.sha256);
+          fs.writeFileSync(out + '/fixed-result.json',JSON.stringify({
+            status:'fixed-bingo-squad-birth-year-band',freshTitle,total,passes:total,failed:0,observed,checks,
+            rawBytes:raw.length,rawSHA256,original,
           },null,2)+'\n',{flag:'wx'});
           NODE
-          node "$EVIDENCE/control-driver.mjs" 2>&1 | tee "$EVIDENCE/control-driver.log"
+      - name: Preserve held Bingo loader and page simulation
+        run: |
+          set -euo pipefail
+          env -u PLAYER_BINGO_BIRTH_YEAR_RAW NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simPlayerBingoLoad.mjs 2>&1 | tee "$EVIDENCE/simPlayerBingoLoad.log"
+          grep -Fq 'simPlayerBingoLoad: 20 actual page and loader outcomes pass, no pending or unhandled cases.' "$EVIDENCE/simPlayerBingoLoad.log"
+          grep -Fq 'simPlayerBingoLoad: CRLF bindings proved, raw source bytes held, owned copies cleaned; fictional transport only, no browser or live calls.' "$EVIDENCE/simPlayerBingoLoad.log"
+      - name: Preserve World Cup aliases and Bingo categories
+        run: |
+          set -euo pipefail
+          git fetch --no-tags --depth=1 origin b20ec6664df9d4c58d63ea0596791d33b2a3b8fc
+          CI=1 PLAYER_BINGO_WC_OUT="$PWD/$EVIDENCE/sim-alias" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simPlayerBingoWorldCupAlias.mjs 2>&1 | tee "$EVIDENCE/simPlayerBingoWorldCupAlias.log"
+          grep -Fq 'Identity outcome: all nine outcomes passed.' "$EVIDENCE/simPlayerBingoWorldCupAlias.log"
+          CI=1 PLAYER_BINGO_CATEGORIES_OUT="$PWD/$EVIDENCE/sim-categories" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simPlayerBingoCategories.mjs 2>&1 | tee "$EVIDENCE/simPlayerBingoCategories.log"
+          grep -Fq 'simPlayerBingoCategories: fixed proof passed; raw reports and changed-copy receipts retained.' "$EVIDENCE/simPlayerBingoCategories.log"
+      - name: Admit fresh unit and held focused simulator results
+        run: |
+          set -euo pipefail
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node --input-type=module <<'NODE'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          import { createHash } from 'node:crypto';
+          const out=process.env.EVIDENCE;
+          const result=JSON.parse(fs.readFileSync(out+'/fixed-result.json','utf8'));
+          assert.equal(result.status,'fixed-bingo-squad-birth-year-band');
+          assert.deepEqual([result.total,result.passes,result.failed],[23,23,0]);
+          const names=['simPlayerBingoLoad.log','simPlayerBingoWorldCupAlias.log','simPlayerBingoCategories.log'];
+          const logs=names.map(file=>{
+            const bytes=fs.readFileSync(out+'/'+file);
+            assert(bytes.length>0,file);
+            return {file,bytes:bytes.length,sha256:createHash('sha256').update(bytes).digest('hex')};
+          });
+          fs.writeFileSync(out+'/unit-admission.json',JSON.stringify({
+            ...result,resultStatus:result.status,status:'passed',logs,
+          },null,2)+'\n');
+          NODE
+      - name: Normal production build and retained bytes
+        id: build
+        run: |
+          set -euo pipefail
+          NODE_OPTIONS="--max-old-space-size=6144" npm run build 2>&1 | tee player-bingo-birth-year-full/build.log
+          tar -czf player-bingo-birth-year-full/dist.tgz dist
+          sha256sum player-bingo-birth-year-full/dist.tgz > player-bingo-birth-year-full/dist.sha256
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import {createHash} from 'node:crypto';import assert from 'node:assert/strict';
+          const walk=dir=>fs.readdirSync(dir,{withFileTypes:true}).sort((a,b)=>a.name.localeCompare(b.name)).flatMap(e=>e.isDirectory()?walk(dir+'/'+e.name):e.isFile()?[dir+'/'+e.name]:[]);
+          const rows=walk('dist').map(file=>{const b=fs.readFileSync(file);return {file,bytes:b.length,sha256:createHash('sha256').update(b).digest('hex')};});
+          assert.equal(rows.length,850);fs.writeFileSync('player-bingo-birth-year-full/dist-before.json',JSON.stringify(rows));
+          NODE
+      - name: Isolated pinned Playwright and Chromium
+        id: browser_setup
+        timeout-minutes: 12
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          python -m pip install fonttools pillow
+          npm install --prefix "$RUNNER_TEMP/player-bingo-birth-year-browser" --no-save --package-lock=false playwright@1.64.1 2>&1 | tee player-bingo-birth-year-full/browser-install.log
+          test ! -e node_modules/playwright
+          test ! -e node_modules/playwright-core
+          ln -s "$RUNNER_TEMP/player-bingo-birth-year-browser/node_modules/playwright" node_modules/playwright
+          ln -s "$RUNNER_TEMP/player-bingo-birth-year-browser/node_modules/playwright-core" node_modules/playwright-core
+          node "$RUNNER_TEMP/player-bingo-birth-year-browser/node_modules/playwright/cli.js" install --with-deps chromium 2>&1 | tee player-bingo-birth-year-full/chromium-install.log
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const before=JSON.parse(fs.readFileSync('player-bingo-birth-year-full/installed-before.json'));
+          const after=before.map(([p])=>[p,JSON.parse(fs.readFileSync(p+'/package.json')).version]);assert.deepEqual(after,before);
+          const {createRequire}=await import('node:module');
+          const require=createRequire(process.cwd()+'/package.json');
+          const target=fs.realpathSync('node_modules/playwright'),coreTarget=fs.realpathSync('node_modules/playwright-core');
+          const pw=JSON.parse(fs.readFileSync(target+'/package.json')),core=JSON.parse(fs.readFileSync(coreTarget+'/package.json'));
+          assert.deepEqual([pw.version,core.version],['1.64.1','1.64.1']);
+          const coreEntry=require.resolve('playwright-core');
+          assert(coreEntry.startsWith(coreTarget+'/'));
+          assert.equal(createRequire(target+'/package.json').resolve('playwright-core'),coreEntry);
+          fs.writeFileSync('player-bingo-birth-year-full/installed-after.json',JSON.stringify(after));
+          fs.writeFileSync('player-bingo-birth-year-full/browser-package.json',JSON.stringify({
+            version:pw.version,target,coreVersion:core.version,coreTarget,coreEntry,sharedOfflineGuardResolution:true,
+          }));
+          NODE
+      - name: All required built readers and existing source fences
+        if: ${{ !cancelled() && steps.build.outcome == 'success' && steps.browser_setup.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          git fetch --no-tags --depth=1 origin "$SEO_SPLIT_BASE_REF"
+          export ONLY="simAdsense,simBrand,simHeadTags,simHiddenPages,simHubs,simIndexNow,simIndexing,simInternalLinks,simNoRivalNames,simPrerender,simPrerenderBoot,simRetiredRoutes,simSchema,simSitemap,simSnapshotAssets,simSiteSearch,simGuideHeadings,simSeoMetaSplit,simHomeCopy,simHarnessAnchors"
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/runAllSims.mjs --browser 2>&1 | tee player-bingo-birth-year-full/readers.log
+      - name: All original route download limits
+        if: ${{ !cancelled() && steps.build.outcome == 'success' && steps.browser_setup.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          test ! -s "$SIM_OFFLINE_RECEIPT"
+          test ! -e "$EVIDENCE/weight-asset-blocks.jsonl"
+          touch "$EVIDENCE/weight-asset-blocks.jsonl"
+          owned_weight="$PWD/$(mktemp --suffix=.mjs scripts/.bingo-sweepWeight.XXXXXX)"
+          weight_host_pid=''
+          cleanup_weight() {
+            if test -n "$weight_host_pid"; then
+              kill "$weight_host_pid" 2>/dev/null || true
+              wait "$weight_host_pid" 2>/dev/null || true
+            fi
+            rm -f -- "$owned_weight"
+          }
+          trap cleanup_weight EXIT
+          node --input-type=module - "$owned_weight" <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          import path from 'node:path';
+          import { createHash } from 'node:crypto';
+          import { execFileSync } from 'node:child_process';
+
+          const spec={"file":"scripts/sweepWeight.mjs","blob":"5a92a68cc0225d5e633c19e041087e7c6c4254e8","bytes":104848,"sha256":"afdd281ce2984ca34158194a0d6102bd053f2f8d242bc844c19f8f536b08d627","changedBytes":105985,"changedSHA256":"b7edf531df56816d5b5103f4c08686790f083b4940f6c6abf7664dc3108de8b6","changedBlob":"2375a75116c540fde0fdd94c3cee074968905b47","anchorOffset":90355,"anchor":"  if (process.env.SWEEP_OFFLINE === '1') await ctx.route(/supabase\\.co/, r => r.abort());","change":"  if (process.env.SWEEP_OFFLINE === '1') {\n    await ctx.route(/supabase\\.co/, r => r.abort());\n    await ctx.route(url => url.origin === 'https://fonts.googleapis.com' || url.origin === 'https://flagcdn.com', async r => {\n      const request = r.request();\n      const url = new URL(request.url());\n      const type = request.resourceType();\n      const fonts = url.origin === 'https://fonts.googleapis.com' && url.pathname === '/css2' &&\n        JSON.stringify([...url.searchParams]) === JSON.stringify([\n          ['family', 'Space Grotesk:wght@400;500;600;700'],\n          ['family', 'Inter:wght@400;500;600;700'],\n          ['display', 'swap'],\n        ]) && type === 'stylesheet';\n      const flag = url.origin === 'https://flagcdn.com' &&\n        /^\\/w(?:20|40|80|160|320)\\/[a-z]{2}(?:-[a-z]{3})?\\.png$/.test(url.pathname) &&\n        !url.search && type === 'image';\n      if (request.method() !== 'GET' || (!fonts && !flag)) return r.fallback();\n      await r.abort('blockedbyclient');\n      fs.appendFileSync(process.env.PLAYER_BINGO_WEIGHT_ASSET_RECEIPT, JSON.stringify({\n        route, url: url.href, method: request.method(), resourceType: type, disposition: 'aborted-before-network',\n      }) + '\\n');\n    });\n  }"};
+          const [target]=process.argv.slice(2),out=process.env.EVIDENCE;
+          const src=fs.readFileSync(spec.file);
+          const sha=(algorithm,bytes)=>createHash(algorithm).update(bytes).digest('hex');
+          const blob=bytes=>sha('sha1',Buffer.concat([Buffer.from('blob '+bytes.length+'\0'),bytes]));
+          assert.equal(path.dirname(target),path.resolve('scripts'));
+          assert.match(path.basename(target),/^\.bingo-sweepWeight\.[A-Za-z0-9]+\.mjs$/);
+          assert(fs.lstatSync(target).isFile()&&fs.statSync(target).size===0);
+          assert.deepEqual([src.length,sha('sha256',src),blob(src)],[spec.bytes,spec.sha256,spec.blob]);
+          assert.equal(execFileSync('git',['rev-parse','HEAD:'+spec.file],{encoding:'utf8'}).trim(),spec.blob);
+          const original=src.toString('utf8');
+          assert.equal(original.split(spec.anchor).length,2);
+          assert.equal(Buffer.byteLength(original.slice(0,original.indexOf(spec.anchor))),spec.anchorOffset);
+          const changed=original.replace(spec.anchor,spec.change);
+          assert.equal(changed.split(spec.change).length,2);
+          assert.equal(changed.replace(spec.change,spec.anchor),original);
+          const prepared=Buffer.from(changed);
+          assert.deepEqual([prepared.length,sha('sha256',prepared),blob(prepared)],[spec.changedBytes,spec.changedSHA256,spec.changedBlob]);
+          fs.writeFileSync(target,prepared);
+          fs.writeFileSync(out+'/weight-source-proof.json',JSON.stringify({
+            status:'passed',file:spec.file,blob:spec.blob,bytes:spec.bytes,sha256:spec.sha256,
+            changedBlob:spec.changedBlob,changedBytes:spec.changedBytes,changedSHA256:spec.changedSHA256,
+            anchorOffset:spec.anchorOffset,anchorBytes:Buffer.byteLength(spec.anchor),replacementBytes:Buffer.byteLength(spec.change),
+            exactWholeInverse:true,trackedSourceChanged:false,temporarySibling:true,
+          },null,2)+'\n',{flag:'wx'});
+          NODE
+          node scripts/lib/hostLikeServer.mjs dist 4173 > "$EVIDENCE/weight-host.log" 2>&1 &
+          weight_host_pid=$!
+          weight_ready=0
+          for attempt in $(seq 1 40); do
+            kill -0 "$weight_host_pid"
+            if curl --noproxy '*' --silent --fail --max-time 1 http://127.0.0.1:4173/ -o /dev/null; then
+              weight_ready=1
+              break
+            fi
+            sleep 0.25
+          done
+          test "$weight_ready" -eq 1
+          PLAYER_BINGO_WEIGHT_ASSET_RECEIPT="$PWD/$EVIDENCE/weight-asset-blocks.jsonl" SWEEP_OFFLINE=1 \
+            BASE=http://127.0.0.1:4173 NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" \
+            node "$owned_weight" 2>&1 | tee "$EVIDENCE/weight.log"
+          test ! -s "$SIM_OFFLINE_RECEIPT"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+
+          const out=process.env.EVIDENCE;
+          const raw=fs.readFileSync(out+'/weight-asset-blocks.jsonl','utf8');
+          assert(raw.endsWith('\n'));
+          const records=raw.trimEnd().split('\n').map(line=>JSON.parse(line));
+          const log=fs.readFileSync(out+'/weight.log','utf8');
+          const caps=log.split('\n').map(line=>/^\s+(\/\S*)\s+\d+K gz over/.exec(line)?.[1]).filter(Boolean);
+          assert.equal(caps.length,16);
+          const fonts=new Set();
+          let flags=0;
+          for(const item of records){
+            const url=new URL(item.url);
+            assert(caps.includes(item.route));
+            assert.deepEqual([item.method,item.disposition],['GET','aborted-before-network']);
+            if(url.origin==='https://fonts.googleapis.com'){
+              assert.deepEqual([item.resourceType,url.pathname,[...url.searchParams]],['stylesheet','/css2',[
+                ['family','Space Grotesk:wght@400;500;600;700'],
+                ['family','Inter:wght@400;500;600;700'],
+                ['display','swap'],
+              ]]);
+              fonts.add(item.route);
+            }else{
+              assert.deepEqual([item.resourceType,url.origin,url.search],['image','https://flagcdn.com','']);
+              assert.match(url.pathname,/^\/w(?:20|40|80|160|320)\/[a-z]{2}(?:-[a-z]{3})?\.png$/);
+              flags++;
+            }
+          }
+          assert.deepEqual([...fonts].sort(),[...caps].sort());
+          assert(flags>0,'At least one exact Flagcdn image intercepted');
+          console.log('PASS explicit offline weight asset blocks across all 16 budget routes');
+          NODE
+      - name: Actual native Player Bingo birth-year placement journeys
+        id: native
+        timeout-minutes: 15
+        if: ${{ !cancelled() && steps.build.outcome == 'success' && steps.browser_setup.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          test ! -e "$EVIDENCE/browser"
+          test ! -e "$EVIDENCE/browser.transport.log"
+          touch "$EVIDENCE/browser.transport.log"
+          native_base=http://127.0.0.1:4174
+          node scripts/lib/hostLikeServer.mjs dist 4174 > "$EVIDENCE/browser-host.log" 2>&1 &
+          native_host_pid=$!
+          stop_native_host() {
+            kill "$native_host_pid" 2>/dev/null || true
+            wait "$native_host_pid" 2>/dev/null || true
+          }
+          trap stop_native_host EXIT
+          native_ready=0
+          for attempt in $(seq 1 40); do
+            kill -0 "$native_host_pid"
+            if curl --noproxy '*' --silent --fail --max-time 1 "$native_base/" -o /dev/null; then
+              native_ready=1
+              break
+            fi
+            sleep 0.25
+          done
+          test "$native_ready" -eq 1
+          native_exit=0
+          CI=1 SIM_NETWORK=offline BASE="$native_base" PLAYER_BINGO_BIRTH_YEAR_BROWSER_OUT="$PWD/$EVIDENCE/browser" \
+            SIM_OFFLINE_RECEIPT="$PWD/$EVIDENCE/browser.transport.log" \
+            NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" \
+            node scripts/qa/playPlayerBingoBirthYear.mjs > "$EVIDENCE/browser.log" 2>&1 || native_exit=$?
+          printf '%s\n' "$native_exit" > "$EVIDENCE/browser-exit.txt"
+          cat "$EVIDENCE/browser.log"
+          test "$native_exit" -eq 0
+          test ! -s "$EVIDENCE/browser.transport.log"
+      - name: Admit exact Player Bingo native journeys and production files
+        run: |
+          set -euo pipefail
+          cat > "$EVIDENCE/native-consumer.mjs" <<'BINGO_NATIVE_READER'
+          import assert from 'node:assert/strict';
+          import { createHash } from 'node:crypto';
+          import { readFileSync, readdirSync, statSync } from 'node:fs';
+          import path from 'node:path';
+          
+          const [out, stdout, transport, exit, helper] = process.argv.slice(2);
+          assert(out && stdout && transport && helper && process.argv.length === 7);
+          assert.equal(exit, '0');
+          const helperSHA256 = 'd14a8107d016c2c6bb138a776196b46f3a89388f1deda05b74bd6e74e1095d1c';
+          const sha = bytes => createHash('sha256').update(bytes).digest('hex');
+          assert.equal(sha(readFileSync(helper)), helperSHA256);
+          assert.equal(statSync(transport).size, 0);
+          assert.equal(readFileSync(stdout, 'utf8').trimEnd().split(/\r?\n/).at(-1), 'PASS Player Bingo native birth-year board and placement');
+          
+          const viewports = [[320, 780], [390, 844], [1280, 900]];
+          const labels = { older: 'Born 1997 to 1999', newer: 'Born 2000 to 2003' };
+          const ageLabels = ['Born 1996 or earlier', labels.older, labels.newer, 'Born 2004 or later'];
+          const cohortRules = [
+            ['jan1-correct', '2000-01-01', '2000-01-01', 'primary', 'newer', 'newer', true],
+            ['jan27-adjacent', null, '2000-01-27', 'primary', 'newer', 'older', false],
+            ['dec31-correct', null, '1999-12-31', 'primary', 'older', 'older', true],
+            ['wrong-country-fallback', null, '2000-01-27', 'secondary', 'older', 'older', true],
+            ['conflict-fallback', '2000-01-27', '1999-12-31', 'primary', 'older', 'older', true],
+            ['invalid-fallback', null, '2000-02-30', 'primary', 'older', 'older', true],
+            ['implausible-fallback', null, '2004-01-01', 'primary', 'older', 'older', true],
+            ['legacy-fallback', null, null, 'primary', 'older', 'older', true],
+          ];
+          const ids = viewports.flatMap(([width]) => cohortRules.map(([id]) => width + '-' + id));
+          const route = 'http://127.0.0.1:4174/player-bingo';
+          const document = { url: route, method: 'GET', resourceType: 'document', navigationRequest: true, mainFrame: true, redirectedFrom: null };
+          const heldBodies = [];
+          function read(name, ref) {
+            const file = path.join(out, name);
+            const stat = statSync(file);
+            assert(stat.isFile() && stat.size > 0);
+            const bytes = readFileSync(file);
+            const tuple = { file: name, bytes: bytes.length, sha256: sha(bytes) };
+            if (ref) assert.deepEqual(ref, tuple);
+            heldBodies.push(tuple);
+            return bytes;
+          }
+          function png(name, ref) {
+            const bytes = read(name, ref);
+            assert.equal(bytes.subarray(0, 8).toString('hex'), '89504e470d0a1a0a');
+            assert.equal(bytes.subarray(12, 16).toString(), 'IHDR');
+            assert.equal(bytes.subarray(-8, -4).toString(), 'IEND');
+            assert(bytes.readUInt32BE(16) > 0 && bytes.readUInt32BE(20) > 0);
+          }
+          
+          const reportBody = read('report.json');
+          const report = JSON.parse(reportBody);
+          assert.deepEqual([report.schema, report.status, report.route, report.error], ['player-bingo-birth-year-native-v1', 'passed', route, undefined]);
+          assert.deepEqual(report.cases.map(row => row.id), ids);
+          const { distFile, ...builtRef } = report.builtDocument;
+          assert.equal(distFile, 'dist/player-bingo/index.html');
+          const built = read('built-document.html', builtRef);
+          assert(built.equals(readFileSync(distFile)), 'Exact direct document evidence equals the held build');
+          const builtText = built.toString('utf8');
+          assert.match(builtText, /<div id="dukb-snapshot">/);
+          assert.match(builtText, /<link rel="canonical" href="https:\/\/douknowball\.com\/player-bingo"/);
+          const fixture = JSON.parse(read('fictional-fixture.json', report.fictionalFixture));
+          assert.equal(fixture.schema, 'player-bingo-birth-year-native-fixture-v1');
+          assert.deepEqual(fixture.ages, { year: 2026, target: [0, 239], stableOlder: [240, 369],
+            stableNewer: [370, 499], targetAge: 26, olderAge: 26, newerAge: 25 });
+          assert.deepEqual(fixture.labels, labels);
+          assert.deepEqual(fixture.ageLabels, ageLabels);
+          const market = fixture.market;
+          assert.equal(market.length, 500);
+          const marketByName = new Map();
+          for (const [i, row] of market.entries()) {
+            const name = 'FixtureBingo' + String(i).padStart(3, '0');
+            assert.deepEqual([row.id, row.player_name, row.age, row.year], [i + 1, name, i < 370 ? 26 : 25, 2026]);
+            assert.equal(row.nationality.endsWith(' / Fictional Secondary'), i < 240);
+            assert(row.position && row.club && row.market_value_usd > 0);
+            marketByName.set(name, row);
+          }
+          assert.equal(marketByName.size, 500);
+          assert.equal(fixture.cohorts.length, cohortRules.length);
+          const primary = nationality => nationality.split('/')[0].trim().toLowerCase();
+          const neutral = i => ({ id: i + 1, player_name: 'Fictional squad filler ' + i,
+            world_cup_year: 2018, nationality: 'Fixture Nation', date_of_birth: null });
+          for (const [i, [id, firstDate, secondDate, country, band, tap, locks]] of cohortRules.entries()) {
+            const cohort = fixture.cohorts[i];
+            const { squadRows, ...metadata } = cohort;
+            assert.deepEqual(metadata, { id, firstDate, secondDate, country, band, tap, locks });
+            assert.equal(squadRows.length, 1001 + (secondDate ? 240 : 0));
+            for (const [index, row] of squadRows.entries()) {
+              const first = index < 1000;
+              const relative = first ? index : index - 1000;
+              const date = first ? firstDate : secondDate;
+              if (!date || relative >= 240) {
+                assert.deepEqual(row, neutral(index));
+              } else {
+                const player = market[relative];
+                assert.deepEqual(row, { id: index + 1, player_name: ' ' + player.player_name.toLowerCase() + ' ',
+                  world_cup_year: first ? 2022 : 2018,
+                  nationality: country === 'secondary' ? 'Fictional Secondary' : player.nationality.split('/')[0].toLowerCase(),
+                  date_of_birth: date });
+              }
+            }
+          }
+          const marketColumns = {
+            seed: ['player_name'],
+            latest: ['player_name','nationality','position','club','market_value_usd','age','year'],
+            history: ['player_name','nationality','position','club','year','age','market_value_usd','goals','assists','matches','yellow_cards','red_cards'],
+          };
+          const squadColumns = ['player_name','world_cup_year','nationality','date_of_birth'];
+          const seeded = [...market].sort((a, b) => b.market_value_usd - a.market_value_usd);
+          const hashProjected = (rows, columns) => {
+            const body = JSON.stringify(rows.map(row => Object.fromEntries(columns.map(column => {
+              assert(Object.hasOwn(row, column));
+              return [column, row[column]];
+            }))));
+            return [rows.length, Buffer.byteLength(body), sha(body)];
+          };
+          const nonces = new Set();
+          const totals = { cases: 0, documents: 0, fixtureGets: 0, squadPages: 0, locks: 0, adjacentRejections: 0, pngs: 0 };
+          for (const [index, row] of report.cases.entries()) {
+            const [width, height] = viewports[Math.floor(index / cohortRules.length)];
+            const seed = index % cohortRules.length + 1;
+            const { id, band, tap, locks, squadRows, country } = fixture.cohorts[seed - 1];
+            const caseId = ids[index];
+            assert.deepEqual([row.id, row.width, row.height, row.touch, row.journey, row.seed, row.status, row.error],
+              [caseId, width, height, width <= 390, id, seed, 'passed', undefined]);
+            assert.deepEqual([row.documents, row.documentInterceptions, row.routeErrors, row.pageErrors], [[document], [document], [], []]);
+            assert.deepEqual(row.served, { url: route, status: 200, request: document,
+              redirectedTo: null, location: null, contentType: 'text/html; charset=utf-8', ...builtRef });
+            assert(['rejected','absent'].includes(row.consent));
+            assert(row.frameEvents.every(url => typeof url === 'string'));
+            const nonce = row.mount.nonce;
+            assert(/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/.test(nonce) && !nonces.has(nonce));
+            nonces.add(nonce);
+            for (const state of [row.mount, row.before.state, row.after.state]) {
+              assert.deepEqual([state.nonce, state.url], [nonce, route]);
+              assert.equal(state.viewport.length, 2);
+              assert(state.viewport.every(size => Number.isSafeInteger(size) && size > 0));
+              assert(state.scrollWidth > 0);
+            }
+            assert.equal(row.board.length, 24);
+            assert.equal(new Set(row.board.map(item => item.title)).size, 24);
+            assert(row.board.every(item => item.title && item.title === item.label));
+            assert.deepEqual(row.board.map(item => item.title).filter(title => ageLabels.includes(title)).sort(), [labels.older, labels.newer].sort());
+            const marketRow = marketByName.get(row.target.name);
+            assert(marketRow && marketRow.id <= 240);
+            assert.equal(new Set(row.skipped).size, row.skipped.length);
+            assert(row.skipped.length <= 260 && row.skipped.every(name => marketByName.get(name)?.id > 240));
+            const targetSquad = squadRows.filter(item => item.player_name.trim() === row.target.name.toLowerCase());
+            assert.deepEqual(row.target, { name: row.target.name, market: marketRow, squads: targetSquad, expectedBand: labels[band] });
+            assert(targetSquad.every(item => primary(item.nationality) === (country === 'secondary' ? 'fictional secondary' : primary(marketRow.nationality))));
+            assert.deepEqual(row.fixtureExpectedSupport, { [labels.older]: band === 'older' ? 370 : 130, [labels.newer]: band === 'newer' ? 370 : 130 });
+            const next = row.placement.next;
+            assert(marketByName.has(next) && next !== row.target.name && !row.skipped.includes(next));
+            assert.deepEqual(row.placement, { label: labels[tap], expectedLock: locks, locked: locks, nameInTile: Number(locks), next });
+            assert.deepEqual([row.before.strikes, row.after.strikes], ['0 of 3 strikes used', locks ? '0 of 3 strikes used' : '1 of 3 strikes used']);
+            png(caseId + '-before.png', row.before.screenshot);
+            png(caseId + '-after.png', row.after.screenshot);
+            assert(row.forwardedLoopbackReads > 0);
+            assert(row.preflights.every(table => ['player_market_values','world_cup_players','ballon_dor'].includes(table)));
+            assert(row.blocked.every(item => item.origin !== 'http://127.0.0.1:4174' || !['GET','HEAD'].includes(item.method)));
+            assert.equal(row.fixtureReads.length, 24);
+            assert(row.fixtureReads.every(read => read.method === 'GET'));
+            const marketReads = row.fixtureReads.filter(read => read.table === 'player_market_values');
+            for (const [kind, count] of [['seed',1],['latest',13],['history',7]]) {
+              const reads = marketReads.filter(read => read.kind === kind);
+              assert.equal(reads.length, count);
+              if (kind !== 'seed') assert.deepEqual(reads.flatMap(read => read.selected).sort(), [...marketByName.keys()].sort());
+              for (const read of reads) {
+                assert.deepEqual([read.columns, read.offset, read.limit], [marketColumns[kind], 0, 1000]);
+                const selected = new Set(read.selected);
+                const rows = kind === 'seed' ? seeded : market.filter(row => selected.has(row.player_name));
+                assert.deepEqual([read.rows, read.bytes, read.sha256], hashProjected(rows, read.columns));
+              }
+            }
+            const pages = row.fixtureReads.filter(read => read.table === 'world_cup_players');
+            assert.deepEqual(pages.map(read => [read.columns, read.offset, read.limit]), [[squadColumns,0,1000],[squadColumns,1000,1000]]);
+            assert.equal(row.squadProjection, squadColumns.join(','));
+            for (const read of pages) {
+              assert.deepEqual([read.rows, read.bytes, read.sha256], hashProjected(squadRows.slice(read.offset, read.offset + read.limit), squadColumns));
+            }
+            const award = row.fixtureReads.filter(read => read.table === 'ballon_dor');
+            assert.equal(award.length, 1);
+            assert.deepEqual([award[0].columns, award[0].rows, award[0].bytes, award[0].sha256], [
+              ['player_name','rank','award_type'],0,2,sha('[]'),
+            ]);
+            totals.cases++;
+            totals.documents += row.documents.length;
+            totals.fixtureGets += row.fixtureReads.length;
+            totals.squadPages += pages.length;
+            totals.locks += Number(locks);
+            totals.adjacentRejections += Number(!locks);
+            totals.pngs += 2;
+          }
+          assert.equal(nonces.size, 24);
+          assert.deepEqual(totals, { cases: 24, documents: 24, fixtureGets: 576, squadPages: 48, locks: 21, adjacentRejections: 3, pngs: 48 });
+          assert.deepEqual(report.totals, totals);
+          assert.equal(heldBodies.length, 51);
+          assert.deepEqual(readdirSync(out).sort(), heldBodies.map(row => row.file).sort());
+          console.log(JSON.stringify({ status: 'passed', schema: 'player-bingo-birth-year-native-admission-v1',
+            helperSHA256, reportSHA256: sha(reportBody), builtDocument: report.builtDocument, fictionalFixture: report.fictionalFixture,
+            route, cases: ids, totals, heldBodies, offlineBytes: 0 }));
+          BINGO_NATIVE_READER
+          printf '%s  %s\n' '8c178a120ca4ca8e2286a1a4cf3e3212fb797c0c41ef1abc6c4ae1a782ac5a47' "$EVIDENCE/native-consumer.mjs" | sha256sum -c -
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node "$EVIDENCE/native-consumer.mjs" \
+            "$EVIDENCE/browser" "$EVIDENCE/browser.log" "$EVIDENCE/browser.transport.log" \
+            "$(cat "$EVIDENCE/browser-exit.txt")" scripts/qa/playPlayerBingoBirthYear.mjs > "$EVIDENCE/native-admission.json"
+          sha256sum -c "$EVIDENCE/dist.sha256"
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node --input-type=module <<'NODE'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          import { createHash } from 'node:crypto';
+
+          const out=process.env.EVIDENCE;
+          const read=file=>fs.readFileSync(out+'/'+file);
+          const json=file=>JSON.parse(read(file));
+          const sha=bytes=>createHash('sha256').update(bytes).digest('hex');
+          const src=json('source-join.json'),unit=json('unit-admission.json'),refs=json('packet-custody.json'),native=json('native-admission.json');
+          const route=json('active-route-preflight.json');
+          assert.deepEqual([src.status,route.status,unit.status,refs.status,native.status],
+            Array(5).fill('passed'));
+          assert.deepEqual([route.route,route.component,route.catalogCategory,route.snapshot.canonical],
+            ['/player-bingo','PlayerBingo','Soccer','https://douknowball.com/player-bingo']);
+          assert.deepEqual([unit.total,unit.passes,unit.failed],[23,23,0]);
+          assert.deepEqual([unit.rawBytes,unit.rawSHA256],[2174,'5747e56b6b64e3c06801475aac72e24d69d2aa43a44d00f9e840b4c2d7925ba0']);
+          assert.equal(src.head,process.env.GITHUB_SHA);
+          assert.equal(src.head,read('head.txt').toString().trim());
+          assert.equal(src.tree,read('tree.txt').toString().trim());
+          assert.match(src.head,/^[a-f0-9]{40}$/);
+          assert.match(src.tree,/^[a-f0-9]{40}$/);
+          assert.equal(src.helperBlob,process.env.BINGO_NATIVE_HELPER_BLOB);
+          assert.equal(native.schema,'player-bingo-birth-year-native-admission-v1');
+          assert.equal(native.helperSHA256,process.env.BINGO_NATIVE_HELPER_SHA256);
+          assert.equal(native.route,'http://127.0.0.1:4174/player-bingo');
+          assert.equal(native.cases.length,24);
+          assert.equal(native.heldBodies.length,51);
+          assert.equal(native.offlineBytes,0);
+          assert.deepEqual(native.totals,{cases:24,documents:24,fixtureGets:576,squadPages:48,locks:21,adjacentRejections:3,pngs:48});
+          assert.equal(fs.statSync(process.env.SIM_OFFLINE_RECEIPT).size,0);
+
+          const readers=read('readers.log').toString(),weight=read('weight.log').toString();
+          assert(readers.includes('All 20 harnesses green.'));
+          assert(weight.includes('sweepWeight: green.'));
+          const capRows=weight.split('\n').filter(line=>/^\s+\/\S*\s+\d+K gz over/.test(line));
+          assert.equal(capRows.length,16);
+
+          function distPaths(directory) {
+            return fs.readdirSync(directory,{withFileTypes:true}).flatMap(entry=>{
+              const file=directory+'/'+entry.name;
+              if(entry.isDirectory())return distPaths(file);
+              assert(entry.isFile(),'Regular production build file required');
+              return [file];
+            });
+          }
+          const toTuple=file=>{
+            const bytes=fs.readFileSync(file);
+            return {file,bytes:bytes.length,sha256:sha(bytes)};
+          };
+          const byPath=(a,b)=>a.file.localeCompare(b.file);
+          const before=json('dist-before.json').sort(byPath);
+          const after=distPaths('dist').map(toTuple).sort(byPath);
+          assert.equal(before.length,850);
+          assert.equal(new Set(before.map(row=>row.file)).size,850);
+          assert.deepEqual(after,before);
+          const served=after.find(row=>row.file==='dist/player-bingo/index.html');
+          assert(served);
+          assert.deepEqual(native.builtDocument,{distFile:served.file,file:'built-document.html',bytes:served.bytes,sha256:served.sha256});
+          const distLedger=Buffer.from(JSON.stringify(after));
+          fs.writeFileSync(out+'/dist-after.json',distLedger);
+
+          const tar=read('dist.tgz'),distTar={bytes:tar.length,sha256:sha(tar)};
+          assert(tar.length>0);
+          assert.equal(read('dist.sha256').toString().trim(),distTar.sha256+'  '+out+'/dist.tgz');
+          const admission={
+            status:'passed',head:src.head,tree:src.tree,readers:20,immutableCaps:16,capRows,
+            distFiles:850,distTar,distTupleSHA256:sha(distLedger),unit,native,controlsRerun:false,
+          };
+          fs.writeFileSync(out+'/admission.json',JSON.stringify(admission,null,2)+'\n');
+          console.log('PASS exact Player Bingo birth-year native journeys and held production files');
+          NODE
       - name: Verify unchanged physical source and locked offline run
         if: always()
         run: |
@@ -370,7 +790,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: player-bingo-birth-year-controls-${{ github.run_id }}
-          path: player-bingo-birth-year-controls
-          retention-days: 14
+          name: player-bingo-birth-year-full-${{ github.run_id }}
+          path: player-bingo-birth-year-full
           if-no-files-found: error
+          retention-days: 30
