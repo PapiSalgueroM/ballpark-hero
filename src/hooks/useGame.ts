@@ -168,6 +168,12 @@ export function useGame() {
   // that on refresh the hook restores the correct 'lost' state.
   const effectiveDailyStatus: 'playing' | 'won' | 'lost' = forfeited ? 'lost' : rawDailyStatus;
 
+  // Wait for the Daily hook to restore progress for the resolved pool before opening a saved practice puzzle.
+  const [practiceDailyReady, setPracticeDailyReady] = useState(false);
+  useEffect(() => {
+    if (!isLoadingPool && !isLoading) setPracticeDailyReady(true);
+  }, [isLoadingPool, isLoading]);
+
   // Each Unlimited tier keeps its own frozen puzzle and answer deck.
   const difficulty = unlimitedSession.tier;
   const [practiceDifficulty, setPracticeDifficulty] = useState<Difficulty>(() => practiceRun?.tier ?? 'easy');
@@ -187,7 +193,13 @@ export function useGame() {
     : [], [unlimitedDeck, unlimitedTarget]);
   const unlimitedStatus = unlimitedPaused ? 'playing' : unlimitedDeck?.current.status ?? 'playing';
   const practiceRound = practiceRun?.rounds[practiceRun.index];
-  const practiceTarget = practiceRun?.pool.find(player => player.name === practiceRun.targets[practiceRun.index]) ?? null;
+  const savedPracticeTarget = practiceRun?.pool.find(player => player.name === practiceRun.targets[practiceRun.index]) ?? null;
+  let practiceBlock: 'loading' | 'daily' | null = null;
+  if (savedPracticeTarget && practiceRound?.status === 'playing') {
+    if (!practiceDailyReady || !dailyTarget) practiceBlock = 'loading';
+    else if (effectiveDailyStatus === 'playing' && normalizeName(savedPracticeTarget.name) === normalizeName(dailyTarget.name)) practiceBlock = 'daily';
+  }
+  const practiceTarget = practiceBlock ? null : savedPracticeTarget;
   const practiceGuesses = useMemo(() => practiceRun && practiceTarget
     ? practiceRun.rounds[practiceRun.index].guesses.map(name => compareGuess(practiceRun.pool.find(player => player.name === name)!, practiceTarget))
     : [], [practiceRun, practiceTarget]);
@@ -226,7 +238,7 @@ export function useGame() {
   const makeGuess = useCallback((player: Player) => {
     if (mode === 'practice') {
       const run = practiceRef.current;
-      if (run) savePractice(guessPractice(run, player.name));
+      if (run && targetPlayer) savePractice(guessPractice(run, player.name));
       return;
     }
     if (gameStatus !== 'playing' || !targetPlayer) return;
@@ -242,7 +254,7 @@ export function useGame() {
   const giveUp = useCallback(() => {
     if (mode === 'practice') {
       const run = practiceRef.current;
-      if (run) savePractice(giveUpPractice(run));
+      if (run && targetPlayer) savePractice(giveUpPractice(run));
       return;
     }
     if (gameStatus !== 'playing' || (mode === 'unlimited' && (!unlimitedTarget || isLoadingPool))) return;
@@ -266,7 +278,7 @@ export function useGame() {
     } else {
       saveUnlimited(giveUpUnlimited(unlimitedRef.current));
     }
-  }, [mode, gameStatus, todayStr, dailyPuzzleIndex, dailyGuesses, savePractice, saveUnlimited, unlimitedTarget, isLoadingPool]);
+  }, [mode, gameStatus, targetPlayer, todayStr, dailyPuzzleIndex, dailyGuesses, savePractice, saveUnlimited, unlimitedTarget, isLoadingPool]);
 
   const resetGame = useCallback(() => {
     if (mode === 'practice' || isLoadingPool) return;
@@ -347,6 +359,7 @@ export function useGame() {
     isLoading: mode === 'daily' ? isLoading : mode === 'unlimited' && isLoadingPool,
     isLoadingPool,
     practiceRun,
+    ...(practiceBlock ? { practiceBlock } : {}),
     practiceSaveFailed,
     startPractice,
     advancePractice,

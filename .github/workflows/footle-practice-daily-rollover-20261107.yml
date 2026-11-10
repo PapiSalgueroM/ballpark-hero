@@ -1,0 +1,357 @@
+name: Footle saved practice Daily rollover clean source and build join
+on:
+  push:
+    branches: [codex/footle-practice-daily-rollover-clean-join-qa-20261107]
+permissions:
+  contents: read
+  actions: read
+jobs:
+  closeout:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        shell: bash
+    env:
+      SIM_NETWORK: offline
+      SIM_OFFLINE_RECEIPT: footle-practice-daily-rollover-clean-join/offline.log
+      FOOTLE_PRACTICE_ROLLOVER_REFERENCE_ARTIFACT: '13739938588'
+      FOOTLE_PRACTICE_ROLLOVER_REFERENCE_RUN: '42767078265'
+      FOOTLE_PRACTICE_ROLLOVER_REFERENCE_ZIP: 'beaeb6f164ebe565d17813df13b64594b14e4b242739427680842276f3b5b7b3'
+      FOOTLE_PRACTICE_ROLLOVER_REFERENCE_TAR: '5972cd50a41a73152613458bf460b80ec3894411c98179a920ac38d086e02627'
+      FOOTLE_PRACTICE_ROLLOVER_REFERENCE_HEAD: '9b6a08170f71f54586f03a6151e7009e7f0aa0ef'
+      FOOTLE_PRACTICE_ROLLOVER_REFERENCE_TREE: 'cda3956599d51e0da2ef3939486a4a889af83324'
+      FOOTLE_PRACTICE_ROLLOVER_REFERENCE_ZIP_BYTES: '35608652'
+      FOOTLE_PRACTICE_ROLLOVER_NATIVE_HELPER: '9b999f66f519c5e23024d1ed0728b2184191eee3'
+      FOOTLE_PRACTICE_ROLLOVER_NATIVE_OUTER: '35a1de2327dccd5ecb8c2ecba149c312d112d701'
+      FOOTLE_PRACTICE_ROLLOVER_FIXED_PAGE_BLOB: 'fe0b9bd8896d6f8888b0bbd860cede4e0a2c304c'
+      FOOTLE_PRACTICE_ROLLOVER_FIXED_HOOK_BLOB: '17fc817ad6873a09a9bac08d01174a40687d6a8b'
+      FOOTLE_PRACTICE_ROLLOVER_QUALIFIED_PLAN_BLOB: '290b0e00efa1b56da3c609fc656f22214dbdb56e'
+      FOOTLE_PRACTICE_ROLLOVER_QUALIFIED_TEST_BLOB: '4b908897ce16248a3e5d3c723e6170b94394d580'
+      FOOTLE_PRACTICE_ROLLOVER_REFERENCE_DIST_MANIFEST: 'f905842ad0048ea7cede2344ad523a165b7b6fc1f5c9171b18b91e252aa565f3'
+      FOOTLE_PRACTICE_ROLLOVER_REFERENCE_WORKFLOW: '2f4099b892047568f32ac731fc68d75c644573c3'
+      FOOTLE_PRACTICE_ROLLOVER_CLEAN_PRODUCT_BASE: '15b74eb41d984a264c922356d02811f3dd37fef6'
+      FOOTLE_PRACTICE_ROLLOVER_CLEAN_PRODUCT_BASE_TREE: 'b53eb3efa411e58e5f68b462aeaba87440ce10f2'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 3
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24.22.1
+          cache: npm
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.4.4
+      - name: Locked dependencies and clean source receipts
+        run: |
+          set -euo pipefail
+          if grep -Eq '__[A-Z][A-Z0-9_]*__' .github/workflows/footle-practice-daily-rollover-20261107.yml; then echo 'Unresolved clean qualification template binding'; exit 1; fi
+          [[ "$FOOTLE_PRACTICE_ROLLOVER_REFERENCE_ARTIFACT" =~ ^[1-9][0-9]*$ ]]
+          [[ "$FOOTLE_PRACTICE_ROLLOVER_REFERENCE_RUN" =~ ^[1-9][0-9]*$ ]]
+          [[ "$FOOTLE_PRACTICE_ROLLOVER_REFERENCE_ZIP" =~ ^[a-f0-9]{64}$ ]]
+          [[ "$FOOTLE_PRACTICE_ROLLOVER_REFERENCE_TAR" =~ ^[a-f0-9]{64}$ ]]
+          [[ "$FOOTLE_PRACTICE_ROLLOVER_REFERENCE_ZIP_BYTES" =~ ^[1-9][0-9]*$ ]]
+          [[ "$FOOTLE_PRACTICE_ROLLOVER_REFERENCE_DIST_MANIFEST" =~ ^[a-f0-9]{64}$ ]]
+          for value in "$FOOTLE_PRACTICE_ROLLOVER_REFERENCE_HEAD" "$FOOTLE_PRACTICE_ROLLOVER_REFERENCE_TREE" "$FOOTLE_PRACTICE_ROLLOVER_NATIVE_HELPER" "$FOOTLE_PRACTICE_ROLLOVER_NATIVE_OUTER" "$FOOTLE_PRACTICE_ROLLOVER_REFERENCE_WORKFLOW" "$FOOTLE_PRACTICE_ROLLOVER_FIXED_PAGE_BLOB" "$FOOTLE_PRACTICE_ROLLOVER_FIXED_HOOK_BLOB" "$FOOTLE_PRACTICE_ROLLOVER_QUALIFIED_PLAN_BLOB" "$FOOTLE_PRACTICE_ROLLOVER_QUALIFIED_TEST_BLOB"; do [[ "$value" =~ ^[a-f0-9]{40}$ ]]; done
+          test ! -e footle-practice-daily-rollover-clean-join
+          mkdir footle-practice-daily-rollover-clean-join
+          touch footle-practice-daily-rollover-clean-join/offline.log
+          git rev-parse HEAD > footle-practice-daily-rollover-clean-join/head.txt
+          git rev-parse 'HEAD^{tree}' > footle-practice-daily-rollover-clean-join/tree.txt
+          git ls-files -s > footle-practice-daily-rollover-clean-join/source-before.txt
+          sha256sum package.json package-lock.json > footle-practice-daily-rollover-clean-join/locks-before.txt
+          npm ci
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const lock=JSON.parse(fs.readFileSync('package-lock.json'));
+          const rows=Object.keys(lock.packages).filter(p=>p.startsWith('node_modules/')&&fs.existsSync(p+'/package.json')).map(p=>[p,JSON.parse(fs.readFileSync(p+'/package.json')).version]);
+          assert.equal(rows.length,521);for(const[p,v]of rows)assert.equal(v,lock.packages[p].version,p);fs.writeFileSync('footle-practice-daily-rollover-clean-join/installed-before.json',JSON.stringify(rows));
+          NODE
+      - name: Proper app types
+        run: |
+          set -euo pipefail
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee footle-practice-daily-rollover-clean-join/types.log
+      - name: Authenticate the completed full reference before extraction
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          gh api "repos/PapiSalgueroM/ballpark-hero/actions/runs/$FOOTLE_PRACTICE_ROLLOVER_REFERENCE_RUN" > footle-practice-daily-rollover-clean-join/reference-run.json
+          gh api "repos/PapiSalgueroM/ballpark-hero/actions/artifacts/$FOOTLE_PRACTICE_ROLLOVER_REFERENCE_ARTIFACT" > footle-practice-daily-rollover-clean-join/reference-artifact.json
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          const env = process.env;
+          const read = file => JSON.parse(fs.readFileSync('footle-practice-daily-rollover-clean-join/' + file));
+          const run = read('reference-run.json'), artifact = read('reference-artifact.json');
+          assert.deepEqual(
+            [run.id, run.status, run.conclusion, run.event, run.path, run.repository.full_name, run.head_sha, run.head_commit.tree_id],
+            [Number(env.FOOTLE_PRACTICE_ROLLOVER_REFERENCE_RUN), 'completed', 'success', 'push', '.github/workflows/footle-practice-daily-rollover-20261107.yml', 'PapiSalgueroM/ballpark-hero', env.FOOTLE_PRACTICE_ROLLOVER_REFERENCE_HEAD, env.FOOTLE_PRACTICE_ROLLOVER_REFERENCE_TREE],
+          );
+          assert.deepEqual(
+            [artifact.id, artifact.name, artifact.expired, artifact.size_in_bytes, artifact.digest, artifact.workflow_run.id, artifact.workflow_run.head_sha],
+            [Number(env.FOOTLE_PRACTICE_ROLLOVER_REFERENCE_ARTIFACT), 'footle-practice-daily-rollover-full-' + run.id, false, Number(env.FOOTLE_PRACTICE_ROLLOVER_REFERENCE_ZIP_BYTES), 'sha256:' + env.FOOTLE_PRACTICE_ROLLOVER_REFERENCE_ZIP, run.id, run.head_sha],
+          );
+          NODE
+          gh api "repos/PapiSalgueroM/ballpark-hero/actions/artifacts/$FOOTLE_PRACTICE_ROLLOVER_REFERENCE_ARTIFACT/zip" > "$RUNNER_TEMP/footle-practice-daily-rollover-full-reference.zip"
+          test "$(wc -c < "$RUNNER_TEMP/footle-practice-daily-rollover-full-reference.zip")" -eq "$FOOTLE_PRACTICE_ROLLOVER_REFERENCE_ZIP_BYTES"
+          echo "$FOOTLE_PRACTICE_ROLLOVER_REFERENCE_ZIP  $RUNNER_TEMP/footle-practice-daily-rollover-full-reference.zip" | sha256sum --check
+          unzip -Z1 "$RUNNER_TEMP/footle-practice-daily-rollover-full-reference.zip" > footle-practice-daily-rollover-clean-join/reference-zip-entries.txt
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          const names = fs.readFileSync('footle-practice-daily-rollover-clean-join/reference-zip-entries.txt', 'utf8').trimEnd().split('\n');
+          assert.equal(new Set(names).size, names.length, 'Unique admitted ZIP paths');
+          for (const name of names) {
+            assert(name.length && !name.includes('\\') && !name.startsWith('/'), 'Relative ZIP path');
+            assert(name.replace(/\/$/, '').split('/').every(part => part && part !== '.' && part !== '..'), 'Safe ZIP path');
+          }
+          for (const file of ['head.txt', 'tree.txt', 'admission.json', 'unit-admission.json', 'native-admission.json', 'final-holds.json', 'source-before.txt', 'source-after.txt', 'dist-before.json', 'dist-after.json', 'dist.tgz']) {
+            assert(names.includes(file), file + ' required authenticated body');
+          }
+          NODE
+          mkdir "$RUNNER_TEMP/footle-practice-daily-rollover-full-reference" "$RUNNER_TEMP/footle-practice-daily-rollover-full-reference-dist"
+          unzip -q "$RUNNER_TEMP/footle-practice-daily-rollover-full-reference.zip" -d "$RUNNER_TEMP/footle-practice-daily-rollover-full-reference"
+          test -z "$(find "$RUNNER_TEMP/footle-practice-daily-rollover-full-reference" -type l -print -quit)"
+          echo "$FOOTLE_PRACTICE_ROLLOVER_REFERENCE_TAR  $RUNNER_TEMP/footle-practice-daily-rollover-full-reference/dist.tgz" | sha256sum --check
+          tar -tzf "$RUNNER_TEMP/footle-practice-daily-rollover-full-reference/dist.tgz" > footle-practice-daily-rollover-clean-join/reference-tar-entries.txt
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          const names = fs.readFileSync('footle-practice-daily-rollover-clean-join/reference-tar-entries.txt', 'utf8').trimEnd().split('\n');
+          assert.equal(new Set(names).size, names.length, 'Unique admitted dist tar paths');
+          for (const name of names) {
+            assert(name.startsWith('dist/') && !name.includes('\\'), 'Tar stays under dist');
+            assert(name.replace(/\/$/, '').split('/').every(part => part && part !== '.' && part !== '..'), 'Safe tar path');
+          }
+          NODE
+          tar -xzf "$RUNNER_TEMP/footle-practice-daily-rollover-full-reference/dist.tgz" -C "$RUNNER_TEMP/footle-practice-daily-rollover-full-reference-dist"
+          cp "$RUNNER_TEMP/footle-practice-daily-rollover-full-reference/source-before.txt" footle-practice-daily-rollover-clean-join/reference-source.txt
+      - name: Fresh unchanged product-name fence on clean source
+        run: |
+          set -euo pipefail
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simNoRivalNames.mjs 2>&1 | tee footle-practice-daily-rollover-clean-join/no-rival.log
+      - name: Clean production build
+        run: |
+          set -euo pipefail
+          NODE_OPTIONS="--max-old-space-size=6144" npm run build 2>&1 | tee footle-practice-daily-rollover-clean-join/build.log
+      - name: Join exact clean product source and all 850 built files
+        id: join
+        env:
+          FOOTLE_PRACTICE_ROLLOVER_REFERENCE_DIR: ${{ runner.temp }}/footle-practice-daily-rollover-full-reference
+          FOOTLE_PRACTICE_ROLLOVER_REFERENCE_DIST: ${{ runner.temp }}/footle-practice-daily-rollover-full-reference-dist/dist
+        run: |
+          set -euo pipefail
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import assert from 'node:assert/strict';
+          import {createHash} from 'node:crypto';
+          import {execFileSync} from 'node:child_process';
+          const env = process.env;
+          const out = 'footle-practice-daily-rollover-clean-join';
+          const ref = env.FOOTLE_PRACTICE_ROLLOVER_REFERENCE_DIR;
+          const read = file => JSON.parse(fs.readFileSync(path.join(ref, file)));
+          const bytes = file => fs.readFileSync(path.join(ref, file));
+          const readOutput = file => JSON.parse(fs.readFileSync(path.join(out, file)));
+          const sha = bytes => createHash('sha256').update(bytes).digest('hex');
+          const blob = bytes => createHash('sha1').update('blob ' + bytes.length + '\0').update(bytes).digest('hex');
+          const git = (...args) => execFileSync('git', args, {encoding:'utf8', maxBuffer:16 * 1024 * 1024});
+          const workflow = '.github/workflows/footle-practice-daily-rollover-20261107.yml';
+          const helper = 'scripts/qa/playFootlePracticeDailyRollover.mjs';
+          const page = 'src/pages/Footle.tsx', hook = 'src/hooks/useGame.ts';
+          const test = 'src/test/footlePracticeDailyRollover.test.tsx';
+          const plan = 'docs/plans/2026-11-07-footle-practice-daily-rollover.md';
+          const configs = ['index.html','package.json','package-lock.json','vite.config.ts','tailwind.config.ts','postcss.config.js','tsconfig.json','tsconfig.app.json','tsconfig.node.json','bun.lockb','bun.lock'];
+          const sourceScope = file => /^(?:src|public|scripts)\//.test(file);
+          const fullOnly = new Set([workflow, helper]);
+          const denied = ['scripts/qa/checkFootlePracticeDailyRollover.mjs','scripts/qa/admitFootlePracticeDailyRollover.mjs'];
+          const pins = {
+            [page]: env.FOOTLE_PRACTICE_ROLLOVER_FIXED_PAGE_BLOB,
+            [hook]: env.FOOTLE_PRACTICE_ROLLOVER_FIXED_HOOK_BLOB,
+            [test]: env.FOOTLE_PRACTICE_ROLLOVER_QUALIFIED_TEST_BLOB,
+            [plan]: env.FOOTLE_PRACTICE_ROLLOVER_QUALIFIED_PLAN_BLOB,
+            'src/App.tsx': '8bfedf7aaa1d076e0f0c8e2216c7e46632cd8a33',
+            'src/data/gameRegistry.ts': 'f560b40a74d1468ac72dfde4ee6fec6635a9a255',
+            'public/footle/index.html': 'a54dc5d7b9c7743ca4c45b13244b51a57597672e',
+            'src/hooks/useDailyPuzzle.ts': 'b8a0d6ba268efe0e728c4ee96fbc6c60fcc73846',
+            'src/lib/footlePracticeRun.ts': 'c6c75bbab082c801c631e355b02b900e15fff317',
+            'src/lib/footleUnlimitedSession.ts': '343550b40e3fd7181cc737d387275be944dab1d7',
+            'src/lib/fetchFootlePlayerPool.ts': '356adf65dd26f3a9e7001214bc1e194d7828d0dd',
+            'scripts/lib/offlineTransport.cjs': '0fda542a2649fe5da937c6976fd0f5b6073e74b6',
+            'src/test/footlePractice.test.tsx': '3ffdc6435cdee12f40691a14bd6538de447b7451',
+            'src/test/footleUnlimitedSession.test.tsx': '0fae6dbb1e548095e03478136d38f89490044aac',
+            'src/hooks/useGame.test.ts': '2d407fc5d35148a7f4566d4e5f333184c3618a39',
+            'src/lib/footlePracticeRun.test.ts': '65f80837ff75c72755f567e129bdc4b3ff799ae6',
+            'src/test/footleClueDesk.test.tsx': '0b03d36e35737572036846005d8b2cb9311b9b46',
+            'src/test/footleResultCurrency.test.tsx': '6b809bc195181952d5dc7f1a097abb52e9144ce8',
+            'src/lib/fetchFootlePlayerPool.test.ts': '16503ca35300b38d047a56b0c3a2e41fbe758dd0',
+            'src/lib/dateUtils.ts': '12c9de0ed37b0797492f3e936bcba70bdc03d585',
+            'src/components/game/PlayerSearch.tsx': '5a9be8e9b1adaf6b28deb0a9738430f284c1247b',
+            'src/components/game/GiveUpButton.tsx': '2462260a7b5f1d5d3b70915df2428d5d4397b0a0',
+            'src/test/fixtures/footlePracticePlayers.ts': '3a5ae57bf78e1bfe0e92059bfac1df73da871abd',
+            'vitest.config.ts': 'ed2a9dc677f77dfe95c061064eeff5782b856864',
+            'src/test/setup.ts': 'df00cdf5c54e8c8efc71e46d7585ae76acb4fc8d',
+            'src/data/seoMeta.ts': 'cf7a5142e59b97048d27b5ece9a6588a92073728',
+          };
+          const indexRows = (body, separator = '\n') => {
+            const rows = body.split(separator).filter(Boolean).map(line => {
+              const matched = /^(100(?:644|755)) ([0-9a-f]{40}) 0\t(.+)$/.exec(line);
+              assert(matched, 'Actual regular path/mode/blob index tuple');
+              return [matched[3], {mode:matched[1], blob:matched[2]}];
+            });
+            assert.equal(new Set(rows.map(([file]) => file)).size, rows.length, 'Unique index paths');
+            return new Map(rows);
+          };
+          const treeRows = commit => {
+            const rows = git('ls-tree', '-r', '-z', commit).split('\0').filter(Boolean).map(line => {
+              const matched = /^(100(?:644|755)) blob ([0-9a-f]{40})\t(.+)$/.exec(line);
+              assert(matched, 'Actual regular path/mode/blob tree tuple');
+              return [matched[3], {mode:matched[1], blob:matched[2]}];
+            });
+            assert.equal(new Set(rows.map(([file]) => file)).size, rows.length, 'Unique tree paths');
+            return new Map(rows);
+          };
+          const ordered = rows => [...rows].sort(([left],[right]) => left.localeCompare(right));
+          const cleanHead = git('rev-parse', 'HEAD').trim(), cleanTree = git('rev-parse', 'HEAD^{tree}').trim();
+          assert.deepEqual(git('rev-list', '--parents', '-n', '1', 'HEAD').trim().split(' '), [cleanHead, env.FOOTLE_PRACTICE_ROLLOVER_CLEAN_PRODUCT_BASE], 'Clean QA is the direct PR537 child');
+          assert.equal(git('rev-parse', env.FOOTLE_PRACTICE_ROLLOVER_CLEAN_PRODUCT_BASE + '^{tree}').trim(), env.FOOTLE_PRACTICE_ROLLOVER_CLEAN_PRODUCT_BASE_TREE);
+          assert.equal(fs.readFileSync(out + '/head.txt','utf8').trim(), cleanHead);
+          assert.equal(fs.readFileSync(out + '/tree.txt','utf8').trim(), cleanTree);
+          const base = treeRows(env.FOOTLE_PRACTICE_ROLLOVER_CLEAN_PRODUCT_BASE);
+          const current = indexRows(fs.readFileSync(out + '/source-before.txt', 'utf8'));
+          const old = indexRows(fs.readFileSync(out + '/reference-source.txt', 'utf8'));
+          assert.deepEqual(ordered(indexRows(git('ls-files','--stage','-z'),'\0')), ordered(current));
+          assert.deepEqual(ordered(treeRows(cleanHead)), ordered(current), 'Clean index joins exact committed tree tuples');
+          assert.deepEqual([base.size,current.size,old.size],[5791,5794,5795]);
+          const allowedClean = [page, hook, test, plan, workflow];
+          const cleanDelta = [...new Set([...base.keys(), ...current.keys()])].filter(file => {
+            const before = base.get(file), after = current.get(file);
+            return before?.mode !== after?.mode || before?.blob !== after?.blob;
+          }).sort();
+          assert.deepEqual(cleanDelta, [...allowedClean].sort(), 'Exactly two product source changes and three owned new leaves');
+          assert.deepEqual([base.get(page)?.blob,base.get(hook)?.blob], ['7e78c2ed9cc97f506f53a21d630c02f9adcf3e70','40c250b6ed1a21ee204270aebd437229fe937837']);
+          for (const file of [page,hook]) assert.equal(current.get(file)?.mode, base.get(file)?.mode);
+          for (const file of [test, plan, workflow]) assert(!base.has(file) && current.get(file)?.mode === '100644', file + ' exact owned new leaf');
+          assert(!current.has(helper), 'Tracked full browser helper is excluded from clean QA');
+          assert.equal(old.get(helper)?.blob, env.FOOTLE_PRACTICE_ROLLOVER_NATIVE_HELPER);
+          assert.equal(old.get(workflow)?.blob, env.FOOTLE_PRACTICE_ROLLOVER_REFERENCE_WORKFLOW);
+          assert(current.get(workflow)?.blob && current.get(workflow).blob !== old.get(workflow).blob, 'Clean QA uses its own workflow body');
+          for (const file of denied) assert(!old.has(file) && !current.has(file), file + ' untracked QA source');
+          for (const [file,want] of Object.entries(pins)) {
+            assert.equal(current.get(file)?.blob, want, file + ' exact clean pin');
+            assert.equal(old.get(file)?.blob, want, file + ' exact full pin');
+          }
+          const product = (rows, omit) => ordered([...rows].filter(([file]) => !omit.has(file)));
+          assert.deepEqual(product(current,new Set([workflow])), product(old,fullOnly), 'All 5793 product path/mode/blob tuples are identical');
+          assert.deepEqual([base,current,old].map(rows => [...rows.keys()].filter(sourceScope).length), [4664,4665,4666]);
+          const scoped = (rows, omit) => ordered([...rows].filter(([file]) => (sourceScope(file) || configs.includes(file)) && !omit.has(file)));
+          const sourceConfigRows = scoped(current,new Set());
+          assert.equal(sourceConfigRows.length, 4676);
+          assert.deepEqual(sourceConfigRows,scoped(old,fullOnly),'Every 4665 code and 11 root configuration path/mode/blob tuple');
+          for (const file of configs) assert(current.has(file) && old.has(file),file + ' required root configuration');
+          for (const [file,tuple] of current) {
+            const stat = fs.lstatSync(file);
+            assert(stat.isFile(),file + ' physical regular source body');
+            assert.equal((stat.mode & 0o111) !== 0, tuple.mode === '100755',file + ' physical source executable mode');
+            assert.equal(blob(fs.readFileSync(file)),tuple.blob,file + ' physical source bytes join tree');
+          }
+
+          const inventory = (directory,prefix = '') => fs.readdirSync(directory,{withFileTypes:true}).sort((a,b) => a.name.localeCompare(b.name)).flatMap(entry => {
+            const file = path.join(directory,entry.name);
+            const relative = prefix + entry.name;
+            if (entry.isDirectory()) return inventory(file,relative + '/');
+            assert(entry.isFile(),relative + ' regular dist file');
+            const body = fs.readFileSync(file);
+            return [{path:relative,bytes:body.length,sha256:sha(body)}];
+          });
+          const actual = inventory('dist'), reference = inventory(env.FOOTLE_PRACTICE_ROLLOVER_REFERENCE_DIST);
+          assert.deepEqual([actual.length,reference.length],[850,850]);
+          assert.deepEqual(actual,reference,'Every clean built path and byte equals the qualified full build');
+          const distManifestSHA256 = sha(JSON.stringify(reference));
+          assert.equal(distManifestSHA256,env.FOOTLE_PRACTICE_ROLLOVER_REFERENCE_DIST_MANIFEST);
+          const retainedManifest = read('dist-before.json').map(row => {
+            assert.deepEqual(Object.keys(row).sort(),['bytes','file','sha256']);
+            assert(row.file.startsWith('dist/'));
+            return {path:row.file.slice(5),bytes:row.bytes,sha256:row.sha256};
+          });
+          assert.deepEqual(retainedManifest,reference,'Exact full retained build inventory and tar join');
+          assert(bytes('dist-before.json').equals(bytes('dist-after.json')));
+          assert(bytes('source-before.txt').equals(bytes('source-after.txt')));
+          assert(bytes('source-before.txt').equals(fs.readFileSync(out + '/reference-source.txt')));
+          const referenceHead = bytes('head.txt').toString('utf8').trim(), referenceTree = bytes('tree.txt').toString('utf8').trim();
+          const run = readOutput('reference-run.json'), meta = readOutput('reference-artifact.json');
+          assert.deepEqual([referenceHead,referenceTree],[env.FOOTLE_PRACTICE_ROLLOVER_REFERENCE_HEAD,env.FOOTLE_PRACTICE_ROLLOVER_REFERENCE_TREE]);
+          const full = read('admission.json'), native = read('native-admission.json'), unit = read('unit-admission.json'), holds = read('final-holds.json');
+          assert.deepEqual([full.status,full.qualification,full.head,full.tree,full.page,full.hook,full.test,full.plan,full.helper,full.nativeOuter], [
+            'passed','fresh-footle-practice-daily-rollover-full-scope',referenceHead,referenceTree,env.FOOTLE_PRACTICE_ROLLOVER_FIXED_PAGE_BLOB,env.FOOTLE_PRACTICE_ROLLOVER_FIXED_HOOK_BLOB,env.FOOTLE_PRACTICE_ROLLOVER_QUALIFIED_TEST_BLOB,env.FOOTLE_PRACTICE_ROLLOVER_QUALIFIED_PLAN_BLOB,env.FOOTLE_PRACTICE_ROLLOVER_NATIVE_HELPER,env.FOOTLE_PRACTICE_ROLLOVER_NATIVE_OUTER,
+          ]);
+          assert.deepEqual([full.trackedBodies,full.sourceRows,full.cleanSourceRows,full.rootConfigurations,full.distFiles,full.immutableCaps,full.readers],[5795,4666,4665,11,850,16,20]);
+          assert.deepEqual(full.unit,unit);
+          assert.deepEqual([full.unitCommands,unit.commands,unit.status,unit.actualPasses,unit.actualFailures,unit.wholeQualifiedFixedRAWBytesHeld,full.controlsRerun],[1,1,'passed',unit.actualCases,0,true,false]);
+          assert.deepEqual([unit.actualCases,unit.newCases,unit.heldCases],[54,2,52],'Exact fresh fixed and held cases from the admitted full reference');
+          assert.deepEqual([full.raw.status,full.raw.raw,full.raw.freshUnitRAWByteEqual,full.distTupleSHA256],['passed',unit.raw,true,distManifestSHA256]);
+          assert.deepEqual(full.nativeReceipt,native);
+          assert.deepEqual([native.status,native.route,native.page,native.hook,native.helper],['passed','/footle',env.FOOTLE_PRACTICE_ROLLOVER_FIXED_PAGE_BLOB,env.FOOTLE_PRACTICE_ROLLOVER_FIXED_HOOK_BLOB,env.FOOTLE_PRACTICE_ROLLOVER_NATIVE_HELPER]);
+          assert.deepEqual([holds.status,holds.trackedBodies,holds.scopedSourceRows,holds.cleanSourceRows,holds.rootConfigurations,holds.installedLockedVersions,holds.indexUnchanged,holds.sourceBytesUnchanged,holds.locksUnchanged,holds.distHeld,holds.retainedPacketsHeld,holds.offlineBytes],
+            ['passed',5795,4666,4665,11,521,true,true,true,true,true,0]);
+          assert.deepEqual(full.distTar,{file:'dist.tgz',bytes:bytes('dist.tgz').length,sha256:env.FOOTLE_PRACTICE_ROLLOVER_REFERENCE_TAR});
+          assert.equal(sha(bytes('dist.tgz')),env.FOOTLE_PRACTICE_ROLLOVER_REFERENCE_TAR);
+          assert.equal(blob(bytes('native-admission-script.mjs')),env.FOOTLE_PRACTICE_ROLLOVER_NATIVE_OUTER);
+          const exactEvidence = [{"file":"admission.json","bytes":20999,"sha256":"c4cedff67e07f18a365f9a0cbb484b7331037bf0703008266077a1d2c161e6ef"},{"file":"unit-admission.json","bytes":2205,"sha256":"c225ac36af98924d9ac9a3ac5b2a32d4959bb370534a1bba50dd6ce2f661f159"},{"file":"native-admission.json","bytes":6524,"sha256":"5c2851e1f410810daf4078a37c331102f14be0ef8bf85ee3dc3fa129acd49774"},{"file":"fixed-raw-join.json","bytes":331,"sha256":"a7de262c65570f0686eb04bd28465cddfa916f6d07918b85b9a5583514f64a66"},{"file":"packet-custody.json","bytes":3708,"sha256":"3617427426682c2c4da3ccbce090cc3b7845650e36fd1f617a78381862880a83"},{"file":"final-holds.json","bytes":378,"sha256":"9ea0176ba77600a6ab68ade694e7ae57d5082b180869cc7a12f40a05b49fc4d7"},{"file":"source-join.json","bytes":4795,"sha256":"2fe181c7e399fd20df415d522da8ea0528684c97cee9f7646fc333c6f354a854"},{"file":"active-route-preflight.json","bytes":1227,"sha256":"d0d075fe58dede3ccb9bac846ad0b044c3bc1c0fa0303a94a87d3e42b31715a1"},{"file":"active-snapshot.html","bytes":21873,"sha256":"ac1fd903f79599a6b221fb71def37684d8964db25f683470e995eb2e4fdd0911"},{"file":"public-cases.raw.json","bytes":400361,"sha256":"2144a7989776a6847d384e828fbeaf69a523a7da64ca2d4a13c4560745839788"},{"file":"browser/body-manifest.json","bytes":40020,"sha256":"f6789532f95624a55c66f529073a27164278f1ba0186694d5de91790e8d24481"},{"file":"browser/report.json","bytes":4717117,"sha256":"5ff1728324ee4b1dbe2cdfe1c48b2c4ddd5b9e6ae845a3a1ecddc429a7684597"},{"file":"browser/raw.json","bytes":23961949,"sha256":"3fa3ae05ab4ad9cabc4a9a8d1d80e084706eff1025e3312550239fd0fe0f3aee"},{"file":"browser/qualified-input.json","bytes":1499,"sha256":"862d2072a3f34e593a618d722f5819843fbca882b2a85f0c8e0f3fe0f4a45ac1"},{"file":"native-admission-script.mjs","bytes":34666,"sha256":"be3f66dda0f6f2c0500fca5ef3b5a735345e84f3a2edffb2eba116edf5751ffb"},{"file":"browser/1280-paused.png","bytes":133724,"sha256":"90b3d87c104969006b2c9f6bbbd8e89068cec93a768786d9bc1c104b15c6162c"},{"file":"browser/1280-resumed.png","bytes":120373,"sha256":"1b25130744b921611dd850c48c00ba99eec9cf292288b01d4c1ff1d20db3303a"},{"file":"browser/1280-pending.png","bytes":131962,"sha256":"810ecacfd61467ef458f81884536b88d97361933a1c99f5aaafac7bc734f4c8e"},{"file":"browser/320-paused.png","bytes":57981,"sha256":"4ed56d9f377cd167426451b5effac6582a62201daec0e75867b9b89759700d51"},{"file":"browser/320-pending.png","bytes":56845,"sha256":"30bfc2f2b4895f7e4efe652654e51c7e13a149006bb6fe7fb249e0f44bc379f4"},{"file":"browser/320-resumed.png","bytes":56545,"sha256":"94471e2ad0941484cc8cf20c5678436ec1b6816e0e2c2ce5e7e7a8737f200bec"},{"file":"browser/390-paused.png","bytes":76851,"sha256":"afb238f93b366ebf4583780e7d2600725da3c5aeb3ed50c9e82d5d1fb1e263eb"},{"file":"browser/390-pending.png","bytes":75198,"sha256":"48ef374844ab189a433fcf312c23edc7d168b376e8657ae99fc940f6fca339bb"},{"file":"browser/390-resumed.png","bytes":74276,"sha256":"284bf4852d2bcee832f4c7641933a7b1d6ab3a0953f00f7050d65a007e72bafa"}];
+          for (const pin of exactEvidence) {
+            const body = bytes(pin.file);
+            assert.deepEqual([body.length,sha(body)],[pin.bytes,pin.sha256],pin.file);
+          }
+          const joinedUnit = read('fixed-raw-join.json');
+          const custody = read('packet-custody.json');
+          const preflight = custody.preflight;
+          const original = custody.original;
+          const fixed = custody.fixed;
+          const controls = custody.controls;
+          assert.deepEqual([preflight.run,original.run,fixed.run,controls.run],[42370765351,42372278434,42762361123,42762970118]);
+          assert.deepEqual([joinedUnit.status,joinedUnit.raw.sha256,joinedUnit.freshUnitRAWByteEqual],['passed',unit.raw.sha256,true]);
+          assert.deepEqual([native.status,native.census.journeys,native.census.viewportPNGs,native.census.resumed],['passed',3,9,3]);
+          const referenceChecks = {status:'passed', exactEvidenceBodies:exactEvidence.length, retainedPNGs:9,
+            preflightRun:preflight.run,originalRun:original.run,fixedRun:fixed.run,controlsRun:controls.run,nativeExact:true,freshUnitExact:true,
+            independentFullSHA256:'250d96c92470a5a082932cc9e886ad6d3bd6903318a3c7cae368467924bfe2e3',independentNativeSHA256:'9e7dab447620bfd0785d2443405aeed4b0fc42f1786c5b92c03e8c6a981a3868',rootVisualReviewSHA256:'2e2400045712b6b8f3a1f48ca0a7efde4cfe6f530db094e6c85b082eb4923980'};
+          assert.equal(referenceChecks.status,'passed','Reviewed actual full receipt validator must complete');
+          const result = {
+            status:'passed', cleanHead, cleanTree, cleanProductBase:env.FOOTLE_PRACTICE_ROLLOVER_CLEAN_PRODUCT_BASE, cleanProductBaseTree:env.FOOTLE_PRACTICE_ROLLOVER_CLEAN_PRODUCT_BASE_TREE,
+            cleanDelta, referenceRun:run.id, referenceWorkflowHead:referenceHead, referenceApp:referenceHead, referenceTree,
+            referenceQualification:full.qualification, referenceArtifact:meta.id, referenceZipSHA256:env.FOOTLE_PRACTICE_ROLLOVER_REFERENCE_ZIP,
+            referenceTarSHA256:env.FOOTLE_PRACTICE_ROLLOVER_REFERENCE_TAR, referenceWorkflowBlob:env.FOOTLE_PRACTICE_ROLLOVER_REFERENCE_WORKFLOW,
+            heldProductRows:5793, sourceRows:4665, sourceAndConfigurationRows:sourceConfigRows.length,
+            rootConfigurations:configs.map(file => ({file,...current.get(file)})),
+            excludedFullQA:[...fullOnly], finalProductForbiddenPaths:[...fullOnly,...denied], generatedPatches:[],
+            distFiles:actual.length, distManifestSHA256, dist:actual, referenceChecks,
+            limits:'Fresh clean types, product-name fence, normal production build and exact source and built-byte join. Unit, native, control, reader and cap evidence comes from the authenticated full reference. The frozen qualified plan is held. Final product excludes this round QA workflow, helper, outer and controller. No provider or release credit.',
+          };
+          fs.writeFileSync(out + '/reference-build-join.json',JSON.stringify(result,null,2));
+          console.log('PASS all 4665 source paths, 11 root configurations and 850 built file bodies');
+          NODE
+      - name: Final source locks installed versions and offline holds
+        if: always()
+        run: |
+          set -euo pipefail
+          git ls-files -s > footle-practice-daily-rollover-clean-join/source-after.txt
+          cmp footle-practice-daily-rollover-clean-join/source-before.txt footle-practice-daily-rollover-clean-join/source-after.txt
+          git diff --exit-code HEAD -- .
+          sha256sum package.json package-lock.json > footle-practice-daily-rollover-clean-join/locks-after.txt
+          cmp footle-practice-daily-rollover-clean-join/locks-before.txt footle-practice-daily-rollover-clean-join/locks-after.txt
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const before=JSON.parse(fs.readFileSync('footle-practice-daily-rollover-clean-join/installed-before.json')),lock=JSON.parse(fs.readFileSync('package-lock.json'));
+          const after=Object.keys(lock.packages).filter(p=>p.startsWith('node_modules/')&&fs.existsSync(p+'/package.json')).map(p=>[p,JSON.parse(fs.readFileSync(p+'/package.json')).version]);assert.equal(after.length,521);for(const[p,v]of after)assert.equal(v,lock.packages[p].version,p);assert.deepEqual(after,before);
+          fs.writeFileSync('footle-practice-daily-rollover-clean-join/installed-final.json',JSON.stringify(after));
+          assert(fs.existsSync('footle-practice-daily-rollover-clean-join/offline.log'));assert.equal(fs.statSync('footle-practice-daily-rollover-clean-join/offline.log').size,0);
+          NODE
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: footle-practice-daily-rollover-clean-build-join-${{ github.run_id }}
+          path: footle-practice-daily-rollover-clean-join
+          retention-days: 14
+          if-no-files-found: error
