@@ -57,7 +57,7 @@
  * repaired lazily and only once.
  */
 import type { BoardObjective, CareerState, CMPlayer, MarketPlayer, ObjectiveStatus, PosGroup } from '@/lib/clubManager';
-import { SQUAD_LIMIT, buildMarket, careerPlace, groupOf, money, shownNation } from '@/lib/clubManager';
+import { SQUAD_LIMIT, buildMarket, careerPlace, groupOf, money, shownNation, squadRegistrationCount } from '@/lib/clubManager';
 import { marketForMe } from '@/lib/clubManagerDifficulty';
 
 /** Bump when the shape of a stored ask changes so old saves rebuild theirs. */
@@ -189,7 +189,7 @@ export function askCandidates(career: CareerState): AskCandidate[] {
   const market: MarketPlayer[] = marketForMe(career, buildMarket(career));
   const affordable = market.filter(p => p.price <= budget * SPEND_MARGIN);
   const out: AskCandidate[] = [];
-  const room = SQUAD_LIMIT - squad.length;
+  const room = SQUAD_LIMIT - squadRegistrationCount(career);
   const cheapest = (pool: MarketPlayer[]): number =>
     pool.reduce((lo, p) => Math.min(lo, p.price), Infinity);
 
@@ -347,7 +347,7 @@ export function buildBoardAsks(career: CareerState): BoardObjective[] {
   const pool = askCandidates(career);
   if (pool.length === 0) return [];
   const budget = career.budget ?? 0;
-  const room = SQUAD_LIMIT - (career.squad?.length ?? 0);
+  const room = SQUAD_LIMIT - squadRegistrationCount(career);
   const h = hash32(`${career.clubName}|${career.season}|${career.eraId ?? 'now'}`);
   const start = h % pool.length;
   const out: BoardObjective[] = [];
