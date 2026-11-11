@@ -695,7 +695,7 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
       const banned: SeasonLine = sport.suspendedLine(c);
       c.seasons.push(banned);
       c.headlines = pushHeadlines(c.headlines, sport.headlinesFor(c, banned));
-      const banNotes = sport.progress(c, Math.random);
+      const banNotes = sport.progress(c, Math.random, banned.salary);
       settleUsCareerProgramme(c, banned, sport.slug);
       setLastLine(banned);
       setCareer(c);

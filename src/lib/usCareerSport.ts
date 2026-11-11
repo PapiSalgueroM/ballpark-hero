@@ -296,7 +296,7 @@ export interface UsCareerSport<C extends UsCareerCore = any, L extends UsCareerS
   assignRole(c: C, teamQuality: number, rng: () => number): string;
   campBattle(c: C, teamQuality: number, rng: () => number): string | null;
   simSeason(c: C, teamQuality: number, rng: () => number): { line: L; notes: string[] };
-  progress(c: C, rng: () => number): string[];
+  progress(c: C, rng: () => number, paidSalary?: number): string[];
   drawEvent(c: C, rng: () => number): UsCareerEvent<C>;
   /** Round 1038: every card drawEvent could have picked, built with the same
    *  draws, so a dealt card can be found again by id. */

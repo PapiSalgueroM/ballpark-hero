@@ -1,3 +1,11 @@
+## 2026-11-11: US My Career suspended season pay candidate
+
+A suspended year in NBA, NFL, MLB and NHL My Career now banks the zero salary recorded in its season log. The annual bills, investment and savings ticks, existing bank floor and contract progression still run.
+
+The original mounted checks reproduced a salary deposit in all four careers. In compiled Chromium at 390 px, the four suspended saves matched the original after normalizing the corrected cash balance. All four active season saves matched byte for byte through reload. The NBA savings example still gained 0.04M interest and paid an underfunded 0.4M annual bill from savings. All 103 focused tests, app types, production build, 19 output and career checks and 16 route caps passed.
+
+Source hunks dry-merge with the Nightclub receipt, NHL Quick Start and stale My Career drafts. The separate Watch handoff changes touch different files.
+
 ## 2026-11-07: Club Manager historical roster counts live
 
 [PR #532](https://github.com/PapiSalgueroM/ballpark-hero/pull/532) published from main `c3b5ca4afaf9b4dadcd748f340e8e8e3e4a1a1dd`, App tree `133fcd3d26a4d237178e5c7efee723048da0aef2`, Lovable deployment `510b1df1-2172-42c0-90f9-d9f9c997b840`.
