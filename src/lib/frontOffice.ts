@@ -937,7 +937,7 @@ export function proposeTrade(
 ): 'accepted' | 'rejected' | 'invalid' {
   const mine = my.players.find(p => p.id === myPlayerId);
   const theirs = their.players.find(p => p.id === theirPlayerId);
-  if (!mine || !theirs || my.players.length <= 6 || their.players.length <= 6) return 'invalid';
+  if (!mine || !theirs || my.players.length < NFL_ROSTER_MIN || their.players.length < NFL_ROSTER_MIN) return 'invalid';
   /* Round 631: nobody comes back the season he was cut, by trade either. */
   if (tradeRefusal(my, theirPlayerId) || tradeRefusal(their, myPlayerId)) return 'invalid';
   // Round 82: salary matching so cap-strapped teams can still swap contracts
@@ -969,7 +969,7 @@ export function executeTalksTrade(
 ): 'done' | 'invalid' {
   const mine = my.players.find(p => p.id === myPlayerId);
   const theirs = their.players.find(p => p.id === theirPlayerId);
-  if (!mine || !theirs || my.players.length <= 6 || their.players.length <= 6) return 'invalid';
+  if (!mine || !theirs || my.players.length < NFL_ROSTER_MIN || their.players.length < NFL_ROSTER_MIN) return 'invalid';
   /* Round 631: nobody comes back the season he was cut, by trade either. */
   if (tradeRefusal(my, theirPlayerId) || tradeRefusal(their, myPlayerId)) return 'invalid';
   if (addPick && my.picks.length === 0) return 'invalid';
