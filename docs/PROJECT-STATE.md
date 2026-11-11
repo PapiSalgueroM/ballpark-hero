@@ -8,6 +8,12 @@ Select a historical club to see how many players are recorded in its roster snap
 
 Next league work: the Ekstraklasa intake verifies all 18 current clubs, including held Legia Warsaw. The proposed 17 additions still need the dated pool integration, load timing and measured size check. Historical player population and NBA/NFL draft intake remain open.
 
+## 2026-11-11: NBA My Career replay scoring precision
+
+Season Center now fits the per-game scoring lines to the tenth saved by the NBA career simulator. In a 2027 Cleveland fixture with 80 appearances, the last game and review now agree at 8.1 PPG. The original last game showed 8.4. Reopening the replay keeps the exact career save.
+
+The paired check matched the saved points, rebounds and assists averages across 100 modern seasons. The schedules, scores and appearance flags matched the original, and all 419 playable archived seasons produced the same game lines. The display now rounds exact half-tenths consistently. This changes the displayed final average in 15 of those archived replays.
+
 ## 2026-11-07: Soccer Career historical arrivals from 2010 and 2015 live
 
 [PR #529](https://github.com/PapiSalgueroM/ballpark-hero/pull/529) published from main `cef43e538e2266974cc4d2e96eb5996a6e2bdce9`, App tree `5f6ef45062b696e0eea44006093f5824bd02ff7b`, Lovable deployment `d1268cef-456a-487f-80e2-9d1edba677bb`.
