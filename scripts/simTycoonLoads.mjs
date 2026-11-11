@@ -4,7 +4,7 @@
  * Second round of the tycoon merge (docs/design/round-580-tycoon-merge.md).
  *
  * A) Two vitest suites over the real hooks and libs:
- *    src/test/academyAway.test.tsx   (1 to 6, 10 to 13) the academy's clock:
+ *    src/test/academyAway.test.tsx   (1 to 6, 10 to 14) the academy's clock:
  *                                     watched, hidden three hours, hidden against
  *                                     closed for twenty (the same academy, not just
  *                                     the same meter), closed, coming back,
@@ -18,7 +18,7 @@
  *    and eight controls, each a broken copy pointed at through vitest.config.ts:
  *      fixeddt       the academy hook ticks a fixed quarter second again   red 2, 3, 11, 12, 13
  *      showcaseaway  a showcase multiplies away training again             red 10
- *      gaponly       the hook stops passing whether the page is visible   red 11
+ *      gaponly       the hook stops passing whether the page is visible   red 11, 14
  *      quickaway     a visible page's 750ms gap counts as away again       red 12
  *      bigstep       away time trains in one giant step again              red 13
  *      rawlevels     the stadium loader merges levels in raw again         red 7
@@ -121,11 +121,10 @@ function detail(messages) {
 const sectionOf = title => Number((title.match(/^(\d+)/) || [])[1] || 0);
 
 /* The exact text each control rewrites, verbatim from the shipped files. */
-const LIVE_CLOCK = `      const now = Date.now();
-      advanceClock(s, now - s.lastSeen, document.visibilityState !== 'hidden');
+const LIVE_CLOCK = `      advanceClock(s, now - s.lastSeen, visible);
       s.lastSeen = now;`;
 const FIXED_CLOCK = `      tick(s, 0.25);
-      s.lastSeen = Date.now();`;
+      s.lastSeen = now;`;
 const LEVEL_CLEANING_START = '    const cleanLevels: Record<string, number> = {};';
 const LEVEL_CLEANING_END = '    s.levels = cleanLevels;\n';
 const REF_FIRST_PRESTIGE = `    const now = Date.now();
@@ -175,8 +174,8 @@ const CONTROLS = [
     why: 'the academy hook stops telling the clock whether the page is visible',
     env: 'TYCOON_LOADS_ACADEMY_HOOK',
     file: 'useWonderkidFactory.ts',
-    build: () => mustReplace(read(ACADEMY_HOOK), "advanceClock(s, now - s.lastSeen, document.visibilityState !== 'hidden');", 'advanceClock(s, now - s.lastSeen);', 'useWonderkidFactory.ts'),
-    red: [11],
+    build: () => mustReplace(read(ACADEMY_HOOK), 'advanceClock(s, now - s.lastSeen, visible);', 'advanceClock(s, now - s.lastSeen);', 'useWonderkidFactory.ts'),
+    red: [11, 14],
     green: [1, 2, 3, 4, 6, 12, 13],
   },
   {
@@ -248,10 +247,10 @@ for (const row of live) {
   console.log(`   ${row.status === 'passed' ? 'pass' : 'FAIL'}  ${row.title}`);
   if (row.status !== 'passed') fail(`${row.title}: ${detail(row.messages)}`);
 }
-if (live.length < 13) fail(`only ${live.length} of the 13 tests ran`);
+if (live.length < 14) fail(`only ${live.length} of the 14 tests ran`);
 console.log('   what it measured:');
 for (const note of live.notes) console.log(`     ${note}`);
-if (live.notes.length < 13) fail(`the suites printed ${live.notes.length} measurements, so some test returned without measuring`);
+if (live.notes.length < 14) fail(`the suites printed ${live.notes.length} measurements, so some test returned without measuring`);
 
 for (const control of CONTROLS) {
   console.log('');
@@ -266,7 +265,7 @@ for (const control of CONTROLS) {
   fs.rmSync(dir, { recursive: true, force: true });
   if (!rows) { fail(`control ${control.name}: no report`); continue; }
   if (rows.loadError) { fail(`control ${control.name}: the broken copy did not load, so every red is a crash:\n${rows.loadError}`); continue; }
-  if (rows.length < 13) { fail(`control ${control.name}: only ${rows.length} tests ran`); continue; }
+  if (rows.length < 14) { fail(`control ${control.name}: only ${rows.length} tests ran`); continue; }
   for (const row of rows) {
     const n = sectionOf(row.title);
     const graded = control.red.includes(n) || control.green.includes(n);

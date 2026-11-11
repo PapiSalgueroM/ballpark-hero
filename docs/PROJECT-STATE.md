@@ -20337,3 +20337,9 @@ Wonderkid Factory and Stadium Tycoon's Academy now use the same save fence. Afte
 The original compiled browser lost a saved first-team promotion when the older Academy tab navigated away. Mounted checks cover both directions, exact saved bytes, stale promotions and rewards actions, and a one-tab sale carried to the other door. Pack delivery and Welcome still wait for their required saves.
 
 Compiled Chromium at 390px preserved the saved promotion in both directions and confirmed the idle autosave rule with the real clock. The shared fence passed the unit and mounted checks, the tabs and source sim, its negative control, and 2,000 ordered storage operations against the original helper. App types, the production build, 15 output checks and 16 unchanged caps passed. Soccer Career measured 860,645 gzip bytes, below the 860,672-byte rounding boundary.
+
+## 2026-11-11 Wonderkid Factory short hidden visits
+
+The shared Academy now settles each visibility change under the clock that was running before it. A four-second hidden visit with no timer callbacks previously aged out a prospect and retired a first-team player in compiled tests on both main and the pending sale-save branch. The candidate granted two seconds of training without moving the birthdays or sale and showcase timers during the hidden visit. The next watched callback and a same-tab move to Stadium Tycoon continued the normal Academy clock. The 60-second visible suspension replay matched the sale-save base exactly.
+
+Stacked on PR #598 to keep its existing save fence. The mounted case failed on that base and passed with the fix. All 35 scoped tests, the Wonderkid simulation, the Tycoon Loads simulation with all 11 negative controls, app types, production build, 15 output readers and 16 unchanged caps passed. The source changes compose with #605 and #612. Candidate verified locally.

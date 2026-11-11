@@ -129,12 +129,12 @@ export function useWonderkidFactory() {
       stateRef.current = readAcademy();
       bump();
     }
-    const iv = window.setInterval(() => {
+    let visible = document.visibilityState !== 'hidden';
+    const tickClock = (now: number) => {
       if (checkMoved()) return;
       const s = stateRef.current!;
       const before = s.prospects.length;
-      const now = Date.now();
-      advanceClock(s, now - s.lastSeen, document.visibilityState !== 'hidden');
+      advanceClock(s, now - s.lastSeen, visible);
       s.lastSeen = now;
       const scouted = s.prospects.length > before;
       if (deliverWaiting(s)) pushFloater('🎁 your pack kid moved into a free bed', 'win');
@@ -144,15 +144,24 @@ export function useWonderkidFactory() {
         pushFloater('a kid ran out of time and left on a free', 'bad');
       }
       bump();
-    }, 250);
+    };
+    const iv = window.setInterval(() => tickClock(Date.now()), 250);
     const save = () => { writeAcademy(stateRef.current!); };
+    const onVisibilityChange = () => {
+      const nextVisible = document.visibilityState !== 'hidden';
+      const now = Date.now();
+      // Settle the time since the last callback under its previous visibility.
+      if (nextVisible !== visible && now > stateRef.current!.lastSeen) tickClock(now);
+      visible = nextVisible;
+      save();
+    };
     const saver = window.setInterval(save, 5000);
-    document.addEventListener('visibilitychange', save);
+    document.addEventListener('visibilitychange', onVisibilityChange);
     window.addEventListener('pagehide', save);
     return () => {
       window.clearInterval(iv);
       window.clearInterval(saver);
-      document.removeEventListener('visibilitychange', save);
+      document.removeEventListener('visibilitychange', onVisibilityChange);
       window.removeEventListener('pagehide', save);
       save();
     };
