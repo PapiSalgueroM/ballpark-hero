@@ -396,6 +396,45 @@ const PerfectSeasonNba = () => {
       : `🏀 ${lockedAttempt.sim.wins}-${lockedAttempt.sim.losses} season\nDaily · ${lockedAttempt.date}\nTeam overall ${lockedAttempt.overall} · ${lockedAttempt.spins} spins${lockedPlayoffLine}${lockedVerificationLine}`
     : '';
 
+  const renderLineup = (className: string) => (
+    <aside className={cn('bg-card border border-border rounded-2xl p-4 h-fit', className)}>
+      <div className="flex items-baseline justify-between mb-3">
+        <h2 className="font-bold text-foreground text-sm uppercase tracking-wider">Your lineup</h2>
+        {overall > 0 && (
+          <span className="text-sm font-bold text-primary">{ratingsHidden ? HIDDEN_RATING_DISPLAY : Math.round(overall)} OVR</span>
+        )}
+      </div>
+      <div className="space-y-1">
+        {NBA_SLOTS.map(s => {
+          const p = picks[s.key];
+          return (
+            <div key={s.key} className="flex items-center gap-2 text-sm">
+              <span className="w-10 text-[11px] font-bold text-muted-foreground">{s.key}</span>
+              {p ? (
+                <>
+                  <span className="flex-1 truncate font-medium text-foreground">{p.name}</span>
+                  <span className={cn(
+                    'px-1.5 rounded text-xs font-bold border',
+                    ratingsHidden ? 'bg-secondary/50 text-muted-foreground border-border' : TIER_CLASSES[ratingTier(p.rating)]
+                  )}>
+                    {ratingsHidden ? HIDDEN_RATING_DISPLAY : p.rating}
+                  </span>
+                </>
+              ) : (
+                <span className="flex-1 text-muted-foreground/40">empty</span>
+              )}
+            </div>
+          );
+        })}
+      </div>
+      <p className="text-[11px] text-muted-foreground mt-3">
+        {openSlots.length > 0
+          ? `${openSlots.length} slot${openSlots.length === 1 ? '' : 's'} to fill`
+          : 'Lineup complete!'}
+      </p>
+    </aside>
+  );
+
   return (
     <main id="dukb-main" className="min-h-screen bg-background">
       <GameNavbar />
@@ -647,42 +686,7 @@ const PerfectSeasonNba = () => {
               )}
             </div>
 
-            <aside className="bg-card border border-border rounded-2xl p-4 h-fit md:sticky md:top-20">
-              <div className="flex items-baseline justify-between mb-3">
-                <h2 className="font-bold text-foreground text-sm uppercase tracking-wider">Your lineup</h2>
-                {overall > 0 && (
-                  <span className="text-sm font-bold text-primary">{ratingsHidden ? HIDDEN_RATING_DISPLAY : Math.round(overall)} OVR</span>
-                )}
-              </div>
-              <div className="space-y-1">
-                {NBA_SLOTS.map(s => {
-                  const p = picks[s.key];
-                  return (
-                    <div key={s.key} className="flex items-center gap-2 text-sm">
-                      <span className="w-10 text-[11px] font-bold text-muted-foreground">{s.key}</span>
-                      {p ? (
-                        <>
-                          <span className="flex-1 truncate font-medium text-foreground">{p.name}</span>
-                          <span className={cn(
-                            'px-1.5 rounded text-xs font-bold border',
-                            ratingsHidden ? 'bg-secondary/50 text-muted-foreground border-border' : TIER_CLASSES[ratingTier(p.rating)]
-                          )}>
-                            {ratingsHidden ? HIDDEN_RATING_DISPLAY : p.rating}
-                          </span>
-                        </>
-                      ) : (
-                        <span className="flex-1 text-muted-foreground/40">empty</span>
-                      )}
-                    </div>
-                  );
-                })}
-              </div>
-              <p className="text-[11px] text-muted-foreground mt-3">
-                {openSlots.length > 0
-                  ? `${openSlots.length} slot${openSlots.length === 1 ? '' : 's'} to fill`
-                  : 'Lineup complete!'}
-              </p>
-            </aside>
+            {renderLineup('md:sticky md:top-20')}
           </div>
         )}
 
@@ -753,6 +757,8 @@ const PerfectSeasonNba = () => {
                 onBackToModes={backToModes}
                 onRestart={restart}
               />
+
+              {mode === 'hard' && renderLineup('mt-4')}
 
               {playoffRun ? (
                 <div className="bg-card border border-border rounded-2xl p-6 mt-4">
