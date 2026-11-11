@@ -286,11 +286,12 @@ export function useBudgetBuilder(): BudgetBuilderState {
   }, []);
 
   const setEra = useCallback((id: EraDef['id']) => {
+    if (id === eraId) return;
     setEraId(id);
     setSquad({});
     setActiveSlot(null);
     setSeries(null);
-  }, []);
+  }, [eraId]);
 
   const shareText = useMemo(() => {
     if (!complete) return '';

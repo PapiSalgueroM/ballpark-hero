@@ -65,6 +65,35 @@ const field = (view: ReturnType<typeof render>, label: string) => within(view.co
 const sign = (view: ReturnType<typeof render>, value: Player, index = 0) => { open(view, index); preview(view, value); confirm(view); };
 
 describe('Budget Builder signing decisions', () => {
+  it('keeps signings and the Final when selecting the current market again', async () => {
+    const view = await start();
+    xi.forEach((player, index) => sign(view, player, index));
+    fireEvent.click(view.getByRole('button', { name: /Play the Final vs the Money XI/ }));
+    const final = boundary.state!;
+    expect(final.series).not.toBeNull();
+    expect(recordCompletion).toHaveBeenCalledTimes(1);
+
+    fireEvent.click(view.getByRole('button', { name: /Today The 2026 market/ }));
+    expect(boundary.state!.squad).toBe(final.squad);
+    expect(boundary.state!.remaining).toBe(final.remaining);
+    expect(boundary.state!.series).toBe(final.series);
+    expect(view.getByText(`Score: ${final.finalScore}`)).toBeVisible();
+
+    const historical = /2015 Prime Messi vs prime Ronaldo money/;
+    fireEvent.click(view.getByRole('button', { name: historical }));
+    await view.findByRole('button', { name: 'GK slot 1: empty' });
+    expect(boundary.state!.era.id).toBe('y2015');
+    expect(boundary.state!.filled).toBe(0);
+    expect(boundary.state!.series).toBeNull();
+
+    sign(view, xi[0]);
+    const historicalSquad = boundary.state!.squad;
+    fireEvent.click(view.getByRole('button', { name: historical }));
+    expect(boundary.state!.squad).toBe(historicalSquad);
+    expect(boundary.state!.filled).toBe(1);
+    expect(recordCompletion).toHaveBeenCalledTimes(1);
+  });
+
   it('previews exact existing values without spending and cancels back to the original candidate', async () => {
     const view = await start(); open(view);
     expect(view.getByRole('textbox')).toHaveFocus();
