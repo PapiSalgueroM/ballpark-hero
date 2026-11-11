@@ -20321,3 +20321,11 @@ Actual independent seven-arm proof is7eadbca71e1e351741802f8f9e8b9ac1852e4b957ec
 Native admission: 69f420492bd29d81667ad18b3ed98209473e49f77e33a7e8f3eb6788e0acebe5. Deployment: 2d231ee7-24b2-4940-af8d-5908d26371e6. Public admission: 147361f50c8e3db9c6583009a045a7d79c22c8a680d2fadb171826ff3d3b6c89. Full source, provenance, artifact identities and the exact nine-path nonruntime bridge are in [the dated plan](plans/2026-11-05-soccer-four-first-team-entries.md).
 
 SC-36 remains partial. This does not add leagues, rosters or a complete evolving population. Next owner priority is more Soccer Career/Club Manager teams and leagues, preceded by a measured Team-picker UI cut if needed for the unchanged CM cap. CM47, LeagueSeasons582, measured NFL37/NBA25 golden differences and the separately triaged PR502 reds remain unwaived. The first SC4 build stopped at reader18; it is not relabelled green.
+
+## 2026-11-11: My Career stale Play and Watch
+
+In all four US My Career games, a second tab could replay the same season with different stats and replace the first tab's committed progress. Play now compares its last loaded or written save bytes before it records activity or simulates. NBA, NFL and MLB Watch use that same check after loading the viewer. The older tab asks to reload and never starts the season or opens its viewer. Existing contract-only adoption still works when the underlying career, coaching state and team quality match. This check protects sequential Play and Watch.
+
+The original failed all seven mounted stale-action cases. The candidate passed 131 tests across six suites. Product hunks merge cleanly with PR561 and PR570. Combined scratch verification passed 95 tests after adjusting PR561's competing-writer fixtures to arrive during an accepted Play and keeping the no-handoff tests as disk-only callers.
+
+Compiled Chromium at 390 × 844 matched the full saved bytes for all four accepted baseline and candidate journeys. The stale direct Play and three stale Watch cases preserved the newer save through reload and opened no season viewer. App types, production build, all 15 output checks and all 16 existing route caps passed.
