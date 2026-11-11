@@ -20321,3 +20321,11 @@ Actual independent seven-arm proof is7eadbca71e1e351741802f8f9e8b9ac1852e4b957ec
 Native admission: 69f420492bd29d81667ad18b3ed98209473e49f77e33a7e8f3eb6788e0acebe5. Deployment: 2d231ee7-24b2-4940-af8d-5908d26371e6. Public admission: 147361f50c8e3db9c6583009a045a7d79c22c8a680d2fadb171826ff3d3b6c89. Full source, provenance, artifact identities and the exact nine-path nonruntime bridge are in [the dated plan](plans/2026-11-05-soccer-four-first-team-entries.md).
 
 SC-36 remains partial. This does not add leagues, rosters or a complete evolving population. Next owner priority is more Soccer Career/Club Manager teams and leagues, preceded by a measured Team-picker UI cut if needed for the unchanged CM cap. CM47, LeagueSeasons582, measured NFL37/NBA25 golden differences and the separately triaged PR502 reds remain unwaived. The first SC4 build stopped at reader18; it is not relabelled green.
+
+## 2026-11-11: Club Manager keeps an accepted job after a dismissal reload
+
+A manager who reloaded on Full Time after being sacked opened the unemployment screen without a club that had already accepted their application. The offer appeared only after waiting a week. Resuming the active or a parked dismissed career now opens the same job market as Continue from Full Time. A saved job market keeps its existing offers and weeks out.
+
+The 390px replay used an engine-generated Crystal Palace career that lost 2-4 after Fulham accepted its application. The original cold path hid Fulham until week one. The candidate showed Fulham at week zero, held the exact completed match bytes and opened the same new career as the uninterrupted path. All 67 scoped tests, app types, normal build, the unemployment simulation, 15 built-site checks and 16 existing route caps passed. Club Manager measured 647.7 KiB gzip against 648 KiB.
+
+Prepared on codex/club-manager-dismissed-job-resume-20261111.

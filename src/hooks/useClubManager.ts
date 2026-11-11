@@ -64,6 +64,11 @@ export type CMPhase = 'boot' | 'resume' | 'clubSelect' | 'hub' | 'halftime' | 'm
 export function phaseFor(c: CareerState): CMPhase {
   return c.retired ? 'retired' : c.sacked ? 'sacked' : c.pendingSummary ? 'seasonEnd' : 'hub';
 }
+
+/** A dismissal can be saved on Full Time, before Continue opens the job market. */
+function careerForResume(c: CareerState): CareerState {
+  return c.sacked && !c.retired ? enterWilderness(c) : c;
+}
 export type HubTab = 'overview' | 'squad' | 'tactics' | 'table' | 'transfers';
 
 /**
@@ -196,7 +201,8 @@ export function useClubManager() {
       saveFence.adopt(SAVE_KEY);
       /* Round 1323: Hot Seat's carry on opens its career on the hub. */
       if (takeLandOnHub()) goStraightIn.current = true;
-      const saved = loadCareer();
+      const loaded = loadCareer();
+      const saved = loaded && goStraightIn.current ? careerForResume(loaded) : loaded;
       const views = readSlots();
       setSlots(views);
       if (saved) {
@@ -428,8 +434,10 @@ export function useClubManager() {
   /* ---------- lifecycle actions ---------- */
   const resume = useCallback(() => {
     if (!career) { setPhase('clubSelect'); return; }
-    const next = phaseFor(career);
-    if (next === 'seasonEnd') setSummary(career.pendingSummary);
+    const opened = careerForResume(career);
+    if (opened !== career) setCareer(opened);
+    const next = phaseFor(opened);
+    if (next === 'seasonEnd') setSummary(opened.pendingSummary);
     setPhase(next);
     setActiveTab('overview');
   }, [career]);
