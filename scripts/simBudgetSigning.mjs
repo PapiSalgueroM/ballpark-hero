@@ -1,5 +1,5 @@
 /* Round 779: real-hook signing previews and committed, finite feedback.
-   BUDGET_SIGNING_CONTROL=refund|commit|object|focus|cancel|cleanup|motion changes asserted copies. */
+   BUDGET_SIGNING_CONTROL=refund|commit|object|focus|cancel|slotsearch|cleanup|motion changes asserted copies. */
 import assert from 'node:assert/strict';
 import { mkdir, mkdtemp, readFile, writeFile, rm, rmdir } from 'node:fs/promises';
 import { spawnSync } from 'node:child_process';
@@ -15,6 +15,7 @@ const controls = {
   object: { anchor: 'sign(choice);', replacement: 'sign({ ...choice });', failure: 'commits the original candidate once' },
   focus: { anchor: 'slots.current[request.slot]?.focus({ preventScroll: true });', replacement: '', failure: 'commits the original candidate once' },
   cancel: { anchor: 'previewOpener.current?.isConnected ? previewOpener.current : searchInput.current', replacement: 'previewOpener.current', failure: 'returns cancel focus to search when filtering removes' },
+  slotsearch: { anchor: "if (!isActive) setSearch('');", replacement: '', failure: 'scopes search per slot' },
   cleanup: { anchor: 'return () => window.clearTimeout(timer);', replacement: 'return () => {};', failure: 'keeps cues finite, quiet on cloned rerenders' },
   motion: { anchor: 'className={styles.feedback}', replacement: 'className={undefined}', failure: 'keeps cues finite, quiet on cloned rerenders' },
 };
