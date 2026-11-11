@@ -70,23 +70,21 @@ export default function GauntletDraft() {
     return () => { cancelled = true; };
   }, []);
 
+  const restoreDaily = useCallback(() => {
+    const saved = loadDailyRun(todayStr);
+    if (!saved) return false;
+    // A saved run enters the completed state without recording it again.
+    markRestoredFinish(SLUG);
+    setMode('daily');
+    setDraft(null);
+    setRun(saved);
+    setShownMatches(saved.matches.length);
+    setPhase('done');
+    return true;
+  }, [todayStr]);
+
   const start = useCallback((m: Mode) => {
-    if (m === 'daily') {
-      /* Round 428: a run already in the books comes back as it was, instead
-         of the same draft being dealt again with the cup known. This restore
-         runs in a click handler after mount, exactly the false to true
-         transition useGameCompletion records, so it says what it is first. */
-      const saved = loadDailyRun(todayStr);
-      if (saved) {
-        markRestoredFinish(SLUG);
-        setMode('daily');
-        setDraft(null);
-        setRun(saved);
-        setShownMatches(saved.matches.length);
-        setPhase('done');
-        return;
-      }
-    }
+    if (m === 'daily' && restoreDaily()) return;
     const seed = m === 'daily' ? dailyDraftSeed(todayStr) : Math.floor(Math.random() * 2147483645) + 1;
     const d = buildDraft(pool, seed);
     setMode(m);
@@ -96,10 +94,11 @@ export default function GauntletDraft() {
     setRun(null);
     setShownMatches(0);
     setPhase('drafting');
-  }, [pool]);
+  }, [pool, restoreDaily, todayStr]);
 
   const keep = (p: Player) => {
     if (!draft || phase !== 'drafting') return;
+    if (mode === 'daily' && restoreDaily()) return;
     const next = [...squad];
     next[pickIndex] = p;
     setSquad(next);
