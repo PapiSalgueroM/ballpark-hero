@@ -1514,22 +1514,26 @@ export function aiWeeklyMoves(league: LeagueState, userTeam: string, rng: () => 
   for (const t of Object.values(league.teams)) {
     if (t.abbr === userTeam) continue;
     if (rng() > 0.15) continue;
+    if (deepRosterRefusal(t)) continue;
+    const full = t.rosterDepth === 2;
     const room = capRoom(t, league.cap);
-    const target = league.freeAgents
+    const affordable = league.freeAgents
       .filter(p => p.salary <= room)
-      .sort((a, b) => b.ovr - a.ovr)[0];
-    if (!target) continue;
+      .sort((a, b) => b.ovr - a.ovr);
     /* Round 828: on a full roster the man to beat is the worst STARTER at his
        position, as he was when the starters were the whole group. Measured
        against the bench every free agent would beat somebody, and the CPU
-       would sign until the cap ran out. A full club at 53 signs nobody. */
-    if (deepRosterRefusal(t)) continue;
-    const worstSamePos = (t.rosterDepth === 2
-      ? depthOrder(t, target.pos).slice(0, STARTER_SLOTS[target.pos])
-      : t.players.filter(p => p.pos === target.pos)).sort((a, b) => a.ovr - b.ovr)[0];
-    if (worstSamePos && worstSamePos.ovr + 2 < target.ovr) {
-      signPlayer(t, league.freeAgents, target.id, league.cap);
-      log.push(`${t.abbr} sign ${target.name} (${target.pos} ${target.ovr})`);
+       would sign until the cap ran out. Older short rosters keep their
+       original single candidate and news. */
+    for (const target of full ? affordable : affordable.slice(0, 1)) {
+      const worstSamePos = (full
+        ? depthOrder(t, target.pos).slice(0, STARTER_SLOTS[target.pos])
+        : t.players.filter(p => p.pos === target.pos)).sort((a, b) => a.ovr - b.ovr)[0];
+      if (worstSamePos && worstSamePos.ovr + 2 < target.ovr) {
+        if (!signPlayer(t, league.freeAgents, target.id, league.cap) && full) continue;
+        log.push(`${t.abbr} sign ${target.name} (${target.pos} ${target.ovr})`);
+        break;
+      }
     }
   }
   return log;
