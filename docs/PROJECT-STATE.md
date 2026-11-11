@@ -1,3 +1,9 @@
+## 2026-11-11: NBA Perfect Season keeps the first Daily result across tabs
+
+When another tab has already saved today's Daily, finishing an older draft opens the saved recap. The first Daily result and best record stay in place, and the older draft adds no completion.
+
+In the 390px replay, main and the early-save draft let a stale tab replace a 46-win Daily with 36 wins. The reverse order also replaced the first result and best. The candidate preserved the exact first save and best in both orders, restored the same recap in a cold tab and recorded a fresh Classic from the older tab. App types, production build, 42 scoped tests, 15 output checks, the odds harness and all 16 existing route caps passed.
+
 ## 2026-11-11: NBA Perfect Season saves Daily before the reveal
 
 When the sixth pick produces the Daily's simulated season, the game saves the attempt and records its completion and best record. The game-by-game reveal and Skip to result still work. Reloading during the reveal opens the locked Daily recap.
