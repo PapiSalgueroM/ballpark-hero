@@ -1,3 +1,9 @@
+## 2026-11-11: NBA My Career injury headlines use the played season's schedule
+
+The NBA news feed now counts games missed against the same schedule as the simulator. A healthy 66-game 2011-12 season no longer produces a false 16-game injury headline. A player who actually misses 19 games in that season gets a 19-game headline. The same calculation covers the 72-game 2020-21 season. Previously saved headlines keep their original text.
+
+The six deterministic regression cases cover healthy and injured seasons across 66, 72 and 82 games. An offline 390 by 844 browser replay plays the healthy and injured 2011-12 seasons and an 82-game control, answers the offseason cards, opens News and reopens it after a cold reload. The baseline and candidate save bytes match after removing the affected injury headlines.
+
 ## 2026-11-07: Club Manager historical roster counts live
 
 [PR #532](https://github.com/PapiSalgueroM/ballpark-hero/pull/532) published from main `c3b5ca4afaf9b4dadcd748f340e8e8e3e4a1a1dd`, App tree `133fcd3d26a4d237178e5c7efee723048da0aef2`, Lovable deployment `510b1df1-2172-42c0-90f9-d9f9c997b840`.
