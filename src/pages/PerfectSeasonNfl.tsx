@@ -336,8 +336,11 @@ const PerfectSeasonNfl = () => {
 
   const playoffRun: PlayoffRun | null = useMemo(() => {
     if (!sim || poSeed == null) return null;
+    // Coach and defense cards contribute to the team overall. The MVP is an individual player.
     return buildPlayoffRun('nfl', Math.round(overall), sim.wins, poSeed,
-      draftedList.map(d => ({ name: d.name, rating: d.rating })));
+      draftedList
+        .filter(d => d.slotKey !== 'HC' && d.slotKey !== 'DEF')
+        .map(d => ({ name: d.name, rating: d.rating })));
   }, [sim, poSeed, overall, draftedList]);
 
   const analysis = useMemo(
