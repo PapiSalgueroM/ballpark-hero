@@ -1,3 +1,11 @@
+## 2026-11-11: MLB Front Office free-agent offseason aging candidate
+
+Players who enter free agency after a contract expires or a CPU roster cut now age once during the offseason. Players already on the market still receive their normal annual age and rating update.
+
+The nine original desk-off fixture hashes from 8f27082f reproduced on main. Held-input replays of all nine winters changed 188 market ages and 129 associated rating points, with exact market membership, order, draws and other league state. In the chained replays, the corrected player records later changed market membership in four of six later winters. All nine champions matched. The strict fixture was re-recorded from engine checkpoint a7468e2b6bfef5d0783bfb9795bd03908f85b820.
+
+At 390 px, both compiled runs played the full 97-65 season, made the same two draft picks and used 4,051 draws. In the candidate, Case Nakamura aged from 33 to 34 and kept the rating point previously lost to the second aging pass. All 23 focused tests, app types, the production build, 17 output and simulation checks and all 16 route caps passed. Restoring the original engine failed exactly the nine refreshed snapshot comparisons.
+
 ## 2026-11-07: Club Manager historical roster counts live
 
 [PR #532](https://github.com/PapiSalgueroM/ballpark-hero/pull/532) published from main `c3b5ca4afaf9b4dadcd748f340e8e8e3e4a1a1dd`, App tree `133fcd3d26a4d237178e5c7efee723048da0aef2`, Lovable deployment `510b1df1-2172-42c0-90f9-d9f9c997b840`.
