@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { lazy, Suspense, useCallback, useEffect, useRef, useState } from 'react';
 import { DraftNightCard } from '@/components/front-office-shared/DraftNightCard';
 import { buildDraftNight } from '@/lib/draftNight';
 import type { DraftNight } from '@/lib/draftNight';
@@ -66,6 +66,7 @@ type Phase = 'pick' | 'hub' | 'draft' | 'recap' | 'fired';
 type Tab = 'team' | 'market' | 'trade' | 'round' | 'standings';
 
 const SAVE_KEY = 'mlb-front-office-save-v1';
+const SaveMovedNotice = lazy(() => import('@/components/SaveMovedNotice'));
 /* Round 631: what the market and the trade screen say about a man you let go this season. */
 const CUT_SAID = 'You designated him for assignment this season.';
 
@@ -103,6 +104,8 @@ export default function MlbFrontOfficeBoard() {
   const [league, setLeague] = useState<MlbLeague | null>(null);
   const [saveWriteFailed, setSaveWriteFailed] = useState(false);
   const pendingSave = useRef<string | null>(null);
+  const committedSave = useRef<string | null>();
+  const [saveMoved, setSaveMoved] = useState(false);
   const [feed, setFeed] = useState<string[]>([]);
   /* Round 530: a done deal or a signing slams in at the top of the feed the
      moment it happens. Matched on the line's text, never its index, so the
@@ -161,9 +164,32 @@ export default function MlbFrontOfficeBoard() {
     return buildOwnerMandate(strengthRank(strengths, team), Object.keys(lg.teams).length, defendingChamp, MLB_WORDS, lg.season, tilt);
   };
 
+  const checkSaveMoved = useCallback(() => {
+    try {
+      if (committedSave.current !== undefined && localStorage.getItem(SAVE_KEY) !== committedSave.current) {
+        setSaveMoved(true);
+        return true;
+      }
+    } catch { /* The save attempt handles a storage refusal. */ }
+    return false;
+  }, []);
+
+  useEffect(() => {
+    const onStorage = (event: StorageEvent) => {
+      if (event.key === SAVE_KEY || event.key === null) checkSaveMoved();
+    };
+    window.addEventListener('storage', onStorage);
+    window.addEventListener('pageshow', checkSaveMoved);
+    return () => {
+      window.removeEventListener('storage', onStorage);
+      window.removeEventListener('pageshow', checkSaveMoved);
+    };
+  }, [checkSaveMoved]);
+
   useEffect(() => {
     try {
       const raw = localStorage.getItem(SAVE_KEY);
+      committedSave.current = raw;
       if (!raw) return;
       const s = JSON.parse(raw) as SaveShape;
       if (!s.league || !s.myTeam) return;
@@ -217,13 +243,14 @@ export default function MlbFrontOfficeBoard() {
 
   const retrySave = useCallback(() => {
     const bytes = pendingSave.current;
-    if (bytes === null) return;
+    if (bytes === null || checkSaveMoved()) return;
     try {
       localStorage.setItem(SAVE_KEY, bytes);
+      committedSave.current = bytes;
       pendingSave.current = null;
       setSaveWriteFailed(false);
     } catch { setSaveWriteFailed(true); }
-  }, []);
+  }, [checkSaveMoved]);
 
   const persist = useCallback((patch: Partial<SaveShape>, lg: MlbLeague | null, team: string) => {
     if (!lg) return;
@@ -244,6 +271,7 @@ export default function MlbFrontOfficeBoard() {
   };
 
   const start = (abbr: string) => {
+    if (checkSaveMoved()) return;
     const lg = initMlbLeague();
     const m = mandateFor(lg, abbr, false);
     setLeague(lg); setMyTeam(abbr); setPhase('hub'); setTab(null);
@@ -311,7 +339,7 @@ export default function MlbFrontOfficeBoard() {
     : pr.grade;
 
   const playRound = () => {
-    if (!league || !my) return;
+    if (!league || !my || checkSaveMoved()) return;
     /* Round 195: a played round counts as playing TODAY, the same per-session mark
        Club Manager has had since Round 157. Unscored on purpose: the
        scored completion stays the title. */
@@ -643,7 +671,9 @@ export default function MlbFrontOfficeBoard() {
   };
 
   const reset = () => {
+    if (checkSaveMoved()) return;
     localStorage.removeItem(SAVE_KEY);
+    committedSave.current = null;
     pendingSave.current = null;
     setSaveWriteFailed(false);
     setPhase('pick'); setLeague(null); setMyTeam('');
@@ -680,7 +710,11 @@ export default function MlbFrontOfficeBoard() {
     },
   } : null;
 
-  const saveNotice = saveWriteFailed && (
+  const saveNotice = saveMoved ? (
+    <Suspense fallback={null}>
+      <SaveMovedNotice message="This franchise moved on in another tab. Reload to carry on." />
+    </Suspense>
+  ) : saveWriteFailed && (
     <div role="alert" data-no-prerender className="rounded-xl border border-destructive/40 bg-destructive/10 p-3 text-xs">
       <p>Franchise save failed. Keep this page open and retry.</p>
       <button type="button" onClick={retrySave} className="mt-2 min-h-11 min-w-11 rounded-full border border-destructive/50 px-3 font-bold">Retry save</button>
@@ -689,6 +723,7 @@ export default function MlbFrontOfficeBoard() {
 
   if (draftSaveError) return (
     <div role="alert" className="rounded-2xl border border-border bg-card p-4 text-center space-y-3">
+      {saveNotice}
       <p className="text-sm text-foreground">This save has invalid draft information. It is still stored.</p>
       <button type="button" onClick={reset} className="min-h-[44px] rounded-full bg-primary px-4 py-2 text-sm font-bold text-primary-foreground">Delete this save and choose a team</button>
     </div>
