@@ -1,6 +1,6 @@
 import { acknowledgeChanceWheel, validChanceWheel } from '@/lib/careerChanceWheel';
 import { soccerEventChoiceConsequence } from '@/lib/soccerCareerContracts';
-import { Component, Fragment, lazy, Suspense, useState, useCallback, useRef, useEffect, useLayoutEffect, useMemo, type ComponentType, type ComponentProps, type ReactNode, type CSSProperties } from "react";
+import { Component, Fragment, lazy, Suspense, useState, useCallback, useRef, useEffect, useLayoutEffect, useMemo, useSyncExternalStore, type ComponentType, type ComponentProps, type ReactNode, type CSSProperties } from "react";
 import { formatNumber } from '@/lib/formatNumber';
 import { completedRecordCandidate, readCompletedRecords, retainCompletedRecord, recordRetentionStatus, type CompletedRecordCandidate, type CompletedRecordsRead, type RetainResult } from '@/lib/soccerCareerCompletedRecords';
 import { focusDialogOnMount, escapeCloses } from '@/lib/dialogA11y';
@@ -902,9 +902,7 @@ function useFooterLift(enabled: boolean): number {
          footer, so only footer above the banner counts and the clamp counts
          the banner too. The two lifts used to add up and throw the bar off
          the top of a 320 by 640 screen at the page end. */
-      const pending = document.body.dataset.consentPending != null;
-      const height = document.body.style.getPropertyValue('--dukb-consent-height');
-      const banner = pending ? (height ? parseFloat(height) || 0 : 230) : 0;
+      const banner = readConsentHeight();
       const next = Math.max(0, Math.min(Math.round(vh - foot.getBoundingClientRect().top - banner), Math.round(vh * 0.6 - banner)));
       setLift((prev) => (prev === next ? prev : next));
     };
@@ -913,17 +911,27 @@ function useFooterLift(enabled: boolean): number {
     window.addEventListener('scroll', onScroll, { passive: true });
     window.addEventListener('resize', onScroll);
     /* the answer (or a new banner height) changes the lift without a scroll */
-    const consent = typeof MutationObserver !== 'undefined' ? new MutationObserver(onScroll) : null;
-    consent?.observe(document.body, { attributes: true, attributeFilter: ['data-consent-pending', 'style'] });
+    const stopWatchingConsent = watchConsentHeight(onScroll);
     return () => {
       if (raf) cancelAnimationFrame(raf);
       window.removeEventListener('scroll', onScroll);
       window.removeEventListener('resize', onScroll);
-      consent?.disconnect();
+      stopWatchingConsent();
     };
   }, [enabled]);
 
   return lift;
+}
+
+function readConsentHeight(): number {
+  const body = document.body;
+  return body.dataset.consentPending == null ? 0 : parseFloat(body.style.getPropertyValue('--dukb-consent-height') || '230') || 0;
+}
+
+function watchConsentHeight(update: () => void): () => void {
+  const observer = typeof MutationObserver !== 'undefined' ? new MutationObserver(update) : null;
+  observer?.observe(document.body, { attributeFilter: ['data-consent-pending', 'style'] });
+  return () => observer?.disconnect();
 }
 
 /* ─── Main Component ─── */
@@ -2054,6 +2062,11 @@ function CreationScreen({ playerName, setPlayerName, nationality, setNationality
   const [isRolling, setIsRolling] = useState(false);
   const [displayOvr, setDisplayOvr] = useState(0);
   const [academyClub, setAcademyClub] = useState<ClubData | null>(null);
+  const consentHeight = useSyncExternalStore(watchConsentHeight, readConsentHeight, () => 0);
+  const pickerBounds = consentHeight ? {
+    collisionPadding: { top: 10, right: 10, bottom: consentHeight + 10, left: 10 },
+    style: { maxHeight: 'min(18rem, var(--radix-select-content-available-height))' },
+  } : undefined;
   /* Round 1604 (report 3f014b97): the club shown here is the club the career
      starts at. Every placement is drawn in one place, handed up to the page
      for initCareer, and remembers the nationality and era it was drawn for. */
@@ -2215,7 +2228,7 @@ function CreationScreen({ playerName, setPlayerName, nationality, setNationality
               sits to the RIGHT of the name, exactly as he asked. */}
           <Select value={nationality} onValueChange={setNationality}>
             <SelectTrigger className="bg-muted/30"><SelectValue placeholder={<span>Choose nationality</span>} /></SelectTrigger>
-            <SelectContent position="popper" className="max-h-72">
+            <SelectContent position="popper" className="max-h-72" {...pickerBounds}>
               {/* Round 453: over a hundred nations is a long scroll, so they
                   sit under their confederation, the way qualifying groups them. */}
               {groupByConfederation(NATIONALITIES, n => n).map(g => (
@@ -2235,14 +2248,14 @@ function CreationScreen({ playerName, setPlayerName, nationality, setNationality
           <Label>Position</Label>
           <Select value={position} onValueChange={handlePositionChange}>
             <SelectTrigger className="bg-muted/30"><SelectValue placeholder={<span>Choose position</span>} /></SelectTrigger>
-            <SelectContent>{POSITIONS.map(p => <SelectItem key={p.value} value={p.value}><span>{p.label}</span></SelectItem>)}</SelectContent>
+            <SelectContent {...pickerBounds}>{POSITIONS.map(p => <SelectItem key={p.value} value={p.value}><span>{p.label}</span></SelectItem>)}</SelectContent>
           </Select>
         </div>
         <div className="space-y-1.5">
           <Label>Starting Era</Label>
           <Select value={era} onValueChange={setEra}>
             <SelectTrigger className="bg-muted/30"><SelectValue placeholder={<span>Choose era</span>} /></SelectTrigger>
-            <SelectContent>{ERAS.map(e => <SelectItem key={e.value} value={e.value}><span>{e.label}</span></SelectItem>)}</SelectContent>
+            <SelectContent {...pickerBounds}>{ERAS.map(e => <SelectItem key={e.value} value={e.value}><span>{e.label}</span></SelectItem>)}</SelectContent>
           </Select>
         </div>
       </div>

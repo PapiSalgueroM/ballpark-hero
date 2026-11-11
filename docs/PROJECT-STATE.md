@@ -1,3 +1,11 @@
+## 2026-11-10 Soccer Career setup menus and cookie choices draft
+
+Soccer Career ranked first with 5,214 distinct recorded gameplay handles for Nov 4 to 10 UTC. While cookie choices are visible, nationality, position and starting era now use the measured panel height and the menu's available space. At 344 by 643, the original build drew the nationality menu to y633 under a panel starting at y338. Native taps hit the panel. The permanent creator consent sim reproduces that failure on main and selects all three fields on this draft with consent still unanswered.
+
+The final compiled bundle passed nine Chromium and WebKit emulated journeys. The pending cases at 344 by 643, 320 by 568 and 643 by 344 selected the three fields, rolled, started and restored the academy save. The answered controls and choosing Reject all with a menu open also passed. Very short landscape menus scroll, and the baseline horizontal clipping remains visible at narrow widths. Physical iPhone Safari was outside this replay.
+
+App types, 13 creation tests, the 852-file build, 15 output checks and all 16 route caps passed. The final Soccer Career measurement was 840.497 KiB, which passes the existing rounded 840 gate. A larger first candidate exceeded it. The optional long creation simulation was stopped during concurrent local checks. The original report `caad848a` lacks its consent and setup state. Keep it open for release and further reproduction.
+
 ## 2026-11-07: Club Manager historical roster counts live
 
 [PR #532](https://github.com/PapiSalgueroM/ballpark-hero/pull/532) published from main `c3b5ca4afaf9b4dadcd748f340e8e8e3e4a1a1dd`, App tree `133fcd3d26a4d237178e5c7efee723048da0aef2`, Lovable deployment `510b1df1-2172-42c0-90f9-d9f9c997b840`.
