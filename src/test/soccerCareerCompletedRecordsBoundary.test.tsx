@@ -39,6 +39,7 @@ vi.mock('@/components/ui/select', () => ({
 }));
 
 import * as E from '@/lib/soccerCareerEngine';
+import { recordCompletion } from '@/lib/completions';
 import { isSoccerCareerSave, parseSoccerCareerSave, serializeSoccerCareerSave } from '@/lib/soccerCareerSave';
 import SoccerCareer from '@/pages/SoccerCareer';
 
@@ -50,7 +51,7 @@ let mainFault: 'none' | 'ignore' | 'alter' | 'throw' = 'none', recordsRefuse = f
 let attempts: string[] = [], writes = 0, mainFaults = 0, recordAttempts = 0, recordRefusals = 0, removeAttempts = 0;
 let nativeSet: typeof Storage.prototype.setItem;
 
-function completed(): E.CareerState {
+function completed(phase: 'retired' | 'retirement_ceremony' = 'retired'): E.CareerState {
   const start = E.initCareer('Boundary Keeper', 'England', 'CM', '2020-24',
     { pace: 75, shooting: 75, passing: 75, dribbling: 75, defending: 75, physical: 75, reflexes: 75 },
     75, 2020, [club], null, 90);
@@ -63,7 +64,8 @@ function completed(): E.CareerState {
     currentClubTier: 1, currentClubColor: club.color, currentLeague: club.league,
     phase: 'playing' as const, retired: false, seasons: [...start.seasons, season],
     intStats: { ...start.intStats, caps: 4, goals: 2, assists: 1 } };
-  let state = E.choosePostRetirement(E.manualRetire(playing), 'retire', [club]);
+  let state = E.manualRetire(playing);
+  if (phase === 'retired') state = E.choosePostRetirement(state, 'retire', [club]);
   // Stabilize this declared fixture through the same real codec/repair path used on mount.
   for (let i = 0; i < 2; i++) state = E.repairCareer(parseSoccerCareerSave(serializeSoccerCareerSave(state)) as E.CareerState);
   return state;
@@ -132,6 +134,35 @@ beforeEach(() => {
 afterEach(() => { cleanup(); vi.restoreAllMocks(); vi.unstubAllGlobals(); localStorage.clear(); window.history.replaceState({}, '', '/'); });
 
 describe('Soccer Career completed record storage boundaries', () => {
+  it.each([false, true])('records retirement only after the career save succeeds, with archive refusal %s', async refuseArchive => {
+    const view = mount(serializeSoccerCareerSave(completed('retirement_ceremony')));
+    await attempted();
+    const ceremony = localStorage.getItem(KEY);
+    const savedAtCompletion: (string | null)[] = [];
+    vi.mocked(recordCompletion).mockImplementationOnce(() => { savedAtCompletion.push(localStorage.getItem(KEY)); });
+    mainFault = 'throw';
+    recordsRefuse = refuseArchive;
+    fireEvent.click(view.getByRole('button', { name: /Retire and Enjoy Life/ }));
+    const retry = (await view.findAllByRole('button', { name: 'Retry save' }))[0];
+    expect(localStorage.getItem(KEY)).toBe(ceremony);
+    expect(recordAttempts).toBe(0);
+    expect(recordCompletion).not.toHaveBeenCalled();
+
+    mainFault = 'none';
+    fireEvent.click(retry);
+    await waitFor(() => expect(recordCompletion).toHaveBeenCalledTimes(1));
+    const saved = localStorage.getItem(KEY)!;
+    const retired = parseSoccerCareerSave(saved) as E.CareerState;
+    expect(retired.phase).toBe('retired');
+    expect(recordCompletion).toHaveBeenCalledWith('/soccer-career', retired.legacy?.score, 'Records Fixture', 0);
+    expect(savedAtCompletion).toEqual([saved]);
+    expect(recordRefusals).toBe(refuseArchive ? 1 : 0);
+    cleanup();
+    const restored = mount(saved);
+    await restored.findAllByRole('button', { name: /Share Legacy/ });
+    expect(recordCompletion).toHaveBeenCalledTimes(1);
+  });
+
   it.each(['ignore', 'alter'] as const)('rejects a nonthrowing %s source write before archive or discard', async mode => {
     // Pretty valid JSON differs from the real canonical serializer, so ignored writes cannot accidentally match.
     const original = JSON.stringify(completed(), null, 2);

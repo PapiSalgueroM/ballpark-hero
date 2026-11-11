@@ -1064,7 +1064,10 @@ export default function SoccerCareer() {
      from 55. scripts/simScoreShown.mjs holds both halves. */
   const isRetired = career?.retired === true && career?.phase === "retired";
   const legacyScore = isRetired && career?.legacy ? career.legacy.score : 0;
-  useGameCompletion('soccer-career', isRetired, legacyScore);
+  // A restored finish starts complete. A new finish waits for the save acknowledgement
+  // that produces the archive outcome, even when the optional archive write fails.
+  const retirementSaved = isRetired && (career === restoredSave.career || recordOutcome !== null);
+  useGameCompletion('soccer-career', retirementSaved, legacyScore);
 
   // Club roster comes from the bundled FALLBACK_CLUBS list, deliberately.
   //
