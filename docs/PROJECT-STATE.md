@@ -6,6 +6,12 @@ The 390px Arsenal career took a real one-season Sporting CP loan. A ruptured qua
 
 Four focused cases and a paired 96-seed comparison passed. All 93 healthy outcomes matched main. Nine choices across three injured loans held their recovery and recorded season, and two home-club injuries kept their full recovery state. App types, production build, 15 offline output readers and all 16 route caps passed. Soccer Career measured 840.4 KiB, which rounds to the existing 840 KiB cap.
 
+## 2026-11-11: Soccer Career contract expiry after rehab draft
+
+An injury season uses one contract year when its pending rehab choice is resolved. This also applies to older saves still on that choice. If the deal expires, the player resolves the contract through the usual transfer window before starting another season. Loan returns happen before that decision, and a completed farewell goes to its summary.
+
+The compiled phone replays kept the existing rehab results and saved rows for Arsenal and an AC Milan loan. Both active deals went from two years to one. A final-year Arsenal injury reached the extension screen at zero years, restored the same offers after reload and resumed on a new contract.
+
 ## 2026-11-07: Club Manager historical roster counts live
 
 [PR #532](https://github.com/PapiSalgueroM/ballpark-hero/pull/532) published from main `c3b5ca4afaf9b4dadcd748f340e8e8e3e4a1a1dd`, App tree `133fcd3d26a4d237178e5c7efee723048da0aef2`, Lovable deployment `510b1df1-2172-42c0-90f9-d9f9c997b840`.
