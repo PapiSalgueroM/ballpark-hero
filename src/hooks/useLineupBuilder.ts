@@ -8,6 +8,7 @@ import { FORMATIONS } from '@/types/lineupBuilder';
 import { checkLineupPick, gradeFit, SLOT_ALLOWED_BY_ROLE } from '@/lib/positionFit';
 import type { Position } from '@/types/game';
 import { normalizePosition } from '@/lib/squadDeal';
+import { normalizeName } from '@/lib/playerSearch';
 
 /* The project URL and public key are hardcoded on purpose: CLAUDE.md records
    that Lovable injects VITE_SUPABASE_* pointing at a DELETED project, so these
@@ -227,11 +228,11 @@ export function useLineupBuilder() {
         return;
       }
 
-      const trimmedName = playerName.trim().toLowerCase();
-      const isDuplicate = Array.from(filledSlots.values()).some(
-        (slot) => slot.playerName.toLowerCase() === trimmedName
-      );
-      if (isDuplicate) {
+      const isDuplicate = (name: string) => {
+        const key = normalizeName(name);
+        return Array.from(filledSlots.values()).some((slot) => normalizeName(slot.playerName) === key);
+      };
+      if (isDuplicate(playerName)) {
         setValidationError(`${playerName.trim()} is already in your lineup!`);
         return;
       }
@@ -340,6 +341,12 @@ export function useLineupBuilder() {
         if (answer.fullName) playerName = answer.fullName;
       }
 
+      if (isDuplicate(playerName)) {
+        setIsValidating(false);
+        setValidationError(`${playerName.trim()} is already in your lineup!`);
+        return;
+      }
+
       const slot: FilledSlot = {
         ...position,
         playerName: playerName.trim(),
@@ -366,7 +373,7 @@ export function useLineupBuilder() {
         startSpin();
       }
     },
-    [selectedPositionIndex, currentTeam, positions, filledCount, startSpin, draftChoice]
+    [selectedPositionIndex, currentTeam, positions, filledCount, filledSlots, startSpin, draftChoice]
   );
 
   const filledSlotsArray = useMemo(() => {
