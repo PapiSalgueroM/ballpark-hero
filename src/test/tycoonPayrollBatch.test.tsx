@@ -68,6 +68,40 @@ describe('Stadium payroll batches', () => {
     expect(result.quantity).toBe(1); expect(result.cost).toBe(price);
     expect(result.state).toEqual({ ...last, money: last.money - price, staffLevels: { ...last.staffLevels, steward: 300 } });
   });
+  it('shows the cap instead of a price for maxed upgrades in either purchase mode', () => {
+    const before = initial(0);
+    before.levels.stands = 200;
+    localStorage.setItem(E.TYCOON_SAVE_KEY, E.serializeTycoon(before, EPOCH));
+    mountPage(<StadiumTycoon />, '/stadium-tycoon');
+
+    const stands = screen.getByRole('button', { name: /Stands Lv 200/ });
+    expect(stands).toBeDisabled();
+    expect(stands).toHaveTextContent('Max level');
+    expect(stands).not.toHaveTextContent(/\$/);
+
+    fireEvent.click(screen.getByRole('button', { name: 'Up to 5 levels' }));
+    expect(stands).toBeDisabled();
+    expect(stands).toHaveTextContent('Max level');
+    expect(stands).not.toHaveTextContent(/\$/);
+  });
+  it('shows the staff cap without a price or a new income quote in either purchase mode', () => {
+    const before = initial(0);
+    before.staffLevels = { ...before.staffLevels, steward: 300 };
+    localStorage.setItem(E.TYCOON_SAVE_KEY, E.serializeTycoon(before, EPOCH));
+    mountPage(<StadiumTycoon />, '/stadium-tycoon');
+    fireEvent.click(screen.getByRole('button', { name: /Payroll/ }));
+
+    const steward = screen.getByRole('button', { name: /Turnstile Steward/ });
+    expect(steward).toBeDisabled();
+    expect(steward).toHaveTextContent('Max staff');
+    expect(steward).not.toHaveTextContent(/\$/);
+
+    fireEvent.click(screen.getByRole('button', { name: 'Up to 5 hires' }));
+    expect(steward).toBeDisabled();
+    expect(steward).toHaveTextContent('Max staff');
+    expect(steward).not.toHaveTextContent(/\$/);
+    expect(screen.getByRole('button', { name: /Pie Chef/ })).toHaveTextContent('Save for the next hire');
+  });
   for (const [wallet, quantity, money, cost] of [[1000, 5, 352, 648], [341, 3, 0, 341]] as const) {
     it('quotes, hires and persists the affordable payroll batch from' + wallet, () => {
       const before = initial(wallet);
