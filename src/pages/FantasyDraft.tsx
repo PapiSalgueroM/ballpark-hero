@@ -11,7 +11,7 @@ import { PlayerPool, type DraftPlayer } from '@/components/fantasy-draft/PlayerP
 import { DraftRoster } from '@/components/fantasy-draft/DraftRoster';
 import { SeasonStory } from '@/components/fantasy-draft/SeasonStory';
 import { TeamAnalysis } from '@/components/fantasy-draft/TeamAnalysis';
-import { VoteWinner } from '@/components/fantasy-draft/VoteWinner';
+import { VoteWinner, type VoteStatus } from '@/components/fantasy-draft/VoteWinner';
 import ShareButtons from '@/components/game/ShareButtons';
 import { cn } from '@/lib/utils';
 import { useToast } from '@/hooks/use-toast';
@@ -98,7 +98,8 @@ const FantasyDraft = () => {
 
   // Vote state
   const [voted, setVoted] = useState<'user' | 'ai' | null>(null);
-  const [voteCounts, setVoteCounts] = useState({ user: 0, ai: 0 });
+  const [voteStatus, setVoteStatus] = useState<VoteStatus>('idle');
+  const [voteCounts, setVoteCounts] = useState<{ user: number; ai: number } | null>(null);
 
   const draftComplete = pickIndex >= TOTAL_PICKS;
   const validXis = fantasyXiComplete(userTeam) && fantasyXiComplete(aiTeam);
@@ -253,23 +254,31 @@ const FantasyDraft = () => {
 
   // Vote handler
   const handleVote = async (team: 'user' | 'ai') => {
+    if (voted || voteStatus !== 'idle') return;
     if (!user) {
       toast({ title: 'Sign in required', description: 'Please sign in to vote.', variant: 'destructive' });
       return;
     }
+    setVoteStatus('pending');
+    try {
+      const { error } = await supabase.from('fantasy_draft_votes').insert({ voted_team: team, user_id: user.id });
+      if (error?.code === '23505') {
+        setVoteStatus('already-voted');
+        return;
+      }
+      if (error) throw error;
+    } catch {
+      setVoteStatus('idle');
+      toast({ title: 'Vote could not be saved', description: 'Please try again.', variant: 'destructive' });
+      return;
+    }
     setVoted(team);
-    // Save to Supabase with user_id for per-user deduplication
-    await supabase.from('fantasy_draft_votes').insert({ voted_team: team, user_id: user.id } as any);
-    // Fetch counts
-    const { count: userVotes } = await supabase
-      .from('fantasy_draft_votes')
-      .select('*', { count: 'exact', head: true })
-      .eq('voted_team', 'user');
-    const { count: aiVotes } = await supabase
-      .from('fantasy_draft_votes')
-      .select('*', { count: 'exact', head: true })
-      .eq('voted_team', 'ai');
-    setVoteCounts({ user: userVotes || 0, ai: aiVotes || 0 });
+    setVoteStatus('idle');
+    const [{ count: userVotes }, { count: aiVotes }] = await Promise.all([
+      supabase.from('fantasy_draft_votes').select('*', { count: 'exact', head: true }).eq('voted_team', 'user'),
+      supabase.from('fantasy_draft_votes').select('*', { count: 'exact', head: true }).eq('voted_team', 'ai'),
+    ]);
+    if (userVotes !== null && aiVotes !== null) setVoteCounts({ user: userVotes, ai: aiVotes });
   };
 
   return (
@@ -463,6 +472,7 @@ const FantasyDraft = () => {
                         aiTeam={aiTeam}
                         onVote={handleVote}
                         voted={voted}
+                        voteStatus={voteStatus}
                         voteCounts={voteCounts}
                       />
                     )}

@@ -8,21 +8,29 @@ import { recordCompletion } from '@/lib/completions';
 const remote = vi.hoisted(() => ({
   players: [] as DraftPlayer[],
   criteria: null as string | null,
+  user: null as { id: string } | null,
   toast: vi.fn(),
+  insertVote: vi.fn<(row: { voted_team: 'user' | 'ai'; user_id: string }) => Promise<{ error: { code: string } | null }>>(),
+  countVotes: vi.fn(),
 }));
 vi.mock('@/integrations/supabase/client', () => ({
   supabase: {
     functions: { invoke: vi.fn(async (name: string) => {
-      if (name !== 'fantasy-draft-daily') throw new Error('Unexpected fixture function: ' + name);
-      return { data: { criteria: remote.criteria }, error: null };
+      if (name === 'fantasy-draft-daily') return { data: { criteria: remote.criteria }, error: null };
+      if (name === 'simulate-season') return { data: { teamAStory: 'Fixture story A.', teamBStory: 'Fixture story B.' }, error: null };
+      if (name === 'analyze-squads') return { data: null, error: null };
+      throw new Error('Unexpected fixture function: ' + name);
     }) },
     from: vi.fn((table: string) => {
+      if (table === 'fantasy_draft_votes') {
+        return { insert: remote.insertVote, select: () => ({ eq: remote.countVotes }) };
+      }
       if (table !== 'fantasy_draft_players') throw new Error('Unexpected fixture table: ' + table);
       return { select: () => ({ order: async () => ({ data: remote.players, error: null }) }) };
     }),
   },
 }));
-vi.mock('@/contexts/AuthContext', () => ({ useAuth: () => ({ user: null, profile: null }) }));
+vi.mock('@/contexts/AuthContext', () => ({ useAuth: () => ({ user: remote.user, profile: null }) }));
 vi.mock('@/hooks/use-toast', () => ({ useToast: () => ({ toast: remote.toast }) }));
 vi.mock('@/components/game/GameNavbar', () => ({ GameNavbar: () => null }));
 vi.mock('@/components/game/GameHelp', () => ({ GameHelp: () => null }));
@@ -96,6 +104,18 @@ async function finishAiTurn(view: RenderResult) {
   expect(view.getByText('Draft Complete!', { exact: true })).toBeVisible();
 }
 
+async function openVote() {
+  remote.user = { id: 'fixture-voter' };
+  const view = await openDraft();
+  for (const position of ['GK', 'DEF', 'DEF', 'DEF', 'DEF', 'MID', 'MID', 'MID', 'FWD', 'FWD', 'FWD']) {
+    await pickPosition(view, position);
+  }
+  await finishAiTurn(view);
+  await act(async () => { fireEvent.click(view.getByRole('button', { name: "Tell the season's story" })); });
+  expect(view.getByRole('heading', { name: 'Who Won the Season?' })).toBeVisible();
+  return view;
+}
+
 beforeEach(() => {
   localStorage.clear();
   vi.clearAllMocks();
@@ -103,6 +123,59 @@ beforeEach(() => {
   vi.spyOn(Math, 'random').mockReturnValue(0);
   remote.players = fixture();
   remote.criteria = null;
+  remote.user = null;
+  remote.insertVote.mockReset().mockResolvedValue({ error: null });
+  remote.countVotes.mockReset().mockImplementation(async (_, team) => ({ count: team === 'user' ? 2 : 7, error: null }));
+});
+
+describe('Fantasy Draft daily vote', { timeout: 20_000 }, () => {
+  it('waits for acceptance, then allows a retry after a refused vote', async () => {
+    let refuse!: (response: { error: { code: string } }) => void;
+    remote.insertVote.mockReturnValueOnce(new Promise(resolve => { refuse = resolve; }));
+    const view = await openVote();
+    fireEvent.click(view.getByRole('button', { name: 'Your Team' }));
+    expect(view.queryByRole('heading', { name: /Winner Declared/ })).not.toBeInTheDocument();
+    const ai = view.getByRole('button', { name: 'AI Team' });
+    expect(ai).toBeDisabled();
+    fireEvent.click(ai);
+    expect(remote.insertVote).toHaveBeenCalledExactlyOnceWith({ voted_team: 'user', user_id: 'fixture-voter' });
+    expect(remote.countVotes).not.toHaveBeenCalled();
+
+    await act(async () => { refuse({ error: { code: '08006' } }); });
+    expect(ai).toBeEnabled();
+    expect(remote.toast).toHaveBeenCalledWith(expect.objectContaining({ title: 'Vote could not be saved' }));
+    expect(remote.countVotes).not.toHaveBeenCalled();
+    await act(async () => { fireEvent.click(ai); });
+    expect(remote.insertVote).toHaveBeenNthCalledWith(2, { voted_team: 'ai', user_id: 'fixture-voter' });
+    expect(view.getByRole('heading', { name: /Winner Declared/ })).toBeVisible();
+    expect(view.getByText('AI Team wins!')).toBeVisible();
+    expect(remote.countVotes.mock.calls).toEqual([['voted_team', 'user'], ['voted_team', 'ai']]);
+    expect(view.getByText('2', { selector: 'strong' })).toBeVisible();
+    expect(view.getByText('7', { selector: 'strong' })).toBeVisible();
+    expect(recordCompletion).toHaveBeenCalledTimes(1);
+  });
+
+  it('shows the existing daily vote restriction without claiming the new vote won', async () => {
+    remote.insertVote.mockResolvedValueOnce({ error: { code: '23505' } });
+    const view = await openVote();
+    await act(async () => { fireEvent.click(view.getByRole('button', { name: 'Your Team' })); });
+    expect(view.queryByRole('heading', { name: /Winner Declared/ })).not.toBeInTheDocument();
+    expect(view.getByText('You already voted today.')).toBeVisible();
+    expect(view.queryByRole('button', { name: 'Your Team' })).not.toBeInTheDocument();
+    expect(view.queryByRole('button', { name: 'AI Team' })).not.toBeInTheDocument();
+    expect(remote.countVotes).not.toHaveBeenCalled();
+    expect(recordCompletion).toHaveBeenCalledTimes(1);
+  });
+
+  it('keeps an accepted vote when the vote tally is unavailable', async () => {
+    remote.countVotes.mockResolvedValueOnce({ count: null, error: { code: '08006' } });
+    const view = await openVote();
+    await act(async () => { fireEvent.click(view.getByRole('button', { name: 'Your Team' })); });
+    expect(view.getByText('Your Team wins!')).toBeVisible();
+    expect(view.queryByText('0', { selector: 'strong' })).not.toBeInTheDocument();
+    expect(view.queryByText('7', { selector: 'strong' })).not.toBeInTheDocument();
+    expect(remote.toast).not.toHaveBeenCalled();
+  });
 });
 afterEach(() => {
   cleanup();

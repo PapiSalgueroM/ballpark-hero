@@ -1,3 +1,9 @@
+## 2026-11-11: Fantasy Draft vote confirmation
+
+The daily vote now waits for the insert result before confirming either side. A temporary failure leaves both choices available for retry. A duplicate explains the existing daily limit, and an unavailable tally no longer displays zero as a result.
+
+Paired compiled 390px drafts used the same picks, 68/100 verdict and one completion each. The original declared a winner for both a held HTTP 503 and a duplicate HTTP 409. The candidate accepted the next vote after the 503 and showed the daily limit after the 409. The three mounted regressions passed and all three failed with the copied original source. All 11 focused cases, the winner and pool simulations, app types, production build, 15 output checks and 16 route-size caps passed. The snapshot boot check used native loopback routing.
+
 ## 2026-11-07: Club Manager historical roster counts live
 
 [PR #532](https://github.com/PapiSalgueroM/ballpark-hero/pull/532) published from main `c3b5ca4afaf9b4dadcd748f340e8e8e3e4a1a1dd`, App tree `133fcd3d26a4d237178e5c7efee723048da0aef2`, Lovable deployment `510b1df1-2172-42c0-90f9-d9f9c997b840`.
