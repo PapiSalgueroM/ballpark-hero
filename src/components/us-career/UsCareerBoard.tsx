@@ -91,6 +91,7 @@ import type { HallWall } from '@/lib/usCareerHallWall';
 import { DIRTY_SENTENCE_NO_WASHERS, canDealWithDirtyMoney, washersLeft } from '@/lib/careerDirtyMoney';
 
 const UsCareerPractice = lazy(() => import('@/components/us-career/UsCareerPractice'));
+const SaveMovedNotice = lazy(() => import('@/components/SaveMovedNotice'));
 const CareerSeasonReview = lazy(() => import('@/components/us-career/CareerSeasonReview'));
 /* Round 1039: the retirement talk, the farewell banner and the Hall card load
    with the moment they belong to; the speech (careerAwardsNight) rides only
@@ -147,6 +148,8 @@ const SAVE_TOAST_BUTTON = { height: 44, minWidth: 64, paddingLeft: 14, paddingRi
 
 export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
   const pendingSave = useRef<{ key: string; value: string | null } | null>(null);
+  const savedBytes = useRef<string | null>();
+  const [playSaveMoved, setPlaySaveMoved] = useState(false);
   const [saveFailure, setSaveFailure] = useState<'write' | 'remove' | null>(null);
   const saveFailed = saveFailure !== null;
   useEffect(() => {
@@ -447,12 +450,15 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
 
   useEffect(() => {
     pendingSave.current = null;
+    savedBytes.current = undefined;
+    setPlaySaveMoved(false);
     setSaveFailure(null);
     setDecisionOutcome(null);
     consumedEvent.current = null;
     decisionReturn.current = false;
     try {
       const raw = localStorage.getItem(sport.saveKey);
+      savedBytes.current = raw;
       if (!raw) return;
       const s = JSON.parse(raw) as SaveShape;
       if (!s.c) {
@@ -536,6 +542,7 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
     try {
       if (pending.value === null) localStorage.removeItem(pending.key);
       else localStorage.setItem(pending.key, pending.value);
+      savedBytes.current = pending.value;
       pendingSave.current = null;
       setSaveFailure(null);
     } catch {
@@ -678,6 +685,16 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
      keep. Null after a press that played no season (a talk, the market, a
      banned year). */
   const playedRef = useRef<CareerState | null>(null);
+
+  const canPlaySeason = () => {
+    try {
+      if (savedBytes.current !== undefined && localStorage.getItem(sport.saveKey) !== savedBytes.current) {
+        setPlaySaveMoved(true);
+        return false;
+      }
+    } catch { /* The current tab can still play through a storage refusal. */ }
+    return true;
+  };
 
   const playSeason = () => {
     playedRef.current = null;
@@ -911,8 +928,11 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
     if (!career || !held || pendingSave.current) return false;
     try {
       const raw = localStorage.getItem(sport.saveKey);
-      const stored = raw ? restoreMarketTalk((JSON.parse(raw) as SaveShape).contractTalk, career, sport.slug) : null;
+      const disk = raw ? JSON.parse(raw) as SaveShape : null;
+      const stored = restoreMarketTalk(disk?.contractTalk, career, sport.slug);
       if (!stored || JSON.stringify(stored) === JSON.stringify(held)) return false;
+      if (disk && disk.teamQuality === teamQuality && JSON.stringify(disk.c) === JSON.stringify(career)
+        && JSON.stringify(disk.coach ?? null) === JSON.stringify(coachRef.current)) savedBytes.current = raw;
       setMarketTalk(stored);
       setPhase(stored.kind === 'freeagency' ? 'freeagency' : stored.declined ? 'season' : 'extension');
       return true;
@@ -1201,6 +1221,7 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
      back). Not while the rules load, and not for a plaque never built (a key past the bound refuses nothing). */
   const hallRefused = hallWallKeyNow !== null && !hallKept && (wallRefused === hallWallKeyNow || !!saveFailure);
   const withSaveStatus = (content: ReactNode) => <div ref={boardTop}>
+    {playSaveMoved && <Suspense fallback={null}><SaveMovedNotice message="This career moved on in another tab. Reload to carry on." /></Suspense>}
     {saveFailure && <UsCareerSaveNotice operation={saveFailure} onRetry={retrySave} />}
     {startOver && <UsCareerStartOver sport={sport.label} onConfirm={reset} hallCard={hallOnRestart} hallKept={hallKept} />}
     {content}
@@ -1901,12 +1922,12 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
           )}
           <button
             ref={careerEntryButton}
-            onClick={playSeason}
+            onClick={() => { if (canPlaySeason()) playSeason(); }}
             className="inline-flex min-h-11 items-center gap-2 rounded-full bg-primary px-8 py-2.5 text-sm font-bold text-primary-foreground hover:opacity-90"
           >
             <Dumbbell className="h-4 w-4" /> Play the {career.year} season
           </button>
-          <UsSeasonCentreEntry sport={sport} career={career} busy={practiceOpen} onPlay={playSeason} played={() => playedRef.current} />
+          <UsSeasonCentreEntry sport={sport} career={career} busy={practiceOpen} canPlay={canPlaySeason} onPlay={playSeason} played={() => playedRef.current} />
           <p className="mt-2 text-xs text-muted-foreground">
             Career so far: {sport.careerSoFar(career)}
           </p>

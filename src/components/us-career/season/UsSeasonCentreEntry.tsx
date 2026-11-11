@@ -45,11 +45,13 @@ function copyOf(c: UsCareerCore | null | undefined): UsCareerCore | null {
 
 const playable = (row: UsCareerSeason | null | undefined): row is UsCareerSeason => !!row && row.games > 0 && row.teamResult !== 'SUSPENDED';
 
-export function UsSeasonCentreEntry({ sport, career, busy, onPlay, played }: {
+export function UsSeasonCentreEntry({ sport, career, busy, canPlay, onPlay, played }: {
   sport: UsCareerSport;
   career: UsCareerCore;
   /** The hub is busy (practice is open): the button is disabled like the rest. */
   busy: boolean;
+  /** Recheck whether this press may play after the viewer finishes loading. */
+  canPlay?: () => boolean;
   /** The board's own playSeason. */
   onPlay: () => void;
   /** The career the board's last Play left a played season on, or null when
@@ -59,8 +61,8 @@ export function UsSeasonCentreEntry({ sport, career, busy, onPlay, played }: {
   const centre = useContext(UsSeasonCentreOpen);
   const [loading, setLoading] = useState<'play' | 'watch' | null>(null);
   /* the hub as it is NOW, for the moment the viewer has finished loading */
-  const now = useRef({ career, busy, onPlay, played });
-  now.current = { career, busy, onPlay, played };
+  const now = useRef({ career, busy, canPlay, onPlay, played });
+  now.current = { career, busy, canPlay, onPlay, played };
   const alive = useRef(true);
   useEffect(() => { alive.current = true; return () => { alive.current = false; }; }, []);
   if (!sport.loadSeasonCentre) return null;
@@ -82,6 +84,7 @@ export function UsSeasonCentreEntry({ sport, career, busy, onPlay, played }: {
     }
     /* the hub may have moved on while the viewer loaded (he pressed Play, or opened practice) */
     const at = now.current;
+    if (at.canPlay?.() === false) return;
     if (at.busy || at.career.seasons.length !== before || at.career.year !== year) return;
     at.onPlay();
     if (!centre) return;
