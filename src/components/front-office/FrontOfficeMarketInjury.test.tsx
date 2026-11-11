@@ -13,7 +13,7 @@ const KEY = 'front-office-save-v1';
 const team = 'SEA';
 const leagueFromSave = (): LeagueState => JSON.parse(localStorage.getItem(KEY)!).league;
 const row = (attribute: string, id: string) => within(document.querySelector('[' + attribute + '="' + id + '"]') as HTMLElement);
-const click = (name: string) => fireEvent.click(screen.getByRole('button', { name, exact: true }));
+const click = (name: string) => fireEvent.click(screen.getByRole('button', { name }));
 const tile = (name: string) => fireEvent.click(screen.getByText(name));
 function start(league: LeagueState, extra: object = {}) {
   localStorage.setItem(KEY, JSON.stringify({
