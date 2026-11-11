@@ -196,6 +196,6 @@ export function loadDailyRun(date: string): GauntletRun | null {
   return engineLoadDailyRun(soccerConfig([]), date);
 }
 
-export function saveDailyRun(date: string, run: GauntletRun): void {
-  engineSaveDailyRun(soccerConfig([]), date, run);
+export function saveDailyRun(date: string, run: GauntletRun): boolean {
+  return engineSaveDailyRun(soccerConfig([]), date, run);
 }

@@ -1,3 +1,9 @@
+## 2026-11-11: Soccer Gauntlet Daily save retry
+
+When browser storage refuses a Daily save, the completed recap stays available in the current tab, including after returning to modes. Retry saves the same run and prefers a result another tab already saved. The mounted regression also checks that reviewing the result and retrying never record another completion.
+
+On the compiled 390px replay, the original redealt the Daily after a refused write. The candidate kept the same 48-point recap, saved the exact 731-byte result after two refusals, and restored it on a cold reload. The initial picks, four match lines and single completion matched. Both copied-original failures, three focused tests, Daily Reload and its controls, four game and storage sims, app types, production build, 15 output checks and 16 route caps passed. A composed product copy with PR589, PR601 and PR619 passed eight tests across four suites.
+
 ## 2026-11-11: Soccer Gauntlet Draft completion after Daily review
 
 Returning to the Soccer Gauntlet mode menu clears the finished run and resets completion tracking. Reviewing a saved Daily shows its original result without recording another completion. A fresh Unlimited draft finished within five seconds of that review records once.
