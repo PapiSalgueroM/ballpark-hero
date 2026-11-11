@@ -1,3 +1,11 @@
+## 2026-11-11: Soccer Gauntlet keeps new Dailies on the official player feed
+
+A failed player feed now offers a retry before starting a fresh Soccer Gauntlet Daily. Unlimited can still deal from the offline roster, and a locked Daily can still open from the same menu.
+
+In the original 390px replay, the November 11 Daily offered different cards on the official feed and after a 503. Keeping the first card at every slot scored 32 on the official feed and 48 on the fallback. Both scores were recorded and the fallback result still locked the Daily after the feed recovered.
+
+The fixed phone replay finished Unlimited during a 503, then retried the Daily with one new player-feed read. The recovered Daily matched all eleven official choices and the saved result. A locked Daily opened during the outage without another completion, and a short official feed kept its existing error. All 11 focused tests, the Gauntlet engine sim, app types, the build, 15 output checks and 16 unchanged route caps passed.
+
 ## 2026-11-07: Club Manager historical roster counts live
 
 [PR #532](https://github.com/PapiSalgueroM/ballpark-hero/pull/532) published from main `c3b5ca4afaf9b4dadcd748f340e8e8e3e4a1a1dd`, App tree `133fcd3d26a4d237178e5c7efee723048da0aef2`, Lovable deployment `510b1df1-2172-42c0-90f9-d9f9c997b840`.
