@@ -38,9 +38,8 @@ const seasonScore = (points: number) => Math.min(100, Math.round((points / 114) 
 
 /* Round 644: the share says how the season really went and carries the same
    season score. It used to claim "I outdrafted the AI" whatever the table said. */
-function fantasyShareText(verdict: SdSeason | null): string {
+function fantasyShareText(verdict: SdSeason): string {
   const tail = 'Can you build a better squad? douknowball.com/fantasy-draft';
-  if (!verdict) return `I drafted my XI on Fantasy Draft at DoUKnowBall. ${tail}`;
   const line = `Season score ${seasonScore(verdict.points[0])}/100, ${verdict.points[0]} pts to the AI's ${verdict.points[1]}.`;
   const result = verdict.winner === 0
     ? 'I outdrafted the AI on Fantasy Draft at DoUKnowBall!'
@@ -430,6 +429,15 @@ const FantasyDraft = () => {
                       </div>
                     )}
 
+                    {verdict && (
+                      <ShareButtons
+                        gameName="Fantasy Draft"
+                        gamePath="/fantasy-draft"
+                        score={`Season score ${seasonScore(verdict.points[0])}/100 (${verdict.points[0]} pts vs the AI's ${verdict.points[1]})`}
+                        customText={fantasyShareText(verdict)}
+                      />
+                    )}
+
                     {/* Simulate button */}
                     {draftComplete && validXis && !seasonSimulated && (
                       <Button
@@ -464,15 +472,6 @@ const FantasyDraft = () => {
                         onVote={handleVote}
                         voted={voted}
                         voteCounts={voteCounts}
-                      />
-                    )}
-
-                    {seasonSimulated && (
-                      <ShareButtons
-                        gameName="Fantasy Draft"
-                        gamePath="/fantasy-draft"
-                        score={verdict ? `Season score ${seasonScore(verdict.points[0])}/100 (${verdict.points[0]} pts vs the AI's ${verdict.points[1]})` : 'Drafted my XI and simulated a full season'}
-                        customText={fantasyShareText(verdict)}
                       />
                     )}
                   </>
