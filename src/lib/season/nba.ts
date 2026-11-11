@@ -1,7 +1,7 @@
 /* Round 1048: the NBA's number file for the US Season Center
    (src/lib/season/us.ts binds it to the season core).
 
-   What is the engine's: games played, points a game (a whole number), rebounds
+   What is the engine's: games played, points a game (whole in older saves, one decimal in newer ones), rebounds
    and assists a game (one decimal), the team result and the playoff numbers,
    all read from the saved line. What is THIS SIM'S OWN, and said so in the
    "?": the record bands, the score law, the per game spread, who he meets on
@@ -91,7 +91,8 @@ export function nbaDealProblems(ctx: UsSeasonCtx, games: readonly DerivedGame[])
 function totals(row: UsRow): StatTotal[] {
   const out: StatTotal[] = [];
   const ppg = num(row.ppg); const rpg = num(row.rpg); const apg = num(row.apg);
-  if (ppg !== null) out.push({ key: 'pts', kind: 'mean', mean: ppg, dp: 0, perGame: 'int', min: 0, max: Math.min(70, Math.round(ppg * 2.3) + 6) });
+  // Minutes identify the newer saved stat line, which records PPG to a tenth.
+  if (ppg !== null) out.push({ key: 'pts', kind: 'mean', mean: ppg, dp: num(row.mpg) === null ? 0 : 1, perGame: 'int', min: 0, max: Math.min(70, Math.round(ppg * 2.3) + 6) });
   if (rpg !== null) out.push({ key: 'reb', kind: 'mean', mean: rpg, dp: 1, perGame: 'int', min: 0, max: Math.round(rpg * 2.5) + 4 });
   if (apg !== null) out.push({ key: 'ast', kind: 'mean', mean: apg, dp: 1, perGame: 'int', min: 0, max: Math.round(apg * 2.5) + 4 });
   return out;
@@ -137,7 +138,8 @@ function check(row: UsRow, _pos: string, s: DerivedSeason, ctx: UsSeasonCtx): st
   return out;
 }
 
-const per = (sum: number | undefined, apps: number) => (apps ? ((sum ?? 0) / apps).toFixed(1) : '-');
+// Round in tenths before formatting so exact half-tenths match the stat fitter.
+const per = (sum: number | undefined, apps: number) => (apps ? (Math.round((10 * (sum ?? 0)) / apps) / 10).toFixed(1) : '-');
 const plural = (n: number, one: string, many: string) => `${n} ${n === 1 ? one : many}`;
 
 export const NBA_SEASON: UsSeasonBind = {
@@ -202,7 +204,7 @@ export const NBA_SEASON: UsSeasonBind = {
       examples: [
         { head: 'A game', body: `Game 12, at home to ${named && opp ? `the ${opp}` : 'another team'}. You win 112-104 and put up 31 points, 8 rebounds and 6 assists. Your record goes to 8-4.` },
         { head: 'The court', body: 'Scores update at the end of each quarter. A 24-22 first quarter followed by 31-28 makes it 55-50. The figures are an illustration, not a shot chart or play-by-play. Your points, rebounds and assists appear at the final buzzer.' },
-        { head: 'Your averages', body: 'Your season card says 25 points a game over 80 games. Add up every game here, divide by 80, and it rounds to 25. Same for rebounds and assists.' },
+        { head: 'Your averages', body: 'Your season card says 25.3 points a game over 80 games. Add up every game here, divide by 80, and it rounds to 25.3. Same for rebounds and assists.' },
         { head: 'The playoffs', body: 'Your card says you lost in the conference semis after 11 playoff games. The path shows two rounds that add up to 11: a 4-2 win, then a 1-4 loss.' },
       ],
     }),
