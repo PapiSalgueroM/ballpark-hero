@@ -835,7 +835,7 @@ export function mlbRivalSeason(year: number, mine: { pos: MlbCareerPos; kind: st
   };
 }
 
-export function mlbProgress(c: MlbCareerState, rng: () => number): string[] {
+export function mlbProgress(c: MlbCareerState, rng: () => number, paidSalary = c.salary): string[] {
   const notes: string[] = [];
   const before = c.ovr;
   // Round 58: progression slowed, and the fall now starts at the age this
@@ -896,8 +896,8 @@ export function mlbProgress(c: MlbCareerState, rng: () => number): string[] {
      the season sim adds the salary to earnings before this runs, and crediting
      both would pay a legacy save twice for the same season. */
   const upkeep = c.yearlyCosts ?? 0;
-  const priorNet = c.netWorth ?? Math.round(Math.max(0, c.earnings - c.salary) * TAKE_HOME * 10) / 10;
-  c.netWorth = Math.round((priorNet + c.salary * TAKE_HOME - upkeep) * 10) / 10;
+  const priorNet = c.netWorth ?? Math.round(Math.max(0, c.earnings - paidSalary) * TAKE_HOME * 10) / 10;
+  c.netWorth = Math.round((priorNet + paidSalary * TAKE_HOME - upkeep) * 10) / 10;
   /* Round 1534: the shop pays what its cards print (src/lib/usCareerAnnualBenefits.ts), straight after the pay
      line so Cash is in tenths, and before the money app. Stakes draw on their own keyed stream, never this rng. */
   for (const line of settleUsCareerShop(c, MLB_SPEND_ITEMS)) notes.push(line);
