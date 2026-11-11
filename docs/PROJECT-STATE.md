@@ -1,3 +1,12 @@
+## 2026-11-11: NFL Front Office offseason free-agent aging draft
+
+NFL Front Office now ages contract departures once when the season rolls over. The free agents already on the market at offseason start still get their annual update. The fix applies with or without the GM desk and keeps the market cutoff and random draw order. This draft builds on [PR #627](https://github.com/PapiSalgueroM/ballpark-hero/pull/627).
+
+A compiled 390px Seattle season finished 10-7 and took the same three draft picks on both builds. Maliek Collins was 31 before the offseason. The Free agency row now shows age 32 and 90 OVR, where the stack base showed age 33 and 89 OVR. Across both replays, all 31,747 draws and all saved fields outside the 29 corrected market rows matched. Cold reload held the exact completed bytes.
+
+The mounted desk-on and desk-off regressions catch the extra tick. The GM Desk fixture records nine corrected season checkpoints, all rejected by its double-aging control. The 91 Full Rosters checks include 162 legacy league states matched against the archived engine with the single-aging rule applied to the reference.
+
+
 ## 2026-11-11: NFL Front Office weekly starter upgrades draft
 
 Full-roster CPU clubs now check the affordable free agents in rating order and sign at most one who improves a starter by the existing margin. The cap, 53-player limit, and this-season release refusal still govern each move. Old-size leagues retain their original one-candidate behavior.

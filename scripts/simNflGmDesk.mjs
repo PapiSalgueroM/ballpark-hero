@@ -60,6 +60,7 @@
  *   nocapguard   the trade finder's accept skips the dead money cap check    (3)
  *   reliefnodead the package cap check forgets the dead money a leaver keeps (6)
  *   staletiles   an old save's Staff box claims an edge no game applies      (7)
+ *   doubleage    a contract departure ages again on the market              (1)
  * Recording the fixture: SIM_NFL_GM_DESK_RECORD=<engine git ref> rewrites
  * scripts/data/nflGmDeskFixture.json from that engine. The weekly starter
  * upgrade fix changes the full-roster replay from its first added signing.
@@ -119,7 +120,7 @@ const CONTROLS = {
   coinflip: '2', shortrookie: '2', latetrade: '3', noguard: '3', droppick: '4',
   flatstaff: '5', flatstep: '5', onepost: '5', nodefault: '1', nodead: '6',
   boardsummer: '2', boarddraftee: '2', boardedges: '5', stancespots: '3', stanceswap: '3', nocapguard: '3', reliefnodead: '6',
-  staletiles: '7',
+  staletiles: '7', doubleage: '1',
 };
 if (CONTROL && !CONTROLS[CONTROL]) {
   console.error(`SIM_NFL_GM_DESK_CONTROL=${CONTROL} is not a control this harness knows (${Object.keys(CONTROLS).join(', ')})`);
@@ -166,6 +167,7 @@ const FILES = {
   board: path.join(ROOT, 'src', 'components', 'front-office', 'FrontOfficeBoard.tsx'),
 };
 const EDITS = {
+  doubleage: ['engine', '    if (!openingMarket.has(fa)) continue;', ''],
   coinflip: ['desk', '  const run = runDeskOffseason(nflContractHost, league, ledger, rng);',
     '  const run = { ok: true as const, engine: nflContractHost.runOffseason(league, rng, team), applied: [] as GmDecision[], picksAdded: [] as number[] };'],
   shortrookie: ['desk', '  p.years = NFL_ROOKIE_DEAL_YEARS + 1;', '  p.years = NFL_ROOKIE_DEAL_YEARS;'],
