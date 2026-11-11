@@ -1,3 +1,9 @@
+## 2026-11-11: Manager Hot Seat preserves the finished Daily
+
+Entering the Daily or saving an action checks for a finished result for that day. A tab that finds one shows the saved verdict and keeps its Club Manager offer available. Entering from an older menu also reads the latest unfinished actions. Free play uses its existing save and resume path.
+
+In the compiled 390 px baseline, Swansea City's Nov 11 Daily survived on 6 of 4 points. A Kick off from an older open tab replaced seven settled actions with two unfinished actions. The mounted case reproduced that overwrite before the fix. All 29 mounted and related Hot Seat tests passed. The compiled candidate preserved the exact save in both older tabs and through reload and the Club Manager offer. Free play still worked and only the original completion was recorded. App types, the 852-file build, 15 output checks and all 16 route caps passed. Manager Hot Seat measured 670.4 KiB against its existing 672 KiB cap.
+
 ## 2026-11-07: Club Manager historical roster counts live
 
 [PR #532](https://github.com/PapiSalgueroM/ballpark-hero/pull/532) published from main `c3b5ca4afaf9b4dadcd748f340e8e8e3e4a1a1dd`, App tree `133fcd3d26a4d237178e5c7efee723048da0aef2`, Lovable deployment `510b1df1-2172-42c0-90f9-d9f9c997b840`.

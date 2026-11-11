@@ -57,6 +57,17 @@ function readActions(v: unknown): HotSeatAction[] | null {
   return Array.isArray(v) && v.length <= 60 && v.every(isAction) ? (v as HotSeatAction[]) : null;
 }
 
+function readDailyRun(date: string, club: string) {
+  return readDailyRecord(SLUG, date, f => {
+    const actions = readActions(f.actions);
+    if (!actions || f.club !== club) return null;
+    const done = f.done === true && typeof f.kind === 'string' && f.kind in VERDICT_WORDS
+      ? { club, kind: f.kind as VerdictKind, points: Number(f.points) || 0, target: Number(f.target) || 0, dots: typeof f.dots === 'string' ? f.dots : '' }
+      : null;
+    return { actions, done };
+  });
+}
+
 /** A verdict that keeps the job, for the menu's way back to the offer. The
  *  card's own canCarryOn is still the gate on the offer itself. */
 function keepsJob(kind: VerdictKind): boolean {
@@ -132,21 +143,19 @@ export default function ManagerHotSeatBoard() {
      records that you played and puts nothing on the leaderboard. */
   useGameCompletion(SLUG, !!run?.verdict, undefined);
 
+  const showSavedDailyResult = useCallback((rec: ReturnType<typeof readDailyRun>) => {
+    if (!rec?.done) return false;
+    setDailyDone(rec.done);
+    setDailyFinished(rec.actions.length ? rec.actions : null);
+    setDailySaved(null);
+    return true;
+  }, []);
+
   /* What is waiting in storage, read after mount so nothing from the clock or
      the store lands in the first render. */
   useEffect(() => {
-    const rec = readDailyRecord(SLUG, today, f => {
-      const actions = readActions(f.actions);
-      if (!actions || f.club !== daily.club) return null;
-      const done = f.done === true && typeof f.kind === 'string' && f.kind in VERDICT_WORDS
-        ? { club: daily.club, kind: f.kind as VerdictKind, points: Number(f.points) || 0, target: Number(f.target) || 0, dots: typeof f.dots === 'string' ? f.dots : '' }
-        : null;
-      return { actions, done };
-    });
-    if (rec?.done) {
-      setDailyDone(rec.done);
-      setDailyFinished(rec.actions.length ? rec.actions : null);
-    } else if (rec && rec.actions.length) setDailySaved(rec.actions);
+    const rec = readDailyRun(today, daily.club);
+    if (!showSavedDailyResult(rec) && rec?.actions.length) setDailySaved(rec.actions);
     try {
       const raw = localStorage.getItem(FREE_KEY);
       if (raw) {
@@ -166,10 +175,16 @@ export default function ManagerHotSeatBoard() {
     } catch {
       /* a blocked or mangled store just means no free play to continue */
     }
-  }, [today, daily.club]);
+  }, [today, daily.club, showSavedDailyResult]);
 
   const persist = useCallback((r: HotSeatRun) => {
     if (r.setup.daily) {
+      // A tab still playing may have missed another tab finishing this Daily.
+      if (showSavedDailyResult(readDailyRun(r.setup.daily, r.setup.club))) {
+        setRun(null);
+        setPhase('menu');
+        return false;
+      }
       writeDailyRecord(SLUG, r.setup.daily, {
         club: r.setup.club,
         actions: r.actions,
@@ -193,7 +208,8 @@ export default function ManagerHotSeatBoard() {
       setFreeSaved(r.verdict ? null : { setup: r.setup, actions: r.actions });
       setFreeFinished(r.verdict && keepsJob(r.verdict.kind) ? { setup: r.setup, actions: r.actions } : null);
     }
-  }, []);
+    return true;
+  }, [showSavedDailyResult]);
 
   /* The takeover costs about twenty engine calls, so the loading card paints first. */
   const open = useCallback((setup: HotSeatSetup, actions: HotSeatAction[] = []) => {
@@ -209,7 +225,12 @@ export default function ManagerHotSeatBoard() {
     }, 30);
   }, []);
 
-  const startDaily = () => open({ club: daily.club, seed: daily.seed, daily: daily.daily }, dailySaved ?? []);
+  const startDaily = () => {
+    const saved = readDailyRun(today, daily.club);
+    if (!showSavedDailyResult(saved)) {
+      open({ club: daily.club, seed: daily.seed, daily: daily.daily }, saved?.actions ?? dailySaved ?? []);
+    }
+  };
   const startFree = (club: string) => {
     const seed = Math.floor(Math.random() * 4294967296) >>> 0;
     setFreeSaved(null);
@@ -223,16 +244,14 @@ export default function ManagerHotSeatBoard() {
   };
 
   const takeJob = () => {
-    if (!run) return;
-    persist(run);
-    setPhase('match');
+    if (run && persist(run)) setPhase('match');
   };
 
   const play = () => {
     if (!run || run.verdict) return;
     const next = playHotSeatMatch(run, mentality, talk);
+    if (!persist(next)) return;
     setRun(next);
-    persist(next);
     setTalk(null);
     setLastLine(null);
     setPhase(next.verdict ? 'done' : 'after');
@@ -241,8 +260,8 @@ export default function ManagerHotSeatBoard() {
   const answer = (i: number) => {
     if (!run) return;
     const next = answerHotSeatPress(run, i);
+    if (!persist(next)) return;
     setRun(next);
-    persist(next);
     setLastLine(next.state.press?.lastLine ?? null);
   };
 
