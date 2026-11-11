@@ -784,6 +784,7 @@ export function nbaOffseason(league: NbaLeague, rng: () => number, myTeam?: stri
   /* Round 722: next season's cap, under whose tax line a CPU club that just
      wrote a cheque, or would write one at today's payroll, steers. */
   const nextCap = nbaNextCap(league.cap);
+  const incomingFreeAgents = new Set(league.freeAgents);
   for (const t of Object.values(league.teams)) {
     const cpu = t.abbr !== myTeam;
     /* Round 722: a CPU club facing a cheque stops re-signing its depth: an
@@ -837,7 +838,14 @@ export function nbaOffseason(league: NbaLeague, rng: () => number, myTeam?: stri
   /* Round 824: a free agent's ask is a deal he has not signed yet, so each
      summer it is set again for his rating in next season's money. Without
      this the pool kept asking opening season prices while the cap rose. */
-  for (const fa of league.freeAgents) { fa.age += 1; if (fa.age >= 32) fa.ovr = Math.max(64, fa.ovr - 1); fa.salary = nbaSalaryFor(fa.ovr, nextCap); }
+  for (const fa of league.freeAgents) {
+    // Players added by the roster pass have already aged and declined this summer.
+    if (incomingFreeAgents.has(fa)) {
+      fa.age += 1;
+      if (fa.age >= 32) fa.ovr = Math.max(64, fa.ovr - 1);
+    }
+    fa.salary = nbaSalaryFor(fa.ovr, nextCap);
+  }
   league.cap = nextCap;
   league.season += 1;
   league.round = 1;
