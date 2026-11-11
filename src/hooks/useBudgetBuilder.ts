@@ -74,6 +74,8 @@ export interface Squad {
 
 export interface BudgetBuilderState {
   loading: boolean;
+  marketUnavailable: boolean;
+  retryMarket: () => void;
   pool: Player[];
   formation: Formation;
   setFormation: (name: string) => void;
@@ -134,8 +136,7 @@ export function budgetFor(moneyXi: (Player | null)[], eraId?: string): number {
 }
 
 export function useBudgetBuilder(): BudgetBuilderState {
-  const [pools, setPools] = useState<Record<string, Player[]>>({});
-  const [loading, setLoading] = useState(true);
+  const [pools, setPools] = useState<Partial<Record<EraDef['id'], Player[] | null>>>({});
   const [eraId, setEraId] = useState<EraDef['id']>('today');
   const [formationName, setFormationName] = useState(FORMATIONS[0].name);
   const [topic, setTopic] = useState<Topic>('all');
@@ -145,21 +146,25 @@ export function useBudgetBuilder(): BudgetBuilderState {
   const [series, setSeries] = useState<SeriesResult | null>(null);
 
   const era = BB_ERAS.find(e => e.id === eraId) ?? BB_ERAS[0];
+  const loadedPool = pools[era.id];
+  const loading = loadedPool === undefined;
+  const marketUnavailable = loadedPool === null;
 
   useEffect(() => {
+    if (!loading) return;
     let cancelled = false;
-    if (pools[era.id]) { setLoading(false); return; }
-    setLoading(true);
     fetchSquadPool('current', era.year).then(p => {
       if (cancelled) return;
-      setPools(prev => ({ ...prev, [era.id]: p }));
-      setLoading(false);
+      setPools(prev => ({ ...prev, [era.id]: p.length ? p : null }));
     });
     return () => { cancelled = true; };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [era.id]);
+  }, [era.id, era.year, loading]);
 
-  const pool = pools[era.id] ?? [];
+  const retryMarket = useCallback(() => {
+    setPools(prev => prev[eraId] === null ? { ...prev, [eraId]: undefined } : prev);
+  }, [eraId]);
+
+  const pool = loadedPool ?? [];
 
   const formation = useMemo(
     () => FORMATIONS.find(f => f.name === formationName) ?? FORMATIONS[0],
@@ -302,7 +307,7 @@ export function useBudgetBuilder(): BudgetBuilderState {
   }, [complete, era, budget, formation, teamRating, spent, finalScore, criterion, criterionMet, series, moneyRating]);
 
   return {
-    loading, pool: topicPool, formation, setFormation, topic, setTopic,
+    loading, marketUnavailable, retryMarket, pool: topicPool, formation, setFormation, topic, setTopic,
     era, setEra, budget,
     squad, activeSlot, setActiveSlot, candidates, search, setSearch,
     spent, remaining, filled, complete, teamRating,

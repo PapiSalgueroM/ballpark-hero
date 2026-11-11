@@ -1,3 +1,11 @@
+## 2026-11-11: Budget Builder reports unavailable historical markets
+
+The 2007 and 2015 markets need their dated player pools. If that read fails, returns no rows, or yields fewer than 33 usable players, the game shows the requested market as unavailable and offers a retry. The market choices remain available during the read. Today continues to use its bundled player pool when its live read fails.
+
+The original phone replay signed Lamine Yamal for $216M in both historical markets after a failed or empty read. The mounted regression covers each unavailable state, same-year retry with a dated response, and returning to the cached Today market while a historical read is pending.
+
+The fixed production build recovered both years in the 390px replay using separate 33-player response fixtures. Today kept its offline $1,000M market. All 17 scoped tests, app types, the build, 17 output and game checks, and 16 route size caps passed.
+
 ## 2026-11-07: Club Manager historical roster counts live
 
 [PR #532](https://github.com/PapiSalgueroM/ballpark-hero/pull/532) published from main `c3b5ca4afaf9b4dadcd748f340e8e8e3e4a1a1dd`, App tree `133fcd3d26a4d237178e5c7efee723048da0aef2`, Lovable deployment `510b1df1-2172-42c0-90f9-d9f9c997b840`.
