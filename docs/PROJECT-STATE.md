@@ -1,3 +1,12 @@
+## 2026-11-11: NFL Front Office free-agent injury recovery draft
+
+Played regular-season weeks now count toward injuries while a player is unsigned. Signing in the same week keeps the injury clock, and the offseason clears market injuries as it already clears roster injuries. The change builds on [PR #645](https://github.com/PapiSalgueroM/ballpark-hero/pull/645).
+
+In the compiled 390px replay, an injury stayed at three weeks immediately after Cut and same-week Sign. After two played weeks, the market and the subsequent signing both held one week instead of three. The offseason replay cleared its three-week injury. The two cold reloads held exact saved bytes, and the paired weekly runs held all 1,121 draws and every other saved field. The same-season cut-back refusal still applied.
+
+Both mounted regressions failed on main and passed on the candidate. The 28 focused tests, the nine existing GM Desk checkpoints, all seven Desk sections over 20 seasons and the production build passed.
+
+
 ## 2026-11-11: NFL Front Office offseason free-agent aging draft
 
 NFL Front Office now ages contract departures once when the season rolls over. The free agents already on the market at offseason start still get their annual update. The fix applies with or without the GM desk and keeps the market cutoff and random draw order. This draft builds on [PR #627](https://github.com/PapiSalgueroM/ballpark-hero/pull/627).
