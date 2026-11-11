@@ -823,7 +823,18 @@ export default function NbaFrontOfficeBoard() {
   // Round 82: shop a player league-wide with the real trade rules
   const doShop = () => {
     if (!league || !myTradePiece || deadlineBlock()) return;
-    const offers = findTrades(league.teams, myTeam, myTradePiece, league.cap, (m, t, a, b, s, c) => nbaTrade(m, t, a, b, s, c, league.taxScale), nbaTradeValue);
+    const round = lastPickRound(league, true);
+    const blockedPartners = new Set<string>();
+    if (gm && round !== null) {
+      const ledger = nbaPicksOf(gm, league);
+      for (const partner of Object.keys(league.teams)) {
+        if (partner !== myTeam && nbaMirrorPickRefusal(ledger, myTeam, partner, round, league.season)) blockedPartners.add(partner);
+      }
+    }
+    const offers = findTrades(league.teams, myTeam, myTradePiece, league.cap,
+      (mine, theirs, send, receive, sweeten, cap) => sweeten && blockedPartners.has(theirs.abbr)
+        ? 'invalid' : nbaTrade(mine, theirs, send, receive, sweeten, cap, league.taxScale),
+      nbaTradeValue);
     setShopOffers(offers); setShopTried(true);
   };
   const acceptShopOffer = (o: FinderOffer) => {
