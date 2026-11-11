@@ -22,7 +22,7 @@ vi.mock('@/lib/perfectSeasonExpansion', async importOriginal => {
 vi.mock('@/lib/perfectSeasonNfl', async importOriginal => ({
   ...await importOriginal<typeof import('@/lib/perfectSeasonNfl')>(),
   fetchTeamSeasonIndex: async () => [{ year: 2001, abbr: 'FXR', name: 'Fixture Club' }],
-  fetchSquad: async () => squad,
+  fetchSquad: async () => ({ ...squad, players: [...squad.players, reserve] }),
 }));
 
 const squad: SpinSquad = {
@@ -32,6 +32,10 @@ const squad: SpinSquad = {
     rating: 80, eligible: [slot.key], detail: 'Fictional archive fixture',
   })),
 };
+const reserve = {
+  playerId: 'fixture-reserve', name: 'Fixture Reserve Coach', rating: 15,
+  eligible: ['HC'], detail: 'Fictional archive fixture',
+};
 
 const tick = (ms: number) => act(async () => { await vi.advanceTimersByTimeAsync(ms); });
 const mount = () => mountPage(<NflPage />, '/perfect-season-nfl');
@@ -40,14 +44,22 @@ async function chooseMode(page: MountedPage, name: RegExp) {
   await tick(10);
 }
 
-async function draft(page: MountedPage) {
+async function readyForCoach(page: MountedPage) {
   const board = within(page.container);
   for (const [i, player] of squad.players.entries()) {
     await click(board.getByRole('button', { name: i ? /^Next spin$/ : /^Spin the wheel$/ }));
     await tick(1600);
+    if (player.eligible.includes('HC')) break;
     await click(board.getByRole('button', { name: new RegExp(player.name + '(?:\\s|$)') }));
     await tick(10);
   }
+  return board;
+}
+
+async function draft(page: MountedPage) {
+  const board = await readyForCoach(page);
+  await click(board.getByRole('button', { name: /Fixture Player HC\b/ }));
+  await tick(10);
   expect(board.getByRole('button', { name: 'Skip to result' })).toBeVisible();
   expect(page.container.querySelector('[data-season-verdict]')).toBeNull();
   expect(simulations).toHaveLength(1);
@@ -111,3 +123,40 @@ it('keeps Classic settlement at the end of the reveal', async () => {
   expect(loadBestRecord('nfl')).toMatchObject({ mode: 'classic', wins: result.wins, losses: result.losses });
   expect(loadDailyAttempt('nfl')).toBeNull();
 });
+
+it.each(['weaker', 'stronger'] as const)('keeps the first Daily when a stale tab drafts a %s coach', async stalePick => {
+  const firstPage = mount();
+  const stalePage = mount();
+  await chooseMode(firstPage, /^Daily\b/);
+  await chooseMode(stalePage, /^Daily\b/);
+  const first = await readyForCoach(firstPage);
+  const stale = await readyForCoach(stalePage);
+  const key = `perfect-season-nfl-daily-${getDailyDateET()}`;
+  const bestKey = 'perfect-season-nfl-best';
+  expect(localStorage.getItem(key)).toBeNull();
+
+  const weaker = /Fixture Reserve Coach\b/;
+  const stronger = /Fixture Player HC\b/;
+  await click(first.getByRole('button', { name: stalePick === 'stronger' ? weaker : stronger }));
+  const bytes = localStorage.getItem(key);
+  const best = localStorage.getItem(bestKey);
+  expect(bytes).not.toBeNull();
+  expect(best).not.toBeNull();
+  expect(first.getByRole('button', { name: 'Skip to result' })).toBeVisible();
+  expect(recordCompletion).toHaveBeenCalledExactlyOnceWith('/perfect-season-nfl', simulations[0].wins, 'Tester');
+
+  await click(stale.getByRole('button', { name: stalePick === 'stronger' ? stronger : weaker }));
+  expect(simulations).toHaveLength(2);
+  if (stalePick === 'stronger') expect(simulations[1].wins).toBeGreaterThan(simulations[0].wins);
+  else expect(simulations[1].wins).toBeLessThan(simulations[0].wins);
+  expect(localStorage.getItem(key)).toBe(bytes);
+  expect(localStorage.getItem(bestKey)).toBe(best);
+  expect(recordCompletion).toHaveBeenCalledTimes(1);
+  expect(stale.getByRole('heading', { name: "Today's daily is done" })).toBeVisible();
+
+  const cold = mount();
+  await chooseMode(cold, /^Daily\b/);
+  expect(within(cold.container).getByRole('heading', { name: "Today's daily is done" })).toBeVisible();
+  expect(localStorage.getItem(key)).toBe(bytes);
+  expect(recordCompletion).toHaveBeenCalledTimes(1);
+}, 15000);

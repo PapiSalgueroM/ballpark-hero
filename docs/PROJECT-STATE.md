@@ -1,3 +1,11 @@
+## 2026-11-11: Perfect Season NFL keeps the first Daily result across tabs
+
+If another tab has already saved today's NFL Daily when a draft finishes, the later tab opens that saved recap. The first result keeps its completion score and best record. The first Daily still settles as its reveal starts, and Classic and Hard still settle at the final record.
+
+Two 390px tabs reached the final FLEX pick on the same wheel. On main and the early-reveal draft, the later result replaced the first and posted a second score. Finishing 13-4 followed by 14-3 also replaced the first best record. The regression covers both finish orders and a fresh Daily recap.
+
+The production build kept the first result and best record byte for byte in both orders, with one Daily score. A later Classic run in the stale tab posted its own score and kept the Daily. All 21 focused tests, the Perfect Season engine sim, app types, the build, 16 output and odds checks and all 16 route size caps passed. This change builds on the early-reveal draft in PR #581.
+
 ## 2026-11-11: Perfect Season NFL saves the Daily before the reveal
 
 The completed NFL Daily now saves its full season, best record and single completion when the reveal starts. Reloading during the reveal opens the same locked Daily. Classic and Hard settle when their result appears.
