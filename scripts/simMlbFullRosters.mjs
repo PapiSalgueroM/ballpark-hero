@@ -134,7 +134,7 @@ const req = createRequire(path.join(ROOT, 'package.json'));
 
 /* ---- the engine and the data, bundled (a control edits a copy) ---------- */
 const ENGINE_SWAPS = {
-  benchread: [['.filter(p => !isPitcher(p)).sort((a, b) => b.ovr - a.ovr).slice(0, 8)', '.filter(p => !isPitcher(p)).sort((a, b) => b.ovr - a.ovr).slice(0, 99)']],
+  benchread: [['.filter(p => !isPitcher(p)).sort((a, b) => b.ovr - a.ovr).slice(0, MLB_STRENGTH_SLOTS.bats)', '.filter(p => !isPitcher(p)).sort((a, b) => b.ovr - a.ovr).slice(0, 99)']],
   sharedstream: [['  if (deep) rollDepthInjuries(league, myTeam, rng, notes);\n  else {', '  {']],
   fullprice: [['salary: core.has(i) ? mlbSalaryFor(s.ovr) : MLB_DEPTH_SALARY,', 'salary: mlbSalaryFor(s.ovr),']],
   idkeyed: [['unitHash(roundSeed, p.name, 1)', 'unitHash(roundSeed, p.id, 1)'], ['unitHash(roundSeed, p.name, 2)', 'unitHash(roundSeed, p.id, 2)']],
@@ -515,7 +515,7 @@ console.log('5) the bench never moves a result');
     const r2a = lcg(seed + 23), r2c = lcg(seed + 23);
     for (let r = 1; r <= E.MLB_ROUNDS; r += 1) { E.simMlbRound(A2, 'NYY', r2a); E.simMlbRound(C, 'NYY', r2c); }
     const diffs = GAME_TEAMS.map(a => Math.abs(A2.teams[a].wins - C.teams[a].wins));
-    if (seed === SEEDS[0]) console.log(`   against a 13 man twin (seed ${seed}): ${diffs.filter(d => d > 0).length} of 30 clubs end on a different win total, mean ${(diffs.reduce((s, d) => s + d, 0) / 30).toFixed(1)} wins. Why: when one of the 13 is on the IL the 26 man club plays its next man, the 13 man club plays short (the strength averages fewer men), and that changes the strengths in those games.`);
+    if (seed === SEEDS[0]) console.log(`   against a 13 man twin (seed ${seed}): ${diffs.filter(d => d > 0).length} of 30 clubs end on a different win total, mean ${(diffs.reduce((s, d) => s + d, 0) / 30).toFixed(1)} wins. When one of the 13 is on the IL, the 26 man club plays its next man and the 13 man twin uses the replacement rating in the empty slot.`);
   }
   ok(5, 'every club\'s strength with 26 equals its strength with the 13 it reads', strengthSame === SEEDS.length * 30, `${strengthSame} of ${SEEDS.length * 30}`);
   ok(5, 'the depth twins put the same men on the IL every round', ilSame === ilTotal, `${ilTotal - ilSame} of ${ilTotal} differ`);
