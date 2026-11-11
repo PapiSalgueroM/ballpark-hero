@@ -1266,6 +1266,7 @@ const declined = (ovr: number, by: number): number => Math.max(Math.min(62, ovr)
 /* Round 723: userTeam is the club whose tag decision is the GM's own, so the
    CPU policy skips it. Callers without one (the harnesses) run it everywhere. */
 export function runOffseason(league: LeagueState, rng: () => number, userTeam?: string): OffseasonNews {
+  const openingMarket = new Set(league.freeAgents);
   const news: OffseasonNews = { retired: [], expired: [], developed: [], tagged: [] };
   /* Round 723: the tags go on before free agency opens, which is this loop. */
   news.tagged = cpuFranchiseTags(league, userTeam);
@@ -1356,7 +1357,12 @@ export function runOffseason(league: LeagueState, rng: () => number, userTeam?: 
   }
   // trim the FA pool to the useful part
   league.freeAgents = league.freeAgents.sort((a, b) => b.ovr - a.ovr).slice(0, 40);
-  for (const fa of league.freeAgents) { fa.age += 1; fa.ovr = fa.age >= 31 ? declined(fa.ovr, 1) : fa.ovr; }
+  for (const fa of league.freeAgents) {
+    // Expiring players already aged on their team's roster.
+    if (!openingMarket.has(fa)) continue;
+    fa.age += 1;
+    if (fa.age >= 31) fa.ovr = declined(fa.ovr, 1);
+  }
   /* Round 828: a full club refills from its own practice squad first and cuts
      down to 53 last. A fifteen man club goes through the old pass untouched.
      Round 828 follow up: the computer clubs cut themselves; the GM's own club
