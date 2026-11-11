@@ -24,15 +24,15 @@
  */
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { render, screen, fireEvent, cleanup } from '@testing-library/react';
-import { initNbaLeague, nbaDraftClass, nbaTrade, NBA_ROUNDS, type NbaLeague } from '@/lib/nbaFrontOffice';
+import { initNbaLeague, nbaDraftClass, nbaTrade, nbaTradeValue, NBA_ROUNDS, type NbaLeague } from '@/lib/nbaFrontOffice';
 import type { FinderOffer } from '@/lib/tradeFinder';
 import { leagueNames } from '@/lib/foNames';
-import { openNbaDesk, nbaContractsOf, nbaPicksOf, NBA_DESK_KEYS } from '@/lib/nbaGmDesk';
+import { openNbaDesk, nbaContractsOf, nbaGamePickRules, nbaPicksOf, syncNbaPicks, NBA_DESK_KEYS } from '@/lib/nbaGmDesk';
 import { deskCases, letGo, keepAtAsk } from '@/lib/gmContracts';
 import { nbaContractHost } from '@/lib/gmContractsHostNba';
 import { withGmBlock, type GmDesk } from '@/lib/gmDesk';
 import { NBA_ROOKIE_SCALE_YEARS } from '@/lib/gmContractRules';
-import { movePicks, pickKey, picksHeldBy } from '@/lib/gmPicks';
+import { movePicks, pickKey, picksHeldBy, pickSwapRefusal } from '@/lib/gmPicks';
 
 vi.mock('@/hooks/useGameCompletion', () => ({ useGameCompletion: () => undefined }));
 vi.mock('@/lib/completions', () => ({ recordActivity: () => undefined }));
@@ -143,10 +143,12 @@ function tradeSave(stepien: boolean) {
        list is [1], so the sweetener would send this season's first. */
     const next1 = picksHeldBy(ledger, team, S + 1).find(p => p.round === 1 && p.orig === team)!;
     const now2 = picksHeldBy(ledger, team, S).find(p => p.round === 2 && p.orig === team)!;
-    ledger = movePicks(ledger, [pickKey(next1), pickKey(now2)], ids[2]);
+    const keys = [pickKey(next1), pickKey(now2)];
+    expect(pickSwapRefusal(ledger, nbaGamePickRules(), S, team, keys, ids[2], [])).toBeNull();
+    ledger = movePicks(ledger, keys, ids[2]);
     gm = withGmBlock(gm, NBA_DESK_KEYS.picks, ledger);
   }
-  league.teams[team].picks = picksHeldBy(ledger, team, S).map(p => p.round).sort((a, b) => a - b);
+  syncNbaPicks(league, ledger);
   /* A pair the engine accepts with the pick on, found on a copy. */
   let found: { mine: string; partner: string; theirs: string } | null = null;
   for (const partner of ids.slice(1)) {
@@ -169,13 +171,17 @@ function tradeSave(stepien: boolean) {
   return { team, S, found: found!, offer, myName };
 }
 
-/** Shop the man on the real trade screen and take the offer. */
-function acceptSweetened(myName: string, offer: FinderOffer) {
+function selectShopPlayer(myName: string) {
   fireEvent.click(screen.getByText('Trades'));
   const list = document.querySelector('[data-trade-shop-list]') as HTMLElement;
   const mineBtn = [...list.querySelectorAll('button')].find(b => (b.textContent ?? '').includes(myName));
   expect(mineBtn).toBeTruthy();
   fireEvent.click(mineBtn!);
+}
+
+/** Inject an offer to keep exercising the final acceptance guard. */
+function acceptSweetened(myName: string, offer: FinderOffer) {
+  selectShopPlayer(myName);
   vi.mocked(findTrades).mockImplementationOnce(() => [offer]);
   fireEvent.click(screen.getByText('Shop him around the league'));
   fireEvent.click(screen.getByText('Accept'));
@@ -237,5 +243,40 @@ describe('Round 1018: the NBA GM desk on the real board', () => {
     const first = s.gm.blocks.picks.picks.find((p: any) => p.year === S && p.round === 1 && p.orig === team);
     expect(first.holder).toBe(team);
     expect(s.league.teams[team].picks).toEqual([1]);
+  });
+
+  it('fills the finder with legal alternatives when the remaining first cannot be traded', async () => {
+    const { team } = tradeSave(true);
+    const before = saved();
+    const league: NbaLeague = before.league;
+    expect(league.teams[team].picks).toEqual([1]);
+    const { findTrades: probe } = await vi.importActual<typeof import('@/lib/tradeFinder')>('@/lib/tradeFinder');
+    const offersFor = (id: string, allowPick: boolean) => probe(league.teams, team, id, league.cap,
+      (mine, theirs, send, receive, sweeten, cap) => sweeten && !allowPick
+        ? 'invalid' : nbaTrade(mine, theirs, send, receive, sweeten, cap, league.taxScale),
+      nbaTradeValue);
+    const fixture = league.teams[team].players.map(player => ({
+      player, unrestricted: offersFor(player.id, true), eligible: offersFor(player.id, false),
+    })).find(({ unrestricted, eligible }) => unrestricted.some(o => o.sweeten)
+      && eligible.length === 4 && eligible.some(o => !unrestricted.some(u => u.playerId === o.playerId)));
+    expect(fixture).toBeDefined();
+    const { player, eligible } = fixture!;
+    const bytes = localStorage.getItem(SAVE_KEY);
+
+    render(<NbaFrontOfficeBoard />);
+    selectShopPlayer(player.name);
+    fireEvent.click(screen.getByText('Shop him around the league'));
+    const accepts = screen.getAllByRole('button', { name: /^Accept$/ });
+    expect(accepts).toHaveLength(eligible.length);
+    expect(accepts.map(button => button.parentElement?.textContent)).toEqual(
+      eligible.map(o => expect.stringContaining(o.playerName)),
+    );
+    expect(screen.queryByText(/costs one of your picks/)).toBeNull();
+    expect(localStorage.getItem(SAVE_KEY)).toBe(bytes);
+
+    fireEvent.click(accepts[0]);
+    const after = saved();
+    expect(after.league.teams[team].players.some((p: { id: string }) => p.id === eligible[0].playerId)).toBe(true);
+    expect(after.gm.blocks.picks).toEqual(before.gm.blocks.picks);
   });
 });
