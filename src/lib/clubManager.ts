@@ -8259,6 +8259,7 @@ export function severanceFor(state: CareerState, p: CMPlayer): { weekly: number;
 
 /** Why a release would be refused. The card shows the same reason the engine uses. */
 export type ReleaseBlock = 'midMatch' | 'onLoan' | 'lastKeeper' | 'squadSize' | 'squadRules' | 'seniorFloor';
+export const FINISH_MATCH_BEFORE_PLAYER_EXIT = 'Finish the match before moving players out.';
 
 /**
  * Round 619 review: the one place that decides whether a man can be released,
@@ -10533,7 +10534,7 @@ export function exerciseLoanOption(career: CareerState, playerId: string): Caree
  * market does not offer him back the same window.
  */
 export function breakLoan(career: CareerState, playerId: string): CareerState | null {
-  if (career.transferWindow === null) return null;
+  if (career.live || career.transferWindow === null) return null;
   const p = career.squad.find(x => x.id === playerId);
   if (!p || !p.onLoan) return null;
   const fee = p.loanBreakFee;
@@ -11463,6 +11464,9 @@ export function offerTerms(career: CareerState, offer: PersonalTerms): CareerSta
   if (!neg || neg.status !== 'open' || neg.phase !== 'terms' || !neg.terms) return null;
   if (career.transferWindow === null) return null;
   const talk = neg.terms;
+  if (career.live && neg.agreedExtras?.swapId) {
+    return { ...career, negotiation: { ...neg, terms: { ...talk, note: FINISH_MATCH_BEFORE_PLAYER_EXIT } } };
+  }
   const clean: PersonalTerms = {
     years: clamp(Math.round(offer.years), MIN_TERMS_YEARS, MAX_TERMS_YEARS),
     wage: Math.max(1, Math.round(offer.wage)),
@@ -11808,6 +11812,8 @@ export function loanOutFee(p: CMPlayer): number {
  * selling, accepting a bid and loaning out, so all three agree.
  */
 export function canLeaveSquad(career: CareerState, p: CMPlayer): boolean {
+  // The live lineup reads from the squad until the match is settled.
+  if (career.live) return false;
   if (career.squad.length <= 14) return false;
   if (p.onLoan) return false;             // he belongs to someone else
   if (p.position === 'GK' && career.squad.filter(x => x.position === 'GK').length <= 1) return false;
@@ -11867,6 +11873,7 @@ export function loanOutRefusal(career: CareerState, playerId: string): string | 
   const p = career.squad.find(x => x.id === playerId);
   if (!p) return 'He is not in your squad any more.';
   if (career.transferWindow === null) return 'Loans out need an open transfer window.';
+  if (career.live) return FINISH_MATCH_BEFORE_PLAYER_EXIT;
   if (p.loanOutSeason === career.season) return `${p.name} has already been out on loan once this season. One loan out a season.`;
   if (career.squad.length <= 14) return 'Your squad is at the minimum of 14. Nobody else can leave.';
   if (p.onLoan) return `${p.name} is on loan to you, so he is not yours to send anywhere.`;
