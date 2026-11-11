@@ -128,7 +128,7 @@ const PerfectSeasonNba = () => {
         setPhase('daily-locked');
         return;
       }
-      dailyPicker.current = makeDailyPicker(SPORT_KEY);
+      dailyPicker.current = makeDailyPicker(SPORT_KEY, todayStr);
     }
     setIndex([]);
     setPhase('boot');
