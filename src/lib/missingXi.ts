@@ -7151,11 +7151,11 @@ export const HELD_LINEUP_IDS: ReadonlySet<string> = new Set<string>([]);
  * date-seeded (America/New_York) so every player gets the same puzzle on the
  * same ET date, matching the sitewide daily-reset convention.
  */
-export function pickDailyPuzzle(lineups: Lineup[] = LINEUPS): ActivePuzzle {
+export function pickDailyPuzzle(lineups: Lineup[] = LINEUPS, date: string = getTodayET()): ActivePuzzle {
   /* Round 212: the HASHED date, not the raw one. A raw date seed makes a
      Lehmer generator's first draw a straight line in the date, which froze
      this puzzle for months at a time. See dailyPrngSeed in dateUtils. */
-  const seed = dailyPrngSeed(getTodayET());
+  const seed = dailyPrngSeed(date);
   const rand = seededRandom(seed);
   let lineupIndex = Math.floor(rand() * lineups.length);
   /* Round 1026: a held lineup is never dealt. Stepping to the next one moves
