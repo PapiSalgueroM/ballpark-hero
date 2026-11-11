@@ -1,3 +1,11 @@
+## 2026-11-11: Soccer Career loan return after rehab draft
+
+A completed one-season loan now returns the player to the parent club when the player chooses rehab after a serious injury. This also works for a saved pending rehab choice, including older saves whose injury year is recorded by the choice. The return uses the same club, league and role transition as a healthy loan.
+
+The 390px Arsenal career took a real one-season Sporting CP loan. A ruptured quad ended its 2025 season after 27 appearances. Both builds held that record, age, wage, contract and rehab costs, with 18 injury draws and zero rehab draws. Main stayed at Sporting and played 2026 there. The candidate returned to Arsenal after the rehab choice and played 2026 at Arsenal. Both cold reload checkpoints passed.
+
+Four focused cases and a paired 96-seed comparison passed. All 93 healthy outcomes matched main. Nine choices across three injured loans held their recovery and recorded season, and two home-club injuries kept their full recovery state. App types, production build, 15 offline output readers and all 16 route caps passed. Soccer Career measured 840.4 KiB, which rounds to the existing 840 KiB cap.
+
 ## 2026-11-07: Club Manager historical roster counts live
 
 [PR #532](https://github.com/PapiSalgueroM/ballpark-hero/pull/532) published from main `c3b5ca4afaf9b4dadcd748f340e8e8e3e4a1a1dd`, App tree `133fcd3d26a4d237178e5c7efee723048da0aef2`, Lovable deployment `510b1df1-2172-42c0-90f9-d9f9c997b840`.

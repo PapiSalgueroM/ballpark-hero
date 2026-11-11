@@ -1858,7 +1858,7 @@ function yearOutRow(s: CareerState, reason: string | null): SeasonRecord {
  * Every road records the injury in the career's history, so a comeback is
  * something the save remembers rather than a line that scrolls away.
  */
-export function applyRehabChoice(prev: CareerState, choiceIndex: number): CareerState {
+export function applyRehabChoice(prev: CareerState, choiceIndex: number, clubs = FALLBACK_CLUBS): CareerState {
   if (readSoccerFarewell(prev) && !prev.pendingRehab && (prev.retired || farewellSeasonComplete(prev))) return prev;
   const s = { ...prev };
   const r = s.pendingRehab;
@@ -1924,6 +1924,7 @@ export function applyRehabChoice(prev: CareerState, choiceIndex: number): Career
   if (history.length >= 2) {
     s.events.push(`⭐ That is ${history.length} serious injuries you have come back from.`);
   }
+  returnFromLoan(s, clubs, r.year);
   if (farewellSeasonComplete(s)) {
     s.pendingSummary = s.seasons[s.seasons.length - 1];
     s.phase = "season_summary";
@@ -4619,6 +4620,27 @@ export function acceptLoan(prev: CareerState, offer: ContractOffer): CareerState
   return clearLoyaltyChoice(s);
 }
 
+/** Close a completed one-season loan and restore the parent club. */
+function returnFromLoan(s: CareerState, clubs: ClubData[], year: number): void {
+  const back = s.loan;
+  if (!back) return;
+  cancelReducedRole(s);
+  s.currentClub = back.parentClub; s.currentClubTier = back.parentTier;
+  s.currentLeague = back.parentLeague; s.currentClubCountry = back.parentCountry;
+  s.currentClubColor = back.parentColor;
+  s.loan = null;
+  Object.assign(s, endCareerMentorForMove(s, s.currentClub));
+  prepareLeagueWorld(s, clubs, year + 1);
+  const backSeasons = s.seasons.filter(ss => ss.club === back.parentClub && ss.type === "playing").length;
+  const nextHere = projectLeagueApps(s.overall, s.currentClubTier, back.parentClub, backSeasons, { league: s.currentLeague, year: year + 1 });
+  if (nextHere.min >= 20) {
+    s.morale = clamp(s.morale + 5, 0, 100);
+    s.events.push(`🔙 Loan over. Back at ${back.parentClub}, and this time they are planning around you: about ${nextHere.min} to ${nextHere.max} league games on the table.`);
+  } else {
+    s.events.push(`🔙 Loan over. Back at ${back.parentClub}, and the pecking order has not moved much: about ${nextHere.min} to ${nextHere.max} league games unless something changes.`);
+  }
+}
+
 /** Complete a new club listing using its existing offer, then show the move once. */
 export function completeClubVerdictMove(prev: CareerState): CareerState {
   const verdict = prev.transferSituation;
@@ -6109,24 +6131,7 @@ function playPendingProSeason(s: CareerState, clubs: ClubData[]): CareerState {
      season, so the screen can promise nothing the simulation will not keep. */
   const programmeLoanClub = s.loan ? worldClubs.find(club => club.name === s.currentClub) : undefined;
   if (programmeLoanClub) completeProgrammeLoanBuy(s, programmeLoanClub);
-  if (s.loan) {
-    const back = s.loan;
-    cancelReducedRole(s);
-    s.currentClub = back.parentClub; s.currentClubTier = back.parentTier;
-    s.currentLeague = back.parentLeague; s.currentClubCountry = back.parentCountry;
-    s.currentClubColor = back.parentColor;
-    s.loan = null;
-    Object.assign(s, endCareerMentorForMove(s, s.currentClub));
-    prepareLeagueWorld(s, clubs, season.year + 1);
-    const backSeasons = s.seasons.filter(ss => ss.club === back.parentClub && ss.type === "playing").length;
-    const nextHere = projectLeagueApps(s.overall, s.currentClubTier, back.parentClub, backSeasons, { league: s.currentLeague, year: season.year + 1 });
-    if (nextHere.min >= 20) {
-      s.morale = clamp(s.morale + 5, 0, 100);
-      s.events.push(`🔙 Loan over. Back at ${back.parentClub}, and this time they are planning around you: about ${nextHere.min} to ${nextHere.max} league games on the table.`);
-    } else {
-      s.events.push(`🔙 Loan over. Back at ${back.parentClub}, and the pecking order has not moved much: about ${nextHere.min} to ${nextHere.max} league games unless something changes.`);
-    }
-  }
+  returnFromLoan(s, clubs, season.year);
   prepareLeagueWorld(s, clubs, season.year + 1);
   return s;
 }
