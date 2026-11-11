@@ -1,3 +1,9 @@
+## 2026-11-11: Missing XI counts reordered names as one guess
+
+The repeated-guess check recognizes verified full-name spellings whose words are reordered, including Park Ji-sung and Ji-sung Park. Lineup-specific answer aliases still work, and ambiguous short aliases keep their existing scope.
+
+On the Nov 11 Daily, the original 390px replay used two guesses for the same player in either spelling order and posted 40 for the correct answer. The candidate preserved the first miss exactly through reload and the second spelling, then posted 70. Two different players still used two guesses, and Bosingwa still solved the 2012 Chelsea lineup. App types, production build, 15 scoped tests, 17 output and Missing XI checks, Daily reload controls and all 16 existing route caps passed.
+
 ## 2026-11-07: Club Manager historical roster counts live
 
 [PR #532](https://github.com/PapiSalgueroM/ballpark-hero/pull/532) published from main `c3b5ca4afaf9b4dadcd748f340e8e8e3e4a1a1dd`, App tree `133fcd3d26a4d237178e5c7efee723048da0aef2`, Lovable deployment `510b1df1-2172-42c0-90f9-d9f9c997b840`.
