@@ -123,7 +123,7 @@ export const HOCKEY_CONTENT: GameContentMap = {
 
   '/puck-detective': {
     intro: [
-      "You get 8 guesses to name a mystery NHL player from the game's roster snapshot.",
+      "You get 8 guesses to name a mystery NHL player from the game's roster snapshot. Team and jersey clues use that snapshot, so players may have since moved or become free agents.",
       "Every guess is a real player, and every guess talks back: five chips compare team, position, nationality, age and jersey number against the secret answer. Solve the shared daily puzzle, or grind win streaks in unlimited mode.",
     ],
     headings: {
@@ -161,7 +161,6 @@ export const HOCKEY_CONTENT: GameContentMap = {
         items: [
           "8 guesses per puzzle, in both daily and unlimited.",
           "Five clues per guess: team, position, nationality, age and jersey number.",
-          "Team and jersey clues come from the game's roster snapshot. Players may have since moved or become free agents.",
         ],
       },
       {

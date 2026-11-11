@@ -2,7 +2,7 @@
 
 Admin report `e245241a` exposed a mismatch between the current-roster wording and the stored team and jersey clues. The game now explains the roster snapshot during play, on results and in help. The game guide, hockey hub and their saved pages use the same description. Roster freshness remains open. The report does not capture the selected player or mode. On the current snapshot, Nov 6 Daily selects Trevor van Riemsdyk (Washington #57), while James van Riemsdyk remains a separate eligible guess (Detroit #21).
 
-Both source versions selected the same 876 eligible IDs and the same daily answers across 365 dates. Phone and desktop browser replays restored both named clue outcomes and the exact Daily save bytes, and kept the Unlimited round through mode changes. App types, 13 focused tests, the Puck Detective feedback sim, the build, 15 saved-output checks and all 16 route caps passed. The report remains confirmed through release and roster follow-up.
+Both source versions selected the same 876 eligible IDs and the same daily answers across 365 dates. Phone and desktop browser replays restored both named clue outcomes and the exact Daily save bytes, and kept the Unlimited round through mode changes. The guide intro explains the snapshot and the regenerated search index updates only Puck Detective keywords. App types, 13 focused tests, the Puck Detective feedback sim, the build, all 18 output and harness checks, six guide controls and all 16 route caps passed. The report remains confirmed through release and roster follow-up.
 
 ## 2026-11-07: Club Manager historical roster counts live
 
