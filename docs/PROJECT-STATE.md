@@ -1,3 +1,11 @@
+## 2026-11-10: Club Manager summer budget breakdown staged
+
+The new season Overview shows the unspent balance, board allocation, amount carried, any balance above the cap, summer adjustments and the opening budget. It records those amounts at rollover, after loan options, add-ons and sponsor payments. The carryover cap equals the new board allocation. The figures belong to the club where the season ended.
+
+An Arsenal season with £1bn unspent opened on £330m. The board allocated £165m, £165m carried over and £835m was above the cap. The same figures appeared after reload on phone and desktop. A separate replay included a £12.5m sponsor payment and confirmed the old breakdown cleared on a move to Chelsea. The reporter's save was unavailable.
+
+Admin report `7d85f91d` asks for full carryover. The staged change explains the existing cap in the game. Keep the report open through deployment and the public rollover check.
+
 ## 2026-11-07: Club Manager historical roster counts live
 
 [PR #532](https://github.com/PapiSalgueroM/ballpark-hero/pull/532) published from main `c3b5ca4afaf9b4dadcd748f340e8e8e3e4a1a1dd`, App tree `133fcd3d26a4d237178e5c7efee723048da0aef2`, Lovable deployment `510b1df1-2172-42c0-90f9-d9f9c997b840`.
