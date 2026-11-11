@@ -561,7 +561,11 @@ export function simMlbSeason(
   };
   if (slate !== US_ENGINE_SEASON.mlb) full.slate = slate;
   const prof = MLB_POS_PROFILE[c.pos] ?? MLB_POS_PROFILE.LF;
-  Object.assign(full, mlbStatLineFor({ form, pos: c.pos, kind: c.archetype.id, games: fullGames }, rng));
+  Object.assign(full, drawMlbStatLine({ form, pos: c.pos, kind: c.archetype.id, games: fullGames }, rng));
+  const savesLeaderMin = 38;
+  // Keep the original award draw in sequence even if the corrected line falls below the cutoff.
+  const drawForSavesLeader = c.pos === 'RP' && (full.saves ?? 0) >= savesLeaderMin;
+  fitReliefAppearances(full, fullGames);
   const line = mlbLineOnSlate(full, work);
 
   const strength = teamQuality + (c.ovr - 76) * 0.35;
@@ -666,7 +670,7 @@ export function simMlbSeason(
   if (c.pos === 'SP' && (full.era ?? 9) <= 2.6 && fullGames >= 28 && wonAward(rng, 'mlb', 'eraTitle', c.pos, statScore)) {
     line.awards.push('ERA Title'); notes.push('🎯 Led the league in ERA.');
   }
-  if (c.pos === 'RP' && (full.saves ?? 0) >= 38 && wonAward(rng, 'mlb', 'savesLeader', c.pos, statScore)) {
+  if (drawForSavesLeader && wonAward(rng, 'mlb', 'savesLeader', c.pos, statScore) && (full.saves ?? 0) >= savesLeaderMin) {
     line.awards.push('Saves Leader'); notes.push('🚪 Led the league in saves.');
   }
   // Comeback needs a real bounce off a lost season, not just a good year. The
@@ -721,8 +725,23 @@ export interface MlbLineInput { form: number; pos: MlbCareerPos; kind: string; g
 /** The keys of a season line the stat block writes. */
 export type MlbStatLine = Pick<MlbSeasonLine, 'era' | 'wins' | 'lossesP' | 'so' | 'saves' | 'holds' | 'avg' | 'hr' | 'rbi' | 'sb' | 'doubles' | 'obp'>;
 
+function fitReliefAppearances(stats: MlbStatLine, games: number): void {
+  if (stats.saves === undefined || stats.holds === undefined) return;
+  const nonWins = Math.max(0, games - (stats.wins ?? 0));
+  stats.holds = Math.min(stats.holds, nonWins);
+  // A hold and a loss can share an appearance. A save needs its own.
+  const available = Math.max(0, nonWins - Math.max(stats.holds, stats.lossesP ?? 0));
+  stats.saves = Math.min(stats.saves, available);
+}
+
 /** One season's stat block on the engine's own length. Draws: a starter 4, a reliever 6, a hitter 6. */
 export function mlbStatLineFor(x: MlbLineInput, rng: () => number): MlbStatLine {
+  const stats = drawMlbStatLine(x, rng);
+  fitReliefAppearances(stats, x.games);
+  return stats;
+}
+
+function drawMlbStatLine(x: MlbLineInput, rng: () => number): MlbStatLine {
   const form = x.form;
   const fullGames = x.games;
   const prof = MLB_POS_PROFILE[x.pos] ?? MLB_POS_PROFILE.LF;
@@ -798,6 +817,7 @@ export function mlbLineOnSlate(full: MlbSeasonLine, work: number): MlbSeasonLine
       const v = full[k];
       if (v !== undefined) line[k] = cut(v);
     }
+    fitReliefAppearances(line, line.games);
   }
   return line;
 }
