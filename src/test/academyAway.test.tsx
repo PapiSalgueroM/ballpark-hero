@@ -293,4 +293,34 @@ describe('Wonderkid Factory away time', () => {
     expect(state().awayMs ?? 0, 'a slow but visible page was paid as away').toBe(0);
     measured(`slow device: 60s of 800ms callbacks on a visible page aged the first kid ${aged.toFixed(3)}s, no absence`);
   }, TEST_MS);
+
+  it('14 settles a short hidden visit even without a callback while hidden', () => {
+    const saved = deserialize(raw('midAcademy'), EPOCH)!;
+    const prospect = { ...saved.prospects[0], age: 23, ageClock: 298.75, rating: 58, potential: 90 };
+    Object.assign(saved, {
+      prospects: [prospect],
+      firstTeam: [{ ...prospect, id: 'senior-short-absence', name: 'Senior fixture', age: 33, ageClock: 898.75 }],
+      rep: 0, levels: { ...saved.levels, coaching: 0 }, scoutProgress: 0,
+      deadlineIn: 2, deadlineLeft: 0, showcaseLeft: 4, showcaseCooldown: 129,
+    });
+    localStorage.setItem(SAVE_KEY, JSON.stringify(saved));
+    mount();
+    vnow += 125;
+    setVisible(false);
+    vnow += 4_000;
+    setVisible(true);
+    act(() => vi.advanceTimersByTime(CALLBACK_MS));
+
+    expect(state().prospects.map(p => p.id), 'the hidden gap aged out the prospect').toEqual([prospect.id]);
+    expect(state().firstTeam?.[0].ageClock).toBe(898.875);
+    expect(state().prospects[0].ageClock).toBe(298.875);
+    expect(state().prospects[0].rating).toBeCloseTo(58.12913064, 8);
+    expect(state()).toMatchObject({ awayMs: 4_000, deadlineIn: 1.875, deadlineLeft: 0, showcaseLeft: 3.875 });
+    expect(JSON.parse(localStorage.getItem(SAVE_KEY)!).awayMs).toBe(4_000);
+
+    watch(CALLBACK_MS);
+    expect(state().prospects[0].ageClock).toBe(299.125);
+    expect(state().awayMs).toBe(0);
+    measured('short absence: four seconds hidden paid two seconds of training without advancing either birthday');
+  }, TEST_MS);
 });
