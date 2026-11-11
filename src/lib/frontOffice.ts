@@ -1358,6 +1358,7 @@ export function runOffseason(league: LeagueState, rng: () => number, userTeam?: 
   // trim the FA pool to the useful part
   league.freeAgents = league.freeAgents.sort((a, b) => b.ovr - a.ovr).slice(0, 40);
   for (const fa of league.freeAgents) {
+    fa.out = 0;
     // Expiring players already aged on their team's roster.
     if (!openingMarket.has(fa)) continue;
     fa.age += 1;
@@ -1514,8 +1515,9 @@ function years0(age: number): number {
   return 1;
 }
 
-/** AI teams take sensible weekly actions: sign a FA upgrade if cap allows. */
+/** Advance the market one week: recover injuries, then let AI teams sign upgrades. */
 export function aiWeeklyMoves(league: LeagueState, userTeam: string, rng: () => number): string[] {
+  for (const fa of league.freeAgents) fa.out = Math.max(0, fa.out - 1);
   const log: string[] = [];
   for (const t of Object.values(league.teams)) {
     if (t.abbr === userTeam) continue;
