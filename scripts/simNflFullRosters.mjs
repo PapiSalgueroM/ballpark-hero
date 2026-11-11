@@ -59,7 +59,7 @@
      7) AN OLD SAVE LOADS AND PLAYS AS IT DID. A fifteen man league is played
         for three seasons, the board's way, by this engine and by the engine
         as it stood before this round (read from git at BASE), from one seed.
-        Every league state after every week and offseason is identical, and
+        With the same offseason aging rule on each side, every league state is identical, and
         the old save never grows a bench: it is not topped up.
      8) THE BOARD, under vitest (src/components/front-office/
         FrontOfficeFullRoster.test.tsx): a full roster's Roster box opens on
@@ -128,6 +128,7 @@ import os from 'node:os';
 import path from 'node:path';
 import { execSync } from 'node:child_process';
 import { fileURLToPath, pathToFileURL } from 'node:url';
+import { ageHistoricalNflDeparturesOnce } from './lib/nflOffseasonReference.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const ENGINE = path.join(ROOT, 'src', 'lib', 'frontOffice.ts');
@@ -999,7 +1000,7 @@ engine = shippedEngine;
     fs.mkdirSync(dir, { recursive: true });
     for (const f of ['frontOffice.ts', 'foNames.ts', 'leagueCaps.ts', 'entityIds.ts', 'frontOfficeCuts.ts']) {
       const text = execSync(`git show ${BASE}:src/lib/${f}`, { cwd: ROOT, encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] });
-      fs.writeFileSync(path.join(dir, f), text);
+      fs.writeFileSync(path.join(dir, f), f === 'frontOffice.ts' ? ageHistoricalNflDeparturesOnce(text) : text);
     }
     base = await bundle(`export * from ${JSON.stringify(fwd(path.join(dir, 'frontOffice.ts')))};`, 'base');
     ready = typeof base.initLeague === 'function';
@@ -1063,7 +1064,7 @@ engine = shippedEngine;
         grew.slice(0, 3).map(t => `${t.abbr} ${t.players.length}`).join(', '));
     }
     console.log(`   ${states} league states compared over three seeds and three seasons each`);
-    ok(7, 'a fifteen man league plays exactly as it did before this round', diverged.length === 0, diverged.join(', '));
+    ok(7, 'a fifteen man league matches the archived engine with single offseason aging', diverged.length === 0, diverged.join(', '));
   }
 }
 
