@@ -272,6 +272,12 @@ const PerfectSeasonNfl = () => {
     if (!readyToRecord || !sim || completionSaved.current) return;
     completionSaved.current = true;
     if (mode === 'daily') {
+      const existing = loadDailyAttempt(SPORT_KEY, todayStr);
+      if (existing) {
+        setLockedAttempt(existing);
+        setPhase('daily-locked');
+        return;
+      }
       saveDailyAttempt(SPORT_KEY, {
         date: todayStr,
         sim,
