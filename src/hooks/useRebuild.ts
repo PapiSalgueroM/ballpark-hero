@@ -410,13 +410,16 @@ export function useRebuild(): RebuildState {
       setRivalsLoading(true);
       try {
         const plans = run.rivalPlans.length === 2 ? run.rivalPlans : [];
-        const humanSigned = new Set(run.signed.map(p => p.name));
+        // War winners already own those players before either rival shops.
+        const claimed = new Set([...run.signed.map(p => p.name), ...Object.keys(run.lost)]);
         const results: RivalResult[] = [];
         for (let i = 0; i < plans.length; i++) {
           const plan = plans[i];
           const rivalSquad = await fetchClubSquad(plan.club.club);
           const wonInWars = Object.entries(run.lost).filter(([, idx]) => idx === i).map(([n]) => n);
-          results.push(simulateRival(plan, rivalSquad, run.market, humanSigned, run.seed, wonInWars));
+          const result = simulateRival(plan, rivalSquad, run.market, claimed, run.seed, wonInWars);
+          for (const name of result.signings) claimed.add(name);
+          results.push(result);
         }
         if (cancelled) return;
         setRivals(results);
