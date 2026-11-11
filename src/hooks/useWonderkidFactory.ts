@@ -176,15 +176,14 @@ export function useWonderkidFactory() {
 
   const doSell = useCallback((id: number) => {
     if (checkMoved()) return;
-    markSessionPlay();
-    const s = stateRef.current!;
-    const kid = s.prospects.find(p => p.id === id);
-    const price = sellProspect(s, id);
-    if (price !== null && kid) {
+    const next = copyAcademy(stateRef.current!);
+    const kid = next.prospects.find(p => p.id === id);
+    const price = sellProspect(next, id);
+    if (kid && price !== null && commitAcademy(next)) {
+      markSessionPlay();
       pushFloater(`💵 ${kid.name} sold for $${price.toLocaleString('en-US')}`, 'sale');
-      bump();
     }
-  }, [bump, checkMoved, markSessionPlay, pushFloater]);
+  }, [checkMoved, commitAcademy, markSessionPlay, pushFloater]);
 
   const doShowcase = useCallback(() => {
     if (checkMoved()) return;
