@@ -1859,12 +1859,17 @@ function yearOutRow(s: CareerState, reason: string | null): SeasonRecord {
  * something the save remembers rather than a line that scrolls away.
  */
 export function applyRehabChoice(prev: CareerState, choiceIndex: number, clubs = FALLBACK_CLUBS): CareerState {
-  if (readSoccerFarewell(prev) && !prev.pendingRehab && (prev.retired || farewellSeasonComplete(prev))) return prev;
-  const s = { ...prev };
-  const r = s.pendingRehab;
-  s.pendingRehab = null;
-  s.phase = "playing";
-  if (!r) return s;
+  const r = prev.pendingRehab;
+  if (!r) {
+    return prev.phase === "rehab_choice" && !prev.retired && !farewellSeasonComplete(prev)
+      ? { ...prev, phase: "playing" }
+      : prev;
+  }
+  // Resolve the injury year's contract once, including saves already waiting on this choice.
+  const s: CareerState = {
+    ...prev, pendingRehab: null, phase: "playing",
+    contractYearsLeft: Math.max(0, prev.contractYearsLeft - 1),
+  };
   /* Round 850: a save written before this round can be sitting here with the
      injury year unrecorded, because the season used to be thrown away at this
      stop. Its games are gone, so the year goes on as a zero appearance
@@ -1928,6 +1933,8 @@ export function applyRehabChoice(prev: CareerState, choiceIndex: number, clubs =
   if (farewellSeasonComplete(s)) {
     s.pendingSummary = s.seasons[s.seasons.length - 1];
     s.phase = "season_summary";
+  } else if (s.contractYearsLeft === 0) {
+    enterTransferWindow(s, clubs);
   }
   return s;
 }
