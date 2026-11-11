@@ -89,3 +89,76 @@ it('opens the current unfinished Daily from a tab that still shows a fresh start
   expect(localStorage.getItem(key)).toBe(saved);
   expect(recordCompletion).not.toHaveBeenCalled();
 }, 120_000);
+
+const freeKey = 'manager-hot-seat-free';
+type Tab = ReturnType<typeof openTab>;
+
+function previewClub(tab: Tab, club: string) {
+  fireEvent.click(tab.getByRole('button', { name: 'Pick a club' }));
+  const random = vi.spyOn(Math, 'random').mockReturnValue(805857686 / 4294967296);
+  fireEvent.click(tab.getByRole('button', { name: club }));
+  random.mockRestore();
+  act(() => { vi.advanceTimersByTime(50); });
+}
+
+function resumeFree(tab: Tab, club: string) {
+  fireEvent.click(tab.getByRole('button', { name: 'Carry on at ' + club }));
+  act(() => { vi.advanceTimersByTime(50); });
+}
+
+function nextFreeAction(tab: Tab, aggressive = false) {
+  const press = tab.queryByTestId('hot-seat-press');
+  if (press) {
+    const options = within(press).getAllByRole('button');
+    fireEvent.click(aggressive ? options[options.length - 1] : options[0]);
+  } else {
+    if (aggressive) fireEvent.click(tab.getByRole('button', { name: 'Attacking' }));
+    fireEvent.click(tab.getByRole('button', { name: 'Kick off' }));
+  }
+}
+
+it('keeps the newer Free Play save when an old tab takes a different job', () => {
+  const old = openTab();
+  previewClub(old, 'Aston Villa');
+
+  const current = openTab();
+  previewClub(current, 'Arsenal');
+  fireEvent.click(current.getByRole('button', { name: 'Take the job' }));
+  nextFreeAction(current);
+  const saved = localStorage.getItem(freeKey);
+  expect(JSON.parse(saved ?? 'null')).toMatchObject({ club: 'Arsenal' });
+
+  fireEvent.click(old.getByRole('button', { name: 'Take the job' }));
+  expect(localStorage.getItem(freeKey)).toBe(saved);
+  expect(old.getByRole('alert')).toHaveTextContent('Free Play save changed in another tab');
+  expect(old.getByRole('button', { name: 'Reload Free Play' })).toBeVisible();
+
+  openDaily(old);
+  fireEvent.click(old.getByRole('button', { name: 'Take the job' }));
+  expect(old.getByTestId('hot-seat-match')).toBeVisible();
+  expect(localStorage.getItem(freeKey)).toBe(saved);
+}, 120_000);
+
+it('keeps the newer Free Play actions when an old tab plays from the same save', () => {
+  const current = openTab();
+  previewClub(current, 'Arsenal');
+  fireEvent.click(current.getByRole('button', { name: 'Take the job' }));
+  nextFreeAction(current);
+  fireEvent.click(current.getByRole('button', { name: 'Menu' }));
+  const initial = localStorage.getItem(freeKey);
+
+  const old = openTab();
+  for (const tab of [current, old]) resumeFree(tab, 'Arsenal');
+  nextFreeAction(current);
+  const saved = localStorage.getItem(freeKey);
+  expect(saved).not.toBe(initial);
+
+  nextFreeAction(old, true);
+  expect(localStorage.getItem(freeKey)).toBe(saved);
+  expect(old.getByRole('button', { name: 'Reload Free Play' })).toBeVisible();
+
+  const restored = openTab();
+  resumeFree(restored, 'Arsenal');
+  expect(restored.getByTestId('hot-seat-match')).toBeVisible();
+  expect(localStorage.getItem(freeKey)).toBe(saved);
+}, 120_000);

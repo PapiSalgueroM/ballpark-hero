@@ -7,6 +7,7 @@ import { useRevealScroll } from '@/hooks/useRevealScroll';
 import { markRestoredFinish } from '@/lib/restoredFinish';
 import { readDailyRecord, writeDailyRecord } from '@/lib/dailyRecord';
 import { getTodayET } from '@/lib/dateUtils';
+import { createSaveFence } from '@/lib/saveFence';
 import { cn } from '@/lib/utils';
 import { MENTALITIES, TALK_TONES, preMatchRead, type Mentality, type TalkTone } from '@/lib/clubManager';
 import type { Meter } from '@/lib/clubManagerMeters';
@@ -137,6 +138,8 @@ export default function ManagerHotSeatBoard() {
   const [mentality, setMentality] = useState<Mentality>('balanced');
   const [talk, setTalk] = useState<TalkTone | null>(null);
   const [lastLine, setLastLine] = useState<string | null>(null);
+  const [freeFence] = useState(() => createSaveFence(() => localStorage));
+  const [freeSaveMoved, setFreeSaveMoved] = useState(false);
 
   const revealRef = useRevealScroll<HTMLDivElement>(`${phase}:${run?.log.length ?? 0}:${run?.actions.length ?? 0}`);
   /* A play with no score for now: the points economy is being rebuilt, so this
@@ -156,6 +159,7 @@ export default function ManagerHotSeatBoard() {
   useEffect(() => {
     const rec = readDailyRun(today, daily.club);
     if (!showSavedDailyResult(rec) && rec?.actions.length) setDailySaved(rec.actions);
+    freeFence.adopt(FREE_KEY);
     try {
       const raw = localStorage.getItem(FREE_KEY);
       if (raw) {
@@ -175,7 +179,7 @@ export default function ManagerHotSeatBoard() {
     } catch {
       /* a blocked or mangled store just means no free play to continue */
     }
-  }, [today, daily.club, showSavedDailyResult]);
+  }, [today, daily.club, showSavedDailyResult, freeFence]);
 
   const persist = useCallback((r: HotSeatRun) => {
     if (r.setup.daily) {
@@ -200,16 +204,21 @@ export default function ManagerHotSeatBoard() {
          overwrote the matches already played. */
       setDailySaved(r.verdict || !r.actions.length ? null : r.actions);
     } else {
-      try {
+      const saved = freeFence.write(FREE_KEY, () => {
         localStorage.setItem(FREE_KEY, JSON.stringify({ v: 1, club: r.setup.club, seed: r.setup.seed, ...(r.setup.rules === 1331 ? { rules: 1331 } : {}), ...(r.setup.tie === 1603 ? { tie: 1603 } : {}), actions: r.actions, done: !!r.verdict, ...(r.verdict ? { kind: r.verdict.kind } : {}) }));
-      } catch {
-        /* storage full or blocked: the run still plays, it just will not survive a refresh */
+        return true;
+      });
+      if (saved === 'moved') {
+        setFreeSaveMoved(true);
+        setRun(null);
+        setPhase('menu');
+        return false;
       }
       setFreeSaved(r.verdict ? null : { setup: r.setup, actions: r.actions });
       setFreeFinished(r.verdict && keepsJob(r.verdict.kind) ? { setup: r.setup, actions: r.actions } : null);
     }
     return true;
-  }, [showSavedDailyResult]);
+  }, [showSavedDailyResult, freeFence]);
 
   /* The takeover costs about twenty engine calls, so the loading card paints first. */
   const open = useCallback((setup: HotSeatSetup, actions: HotSeatAction[] = []) => {
@@ -304,16 +313,23 @@ export default function ManagerHotSeatBoard() {
             <div className="text-xs font-semibold uppercase tracking-wide text-primary">Free play</div>
             <div className="mt-1 text-lg font-bold">Any club, any time</div>
             <div className="text-xs text-muted-foreground">Pick a club or let us pick one. A new season every time.</div>
-            <div className="mt-3 grid grid-cols-2 gap-2">
+            {freeSaveMoved ? (
+              <div className="mt-3 rounded-md bg-muted px-3 py-2 text-sm">
+                <p role="alert">Your Free Play save changed in another tab.</p>
+                <button type="button" onClick={() => window.location.reload()} className="mt-2 min-h-[44px] rounded-md border border-border px-3 font-semibold">
+                  Reload Free Play
+                </button>
+              </div>
+            ) : <div className="mt-3 grid grid-cols-2 gap-2">
               <button type="button" onClick={() => setPhase('pick')} className="min-h-[44px] rounded-md border border-border px-3 py-2 text-sm font-semibold">Pick a club</button>
               <button type="button" onClick={randomFree} className="min-h-[44px] rounded-md border border-border px-3 py-2 text-sm font-semibold"><Shuffle className="mr-1 inline h-4 w-4" />Random</button>
-            </div>
-            {freeSaved && (
+            </div>}
+            {!freeSaveMoved && freeSaved && (
               <button type="button" onClick={() => open(freeSaved.setup, freeSaved.actions)} className="mt-2 min-h-[44px] w-full rounded-md border border-primary px-3 py-2 text-sm font-semibold text-primary">
                 Carry on at {freeSaved.setup.club}
               </button>
             )}
-            {!freeSaved && freeFinished && (
+            {!freeSaveMoved && !freeSaved && freeFinished && (
               <button type="button" onClick={() => open(freeFinished.setup, freeFinished.actions)} className="mt-2 min-h-[44px] w-full rounded-md border border-primary px-3 py-2 text-sm font-semibold text-primary">
                 See the Club Manager offer for {freeFinished.setup.club}
               </button>
