@@ -1,3 +1,12 @@
+## 2026-11-11: MLB Front Office October standings tile draft
+
+The standings tile now shows a projected playoff seed or outside-field status alongside the club's league record rank. The late-season pulse and Owner card use the same October field. This complements the separate Trade Desk fix in [PR #654](https://github.com/PapiSalgueroM/ballpark-hero/pull/654).
+
+In the Round 21 fixtures, Chicago was No. 11 in the AL by record and the projected No. 3 seed. The original tile warned it was five places short. Texas was No. 6 and outside the field, which the original tile showed as inside. The corrected copy and pulse matched the actual seeds at 320px and 390px. Both labels fit at 320px, and the Standings navigation and cold reload preserved the exact save bytes.
+
+Both mounted season cases failed on main and passed on the candidate. The preseason case kept the original behavior.
+
+
 ## 2026-11-07: Club Manager historical roster counts live
 
 [PR #532](https://github.com/PapiSalgueroM/ballpark-hero/pull/532) published from main `c3b5ca4afaf9b4dadcd748f340e8e8e3e4a1a1dd`, App tree `133fcd3d26a4d237178e5c7efee723048da0aef2`, Lovable deployment `510b1df1-2172-42c0-90f9-d9f9c997b840`.

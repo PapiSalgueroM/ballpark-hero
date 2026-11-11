@@ -908,7 +908,10 @@ export default function MlbFrontOfficeBoard() {
 
   const t = MLB_TEAM_MAP.get(myTeam)!;
 
-  const tiles = foHubTiles(hubFacts);
+  const playoffSeed = league.round > 1 && league.round <= MLB_ROUNDS
+    ? mlbLeagueSeeds(league, myLeagueName === 'AL').indexOf(myTeam) + 1
+    : undefined;
+  const tiles = foHubTiles({ ...hubFacts, playoffSeed });
   /* Round 1020: the desk's boxes sit under the board's own; a desk panel open hides the board's boxes. */
   const hubDesk = deskFacts(hubFacts);
   const deskPanelOpen = gmPanelFor(MLB_DESK_PANELS, gmOpen) !== null;
@@ -956,9 +959,8 @@ export default function MlbFrontOfficeBoard() {
         <OwnerMandateCard
           mandate={mandate}
           trust={trust}
-          pace={league.round > 1 && league.round <= MLB_ROUNDS
-            ? mandatePace(mandate, my.wins, (league.round - 1) / MLB_ROUNDS,
-                mlbLeagueSeeds(league, AL.includes(myTeam)).includes(myTeam))
+          pace={playoffSeed !== undefined
+            ? mandatePace(mandate, my.wins, (league.round - 1) / MLB_ROUNDS, playoffSeed > 0)
             : null}
         />
       )}

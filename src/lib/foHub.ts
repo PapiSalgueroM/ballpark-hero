@@ -81,9 +81,11 @@ export interface FoHubFacts {
   nextOpponent: { label: string; home: boolean } | null;
   /** What happened last time out. */
   lastResult: { won: boolean; us: number; them: number; opponent: string } | null;
-  /** Our place in the table that decides the playoffs, 1 based. */
+  /** Our one-based record rank in the standings table. */
   place: number;
-  /** How many of that table qualify. */
+  /** Current bracket seed when the field differs from the table. Zero means outside. */
+  playoffSeed?: number;
+  /** Number of playoff places. */
   cut: number;
   /** What that table is called, for the second line. */
   tableName: string;
@@ -335,7 +337,10 @@ export function foHubTiles(f: FoHubFacts): FoTile[] {
 
   /* -------------------------------------------------------------- standings */
   {
-    const inside = f.place > 0 && f.place <= f.cut;
+    const seed = f.playoffSeed ?? f.place;
+    const inside = seed > 0 && seed <= f.cut;
+    const playoffStatus = f.playoffSeed === undefined ? null
+      : inside ? `Projected seed #${seed}` : 'Outside playoff field';
     const shortOf = f.place - f.cut;
     const left = Math.max(0, f.periods - f.period + 1);
     /* Late and outside is the season slipping away, which is exactly when
@@ -348,13 +353,13 @@ export function foHubTiles(f: FoHubFacts): FoTile[] {
       icon: '📊',
       title: 'Standings',
       value: f.place > 0 ? `#${f.place} in the ${f.tableName}` : f.tableName,
-      sub: over ? REGULAR_SEASON_OVER : inside
+      sub: over ? REGULAR_SEASON_OVER : playoffStatus ?? (inside
         ? f.place === 1
           ? 'Top seed as it stands'
           : `Inside the top ${f.cut} with ${left} to play`
         : shortOf === 1
           ? `One place short of the cut, ${left} to play`
-          : `${shortOf} places short of the cut, ${left} to play`,
+          : `${shortOf} places short of the cut, ${left} to play`),
       accent: !over && !inside && late && f.place > 0,
     });
   }
