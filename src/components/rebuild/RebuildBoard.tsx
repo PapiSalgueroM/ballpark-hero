@@ -56,7 +56,7 @@ export function RebuildBoard() {
     pickFinance, toManager, hireManager, keepManager, setFormation,
     spinning, spin, keepSpun, sellSpun, takeReplacement, promoteBench, takeForty, redealSpun,
     thinking, raiseWar, walkAway,
-    finish, rivals, rivalsLoading, season,
+    finish, rivals, rivalsLoading, season, seasonFailed, retrySeason,
   } = useRebuild();
   // Round 61: the owner's no scroll rule. Every phase change (envelopes, spin,
   // results) pulls the new screen into view instead of leaving the player
@@ -687,7 +687,15 @@ export function RebuildBoard() {
                   ))}
               </div>
             )}
-            {!rivalsLoading && (!rivals || rivals.length === 0) && (
+            {seasonFailed && (
+              <div className="mt-2 space-y-1">
+                <p role="alert" className="text-xs text-muted-foreground">The season couldn't load. Try again.</p>
+                <button type="button" onClick={retrySeason} className="min-h-11 rounded-lg border border-border px-3 text-xs font-bold">
+                  Retry season
+                </button>
+              </div>
+            )}
+            {!seasonFailed && !rivalsLoading && (!rivals || rivals.length === 0) && (
               <p className="mt-2 text-xs text-muted-foreground">The rivals sat this window out.</p>
             )}
           </div>
