@@ -155,3 +155,29 @@ describe.each(['nba', 'nhl', 'mlb', 'nfl'] as PerfectSeasonSportKey[])('%s Perfe
     expect(JSON.parse(localStorage.getItem(`perfect-season-${sport}-best`)!)).toEqual(best);
   });
 });
+
+describe('NFL Perfect Season Super Bowl MVP', () => {
+  it.each(['HC', 'DEF'])('awards a player when %s is the highest-rated card', async slot => {
+    const original = FIX.nfl;
+    const championship = fixture(NFL_SLOTS, 98, slot, original.index);
+    FIX.nfl = championship;
+    vi.mocked(Math.random).mockReturnValue(0.125);
+    try {
+      const view = render(
+        <HelmetProvider><MemoryRouter initialEntries={[ROUTES.nfl]}><NflPage /></MemoryRouter></HelmetProvider>,
+      );
+      await playOneRun(view, championship);
+
+      expect(view.container.textContent).toContain('SUPER BOWL CHAMPIONS');
+      expect(view.container.textContent).toContain('Washington Commanders');
+      expect(view.container.textContent).toContain('32-15');
+      expect(JSON.parse(localStorage.getItem('perfect-season-nfl-best')!)).toMatchObject({
+        wins: 16, losses: 1, overall: 98,
+      });
+      expect(view.container.textContent).toContain('Super Bowl MVP: Fixture Player QB');
+      expect(view.container.textContent).toContain('SUPER BOWL CHAMPIONS · MVP: Fixture Player QB');
+    } finally {
+      FIX.nfl = original;
+    }
+  });
+});
