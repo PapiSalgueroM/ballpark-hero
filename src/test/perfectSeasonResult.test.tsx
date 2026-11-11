@@ -10,7 +10,7 @@
    only the two archive reads mocked, and a squad whose raw overall sits
    between two integers, so the rounded and the raw lines differ and only the
    raw one passes. */
-import { act, cleanup, fireEvent, render } from '@testing-library/react';
+import { act, cleanup, fireEvent, render, within } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
 import type { ComponentType } from 'react';
@@ -91,8 +91,8 @@ const press = (view: View, text: string | RegExp) => {
   fireEvent.click(node!);
 };
 
-async function playOneRun(view: View, fx: Fixture) {
-  press(view, 'Classic');
+async function draftOneRun(view: View, fx: Fixture, mode = 'Classic') {
+  press(view, mode);
   await tick(10);
   for (let i = 0; i < fx.slots.length; i++) {
     press(view, i === 0 ? /Spin the wheel/ : /Next spin/);
@@ -101,6 +101,10 @@ async function playOneRun(view: View, fx: Fixture) {
     await tick(10);
   }
   await tick(10);
+}
+
+async function playOneRun(view: View, fx: Fixture) {
+  await draftOneRun(view, fx);
   press(view, /Skip to result/);
   await tick(50);
 }
@@ -112,6 +116,25 @@ beforeEach(() => {
   vi.spyOn(Math, 'random').mockReturnValue(0.5);
 });
 afterEach(() => { cleanup(); vi.useRealTimers(); vi.restoreAllMocks(); });
+
+it('reveals all six NBA Hard pick ratings on the final lineup', async () => {
+  const view = render(
+    <HelmetProvider><MemoryRouter initialEntries={[ROUTES.nba]}><NbaPage /></MemoryRouter></HelmetProvider>,
+  );
+  await draftOneRun(view, FIX.nba, 'Hard');
+  expect(view.queryByRole('heading', { name: 'Your lineup' })).toBeNull();
+  press(view, /Skip to result/);
+  await tick(50);
+  const lineup = view.getByRole('heading', { name: 'Your lineup' }).closest('aside')!;
+  for (const [i, player] of FIX.nba.players.entries()) {
+    const row = within(lineup).getByText(player.name).parentElement!;
+    expect(Array.from(row.children, cell => cell.textContent)).toEqual([
+      FIX.nba.slots[i].key, player.name, String(player.rating),
+    ]);
+  }
+  press(view, /Run it back/);
+  expect(view.queryByText(FIX.nba.players[0].name)).toBeNull();
+});
 
 describe.each(['nba', 'nhl', 'mlb', 'nfl'] as PerfectSeasonSportKey[])('%s Perfect Season result card', sport => {
   const fx = FIX[sport];
