@@ -1,3 +1,9 @@
+## 2026-11-11: Budget Builder keeps the squad when reselecting its market
+
+Tapping the active market now keeps the XI, balance and Final result. Selecting a different market starts a fresh squad for that era. The mounted regression caught the original reset and covers reselecting Today after a Final and 2015 after a signing.
+
+The production phone replay confirmed that reselecting Today kept all eleven signings, their spend, the three Final legs and the one posted score. Switching to 2015 started an empty squad. All 14 scoped tests, app types, production build, 16 output and signing checks, and 16 route size caps passed.
+
 ## 2026-11-07: Club Manager historical roster counts live
 
 [PR #532](https://github.com/PapiSalgueroM/ballpark-hero/pull/532) published from main `c3b5ca4afaf9b4dadcd748f340e8e8e3e4a1a1dd`, App tree `133fcd3d26a4d237178e5c7efee723048da0aef2`, Lovable deployment `510b1df1-2172-42c0-90f9-d9f9c997b840`.
