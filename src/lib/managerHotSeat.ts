@@ -78,7 +78,7 @@ import {
   restoreEngineRegistrations,
   startCareer,
   /* Round 1509 (ruling 1l): the dailies start a career that follows no competition from outside. */
-  DAILY_START,
+  dailyStartOptions,
   uclProgressRank,
   type CareerState,
   type Competition,
@@ -539,7 +539,7 @@ function startOnStaticWorld(setup: HotSeatSetup): HotSeatRun {
   /* startCareer itself registers the static world for a real club; the
      onStaticWorld wrapper is what hands a Club Manager save's registrations
      back once this returns. */
-  let s = withSeed(mixSeed(setup.seed, 0), () => startCareer(setup.club, undefined, undefined, undefined, undefined, undefined, DAILY_START));
+  let s = withSeed(mixSeed(setup.seed, 0), () => startCareer(setup.club, undefined, undefined, undefined, undefined, undefined, dailyStartOptions(setup.daily)));
   /* Round 1335: and the board the previous manager had. startCareer opens a new appointment at BOARD_FRESH
      since the round; the weeks below are the previous manager's search for the crisis, and they read the
      board (the press question below 32, the desk below 35, the floor reset), so they open where they always

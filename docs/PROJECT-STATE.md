@@ -20321,3 +20321,11 @@ Actual independent seven-arm proof is7eadbca71e1e351741802f8f9e8b9ac1852e4b957ec
 Native admission: 69f420492bd29d81667ad18b3ed98209473e49f77e33a7e8f3eb6788e0acebe5. Deployment: 2d231ee7-24b2-4940-af8d-5908d26371e6. Public admission: 147361f50c8e3db9c6583009a045a7d79c22c8a680d2fadb171826ff3d3b6c89. Full source, provenance, artifact identities and the exact nine-path nonruntime bridge are in [the dated plan](plans/2026-11-05-soccer-four-first-team-entries.md).
 
 SC-36 remains partial. This does not add leagues, rosters or a complete evolving population. Next owner priority is more Soccer Career/Club Manager teams and leagues, preceded by a measured Team-picker UI cut if needed for the unchanged CM cap. CM47, LeagueSeasons582, measured NFL37/NBA25 golden differences and the separately triaged PR502 reds remain unwaived. The first SC4 build stopped at reader18; it is not relabelled green.
+
+## 2026-11-11 Manager Hot Seat and Deadline Day replay scope
+
+Dailies dated before the Nov 6 Eastern K League release now open with the world they used before that release. The launch date and later dates keep the published world. Free Play and ordinary Club Manager use their existing world choices.
+
+On the compiled 390px layout, the same October Athletic Club tape went back to Alavés with four of five points, and Dortmund's saved Deadline Day action reopened talks with Alphonso Davies. Both held exact save bytes across reload. Launch-day QPR kept its 0-0 against Portsmouth and the same action payload. The Daily Deals suite matched 12 Hot Seat dates, six Deadline Day dates and six scripted Deadline Day replays. The four post-launch Hot Seat references came from published K League source `15652350f` and matched untouched main. Forcing the old world failed those four checks only. Both copied watched-world controls, 53 scoped tests, app types, production build, 15 output checks and all 16 route caps passed.
+
+The product hunks compose with #611. Its October Celta test uses the expanded-world result and needs a different tape on integration. The Nov 8 Hoffenheim replay gave 2-0 against Schalke both on #611 and with the combined engine. Removing #611's selection guard produced 3-2.

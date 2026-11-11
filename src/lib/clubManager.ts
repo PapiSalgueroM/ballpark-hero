@@ -14111,9 +14111,15 @@ function worldUelField(state: CareerState, tables: { league: Pick<LeagueDef, 'id
  * stripped of worldComps anyway; this skips opening them, which cost a daily start a median of 55 ms a date on a
  * runner (simWorldEuro section 6). Opening draws nothing, so no deal moves either way.
  */
-export interface StartCareerOptions { noWorldComps?: boolean }
+export interface StartCareerOptions { noWorldComps?: boolean; kLeagueActive?: boolean }
 /** The options both dailies start a career with. */
 export const DAILY_START: StartCareerOptions = { noWorldComps: true };
+export function dailyStartOptions(daily?: string): StartCareerOptions {
+  // The K League went live on Nov 6 ET. Keep that day's deal and every later deal on its published world.
+  return daily && daily < '2026-11-06'
+    ? { ...DAILY_START, kLeagueActive: false }
+    : DAILY_START;
+}
 /* The states a start was asked to open nothing on, read by openWorldUclOnStart (a set of objects, never saved). */
 const NO_WORLD_COMPS = new WeakSet<CareerState>();
 
@@ -20556,7 +20562,7 @@ export interface SeasonWorld {
    and a custom club is placed against the real lineups. */
 export function startCareer(clubName: string, eraId: string = DEFAULT_ERA_ID, custom?: CustomClubSpec, manager?: ManagerSpec, world?: SeasonWorld, edit?: Record<string, string[]> | null, opts?: StartCareerOptions): CareerState {
   const kLeagueActive = world ? world.kLeagueActive ?? (world.rosterCareer ? careerHasKLeagueWorld(world.rosterCareer) : false)
-    : !(custom && kLeagueMember(custom.name));
+    : opts?.kLeagueActive ?? !(custom && kLeagueMember(custom.name));
   if (!ordinaryClubAllowed(clubName, custom) || (!custom && kLeagueMember(clubName) && (isHistoricEra(eraId) || !kLeagueActive))) throw new Error('CM_CLUB_ACCESS_HELD');
   /* Round 132: the era decides what year season one is, and the year decides
      everything else: the squad you are handed, how good every other club is,

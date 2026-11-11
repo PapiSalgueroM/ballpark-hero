@@ -11,14 +11,14 @@
  * WHAT IT HOLDS, for a fixed window of dates that CONTAINS Premier League days (the next 17 days from
  * 2026-10-10 hold none, so a window of "the next fortnight" is green with the defect in place):
  *   1. no daily state carries the fixture key (realLeagueFixtures);
- *   2. each date's deal is the deal Release AS dealt. The deal is what a player is handed and what
+ *   2. each date matches its published world. The deal is what a player is handed and what
  *      happens when the day is played one fixed way: Hot Seat = the club, the seed, the takeover, the
  *      board's target, the next fixture, the table, then every result of the run played balanced with no
  *      talk and the first press answer, the verdict and the share text; Deadline Day = the club, the
  *      seed, the needs, the targets, the sales, the budget, the ticker and the grade of a day ended at
  *      once. Whole engine states are left out on purpose: they move with any new save field.
- * BASELINE below was recorded from the source of 54e3820a itself (this file run with --root on a worktree
- * of that commit, remote check named in the commit that recorded it), never from this tree.
+ * BASELINE below comes from 54e3820a and the dated releases cited beside later rows. The runner records
+ * directly from those source revisions with --root.
  *   3. Release AZ, the lead's ruling Y3: no daily state carries a world seed or a ledger (worldSeed,
  *      worldRoster: Round 1250 gives every new career a seed, and a career with a seed writes a ledger on its
  *      first deal), the Hot Seat's career handed over (handoverState) included; and a SCRIPTED Deadline Day on
@@ -104,7 +104,7 @@ const DEADLINE = [
   ['2026-10-18', 'Nottingham Forest'], ['2026-11-01', 'Manchester United'], ['2026-11-09', 'Sunderland'],
 ];
 
-/* Recorded from 54e3820a (Release AS). Do not retake from this tree: a deal that moved is the defect. */
+/* Recorded from 54e3820a (Release AS) and the explicit later cutovers below. */
 const BASELINE = {
   hot: {
     '2026-10-10': '34412a45b0e5bb50c77c',
@@ -124,17 +124,20 @@ const BASELINE = {
        tree deals exactly the recording on all 12 dates (exit 0); with the values put back and the rules left as
        they are, it does not (exit 1); and the head as committed deals exactly this recording (retake identical). */
     '2026-10-27': '0400c7b1a2d756911454',
-    '2026-11-14': '67cb2096bdc45751340e',
+    /* The Nov 6 ET K League release (15652350f, deployment 979de67b) deals the following four scheduled dates.
+       These digests match untouched main 56d8708c7. Its K League-only inverse restores the four earlier digests
+       from 3b14650d3: 67cb2096bdc45751340e, 0f5c7f4df3f4b53c5531, a065461da7accfc4228e, 7dc686ab3b392aa070ca. */
+    '2026-11-14': '9cb75d62e4f0c62e72fa',
     /* Round 1600: the three dates from CM_DAILY_NEW_NUMBERS_FROM (2026-11-16) on deal on the age read by design
-       (Club Manager's 2026 world reads each man's age; every earlier date deals on the curve 1 view and keeps its
-       recording above, 2026-11-14 included). Recorded again from the Round 1600 tree with --print (remote check
+       (Club Manager's 2026 world reads each man's age; earlier dates still deal on the curve 1 view, including
+       2026-11-14). Before K League, recorded again from the Round 1600 tree with --print (remote check
        r1600-s8, line dailyDeals-print, head 604fbbe64). Round 1331's tree dealt b33b5b04, 9b645173 and 75a43fcb.
        The one input proof (Round 1600's fixer, 2026-10-30, remote check r1600-rr on head 178a1fd8c): with
        CM_DAILY_NEW_NUMBERS_FROM moved to 2027-03-01 and these three put back to Round 1331's values the tree replays
        green (line rr2-proof, exit 0), and the head as committed prints these three again (line rr2-retake). */
-    '2027-01-19': '0f5c7f4df3f4b53c5531',
-    '2027-01-30': 'a065461da7accfc4228e',
-    '2027-02-06': '7dc686ab3b392aa070ca',
+    '2027-01-19': '128358b04bc6d1f156c5',
+    '2027-01-30': 'c390e7775f17aa335c48',
+    '2027-02-06': 'bd19dbb98ac4ac7b9fc0',
   },
   deadline: {
     '2026-10-10': 'e57fbb3c1e90b2d46068',
@@ -163,10 +166,10 @@ const STRIPS = {
   seeddeadline: { file: 'deadlineDay.ts', line: '    delete state0.worldSeed;' },
   ledger: { file: 'managerHotSeat.ts', line: '  delete s.worldRoster;' },
   ledgerdeadline: { file: 'deadlineDay.ts', line: '    delete state0.worldRoster;' },
-  /* Round 1509 (ruling 1l): the dailies start with DAILY_START and open nothing, so the strip is the shape guard
+  /* Round 1509 (ruling 1l): the daily start options open nothing, so the strip is the shape guard
      behind it: each world control takes both off, the option and the strip, and the day keeps what it opened. */
-  world: { file: 'managerHotSeat.ts', line: '  delete s.worldComps;', also: [['startCareer(setup.club, undefined, undefined, undefined, undefined, undefined, DAILY_START)', 'startCareer(setup.club)']] },
-  worlddeadline: { file: 'deadlineDay.ts', line: '    delete state0.worldComps;', also: [['startCareer(setup.club, undefined, undefined, undefined, undefined, undefined, DAILY_START)', 'startCareer(setup.club)']] },
+  world: { file: 'managerHotSeat.ts', line: '  delete s.worldComps;', also: [['dailyStartOptions(setup.daily)', '{ ...dailyStartOptions(setup.daily), noWorldComps: false }']] },
+  worlddeadline: { file: 'deadlineDay.ts', line: '    delete state0.worldComps;', also: [['dailyStartOptions(setup.daily)', '{ ...dailyStartOptions(setup.daily), noWorldComps: false }']] },
   rulesall: { file: 'managerHotSeat.ts', line: "  if (setup.daily) return setup.daily < HOT_SEAT_RULES_FROM ? 'base' : undefined;", to: '  if (setup.daily) return undefined;' },
   rulesstale: { file: 'managerHotSeat.ts', line: "export const HOT_SEAT_RULES_FROM = '", to: "export const HOT_SEAT_RULES_FROM = '2026-10-01'; const HOT_SEAT_RULES_WAS = '" },
 };
@@ -344,8 +347,7 @@ if (PRINT) {
     console.log(same ? `simDailyDeals: the recorded scripted days ARE the days of the source at ${ROOT}` : `simDailyDeals: the recorded scripted days are NOT the days of the source at ${ROOT}`);
     process.exit(same ? 0 : 1);
   }
-  /* --verify: is the recorded BASELINE really the deals of the tree at --root? This is how the recording is
-     proven to be Release AS's own, on a worktree of 54e3820a. */
+  /* --verify: does the source at --root deal every recorded date as expected? */
   if (!process.argv.includes('--verify')) process.exit(0);
   const same = JSON.stringify(out) === JSON.stringify({ hot: BASELINE.hot, deadline: BASELINE.deadline });
   console.log(same
@@ -430,6 +432,6 @@ if (CONTROL) {
   process.exit(fired ? 1 : 3);
 }
 console.log(total === 0
-  ? `simDailyDeals: green. ${HOT.length} Hot Seat dates (${pl(HOT).length} Premier League) and ${DEADLINE.length} Deadline Day dates (${pl(DEADLINE).length} Premier League) deal what Release AS dealt, no daily carries the real fixture key, a world seed, a ledger or a watched Champions League, and the ${DEADLINE.length} scripted Deadline Days (a signing and a sale each) play and replay as on b6eb78e7.`
+  ? `simDailyDeals: green. ${HOT.length} Hot Seat dates (${pl(HOT).length} Premier League) and ${DEADLINE.length} Deadline Day dates (${pl(DEADLINE).length} Premier League) match their recorded worlds, no daily carries the real fixture key, a world seed, a ledger or a watched Champions League, and the ${DEADLINE.length} scripted Deadline Days (a signing and a sale each) play and replay as on b6eb78e7.`
   : `simDailyDeals: ${total} FAILURE(S): Hot Seat [${fails.hot.join(', ')}], Deadline Day [${fails.deadline.join(', ')}]`);
 process.exit(total === 0 ? 0 : 1);
