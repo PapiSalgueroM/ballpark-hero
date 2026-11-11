@@ -47,7 +47,7 @@ const SEAT_COUNTS = Array.from({ length: MAX_SEATS }, (_, i) => i + 1);
 
 export function RebuildBoard() {
   const {
-    phase, loading, loadFailed, retryLoad, clubs, club, preset, setPreset, chooseClub, reset,
+    phase, loading, loadFailed, saveConflict, retryLoad, clubs, club, preset, setPreset, chooseClub, reset,
     run,
     seats, seat, solo, setSeatKinds, takeSeat, passOn, scoreboard, sharedSeason,
     startingXi, startRating, currentRating, target, budget, spendCeiling, finalFunds, objectives, grade, shareText,
@@ -62,7 +62,7 @@ export function RebuildBoard() {
   // results) pulls the new screen into view instead of leaving the player
   // looking at the old one. Round 461: a hand over is a phase change too, and
   // so is the next seat's window, so the key carries the seat.
-  const revealRef = useRevealScroll<HTMLDivElement>(`${phase}|${seat?.index ?? 0}`);
+  const revealRef = useRevealScroll<HTMLDivElement>(saveConflict ? 'save-conflict' : `${phase}|${seat?.index ?? 0}`);
   const [copied, setCopied] = useState(false);
 
   // Round 333: while the wheel spins, the highlight cycles the unresolved
@@ -87,16 +87,18 @@ export function RebuildBoard() {
     } catch { /* clipboard blocked */ }
   };
 
-  if (loadFailed) {
+  if (saveConflict || loadFailed) {
     return (
-      <div data-no-prerender className="mx-auto max-w-2xl px-4 py-16 text-center">
-        <p role="alert" className="text-sm text-muted-foreground">Couldn’t load the clubs or players.</p>
+      <div ref={saveConflict ? revealRef : undefined} data-no-prerender className="mx-auto max-w-2xl px-4 py-16 text-center">
+        <p role="alert" className="text-sm text-muted-foreground">
+          {saveConflict ? 'Your saved window changed in another tab.' : 'Couldn’t load the clubs or players.'}
+        </p>
         <button
           type="button"
-          onClick={retryLoad}
+          onClick={saveConflict ? () => window.location.reload() : retryLoad}
           className="mt-4 min-h-11 rounded-xl bg-primary px-5 font-bold text-primary-foreground"
         >
-          Try again
+          {saveConflict ? 'Reload saved window' : 'Try again'}
         </button>
       </div>
     );
