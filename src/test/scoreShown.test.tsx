@@ -595,11 +595,14 @@ describe('fantasy-draft', () => {
     const shown = Number(text.match(/Season score: (\d+)\/100/)?.[1]);
     const points = Number(text.match(/You (\d+) pts/)?.[1]);
     const verdictLine = text.includes('Your draft wins the season') ? 'win' : text.includes('Dead level') ? 'draw' : 'loss';
+    const el = shareEl(v.container, 'Fantasy Draft');
+    expect(el, 'the completed verdict can be shared before requesting a story').not.toBeNull();
     await click(v.container, "Tell the season's story");
-    await waitFor(() => !!shareEl(v.container, 'Fantasy Draft'), 'the Fantasy Draft share');
-    const el = shareEl(v.container, 'Fantasy Draft')!;
-    const custom = el.getAttribute('data-custom') ?? '';
-    const scoreLine = el.getAttribute('data-score') ?? '';
+    await waitFor(() => (v.container.textContent ?? '').includes('Your side ground it out.'), 'the optional season story');
+    expect(shareEl(v.container, 'Fantasy Draft')).toBe(el);
+    expect(v.container.querySelectorAll('[data-testid="share"][data-game="Fantasy Draft"]')).toHaveLength(1);
+    const custom = el?.getAttribute('data-custom') ?? '';
+    const scoreLine = el?.getAttribute('data-score') ?? '';
     const told = custom.includes('I outdrafted the AI') ? 'win' : custom.includes('drew level') ? 'draw' : custom.includes('The AI outdrafted me') ? 'loss' : 'none';
     const rec = recorded('/fantasy-draft');
     console.log(`SHOWN fantasy-draft: recorded ${JSON.stringify(rec)} verdict "Season score: ${shown}/100" from ${points} season points (${verdictLine}); share "${scoreLine}", text "${custom}"`);

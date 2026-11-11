@@ -1,3 +1,11 @@
+## 2026-11-11: Fantasy Draft shares the verdict when it is ready
+
+The Fantasy Draft verdict now offers its existing share actions when both XIs finish and the season score is ready. The score and share text come from the same local result. The optional season story can still run and retry below it.
+
+On the original 390px build, a completed draft displayed and posted 76/100, but sharing only appeared after a successful story request. It was missing before the request, while waiting and after a 503 response.
+
+The fixed build kept one share group and the exact same score card through all four story states. Reloading and starting a fresh draft cleared the share controls. The four Fantasy tests, 700-draft pool sim, app types, production build, 15 output checks and 16 unchanged route caps passed. The wider score suite's Soccer Career manager timeout also reproduced on the unmodified baseline.
+
 ## 2026-11-07: Club Manager historical roster counts live
 
 [PR #532](https://github.com/PapiSalgueroM/ballpark-hero/pull/532) published from main `c3b5ca4afaf9b4dadcd748f340e8e8e3e4a1a1dd`, App tree `133fcd3d26a4d237178e5c7efee723048da0aef2`, Lovable deployment `510b1df1-2172-42c0-90f9-d9f9c997b840`.
