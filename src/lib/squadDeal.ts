@@ -161,8 +161,12 @@ export const MEMES: Player[] = [
 
 /* ---------------- Era + pool fetch ---------------- */
 
-export async function fetchSquadPool(era: Era, year = 2026): Promise<Player[]> {
+export async function fetchSquadPool(era: Era, year = 2026, onFallback?: () => void): Promise<Player[]> {
   if (era === 'legends') return [...LEGENDS];
+  const fallback = () => {
+    onFallback?.();
+    return fallbackPlayers.slice();
+  };
   try {
     const { data, error } = await supabase
       .from('player_market_values')
@@ -181,7 +185,7 @@ export async function fetchSquadPool(era: Era, year = 2026): Promise<Player[]> {
          Search and Discard, which share this helper. */
       .order('player_name', { ascending: true })
       .limit(1000);
-    if (error || !data || data.length === 0) return fallbackPlayers.slice();
+    if (error || !data || data.length === 0) return fallback();
     const seen = new Set<string>();
     const pool: Player[] = [];
     for (const row of data) {
@@ -195,8 +199,8 @@ export async function fetchSquadPool(era: Era, year = 2026): Promise<Player[]> {
         marketValue: Math.max(1, Math.round((row.market_value_usd || 1_000_000) / 1_000_000)), difficulty: 'easy',
       });
     }
-    return pool.length >= 33 ? pool : fallbackPlayers.slice();
-  } catch { return fallbackPlayers.slice(); }
+    return pool.length >= 33 ? pool : fallback();
+  } catch { return fallback(); }
 }
 
 

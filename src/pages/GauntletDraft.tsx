@@ -50,6 +50,7 @@ export default function GauntletDraft() {
   const todayStr = useRef(getTodayET()).current;
   const [phase, setPhase] = useState<Phase>('boot');
   const [pool, setPool] = useState<Player[]>([]);
+  const [usingFallback, setUsingFallback] = useState(false);
   const [mode, setMode] = useState<Mode>('daily');
   const [draft, setDraft] = useState<DraftShape | null>(null);
   const [pickIndex, setPickIndex] = useState(0);
@@ -59,11 +60,13 @@ export default function GauntletDraft() {
 
   useEffect(() => {
     let cancelled = false;
-    fetchSquadPool('current')
+    let usedFallback = false;
+    fetchSquadPool('current', undefined, () => { usedFallback = true; })
       .then(p => {
         if (cancelled) return;
         if (p.length < 100) { setPhase('error'); return; }
         setPool(p);
+        setUsingFallback(usedFallback);
         setPhase('setup');
       })
       .catch(() => { if (!cancelled) setPhase('error'); });
@@ -87,6 +90,10 @@ export default function GauntletDraft() {
         return;
       }
     }
+    if (m === 'daily' && usingFallback) {
+      window.location.reload();
+      return;
+    }
     const seed = m === 'daily' ? dailyDraftSeed(todayStr) : Math.floor(Math.random() * 2147483645) + 1;
     const d = buildDraft(pool, seed);
     setMode(m);
@@ -96,7 +103,7 @@ export default function GauntletDraft() {
     setRun(null);
     setShownMatches(0);
     setPhase('drafting');
-  }, [pool]);
+  }, [pool, usingFallback]);
 
   const keep = (p: Player) => {
     if (!draft || phase !== 'drafting') return;
@@ -168,7 +175,9 @@ export default function GauntletDraft() {
             </div>
             <button onClick={() => start('daily')} className="w-full rounded-xl border border-border bg-surface-1 p-4 text-left hover:border-primary/50 hover:bg-primary/5 transition-colors">
               <span className="block font-bold text-foreground">Daily gauntlet</span>
-              <span className="block text-xs text-muted-foreground mt-0.5">{dailyDone ? "Today's draft is done. See how the cup went" : 'The same five card choices for everyone today'}</span>
+              <span className="block text-xs text-muted-foreground mt-0.5">
+                {dailyDone ? "Today's draft is done. See how the cup went" : usingFallback ? 'The player feed is unavailable. Tap to retry.' : 'The same five card choices for everyone today'}
+              </span>
             </button>
             <button onClick={() => start('unlimited')} className="w-full rounded-xl border border-border bg-surface-1 p-4 text-left hover:border-primary/50 hover:bg-primary/5 transition-colors">
               <span className="block font-bold text-foreground">Unlimited</span>
