@@ -67,6 +67,13 @@ const SETTLING = `    const onVisibility = () => {
 const LOAD_ONLY = `    const onVisibility = () => {
       saveNow();
     };`;
+const FRAME_SETTLING = `      if (now - Math.max(lastWall, paidUntilRef.current) >= AWAY_GRACE_SEC * 1000 && document.visibilityState !== 'hidden') {
+        settleAway();
+        last = t;
+        acc = 0;
+        sinceSave = 0;
+      }
+`;
 
 /** Run the suite once and return one row per test: { title, status, messages }. */
 function runSuite(env) {
@@ -120,7 +127,7 @@ for (const row of live) {
   console.log(`   ${row.status === 'passed' ? 'pass' : 'FAIL'}  ${row.title}`);
   if (row.status !== 'passed') fail(`${row.title}: ${detail(row.messages)}`);
 }
-if (live.length < 6) fail(`only ${live.length} of the 6 away sections ran, so this harness measured less than it claims`);
+if (live.length < 11) fail(`only ${live.length} of the 11 away cases ran, so this harness measured less than it claims`);
 console.log('   what it measured:');
 for (const note of live.notes) console.log(`     ${note}`);
 if (live.notes.length < 6) fail(`the suite printed ${live.notes.length} measurements, so some section returned without measuring anything`);
@@ -128,22 +135,22 @@ if (live.notes.length < 6) fail(`the suite printed ${live.notes.length} measurem
 console.log('');
 console.log('B) negative control: the pre 439 load-only settle is put back');
 const src = fs.readFileSync(HOOK, 'utf8').split('\r\n').join('\n');
-if (!src.includes(SETTLING)) {
-  console.error('  control: the Round 439 visibility settle is not in useStadiumTycoon.ts, so this control would rewrite nothing and prove nothing');
+if (src.split(SETTLING).length !== 2 || src.split(FRAME_SETTLING).length !== 2) {
+  console.error('  control: expected one visibility settle and one visible frame settle in useStadiumTycoon.ts');
   process.exit(1);
 }
-fs.writeFileSync(CONTROL_HOOK, src.replace(SETTLING, LOAD_ONLY));
+fs.writeFileSync(CONTROL_HOOK, src.replace(SETTLING, LOAD_ONLY).replace(FRAME_SETTLING, ''));
 console.log('   wrote a copy of the hook whose only away settle is the mount effect');
 const controlled = runSuite({ TYCOON_AWAY_CONTROL: 'loadonly' });
 fs.rmSync(CONTROL_HOOK, { force: true });
 if (!controlled) {
   fail('the control run produced no report, so the control proves nothing');
 } else {
-  /* Targeted: the two sections that measure a backgrounded tab must go red,
-     and the rig section and the load path must stay green, or the red says
+  /* Targeted: background and visible wake cases must go red.
+     The frame cadence, load path and short visible gap must stay green, or the red says
      "something broke" rather than "the away settle is missing". */
-  const MUST_FAIL = [3, 4];
-  const MUST_PASS = [1, 2];
+  const MUST_FAIL = [3, 4, 9];
+  const MUST_PASS = [1, 2, 10];
   for (const row of controlled) {
     const n = section(row.title);
     const graded = MUST_FAIL.includes(n) || MUST_PASS.includes(n);
@@ -171,4 +178,4 @@ console.log('simTycoonAway: green.');
 console.log('   A backgrounded tab settles the hours it was hidden for, at the half rate the rules print.');
 console.log('   The stated cap pays the same whether the tab was closed or only behind another window.');
 console.log('   Live play is never billed back as time away, and a twenty second alt tab pays nothing.');
-console.log('   The control put the load-only settle back and sections 3 and 4 went red, so these checks are alive.');
+console.log('   The load-only control rejected the background and visible wake cases. The load and short-gap checks passed.');
