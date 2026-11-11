@@ -541,7 +541,7 @@ export function nbaTrade(
 ): 'accepted' | 'rejected' | 'invalid' {
   const mine = my.players.find(p => p.id === myId);
   const theirs = their.players.find(p => p.id === theirId);
-  if (!mine || !theirs || my.players.length <= 8 || their.players.length <= 8) return 'invalid';
+  if (!mine || !theirs || my.players.length < NBA_ROSTER_MIN || their.players.length < NBA_ROSTER_MIN) return 'invalid';
   /* Round 631: nobody comes back the season he was cut, by trade either. */
   if (tradeRefusal(my, theirId) || tradeRefusal(their, myId)) return 'invalid';
   if (!nbaSalaryFits(my, mine, theirs, cap, taxScale) || !nbaSalaryFits(their, theirs, mine, cap, taxScale)) return 'invalid';
@@ -565,7 +565,7 @@ export function nbaExecuteTalksTrade(
 ): 'done' | 'invalid' {
   const mine = my.players.find(p => p.id === myId);
   const theirs = their.players.find(p => p.id === theirId);
-  if (!mine || !theirs || my.players.length <= 8 || their.players.length <= 8) return 'invalid';
+  if (!mine || !theirs || my.players.length < NBA_ROSTER_MIN || their.players.length < NBA_ROSTER_MIN) return 'invalid';
   /* Round 631: nobody comes back the season he was cut, by trade either. */
   if (tradeRefusal(my, theirId) || tradeRefusal(their, myId)) return 'invalid';
   if (addPick && !my.picks.length) return 'invalid';
