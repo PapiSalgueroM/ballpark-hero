@@ -171,3 +171,44 @@ it.each([false, true])('holds a prospect and its fee until storage accepts the s
   expect(sold.soldCareer).toBe(state.soldCareer + 1);
   expect(academy.queryByText(/The academy could not save that change/)).toBeNull();
 }, 15_000);
+
+
+it.each([false, true])('keeps a facility purchase pending until the academy can save it (Stadium: %s)', async stadium => {
+  const state = deserialize(save(), now)!;
+  state.cash = 100;
+  localStorage.setItem(SAVE_KEY, serialize(state));
+  const before = save();
+  const view = await openDoor(stadium);
+  const academy = within(view.container);
+  fireEvent.click(academy.getByRole('button', { name: /Coaching staff/ }));
+  const upgrade = await academy.findByRole('button', { name: 'Upgrade for $45' }, { timeout: 5_000 });
+  const nativeWrite = Storage.prototype.setItem;
+  const fault = vi.spyOn(Storage.prototype, 'setItem').mockImplementation(function (this: Storage, key, value) {
+    if (key === SAVE_KEY) throw new DOMException('Controlled academy save refusal', 'QuotaExceededError');
+    nativeWrite.call(this, key, value);
+  });
+
+  fireEvent.click(upgrade);
+  expect(upgrade).toHaveAccessibleName('Upgrade for $45');
+  expect(academy.getByText('Level 0')).toBeVisible();
+  expect(academy.getByText('$100')).toBeVisible();
+  expect(academy.getByText(/The academy could not save that change/)).toBeVisible();
+  expect(save()).toBe(before);
+
+  fault.mockRestore();
+  fireEvent.click(upgrade);
+  expect(academy.getByText('Level 1')).toBeVisible();
+  expect(academy.getByText('$55')).toBeVisible();
+  expect(academy.queryByText(/The academy could not save that change/)).toBeNull();
+  const upgraded = deserialize(save(), now)!;
+  expect(upgraded).toEqual({ ...state, cash: 55, levels: { ...state.levels, coaching: 1 } });
+  const committed = save();
+  view.unmount();
+
+  const restored = await openDoor(!stadium);
+  const restoredAcademy = within(restored.container);
+  fireEvent.click(restoredAcademy.getByRole('button', { name: /Coaching staff/ }));
+  expect(await restoredAcademy.findByText('Level 1', {}, { timeout: 5_000 })).toBeVisible();
+  expect(restoredAcademy.getByText('$55')).toBeVisible();
+  expect(save()).toBe(committed);
+}, 25_000);

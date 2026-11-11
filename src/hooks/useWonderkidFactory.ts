@@ -73,7 +73,7 @@ export function useWonderkidFactory() {
     return result;
   }, [checkMoved, fence]);
 
-  /* Moving a player only reaches the screen after the whole academy is saved. */
+  /* Academy transactions reach the screen only after the save succeeds. */
   const commitAcademy = useCallback((next: FactoryState): boolean => {
     const result = writeAcademy(next);
     if (result !== 'written') {
@@ -179,9 +179,10 @@ export function useWonderkidFactory() {
 
   const doBuy = useCallback((id: FacilityId) => {
     if (checkMoved()) return;
-    markSessionPlay();
-    if (buyFacility(stateRef.current!, id)) bump();
-  }, [bump, checkMoved, markSessionPlay]);
+    const s = stateRef.current!;
+    const next = { ...s, levels: { ...s.levels } };
+    if (buyFacility(next, id) && commitAcademy(next)) markSessionPlay();
+  }, [checkMoved, commitAcademy, markSessionPlay]);
 
   const doSell = useCallback((id: number) => {
     if (checkMoved()) return;
