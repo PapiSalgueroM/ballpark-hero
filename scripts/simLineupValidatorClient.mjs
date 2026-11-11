@@ -65,7 +65,7 @@ import { fileURLToPath } from 'node:url';
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const control = process.env.LINEUP_VALIDATOR_CONTROL || '';
 const TEST_FILE = 'src/test/lineupValidatorClient.test.tsx';
-const TOTAL = 55; // 19 in part A (17 reading, 2 asking), 15 in part B, 21 in part C
+const TOTAL = 57; // 19 in part A (17 reading, 2 asking), 15 in part B, 23 in part C
 
 const LIB = { id: '@/lib/validatorClient', file: 'src/lib/validatorClient.ts', copy: 'validatorClient.ts' };
 const HOOK = { id: '@/hooks/useLineupBuilder', file: 'src/hooks/useLineupBuilder.ts', copy: 'useLineupBuilder.ts' };

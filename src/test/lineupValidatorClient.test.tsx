@@ -199,6 +199,37 @@ describe('part C: the hook', () => {
   beforeEach(() => { vi.useRealTimers(); });
   afterEach(() => { vi.unstubAllGlobals(); vi.useRealTimers(); });
 
+  it.each(['Qzx Centre Back', '  qzx céntre back  '])('keeps a validator alias out when it resolves to %s', async (resolvedName) => {
+    const canonical = 'Qzx Centre Back';
+    const alias = 'Qzx Longer Centre Back';
+    const replacement = 'Qzx Other Centre Back';
+    const meta = { rawPosition: 'Centre-Back', club: 'Real Madrid' };
+    const secondCentreBack = SLOT.CB + 1;
+    const { validatorCalls } = stubFetch((_init, nth) =>
+      answer({ valid: true, fullName: nth === 1 ? resolvedName : replacement }));
+    const game = start([REAL, BRAZIL], SLOT.CB);
+
+    await act(async () => { await game.current.submitPlayer(canonical, { ...meta, rawName: canonical }); });
+    expect(game.current.filledCount).toBe(1);
+    expect(validatorCalls()).toHaveLength(0);
+    act(() => game.current.selectPosition(secondCentreBack));
+
+    await act(async () => { await game.current.submitPlayer(alias, meta); });
+    expect(validatorCalls()).toHaveLength(1);
+    expect(game.current.filledCount).toBe(1);
+    expect(game.current.filledSlots.get(SLOT.CB)?.playerName).toBe(canonical);
+    expect(game.current.filledSlots.has(secondCentreBack)).toBe(false);
+    expect(game.current.currentTeam).toEqual(BRAZIL);
+    expect(game.current.selectedPositionIndex).toBe(secondCentreBack);
+    expect(game.current.isValidating).toBe(false);
+    expect(game.current.validationError).toMatch(/is already in your lineup!/);
+
+    await act(async () => { await game.current.submitPlayer(replacement, meta); });
+    expect(game.current.filledCount).toBe(2);
+    expect(game.current.filledSlots.get(secondCentreBack)?.playerName).toBe(replacement);
+    expect(game.current.validationError).toBeNull();
+  });
+
   it('a club pick on file at the club lands with no request to the validator', async () => {
     const { seen, validatorCalls } = stubFetch(() => answer({ valid: false, reason: 'The validator must not be asked.' }));
     const game = start([REAL], SLOT.RB);
