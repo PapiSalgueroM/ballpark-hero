@@ -124,6 +124,24 @@ describe('Build Your XI evaluation', () => {
     expect(local).not.toHaveBeenCalled();
   });
 
+  it.each([
+    ['an empty verdict', {}],
+    ['a structured rating', { ...remoteVerdict, rating: { score: 85 } }],
+    ['a structured headline', { ...remoteVerdict, headline: { text: 'Malformed' } }],
+    ['blank analysis', { ...remoteVerdict, analysis: '   ' }],
+  ])('uses the market fallback for HTTP 200 with %s', async (_, payload) => {
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: true, json: async () => payload }));
+    local.mockResolvedValue(localVerdict);
+    const xi = await draftXi();
+
+    await act(async () => { await xi.current.evaluateTeam(); });
+
+    expect(xi.current.phase).toBe('result');
+    expect(xi.current.verdict).toEqual(localVerdict);
+    expect(xi.current.isEvaluating).toBe(false);
+    expect(local).toHaveBeenCalledTimes(1);
+  });
+
   it('aborts a submitted review on Start Over without opening a result', async () => {
     const fetchMock = holdReferee();
     const xi = await draftXi();
