@@ -1,3 +1,11 @@
+## 2026-11-10: NBA Grid Marcus Smart Rockets membership staged
+
+Report `469858d8` matches Rockets x Lakers on the November 5 Daily board. The live key lists Boston, the Lakers, Memphis and Washington for Marcus Smart. He played 26:28 for Houston on October 21 and 35:42 on October 31, before the report. His Lakers appearance on November 10, 2025 is also verified. [October 21 NBA scorer's report](https://statsdmz.nba.com/pdfs/20261021/20261021_DALHOU.pdf) · [October 21 Basketball Reference box](https://www.basketball-reference.com/boxscores/202610210HOU.html) · [October 31 NBA scorer's report](https://statsdmz.nba.com/pdfs/20261031/20261031_OKCHOU.pdf) · [Rockets postgame media](https://www.nba.com/watch/video/marcus-smart-presser-full-10) · [Lakers NBA scorer's report](https://statsdmz.nba.com/pdfs/20251110/20251110_LALCHA_book.pdf)
+
+The migration adds Houston to Smart's exact franchise row. The cell checks only franchise membership. Career totals and season fields retain their stored snapshot for the separate data refresh. The actual grid loader and matcher reject the original row and accept the correction on `grid-20261105`. Local PostgreSQL updated one field, replayed without writes and rejected eight drift cases. The report did not capture the mode. Verify the public answer key after applying the migration.
+
+NBA Starting 5 and NBA Connect 4 also read this franchise history. The retained archive contains seven Rockets x Lakers cells that rise from 49 to 50 and four Rockets x Celtics cells that rise from 38 to 39. The eight listed names per cell stay the same. After applying the correction, review the changes reported by the dated archive generator, then run `npm run archive:grids -- --republish` and `npm run build:seo` in the release tree.
+
 ## 2026-11-07: Club Manager historical roster counts live
 
 [PR #532](https://github.com/PapiSalgueroM/ballpark-hero/pull/532) published from main `c3b5ca4afaf9b4dadcd748f340e8e8e3e4a1a1dd`, App tree `133fcd3d26a4d237178e5c7efee723048da0aef2`, Lovable deployment `510b1df1-2172-42c0-90f9-d9f9c997b840`.
