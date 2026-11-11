@@ -1,3 +1,9 @@
+## 2026-11-10 Soccer Career nationality menu width draft
+
+At 320 and 344 px, the nationality list extended to x363.58 on both main and the setup menu draft. The list now respects the available width computed by Radix and ends at x310 or x334. The long CONCACAF heading wraps on phones, all 135 options remain, and the desktop heading stays on one line. This branch builds on the vertical consent-menu fix in [PR #557](https://github.com/PapiSalgueroM/ballpark-hero/pull/557).
+
+The creation consent sim failed on the parent build at 344 px and passed on the candidate. Nine compiled Chromium and WebKit runs covered 320 and 344 px with consent pending or answered and a desktop control. A real tap selected Bosnia & Herzegovina in each run. App types, 13 creation tests, the production build, 15 static output checks and all 16 route caps passed. Soccer Career measured 840.485 KiB under the existing rounded 840 cap. Phone checks used browser emulation.
+
 ## 2026-11-10 Soccer Career setup menus and cookie choices draft
 
 Soccer Career ranked first with 5,214 distinct recorded gameplay handles for Nov 4 to 10 UTC. While cookie choices are visible, nationality, position and starting era now use the measured panel height and the menu's available space. At 344 by 643, the original build drew the nationality menu to y633 under a panel starting at y338. Native taps hit the panel. The permanent creator consent sim reproduces that failure on main and selects all three fields on this draft with consent still unanswered.
