@@ -575,6 +575,7 @@ export function mlbOverLimit(t: MlbGmTeam): number {
    it, or with it, the stream of draws is the same. */
 export function mlbOffseason(league: MlbLeague, rng: () => number, userTeam?: string, opts?: MlbOffseasonOptions): string[] {
   const notes: string[] = [];
+  const existingFreeAgents = new Set(league.freeAgents);
   /* Round 211: one name book for the whole offseason, so the men who
      arrive to fill rosters cannot duplicate each other or anybody left. */
   const taken = leagueNames(league);
@@ -606,7 +607,12 @@ export function mlbOffseason(league: MlbLeague, rng: () => number, userTeam?: st
      so the men cut compete for its 30 places like everybody else. */
   for (const t of Object.values(league.teams)) if (t.abbr !== userTeam) mlbCutDownToMax(t, league.freeAgents);
   league.freeAgents = league.freeAgents.sort((a, b) => b.ovr - a.ovr).slice(0, 30);
-  for (const fa of league.freeAgents) { fa.age += 1; if (fa.age >= 33) fa.ovr = Math.max(63, fa.ovr - 1); }
+  // Only players who started the offseason in the market need its age update.
+  for (const fa of league.freeAgents) {
+    if (!existingFreeAgents.has(fa)) continue;
+    fa.age += 1;
+    if (fa.age >= 33) fa.ovr = Math.max(63, fa.ovr - 1);
+  }
   league.cap = Math.round(league.cap * 1.03);
   league.season += 1;
   league.round = 1;

@@ -92,6 +92,35 @@ describe('966 MLB real draft-capital consequences', () => {
     expect(localStorage.getItem(OTHER)).toBe('held exact unrelated bytes');
   });
 
+  it('ages an expiring player, a CPU cut and a market carryover once through the draft', () => {
+    const lg = league();
+    const expiring = lg.teams.ATL.players[0];
+    Object.assign(expiring, { age: 34, ovr: 79, pot: 79, years: 1 });
+    const carryover = { ...lg.freeAgents[0], age: 34, ovr: 79, pot: 79 };
+    lg.freeAgents = [carryover];
+    const crowded = lg.teams.BAL.players;
+    const cut = { ...crowded[0], id: 'cpu-cut', name: 'Fictional Cut', pos: 'OF', age: 34, ovr: 65, pot: 65, years: 3 };
+    crowded.push(cut,
+      { ...cut, id: 'cpu-spare-a', name: 'Fictional Spare A', ovr: 76, pot: 76 },
+      { ...cut, id: 'cpu-spare-b', name: 'Fictional Spare B', ovr: 76, pot: 76 },
+    );
+    random.mockReturnValue(0.1);
+    seed(lg);
+    render(<MlbFrontOfficeBoard />);
+    pickFirst();
+    pickFirst();
+
+    const next = saved().league as MlbLeague;
+    expect(next.season).toBe(lg.season + 1);
+    expect(next.round).toBe(1);
+    expect(next.teams.BAL.players).toHaveLength(engine.MLB_ROSTER_MAX);
+    expect([expiring, cut, carryover].map(({ id }) => next.freeAgents.find(p => p.id === id))).toEqual([
+      expect.objectContaining({ id: expiring.id, age: 35, ovr: 78 }),
+      expect.objectContaining({ id: cut.id, age: 35, ovr: 64 }),
+      expect.objectContaining({ id: carryover.id, age: 35, ovr: 78 }),
+    ]);
+  });
+
   it.each([0, 1, 4])('actual traded %i rights determine the newly opened draft without a fixed two', count => {
     const input = traded(), lg = count === 1 ? input.one : count === 0 ? input.zero : input.four, team = count === 4 ? 'ATL' : 'ARI';
     const tokens = clone(lg.teams[team].picks); seed(lg, team, { phase: 'recap', draftClass: null, picksLeft: 0, draftBatchesLeft: undefined });
