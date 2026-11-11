@@ -20329,3 +20329,11 @@ In all four US My Career games, a second tab could replay the same season with d
 The original failed all seven mounted stale-action cases. The candidate passed 131 tests across six suites. Product hunks merge cleanly with PR561 and PR570. Combined scratch verification passed 95 tests after adjusting PR561's competing-writer fixtures to arrive during an accepted Play and keeping the no-handoff tests as disk-only callers.
 
 Compiled Chromium at 390 × 844 matched the full saved bytes for all four accepted baseline and candidate journeys. The stale direct Play and three stale Watch cases preserved the newer save through reload and opened no season viewer. App types, production build, all 15 output checks and all 16 existing route caps passed.
+
+## 2026-11-11 My Career Bank cross-tab saves
+
+The Bank now checks for a newer save before applying account, market, card or shop actions in the four US My Career games. An older tab asks to reload before it changes balances or confirms a purchase. The Retry controls and the app's queued reload check use the same guard. A stale queued write is discarded and an unsaved retirement stays off the Hall Wall.
+
+On the previous compiled build at 390 × 844, stale NBA savings erased one completed season and a stale NFL shop purchase erased $4.95M in same-season savings. NBA Retry save and the automatic stale-chunk reload also erased one completed season when an older tab had queued a refused savings write. The four paths now keep the newer save byte for byte through reload. A fresh NFL purchase after reload keeps the saved balance. The mounted tests cover the same-tab save refusal and Retry, contract adoption, Play/Watch and the committed career digests.
+
+App types, the production build, all 15 built-site readers and all 16 route size caps passed. The Bank sim passed with 32 starting states and 32 careers per sport, along with the shared board weight check.
