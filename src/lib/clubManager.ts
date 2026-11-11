@@ -3083,6 +3083,8 @@ export interface CareerState {
    *  a value of matchRules, because the harnesses of Rounds 1331 and 1335 read rulesOf answering undefined as
    *  the current rules, and the days from HOT_SEAT_RULES_FROM to HOT_SEAT_TIE_FROM play those. */
   tieRules?: 'night';
+  /** Manager Hot Seat replays keep the original sequential XI fill. */
+  lineupRules?: 'sequential';
   /** Round 1229: the league book of the season in play: every rival's league goals, assists and clean
    *  sheets by man, and my men's league clean sheets. Opened where a season starts (startCareer,
    *  startNextSeason) and replaced every summer, so it never grows season over season. Absent on a
@@ -16059,6 +16061,11 @@ function simAiMatch(state: CareerState, home: string, away: string, scale = 1): 
  */
 export function effectiveXIWithSlots(state: CareerState): XiSlot[] {
   const formation = FORMATIONS[state.formationIndex] ?? FORMATIONS[0];
+  const available = state.squad.filter(isAvailable);
+  // Reserve the selected players when a full XI can play. A short-handed XI
+  // keeps the existing compact slot order used by the live match.
+  const picked = state.lineupRules !== 'sequential' && available.length >= formation.slots.length
+    ? new Set(state.xiIds.slice(0, formation.slots.length)) : null;
   const used = new Set<string>();
   const out: XiSlot[] = [];
   /* Round 978: the men you rested for the match after an international
@@ -16078,7 +16085,7 @@ export function effectiveXIWithSlots(state: CareerState): XiSlot[] {
       const worth = (x: CMPlayer) => x.rating - fitPenalty(x, slot);
       const best = (pool: CMPlayer[]) => pool
         .sort((a, b) => worth(b) - worth(a) || b.rating - a.rating)[0];
-      const open = state.squad.filter(x => isAvailable(x) && !used.has(x.id));
+      const open = available.filter(x => !used.has(x.id) && !picked?.has(x.id));
       p = best(open.filter(x => !resting.has(x.id))) ?? best(open);
     }
     if (p) {
