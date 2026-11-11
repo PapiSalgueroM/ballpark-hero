@@ -269,9 +269,9 @@ export default function ManagerHotSeatBoard() {
               <div className="mt-3 rounded-md bg-muted px-3 py-2 text-sm" data-testid="hot-seat-daily-done">
                 <div className="font-semibold">{VERDICT_WORDS[dailyDone.kind].title}</div>
                 <div className="text-muted-foreground">{dailyDone.points} of {dailyDone.target} points {dailyDone.dots}. Back tomorrow for a new club.</div>
-                {keepsJob(dailyDone.kind) && dailyFinished && (
+                {dailyFinished && (
                   <button type="button" onClick={() => open({ club: daily.club, seed: daily.seed, daily: daily.daily }, dailyFinished)} className="mt-2 min-h-[44px] w-full rounded-md border border-primary px-3 py-2 text-sm font-semibold text-primary">
-                    See the Club Manager offer
+                    {keepsJob(dailyDone.kind) ? 'See the Club Manager offer' : 'View result'}
                   </button>
                 )}
               </div>

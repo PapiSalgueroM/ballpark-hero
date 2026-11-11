@@ -18,6 +18,7 @@ import { act, cleanup, fireEvent, render, renderHook } from '@testing-library/re
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { useDeadlineDay } from '@/hooks/useDeadlineDay';
 import ManagerHotSeatBoard from '@/components/manager-hot-seat/ManagerHotSeatBoard';
+import { recordCompletion } from '@/lib/completions';
 import { getTodayET } from '@/lib/dateUtils';
 
 vi.mock('@/lib/completions', () => ({ recordCompletion: vi.fn(), getCurrentPlayerName: () => null }));
@@ -118,5 +119,50 @@ describe('Manager Hot Seat: Menu and back keeps the job', () => {
     act(() => { vi.advanceTimersByTime(50); });
     expect(view.queryByTestId('hot-seat-brief')).toBeNull();
     expect(actionCount(stored('manager-hot-seat')[0])).toBe(played);
+  }, 120000);
+
+  it('reopens a sacked Daily recap from the menu and after reload', () => {
+    vi.setSystemTime(new Date('2026-11-08T17:00:00Z'));
+    vi.mocked(recordCompletion).mockClear();
+    const saveKey = 'manager-hot-seat-daily-2026-11-08';
+    let view = render(<ManagerHotSeatBoard />);
+    fireEvent.click(view.getByRole('button', { name: "Take today's job" }));
+    act(() => { vi.advanceTimersByTime(50); });
+    fireEvent.click(view.getByRole('button', { name: 'Take the job' }));
+
+    for (let step = 0; step < 30 && !view.queryByTestId('hot-seat-verdict'); step++) {
+      const press = view.queryByTestId('hot-seat-press')?.querySelector('button');
+      const next = view.queryByRole('button', { name: 'Next match' });
+      if (press) fireEvent.click(press);
+      else if (next) fireEvent.click(next);
+      else {
+        fireEvent.click(view.getByRole('button', { name: 'Defensive' }));
+        fireEvent.click(view.getByRole('button', { name: 'Kick off' }));
+      }
+    }
+
+    const verdict = view.getByTestId('hot-seat-verdict');
+    const matchLog = verdict.querySelector('ul')?.textContent;
+    const saved = localStorage.getItem(saveKey);
+    expect(JSON.parse(saved!)).toMatchObject({ done: true, kind: 'sacked', points: 1, target: 4 });
+    expect(verdict.textContent).toContain('Sacked');
+    expect(matchLog).toContain('Bayer Leverkusen');
+    expect(recordCompletion).toHaveBeenCalledTimes(1);
+
+    fireEvent.click(view.getByRole('button', { name: 'Menu' }));
+    for (const reload of [false, true]) {
+      if (reload) {
+        view.unmount();
+        view = render(<ManagerHotSeatBoard />);
+      }
+      fireEvent.click(view.getByRole('button', { name: 'View result' }));
+      act(() => { vi.advanceTimersByTime(50); });
+      const reopened = view.getByTestId('hot-seat-verdict');
+      expect(reopened.textContent).toContain('Sacked');
+      expect(reopened.querySelector('ul')?.textContent).toBe(matchLog);
+      expect(view.queryByTestId('hot-seat-carry-on')).toBeNull();
+      expect(localStorage.getItem(saveKey)).toBe(saved);
+      expect(recordCompletion).toHaveBeenCalledTimes(1);
+    }
   }, 120000);
 });
