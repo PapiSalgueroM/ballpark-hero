@@ -17,6 +17,8 @@ const SCHEMA_VERSION = 1 as const;
 // Internal types
 // ---------------------------------------------------------------------------
 
+type DailyStatus = 'playing' | 'won' | 'lost';
+
 interface PersistedDailyState<G> {
   /** Schema version, see SCHEMA_VERSION above. */
   v: typeof SCHEMA_VERSION;
@@ -36,7 +38,7 @@ interface PersistedDailyState<G> {
   /** Full guess history. */
   guesses: G[];
   /** Game outcome at the time of last save. */
-  gameStatus: 'playing' | 'won' | 'lost';
+  gameStatus: DailyStatus;
 }
 
 // ---------------------------------------------------------------------------
@@ -131,9 +133,10 @@ export interface DailyPuzzleOptions<T, G> {
    * the next write replaces the bad bytes. Use it for item fields the page
    * reads without a guard, and for a log that can never be longer than a
    * fixed size (never tie that to maxGuesses: Football Grid lifts it at
-   * runtime). Default: no extra check.
+   * runtime). The saved status is available to games whose actions
+   * independently determine the outcome. Default: no extra check.
    */
-  isValidGuesses?: (guesses: G[]) => boolean;
+  isValidGuesses?: (guesses: G[], gameStatus: DailyStatus) => boolean;
 }
 
 export interface DailyPuzzleReturn<T, G> {
@@ -251,7 +254,7 @@ function readPersistedState<G>(
   puzzleIndex: number,
   puzzleId: string | undefined,
   deserializeGuesses: (raw: unknown) => G[],
-  isValidGuesses?: (guesses: G[]) => boolean,
+  isValidGuesses?: (guesses: G[], gameStatus: DailyStatus) => boolean,
 ): { guesses: G[]; gameStatus: 'playing' | 'won' | 'lost' } | null {
   try {
     const raw = localStorage.getItem(storageKey);
@@ -275,7 +278,7 @@ function readPersistedState<G>(
       // Round 848: a malformed log is no save at all. Today starts fresh and
       // the next write replaces these bytes.
       if (!isGuessLog(guesses) || !GAME_STATUSES.includes(saved.gameStatus)) return null;
-      if (isValidGuesses && !isValidGuesses(guesses)) return null;
+      if (isValidGuesses && !isValidGuesses(guesses, saved.gameStatus)) return null;
       return {
         guesses,
         gameStatus: saved.gameStatus,

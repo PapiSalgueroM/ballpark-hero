@@ -51,6 +51,10 @@ function isXiAction(a: unknown): a is XiAction {
   return t === 'won' || t === 'give' || (t === 'miss' && typeof (a as { name?: unknown }).name === 'string');
 }
 
+const hasXiWin = (actions: XiAction[]) => actions.some(a => a.t === 'won');
+const hasXiLoss = (actions: XiAction[]) =>
+  actions.filter(a => a.t === 'miss').length >= MAX_GUESSES || actions.some(a => a.t === 'give');
+
 /**
  * Missing XI: a famous, real starting lineup is shown on a simple pitch with
  * ONE player blanked out. The player names the missing man in up to 3
@@ -83,9 +87,14 @@ const MissingXi = () => {
     gameSlug: 'missing-xi',
     puzzles: SENTINEL,
     maxGuesses: 999,
-    isWon: g => g.some(a => a.t === 'won'),
-    isLost: g => g.filter(a => a.t === 'miss').length >= MAX_GUESSES || g.some(a => a.t === 'give'),
+    isWon: hasXiWin,
+    isLost: hasXiLoss,
     deserializeGuesses: raw => (Array.isArray(raw) ? raw.filter(isXiAction) : []),
+    isValidGuesses: (actions, status) => {
+      if (status === 'playing') return true;
+      if (hasXiWin(actions)) return status === 'won';
+      return status === 'lost' && hasXiLoss(actions);
+    },
   });
 
   const [unlimitedActions, setUnlimitedActions] = useState<XiAction[]>([]);
