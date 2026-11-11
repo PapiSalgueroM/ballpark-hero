@@ -20321,3 +20321,11 @@ Actual independent seven-arm proof is7eadbca71e1e351741802f8f9e8b9ac1852e4b957ec
 Native admission: 69f420492bd29d81667ad18b3ed98209473e49f77e33a7e8f3eb6788e0acebe5. Deployment: 2d231ee7-24b2-4940-af8d-5908d26371e6. Public admission: 147361f50c8e3db9c6583009a045a7d79c22c8a680d2fadb171826ff3d3b6c89. Full source, provenance, artifact identities and the exact nine-path nonruntime bridge are in [the dated plan](plans/2026-11-05-soccer-four-first-team-entries.md).
 
 SC-36 remains partial. This does not add leagues, rosters or a complete evolving population. Next owner priority is more Soccer Career/Club Manager teams and leagues, preceded by a measured Team-picker UI cut if needed for the unchanged CM cap. CM47, LeagueSeasons582, measured NFL37/NBA25 golden differences and the separately triaged PR502 reds remain unwaived. The first SC4 build stopped at reader18; it is not relabelled green.
+
+## 2026-11-11: NHL My Career throwback quick draft
+
+Quick Start now uses the NHL era's draft team count for both draft-day pressure text and first-round celebration. The 2006-07 throwback has 30 teams. Picks 31 and 32 get the late-pick line, and pick 30 still gets the first-round reveal. The modern league has 32 teams. [NHL 2006 pick 32](https://www.nhl.com/player/carl-sneep-8473539/bio), [NHL 2026 draft order](https://www.nhl.com/news/topic/nhl-draft/2026-nhl-draft-full-order-of-picks-for-seven-rounds).
+
+The mounted regression failed at the two throwback picks on the original and passed on the candidate. Related tests passed 115 across five suites. Compiled Chromium at 390 × 844 matched exact saved bytes and 12 random draws at the first save for each of five baseline and candidate journeys. The only changed presentations in those journeys were the two throwback picks.
+
+App types, production build, all 15 output checks and all 16 existing route caps passed.

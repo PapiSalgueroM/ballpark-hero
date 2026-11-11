@@ -80,6 +80,32 @@ afterEach(() => {
 });
 
 describe('draft day on the four US career hubs', () => {
+  it.each([
+    [2006, 30, true],
+    [2006, 31, false],
+    [2006, 32, false],
+    [2026, 31, true],
+    [2026, 32, true],
+  ] as const)('classifies NHL quick draft year %i pick %i with the correct boundary', (year, pick, firstRound) => {
+    const { container } = render(<NhlMyCareerBoard />);
+    if (year === 2006) fireEvent.click(screen.getByRole('button', { name: /2006-07 throwback/ }));
+    vi.spyOn(Math, 'random')
+      .mockReturnValueOnce(0.05)
+      .mockReturnValueOnce(0.4)
+      .mockReturnValueOnce((pick - 23) / 24)
+      .mockReturnValue(0.24);
+    fireEvent.click(screen.getByRole('button', { name: 'Enter the draft' }));
+
+    const saved = JSON.parse(localStorage.getItem('nhl-my-career-save-v1') ?? '{}');
+    expect(saved.c).toMatchObject({ year, draftPick: pick });
+    const card = container.querySelector('[data-draft-day]');
+    expect(card).toHaveTextContent(`With pick ${pick},`);
+    expect(card).toHaveTextContent(firstRound
+      ? 'First round money, first round pressure.'
+      : 'Late pick. Everything must be earned.');
+    expect(!!card?.querySelector('.cm-confetti')).toBe(firstRound);
+  });
+
   /* Two draws per board: a strong prospect (rng low pushes the stock early)
      and a weak one, so both sides of the confetti rule are exercised. */
   it.each(BOARDS)('%s mounts the draft day card with the engine pick and the confetti rule', (_, Board, firstRoundEnd, boardConst, saveKey) => {
