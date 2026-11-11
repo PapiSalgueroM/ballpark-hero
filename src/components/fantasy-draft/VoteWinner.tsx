@@ -5,15 +5,18 @@ import { cn } from '@/lib/utils';
 import type { DraftPlayer } from './PlayerPool';
 import motion from './DraftWinnerMotion.module.css';
 
+export type VoteStatus = 'idle' | 'pending' | 'already-voted';
+
 interface VoteWinnerProps {
   userTeam: DraftPlayer[];
   aiTeam: DraftPlayer[];
   onVote: (team: 'user' | 'ai') => void;
   voted: 'user' | 'ai' | null;
-  voteCounts: { user: number; ai: number };
+  voteCounts: { user: number; ai: number } | null;
+  voteStatus?: VoteStatus;
 }
 
-export const VoteWinner = ({ userTeam, aiTeam, onVote, voted, voteCounts }: VoteWinnerProps) => {
+export const VoteWinner = ({ userTeam, aiTeam, onVote, voted, voteCounts, voteStatus = 'idle' }: VoteWinnerProps) => {
   const [copied, setCopied] = useState(false);
 
   const winningTeam = voted === 'user' ? userTeam : aiTeam;
@@ -47,18 +50,23 @@ export const VoteWinner = ({ userTeam, aiTeam, onVote, voted, voteCounts }: Vote
 
       <div className="p-4 sm:p-6 space-y-5">
         {/* Vote buttons */}
-        {!voted && (
-          <div className="flex flex-col sm:flex-row gap-3">
+        {!voted && voteStatus === 'already-voted' && (
+          <p role="status" className="text-center text-sm text-muted-foreground">You already voted today.</p>
+        )}
+        {!voted && voteStatus !== 'already-voted' && (
+          <div aria-busy={voteStatus === 'pending'} className="flex flex-col sm:flex-row gap-3">
             <button
               onClick={() => onVote('user')}
-              className="flex-1 flex items-center justify-center gap-3 px-6 py-5 rounded-xl border-2 border-primary/40 bg-primary/10 hover:bg-primary/20 transition-all hover:scale-[1.02] active:scale-[0.98]"
+              disabled={voteStatus === 'pending'}
+              className="flex-1 flex items-center justify-center gap-3 px-6 py-5 rounded-xl border-2 border-primary/40 bg-primary/10 hover:bg-primary/20 transition-all hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50"
             >
               <User className="w-6 h-6 text-primary" />
               <span className="text-lg font-bold text-primary">Your Team</span>
             </button>
             <button
               onClick={() => onVote('ai')}
-              className="flex-1 flex items-center justify-center gap-3 px-6 py-5 rounded-xl border-2 border-amber-500/40 bg-amber-500/10 hover:bg-amber-500/20 transition-all hover:scale-[1.02] active:scale-[0.98]"
+              disabled={voteStatus === 'pending'}
+              className="flex-1 flex items-center justify-center gap-3 px-6 py-5 rounded-xl border-2 border-amber-500/40 bg-amber-500/10 hover:bg-amber-500/20 transition-all hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50"
             >
               <Bot className="w-6 h-6 text-amber-400" />
               <span className="text-lg font-bold text-amber-400">AI Team</span>
@@ -77,10 +85,12 @@ export const VoteWinner = ({ userTeam, aiTeam, onVote, voted, voteCounts }: Vote
                 </span>
               </div>
 
-              <div className="flex items-center justify-center gap-6 text-xs text-muted-foreground">
-                <span>Your Team: <strong className="text-primary">{voteCounts.user}</strong> votes</span>
-                <span>AI Team: <strong className="text-amber-400">{voteCounts.ai}</strong> votes</span>
-              </div>
+              {voteCounts && (
+                <div className="flex items-center justify-center gap-6 text-xs text-muted-foreground">
+                  <span>Your Team: <strong className="text-primary">{voteCounts.user}</strong> votes</span>
+                  <span>AI Team: <strong className="text-amber-400">{voteCounts.ai}</strong> votes</span>
+                </div>
+              )}
 
               <div className="mt-3">
                 <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground mb-2">Best Players</p>
