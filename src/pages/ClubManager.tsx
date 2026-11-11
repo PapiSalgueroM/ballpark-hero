@@ -320,14 +320,13 @@ const ClubManager = () => {
               words, once per phase screen and only while it stays refused.
               Before this a full or blocked browser store dropped the career
               silently, which is the first live report of 2026-09-13. */}
-          {g.saveFailed && (
+          {g.saveFailed && g.career && (
             <div role="alert" data-testid="cm-save-failed" className="mb-4 rounded-xl border border-destructive/60 bg-destructive/10 px-4 py-3 text-sm text-foreground">
               <div className="font-bold">Your career is not being saved right now.</div>
               <div className="mt-1 text-muted-foreground">
-                This browser has no storage left for douknowball.com, or is blocking it (private browsing does that).
-                Whatever you do here will be gone when you leave the page. To fix it, free up space in your browser's
-                site settings or open the game in a normal window, then play a week and this notice will go away.
+                Keep this tab open. Free up browser storage or allow it for this site, then retry to save your latest progress.
               </div>
+              <button type="button" onClick={g.retrySave} className="mt-2 min-h-11 rounded-lg border border-destructive/50 px-3 font-semibold">Retry save</button>
             </div>
           )}
           {/* Round 1522 review: this career's tactics did not load (a dropped connection, or a deploy since the
