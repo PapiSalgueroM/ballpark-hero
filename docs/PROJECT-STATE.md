@@ -1,3 +1,12 @@
+## 2026-11-11: MLB Front Office October trade stances draft
+
+Trade Desk now uses the current October field to identify clubs in playoff places. The existing trade deadline and valuation rules read the same three division winners and three wild cards per league as the postseason bracket.
+
+In a compiled 390px save with 96 games played, the White Sox were 11th in the AL by record and owned the third October seed as division leader. Main listed them as selling and rejected the Will Smith for Kyle Teel package. The candidate listed them as buying, accepted the package and held the exact save through cold reload. The Yankees buyer and Royals seller controls matched, and only the two players moved in the league state.
+
+The AL and NL tests and the mounted Trade Desk case failed on main and passed on the candidate. All 21 scoped cases, the seven MLB GM Desk checks over 100 seasons and the production build passed.
+
+
 ## 2026-11-07: Club Manager historical roster counts live
 
 [PR #532](https://github.com/PapiSalgueroM/ballpark-hero/pull/532) published from main `c3b5ca4afaf9b4dadcd748f340e8e8e3e4a1a1dd`, App tree `133fcd3d26a4d237178e5c7efee723048da0aef2`, Lovable deployment `510b1df1-2172-42c0-90f9-d9f9c997b840`.

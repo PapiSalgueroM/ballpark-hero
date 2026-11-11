@@ -49,7 +49,7 @@ import { tradeRefusal } from './frontOfficeCuts';
 import { MLB_STAFF_PACK, type MlbStaffPost } from '@/data/gmStaff/packs';
 import {
   AL, MLB_ROUNDS, type MlbGmPlayer, type MlbGmTeam, type MlbLeague, type MlbOffseasonOptions, type MlbProspect,
-  type MlbRoundOptions, mlbCapUsed, mlbOffseason, mlbRosterMax, mlbRosterMin, mlbStrength, mlbTrade, mlbTradeValue,
+  type MlbRoundOptions, mlbCapUsed, mlbLeagueSeeds, mlbOffseason, mlbRosterMax, mlbRosterMin, mlbStrength, mlbTrade, mlbTradeValue,
 } from './mlbFrontOffice';
 
 /* ------------------------------------------------------------------ */
@@ -304,7 +304,8 @@ export function mlbStances(league: MlbLeague): Record<string, DeadlineStance> {
   const rows = Object.values(league.teams).map(t => ({
     id: t.abbr, wins: t.wins, losses: t.losses, group: AL.includes(t.abbr) ? 'AL' : 'NL',
   }));
-  return deadlineStances(rows, MLB_PLAYOFF_SPOTS).stance;
+  const placed = new Set([...mlbLeagueSeeds(league, true), ...mlbLeagueSeeds(league, false)]);
+  return deadlineStances(rows, MLB_PLAYOFF_SPOTS, placed).stance;
 }
 
 /* ------------------------------------------------------------------ */
