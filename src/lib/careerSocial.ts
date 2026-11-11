@@ -502,7 +502,7 @@ function mlbStat(name: string, pos: string, line: MlbHeadlineLine): string | nul
     return `${name} works ${line.games} games out of the bullpen with a ${n(line.era).toFixed(2)} ERA`;
   }
   if (n(line.hr) >= 45) return `${n(line.hr)} home runs for ${name}`;
-  if (n(line.avg) >= 0.32) return `${name} hits ${dec3(n(line.avg))} over a full season`;
+  if (n(line.avg) >= 0.32) return `${name} hits ${dec3(n(line.avg))} in ${line.games} games`;
   if (!MLB_NO_STEALS.has(pos) && n(line.sb) >= 40) return `${n(line.sb)} stolen bases for ${name}`;
   return `${name} hits ${dec3(n(line.avg))} with ${n(line.hr)} home runs and ${n(line.rbi)} driven in`;
 }
