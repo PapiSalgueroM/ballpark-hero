@@ -766,9 +766,12 @@ function StadiumRoom({ g, visible, onNeedsYou }: { g: ReturnType<typeof useStadi
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 pb-4">
           {TRACKS.map(t => {
             const lvl = levelOf(s, t.id);
+            const capped = lvl >= t.maxLevel;
             const batch = buyAmount === 5 ? upgradePurchase(s, t.id, 5) : null;
-            const cost = batch ? batch.cost : costOf(s, t.id);
             const ok = batch ? batch.quantity > 0 : canBuy(s, t.id);
+            const quote = capped ? 'Max level' : batch
+              ? (ok ? `Buy ${batch.quantity} · ${fmtMoney(batch.cost)} total` : 'Save for the next level')
+              : fmtMoney(costOf(s, t.id));
             return (
               <button
                 key={t.id}
@@ -785,7 +788,7 @@ function StadiumRoom({ g, visible, onNeedsYou }: { g: ReturnType<typeof useStadi
                   <span className="ml-auto text-[9px] font-bold text-muted-foreground bg-secondary rounded px-1 py-0.5">Lv {lvl}</span>
                 </div>
                 <div className="text-[9px] text-muted-foreground mt-1 leading-snug min-h-[22px]">{t.blurb}</div>
-                <div className={cn('text-[11px] font-bold mt-1 tabular-nums', ok ? 'text-gold' : 'text-muted-foreground')}>{batch ? batch.quantity > 0 ? `Buy ${batch.quantity} · ${fmtMoney(cost)} total` : lvl >= t.maxLevel ? 'Max level' : 'Save for the next level' : fmtMoney(cost)}</div>
+                <div className={cn('text-[11px] font-bold mt-1 tabular-nums', ok ? 'text-gold' : 'text-muted-foreground')}>{quote}</div>
               </button>
             );
           })}
@@ -805,9 +808,12 @@ function StadiumRoom({ g, visible, onNeedsYou }: { g: ReturnType<typeof useStadi
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pb-4">
           {STAFF.map(t => {
             const lvl = staffLevelOf(s, t.id);
+            const capped = lvl >= t.maxLevel;
             const batch = buyAmount === 5 ? payrollPurchase(s, t.id, 5) : null;
-            const cost = batch ? batch.cost : staffCostOf(s, t.id);
             const ok = batch ? batch.quantity > 0 : canHire(s, t.id);
+            const quote = capped ? 'Max staff' : batch
+              ? (ok ? `Hire ${batch.quantity} · ${fmtMoney(batch.cost)} total` : 'Save for the next hire')
+              : fmtMoney(staffCostOf(s, t.id));
             return (
               <button
                 key={t.id}
@@ -825,8 +831,8 @@ function StadiumRoom({ g, visible, onNeedsYou }: { g: ReturnType<typeof useStadi
                 </div>
                 <div className="text-[9px] text-muted-foreground mt-1 leading-snug min-h-[22px]">{t.blurb}</div>
                 <div className="flex items-center justify-between mt-1">
-                  <span className={cn('text-[11px] font-bold tabular-nums', ok ? 'text-gold' : 'text-muted-foreground')}>{batch ? batch.quantity > 0 ? `Hire ${batch.quantity} · ${fmtMoney(cost)} total` : lvl >= t.maxLevel ? 'Max staff' : 'Save for the next hire' : fmtMoney(cost)}</span>
-                  <span className="text-[9px] text-emerald-400 tabular-nums">+{fmtRate(t.rate * (batch?.quantity ?? 1))}/s base</span>
+                  <span className={cn('text-[11px] font-bold tabular-nums', ok ? 'text-gold' : 'text-muted-foreground')}>{quote}</span>
+                  {!capped && <span className="text-[9px] text-emerald-400 tabular-nums">+{fmtRate(t.rate * (batch?.quantity ?? 1))}/s base</span>}
                 </div>
               </button>
             );
