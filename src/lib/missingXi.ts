@@ -7193,18 +7193,38 @@ export function isCorrectGuess(guessName: string, candidate: BlankCandidate): bo
   return (candidate.aliases ?? []).some(alias => normalizeName(alias) === guess);
 }
 
+// Outside a lineup, use only verified full names with the same words reordered.
+const reorderedAliasKeys = (() => {
+  const keys = new Map<string, string | null>();
+  const sortedWords = (name: string) => name.split(' ').sort().join(' ');
+  for (const { blankCandidates } of LINEUPS) {
+    for (const { name, aliases } of blankCandidates) {
+      if (!aliases) continue;
+      const canonical = normalizeName(name);
+      for (const alias of aliases) {
+        const key = normalizeName(alias);
+        if (key === canonical || sortedWords(key) !== sortedWords(canonical)) continue;
+        const previous = keys.get(key);
+        keys.set(key, previous === undefined || previous === canonical ? canonical : null);
+      }
+    }
+  }
+  for (const starter of XI_ROSTER_NAMES) keys.delete(normalizeName(starter));
+  return keys;
+})();
+
 /**
  * Round 383: the key a guess is remembered under, so two offered spellings of
  * one man (the database's "Ji-sung Park" beside the lineup's "Park Ji-sung")
  * cannot burn two of the three guesses. A guess that matches a blank
- * candidate of this lineup by name or alias keys as that candidate; anything
- * else keys as itself.
+ * candidate of this lineup keeps its lineup-specific key.
  */
 export function guessKey(guessName: string, lineup: Lineup): string {
   for (const c of lineup.blankCandidates) {
     if (isCorrectGuess(guessName, c)) return normalizeName(c.name);
   }
-  return normalizeName(guessName);
+  const key = normalizeName(guessName);
+  return reorderedAliasKeys.get(key) ?? key;
 }
 
 /**
