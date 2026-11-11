@@ -1,3 +1,11 @@
+## 2026-11-11: Perfect Season NFL Hard draft order candidate
+
+Hard mode lists the selected archive squad by name. Masked cards previously followed the archive's rating order, giving away which eligible player ranked highest. Classic and Daily retain the archive's rating order.
+
+The mounted regression failed only in Hard on the original page. All 42 Perfect Season tests across five suites pass on the candidate. In compiled Chromium at 390 px, Hard's nine fixture cards appear in name order with masked ratings. Classic and Daily match their original wheel stops, rows and ratings exactly. The same eight Hard picks reached the same 10-7 record, 77.1 overall odds text and saved best. App types, the production build, 17 output and result checks and all 16 route caps pass.
+
+The page hunks dry-merge independently with archive retry #325, Daily date #562 and Daily reveal save #581. The combined existing draft stack has a retry/Daily ref conflict whose exact block is unchanged by this candidate.
+
 ## 2026-11-07: Club Manager historical roster counts live
 
 [PR #532](https://github.com/PapiSalgueroM/ballpark-hero/pull/532) published from main `c3b5ca4afaf9b4dadcd748f340e8e8e3e4a1a1dd`, App tree `133fcd3d26a4d237178e5c7efee723048da0aef2`, Lovable deployment `510b1df1-2172-42c0-90f9-d9f9c997b840`.
