@@ -1,3 +1,9 @@
+## 2026-11-11: MLB My Career pitcher season notes candidate
+
+Starting and relief pitchers now get pitching language for strong and difficult regular seasons and for strong October performances. Six compiled 390 px pitcher replays hit the three corrected notes and three hitter controls kept their original notes. All nine careers saved byte for byte as before and restored after reload.
+
+Paired 2,400 seasons in 2004, 2020 and 2026 changed only 252 pitcher note occurrences. Career state and random draws matched exactly, and the Press/Market comparison still uses its original copied-source narration. App types, the production build, 48 focused tests, the 400-career MLB harness, all 15 output checks and all 16 unchanged route caps passed.
+
 ## 2026-11-07: Club Manager historical roster counts live
 
 [PR #532](https://github.com/PapiSalgueroM/ballpark-hero/pull/532) published from main `c3b5ca4afaf9b4dadcd748f340e8e8e3e4a1a1dd`, App tree `133fcd3d26a4d237178e5c7efee723048da0aef2`, Lovable deployment `510b1df1-2172-42c0-90f9-d9f9c997b840`.

@@ -5,7 +5,8 @@
    four engines hand it that level. The kit (scripts/qa/careerPressMarketKit.mjs, BASE 934c29d9) compares a US season
    in the tree with the same season on the base, notes included, to prove the market moves nothing; it cannot know
    about a note change that is not the market's. So the node copies compared with the base get the old note back:
-   the two new branches of clutchNote become the old one, and each engine's call loses the level again. Each anchor
+   the two new branches of clutchNote become the old one, and each engine's call loses the level again. The MLB
+   copy also drops its later pitcher wording arguments so the old comparison still reads the old narration. Each anchor
    is required exactly once, so a later edit of these lines refuses here and has to decide again, the way Release
    BB's inverse of Round 1313 does (scripts/lib/usRival1313Inverse.mjs). Applied before that inverse, so the MLB
    and NHL engines still meet its byte check against 1313's closed head.
@@ -22,7 +23,7 @@ export const CLUTCH_1569_FILES = [
 const CALLS = {
   'src/lib/nflMyCareer.ts': ["clutchNote(clutch, depth, 'nfl', pf)", "clutchNote(clutch, depth, 'nfl')"],
   'src/lib/nbaMyCareer.ts': ["clutchNote(clutch, depth, 'nba', poForm)", "clutchNote(clutch, depth, 'nba')"],
-  'src/lib/mlbMyCareer.ts': ["clutchNote(clutch, depth, 'mlb', pf)", "clutchNote(clutch, depth, 'mlb')"],
+  'src/lib/mlbMyCareer.ts': ["clutchNote(clutch, depth, 'mlb', pf, MLB_PITCHERS.includes(c.pos))", "clutchNote(clutch, depth, 'mlb')"],
   'src/lib/nhlMyCareer.ts': ["clutchNote(clutch, poDepth, 'nhl', poForm)", "clutchNote(clutch, poDepth, 'nhl')"],
 };
 const NEW_FROM = '  if (depth < 4 && level >= JANUARY_STRONG) {\n';
@@ -50,6 +51,11 @@ export function inverseClutch1569(rel, contents, rows) {
     const [from, to] = CALLS[rel];
     assert.equal(out.split(from).length, 2, `Round 1569: ${rel} must hand clutchNote its level exactly once`);
     out = out.replace(from, () => to);
+    if (rel === 'src/lib/mlbMyCareer.ts') {
+      const swing = "swingNote(swing, 'mlb', isPitcher)";
+      assert.equal(out.split(swing).length, 2, 'The MLB engine must hand swingNote the pitcher flag exactly once');
+      out = out.replace(swing, "swingNote(swing, 'mlb')");
+    }
   }
   rows.push(rel);
   return out;

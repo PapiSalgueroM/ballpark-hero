@@ -39,16 +39,16 @@ export function seasonSwing(rng: () => number, age = 27): number {
 }
 
 /** A short line for the season notes when the swing was big enough to notice. */
-export function swingNote(swing: number, sport: 'mlb' | 'nba' | 'nfl' | 'nhl'): string | null {
+export function swingNote(swing: number, sport: 'mlb' | 'nba' | 'nfl' | 'nhl', mlbPitcher = false): string | null {
   if (swing >= 6) {
-    return sport === 'mlb' ? '🔥 Everything you hit found grass. Career year.'
-      : sport === 'nba' ? '🔥 The rim looked like a swimming pool all season.'
+    if (sport === 'mlb') return mlbPitcher ? '🔥 Your best pitches were working. Career year.' : '🔥 Everything you hit found grass. Career year.';
+    return sport === 'nba' ? '🔥 The rim looked like a swimming pool all season.'
       : sport === 'nfl' ? '🔥 Every read was right. Career year.'
       : '🔥 The puck followed you around all season.';
   }
   if (swing <= -6) {
-    return sport === 'mlb' ? '🥶 Nothing fell in. You hit into everything.'
-      : sport === 'nba' ? '🥶 The shot never came. Long year.'
+    if (sport === 'mlb') return mlbPitcher ? '🥶 You never found your rhythm on the mound.' : '🥶 Nothing fell in. You hit into everything.';
+    return sport === 'nba' ? '🥶 The shot never came. Long year.'
       : sport === 'nfl' ? '🥶 Nothing worked. The tape was rough all year.'
       : '🥶 Ice cold. The bounces went the other way every night.';
   }
@@ -145,11 +145,13 @@ const postseasonWord = (sport: 'mlb' | 'nba' | 'nfl' | 'nhl', depth: number) =>
 
 /** A line for the season notes when the postseason was the story. `level` is
  *  the form his playoff line was drawn from; `depth` 4 is the title. */
-export function clutchNote(swing: number, depth: number, sport: 'mlb' | 'nba' | 'nfl' | 'nhl', level: number): string | null {
+export function clutchNote(swing: number, depth: number, sport: 'mlb' | 'nba' | 'nfl' | 'nhl', level: number, mlbPitcher = false): string | null {
   if (depth < 0) return null;
   if (swing >= 7) {
-    return sport === 'mlb' ? '🧊 Ice in October. You were a different hitter once the lights came on.'
-      : sport === 'nba' ? '🧊 Playoff riser. Everything got harder and you got better.'
+    if (sport === 'mlb') return mlbPitcher
+      ? '🧊 Ice in October. Your best stuff showed up when the lights came on.'
+      : '🧊 Ice in October. You were a different hitter once the lights came on.';
+    return sport === 'nba' ? '🧊 Playoff riser. Everything got harder and you got better.'
       : sport === 'nfl' ? '🧊 January football suited you. You were the best player on the field.'
       : '🧊 Playoff performer. Sixteen wins is a different sport and you were built for it.';
   }

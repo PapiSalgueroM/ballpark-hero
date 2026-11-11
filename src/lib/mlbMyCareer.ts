@@ -616,7 +616,7 @@ export function simMlbSeason(
       line.poLine = `${hits} for ${ab} (.${String(Math.round(shown * 1000)).padStart(3, '0')}), ${hr} HR`;
     }
     notes.push(`📊 Postseason: ${poG} game${poG === 1 ? '' : 's'}, ${line.poLine}.`);
-    const cn = clutchNote(clutch, depth, 'mlb', pf);
+    const cn = clutchNote(clutch, depth, 'mlb', pf, MLB_PITCHERS.includes(c.pos));
     if (cn) notes.push(cn);
   }
 
@@ -680,7 +680,7 @@ export function simMlbSeason(
 
   c.earnings += c.salary;
   // Round 98: tell the player when the season itself was the story.
-  const sn = swingNote(swing, 'mlb');
+  const sn = swingNote(swing, 'mlb', isPitcher);
   if (sn) notes.push(sn);
   // Round 104: the rival played his season too, on the same scale as mine,
   // so the head to head is an honest comparison rather than a vibe.
