@@ -593,6 +593,8 @@ function startOnStaticWorld(setup: HotSeatSetup): HotSeatRun {
   /* Round 1603: and how its deciding second legs are read (tieRulesOf); handoverState takes it off again. */
   const tieRules = tieRulesOf(setup);
   if (tieRules) s.tieRules = tieRules;
+  // The same seed and actions must still produce the original match lineups.
+  s.lineupRules = 'sequential';
   const rounds = leagueRounds(s);
   const lastWeek = Math.max(HOT_SEAT_TAKEOVER_MIN, Math.min(HOT_SEAT_TAKEOVER_MAX, rounds - HOT_SEAT_LEASH - 1));
   let best: { state: CareerState; formPts: number; week: number } | null = null;
@@ -887,6 +889,7 @@ export function handoverState(run: HotSeatRun): CareerState {
   /* Round 1331: a career carried on plays Club Manager's current rules, whatever rules the day played. */
   delete copy.matchRules;
   delete copy.tieRules;
+  delete copy.lineupRules;
   const from = run.takeover.calendarWeek;
   if (Array.isArray(copy.inbox)) copy.inbox = copy.inbox.filter(m => !(typeof m.week === 'number' && m.week < from));
   return copy;
