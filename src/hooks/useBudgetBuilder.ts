@@ -172,7 +172,8 @@ export function useBudgetBuilder(): BudgetBuilderState {
     [pool, topic, era.id],
   );
 
-  const moneyXi = useMemo(() => moneyXiFor(topicPool, formation), [topicPool, formation]);
+  // The Final uses the market benchmark. Topic filters narrow the shortlist.
+  const moneyXi = useMemo(() => moneyXiFor(pool, formation), [pool, formation]);
 
   const budget = useMemo(() => budgetFor(moneyXi, era.id), [moneyXi, era.id]);
 
