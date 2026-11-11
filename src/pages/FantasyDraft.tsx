@@ -133,7 +133,7 @@ const FantasyDraft = () => {
   useEffect(() => {
     const fetchCriteria = async () => {
       try {
-        const { data, error } = await supabase.functions.invoke('fantasy-draft-daily');
+        const { data, error } = await supabase.functions.invoke('fantasy-draft-daily', { timeout: 10_000 });
         if (!error && data?.criteria) setCriteria(data.criteria);
       } catch { /* silent */ }
       finally { setLoadingCriteria(false); }
@@ -310,7 +310,7 @@ const FantasyDraft = () => {
                     <h2 className="text-sm font-bold uppercase tracking-widest text-primary">Today's Criteria</h2>
                   </div>
                   {loadingCriteria ? (
-                    <Loader2 className="w-5 h-5 animate-spin text-muted-foreground mx-auto" />
+                    <p role="status" className="text-sm text-muted-foreground">Loading today's criteria…</p>
                   ) : criteria ? (
                     <p className="text-base sm:text-lg font-semibold text-foreground leading-snug">{criteria}</p>
                   ) : (
@@ -319,6 +319,7 @@ const FantasyDraft = () => {
                 </div>
                 <Button
                   size="lg"
+                  disabled={loadingCriteria}
                   onClick={() => setStarted(true)}
                   className="text-lg px-10 py-6 rounded-xl shadow-lg shadow-primary/20 hover:shadow-primary/40 transition-all duration-300 hover:scale-105"
                 >

@@ -7,14 +7,14 @@ import { recordCompletion } from '@/lib/completions';
 
 const remote = vi.hoisted(() => ({
   players: [] as DraftPlayer[],
-  criteria: null as string | null,
+  criteria: null as string | null | Promise<string | null>,
   toast: vi.fn(),
 }));
 vi.mock('@/integrations/supabase/client', () => ({
   supabase: {
     functions: { invoke: vi.fn(async (name: string) => {
       if (name !== 'fantasy-draft-daily') throw new Error('Unexpected fixture function: ' + name);
-      return { data: { criteria: remote.criteria }, error: null };
+      return { data: { criteria: await remote.criteria }, error: null };
     }) },
     from: vi.fn((table: string) => {
       if (table !== 'fantasy_draft_players') throw new Error('Unexpected fixture table: ' + table);
@@ -113,6 +113,28 @@ afterEach(() => {
 });
 
 describe('Fantasy Draft forms both starting XIs before settlement', () => {
+  it.each(['Under 25s: Every player must be 25 or younger', null])(
+    'waits for the criteria request to settle before drafting (%s)',
+    async criteria => {
+      let reply!: (value: string | null) => void;
+      remote.criteria = new Promise(resolve => { reply = resolve; });
+      remote.players = remote.players.map(p => p.id === 'fixture-FWD-0' ? { ...p, age: 31 } : p);
+      const view = render(<FantasyDraft />);
+      const start = view.getByRole('button', { name: 'Start Draft' });
+      expect(start).toBeDisabled();
+      fireEvent.click(start);
+      expect(view.queryByRole('heading', { name: 'Player Pool' })).toBeNull();
+
+      await act(async () => { reply(criteria); });
+      expect(start).toBeEnabled();
+      fireEvent.click(start);
+      await act(async () => {});
+      const player = searchPlayer(view, remote.players.find(p => p.id === 'fixture-FWD-0')!);
+      if (criteria) expect(player).toBeDisabled();
+      else expect(player).toBeEnabled();
+    },
+  );
+
   it('settles a balanced human draft against an AI with the same complete formation', async () => {
     const view = await openDraft();
     for (const position of ['GK', 'DEF', 'DEF', 'DEF', 'DEF', 'MID', 'MID', 'MID', 'FWD', 'FWD', 'FWD']) {
