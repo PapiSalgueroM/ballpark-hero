@@ -4,6 +4,7 @@ import Board from '@/components/mlb-front-office/MlbFrontOfficeBoard';
 import * as engine from '@/lib/mlbFrontOffice';
 import { findTrades } from '@/lib/tradeFinder';
 import { openTalks } from '@/lib/foTradeTalks';
+import { mlbPackageCapCheck, openMlbDesk } from '@/lib/mlbGmDesk';
 import { buildOwnerMandate } from '@/lib/foOwnerMandate';
 import { MLB_TEAMS } from '@/data/conquestDataMlb';
 import { recordCompletion, recordActivity } from '@/lib/completions';
@@ -154,4 +155,72 @@ describe('actual MLB whole-roster trade access', () => {
     expect(row(state.view, 'finder', 'BOS-8')).toHaveAttribute('aria-pressed', 'false');
     expect(state.view.container.querySelector('[data-trade-talks]')).toBeNull(); quiet(state);
   });
+});
+
+function dodgersAtMinimum() {
+  let seed = 17;
+  const league = engine.initMlbLeague(() => {
+    seed = (Math.imul(1664525, seed) + 1013904223) >>> 0;
+    return seed / 4294967296;
+  });
+  const team = league.teams.LAD;
+  const mine = team.players.find(p => p.name === 'Shohei Ohtani')!;
+  const want = league.teams.PHI.players.find(p => p.name === 'Kyle Schwarber')!;
+  const cuts = [...team.players].sort((a, b) => a.ovr - b.ovr).slice(0, 4);
+  for (const player of cuts) expect(engine.mlbRelease(team, league.freeAgents, player.id)).toBe(true);
+  expect(team.players).toHaveLength(22);
+  return { league, mine, want };
+}
+
+it.each(['Finder', 'Talks'])('completes a legal one-for-one trade at the roster minimum through %s', async path => {
+  const { league, mine, want } = dodgersAtMinimum();
+  localStorage.setItem(KEY, JSON.stringify({ ...saved(league), myTeam: 'LAD', gm: openMlbDesk(league, 'LAD') }));
+  const view = render(<Board />);
+  fireEvent.click(await view.findByRole('button', { name: /^🤝\s*Trades/ }));
+  fireEvent.click(row(view, 'finder', mine.id));
+
+  if (path === 'Finder') {
+    fireEvent.click(view.getByRole('button', { name: 'Shop him around the league' }));
+    const accept = within(panel(view, 'finder')).getAllByRole('button', { name: 'Accept' })
+      .find(button => button.parentElement?.textContent?.includes('PHI offer: Kyle Schwarber'));
+    expect(accept).toBeDefined();
+    fireEvent.click(accept!);
+  } else {
+    fireEvent.click(view.getByRole('button', { name: 'PHI' }));
+    fireEvent.click(row(view, 'receive', want.id));
+    expect(view.container.querySelector('[data-trade-talks]')).toHaveAttribute('data-trade-phase', 'agreed');
+    fireEvent.click(view.getByRole('button', { name: 'Shake on it' }));
+  }
+
+  const after = read().league;
+  expect(after.teams.LAD.players).toHaveLength(22);
+  expect(after.teams.PHI.players).toHaveLength(league.teams.PHI.players.length);
+  expect(after.teams.LAD.players.map(p => p.id)).toEqual([...league.teams.LAD.players.filter(p => p.id !== mine.id).map(p => p.id), want.id]);
+  expect(after.teams.PHI.players.map(p => p.id)).toContain(mine.id);
+  expect(after.teams.LAD.deadCap).toEqual(league.teams.LAD.deadCap);
+  expect(after.teams.LAD.picks).toEqual(league.teams.LAD.picks);
+  expect(after.teams.PHI.picks).toEqual(league.teams.PHI.picks);
+  noBooking();
+});
+
+it('keeps the minimum for a release, a two-for-one package and either side of a swap', () => {
+  const { league, mine, want } = dodgersAtMinimum();
+  const team = league.teams.LAD;
+  const other = team.players.find(p => p.id !== mine.id)!;
+  const before = clone(league);
+  expect(engine.mlbRelease(team, league.freeAgents, other.id)).toBe(false);
+  const swap = { from: 'LAD', to: 'PHI', give: [{ kind: 'player' as const, id: mine.id }], get: [{ kind: 'player' as const, id: want.id }] };
+  expect(mlbPackageCapCheck(league, swap)).toBeNull();
+  expect(mlbPackageCapCheck(league, { ...swap, give: [...swap.give, { kind: 'player', id: other.id }] })).toContain('21 players');
+  expect(league).toEqual(before);
+
+  for (const [abbr, playerId] of [['LAD', mine.id], ['PHI', want.id]]) {
+    const smaller = clone(league);
+    const players = smaller.teams[abbr].players;
+    smaller.teams[abbr].players = [players.find(p => p.id === playerId)!, ...players.filter(p => p.id !== playerId).slice(0, 20)];
+    const snapshot = clone(smaller);
+    expect(engine.mlbTrade(smaller.teams.LAD, smaller.teams.PHI, mine.id, want.id, false, smaller.cap)).toBe('invalid');
+    expect(engine.mlbExecuteTalksTrade(smaller.teams.LAD, smaller.teams.PHI, mine.id, want.id, false, smaller.cap)).toBe('invalid');
+    expect(smaller).toEqual(snapshot);
+  }
 });
