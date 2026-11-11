@@ -743,14 +743,14 @@ export function xiRatingWithHoles(xi: (Player | undefined | null)[], lift?: (p: 
 /**
  * Simulate one rival's window: sell their 2 lowest-rated starters, then
  * greedily buy the best affordable upgrades for their weakest slots from the
- * market (players the human already signed are off limits). Deterministic.
+ * market (players already claimed in this window are off limits). Deterministic.
  * Players this rival won off you in a bidding war are forced into their squad.
  */
 export function simulateRival(
   plan: RivalPlan,
   rivalSquad: Player[],
   market: Player[],
-  humanSigned: Set<string>,
+  claimed: ReadonlySet<string>,
   seed: number,
   wonInWars: string[] = [],
 ): RivalResult {
@@ -785,9 +785,9 @@ export function simulateRival(
     signings.push(won.name);
   }
 
-  // Then up to 3 best affordable players the human didn't take.
+  // Then up to 3 best affordable unclaimed players.
   const options = market
-    .filter(p => !humanSigned.has(p.name) && !taken.has(p.name))
+    .filter(p => !claimed.has(p.name) && !taken.has(p.name))
     .sort((a, b) => playerRating(b) - playerRating(a));
   for (const cand of options) {
     if (signings.length >= 3 + wonInWars.length) break;

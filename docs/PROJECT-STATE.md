@@ -20321,3 +20321,11 @@ Actual independent seven-arm proof is7eadbca71e1e351741802f8f9e8b9ac1852e4b957ec
 Native admission: 69f420492bd29d81667ad18b3ed98209473e49f77e33a7e8f3eb6788e0acebe5. Deployment: 2d231ee7-24b2-4940-af8d-5908d26371e6. Public admission: 147361f50c8e3db9c6583009a045a7d79c22c8a680d2fadb171826ff3d3b6c89. Full source, provenance, artifact identities and the exact nine-path nonruntime bridge are in [the dated plan](plans/2026-11-05-soccer-four-first-team-entries.md).
 
 SC-36 remains partial. This does not add leagues, rosters or a complete evolving population. Next owner priority is more Soccer Career/Club Manager teams and leagues, preceded by a measured Team-picker UI cut if needed for the unchanged CM cap. CM47, LeagueSeasons582, measured NFL37/NBA25 golden differences and the separately triaged PR502 reds remain unwaived. The first SC4 build stopped at reader18; it is not relabelled green.
+
+## 2026-11-11 Rebuild reserves each rival signing once
+
+In a solo window the rivals now shop in their existing order and share the names already taken. A bidding-war winner's player is reserved before either rival shops. The human move tape and save format are unchanged.
+
+On the compiled 390px Real Madrid replay, both rivals previously signed Harry Kane. Manchester City now keeps that signing and Arsenal signs Bruno Fernandes instead. The fresh run, cold reload and original finished save all produce the corrected recap with the same saved bytes. In a separate live bidding war the recap now credits Marcus Rashford only to Tottenham, the announced winner. The rival ratings and whole season tables matched their originals in both walks. Other finished saves can show corrected rival results when reopened.
+
+Both mounted controls failed on the original. All 12 scoped tests, the seven-section save sim including 144 archived v1 saves, app types, the production build, 15 built-site checks and 16 unchanged caps passed. The focused regressions also passed with the combined PR 573 and 596 hook and save adapter. Prepared on codex/rebuild-rival-signings-20261111.
