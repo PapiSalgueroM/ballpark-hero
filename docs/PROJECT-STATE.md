@@ -20321,3 +20321,11 @@ Actual independent seven-arm proof is7eadbca71e1e351741802f8f9e8b9ac1852e4b957ec
 Native admission: 69f420492bd29d81667ad18b3ed98209473e49f77e33a7e8f3eb6788e0acebe5. Deployment: 2d231ee7-24b2-4940-af8d-5908d26371e6. Public admission: 147361f50c8e3db9c6583009a045a7d79c22c8a680d2fadb171826ff3d3b6c89. Full source, provenance, artifact identities and the exact nine-path nonruntime bridge are in [the dated plan](plans/2026-11-05-soccer-four-first-team-entries.md).
 
 SC-36 remains partial. This does not add leagues, rosters or a complete evolving population. Next owner priority is more Soccer Career/Club Manager teams and leagues, preceded by a measured Team-picker UI cut if needed for the unchanged CM cap. CM47, LeagueSeasons582, measured NFL37/NBA25 golden differences and the separately triaged PR502 reds remain unwaived. The first SC4 build stopped at reader18; it is not relabelled green.
+
+## 2026-11-10 US Career season replay and same-year saves
+
+NBA, NFL and MLB My Career open the season the player just played in that tab. The viewer stays closed when Play opens a contract decision. Callers that only supply Play require changed save bytes before opening a stored season.
+
+All 110 Season Center and Save Retry tests passed. The same-player cases use the same season, count and saved identity with divergent results. NHL passed the unbound-board control. The NBA and NFL Chromium tests reproduced the wrong team on the original and opened the active team on the fix. Retry saved the exact previously refused payload and preserved unrelated storage.
+
+Application types, the production build, all 15 output checks, all 16 route caps and 158 Season Center sim checks passed. The Save Retry sim passed all 33 normal cases and caught the targeted Retry fault.
