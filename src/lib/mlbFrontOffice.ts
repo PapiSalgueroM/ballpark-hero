@@ -430,7 +430,7 @@ export function mlbTrade(
 ): 'accepted' | 'rejected' | 'invalid' {
   const mine = my.players.find(p => p.id === myId);
   const theirs = their.players.find(p => p.id === theirId);
-  if (!mine || !theirs || my.players.length <= mlbRosterMin(my) || their.players.length <= mlbRosterMin(their)) return 'invalid';
+  if (!mine || !theirs || my.players.length < mlbRosterMin(my) || their.players.length < mlbRosterMin(their)) return 'invalid';
   /* Round 631: nobody comes back the season he was cut, by trade either. */
   if (tradeRefusal(my, theirId) || tradeRefusal(their, myId)) return 'invalid';
   // Round 82: salary matching so payroll-heavy teams can still swap contracts
@@ -456,7 +456,7 @@ export function mlbExecuteTalksTrade(
 ): 'done' | 'invalid' {
   const mine = my.players.find(p => p.id === myId);
   const theirs = their.players.find(p => p.id === theirId);
-  if (!mine || !theirs || my.players.length <= mlbRosterMin(my) || their.players.length <= mlbRosterMin(their)) return 'invalid';
+  if (!mine || !theirs || my.players.length < mlbRosterMin(my) || their.players.length < mlbRosterMin(their)) return 'invalid';
   /* Round 631: nobody comes back the season he was cut, by trade either. */
   if (tradeRefusal(my, theirId) || tradeRefusal(their, myId)) return 'invalid';
   if (addPick && !my.picks.length) return 'invalid';

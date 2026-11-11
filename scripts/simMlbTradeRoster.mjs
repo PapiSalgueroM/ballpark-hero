@@ -49,10 +49,10 @@ try {
   assert.ok(!run.error, String(run.error)); assert.match(output, /mlbTradeRoster\.test\.tsx/, 'Actual Board tests must run');
   assert.doesNotMatch(output, /Failed to resolve import|Cannot find module|Failed to load url|No test files found|Unhandled Errors|Test timed out|RPC timeout/, 'Import, collection and timeout failures earn no credit');
   if (control) {
-    assert.notEqual(run.status, 0, 'Copied defect must fail its intended outcome'); assert.match(output, /Tests\s+1 failed.*1 passed.*7 skipped/);
+    assert.notEqual(run.status, 0, 'Copied defect must fail its intended outcome'); assert.match(output, /Tests\s+1 failed.*1 passed.*10 skipped/);
     assert.match(output, new RegExp('FAIL[^\\n]*' + controls[control].test)); assert.match(output, /AssertionError|expected .* to|Expected element with focus:|expect\(element\)\.to/i);
     console.log(`simMlbTradeRoster ${control}: asserted copied binding changed, one intended assertion failed and one independent helper baseline passed.`);
-  } else { assert.equal(run.status, 0, output.slice(-6000)); assert.match(output, /9 passed/); console.log('simMlbTradeRoster: nine actual Board/helper outcomes passed.'); }
+  } else { assert.equal(run.status, 0, output.slice(-6000)); assert.match(output, /Tests\s+12 passed/); console.log('simMlbTradeRoster: twelve actual Board/helper outcomes passed.'); }
   console.log('simMlbTradeRoster: all current own/partner IDs, original first-eight ties, exact Finder/manual callbacks, full Save and salary/pick rules exercised.');
   console.log('simMlbTradeRoster: stable retained rows, quiet paging/selection/refusals, focus and native-repeat default cancellation exercised; pixel/native flow remains separate.');
   console.log('simMlbTradeRoster: original Board, scoped CSS, engines, completion and transaction helpers remain byte-held; only owned copies are written.');
