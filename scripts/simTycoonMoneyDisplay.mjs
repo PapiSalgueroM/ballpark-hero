@@ -139,6 +139,7 @@ it('Page money tokens', () => {
 });
 it('Actual prospect and senior sales', async () => {
   const texts = [], expectedTexts = [];
+  const fenceKey = 'dukb-fence:' + E.SAVE_KEY;
   for (const senior of [false, true]) {
     const input = fixture(senior); localStorage.setItem(E.SAVE_KEY, O.serialize(input)); const initialStorage = storage();
     // The actual recorder separately supplies the legitimate non-economic storage effects.
@@ -158,7 +159,18 @@ it('Actual prospect and senior sales', async () => {
     const beforeHideWrites = writes.filter(row => row.key === E.SAVE_KEY).length;
     act(() => window.dispatchEvent(new Event('pagehide')));
     const expectedStorage = clone(completionStorage); expectedStorage.local[E.SAVE_KEY] = bytes;
-    check('saved-' + senior, { storage: storage(), saved: localStorage.getItem(E.SAVE_KEY), saveWrites: writes.filter(row => row.key === E.SAVE_KEY), requests, errors }, { storage: expectedStorage, saved: bytes, saveWrites: Array.from({length: senior ? 2 : 1}, () => ({ scope: 'local', op: 'set', key: E.SAVE_KEY, value: bytes })), requests: [{ url: requests[0]?.url, method: 'POST', body: JSON.stringify({ game: 'wonderkid-factory', player_name: HANDLE }), locallyFulfilled: true }], errors: [] }, { beforeHideWrites, allWrites: clone(writes), completionOracle });
+    expectedStorage.local[fenceKey] = '1';
+    check('saved-' + senior, {
+      storage: storage(), saved: localStorage.getItem(E.SAVE_KEY), beforeHideWrites,
+      saveWrites: writes.filter(row => row.key === E.SAVE_KEY || row.key === fenceKey), requests, errors,
+    }, {
+      storage: expectedStorage, saved: bytes, beforeHideWrites: senior ? 1 : 0,
+      saveWrites: [
+        { scope: 'local', op: 'set', key: fenceKey, value: '1' },
+        { scope: 'local', op: 'set', key: E.SAVE_KEY, value: bytes },
+      ],
+      requests: [{ url: requests[0]?.url, method: 'POST', body: JSON.stringify({ game: 'wonderkid-factory', player_name: HANDLE }), locallyFulfilled: true }], errors: [],
+    }, { beforeHideWrites, allWrites: clone(writes), completionOracle });
     texts.push(hook.result.current.floaters.map(f => ({ text: f.text, kind: f.kind })));
     expectedTexts.push([{ text: '💵 ' + player.name + ' sold for $' + new Intl.NumberFormat('en-US', { maximumFractionDigits: 0 }).format(price), kind: 'sale' }]);
     hook.unmount();
