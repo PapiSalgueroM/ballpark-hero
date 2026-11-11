@@ -614,7 +614,11 @@ export function simNhlSeason(
   // mine, through one function (nhlHeadToHeadScore). The awards and his
   // All-Star pass still read the draw on the engine's own length (`full`).
   if (c.rival && !c.rival.retired) {
-    for (const n of judgeRivalSeason(c.rival, nhlHeadToHeadScore(c.pos, line), c.name, 'nhl', rng, nhlRivalSeason(c.year, { pos: c.pos, slate }))) notes.push(n);
+    const rival = c.rival;
+    const priorCups = rival.rings;
+    for (const n of judgeRivalSeason(rival, nhlHeadToHeadScore(c.pos, line), c.name, 'nhl', rng, nhlRivalSeason(c.year, { pos: c.pos, slate }))) notes.push(n);
+    // Keep the rival's title draw in the stream. Teammates share the club's settled result.
+    if (rival.team === line.team) rival.rings = priorCups + (result === 'WON THE STANLEY CUP' ? 1 : 0);
   }
   /* Round 525: the rivalry beat, rolled right after the rival's own season,
      the same point in the loop the flagship and the NFL career roll their

@@ -31,6 +31,12 @@ Next: CM-03 historical roster snapshot count at club selection. Poland's 18-club
 
 Next master-list work: extend verified future entrants in Soccer Career to 2010 and 2015 starts, then show the available historical roster count in Club Manager. NBA 2005 and NFL 2006 are still source review, with no player or save changes live.
 
+## 2026-11-11: NHL My Career rivals share their club's Cup result
+
+When a generated rival plays for the same club, both players now get the club's settled Cup outcome for the new season. The 2026 Anaheim replay missed the playoffs and the rival stayed at zero Cups. The 2006 Calgary replay won the Cup and both players got one. The Buffalo rival still received his independently drawn Cup after the player moved to Winnipeg. Prior saved counts are kept.
+
+Across 1,300 paired seasons, the change corrected 40 extra Cups and 20 missing Cups. Team results, season lines and draw counts matched. Two Cup-dependent rivalry cards changed, and all 432 other-club states matched.
+
 ## 2026-11-06: K League expansion and phone Squad names live
 
 Current live App source is `51e4ba9e100aa22dbe047999311c725baccae09d`, tree `b1f5ac6efe4d97a1645580c6b473d03616e471b7`. PR509 delivered the K slice as `15652350` / tree `4debc`, product `25193`; PR522 then delivered the one-component Squad layout from `2005`. Each App release was published once: K deployment `979de67b-e1bd-46d0-9115-e28f9939171a`, then UI deployment `7a36d673-a773-4196-9e2d-51f82b2ad3de`. The later documentation commit needs no publication.
