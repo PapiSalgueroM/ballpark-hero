@@ -53,7 +53,7 @@ const ANNOUNCE_Y = 30;
 
 /** Round 530: the two loudest events, held for the page's cards. The label
  *  and the bonus are the engine's own event fields, printed as they came. */
-export interface Promotion { label: string; amount: number; seq: number }
+export interface Promotion { kind: 'promoted' | 'title'; label: string; amount: number; seq: number }
 export interface BadgeEarned { label: string; seq: number }
 /** Round 582 review: the season that just ended, so the League tab can show how
  *  it finished instead of silently wiping the table. This sitting only. */
@@ -315,14 +315,14 @@ export function useStadiumTycoon(getEdge?: () => number) {
         // gets a card on the pitch, held until Continue or four seconds.
         pushFloater(`${e.label} +${fmtMoney(e.amount ?? 0)}`, 'win', 16, 20);
         setConfetti(c => c + 2);
-        setPromotion({ label: e.label, amount: e.amount, seq: floaterSeq++ });
+        setPromotion({ kind: e.kind, label: e.label, amount: e.amount, seq: floaterSeq++ });
       } else if (e.kind === 'title') {
         /* Round 582: a league title. At The Summit it pays and nobody goes up,
            so it takes the promotion card itself; below that the 'promoted'
            event right behind it takes the card and this is the headline. */
         pushFloater(e.label ?? 'CHAMPIONS', 'win', 20, 16);
         setConfetti(c => c + 2);
-        if (e.amount !== undefined) setPromotion({ label: e.label ?? 'CHAMPIONS', amount: e.amount, seq: floaterSeq++ });
+        if (e.amount !== undefined) setPromotion({ kind: e.kind, label: e.label ?? 'CHAMPIONS', amount: e.amount, seq: floaterSeq++ });
       } else if (e.kind === 'seasonEnd') {
         pushFloater(e.label ?? 'Season over', 'bad', 24, 22);
       } else if (e.kind === 'ach') {
