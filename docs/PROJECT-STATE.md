@@ -1,3 +1,11 @@
+## 2026-11-11 Perfect Season NBA Daily wheel date
+
+The NBA Daily wheel now uses the same Eastern date as the theme, season and saved attempt. The page already pins the date at mount. Classic still draws from the regular random stream.
+
+On the compiled 390px baseline, a November 10 tab entered after midnight still showed 2000s Basketball and saved to November 10, but drew FXD078 first and finished with 64 wins. The same page played before midnight drew FXD070 and won 56. The candidate matched all six before-midnight stops, the single 56-win completion and all 701 saved bytes in both replays. A fresh November 11 tab still showed Three-Point Boom and drew FXM078.
+
+The mounted midnight comparison failed before the one-line fix. Both date cases and all 41 focused tests passed, along with application types, production build, 15 output checks, 16 route caps and the odds simulation. The core simulation's local math, copy, seed and save checks passed. Its live archive reads were blocked by offline mode. The page composes with the retry, Daily save/lock and Hard order/reveal drafts.
+
 ## 2026-11-07: Club Manager historical roster counts live
 
 [PR #532](https://github.com/PapiSalgueroM/ballpark-hero/pull/532) published from main `c3b5ca4afaf9b4dadcd748f340e8e8e3e4a1a1dd`, App tree `133fcd3d26a4d237178e5c7efee723048da0aef2`, Lovable deployment `510b1df1-2172-42c0-90f9-d9f9c997b840`.
