@@ -1,3 +1,9 @@
+## 2026-11-11 Soccer Career creation guide correction
+
+The draft corrects three instructions in the Soccer Career guide. The nationality picker has 135 options in this build, so the guide now points to the picker without promising a fixed count. Generate Starting Potential rolls both starting overall and a separate scout ceiling, with free rerolls. The Gifted starting tier begins at 62 overall.
+
+The three corrected lines are in the regenerated Soccer Career page and guide fixture. The in-game help shares the two setup steps. A phone browser check caught the stale text on main and confirmed the corrected page and help on the draft build. A controlled creation roll showed 62 overall and a separate 89 scout ceiling. The sitemap and its ledger changed only the Soccer Career route, plus the generated sitemap header date. The search index refresh kept all 133 route keyword entries and updated the guide source hash. The type gate, production build, 17 output and guide checks, and all 16 route caps passed. Published release pending.
+
 ## 2026-11-07: Club Manager historical roster counts live
 
 [PR #532](https://github.com/PapiSalgueroM/ballpark-hero/pull/532) published from main `c3b5ca4afaf9b4dadcd748f340e8e8e3e4a1a1dd`, App tree `133fcd3d26a4d237178e5c7efee723048da0aef2`, Lovable deployment `510b1df1-2172-42c0-90f9-d9f9c997b840`.
