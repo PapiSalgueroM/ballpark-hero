@@ -1419,7 +1419,20 @@ export function tick(s: TycoonState, dt: number, roll: () => number, edge = 0): 
   let st = { ...s, levels: { ...s.levels } };
 
   // Passive income and organic fan growth.
-  const earned = incomePerSec(st) * dt;
+  const hypeLeft = st.boostLeftSec ?? 0;
+  const derbyLeft = st.goldenKind === 'frenzy' ? st.goldenLeftSec ?? 0 : 0;
+  let earned: number;
+  if ((hypeLeft > 0 && hypeLeft < dt) || (derbyLeft > 0 && derbyLeft < dt)) {
+    const hype = Math.min(dt, Math.max(0, hypeLeft));
+    const derby = Math.min(dt, Math.max(0, derbyLeft));
+    const overlap = Math.min(hype, derby);
+    const unboosted = dt - Math.max(hype, derby);
+    const incomeSeconds = unboosted + (hype - overlap) * HYPE_MULT + (derby - overlap) * FRENZY_MULT
+      + overlap * HYPE_MULT * FRENZY_MULT;
+    earned = unboostedIncomePerSec(st) * incomeSeconds;
+  } else {
+    earned = incomePerSec(st) * dt;
+  }
   st.money += earned;
   st.lifetime += earned;
   st.fanbase += fanGrowthPerSec(st) * dt;
