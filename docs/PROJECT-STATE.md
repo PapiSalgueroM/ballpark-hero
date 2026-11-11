@@ -1,3 +1,11 @@
+## 2026-11-11: Perfect Season NFL saves the Daily before the reveal
+
+The completed NFL Daily now saves its full season, best record and single completion when the reveal starts. Reloading during the reveal opens the same locked Daily. Classic and Hard settle when their result appears.
+
+On the original production build, reloading at Game 0 of 17 lost all eight picks. Drafting the same eight teams again and skipping to the result saved a 14-3 season. The regression checks that the Daily saves before the reveal ends and records once across an uninterrupted reveal or a reload.
+
+The fixed 390px replay saved that same season at Game 0, including byte-identical Daily data and the same best record as the original completed run. Reload held the lock and one completion. All 37 scoped cases, app types, the build, 16 output and odds checks, and 16 route size caps passed.
+
 ## 2026-11-07: Club Manager historical roster counts live
 
 [PR #532](https://github.com/PapiSalgueroM/ballpark-hero/pull/532) published from main `c3b5ca4afaf9b4dadcd748f340e8e8e3e4a1a1dd`, App tree `133fcd3d26a4d237178e5c7efee723048da0aef2`, Lovable deployment `510b1df1-2172-42c0-90f9-d9f9c997b840`.
