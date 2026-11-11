@@ -1,3 +1,11 @@
+## 2026-11-11 Manager Hot Seat Free Play protects the latest save
+
+The Free Play save uses the existing save fence. When another tab has saved first, a stale action returns to the menu and offers Reload Free Play. The Daily remains available.
+
+On the compiled 390px baseline, an older Aston Villa offer replaced a newer Arsenal save with an empty action list. In a separate replay, an older Arsenal tab replaced press answer 0 with answer 2. The candidate preserved the exact newer save in both cases. The older tab could still take the Daily job, and the reload button restored Arsenal.
+
+Both mounted controls reproduced the overwrite. All 31 focused tests, the Hot Seat and Save Fence sims, app types, production build, 15 output checks and all 16 route caps passed. Manager Hot Seat measured 670.6 KiB against its existing 672 KiB cap. Product hunks dry-merge with PR607, PR623 and PR632.
+
 ## 2026-11-11: Manager Hot Seat preserves the finished Daily
 
 Entering the Daily or saving an action checks for a finished result for that day. A tab that finds one shows the saved verdict and keeps its Club Manager offer available. Entering from an older menu also reads the latest unfinished actions. Free play uses its existing save and resume path.
