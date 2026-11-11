@@ -1,4 +1,4 @@
-import { cleanup, renderHook, waitFor } from '@testing-library/react';
+import { act, cleanup, renderHook, waitFor } from '@testing-library/react';
 import { afterEach, beforeEach, expect, it, vi } from 'vitest';
 import { getEnrichment } from '@/data/footleEnrichment';
 import { useRebuild } from '@/hooks/useRebuild';
@@ -31,16 +31,27 @@ const squadOf = (club: string): Player[] => {
 };
 const marketFromRows = (pool: MarketRow[], club: string) => buildMarket(pool, club, (n, c) => getEnrichment(n, c).league);
 let pool = rows;
+let unavailableClub: string | null = null;
+let unavailableReads = 0;
 
 vi.mock('@/hooks/useGameCompletion', () => ({ useGameCompletion: vi.fn() }));
 vi.mock('@/lib/fetchRebuild', () => ({
   fetchRebuildClubs: async () => clubs,
-  fetchClubSquad: async (club: string) => squadOf(club),
+  fetchClubSquad: async (club: string) => {
+    if (club !== unavailableClub) return squadOf(club);
+    unavailableReads++;
+    return [];
+  },
   fetchMarketRows: async () => pool,
   marketFromRows: (data: MarketRow[], club: string) => marketFromRows(data, club),
 }));
 
-beforeEach(() => { localStorage.clear(); pool = rows; });
+beforeEach(() => {
+  localStorage.clear();
+  pool = rows;
+  unavailableClub = null;
+  unavailableReads = 0;
+});
 afterEach(() => { cleanup(); localStorage.clear(); });
 
 function saveFinishedWindow(club: string, lose?: string): string {
@@ -100,5 +111,31 @@ it('reserves a player won by the second rival before the first shops', async () 
   const [first, second] = result.current.rivals!;
   expect(first).toMatchObject({ club: { club: 'Liverpool FC' }, signings: [] });
   expect(second).toMatchObject({ club: { club: 'Tottenham Hotspur' }, signings: ['Marcus Rashford'] });
+  expect(localStorage.getItem(REBUILD_SAVE_KEY)).toBe(bytes);
+});
+
+it.each(['Manchester City', 'Arsenal FC'])('waits for the real %s squad before simulating the season', async club => {
+  const bytes = saveFinishedWindow('Real Madrid');
+  unavailableClub = club;
+  const { result } = renderHook(() => useRebuild());
+  await waitFor(() => {
+    expect(unavailableReads).toBe(1);
+    expect(result.current.rivalsLoading).toBe(false);
+  });
+  expect(result.current.phase).toBe('done');
+  expect(result.current.season).toBeNull();
+  expect(result.current.rivals).toBeNull();
+  expect(result.current.seasonFailed).toBe(true);
+  expect(localStorage.getItem(REBUILD_SAVE_KEY)).toBe(bytes);
+
+  unavailableClub = null;
+  act(() => result.current.retrySeason());
+  await waitFor(() => expect(result.current.season).toBeTruthy());
+  expect(result.current.seasonFailed).toBe(false);
+  expect(result.current.rivals?.map(rival => [rival.club.club, rival.startRating])).toEqual([
+    ['Manchester City', expect.any(Number)],
+    ['Arsenal FC', expect.any(Number)],
+  ]);
+  expect(result.current.rivals?.every(rival => rival.startRating > 0)).toBe(true);
   expect(localStorage.getItem(REBUILD_SAVE_KEY)).toBe(bytes);
 });

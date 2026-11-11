@@ -1,3 +1,11 @@
+## 2026-11-11 Rebuild solo season retry
+
+An unavailable rival squad now stops the solo season preview and offers Retry season. The completed transfer window remains open. A retry loads the two squads again and uses the same moves and season seed.
+
+The compiled 390px Real Madrid replay with an Arsenal squad 503 dropped Arsenal from 86 to 53 and changed Madrid from second to first. The candidate waited through two 503 responses, recovered the exact healthy six-club table and restored all 772 saved bytes with one completion through cold reload.
+
+Both mounted missing-rival controls were red before the fix. All 14 scoped cases, four Rebuild sims, app types, production build, 15 output checks and 16 route caps passed. The product hunks compose with PR596.
+
 ## 2026-11-07: Club Manager historical roster counts live
 
 [PR #532](https://github.com/PapiSalgueroM/ballpark-hero/pull/532) published from main `c3b5ca4afaf9b4dadcd748f340e8e8e3e4a1a1dd`, App tree `133fcd3d26a4d237178e5c7efee723048da0aef2`, Lovable deployment `510b1df1-2172-42c0-90f9-d9f9c997b840`.
