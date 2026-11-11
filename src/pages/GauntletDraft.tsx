@@ -88,7 +88,14 @@ export default function GauntletDraft() {
       }
     }
     const seed = m === 'daily' ? dailyDraftSeed(todayStr) : Math.floor(Math.random() * 2147483645) + 1;
-    const d = buildDraft(pool, seed);
+    let d: DraftShape;
+    try {
+      d = buildDraft(pool, seed);
+    } catch (error) {
+      if (!(error instanceof RangeError)) throw error;
+      setPhase('error');
+      return;
+    }
     setMode(m);
     setDraft(d);
     setPickIndex(0);

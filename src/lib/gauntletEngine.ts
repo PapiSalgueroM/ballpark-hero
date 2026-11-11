@@ -202,6 +202,7 @@ export function buildDraft<P>(config: GauntletConfig<P>, seed: number): Gauntlet
       const b = Math.max(a + 1, Math.floor(hi * fits.length));
       const band = fits.slice(a, b).filter(p => !used.has(config.nameOf(p)));
       const src = band.length ? band : fits.filter(p => !used.has(config.nameOf(p)));
+      if (src.length === 0) throw new RangeError(`Not enough draft players for ${slot.label}`);
       return src[Math.floor(rng() * src.length)];
     };
     const choices: P[] = [];
