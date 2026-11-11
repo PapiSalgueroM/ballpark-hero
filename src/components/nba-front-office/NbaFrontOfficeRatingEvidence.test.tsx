@@ -27,8 +27,8 @@ const SENTINEL = 'nba-evidence-unrelated-fixture';
 const rng = (seed: number) => () => { seed = seed * 16807 % 2147483647; return (seed - 1) / 2147483646; };
 const clone = <T,>(value: T): T => JSON.parse(JSON.stringify(value));
 const saved = (): { league: NbaLeague; myTeam: string; phase: string } => JSON.parse(localStorage.getItem(KEY)!);
-function seed(league: NbaLeague, team = 'DEN') {
-  const raw = JSON.stringify({ league, myTeam: team, phase: 'hub', titles: 0, seasonsPlayed: 0, draftClass: null, picksLeft: 0 });
+function seed(league: NbaLeague, team = 'DEN', phase = 'hub') {
+  const raw = JSON.stringify({ league, myTeam: team, phase, titles: 0, seasonsPlayed: 0, draftClass: null, picksLeft: 0 });
   localStorage.setItem(KEY, raw); return raw;
 }
 const teamButton = (abbr: string) => {
@@ -163,9 +163,9 @@ describe('NBA actual opening ratings and readable saved evidence', () => {
     expect(localStorage.getItem(SENTINEL)).toBe('exact unrelated payload');
   });
 
-  it('refuses an invalid opening version without overwriting another save and retries cleanly', async () => {
+  it('refuses an invalid opening version without overwriting the loaded save and retries cleanly', async () => {
+    const old = engine.initNbaLeague(rng(86)), raw = seed(old, 'BOS', 'draft');
     render(<NbaFrontOfficeBoard />);
-    const old = engine.initNbaLeague(rng(86)), raw = seed(old, 'BOS');
     const first = NBA_TEAMS.find(t => t.id === 'DEN')!.players![0];
     const rating = NBA_OPENING_RATINGS.DEN[`${first.name}|${first.position}`];
     const version = rating.evidence.modelVersion;
