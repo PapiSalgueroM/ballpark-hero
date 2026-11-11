@@ -187,6 +187,7 @@ describe('Budget Builder signing decisions', () => {
     expect(final.series).toEqual(baseline.result.current.series); expect(final.finalScore).toBe(baseline.result.current.finalScore);
     expect(final.shareText).toBe(baseline.result.current.shareText);
     expect(view.getByText(`Score: ${final.finalScore}`)).toBeVisible();
+    expect(view.getByText(/^(You won \d+–\d+ against the Money XI\.|The Money XI won \d+–\d+\.|You drew with the Money XI\.)$/)).toBeVisible();
     expect(recordCompletion).toHaveBeenCalledTimes(2);
     expect(recordCompletion).toHaveBeenNthCalledWith(1, '/budget-builder', final.finalScore, null, final.teamRating);
     fireEvent.click(view.getByRole('button', { name: 'Share my XI' })); await waitFor(() => expect(writeText).toHaveBeenCalledExactlyOnceWith(final.shareText));

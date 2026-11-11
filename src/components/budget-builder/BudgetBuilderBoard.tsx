@@ -372,7 +372,13 @@ export function BudgetBuilderBoard() {
 
           {series && (
             <div className="mt-4 rounded-xl border border-border bg-background p-4 text-left">
-              <p className="text-center text-sm font-bold text-foreground">{series.headline}</p>
+              <p className="text-center text-sm font-bold text-foreground">
+                {series.outcome === 'win'
+                  ? `You won ${series.userWins}–${series.aiWins} against the Money XI.`
+                  : series.outcome === 'loss'
+                    ? `The Money XI won ${series.aiWins}–${series.userWins}.`
+                    : 'You drew with the Money XI.'}
+              </p>
               <div className="mt-2 flex items-center justify-center gap-3 text-xs text-muted-foreground">
                 <span>Legs: {series.legs.map(l => `${l.userGoals}-${l.aiGoals}`).join(' · ')}</span>
               </div>
