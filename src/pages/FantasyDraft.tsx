@@ -21,10 +21,11 @@ import { recordCompletion, getCurrentPlayerName } from '@/lib/completions';
 import { settleSeason, type SdSeason } from '@/lib/searchDiscard';
 import type { Player } from '@/types/game';
 
-/** The settle engine reads marketValue, age and name; this table's rows map
- *  straight onto that. */
-const toSettlePlayer = (p: DraftPlayer): Player =>
-  ({ name: p.name, marketValue: Math.max(1, p.market_value_millions), age: p.age ?? 27, position: p.position } as Player);
+// The season seed uses names in order. Sort a copy and keep draft order on screen.
+const toSettleSquad = (team: DraftPlayer[]): Player[] =>
+  [...team]
+    .sort((a, b) => a.name < b.name ? -1 : a.name > b.name ? 1 : 0)
+    .map(p => ({ name: p.name, marketValue: Math.max(1, p.market_value_millions), age: p.age ?? 27, position: p.position } as Player));
 
 const TEAM_SIZE = 11;
 const TOTAL_PICKS = TEAM_SIZE * 2;
@@ -115,7 +116,7 @@ const FantasyDraft = () => {
   useEffect(() => {
     if (!draftComplete || completionRef.current || !validXis) return;
     completionRef.current = true;
-    const season = settleSeason(userTeam.map(toSettlePlayer), aiTeam.map(toSettlePlayer));
+    const season = settleSeason(toSettleSquad(userTeam), toSettleSquad(aiTeam));
     setVerdict(season);
     const score = seasonScore(season.points[0]);
     recordCompletion('/fantasy-draft', score, getCurrentPlayerName(profile), season.winner === 0 ? 1 : 0);

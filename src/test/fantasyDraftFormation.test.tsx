@@ -141,6 +141,38 @@ describe('Fantasy Draft forms both starting XIs before settlement', () => {
     expect(vi.mocked(recordCompletion).mock.calls[0][3]).toBe(result.winner === 0 ? 1 : 0);
   });
 
+  it('settles the same two XIs identically when two consecutive picks are swapped', async () => {
+    const first = await openDraft();
+    for (const position of ['GK', 'DEF', 'DEF', 'DEF', 'DEF', 'MID', 'MID', 'MID', 'FWD', 'FWD', 'FWD']) {
+      await pickPosition(first, position);
+    }
+    await finishAiTurn(first);
+    const userTeam = roster(first, 'Your XI');
+    const aiTeam = roster(first, 'AI XI');
+    const verdict = first.getByText(/^Season score:/).parentElement!.textContent;
+    const reverseOrder = [userTeam[0], userTeam[2], userTeam[1], ...userTeam.slice(3)];
+    first.unmount();
+
+    const second = await openDraft();
+    for (const player of reverseOrder) {
+      await userTurn(second);
+      const card = searchPlayer(second, player);
+      expect(card).toBeEnabled();
+      fireEvent.click(card);
+    }
+    await finishAiTurn(second);
+    expect(roster(second, 'Your XI')).toEqual(reverseOrder);
+    expect(roster(second, 'AI XI')).toEqual(aiTeam);
+    const settlement = vi.mocked(settleSeason);
+    expect(settlement).toHaveBeenCalledTimes(2);
+    expect(second.getByText(/^Season score:/).parentElement!.textContent).toBe(verdict);
+    expect(settlement.mock.calls[1]).toEqual(settlement.mock.calls[0]);
+    expect(settlement.mock.results[1].value).toEqual(settlement.mock.results[0].value);
+    const completions = vi.mocked(recordCompletion).mock.calls;
+    expect(completions).toHaveLength(2);
+    expect(completions[1]).toEqual(completions[0]);
+  });
+
   it('rejects a fourth human forward while other formation slots remain open', async () => {
     const view = await openDraft();
     await pickPosition(view, 'FWD');
