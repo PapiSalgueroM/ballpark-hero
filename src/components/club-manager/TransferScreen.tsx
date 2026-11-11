@@ -12,7 +12,7 @@ import { Input } from '@/components/ui/input';
 import { currencySymbol } from '@/lib/clubManagerStart';
 import { FreeAgentPool } from '@/components/club-manager/FreeAgentPool';
 import { Newspaper, ArrowDownToLine, ArrowUpFromLine, Handshake, Zap, TrendingUp } from 'lucide-react';
-import { money, moneyIn, sellValue, releaseClauseOf, loanEligible, loanFeeOf, activeLoans, loanOutFee, canLeaveSquad, dealPackageValue, careerLeagueOf, loanOutRefusal, shownNation, FINISH_MATCH_BEFORE_PLAYER_EXIT } from '@/lib/clubManager';
+import { money, moneyIn, sellValue, releaseClauseOf, loanEligible, loanFeeOf, activeLoans, loanOutFee, canLeaveSquad, squadDepartureBlock, dealPackageValue, careerLeagueOf, loanOutRefusal, shownNation, FINISH_MATCH_BEFORE_PLAYER_EXIT } from '@/lib/clubManager';
 import type { CareerState, CMPlayer, MarketPlayer, TransferStatus, DealExtras } from '@/lib/clubManager';
 /* Round 506: the deal desk. The screen reads the SAME verdict and the SAME
    meter the engine judges with, so what the bar says while you are typing and
@@ -1163,6 +1163,8 @@ export function TransferScreen({
               </p>
               {sellable.map(p => {
                 const st = p.transferStatus;
+                const returnBlock = p.onLoan && windowOpen && !career.live ? squadDepartureBlock(career, p) : null;
+                const returnDisabled = !!career.live || !windowOpen || !!returnBlock || (p.loanBreakFee ?? 0) > career.budget;
                 const pill =(key: TransferStatus, label: string) => (
                   <button
                     key={key}
@@ -1227,16 +1229,16 @@ export function TransferScreen({
                           {p.loanBreakFee !== undefined && (
                             <button
                               onClick={() => onEndLoanEarly(p.id)}
-                              disabled={!!career.live || !windowOpen || p.loanBreakFee > career.budget}
-                              title={career.live ? FINISH_MATCH_BEFORE_PLAYER_EXIT : windowOpen
+                              disabled={returnDisabled}
+                              title={career.live ? FINISH_MATCH_BEFORE_PLAYER_EXIT : returnBlock ?? (windowOpen
                                 ? `Send him back early. The release figure agreed when he arrived is ${money(p.loanBreakFee)}`
-                                : 'The loan can only be ended while a window is open'}
+                                : 'The loan can only be ended while a window is open')}
                               className={cn('px-2 py-1 rounded-md text-[9px] font-bold border transition-all',
-                                !career.live && windowOpen && p.loanBreakFee <= career.budget
+                                !returnDisabled
                                   ? 'bg-card border-border text-muted-foreground hover:text-foreground'
                                   : 'bg-secondary border-border text-muted-foreground cursor-not-allowed')}
                             >
-                              Send him back · {money(p.loanBreakFee)}
+                              {returnBlock ?? <>Send him back · {money(p.loanBreakFee)}</>}
                             </button>
                           )}
                         </>

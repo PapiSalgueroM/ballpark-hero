@@ -10536,7 +10536,7 @@ export function exerciseLoanOption(career: CareerState, playerId: string): Caree
 export function breakLoan(career: CareerState, playerId: string): CareerState | null {
   if (career.live || career.transferWindow === null) return null;
   const p = career.squad.find(x => x.id === playerId);
-  if (!p || !p.onLoan) return null;
+  if (!p || !p.onLoan || squadDepartureBlock(career, p)) return null;
   const fee = p.loanBreakFee;
   if (fee === undefined) return null;
   if (fee > career.budget) return null;
@@ -11813,10 +11813,7 @@ export function loanOutFee(p: CMPlayer): number {
  */
 export function canLeaveSquad(career: CareerState, p: CMPlayer): boolean {
   // The live lineup reads from the squad until the match is settled.
-  if (career.live) return false;
-  if (career.squad.length <= 14) return false;
-  if (p.onLoan) return false;             // he belongs to someone else
-  if (p.position === 'GK' && career.squad.filter(x => x.position === 'GK').length <= 1) return false;
+  if (career.live || !squadCanSpare(career, p)) return false;
   /* Round 507 fix: he cannot go two places at once. Round 506 split a transfer
      into a fee table and a terms table, and the part exchange man was only
      checked at the fee. Between the two the manager sits on the same screen as
@@ -11852,10 +11849,13 @@ export function canLeaveSquad(career: CareerState, p: CMPlayer): boolean {
  * terms table is open, and the settlement sent the last keeper too.
  */
 function squadCanSpare(career: CareerState, p: CMPlayer): boolean {
-  if (career.squad.length <= 14) return false;
-  if (p.onLoan) return false;
-  if (p.position === 'GK' && career.squad.filter(x => x.position === 'GK').length <= 1) return false;
-  return true;
+  return !p.onLoan && !squadDepartureBlock(career, p);
+}
+
+export function squadDepartureBlock(career: CareerState, p: CMPlayer): string | null {
+  if (career.squad.length <= 14) return 'Squad at minimum (14)';
+  if (p.position === 'GK' && career.squad.filter(x => x.position === 'GK').length <= 1) return 'Only goalkeeper';
+  return null;
 }
 
 /**
