@@ -701,7 +701,7 @@ function StadiumRoom({ g, visible, onNeedsYou }: { g: ReturnType<typeof useStadi
                     </p>
                   </VictoryMoment>
                   <p className="cm-rise mt-1 text-xs text-muted-foreground" style={{ animationDelay: '0.45s' }}>
-                    +{fmtMoney(g.promotion.amount)} promotion bonus, every payout scaled up from here
+                    +{fmtMoney(g.promotion.amount)} {g.promotion.kind === 'title' ? 'title bonus' : 'promotion bonus, every payout scaled up from here'}
                   </p>
                   <button
                     onClick={g.dismissPromotion}
