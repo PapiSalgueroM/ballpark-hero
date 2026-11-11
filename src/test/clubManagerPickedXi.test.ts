@@ -30,15 +30,15 @@ beforeAll(() => {
 });
 
 it('preserves a saved Hot Seat Daily through its original press answer and result', () => {
-  const replay = replayHotSeat(dailyHotSeat('2026-10-13'), [
-    { t: 'press', i: 0 },
-    { t: 'match', m: 'balanced', talk: null },
-  ]);
-  expect(replay.setup.club).toBe('Celta Vigo');
+  const press = { t: 'press', i: 0 } as const;
+  const match = { t: 'match', m: 'balanced', talk: null } as const;
+  const replay = replayHotSeat(dailyHotSeat('2026-11-08'), [press, match, press, match, match, press, match, match]);
+  expect(replay.setup.club).toBe('Hoffenheim');
   expect(replay.log.map(({ opponent, myGoals, oppGoals }) => [opponent, myGoals, oppGoals])).toEqual([
-    ['Valencia', 2, 0],
+    ['Gladbach', 1, 3], ['Freiburg', 0, 1], ['RB Leipzig', 0, 2],
+    ['Schalke 04', 2, 0], ['Bayer Leverkusen', 0, 3],
   ]);
-  expect(replay.verdict).toMatchObject({ kind: 'survived', points: 3, target: 3 });
+  expect(replay.verdict).toMatchObject({ kind: 'sacked', points: 3, target: 4 });
   expect(handoverState(replay)).not.toHaveProperty('lineupRules');
 });
 
