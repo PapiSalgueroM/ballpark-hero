@@ -101,6 +101,8 @@ export default function MlbFrontOfficeBoard() {
   const [tab, setTab] = useState<Tab | null>(null);
   const [myTeam, setMyTeam] = useState('');
   const [league, setLeague] = useState<MlbLeague | null>(null);
+  const [saveWriteFailed, setSaveWriteFailed] = useState(false);
+  const pendingSave = useRef<string | null>(null);
   const [feed, setFeed] = useState<string[]>([]);
   /* Round 530: a done deal or a signing slams in at the top of the feed the
      moment it happens. Matched on the line's text, never its index, so the
@@ -213,17 +215,28 @@ export default function MlbFrontOfficeBoard() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const persist = useCallback((patch: Partial<SaveShape>, lg: MlbLeague | null, team: string) => {
+  const retrySave = useCallback(() => {
+    const bytes = pendingSave.current;
+    if (bytes === null) return;
     try {
-      if (!lg) return;
-      localStorage.setItem(SAVE_KEY, JSON.stringify({
+      localStorage.setItem(SAVE_KEY, bytes);
+      pendingSave.current = null;
+      setSaveWriteFailed(false);
+    } catch { setSaveWriteFailed(true); }
+  }, []);
+
+  const persist = useCallback((patch: Partial<SaveShape>, lg: MlbLeague | null, team: string) => {
+    if (!lg) return;
+    try {
+      pendingSave.current = JSON.stringify({
         league: lg, myTeam: team, phase, titles, seasonsPlayed, draftClass, picksLeft, draftBatchesLeft: draftBatchesLeft ?? undefined,
         mandate, trust, fired, pressTilt, seasonTradeLine,
         postseason: champion ? { series, champion, gradeLine } : null,
         ...(gmLive.current ? { gm: gmLive.current } : {}), ...patch,
-      } satisfies SaveShape));
-    } catch { /* full */ }
-  }, [phase, titles, seasonsPlayed, draftClass, picksLeft, draftBatchesLeft, mandate, trust, fired, pressTilt, seasonTradeLine, champion, series, gradeLine]);
+      } satisfies SaveShape);
+    } catch { return; }
+    retrySave();
+  }, [phase, titles, seasonsPlayed, draftClass, picksLeft, draftBatchesLeft, mandate, trust, fired, pressTilt, seasonTradeLine, champion, series, gradeLine, retrySave]);
 
   const label = (abbr: string) => {
     const t = MLB_TEAM_MAP.get(abbr);
@@ -631,6 +644,8 @@ export default function MlbFrontOfficeBoard() {
 
   const reset = () => {
     localStorage.removeItem(SAVE_KEY);
+    pendingSave.current = null;
+    setSaveWriteFailed(false);
     setPhase('pick'); setLeague(null); setMyTeam('');
     setMandate(null); setTrust(FO_TRUST_START); setFired(false); setGradeLine(null);
     setPresser(null); setPressTilt(0); setSeasonTradeLine(null);
@@ -665,6 +680,13 @@ export default function MlbFrontOfficeBoard() {
     },
   } : null;
 
+  const saveNotice = saveWriteFailed && (
+    <div role="alert" data-no-prerender className="rounded-xl border border-destructive/40 bg-destructive/10 p-3 text-xs">
+      <p>Franchise save failed. Keep this page open and retry.</p>
+      <button type="button" onClick={retrySave} className="mt-2 min-h-11 min-w-11 rounded-full border border-destructive/50 px-3 font-bold">Retry save</button>
+    </div>
+  );
+
   if (draftSaveError) return (
     <div role="alert" className="rounded-2xl border border-border bg-card p-4 text-center space-y-3">
       <p className="text-sm text-foreground">This save has invalid draft information. It is still stored.</p>
@@ -675,6 +697,7 @@ export default function MlbFrontOfficeBoard() {
   if (phase === 'pick' || !league || !my) {
     return (
       <div className="space-y-4">
+        {saveNotice}
         <div className="rounded-2xl border border-border bg-card p-4 text-center">
           <p className="font-display text-lg font-bold text-foreground">Take over a baseball front office</p>
           <p className="mt-1 text-xs text-muted-foreground">
@@ -704,6 +727,7 @@ export default function MlbFrontOfficeBoard() {
   if (phase === 'fired') {
     return (
       <div className="space-y-4">
+        {saveNotice}
         {/* Round 187: the door shuts with one honest shake, nothing more. */}
         <div className="cm-loss-shake rounded-2xl border border-destructive/50 bg-card p-5 text-center">
           <CelebrationStyles />
@@ -767,12 +791,14 @@ export default function MlbFrontOfficeBoard() {
     if (gm && recapDesk && gmPanelFor(MLB_RECAP_PANELS, gmOpen)) {
       return (
         <div className="space-y-4">
+          {saveNotice}
           <GmDeskMount sport="mlb" desk={gm} facts={recapDesk} panels={MLB_RECAP_PANELS} open={gmOpen} onOpen={openDesk} onDesk={changeDesk} />
         </div>
       );
     }
     return (
       <div className="space-y-4">
+        {saveNotice}
         <div
           data-verdict-reveal
           className={cn(
@@ -858,6 +884,7 @@ export default function MlbFrontOfficeBoard() {
     const availablePicks = Math.min(picksLeft, ownedPicks);
     return (
       <div className="space-y-4">
+        {saveNotice}
         <CelebrationStyles />
         <div className="rounded-2xl border border-border bg-card p-4 text-center">
           <p className="font-display text-lg font-bold text-foreground">The {draftDone ? league.season : league.season + 1} Draft</p>
@@ -941,6 +968,7 @@ export default function MlbFrontOfficeBoard() {
 
   return (
     <div className="space-y-4">
+      {saveNotice}
       <CelebrationStyles />
       <div className="flex flex-wrap items-center justify-center gap-2 text-xs">
         <span className="rounded-full px-3 py-1 font-bold text-white" style={{ background: t.color }}>{label(myTeam)}</span>
