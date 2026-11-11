@@ -36,6 +36,7 @@ const SUPABASE_ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFz
    with nothing on screen. Past this many milliseconds the read gives up and
    the plain rule answers, exactly as a failed read always has. */
 export const HISTORY_WAIT_MS = 4000;
+const EVALUATION_WAIT_MS = 15_000;
 
 async function verifiedSecondaries(name: string, primary: Position | null): Promise<Position[]> {
   if (!name || !primary) return [];
@@ -148,11 +149,17 @@ export function useLineupBuilder() {
   useEffect(() => cancelValidation, [cancelValidation]);
 
   const evaluationRun = useRef(0);
+  const evaluationCall = useRef<AbortController | null>(null);
   const cancelEvaluation = useCallback(() => {
     evaluationRun.current += 1;
+    evaluationCall.current?.abort();
+    evaluationCall.current = null;
     setIsEvaluating(false);
   }, []);
-  useEffect(() => () => { evaluationRun.current += 1; }, []);
+  useEffect(() => () => {
+    evaluationRun.current += 1;
+    evaluationCall.current?.abort();
+  }, []);
 
   const positions = useMemo(() => (formation ? FORMATIONS[formation] : []), [formation]);
 
@@ -390,6 +397,10 @@ export function useLineupBuilder() {
     if (draftChoice.mode === 'club-year') return;
     if (filledSlotsArray.length !== 11) return;
     const run = ++evaluationRun.current;
+    evaluationCall.current?.abort();
+    const call = new AbortController();
+    evaluationCall.current = call;
+    const timer = setTimeout(() => call.abort(), EVALUATION_WAIT_MS);
     setIsEvaluating(true);
     try {
       const resp = await fetch(
@@ -401,6 +412,7 @@ export function useLineupBuilder() {
             Authorization: `Bearer ${"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZsYXd1aXFidmpvYm1rZmthdWh3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU4NTUwNzYsImV4cCI6MjA5MTQzMTA3Nn0.L8xWIXikPIaXC0XOL-FLOuPQb6idws2NdliARxBgk_Y"}`,
           },
           body: JSON.stringify({ formation, players: filledSlotsArray }),
+          signal: call.signal,
         }
       );
       if (run !== evaluationRun.current) return;
@@ -409,7 +421,7 @@ export function useLineupBuilder() {
       
       if (!resp.ok) {
         // AI referee down/out of quota -> offline judge, never a dead-end
-        const local = await localEvaluateSoccerXI(filledSlotsArray.map(s => s.playerName));
+        const local = await localEvaluateSoccerXI(filledSlotsArray.map(s => s.playerName), call.signal);
         if (run !== evaluationRun.current) return;
         setVerdict(local);
         setPhase('result');
@@ -428,9 +440,9 @@ export function useLineupBuilder() {
       setPhase('result');
     } catch (err) {
       if (run !== evaluationRun.current) return;
-      console.error('Evaluation error:', err);
+      if (!call.signal.aborted) console.error('Evaluation error:', err);
       try {
-        const local = await localEvaluateSoccerXI(filledSlotsArray.map(s => s.playerName));
+        const local = await localEvaluateSoccerXI(filledSlotsArray.map(s => s.playerName), call.signal);
         if (run !== evaluationRun.current) return;
         setVerdict(local);
       } catch {
@@ -439,7 +451,11 @@ export function useLineupBuilder() {
       }
       setPhase('result');
     } finally {
-      if (run === evaluationRun.current) setIsEvaluating(false);
+      clearTimeout(timer);
+      if (run === evaluationRun.current) {
+        evaluationCall.current = null;
+        setIsEvaluating(false);
+      }
     }
   }, [filledSlotsArray, formation, draftChoice]);
 
