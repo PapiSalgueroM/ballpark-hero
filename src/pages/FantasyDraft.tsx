@@ -487,7 +487,7 @@ const FantasyDraft = () => {
           title="Fantasy Draft: Soccer Team Builder | DoUKnowBall"
           description="Draft your ultimate soccer squad against an AI opponent. Pick 11 players in a snake draft, then simulate a full season to see who built the better team."
           howToPlay={[
-            "Take turns drafting soccer players with the AI in a snake draft format (you pick, AI picks, repeat).",
+            "Make 22 picks in snake order, alternating who starts each round. A coin flip chooses who picks first.",
             "Both sides build a 4-3-3: 1 goalkeeper, 4 defenders, 3 midfielders and 3 forwards. Daily criteria can relax for a needed position, never for an extra player in a full position.",
             "The moment the draft completes, both XIs play the same simulated 38 game season and the table names the winner. The narrated season stories and the community vote follow underneath."
           ]}
@@ -497,7 +497,7 @@ const FantasyDraft = () => {
             "Grab Virgil van Dijk for defense: 90 defending, 86 physical",
             "Select Alisson for goalkeeper: 89 reflexes, 88 diving",
             "Criteria: Best Under-25 Squad, Highest Market Value XI",
-            "Snake draft: You pick 1st, AI picks 2nd & 3rd, you pick 4th & 5th..."
+            "Snake draft: If you pick first, the AI picks second and third, then you pick fourth and fifth."
           ]}
         />
       </div>

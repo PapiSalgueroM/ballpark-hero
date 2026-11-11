@@ -2013,7 +2013,7 @@ export const SOCCER_CONTENT_2: GameContentMap = {
       {
         heading: "Drafting snake style against the AI",
         items: [
-          "Draft snake style: 22 alternating picks, with a coin flip deciding who starts.",
+          "Make 22 picks in snake order, alternating who starts each round. A coin flip chooses who picks first.",
         ],
       },
       {

@@ -1,3 +1,9 @@
+## 2026-11-11 Fantasy Draft snake order help
+
+The draft guide now explains that the first picker alternates each round after a coin flip. The fallback instructions match, and their example applies when you pick first. The gameplay, draw and daily rules are unchanged.
+
+A 390px native replay checked the first five picks from both starting seats with daily criteria loaded and unavailable. It checked the guide, help dialog, fallback and saved page. The generated search hash updated with all 133 keyword rows held. The sitemap and ledger updated only Fantasy Draft, plus the sitemap header date. Types, build, 17 output and guide checks, and all 16 route caps passed. Published release pending.
+
 ## 2026-11-07: Club Manager historical roster counts live
 
 [PR #532](https://github.com/PapiSalgueroM/ballpark-hero/pull/532) published from main `c3b5ca4afaf9b4dadcd748f340e8e8e3e4a1a1dd`, App tree `133fcd3d26a4d237178e5c7efee723048da0aef2`, Lovable deployment `510b1df1-2172-42c0-90f9-d9f9c997b840`.
