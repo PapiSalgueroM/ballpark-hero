@@ -81,8 +81,8 @@ const controls = {
   fresh: { from: 'for (const out of tiringAtHalftime(state)) {', to: 'for (const out of [] as CMPlayer[]) {', test: 'fatigue' },
   /* Round 1331: the break's keep back reads the match's rule (three here, see freshCareer); same meaning, new line. */
   reserve: { from: 'if (state.live!.subsUsed >= rule.subs - 1 || (rule.stops !== null && state.live!.subsUsed - atBreak >= 2)) break;', to: 'if (state.live!.subsUsed >= rule.subs || (rule.stops !== null && state.live!.subsUsed - atBreak >= 2)) break;', test: 'fatigue' },
-  paused: { from: "      return resumeMatch(coached(state));", to: '      return resumeMatch(state);', test: 'paths' },
-  entry: { from: '    state.live = live;\n    return resumeMatch(coached(state));', to: '    state.live = live;\n    return resumeMatch(state);', test: 'manual' },
+  paused: { from: '      return resumeMatch(coached(state), opts?.legacyInjuryTick);', to: '      return resumeMatch(state, opts?.legacyInjuryTick);', test: 'paths' },
+  entry: { from: '    state.live = live;\n    return resumeMatch(coached(state), opts?.legacyInjuryTick);', to: '    state.live = live;\n    return resumeMatch(state, opts?.legacyInjuryTick);', test: 'manual' },
   immutable: { from: '  let state: CareerState = JSON.parse(JSON.stringify(career));\n  const entry = state.calendar[state.live!.week];', to: '  let state: CareerState = career;\n  const entry = state.calendar[state.live!.week];', test: 'immutable' },
 };
 

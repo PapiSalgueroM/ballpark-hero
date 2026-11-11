@@ -18347,7 +18347,7 @@ function nightSquadTick(state: CareerState, playedIds: Set<string>): void {
   state.squad = state.squad.map(p => ({ ...p, fitness: fitnessAfterWeek(p.fitness, playedIds.has(p.id), recoveryMod, flat) }));
 }
 
-function tickWeek(state: CareerState, playedIds: Set<string> | null): void {
+function tickWeek(state: CareerState, playedIds: Set<string> | null, freshInjuries?: ReadonlySet<string>): void {
   /* Round 619: a settlement counts down HERE, in the same function that charges
      the wage bill, and a row at zero is gone.
 
@@ -18381,7 +18381,7 @@ function tickWeek(state: CareerState, playedIds: Set<string> | null): void {
     const played = playedIds ? playedIds.has(p.id) : false;
     const recovering = p.id === restId;
     const fitness = fitnessAfterWeek(p.fitness, played, recovering ? light.recoveryMod : recoveryMod, recovering ? light.flat : flat);
-    let injuryWeeks = Math.max(0, p.injuryWeeks - 1);
+    let injuryWeeks = freshInjuries?.has(p.id) ? p.injuryWeeks : Math.max(0, p.injuryWeeks - 1);
     if (!recovering && knockRisk > 0 && injuryWeeks === 0 && Math.random() < knockRisk) injuryWeeks = injurySpell(state, ri(1, 3));
     const out: CMPlayer = { ...p, fitness, injuryWeeks };
     const previous = readTrainingExposure(p.trainingExposure);
@@ -18962,7 +18962,7 @@ export function haulLine(name: string, count: number): string | null {
  * Plays my match for this entry, mutating state (tables, squad, cups, board)
  * and returning the report. state must already be a private copy.
  */
-function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch): MatchWeekReport {
+function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch, legacyInjuryTick: boolean): MatchWeekReport {
   const fx = fixtureFor(state, entry)!;
   const club = clubDefFor(state.clubName);
   /* Round 507: what tonight is, in a two legged tie. A FIRST leg is not a
@@ -19605,10 +19605,13 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
   /* Round 504: the injury was drawn with its half too, and it already sits
      after the man's last goal (fixExits). The whistle writes the weeks. */
   const injuryLines: InjuryLine[] = [...(live.h1Injuries ?? []), ...(live.h2Injuries ?? [])].map(inj => ({ ...inj }));
+  // This fixture caused the injury. Only subsequent paid weeks count toward recovery.
+  const freshInjuries = injuryLines.length && !legacyInjuryTick && !entry.night ? new Set<string>() : undefined;
   for (const inj of injuryLines) {
     const p = inj.id ? state.squad.find(x => x.id === inj.id) : state.squad.find(x => x.name === inj.name);
     if (!p) continue;
     p.injuryWeeks = inj.weeks;
+    freshInjuries?.add(p.id);
     events.push(`🩹 ${p.name} limped off, out for ~${p.injuryWeeks} week${p.injuryWeeks > 1 ? 's' : ''}.`);
   }
 
@@ -19813,7 +19816,7 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
      the week's own recovery and match cost below. */
   const tacticsDay = logEverSet(live.instrLog) ? tacticsImpl()?.day(state, fx, live, second, lastMinute) ?? null : null;
   if (entry.night) nightSquadTick(state, new Set(xi.map(p => p.id)));
-  else tickWeek(state, new Set(xi.map(p => p.id)));
+  else tickWeek(state, new Set(xi.map(p => p.id)), freshInjuries);
   if (tacticsDay && tacticsDay.stats.legs !== 0) {
     const played = new Set(xi.map(p => p.id));
     state.squad = state.squad.map(p => (played.has(p.id) ? { ...p, fitness: clamp(p.fitness - tacticsDay.stats.legs, 20, 100) } : p));
@@ -20819,7 +20822,7 @@ export function startCareer(clubName: string, eraId: string = DEFAULT_ERA_ID, cu
  * ties after elimination), opens the January window, or plays my next match.
  * Never mutates the input state.
  */
-export function playNextEntry(career: CareerState, opts?: { skipHalftime?: boolean; untilWeek?: number; noCoach?: boolean; varReviews?: CmVarAsk; noBook?: boolean }): PlayResult {
+export function playNextEntry(career: CareerState, opts?: { skipHalftime?: boolean; untilWeek?: number; noCoach?: boolean; varReviews?: CmVarAsk; noBook?: boolean; legacyInjuryTick?: boolean }): PlayResult {
   if (career.live && !livePositionsValid(career.live)) return { state: career, kind: 'halftime', live: career.live, blocked: 'position-state-invalid' };
   const state: CareerState = JSON.parse(JSON.stringify(career));
   /* Release AL: `noCoach` plays a quick sim the way it was played before
@@ -20891,7 +20894,7 @@ export function playNextEntry(career: CareerState, opts?: { skipHalftime?: boole
        quick sim is. */
     if (state.live && state.live.week === state.week) {
       if (!opts?.skipHalftime) return { state, kind: 'halftime', live: state.live };
-      return resumeMatch(coached(state));
+      return resumeMatch(coached(state), opts?.legacyInjuryTick);
     }
     const entry = state.calendar[state.week];
     if (entry.type === 'window') {
@@ -20975,7 +20978,7 @@ export function playNextEntry(career: CareerState, opts?: { skipHalftime?: boole
       return { state, kind: 'halftime', live };
     }
     state.live = live;
-    return resumeMatch(coached(state));
+    return resumeMatch(coached(state), opts?.legacyInjuryTick);
   }
   return { state, kind: 'seasonOver' };
 }
@@ -21625,14 +21628,14 @@ export function coachQuickMatch(career: CareerState): CareerState {
 }
 
 /** Play the second half and finish the match. */
-export function resumeMatch(career: CareerState): PlayResult {
+export function resumeMatch(career: CareerState, legacyInjuryTick = false): PlayResult {
   if (career.live && !livePositionsValid(career.live)) return { state: career, kind: 'halftime', live: career.live, blocked: 'position-state-invalid' };
   const state: CareerState = JSON.parse(JSON.stringify(career));
   const live = state.live;
-  if (!live) return playNextEntry(state);
+  if (!live) return playNextEntry(state, { legacyInjuryTick });
   const entry = state.calendar[live.week];
   state.live = null;
-  const report = playMyMatch(state, entry, live);
+  const report = playMyMatch(state, entry, live, legacyInjuryTick);
   state.week = live.week + 1;
   /* Round 978: same hook as the quick sim's, see playNextEntry. */
   runIntlBreaks(state);

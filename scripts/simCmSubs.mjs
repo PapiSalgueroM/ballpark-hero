@@ -511,7 +511,7 @@ const LEGACY_SEASONS = Number(process.env.SUBS_LEGACY_SEASONS ?? 2);
 const strip = s => { const c = JSON.parse(JSON.stringify(s)); delete c.matchRules; return c; };
 const hashOf = v => createHash('sha256').update(JSON.stringify(v)).digest('hex').slice(0, 16);
 const QUICK = { coach: { skipHalftime: true }, noCoach: { skipHalftime: true, noCoach: true } };
-const HOT_STYLE = { skipHalftime: true, noCoach: true, noBook: true };
+const HOT_STYLE = { skipHalftime: true, noCoach: true, noBook: true, legacyInjuryTick: true };
 /** A career played LEGACY_SEASONS seasons on one engine: the hash of its end state (matchRules taken off)
  *  and the draws it took. `base` sets matchRules 'base' after every call (a season roll may drop it). */
 function playSeasons(cm, { club, era, seed, opts, base }) {
