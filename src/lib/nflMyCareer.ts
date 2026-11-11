@@ -1,4 +1,5 @@
 import type { CareerDraftEntry, PreDraftState } from './careerPreDraft';
+import { formatNumber } from './formatNumber';
 /**
  * NFL My Career engine (2026-08-05, the career-for-every-sport push).
  * A cradle to retirement player career: you are a fictional prospect (your name,
@@ -1038,7 +1039,7 @@ export const NFL_SPEND_ITEMS: NflSpendItem[] = [
   // ── Shady (hidden until you have heat or dirty money) ──
   { id: 'shady_carwash', name: 'Car Wash Chain', emoji: '🧼', category: 'shady', cost: 1, desc: 'Remarkable revenue for a street with no traffic, 1M', oneTime: true, requiresDirty: true, effect: 'Washes 2M of dirty money' },
   { id: 'shady_barbershops', name: 'Barbershop Chain', emoji: '💈', category: 'shady', cost: 0.8, desc: 'Nine chairs, three customers, endless cash, 800k', oneTime: true, requiresDirty: true, effect: 'Washes 1.5M of dirty money' },
-  { id: 'shady_club', name: 'The Nightclub', emoji: '🍾', category: 'shady', cost: 3, yearly: 0.2, desc: 'Bottle service and a very flexible ledger, 3M', oneTime: true, requiresDirty: true, effect: 'Washes 4M, heat +3' },
+  { id: 'shady_club', name: 'The Nightclub', emoji: '🍾', category: 'shady', cost: 3, yearly: 0.2, desc: 'Bottle service and a very flexible ledger, 3M', oneTime: true, requiresDirty: true, effect: 'Washes up to 4M, heat +3' },
   { id: 'shady_lawyer', name: 'The Lawyer Who Never Loses', emoji: '⚖️', category: 'shady', cost: 0, yearly: 0.4, desc: 'On retainer, answers at 3am, 400k a year', oneTime: true, effect: 'Heat cools twice as fast' },
   { id: 'shady_fixer', name: 'A Guy Who Handles Things', emoji: '🕶️', category: 'shady', cost: 0, yearly: 0.25, desc: 'You do not ask how, 250k a year', oneTime: true, effect: 'Heat -8 immediately' },
   { id: 'shady_offshore', name: 'Offshore Account', emoji: '🏝️', category: 'shady', cost: 0.5, desc: 'An island, a bank, a form nobody files, 500k', oneTime: true, requiresDirty: true, effect: 'Heat +6' },
@@ -1080,7 +1081,7 @@ export function buyNflItem(c: CareerState, itemId: string): { state: CareerState
     case 'foundation': s.fanbase = Math.min(100, s.fanbase + 10); log = 'The foundation launched with a block party and a scholarship fund. Fanbase +10.'; break;
     case 'shady_carwash': s.dirtyMoney = Math.max(0, Math.round(((s.dirtyMoney ?? 0) - 2) * 10) / 10); s.netWorth = Math.round((s.netWorth + Math.min(2, c.dirtyMoney ?? 0)) * 10) / 10; log = 'Two million went in dirty and came out as a very busy car wash.'; break;
     case 'shady_barbershops': s.dirtyMoney = Math.max(0, Math.round(((s.dirtyMoney ?? 0) - 1.5) * 10) / 10); s.netWorth = Math.round((s.netWorth + Math.min(1.5, c.dirtyMoney ?? 0)) * 10) / 10; log = 'Nine chairs, three customers, and a ledger that balances beautifully.'; break;
-    case 'shady_club': s.dirtyMoney = Math.max(0, Math.round(((s.dirtyMoney ?? 0) - 4) * 10) / 10); s.netWorth = Math.round((s.netWorth + Math.min(4, c.dirtyMoney ?? 0)) * 10) / 10; s.heat = Math.min(100, (s.heat ?? 0) + 3); log = 'The club opened. Four million cleaned, and a line around the block of people who know your name.'; break;
+    case 'shady_club': { const w = Math.min(4, c.dirtyMoney ?? 0); s.dirtyMoney = Math.max(0, Math.round(((s.dirtyMoney ?? 0) - 4) * 10) / 10); s.netWorth = Math.round((s.netWorth + w) * 10) / 10; s.heat = Math.min(100, (s.heat ?? 0) + 3); log = `The club opened. ${formatNumber(w)}M cleaned, and a line around the block of people who know your name.`; break; }
     case 'shady_fixer': s.heat = Math.max(0, (s.heat ?? 0) - 8); log = 'You have a guy now. Heat -8, and you genuinely do not want to know how.'; break;
     case 'shady_offshore': s.heat = Math.min(100, (s.heat ?? 0) + 6); log = 'The account is open. An island, a bank, and a form nobody will ever file. Heat +6.'; break;
     default: break;

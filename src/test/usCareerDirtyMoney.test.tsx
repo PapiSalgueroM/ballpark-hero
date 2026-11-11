@@ -18,7 +18,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import type { ComponentType } from 'react';
 import { MemoryRouter } from 'react-router-dom';
-import { act, cleanup, fireEvent, render, waitFor } from '@testing-library/react';
+import { act, cleanup, fireEvent, render, waitFor, within } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 vi.mock('@/lib/completions', () => ({ recordCompletion: vi.fn(), recordActivity: vi.fn(), getCurrentPlayerName: () => 'Tester' }));
@@ -142,6 +142,43 @@ describe('Round 1500: deal with dirty money on the real board', () => {
     expect(view.container.textContent).toContain(`$9.5M unexplained. ${OLD_SENTENCE}`);
     expect(view.container.textContent).not.toContain(DIRTY_SENTENCE_NO_WASHERS);
     expect(deskButton(view.container)?.textContent).toBe('Deal with it');
+  });
+
+  it.each(SPORTS)('%s: Nightclub offer and receipt match partial and full purchases', async (slug, key, sport, Board) => {
+    for (const [held, cleaned, remaining, banked] of [[2.5, 2.5, 0, 9.5], [5, 4, 1, 11]]) {
+      const before = JSON.parse(dirtySave(slug, sport, { dirty: held, washersOwned: 0 })) as Saved;
+      Object.assign(before.c, { netWorth: 10, yearlyCosts: 0 });
+      localStorage.setItem(key, JSON.stringify(before));
+      const view = render(<Board />);
+      await flush();
+
+      fireEvent.click(view.getByRole('button', { name: /The Bank/ }));
+      fireEvent.click(view.getByRole('button', { name: /Shop/ }));
+      fireEvent.click(view.getByRole('button', { name: /Shady/ }));
+      const card = view.getByText('The Nightclub').closest('div.flex.items-center.justify-between') as HTMLElement;
+      const offer = card.textContent;
+      fireEvent.click(within(card).getByRole('button', { name: '$3M' }));
+      const item = sport.shopItems.find(item => item.name === 'The Nightclub')!;
+      expect(read(key)).toEqual({
+        ...before,
+        c: {
+          ...before.c,
+          netWorth: banked,
+          dirtyMoney: remaining,
+          heat: 58,
+          yearlyCosts: slug === 'nfl' ? 0.2 : 0.25,
+          purchased: [...(before.c.purchased ?? []), item.id],
+        },
+      });
+      fireEvent.click(view.getByRole('button', { name: 'Hub' }));
+      fireEvent.click(view.getByRole('button', { name: /News/ }));
+      const receipt = view.getByText(/^The club opened\./).textContent;
+      expect({ offer, receipt }).toEqual({
+        offer: expect.stringContaining('Washes up to 4M, heat +3'),
+        receipt: expect.stringContaining(`${cleaned}M cleaned`),
+      });
+      view.unmount();
+    }
   });
 
   it.each(SPORTS)('%s: no dirty money, no desk; the recorded dirty save mounts without a write and offers it', async (slug, key, sport, Board) => {

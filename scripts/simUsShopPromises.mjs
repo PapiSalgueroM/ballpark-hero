@@ -77,6 +77,7 @@ import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { build } from 'esbuild';
+import { inverseUsNightclubReceipt } from './lib/usNightclubReceiptInverse.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const SHOP_BASE = process.env.SHOP_BASE || '413685149bed816a5c384242aa8c40f412b1d523';
@@ -275,7 +276,7 @@ if (runs('0')) {
 
 /* ─── the two arms ─── */
 const headFiles = headServe();
-const baseFiles = Object.fromEntries(US.map(s => [s.file, unshop(s, read(s.file))]));
+const baseFiles = Object.fromEntries(US.map(s => [s.file, unshop(s, inverseUsNightclubReceipt(s.id, read(s.file)))]));
 if (process.env.SHOP_BASE_CHECK === '1') {
   for (const s of US) {
     const then = lf(execFileSync('git', ['show', `${SHOP_BASE}:${s.file}`], { cwd: ROOT, encoding: 'utf8', maxBuffer: 64e6 }));
