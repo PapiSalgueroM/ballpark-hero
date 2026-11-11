@@ -1,3 +1,9 @@
+## 2026-11-11: MLB My Career relief stats fit the appearances played
+
+A seeded Closer's 35-appearance season showed 36 saves and three holds in the Career Log. Newly played seasons now keep relief wins, losses, saves and holds within the appearance count, including when scaling and rounding a shortened season. A hold and a loss can share an appearance. A save takes its own. [Official Baseball Rules 9.17 and 9.19](https://content.mlb.com/documents/2/2/4/305750224/2019_Official_Baseball_Rules_FINAL_.pdf) and [MLB hold glossary](https://www.mlb.com/glossary/standard-stats/hold).
+
+The corrected Closer line has 27 saves, three holds and the same 35 appearances, pitching decisions, ERA and strikeouts. Previously saved season rows retain their original values. The Saves Leader cutoff uses the corrected total while consuming the existing draw when the original total would have reached that cutoff. The seeded threshold case still consumes 20 draws and drops the award at 37 saves. In the career truth fixture, one of 464 careers changes across 58 keys, with only two invalid reliever season rows corrected.
+
 ## 2026-11-07: Club Manager historical roster counts live
 
 [PR #532](https://github.com/PapiSalgueroM/ballpark-hero/pull/532) published from main `c3b5ca4afaf9b4dadcd748f340e8e8e3e4a1a1dd`, App tree `133fcd3d26a4d237178e5c7efee723048da0aef2`, Lovable deployment `510b1df1-2172-42c0-90f9-d9f9c997b840`.
