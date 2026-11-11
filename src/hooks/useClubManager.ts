@@ -327,6 +327,12 @@ export function useClubManager() {
    */
   const careerRef = useRef<CareerState | null>(null);
   useEffect(() => { careerRef.current = career; }, [career]);
+  const retrySave = useCallback(() => {
+    const latest = careerRef.current;
+    if (!latest) return;
+    if (!holdsActiveSlot()) { setSaveMoved(true); return; }
+    persist(latest);
+  }, [holdsActiveSlot, persist]);
   const recruitmentCurrent = useRef<CareerState | null>(null);
   useLayoutEffect(() => {
     recruitmentCurrent.current = phase === 'hub' ? career : null;
@@ -1440,7 +1446,7 @@ export function useClubManager() {
 
   return {
     simToWeek,
-    saveFailed, saveMoved, deskNote, clearDeskNote: () => setDeskNote(null), positionNotice,
+    saveFailed, saveMoved, retrySave, deskNote, clearDeskNote: () => setDeskNote(null), positionNotice,
     tacticsFailed, retryTactics: () => { reloadToRetryChunk(); },
     bootError, bootNoun, retryBoot,
     startWait, retryStart, startWithoutList,
