@@ -168,9 +168,14 @@ export default function AcademyPanel({ visible = true, stylesReady = false, onSt
     accent: canMoveUp(s),
   });
 
+  const facility = FACILITIES.find(f => f.id === panel);
+  const saveNotice = academySaveBlocked && (
+    <p role="alert" className="mb-2 rounded-xl border border-destructive/40 bg-destructive/10 p-3 text-xs">The academy could not save that change. Free some browser storage, then try again.</p>
+  );
+
   return (
     <div data-academy-panel>
-      {academySaveBlocked && <p role="alert" className="mb-2 rounded-xl border border-destructive/40 bg-destructive/10 p-3 text-xs">The academy could not save that change. Free some browser storage, then try again. Your player stayed where he was.</p>}
+      {!facility && saveNotice}
       <div className="text-center mb-3">
         <div className="inline-flex items-center gap-1.5 mt-1 text-xs font-bold text-foreground bg-secondary rounded-full px-3 py-0.5">
           {region.emoji} {region.name}
@@ -309,7 +314,8 @@ export default function AcademyPanel({ visible = true, stylesReady = false, onSt
         </div>
       ) : (
         <div className="space-y-2">
-          <HubPanelHeader title={FACILITIES.find(f => f.id === panel)!.label} onBack={() => setPanel(null)} />
+          <HubPanelHeader title={facility!.label} onBack={() => setPanel(null)} />
+          {saveNotice}
           <Suspense fallback={<p data-no-prerender role="status" className="min-h-48 p-3 text-sm text-muted-foreground">Opening facility...</p>}>
             <AcademyFacilityPanel s={s} panel={panel} cap={cap} doBuy={doBuy} />
           </Suspense>

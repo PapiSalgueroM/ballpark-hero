@@ -1,3 +1,11 @@
+## 2026-11-11 Wonderkid Factory facility purchase saves
+
+Coaching, Scouting, Dorms and Agent upgrades now save the new level and cash together in Wonderkid Factory and Stadium Tycoon's Academy. If storage refuses the write, the original price and balance remain and a notice beside the upgrade explains how to retry.
+
+The paired 390px replay showed Level 1 and $55 on the previous build while storage held Level 0 and $100. The candidate kept Level 0 and $100 under refusal, then saved Level 1 and $55 on one successful retry. Both routes restored the exact save after a cold reload. Both mounted regressions failed before the fix and all 40 scoped tests passed.
+
+Application types, production build, Wonderkid, Save Fence and Tycoon Packs sims, 15 output checks and 16 route caps passed.
+
 ## 2026-11-11 Wonderkid Factory prospect sale saves
 
 Prospect sales use the same commit path as first-team sales. The player and fee change together after the academy save succeeds. If storage refuses it, the prospect remains available and the existing notice explains that the sale can be tried again.
