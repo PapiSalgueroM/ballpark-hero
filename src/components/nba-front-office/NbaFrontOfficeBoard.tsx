@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { lazy, Suspense, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { NbaRotationPanel } from './NbaRotationPanel';
 import { nbaSetRotationSlot, nbaAutoRotation } from '@/lib/nbaRotation';
 import { DraftNightCard } from '@/components/front-office-shared/DraftNightCard';
@@ -86,6 +86,7 @@ type Phase = 'pick' | 'hub' | 'draft' | 'recap' | 'fired';
 type Tab = 'team' | 'market' | 'trade' | 'round' | 'standings';
 
 const SAVE_KEY = 'nba-front-office-save-v1';
+const SaveMovedNotice = lazy(() => import('@/components/SaveMovedNotice'));
 /* Round 631: what the market and the trade screen say about a man you let go this season. */
 const CUT_SAID = 'You waived him this season.';
 
@@ -160,10 +161,6 @@ export default function NbaFrontOfficeBoard() {
   const startPending = useRef(false);
   const [startError, setStartError] = useState('');
   const alive = useRef(true);
-  useEffect(() => {
-    alive.current = true;
-    return () => { alive.current = false; };
-  }, []);
   /* Round 204: the hub is tiles now, so null means the hub itself and a
      tab key means you have opened that box. Club Manager's Round 74 rule,
      brought to the four GM games. */
@@ -172,6 +169,8 @@ export default function NbaFrontOfficeBoard() {
   const [league, setLeague] = useState<NbaLeague | null>(null);
   const [saveWriteFailed, setSaveWriteFailed] = useState(false);
   const pendingSave = useRef<string | null>(null);
+  const committedSave = useRef<string | null>(null);
+  const [saveMoved, setSaveMoved] = useState(false);
   const [rotationOpen, setRotationOpen] = useState(false);
   const rotationOpener = useRef<HTMLButtonElement>(null);
   const rotationReturn = useRef(false);
@@ -242,9 +241,32 @@ export default function NbaFrontOfficeBoard() {
     return buildOwnerMandate(strengthRank(strengths, team), Object.keys(lg.teams).length, defendingChamp, NBA_WORDS, lg.season, tilt);
   };
 
+  const checkSaveMoved = useCallback(() => {
+    try {
+      if (localStorage.getItem(SAVE_KEY) === committedSave.current) return false;
+    } catch { return false; /* The save attempt handles a storage refusal. */ }
+    setSaveMoved(true);
+    return true;
+  }, []);
+
+  useEffect(() => {
+    alive.current = true;
+    const onStorage = (event: StorageEvent) => {
+      if (event.key === SAVE_KEY || event.key === null) checkSaveMoved();
+    };
+    window.addEventListener('storage', onStorage);
+    window.addEventListener('pageshow', checkSaveMoved);
+    return () => {
+      alive.current = false;
+      window.removeEventListener('storage', onStorage);
+      window.removeEventListener('pageshow', checkSaveMoved);
+    };
+  }, [checkSaveMoved]);
+
   useEffect(() => {
     try {
       const raw = localStorage.getItem(SAVE_KEY);
+      committedSave.current = raw;
       if (!raw) return;
       const s = JSON.parse(raw) as SaveShape;
       if (!s.league || !s.myTeam) return;
@@ -308,13 +330,14 @@ export default function NbaFrontOfficeBoard() {
 
   const retrySave = useCallback(() => {
     const bytes = pendingSave.current;
-    if (bytes === null) return;
+    if (bytes === null || !alive.current || checkSaveMoved()) return;
     try {
       localStorage.setItem(SAVE_KEY, bytes);
+      committedSave.current = bytes;
       pendingSave.current = null;
       setSaveWriteFailed(false);
     } catch { setSaveWriteFailed(true); }
-  }, []);
+  }, [checkSaveMoved]);
 
   const persist = useCallback((patch: Partial<SaveShape>, lg: NbaLeague | null, team: string) => {
     if (!lg) return;
@@ -356,11 +379,11 @@ export default function NbaFrontOfficeBoard() {
   };
 
   const start = async (abbr: string) => {
-    if (startPending.current) return;
+    if (startPending.current || checkSaveMoved()) return;
     startPending.current = true; setStarting(abbr); setStartError('');
     try {
     const { NBA_OPENING_RATINGS } = await import('@/data/nbaOpeningRatings');
-    if (!alive.current) return;
+    if (!alive.current || checkSaveMoved()) return;
     const lg = initNbaLeague(Math.random, NBA_OPENING_RATINGS);
     const m = mandateFor(lg, abbr, false);
     setLeague(lg); setMyTeam(abbr); setPhase('hub'); setTab(null);
@@ -433,7 +456,7 @@ export default function NbaFrontOfficeBoard() {
     : pr.grade;
 
   const playRound = () => {
-    if (!league || !my) return;
+    if (!league || !my || checkSaveMoved()) return;
     /* Round 195: a played round counts as playing TODAY, the same per-session mark
        Club Manager has had since Round 157. Unscored on purpose: the
        scored completion stays the title. */
@@ -860,7 +883,9 @@ export default function NbaFrontOfficeBoard() {
   };
 
   const reset = () => {
+    if (checkSaveMoved()) return;
     localStorage.removeItem(SAVE_KEY);
+    committedSave.current = null;
     pendingSave.current = null;
     setSaveWriteFailed(false);
     setRotationOpen(false); rotationReturn.current = false;
@@ -899,7 +924,11 @@ export default function NbaFrontOfficeBoard() {
     },
   } : null;
 
-  const saveNotice = saveWriteFailed && (
+  const saveNotice = saveMoved ? (
+    <Suspense fallback={null}>
+      <SaveMovedNotice message="This franchise moved on in another tab. Reload to carry on." />
+    </Suspense>
+  ) : saveWriteFailed && (
     <div role="alert" data-no-prerender className="rounded-xl border border-destructive/40 bg-destructive/10 p-3 text-xs">
       <p>Franchise save failed. Keep this page open and retry.</p>
       <button type="button" onClick={retrySave} className="mt-2 min-h-11 min-w-11 rounded-full border border-destructive/50 px-3 font-bold">Retry save</button>

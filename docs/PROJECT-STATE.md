@@ -20329,3 +20329,9 @@ The compiled baseline advanced a new Celtics franchise to Round 2 after a refuse
 The new mounted regression reproduced the missing retry on the baseline. The updated board passed 97 tests across 13 Front Office suites, including two refused rounds, a refused retry, exact Round 3 restoration, a normal later save and abandoning the franchise.
 
 App types, production build, all 15 output checks and all 16 existing route caps passed. NBA Front Office measured 396.6 KiB against 397 KiB. A compiled Chromium run at 390 × 844 verified the exact warning text and a reload into Round 3 with the recovered bytes, plus an unrelated storage marker and zero page errors.
+
+## 2026-11-11 NBA Front Office stale-tab protection
+
+The Retry save draft is the base for this follow-up. Two compiled Celtics tabs reproduced a rollback from Round 3 to Round 2 through both stale Play and stale Retry. Stale Abandon deleted the newer franchise. The board now compares its last committed or loaded save bytes before play, writes and deletion, and prompts for a reload when the franchise has moved.
+
+All three 390 by 844 touch replays kept exact Round 3 bytes and reloaded the current franchise. A refused write left its peer playable, a current retry saved Round 4, and current Abandon still cleared the franchise. Seventy tests in eleven suites, app types, production build, 15 output checks and all 16 existing caps passed. NBA Front Office measured 396.8 KiB. These checks cover sequential tab actions.
