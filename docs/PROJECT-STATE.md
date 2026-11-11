@@ -1,3 +1,9 @@
+## 2026-11-11: NBA Perfect Season hides draft rankings in Hard
+
+Hard lists draft cards by player name while ratings are hidden. Classic and Daily keep their rating order. The draft still uses the same players, slot eligibility and ratings for the season simulation.
+
+The mounted regression failed on main only in Hard, where the list exposed the same rating order as Classic. The 390px production replay held the original six wheel draws, 67-15 result, 89.8 overall, 1-in-990,000 odds and saved best. App types, the production build, 42 scoped tests, 15 output checks, the odds harness and all 16 existing route caps passed.
+
 ## 2026-11-07: Club Manager historical roster counts live
 
 [PR #532](https://github.com/PapiSalgueroM/ballpark-hero/pull/532) published from main `c3b5ca4afaf9b4dadcd748f340e8e8e3e4a1a1dd`, App tree `133fcd3d26a4d237178e5c7efee723048da0aef2`, Lovable deployment `510b1df1-2172-42c0-90f9-d9f9c997b840`.
