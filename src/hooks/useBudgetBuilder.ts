@@ -6,6 +6,7 @@ import {
 } from '@/lib/squadDeal';
 import { simulateSeries, type SeriesResult } from '@/lib/dartDraft';
 import { dailyIndex, getTodayET } from '@/lib/dateUtils';
+import { normalizeName } from '@/lib/playerSearch';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 
 /**
@@ -219,12 +220,12 @@ export function useBudgetBuilder(): BudgetBuilderState {
     if (!slot) return [];
     const currentCost = squad[activeSlot]?.marketValue ?? 0;
     const budgetForSlot = remaining + currentCost;
-    const q = search.trim().toLowerCase();
+    const q = normalizeName(search);
     return topicPool
       .filter(p => slot.allowed.includes(p.position))
       .filter(p => !usedNames.has(p.name) || squad[activeSlot]?.name === p.name)
       .filter(p => p.marketValue <= budgetForSlot)
-      .filter(p => (q ? p.name.toLowerCase().includes(q) || p.club.toLowerCase().includes(q) : true))
+      .filter(p => !q || normalizeName(p.name).includes(q) || normalizeName(p.club).includes(q))
       .sort((a, b) => b.marketValue - a.marketValue)
       .slice(0, 60);
   }, [activeSlot, formation, topicPool, usedNames, squad, remaining, search]);

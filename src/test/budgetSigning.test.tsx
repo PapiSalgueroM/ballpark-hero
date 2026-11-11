@@ -65,6 +65,31 @@ const field = (view: ReturnType<typeof render>, label: string) => within(view.co
 const sign = (view: ReturnType<typeof render>, value: Player, index = 0) => { open(view, index); preview(view, value); confirm(view); };
 
 describe('Budget Builder signing decisions', () => {
+  it('finds accented names and clubs from plain keyboard input within signing limits', async () => {
+    const keeper = { ...player('Iñaki Østby', 'GK', 40), club: 'Atlético Fixture' };
+    pool = [
+      keeper,
+      { ...keeper, name: 'Østby Two', marketValue: 1001 },
+      { ...keeper, name: 'Østby Three', position: 'ST' },
+    ];
+    const view = await start();
+    open(view);
+    const shortlist = within(view.getByRole('region', { name: 'Signing shortlist' }));
+    const search = shortlist.getByRole('textbox');
+    const card = { name: 'Preview signing Iñaki Østby for $40M' };
+    for (const value of ['Iñaki Østby', '  INAKI  OSTBY  ', 'Atletico']) {
+      fireEvent.change(search, { target: { value } });
+      expect(shortlist.getAllByRole('button', { name: /^Preview signing/ }))
+        .toEqual([shortlist.getByRole('button', card)]);
+    }
+    fireEvent.click(shortlist.getByRole('button', card));
+    confirm(view);
+    expect(boundary.signs).toHaveBeenCalledExactlyOnceWith(keeper);
+    expect(slot(view)).toHaveAccessibleName('GK slot 1: Iñaki Østby');
+    expect(boundary.state!.remaining).toBe(960);
+    expect(recordCompletion).not.toHaveBeenCalled();
+  });
+
   it('previews exact existing values without spending and cancels back to the original candidate', async () => {
     const view = await start(); open(view);
     expect(view.getByRole('textbox')).toHaveFocus();
