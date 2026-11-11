@@ -8,6 +8,14 @@ Select a historical club to see how many players are recorded in its roster snap
 
 Next league work: the Ekstraklasa intake verifies all 18 current clubs, including held Legia Warsaw. The proposed 17 additions still need the dated pool integration, load timing and measured size check. Historical player population and NBA/NFL draft intake remain open.
 
+## 2026-11-11 Soccer Gauntlet Draft roster retry
+
+Starting a draft now shows the existing retry screen if the current player pool cannot fill a position. A completed Daily can still open from its saved result. Drafts from a complete pool use their existing selection order and seed.
+
+The compiled 390px original accepted a 448-player fixture without goalkeepers and threw when Daily started. The candidate showed Try again and dealt the original 55 cards when the complete feed returned. The 48-point result and all 731 saved bytes matched exactly, with one completion. A cold reload with the partial feed still opened the finished Daily. Both Daily and Unlimited mounted regressions failed before the change and passed afterward.
+
+All 113 scoped tests, four game and Daily reload sims, app types, production build, 15 output checks and 16 existing route caps passed. The product changes combine with the Daily draft fixes in PR571 and PR589.
+
 ## 2026-11-07: Soccer Career historical arrivals from 2010 and 2015 live
 
 [PR #529](https://github.com/PapiSalgueroM/ballpark-hero/pull/529) published from main `cef43e538e2266974cc4d2e96eb5996a6e2bdce9`, App tree `5f6ef45062b696e0eea44006093f5824bd02ff7b`, Lovable deployment `d1268cef-456a-487f-80e2-9d1edba677bb`.
