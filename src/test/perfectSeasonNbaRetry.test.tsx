@@ -1,4 +1,4 @@
-import { act, cleanup, fireEvent, render, screen } from '@testing-library/react';
+import { act, cleanup, fireEvent, render, screen, within } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
@@ -146,4 +146,29 @@ describe('NBA Perfect Season recoverable archive failures', () => {
     const second = await finish(); expect(second).toEqual(first); expect(evidence.simulations).toHaveLength(2);
     expect(recordCompletion).toHaveBeenCalledTimes(2); expect(evidence.squadCalls).toHaveLength(12);
   });
+});
+
+it.each([
+  ['Classic', ['PG', 'SG', 'SF', 'PF', 'C', 'SIXTH', 'Reserve']],
+  ['Hard', ['C', 'PF', 'PG', 'Reserve', 'SF', 'SG', 'SIXTH']],
+  ['Daily', ['PG', 'SG', 'SF', 'PF', 'C', 'SIXTH', 'Reserve']],
+] as const)('%s shows the intended order for the same archived squad', async (mode, order) => {
+  const squad = evidence.squad as SpinSquad;
+  const players = squad.players.map((player, index) => ({ ...player, rating: 99 - 5 * index }));
+  evidence.squad = { ...squad, players };
+  renderPage();
+  await choose(mode);
+  await spin();
+
+  const cards = screen.getAllByRole('button', { name: /Retry Fixture (PG|SG|SF|PF|C|SIXTH|Reserve)\b/ });
+  expect(cards.map(card => within(card).getByText(/^Retry Fixture/).textContent))
+    .toEqual(order.map(slot => `Retry Fixture ${slot}`));
+  for (const player of players) {
+    const card = screen.getByRole('button', { name: new RegExp(`\\b${player.name}\\b`) });
+    expect(within(card).getByText(mode === 'Hard' ? '??' : String(player.rating))).toBeVisible();
+  }
+
+  await pick('PG');
+  expect(screen.getByRole('button', { name: 'Next spin' })).toBeVisible();
+  expect(within(screen.getByRole('complementary')).getByText('Retry Fixture PG')).toBeVisible();
 });

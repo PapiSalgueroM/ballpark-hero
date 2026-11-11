@@ -100,6 +100,11 @@ const PerfectSeasonNba = () => {
   const overall = useMemo(() => teamOverall(NBA_SLOTS, picks), [picks]);
   const draftDone = openSlots.length === 0;
   const ratingsHidden = isRatingHidden(mode, phase === 'done');
+  const draftPlayers = phase === 'draft' && squad
+    ? ratingsHidden
+      ? [...squad.players].sort((a, b) => a.name.localeCompare(b.name) || a.playerId.localeCompare(b.playerId))
+      : squad.players
+    : null;
 
   // Countdown ticks while the daily result (or lock screen) is showing.
   useEffect(() => {
@@ -581,9 +586,9 @@ const PerfectSeasonNba = () => {
                 )}
               </div>
 
-              {phase === 'draft' && squad && (
+              {draftPlayers && (
                 <div className="space-y-1.5">
-                  {squad.players.map(p => {
+                  {draftPlayers.map(p => {
                     const draftable = canDraft(p);
                     const isSelected = selected?.playerId === p.playerId;
                     const options = p.eligible.filter(e => openSlots.includes(e));
