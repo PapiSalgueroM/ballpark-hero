@@ -100,6 +100,11 @@ const PerfectSeasonNfl = () => {
   const overall = useMemo(() => teamOverall(NFL_SLOTS, picks), [picks]);
   const draftDone = openSlots.length === 0;
   const ratingsHidden = isRatingHidden(mode, phase === 'done');
+  const draftPlayers = useMemo(() => {
+    if (!squad || !ratingsHidden) return squad?.players;
+    // The archive's rating order gives away the rankings in Hard mode.
+    return [...squad.players].sort((a, b) => a.name.localeCompare(b.name) || a.playerId.localeCompare(b.playerId));
+  }, [squad, ratingsHidden]);
 
   // Countdown ticks while the daily result (or lock screen) is showing.
   useEffect(() => {
@@ -581,9 +586,9 @@ const PerfectSeasonNfl = () => {
                 )}
               </div>
 
-              {phase === 'draft' && squad && (
+              {phase === 'draft' && draftPlayers && (
                 <div className="space-y-1.5">
-                  {squad.players.map(p => {
+                  {draftPlayers.map(p => {
                     const draftable = canDraft(p);
                     const isSelected = selected?.playerId === p.playerId;
                     const options = p.eligible.filter(e => openSlots.includes(e));
