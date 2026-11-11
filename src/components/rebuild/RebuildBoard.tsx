@@ -47,7 +47,7 @@ const SEAT_COUNTS = Array.from({ length: MAX_SEATS }, (_, i) => i + 1);
 
 export function RebuildBoard() {
   const {
-    phase, loading, clubs, club, preset, setPreset, chooseClub, reset,
+    phase, loading, loadFailed, retryLoad, clubs, club, preset, setPreset, chooseClub, reset,
     run,
     seats, seat, solo, setSeatKinds, takeSeat, passOn, scoreboard, sharedSeason,
     startingXi, startRating, currentRating, target, budget, spendCeiling, finalFunds, objectives, grade, shareText,
@@ -86,6 +86,21 @@ export function RebuildBoard() {
       setTimeout(() => setCopied(false), 2000);
     } catch { /* clipboard blocked */ }
   };
+
+  if (loadFailed) {
+    return (
+      <div data-no-prerender className="mx-auto max-w-2xl px-4 py-16 text-center">
+        <p role="alert" className="text-sm text-muted-foreground">Couldn’t load the clubs or players.</p>
+        <button
+          type="button"
+          onClick={retryLoad}
+          className="mt-4 min-h-11 rounded-xl bg-primary px-5 font-bold text-primary-foreground"
+        >
+          Try again
+        </button>
+      </div>
+    );
+  }
 
   if (loading && phase === 'pick-club') {
     return (
