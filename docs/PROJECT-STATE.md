@@ -20321,3 +20321,11 @@ Actual independent seven-arm proof is7eadbca71e1e351741802f8f9e8b9ac1852e4b957ec
 Native admission: 69f420492bd29d81667ad18b3ed98209473e49f77e33a7e8f3eb6788e0acebe5. Deployment: 2d231ee7-24b2-4940-af8d-5908d26371e6. Public admission: 147361f50c8e3db9c6583009a045a7d79c22c8a680d2fadb171826ff3d3b6c89. Full source, provenance, artifact identities and the exact nine-path nonruntime bridge are in [the dated plan](plans/2026-11-05-soccer-four-first-team-entries.md).
 
 SC-36 remains partial. This does not add leagues, rosters or a complete evolving population. Next owner priority is more Soccer Career/Club Manager teams and leagues, preceded by a measured Team-picker UI cut if needed for the unchanged CM cap. CM47, LeagueSeasons582, measured NFL37/NBA25 golden differences and the separately triaged PR502 reds remain unwaived. The first SC4 build stopped at reader18; it is not relabelled green.
+
+## 2026-11-11: NBA Front Office save retry
+
+The compiled baseline advanced a new Celtics franchise to Round 2 after a refused storage write. Reload restored Round 1 and the board gave no warning. The board now keeps the newest attempted save in memory, shows a save failure warning and lets the player retry those exact bytes. A later accepted save or abandoning the franchise clears the warning. NBA Front Office retains its existing last-writer behavior across tabs.
+
+The new mounted regression reproduced the missing retry on the baseline. The updated board passed 97 tests across 13 Front Office suites, including two refused rounds, a refused retry, exact Round 3 restoration, a normal later save and abandoning the franchise.
+
+App types, production build, all 15 output checks and all 16 existing route caps passed. NBA Front Office measured 396.6 KiB against 397 KiB. A compiled Chromium run at 390 × 844 verified the exact warning text and a reload into Round 3 with the recovered bytes, plus an unrelated storage marker and zero page errors.
