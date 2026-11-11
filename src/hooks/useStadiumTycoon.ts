@@ -15,7 +15,7 @@ import {
   offlineEarnings, serializeTycoon, deserializeTycoon, TYCOON_SAVE_KEY,
   activateBoost, hire, payrollPurchase, catchGolden, rollGoldenKind, goldenActive, ACH_BONUS,
   GOLDEN_INFO, fmtMoney, buyPerk, perkById, setClubName, GOLDEN_CATCH_SEC, GOLDEN_MEAN_GAP_SEC, HYPE_MULT,
-  awaySecondsOf, playAwayMatchdays, AWAY_MATCHDAY_SEC, leaguePosition, leagueShape,
+  awaySecondsOf, playAwayMatchdays, AWAY_GRACE_SEC, AWAY_MATCHDAY_SEC, leaguePosition, leagueShape,
   setPieceOffer, beginSetPiece, awardSetPieceGoal,
   setTicketPolicy,
 } from '@/lib/stadiumTycoon';
@@ -228,6 +228,7 @@ export function useStadiumTycoon(getEdge?: () => number) {
   useEffect(() => {
     let raf = 0;
     let last = performance.now();
+    let lastWall = Date.now();
     let acc = 0;
     let sinceSave = 0;
     /* Round 1543: milestones and badges take turns on one spot. Each waits in
@@ -254,6 +255,15 @@ export function useStadiumTycoon(getEdge?: () => number) {
     const step = (t: number) => {
       if (movedRef.current) return;
       release();
+      const now = Date.now();
+      // Device sleep can stop frames without changing the tab's visibility.
+      if (now - Math.max(lastWall, paidUntilRef.current) >= AWAY_GRACE_SEC * 1000 && document.visibilityState !== 'hidden') {
+        settleAway();
+        last = t;
+        acc = 0;
+        sinceSave = 0;
+      }
+      lastWall = now;
       const dt = Math.min(2, (t - last) / 1000);
       last = t;
       acc += dt;

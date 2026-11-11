@@ -20342,3 +20342,11 @@ Compiled 390px Chromium originally reverted Premium to Community when the older 
 All 53 focused cases, app types, the production build, 15 output checks and 16 unchanged route caps passed. Stadium measured 305.0 KiB compressed at the existing 305 KiB rounded limit.
 
 The seven scoped Tycoon sims passed. Sale Review retained all 22 controls and 84 healthy comparisons, and Loads retained all 11 controls and nine V1-compatible saves. The two changed Gear controls and the Set Piece opening control failed at their intended runtime assertions.
+
+## 2026-11-11 Stadium Tycoon visible-tab wake
+
+The first frame after a long pause now settles the existing away earnings and matchdays even when the tab stays visible. The shared 30-second floor, away rates and cap still apply. Live ticks resume from the wake frame.
+
+The compiled 390px baseline lost a 45-minute wall-clock gap with no visibility event. It showed no away receipt and played no away match. The candidate showed the receipt, banked one matchday and kept it through reload without paying it twice. Mounted tests held the same result whether the frame clock advanced or paused, and a 20-second gap stayed below the floor.
+
+All 43 scoped tests, both away sims and their controls, app types, production build, 15 output checks and 16 existing caps passed. Stadium measured 305.1 KiB compressed at the existing rounded limit.
