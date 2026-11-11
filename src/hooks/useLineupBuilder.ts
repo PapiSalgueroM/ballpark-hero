@@ -416,11 +416,14 @@ export function useLineupBuilder() {
         }
       );
       if (run !== evaluationRun.current) return;
-      const data = await resp.json();
+      const data = await resp.json() as Record<string, unknown> | null;
       if (run !== evaluationRun.current) return;
       
-      if (!resp.ok) {
-        // AI referee down/out of quota -> offline judge, never a dead-end
+      if (!resp.ok
+        || typeof data?.rating !== 'string' || !data.rating.trim()
+        || typeof data.analysis !== 'string' || !data.analysis.trim()
+        || (data.headline != null && typeof data.headline !== 'string')) {
+        // An unavailable referee or unusable verdict goes to the offline judge.
         const local = await localEvaluateSoccerXI(filledSlotsArray.map(s => s.playerName), call.signal);
         if (run !== evaluationRun.current) return;
         setVerdict(local);
@@ -428,15 +431,11 @@ export function useLineupBuilder() {
         return;
       }
       
-      if (!data.rating || !data.analysis) {
-        setVerdict({
-          rating: data.rating || 'Mid-Table 😐',
-          headline: data.headline || 'Squad evaluated',
-          analysis: data.analysis || 'Your squad has been evaluated.',
-        });
-      } else {
-        setVerdict(data);
-      }
+      setVerdict({
+        rating: data.rating,
+        headline: typeof data.headline === 'string' ? data.headline : '',
+        analysis: data.analysis,
+      });
       setPhase('result');
     } catch (err) {
       if (run !== evaluationRun.current) return;

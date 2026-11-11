@@ -1,3 +1,11 @@
+## 2026-11-11: Build Your XI evaluation response
+
+Build Your XI checks that the referee supplied readable rating and analysis text. Empty and malformed responses use the existing bounded market-value fallback.
+
+The compiled 390px base showed Mid-Table for an empty HTTP 200 and crashed on a structured rating. The candidate used the same 11 market rows and rated both fixture XIs at 70, with one normal completion and no page errors in each case. All three submitted XIs matched their original inputs. The valid verdict displayed the original analysis with zero fallback reads.
+
+This builds on the evaluation deadline in PR625. All nine focused cases, four original-first regressions, the Fit and Validator Client sims, app types, production build, 15 output checks and 16 route-size caps passed.
+
 ## 2026-11-07: Club Manager historical roster counts live
 
 [PR #532](https://github.com/PapiSalgueroM/ballpark-hero/pull/532) published from main `c3b5ca4afaf9b4dadcd748f340e8e8e3e4a1a1dd`, App tree `133fcd3d26a4d237178e5c7efee723048da0aef2`, Lovable deployment `510b1df1-2172-42c0-90f9-d9f9c997b840`.
