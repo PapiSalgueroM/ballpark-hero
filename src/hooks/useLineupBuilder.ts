@@ -178,9 +178,10 @@ export function useLineupBuilder() {
 
   const selectPosition = useCallback((index: number) => {
     if (filledSlots.has(index)) return;
+    if (selectedPositionIndex !== index) cancelValidation();
     setSelectedPositionIndex(index);
     setValidationError(null);
-  }, [filledSlots]);
+  }, [filledSlots, selectedPositionIndex, cancelValidation]);
 
   const startSpin = useCallback(() => {
     setIsSpinning(true);
