@@ -78,12 +78,8 @@ function handBack(league: NbaLeague, h: HeldArrival, notes: readonly string[], k
     if (!cutPlayer(cut, waived, worst.id, NBA_ROSTER_MIN)) break;
     rollDeadCap(cut);
     club.deadCap = [...(club.deadCap ?? []), ...(cut.deadCap ?? [])];
-    /* The summer's free agent step, as nbaOffseason gives every man it waived:
-       a year on, the decline from 32, and his ask in next season's money (the
-       league's cap is next season's by now). */
+    /* The roster pass already aged him. Set his free agent ask at the new cap. */
     for (const fa of waived) {
-      fa.age += 1;
-      if (fa.age >= 32) fa.ovr = Math.max(64, fa.ovr - 1);
       fa.salary = nbaSalaryFor(fa.ovr, league.cap);
       league.freeAgents.push(fa);
     }

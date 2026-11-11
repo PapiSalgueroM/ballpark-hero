@@ -1,3 +1,11 @@
+## 2026-11-11: NBA Front Office offseason age draft
+
+Players who reach the free-agent market during the offseason keep the age and rating already calculated on their roster. The same rule applies when a club waives a replacement to honor an offer sheet. Players who enter the offseason as free agents still age once. The market still uses the next season's cap for asks.
+
+On a 390px replay, a real earned draft and offseason took the saved 2027 Atlanta franchise to the 2028 market. Simulated Tyrese Haliburton went from age 33 and rating 81 to age 34 and rating 79. Main showed age 35 and rating 78 on the same 402 draws. An incumbent market player still went from 31 to 32. The corrected save reloaded byte for byte.
+
+Three focused tests cover expiry, automatic roster waivers, and the protected offer-sheet replacement. The nine refreshed GM Desk hashes record from `c3c34085f`. Each seed's first difference has the same 30 market IDs in order, all other league bytes and the same draws. The three first summers correct 72 ages, 16 ratings, and six asks. Main fails all nine refreshed hashes. App types, production build, the 100-season GM Desk run, Earned Draft, Luxury Tax, Front Office Cuts, 15 offline output readers, and all 16 unchanged route caps passed. NBA Front Office measured 396.4 KiB against a 397 KiB cap.
+
 ## 2026-11-07: Club Manager historical roster counts live
 
 [PR #532](https://github.com/PapiSalgueroM/ballpark-hero/pull/532) published from main `c3b5ca4afaf9b4dadcd748f340e8e8e3e4a1a1dd`, App tree `133fcd3d26a4d237178e5c7efee723048da0aef2`, Lovable deployment `510b1df1-2172-42c0-90f9-d9f9c997b840`.
