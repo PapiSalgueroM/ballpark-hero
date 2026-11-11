@@ -213,15 +213,17 @@ export function mlbCapRoom(t: MlbGmTeam, cap: number): number {
   return Math.round((cap - mlbCapUsed(t)) * 10) / 10;
 }
 
+const MLB_STRENGTH_SLOTS = { bats: 8, rot: 3, pen: 2 };
+
 /** Round 829: the men the strength reads, best healthy first: 8 bats, 3
     starters, 2 relievers. Lifted out of mlbStrength unchanged so the roster
     screen and the opening payroll read the same men the sim does. A bench
     man counts only when he is better than a starter or a starter is hurt. */
 export function mlbStrengthUnits<T extends { pos: string; ovr: number; out: number }>(t: { players: T[] }): { bats: T[]; rot: T[]; pen: T[] } {
   const healthy = t.players.filter(p => p.out === 0);
-  const bats = healthy.filter(p => !isPitcher(p)).sort((a, b) => b.ovr - a.ovr).slice(0, 8);
-  const rot = healthy.filter(p => p.pos === 'SP').sort((a, b) => b.ovr - a.ovr).slice(0, 3);
-  const pen = healthy.filter(p => p.pos === 'RP' || p.pos === 'CL').sort((a, b) => b.ovr - a.ovr).slice(0, 2);
+  const bats = healthy.filter(p => !isPitcher(p)).sort((a, b) => b.ovr - a.ovr).slice(0, MLB_STRENGTH_SLOTS.bats);
+  const rot = healthy.filter(p => p.pos === 'SP').sort((a, b) => b.ovr - a.ovr).slice(0, MLB_STRENGTH_SLOTS.rot);
+  const pen = healthy.filter(p => p.pos === 'RP' || p.pos === 'CL').sort((a, b) => b.ovr - a.ovr).slice(0, MLB_STRENGTH_SLOTS.pen);
   return { bats, rot, pen };
 }
 
@@ -234,9 +236,14 @@ export function mlbSimReads(t: { players: MlbGmPlayer[] }): string[] {
 /** Strength: lineup 55%, rotation 33%, bullpen 12%; IL players excluded. */
 export function mlbStrength(t: MlbGmTeam): number {
   const { bats, rot, pen } = mlbStrengthUnits(t);
-  const avg = (xs: MlbGmPlayer[], fallback: number) =>
-    xs.length ? xs.reduce((s, p) => s + p.ovr, 0) / xs.length : fallback;
-  return avg(bats, 62) * 0.55 + avg(rot, 62) * 0.33 + avg(pen, 62) * 0.12;
+  const replacement = 62;
+  const avg = (xs: MlbGmPlayer[], slots: number) => {
+    const total = xs.reduce((sum, p) => sum + p.ovr, 0);
+    // A short unit in a full-roster save uses the existing replacement rating in each empty slot.
+    if (t.depth && xs.length < slots) return (total + (slots - xs.length) * replacement) / slots;
+    return xs.length ? total / xs.length : replacement;
+  };
+  return avg(bats, MLB_STRENGTH_SLOTS.bats) * 0.55 + avg(rot, MLB_STRENGTH_SLOTS.rot) * 0.33 + avg(pen, MLB_STRENGTH_SLOTS.pen) * 0.12;
 }
 
 /** Baseball is the high-variance sport: even great teams sit near .600.
