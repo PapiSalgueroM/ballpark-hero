@@ -1,3 +1,11 @@
+## 2026-11-11: Build Your XI cancels a pending pick when the slot changes
+
+Choosing a different open position cancels the prior player's check. The team and pick count stay in place while the player chooses for the new slot. Tapping the same slot keeps its check running.
+
+The original 390px replay accepted Trent Alexander-Arnold at left back after the player switched to goalkeeper. Mounted checks cover both deferred position history and a validator response, including a fresh goalkeeper pick before the old reply returns.
+
+The fixed production replay kept the new Courtois query while the earlier history reply arrived, then filled only goalkeeper. All 98 scoped tests, app types, production build, 15 output checks, the Build Your XI fit check and 16 route size caps passed.
+
 ## 2026-11-07: Club Manager historical roster counts live
 
 [PR #532](https://github.com/PapiSalgueroM/ballpark-hero/pull/532) published from main `c3b5ca4afaf9b4dadcd748f340e8e8e3e4a1a1dd`, App tree `133fcd3d26a4d237178e5c7efee723048da0aef2`, Lovable deployment `510b1df1-2172-42c0-90f9-d9f9c997b840`.
