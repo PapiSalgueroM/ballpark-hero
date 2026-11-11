@@ -1,3 +1,9 @@
+## 2026-11-11: Soccer Gauntlet Draft completion after Daily review
+
+Returning to the Soccer Gauntlet mode menu clears the finished run and resets completion tracking. Reviewing a saved Daily shows its original result without recording another completion. A fresh Unlimited draft finished within five seconds of that review records once.
+
+The mounted regression failed on main with one completion across the Daily and Unlimited drafts. The fixed build passed all 12 scoped tests, three phone browser paths, app types, the production build, 18 output and Gauntlet checks, and 16 route size caps. On the phone, the same-page review path recorded its fresh result after 3.2 seconds and preserved the Daily result and save bytes.
+
 ## 2026-11-07: Club Manager historical roster counts live
 
 [PR #532](https://github.com/PapiSalgueroM/ballpark-hero/pull/532) published from main `c3b5ca4afaf9b4dadcd748f340e8e8e3e4a1a1dd`, App tree `133fcd3d26a4d237178e5c7efee723048da0aef2`, Lovable deployment `510b1df1-2172-42c0-90f9-d9f9c997b840`.
