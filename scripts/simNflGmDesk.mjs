@@ -5,10 +5,9 @@
  * (src/lib/frontOffice.ts) and the desk exactly the way the board calls them
  * (FrontOfficeBoard.tsx), on full 53 man rosters as a new franchise has them,
  * with seeded draws, and checks:
- *   1  a save from before the desk plays to the identical league, season
- *      after season, as the engine did before this round (a fixture recorded
- *      from the pre-round engine), and opening the desk changes nothing in
- *      the league it opens on
+ *   1  a save with the desk off plays to its recorded full-roster league,
+ *      season after season, and opening the desk changes nothing in the
+ *      league it opens on
  *   2  over ten seeded seasons, every user man whose deal runs out has a
  *      recorded decision, and what happened to him is what it says: a kept
  *      man is still here (or retired), a man let go is gone; a man drafted
@@ -61,8 +60,10 @@
  *   nocapguard   the trade finder's accept skips the dead money cap check    (3)
  *   reliefnodead the package cap check forgets the dead money a leaver keeps (6)
  *   staletiles   an old save's Staff box claims an edge no game applies      (7)
- * Recording the fixture: SIM_NFL_GM_DESK_RECORD=<git ref of the engine before
- * this round> rewrites scripts/data/nflGmDeskFixture.json from that engine.
+ * Recording the fixture: SIM_NFL_GM_DESK_RECORD=<engine git ref> rewrites
+ * scripts/data/nflGmDeskFixture.json from that engine. The weekly starter
+ * upgrade fix changes the full-roster replay from its first added signing.
+ * The old-size exact replay lives in simNflFullRosters.
  *
  * MEASURED 2026-10-06 (remeasured after the review fixes: buyers became the
  * seed holders, which moved the prices and so the deals) on three seed sets
@@ -358,7 +359,7 @@ function seasonOff(lg, team, rng) {
 }
 
 /* ================================================================== */
-begin('1', 'a save from before the desk plays exactly as the engine did before this round');
+begin('1', 'a full-roster save with the desk off matches the recorded engine');
 /* First, before anything else mints an id, so the recorder and the replay
    walk the same id stream. */
 const ID_SEEDS = [11, 22, 33];
@@ -381,7 +382,7 @@ let idCompared = 0;
 for (const seed of ID_SEEDS) {
   for (let s = 0; s < ID_SEASONS; s++) {
     idCompared++;
-    if (fixture.hashes?.[seed]?.[s] !== played[seed][s]) fail(`seed ${seed} season ${s + 1}: the league is not the one the engine before this round played (${played[seed][s].slice(0, 10)} vs ${String(fixture.hashes?.[seed]?.[s]).slice(0, 10)})`);
+    if (fixture.hashes?.[seed]?.[s] !== played[seed][s]) fail(`seed ${seed} season ${s + 1}: the league differs from the recorded engine (${played[seed][s].slice(0, 10)} vs ${String(fixture.hashes?.[seed]?.[s]).slice(0, 10)})`);
   }
 }
 {
