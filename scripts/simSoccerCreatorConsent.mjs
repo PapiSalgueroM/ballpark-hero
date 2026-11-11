@@ -79,14 +79,20 @@ try {
       const rect = document.querySelector('[role="listbox"]')?.getBoundingClientRect();
       return rect && rect.top > -30 && rect.bottom > 0 && rect.top < innerHeight;
     });
-    const [{ y, height }, { y: panelTop }] = await Promise.all([menu.boundingBox(), banner.boundingBox()]);
+    const [{ x, y, width, height }, { y: panelTop }] = await Promise.all([menu.boundingBox(), banner.boundingBox()]);
+    if (index === 0) {
+      const viewportWidth = page.viewportSize().width;
+      assert(x >= 0 && x + width <= viewportWidth + 1, `Nationality options extend to ${x + width} on a ${viewportWidth}px screen`);
+    }
     assert(y + height <= panelTop + 1, `${placeholder} options end at ${y + height}, behind cookie choices at ${panelTop}`);
     await page.getByRole('option').filter({ hasText: name }).tap();
     await menu.waitFor({ state: 'hidden' });
-    assert.match(await page.getByRole('combobox').nth(index).innerText(), name);
+    const selected = await page.getByRole('combobox').nth(index).innerText();
+    assert.match(selected, name);
     assert(await banner.isVisible(), 'The cookie panel should still be visible');
     const chosen = await page.evaluate(() => localStorage.getItem('cookie-consent-v2') ?? localStorage.getItem('cookie-consent'));
     assert.equal(chosen, null, 'Selecting a creator option must leave consent unanswered');
+    console.log(`Selected ${selected.trim()}; menu bottom ${Math.round(y + height)}, cookie panel top ${Math.round(panelTop)}`);
   }
   console.log('PASS Soccer Career nationality, position and era are tappable with cookie choices unanswered at 344x643');
 } catch (error) {

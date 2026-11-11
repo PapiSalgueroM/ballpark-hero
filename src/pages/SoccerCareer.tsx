@@ -2222,13 +2222,13 @@ function CreationScreen({ playerName, setPlayerName, nationality, setNationality
         </div>
         <div className="space-y-1.5">
           <Label>Nationality</Label>
-          {/* Round 76: position="popper" pins the list BELOW the trigger with
+          {/* Round 76: Popper positions the list by the trigger with
               its own scroll, fixing his bug where the item-aligned popup shot
               off the top of the screen and cut off the first nations. Flag
               sits to the RIGHT of the name, exactly as he asked. */}
           <Select value={nationality} onValueChange={setNationality}>
             <SelectTrigger className="bg-muted/30"><SelectValue placeholder={<span>Choose nationality</span>} /></SelectTrigger>
-            <SelectContent position="popper" className="max-h-72" {...pickerBounds}>
+            <SelectContent className="max-h-72 max-w-[--radix-select-content-available-width]" {...pickerBounds}>
               {/* Round 453: over a hundred nations is a long scroll, so they
                   sit under their confederation, the way qualifying groups them. */}
               {groupByConfederation(NATIONALITIES, n => n).map(g => (
