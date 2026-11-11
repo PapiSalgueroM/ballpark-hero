@@ -1,3 +1,9 @@
+## 2026-11-11: Budget Builder keeps the Money XI tied to its market
+
+Shopping filters narrow the players available to sign. The Money XI comes from the selected market and formation, so changing a filter preserves the opponent and budget for an already built squad. The 2015 and 2007 markets still use their own pools.
+
+In the original 390px replay, changing a completed Today squad's shopping filter to Serie A lowered the Money XI from 88 to 84 and raised a fixed-seed Final from 81 to 96 points. The candidate kept the original All World opponent, $1,000M cap and 81-point result while filtering the keeper shortlist from 34 to six. Both historical fixtures matched their original lineups, opponents and caps. App types, the production build, 11 scoped tests, 16 output and signing checks, and all 16 existing route caps passed.
+
 ## 2026-11-07: Club Manager historical roster counts live
 
 [PR #532](https://github.com/PapiSalgueroM/ballpark-hero/pull/532) published from main `c3b5ca4afaf9b4dadcd748f340e8e8e3e4a1a1dd`, App tree `133fcd3d26a4d237178e5c7efee723048da0aef2`, Lovable deployment `510b1df1-2172-42c0-90f9-d9f9c997b840`.
