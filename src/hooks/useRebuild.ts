@@ -15,8 +15,8 @@ import type { RunState, ObjectiveView } from '@/lib/rebuildLoop';
 import * as table from '@/lib/rebuildTable';
 import type { TableState, TableData, SeatView, SeatKind } from '@/lib/rebuildTable';
 import {
-  clearRebuildSave, isFinishedTable, readRebuildSave, restoreTable, savedClubNames,
-  toSave, writeRebuildSave, type RebuildMove, type RebuildSession,
+  isFinishedTable, parseRebuildSave, readRebuildSaveBytes, restoreTable, savedClubNames,
+  toSave, writeRebuildSave, type RebuildMove, type RebuildSave, type RebuildSession,
 } from '@/lib/rebuildSave';
 import { markRestoredFinish } from '@/lib/restoredFinish';
 
@@ -61,6 +61,7 @@ export interface RebuildState {
   phase: Phase;
   loading: boolean;
   loadFailed: boolean;
+  saveConflict: boolean;
   retryLoad: () => void;
   clubs: RebuildClub[];
   club: RebuildClub | null;
@@ -153,6 +154,8 @@ export function useRebuild(): RebuildState {
   /* Nothing is written until a stored run has had its chance, or the first
      render would overwrite the save with an empty table. */
   const [restored, setRestored] = useState(false);
+  const [saveConflict, setSaveConflict] = useState(false);
+  const savedBytes = useRef<string | null>(null);
   const [spinning, setSpinning] = useState(false);
   const [thinking, setThinking] = useState(false);
   const [rivals, setRivals] = useState<RivalResult[] | null>(null);
@@ -195,39 +198,58 @@ export function useRebuild(): RebuildState {
     : tbl.phase === 'season' ? 'season'
     : run ? run.phase : 'pick-club';
 
+  // A tab may edit the window it read or last saved.
+  const canEditSave = useCallback(() => {
+    if (!restored || saveConflict) return false;
+    const current = readRebuildSaveBytes();
+    if (current === undefined || current === savedBytes.current) return true;
+    setSaveConflict(true);
+    return false;
+  }, [restored, saveConflict]);
+
+  const persist = useCallback((save: RebuildSave | null) => {
+    if (!canEditSave()) return false;
+    const written = writeRebuildSave(save);
+    if (written !== undefined) savedBytes.current = written;
+    return true;
+  }, [canEditSave]);
+
   /** A table move (a club pick, a window opening or shutting): the move lists
    *  ride along untouched, because the save reads those from the seats. */
   const setTable = useCallback((fn: (t: TableState) => TableState) => {
+    if (!canEditSave()) return;
     setSession(s => {
       const t = fn(s.table);
       return t === s.table ? s : { table: t, moves: s.moves };
     });
-  }, []);
+  }, [canEditSave]);
 
   /** Every action on the open window goes through here: no open window, no
    *  change. A move that changed the run is recorded against the seat that
    *  made it, which is what the save replays. */
   const act = useCallback((move: RebuildMove, fn: (r: RunState) => RunState) => {
+    if (!canEditSave()) return;
     setSession(s => {
       const t = table.updateRun(s.table, fn);
       if (t === s.table) return s;
       const turn = s.table.turn;
       return { table: t, moves: s.moves.map((list, i) => (i === turn ? [...list, move] : list)) };
     });
-  }, []);
+  }, [canEditSave]);
 
   const clubsPicked = tbl.seats.some(s => s.club);
   const setPreset = useCallback((p: RebuildPreset) => {
     // The restriction is a promise made before the window opens, never changed mid run.
-    setPresetState(prev => (clubsPicked ? prev : p));
-  }, [clubsPicked]);
+    if (!clubsPicked && canEditSave()) setPresetState(p);
+  }, [clubsPicked, canEditSave]);
 
   const setSeatKinds = useCallback((kinds: SeatKind[]) => {
+    if (!canEditSave()) return;
     setSession(s => {
       const t = table.configureSeats(s.table, kinds);
       return t === s.table ? s : { table: t, moves: t.seats.map(() => []) };
     });
-  }, []);
+  }, [canEditSave]);
 
   const chooseClub = useCallback((c: RebuildClub) => {
     setTable(t => table.pickClub(t, c, clubs));
@@ -274,7 +296,8 @@ export function useRebuild(): RebuildState {
      exactly. An unavailable squad or market leaves the save in place for a retry. */
   useEffect(() => {
     if (restored || clubs.length === 0) return;
-    const saved = readRebuildSave();
+    savedBytes.current = readRebuildSaveBytes() ?? null;
+    const saved = parseRebuildSave(savedBytes.current);
     if (!saved) { setRestored(true); return; }
     let cancelled = false;
     setLoading(true);
@@ -291,9 +314,7 @@ export function useRebuild(): RebuildState {
           return;
         }
         const back = restoreTable(saved, clubs, value);
-        if (!back) {
-          clearRebuildSave();
-        } else {
+        if (back) {
           /* A finish read back from storage is not a new finish (Round 399). */
           if (isFinishedTable(back.table)) markRestoredFinish('rebuild');
           setPresetState(saved.preset);
@@ -302,10 +323,7 @@ export function useRebuild(): RebuildState {
         }
         setRestored(true);
       } catch {
-        if (!cancelled) {
-          clearRebuildSave();
-          setRestored(true);
-        }
+        if (!cancelled) setRestored(true);
       } finally {
         if (!cancelled) setLoading(false);
       }
@@ -317,9 +335,8 @@ export function useRebuild(): RebuildState {
      interruption costs a spin and not a session. */
   useEffect(() => {
     if (!restored) return;
-    const save = toSave(session, preset);
-    if (save) writeRebuildSave(save); else clearRebuildSave();
-  }, [restored, session, preset]);
+    persist(toSave(session, preset));
+  }, [restored, session, preset, persist]);
 
   /* A one seat table opens the moment its squad is in; so does a CPU seat,
      which plays its whole window in that same call. A human seat waits for
@@ -330,7 +347,7 @@ export function useRebuild(): RebuildState {
     const next = tbl.seats[tbl.turn];
     if (!next || next.run) return;
     if (tbl.seats.length === 1 || next.kind === 'cpu') setTable(t => table.openWindow(t, dataReady, clubs));
-  }, [dataReady, tbl, clubs]);
+  }, [dataReady, tbl, clubs, setTable]);
 
   const takeSeat = useCallback(() => {
     if (!dataReady) return;
@@ -355,13 +372,13 @@ export function useRebuild(): RebuildState {
 
   const spin = useCallback(() => {
     if (!run || run.phase !== 'spin' || spinning || run.spun !== null || run.deal || run.war) return;
-    if (run.settledCount >= run.order.length) return;
+    if (run.settledCount >= run.order.length || !canEditSave()) return;
     setSpinning(true);
     spinTimer.current = window.setTimeout(() => {
       setSpinning(false);
       act({ k: 'spin' }, loop.spinNext);
     }, 1200);
-  }, [run, spinning, act]);
+  }, [run, spinning, act, canEditSave]);
 
   const keepSpun = useCallback(() => { if (!spinning) act({ k: 'keep' }, loop.keep); }, [act, spinning]);
   const sellSpun = useCallback(() => { if (!spinning) act({ k: 'sell' }, loop.sell); }, [act, spinning]);
@@ -372,13 +389,14 @@ export function useRebuild(): RebuildState {
 
   const raiseWar = useCallback(() => {
     if (!run?.war || run.war.outcome !== 'live' || run.war.leader !== 'rival' || thinking) return;
+    if (!canEditSave()) return;
     act({ k: 'raise' }, loop.raise);
     setThinking(true);
     warTimer.current = window.setTimeout(() => {
       setThinking(false);
       act({ k: 'reply' }, loop.rivalReply);
     }, 700 + Math.floor(Math.random() * 500));
-  }, [run, thinking, act]);
+  }, [run, thinking, act, canEditSave]);
 
   const walkAway = useCallback(() => {
     if (thinking) return;
@@ -457,11 +475,11 @@ export function useRebuild(): RebuildState {
   }, [solo, run, clubs]);
 
   const reset = useCallback(() => {
+    if (!persist(null)) return;
     setSession(s => {
       const t = table.createTable(table.seatKindsOf(s.table), s.table.salt);
       return { table: t, moves: t.seats.map(() => []) };
     });
-    clearRebuildSave();
     setData(null);
     setSpinning(false);
     setThinking(false);
@@ -470,7 +488,7 @@ export function useRebuild(): RebuildState {
     seasonFor.current = null;
     if (warTimer.current) window.clearTimeout(warTimer.current);
     if (spinTimer.current) window.clearTimeout(spinTimer.current);
-  }, []);
+  }, [persist]);
 
   // readings
   const startingXi = useMemo(() => (run ? loop.xiOf(run) : []), [run]);
@@ -536,7 +554,7 @@ export function useRebuild(): RebuildState {
   }, [solo, tbl, run, startRating, currentRating, target, grade, finalFunds, rivals, season]);
 
   return {
-    phase, loading, loadFailed, retryLoad, clubs, club: seat?.club ?? null, preset, setPreset, chooseClub, reset,
+    phase, loading, loadFailed, saveConflict, retryLoad, clubs, club: seat?.club ?? null, preset, setPreset, chooseClub, reset,
     run,
     seats, seat, solo, setSeatKinds, takeSeat, passOn, scoreboard, sharedSeason: tbl.season,
     startingXi, startRating, currentRating, target, budget, spendCeiling, finalFunds, objectives, grade, shareText,

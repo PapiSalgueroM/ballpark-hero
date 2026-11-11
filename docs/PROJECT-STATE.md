@@ -1,3 +1,9 @@
+## 2026-11-11: Rebuild keeps newer saves across tabs
+
+If another tab has already changed the saved transfer window, Rebuild holds those saved bytes and offers to reload the window before the stale tab can play another move. The existing retry for unavailable roster data still protects the save. A normal reset clears the current window, and blocked storage still allows play.
+
+The original 390px browser run lost the first tab's manager-stage save when the second tab opened a different envelope. The candidate held all 242 bytes and restored the manager stage after the reload button and a cold reopen. App types, the production build, 13 scoped tests, four Rebuild checks, 15 output checks and all 16 existing route caps passed.
+
 ## 2026-11-07: Club Manager historical roster counts live
 
 [PR #532](https://github.com/PapiSalgueroM/ballpark-hero/pull/532) published from main `c3b5ca4afaf9b4dadcd748f340e8e8e3e4a1a1dd`, App tree `133fcd3d26a4d237178e5c7efee723048da0aef2`, Lovable deployment `510b1df1-2172-42c0-90f9-d9f9c997b840`.
