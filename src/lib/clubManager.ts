@@ -1783,6 +1783,8 @@ export interface IncomingBid {
   rival?: string;
   /** Round 94: they came because you listed him, not out of the blue. */
   fromListing?: boolean;
+  /** A permanent bid from your transfer list, even if you later unlist the player. */
+  listedSale?: true;
   /** Round 193: they met his release clause. The offer IS the clause to the
       decimal, reject is impossible, and an unanswered one executes itself
       on deadline day. You signed the exit door, they walked through it. */
@@ -11696,7 +11698,7 @@ export function acceptBid(career: CareerState, playerId: string): CareerState | 
 }
 
 /**
- * Reject a bid: half the time they come back once with ~15% more.
+ * Reject a bid: half the time they can come back once with ~15% more.
  * Round 94: turning down a bid for a player you yourself listed is the worst
  * of both worlds, and he takes it personally.
  */
@@ -11707,15 +11709,18 @@ export function rejectBid(career: CareerState, playerId: string): CareerState {
   /* Round 193: a met release clause cannot be rejected. The UI never shows
      the button; this is the engine keeping the promise anyway. */
   if (bid.clauseMet) return career;
-  if (bid.status === 'open' && Math.random() < 0.5) {
-    const improved: IncomingBid = {
-      ...bid,
-      offer: Math.round(bid.offer * 1.15 * 10) / 10,
-      status: 'improved',
-    };
-    return { ...career, incomingBids: bids.map(b => (b.playerId === playerId ? improved : b)) };
-  }
   const target = career.squad.find(p => p.id === playerId);
+  if (bid.status === 'open' && Math.random() < 0.5) {
+    const offer = Math.round(bid.offer * 1.15 * 10) / 10;
+    const listedSale = !bid.loan && (bid.listedSale || (bid.fromListing && target?.transferStatus === 'listed'));
+    const clubs = listedSale ? actingClubsByLeague(career).flat() : null;
+    const canPay = (name: string) => !clubs || clubs.some(club => club.name === name && club.budget >= offer);
+    if (canPay(bid.club)) {
+      const improved: IncomingBid = { ...bid, offer, status: 'improved' };
+      if (bid.rival && !canPay(bid.rival)) delete improved.rival;
+      return { ...career, incomingBids: bids.map(b => (b.playerId === playerId ? improved : b)) };
+    }
+  }
   const listed = target?.transferStatus === 'listed' || target?.transferStatus === 'loanListed';
   // Final rejection: the player wanted the move 40% of the time, and always
   // if you had already told him he was available.
@@ -11745,21 +11750,10 @@ function actingClubsByLeague(state: CareerState): ClubDef[][] {
   return worldLeagueDefs(state).map(l => playableClubs(l.id));
 }
 
-/** Every club that could plausibly come in for one of my players. */
-function buyerPool(state: CareerState): string[] {
-  // Round 146: bids for a 2010 player come from 2010 clubs.
-  if (state.eraId && isHistoricEra(state.eraId)) {
-    const leagues = ERA_LEAGUES[state.eraId] ?? [];
-    return leagues
-      .flatMap(l => l.clubs
-        .map(c => eraClubDefFor(c, state.eraId))
-        .sort((a, b) => a.expectation - b.expectation)
-        .slice(0, 8)
-        .map(c => c.name))
-      .filter(n => n !== state.clubName);
-  }
-  return worldLeagueDefs(state).flatMap(l => playableClubs(l.id).slice(0, 8).map(c => c.name))
-    .filter(n => n !== state.clubName);
+/** The top eight buyers in each league of this save's world. */
+function buyerPool(state: CareerState): ClubDef[] {
+  return actingClubsByLeague(state).flatMap(clubs => clubs.slice(0, 8))
+    .filter(club => club.name !== state.clubName);
 }
 
 /**
@@ -11894,7 +11888,7 @@ export function loanOutPlayer(
      November); what it cannot be is the start of a second paid trip. Checked
      before the pick below, so the refused path draws nothing. */
   if (p.loanOutSeason === career.season) return null;
-  const pool = buyerPool(career);
+  const pool = buyerPool(career).map(club => club.name);
   const club = toClub && toClub !== career.clubName ? toClub : pick(pool);
   /* Round 508: honour the number that was actually agreed. acceptBid used to
      recompute this from loanOutFee and throw bid.offer away, which was harmless
@@ -12048,7 +12042,8 @@ export function generateIncomingBids(state: CareerState, topUp = false): void {
     ? (state.incomingBids ?? []).filter(b => b.status === 'open' && state.squad.some(p => p.id === b.playerId))
     : [];
   const bids: IncomingBid[] = [...surviving];
-  const buyers = buyerPool(state);
+  const buyerClubs = buyerPool(state);
+  const buyers = buyerClubs.map(club => club.name);
   const taken = new Set<string>(surviving.map(b => b.playerId));
   const available = state.squad.filter(p => !p.onLoan && p.transferStatus !== 'blocked');
 
@@ -12101,27 +12096,36 @@ export function generateIncomingBids(state: CareerState, topUp = false): void {
      draw SKIPS when it exceeds the threshold, so the threshold IS the bid
      probability. The window-open rush stays strong (70 percent, close to the
      original engine), the NEW parts are the 35 percent weekly top-up and the
-     fact that open offers persist week to week. Together a man listed for a
-     whole 4 week window goes unbid about one time in a hundred, and that
-     matters more than it used to because the instant sell button is gone and
-     listing is now the ONLY way to move a player. */
+     fact that open offers persist week to week. A player stays listed when
+     nobody can afford that week's price, so a later top-up can try again. */
   for (const p of available.filter(x => x.transferStatus === 'listed')) {
     if (taken.has(p.id)) continue;
     if (Math.random() > (topUp ? 0.35 : 0.7)) continue;
     const base = sellValue(p);
-    const pool = buyers.filter(n => n !== state.clubName);
-    const club = pick(pool);
-    const contested = Math.random() < 0.3;
-    const rival = contested ? pick(pool.filter(n => n !== club)) : undefined;
-    const mult = contested ? 1.05 + Math.random() * 0.3 : 0.85 + Math.random() * 0.3;
+    // Keep the same draws for later offers even when this one has no buyer.
+    const buyerRoll = Math.random();
+    const contestRoll = Math.random() < 0.3;
+    const rivalRoll = contestRoll ? Math.random() : 0;
+    const spread = Math.random() * 0.3;
+    const offerAt = (multiplier: number) => Math.max(0.3, Math.round(base * (multiplier + spread) * 10) / 10);
+    const premiumOffer = offerAt(1.05);
+    const premiumBuyers = contestRoll ? buyerClubs.filter(club => club.budget >= premiumOffer) : [];
+    const contested = premiumBuyers.length >= 2;
+    const offer = contested ? premiumOffer : offerAt(0.85);
+    const pool = contested ? premiumBuyers : buyerClubs.filter(club => club.budget >= offer);
+    if (!pool.length) continue;
+    const club = pool[Math.floor(buyerRoll * pool.length)].name;
+    const rivals = contested ? pool.filter(candidate => candidate.name !== club) : [];
+    const rival = rivals[Math.floor(rivalRoll * rivals.length)]?.name;
     bids.push({
       playerId: p.id,
       playerName: p.name,
       club,
-      offer: Math.max(0.3, Math.round(base * mult * 10) / 10),
+      offer,
       status: 'open',
       rival,
       fromListing: true,
+      listedSale: true,
     });
     taken.add(p.id);
   }
