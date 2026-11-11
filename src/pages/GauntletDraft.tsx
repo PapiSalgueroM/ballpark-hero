@@ -247,7 +247,10 @@ export default function GauntletDraft() {
             statRow={[{ label: 'Score', value: run.score }]}
             emojiGrid={[`⚔️ Gauntlet Draft: ${run.score} pts`, ...run.matches.map(m => `${m.won ? '🟩' : '🟥'} ${matchLine(m)}`)].join('\n')}
             share={{ score: String(run.score), gameName: 'Gauntlet Draft', gamePath: '/gauntlet-draft' }}
-            onPlayAgain={() => setPhase('setup')}
+            onPlayAgain={() => {
+              setRun(null);
+              setPhase('setup');
+            }}
             playAgainLabel={mode === 'daily' ? 'Back to modes' : 'New draft'}
             playNext={mode === 'daily' ? <p className="text-sm text-muted-foreground">Come back tomorrow for a new draft.</p> : undefined}
           >
