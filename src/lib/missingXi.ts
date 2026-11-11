@@ -7171,10 +7171,12 @@ export function pickDailyPuzzle(lineups: Lineup[] = LINEUPS): ActivePuzzle {
   return { lineup, candidate: lineup.blankCandidates[candidateIndex] };
 }
 
-/** Picks a random lineup + blank for Unlimited free-play mode. Held lineups are never drawn. */
-export function pickUnlimitedPuzzle(lineups: Lineup[] = LINEUPS): ActivePuzzle {
+/** Picks a random Unlimited lineup and blank, skipping the current lineup when possible. */
+export function pickUnlimitedPuzzle(lineups: Lineup[] = LINEUPS, currentLineupId?: string): ActivePuzzle {
   const pool = lineups.filter(l => !HELD_LINEUP_IDS.has(l.id));
-  const lineup = pool[Math.floor(Math.random() * pool.length)];
+  const alternatives = currentLineupId ? pool.filter(l => l.id !== currentLineupId) : pool;
+  const choices = alternatives.length ? alternatives : pool;
+  const lineup = choices[Math.floor(Math.random() * choices.length)];
   const candidate = lineup.blankCandidates[Math.floor(Math.random() * lineup.blankCandidates.length)];
   return { lineup, candidate };
 }

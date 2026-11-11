@@ -112,16 +112,17 @@ const MissingXi = () => {
 
   // The daily is drawn from the date above and never re-dealt; only an
   // Unlimited run draws a fresh lineup.
+  const currentUnlimitedLineupId = playMode === 'unlimited' ? unlimitedPuzzle?.lineup.id : undefined;
   const startRun = useCallback((nextMode: PlayMode) => {
     setPlayMode(nextMode);
     if (nextMode === 'unlimited') {
-      setUnlimitedPuzzle(pickUnlimitedPuzzle());
+      setUnlimitedPuzzle(pickUnlimitedPuzzle(undefined, currentUnlimitedLineupId));
       setUnlimitedActions([]);
     }
     setInputValue('');
     setSelectedEntity(null);
     setErrorMsg('');
-  }, []);
+  }, [currentUnlimitedLineupId]);
 
   // Once the daily log is finished addDailyAction is a no-op, which is what
   // refuses a replay of today's lineup.

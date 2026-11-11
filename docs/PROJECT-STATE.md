@@ -1,3 +1,11 @@
+## 2026-11-11: Missing XI draws a different lineup on New Lineup
+
+New Lineup skips the currently revealed Unlimited lineup when another is available. The draw still chooses a lineup and then one blank, so previously played lineups can return on later rounds. The Daily keeps its exact match, saved actions and score.
+
+In the original production browser replay, consecutive New Lineup taps with the same valid random draw reopened the 2011 Champions League Final and Javier Mascherano. The mounted regression checks the redraw and a real Daily result. The draw test covers the two random calls and the single available lineup case.
+
+The fixed 390px replay drew Barcelona 2011, Chelsea 2012, then Barcelona 2011 again with those same draws. A separate draw picked Real Madrid 2014. The 100-point Daily result and saved bytes survived the mode changes and cold reload. All 13 scoped tests, app types, the build, 17 output and Missing XI checks, and 16 route size caps passed.
+
 ## 2026-11-07: Club Manager historical roster counts live
 
 [PR #532](https://github.com/PapiSalgueroM/ballpark-hero/pull/532) published from main `c3b5ca4afaf9b4dadcd748f340e8e8e3e4a1a1dd`, App tree `133fcd3d26a4d237178e5c7efee723048da0aef2`, Lovable deployment `510b1df1-2172-42c0-90f9-d9f9c997b840`.
