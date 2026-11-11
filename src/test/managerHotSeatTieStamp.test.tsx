@@ -106,3 +106,44 @@ describe('Manager Hot Seat: a free run carries the 1603 tie stamp', () => {
     expect(lastReplay()[0]).toMatchObject({ club, ...STAMPED });
   }, 120000);
 });
+
+it('keeps Free Play progress when backing out of another club before taking the job', () => {
+  const view = board();
+  const button = (name: string) => view.getByRole('button', { name });
+  const choose = (clubName: string) => {
+    fireEvent.click(button('Pick a club'));
+    const random = vi.spyOn(Math, 'random').mockReturnValue(1 / 4294967296);
+    fireEvent.click(button(clubName));
+    random.mockRestore();
+    loaded();
+  };
+
+  choose('Arsenal');
+  fireEvent.click(button('Take the job'));
+  const press = view.getByTestId('hot-seat-press');
+  fireEvent.click(press.querySelector('button')!);
+  fireEvent.click(button('Kick off'));
+  expect(view.getByTestId('hot-seat-result')).toHaveTextContent('Arsenal 3 to 2 PSV');
+  const played = localStorage.getItem(FREE_KEY)!;
+  expect(JSON.parse(played)).toMatchObject({ club: 'Arsenal', done: false, actions: [
+    { t: 'press', i: 0 }, { t: 'match', m: 'balanced', talk: null },
+  ] });
+
+  fireEvent.click(button('Menu'));
+  expect(button('Carry on at Arsenal')).toBeInTheDocument();
+  choose('Aston Villa');
+  expect(localStorage.getItem(FREE_KEY)).toBe(played);
+  fireEvent.click(button('Back'));
+  fireEvent.click(button('Carry on at Arsenal'));
+  loaded();
+  expect(view.getByTestId('hot-seat-match')).toHaveTextContent('Home to Aston Villa');
+  expect(localStorage.getItem(FREE_KEY)).toBe(played);
+
+  fireEvent.click(button('Menu'));
+  choose('Aston Villa');
+  fireEvent.click(button('Take the job'));
+  fireEvent.click(button('Menu'));
+  expect(button('Carry on at Aston Villa')).toBeInTheDocument();
+  expect(view.queryByRole('button', { name: 'Carry on at Arsenal' })).toBeNull();
+  expect(JSON.parse(localStorage.getItem(FREE_KEY)!)).toMatchObject({ club: 'Aston Villa', done: false, actions: [] });
+}, 120000);
