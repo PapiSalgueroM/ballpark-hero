@@ -3723,7 +3723,7 @@ export const LEAGUE_RULES: Record<string, LeagueRules> = {
   championship: {
     clubCountry: { 'Cardiff City': 'Wales', 'Swansea City': 'Wales', Wrexham: 'Wales' },
     nationId: 'england', flag: 'England', cup: 'FA Cup', europe: null, drop: 3, ladder: 'promotion',
-    playoff: { rankUpTo: 8, target: 6, label: 'Make the promotion playoffs' }, season: 'autumnSpring',
+    playoff: { rankUpTo: 8, target: 6, label: 'Finish 6th or higher' }, season: 'autumnSpring',
     simplified: 'Three go up and three come down in a straight swap; the real promotion playoff is not played.',
   },
   laliga: { nationId: 'spain', flag: 'Spain', cup: 'Copa del Rey', europe: { ucl: 4, uel: 5, uecl: 6 }, drop: 3, tiebreak: 'h2h', secondTier: 'segunda', ladder: 'top', season: 'autumnSpring' },
@@ -3771,7 +3771,7 @@ export const LEAGUE_RULES: Record<string, LeagueRules> = {
   superlig: { nationId: 'turkey', flag: 'Türkiye', cup: 'Turkish Cup', europe: { ucl: 1, uel: 2, uecl: 3 }, drop: 3, ladder: 'top', season: 'autumnSpring' },
   bundesliga2: {
     nationId: 'germany', flag: 'Germany', cup: 'DFB-Pokal', europe: null, drop: 2, ladder: 'promotion',
-    playoff: { rankUpTo: 6, target: 3, label: 'Reach the promotion playoff' }, season: 'autumnSpring',
+    playoff: { rankUpTo: 6, target: 3, label: 'Finish 3rd or higher' }, season: 'autumnSpring',
     simplified: 'The real promotion playoff (third against the Bundesliga\'s sixteenth) is not played: two go straight up and two straight down.',
   },
   proleague: { nationId: 'belgium', flag: 'Belgium', cup: 'Belgian Cup', europe: { ucl: 1, uel: 2, uecl: 3 }, drop: 1, ladder: 'top', season: 'autumnSpring' },
@@ -3904,7 +3904,7 @@ export const LEAGUE_RULES: Record<string, LeagueRules> = {
        gdGfOnly default. */
   serieb: {
     nationId: 'italy', flag: 'Italy', cup: 'Coppa Italia', europe: null, drop: 3, ladder: 'promotion',
-    playoff: { rankUpTo: 10, target: 8, label: 'Make the promotion playoffs' }, season: 'autumnSpring',
+    playoff: { rankUpTo: 10, target: 8, label: 'Finish 8th or higher' }, season: 'autumnSpring',
     simplified: 'The promotion playoff and the relegation playout are not played: three go straight up and Serie A\'s bottom three come down in a straight swap.',
   },
   /* Round 1040: Ligue 2 2026-27, Ligue 1's modelled second tier, so the
@@ -3939,7 +3939,7 @@ export const LEAGUE_RULES: Record<string, LeagueRules> = {
      - Clubs level on points: not two-sourced, so the gdGfOnly default. */
   ligue2: {
     nationId: 'france', flag: 'France', cup: 'Coupe de France', europe: null, drop: 2, ladder: 'promotion',
-    playoff: { rankUpTo: 7, target: 5, label: 'Make the promotion playoffs' }, season: 'autumnSpring',
+    playoff: { rankUpTo: 7, target: 5, label: 'Finish 5th or higher' }, season: 'autumnSpring',
     simplified: 'The promotion playoffs, the barrage against Ligue 1\'s sixteenth and the relegation barrage are not played: two go straight up and Ligue 1\'s bottom two come down in a straight swap.',
   },
   /* Round 1040: the Segunda División 2026-27 (LALIGA HYPERMOTION), La Liga's
@@ -3968,7 +3968,7 @@ export const LEAGUE_RULES: Record<string, LeagueRules> = {
      - Clubs level on points: not two-sourced, so the gdGfOnly default. */
   segunda: {
     nationId: 'spain', flag: 'Spain', cup: 'Copa del Rey', europe: null, drop: 4, ladder: 'promotion',
-    playoff: { rankUpTo: 8, target: 6, label: 'Make the promotion playoffs' }, season: 'autumnSpring',
+    playoff: { rankUpTo: 8, target: 6, label: 'Finish 6th or higher' }, season: 'autumnSpring',
     simplified: 'The promotion playoff (third to sixth) is not played: three go straight up and La Liga\'s bottom three come down in a straight swap. The real league has 22 clubs, and its two reserve sides, Real Sociedad B and Celta Fortuna, are left out because they do not play the Copa del Rey, so 20 of the real 22 clubs play.',
   },
   /* Round 1052: the Russian Premier League 2026-27, the Brazil shape (a drop
@@ -15828,7 +15828,12 @@ export function objectiveStatuses(career: CareerState): { objective: BoardObject
   const roundsTotal = career.leagueClubs.length > 1 ? 2 * (career.leagueClubs.length - 1) : 38;
   const played = myRow ? myRow.w + myRow.d + myRow.l : 0;
   const seasonDone = career.week >= career.calendar.length;
-  return objs.map(objective => {
+  return objs.map(saved => {
+    // Older saves carry these labels for objectives graded by league finish.
+    const objective = saved.id === 'league'
+      && (saved.label === 'Make the promotion playoffs' || saved.label === 'Reach the promotion playoff')
+      ? { ...saved, label: `Finish ${ordinal(saved.target)} or higher` }
+      : saved;
     /* Round 474: the five specific asks grade in their own module, on the
        same seasonDone line every shape below uses, so a board ask is final
        at the final whistle exactly like a league place is. */

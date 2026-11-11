@@ -1,3 +1,9 @@
+## 2026-11-10 Club Manager board table targets draft
+
+The Nov 4 to 10 UTC gameplay ranking put Club Manager second with 945 distinct recorded handles. Five second-division board objectives now state the table finish they grade. The targets are sixth in the Championship and Segunda, third in 2. Bundesliga, eighth in Serie B, and fifth in Ligue 2. Older active objectives display the equivalent wording from their saved target. The playable promotion-playoffs request `407e2295` remains open.
+
+Seven focused tests reproduce the five original labels and the two legacy forms, then verify the corrected labels and both sides of the finishing-position cutoff. The original Burnley save displayed the same target and On track status on phone and desktop after reload. Both candidate browser contexts kept the exact 65,915 baseline save bytes. App types, production build, the 15 output checks, all 16 route caps, simBoardObjectives and simPromotion passed. The broader simBoard has the same four K League board-demand failures on main and this branch.
+
 ## 2026-11-07: Club Manager historical roster counts live
 
 [PR #532](https://github.com/PapiSalgueroM/ballpark-hero/pull/532) published from main `c3b5ca4afaf9b4dadcd748f340e8e8e3e4a1a1dd`, App tree `133fcd3d26a4d237178e5c7efee723048da0aef2`, Lovable deployment `510b1df1-2172-42c0-90f9-d9f9c997b840`.
