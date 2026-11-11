@@ -226,6 +226,36 @@ const SEEDS = 25;
 const REROLLS = 12;
 
 describe('Build Your XI draws under a seeded generator', () => {
+  it('rerolls Mixed to a different assignment and holds consumed and future teams', async () => {
+    const view = renderHook(() => useLineupBuilder());
+    act(() => api(view).selectFormation('4-4-2'));
+    const initial = api(view).teamAssignments;
+    expect(initial[0].name).toBe(clubs[0]);
+    const expected = clubs.find(club => !initial.some(team => team.name === club));
+
+    vi.mocked(Math.random).mockReturnValue(0);
+    act(() => api(view).rerollTeam());
+    expect(api(view).currentTeam?.name).toBe(expected);
+    expect(api(view).teamAssignments.slice(1)).toEqual(initial.slice(1));
+    expect(api(view).filledCount).toBe(0);
+
+    act(() => api(view).finishSpin());
+    act(() => api(view).selectPosition(FORMATIONS['4-4-2'].findIndex(slot => slot.role === 'GK')));
+    await act(async () => api(view).submitPlayer('Fixture Keeper', meta(expected!, 2026)));
+    expect(api(view).filledCount).toBe(1);
+    const filled = api(view).filledSlots;
+    const before = api(view).teamAssignments;
+
+    vi.mocked(Math.random).mockReturnValue(0.99);
+    act(() => api(view).rerollTeam());
+    const after = api(view).teamAssignments;
+    expect(api(view).currentTeam?.isNation).toBe(true);
+    expect(before.some(team => team.name === after[1].name)).toBe(false);
+    expect(after.filter((_, index) => index !== 1)).toEqual(before.filter((_, index) => index !== 1));
+    expect(api(view).filledSlots).toBe(filled);
+    expect(api(view).filledCount).toBe(1);
+  });
+
   it('a Club year draft deals clubs only, never a withheld club, and every reroll moves to another club', async () => {
     expect(CLUB_YEAR_WITHHELD.has('Arsenal'),
       'XI_CLUB_YEAR_ARSENAL: the stored "Arsenal FC" also holds Arsenal de Sarandi, so a Club year never deals Arsenal').toBe(true);
