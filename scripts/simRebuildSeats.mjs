@@ -523,7 +523,7 @@ console.log('\n5. THE SEASON TRACKS THE SQUADS');
       if (rec.longestUnbeaten > season.gamesEach || (rec.longestUnbeaten === 0) !== (row.w + row.d === 0)) recordsOff += 1;
       if (rec.topScorer) {
         if (rec.topScorer.goals > row.gf || rec.topScorer.goals < 1 || !xi.some(p => p.name === rec.topScorer.player)) recordsOff += 1;
-      } else if (xi.length > 0) recordsOff += 1;
+      } else if (row.gf > 0 && xi.some(p => p.position !== 'GK')) recordsOff += 1;
       if (rec.biggestWin && CONDUCT.test(rec.biggestWin)) conduct += 1;
     }
     const title = season.trophies.find(x => x.title === 'League title');

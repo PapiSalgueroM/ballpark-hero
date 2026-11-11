@@ -1,3 +1,11 @@
+## 2026-11-11: Rebuild season awards draft
+
+Solo scoring and assist credits and pass-and-play scoring credits now stay within each club's simulated goals. Scoreless clubs have no scorer or assist award. Award candidates still draw in the same order.
+
+On a 390px replay, AS Monaco scored zero but used to show two goals and two assists in its solo recap. The shared Manchester City result awarded one goal to a player after a scoreless ten-game season. Both recaps now reflect the scoreless season, preserve the other club's Golden Boot, and reload from the same saved bytes as main.
+
+Four focused regression cases failed on main and passed after the fix. The healthy standings control and all ten power-up tests passed. Across 1,200 seeds per mode, standings, match summaries, and non-scoring trophies stayed exact. The skip-draw control changes both following awards from two goals to three. App types, production build, four Rebuild sims, 15 offline output readers, and 16 unchanged route caps passed.
+
 ## 2026-11-07: Club Manager historical roster counts live
 
 [PR #532](https://github.com/PapiSalgueroM/ballpark-hero/pull/532) published from main `c3b5ca4afaf9b4dadcd748f340e8e8e3e4a1a1dd`, App tree `133fcd3d26a4d237178e5c7efee723048da0aef2`, Lovable deployment `510b1df1-2172-42c0-90f9-d9f9c997b840`.
