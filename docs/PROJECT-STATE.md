@@ -1,3 +1,9 @@
+## 2026-11-11: NBA Perfect Season saves Daily before the reveal
+
+When the sixth pick produces the Daily's simulated season, the game saves the attempt and records its completion and best record. The game-by-game reveal and Skip to result still work. Reloading during the reveal opens the locked Daily recap.
+
+A compiled 390 px baseline accepted all six picks and showed Game 0 of 82. Reloading reopened a fresh Daily with no attempt or completion. Both mounted controls failed at the missing save on main. At the same reveal frame the compiled draft kept the 43-39 result, all 82 outcomes, the exact attempt bytes and one completion through reload. The draft passed 41 focused and adjacent tests, including automatic reveal, skip, reload, Classic restart and archive retry. App types, the final test type check, the 852-file build, 15 output checks, all 16 route caps and the odds sim passed. The two archive sims could not check live tables in offline mode.
+
 ## 2026-11-07: Club Manager historical roster counts live
 
 [PR #532](https://github.com/PapiSalgueroM/ballpark-hero/pull/532) published from main `c3b5ca4afaf9b4dadcd748f340e8e8e3e4a1a1dd`, App tree `133fcd3d26a4d237178e5c7efee723048da0aef2`, Lovable deployment `510b1df1-2172-42c0-90f9-d9f9c997b840`.
