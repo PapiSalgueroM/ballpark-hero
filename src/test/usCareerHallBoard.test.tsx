@@ -21,7 +21,7 @@
  *      with no filter, so a board that drops the filter goes red here.
  */
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { act, cleanup, fireEvent, render, waitFor } from '@testing-library/react';
+import { act, cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 
 vi.mock('@/lib/completions', () => ({ recordCompletion: vi.fn(), recordActivity: vi.fn(), getCurrentPlayerName: () => 'Tester' }));
@@ -310,7 +310,12 @@ describe.each(SPORTS)('%s: the retirement talk on the board', (slug, getSport) =
     await waitFor(() => expect(document.body.textContent).toContain('came up'));
     expect(terms().every(y => y === '1'), `offer lengths after a push ${terms().join(',')}`).toBe(true);
     vi.spyOn(Math, 'random').mockImplementation(mulberry32(47));
-    fireEvent.click(button('Sign')!);
+    const beforeSigning = localStorage.getItem(sport.saveKey);
+    fireEvent.click(document.querySelector('[data-fa-sign="0"]')!);
+    if (slug === 'nba' || slug === 'nfl') {
+      expect(localStorage.getItem(sport.saveKey)).toBe(beforeSigning);
+      fireEvent.click(screen.getByRole('button', { name: 'Confirm signing' }));
+    }
     expect(read(sport).c.contractYears).toBe(1);
     fireEvent.click(button(`Play the ${c.year} season`)!);
     const after = read(sport);
