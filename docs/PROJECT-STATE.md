@@ -20329,3 +20329,11 @@ A refused storage write used to let a franchise play on without a warning. In co
 All four new mounted cases failed on the original at the missing retry. The candidate passed 69 tests across seven Front Office suites, including exact latest-round and World Series recap restoration, a normal later save and reset.
 
 App types, production build, all 15 output checks and all 16 existing route caps passed. Compiled Chromium at 390 × 844 restored the exact Round 3 bytes after a refused retry, and separately restored a completed World Series recap after playing all 27 rounds from a new franchise. Both reloads preserved unrelated storage and produced zero page errors.
+
+## 2026-11-11: MLB Front Office stale-tab save protection
+
+On the PR574 retry build, a second Dodgers tab replaced Round 3 with Round 2 through normal Play, and separately through an older pending Retry. MLB Front Office compares its last loaded or saved bytes before playing, starting, writing or deleting. A stale tab asks to reload while the newer bytes stay on disk. The guard protects sequential actions across tabs.
+
+Five mounted cases failed on PR574 and the candidate passed 76 related tests in eight suites. The original retry, round progression and World Series recap tests still pass. The picker and invalid-draft recovery screen also protect a newer franchise.
+
+Compiled Chromium at 390 × 844 preserved exact Round 3 bytes through stale Play and Retry, and saved exact Round 4 bytes on a current Retry. A transient read refusal still allowed a normal reset and restart. A separate 27-round journey restored the exact World Series recap after Retry. Seeded current start and Play produced byte-identical saves against PR574. App types, production build, all 15 output checks and all 16 existing route caps passed.
