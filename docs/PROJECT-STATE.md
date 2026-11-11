@@ -1,3 +1,9 @@
+## 2026-11-11: Soccer Gauntlet Draft keeps the first Daily result across tabs
+
+When another tab has already saved today's Daily Gauntlet, the next pick in an older draft opens that saved result without recording a second completion. Unlimited keeps its own result and leaves the Daily save in place.
+
+The mounted regression failed on main when the second draft replaced 48 points with 16. In the production browser replay at 390px, both active tabs and a cold reopen showed 48 with the same 731 saved bytes. The second tab added no completion, and Unlimited recorded once. App types, the production build, 12 scoped tests, 18 output and Gauntlet checks, the Daily reload controls and all 16 existing route caps passed.
+
 ## 2026-11-07: Club Manager historical roster counts live
 
 [PR #532](https://github.com/PapiSalgueroM/ballpark-hero/pull/532) published from main `c3b5ca4afaf9b4dadcd748f340e8e8e3e4a1a1dd`, App tree `133fcd3d26a4d237178e5c7efee723048da0aef2`, Lovable deployment `510b1df1-2172-42c0-90f9-d9f9c997b840`.
