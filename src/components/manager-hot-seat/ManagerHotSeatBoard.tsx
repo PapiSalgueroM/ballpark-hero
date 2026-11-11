@@ -212,7 +212,6 @@ export default function ManagerHotSeatBoard() {
   const startDaily = () => open({ club: daily.club, seed: daily.seed, daily: daily.daily }, dailySaved ?? []);
   const startFree = (club: string) => {
     const seed = Math.floor(Math.random() * 4294967296) >>> 0;
-    setFreeSaved(null);
     /* Round 1331: every new free run plays the current match rules, and its save says so. */
     /* Round 1603: and judges a deciding second leg by the tie. */
     open({ club, seed, rules: 1331, tie: 1603 });

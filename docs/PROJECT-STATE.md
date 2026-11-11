@@ -20321,3 +20321,13 @@ Actual independent seven-arm proof is7eadbca71e1e351741802f8f9e8b9ac1852e4b957ec
 Native admission: 69f420492bd29d81667ad18b3ed98209473e49f77e33a7e8f3eb6788e0acebe5. Deployment: 2d231ee7-24b2-4940-af8d-5908d26371e6. Public admission: 147361f50c8e3db9c6583009a045a7d79c22c8a680d2fadb171826ff3d3b6c89. Full source, provenance, artifact identities and the exact nine-path nonruntime bridge are in [the dated plan](plans/2026-11-05-soccer-four-first-team-entries.md).
 
 SC-36 remains partial. This does not add leagues, rosters or a complete evolving population. Next owner priority is more Soccer Career/Club Manager teams and leagues, preceded by a measured Team-picker UI cut if needed for the unchanged CM cap. CM47, LeagueSeasons582, measured NFL37/NBA25 golden differences and the separately triaged PR502 reds remain unwaived. The first SC4 build stopped at reader18; it is not relabelled green.
+
+## 2026-11-11 Manager Hot Seat keeps Free Play when you back out of a new club
+
+Previewing a new job used to hide the current Free Play run from the menu before the player accepted the offer. Back now leaves the current run available, and Take the job still replaces it. The existing action tape and Daily paths stay in place.
+
+The compiled 390px replay played Arsenal 3-2 PSV, previewed Aston Villa, then resumed Arsenal at the next fixture with the same saved bytes before and after reload. Accepting Villa replaced Arsenal as expected. The separate Swansea City 1-2 Sheffield United Daily and its saved tape matched the baseline.
+
+The mounted regression failed on the original source at the missing Arsenal button. All 28 focused tests, app types, the normal build, 15 built-site checks and all 16 unchanged route caps passed. Manager Hot Seat measured 670.3 KiB gzip against 672 KiB. The board change dry-merged with PR 575's Daily lock.
+
+Prepared on codex/manager-hot-seat-keep-free-play-20261111.
