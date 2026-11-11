@@ -20,6 +20,10 @@ New 2010 and 2015 saves now show sourced arrivals in the phone's SportsFeed as t
 
 Next: CM-03 historical roster snapshot count at club selection. Poland's 18-club Ekstraklasa membership and proposed 17 additional identities have source intake; there is no live Polish expansion yet. NBA 2005 and NFL 2006 remain source intake.
 
+## 2026-11-11: MLB My Career batting headlines show games played
+
+When News highlights an average of .320 or better, the headline gives the recorded games played. In the 2038 Kansas City replay, the .320 headline now says 62 games alongside the existing injury headline. A healthy .321 replay says 160 games. The .302 control keeps its usual home-run and RBI headline. The compiled phone replay restored each headline after reload and kept the archived .328 headline and exact season records.
+
 ## 2026-11-07: Russian league expansion live
 
 [PR #527](https://github.com/PapiSalgueroM/ballpark-hero/pull/527) published from main `d151e61ee8fa1348e05b2dadd59b1aff2d226ee6`, App tree `3fe5bf9acace9f506c5f469e012be11c1dded94e`, Lovable deployment `e83da178-a548-4af8-ab61-f3e514993136`. This includes the previous K League and phone Squad releases.

@@ -100,6 +100,16 @@ describe('Round 1226: a saved MLB season keeps the length it was played on', () 
     expect('slate' in line).toBe(false);
   });
 
+  it.each([
+    { year: 2038, games: 62, slate: undefined },
+    { year: 2038, games: 160, slate: undefined },
+    { year: 2020, games: 59, slate: 60 },
+  ])('prints $games games beside a .320 average in $year', ({ year, games, slate }) => {
+    const c = startMlbCareer('Contact Hitter', 'CF', MLB_ARCHETYPES.CF[0], seeded(21));
+    const line = { ...oldMlb(year, games, c.team), avg: 0.320, slate };
+    expect(mlbHeadlinesFor(c, line)[0]).toBe(`Contact Hitter hits .320 in ${games} games`);
+  });
+
   it('plays 2020 as 60 games and does not print a lost hundred', () => {
     for (let seed = 1; seed <= 40; seed++) {
       const c = startMlbCareer('Short Year', 'SS', MLB_ARCHETYPES.SS[0], seeded(100 + seed), null, 'y2004');
