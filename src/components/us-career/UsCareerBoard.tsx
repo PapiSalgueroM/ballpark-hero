@@ -682,6 +682,15 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
   const playSeason = () => {
     playedRef.current = null;
     if (!career || teamQuality == null || practiceOpen) return;
+    /* Older saves could stay active after a suspended year reached the limit. */
+    const lastSeason = career.seasons[career.seasons.length - 1];
+    if (lastSeason?.teamResult === 'SUSPENDED' && lastSeason.year === career.year - 1 && sport.shouldRetire(career)) {
+      const c = { ...career, retired: true };
+      setCareer(c);
+      setPhase('retired');
+      persist(c, 'retired', teamQuality);
+      return;
+    }
     /* Round 195: a played season counts as playing TODAY, the Round 159
        soccer rule reaching the American careers. Unscored on purpose: the
        scored completion stays the retirement legacy. */
@@ -706,9 +715,8 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
         subHeader: `${sport.teamLabelOf(banned.team, c.eraId)} · age ${banned.age} · ${c.pos}`,
         teamResult: 'SUSPENDED', statLine: '', campNote: null, notes: [], progressNotes: banNotes,
       }));
-      /* Round 1039: a farewell or a retirement he chose ends the career even on
-         a banned year: the card said whatever the numbers say. */
-      if (endsAfterSeason(c, banned.year)) {
+      /* A banned year can reach the sport's retirement limit or end a farewell. */
+      if (sport.shouldRetire(c) || endsAfterSeason(c, banned.year)) {
         c.retired = true;
         setPhase('retired');
         persist(c, 'retired', teamQuality);

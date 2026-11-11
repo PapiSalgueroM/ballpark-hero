@@ -21,7 +21,7 @@
  *      with no filter, so a board that drops the filter goes red here.
  */
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { act, cleanup, fireEvent, render, waitFor } from '@testing-library/react';
+import { act, cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 
 vi.mock('@/lib/completions', () => ({ recordCompletion: vi.fn(), recordActivity: vi.fn(), getCurrentPlayerName: () => 'Tester' }));
@@ -34,6 +34,7 @@ import { NFL_CAREER_SPORT } from '@/lib/nflCareerSport';
 import { NBA_CAREER_SPORT } from '@/lib/nbaCareerSport';
 import { MLB_CAREER_SPORT } from '@/lib/mlbCareerSport';
 import { NHL_CAREER_SPORT } from '@/lib/nhlCareerSport';
+import { recordActivity } from '@/lib/completions';
 import { defaultAppearance } from '@/lib/soccerCareerAppearance';
 import { dealSummer, laterAnswerMovesRating, movesRating, seekSummerCard, summerCardAt, summerSeason } from '@/lib/usCareerSummer';
 import { pendingTalk, repairHallOnLoad, RETIREMENT_CARD_IDS, stampOnRetirement, talkDeckFilter } from '@/lib/usCareerRetirementFlow';
@@ -45,6 +46,7 @@ const SPORTS: [string, () => UsCareerSport][] = [
   ['nfl', () => NFL_CAREER_SPORT], ['nba', () => NBA_CAREER_SPORT],
   ['mlb', () => MLB_CAREER_SPORT], ['nhl', () => NHL_CAREER_SPORT],
 ];
+const RETIREMENT_AGES: Record<string, number> = { nfl: 34, nba: 41, mlb: 42, nhl: 40 };
 
 function mulberry32(seed: number): () => number {
   let a = seed >>> 0;
@@ -128,7 +130,73 @@ afterEach(() => {
   vi.unstubAllGlobals();
 });
 
-describe.each(SPORTS)('%s: the retirement talk on the board', (_slug, getSport) => {
+it('retires an older save on Play when the last suspended season already reached the limit', async () => {
+  const sport: UsCareerSport = NFL_CAREER_SPORT;
+  const { c, tq } = talkCareer(sport, 19);
+  c.pos = 'RB';
+  c.age = 33;
+  c.ovr = 90;
+  c.seasons.push(sport.suspendedLine(c));
+  sport.progress(c, mulberry32(19));
+  expect(sport.shouldRetire(c)).toBe(true);
+  save(sport, c, tq, 'season');
+  const bytes = localStorage.getItem(sport.saveKey);
+  mount(sport);
+  cleanup();
+  mount(sport);
+  expect(localStorage.getItem(sport.saveKey)).toBe(bytes);
+  vi.mocked(recordActivity).mockClear();
+  vi.mocked(Math.random).mockClear();
+
+  fireEvent.click(button(`Play the ${c.year} season`)!);
+  const after = read(sport);
+  expect(after.phase).toBe('retired');
+  expect(after.c).toMatchObject({ retired: true, age: c.age, year: c.year, hallCal: HALL_CALIBRATION });
+  expect(after.c.seasons).toEqual(c.seasons);
+  expect(recordActivity).not.toHaveBeenCalled();
+  expect(Math.random).not.toHaveBeenCalled();
+  expect(document.body.textContent).toContain(`${c.name} retires`);
+  await waitFor(() => expect(document.body.textContent).toContain(sport.hall!.rules.hallName));
+});
+
+describe.each(SPORTS)('%s: the retirement talk on the board', (slug, getSport) => {
+  it.each([
+    { yearsToLimit: 1, retires: true },
+    { yearsToLimit: 2, retires: false },
+  ])('enforces the retirement limit after a suspended season (retires=$retires)', async ({ yearsToLimit, retires }) => {
+    const sport = getSport();
+    const { c, tq } = talkCareer(sport, 19);
+    if (slug === 'nfl') c.pos = 'RB';
+    c.age = RETIREMENT_AGES[slug] - yearsToLimit;
+    c.ovr = 90;
+    c.suspendedSeasons = 1;
+    expect(sport.shouldRetire(c)).toBe(false);
+    expect(pendingTalk(c, sport.hall)).toBeNull();
+    save(sport, c, tq, 'season');
+    mount(sport);
+    fireEvent.click(button(`Play the ${c.year} season`)!);
+
+    const after = read(sport);
+    expect(after.c.seasons).toEqual([...c.seasons, sport.suspendedLine(c)]);
+    expect(after.c).toMatchObject({
+      age: c.age + 1, year: c.year + 1, suspendedSeasons: 0,
+      contractYears: c.contractYears - 1, salary: c.salary, earnings: c.earnings,
+    });
+    expect(sport.shouldRetire(after.c)).toBe(retires);
+    expect(after.phase).toBe(retires ? 'retired' : 'season');
+    expect(after.c.retired).toBe(retires);
+    if (retires) expect(after.c.hallCal).toBe(HALL_CALIBRATION);
+    expect(document.body.textContent).toContain('Season served on the suspended list');
+
+    cleanup();
+    mount(sport);
+    if (retires) {
+      expect(document.body.textContent).toContain(`${c.name} retires`);
+      await waitFor(() => expect(document.body.textContent).toContain(sport.hall!.rules.hallName));
+    }
+    expect(!!button(`Play the ${after.c.year} season`)).toBe(!retires);
+  });
+
   it('an old active save inside the rule opens on the talk, writes nothing, and a reload asks again', async () => {
     const sport = getSport();
     const { c, tq } = talkCareer(sport, 11);
@@ -242,7 +310,12 @@ describe.each(SPORTS)('%s: the retirement talk on the board', (_slug, getSport) 
     await waitFor(() => expect(document.body.textContent).toContain('came up'));
     expect(terms().every(y => y === '1'), `offer lengths after a push ${terms().join(',')}`).toBe(true);
     vi.spyOn(Math, 'random').mockImplementation(mulberry32(47));
-    fireEvent.click(button('Sign')!);
+    const beforeSigning = localStorage.getItem(sport.saveKey);
+    fireEvent.click(document.querySelector('[data-fa-sign="0"]')!);
+    if (slug === 'nba' || slug === 'nfl') {
+      expect(localStorage.getItem(sport.saveKey)).toBe(beforeSigning);
+      fireEvent.click(screen.getByRole('button', { name: 'Confirm signing' }));
+    }
     expect(read(sport).c.contractYears).toBe(1);
     fireEvent.click(button(`Play the ${c.year} season`)!);
     const after = read(sport);
