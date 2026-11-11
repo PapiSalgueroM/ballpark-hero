@@ -40,8 +40,8 @@ try {
     let hook = fs.readFileSync(path.join(ROOT, 'src/hooks/useStadiumTycoon.ts'), 'utf8').replaceAll('\r\n', '\n');
     let page = fs.readFileSync(path.join(ROOT, 'src/pages/StadiumTycoon.tsx'), 'utf8').replaceAll('\r\n', '\n');
     if (CONTROL === 'opening') hook = replace(hook,
-      'try { localStorage.setItem(TYCOON_SAVE_KEY, serializeTycoon(next, Date.now())); }\n    catch {',
-      'try { void next; }\n    catch {');
+      'if (!writeState(next)) {',
+      'if (false) {');
     if (CONTROL === 'openearly') hook = replace(hook,
       'const next = beginSetPiece(stateRef.current, offer);\n    if (next === stateRef.current) return;',
       'const next = beginSetPiece(stateRef.current, offer);\n    if (next === stateRef.current) return;\n    commit(next);');

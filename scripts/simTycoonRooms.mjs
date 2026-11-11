@@ -107,14 +107,21 @@ const sectionOf = title => Number((title.match(/^(\d+)/) || [])[1] || 0);
 const PAGE_LINES = {
   hook: '  const g = useStadiumTycoon(getEdge);\n',
   roomSignature: 'function StadiumRoom({ g, visible, onNeedsYou }: { g: ReturnType<typeof useStadiumTycoon>; visible: boolean; onNeedsYou: (v: boolean) => void }) {\n',
-  roomMount: "<StadiumRoom g={g} visible={room === 'stadium'} onNeedsYou={setStadiumNeedsYou} />",
+  roomMount: "<StadiumRoom g={g} visible={room === 'stadium' && !g.saveMoved} onNeedsYou={setStadiumNeedsYou} />",
   academyMount: '{academyOpened && (',
   onStatus: 'onStatus={setAcademyStatus}',
   unseenTimer: 'if (!g.promotion || !visible) return;',
   hookImport: "import { useStadiumTycoon } from '@/hooks/useStadiumTycoon';\n",
-  leagueMount: "        <LeagueRoom g={g} visible={room === 'league'} />\n",
-  gearNotice: '        {g.gearSaveBlocked && <p role="alert" data-no-prerender className="mb-3 rounded-xl border border-destructive/40 bg-destructive/10 p-3 text-xs">Title equipment could not be saved, so no new equipment was added. Your existing pairs are safe. Allow device storage before earning another title.</p>}\n',
-  ticketNotice: `        {g.ticketSaveFailed && (
+  leagueMount: "        <LeagueRoom g={g} visible={room === 'league' && !g.saveMoved} />\n",
+  movedNotice: `        {g.saveMoved && room !== 'academy' && (
+          <div role="alert" data-no-prerender className="mb-3 rounded-xl border border-border bg-card p-3 text-sm">
+            <p>Stadium progress moved on in another tab. Reload to carry on.</p>
+            <button type="button" onClick={() => window.location.reload()} className="mt-2 min-h-11 rounded-full border border-primary px-3 font-bold">Reload</button>
+          </div>
+        )}
+`,
+  gearNotice: '        {!g.saveMoved && g.gearSaveBlocked && <p role="alert" data-no-prerender className="mb-3 rounded-xl border border-destructive/40 bg-destructive/10 p-3 text-xs">Title equipment could not be saved, so no new equipment was added. Your existing pairs are safe. Allow device storage before earning another title.</p>}\n',
+  ticketNotice: `        {!g.saveMoved && g.ticketSaveFailed && (
           <div role="alert" data-tycoon-save-notice data-no-prerender className="mb-3 rounded-xl border border-destructive/40 bg-destructive/10 p-3 text-xs">
             <p>Stadium progress is not saved on this device. Keep this page open and retry.</p>
             <button type="button" onClick={g.retryTicketSave} className="mt-2 min-h-11 min-w-11 rounded-full border border-destructive/50 px-3 font-bold">Retry save</button>
@@ -136,6 +143,7 @@ const PAGE_CONTROLS = [
       /* Round 582: the League room reads the page's hook too, so it goes with it. */
       [PAGE_LINES.leagueMount, ''],
       /* The page-level save notices also read the moved hook. */
+      [PAGE_LINES.movedNotice, ''],
       [PAGE_LINES.gearNotice, ''],
       [PAGE_LINES.ticketNotice, ''],
     ],

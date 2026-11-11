@@ -20331,3 +20331,14 @@ The original compiled browser lost a saved first-team promotion when the older A
 Compiled Chromium at 390px preserved the saved promotion in both directions and confirmed the idle autosave rule with the real clock. The shared fence passed the unit and mounted checks, the tabs and source sim, its negative control, and 2,000 ordered storage operations against the original helper. App types, the production build, 15 output checks and 16 unchanged caps passed. Soccer Career measured 860,645 gzip bytes, below the 860,672-byte rounding boundary.
 
 The QA follow-up fixes two inherited harness failures. Rooms removes the ticket-save notice only in the copy that moves the Stadium hook. That control measures 60.112 seconds lost and passes its five unaffected checks. Help now checks six bulk purchase phrases against real quantity, rising prices, affordability and caps. All 11 Rooms controls, 27 Help controls and 24 related mounted tests passed. A second 390px replay on the same build preserved the promotion through the stale tab's autosave, departure and reload.
+
+
+## 2026-11-11 Stadium Tycoon stale tabs
+
+A Stadium tab adopts the exact main save it loaded and checks those bytes before replacing them. Once another tab commits different bytes, the older Stadium and League views pause and offer Reload. Academy remains available through its own save. An existing idle autosave can be the first commit. The guard covers sequential writes and cannot serialize writes that overlap the check.
+
+Compiled 390px Chromium originally reverted Premium to Community when the older tab navigated to About. The candidate kept the exact Premium bytes. A controlled write refusal left the other tab playable until Retry committed Premium. The older tab then opened Academy and reloaded to the saved ticket policy. Both arms finished with no page errors.
+
+All 53 focused cases, app types, the production build, 15 output checks and 16 unchanged route caps passed. Stadium measured 305.0 KiB compressed at the existing 305 KiB rounded limit.
+
+The seven scoped Tycoon sims passed. Sale Review retained all 22 controls and 84 healthy comparisons, and Loads retained all 11 controls and nine V1-compatible saves. The two changed Gear controls and the Set Piece opening control failed at their intended runtime assertions.
