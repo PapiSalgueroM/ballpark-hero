@@ -58,7 +58,7 @@ import { NBA_STAFF_PACK, type NbaStaffPost } from '@/data/gmStaff/packs';
 import { nbaReconcileRotation } from './nbaRotation';
 import {
   EAST, NBA_ROSTER_MAX, NBA_ROSTER_MIN, NBA_ROUNDS, type NbaGmPlayer, type NbaLeague, type NbaProspect,
-  type NbaRoundOptions, nbaCapRoom, nbaCapUsed, nbaFirstApron, nbaStrength, nbaTradeValue,
+  type NbaRoundOptions, nbaCapRoom, nbaFirstApron, nbaPayrollAfterTrade, nbaStrength, nbaTradeValue,
 } from './nbaFrontOffice';
 
 /* ------------------------------------------------------------------ */
@@ -352,7 +352,7 @@ const playerIn = (league: NbaLeague, id: string): NbaGmPlayer | undefined => {
  */
 export function nbaPileFits(league: NbaLeague, club: string, outSalary: number, inSalary: number): boolean {
   const t = league.teams[club];
-  const after = nbaCapUsed(t) - outSalary + inSalary;
+  const after = nbaPayrollAfterTrade(t, outSalary, inSalary);
   if (league.taxScale != null && after > nbaFirstApron(league.cap, league.taxScale)) return inSalary <= outSalary;
   return nbaCapRoom(t, league.cap) + outSalary >= inSalary || inSalary <= outSalary * 1.5 + 5;
 }
@@ -377,7 +377,7 @@ export function nbaPackageCapCheck(league: NbaLeague, pkg: TradePackage): string
       if (refused) return refused;
     }
     if (!nbaPileFits(league, club, outSalary, inSalary)) {
-      return league.taxScale != null && nbaCapUsed(t) - outSalary + inSalary > nbaFirstApron(league.cap, league.taxScale)
+      return league.taxScale != null && nbaPayrollAfterTrade(t, outSalary, inSalary) > nbaFirstApron(league.cap, league.taxScale)
         ? `${club} would sit over the first apron, so it can take back no more salary than it sends out.`
         : `The salaries do not match for ${club}: it would take in $${Math.round(inSalary * 10) / 10}M for $${Math.round(outSalary * 10) / 10}M.`;
     }

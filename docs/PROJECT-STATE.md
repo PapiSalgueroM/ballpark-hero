@@ -1,3 +1,10 @@
+## 2026-11-11: NBA Front Office trade apron rounding draft
+
+Direct talks, Trade Finder checks and Trade Desk packages now compare projected payroll at the same $0.1M precision as the apron line. The package refusal uses that calculation too.
+
+In the compiled 390px Houston fixture, sending Fred VanVleet at $21.2M for Aaron Gordon at $33.8M moved the club from $223.8M to its $236.4M first apron. The original refused both Trades and Trade Desk because the intermediate calculation was 236.40000000000003. Both candidate paths completed the same two-player swap and restored exact save bytes after reload. Both $236.5M controls remained refused with their original saves held. The focused engine tests also cover $236.3M and the Finder acceptance function.
+
+
 ## 2026-11-07: Club Manager historical roster counts live
 
 [PR #532](https://github.com/PapiSalgueroM/ballpark-hero/pull/532) published from main `c3b5ca4afaf9b4dadcd748f340e8e8e3e4a1a1dd`, App tree `133fcd3d26a4d237178e5c7efee723048da0aef2`, Lovable deployment `510b1df1-2172-42c0-90f9-d9f9c997b840`.
