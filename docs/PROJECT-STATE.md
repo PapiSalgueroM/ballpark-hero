@@ -20329,3 +20329,11 @@ The Market could loan out a starter after a manager reopened a paused match. In 
 Three focused regressions failed on the original source and passed with the change. All 36 scoped tests, the proper app type gate, a normal build, all 15 built-site checks, the Club Manager deals simulation and all 16 unchanged route caps passed. Club Manager measured 647.8 KiB gzip against 648 KiB. In the 390px replay, Quick Sim settled the same 1-1 at Everton as the baseline control. Wharton then went out on loan, and a cold resume reopened the same post-loan bytes as the control.
 
 Prepared on codex/club-manager-live-roster-20261111. When combining with PR #460, exclude active matches from its per-player reason display so the shared pause notice appears once. PR #460's specific reasons still apply between matches.
+
+## 2026-11-11: Club Manager early loan return safeguards
+
+Early loan returns use the same 14-player minimum and last-goalkeeper rule as permanent departures. The Market shows the reason when a return would leave too few players or remove the only goalkeeper. The normal return still charges the agreed fee.
+
+In the 390px replay, main and PR #592 both let Crystal Palace send its only goalkeeper, Robin Roefs, back for £0.8m and start the next match with Adam Wharton in goal. The candidate kept the saved roster and budget and started Roefs after a cold resume. A second replay held the 14-player minimum with three keepers. The legal £0.8m return matched PR #592's saved bytes exactly. The engine tests also allow a return from 15 to 14 and confirm it consumes no random draws.
+
+All 37 scoped tests, app types, the production build, the Club Manager Deals simulation, 15 built-site readers and all 16 existing caps passed. Club Manager measured 647.8 KiB against its 648 KiB budget. This branch is based on PR #592 at `b3c91a2dd1c9a0d643b20829860e2028151eba7d`.
