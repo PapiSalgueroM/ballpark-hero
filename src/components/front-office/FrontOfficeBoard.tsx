@@ -112,6 +112,7 @@ import type { NflSeasonCardProps } from '@/components/front-office/NflSeasonStat
    when it opens; the press never waits on it. Made here, at module level:
    a lazy part must be the same component on every render. */
 import { lazyPart } from '@/components/front-office-shared/gmLazyPanel';
+const SaveMovedNotice = lazy(() => import('@/components/SaveMovedNotice'));
 const NflGameDay = lazyPart<GmGameDayMount>(() => import('@/components/front-office/NflGameDay'));
 /* Round 1309: the bracket card, the face of the same box in the playoffs. Made
    once at module level, so the card, its "?" and the ledger's week names are
@@ -196,6 +197,9 @@ export default function FrontOfficeBoard() {
   const [saveError, setSaveError] = useState(false);
   const [saveWriteFailed, setSaveWriteFailed] = useState(false);
   const pendingSave = useRef<string | null>(null);
+  const alive = useRef(false);
+  const savedBytes = useRef<string | null>();
+  const [saveMoved, setSaveMoved] = useState(false);
   /* Round 204: the hub is tiles now, so null means the hub itself and a
      tab key means you have opened that box. Club Manager's Round 74 rule,
      brought to the four GM games. */
@@ -395,9 +399,34 @@ export default function FrontOfficeBoard() {
   };
 
   // ---- persistence ----
+  const checkSaveMoved = useCallback(() => {
+    try {
+      if (savedBytes.current !== undefined && localStorage.getItem(SAVE_KEY) !== savedBytes.current) {
+        setSaveMoved(true);
+        return true;
+      }
+    } catch { /* A storage refusal is handled by the save or retry. */ }
+    return false;
+  }, []);
+
+  useEffect(() => {
+    alive.current = true;
+    const onStorage = (e: StorageEvent) => {
+      if (e.key === SAVE_KEY || e.key === null) checkSaveMoved();
+    };
+    window.addEventListener('storage', onStorage);
+    window.addEventListener('pageshow', checkSaveMoved);
+    return () => {
+      alive.current = false;
+      window.removeEventListener('storage', onStorage);
+      window.removeEventListener('pageshow', checkSaveMoved);
+    };
+  }, [checkSaveMoved]);
+
   useEffect(() => {
     try {
       const raw = localStorage.getItem(SAVE_KEY);
+      savedBytes.current = raw;
       if (!raw) return;
       const parsed: unknown = JSON.parse(raw);
       if (!isFrontOfficeSave(parsed, 'NFL', REGULAR_WEEKS)) { setSaveError(true); return; }
@@ -482,6 +511,17 @@ export default function FrontOfficeBoard() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const retrySave = useCallback(() => {
+    const bytes = pendingSave.current;
+    if (!alive.current || bytes === null || checkSaveMoved()) return;
+    try {
+      localStorage.setItem(SAVE_KEY, bytes);
+      savedBytes.current = bytes;
+      pendingSave.current = null;
+      setSaveWriteFailed(false);
+    } catch { setSaveWriteFailed(true); }
+  }, [checkSaveMoved]);
+
   const persist = useCallback((patch: Partial<SaveShape>, lg: LeagueState | null, team: string) => {
     try {
       if (!lg) return;
@@ -503,21 +543,9 @@ export default function FrontOfficeBoard() {
       /* Round 1309: the same for the bracket: the key is the ref's, or absent */
       if (!playoffsLive.current) delete base.playoffs;
       pendingSave.current = JSON.stringify(base);
-      localStorage.setItem(SAVE_KEY, pendingSave.current);
-      pendingSave.current = null;
-      setSaveWriteFailed(false);
+      retrySave();
     } catch { setSaveWriteFailed(true); }
-  }, [phase, titles, seasonsPlayed, draftClass, picksLeft, draftBatchesLeft, mandate, trust, fired, pressTilt, seasonTradeLine, champion, playoffRounds, gradeLine]);
-
-  const retrySave = () => {
-    const bytes = pendingSave.current;
-    if (bytes === null) return;
-    try {
-      localStorage.setItem(SAVE_KEY, bytes);
-      pendingSave.current = null;
-      setSaveWriteFailed(false);
-    } catch { setSaveWriteFailed(true); }
-  };
+  }, [phase, titles, seasonsPlayed, draftClass, picksLeft, draftBatchesLeft, mandate, trust, fired, pressTilt, seasonTradeLine, champion, playoffRounds, gradeLine, retrySave]);
 
   /* Round 828: a new league carries every club's whole roster and practice
      squad. That data is its own chunk, fetched here on the tap rather than
@@ -526,7 +554,7 @@ export default function FrontOfficeBoard() {
      player the old fifteen man league in silence would be a different game
      than the one he picked. */
   const start = async (abbr: string) => {
-    if (starting) return;
+    if (starting || checkSaveMoved()) return;
     setStarting(abbr);
     setStartError(false);
     let depth;
@@ -536,11 +564,14 @@ export default function FrontOfficeBoard() {
     try {
       [{ FO_DEPTH: depth }, k] = await Promise.all([import('@/data/frontOfficeDepth'), loadNflCareerKit()]);
     } catch {
+      if (!alive.current) return;
       setStarting(null);
       setStartError(true);
       return;
     }
+    if (!alive.current) return;
     setStarting(null);
+    if (checkSaveMoved()) return;
     careerKit.arrived(k);
     const { hostNewSeat, hostSeatTeams, leagueTiers, nflDeskHost } = k;
     /* Codex853: a new franchise is the player's answer to a save that would not
@@ -755,7 +786,7 @@ export default function FrontOfficeBoard() {
   };
 
   const playWeek = () => {
-    if (!league || !my) return;
+    if (!league || !my || checkSaveMoved()) return;
     /* Round 828 follow up: a full roster over 53 cuts down before it plays,
        through the same two tap Cut as any other release. Nothing is played,
        so nothing is recorded either. */
@@ -1256,7 +1287,10 @@ export default function FrontOfficeBoard() {
   };
 
   const reset = () => {
+    if (checkSaveMoved()) return;
     localStorage.removeItem(SAVE_KEY);
+    savedBytes.current = null;
+    setSaveError(false);
     pendingSave.current = null;
     setSaveWriteFailed(false);
     setPhase('pick');
@@ -1406,7 +1440,11 @@ export default function FrontOfficeBoard() {
     career: careerOf(league),
   } : null;
 
-  const saveNotice = saveWriteFailed && (
+  const saveNotice = saveMoved ? (
+    <Suspense fallback={null}>
+      <SaveMovedNotice message="This franchise moved on in another tab. Reload to carry on." />
+    </Suspense>
+  ) : saveWriteFailed && (
     <div role="alert" data-no-prerender className="rounded-xl border border-destructive/40 bg-destructive/10 p-3 text-xs">
       <p>Franchise progress is not saved on this device. Keep this page open and retry.</p>
       <button type="button" onClick={retrySave} className="mt-2 min-h-11 min-w-11 rounded-full border border-destructive/50 px-3 font-bold">Retry save</button>
@@ -1421,7 +1459,7 @@ export default function FrontOfficeBoard() {
         {saveError && (
           <div role="alert" className="rounded-xl border border-destructive/40 bg-card p-4 text-sm">
             <p>We couldn&apos;t open this save. Pick a team to start a new franchise. Your old save stays here until you pick a team or delete it.</p>
-            <button onClick={() => { localStorage.removeItem(SAVE_KEY); setSaveError(false); }} className="mt-3 rounded-lg border border-border px-3 py-2 font-semibold hover:border-primary">Delete unusable save</button>
+            <button onClick={reset} className="mt-3 rounded-lg border border-border px-3 py-2 font-semibold hover:border-primary">Delete unusable save</button>
           </div>
         )}
         <div className="rounded-2xl border border-border bg-card p-4 text-center">
@@ -2041,6 +2079,7 @@ export default function FrontOfficeBoard() {
   /* the presses that open the bracket or play in it: the box then shows his game when the press logged one (a Watch
      runs it on the clock) and the bracket when it logged none (his bye, or he is out) */
   const pressPlayoffs = (asked: 'bracket' | 'round' | 'rest', watch: boolean) => {
+    if (checkSaveMoved()) return;
     const before = gameLogLive.current?.games.length ?? 0;
     if (watch) { setHeld(league); setHeldBracket(playoffs); setHeldRoom({ from: league, trust, presser, won: wonTitleNow }); }
     ask.current = asked;
@@ -2563,7 +2602,7 @@ export default function FrontOfficeBoard() {
             </button>
             {seenGame && (
               <button
-                onClick={() => { ask.current = 'week'; setHeld(league); playWeek(); }}
+                onClick={() => { if (!checkSaveMoved()) { ask.current = 'week'; setHeld(league); playWeek(); } }}
                 disabled={overLimit > 0 || !!hold || closeWaits}
                 data-watch-week
                 className="inline-flex min-h-[44px] items-center rounded-full border border-primary px-6 py-2.5 text-sm font-bold text-primary hover:bg-primary/10 disabled:opacity-40"
