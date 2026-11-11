@@ -276,6 +276,32 @@ console.log('6) The boost is honest');
   const back = deserializeTycoon(serializeTycoon(lit, 5), 5);
   if (!back || Math.abs(back.boostLeftSec - lit.boostLeftSec) > 0.001) fail('the boost clock did not survive a save');
   console.log(`   x${ratio.toFixed(2)} while lit, no stacking, burns out on time, away pay unchanged`);
+
+  const fresh = newTycoon(0);
+  const rate = incomePerSec(fresh);
+  const cases = [
+    ['ordinary', 0, null, 0, 2],
+    ['Hype expires', 0.5, null, 0, 2.5],
+    ['Derby Day expires', 0, 'frenzy', 0.25, 3.5],
+    ['Derby Day expires first', 0.5, 'frenzy', 0.25, 5.5],
+    ['Hype expires first', 0.25, 'frenzy', 4, 15.75],
+    ['both bonuses stay active', 4, 'frenzy', 4, 28],
+    ['Crowd Surge affects taps only', 0, 'tapRush', 0.25, 2],
+  ];
+  for (const [label, hype, kind, whistle, effectiveSeconds] of cases) {
+    let draws = 0;
+    const initial = { ...fresh, boostLeftSec: hype, goldenKind: kind, goldenLeftSec: whistle };
+    const { state, events } = tick(initial, 2, () => { draws += 1; return 0.999; });
+    const expected = rate * effectiveSeconds;
+    if (Math.abs(state.money - initial.money - expected) > 1e-9 || Math.abs(state.lifetime - initial.lifetime - expected) > 1e-9) {
+      fail(`${label}: two seconds paid ${state.money - initial.money}, expected ${expected} based on bonus time`);
+    }
+    if (state.boostLeftSec !== Math.max(0, hype - 2) || state.goldenLeftSec !== Math.max(0, whistle - 2)
+      || state.boostChargeSec !== (hype ? 0 : 2) || state.minute !== 1 || draws !== 2 || events.length !== 0) {
+      fail(`${label}: income changed a boost clock, match minute, draw count or events`);
+    }
+  }
+  console.log(`   ${cases.length} two-second callbacks checked for exact passive pay and unchanged match and bonus clocks`);
 }
 
 /* ---------- 7. Milestones pay once, ever ---------- */
