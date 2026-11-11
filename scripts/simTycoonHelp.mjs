@@ -432,6 +432,32 @@ function ticketClaim(where, key, read, source) {
 }
 const ticketExample = f => (f.lessThere && f.fullAtShare && f.moreOnceFull ? '' : `on the new ground Premium ${f.lessThere ? 'earns less than' : 'does not earn less than'} Standard; Premium first fills it at ${f.firstFull} supporters, which ${f.fullAtShare ? 'is' : 'is not'} where its share reaches the seats; from there up Premium ${f.moreOnceFull ? 'earns more' : 'does not always earn more'}`);
 
+function bulkClaim(phrase, payroll, amount) {
+  return {
+    where: 'screen', phrase,
+    check: (T, { fresh }) => {
+      const { id, maxLevel } = payroll ? T.staffById('steward') : T.TRACKS.find(t => t.id === 'stands');
+      const purchase = payroll ? T.payrollPurchase : T.upgradePurchase;
+      const priceOf = payroll ? T.staffCostOf : T.costOf;
+      const levels = payroll ? 'staffLevels' : 'levels';
+      const funded = { ...fresh, money: 1000 };
+      const quote = purchase(funded, id, amount);
+      if (quote.quantity !== amount) return `with an affordable ${amount}, the engine buys ${quote.quantity}`;
+      if (amount === 1) return '';
+
+      const single = purchase(funded, id, 1);
+      const nextPrice = priceOf(single.state, id);
+      const oneAffordable = purchase({ ...funded, money: single.cost }, id, amount);
+      const nearCap = { ...funded, [levels]: { ...funded[levels], [id]: maxLevel - 1 } };
+      const oneAtCap = purchase({ ...nearCap, money: priceOf(nearCap, id) * 2 }, id, amount);
+      return nextPrice > single.cost && oneAffordable.quantity === 1 && oneAffordable.state.money === 0 &&
+        oneAtCap.quantity === 1 && oneAtCap.state[levels][id] === maxLevel
+        ? ''
+        : `prices ${single.cost} then ${nextPrice}, bought ${oneAffordable.quantity} on a one-purchase wallet and ${oneAtCap.quantity} one below cap`;
+    },
+  };
+}
+
 /** Each row: the exact phrase in the guide (or the modal text), and what the
  *  engine must say for it to be true. A check returns '' when the claim holds,
  *  or the engine's answer when it does not. */
@@ -738,6 +764,13 @@ const CLAIMS = [
   /* ---- words anywhere else on the screen: the page, the hook's floaters, the pitch ---- */
   { where: 'screen', phrase: 'ten divisions', check: T => (T.DIVISIONS.length === 10 ? '' : `${T.DIVISIONS.length} divisions`) },
   { where: 'screen', phrase: '47 badges', check: T => (T.ACHIEVEMENTS.length === 47 ? '' : `${T.ACHIEVEMENTS.length} badges`) },
+
+  bulkClaim('1 hire', true, 1),
+  bulkClaim('Up to 5 hires', true, 5),
+  bulkClaim('Each hire costs more. Hire up to five you can afford, stopping at the staff cap.', true, 5),
+  bulkClaim('1 level', false, 1),
+  bulkClaim('Up to 5 levels', false, 5),
+  bulkClaim('Each level costs more. Buy up to five you can afford, stopping at the level cap.', false, 5),
 
   /* ---- the engine's own blurbs, which the tiles and the boardroom print ---- */
   {
@@ -1113,6 +1146,23 @@ const CLAIM_CONTROLS = [
     why: 'the away card says half speed again, which is wrong with the Away Day Deal',
     red: ['M2'], green: ['G1', 'G2', 'G3', 'M1', 'L1'],
     page: p => mustReplace(p, 'The turnstiles kept spinning at {Math.round(offlineRateOf(s) * 100)}% speed.', 'The turnstiles kept spinning at half speed.', 'StadiumTycoon.tsx'),
+  },
+  {
+    name: 'bulkcopy', why: 'the payroll button promises six hires',
+    red: ['M2'], green: ['G1', 'G2', 'G3', 'M1', 'L1'],
+    page: p => mustReplace(p, "'Up to 5 hires'", "'Up to 6 hires'", 'StadiumTycoon.tsx'),
+  },
+  {
+    name: 'bulkquantity', why: 'the engine buys only one hire when five are affordable',
+    red: ['G2'], green: ['G1', 'G3', 'M1', 'M2', 'L1'],
+    lib: t => {
+      const funded = { ...m.fresh, money: 1000 };
+      const payrollPurchase = (state, id) => t.payrollPurchase(state, id, 1);
+      if (payrollPurchase(funded, 'steward').quantity === t.payrollPurchase(funded, 'steward', 5).quantity) {
+        abort('  control bulkquantity: the engine quantity did not change');
+      }
+      return { ...t, payrollPurchase };
+    },
   },
   {
     name: 'typedblurb',
