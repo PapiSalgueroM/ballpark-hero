@@ -1,3 +1,9 @@
+## 2026-11-10: NBA Grid Andre Drummond Knicks membership staged
+
+The live answer key includes Detroit and omits New York for Andre Drummond. The migration adds the Knicks to the verified franchise list on his exact career row. Career totals cover 2012-13 through 2025-26. [NBA official box score](https://www.nba.com/game/0022600177/box-score) · [Basketball Reference](https://www.basketball-reference.com/boxscores/202611040NYK.html)
+
+The actual grid loader and matcher accept him for Detroit and New York with the correction. Local Postgres updated one field, replayed exactly and rejected five drift cases. Admin report `a305345d` has no puzzle or mode captured. Verify the public answer key after applying the migration.
+
 ## 2026-11-07: Club Manager historical roster counts live
 
 [PR #532](https://github.com/PapiSalgueroM/ballpark-hero/pull/532) published from main `c3b5ca4afaf9b4dadcd748f340e8e8e3e4a1a1dd`, App tree `133fcd3d26a4d237178e5c7efee723048da0aef2`, Lovable deployment `510b1df1-2172-42c0-90f9-d9f9c997b840`.
