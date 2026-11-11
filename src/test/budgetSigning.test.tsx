@@ -145,8 +145,9 @@ describe('Budget Builder signing decisions', () => {
     expect(view.container.querySelector('[data-budget-feedback]')).toHaveTextContent('Fixture player 0 released. $40M returned.');
   });
 
-  it('closes and escapes to the exact opener without signing, and truthfully keeps the top sixty bound', async () => {
+  it('closes and escapes to the exact opener, scopes search per slot and keeps the top sixty bound', async () => {
     pool = Array.from({ length: 75 }, (_, index) => player(`Fixture keeper ${index}`, 'GK', 100 - index));
+    pool.push(xi[9]);
     const view = await start(); open(view);
     expect(view.getAllByRole('button', { name: /^Preview signing/ })).toHaveLength(60);
     expect(view.getByText('Showing 60 of up to 60 eligible matches, highest value first. Search to narrow the shortlist.')).toBeVisible();
@@ -155,6 +156,27 @@ describe('Budget Builder signing decisions', () => {
     expect(boundary.signs).not.toHaveBeenCalled(); expect(boundary.state!.squad).toEqual({});
     open(view); preview(view, pool[74]); expect(view.getAllByRole('button', { name: /^Preview signing/ })).toHaveLength(1);
     expect(field(view, 'Signing cost')).toHaveTextContent('$26M');
+
+    open(view, 9);
+    expect(view.getByRole('textbox')).toHaveValue('');
+    const striker = preview(view, xi[9]);
+    fireEvent.click(view.getByRole('button', { name: 'Cancel preview' }));
+    expect(view.getByRole('textbox')).toHaveValue(xi[9].name);
+    expect(striker).toHaveFocus();
+    expect(view.getAllByRole('button', { name: /^Preview signing/ })).toEqual([striker]);
+
+    open(view);
+    expect(view.getByRole('textbox')).toHaveValue('');
+    expect(view.getAllByRole('button', { name: /^Preview signing/ })).toHaveLength(60);
+
+    open(view, 9);
+    preview(view, xi[9]);
+    fireEvent.click(view.getByRole('button', { name: 'Close signing shortlist' }));
+    open(view);
+    expect(view.getByRole('textbox')).toHaveValue('');
+    expect(view.getAllByRole('button', { name: /^Preview signing/ })).toHaveLength(60);
+    expect(boundary.state!.squad).toEqual({});
+    expect(boundary.state!.remaining).toBe(1000);
   });
 
   it('keeps cues finite, quiet on cloned rerenders and cleared by reset or unmount', async () => {

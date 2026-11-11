@@ -233,7 +233,13 @@ export function BudgetBuilderBoard() {
               aria-controls={isActive ? 'budget-signing-picker' : undefined}
               data-budget-slot={i}
               data-budget-slot-feedback={cue?.slot === i ? 'committed' : undefined}
-              onClick={event => { opener.current = event.currentTarget; setChoice(null); setCue(null); setActiveSlot(isActive ? null : i); }}
+              onClick={event => {
+                opener.current = event.currentTarget;
+                setChoice(null);
+                setCue(null);
+                if (!isActive) setSearch('');
+                setActiveSlot(isActive ? null : i);
+              }}
               style={{ left: `${slot.x}%`, top: `${slot.y}%` }}
               className={`absolute w-[19%] -translate-x-1/2 -translate-y-1/2 rounded-lg border-2 px-1 py-1.5 text-center transition-all ${
                 isActive
