@@ -10,6 +10,7 @@ import { formatNumber } from './formatNumber';
  */
 
 import { NHL_TEAMS } from '@/data/conquestDataNhl';
+import { NHL_PLAYOFF_FORMAT } from '@/data/usSeasonLedgerNhl';
 import { seasonSwing, swingNote, playoffDepthOf, playoffGames, clutchSwing, clutchNote } from './careerVariance';
 import { nhlSeasonScore, wonAward } from './careerAwards';
 import { US_ENGINE_SEASON, seasonLength, toSlate, fullSeasonOf } from './usSeasonShape';
@@ -530,9 +531,14 @@ export function simNhlSeason(
     const poForm = form + clutch - 1.2;   // playoff hockey is tighter
     line.poGames = poG;
     if (c.pos === 'G') {
-      line.poWins = Math.max(0, Math.min(16, Math.round(poG * (0.45 + (poForm - 64) * 0.006))));
+      const series = NHL_PLAYOFF_FORMAT.series;
+      const priorWins = series.slice(0, poDepth).reduce((wins, [need]) => wins + need, 0);
+      const lostRound = series[poDepth];
+      // The team lost the clinching number of games and finished short of winning the series.
+      const maxWins = lostRound ? Math.min(poG - lostRound[0], priorWins + lostRound[0] - 1) : priorWins;
+      line.poWins = Math.max(0, Math.min(maxWins, Math.round(poG * (0.45 + (poForm - 64) * 0.006))));
       line.poSvpct = Math.min(0.96, Math.max(0.86, Math.round((0.903 + (poForm - 64) * 0.0012 + rng() * 0.006) * 1000) / 1000));
-      notes.push(`📊 Playoffs: ${poG} games, ${line.poWins} wins, ${line.poSvpct.toFixed(3)} SV%.`);
+      notes.push(`📊 Playoffs: ${poG} games, ${line.poWins} win${line.poWins === 1 ? '' : 's'}, ${line.poSvpct.toFixed(3)} SV%.`);
     } else {
       const pg = poG / US_ENGINE_SEASON.nhl;
       const off = (NHL_POS_PROFILE[c.pos] ?? NHL_POS_PROFILE.C).offense;

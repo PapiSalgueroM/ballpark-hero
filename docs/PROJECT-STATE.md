@@ -1,3 +1,11 @@
+## 2026-11-11: NHL My Career goalie playoff wins candidate
+
+New goalie playoff lines cap wins at what the team's result and games played could support. The cap uses the four modeled best-of-seven rounds. The original 390 px run credited three goalie wins in a six-game first-round loss, where the team could only have won two.
+
+The seeded comparison replayed 2,000 current and throwback seasons and corrected 470 impossible goalie win totals. All other season results, statistics and random draws matched. The 65 goalie Cup runs and 1,000 skater seasons matched in full. The test also holds legal goalie totals and the old 16-win Cup ceiling.
+
+The compiled phone replay verified two wins through reload for 2026, 2006 and the 48-game 2012 season. Earlier saved totals display as recorded. App types, the production build, 48 focused tests, the 400-career NHL harness, 15 offline output checks and 16 unchanged route caps passed.
+
 ## 2026-11-07: Club Manager historical roster counts live
 
 [PR #532](https://github.com/PapiSalgueroM/ballpark-hero/pull/532) published from main `c3b5ca4afaf9b4dadcd748f340e8e8e3e4a1a1dd`, App tree `133fcd3d26a4d237178e5c7efee723048da0aef2`, Lovable deployment `510b1df1-2172-42c0-90f9-d9f9c997b840`.
