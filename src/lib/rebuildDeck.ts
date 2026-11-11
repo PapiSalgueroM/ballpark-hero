@@ -970,7 +970,7 @@ export function simulateSeason(
   const champ = rows[0];
   highlights.push(champ.isYou ? '\u{1F3C6} You won the league in front of a full house.' : `\u{1F3C6} ${champ.emoji} ${champ.name} won it with ${champ.pts} points.`);
 
-  // Golden boot: real names only (your XI + rival signings), goals scaled off team output.
+  // Keep each candidate's seeded draw and cap credited goals and assists at team goals.
   let goldenBoot: SeasonResult['goldenBoot'] = null;
   const yourAtk = you.xi
     .filter(p => ['ST', 'CF', 'LW', 'RW', 'CAM'].includes(p.position))
@@ -978,22 +978,25 @@ export function simulateSeason(
   let yourTopScorer: SeasonResult['yourTopScorer'] = null;
   let yourAssistKing: SeasonResult['yourAssistKing'] = null;
   if (yourAtk[0]) {
-    const goals = Math.max(2, Math.round(yourRow.gf * (0.42 + rnd() * 0.14)));
-    yourTopScorer = { player: yourAtk[0].name, goals };
-    goldenBoot = { player: yourAtk[0].name, team: 'You', goals };
+    const goals = Math.min(yourRow.gf, Math.max(2, Math.round(yourRow.gf * (0.42 + rnd() * 0.14))));
+    if (goals > 0) {
+      yourTopScorer = { player: yourAtk[0].name, goals };
+      goldenBoot = { player: yourAtk[0].name, team: 'You', goals };
+    }
   }
   const yourMids = you.xi
     .filter(p => ['CM', 'CAM', 'CDM', 'LM', 'RM', 'LW', 'RW'].includes(p.position))
-    .filter(p => p.name !== yourTopScorer?.player)
+    .filter(p => p.name !== yourAtk[0]?.name)
     .sort((a, b) => playerRating(b) - playerRating(a));
   if (yourMids[0]) {
-    yourAssistKing = { player: yourMids[0].name, assists: Math.max(2, Math.round(yourRow.gf * (0.24 + rnd() * 0.1))) };
+    const assists = Math.min(yourRow.gf, Math.max(2, Math.round(yourRow.gf * (0.24 + rnd() * 0.1))));
+    if (assists > 0) yourAssistKing = { player: yourMids[0].name, assists };
   }
   for (const r of rivals) {
     const row = rows.find(x => x.name === r.name);
     if (!row || r.signings.length === 0) continue;
-    const goals = Math.max(2, Math.round(row.gf * (0.38 + rnd() * 0.14)));
-    if (!goldenBoot || goals > goldenBoot.goals) goldenBoot = { player: r.signings[0], team: r.name, goals };
+    const goals = Math.min(row.gf, Math.max(2, Math.round(row.gf * (0.38 + rnd() * 0.14))));
+    if (goals > 0 && (!goldenBoot || goals > goldenBoot.goals)) goldenBoot = { player: r.signings[0], team: r.name, goals };
   }
 
   const headline =
@@ -1092,7 +1095,8 @@ export function simulateSharedSeason(teams: SharedSeasonTeam[], fillerClubs: Reb
     const outfield = t.xi.filter(p => p.position !== 'GK').sort((a, b) => playerRating(b) - playerRating(a));
     const scorer = attackers[0] ?? outfield[0];
     const share = attackers[0] ? 0.42 : 0.22;
-    const topScorer = scorer ? { player: scorer.name, goals: Math.max(1, Math.round(row.gf * (share + rnd() * 0.14))) } : null;
+    const goals = scorer ? Math.min(row.gf, Math.max(1, Math.round(row.gf * (share + rnd() * 0.14)))) : 0;
+    const topScorer = scorer && goals > 0 ? { player: scorer.name, goals } : null;
     return { seat: t.seat, biggestWin, longestUnbeaten: longest, topScorer };
   });
 
