@@ -1,3 +1,11 @@
+## 2026-11-11 Stadium Tycoon Legacy perk save draft
+
+The Legacy boardroom now saves the perk and its point debit before celebrating or counting the session. If the browser refuses the write, the perk stays unbought, the points remain available, and the boardroom offers a retry. This draft builds on the save protection in PR #605.
+
+At 390px the original Boardroom Sway purchase showed level 1 and spent three points on screen while storage still held level 0 and all four points. A refused purchase now keeps level 0 and four points, shows a retry message and records no completion. A successful retry spends exactly three points, records one completion and restores the same 1,439 bytes as an uninterrupted purchase after reload.
+
+Passed 23 focused tests, app types, the production build, Stadium Tycoon and Save Fence simulations, 15 output checks, and all 16 unchanged route caps.
+
 ## 2026-11-07: Club Manager historical roster counts live
 
 [PR #532](https://github.com/PapiSalgueroM/ballpark-hero/pull/532) published from main `c3b5ca4afaf9b4dadcd748f340e8e8e3e4a1a1dd`, App tree `133fcd3d26a4d237178e5c7efee723048da0aef2`, Lovable deployment `510b1df1-2172-42c0-90f9-d9f9c997b840`.
