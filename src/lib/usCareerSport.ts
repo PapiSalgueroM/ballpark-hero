@@ -273,8 +273,9 @@ export interface UsCareerSport<C extends UsCareerCore = any, L extends UsCareerS
   gameSlug: string;
   /** 'NFL My Career', for the share button. */
   gameName: string;
-  /** How long round one of this sport's draft is. */
+  /** Default length of round one in the quick draft. */
   firstRoundEnd: number;
+  firstRoundEndForEra?(eraId: string): number;
   create: UsCareerCreate;
   practiceLabel: string;
   loadTraining(pos: string): Promise<TrainingSport>;

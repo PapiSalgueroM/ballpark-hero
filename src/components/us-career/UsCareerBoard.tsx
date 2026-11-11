@@ -658,14 +658,15 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
     if (summerOn(sport.summer)) c.summerSalt = newSummerSalt(Math.random);
     setCareer(c);
     setTeamQuality(tq);
-    const pressureLine = draftPressureLine(c.draftPick, sport.firstRoundEnd);
+    const firstRoundEnd = sport.firstRoundEndForEra?.(eraId) ?? sport.firstRoundEnd;
+    const pressureLine = draftPressureLine(c.draftPick, firstRoundEnd);
     setFeed([
       `🎓 With pick ${c.draftPick}, the ${sport.teamLabelOf(c.team)} select ${c.name}.`,
       pressureLine,
       roleNote,
     ]);
     /* Round 530: the same facts, given a moment. */
-    setDraftDay({ pick: c.draftPick, teamLabel: sport.teamLabelOf(c.team), playerName: c.name, lines: [pressureLine, roleNote], firstRoundEnd: sport.firstRoundEnd });
+    setDraftDay({ pick: c.draftPick, teamLabel: sport.teamLabelOf(c.team), playerName: c.name, lines: [pressureLine, roleNote], firstRoundEnd });
     setCareerStart(n => n + 1);
     setPhase('season');
     persist(c, 'season', tq);

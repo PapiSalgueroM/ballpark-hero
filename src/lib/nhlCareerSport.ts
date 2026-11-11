@@ -11,7 +11,7 @@ import {
   NHL_ARCHETYPES, NHL_ERAS, startNhlCareer, simNhlSeason, nhlProgress, drawNhlEvent,
   nhlEventDeck,
   NHL_SPEND_ITEMS, buyNhlItem, getNhlSpendItem,
-  nhlShouldRetire, nhlLegacyOf, nhlCareerTotals, nhlRollTeamQuality, nhlTeamLabelOf,
+  nhlShouldRetire, nhlLegacyOf, nhlCareerTotals, nhlRollTeamQuality, nhlTeamLabelOf, nhlEraTeamIds,
   buildNhlFaWindow, nhlFaPushArgs, buildNhlExtension, nhlExtPushArgs,
   nhlAssignRole, nhlCampBattle, nhlWorkSlate,
   type NhlCareerPos, type NhlCareerState, type NhlSeasonLine,
@@ -57,8 +57,9 @@ export const NHL_CAREER_SPORT: UsCareerSport<NhlCareerState, NhlSeasonLine> = wi
   gameName: 'NHL My Career',
   practiceLabel: 'Practice rink',
   loadTraining: pos => import('@/lib/nhlCareerTraining').then(m => m.nhlTraining(pos as NhlCareerPos)),
-  /* The NHL has 32 clubs, so round one is 32. */
+  /* The modern NHL has 32 clubs. */
   firstRoundEnd: 32,
+  firstRoundEndForEra: eraId => nhlEraTeamIds(eraId).length,
   create: {
     defaultName: 'Gordie Blaze',
     defaultPos: 'C',
