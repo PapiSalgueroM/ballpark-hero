@@ -1,3 +1,11 @@
+## 2026-11-11: Missing XI keeps its Daily lineup date across midnight
+
+Missing XI now uses the saved Daily session date for both the lineup draw and its caption. A tab left open across Eastern midnight still shows the date of the lineup it dealt. A fresh visit draws the next day's lineup.
+
+The original 390px build relabeled November 11's Italy lineup as November 12 after midnight, even though the successful Gennaro Gattuso guess correctly saved under November 11. The regression covers switching to Unlimited and back, solving the first lineup for 100, and reloading for November 12's Bayern lineup.
+
+The fixed phone replay matched the original save byte for byte and recorded one completion. All eight focused tests, the 207-lineup audit, app types, the production build, 15 output checks and 16 unchanged route caps passed.
+
 ## 2026-11-07: Club Manager historical roster counts live
 
 [PR #532](https://github.com/PapiSalgueroM/ballpark-hero/pull/532) published from main `c3b5ca4afaf9b4dadcd748f340e8e8e3e4a1a1dd`, App tree `133fcd3d26a4d237178e5c7efee723048da0aef2`, Lovable deployment `510b1df1-2172-42c0-90f9-d9f9c997b840`.
