@@ -585,6 +585,16 @@ export function tick(s: FactoryState, dt: number, opts?: { offline?: boolean }):
   if (!(dt > 0) || !Number.isFinite(dt)) return;
   const offline = opts?.offline === true;
 
+  // The showcase trains only while watched. Read its remaining time before
+  // moving the clock so a tick crossing expiry still pays the active seconds.
+  const showcaseLeft = offline ? 0 : s.showcaseLeft;
+  const tm = offline && s.showcaseLeft > 0 ? trainMult(s) / SHOWCASE_MULT : trainMult(s);
+  const trainingSeconds = (seconds: number, elapsed = 0) => {
+    if (showcaseLeft <= 0) return seconds;
+    const boosted = Math.max(0, Math.min(seconds, showcaseLeft - elapsed));
+    return boosted + (seconds - boosted) / SHOWCASE_MULT;
+  };
+
   /* clocks that only run while someone is watching */
   if (!offline) {
     if (s.showcaseLeft > 0) s.showcaseLeft = Math.max(0, s.showcaseLeft - dt);
@@ -617,18 +627,12 @@ export function tick(s: FactoryState, dt: number, opts?: { offline?: boolean }):
 
   /* training and the clock. Growth slows toward the ceiling and never
      crosses it: headroom is the fraction of the original climb left. */
-  /* Round 581 review: a showcase is a watched moment. Away time trains at the
-     away rate without it, and its clock waits (above), so hiding the tab during
-     a showcase neither multiplies the away pay by three nor burns the showcase.
-     Before this, a hidden tab with a showcase lit trained at 1.5 times the
-     WATCHED speed and the showcase never ran out: the stadium's Matchday Hype
-     has had the same exclusion since Round 150. */
-  const tm = offline && s.showcaseLeft > 0 ? trainMult(s) / SHOWCASE_MULT : trainMult(s);
+  const youthTraining = trainingSeconds(dt);
   const leavers: number[] = [];
   for (const p of s.prospects) {
     if (p.rating < p.potential) {
       const headroom = Math.max(0.12, (p.potential - p.rating) / Math.max(1, p.potential - 40));
-      p.rating = Math.min(p.potential, p.rating + TRAIN_BASE * tm * headroom * dt);
+      p.rating = Math.min(p.potential, p.rating + TRAIN_BASE * tm * headroom * youthTraining);
     }
     /* the calendar only turns while someone is watching. An eight hour
        offline gap is 96 academy years, and coming back to an academy the
@@ -662,7 +666,7 @@ export function tick(s: FactoryState, dt: number, opts?: { offline?: boolean }):
       const seconds = offline ? left : Math.min(left, SENIOR_YEAR_SEC - p.ageClock);
       if (p.age <= 27 && p.rating < p.potential) {
         const headroom = Math.max(0.12, (p.potential - p.rating) / Math.max(1, p.potential - 40));
-        p.rating = Math.min(p.potential, p.rating + TRAIN_BASE * tm * headroom * seconds * 0.5);
+        p.rating = Math.min(p.potential, p.rating + TRAIN_BASE * tm * headroom * trainingSeconds(seconds, dt - left) * 0.5);
       }
       left -= seconds;
       if (offline) break;

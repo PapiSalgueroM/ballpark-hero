@@ -229,6 +229,38 @@ describe('Wonderkid Factory away time', () => {
     measured(`showcase: 10 hidden minutes with x3 lit trained exactly as without it; ${s.showcaseLeft.toFixed(2)}s of showcase still waiting`);
   }, TEST_MS);
 
+  it.each([4, 5, 6])('14 a watched tick pays the showcase when %ss remain', (showcaseLeft) => {
+    const saved = deserialize(raw('midAcademy'), EPOCH)!;
+    const prospect = { ...saved.prospects[0], rating: 58, potential: 90, age: 18, ageClock: 30 };
+    Object.assign(saved, {
+      lastSeen: EPOCH, rep: 0, levels: { ...saved.levels, coaching: 0 },
+      scoutProgress: 0, showcaseLeft, showcaseCooldown: 129, prospects: [prospect],
+      firstTeam: [
+        { ...prospect, id: 'sr-showcase-older', name: 'Older senior', age: 27, ageClock: 898 },
+        { ...prospect, id: 'sr-showcase-younger', name: 'Younger senior', age: 26, ageClock: 898 },
+      ],
+    });
+    localStorage.setItem(SAVE_KEY, JSON.stringify(saved));
+    mount();
+
+    act(() => { vnow += 5000; vi.advanceTimersByTime(CALLBACK_MS); });
+
+    const s = state();
+    const normalGain = 0.085 * (90 - 58) / (90 - 40);
+    const boostedSeconds = Math.min(5, showcaseLeft);
+    expect(s.prospects[0].rating).toBeCloseTo(58 + normalGain * (5 + 2 * boostedSeconds), 10);
+    const seniorAtBirthday = 58 + normalGain * 3 * 2 * 0.5;
+    const seniorGainAfter = 0.085 * (90 - seniorAtBirthday) / (90 - 40) * 0.5;
+    expect(s.firstTeam?.[0].rating).toBeCloseTo(seniorAtBirthday, 10);
+    expect(s.firstTeam?.[1].rating).toBeCloseTo(seniorAtBirthday + seniorGainAfter * (3 + 2 * (boostedSeconds - 2)), 10);
+    expect(s.prospects[0].ageClock).toBe(35);
+    expect(s.firstTeam?.[0]).toMatchObject({ age: 28, ageClock: 3 });
+    expect(s.firstTeam?.[1]).toMatchObject({ age: 27, ageClock: 3 });
+    expect(s.showcaseLeft).toBe(Math.max(0, showcaseLeft - 5));
+    expect(s.showcaseCooldown).toBe(124);
+    measured(`showcase: ${boostedSeconds}s of the watched 5s tick trained at x3 and age clocks advanced 5s`);
+  });
+
   it('11 a hidden tab whose wakes jitter never opens a fresh eight hours', () => {
     localStorage.setItem(SAVE_KEY, raw('midAcademy'));
     mount();
