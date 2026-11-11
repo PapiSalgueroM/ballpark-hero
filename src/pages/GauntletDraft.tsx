@@ -31,6 +31,7 @@ import {
 type Phase = 'boot' | 'error' | 'setup' | 'drafting' | 'running' | 'done';
 type Mode = 'daily' | 'unlimited';
 const SLUG = 'gauntlet-draft';
+const MIN_POOL_SIZE = 100;
 
 /* The original card frame: colour keyed to the card's rating band. */
 const bandClass = (r: number) =>
@@ -62,7 +63,7 @@ export default function GauntletDraft() {
     fetchSquadPool('current')
       .then(p => {
         if (cancelled) return;
-        if (p.length < 100) { setPhase('error'); return; }
+        if (p.length < MIN_POOL_SIZE) { setPhase('error'); return; }
         setPool(p);
         setPhase('setup');
       })
@@ -135,7 +136,8 @@ export default function GauntletDraft() {
   useGameCompletion(SLUG, run !== null, run?.score ?? 0, run?.roundsCleared ?? 0);
 
   const pick = draft && phase === 'drafting' ? draft.picks[pickIndex] : null;
-  const dailyDone = phase === 'setup' && loadDailyRun(todayStr) !== null;
+  const poolUnavailable = phase === 'error' || (phase === 'setup' && pool.length < MIN_POOL_SIZE);
+  const dailyDone = (phase === 'setup' || phase === 'error') && loadDailyRun(todayStr) !== null;
 
   return (
     <>
@@ -149,16 +151,27 @@ export default function GauntletDraft() {
           <div className="flex justify-center py-16"><Loader2 className="w-8 h-8 animate-spin text-primary" /></div>
         )}
 
-        {phase === 'error' && (
+        {poolUnavailable && (
           <div className="text-center py-12">
             <p className="text-destructive font-semibold mb-3">Couldn't load the player pool right now.</p>
-            <button onClick={() => window.location.reload()} className="px-6 py-2.5 bg-primary text-primary-foreground rounded-full font-semibold">
-              Try again
-            </button>
+            <div className="flex flex-wrap justify-center gap-2">
+              {dailyDone && (
+                <button
+                  type="button"
+                  onClick={() => { if (loadDailyRun(todayStr)) start('daily'); }}
+                  className="px-6 py-2.5 border border-border rounded-full font-semibold"
+                >
+                  See today's result
+                </button>
+              )}
+              <button onClick={() => window.location.reload()} className="px-6 py-2.5 bg-primary text-primary-foreground rounded-full font-semibold">
+                Try again
+              </button>
+            </div>
           </div>
         )}
 
-        {phase === 'setup' && (
+        {phase === 'setup' && !poolUnavailable && (
           <div className="space-y-4 max-w-sm mx-auto">
             <div className="rounded-xl border border-border bg-surface-1 p-4 text-sm text-muted-foreground space-y-1.5">
               <p className="font-bold text-foreground">How to play</p>
