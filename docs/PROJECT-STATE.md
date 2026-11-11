@@ -1,3 +1,9 @@
+## 2026-11-11: Budget Builder shortlist search
+
+Budget Builder matches player and club names with the same accent and special-letter handling as the site search. In the compiled 390px baseline, Mbappe, Odegaard and Atletico de Madrid each returned zero cards. The candidate returned the same one, one and three cards as the accented searches. Typing Mbappe and confirming signed the same player for $216M. The mounted regression covers both spellings, an over-budget keeper, a wrong-position match and the exact signing cost.
+
+All ten signing cases, the app type check, production build, 15 built-output checks and 16 route-size caps passed. The snapshot boot check used native loopback-only browser routing after the offline preload rejected Playwright's local transport.
+
 ## 2026-11-07: Club Manager historical roster counts live
 
 [PR #532](https://github.com/PapiSalgueroM/ballpark-hero/pull/532) published from main `c3b5ca4afaf9b4dadcd748f340e8e8e3e4a1a1dd`, App tree `133fcd3d26a4d237178e5c7efee723048da0aef2`, Lovable deployment `510b1df1-2172-42c0-90f9-d9f9c997b840`.
