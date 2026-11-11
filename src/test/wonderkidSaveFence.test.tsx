@@ -9,7 +9,7 @@ import { fenceKeyOf } from '@/lib/saveFence';
 import { BOOTS } from '@/lib/soccerCareerAppearance';
 import { newTycoon, serializeTycoon, TYCOON_SAVE_KEY } from '@/lib/stadiumTycoon';
 import { creditFullTimes, newLedger, REWARDS_KEY } from '@/lib/tycoonRewards';
-import { deserialize, makeProspectInBand, newFactory, PACKS, SAVE_KEY, serialize } from '@/lib/wonderkidFactory';
+import { deserialize, makeProspectInBand, newFactory, PACKS, salePrice, SAVE_KEY, serialize } from '@/lib/wonderkidFactory';
 import StadiumTycoon from '@/pages/StadiumTycoon';
 import WonderkidFactory from '@/pages/WonderkidFactory';
 
@@ -124,16 +124,50 @@ it.each(['promote', 'pack', 'upgrade'] as const)('refuses a stale %s before it c
   expect(older!.state.prospects).toHaveLength(1);
 });
 
-it('carries an unsaved sale into the other door when navigating in one tab', async () => {
+it('saves a prospect sale before carrying it into the other door', async () => {
   const view = render(<StadiumTycoon />, { wrapper: ({ children }) => <HelmetProvider><MemoryRouter>{children}</MemoryRouter></HelmetProvider> });
   const stadium = within(view.container);
   fireEvent.click(stadium.getByRole('button', { name: /^🎓 Academy/ }));
   const sell = await stadium.findByRole('button', { name: /^Sell for / }, { timeout: 4_000 });
   const before = save();
   fireEvent.click(sell);
-  expect(save()).toBe(before);
+  const sold = save();
+  expect(sold).not.toBe(before);
+  expect(deserialize(sold, now)?.sold).toBe(1);
   await act(async () => { view.rerender(<WonderkidFactory />); });
   expect(stadium.queryByText(/the beds are empty/)).toBeVisible();
-  expect(deserialize(save(), now)?.sold).toBe(1);
+  expect(save()).toBe(sold);
   expect(stadium.queryByRole('button', { name: 'Reload academy' })).toBeNull();
+}, 15_000);
+
+it.each([false, true])('holds a prospect and its fee until storage accepts the sale (Stadium: %s)', async stadium => {
+  const view = await openDoor(stadium);
+  const academy = within(view.container);
+  const sell = academy.getByRole('button', { name: /^Sell for / });
+  const before = save();
+  const state = deserialize(before, now)!;
+  const fee = salePrice(state, state.prospects[0]);
+  const nativeWrite = Storage.prototype.setItem;
+  let refused = 0;
+  const fault = vi.spyOn(Storage.prototype, 'setItem').mockImplementation(function (this: Storage, key, value) {
+    if (key === SAVE_KEY) {
+      refused++;
+      throw new DOMException('Controlled academy save refusal', 'QuotaExceededError');
+    }
+    nativeWrite.call(this, key, value);
+  });
+
+  fireEvent.click(sell);
+  expect(save()).toBe(before);
+  expect(refused).toBe(1);
+  expect(sell).toBeVisible();
+  expect(academy.getByText(/The academy could not save that change/)).toBeVisible();
+
+  fault.mockRestore();
+  fireEvent.click(sell);
+  const sold = deserialize(save(), now)!;
+  expect(sold.prospects).toHaveLength(0);
+  expect(sold.cash).toBe(state.cash + fee);
+  expect(sold.soldCareer).toBe(state.soldCareer + 1);
+  expect(academy.queryByText(/The academy could not save that change/)).toBeNull();
 }, 15_000);
