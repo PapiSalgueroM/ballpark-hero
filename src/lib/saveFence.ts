@@ -74,18 +74,16 @@ export const fenceKeyOf = (saveKey: string): string => FENCE_PREFIX + saveKey;
 
 export function createSaveFence(source: FenceStore | (() => FenceStore | null | undefined)): SaveFence {
   const held = new Map<string, number>();
-  const store = (): FenceStore | null => {
+  const store = () => {
     try {
-      return (typeof source === 'function' ? source() : source) ?? null;
-    } catch {
-      return null;
-    }
+      return typeof source === 'function' ? source() : source;
+    } catch { /* browser storage is unavailable */ }
   };
   /** The stored generation, or null when absent, unreadable or unreachable. */
   const stored = (saveKey: string): number | null => {
     try {
       const raw = store()?.getItem(fenceKeyOf(saveKey));
-      if (raw === null || raw === undefined || raw.trim() === '') return null;
+      if (!raw || !raw.trim()) return null;
       const n = Number(raw);
       return Number.isSafeInteger(n) && n >= 0 ? n : null;
     } catch {
@@ -94,9 +92,7 @@ export function createSaveFence(source: FenceStore | (() => FenceStore | null | 
   };
   const moved = (saveKey: string): boolean => {
     const mine = held.get(saveKey);
-    if (mine === undefined) return false;
-    const now = stored(saveKey);
-    return now !== null && now !== mine;
+    return mine !== undefined && (stored(saveKey) ?? mine) !== mine;
   };
   return {
     adopt(saveKey) {
@@ -125,29 +121,24 @@ export function createSaveFence(source: FenceStore | (() => FenceStore | null | 
       let ok = false;
       try {
         ok = doWrite() === true;
-      } catch {
-        ok = false;
-      }
+      } catch { /* failed write */ }
       /* A refused save changed nothing, so the fence goes back to what it was
          and no other tab is made stale over the same bytes. If even that is
          refused, the fence stays moved and this page holds the new number. */
-      let at = fenced ? next : mine;
       if (fenced && !ok && s) {
         try {
           if (before === null) s.removeItem(fenceKeyOf(saveKey));
           else s.setItem(fenceKeyOf(saveKey), before);
-          at = mine;
+          fenced = false;
         } catch {
           /* left moved: a reload in the other tab, nothing lost */
         }
       }
-      if (mine !== undefined && at !== undefined) held.set(saveKey, at);
+      if (mine !== undefined) held.set(saveKey, fenced ? next : mine);
       return ok ? 'written' : 'failed';
     },
   };
 }
 
 /** The page's own fence over the browser's storage; none in a node sim with no window. */
-export const saveFence: SaveFence = createSaveFence(
-  () => (typeof window === 'undefined' ? null : window.localStorage),
-);
+export const saveFence: SaveFence = createSaveFence(() => window.localStorage);

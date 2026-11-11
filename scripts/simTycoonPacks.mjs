@@ -531,9 +531,9 @@ const CONTROLS = [
   { name: 'rawkid', why: 'the reveal receives unvalidated kid fields from storage', red: [], vRed: [9], vitest: 'TYCOON_PACKS_REWARDS',
     lib: () => [REWARDS_LIB, mustReplace(read(REWARDS_LIB), '    const kid = cleanPackKid(p.kid, p.tier);', '    const kid = p.kid;', 'tycoonRewards.ts')] },
   { name: 'unsaveddelivery', why: 'an academy write refusal still counts the kid as delivered', red: [], vRed: [10], vitest: 'TYCOON_LOADS_ACADEMY_HOOK',
-    lib: () => [ACADEMY_HOOK, mustReplace(read(ACADEMY_HOOK), '      setPackSaveBlocked(true);\n      return false;', '      setPackSaveBlocked(true);', 'useWonderkidFactory.ts')] },
+    lib: () => [ACADEMY_HOOK, mustReplace(read(ACADEMY_HOOK), "    if (result !== 'written') {\n      if (result === 'failed') setPackSaveBlocked(true);\n      return false;\n    }", "    if (result === 'moved') return false;\n    if (result === 'failed') setPackSaveBlocked(true);", 'useWonderkidFactory.ts')] },
   { name: 'unsaveddismiss', why: 'dismissal clears the pending draw despite a refused academy save', red: [], vRed: [11], vitest: 'TYCOON_LOADS_ACADEMY_HOOK',
-    lib: () => [ACADEMY_HOOK, mustReplace(read(ACADEMY_HOOK), '    try { localStorage.setItem(SAVE_KEY, serialize(s)); } catch {\n      setPackSaveBlocked(true);\n      return;\n    }', '    try { localStorage.setItem(SAVE_KEY, serialize(s)); } catch {\n      setPackSaveBlocked(true);\n    }', 'useWonderkidFactory.ts')] },
+    lib: () => [ACADEMY_HOOK, mustReplace(read(ACADEMY_HOOK), "    if (result !== 'written') {\n      if (result === 'failed') setPackSaveBlocked(true);\n      return;\n    }", "    if (result === 'moved') return;\n    if (result === 'failed') setPackSaveBlocked(true);", 'useWonderkidFactory.ts')] },
   { name: 'unsaveddebit', why: 'opening accepts a ledger write refusal and delivers a kid without a durable debit', red: [], vRed: [12], vitest: 'TYCOON_PACKS_REWARDS',
     lib: () => [REWARDS_LIB, mustReplace(read(REWARDS_LIB), '  saveLedger(next, true);\n  return next.pending;', '  saveLedger(next);\n  return next.pending;', 'tycoonRewards.ts (commitOpenPack)')] },
 ];

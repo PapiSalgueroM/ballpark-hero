@@ -53,7 +53,7 @@ const AcademyProspects = lazy(() => import('@/components/tycoon/AcademyProspects
 type Panel = 'scouting' | 'coaching' | 'dorms' | 'agents' | 'legacy' | 'packs' | 'firstTeam' | null;
 
 export default function AcademyPanel({ visible = true, stylesReady = false, onStatus, onSnapshot }: { visible?: boolean; stylesReady?: boolean; onStatus?: (s: AcademyStatus) => void; onSnapshot?: (s: FactoryState) => void }) {
-  const { state: s, floaters, doBuy, doSell, doShowcase, doMoveUp, doOpenPack, doDismissPack, packSaveBlocked, doPromote, doSellSenior, academySaveBlocked, doEquipBoot, doUpgradeBoot, gearSaveBlocked } = useWonderkidFactory();
+  const { state: s, saveMoved, floaters, doBuy, doSell, doShowcase, doMoveUp, doOpenPack, doDismissPack, packSaveBlocked, doPromote, doSellSenior, academySaveBlocked, doEquipBoot, doUpgradeBoot, gearSaveBlocked } = useWonderkidFactory();
   /* Round 585: the gem ledger, shared with the stadium that earns it. */
   const ledger = useTycoonRewards();
   const [panel, setPanel] = useState<Panel>(null);
@@ -123,6 +123,12 @@ export default function AcademyPanel({ visible = true, stylesReady = false, onSt
   }, [walked]);
 
   if (!visible) return null;
+  if (saveMoved) return (
+    <div data-academy-panel role="alert" className="rounded-xl border border-border bg-card p-3 text-sm">
+      <p>Your academy moved on in another tab. Reload to continue.</p>
+      <button type="button" onClick={() => window.location.reload()} className="mt-2 min-h-11 rounded-lg border border-border px-3 font-semibold">Reload academy</button>
+    </div>
+  );
 
   const tiles: HubTile[] = FACILITIES.map(f => {
     const lvl = s.levels[f.id];
