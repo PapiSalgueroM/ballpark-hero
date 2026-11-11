@@ -326,8 +326,8 @@ const BOOK_OFF = [
   { file: ENGINE, from: ENSURE_CALL, to: '  void ensureLeagueBook;' },
 ];
 /* The Hot Seat's three calls of the match week, each with the option that keeps a daily without a book. */
-const HOT_CALL = who => `playNextEntry(${who}, { skipHalftime: true, noCoach: true, noBook: true })`;
-const HOT_CALL_BOOKED = who => `playNextEntry(${who}, { skipHalftime: true, noCoach: true })`;
+const HOT_CALL = who => `playNextEntry(${who}, HOT_SEAT_MATCH_OPTIONS)`;
+const HOT_CALL_BOOKED = who => `playNextEntry(${who}, { ...HOT_SEAT_MATCH_OPTIONS, noBook: false })`;
 /* The line of noteBookSide that picks a club's eleven (null for a club that cannot field a named one). */
 const SIDE_XI = '  const xi = pickOppSquad(roster)?.xi ?? null;';
 /* Round 1311: the line of the reader module that says whether the book decides the awards. */
@@ -2702,11 +2702,11 @@ function onStream(seed, fn) {
 
 /* ---------- section dailies: a daily carries no book, and its state is what it was ---------- */
 {
-  /* Round 1306: two more Hot Seat dates, picked because their runs cross the transfer window (2026-10-11 and
-     2026-10-17). The Hot Seat calls the match week at three places, the day's setup, the walk past a window
+  /* Two Hot Seat dates whose runs cross the transfer window (2026-11-02 and 2026-11-05).
+     The Hot Seat calls the match week at three places, the day's setup, the walk past a window
      and the match itself, and the walk past a window is only reached by a run that meets one: the section
      says so below when no date does, so a data update cannot quietly drop that call from the proof. */
-  const HOT_DATES = ['2026-10-10', '2026-10-11', '2026-10-12', '2026-10-17', '2026-10-27', '2027-01-30'];
+  const HOT_DATES = ['2026-10-10', '2026-10-12', '2026-10-27', '2026-11-02', '2026-11-05', '2027-01-30'];
   const DEADLINE_DATES = ['2026-10-10', '2026-10-18', '2026-11-09'];
   const hotOn = (mod, date) => onStream(0x7300, () => {
     const { hs, cm } = mod;

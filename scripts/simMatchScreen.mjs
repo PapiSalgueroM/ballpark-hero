@@ -132,8 +132,9 @@ const stripComments = t => t.replace(/\/\*[\s\S]*?\*\//g, '').replace(/(^|[^:'"`
 const ENGINE = path.join(ROOT, 'src', 'lib', 'clubManager.ts');
 const CARD = path.join(ROOT, 'src', 'components', 'club-manager', 'MatchReportCard.tsx');
 const PAGE = path.join(ROOT, 'src', 'pages', 'ClubManager.tsx');
+const HUB = path.join(ROOT, 'src', 'components', 'club-manager', 'ClubManagerDeferredViews.tsx');
 const sourceBefore = {}, verifySources = [];
-for (const file of [ENGINE, CARD, PAGE]) {
+for (const file of [ENGINE, CARD, PAGE, HUB]) {
   const bytes = fs.readFileSync(file);
   sourceBefore[path.relative(ROOT, file).replaceAll('\\', '/')] = createHash('sha256').update(bytes).digest('hex');
   verifySources.push(() => assert.deepEqual(fs.readFileSync(file), bytes, 'Original match sources remain unchanged'));
@@ -206,8 +207,8 @@ if (CONTROL === 'flat') {
 if (CONTROL === 'twoengines') {
   enginePath = rewrite(ENGINE, [[
     /* Release AL: playNextEntry reaches the coach through `coached` now. */
-    '    state.live = live;\n    return resumeMatch(coached(state));\n',
-    '    state.live = kickOff(state, entry);\n    return resumeMatch(coached(state));\n',
+    '    state.live = live;\n    return resumeMatch(coached(state), opts?.legacyInjuryTick);\n',
+    '    state.live = kickOff(state, entry);\n    return resumeMatch(coached(state), opts?.legacyInjuryTick);\n',
   ]], 'clubManager.twoengines.ts', 'the quick path');
   console.log('NEGATIVE CONTROL ON: the quick path kicks off a second half of its own, so the two ways stop agreeing; section 6 must go red');
 }
@@ -580,7 +581,7 @@ console.log(`   ${pairs} fixtures replayed both ways, ${scorelines.size} distinc
   /* Release AL: both quick paths reach the coach through `coached`, the one
      switch Manager Hot Seat's noCoach turns off, so the count is of that
      call and the switch itself must exist exactly once and be the coach. */
-  const coached = engineSrc.match(/resumeMatch\(coached\(state\)\)/g) ?? [];
+  const coached = engineSrc.match(/resumeMatch\(coached\(state\), opts\?\.legacyInjuryTick\)/g) ?? [];
   if (coached.length !== 2) fail(`${coached.length} Quick paths use the same coach and settlement; both must`);
   const coachSwitch = engineSrc.match(/const coached = \(s: CareerState\): CareerState => \(opts\?\.noCoach \? s : coachQuickMatch\(s\)\);/g) ?? [];
   if (coachSwitch.length !== 1) fail(`${coachSwitch.length} switches decide whether the quick sim coach runs; there is one, and it calls the coach unless noCoach is passed`);
@@ -590,9 +591,9 @@ console.log(`   ${pairs} fixtures replayed both ways, ${scorelines.size} distinc
      because it only draws with a save; the Match Centre is rendered and every
      button on it counted, so a third way of playing a match fails here
      whether or not whoever adds it marks it as one. */
-  const pageSrc = stripComments(lf(fs.readFileSync(PAGE, 'utf8')));
-  const hubWays = (pageSrc.match(/data-cm-way="/g) ?? []).length;
-  if (hubWays !== 2) fail(`the hub offers ${hubWays} ways into a match, and it offers two`);
+  const hubSrc = stripComments(lf(fs.readFileSync(HUB, 'utf8')));
+  const hubWays = [...hubSrc.matchAll(/data-cm-way="([^"]+)"/g)].map(match => match[1]).sort();
+  if (hubWays.join(',') !== 'live,quick') fail(`the hub offers [${hubWays.join(', ')}], expected exactly one live and one quick way into a match`);
   const facts = cm.matchFacts(startCareer('Everton'));
   const centre = render(MatchCentre, {
     career: startCareer('Everton'), facts, clubColor: '#ffffff',
@@ -631,7 +632,7 @@ await new Promise(resolve => setImmediate(resolve));
 assert.deepEqual(runtimeErrors, [], 'Neither the control nor its baseline produces a runtime error');
 for (const verify of verifySources) verify();
 const sourceAfter = {};
-for (const file of [ENGINE, CARD, PAGE]) {
+for (const file of [ENGINE, CARD, PAGE, HUB]) {
   const bytes = fs.readFileSync(file);
   sourceAfter[path.relative(ROOT, file).replaceAll('\\', '/')] = createHash('sha256').update(bytes).digest('hex');
 }
