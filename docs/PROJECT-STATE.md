@@ -20321,3 +20321,15 @@ Actual independent seven-arm proof is7eadbca71e1e351741802f8f9e8b9ac1852e4b957ec
 Native admission: 69f420492bd29d81667ad18b3ed98209473e49f77e33a7e8f3eb6788e0acebe5. Deployment: 2d231ee7-24b2-4940-af8d-5908d26371e6. Public admission: 147361f50c8e3db9c6583009a045a7d79c22c8a680d2fadb171826ff3d3b6c89. Full source, provenance, artifact identities and the exact nine-path nonruntime bridge are in [the dated plan](plans/2026-11-05-soccer-four-first-team-entries.md).
 
 SC-36 remains partial. This does not add leagues, rosters or a complete evolving population. Next owner priority is more Soccer Career/Club Manager teams and leagues, preceded by a measured Team-picker UI cut if needed for the unchanged CM cap. CM47, LeagueSeasons582, measured NFL37/NBA25 golden differences and the separately triaged PR502 reds remain unwaived. The first SC4 build stopped at reader18; it is not relabelled green.
+
+## 2026-11-11 Soccer Career tournament scoring
+
+The reported World Cup and Champions League scoring gap came from two different player-goal models. Cups now credit a share of actual team goals based on position and overall. Club extra-time goals are eligible, while shootout penalties stay separate. Both engines retain their original draw counts for team play and subsequent rolls. The 2002 and modern scoring records informed the calibration. [FIFA World Cup top scorers](https://www.fifa.com/en/articles/fontaine-mbappe-ronaldo-and-more-every-world-cup-top-scorer) and [UEFA Champions League top scorers by season](https://www.uefa.com/uefachampionsleague/history/rankings/players/season_goals_scored/).
+
+Over 400 paired 2002 campaigns at each rating, the 80 OVR Brazil and Real Madrid winger went from 0.885 to 0.381 World Cup goals per appearance and from 0.238 to 0.390 club goals per appearance. At 95 OVR those rates moved from 1.486 to 0.688 and from 0.257 to 0.622. The elite winger's international Golden Boots went from 278 to 79. Across 24 scenario cells, the original and candidate team scores, winners, qualifying results, draw counts and immediate next rolls matched. The candidate recorded zero player goal totals above team scores.
+
+Another 800 paired club campaigns covered Libertadores, CONCACAF, AFC and CAF formats. Their team results and draw counts matched, and player goals stayed within the actual score.
+
+Compiled 390 by 844 replays preserved all 14 club and seven international scorelines through normal 2002 progression and exact cold reload. Prior modern results loaded byte for byte. The deferred legacy World Cup card rendered the same seven match rows and continued with byte-identical saved history. The final route measured 840.1 KiB inside the existing rounded cap.
+
+All 67 scoped cases, app types, production build, three tournament sims, 15 output checks and 16 route caps passed. The separate World Truth harness stopped at the same missing soccerPhone.ts marker on the baseline and candidate. The scoring implementation overlaps PR229's knockout goal cap and should be reviewed with that draft at integration.
