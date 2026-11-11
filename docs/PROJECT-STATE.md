@@ -1,3 +1,11 @@
+## 2026-11-11: Missing XI Daily save recovery
+
+Missing XI checks a finished save against its recorded actions before opening it. A finished status with no matching action no longer leaves the puzzle unable to accept guesses. The next played guess writes the normal version 1 record.
+
+Two compiled 390px fixtures with empty won and lost saves accepted the correct guess and posted one score of 100. Cold reload restored the exact 86-byte result. Existing win, give-up loss and legacy win recaps kept their original bytes with zero new completions. Both regressions failed on the original mounted page, and the valid win, loss and legacy controls passed.
+
+All 116 focused and shared save tests passed, with the fixture-export case skipped as configured. Missing XI, Daily Record, Daily Reload and its controls, app types, production build, 15 output checks and 16 route-size caps passed.
+
 ## 2026-11-07: Club Manager historical roster counts live
 
 [PR #532](https://github.com/PapiSalgueroM/ballpark-hero/pull/532) published from main `c3b5ca4afaf9b4dadcd748f340e8e8e3e4a1a1dd`, App tree `133fcd3d26a4d237178e5c7efee723048da0aef2`, Lovable deployment `510b1df1-2172-42c0-90f9-d9f9c997b840`.
