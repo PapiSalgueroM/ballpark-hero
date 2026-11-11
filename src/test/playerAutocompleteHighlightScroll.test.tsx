@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { act, cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { useMemo, useState } from 'react';
 import { PlayerAutocomplete } from '@/components/game/PlayerAutocomplete';
 import type { PlayerSourceConfig } from '@/lib/playerSearch';
@@ -60,6 +60,23 @@ async function open() {
 afterEach(() => { cleanup(); vi.restoreAllMocks(); document.documentElement.scrollTop = 0; document.body.scrollTop = 0; });
 
 describe('Player autocomplete highlighted option stays in its list', () => {
+  it('keeps a suggestion mounted from compatibility mousedown through click', async () => {
+    render(<main tabIndex={-1}><Picker /></main>);
+    const input = screen.getByRole('combobox');
+    const option = await screen.findByRole('option', { name: 'Fixture Picker 00' });
+    act(() => input.focus());
+
+    // JSDOM does not perform the WebKit compatibility event's default focus change.
+    if (fireEvent.mouseDown(option)) act(() => screen.getByRole('main').focus());
+    expect(input).toHaveFocus();
+    expect(input).toHaveValue('');
+    expect(option).toBeInTheDocument();
+
+    fireEvent.click(option, { detail: 1 });
+    expect(input).toHaveValue('Fixture Picker 00');
+    expect(screen.queryByRole('listbox')).toBeNull();
+  });
+
   it('reveals a lower and wrapped option without moving the page or input focus', async () => {
     const { options, list, input } = await open();
     layout(list, options);

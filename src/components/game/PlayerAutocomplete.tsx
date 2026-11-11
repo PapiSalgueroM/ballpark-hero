@@ -586,6 +586,10 @@ export function PlayerAutocomplete({
                   e.preventDefault();
                   commitSelection(entity);
                 }}
+                onMouseDown={e => {
+                  // Keep the option mounted until WebKit's touch-generated click.
+                  e.preventDefault();
+                }}
                 onClick={() => commitSelection(entity)}
                 className={cn(
                   'w-full flex flex-col items-center justify-center gap-0.5 px-4 py-2.5 text-center transition-colors border-b border-border last:border-b-0',
