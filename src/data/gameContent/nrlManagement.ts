@@ -10,7 +10,7 @@ export const NRL_MANAGEMENT_CONTENT: GameContentMap = {
       'Choose your season and club, then open Squad. Pick a fit starting 13 and six reserves. Save a lineup for this season and preview any replacements before applying it.',
       'Open Position training in Squad to teach one fit player a second role. In this game, a course takes four regular-season rounds, including byes. Assign the learned role in your starting 13 when you want to use it.',
       'Courses cover the back three, wing and centre on the same side, the halves, the two props, and the second rows and lock. A player can learn one extra role.',
-      'Check the next opponent and pick a tactic. Use training to prepare or give a tired squad a chance to recover.',
+      'Check the next opponent and pick a tactic. Open Attack plan to compare projected attack and defence changes for playing through the middle or shifting wide. A plan lasts one match, including both halves in Play Live. Use training to prepare or give a tired squad a chance to recover.',
       'Play the round and check the result against the ladder. A bye is a break in the fixture list, so check who you play after it.',
       'Finish in the top eight to reach the finals. Follow the bracket and try to win the Grand Final.',
       'Open the club office to extend contracts and approach eligible recruits. Check how much cap room you have in the season the deal starts.',
