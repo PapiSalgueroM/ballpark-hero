@@ -376,6 +376,8 @@ export function nbaPackageCapCheck(league: NbaLeague, pkg: TradePackage): string
       const refused = tradeRefusal(t, a.id, NBA_CUT_SAID);
       if (refused) return refused;
     }
+    outSalary = Math.round(outSalary * 10) / 10;
+    inSalary = Math.round(inSalary * 10) / 10;
     if (!nbaPileFits(league, club, outSalary, inSalary)) {
       return league.taxScale != null && nbaPayrollAfterTrade(t, outSalary, inSalary) > nbaFirstApron(league.cap, league.taxScale)
         ? `${club} would sit over the first apron, so it can take back no more salary than it sends out.`

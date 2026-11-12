@@ -13,12 +13,15 @@ vi.mock('@/hooks/useRevealScroll', () => ({ useRevealScroll: () => ({ current: n
 const KEY = 'nba-front-office-save-v1';
 const TEAM = 'HOU';
 const PARTNER = 'DEN';
-function fixture(salary = 51.9) {
+function openingLeague() {
   let seed = 7;
-  const league = initNbaLeague(() => {
+  return initNbaLeague(() => {
     seed = seed * 16807 % 2147483647;
     return (seed - 1) / 2147483646;
   });
+}
+function fixture(salary = 51.9) {
+  const league = openingLeague();
   const mine = league.teams[TEAM];
   const other = league.teams[PARTNER];
   mine.players.find(p => p.name === 'Kevin Durant')!.salary = salary;
@@ -75,6 +78,52 @@ it.each([[51.9, true], [52, false]] as const)('settles the Trade Desk package on
   } else {
     expect(propose).toBeDisabled();
     expect(screen.getByText(/HOU would sit over the first apron/)).toBeInTheDocument();
+    expect(localStorage.getItem(KEY)).toBe(original);
+  }
+}, 15000);
+
+it.each([[14.9, true], [15, false]] as const)('compares both above-apron package totals in tenths (Hauser salary %s)', (salary, allowed) => {
+  const league = openingLeague();
+  const mine = league.teams.DEN;
+  const other = league.teams.BOS;
+  const sending = ['Bruce Brown', 'Jonas Valanciunas'].map(name => mine.players.find(p => p.name === name)!);
+  const receiving = ['Baylor Scheierman', 'Sam Hauser'].map(name => other.players.find(p => p.name === name)!);
+  if (!allowed) receiving[1].salary = salary;
+  const sendingSalary = sending.reduce((sum, player) => sum + player.salary, 0);
+  const receivingSalary = receiving.reduce((sum, player) => sum + player.salary, 0);
+  expect(nbaCapUsed(mine)).toBeGreaterThan(nbaFirstApron(league.cap, league.taxScale));
+  expect(sendingSalary).toBe(27.7);
+  expect(receivingSalary).toBeGreaterThan(sendingSalary);
+  expect(Math.round(receivingSalary * 10) / 10).toBe(allowed ? 27.7 : 27.8);
+
+  localStorage.setItem(KEY, JSON.stringify({
+    league, myTeam: 'DEN', phase: 'hub', titles: 0, seasonsPlayed: 0, draftClass: null, picksLeft: 0,
+    gm: openNbaDesk(league, 'DEN'),
+  }));
+  const original = localStorage.getItem(KEY);
+  render(<Board />);
+  fireEvent.click(screen.getByText('Trade desk'));
+  fireEvent.change(screen.getByLabelText('Deal with'), { target: { value: 'BOS' } });
+  for (const player of [...sending, ...receiving]) {
+    fireEvent.click(document.querySelector('[data-gm-tile="player:' + player.id + '"]')!);
+  }
+  const propose = screen.getByRole('button', { name: 'Make the trade' });
+  expect(localStorage.getItem(KEY)).toBe(original);
+  if (allowed) {
+    expect(propose).toBeEnabled();
+    fireEvent.click(propose);
+    const settled = read().league;
+    expect(nbaCapUsed(settled.teams.DEN)).toBe(nbaCapUsed(mine));
+    expect(settled.teams.DEN.players).toEqual(expect.arrayContaining(receiving));
+    expect(settled.teams.BOS.players).toEqual(expect.arrayContaining(sending));
+    expect(settled.teams.DEN.picks).toEqual(mine.picks);
+    const bytes = localStorage.getItem(KEY);
+    cleanup();
+    render(<Board />);
+    expect(localStorage.getItem(KEY)).toBe(bytes);
+  } else {
+    expect(propose).toBeDisabled();
+    expect(screen.getByText(/DEN would sit over the first apron/)).toBeInTheDocument();
     expect(localStorage.getItem(KEY)).toBe(original);
   }
 }, 15000);
