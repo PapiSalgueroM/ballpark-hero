@@ -126,7 +126,7 @@ const HigherLowerGame = () => {
               }}
               onPlayAgain={resetGame}
             >
-              {lastChoice && (
+              {lastChoice?.correct === false ? (
                 <div className="bg-secondary/50 rounded-xl p-4 mb-2 text-sm text-muted-foreground">
                   <p>
                     <span className="text-foreground font-semibold">{currentPlayer.name}</span> had{' '}
@@ -135,6 +135,38 @@ const HigherLowerGame = () => {
                     <span className="text-foreground font-semibold">{nextPlayer.name}</span> had{' '}
                     <span className="text-destructive font-semibold">{nextPlayer.stats[lastChoice.stat]}</span>.
                   </p>
+                </div>
+              ) : (
+                <div className="mb-2 rounded-xl bg-secondary/50 p-3">
+                  <table className="w-full table-fixed text-xs">
+                    <caption className="mb-2 font-semibold text-foreground">Revealed comparison</caption>
+                    <thead>
+                      <tr className="align-bottom">
+                        <th scope="col" className="px-1 pb-2 text-left text-muted-foreground">Stat</th>
+                        <th scope="col" className="break-words px-1 pb-2 text-foreground">{currentPlayer.name}</th>
+                        <th scope="col" className="break-words px-1 pb-2 text-foreground">{nextPlayer.name}</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {STAT_KEYS.map(stat => (
+                        <tr key={stat} className="border-t border-border">
+                          <th scope="row" className="break-words px-1 py-2 text-left font-medium text-muted-foreground">{statLabels[stat]}</th>
+                          <td className={cn("px-1 py-2 font-semibold tabular-nums", currentPlayer.stats[stat] >= nextPlayer.stats[stat] && "text-correct")}>
+                            {currentPlayer.stats[stat].toLocaleString()}
+                          </td>
+                          <td className="px-1 py-2 font-semibold tabular-nums">{nextPlayer.stats[stat].toLocaleString()}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                  {[currentPlayer, nextPlayer].map(player => {
+                    const notes = [...new Set(STAT_KEYS.map(stat => noteFor(player.name, stat)).filter(Boolean))];
+                    return notes.length > 0 && (
+                      <p key={player.name} className="mt-2 text-left text-[11px] leading-snug text-muted-foreground">
+                        <span className="font-semibold">{player.name}</span>{' '}{notes.join(' ')}
+                      </p>
+                    );
+                  })}
                 </div>
               )}
             </ResultScreen>
