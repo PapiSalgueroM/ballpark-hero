@@ -1,3 +1,9 @@
+## 2026-11-12: NBA Starting 5 former-franchise picks staged
+
+NBA Starting 5 search and scoring now use the same franchise records. Players with a verified earlier stint can appear for that team, even when their roster card lists another team. The lookup still requires exact franchise codes and a unique roster identity.
+
+The former-team harness exposed six misses on the combined baseline and passed all 13 sections after the port. Existing stat, position, duplicate and score rules passed. Compiled mobile qualification is pending.
+
 ## 2026-11-12: Rebuild season retry staged
 
 After the transfer window, Rebuild waits for both rival squads before showing the solo season. If a squad is unavailable, Retry season keeps the finished window and tries again.

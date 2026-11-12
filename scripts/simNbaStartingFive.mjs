@@ -43,8 +43,8 @@
  *  11. Every refusal names the player and carries no dash.
  *  12. Points: the score on the old 500 scale, clamped.
  *  13. The hook itself, bundled with a stub client that answers like
- *      PostgREST: each pool is the dealt team's own search rows with the
- *      table wide census and the span hold applied, the five is scored in
+ *      PostgREST: search and scoring admit verified former-team players,
+ *      with the table wide census and the span hold applied. The five is scored in
  *      the spin's direction (hand computed 33 on Highest, 67 on Lowest), and
  *      a repeat is refused by the scorer's own name key.
  *
@@ -67,7 +67,8 @@
  *   notablewide a name on two search rows is no longer held          section 7
  *   nospan      a record longer than any career is no longer held    section 7
  *   hookhighest the hook scores every five as Highest                section 13
- *   hookleague  the hook's roster read drops its team filter         section 13
+ *   hookleague  the hook's roster ignores franchise eligibility    section 13
+ *   hookcurrent the hook excludes former-team players again          section 13
  *   hookbypass  the page's call overrides the spin's direction       section 13
  *   hooknocensus the hook builds pools without the name census       section 13
  *   hooknoyearto the hook's record read drops year_to                section 13
@@ -98,16 +99,17 @@ const CONTROLS = {
   oldjudge: [3, 5], noinvert: [4], greedy: [6], nonamesake: [7], pergame: [3], aiverdict: [10], flatpoints: [10], hitdrift: [12],
   slotflip: [4], gainflip: [4], fourcands: [6], hookhighest: [13], hookleague: [13], hookbypass: [13],
   nostl: [2], notablewide: [7], nospan: [7], hooknocensus: [13], hooknoyearto: [13], hookrepeat: [13],
-  nodensity: [7],
+  nodensity: [7], hookcurrent: [13],
 };
 /* Section 13's controls edit the hook as esbuild loads it (and the copy the
    source fence reads). */
 const HOOK = `${ROOT}/src/hooks/useNbaLineup.ts`;
 const HOOK_MUTATIONS = {
   hookhighest: ['    challenge.direction,', "    'highest',"],
-  hookleague: ["        .eq('team', team)\n", ''],
+  hookleague: ['return census.get(key) === 1 && careerNames.has(key);', 'return true;'],
+  hookcurrent: ['return census.get(key) === 1 && careerNames.has(key);', 'return false;'],
   hookbypass: ['      const scored = await scoreNbaLineup(filledSlotsArray, challenge);', "      const scored = await scoreNbaLineup(filledSlotsArray, { ...challenge, direction: 'highest' });"],
-  hooknocensus: ['    return buildTeamPool(team, roster, records, census);', '    return buildTeamPool(team, roster, records);'],
+  hooknocensus: ['const pool = buildTeamPool(team, roster, records, census);', 'const pool = buildTeamPool(team, roster, records);'],
   hooknoyearto: ["'player_name, teams, year_from, year_to, games, points,", "'player_name, teams, year_from, games, points,"],
   hookrepeat: ['normalizeName(s.excludeName) === normalized || nbaFiveNameKey(s.playerName) === fiveKey', 'normalizeName(s.excludeName) === normalized'],
 };
@@ -707,11 +709,11 @@ begin(12, "points are the score on the old 500 scale, and the hit mark is NBA St
   console.log(`   6 cases; hit mark ${lib.NBA_FIVE_HIT_SCORE}, Stat Line's ${statLine?.[1]}`);
 }
 
-begin(13, "the hook's half: each pool is the dealt team's own search rows, and the five is scored in the spin's direction");
+begin(13, 'search and scoring share franchise eligibility, and the five is scored in the spin direction');
 {
   /* The hook itself is bundled, with the Supabase client swapped for a stub
      that answers from the fixture tables below the way PostgREST would
-     (eq, an or of ilike, a column list, a range), so loadTeamPool and
+     (an or of ilike, a column list, a range), so loadTeamPool and
      scoreNbaLineup run exactly as the page runs them. */
   const hookText = () => {
     const src = fs.readFileSync(HOOK, 'utf8').replace(/\r\n/g, '\n');
@@ -727,6 +729,7 @@ begin(13, "the hook's half: each pool is the dealt team's own search rows, and t
 class Q {
   constructor(table) { this.table = table; this.filters = []; this.cols = null; this.window = null; }
   select(cols) { this.cols = cols.split(',').map(s => s.trim()); return this; }
+  limit(n) { this.window = [0, n - 1]; return this; }
   eq(col, val) { this.filters.push(r => r[col] === val); return this; }
   or(expr) {
     const parts = expr.split(',').map(p => {
@@ -742,6 +745,9 @@ class Q {
   then(ok, bad) {
     try {
       globalThis.__nbaFiveReads.push(this.table);
+      if (this.table === globalThis.__nbaFiveFailureTable) {
+        return Promise.resolve({ data: null, error: { message: 'fixture read failure' } }).then(ok, bad);
+      }
       let rows = (globalThis.__nbaFiveTables[this.table] ?? []).filter(r => this.filters.every(f => f(r)));
       if (this.window) rows = rows.slice(this.window[0], this.window[1] + 1);
       const cols = this.cols;
@@ -756,7 +762,7 @@ export const supabase = { from: table => new Q(table) };
   fs.writeFileSync(COMPLETION_STUB, 'export function useGameCompletion() {}\n');
   const same = (a, b) => path.resolve(a).replace(/\\/g, '/').toLowerCase() === path.resolve(b).replace(/\\/g, '/').toLowerCase();
   const HOOK_ENTRY = `${TMP}/hookEntry.ts`;
-  fs.writeFileSync(HOOK_ENTRY, `export * as hook from '${HOOK}';\n`);
+  fs.writeFileSync(HOOK_ENTRY, `export * as hook from '${HOOK}';\nexport { searchPlayers } from '@/lib/playerSearch';\n`);
   const HOOK_BUNDLE = `${TMP}/hookBundle.mjs`;
   await build({
     entryPoints: [HOOK_ENTRY], bundle: true, format: 'esm', platform: 'node', outfile: HOOK_BUNDLE, logLevel: 'error',
@@ -774,9 +780,8 @@ export const supabase = { from: table => new Q(table) };
       },
     }],
   });
-  /* The league. Every man may play any slot. Hook Visitor is a Boston man in
-     the search table whose record also lists Atlanta: the Atlanta search
-     never offers him, so the Atlanta pool must not hold him. */
+  /* Hook Visitor's roster row is in Boston and his career also lists Atlanta.
+     Hook Stray's career has an inexact code that does not qualify for Atlanta. */
   const DEALT = ['Atlanta Hawks', 'Boston Celtics', 'Chicago Bulls', 'Denver Nuggets', 'Miami Heat'];
   const PER_GAME = { 'Atlanta Hawks': [30, 20, 2], 'Boston Celtics': [28, 10, 3], 'Chicago Bulls': [26, 12, 4], 'Denver Nuggets': [24, 14, 5], 'Miami Heat': [22, 16, 6] };
   const searchRows = [];
@@ -794,6 +799,9 @@ export const supabase = { from: table => new Q(table) };
   id += 1;
   searchRows.push({ player_id: id, first_name: 'Hook', last_name: 'Visitor', position: null, team: 'Boston Celtics' });
   statRows.push({ id, player_name: 'Hook Visitor', teams: 'ATL,BOS', year_from: '1990-91', year_to: '1999-00', games: 100, points: 5000, trb: null, ast: null, stl: null, blk: null, three_p: null });
+  id += 1;
+  searchRows.push({ player_id: id, first_name: 'Hook', last_name: 'Stray', position: 'F', team: 'Boston Celtics' });
+  statRows.push({ id, player_name: 'Hook Stray', teams: 'XATL,BOS', year_from: '1990-91', year_to: '1999-00', games: 100, points: 1700 });
   /* Hook Twin: two men, one Atlanta's and one Chicago's in the search table,
      under one record row, so both teams must hold him. Hook Long: a Denver
      row spanning 41 seasons, two men under one name. Both would lead their
@@ -812,14 +820,33 @@ export const supabase = { from: table => new Q(table) };
      the team and the whole search table's name census, never from the hook. */
   const strip3 = ({ first_name, last_name, position }) => ({ first_name, last_name, position });
   const tableCensus = nbaFiveNameCounts(searchRows.map(strip3));
-  const expectedPool = team => buildTeamPool(team, searchRows.filter(r => r.team === team).map(strip3), statRows, tableCensus);
+  const expectedPool = team => buildTeamPool(team, searchRows.filter(r =>
+    r.team === team || (team === 'Atlanta Hawks' && r.last_name === 'Visitor')).map(strip3), statRows, tableCensus);
   for (const [team, name] of [['Atlanta Hawks', 'Hook Twin'], ['Chicago Bulls', 'Hook Twin'], ['Denver Nuggets', 'Hook Long']]) {
     if (findPoolEntry(expectedPool(team), name)?.hold !== 'namesake') fail(`the fixture does not hold ${name} on the ${team}, the check stands on nothing`);
   }
   let hook = null;
-  try { ({ hook } = await import(pathToFileURL(HOOK_BUNDLE).href)); } catch (e) { fail(`the hook bundle does not load: ${e.message}`); }
+  let searchPlayers;
+  try { ({ hook, searchPlayers } = await import(pathToFileURL(HOOK_BUNDLE).href)); } catch (e) { fail(`the hook bundle does not load: ${e.message}`); }
   let checks = 0;
   if (hook) {
+    const source = hook.buildTeamFilteredNbaSource('Atlanta Hawks');
+    globalThis.__nbaFiveFailureTable = 'nba_player_stats';
+    const unavailable = await searchPlayers({ query: 'Hook Visitor', source });
+    if (!unavailable.error || unavailable.results.length) fail('the Atlanta search did not report its failed career read');
+    globalThis.__nbaFiveFailureTable = null;
+    for (const [query, exclude, expected] of [
+      ['Hook Visitor', undefined, ['Hook Visitor']],
+      ['Hook Stray', undefined, []],
+      ['Hook Visitor', new Set(['hook visitor']), []],
+    ]) {
+      const { results, error } = await searchPlayers({ query, source, exclude });
+      const names = results.map(r => r.name);
+      if (error || JSON.stringify(names) !== JSON.stringify(expected) || results.some(r => r.meta.team !== 'Atlanta Hawks')) {
+        fail(`Atlanta search for ${query} yielded [${names}], wanted [${expected}] (error: ${error})`);
+      }
+      checks += 1;
+    }
     for (const team of DEALT) {
       let got = null;
       try { got = await hook.loadTeamPool(team); } catch (e) { fail(`loadTeamPool(${team}) threw: ${e.message}`); continue; }
@@ -851,6 +878,11 @@ export const supabase = { from: table => new Q(table) };
       checks += 1;
     }
     if (scores.highest !== 33 || scores.lowest !== 67) fail(`the hook scored the fixture five ${scores.highest} on Highest and ${scores.lowest} on Lowest, hand computed 33 and 67`);
+    const formerTeamSlots = slots.map((slot, i) => i === 0 ? { ...slot, playerName: 'Hook Visitor', excludeName: 'Hook Visitor' } : slot);
+    const formerTeamScore = await hook.scoreNbaLineup(formerTeamSlots, { stat: PPG.stat, direction: 'highest', unit: PPG.unit, emoji: PPG.emoji });
+    if (formerTeamScore?.yourTotal !== 83 || formerTeamScore?.score !== 48 || formerTeamScore.perPick[0].value !== 50) {
+      fail('the former Atlanta player did not score 50 points per game in the 83 total, 48-score lineup');
+    }
     /* A repeat is refused by the scorer's key as well as the search's, so
        the page never accepts a five that scoreFive refuses (review minor 2). */
     const one = name => [{ role: 'PG', label: 'PG', playerName: name, excludeName: name, assignedTeam: 'Atlanta Hawks', statValue: 0 }];

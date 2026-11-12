@@ -420,8 +420,7 @@ const NbaLineup = () => {
             "Submit your lineup for a score out of 100 against the best five your teams allowed",
           ]}
           examples={[
-            /* The search lists each man under ONE team, so every example is a
-               whole career with that one franchise (Basketball Reference's
+            /* These examples are one-franchise careers (Basketball Reference's
                player pages for all five; second sources: nba.com's legend
                profiles for Stockton, Miller and Bird, ESPN's July 2018 report
                of Nowitzki's 21st season with Dallas, Sports Illustrated's 2009
