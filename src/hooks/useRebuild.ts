@@ -286,7 +286,10 @@ export function useRebuild(): RebuildState {
       const names = savedClubNames(saved);
       const wanted = names.filter(Boolean);
       try {
-        const value = wanted.length > 0
+        // Partial setups and clubs removed from a successfully loaded list do not need squad data.
+        const needsData = saved.phase !== 'clubs' && wanted.length > 0
+          && wanted.every(name => clubs.some(club => club.club === name));
+        const value = needsData
           ? await loadTableData(wanted, saved.preset)
           : { squads: new Map(), markets: new Map(), preset: saved.preset };
         if (cancelled) return;

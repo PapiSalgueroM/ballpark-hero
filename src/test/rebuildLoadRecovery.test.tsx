@@ -59,3 +59,42 @@ it('holds an in-progress save through a squad outage and restores the same windo
   expect(reopened.result.current.loadFailed).toBe(false);
   expect(localStorage.getItem(REBUILD_SAVE_KEY)).toBe(save);
 });
+
+it('opens fresh when the loaded club list no longer contains the saved club', async () => {
+  const first = renderHook(useRebuild);
+  await waitFor(() => expect(first.result.current.loading).toBe(false));
+  act(() => first.result.current.chooseClub(club));
+  await waitFor(() => expect(first.result.current.phase).toBe('envelopes'));
+  expect(localStorage.getItem(REBUILD_SAVE_KEY)).not.toBeNull();
+  first.unmount();
+
+  const otherClub = { ...club, club: 'Barcelona' };
+  vi.mocked(fetchRebuildClubs).mockResolvedValue([otherClub]);
+  vi.mocked(fetchClubSquad).mockResolvedValue([]);
+  const reopened = renderHook(useRebuild);
+  await waitFor(() => expect(reopened.result.current.loading).toBe(false));
+  expect(reopened.result.current.phase).toBe('pick-club');
+  expect(reopened.result.current.clubs).toEqual([otherClub]);
+  expect(reopened.result.current.loadFailed).toBe(false);
+  expect(localStorage.getItem(REBUILD_SAVE_KEY)).toBeNull();
+  expect(fetchClubSquad).toHaveBeenCalledTimes(1);
+});
+
+it('restores a partial table setup without loading squads', async () => {
+  const otherClub = { ...club, club: 'Barcelona' };
+  vi.mocked(fetchRebuildClubs).mockResolvedValue([club, otherClub]);
+  const first = renderHook(useRebuild);
+  await waitFor(() => expect(first.result.current.loading).toBe(false));
+  act(() => first.result.current.setSeatKinds(['human', 'human']));
+  act(() => first.result.current.chooseClub(club));
+  const save = localStorage.getItem(REBUILD_SAVE_KEY);
+  expect(save).toContain('"phase":"clubs"');
+  first.unmount();
+
+  vi.mocked(fetchClubSquad).mockResolvedValue([]);
+  const reopened = renderHook(useRebuild);
+  await waitFor(() => expect(reopened.result.current.loading).toBe(false));
+  expect(reopened.result.current.loadFailed).toBe(false);
+  expect(localStorage.getItem(REBUILD_SAVE_KEY)).toBe(save);
+  expect(fetchClubSquad).not.toHaveBeenCalled();
+});
