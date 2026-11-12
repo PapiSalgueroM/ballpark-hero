@@ -7,6 +7,7 @@ import { useRevealScroll } from '@/hooks/useRevealScroll';
 import { markRestoredFinish } from '@/lib/restoredFinish';
 import { readDailyRecord, writeDailyRecord } from '@/lib/dailyRecord';
 import { getTodayET } from '@/lib/dateUtils';
+import { createSaveFence } from '@/lib/saveFence';
 import { cn } from '@/lib/utils';
 import { MENTALITIES, TALK_TONES, preMatchRead, type Mentality, type TalkTone } from '@/lib/clubManager';
 import type { Meter } from '@/lib/clubManagerMeters';
@@ -55,6 +56,17 @@ function isAction(a: unknown): a is HotSeatAction {
 
 function readActions(v: unknown): HotSeatAction[] | null {
   return Array.isArray(v) && v.length <= 60 && v.every(isAction) ? (v as HotSeatAction[]) : null;
+}
+
+function readDailyRun(date: string, club: string) {
+  return readDailyRecord(SLUG, date, f => {
+    const actions = readActions(f.actions);
+    if (!actions || f.club !== club) return null;
+    const done = f.done === true && typeof f.kind === 'string' && f.kind in VERDICT_WORDS
+      ? { club, kind: f.kind as VerdictKind, points: Number(f.points) || 0, target: Number(f.target) || 0, dots: typeof f.dots === 'string' ? f.dots : '' }
+      : null;
+    return { actions, done };
+  });
 }
 
 /** A verdict that keeps the job, for the menu's way back to the offer. The
@@ -126,27 +138,28 @@ export default function ManagerHotSeatBoard() {
   const [mentality, setMentality] = useState<Mentality>('balanced');
   const [talk, setTalk] = useState<TalkTone | null>(null);
   const [lastLine, setLastLine] = useState<string | null>(null);
+  const [freeFence] = useState(() => createSaveFence(() => localStorage));
+  const [freeSaveMoved, setFreeSaveMoved] = useState(false);
 
   const revealRef = useRevealScroll<HTMLDivElement>(`${phase}:${run?.log.length ?? 0}:${run?.actions.length ?? 0}`);
   /* A play with no score for now: the points economy is being rebuilt, so this
      records that you played and puts nothing on the leaderboard. */
   useGameCompletion(SLUG, !!run?.verdict, undefined);
 
+  const showSavedDailyResult = useCallback((rec: ReturnType<typeof readDailyRun>) => {
+    if (!rec?.done) return false;
+    setDailyDone(rec.done);
+    setDailyFinished(rec.actions.length ? rec.actions : null);
+    setDailySaved(null);
+    return true;
+  }, []);
+
   /* What is waiting in storage, read after mount so nothing from the clock or
      the store lands in the first render. */
   useEffect(() => {
-    const rec = readDailyRecord(SLUG, today, f => {
-      const actions = readActions(f.actions);
-      if (!actions || f.club !== daily.club) return null;
-      const done = f.done === true && typeof f.kind === 'string' && f.kind in VERDICT_WORDS
-        ? { club: daily.club, kind: f.kind as VerdictKind, points: Number(f.points) || 0, target: Number(f.target) || 0, dots: typeof f.dots === 'string' ? f.dots : '' }
-        : null;
-      return { actions, done };
-    });
-    if (rec?.done) {
-      setDailyDone(rec.done);
-      setDailyFinished(rec.actions.length ? rec.actions : null);
-    } else if (rec && rec.actions.length) setDailySaved(rec.actions);
+    const rec = readDailyRun(today, daily.club);
+    if (!showSavedDailyResult(rec) && rec?.actions.length) setDailySaved(rec.actions);
+    freeFence.adopt(FREE_KEY);
     try {
       const raw = localStorage.getItem(FREE_KEY);
       if (raw) {
@@ -166,10 +179,16 @@ export default function ManagerHotSeatBoard() {
     } catch {
       /* a blocked or mangled store just means no free play to continue */
     }
-  }, [today, daily.club]);
+  }, [today, daily.club, showSavedDailyResult, freeFence]);
 
   const persist = useCallback((r: HotSeatRun) => {
     if (r.setup.daily) {
+      // A tab still playing may have missed another tab finishing this Daily.
+      if (showSavedDailyResult(readDailyRun(r.setup.daily, r.setup.club))) {
+        setRun(null);
+        setPhase('menu');
+        return false;
+      }
       writeDailyRecord(SLUG, r.setup.daily, {
         club: r.setup.club,
         actions: r.actions,
@@ -185,15 +204,21 @@ export default function ManagerHotSeatBoard() {
          overwrote the matches already played. */
       setDailySaved(r.verdict || !r.actions.length ? null : r.actions);
     } else {
-      try {
+      const saved = freeFence.write(FREE_KEY, () => {
         localStorage.setItem(FREE_KEY, JSON.stringify({ v: 1, club: r.setup.club, seed: r.setup.seed, ...(r.setup.rules === 1331 ? { rules: 1331 } : {}), ...(r.setup.tie === 1603 ? { tie: 1603 } : {}), actions: r.actions, done: !!r.verdict, ...(r.verdict ? { kind: r.verdict.kind } : {}) }));
-      } catch {
-        /* storage full or blocked: the run still plays, it just will not survive a refresh */
+        return true;
+      });
+      if (saved === 'moved') {
+        setFreeSaveMoved(true);
+        setRun(null);
+        setPhase('menu');
+        return false;
       }
       setFreeSaved(r.verdict ? null : { setup: r.setup, actions: r.actions });
       setFreeFinished(r.verdict && keepsJob(r.verdict.kind) ? { setup: r.setup, actions: r.actions } : null);
     }
-  }, []);
+    return true;
+  }, [showSavedDailyResult, freeFence]);
 
   /* The takeover costs about twenty engine calls, so the loading card paints first. */
   const open = useCallback((setup: HotSeatSetup, actions: HotSeatAction[] = []) => {
@@ -209,10 +234,14 @@ export default function ManagerHotSeatBoard() {
     }, 30);
   }, []);
 
-  const startDaily = () => open({ club: daily.club, seed: daily.seed, daily: daily.daily }, dailySaved ?? []);
+  const startDaily = () => {
+    const saved = readDailyRun(today, daily.club);
+    if (!showSavedDailyResult(saved)) {
+      open({ club: daily.club, seed: daily.seed, daily: daily.daily }, saved?.actions ?? dailySaved ?? []);
+    }
+  };
   const startFree = (club: string) => {
     const seed = Math.floor(Math.random() * 4294967296) >>> 0;
-    setFreeSaved(null);
     /* Round 1331: every new free run plays the current match rules, and its save says so. */
     /* Round 1603: and judges a deciding second leg by the tie. */
     open({ club, seed, rules: 1331, tie: 1603 });
@@ -223,16 +252,14 @@ export default function ManagerHotSeatBoard() {
   };
 
   const takeJob = () => {
-    if (!run) return;
-    persist(run);
-    setPhase('match');
+    if (run && persist(run)) setPhase('match');
   };
 
   const play = () => {
     if (!run || run.verdict) return;
     const next = playHotSeatMatch(run, mentality, talk);
+    if (!persist(next)) return;
     setRun(next);
-    persist(next);
     setTalk(null);
     setLastLine(null);
     setPhase(next.verdict ? 'done' : 'after');
@@ -241,8 +268,8 @@ export default function ManagerHotSeatBoard() {
   const answer = (i: number) => {
     if (!run) return;
     const next = answerHotSeatPress(run, i);
+    if (!persist(next)) return;
     setRun(next);
-    persist(next);
     setLastLine(next.state.press?.lastLine ?? null);
   };
 
@@ -269,9 +296,9 @@ export default function ManagerHotSeatBoard() {
               <div className="mt-3 rounded-md bg-muted px-3 py-2 text-sm" data-testid="hot-seat-daily-done">
                 <div className="font-semibold">{VERDICT_WORDS[dailyDone.kind].title}</div>
                 <div className="text-muted-foreground">{dailyDone.points} of {dailyDone.target} points {dailyDone.dots}. Back tomorrow for a new club.</div>
-                {keepsJob(dailyDone.kind) && dailyFinished && (
+                {dailyFinished && (
                   <button type="button" onClick={() => open({ club: daily.club, seed: daily.seed, daily: daily.daily }, dailyFinished)} className="mt-2 min-h-[44px] w-full rounded-md border border-primary px-3 py-2 text-sm font-semibold text-primary">
-                    See the Club Manager offer
+                    {keepsJob(dailyDone.kind) ? 'See the Club Manager offer' : 'View result'}
                   </button>
                 )}
               </div>
@@ -285,16 +312,23 @@ export default function ManagerHotSeatBoard() {
             <div className="text-xs font-semibold uppercase tracking-wide text-primary">Free play</div>
             <div className="mt-1 text-lg font-bold">Any club, any time</div>
             <div className="text-xs text-muted-foreground">Pick a club or let us pick one. A new season every time.</div>
-            <div className="mt-3 grid grid-cols-2 gap-2">
+            {freeSaveMoved ? (
+              <div className="mt-3 rounded-md bg-muted px-3 py-2 text-sm">
+                <p role="alert">Your Free Play save changed in another tab.</p>
+                <button type="button" onClick={() => window.location.reload()} className="mt-2 min-h-[44px] rounded-md border border-border px-3 font-semibold">
+                  Reload Free Play
+                </button>
+              </div>
+            ) : <div className="mt-3 grid grid-cols-2 gap-2">
               <button type="button" onClick={() => setPhase('pick')} className="min-h-[44px] rounded-md border border-border px-3 py-2 text-sm font-semibold">Pick a club</button>
               <button type="button" onClick={randomFree} className="min-h-[44px] rounded-md border border-border px-3 py-2 text-sm font-semibold"><Shuffle className="mr-1 inline h-4 w-4" />Random</button>
-            </div>
-            {freeSaved && (
+            </div>}
+            {!freeSaveMoved && freeSaved && (
               <button type="button" onClick={() => open(freeSaved.setup, freeSaved.actions)} className="mt-2 min-h-[44px] w-full rounded-md border border-primary px-3 py-2 text-sm font-semibold text-primary">
                 Carry on at {freeSaved.setup.club}
               </button>
             )}
-            {!freeSaved && freeFinished && (
+            {!freeSaveMoved && !freeSaved && freeFinished && (
               <button type="button" onClick={() => open(freeFinished.setup, freeFinished.actions)} className="mt-2 min-h-[44px] w-full rounded-md border border-primary px-3 py-2 text-sm font-semibold text-primary">
                 See the Club Manager offer for {freeFinished.setup.club}
               </button>

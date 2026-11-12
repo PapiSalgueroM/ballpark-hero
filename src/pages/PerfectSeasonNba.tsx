@@ -90,7 +90,6 @@ const PerfectSeasonNba = () => {
   const simTimer = useRef<ReturnType<typeof setInterval> | null>(null);
   const countdownTimer = useRef<ReturnType<typeof setInterval> | null>(null);
   const dailyPicker = useRef<((len: number) => number) | null>(null);
-  const dailySaved = useRef(false);
   const retryReroll = useRef(false);
 
   const openSlots = useMemo(
@@ -128,7 +127,7 @@ const PerfectSeasonNba = () => {
         setPhase('daily-locked');
         return;
       }
-      dailyPicker.current = makeDailyPicker(SPORT_KEY);
+      dailyPicker.current = makeDailyPicker(SPORT_KEY, todayStr);
     }
     setIndex([]);
     setPhase('boot');
@@ -267,34 +266,34 @@ const PerfectSeasonNba = () => {
     return () => { if (simTimer.current) clearInterval(simTimer.current); };
   }, [phase, sim, revealed >= NBA_GAMES]);
 
-  // Lock in the daily attempt exactly once, right when the result lands.
-  useEffect(() => {
-    if (mode !== 'daily' || phase !== 'done' || !sim || dailySaved.current) return;
-    dailySaved.current = true;
-    saveDailyAttempt(SPORT_KEY, {
-      date: todayStr,
-      sim,
-      overall: Math.round(overall),
-      spins,
-      teamNames,
-      themeId: dailyTheme?.id,
-    });
-  }, [mode, phase, sim, overall, spins, teamNames, dailyTheme]);
-
-  // Round 299, the scoring audit: finishing a season never recorded a play,
-  // so a run earned no streak day, no played-today credit and no points.
-  // The season landing on the final record is the completion moment. One
-  // row per run (the ref, reset by restart), score is the win count the
-  // result screen leads with.
+  // The completed Daily is ready before the cosmetic reveal. Save and record
+  // it together so closing the page during the reveal keeps the attempt.
   const completionSaved = useRef(false);
+  const readyToRecord = phase === 'done' || (mode === 'daily' && phase === 'sim');
   useEffect(() => {
-    if (phase !== 'done' || !sim || completionSaved.current) return;
+    if (!readyToRecord || !sim || completionSaved.current) return;
     completionSaved.current = true;
+    if (mode === 'daily') {
+      const existing = loadDailyAttempt(SPORT_KEY, todayStr);
+      if (existing) {
+        setLockedAttempt(existing);
+        setPhase('daily-locked');
+        return;
+      }
+      saveDailyAttempt(SPORT_KEY, {
+        date: todayStr,
+        sim,
+        overall: Math.round(overall),
+        spins,
+        teamNames,
+        themeId: dailyTheme?.id,
+      });
+    }
     recordCompletion('/perfect-season-nba', sim.wins, getCurrentPlayerName());
     // Round 784: the best record is the honest target, so every finished run
     // is weighed against it, in any mode.
     recordBest({ wins: sim.wins, losses: sim.losses, overall: Math.round(overall), date: todayStr, mode });
-  }, [phase, sim, overall, mode, todayStr, recordBest]);
+  }, [readyToRecord, sim, overall, mode, todayStr, spins, teamNames, dailyTheme, recordBest]);
 
   const skipSim = () => setRevealed(NBA_GAMES);
 
@@ -315,7 +314,6 @@ const PerfectSeasonNba = () => {
   };
 
   const backToModes = () => {
-    dailySaved.current = false;
     setLockedAttempt(null);
     setDailyTheme(null);
     restart();
