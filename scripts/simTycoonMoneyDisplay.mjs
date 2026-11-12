@@ -164,7 +164,7 @@ it('Actual prospect and senior sales', async () => {
       storage: storage(), saved: localStorage.getItem(E.SAVE_KEY), beforeHideWrites,
       saveWrites: writes.filter(row => row.key === E.SAVE_KEY || row.key === fenceKey), requests, errors,
     }, {
-      storage: expectedStorage, saved: bytes, beforeHideWrites: senior ? 1 : 0,
+      storage: expectedStorage, saved: bytes, beforeHideWrites: 1,
       saveWrites: [
         { scope: 'local', op: 'set', key: fenceKey, value: '1' },
         { scope: 'local', op: 'set', key: E.SAVE_KEY, value: bytes },

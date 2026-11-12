@@ -1,3 +1,9 @@
+## 2026-11-12: Wonderkid Academy sale and shared save recovery
+
+A prospect stays on the Academy screen until the sale reaches browser storage. If storage refuses the write, the prospect and money stay in place and the sale can be retried. An older Wonderkid Factory or Stadium Tycoon Academy tab must reload before writing over the shared academy.
+
+Eleven mounted cases reproduced the original failures and passed after the repair. The broader 62-test Academy suite passed with packs, boots, away training and saved ground controls. The existing academy save format and sale values still apply.
+
 ## 2026-11-12: Wall practice keeper proportions staged
 
 The keeper's body now follows the rendered contact point when the gloves animate toward a saved ball. The arms stay in proportion across low, high and straight catches. The shot simulator, collision coordinates, scoring, saves and timing stay as before.
