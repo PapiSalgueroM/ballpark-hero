@@ -419,11 +419,14 @@ describe.each(BOUND)('$name My Career: watching changes nothing', ({ Board, spor
     expect(q('[data-season-centre]')).toBeNull();
   }, 60000);
 
-  /** From here on the browser refuses every write of this career's save, as a full storage does. */
-  function refuseTheSave() {
+  /** A competing save, when supplied, lands after Play starts but before its write is refused. */
+  function refuseTheSave(competingSave?: string) {
     const real = Storage.prototype.setItem;
     return vi.spyOn(Storage.prototype, 'setItem').mockImplementation(function (this: Storage, k: string, v: string) {
-      if (k === sport.saveKey) throw new Error('QuotaExceededError');
+      if (k === sport.saveKey) {
+        if (competingSave !== undefined) real.call(this, k, competingSave);
+        throw new Error('QuotaExceededError');
+      }
       real.call(this, k, v);
     });
   }
@@ -548,7 +551,7 @@ describe.each(BOUND)('$name My Career: watching changes nothing', ({ Board, spor
     seedSave(sport, pos, `tab|${sport.slug}`);
     render(<MemoryRouter><Board /></MemoryRouter>);
     await flush();
-    /* another tab has saved this career one season on, in a different year, and this tab's own write is refused */
+    /* The other tab saves a different year while this Play is in progress. */
     const other = JSON.parse(localStorage.getItem(sport.saveKey)!) as { c: UsCareerCore; teamQuality: number };
     const year = other.c.year;
     other.c.year = year + 3;
@@ -558,9 +561,8 @@ describe.each(BOUND)('$name My Career: watching changes nothing', ({ Board, spor
     expect(other.c.seasons).toHaveLength(1);
     expect(other.c.seasons[0].year).toBe(year + 3);
     expect(other.c.seasons[0].games).toBeGreaterThan(0);
-    localStorage.setItem(sport.saveKey, JSON.stringify(other));
-    const stored = localStorage.getItem(sport.saveKey);
-    refuseTheSave();
+    const stored = JSON.stringify(other);
+    refuseTheSave(stored);
     await pressWatch();
     /* this tab played its own season in memory (the curtain is up under the viewer) and the stored line is
        still the other tab's. Since Release AN the viewer opens, on this tab's own season: the one line the
@@ -588,8 +590,7 @@ describe.each(BOUND)('$name My Career: watching changes nothing', ({ Board, spor
     const rng = keyedRng(`tab|other|${sport.slug}`);
     sport.campBattle(other.c as never, other.teamQuality, rng);
     sport.simSeason(other.c as never, other.teamQuality, rng);
-    localStorage.setItem(sport.saveKey, JSON.stringify(other));
-    refuseTheSave();
+    refuseTheSave(JSON.stringify(other));
     await pressWatch();
     ctl.noHandOver = false;
     /* the read back alone turns the other tab's line away (its year is not the year he pressed for) */
