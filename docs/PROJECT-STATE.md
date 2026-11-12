@@ -1,3 +1,11 @@
+## 2026-11-12: NRL Manager opposition report
+
+Open Opposition report in Match centre to see the next rival’s ladder place and up to three played results, with scores shown from their side. The model’s attack and defence edges use the selected squad, preparation, tactic and venue. Positive edges favour your club. The report reads the current save without advancing a match.
+
+The report was read through 80 seasons and 17,520 fixtures, with exact prior results, saves and rollovers. The 63 NRL tests include saved form orientation, changes from tactics and lawful lineup selections, home and away legacy inputs and a check that opening the read model takes no random draws.
+
+At 320px, the report met text contrast checks, showed keyboard focus, opened with Enter and touch, and left the save and fence unchanged when closed. At 390px, a played-season fixture showed three results. App types, production build, the NRL browser suite, 15 built-site readers and 16 download caps passed.
+
 ## 2026-11-12: Club Manager opponent formations draft
 
 Report 23a9b4ae describes opponents being forced into 4-4-2. New kickoffs now choose the highest-rated available eleven that fits one of the existing formations, with the previous fallback when the roster cannot fill a shape. The 390px Chelsea versus Fulham replay changed Fulham from 4-4-2 with six compatible positions to 4-3-3 with eleven, and both runs finished 2-1.

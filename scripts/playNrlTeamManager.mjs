@@ -18,6 +18,7 @@ const host = process.env.BASE ? null : spawn(process.execPath, ['scripts/lib/hos
 let browser;
 
 const save = page => page.evaluate(key => localStorage.getItem(key), SAVE_KEY);
+const fence = page => page.evaluate(key => localStorage.getItem(`dukb-fence:${key}`), SAVE_KEY);
 const career = async page => JSON.parse(await save(page));
 const advance = page => page.locator('[data-nrl-advance]');
 const finishLive = page => page.getByRole('button', { name: 'Play second half' });
@@ -25,6 +26,9 @@ const reloadMoved = page => Promise.all([page.waitForNavigation({ waitUntil: 'do
 const development = page => page.getByLabel('Development focus');
 const medicalLevel = page => page.locator('[data-nrl-medical-level]');
 const upgradeMedical = (page, cost) => page.getByRole('button', { name: `Upgrade for ${cost}`, exact: true });
+const opposition = page => page.getByText('Opposition report', { exact: true });
+const attackEdge = page => page.locator('[data-nrl-attack-edge]');
+const defenseEdge = page => page.locator('[data-nrl-defense-edge]');
 const screenshot = (page, name) => shots && page.screenshot({ path: path.join(shots, name), fullPage: false });
 
 async function context(width) {
@@ -49,6 +53,17 @@ async function open(ctx) {
 async function fit(page) {
   assert(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1), 'No horizontal overflow');
 }
+
+const reportContrast = label => label.evaluate(element => {
+  const luminance = color => {
+    const rgb = color.match(/\d+(?:\.\d+)?/g).slice(0, 3).map(value => Number(value) / 255);
+    const [r, g, b] = rgb.map(value => value <= 0.04045 ? value / 12.92 : ((value + 0.055) / 1.055) ** 2.4);
+    return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+  };
+  const foreground = luminance(getComputedStyle(element).color);
+  const background = luminance(getComputedStyle(element.closest('details')).backgroundColor);
+  return (Math.max(foreground, background) + 0.05) / (Math.min(foreground, background) + 0.05);
+});
 
 async function play(page, count) {
   for (let action = 0; action < count; action++) await advance(page).click();
@@ -117,7 +132,31 @@ try {
   assert.equal(afterBench[1], beforeBench[0]);
   assert.equal(new Set(afterBench).size, 6);
   await past.getByRole('button', { name: 'Match centre' }).click();
+  const beforeReport = await save(past);
+  const beforeFence = await fence(past);
+  assert.equal(await attackEdge(past).count(), 0);
+  const summary = opposition(past);
+  assert(await reportContrast(summary) >= 4.5);
+  await past.getByRole('button', { name: 'Balanced', exact: true }).focus();
+  await past.keyboard.press('Shift+Tab');
+  assert(await summary.evaluate(element => document.activeElement === element
+    && element.matches(':focus-visible') && getComputedStyle(element).boxShadow !== 'none'));
+  await screenshot(past, 'nrl-opposition-320-collapsed.png');
+  await past.keyboard.press('Enter');
+  const initialAttack = Number(await attackEdge(past).innerText());
+  const initialDefense = Number(await defenseEdge(past).innerText());
+  assert(await reportContrast(past.getByText('Your attack edge', { exact: true })) >= 4.5);
+  await past.getByText('No matches played this season yet.').waitFor();
+  await fit(past);
+  await screenshot(past, 'nrl-opposition-320.png');
+  await opposition(past).tap();
+  await attackEdge(past).waitFor({ state: 'detached' });
+  assert.equal(await save(past), beforeReport);
+  assert.equal(await fence(past), beforeFence);
+  await opposition(past).tap();
   await past.getByRole('button', { name: 'Attack', exact: true }).click();
+  assert.equal(Math.round(10 * (Number(await attackEdge(past).innerText()) - initialAttack)), 50);
+  assert.equal(Math.round(10 * (Number(await defenseEdge(past).innerText()) - initialDefense)), -30);
   await past.getByRole('button', { name: 'Train', exact: true }).click();
   assert.equal((await career(past)).season.preparation, 'train');
   const firstRound = await play(past, 1);
@@ -137,6 +176,7 @@ try {
   const beforeLive = await career(past);
   const sameSave = await open(phone);
   await sameSave.page.getByRole('button', { name: 'Play Live', exact: true }).tap();
+  assert.equal(await opposition(sameSave.page).count(), 0);
   await past.getByRole('button', { name: 'Reload your season' }).waitFor();
   assert.equal(await advance(past).isEnabled(), false);
   const pendingBytes = await save(sameSave.page);
@@ -315,6 +355,15 @@ try {
   const medical = await context(390);
   await medical.addInitScript(({ key, raw }) => { if (!localStorage.getItem(key)) localStorage.setItem(key, raw); }, { key: SAVE_KEY, raw: JSON.stringify(funded) });
   const { page: clinic, errors: clinicErrors } = await open(medical);
+  const clinicBytes = await save(clinic);
+  await opposition(clinic).tap();
+  const form = clinic.locator('[data-nrl-opposition-form]');
+  await form.waitFor();
+  assert.equal(await form.locator('li').count(), 3);
+  assert.match(await form.innerText(), /(?:Win|Draw|Loss)/);
+  assert.equal(await save(clinic), clinicBytes);
+  await fit(clinic);
+  await screenshot(clinic, 'nrl-opposition-390.png');
   await openFinances(clinic);
   await upgradeMedical(clinic, '$800,000').tap();
   assert.equal(await upgradeMedical(clinic, '$2,600,000').isEnabled(), true);
@@ -329,7 +378,7 @@ try {
   assert.match(await clinic.locator('[data-nrl-match-injury]').innerText(), /miss 2 rounds/);
   assert.deepEqual(clinicErrors, []);
   await medical.close();
-  console.log('Medical at 390px: earned cash funded both upgrades and the same seeded four-round knock became two.');
+  console.log('Match centre at 390px: three saved form rows, and funded treatment turned the same four-round knock into two.');
 
   let old = createNrlSeason('bears', 717, 2027);
   for (let action = 0; action < 31; action++) old = reduceNrlSeason(old, { type: 'advance' });
