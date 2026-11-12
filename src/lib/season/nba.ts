@@ -2,10 +2,12 @@
    (src/lib/season/us.ts binds it to the season core).
 
    What is the engine's: games played, points a game (a whole number), rebounds
-   and assists a game (one decimal), the team result, its saved record when
-   present and the playoff numbers. What is THIS SIM'S OWN, and said so in the
-   "?": the record bands for older saves, the score law, the per game spread, who he meets on
+   and assists a game (one decimal), the team result and the playoff numbers,
+   all read from the saved line. What is THIS SIM'S OWN, and said so in the
+   "?": the fallback record bands, the score law, the per game spread, who he meets on
    which night, every score and every stat line.
+
+   A valid club record in the save sets the exact wins and losses in the replay.
 
    Real and two sourced (src/data/usLeagueShape.ts): the divisions, the
    league's standard 82 game formula, the league scoring mean of each era, and
