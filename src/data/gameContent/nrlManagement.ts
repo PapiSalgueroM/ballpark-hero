@@ -12,7 +12,7 @@ export const NRL_MANAGEMENT_CONTENT: GameContentMap = {
       'Play the round and check the result against the ladder. A bye is a break in the fixture list, so check who you play after it.',
       'Finish in the top eight to reach the finals. Follow the bracket and try to win the Grand Final.',
       'Open the club office to extend contracts and approach eligible recruits. Check how much cap room you have in the season the deal starts.',
-      'Review your final ladder, premiership result and finances, then advance to the next season with the players you kept or recruited.',
+      'Review your final ladder, premiership result and finances. Stay with your squad or choose another club for next season.',
     ],
     rules: [
       'The 2026 regular season spans 27 rounds, with 24 matches and three byes for each club. The game generates its own fixture list for each year.',
@@ -32,7 +32,7 @@ export const NRL_MANAGEMENT_CONTENT: GameContentMap = {
       'Check next season’s cap before you make an offer. A player who has agreed to join still plays for his current club until rollover.',
     ],
     faqs: [
-      { q: 'When can I manage the Perth Bears?', a: 'Pick the 2027 season to manage the Perth Bears. The 2026 season uses the 17 clubs in that year’s competition.' },
+      { q: 'When can I manage the Perth Bears?', a: 'Start a 2027 career with the Perth Bears, or move there in Season review after finishing 2026.' },
       { q: 'Does the game use the published NRL fixtures?', a: 'Each season has an original simulated fixture list. The game generates the squad for each real club and simulates all match results.' },
       { q: 'Can I resume my season later?', a: 'Yes, when browser storage is available. Use the same browser and device to return to your save.' },
     ],
