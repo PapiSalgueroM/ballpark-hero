@@ -737,10 +737,23 @@ async function loadSave(page, raw) {
 /* a press of the walk's own, by a click that does NOT scroll first: a real pointer at the button's centre (Playwright's
    own click scrolls the button into view, which is the page moving for a reason that is not the board's) */
 async function pressAt(page, sel) {
-  const r = await page.evaluate(s => { const b = document.querySelector(s); if (!b) return null; const x = b.getBoundingClientRect(); return { x: x.left + x.width / 2, y: x.top + x.height / 2, vh: window.innerHeight }; }, sel);
-  if (!r) throw new Error(`no button ${sel}`);
-  if (r.y < 0 || r.y > r.vh) { await page.locator(sel).scrollIntoViewIfNeeded(); return pressAt(page, sel); }
-  await page.mouse.click(r.x, r.y);
+  const point = () => page.evaluate(selector => {
+    const button = document.querySelector(selector);
+    if (!button) return null;
+    const rect = button.getBoundingClientRect();
+    const x = rect.left + rect.width / 2;
+    const y = rect.top + rect.height / 2;
+    return { x, y, reachable: button.contains(document.elementFromPoint(x, y)) };
+  }, sel);
+  let target = await point();
+  if (!target) throw new Error(`no button ${sel}`);
+  if (!target.reachable) {
+    // Sticky site chrome can cover a button whose centre is still in the viewport.
+    await page.locator(sel).evaluate(button => button.scrollIntoView({ block: 'center', behavior: 'instant' }));
+    target = await point();
+  }
+  if (!target?.reachable) throw new Error(`button ${sel} is covered after scrolling`);
+  await page.mouse.click(target.x, target.y);
   await page.waitForTimeout(1100);
 }
 
