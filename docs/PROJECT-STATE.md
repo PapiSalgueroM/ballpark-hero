@@ -47,6 +47,12 @@ Live UI delivery run42300717290 passed on the first root read: the root and Club
 
 SC-36 and CM-04 remain partial; CM-03 real opening-roster coverage is incomplete. Old unrelated full-fleet reds remain unwaived. Continue the master list with verified team/league and real historical entrant coverage. Russia's proposed 15-club SC bridge remains research only: no new rows, palettes, points or year/continental policy are adopted. Rubin's traditional green/white word gap is now corroborated by Sport.ru and Sport Mail, with dated-season/personnel and shade-equivalence caveats retained; other colour and availability gates remain open.
 
+## 2026-11-12: Real-club Soccer Perfect Season candidate
+
+Soccer Perfect Season draws 11 real clubs from the pinned October 2026 pool of 557 players and 146 clubs. Draft a 4-3-3 with two rerolls, then play all 38 simulated matches. Daily and Unlimited have separate browser saves. The strongest available XI guarantees 38 wins. A 37-win season with one draw is unbeaten and scores 98.
+
+The 32 paired outcome checks agreed with an independent slot assignment and measured 50.19 points between the strongest and weakest drafts. The flattened odds control dropped that gap to zero and failed. Eight focused tests, app types, both builds, three scoped snapshots, 18 offline readers and all 16 existing size caps passed. The 320px and 390px phone checks covered both verdicts, rerolls, saved draft and match progress, and two local completion payloads. The source migration stages the 100-point leaderboard cap for the release lane and has not been applied.
+
 ## 2026-11-01 20:55 EDT, Claude session K (games): RELEASE BV IS LIVE (deployment 96c67a3b, main 7bd3e99a1)
 
 LIVE: release-bv-gate 7bd3e99a1 fast forwarded onto main from 19911f815 and published 20:54 EDT as deployment
