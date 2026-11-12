@@ -1,3 +1,11 @@
+## 2026-11-12: NRL Manager golden-point match report
+
+The latest regular-season match report names the decisive score and five-minute period when a managed match goes to golden point. A draw explains that neither club scored in either period. The receipt uses the same resolution roll as the existing simulation.
+
+Against the previous engine, 17,724 results, 80 rollovers and 1,463,262 random draws per arm matched exactly after removing only the new receipt. That included 339 Live finishes, 86 named interchanges, 40 finals that reached extra time and 1,374 exact legacy state checks.
+
+At 320px, Quick Sim showed a second-period field goal. At 390px, Play Live showed a scoreless golden-point draw. Both receipts survived reload, and an imported tie kept its exact bytes. All 92 NRL tests, app types, production build, 15 built-site readers and 16 download caps passed.
+
 ## 2026-11-12 Club Manager saved opening layout
 
 The three saved-start loading panels reserve one small viewport of height on phones, where the manager slots stack vertically. That keeps the live guide below the fold until the slot cards arrive. The desktop loaders keep their prior geometry.

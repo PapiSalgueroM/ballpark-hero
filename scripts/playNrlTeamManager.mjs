@@ -478,6 +478,49 @@ try {
   await blockedInterchange.close();
   console.log('Halftime at 320px: explained the protected kicker, then finished with automatic rotation.');
 
+  for (const [width, seed, live, receipt, copy] of [
+    [320, 202, false, { period: 2, score: 'fieldGoals' }, /won with a field goal in the second five-minute period of golden point/],
+    [390, 88, true, 'draw', /Golden point ended scoreless after two five-minute periods/],
+  ]) {
+    const tie = await context(width);
+    const opening = createNrlCareer('storm', seed);
+    await tie.addInitScript(({ key, raw }) => { if (!localStorage.getItem(key)) localStorage.setItem(key, raw); },
+      { key: SAVE_KEY, raw: JSON.stringify(opening) });
+    const { page, errors } = await open(tie);
+    const result = page.locator('[data-nrl-golden-point]');
+    assert.equal(await result.count(), 0);
+    if (live) {
+      await page.getByRole('button', { name: 'Play Live', exact: true }).tap();
+      await finishLive(page).tap();
+    } else {
+      await advance(page).tap();
+    }
+    assert.match(await result.innerText(), copy);
+    assert.deepEqual((await career(page)).season.results.find(match => match.goldenPoint)?.goldenPoint, receipt);
+    const settled = await save(page);
+    await result.scrollIntoViewIfNeeded();
+    await fit(page);
+    await screenshot(page, `nrl-golden-point-${width}.png`);
+    await page.reload({ waitUntil: 'domcontentloaded' });
+    assert.match(await result.innerText(), copy);
+    assert.equal(await save(page), settled);
+    assert.deepEqual(errors, []);
+    await tie.close();
+  }
+  console.log('Golden point at 320px and 390px: Quick Sim second-period field goal and a scoreless Live draw both survived reload.');
+
+  const importedTie = reduceNrlSeason(createNrlSeason('storm', 2), { type: 'advance' });
+  const oldTie = await context(390);
+  await oldTie.addInitScript(({ key, raw }) => { if (!localStorage.getItem(key)) localStorage.setItem(key, raw); },
+    { key: SAVE_KEY, raw: JSON.stringify(importedTie) });
+  const { page: importedResult, errors: importedResultErrors } = await open(oldTie);
+  assert.match(await importedResult.locator('[data-nrl-result]').innerText(), /after extra time$/);
+  assert.equal(await importedResult.locator('[data-nrl-golden-point]').count(), 0);
+  assert.equal(await save(importedResult), JSON.stringify(importedTie));
+  assert.deepEqual(importedResultErrors, []);
+  await oldTie.close();
+  console.log('Imported golden-point match kept its existing result and exact save bytes.');
+
   let old = createNrlSeason('bears', 717, 2027);
   for (let action = 0; action < 31; action++) old = reduceNrlSeason(old, { type: 'advance' });
   const oldContext = await context(390);
