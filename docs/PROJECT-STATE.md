@@ -1,3 +1,11 @@
+## 2026-11-12: NRL Manager Play Live
+
+Play Live opens the first-half scoreboard in Match centre and saves the round at half time. Keep the opening tactic or switch for the second half. Full time settles the round and posts the score, scorers, interchange, injuries and club accounts together. Quick Sim is still one action, and saves without player scoring gain Play Live at their next season.
+
+Across 80 seasons and 17,520 fixtures, Quick Sim produced the same saved state as the previous engine. Keeping the opening tactic also matched Quick Sim in 1,194 live matches, including 42 finals and one finals extra-time match. A changed tactic affected the score in 135 of 250 sampled matches.
+
+At 320px, a halftime reload kept the exact score and a second tab could not finish the round twice. At 390px, Perth switched to Attack for the second half and retained Balanced for its next match. The app type gate, production build, 48 focused tests, NRL browser suite, 15 built-site readers and 16 download caps passed.
+
 ## 2026-11-12: NRL Manager player scoring
 
 Squad lets you name a starting goal kicker. The Match centre credits tries, conversions, penalty goals and field goals to players who took part. The halfback takes over if the chosen kicker leaves the starting lineup. Squad shows season leaders, and Season review keeps compact player totals after rollover.

@@ -20,10 +20,13 @@ let browser;
 const save = page => page.evaluate(key => localStorage.getItem(key), SAVE_KEY);
 const career = async page => JSON.parse(await save(page));
 const advance = page => page.locator('[data-nrl-advance]');
+const finishLive = page => page.getByRole('button', { name: 'Play second half' });
+const reloadMoved = page => Promise.all([page.waitForNavigation({ waitUntil: 'domcontentloaded' }), page.getByRole('button', { name: 'Reload your season' }).click()]);
 const screenshot = (page, name) => shots && page.screenshot({ path: path.join(shots, name), fullPage: false });
 
 async function context(width) {
-  const ctx = await browser.newContext({ viewport: { width, height: width < 600 ? 844 : 960 }, reducedMotion: 'reduce' });
+  const mobile = width < 600;
+  const ctx = await browser.newContext({ viewport: { width, height: mobile ? 844 : 960 }, isMobile: mobile, hasTouch: mobile, reducedMotion: 'reduce' });
   await ctx.route(url => url.origin !== SOURCE, route => route.abort());
   await ctx.addInitScript(() => { localStorage.setItem('cookie-consent', 'essential'); });
   return ctx;
@@ -98,12 +101,46 @@ try {
   assert.equal(await past.locator('[data-nrl-ladder]').count(), 17);
   await fit(past);
   await past.getByRole('button', { name: 'Match centre' }).click();
+  const beforeLive = await career(past);
   const sameSave = await open(phone);
-  await play(sameSave.page, 1);
+  await sameSave.page.getByRole('button', { name: 'Play Live', exact: true }).tap();
   await past.getByRole('button', { name: 'Reload your season' }).waitFor();
   assert.equal(await advance(past).isEnabled(), false);
-  await Promise.all([past.waitForNavigation({ waitUntil: 'domcontentloaded' }), past.getByRole('button', { name: 'Reload your season' }).click()]);
+  const pendingBytes = await save(sameSave.page);
+  const pending = await career(sameSave.page);
+  assert.equal(pending.season.round, beforeLive.season.round);
+  assert.deepEqual(pending.season.results, beforeLive.season.results);
+  assert.deepEqual(pending.finance, beforeLive.finance);
+  assert.equal(pending.season.live.fixture.round, beforeLive.season.round);
+  const halfScore = sameSave.page.locator('[data-nrl-halftime]');
+  const halfText = await halfScore.innerText();
+  assert.match(halfText, /tr(?:y|ies)/);
+  assert.equal(await advance(sameSave.page).count(), 0);
+  await fit(sameSave.page);
+  await screenshot(sameSave.page, 'nrl-halftime-320.png');
+  await sameSave.page.reload({ waitUntil: 'domcontentloaded' });
+  await finishLive(sameSave.page).waitFor();
+  assert.equal(await halfScore.innerText(), halfText);
+  assert.equal(await save(sameSave.page), pendingBytes);
+  await reloadMoved(past);
+  await finishLive(past).waitFor();
+  await past.getByRole('button', { name: 'Squad', exact: true }).click();
+  assert.equal(await past.getByLabel('Goal kicker').isEnabled(), false);
+  await past.getByRole('button', { name: 'Match centre', exact: true }).click();
+  await finishLive(sameSave.page).tap();
+  await sameSave.page.getByRole('heading', { name: 'Full time', exact: true }).waitFor();
+  await past.getByRole('button', { name: 'Reload your season' }).waitFor();
+  assert.equal(await finishLive(past).isEnabled(), false);
+  const settledBytes = await save(sameSave.page);
+  const settled = await career(sameSave.page);
+  assert.equal(settled.season.live, undefined);
+  assert.equal(settled.season.round, beforeLive.season.round + 1);
+  assert.equal(settled.season.results.filter(result => result.round === beforeLive.season.round
+    && (result.homeId === settled.season.clubId || result.awayId === settled.season.clubId)).length, 1);
+  await reloadMoved(past);
   await past.getByRole('heading', { level: 1, name: 'NRL Team Manager' }).waitFor();
+  await advance(past).waitFor();
+  assert.equal(await save(past), settledBytes);
   const complete2026 = await play(past, 29);
   assert.equal(complete2026.phase, 'complete');
   assert.equal(complete2026.results.filter(result => !result.finalsRound).length, 204);
@@ -120,7 +157,7 @@ try {
   assert.equal(await past.locator('[data-nrl-ladder]').count(), 18);
   assert.deepEqual([...pastErrors, ...sameSave.errors], []);
   await phone.close();
-  console.log('2026 at 320px: 17 clubs, starters and interchange, training, save reload, stale tab guard, 204 matches, nine finals and 2027 rollover.');
+  console.log('2026 at 320px: starters and interchange, live halftime reload, one settlement across two tabs, 204 matches, nine finals and 2027 rollover.');
 
   const largerPhone = await context(390);
   const { page: future, errors: futureErrors } = await open(largerPhone);
@@ -159,7 +196,17 @@ try {
   assert(recruitId, 'A legal Perth signing was available');
   await fit(future);
   await future.getByRole('button', { name: 'Match centre', exact: true }).click();
-  const middle = await play(future, 14);
+  await future.getByRole('button', { name: 'Play Live', exact: true }).tap();
+  const attack = future.getByRole('button', { name: 'Attack', exact: true });
+  await attack.tap();
+  assert.equal(await attack.getAttribute('aria-pressed'), 'true');
+  await fit(future);
+  await screenshot(future, 'nrl-halftime-390.png');
+  await finishLive(future).tap();
+  await future.getByRole('heading', { name: 'Full time', exact: true }).waitFor();
+  await screenshot(future, 'nrl-full-time-390.png');
+  assert.equal((await career(future)).season.tactic, 'balanced');
+  const middle = await play(future, 13);
   assert.equal(middle.year, 2027);
   assert.equal(middle.clubId, 'bears');
   const middleBytes = await save(future);
@@ -198,7 +245,7 @@ try {
   await fit(future);
   assert.deepEqual(futureErrors, []);
   await largerPhone.close();
-  console.log('2027 at 390px: 18 clubs, Perth selection, midseason and final reloads, 216 matches, nine finals, restart cancellation, finance reconciliation and Chiefs rollover.');
+  console.log('2027 at 390px: 18 clubs, Perth signing, halftime tactic change, midseason and final reloads, 216 matches, nine finals, finance reconciliation and Chiefs rollover.');
 
   const fixture = await build({
     stdin: { contents: "export { createNrlSeason, reduceNrlSeason } from './src/lib/nrlManager';", resolveDir: process.cwd() },

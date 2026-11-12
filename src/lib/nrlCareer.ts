@@ -4,7 +4,7 @@ import { uniqueName } from '@/lib/foNames';
 import { archiveNrlScoring, validNrlScoringArchive, type NrlSeasonScoringTotal } from '@/lib/nrlPlayerScoring';
 import {
   createNrlSeason, isNrlManagerState, isNrlSeasonProgress, nrlBench, nrlLadder, nrlRegularRounds,
-  NRL_ROLES, reduceNrlSeason, type NrlAction, type NrlManagerState, type NrlMatchResult,
+  NRL_ROLES, reduceNrlSeason, validNrlLiveScore, type NrlAction, type NrlManagerState, type NrlMatchResult,
   type NrlPlayer, type NrlRole, type NrlYear,
 } from '@/lib/nrlManager';
 
@@ -346,11 +346,11 @@ function opponentStrengths(state: NrlCareerState): Map<string, number> {
   return new Map([...ratings].map(([id, roles]) => [id, [...roles.values()].reduce((sum, rating) => sum + rating, 0) / NRL_ROLES.length]));
 }
 
-function advanceCareer(state: NrlCareerState): NrlCareerState {
+function advanceCareer(state: NrlCareerState, action: Extract<NrlAction, { type: 'advance' | 'finishLive' }>): NrlCareerState {
   const previous = state.season;
   // An imported v1 season keeps its exact original simulation until the next kickoff.
   const matchday = state.legacySeason ? { ...previous, bench: undefined } : previous;
-  const played = reduceNrlSeason(matchday, { type: 'advance' }, state.legacySeason ? undefined : opponentStrengths(state));
+  const played = reduceNrlSeason(matchday, action, state.legacySeason ? undefined : opponentStrengths(state));
   if (played === matchday) return state;
   const season = state.legacySeason ? { ...played, bench: previous.bench } : played;
   const fitness = new Map(season.squad.map(player => [player.id, player.fitness]));
@@ -439,6 +439,7 @@ function rolloverCareer(state: NrlCareerState): NrlCareerState {
 }
 
 export function reduceNrlCareer(state: NrlCareerState, action: NrlCareerAction): NrlCareerState {
+  if (state.season.live && action.type !== 'finishLive') return state;
   switch (action.type) {
     case 'startNextSeason':
       return rolloverCareer(state);
@@ -458,9 +459,11 @@ export function reduceNrlCareer(state: NrlCareerState, action: NrlCareerAction):
       return { ...state, players: [...state.players, { ...report.player, futureContract: quote.contract }] };
     }
     case 'advance':
-      return advanceCareer(state);
+    case 'finishLive':
+      return advanceCareer(state, action);
     default: {
-      const season = reduceNrlSeason(state.season, action);
+      const strength = action.type === 'startLive' && state.season.kickerId ? opponentStrengths(state) : undefined;
+      const season = reduceNrlSeason(state.season, action, strength);
       return season === state.season ? state : { ...state, season };
     }
   }
@@ -609,7 +612,8 @@ export function isNrlCareerState(value: unknown): value is NrlCareerState {
   const { year } = value.season;
   if (!value.players.every(player => validPlayer(player, year))) return false;
   const state = value as unknown as NrlCareerState;
-  return validWorld(state) && validCareerBooks(state) && validAcademy(state);
+  return validWorld(state) && validCareerBooks(state) && validAcademy(state)
+    && (!state.season.live || validNrlLiveScore(state.season, opponentStrengths(state)));
 }
 
 export function readNrlCareerSave(raw: string | null): NrlCareerState | null {
