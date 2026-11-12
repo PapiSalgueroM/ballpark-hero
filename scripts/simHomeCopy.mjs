@@ -102,7 +102,7 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTROL = process.env.HOME_COPY_CONTROL || '';
 const HOME_CONTROLS = {
   descdrift: '4b', commentapp: '4b', commenttpl: '4b',
-  moduledrift: '6', templatedrift: '6', nosection: '9', staticimport: '9',
+  moduledrift: '6', templatedrift: '6', nosection: '9', staticimport: '9', eagerhome: '9',
   hiddenh1: ['7', '8'], srabout: ['7', '8'], srsource: '8', retiredlink: '3',
 };
 if (CONTROL && !(CONTROL in HOME_CONTROLS)) {
@@ -156,7 +156,7 @@ indexBundled = controlledRe('hiddenh1', indexBundled, /DoUKnowBall(\s*<\/h1>)/,
    so only the import graph in part 9 can object. */
 indexBundled = controlled('staticimport', indexBundled, "import { FavouriteSport } from '@/components/home/FavouriteSport';",
   "import { FavouriteSport } from '@/components/home/FavouriteSport';\nimport { HOME_COPY } from '@/data/homeCopy';");
-indexBundled = controlledRe('staticimport', indexBundled, />(\s*)DoUKnowBall(\s*<\/h1>)/, '>$1{HOME_COPY.h1}$2');
+indexBundled = controlledRe('staticimport', indexBundled, />(\s*)Free sports games(\s*<\/h1>)/, '>$1{HOME_COPY.h1}$2');
 indexBundled = controlledRe('srsource', indexBundled, /<\/h1>/,
   '</h1><span className="sr-only"> Free sports trivia, quizzes and career sims.</span>');
 let homeAboutSrc = readFileSync(path.join(ROOT, 'src/components/home/HomeAbout.tsx'), 'utf8');
@@ -712,7 +712,7 @@ console.log('8) no visually hidden text in src/pages/Index.tsx or src/components
    whose fallback is nothing, outside every condition in the page's JSX, and
    below every tile. And it holds the weight: no file the entry reaches by a
    static import may import src/data/homeCopy.ts or the About component.
-   Controls: nosection (the mount removed) and staticimport (the copy module
+   Controls: eagerhome (the Home route made static), nosection (the mount removed), and staticimport (the copy module
    imported by Index.tsx again, and used). */
 part = '9';
 console.log('9) the About section is a lazy chunk, mounted for every visitor, and the copy stays out of the entry');
@@ -752,7 +752,10 @@ console.log('9) the About section is a lazy chunk, mounted for every visitor, an
   /* the static import graph from the entry */
   const SRC = path.join(ROOT, 'src');
   const norm = p => path.resolve(p).toLowerCase();
+  const lazyHome = 'const Index = lazy(() => import("./pages/Index"));';
+  const routedApp = controlled('eagerhome', appSrc, lazyHome, 'import Index from "./pages/Index";');
   const overrides = new Map([
+    [norm(path.join(SRC, 'App.tsx')), routedApp],
     [norm(path.join(SRC, 'pages/Index.tsx')), indexBundled],
     [norm(path.join(SRC, 'components/home/HomeAbout.tsx')), homeAboutSrc],
     [norm(path.join(SRC, 'data/homeCopy.ts')), homeCopySrc],
@@ -796,14 +799,15 @@ console.log('9) the About section is a lazy chunk, mounted for every visitor, an
   };
   const entry = walk(path.join(SRC, 'main.tsx'));
   const has = (set, rel) => set.has(norm(path.join(SRC, rel)));
-  if (entry.size < 50 || !has(entry, 'App.tsx') || !has(entry, 'pages/Index.tsx')) {
-    fail(`the import walk from src/main.tsx reached only ${entry.size} files${has(entry, 'pages/Index.tsx') ? '' : ', not Index.tsx'}, so it proves nothing`);
-  }
-  if (has(entry, 'data/homeCopy.ts')) fail('src/data/homeCopy.ts is reachable by static imports from src/main.tsx, so the copy rides in the entry chunk every page downloads');
-  if (has(entry, 'components/home/HomeAbout.tsx')) fail('src/components/home/HomeAbout.tsx is reachable by static imports from src/main.tsx, so the lazy chunk is not lazy');
+  if (entry.size < 50 || !has(entry, 'App.tsx')) fail('the static entry walk did not reach the app');
+  if (!strip(routedApp).includes(lazyHome) || has(entry, 'pages/Index.tsx')) fail('Home is not behind its lazy app route');
+  const home = walk(path.join(SRC, 'pages/Index.tsx'));
+  if (!has(home, 'components/home/FeaturedStage.tsx')) fail('the static Home walk did not reach its featured stage');
+  if ([entry, home].some(graph => has(graph, 'data/homeCopy.ts'))) fail('the Home copy is reachable without loading the About chunk');
+  if ([entry, home].some(graph => has(graph, 'components/home/HomeAbout.tsx'))) fail('the About component is reachable without loading its lazy chunk');
   const lazySide = walk(path.join(SRC, 'components/home/HomeAbout.tsx'));
   if (!has(lazySide, 'data/homeCopy.ts')) fail('the About component does not import src/data/homeCopy.ts, so the lazy chunk does not carry the copy');
-  if (!failedParts.has('9')) console.log(`   lazy at module level, mounted once inside <Suspense fallback={null}> outside every condition, after the sport sections; ${entry.size} files reached statically from src/main.tsx, none of them the copy or the About component`);
+  if (!failedParts.has('9')) console.log(`   lazy at module level, mounted once inside <Suspense fallback={null}> outside every condition, after the sport sections; ${entry.size} static entry files and ${home.size} static Home files, with the copy and About component deferred`);
 }
 
 console.log('');

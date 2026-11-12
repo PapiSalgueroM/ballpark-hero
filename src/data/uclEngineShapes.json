@@ -8,13 +8,13 @@
         "startYear": 2026,
         "emoji": "📅"
       },
-      "firstKo": "QF",
+      "firstKo": "PO",
       "legs": 2,
       "awayGoals": false,
       "realId": "league-phase",
-      "matchesReal": false,
+      "matchesReal": true,
       "watched": "l36",
-      "line": "Eight groups of four into the quarter-finals, two legged ties, no away goals rule. A stand in: the real 2026-27 competition runs thirty six clubs in one league table, which your own club does not play yet. The Champions League you follow from outside it plays the real format."
+      "line": "One table of 36 clubs, eight matches per club, and playoffs for ninth to 24th. The draw and results are simulated. Saved group seasons finish in groups, and Manager Hot Seat keeps its own format."
     },
     {
       "era": {

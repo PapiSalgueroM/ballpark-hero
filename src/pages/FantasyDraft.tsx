@@ -15,6 +15,7 @@ import { VoteWinner } from '@/components/fantasy-draft/VoteWinner';
 import ShareButtons from '@/components/game/ShareButtons';
 import { cn } from '@/lib/utils';
 import { useToast } from '@/hooks/use-toast';
+import { Toaster } from '@/components/ui/toaster';
 import { useAuth } from '@/contexts/AuthContext';
 import { FANTASY_FORMATION, fantasyDraftCandidates, fantasySlotOpen, fantasyXiComplete, ruleForCriteria } from '@/lib/fantasyCriteria';
 import { recordCompletion, getCurrentPlayerName } from '@/lib/completions';
@@ -274,6 +275,7 @@ const FantasyDraft = () => {
 
   return (
     <>
+      <Toaster />
       <PageSeo
         title="Fantasy Draft Showdown - Soccer Draft Game | DoUKnowBall"
         description="Draft a balanced soccer XI against the AI under a daily squad rule. The simulated season table decides the winner. Free soccer draft."

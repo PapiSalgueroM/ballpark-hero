@@ -466,6 +466,15 @@ export function certainFixturesLeft(state: CareerState): { home: number; away: n
     if (fx.home === true) home += 1;
     else if (fx.home === false) { away += 1; if (entry.type === 'uclGroup' || entry.type === 'uclKo' || entry.type === 'uel') euroAway += 1; }
   }
+  // A top-eight club has earned two last-16 matches before the playoffs determine its opponent.
+  if (state.uclGroup?.leaguePhase && state.uclKoRound === 'R16' && !state.uclDraw.R16) {
+    const legs = state.calendar.slice(state.week).filter(entry => entry.type === 'uclKo' && entry.uclRound === 'R16');
+    if (legs.length === 2 && legs[0].uclLeg === 1 && legs[1].uclLeg === 2) {
+      home += 1;
+      away += 1;
+      euroAway += 1;
+    }
+  }
   return { home, away, euroAway };
 }
 
@@ -588,7 +597,9 @@ export function projectFinances(state: CareerState): FinanceProjection {
     resultActual: round2(incomeActual - spendActual),
     resultProjected: round2(incomeProjected - spendProjected),
     possibleBonus: state.sponsor?.bonus ?? 0,
-    caveat: 'Counts league fixtures and the one cup or European tie already drawn. Later rounds depend on results and are left out, and so are deals you have not done.',
+    caveat: state.uclGroup?.leaguePhase
+      ? 'Counts league fixtures, drawn ties and the round of 16 tie earned by finishing in the league phase top eight. Later rounds depend on results, and deals you have not done are left out.'
+      : 'Counts league fixtures and the one cup or European tie already drawn. Later rounds depend on results and are left out, and so are deals you have not done.',
   };
 }
 

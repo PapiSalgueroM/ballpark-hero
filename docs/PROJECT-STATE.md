@@ -1,3 +1,27 @@
+## 2026-11-12 Club Manager Championship playoffs prototype
+
+New current-era English careers use the six-team Championship playoffs for the third Premier League place. Fifth and sixth host the eliminators, then third and fourth host the return legs of reseeded semifinals. The neutral final decides promotion. Dates and results are simulated. The game uses the standard home order and the existing regular-season standings.
+
+The prototype keeps the bracket and match scores in the career save. It opens a qualified manager's playoff fixtures after the existing league and cup calendar, and settles the same bracket through AI for other clubs. Season review and the summer exchange read one winner. Old saves and Manager Hot Seat keep their existing promotion rules.
+
+On exact parent a887cce20, the old engine sent the third-place Burnley fixture directly up. The prototype kept it in the Championship after a semifinal shootout win and a final loss, and sent an eighth-place fixture up after four match-engine fixtures and the final win. The 98 distinct focused checks covered rank and venue, the regular-final Continue callback, fast forward, saved halftime, three-place exchange and late job handling. Three Daily start-and-match pairs and four fixtures each at legacy Burnley, Arsenal and Real Madrid held exact serialized state and observed draws against the parent. The league tables used for these replays are test fixtures. Full app types, production build, phone, saved output and budgets are pending. The prototype is local.
+
+Rules: [2026/27 EFL play-off rules](https://images.gc.eflservices.co.uk/659e3bb0-7b8d-11f1-b366-6527b2d4899f.pdf), [2026/27 EFL regulations](https://images.gc.eflservices.co.uk/8374c4e0-c95f-11f1-bbd2-73c36057a203.pdf), [Premier League format explainer](https://www.premierleague.com/en/news/4611805).
+
+## 2026-11-12 Club Manager played Champions League prototype
+
+New ordinary current-season careers can play the 36-club Champions League league phase. Qualified clubs play eight simulated fixtures before the two-leg knockout playoffs and the single final. The saved draw and results feed the Cups table, matchday view and calendar. Existing group seasons finish in groups, with the modern option activated at ordinary rollover. Historic, Asian start and Daily paths keep their existing rules.
+
+On local integration base 2348a72f9, the 116 focused tests passed. Arsenal recorded 144 league-phase results and completed the full bracket. Matchday four reloaded the exact draw, scores and visible table. Tested finishes were seventh, ninth and thirty-first, with an earned home and away round of 16 tie counted before its opponent was drawn. An Everton-to-Arsenal job preserved the season's rules. The source-only format reader and its watched-format control passed. Full app types, production and phone builds, and the Club Manager and format-history snapshots remain pending. This prototype is local.
+
+## 2026-11-12 Club Manager severe match injuries draft
+
+A new Club Manager career or the next season of an existing one can draw an ACL tear or Achilles tendon rupture during a simulated match. The existing match-injury draw assigns 2% of injuries to these severe spells. ACL tears last 28 to 36 simulated weeks and Achilles ruptures last 18 to 30. The bands are game estimates based on a 225-day median to match return in the [UEFA ACL cohort](https://pubmed.ncbi.nlm.nih.gov/27034129/) and a 161-day average absence in the [UEFA Achilles cohort](https://pubmed.ncbi.nlm.nih.gov/23770660/).
+
+A severe injury first counts down on a subsequent paid week. A player who remains at the club gets credit for complete summer weeks between the last calendar date and the following kickoff. Treatment shows the simulated diagnosis and remaining weeks, and clears the diagnosis when the spell ends. Existing active seasons, routine and training injuries and daily games keep their original rules.
+
+The compiled 390px replay opened the Help and started a new save, resumed a saved Achilles rupture, and rolled an ACL injury from 36 to 23 weeks across a 13-week summer. The engine replay then counted down to full availability. Three Manager Hot Seat dates matched main byte for byte.
+
 ## 2026-11-12 Club Manager opening performance prototype
 
 The five season buttons share the existing era catalogue and appear before the match engine for empty stores. The original career boot still handles active, parked and damaged data and Hot Seat handoffs. A choice made while the engine loads gives way to a save created in another tab. The roster catalogue remains in the prerendered guide and can be opened before a career from the guide's club list control.

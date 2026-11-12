@@ -1,4 +1,3 @@
-import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -15,7 +14,7 @@ import { SiteMenuProvider } from "@/components/layout/SiteMenuHost";
 import { LiveTicker } from "@/components/layout/LiveTicker";
 import { UpdateNudge } from "@/components/layout/UpdateNudge";
 import { Footer } from "@/components/game/Footer";
-import Index from "./pages/Index";
+const Index = lazy(() => import("./pages/Index"));
 const Footle = lazy(() => import("./pages/Footle"));
 const FreeKick = lazy(() => import("./pages/FreeKick"));
 const BuzzerBeater = lazy(() => import("./pages/BuzzerBeater"));
@@ -587,7 +586,6 @@ const App = () => (
   <QueryClientProvider client={queryClient}>
     <AuthProvider>
       <TooltipProvider>
-        <Toaster />
         <Sonner />
         <UpdateNudge />
         <BrowserRouter>
