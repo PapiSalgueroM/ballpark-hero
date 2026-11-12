@@ -12,6 +12,7 @@ export const NRL_MANAGEMENT_CONTENT: GameContentMap = {
       'Play the round and check the result against the ladder. A bye is a break in the fixture list, so check who you play after it.',
       'Finish in the top eight to reach the finals. Follow the bracket and try to win the Grand Final.',
       'Open the club office to extend contracts and approach eligible recruits. Check how much cap room you have in the season the deal starts.',
+      'Set Standard, Value or Premium ticket prices in Finance before your first paid home match. That choice applies to home gates for the rest of the season.',
       'Review your final ladder, premiership result and finances. Stay with your squad or choose another club for next season.',
     ],
     rules: [
