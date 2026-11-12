@@ -6,8 +6,8 @@ import { archiveNrlScoring, validNrlScoringArchive, type NrlSeasonScoringTotal }
 import {
   archiveNrlFinals, createNrlSeason, isNrlManagerState, isNrlSeasonProgress, nrlArchivedFinals, nrlBench, nrlLadder, nrlMatchdaySelection,
   nrlInjuries, nrlMatchupEdges, nrlNextRound, nrlRegularRounds, nrlRetrainingRoles, nrlSavedLineupPreview, NRL_BENCH_SIZE,
-  NRL_FINALS_SPOTS, NRL_ROLES, reduceNrlSeason, validNrlLiveScore,
-  type NrlAction, type NrlCoachRole, type NrlFinalsArchive, type NrlFixture, type NrlManagerState, type NrlMatchResult,
+  nrlPlanAdjustments, NRL_FINALS_SPOTS, NRL_ROLES, NRL_SPECIALIST_PLANS, reduceNrlSeason, validNrlLiveScore,
+  type NrlAction, type NrlAttackPlan, type NrlCoachRole, type NrlFinalsArchive, type NrlFixture, type NrlManagerState, type NrlMatchResult,
   type NrlPlayer, type NrlRole, type NrlSavedLineup, type NrlYear,
 } from '@/lib/nrlManager';
 
@@ -111,6 +111,7 @@ export interface NrlCareerState {
   positionTraining?: NrlPositionCourse;
 }
 export type NrlCareerAction = NrlAction
+  | { type: 'setAttackPlan'; attackPlan: NrlAttackPlan; year: number; clubId: string; round: number }
   | { type: 'offerContract'; playerId: string; salary: number; years: number }
   | { type: 'arrangeTakeover'; year: number; clubId: string; playerId: string; destinationId: string }
   | { type: 'saveLineup'; year: number; clubId: string }
@@ -653,7 +654,7 @@ export function nrlFinanceForecast(state: NrlCareerState) {
     cashNow, gateLow, gateHigh, closingLow: cashBeforeGates + gateLow, closingHigh: cashBeforeGates + gateHigh };
 }
 
-function opponentStrengths(state: NrlCareerState): Map<string, number> {
+function opponentRatings(state: NrlCareerState) {
   const { year, clubId } = state.season;
   const ratings = new Map<string, Map<NrlRole, number>>();
   for (const player of state.players) {
@@ -663,14 +664,33 @@ function opponentStrengths(state: NrlCareerState): Map<string, number> {
     roles.set(player.role, Math.max(roles.get(player.role) ?? 0, player.rating));
     ratings.set(contract.clubId, roles);
   }
-  return new Map([...ratings].map(([id, roles]) => [id, [...roles.values()].reduce((sum, rating) => sum + rating, 0) / NRL_ROLES.length]));
+  return ratings;
+}
+
+function planRivalRatings(season: NrlManagerState, ratings: ReturnType<typeof opponentRatings>) {
+  if (!season.kickerId || !season.bench || season.phase === 'complete') return undefined;
+  const fixture = nrlNextRound(season).clubMatch;
+  const rival = fixture && ratings.get(fixture.homeId === season.clubId ? fixture.awayId : fixture.homeId);
+  return rival?.size === NRL_ROLES.length ? rival : undefined;
 }
 
 function careerMatchday(state: NrlCareerState) {
   // The imported season uses the original lineups and opponent ratings.
-  return state.legacySeason
-    ? { matchday: { ...state.season, bench: undefined }, opponentStrength: undefined }
-    : { matchday: state.season, opponentStrength: opponentStrengths(state) };
+  if (state.legacySeason) return { matchday: { ...state.season, bench: undefined } };
+  const ratings = opponentRatings(state);
+  const opponentStrength = new Map([...ratings].map(([id, roles]) =>
+    [id, [...roles.values()].reduce((sum, rating) => sum + rating, 0) / NRL_ROLES.length]));
+  return {
+    matchday: state.season,
+    opponentStrength,
+    planRatings: state.season.attackPlan ? planRivalRatings(state.season, ratings) : undefined,
+  };
+}
+
+export function nrlAttackPlanPreview(state: NrlCareerState) {
+  if (state.legacySeason || state.retired || state.season.live) return null;
+  const rival = planRivalRatings(state.season, opponentRatings(state));
+  return rival ? nrlPlanAdjustments(state.season, rival) : null;
 }
 
 export interface NrlOppositionReport {
@@ -700,15 +720,17 @@ export function nrlOppositionReport(state: NrlCareerState): NrlOppositionReport 
         outcome: scored > conceded ? 'W' : scored < conceded ? 'L' : 'D',
       };
     });
-  const { matchday, opponentStrength } = careerMatchday(state);
-  return { opponentId, ladderRank, recent, ...nrlMatchupEdges(matchday, clubMatch, opponentStrength, state.finance.coachHire?.role) };
+  const { matchday, opponentStrength, planRatings } = careerMatchday(state);
+  return { opponentId, ladderRank, recent, ...nrlMatchupEdges(matchday, clubMatch, opponentStrength, {
+    coachRole: state.finance.coachHire?.role, planRivalRatings: planRatings,
+  }) };
 }
 
 function advanceCareer(state: NrlCareerState, action: Extract<NrlAction, { type: 'advance' | 'finishLive' }>): NrlCareerState {
   const previous = state.season;
-  const { matchday, opponentStrength } = careerMatchday(state);
+  const { matchday, opponentStrength, planRatings } = careerMatchday(state);
   const played = reduceNrlSeason(matchday, action, opponentStrength, {
-    medicalReduction: nrlMedicalLevel(state) - 1, coachRole: state.finance.coachHire?.role,
+    medicalReduction: nrlMedicalLevel(state) - 1, coachRole: state.finance.coachHire?.role, planRivalRatings: planRatings,
   });
   if (played === matchday) return state;
   const season = state.legacySeason ? { ...played, bench: previous.bench } : played;
@@ -852,6 +874,18 @@ function rolloverCareer(state: NrlCareerState, move?: { fromYear: number; clubId
 export function reduceNrlCareer(state: NrlCareerState, action: NrlCareerAction): NrlCareerState {
   if (state.retired || (state.season.live && action.type !== 'finishLive')) return state;
   switch (action.type) {
+    case 'setAttackPlan': {
+      const { season } = state;
+      if (action.year !== season.year || action.clubId !== season.clubId || action.round !== season.round) return state;
+      if (action.attackPlan === 'standard') {
+        if (!season.attackPlan) return state;
+        const { attackPlan, ...standard } = season;
+        return { ...state, season: standard };
+      }
+      if (action.attackPlan === season.attackPlan || !NRL_SPECIALIST_PLANS.includes(action.attackPlan)
+        || state.legacySeason || !planRivalRatings(season, opponentRatings(state))) return state;
+      return { ...state, season: { ...season, attackPlan: action.attackPlan } };
+    }
     case 'retireCareer': {
       const { phase, year, clubId } = state.season;
       if (phase !== 'complete' || action.year !== year || action.clubId !== clubId) return state;
@@ -954,8 +988,10 @@ export function reduceNrlCareer(state: NrlCareerState, action: NrlCareerAction):
     case 'finishLive':
       return advanceCareer(state, action);
     default: {
-      const strength = action.type === 'startLive' && state.season.kickerId ? opponentStrengths(state) : undefined;
-      const season = reduceNrlSeason(state.season, action, strength, { coachRole: state.finance.coachHire?.role });
+      const match = action.type === 'startLive' && state.season.kickerId ? careerMatchday(state) : null;
+      const season = reduceNrlSeason(state.season, action, match?.opponentStrength, {
+        coachRole: state.finance.coachHire?.role, planRivalRatings: match?.planRatings,
+      });
       return season === state.season ? state : { ...state, season };
     }
   }
@@ -1213,8 +1249,11 @@ export function isNrlCareerState(value: unknown): value is NrlCareerState {
   const { year } = value.season;
   if (!value.players.every(player => validPlayer(player, year) && (!value.legacySeason || !player.secondaryRole))) return false;
   const state = value as unknown as NrlCareerState;
-  return validWorld(state) && validCareerBooks(state) && validAcademy(state) && validShortlist(state)
-    && (!state.season.live || validNrlLiveScore(state.season, opponentStrengths(state), state.finance.coachHire?.role));
+  if (!validWorld(state) || !validCareerBooks(state) || !validAcademy(state) || !validShortlist(state)) return false;
+  if (!state.season.live && !state.season.attackPlan) return true;
+  const { opponentStrength, planRatings } = careerMatchday(state);
+  return (!state.season.attackPlan || Boolean(planRatings))
+    && validNrlLiveScore(state.season, opponentStrength, { coachRole: state.finance.coachHire?.role, planRivalRatings: planRatings });
 }
 
 export function readNrlCareerSave(raw: string | null): NrlCareerState | null {

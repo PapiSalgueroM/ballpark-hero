@@ -14,6 +14,7 @@ export const NRL_ROLES = [
   'Five-eighth', 'Halfback', 'Prop 8', 'Hooker', 'Prop 10', 'Left Second Row', 'Right Second Row', 'Lock',
 ] as const;
 export const NRL_TACTICS = ['balanced', 'attack', 'defense'] as const;
+export const NRL_SPECIALIST_PLANS = ['middle', 'wide'] as const;
 export const NRL_BENCH_SIZE = 6;
 export const NRL_MAX_BENCH_USED = 4;
 export const NRL_FINALS_SPOTS = 8;
@@ -27,9 +28,15 @@ const GOLDEN_POINT_VALUES = { tries: 4, penalties: 2, longFieldGoals: 2, fieldGo
 
 export type NrlRole = typeof NRL_ROLES[number];
 export type NrlTactic = typeof NRL_TACTICS[number];
+type NrlSpecialistPlan = typeof NRL_SPECIALIST_PLANS[number];
+export type NrlAttackPlan = 'standard' | NrlSpecialistPlan;
 export type NrlCoachRole = Exclude<NrlTactic, 'balanced'>;
 export type NrlPreparation = 'train' | 'recover';
-interface NrlRoundOptions { medicalReduction?: number; coachRole?: NrlCoachRole }
+interface NrlRoundOptions {
+  medicalReduction?: number;
+  coachRole?: NrlCoachRole;
+  planRivalRatings?: ReadonlyMap<NrlRole, number>;
+}
 
 export interface NrlPlayer { id: string; name: string; role: NrlRole; rating: number; fitness: number; secondaryRole?: NrlRole }
 
@@ -105,6 +112,7 @@ export interface NrlManagerState {
   injuryTracking?: true;
   kickerId?: string;
   tactic: NrlTactic;
+  attackPlan?: NrlSpecialistPlan;
   preparation: NrlPreparation | null;
   results: NrlMatchResult[];
   championId: string | null;
@@ -418,27 +426,60 @@ function matchInjury(state: NrlManagerState, used: Set<string>, medicalReduction
   return { playerId: played[Math.floor(rng() * played.length)].id, rounds: Math.max(1, 1 + Math.floor(rng() * MAX_INJURY_ROUNDS) - medicalReduction) };
 }
 
+const PLAN_ROLES: Record<NrlSpecialistPlan, readonly NrlRole[]> = {
+  middle: ['Prop 8', 'Hooker', 'Prop 10', 'Lock'],
+  wide: ['Left Wing', 'Left Centre', 'Right Centre', 'Right Wing'],
+};
+
+function addMatchdayRating(sum: number, player: NrlPlayer, role: NrlRole, preparation: NrlPreparation | null, reserve?: NrlPlayer): number {
+  const rating = nrlCanPlayRole(player, role) ? player.rating : player.rating - UTILITY_RATING_COST;
+  // Keep the original summation order for the ordinary ratings.
+  if (!reserve) return sum + rating - fitnessPenalty(player, preparation);
+  return sum + (rating - fitnessPenalty(player, preparation)) * 0.68
+    + (reserve.rating - fitnessPenalty(reserve, preparation)) * 0.32;
+}
+
+function matchdayBase(state: NrlManagerState, rotation: ReadonlyMap<string, NrlPlayer>): number {
+  const starters = new Map(Object.entries(state.lineup).map(([role, id]) => [id, role]));
+  return state.squad.filter(player => starters.has(player.id)).reduce((sum, player) =>
+    addMatchdayRating(sum, player, starters.get(player.id) as NrlRole, state.preparation, rotation.get(player.id)), 0) / NRL_ROLES.length;
+}
+
+function planAdjustment(state: NrlManagerState, rotation: ReadonlyMap<string, NrlPlayer>, base: number,
+  plan: NrlSpecialistPlan, rival: ReadonlyMap<NrlRole, number>) {
+  const roles = PLAN_ROLES[plan];
+  const players = new Map(state.squad.map(player => [player.id, player]));
+  const laneGap = roles.reduce((sum, role) => {
+    const id = state.lineup[role];
+    return addMatchdayRating(sum, players.get(id)!, role, state.preparation, rotation.get(id)) - rival.get(role)!;
+  }, 0) / roles.length;
+  const rivalBase = [...rival.values()].reduce((sum, rating) => sum + rating, 0) / NRL_ROLES.length;
+  return { attack: clamp((laneGap - (base - rivalBase)) * 0.5, -4, 6), defense: -2 };
+}
+
+export function nrlPlanAdjustments(state: NrlManagerState, rival: ReadonlyMap<NrlRole, number>) {
+  const rotation = benchRotation(state);
+  const base = matchdayBase(state, rotation);
+  return { middle: planAdjustment(state, rotation, base, 'middle', rival), wide: planAdjustment(state, rotation, base, 'wide', rival) };
+}
+
 function teamRatings(state: NrlManagerState, clubId: string, opponentStrength: ReadonlyMap<string, number> | undefined,
-  rotation: ReadonlyMap<string, NrlPlayer>, coachRole?: NrlCoachRole) {
+  rotation: ReadonlyMap<string, NrlPlayer>, { coachRole, planRivalRatings }: NrlRoundOptions) {
   if (clubId !== state.clubId) {
     const strength = opponentStrength?.get(clubId) ?? clubFor(state.year, clubId)!.strength;
     return { attack: strength, defense: strength };
   }
-  const starters = new Map(Object.entries(state.lineup).map(([role, id]) => [id, role]));
-  const base = state.squad.filter(player => starters.has(player.id)).reduce((sum, player) => {
-    const reserve = rotation.get(player.id);
-    const rating = nrlCanPlayRole(player, starters.get(player.id) as NrlRole) ? player.rating : player.rating - UTILITY_RATING_COST;
-    if (!reserve) return sum + rating - fitnessPenalty(player, state.preparation);
-    return sum + (rating - fitnessPenalty(player, state.preparation)) * 0.68
-      + (reserve.rating - fitnessPenalty(reserve, state.preparation)) * 0.32;
-  }, 0) / NRL_ROLES.length;
+  const base = matchdayBase(state, rotation);
   const { attack, defense } = TACTIC_EFFECT[state.tactic];
   const attackCoaching = coachRole === 'attack' && state.tactic === 'attack' ? NRL_COACHING_BONUS : 0;
   const defenseCoaching = coachRole === 'defense' && state.tactic === 'defense' ? NRL_COACHING_BONUS : 0;
-  return {
+  const ordinary = {
     attack: base + attack + (state.preparation === 'train' ? 7 : 0) + attackCoaching,
     defense: base + defense + defenseCoaching,
   };
+  if (!state.attackPlan || !planRivalRatings) return ordinary;
+  const specialist = planAdjustment(state, rotation, base, state.attackPlan, planRivalRatings);
+  return { attack: ordinary.attack + specialist.attack, defense: ordinary.defense + specialist.defense };
 }
 
 function tryChances(rng: () => number, edge: number, chances: number): NrlScoring {
@@ -481,46 +522,46 @@ function fixtureRng(state: NrlManagerState, { round, homeId, awayId }: NrlFixtur
 }
 
 function fixtureEdges(state: NrlManagerState, { homeId, awayId, tieId }: NrlFixture,
-  opponentStrength: ReadonlyMap<string, number> | undefined, rotation: ReadonlyMap<string, NrlPlayer>, coachRole?: NrlCoachRole) {
-  const home = teamRatings(state, homeId, opponentStrength, rotation, coachRole);
-  const away = teamRatings(state, awayId, opponentStrength, rotation, coachRole);
+  opponentStrength: ReadonlyMap<string, number> | undefined, rotation: ReadonlyMap<string, NrlPlayer>, options: NrlRoundOptions) {
+  const home = teamRatings(state, homeId, opponentStrength, rotation, options);
+  const away = teamRatings(state, awayId, opponentStrength, rotation, options);
   const venue = tieId === 'GF' ? 0 : 2;
   return { homeEdge: home.attack - away.defense + venue, awayEdge: away.attack - home.defense - venue };
 }
 
 export function nrlMatchupEdges(state: NrlManagerState, fixture: NrlFixture, opponentStrength?: ReadonlyMap<string, number>,
-  coachRole?: NrlCoachRole) {
-  const { homeEdge, awayEdge } = fixtureEdges(state, fixture, opponentStrength, benchRotation(state), coachRole);
+  options: NrlRoundOptions = {}) {
+  const { homeEdge, awayEdge } = fixtureEdges(state, fixture, opponentStrength, benchRotation(state), options);
   return fixture.homeId === state.clubId
     ? { attackEdge: homeEdge, defenseEdge: -awayEdge }
     : { attackEdge: awayEdge, defenseEdge: -homeEdge };
 }
 
-function drawHalftime(state: NrlManagerState, fixture: NrlFixture, opponentStrength?: ReadonlyMap<string, number>,
-  coachRole?: NrlCoachRole): NrlLiveHalf {
+function drawHalftime(state: NrlManagerState, fixture: NrlFixture, opponentStrength: ReadonlyMap<string, number> | undefined,
+  options: NrlRoundOptions): NrlLiveHalf {
   const rng = fixtureRng(state, fixture);
-  const { homeEdge, awayEdge } = fixtureEdges(state, fixture, opponentStrength, benchRotation(state), coachRole);
+  const { homeEdge, awayEdge } = fixtureEdges(state, fixture, opponentStrength, benchRotation(state), options);
   const homeScoring = regulationHalves(rng, homeEdge, homeEdge).first;
   const awayScoring = regulationHalves(rng, awayEdge, awayEdge).first;
   return { fixture, homeScoring, awayScoring };
 }
 
-export function validNrlLiveScore(state: NrlManagerState, opponentStrength?: ReadonlyMap<string, number>, coachRole?: NrlCoachRole): boolean {
+export function validNrlLiveScore(state: NrlManagerState, opponentStrength?: ReadonlyMap<string, number>, options: NrlRoundOptions = {}): boolean {
   if (!state.live) return true;
   const actual = state.live;
-  const expected = drawHalftime(state, actual.fixture, opponentStrength, coachRole);
+  const expected = drawHalftime(state, actual.fixture, opponentStrength, options);
   const same = (a: NrlScoring, b: NrlScoring) => a.tries === b.tries && a.conversions === b.conversions && a.penalties === b.penalties;
   return same(actual.homeScoring, expected.homeScoring) && same(actual.awayScoring, expected.awayScoring);
 }
 
 function playFixture(state: NrlManagerState, fixture: NrlFixture, opponentStrength: ReadonlyMap<string, number> | undefined,
   rotation: ReadonlyMap<string, NrlPlayer>,
-  closing?: { state: NrlManagerState; rotation: ReadonlyMap<string, NrlPlayer> }, coachRole?: NrlCoachRole): NrlMatchResult {
+  closing: { state: NrlManagerState; rotation: ReadonlyMap<string, NrlPlayer> } | undefined, options: NrlRoundOptions): NrlMatchResult {
   const { homeId, awayId, finalsRound } = fixture;
   const managed = homeId === state.clubId || awayId === state.clubId;
   const rng = fixtureRng(state, fixture);
-  const opening = fixtureEdges(state, fixture, opponentStrength, rotation, coachRole);
-  const { homeEdge, awayEdge } = closing ? fixtureEdges(closing.state, fixture, opponentStrength, closing.rotation, coachRole) : opening;
+  const opening = fixtureEdges(state, fixture, opponentStrength, rotation, options);
+  const { homeEdge, awayEdge } = closing ? fixtureEdges(closing.state, fixture, opponentStrength, closing.rotation, options) : opening;
   const regulation = (openingEdge: number, closingEdge: number) => {
     if (openingEdge === closingEdge) return scoringChances(rng, openingEdge, 18);
     const { first, second } = regulationHalves(rng, openingEdge, closingEdge);
@@ -571,7 +612,8 @@ function playFixture(state: NrlManagerState, fixture: NrlFixture, opponentStreng
 }
 
 function advanceRound(state: NrlManagerState, opponentStrength: ReadonlyMap<string, number> | undefined,
-  { medicalReduction = 0, coachRole }: NrlRoundOptions, halftime?: NrlHalftimeDecision): NrlManagerState {
+  options: NrlRoundOptions, halftime?: NrlHalftimeDecision): NrlManagerState {
+  const { medicalReduction = 0 } = options;
   const fixtures = nrlRoundFixtures(state);
   const played = fixtures.some(match => match.homeId === state.clubId || match.awayId === state.clubId);
   const starters = new Set(Object.values(state.lineup));
@@ -599,7 +641,7 @@ function advanceRound(state: NrlManagerState, opponentStrength: ReadonlyMap<stri
   const injury = played && state.injuryTracking ? matchInjury(state, used, medicalReduction) : undefined;
   const results = [...state.results, ...fixtures.map(fixture => {
     const managed = fixture.homeId === state.clubId || fixture.awayId === state.clubId;
-    const result = playFixture(state, fixture, opponentStrength, rotation, managed ? closing : undefined, coachRole);
+    const result = playFixture(state, fixture, opponentStrength, rotation, managed ? closing : undefined, options);
     if (!managed) return result;
     const withInjury = injury ? { ...result, injury } : result;
     if (!state.kickerId) return withInjury;
@@ -618,8 +660,9 @@ function advanceRound(state: NrlManagerState, opponentStrength: ReadonlyMap<stri
   })];
   const championId = premierOf(FINALS, finalsOutcomes(results))?.winner ?? null;
   const round = Math.min(state.round + 1, lastRound(state.year));
+  const { attackPlan: _playedPlan, ...settled } = state;
   const next: NrlManagerState = {
-    ...state, round, squad, results, championId, preparation: null,
+    ...settled, round, squad, results, championId, preparation: null,
     phase: championId ? 'complete' : round > nrlRegularRounds(state.year) ? 'finals' : 'regular',
   };
   return state.injuryTracking ? repairMatchday(next) : next;
@@ -667,7 +710,7 @@ export function reduceNrlSeason(state: NrlManagerState, action: NrlAction,
     case 'startLive': {
       if (!state.kickerId || !state.bench) return state;
       const { clubMatch } = nrlNextRound(state);
-      return clubMatch ? { ...state, live: drawHalftime(state, clubMatch, opponentStrength, options.coachRole) } : state;
+      return clubMatch ? { ...state, live: drawHalftime(state, clubMatch, opponentStrength, options) } : state;
     }
     case 'finishLive': {
       const { live, ...matchday } = state;
@@ -793,6 +836,8 @@ export function isNrlSeasonProgress(value: unknown): value is NrlManagerState {
   const expectedPhase = phase === 'complete' && round === lastRound(year) ? 'complete'
     : round > regularRounds ? 'finals' : 'regular';
   if (phase !== expectedPhase || (phase === 'complete' && preparation !== null)) return false;
+  if (value.attackPlan !== undefined && (!NRL_SPECIALIST_PLANS.includes(value.attackPlan as NrlSpecialistPlan)
+    || !kickerId || !bench || phase === 'complete')) return false;
 
   if (squad.length < NRL_ROLES.length || squad.length > 30 || !squad.every((player: unknown) =>
     record(player) && typeof player.id === 'string' && typeof player.name === 'string'
@@ -836,11 +881,11 @@ export function isNrlSeasonProgress(value: unknown): value is NrlManagerState {
   if (bench !== undefined && (!Array.isArray(bench) || bench.length !== NRL_BENCH_SIZE
     || new Set(bench).size !== bench.length
     || !bench.every(id => typeof id === 'string' && byId.has(id) && !starters.has(id) && !injuries.has(id)))) return false;
-  if (value.live !== undefined) {
+  if (value.live !== undefined || value.attackPlan !== undefined) {
     if (!kickerId || !bench) return false;
     const fixture = nrlRoundFixtures({ year, round, phase: expectedPhase, results: verified }).find(match =>
       match.homeId === value.clubId || match.awayId === value.clubId);
-    if (!validLiveHalf(value.live, fixture)) return false;
+    if (!fixture || (value.live !== undefined && !validLiveHalf(value.live, fixture))) return false;
   }
   return verified.length === results.length && value.championId === (premierOf(FINALS, finalsOutcomes(verified))?.winner ?? null);
 }

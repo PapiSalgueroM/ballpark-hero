@@ -21,10 +21,10 @@ import {
   nrlBench, nrlFitLineup, nrlHalftimeInterchanges, nrlInjuries, nrlLadder, nrlMatchdaySelection, nrlNextRound,
   nrlRegularRounds, nrlRetrainingRoles, nrlSavedLineupPreview, nrlStarterOptions, NRL_BENCH_SIZE, NRL_COACHING_BONUS,
   NRL_MAX_BENCH_USED, NRL_ROLES,
-  type NrlAction, type NrlCoachRole, type NrlLiveHalf, type NrlManagerState, type NrlMatchResult, type NrlNextRound, type NrlRole, type NrlTactic,
+  type NrlAction, type NrlAttackPlan, type NrlCoachRole, type NrlLiveHalf, type NrlManagerState, type NrlMatchResult, type NrlNextRound, type NrlRole, type NrlTactic,
 } from '@/lib/nrlManager';
 import {
-  createNrlCareer, nrlOppositionReport, nrlPositionTraining, nrlPositionTrainingCandidates, nrlRivalSquad,
+  createNrlCareer, nrlAttackPlanPreview, nrlOppositionReport, nrlPositionTraining, nrlPositionTrainingCandidates, nrlRivalSquad,
   NRL_POSITION_TRAINING_ROUNDS, reduceNrlCareer, type NrlCareerAction, type NrlCareerState,
 } from '@/lib/nrlCareer';
 import { nrlScorePoints, nrlScoringLeaders, nrlSquadSeasonStats, nrlTryLeaders, type NrlSquadStatsScope } from '@/lib/nrlPlayerScoring';
@@ -56,6 +56,12 @@ const tactics: { id: NrlTactic; label: string; description: string }[] = [
   { id: 'attack', label: 'Attack', description: 'Chase tries and risk leaving gaps.' },
   { id: 'defense', label: 'Defence', description: 'Protect your line and create fewer chances.' },
 ];
+const attackPlanChoices: readonly { id: NrlAttackPlan; label: string }[] = [
+  { id: 'standard', label: 'Standard' },
+  { id: 'middle', label: 'Through the middle' },
+  { id: 'wide', label: 'Shift wide' },
+];
+const attackPlanLabel = (plan: NrlAttackPlan) => attackPlanChoices.find(choice => choice.id === plan)?.label ?? 'Standard';
 const coachTacticNote = (role: NrlCoachRole | undefined, tactic: NrlTactic) => role === tactic
   ? ` Your assistant adds +${NRL_COACHING_BONUS} ${role === 'attack' ? 'attack' : 'defence'} rating.` : '';
 
@@ -157,6 +163,7 @@ function LiveHalftime({ live, season, title, onAction, disabled, coachRole }: {
           ))}
         </div>
         <p className="mt-2 text-sm text-muted-foreground">{tactics.find(option => option.id === tactic)?.description}{coachTacticNote(coachRole, tactic)}</p>
+        {season.attackPlan && <p className="mt-2 text-sm">Attack plan: {attackPlanLabel(season.attackPlan)}. Locked for this match.</p>}
       </div>
       {options.length > 0 ? (
         <details className="group rounded-xl border border-border bg-card px-4">
@@ -191,6 +198,47 @@ function LiveHalftime({ live, season, title, onAction, disabled, coachRole }: {
 
 const edgeNumber = new Intl.NumberFormat('en-AU', { maximumFractionDigits: 1, signDisplay: 'exceptZero' });
 const formLabels = { W: 'Win', D: 'Draw', L: 'Loss' };
+
+function AttackPlan({ career, onAction, disabled }: {
+  career: NrlCareerState; onAction: (action: NrlCareerAction) => void; disabled: boolean;
+}) {
+  const [expanded, setExpanded] = useState(false);
+  const { season, legacySeason } = career;
+  const { year, clubId, round, attackPlan } = season;
+  const preview = expanded ? nrlAttackPlanPreview(career) : null;
+  return (
+    <details className="group mt-3 border-t border-border" onToggle={event => setExpanded(event.currentTarget.open)}>
+      <summary className="flex min-h-11 cursor-pointer items-center justify-between gap-2 rounded-md text-sm font-bold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
+        <span>Attack plan{attackPlan && `: ${attackPlanLabel(attackPlan)}`}</span>
+        <ChevronDown size={16} aria-hidden="true" className="shrink-0 group-open:rotate-180" />
+      </summary>
+      {expanded && (preview ? (
+        <>
+          <p className="text-xs text-muted-foreground">Compare projected ratings for this match. The middle uses props, hooker and lock. Wide uses wings and centres. Either specialist plan leaves more room for the opposition.</p>
+          <div className="mt-2 grid gap-2" role="group" aria-label="Match attack plan">
+            {attackPlanChoices.map(({ id, label }) => {
+              const adjustment = id === 'standard' ? null : preview[id];
+              return (
+                <Button key={id} type="button" size="lg" variant={(attackPlan ?? 'standard') === id ? 'default' : 'outline'}
+                  className="h-auto min-h-11 flex-wrap justify-start gap-x-2 gap-y-0.5 whitespace-normal px-3 py-2 text-left"
+                  aria-pressed={(attackPlan ?? 'standard') === id} disabled={disabled}
+                  onClick={() => onAction({ type: 'setAttackPlan', attackPlan: id, year, clubId, round })}>
+                  <span>{label}</span>
+                  {adjustment && <span className="flex flex-wrap gap-x-2 text-xs tabular-nums">
+                    <span>Attack {edgeNumber.format(adjustment.attack)}</span>
+                    <span>Defence {edgeNumber.format(adjustment.defense)}</span>
+                  </span>}
+                </Button>
+              );
+            })}
+          </div>
+        </>
+      ) : <p className="text-xs text-muted-foreground">{legacySeason
+        ? 'Attack plans unlock after the imported season.'
+        : 'Attack plans need saved opponent ratings for all starting positions.'}</p>)}
+    </details>
+  );
+}
 
 function OppositionReport({ career }: { career: NrlCareerState }) {
   const [expanded, setExpanded] = useState(false);
@@ -302,7 +350,7 @@ function SeasonFixtures({ season, next }: { season: NrlManagerState; next: NrlNe
 }
 
 function MatchCentre({ career, onAction, onReview, disabled, showLiveResult }: {
-  career: NrlCareerState; onAction: (action: NrlAction) => void; onReview: () => void; disabled: boolean; showLiveResult: boolean;
+  career: NrlCareerState; onAction: (action: NrlCareerAction) => void; onReview: () => void; disabled: boolean; showLiveResult: boolean;
 }) {
   const { season } = career;
   const next = nrlNextRound(season);
@@ -424,6 +472,7 @@ function MatchCentre({ career, onAction, onReview, disabled, showLiveResult }: {
               ))}
             </div>
             <p className="mt-2 text-sm text-muted-foreground">{tactics.find(tactic => tactic.id === season.tactic)?.description}{coachTacticNote(coachRole, season.tactic)}</p>
+            <AttackPlan key={`${year}:${next.round}`} career={career} onAction={onAction} disabled={disabled} />
           </div>
           <div className="rounded-xl border border-border bg-card p-4">
             <h3 className="font-bold">Preparation <span className="ml-1 font-normal text-muted-foreground">· {fitness}% starter fitness</span></h3>
