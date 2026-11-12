@@ -70,6 +70,31 @@ export function makeNrlScoringReport(
   return { kickerId, starters: starting.map(player => player.id), lines: [...lines.values()] };
 }
 
+interface NrlScoringMatchday {
+  starting: { id: string; role: NrlRole }[];
+  rotation: ReadonlyMap<string, NrlPlayer>;
+}
+
+export function makeNrlInterchangeScoringReport(
+  totals: NrlScoring, firstHalf: NrlScoring, opening: NrlScoringMatchday, closing: NrlScoringMatchday,
+  kickerId: string, rng: () => number,
+): NrlMatchScoringReport {
+  const first = makeNrlScoringReport(firstHalf, opening.starting, opening.rotation, kickerId, rng);
+  const remaining = emptyScoring();
+  for (const field of scoringFields) remaining[field] = totals[field] - firstHalf[field];
+  const second = makeNrlScoringReport(remaining, closing.starting, closing.rotation, kickerId, rng);
+  const lines = new Map(first.lines.map(line => [line.playerId, line]));
+  for (const line of second.lines) {
+    const total = lines.get(line.playerId);
+    if (total) {
+      for (const field of scoringFields) total[field] += line[field];
+    } else {
+      lines.set(line.playerId, line);
+    }
+  }
+  return { ...first, lines: [...lines.values()] };
+}
+
 const record = (value: unknown): value is Record<string, unknown> =>
   value !== null && typeof value === 'object' && !Array.isArray(value);
 const countIn = (value: unknown, max: number) =>
