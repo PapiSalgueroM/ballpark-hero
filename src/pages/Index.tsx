@@ -1,7 +1,7 @@
 import { useState, useEffect, useLayoutEffect, useMemo, useRef, lazy, Suspense, type ReactNode } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { Link } from 'react-router-dom';
-import { Trophy, Flame, Sparkles, Users, Search, X, Globe } from 'lucide-react';
+import { Trophy, Flame, Sparkles, Users, Search, X, Globe, ChevronDown, Pin } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import PageSeo from '@/components/seo/PageSeo';
 
@@ -250,12 +250,10 @@ export default function Index() {
               simHomeCopy, so a typed figure here would be a second copy with
               no guard behind it.
 
-              The title reserves a second row for signed-in chips below xl,
-              including while auth is loading. At xl it keeps one fixed inline
-              row. Unchanged playHomeFold section 4 holds the no-shift check. */}
-          <div className="pt-4 pb-3 md:flex md:items-end md:justify-between md:gap-8 md:pt-7 md:pb-6">
+              Account stats have their own row on narrow screens when signed in. */}
+          <div className="pb-4 pt-4 md:flex md:items-end md:justify-between md:gap-8 md:pb-6 md:pt-7">
             <div className="min-w-0">
-              <div className="grid grid-rows-[2rem_1.75rem] items-center gap-y-2 md:grid-rows-[2.75rem_1.75rem] xl:flex xl:h-11 xl:gap-3">
+              <div className="grid items-center gap-y-2 xl:flex xl:flex-wrap xl:gap-3">
                 {/* Round 1449: the page's short descriptive headline. A literal
                     rather than an import, so the copy module stays out of the
                     chunk every page downloads; simHomeCopy part 7 holds it
@@ -273,7 +271,7 @@ export default function Index() {
                     world rank. Site-wide traffic numbers still must never
                     render publicly (owner 2026-07-10). */}
                 {user && (
-                  <div className="ml-auto flex min-w-0 items-center gap-1.5 md:ml-2">
+                  <div className="flex min-w-0 flex-wrap items-center gap-1.5">
                     <StatChip icon={<Flame className="h-3.5 w-3.5 text-warn" />} label="Days in a row" value={String(globalCurrentStreak)} unit={globalCurrentStreak === 1 ? 'day' : 'days'} />
                     <StatChip icon={<Trophy className="h-3.5 w-3.5 text-gold" />} label="Played today" value={String(gamesToday)} unit="today" />
                     {worldRank !== null && (
@@ -291,38 +289,45 @@ export default function Index() {
               </p>
             </div>
 
-            <div className="relative mt-3 md:mt-0 md:w-[340px] md:shrink-0">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none" />
-              <input
-                ref={searchInputRef}
-                type="text"
-                value={searchQuery}
-                onChange={e => { warmSearch(); setSearchQuery(e.target.value); }}
-                onFocus={warmSearch}
-                onKeyDown={e => {
-                  if (e.key === 'Escape' && isSearching && !e.nativeEvent.isComposing && e.nativeEvent.keyCode !== 229) {
-                    e.preventDefault();
-                    setSearchQuery('');
-                  }
-                }}
-                onPointerEnter={warmSearch}
-                aria-label="Search games"
-                placeholder='Search games... e.g. soccer, grid, NBA'
-                className="h-11 w-full pl-10 pr-10 rounded-xl border border-border bg-card text-foreground text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary/40 transition-all"
-              />
-              {isSearching && (
-                <button
-                  onClick={clearSearch}
-                  className="absolute right-1.5 top-1/2 -translate-y-1/2 grid h-8 w-8 place-items-center rounded-lg text-muted-foreground hover:text-foreground transition-colors"
-                  aria-label="Clear search"
-                >
-                  <X className="w-4 h-4" />
-                </button>
+            <div className="mt-3 flex items-center gap-2 md:mt-0 md:w-[23rem] md:shrink-0 lg:w-[26rem]">
+              <div className="relative min-w-0 flex-1">
+                <Search aria-hidden="true" className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                <input
+                  ref={searchInputRef}
+                  type="text"
+                  value={searchQuery}
+                  onChange={e => { warmSearch(); setSearchQuery(e.target.value); }}
+                  onFocus={warmSearch}
+                  onKeyDown={e => {
+                    if (e.key === 'Escape' && isSearching && !e.nativeEvent.isComposing && e.nativeEvent.keyCode !== 229) {
+                      e.preventDefault();
+                      setSearchQuery('');
+                    }
+                  }}
+                  onPointerEnter={warmSearch}
+                  aria-label="Search games"
+                  placeholder="Search games"
+                  className={`h-11 w-full rounded-xl border border-border bg-card pl-9 text-sm text-foreground transition-colors placeholder:text-muted-foreground focus:border-primary/40 focus:outline-none focus:ring-2 focus:ring-primary/40 ${isSearching ? 'pr-11' : 'pr-2'}`}
+                />
+                {isSearching && (
+                  <button
+                    type="button"
+                    onClick={clearSearch}
+                    className="absolute inset-y-0 right-0 grid w-11 place-items-center rounded-lg text-muted-foreground transition-colors hover:text-foreground"
+                    aria-label="Clear search"
+                  >
+                    <X aria-hidden="true" className="h-4 w-4" />
+                  </button>
+                )}
+              </div>
+              {!isSearching && (
+                <a href="#browse-sports" className="inline-flex min-h-11 shrink-0 items-center gap-1 rounded-xl border border-border bg-surface-1 px-2 text-sm font-semibold text-foreground transition-colors hover:border-primary/50 hover:text-primary focus-visible:outline-primary sm:gap-1.5 sm:px-3">
+                  Browse sports <ChevronDown aria-hidden="true" className="h-4 w-4 text-primary" />
+                </a>
               )}
             </div>
           </div>
 
-          <p className="-mt-3 mb-4 text-xs text-muted-foreground">Pin a game to keep it on Home.</p>
           {picksStorageFailed && <div className="mb-4"><GamePicksWarning /></div>}
 
           {/* Search results replace everything under the title row, so they
@@ -466,9 +471,14 @@ export default function Index() {
                 </RevealSection>
               </section>
 
-              {/* Round 717: pick a sport and its section leads the list below.
-                  The chips sit above everything they reorder. */}
-              <FavouriteSport sports={pickableSports} value={favSport} onPick={pickSport} />
+              <section id="browse-sports" tabIndex={-1} aria-labelledby="browse-sports-heading" className="scroll-mt-36 rounded-2xl border border-border bg-surface-1 p-3 sm:scroll-mt-28 sm:p-4">
+                <h2 id="browse-sports-heading" className="font-display text-lg font-bold">Browse sports</h2>
+                <FavouriteSport sports={pickableSports} value={favSport} onPick={pickSport} />
+                <p className="mt-3 flex items-start gap-2 text-xs text-muted-foreground">
+                  <Pin aria-hidden="true" className="mt-0.5 h-3.5 w-3.5 shrink-0 text-gold" />
+                  Pin a game to keep it in Your picks on Home.
+                </p>
+              </section>
 
               {sportSections.map(cat => (
                 <section key={cat.title} data-sport={CATEGORY_SPORT[cat.title]}>
@@ -501,16 +511,16 @@ export default function Index() {
                         /* Round 203: this link was 16px tall, which is half
                            the height a thumb needs. Padded to a real tap
                            target without changing where it sits. */
-                        className="ml-auto inline-flex items-center rounded-lg px-2.5 py-2 text-xs font-normal leading-5 text-primary hover:underline"
+                        className="ml-auto inline-flex items-center rounded-lg px-2.5 py-2 text-xs font-normal leading-5 text-primary hover:underline max-sm:min-h-11"
                       >
                         Hub
                       </Link>
                     )}
                   </h2>
                   <RevealSection>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
+                    <div className="grid grid-cols-1 gap-2 min-[360px]:grid-cols-2 sm:gap-3 lg:grid-cols-3 xl:grid-cols-4">
                       {cat.games.map((game, i) => (
-                        <GameCard key={game.path} game={game} badgeDate={badgeDate} bestScore={bestScores[game.path.slice(1)]} revealIndex={i} pinned={gamePicks.includes(game.path)} onTogglePick={toggleGamePick} />
+                        <GameCard key={game.path} game={game} badgeDate={badgeDate} bestScore={bestScores[game.path.slice(1)]} revealIndex={i} pinned={gamePicks.includes(game.path)} onTogglePick={toggleGamePick} compact />
                       ))}
                     </div>
                   </RevealSection>
@@ -693,6 +703,32 @@ function HomeTileStyles() {
       @keyframes homeTileIn { 0% { opacity: 0; transform: translateY(10px); } 100% { opacity: 1; transform: none; } }
       [data-tile-reveal="in"] .home-tile { animation: homeTileIn 0.45s ease-out both; }
       [data-tile-reveal="in"] [data-home-game-card] > [data-game-pick] { animation: homeTileIn 0.45s ease-out both; animation-delay: inherit; }
+      @media (max-width: 639px) {
+        [data-catalog-card] {
+          display: grid;
+          grid-template-columns: minmax(0, 1fr) 44px;
+          align-items: center;
+          padding-right: 4px;
+          border: 1px solid hsl(var(--border) / .8);
+          border-radius: var(--radius);
+          background: hsl(var(--surface-1));
+        }
+        [data-catalog-card] .home-tile {
+          min-height: 64px;
+          align-items: center;
+          gap: 8px;
+          padding: 8px;
+          border: 0;
+          background: transparent;
+          outline-offset: -2px;
+          transform: none;
+        }
+        [data-catalog-card] .home-tile:hover { background: hsl(var(--surface-2)); }
+        [data-catalog-card] :is(.home-tile-accent, .home-tile-watermark, .home-tile-sport, .home-tile-summary) { display: none; }
+        [data-catalog-card] .home-tile-icon { width: 24px; height: 24px; margin-top: 0; border-radius: 8px; font-size: 1rem; }
+        [data-catalog-card] h3 { width: 100%; font-size: .875rem; line-height: 1.2; overflow-wrap: anywhere; }
+        [data-catalog-card] > [data-game-pick] { position: static; }
+      }
       @media (prefers-reduced-motion: reduce) {
         [data-tile-reveal="out"] .home-tile, [data-tile-reveal="in"] .home-tile { animation: none; opacity: 1; transform: none; }
         [data-tile-reveal] [data-home-game-card] > [data-game-pick] { animation: none; opacity: 1; transform: none; }
@@ -729,29 +765,30 @@ const tileDelay = (i: number) => `${(i % 9) * 0.06}s`;
    thing on the card that tells two games of the same sport apart at a
    glance. The description is clamped to two lines so a grid of cards lines
    up in rows. */
-function GameCard({ game, badgeDate, bestScore, revealIndex, pinned, onTogglePick }: {
+function GameCard({ game, badgeDate, bestScore, revealIndex, pinned, onTogglePick, compact = false }: {
   game: GameDef;
   badgeDate: string;
   bestScore?: number;
   revealIndex?: number;
   pinned: boolean;
   onTogglePick: (path: string, node?: HTMLElement) => void;
+  compact?: boolean;
 }) {
   const cardRef = useRef<HTMLDivElement>(null);
   const sport = sportOf(game.path);
   return (
-    <div ref={cardRef} data-home-game-card="" className="relative h-full" style={revealIndex != null ? { animationDelay: tileDelay(revealIndex) } : undefined}>
+    <div ref={cardRef} data-home-game-card="" data-catalog-card={compact ? '' : undefined} className="relative h-full" style={revealIndex != null ? { animationDelay: tileDelay(revealIndex) } : undefined}>
     <Link
       to={game.path}
       data-sport={sport}
       className="home-tile group relative flex h-full items-start gap-3 overflow-hidden rounded-xl border border-border/80 bg-surface-1 p-4 pr-16 pt-[18px] hover:border-tile/50 hover:bg-surface-2 hover:-translate-y-0.5 transition-all duration-200"
       style={{ ...sportStyle(sport), ...(revealIndex != null ? { animationDelay: tileDelay(revealIndex) } : {}) }}
     >
-      <span aria-hidden="true" className="absolute inset-x-0 top-0 h-[3px] bg-tile" />
-      <SportGlyph sport={sport} className="pointer-events-none absolute -bottom-4 -right-4 h-20 w-20 text-tile opacity-[0.07] transition-opacity duration-200 group-hover:opacity-[0.13]" />
-      <span aria-hidden="true" className="relative mt-0.5 grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-tile/15 text-2xl ring-1 ring-inset ring-tile/25">
+      <span aria-hidden="true" className="home-tile-accent absolute inset-x-0 top-0 h-[3px] bg-tile" />
+      <SportGlyph sport={sport} className="home-tile-watermark pointer-events-none absolute -bottom-4 -right-4 h-20 w-20 text-tile opacity-[0.07] transition-opacity duration-200 group-hover:opacity-[0.13]" />
+      <span aria-hidden="true" className="home-tile-icon relative mt-0.5 grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-tile/15 text-2xl ring-1 ring-inset ring-tile/25">
         {game.emoji}
-        <span className="absolute -bottom-1.5 -right-1.5 grid h-5 w-5 place-items-center rounded-full bg-surface-1 text-tile ring-1 ring-tile/50">
+        <span className="home-tile-sport absolute -bottom-1.5 -right-1.5 grid h-5 w-5 place-items-center rounded-full bg-surface-1 text-tile ring-1 ring-tile/50">
           <SportGlyph sport={sport} className="h-3.5 w-3.5" />
         </span>
       </span>
@@ -776,7 +813,7 @@ function GameCard({ game, badgeDate, bestScore, revealIndex, pinned, onTogglePic
             </span>
           )}
         </div>
-        <p className="text-xs text-muted-foreground mt-1 leading-snug line-clamp-2">{game.description}</p>
+        <p className="home-tile-summary text-xs text-muted-foreground mt-1 leading-snug line-clamp-2">{game.description}</p>
         {bestScore != null && bestScore > 0 && (
           <span className="text-[10px] text-gold/70 mt-0.5 block">PB: {bestScore}</span>
         )}
