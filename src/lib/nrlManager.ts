@@ -310,14 +310,14 @@ function readyFitness(fitness: number, preparation: NrlPreparation | null, playi
   return clamp(fitness + routineRecovery + PREPARATION_FITNESS[preparation ?? 'normal'] + (playing ? 0 : 12), 0, 100);
 }
 
-function matchInjury(state: NrlManagerState, used: Set<string>): NrlInjury | undefined {
+function matchInjury(state: NrlManagerState, used: Set<string>, medicalReduction: number): NrlInjury | undefined {
   const starters = new Set(Object.values(state.lineup));
   const played = state.squad.filter(player => starters.has(player.id) || used.has(player.id));
   const ready = played.reduce((total, player) => total + readyFitness(player.fitness, state.preparation, true), 0) / played.length;
   const risk = 0.12 + (100 - ready) / 260 + (state.preparation === 'train' ? 0.04 : 0);
   const rng = rngFrom(hashLabel(`${state.seed}|${state.year}|${state.round}|${state.clubId}|injury`));
   if (rng() >= risk) return undefined;
-  return { playerId: played[Math.floor(rng() * played.length)].id, rounds: 1 + Math.floor(rng() * MAX_INJURY_ROUNDS) };
+  return { playerId: played[Math.floor(rng() * played.length)].id, rounds: Math.max(1, 1 + Math.floor(rng() * MAX_INJURY_ROUNDS) - medicalReduction) };
 }
 
 function teamRatings(state: NrlManagerState, clubId: string, opponentStrength: ReadonlyMap<string, number> | undefined, rotation: ReadonlyMap<string, NrlPlayer>) {
@@ -447,7 +447,8 @@ function playFixture(state: NrlManagerState, fixture: NrlFixture, opponentStreng
     : result;
 }
 
-function advanceRound(state: NrlManagerState, opponentStrength: ReadonlyMap<string, number> | undefined, halftimeTactic?: NrlTactic): NrlManagerState {
+function advanceRound(state: NrlManagerState, opponentStrength: ReadonlyMap<string, number> | undefined,
+  medicalReduction: number, halftimeTactic?: NrlTactic): NrlManagerState {
   const fixtures = nrlRoundFixtures(state);
   const played = fixtures.some(match => match.homeId === state.clubId || match.awayId === state.clubId);
   const starters = new Set(Object.values(state.lineup));
@@ -460,7 +461,7 @@ function advanceRound(state: NrlManagerState, opponentStrength: ReadonlyMap<stri
     const reserveFatigue = used.has(player.id) ? 8 : 0;
     return { ...player, fitness: Math.max(0, before - starterFatigue + relief - reserveFatigue) };
   });
-  const injury = played && state.injuryTracking ? matchInjury(state, used) : undefined;
+  const injury = played && state.injuryTracking ? matchInjury(state, used, medicalReduction) : undefined;
   const results = [...state.results, ...fixtures.map(fixture => {
     const managed = fixture.homeId === state.clubId || fixture.awayId === state.clubId;
     const result = playFixture(state, fixture, opponentStrength, rotation, managed ? halftimeTactic : undefined);
@@ -481,7 +482,8 @@ function advanceRound(state: NrlManagerState, opponentStrength: ReadonlyMap<stri
   return state.injuryTracking ? repairMatchday(next) : next;
 }
 
-export function reduceNrlSeason(state: NrlManagerState, action: NrlAction, opponentStrength?: ReadonlyMap<string, number>): NrlManagerState {
+export function reduceNrlSeason(state: NrlManagerState, action: NrlAction,
+  opponentStrength?: ReadonlyMap<string, number>, medicalReduction = 0): NrlManagerState {
   if (state.phase === 'complete') return state;
   if (state.live && action.type !== 'finishLive') return state;
   switch (action.type) {
@@ -520,10 +522,10 @@ export function reduceNrlSeason(state: NrlManagerState, action: NrlAction, oppon
     case 'finishLive': {
       const { live, ...matchday } = state;
       if (!live || action.year !== state.year || action.round !== state.round || !NRL_TACTICS.includes(action.tactic)) return state;
-      return advanceRound(matchday, opponentStrength, action.tactic);
+      return advanceRound(matchday, opponentStrength, medicalReduction, action.tactic);
     }
     case 'advance':
-      return advanceRound(state, opponentStrength);
+      return advanceRound(state, opponentStrength, medicalReduction);
   }
 }
 

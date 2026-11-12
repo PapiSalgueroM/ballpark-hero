@@ -4,7 +4,8 @@ import { Button } from '@/components/ui/button';
 import { nrlSeasonPlan, NRL_LAST_YEAR } from '@/data/nrlManagerSeasons';
 import {
   nrlAcademyAvailableRoles, nrlAcademyOffer, nrlAcademyReports, nrlCareerCap, nrlCareerFinance, nrlCareerMarket, nrlCareerSquad, nrlContractOffer,
-  nrlDevelopmentPreview, type NrlCareerAction, type NrlCareerState, type NrlDevelopmentFocus,
+  nrlDevelopmentPreview, nrlMedicalSpend, nrlMedicalUpgradeQuote, type NrlCareerAction, type NrlCareerState,
+  type NrlDevelopmentFocus, type NrlMedicalLevel,
 } from '@/lib/nrlCareer';
 import { NRL_ROLES, type NrlRole } from '@/lib/nrlManager';
 import { nrlArchivedScoringLeaders, nrlTryLeaders } from '@/lib/nrlPlayerScoring';
@@ -22,6 +23,7 @@ type Dispatch = (action: NrlCareerAction) => boolean;
 
 const control = 'min-h-11 w-full rounded-lg border border-input bg-background px-3 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring';
 const developmentLabels = { balanced: 'Balanced', youth: 'Youth development', veterans: 'Veteran conditioning' };
+const medicalLabels = { 1: 'Standard care', 2: 'Treatment room', 3: 'Recovery centre' };
 
 function developmentSummary(focus: Exclude<NrlDevelopmentFocus, 'balanced'>, affected: number, preview: boolean) {
   if (!affected) return preview ? 'No returning players would get an extra point.' : 'No ratings changed from this focus.';
@@ -228,12 +230,38 @@ function MoneyRows({ entries }: { entries: readonly (readonly [string, number])[
   );
 }
 
-function Finances({ career }: { career: NrlCareerState }) {
+function MedicalFacilities({ career, onAction, disabled }: { career: NrlCareerState; onAction: Dispatch; disabled: boolean }) {
+  const { level, nextLevel, cost, reason } = nrlMedicalUpgradeQuote(career);
+  const effect = (step: NrlMedicalLevel) => step === 1 ? 'New knocks use the standard recovery time.'
+    : `New knocks are ${step - 1} ${step === 2 ? 'round' : 'rounds'} shorter, with at least one round out.`;
+  return (
+    <section className="mt-5 rounded-xl border border-border bg-background p-3" aria-labelledby="nrl-medical-facilities">
+      <h3 id="nrl-medical-facilities" className="font-bold">Medical facilities</h3>
+      <p className="mt-2 text-sm font-semibold" data-nrl-medical-level>Level {level} of 3 · {medicalLabels[level]}</p>
+      <p className="mt-1 text-sm text-muted-foreground">{effect(level)}</p>
+      {nextLevel !== null && cost !== null && (
+        <div className="mt-3 border-t border-border pt-3">
+          <p className="text-sm font-semibold">{medicalLabels[nextLevel]}</p>
+          <p className="mt-1 text-sm text-muted-foreground">{effect(nextLevel)}</p>
+          <Button type="button" size="lg" className="mt-2 w-full px-3 sm:w-auto" disabled={disabled || reason !== null}
+            onClick={() => onAction({ type: 'upgradeMedical', level: nextLevel })}>
+            Upgrade for {money(cost)}
+          </Button>
+          <p className="mt-1 text-sm text-muted-foreground">One-time charge from club cash.</p>
+        </div>
+      )}
+      {reason && <p className="mt-2 text-sm text-muted-foreground" data-nrl-medical-reason>{reason}</p>}
+    </section>
+  );
+}
+
+function Finances({ career, onAction, disabled }: { career: NrlCareerState; onAction: Dispatch; disabled: boolean }) {
   const [nextYear, setNextYear] = useState(false);
   const year = career.season.year;
   const capYear = nextYear && year < NRL_LAST_YEAR ? year + 1 : year;
   const cap = nrlCareerCap(career, capYear);
   const cash = nrlCareerFinance(career);
+  const medicalSpend = nrlMedicalSpend(cash);
   const hasAccounts = cash.fromRound <= nrlSeasonPlan(year).draw.length + 4;
   return (
     <>
@@ -257,12 +285,15 @@ function Finances({ career }: { career: NrlCareerState }) {
               <MoneyRows entries={[
                 ['Opening cash', cash.openingCash], ['Central funding', cash.centralFunding],
                 ['Gate receipts', cash.gateReceipts], ['Wages paid', cash.wagesPaid],
-                ['Operating costs', cash.operatingCosts], ['Profit or loss', cash.profit], ['Cash balance', cash.cash],
+                ['Operating costs', cash.operatingCosts],
+                ...(medicalSpend ? [['Medical upgrades', medicalSpend] as [string, number]] : []),
+                ['Profit or loss', cash.profit], ['Cash balance', cash.cash],
               ]} />
             </>
           ) : <p className="mt-2 text-sm text-muted-foreground">This completed save predates club accounts. Tracking starts next season.</p>}
         </div>
       </div>
+      <MedicalFacilities career={career} onAction={onAction} disabled={disabled} />
     </>
   );
 }
@@ -341,7 +372,7 @@ export default function NrlCareerOffice({ career, screen, onAction, disabled }: 
       {screen === 'contracts' && <Contracts career={career} onAction={onAction} disabled={disabled} />}
       {screen === 'recruitment' && <Recruitment career={career} onAction={onAction} disabled={disabled} />}
       {screen === 'academy' && <Academy career={career} onAction={onAction} disabled={disabled} />}
-      {screen === 'finances' && <Finances career={career} />}
+      {screen === 'finances' && <Finances career={career} onAction={onAction} disabled={disabled} />}
       {screen === 'history' && <History career={career} onAction={onAction} disabled={disabled} />}
     </section>
   );
