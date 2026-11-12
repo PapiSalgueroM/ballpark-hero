@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react';
-import { ArrowRight, BedDouble, BriefcaseBusiness, ClipboardList, Radio, Table2, Trophy, Zap } from 'lucide-react';
+import { ArrowRight, BedDouble, BriefcaseBusiness, ChevronDown, ClipboardList, Radio, Table2, Trophy, Zap } from 'lucide-react';
 import { GameNav } from '@/components/game/GameNav';
 import { GameNavbar } from '@/components/game/GameNavbar';
 import { RulesGate } from '@/components/game/RulesGate';
@@ -16,7 +16,7 @@ import {
   nrlBench, nrlInjuries, nrlLadder, nrlNextRound, nrlStarterOptions, NRL_BENCH_SIZE, NRL_MAX_BENCH_USED, NRL_ROLES, NRL_SAVE_KEY,
   type NrlAction, type NrlLiveHalf, type NrlManagerState, type NrlMatchResult, type NrlTactic,
 } from '@/lib/nrlManager';
-import { createNrlCareer, readNrlCareerSave, reduceNrlCareer, type NrlCareerAction, type NrlCareerState } from '@/lib/nrlCareer';
+import { createNrlCareer, nrlOppositionReport, readNrlCareerSave, reduceNrlCareer, type NrlCareerAction, type NrlCareerState } from '@/lib/nrlCareer';
 import { nrlScorePoints, nrlScoringLeaders, nrlTryLeaders } from '@/lib/nrlPlayerScoring';
 import { saveFence } from '@/lib/saveFence';
 
@@ -153,9 +153,56 @@ function LiveHalftime({ live, year, title, openingTactic, onAction, disabled }: 
   );
 }
 
-function MatchCentre({ season, onAction, onReview, disabled, showLiveResult }: {
-  season: NrlManagerState; onAction: (action: NrlAction) => void; onReview: () => void; disabled: boolean; showLiveResult: boolean;
+const edgeNumber = new Intl.NumberFormat('en-AU', { maximumFractionDigits: 1, signDisplay: 'exceptZero' });
+const formLabels = { W: 'Win', D: 'Draw', L: 'Loss' };
+
+function OppositionReport({ career }: { career: NrlCareerState }) {
+  const [expanded, setExpanded] = useState(false);
+  const report = expanded ? nrlOppositionReport(career) : null;
+  const { year } = career.season;
+  return (
+    <details className="group rounded-xl border border-border bg-card px-4" onToggle={event => setExpanded(event.currentTarget.open)}>
+      <summary className="flex min-h-11 cursor-pointer items-center justify-between gap-2 rounded-md font-bold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
+        Opposition report <ChevronDown size={16} aria-hidden="true" className="group-open:rotate-180" />
+      </summary>
+      {report && (
+        <div className="pb-4">
+          <p className="text-sm font-semibold">
+            {shortName(year, report.opponentId)}{report.ladderRank === null ? '' : ` · Ladder place ${report.ladderRank}`}
+          </p>
+          <dl className="mt-3 grid grid-cols-2 gap-2">
+            <div className="rounded-lg border border-border p-2">
+              <dt className="text-xs text-muted-foreground">Your attack edge</dt>
+              <dd className="mt-1 font-bold tabular-nums" data-nrl-attack-edge>{edgeNumber.format(report.attackEdge)}</dd>
+            </div>
+            <div className="rounded-lg border border-border p-2">
+              <dt className="text-xs text-muted-foreground">Your defence edge</dt>
+              <dd className="mt-1 font-bold tabular-nums" data-nrl-defense-edge>{edgeNumber.format(report.defenseEdge)}</dd>
+            </div>
+          </dl>
+          <p className="mt-2 text-xs text-muted-foreground">Positive edges favour your club. The model uses your lineup, preparation, tactic and venue.</p>
+          <h3 className="mt-4 text-sm font-semibold">Recent form</h3>
+          {report.recent.length ? (
+            <ol className="mt-1 divide-y divide-border text-sm" data-nrl-opposition-form>
+              {report.recent.map(result => (
+                <li key={result.round} className="grid grid-cols-[3rem_auto_1fr] items-center gap-2 py-2">
+                  <span>{formLabels[result.outcome]}</span>
+                  <strong className="tabular-nums">{result.scored}–{result.conceded}</strong>
+                  <span className="min-w-0 break-words text-right text-muted-foreground">{shortName(year, result.rivalId)}</span>
+                </li>
+              ))}
+            </ol>
+          ) : <p className="mt-1 text-sm text-muted-foreground">No matches played this season yet.</p>}
+        </div>
+      )}
+    </details>
+  );
+}
+
+function MatchCentre({ career, onAction, onReview, disabled, showLiveResult }: {
+  career: NrlCareerState; onAction: (action: NrlAction) => void; onReview: () => void; disabled: boolean; showLiveResult: boolean;
 }) {
+  const { season } = career;
   const next = nrlNextRound(season);
   const { clubId, year, phase, championId } = season;
   if (season.live) {
@@ -245,6 +292,8 @@ function MatchCentre({ season, onAction, onReview, disabled, showLiveResult }: {
           <Button type="button" size="lg" className="mt-3 px-4" onClick={onReview}><Trophy aria-hidden="true" /> Review this season</Button>
         )}
       </div>
+
+      {match && <OppositionReport key={`${year}:${match.round}`} career={career} />}
 
       {match && (
         <div className="grid gap-4 sm:grid-cols-2">
@@ -577,7 +626,7 @@ export default function NrlTeamManager() {
                 </Button>
               ))}
             </div>
-            {panel === 'match' && <MatchCentre season={season} onAction={dispatch} disabled={moved} showLiveResult={showLiveResult}
+            {panel === 'match' && <MatchCentre career={career} onAction={dispatch} disabled={moved} showLiveResult={showLiveResult}
               onReview={() => { setOffice('history'); setPanel('office'); }} />}
             {live && (panel === 'squad' || panel === 'office') && (
               <p className="rounded-xl border border-border bg-card p-3 text-sm">Finish the live match in Match centre to make changes.</p>

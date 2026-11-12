@@ -384,6 +384,13 @@ function fixtureEdges(state: NrlManagerState, { homeId, awayId, tieId }: NrlFixt
   return { homeEdge: home.attack - away.defense + venue, awayEdge: away.attack - home.defense - venue };
 }
 
+export function nrlMatchupEdges(state: NrlManagerState, fixture: NrlFixture, opponentStrength?: ReadonlyMap<string, number>) {
+  const { homeEdge, awayEdge } = fixtureEdges(state, fixture, opponentStrength, benchRotation(state));
+  return fixture.homeId === state.clubId
+    ? { attackEdge: homeEdge, defenseEdge: -awayEdge }
+    : { attackEdge: awayEdge, defenseEdge: -homeEdge };
+}
+
 function drawHalftime(state: NrlManagerState, fixture: NrlFixture, opponentStrength?: ReadonlyMap<string, number>): NrlLiveHalf {
   const rng = fixtureRng(state, fixture);
   const { homeEdge, awayEdge } = fixtureEdges(state, fixture, opponentStrength, benchRotation(state));
