@@ -1,3 +1,11 @@
+## 2026-11-12: Club Manager opponent formations draft
+
+Report 23a9b4ae describes opponents being forced into 4-4-2. New kickoffs now choose the highest-rated available eleven that fits one of the existing formations, with the previous fallback when the roster cannot fill a shape. The 390px Chelsea versus Fulham replay changed Fulham from 4-4-2 with six compatible positions to 4-3-3 with eleven, and both runs finished 2-1.
+
+In 104 paired matches, 59 opponent formations changed and 92 elevens gained compatible positions. The user's lineup, opening match rates, first-half random draw counts and final scores matched. Four matches had different later draw counts and match statistics because the existing second-yellow check depends on which opponent had already been booked.
+
+Four focused tests, app types, the production build, three match sims, 15 output checks and all 16 route download caps passed. Club Manager measured 647.9 KiB against a 648 KiB cap.
+
 ## 2026-11-07: Club Manager historical roster counts live
 
 [PR #532](https://github.com/PapiSalgueroM/ballpark-hero/pull/532) published from main `c3b5ca4afaf9b4dadcd748f340e8e8e3e4a1a1dd`, App tree `133fcd3d26a4d237178e5c7efee723048da0aef2`, Lovable deployment `510b1df1-2172-42c0-90f9-d9f9c997b840`.

@@ -16499,6 +16499,29 @@ function intoSlots(xi: OppXiLine[], formation: Formation): OppXiLine[] {
 }
 
 /**
+ * Try the higher-rated players first. A later player can take a compatible
+ * slot by moving its occupant to another compatible slot.
+ */
+function fittingOppXi(roster: ProjectedPlayer[], formation: Formation): ProjectedPlayer[] | null {
+  const xi = new Array<ProjectedPlayer>(formation.slots.length);
+  const place = (player: ProjectedPlayer, visited: Set<number>): boolean => formation.slots.some((slot, index) => {
+    if (visited.has(index) || !slot.allowed.includes(player.p)) return false;
+    visited.add(index);
+    if (xi[index] && !place(xi[index], visited)) return false;
+    xi[index] = player;
+    return true;
+  });
+
+  const selected = new Set<string>();
+  for (const player of roster) {
+    if (selected.has(player.n) || !place(player, new Set())) continue;
+    selected.add(player.n);
+    if (selected.size === formation.slots.length) return xi;
+  }
+  return null;
+}
+
+/**
  * The opposition's eleven and bench for today, from the same era roster
  * their scorers have always been drawn from. A named eleven with a keeper or
  * nothing: a thin club (CM_PARTIAL) whose roster cannot field one gets no
@@ -16518,21 +16541,41 @@ function pickOppSquad(roster: ProjectedPlayer[]): { xi: OppXiLine[]; bench: OppX
       count -= 1;
     }
   };
-  const xi: OppXiLine[] = [];
-  take(xi, p => p.p === 'GK', 1, 11);
-  take(xi, p => groupOf(p.p) === 'DEF', 4, 11);
-  take(xi, p => groupOf(p.p) === 'MID', 4, 11);
-  take(xi, p => groupOf(p.p) === 'ATT', 2, 11);
-  take(xi, p => p.p !== 'GK', 11, 11);
-  if (xi.length !== 11 || !xi.some(p => p.p === 'GK')) return null;
+  let best: { xi: ProjectedPlayer[]; formationIndex: number; rating: number } | null = null;
+  for (const [formationIndex, formation] of FORMATIONS.entries()) {
+    const xi = fittingOppXi(byR, formation);
+    if (!xi) continue;
+    const rating = xi.reduce((sum, player) => sum + player.r, 0);
+    if (!best || rating > best.rating || (rating === best.rating && formation.name === '4-4-2')) {
+      best = { xi, formationIndex, rating };
+    }
+  }
+
+  let xi: OppXiLine[];
+  let formationIndex: number;
+  if (best) {
+    xi = best.xi.map(line);
+    formationIndex = best.formationIndex;
+    xi.forEach(player => taken.add(player.n));
+  } else {
+    // Keep the existing fallback when the available positions cannot fill a shape.
+    xi = [];
+    take(xi, p => p.p === 'GK', 1, 11);
+    take(xi, p => groupOf(p.p) === 'DEF', 4, 11);
+    take(xi, p => groupOf(p.p) === 'MID', 4, 11);
+    take(xi, p => groupOf(p.p) === 'ATT', 2, 11);
+    take(xi, p => p.p !== 'GK', 11, 11);
+    if (xi.length !== 11 || !xi.some(p => p.p === 'GK')) return null;
+    formationIndex = bestFormationFor(xi);
+    xi = intoSlots(xi, FORMATIONS[formationIndex] ?? FORMATIONS[1]);
+  }
   const bench: OppXiLine[] = [];
   take(bench, p => p.p === 'GK', 1, 7);
   take(bench, p => groupOf(p.p) === 'DEF', 2, 7);
   take(bench, p => groupOf(p.p) === 'MID', 2, 7);
   take(bench, p => groupOf(p.p) === 'ATT', 2, 7);
   take(bench, p => p.p !== 'GK', 7, 7);
-  const formationIndex = bestFormationFor(xi);
-  return { xi: intoSlots(xi, FORMATIONS[formationIndex] ?? FORMATIONS[1]), bench, formationIndex };
+  return { xi, bench, formationIndex };
 }
 
 /** Opposition scorers from the men actually on their pitch, weighted like ours. */
