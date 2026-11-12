@@ -1,9 +1,9 @@
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { CookieConsent } from "@/components/CookieConsent";
-import { StorageNotice } from "@/components/StorageNotice";
+import { StorageNotice, isGameRoute } from "@/components/StorageNotice";
+import { GameAdInventory } from "@/components/ads/GameAdInventory";
 import { lazy, Suspense, useEffect, useRef } from "react";
 import { BrowserRouter, Routes, Route, Navigate, useLocation, useNavigationType } from "react-router-dom";
 import RouteErrorBoundary from "@/components/RouteErrorBoundary";
@@ -15,7 +15,7 @@ import { SiteMenuProvider } from "@/components/layout/SiteMenuHost";
 import { LiveTicker } from "@/components/layout/LiveTicker";
 import { UpdateNudge } from "@/components/layout/UpdateNudge";
 import { Footer } from "@/components/game/Footer";
-import Index from "./pages/Index";
+const Index = lazy(() => import("./pages/Index"));
 const Footle = lazy(() => import("./pages/Footle"));
 const FreeKick = lazy(() => import("./pages/FreeKick"));
 const BuzzerBeater = lazy(() => import("./pages/BuzzerBeater"));
@@ -44,7 +44,7 @@ const PerfectLineupF1 = lazy(() => import("./pages/PerfectLineupF1"));
 const PerfectLineupNhl = lazy(() => import("./pages/PerfectLineupNhl"));
 const Olympics = lazy(() => import("./pages/Olympics"));
 const GuessTheCollege = lazy(() => import("./pages/GuessTheCollege"));
-import NotFound from "./pages/NotFound";
+const NotFound = lazy(() => import("./pages/NotFound"));
 const PrivacyPolicy = lazy(() => import("./pages/PrivacyPolicy"));
 const CookiePolicy = lazy(() => import("./pages/CookiePolicy"));
 const TermsOfService = lazy(() => import("./pages/TermsOfService"));
@@ -184,8 +184,6 @@ const About = lazy(() => import("./pages/About"));
 const Contact = lazy(() => import("./pages/Contact"));
 const WhatsNew = lazy(() => import("./pages/WhatsNew"));
 
-const queryClient = new QueryClient();
-
 const HEADER_PATHS = ['/', '/leaderboard', '/profile'];
 
 const shouldShowHeader = (pathname: string) =>
@@ -314,6 +312,7 @@ const RouteLoader = () => (
 
 const AppContent = () => {
   const { pathname } = useLocation();
+  const gameRoute = isGameRoute(pathname);
   return (
     <SiteMenuProvider>
       {/* Round 215: the first tab stop on every page jumps a keyboard player
@@ -321,17 +320,18 @@ const AppContent = () => {
           focused, styled in index.css. */}
       <a href="#dukb-main" className="dukb-skip-link">Skip to main content</a>
       <ScrollToTop />
-      <CookieConsent />
       {/* Round 167: the site's own wire across the top of every screen. */}
       <SiteMenu />
       <div data-site-chrome="" className={`sticky top-0 z-50 ${pathname === '/' ? 'h-8' : 'hidden h-8 md:block'}`}>
         <LiveTicker />
       </div>
       {shouldShowHeader(pathname) && <Header />}
+      {!gameRoute && <CookieConsent />}
       {/* Round 1142: one line, game routes only, and only in a browser that
           will not keep anything. Renders nothing for everybody else. */}
       <StorageNotice />
       <Suspense fallback={<RouteLoader />}>
+      {gameRoute && <CookieConsent inline />}
       {/* Round 544: around the routes, inside Suspense. A render throw in one
           game now costs that game and nothing else: the header above and the
           global footer below both survive, and the footer is where the report a
@@ -577,6 +577,7 @@ const AppContent = () => {
           the content whose height it depends on, and then mounts below the
           fold where a mount costs nothing. */}
       </RouteErrorBoundary>
+      {gameRoute && <GameAdInventory />}
       <Footer />
       </Suspense>
     </SiteMenuProvider>
@@ -584,18 +585,16 @@ const AppContent = () => {
 };
 
 const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <AuthProvider>
-      <TooltipProvider>
-        <Toaster />
-        <Sonner />
-        <UpdateNudge />
-        <BrowserRouter>
-          <AppContent />
-        </BrowserRouter>
-      </TooltipProvider>
-    </AuthProvider>
-  </QueryClientProvider>
+  <AuthProvider>
+    <TooltipProvider>
+      <Toaster />
+      <Sonner />
+      <UpdateNudge />
+      <BrowserRouter>
+        <AppContent />
+      </BrowserRouter>
+    </TooltipProvider>
+  </AuthProvider>
 );
 
 export default App;

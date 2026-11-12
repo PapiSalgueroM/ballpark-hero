@@ -58,8 +58,8 @@ export const SEO_META: Record<string, SeoMeta> = {
     description: 'Run recruitment at a real club on the last day of the window. Three or four gaps, one budget, twelve hours before it shuts. Free football transfer game.',
   },
   '/club-manager': {
-    title: 'Club Manager: Free Football Management Game',
-    description: 'Manage a club across current and historical leagues. Transfers, tactics, the board and the sack race. Free soccer management sim.',
+    title: 'Club Manager: Football Tactics and Transfers',
+    description: 'Take over a real club in a current or historical season. Set tactics, negotiate transfers and meet the board’s targets in a free football management sim.',
   },
   '/soccer-conquest': {
     title: 'Soccer Conquest: Europe Imperialism Map Game',
@@ -146,8 +146,8 @@ export const SEO_META: Record<string, SeoMeta> = {
     description: 'Build your 2026 World Cup bracket, every group and knockout round plus the awards, then score it against how the tournament really went. Free soccer game.',
   },
   '/soccer-career': {
-    title: 'Soccer Career: Free Football Career Simulator',
-    description: 'Start at 16 in a youth academy and live a whole soccer career: transfers, trophies, feuds, scandals and a legacy verdict. A free football life sim game.',
+    title: 'Soccer Career: From Academy to Retirement',
+    description: 'Create a footballer, earn your first pro contract, choose transfers and play season by season in a free soccer career simulator.',
   },
   '/fantasy-draft': {
     title: 'Fantasy Draft: Soccer XI Draft Against the AI',
@@ -306,8 +306,8 @@ export const SEO_META: Record<string, SeoMeta> = {
     description: 'Run a real NBA franchise: the cap sheet, waivers, trades the AI weighs, the play in and best of seven series, drafts and dynasties. A free basketball GM sim.',
   },
   '/nba-my-career': {
-    title: 'NBA My Career: Basketball Career Simulator',
-    description: 'Create a prospect, land on a real NBA team and live a whole career: stat lines, contracts, trade demands, rings and a legacy verdict. Free basketball sim.',
+    title: 'NBA My Career: A Basketball Player Simulator',
+    description: 'Build a prospect in this free NBA career sim. Fight for a starting spot, weigh trades and contracts, and play from draft night to retirement.',
   },
   '/nba-gauntlet-draft': {
     title: 'Gauntlet Draft: NBA Starting Five Draft Game',

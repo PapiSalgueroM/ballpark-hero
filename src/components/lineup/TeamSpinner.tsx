@@ -99,6 +99,9 @@ const TeamSpinner = ({ teams, targetIndex, isSpinning, onFinish, recordedYear }:
             <img
               src={logoUrl}
               alt={displayName || ''}
+              width={40}
+              height={40}
+              decoding="async"
               className="w-10 h-10 object-contain"
               onError={(e) => {
                 (e.target as HTMLImageElement).style.display = 'none';

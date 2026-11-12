@@ -1740,8 +1740,8 @@ export default function SoccerCareer() {
   return (
     <>
       <PageSeo
-        title="Soccer Career Simulator - Football Career Game | DoUKnowBall"
-        description="Simulate your soccer career from youth academy to retirement. Make transfers, win trophies, become a legend."
+        title="Soccer Career: From Academy to Retirement | DoUKnowBall"
+        description="Create a footballer, earn your first pro contract, choose transfers and play season by season in a free soccer career simulator."
         path="/soccer-career"
       />
 

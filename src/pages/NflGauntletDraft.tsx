@@ -33,7 +33,7 @@ export default function NflGauntletDraft() {
           reportControl={<ReportQuestion gameType="nfl-gauntlet-draft" />}
           pageHasOwnH1
           title="Gauntlet Draft: NFL, Pick Five, Survive Five"
-          description="The NFL draft mode: each of the seven starting offense slots deals five real players from a star to a bargain, you keep one per slot, and the finished offense runs a five round knockout against ever stronger invented opposition. One shared daily draft, unlimited redrafts, and a fully deterministic cup run so the draft is the game."
+          description="Build a seven-player offense around one quarterback, two backs, three receivers and a tight end. Take it through five rounds of playoff football in the daily or unlimited draft."
         />
         <GameNav />
       </GameShell>

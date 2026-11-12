@@ -1,8 +1,8 @@
 {
   "__version": 3,
   "/": {
-    "hash": "4fa0856128e89413",
-    "date": "2026-10-31"
+    "hash": "795476039ca94aa9",
+    "date": "2026-11-12"
   },
   "/about": {
     "hash": "0ef705596909dcc0",
@@ -93,8 +93,8 @@
     "date": "2026-10-17"
   },
   "/club-manager": {
-    "hash": "451b2842fba2b751",
-    "date": "2026-11-06"
+    "hash": "636eb1cc65f72fc2",
+    "date": "2026-11-12"
   },
   "/clue-auction": {
     "hash": "eb595f5de269d4aa",
@@ -129,16 +129,16 @@
     "date": "2026-09-30"
   },
   "/contact": {
-    "hash": "a681f93116dd8c3b",
-    "date": "2026-10-13"
+    "hash": "e90d46b1c0d07a53",
+    "date": "2026-11-12"
   },
   "/contract-chaos": {
     "hash": "ccd75e13a7a82412",
     "date": "2026-09-30"
   },
   "/cookie-policy": {
-    "hash": "0117ef9e2b9eb655",
-    "date": "2026-10-22"
+    "hash": "e7020b9bfd7ed002",
+    "date": "2026-11-12"
   },
   "/dart-draft": {
     "hash": "837f192adf3b0e9d",
@@ -385,8 +385,8 @@
     "date": "2026-10-23"
   },
   "/nba-my-career": {
-    "hash": "f418d038f0d33a2c",
-    "date": "2026-10-29"
+    "hash": "82208ddff3da8aba",
+    "date": "2026-11-12"
   },
   "/nba-playoff-format-history": {
     "hash": "e9ebd68869371222",
@@ -413,8 +413,8 @@
     "date": "2026-10-23"
   },
   "/nfl-gauntlet-draft": {
-    "hash": "af1e06bb550473e6",
-    "date": "2026-10-09"
+    "hash": "7564b05c86d8281f",
+    "date": "2026-11-12"
   },
   "/nfl-higher-lower": {
     "hash": "b2c6a4f99fb69b20",
@@ -493,12 +493,12 @@
     "date": "2026-10-13"
   },
   "/privacy": {
-    "hash": "d248b100d36585e7",
-    "date": "2026-10-22"
+    "hash": "761ea7b919627b3e",
+    "date": "2026-11-12"
   },
   "/pro-basketball": {
-    "hash": "741bd73f7ce63d86",
-    "date": "2026-10-22"
+    "hash": "aae02180933906c5",
+    "date": "2026-11-12"
   },
   "/pro-football": {
     "hash": "ee3ab6fd96b6e650",
@@ -597,12 +597,12 @@
     "date": "2026-09-19"
   },
   "/soccer": {
-    "hash": "a67f8350d311e21a",
-    "date": "2026-11-06"
+    "hash": "9414b81d41b41d83",
+    "date": "2026-11-12"
   },
   "/soccer-career": {
-    "hash": "01444adb38650606",
-    "date": "2026-11-06"
+    "hash": "b9bd2d27a6afbc43",
+    "date": "2026-11-12"
   },
   "/soccer-conquest": {
     "hash": "c2c02b2757b166c2",
@@ -645,8 +645,8 @@
     "date": "2026-10-23"
   },
   "/terms": {
-    "hash": "805a1b67182ca255",
-    "date": "2026-10-21"
+    "hash": "3c51a1fca88a9516",
+    "date": "2026-11-12"
   },
   "/transfer-path": {
     "hash": "27152604c9584ef0",

@@ -8,11 +8,12 @@ import {
   migrateConsentPreferences, readConsentPreferences, saveConsentPreferences, setPendingConsentWithdrawal, synchronizeConsentStorageEvent,
   type ConsentPurposes,
 } from '@/lib/consentPreferences';
+import { safeLocalStorage } from '@/lib/safeStorage';
 
-export function CookieConsent() {
-  const [visible, setVisible] = useState(false);
-  const [helpTarget, setHelpTarget] = useState<HTMLElement | null>(null);
+export function CookieConsent({ inline = false }: { inline?: boolean }) {
   const [preferences, setPreferences] = useState(readConsentPreferences);
+  const [visible, setVisible] = useState(() => inline && !preferences && safeLocalStorage.getItem('cookie-consent') !== 'essential');
+  const [helpTarget, setHelpTarget] = useState<HTMLElement | null>(null);
   const [advertising, setAdvertising] = useState(false);
   const [gpc, setGpc] = useState(isGlobalPrivacyControlEnabled);
   const [pendingReload, setPendingReload] = useState(false);
@@ -86,6 +87,7 @@ export function CookieConsent() {
       opener.current = (event as CustomEvent<{ opener?: HTMLElement }>).detail?.opener ?? null;
       setAdvertising(effective.advertising);
       setVisible(true);
+      ref.current?.focus();
     };
     window.addEventListener('storage', onStorage);
     window.addEventListener(CONSENT_CHANGED_EVENT, reconcile);
@@ -112,9 +114,10 @@ export function CookieConsent() {
     return () => observer.disconnect();
   }, [visible]);
   const insideHelp = !!helpTarget?.isConnected;
+  const inlineNotice = inline && !insideHelp;
 
   useEffect(() => {
-    if (!visible || insideHelp) return;
+    if (!visible || insideHelp || inlineNotice) return;
     document.body.dataset.consentPending = '1';
     const el = ref.current;
     const measure = () => document.body.style.setProperty('--dukb-consent-height', `${el?.getBoundingClientRect().height ?? 230}px`);
@@ -126,7 +129,7 @@ export function CookieConsent() {
       document.body.style.removeProperty('--dukb-consent-height');
       observer?.disconnect();
     };
-  }, [visible, insideHelp]);
+  }, [visible, insideHelp, inlineNotice]);
 
   useEffect(() => {
     if (!visible) return;
@@ -143,28 +146,35 @@ export function CookieConsent() {
     explicitlyOpen.current = false;
     setVisible(false);
     saveConsentPreferences(choice);
-    if (!pendingRevoked.current.advertising && !pendingRevoked.current.analytics) opener.current?.focus({ preventScroll: true });
+    if (!pendingRevoked.current.advertising && !pendingRevoked.current.analytics) opener.current?.focus({ preventScroll: !inlineNotice });
   };
   const cancel = () => {
     explicitlyOpen.current = false;
     setVisible(false);
-    opener.current?.focus({ preventScroll: true });
+    opener.current?.focus({ preventScroll: !inlineNotice });
   };
   if (!visible) return null;
 
-  return createPortal(
+  const buttonPadding = inlineNotice ? 'px-2 sm:px-4' : 'px-4';
+  const region = (
     <div
       ref={el => {
         ref.current = el;
-        if (el && !el.dataset.dukbFocused) { el.dataset.dukbFocused = '1'; el.focus(); }
+        if (el && !el.dataset.dukbFocused && (!inlineNotice || explicitlyOpen.current)) {
+          el.dataset.dukbFocused = '1';
+          el.focus();
+        }
       }}
       role="region"
       aria-label="Cookie choices"
       tabIndex={-1}
       data-site-chrome=""
+      data-game-consent-inline={inlineNotice ? '' : undefined}
       className={insideHelp
         ? 'pointer-events-auto rounded-xl border border-border p-3 bg-card'
-        : 'fixed bottom-0 left-0 right-0 z-[60] pointer-events-auto max-h-[60dvh] overflow-y-auto p-4 bg-card border-t border-border shadow-lg'}
+        : inlineNotice
+          ? 'border-b border-border bg-card p-3'
+          : 'fixed bottom-0 left-0 right-0 z-[60] pointer-events-auto max-h-[60dvh] overflow-y-auto p-4 bg-card border-t border-border shadow-lg'}
     >
       <div className="max-w-3xl mx-auto space-y-3 text-sm text-muted-foreground">
         <p>
@@ -182,14 +192,14 @@ export function CookieConsent() {
         </div>
         {gpc && <p>Your browser's Global Privacy Control keeps advertising off.</p>}
         {pendingReload && <p role="status">Advertising is off for this visit. Save your game or allow site storage, then choose Save choices to refresh. Already-loaded vendor code may keep running until then.</p>}
-        <div className="flex flex-wrap items-center gap-2">
-          <button type="button" onClick={() => save({ advertising: false, analytics: false })} className="min-h-11 px-4 py-2 rounded-lg border border-border text-foreground font-medium hover:bg-muted transition-colors">Reject all</button>
-          <button type="button" disabled={pendingReload} onClick={() => save({ advertising: true, analytics: false })} className="min-h-11 px-4 py-2 rounded-lg border border-border text-foreground font-medium hover:bg-muted transition-colors">Accept all</button>
-          <button type="button" onClick={() => save({ advertising, analytics: false })} className="min-h-11 px-4 py-2 rounded-lg bg-primary text-primary-foreground font-semibold hover:opacity-90 transition-opacity">Save choices</button>
-          {preferences && !pendingReload && <button type="button" onClick={cancel} className="min-h-11 px-4 py-2 underline hover:text-foreground">Cancel</button>}
+        <div className={inlineNotice ? 'grid grid-cols-3 gap-2 sm:flex sm:flex-wrap sm:items-center' : 'flex flex-wrap items-center gap-2'}>
+          <button type="button" onClick={() => save({ advertising: false, analytics: false })} className={`min-h-11 ${buttonPadding} py-2 rounded-lg border border-border text-foreground font-medium hover:bg-muted transition-colors`}>Reject all</button>
+          <button type="button" disabled={pendingReload} onClick={() => save({ advertising: true, analytics: false })} className={`min-h-11 ${buttonPadding} py-2 rounded-lg border border-border text-foreground font-medium hover:bg-muted transition-colors`}>Accept all</button>
+          <button type="button" onClick={() => save({ advertising, analytics: false })} className={`min-h-11 ${buttonPadding} py-2 rounded-lg bg-primary text-primary-foreground font-semibold hover:opacity-90 transition-opacity`}>Save choices</button>
+          {preferences && !pendingReload && <button type="button" onClick={cancel} className={`min-h-11 ${buttonPadding} py-2 underline hover:text-foreground`}>Cancel</button>}
         </div>
       </div>
-    </div>,
-    insideHelp ? helpTarget! : document.body,
+    </div>
   );
+  return inlineNotice ? region : createPortal(region, insideHelp ? helpTarget! : document.body);
 }

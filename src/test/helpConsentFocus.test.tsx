@@ -4,6 +4,7 @@ import { MemoryRouter } from 'react-router-dom';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { CookieConsent } from '@/components/CookieConsent';
 import { HowToPlayPopover } from '@/components/game/HowToPlayPopover';
+import { openConsentChoices } from '@/lib/consentPreferences';
 
 const essentialChoice = () => JSON.stringify({ version: 2, advertising: false, analytics: false, updatedAt: Date.now() });
 
@@ -14,10 +15,10 @@ vi.mock('@/lib/consentedScripts', () => ({
   stopRevokedServices: vi.fn(),
 }));
 
-function Fixture({ initialOpen = true }: { initialOpen?: boolean }) {
+function Fixture({ initialOpen = true, inline = false }: { initialOpen?: boolean; inline?: boolean }) {
   const [open, setOpen] = useState(initialOpen);
   return <MemoryRouter>
-    <CookieConsent />
+    <CookieConsent inline={inline} />
     <button>Fixture game action</button>
     <HowToPlayPopover title="Fixture rules" open={open} onOpenChange={setOpen}>
       <p>Fixture instructions.</p><p>Fixture worked example.</p>
@@ -146,5 +147,39 @@ describe('pending cookie choices belong to the open help focus scope', () => {
     expect(screen.queryByRole('dialog')).toBeNull();
     expect(localStorage.getItem('cookie-consent-v2')).toBeNull();
     expect(consent.load).not.toHaveBeenCalled();
+  });
+
+  it('shows pending choices in flow before the game without taking focus', async () => {
+    const { container } = render(<Fixture initialOpen={false} inline />);
+    const region = await screen.findByRole('region', { name: 'Cookie choices' });
+    expect(container).toContainElement(region);
+    expect(region).toHaveAttribute('data-game-consent-inline');
+    expect(region).not.toHaveClass('fixed');
+    expect(region).not.toHaveFocus();
+    expect(document.body.dataset.consentPending).toBeUndefined();
+    expect(localStorage.getItem('cookie-consent-v2')).toBeNull();
+    expect(consent.load).not.toHaveBeenCalled();
+
+    const game = screen.getByRole('button', { name: 'Fixture game action' });
+    game.focus();
+    expect(game).toHaveFocus();
+    act(() => openConsentChoices(game));
+    expect(region).toHaveFocus();
+    fireEvent.click(within(region).getByRole('button', { name: 'Reject all' }));
+    await waitFor(() => expect(game).toHaveFocus());
+    expect(JSON.parse(localStorage.getItem('cookie-consent-v2')!)).toMatchObject({ advertising: false, analytics: false });
+  });
+
+  it('uses one consent region inside rules and restores its inline placement on close', async () => {
+    const { container } = render(<Fixture inline />);
+    const dialog = await screen.findByRole('dialog');
+    await waitFor(() => expect(dialog).toContainElement(screen.getByRole('region', { name: 'Cookie choices' })));
+    fireEvent.keyDown(dialog, { key: 'Escape' });
+    await waitFor(() => expect(screen.queryByRole('dialog')).toBeNull());
+    const region = screen.getByRole('region', { name: 'Cookie choices' });
+    expect(container).toContainElement(region);
+    expect(region).toHaveAttribute('data-game-consent-inline');
+    expect(region).not.toHaveFocus();
+    expect(localStorage.getItem('cookie-consent-v2')).toBeNull();
   });
 });

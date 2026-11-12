@@ -11,8 +11,8 @@ export const SEO_META_PART: Record<string, SeoMeta> = {
     description: "Build your 2026 World Cup bracket, every group and knockout round plus the awards, then score it against how the tournament really went. Free soccer game.",
   },
   "/soccer-career": {
-    title: "Soccer Career: Free Football Career Simulator",
-    description: "Start at 16 in a youth academy and live a whole soccer career: transfers, trophies, feuds, scandals and a legacy verdict. A free football life sim game.",
+    title: "Soccer Career: From Academy to Retirement",
+    description: "Create a footballer, earn your first pro contract, choose transfers and play season by season in a free soccer career simulator.",
   },
   "/football-grid": {
     title: "NFL Grid: Daily Pro Football Trivia Grid",

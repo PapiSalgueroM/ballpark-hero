@@ -796,9 +796,12 @@ console.log('9) the About section is a lazy chunk, mounted for every visitor, an
   };
   const entry = walk(path.join(SRC, 'main.tsx'));
   const has = (set, rel) => set.has(norm(path.join(SRC, rel)));
-  if (entry.size < 50 || !has(entry, 'App.tsx') || !has(entry, 'pages/Index.tsx')) {
-    fail(`the import walk from src/main.tsx reached only ${entry.size} files${has(entry, 'pages/Index.tsx') ? '' : ', not Index.tsx'}, so it proves nothing`);
+  const home = walk(path.join(SRC, 'pages/Index.tsx'));
+  if (entry.size < 50 || !has(entry, 'App.tsx') || home.size < 20) {
+    fail(`the static import walk reached only ${entry.size} entry files and ${home.size} home files`);
   }
+  if (has(entry, 'pages/Index.tsx')) fail('the home page is loaded by the shared entry bundle');
+  if (has(home, 'data/homeCopy.ts') || has(home, 'components/home/HomeAbout.tsx')) fail('home copy is loaded before its lazy About section');
   if (has(entry, 'data/homeCopy.ts')) fail('src/data/homeCopy.ts is reachable by static imports from src/main.tsx, so the copy rides in the entry chunk every page downloads');
   if (has(entry, 'components/home/HomeAbout.tsx')) fail('src/components/home/HomeAbout.tsx is reachable by static imports from src/main.tsx, so the lazy chunk is not lazy');
   const lazySide = walk(path.join(SRC, 'components/home/HomeAbout.tsx'));

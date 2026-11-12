@@ -226,8 +226,8 @@ export default function Index() {
           simTrustCopy fails the day the registry's label moves and these
           do not, and names the four places to retype. */}
       <PageSeo
-        title="DoUKnowBall: Free Sports Trivia Games and Daily Quizzes"
-        description="130+ free sports games, from a Soccer Career sim and Club Manager to daily trivia and quizzes for the NFL, NBA, MLB, NHL, F1, UFC and more. No login needed."
+        title="Free Sports Games, Daily Quizzes and Career Sims"
+        description="130+ free sports games in a browser. Play daily quizzes, build a lineup, take a player through Soccer Career or run a club in Club Manager. No login needed."
         path="/"
       />
       <HomeTileStyles />
