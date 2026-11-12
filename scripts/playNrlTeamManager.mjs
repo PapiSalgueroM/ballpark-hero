@@ -108,7 +108,7 @@ try {
   assert.match(await medicalLevel(past).innerText(), /Level 2 of 3/);
   assert.equal(await upgradeMedical(past, '$2,600,000').isEnabled(), false);
   assert.match(await past.locator('[data-nrl-medical-reason]').innerText(), /more cash/);
-  await past.getByText('$1,700,000', { exact: true }).waitFor();
+  assert.equal(await past.getByText('Cash balance', { exact: true }).locator('..').locator('dd').innerText(), '$1,700,000');
   assert.deepEqual((await career(past)).finance.medicalUpgrades, [{ level: 2, round: 1 }]);
   const medicalBytes = await save(past);
   await fit(past);
@@ -122,7 +122,7 @@ try {
   await past.getByRole('button', { name: 'Hire attack assistant', exact: true }).tap();
   assert.match(await past.locator('[data-nrl-coach-current]').innerText(), /Attack assistant/);
   assert.deepEqual((await career(past)).finance.coachHire, { role: 'attack', round: 1, paidRounds: 0 });
-  await past.getByText('$1,580,000', { exact: true }).waitFor();
+  assert.equal(await past.getByText('Cash balance', { exact: true }).locator('..').locator('dd').innerText(), '$1,580,000');
   await fit(past);
   await screenshot(past, 'nrl-coaching-320.png');
   const beforeBoard = await save(past);
