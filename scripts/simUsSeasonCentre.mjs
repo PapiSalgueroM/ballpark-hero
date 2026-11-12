@@ -33,6 +33,7 @@
  * the red was at the named check:
  *   stream   one Math.random inside buildUsSeason              -> section 6
  *   record   the record target ignored                         -> section 3
+ *   nbarecord the NBA replay ignores the saved wins and losses  -> section 3
  *   length   the held gate removed                             -> section 2
  *   stage    the engine writes a result its own list lacks     -> sections 1 and 4
  *   short82  the NBA engine back on 82 games in every year
@@ -291,7 +292,8 @@ const MLB_LEDGER = 'src/data/usSeasonLedgerMlb.ts';
 const WINDOW = { file: 'src/data/usLeagueShape.ts', from: "  { sport: 'nba', era: 'now', from: 2025, to: null, shape: NBA_2025 },", to: "  { sport: 'nba', era: 'now', from: 2025, to: null, shape: NBA_2025 },\n  { sport: 'nba', era: 'y2004', from: 2003, to: null, shape: NBA_2025 }," };
 const CONTROLS = {
   stream: { section: 6, patches: [{ file: US, from: 'const key = usSeasonKey(bind, career, row);', to: 'const key = usSeasonKey(bind, career, row); Math.random();' }] },
-  record: { section: 3, patches: [{ file: US, from: "const target: TeamTarget = band ? { kind: 'record', winsMin: band[0], winsMax: band[1] } : { kind: 'none' };", to: "const target: TeamTarget = { kind: 'none' };" }] },
+  record: { section: 3, patches: [{ file: US, from: "const target: TeamTarget = wins !== null ? { kind: 'record', winsMin: wins, winsMax: wins, saved: true }\n    : band ? { kind: 'record', winsMin: band[0], winsMax: band[1] } : { kind: 'none' };", to: "const target: TeamTarget = { kind: 'none' };" }] },
+  nbarecord: { section: 3, patches: [{ file: US, from: 'const wins = bind.savedWins?.(row, length) ?? null;', to: 'const wins = null;' }] },
   length: { section: 2, patches: [{ file: US, from: 'if (length === null || length !== bind.fullSeason) {', to: 'if (length === null) {' }] },
   stage: { section: 1, also: 4, patches: [{ file: 'src/lib/nbaMyCareer.ts', from: '    result = stages[stage];', to: "    result = stages[stage] + ' ';" }] },
   short82: { section: 1, patches: [{ file: 'src/lib/nbaMyCareer.ts', from: "  return usSeasonLength('nba', year) ?? 82;", to: '  return 82;' }] },
@@ -393,7 +395,7 @@ CONTROLS.seam = CONTROLS.lay;
 const CONTROL_SPORT = {
   stage: 'nba', names: 'nba', window: 'nba', formula: 'nba', hot: 'nba', sum: 'nfl', kick: 'nfl', nflstage: 'nfl', nflformula: 'nfl', days: 'nfl',
   poscore: 'nfl', nflheld: 'nfl', lumpy: 'nfl', flat: 'nfl', tdform: 'nfl', minutes: 'nfl', order: 'nfl', points: 'nfl', forty: 'nfl', level: 'nfl', oddtd: 'nfl', bigkick: 'nfl',
-  oddsack: 'nfl', short82: 'nba', lawdrift: 'nfl',
+  oddsack: 'nfl', short82: 'nba', lawdrift: 'nfl', nbarecord: 'nba',
   mlbstage: 'mlb', mlbformula: 'mlb', series: 'mlb', hits: 'mlb', rbi: 'mlb', allstar: 'mlb', pitcher: 'mlb', club: 'mlb', outside: 'mlb', mlbwho: 'mlb', pathyear: 'mlb', mlblevel: 'mlb',
   mlbinnings: 'mlb', mlbcap: 'mlb', mlbold: 'mlb', mlborder: 'mlb', mlbfit: 'mlb', absix: 'mlb',
 };
@@ -633,12 +635,24 @@ const ownBand = (slug, teamResult, year) => {
 const gameIds = (slug, eraId) => (slug === 'mlb' ? M.mlbEraTeamIds(eraId) : slug === 'nba' ? M.nbaEraTeamIds(eraId) : (M.NFL_ERAS.find(e => e.id === (eraId ?? 'now')) ?? M.NFL_ERAS[0]).teams.map(t => t.abbr));
 const isNum = v => typeof v === 'number' && Number.isFinite(v);
 
+function nbaHasSavedRecord(row) {
+  return Number.isInteger(row.clubWins) && Number.isInteger(row.clubLosses)
+    && row.clubWins >= 0 && row.clubLosses >= 0 && row.clubWins + row.clubLosses === OWN.nba.games;
+}
+
 /** Section 3, NBA: every item recomputed from the row and the derived games. */
 function shownIsSavedNba(row, s) {
   const out = [];
   const on = s.games.filter(g => g.played);
   if (s.games.length !== OWN.nba.games) out.push(`games ${s.games.length}`);
   if (on.length !== row.games) out.push(`played ${on.length} != ${row.games}`);
+  if (nbaHasSavedRecord(row)) {
+    const wins = s.games.filter(g => g.us > g.them).length;
+    const losses = s.games.filter(g => g.us < g.them).length;
+    if (wins !== row.clubWins || losses !== row.clubLosses) {
+      out.push(`record ${wins}-${losses} != ${row.clubWins}-${row.clubLosses}`);
+    }
+  }
   const mean = k => on.reduce((a, g) => a + (g.line[k] ?? 0), 0) / Math.max(1, on.length);
   if (isNum(row.ppg) && Math.round(mean('pts')) !== Math.round(row.ppg)) out.push(`ppg ${mean('pts').toFixed(2)} != ${row.ppg}`);
   if (isNum(row.rpg) && Math.round(mean('reb') * 10) !== Math.round(row.rpg * 10)) out.push(`rpg ${mean('reb').toFixed(3)} != ${row.rpg}`);
@@ -934,7 +948,9 @@ function pathProblems(slug, row, path, target, who) {
   const i = o.results.indexOf(row.teamResult);
   if (i < 0) {
     if (path) out.push('a path for a season with no playoff result');
-    if (row.teamResult !== o.missed && target.kind !== 'none') out.push('a band for a result the list does not hold');
+    if (row.teamResult !== o.missed && target.kind !== 'none' && !(slug === 'nba' && nbaHasSavedRecord(row))) {
+      out.push('a band for a result the list does not hold');
+    }
     return out;
   }
   const n = Math.min(4, i + 1);
@@ -1367,9 +1383,26 @@ function observe(c, line, who) {
   if (who.slug === 'nfl' && isNum(row.sacks)) rec.old = oldSaveTwin(bind, SB, career, seen.length);
   /* the fix pass of Round 1212: baseball's older save twin (see mlbOldTwin); null when the season is not one */
   if (who.slug === 'mlb') rec.old = mlbOldTwin(bind, SB, career);
+  /* The broad-band repair and win-distribution gates still apply to the older NBA path. */
+  if (who.slug === 'nba' && !DIGEST) {
+    const { clubWins, clubLosses, ...oldRow } = row;
+    const old = M.buildUsSeason(bind, career, oldRow, SB.teamLabelOf);
+    const legacy = old.ok ? M.deriveSeasonOrWhy(old.sport, oldRow, old.ctx) : old.why;
+    if (typeof legacy === 'string') rec.p3.push(`the recordless save could not be replayed: ${legacy}`);
+    else {
+      rec.legacy = {
+        repairs: legacy.repairs,
+        wins: legacy.games.filter(g => g.us > g.them).length,
+        close: legacy.games.filter(g => Math.abs(g.us - g.them) === 1).length,
+      };
+      rec.close = s.games.filter(g => Math.abs(g.us - g.them) === 1).length;
+    }
+  }
   const band = ownBand(who.slug, row.teamResult, row.year);
-  if (band && (rec.wins < band[0] || rec.wins > band[1])) rec.p3.push(`wins ${rec.wins} outside ${band[0]} to ${band[1]} for "${row.teamResult}"`);
-  if (!band && s.target.kind !== 'none') rec.p3.push(`a band for the unknown result "${row.teamResult}"`);
+  const savedNbaRecord = who.slug === 'nba' && nbaHasSavedRecord(row);
+  const bandWins = savedNbaRecord ? rec.legacy?.wins : rec.wins;
+  if (band && bandWins !== undefined && (bandWins < band[0] || bandWins > band[1])) rec.p3.push(`wins ${bandWins} outside ${band[0]} to ${band[1]} for "${row.teamResult}"`);
+  if (!band && s.target.kind !== 'none' && !savedNbaRecord) rec.p3.push(`a band for the unknown result "${row.teamResult}"`);
   /* section 4 */
   const pathNow = M.usPlayoffPath(bind, row, b.ctx, b.key);
   digestSeason(who, row, 'ok', s, pathNow);
@@ -1792,9 +1825,14 @@ for (const slug of SPORTS) {
     const dd = derived.filter(r => r.seedset === ss);
     console.log(`       seed set ${ss}: ${dd.length} derived, no repair ${share(dd.filter(r => r.repairs === 0).length, dd.length)}, refused ${share(open.filter(r => r.seedset === ss && !r.derived).length, open.filter(r => r.seedset === ss).length)}`);
   }
-  check('7', noRepair >= derived.length * (NO_REPAIR_MIN[slug] ?? 1), `${slug} at least ${(100 * (NO_REPAIR_MIN[slug] ?? 1)).toFixed(0)}% of seasons need no repair (${share(noRepair, derived.length)})`);
+  const bandNoRepair = slug === 'nba' ? derived.filter(r => r.legacy?.repairs === 0).length : noRepair;
+  if (slug === 'nba') {
+    const paired = derived.filter(r => r.legacy);
+    console.log(`     one-point games per season: ${median(paired.map(r => r.close))} median with the saved record, ${median(paired.map(r => r.legacy.close))} median without it`);
+  }
+  check('7', bandNoRepair >= derived.length * (NO_REPAIR_MIN[slug] ?? 1), `${slug} at least ${(100 * (NO_REPAIR_MIN[slug] ?? 1)).toFixed(0)}% of ${slug === 'nba' ? 'recordless ' : ''}seasons need no repair (${share(bandNoRepair, derived.length)})`);
   [o.missed, ...o.results].forEach((t, i) => {
-    const w = derived.filter(r => r.teamResult === t).map(r => r.wins);
+    const w = derived.filter(r => r.teamResult === t).map(r => slug === 'nba' ? r.legacy?.wins : r.wins).filter(Number.isInteger);
     const [lo, hi] = o.bands[i];
     const q1 = lo + (hi - lo) * 0.25; const q3 = lo + (hi - lo) * 0.75;
     const med = median(w);
@@ -2044,6 +2082,11 @@ if (CONTROL) {
     note = `; ${wrong} kicker seasons show a team field goal count that is not his makes`;
   }
   if (CONTROL === 'record') ok = ok && labels.some(l => l.includes('independent checker'));
+  if (CONTROL === 'nbarecord') {
+    const wrong = seen.filter(r => r.slug === 'nba' && r.p3.some(p => p.startsWith('record '))).length;
+    ok = ok && labels.some(l => l.startsWith('nba') && l.includes('independent checker')) && wrong > 0 && red.length === 1;
+    note = `; ${wrong} NBA replays disagree with their saved record`;
+  }
   if (CONTROL === 'conf') {
     const wrong = seen.filter(r => r.p4.some(p => p.includes('conference'))).length;
     ok = ok && labels.some(l => l.includes("bracket's conferences")) && wrong > 0;

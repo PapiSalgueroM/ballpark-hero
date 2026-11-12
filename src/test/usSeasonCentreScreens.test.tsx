@@ -105,7 +105,10 @@ function modelOf(SB: UsCareerSport, bind: UsSeasonBind, pos: string, seed: strin
     }
     const career: UsCareerCore = JSON.parse(JSON.stringify(c));
     for (const season of career.seasons) {
-      const row = season as UsRow;
+      // The historical screens show the band-derived record. Model an older save.
+      const row = { ...season } as UsRow;
+      delete row.clubWins;
+      delete row.clubLosses;
       const b = buildUsSeason(bind, career, row, SB.teamLabelOf);
       if (b.ok === false || !b.ctx.shape) continue;
       if (!usPlayoffPath(bind, row, b.ctx, b.key)) continue;

@@ -2,9 +2,9 @@
    (src/lib/season/us.ts binds it to the season core).
 
    What is the engine's: games played, points a game (a whole number), rebounds
-   and assists a game (one decimal), the team result and the playoff numbers,
-   all read from the saved line. What is THIS SIM'S OWN, and said so in the
-   "?": the record bands, the score law, the per game spread, who he meets on
+   and assists a game (one decimal), the team result, its saved record when
+   present and the playoff numbers. What is THIS SIM'S OWN, and said so in the
+   "?": the record bands for older saves, the score law, the per game spread, who he meets on
    which night, every score and every stat line.
 
    Real and two sourced (src/data/usLeagueShape.ts): the divisions, the
@@ -149,6 +149,11 @@ export const NBA_SEASON: UsSeasonBind = {
   missed: NBA_MISSED_PLAYOFFS,
   results: NBA_PLAYOFF_RESULTS,
   bands: BANDS,
+  savedWins: (row, length) => {
+    const wins = num(row.clubWins), losses = num(row.clubLosses);
+    return wins !== null && losses !== null && Number.isInteger(wins) && Number.isInteger(losses)
+      && wins >= 0 && losses >= 0 && wins + losses === length ? wins : null;
+  },
   /* every round is a best of seven: four wins, seven games at most (the ledger's format, with its sources) */
   series: US_PLAYOFF_FORMAT.nba.series,
   rounds: US_PLAYOFF_FORMAT.nba.rounds,
@@ -197,8 +202,8 @@ export const NBA_SEASON: UsSeasonBind = {
     soFar: so => [['Played', String(so.apps)], ['PPG', per(so.pts, so.apps)], ['RPG', per(so.reb, so.apps)], ['APG', per(so.ast, so.apps)]],
     half: so => (so.apps ? `First half: ${plural(so.apps, 'game', 'games')}, ${per(so.pts, so.apps)} points a game` : 'First half: you did not play a game.'),
     tileLabels: { 'Points per game': 'PPG', 'Rebounds per game': 'RPG', 'Assists per game': 'APG' },
-    help: (named, opp) => usHelp({
-      named, games: GAMES, bands: BANDS,
+    help: (named, opp, savedRecord) => usHelp({
+      named, games: GAMES, bands: BANDS, savedRecord,
       examples: [
         { head: 'A game', body: `Game 12, at home to ${named && opp ? `the ${opp}` : 'another team'}. You win 112-104 and put up 31 points, 8 rebounds and 6 assists. Your record goes to 8-4.` },
         { head: 'The court', body: 'Scores update at the end of each quarter. A 24-22 first quarter followed by 31-28 makes it 55-50. The figures are an illustration, not a shot chart or play-by-play. Your points, rebounds and assists appear at the final buzzer.' },
