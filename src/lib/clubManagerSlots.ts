@@ -17,15 +17,14 @@
  * browser refuses is rolled back, so a full store can stop a swap but can
  * never cost a career.
  */
-import { SAVE_KEY, leanCareer, worldSeasonLabel, type CareerState } from './clubManager';
+import { leanCareer, worldSeasonLabel, type CareerState } from './clubManager';
+import { SAVE_KEY, SLOT_COUNT, SLOTS_INDEX_KEY, parkedKey } from './clubManagerSaveKeys';
 import { eraById, isHistoricEra } from './clubManagerEras';
 import { levelFrom, noSackFrom } from '@/lib/clubManagerStart';
 import type { DifficultyLevel } from '@/lib/managerDifficulty';
 import { saveFence } from '@/lib/saveFence';
 
-export const SLOT_COUNT = 3;
-export const SLOTS_INDEX_KEY = 'dukb-cm-slots';
-export const parkedKey = (slot: number): string => `dukb-cm-slot-${slot}`;
+export { SLOT_COUNT, SLOTS_INDEX_KEY, parkedKey } from './clubManagerSaveKeys';
 
 export interface SlotSummary {
   managerName: string | null;

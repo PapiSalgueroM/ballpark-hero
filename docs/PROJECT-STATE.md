@@ -1,3 +1,9 @@
+## 2026-11-12 Club Manager opening performance prototype
+
+The five season buttons share the existing era catalogue and appear before the match engine for empty stores. The original career boot still handles active, parked and damaged data and Hot Seat handoffs. A choice made while the engine loads gives way to a save created in another tab. The roster catalogue remains in the prerendered guide and can be opened before a career from the guide's club list control.
+
+On the #721 parent and this prototype, three alternating 390px mobile pairs at 150ms RTT, 1.64 Mbps and 4x CPU slowdown put the first usable era at 5.825s and 3.251s median. All three fresh pairs improved. Initial route weight fell from 648.3 to 269.5 KiB gzipped. Saved Arsenal's Resume button was 5.997s and 5.727s median, with one slower pair, and the median tap to hub was 646ms and 573ms. Browser LCP in this run was the prerender disclaimer. Saved CLS stayed around 0.38 on both standalone builds, so the exact combined build needs its own timing.
+
 ## 2026-11-12 Club Manager Chinese Super League draft
 
 Choose China in a new current Club Manager career to manage any of the 16 Chinese Super League clubs from 2026. Each club plays a 30-match home-and-away season. The draw, dates, stadiums, results, opening squads, ratings and budgets are simulated. The CFA Cup, Super Cup, AFC competitions and promotion and relegation are outside the model. The 2027 competition has its own calendar and will need a verified admission list before it can be represented as a real start.
