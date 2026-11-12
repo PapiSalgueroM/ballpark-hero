@@ -429,6 +429,8 @@ export function nhlWorkSlate(pos: string, slate: number): number {
   return pos === 'G' ? Math.min(slate, US_ENGINE_SEASON.nhl) : slate;
 }
 
+const NHL_GOALIE_MIN_STARTS = 58;
+
 /* The season's workload on the engine's OWN season: 58 to 67 starts, or all
    but zero to three of the games. simNhlSeason carries it, and every count
    drawn from it, to the season the ledger says his club played that year. */
@@ -598,7 +600,8 @@ export function simNhlSeason(
   // (48 of 48 in 2012-13 was no lost year).
   const prevSeason = c.seasons[c.seasons.length - 1];
   const prevEq = prevSeason ? fullSeasonOf('nhl', prevSeason.games, nhlWorkSlate(c.pos, prevSeason.slate ?? US_ENGINE_SEASON.nhl)) : 0;
-  if (prevSeason && prevEq <= 35 && fullGames >= 70 && wonAward(rng, 'nhl', 'nhlComeback', c.pos, statScore)) {
+  const comebackWorkload = c.pos === 'G' ? NHL_GOALIE_MIN_STARTS : 70;
+  if (prevSeason && prevEq <= 35 && fullGames >= comebackWorkload && wonAward(rng, 'nhl', 'nhlComeback', c.pos, statScore)) {
     line.awards.push('Comeback Player of the Year'); notes.push('🔁 Comeback Player of the Year.');
   }
 
@@ -672,7 +675,7 @@ export function nhlStatLineFor(x: NhlLineInput, rng: () => number): NhlStatLine 
 /** The healthy workload on the engine's own season, as gamesFor draws it: 58 to 67 starts, or all but zero to
  *  three of the games. Draws: 1. */
 export function nhlFullWorkload(pos: string, rng: () => number): number {
-  return pos === 'G' ? 58 + Math.floor(rng() * 10) : US_ENGINE_SEASON.nhl - 3 + Math.floor(rng() * 4);
+  return pos === 'G' ? NHL_GOALIE_MIN_STARTS + Math.floor(rng() * 10) : US_ENGINE_SEASON.nhl - 3 + Math.floor(rng() * 4);
 }
 
 /** The season line that is saved, out of the season on the engine's own length and the games his position
