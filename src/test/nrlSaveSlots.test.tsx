@@ -26,7 +26,7 @@ const storm = () => createNrlCareer('storm', 17);
 const perth = () => createNrlCareer('bears', 19, 2027);
 const read = (key: string) => readNrlCareerSave(localStorage.getItem(key));
 const raw = (key: string) => localStorage.getItem(key);
-const click = (name: string) => fireEvent.click(screen.getByRole('button', { name, exact: true }));
+const click = (name: string) => fireEvent.click(screen.getByRole('button', { name }));
 
 function open(search = '') {
   return render(<MemoryRouter initialEntries={[path + search]}><NrlTeamManager /></MemoryRouter>);
@@ -88,7 +88,11 @@ describe('NRL career slots', () => {
     expect(screen.getByRole('button', { name: 'Play second half' })).toBeEnabled();
     expect(raw(secondKey)).toBe(half);
 
-    const finished = JSON.stringify(reduceNrlCareer(inPlay, { type: 'finishLive' }));
+    const { year, round, tactic } = inPlay.season;
+    const settled = reduceNrlCareer(inPlay, { type: 'finishLive', year, round, tactic });
+    expect(settled.season.live).toBeUndefined();
+    expect(settled.season.round).toBe(round + 1);
+    const finished = JSON.stringify(settled);
     externalWrite(secondKey, finished);
     const finish = screen.getByRole('button', { name: 'Play second half' });
     expect(finish).toBeDisabled();
