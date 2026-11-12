@@ -98,6 +98,7 @@
  *   partballon    the generatedBallonPool row is left out              (1)
  *   partplayoffs  the NFL front office's playoffs row is left out      (1)
  *   stadiumserializer  Stadium's saved bytes use the wrong serializer   (0)
+ *   wonderkidserializer  Academy's nested writer uses the wrong binding (0)
  * A control that fired exits 1 and its last line says FIRED. One that did not
  * fire, or could not run, exits 2 and says so. A green run exits 0. The ten
  * part controls must also fire on their OWN sentence (the failure that names
@@ -188,7 +189,7 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTROL = process.env.SIM_SAVE_KEEPER_CONTROL || '';
 const CONTROLS = ['dropkey', 'versiontable', 'norow', 'onebyte', 'bootwrite', 'noaside', 'journalfirst', 'pileup',
   'nocopycheck', 'hidebehind', 'twins', 'numberonly', 'nomaincall', 'assign', 'partrow', 'partrowus',
-  'partbrief', 'partagent', 'partreturn', 'partfarewell', 'partpress', 'partgamelog', 'partballon', 'partplayoffs', 'stadiumserializer'];
+  'partbrief', 'partagent', 'partreturn', 'partfarewell', 'partpress', 'partgamelog', 'partballon', 'partplayoffs', 'stadiumserializer', 'wonderkidserializer'];
 if (CONTROL && !CONTROLS.includes(CONTROL)) { console.error(`SIM_SAVE_KEEPER_CONTROL=${CONTROL} is not a control this harness knows`); process.exit(2); }
 const SEEDS = [0, 1, 2, 3];
 const TMP = fs.mkdtempSync(path.join(os.tmpdir(), 'simSaveKeeper-'));
@@ -209,6 +210,7 @@ const KEEPER = 'src/lib/saveKeeper.ts';
 const RECOVERY = 'src/lib/brokenSaveRecovery.ts';
 const MAIN = 'src/main.tsx';
 const STADIUM = 'src/hooks/useStadiumTycoon.ts';
+const WONDERKID = 'src/hooks/useWonderkidFactory.ts';
 const SWAPS = {
   versiontable: ["'/club-manager': { at: ['saveVersion'], current: 3, oldest: 3, other: 'refuses' },", "'/club-manager': { at: ['saveVersion'], current: 4, oldest: 4, other: 'refuses' },"],
   norow: ["  '/stadium-tycoon': { at: ['v'], current: 1, oldest: 1, other: 'refuses' },\n", ''],
@@ -227,9 +229,11 @@ const SWAPS_ELSEWHERE = {
   twins: [RECOVERY, '      if (kept !== null && storage.getItem(k) === kept) storage.removeItem(k);\n      else others.push(k);\n', '      others.push(k);\n'],
   nomaincall: [MAIN, 'runSaveKeeper();\n', ''],
   stadiumserializer: [STADIUM, 'const bytes = serializeTycoon(next, now);', 'const bytes = JSON.stringify(next);'],
+  wonderkidserializer: [WONDERKID, 'try { localStorage.setItem(SAVE_KEY, bytes); return true; }',
+    'try { const bytes = JSON.stringify(next); localStorage.setItem(SAVE_KEY, bytes); return true; }'],
 };
 /* Every source file a section reads or the bundle loads, as the control left it. */
-const sources = { [KEEPER]: readLF(KEEPER), [RECOVERY]: readLF(RECOVERY), [MAIN]: readLF(MAIN), [STADIUM]: readLF(STADIUM) };
+const sources = { [KEEPER]: readLF(KEEPER), [RECOVERY]: readLF(RECOVERY), [MAIN]: readLF(MAIN), [STADIUM]: readLF(STADIUM), [WONDERKID]: readLF(WONDERKID) };
 if (CONTROL in SWAPS || CONTROL in SWAPS_ELSEWHERE) {
   const [file, from, to] = CONTROL in SWAPS ? [KEEPER, ...SWAPS[CONTROL]] : SWAPS_ELSEWHERE[CONTROL];
   if (!sources[file].includes(from)) { console.error(`simSaveKeeper control ${CONTROL}: CANNOT RUN. The text it rewrites is not in ${file}, so the control would change nothing.`); process.exit(2); }
@@ -367,17 +371,23 @@ const resolveModule = (fromRel, spec) => {
   for (const ext of ['.ts', '.tsx', '/index.ts']) { const p = (base + ext).replace(/\\/g, '/'); if (fs.existsSync(path.join(ROOT, p))) return p; }
   return null;
 };
-/** The direct serializer call, or the earlier const in this writer's own block. */
-function writerSerializer(arg) {
+/** Bind each source on its own so nested callbacks can use captured consts. */
+function writerChecker(sf) {
+  const options = { noLib: true, noResolve: true };
+  const host = ts.createCompilerHost(options);
+  host.getSourceFile = name => name === sf.fileName ? sf : undefined;
+  return ts.createProgram([sf.fileName], options, host).getTypeChecker();
+}
+
+/** The direct serializer call or the earlier immutable value in lexical scope. */
+function writerSerializer(arg, checker) {
   let value = unwrap(arg);
   if (ts.isIdentifier(value)) {
-    let statement = value;
-    while (statement.parent && !ts.isBlock(statement.parent) && !ts.isSourceFile(statement.parent)) statement = statement.parent;
-    for (const prior of statement.parent?.statements ?? []) {
-      if (prior === statement) break;
-      if (!ts.isVariableStatement(prior) || !(prior.declarationList.flags & ts.NodeFlags.Const)) continue;
-      const match = prior.declarationList.declarations.find(d => ts.isIdentifier(d.name) && d.name.text === value.text);
-      if (match?.initializer) { value = unwrap(match.initializer); break; }
+    const declaration = checker.getSymbolAtLocation(value)?.valueDeclaration;
+    if (declaration && ts.isVariableDeclaration(declaration)
+        && (declaration.parent.flags & ts.NodeFlags.Const)
+        && declaration.initializer && declaration.end < value.pos) {
+      value = unwrap(declaration.initializer);
     }
   }
   if (ts.isBinaryExpression(value) && value.operatorToken.kind === ts.SyntaxKind.EqualsToken) value = unwrap(value.right);
@@ -387,6 +397,7 @@ function writerSerializer(arg) {
 function setItemKeys(rel) {
   const sf = parse(rel);
   const local = constsOf(sf);
+  let checker;
   const imported = new Map();
   walkTree(sf, n => {
     if (!ts.isImportDeclaration(n) || !n.importClause?.namedBindings || !ts.isNamedImports(n.importClause.namedBindings)) return;
@@ -403,7 +414,11 @@ function setItemKeys(rel) {
     if (!ts.isCallExpression(n) || !ts.isPropertyAccessExpression(n.expression) || n.expression.name.text !== 'setItem' || n.arguments.length < 2) return;
     const a = unwrap(n.arguments[0]);
     const key = ts.isStringLiteralLike(a) ? a.text : ts.isIdentifier(a) ? (local.get(a.text) ?? imported.get(a.text)) : undefined;
-    if (key !== undefined) out.push({ key, value: n.arguments[1].getText(sf), serializer: writerSerializer(n.arguments[1]) });
+    if (key !== undefined) {
+      const value = n.arguments[1];
+      if (ts.isIdentifier(unwrap(value))) checker ??= writerChecker(sf);
+      out.push({ key, value: value.getText(sf), serializer: writerSerializer(value, checker) });
+    }
   });
   return out;
 }
@@ -943,7 +958,7 @@ console.log('\n6. the wiring: the boot call, and the load that leaves no way bac
 const red = [...failed].sort();
 console.log('');
 const OWN = { dropkey: '0', versiontable: '1', norow: '1', onebyte: '2', bootwrite: '2', noaside: '3', journalfirst: '3', pileup: '4',
-  nocopycheck: '3', hidebehind: '3', twins: '3', numberonly: '4', nomaincall: '6', assign: '6', partrow: '1', partrowus: '1', partbrief: '1', partagent: '1', partreturn: '1', partfarewell: '1', partpress: '1', partgamelog: '1', partballon: '1', partplayoffs: '1', stadiumserializer: '0' };
+  nocopycheck: '3', hidebehind: '3', twins: '3', numberonly: '4', nomaincall: '6', assign: '6', partrow: '1', partrowus: '1', partbrief: '1', partagent: '1', partreturn: '1', partfarewell: '1', partpress: '1', partgamelog: '1', partballon: '1', partplayoffs: '1', stadiumserializer: '0', wonderkidserializer: '0' };
 /* A lie in the table or a write on every boot is also seen by the sections that boot the keeper. A card that hides
    behind the save being played is also seen where the quiet copy sits in front of older backups. */
 const ALSO = { versiontable: ['2', '3', '4', '5'], bootwrite: ['3', '4', '5'], norow: ['4'], hidebehind: ['4'] };
@@ -952,8 +967,9 @@ if (CONTROL) {
   /* Release AW closing pass: a part control must fire on its OWN sentence, the one that names the part it left
      out, and on no other part. A red section alone would also be what a broken fixture gives. */
   const ownPart = PART_CONTROLS[CONTROL]?.[1];
-  if (CONTROL === 'stadiumserializer' && !failLines.some(line => line.startsWith('/stadium-tycoon:') && line.includes('but not with serializeTycoon(...)'))) {
-    console.log('simSaveKeeper control stadiumserializer: DID NOT FIRE on the Stadium writer.');
+  const serializer = { stadiumserializer: ['/stadium-tycoon', 'serializeTycoon'], wonderkidserializer: ['/wonderkid-factory', 'serialize'] }[CONTROL];
+  if (serializer && !failLines.some(line => line.startsWith(serializer[0] + ':') && line.includes('but not with ' + serializer[1] + '(...)'))) {
+    console.log(`simSaveKeeper control ${CONTROL}: DID NOT FIRE on the ${serializer[0]} writer.`);
     process.exit(2);
   }
   const ownLine = ownPart ? failLines.find(line => line.includes(`(${ownPart}=`) && line.includes('has a row for it')) : null;
