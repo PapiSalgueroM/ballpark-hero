@@ -253,6 +253,12 @@ Soccer Perfect Season draws 11 real clubs from the pinned October 2026 pool of 5
 
 The 32 paired outcome checks agreed with an independent slot assignment and measured 50.19 points between the strongest and weakest drafts. The flattened odds control dropped that gap to zero and failed. Eight focused tests, app types, both builds, three scoped snapshots, 18 offline readers and all 16 existing size caps passed. The 320px and 390px phone checks covered both verdicts, rerolls, saved draft and match progress, and two local completion payloads. The source migration stages the 100-point leaderboard cap for the release lane and has not been applied.
 
+## 2026-11-12: Club Manager keeps league stats after a departure
+
+An accepted January sale removed the player from both the league leaders and the Golden Boot race. The regular transfer-list flow reproduced it for Viktor Gyökeres after 12 Arsenal league goals and Alexander Isak after 13 for Liverpool. Both sales still updated ownership and left the clubs' team totals intact.
+
+The current season now keeps the league line earned before a sale, release, outgoing loan, early loan return or part exchange. Each line stays with its original club and league, and a recall restores the player's running line once. The book uses only its covered rounds. The old scorer race can read the complete retained line. The rival book has no stable player ID for linking every historical row, so ambiguous stints stay labelled by club. Older saves carry no new row until a future departure, and rollover clears the active snapshots after the season awards are settled.
+
 ## 2026-11-01 20:55 EDT, Claude session K (games): RELEASE BV IS LIVE (deployment 96c67a3b, main 7bd3e99a1)
 
 LIVE: release-bv-gate 7bd3e99a1 fast forwarded onto main from 19911f815 and published 20:54 EDT as deployment
