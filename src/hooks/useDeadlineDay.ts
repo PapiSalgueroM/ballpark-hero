@@ -77,6 +77,17 @@ function summaryOf(run: DeadlineRun): DeadlineDailySummary | null {
   return g ? { club: run.setup.club, letter: g.letter, score: g.score, filled: g.filled, needs: g.needs } : null;
 }
 
+function readDailyRun(date: string, club: string) {
+  return readDailyRecord(DEADLINE_SLUG, date, f => {
+    const actions = readActions(f.actions);
+    if (!actions || f.club !== club) return null;
+    const done = f.done === true && typeof f.letter === 'string' && LETTERS.includes(f.letter as GradeLetter)
+      ? { club, letter: f.letter as GradeLetter, score: Number(f.score) || 0, filled: Number(f.filled) || 0, needs: Number(f.needs) || 0 }
+      : null;
+    return { actions, done };
+  });
+}
+
 export function useDeadlineDay() {
   const today = useRef(getTodayET()).current;
   const daily = useMemo(() => dailyDeadlineDay(today), [today]);
@@ -96,14 +107,7 @@ export function useDeadlineDay() {
   /* What is waiting in storage, read after mount so nothing from the clock or
      the store lands in the first render. */
   useEffect(() => {
-    const rec = readDailyRecord(DEADLINE_SLUG, today, f => {
-      const actions = readActions(f.actions);
-      if (!actions || f.club !== daily.club) return null;
-      const done = f.done === true && typeof f.letter === 'string' && LETTERS.includes(f.letter as GradeLetter)
-        ? { club: daily.club, letter: f.letter as GradeLetter, score: Number(f.score) || 0, filled: Number(f.filled) || 0, needs: Number(f.needs) || 0 }
-        : null;
-      return { actions, done };
-    });
+    const rec = readDailyRun(today, daily.club);
     if (rec?.done) setDailyDone(rec.done);
     else if (rec && rec.actions.length) setDailySaved(rec.actions);
     try {
@@ -146,18 +150,31 @@ export function useDeadlineDay() {
     }
   }, []);
 
+  const showSavedDailyResult = useCallback((setup: DeadlineSetup) => {
+    if (!setup.daily) return false;
+    const done = readDailyRun(setup.daily, setup.club)?.done;
+    if (!done) return false;
+    setDailyDone(done);
+    setDailySaved(null);
+    setRun(null);
+    setNotice(null);
+    setPhase('menu');
+    return true;
+  }, []);
+
   /* Opening the day starts a Club Manager career and reads its market, so the
      loading card paints first. */
   const open = useCallback((setup: DeadlineSetup, actions: DeadlineAction[] = []) => {
     setPhase('loading');
     setNotice(null);
     window.setTimeout(() => {
+      if (showSavedDailyResult(setup)) return;
       const r = actions.length ? replayDeadlineDay(setup, actions) : startDeadlineDay(setup);
       if (r.grade) markRestoredFinish(DEADLINE_SLUG);
       setRun(r);
       setPhase(r.grade ? 'done' : 'play');
     }, 30);
-  }, []);
+  }, [showSavedDailyResult]);
 
   const startDaily = useCallback(() => {
     open({ club: daily.club, seed: daily.seed, daily: daily.daily }, dailySaved ?? []);
@@ -181,7 +198,7 @@ export function useDeadlineDay() {
   /* One move. A move the frame or the engine refuses returns the same run,
      and the screen says why instead of a button that does nothing. */
   const apply = useCallback((next: DeadlineRun, why: string) => {
-    if (!run) return;
+    if (!run || showSavedDailyResult(run.setup)) return;
     if (next === run) {
       setNotice(why);
       return;
@@ -190,7 +207,7 @@ export function useDeadlineDay() {
     setRun(next);
     persist(next);
     if (next.grade) setPhase('done');
-  }, [run, persist]);
+  }, [run, persist, showSavedDailyResult]);
 
   const callClub = useCallback((i: number) => {
     if (!run) return;
