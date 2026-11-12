@@ -70,28 +70,30 @@ interface KnockoutBracketProps {
   /** Round 395: the rounds as built from the picks, so the page can score them. */
   onRoundsChange?: (rounds: BracketMatch[][]) => void;
   autoFillRef?: MutableRefObject<AutoFillHandle | null>;
+  sharedPicks?: KnockoutPicks;
 }
 
-const KnockoutBracket = ({ seeds, bestThirds, onChampionChange, onRoundsChange, autoFillRef }: KnockoutBracketProps) => {
+const KnockoutBracket = ({ seeds, bestThirds, onChampionChange, onRoundsChange, autoFillRef, sharedPicks }: KnockoutBracketProps) => {
+  const readOnly = sharedPicks !== undefined;
   const signature = useMemo(() => wc2026SeedSignature(seeds, bestThirds), [seeds, bestThirds]);
   const signatureRef = useRef(signature);
-  const [picks, setPicks] = useState<KnockoutPicks>(() => loadPicks(signature));
-  const activePicks = signatureRef.current === signature ? picks : {};
+  const [picks, setPicks] = useState<KnockoutPicks>(() => sharedPicks ?? loadPicks(signature));
+  const activePicks = sharedPicks ?? (signatureRef.current === signature ? picks : {});
   const [roundLoading, setRoundLoading] = useState<number | null>(null);
   const roundTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
-    if (signatureRef.current !== signature) return;
+    if (readOnly || signatureRef.current !== signature) return;
     if (Object.keys(picks).length === 0) {
       clearWc2026ChildStorage(localStorage, false);
       return;
     }
     safeSetItem(WC2026_STORAGE_KEYS.knockout, JSON.stringify(picks));
     safeSetItem(WC2026_STORAGE_KEYS.knockoutSignature, signature);
-  }, [picks, signature]);
+  }, [picks, signature, readOnly]);
 
   useEffect(() => {
-    if (signatureRef.current === signature) return;
+    if (readOnly || signatureRef.current === signature) return;
     signatureRef.current = signature;
     clearWc2026ChildStorage(localStorage, false);
     if (roundTimerRef.current) clearTimeout(roundTimerRef.current);
@@ -100,7 +102,7 @@ const KnockoutBracket = ({ seeds, bestThirds, onChampionChange, onRoundsChange, 
     setPicks({});
     onChampionChange?.("");
     onRoundsChange?.([]);
-  }, [signature, onChampionChange, onRoundsChange]);
+  }, [signature, onChampionChange, onRoundsChange, readOnly]);
 
   useEffect(() => () => {
     if (roundTimerRef.current) clearTimeout(roundTimerRef.current);
@@ -227,10 +229,10 @@ const KnockoutBracket = ({ seeds, bestThirds, onChampionChange, onRoundsChange, 
 
   // Expose auto-fill to parent via ref
   useEffect(() => {
-    if (autoFillRef) {
+    if (!readOnly && autoFillRef) {
       autoFillRef.current = { autoFillAllRounds };
     }
-  }, [autoFillRef, autoFillAllRounds]);
+  }, [autoFillRef, autoFillAllRounds, readOnly]);
 
   const champion = rounds[5]?.[0]?.winner || "";
   const thirdPlace = rounds[4]?.[0]?.winner || "";
@@ -266,7 +268,7 @@ const KnockoutBracket = ({ seeds, bestThirds, onChampionChange, onRoundsChange, 
       {champion && (
         <div className="text-center mb-6 py-5 rounded-xl bg-gradient-to-r from-[hsl(45,80%,12%)] via-[hsl(45,90%,18%)] to-[hsl(45,80%,12%)] border-2 border-[hsl(45,70%,35%)] shadow-lg shadow-[hsl(45,80%,30%)]/20">
           <p className="text-[hsl(45,90%,60%)] text-xs uppercase tracking-[0.2em] font-bold mb-2">
-            🏆 Your Predicted Champion 🏆
+            🏆 {readOnly ? "Predicted Champion" : "Your Predicted Champion"} 🏆
           </p>
           <p className="text-3xl sm:text-4xl font-black text-white drop-shadow-lg">
             <FlagImg name={champion} size={32} />{champion}
@@ -283,9 +285,11 @@ const KnockoutBracket = ({ seeds, bestThirds, onChampionChange, onRoundsChange, 
         <Trophy className="w-5 h-5 text-[hsl(45,90%,55%)]" />
         Knockout Bracket
       </h2>
-      <p className="text-[hsl(150,15%,50%)] text-xs sm:text-sm mb-4">
-        Click a team to pick them as the winner. They'll auto-advance to the next round.
-      </p>
+      {!readOnly && (
+        <p className="text-[hsl(150,15%,50%)] text-xs sm:text-sm mb-4">
+          Click a team to pick them as the winner. They'll auto-advance to the next round.
+        </p>
+      )}
 
       {allocationUnavailable && (
         <p
@@ -309,7 +313,7 @@ const KnockoutBracket = ({ seeds, bestThirds, onChampionChange, onRoundsChange, 
                   {ROUND_MATCH_COUNTS[rIdx]} match{ROUND_MATCH_COUNTS[rIdx] > 1 ? "es" : ""}
                 </span>
                 {/* Per-round auto-fill button */}
-                {roundHasUnfilled(rIdx) && (
+                {!readOnly && roundHasUnfilled(rIdx) && (
                   <button
                     onClick={() => handleAutoFillRound(rIdx)}
                     disabled={roundLoading === rIdx}
@@ -338,6 +342,7 @@ const KnockoutBracket = ({ seeds, bestThirds, onChampionChange, onRoundsChange, 
                       match={match}
                       onPick={handlePick}
                       isFinal={rIdx === 5}
+                      readOnly={readOnly}
                     />
                   </div>
                 ))}
@@ -383,9 +388,10 @@ interface MatchCardProps {
   match: BracketMatch;
   onPick: (id: string, winner: string) => void;
   isFinal?: boolean;
+  readOnly: boolean;
 }
 
-const MatchCard = ({ match, onPick, isFinal }: MatchCardProps) => {
+const MatchCard = ({ match, onPick, isFinal, readOnly }: MatchCardProps) => {
   const { id, teamA, teamB, winner } = match;
   const bothTeams = !!teamA && !!teamB && teamA !== "TBD" && teamB !== "TBD";
 
@@ -396,7 +402,7 @@ const MatchCard = ({ match, onPick, isFinal }: MatchCardProps) => {
   };
 
   const teamRow = (team: string, isWinner: boolean) => {
-    const canClick = bothTeams && !!team;
+    const canClick = !readOnly && bothTeams && !!team;
     return (
       <button
         disabled={!canClick}
