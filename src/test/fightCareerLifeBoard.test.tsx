@@ -4,7 +4,7 @@
  * tiles, a card waiting on the save is the first thing shown and comes back
  * after a reload, and a tile opens its panel and Back closes it.
  */
-import { cleanup, fireEvent, render } from '@testing-library/react';
+import { cleanup, fireEvent, render, within } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import FightCareerBoard from '@/components/fight-career/FightCareerBoard';
 import { newFightCareer, runCamp, takeFight } from '@/lib/fightCareer';
@@ -66,6 +66,31 @@ describe('Fight Career board, the life between fights', () => {
     expect(view.container.textContent).toContain('Cut man');
     fireEvent.click(view.getByText('Back'));
     expect(view.container.textContent).toContain('What do you take?');
+  });
+
+  it('explains moving camp weeks and grows attributes only when camp finishes', async () => {
+    const st = lifeNewCareer('Camp Rookie', 'light', 'slugger', 'puncher', 'dealmaker', 'board-camp-help');
+    localStorage.setItem(KEY, JSON.stringify({ st, phase: 'hub' }));
+    const view = render(<FightCareerBoard />);
+    fireEvent.click(await view.findByText(st.offers[0].label));
+
+    expect(view.getByText(/Use - to free a week and \+ to move it/)).toBeInTheDocument();
+    expect(view.getByText(/Finishing camp can improve the attributes you trained/)).toBeInTheDocument();
+    const priorSave = localStorage.getItem(KEY);
+    const conditioning = within(view.getByText('Conditioning').parentElement!);
+    const speed = within(view.getByText('Speed').parentElement!);
+    expect(speed.getByRole('button', { name: '+' })).toBeDisabled();
+    fireEvent.click(conditioning.getByRole('button', { name: '-' }));
+    expect(view.getByText(/You have 1 week left to place/)).toBeInTheDocument();
+    fireEvent.click(speed.getByRole('button', { name: '+' }));
+    expect(speed.getByRole('button', { name: '+' })).toBeDisabled();
+    expect(localStorage.getItem(KEY)).toBe(priorSave);
+
+    fireEvent.click(view.getByRole('button', { name: 'Finish camp' }));
+    const saved = JSON.parse(localStorage.getItem(KEY)!);
+    expect(saved.phase).toBe('plan');
+    expect(saved.st.camp).toEqual({ ...PLAN, conditioning: 1, speed: 2 });
+    expect(saved.st.fighter.attrs.speed).toBeGreaterThan(st.fighter.attrs.speed);
   });
 
   /* Round 916 review: a game plan save from before the round has no offerId

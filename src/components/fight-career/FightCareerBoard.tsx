@@ -535,7 +535,8 @@ export default function FightCareerBoard() {
           </p>
           <p className="mb-3 text-xs text-muted-foreground">
             You have {CAMP_WEEKS - campTotal} week{CAMP_WEEKS - campTotal === 1 ? '' : 's'} left to place.
-            Spreading them keeps you ready everywhere. Piling them on one thing makes you sharp there and short of gas.
+            Use - to free a week and + to move it. Spreading weeks across drills keeps you ready everywhere.
+            Finishing camp can improve the attributes you trained if your fighter has room to grow.
           </p>
           <div className="space-y-2">
             {rows.map(r => (
