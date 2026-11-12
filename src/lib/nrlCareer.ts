@@ -214,14 +214,21 @@ function baseSalary(rating: number, year: number): number {
   return minimumSalary + Math.round(Math.max(0, rating - 54) ** 2 * 340 / 5_000) * 5_000;
 }
 
-function marketEntry(state: NrlCareerState, player: NrlCareerPlayer): NrlCareerMarketEntry | null {
+function marketStartYear(state: NrlCareerState, player: NrlCareerPlayer): number | null {
   if (player.futureContract || player.age >= RETIREMENT_AGE || state.season.year === NRL_LAST_YEAR) return null;
   const { contract } = player;
   const { clubId, year } = state.season;
   const own = contract?.clubId === clubId;
   if (contract && !own && contract.endYear !== year) return null;
   const startYear = (contract?.endYear ?? year) + 1;
-  if (startYear > NRL_LAST_YEAR) return null;
+  return startYear <= NRL_LAST_YEAR ? startYear : null;
+}
+
+function marketEntry(state: NrlCareerState, player: NrlCareerPlayer): NrlCareerMarketEntry | null {
+  const startYear = marketStartYear(state, player);
+  if (startYear === null) return null;
+  const { contract } = player;
+  const own = contract?.clubId === state.season.clubId;
   const askingSalary = Math.max(baseSalary(player.rating, startYear), own ? Math.floor(contract!.salary * 0.94) : 0);
   return { player, startYear, askingSalary, kind: own ? 'renewal' : contract ? 'rival' : 'freeAgent' };
 }
@@ -231,6 +238,16 @@ export function nrlCareerMarket(state: NrlCareerState): NrlCareerMarketEntry[] {
     const entry = marketEntry(state, player);
     return entry ? [entry] : [];
   });
+}
+
+export function nrlRivalSquad(state: NrlCareerState, clubId: string) {
+  const { year } = state.season;
+  if (clubId === state.season.clubId) return [];
+  return squadAt(state.players, clubId, year).sort(byRating).map(player => ({
+    player,
+    contractEnd: contractIn(player, year)!.endYear,
+    marketYear: marketStartYear(state, player),
+  }));
 }
 
 function isRecruitmentTarget(state: NrlCareerState, id: string): boolean {
