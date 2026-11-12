@@ -14,6 +14,7 @@ import {
   boardTerms,
   clockLabel,
   deskRead,
+  gradeWindow,
   hoursLeft,
   needBoxes,
   rivalOn,
@@ -53,7 +54,7 @@ function Dots({ left, of }: { left: number; of: number }) {
 }
 
 export function Strip({ run }: { run: DeadlineRun }) {
-  const filled = new Set(run.targets.filter(t => t.status === 'signed').map(t => t.need)).size;
+  const { filled } = gradeWindow(run);
   const left = hoursLeft(run);
   return (
     <div className="grid grid-cols-3 gap-2 rounded-lg border border-border bg-card p-3 text-center" data-testid="deadline-strip">
@@ -92,15 +93,16 @@ function tileLine(run: DeadlineRun, t: DeadlineTarget, i: number): string {
 export function Desk({ run, onOpen, onSales, hook }: { run: DeadlineRun; onOpen: (i: number) => void; onSales: () => void; hook: Hook }) {
   const [confirmEnd, setConfirmEnd] = useState(false);
   const salesOpen = run.sales.filter(s => !s.done).length;
+  const { filledBy } = gradeWindow(run);
   return (
     <div className="space-y-3" data-testid="deadline-desk">
       {run.needs.map((need, ni) => {
-        const filledBy = run.targets.find(t => t.need === ni && t.status === 'signed');
+        const player = filledBy[ni];
         return (
           <div key={ni} className="rounded-lg border border-border bg-card p-3">
             <div className="flex items-baseline justify-between gap-2">
               <div className="text-sm font-semibold capitalize">{slotWord(need.label)}</div>
-              <div className="text-[11px] text-muted-foreground">{filledBy ? `Filled by ${filledBy.mp.name}` : `Needs a ${need.min} or better`}</div>
+              <div className="text-[11px] text-muted-foreground">{player ? `Filled by ${player}` : `Needs a ${need.min} or better`}</div>
             </div>
             <div className="text-[11px] text-muted-foreground">
               {need.incumbent ? `Starting now: ${need.incumbent} (${need.incumbentRating})` : 'Nobody starts there now'}
