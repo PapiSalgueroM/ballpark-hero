@@ -22,7 +22,7 @@ import {
   NRL_MAX_BENCH_USED, NRL_ROLES,
   type NrlAction, type NrlCoachRole, type NrlLiveHalf, type NrlManagerState, type NrlMatchResult, type NrlTactic,
 } from '@/lib/nrlManager';
-import { createNrlCareer, nrlOppositionReport, reduceNrlCareer, type NrlCareerAction, type NrlCareerState } from '@/lib/nrlCareer';
+import { createNrlCareer, nrlOppositionReport, nrlRivalSquad, reduceNrlCareer, type NrlCareerAction, type NrlCareerState } from '@/lib/nrlCareer';
 import { nrlScorePoints, nrlScoringLeaders, nrlSquadSeasonStats, nrlTryLeaders, type NrlSquadStatsScope } from '@/lib/nrlPlayerScoring';
 import { NRL_SAVE_ENTRY, readNrlSaveSlot, writeNrlSaveSlot } from '@/lib/nrlSaveSlots';
 import { saveFence } from '@/lib/saveFence';
@@ -624,8 +624,15 @@ function Squad({ season, onAction, disabled }: {
   );
 }
 
-function Ladder({ season }: { season: NrlManagerState }) {
+function Ladder({ career }: { career: NrlCareerState }) {
+  const { season } = career;
+  const [scoutOpen, setScoutOpen] = useState(false);
+  const [scoutClubId, setScoutClubId] = useState('');
   const rows = nrlLadder(season);
+  const clubs = nrlSeasonPlan(season.year).clubs;
+  const rivals = clubs.filter(club => club.id !== season.clubId);
+  const rival = scoutOpen ? rivals.find(club => club.id === scoutClubId) : undefined;
+  const rank = rows.findIndex(row => row.clubId === rival?.id && row.played > 0) + 1;
   return (
     <section className="rounded-xl border border-border bg-card p-3 sm:p-4" aria-labelledby="nrl-ladder">
       <h2 id="nrl-ladder" className="font-display text-lg font-bold">{season.year} ladder</h2>
@@ -659,6 +666,50 @@ function Ladder({ season }: { season: NrlManagerState }) {
           ))}
         </tbody>
       </table>
+      <details className="mt-3 rounded-lg border border-border bg-background px-3"
+        onToggle={event => setScoutOpen(event.currentTarget.open)}>
+        <summary className="flex min-h-11 cursor-pointer items-center rounded-md text-sm font-bold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
+          Scout a club
+        </summary>
+        <div className="space-y-3 pb-3">
+          <label className="block max-w-xs space-y-1 text-sm font-semibold">
+            <span>Club to scout</span>
+            <select value={scoutClubId} onChange={event => setScoutClubId(event.target.value)}
+              className="min-h-11 w-full rounded-lg border border-input bg-background px-3 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
+              <option value="">Choose a rival club</option>
+              {rivals.map(club => <option key={club.id} value={club.id}>{club.name}</option>)}
+            </select>
+          </label>
+          {rival && (
+            <div>
+              <h3 className="break-words text-sm font-bold">{rival.name} squad{rank > 0 && ` · Ladder ${rank}`}</h3>
+              <p className="mt-1 text-xs text-muted-foreground">Generated squad for this career.</p>
+              {career.legacySeason && <p className="mt-1 text-xs text-muted-foreground">This imported season uses its original opponent ratings for matches.</p>}
+              <div tabIndex={0} role="region" aria-label={`${rival.name} squad`}
+                className="mt-2 max-h-80 overflow-y-auto rounded-md border border-border px-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
+                <ul className="divide-y divide-border text-sm">
+                  {nrlRivalSquad(career, rival.id).map(({ player, contractEnd, marketYear }) => {
+                    const future = player.futureContract;
+                    const destination = future && clubs.find(club => club.id === future.clubId);
+                    return (
+                      <li key={player.id} className="break-words py-2">
+                        <p className="font-semibold">{player.name}</p>
+                        <p className="text-muted-foreground">{player.role} · Age {player.age} · {player.rating} OVR</p>
+                        <p className="text-xs text-muted-foreground">
+                          Signed through {contractEnd}
+                          {future && (future.clubId === rival.id ? ` · Extended through ${future.endYear}`
+                            : ` · Joins ${destination?.shortName ?? 'another club'} in ${future.startYear}`)}
+                          {marketYear !== null && ` · On the ${marketYear} market`}
+                        </p>
+                      </li>
+                    );
+                  })}
+                </ul>
+              </div>
+            </div>
+          )}
+        </div>
+      </details>
     </section>
   );
 }
@@ -800,7 +851,7 @@ function NrlManagerScreen({ entry, showSlots }: { entry: ContinueSave; showSlots
               <p className="rounded-xl border border-border bg-card p-3 text-sm">Finish the live match in Match centre to make changes.</p>
             )}
             {panel === 'squad' && <Squad season={season} onAction={dispatch} disabled={moved || live} />}
-            {panel === 'ladder' && <Ladder season={season} />}
+            {panel === 'ladder' && <Ladder career={career} />}
             {panel === 'office' && (
               <>
                 <div className="grid grid-cols-2 gap-2 sm:grid-cols-5" role="group" aria-label="Club office screens">
