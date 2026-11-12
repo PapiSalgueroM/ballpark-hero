@@ -11,10 +11,12 @@ const promiseWords: Record<SoccerPressPromise['outcome'], string> = {
 };
 
 function PromiseLine({ promise }: { promise: SoccerPressPromise }) {
+  const settledTitle = promise.metric === 'leagueTitle' && (promise.outcome === 'met' || promise.outcome === 'missed');
   return <div data-press-promise={promise.outcome} className="space-y-1 rounded-xl border border-border bg-secondary/50 p-3 text-sm">
     <p className="font-bold">{promiseWords[promise.outcome]}</p>
     <p>{promise.label}</p>
-    {promise.actual !== undefined && <p className="text-xs text-muted-foreground">Recorded: {promise.actual}{promise.actualRating !== undefined ? `, ${promise.actualRating.toFixed(1)} rating` : ''}{promise.settledYear !== undefined ? ` in ${season(promise.settledYear)}` : ''}</p>}
+    {settledTitle && <p className="text-xs text-muted-foreground">Recorded: {promise.outcome === 'met' ? 'league champions' : 'league title missed'}{promise.settledYear !== undefined ? ` in ${season(promise.settledYear)}` : ''}</p>}
+    {promise.metric !== 'leagueTitle' && promise.actual !== undefined && <p className="text-xs text-muted-foreground">Recorded: {promise.actual}{promise.actualRating !== undefined ? `, ${promise.actualRating.toFixed(1)} rating` : ''}{promise.settledYear !== undefined ? ` in ${season(promise.settledYear)}` : ''}</p>}
   </div>;
 }
 
@@ -64,9 +66,9 @@ export default function PressRoom({ career, onCareer, onClose }: {
         {screen === 'help' && <>
           <h3 className="font-bold">Say it, then back it up</h3>
           <p className="text-sm">One answer after each season you played. The question uses your saved club and performance. An answer changes morale and popularity once. Reading or closing this room changes nothing.</p>
-          <p className="text-sm">Keep it calm: morale +3, popularity -2. Own your season: popularity +3, morale -3 and credibility +2. Make a public promise: morale -4 now, with a target for your next season at your current club. The promise names that club even if you just moved.</p>
-          <p className="text-sm">Keep the promise: popularity +6, morale +3 and credibility +8. Miss it: popularity -6, morale -3 and credibility -8. A club move, a severe injury or a year you could not play closes it without those rewards or penalties. The target follows your position when you answered.</p>
-          <div className="rounded-xl bg-secondary p-3 text-sm"><strong>Example:</strong> Your striker scored 12. Promise 15 next season at the same club. A recorded 16 keeps it. A recorded 13 misses it. Move clubs and it closes with no performance penalty.</div>
+          <p className="text-sm">Keep it calm: morale +3, popularity -2. Own your season: popularity +3, morale -3 and credibility +2. A public promise costs 4 morale now. You can promise a performance target or the league title for your next played season at your current club.</p>
+          <p className="text-sm">Keep the promise: popularity +6, morale +3 and credibility +8. Miss it: popularity -6, morale -3 and credibility -8. A club move, a severe injury or a year you could not play closes it without those rewards or penalties. Performance targets follow your position when you answered. A league promise uses the league result saved for that season.</p>
+          <div className="rounded-xl bg-secondary p-3 text-sm"><strong>Example:</strong> Your striker scored 12. Promise 15 next season at the same club. A recorded 16 keeps it. A recorded 13 misses it. Move clubs and it closes with no performance penalty. If you promise the league title, winning the league at that club keeps it.</div>
           <p className="text-xs text-muted-foreground">Career choices can change your future season. This room never changes a season already played or reveals the pending award ballot. Promises left at retirement stay unresolved if you play no following season.</p>
           <button type="button" className={`${BUTTON} w-full bg-primary text-primary-foreground`} data-press-start onClick={() => setScreen(helpReturn ?? (view.eligible ? 'question' : 'history'))}>{helpReturn ? 'Back to the room' : view.eligible ? 'Answer for your season' : 'Read your answers'}</button>
         </>}

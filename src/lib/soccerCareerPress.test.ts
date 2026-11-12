@@ -207,6 +207,48 @@ describe('Soccer Press facts and questions', () => {
 
 describe('Soccer Press once-only settlement', () => {
   it.each([
+    [true, 'met', 1, 56, 49, 58], [false, 'missed', 0, 44, 43, 42],
+    [undefined, 'excused', undefined, 50, 46, 50],
+  ] as const)('uses the saved league title flag %s to settle once', (title, outcome, actual, popularity, morale, credibility) => {
+    const state = answerSoccerPress(career(), 'league-title');
+    const row = record(state, { leagueTitle: title });
+    if (title === undefined) delete (row as Partial<SeasonRecord>).leagueTitle;
+    vi.spyOn(Math, 'random').mockImplementation(() => { throw new Error('Press settlement must not draw'); });
+    const before = structuredClone(row);
+    settleSoccerPress(state, row);
+    const promise = state.pressRoom!.history[0].promise!;
+    expect(promise).toMatchObject({ metric: 'leagueTitle', target: 1, outcome, settledYear: 2029, settledIndex: 1 });
+    expect(promise.actual).toBe(actual);
+    expect([state.popularity, state.morale, state.pressRoom!.credibility]).toEqual([popularity, morale, credibility]);
+    expect(row).toEqual(before);
+    expect(pressRoomView(structuredClone(state)).history[0].promise).toEqual(promise);
+    const once = structuredClone(state);
+    settleSoccerPress(state, row);
+    expect(state).toEqual(once);
+  });
+
+  it.each([
+    [{ club: 'PSV', leagueTitle: true }, 'moved'],
+    [{ apps: 0, leagueTitle: true }, 'excused'],
+    [{ injurySevere: true, leagueTitle: true }, 'excused'],
+  ] as const)('closes a league promise without a reward on %j', (patch, outcome) => {
+    const state = answerSoccerPress(career(), 'league-title');
+    const row = record(state, patch);
+    settleSoccerPress(state, row);
+    expect(pressRoomView(state).history[0].promise?.outcome).toBe(outcome);
+    expect([state.popularity, state.morale, state.pressRoom!.credibility]).toEqual([50, 46, 50]);
+  });
+
+  it('shares one pending promise across league and performance choices', () => {
+    const state = answerSoccerPress(career(), 'league-title');
+    record(state);
+    const choices = pressRoomView(state).options.filter(option => option.id === 'ambitious' || option.id === 'league-title');
+    expect(choices.map(option => option.eligible)).toEqual([false, false]);
+    expect(answerSoccerPress(state, 'ambitious')).toBe(state);
+    expect(answerSoccerPress(state, 'league-title')).toBe(state);
+  });
+
+  it.each([
     ['ST', { goals: 17 }, 'met', 56, 49, 58], ['ST', { goals: 16 }, 'missed', 44, 43, 42],
     ['GK', { cleanSheets: 12 }, 'met', 56, 49, 58], ['CM', { assists: 10 }, 'met', 56, 49, 58],
     ['CB', { apps: 30, rating: 7 }, 'met', 56, 49, 58], ['CB', { apps: 30, rating: 6.9 }, 'missed', 44, 43, 42],
