@@ -1,11 +1,57 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
-import { FALLBACK_CLUBS, type CareerState, type SeasonRecord } from '@/lib/soccerCareerEngine';
+import {
+  acceptLoan, acceptOffer, advanceProSeason, advanceYouthYear, applyEventChoice, dismissBallonDor,
+  dismissNewspaper, dismissSocialMediaPhase, dismissSummary, FALLBACK_CLUBS, initCareer, stayAtClub,
+  type CareerState, type SeasonRecord,
+} from '@/lib/soccerCareerEngine';
+import { mulberry32 } from '@/lib/leagueCore';
+import { chooseProgramme } from '@/lib/soccerCareerProgramme';
 import { buildSoccerSeasonCtx, SOCCER } from '@/lib/season/soccer';
 import { deriveSeason, tableAt } from '@/lib/season/core';
 
 afterEach(() => vi.restoreAllMocks());
+describe('new Soccer Career season availability', () => {
+  it.each([
+    { name: 'Arsenal injury', start: 2022, seed: 6, year: 2025, club: 'Arsenal', apps: 5, leagueApps: 5, injurySevere: true },
+    { name: 'AC Milan loan injury', start: 2022, seed: 43, year: 2025, club: 'AC Milan', apps: 26, leagueApps: 26, injurySevere: true, loan: true },
+    { name: 'healthy Arsenal season', start: 2022, seed: 4, year: 2025, club: 'Arsenal', apps: 20, leagueApps: 14, injurySevere: false },
+    { name: 'injury with a league world', start: 2023, seed: 6, year: 2026, club: 'Arsenal', apps: 5, leagueApps: 5, injurySevere: true },
+    { name: 'AC Milan missed appearance clause', start: 2022, seed: 677, year: 2025, club: 'AC Milan', apps: 23, leagueApps: 23, injurySevere: false, loan: true, bonus: 0, injury: 'Hamstring tear' },
+    { name: 'AC Milan earned appearance clause', start: 2022, seed: 30, year: 2025, club: 'AC Milan', apps: 24, leagueApps: 24, injurySevere: false, loan: true, bonus: 164380, injury: 'Metatarsal fracture' },
+  ])('records league appearances for $name', ({ start, seed, loan, year, club, apps, leagueApps, injurySevere, bonus, injury }) => {
+    const clubs = FALLBACK_CLUBS;
+    const random = vi.spyOn(Math, 'random').mockImplementation(mulberry32(1));
+    const stats = { pace: 62, shooting: 62, passing: 62, dribbling: 62, defending: 62, physical: 62, reflexes: 62 };
+    let c = initCareer('Rehab Contract Test', 'England', 'CM', '2020s', stats, 62, start, clubs, null, 83, null, null, 'Arsenal');
+    c = advanceYouthYear(c, clubs);
+    c = acceptOffer(c, c.pendingOffers.find(o => o.club.name === 'Arsenal')!);
+    c = dismissNewspaper(advanceProSeason(c, clubs));
+    c = dismissSummary(c, clubs);
+    c = dismissBallonDor(c, clubs);
+    c = dismissSocialMediaPhase(c, clubs);
+    for (let i = 0; i < 8 && c.phase === 'random_events'; i++) c = applyEventChoice(c, 0, clubs);
+    expect(c.phase).toBe('transfer_window');
+    c = loan ? acceptLoan(c, c.pendingLoanOffers![0]) : stayAtClub(c);
+    expect(c.phase).toBe('playing');
+    if (bonus !== undefined) {
+      c = chooseProgramme(c, 'bonuses', 'appearances');
+      expect(c.programme?.plan?.choices.bonuses).toBe('appearances');
+    }
+
+    random.mockImplementation(mulberry32(seed));
+    const season = advanceProSeason(c, clubs).seasons.at(-1)!;
+    if (bonus !== undefined) {
+      expect(season.injury).toBe(injury);
+      expect(season.programme?.bonusEuros).toBe(bonus);
+    }
+    expect(season).toMatchObject({ year, club, apps, leagueApps, injurySevere });
+    if (loan) expect(season.onLoanFrom).toBe('Arsenal');
+    expect(!!season.leagueWorld).toBe(year >= 2026);
+  });
+});
+
 const row: SeasonRecord = {
   year: 2007, age: 23, club: 'Bayern Munich', clubCountry: 'Germany', clubTier: 1,
   apps: 54, leagueApps: 35, goals: 33, assists: 22, cleanSheets: 0, yellowCards: 6, redCards: 0,
