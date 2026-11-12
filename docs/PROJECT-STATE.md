@@ -1,3 +1,9 @@
+## 2026-11-12: Build Your XI Mixed club pool
+
+Mixed adds 30 clubs, including Flamengo and Palmeiras, while keeping its 25 countries. The draw, reroll and reel use the expanded pool. Club year still uses its 29 qualified clubs and the chosen recorded year.
+
+The short labels use the previously audited exact stored names. All 35 original aliases are retained. The validator's matching alias source is staged for the release. [Club identity and record checks](audits/BUILD-XI-MIXED-CLUBS-2026-10-29.md)
+
 ## 2026-11-12 Footle Daily give up and shared saves
 
 Give up now checks the current Daily save before recording a loss. If another tab has finished or saved further, Footle takes that progress and keeps the existing guesses. An ordinary give up still records one loss and preserves the same save format.

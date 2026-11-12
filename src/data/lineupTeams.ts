@@ -17,19 +17,8 @@ export const nations: string[] = [
   'Switzerland', 'Morocco', 'Serbia', 'Poland', 'Cameroon',
 ];
 
-const allTeams: TeamAssignment[] = [
-  ...clubs.map((name) => ({ name, isNation: false })),
-  ...nations.map((name) => ({ name, isNation: true })),
-];
-
-/** Return a shuffled list of 11 unique teams for a game session */
-export function getRandomTeamAssignments(count = 11): TeamAssignment[] {
-  const shuffled = [...allTeams].sort(() => Math.random() - 0.5);
-  return shuffled.slice(0, count);
-}
-
 /**
- * THE EXACT STRINGS player_market_values USES FOR THE THIRTY CLUBS ABOVE.
+ * THE EXACT STRINGS player_market_values USES FOR MIXED CLUBS.
  *
  * Round 483. Until this round the dropdown scoped its pool with a substring
  * `ilike` on the club label, and the comment that used to live here admitted
@@ -91,7 +80,51 @@ export const CLUB_TABLE_NAMES: Record<string, string[]> = {
   'Lyon': ['Olympique Lyon'],
   'Celtic': ['Celtic FC'],
   'Galatasaray': ['Galatasaray'],
+  'Brighton': ['Brighton & Hove Albion'],
+  'Bournemouth': ['AFC Bournemouth'],
+  'Brentford': ['Brentford FC'],
+  'Crystal Palace': ['Crystal Palace'],
+  'Everton': ['Everton FC'],
+  'Fulham': ['Fulham FC'],
+  'Leeds United': ['Leeds United'],
+  'Nottingham Forest': ['Nottingham Forest'],
+  'Real Betis': ['Real Betis Balompié'],
+  'Villarreal': ['Villarreal CF'],
+  'Real Sociedad': ['Real Sociedad'],
+  'Celta Vigo': ['Celta de Vigo'],
+  'Lazio': ['SS Lazio'],
+  'Fiorentina': ['ACF Fiorentina'],
+  'Bologna': ['Bologna FC 1909'],
+  'Udinese': ['Udinese Calcio'],
+  'Stuttgart': ['VfB Stuttgart'],
+  'Mönchengladbach': ['Borussia Mönchengladbach'],
+  'Freiburg': ['SC Freiburg'],
+  'Lille': ['LOSC Lille'],
+  'Rennes': ['Stade Rennais FC'],
+  'Nice': ['OGC Nice'],
+  'Feyenoord': ['Feyenoord Rotterdam'],
+  'AZ Alkmaar': ['AZ Alkmaar'],
+  'Rangers': ['Rangers FC'],
+  'Fenerbahçe': ['Fenerbahce'],
+  'Beşiktaş': ['Besiktas JK'],
+  'Flamengo': ['CR Flamengo'],
+  'Palmeiras': ['Sociedade Esportiva Palmeiras'],
+  'Club América': ['CF América'],
 };
+
+/** Mixed deals every club in the exact records map. Club year has its own pool. */
+export const mixedClubs = Object.keys(CLUB_TABLE_NAMES);
+
+const allTeams: TeamAssignment[] = [
+  ...mixedClubs.map((name) => ({ name, isNation: false })),
+  ...nations.map((name) => ({ name, isNation: true })),
+];
+
+/** Return a shuffled list of 11 unique teams for a game session */
+export function getRandomTeamAssignments(count = 11): TeamAssignment[] {
+  const shuffled = [...allTeams].sort(() => Math.random() - 0.5);
+  return shuffled.slice(0, count);
+}
 
 /**
  * Release BT: clubs the Club year draft never deals, in the draw or a reroll.
