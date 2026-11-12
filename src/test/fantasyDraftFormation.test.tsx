@@ -8,7 +8,7 @@ import { recordCompletion } from '@/lib/completions';
 
 const remote = vi.hoisted(() => ({
   players: [] as DraftPlayer[],
-  criteria: null as string | null,
+  criteria: null as string | null | Promise<string | null>,
   readPool: vi.fn(),
   toast: vi.fn(),
 }));
@@ -16,7 +16,7 @@ vi.mock('@/integrations/supabase/client', () => ({
   supabase: {
     functions: { invoke: vi.fn(async (name: string) => {
       if (name !== 'fantasy-draft-daily') throw new Error('Unexpected fixture function: ' + name);
-      return { data: { criteria: remote.criteria }, error: null };
+      return { data: { criteria: await remote.criteria }, error: null };
     }) },
     from: vi.fn((table: string) => {
       if (table !== 'fantasy_draft_players') throw new Error('Unexpected fixture table: ' + table);
@@ -117,6 +117,41 @@ afterEach(() => {
 });
 
 describe('Fantasy Draft player pool recovery', () => {
+  it.each(['resolved', 'failed'] as const)('waits for the pending rule before allowing a first pick (%s)', async outcome => {
+    const rule = 'Under 25s: Every player must be 25 or younger';
+    let reply!: (value: string) => void;
+    let fail!: (reason: Error) => void;
+    remote.criteria = new Promise<string>((resolve, reject) => { reply = resolve; fail = reject; });
+    remote.players = remote.players.map(p => p.id === 'fixture-FWD-0' ? { ...p, age: 31 } : p);
+    const view = render(<FantasyDraft />);
+    const start = view.getByRole('button', { name: 'Start Draft' });
+    expect(start).toBeDisabled();
+    fireEvent.click(start);
+    expect(remote.readPool).not.toHaveBeenCalled();
+    expect(view.queryByRole('heading', { name: 'Player Pool' })).toBeNull();
+
+    await act(async () => {
+      if (outcome === 'resolved') reply(rule);
+      else fail(new Error('Fixture criteria unavailable'));
+    });
+    expect(view.getByText(outcome === 'resolved' ? rule : "Could not load today's criteria.")).toBeVisible();
+    expect(start).toBeEnabled();
+    await act(async () => { fireEvent.click(start); });
+    const olderPlayer = searchPlayer(view, remote.players.find(p => p.id === 'fixture-FWD-0')!);
+    if (outcome === 'resolved') {
+      expect(olderPlayer).toBeDisabled();
+      await pickPosition(view, 'GK');
+      expect(roster(view, 'Your XI')).toMatchObject([{ position: 'GK', age: 24 }]);
+    } else {
+      expect(olderPlayer).toBeEnabled();
+      fireEvent.click(olderPlayer);
+      expect(roster(view, 'Your XI')).toMatchObject([{ position: 'FWD', age: 31 }]);
+    }
+    expect(supabase.functions.invoke).toHaveBeenCalledExactlyOnceWith('fantasy-draft-daily', { timeout: 10_000 });
+    expect(remote.readPool).toHaveBeenCalledTimes(1);
+    expect(recordCompletion).not.toHaveBeenCalled();
+  });
+
   const failures = {
     empty: async () => ({ data: [], error: null }),
     error: async () => ({ data: null, error: { message: 'Fixture request failed' } }),
@@ -161,7 +196,7 @@ describe('Fantasy Draft player pool recovery', () => {
     expect(view.getByText('Round 1 • Pick 1/22', { exact: true })).toBeVisible();
     expect(view.getByText(criteria)).toBeVisible();
     expect(random).toHaveBeenCalledTimes(1);
-    expect(supabase.functions.invoke).toHaveBeenCalledExactlyOnceWith('fantasy-draft-daily');
+    expect(supabase.functions.invoke).toHaveBeenCalledExactlyOnceWith('fantasy-draft-daily', { timeout: 10_000 });
     await pickPosition(view, 'GK');
     expect(roster(view, 'Your XI')).toMatchObject([{ position: 'GK', age: 24 }]);
     expect(roster(view, 'AI XI')).toHaveLength(seat === 'ai' ? 1 : 0);
