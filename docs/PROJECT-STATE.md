@@ -1,3 +1,11 @@
+## 2026-11-12: NRL Manager opposition report
+
+Open Opposition report in Match centre to see the next rival’s ladder place and up to three played results, with scores shown from their side. The model’s attack and defence edges use the selected squad, preparation, tactic and venue. Positive edges favour your club. The report reads the current save without advancing a match.
+
+The report was read through 80 seasons and 17,520 fixtures, with exact prior results, saves and rollovers. The 63 NRL tests include saved form orientation, changes from tactics and lawful lineup selections, home and away legacy inputs and a check that opening the read model takes no random draws.
+
+At 320px, the report met text contrast checks, showed keyboard focus, opened with Enter and touch, and left the save and fence unchanged when closed. At 390px, a played-season fixture showed three results. App types, production build, the NRL browser suite, 15 built-site readers and 16 download caps passed.
+
 ## 2026-11-12: NRL Manager medical facilities
 
 Finances offers a treatment room for A$800,000 and a recovery centre for another A$2.6m. The one-time charges come from club cash and are recorded in the season accounts. New knocks are one or two rounds shorter, with one round out at minimum. An upgrade stays with the club after rollover. Older saves can buy upgrades once injury tracking starts.

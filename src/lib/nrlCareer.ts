@@ -3,7 +3,7 @@ import { clampi, hashLabel, rngFrom } from '@/lib/careerEngine';
 import { uniqueName } from '@/lib/foNames';
 import { archiveNrlScoring, validNrlScoringArchive, type NrlSeasonScoringTotal } from '@/lib/nrlPlayerScoring';
 import {
-  createNrlSeason, isNrlManagerState, isNrlSeasonProgress, nrlBench, nrlLadder, nrlRegularRounds,
+  createNrlSeason, isNrlManagerState, isNrlSeasonProgress, nrlBench, nrlLadder, nrlMatchupEdges, nrlNextRound, nrlRegularRounds,
   NRL_ROLES, reduceNrlSeason, validNrlLiveScore, type NrlAction, type NrlManagerState, type NrlMatchResult,
   type NrlPlayer, type NrlRole, type NrlYear,
 } from '@/lib/nrlManager';
@@ -388,11 +388,48 @@ function opponentStrengths(state: NrlCareerState): Map<string, number> {
   return new Map([...ratings].map(([id, roles]) => [id, [...roles.values()].reduce((sum, rating) => sum + rating, 0) / NRL_ROLES.length]));
 }
 
+function careerMatchday(state: NrlCareerState) {
+  // The imported season uses the original lineups and opponent ratings.
+  return state.legacySeason
+    ? { matchday: { ...state.season, bench: undefined }, opponentStrength: undefined }
+    : { matchday: state.season, opponentStrength: opponentStrengths(state) };
+}
+
+export interface NrlOppositionReport {
+  opponentId: string;
+  ladderRank: number | null;
+  recent: { round: number; rivalId: string; scored: number; conceded: number; outcome: 'W' | 'D' | 'L' }[];
+  attackEdge: number;
+  defenseEdge: number;
+}
+
+export function nrlOppositionReport(state: NrlCareerState): NrlOppositionReport | null {
+  const { season } = state;
+  if (season.live) return null;
+  const { clubMatch } = nrlNextRound(season);
+  if (!clubMatch) return null;
+  const opponentId = clubMatch.homeId === season.clubId ? clubMatch.awayId : clubMatch.homeId;
+  const ladder = nrlLadder(season);
+  const index = ladder.findIndex(row => row.clubId === opponentId);
+  const ladderRank = ladder[index]?.played ? index + 1 : null;
+  const recent = season.results.filter(match => match.homeId === opponentId || match.awayId === opponentId)
+    .slice(-3).reverse().map<NrlOppositionReport['recent'][number]>(match => {
+      const home = match.homeId === opponentId;
+      const scored = home ? match.homeScore : match.awayScore;
+      const conceded = home ? match.awayScore : match.homeScore;
+      return {
+        round: match.round, rivalId: home ? match.awayId : match.homeId, scored, conceded,
+        outcome: scored > conceded ? 'W' : scored < conceded ? 'L' : 'D',
+      };
+    });
+  const { matchday, opponentStrength } = careerMatchday(state);
+  return { opponentId, ladderRank, recent, ...nrlMatchupEdges(matchday, clubMatch, opponentStrength) };
+}
+
 function advanceCareer(state: NrlCareerState, action: Extract<NrlAction, { type: 'advance' | 'finishLive' }>): NrlCareerState {
   const previous = state.season;
-  // An imported v1 season keeps its exact original simulation until the next kickoff.
-  const matchday = state.legacySeason ? { ...previous, bench: undefined } : previous;
-  const played = reduceNrlSeason(matchday, action, state.legacySeason ? undefined : opponentStrengths(state), nrlMedicalLevel(state) - 1);
+  const { matchday, opponentStrength } = careerMatchday(state);
+  const played = reduceNrlSeason(matchday, action, opponentStrength, nrlMedicalLevel(state) - 1);
   if (played === matchday) return state;
   const season = state.legacySeason ? { ...played, bench: previous.bench } : played;
   const fitness = new Map(season.squad.map(player => [player.id, player.fitness]));
