@@ -28,7 +28,7 @@ import {
 } from '@/lib/soccerGridDifficulty';
 
 type GridAction =
-  | { t: 'ok'; cellIndex: number; playerName: string; rarity: number }
+  | { t: 'ok'; cellIndex: number; playerName: string; rarity: number | null }
   | { t: 'x' };
 
 export function useSoccerGrid() {
@@ -123,7 +123,7 @@ export function useSoccerGrid() {
   const [wrongFlash, setWrongFlash] = useState<{ cellIndex: number; playerName: string } | null>(null);
 
   const correctActions = useMemo(
-    () => dailyActions.filter((a): a is { t: 'ok'; cellIndex: number; playerName: string; rarity: number } => a.t === 'ok'),
+    () => dailyActions.filter((a): a is { t: 'ok'; cellIndex: number; playerName: string; rarity: number | null } => a.t === 'ok'),
     [dailyActions],
   );
 
@@ -195,8 +195,9 @@ export function useSoccerGrid() {
   mainRoundComplete.current = gameStatus === 'complete';
 
   const rarityScore = useMemo(() => {
-    if (correctActions.length === 0) return null;
-    const avg = correctActions.reduce((sum, a) => sum + Math.min(a.rarity, 100), 0) / correctActions.length;
+    const rarities = correctActions.map(action => action.rarity);
+    if (rarities.length === 0 || !rarities.every((rarity): rarity is number => Number.isFinite(rarity))) return null;
+    const avg = rarities.reduce((sum, rarity) => sum + Math.min(rarity, 100), 0) / rarities.length;
     return Math.round(avg);
   }, [correctActions]);
 
@@ -231,22 +232,24 @@ export function useSoccerGrid() {
   );
 
   const fetchRarity = useCallback(
-    async (puzzleId: string, cellIndex: number, playerName: string): Promise<number> => {
+    async (puzzleId: string, cellIndex: number, playerName: string): Promise<number | null> => {
       try {
-        const { count: totalCount } = await supabase
+        const { count: totalCount, error: totalError } = await supabase
           .from('soccer_grid_selections')
           .select('*', { count: 'exact', head: true })
           .eq('puzzle_id', puzzleId)
           .eq('cell_index', cellIndex);
-        const { count: playerCount } = await supabase
+        if (totalError || totalCount === null || !Number.isFinite(totalCount)) return null;
+        const { count: playerCount, error: playerError } = await supabase
           .from('soccer_grid_selections')
           .select('*', { count: 'exact', head: true })
           .eq('puzzle_id', puzzleId)
           .eq('cell_index', cellIndex)
           .eq('player_name', playerName.toLowerCase());
-        return rarityPercent(totalCount ?? 0, playerCount ?? 0);
+        if (playerError || playerCount === null || !Number.isFinite(playerCount)) return null;
+        return rarityPercent(totalCount, playerCount);
       } catch {
-        return 50;
+        return null;
       }
     },
     [],

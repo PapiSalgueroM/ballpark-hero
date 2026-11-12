@@ -1,3 +1,9 @@
+## 2026-11-11: Soccer Grid keeps correct answers when rarity is unavailable
+
+A verified answer still fills its cell if a crowd count errors or has no exact number. The cell says Rarity unavailable and the run omits the rarity average if any correct cell lacks a count. A genuine empty crowd still earns Unicorn. The completion uses the number of correct cells.
+
+The compiled 390px baseline showed Only you! after a failed total count and 10% picked this after a failed player count with nine known picks. The fix retained each correct answer through reload with one fixture selection and no made-up percentage. A healthy crowd still showed 20% and a true zero still showed Only you! A wildcard count also showed Rarity unavailable. Completing the grid recorded 900 once in each timer setting. Measured counts produced a 29% aggregate and unavailable counts omitted it. All 25 focused tests and the production build passed.
+
 ## 2026-11-07: Club Manager historical roster counts live
 
 [PR #532](https://github.com/PapiSalgueroM/ballpark-hero/pull/532) published from main `c3b5ca4afaf9b4dadcd748f340e8e8e3e4a1a1dd`, App tree `133fcd3d26a4d237178e5c7efee723048da0aef2`, Lovable deployment `510b1df1-2172-42c0-90f9-d9f9c997b840`.

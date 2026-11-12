@@ -195,7 +195,7 @@ export { DEFAULT_SETTINGS };
 export interface OvertimeCell {
   cellIndex: number;
   playerName: string;
-  rarity: number;
+  rarity: number | null;
 }
 
 const overtimeKey = (dateStr: string) => `soccer-grid-overtime-${dateStr}`;

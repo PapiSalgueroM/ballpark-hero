@@ -78,13 +78,15 @@ export function SoccerGridBoard({ puzzle, cells, activeCell, onCellClick }: Prop
                       <span title={cell.playerName} className={cn('text-[11px] md:text-xs font-bold text-foreground leading-tight', layout.name)}>
                         {cell.playerName}
                       </span>
-                      {cell.rarity !== null && (
+                      {cell.rarity !== null ? (
                         <>
                           <span className="text-[9px] text-muted-foreground">
                             {cell.rarity > 100 ? 'Only you!' : `${cell.rarity}% picked this`}
                           </span>
                           <RarityBadge rarity={cell.rarity} />
                         </>
+                      ) : (
+                        <span className="text-[9px] text-muted-foreground">Rarity unavailable</span>
                       )}
                     </div>
                   ) : cell.status === 'wrong' ? (
