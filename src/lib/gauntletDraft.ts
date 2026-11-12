@@ -6,6 +6,8 @@ import {
   buildDraft as engineBuildDraft, dailySeedFor, squadRatingOf as engineSquadRatingOf,
   runGauntlet as engineRunGauntlet, loadDailyRun as engineLoadDailyRun,
   saveDailyRun as engineSaveDailyRun, GauntletRun, GauntletMatch, decidedNote,
+  loadDailyDraft as engineLoadDailyDraft, restoreDailyPicks as engineRestoreDailyPicks,
+  saveDailyDraft as engineSaveDailyDraft, type SavedGauntletDraft,
 } from '@/lib/gauntletEngine';
 export type { GauntletRun } from '@/lib/gauntletEngine';
 
@@ -198,4 +200,16 @@ export function loadDailyRun(date: string): GauntletRun | null {
 
 export function saveDailyRun(date: string, run: GauntletRun): boolean {
   return engineSaveDailyRun(soccerConfig([]), date, run);
+}
+
+export function loadDailyDraft(date: string): SavedGauntletDraft | null {
+  return engineLoadDailyDraft(soccerConfig([]), date);
+}
+
+export function restoreDailyPicks(draft: GauntletDraft, saved: SavedGauntletDraft): Player[] | null {
+  return engineRestoreDailyPicks(soccerConfig([]), draft, saved);
+}
+
+export function saveDailyDraft(date: string, draft: GauntletDraft, kept: Player[]): void {
+  engineSaveDailyDraft(soccerConfig([]), date, draft, kept);
 }

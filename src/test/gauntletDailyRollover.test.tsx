@@ -26,7 +26,7 @@ afterEach(() => {
   vi.useRealTimers();
 });
 
-it('keeps the current Gauntlet Daily when an older tab finishes after midnight', async () => {
+it.each([5, 11])('keeps the current Daily at %i picks when an older tab finishes after midnight', async (newerPicks) => {
   vi.setSystemTime(new Date('2026-11-12T04:59:59Z'));
   const previous = await gauntlet.mount();
   await gauntlet.enterDaily(previous);
@@ -35,9 +35,13 @@ it('keeps the current Gauntlet Daily when an older tab finishes after midnight',
   vi.setSystemTime(new Date('2026-11-12T05:00:00Z'));
   const current = await gauntlet.mount();
   await gauntlet.enterDaily(current);
-  await keepFirstCards(current, 11);
+  await keepFirstCards(current, newerPicks);
   const currentSave = localStorage.getItem(currentKey);
-  expect(JSON.parse(currentSave ?? 'null')).toMatchObject({ v: 1, date: '2026-11-12', run: { score: 32 } });
+  const currentRecord = JSON.parse(currentSave ?? 'null');
+  expect(currentRecord).toMatchObject({ v: 1, date: '2026-11-12' });
+  if (newerPicks === 11) expect(currentRecord.run.score).toBe(32);
+  else expect(currentRecord.kept).toHaveLength(newerPicks);
+  expect(localStorage.getItem(previousKey)).toBeNull();
 
   await keepFirstCards(previous, 1);
   const previousSave = localStorage.getItem(previousKey);
@@ -48,12 +52,12 @@ it('keeps the current Gauntlet Daily when an older tab finishes after midnight',
   gauntlet.unmount(current);
   const reopened = await gauntlet.mount();
   await gauntlet.enterDaily(reopened);
-  expect(gauntlet.status(reopened)).toBe('finished');
-  expect(gauntlet.fingerprint(reopened)).toContain('32');
+  expect(gauntlet.status(reopened)).toBe(newerPicks === 11 ? 'finished' : 'playing');
+  if (newerPicks === 11) expect(gauntlet.fingerprint(reopened)).toContain('32');
+  else expect(reopened.container.textContent).toContain("Pick " + (newerPicks + 1) + " of 11");
   expect(localStorage.getItem(currentKey)).toBe(currentSave);
   expect(localStorage.getItem(previousKey)).toBe(previousSave);
-  expect(recordCompletion.mock.calls.map(([game, score]) => [game, score])).toEqual([
-    ['/gauntlet-draft', 32],
-    ['/gauntlet-draft', 48],
-  ]);
+  expect(recordCompletion.mock.calls.map(([game, score]) => [game, score])).toEqual(
+    newerPicks === 11 ? [['/gauntlet-draft', 32], ['/gauntlet-draft', 48]] : [['/gauntlet-draft', 48]],
+  );
 });
