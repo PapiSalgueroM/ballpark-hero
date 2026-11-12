@@ -147,13 +147,7 @@ const RarityRound = () => {
     const key = normalizeName(selectedEntity.name);
     const match = pool.find(p => p.key === key);
     if (!match) {
-      // Structurally this should be rare: PlayerAutocomplete's dropdown is
-      // already filtered to the category (validateOnly=true, sourceConfig
-      // scoped per category), so a pick that isn't in the scoring pool means
-      // either the elite-100m category's broader autocomplete (documented in
-      // rarityRound.ts) surfaced a sub-threshold player, or the two sources
-      // disagree for some other data reason. Either way, reject it here
-      // rather than letting an invalid answer score.
+      // Keep the scoring pool authoritative if the dropdown and pool data disagree.
       setErrorMsg("That player doesn't count for this category. Try another.");
       return;
     }

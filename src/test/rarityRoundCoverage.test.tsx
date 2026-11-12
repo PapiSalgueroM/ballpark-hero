@@ -11,13 +11,19 @@ vi.mock('@/lib/rarityRound', async original => {
 });
 
 vi.mock('@/integrations/supabase/client', () => {
+  const boundaries = [
+    ['Boundary Below Fifty', 49_990_000], ['Boundary Exact Fifty', 50_000_000],
+    ['Boundary Below Hundred', 99_990_000], ['Boundary Exact Hundred', 100_000_000],
+  ] as const;
   const tables: Record<string, Record<string, string | number>[]> = {
     player_nationality_peaks: [{ player_name: 'Virgil van Dijk', nationality: 'Netherlands', peak_value_usd: 108_000_000 }],
     player_market_values: [{
       player_name: 'Virgil van Dijk', name_folded: 'virgil van dijk', nationality: 'Netherlands',
       market_value_usd: 108_000_000, club: 'Liverpool FC',
-    }],
-    player_peak_values: [],
+    }, ...boundaries.map(([player_name, market_value_usd]) => ({
+      player_name, name_folded: player_name.toLowerCase(), market_value_usd, year: 2024,
+    })), { player_name: 'Boundary Exact Hundred', name_folded: 'boundary exact hundred', market_value_usd: 49_990_000, year: 2025 }],
+    player_peak_values: boundaries.map(([player_name, peak_value_usd]) => ({ player_name, peak_value_usd })),
     ballon_dor: [1971, 1973, 1974].map(year => ({
       player_name: 'Johan Cruyff', nationality: 'Netherlands', rank: 1, award_type: 'Men', year,
     })),
@@ -36,13 +42,17 @@ vi.mock('@/integrations/supabase/client', () => {
             rows = rows.filter(row => row[column] === value);
             return builder;
           },
+          gte: (column: string, value: number) => {
+            rows = rows.filter(row => Number(row[column]) >= value);
+            return builder;
+          },
           in: (column: string, values: (string | number)[]) => {
             rows = rows.filter(row => values.includes(row[column]));
             return builder;
           },
           ilike: (column: string, pattern: string) => {
             daily.searches.push(pattern);
-            rows = rows.filter(row => String(row[column]).toLowerCase().includes(pattern.replaceAll('%', '').toLowerCase()));
+            rows = rows.filter(row => String(row[column]).toLowerCase().includes(pattern.replace(/%/g, '').toLowerCase()));
             return builder;
           },
           then: (resolve: (value: { data: typeof rows; error: null }) => unknown) => resolve({ data: rows, error: null }),
@@ -99,6 +109,22 @@ describe('Rarity Round pool coverage', () => {
     expect(lock()).toBeEnabled();
     fireEvent.click(lock());
     expect(await screen.findByText('Ranked 1 of 1 by fame in this category')).toBeVisible();
+  });
+
+  it.each([
+    ['elite-50m', 'Boundary Exact Fifty', ['Boundary Exact Hundred', 'Boundary Below Hundred', 'Boundary Exact Fifty'], 'Ranked 3 of 3 by fame in this category'],
+    ['elite-100m', 'Boundary Exact Hundred', ['Boundary Exact Hundred'], 'Ranked 1 of 1 by fame in this category'],
+  ] as const)('offers and scores only players meeting the %s peak threshold', async (category, answer, eligible, ranking) => {
+    const input = await start(category);
+    type(input, 'Boundary');
+    await screen.findByRole('option', { name: /Boundary Exact Hundred/ });
+    const options = screen.getAllByRole('option');
+    expect(options).toHaveLength(eligible.length);
+    eligible.forEach(name => expect(screen.getByRole('option', { name: new RegExp(name) })).toBeVisible());
+    fireEvent.click(screen.getByRole('option', { name: new RegExp(answer) }));
+    expect(lock()).toBeEnabled();
+    fireEvent.click(lock());
+    expect(await screen.findByText(ranking)).toBeVisible();
   });
 
   it('keeps the Ballon d’Or winners searchable without requiring a valuation', async () => {
