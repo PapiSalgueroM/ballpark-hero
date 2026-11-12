@@ -13,7 +13,7 @@ import { useArrivalTop } from '@/hooks/useArrivalTop';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { useSaveFenceWatch } from '@/hooks/useSaveFenceWatch';
 import {
-  nrlBench, nrlLadder, nrlNextRound, NRL_BENCH_SIZE, NRL_MAX_BENCH_USED, NRL_ROLES, NRL_SAVE_KEY,
+  nrlBench, nrlInjuries, nrlLadder, nrlNextRound, nrlStarterOptions, NRL_BENCH_SIZE, NRL_MAX_BENCH_USED, NRL_ROLES, NRL_SAVE_KEY,
   type NrlAction, type NrlManagerState, type NrlMatchResult, type NrlTactic,
 } from '@/lib/nrlManager';
 import { createNrlCareer, readNrlCareerSave, reduceNrlCareer, type NrlCareerAction, type NrlCareerState } from '@/lib/nrlCareer';
@@ -117,6 +117,8 @@ function MatchCentre({ season, onAction, onReview, disabled }: {
   const latest = latestRound === undefined ? [] : season.results.filter(result => result.round === latestRound);
   const lastMatch = latest.find(result => result.homeId === clubId || result.awayId === clubId);
   const usedReserves = lastMatch?.benchUsed?.map(id => season.squad.find(player => player.id === id)?.name).filter(Boolean) ?? [];
+  const latestInjury = lastMatch?.injury;
+  const injuredName = latestInjury && season.squad.find(player => player.id === latestInjury.playerId)?.name;
   const starterIds = new Set(Object.values(season.lineup));
   const fitness = Math.round(season.squad.reduce((sum, player) => sum + (starterIds.has(player.id) ? player.fitness : 0), 0) / NRL_ROLES.length);
   const title = phase === 'complete'
@@ -225,6 +227,11 @@ function MatchCentre({ season, onAction, onReview, disabled }: {
             <h4 className="font-semibold">Interchange used</h4>
             <p className="text-muted-foreground">{usedReserves.join(", ")}</p>
           </div>}
+          {latestInjury && injuredName && (
+            <p className="mt-3 text-sm text-muted-foreground" data-nrl-match-injury>
+              {injuredName} picked up a knock and will miss {latestInjury.rounds} {latestInjury.rounds === 1 ? 'round' : 'rounds'}.
+            </p>
+          )}
           <ul className="mt-2 divide-y divide-border text-sm">
             {latest.map(result => (
               <li key={`${result.homeId}-${result.awayId}`} className="grid grid-cols-[1fr_auto_1fr] items-center gap-2 py-2">
@@ -244,12 +251,33 @@ function Squad({ season, onAction, disabled }: {
   season: NrlManagerState; onAction: (action: NrlAction) => void; disabled: boolean;
 }) {
   const bench = nrlBench(season);
+  const injuries = nrlInjuries(season);
   const starters = new Set(Object.values(season.lineup));
-  const reserves = season.squad.filter(player => !starters.has(player.id));
+  const unavailable = season.squad.filter(player => injuries.has(player.id));
+  const reserves = season.squad.filter(player => !starters.has(player.id) && !injuries.has(player.id));
   return (
     <section className="rounded-xl border border-border bg-card p-4" aria-labelledby="nrl-squad">
       <h2 id="nrl-squad" className="font-display text-lg font-bold">Starting 13</h2>
-      <p className="mt-1 text-sm text-muted-foreground">Players and ratings are fictional. Swap a tired starter for a fresh player in the same position.</p>
+      <p className="mt-1 text-sm text-muted-foreground">Players and ratings are fictional. Choose a fit starter for each position.</p>
+      {season.injuryTracking ? (
+        <section className="mt-4 rounded-lg border border-border bg-background p-3" aria-labelledby="nrl-availability" data-nrl-availability>
+          <h3 id="nrl-availability" className="text-sm font-semibold">Availability</h3>
+          {unavailable.length === 0 ? <p className="mt-1 text-sm text-muted-foreground">Everyone is available.</p> : (
+            <>
+              <ul className="mt-1 divide-y divide-border text-sm">
+                {unavailable.map(player => {
+                  const remaining = injuries.get(player.id)!;
+                  return <li key={player.id} className="flex flex-wrap justify-between gap-x-3 py-1">
+                    <span>{player.name} · {player.role}</span>
+                    <span className="text-muted-foreground">Out for {remaining} {remaining === 1 ? 'round' : 'rounds'}</span>
+                  </li>;
+                })}
+              </ul>
+              <p className="mt-1 text-xs text-muted-foreground">Byes count toward recovery. Utility cover plays below their usual rating.</p>
+            </>
+          )}
+        </section>
+      ) : <p className="mt-2 text-sm text-muted-foreground">Availability tracking starts next season for this save.</p>}
       <div className="mt-4 grid gap-x-4 gap-y-3 sm:grid-cols-2">
         {NRL_ROLES.map((role, index) => (
           <div key={role} className="min-w-0">
@@ -257,8 +285,8 @@ function Squad({ season, onAction, disabled }: {
             <select id={`nrl-starter-${index}`} value={season.lineup[role]} disabled={disabled || season.phase === 'complete'}
               className="min-h-11 w-full min-w-0 rounded-lg border border-input bg-background px-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:opacity-60"
               onChange={event => onAction({ type: 'selectStarter', role, playerId: event.target.value })}>
-              {season.squad.filter(player => player.role === role).map(player => (
-                <option key={player.id} value={player.id}>{player.name} · {player.rating} OVR · {player.fitness}% fit</option>
+              {nrlStarterOptions(season, role).map(player => (
+                <option key={player.id} value={player.id}>{player.name} · {player.rating} OVR · {player.fitness}% fit{player.role !== role ? ' · Utility cover' : ''}</option>
               ))}
             </select>
           </div>
@@ -386,6 +414,7 @@ export default function NrlTeamManager() {
             <ul className="list-disc space-y-2 pl-5">
               <li>Choose 2026 or 2027, then pick a club. The Perth Bears enter in 2027. Your players, ratings, draw and results are simulated.</li>
               <li>Name 13 starters and six reserves in Squad. Quick sim can use up to four of the reserves. Before a game, choose a tactic and train or recover.</li>
+              <li>A match knock can put a player out for up to four rounds. Check Availability in Squad. The countdown includes byes, and an available player fills the vacant spot.</li>
               <li>Advance a round to simulate every fixture. A win or bye earns two ladder points, a draw earns one and a loss earns zero.</li>
               <li>The top eight make finals. The top four get a second chance if they lose their qualifying final. The last club standing wins the premiership.</li>
               <li>Review each season, manage contracts and recruit for the next year. The career saves on this browser. Starting over replaces the current save.</li>
