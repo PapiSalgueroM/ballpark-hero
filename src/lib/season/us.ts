@@ -17,9 +17,9 @@
    saved line, so it lands on every number the save holds and stores nothing.
    What is on the line decides everything: games played, the stat fields, and
    the team result, which is read by EXACT equality against the engine's own
-   exported words (never out of a sentence). The line holds no record and no
-   opponent, so his team's record is a band this career's rules give that
-   result, and opponents are named only from a two sourced league shape whose
+   exported words (never out of a sentence). When the line has no saved
+   record, the record follows the band this career's rules give that result.
+   Opponents are named only from a two sourced league shape whose
    team list is exactly the game's own for that era (otherwise "another team").
 
    Key streams added to the core's (each a suffix of the season key):
@@ -81,9 +81,8 @@ export interface UsSeasonView {
   /** Round 1212 (fix pass): the board's postseason labels as the review's playoff line prints them after the
    *  number; a label not here prints in lower case, as it always did. Baseball's 'Team postseason games' reads "games". */
   postLabels?: Record<string, string>;
-  /** The "?" sheet. `named`: opponents are named this season. `opp`: a team of
-   *  this season that is not his, for the worked example; absent when nobody is named. */
-  help(named: boolean, opp?: string): UsHelp;
+  /** The "?" sheet. `opp` names a rival in the worked example when opponents are named. */
+  help(named: boolean, opp?: string, savedRecord?: boolean): UsHelp;
 }
 
 export interface UsSeasonCtx {
@@ -137,6 +136,8 @@ export interface UsSeasonBind {
   results: readonly string[];
   /** Wins held by this career's own rule: [missed, depth 0, 1, 2, ...]. */
   bands: readonly (readonly [number, number])[];
+  /** Exact club wins when the saved record fits the schedule, otherwise null. */
+  savedWins?(row: UsRow, length: number): number | null;
   /** One [wins needed, most games] a playoff round; null: one game a round. */
   series: readonly (readonly [number, number])[] | null;
   /** The round names, in order. */
@@ -292,8 +293,10 @@ export function buildUsSeason(
     name: career.name, pos, eraId, team: row.team, teamLabel, year: row.year, length, shape, order, names,
     divSlots: slots ? slots.divSlots : 0, confSlots: slots ? slots.confSlots : 0,
   };
+  const wins = bind.savedWins?.(row, length) ?? null;
   const band = usBandOf(usBindOf(bind, row.year), row.teamResult);
-  const target: TeamTarget = band ? { kind: 'record', winsMin: band[0], winsMax: band[1] } : { kind: 'none' };
+  const target: TeamTarget = wins !== null ? { kind: 'record', winsMin: wins, winsMax: wins, saved: true }
+    : band ? { kind: 'record', winsMin: band[0], winsMax: band[1] } : { kind: 'none' };
   const frame: Frame = { mode: 'record', teams, games: length, rule: null, cap: bind.cap };
   const sport: SeasonSport<UsRow, UsSeasonCtx> = {
     id: bind.slug,
@@ -422,7 +425,7 @@ export function usPlayoffPath(given: UsSeasonBind, row: UsRow, ctx: UsSeasonCtx,
  *  `whoWhen`: the sport's words for its order of games ('Who you meet on
  *  which night' when absent). `playoffNote`: a sentence of the sport's own
  *  about its playoff path, printed after the shared footnote. */
-export function usHelp(o: { named: boolean; games: number; bands: readonly (readonly [number, number])[]; examples: UsHelp['examples']; whoWhen?: string; playoffNote?: string }): UsHelp {
+export function usHelp(o: { named: boolean; games: number; bands: readonly (readonly [number, number])[]; examples: UsHelp['examples']; whoWhen?: string; playoffNote?: string; savedRecord?: boolean }): UsHelp {
   const missed = o.bands[0];
   const champion = o.bands[o.bands.length - 1];
   return {
@@ -432,7 +435,9 @@ export function usHelp(o: { named: boolean; games: number; bands: readonly (read
       o.named
         ? `The teams, the divisions and how often you meet each one follow the league's standard schedule formula. ${o.whoWhen ?? 'Who you meet on which night'}, every score and every stat line are this career's own, not a real schedule.`
         : "Opponents are not named this season, because the game does not hold that season's divisions and schedule. Every score and every stat line are this career's own.",
-      `Your team's record is this career's own too. It always fits how your season ended: here a champion wins ${champion[0]} to ${champion[1]} of ${o.games} and a team that missed the playoffs ${missed[0]} to ${missed[1]}.`,
+      o.savedRecord
+        ? "The wins and losses here add up to your team's saved record."
+        : `Your team's record is this career's own too. It always fits how your season ended: here a champion wins ${champion[0]} to ${champion[1]} of ${o.games} and a team that missed the playoffs ${missed[0]} to ${missed[1]}.`,
       'If a contract talk comes up when you press Week by week, answer it first. If you play the year out, the season runs straight away and you can open it afterwards with Watch again.',
     ],
     controls: '▶ plays the next game. ⏩ jumps to the next big one (halfway, the last game). ⏭ goes straight to the end. 1x and 3x set the clock, Results shows each game at the final.',

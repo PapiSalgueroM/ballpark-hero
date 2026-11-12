@@ -288,6 +288,51 @@ describe('the NBA schedule formula, dealt for every team', () => {
 });
 
 describe('an NBA season, derived from its saved line', () => {
+  it.each([45, 57])('matches the saved %i wins while keeping the same fixtures', wins => {
+    const row = NBA_ROW({ clubWins: wins, clubLosses: 82 - wins });
+    const b = built(row);
+    const saved = JSON.stringify(row);
+    const s = deriveSeason(b.sport, row, b.ctx)!;
+    expect(s).not.toBeNull();
+    expect(s.games.filter(g => g.us > g.them)).toHaveLength(wins);
+    expect(s.games.filter(g => g.us < g.them)).toHaveLength(82 - wins);
+
+    const oldRow = NBA_ROW(), old = built(oldRow);
+    const previous = deriveSeason(old.sport, oldRow, old.ctx)!;
+    const schedule = (games: DerivedGame[]) => games.map(g => [g.md, g.opp, g.home, g.played]);
+    expect(schedule(s.games)).toEqual(schedule(previous.games));
+    expect(b.key).toBe(old.key);
+    expect(JSON.stringify(row)).toBe(saved);
+  });
+
+  it.each([
+    { clubWins: 52 },
+    { clubWins: 52, clubLosses: 32 },
+    { clubWins: 52.5, clubLosses: 29.5 },
+    { clubWins: -1, clubLosses: 83 },
+  ])('uses the older deterministic record when saved counts are incomplete or invalid (%o)', record => {
+    const oldRow = NBA_ROW(), old = built(oldRow);
+    const row = NBA_ROW(record), b = built(row);
+    expect(deriveSeason(b.sport, row, b.ctx)).toEqual(deriveSeason(old.sport, oldRow, old.ctx));
+  });
+
+  it.each([45, 57])('can repair the exact %i-win record without inventing extra close games', wins => {
+    const row = NBA_ROW({ clubWins: wins, clubLosses: 82 - wins });
+    const b = built(row);
+    const margins: number[] = [];
+    const s = deriveSeason({
+      ...b.sport,
+      score: (...args) => {
+        const [us, them] = b.sport.score(...args);
+        margins.push(Math.abs(us - them));
+        return [us, them];
+      },
+    }, row, b.ctx)!;
+    expect(s.attempt).toBe(0);
+    expect(s.repairs).toBeGreaterThan(0);
+    expect(s.games.map(g => Math.abs(g.us - g.them))).toEqual(margins);
+  });
+
   it('lands the games played, the averages, the band and the names', () => {
     const row = NBA_ROW();
     const b = built(row);

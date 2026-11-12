@@ -20310,6 +20310,12 @@ Proper types, eight-arm outcomes, completed build/readers/caps, permanent regres
 Master409/PL-16/SC-36/CM-04 remain partial. Existing CM47, Seasons582, baseline NFL37/NBA25 golden differences and broader automatic/source/native failures remain unwaived; no full-suite-green claim. Next: the sourced three additional Soccer Career historical entries, then actual playable team/league coverage. Existing v1/opaque saves retain their own policy.
 
 
+## 2026-11-11: NBA My Career replay record
+
+The Season Center game results, record and season review now match the wins and losses in the career save. Recordless or incomplete saves still use the original playoff-result bands. The replay reuses its seeded score margins when adjusting a result and leaves the career save untouched.
+
+On a 390px phone, the 2027 Cleveland replay and review both changed from 34-48 to the saved 35-47, including after reload. The same fixture without a stored record still showed 34-48. The default Season Center fleet checked 4,043 NBA seasons, with zero refused or retried. The saved-record and older paths both had a median of four one-point games per season. The named regression control restored the record mismatch.
+
 ## 2026-11-05: SC-36 four sourced first-team entries
 
 Qualification state: published and independently qualified; SC-36 remains partial. Qualified App source: e16e9ea36fc6c9aab84d7f79d99679e5c22e8ad3.
