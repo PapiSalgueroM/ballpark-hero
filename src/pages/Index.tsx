@@ -709,7 +709,7 @@ function HomeTileStyles() {
           transform: none;
         }
         [data-catalog-card] .home-tile:hover { background: hsl(var(--surface-2)); }
-        [data-catalog-card] :is(.home-tile-accent, .home-tile-watermark, .home-tile-sport, .home-tile-summary) { display: none; }
+        [data-catalog-card] :is(.home-tile-accent, .home-tile-summary) { display: none; }
         [data-catalog-card] .home-tile-icon { width: 24px; height: 24px; margin-top: 0; border-radius: 8px; font-size: 1rem; }
         [data-catalog-card] h3 { width: 100%; font-size: .875rem; line-height: 1.2; overflow-wrap: anywhere; }
         [data-catalog-card] > [data-game-pick] { position: static; }
@@ -719,10 +719,10 @@ function HomeTileStyles() {
 }
 
 /* ─── GAME CARD ───
-   Round 658: every card wears its sport. A 3px rule and a tinted icon tile
-   in the sport's ink, and the sport's drawn glyph as a badge on the icon so
-   the colour is never the only signal (search results and the sims row mix
-   sports on one grid). The game's own emoji stays in the tile: it is the one
+   A 3px rule and a tinted icon tile show the sport's color on desktop.
+   Mixed-sport rows repeat the sport glyph so color is never the only clue.
+   The catalogue already names each sport and shows its glyph at the top.
+   The game's own emoji stays in the tile: it is the one
    thing on the card that tells two games of the same sport apart at a
    glance. The description is clamped to two lines so a grid of cards lines
    up in rows. */
@@ -745,12 +745,14 @@ function GameCard({ game, badgeDate, bestScore, pinned, onTogglePick, compact = 
       style={sportStyle(sport)}
     >
       <span aria-hidden="true" className="home-tile-accent absolute inset-x-0 top-0 h-[3px] bg-tile" />
-      <SportGlyph sport={sport} className="home-tile-watermark pointer-events-none absolute -bottom-4 -right-4 h-20 w-20 text-tile opacity-[0.07] transition-opacity duration-200 group-hover:opacity-[0.13]" />
+      {!compact && <SportGlyph sport={sport} className="pointer-events-none absolute -bottom-4 -right-4 h-20 w-20 text-tile opacity-[0.07] transition-opacity duration-200 group-hover:opacity-[0.13]" />}
       <span aria-hidden="true" className="home-tile-icon relative mt-0.5 grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-tile/15 text-2xl ring-1 ring-inset ring-tile/25">
         {game.emoji}
-        <span className="home-tile-sport absolute -bottom-1.5 -right-1.5 grid h-5 w-5 place-items-center rounded-full bg-surface-1 text-tile ring-1 ring-tile/50">
-          <SportGlyph sport={sport} className="h-3.5 w-3.5" />
-        </span>
+        {!compact && (
+          <span className="absolute -bottom-1.5 -right-1.5 grid h-5 w-5 place-items-center rounded-full bg-surface-1 text-tile ring-1 ring-tile/50">
+            <SportGlyph sport={sport} className="h-3.5 w-3.5" />
+          </span>
+        )}
       </span>
       <div className="relative min-w-0 flex-1">
         <div className="flex items-center gap-x-2 gap-y-1 flex-wrap">
