@@ -29,6 +29,29 @@ afterEach(() => {
 });
 
 describe('Analytics paused status1445', () => {
+  it('starts compact on Home and keeps full cookie settings one click away', async () => {
+    render(<MemoryRouter>
+      <button onClick={event => openConsentChoices(event.currentTarget)}>Open cookie choices</button>
+      <CookieConsent compactInitial />
+    </MemoryRouter>);
+    const region = await screen.findByRole('region', { name: 'Cookie choices' });
+    expect(within(region).queryByRole('checkbox', { name: 'Advertising' })).toBeNull();
+    expect(within(region).getByRole('button', { name: 'Reject all' })).toBeVisible();
+    expect(within(region).getByRole('button', { name: 'Accept all' })).toBeVisible();
+    fireEvent.click(within(region).getByRole('button', { name: 'Manage choices' }));
+    expect(region).toHaveFocus();
+    expect(within(region).getByRole('checkbox', { name: 'Advertising' })).not.toBeChecked();
+    expect(within(region).getByText('Analytics is paused.', { exact: true })).toBeVisible();
+    fireEvent.click(within(region).getByRole('button', { name: 'Reject all' }));
+    expect(getEffectiveConsent()).toEqual({ advertising: false, analytics: false });
+    const opener = screen.getByRole('button', { name: 'Open cookie choices' });
+    fireEvent.click(opener);
+    const reopened = screen.getByRole('region', { name: 'Cookie choices' });
+    expect(within(reopened).getByRole('checkbox', { name: 'Advertising' })).not.toBeChecked();
+    fireEvent.click(within(reopened).getByRole('button', { name: 'Cancel' }));
+    expect(opener).toHaveFocus();
+  });
+
   it('explains the pause without a dead control and preserves advertising, privacy and focus', async () => {
     const fetchCalls = vi.spyOn(globalThis, 'fetch').mockRejectedValue(new Error('Unexpected transport in consent UI test'));
     render(<MemoryRouter>

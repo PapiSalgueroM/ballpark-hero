@@ -329,6 +329,7 @@ function LiveTickerRail({ home }: { home: boolean }) {
 const AppContent = () => {
   const { pathname } = useLocation();
   const gameRoute = isGameRoute(pathname);
+  const opensCareerRules = /^\/(?:nba|nfl|mlb|nhl)-my-career\/?$/.test(pathname);
   return (
     <SiteMenuProvider>
       {/* Round 215: the first tab stop on every page jumps a keyboard player
@@ -340,12 +341,12 @@ const AppContent = () => {
       <SiteMenu />
       <LiveTickerRail home={pathname === "/"} />
       {shouldShowHeader(pathname) && <Header />}
-      {!gameRoute && <CookieConsent />}
+      {!gameRoute && <CookieConsent compactInitial={pathname === "/"} />}
       {/* Round 1142: one line, game routes only, and only in a browser that
           will not keep anything. Renders nothing for everybody else. */}
       <StorageNotice />
       <Suspense fallback={<RouteLoader />}>
-      {gameRoute && <CookieConsent inline />}
+      {gameRoute && !opensCareerRules && <CookieConsent inline />}
       {/* Round 544: around the routes, inside Suspense. A render throw in one
           game now costs that game and nothing else: the header above and the
           global footer below both survive, and the footer is where the report a
@@ -591,6 +592,9 @@ const AppContent = () => {
           the content whose height it depends on, and then mounts below the
           fold where a mount costs nothing. */}
       </RouteErrorBoundary>
+      {/* The My Career guide opens after its text arrives. Moving consent into it
+          from below the game keeps the play area in place. */}
+      {opensCareerRules && <CookieConsent inline />}
       {gameRoute && <GameAdInventory />}
       <Footer />
       </Suspense>
