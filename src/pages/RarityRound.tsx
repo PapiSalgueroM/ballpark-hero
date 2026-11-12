@@ -70,6 +70,7 @@ const RarityRound = () => {
   const [todayStanding, setTodayStanding] = useState<{ rank: number; total: number } | null>(null);
 
   const currentCategory = rounds[roundIndex];
+  const usesMarketValues = currentCategory?.sourceConfig.table === 'player_market_values';
 
   // Every hook lives above this point and none of them are conditional, per
   // the site's React error #310 rule (hooks must never sit below an early
@@ -355,8 +356,8 @@ const RarityRound = () => {
                   {modeEmoji} You're in {modeLabel}. {objectiveLine(rarityMode)}
                 </p>
                 <p className="text-muted-foreground">
-                  Each round shows a category, like "Name a Ballon d'Or winner." Pick any real, valid
-                  answer using the search box. You cannot submit a name that doesn't fit the category.
+                  Pick an answer from the search results. Club, country, position and price rounds use players
+                  with recorded market values. The Ballon d'Or round uses the winners list.
                 </p>
               </section>
               {/* The two ends of this example were checked against the live
@@ -475,7 +476,9 @@ const RarityRound = () => {
               <p className="text-xl md:text-2xl font-display font-bold text-foreground mb-1">
                 {currentCategory.prompt}
               </p>
-              <p className="text-sm text-muted-foreground">{currentCategory.hint}</p>
+              <p className="text-sm text-muted-foreground">
+                {currentCategory.hint}{usesMarketValues && ' Choose a player with a recorded market value.'}
+              </p>
               {/* Round 319 did put the goal on the board here, as a 12px line
                   under the hint and the smallest text in the card, and Round
                   444 is him asking for it again:
@@ -512,6 +515,7 @@ const RarityRound = () => {
                   onSelect={handleSelect}
                   searchOptions={{ source: currentCategory.sourceConfig, minChars: 2, limit: 8 }}
                   placeholder="Search for a player..."
+                  emptyText={usesMarketValues ? 'No matches in this category’s market-value data.' : undefined}
                   validateOnly
                   autoFocus
                 />
