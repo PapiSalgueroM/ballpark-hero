@@ -17,6 +17,7 @@ import {
   type NrlAction, type NrlManagerState, type NrlMatchResult, type NrlTactic,
 } from '@/lib/nrlManager';
 import { createNrlCareer, readNrlCareerSave, reduceNrlCareer, type NrlCareerAction, type NrlCareerState } from '@/lib/nrlCareer';
+import { nrlScorePoints, nrlScoringLeaders, nrlTryLeaders } from '@/lib/nrlPlayerScoring';
 import { saveFence } from '@/lib/saveFence';
 
 const SLUG = 'nrl-team-manager';
@@ -118,6 +119,7 @@ function MatchCentre({ season, onAction, onReview, disabled }: {
   const latest = latestRound === undefined ? [] : season.results.filter(result => result.round === latestRound);
   const lastMatch = latest.find(result => result.homeId === clubId || result.awayId === clubId);
   const usedReserves = lastMatch?.benchUsed?.map(id => season.squad.find(player => player.id === id)?.name).filter(Boolean) ?? [];
+  const latestScorers = lastMatch?.playerScoring?.lines ?? [];
   const latestInjury = lastMatch?.injury;
   const injuredName = latestInjury && season.squad.find(player => player.id === latestInjury.playerId)?.name;
   const starterIds = new Set(Object.values(season.lineup));
@@ -228,6 +230,29 @@ function MatchCentre({ season, onAction, onReview, disabled }: {
             <h4 className="font-semibold">Interchange used</h4>
             <p className="text-muted-foreground">{usedReserves.join(", ")}</p>
           </div>}
+          {latestScorers.length > 0 && (
+            <div className="mt-3 text-sm" data-nrl-scorers>
+              <h4 className="font-semibold">Your scorers</h4>
+              <ul className="mt-1 space-y-1 text-muted-foreground">
+                {latestScorers.map(line => {
+                  const goals = line.conversions + line.penalties;
+                  const fieldGoals = line.fieldGoals + line.longFieldGoals;
+                  const detail = [
+                    `${nrlScorePoints(line)} pts`,
+                    line.tries > 0 && `${line.tries} ${line.tries === 1 ? 'try' : 'tries'}`,
+                    goals > 0 && `${goals} ${goals === 1 ? 'goal' : 'goals'}`,
+                    fieldGoals > 0 && `${fieldGoals} ${fieldGoals === 1 ? 'field goal' : 'field goals'}`,
+                  ].filter(Boolean).join(' · ');
+                  return (
+                    <li key={line.playerId} className="flex flex-wrap justify-between gap-x-3">
+                      <span>{season.squad.find(player => player.id === line.playerId)?.name}</span>
+                      <span>{detail}</span>
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
+          )}
           {latestInjury && injuredName && (
             <p className="mt-3 text-sm text-muted-foreground" data-nrl-match-injury>
               {injuredName} picked up a knock and will miss {latestInjury.rounds} {latestInjury.rounds === 1 ? 'round' : 'rounds'}.
@@ -254,6 +279,8 @@ function Squad({ season, onAction, disabled }: {
   const bench = nrlBench(season);
   const injuries = nrlInjuries(season);
   const starters = new Set(Object.values(season.lineup));
+  const leaders = nrlScoringLeaders(season);
+  const tryLeaders = nrlTryLeaders(leaders);
   const unavailable = season.squad.filter(player => injuries.has(player.id));
   const reserves = season.squad.filter(player => !starters.has(player.id) && !injuries.has(player.id));
   return (
@@ -293,6 +320,19 @@ function Squad({ season, onAction, disabled }: {
           </div>
         ))}
       </div>
+      {season.kickerId ? (
+        <div className="mt-5 border-t border-border pt-4">
+          <label htmlFor="nrl-goal-kicker" className="block text-sm font-semibold">Goal kicker</label>
+          <select id="nrl-goal-kicker" value={season.kickerId} disabled={disabled || season.phase === 'complete'}
+            className="mt-1 min-h-11 w-full rounded-lg border border-input bg-background px-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring sm:max-w-xs"
+            onChange={event => onAction({ type: 'setKicker', playerId: event.target.value })}>
+            {season.squad.filter(player => starters.has(player.id)).map(player => (
+              <option key={player.id} value={player.id}>{player.name}</option>
+            ))}
+          </select>
+          <p className="mt-1 text-xs text-muted-foreground">Your kicker gets credit for conversions and penalty goals. If they leave the starting lineup, the halfback takes over.</p>
+        </div>
+      ) : <p className="mt-3 text-sm text-muted-foreground">Player scoring starts next season for this save.</p>}
       <div className="mt-5 border-t border-border pt-4">
         <h3 className="font-display text-lg font-bold">Interchange bench</h3>
         <p className="mt-1 text-sm text-muted-foreground">Name six reserves. Quick sim uses up to {NRL_MAX_BENCH_USED} in order to cover different positions. Players who come on use fitness.</p>
@@ -309,6 +349,26 @@ function Squad({ season, onAction, disabled }: {
           ))}
         </div>
       </div>
+      {season.kickerId && leaders.length > 0 && (
+        <section className="mt-5 border-t border-border pt-4" aria-labelledby="nrl-scoring-leaders" data-nrl-scoring-leaders>
+          <h3 id="nrl-scoring-leaders" className="font-display text-lg font-bold">Scoring leaders</h3>
+          <div className="mt-2 grid gap-3 sm:grid-cols-2">
+            <div>
+              <h4 className="text-sm font-semibold">Tries</h4>
+              <ol className="mt-1 space-y-1 text-sm text-muted-foreground">
+                {tryLeaders.slice(0, 3).map(player => <li key={player.playerId}>{player.name} · {player.tries}</li>)}
+                {tryLeaders.length === 0 && <li>No tries yet.</li>}
+              </ol>
+            </div>
+            <div>
+              <h4 className="text-sm font-semibold">Points</h4>
+              <ol className="mt-1 space-y-1 text-sm text-muted-foreground">
+                {leaders.slice(0, 3).map(player => <li key={player.playerId}>{player.name} · {player.points}</li>)}
+              </ol>
+            </div>
+          </div>
+        </section>
+      )}
     </section>
   );
 }
@@ -416,6 +476,7 @@ export default function NrlTeamManager() {
               <li>Choose 2026 or 2027, then pick a club. The Perth Bears enter in 2027. Your players, ratings, draw and results are simulated.</li>
               <li>Name 13 starters and six reserves in Squad. Quick sim can use up to four of the reserves. Before a game, choose a tactic and train or recover.</li>
               <li>A match knock can put a player out for up to four rounds. Check Availability in Squad. The countdown includes byes, and an available player fills the vacant spot.</li>
+              <li>Choose your goal kicker in Squad to credit conversions and penalty goals. Match centre shows your scorers.</li>
               <li>Advance a round to simulate every fixture. A win or bye earns two ladder points, a draw earns one and a loss earns zero.</li>
               <li>The top eight make finals. The top four get a second chance if they lose their qualifying final. The last club standing wins the premiership.</li>
               <li>Scout a position in the Academy. The report arrives after you advance a round, and a promotion reserves a place next season.</li>
