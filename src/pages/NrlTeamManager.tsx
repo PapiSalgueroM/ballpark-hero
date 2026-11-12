@@ -3,6 +3,7 @@ import { ArrowRight, BedDouble, BriefcaseBusiness, ChevronDown, ClipboardList, R
 import { GameNav } from '@/components/game/GameNav';
 import { GameNavbar } from '@/components/game/GameNavbar';
 import { RulesGate } from '@/components/game/RulesGate';
+import NrlBoardChallengeNotice from '@/components/nrl-manager/NrlBoardChallengeNotice';
 import NrlCareerOffice from '@/components/nrl-manager/NrlCareerOffice';
 import GameSeoContent from '@/components/seo/GameSeoContent';
 import PageSeo from '@/components/seo/PageSeo';
@@ -12,6 +13,7 @@ import { nrlSeasonPlan } from '@/data/nrlManagerSeasons';
 import { useArrivalTop } from '@/hooks/useArrivalTop';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { useSaveFenceWatch } from '@/hooks/useSaveFenceWatch';
+import { nrlBoardChallengeStatus } from '@/lib/nrlBoardTarget';
 import {
   nrlBench, nrlFitLineup, nrlHalftimeInterchanges, nrlInjuries, nrlLadder, nrlNextRound, nrlStarterOptions, NRL_BENCH_SIZE, NRL_COACHING_BONUS,
   NRL_MAX_BENCH_USED, NRL_ROLES, NRL_SAVE_KEY,
@@ -65,8 +67,9 @@ function initialSave() {
 
 function ClubChooser({ year, season, onYear, onStart, onReturn, disabled }: {
   year: NrlYear; season: NrlManagerState | null; onYear: (year: NrlYear) => void;
-  onStart: (clubId: string) => void; onReturn: () => void; disabled: boolean;
+  onStart: (clubId: string, boardChallenge: boolean) => void; onReturn: () => void; disabled: boolean;
 }) {
+  const [boardChallenge, setBoardChallenge] = useState(false);
   const competition = NRL_SEASONS[year];
   return (
     <section aria-labelledby="nrl-choose-club" className="space-y-5">
@@ -81,6 +84,14 @@ function ClubChooser({ year, season, onYear, onStart, onReturn, disabled }: {
             </Button>
           ))}
         </div>
+        <label className="mt-3 flex min-h-11 items-start gap-2 rounded-lg border border-border bg-background p-2 text-sm">
+          <input type="checkbox" checked={boardChallenge} disabled={disabled} onChange={event => setBoardChallenge(event.target.checked)}
+            className="mt-0.5 h-4 w-4 shrink-0 accent-primary" />
+          <span>
+            <span className="block font-semibold">Board challenge</span>
+            <span className="block text-muted-foreground">Miss two targets in a row at one club and you must move after finals. A premiership clears the warning.</span>
+          </span>
+        </label>
         {season && (
           <Button type="button" size="lg" variant="ghost" className="mt-3 whitespace-normal px-2 text-left" onClick={onReturn}>
             Back to {shortName(season.year, season.clubId)} {season.year}
@@ -94,7 +105,7 @@ function ClubChooser({ year, season, onYear, onStart, onReturn, disabled }: {
       <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-4">
         {competition.clubs.map(club => (
           <button key={club.id} type="button" disabled={disabled} data-nrl-club={club.id}
-            aria-label={`Manage ${club.name}`} onClick={() => onStart(club.id)}
+            aria-label={`Manage ${club.name}`} onClick={() => onStart(club.id, boardChallenge)}
             className="group flex min-h-24 min-w-0 flex-col justify-between rounded-xl border border-border bg-card p-3 text-left transition-colors hover:border-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:opacity-50">
             <span className="text-sm font-bold leading-snug sm:text-base">{club.name}</span>
             <span className="mt-2 flex w-full items-center justify-between gap-1 text-xs text-muted-foreground">
@@ -324,6 +335,7 @@ function MatchCentre({ career, onAction, onReview, disabled, showLiveResult }: {
 
   return (
     <section className="space-y-4" aria-label="Match centre">
+      <NrlBoardChallengeNotice season={season} status={nrlBoardChallengeStatus(career)} />
       {showLiveResult && report}
       <div className="overflow-hidden rounded-2xl border border-emerald-500/35 bg-emerald-950 p-4 text-emerald-50 sm:p-6">
         <p className="text-xs font-bold uppercase tracking-widest text-emerald-200">{next.title}</p>
@@ -632,8 +644,8 @@ export default function NrlTeamManager() {
     return true;
   }
 
-  function start(clubId: string) {
-    const next = createNrlCareer(clubId, Math.floor(Math.random() * 0x1_0000_0000), year);
+  function start(clubId: string, boardChallenge: boolean) {
+    const next = createNrlCareer(clubId, Math.floor(Math.random() * 0x1_0000_0000), year, boardChallenge);
     if (!persist(next)) return;
     setChoosing(false);
     setPanel('match');

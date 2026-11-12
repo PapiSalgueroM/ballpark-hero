@@ -1,6 +1,7 @@
 import { isNrlOpeningYear, nrlSeasonPlan, NRL_LAST_YEAR, type NrlClub } from '@/data/nrlManagerSeasons';
 import { clampi, hashLabel, rngFrom } from '@/lib/careerEngine';
 import { uniqueName } from '@/lib/foNames';
+import { nrlBoardChallengeStatus } from '@/lib/nrlBoardTarget';
 import { archiveNrlScoring, validNrlScoringArchive, type NrlSeasonScoringTotal } from '@/lib/nrlPlayerScoring';
 import {
   createNrlSeason, isNrlManagerState, isNrlSeasonProgress, nrlBench, nrlLadder, nrlMatchupEdges, nrlNextRound, nrlRegularRounds,
@@ -76,6 +77,7 @@ export interface NrlCareerState {
   history: NrlCareerHistoryRow[];
   finance: NrlCareerBook;
   legacySeason: boolean;
+  boardChallenge?: true;
   academy?: NrlAcademyAssignment[];
   developmentFocus?: ActiveDevelopmentFocus;
 }
@@ -436,8 +438,9 @@ function careerFrom(season: NrlManagerState, openingYear: NrlYear, legacySeason:
   return state;
 }
 
-export function createNrlCareer(clubId: string, seed: number, openingYear: NrlYear = 2026): NrlCareerState {
-  return careerFrom(createNrlSeason(clubId, seed, openingYear), openingYear, false);
+export function createNrlCareer(clubId: string, seed: number, openingYear: NrlYear = 2026, boardChallenge = false): NrlCareerState {
+  const career = careerFrom(createNrlSeason(clubId, seed, openingYear), openingYear, false);
+  return boardChallenge ? { ...career, boardChallenge: true } : career;
 }
 
 function tickBooks(finance: NrlCareerBook, season: NrlManagerState, round: number, results: NrlMatchResult[], cap: NrlCareerCap): NrlCareerBook {
@@ -602,6 +605,7 @@ export function nrlOffseasonClubs({ season }: Pick<NrlCareerState, 'season'>): r
 function rolloverCareer(state: NrlCareerState, move?: { fromYear: number; clubId: string }): NrlCareerState {
   const { season } = state;
   if (season.phase !== 'complete' || season.year === NRL_LAST_YEAR) return state;
+  if (!move && nrlBoardChallengeStatus(state) === 'must-move') return state;
   if (move && (move.fromYear !== season.year || !nrlOffseasonClubs(state).some(club => club.id === move.clubId))) return state;
   const { developmentFocus, ...career } = state;
   const year = season.year + 1;
@@ -884,6 +888,7 @@ export function isNrlCareerState(value: unknown): value is NrlCareerState {
   if (!record(value) || value.version !== 2 || !isNrlOpeningYear(value.openingYear)
     || !isNrlSeasonProgress(value.season) || value.season.year < value.openingYear
     || typeof value.legacySeason !== 'boolean'
+    || (value.boardChallenge !== undefined && (value.boardChallenge !== true || value.legacySeason))
     || (value.developmentFocus !== undefined && (!activeDevelopmentFocus(value.developmentFocus)
       || value.legacySeason || value.season.year === NRL_LAST_YEAR))
     || (value.legacySeason && (value.season.year !== value.openingYear || value.season.kickerId || value.season.injuryTracking || value.season.results.some(match => match.benchUsed !== undefined)))

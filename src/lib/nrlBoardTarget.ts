@@ -1,4 +1,4 @@
-import { nrlSeasonPlan } from '@/data/nrlManagerSeasons';
+import { nrlSeasonPlan, NRL_LAST_YEAR } from '@/data/nrlManagerSeasons';
 import type { NrlCareerState } from '@/lib/nrlCareer';
 import { nrlLadder } from '@/lib/nrlManager';
 
@@ -23,4 +23,22 @@ export function nrlBoardTarget({ season, history }: Pick<NrlCareerState, 'season
   const place = ladder[index]?.played ? index + 1 : null;
   const result = season.phase === 'regular' || place === null ? null : place <= benchmark.targetRank ? 'met' : 'missed';
   return { ...benchmark, place, result };
+}
+
+export type NrlBoardChallengeStatus = 'warning' | 'review' | 'must-move' | 'cleared' | null;
+
+export function nrlBoardChallengeStatus(career: Pick<NrlCareerState, 'boardChallenge' | 'season' | 'history'>): NrlBoardChallengeStatus {
+  const { boardChallenge, season, history } = career;
+  const { year, clubId, phase } = season;
+  if (!boardChallenge || year === NRL_LAST_YEAR) return null;
+
+  const previous = history.find(row => row.year === year - 1 && row.clubId === clubId);
+  const earlier = previous && history.find(row => row.year === year - 2 && row.clubId === clubId);
+  const previousTarget = previous && nrlBoardBenchmark(previous.year, clubId, earlier?.rank);
+  const previousMiss = previousTarget && previous.rank > previousTarget.targetRank && previous.championId !== clubId;
+  if (phase === 'regular') return previousMiss ? 'warning' : null;
+  if (nrlBoardTarget(career)?.result !== 'missed') return null;
+  if (season.championId === clubId) return 'cleared';
+  if (!previousMiss) return 'warning';
+  return phase === 'complete' ? 'must-move' : 'review';
 }
