@@ -1,3 +1,11 @@
+## 2026-11-12: NRL Manager Academy
+
+Club office has an Academy for one active position assignment at a time. Generated reports arrive after the next round, including a bye. A promotion signs the prospect for one year at next season’s minimum salary and reserves one place in the Top 30. Unsigned reports clear at rollover.
+
+On a 390px touch viewport, the Eels’ Hooker report resumed from exact saved bytes, opened after the bye and brought the promoted player into the 2027 squad. At 320px a full future squad showed the existing contract refusal. The role-coverage regression holds the final place for a missing position.
+
+App types, production build and 37 focused tests passed. Paired runs across 32 existing careers kept exact saved bytes through 992 round actions, 7,008 fixture results and 32 rollovers when scouting was unused.
+
 ## 2026-11-12: NRL Manager squad availability
 
 New NRL careers record simulated match knocks for the players who took part. The Squad screen shows one to four rounds out, including byes. Fit players cover vacated starting and interchange places. Natural replacements take priority, and utility cover plays below its normal rating until a natural player is available.
