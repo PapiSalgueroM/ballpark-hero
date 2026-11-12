@@ -1,3 +1,9 @@
+## 2026-11-11: Rarity Round retries the failed category
+
+If a category fails to load, Try again now reloads that category. Players keep their earlier answers and points in Daily and keep the same draw in Unlimited.
+
+On the compiled 390px November 11 Daily, an empty Portugal pool in round two made the original go back to round one and drop its 100 fame points. The fix retried Portugal twice and completed the same five picks and 400-point result as the uninterrupted run. Each completed run recorded once. All four focused tests, seven offline checks, app types and the production build passed with local fixtures.
+
 ## 2026-11-07: Club Manager historical roster counts live
 
 [PR #532](https://github.com/PapiSalgueroM/ballpark-hero/pull/532) published from main `c3b5ca4afaf9b4dadcd748f340e8e8e3e4a1a1dd`, App tree `133fcd3d26a4d237178e5c7efee723048da0aef2`, Lovable deployment `510b1df1-2172-42c0-90f9-d9f9c997b840`.
