@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState, type KeyboardEvent as ReactKeyboardEvent } from 'react';
-import { Link, useLocation, useNavigate, useNavigationType, useSearchParams } from 'react-router-dom';
+import { Link, useLocation, useNavigationType, useSearchParams } from 'react-router-dom';
+import { useSiteBack } from '@/hooks/useSiteBack';
 import { ArrowLeft, Search as SearchIcon, X } from 'lucide-react';
 import PageSeo from '@/components/seo/PageSeo';
 import { CATEGORIES, FEATURED_GAMES, TOTAL_GAMES, type CategoryTitle } from '@/data/gameRegistry';
@@ -40,7 +41,7 @@ import { useGamePicks } from '@/hooks/useGamePicks';
 const ALL_SPORTS = 'All sports';
 
 export default function Search() {
-  const navigate = useNavigate();
+  const goBack = useSiteBack();
   const location = useLocation();
   const navigationType = useNavigationType();
   const [params, setParams] = useSearchParams();
@@ -158,7 +159,7 @@ export default function Search() {
       />
 
       <button
-        onClick={() => navigate(-1)}
+        onClick={goBack}
         className="mb-6 inline-flex items-center gap-2 rounded-full px-3 py-2 text-sm text-muted-foreground transition-colors hover:text-foreground"
       >
         <ArrowLeft className="w-4 h-4" />
