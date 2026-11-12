@@ -205,10 +205,12 @@ if (!existsSync(ASSETS)) {
     for (let m; (m = CHUNK_IMPORT.exec(t)) !== null;) out.add(m[1]);
     return [...out];
   };
-  const entry = files.find(f => /^index-.*\.js$/.test(f));
+  const dist = path.dirname(ASSETS);
+  const home = readFileSync(path.join(dist, 'index.html'), 'utf8');
+  const entry = home.match(/<script[^>]+type="module"[^>]+src="\/assets\/([^"]+\.js)"/)?.[1];
   const route = files.find(f => /^SoccerCareer-.*\.js$/.test(f));
   const coldRoute = files.find(f => /^SoccerCareerEntry-.*\.js$/.test(f));
-  if (!entry || !route || !coldRoute) {
+  if (!files.includes(entry) || !route || !coldRoute) {
     fail('cannot find the entry, creation or SoccerCareer runtime chunk in dist/assets');
   } else {
     const closureOf = (queue) => {
@@ -230,6 +232,29 @@ if (!existsSync(ASSETS)) {
     if (!engines.some(f => seen.has(f))) fail('compiled career runtime is missing the simulation engine');
     if (coldSeen.has(route) || engines.some(f => coldSeen.has(f))) fail('compiled first-time creation loads the career runtime or engine');
     console.log(`   ${coldSeen.size} built chunks in the creation closure`);
+
+    const snapshot = path.join(dist, 'soccer-career/index.html');
+    let html = readFileSync(snapshot, 'utf8');
+    if (process.env.FLAGSHIP_LAZY_CONTROL === 'preloadengine') {
+      const planted = `<link rel="modulepreload" crossorigin href="/assets/${route}">`;
+      if (html.includes(planted) || !html.includes('</head>')) throw new Error('control refused: cannot plant one career runtime preload');
+      html = html.replace('</head>', planted + '</head>');
+    }
+    const hints = [...html.matchAll(/<link rel="modulepreload" crossorigin href="\/assets\/([^"]+)">/g)];
+    const expectedHints = closureOf([coldRoute]);
+    expectedHints.delete(entry);
+    const preloaded = new Set(hints.map(hint => hint[1]));
+    const missing = [...expectedHints].filter(file => !preloaded.has(file));
+    const extra = [...preloaded].filter(file => !expectedHints.has(file));
+    if (missing.length || extra.length || preloaded.size !== hints.length) {
+      fail(`the Soccer Career snapshot must preload only the creator's static graph once (missing ${missing.join(', ') || 'none'}, extra ${extra.join(', ') || 'none'})`);
+    }
+    const appTag = html.indexOf(`src="/assets/${entry}"`);
+    const headEnd = html.indexOf('</head>');
+    if (appTag < 0 || hints.some(hint => hint.index < appTag || hint.index > headEnd)) fail('the creator hints must follow the App entry in the snapshot head');
+    if (home.includes(`href="/assets/${coldRoute}"`)) fail('the home template preloads the Soccer Career creator');
+    console.log(`   ${hints.length} creator dependency hints in the Soccer Career snapshot`);
+
     /* Absence is only half the proof. A chunk that is missing because the
        feature broke would also be absent, and the flagship would look lighter
        for the worst possible reason. So the Club Manager chunk has to be in
