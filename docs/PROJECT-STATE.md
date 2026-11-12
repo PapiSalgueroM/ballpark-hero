@@ -1,3 +1,9 @@
+## 2026-11-12: Career Ladder Daily midnight saves staged
+
+A Career Ladder tab that starts loading before midnight keeps a newer Daily result when its player pool arrives after midnight. The shared puzzle loader prunes only earlier dates for the same game.
+
+The mounted replay finished Nov 12, then released the delayed Nov 11 player pool. The original deleted the current result without a guess. The repair restores the older tab's clue, keeps Nov 12 complete on reload and records one completion. Focused checks cover older and same-day records, other game keys and the Footle give up flow.
+
 ## 2026-11-12 Footle Daily give up and shared saves
 
 Give up now checks the current Daily save before recording a loss. If another tab has finished or saved further, Footle takes that progress and keeps the existing guesses. An ordinary give up still records one loss and preserves the same save format.
