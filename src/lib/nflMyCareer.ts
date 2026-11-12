@@ -789,7 +789,10 @@ export function nflStatLineFor(x: NflLineInput, rng: () => number): NflStatLine 
     line.fgAtt = Math.round((24 + rng() * 12) * g);
     const acc = Math.min(0.98, 0.66 + (form - 62) * 0.011 + rng() * 0.06);
     line.fgMade = Math.round((line.fgAtt ?? 0) * acc);
-    line.longFg = Math.round(48 + (form - 64) * 0.5 + rng() * 12);
+    const distance = 48 + (form - 64) * 0.5 + rng() * 12;
+    // Taper the upper tail so Cam Little's 68-yard regular-season record stays rare.
+    const longFg = distance <= 64 ? distance : 64 + (distance - 64) / 4;
+    line.longFg = Math.min(68, Math.round(longFg));
   }
   return line;
 }
