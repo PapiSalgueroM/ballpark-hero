@@ -15,6 +15,12 @@ const OPENING_CASH = 2_500_000;
 const MARKET_PER_ROLE = 4;
 const RETIREMENT_AGE = 36;
 const MEDICAL_UPGRADE_COST = { 2: 800_000, 3: 2_600_000 } as const;
+export const NRL_TICKET_GATE_CHANGES = {
+  value: { regularNonWin: 18_000, regularWin: -22_000, homeFinal: -36_000 },
+  standard: { regularNonWin: 0, regularWin: 0, homeFinal: 0 },
+  premium: { regularNonWin: -24_000, regularWin: 18_000, homeFinal: 36_000 },
+} as const;
+
 const COACH_SIGNING_FEE = 120_000;
 const COACH_ROUND_WAGE = 18_000;
 const COACH_ROLES = ['attack', 'defense'] as const;
@@ -34,6 +40,8 @@ type MedicalUpgradeLevel = keyof typeof MEDICAL_UPGRADE_COST;
 export type NrlMedicalLevel = 1 | MedicalUpgradeLevel;
 interface NrlMedicalUpgrade { level: MedicalUpgradeLevel; round: number }
 interface NrlCoachHire { role: NrlCoachRole; round: number; paidRounds: number }
+export type NrlTicketTier = keyof typeof NRL_TICKET_GATE_CHANGES;
+type ActiveTicketTier = Exclude<NrlTicketTier, 'standard'>;
 export interface NrlCareerBook {
   fromRound: number;
   openingCash: number;
@@ -43,6 +51,7 @@ export interface NrlCareerBook {
   operatingCosts: number;
   medicalUpgrades?: NrlMedicalUpgrade[];
   coachHire?: NrlCoachHire;
+  ticketTier?: ActiveTicketTier;
 }
 export interface NrlCareerFinance extends NrlCareerBook { cash: number; profit: number }
 export type NrlDevelopmentFocus = 'balanced' | 'youth' | 'veterans';
@@ -88,6 +97,7 @@ export type NrlCareerAction = NrlAction
   | { type: 'setDevelopmentFocus'; focus: NrlDevelopmentFocus }
   | { type: 'upgradeMedical'; level: MedicalUpgradeLevel }
   | { type: 'hireCoach'; role: NrlCoachRole; year: number; round: number }
+  | { type: 'setTicketTier'; tier: NrlTicketTier; year: number; round: number }
   | { type: 'startNextSeason'; move?: { fromYear: number; clubId: string } };
 
 export interface NrlCareerCap {
@@ -117,6 +127,7 @@ const record = (value: unknown): value is Record<string, unknown> => value !== n
 const byRating = (a: NrlCareerPlayer, b: NrlCareerPlayer) => b.rating - a.rating || a.id.localeCompare(b.id);
 const activeDevelopmentFocus = (value: unknown): value is ActiveDevelopmentFocus => value === 'youth' || value === 'veterans';
 const isCoachRole = (value: unknown): value is NrlCoachRole => value === 'attack' || value === 'defense';
+const activeTicketTier = (value: unknown): value is ActiveTicketTier => value === 'value' || value === 'premium';
 
 function contractIn(player: NrlCareerPlayer, year: number): NrlContract | null {
   const current = player.contract;
@@ -443,14 +454,28 @@ export function createNrlCareer(clubId: string, seed: number, openingYear: NrlYe
   return boardChallenge ? { ...career, boardChallenge: true } : career;
 }
 
+function hasHomeGate(fixture: NrlMatchResult, clubId: string): boolean {
+  return fixture.homeId === clubId && fixture.tieId !== 'GF';
+}
+
+export function nrlTicketPricingRefusal({ season, legacySeason }: Pick<NrlCareerState, 'season' | 'legacySeason'>): string | null {
+  if (legacySeason) return 'Ticket pricing opens next season for this imported career.';
+  if (season.phase !== 'regular' || season.results.some(fixture => hasHomeGate(fixture, season.clubId))) {
+    return 'Ticket pricing is locked until next season.';
+  }
+  return season.live ? 'Ticket pricing is unavailable during a live match.' : null;
+}
+
 function tickBooks(finance: NrlCareerBook, season: NrlManagerState, round: number, results: NrlMatchResult[], cap: NrlCareerCap): NrlCareerBook {
   const ticks = lastRound(season.year);
   const installment = (annual: number) => Math.floor(annual * round / ticks) - Math.floor(annual * (round - 1) / ticks);
   const fixture = results.find(result => result.homeId === season.clubId || result.awayId === season.clubId);
-  // Neutral Grand Final accounting and representative/ticket splits are outside this model.
-  const home = fixture?.homeId === season.clubId && fixture.tieId !== 'GF';
+  const home = fixture && hasHomeGate(fixture, season.clubId);
   const away = fixture && !home;
-  const gate = home ? 240_000 + (fixture!.homeScore > fixture!.awayScore ? 30_000 : 0) + (fixture!.finalsRound ? 120_000 : 0) : 0;
+  const homeWin = home && fixture.homeScore > fixture.awayScore;
+  const changes = NRL_TICKET_GATE_CHANGES[finance.ticketTier ?? 'standard'];
+  const gate = home ? 240_000 + (homeWin ? 30_000 : 0) + (fixture.finalsRound ? 120_000 : 0)
+    + changes[fixture.finalsRound ? 'homeFinal' : homeWin ? 'regularWin' : 'regularNonWin'] : 0;
   return {
     ...finance,
     centralFunding: finance.centralFunding + installment(cap.cap),
@@ -663,6 +688,15 @@ export function reduceNrlCareer(state: NrlCareerState, action: NrlCareerAction):
         || coachHireRefusal(state, coachTermWages(round, lastRound(year))) !== null) return state;
       return { ...state, finance: { ...state.finance, coachHire: { role: action.role, round, paidRounds: 0 } } };
     }
+    case 'setTicketTier': {
+      const { year, round } = state.season;
+      if (action.year !== year || action.round !== round || nrlTicketPricingRefusal(state) !== null) return state;
+      const { ticketTier, ...finance } = state.finance;
+      if (activeTicketTier(action.tier) && ticketTier !== action.tier) {
+        return { ...state, finance: { ...state.finance, ticketTier: action.tier } };
+      }
+      return action.tier === 'standard' && ticketTier ? { ...state, finance } : state;
+    }
     case 'setDevelopmentFocus': {
       if (state.legacySeason || state.season.year === NRL_LAST_YEAR || action.focus === state.developmentFocus) return state;
       if (activeDevelopmentFocus(action.focus)) return { ...state, developmentFocus: action.focus };
@@ -733,6 +767,7 @@ function validBook(value: unknown, roundLimit: number): value is NrlCareerBook {
     && [value.centralFunding, value.gateReceipts, value.wagesPaid, value.operatingCosts]
       .every(amount => intIn(amount, 0, Number.MAX_SAFE_INTEGER))
     && validMedicalUpgrades(value.medicalUpgrades, value.fromRound, roundLimit)
+    && (value.ticketTier === undefined || (value.fromRound === 1 && activeTicketTier(value.ticketTier)))
     && (value.coachHire === undefined || (record(value.coachHire) && isCoachRole(value.coachHire.role)
       && intIn(value.coachHire.round, value.fromRound, roundLimit)
       && intIn(value.coachHire.paidRounds, 0, roundLimit - value.coachHire.round + 1)));
@@ -763,6 +798,7 @@ function booksMatch(a: NrlCareerBook, b: NrlCareerBook): boolean {
     && a.wagesPaid === b.wagesPaid && a.operatingCosts === b.operatingCosts
     && a.coachHire?.role === b.coachHire?.role && a.coachHire?.round === b.coachHire?.round
     && a.coachHire?.paidRounds === b.coachHire?.paidRounds
+    && a.ticketTier === b.ticketTier
     && first.length === second.length && first.every((purchase, index) =>
       purchase.round === second[index].round && purchase.level === second[index].level);
 }
@@ -795,7 +831,8 @@ function validCareerBooks(state: NrlCareerState): boolean {
   const complete = season.phase === 'complete';
   const played = complete ? season.round : season.round - 1;
   const finalRound = lastRound(season.year);
-  if (finance.fromRound > played + 1 || (finance.fromRound !== 1 && !legacySeason)) return false;
+  if (finance.fromRound > played + 1 || (finance.fromRound !== 1 && !legacySeason)
+    || (legacySeason && finance.ticketTier !== undefined)) return false;
   const coach = finance.coachHire;
   if (coach) {
     if (legacySeason) return false;
@@ -827,6 +864,7 @@ function validCareerBooks(state: NrlCareerState): boolean {
   }
   const currentClub = clubs.get(season.clubId) ?? firstBook;
   let expected = bookFrom(currentClub.cash, finance.fromRound);
+  if (finance.ticketTier) expected.ticketTier = finance.ticketTier;
   const cap = nrlCareerCap(state);
   const purchases = finance.medicalUpgrades ?? [];
   if ((!season.injuryTracking && purchases.length)
