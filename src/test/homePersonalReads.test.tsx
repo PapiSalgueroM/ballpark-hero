@@ -5,17 +5,26 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 const mock = vi.hoisted(() => ({
   auth: { user: null, profile: null } as { user: { id: string } | null; profile: { user_id: string; display_name: string } | null },
-  localGames: 1, rpc: vi.fn(), from: vi.fn(),
+  localGames: 1, rpc: vi.fn(), from: vi.fn(), load: vi.fn(),
 }));
 vi.mock('@/contexts/AuthContext', () => ({ useAuth: () => mock.auth }));
 vi.mock('@/lib/completions', () => ({ getCurrentPlayerName: (p: { display_name?: string } | null) => p?.display_name || 'Guest', getLocalTodayCount: () => mock.localGames }));
 vi.mock('@/hooks/useStreaks', () => ({ useStreaks: () => ({ globalCurrentStreak: 3 }) }));
-vi.mock('@/integrations/supabase/loadClient', () => ({ loadSupabase: async () => ({ rpc: mock.rpc, from: mock.from }) }));
+vi.mock('@/integrations/supabase/loadClient', () => ({ loadSupabase: async () => { mock.load(); return { rpc: mock.rpc, from: mock.from }; } }));
 vi.mock('@/components/auth/AuthModal', () => ({ AuthModal: () => null }));
 vi.mock('@/components/game/StreakReminder', () => ({ StreakReminder: () => null }));
 vi.mock('@/components/seo/PageSeo', () => ({ default: () => null }));
 import Index from '@/pages/Index';
 import { useGameNavbarStats } from '@/hooks/useGameNavbarStats';
+
+const nearObservers = new Map<Element, IntersectionObserverCallback>();
+function revealPopularity(view: ReturnType<typeof render>) {
+  const section = view.getByRole('heading', { name: 'Most played today' }).closest('section')!;
+  const callback = nearObservers.get(section);
+  expect(callback).toBeDefined();
+  act(() => callback!([{ target: section, isIntersecting: true } as IntersectionObserverEntry], {} as IntersectionObserver));
+  return () => act(() => callback!([{ target: section, isIntersecting: true } as IntersectionObserverEntry], {} as IntersectionObserver));
+}
 
 function deferred() {
   let resolve!: (value: any) => void;
@@ -80,14 +89,19 @@ beforeEach(() => {
   vi.useFakeTimers(); vi.setSystemTime(new Date('2026-10-02T23:00:00Z'));
   localStorage.clear(); requests.length = 0; mock.localGames = 1; mock.auth = { user: null, profile: null };
   visibility = 'visible'; Object.defineProperty(document, 'visibilityState', { configurable: true, get: () => visibility });
-  mock.rpc.mockReset(); mock.from.mockReset(); mock.from.mockImplementation(table => builder(table));
+  mock.rpc.mockReset(); mock.from.mockReset(); mock.load.mockReset(); nearObservers.clear(); mock.from.mockImplementation(table => builder(table));
   mock.rpc.mockImplementation((table, args) => {
     if (table !== 'most_played_today') return builder(table, args);
     requests.push({ table, args, filters: [], reply: deferred() });
     return Promise.resolve({ data: [{ game: 'soccer-grid', plays: 17 }, { game: 'perfect-season-nba', plays: 12 }, { game: 'transfer-path', plays: 9 }], error: null });
   });
   vi.stubGlobal('fetch', vi.fn(() => { throw new Error('Offline homepage fixture must not fetch'); }));
-  vi.stubGlobal('IntersectionObserver', class { observe() {} disconnect() {} });
+  vi.stubGlobal('IntersectionObserver', class {
+    private nodes: Element[] = [];
+    constructor(private callback: IntersectionObserverCallback) {}
+    observe(node: Element) { this.nodes.push(node); nearObservers.set(node, this.callback); }
+    disconnect() { this.nodes.forEach(node => nearObservers.delete(node)); }
+  });
 });
 afterEach(() => { cleanup(); expect(globalThis.fetch).not.toHaveBeenCalled(); vi.useRealTimers(); vi.unstubAllGlobals(); vi.restoreAllMocks(); });
 
@@ -95,8 +109,30 @@ describe('homepage personal read ownership', () => {
   it('preserves useful public popularity for signed out visitors', async () => {
     const view = mount(); await flush();
     expect(view.getByRole('heading', { name: 'Most played today' })).toBeInTheDocument();
+    revealPopularity(view); await flush();
     expect(view.getAllByText('Trending')).toHaveLength(3);
     expect(requests.filter(r => r.table === 'most_played_today')).toHaveLength(1);
+    expect(mock.rpc).toHaveBeenCalledWith('most_played_today', { p_min: 3, p_limit: 3 });
+  });
+
+  it('keeps below-fold popularity usable without loading the account client', async () => {
+    const view = mount(); await flush();
+    const section = view.getByRole('heading', { name: 'Most played today' }).closest('section')!;
+    expect(section.querySelectorAll('ol a')).toHaveLength(3);
+    expect(view.queryAllByText('Trending')).toHaveLength(0);
+    expect(mock.load).not.toHaveBeenCalled();
+    expect(mock.rpc).not.toHaveBeenCalled();
+    const queuedIntersection = revealPopularity(view); await flush();
+    expect(mock.load).toHaveBeenCalledOnce();
+    expect(view.getAllByText('Trending')).toHaveLength(3);
+    queuedIntersection(); await flush();
+    expect(mock.rpc).toHaveBeenCalledOnce();
+  });
+
+  it('loads popularity without an IntersectionObserver implementation', async () => {
+    vi.stubGlobal('IntersectionObserver', undefined);
+    const view = mount(); await flush();
+    expect(view.getAllByText('Trending')).toHaveLength(3);
     expect(mock.rpc).toHaveBeenCalledWith('most_played_today', { p_min: 3, p_limit: 3 });
   });
 
@@ -118,7 +154,7 @@ describe('homepage personal read ownership', () => {
   });
 
   it('guests make zero personal reads through focus visibility and idle time', async () => {
-    mount(); await flush(); event('focus'); show('hidden'); show('visible');
+    const view = mount(); await flush(); revealPopularity(view); await flush(); event('focus'); show('hidden'); show('visible');
     await act(async () => { await vi.advanceTimersByTimeAsync(15 * 60 * 1000); });
     expect(personal()).toHaveLength(0);
     expect(requests.filter(r => r.table === 'most_played_today')).toHaveLength(1);

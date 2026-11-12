@@ -49,11 +49,12 @@ function buildFallback(): MostPlayedEntry[] {
  * Falls back to a curated flagship trio whenever fewer than 3 games clear
  * the threshold, so the section never renders empty or looks broken.
  */
-export function useMostPlayed(): { entries: MostPlayedEntry[]; loading: boolean } {
+export function useMostPlayed(enabled = true): { entries: MostPlayedEntry[]; loading: boolean } {
   const [entries, setEntries] = useState<MostPlayedEntry[]>(buildFallback());
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    if (!enabled) return;
     let cancelled = false;
 
     const load = async () => {
@@ -115,7 +116,7 @@ export function useMostPlayed(): { entries: MostPlayedEntry[]; loading: boolean 
 
     load();
     return () => { cancelled = true; };
-  }, []);
+  }, [enabled]);
 
   return { entries, loading };
 }

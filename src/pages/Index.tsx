@@ -631,7 +631,18 @@ function StatChip({ icon, label, value, unit }: { icon: ReactNode; label: string
  * this section never renders empty or looks broken.
  */
 function MostPlayedToday() {
-  const { entries, loading } = useMostPlayed();
+  const section = useRef<HTMLElement>(null);
+  const [near, setNear] = useState(false);
+  const { entries, loading } = useMostPlayed(near);
+  useEffect(() => {
+    if (!section.current) return;
+    if (typeof IntersectionObserver === 'undefined') { setNear(true); return; }
+    const observer = new IntersectionObserver(entries => {
+      if (entries.some(entry => entry.isIntersecting)) { setNear(true); observer.disconnect(); }
+    });
+    observer.observe(section.current);
+    return () => observer.disconnect();
+  }, []);
 
   /* Round 659: an h2 now, still the section's first heading, which is how
      playHomeFold section 3 finds it. */
@@ -646,7 +657,7 @@ function MostPlayedToday() {
 
   if (loading && entries.length === 0) {
     return (
-      <section>
+      <section ref={section}>
         {heading}
         <div className="grid gap-2">
           {[1, 2, 3].map(i => (
@@ -660,7 +671,7 @@ function MostPlayedToday() {
   if (entries.length === 0) return null;
 
   return (
-    <section>
+    <section ref={section}>
       {heading}
       <ol className="grid grid-cols-1 gap-2">
         {entries.map(({ game, isFallback }, rank) => {

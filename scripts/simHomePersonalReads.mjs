@@ -53,19 +53,19 @@ try {
   assert.doesNotMatch(output, /Unhandled (?:Error|Rejection)|Test timed out|Timeout calling|Failed to (?:resolve import|load)|Cannot find module|SyntaxError|Transform failed/);
   const report = JSON.parse(await readFile(reportFile, 'utf8'));
   assert.equal(Number(report.numUnhandledErrors ?? 0), 0);
-  const rows = report.testResults.flatMap(file => file.assertionResults); assert.equal(rows.length, 18);
+  const rows = report.testResults.flatMap(file => file.assertionResults); assert.equal(rows.length, 20);
   if (control) {
-    assert.equal(run.status, 1); assert.equal(report.numFailedTests, 1); assert.equal(report.numPassedTests, 2); assert.equal(report.numPendingTests, 15);
+    assert.equal(run.status, 1); assert.equal(report.numFailedTests, 1); assert.equal(report.numPassedTests, 2); assert.equal(report.numPendingTests, 17);
     const target = rows.find(row => row.title === controls[control][2]); assert.equal(target?.status, 'failed');
     for (const title of baselines) assert.equal(rows.find(row => row.title === title)?.status, 'passed');
     assert.match(target.failureMessages.join('\n'), /AssertionError:|expect\(element\)|TestingLibraryElementError: Unable to find an element with the text:/);
     console.log(`Homepage personal ${control}: one executable binding changed in an isolated page.`);
-    console.log(`Homepage personal ${control}: one intended outcome failed, both real public/signed-in baselines passed, fifteen explicit skips.`);
+    console.log(`Homepage personal ${control}: one intended outcome failed, both real public/signed-in baselines passed, seventeen explicit skips.`);
     console.log(`HOME_PERSONAL_CONTROL: ${JSON.stringify({ control, title: target.title, failure: target.failureMessages[0].split('\n')[0] })}`);
   } else {
     if (run.status !== 0) process.stdout.write(output);
-    assert.equal(run.status, 0); assert.equal(report.numPassedTests, 18); assert.equal(report.numPendingTests, 0);
-    console.log('Homepage personal reads: 18/18 Home and game header cases passed, none skipped; inert Supabase boundary, zero fetch calls.');
+    assert.equal(run.status, 0); assert.equal(report.numPassedTests, 20); assert.equal(report.numPendingTests, 0);
+    console.log('Homepage personal reads: 20/20 Home and game header cases passed, none skipped; inert Supabase boundary, zero fetch calls.');
     console.log('Homepage personal reads: guests make zero personal reads; public trending queries and rendered links stay useful.');
     console.log('Homepage personal reads: one visible account batch preserves two hero reads and the existing tile-best read, without background polling.');
     console.log('Homepage personal reads: matching profiles, in-flight coalescing, stable identities, account/handle ownership and abort cleanup hold.');
