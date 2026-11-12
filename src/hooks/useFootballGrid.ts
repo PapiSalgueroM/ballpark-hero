@@ -34,6 +34,12 @@ type GridAction =
 
 const GUESS_LIMIT = 15;
 
+function selectionKey(name: string): string {
+  const key = name.toLowerCase();
+  // The career span changed. Saved picks and rarity still use the same identity.
+  return key === 'adrian peterson (2007-2021)' ? 'adrian peterson (2007-2020)' : key;
+}
+
 /** The board the page renders, with the engine's categories kept beside the labels for matching. */
 export interface DailyBoard extends GridPuzzle {
   engine: { rows: GridCategory[]; cols: GridCategory[] };
@@ -151,7 +157,7 @@ export function useFootballGrid() {
   );
 
   const fetchRarity = useCallback(
-    async (puzzleId: string, cellIndex: number, playerName: string): Promise<number> => {
+    async (puzzleId: string, cellIndex: number, playerKey: string): Promise<number> => {
       try {
         const { count: totalCount } = await supabase
           .from('football_grid_selections')
@@ -163,7 +169,7 @@ export function useFootballGrid() {
           .select('*', { count: 'exact', head: true })
           .eq('puzzle_id', puzzleId)
           .eq('cell_index', cellIndex)
-          .eq('player_name', playerName.toLowerCase());
+          .eq('player_name', playerKey);
         return rarityPercent(totalCount ?? 0, playerCount ?? 0);
       } catch {
         return 50;
@@ -189,7 +195,8 @@ export function useFootballGrid() {
         toast.error('Pick a player from the suggestions.');
         return;
       }
-      if (cells.some((c) => c.status === 'correct' && c.playerName === player.name)) {
+      const playerKey = selectionKey(player.name);
+      if (correctActions.some((action) => selectionKey(action.playerName) === playerKey)) {
         toast.error(`${player.name} is already on your board.`);
         return;
       }
@@ -199,7 +206,7 @@ export function useFootballGrid() {
         if (takeNewerSave()) return false;
         const progress = getCurrentProgress();
         return progress.gameStatus === 'playing' && !progress.guesses.some(guess =>
-          guess.t === 'ok' && (guess.cellIndex === capturedCell || guess.playerName === player.name),
+          guess.t === 'ok' && (guess.cellIndex === capturedCell || selectionKey(guess.playerName) === playerKey),
         );
       };
       if (!canSettle()) return;
@@ -212,12 +219,12 @@ export function useFootballGrid() {
           /* Round 401: measure the crowd BEFORE this row joins it. The
              formula adds the player's own row itself; inserting first counted
              it twice (a first pick read 100 instead of the unicorn 101). */
-          const rarity = await fetchRarity(puzzle.id, capturedCell, player.name);
+          const rarity = await fetchRarity(puzzle.id, capturedCell, playerKey);
           if (!canSettle()) return;
           await supabase.from('football_grid_selections').insert({
             puzzle_id: puzzle.id,
             cell_index: capturedCell,
-            player_name: player.name.toLowerCase(),
+            player_name: playerKey,
           });
           if (!canSettle()) return;
           addDailyGuess({ t: 'ok', cellIndex: capturedCell, playerName: player.name, rarity });
@@ -235,7 +242,7 @@ export function useFootballGrid() {
         setActiveCell(null);
       }
     },
-    [activeCell, gameStatus, validating, gridData, cells, puzzle, getRowCol, fetchRarity, addDailyGuess, takeNewerSave, getCurrentProgress],
+    [activeCell, gameStatus, validating, gridData, cells, correctActions, puzzle, getRowCol, fetchRarity, addDailyGuess, takeNewerSave, getCurrentProgress],
   );
 
   useGameCompletion('football-grid', rawDailyStatus !== 'playing', correctCount * 100);
