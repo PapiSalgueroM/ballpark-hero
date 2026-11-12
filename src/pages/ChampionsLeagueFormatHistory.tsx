@@ -25,7 +25,7 @@ import engineShapes from '@/data/uclEngineShapes.json';
 
 interface EngineShape {
   era: { id: string; label: string; startYear: number; emoji: string };
-  firstKo: 'R16' | 'QF';
+  firstKo: 'PO' | 'R16' | 'QF';
   legs: 1 | 2;
   awayGoals: boolean;
   realId: string;
