@@ -1,3 +1,15 @@
+## 2026-11-12 Footle Daily give up and shared saves
+
+Give up now checks the current Daily save before recording a loss. If another tab has finished or saved further, Footle takes that progress and keeps the existing guesses. An ordinary give up still records one loss and preserves the same save format.
+
+Mounted checks reproduced a two-guess win changing to an empty loss both before another tab received the storage event and while it was processing that event. The repair keeps both wins, preserves a guess made just before giving up, and passes the legacy Footle save comparison.
+
+## 2026-11-12: NBA, MLB and Hockey Grid Daily saves staged
+
+Daily guesses settle against the latest saved board, so two tabs can fill different squares without losing either answer. An already filled square keeps its first answer, and a finished Daily cannot be replayed or paid again by a stale tab. Entering Daily from Unlimited and receiving another tab's save are read-only. Existing save keys, optional legacy wrong counts, Eastern dates, board generation and scoring are preserved.
+
+The mounted fixture suite reproduced 27 failures on main and passed all 27 with the repair, plus 29 completion, rarity, namesake and engine checks. Production build and phone verification are pending. The NHL reports did not include a player or square, so this verifies a separate Daily save defect in that route.
+
 ## 2026-11-12: NRL Manager career saves
 
 Career saves keeps up to three careers in the same browser. An existing career opens in slot 1. Each slot can start in 2026 or 2027, and a saved live match resumes in the slot that played it. Starting another career uses an empty slot. Deleting a career asks for confirmation.
