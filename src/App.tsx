@@ -1,5 +1,4 @@
 import { Toaster as Sonner } from "@/components/ui/sonner";
-import { TooltipProvider } from "@/components/ui/tooltip";
 import { CookieConsent } from "@/components/CookieConsent";
 import { StorageNotice, isGameRoute } from "@/components/StorageNotice";
 import { GameAdInventory } from "@/components/ads/GameAdInventory";
@@ -608,13 +607,11 @@ const AppContent = () => {
 
 const App = () => (
   <AuthProvider>
-    <TooltipProvider>
-      <Sonner />
-      <UpdateNudge />
-      <BrowserRouter>
-        <AppContent />
-      </BrowserRouter>
-    </TooltipProvider>
+    <Sonner />
+    <UpdateNudge />
+    <BrowserRouter>
+      <AppContent />
+    </BrowserRouter>
   </AuthProvider>
 );
 
