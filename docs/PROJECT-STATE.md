@@ -1,3 +1,9 @@
+## 2026-11-12: NRL Manager season player stats
+
+Open Season player stats in Squad to see each player’s appearances, starts, games played off the bench, tries and points. Once the club has played a final, filter the table by regular season or finals. Imported seasons without player match records show when tracking begins.
+
+The table reads current-season match receipts. An exact-parent comparison reconciled 8,970 reads and matched 17,934 fixture results, 80 seasons, 359 live finishes, 125 named interchanges, 240 reloads and 1,480,376 random draws per arm.
+
 ## 2026-11-12: Club Manager academy promotion prices staged
 
 New academy graduates and scouted prospects receive the existing age-aware market value before their first wage is calculated. An existing career keeps signed wages, contract terms and legacy values. No extra match or development draws are consumed.
