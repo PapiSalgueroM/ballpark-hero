@@ -34,7 +34,7 @@ export const NRL_MANAGEMENT_CONTENT: GameContentMap = {
     faqs: [
       { q: 'When can I manage the Perth Bears?', a: 'Start a 2027 career with the Perth Bears, or move there in Season review after finishing 2026.' },
       { q: 'Does the game use the published NRL fixtures?', a: 'Each season has an original simulated fixture list. The game generates the squad for each real club and simulates all match results.' },
-      { q: 'Can I resume my season later?', a: 'Yes, when browser storage is available. Use the same browser and device to return to your save.' },
+      { q: 'Can I resume my season later?', a: 'Yes. When browser storage is available, open Career saves to keep up to three careers on the same browser and device. You can keep a 2026 and 2027 career side by side.' },
     ],
   },
 };
