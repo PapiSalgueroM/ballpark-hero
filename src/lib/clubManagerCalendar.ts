@@ -471,7 +471,7 @@ export function clubTag(name: string): string {
   return up(words.slice(0, 3).map(w => w[0]).join(''));
 }
 
-const ROUND_RANK: Record<'R16' | 'QF' | 'SF' | 'F', number> = { R16: 0, QF: 1, SF: 2, F: 3 };
+const ROUND_RANK = { PO: -1, R16: 0, QF: 1, SF: 2, F: 3 };
 
 /**
  * A knockout round ahead of the one my club is in, while it is still in the
@@ -506,7 +506,7 @@ function pendingLabel(state: CareerState, entry: CalendarEntry): string {
   const league = careerLeagueOf(state);
   if (entry.type === 'cup' && entry.cupRound) return `${league.cupName} · ${CUP_LABELS[entry.cupRound]}`;
   if (entry.type === 'uclKo' && entry.uclRound) return `Champions League · ${UCL_LABELS[entry.uclRound]}`;
-  if (entry.type === 'uclGroup') return `Champions League · Group MD${entry.round + 1}`;
+  if (entry.type === 'uclGroup') return `Champions League · ${state.uclGroup?.leaguePhase ? 'League' : 'Group'} MD${entry.round + 1}`;
   return `${league.name} · Round ${entry.round + 1}`;
 }
 
@@ -995,10 +995,14 @@ export function joinClubNow(career: CareerState): CareerState | null {
       kLeagueActive: careerHasKLeagueWorld(career),
       scopedLeagueId: careerScopedLeagueId(career),
       uclField: career.uclField ? customExitUclField(career, career.uclField) : null,
+      uclHolder: career.worldComps?.ucl?.holder,
       keepLeagueOverrides: true,
       ...(worldRosterView(departed) || worldSeedOf(departed) !== undefined
         ? { rosterCareer: departed, worldSeed: worldSeedOf(departed) } : {}),
-    }, undefined, { severeMatchInjuries: career.severeMatchInjuries });
+    }, undefined, {
+      severeMatchInjuries: career.severeMatchInjuries,
+      playedUclLeaguePhase: career.uclFormat === 'league36' ? true : undefined,
+    });
   } catch {
     return null;
   }

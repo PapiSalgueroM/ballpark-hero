@@ -31,10 +31,11 @@ export function CalendarCard({ career, onQuickSim }: { career: CareerState; onQu
           });
         }
       } else if (entry.type === 'uclGroup' && career.uclGroup && career.uclKoRound === null) {
-        out.push({ label: `⭐ UCL Group MD${entry.round + 1}`, detail: career.uclGroup.opponents[entry.round % 3] ?? '' });
+        const match = fixtureFor(career, entry);
+        if (match) out.push({ label: `⭐ ${match.compLabel.replace('Champions League · ', 'UCL ')}`, detail: match.opponent });
       } else if (entry.type === 'uclKo' && entry.uclRound && career.uclKoRound === entry.uclRound) {
         out.push({
-          label: `⭐ UCL ${entry.uclRound === 'F' ? 'Final' : entry.uclRound}`,
+          label: `⭐ UCL ${entry.uclRound === 'F' ? 'Final' : entry.uclRound === 'PO' ? 'Playoff' : entry.uclRound}`,
           detail: career.uclDraw[entry.uclRound] ?? 'Draw to come',
         });
       } else if (entry.type === 'uel') {

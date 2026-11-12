@@ -194,7 +194,10 @@ import {
   euroFieldFromTables, SEASON_ONE_CUP_WINNERS, SEASON_ONE_UECL_HOLDER, UEL_FINAL_MARK, UEL_LEGS,
   type EuroRoute, type EuroTable,
 } from '@/lib/euroAccess';
-import { UCL_LEAGUE, drawUclLeaguePhase } from '@/lib/uclLeaguePhase';
+import {
+  UCL_LEAGUE, drawUclKnockout, drawUclLeaguePhase, leaguePhaseFootnote, leaguePhaseZone,
+  nextRoundTie, slateFixtureOf, slateFixtures, slateOpponents, sortedLeaguePhaseTable, type UclLeagueSlate,
+} from '@/lib/uclLeaguePhase';
 /* Round 781: the match clock with the board in it. The module imports nothing. */
 import { clockOrder, playedBy } from '@/lib/clubManagerClock';
 /* Round 1522: team instructions. The engine carries only the small core (clubManagerTacticsCore.ts): the types,
@@ -1152,7 +1155,7 @@ export type CupState = CupRound | 'out' | 'won';
    first ... edition to feature a new format with a 16-team knockout round
    instead of a second group stage"). Only an era save plays it, see
    eraUclHasR16; the modern save keeps the shape it has today. */
-export type UclKoRound = 'R16' | 'QF' | 'SF' | 'F';
+export type UclKoRound = 'PO' | 'R16' | 'QF' | 'SF' | 'F';
 export type UclKoState = UclKoRound | 'out' | 'won' | null;
 
 /* ---------- Round 505: Club Manager's own formation list ---------- */
@@ -2187,11 +2190,11 @@ export interface CalendarEntry {
 }
 
 export interface UclGroupState {
-  /** The 3 other clubs in my group. */
   opponents: string[];
   table: TableRow[];
-  /** Group matchdays already played (0-6). */
   matchday: number;
+  /** The saved draw for an ordinary modern league phase. Old group saves omit it. */
+  leaguePhase?: UclLeagueSlate;
 }
 
 /**
@@ -2649,7 +2652,7 @@ export function wildernessWeek(career: CareerState, rng: () => number = Math.ran
  * other move uses, which is why this returns whatever startNextSeason makes
  * of it rather than transplanting a manager into a half played table.
  */
-export function acceptWildernessJob(career: CareerState, club: string, opts?: SeasonInjuryOptions): CareerState | null {
+export function acceptWildernessJob(career: CareerState, club: string, opts?: SeasonStartOptions): CareerState | null {
   const w = career.wilderness;
   if (!w || !w.offers.some(o => o.club === club) || !clubAvailableInCareer(career, club)) return null;
   /* Round 1304: an offer a save from before the fix still holds, from a club
@@ -2990,6 +2993,8 @@ export interface CareerState {
   cupRound: CupState;
   cupDraw: Partial<Record<CupRound, string>>;
   uclGroup: UclGroupState | null;
+  /** The season's rules survive a job move, even if the first club was outside Europe. */
+  uclFormat?: 'league36';
   uclKoRound: UclKoState;
   uclDraw: Partial<Record<UclKoRound, string>>;
   trophies: Trophy[];
@@ -5555,8 +5560,9 @@ const CUP_ORDER: CupRound[] = ['R16', 'QF', 'SF', 'F'];
 export const CUP_LABELS: Record<CupRound, string> = {
   R16: 'Round of 16', QF: 'Quarter-final', SF: 'Semi-final', F: 'Final',
 };
-const UCL_ORDER: UclKoRound[] = ['R16', 'QF', 'SF', 'F'];
+const UCL_ORDER: UclKoRound[] = ['PO', 'R16', 'QF', 'SF', 'F'];
 export const UCL_LABELS: Record<UclKoRound, string> = {
+  PO: 'Knockout playoff',
   R16: 'Round of 16', QF: 'Quarter-final', SF: 'Semi-final', F: 'Final',
 };
 
@@ -12608,7 +12614,7 @@ const UCL_SECOND_LEG_GAP = 0.035;
    its rules row): its season carries no cup week at all. Every league before
    this round has one, and for them the calendar is the one it always was.
    Round 1510: exported so the night placer's unit file builds every league size on the engine's own calendar. */
-export function buildCalendar(leagueSize: number, r16 = false, twoLegKo = false, cup = true): CalendarEntry[] {
+export function buildCalendar(leagueSize: number, r16 = false, twoLegKo = false, cup = true, leaguePhase = false): CalendarEntry[] {
   // Odd-sized leagues carry a BYE ghost, so the schedule runs 2*n rounds.
   const effSize = leagueSize % 2 === 0 ? leagueSize : leagueSize + 1;
   const rounds = 2 * (effSize - 1);
@@ -12616,11 +12622,15 @@ export function buildCalendar(leagueSize: number, r16 = false, twoLegKo = false,
   /* Round 507: a second leg lands at least one league round after its first,
      so the two never collapse into the same week at a small league size. */
   const after = (f: number): number => Math.max(at(f) + 1, at(f + UCL_SECOND_LEG_GAP));
+  const r16Mark = leaguePhase ? 0.60 : UCL_R16_MARK;
+  const qfMark = leaguePhase ? 0.69 : 0.58;
+  const sfMark = leaguePhase ? 0.80 : 0.76;
   const marks = {
-    ucl: [at(0.05), at(0.13), at(0.21), at(0.27), at(0.32), at(0.39)],
-    cupR16: at(0.16), cupQF: at(0.37), window: at(0.47), uclR16: at(UCL_R16_MARK),
-    uclQF: at(0.58), cupSF: at(0.68), uclSF: at(0.76), cupF: at(0.87),
-    uclR16b: after(UCL_R16_MARK), uclQFb: after(0.58), uclSFb: after(0.76),
+    ucl: (leaguePhase ? [0.05, 0.13, 0.21, 0.27, 0.32, 0.39, 0.44, 0.49] : [0.05, 0.13, 0.21, 0.27, 0.32, 0.39]).map(at),
+    cupR16: at(0.16), cupQF: at(0.37), window: at(0.47), uclR16: at(r16Mark),
+    uclQF: at(qfMark), cupSF: at(0.68), uclSF: at(sfMark), cupF: at(0.87),
+    uclR16b: after(r16Mark), uclQFb: after(qfMark), uclSFb: after(sfMark),
+    playoff: at(0.53), playoffSecondLeg: after(0.53),
   };
   const pushKo = (list: CalendarEntry[], round: UclKoRound, leg: 1 | 2): void => {
     list.push({ type: 'uclKo', round: 0, uclRound: round, ...(twoLegKo ? { uclLeg: leg } : {}) });
@@ -12629,7 +12639,7 @@ export function buildCalendar(leagueSize: number, r16 = false, twoLegKo = false,
   let md = 0;
   for (let r = 0; r < rounds; r++) {
     cal.push({ type: 'league', round: r });
-    while (md < 6 && marks.ucl[md] === r) {
+    while (md < marks.ucl.length && marks.ucl[md] === r) {
       cal.push({ type: 'uclGroup', round: md });
       md += 1;
     }
@@ -12637,8 +12647,10 @@ export function buildCalendar(leagueSize: number, r16 = false, twoLegKo = false,
     if (cup && r === marks.cupQF) cal.push({ type: 'cup', round: 0, cupRound: 'QF' });
     if (r === marks.window) cal.push({ type: 'window', round: 0 });
     // Round 462: only an era whose real format had one plays a round of 16.
-    if (r16 && r === marks.uclR16) pushKo(cal, 'R16', 1);
-    if (r16 && twoLegKo && r === marks.uclR16b) pushKo(cal, 'R16', 2);
+    if (leaguePhase && r === marks.playoff) pushKo(cal, 'PO', 1);
+    if (leaguePhase && r === marks.playoffSecondLeg) pushKo(cal, 'PO', 2);
+    if ((r16 || leaguePhase) && r === marks.uclR16) pushKo(cal, 'R16', 1);
+    if ((r16 || leaguePhase) && twoLegKo && r === marks.uclR16b) pushKo(cal, 'R16', 2);
     if (r === marks.uclQF) pushKo(cal, 'QF', 1);
     if (twoLegKo && r === marks.uclQFb) pushKo(cal, 'QF', 2);
     if (cup && r === marks.cupSF) cal.push({ type: 'cup', round: 0, cupRound: 'SF' });
@@ -12716,7 +12728,7 @@ export function ensureUclCalendar(state: CareerState): void {
  */
 export function ensureUclLegs(state: CareerState): void {
   if (!Array.isArray(state.calendar)) return;
-  const rounds: UclKoRound[] = ['R16', 'QF', 'SF', 'F'];
+  const rounds: UclKoRound[] = UCL_ORDER;
   for (const round of rounds) {
     if (uclLegsFor(state.eraId, round) !== 2) continue;
     const weeks = state.calendar
@@ -13411,18 +13423,20 @@ export function uclGroupRule(state: Pick<CareerState, 'eraId'>): UclGroupRule {
   return eraById(state.eraId!).startYear >= 2015 ? 'h2hFull' : 'h2hAway';
 }
 
-type UclGroupSortState = Pick<CareerState, 'eraId' | 'pairResults'>;
+type UclGroupSortState = Pick<CareerState, 'eraId' | 'pairResults'> & Partial<Pick<CareerState, 'uclGroup'>>;
 
 /** One group table, in that competition's order. EVERY read of a group's
  *  standing goes through this, my own group and the seven the engine plays
  *  beside it, so the table on screen and the field the round of 16 is seeded
  *  from can never be two different orders. */
 export function sortedUclGroup(state: UclGroupSortState, rows: TableRow[]): TableRow[] {
+  if (state.uclGroup?.leaguePhase) return sortedLeaguePhaseTable(rows, state.pairResults?.[UCL_GROUP_LEDGER]);
   return sortedUclGroupTable(rows, uclGroupRule(state), state.pairResults?.[UCL_GROUP_LEDGER]);
 }
 
 /** The line under a group table saying how level points were split. */
 export function uclGroupTiebreakFootnote(state: UclGroupSortState, rows: TableRow[]): string {
+  if (state.uclGroup?.leaguePhase) return leaguePhaseFootnote();
   return uclGroupFootnote(rows, uclGroupRule(state), state.pairResults?.[UCL_GROUP_LEDGER]);
 }
 
@@ -13631,6 +13645,18 @@ function advanceUclBracket(state: CareerState, round: UclKoRound): void {
     settleTie(t, { legs, awayGoals: uclAwayGoalsApply(state.eraId), deciderScale: ET_DEFLATOR, etScale: ET_DEFLATOR * ET_MINUTES / 90 },
       (home, away, scale) => simAiMatch(state, home, away, scale), () => Math.random());
   }
+  if (round === 'PO' && state.uclGroup?.leaguePhase) {
+    if (bracket.some(tie => tie.round === 'R16')) return;
+    const ties = bracket.filter(tie => tie.round === 'PO').sort((a, b) => a.slot - b.slot);
+    const seeds = playedUclKnockoutDraw(state)?.seeds;
+    if (!seeds || ties.length !== seeds.length || ties.some(tie => !tie.winner)) return;
+    for (const [slot, tie] of ties.entries()) {
+      bracket.push(makePlayedUclTie(state, 'R16', slot, tie.winner!, seeds[slot]));
+    }
+    const opponent = myUclOpponent(state, 'R16');
+    if (opponent) state.uclDraw.R16 = opponent;
+    return;
+  }
   const next: UclKoRound | null = round === 'R16' ? 'QF' : round === 'QF' ? 'SF' : round === 'SF' ? 'F' : null;
   if (!next) return;
   if (bracket.some(t => t.round === next)) return;
@@ -13641,8 +13667,8 @@ function advanceUclBracket(state: CareerState, round: UclKoRound): void {
   const winners = thisRound.map(t => t.winner).filter((w): w is string => !!w);
   if (winners.length < 2) return;
   for (let i = 0; i * 2 + 1 < winners.length; i++) {
-    const home = winners[i * 2];
-    const away = winners[i * 2 + 1];
+    const { home, away } = state.uclGroup?.leaguePhase
+      ? nextRoundTie(winners, i) : { home: winners[i * 2], away: winners[i * 2 + 1] };
     bracket.push({
       round: next, slot: i, home, away,
       homeGoals: null, awayGoals: null, winner: null,
@@ -13780,11 +13806,11 @@ function initUclGroup(qualified: boolean, myClub: string, eraId?: string, field?
  * orders, so this and season one cannot drift into two versions of it. This
  * function's job is only to read the save's final tables in world order.
  */
-export function uclQualifiersFrom(career: CareerState): string[] {
+export function uclQualifiersFrom(career: CareerState, size?: number): string[] {
   const tables = uclFinalTables(career);
   if (!tables) return [];
   /* Round 1509 (ruling 1k): and the Europa League's winner, row Q4. */
-  return uclFieldFromTables(tables, uclHolderOf(career), undefined, undefined, uelHolderOf(career));
+  return uclFieldFromTables(tables, uclHolderOf(career), size, undefined, uelHolderOf(career));
 }
 
 /**
@@ -14011,7 +14037,7 @@ const GROUP_LETTERS = ['B', 'C', 'D', 'E', 'F', 'G', 'H'];
  */
 export function initUclWorld(state: CareerState): UclAiGroup[] | undefined {
   const group = state.uclGroup;
-  if (!group) return undefined;
+  if (!group || group.leaguePhase) return undefined;
   const taken = new Set<string>([state.clubName, ...group.opponents]);
   const historic = !!state.eraId && isHistoricEra(state.eraId);
   let pool: string[];
@@ -14157,6 +14183,7 @@ type TaggedField = string[] & { via?: Record<string, EuroRoute>; earned?: EuroRo
 /** The clubs of the Champions League this season really plays (the critic's 2(b)): my group and the AI groups
  *  with my club when it is in, else the one the save follows. */
 export function uclEntrantsOf(state: Pick<CareerState, 'clubName' | 'uclGroup' | 'uclWorld' | 'worldComps'>): string[] {
+  if (state.uclGroup?.leaguePhase) return [...state.uclGroup.leaguePhase.clubs];
   if (state.uclGroup) return [state.clubName, ...state.uclGroup.opponents, ...(state.uclWorld ?? []).flatMap(g => g.clubs)];
   return [...(state.worldComps?.ucl?.clubs ?? [])];
 }
@@ -14243,8 +14270,8 @@ function worldUelField(state: CareerState, tables: { league: Pick<LeagueDef, 'id
  * stripped of worldComps anyway; this skips opening them, which cost a daily start a median of 55 ms a date on a
  * runner (simWorldEuro section 6). Opening draws nothing, so no deal moves either way.
  */
-type SeasonInjuryOptions = { severeMatchInjuries?: true };
-export interface StartCareerOptions extends SeasonInjuryOptions { noWorldComps?: boolean }
+type SeasonStartOptions = { severeMatchInjuries?: true; playedUclLeaguePhase?: true };
+export interface StartCareerOptions extends SeasonStartOptions { noWorldComps?: boolean }
 /** The options both dailies start a career with. */
 export const DAILY_START: StartCareerOptions = { noWorldComps: true };
 /* The states a start was asked to open nothing on, read by openWorldUclOnStart (a set of objects, never saved). */
@@ -14316,6 +14343,40 @@ function worldCompSeed(state: CareerState, comp: WorldCompKey | OneOffKey): numb
 
 /** One decimal, the strength every watched match reads (the snapshot). */
 const worldUclStrength = (state: CareerState, club: string): number => Math.round(strengthOf(state, club) * 10) / 10;
+
+/** The participant uses the same simulated draw and saved slate as the watched format. */
+function openPlayedUcl(state: CareerState, league: LeagueDef, qualified: boolean, holder?: string | null): void {
+  if (!qualified) return;
+  const field = state.uclField ?? [];
+  const slate = field.includes(state.clubName) ? drawUclLeaguePhase({
+    field, holder: holder ?? null, seed: worldCompSeed(state, 'ucl'),
+    strengthOf: club => worldUclStrength(state, club), assocOf: club => uclClubCountry(state, club),
+  }) : null;
+  if (!slate) {
+    state.uclGroup = initUclGroup(true, state.clubName, state.eraId, field);
+    return;
+  }
+  state.uclGroup = {
+    opponents: slateOpponents(slate, state.clubName),
+    table: slate.clubs.map(emptyRow),
+    matchday: 0,
+    leaguePhase: slate,
+  };
+  state.calendar = buildCalendar(league.clubs.length, true, true, league.cupName !== null, true);
+}
+
+function playedUclKnockoutDraw(state: CareerState) {
+  const group = state.uclGroup;
+  if (!group?.leaguePhase) return null;
+  return drawUclKnockout(sortedUclGroup(state, group.table).map(row => row.club), group.leaguePhase.seed);
+}
+
+function makePlayedUclTie(state: CareerState, round: UclKoRound, slot: number, home: string, away: string): UclTie {
+  return {
+    round, slot, home, away, homeGoals: null, awayGoals: null, winner: null,
+    mine: home === state.clubName || away === state.clubName,
+  };
+}
 
 /**
  * Open this season's watched competition on `state` from `field`: the
@@ -14556,7 +14617,8 @@ export function carryWorldComp(career: CareerState, joined: CareerState, comp: W
     /* Round 1593: the guard stands down only for the move the critic's correction 3b named, a participant's slice
        carried to a club that is one of its entrants; a move from it anywhere else keeps fix-1509's rule. */
     const toEntrant = !!held && !!held.me && names.some(c => held.clubs.includes(c));
-    const slice = comp === 'uel' && held && !toEntrant && uclEntrantsOf(joined).some(c => held.clubs.includes(c)) ? undefined : held;
+    const mayCarryOverlap = toEntrant && !joined.uclGroup?.leaguePhase;
+    const slice = comp === 'uel' && held && !mayCarryOverlap && uclEntrantsOf(joined).some(c => held.clubs.includes(c)) ? undefined : held;
     /* Round 1593 (the critic's correction 3b): a slice my old club PLAYED is carried even when the new club is one of
        its entrants: the new club is then an entrant like any other, played from the streams, and my old club's nights
        still to come are drawn the same way, so the season still crowns a winner. */
@@ -15383,7 +15445,7 @@ const CUP_STAGE_RANK: Record<CupRound, number> = { R16: 0, QF: 1, SF: 2, F: 3 };
    and those targets are already written into every saved objective, so the
    first knockout round of whichever format the save plays has to be rank 1
    and the semi-finals rank 2, exactly as before. */
-const UCL_STAGE_RANK: Record<UclKoRound, number> = { R16: 1, QF: 1, SF: 2, F: 3 };
+const UCL_STAGE_RANK: Record<UclKoRound, number> = { PO: 1, R16: 1, QF: 1, SF: 2, F: 3 };
 
 /** How far we got in the cup: 0 = still/exit at R16 ... 4 = won it. */
 export function cupProgressRank(state: CareerState): { rank: number; alive: boolean } {
@@ -18706,6 +18768,10 @@ export function fixtureFor(state: CareerState, entry: CalendarEntry): MyFixture 
     };
   }
   if (entry.type === 'uclGroup' && state.uclGroup) {
+    if (state.uclGroup.leaguePhase) {
+      const match = slateFixtureOf(state.uclGroup.leaguePhase, state.clubName, entry.round);
+      return match ? { competition: 'uclGroup', compLabel: `Champions League · League MD${entry.round + 1}`, ...match } : null;
+    }
     const idx = entry.round % 3;
     const opponent = state.uclGroup.opponents[idx];
     if (!opponent) return null;
@@ -19405,8 +19471,43 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
     confDelta += clamp((club.expectation - pos) * 0.25, -2, 2);
   }
 
-  if (fx.competition === 'uclGroup' && state.uclGroup) {
-    const group = state.uclGroup;
+  const group = state.uclGroup;
+  if (fx.competition === 'uclGroup' && group?.leaguePhase) {
+    for (const [home, away] of slateFixtures(group.leaguePhase, entry.round)) {
+      const mine = home === state.clubName || away === state.clubName;
+      const [hg, ag] = mine
+        ? (home === state.clubName ? [myGoals, oppGoals] : [oppGoals, myGoals])
+        : simAiMatch(state, home, away);
+      applyResult(group.table, home, away, hg, ag);
+      noteUclPair(state, home, away, hg, ag);
+      if (!mine) {
+        noteForm(state, home, away, hg, ag);
+        otherResults.push({ home, away, hg, ag });
+      }
+    }
+    group.matchday += 1;
+    if (group.matchday === UCL_LEAGUE.games) {
+      const draw = playedUclKnockoutDraw(state)!;
+      state.uclBracket = draw.playoffs.map(({ home, away }, slot) => makePlayedUclTie(state, 'PO', slot, home, away));
+      const rank = sortedUclGroup(state, group.table).findIndex(row => row.club === state.clubName) + 1;
+      const zone = leaguePhaseZone(rank);
+      if (zone === 'r16') {
+        state.uclKoRound = 'R16';
+        events.push('⭐ Top eight in the Champions League. Straight into the round of 16.');
+        confDelta += 3;
+      } else if (zone === 'playoff') {
+        state.uclKoRound = 'PO';
+        state.uclDraw.PO = myUclOpponent(state, 'PO')!;
+        events.push(`⭐ Into the Champions League knockout playoff against ${state.uclDraw.PO}.`);
+        confDelta += 1;
+      } else {
+        state.uclKoRound = 'out';
+        state.uclExit = 'group';
+        events.push('💤 Out of the Champions League after the league phase.');
+        confDelta -= 4;
+      }
+    }
+  } else if (fx.competition === 'uclGroup' && group) {
     const idx = entry.round % 3;
     const myHome = fx.home === true;
     const gHome = myHome ? state.clubName : fx.opponent;
@@ -20737,6 +20838,7 @@ export function developingPlayers(career: CareerState): CMPlayer[] {
 export interface SeasonWorld {
   yearsOn: number;
   uclField: string[] | null;
+  uclHolder?: string | null;
   keepLeagueOverrides: boolean;
   worldSeed?: number;
   rosterCareer?: CareerState;
@@ -20820,7 +20922,9 @@ export function startCareer(clubName: string, eraId: string = DEFAULT_ERA_ID, cu
   /* Round 783: inside a running save the field is the save's own, derived at
      its last rollover, and the club is in Europe exactly when that field
      names it. */
-  const seasonOneField = custom ? null : world ? world.uclField : seasonOneUclField(era.id);
+  const playedLeaguePhase = opts?.playedUclLeaguePhase && !opts.noWorldComps && worldUclFormatOf({ eraId: era.id }) === 'l36'
+    && !scopedLeagueId && league.id !== K_LEAGUE_2026.id;
+  const seasonOneField = custom ? null : world ? world.uclField : seasonOneUclField(era.id, playedLeaguePhase ? UCL_LEAGUE.clubs : undefined);
   /* Round 964: on an edited world season one's Europe is still who really
      qualified, wherever they play now. seasonOneUclField already hands the
      AI field the real qualifiers whatever league the edit put them in, so my
@@ -20869,7 +20973,8 @@ export function startCareer(clubName: string, eraId: string = DEFAULT_ERA_ID, cu
     // money says, because it has not qualified for anything yet.
     // Round 612: the field and the qualification are the ones read above.
     uclField: seasonOneField ?? undefined,
-    uclGroup: custom ? null : initUclGroup(qualifiedSeasonOne, club.name, era.id, seasonOneField ?? undefined),
+    ...(playedLeaguePhase ? { uclFormat: 'league36' as const } : {}),
+    uclGroup: custom || playedLeaguePhase ? null : initUclGroup(qualifiedSeasonOne, club.name, era.id, seasonOneField ?? undefined),
     uclKoRound: null,
     uclDraw: {},
     uclBracket: undefined,
@@ -20961,6 +21066,7 @@ export function startCareer(clubName: string, eraId: string = DEFAULT_ERA_ID, cu
   if (custom) state.wageCap = Math.max(state.wageCap, realCapForBudget(club.budget) + (state.founderWageRoom ?? 0));
   /* Round 1520: every made up man on day one gets his country, before the board's asks count them. */
   ensureMadeUpNations(state);
+  if (playedLeaguePhase) openPlayedUcl(state, league, !custom && qualifiedSeasonOne, world ? world.uclHolder : CM_FINAL_TABLES_2025_26.holders);
   state.boardObjectives = buildBoardObjectives(club.name, state.uclGroup !== null, league.clubs.length, era.id, custom ? leagueClubs : undefined);
   /* Round 474: and the two specific asks, read off the squad you have just
      been handed and the market this world really has. */
@@ -23129,7 +23235,7 @@ export function toLeague(name: string): string {
  * offer was accepted. Ages the squad, runs the youth intake, resets the
  * competitions and reopens the summer window.
  */
-export function startNextSeason(career: CareerState, acceptOfferClub?: string, opts?: SeasonInjuryOptions): CareerState {
+export function startNextSeason(career: CareerState, acceptOfferClub?: string, opts?: SeasonStartOptions): CareerState {
   const requestedClub = career.jobHunt?.summerMove?.club ?? acceptOfferClub;
   if (requestedClub && requestedClub !== career.clubName && !clubAvailableInCareer(career, requestedClub)) return career;
   const kLeagueActive = careerHasKLeagueWorld(career);
@@ -23197,7 +23303,10 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string, o
      promoted into the Premier League handed the Championship's top four the
      Premier League's places, and one just relegated out of it left the
      Premier League sending nobody. */
-  let nextUclField = uclQualifiersFrom(career);
+  const playedLeaguePhase = (opts?.playedUclLeaguePhase || career.uclFormat === 'league36')
+    && worldUclFormatOf(career) === 'l36' && !scopedLeagueId
+    && !kLeagueMember(career.clubName) && !kLeagueMember(requestedClub ?? '');
+  let nextUclField = uclQualifiersFrom(career, playedLeaguePhase ? UCL_LEAGUE.clubs : undefined);
   /* Round 1502: the watched Champions League reads the very same final tables, here for the same reason, and
      the season's winner as the holder the participant's field is handed. */
   const watchTables = uclFinalTables(career);
@@ -23472,7 +23581,7 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string, o
     : career.uclExit === 'F' ? 4
     : career.uclExit === 'SF' ? 3
     : career.uclExit === 'QF' ? 2
-    : career.uclExit === 'R16' ? 1
+    : career.uclExit === 'R16' || career.uclExit === 'PO' ? 1
     : 0;
   const seasonIn = career.seasonSignings.filter(t => t.dir === 'in').reduce((n, t) => n + t.fee + (t.bonus ?? 0), 0);
   const seasonOut = career.seasonSignings.filter(t => t.dir === 'out').reduce((n, t) => n + t.fee, 0);
@@ -23599,7 +23708,8 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string, o
     cupRound: league.cupName !== null ? 'R16' : 'out',
     cupDraw: {},
     uclField: nextUclField.length ? nextUclField : undefined,
-    uclGroup: initUclGroup(qualifiedUcl, clubName, eraId, nextUclField),
+    ...(playedLeaguePhase ? { uclFormat: 'league36' as const } : {}),
+    uclGroup: playedLeaguePhase ? null : initUclGroup(qualifiedUcl, clubName, eraId, nextUclField),
     uclKoRound: null,
     uclDraw: {},
     uclBracket: undefined,
@@ -23792,6 +23902,12 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string, o
     const liveXI = squadXIAvg(state.squad);
     state.clubStrengths[nextCustom.name] = clamp(Math.round(liveXI) + ri(-2, 2), 52, 95);
     registerCustomClub(nextCustom, eraId, liveXI);
+  }
+  if (!playedLeaguePhase && state.uclFormat) delete state.uclFormat;
+  if (playedLeaguePhase) {
+    const direct = watchTables ? uclDirectQualifiersFromTables(watchTables, watchHolder, undefined, watchUelHolder) : null;
+    const qualified = direct ? (moving ? customExitUclField(career, direct) : direct).includes(clubName) : qualifiedUcl;
+    openPlayedUcl(state, league, qualified, watchHolder);
   }
   state.boardObjectives = buildBoardObjectives(clubName, state.uclGroup !== null, league.clubs.length, eraId, nextCustom ? leagueClubs : undefined);
   // Round 163: a fresh Champions League draw for the new season.
