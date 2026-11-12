@@ -78,7 +78,16 @@ describe('NRL Manager Board challenge', () => {
     expect(changed.season.clubId).toBe('chiefs');
     expect(changed.boardChallenge).toBe(true);
     expect(status(changed)).toBeNull();
-    expect(changed.history).toEqual(completed.history);
+    expect(changed.history).toEqual([
+      completed.history[0],
+      {
+        ...completed.history[1],
+        finals: {
+          seeds: ['broncos', 'raiders', 'warriors', 'bulldogs', 'sharks', 'dolphins', 'roosters', 'panthers'],
+          scores: [[22, 0], [10, 18], [18, 12], [10, 20], [18, 0], [29, 28], [22, 6], [20, 24], [18, 34]],
+        },
+      },
+    ]);
     expect(changed.finance.openingCash).toBe(2_500_000);
     const { boardChallenge, ...standard } = restored;
     expect(JSON.stringify({ ...changed, boardChallenge: undefined })).toBe(JSON.stringify(move(standard, 'chiefs')));
