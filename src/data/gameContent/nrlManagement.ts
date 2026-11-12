@@ -4,16 +4,17 @@ export const NRL_MANAGEMENT_CONTENT: GameContentMap = {
   '/nrl-team-manager': {
     intro: [
       'Choose the 2026 or 2027 NRL season and pick a club. Select your starting 13 and six reserves, decide when to train or recover, and pick a match plan before you face the next side.',
-      'The 2026 field has 17 clubs. Select 2027 to manage the Perth Bears in their debut season. Both seasons use original fixture lists. Clubs are real, and the game generates squads, ratings and results.',
+      'The 2026 field has 17 clubs. Select 2027 to manage the Perth Bears in their debut season. Both seasons use simulated fixture lists. Clubs are real, and the game generates squads, ratings and results.',
     ],
     howToPlay: [
-      'Choose your season and club, then open the squad. Look at the positions and condition of your players before filling the starting 13.',
+      'Choose your season and club, then open Squad. Pick a fit starting 13 and six reserves. Save a lineup for this season and preview any replacements before applying it.',
       'Check the next opponent and pick a tactic. Use training to prepare or give a tired squad a chance to recover.',
       'Play the round and check the result against the ladder. A bye is a break in the fixture list, so check who you play after it.',
       'Finish in the top eight to reach the finals. Follow the bracket and try to win the Grand Final.',
       'Open the club office to extend contracts and approach eligible recruits. Check how much cap room you have in the season the deal starts.',
+      'In Contracts, arrange an offseason move for an eligible player. They stay this season, and the receiving club pays their salary for the remaining term.',
       'Set Standard, Value or Premium ticket prices in Finance before your first paid home match. That choice applies to home gates for the rest of the season.',
-      'Review your final ladder, premiership result and finances. Stay with your squad or choose another club for next season.',
+      'Open Season review for your final ladder, finances, recorded scoring and finals scores. Stay with your club, move to a new club, or retire and keep your career record.',
     ],
     rules: [
       'The 2026 regular season spans 27 rounds, with 24 matches and three byes for each club. The game generates its own fixture list for each year.',
@@ -35,7 +36,7 @@ export const NRL_MANAGEMENT_CONTENT: GameContentMap = {
     faqs: [
       { q: 'When can I manage the Perth Bears?', a: 'Start a 2027 career with the Perth Bears, or move there in Season review after finishing 2026.' },
       { q: 'Does the game use the published NRL fixtures?', a: 'Each season has an original simulated fixture list. The game generates the squad for each real club and simulates all match results.' },
-      { q: 'Can I resume my season later?', a: 'Yes. When browser storage is available, open Career saves to keep up to three careers on the same browser and device. You can keep a 2026 and 2027 career side by side.' },
+      { q: 'Can I resume my season later?', a: 'Yes. When browser storage is available, use Career saves to keep up to three careers on the same browser and device. Each slot can keep one checkpoint to restore, and 2026 and 2027 careers can sit side by side.' },
     ],
   },
 };

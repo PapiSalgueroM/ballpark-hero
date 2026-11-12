@@ -12,7 +12,7 @@ import {
   type NrlDevelopmentFocus, type NrlMedicalLevel, type NrlSponsorOffer, type NrlTicketTier,
 } from '@/lib/nrlCareer';
 import { nrlArchivedFinals, NRL_COACHING_BONUS, NRL_FINALS_ROUND_TITLES, NRL_ROLES, type NrlCoachRole, type NrlRole } from '@/lib/nrlManager';
-import { nrlArchivedScoringLeaders, nrlTryLeaders } from '@/lib/nrlPlayerScoring';
+import { nrlArchivedScoringLeaders, nrlTryLeaders, type NrlScoringLeader } from '@/lib/nrlPlayerScoring';
 import { nrlBoardBenchmark, nrlBoardChallengeStatus, nrlBoardTarget } from '@/lib/nrlBoardTarget';
 
 const currency = new Intl.NumberFormat('en-AU', {
@@ -687,6 +687,49 @@ function CareerRecord({ history }: { history: NrlCareerState['history'] }) {
   );
 }
 
+const scoringColumns = [
+  ['tries', 'T', 'Tries'],
+  ['conversions', 'C', 'Conversions'],
+  ['penalties', 'PG', 'Penalty goals'],
+  ['fieldGoals', 'FG', 'One-point field goals'],
+  ['longFieldGoals', '2FG', 'Two-point field goals'],
+  ['points', 'Pts', 'Points'],
+] as const;
+
+function ScoringHistory({ year, leaders }: { year: number; leaders: NrlScoringLeader[] }) {
+  if (!leaders.length) return <p className="text-sm text-muted-foreground">Player scoring is unavailable for this saved season.</p>;
+  return (
+    <details className="group mt-2 rounded-lg border border-border">
+      <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between gap-2 rounded-lg px-3 py-2 text-sm font-semibold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
+        {year} player scoring<ChevronDown size={16} aria-hidden="true" className="shrink-0 group-open:rotate-180" />
+      </summary>
+      <div className="border-t border-border p-3">
+        <p className="mb-2 text-xs text-muted-foreground">Totals from recorded matches for this club.</p>
+        <table className="w-full text-left text-xs">
+          <caption className="sr-only">{year} recorded club scoring</caption>
+          <thead>
+            <tr>
+              <th scope="col" className="py-1">Player</th>
+              {scoringColumns.map(([field, short, label]) => (
+                <th key={field} scope="col" aria-label={label} className="px-1 text-right">{short}</th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {leaders.map(player => (
+              <tr key={player.playerId} className="border-t border-border tabular-nums">
+                <th scope="row" className="break-words py-1.5 pr-1 font-medium">{player.name}</th>
+                {scoringColumns.map(([field]) => <td key={field} className="px-1 text-right">{player[field]}</td>)}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        <p className="mt-2 text-xs text-muted-foreground">T tries · C conversions · PG penalty goals · FG one-point field goals · 2FG two-point field goals.</p>
+      </div>
+    </details>
+  );
+}
+
 function FinalsHistory({ record, season }: { record: NrlCareerState['history'][number]; season: NrlCareerState['season'] }) {
   const { year, finals } = record;
   const matches = year === season.year ? season.results.filter(match => match.finalsRound !== undefined)
@@ -802,6 +845,7 @@ function History({ career, onAction, disabled }: { career: NrlCareerState; onAct
                 {points && <p className="text-sm text-muted-foreground" data-nrl-archived-scoring>
                   {tries ? `Try leader ${tries.name} (${tries.tries}) · ` : ''}Points leader {points.name} ({points.points})
                 </p>}
+                <ScoringHistory year={record.year} leaders={leaders} />
                 {record.development && <p className="text-sm text-muted-foreground" data-nrl-development-receipt>
                   {developmentLabels[record.development.focus]} · {developmentSummary(record.development.focus, record.development.affected, false)}
                 </p>}
