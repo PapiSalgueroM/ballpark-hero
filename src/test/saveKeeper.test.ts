@@ -34,7 +34,7 @@ vi.mock('@/lib/safeStorage', async (importOriginal) => {
   return { ...real, getStorageTrouble: () => seam.trouble ?? real.getStorageTrouble() };
 });
 
-import { CONTINUE_SAVES } from '@/data/continueSaves';
+import { CONTINUE_SAVES, continueSaveEntries } from '@/data/continueSaves';
 import { BROKEN_SAVE_MARK, SET_ASIDE_SEEN_KEY, backupKeysOf, offeredBackup, type ListableStorage } from '@/lib/brokenSaveRecovery';
 import { holdPendingSave } from '@/lib/safeStorage';
 import {
@@ -361,8 +361,9 @@ describe('the copy before a version step (Round 1219)', () => {
     expect(applyPending(api, T0)).toBeNull();
     expect(keepUpdateCopies(api, T0)).toBe(0);
     expect(s.sets + s.removes).toBe(0);
-    const acting = CONTINUE_SAVES.filter(e => SAVE_VERSIONS[e.path] && SAVE_VERSIONS[e.path].other !== 'ignores').map(e => e.saveKey);
-    expect(acting).toHaveLength(6);
+    const acting = CONTINUE_SAVES.filter(e => SAVE_VERSIONS[e.path] && SAVE_VERSIONS[e.path].other !== 'ignores')
+      .flatMap(e => continueSaveEntries(e).map(save => save.saveKey));
+    expect(acting).toHaveLength(9);
     expect([...s.read].sort()).toEqual([PENDING_RESTORE_KEY, ...acting].sort());
   });
 

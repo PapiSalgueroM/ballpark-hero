@@ -1,6 +1,6 @@
-import { CONTINUE_SAVES, type ContinueSave, type SavePath } from '@/data/continueSaves';
+import { CONTINUE_SAVES, continueSaveEntries, type ContinueSave, type SavePath } from '@/data/continueSaves';
 import {
-  BACKUPS_KEPT, BROKEN_SAVE_MARK, backupKeysOf, browserStorage, copyAside, dismissBackup, type ListableStorage,
+  BACKUPS_KEPT, BROKEN_SAVE_MARK, backupKeysOf, browserStorage, copyAside, dismissBackup, routeSaveEntry, type ListableStorage,
 } from '@/lib/brokenSaveRecovery';
 import { getStorageTrouble, settlePendingSaves } from '@/lib/safeStorage';
 
@@ -201,8 +201,10 @@ function readStaged(storage: ListableStorage): { rec: Staged; entry: ContinueSav
   const o = parsed as Record<string, unknown>;
   const whole = (n: unknown): n is number => typeof n === 'number' && Number.isInteger(n) && n >= 0;
   if (o.v !== 1 || typeof o.path !== 'string' || typeof o.backupKey !== 'string' || !whole(o.at) || !whole(o.len) || !whole(o.sum)) return 'junk';
-  const entry = CONTINUE_SAVES.find(e => e.path === o.path);
-  if (!entry || (o.backupKey !== PENDING_COPY_KEY && !o.backupKey.startsWith(`${entry.saveKey}${BROKEN_SAVE_MARK}`))) return 'junk';
+  const entry = routeSaveEntry(o.path);
+  if (!entry || entry.path !== o.path) return 'junk';
+  if (o.backupKey === PENDING_COPY_KEY && entry.path.includes('?')) return 'junk';
+  if (o.backupKey !== PENDING_COPY_KEY && !o.backupKey.startsWith(`${entry.saveKey}${BROKEN_SAVE_MARK}`)) return 'junk';
   return { rec: { v: 1, path: o.path, backupKey: o.backupKey, at: o.at, len: o.len, sum: o.sum }, entry };
 }
 
@@ -336,38 +338,33 @@ const uncopied = new Set<string>();
 export function keepUpdateCopies(storage: ListableStorage | null, now: Date = new Date()): number {
   if (!storage) return 0;
   let made = 0;
-  for (const entry of CONTINUE_SAVES) {
-    const row = Object.prototype.hasOwnProperty.call(SAVE_VERSIONS, entry.path) ? SAVE_VERSIONS[entry.path] : undefined;
+  for (const game of CONTINUE_SAVES) {
+    const row = Object.prototype.hasOwnProperty.call(SAVE_VERSIONS, game.path) ? SAVE_VERSIONS[game.path] : undefined;
     if (!row || row.other === 'ignores') continue;
-    let raw: string | null;
-    try { raw = storage.getItem(entry.saveKey); } catch { continue; }
-    if (raw === null) continue;
-    /* Anything but exactly the number this build writes. A save with no whole
-       number there (or a text one, or one that does not parse) is refused by
-       every one of these games as well, so it gets its copy too. */
-    if (versionIn(raw, row.at) === row.current) continue;
-    if (heldAside(entry, storage, raw)) continue;
-    const copied = copyAside(entry, storage, now);
-    if (copied.ok && copied.backupKey) {
-      dismissBackup(entry, copied.backupKey, storage);
-      made += 1;
-    } else if (!copied.ok) {
-      /* No room for the copy. The save is left exactly as it was, and the
-         card on that game's page says so once (takeCopyTrouble). */
-      uncopied.add(entry.path);
+    for (const entry of continueSaveEntries(game)) {
+      let raw: string | null;
+      try { raw = storage.getItem(entry.saveKey); } catch { continue; }
+      if (raw === null) continue;
+      /* An older, future or unreadable version gets one exact copy. */
+      if (versionIn(raw, row.at) === row.current) continue;
+      if (heldAside(entry, storage, raw)) continue;
+      const copied = copyAside(entry, storage, now);
+      if (copied.ok && copied.backupKey) {
+        dismissBackup(entry, copied.backupKey, storage);
+        made += 1;
+      } else if (!copied.ok) {
+        /* The original stays at its key. Its game shows the refusal once. */
+        uncopied.add(entry.path);
+      }
     }
   }
   return made;
 }
 
-/** One route form: no query, no hash, no trailing slash. */
-function routeOf(pathname: string): string {
-  return (pathname.split(/[?#]/)[0] || '/').replace(/\/+$/, '') || '/';
-}
-
 /** True, once, when this route's game holds a save from another version that could not be copied aside on this load. */
 export function takeCopyTrouble(pathname: string): boolean {
-  return uncopied.delete(routeOf(pathname));
+  const entry = routeSaveEntry(pathname);
+  return entry !== null && uncopied.delete(entry.path);
 }
 
 /* What the last staged put back did. Held in memory, not in storage: the card
@@ -389,7 +386,7 @@ export function runSaveKeeper(): void {
 
 /** The outcome of a put back for the game on this route, once. */
 export function takeOutcome(pathname: string): KeeperOutcome | null {
-  if (!lastOutcome || lastOutcome.path !== routeOf(pathname)) return null;
+  if (!lastOutcome || lastOutcome.path !== routeSaveEntry(pathname)?.path) return null;
   const out = lastOutcome;
   lastOutcome = null;
   return out;

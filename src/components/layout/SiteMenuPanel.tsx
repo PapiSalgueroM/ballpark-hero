@@ -78,7 +78,10 @@ export function SiteMenuPanel({ open, onOpenChange, returnFocusRef, id }: SiteMe
             </section>
             <section>
               <h3 className="mb-2 px-3 text-sm font-semibold text-muted-foreground">Sports</h3>
-              <div className="grid grid-cols-2 gap-1">{HUB_NAV.map(hub => link(hub.route, hub.navLabel))}</div>
+              <div className="grid grid-cols-2 gap-1">
+                {HUB_NAV.map(hub => link(hub.route, hub.navLabel))}
+                {link('/nrl-team-manager', 'Rugby League', 'NRL Team Manager')}
+              </div>
             </section>
             <section>
               <h3 className="mb-2 px-3 text-sm font-semibold text-muted-foreground">About the site</h3>

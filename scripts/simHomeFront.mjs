@@ -606,10 +606,11 @@ console.log('7) Continue playing: the right keys, real fields, hostile saves, on
   /* a: live games, one card each */
   const paths = CONTINUE_SAVES.map(e => e.path);
   const keys = CONTINUE_SAVES.map(e => e.saveKey);
+  const allKeys = CONTINUE_SAVES.flatMap(e => [e.saveKey, ...(e.alternateSaveKeys ?? [])]);
   if (CONTINUE_SAVES.length < 15) fail(7, `the list holds only ${CONTINUE_SAVES.length} games, so this measured almost nothing`);
   for (const p of paths) if (!gameByPath.has(p)) fail(7, `${p} is on the Continue list and is not a live registry game`);
   if (new Set(paths).size !== paths.length) fail(7, 'a game is on the Continue list twice');
-  if (new Set(keys).size !== keys.length) fail(7, 'two Continue entries share a save key');
+  if (new Set(allKeys).size !== allKeys.length) fail(7, 'two Continue entries share a save key');
 
   /* b: each key is the one its game declares */
   for (const e of CONTINUE_SAVES) {
@@ -744,7 +745,7 @@ console.log('7) Continue playing: the right keys, real fields, hostile saves, on
   const cold = withWindow(() => front.renderContinue());
   if (cold !== '') fail(7, `with no save in the browser the row renders ${cold.length} characters instead of nothing`);
   if (savedGames(globalThis.localStorage).length !== 0) fail(7, 'savedGames finds a save in an empty browser');
-  if (reads.some(k => !keys.includes(k))) fail(7, `the row asks storage for ${reads.filter(k => !keys.includes(k)).join(', ')}, which is not a save key`);
+  if (reads.some(k => !allKeys.includes(k))) fail(7, `the row asks storage for ${reads.filter(k => !allKeys.includes(k)).join(', ')}, which is not a save key`);
   for (const e of CONTINUE_SAVES) {
     store.clear();
     store.set(e.saveKey, '{}');

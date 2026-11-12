@@ -1,3 +1,9 @@
+## 2026-11-12: NRL Manager career saves
+
+Career saves keeps up to three careers in the same browser. An existing career opens in slot 1. Each slot can start in 2026 or 2027, and a saved live match resumes in the slot that played it. Starting another career uses an empty slot. Deleting a career asks for confirmation.
+
+Home Continue opens a saved slot even if slot 1 is empty. Each slot has its own write generation and recovery key. Switching keeps the other saves in place, and a failed write is retried before leaving for the slots screen.
+
 ## 2026-11-12 Front Office manual trade recovery
 
 In NFL, NBA, MLB and NHL Front Office, an open negotiation closes when a roster move takes away a player it needs. Manual trade choices return immediately. A visit to the Hub or an unrelated roster move keeps a valid negotiation open.

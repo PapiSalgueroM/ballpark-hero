@@ -329,7 +329,7 @@ function LiveTickerRail({ home }: { home: boolean }) {
 }
 
 const AppContent = () => {
-  const { pathname } = useLocation();
+  const { pathname, search } = useLocation();
   const gameRoute = isGameRoute(pathname);
   const opensCareerRules = /^\/(?:nba|nfl|mlb|nhl)-my-career\/?$/.test(pathname);
   return (
@@ -578,7 +578,7 @@ const AppContent = () => {
       {/* Round 958: the way back from a fresh start. On a long game's page,
           while a save it set aside exists, offers to put it back. Inside the
           boundary, so a throw here costs the page and not the site. */}
-      <BrokenSaveRestore pathname={pathname} />
+      <BrokenSaveRestore pathname={/^\/nrl-team-manager\/*$/.test(pathname) ? pathname + search : pathname} />
       {/* Round 49: one global footer on every page (legal disclaimer, About/Contact/
           What's New links, and the Report a bug button), instead of 33 pages
           importing their own copy and 95 pages having none.
