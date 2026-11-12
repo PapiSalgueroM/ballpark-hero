@@ -22,8 +22,11 @@ function revealPopularity(view: ReturnType<typeof render>) {
   const section = view.getByRole('heading', { name: 'Most played today' }).closest('section')!;
   const callback = nearObservers.get(section);
   expect(callback).toBeDefined();
-  act(() => callback!([{ target: section, isIntersecting: true } as IntersectionObserverEntry], {} as IntersectionObserver));
-  return () => act(() => callback!([{ target: section, isIntersecting: true } as IntersectionObserverEntry], {} as IntersectionObserver));
+  const rect = section.getBoundingClientRect();
+  const entry: IntersectionObserverEntry = { target: section, isIntersecting: true, boundingClientRect: rect,
+    intersectionRatio: 1, intersectionRect: rect, rootBounds: null, time: 0 };
+  act(() => callback!([entry], {} as IntersectionObserver));
+  return () => act(() => callback!([entry], {} as IntersectionObserver));
 }
 
 function deferred() {
