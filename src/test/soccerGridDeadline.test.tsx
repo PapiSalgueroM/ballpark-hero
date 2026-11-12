@@ -247,7 +247,7 @@ describe('Soccer Grid keeps a committed timed result frozen', () => {
   for (const [key, response, message, down] of [
     ['timelyUnverified', { data: { valid: false, unverified: true } }, RETRY, false],
     ['exhausted', { data: { valid: false, unverified: true, exhausted: true } }, EXHAUSTED, true],
-    ['rejected', null, null, false],
+    ['rejected', null, RETRY, false],
   ] as const) {
     it(TITLES[key], async () => {
       const view = await ready(); const moments: Moment[] = []; const before = moment(view, moments, 'ready');
@@ -259,6 +259,131 @@ describe('Soccer Grid keeps a committed timed result frozen', () => {
       expect(settled.toasts).toEqual(message ? [[message]] : []); released(view);
     });
   }
+
+  it('reports an HTTP error without spending a guess or writing the save', async () => {
+    const view = await ready();
+    const before = state(view);
+    const requestCount = requests.length;
+    replies.validator.push({ error: { name: 'FunctionsHttpError', status: 503 } });
+    await complete(view, 1, 'Grid Fixture Retry');
+
+    const settled = state(view);
+    expect(settled.main).toEqual(before.main);
+    expect(settled.storage).toEqual(before.storage);
+    expect(settled.recordings).toEqual(before.recordings);
+    expect(settled.toasts).toEqual([[RETRY]]);
+    expect(settled.checkingDown).toBe(false);
+    expect(requests.slice(requestCount).map(request => request.kind)).toEqual(['validator']);
+    released(view);
+  });
+
+  it('ignores an HTTP error after the player selects another cell', async () => {
+    const view = await ready();
+    const before = state(view);
+    const held = gate('superseded-http-error');
+    replies.validator.push(held);
+    const pending = begin(view, 1, 'Grid Fixture Retry');
+    await flush();
+    act(() => view.result.current.setActiveCell(2));
+    await act(async () => { held.resolve({ error: new Error('Fixture HTTP 503') }); await pending; });
+
+    const settled = state(view);
+    expect(settled.main).toEqual(before.main);
+    expect(settled.storage).toEqual(before.storage);
+    expect(settled.toasts).toEqual([]);
+    expect(settled.activeCell).toBe(2);
+    expect(settled.validating).toBe(false);
+  });
+
+  it('ignores an HTTP error after adopting newer daily progress', async () => {
+    const view = await ready();
+    const held = gate('adopted-http-error');
+    replies.validator.push(held);
+    const pending = begin(view, 1, 'Grid Fixture Retry');
+    await flush();
+    const save = JSON.parse(localStorage.getItem(dailyKey())!);
+    save.guesses.push({ t: 'x' });
+    localStorage.setItem(dailyKey(), JSON.stringify(save));
+    await act(async () => {
+      window.dispatchEvent(new StorageEvent('storage', { key: dailyKey() }));
+      held.resolve({ error: new Error('Fixture HTTP 503') });
+      await pending;
+    });
+
+    const settled = state(view);
+    expect(settled.main.dailyJSON).toBe(JSON.stringify(save));
+    expect(settled.main.guessesLeft).toBe(13);
+    expect(settled.toasts).toEqual([]);
+    released(view);
+  });
+
+  it('ignores an HTTP error after the timer setting changes', async () => {
+    const view = await ready();
+    const held = gate('changed-settings-http-error');
+    replies.validator.push(held);
+    const pending = begin(view, 1, 'Grid Fixture Retry');
+    await flush();
+    act(() => view.result.current.setTimerMode(60));
+    const changed = state(view);
+    await act(async () => { held.resolve({ error: new Error('Fixture HTTP 503') }); await pending; });
+
+    const settled = state(view);
+    expect(settled.main).toEqual(changed.main);
+    expect(settled.storage).toEqual(changed.storage);
+    expect(settled.settings.timerMode).toBe(60);
+    expect(settled.toasts).toEqual([]);
+    released(view);
+  });
+
+  it('ignores an HTTP error after the deadline before the timer ticks', async () => {
+    const view = await ready();
+    const before = state(view);
+    const held = gate('expired-http-error');
+    replies.validator.push(held);
+    const pending = begin(view, 1, 'Grid Fixture Retry');
+    await flush();
+    vi.setSystemTime(NOW + 40_000);
+    await act(async () => { held.resolve({ error: new Error('Fixture HTTP 503') }); await pending; });
+
+    const settled = state(view);
+    expect(settled.main).toEqual(before.main);
+    expect(settled.storage).toEqual(before.storage);
+    expect(settled.recordings).toEqual(before.recordings);
+    expect(settled.toasts).toEqual([]);
+    released(view);
+  });
+
+  it('ignores an HTTP error after leaving the board', async () => {
+    const view = await ready();
+    const held = gate('unmounted-http-error');
+    replies.validator.push(held);
+    const pending = begin(view, 1, 'Grid Fixture Retry');
+    await flush();
+    view.unmount();
+    await act(async () => { held.resolve({ error: new Error('Fixture HTTP 503') }); await pending; });
+
+    expect(io.toast).not.toHaveBeenCalled();
+    expect(io.record).not.toHaveBeenCalled();
+  });
+
+  it('keeps a failed selection write separate from a validator error', async () => {
+    const view = await ready();
+    const before = state(view);
+    const held = gate('failed-selection-write');
+    replies.validator.push(VALID('Grid Fixture Second'));
+    replies.count.push({ count: 9 }, { count: 1 });
+    replies.insert.push(held);
+    const pending = begin(view, 1, 'Grid Fixture Second');
+    await flush();
+    expect(requests.at(-1)?.deferred).toBe(held.name);
+    await act(async () => { held.reject(new Error('Fixture selection write failure')); await pending; });
+
+    const settled = state(view);
+    expect(settled.main).toEqual(before.main);
+    expect(settled.storage).toEqual(before.storage);
+    expect(settled.toasts).toEqual([]);
+    released(view);
+  });
 
   it(TITLES.overtimeValid, async () => {
     const view = await ready(); const moments: Moment[] = []; moment(view, moments, 'ready');

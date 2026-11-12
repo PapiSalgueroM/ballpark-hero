@@ -267,7 +267,7 @@ describe('Soccer Grid main-round submission ownership', () => {
       await act(async () => { if (key === 'rejected') held.reject(new Error('Declared offline fixture')); else held.resolve({ data: { valid: false, unverified: true, ...(key === 'exhausted' ? { exhausted: true } : {}) } }); await pending; });
       const settled = frame([view], frames, 'free-settled')[0]; retain(key, frames);
       expect(settled.main).toEqual(before.main); expect(writeCount()).toBe(0); expect(settled.recordings).toEqual([]);
-      expect(settled.checkingDown).toBe(key === 'exhausted'); expect(settled.toasts).toEqual(key === 'rejected' ? [] : [[key === 'exhausted' ? EXHAUSTED : RETRY]]);
+      expect(settled.checkingDown).toBe(key === 'exhausted'); expect(settled.toasts).toEqual([[key === 'exhausted' ? EXHAUSTED : RETRY]]);
       expect(settled.gameStatus).toBe('playing'); released(view);
     });
   }
