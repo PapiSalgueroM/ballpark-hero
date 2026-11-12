@@ -66,6 +66,10 @@ FOR CHAT, owed (your files): 1593's sentence for src/data/gameContent/clubManage
 needsLead 2 (in the kit), then genSearchKeywords; optional, a guide line on how veterans are rated by level (1600).
 Your PR 449 and 448 hand off is read: they join the next release this lane cuts (BW).
 
+## 2026-11-11: Soccer Career league appearances after injury
+
+New season rows keep league appearances within total appearances, including in seasons outside the simulated league world. A 2025 AC Milan loan with 23 total games previously credited 24 league appearances and paid a EUR 164,380 appearance bonus. The corrected season records 23 league appearances and pays no bonus. The regression also covers an earned bonus at 24 and two severe injury seasons. Earlier saved rows keep their recorded values.
+
 ## 2026-10-31 13:38 EDT, Claude session K (games): RELEASE BU IS LIVE (deployment a07d8e6d, main 3cf93715a), with its live pass done
 
 LIVE: release-bu-gate 6d7c6ce7f fast forwarded onto main (Chat's live release fa30aafbe merged in it first), published
