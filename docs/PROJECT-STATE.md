@@ -1,3 +1,9 @@
+## 2026-11-12: Soccer Career Heat card explains owned items
+
+The Heat card now points to My Life and The other list when there is no owned processing capacity. It shows what the owned items can clear in the next playing season and warns about leftover Heat only when a balance remains. A 390px original replay confirmed that the old instruction was identical with no purchases and with all three items already owned.
+
+The four mounted regressions cover no items, partial capacity, full capacity and a cleared balance. Both save suites passed 66 cases. In 72 paired season simulations the full next save and all 44,959 random draws matched, including cooling, a penalty and seasons missed through a ban or prison.
+
 ## 2026-11-12: NRL Manager golden-point match report
 
 The latest regular-season match report names the decisive score and five-minute period when a managed match goes to golden point. A draw explains that neither club scored in either period. The receipt uses the same resolution roll as the existing simulation.
