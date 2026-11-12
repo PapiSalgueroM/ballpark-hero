@@ -1,8 +1,18 @@
+## 2026-11-12 Club Manager Championship playoffs prototype
+
+New current-era English careers use the six-team Championship playoffs for the third Premier League place. Fifth and sixth host the eliminators, then third and fourth host the return legs of reseeded semifinals. The neutral final decides promotion. Dates and results are simulated. The game uses the standard home order and the existing regular-season standings.
+
+The prototype keeps the bracket and match scores in the career save. It opens a qualified manager's playoff fixtures after the existing league and cup calendar, and settles the same bracket through AI for other clubs. Season review and the summer exchange read one winner. Old saves and Manager Hot Seat keep their existing promotion rules.
+
+On exact parent a887cce20, the old engine sent the third-place Burnley fixture directly up. The prototype kept it in the Championship after a semifinal shootout win and a final loss, and sent an eighth-place fixture up after four match-engine fixtures and the final win. The 98 distinct focused checks covered rank and venue, the regular-final Continue callback, fast forward, saved halftime, three-place exchange and late job handling. Three Daily start-and-match pairs and four fixtures each at legacy Burnley, Arsenal and Real Madrid held exact serialized state and observed draws against the parent. The league tables used for these replays are test fixtures. App types, Vite, two focused readers and 16 caps passed at local 3a6e3ea00. Six phone journeys passed at 320 and 390px, including semifinal reload, promotion and relegation. The integration build is pending.
+
+Rules: [2026/27 EFL play-off rules](https://images.gc.eflservices.co.uk/659e3bb0-7b8d-11f1-b366-6527b2d4899f.pdf), [2026/27 EFL regulations](https://images.gc.eflservices.co.uk/8374c4e0-c95f-11f1-bbd2-73c36057a203.pdf), [Premier League format explainer](https://www.premierleague.com/en/news/4611805).
+
 ## 2026-11-12 Club Manager played Champions League prototype
 
 New ordinary current-season careers can play the 36-club Champions League league phase. Qualified clubs play eight simulated fixtures before the two-leg knockout playoffs and the single final. The saved draw and results feed the Cups table, matchday view and calendar. Existing group seasons finish in groups, with the modern option activated at ordinary rollover. Historic, Asian start and Daily paths keep their existing rules.
 
-On local integration base 2348a72f9, the 116 focused tests passed. Arsenal recorded 144 league-phase results and completed the full bracket. Matchday four reloaded the exact draw, scores and visible table. Tested finishes were seventh, ninth and thirty-first, with an earned home and away round of 16 tie counted before its opponent was drawn. An Everton-to-Arsenal job preserved the season's rules. The source-only format reader and its watched-format control passed. Full app types, production and phone builds, and the Club Manager and format-history snapshots remain pending. This prototype is local.
+On local integration base 2348a72f9, the 116 focused tests passed. Arsenal recorded 144 league-phase results and completed the full bracket. Matchday four reloaded the exact draw, scores and visible table. Tested finishes were seventh, ninth and thirty-first, with an earned home and away round of 16 tie counted before its opponent was drawn. An Everton-to-Arsenal job preserved the season's rules. The source-only format reader and its watched-format control passed. App types, the production build, both refreshed crawler pages and six phone journeys passed at local integration 54567675b. A played matchday saved all 18 scores. Existing group-stage saves loaded and kept their bytes.
 
 ## 2026-11-12: NRL Manager fit lineup preview
 

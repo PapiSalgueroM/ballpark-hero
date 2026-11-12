@@ -212,7 +212,7 @@ export function InboxCard({ career, onAnswer }: InboxCardProps) {
             </p>
             {!m.resolved && m.options.length > 0 && (
               <div className="flex flex-wrap gap-1.5 mt-2">
-                {m.options.map((o, i) => (
+                {m.options.map((o, i) => (career.championshipPlayoffs && o.effect === 'joinNow' ? null : (
                   <button
                     key={i}
                     onClick={() => { setAnswerRequest(m.id); onAnswer(m.id, i); }}
@@ -220,7 +220,7 @@ export function InboxCard({ career, onAnswer }: InboxCardProps) {
                   >
                     {o.label}
                   </button>
-                ))}
+                )))}
               </div>
             )}
             {m.resolved && (
