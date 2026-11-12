@@ -194,15 +194,14 @@ export function useLineupBuilder() {
   const rerollTeam = useCallback(() => {
     cancelValidation();
     setTeamAssignments((prev) => {
-      const usedNames = new Set(prev.filter((_, i) => i !== filledCount).map((t) => t.name));
+      const usedNames = new Set(prev.map((t) => t.name));
       const all = draftChoice.mode === 'club-year'
         ? clubYearClubs.map((name) => ({ name, isNation: false }))
         : [
         ...MIXED_CLUBS.map((name) => ({ name, isNation: false })),
         ...ALL_NATIONS.map((name) => ({ name, isNation: true })),
       ];
-      const available = all.filter((t) => !usedNames.has(t.name)
-        && (draftChoice.mode !== 'club-year' || t.name !== prev[filledCount]?.name));
+      const available = all.filter((t) => !usedNames.has(t.name));
       const pick = available[Math.floor(Math.random() * available.length)];
       if (!pick) return prev;
       const next = [...prev];

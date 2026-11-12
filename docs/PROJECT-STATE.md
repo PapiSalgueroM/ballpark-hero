@@ -1,3 +1,9 @@
+## 2026-11-11 Build Your XI Mixed rerolls
+
+The draft fixes a Mixed reroll that could spin and give back the same assignment. Both modes now exclude the current team along with the other teams already assigned. The recorded year and consumed lineup slots stay in place when the next team changes.
+
+A controlled draw repeated Real Madrid on main and picked Inter Milan on the draft build. A later draw kept the filled goalkeeper and reached Cameroon. The same Club year draw kept 2010 and switched Real Madrid to Borussia Dortmund on both builds. The real hook regression, type gate, production build, 15 output checks and all 16 route caps passed. Published release pending.
+
 ## 2026-11-12: Build Your XI Mixed club pool
 
 Mixed adds 30 clubs, including Flamengo and Palmeiras, while keeping its 25 countries. The draw, reroll and reel use the expanded pool. Club year still uses its 29 qualified clubs and the chosen recorded year.
