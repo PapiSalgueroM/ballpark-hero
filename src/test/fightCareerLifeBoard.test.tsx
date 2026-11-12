@@ -22,6 +22,27 @@ beforeEach(() => localStorage.clear());
 afterEach(() => cleanup());
 
 describe('Fight Career board, the life between fights', () => {
+  it('explains the six camp weeks and moves one without adding to the budget', async () => {
+    const st = lifeNewCareer('Camp Check', 'welter', 'outboxer', 'allround', 'family', 'camp-week-help');
+    localStorage.setItem(KEY, JSON.stringify({ st, phase: 'hub' }));
+    const view = render(<FightCareerBoard />);
+    fireEvent.click(await view.findByText(st.offers[0].label));
+
+    expect(view.getByText(/Each fight gives you six training weeks/)).toBeVisible();
+    const addSpeed = view.getByRole('button', { name: 'Add week to Speed' });
+    expect(addSpeed).toBeDisabled();
+    fireEvent.click(view.getByRole('button', { name: 'Remove week from Conditioning' }));
+    expect(view.getByText(/1 week left to place/)).toBeVisible();
+    fireEvent.click(addSpeed);
+    expect(addSpeed).toBeDisabled();
+    fireEvent.click(view.getByRole('button', { name: 'Finish camp' }));
+
+    const expected = lifeRunCamp(st, { ...PLAN, conditioning: 1, speed: 2 });
+    const saved = JSON.parse(localStorage.getItem(KEY)!);
+    expect(saved.phase).toBe('plan');
+    expect(saved.st).toEqual(expected);
+  });
+
   it('opens a save from before the round on the hub, record intact, tiles showing', async () => {
     let st = newFightCareer('Old Timer', 'light', 'swarmer', 'board-v1');
     st = takeFight(runCamp(st, PLAN), st.offers[0].id, [...LOOKS])!.state;
