@@ -63,11 +63,12 @@
  * Run: node scripts/simTransferPathHints.mjs
  */
 import fs from 'node:fs';
+import { createHash } from 'node:crypto';
 import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { build } from 'esbuild';
-import { CARVAJAL_MIGRATION, LIVERPOOL_MIGRATION, MODE_RULES, ROUND_784_MIGRATION, buildGraph, deriveHint, distances, expandCompactCareers, hintProblems, liverpoolCareerState, parseActiveRefreshMigration, parseActiveRestoreMigration, parseHint, parseRuleEntryRefresh, parseTransferPathCompanionMigration, ruleEntryRefreshState, ruleProblems, sharedClub } from './lib/transferPathHints.mjs';
+import { BARCELONA_MIGRATION, CARVAJAL_MIGRATION, LIVERPOOL_MIGRATION, MODE_RULES, ROUND_784_MIGRATION, barcelonaCareerState, buildGraph, deriveHint, distances, expandCompactCareers, hintProblems, liverpoolCareerState, parseActiveRefreshMigration, parseActiveRestoreMigration, parseHint, parseRuleEntryRefresh, parseTransferPathCompanionMigration, ruleEntryRefreshState, ruleProblems, sharedClub } from './lib/transferPathHints.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTROL = process.env.TPH_CONTROL || '';
@@ -89,6 +90,9 @@ const ACTIVE_RESTORE = path.join(ROOT, 'supabase/migrations/20260911190000_refre
 const ACTIVE_RESTORE_ROWS = 212;
 const APPLIED_ACTIVE_ROWS = 203;
 const liverpoolRewrites = parseActiveRefreshMigration(fs.readFileSync(path.join(ROOT, LIVERPOOL_MIGRATION), 'utf8'));
+const barcelonaSql = fs.readFileSync(path.join(ROOT, BARCELONA_MIGRATION), 'utf8');
+const barcelonaRewrites = parseRuleEntryRefresh(barcelonaSql);
+const barcelonaActive = new Map(barcelonaRewrites.filter(row => row.rule === 'active').map(row => [row.id, row]));
 
 function checkRows(graph, rows, label) {
   let unreachable = 0, checked = 0;
@@ -146,6 +150,7 @@ export { fetchTransferPathPuzzles } from '${ROOT.replaceAll('\\', '/')}/src/lib/
 export { fetchAllRows } from '${ROOT.replaceAll('\\', '/')}/src/lib/fetchAllRows.ts';
 export { supabase } from '${ROOT.replaceAll('\\', '/')}/src/integrations/supabase/client.ts';
 export { playersUnderRule } from '${ROOT.replaceAll('\\', '/')}/src/lib/transferPathModes.ts';
+export { dateSeed } from '${ROOT.replaceAll('\\', '/')}/src/lib/dateUtils.ts';
 `);
 await build({ entryPoints: [ENTRY], bundle: true, format: 'esm', platform: 'node', outfile: OUT, logLevel: 'error', alias: { '@': path.join(ROOT, 'src') } });
 const site = await import(pathToFileURL(OUT).href);
@@ -218,7 +223,13 @@ console.log('3) the live tables, through the site\'s own fetchers');
     if (activeLiveState === 'mixed') fail(`live active hints are in a mixed state: ${liveActiveCount} complete, ${partialActive.length} partial; only the applied ${appliedRows.size} or the refreshed ${restoreRows.size} is valid`);
     const liverpoolState = liverpoolCareerState(players);
     if (liverpoolState === 'mixed' || (liverpoolState === 'after' && activeLiveState !== 'refreshed')) fail('live Liverpool seasons must arrive together after the full Active refresh');
-    const currentRestore = liverpoolState === 'after' ? new Map([...restoreRows, ...liverpoolRewrites]) : restoreRows;
+    const barcelonaState = barcelonaCareerState(players);
+    if (barcelonaState === 'mixed' || (barcelonaState === 'after' && liverpoolState !== 'after')) fail('live Barcelona seasons must arrive together after the Liverpool correction');
+    const currentRestore = new Map([
+      ...restoreRows,
+      ...(liverpoolState === 'after' ? liverpoolRewrites : []),
+      ...(barcelonaState === 'after' ? barcelonaActive : []),
+    ]);
     const livePuzzleIds = new Set(puzzles.map(puzzle => puzzle.id));
     for (const id of restoreRows.keys()) if (!livePuzzleIds.has(id)) {
       fail(`proposed active restore ${id} is absent from the live table`);
@@ -241,9 +252,12 @@ console.log('3) the live tables, through the site\'s own fetchers');
     const carvajal = parseRuleEntryRefresh(fs.readFileSync(path.join(ROOT, CARVAJAL_MIGRATION), 'utf8'));
     const carvajalState = ruleEntryRefreshState(carvajal, liveEntry);
     if (carvajalState === 'mixed') fail('live Carvajal puzzle entries must be all before or all after the correction');
+    if (ruleEntryRefreshState(barcelonaRewrites, liveEntry) !== barcelonaState) fail('live Barcelona seasons and the three hints must move together');
+    if (barcelonaState === 'after' && (r784State !== 'after' || carvajalState !== 'after')) fail('live Barcelona correction requires the earlier career hints');
     const appliedRewrites = [
       ...(r784State === 'after' ? r784 : []),
       ...(carvajalState === 'after' ? carvajal : []),
+      ...(barcelonaState === 'after' ? barcelonaRewrites : []),
     ];
     const europeRewrites = new Map(appliedRewrites.filter(r => r.rule === 'europe').map(r => [r.id, r]));
     console.log(r784State === 'after'
@@ -473,7 +487,7 @@ let r784Caught = false;
     ? { minSteps: c.minSteps, hint: c.hint }
     : c.europeMinSteps === null ? null : { minSteps: c.europeMinSteps, hint: c.europeHint };
   const carvajal = parseRuleEntryRefresh(fs.readFileSync(path.join(ROOT, CARVAJAL_MIGRATION), 'utf8'));
-  const rows = [...r784, ...carvajal];
+  const rows = [...r784, ...carvajal, ...barcelonaRewrites.filter(row => row.rule !== 'active')];
   const graphs = { classic: buildGraph(site.fallbackPlayers), europe: buildGraph(site.playersUnderRule(site.fallbackPlayers, 'europe')) };
   const byKey = new Map();
   for (const r of rows) {
@@ -517,11 +531,91 @@ console.log('8) the Liverpool seasons and their Active refresh entries');
     if (!next || next.minSteps !== row.minSteps || next.hint !== row.hint || row.minSteps >= row.oldMinSteps) fail(`${id}: Liverpool correction must carry the derived shorter Active path`);
   }
   for (const { id, playerA, playerB } of companion) {
-    const current = liverpoolRewrites.get(id) ?? refresh.get(id) ?? null;
+    const current = barcelonaActive.get(id) ?? liverpoolRewrites.get(id) ?? refresh.get(id) ?? null;
     const entry = current ? { minSteps: current.minSteps, hint: current.hint } : null;
-    for (const problem of ruleProblems(activeGraph, playerA, playerB, entry)) fail(`${id} under Active after the Liverpool correction: ${problem}`);
+    for (const problem of ruleProblems(activeGraph, playerA, playerB, entry)) fail(`${id} under Active after the staged career corrections: ${problem}`);
   }
-  console.log(`   ${liverpoolRewrites.size} shorter entries over the verified refresh, all ${companion.length} retained pairs checked on the baked Active graph`);
+  console.log(`   ${liverpoolRewrites.size} shorter entries over the verified refresh, all ${companion.length} retained pairs checked on the baked Active graph with the Barcelona update`);
+}
+
+console.log('9) the Barcelona correction holds the staged graph and the ordered Daily deck');
+{
+  const rules = ['classic', 'active', 'europe'];
+  const code = barcelonaSql.replace(/--[^\n]*/g, '');
+  const companion = parseTransferPathCompanionMigration(fs.readFileSync(COMPANION, 'utf8')).desired;
+  const refresh = parseActiveRefreshMigration(fs.readFileSync(ACTIVE_RESTORE, 'utf8'));
+  const priorEntries = new Map(companion.map(row => [row.id, {
+    classic: { minSteps: row.minSteps, hint: row.hint },
+    active: liverpoolRewrites.get(row.id) ?? refresh.get(row.id),
+    europe: row.europeMinSteps === null ? undefined : { minSteps: row.europeMinSteps, hint: row.europeHint },
+  }]));
+  for (const file of [ROUND_784_MIGRATION, CARVAJAL_MIGRATION]) {
+    for (const row of parseRuleEntryRefresh(fs.readFileSync(path.join(ROOT, file), 'utf8'))) {
+      priorEntries.get(row.id)[row.rule] = row;
+    }
+  }
+  const corrected = structuredClone(priorEntries);
+  if (barcelonaRewrites.length !== rules.length || new Set(barcelonaRewrites.map(row => row.rule)).size !== rules.length) {
+    fail('the Barcelona correction must update one entry in each rule');
+  }
+  for (const row of barcelonaRewrites) {
+    const previous = priorEntries.get(row.id)?.[row.rule];
+    if (row.id !== 'tpa-912' || row.a !== 'Kobbie Mainoo' || row.b !== 'Lamine Yamal'
+      || row.oldMinSteps !== 4 || row.minSteps !== 3
+      || previous?.minSteps !== row.oldMinSteps || previous?.hint !== row.oldHint) {
+      fail('the Barcelona correction does not replace the held four-step tpa-912 hint');
+      continue;
+    }
+    corrected.get(row.id)[row.rule] = row;
+    const graph = buildGraph(site.playersUnderRule(site.fallbackPlayers, row.rule));
+    const next = deriveHint(graph, row.a, row.b);
+    if (!next || next.hint !== row.hint || next.minSteps !== row.minSteps) fail(`tpa-912 ${row.rule}: the new hint differs from the graph`);
+    if (next?.path.join('|') !== 'Kobbie Mainoo|Marcus Rashford|Robert Lewandowski|Lamine Yamal') {
+      fail(`tpa-912 ${row.rule}: the exact three-step Barcelona path is missing`);
+    }
+    const historical = deriveHint(graph, 'Rodri', 'Romelu Lukaku');
+    const held = priorEntries.get('tpa-174')[row.rule];
+    if (!historical || historical.minSteps !== held.minSteps || historical.hint !== held.hint) {
+      fail(`tpa-174 ${row.rule}: the reported Daily pair's hint moved`);
+    }
+  }
+  if (ruleEntryRefreshState(barcelonaRewrites, (id, rule) => priorEntries.get(id)?.[rule]) !== 'before'
+    || ruleEntryRefreshState(barcelonaRewrites, (id, rule) => corrected.get(id)?.[rule]) !== 'after'
+    || ruleEntryRefreshState(barcelonaRewrites, (id, rule) => (rule === 'active' ? corrected : priorEntries).get(id)?.[rule]) !== 'mixed') {
+    fail('the three Barcelona hints must distinguish before, after and partial states');
+  }
+
+  const hash = rows => createHash('sha256').update(rows.map(row => JSON.stringify(row)).join('\n')).digest('hex');
+  const ordered = [...companion].sort((a, b) => a.id < b.id ? -1 : a.id > b.id ? 1 : 0);
+  const digests = values => rules.map(rule => hash(ordered.flatMap(row => {
+    const entry = values.get(row.id)[rule];
+    return entry ? [[row.id, row.playerA, row.playerB, String(entry.minSteps), entry.hint]] : [];
+  })));
+  for (const [label, values] of [['before', priorEntries], ['after', corrected]]) {
+    const declared = code.match(new RegExp(`${label}_digests constant text\\[\\] := array\\[([^\\]]+)\\]`))?.[1] ?? '';
+    const recorded = [...declared.matchAll(/'([0-9a-f]{64})'/g)].map(match => match[1]);
+    if (JSON.stringify(digests(values)) !== JSON.stringify(recorded)) fail(`Barcelona ${label} hint digests differ from the exact staged graph`);
+  }
+
+  const deck = fs.readFileSync(path.join(ROOT, 'scripts/data/transferPathPull/puzzles.txt'), 'utf8')
+    .trim().split(/\r?\n/).map(line => {
+      const [id, a, b] = line.split('|');
+      return [id, a, b, String(Number(id.split('-')[1]) - (id.startsWith('tp-') ? 1 : 0))];
+    });
+  const deckGuard = code.match(/deck_digest is distinct from '([0-9a-f]{64})'/)?.[1];
+  if (deck.length !== PUZZLE_FLOOR || deck[155]?.[0] !== 'tpa-174' || deck[834]?.[0] !== 'tpa-912' || hash(deck) !== deckGuard) {
+    fail('the SQL deck guard differs from the ordered Daily source');
+  }
+  for (let date = Date.UTC(2026, 4, 26); date <= Date.UTC(2026, 10, 12); date += 86_400_000) {
+    const day = new Date(date).toISOString().slice(0, 10);
+    if (deck[site.dateSeed(day) % deck.length]?.[0] === 'tpa-912') fail(`the exact deck selected tpa-912 on historical day ${day}`);
+  }
+  const assignments = code.match(/update public\.transfer_path_puzzles p\s+set ([\s\S]*?)\s+where/i)?.[1] ?? '';
+  const columns = [...assignments.matchAll(/(?:^|,)\s*([a-z_]+)\s*=/g)].map(match => match[1]);
+  if (columns.join() !== 'min_steps,hint,active_min_steps,active_hint,europe_min_steps,europe_hint') {
+    fail('the Barcelona correction may change only the three tpa-912 hint fields and their minimums');
+  }
+  console.log('   Only tpa-912 changes. The ordered 885-card deck, the captured tpa-174 pair, and the six staged hint digests are verified.');
 }
 
 console.log('');

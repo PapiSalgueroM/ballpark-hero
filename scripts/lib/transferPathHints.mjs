@@ -341,19 +341,28 @@ export function parseActiveRefreshMigration(sql) {
   return rows;
 }
 
-const RULE_ENTRY_REFRESH_ROW_RE = /^\s*\('((?:[^']|'')*)', '((?:[^']|'')*)', '((?:[^']|'')*)', '(classic|europe)', (\d+), '((?:[^']|'')*)', (\d+), '((?:[^']|'')*)'\),?$/gm;
+const RULE_ENTRY_REFRESH_ROW_RE = /^\s*\('((?:[^']|'')*)', '((?:[^']|'')*)', '((?:[^']|'')*)', '(classic|active|europe)', (\d+), '((?:[^']|'')*)', (\d+), '((?:[^']|'')*)'\),?$/gm;
 export const ROUND_784_MIGRATION = 'supabase/migrations/20261001120000_career_first_clubs.sql';
 export const CARVAJAL_MIGRATION = 'supabase/migrations/20261110192036_career_carvajal_madrid_2024_2025.sql';
 export const LIVERPOOL_MIGRATION = 'supabase/migrations/20261110195000_career_isak_van_dijk_liverpool_2025.sql';
+export const BARCELONA_MIGRATION = 'supabase/migrations/20261112123000_career_barcelona_rashford_lewandowski_2025.sql';
 
-/** The two Liverpool spells must arrive together with their Active hint changes. */
-export function liverpoolCareerState(players) {
-  const counts = ['Alexander Isak', 'Virgil van Dijk'].map(name => players
+function careerPairState(players, names, club) {
+  const counts = names.map(name => players
     .find(player => player.name === name)?.career
-    .filter(season => season.season === '2025-2026' && season.club === 'Liverpool').length);
+    .filter(season => season.season === '2025-2026' && season.club === club).length);
   if (counts.every(count => count === 0)) return 'before';
   if (counts.every(count => count === 1)) return 'after';
   return 'mixed';
+}
+
+/** Career rows and their staged hint corrections arrive together. */
+export function liverpoolCareerState(players) {
+  return careerPairState(players, ['Alexander Isak', 'Virgil van Dijk'], 'Liverpool');
+}
+
+export function barcelonaCareerState(players) {
+  return careerPairState(players, ['Marcus Rashford', 'Robert Lewandowski'], 'Barcelona');
 }
 
 /** Round 784: the rule entries a career migration rewrites in the same

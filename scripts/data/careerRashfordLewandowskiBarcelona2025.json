@@ -1,0 +1,47 @@
+{
+  "checked": "2026-11-12",
+  "report": "Transfer Path tpa-174 rejected Marcus Rashford after Robert Lewandowski.",
+  "scope": "Senior Barcelona club competitions in 2025-2026. Assists are unknown because source definitions disagree. Market value 0 is the existing unknown marker.",
+  "sources": {
+    "uefaLineup": "https://www.uefa.com/uefachampionsleague/match/2045920--newcastle-vs-barcelona/lineups/",
+    "newcastleMatchReport": "https://www.newcastleunited.com/en/matches/mens-team/newcastle-united-v-barcelona-uefa-champions-league-20250918",
+    "barcelonaMatchReport": "https://www.fcbarcelona.com/en/football/first-team/news/4399120/celta-vigo-2-4-fc-barcelona-closer-to-the-top",
+    "laligaMatchReport": "https://www.laliga.com/en-US/match/temporada-2025-2026-laliga-ea-sports-rc-celta-fc-barcelona-12"
+  },
+  "added": [
+    {
+      "player": "Marcus Rashford",
+      "playerId": "a0000001-0000-0000-0000-000000000024",
+      "season": "2025-2026",
+      "club": "Barcelona",
+      "appearances": 49,
+      "goals": 14,
+      "assists": null,
+      "marketValue": 0,
+      "sortOrder": 10,
+      "sources": {
+        "clubAppearancesAndGoals": "https://www.bdfutbol.com/en/j/j25112.html?p=stats",
+        "independentSeasonTotals": "https://fbref.com/en/players/a1d5bd30/all_comps/Marcus-Rashford-Stats---All-Competitions",
+        "independentCompetitionBreakdown": "https://www.footballtransfers.com/en/players/marcus-rashford/stats"
+      }
+    },
+    {
+      "player": "Robert Lewandowski",
+      "playerId": "a0000001-0000-0000-0000-000000000004",
+      "season": "2025-2026",
+      "club": "Barcelona",
+      "appearances": 46,
+      "goals": 19,
+      "assists": null,
+      "marketValue": 0,
+      "sortOrder": 16,
+      "sources": {
+        "barcelonaFinalMatch": "https://www.fcbarcelona.com/en/news/4509005/robert-lewandowski-says-goodbye-on-120-goals/amp",
+        "barcelonaCompletedSeasonGoals": "https://www.fcbarcelona.com/en/card/4526738/robert-lewandowski",
+        "seasonTotals": "https://fbref.com/en/squads/206d90db/2025-2026/roster/Barcelona-Roster-Details",
+        "independentSeasonTotals": "https://tactix.football/player/r-lewandowski/2025-26"
+      }
+    }
+  ],
+  "changed": []
+}

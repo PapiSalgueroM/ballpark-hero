@@ -65,7 +65,7 @@ import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { build } from 'esbuild';
 import {
-  CARVAJAL_MIGRATION, LIVERPOOL_MIGRATION, MODE_RULES, ROUND_784_MIGRATION, buildGraph, distances, expandCompactCareers, liverpoolCareerState, parseActiveRefreshMigration, parseActiveRestoreMigration, parseRuleEntryRefresh, parseTransferPathCompanionMigration, ruleEntryRefreshState, ruleProblems, sharedClub, shortestPath,
+  BARCELONA_MIGRATION, CARVAJAL_MIGRATION, LIVERPOOL_MIGRATION, MODE_RULES, ROUND_784_MIGRATION, barcelonaCareerState, buildGraph, distances, expandCompactCareers, liverpoolCareerState, parseActiveRefreshMigration, parseActiveRestoreMigration, parseRuleEntryRefresh, parseTransferPathCompanionMigration, ruleEntryRefreshState, ruleProblems, sharedClub, shortestPath,
 } from './lib/transferPathHints.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -274,7 +274,14 @@ console.log('3) the live table, through the site\'s own fetcher');
     const liverpoolState = liverpoolCareerState(players);
     if (liverpoolState === 'mixed' || (liverpoolState === 'after' && activeLiveState !== 'refreshed')) fail('live Liverpool seasons must arrive together after the full Active refresh');
     const liverpoolRewrites = parseActiveRefreshMigration(fs.readFileSync(path.join(ROOT, LIVERPOOL_MIGRATION), 'utf8'));
-    const currentRestore = liverpoolState === 'after' ? new Map([...restoreRows, ...liverpoolRewrites]) : restoreRows;
+    const barcelonaRewrites = parseRuleEntryRefresh(fs.readFileSync(path.join(ROOT, BARCELONA_MIGRATION), 'utf8'));
+    const barcelonaState = barcelonaCareerState(players);
+    if (barcelonaState === 'mixed' || (barcelonaState === 'after' && liverpoolState !== 'after')) fail('live Barcelona seasons must arrive together after the Liverpool correction');
+    const currentRestore = new Map([
+      ...restoreRows,
+      ...(liverpoolState === 'after' ? liverpoolRewrites : []),
+      ...(barcelonaState === 'after' ? barcelonaRewrites.filter(row => row.rule === 'active').map(row => [row.id, row]) : []),
+    ]);
     const livePuzzleIds = new Set(puzzles.map(puzzle => puzzle.id));
     for (const id of restoreRows.keys()) if (!livePuzzleIds.has(id)) fail(`proposed active restore ${id} is absent from the live table`);
     const everyday = buildGraph(players);
@@ -293,9 +300,12 @@ console.log('3) the live table, through the site\'s own fetcher');
     const carvajal = parseRuleEntryRefresh(fs.readFileSync(path.join(ROOT, CARVAJAL_MIGRATION), 'utf8'));
     const carvajalState = ruleEntryRefreshState(carvajal, liveEntry);
     if (carvajalState === 'mixed') fail('live Carvajal puzzle entries must be all before or all after the correction');
+    if (ruleEntryRefreshState(barcelonaRewrites, liveEntry) !== barcelonaState) fail('live Barcelona seasons and the three hints must move together');
+    if (barcelonaState === 'after' && (r784State !== 'after' || carvajalState !== 'after')) fail('live Barcelona correction requires the earlier career hints');
     const appliedRewrites = new Map([
       ...(r784State === 'after' ? r784 : []),
       ...(carvajalState === 'after' ? carvajal : []),
+      ...(barcelonaState === 'after' ? barcelonaRewrites : []),
     ].map(r => [`${r.id}|${r.rule}`, r]));
     console.log(`   Round 784 rewrite of ${r784.length} entries: ${r784State === 'after' ? 'applied' : r784State === 'before' ? 'PENDING, not applied' : 'MIXED'}`);
     for (const rule of MODE_RULES) {
