@@ -1,3 +1,11 @@
+## 2026-11-12 Club Manager Chinese Super League draft
+
+Choose China in a new current Club Manager career to manage any of the 16 Chinese Super League clubs from 2026. Each club plays a 30-match home-and-away season. The draw, dates, stadiums, results, opening squads, ratings and budgets are simulated. The CFA Cup, Super Cup, AFC competitions and promotion and relegation are outside the model. The 2027 competition has its own calendar and will need a verified admission list before it can be represented as a real start.
+
+The nine verified point deductions apply once in the 2026 table, including a same-season midseason job change, and future seasons start with zero points. The manager's performance score counts only match-earned points. China belongs to the worlds of CSL starts and remains available for those managers after they move. [CFL admissions](https://www.cfl-china.cn/zh/content/announcements/bRVz.html), [CFL competition format](https://www.cfl-china.cn/zh/content/news/fVRn.html), [CFA decision](https://www.thecfa.cn/cftz/20260129/37309.html), [independent final standings](https://343.info/standings/csl).
+
+The focused replay completed all 30 fixtures and checked save and resume, midseason jobs, and rollover. In exact comparisons against the J1 draft, English, Korean, Japanese, historical and custom careers preserved save bytes and random draws. Hot Seat and Deadline Day retained their opening states across three dates. The 320px and 390px replays showed all club names, top-half board targets and the points-ordered opening table. Shanghai Shenhua moved from -10 to -7 after a win and resumed at the next fixture. The existing route cap passed at 648.3 KiB before rounding.
+
 ## 2026-11-12: NRL Manager assistant coaching
 
 Finances offers one fictional Attack or Defence assistant through the end of the season. The signing fee is A$120,000 and wages are A$18,000 per settled round, including byes and finals. Club cash must cover the full commitment before signing, and the remaining wages count against medical spending. The chosen assistant adds two rating points only when the matching tactic is active. Opposition report and the pre-match and halftime tactic cards show the effect. The contract and expense go into the annual accounts, and the next season opens a new shortlist.

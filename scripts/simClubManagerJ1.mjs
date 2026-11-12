@@ -25,7 +25,7 @@ assert.equal(clubs.length, 20);
 assert.deepEqual(cm.playableClubs(id).map(c => c.name).sort(), [...clubs].sort());
 assert(!cm.REAL_LEAGUES.some(league => league.id === id));
 assert(!jobs.allOfferClubs().some(club => club.league === label));
-assert.equal(jobs.allOfferClubs(true).filter(club => club.league === label).length, 20);
+assert.equal(jobs.allOfferClubs(id).filter(club => club.league === label).length, 20);
 assert.throws(() => cm.startCareer(clubs[0], 'era2010'), /CM_CLUB_ACCESS_HELD/);
 const england = cm.startCareer('Arsenal');
 if (process.env.J1_CONTROL === 'leak') {

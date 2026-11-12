@@ -14,7 +14,7 @@
    to simulate. One save, one pyramid, no seams.
 */
 
-import { REAL_LEAGUES, CLUB_MANAGER_START_LEAGUES, CLUB_MANAGER_START_NATIONS, playableClubs } from './clubManager';
+import { CLUB_MANAGER_START_NATIONS, playableClubs, startLeaguesFor } from './clubManager';
 import type { OfferClub, ManagerProfile, JobOffer } from './managerOffers';
 import { generateJobOffers } from './managerOffers';
 
@@ -38,10 +38,10 @@ export function invalidateOfferClubCache(): void {
  * Every club in the game, as the job market sees it. Built once and cached,
  * because it is pure and gets asked for on every render of the offer screen.
  */
-export function allOfferClubs(includeJ1 = false): OfferClub[] {
-  if (!includeJ1 && CACHE) return CACHE;
+export function allOfferClubs(scopedLeagueId?: string): OfferClub[] {
+  if (!scopedLeagueId && CACHE) return CACHE;
   const out: OfferClub[] = [];
-  for (const league of includeJ1 ? CLUB_MANAGER_START_LEAGUES : REAL_LEAGUES) {
+  for (const league of startLeaguesFor(scopedLeagueId)) {
     const country = countryOfLeague(league.id);
     for (const c of playableClubs(league.id)) {
       out.push({
@@ -53,7 +53,7 @@ export function allOfferClubs(includeJ1 = false): OfferClub[] {
       });
     }
   }
-  if (!includeJ1) CACHE = out;
+  if (!scopedLeagueId) CACHE = out;
   return out;
 }
 
