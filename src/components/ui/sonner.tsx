@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { useTheme } from "next-themes";
 import { Toaster as Sonner, toast } from "sonner";
 
 type ToasterProps = React.ComponentProps<typeof Sonner>;
@@ -48,13 +47,12 @@ function useCookieBannerHeight(): number {
 }
 
 const Toaster = ({ ...props }: ToasterProps) => {
-  const { theme = "system" } = useTheme();
   const banner = useCookieBannerHeight();
   const clear = banner > 0 ? `${banner + BANNER_GAP}px` : null;
 
   return (
     <Sonner
-      theme={theme as ToasterProps["theme"]}
+      theme="system"
       className="toaster group"
       /* never lower than where a toast rests on a phone, and above the banner while it is up */
       mobileOffset={{ bottom: clear ? `max(${RESTING}, ${clear})` : RESTING }}
