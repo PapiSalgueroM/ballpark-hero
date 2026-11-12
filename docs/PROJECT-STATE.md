@@ -4,6 +4,10 @@ A prospect stays on the Academy screen until the sale reaches browser storage. I
 
 Eleven mounted cases reproduced the original failures and passed after the repair. The broader 62-test Academy suite passed with packs, boots, away training and saved ground controls. The existing academy save format and sale values still apply.
 
+## 2026-11-12: World XI phone scroll anchoring staged
+
+The World XI page holds its scroll position when the draw or final pick changes the screen. On the combined baseline, 320px and 390px phone journeys jumped 129px and 283px at the draw, then 1,041px and 721px at the last pick. Applying the original one-line style to the same compiled page kept the draw and all 11 picks at zero delta. The 34 focused World XI tests passed on the source port.
+
 ## 2026-11-12: Wall practice keeper proportions staged
 
 The keeper's body now follows the rendered contact point when the gloves animate toward a saved ball. The arms stay in proportion across low, high and straight catches. The shot simulator, collision coordinates, scoring, saves and timing stay as before.
