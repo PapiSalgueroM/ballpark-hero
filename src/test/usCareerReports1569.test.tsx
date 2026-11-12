@@ -98,7 +98,9 @@ afterEach(() => { cleanup(); vi.restoreAllMocks(); vi.unstubAllGlobals(); for (c
 describe('Round 1569 report A: Start over from every screen', () => {
   it.each(ROWS)('$label starts over from the hub of a two season career', async row => {
     seed(row, 2); const view = render(<row.Board />); await flush();
-    expect(view.queryByRole('button', { name: 'Hang them up now' })).toBeNull();
+    const retire = view.queryByRole('button', { name: 'Hang them up now' });
+    if (row.sport.slug === 'mlb') expect(retire).toBeEnabled();
+    else expect(retire).toBeNull();
     await startOver(view, row);
   });
   it.each(ROWS)('$label starts over from the free agency window', async row => {
@@ -240,12 +242,106 @@ describe('Round 1569 report B: no offer is never a dead end', () => {
     expect(document.querySelector('[data-extension-talk]')?.textContent).toMatch(/reach free agency/);
     expect(view.getByRole('button', { name: 'Retire now' })).toBeEnabled();
   });
-  it.each(ROWS)('$label: free agency offers a veteran Retire instead, and a two season player none', async row => {
+  it.each(ROWS)('$label: free agency uses the sport’s voluntary retirement threshold', async row => {
     seed(row, 6, c => { c.contractYears = 0; }); const view = render(<row.Board />); await flush();
     await play(view); expect(view.getByRole('button', { name: 'Retire instead' })).toBeEnabled();
     cleanup(); localStorage.clear();
     seed(row, 2, c => { c.contractYears = 0; }); const young = render(<row.Board />); await flush();
     await play(young); expect(document.querySelector('[data-fa-window]')).not.toBeNull();
-    expect(young.queryByRole('button', { name: 'Retire instead' })).toBeNull();
+    const retire = young.queryByRole('button', { name: 'Retire instead' });
+    if (row.sport.slug === 'mlb') expect(retire).toBeEnabled();
+    else expect(retire).toBeNull();
+  });
+});
+
+describe('MLB early voluntary retirement', () => {
+  const mlb = ROWS.find(row => row.sport.slug === 'mlb')!;
+  const retirementName = 'Hang them up now';
+  const dialog = () => within(document.body).getByRole('alertdialog', { name: 'Retire this player?' });
+  const bytes = () => localStorage.getItem(mlb.sport.saveKey)!;
+
+  it('keeps retirement unavailable before the first MLB season', async () => {
+    seed(mlb, 0);
+    const view = render(<mlb.Board />);
+    await flush();
+    expect(view.getByRole('button', { name: /^Play the \d+ season$/ })).toBeEnabled();
+    expect(view.queryByRole('button', { name: retirementName })).toBeNull();
+    expect(recordCompletion).not.toHaveBeenCalled();
+  });
+
+  it.each(ROWS.filter(row => row.sport.slug !== 'mlb'))('$label keeps the six-season threshold', async row => {
+    seed(row, 5);
+    const view = render(<row.Board />);
+    await flush();
+    expect(view.queryByRole('button', { name: retirementName })).toBeNull();
+    view.unmount();
+    seed(row, 6);
+    const veteran = render(<row.Board />);
+    await flush();
+    expect(veteran.getByRole('button', { name: retirementName })).toBeEnabled();
+  });
+
+  it('confirms after one season, holds the active contract and scores once across reload', async () => {
+    seed(mlb, 1, c => { c.contractYears = 2; });
+    const before = bytes();
+    const expected = JSON.parse(before);
+    expect(expected.c.seasons).toHaveLength(1);
+    const view = render(<mlb.Board />);
+    await flush();
+
+    const opener = view.getByRole('button', { name: retirementName });
+    await click(opener);
+    expect(bytes()).toBe(before);
+    await click(within(dialog()).getByRole('button', { name: 'Keep playing' }));
+    expect(bytes()).toBe(before);
+    expect(recordCompletion).not.toHaveBeenCalled();
+
+    await click(opener);
+    await click(within(dialog()).getByRole('button', { name: 'Retire this player' }));
+    expected.phase = 'retired';
+    expected.c.retired = true;
+    expected.c.retirement = { ...expected.c.retirement, retiredYear: expected.c.seasons[0].year };
+    expected.c.hallCal = 3;
+    expect(JSON.parse(bytes())).toEqual(expected);
+    const score = mlb.sport.legacyOf(expected.c).score;
+    expect(score).toBeGreaterThan(0);
+    expect(recordCompletion).toHaveBeenCalledExactlyOnceWith('/mlb-my-career', score, 'Fixture player', 0);
+
+    const retiredBytes = bytes();
+    view.unmount();
+    const restored = render(<mlb.Board />);
+    await flush();
+    expect(restored.getByRole('button', { name: 'Review seasons' })).toBeEnabled();
+    expect(bytes()).toBe(retiredBytes);
+    expect(recordCompletion).toHaveBeenCalledTimes(1);
+  });
+
+  it('offers retirement on a one-season no-offer screen and clears the talk only on confirmation', async () => {
+    seed(mlb, 1, (c, save) => holdTalk(mlb, c, save, {
+      offer: null, pushed: false, pulled: false, note: 'No fixture offer.',
+    }));
+    const before = bytes();
+    const view = render(<mlb.Board />);
+    await flush();
+    expect(view.getByRole('button', { name: 'Play the year out' })).toBeEnabled();
+
+    const opener = view.getByRole('button', { name: 'Retire now' });
+    await click(opener);
+    await click(within(dialog()).getByRole('button', { name: 'Keep playing' }));
+    expect(bytes()).toBe(before);
+    expect(recordCompletion).not.toHaveBeenCalled();
+
+    await click(opener);
+    await click(within(dialog()).getByRole('button', { name: 'Retire this player' }));
+    const expected = JSON.parse(before);
+    delete expected.contractTalk;
+    expected.phase = 'retired';
+    expected.c.retired = true;
+    expected.c.retirement = { ...expected.c.retirement, retiredYear: expected.c.seasons[0].year };
+    expected.c.hallCal = 3;
+    expect(JSON.parse(bytes())).toEqual(expected);
+    expect(recordCompletion).toHaveBeenCalledExactlyOnceWith(
+      '/mlb-my-career', mlb.sport.legacyOf(expected.c).score, 'Fixture player', 0,
+    );
   });
 });

@@ -1093,8 +1093,10 @@ export default function UsCareerBoard({ sport, entry }: { sport: UsCareerSport; 
     });
   };
 
+  const canManuallyRetire = !!career && !career.retired && career.seasons.length >= (sport.slug === 'mlb' ? 1 : 6);
+
   const retireNow = () => {
-    if (!career) return;
+    if (!career || !canManuallyRetire) return;
     const c: CareerState = JSON.parse(JSON.stringify(career));
     /* Round 1039: 'Hang them up now' writes the last season played as the last.
        With no Hall bound (the parity replay) the save stays the old one. */
@@ -1105,12 +1107,9 @@ export default function UsCareerBoard({ sport, entry }: { sport: UsCareerSport; 
     persist(c, 'retired', teamQuality);
   };
 
-  /* Round 1569: the market and the extension talk with no offer are never a
-     dead end. A veteran (the six seasons Hang them up now waits for) can
-     retire from either, through the same confirmation, and the retirement
-     is the full one: the card, the Hall ballot and the coaching start. The
-     talk is dropped first so the save carries no market for a retired man. */
-  const retireFromMarket = (label: string): ReactNode => (!career || career.seasons.length < 6) ? null : (
+  /* The market and the extension talk with no offer use the hub's retirement
+     eligibility and confirmation. Drop the talk before saving a retired player. */
+  const retireFromMarket = (label: string): ReactNode => !canManuallyRetire ? null : (
     <div data-career-market-retire="" className="mt-2 flex justify-center">
       <USCareerActionConfirm action="retire" sport={sport.label} onConfirm={() => { setMarketTalk(null); extDeclinedRef.current = false; retireNow(); }}>
         <button type="button" className="min-h-11 min-w-11 rounded-full px-4 text-xs font-semibold text-muted-foreground hover:text-destructive">{label}</button>
@@ -1876,7 +1875,7 @@ export default function UsCareerBoard({ sport, entry }: { sport: UsCareerSport; 
                 onComplete={bankPractice} onClose={closePractice} />
             </Suspense>}
           </section>
-          {career.seasons.length >= 6 && (
+          {canManuallyRetire && (
             <USCareerActionConfirm action="retire" sport={sport.label} onConfirm={retireNow}>
               <button className="mt-2 min-h-11 min-w-11 text-[11px] text-muted-foreground hover:text-destructive">Hang them up now</button>
             </USCareerActionConfirm>
