@@ -1,3 +1,11 @@
+## 2026-11-12: Deadline Day live needs fix
+
+The Deadline Day desk now uses the final grade to assign signed players to the board needs they can cover. Arsenal seed 1 credits Micky van de Ven at centre back and Rúben Dias at left back as soon as both sign. The live and final boards show 2 of 4, and the original final score remains 47/100.
+
+The compiled 390px touch check used the normal calls, bids and terms, then reloaded the exact six saved actions. The control signed Harvey Barnes for the left winger need and showed 1 of 4 live and at closing.
+
+Both regression tests, app types, build, the Deadline Day sim, all 15 built-site checks and all 16 download caps passed. Deadline Day measured 668.3 KiB against the 680 KiB cap.
+
 ## 2026-11-07: Club Manager historical roster counts live
 
 [PR #532](https://github.com/PapiSalgueroM/ballpark-hero/pull/532) published from main `c3b5ca4afaf9b4dadcd748f340e8e8e3e4a1a1dd`, App tree `133fcd3d26a4d237178e5c7efee723048da0aef2`, Lovable deployment `510b1df1-2172-42c0-90f9-d9f9c997b840`.
