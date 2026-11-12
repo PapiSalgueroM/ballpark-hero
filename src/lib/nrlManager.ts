@@ -1,4 +1,4 @@
-import { NRL_SEASONS, type NrlYear } from '@/data/nrlManager2026';
+import { isNrlOpeningYear, nrlSeasonPlan, NRL_LAST_YEAR } from '@/data/nrlManagerSeasons';
 import { clamp, clampi, hashLabel, rngFrom } from '@/lib/careerEngine';
 import { eliminated, premierOf, resolveWeek, type FinalsTie, type TieOutcome } from '@/lib/finalsBracket';
 import { uniqueName } from '@/lib/foNames';
@@ -6,8 +6,8 @@ import { uniqueName } from '@/lib/foNames';
 export type { NrlYear } from '@/data/nrlManager2026';
 
 export const NRL_SAVE_KEY = 'nrl-manager-save-v1';
-export const NRL_REGULAR_ROUNDS = NRL_SEASONS[2026].draw.length;
-export const nrlRegularRounds = (year: NrlYear): number => NRL_SEASONS[year].draw.length;
+export const NRL_REGULAR_ROUNDS = nrlSeasonPlan(2026).draw.length;
+export const nrlRegularRounds = (year: number): number => nrlSeasonPlan(year).draw.length;
 export const NRL_ROLES = [
   'Fullback', 'Left Wing', 'Left Centre', 'Right Centre', 'Right Wing',
   'Five-eighth', 'Halfback', 'Prop 8', 'Hooker', 'Prop 10', 'Left Second Row', 'Right Second Row', 'Lock',
@@ -43,7 +43,7 @@ export interface NrlLadderRow {
 export interface NrlManagerState {
   version: 1;
   seed: number;
-  year: NrlYear;
+  year: number;
   clubId: string;
   phase: 'regular' | 'finals' | 'complete';
   round: number;
@@ -60,8 +60,8 @@ export type NrlAction =
   | { type: 'prepare'; choice: NrlPreparation }
   | { type: 'advance' };
 
-const lastRound = (year: NrlYear) => nrlRegularRounds(year) + 4;
-const clubFor = (year: NrlYear, clubId: string) => NRL_SEASONS[year].clubs.find(club => club.id === clubId);
+const lastRound = (year: number) => nrlRegularRounds(year) + 4;
+const clubFor = (year: number, clubId: string) => nrlSeasonPlan(year).clubs.find(club => club.id === clubId);
 
 // NRL finals cross over in week three so the two qualifying finals cannot immediately repeat.
 // https://www.nrl.com/news/2021/09/05/nrl-finals-week-1-who-plays-who/
@@ -79,7 +79,7 @@ const FINALS: FinalsTie[] = [
 const FIRST_NAMES = ['Arlo', 'Beau', 'Brodie', 'Callum', 'Coby', 'Elijah', 'Hemi', 'Isaac', 'Jalen', 'Jesse', 'Koa', 'Lachlan', 'Levi', 'Luca', 'Malachi', 'Niko', 'Riley', 'Tama', 'Tane', 'Teo'];
 const LAST_NAMES = ['Arden', 'Ashby', 'Bennett', 'Cairns', 'Dawson', 'Forde', 'Hanley', 'Hartley', 'Hewitt', 'Lennox', 'Linton', 'Marlow', 'Merritt', 'Nairn', 'Palmer', 'Preece', 'Reeve', 'Rourke', 'Rowan', 'Vale'];
 
-export function createNrlSeason(clubId: string, seed: number, year: NrlYear = 2026): NrlManagerState {
+export function createNrlSeason(clubId: string, seed: number, year = 2026): NrlManagerState {
   const club = clubFor(year, clubId);
   if (!club) throw new RangeError(`Choose a club from the ${year} league.`);
   seed = seed >>> 0;
@@ -101,7 +101,7 @@ export function createNrlSeason(clubId: string, seed: number, year: NrlYear = 20
 
 export function nrlLadder(state: Pick<NrlManagerState, 'year' | 'round' | 'results'>): NrlLadderRow[] {
   const regularRounds = nrlRegularRounds(state.year);
-  const rows = NRL_SEASONS[state.year].clubs.map(({ id }) => ({
+  const rows = nrlSeasonPlan(state.year).clubs.map(({ id }) => ({
     clubId: id, played: 0, wins: 0, draws: 0, losses: 0,
     byes: 0, points: 0, pointsFor: 0, pointsAgainst: 0, differential: 0,
     tries: 0, goals: 0, fieldGoals: 0,
@@ -153,7 +153,7 @@ function finalsOutcomes(results: NrlMatchResult[]): Record<string, TieOutcome> {
 export function nrlRoundFixtures(state: Pick<NrlManagerState, 'year' | 'round' | 'phase' | 'results'>): NrlFixture[] {
   const { year, round, phase, results } = state;
   if (phase === 'complete') return [];
-  if (phase === 'regular') return (NRL_SEASONS[year].draw[round - 1] ?? []).map(([homeId, awayId]) => ({ homeId, awayId, round }));
+  if (phase === 'regular') return (nrlSeasonPlan(year).draw[round - 1] ?? []).map(([homeId, awayId]) => ({ homeId, awayId, round }));
   const finalsRound = round - nrlRegularRounds(year);
   const seeds = nrlLadder(state).slice(0, 8).map(row => row.clubId);
   const pairings = resolveWeek(FINALS, seeds, finalsOutcomes(results), finalsRound);
@@ -198,9 +198,9 @@ function readyFitness(fitness: number, preparation: NrlPreparation | null, playi
   return clamp(fitness + routineRecovery + PREPARATION_FITNESS[preparation ?? 'normal'] + (playing ? 0 : 12), 0, 100);
 }
 
-function teamRatings(state: NrlManagerState, clubId: string) {
+function teamRatings(state: NrlManagerState, clubId: string, opponentStrength: ReadonlyMap<string, number> | undefined) {
   if (clubId !== state.clubId) {
-    const strength = clubFor(state.year, clubId)!.strength;
+    const strength = opponentStrength?.get(clubId) ?? clubFor(state.year, clubId)!.strength;
     return { attack: strength, defense: strength };
   }
   const starters = new Set(Object.values(state.lineup));
@@ -237,11 +237,11 @@ function addScoring(total: NrlScoring, extra: NrlScoring) {
   total.penalties += extra.penalties;
 }
 
-function playFixture(state: NrlManagerState, fixture: NrlFixture): NrlMatchResult {
+function playFixture(state: NrlManagerState, fixture: NrlFixture, opponentStrength: ReadonlyMap<string, number> | undefined): NrlMatchResult {
   const { round, homeId, awayId, finalsRound, tieId } = fixture;
   const rng = rngFrom(hashLabel(`${state.seed}|${state.year}|${round}|${homeId}|${awayId}`));
-  const home = teamRatings(state, homeId);
-  const away = teamRatings(state, awayId);
+  const home = teamRatings(state, homeId, opponentStrength);
+  const away = teamRatings(state, awayId, opponentStrength);
   const venue = tieId === 'GF' ? 0 : 2;
   const homeEdge = home.attack - away.defense + venue;
   const awayEdge = away.attack - home.defense - venue;
@@ -276,7 +276,7 @@ function playFixture(state: NrlManagerState, fixture: NrlFixture): NrlMatchResul
   return { ...fixture, homeScoring, awayScoring, homeScore: scoreOf(homeScoring), awayScore: scoreOf(awayScoring), extraTime };
 }
 
-function advanceRound(state: NrlManagerState): NrlManagerState {
+function advanceRound(state: NrlManagerState, opponentStrength: ReadonlyMap<string, number> | undefined): NrlManagerState {
   const fixtures = nrlRoundFixtures(state);
   const played = fixtures.some(match => match.homeId === state.clubId || match.awayId === state.clubId);
   const starters = new Set(Object.values(state.lineup));
@@ -284,7 +284,7 @@ function advanceRound(state: NrlManagerState): NrlManagerState {
     const before = readyFitness(player.fitness, state.preparation, played);
     return { ...player, fitness: Math.max(0, before - (played && starters.has(player.id) ? 15 : 0)) };
   });
-  const results = [...state.results, ...fixtures.map(fixture => playFixture(state, fixture))];
+  const results = [...state.results, ...fixtures.map(fixture => playFixture(state, fixture, opponentStrength))];
   const championId = premierOf(FINALS, finalsOutcomes(results))?.winner ?? null;
   const round = Math.min(state.round + 1, lastRound(state.year));
   return {
@@ -293,7 +293,7 @@ function advanceRound(state: NrlManagerState): NrlManagerState {
   };
 }
 
-export function reduceNrlSeason(state: NrlManagerState, action: NrlAction): NrlManagerState {
+export function reduceNrlSeason(state: NrlManagerState, action: NrlAction, opponentStrength?: ReadonlyMap<string, number>): NrlManagerState {
   if (state.phase === 'complete') return state;
   switch (action.type) {
     case 'selectStarter':
@@ -306,7 +306,7 @@ export function reduceNrlSeason(state: NrlManagerState, action: NrlAction): NrlM
       return (action.choice === 'train' || action.choice === 'recover') && state.preparation !== action.choice
         ? { ...state, preparation: action.choice } : state;
     case 'advance':
-      return advanceRound(state);
+      return advanceRound(state, opponentStrength);
   }
 }
 
@@ -327,8 +327,8 @@ function validResult(value: unknown, expected: NrlFixture): value is NrlMatchRes
     && typeof value.extraTime === 'boolean' && (value.homeScore !== value.awayScore || (!expected.tieId && value.extraTime));
 }
 
-export function isNrlManagerState(value: unknown): value is NrlManagerState {
-  if (!record(value) || value.version !== 1 || (value.year !== 2026 && value.year !== 2027)
+export function isNrlSeasonProgress(value: unknown): value is NrlManagerState {
+  if (!record(value) || value.version !== 1 || !integerIn(value.year, 2026, NRL_LAST_YEAR)
     || typeof value.clubId !== 'string' || !clubFor(value.year, value.clubId)
     || !integerIn(value.seed, 0, 0xffffffff) || !integerIn(value.round, 1, lastRound(value.year))
     || !NRL_TACTICS.includes(value.tactic as NrlTactic)
@@ -340,13 +340,11 @@ export function isNrlManagerState(value: unknown): value is NrlManagerState {
     : round > regularRounds ? 'finals' : 'regular';
   if (phase !== expectedPhase || (phase === 'complete' && preparation !== null)) return false;
 
-  const expectedSquad = createNrlSeason(value.clubId, value.seed, year).squad;
-  if (squad.length !== expectedSquad.length || !expectedSquad.every((expected, index) => {
-    const player: unknown = squad[index];
-    return record(player) && player.id === expected.id && player.name === expected.name && player.role === expected.role
-      && player.rating === expected.rating && integerIn(player.fitness, 0, 100);
-  })) return false;
-  if (!NRL_ROLES.every(role => expectedSquad.some(player => player.role === role && player.id === lineup[role]))) return false;
+  if (squad.length < NRL_ROLES.length || squad.length > 30 || !squad.every((player: unknown) =>
+    record(player) && typeof player.id === 'string' && typeof player.name === 'string'
+      && NRL_ROLES.includes(player.role as NrlRole) && integerIn(player.rating, 40, 98) && integerIn(player.fitness, 0, 100))) return false;
+  const playerIds = new Set(squad.map(player => player.id));
+  if (playerIds.size !== squad.length || !NRL_ROLES.every(role => squad.some(player => player.role === role && player.id === lineup[role]))) return false;
 
   const completed = phase === 'complete' ? round : round - 1;
   const verified: NrlMatchResult[] = [];
@@ -361,6 +359,15 @@ export function isNrlManagerState(value: unknown): value is NrlManagerState {
     }
   }
   return verified.length === results.length && value.championId === (premierOf(FINALS, finalsOutcomes(verified))?.winner ?? null);
+}
+
+export function isNrlManagerState(value: unknown): value is NrlManagerState {
+  if (!isNrlSeasonProgress(value) || !isNrlOpeningYear(value.year)) return false;
+  const expected = createNrlSeason(value.clubId, value.seed, value.year).squad;
+  return value.squad.length === expected.length && expected.every((player, index) => {
+    const saved = value.squad[index];
+    return player.id === saved.id && player.name === saved.name && player.role === saved.role && player.rating === saved.rating;
+  });
 }
 
 export function readNrlSave(raw: string | null): NrlManagerState | null {

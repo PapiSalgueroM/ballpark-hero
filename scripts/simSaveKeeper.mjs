@@ -625,7 +625,9 @@ const withVersion = (raw, at, n) => {
     const load = accepts[r];
     if (!load) { console.log(`         ${r}: no pure loader is exported, so "${row.other}" is held by reading its engine only`); continue; }
     const same = load(withVersion(fleet[r][0], row.at, row.current));
-    const down = load(withVersion(fleet[r][0], row.at, row.current - 1));
+    const down = load(r === '/nrl-team-manager'
+      ? real.nrlLegacySave()
+      : withVersion(fleet[r][0], row.at, row.current - 1));
     const up = load(withVersion(fleet[r][0], row.at, row.current + 1));
     const wantDown = row.other === 'ignores' || (row.other === 'migrates' && row.current - 1 >= row.oldest);
     const wantUp = row.other === 'ignores';
@@ -803,7 +805,9 @@ console.log('\n4. the copy before a version step, on real saves one version down
   let held = 0;
   for (const e of acting) {
     const row = V[e.path];
-    const lowered = withVersion(fleet[e.path][0], row.at, row.current - 1);
+    const lowered = e.path === '/nrl-team-manager'
+      ? real.nrlLegacySave()
+      : withVersion(fleet[e.path][0], row.at, row.current - 1);
     const three = [['2025-09-01T09-00-00', fleet[e.path][1]], ['2025-09-02T09-00-00', fleet[e.path][2]], ['2025-09-03T09-00-00', fleet[e.path][3]]].map(([s, v]) => [`${e.saveKey}${MARK}${s}`, v]);
     page.m = new Map([[e.saveKey, lowered], ...three]);
     page.reset();

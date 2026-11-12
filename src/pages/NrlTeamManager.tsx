@@ -1,19 +1,22 @@
 import { useRef, useState } from 'react';
-import { ArrowRight, BedDouble, ClipboardList, Radio, Table2, Trophy, Zap } from 'lucide-react';
+import { ArrowRight, BedDouble, BriefcaseBusiness, ClipboardList, Radio, Table2, Trophy, Zap } from 'lucide-react';
 import { GameNav } from '@/components/game/GameNav';
 import { GameNavbar } from '@/components/game/GameNavbar';
 import { RulesGate } from '@/components/game/RulesGate';
+import NrlCareerOffice from '@/components/nrl-manager/NrlCareerOffice';
 import GameSeoContent from '@/components/seo/GameSeoContent';
 import PageSeo from '@/components/seo/PageSeo';
 import { Button } from '@/components/ui/button';
 import { NRL_SEASONS, type NrlYear } from '@/data/nrlManager2026';
+import { nrlSeasonPlan } from '@/data/nrlManagerSeasons';
 import { useArrivalTop } from '@/hooks/useArrivalTop';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { useSaveFenceWatch } from '@/hooks/useSaveFenceWatch';
 import {
-  createNrlSeason, nrlLadder, nrlNextRound, NRL_ROLES, NRL_SAVE_KEY, readNrlSave, reduceNrlSeason,
+  nrlLadder, nrlNextRound, NRL_ROLES, NRL_SAVE_KEY,
   type NrlAction, type NrlManagerState, type NrlMatchResult, type NrlTactic,
 } from '@/lib/nrlManager';
+import { createNrlCareer, readNrlCareerSave, reduceNrlCareer, type NrlCareerAction, type NrlCareerState } from '@/lib/nrlCareer';
 import { saveFence } from '@/lib/saveFence';
 
 const SLUG = 'nrl-team-manager';
@@ -22,8 +25,16 @@ const PANELS = [
   { id: 'match', label: 'Match centre', Icon: Radio },
   { id: 'squad', label: 'Squad', Icon: ClipboardList },
   { id: 'ladder', label: 'Ladder', Icon: Table2 },
+  { id: 'office', label: 'Club office', Icon: BriefcaseBusiness },
 ] as const;
 type Panel = typeof PANELS[number]['id'];
+const OFFICE_SCREENS = [
+  { id: 'contracts', label: 'Contracts' },
+  { id: 'recruitment', label: 'Recruitment' },
+  { id: 'finances', label: 'Finances' },
+  { id: 'history', label: 'Season review' },
+] as const;
+type OfficeScreen = typeof OFFICE_SCREENS[number]['id'];
 
 const tactics: { id: NrlTactic; label: string; description: string }[] = [
   { id: 'balanced', label: 'Balanced', description: 'Keep your attack and defence even.' },
@@ -31,18 +42,18 @@ const tactics: { id: NrlTactic; label: string; description: string }[] = [
   { id: 'defense', label: 'Defence', description: 'Protect your line and create fewer chances.' },
 ];
 
-function shortName(year: NrlYear, id: string) {
-  return NRL_SEASONS[year].clubs.find(club => club.id === id)?.shortName ?? id;
+function shortName(year: number, id: string) {
+  return nrlSeasonPlan(year).clubs.find(club => club.id === id)?.shortName ?? id;
 }
 
 function initialSave() {
   saveFence.adopt(NRL_SAVE_KEY);
   try {
     const raw = localStorage.getItem(NRL_SAVE_KEY);
-    const season = readNrlSave(raw);
-    return { season, invalid: raw !== null && season === null };
+    const career = readNrlCareerSave(raw);
+    return { career, invalid: raw !== null && career === null };
   } catch {
-    return { season: null, invalid: false };
+    return { career: null, invalid: false };
   }
 }
 
@@ -90,12 +101,12 @@ function ClubChooser({ year, season, onYear, onStart, onReturn, disabled }: {
   );
 }
 
-function scoreLine(result: NrlMatchResult, year: NrlYear) {
+function scoreLine(result: NrlMatchResult, year: number) {
   return `${shortName(year, result.homeId)} ${result.homeScore}–${result.awayScore} ${shortName(year, result.awayId)}`;
 }
 
-function MatchCentre({ season, onAction, disabled }: {
-  season: NrlManagerState; onAction: (action: NrlAction) => void; disabled: boolean;
+function MatchCentre({ season, onAction, onReview, disabled }: {
+  season: NrlManagerState; onAction: (action: NrlAction) => void; onReview: () => void; disabled: boolean;
 }) {
   const next = nrlNextRound(season);
   const { clubId, year, phase, championId } = season;
@@ -122,7 +133,9 @@ function MatchCentre({ season, onAction, disabled }: {
               : next.clubStatus === 'eliminated' ? 'You can finish the finals and see who wins.' : phase === 'regular' ? 'Your club gets two ladder points this round.' : 'Your club has advanced and rests this week.'}
           </p>
         )}
-        {phase === 'complete' && <Trophy className="mt-3 text-amber-300" aria-hidden="true" />}
+        {phase === 'complete' && (
+          <Button type="button" size="lg" className="mt-3 px-4" onClick={onReview}><Trophy aria-hidden="true" /> Review this season</Button>
+        )}
       </div>
 
       {match && (
@@ -188,7 +201,7 @@ function MatchCentre({ season, onAction, disabled }: {
       <details className="rounded-xl border border-border bg-card px-4">
         <summary className="flex min-h-11 cursor-pointer items-center font-bold">Season fixtures</summary>
         <ol className="divide-y divide-border pb-2 text-sm">
-          {NRL_SEASONS[year].draw.map((round, index) => {
+          {nrlSeasonPlan(year).draw.map((round, index) => {
             const fixture = round.find(([home, away]) => home === clubId || away === clubId);
             const result = season.results.find(row => row.round === index + 1 && (row.homeId === clubId || row.awayId === clubId));
             return (
@@ -288,19 +301,21 @@ function Ladder({ season }: { season: NrlManagerState }) {
 
 export default function NrlTeamManager() {
   const [initial] = useState(initialSave);
-  const [season, setSeason] = useState(initial.season);
-  const current = useRef(season);
-  const [year, setYear] = useState<NrlYear>(initial.season?.year ?? 2026);
+  const [career, setCareer] = useState(initial.career);
+  const season = career?.season ?? null;
+  const current = useRef(career);
+  const [year, setYear] = useState<NrlYear>(initial.career?.openingYear ?? 2026);
   const [choosing, setChoosing] = useState(!season);
-  const arrival = useArrivalTop<HTMLHeadingElement>(choosing ? 'choose' : 'club');
+  const arrival = useArrivalTop<HTMLHeadingElement>(choosing ? 'choose' : `club-${season?.year}`);
   const [confirm, setConfirm] = useState(false);
   const [panel, setPanel] = useState<Panel>('match');
+  const [office, setOffice] = useState<OfficeScreen>('contracts');
   const [saveFailed, setSaveFailed] = useState(false);
   const { moved, check } = useSaveFenceWatch(NRL_SAVE_KEY);
   const complete = season?.phase === 'complete';
   useGameCompletion(SLUG, complete, undefined);
 
-  function persist(next: NrlManagerState) {
+  function persist(next: NrlCareerState) {
     const outcome = saveFence.write(NRL_SAVE_KEY, () => {
       localStorage.setItem(NRL_SAVE_KEY, JSON.stringify(next));
       return true;
@@ -311,35 +326,37 @@ export default function NrlTeamManager() {
     }
     setSaveFailed(outcome === 'failed');
     current.current = next;
-    setSeason(next);
+    setCareer(next);
     return true;
   }
 
   function start(clubId: string) {
-    const next = createNrlSeason(clubId, Math.floor(Math.random() * 0x1_0000_0000), year);
+    const next = createNrlCareer(clubId, Math.floor(Math.random() * 0x1_0000_0000), year);
     if (!persist(next)) return;
     setChoosing(false);
     setPanel('match');
   }
 
-  function dispatch(action: NrlAction) {
+  function dispatch(action: NrlCareerAction) {
     const before = current.current;
-    if (!before) return;
-    const next = reduceNrlSeason(before, action);
-    if (next !== before) persist(next);
+    if (!before) return false;
+    const next = reduceNrlCareer(before, action);
+    if (next === before || !persist(next)) return false;
+    if (action.type === 'startNextSeason') setPanel('match');
+    return true;
   }
 
   return (
     <>
       <PageSeo title="NRL Team Manager: Rugby League Sim | DoUKnowBall"
-        description="Choose a 2026 or 2027 NRL club, pick your starting 13 and manage tactics, training and recovery in a free rugby league sim. Includes Perth in 2027."
+        description="Start in 2026 or 2027, pick your starting 13 and manage contracts, recruitment and club finances across seasons. Manage Perth from its 2027 debut."
         path="/nrl-team-manager" />
       <GameNavbar />
       <main id="dukb-main" className="container mx-auto max-w-5xl space-y-5 px-3 pb-20 pt-5 sm:px-6">
         <header className="flex items-start justify-between gap-3">
           <div className="min-w-0">
             <h1 ref={arrival} className="font-display text-2xl font-black sm:text-3xl">NRL Team Manager</h1>
-            <p className="mt-1 text-sm text-muted-foreground">{season && !choosing ? `${shortName(season.year, season.clubId)} · ${season.year} season` : 'Coach a club from Round 1 to the Grand Final.'}</p>
+            <p className="mt-1 text-sm text-muted-foreground">{season && !choosing ? `${shortName(season.year, season.clubId)} · ${season.year} season` : 'Take charge of a rugby league club across seasons.'}</p>
           </div>
           <RulesGate title="How to play NRL Team Manager" floatingTrigger={false} className="min-h-11 min-w-11">
             <ul className="list-disc space-y-2 pl-5">
@@ -347,7 +364,7 @@ export default function NrlTeamManager() {
               <li>Pick 13 starters in Squad. Before a game, choose a tactic and train for extra attack or recover for better fitness.</li>
               <li>Advance a round to simulate every fixture. A win or bye earns two ladder points, a draw earns one and a loss earns zero.</li>
               <li>The top eight make finals. The top four get a second chance if they lose their qualifying final. The last club standing wins the premiership.</li>
-              <li>The game saves this season on your browser. Starting another season replaces the current save.</li>
+              <li>Review each season, manage contracts and recruit for the next year. The career saves on this browser. Starting over replaces the current save.</li>
             </ul>
           </RulesGate>
         </header>
@@ -361,36 +378,48 @@ export default function NrlTeamManager() {
         </div>}
         {initial.invalid && !season && <p role="status" className="rounded-xl border border-border p-3 text-sm">The previous save could not be opened. Starting a season replaces it.</p>}
 
-        {choosing || !season ? (
+        {choosing || !career || !season ? (
           <ClubChooser year={year} season={season} disabled={moved} onYear={setYear} onStart={start} onReturn={() => setChoosing(false)} />
         ) : (
           <>
-            <div className="grid grid-cols-3 gap-2" role="group" aria-label="Manager screens">
+            <div className="grid grid-cols-4 gap-2" role="group" aria-label="Manager screens">
               {PANELS.map(({ id, label, Icon }) => (
                 <Button key={id} type="button" variant={panel === id ? 'default' : 'outline'} size="lg"
                   className="min-w-0 gap-1 whitespace-normal px-1 text-xs sm:gap-2 sm:text-sm"
                   aria-pressed={panel === id} onClick={() => setPanel(id)}>
-                  <Icon aria-hidden="true" className="hidden min-[360px]:block" />{label}
+                  <Icon aria-hidden="true" className="hidden sm:block" />{label}
                 </Button>
               ))}
             </div>
-            {panel === 'match' && <MatchCentre season={season} onAction={dispatch} disabled={moved} />}
+            {panel === 'match' && <MatchCentre season={season} onAction={dispatch} disabled={moved}
+              onReview={() => { setOffice('history'); setPanel('office'); }} />}
             {panel === 'squad' && <Squad season={season} onAction={dispatch} disabled={moved} />}
             {panel === 'ladder' && <Ladder season={season} />}
+            {panel === 'office' && (
+              <>
+                <div className="grid grid-cols-2 gap-2 sm:grid-cols-4" role="group" aria-label="Club office screens">
+                  {OFFICE_SCREENS.map(({ id, label }) => (
+                    <Button key={id} type="button" size="lg" className="px-2 text-sm" variant={office === id ? 'default' : 'outline'}
+                      aria-pressed={office === id} onClick={() => setOffice(id)}>{label}</Button>
+                  ))}
+                </div>
+                <NrlCareerOffice key={office} career={career} screen={office} disabled={moved} onAction={dispatch} />
+              </>
+            )}
             {confirm ? (
               <div className="space-y-2 rounded-xl border border-border bg-card p-3 text-sm">
-                <p>Choosing a club for a new season replaces this save.</p>
+                <p>Starting a new career replaces this save.</p>
                 <div className="flex flex-wrap gap-2">
                   <Button type="button" size="lg" variant="outline" className="px-3" onClick={() => setConfirm(false)}>Keep this season</Button>
-                  <Button type="button" size="lg" className="px-3" onClick={() => { setConfirm(false); setYear(season.year); setChoosing(true); }}>Choose a new season</Button>
+                  <Button type="button" size="lg" className="px-3" onClick={() => { setConfirm(false); setYear(career.openingYear); setChoosing(true); }}>Choose a new career</Button>
                 </div>
               </div>
             ) : <Button type="button" size="lg" variant="ghost" className="px-3" onClick={() => setConfirm(true)}>Start over</Button>}
           </>
         )}
 
-        <GameSeoContent pageHasOwnH1 title="Coach an NRL club through a full season"
-          description="Pick a 2026 or 2027 club, set your starting 13 and play a simulated rugby league season through the Grand Final."
+        <GameSeoContent pageHasOwnH1 title="Build an NRL club across seasons"
+          description="Choose a club, coach every round, and build your next squad with contracts and recruitment under the salary cap."
           reportGameContext={season ? { year: season.year, club: season.clubId, round: season.round } : { year }} />
         <GameNav />
       </main>
