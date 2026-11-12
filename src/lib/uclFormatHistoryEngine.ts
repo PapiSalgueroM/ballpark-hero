@@ -21,8 +21,8 @@ import type { WorldCompFormat } from '@/lib/worldCompetition';
 
 export interface ClubManagerUclShape {
   era: Pick<CMEra, 'id' | 'label' | 'startYear' | 'emoji'>;
-  /** The first knockout round the engine plays after its eight groups. */
-  firstKo: 'R16' | 'QF';
+  /** The first knockout round in an ordinary new career. */
+  firstKo: 'PO' | 'R16' | 'QF';
   legs: 1 | 2;
   awayGoals: boolean;
   /** The id of the real format period the era starts in. */
@@ -43,6 +43,9 @@ export function clubManagerUclLine(
   s: Pick<ClubManagerUclShape, 'era' | 'firstKo' | 'legs' | 'awayGoals' | 'matchesReal' | 'watched'>,
   real: UclFormatPeriod,
 ): string {
+  if (s.firstKo === 'PO') {
+    return 'One table of 36 clubs, eight matches per club, and playoffs for ninth to 24th. The draw and results are simulated. Saved group seasons finish in groups, and Manager Hot Seat keeps its own format.';
+  }
   const ko = s.firstKo === 'R16' ? 'round of 16' : 'quarter-finals';
   const legs = s.legs === 2 ? 'two legged ties' : 'one off ties';
   const ag = s.awayGoals ? 'away goals count double' : 'no away goals rule';
@@ -57,23 +60,23 @@ export function clubManagerUclLine(
 
 /**
  * Every value here comes from the engine's own helpers, never from the
- * timeline, so the page can only ever describe what the game does. The engine
- * always draws eight groups (initUclWorld in clubManager.ts); what changes by
- * era is where the knockout starts, how many legs a tie has and whether away
- * goals count.
+ * timeline, so the page can only ever describe what the game does. The
+ * current era plays the league phase, and historical starts keep their groups.
  */
 export function clubManagerUclShape(era: CMEra): ClubManagerUclShape {
-  const firstKo = uclFirstKoRound({ eraId: era.id }) === 'R16' ? 'R16' : 'QF';
+  const watched = worldUclFormatOf({ eraId: era.id });
+  const firstKo = watched === 'l36' ? 'PO' : uclFirstKoRound({ eraId: era.id }) === 'R16' ? 'R16' : 'QF';
   const legs = uclLegsFor(era.id, 'QF');
   const awayGoals = uclAwayGoalsApply(era.id);
   const real = periodFor(era.startYear);
-  const matchesReal =
-    real.stage === 'groups'
-    && real.groups === 8
-    && !real.secondGroupStage
-    && real.roundOf16 === (firstKo === 'R16')
-    && real.koLegs === legs
-    && awayGoals === (era.startYear <= UCL_AWAY_GOALS.lastSeason);
+  const matchesReal = firstKo === 'PO'
+    ? real.stage === 'leaguePhase' && real.koLegs === legs && !awayGoals
+    : real.stage === 'groups'
+      && real.groups === 8
+      && !real.secondGroupStage
+      && real.roundOf16 === (firstKo === 'R16')
+      && real.koLegs === legs
+      && awayGoals === (era.startYear <= UCL_AWAY_GOALS.lastSeason);
   const shape: Omit<ClubManagerUclShape, 'line'> = {
     era: { id: era.id, label: era.label, startYear: era.startYear, emoji: era.emoji },
     firstKo,
@@ -81,7 +84,7 @@ export function clubManagerUclShape(era: CMEra): ClubManagerUclShape {
     awayGoals,
     realId: real.id,
     matchesReal,
-    watched: worldUclFormatOf({ eraId: era.id }),
+    watched,
   };
   return { ...shape, line: clubManagerUclLine(shape, real) };
 }

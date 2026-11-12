@@ -39,6 +39,7 @@ import { entryDatesOf, worldCompNightDates, worldYearOf, type CalDate } from '@/
 import { isHistoricEra } from '@/lib/clubManagerEras';
 import { CM_FINAL_TABLES_2025_26 } from '@/data/clubManagerFinalTables2025_26';
 import { UCL_GROUP_LEDGER } from '@/lib/clubManagerUclGroups';
+import { UCL_LEAGUE, slateFixtures } from '@/lib/uclLeaguePhase';
 import { groupFixtures, type WorldCompFormat, type WorldCompKey, type WorldKoRound } from '@/lib/worldCompetition';
 
 export type WorldViewStage = 'md' | WorldKoRound;
@@ -73,7 +74,7 @@ export interface WorldViewTie {
 export interface WorldCompView {
   /** In it, or watching it from outside. */
   mode: 'in' | 'watching';
-  /** The first stage shown: eight groups of four ('g8', the participant's always) or the 36 club league ('l36'). */
+  /** The first stage shown: eight groups of four ('g8') or the 36 club league ('l36'). */
   format: WorldCompFormat;
   /** "2026-27". */
   season: string;
@@ -166,6 +167,7 @@ function participantView(career: CareerState): WorldCompView | null {
   const me = career.clubName;
   const ledger = career.pairResults?.[UCL_GROUP_LEDGER] ?? {};
   const world = career.uclWorld ?? [];
+  const slate = group.leaguePhase;
   const dates = entryDatesOf(career);
   const bracket = career.uclBracket ?? [];
   const score = (home: string, away: string, played: boolean): WorldViewFixture => {
@@ -177,7 +179,7 @@ function participantView(career: CareerState): WorldCompView | null {
     const date = dates[i] ?? null;
     if (e.type === 'uclGroup') {
       const md = e.round;
-      const fixtures = [
+      const fixtures = slate ? slateFixtures(slate, md).map(([h, a]) => score(h, a, md < group.matchday)) : [
         ...myGroupPairs(me, group.opponents, md).map(([h, a]) => score(h, a, md < group.matchday)),
         ...world.flatMap(g => groupFixtures(g.clubs, md).map(([h, a]) => score(h, a, md < g.matchday))),
       ];
@@ -198,8 +200,9 @@ function participantView(career: CareerState): WorldCompView | null {
     const id = !twoLegs ? (round === 'F' ? 'F' : round) : round === 'R16' ? `R16_${leg}` : `${round}${leg}`;
     nights.push({ id, stage: round, leg: twoLegs ? leg : undefined, twoLegs, date, played: i < career.week, fixtures });
   });
+  const rows = sortedUclGroup(career, group.table);
   const groups = [
-    { letter: 'A', rows: sortedUclGroup(career, group.table) },
+    { letter: 'A', rows },
     ...world.map(g => ({ letter: g.letter, rows: sortedUclGroup(career, g.table) })),
   ];
   const ties = [...bracket].sort((a, b) => KO_ORDER.indexOf(a.round) - KO_ORDER.indexOf(b.round) || a.slot - b.slot).map(tieView);
@@ -209,9 +212,9 @@ function participantView(career: CareerState): WorldCompView | null {
   /* An era save whose club is not one of the real 32: it takes the place of the one initUclWorld leaves over. */
   const standIn = standInOf(career, clubs);
   return {
-    mode: 'in', format: 'g8', season: seasonLabel(career), myClub: me,
+    mode: 'in', format: slate ? 'l36' : 'g8', season: seasonLabel(career), myClub: me,
     clubs,
-    nights, nightsDone: nights.filter(n => n.played).length, groups, ties, firstKo,
+    nights, nightsDone: nights.filter(n => n.played).length, ...(slate ? { table: rows } : { groups }), ties, firstKo,
     ...(final ? { winner: final.winner, runnerUp: final.winner === final.home ? final.away : final.home } : {}),
     ...(standIn ? { standIn } : {}),
     eraField: isHistoricEra(career.eraId),
@@ -344,14 +347,23 @@ export const REAL_FIFTH_TILE = "Fifth was a real Champions League place, a Europ
 export function worldUclStatus(career: CareerState, view: WorldCompView | null): WorldUclStatus {
   if (career.uclGroup) {
     const ko = career.uclKoRound;
+    const stage = career.uclGroup.leaguePhase ? 'league phase' : 'group stage';
     const winnerLine = view?.winner ? `Won by ${view.winner}` : 'Follow the rest of it';
     if (ko === 'won') return { mode: 'in', value: 'Champions of Europe', sub: `${seasonLabel(career)} is yours` };
     if (ko === 'out') {
       const exit = career.uclExit;
-      return { mode: 'in', value: exit && exit !== 'group' ? `Out in the ${roundPlural(exit)}` : 'Out in the group stage', sub: winnerLine };
+      return { mode: 'in', value: exit && exit !== 'group' ? `Out in the ${roundPlural(exit)}` : `Out in the ${stage}`, sub: winnerLine };
     }
     if (ko) return { mode: 'in', value: `In the ${roundPlural(ko)}`, sub: `Next up: ${career.uclDraw?.[ko] ?? 'to be drawn'}` };
     const md = career.uclGroup.matchday;
+    if (career.uclGroup.leaguePhase) {
+      const pos = view?.table?.findIndex(row => row.club === career.clubName) ?? -1;
+      return {
+        mode: 'in',
+        value: md === 0 ? 'League phase, the draw is out' : `League phase, matchday ${md} of ${UCL_LEAGUE.games}`,
+        sub: md > 0 && pos >= 0 ? `${ordinal(pos + 1)} in the table` : 'You are in it',
+      };
+    }
     const pos = view?.groups?.[0]?.rows.findIndex(r => r.club === career.clubName) ?? -1;
     return {
       mode: 'in',

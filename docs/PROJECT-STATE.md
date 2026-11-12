@@ -1,3 +1,9 @@
+## 2026-11-12 Club Manager played Champions League prototype
+
+New ordinary current-season careers can play the 36-club Champions League league phase. Qualified clubs play eight simulated fixtures before the two-leg knockout playoffs and the single final. The saved draw and results feed the Cups table, matchday view and calendar. Existing group seasons finish in groups, with the modern option activated at ordinary rollover. Historic, Asian start and Daily paths keep their existing rules.
+
+On local integration base 2348a72f9, the 116 focused tests passed. Arsenal recorded 144 league-phase results and completed the full bracket. Matchday four reloaded the exact draw, scores and visible table. Tested finishes were seventh, ninth and thirty-first, with an earned home and away round of 16 tie counted before its opponent was drawn. An Everton-to-Arsenal job preserved the season's rules. The source-only format reader and its watched-format control passed. Full app types, production and phone builds, and the Club Manager and format-history snapshots remain pending. This prototype is local.
+
 ## 2026-11-12: NRL Manager fit lineup preview
 
 Before a club match, Squad can suggest healthy starters using the same fitness adjustment as the match engine. Players cover their own positions first. Apply keeps eligible reserves in order and keeps the selected goal kicker if they still start.
