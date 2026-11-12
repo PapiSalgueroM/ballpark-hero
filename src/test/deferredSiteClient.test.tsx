@@ -2,6 +2,7 @@ import { act, cleanup, fireEvent, render, screen, waitFor } from '@testing-libra
 import type { AuthChangeEvent, Session } from '@supabase/supabase-js';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { AuthProvider, useAuth } from '@/contexts/AuthContext';
+import { AUTH_STORAGE_KEY } from '@/integrations/supabase/clientReady';
 import { recordActivity, recordCompletion } from '@/lib/completions';
 import { probeStorageWrites } from '@/lib/safeStorage';
 
@@ -35,6 +36,7 @@ afterEach(() => {
 
 describe('deferred site client', () => {
   it('renders the shell while loading, then subscribes before reading and applying the session', async () => {
+    localStorage.setItem(AUTH_STORAGE_KEY, 'fixture session');
     const open = deferred();
     const order: string[] = [];
     const unsubscribe = vi.fn();

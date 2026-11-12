@@ -14,19 +14,25 @@ vi.mock('@/integrations/supabase/loadClient', () => ({ loadSupabase: async () =>
 vi.mock('@/components/auth/AuthModal', () => ({ AuthModal: () => null }));
 vi.mock('@/components/game/StreakReminder', () => ({ StreakReminder: () => null }));
 vi.mock('@/components/seo/PageSeo', () => ({ default: () => null }));
+vi.mock('@/components/home/PollOfTheDay', () => ({ PollOfTheDay: () => <div>Polls are mounted</div> }));
 import Index from '@/pages/Index';
 import { useGameNavbarStats } from '@/hooks/useGameNavbarStats';
 
-const nearObservers = new Map<Element, IntersectionObserverCallback>();
+const nearObservers = new Map<Element, { callback: IntersectionObserverCallback; rootMargin?: string }>();
+function showIntersection(node: Element, intersecting: boolean) {
+  const observed = nearObservers.get(node);
+  expect(observed).toBeDefined();
+  const rect = node.getBoundingClientRect();
+  const entry: IntersectionObserverEntry = { target: node, isIntersecting: intersecting, boundingClientRect: rect,
+    intersectionRatio: Number(intersecting), intersectionRect: rect, rootBounds: null, time: 0 };
+  const send = () => act(() => observed!.callback([entry], {} as IntersectionObserver));
+  send();
+  return send;
+}
+
 function revealPopularity(view: ReturnType<typeof render>) {
   const section = view.getByRole('heading', { name: 'Most played today' }).closest('section')!;
-  const callback = nearObservers.get(section);
-  expect(callback).toBeDefined();
-  const rect = section.getBoundingClientRect();
-  const entry: IntersectionObserverEntry = { target: section, isIntersecting: true, boundingClientRect: rect,
-    intersectionRatio: 1, intersectionRect: rect, rootBounds: null, time: 0 };
-  act(() => callback!([entry], {} as IntersectionObserver));
-  return () => act(() => callback!([entry], {} as IntersectionObserver));
+  return showIntersection(section, true);
 }
 
 function deferred() {
@@ -101,8 +107,8 @@ beforeEach(() => {
   vi.stubGlobal('fetch', vi.fn(() => { throw new Error('Offline homepage fixture must not fetch'); }));
   vi.stubGlobal('IntersectionObserver', class {
     private nodes: Element[] = [];
-    constructor(private callback: IntersectionObserverCallback) {}
-    observe(node: Element) { this.nodes.push(node); nearObservers.set(node, this.callback); }
+    constructor(private callback: IntersectionObserverCallback, private options?: IntersectionObserverInit) {}
+    observe(node: Element) { this.nodes.push(node); nearObservers.set(node, { callback: this.callback, rootMargin: this.options?.rootMargin }); }
     disconnect() { this.nodes.forEach(node => nearObservers.delete(node)); }
   });
 });
@@ -137,6 +143,26 @@ describe('homepage personal read ownership', () => {
     const view = mount(); await flush();
     expect(view.getAllByText('Trending')).toHaveLength(3);
     expect(mock.rpc).toHaveBeenCalledWith('most_played_today', { p_min: 3, p_limit: 3 });
+    await act(async () => { await vi.dynamicImportSettled(); });
+    expect(view.getByText('Polls are mounted')).toBeVisible();
+  });
+
+  it('keeps the poll placeholder until its section intersects the actual viewport', async () => {
+    const view = mount(); await flush();
+    const placeholder = view.getByRole('heading', { name: 'Polls of the day' }).closest('section')!;
+    const wrapper = placeholder.parentElement!;
+    const observed = nearObservers.get(wrapper);
+    expect(observed?.rootMargin ?? '0px').toMatch(/^0px(?: 0px){0,3}$/);
+    showIntersection(wrapper, false);
+    expect(placeholder).toHaveAttribute('aria-busy', 'true');
+    expect(placeholder.querySelectorAll('[data-poll-skeleton]')).toHaveLength(2);
+    expect(view.queryByText('Polls are mounted')).toBeNull();
+
+    showIntersection(wrapper, true);
+    await act(async () => { await vi.dynamicImportSettled(); });
+    expect(view.getByText('Polls are mounted')).toBeVisible();
+    expect(nearObservers.has(wrapper)).toBe(false);
+    expect(mock.load).not.toHaveBeenCalled();
   });
 
   it('preserves visible signed in rank distinct games local floor and tile bests', async () => {

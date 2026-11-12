@@ -2,7 +2,7 @@ import { createContext, useContext, useEffect, useState, ReactNode } from 'react
 import type { User, Session } from '@supabase/supabase-js';
 import { loadSupabase } from '@/integrations/supabase/loadClient';
 import { AUTH_STORAGE_KEY, onSupabaseClientReady } from '@/integrations/supabase/clientReady';
-import { hasVerifiedLocalStorageWrites, subscribeStorageTrouble } from '@/lib/safeStorage';
+import { hasVerifiedLocalStorageWrites, probeStorageWrites, subscribeStorageTrouble } from '@/lib/safeStorage';
 import { cacheDisplayName } from '@/lib/completions';
 
 /** Mirrors the live `profiles` table exactly (verified against the schema in
@@ -37,18 +37,21 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 function needsAccountClient(): boolean {
-  if (!hasVerifiedLocalStorageWrites()) return true;
   const { pathname, search, hash } = window.location;
+  if (pathname !== '/' && !hasVerifiedLocalStorageWrites()) return true;
   if (/^\/(?:profile|admin|reset-password)(?:\/|$)/.test(pathname)) return true;
   const params = [new URLSearchParams(search), new URLSearchParams(hash.slice(1))];
   if (params.some(part => part.has('access_token') || part.has('error_description') || part.has('code')
     || part.get('type') === 'recovery')) return true;
   try {
-    return window.localStorage.getItem(AUTH_STORAGE_KEY) !== null
-      || window.localStorage.getItem(AUTH_STORAGE_KEY + '-code-verifier') !== null;
+    if (window.localStorage.getItem(AUTH_STORAGE_KEY) !== null
+      || window.localStorage.getItem(AUTH_STORAGE_KEY + '-code-verifier') !== null) return true;
   } catch {
     return true;
   }
+  // Home has no game storage notice to verify that a guest can write.
+  if (pathname === '/') probeStorageWrites();
+  return !hasVerifiedLocalStorageWrites();
 }
 
 export function AuthProvider({ children }: { children: ReactNode }) {

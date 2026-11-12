@@ -47,7 +47,7 @@ async function mount(path = '/soccer-career', { storageNotice = true, creator = 
     const { loading, user } = useAuth();
     return <span>{loading ? 'Opening account' : user?.email ?? 'Guest ready'}</span>;
   }
-  const view = render(<HelmetProvider><MemoryRouter initialEntries={['/soccer-career']}>
+  const view = render(<HelmetProvider><MemoryRouter initialEntries={[path]}>
     <AuthProvider>
       {storageNotice && <StorageNotice />}
       {Creator && <Creator />}
@@ -181,5 +181,57 @@ describe('guest game account startup', () => {
     await waitFor(() => expect(client.getSession).toHaveBeenCalledOnce());
     expect(client.calls).toEqual(['listen', 'read session']);
     if (state !== 'unprobed') expect(screen.getByRole('status')).toHaveAttribute('data-dukb-storage-notice', state);
+  });
+});
+
+describe('guest Home account startup', () => {
+  const probeKey = '__dukb_storage_probe__';
+
+  it('checks initially unprobed storage once and keeps the healthy guest client deferred', async () => {
+    fixture();
+    const set = vi.spyOn(Storage.prototype, 'setItem');
+    const remove = vi.spyOn(Storage.prototype, 'removeItem');
+    const { hasVerifiedLocalStorageWrites } = await import('@/lib/safeStorage');
+    expect(hasVerifiedLocalStorageWrites()).toBe(false);
+
+    const view = await mount('/');
+    expect(screen.getByText('Guest ready')).toBeVisible();
+    expect(create).not.toHaveBeenCalled();
+    expect(hasVerifiedLocalStorageWrites()).toBe(true);
+    view.unmount();
+    await mount('/');
+    expect(set.mock.calls.filter(([key]) => key === probeKey)).toEqual([[probeKey, '1']]);
+    expect(remove.mock.calls.filter(([key]) => key === probeKey)).toEqual([[probeKey]]);
+    expect(create).not.toHaveBeenCalled();
+  });
+
+  it.each(['blocked', 'full'] as const)('keeps eager auth with %s storage', async state => {
+    const client = fixture();
+    if (state === 'blocked') vi.spyOn(Storage.prototype, 'getItem').mockImplementation(() => {
+      throw new DOMException('Access denied', 'SecurityError');
+    });
+    if (state === 'full') vi.spyOn(Storage.prototype, 'setItem').mockImplementation(() => {
+      throw new DOMException('Storage full', 'QuotaExceededError');
+    });
+    const { getStorageTrouble } = await import('@/lib/safeStorage');
+    await mount('/');
+    await waitFor(() => expect(client.getSession).toHaveBeenCalledOnce());
+    expect(getStorageTrouble()).toBe(state);
+    expect(client.calls).toEqual(['listen', 'read session']);
+  });
+
+  it.each([
+    ['/', key],
+    ['/', key + '-code-verifier'],
+    ['/?code=fixture', null],
+    ['/#access_token=fixture&type=recovery', null],
+  ] as const)('preserves eager auth for %s with cache key %s', async (path, storedKey) => {
+    const client = fixture(storedKey === key ? player : null);
+    if (storedKey) localStorage.setItem(storedKey, 'fixture');
+    const set = vi.spyOn(Storage.prototype, 'setItem');
+    await mount(path);
+    await waitFor(() => expect(client.getSession).toHaveBeenCalledOnce());
+    expect(set.mock.calls.some(([key]) => key === probeKey)).toBe(false);
+    expect(client.calls).toEqual(['listen', 'read session']);
   });
 });

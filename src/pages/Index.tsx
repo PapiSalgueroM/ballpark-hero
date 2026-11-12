@@ -572,11 +572,9 @@ export default function Index() {
   );
 }
 
-/* Round 659: the polls sit below the games now, so their code (the poll
-   card, the flags, the fixture pool) loads when the section comes within
-   600px of the screen rather than with the page. Until then, and while it
-   loads, the placeholder holds the section's exact box, and because the
-   swap happens well below what anyone is reading, nothing they see moves. */
+/* The polls sit below the games, so their code (the poll card, the flags,
+   the fixture pool) loads when the section enters the viewport. The
+   placeholder holds the section's space until the polls are ready. */
 const LazyPolls = lazy(() => import('@/components/home/PollOfTheDay').then(m => ({ default: m.PollOfTheDay })));
 
 /* Round 840: the About copy, its own chunk. Mounted unconditionally above,
@@ -593,7 +591,7 @@ function PollsWhenNear() {
     if (typeof IntersectionObserver === 'undefined') { setNear(true); return; }
     const io = new IntersectionObserver(entries => {
       if (entries.some(e => e.isIntersecting)) { setNear(true); io.disconnect(); }
-    }, { rootMargin: '600px 0px' });
+    });
     io.observe(el);
     return () => io.disconnect();
   }, []);
