@@ -431,10 +431,7 @@ console.log('6) The Machine is the opponent it was');
 }
 
 console.log(`7) ${DRAFTS} whole drafts a model, before and after, graded by the game's own functions`);
-/* The page's own two small rules, which live inside the component: an out of position pick is rated on a third of
-   his value, and the tile shows the rating a pick would carry. */
-const adjusted = (xi, oop) => xi.map((p, i) => (p && oop[i] ? { ...p, marketValue: Math.max(1, Math.round(p.marketValue / 3)) } : p));
-const shown = c => c.player.fixedOverall ?? Math.max(35, lib.playerRating(c.player) - (c.outOfPosition ? 8 : 0));
+const shown = c => D.dartPlayerRating(c.player, c.outOfPosition);
 const GRADES = ['F', 'D', 'C', 'B', 'A', 'S'];
 /* One draft, the way resolveLanding in the page runs it. The thrower lands on a uniform point of the round's camera
    box ('any') or keeps throwing until it is not open water ('land', somebody who can aim). The picker takes the best
@@ -468,11 +465,10 @@ async function oneDraft(arm, thrower, picker, seed) {
     const pick = picker === 'best' ? c.reduce((b, x) => (shown(x) > shown(b) ? x : b), c[0]) : c[Math.floor(Math.random() * c.length)];
     xi.push(pick.player); oop.push(pick.outOfPosition); used.add(pick.player.name);
   }
-  const final = adjusted(xi, oop);
   /* The same XI with every unknown club made a league of its own: what the rating is when 'Other' is not a cluster. */
   let n = 0;
-  const apart = final.map(p => (p && p.fixedOverall === undefined && p.league === 'Other' ? { ...p, league: 'Other ' + (n += 1) } : p));
-  return { rating: D.squadRating(final), apart: D.squadRating(apart), unknown: n };
+  const apart = xi.map(p => (p && p.fixedOverall === undefined && p.league === 'Other' ? { ...p, league: 'Other ' + (n += 1) } : p));
+  return { rating: D.squadRating(xi, oop), apart: D.squadRating(apart, oop), unknown: n };
 }
 /* 'sharp' ignores the camera and always sticks one of the twelve nations with the dearest eleven: the ceiling of the board. */
 const strength = [];
