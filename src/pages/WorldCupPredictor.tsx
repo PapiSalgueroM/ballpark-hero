@@ -513,13 +513,14 @@ const PlayoffSlotsPanel = ({ picks, onPick, onAutoPickPlayoffs }: PlayoffSlotsPa
 interface GroupPredictionCardProps {
   group: Group;
   predictions: Predictions;
+  readOnly?: boolean;
   onScoreChange: (key: string, field: "homeGoals" | "awayGoals", val: number | "") => void;
   onAutoFillGroup: (letter: string) => void;
   onRankFillGroup: (letter: string) => void;
   onResetGroup: (letter: string) => void;
 }
 
-const GroupPredictionCard = ({ group, predictions, onScoreChange, onAutoFillGroup, onRankFillGroup, onResetGroup }: GroupPredictionCardProps) => {
+const GroupPredictionCard = ({ group, predictions, onScoreChange, onAutoFillGroup, onRankFillGroup, onResetGroup, readOnly = false }: GroupPredictionCardProps) => {
   const [expanded, setExpanded] = useState(true);
   const matchups = getMatchups(group.teams);
 
@@ -583,10 +584,10 @@ const GroupPredictionCard = ({ group, predictions, onScoreChange, onAutoFillGrou
         <CardContent className="px-4 pb-4 pt-2" style={{ borderTopColor: colors.border, borderTopWidth: 1 }}>
           <div className="flex items-center justify-between mb-2">
             <p className="text-[10px] uppercase tracking-wider font-semibold" style={{ color: colors.accentDim }}>
-              Predict Scores
+              {readOnly ? "Predicted Scores" : "Predict Scores"}
             </p>
             <div className="flex gap-1.5 flex-wrap">
-              {!allFilled && (
+              {!readOnly && !allFilled && (
                 <>
                   <SmallAutoButton
                     label="By Rank"
@@ -602,7 +603,7 @@ const GroupPredictionCard = ({ group, predictions, onScoreChange, onAutoFillGrou
                   </button>
                 </>
               )}
-              {hasAnyScore && (
+              {!readOnly && hasAnyScore && (
                 <button
                   onClick={(e) => { e.stopPropagation(); onResetGroup(group.letter); }}
                   className="flex items-center gap-1 text-[10px] px-2 py-1 rounded bg-[hsl(0,40%,20%)] hover:bg-[hsl(0,40%,25%)] text-[hsl(0,60%,72%)] transition-colors"
@@ -630,6 +631,7 @@ const GroupPredictionCard = ({ group, predictions, onScoreChange, onAutoFillGrou
                   </span>
                   <input
                     type="number"
+                    readOnly={readOnly}
                     min={0}
                     max={9}
                     value={score.homeGoals}
@@ -644,6 +646,7 @@ const GroupPredictionCard = ({ group, predictions, onScoreChange, onAutoFillGrou
                   <span className="text-[hsl(0,0%,52%)] text-[10px] font-bold">vs</span>
                   <input
                     type="number"
+                    readOnly={readOnly}
                     min={0}
                     max={9}
                     value={score.awayGoals}
@@ -733,17 +736,27 @@ const GroupPredictionCard = ({ group, predictions, onScoreChange, onAutoFillGrou
 
 const GROUPS_LETTERS = ["A","B","C","D","E","F","G","H","I","J","K","L"];
 
-const WorldCupPredictor = () => {
-  const [searchParams] = useSearchParams();
-  const sharedBracketId = searchParams.get("bracket");
-  const { user, profile } = useAuth();
+interface SharedBracket {
+  ownerName: string;
+  predictions: Predictions;
+  selectedThirds: string[];
+  playoffPicks: Record<string, string>;
+  knockoutPicks: Record<string, string>;
+  awards: PredictedAwards;
+}
 
-  const [predictions, setPredictions] = useState<Predictions>(loadPredictions);
+const WorldCupBracket = ({ shared }: { shared?: SharedBracket }) => {
+  const { user, profile } = useAuth();
+  const viewingSharedBracket = shared !== undefined;
+
+  const [predictions, setPredictions] = useState<Predictions>(() => shared?.predictions ?? loadPredictions());
   const [showBracket, setShowBracket] = useState(() => {
+    if (shared) return true;
     try { return localStorage.getItem("wc2026-show-bracket") === "true"; } catch { return false; }
   });
   const bracketRef = useRef<HTMLDivElement>(null);
   const [selectedThirds, setSelectedThirds] = useState<string[]>(() => {
+    if (shared) return shared.selectedThirds;
     try {
       const raw = localStorage.getItem("wc2026-selected-thirds");
       const parsed = raw ? JSON.parse(raw) : [];
@@ -752,6 +765,7 @@ const WorldCupPredictor = () => {
     } catch { return []; }
   });
   const [playoffPicks, setPlayoffPicks] = useState<Record<string, string>>(() => {
+    if (shared) return shared.playoffPicks;
     try {
       const raw = localStorage.getItem("wc2026-playoff-picks");
       const parsed = raw ? JSON.parse(raw) : {};
@@ -777,11 +791,6 @@ const WorldCupPredictor = () => {
   const [saving, setSaving] = useState(false);
   const [shareUrl, setShareUrl] = useState("");
 
-  // Shared bracket viewing state
-  const [viewingSharedBracket, setViewingSharedBracket] = useState(false);
-  const [sharedOwnerName, setSharedOwnerName] = useState("");
-  const [sharedBracketData, setSharedBracketData] = useState<any>(null);
-
   /* Round 299, the scoring audit: this was the one real game on the registry
      that never recorded a completion, so a finished bracket earned no streak
      day and no played-today credit. Crowning a champion is the completion
@@ -805,6 +814,7 @@ const WorldCupPredictor = () => {
      stored value is a JSON list now; a value written before this round is a
      single plain name and reads back as a list of one. */
   const crownedRef = useRef<string[]>((() => {
+    if (shared) return [];
     try { return parseCrowned(localStorage.getItem(WC2026_STORAGE_KEYS.crowned)); } catch { return []; }
   })());
   useEffect(() => {
@@ -815,43 +825,6 @@ const WorldCupPredictor = () => {
     try { localStorage.setItem(WC2026_STORAGE_KEYS.crowned, JSON.stringify(next)); } catch { /* storage may be unavailable */ }
     recordCompletion("/world-cup-bracket", undefined, getCurrentPlayerName(profile));
   }, [champion, viewingSharedBracket, profile]);
-
-  // Load shared bracket if URL has ?bracket=xxx
-  useEffect(() => {
-    if (!sharedBracketId) return;
-    const loadShared = async () => {
-      const { data, error } = await supabase
-        .from("saved_brackets" as any)
-        .select("*")
-        .eq("id", sharedBracketId)
-        .single();
-      if (error || !data) {
-        toast.error("Bracket not found");
-        return;
-      }
-      const bracketRow = data as any;
-      const bd = bracketRow.bracket_data;
-      // Load bracket data into state
-      setPredictions(bd.predictions || {});
-      setPlayoffPicks(bd.playoffPicks || {});
-      setSelectedThirds(bd.selectedThirds || []);
-      setShowBracket(true);
-      setSharedBracketData(bd);
-      setViewingSharedBracket(true);
-      // Fetch owner display name
-      const { data: ownerProfile } = await supabase
-        .from("profiles")
-        .select("display_name, username")
-        .eq("user_id", bracketRow.user_id)
-        .single();
-      if (ownerProfile) {
-        setSharedOwnerName(ownerProfile.display_name || ownerProfile.username || "Someone");
-      } else {
-        setSharedOwnerName("Someone");
-      }
-    };
-    loadShared();
-  }, [sharedBracketId]);
 
   // Generate unique bracket ID
   const generateBracketId = () => {
@@ -900,20 +873,20 @@ const WorldCupPredictor = () => {
 
   // persist to localStorage
   useEffect(() => {
-    safeSetItem(STORAGE_KEY, JSON.stringify(predictions));
-  }, [predictions]);
+    if (!viewingSharedBracket) safeSetItem(STORAGE_KEY, JSON.stringify(predictions));
+  }, [predictions, viewingSharedBracket]);
 
   useEffect(() => {
-    safeSetItem("wc2026-show-bracket", String(showBracket));
-  }, [showBracket]);
+    if (!viewingSharedBracket) safeSetItem("wc2026-show-bracket", String(showBracket));
+  }, [showBracket, viewingSharedBracket]);
 
   useEffect(() => {
-    safeSetItem("wc2026-selected-thirds", JSON.stringify(selectedThirds));
-  }, [selectedThirds]);
+    if (!viewingSharedBracket) safeSetItem("wc2026-selected-thirds", JSON.stringify(selectedThirds));
+  }, [selectedThirds, viewingSharedBracket]);
 
   useEffect(() => {
-    safeSetItem("wc2026-playoff-picks", JSON.stringify(playoffPicks));
-  }, [playoffPicks]);
+    if (!viewingSharedBracket) safeSetItem("wc2026-playoff-picks", JSON.stringify(playoffPicks));
+  }, [playoffPicks, viewingSharedBracket]);
 
   const cancelAutoFillEverything = useCallback(() => {
     autoFillControllerRef.current?.cancel();
@@ -923,12 +896,13 @@ const WorldCupPredictor = () => {
   }, []);
 
   const invalidateKnockout = useCallback(() => {
+    if (viewingSharedBracket) return;
     clearWc2026ChildStorage(localStorage, false);
     setChampion("");
     crownedRef.current = [];
     setBracketRounds([]);
     setKnockoutResetVersion((version) => version + 1);
-  }, []);
+  }, [viewingSharedBracket]);
 
   const beginManualBracketChange = useCallback(() => {
     cancelAutoFillEverything();
@@ -1277,12 +1251,12 @@ const WorldCupPredictor = () => {
       <AuthModal isOpen={showAuthModal} onClose={() => setShowAuthModal(false)} defaultTab={authDefaultTab} />
 
       {/* Shared bracket banner */}
-      {viewingSharedBracket && (
+      {shared && (
         <div className="sticky top-0 z-[60] flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4 px-4 py-3 bg-[hsl(220,40%,20%)] border-b border-[hsl(220,40%,30%)] text-center">
           <div className="flex items-center gap-2">
             <Eye className="w-4 h-4 text-[hsl(45,90%,60%)]" />
             <span className="text-white text-sm font-semibold">
-              You're viewing <span className="text-[hsl(45,90%,60%)]">{sharedOwnerName}'s</span> bracket
+              You're viewing <span className="text-[hsl(45,90%,60%)]">{shared.ownerName}'s</span> bracket
             </span>
           </div>
           <a
@@ -1457,6 +1431,7 @@ const WorldCupPredictor = () => {
               key={group.letter}
               group={group}
               predictions={predictions}
+              readOnly={viewingSharedBracket}
               onScoreChange={handleScoreChange}
               onAutoFillGroup={handleAutoFillGroup}
               onRankFillGroup={handleRankFillGroup}
@@ -1470,13 +1445,17 @@ const WorldCupPredictor = () => {
           <div className="mt-8">
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-4">
               <div>
-                <h2 className="text-xl sm:text-2xl font-bold text-white mb-1">Pick Your Third-Place Qualifiers</h2>
-                <p className="text-[hsl(150,15%,50%)] text-xs sm:text-sm">
-                  Select exactly 8 of the 12 third-place teams to advance to the Round of 32.
-                </p>
+                <h2 className="text-xl sm:text-2xl font-bold text-white mb-1">
+                  {viewingSharedBracket ? "Third-Place Qualifiers" : "Pick Your Third-Place Qualifiers"}
+                </h2>
+                {!viewingSharedBracket && (
+                  <p className="text-[hsl(150,15%,50%)] text-xs sm:text-sm">
+                    Select exactly 8 of the 12 third-place teams to advance to the Round of 32.
+                  </p>
+                )}
               </div>
               <div className="flex items-center gap-2 self-start">
-                {selectedThirds.length < 8 && (
+                {!viewingSharedBracket && selectedThirds.length < 8 && (
                   <SmallAutoButton
                     label="Auto Pick"
                     loading={false}
@@ -1517,9 +1496,9 @@ const WorldCupPredictor = () => {
                         return (
                           <tr
                             key={t.team + t.group}
-                            onClick={() => !isDisabled && handleToggleThird(t.team)}
+                            onClick={viewingSharedBracket || isDisabled ? undefined : () => handleToggleThird(t.team)}
                             className={`border-b border-[hsl(150,10%,16%)] transition-colors ${
-                              isDisabled ? "opacity-40 cursor-not-allowed" : "cursor-pointer hover:bg-[hsl(150,12%,16%)]"
+                              viewingSharedBracket ? "" : isDisabled ? "opacity-40 cursor-not-allowed" : "cursor-pointer hover:bg-[hsl(150,12%,16%)]"
                             } ${isSelected ? "bg-[hsl(140,50%,18%)]" : "bg-transparent"}`}
                           >
                             <td className="py-2.5 px-3 text-center">
@@ -1596,12 +1575,12 @@ const WorldCupPredictor = () => {
         {/* Knockout Bracket */}
         {showBracket && allGroupsFilled && selectedThirds.length === 8 && (
           <div ref={bracketRef}>
-            <KnockoutBracket key={`${knockoutSignature}:${knockoutResetVersion}`} seeds={groupSeeds} bestThirds={userSelectedThirdsForBracket} onChampionChange={setChampion} onRoundsChange={setBracketRounds} autoFillRef={bracketAutoFillRef} />
+            <KnockoutBracket key={`${knockoutSignature}:${knockoutResetVersion}`} seeds={groupSeeds} bestThirds={userSelectedThirdsForBracket} onChampionChange={setChampion} onRoundsChange={setBracketRounds} autoFillRef={bracketAutoFillRef} sharedPicks={shared?.knockoutPicks} />
           </div>
         )}
 
         {/* Awards Predictor */}
-        <AwardsPredictor key={`awards:${awardResetVersion}`} champion={champion} onAwardsChange={setAwardPicks} />
+        <AwardsPredictor key={`awards:${awardResetVersion}`} champion={champion} onAwardsChange={setAwardPicks} sharedAwards={shared?.awards} />
 
         {/* Round 395: the tournament has been played, score the bracket against it */}
         {!viewingSharedBracket && (
@@ -1651,6 +1630,99 @@ const WorldCupPredictor = () => {
       </div>
     </div>
   );
+};
+
+function asRecord(value: unknown): Record<string, unknown> {
+  return value && typeof value === "object" && !Array.isArray(value) ? value as Record<string, unknown> : {};
+}
+
+function readNames(value: unknown): Record<string, string> {
+  return Object.fromEntries(Object.entries(asRecord(value)).filter(
+    (entry): entry is [string, string] => typeof entry[1] === "string",
+  ));
+}
+
+function isGoal(value: unknown): value is number | "" {
+  return value === "" || (typeof value === "number" && Number.isFinite(value));
+}
+
+function SharedBracketLoader({ id }: { id: string }) {
+  const [shared, setShared] = useState<SharedBracket | null | undefined>(undefined);
+
+  useEffect(() => {
+    let active = true;
+
+    async function loadShared() {
+      try {
+        const { data, error } = await supabase.from("saved_brackets")
+          .select("bracket_data, user_id").eq("id", id).single();
+        const raw = asRecord(data?.bracket_data);
+        if (error || !data || !Object.keys(raw).length) {
+          if (active) setShared(null);
+          return;
+        }
+
+        const predictions: Predictions = {};
+        for (const [key, value] of Object.entries(asRecord(raw.predictions))) {
+          const { homeGoals, awayGoals } = asRecord(value);
+          if (isGoal(homeGoals) && isGoal(awayGoals)) predictions[key] = { homeGoals, awayGoals };
+        }
+        const awards = readNames(raw.awards);
+        if (!active) return;
+        setShared({
+          ownerName: "Someone",
+          predictions,
+          selectedThirds: Array.isArray(raw.selectedThirds)
+            ? raw.selectedThirds.filter((team): team is string => typeof team === "string")
+            : [],
+          playoffPicks: readNames(raw.playoffPicks),
+          knockoutPicks: readNames(raw.knockoutPicks),
+          awards: {
+            goldenBoot: awards.goldenBoot ?? "",
+            goldenGlove: awards.goldenGlove ?? "",
+            goldenBall: awards.goldenBall ?? "",
+          },
+        });
+
+        void supabase.from("profiles").select("display_name, username").eq("user_id", data.user_id).single()
+          .then(({ data: owner }) => {
+            const ownerName = owner?.display_name || owner?.username;
+            if (active && ownerName) setShared((current) => current && { ...current, ownerName });
+          }, () => undefined);
+      } catch {
+        if (active) setShared(null);
+      }
+    }
+
+    void loadShared();
+    return () => { active = false; };
+  }, [id]);
+
+  if (shared) return <WorldCupBracket shared={shared} />;
+
+  return (
+    <main id="dukb-main" tabIndex={-1} className="min-h-screen bg-background text-foreground">
+      <GameNavbar />
+      <div className="mx-auto max-w-2xl space-y-4 px-4 py-10 text-center">
+        {shared === undefined ? (
+          <p role="status">Loading shared bracket...</p>
+        ) : (
+          <>
+            <p role="alert">Couldn't open this shared bracket.</p>
+            <a href="/world-cup-bracket" className="inline-block rounded-lg bg-primary px-4 py-2 font-bold text-primary-foreground">
+              Make Your Own
+            </a>
+          </>
+        )}
+      </div>
+    </main>
+  );
+}
+
+const WorldCupPredictor = () => {
+  const [searchParams] = useSearchParams();
+  const id = searchParams.get("bracket");
+  return id ? <SharedBracketLoader key={id} id={id} /> : <WorldCupBracket />;
 };
 
 export default WorldCupPredictor;

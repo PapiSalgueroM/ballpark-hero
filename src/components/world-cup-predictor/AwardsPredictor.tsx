@@ -159,18 +159,21 @@ function AwardDropdown({
   value,
   options,
   onChange,
+  readOnly,
 }: {
   label: string;
   emoji: string;
   value: string;
   options: { name: string; nation: string }[];
   onChange: (v: string) => void;
+  readOnly: boolean;
 }) {
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState("");
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    if (readOnly) return;
     const handler = (e: MouseEvent | TouchEvent) => {
       if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
     };
@@ -185,7 +188,7 @@ function AwardDropdown({
       document.removeEventListener("touchstart", handler);
       document.removeEventListener("keydown", onKeyDown);
     };
-  }, []);
+  }, [readOnly]);
 
   const filtered = search
     ? options.filter(
@@ -200,9 +203,10 @@ function AwardDropdown({
   return (
     <div ref={ref} className="relative">
       <button
+        disabled={readOnly}
         onClick={() => setOpen(!open)}
         className="w-full flex items-center justify-between gap-2 px-4 py-3 rounded-xl
-          bg-[hsl(220,15%,13%)] border border-[hsl(220,15%,22%)] hover:border-[hsl(45,60%,40%)]
+          bg-[hsl(220,15%,13%)] border border-[hsl(220,15%,22%)] enabled:hover:border-[hsl(45,60%,40%)]
           transition-colors text-left"
       >
         <div className="flex items-center gap-2 min-w-0">
@@ -215,11 +219,11 @@ function AwardDropdown({
                 {selected.name} <span className="text-[hsl(150,15%,56%)]">({selected.nation})</span>
               </p>
             ) : (
-              <p className="text-sm text-[hsl(150,15%,56%)]">Select a player...</p>
+              <p className="text-sm text-[hsl(150,15%,56%)]">{readOnly ? value || "No pick" : "Select a player..."}</p>
             )}
           </div>
         </div>
-        <ChevronDown className={`w-4 h-4 text-[hsl(150,15%,56%)] transition-transform flex-shrink-0 ${open ? "rotate-180" : ""}`} />
+        {!readOnly && <ChevronDown className={`w-4 h-4 text-[hsl(150,15%,56%)] transition-transform flex-shrink-0 ${open ? "rotate-180" : ""}`} />}
       </button>
 
       {open && (
@@ -265,8 +269,14 @@ function AwardDropdown({
 
 /* ───── Main Awards component ───── */
 
-export default function AwardsPredictor({ champion, onAwardsChange }: { champion: string; onAwardsChange?: (picks: AwardPicks) => void }) {
-  const [awards, setAwards] = useState<AwardPicks>(loadAwards);
+export default function AwardsPredictor({ champion, onAwardsChange, sharedAwards }: {
+  champion: string;
+  onAwardsChange?: (picks: AwardPicks) => void;
+  sharedAwards?: AwardPicks;
+}) {
+  const readOnly = sharedAwards !== undefined;
+  const [personalAwards, setAwards] = useState<AwardPicks>(() => sharedAwards ?? loadAwards());
+  const awards = sharedAwards ?? personalAwards;
 
   /* Round 395: the page scores these against the real awards. */
   useEffect(() => {
@@ -274,8 +284,8 @@ export default function AwardsPredictor({ champion, onAwardsChange }: { champion
   }, [awards, onAwardsChange]);
 
   useEffect(() => {
-    safeSetItem(STORAGE_KEY, JSON.stringify(awards));
-  }, [awards]);
+    if (!readOnly) safeSetItem(STORAGE_KEY, JSON.stringify(awards));
+  }, [awards, readOnly]);
 
   const update = (key: keyof AwardPicks) => (val: string) =>
     setAwards((prev) => ({ ...prev, [key]: val }));
@@ -290,11 +300,13 @@ export default function AwardsPredictor({ champion, onAwardsChange }: { champion
     <div className="mt-12">
       <h2 className="text-xl sm:text-2xl font-bold text-white mb-1 flex items-center gap-2">
         <Trophy className="w-5 h-5 text-[hsl(45,90%,55%)]" />
-        Awards Predictor
+        {readOnly ? "Award Picks" : "Awards Predictor"}
       </h2>
-      <p className="text-[hsl(150,15%,50%)] text-xs sm:text-sm mb-6">
-        Pick your predictions for the tournament's top individual awards.
-      </p>
+      {!readOnly && (
+        <p className="text-[hsl(150,15%,50%)] text-xs sm:text-sm mb-6">
+          Pick your predictions for the tournament's top individual awards.
+        </p>
+      )}
 
       <div className="grid gap-4 sm:grid-cols-2">
         {/* Tournament Winner, auto-filled */}
@@ -311,7 +323,7 @@ export default function AwardsPredictor({ champion, onAwardsChange }: { champion
                   {champion}
                 </p>
               ) : (
-                <p className="text-sm text-[hsl(150,15%,56%)]">Pick a champion in the bracket above</p>
+                <p className="text-sm text-[hsl(150,15%,56%)]">{readOnly ? "No pick" : "Pick a champion in the bracket above"}</p>
               )}
             </div>
           </div>
@@ -319,6 +331,7 @@ export default function AwardsPredictor({ champion, onAwardsChange }: { champion
 
         {/* Golden Boot */}
         <AwardDropdown
+          readOnly={readOnly}
           label="Golden Boot (Top Scorer)"
           emoji="🥇"
           value={awards.goldenBoot}
@@ -328,6 +341,7 @@ export default function AwardsPredictor({ champion, onAwardsChange }: { champion
 
         {/* Golden Glove */}
         <AwardDropdown
+          readOnly={readOnly}
           label="Golden Glove (Best GK)"
           emoji="🧤"
           value={awards.goldenGlove}
@@ -337,6 +351,7 @@ export default function AwardsPredictor({ champion, onAwardsChange }: { champion
 
         {/* Golden Ball */}
         <AwardDropdown
+          readOnly={readOnly}
           label="Golden Ball (Best Player)"
           emoji="🌟"
           value={awards.goldenBall}
@@ -349,13 +364,13 @@ export default function AwardsPredictor({ champion, onAwardsChange }: { champion
       {hasPicks && (
         <div className="mt-8 rounded-2xl border-2 border-[hsl(45,70%,25%)] bg-gradient-to-br from-[hsl(220,15%,11%)] to-[hsl(230,18%,8%)] p-6 shadow-lg">
           <h3 className="text-sm font-bold text-[hsl(45,90%,60%)] uppercase tracking-wider mb-4 text-center">
-            🏅 Your Award Predictions
+            🏅 {readOnly ? "Award Predictions" : "Your Award Predictions"}
           </h3>
           <div className="grid gap-3 sm:grid-cols-2">
             <SummaryRow emoji="🏆" label="Champion" value={champion} nation={champion} />
-            <SummaryRow emoji="🥇" label="Golden Boot" value={bootPlayer?.name} nation={bootPlayer?.nation} />
-            <SummaryRow emoji="🧤" label="Golden Glove" value={glovePlayer?.name} nation={glovePlayer?.nation} />
-            <SummaryRow emoji="🌟" label="Golden Ball" value={ballPlayer?.name} nation={ballPlayer?.nation} />
+            <SummaryRow emoji="🥇" label="Golden Boot" value={readOnly ? awards.goldenBoot : bootPlayer?.name} nation={bootPlayer?.nation} />
+            <SummaryRow emoji="🧤" label="Golden Glove" value={readOnly ? awards.goldenGlove : glovePlayer?.name} nation={glovePlayer?.nation} />
+            <SummaryRow emoji="🌟" label="Golden Ball" value={readOnly ? awards.goldenBall : ballPlayer?.name} nation={ballPlayer?.nation} />
           </div>
         </div>
       )}

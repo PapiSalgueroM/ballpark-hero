@@ -1,3 +1,9 @@
+## 2026-11-12: World Cup Bracket share isolation candidate
+
+Opening a shared link previously copied the other player's group scores and third-place qualifiers into the viewer's save, then could clear the personal knockout and crown. Shared links now open a read-only view using the saved groups, knockout winners and awards. Make Your Own returns to the viewer's personal bracket, including when the link is unavailable. The existing share payload and tournament scoring are used.
+
+Exact main reproduced the overwrite on a 390px touch browser. The candidate's production build displayed a separate completed shared bracket with all 72 group scores and 32 knockout matches, preserved all eight personal save fields through opening the share and reloading the personal route, and emitted zero completion writes during the walk. Three focused tests, the app type check, the personal reset browser harness, 17 output and scoring harnesses, and all 16 existing route caps passed.
+
 ## 2026-11-07: Club Manager historical roster counts live
 
 [PR #532](https://github.com/PapiSalgueroM/ballpark-hero/pull/532) published from main `c3b5ca4afaf9b4dadcd748f340e8e8e3e4a1a1dd`, App tree `133fcd3d26a4d237178e5c7efee723048da0aef2`, Lovable deployment `510b1df1-2172-42c0-90f9-d9f9c997b840`.
