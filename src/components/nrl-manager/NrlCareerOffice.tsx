@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react';
 import { ArrowRight, ChevronDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import NrlBoardChallengeNotice from '@/components/nrl-manager/NrlBoardChallengeNotice';
 import { nrlSeasonPlan, NRL_LAST_YEAR } from '@/data/nrlManagerSeasons';
 import {
   nrlAcademyAvailableRoles, nrlAcademyOffer, nrlAcademyReports, nrlCareerCap, nrlCareerFinance, nrlCareerMarket, nrlCareerRecord, nrlCareerSquad, nrlContractOffer,
@@ -9,7 +10,7 @@ import {
 } from '@/lib/nrlCareer';
 import { NRL_COACHING_BONUS, NRL_ROLES, type NrlCoachRole, type NrlRole } from '@/lib/nrlManager';
 import { nrlArchivedScoringLeaders, nrlTryLeaders } from '@/lib/nrlPlayerScoring';
-import { nrlBoardBenchmark, nrlBoardTarget } from '@/lib/nrlBoardTarget';
+import { nrlBoardBenchmark, nrlBoardChallengeStatus, nrlBoardTarget } from '@/lib/nrlBoardTarget';
 
 const currency = new Intl.NumberFormat('en-AU', {
   style: 'currency', currency: 'AUD', maximumFractionDigits: 0,
@@ -422,6 +423,8 @@ function History({ career, onAction, disabled }: { career: NrlCareerState; onAct
   const { year, phase, clubId } = career.season;
   const finished = phase === 'complete';
   const target = nrlBoardTarget(career);
+  const challengeStatus = nrlBoardChallengeStatus(career);
+  const mustMove = challengeStatus === 'must-move';
   const pastPlaces = new Map(career.history.map(record => [`${record.clubId}:${record.year}`, record.rank]));
   const [nextClubId, setNextClubId] = useState('');
   const clubs = nrlOffseasonClubs(career);
@@ -446,16 +449,17 @@ function History({ career, onAction, disabled }: { career: NrlCareerState; onAct
           </p>
         </section>
       )}
+      {challengeStatus && <div className="mt-3"><NrlBoardChallengeNotice season={career.season} status={challengeStatus} /></div>}
       {!career.legacySeason && year < NRL_LAST_YEAR && <DevelopmentFocus career={career} onAction={onAction} disabled={disabled} />}
-      {finished && year < NRL_LAST_YEAR && (
+      {finished && year < NRL_LAST_YEAR && !mustMove && (
         <Button type="button" size="lg" className="mt-3 w-full" disabled={disabled} onClick={() => onAction({ type: 'startNextSeason' })}>
           Start {year + 1}<ArrowRight aria-hidden="true" />
         </Button>
       )}
       {clubs.length > 0 && (
-        <details className="group mt-3 rounded-xl border border-border bg-background px-3">
+        <details className="group mt-3 rounded-xl border border-border bg-background px-3" open={mustMove || undefined}>
           <summary className="flex min-h-11 cursor-pointer items-center justify-between gap-2 rounded-md text-sm font-bold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
-            Change clubs for {year + 1}<ChevronDown size={16} aria-hidden="true" className="shrink-0 group-open:rotate-180" />
+            {mustMove ? 'Choose a new club for' : 'Change clubs for'} {year + 1}<ChevronDown size={16} aria-hidden="true" className="shrink-0 group-open:rotate-180" />
           </summary>
           <div className="space-y-2 pb-3 text-sm">
             <p className="text-muted-foreground">Take over the new club’s squad and contracts. If you return to a club, you resume its last balance and medical facilities.</p>
