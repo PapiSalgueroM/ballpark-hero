@@ -24,6 +24,12 @@ export const NRL_TICKET_GATE_CHANGES = {
   premium: { regularNonWin: -24_000, regularWin: 18_000, homeFinal: 36_000 },
 } as const;
 
+export const NRL_SPONSOR_OFFERS = {
+  fixed: { upfront: 200_000, bonus: 0 },
+  finals: { upfront: 110_000, bonus: 200_000 },
+} as const;
+export type NrlSponsorOffer = keyof typeof NRL_SPONSOR_OFFERS;
+
 const COACH_SIGNING_FEE = 120_000;
 const COACH_ROUND_WAGE = 18_000;
 const COACH_ROLES = ['attack', 'defense'] as const;
@@ -55,6 +61,7 @@ export interface NrlCareerBook {
   medicalUpgrades?: NrlMedicalUpgrade[];
   coachHire?: NrlCoachHire;
   ticketTier?: ActiveTicketTier;
+  sponsor?: { offer: NrlSponsorOffer; bonusPaid?: true };
 }
 export interface NrlCareerFinance extends NrlCareerBook { cash: number; profit: number }
 export type NrlDevelopmentFocus = 'balanced' | 'youth' | 'veterans';
@@ -103,6 +110,7 @@ export type NrlCareerAction = NrlAction
   | { type: 'upgradeMedical'; level: MedicalUpgradeLevel }
   | { type: 'hireCoach'; role: NrlCoachRole; year: number; round: number }
   | { type: 'setTicketTier'; tier: NrlTicketTier; year: number; round: number }
+  | { type: 'signSponsor'; offer: NrlSponsorOffer; year: number; clubId: string }
   | { type: 'startNextSeason'; move?: { fromYear: number; clubId: string } };
 
 export interface NrlCareerCap {
@@ -363,10 +371,17 @@ function coachWageReserve(book: NrlCareerBook, finalRound: number): number {
   return book.coachHire ? coachTermWages(book.coachHire.round, finalRound) - nrlCoachSpend(book).wages : 0;
 }
 
+export function nrlSponsorIncome({ sponsor }: NrlCareerBook): number {
+  if (!sponsor) return 0;
+  const { upfront, bonus } = NRL_SPONSOR_OFFERS[sponsor.offer];
+  return upfront + (sponsor.bonusPaid ? bonus : 0);
+}
+
 export function nrlCareerFinance(state: Pick<NrlCareerState, 'finance'>): NrlCareerFinance {
   const { openingCash, centralFunding, gateReceipts, wagesPaid, operatingCosts } = state.finance;
   const { signingFee, wages } = nrlCoachSpend(state.finance);
-  const profit = centralFunding + gateReceipts - wagesPaid - operatingCosts - nrlMedicalSpend(state.finance) - signingFee - wages;
+  const profit = centralFunding + gateReceipts + nrlSponsorIncome(state.finance)
+    - wagesPaid - operatingCosts - nrlMedicalSpend(state.finance) - signingFee - wages;
   return { ...state.finance, cash: openingCash + profit, profit };
 }
 
@@ -513,12 +528,27 @@ export function nrlTicketPricingRefusal({ season, legacySeason }: Pick<NrlCareer
   return season.live ? 'Ticket pricing is unavailable during a live match.' : null;
 }
 
+export function nrlSponsorRefusal({ season, finance, legacySeason }: NrlCareerState): string | null {
+  if (finance.sponsor) return 'Your sponsor is signed for this season.';
+  if (legacySeason) return 'Sponsor offers open next season for this imported career.';
+  if (season.phase !== 'regular' || season.round !== 1 || season.live) {
+    return 'Sponsor offers close when Round 1 starts.';
+  }
+  return null;
+}
+
+function isSponsorOffer(offer: unknown): offer is NrlSponsorOffer {
+  return offer === 'fixed' || offer === 'finals';
+}
+
 function tickBooks(finance: NrlCareerBook, season: NrlManagerState, round: number, results: NrlMatchResult[], cap: NrlCareerCap): NrlCareerBook {
   const ticks = lastRound(season.year);
   const installment = (annual: number) => payThroughRound(annual, round, ticks) - payThroughRound(annual, round - 1, ticks);
   const fixture = results.find(result => result.homeId === season.clubId || result.awayId === season.clubId);
   const home = fixture && hasHomeGate(fixture, season.clubId);
   const gate = home ? homeGateReceipt(fixture, fixture.homeScore > fixture.awayScore, finance.ticketTier ?? 'standard') : 0;
+  const earnsSponsorBonus = finance.sponsor?.offer === 'finals' && round === nrlRegularRounds(season.year)
+    && nrlLadder(season).slice(0, NRL_FINALS_SPOTS).some(row => row.clubId === season.clubId);
   return {
     ...finance,
     centralFunding: finance.centralFunding + installment(cap.cap),
@@ -526,6 +556,7 @@ function tickBooks(finance: NrlCareerBook, season: NrlManagerState, round: numbe
     gateReceipts: finance.gateReceipts + gate,
     operatingCosts: finance.operatingCosts + ROUND_OPERATING_COST + (fixture && !home ? TRAVEL_COST : 0),
     ...(finance.coachHire ? { coachHire: { ...finance.coachHire, paidRounds: finance.coachHire.paidRounds + 1 } } : {}),
+    ...(earnsSponsorBonus ? { sponsor: { offer: 'finals', bonusPaid: true } } : {}),
   };
 }
 
@@ -776,6 +807,11 @@ export function reduceNrlCareer(state: NrlCareerState, action: NrlCareerAction):
       }
       return action.tier === 'standard' && ticketTier ? { ...state, finance } : state;
     }
+    case 'signSponsor': {
+      if (action.year !== state.season.year || action.clubId !== state.season.clubId
+        || !isSponsorOffer(action.offer) || nrlSponsorRefusal(state) !== null) return state;
+      return { ...state, finance: { ...state.finance, sponsor: { offer: action.offer } } };
+    }
     case 'setDevelopmentFocus': {
       if (state.legacySeason || state.season.year === NRL_LAST_YEAR || action.focus === state.developmentFocus) return state;
       if (activeDevelopmentFocus(action.focus)) return { ...state, developmentFocus: action.focus };
@@ -858,6 +894,10 @@ function validBook(value: unknown, roundLimit: number): value is NrlCareerBook {
       .every(amount => intIn(amount, 0, Number.MAX_SAFE_INTEGER))
     && validMedicalUpgrades(value.medicalUpgrades, value.fromRound, roundLimit)
     && (value.ticketTier === undefined || (value.fromRound === 1 && activeTicketTier(value.ticketTier)))
+    && (value.sponsor === undefined || (value.fromRound === 1 && record(value.sponsor)
+      && isSponsorOffer(value.sponsor.offer)
+      && Object.keys(value.sponsor).length === (value.sponsor.bonusPaid === undefined ? 1 : 2)
+      && (value.sponsor.bonusPaid === undefined || (value.sponsor.offer === 'finals' && value.sponsor.bonusPaid === true))))
     && (value.coachHire === undefined || (record(value.coachHire) && isCoachRole(value.coachHire.role)
       && intIn(value.coachHire.round, value.fromRound, roundLimit)
       && intIn(value.coachHire.paidRounds, 0, roundLimit - value.coachHire.round + 1)));
@@ -877,6 +917,7 @@ function validReceipt(value: unknown, year: number): value is NrlCareerHistoryRo
   if (!record(value.finance) || !validBook(value.finance, lastRound(year))) return false;
   const finance = nrlCareerFinance({ finance: value.finance });
   if (finance.coachHire && (finance.fromRound !== 1 || finance.coachHire.paidRounds !== lastRound(year) - finance.coachHire.round + 1)) return false;
+  if (finance.sponsor?.offer === 'finals' && Boolean(finance.sponsor.bonusPaid) !== (value.rank <= NRL_FINALS_SPOTS)) return false;
   return value.finance.cash === finance.cash && value.finance.profit === finance.profit;
 }
 
@@ -889,6 +930,7 @@ function booksMatch(a: NrlCareerBook, b: NrlCareerBook): boolean {
     && a.coachHire?.role === b.coachHire?.role && a.coachHire?.round === b.coachHire?.round
     && a.coachHire?.paidRounds === b.coachHire?.paidRounds
     && a.ticketTier === b.ticketTier
+    && a.sponsor?.offer === b.sponsor?.offer && a.sponsor?.bonusPaid === b.sponsor?.bonusPaid
     && first.length === second.length && first.every((purchase, index) =>
       purchase.round === second[index].round && purchase.level === second[index].level);
 }
@@ -922,7 +964,7 @@ function validCareerBooks(state: NrlCareerState): boolean {
   const played = complete ? season.round : season.round - 1;
   const finalRound = lastRound(season.year);
   if (finance.fromRound > played + 1 || (finance.fromRound !== 1 && !legacySeason)
-    || (legacySeason && finance.ticketTier !== undefined)) return false;
+    || (legacySeason && (finance.ticketTier !== undefined || finance.sponsor !== undefined))) return false;
   const coach = finance.coachHire;
   if (coach) {
     if (legacySeason) return false;
@@ -955,6 +997,7 @@ function validCareerBooks(state: NrlCareerState): boolean {
   const currentClub = clubs.get(season.clubId) ?? firstBook;
   let expected = bookFrom(currentClub.cash, finance.fromRound);
   if (finance.ticketTier) expected.ticketTier = finance.ticketTier;
+  if (finance.sponsor) expected.sponsor = { offer: finance.sponsor.offer };
   const cap = nrlCareerCap(state);
   const purchases = finance.medicalUpgrades ?? [];
   if ((!season.injuryTracking && purchases.length)

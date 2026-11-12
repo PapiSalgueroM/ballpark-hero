@@ -6,7 +6,8 @@ import { nrlSeasonPlan, NRL_LAST_YEAR } from '@/data/nrlManagerSeasons';
 import {
   nrlAcademyAvailableRoles, nrlAcademyOffer, nrlAcademyReports, nrlCareerCap, nrlCareerFinance, nrlCareerMarket, nrlCareerRecord, nrlCareerSquad, nrlContractOffer,
   nrlCoachQuote, nrlCoachSpend, nrlDevelopmentPreview, nrlFinanceForecast, nrlMedicalSpend, nrlMedicalUpgradeQuote, nrlOffseasonClubs, type NrlCareerAction, type NrlCareerState,
-  nrlTicketPricingRefusal, NRL_SHORTLIST_LIMIT, NRL_TICKET_GATE_CHANGES, type NrlDevelopmentFocus, type NrlMedicalLevel, type NrlTicketTier,
+  nrlSponsorIncome, nrlSponsorRefusal, nrlTicketPricingRefusal, NRL_SHORTLIST_LIMIT, NRL_SPONSOR_OFFERS, NRL_TICKET_GATE_CHANGES,
+  type NrlDevelopmentFocus, type NrlMedicalLevel, type NrlSponsorOffer, type NrlTicketTier,
 } from '@/lib/nrlCareer';
 import { NRL_COACHING_BONUS, NRL_ROLES, type NrlCoachRole, type NrlRole } from '@/lib/nrlManager';
 import { nrlArchivedScoringLeaders, nrlTryLeaders } from '@/lib/nrlPlayerScoring';
@@ -406,6 +407,55 @@ function TicketPricing({ career, onAction, disabled }: { career: NrlCareerState;
   );
 }
 
+const sponsorLabels: Record<NrlSponsorOffer, string> = { fixed: 'Fixed offer', finals: 'Finals offer' };
+
+function SeasonSponsor({ career, onAction, disabled }: { career: NrlCareerState; onAction: Dispatch; disabled: boolean }) {
+  const { season, finance } = career;
+  const sponsor = finance.sponsor;
+  const reason = nrlSponsorRefusal(career);
+  const summary = useRef<HTMLElement>(null);
+  return (
+    <details className="group mt-4 rounded-lg border border-border bg-background px-3">
+      <summary ref={summary} className="flex min-h-11 cursor-pointer items-center justify-between gap-2 rounded-md text-sm font-bold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
+        Season sponsor<ChevronDown size={16} aria-hidden="true" className="shrink-0 group-open:rotate-180" />
+      </summary>
+      <div className="space-y-2 pb-3 text-sm">
+        <p className="text-muted-foreground">Simulated one-season offers in AUD. Choose before Round 1 starts.</p>
+        {sponsor ? (
+          <div role="status">
+            <p className="font-semibold">{sponsorLabels[sponsor.offer]} · {season.year}</p>
+            <p>{money(nrlSponsorIncome(finance))} received</p>
+            {sponsor.offer === 'finals' && (
+              <p className="text-muted-foreground">
+                {sponsor.bonusPaid ? 'Top-eight bonus paid.'
+                  : season.phase === 'regular' ? money(NRL_SPONSOR_OFFERS.finals.bonus) + ' more for finishing in the top eight.'
+                    : 'Top-eight bonus missed.'}
+              </p>
+            )}
+          </div>
+        ) : reason ? <p className="text-muted-foreground">{reason}</p> : (
+          <div className="grid gap-2 sm:grid-cols-2">
+            {(['fixed', 'finals'] as const).map(offer => {
+              const { upfront, bonus } = NRL_SPONSOR_OFFERS[offer];
+              return (
+                <div key={offer} className="flex flex-col items-start gap-2 rounded-md border border-border p-2">
+                  <p>{money(upfront)} now{bonus > 0 && <> · {money(bonus)} for finishing in the top eight</>}</p>
+                  <Button type="button" variant="outline" size="lg" className="mt-auto px-3" disabled={disabled}
+                    onClick={() => {
+                      if (onAction({ type: 'signSponsor', offer, year: season.year, clubId: season.clubId })) summary.current?.focus();
+                    }}>
+                    Sign {sponsorLabels[offer].toLowerCase()}
+                  </Button>
+                </div>
+              );
+            })}
+          </div>
+        )}
+      </div>
+    </details>
+  );
+}
+
 function CashForecast({ career, hasAccounts }: { career: NrlCareerState; hasAccounts: boolean }) {
   const forecast = nrlFinanceForecast(career);
   return (
@@ -419,6 +469,9 @@ function CashForecast({ career, hasAccounts }: { career: NrlCareerState; hasAcco
             <p className="text-muted-foreground">
               Uses simulated amounts at your current ticket tier. Later finals, new hires and facility purchases can change the final balance.
             </p>
+            {career.season.phase === 'regular' && career.finance.sponsor?.offer === 'finals' && (
+              <p className="mt-1 text-muted-foreground">This estimate excludes the possible {money(NRL_SPONSOR_OFFERS.finals.bonus)} sponsor bonus.</p>
+            )}
             {career.finance.fromRound > 1 && (
               <p className="mt-1 text-muted-foreground">Accounts began in round {career.finance.fromRound}. The estimate uses the cash recorded since then.</p>
             )}
@@ -470,7 +523,9 @@ function Finances({ career, onAction, disabled }: { career: NrlCareerState; onAc
               {cash.fromRound > 1 && <p className="mt-2 text-sm text-muted-foreground">This save began tracking finances in round {cash.fromRound}.</p>}
               <MoneyRows entries={[
                 ['Opening cash', cash.openingCash], ['Central funding', cash.centralFunding],
-                ['Gate receipts', cash.gateReceipts], ['Wages paid', cash.wagesPaid],
+                ['Gate receipts', cash.gateReceipts],
+                ...(cash.sponsor ? [['Sponsor income', nrlSponsorIncome(cash)] as const] : []),
+                ['Wages paid', cash.wagesPaid],
                 ['Operating costs', cash.operatingCosts],
                 ...(medicalSpend ? [['Medical upgrades', medicalSpend] as [string, number]] : []),
                 ...(cash.coachHire ? [['Coach signing fee', coachSpend.signingFee], ['Coach wages paid', coachSpend.wages]] as [string, number][] : []),
@@ -481,6 +536,7 @@ function Finances({ career, onAction, disabled }: { career: NrlCareerState; onAc
         </div>
       </div>
       <CashForecast career={career} hasAccounts={hasAccounts} />
+      <SeasonSponsor career={career} onAction={onAction} disabled={disabled} />
       <TicketPricing career={career} onAction={onAction} disabled={disabled} />
       <MedicalFacilities career={career} onAction={onAction} disabled={disabled} />
       <CoachingStaff career={career} onAction={onAction} disabled={disabled} />
@@ -633,6 +689,7 @@ function History({ career, onAction, disabled }: { career: NrlCareerState; onAct
                 <p className="text-sm text-muted-foreground">Ladder place {record.rank} · {record.wins} wins · {record.draws} draws · {record.losses} losses</p>
                 <p className="text-sm text-muted-foreground">Premiers {labelForClub(record.year, record.championId)}{record.finance ? ` · Profit or loss ${money(record.finance.profit)}` : ''}</p>
                 {record.finance?.ticketTier && <p className="text-sm text-muted-foreground">Home ticket pricing {ticketLabels[record.finance.ticketTier]}</p>}
+                {record.finance?.sponsor && <p className="text-sm text-muted-foreground">Sponsor income {money(nrlSponsorIncome(record.finance))}</p>}
                 {benchmark && <p className="text-sm text-muted-foreground" data-nrl-board-benchmark>
                   Board benchmark · {benchmark.label} · {record.rank <= benchmark.targetRank ? 'Met' : 'Missed'}
                 </p>}
