@@ -1,3 +1,9 @@
+## 2026-11-12: Career Ladder Daily midnight saves staged
+
+A Career Ladder tab that starts loading before midnight keeps a newer Daily result when its player pool arrives after midnight. The shared puzzle loader prunes only earlier dates for the same game.
+
+The mounted replay finished Nov 12, then released the delayed Nov 11 player pool. The original deleted the current result without a guess. The repair restores the older tab's clue, keeps Nov 12 complete on reload and records one completion. Focused checks cover older and same-day records, other game keys and the Footle give up flow.
+
 ## 2026-11-12 Footle Daily give up and shared saves
 
 Give up now checks the current Daily save before recording a loss. If another tab has finished or saved further, Footle takes that progress and keeps the existing guesses. An ordinary give up still records one loss and preserves the same save format.
@@ -9,6 +15,12 @@ Mounted checks reproduced a two-guess win changing to an empty loss both before 
 Daily guesses settle against the latest saved board, so two tabs can fill different squares without losing either answer. An already filled square keeps its first answer, and a finished Daily cannot be replayed or paid again by a stale tab. Entering Daily from Unlimited and receiving another tab's save are read-only. Existing save keys, optional legacy wrong counts, Eastern dates, board generation and scoring are preserved.
 
 The mounted fixture suite reproduced 27 failures on main and passed all 27 with the repair, plus 29 completion, rarity, namesake and engine checks. Production build and phone verification are pending. The NHL reports did not include a player or square, so this verifies a separate Daily save defect in that route.
+
+## 2026-11-12: Gauntlet Daily midnight saves staged
+
+Finishing a Gauntlet Daily from before midnight keeps the newer Daily result in another tab. The shared record writer prunes only earlier dates for the same game and retains the existing keys and JSON.
+
+A mounted replay saved 32 points for Nov 12, then 48 for Nov 11 from its older tab. The original removed Nov 12 and offered the first pick again. The repair kept both records and reopened Nov 12 with the 32-point result and one completion for each run. Both new regressions failed on main, then passed with 13 existing Daily record and Gauntlet reload checks. Production verification is pending.
 
 ## 2026-11-07: Club Manager historical roster counts live
 
