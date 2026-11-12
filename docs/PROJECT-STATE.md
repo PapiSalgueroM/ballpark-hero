@@ -1,3 +1,11 @@
+## 2026-11-11: Rarity Round explains historical archive coverage
+
+Report 97072527 found that Johan Cruyff is absent from the Dutch answer list. The picker reads market-value records and the scorer ranks the Dutch pool derived from them. The first-run guide and empty-search message now explain that some historical players are missing. The Dutch pool and scoring stay as they were. Adding ranked historical players requires a comparable, sourced prominence measure and a future pool version so players on the same Daily use the same ranks.
+
+[KNVB](https://www.onsoranje.nl/toernooien/502/selectie/185184/speler/9326) identifies Johan Cruijff as a Netherlands player. [FIFA](https://www.fifa.com/en/archive/johan-cruyff) and [FC Barcelona](https://www.fcbarcelona.com/en/news/648131/johan-cruyff) use Johan Cruyff. [FC Barcelona records Jordi separately](https://players.fcbarcelona.com/en/player/426-jordi-cruyff-johan-jordi-cruyff).
+
+On the compiled 390px November 11 Daily, fixture searches for Cruyff, Cruijff, accented input and the reported typo went from the generic empty result to the archive note. An outage still showed Retry. Jordi stayed rank 2 of 3 for 50 points in both builds, with one fixture submission. App types, the production build, 23 focused tests and seven offline harnesses passed. No live data was written.
+
 ## 2026-11-07: Club Manager historical roster counts live
 
 [PR #532](https://github.com/PapiSalgueroM/ballpark-hero/pull/532) published from main `c3b5ca4afaf9b4dadcd748f340e8e8e3e4a1a1dd`, App tree `133fcd3d26a4d237178e5c7efee723048da0aef2`, Lovable deployment `510b1df1-2172-42c0-90f9-d9f9c997b840`.
