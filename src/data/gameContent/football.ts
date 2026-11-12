@@ -1318,122 +1318,109 @@ export const FOOTBALL_CONTENT: GameContentMap = {
 
   '/nfl-gauntlet-draft': {
     intro: [
-      "The draft mode, NFL style: seven picks, one per starting offense slot, five real players a pick from a genuine star to a bargain, and you keep exactly one.",
-      "Then the cup begins. Your finished offense runs five knockout rounds against ever stronger invented opposition, rated 79 up to 97, and overtime when the game is level.",
-      "The run is decided entirely by the offense you drafted: the same seven always runs the same gauntlet, so every pick is the game.",
+      "Draft a quarterback, then build his backfield and receiving group. You leave the board with one QB, two running backs, three wide receivers and a tight end.",
+      "The ratings on the cards are the ratings this game uses. A familiar name at quarterback is tempting, but the simulator takes the average of all seven picks. Check the number on the card before you start building around a favorite.",
+      "Your offense opens against a 79-rated opponent. If you keep winning, the final asks it to get past a 97. There is no play-calling between rounds, so the draft is where you make your decisions.",
     ],
     headings: {
       howToPlay: "How to play Gauntlet Draft: NFL, a free online NFL card draft game",
-      rules: "Gauntlet Draft: NFL rules: cards, positions and the knockout",
-      example: "Gauntlet Draft: NFL walkthrough: a quarterback pick and a title run",
-      tips: "Gauntlet Draft: NFL tips for building a title winning offense",
+      rules: "Gauntlet Draft: NFL rules for skill players and overtime",
+      example: "Gauntlet Draft: NFL walkthrough from the quarterback pick to the playoffs",
+      tips: "Gauntlet Draft: NFL tips for grading your offense",
       faq: "Gauntlet Draft: NFL FAQ: daily drafts, positions and opponents",
     },
     howToPlaySections: [
       {
-        heading: "Choosing the daily or unlimited draft",
+        heading: "Choose a shared board or a fresh draw",
         items: [
-          "Pick the daily gauntlet (the same five card choices for everyone today) or unlimited for a fresh draft.",
+          "Daily gives everyone the same offers for the Eastern Time date. Use Unlimited when you want to see a different mix of quarterbacks, backs and pass catchers.",
         ],
       },
       {
-        heading: "Drafting each of your seven slots",
+        heading: "Fill the backfield and receiving group",
         items: [
-          "For each of the seven slots (QB, two RB, three WR, TE) read the five cards, star to bargain, and tap the one you keep.",
+          "Each slot shows five candidates from its own position. Choose one and the board advances. A second running back goes into RB2, and the three wide receiver slots each take their own pick.",
         ],
       },
       {
-        heading: "Watching the knockout begin on its own",
+        heading: "Follow the offense from the qualifier",
         items: [
-          "After the seventh pick the knockout starts on its own: five rounds, one match each, revealed one at a time.",
+          "Once you choose a tight end, watch the playoff results. The next game appears if you win the current one. A loss ends the run, even if your roster rating was higher.",
         ],
       },
       {
-        heading: "Scoring survival points and the trophy",
+        heading: "Read your score at the end",
         items: [
-          "Survive a round for 16 points; lift the trophy for exactly 100.",
+          "Four wins and a loss in the final earn 64 points. A fifth win adds another 16, and the trophy adds 20 more for a score of 100.",
         ],
       },
     ],
     ruleSections: [
       {
-        heading: "Real players against invented opponents",
+        heading: "NFL player cards and fictional opponents",
         items: [
-          "Every card is a real player off the same 2026 roster data NFL Front Office plays; every opponent club is invented on purpose.",
+          "The skill players come from the roster data used by NFL Front Office. The teams you face in the playoffs are fictional, and the scores come from the game.",
         ],
       },
       {
-        heading: "Why the draft covers four skill positions",
+        heading: "Why the board stops at seven slots",
         items: [
-          "The draft is scoped to the four skill positions (QB, RB, WR, TE) on purpose: their ratings are built from real production, the way the position data's own generator describes it, and every slot deals a genuine star-to-bargain spread. Offensive linemen and defenders are rated on thinner evidence (playing time, draft position and limited defensive measures, most of it marked e in NFL Front Office), so they stay out of the draft rather than padding it with picks that are not a real choice.",
+          "The roster data has more detailed production for quarterbacks, running backs, wide receivers and tight ends. The draft uses those four positions, where each card can be graded on that evidence.",
         ],
       },
       {
-        heading: "A star to bargain spread in every slot",
+        heading: "Five options and no repeats",
         items: [
-          "The five cards per slot are spread across the pool's rating range, so a top-tier card and a bargain are always both on the table.",
+          "Each deal draws from different parts of the position's rating range.",
         ],
         subsections: [
           {
-            heading: "Never dealt the same player twice",
+            heading: "Why the receiver options change",
             items: [
-              "No player is dealt twice in one draft.",
+              "A player who has already appeared in your draft will not be dealt again, so each receiver slot gives you new choices.",
             ],
           },
         ],
       },
       {
-        heading: "A knockout that replays the same way",
+        heading: "Five opponents and an overtime decider",
         items: [
-          "The knockout is deterministic in your offense: scoring comes from the rating gap, level games go to overtime, and replaying the same seven replays the same cup.",
-        ],
-      },
-      {
-        heading: "Opposition ratings climbing round by round",
-        items: [
-          "Opposition ratings climb 79, 83, 88, 92, 97. A bargain offense usually falls in the first round, an elite one reaches the final as a slight underdog, and even a perfect draft lifts the trophy roughly one run in nine.",
+          "The playoff ladder is rated 79, 83, 88, 92 and 97. A tie goes to overtime. The game uses the same simulation for the same seven picks, so you need a different offense to see a different run.",
         ],
       },
     ],
     exampleSections: [
       {
-        heading: "Five cards at the quarterback slot",
+        heading: "A twelve point gap at running back",
         paragraphs: [
-          "The quarterback slot deals a 93 next to an 88, an 82, a 76 and a 71. There is no cost to any of them, so the 93 is the pick unless you are chasing a specific team on the card.",
+          "Say the second running back deal has a 90 and a 78, and you prefer the 78 because he played for your favorite team. That costs 12 points across seven cards, so it lowers the offense average by about 1.7 before rounding. Giving up the same 12 points at quarterback would have exactly the same effect.",
         ],
       },
       {
-        heading: "Two rounds survived and one regret",
+        heading: "A tight end can tip a close matchup",
         paragraphs: [
-          "Your finished offense rates 90. The Qualifier wins big, the Last Sixteen is tight, the Quarter Final needs overtime, and the Semi Final ends the run. Two rounds survived, 32 points, and the card you would redo is the 76 you took at the third receiver spot.",
+          "Imagine your first six picks add up to 540, an average of 90. Take a tight end rated 90 and your finished offense stays at 90. Take an 83 and it drops to 89. Either can beat the 92-rated semifinal opponent, but the stronger card gives your offense the better matchup.",
         ],
       },
     ],
     tipSections: [
       {
-        heading: "Why the quarterback card carries the most weight",
+        heading: "Spread the strength across the offense",
         items: [
-          "The quarterback card carries the most weight of any single pick: a weak one drags the whole rating.",
+          "Three receiver picks give you three chances to raise the average. Take those deals as seriously as the opening QB slot. A two-point gain on each receiver adds six rating points across the seven picks.",
         ],
       },
       {
-        heading: "Bargain cards for flavor, not for winning",
+        heading: "Use Unlimited for a team theme",
         items: [
-          "The bargain cards exist for flavor runs, not for winning. If the score is the goal, draft the biggest number that fits.",
-        ],
-      },
-      {
-        heading: "Watching your running rating climb",
-        items: [
-          "Champions need an offense in the mid nineties. Check your running rating under the cards as you go.",
+          "If you want to pick by favorite franchise or build around a particular player, try it on a fresh draft. On the daily board, compare the ratings at every spot if your aim is the highest possible score.",
         ],
       },
     ],
     faqs: [
-      { q: "Is the daily draft the same for everyone?", a: "Yes. One shared set of five card choices per Eastern Time date, so daily scores compare fairly." },
-      { q: "Are the opponents real teams?", a: "No, and that is deliberate: every gauntlet opponent is an invented club, so no real logo or name is borrowed. The players you draft are real, off the same roster data NFL Front Office plays." },
-      { q: "Why seven slots instead of eleven?", a: "The real position data behind this game groups linemen and defenders more broadly than it splits out quarterbacks, running backs, receivers and tight ends, so those four skill positions are where every pick is a genuinely graded choice. A full eleven man lineup is possible future scope; this round scoped it to what the data actually supports." },
-      { q: "Is this the same game as the soccer Gauntlet Draft?", a: "Same engine, NFL's own pool and positions. Seven picks instead of eleven, and the ladder is tuned to this pool's own, much wider rating spread." },
+      { q: "Can I move a wide receiver to tight end?", a: "Each of the seven deals is locked to its listed position. Save the tight end spot for the five cards that appear when you get there." },
+      { q: "Does a higher offense rating guarantee the win?", a: "A bigger rating helps, but the simulator can produce an upset. The final is rated 97, so even a lineup full of the best cards can lose." },
+      { q: "Will the same seven players get a different result next time?", a: "The same lineup produces the same playoff run. Try another set of cards in Unlimited to see how a different offense gets on." },
     ],
   },
 

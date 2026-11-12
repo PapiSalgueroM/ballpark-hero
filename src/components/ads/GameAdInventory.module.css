@@ -1,0 +1,75 @@
+.inventory {
+  container-type: inline-size;
+  pointer-events: none;
+}
+
+.slots {
+  display: grid;
+  justify-content: center;
+  justify-items: center;
+  align-items: start;
+}
+
+.leaderboard,
+.rectangle,
+.tower,
+.mobileBanner {
+  display: none;
+}
+
+.leaderboard {
+  width: 728px;
+  height: 90px;
+}
+
+.rectangle {
+  width: 300px;
+  height: 250px;
+}
+
+.tower {
+  width: 300px;
+  height: 600px;
+}
+
+.mobileBanner {
+  width: 320px;
+  height: 50px;
+}
+
+@container (min-width: 300px) {
+  .slots {
+    /* Match the clearance that keeps AdBanner away from game controls. */
+    padding-block: 150px;
+  }
+
+  .rectangle {
+    display: block;
+  }
+}
+
+@container (320px <= width < 375px) {
+  .rectangle {
+    display: none;
+  }
+
+  .mobileBanner {
+    display: block;
+  }
+}
+
+@container (min-width: 768px) {
+  .slots {
+    grid-template-columns: repeat(2, 364px);
+    row-gap: 16px;
+  }
+
+  .leaderboard {
+    display: block;
+    grid-column: 1 / -1;
+  }
+
+  .tower {
+    display: block;
+  }
+}

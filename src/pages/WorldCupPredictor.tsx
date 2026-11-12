@@ -232,6 +232,8 @@ export function FlagImg({ name, size = 24 }: { name: string; size?: number }) {
       style={{ display: "inline", marginRight: "4px", verticalAlign: "middle" }}
       width={size}
       height={h}
+      loading="lazy"
+      decoding="async"
     />
   );
 }

@@ -16,8 +16,8 @@ const NbaMyCareer = () => {
   return (
     <>
       <PageSeo
-        title="NBA My Career - Draft Night to the Rafters | DoUKnowBall"
-        description="Create a prospect, get drafted by a real NBA team, and live a whole career: per-game stat lines, contracts, trade demands, rings, MVPs and a legacy verdict."
+        title="NBA My Career: A Basketball Player Simulator | DoUKnowBall"
+        description="Build a prospect in this free NBA career sim. Fight for a starting spot, weigh trades and contracts, and play from draft night to retirement."
         path="/nba-my-career"
       />
       <div className="min-h-screen bg-background text-foreground">

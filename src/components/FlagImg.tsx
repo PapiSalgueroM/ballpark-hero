@@ -167,7 +167,10 @@ export function FlagImg({ name, size = 20, showLabel = false }: { name: string; 
           alt={name}
           className="inline-block align-middle object-cover"
           style={{ width: size, height: h, borderRadius: 2 }}
+          width={size}
+          height={h}
           loading="lazy"
+          decoding="async"
           onError={(e) => {
             // Never leave a hole: swap in the emoji, and if the platform has
             // no flag font (Windows) that still reads as the country code.
@@ -231,7 +234,10 @@ export function FlagFromEmoji({ emoji, size = 20 }: { emoji: string; size?: numb
       alt={trimmed}
       className="inline-block align-middle"
       style={{ width: size, height: h }}
+      width={size}
+      height={h}
       loading="lazy"
+      decoding="async"
       onError={(e) => {
         (e.target as HTMLImageElement).style.display = 'none';
       }}

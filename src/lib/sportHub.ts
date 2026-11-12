@@ -102,9 +102,9 @@ export const SPORT_HUBS: SportHub[] = [
     keyword: 'soccer',
     sport: 'Soccer',
     titles: ['Soccer'],
-    seoTitle: 'Free Soccer Games: Football Trivia, Puzzles and Career Sims | DoUKnowBall',
+    seoTitle: 'Free Soccer Games: Grids, Transfer Puzzles and Sims | DoUKnowBall',
     seoDescription:
-      'Every free soccer game on DoUKnowBall in one place: daily football trivia and quiz puzzles, grid games, transfer market games, and full career and club management sims. Every game plays without an account.',
+      'Play Soccer Grid, Missing XI and Transfer Path, build a squad, or start a player or club career. Free soccer games in your browser.',
     intro:
       'Real-player puzzles, transfer games and career sims. Test your football knowledge or build a career story of your own.',
     whyHere:
@@ -145,6 +145,9 @@ export const SPORT_HUBS: SportHub[] = [
       'Short on time: start with the daily puzzles. Everyone gets the same board each day and a run takes a couple of minutes.',
       'Want something that lasts: Soccer Career and Club Manager both run for as many seasons as you can survive.',
       'Every game explains itself before you play, and the "?" button reopens the rules and a worked example at any point.',
+      "In Missing XI, start with the empty player's position and the names on either side. If the gap is in midfield, think about who played that role for that team in that match. You have three guesses, and the hints add clues after a miss. A strong first guess is worth more than listing every player you remember from that season.",
+      "In Transfer Path, think about the target's teammates before you type. If one of them also shared a club season with your starting player, the link can close in one move. A club badge in common is only a lead. The two careers have to cross there at the same time, so check the seasons when an obvious link keeps getting rejected.",
+      'In Soccer Grid, work the hardest crossing first. A player who represented a country and spent time with a particular club might be the only name you know for that square. Keep him for that crossing. Once you have a valid answer in mind, you can decide whether to chase a rarer pick or bank the safe one.',
     ],
   },
   {
@@ -155,9 +158,9 @@ export const SPORT_HUBS: SportHub[] = [
     keyword: 'NBA',
     sport: 'Basketball',
     titles: ['Pro Basketball'],
-    seoTitle: 'Free Basketball Games: NBA Trivia, Grids and GM Sims | DoUKnowBall',
+    seoTitle: 'Free NBA Games: Basketball Trivia, Drafts and Sims | DoUKnowBall',
     seoDescription:
-      'Every free pro basketball game on DoUKnowBall in one place: daily NBA trivia, franchise grids, career-path guessers, connections, and full front office and my career sims. Every game plays without an account.',
+      'Play NBA franchise puzzles, rebuild a real stat line, draft a lineup or run a career. Free basketball games in your browser.',
     intro:
       'Franchise grids and career guessers use real players and franchise history. The long sims let you run a front office or take an invented rookie through a career.',
     whyHere:
@@ -199,6 +202,9 @@ export const SPORT_HUBS: SportHub[] = [
       'Short on time: the daily puzzles reset every day and take a couple of minutes each.',
       'Want something deeper: the front office sim has contracts, trades, a draft and a playoff run, while the career sim follows your created player from draft night.',
       'Every game explains itself before you play, and the "?" button reopens the rules at any point.',
+      'In NBA Starting 5, read the direction of the stat challenge before you pick. A slot can send you to a franchise where a famous scorer played, but that name works against you when the wheel asks for the lowest career scoring average. Think about players who filled the position on that team and compare them to the stat you actually need.',
+      'In NBA Stat Line, balance the minutes as well as the numbers. A season with 3,000 minutes moves the blend much further than a 600-minute season. Start with a high-minute year near the target, then use the remaining slots to pull the line toward the stats you are missing. Five seasons with good individual lines can still make a poor blend.',
+      'In NBA Perfect Season, check the open slots before you lock a pick. You only take one player from the team season on the wheel. The sixth man can be anyone, so use that flexibility when it helps you fill out the starting five. Compare the record and the printed odds at the end if you want to judge two drafts.',
     ],
   },
   {

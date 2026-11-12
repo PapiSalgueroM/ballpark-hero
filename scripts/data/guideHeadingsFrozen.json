@@ -2408,27 +2408,25 @@
     },
     "/nfl-gauntlet-draft": {
       "howToPlay": [
-        "Pick the daily gauntlet (the same five card choices for everyone today) or unlimited for a fresh draft.",
-        "For each of the seven slots (QB, two RB, three WR, TE) read the five cards, star to bargain, and tap the one you keep.",
-        "After the seventh pick the knockout starts on its own: five rounds, one match each, revealed one at a time.",
-        "Survive a round for 16 points; lift the trophy for exactly 100."
+        "Daily gives everyone the same offers for the Eastern Time date. Use Unlimited when you want to see a different mix of quarterbacks, backs and pass catchers.",
+        "Each slot shows five candidates from its own position. Choose one and the board advances. A second running back goes into RB2, and the three wide receiver slots each take their own pick.",
+        "Once you choose a tight end, watch the playoff results. The next game appears if you win the current one. A loss ends the run, even if your roster rating was higher.",
+        "Four wins and a loss in the final earn 64 points. A fifth win adds another 16, and the trophy adds 20 more for a score of 100."
       ],
       "rules": [
-        "Every card is a real player off the same 2026 roster data NFL Front Office plays; every opponent club is invented on purpose.",
-        "The draft is scoped to the four skill positions (QB, RB, WR, TE) on purpose: their ratings are built from real production, the way the position data's own generator describes it, and every slot deals a genuine star-to-bargain spread. Offensive linemen and defenders are rated on thinner evidence (playing time, draft position and limited defensive measures, most of it marked e in NFL Front Office), so they stay out of the draft rather than padding it with picks that are not a real choice.",
-        "The five cards per slot are spread across the pool's rating range, so a top-tier card and a bargain are always both on the table.",
-        "No player is dealt twice in one draft.",
-        "The knockout is deterministic in your offense: scoring comes from the rating gap, level games go to overtime, and replaying the same seven replays the same cup.",
-        "Opposition ratings climb 79, 83, 88, 92, 97. A bargain offense usually falls in the first round, an elite one reaches the final as a slight underdog, and even a perfect draft lifts the trophy roughly one run in nine."
+        "The skill players come from the roster data used by NFL Front Office. The teams you face in the playoffs are fictional, and the scores come from the game.",
+        "The roster data has more detailed production for quarterbacks, running backs, wide receivers and tight ends. The draft uses those four positions, where each card can be graded on that evidence.",
+        "Each deal draws from different parts of the position's rating range.",
+        "A player who has already appeared in your draft will not be dealt again, so each receiver slot gives you new choices.",
+        "The playoff ladder is rated 79, 83, 88, 92 and 97. A tie goes to overtime. The game uses the same simulation for the same seven picks, so you need a different offense to see a different run."
       ],
       "example": [
-        "The quarterback slot deals a 93 next to an 88, an 82, a 76 and a 71. There is no cost to any of them, so the 93 is the pick unless you are chasing a specific team on the card.",
-        "Your finished offense rates 90. The Qualifier wins big, the Last Sixteen is tight, the Quarter Final needs overtime, and the Semi Final ends the run. Two rounds survived, 32 points, and the card you would redo is the 76 you took at the third receiver spot."
+        "Say the second running back deal has a 90 and a 78, and you prefer the 78 because he played for your favorite team. That costs 12 points across seven cards, so it lowers the offense average by about 1.7 before rounding. Giving up the same 12 points at quarterback would have exactly the same effect.",
+        "Imagine your first six picks add up to 540, an average of 90. Take a tight end rated 90 and your finished offense stays at 90. Take an 83 and it drops to 89. Either can beat the 92-rated semifinal opponent, but the stronger card gives your offense the better matchup."
       ],
       "tips": [
-        "The quarterback card carries the most weight of any single pick: a weak one drags the whole rating.",
-        "The bargain cards exist for flavor runs, not for winning. If the score is the goal, draft the biggest number that fits.",
-        "Champions need an offense in the mid nineties. Check your running rating under the cards as you go."
+        "Three receiver picks give you three chances to raise the average. Take those deals as seriously as the opening QB slot. A two-point gain on each receiver adds six rating points across the seven picks.",
+        "If you want to pick by favorite franchise or build around a particular player, try it on a fresh draft. On the daily board, compare the ratings at every spot if your aim is the highest possible score."
       ]
     },
     "/nfl-higher-lower": {

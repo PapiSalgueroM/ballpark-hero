@@ -31,8 +31,30 @@ watchForNewBuild();
 // draws anything. Applied here and not in index.html, which is frozen.
 applyTheme(storedTheme());
 
-createRoot(document.getElementById("root")!).render(
-  <HelmetProvider>
-    <App />
-  </HelmetProvider>
-);
+const mount = () => {
+  createRoot(document.getElementById("root")!).render(
+    <HelmetProvider>
+      <App />
+    </HelmetProvider>
+  );
+};
+
+// A built snapshot can paint its cover before CSS without flashing unstyled controls.
+const pendingStyles = document.querySelectorAll('link[data-dukb-app-style][media="print"]');
+if (pendingStyles.length === 0) {
+  mount();
+} else {
+  const listeners = new AbortController();
+  const ready = Promise.all(Array.from(pendingStyles, link => new Promise<void>(resolve => {
+    const options = { once: true, signal: listeners.signal };
+    link.addEventListener("load", () => resolve(), options);
+    link.addEventListener("error", () => resolve(), options);
+  })));
+  let timeout: number | undefined;
+  const fallback = new Promise<void>(resolve => { timeout = window.setTimeout(resolve, 5000); });
+  void Promise.race([ready, fallback]).then(() => {
+    window.clearTimeout(timeout);
+    listeners.abort();
+    mount();
+  });
+}

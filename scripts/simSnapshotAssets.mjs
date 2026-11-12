@@ -37,7 +37,7 @@
  *
  * Run: npm run build && node scripts/simSnapshotAssets.mjs
  */
-import { readFileSync, existsSync, readdirSync, statSync } from 'node:fs';
+import { readFileSync, existsSync, readdirSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -50,14 +50,22 @@ const fail = m => { failures += 1; console.error('  FAIL: ' + m); };
 /* ── 1: nothing hash named is ever committed ──────────────────────────── */
 console.log('1) the committed snapshots stay hash free');
 let committed = 0, hashed = 0;
-for (const e of readdirSync(PUBLIC, { withFileTypes: true })) {
-  if (!e.isDirectory()) continue;
-  const f = path.join(PUBLIC, e.name, 'index.html');
-  if (!existsSync(f) || !statSync(f).isFile()) continue;
+const snapshotRoutes = new Set();
+function* htmlDocuments(dir) {
+  for (const entry of readdirSync(dir, { withFileTypes: true })) {
+    const file = path.join(dir, entry.name);
+    if (entry.isDirectory()) yield* htmlDocuments(file);
+    else if (entry.name === 'index.html') yield file;
+  }
+}
+for (const file of htmlDocuments(PUBLIC)) {
   committed += 1;
-  if (/(?:src|href)="\/assets\//.test(readFileSync(f, 'utf8'))) {
+  const route = path.relative(PUBLIC, path.dirname(file));
+  const html = readFileSync(file, 'utf8');
+  if (html.includes('/prerender-boot.js')) snapshotRoutes.add(route);
+  if (/(?:src|href)="\/assets\//.test(html)) {
     hashed += 1;
-    if (hashed <= 3) fail(`public/${e.name}/index.html carries a hashed asset path, which goes stale on the next build`);
+    if (hashed <= 3) fail(`public/${route}/index.html carries a hashed asset path, which goes stale on the next build`);
   }
 }
 console.log(`   ${committed} committed documents, ${hashed} carrying a hashed path`);
@@ -77,17 +85,14 @@ if (!wantJs.length) fail('dist/index.html has no module script, so there is noth
 /* ── 2 to 5: what actually ships ──────────────────────────────────────── */
 console.log('2) every shipped page carries THIS build\'s assets');
 const snaps = [], stubs = [];
-const walk = dir => {
-  for (const e of readdirSync(dir, { withFileTypes: true })) {
-    const f = path.join(dir, e.name);
-    if (e.isDirectory()) { walk(f); continue; }
-    if (e.name !== 'index.html' || path.dirname(f) === DIST) continue;
-    const html = readFileSync(f, 'utf8');
-    (html.includes('/prerender-boot.js') ? snaps : stubs).push([path.relative(DIST, path.dirname(f)), html]);
-  }
-};
-walk(DIST);
-let withTags = 0, blocking = 0, noBoot = 0, stale = 0;
+for (const file of htmlDocuments(DIST)) {
+  if (path.dirname(file) === DIST) continue;
+  const route = path.relative(DIST, path.dirname(file));
+  const html = readFileSync(file, 'utf8');
+  (snapshotRoutes.has(route) ? snaps : stubs).push([route, html]);
+}
+if (snaps.length !== snapshotRoutes.size) fail(`found ${snaps.length} built snapshots for ${snapshotRoutes.size} source snapshots`);
+let withTags = 0, blocking = 0, extraBoot = 0, stale = 0;
 for (const [route, html] of snaps) {
   const css = [...html.matchAll(/<link[^>]+href="(\/assets\/[^"]+\.css)"/g)].map(m => m[1]);
   const js = [...html.matchAll(/<script[^>]+src="(\/assets\/[^"]+\.js)"/g)].map(m => m[1]);
@@ -106,16 +111,13 @@ for (const [route, html] of snaps) {
       if (blocking <= 3) fail(`/${route} injects a render blocking stylesheet, which measured 2860ms to first paint against 756ms without it`);
     }
   }
-  /* 4: the fallback stays. prerender-boot.js returns early when it finds a
-     module script, so it costs nothing and covers a build where the plugin
-     did not run. */
-  if (!html.includes('/prerender-boot.js')) { noBoot += 1; fail(`/${route} lost its boot script, so a build without the plugin would leave it dead`); }
+  if (html.includes('/prerender-boot.js')) { extraBoot += 1; fail(`/${route} still loads the boot fallback alongside its built entry module`); }
 }
 console.log(`   ${withTags} of ${snaps.length} shipped pages carry their own tags, ${stale} pointing at a file this build did not make`);
 console.log(`3) the injected stylesheet does not block the paint`);
 console.log(`   ${blocking} render blocking stylesheet injections`);
-console.log(`4) the boot script survives as the fallback`);
-console.log(`   ${snaps.length - noBoot} of ${snaps.length} still reference /prerender-boot.js`);
+console.log('4) the boot script remains in source snapshots only');
+console.log(`   ${snapshotRoutes.size} source fallbacks, ${extraBoot} redundant built requests`);
 console.log(`5) the retired signposts are left alone`);
 let stubTags = 0;
 for (const [route, html] of stubs) {
@@ -123,31 +125,16 @@ for (const [route, html] of stubs) {
 }
 console.log(`   ${stubs.length} signposts, ${stubTags} touched`);
 
-/* ── 6: the calm boot (Round 314) ─────────────────────────────────────────
-   The moment before React mounts used to show the snapshot's whole crawler
-   copy as a wall of raw text, filmed by the owner on 2026-08-28. Every
-   shipped snapshot must cap and dim #dukb-snapshot to one screenful AND
-   carry the noscript that lifts the cap for a browser that will never boot
-   the app. The home page gets the same pair for #dukb-home-copy in the
-   template. Both halves are required: the cap without the noscript hides
-   content from no-JS readers, the noscript without the cap does nothing.
-   NEGATIVE CONTROL: SNAP_CONTROL=flash strips the pair from one page in
-   memory and this section must go red. */
-/* Round 448: the dim was not enough. He filmed the dimmed wall again coming
-   back from Google sign in ("the balck screen and all that text"), so the
-   moment before React now shows a full cover with the mark (#dukb-boot)
-   inside #root, and the copy sits under it, capped. The noscript rule hides
-   the cover and lifts the cap. Three parts now, all required, on every
-   built page and on the home template. The control strips the COVER, which
-   is the part whose absence he would film. */
+/* 6: the loading cover excludes raw snapshot copy from layout. Browsers
+   without JavaScript get the full copy. SNAP_CONTROL=flash removes the cover. */
 console.log('6) the calm boot: the mark on a cover before React, the whole page without JS');
 {
   const CONTROL = process.env.SNAP_CONTROL || '';
   if (CONTROL && CONTROL !== 'flash') { console.error(`SNAP_CONTROL=${CONTROL} is not a control this harness knows`); process.exit(1); }
   const coverRe = /<div id="dukb-boot" aria-hidden="true"><img src="\/logo-mark\.svg"[^>]*><\/div>/;
   const coverCssRe = /#dukb-boot\{position:fixed;inset:0;[^}]*\}/;
-  const capRe = /#dukb-snapshot\{max-height:100vh;overflow:hidden\}/;
-  const liftRe = /<noscript><style>#dukb-boot\{display:none\}#dukb-snapshot\{max-height:none;overflow:visible\}<\/style><\/noscript>/;
+  const hiddenRe = /#dukb-snapshot\{display:none\}/;
+  const liftRe = /<noscript><style>#dukb-boot\{display:none\}#dukb-snapshot\{display:block;max-height:none;overflow:visible\}<\/style><\/noscript>/;
   const dimRe = /#dukb-snapshot\{max-height:100vh;overflow:hidden;opacity:\.45\}/;
   let calm = 0;
   let controlArmed = false;
@@ -160,11 +147,11 @@ console.log('6) the calm boot: the mark on a cover before React, the whole page 
       console.log(`   NEGATIVE CONTROL ON: the cover stripped from /${route} in memory, this section must go red`);
     }
     const hasCover = coverRe.test(html) && coverCssRe.test(html);
-    const hasCap = capRe.test(html);
+    const hiddenDuringBoot = hiddenRe.test(html);
     const hasLift = liftRe.test(html);
-    if (hasCover && hasCap && hasLift) { calm += 1; continue; }
+    if (hasCover && hiddenDuringBoot && hasLift) { calm += 1; continue; }
     if (!hasCover) fail(`/${route} ships without the boot cover, so the wall of text is back on it${dimRe.test(html) ? ' (it still carries the Round 314 dim, which he filmed)' : ''}`);
-    else if (!hasCap) fail(`/${route} has the cover but lost the cap, so the document scrolls under it`);
+    else if (!hiddenDuringBoot) fail(`/${route} lets the raw snapshot move under the boot cover`);
     else fail(`/${route} has the cover but lost the noscript rule, hiding the whole page from no-JS readers`);
   }
   const home = readFileSync(path.join(DIST, 'index.html'), 'utf8');

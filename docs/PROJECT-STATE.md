@@ -1,3 +1,17 @@
+## 2026-11-11 NitroPay readiness draft
+
+The shared entry no longer loads the home page, the unused React Query provider or unused prerender boot script on built snapshots. Existing fonts are self-hosted. Images carry dimensions and below-fold flags load lazily. When CSS is delayed, the loading cover remains until it is ready or the fallback runs. No-JS visitors receive the full static page.
+
+The four trust links remain in the shared footer. Contact uses the published mailbox. Privacy and Cookie Policy describe current advertising, cookie choices, GDPR and California requests, and browser GPC. The ads.txt placeholder preserves the existing seller. The live robots and sitemap endpoints answered with the expected types. NitroPay seller records and provider activation are pending.
+
+Six priority pages have 176 to 197 original words and matching static and runtime metadata. Audit covered 172 indexable pages and 21 existing exclusions. Rewriting the NFL Gauntlet guide reduced the only near-duplicate pair's measured overlap from 32.3% to 5.0%. The sitemap retains 172 URLs.
+
+Empty reserved ad sizes fit 320px, 390px and 1440px layouts. First-visit game consent is in the page flow and allows gameplay while the choice is pending. Exact phone replays kept typed input through help and consent changes and confirmed GPC. No game engine or regional ad-loading rule changed.
+
+The shared JavaScript fell from approximately 244 to 222 KiB gzip. Compressed local Lighthouse on the final build measured desktop LCP at 1.86s home and 1.85s Soccer Career, with CLS 0.002 and 0. Mobile LCP measured 5.28s home and 7.63s Soccer Career. PageSpeed Insights API returned HTTP 429 for both devices. Field INP and live post-release vitals are unverified.
+
+Passed app types, 252 scoped tests, production build, 20 offline harnesses, standalone snapshot boot, 16 route-size caps and compiled desktop/mobile checks. The targeted prerender captured ten routes without errors.
+
 ## 2026-11-07: Club Manager historical roster counts live
 
 [PR #532](https://github.com/PapiSalgueroM/ballpark-hero/pull/532) published from main `c3b5ca4afaf9b4dadcd748f340e8e8e3e4a1a1dd`, App tree `133fcd3d26a4d237178e5c7efee723048da0aef2`, Lovable deployment `510b1df1-2172-42c0-90f9-d9f9c997b840`.

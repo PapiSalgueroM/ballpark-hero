@@ -23,11 +23,11 @@ const Contact = () => {
         <div>
           <h2 className="text-lg font-semibold text-foreground mb-2">Email us</h2>
           <p>
-            The inbox for everything is{' '}
+            For game feedback, privacy requests or business inquiries, email{' '}
             <a href="mailto:douknowball1@gmail.com" className="underline hover:text-foreground transition-colors">
               douknowball1@gmail.com
             </a>
-            . Bug reports, wrong stats, game ideas, feedback, business inquiries, all of it. It is a small operation, so a real person reads every message.
+            . The independent site operator reads this inbox.
           </p>
         </div>
 

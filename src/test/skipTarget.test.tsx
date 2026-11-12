@@ -27,7 +27,6 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { MemoryRouter } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { resetMocks } from './dailyReload/mocks';
 
@@ -95,14 +94,11 @@ describe('skip to main content', () => {
       const file = modules.get(route!.component);
       expect(file, `${route!.component} resolves to a page module`).toBeDefined();
       const Page = (await import(/* @vite-ignore */ `@/pages/${file}`)).default as ComponentType<Record<string, string>>;
-      const client = new QueryClient({ defaultOptions: { queries: { retry: false } } });
       const view = render(
         <HelmetProvider>
-          <QueryClientProvider client={client}>
-            <TooltipProvider>
-              <MemoryRouter initialEntries={[address]}>{createElement(Page, route!.props)}</MemoryRouter>
-            </TooltipProvider>
-          </QueryClientProvider>
+          <TooltipProvider>
+            <MemoryRouter initialEntries={[address]}>{createElement(Page, route!.props)}</MemoryRouter>
+          </TooltipProvider>
         </HelmetProvider>,
       );
       await settle();
