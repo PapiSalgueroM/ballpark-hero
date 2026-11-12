@@ -48,6 +48,7 @@ export type CategoryTitle =
   | 'Tennis'
   | 'Golf'
   | 'Aussie Rules'
+  | 'Rugby League'
   | 'NASCAR'
   | 'Combat Sports'
   | 'World & Olympic Games';
@@ -271,6 +272,13 @@ export const CATEGORIES: GameCategory[] = [
     games: [
       { path: '/aussie-rules-manager', label: 'Aussie Rules Manager', emoji: '🏉', description: 'Run one of the 18 AFL clubs through 23 rounds, the finals and a draft into next season', addedOn: '2026-10-01' },
       { path: '/afl-higher-lower', label: 'AFL Higher or Lower', emoji: '📊', description: 'Which legend kicked more career goals?', daily: true, addedOn: '2026-03-08' },
+    ],
+  },
+  {
+    title: 'Rugby League',
+    emoji: '🏉',
+    games: [
+      { path: '/nrl-team-manager', label: 'NRL Team Manager', emoji: '🏉', description: 'Choose a 2026 or 2027 club, pick your starting 13 and manage a generated squad through the rugby league finals', addedOn: '2026-11-11', featured: true },
     ],
   },
   {

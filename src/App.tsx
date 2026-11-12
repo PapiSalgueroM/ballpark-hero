@@ -163,6 +163,7 @@ const NhlConnect4 = lazy(() => import("./pages/NhlConnect4"));
 const GolfHigherLower = lazy(() => import("./pages/GolfHigherLower"));
 const AflHigherLower = lazy(() => import("./pages/AflHigherLower"));
 const AussieRulesManager = lazy(() => import("./pages/AussieRulesManager"));
+const NrlTeamManager = lazy(() => import("./pages/NrlTeamManager"));
 const ChampOrNot = lazy(() => import("./pages/ChampOrNot"));
 const Records = lazy(() => import("./pages/Records"));
 const RecordPage = lazy(() => import("./pages/RecordPage"));
@@ -535,6 +536,7 @@ const AppContent = () => {
         <Route path="/golf-higher-lower" element={<GolfHigherLower />} />
         <Route path="/afl-higher-lower" element={<AflHigherLower />} />
         <Route path="/aussie-rules-manager" element={<AussieRulesManager />} />
+        <Route path="/nrl-team-manager" element={<NrlTeamManager />} />
         <Route path="/champ-or-not" element={<ChampOrNot />} />
         <Route path="/records" element={<Records />} />
         {/* Round 649: one page per Record Books competition, all drawn by RecordPage. The slugs
