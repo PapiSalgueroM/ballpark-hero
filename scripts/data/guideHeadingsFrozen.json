@@ -3295,6 +3295,27 @@
         "Overtime lets you keep filling leftover cells with no effect on your recorded score."
       ]
     },
+    "/soccer-perfect-season": {
+      "howToPlay": [
+        "Choose Daily for the same club draw everyone gets that Eastern date, or Unlimited for a fresh draw.",
+        "Pick one player from the club on screen. Place them in a slot the game offers. You can open Upcoming clubs to see which players and ratings are coming.",
+        "Reroll up to twice in the draft. It replaces only the current club and keeps the others in order.",
+        "Once the XI is full, reveal results one at a time with Next match or finish all 38 in one go."
+      ],
+      "rules": [
+        "A win earns three league points. A draw earns one and ends the chance of perfection. Win all 38 for 114 points and a site score of 100.",
+        "Goalkeeper and striker ratings count twice. The game compares your XI with the strongest possible XI from the same final set of clubs to work out your odds.",
+        "Every offered slot keeps a route to a full XI. The strongest available XI guarantees all 38 wins."
+      ],
+      "example": [
+        "Say you have one open striker slot and one open winger slot. The final club has only a striker in the pool, so the current club must supply the winger. You can reroll the current club to look for a stronger winger if you still have a reroll.",
+        "If that XI wins 37 and draws one, it gets 112 points and a site score of 98. The team went unbeaten, and the draw ended its shot at a perfect season."
+      ],
+      "tips": [
+        "Check which upcoming clubs have a goalkeeper. When two picks can cover the same positions, compare their ratings before deciding who should take the slot with double weight.",
+        "Save a reroll for a pick where the other clubs have already narrowed your options. The rest of the draw stays in the same order."
+      ]
+    },
     "/sports-bingo": {
       "howToPlay": [
         "Pick a mode: the daily card (one shared card and pack run per day), unlimited, versus the CPU at one of three levels, or pass the device for two to four of you on one phone.",
