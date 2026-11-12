@@ -5,7 +5,7 @@ import { nrlBoardChallengeStatus } from '@/lib/nrlBoardTarget';
 import { archiveNrlScoring, validNrlScoringArchive, type NrlSeasonScoringTotal } from '@/lib/nrlPlayerScoring';
 import {
   createNrlSeason, isNrlManagerState, isNrlSeasonProgress, nrlBench, nrlLadder, nrlMatchupEdges, nrlNextRound, nrlRegularRounds,
-  NRL_FINALS_SPOTS, NRL_ROLES, reduceNrlSeason, validNrlLiveScore, type NrlAction, type NrlCoachRole, type NrlManagerState, type NrlMatchResult,
+  NRL_FINALS_SPOTS, NRL_ROLES, reduceNrlSeason, validNrlLiveScore, type NrlAction, type NrlCoachRole, type NrlFixture, type NrlManagerState, type NrlMatchResult,
   type NrlPlayer, type NrlRole, type NrlYear,
 } from '@/lib/nrlManager';
 
@@ -15,6 +15,8 @@ const OPENING_CASH = 2_500_000;
 const MARKET_PER_ROLE = 4;
 const RETIREMENT_AGE = 36;
 const MEDICAL_UPGRADE_COST = { 2: 800_000, 3: 2_600_000 } as const;
+const ROUND_OPERATING_COST = 75_000;
+const TRAVEL_COST = 45_000;
 export const NRL_TICKET_GATE_CHANGES = {
   value: { regularNonWin: 18_000, regularWin: -22_000, homeFinal: -36_000 },
   standard: { regularNonWin: 0, regularWin: 0, homeFinal: 0 },
@@ -454,8 +456,18 @@ export function createNrlCareer(clubId: string, seed: number, openingYear: NrlYe
   return boardChallenge ? { ...career, boardChallenge: true } : career;
 }
 
-function hasHomeGate(fixture: NrlMatchResult, clubId: string): boolean {
+function hasHomeGate(fixture: NrlFixture, clubId: string): boolean {
   return fixture.homeId === clubId && fixture.tieId !== 'GF';
+}
+
+function homeGateReceipt(fixture: NrlFixture, homeWin: boolean, tier: NrlTicketTier) {
+  const changes = NRL_TICKET_GATE_CHANGES[tier];
+  return 240_000 + (homeWin ? 30_000 : 0) + (fixture.finalsRound ? 120_000 : 0)
+    + changes[fixture.finalsRound ? 'homeFinal' : homeWin ? 'regularWin' : 'regularNonWin'];
+}
+
+function payThroughRound(annual: number, round: number, ticks: number) {
+  return Math.floor(annual * round / ticks);
 }
 
 export function nrlTicketPricingRefusal({ season, legacySeason }: Pick<NrlCareerState, 'season' | 'legacySeason'>): string | null {
@@ -468,22 +480,53 @@ export function nrlTicketPricingRefusal({ season, legacySeason }: Pick<NrlCareer
 
 function tickBooks(finance: NrlCareerBook, season: NrlManagerState, round: number, results: NrlMatchResult[], cap: NrlCareerCap): NrlCareerBook {
   const ticks = lastRound(season.year);
-  const installment = (annual: number) => Math.floor(annual * round / ticks) - Math.floor(annual * (round - 1) / ticks);
+  const installment = (annual: number) => payThroughRound(annual, round, ticks) - payThroughRound(annual, round - 1, ticks);
   const fixture = results.find(result => result.homeId === season.clubId || result.awayId === season.clubId);
   const home = fixture && hasHomeGate(fixture, season.clubId);
-  const away = fixture && !home;
-  const homeWin = home && fixture.homeScore > fixture.awayScore;
-  const changes = NRL_TICKET_GATE_CHANGES[finance.ticketTier ?? 'standard'];
-  const gate = home ? 240_000 + (homeWin ? 30_000 : 0) + (fixture.finalsRound ? 120_000 : 0)
-    + changes[fixture.finalsRound ? 'homeFinal' : homeWin ? 'regularWin' : 'regularNonWin'] : 0;
+  const gate = home ? homeGateReceipt(fixture, fixture.homeScore > fixture.awayScore, finance.ticketTier ?? 'standard') : 0;
   return {
     ...finance,
     centralFunding: finance.centralFunding + installment(cap.cap),
     wagesPaid: finance.wagesPaid + installment(cap.committed),
     gateReceipts: finance.gateReceipts + gate,
-    operatingCosts: finance.operatingCosts + 75_000 + (away ? 45_000 : 0),
+    operatingCosts: finance.operatingCosts + ROUND_OPERATING_COST + (fixture && !home ? TRAVEL_COST : 0),
     ...(finance.coachHire ? { coachHire: { ...finance.coachHire, paidRounds: finance.coachHire.paidRounds + 1 } } : {}),
   };
+}
+
+export function nrlFinanceForecast(state: NrlCareerState) {
+  const { season, finance } = state;
+  const { year, phase, round, clubId } = season;
+  if (phase === 'complete') return null;
+  const ticks = lastRound(year);
+  const roundsLeft = ticks - round + 1;
+  const lastScheduledRound = phase === 'regular' ? nrlRegularRounds(year) : round;
+  const tier = finance.ticketTier ?? 'standard';
+  let homeMatches = 0;
+  let trips = 0;
+  let gateLow = 0;
+  let gateHigh = 0;
+  for (let next = round; next <= lastScheduledRound; next++) {
+    const { clubMatch } = nrlNextRound({ ...season, round: next });
+    if (!clubMatch) continue;
+    if (hasHomeGate(clubMatch, clubId)) {
+      homeMatches++;
+      const win = homeGateReceipt(clubMatch, true, tier);
+      const nonWin = homeGateReceipt(clubMatch, false, tier);
+      gateLow += Math.min(win, nonWin);
+      gateHigh += Math.max(win, nonWin);
+    } else trips++;
+  }
+  const cap = nrlCareerCap(state);
+  const remaining = (annual: number) => annual - payThroughRound(annual, round - 1, ticks);
+  const funding = remaining(cap.cap);
+  const playerWages = remaining(cap.committed);
+  const assistantWages = coachWageReserve(finance, ticks);
+  const operatingCosts = roundsLeft * ROUND_OPERATING_COST + trips * TRAVEL_COST;
+  const cashNow = nrlCareerFinance(state).cash;
+  const cashBeforeGates = cashNow + funding - playerWages - assistantWages - operatingCosts;
+  return { roundsLeft, homeMatches, trips, funding, playerWages, assistantWages, operatingCosts,
+    cashNow, gateLow, gateHigh, closingLow: cashBeforeGates + gateLow, closingHigh: cashBeforeGates + gateHigh };
 }
 
 function opponentStrengths(state: NrlCareerState): Map<string, number> {

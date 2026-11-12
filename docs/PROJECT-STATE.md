@@ -1,3 +1,9 @@
+## 2026-11-12: NRL Manager season cash forecast
+
+Club finances shows an estimated closing cash range based on your current balance, scheduled fixtures, ticket tier and remaining commitments. Later finals and new hires or upgrades can change the balance. Older imports show when their accounts began or when the forecast becomes available.
+
+Against the exact parent, default and paid careers matched 23,312 fixture results, 104 seasons, 312 reloads and 1,924,612 random draws per arm. All 3,680 active forecasts reconciled with the played ledger after allowing for finals fixtures still undrawn at the time.
+
 ## 2026-11-12: NRL Manager season player stats
 
 Open Season player stats in Squad to see each player’s appearances, starts, games played off the bench, tries and points. Once the club has played a final, filter the table by regular season or finals. Imported seasons without player match records show when tracking begins.
