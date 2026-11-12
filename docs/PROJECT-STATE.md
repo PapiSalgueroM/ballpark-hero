@@ -1,3 +1,11 @@
+## 2026-11-12 Club Manager severe match injuries draft
+
+A new Club Manager career or the next season of an existing one can draw an ACL tear or Achilles tendon rupture during a simulated match. The existing match-injury draw assigns 2% of injuries to these severe spells. ACL tears last 28 to 36 simulated weeks and Achilles ruptures last 18 to 30. The bands are game estimates based on a 225-day median to match return in the [UEFA ACL cohort](https://pubmed.ncbi.nlm.nih.gov/27034129/) and a 161-day average absence in the [UEFA Achilles cohort](https://pubmed.ncbi.nlm.nih.gov/23770660/).
+
+A severe injury first counts down on a subsequent paid week. A player who remains at the club gets credit for complete summer weeks between the last calendar date and the following kickoff. Treatment shows the simulated diagnosis and remaining weeks, and clears the diagnosis when the spell ends. Existing active seasons, routine and training injuries and daily games keep their original rules.
+
+The compiled 390px replay opened the Help and started a new save, resumed a saved Achilles rupture, and rolled an ACL injury from 36 to 23 weeks across a 13-week summer. The engine replay then counted down to full availability. Three Manager Hot Seat dates matched main byte for byte.
+
 ## 2026-11-07: Club Manager historical roster counts live
 
 [PR #532](https://github.com/PapiSalgueroM/ballpark-hero/pull/532) published from main `c3b5ca4afaf9b4dadcd748f340e8e8e3e4a1a1dd`, App tree `133fcd3d26a4d237178e5c7efee723048da0aef2`, Lovable deployment `510b1df1-2172-42c0-90f9-d9f9c997b840`.
