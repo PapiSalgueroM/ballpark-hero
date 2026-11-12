@@ -16,12 +16,15 @@ export const NRL_ROLES = [
 export const NRL_TACTICS = ['balanced', 'attack', 'defense'] as const;
 export const NRL_BENCH_SIZE = 6;
 export const NRL_MAX_BENCH_USED = 4;
+export const NRL_COACHING_BONUS = 2;
 const MAX_INJURY_ROUNDS = 4;
 const UTILITY_RATING_COST = 12;
 
 export type NrlRole = typeof NRL_ROLES[number];
 export type NrlTactic = typeof NRL_TACTICS[number];
+export type NrlCoachRole = Exclude<NrlTactic, 'balanced'>;
 export type NrlPreparation = 'train' | 'recover';
+interface NrlRoundOptions { medicalReduction?: number; coachRole?: NrlCoachRole }
 
 export interface NrlPlayer { id: string; name: string; role: NrlRole; rating: number; fitness: number }
 export interface NrlFixture { homeId: string; awayId: string; round: number; finalsRound?: number; tieId?: string }
@@ -330,7 +333,8 @@ function matchInjury(state: NrlManagerState, used: Set<string>, medicalReduction
   return { playerId: played[Math.floor(rng() * played.length)].id, rounds: Math.max(1, 1 + Math.floor(rng() * MAX_INJURY_ROUNDS) - medicalReduction) };
 }
 
-function teamRatings(state: NrlManagerState, clubId: string, opponentStrength: ReadonlyMap<string, number> | undefined, rotation: ReadonlyMap<string, NrlPlayer>) {
+function teamRatings(state: NrlManagerState, clubId: string, opponentStrength: ReadonlyMap<string, number> | undefined,
+  rotation: ReadonlyMap<string, NrlPlayer>, coachRole?: NrlCoachRole) {
   if (clubId !== state.clubId) {
     const strength = opponentStrength?.get(clubId) ?? clubFor(state.year, clubId)!.strength;
     return { attack: strength, defense: strength };
@@ -344,7 +348,12 @@ function teamRatings(state: NrlManagerState, clubId: string, opponentStrength: R
     return sum + (rating - fitnessPenalty(player)) * 0.68 + (reserve.rating - fitnessPenalty(reserve)) * 0.32;
   }, 0) / NRL_ROLES.length;
   const { attack, defense } = TACTIC_EFFECT[state.tactic];
-  return { attack: base + attack + (state.preparation === 'train' ? 7 : 0), defense: base + defense };
+  const attackCoaching = coachRole === 'attack' && state.tactic === 'attack' ? NRL_COACHING_BONUS : 0;
+  const defenseCoaching = coachRole === 'defense' && state.tactic === 'defense' ? NRL_COACHING_BONUS : 0;
+  return {
+    attack: base + attack + (state.preparation === 'train' ? 7 : 0) + attackCoaching,
+    defense: base + defense + defenseCoaching,
+  };
 }
 
 function tryChances(rng: () => number, edge: number, chances: number): NrlScoring {
@@ -387,43 +396,45 @@ function fixtureRng(state: NrlManagerState, { round, homeId, awayId }: NrlFixtur
 }
 
 function fixtureEdges(state: NrlManagerState, { homeId, awayId, tieId }: NrlFixture,
-  opponentStrength: ReadonlyMap<string, number> | undefined, rotation: ReadonlyMap<string, NrlPlayer>) {
-  const home = teamRatings(state, homeId, opponentStrength, rotation);
-  const away = teamRatings(state, awayId, opponentStrength, rotation);
+  opponentStrength: ReadonlyMap<string, number> | undefined, rotation: ReadonlyMap<string, NrlPlayer>, coachRole?: NrlCoachRole) {
+  const home = teamRatings(state, homeId, opponentStrength, rotation, coachRole);
+  const away = teamRatings(state, awayId, opponentStrength, rotation, coachRole);
   const venue = tieId === 'GF' ? 0 : 2;
   return { homeEdge: home.attack - away.defense + venue, awayEdge: away.attack - home.defense - venue };
 }
 
-export function nrlMatchupEdges(state: NrlManagerState, fixture: NrlFixture, opponentStrength?: ReadonlyMap<string, number>) {
-  const { homeEdge, awayEdge } = fixtureEdges(state, fixture, opponentStrength, benchRotation(state));
+export function nrlMatchupEdges(state: NrlManagerState, fixture: NrlFixture, opponentStrength?: ReadonlyMap<string, number>,
+  coachRole?: NrlCoachRole) {
+  const { homeEdge, awayEdge } = fixtureEdges(state, fixture, opponentStrength, benchRotation(state), coachRole);
   return fixture.homeId === state.clubId
     ? { attackEdge: homeEdge, defenseEdge: -awayEdge }
     : { attackEdge: awayEdge, defenseEdge: -homeEdge };
 }
 
-function drawHalftime(state: NrlManagerState, fixture: NrlFixture, opponentStrength?: ReadonlyMap<string, number>): NrlLiveHalf {
+function drawHalftime(state: NrlManagerState, fixture: NrlFixture, opponentStrength?: ReadonlyMap<string, number>,
+  coachRole?: NrlCoachRole): NrlLiveHalf {
   const rng = fixtureRng(state, fixture);
-  const { homeEdge, awayEdge } = fixtureEdges(state, fixture, opponentStrength, benchRotation(state));
+  const { homeEdge, awayEdge } = fixtureEdges(state, fixture, opponentStrength, benchRotation(state), coachRole);
   const homeScoring = regulationHalves(rng, homeEdge, homeEdge).first;
   const awayScoring = regulationHalves(rng, awayEdge, awayEdge).first;
   return { fixture, homeScoring, awayScoring };
 }
 
-export function validNrlLiveScore(state: NrlManagerState, opponentStrength?: ReadonlyMap<string, number>): boolean {
+export function validNrlLiveScore(state: NrlManagerState, opponentStrength?: ReadonlyMap<string, number>, coachRole?: NrlCoachRole): boolean {
   if (!state.live) return true;
   const actual = state.live;
-  const expected = drawHalftime(state, actual.fixture, opponentStrength);
+  const expected = drawHalftime(state, actual.fixture, opponentStrength, coachRole);
   const same = (a: NrlScoring, b: NrlScoring) => a.tries === b.tries && a.conversions === b.conversions && a.penalties === b.penalties;
   return same(actual.homeScoring, expected.homeScoring) && same(actual.awayScoring, expected.awayScoring);
 }
 
 function playFixture(state: NrlManagerState, fixture: NrlFixture, opponentStrength: ReadonlyMap<string, number> | undefined,
   rotation: ReadonlyMap<string, NrlPlayer>,
-  closing?: { state: NrlManagerState; rotation: ReadonlyMap<string, NrlPlayer> }): NrlMatchResult {
+  closing?: { state: NrlManagerState; rotation: ReadonlyMap<string, NrlPlayer> }, coachRole?: NrlCoachRole): NrlMatchResult {
   const { homeId, awayId, finalsRound } = fixture;
   const rng = fixtureRng(state, fixture);
-  const opening = fixtureEdges(state, fixture, opponentStrength, rotation);
-  const { homeEdge, awayEdge } = closing ? fixtureEdges(closing.state, fixture, opponentStrength, closing.rotation) : opening;
+  const opening = fixtureEdges(state, fixture, opponentStrength, rotation, coachRole);
+  const { homeEdge, awayEdge } = closing ? fixtureEdges(closing.state, fixture, opponentStrength, closing.rotation, coachRole) : opening;
   const regulation = (openingEdge: number, closingEdge: number) => {
     if (openingEdge === closingEdge) return scoringChances(rng, openingEdge, 18);
     const { first, second } = regulationHalves(rng, openingEdge, closingEdge);
@@ -465,7 +476,7 @@ function playFixture(state: NrlManagerState, fixture: NrlFixture, opponentStreng
 }
 
 function advanceRound(state: NrlManagerState, opponentStrength: ReadonlyMap<string, number> | undefined,
-  medicalReduction: number, halftime?: NrlHalftimeDecision): NrlManagerState {
+  { medicalReduction = 0, coachRole }: NrlRoundOptions, halftime?: NrlHalftimeDecision): NrlManagerState {
   const fixtures = nrlRoundFixtures(state);
   const played = fixtures.some(match => match.homeId === state.clubId || match.awayId === state.clubId);
   const starters = new Set(Object.values(state.lineup));
@@ -493,7 +504,7 @@ function advanceRound(state: NrlManagerState, opponentStrength: ReadonlyMap<stri
   const injury = played && state.injuryTracking ? matchInjury(state, used, medicalReduction) : undefined;
   const results = [...state.results, ...fixtures.map(fixture => {
     const managed = fixture.homeId === state.clubId || fixture.awayId === state.clubId;
-    const result = playFixture(state, fixture, opponentStrength, rotation, managed ? closing : undefined);
+    const result = playFixture(state, fixture, opponentStrength, rotation, managed ? closing : undefined, coachRole);
     if (!managed) return result;
     const withInjury = injury ? { ...result, injury } : result;
     if (!state.kickerId) return withInjury;
@@ -520,7 +531,7 @@ function advanceRound(state: NrlManagerState, opponentStrength: ReadonlyMap<stri
 }
 
 export function reduceNrlSeason(state: NrlManagerState, action: NrlAction,
-  opponentStrength?: ReadonlyMap<string, number>, medicalReduction = 0): NrlManagerState {
+  opponentStrength?: ReadonlyMap<string, number>, options: NrlRoundOptions = {}): NrlManagerState {
   if (state.phase === 'complete') return state;
   if (state.live && action.type !== 'finishLive') return state;
   switch (action.type) {
@@ -554,7 +565,7 @@ export function reduceNrlSeason(state: NrlManagerState, action: NrlAction,
     case 'startLive': {
       if (!state.kickerId || !state.bench) return state;
       const { clubMatch } = nrlNextRound(state);
-      return clubMatch ? { ...state, live: drawHalftime(state, clubMatch, opponentStrength) } : state;
+      return clubMatch ? { ...state, live: drawHalftime(state, clubMatch, opponentStrength, options.coachRole) } : state;
     }
     case 'finishLive': {
       const { live, ...matchday } = state;
@@ -563,10 +574,10 @@ export function reduceNrlSeason(state: NrlManagerState, action: NrlAction,
       const interchange = requested && nrlHalftimeInterchanges(state).find(option =>
         option.starterId === requested.starterId && option.reserveId === requested.reserveId);
       if (requested !== undefined && !interchange) return state;
-      return advanceRound(matchday, opponentStrength, medicalReduction, { live, tactic: action.tactic, interchange });
+      return advanceRound(matchday, opponentStrength, options, { live, tactic: action.tactic, interchange });
     }
     case 'advance':
-      return advanceRound(state, opponentStrength, medicalReduction);
+      return advanceRound(state, opponentStrength, options);
   }
 }
 

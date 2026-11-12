@@ -1,3 +1,11 @@
+## 2026-11-12: NRL Manager assistant coaching
+
+Finances offers one fictional Attack or Defence assistant through the end of the season. The signing fee is A$120,000 and wages are A$18,000 per settled round, including byes and finals. Club cash must cover the full commitment before signing, and the remaining wages count against medical spending. The chosen assistant adds two rating points only when the matching tactic is active. Opposition report and the pre-match and halftime tactic cards show the effect. The contract and expense go into the annual accounts, and the next season opens a new shortlist.
+
+The no-hire path matched the previous engine across 80 seasons and 17,520 fixtures. In another 80 seasons with a hire every year, 1,949 Live finishes with the opening tactic matched Quick Sim, including 29 finals. The largest save was 334,093 characters against the 550,000 limit. The 73 NRL tests include a Grand Final one-round contract, exact pending reload, and both orders of a same-round medical purchase and hire.
+
+At 320px, the signing fee and full payroll appeared in the accounts, the matching tactic showed its rating bonus, and the post reopened after rollover. At 390px, an imported season kept its exact save and the hiring action remained unavailable. App types, production build, the NRL browser suite, 15 built-site readers and 16 download caps passed.
+
 ## 2026-11-12: NRL Manager halftime interchange
 
 At half time, keep one same-position reserve already in the rotation on for the finish. The starter stays off, and the club uses the same bench participants. The designated kicker stays eligible. Full time records the pair with approximate regulation minutes. The closing lineup changes second-half scoring chances and shifts five fitness points of match load from the starter to the reserve.

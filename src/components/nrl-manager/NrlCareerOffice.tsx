@@ -1,13 +1,13 @@
 import { useMemo, useState } from 'react';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, ChevronDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { nrlSeasonPlan, NRL_LAST_YEAR } from '@/data/nrlManagerSeasons';
 import {
   nrlAcademyAvailableRoles, nrlAcademyOffer, nrlAcademyReports, nrlCareerCap, nrlCareerFinance, nrlCareerMarket, nrlCareerSquad, nrlContractOffer,
-  nrlDevelopmentPreview, nrlMedicalSpend, nrlMedicalUpgradeQuote, type NrlCareerAction, type NrlCareerState,
+  nrlCoachQuote, nrlCoachSpend, nrlDevelopmentPreview, nrlMedicalSpend, nrlMedicalUpgradeQuote, type NrlCareerAction, type NrlCareerState,
   type NrlDevelopmentFocus, type NrlMedicalLevel,
 } from '@/lib/nrlCareer';
-import { NRL_ROLES, type NrlRole } from '@/lib/nrlManager';
+import { NRL_COACHING_BONUS, NRL_ROLES, type NrlCoachRole, type NrlRole } from '@/lib/nrlManager';
 import { nrlArchivedScoringLeaders, nrlTryLeaders } from '@/lib/nrlPlayerScoring';
 
 const currency = new Intl.NumberFormat('en-AU', {
@@ -24,6 +24,9 @@ type Dispatch = (action: NrlCareerAction) => boolean;
 const control = 'min-h-11 w-full rounded-lg border border-input bg-background px-3 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring';
 const developmentLabels = { balanced: 'Balanced', youth: 'Youth development', veterans: 'Veteran conditioning' };
 const medicalLabels = { 1: 'Standard care', 2: 'Treatment room', 3: 'Recovery centre' };
+const coachLabels = { attack: 'Attack assistant', defense: 'Defence assistant' };
+const coachEffect = (role: NrlCoachRole) => role === 'attack' ? `+${NRL_COACHING_BONUS} attack rating with the Attack tactic.`
+  : `+${NRL_COACHING_BONUS} defence rating with the Defence tactic.`;
 
 function developmentSummary(focus: Exclude<NrlDevelopmentFocus, 'balanced'>, affected: number, preview: boolean) {
   if (!affected) return preview ? 'No returning players would get an extra point.' : 'No ratings changed from this focus.';
@@ -255,6 +258,47 @@ function MedicalFacilities({ career, onAction, disabled }: { career: NrlCareerSt
   );
 }
 
+function CoachingStaff({ career, onAction, disabled }: { career: NrlCareerState; onAction: Dispatch; disabled: boolean }) {
+  const { year, round } = career.season;
+  const { candidates, current, fee, wagePerRound, remainingWages, reason } = nrlCoachQuote(career);
+  return (
+    <details className="group mt-5 rounded-xl border border-border bg-background px-3">
+      <summary className="flex min-h-11 cursor-pointer items-center justify-between gap-2 rounded-md font-bold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
+        Coaching staff <ChevronDown size={16} aria-hidden="true" className="shrink-0 group-open:rotate-180" />
+      </summary>
+      <div className="pb-3 text-sm">
+        {current ? (
+          <>
+            <p className="font-semibold" data-nrl-coach-current>{current.name} · {coachLabels[current.role]}</p>
+            <p className="mt-1 text-muted-foreground">{coachEffect(current.role)}</p>
+            <p className="mt-2 text-muted-foreground">Signed through this season. Remaining wages {money(remainingWages)}.</p>
+          </>
+        ) : (
+          <>
+            <p className="text-muted-foreground">Sign one fictional assistant through the end of this season.</p>
+            <p className="mt-1 text-muted-foreground">{money(fee)} signing fee · {money(wagePerRound)} per settled round, including byes and finals.</p>
+            {remainingWages > 0 && <p className="mt-1 font-semibold" data-nrl-coach-commitment>{money(fee + remainingWages)} total commitment</p>}
+            <ul className="mt-3 grid gap-2 sm:grid-cols-2">
+              {candidates.map(candidate => (
+                <li key={candidate.role} className="min-w-0 rounded-lg border border-border p-2">
+                  <p className="break-words font-semibold">{candidate.name}</p>
+                  <p className="text-muted-foreground">{coachLabels[candidate.role]}</p>
+                  <p className="mt-1 text-muted-foreground">{coachEffect(candidate.role)}</p>
+                  <Button type="button" size="lg" variant="outline" className="mt-2 w-full px-3" disabled={disabled || reason !== null}
+                    onClick={() => onAction({ type: 'hireCoach', role: candidate.role, year, round })}>
+                    Hire {coachLabels[candidate.role].toLowerCase()}
+                  </Button>
+                </li>
+              ))}
+            </ul>
+            {reason && <p className="mt-2 text-muted-foreground">{reason}</p>}
+          </>
+        )}
+      </div>
+    </details>
+  );
+}
+
 function Finances({ career, onAction, disabled }: { career: NrlCareerState; onAction: Dispatch; disabled: boolean }) {
   const [nextYear, setNextYear] = useState(false);
   const year = career.season.year;
@@ -262,6 +306,7 @@ function Finances({ career, onAction, disabled }: { career: NrlCareerState; onAc
   const cap = nrlCareerCap(career, capYear);
   const cash = nrlCareerFinance(career);
   const medicalSpend = nrlMedicalSpend(cash);
+  const coachSpend = nrlCoachSpend(cash);
   const hasAccounts = cash.fromRound <= nrlSeasonPlan(year).draw.length + 4;
   return (
     <>
@@ -287,6 +332,7 @@ function Finances({ career, onAction, disabled }: { career: NrlCareerState; onAc
                 ['Gate receipts', cash.gateReceipts], ['Wages paid', cash.wagesPaid],
                 ['Operating costs', cash.operatingCosts],
                 ...(medicalSpend ? [['Medical upgrades', medicalSpend] as [string, number]] : []),
+                ...(cash.coachHire ? [['Coach signing fee', coachSpend.signingFee], ['Coach wages paid', coachSpend.wages]] as [string, number][] : []),
                 ['Profit or loss', cash.profit], ['Cash balance', cash.cash],
               ]} />
             </>
@@ -294,6 +340,7 @@ function Finances({ career, onAction, disabled }: { career: NrlCareerState; onAc
         </div>
       </div>
       <MedicalFacilities career={career} onAction={onAction} disabled={disabled} />
+      <CoachingStaff career={career} onAction={onAction} disabled={disabled} />
     </>
   );
 }
@@ -339,6 +386,8 @@ function History({ career, onAction, disabled }: { career: NrlCareerState; onAct
             const leaders = nrlArchivedScoringLeaders(record.scoring);
             const tries = nrlTryLeaders(leaders)[0];
             const points = leaders[0];
+            const coach = record.finance?.coachHire;
+            const staffSpend = record.finance ? nrlCoachSpend(record.finance) : null;
             return (
               <li key={record.year} className="space-y-1 py-3">
                 <p className="font-bold">{record.year} {labelForClub(record.year, record.clubId)}</p>
@@ -349,6 +398,9 @@ function History({ career, onAction, disabled }: { career: NrlCareerState; onAct
                 </p>}
                 {record.development && <p className="text-sm text-muted-foreground" data-nrl-development-receipt>
                   {developmentLabels[record.development.focus]} · {developmentSummary(record.development.focus, record.development.affected, false)}
+                </p>}
+                {coach && staffSpend && <p className="text-sm text-muted-foreground" data-nrl-coach-receipt>
+                  {coachLabels[coach.role]} · {money(staffSpend.signingFee + staffSpend.wages)} total staff cost
                 </p>}
               </li>
             );

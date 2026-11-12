@@ -13,8 +13,9 @@ import { useArrivalTop } from '@/hooks/useArrivalTop';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { useSaveFenceWatch } from '@/hooks/useSaveFenceWatch';
 import {
-  nrlBench, nrlHalftimeInterchanges, nrlInjuries, nrlLadder, nrlNextRound, nrlStarterOptions, NRL_BENCH_SIZE, NRL_MAX_BENCH_USED, NRL_ROLES, NRL_SAVE_KEY,
-  type NrlAction, type NrlLiveHalf, type NrlManagerState, type NrlMatchResult, type NrlTactic,
+  nrlBench, nrlHalftimeInterchanges, nrlInjuries, nrlLadder, nrlNextRound, nrlStarterOptions, NRL_BENCH_SIZE, NRL_COACHING_BONUS,
+  NRL_MAX_BENCH_USED, NRL_ROLES, NRL_SAVE_KEY,
+  type NrlAction, type NrlCoachRole, type NrlLiveHalf, type NrlManagerState, type NrlMatchResult, type NrlTactic,
 } from '@/lib/nrlManager';
 import { createNrlCareer, nrlOppositionReport, readNrlCareerSave, reduceNrlCareer, type NrlCareerAction, type NrlCareerState } from '@/lib/nrlCareer';
 import { nrlScorePoints, nrlScoringLeaders, nrlTryLeaders } from '@/lib/nrlPlayerScoring';
@@ -43,6 +44,8 @@ const tactics: { id: NrlTactic; label: string; description: string }[] = [
   { id: 'attack', label: 'Attack', description: 'Chase tries and risk leaving gaps.' },
   { id: 'defense', label: 'Defence', description: 'Protect your line and create fewer chances.' },
 ];
+const coachTacticNote = (role: NrlCoachRole | undefined, tactic: NrlTactic) => role === tactic
+  ? ` Your assistant adds +${NRL_COACHING_BONUS} ${role === 'attack' ? 'attack' : 'defence'} rating.` : '';
 
 function shortName(year: number, id: string) {
   return nrlSeasonPlan(year).clubs.find(club => club.id === id)?.shortName ?? id;
@@ -107,9 +110,9 @@ function scoreLine(result: NrlMatchResult, year: number) {
   return `${shortName(year, result.homeId)} ${result.homeScore}–${result.awayScore} ${shortName(year, result.awayId)}`;
 }
 
-function LiveHalftime({ live, season, title, onAction, disabled }: {
+function LiveHalftime({ live, season, title, onAction, disabled, coachRole }: {
   live: NrlLiveHalf; season: NrlManagerState; title: string;
-  onAction: (action: NrlAction) => void; disabled: boolean;
+  onAction: (action: NrlAction) => void; disabled: boolean; coachRole?: NrlCoachRole;
 }) {
   const { year, tactic: openingTactic, squad } = season;
   const [tactic, setTactic] = useState(openingTactic);
@@ -148,7 +151,7 @@ function LiveHalftime({ live, season, title, onAction, disabled }: {
             </Button>
           ))}
         </div>
-        <p className="mt-2 text-sm text-muted-foreground">{tactics.find(option => option.id === tactic)?.description}</p>
+        <p className="mt-2 text-sm text-muted-foreground">{tactics.find(option => option.id === tactic)?.description}{coachTacticNote(coachRole, tactic)}</p>
       </div>
       {options.length > 0 ? (
         <details className="group rounded-xl border border-border bg-card px-4">
@@ -233,8 +236,9 @@ function MatchCentre({ career, onAction, onReview, disabled, showLiveResult }: {
   const { season } = career;
   const next = nrlNextRound(season);
   const { clubId, year, phase, championId } = season;
+  const coachRole = career.finance.coachHire?.role;
   if (season.live) {
-    return <LiveHalftime live={season.live} season={season} title={next.title} onAction={onAction} disabled={disabled} />;
+    return <LiveHalftime live={season.live} season={season} title={next.title} onAction={onAction} disabled={disabled} coachRole={coachRole} />;
   }
   const club = shortName(year, clubId);
   const match = next.clubMatch;
@@ -340,7 +344,7 @@ function MatchCentre({ career, onAction, onReview, disabled, showLiveResult }: {
                   aria-pressed={season.tactic === tactic.id} onClick={() => onAction({ type: 'setTactic', tactic: tactic.id })}>{tactic.label}</Button>
               ))}
             </div>
-            <p className="mt-2 text-sm text-muted-foreground">{tactics.find(tactic => tactic.id === season.tactic)?.description}</p>
+            <p className="mt-2 text-sm text-muted-foreground">{tactics.find(tactic => tactic.id === season.tactic)?.description}{coachTacticNote(coachRole, season.tactic)}</p>
           </div>
           <div className="rounded-xl border border-border bg-card p-4">
             <h3 className="font-bold">Preparation <span className="ml-1 font-normal text-muted-foreground">· {fitness}% starter fitness</span></h3>
@@ -627,6 +631,7 @@ export default function NrlTeamManager() {
               <li>Name 13 starters and six reserves in Squad. Quick sim can use up to four of the reserves. Before a game, choose a tactic and train or recover.</li>
               <li>A match knock can put a player out for up to four rounds. Check Availability in Squad. The countdown includes byes, and an available player fills the vacant spot.</li>
               <li>Buy medical upgrades with club cash in Finances. Upgrades shorten recovery from new knocks.</li>
+              <li>Sign one fictional assistant in Finances. Their rating bonus applies when you use their tactic.</li>
               <li>Choose your goal kicker in Squad to credit conversions and penalty goals. Match centre shows your scorers.</li>
               <li>Play Live shows the first half. At half time, change tactics or keep a rotating reserve on to finish the match. Quick Sim settles the round in one action.</li>
               <li>Advance a round to simulate every fixture. A win or bye earns two ladder points, a draw earns one and a loss earns zero.</li>
