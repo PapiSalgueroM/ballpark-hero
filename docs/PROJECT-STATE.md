@@ -1,3 +1,9 @@
+## 2026-11-12 Club Manager played Champions League prototype
+
+New ordinary current-season careers can play the 36-club Champions League league phase. Qualified clubs play eight simulated fixtures before the two-leg knockout playoffs and the single final. The saved draw and results feed the Cups table, matchday view and calendar. Existing group seasons finish in groups, with the modern option activated at ordinary rollover. Historic, Asian start and Daily paths keep their existing rules.
+
+On local integration base 2348a72f9, the 116 focused tests passed. Arsenal recorded 144 league-phase results and completed the full bracket. Matchday four reloaded the exact draw, scores and visible table. Tested finishes were seventh, ninth and thirty-first, with an earned home and away round of 16 tie counted before its opponent was drawn. An Everton-to-Arsenal job preserved the season's rules. The source-only format reader and its watched-format control passed. Full app types, production and phone builds, and the Club Manager and format-history snapshots remain pending. This prototype is local.
+
 ## 2026-11-12 Club Manager severe match injuries draft
 
 A new Club Manager career or the next season of an existing one can draw an ACL tear or Achilles tendon rupture during a simulated match. The existing match-injury draw assigns 2% of injuries to these severe spells. ACL tears last 28 to 36 simulated weeks and Achilles ruptures last 18 to 30. The bands are game estimates based on a 225-day median to match return in the [UEFA ACL cohort](https://pubmed.ncbi.nlm.nih.gov/27034129/) and a 161-day average absence in the [UEFA Achilles cohort](https://pubmed.ncbi.nlm.nih.gov/23770660/).

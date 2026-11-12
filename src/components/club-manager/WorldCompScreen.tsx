@@ -206,7 +206,7 @@ interface ViewProps {
 }
 
 function TableView({ career, comp, view, nav, go, onClub, groupsCard }: ViewProps) {
-  if (view.mode === 'in') return <div className="space-y-2">{withClubHandler(groupsCard, onClub)}</div>;
+  if (view.mode === 'in' && view.format === 'g8') return <div className="space-y-2">{withClubHandler(groupsCard, onClub)}</div>;
   const played = view.nightsDone > 0;
   if (view.groups) {
     const letter = nav.group ?? view.groups[0]?.letter ?? 'A';
@@ -269,7 +269,7 @@ function KnockoutsView({ career, view, nav, go, onClub, bracketCard }: ViewProps
           <p className="bg-card border border-border rounded-xl p-3 text-xs text-foreground" data-cm-world-next>You are still in it. Next up: {secondLeg ? `the second leg of the ${roundPlural(ko)}` : `the ${roundPlural(ko)}`}, against {career.uclDraw?.[ko] ?? 'a club to be drawn'}.</p>
         )}
         {ko === 'won' && <p className="bg-card border border-gold/40 rounded-xl p-3 text-xs text-gold font-bold">Champions of Europe.</p>}
-        {!career.uclBracket?.length && <p className="text-xs text-muted-foreground px-1">The knockouts are drawn after matchday 6.</p>}
+        {!career.uclBracket?.length && <p className="text-xs text-muted-foreground px-1">The knockouts are drawn after matchday {firstStageNights(view)}.</p>}
         {withClubHandler(bracketCard, onClub)}
       </div>
     );
@@ -369,13 +369,12 @@ function headerLines(career: CareerState, view: WorldCompView): string[] {
   const lines: string[] = [];
   const modern = worldUclFormatOf(career) === 'l36';
   lines.push(view.mode === 'in'
-    ? 'You are in it: your group is Group A.'
+    ? (view.format === 'l36' ? 'You play eight games in the league phase.' : 'You are in it: your group is Group A.')
     : `${career.clubName} are not in it this season, so you are following it from outside.`);
   /* fix-1509 (advice 21): a season one club whose real fifth place the game does not play says why it is in neither. */
   const fifth = view.mode === 'watching' ? realFifthNation(career) : null;
   if (fifth) lines.push(`${career.clubName} finished fifth in 2025-26. In the real 2026-27 that was a Champions League place, a one year bonus place ${fifth} earned (a European Performance Spot), which the game does not play: here ${fifth} has four places, fifth goes to the Europa League. Your first season starts after those places were assigned, so you follow it from outside.`);
-  if (modern && view.mode === 'watching') lines.push('This is the real format. In a season your club qualifies, it plays the game\'s stand in instead: eight groups of four into the quarter-finals.');
-  if (modern && view.mode === 'in') lines.push('Your club plays the game\'s stand in: eight groups of four into the quarter-finals. In a season you are not in it, the one you follow from outside plays the real 36 club format.');
+  if (modern && view.mode === 'in' && view.format === 'g8') lines.push('This season keeps its saved group format: eight groups of four into the quarter-finals.');
   if (view.holder) lines.push(`Holders: ${view.holder}, top of pot one in the draw.`);
   const eraSeason = seasonOfYear(career.startYear ?? 0);
   if (view.standIn && view.mode === 'watching') lines.push(`${view.standIn.club} stand in for ${view.standIn.for}, one of the real 32 of ${eraSeason}: that place belongs to a club of yours in this save, so the strongest club in this save's leagues from outside the 32 plays it.`);
@@ -427,7 +426,7 @@ function UelHowItWorks() {
   return (
     <div className="bg-card border border-border rounded-xl p-3 space-y-2 text-xs text-muted-foreground" data-cm-world-help="uel">
       <p>36 clubs play eight games each, four at home and four away, in one table. 1st to 8th go straight to the round of 16, 9th to 24th play a two legged play-off for the other eight places, and 25th and below are out. Two legs from the play-offs to the semi-finals, then a one match final. A tie level on aggregate goes to extra time, then penalties.</p>
-      <p>Who is in it, by the game's rule: in each league, the club just below its Champions League places, and your own country's cup winner. A club already in the Champions League, or a cup winner already in, hands its place down the table to the next club. Cups abroad are not played in the game, so from your second season their place goes down their league too. The last places go to the next best placed clubs of the leagues with the most Champions League places. In your first season the field is the real 2025-26 tables, cup winners and Conference League winner, put through the same rule. The winner goes into next season's Champions League (in a season your own club is in that one, only when the game's smaller field has room).</p>
+      <p>Who is in it, by the game's rule: in each league, the club just below its Champions League places, and your own country's cup winner. A club already in the Champions League, or a cup winner already in, hands its place down the table to the next club. Cups abroad are not played in the game, so from your second season their place goes down their league too. The last places go to the next best placed clubs of the leagues with the most Champions League places. In your first season the field is the real 2025-26 tables, cup winners and Conference League winner, put through the same rule. The winner goes into next season's Champions League, with field space limited in a saved group season.</p>
       <p>What the game plays in place of the real thing: those places are simplified and the same every season. In the real 2026-27, England and Spain had a fifth Champions League place and France sent its fourth to Champions League qualifying, so the real field was not quite this one. The pots are set by how strong the clubs are in your save, the bracket and the order of clubs level on points are the Champions League's, and while you follow it from outside every night sits on your own calendar, the day after a Champions League night, with the final between the Champions League's semi-finals and its final, so the dates are the game's (your own nights, when you are in it, are below).</p>
       <p>Your club: finish in a Europa League place, win your cup, or have your cup's place passed down to you, and next season you play it (never through the last places, which stand in for the qualifying rounds). Eight league phase nights against eight different clubs, four at home, then the knockouts if you finish in the top 24. Your first season's places were settled before you arrived, so that season you follow it. The board counts a place the same way: through the season it reads your league place and, once it is played, your cup final.</p>
       <p>Every one of your nights is a Thursday on your own calendar, between your league weekends; a short league season plays its last few after the league is done. The real 2026-27 nights are Thursdays too, except matchday 1 (a Wednesday and a Thursday) and the final (Wednesday 26 May 2027, in Frankfurt), so the game's dates are its own. For example: 16th of 36 sends you to the knockout play-off; win the first leg 1-0 away, draw the second 2-2 at home, and you are through 3-2 on aggregate to the round of 16.</p>
@@ -450,7 +449,7 @@ function HowItWorks({ view }: { view: WorldCompView }) {
         <p>Eight groups of four, everyone playing the other three home and away. The top two of each group go through to a round of 16 drawn winner against runner-up, never from the same group or the same country. Two legs to the semi-finals, then a one match final.{view.mode === 'watching' ? ' A tie level on aggregate goes to the side with more away goals, then extra time and penalties.' : ''}</p>
       )}
       {view.mode === 'in' ? (
-        <p>The draw is the game's own, and every night sits on your own calendar, so the dates are the game's.</p>
+        <p>The draw is the game's own, and every night sits on your own calendar, so the dates are the game's.{l36 ? " The pots use club strength in your save, and the final places go to the next best placed clubs from the strongest leagues." : ''}</p>
       ) : <p>What the game plays in place of the real thing: the draw is its own, with the pots set by how strong the clubs are in this save and the holders first.{l36 ? '' : ' The quarter-finals and semi-finals follow a fixed bracket rather than an open draw.'} Every night sits on your own calendar, so the dates are the game's.{l36 ? ' The last places in the field go to the next best placed clubs of the strongest leagues, not through qualifying, and the winner is in next season\'s field as the holders.' : ''}</p>}
       {!l36 && view.mode === 'watching' && <p>In the 2015-16 and 2020-21 saves the group draw keeps Russian and Ukrainian clubs apart, as the real draws did. The round of 16 draw here does not. A save keeps its era's format for its whole life.</p>}
     </div>
