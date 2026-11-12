@@ -241,19 +241,23 @@ export function toSave(session: RebuildSession, preset: RebuildPreset): RebuildS
   };
 }
 
-export function writeRebuildSave(save: RebuildSave): void {
+export function writeRebuildSave(save: RebuildSave | null): string | null | undefined {
   try {
-    localStorage.setItem(REBUILD_SAVE_KEY, JSON.stringify(save));
+    const bytes = save === null ? null : JSON.stringify(save);
+    if (bytes === null) localStorage.removeItem(REBUILD_SAVE_KEY);
+    else localStorage.setItem(REBUILD_SAVE_KEY, bytes);
+    return bytes;
   } catch {
     /* storage full or blocked: the run still plays, it just will not survive a refresh */
+    return undefined;
   }
 }
 
-export function clearRebuildSave(): void {
+export function readRebuildSaveBytes(): string | null | undefined {
   try {
-    localStorage.removeItem(REBUILD_SAVE_KEY);
+    return localStorage.getItem(REBUILD_SAVE_KEY);
   } catch {
-    /* nothing to do */
+    return undefined;
   }
 }
 
@@ -371,11 +375,7 @@ export function parseRebuildSave(raw: string | null): RebuildSave | null {
 }
 
 export function readRebuildSave(): RebuildSave | null {
-  try {
-    return parseRebuildSave(localStorage.getItem(REBUILD_SAVE_KEY));
-  } catch {
-    return null;
-  }
+  return parseRebuildSave(readRebuildSaveBytes() ?? null);
 }
 
 /* ---------------- restoring ---------------- */

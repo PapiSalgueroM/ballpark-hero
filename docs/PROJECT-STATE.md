@@ -1,3 +1,9 @@
+## 2026-11-12: Rebuild shared save ownership staged
+
+Rebuild keeps the latest transfer window when an older tab tries a move or finishes loading. The older tab offers to reload the saved window. This keeps the existing save format, normal restart and the retry for unavailable club data.
+
+The original replaced a manager-stage save with a stale envelope choice at both phone widths. A delayed restore also deleted newer bytes in a mounted case. The guarded writer kept both newer saves byte for byte, with 16 focused ownership, restore and power-up cases passing.
+
 ## 2026-11-12: Wonderkid Academy sale and shared save recovery
 
 A prospect stays on the Academy screen until the sale reaches browser storage. If storage refuses the write, the prospect and money stay in place and the sale can be retried. An older Wonderkid Factory or Stadium Tycoon Academy tab must reload before writing over the shared academy.

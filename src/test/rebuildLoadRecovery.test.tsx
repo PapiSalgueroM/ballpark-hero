@@ -98,3 +98,27 @@ it('restores a partial table setup without loading squads', async () => {
   expect(localStorage.getItem(REBUILD_SAVE_KEY)).toBe(save);
   expect(fetchClubSquad).not.toHaveBeenCalled();
 });
+
+
+it('does not clear newer bytes when an older restore cannot replay its window', async () => {
+  const active = renderHook(useRebuild);
+  await waitFor(() => expect(active.result.current.loading).toBe(false));
+  act(() => active.result.current.chooseClub(club));
+  await waitFor(() => expect(active.result.current.phase).toBe('envelopes'));
+  const oldSave = localStorage.getItem(REBUILD_SAVE_KEY);
+  expect(oldSave).not.toBeNull();
+
+  let releaseSquad!: (players: Player[]) => void;
+  vi.mocked(fetchClubSquad).mockReturnValueOnce(new Promise(resolve => { releaseSquad = resolve; }));
+  const older = renderHook(useRebuild);
+  await waitFor(() => expect(fetchClubSquad).toHaveBeenCalledTimes(2));
+  act(() => active.result.current.pickFinance(0));
+  act(() => active.result.current.toManager());
+  const newer = localStorage.getItem(REBUILD_SAVE_KEY);
+  expect(newer).not.toBe(oldSave);
+
+  await act(async () => releaseSquad(squad.map(player => ({ ...player, marketValue: player.marketValue * 10 }))));
+  await waitFor(() => expect(older.result.current.loading).toBe(false));
+  expect(localStorage.getItem(REBUILD_SAVE_KEY)).toBe(newer);
+  expect(older.result.current.saveConflict).toBe(true);
+});
