@@ -66,7 +66,7 @@ export function phaseFor(c: CareerState): CMPhase {
 }
 export type HubTab = 'overview' | 'squad' | 'tactics' | 'table' | 'transfers';
 
-const CAREER_SEASON_RULES = { severeMatchInjuries: true, playedUclLeaguePhase: true } as const;
+const CAREER_SEASON_RULES = { severeMatchInjuries: true, playedUclLeaguePhase: true, championshipPlayoffs: true } as const;
 
 /**
  * Round 505: a new shape keeps the eleven you picked. Until this round a
@@ -1035,6 +1035,7 @@ export function useClubManager() {
   const nextSeason = useCallback((acceptOfferClub?: string) => {
     if (!career) return;
     const s = startNextSeason(career, acceptOfferClub, CAREER_SEASON_RULES);
+    if (s === career) return;
     setCareer(s);
     setSummary(null);
     setReport(null);

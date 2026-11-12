@@ -1,3 +1,13 @@
+## 2026-11-12 Club Manager Championship playoffs prototype
+
+New current-era English careers use the six-team Championship playoffs for the third Premier League place. Fifth and sixth host the eliminators, then third and fourth host the return legs of reseeded semifinals. The neutral final decides promotion. Dates and results are simulated. The game uses the standard home order and the existing regular-season standings.
+
+The prototype keeps the bracket and match scores in the career save. It opens a qualified manager's playoff fixtures after the existing league and cup calendar, and settles the same bracket through AI for other clubs. Season review and the summer exchange read one winner. Old saves and Manager Hot Seat keep their existing promotion rules.
+
+On exact parent a887cce20, the old engine sent the third-place Burnley fixture directly up. The prototype kept it in the Championship after a semifinal shootout win and a final loss, and sent an eighth-place fixture up after four match-engine fixtures and the final win. The 98 distinct focused checks covered rank and venue, the regular-final Continue callback, fast forward, saved halftime, three-place exchange and late job handling. Three Daily start-and-match pairs and four fixtures each at legacy Burnley, Arsenal and Real Madrid held exact serialized state and observed draws against the parent. The league tables used for these replays are test fixtures. Full app types, production build, phone, saved output and budgets are pending. The prototype is local.
+
+Rules: [2026/27 EFL play-off rules](https://images.gc.eflservices.co.uk/659e3bb0-7b8d-11f1-b366-6527b2d4899f.pdf), [2026/27 EFL regulations](https://images.gc.eflservices.co.uk/8374c4e0-c95f-11f1-bbd2-73c36057a203.pdf), [Premier League format explainer](https://www.premierleague.com/en/news/4611805).
+
 ## 2026-11-12 Club Manager played Champions League prototype
 
 New ordinary current-season careers can play the 36-club Champions League league phase. Qualified clubs play eight simulated fixtures before the two-leg knockout playoffs and the single final. The saved draw and results feed the Cups table, matchday view and calendar. Existing group seasons finish in groups, with the modern option activated at ordinary rollover. Historic, Asian start and Daily paths keep their existing rules.
