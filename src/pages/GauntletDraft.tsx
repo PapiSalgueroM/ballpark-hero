@@ -53,6 +53,7 @@ export default function GauntletDraft() {
   const todayStr = useRef(getTodayET()).current;
   const [phase, setPhase] = useState<Phase>('boot');
   const [pool, setPool] = useState<Player[]>([]);
+  const [usingFallback, setUsingFallback] = useState(false);
   const [mode, setMode] = useState<Mode>('daily');
   const [draft, setDraft] = useState<DraftShape | null>(null);
   const [pickIndex, setPickIndex] = useState(0);
@@ -63,17 +64,20 @@ export default function GauntletDraft() {
   const [shownMatches, setShownMatches] = useState(0);
 
   useEffect(() => {
+    if (phase !== 'boot') return;
     let cancelled = false;
-    fetchSquadPool('current')
+    let usedFallback = false;
+    fetchSquadPool('current', undefined, () => { usedFallback = true; })
       .then(p => {
         if (cancelled) return;
         if (p.length < 100) { setPhase('error'); return; }
         setPool(p);
+        setUsingFallback(usedFallback);
         setPhase('setup');
       })
       .catch(() => { if (!cancelled) setPhase('error'); });
     return () => { cancelled = true; };
-  }, []);
+  }, [phase]);
 
   const restoreDaily = useCallback(() => {
     const stored = loadDailyRun(todayStr);
@@ -93,18 +97,26 @@ export default function GauntletDraft() {
     setDailyUnavailable(false);
     if (m === 'daily' && restoreDaily()) return;
     const saved = m === 'daily' ? loadDailyDraft(todayStr) : null;
+    if (m === 'daily' && usingFallback && !saved) {
+      setPhase('boot');
+      return;
+    }
+    const unavailable = () => {
+      if (usingFallback) setPhase('boot');
+      else setDailyUnavailable(true);
+    };
     const seed = m === 'daily' ? dailyDraftSeed(todayStr) : Math.floor(Math.random() * 2147483645) + 1;
     let d: DraftShape;
     try {
       d = buildDraft(pool, seed);
     } catch (error) {
       if (!saved) throw error;
-      setDailyUnavailable(true);
+      unavailable();
       return;
     }
     const kept = saved ? restoreDailyPicks(d, saved) : [];
     if (!kept) {
-      setDailyUnavailable(true);
+      unavailable();
       return;
     }
     setMode(m);
@@ -114,7 +126,7 @@ export default function GauntletDraft() {
     setRun(null);
     setShownMatches(0);
     setPhase('drafting');
-  }, [pool, restoreDaily, todayStr]);
+  }, [pool, restoreDaily, todayStr, usingFallback]);
 
   const retryDailySave = () => {
     if (!pendingDailyRun) return;
@@ -222,7 +234,9 @@ export default function GauntletDraft() {
             </div>
             <button onClick={() => start('daily')} className="w-full rounded-xl border border-border bg-surface-1 p-4 text-left hover:border-primary/50 hover:bg-primary/5 transition-colors">
               <span className="block font-bold text-foreground">Daily gauntlet</span>
-              <span className="block text-xs text-muted-foreground mt-0.5">{dailyDone ? "Today's draft is done. See how the cup went" : 'The same five card choices for everyone today'}</span>
+              <span className="block text-xs text-muted-foreground mt-0.5">
+                {dailyDone ? "Today's draft is done. See how the cup went" : usingFallback ? 'The player feed is unavailable. Tap to retry or resume a saved draft.' : 'The same five card choices for everyone today'}
+              </span>
             </button>
             {dailyUnavailable && <GauntletResumeNotice />}
             <button onClick={() => start('unlimited')} className="w-full rounded-xl border border-border bg-surface-1 p-4 text-left hover:border-primary/50 hover:bg-primary/5 transition-colors">

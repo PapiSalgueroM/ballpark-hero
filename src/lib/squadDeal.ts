@@ -164,9 +164,12 @@ export const MEMES: Player[] = [
 
 const CURRENT_SQUAD_YEAR = 2026;
 
-export async function fetchSquadPool(era: Era, year = CURRENT_SQUAD_YEAR): Promise<Player[]> {
+export async function fetchSquadPool(era: Era, year = CURRENT_SQUAD_YEAR, onFallback?: () => void): Promise<Player[]> {
   if (era === 'legends') return [...LEGENDS];
-  const fallback = year === CURRENT_SQUAD_YEAR ? fallbackPlayers : [];
+  const fallback = () => {
+    onFallback?.();
+    return year === CURRENT_SQUAD_YEAR ? fallbackPlayers.slice() : [];
+  };
   try {
     const { data, error } = await supabase
       .from('player_market_values')
@@ -185,7 +188,7 @@ export async function fetchSquadPool(era: Era, year = CURRENT_SQUAD_YEAR): Promi
          Search and Discard, which share this helper. */
       .order('player_name', { ascending: true })
       .limit(1000);
-    if (error || !data || data.length === 0) return fallback.slice();
+    if (error || !data || data.length === 0) return fallback();
     const seen = new Set<string>();
     const pool: Player[] = [];
     for (const row of data) {
@@ -199,8 +202,8 @@ export async function fetchSquadPool(era: Era, year = CURRENT_SQUAD_YEAR): Promi
         marketValue: Math.max(1, Math.round((row.market_value_usd || 1_000_000) / 1_000_000)), difficulty: 'easy',
       });
     }
-    return pool.length >= 33 ? pool : fallback.slice();
-  } catch { return fallback.slice(); }
+    return pool.length >= 33 ? pool : fallback();
+  } catch { return fallback(); }
 }
 
 
