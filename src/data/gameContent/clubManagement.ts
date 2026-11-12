@@ -8,6 +8,7 @@ export const CLUB_MANAGEMENT_CONTENT: GameContentMap = {
       "Read the board's targets before shopping. The league finish is only part of the job. Open the board screen and check In the market for the two squad-building asks and the line under each one. A signing for your weakest line might solve a real depth problem and satisfy an objective at the same time.",
       "Before a busy run, look beyond your starting eleven. Keep a fit replacement for the positions that are short on cover. Quick Sim leaves substitutions to your coach, while Play Live lets you pause to move players, change shape or bring somebody off. If a tired player is on a booking and you have suitable cover, that is a good moment to use the bench.",
       "Use the calendar once you trust your setup. You can jump to the next match, about a month, the next window or the end of the season. It still plays the matches on the way and stops for big decisions such as a transfer window or the season review. Check your squad before you skip a stretch of fixtures.",
+      "At the season review, open Veteran talks to ask an owned player aged 31 to 41 to stay for one more season. An agreement protects the player from retirement that summer, once per career. If a renewal is needed, the contracts desk's ordinary fee, wages and term apply, and any release clause is removed.",
     ],
     headings: {
       howToPlay: "How to play Club Manager, a free online football management game",
