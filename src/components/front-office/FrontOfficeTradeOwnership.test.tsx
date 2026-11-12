@@ -24,7 +24,7 @@ function setup() {
   return { league, team, partner, otherPartner, roster, initial };
 }
 
-const click = (name: string) => fireEvent.click(screen.getByRole('button', { name, exact: true }));
+const click = (name: string) => fireEvent.click(screen.getByRole('button', { name }));
 const tile = (name: string) => fireEvent.click(screen.getByText(name, { exact: true }));
 const readSave = () => localStorage.getItem(SAVE_KEY)!;
 const talks = () => document.querySelector('[data-trade-talks]');
@@ -51,7 +51,7 @@ function cut(player: GmPlayer) {
   tile('Roster');
   const playerRow = row('data-roster-row', player);
   fireEvent.click(playerRow.getByRole('button', { name: /Cut, / }));
-  fireEvent.click(playerRow.getByRole('button', { name: 'Cut him', exact: true }));
+  fireEvent.click(playerRow.getByRole('button', { name: 'Cut him' }));
   click('Hub');
   tile('Trades');
 }
@@ -121,7 +121,7 @@ it('clears talks if the wanted player joins through the Finder first', () => {
   startTalk(offer.teamId, negotiatingOutgoing, wanted);
   pickOutgoing(finderOutgoing);
   click('Shop him around the league');
-  const accept = screen.getAllByRole('button', { name: 'Accept', exact: true })
+  const accept = screen.getAllByRole('button', { name: 'Accept' })
     .find(button => button.parentElement?.textContent?.includes(`${offer.teamId} offer: ${wanted.name}`));
   expect(accept).toBeTruthy();
   fireEvent.click(accept!);

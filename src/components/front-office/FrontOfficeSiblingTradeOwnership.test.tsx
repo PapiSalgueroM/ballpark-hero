@@ -18,10 +18,10 @@ const cases = [
 ];
 
 type Player = { id: string; name: string; ovr: number; pos: string };
-const click = (name: string) => fireEvent.click(screen.getByRole('button', { name, exact: true }));
+const click = (name: string) => fireEvent.click(screen.getByRole('button', { name }));
 const tile = (name: string) => fireEvent.click(screen.getByText(name, { exact: true }));
 const talks = () => document.querySelector('[data-trade-talks]');
-const available = () => screen.queryAllByRole('button', { name: 'Open talks', exact: true });
+const available = () => screen.queryAllByRole('button', { name: 'Open talks' });
 function row(attr: string, player: Player) {
   const found = document.querySelector<HTMLElement>(`[${attr}="${player.id}"]`);
   expect(found, player.name).toBeTruthy();
@@ -70,7 +70,7 @@ for (const c of cases) {
     tile('Roster');
     const owned = row('data-roster-row', outgoing);
     fireEvent.click(owned.getByRole('button', { name: c.arm }));
-    fireEvent.click(owned.getByRole('button', { name: c.confirm, exact: true }));
+    fireEvent.click(owned.getByRole('button', { name: c.confirm }));
     const after = localStorage.getItem(c.key)!;
     const saved = JSON.parse(after).league.teams[team];
     expect(saved.players.length).toBe(roster.length - 1);
