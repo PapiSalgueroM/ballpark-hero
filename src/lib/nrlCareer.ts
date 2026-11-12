@@ -105,6 +105,7 @@ export interface NrlCareerState {
 }
 export type NrlCareerAction = NrlAction
   | { type: 'offerContract'; playerId: string; salary: number; years: number }
+  | { type: 'arrangeTakeover'; year: number; clubId: string; playerId: string; destinationId: string }
   | { type: 'setShortlist'; playerId: string; saved: boolean; year: number }
   | { type: 'scoutAcademy'; role: NrlRole }
   | { type: 'promoteAcademy'; playerId: string }
@@ -293,16 +294,44 @@ function checkContractOffer(
   }
   const { clubId } = state.season;
   const contract = { clubId, startYear: entry.startYear, endYear: entry.startYear + years - 1, salary };
-  for (let year = contract.startYear; year <= contract.endYear; year++) {
-    const cap = capFor(state.players, clubId, year);
-    if (!cap.openSlots) return { ok: false, reason: `The ${year} squad already has 30 contracts.` };
-    if (salary > cap.available + cap.minimumSalary) return { ok: false, reason: `This offer exceeds the ${year} salary cap.` };
-    const projected = squadAt(state.players, clubId, year);
-    if (missingRoles([...projected, entry.player]).length >= cap.openSlots) {
-      return { ok: false, reason: `Keep enough ${year} squad places to cover every starting position.` };
+  const reason = contractCapacityRefusal(state.players, entry.player, contract);
+  return reason ? { ok: false, reason } : { ok: true, contract };
+}
+
+function contractCapacityRefusal(players: NrlCareerPlayer[], player: NrlCareerPlayer, contract: NrlContract): string | null {
+  const { clubId, salary, startYear, endYear } = contract;
+  for (let year = startYear; year <= endYear; year++) {
+    const cap = capFor(players, clubId, year);
+    if (!cap.openSlots) return `The ${year} squad already has 30 contracts.`;
+    if (salary > cap.available + cap.minimumSalary) return `This offer exceeds the ${year} salary cap.`;
+    if (missingRoles([...squadAt(players, clubId, year), player]).length >= cap.openSlots) {
+      return `Keep enough ${year} squad places to cover every starting position.`;
     }
   }
-  return { ok: true, contract };
+  return null;
+}
+
+export function nrlTakeoverPlayers(state: NrlCareerState): NrlCareerPlayer[] {
+  const { clubId, year, live } = state.season;
+  if (state.legacySeason || state.retired || live || year === NRL_LAST_YEAR) return [];
+  return state.players.filter(player =>
+    player.contract?.clubId === clubId && player.contract.endYear > year && !player.futureContract);
+}
+
+export function nrlTakeoverOffers(state: NrlCareerState, playerId: string): NrlContract[] {
+  const { clubId, year } = state.season;
+  const player = nrlTakeoverPlayers(state).find(candidate => candidate.id === playerId);
+  if (!player?.contract) return [];
+  const { salary, endYear } = player.contract;
+  const startYear = year + 1;
+  // Expansion clubs get their initial 30-player squad when they join the league.
+  return nrlSeasonPlan(year).clubs.flatMap(club => {
+    if (club.id === clubId || squadAt(state.players, club.id, startYear).some(
+      signed => signed.role === player.role && signed.rating >= player.rating,
+    )) return [];
+    const contract = { clubId: club.id, startYear, endYear, salary };
+    return contractCapacityRefusal(state.players, player, contract) ? [] : [contract];
+  });
 }
 
 const academyPrefix = ({ clubId, year }: NrlManagerState) => `nrl-prospect-${clubId}-${year}-`;
@@ -837,6 +866,15 @@ export function reduceNrlCareer(state: NrlCareerState, action: NrlCareerAction):
       if (ids.length >= NRL_SHORTLIST_LIMIT || !isRecruitmentTarget(state, playerId)) return state;
       return withShortlist(state, [...ids, playerId]);
     }
+    case 'arrangeTakeover': {
+      const { year, clubId } = state.season;
+      if (action.year !== year || action.clubId !== clubId) return state;
+      const futureContract = nrlTakeoverOffers(state, action.playerId).find(offer => offer.clubId === action.destinationId);
+      if (!futureContract) return state;
+      return { ...state, players: state.players.map(player => player.id === action.playerId
+        ? { ...player, contract: { ...player.contract!, endYear: year }, futureContract }
+        : player) };
+    }
     case 'offerContract': {
       const quote = nrlContractOffer(state, action.playerId, action.salary, action.years);
       if (!quote.ok) return state;
@@ -954,6 +992,8 @@ function validWorld(state: NrlCareerState): boolean {
   const { year, clubId, squad } = state.season;
   if (new Set(state.players.map(player => player.id)).size !== state.players.length) return false;
   if (new Set(state.players.map(player => player.name)).size !== state.players.length) return false;
+  const activeClubs = new Set(nrlSeasonPlan(year).clubs.map(club => club.id));
+  if (state.players.some(player => player.futureContract && !activeClubs.has(player.futureContract.clubId))) return false;
   const own = new Map(squadAt(state.players, clubId, year).map(player => [player.id, player]));
   if (squad.length !== SQUAD_SIZE || !squad.every(player => {
     const stored = own.get(player.id);

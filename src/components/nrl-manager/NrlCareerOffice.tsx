@@ -7,7 +7,8 @@ import { nrlSeasonPlan, NRL_LAST_YEAR } from '@/data/nrlManagerSeasons';
 import {
   nrlAcademyAvailableRoles, nrlAcademyOffer, nrlAcademyReports, nrlCareerCap, nrlCareerFinance, nrlCareerMarket, nrlCareerRecord, nrlCareerSquad, nrlContractOffer,
   nrlCoachQuote, nrlCoachSpend, nrlDevelopmentPreview, nrlFinanceForecast, nrlMedicalSpend, nrlMedicalUpgradeQuote, nrlOffseasonClubs, type NrlCareerAction, type NrlCareerState,
-  nrlSponsorIncome, nrlSponsorRefusal, nrlTicketPricingRefusal, NRL_SHORTLIST_LIMIT, NRL_SPONSOR_OFFERS, NRL_TICKET_GATE_CHANGES,
+  nrlSponsorIncome, nrlSponsorRefusal, nrlTakeoverOffers, nrlTakeoverPlayers, nrlTicketPricingRefusal,
+  NRL_SHORTLIST_LIMIT, NRL_SPONSOR_OFFERS, NRL_TICKET_GATE_CHANGES,
   type NrlDevelopmentFocus, type NrlMedicalLevel, type NrlSponsorOffer, type NrlTicketTier,
 } from '@/lib/nrlCareer';
 import { nrlArchivedFinals, NRL_COACHING_BONUS, NRL_FINALS_ROUND_TITLES, NRL_ROLES, type NrlCoachRole, type NrlRole } from '@/lib/nrlManager';
@@ -90,6 +91,7 @@ function PlayerRow({ player, entry, career, onAction, disabled, onShortlist }: {
   const [editing, setEditing] = useState(false);
   const [agreed, setAgreed] = useState(false);
   const { contract, futureContract } = player;
+  const leaving = contract?.clubId === career.season.clubId && futureContract && futureContract.clubId !== contract.clubId;
   const action = entry?.kind === 'renewal' ? 'Extend' : 'Make offer';
   const shortlisted = career.shortlist?.includes(player.id) ?? false;
   const shortlistFull = (career.shortlist?.length ?? 0) >= NRL_SHORTLIST_LIMIT;
@@ -108,7 +110,10 @@ function PlayerRow({ player, entry, career, onAction, disabled, onShortlist }: {
             </p>
           )}
           {entry && entry.kind !== 'renewal' && <p className="text-sm text-muted-foreground">Asks {money(entry.askingSalary)} · Available {entry.startYear}</p>}
-          {futureContract && <p className="text-sm text-primary">Agreed through {futureContract.endYear} at {money(futureContract.salary)} per season</p>}
+          {futureContract && <p className="text-sm text-primary">{leaving ? <>
+            <span>Moving to {labelForClub(futureContract.startYear, futureContract.clubId)} in {futureContract.startYear}</span>
+            <span className="block text-muted-foreground">{money(futureContract.salary)} per season through {futureContract.endYear}</span>
+          </> : `Agreed through ${futureContract.endYear} at ${money(futureContract.salary)} per season`}</p>}
           {agreed && <p role="status" className="text-sm font-semibold text-primary">Contract agreed</p>}
         </div>
         {onShortlist ? (
@@ -135,6 +140,70 @@ function PlayerRow({ player, entry, career, onAction, disabled, onShortlist }: {
   );
 }
 
+function ContractTakeover({ career, onAction, disabled }: { career: NrlCareerState; onAction: Dispatch; disabled: boolean }) {
+  const [playerId, setPlayerId] = useState('');
+  const [destinationId, setDestinationId] = useState('');
+  const summary = useRef<HTMLElement>(null);
+  const { year, clubId } = career.season;
+  if (career.legacySeason || career.retired || year === NRL_LAST_YEAR) return null;
+  const candidates = nrlTakeoverPlayers(career);
+  const player = candidates.find(candidate => candidate.id === playerId);
+  const offers = player ? nrlTakeoverOffers(career, playerId) : [];
+  const quote = offers.find(offer => offer.clubId === destinationId);
+  const reset = () => {
+    setPlayerId('');
+    setDestinationId('');
+    summary.current?.focus();
+  };
+  return (
+    <details className="group mt-3 rounded-lg border border-border">
+      <summary ref={summary} className="flex min-h-11 cursor-pointer list-none items-center justify-between gap-2 px-3 py-2 text-sm font-semibold">
+        Arrange an offseason move<ChevronDown size={16} aria-hidden="true" className="shrink-0 group-open:rotate-180" />
+      </summary>
+      <div className="space-y-3 border-t border-border p-3 text-sm">
+        <p className="text-muted-foreground">Simulated offers depend on each club’s position needs and salary cap.</p>
+        {career.season.live ? <p className="text-muted-foreground">Finish the live match before arranging a move.</p>
+          : candidates.length === 0 ? <p className="text-muted-foreground">No player has a remaining deal available to move.</p> : (
+          <label className="block space-y-1 font-semibold">
+            <span>Player to move</span>
+            <select className={control} value={playerId} disabled={disabled} onChange={event => {
+              setPlayerId(event.target.value);
+              setDestinationId('');
+            }}>
+              <option value="">Choose a player</option>
+              {candidates.map(candidate => <option key={candidate.id} value={candidate.id}>{candidate.name} · {candidate.role}</option>)}
+            </select>
+          </label>
+        )}
+        {player && (offers.length ? (
+          <label className="block space-y-1 font-semibold">
+            <span>Receiving club</span>
+            <select className={control} value={destinationId} disabled={disabled} onChange={event => setDestinationId(event.target.value)}>
+              <option value="">Choose an interested club</option>
+              {offers.map(offer => <option key={offer.clubId} value={offer.clubId}>{labelForClub(offer.startYear, offer.clubId)}</option>)}
+            </select>
+          </label>
+        ) : <p className="text-muted-foreground">No club can take over this deal.</p>)}
+        {player && quote && (
+          <>
+            <div className="space-y-1 text-muted-foreground" role="status">
+              <p>{player.name} stays with {labelForClub(year, clubId)} for {year}.</p>
+              <p>{labelForClub(quote.startYear, quote.clubId)} will pay {money(quote.salary)} per season from {quote.startYear} through {quote.endYear}.</p>
+              <p>Adds {money(quote.salary - nrlCareerCap(career, quote.startYear).minimumSalary)} of {quote.startYear} cap space after reserving a roster place.</p>
+            </div>
+            <div className="flex flex-wrap gap-2">
+              <Button type="button" size="lg" variant="outline" className="px-4" onClick={reset}>Cancel move</Button>
+              <Button type="button" size="lg" className="px-4" disabled={disabled} onClick={() => {
+                if (onAction({ type: 'arrangeTakeover', year, clubId, playerId, destinationId })) reset();
+              }}>Confirm offseason move</Button>
+            </div>
+          </>
+        )}
+      </div>
+    </details>
+  );
+}
+
 function Contracts({ career, onAction, disabled }: { career: NrlCareerState; onAction: Dispatch; disabled: boolean }) {
   const squad = nrlCareerSquad(career);
   const offers = new Map(nrlCareerMarket(career).filter(entry => entry.kind === 'renewal').map(entry => [entry.player.id, entry]));
@@ -144,6 +213,7 @@ function Contracts({ career, onAction, disabled }: { career: NrlCareerState; onA
     <>
       <h2 className="font-display text-xl font-bold">Squad contracts</h2>
       <p className="mt-1 text-sm text-muted-foreground">{squad.length} players · {expiring} deals expire this season</p>
+      <ContractTakeover career={career} onAction={onAction} disabled={disabled} />
       <ul className="mt-3 divide-y divide-border">
         {squad.map(player => <PlayerRow key={player.id} player={player} entry={offers.get(player.id)} career={career} onAction={onAction} disabled={disabled} />)}
       </ul>
