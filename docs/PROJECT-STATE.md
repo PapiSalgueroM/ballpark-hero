@@ -1,3 +1,9 @@
+## 2026-11-12: Soccer Career Heat card explains owned items
+
+The Heat card now points to My Life and The other list when there is no owned processing capacity. It shows what the owned items can clear in the next playing season and warns about leftover Heat only when a balance remains. A 390px original replay confirmed that the old instruction was identical with no purchases and with all three items already owned.
+
+The four mounted regressions cover no items, partial capacity, full capacity and a cleared balance. Both save suites passed 66 cases. In 72 paired season simulations the full next save and all 44,959 random draws matched, including cooling, a penalty and seasons missed through a ban or prison.
+
 ## 2026-11-07: Club Manager historical roster counts live
 
 [PR #532](https://github.com/PapiSalgueroM/ballpark-hero/pull/532) published from main `c3b5ca4afaf9b4dadcd748f340e8e8e3e4a1a1dd`, App tree `133fcd3d26a4d237178e5c7efee723048da0aef2`, Lovable deployment `510b1df1-2172-42c0-90f9-d9f9c997b840`.

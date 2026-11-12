@@ -5350,6 +5350,17 @@ function endClubCaptaincy(s: CareerState, reason: "transfer" | "loan" | "handove
   else s.events.push(n >= 1 ? `©️ Retires as a club captain: ${n} season${n === 1 ? "" : "s"} with the ${club} armband` : "©️ Hands back the armband on the way out");
 }
 
+export const DIRTY_BALANCE_HEAT = 6;
+
+export function dirtyMoneySeasonPlan(balance: number, purchasedItems: readonly string[]): { washed: number; remaining: number } {
+  let capacity = 0;
+  if (purchasedItems.includes("shady_shell_carwash")) capacity += 2;
+  if (purchasedItems.includes("shady_nightclub")) capacity += 4;
+  if (purchasedItems.includes("shady_crypto_mixer")) capacity += 1.5;
+  const washed = Math.min(balance, capacity);
+  return { washed, remaining: washed > 0 ? Math.round((balance - washed) * 100) / 100 : balance };
+}
+
 export function advanceProSeason(prev: CareerState, clubs: ClubData[]): CareerState {
   if (readSoccerFarewell(prev) && (prev.retired || farewellSeasonComplete(prev))) return prev;
   const s = repairCareer({ ...prev }); s.age += 1; s.story = archiveSeasonStory(s); s.events = [];
@@ -5425,18 +5436,14 @@ export function advanceProSeason(prev: CareerState, clubs: ClubData[]): CareerSt
   // wants cooling, and investigators want promotions. ──
   const dirtyNow = s.dirtyMoney ?? 0;
   if (dirtyNow > 0) {
-    let washCapacity = 0;
-    if (s.purchasedItems.includes("shady_shell_carwash")) washCapacity += 2;
-    if (s.purchasedItems.includes("shady_nightclub")) washCapacity += 4;
-    if (s.purchasedItems.includes("shady_crypto_mixer")) washCapacity += 1.5;
-    if (washCapacity > 0) {
-      const washed = Math.min(dirtyNow, washCapacity);
-      s.dirtyMoney = Math.round((dirtyNow - washed) * 100) / 100;
+    const { washed, remaining } = dirtyMoneySeasonPlan(dirtyNow, s.purchasedItems);
+    if (washed > 0) {
+      s.dirtyMoney = remaining;
       s.netWorth = Math.round((s.netWorth + washed) * 100) / 100;
       s.events.push(`🧼 The businesses had a "great year": €${washed.toFixed(1)}M of quiet money is now clean.`);
     }
     if ((s.dirtyMoney ?? 0) > 0) {
-      s.corruptionHeat = clamp((s.corruptionHeat ?? 0) + 6, 0, 100);
+      s.corruptionHeat = clamp((s.corruptionHeat ?? 0) + DIRTY_BALANCE_HEAT, 0, 100);
       s.events.push(`💼 €${(s.dirtyMoney ?? 0).toFixed(1)}M still sits in the duffel bags. Money that loud attracts ears.`);
     }
   } else if ((s.corruptionHeat ?? 0) > 0) {
