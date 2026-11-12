@@ -8,6 +8,11 @@ import PageSeo from '@/components/seo/PageSeo';
 
 const ClubManagerHelp = lazy(() => import('@/components/club-manager/ClubManagerHelp'));
 
+/** Keep the guide below the fold while the stacked phone slots load. */
+export function ClubManagerStartup({ className, children }: { className: string; children: ReactNode }) {
+  return <div role="status" data-cm-startup className={`max-sm:min-h-svh text-center text-muted-foreground ${className}`}>{children}</div>;
+}
+
 export function ClubManagerFrame({ catalogue, children }: { catalogue: ReactNode; children: ReactNode }) {
   return (
     <>

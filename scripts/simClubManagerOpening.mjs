@@ -68,3 +68,22 @@ const deferred = Object.entries(outputs).filter(([file]) => !reachable.has(file)
 assert(deferred.some(([, output]) => Object.keys(output.inputs).some(input => input.endsWith('/useClubManager.ts'))));
 assert(deferred.some(([, output]) => Object.keys(output.inputs).some(input => input.endsWith('/ClubManagerClubList.tsx'))));
 console.log('Deferred graph: the existing career boot and canonical roster catalogue remain reachable.');
+
+const framePath = path.join(root, 'src/components/club-manager/ClubManagerFrame.tsx');
+const loadingHeight = 'max-sm:min-h-svh';
+let frame = fs.readFileSync(framePath, 'utf8');
+if (process.env.CM_OPENING_CONTROL === 'short-startup') {
+  assert(frame.includes(loadingHeight), 'the control needs a reserved loading height');
+  frame = frame.replace(loadingHeight, '');
+}
+const startupClass = frame.replace(/\/\*[\s\S]*?\*\//g, '')
+  .match(/return <div role="status" data-cm-startup className=\{([^}]+)\}/)?.[1];
+assert(startupClass?.includes(loadingHeight), 'saved startup reserves one viewport on single-column phones');
+const entrySource = fs.readFileSync(path.join(root, entry), 'utf8');
+const runtime = fs.readFileSync(path.join(root, 'src/pages/ClubManager.tsx'), 'utf8');
+assert.match(entrySource, /fallback=\{direct\s*\? <ClubManagerStartup\b[^>]*>Loading Club Manager/);
+assert.match(runtime, /return shell\(<ClubManagerStartup\b[^>]*>Loading…<\/ClubManagerStartup>\);/);
+assert.match(runtime, /<Suspense fallback=\{<ClubManagerStartup\b[^>]*>Loading screen\.\.\.<\/ClubManagerStartup>\}>\s*<ManagerSlotsScreen\b/);
+assert.equal([...entrySource.matchAll(/<ClubManagerStartup\b/g)].length, 1);
+assert.equal([...runtime.matchAll(/<ClubManagerStartup\b/g)].length, 2);
+console.log('Startup layout: only direct entry, generic boot and manager-slot loading reserve the mobile viewport.');

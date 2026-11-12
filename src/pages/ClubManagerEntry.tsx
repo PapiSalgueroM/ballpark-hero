@@ -1,6 +1,6 @@
 import { lazy, Suspense, useState } from 'react';
 import { ClubManagerEraPicker, ClubManagerPickerHeading } from '@/components/club-manager/ClubManagerEraPicker';
-import { ClubManagerFrame } from '@/components/club-manager/ClubManagerFrame';
+import { ClubManagerFrame, ClubManagerStartup } from '@/components/club-manager/ClubManagerFrame';
 import { hasClubManagerBootData } from '@/lib/clubManagerOpening';
 
 const ClubManagerContents = lazy(() => import('./ClubManager').then(m => ({ default: m.ClubManagerContents })));
@@ -31,7 +31,7 @@ export default function ClubManagerEntry() {
     )}>
       {openCareer ? (
         <Suspense fallback={direct
-          ? <div role="status" className="py-24 text-center text-muted-foreground">Loading Club Manager...</div>
+          ? <ClubManagerStartup className="py-24">Loading Club Manager...</ClubManagerStartup>
           : picker}>
           <ClubManagerContents initialEra={pickedEra} />
         </Suspense>
