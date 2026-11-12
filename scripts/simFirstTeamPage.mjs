@@ -15,11 +15,11 @@ const page = 'src/pages/StadiumTycoon.tsx';
 const lib = 'src/lib/wonderkidFactory.ts';
 const controls = [
   { name: 'nosave', file: hook, env: 'TYCOON_LOADS_ACADEMY_HOOK',
-    from: 'try { localStorage.setItem(SAVE_KEY, serialize(next)); } catch {\n      setAcademySaveBlocked(true);',
-    to: 'try { void next; } catch {\n      setAcademySaveBlocked(true);', red: [1, 2, 3] },
+    from: "const result = writeAcademy(next);\n    if (result !== 'written') {\n      if (result === 'failed') setAcademySaveBlocked(true);",
+    to: "const result = 'written';\n    if (result !== 'written') {\n      if (result === 'failed') setAcademySaveBlocked(true);", red: [1, 2, 3] },
   { name: 'failopen', file: hook, env: 'TYCOON_LOADS_ACADEMY_HOOK',
-    from: 'setAcademySaveBlocked(true);\n      return false;',
-    to: 'setAcademySaveBlocked(true);', red: [2] },
+    from: "if (result === 'failed') setAcademySaveBlocked(true);\n      return false;",
+    to: "if (result === 'moved') return false;\n      if (result === 'failed') setAcademySaveBlocked(true);", red: [2] },
   { name: 'dropteam', file: lib, env: 'TYCOON_LOADS_ACADEMY_LIB',
     from: 'firstTeam: s.firstTeam,', to: 'firstTeam: undefined,', red: [3] },
   { name: 'stoppedclock', file: page, env: 'TYCOON_ROOMS_PAGE',
