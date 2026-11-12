@@ -1,3 +1,7 @@
+## 2026-11-11: NBA Front Office manual trade salaries
+
+Manual talks now check both teams' salary rules before opening an offer. A blocked row tells you why, and a counter can only name a player who fits both payrolls. The Denver fixtures cover both an unaffordable direct offer and a counter that now lands a cap-legal player.
+
 ## 2026-11-07: Club Manager historical roster counts live
 
 [PR #532](https://github.com/PapiSalgueroM/ballpark-hero/pull/532) published from main `c3b5ca4afaf9b4dadcd748f340e8e8e3e4a1a1dd`, App tree `133fcd3d26a4d237178e5c7efee723048da0aef2`, Lovable deployment `510b1df1-2172-42c0-90f9-d9f9c997b840`.

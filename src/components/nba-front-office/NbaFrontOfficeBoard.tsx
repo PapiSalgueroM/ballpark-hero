@@ -10,7 +10,7 @@ import { NBA_TEAMS, NBA_TEAM_MAP } from '@/data/conquestDataNba';
 import {
   initNbaLeague, simRound, nbaStandings, runNbaPlayoffs, nbaOffseason,
   nbaDraftClass, nbaProspectToPlayer, nbaStrength, nbaCapUsed, nbaCapRoom,
-  nbaRelease, nbaSign, nbaTrade, nbaTradeValue, EAST,
+  nbaRelease, nbaSign, nbaTrade, nbaTradeValue, nbaSalaryFits, EAST,
   NBA_ROUNDS,
   type NbaLeague, type NbaGmPlayer, type NbaProspect, type SeriesResult, nbaExecuteTalksTrade,
   ensureNbaLeagueIds, NBA_ROSTER_MIN, NBA_ROSTER_MAX,
@@ -737,6 +737,13 @@ export default function NbaFrontOfficeBoard() {
       setLeague(lg); persist({}, lg, myTeam);
     }
   };
+  const talksSalariesFit = (partner: string, mine: NbaGmPlayer, want: NbaGmPlayer): boolean => {
+    if (!league) return false;
+    const { teams, cap, taxScale } = league;
+    return nbaSalaryFits(teams[myTeam], mine, want, cap, taxScale)
+      && nbaSalaryFits(teams[partner], want, mine, cap, taxScale);
+  };
+
   /* Round 190: the direct deal is a phone call now. The instant verdict
      that lived here is exactly the three-button haggle the owner banned
      from Club Manager, so the same negotiation engine answers instead. */
@@ -746,9 +753,9 @@ export default function NbaFrontOfficeBoard() {
     const their = league.teams[partner];
     const mine = mySide.players.find(p => p.id === myPieceId);
     const want = their.players.find(p => p.id === wantId);
-    if (!mine || !want) return null;
+    if (!mine || !want || !talksSalariesFit(partner, mine, want)) return null;
     return {
-      mine, want, theirRoster: their.players,
+      mine, want, theirRoster: their.players.filter(p => talksSalariesFit(partner, mine, p)),
       myPickCount: mySide.picks.length, pickValue: 12, value: nbaTradeValue,
       theirCoverAtMyPos: their.players.filter(p => p.pos === mine.pos && p.ovr >= mine.ovr - 2).length,
       openPremium: 1.07,
@@ -1224,6 +1231,7 @@ export default function NbaFrontOfficeBoard() {
   const tipPayroll = nbaTipOffPayroll(my, league.cap);
   const tipTax = view.pending ? null : nbaTaxBill(tipPayroll, league.cap, view.repeater, league.taxScale);
   const apronNote = nbaApronNote(my, league.cap, league.taxScale);
+  const sending = my.players.find(p => p.id === myTradePiece);
   const panelTitle = tiles.find(x => (x.key === 'play' ? 'round' : x.key) === tab)?.title ?? '';
 
   return (
@@ -1460,15 +1468,16 @@ export default function NbaFrontOfficeBoard() {
                   <p className="text-center text-[10px] font-bold uppercase text-muted-foreground">You get ({tradePartner})</p>
                   {[...league.teams[tradePartner].players].sort((a, b) => b.ovr - a.ovr).map(p => {
                     /* Round 631: the trade paths refuse a man you let go this season, so the screen says so. */
-                    const back = tradeRefusal(my, p.id, CUT_SAID);
+                    const blocked = tradeRefusal(my, p.id, CUT_SAID)
+                      ?? (sending && !talksSalariesFit(tradePartner, sending, p) ? 'Those salaries do not fit the cap rules.' : null);
                     return (
                     <div key={p.id} data-trade-row={p.id} className="flex items-center justify-between gap-1 rounded-lg border border-border/60 bg-background px-2 py-1 text-[11px]">
                       <span className="min-w-0">
                         <span className="block truncate text-foreground">{p.name} ({p.pos}) <b className="text-primary">{p.ovr}{ratingMarker(p)}</b></span>
                         {ratingNote(p)}
-                        {back && <span className="block text-[9px] text-destructive">{back}</span>}
+                        {blocked && <span className="block text-[9px] text-destructive">{blocked}</span>}
                       </span>
-                      <button onClick={() => openTradeTalks(p.id)} disabled={!myTradePiece || !!back} title={back ?? undefined} className="shrink-0 rounded-full bg-primary px-2.5 py-0.5 text-[9px] font-bold text-primary-foreground disabled:opacity-40">Open talks</button>
+                      <button onClick={() => openTradeTalks(p.id)} disabled={!myTradePiece || !!blocked} title={blocked ?? undefined} className="shrink-0 rounded-full bg-primary px-2.5 py-0.5 text-[9px] font-bold text-primary-foreground disabled:opacity-40">Open talks</button>
                     </div>
                     );
                   })}
