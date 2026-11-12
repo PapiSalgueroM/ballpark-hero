@@ -1,3 +1,11 @@
+## 2026-11-12: NRL Manager squad availability
+
+New NRL careers record simulated match knocks for the players who took part. The Squad screen shows one to four rounds out, including byes. Fit players cover vacated starting and interchange places. Natural replacements take priority, and utility cover plays below its normal rating until a natural player is available.
+
+The 390px Bulldogs fixture kept a four-round injury and the replacement through an exact save reload, then counted three rounds remaining after a bye. The 320px utility fixture kept 19 eligible selections. Paired runs across 96 existing v1 and v2 seasons held the same career state over 2,976 round actions and 21,024 results. Existing saves pick up availability on rollover.
+
+App types, production build, 31 focused tests, the NRL browser suite, all 15 built-site readers and all 16 download caps passed.
+
 ## 2026-11-11 Soccer Career creation download
 
 This draft builds on PR #675. The fresh creation screen skips the historical club squad archive. Existing club offers, the transfer verdict and the senior Squad tile load the same recorded data when shown. The Squad tile holds its space while loading.

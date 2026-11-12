@@ -41,6 +41,10 @@ describe('NRL Manager squad availability', () => {
   it('records a deterministic knock and names an eligible natural replacement', () => {
     const { state, next, injured, match } = injuryStart();
     expect(advance(state)).toEqual(next);
+    const { injuryTracking, ...oldSeason } = state.season;
+    const uninjuredModel = advance({ ...state, season: oldSeason });
+    expect(next.season.results.map(({ injury, ...result }) => result)).toEqual(uninjuredModel.season.results);
+    expect(next.season.squad).toEqual(uninjuredModel.season.squad);
     expect(nrlInjuries(next.season).get(injured.id)).toBe(match.injury!.rounds);
     const replacementId = next.season.lineup[injured.role];
     expect(replacementId).not.toBe(injured.id);
