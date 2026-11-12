@@ -1,3 +1,9 @@
+## 2026-11-12 Front Office manual trade recovery
+
+In NFL, NBA, MLB and NHL Front Office, an open negotiation closes when a roster move takes away a player it needs. Manual trade choices return immediately. A visit to the Hub or an unrelated roster move keeps a valid negotiation open.
+
+A phone replay reproduced the NFL lockout after a confirmed cut. Mounted checks covered NBA and NHL waivers, an MLB DFA, and an NFL Finder trade that moved the wanted player. The checks kept the saved roster moves and existing roster limits, opened new talks without a reload, and completed an agreed NFL trade after an unrelated cut.
+
 ## 2026-11-12: NRL Manager Board challenge
 
 Choose Board challenge when starting a career to put your job on the line. The first missed ladder target warns you. Two consecutive completed misses at the same club require an offseason move. A premiership clears the warning even when the regular-season target was missed. The next club uses its own squad, contracts, cash and medical facilities.
