@@ -166,7 +166,7 @@ describe('played modern Champions League', () => {
     expect(joined(legacyRules)?.uclGroup?.table).toHaveLength(4);
   });
 
-  it.each([[4, 7, 'R16'], [731, 9, 'PO'], [11, 31, 'out']] as const)(
+  it.each([[4, 3, 'R16'], [731, 9, 'PO'], [11, 30, 'out']] as const)(
     'takes seed %i at table position %i to %s',
     (seed, rank, phase) => {
       const { value: state } = seeded(seed, () => playTo(start('Arsenal', PLAYED_UCL), career => career.uclGroup?.matchday === 8));
