@@ -136,10 +136,13 @@ export function OverviewIntro({ summerBudget, retired, freeRetired, freeLeft, de
 }) {
   const budgetRows: [string, string][] = [];
   if (summerBudget) {
-    const { unspent, allocation, carried, adjustments, opening, format } = summerBudget;
+    const { unspent, allocation, usualAllocation, carried, adjustments, opening, format } = summerBudget;
+    budgetRows.push(['Unspent balance', format(unspent)]);
+    if (usualAllocation !== undefined && usualAllocation !== allocation) {
+      budgetRows.push(['Usual board allocation', format(usualAllocation)]);
+    }
     budgetRows.push(
-      ['Unspent balance', format(unspent)],
-      ['Board allocation', format(allocation)],
+      [usualAllocation === undefined ? 'Board allocation' : 'Board top-up', format(allocation)],
       ['Carried over', format(carried)],
     );
     if (unspent > carried) budgetRows.push(['Above carryover cap', format(unspent - carried)]);
@@ -157,7 +160,11 @@ export function OverviewIntro({ summerBudget, retired, freeRetired, freeLeft, de
                   </div>
                 ))}
               </dl>
-              <p className="mt-1 text-xs text-muted-foreground">You can carry over up to your new board allocation.</p>
+              <p className="mt-1 text-xs text-muted-foreground">
+                {summerBudget?.usualAllocation === undefined
+                  ? 'This summer carried over up to the board allocation.'
+                  : 'You kept all unused transfer funds. The board can reduce its payment when you have money left in the bank.'}
+              </p>
             </section>
           )}
           {/* Round 132: who stopped playing over the summer. It sits at the top
