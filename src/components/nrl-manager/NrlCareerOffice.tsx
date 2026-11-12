@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { nrlSeasonPlan, NRL_LAST_YEAR } from '@/data/nrlManagerSeasons';
 import {
   nrlAcademyAvailableRoles, nrlAcademyOffer, nrlAcademyReports, nrlCareerCap, nrlCareerFinance, nrlCareerMarket, nrlCareerSquad, nrlContractOffer,
-  nrlCoachQuote, nrlCoachSpend, nrlDevelopmentPreview, nrlMedicalSpend, nrlMedicalUpgradeQuote, type NrlCareerAction, type NrlCareerState,
+  nrlCoachQuote, nrlCoachSpend, nrlDevelopmentPreview, nrlMedicalSpend, nrlMedicalUpgradeQuote, nrlOffseasonClubs, type NrlCareerAction, type NrlCareerState,
   type NrlDevelopmentFocus, type NrlMedicalLevel,
 } from '@/lib/nrlCareer';
 import { NRL_COACHING_BONUS, NRL_ROLES, type NrlCoachRole, type NrlRole } from '@/lib/nrlManager';
@@ -372,10 +372,13 @@ function DevelopmentFocus({ career, onAction, disabled }: { career: NrlCareerSta
 }
 
 function History({ career, onAction, disabled }: { career: NrlCareerState; onAction: Dispatch; disabled: boolean }) {
-  const { year, phase } = career.season;
+  const { year, phase, clubId } = career.season;
   const finished = phase === 'complete';
   const target = nrlBoardTarget(career);
-  const pastPlaces = new Map(career.history.map(record => [record.year, record.rank]));
+  const pastPlaces = new Map(career.history.map(record => [`${record.clubId}:${record.year}`, record.rank]));
+  const [nextClubId, setNextClubId] = useState('');
+  const clubs = nrlOffseasonClubs(career);
+  const nextClub = clubs.find(club => club.id === nextClubId);
   return (
     <>
       <h2 className="font-display text-xl font-bold">Season review</h2>
@@ -392,11 +395,35 @@ function History({ career, onAction, disabled }: { career: NrlCareerState; onAct
                 : `Target ${target.result} · Final ladder place ${target.place}`}
           </p>
           <p className="mt-1 text-xs text-muted-foreground">
-            Based on the club’s modeled rating{pastPlaces.has(year - 1) ? ' and last season’s finish.' : '.'}
+            Based on the club’s modeled rating{pastPlaces.has(`${clubId}:${year - 1}`) ? ' and last season’s finish.' : '.'}
           </p>
         </section>
       )}
       {!career.legacySeason && year < NRL_LAST_YEAR && <DevelopmentFocus career={career} onAction={onAction} disabled={disabled} />}
+      {finished && year < NRL_LAST_YEAR && (
+        <Button type="button" size="lg" className="mt-3 w-full" disabled={disabled} onClick={() => onAction({ type: 'startNextSeason' })}>
+          Start {year + 1}<ArrowRight aria-hidden="true" />
+        </Button>
+      )}
+      {clubs.length > 0 && (
+        <details className="group mt-3 rounded-xl border border-border bg-background px-3">
+          <summary className="flex min-h-11 cursor-pointer items-center justify-between gap-2 rounded-md text-sm font-bold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
+            Change clubs for {year + 1}<ChevronDown size={16} aria-hidden="true" className="shrink-0 group-open:rotate-180" />
+          </summary>
+          <div className="space-y-2 pb-3 text-sm">
+            <p className="text-muted-foreground">Take over the new club’s squad and contracts. If you return to a club, you resume its last balance and medical facilities.</p>
+            <label className="block font-semibold" htmlFor="nrl-next-club">Club to manage</label>
+            <select id="nrl-next-club" className={control} value={nextClubId} disabled={disabled} onChange={event => setNextClubId(event.target.value)}>
+              <option value="">Choose a club</option>
+              {clubs.map(club => <option key={club.id} value={club.id}>{club.name}</option>)}
+            </select>
+            {nextClub && <Button type="button" size="lg" variant="outline" className="w-full px-2" disabled={disabled}
+              onClick={() => onAction({ type: 'startNextSeason', move: { fromYear: year, clubId: nextClub.id } })}>
+              Start {year + 1} with {nextClub.shortName}
+            </Button>}
+          </div>
+        </details>
+      )}
       {career.history.length > 0 ? (
         <ul className="mt-3 divide-y divide-border">
           {[...career.history].reverse().map(record => {
@@ -405,7 +432,8 @@ function History({ career, onAction, disabled }: { career: NrlCareerState; onAct
             const points = leaders[0];
             const coach = record.finance?.coachHire;
             const staffSpend = record.finance ? nrlCoachSpend(record.finance) : null;
-            const benchmark = record.year === year ? null : nrlBoardBenchmark(record.year, record.clubId, pastPlaces.get(record.year - 1));
+            const benchmark = record.year === year ? null
+              : nrlBoardBenchmark(record.year, record.clubId, pastPlaces.get(`${record.clubId}:${record.year - 1}`));
             return (
               <li key={record.year} className="space-y-1 py-3">
                 <p className="font-bold">{record.year} {labelForClub(record.year, record.clubId)}</p>
@@ -428,11 +456,6 @@ function History({ career, onAction, disabled }: { career: NrlCareerState; onAct
           })}
         </ul>
       ) : <p className="mt-3 text-sm text-muted-foreground">Your first season is in progress.</p>}
-      {finished && year < NRL_LAST_YEAR && (
-        <Button type="button" size="lg" className="mt-3 w-full" disabled={disabled} onClick={() => onAction({ type: 'startNextSeason' })}>
-          Start {year + 1}<ArrowRight aria-hidden="true" />
-        </Button>
-      )}
     </>
   );
 }

@@ -495,13 +495,71 @@ try {
   assert.equal(await save(restored), JSON.stringify(old));
   await restored.getByRole('button', { name: 'Season review', exact: true }).click();
   assert.equal(await development(restored).count(), 0);
-  await restored.getByRole('button', { name: 'Start 2028' }).click();
+  await restored.getByText('Change clubs for 2028', { exact: true }).tap();
+  await restored.getByLabel('Club to manage').selectOption('chiefs');
+  await restored.getByRole('button', { name: 'Start 2028 with Chiefs', exact: true }).waitFor();
+  assert.equal(await save(restored), JSON.stringify(old));
+  await restored.getByRole('button', { name: 'Start 2028', exact: true }).click();
   assert.equal((await career(restored)).season.year, 2028);
+  assert.equal((await career(restored)).season.clubId, 'bears');
   assert.equal((await career(restored)).history[0].finance, null);
   assert.equal((await career(restored)).finance.coachHire, undefined);
   assert.deepEqual(restoredErrors, []);
   await oldContext.close();
   console.log('A completed v1 save reopened without invented accounts and advanced to 2028.');
+
+  let offseason = reduceNrlCareer(createNrlCareer('storm', 13), { type: 'upgradeMedical', level: 2 });
+  while (offseason.season.phase !== 'complete') offseason = reduceNrlCareer(offseason, { type: 'advance' });
+  const jobs = await context(320);
+  await jobs.addInitScript(({ key, raw }) => {
+    if (!localStorage.getItem(key)) localStorage.setItem(key, raw);
+    // Let both old controls stay enabled until their write-time fence check.
+    const hold = event => event.stopImmediatePropagation();
+    window.addEventListener('storage', event => {
+      if (event.key === `dukb-fence:${key}`) hold(event);
+    }, { capture: true });
+    window.addEventListener('pageshow', hold, { capture: true });
+    document.addEventListener('visibilitychange', hold, { capture: true });
+  }, { key: SAVE_KEY, raw: JSON.stringify(offseason) });
+  const { page: chosen, errors: chosenErrors } = await open(jobs);
+  const { page: stale, errors: staleErrors } = await open(jobs);
+  for (const page of [chosen, stale]) {
+    await page.getByRole('button', { name: 'Review this season' }).tap();
+    assert.equal(await page.getByLabel('Club to manage').isVisible(), false);
+    await page.getByText('Change clubs for 2027', { exact: true }).tap();
+    assert.equal(await page.getByLabel('Club to manage').locator('option[value="chiefs"], option[value="storm"]').count(), 0);
+  }
+  await chosen.getByLabel('Club to manage').selectOption('bears');
+  await stale.getByLabel('Club to manage').selectOption('roosters');
+  const chosenButton = chosen.getByRole('button', { name: 'Start 2027 with Bears', exact: true });
+  const staleButton = stale.getByRole('button', { name: 'Start 2027 with Roosters', exact: true });
+  assert.equal(await save(chosen), JSON.stringify(offseason));
+  const generation = Number(await fence(chosen));
+  await fit(chosen);
+  await screenshot(chosen, 'nrl-offseason-club-320.png');
+  await chosenButton.tap();
+  const changed = await career(chosen);
+  assert.equal(changed.season.clubId, 'bears');
+  assert.equal(changed.season.year, 2027);
+  assert.equal(changed.season.round, 1);
+  assert.deepEqual(changed.history, offseason.history);
+  assert.equal(changed.finance.openingCash, 2_500_000);
+  const movedBytes = await save(chosen);
+  assert.equal(Number(await fence(chosen)), generation + 1);
+  assert.equal(await staleButton.isEnabled(), true);
+  await staleButton.evaluate(button => button.click());
+  await stale.getByRole('button', { name: 'Reload your season' }).waitFor();
+  assert.equal(await save(stale), movedBytes);
+  assert.equal(Number(await fence(stale)), generation + 1);
+  await reloadMoved(stale);
+  await stale.getByText('Bears · 2027 season', { exact: true }).waitFor();
+  assert.equal(await save(stale), movedBytes);
+  await openFinances(stale);
+  assert.match(await medicalLevel(stale).innerText(), /Level 1 of 3/);
+  await fit(stale);
+  assert.deepEqual([...chosenErrors, ...staleErrors], []);
+  await jobs.close();
+  console.log('Offseason jobs at 320px: Perth opens in 2027, each club keeps its books, and a stale competing move cannot overwrite the save.');
 
   const desktop = await context(1440);
   const { page, errors } = await open(desktop);
