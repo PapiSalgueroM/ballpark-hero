@@ -135,8 +135,8 @@ export function useStadiumTycoon(getEdge?: () => number) {
       return true;
     } catch { return false; }
   }, [checkSaveMoved]);
-  const saveTicketState = useCallback((next: TycoonState) => {
-    const saved = writeState(next);
+  const saveTicketState = useCallback((next: TycoonState, now = Date.now()) => {
+    const saved = writeState(next, now);
     setTicketSaveFailed(!saved);
     return saved;
   }, [writeState]);
@@ -369,7 +369,12 @@ export function useStadiumTycoon(getEdge?: () => number) {
     };
     raf = requestAnimationFrame(step);
     const saveNow = () => {
-      saveTicketState(stateRef.current);
+      const now = Date.now();
+      // A hidden tab can close before its away time has been settled.
+      const savedAt = document.visibilityState === 'hidden'
+        ? Math.min(now, Math.floor(paidUntilRef.current))
+        : now;
+      saveTicketState(stateRef.current, savedAt);
     };
     /* Round 439: hiding banks the save, coming back settles the hours. The
        frame clock restarts on the way back in so the return frame pays for
@@ -479,6 +484,7 @@ export function useStadiumTycoon(getEdge?: () => number) {
     const next = prestige(stateRef.current, now);
     if (next === stateRef.current) return false;
     if (!writeState(next, now)) return false;
+    paidUntilRef.current = now;
     stateRef.current = next;
     setState(next);
     return true;
