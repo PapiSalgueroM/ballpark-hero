@@ -1,16 +1,54 @@
+import { lazy, Suspense, useRef, useState } from 'react';
 import { GameNavbar } from '@/components/game/GameNavbar';
 import { GameHelp } from '@/components/game/GameHelp';
-import { nbaHallHelpRules } from '@/lib/nbaCareerHall';
+import { nbaHallHelpRules } from '@/lib/nbaCareerHallRules';
 import { nbaAwardHelpRules } from '@/lib/nbaCareerAwards';
 import { US_BANK_HELP_RULE } from '@/lib/usCareerBank';
 import { US_COACH_RETIRE_HELP_RULE } from '@/lib/usCoachRetirement';
 import { US_DIRTY_MONEY_HELP_RULE } from '@/lib/careerDirtyMoney';
 import { US_SHOP_HELP_RULE } from '@/lib/usCareerAnnualBenefits';
-import { nbaIntlHelpRules } from '@/lib/nbaCareerIntlGate';
-import NbaMyCareerBoard from '@/components/nba-my-career/NbaMyCareerBoard';
+import { nbaIntlHelpRules } from '@/lib/nbaCareerIntlRules';
+import UsCareerCreator, { emptyUsCareerDraft } from '@/components/us-career/UsCareerCreator';
+import type { UsCareerStart } from '@/components/us-career/UsCareerBoard';
+import { NBA_CAREER_CREATE, NBA_CAREER_SAVE_KEY } from '@/lib/nbaCareerCreation';
+import { hallWallKey } from '@/lib/usCareerHallWallKey';
 import { GameNav } from '@/components/game/GameNav';
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
+
+const loadBoard = () => import('@/components/nba-my-career/NbaMyCareerBoard');
+const SavedBoard = lazy(loadBoard);
+
+function NbaCareerEntry() {
+  const [saved] = useState(() => {
+    try { return !!(localStorage.getItem(NBA_CAREER_SAVE_KEY) || localStorage.getItem(hallWallKey('nba'))); }
+    catch { return false; }
+  });
+  const [draft, setDraft] = useState(() => emptyUsCareerDraft(NBA_CAREER_CREATE));
+  const [opened, setOpened] = useState<{ Board: Awaited<ReturnType<typeof loadBoard>>['default']; entry: UsCareerStart } | null>(null);
+  const loading = useRef(false);
+  const [status, setStatus] = useState<'loading' | 'error' | null>(null);
+
+  if (saved) return <Suspense fallback={<p role="status" className="text-sm text-muted-foreground">Opening your career…</p>}><SavedBoard /></Suspense>;
+  if (opened) return <opened.Board entry={opened.entry} />;
+
+  const start = (mode: UsCareerStart['mode']) => {
+    if (loading.current) return;
+    loading.current = true;
+    setStatus('loading');
+    loadBoard().then(({ default: Board }) => {
+      setOpened({ Board, entry: { draft, mode } });
+    }).catch(() => {
+      loading.current = false;
+      setStatus('error');
+    });
+  };
+
+  return <UsCareerCreator sport="nba" create={NBA_CAREER_CREATE} draft={draft} setDraft={setDraft}
+    onBeginProspect={() => start('prospect')} onEnterDraft={() => start('draft')}
+    pending={status === 'loading'}
+    draftStatus={status === 'loading' ? 'Opening the draft…' : status === 'error' ? 'The draft could not load. Try again.' : undefined} />;
+}
 
 const NbaMyCareer = () => {
   return (
@@ -30,7 +68,7 @@ const NbaMyCareer = () => {
               Draft night to jersey retirement. Every summer bends the career.
             </p>
           </div>
-          <NbaMyCareerBoard />
+          <NbaCareerEntry />
           <GameSeoContent
           pageHasOwnH1
             title="NBA My Career: the Player Life Sim"

@@ -1,4 +1,5 @@
 import { lazy } from 'react';
+import { NBA_CAREER_CREATE, NBA_CAREER_SAVE_KEY } from './nbaCareerCreation';
 import { nbaPreDraftDescriptor } from '@/lib/nbaCareerPreDraft';
 /**
  * Round 900: the NBA's binding for the one US career board.
@@ -9,7 +10,7 @@ import { nbaPreDraftDescriptor } from '@/lib/nbaCareerPreDraft';
  * this file is the only place the NBA route reaches the NBA engine from.
  */
 import {
-  NBA_ERAS, NBA_ARCHETYPES, startNbaCareer, simNbaSeason, nbaProgress, drawNbaEvent,
+  startNbaCareer, simNbaSeason, nbaProgress, drawNbaEvent,
   nbaEventDeck,
   NBA_SPEND_ITEMS, buyNbaItem, getNbaSpendItem,
   nbaShouldRetire, nbaLegacyOf, nbaCareerTotals, nbaRollTeamQuality, nbaTeamLabelOf,
@@ -35,7 +36,7 @@ import { usSeasonHeldLine } from '@/data/usSeasonLengths';
 /* The key this career saves under. It stays a named constant so the home
    page's Continue fence (simHomeFront section 7) can find where every save
    key in src is declared; the value is the one the old board used. */
-const SAVE_KEY = 'nba-my-career-save-v1';
+const SAVE_KEY = NBA_CAREER_SAVE_KEY;
 const NbaHistoricalDraftPanel = lazy(() => import('@/components/nba-my-career/NbaHistoricalDraftClass'));
 /** The awards the Trophy Case tile already counts in a row of their own (the honours below). */
 const NBA_TILE_NAMED = ['MVP', 'All-NBA', 'All-Star'];
@@ -52,17 +53,7 @@ export const NBA_CAREER_SPORT: UsCareerSport<NbaCareerState, NbaSeasonLine> = wi
   loadTraining: pos => import('@/lib/nbaCareerTraining').then(m => m.nbaTraining(pos as NbaCareerPos)),
   /* The NBA drafts 30 in round one. */
   firstRoundEnd: 30,
-  create: {
-    defaultName: 'Trey Buckets',
-    defaultPos: 'PG',
-    positions: ['PG', 'SG', 'SF', 'PF', 'C'],
-    positionGridClass: 'grid grid-cols-5 gap-1 rounded-2xl bg-secondary p-1',
-    positionButtonClass: 'rounded-xl px-1 py-1.5 text-sm font-bold transition-all',
-    eras: NBA_ERAS,
-    eraEmoji: '🏀',
-    clubColor: '#F97316',
-    archetypes: NBA_ARCHETYPES,
-  },
+  create: NBA_CAREER_CREATE,
 
   preDraft: nbaPreDraftDescriptor,
   historicalDraft: {

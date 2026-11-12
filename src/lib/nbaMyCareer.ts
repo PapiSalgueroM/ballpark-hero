@@ -1,5 +1,7 @@
 import type { CareerDraftEntry, PreDraftState } from './careerPreDraft';
 import { formatNumber } from './formatNumber';
+import { NBA_ARCHETYPES, NBA_CAREER_ERAS } from './nbaCareerCreation';
+export { NBA_ARCHETYPES } from './nbaCareerCreation';
 /**
  * NBA My Career engine (2026-08-05). Basketball sibling of nflMyCareer.ts:
  * a fictional prospect living a whole career inside the real 30-team
@@ -53,8 +55,10 @@ import { applyUsCareerAnnualBenefits } from './usCareerAnnualBenefits';
 import { settleUsCareerShop, usCareerSeasonCool } from './usCareerAnnualBenefits';
 import { bankUsCareerFee, usCareerSkillSummer } from './usCareerAnnualBenefits';
 import { careerRecoveryRisk } from './usCareerRecovery';
-import { hallCalibrationOf, legacyRead, LEGACY_GAME_RULES, type HallCalibration, type LegacyRead, type LegacyStandout, type LegacyWeights } from './careerHallOfFame';
+import { hallCalibrationOf, legacyRead, LEGACY_GAME_RULES, type LegacyRead, type LegacyStandout, type LegacyWeights } from './careerHallOfFame';
 import { moraleForm } from './careerForm';
+import { NBA_LEGACY_V2, NBA_LEGACY_WEIGHTS } from './nbaCareerHallRules';
+export { NBA_LEGACY_NEW_LINE_SCALE, NBA_LEGACY_WEIGHTS } from './nbaCareerHallRules';
 /* Round 422: the share of gross pay that actually reaches the bank, after tax,
    agent and living. It was already the number this file used to turn career
    earnings into net worth; it is named here so the yearly banking and the
@@ -78,34 +82,6 @@ export interface NbaArchetype {
   playmaking: number;
   rebounding: number;
 }
-
-export const NBA_ARCHETYPES: Record<NbaCareerPos, NbaArchetype[]> = {
-  PG: [
-    { id: 'pointgod', label: 'Point God', desc: 'The offense runs through you', ovrBoost: 1, potBoost: 5, durability: 0.95, scoring: 0.85, playmaking: 1.55, rebounding: 0.55 },
-    { id: 'scoringpg', label: 'Scoring Lead', desc: 'A point guard who hunts buckets', ovrBoost: 3, potBoost: 4, durability: 0.9, scoring: 1.3, playmaking: 1.05, rebounding: 0.55 },
-    { id: 'pest', label: 'The Pest', desc: 'Picks pockets, gets under skin', ovrBoost: 2, potBoost: 4, durability: 1.0, scoring: 0.95, playmaking: 1.15, rebounding: 0.6 },
-  ],
-  SG: [
-    { id: 'bucket', label: 'Bucket Getter', desc: 'Shot creation from anywhere', ovrBoost: 3, potBoost: 4, durability: 0.9, scoring: 1.35, playmaking: 0.8, rebounding: 0.6 },
-    { id: 'sniper', label: 'Movement Sniper', desc: 'Never stops running off screens', ovrBoost: 1, potBoost: 5, durability: 0.95, scoring: 1.15, playmaking: 0.65, rebounding: 0.6 },
-    { id: 'twoway', label: 'Two-Way Menace', desc: 'Guards the best perimeter player alive', ovrBoost: 2, potBoost: 4, durability: 1.0, scoring: 1.0, playmaking: 0.85, rebounding: 0.75 },
-  ],
-  SF: [
-    { id: 'alpha', label: 'Alpha Wing', desc: 'Face of the franchise scorer', ovrBoost: 3, potBoost: 4, durability: 0.9, scoring: 1.25, playmaking: 0.95, rebounding: 0.9 },
-    { id: 'threed', label: '3-and-D Wing', desc: 'Corner threes and lockdowns', ovrBoost: 1, potBoost: 4, durability: 1.0, scoring: 0.85, playmaking: 0.7, rebounding: 0.9 },
-    { id: 'pointforward', label: 'Point Forward', desc: 'Jumbo playmaker', ovrBoost: 2, potBoost: 5, durability: 0.9, scoring: 1.0, playmaking: 1.3, rebounding: 1.0 },
-  ],
-  PF: [
-    { id: 'stretch4', label: 'Stretch Four', desc: 'Spaces the floor, switches everything', ovrBoost: 2, potBoost: 4, durability: 0.95, scoring: 1.05, playmaking: 0.7, rebounding: 1.15 },
-    { id: 'bruiser', label: 'Bruiser', desc: 'Offensive boards and bad intentions', ovrBoost: 3, potBoost: 3, durability: 0.85, scoring: 0.95, playmaking: 0.6, rebounding: 1.4 },
-    { id: 'swiss', label: 'Swiss Army Four', desc: 'Does a bit of everything, nightly', ovrBoost: 1, potBoost: 5, durability: 0.95, scoring: 1.0, playmaking: 1.0, rebounding: 1.15 },
-  ],
-  C: [
-    { id: 'paintbeast', label: 'Paint Beast', desc: 'Dunks, boards, blocks', ovrBoost: 3, potBoost: 3, durability: 0.85, scoring: 1.0, playmaking: 0.5, rebounding: 1.5 },
-    { id: 'stretch', label: 'Stretch Five', desc: 'A center who lives at the arc', ovrBoost: 1, potBoost: 5, durability: 0.95, scoring: 1.05, playmaking: 0.7, rebounding: 1.15 },
-    { id: 'anchor', label: 'Defensive Anchor', desc: 'DPOY ceiling, capped usage', ovrBoost: 2, potBoost: 4, durability: 0.95, scoring: 0.75, playmaking: 0.6, rebounding: 1.4 },
-  ],
-};
 
 /** Round 57: what each position is worth, and when the fall starts. */
 export const NBA_POS_SALARY_MULT: Record<NbaCareerPos, number> = {
@@ -328,15 +304,8 @@ export interface NbaEraDef {
 }
 
 export const NBA_ERAS: NbaEraDef[] = [
-  {
-    id: 'now', label: '2026', startYear: 2026, moneyScale: 1,
-    teams: [],
-    blurb: 'The league as it is today. Full money, all 30 franchises.',
-  },
-  {
-    id: 'y2004', label: '2003-04 throwback', startYear: 2003, moneyScale: 0.31, teams: NBA_TEAMS_2004,
-    blurb: 'The 29 team league of 2003-04: the SuperSonics in Seattle, the Nets in New Jersey, the Hornets in New Orleans, no Charlotte yet. Contracts pay 2003 money.',
-  },
+  { ...NBA_CAREER_ERAS[0], startYear: 2026, moneyScale: 1, teams: [] },
+  { ...NBA_CAREER_ERAS[1], startYear: 2003, moneyScale: 0.31, teams: NBA_TEAMS_2004 },
 ];
 
 export function nbaEraById(id?: string): NbaEraDef {
@@ -1182,90 +1151,6 @@ export function nbaCareerTotals(c: NbaCareerState) {
   const totals = { pts: Math.round(pts), reb: Math.round(reb), ast: Math.round(ast), games };
   return newLine > 0 ? { ...totals, newLinePts: Math.round(newLine) } : totals;
 }
-
-/** Round 1103: what the POINTS of a season on the new line are worth to the legacy score against a season on
- *  the old one. 1 is no adjustment. The new line scores about a fifth lower than the old on purpose, and the
- *  Hall of Fame is held, not recalibrated, in this round: this is the one lever, set from the measured Hall
- *  rate (scripts/simNbaAwardsSense.mjs section H, the table in docs/audits/NBA-LINE-NORMS-2026-10.md). It
- *  weighs the points TERM only: it enters the calibration 2 table as a term of its own on the new line's
- *  points (NBA_NEW_LINE_TERM), so every total the scorer, the standout and the ballot card read is the
- *  career's real one. The legacy recalibration round replaces it. */
-export const NBA_LEGACY_NEW_LINE_SCALE: number = 1.4;
-/** The constant as the table carries it: the new line's points at the points term's own rate (430 a point)
- *  times the constant less one, a whole number (1,075 at 1.4). The marks ledger records the same number as a
- *  fixed added term (scripts/genCareerHallMarks.mjs, FIXED_BASE), and section 19 of scripts/simCareerHall.mjs
- *  fails when the two differ, so the constant cannot move without the ledger. */
-const NBA_NEW_LINE_TERM = { stat: 'newLinePts', per: Math.round(430 / (NBA_LEGACY_NEW_LINE_SCALE - 1)) };
-
-/* Round 1051: the legacy score reads a table per calibration through the one
-   scorer (legacyRead, careerHallOfFame.ts). Calibration 1 is the Round 123
-   formula below to the last bit; a career is read on the calibration it
-   retired on (hallCalibrationOf). */
-const NBA_LEGACY_V1: LegacyWeights = {
-  awards: { rings: 95, mvps: 155, finalsMvps: 90, allNbas: 48 },
-  season: 8,
-  positions: { '*': { terms: [{ stat: 'pts', per: 430 }] } },
-};
-/* Calibration 2 (Round 1051). It contains calibration 1 unchanged (the same
-   awards, the same season weight, each position's old terms first and in
-   order) and only adds, so no career scores lower on it. What it adds:
-   a base where calibration 1 read nothing, and the standout: a career total
-   near the top of this game's books for the position, in any family on the
-   list, earns credit of its own (legacyRead; only the best family counts).
-   Every from and to mark, the list itself (the half rule) and the measured
-   base terms come from scripts/data/careerHallMarks.json, which
-   scripts/genCareerHallMarks.mjs derives from measured careers; section 17 of
-   scripts/simCareerHall.mjs fails if this table and that ledger disagree.
-   Round 1103 (the fix pass of 2026-10-08): the marks were measured again on the
-   new stat line, where a centre no longer passes like a guard (so the big
-   men's assists left the list by the half rule), and every position gained
-   one fixed term, the points of seasons on the new line (NBA_NEW_LINE_TERM). */
-const NBA_LEGACY_V2: LegacyWeights = {
-  awards: { rings: 95, mvps: 155, finalsMvps: 90, allNbas: 48 },
-  season: 8,
-  positions: {
-    PG: {
-      terms: [{ stat: 'pts', per: 430 }, NBA_NEW_LINE_TERM],
-      standout: [
-        { stat: 'pts', from: 31000, to: 38700, label: 'points' },
-        { stat: 'ast', from: 10700, to: 13700, label: 'assists' },
-      ],
-    },
-    SG: {
-      terms: [{ stat: 'pts', per: 430 }, NBA_NEW_LINE_TERM],
-      standout: [
-        { stat: 'pts', from: 32500, to: 39900, label: 'points' },
-        { stat: 'reb', from: 7850, to: 9610, label: 'rebounds' },
-        { stat: 'ast', from: 5420, to: 6470, label: 'assists' },
-      ],
-    },
-    SF: {
-      terms: [{ stat: 'pts', per: 430 }, NBA_NEW_LINE_TERM],
-      standout: [
-        { stat: 'pts', from: 31800, to: 39900, label: 'points' },
-        { stat: 'reb', from: 10400, to: 11800, label: 'rebounds' },
-        { stat: 'ast', from: 8270, to: 10300, label: 'assists' },
-      ],
-    },
-    PF: {
-      terms: [{ stat: 'pts', per: 430 }, NBA_NEW_LINE_TERM],
-      standout: [
-        { stat: 'pts', from: 28700, to: 34100, label: 'points' },
-        { stat: 'reb', from: 11000, to: 13400, label: 'rebounds' },
-      ],
-    },
-    C: {
-      terms: [{ stat: 'pts', per: 430 }, NBA_NEW_LINE_TERM],
-      standout: [
-        { stat: 'pts', from: 26700, to: 32200, label: 'points' },
-        { stat: 'reb', from: 15600, to: 18400, label: 'rebounds' },
-      ],
-    },
-    '*': { terms: [{ stat: 'pts', per: 430 }, NBA_NEW_LINE_TERM] },
-  },
-};
-/* Round 1301: calibration 3 moved the NHL marks only. Here 3 is the calibration 2 table itself, the same object. */
-export const NBA_LEGACY_WEIGHTS: Record<HallCalibration, LegacyWeights> = { 1: NBA_LEGACY_V1, 2: NBA_LEGACY_V2, 3: NBA_LEGACY_V2 };
 
 /* Round 1103 (the fix pass of 2026-10-08): the standout marks Round 1051 measured on the OLD stat line, frozen
    here as that round committed them (e313f183). Nobody can play an old line season any more, so they can never
