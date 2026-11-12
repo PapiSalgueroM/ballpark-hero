@@ -4355,10 +4355,10 @@ function generateSeasonStats(state: CareerState, clubs: ClubData[]): SeasonRecor
      after the derbies had been drawn from the unheld number, so a row could
      carry a derby he played in a league game its own count has no room for
      (14 of 2854 derby seasons, replayed from their rows, drew another
-     answer). The same hold comes first now, so the row and its derbies are
-     one season. Outside a saved world nothing changes. */
+     answer). Every season holds league appearances to total appearances
+     before drawing derbies or settling contract terms. */
   const worldField = state.leagueWorld?.year === seasonYear ? state.leagueWorld.leagues[state.currentLeague] : undefined;
-  const leagueGames = worldField ? Math.min(leagueApps, apps, 2 * (worldField.length - 1)) : leagueApps;
+  const leagueGames = Math.min(leagueApps, apps, worldField ? 2 * (worldField.length - 1) : Infinity);
   const derbies = resolveSeasonDerbies({
     club: state.currentClub, league: state.currentLeague, year: seasonYear, clubs, elite: ELITE_CLUBS,
     position, apps, leagueApps: leagueGames, goals, leagueTitle: winLeague && !(injured && injurySevere),
