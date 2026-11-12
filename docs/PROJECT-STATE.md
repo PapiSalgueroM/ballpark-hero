@@ -1,3 +1,11 @@
+## 2026-11-11: Perfect Season NFL keeps decade drafts in the chosen era
+
+Classic and Hard now keep the decade selected on the mode screen. If the archive has fewer than 20 teams in that era, players can retry the same wheel or return to the mode menu.
+
+On the compiled 390px route, choosing the 2000s with 19 era rows and 401 rows from 2018 dealt a 2018 squad on main. The fix requested zero squads until Retry and dealt a 2004 squad when the 20th era row arrived. A healthy 2000s wheel, All Eras and Daily each dealt the same team on both builds. The archive and squads were local fixtures.
+
+The focused regression and adjacent Perfect Season suites passed 38 tests. App types, the production build, 15 offline output and odds checks, snapshot boot and all 16 route size caps passed.
+
 ## 2026-11-07: Club Manager historical roster counts live
 
 [PR #532](https://github.com/PapiSalgueroM/ballpark-hero/pull/532) published from main `c3b5ca4afaf9b4dadcd748f340e8e8e3e4a1a1dd`, App tree `133fcd3d26a4d237178e5c7efee723048da0aef2`, Lovable deployment `510b1df1-2172-42c0-90f9-d9f9c997b840`.
