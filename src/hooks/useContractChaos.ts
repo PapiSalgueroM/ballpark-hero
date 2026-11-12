@@ -41,7 +41,7 @@ function loadSave(): CcSave {
     if (!s || typeof s !== 'object') return EMPTY;
     const num = (v: unknown) => (typeof v === 'number' && Number.isFinite(v) && v >= 0 ? Math.floor(v) : 0);
     const d = s.daily;
-    const daily = d && typeof d.date === 'string' && typeof d.club === 'string' && typeof d.verdict === 'string'
+    const daily = d && typeof d.date === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(d.date) && typeof d.club === 'string' && typeof d.verdict === 'string'
       ? { date: d.date, score: num(d.score), club: d.club, verdict: d.verdict }
       : undefined;
     return { played: num(s.played), best: Math.min(100, num(s.best)), total: num(s.total), daily };
@@ -59,6 +59,7 @@ export function useContractChaos() {
   const [mode, setMode] = useState<Mode>('daily');
   const [phase, setPhase] = useState<Phase>('menu');
   const [deal, setDeal] = useState<CcDeal | null>(null);
+  const [dealDate, setDealDate] = useState<string | null>(null);
   const [focus, setFocus] = useState(0);
   const [talk, setTalk] = useState<Record<number, string>>({});
   const [signed, setSigned] = useState<number | null>(null);
@@ -68,9 +69,10 @@ export function useContractChaos() {
   const dailyPlayed = save.daily?.date === today ? save.daily : null;
 
   const start = useCallback((m: Mode) => {
-    const seed = m === 'daily' ? dailySeed(getTodayET()) : freeSeed(Math.random());
+    const date = m === 'daily' ? getTodayET() : null;
     setMode(m);
-    setDeal(buildDeal(seed));
+    setDealDate(date);
+    setDeal(buildDeal(date ? dailySeed(date) : freeSeed(Math.random())));
     setTalk({});
     setSigned(null);
     setOutcomes([]);
@@ -90,6 +92,17 @@ export function useContractChaos() {
 
   const sign = useCallback((i: number) => {
     if (!deal || deal.offers[i]?.fa.gone) return;
+    const stored = loadSave();
+    const latest = stored.played >= save.played ? stored : save;
+    const daily = stored.daily && (!save.daily || stored.daily.date >= save.daily.date)
+      ? stored.daily
+      : save.daily;
+    // Another tab may have signed while these offers were open.
+    if (dealDate && daily && daily.date >= dealDate) {
+      setSave({ ...latest, daily });
+      setPhase('menu');
+      return;
+    }
     const outs = allOutcomes(deal);
     const mine = outs[i];
     setSigned(i);
@@ -97,15 +110,17 @@ export function useContractChaos() {
     setRevealed(1);
     setPhase('career');
     const next: CcSave = {
-      ...save,
-      played: save.played + 1,
-      best: Math.max(save.best, mine.score),
-      total: save.total + mine.score,
+      ...latest,
+      played: latest.played + 1,
+      best: Math.max(latest.best, mine.score),
+      total: latest.total + mine.score,
+      daily: dealDate
+        ? { date: dealDate, score: mine.score, club: deal.offers[i].fa.label, verdict: mine.verdict }
+        : daily,
     };
-    if (mode === 'daily') next.daily = { date: getTodayET(), score: mine.score, club: deal.offers[i].fa.label, verdict: mine.verdict };
     setSave(next);
     writeSave(next);
-  }, [deal, mode, save]);
+  }, [deal, dealDate, save]);
 
   const nextSeason = useCallback(() => {
     if (revealed >= HORIZON) setPhase('done');
@@ -120,7 +135,7 @@ export function useContractChaos() {
   useGameCompletion('contract-chaos', phase === 'career' || phase === 'done', undefined);
 
   return {
-    save, mode, phase, deal, focus, talk, signed, outcomes, revealed, today, dailyPlayed,
+    save, mode, phase, deal, dealDate, focus, talk, signed, outcomes, revealed, today, dailyPlayed,
     start, open, back, push, sign, nextSeason, finish, toMenu,
   };
 }
