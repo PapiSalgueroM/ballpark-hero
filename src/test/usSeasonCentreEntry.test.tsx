@@ -77,8 +77,9 @@ vi.mock('@/components/us-career/season/UsSeasonCentreEntry', async importOrigina
     } } : first;
     return (
       <host.UsSeasonCentreOpen.Provider value={api}>
-        {/* the hand over control: the board before Release AN, which gave the entry nothing but its Play */}
-        <Entry {...props} played={ctl.noHandOver ? undefined : props.played} onPlay={() => { props.onPlay(); if (ctl.extraDraw) Math.random(); }} />
+        {/* The Play-only control supplies neither the board's handoff nor its current-save check. */}
+        <Entry {...props} played={ctl.noHandOver ? undefined : props.played} canPlay={ctl.noHandOver ? undefined : props.canPlay}
+          onPlay={() => { props.onPlay(); if (ctl.extraDraw) Math.random(); }} />
       </host.UsSeasonCentreOpen.Provider>
     );
   };
@@ -124,7 +125,7 @@ function seedSave(sport: UsCareerSport, pos: string, seed: string, eraId = 'now'
 }
 const savedCareer = (sport: UsCareerSport): UsCareerCore => JSON.parse(localStorage.getItem(sport.saveKey)!).c;
 
-function storeOtherTabsSameYear(sport: UsCareerSport): string {
+function otherTabsSameYearSave(sport: UsCareerSport): string {
   const other = JSON.parse(localStorage.getItem(sport.saveKey)!) as { c: UsCareerCore; teamQuality: number };
   const year = other.c.year;
   other.c.ovr -= 15;
@@ -134,9 +135,7 @@ function storeOtherTabsSameYear(sport: UsCareerSport): string {
   expect(other.c.seasons).toHaveLength(1);
   expect(other.c.seasons[0].year).toBe(year);
   expect(other.c.seasons[0].games).toBeGreaterThan(0);
-  const stored = JSON.stringify(other);
-  localStorage.setItem(sport.saveKey, stored);
-  return stored;
+  return JSON.stringify(other);
 }
 
 function mulberry32(a: number) {
@@ -608,13 +607,13 @@ describe.each(BOUND)('$name My Career: watching changes nothing', ({ Board, spor
     render(<MemoryRouter><Board /></MemoryRouter>);
     await flush();
     const initial = savedCareer(sport);
-    const stored = storeOtherTabsSameYear(sport);
-    const other = savedCareer(sport);
+    const stored = otherTabsSameYearSave(sport);
+    const other = (JSON.parse(stored) as { c: UsCareerCore }).c;
     expect(other.name).toBe(initial.name);
     expect(initial.summerSalt).toBe('4a394b27');
     expect(other.summerSalt).toBe(initial.summerSalt);
     localStorage.setItem('unrelated-save', 'held');
-    const refusing = refuseTheSave();
+    const refusing = refuseTheSave(stored);
 
     await pressWatch();
     expect(localStorage.getItem(sport.saveKey)).toBe(stored);
@@ -630,18 +629,20 @@ describe.each(BOUND)('$name My Career: watching changes nothing', ({ Board, spor
     expect(q('[data-season-reveal]')).not.toBeNull();
     refusing.mockRestore();
     await click([...refusedNotice()!.querySelectorAll('button')].find(b => squash(b.textContent ?? '') === 'Retry save'));
-    expect(savedCareer(sport)).toEqual(ctl.openedCareers[0]);
+    await waitFor(() => expect(q('[data-testid="save-moved-notice"]')).not.toBeNull());
+    expect(localStorage.getItem(sport.saveKey)).toBe(stored);
     expect(localStorage.getItem('unrelated-save')).toBe('held');
     expect(refusedNotice()).toBeNull();
   }, 30000);
 
-  it.each([false, true])('keeps the contract talk open with an unchanged same-year save (disk-only: %s)', async diskOnly => {
+  it.each([false, true])('keeps the contract talk open without watching a peer’s same-year save (Play-only: %s)', async diskOnly => {
     ctl.noHandOver = diskOnly;
     seedSave(sport, pos, `same-year-extension|${sport.slug}`, 'now', c => { c.contractYears = 1; });
     render(<MemoryRouter><Board /></MemoryRouter>);
     await flush();
-    const stored = storeOtherTabsSameYear(sport);
-    refuseTheSave();
+    const stored = otherTabsSameYearSave(sport);
+    if (diskOnly) localStorage.setItem(sport.saveKey, stored);
+    refuseTheSave(diskOnly ? undefined : stored);
 
     await pressWatch();
     expect(q('[data-extension-talk]')).not.toBeNull();
@@ -847,7 +848,8 @@ describe('a held year, a banned year, and the sports with no Season Center', () 
     seedSave(sport, sport.create.defaultPos, 'same-year|nhl');
     render(<MemoryRouter><NhlMyCareerBoard /></MemoryRouter>);
     await flush();
-    const stored = storeOtherTabsSameYear(sport);
+    const stored = otherTabsSameYearSave(sport);
+    localStorage.setItem(sport.saveKey, stored);
     expect(playButton()).toBeDefined();
     expect(q('[data-season-centre-entry]')).toBeNull();
     expect(ctl.opens).toEqual([]);
