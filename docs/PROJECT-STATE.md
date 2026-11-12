@@ -1,3 +1,9 @@
+## 2026-11-12 NFL Grid pending answer settlement
+
+An answer waiting for rarity now checks the latest Daily board before adding a crowd selection and again before saving the result. If another tab has filled that square or used that player, the older answer drops without spending a guess. A different player in an empty square can still finish the board after the newer save arrives.
+
+An offline two-tab phone replay reproduced a 900-point completion request with eight visible squares. The local regression also covers delayed save delivery, a selection request already in flight, and the existing rarity fallback when a current selection write fails.
+
 ## 2026-11-07: Club Manager historical roster counts live
 
 [PR #532](https://github.com/PapiSalgueroM/ballpark-hero/pull/532) published from main `c3b5ca4afaf9b4dadcd748f340e8e8e3e4a1a1dd`, App tree `133fcd3d26a4d237178e5c7efee723048da0aef2`, Lovable deployment `510b1df1-2172-42c0-90f9-d9f9c997b840`.
