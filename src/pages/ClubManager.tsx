@@ -9,7 +9,8 @@ import type { HubTab } from '@/hooks/useClubManager';
 import {
   TIER_INFO, clubDefFor, clubPreviewRating, careerLeagueOf, money,
   isAvailable, xiAverageRating, sortedTable,
-  NATIONS, REAL_LEAGUES, playableClubs, objectiveStatuses, CM_ROSTER_META, isPartialClub, ordinaryClubAllowed,
+  CLUB_MANAGER_START_NATIONS as NATIONS, CLUB_MANAGER_START_LEAGUES as REAL_LEAGUES,
+  playableClubs, objectiveStatuses, CM_ROSTER_META, isPartialClub, ordinaryClubAllowed, usesGeneratedOpeningSquad,
   isHistoricEra, eraLeaguesFor, eraPlayableClubs, boardWantLabel,
   developingPlayers, INTENSITY_INFO, FOCUS_INFO,
   brokenPromises, CM_ERAS, DEFAULT_ERA_ID, eraById, projectedXIAvg, CM_BASE_YEAR,
@@ -19,6 +20,7 @@ import {
 // Round 1035: the A-League Men's squads come from their own generated file.
 import { generatedLeagueCountClauses, generatedLeagueMonthClause } from '@/data/clubManagerWorldRosters';
 import { K_LEAGUE_2026, kLeagueMember } from '@/data/kLeague2026';
+import { J1_LEAGUE_2026 } from '@/data/j1League2026';
 import { FACILITY_IDS, facilitiesOf } from '@/lib/clubManagerFacilities';
 import { projectFinances } from '@/lib/clubManagerFinances';
 import { expiringDealsLine, inboxTile, kittyChange, leagueTileValue, recordLine } from '@/lib/clubManagerHubLines';
@@ -348,24 +350,12 @@ const ClubManager = () => {
         <GameSeoContent
           pageHasOwnH1
           title="Club Manager: Football Management Sim"
-          description="A full club-management sim in your browser: the existing 27 real leagues cover 454 clubs, from the Premier League, the 2. Bundesliga, Serie B, Ligue 2, the Segunda División and the Scottish Premiership to the Saudi Pro League, MLS, Brazil, Mexico, Australia, Russia, Croatia, Denmark, Switzerland, Austria and Greece, with real players at their real market values as of August 2026 (October for the A-League Men and the Russian Premier League) and thin squads topped up with made up youth, marked as such. K League 1 adds 12 member clubs and 11 available ordinary jobs, with generated opening squads and simplified competition rules. Start a new current career to use it; existing saved worlds keep their previous leagues. Manage today or in a real past season: 2020-21 with Haaland's Dortmund and Mbappé's PSG, 2015-16 with Leicester at 5000 to 1, 2010-11 with prime Messi, or 2005-06 with Ronaldinho's Barcelona. Or create your own club with its own crest and stadium. Negotiate transfers, survive bidding wars, hit the board's named objectives, and chase titles season after season."
+          description="Manage a current football club or start in one of four past seasons. J1 League and K League 1 open with generated squads. J1 can use verified opponents and home sides in 2026/27, with simulated dates, stadiums and results. Pick your tactics, sign players and keep the board happy."
           howToPlay={[
-            'Pick your era: 2026-27 with the roster coverage stated for each league, or a real past season: 2020-21, 2015-16, 2010-11 or 2005-06, each with the Premier League, La Liga, Serie A, the Bundesliga and Ligue 1.',
-            'Pick your nation, league and an available club, or create your own club with its own crest, stadium and budget.',
-            'Read the board\'s objectives: league finish, cup run, Europe where it applies, beating your rival, and a goals quota.',
-            'Go and meet the two asks the board makes in the market: a country quota, an experience count, the thinnest line in your squad, a signing 21 or under at a rating floor, or one fee over a threshold, every number worked out from your club and your era.',
-            'Set your formation, mentality and XI, then play through the full season week by week.',
-            'Work the market: negotiate fees, pay release clauses, take loans, and field bids for your own stars, with deep filters down to exact position, age, an exact maximum asking price or preset price bands, league and nationality, every player under his real flag.',
-            'Run the contracts desk: re-sign expiring players at full wage, or cheaper with a release clause any club can trigger, and delete a bargain clause with a full price renewal before the phone rings.',
-            'Let a player go early if you have to: you keep paying half his wage until his deal would have ended, up to two seasons, it counts against your wage ceiling, the whole dressing room takes a morale hit, and a man you release never signs for you again.',
-            'Sign free agents from the Free agents option on the Market tab or the contracts desk on Squad any time, even with the window shut: made up journeymen without a club, marked MADE UP, players whose deals ran out with you (a verified saved contract lets him return straight away on at least the wage and signing fee a renewal would ask), and, on day one of a new career in today\'s world, a few real players with no club. Only men a level below your club will sign, and a man who never played for you also has to be no better than your eleventh best player. No transfer fee: the wage, contract length and signing on fee are on the button.',
-            'Run the money: gate receipts from every home crowd, ticket and food prices the fans and the board react to, a shirt sponsor from three honest shapes or one bad brand that pays more and costs the fans, each one negotiable, and a projection of the season\'s books to the last day.',
-            'Build the club: stadium, training ground, medical and dressing room, each level 1 to 10, paid from the kitty, each one a small real lift on the squad.',
-            'Run the staff room: an attack coach, a defence coach, a goalkeeping coach and a lead scout, hired, promoted from your academy or paid off, each one growing his own part of the squad, with rivals coming in for the good ones and a limited number of offers you can match.',
-            'Win enough and manage your country as well: real tournaments between seasons, real qualifying groups, and a place in the cabinet if you lift one.',
-            'Handle the press when they come for you, and pick your team talk before kick off and again at half time.',
-            'Win trophies, keep the board happy, and build a managerial career that can cross leagues and continents.',
-            'Run up to three managers on one device, each with a career of his own in its own slot: tap Managers on the hub to switch between them or start another.',
+            'Choose your season, nation, league and club. Pick Japan in 2026/27 to manage any of the 20 J1 clubs.',
+            'Set your formation and starting eleven. Choose Play Live or Quick Sim. Open the Calendar to play ahead.',
+            'Sign players, renew contracts and check the board screen for your targets.',
+            'Review your results at the end of the season. Tap Managers to switch between your saved careers.',
           ]}
         >
           {/* Round 655: every league and club as readable text, below the guide. */}
@@ -471,7 +461,7 @@ const ClubManager = () => {
         <header className="text-center mb-6">
           <h1 className="text-4xl md:text-6xl font-bold tracking-[0.1em] text-primary font-display mb-1">CLUB MANAGER</h1>
           <p className="text-muted-foreground text-sm md:text-base max-w-xl mx-auto">
-            {REAL_LEAGUES.length} league tables and {REAL_LEAGUES.reduce((s, l) => s + l.clubs.length, 0)} member clubs today. The existing 27 leagues use roster snapshots from {CM_ROSTER_META.asOf}{generatedLeagueMonthClause() ? ` (${generatedLeagueMonthClause()})` : ''}; K League 1 uses generated opening squads. Start a new current career for K League 1. Four real past seasons stay separate: 2020-21, 2015-16, 2010-11 and 2005-06.
+            {REAL_LEAGUES.length} selectable leagues and {REAL_LEAGUES.reduce((s, l) => s + l.clubs.length, 0)} member clubs today. The existing 27 leagues use roster snapshots from {CM_ROSTER_META.asOf}{generatedLeagueMonthClause() ? ` (${generatedLeagueMonthClause()})` : ''}. K League 1 and J1 League use generated opening squads. Choose Japan in a new current career to play J1. Four real past seasons stay separate: 2020-21, 2015-16, 2010-11 and 2005-06.
           </p>
         </header>
 
@@ -581,7 +571,9 @@ const ClubManager = () => {
         )}
         {pickStep === 'nation' && (
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 max-w-2xl mx-auto">
-            {NATIONS.filter(n => !historicPick || eraLeaguesFor(pickEra, n).length > 0).map(n => {
+            {NATIONS.filter(n => n.leagueIds.includes(J1_LEAGUE_2026.id)
+              ? pickEra === DEFAULT_ERA_ID && !editing
+              : !historicPick || eraLeaguesFor(pickEra, n).length > 0).map(n => {
               /* Round 146: in a historic era a nation offers its era leagues,
                  so 2010 England is the 20 club Premier League and the other
                  ten nations are simply not on the board. */
@@ -658,7 +650,7 @@ const ClubManager = () => {
                     <ChevronRight className="w-4 h-4 text-muted-foreground ml-auto shrink-0" />
                   </div>
                   <div className="text-[10px] text-muted-foreground mt-2 truncate">
-                    {lg.id === K_LEAGUE_2026.id ? 'Club options' : 'Strongest sides'}: {lgTeams.slice(0, 4).map(c => c.name).join(' · ')}
+                    {lg.id === K_LEAGUE_2026.id || lg.id === J1_LEAGUE_2026.id ? 'Club options' : 'Strongest sides'}: {lgTeams.slice(0, 4).map(c => c.name).join(' · ')}
                   </div>
                 </button>
               );
@@ -676,6 +668,7 @@ const ClubManager = () => {
               <ChevronLeft className="w-3.5 h-3.5" /> <FlagImg name={pickNation.name} size={14} /> {league.name}
             </button>
             {league.id === K_LEAGUE_2026.id && <p data-cm-kleague-access className="text-xs text-muted-foreground mb-3">The current K League 1 catalogue has {K_LEAGUE_2026.clubs.length} members; your world offers {teams.length} ordinary jobs here. {K_LEAGUE_2026.clubs.filter(c => !ordinaryClubAllowed(c.name)).map(c => c.name).join(', ')} remains in the league world as an opponent. Managing or joining the real club is not supported here yet.</p>}
+            {league.id === J1_LEAGUE_2026.id && <p data-cm-j1-access className="text-xs text-muted-foreground mb-3">Choose from all {teams.length} J1 clubs. Opening squads are generated and ratings and budgets are game estimates. The first season can use the verified 2026/27 fixture order on Club Manager's simulated calendar.</p>}
             {(() => {
               const rows = teams.map(c => {
                 const sel = g.pendingClub === c.name;
@@ -688,7 +681,7 @@ const ClubManager = () => {
                   tierEmoji: TIER_INFO[c.tier].emoji,
                   tierLabel: TIER_INFO[c.tier].label,
                   partial,
-                  ...(!historicPick && K_LEAGUE_2026.modelOnlyRoster && kLeagueMember(c.name) ? { modelOnlyRoster: true } : {}),
+                  ...(!historicPick && usesGeneratedOpeningSquad(c.name) ? { modelOnlyRoster: true } : {}),
                   rating: Math.round(projectedXIAvg(c.name, eraYearsOn, pickEra) ?? clubPreviewRating(c.name)),
                   budgetLabel: money(c.budget),
                   boardTitle: teamWants.get(c.name) ?? '',
@@ -701,11 +694,11 @@ const ClubManager = () => {
                   editing={editing}
                   historicalEra={historicPick ? era : undefined}
                   onPick={name => g.chooseClub(name, pickEra)}
-                  onCreate={() => { g.chooseClub(''); setPickStep('custom'); }}
+                  onCreate={league.id === J1_LEAGUE_2026.id ? undefined : () => { g.chooseClub(''); setPickStep('custom'); }}
                 /></ScreenLoading>
               );
             })()}
-            <p className="text-[9px] text-muted-foreground text-center mt-3">
+            {league.id !== J1_LEAGUE_2026.id && <p className="text-[9px] text-muted-foreground text-center mt-3">
               {historicPick ? (
                 <>{eraHonestyLine(era)}</>
               ) : (
@@ -714,7 +707,7 @@ const ClubManager = () => {
               {eraYearsOn > 0 && (
                 <> Starting {era.label}, so those squads have been aged {eraYearsOn} years: {eraHonestyLine(era)}</>
               )}
-            </p>
+            </p>}
 
             {/* Round 70: no scrolling to confirm. The confirm bar pins to the
                 bottom of the screen the moment a club is picked. */}
@@ -932,6 +925,7 @@ const ClubManager = () => {
   const cupAlive = cupName !== null && c.cupRound !== 'out' && c.cupRound !== 'won';
   const uclAlive = (c.uclGroup !== null && c.uclKoRound === null) || (!!c.uclKoRound && c.uclKoRound !== 'out' && c.uclKoRound !== 'won');
   const kLeagueModel = careerLeagueOf(c).id === K_LEAGUE_2026.id;
+  const j1Model = careerLeagueOf(c).id === J1_LEAGUE_2026.id;
 
   /* ---- Round 74: the rival viewer takes over the whole screen ---- */
   if (card) {
@@ -989,6 +983,7 @@ const ClubManager = () => {
         <div className={cn('flow-root', boardMeter(c).value > 0 && boardMeter(c).value < BOARD_EDGE ? 'min-h-[60px]' : 'min-h-[52px]')}><ScreenLoading compact><MetersStrip career={c} /></ScreenLoading></div>
       </header>
       {kLeagueModel && <p data-cm-kleague-model className="text-xs text-muted-foreground mb-4">K League 1 plays 22 simulated league games on the shared August to May calendar. The real 2026 league used 33 games, then 5 split games. The split, Korea Cup, AFC competitions and promotion/relegation are not played here.</p>}
+      {j1Model && <p data-cm-j1-model className="text-xs text-muted-foreground mb-4">J1 plays {c.calendar.filter(entry => entry.type === 'league').length} league games with generated opening squads and simulated dates and results. The Emperor's Cup, J.League Cup, AFC competitions and J2 promotion and relegation are outside this league model.</p>}
 
       <ScreenLoading><Tabs value={g.activeTab} onValueChange={(v) => g.setActiveTab(v as HubTab)}>
         <TabsList className="grid grid-cols-5 w-full mb-4">
@@ -1315,8 +1310,8 @@ const ClubManager = () => {
                   career={c}
                   onClubClick={setClubView}
                   cupTitle={kLeagueModel ? 'Korea Cup' : 'Domestic cup'}
-                  cupValue={kLeagueModel ? 'Not played' : cupName ?? cupSatOut ?? 'No domestic cup'}
-                  cupSub={kLeagueModel ? 'League-only model' : cupName === null ? (cupSatOut ? 'Not entered' : undefined) : cupAlive ? `Still alive. Next up: ${c.cupDraw[c.cupRound as CupRound] ?? 'to be drawn'}` : c.cupRound === 'won' ? 'Cup winners' : 'Knocked out'}
+                  cupValue={kLeagueModel || j1Model ? 'Not played' : cupName ?? cupSatOut ?? 'No domestic cup'}
+                  cupSub={kLeagueModel || j1Model ? 'League-only model' : cupName === null ? (cupSatOut ? 'Not entered' : undefined) : cupAlive ? `Still alive. Next up: ${c.cupDraw[c.cupRound as CupRound] ?? 'to be drawn'}` : c.cupRound === 'won' ? 'Cup winners' : 'Knocked out'}
                   cupLine={kLeagueModel ? <p data-cm-kleague-cup className="bg-card border border-border rounded-xl p-3 text-xs text-muted-foreground">The Korea Cup is not played here. This K League 1 season is a 22-game league simulation on the shared calendar. Its real 2026 split, AFC competitions and promotion/relegation are not played either.</p> : undefined}
                   /* Round 102 built this bracket; Round 312 mounted it. */
                   cupBracket={cupName === null ? undefined : <CupBracketCard career={c} onClubClick={setClubView} />}

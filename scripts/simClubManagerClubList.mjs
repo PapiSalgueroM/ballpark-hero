@@ -102,7 +102,7 @@ import { MemoryRouter } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
 import GameSeoContent from '${ROOT_URL}/src/components/seo/GameSeoContent.tsx';
 import { ClubManagerClubList } from '${ROOT_URL}/src/components/club-manager/ClubManagerClubList.tsx';
-export { REAL_LEAGUES, ERA_LEAGUES, isPartialClub, playableClubs, CM_ROSTER_META, CM_ROSTERS } from '${ROOT_URL}/src/lib/clubManager.ts';
+export { CLUB_MANAGER_START_LEAGUES as REAL_LEAGUES, ERA_LEAGUES, isPartialClub, usesGeneratedOpeningSquad, ordinaryClubAllowed, playableClubs, CM_ROSTER_META, CM_ROSTERS } from '${ROOT_URL}/src/lib/clubManager.ts';
 export { CM_ALEAGUE_META } from '${ROOT_URL}/src/data/clubManagerALeague2026.ts';
 export { CM_GENERATED_LEAGUES } from '${ROOT_URL}/src/data/clubManagerWorldRosters.ts';
 export const render = () => renderToStaticMarkup(
@@ -127,7 +127,7 @@ esbuild.buildSync({
    render of the data, with no save and no promotions registered. */
 globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };
 const {
-  REAL_LEAGUES, ERA_LEAGUES, isPartialClub, playableClubs, CM_ROSTER_META, CM_ROSTERS, CM_ALEAGUE_META, CM_GENERATED_LEAGUES, render: renderRaw,
+  REAL_LEAGUES, ERA_LEAGUES, isPartialClub, usesGeneratedOpeningSquad, ordinaryClubAllowed, playableClubs, CM_ROSTER_META, CM_ROSTERS, CM_ALEAGUE_META, CM_GENERATED_LEAGUES, render: renderRaw,
 } = require(BUNDLE);
 /* Round 1035: the A-League Men squads carry their own read date, so the one
    date line names both, each from its own data file, never the clock. */
@@ -135,7 +135,7 @@ const {
    last read day) and not from the component's helper, so the two are held to each other. The
    A-League's clause must still be the Round 1035 one, from its own META. */
 if (CM_GENERATED_LEAGUES[0]?.label !== 'A-League Men' || CM_GENERATED_LEAGUES[0].read !== CM_ALEAGUE_META.read) { console.error('simClubManagerClubList: the first generated league is not the A-League Men on its own read date'); process.exit(1); }
-const DATE_LINE = `Squads as of ${CM_ROSTER_META.asOf}; ${CM_GENERATED_LEAGUES.map(g => `${g.label} squads as of ${g.read === g.readTo ? g.read : `between ${g.read} and ${g.readTo}`}`).join('; ')}.`;
+const DATE_LINE = `Existing 27-league roster snapshots: ${CM_ROSTER_META.asOf}; ${CM_GENERATED_LEAGUES.map(g => `${g.label} squads as of ${g.read === g.readTo ? g.read : `between ${g.read} and ${g.readTo}`}`).join('; ')}. K League 1 and J1 League use generated opening squads.`;
 const renderHtml = (() => {
   const error = console.error;
   console.error = (...a) => { if (!String(a[0]).includes('useLayoutEffect does nothing on the server')) error(...a); };
@@ -151,7 +151,9 @@ for (const c of modernClubs) {
 }
 const eraOnly = [...new Set(Object.values(ERA_LEAGUES).flat().flatMap(l => l.clubs))].filter(c => !modernClubs.has(c));
 if (eraOnly.length === 0) abort('no club exists only in a past season, so section 5 would prove nothing');
-const wantH3 = REAL_LEAGUES.map(l => `${l.name} clubs you can manage (${l.clubs.length})`);
+const wantH3 = REAL_LEAGUES.map(l => l.id === 'kleague1'
+  ? `${l.name} members (${l.clubs.length}), ${l.clubs.filter(c => ordinaryClubAllowed(c)).length} ordinary jobs`
+  : `${l.name} clubs you can manage (${l.clubs.length})`);
 const leagueByH3 = new Map(REAL_LEAGUES.map((l, i) => [wantH3[i], l]));
 const partialCount = [...modernClubs].filter(c => isPartialClub(c)).length;
 
@@ -176,9 +178,11 @@ function blockOf(html) {
 }
 const tokensOf = block => [...block.matchAll(/<(h3|h4|p|li)\b[^>]*>([\s\S]*?)<\/\1>/gi)]
   .map(m => ({ tag: m[1].toLowerCase(), text: decode(m[2]) }));
-const namesOf = text => text.replace(/\.$/, '').split(', ').map(t => (t.endsWith(MARK)
-  ? { name: t.slice(0, -MARK.length), marked: true }
-  : { name: t, marked: false }));
+const namesOf = text => text.replace(/\.$/, '').split(/, (?![^()]*\))/).map(t => {
+  const generated = / \(generated starting squad(?:; opponent, ordinary job unavailable)?\)$/.exec(t);
+  if (generated) return { name: t.slice(0, generated.index), marked: true, generated: true };
+  return t.endsWith(MARK) ? { name: t.slice(0, -MARK.length), marked: true } : { name: t, marked: false };
+});
 
 /* ---------- the documents ---------- */
 const docs = [{ label: 'render', html: renderHtml }];
@@ -313,13 +317,14 @@ for (const doc of docs) {
       clubsSeen += 1;
       if (g.marked) marksSeen += 1;
       if (g.marked !== isPartialClub(g.name)) findings[3].push(`${doc.label}: ${g.name} is ${g.marked ? 'marked partial data but the data is not thin' : 'not marked, but isPartialClub says its data is thin'}`);
+      if (!!g.generated !== usesGeneratedOpeningSquad(g.name)) findings[3].push(`${doc.label}: ${g.name} has the wrong generated squad label`);
     }
   });
   const explain = tokens.filter(t => t.tag === 'p' && t.text.startsWith('Partial data means'));
   if (explain.length !== 1) findings[3].push(`${doc.label}: the line explaining the partial data mark appears ${explain.length} times, not once`);
 
   /* 4. the date */
-  const dated = tokens.filter(t => /^Squads as of /.test(t.text));
+  const dated = tokens.filter(t => t.text.startsWith('Existing 27-league roster snapshots: '));
   const wantDate = DATE_LINE;
   if (dated.length !== 1) findings[4].push(`${doc.label}: ${dated.length} "Squads as of" lines, not one`);
   for (const d of dated) if (d.text !== wantDate) findings[4].push(`${doc.label}: "${d.text}" is not the roster bake's own date, "${wantDate}"`);
@@ -334,7 +339,7 @@ for (const doc of docs) {
 for (const l of REAL_LEAGUES) {
   const picker = playableClubs(l.id).map(c => c.name);
   const a = [...picker].sort().join('|');
-  const b = [...l.clubs].sort().join('|');
+  const b = l.clubs.filter(c => ordinaryClubAllowed(c)).sort().join('|');
   if (a !== b) findings[2].push(`data: the picker offers ${picker.length} ${l.name} clubs and the list prints ${l.clubs.length}, not the same clubs`);
 }
 /* A club with no baked players at all is youth players only, so it must carry the mark. */
