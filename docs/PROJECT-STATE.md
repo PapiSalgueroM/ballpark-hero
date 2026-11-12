@@ -20595,3 +20595,9 @@ Another 800 paired club campaigns covered Libertadores, CONCACAF, AFC and CAF fo
 Compiled 390 by 844 replays preserved all 14 club and seven international scorelines through normal 2002 progression and exact cold reload. Prior modern results loaded byte for byte. The deferred legacy World Cup card rendered the same seven match rows and continued with byte-identical saved history. The final route measured 840.1 KiB inside the existing rounded cap.
 
 All 67 scoped cases, app types, production build, three tournament sims, 15 output checks and 16 route caps passed. The separate World Truth harness stopped at the same missing soccerPhone.ts marker on the baseline and candidate. The scoring implementation overlaps PR229's knockout goal cap and should be reviewed with that draft at integration.
+
+## 2026-11-10: Club Manager listed transfer offer budgets
+
+Prepared for review for report `d941859e`. A new bid for a transfer-listed player uses a club from the save's existing era and league pool that can afford the quoted fee. A contested bid needs two eligible clubs. When the higher quote has fewer than two buyers, the ordinary quote can still draw a bid. A listed counteroffer checks the higher price for the buyer and any rival, including after unlisting and reloading the save. Older open offers can still be accepted at their saved terms.
+
+The original generator produced a £153m offer from Incheon United on an £8m in-game budget. The earlier counteroffer path raised a £191.3m Real Madrid bid to £220m. Both controls failed before their corresponding fixes. Local qualification passed app types, the production build, 27 focused and adjacent tests, 15 built-output checks, the transfer and release-clause simulations, and all 16 existing route size caps. Club Manager measured 647.9 KiB against its 648 KiB cap. Publication is pending.
