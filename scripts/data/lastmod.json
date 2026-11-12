@@ -93,7 +93,7 @@
     "date": "2026-10-17"
   },
   "/club-manager": {
-    "hash": "636eb1cc65f72fc2",
+    "hash": "9ff2b0f50984f72e",
     "date": "2026-11-12"
   },
   "/clue-auction": {
@@ -601,7 +601,7 @@
     "date": "2026-09-19"
   },
   "/soccer": {
-    "hash": "9414b81d41b41d83",
+    "hash": "c639bdc24f0a0b0e",
     "date": "2026-11-12"
   },
   "/soccer-career": {
@@ -615,6 +615,10 @@
   "/soccer-grid": {
     "hash": "e7a7b846f7e42bf7",
     "date": "2026-09-30"
+  },
+  "/soccer-perfect-season": {
+    "hash": "085eedbd93e6470a",
+    "date": "2026-11-12"
   },
   "/sports-bingo": {
     "hash": "5211190d16cb4919",
@@ -665,7 +669,7 @@
     "date": "2026-10-06"
   },
   "/whats-new": {
-    "hash": "6ee57088248b815c",
+    "hash": "7836ace4938e01a6",
     "date": "2026-11-12"
   },
   "/who-am-i": {
