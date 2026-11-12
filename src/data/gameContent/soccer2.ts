@@ -1784,14 +1784,14 @@ export const SOCCER_CONTENT_2: GameContentMap = {
       {
         heading: "Creating your player and building your look",
         items: [
-          "Create your player: name, one of 50 nationalities, one of 10 positions, and a starting era from the 1990s to the 2020s.",
+          "Enter your name, pick from the listed nationalities, choose one of 10 positions and set a starting era from the 1990s to the 2020s.",
           "Build your look in the appearance editor: 12 skin tones, 29 hairstyles, 16 hair colours, 18 beard styles, 16 accessories, 18 boot lines, and 19 signature celebrations, or hit Surprise me.",
         ],
       },
       {
         heading: "Rolling potential and customizing your build",
         items: [
-          "Roll your starting potential, somewhere in the mid 50s to high 60s, and reroll as many times as you like. Rerolls are free and there is no limit on them.",
+          "Choose Generate Starting Potential to roll your starting overall and scout ceiling. You can reroll both for free as often as you like.",
           "Open Customize your build to set your starting overall anywhere from 40 to 99, move points between the six attribute families, shape the specifics under each family, and set your height and weight.",
         ],
       },
@@ -1945,7 +1945,7 @@ export const SOCCER_CONTENT_2: GameContentMap = {
       {
         heading: "Rerolling your potential before you start",
         items: [
-          "Reroll your potential to 62 or better. The gap between a Promising start and a Gifted one echoes for a decade.",
+          "A Gifted start begins at 62 overall. Check your scout ceiling separately.",
         ],
       },
       {
