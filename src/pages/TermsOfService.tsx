@@ -1,16 +1,17 @@
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import { useSiteBack } from '@/hooks/useSiteBack';
 import { ArrowLeft } from 'lucide-react';
 import PageSeo from '@/components/seo/PageSeo';
 import { OAUTH_PROVIDERS } from '@/lib/authProviders';
 
 const TermsOfService = () => {
-  const navigate = useNavigate();
+  const goBack = useSiteBack();
 
   return (
     <div id="dukb-main" tabIndex={-1} className="min-h-screen bg-background text-foreground px-4 py-12 max-w-3xl mx-auto">
       <PageSeo title="Terms of Service - DoUKnowBall" description="Terms of service for DoUKnowBall sports trivia games." path="/terms" />
       <button
-        onClick={() => navigate(-1)}
+        onClick={goBack}
         className="mb-6 inline-flex items-center gap-2 rounded-full px-3 py-2 text-sm text-muted-foreground transition-colors hover:text-foreground"
       >
         <ArrowLeft className="w-4 h-4" />
