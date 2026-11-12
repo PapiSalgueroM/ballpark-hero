@@ -367,7 +367,7 @@ export const COLLEGE_CONTENT: GameContentMap = {
       {
         heading: "Choosing a mode and a difficulty",
         items: [
-          "Pick Daily, Unlimited with a streak counter, or Conference mode, and set Easy (Power 4) or Hard (all of Division 1).",
+          "Pick Daily, Unlimited with a streak counter, or Conference. For Unlimited and Conference, Easy uses the Power 4 schools in the game and Hard uses the full school pool.",
         ],
       },
     ],
@@ -434,7 +434,7 @@ export const COLLEGE_CONTENT: GameContentMap = {
     faqs: [
       {
         q: "What is the difference between Easy and Hard?",
-        a: "Easy sticks to Power 4 schools; Hard opens all of Division 1 for Unlimited and Conference play. The daily always uses Power 4.",
+        a: "Easy sticks to the Power 4 schools in the game. Hard adds selected Group of 5 schools in Unlimited and Conference play. The daily always uses Power 4.",
       },
       {
         q: "Does a wrong guess hurt more than skipping?",
