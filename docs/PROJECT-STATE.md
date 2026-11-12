@@ -1,3 +1,13 @@
+## 2026-11-10 Club Manager summer squad retention
+
+Returning loans can put a saved squad over 30. The previous summer trim could then send a player who still had contract years left to free agency. Same-club rollover now keeps those contracts. Ordinary expiries, retirements, loan options and emergency squad coverage still use their existing rules. The save format and the handling of older free-agent rows marked as trimmed are preserved.
+
+For new acquisitions, the 30-player limit now counts the active squad plus players the club owns who are out on loan. Market talks and agreed deals use the same check, including part exchanges. Free-agent signings, academy promotions and board recruitment asks also use that count. An early recall still uses the active squad limit because it brings back a player the club already owns.
+
+The fixture starts with 30 active players and three owned loans out. The original lost a contracted player when the loans came back. The correction keeps all 31 eligible players through rollover and save/reload while letting one incoming loan and one expired contract leave. The new checks also verify that buying, free-agent signing and academy promotion are blocked at 29 active plus one owned loan out and can proceed when there is room.
+
+The full free-agent fleet passed all eight sections. Across four oversized rollovers the original cut 12 contracted players and the correction kept all 130 eligible players. Older trimmed rows still pass their original eligibility check. App types, production build, 15 required output checks, 16 route budgets and the Club Manager metadata comparison passed. Offline browser checks on phone and desktop verified the Market and Academy warnings at 29 active plus one owned loan out and cleared both warnings at 29 active with nobody out. Publication is pending.
+
 ## 2026-11-10: Club Manager summer budget breakdown staged
 
 The new season Overview shows the unspent balance, board allocation, amount carried, any balance above the cap, summer adjustments and the opening budget. It records those amounts at rollover, after loan options, add-ons and sponsor payments. The carryover cap equals the new board allocation. The figures belong to the club where the season ended.
