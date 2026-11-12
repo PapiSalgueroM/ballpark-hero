@@ -1,3 +1,9 @@
+## 2026-11-12: Conquest first-result card containment staged
+
+The existing saved-preview fix stays in place. The result card keeps its 700 ms entrance inside a horizontal clip, with the keyboard-operable Skip button outside it.
+
+The frozen 4314 Soccer Conquest build reproduced document widths of 328 and 398 pixels during the first prediction result at 320 and 390 pixels. A browser-only response overlay kept all 73 sampled entrance frames within the viewport while retaining the translation. Both arms held the exact one-prediction save and recap through reload. The source simulator passed all 1,364 renders after its new wrapper check failed on the original in all five sports. Source-built phone verification is pending. The separate first-match blocker remains unreproduced.
+
 ## 2026-11-12: Public ticker configuration split
 
 The score ticker reads the pinned public Supabase URL and key from a dependency-free config module. The SDK client reads and re-exports the same values. Script readers were updated to the new path and their parsing expressions returned the original values.

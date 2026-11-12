@@ -49,7 +49,8 @@
  *      driven by useScenePlayer with initialCursor at every beat, mounts the
  *      score element only at the score and takeover beats and with the
  *      scene's own score, opens on the matchup card naming both teams with
- *      no score, hands the map the scene's opening map before the score and
+ *      no score, clips the card's entrance while leaving Skip outside the
+ *      clip, hands the map the scene's opening map before the score and
  *      its closing map with exactly the flipped regions in the wave after
  *      it, marks the call and the hit on the featured scene only, and under
  *      reduced motion play() lands on the last scene at beat done with
@@ -670,6 +671,8 @@ function reducedMotionAudit(css) {
   let rounds = 0, renders = 0, cursorOff = 0, scoreEarly = 0, scoreMissing = 0, scoreWrong = 0, cardWrong = 0, teamsMissing = 0, frameWrong = 0, callWrong = 0, hitWrong = 0, skipMissing = 0, featuredSeen = 0, chipWrong = 0;
   let reducedRuns = 0, reducedWrong = 0;
   const seenBeats = new Set();
+  const clipChecked = new Set();
+  const { JSDOM } = createRequire(`${ROOT}/package.json`)('jsdom');
   for (const { sport, map } of SPORTS) {
     for (const { run, snaps } of RUNS.get(sport.key).slice(0, 2)) {
       for (let i = 0; i < run.rounds.length; i++) {
@@ -688,6 +691,15 @@ function reducedMotionAudit(css) {
             seenBeats.add(beat);
             const cursor = { index: scene.index, beat };
             const html = render(Probe, { sport, map, scenes, cursor, records: run.records, favorite: run.favorite, wheel, arrowDeg: 42, reducedMotion: false, kick: false });
+            if (beat === 'card' && !clipChecked.has(sport.key)) {
+              clipChecked.add(sport.key);
+              const scenePlayer = JSDOM.fragment(html).querySelector('[data-scene-player]');
+              const clip = scenePlayer?.querySelector(':scope > .overflow-x-clip');
+              if (!clip?.querySelector(':scope > [data-scene-card].cq-scene-in') ||
+                !scenePlayer.querySelector(':scope > button[data-scene-skip]')) {
+                fail('7', `${sport.key} entrance must clip the animated card and leave Skip outside`);
+              }
+            }
             const probe = tags(html, 'div').find(d => 'data-probe-beat' in d) || {};
             if (probe['data-probe-beat'] !== beat || Number(probe['data-probe-index']) !== scene.index) cursorOff += 1;
             /* The score element exists only at its own beats, and then it is the scene's score. */
@@ -740,6 +752,7 @@ function reducedMotionAudit(css) {
   console.log(`   ${featuredSeen} featured renders: ${callWrong} with the call wrong or on the wrong scene, ${hitWrong} with the hit wrong or early; ${reducedRuns} reduced motion plays, ${reducedWrong} not landing on the last scene at done with nothing playing`);
   if (rounds < 150) fail('7', `only ${rounds} settled rounds rendered`);
   if (renders < 1200) fail('7', `only ${renders} player renders`);
+  if (clipChecked.size !== SPORTS.length) fail('7', 'not every sport rendered a clipped entrance');
   if (seenBeats.size !== BEATS.length) fail('7', `beats rendered: ${[...seenBeats].join(', ')}, not all five`);
   if (cursorOff > 0) fail('7', `${cursorOff} renders did not start on the cursor they were given`);
   if (scoreEarly > 0) fail('7', `${scoreEarly} renders mounted the score before its beat`);
