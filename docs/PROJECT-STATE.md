@@ -8,6 +8,12 @@ NBA Starting 5 search and scoring now use the same franchise records. Players wi
 
 The former-team harness exposed six misses on the combined baseline and passed all 13 sections after the port. Existing stat, position, duplicate and score rules passed. Compiled mobile qualification is pending.
 
+## 2026-11-12: NBA Chain roster spellings staged
+
+The NBA Chain validator can match JR Smith and Robert Williams III to their verified archive spellings. The stored team and season overlap still decides each link. Missing or incomplete alias data offers a retry, and exact spellings take precedence. [Cleveland game book](https://statsdmz.nba.com/pdfs/20160619/20160619_CLEGSW.pdf) · [Boston game book](https://statsdmz.nba.com/pdfs/20220602/20220602_BOSGSW_book.pdf) · [Williams career record](https://www.basketball-reference.com/players/w/williro04.html)
+
+Both reported links failed on the baseline Edge fixture and passed in both directions after the port. The seven mounted Chain checks and the validator failure scan passed. The Edge change is staged for release review.
+
 ## 2026-11-12: Rebuild season retry staged
 
 After the transfer window, Rebuild waits for both rival squads before showing the solo season. If a squad is unavailable, Retry season keeps the finished window and tries again.
