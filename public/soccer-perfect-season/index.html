@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Round 90: index.html must never be cached. The hashed asset files
+         under /assets are immutable and still cache normally; only this
+         document has to stay fresh so a returning player always gets the
+         newest chunk names. -->
+
+
+
+    <title>Soccer Perfect Season: 38 Win Draft Game | DoUKnowBall</title>
+    <!-- Round 69: static AdSense account association. The ad script itself stays
+         consent gated below; this meta tag just makes the site-to-account link
+         visible to Google's crawler on the raw HTML, no consent needed. -->
+    <meta name="google-adsense-account" content="ca-pub-2929318086316376">
+    <meta name="msvalidate.01" content="9C0F485E90B6744EF88628240F61B9E1">
+    <meta name="yandex-verification" content="78b02f385cab3272">
+
+    <!-- Round 265: the home page's canonical, in the template rather than in
+         the app. Every OTHER page carries one because the prerenderer captures
+         the head after React has drawn it, but the home page is deliberately
+         not prerendered (the host regenerates it every build), so its canonical
+         only existed once JavaScript ran. Measured on the live site with
+         JavaScript off and a Googlebot user agent: ten pages checked, ten
+         canonicals, and the one that was missing was the home page. It is also
+         the page most likely to collect tracking parameters from shares, which
+         is exactly what a self referencing canonical is for. -->
+
+
+    <!-- Round 281: who this site is, in the template rather than at runtime.
+
+         Every other page ships as a snapshot whose head is copied verbatim from
+         the build, so a tag React adds survives. The home page is the one page
+         that cannot work that way, because vite regenerates it from THIS file on
+         whatever machine builds the site, so anything added at runtime never
+         reaches the raw HTML. Measured on 2026-08-24, the shipped home page
+         carried zero structured data blocks: the WebApplication object the app
+         has been generating since Round 53 had never been seen by a crawler,
+         only by a browser that runs JavaScript. Same trap that swallowed the
+         canonical in Round 265 and the readable copy in Round 257.
+
+         WebSite and Organization are the two things Google reads to work out
+         whose domain this is and what to call it, and WebApplication is what
+         says the thing at this address is a free browser game rather than a
+         shop or a blog. All three are claims about the SITE rather than about
+         whichever page is being served, and each carries an @id naming the site
+         root so none of them can be read as a claim about the current page.
+         Putting them here does exactly that: the snapshots copy this head, so
+         all 126 of them carry the pair and a crawler can tie 127 documents to
+         one entity. The page level object, whatever type that page is, is still
+         emitted by PageSeo on top of this.
+
+         KEEP THIS IN STEP WITH SITE_JSON_LD in src/lib/pageSchema.ts.
+         scripts/simSchema.mjs parses this block and compares it against that
+         export, so the two cannot drift apart quietly. -->
+    <script type="application/ld+json">[{"@context":"https://schema.org","@type":"WebSite","@id":"https://douknowball.com/#website","name":"DoUKnowBall","alternateName":"Do U Know Ball","url":"https://douknowball.com/","inLanguage":"en","publisher":{"@id":"https://douknowball.com/#org"}},{"@context":"https://schema.org","@type":"Organization","@id":"https://douknowball.com/#org","name":"DoUKnowBall","url":"https://douknowball.com/","logo":"https://douknowball.com/icon-512.png"},{"@context":"https://schema.org","@type":"WebApplication","@id":"https://douknowball.com/#webapp","name":"DoUKnowBall","url":"https://douknowball.com/","applicationCategory":"GameApplication","operatingSystem":"Web Browser","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"publisher":{"@id":"https://douknowball.com/#org"}}]</script><script type="application/ld+json" data-rh="true">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"DoUKnowBall","item":"https://douknowball.com"},{"@type":"ListItem","position":2,"name":"Soccer Games","item":"https://douknowball.com/soccer"},{"@type":"ListItem","position":3,"name":"Soccer Perfect Season","item":"https://douknowball.com/soccer-perfect-season"}]}</script><script type="application/ld+json" data-rh="true">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Can I continue a season later?","acceptedAnswer":{"@type":"Answer","text":"Yes. Daily and Unlimited save separately in this browser. Starting a fresh Unlimited run replaces only its Unlimited save."}},{"@type":"Question","name":"Where do the players come from?","acceptedAnswer":{"@type":"Answer","text":"The draft uses real player names and clubs from the site's October 2026 player pool. Strength ratings and season results are generated for the game."}},{"@type":"Question","name":"Will a reroll change tomorrow's Daily?","acceptedAnswer":{"@type":"Answer","text":"No. Each Eastern date has its own draw. A reroll only changes your current club in the run you are playing."}},{"@type":"Question","name":"Is Soccer Perfect Season free to play?","acceptedAnswer":{"@type":"Answer","text":"Yes. Soccer Perfect Season is free to play on DoUKnowBall, right in your browser. No download and no signup needed."}}]}</script><script type="application/ld+json" data-rh="true">{"@context":"https://schema.org","@type":"Game","name":"Soccer Perfect Season: 38 Win Draft Game | DoUKnowBall","description":"Draft a soccer XI from 11 random real clubs, use two rerolls and chase 38 wins in 38 games. Play the free Daily or start a fresh Unlimited season.","url":"https://douknowball.com/soccer-perfect-season","isAccessibleForFree":true,"gamePlatform":"Web Browser","publisher":{"@id":"https://douknowball.com/#org"}}</script>
+
+
+    <!-- Round 286: the site's own social image, on its own domain. The old
+         one lived on the host's upload bucket, which is an external image host
+         (the legal rule allows exactly one, flagcdn.com), said "10+ games" on a
+         site with over a hundred, and had a line of garbled text at the bottom.
+         It is generated from the same source as the favicon and the header
+         mark: scripts/logo/gen_logo.py. -->
+
+
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="DoUKnowBall: free daily sports trivia, puzzles and career sims">
+
+
+    <!-- Round 286: icons. The SVG is the crisp one and modern browsers take it
+         first; the .ico carries 16, 32 and 48 for everything else; the touch
+         icon is what a phone shows when the site is added to a home screen. -->
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+    <link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180">
+    <meta name="theme-color" content="#0b0d14">
+    <!-- Round 290: installable. The manifest names the same icons the tab and the home
+         screen already use, so Add to Home Screen on Android and desktop Chrome gets the
+         mark, the name and a standalone window. simBrand section 7 holds the file to the
+         icons on disk and this theme colour. -->
+    <link rel="manifest" href="/manifest.json">
+    <meta name="application-name" content="DoUKnowBall">
+    <meta name="apple-mobile-web-app-title" content="DoUKnowBall">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&amp;family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+
+    <script>
+      // Owner 2026-08-05: no third-party editor badge should ever show on the
+      // live site. The host injects a floating "Edit with ..." badge into the
+      // published page after load; this watcher removes it (and anything like
+      // it) the moment it appears.
+      (function () {
+        var isBadge = function (el) {
+          if (!(el instanceof HTMLElement)) return false;
+          var idc = ((el.id || '') + ' ' + (el.className || '')).toString().toLowerCase();
+          if (idc.indexOf('lovable') !== -1 || idc.indexOf('gpt-engineer') !== -1 || idc.indexOf('gptengineer') !== -1) return true;
+          if (el.tagName === 'A') {
+            var href = (el.getAttribute('href') || '').toLowerCase();
+            if (href.indexOf('lovable.dev') !== -1 || href.indexOf('gptengineer.app') !== -1) return true;
+          }
+          return false;
+        };
+        var sweep = function () {
+          try {
+            var all = document.querySelectorAll('[id*="lovable" i], [class*="lovable" i], a[href*="lovable.dev"], a[href*="gptengineer"], [id*="gpt-engineer" i]');
+            for (var i = 0; i < all.length; i++) {
+              var el = all[i];
+              if (isBadge(el)) el.remove();
+            }
+          } catch (e) { /* never break the page over badge cleanup */ }
+        };
+        new MutationObserver(sweep).observe(document.documentElement, { childList: true, subtree: true });
+        document.addEventListener('DOMContentLoaded', sweep);
+        window.addEventListener('load', sweep);
+      })();
+    </script>
+    <script data-dukb-consent-bootstrap="">
+      // Keep this gate aligned with consentPreferences and consentedScripts.
+      (function () {
+        var ANALYTICS_READY = false;
+        if (!ANALYTICS_READY) return;
+        try {
+          var value = JSON.parse(localStorage.getItem('cookie-consent-v2') || 'null');
+          var now = Date.now();
+          if (!value || value.version !== 2 || typeof value.advertising !== 'boolean'
+            || typeof value.analytics !== 'boolean' || value.analytics !== true
+            || typeof value.updatedAt !== 'number' || !Number.isFinite(value.updatedAt)
+            || value.updatedAt < 0 || value.updatedAt > now
+            || now - value.updatedAt >= 180 * 24 * 60 * 60 * 1000) return;
+          if (/^\/(?:reset-password|auth|account|profile|admin)(?:\/|$)/.test(location.pathname)) return;
+          function cleanUrl(input) {
+            try {
+              var url = new URL(input, location.origin);
+              return url.protocol === 'https:' || url.protocol === 'http:' ? url.origin + url.pathname : '';
+            } catch (e) { return ''; }
+          }
+          window.dataLayer = window.dataLayer || [];
+          window.gtag = function () { window.dataLayer.push(arguments); };
+          window.gtag('consent', 'default', {
+            ad_storage: 'denied', analytics_storage: 'denied',
+            ad_user_data: 'denied', ad_personalization: 'denied'
+          });
+          window.__DUKB_CONSENT_DEFAULTED__ = true;
+          window.gtag('consent', 'update', {
+            ad_storage: value.advertising && navigator.globalPrivacyControl !== true ? 'granted' : 'denied',
+            analytics_storage: 'granted', ad_user_data: 'denied', ad_personalization: 'denied'
+          });
+          window.gtag('js', new Date());
+          window.gtag('config', 'G-KZQK2G68YC', {
+            send_page_view: false, page_location: cleanUrl(location.href),
+            page_referrer: document.referrer ? cleanUrl(document.referrer) : '',
+            allow_google_signals: false, allow_ad_personalization_signals: false
+          });
+          var g = document.createElement('script');
+          g.async = true;
+          g.src = 'https://www.googletagmanager.com/gtag/js?id=G-KZQK2G68YC';
+          document.head.appendChild(g);
+        } catch (e) { /* Blocked storage keeps optional analytics off. */ }
+      })();
+    </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <!-- Round 314: the moment before React mounts used to show this document's
+       full crawler copy as a wall of raw text (the owner filmed it). The block
+       stays completely in the DOM for crawlers and for no-JS visitors (the
+       noscript lifts the cap), but a browser that is about to boot the app
+       sees one dimmed screenful, which reads as the site loading rather than
+       a broken page. React replaces #root's children on mount, so the capped
+       wrapper lives exactly as long as the wait does. -->
+  <!-- Round 448: the dim was not enough. His words, with a screenshot: "that
+       thing still shows when u log in into douknowball with the balck screen
+       and all that text and i dont want taht". Every sign in with Google
+       comes back through a full reload of this document, so the wait before
+       React mounts is the first thing a player sees after choosing an
+       account, and a screenful of grey paragraphs is what it showed. The
+       copy stays exactly where it is for crawlers and for no-JS visitors; a
+       booting browser now sees the mark on the app's own background and
+       nothing else, because #dukb-boot sits over the copy inside #root and
+       React replaces #root's children on mount, so it vanishes at the exact
+       moment the app appears. The cap on the copy stays so the document
+       cannot scroll during the wait. -->
+
+  <noscript></noscript>
+
+
+<link rel="canonical" href="https://douknowball.com/soccer-perfect-season" data-rh="true"><meta name="description" content="Draft a soccer XI from 11 random real clubs, use two rerolls and chase 38 wins in 38 games. Play the free Daily or start a fresh Unlimited season." data-rh="true"><meta property="og:type" content="website" data-rh="true"><meta property="og:url" content="https://douknowball.com/soccer-perfect-season" data-rh="true"><meta property="og:description" content="Draft a soccer XI from 11 random real clubs, use two rerolls and chase 38 wins in 38 games. Play the free Daily or start a fresh Unlimited season." data-rh="true"><meta property="og:image" content="https://douknowball.com/og-image.png" data-rh="true"><meta name="twitter:card" content="summary_large_image" data-rh="true"><meta name="twitter:description" content="Draft a soccer XI from 11 random real clubs, use two rerolls and chase 38 wins in 38 games. Play the free Daily or start a fresh Unlimited season." data-rh="true"><meta name="twitter:image" content="https://douknowball.com/og-image.png" data-rh="true"><meta property="og:title" content="Soccer Perfect Season: 38 Win Draft Game | DoUKnowBall" data-rh="true"><meta name="twitter:title" content="Soccer Perfect Season: 38 Win Draft Game | DoUKnowBall" data-rh="true">
+<style>html,body{background:#0a0a0b;color:#fafafa;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;margin:0;padding:0}a{color:#7dd3fc}#dukb-snapshot{padding:16px}</style>
+<style>#dukb-boot{position:fixed;inset:0;z-index:2147483000;display:flex;align-items:center;justify-content:center;background:#0a0a0b}#dukb-boot img{width:72px;height:72px}#dukb-snapshot{max-height:100vh;overflow:hidden}</style>
+<noscript><style>#dukb-boot{display:none}#dukb-snapshot{max-height:none;overflow:visible}</style></noscript>
+<script src="/prerender-boot.js" defer></script>
+</head>
+<body>
+<div id="root">
+<div id="dukb-boot" aria-hidden="true"><img src="/logo-mark.svg" alt="" width="72" height="72" decoding="async"></div>
+<div id="dukb-snapshot">
+<div data-site-chrome>
+<a href="/">DOUKNOWBALL</a>
+</div>
+<h1>Soccer Perfect Season</h1>
+<p>Draft from 11 real clubs. Win all 38 matches.</p>
+<h2>Soccer Perfect Season: 38 Win Draft Game</h2>
+<p>Draft a soccer XI from 11 random real clubs, use two rerolls and chase 38 wins in 38 games. Play the free Daily or start a fresh Unlimited season.</p>
+<p>In Soccer Perfect Season, 11 real clubs come up in a random order and you take one player from each. Fit them into a 4-3-3, then see if your XI can win every match in a 38-game season.</p>
+<p>The big name in front of you is only half the pick. Look at the clubs still to come before using your last centre-back slot, and save a reroll for a club whose available players leave you with a tough decision.</p>
+<h2>How to play Soccer Perfect Season and draft your starting XI</h2>
+<h3>Choose Daily or Unlimited</h3>
+<li>Choose Daily for the same club draw everyone gets that Eastern date, or Unlimited for a fresh draw.</li>
+<h3>Fit the players into your XI</h3>
+<li>Pick one player from the club on screen. Place them in a slot the game offers. You can open Upcoming clubs to see which players and ratings are coming.</li>
+<h4>When to reroll a club</h4>
+<li>Reroll up to twice in the draft. It replaces only the current club and keeps the others in order.</li>
+<h3>Play all 38 matches</h3>
+<li>Once the XI is full, reveal results one at a time with Next match or finish all 38 in one go.</li>
+<h2>Soccer Perfect Season rules for rerolls and scoring</h2>
+<h3>What counts as a perfect season</h3>
+<li>A win earns three league points. A draw earns one and ends the chance of perfection. Win all 38 for 114 points and a site score of 100.</li>
+<h3>How the game sets match odds</h3>
+<li>Goalkeeper and striker ratings count twice. The game compares your XI with the strongest possible XI from the same final set of clubs to work out your odds.</li>
+<li>Every offered slot keeps a route to a full XI. The strongest available XI guarantees all 38 wins.</li>
+<h2>Soccer Perfect Season example with 37 wins and a draw</h2>
+<h3>Finding the last winger</h3>
+<p>Say you have one open striker slot and one open winger slot. The final club has only a striker in the pool, so the current club must supply the winger. You can reroll the current club to look for a stronger winger if you still have a reroll.</p>
+<h3>Finishing just short of 38 wins</h3>
+<p>If that XI wins 37 and draws one, it gets 112 points and a site score of 98. The team went unbeaten, and the draw ended its shot at a perfect season.</p>
+<h2>Soccer Perfect Season tips for placing your players</h2>
+<h3>Keep an eye on the last few clubs</h3>
+<li>Check which upcoming clubs have a goalkeeper. When two picks can cover the same positions, compare their ratings before deciding who should take the slot with double weight.</li>
+<li>Save a reroll for a pick where the other clubs have already narrowed your options. The rest of the draw stays in the same order.</li>
+<h2>Soccer Perfect Season questions about Daily and Unlimited</h2>
+<h3>Can I continue a season later?</h3>
+<p>Yes. Daily and Unlimited save separately in this browser. Starting a fresh Unlimited run replaces only its Unlimited save.</p>
+<h3>Where do the players come from?</h3>
+<p>The draft uses real player names and clubs from the site's October 2026 player pool. Strength ratings and season results are generated for the game.</p>
+<h3>Will a reroll change tomorrow's Daily?</h3>
+<p>No. Each Eastern date has its own draw. A reroll only changes your current club in the run you are playing.</p>
+<h3>Is Soccer Perfect Season free to play?</h3>
+<p>Yes. Soccer Perfect Season is free to play on DoUKnowBall, right in your browser. No download and no signup needed.</p>
+<h2>More games to play</h2>
+<a href="/dart-draft">🎯 Dart Draft Throw timed darts at a real world map: hit a country, draft its players</a>
+<a href="/career-ladder">🪜 Career Ladder Guess the player, one career stop at a time</a>
+<a href="/who-am-i">🕵️ Who Am I? Hunt the secret player with similarity scores</a>
+<a href="/nfl-career">🏈 NFL Career Path Guess the NFL player from clues</a>
+<a href="/nba-grid">🔲 NBA Franchise Grid Fill the 3×3 with players who match both teams</a>
+<a href="/ufc-chain">🔗 Combat Chain Build a chain of fighters who beat each other</a>
+<div data-site-chrome>
+<p>All team names, competition names, logos and trademarks are property of their respective owners. DoUKnowBall is an independent fan project and is not affiliated with, endorsed by or sponsored by the NFL, NBA, UFC, NHL, MLB, FIFA, UEFA, the Premier League, the English Football League, LaLiga, Serie A, the Bundesliga, Ligue 1, the Eredivisie, MLS, the Saudi Pro League, the IOC, the NCAA, F1, the PGA Tour, NASCAR, the ATP or the WTA. Player names and statistics are used for identification and commentary only. © 2026 DoUKnowBall</p>
+<a href="/soccer">Soccer</a>
+<a href="/pro-basketball">NBA</a>
+<a href="/hockey">NHL</a>
+<a href="/pro-football">NFL</a>
+<a href="/baseball">MLB</a>
+<a href="/college">College</a>
+<a href="/search">Search Games</a>
+<a href="/about">About</a>
+<a href="/contact">Contact</a>
+<a href="/whats-new">What's New</a>
+<a href="/records">Record Books</a>
+<a href="/leaderboard">Leaderboard</a>
+<a href="/privacy">Privacy Policy</a>
+<a href="/cookie-policy">Cookie Policy</a>
+<a href="/terms">Terms of Service</a>
+<a href="/accessibility">Accessibility</a>
+<p>Essential storage keeps games working. Advertising is optional. We ask again in 180 days. <a href="/privacy">Learn more</a></p>
+<p>Analytics is paused. Google Analytics is off while we check its privacy settings.</p>
+</div>
+</div>
+</div>
+</body>
+</html>

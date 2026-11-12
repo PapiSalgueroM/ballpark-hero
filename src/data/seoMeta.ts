@@ -145,6 +145,10 @@ export const SEO_META: Record<string, SeoMeta> = {
     title: 'World Cup 2026 Bracket: Soccer Predictor Game',
     description: 'Build your 2026 World Cup bracket, every group and knockout round plus the awards, then score it against how the tournament really went. Free soccer game.',
   },
+  '/soccer-perfect-season': {
+    title: 'Soccer Perfect Season: 38 Win Draft Game',
+    description: 'Draft a soccer XI from 11 random real clubs, use two rerolls and chase 38 wins in 38 games. Play the free Daily or start a fresh Unlimited season.',
+  },
   '/soccer-career': {
     title: 'Soccer Career: From Academy to Retirement',
     description: 'Create a footballer, earn your first pro contract, choose transfers and play season by season in a free soccer career simulator.',

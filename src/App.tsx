@@ -102,6 +102,7 @@ const PerfectSeasonNhl = lazy(() => import("./pages/PerfectSeasonNhl"));
 const CareerLadder = lazy(() => import("./pages/CareerLadder"));
 const PerfectSeasonNba = lazy(() => import("./pages/PerfectSeasonNba"));
 const PerfectSeasonNfl = lazy(() => import("./pages/PerfectSeasonNfl"));
+const SoccerPerfectSeason = lazy(() => import("./pages/SoccerPerfectSeason"));
 const WhoAmI = lazy(() => import("./pages/WhoAmI"));
 const WorldXi = lazy(() => import("./pages/WorldXi"));
 const PlayerBingo = lazy(() => import("./pages/PlayerBingo"));
@@ -423,6 +424,7 @@ const AppContent = () => {
         <Route path="/transfer-path" element={<TransferPath />} />
         <Route path="/guess-transfer-value" element={<Navigate to="/" replace />} />
         <Route path="/perfect-lineup" element={<Navigate to="/" replace />} />
+        <Route path="/soccer-perfect-season" element={<SoccerPerfectSeason />} />
         {/* Round 270: one component, six sport hubs. The route string is the
             key into SPORT_HUBS in src/lib/sportHub.ts, and scripts/simHubs.mjs
             checks that these two lists say the same thing. */}
