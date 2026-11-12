@@ -3,7 +3,7 @@ import { ArrowRight, ChevronDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { nrlSeasonPlan, NRL_LAST_YEAR } from '@/data/nrlManagerSeasons';
 import {
-  nrlAcademyAvailableRoles, nrlAcademyOffer, nrlAcademyReports, nrlCareerCap, nrlCareerFinance, nrlCareerMarket, nrlCareerSquad, nrlContractOffer,
+  nrlAcademyAvailableRoles, nrlAcademyOffer, nrlAcademyReports, nrlCareerCap, nrlCareerFinance, nrlCareerMarket, nrlCareerRecord, nrlCareerSquad, nrlContractOffer,
   nrlCoachQuote, nrlCoachSpend, nrlDevelopmentPreview, nrlMedicalSpend, nrlMedicalUpgradeQuote, nrlOffseasonClubs, type NrlCareerAction, type NrlCareerState,
   type NrlDevelopmentFocus, type NrlMedicalLevel,
 } from '@/lib/nrlCareer';
@@ -371,6 +371,53 @@ function DevelopmentFocus({ career, onAction, disabled }: { career: NrlCareerSta
   );
 }
 
+function CareerRecord({ history }: { history: NrlCareerState['history'] }) {
+  const record = nrlCareerRecord(history);
+  if (!record) return null;
+  const { bestFinish } = record;
+  const stats = [
+    ['Completed seasons', record.seasons],
+    ['Regular-season record', `${record.wins}W ${record.draws}D ${record.losses}L`],
+    ['Regular-season win rate', `${record.winRate}%`],
+    ['Finals trips', record.finalsTrips],
+    ['Minor premierships', record.minorPremierships],
+    ['Premierships', record.premierships],
+  ];
+  return (
+    <details className="group mt-4 rounded-xl border border-border bg-background px-3" data-nrl-career-record>
+      <summary className="flex min-h-11 cursor-pointer items-center justify-between gap-2 rounded-md text-sm font-bold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
+        Career record<ChevronDown size={16} aria-hidden="true" className="shrink-0 group-open:rotate-180" />
+      </summary>
+      <div className="pb-3 text-sm">
+        <dl className="grid grid-cols-2 gap-x-3 gap-y-2">
+          {stats.map(([label, value]) => (
+            <div key={label}>
+              <dt className="text-xs text-muted-foreground">{label}</dt>
+              <dd className="font-semibold">{value}</dd>
+            </div>
+          ))}
+          <div className="col-span-2">
+            <dt className="text-xs text-muted-foreground">Best ladder finish</dt>
+            <dd className="font-semibold">#{bestFinish.rank} · {labelForClub(bestFinish.year, bestFinish.clubId)} {bestFinish.year}</dd>
+          </div>
+        </dl>
+        {record.clubs.length > 1 && (
+          <ul className="mt-3 divide-y divide-border border-t border-border" aria-label="Record by club">
+            {record.clubs.map(club => (
+              <li key={club.clubId} className="pt-2 pb-1">
+                <p className="font-semibold">{labelForClub(club.firstYear, club.clubId)}</p>
+                <p className="text-xs text-muted-foreground">
+                  {club.seasons} {club.seasons === 1 ? 'season' : 'seasons'} · {club.wins}W {club.draws}D {club.losses}L · {club.premierships} {club.premierships === 1 ? 'premiership' : 'premierships'}
+                </p>
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+    </details>
+  );
+}
+
 function History({ career, onAction, disabled }: { career: NrlCareerState; onAction: Dispatch; disabled: boolean }) {
   const { year, phase, clubId } = career.season;
   const finished = phase === 'complete';
@@ -424,6 +471,7 @@ function History({ career, onAction, disabled }: { career: NrlCareerState; onAct
           </div>
         </details>
       )}
+      <CareerRecord history={career.history} />
       {career.history.length > 0 ? (
         <ul className="mt-3 divide-y divide-border">
           {[...career.history].reverse().map(record => {

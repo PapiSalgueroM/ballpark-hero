@@ -4,7 +4,7 @@ import { uniqueName } from '@/lib/foNames';
 import { archiveNrlScoring, validNrlScoringArchive, type NrlSeasonScoringTotal } from '@/lib/nrlPlayerScoring';
 import {
   createNrlSeason, isNrlManagerState, isNrlSeasonProgress, nrlBench, nrlLadder, nrlMatchupEdges, nrlNextRound, nrlRegularRounds,
-  NRL_ROLES, reduceNrlSeason, validNrlLiveScore, type NrlAction, type NrlCoachRole, type NrlManagerState, type NrlMatchResult,
+  NRL_FINALS_SPOTS, NRL_ROLES, reduceNrlSeason, validNrlLiveScore, type NrlAction, type NrlCoachRole, type NrlManagerState, type NrlMatchResult,
   type NrlPlayer, type NrlRole, type NrlYear,
 } from '@/lib/nrlManager';
 
@@ -382,6 +382,38 @@ function seasonReceipt(state: NrlCareerState): NrlCareerHistoryRow {
   return {
     year: season.year, clubId: season.clubId, rank, wins, draws, losses, championId: season.championId!, finance,
     ...(season.kickerId ? { scoring: archiveNrlScoring(season) } : {}),
+  };
+}
+
+type NrlCareerRecordYear = Pick<NrlCareerHistoryRow, 'year' | 'clubId' | 'rank' | 'wins' | 'draws' | 'losses' | 'championId'>;
+
+export function nrlCareerRecord(history: readonly NrlCareerRecordYear[]) {
+  const first = history[0];
+  if (!first) return null;
+  const empty = { seasons: 0, wins: 0, draws: 0, losses: 0, premierships: 0 };
+  const totals = { ...empty, finalsTrips: 0, minorPremierships: 0 };
+  const clubs = new Map<string, { clubId: string; firstYear: number } & typeof empty>();
+  let bestFinish = { rank: first.rank, year: first.year, clubId: first.clubId };
+
+  for (const { year, clubId, rank, wins, draws, losses, championId } of history) {
+    const club = clubs.get(clubId) ?? { ...empty, clubId, firstYear: year };
+    for (const record of [totals, club]) {
+      record.seasons++;
+      record.wins += wins;
+      record.draws += draws;
+      record.losses += losses;
+      record.premierships += Number(championId === clubId);
+    }
+    totals.finalsTrips += Number(rank <= NRL_FINALS_SPOTS);
+    totals.minorPremierships += Number(rank === 1);
+    club.firstYear = Math.min(club.firstYear, year);
+    clubs.set(clubId, club);
+    if (rank < bestFinish.rank || (rank === bestFinish.rank && year < bestFinish.year)) bestFinish = { rank, year, clubId };
+  }
+  const played = totals.wins + totals.draws + totals.losses;
+  return {
+    ...totals, bestFinish, winRate: Math.round(100 * totals.wins / played),
+    clubs: [...clubs.values()].sort((a, b) => a.firstYear - b.firstYear),
   };
 }
 

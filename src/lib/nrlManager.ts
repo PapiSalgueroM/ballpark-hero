@@ -16,6 +16,7 @@ export const NRL_ROLES = [
 export const NRL_TACTICS = ['balanced', 'attack', 'defense'] as const;
 export const NRL_BENCH_SIZE = 6;
 export const NRL_MAX_BENCH_USED = 4;
+export const NRL_FINALS_SPOTS = 8;
 export const NRL_COACHING_BONUS = 2;
 const MAX_INJURY_ROUNDS = 4;
 const UTILITY_RATING_COST = 12;
@@ -187,7 +188,7 @@ export function nrlRoundFixtures(state: Pick<NrlManagerState, 'year' | 'round' |
   if (phase === 'complete') return [];
   if (phase === 'regular') return (nrlSeasonPlan(year).draw[round - 1] ?? []).map(([homeId, awayId]) => ({ homeId, awayId, round }));
   const finalsRound = round - nrlRegularRounds(year);
-  const seeds = nrlLadder(state).slice(0, 8).map(row => row.clubId);
+  const seeds = nrlLadder(state).slice(0, NRL_FINALS_SPOTS).map(row => row.clubId);
   const pairings = resolveWeek(FINALS, seeds, finalsOutcomes(results), finalsRound);
   return (pairings ?? []).map(({ id, homeId, awayId }) => ({ homeId, awayId, round, finalsRound, tieId: id }));
 }
