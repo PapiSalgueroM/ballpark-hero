@@ -1,3 +1,9 @@
+## 2026-11-12 Soccer Career snapshot preload
+
+This draft builds on PR #697. The build preloads the creator's emitted static dependencies after the App script in the Soccer Career snapshot. The build comparison found 33 links in that one snapshot and byte-identical copies of the other 895 output files. Public snapshots stay hash free.
+
+In three paired 390px runs at 150ms latency, 1.6Mbps download and 4x CPU throttling, median fresh LCP was 3.80s versus 6.07s. The name field was visible at 5.56s versus 7.37s. The largest element was a different line of the same consent banner. In three saved-career pairs the hub was visible at 7.73s versus 8.48s. Both paths fetched the same JavaScript bytes as #697. These are local lab timings.
+
 ## 2026-11-12 Soccer Career first visit
 
 This draft builds on PR #676. The real creation form opens before the simulation downloads. Generate Starting Potential loads the bundled clubs and simulation on the first roll. Saved careers open directly, and in-game restart uses the same creator. Editing the position while the simulation downloads cancels the previous roll without replacing the form.
