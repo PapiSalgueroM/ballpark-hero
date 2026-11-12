@@ -1,3 +1,9 @@
+## 2026-11-12 Club Manager saved opening layout
+
+The three saved-start loading panels reserve one small viewport of height on phones, where the manager slots stack vertically. That keeps the live guide below the fold until the slot cards arrive. The desktop loaders keep their prior geometry.
+
+With the engine, historical squads and slots file held separately, the #727 phone control exposed the guide at y=385, y=385 and y=361, then recorded a 0.361 shift when the cards arrived. All four 320px and 390px combinations of essential consent and unset consent kept the guide below the fold and recorded zero guide shifts. The same opening save bytes and normalized slot bytes matched at each stage.
+
 ## 2026-11-12 Club Manager opening performance prototype
 
 The five season buttons share the existing era catalogue and appear before the match engine for empty stores. The original career boot still handles active, parked and damaged data and Hot Seat handoffs. A choice made while the engine loads gives way to a save created in another tab. The roster catalogue remains in the prerendered guide and can be opened before a career from the guide's club list control.
