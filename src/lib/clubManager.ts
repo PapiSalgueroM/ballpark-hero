@@ -12489,7 +12489,7 @@ export function buildCalendar(leagueSize: number, r16 = false, twoLegKo = false,
   const marks = {
     ucl: [at(0.05), at(0.13), at(0.21), at(0.27), at(0.32), at(0.39)],
     cupR16: at(0.16), cupQF: at(0.37), window: at(0.47), uclR16: at(UCL_R16_MARK),
-    uclQF: at(0.58), cupSF: at(0.68), uclSF: at(0.76), cupF: at(0.87), uclF: at(0.92),
+    uclQF: at(0.58), cupSF: at(0.68), uclSF: at(0.76), cupF: at(0.87),
     uclR16b: after(UCL_R16_MARK), uclQFb: after(0.58), uclSFb: after(0.76),
   };
   const pushKo = (list: CalendarEntry[], round: UclKoRound, leg: 1 | 2): void => {
@@ -12517,7 +12517,7 @@ export function buildCalendar(leagueSize: number, r16 = false, twoLegKo = false,
     if (cup && r === marks.cupF) cal.push({ type: 'cup', round: 0, cupRound: 'F' });
     /* The final is one match at a neutral venue in every era on offer, so it
        never gets a second leg however twoLegKo is set. */
-    if (r === marks.uclF) cal.push({ type: 'uclKo', round: 0, uclRound: 'F' });
+    if (r === rounds - 1) cal.push({ type: 'uclKo', round: 0, uclRound: 'F' });
   }
   return cal;
 }
