@@ -1,3 +1,11 @@
+## 2026-11-12 Soccer Career first visit
+
+This draft builds on PR #676. The real creation form opens before the simulation downloads. Generate Starting Potential loads the bundled clubs and simulation on the first roll. Saved careers open directly, and in-game restart uses the same creator. Editing the position while the simulation downloads cancels the previous roll without replacing the form.
+
+Three paired 390px cold runs at 150ms latency, 1.6Mbps download and 4x CPU throttling measured median local LCP at 6.47s versus 8.74s on #676. The name field was visible at 6.81s versus 9.96s. Cold JavaScript fell from 751.6 to 305.1 KiB gzip. The first roll brings it to 756.4 KiB under the existing 840 KiB ceiling. Field vitals remain unmeasured and local LCP remains above 2.5s.
+
+The compiled phone replays matched the academy placement, random draws, first save bytes, restored save normalization and restart result. Source and compiled guards keep the engine off the cold path. The route budget checks verify that the pools load on the first roll. Public snapshots are byte-identical.
+
 ## 2026-11-12 Home search and sport catalog
 
 Home puts Search and Browse sports together above the featured games. Browse sports moves focus below the sticky header to the sport library, with favourite and pin guidance beside the controls. Phone catalog tiles show the full title and badges, with separate Play and Pin targets. Search results and the desktop catalog show game descriptions.

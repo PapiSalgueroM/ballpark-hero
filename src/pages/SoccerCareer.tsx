@@ -1,25 +1,17 @@
+import { SoccerCareerFrame } from "@/components/soccer-career/SoccerCareerFrame";
+import { CentreMountBoundary, keepTabInside, completedRecordsStorage, SaveMovedNotice, useSoccerPastCareers } from "@/components/soccer-career/SoccerCareerOverlays";
+import { SAVE_KEY, adoptSoccerCareerSave } from "@/lib/soccerCareerSaveEntry";
+import { SoccerCareerCreator, POSITIONS, FAMILY_COLORS, getPositionStatBars, StatBarGame, type CareerCreationSupport, type SoccerCareerDraft } from "@/components/soccer-career/SoccerCareerCreator";
 import { acknowledgeChanceWheel, validChanceWheel } from '@/lib/careerChanceWheel';
 import { soccerEventChoiceConsequence } from '@/lib/soccerCareerContracts';
-import { Component, Fragment, lazy, Suspense, useState, useCallback, useRef, useEffect, useLayoutEffect, useMemo, type ComponentType, type ComponentProps, type ReactNode, type CSSProperties } from "react";
+import { Fragment, lazy, Suspense, useState, useCallback, useRef, useEffect, useLayoutEffect, useMemo, type ComponentType, type ComponentProps, type ReactNode, type CSSProperties } from "react";
 import { formatNumber } from '@/lib/formatNumber';
-import { completedRecordCandidate, readCompletedRecords, retainCompletedRecord, recordRetentionStatus, type CompletedRecordCandidate, type CompletedRecordsRead, type RetainResult } from '@/lib/soccerCareerCompletedRecords';
+import { completedRecordCandidate, readCompletedRecords, retainCompletedRecord, recordRetentionStatus, type CompletedRecordCandidate, type RetainResult } from '@/lib/soccerCareerCompletedRecords';
 import { focusDialogOnMount, escapeCloses } from '@/lib/dialogA11y';
 import { useGameCompletion } from "@/hooks/useGameCompletion";
 import { recordCompletion, recordActivity, recordStreakDay } from "@/lib/completions";
-import PageSeo from "@/components/seo/PageSeo";
-import GameSeoContent from '@/components/seo/GameSeoContent';
-import { GameNavbar } from "@/components/game/GameNavbar";
-import { GameHelp } from "@/components/game/GameHelp";
 import VictoryMoment from '@/components/game/VictoryMoment';
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import {
-  Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue,
-} from "@/components/ui/select";
-import { groupByConfederation } from "@/lib/confederationGroups";
-import { useAuth } from "@/contexts/AuthContext";
-import { AuthModal } from "@/components/auth/AuthModal";
 import { toast } from "sonner";
 import { ChevronRight } from "lucide-react";
 import { getPersonalityDef, getAgentDef } from "@/lib/soccerCareerLife";
@@ -81,7 +73,6 @@ import { localizeMoney as money, localizeMoneyGrouped as moneyLine, CURRENCIES, 
 const SquadTile = lazy(() => import("@/components/soccer-career/SquadTile").then(m => ({ default: m.SquadTile })));
 import { ReducedRolePlanNote, ReducedRoleSeasonNote } from "@/components/soccer-career/ReducedRoleNote";
 import { personalGoalMilestone } from "@/lib/soccerCareerMilestone";
-import { REDUCED_ROLE_GAMES } from "@/lib/soccerCareerRole";
 import PressRoomTile from "@/components/soccer-career/PressRoomTile";
 import type { TrophyCategory } from "@/components/soccer-career/TrophyCabinet";
 import { CareerRecordsTile } from '@/components/soccer-career/CareerRecordsTile';
@@ -96,33 +87,24 @@ import type { MoneyAction } from "@/lib/soccerMoney";
 import { bankSummary } from "@/lib/soccerMoney";
 const AttributesScreen = lazy(() => import("@/components/soccer-career/CareerAttributesScreen"));
 const PhonePanel = lazy(() => import("@/components/soccer-career/PhonePanel"));
-const PastCareersSheet = lazy(() => import("@/components/soccer-career/PastCareersSheet"));
 const CareerStory = lazy(() => import("@/components/soccer-career/CareerStory").catch(() => new Promise<never>(() => undefined)));
 import { BAND_CLASS } from "@/lib/careerRatingBand";
 import { soccerRatingRows, readMatchRating, readOvr, ratingBand } from "@/lib/careerSeasonRatings";
 import { applyDrillResult, type DrillKind } from "@/lib/careerDrills";
-import { isSoccerDeckId, loadSoccerDeck, soccerDeckReady, SOCCER_DECK_HELP_RULES } from "@/lib/soccerDeckGate";
+import { isSoccerDeckId, loadSoccerDeck, soccerDeckReady } from "@/lib/soccerDeckGate";
 import { rollStartingOverall, rollPotential, potentialTier, adjustClubsForYear, allocOverall, normalizeAllocation, allocMax, ALLOC_MIN, playsLike, stepAllocation } from "@/lib/careerEras";
 import { dugoutTableWords, ordinal, leagueWithArticle, readLeagueFinish, finishLeague, leagueInYear, leagueSeasonLine, namedInLeague } from "@/lib/soccerCareerLeague";
 import { SeasonDerbyLines, DerbyChip, CareerDerbyTotals } from "@/components/soccer-career/DerbyLines";
 import { SeasonCupExitLine, SeasonCupWinBlock } from "@/components/soccer-career/CupRunLines";
 import { cupCabinetLabel, cupChipLabel } from "@/lib/soccerCareerCup";
-import { derbyHeroSeasons, DERBY_HELP_RULES } from "@/lib/soccerCareerDerby";
+import { derbyHeroSeasons } from "@/lib/soccerCareerDerby";
 import type { WorldSeason } from "@/lib/soccerPhone";
 import { soccerMoraleLine } from "@/lib/careerForm";
-/* Round 131: height, weight and the specifics under each family. */
 import {
-  type PlayerPhysique, type AttrShape,
-  attrTreeFor, deriveAttributes, buildEffects,
-  applyFamilyOffset, defaultPhysique,
-  POSITION_OFFSETS, SHAPE_MAX, HEIGHT_MIN, HEIGHT_MAX, WEIGHT_MIN, WEIGHT_MAX,
-} from "@/lib/soccerCareerAttributes";
-import {
-  type PlayerAppearance, defaultAppearance, getCelebration,
+  type PlayerAppearance, getCelebration,
 } from "@/lib/soccerCareerAppearance";
 import { seasonFamilySummary, type SeasonFamilyContext } from "@/lib/seasonFamilySummary";
 import PlayerAvatar from "@/components/soccer-career/PlayerAvatar";
-import AppearanceBuilder from "@/components/soccer-career/AppearanceBuilder";
 import { Confetti } from "@/components/soccer-career/CareerFx";
 import { AwardsNightCard, SpeechChoices, SpokenSpeech } from "@/components/career/AwardsNightCard";
 import { availableSpeeches, givenSpeechOf } from "@/lib/careerAwardsNight";
@@ -189,52 +171,14 @@ const OwnerPanelWait = () => {
 const TrophyCabinet = lazy(() => import("@/components/soccer-career/TrophyCabinet"));
 const SeasonRatings = lazy(() => import("@/components/soccer-career/SeasonRatings"));
 const SoccerDerbyHistory = lazy(() => import("@/components/soccer-career/SoccerDerbyHistory"));
-const BuildEditor = lazy(() => import("@/components/soccer-career/SoccerCareerBuildEditor"));
 const CareerChanceWheel = lazy(() => import('@/components/soccer-career/CareerChanceWheel'));
 const SoccerCareerProgramme = lazy(() => import("@/components/soccer-career/SoccerCareerProgramme"));
 /* Round 1047: the training ground (its drills and its boards) loads when it
    is opened, not with the page; the page's budget came down by what it weighed. */
 const TrainingPanel = lazy(() => import("@/components/soccer-career/TrainingPanel"));
-const STORY_ROLE_HELP_RULES = [
-  'Phone and Training sit above your player on a phone. Career Story opens your saved chapters; Previous and Next move between them, and All seasons returns to the tile you opened.',
-  `Accepting a smaller role from a new manager means ${REDUCED_ROLE_GAMES} fewer planned league games next season at that club. It lasts one recorded season; a move, loan or retirement clears it. Example: a selection of 30 becomes ${30 - REDUCED_ROLE_GAMES} before existing selection limits, injuries and bans.`,
-  'Personal goal milestones count the goals of your recorded senior club seasons, excluding academy and international goals. Example: 99 senior club goals plus 2 this season takes you past 100, with a new total of 101. The summary shows that crossing.',
-];
-/* Round 1045: a boundary inside the lazy chunk cannot catch the chunk failing
-   to load (a deploy swapped the files), so the mount carries its own: the
-   overlay says so with Retry and Close, and the save is never touched.
-   Retry reloads the page (src/lib/freshBuild.ts, Round 832): a lazy import
-   that failed stays failed for the life of the page, so a remount alone
-   would throw the same error again. The save is already on disk. */
-class CentreMountBoundary extends Component<{ onClose: () => void; what?: string; children: ReactNode }, { failed: boolean; tries: number }> {
-  state = { failed: false, tries: 0 };
-  static getDerivedStateFromError() { return { failed: true }; }
-  render() {
-    if (!this.state.failed) return <Fragment key={this.state.tries}>{this.props.children}</Fragment>;
-    return (
-      <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 p-4" data-season-centre>
-        <div role="dialog" aria-modal="true" aria-label={this.props.what ?? "Season Centre"} tabIndex={-1} ref={focusDialogOnMount} onKeyDown={escapeCloses(this.props.onClose)} className="w-full max-w-sm space-y-3 rounded-2xl border border-border bg-card p-4 text-center outline-none">
-          <p className="text-sm">Couldn't load the {this.props.what ?? "Season Centre"}. Your career is safe.</p>
-          <div className="flex gap-2">
-            <button type="button" onClick={() => { if (!reloadToRetryChunk()) this.setState(s => ({ failed: false, tries: s.tries + 1 })); }} className="h-10 flex-1 rounded-lg border border-border text-sm font-semibold">↻ Retry</button>
-            <button type="button" onClick={this.props.onClose} className="h-10 flex-1 rounded-lg bg-primary text-sm font-bold text-primary-foreground">✕ Close it</button>
-          </div>
-        </div>
-      </div>
-    );
-  }
-}
-
 /* ─── Constants ─── */
 // Round 76: 131 nations (was 49), every one with a real flag in FlagImg,
 // sorted alphabetically so yours is findable in the scroll.
-/* Release BS fix: a loading layer has one control, so Tab stays on it, the phone layer's rule below */
-function keepTabInside(event: { key: string; preventDefault(): void; stopPropagation(): void; currentTarget: HTMLElement }): boolean {
-  if (event.key !== "Tab") return false;
-  event.preventDefault(); event.stopPropagation();
-  event.currentTarget.querySelector<HTMLButtonElement>("button")?.focus({ preventScroll: true });
-  return true;
-}
 /* Release BS fix: the trophy loading layer takes focus before the lazy cabinet mounts, so the cabinet would record
    the layer as its opener. This holds the real opener from the first render and hands focus back to it on close,
    the phone's rule. */
@@ -269,131 +213,6 @@ function PhoneSurface(props: ComponentProps<typeof PhonePanel>) {
     </CentreMountBoundary>
   );
 }
-const NATIONALITIES = [
-  "Albania","Algeria","Andorra","Angola","Argentina","Armenia","Australia","Austria","Azerbaijan",
-  "Bahrain","Belarus","Belgium","Benin","Bolivia","Bosnia & Herzegovina","Brazil","Bulgaria",
-  "Burkina Faso","Cameroon","Canada","Cape Verde","Chile","China","Colombia","Comoros",
-  "Congo","Costa Rica","Croatia","Cuba","Curaçao","Cyprus","Czech Republic","DR Congo",
-  "Denmark","Dominican Republic","Ecuador","Egypt","El Salvador","England","Estonia",
-  "Ethiopia","Faroe Islands","Finland","France","Gabon","Georgia","Germany","Ghana",
-  "Greece","Guatemala","Guinea","Guinea-Bissau","Haiti","Honduras","Hungary","Iceland",
-  "India","Indonesia","Iran","Iraq","Ireland","Israel","Italy","Ivory Coast","Jamaica",
-  "Japan","Jordan","Kazakhstan","Kenya","Kosovo","Kuwait","Latvia","Lebanon","Liberia",
-  "Libya","Liechtenstein","Lithuania","Luxembourg","Madagascar","Mali","Malta","Mexico",
-  "Moldova","Montenegro","Morocco","Mozambique","Netherlands","New Zealand","Nigeria",
-  "North Korea","North Macedonia","Northern Ireland","Norway","Oman","Panama","Paraguay",
-  "Peru","Philippines","Poland","Portugal","Qatar","Romania","Russia","Saudi Arabia",
-  "Scotland","Senegal","Serbia","Sierra Leone","Slovakia","Slovenia","South Africa",
-  "South Korea","Spain","Suriname","Sweden","Switzerland","Tajikistan","Tanzania",
-  "Thailand","The Gambia","Togo","Trinidad and Tobago","Tunisia","Turkey","Uganda",
-  "Ukraine","United Arab Emirates","Uruguay","USA","Uzbekistan","Venezuela","Vietnam",
-  "Wales","Zambia","Zimbabwe",
-];
-const POSITIONS = [
-  { value: "GK", label: "Goalkeeper (GK)" }, { value: "CB", label: "Centre Back (CB)" },
-  { value: "LB", label: "Left Back (LB)" }, { value: "RB", label: "Right Back (RB)" },
-  { value: "CDM", label: "Defensive Mid (CDM)" }, { value: "CM", label: "Central Mid (CM)" },
-  { value: "CAM", label: "Attacking Mid (CAM)" }, { value: "LW", label: "Left Wing (LW)" },
-  { value: "RW", label: "Right Wing (RW)" }, { value: "ST", label: "Striker (ST)" },
-];
-/* Round 302, off the owner's tweaks document ("eras 2015/16, 2010/11, 05/06
-   plus more eras"): the engine has modeled eight half decade windows since the
-   era system landed, but this picker only exposed four decade starts, so a
-   2005 or 2015 kickoff was unreachable. Every row below maps onto one of the
-   eight ERA_DEFS windows in careerEras.ts, and simCareerEras keeps that true.
-   Old values ("1990s" etc) only ever lived in creation screen state, never in
-   a save, so renaming them breaks nothing. */
-const ERAS = [
-  { value: "1990-94", label: "Early 90s (1990 start)", startYear: 1990 },
-  { value: "1995-99", label: "Late 90s (1995 start)", startYear: 1995 },
-  { value: "2000-04", label: "Early 2000s (2000 start)", startYear: 2000 },
-  { value: "2005-09", label: "Late 2000s (2005 start)", startYear: 2005 },
-  { value: "2010-14", label: "Early 2010s (2010 start)", startYear: 2010 },
-  { value: "2015-19", label: "Late 2010s (2015 start)", startYear: 2015 },
-  { value: "2020-24", label: "2020s (2020 start)", startYear: 2020 },
-  { value: "2025", label: "2025 start", startYear: 2025 },
-  { value: "2026", label: "Current era (2026 start)", startYear: 2026 },
-];
-
-const rand = (min: number, max: number) => Math.floor(Math.random() * (max - min + 1)) + min;
-
-type Stats = { pace: number; shooting: number; passing: number; dribbling: number; defending: number; physical: number; reflexes: number };
-
-function generateStatsFromOverall(overall: number, position: string): Stats {
-  /* Round 131: the offsets moved into soccerCareerAttributes because the
-     engine now needs the same table to work out what a neutral player at this
-     overall looks like. One copy, imported in both places, so the reference
-     the season maths measures a build against can never drift from the line
-     the creation screen hands out. */
-  const o = POSITION_OFFSETS[position] || [0, 0, 0, 0, 0, 0, 0];
-  const clamp = (v: number) => Math.max(25, Math.min(99, v));
-  const keys: (keyof Stats)[] = ["pace", "shooting", "passing", "dribbling", "defending", "physical", "reflexes"];
-  const vals = o.map(off => clamp(overall + off));
-
-  // Adjust so the average equals exactly the rolled overall
-  let avg = Math.round(vals.reduce((a, b) => a + b, 0) / 7);
-  while (avg !== overall) {
-    if (avg < overall) {
-      // Find the largest stat that can go up
-      let idx = vals.indexOf(Math.max(...vals.filter(v => v < 99)));
-      if (idx === -1) idx = 0;
-      vals[idx] = Math.min(99, vals[idx] + 1);
-    } else {
-      // Find the largest stat that can go down
-      let idx = vals.indexOf(Math.max(...vals.filter(v => v > 25)));
-      if (idx === -1) idx = 0;
-      vals[idx] = Math.max(25, vals[idx] - 1);
-    }
-    avg = Math.round(vals.reduce((a, b) => a + b, 0) / 7);
-  }
-
-  const s: Stats = { pace: vals[0], shooting: vals[1], passing: vals[2], dribbling: vals[3], defending: vals[4], physical: vals[5], reflexes: vals[6] };
-  return s;
-}
-
-/* ─── Position-specific attribute display ───
-
-   Round 131 rebuilt this. It used to hand back six hardcoded rows per position
-   group with labels invented on the spot, so a midfielder's "Dribbling" bar
-   was secretly reading his shooting stat and his "Composure" bar was reading
-   his reflexes, which for an outfielder is a number nothing else in the game
-   touches. It looked like six attributes and it was six mislabelled ones.
-
-   Now it reads the real family list for the position and, under each family,
-   names the specific attribute that stands out. Still six rows, because a
-   phone screen is a phone screen and the tile rule is the tile rule, but every
-   row is honest and the whole tree is one tap away on its own screen. */
-type AttrHolder = {
-  pace: number; shooting: number; passing: number; dribbling: number;
-  defending: number; physical: number; reflexes: number;
-  position?: string; physique?: PlayerPhysique | null; attrShape?: AttrShape | null;
-};
-
-const FAMILY_COLORS: Record<string, string> = {
-  pace: "bg-emerald-500",
-  shooting: "bg-red-500",
-  passing: "bg-blue-500",
-  dribbling: "bg-yellow-500",
-  defending: "bg-purple-500",
-  physical: "bg-orange-500",
-  reflexes: "bg-cyan-500",
-};
-
-function getPositionStatBars(pos: string, s: AttrHolder) {
-  const derived = deriveAttributes(s, pos, s.physique, s.attrShape);
-  return attrTreeFor(pos).map(fam => {
-    const kids = derived.filter(d => d.family === fam.key);
-    let top = kids[0];
-    for (const k of kids) if (k.value > top.value) top = k;
-    return {
-      l: fam.label,
-      v: Math.round((s as any)[fam.key]) || 0,
-      c: FAMILY_COLORS[fam.key] || "bg-emerald-500",
-      top: top ? `${top.label} ${top.value}` : "",
-    };
-  });
-}
-
 /* Round 972: the cabinet tile for continental club cups won outside UEFA. One
    name when every win was the same cup, a plain label when the cup was renamed
    or the player won in two parts of the world. */
@@ -443,23 +262,6 @@ export function CareerStatsCard({ career, totals, onDerbyHistory }: { career: Pi
     {onDerbyHistory && career.seasons.some(s => s.type === "playing") && <button type="button" onClick={onDerbyHistory} data-open-derby-history
       className="mt-2 min-h-11 rounded-lg px-3 text-xs font-bold text-orange-400 hover:bg-orange-500/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-ring">🔥 Derby history</button>}
   </div>;
-}
-
-/* ─── Stat Bar ─── */
-function StatBarGame({ label, value, color, top }: { label: string; value: number; color: string; top?: string }) {
-  const rc = value >= 80 ? "text-green-400" : value >= 65 ? "text-emerald-400" : value >= 50 ? "text-yellow-400" : "text-red-400";
-  return (
-    <div className="flex items-center gap-2">
-      <span className="w-[5.5rem] shrink-0 min-w-0">
-        <span className="block text-xs text-muted-foreground truncate">{label}</span>
-        {top && <span className="block text-[9px] text-muted-foreground/70 truncate">{top}</span>}
-      </span>
-      <div className="flex-1 h-2 rounded-full bg-muted/40 overflow-hidden">
-        <div className={`h-full rounded-full ${color} transition-all duration-500`} style={{ width: `${value}%` }} />
-      </div>
-      <span className={`text-xs font-bold w-6 text-right ${rc}`}>{value}</span>
-    </div>
-  );
 }
 
 /* ─── Round 972: the first stage on the cup card ───
@@ -877,12 +679,7 @@ function useFooterLift(enabled: boolean): number {
 }
 
 /* ─── Main Component ─── */
-const SAVE_KEY = "soccerCareerSave";
 type CareerSaveAcknowledgement = { career: CareerState; raw: string; candidate: CompletedRecordCandidate | null };
-const completedRecordsStorage = {
-  getItem: (key: string) => localStorage.getItem(key),
-  setItem: (key: string, value: string) => localStorage.setItem(key, value),
-};
 /* Round 1330: the page's own toasts sit at the top centre, clear of the bar,
    the Training and Phone buttons and the choices a card reveals under them.
    Round 1568: on a phone (the toast library's own 600 px line) they start 44 px lower, under the site's bar
@@ -901,40 +698,31 @@ const PAGE_TOAST = {
    scripts/playSoccerDeck.mjs read the deck's first load (7 chunks, 30.1K gzipped) at 334 ms on a phone line of
    150 ms latency and 1.6 Mbps (rc r1504-s7); about 2.6 s on a 2G line of 250 Kbps and 800 ms by the same bytes. */
 const DECK_WAIT_MS = 8000;
-const SaveMovedNotice = lazy(() => import('@/components/SaveMovedNotice').catch(() => { reloadToRetryChunk(); return new Promise<never>(() => undefined); }));
 
-export default function SoccerCareer() {
-  const { user } = useAuth();
-  const [showAuth, setShowAuth] = useState(false);
-  const [playerName, setPlayerName] = useState("");
-  const [nationality, setNationality] = useState("");
-  const [position, setPosition] = useState("");
-  const [era, setEra] = useState("");
-  const [previewStats, setPreviewStats] = useState<Stats | null>(null);
-  // Round 54: the look you build on the creation screen, carried into initCareer
-  const [appearance, setAppearance] = useState<PlayerAppearance>(() => defaultAppearance());
-  /* Round 131: the frame and the shaping live up here beside the look, because
-     they have to survive closing the build screen and reopening it, and they
-     both go into initCareer at the end. */
-  const [physique, setPhysique] = useState<PlayerPhysique>(() => defaultPhysique("ST"));
-  const [attrShape, setAttrShape] = useState<AttrShape>({});
-  const [previewOvr, setPreviewOvr] = useState(0);
-  const [saving, setSaving] = useState(false);
+export function getCreationSupport(): CareerCreationSupport {
+  return { clubs: FALLBACK_CLUBS, getYouthAcademyClub, adjustClubsForYear,
+    rollStartingOverall, rollPotential, potentialTier, playsLike, leagueSeasonLine };
+}
+
+export function startSoccerCareer(draft: SoccerCareerDraft): CareerState {
+  const { playerName, nationality, position, era, stats, overall, startYear, clubs, appearance, potential, physique, attrShape, academyPreview } = draft;
+  const career = initCareer(playerName, nationality, position, era, stats, overall, startYear, clubs, appearance, potential, physique, attrShape, academyPreview);
+  if (startYear < 2009) career.historicalArrivals = { version: 2, players: [] };
+  else if (startYear === 2010 || startYear === 2015) career.historicalArrivals = { version: 3, startYear, players: [] };
+  return career;
+}
+
+export type SoccerCareerAdmission = { saved: string } | { started: CareerState };
+
+export default function SoccerCareer({ entry }: { entry?: SoccerCareerAdmission } = {}) {
   /* Round 258: the display currency is a preference in its own storage key,
      not save data, so nothing here needs to know what it is. Bumping this
      counter is all that is needed to redraw every money figure after the
      picker changes, and it costs nothing when nobody touches it. */
   const [, setCurrencyTick] = useState(0);
   const [restoredSave] = useState(() => {
-    /* Round 1330: one tab wins (src/lib/saveFence.ts). Adopt the save's
-       generation BEFORE it is read, so a write another tab lands between the
-       two leaves this page stale, never the other one. Never released: nothing
-       on this page writes the save once the page has gone, and the next mount
-       adopts again before it reads, while a release would turn a later write
-       of a remounted or retried tree into an unchecked claim. */
-    saveFence.adopt(SAVE_KEY);
-    let saved: string | null;
-    try { saved = localStorage.getItem(SAVE_KEY); } catch { return { career: null, invalid: false }; }
+    if (entry && "started" in entry) return { career: entry.started, invalid: false };
+    const saved = entry && "saved" in entry ? entry.saved : adoptSoccerCareerSave();
     if (saved === null) return { career: null, invalid: false };
     try {
       const parsed: unknown = parseSoccerCareerSave(saved);
@@ -956,14 +744,7 @@ export default function SoccerCareer() {
   const agentReviewAttempt = useRef<CareerState | null>(null);
   const [saveError, setSaveError] = useState(restoredSave.invalid);
   const [saveFailed, setSaveFailed] = useState(false);
-  const [clubs, setClubs] = useState<ClubData[]>([]);
-  const [clubsLoading, setClubsLoading] = useState(true);
-  const [clubsError, setClubsError] = useState(false);
-  const [rolledOvr, setRolledOvr] = useState<number | null>(null);
-  // Round 78: the potential rolled alongside the overall, threaded into the career.
-  const [rolledPot, setRolledPot] = useState<number | null>(null);
-  // Round 1604: the academy the creation screen is showing, handed to initCareer.
-  const [academyPreview, setAcademyPreview] = useState<string | null>(null);
+  const [clubs, setClubs] = useState<ClubData[]>(entry && "started" in entry ? FALLBACK_CLUBS : []);
   // Round 80: the phone overlay
   const [phoneOpen, setPhoneOpen] = useState(false);
   // Round 81: the training ground overlay
@@ -978,9 +759,6 @@ export default function SoccerCareer() {
   const discardRecordAcknowledgement = useRef<CareerSaveAcknowledgement | null>(null);
   const [recordOutcome, setRecordOutcome] = useState<RetainResult | null>(null);
   const [showRecordDiscard, setShowRecordDiscard] = useState(false);
-  const [pastCareersOpen, setPastCareersOpen] = useState(false);
-  const [pastCareersRead, setPastCareersRead] = useState<CompletedRecordsRead | null>(null);
-  const pastCareersTrigger = useRef<HTMLButtonElement>(null);
   /* Round 530: the slip that lands under the toast when a deal is done. It
      remembers the career object it was written for, and every action in this
      game produces a new career object, so the next action of any kind
@@ -1063,8 +841,6 @@ export default function SoccerCareer() {
 
   useEffect(() => {
     setClubs(FALLBACK_CLUBS);
-    setClubsError(false);
-    setClubsLoading(false);
   }, []);
 
   /* Round 1330: true once another tab has played this career on. Every write
@@ -1072,6 +848,7 @@ export default function SoccerCareer() {
      asks for a reload. Never saveFailed for it: the browser is fine, the
      career is just newer somewhere else. */
   const { moved: saveMoved, check: checkSaveMoved } = useSaveFenceWatch(SAVE_KEY);
+  const { openPastCareers, pastCareersTrigger, pastCareersOverlay } = useSoccerPastCareers(saveMoved, saveFailed);
   const sourceIsCurrent = useCallback((ack: CareerSaveAcknowledgement) => {
     try {
       return !!career && ack.career === career && !saveFence.moved(SAVE_KEY)
@@ -1133,40 +910,12 @@ export default function SoccerCareer() {
       ? retainCompletedRecord(ack.candidate, completedRecordsStorage, () => sourceIsCurrent(ack))
       : { status: 'blocked', reason: 'unsupported-record' });
   };
-  const openPastCareers = () => {
-    setPastCareersRead(readCompletedRecords(completedRecordsStorage));
-    setPastCareersOpen(true);
-  };
-  const closePastCareers = () => {
-    setPastCareersOpen(false);
-    queueMicrotask(() => {
-      if (pastCareersTrigger.current?.isConnected) pastCareersTrigger.current.focus({ preventScroll: true });
-    });
-  };
   useEffect(() => {
     if (saveFailed) toast.error("Your latest progress could not be saved. Keep this tab open, then try again.", PAGE_TOAST);
   }, [saveFailed]);
   /* Round 1330: a press can land before the other tab's storage event does, so
      a toast may already be up claiming something the save refused. */
   useEffect(() => { if (saveMoved) toast.dismiss(); }, [saveMoved]);
-
-  const isFormValid = playerName.trim().length > 0 && nationality && position && era;
-
-  const handlePositionChange = useCallback((pos: string) => {
-    setPosition(pos);
-    // Clear preview stats; they'll be regenerated when the player rolls
-    setPreviewStats(null);
-    setPreviewOvr(0);
-    setRolledOvr(null);
-    setRolledPot(null);
-    setAcademyPreview(null);
-    /* Round 131: the specifics under each family are different for a keeper
-       than for anybody else, and a normal frame for a keeper is not a normal
-       frame for a winger, so switching position resets both rather than
-       carrying over a shape whose attribute names no longer exist. */
-    setPhysique(defaultPhysique(pos));
-    setAttrShape({});
-  }, []);
 
   useEffect(() => {
     if (career && timelineRef.current) {
@@ -1176,20 +925,11 @@ export default function SoccerCareer() {
 
   /* Round 1330: Begin Career is a screen change the player did not scroll to,
      so the hub lands on his player card (useArrivalTop, keyed by this count). */
-  const [arrivalCount, setArrivalCount] = useState(0);
-  const handleBeginCareer = () => {
-    // Guests can play; careers live in local state. Sign-in is only a nice-to-have.
-    if (!previewStats || !isFormValid || clubs.length === 0 || rolledOvr === null) return;
-    const startYear = ERAS.find(e => e.value === era)?.startYear ?? 2020;
-    const newCareer = initCareer(playerName.trim(), nationality, position, era, previewStats, rolledOvr, startYear, clubs, appearance, rolledPot ?? undefined, physique, attrShape, academyPreview);
-    if (startYear < 2009) newCareer.historicalArrivals = { version: 2, players: [] };
-    else if (startYear === 2010 || startYear === 2015) newCareer.historicalArrivals = { version: 3, startYear, players: [] };
+  const [arrivalCount, setArrivalCount] = useState(entry && "started" in entry ? 1 : 0);
+  const handleBeginCareer = (draft: SoccerCareerDraft) => {
     setSaveError(false);
     setArrivalCount(n => n + 1);
-    setCareer(newCareer);
-    /* Round 1330: no "Joined" toast. At the top of the landing view it sat over
-       the player's name (measured at 320 by playSoccerLanding), and the hub's
-       club card names the club inside that same view at every size. */
+    setCareer(startSoccerCareer(draft));
   };
 
   /* Round 1047: the stars from this season's Season Centre moments bank before
@@ -1675,48 +1415,36 @@ export default function SoccerCareer() {
     setShowRecordDiscard(false);
     setSaveError(false);
     setCareer(null);
-    setPreviewStats(null);
-    setRolledOvr(null);
-    setRolledPot(null);
-    setAcademyPreview(null);
     setPhoneOpen(false);
     setTrainingOpen(false);
-    setPlayerName(""); setNationality(""); setPosition(""); setEra("");
-    setAppearance(defaultAppearance());
     setShowNewCareerConfirm(false);
   };
   const handleConfirmNewCareer = () => confirmNewCareer(false);
 
   return (
     <>
-      <PageSeo
-        title="Soccer Career: From Academy to Retirement | DoUKnowBall"
-        description="Create a footballer, earn your first pro contract, choose transfers and play season by season in a free soccer career simulator."
-        path="/soccer-career"
-      />
-
-      {/* Round 129: clearance under the last of the page content. The action bar
-          rides the bottom of the screen for the whole page now and comes to rest
-          on top of the footer, and at the very end of the document that means it
-          is parked over the 85px directly above the footer's top edge. The
-          footer already carries mt-12, so 48 of those 85 pixels are empty margin
-          and only 37 were real content, but 37px of the last FAQ answer is still
-          37px he cannot read. 88px of padding here, only while a career is
-          loaded, puts the whole thing back in the clear. It is a static class,
-          not something that changes as you scroll, so it cannot interact with
-          the lift measurement. */}
-      <div className={`min-h-screen bg-background text-foreground flex flex-col ${career ? 'pb-[88px]' : ''}`}>
-        <GameNavbar />
-        <div className={`relative z-10 mx-auto w-full max-w-4xl ${career ? "h-11 sm:h-0" : ""}`}>
-          <GameHelp extraRules={[...DERBY_HELP_RULES,
-            'Recent club form: last season at the same club needs 10 to 38 recorded league appearances. A rating of 7.6 or more adds two to next year\'s selection draw; 6.4 or less takes two away. Phone effects and frozen-out limits still apply. Example: a 24-game draw becomes 26 after a qualifying 7.8 season.',
-            'Preseason plan: choose development (+1 position skill after growth, 3 percentage points more injury risk), recovery (-1 skill, 4 points less risk), or balanced. Example: 20% injury risk becomes 23% or 16%, within existing limits. A serious injury or no appearances interrupts development; a move cancels the plan.',
-            'Academy mentoring: the Youth Mentor event starts one generated player. Ten senior appearances at your shared club adds one mentoring year. Example: 12 appearances moves 0/3 to 1/3; six appearances pauses it. Three qualifying years complete it, a move ends it, and its history stays in the mentor tile.',
-            ...STORY_ROLE_HELP_RULES,
-            ...SOCCER_DECK_HELP_RULES,
-            'One tab at a time: the career plays in the newest tab you opened. An older tab asks you to reload. Example: open it in two tabs and play a season in the second; the first asks you to reload, and the reload shows that season.',
-          ]} className={career ? "h-11 w-11 sm:h-auto sm:w-auto" : undefined} />
-        </div>
+      <SoccerCareerFrame active={!!career}
+          reportGameContext={{
+            careerRating: {
+              phase: career?.phase ?? "creation",
+              age: career?.age ?? null,
+              position: career && POSITIONS.some(p => p.value === career.position) ? career.position : null,
+              overall: career?.overall ?? null,
+              derivedOverall: career && POSITIONS.some(p => p.value === career.position) ? calcOverall(career, career.position) : null,
+              skills: career ? {
+                pace: career.pace, shooting: career.shooting, passing: career.passing,
+                dribbling: career.dribbling, defending: career.defending,
+                physical: career.physical, reflexes: career.reflexes,
+              } : null,
+              seasonCount: career?.seasons.length ?? 0,
+              lastSeason: career?.seasons.length ? {
+                year: career.seasons[career.seasons.length - 1].year,
+                ovr: career.seasons[career.seasons.length - 1].ovr ?? null,
+              } : null,
+              saveFailed, saveMoved, saveError,
+            },
+          }}
+      >
         <main id="dukb-main" className="flex-1 w-full max-w-5xl mx-auto px-3 sm:px-4 py-4">
           {saveMoved && <Suspense fallback={null}><SaveMovedNotice message="This career moved on in another tab. Reload to carry on." /></Suspense>}
           {career && saveFailed && (
@@ -1778,22 +1506,7 @@ export default function SoccerCareer() {
             <Button ref={pastCareersTrigger} variant="outline" className="mb-3 min-h-11 w-full whitespace-normal" onClick={openPastCareers}>Past careers</Button>
           )}
           {!career ? (
-            <CreationScreen
-              playerName={playerName} setPlayerName={setPlayerName}
-              nationality={nationality} setNationality={setNationality}
-              position={position} handlePositionChange={handlePositionChange}
-              era={era} setEra={setEra}
-              previewStats={previewStats} previewOvr={previewOvr}
-              isFormValid={isFormValid && clubs.length > 0} saving={saving}
-              user={user} onBegin={handleBeginCareer} onShowAuth={() => setShowAuth(true)}
-              clubs={clubs} clubsLoading={clubsLoading} clubsError={clubsError}
-              onRolledOvr={(ovr: number, pot: number) => { setRolledOvr(ovr); setRolledPot(pot); }}
-              onAcademyPreview={setAcademyPreview}
-              onStatsGenerated={(stats: Stats, ovr: number) => { setPreviewStats(stats); setPreviewOvr(ovr); }}
-              appearance={appearance} setAppearance={setAppearance}
-              physique={physique} setPhysique={setPhysique}
-              attrShape={attrShape} setAttrShape={setAttrShape}
-            />
+            <SoccerCareerCreator initialSupport={getCreationSupport()} onBegin={handleBeginCareer} />
           ) : (
             <GameScreen
               career={career}
@@ -1886,69 +1599,8 @@ export default function SoccerCareer() {
             )}
           </>
         )}
-        <GameSeoContent
-          pageHasOwnH1
-          reportGameContext={{
-            careerRating: {
-              phase: career?.phase ?? "creation",
-              age: career?.age ?? null,
-              position: career && POSITIONS.some(p => p.value === career.position) ? career.position : null,
-              overall: career?.overall ?? null,
-              derivedOverall: career && POSITIONS.some(p => p.value === career.position) ? calcOverall(career, career.position) : null,
-              skills: career ? {
-                pace: career.pace, shooting: career.shooting, passing: career.passing,
-                dribbling: career.dribbling, defending: career.defending,
-                physical: career.physical, reflexes: career.reflexes,
-              } : null,
-              seasonCount: career?.seasons.length ?? 0,
-              lastSeason: career?.seasons.length ? {
-                year: career.seasons[career.seasons.length - 1].year,
-                ovr: career.seasons[career.seasons.length - 1].ovr ?? null,
-              } : null,
-              saveFailed, saveMoved, saveError,
-            },
-          }}
-          title="Soccer Career Simulator | DoUKnowBall"
-          description="Live out your soccer dream in a season by season career simulator. Create a player, join a youth academy, develop skills, sign contracts, win trophies, and compete for the Ballon d'Or."
-          howToPlay={[
-            "Create your player: choose name, nationality, position, and starting era to begin your career.",
-            "Each season, develop your skills through training, handle contract offers, and compete for trophies.",
-            "Win the Ballon d'Or, lead your team to World Cup glory, and build a legendary career timeline."
-          ]}
-          examples={[
-            "Start at La Masia (Barcelona academy) as a Spanish midfielder",
-            "Transfer from Ajax to Premier League for a big contract",
-            "Win the Champions League and earn a Ballon d'Or nomination",
-            "Buy a Private Chef upgrade (+2 Physical, +2 Stamina)",
-            "Pass your country's real all-time scoring record (not every nation has one on file yet)",
-            "Earn Club Legend status with 300+ appearances at one club",
-            "Retire after 20 seasons with a legendary career score"
-          ]}
-        />
-      </div>
-      <AuthModal isOpen={showAuth} onClose={() => setShowAuth(false)} />
-      {pastCareersOpen && !saveMoved && (
-        <CentreMountBoundary what="record book" onClose={closePastCareers}>
-          <Suspense fallback={
-            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4">
-              <div role="dialog" aria-modal="true" aria-label="Opening past careers" tabIndex={-1} ref={focusDialogOnMount} onKeyDown={event => { if (!keepTabInside(event)) escapeCloses(closePastCareers)(event); }} className="w-full max-w-sm rounded-xl border border-border bg-card p-4">
-                <p role="status">Opening past careers...</p>
-                <Button variant="outline" className="mt-3 min-h-11 w-full" onClick={closePastCareers}>Back</Button>
-              </div>
-            </div>
-          }>
-            <PastCareersSheet
-              records={pastCareersRead?.status === 'known' ? pastCareersRead.records : []}
-              notice={saveFailed
-                ? 'Your latest progress could not be saved. Close Past careers and use Retry save before starting over.'
-                : pastCareersRead?.status === 'blocked'
-                  ? 'This record book could not be opened. Its saved data is unchanged.'
-                  : undefined}
-              onClose={closePastCareers}
-            />
-          </Suspense>
-        </CentreMountBoundary>
-      )}
+      </SoccerCareerFrame>
+      {pastCareersOverlay}
       {/* New Career Confirmation Dialog */}
       {showNewCareerConfirm && (
         <div className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4" onClick={() => setShowNewCareerConfirm(false)}>
@@ -1980,347 +1632,6 @@ export default function SoccerCareer() {
 }
 
 /* ─── Overall tier info ─── */
-function getOverallTier(ovr: number): { label: string; color: string; bgColor: string } {
-  if (ovr >= 66) return { label: "Exceptional: Born Winner", color: "text-purple-400", bgColor: "bg-purple-500/15 border-purple-500/30" };
-  if (ovr >= 62) return { label: "Gifted: High Ceiling", color: "text-amber-400", bgColor: "bg-amber-500/15 border-amber-500/30" };
-  if (ovr >= 58) return { label: "Solid Foundation: Good Potential", color: "text-emerald-400", bgColor: "bg-emerald-500/15 border-emerald-500/30" };
-  if (ovr >= 40) return { label: "Promising: Hard Work Ahead", color: "text-blue-400", bgColor: "bg-blue-500/15 border-blue-500/30" };
-  return { label: "Raw Talent: Rough Around the Edges", color: "text-muted-foreground", bgColor: "bg-muted/20 border-border" };
-}
-
-/* ─── Round 131: every number, on its own screen ───
-   The career page shows six family bars because that is what fits on a phone.
-   This is where the rest of it lives: the specifics under each family with
-   their real values, the frame that is pushing some of them around, and the
-   plain english summary of what the whole build is worth in a season. One tap
-   in, one tap back, nothing stacked under anything else. */
-
-/* ─── Creation Screen ─── */
-function CreationScreen({ playerName, setPlayerName, nationality, setNationality, position, handlePositionChange, era, setEra, previewStats, previewOvr, isFormValid, saving, user, onBegin, onShowAuth, clubs, clubsLoading, clubsError, onRolledOvr, onAcademyPreview, onStatsGenerated, appearance, setAppearance, physique, setPhysique, attrShape, setAttrShape }: any) {
-  const [rolledOvr, setRolledOvr] = useState<number | null>(null);
-  const [rolledPot, setRolledPot] = useState<number | null>(null);
-  const [rollCount, setRollCount] = useState(0);
-  const [bestPotSeen, setBestPotSeen] = useState(0);
-  const [isRolling, setIsRolling] = useState(false);
-  const [displayOvr, setDisplayOvr] = useState(0);
-  const [academyClub, setAcademyClub] = useState<ClubData | null>(null);
-  /* Round 1604 (report 3f014b97): the club shown here is the club the career
-     starts at. Every placement is drawn in one place, handed up to the page
-     for initCareer, and remembers the nationality and era it was drawn for. */
-  const academyFor = useRef("");
-  const showAcademy = (club: ClubData | null, drawnFor = "") => {
-    academyFor.current = drawnFor;
-    setAcademyClub(club);
-    onAcademyPreview?.(club ? club.name : null);
-  };
-  const placeAcademy = (ovr: number, nat: string, eraValue: string) => {
-    const startYr = ERAS.find(er => er.value === eraValue)?.startYear ?? 2020;
-    showAcademy(getYouthAcademyClub(adjustClubsForYear(clubs, startYr), nat, ovr), `${nat}|${eraValue}`);
-  };
-  const rollTimer = useRef<ReturnType<typeof setInterval> | null>(null);
-  // A roll belongs to the position it was made for. Keep the form itself mounted.
-  useEffect(() => {
-    setRolledOvr(null);
-    setRolledPot(null);
-    setIsRolling(false);
-    setAcademyClub(null);
-    return () => {
-      if (rollTimer.current !== null) clearInterval(rollTimer.current);
-      rollTimer.current = null;
-    };
-  }, [position]);
-  // Round 79: the attribute point-spend build editor drill-in
-  const [buildOpen, setBuildOpen] = useState(false);
-  /* Coming back OUT of the build editor has the same problem in reverse, so
-     the creation screen brings its own top with it too. skipFirst stays on
-     here, because the very first render is just the page loading and nobody
-     wants a game that scrolls the moment it opens. */
-  const creationRef = useRevealScroll<HTMLDivElement>(buildOpen ? "build" : "creation");
-
-  const canGenerate = playerName.trim().length > 0 && nationality && position && era;
-
-  const doRoll = useCallback(() => {
-    /* Round 78 gave everybody three looks from the scouts and then locked it.
-       Round 131 takes the lock off, because he asked for it and because he was
-       right: "have unlimited rerolls so people can try to get someone with a
-       higher potential." Somebody chasing a dice roll is going to chase it
-       either way, and the three roll version only ever meant closing the tab
-       and opening it again, which is a worse game and the same outcome. The
-       odds behind the roll have not moved a point, so a generational ceiling is
-       exactly as rare per roll as it has always been. */
-    if (!canGenerate || clubs.length === 0 || isRolling) return;
-    setIsRolling(true);
-    showAcademy(null);
-    // Slot machine animation: cycle through random numbers
-    let ticks = 0;
-    const totalTicks = 18;
-    const interval = setInterval(() => {
-      ticks++;
-      setDisplayOvr(rollStartingOverall(position));
-      if (ticks >= totalTicks) {
-        clearInterval(interval);
-        rollTimer.current = null;
-        const finalOvr = rollStartingOverall(position);
-        // Round 78: potential rolled alongside the overall. Weighted low,
-        // tiny chance of a generational ceiling, exactly like he asked.
-        const pot = rollPotential(finalOvr);
-        setDisplayOvr(finalOvr);
-        setRolledOvr(finalOvr);
-        setRolledPot(pot);
-        setRollCount(prev => prev + 1);
-        setBestPotSeen(prev => Math.max(prev, pot));
-        onRolledOvr?.(finalOvr, pot);
-        // Generate stats that average to exactly this overall
-        const stats = generateStatsFromOverall(finalOvr, position);
-        onStatsGenerated?.(stats, finalOvr);
-        setIsRolling(false);
-        // Preview academy (era-adjusted, and the one initCareer is handed)
-        placeAcademy(finalOvr, nationality, era);
-      }
-    }, 60);
-    rollTimer.current = interval;
-  }, [canGenerate, clubs, nationality, position, isRolling, era]);
-
-  const tier = rolledOvr !== null ? getOverallTier(rolledOvr) : (isRolling ? getOverallTier(displayOvr) : null);
-
-  const handleBuildConfirm = (stats: Stats, calcOvr: number) => {
-    setRolledOvr(calcOvr);
-    setDisplayOvr(calcOvr);
-    /* Round 159: the ceiling can never sit below the player. He typed a 99
-       overall in the build editor and the scout projection still quoted the
-       ORIGINAL roll's 89 ceiling next to it, which reads as broken because it
-       is: a ceiling below the floor. The ceiling now rises with the build,
-       capped at 99 like everything else. */
-    const pot = Math.min(99, Math.max(rolledPot ?? calcOvr + 6, calcOvr));
-    setRolledPot(pot);
-    onRolledOvr?.(calcOvr, pot);
-    onStatsGenerated?.(stats, calcOvr);
-    setBuildOpen(false);
-    /* Round 131: the academy that takes you depends on how good you are, and
-       the build screen can now move that by fifty points, so the placement
-       preview underneath has to be recalculated or it is quietly lying. */
-    placeAcademy(calcOvr, nationality, era);
-  };
-
-  /* Round 1604: a placement belongs to the nationality and era it was drawn
-     for. Change either after a roll (or during one) and it is drawn once more
-     for the new choice, the roll itself kept, so the club shown is still the
-     club Begin Career starts you at. */
-  useEffect(() => {
-    if (rolledOvr === null || isRolling || clubs.length === 0 || !nationality || !era) return;
-    if (academyFor.current === `${nationality}|${era}`) return;
-    placeAcademy(rolledOvr, nationality, era);
-  }, [nationality, era, rolledOvr, isRolling, clubs]);
-
-  /* Round 1604: what still stands between the player and a roll, in plain words. */
-  const missingPicks = [!nationality && "a nationality", !position && "a position", !era && "an era"].filter(Boolean) as string[];
-  const pickList = missingPicks.length > 1 ? `${missingPicks.slice(0, -1).join(", ")} and ${missingPicks[missingPicks.length - 1]}` : (missingPicks[0] ?? "");
-  const needName = !playerName.trim();
-  /* Once a roll is on screen the name unlocks a reroll and Begin Career, not a
-     first roll, so the two lines say that instead. */
-  const missingFor = (goal: string) => !needName && !missingPicks.length ? ""
-    : `${needName ? (missingPicks.length ? "Add your name, then pick " : "Add your name") : "Pick "}${pickList} to ${goal}.`;
-  const missingLine = missingFor(rolledOvr !== null ? "roll again" : "roll your potential");
-  const missingBeginLine = missingFor(rolledOvr !== null ? "start your career" : "roll your potential");
-
-  // Tile rule: the build editor takes over the whole screen with a back button
-  if (buildOpen && previewStats && rolledOvr !== null) {
-    return (
-      <CentreMountBoundary what="build editor" onClose={() => setBuildOpen(false)}>
-        <Suspense fallback={<div role="status" className="max-w-xl mx-auto rounded-xl border border-border bg-card p-4 text-sm">Loading build editor...</div>}>
-          <BuildEditor
-            position={position}
-            targetOvr={rolledOvr}
-            baseStats={previewStats}
-            rolledPot={rolledPot}
-            physique={physique}
-            onPhysique={setPhysique}
-            shape={attrShape}
-            onShape={setAttrShape}
-            onConfirm={handleBuildConfirm}
-            onCancel={() => setBuildOpen(false)}
-          />
-        </Suspense>
-      </CentreMountBoundary>
-    );
-  }
-
-  return (
-    <div ref={creationRef} className="max-w-xl mx-auto space-y-5">
-      <div className="text-center space-y-1">
-        <h1 className="text-3xl sm:text-4xl font-black tracking-tight">⚽ Soccer Career</h1>
-        <p className="text-muted-foreground text-sm">Create your player. Build your legend.</p>
-      </div>
-      <div className="space-y-4 bg-card border border-border rounded-xl p-4 sm:p-5">
-        <h2 className="text-lg font-bold">Create Your Player</h2>
-        <div className="space-y-1.5">
-          <Label htmlFor="pname">Player Name</Label>
-          <Input id="pname" placeholder="Enter your player name..." value={playerName} onChange={(e: any) => setPlayerName(e.target.value)} maxLength={40} className="bg-muted/30" />
-        </div>
-        <div className="space-y-1.5">
-          <Label>Nationality</Label>
-          {/* Round 76: position="popper" pins the list BELOW the trigger with
-              its own scroll, fixing his bug where the item-aligned popup shot
-              off the top of the screen and cut off the first nations. Flag
-              sits to the RIGHT of the name, exactly as he asked. */}
-          <Select value={nationality} onValueChange={setNationality}>
-            <SelectTrigger className="bg-muted/30"><SelectValue placeholder={<span>Choose nationality</span>} /></SelectTrigger>
-            <SelectContent position="popper" className="max-h-72">
-              {/* Round 453: over a hundred nations is a long scroll, so they
-                  sit under their confederation, the way qualifying groups them. */}
-              {groupByConfederation(NATIONALITIES, n => n).map(g => (
-                <SelectGroup key={g.conf}>
-                  <SelectLabel className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">{g.label}</SelectLabel>
-                  {g.items.map(n => (
-                    <SelectItem key={n} value={n}>
-                      <span className="flex items-center gap-2">{n}<FlagImg name={n} size={18} /></span>
-                    </SelectItem>
-                  ))}
-                </SelectGroup>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-        <div className="space-y-1.5">
-          <Label>Position</Label>
-          <Select value={position} onValueChange={handlePositionChange}>
-            <SelectTrigger className="bg-muted/30"><SelectValue placeholder={<span>Choose position</span>} /></SelectTrigger>
-            <SelectContent>{POSITIONS.map(p => <SelectItem key={p.value} value={p.value}><span>{p.label}</span></SelectItem>)}</SelectContent>
-          </Select>
-        </div>
-        <div className="space-y-1.5">
-          <Label>Starting Era</Label>
-          <Select value={era} onValueChange={setEra}>
-            <SelectTrigger className="bg-muted/30"><SelectValue placeholder={<span>Choose era</span>} /></SelectTrigger>
-            <SelectContent>{ERAS.map(e => <SelectItem key={e.value} value={e.value}><span>{e.label}</span></SelectItem>)}</SelectContent>
-          </Select>
-        </div>
-      </div>
-
-      {/* Round 54: create your appearance */}
-      <AppearanceBuilder
-        appearance={appearance}
-        onChange={setAppearance}
-        clubColor={academyClub?.color || "#10B981"}
-      />
-
-      {/* Generate Starting Potential. Round 1604: on the page before the form
-          is complete too, its button off and one line saying what is missing. */}
-      <div className="bg-card border border-border rounded-xl p-4 sm:p-5 space-y-4">
-        <h2 className="text-base font-bold text-center">Starting Potential</h2>
-
-        {/* Only a complete form waits on the clubs, so an empty one never
-            flashes a loading box on its first frame. */}
-        {clubsLoading && canGenerate && (
-          <div className="rounded-xl border border-border bg-muted/10 p-4 text-center text-sm text-muted-foreground animate-pulse">
-            Loading clubs...
-          </div>
-        )}
-        {!clubsLoading && clubsError && (
-          <div className="rounded-xl border border-amber-500/30 bg-amber-500/10 p-3 text-center text-xs text-amber-400">
-            Couldn't reach the live club database, so we loaded a backup roster. Everything still works.
-          </div>
-        )}
-
-        {(rolledOvr !== null || isRolling) && (
-          <div className={`rounded-xl border p-5 text-center space-y-2 transition-all ${tier ? tier.bgColor : "bg-muted/20 border-border"}`}>
-            <div className={`text-6xl font-black tabular-nums transition-all ${isRolling ? "animate-pulse" : "animate-scale-in"} ${tier ? tier.color : "text-foreground"}`}>
-              {isRolling ? displayOvr : rolledOvr}
-            </div>
-            <div className={`text-sm font-bold ${tier ? tier.color : "text-muted-foreground"}`}>
-              {isRolling ? "Rolling..." : tier?.label}
-            </div>
-            {/* Round 78: scout projection. Potential is rolled once and the
-                engine walls growth at it, so this number actually matters. */}
-            {!isRolling && rolledPot !== null && (
-              <div className="pt-1 border-t border-border/50 space-y-0.5 animate-fade-in">
-                <div className="text-[10px] uppercase tracking-widest font-bold text-muted-foreground">Scout Projection</div>
-                <div className={`text-sm font-bold ${potentialTier(rolledPot).color}`}>
-                  {potentialTier(rolledPot).label} · {rolledPot} ceiling
-                </div>
-              </div>
-            )}
-          </div>
-        )}
-
-        <div className="flex gap-2">
-          <Button
-            onClick={doRoll}
-            disabled={!canGenerate || isRolling || clubsLoading}
-            className={`flex-1 h-11 text-sm font-bold text-black ${rolledOvr !== null ? "bg-muted/40 hover:bg-muted/60 text-foreground" : "bg-emerald-600 hover:bg-emerald-500"}`}
-            variant={rolledOvr !== null ? "outline" : "default"}
-          >
-            {clubsLoading && canGenerate ? "Loading..." : isRolling ? "🎰 Rolling..." : rolledOvr !== null ? "🎲 Roll again" : "🎲 Generate Starting Potential"}
-          </Button>
-        </div>
-        {!canGenerate && <p className="text-[11px] text-muted-foreground text-center">{missingLine}</p>}
-        {rolledOvr !== null && !isRolling && (
-          <p className="text-[11px] text-muted-foreground text-center">
-            Roll {rollCount}. Reroll as many times as you like, it costs nothing.
-            {bestPotSeen > (rolledPot ?? 0) ? ` Best ceiling you have turned up so far: ${potentialTier(bestPotSeen).label.toLowerCase()}.` : ""}
-          </p>
-        )}
-
-        {/* Academy preview */}
-        {academyClub && !isRolling && (
-          <div className="rounded-xl border border-border bg-muted/10 p-4 space-y-2 animate-fade-in">
-            <div className="text-[10px] uppercase tracking-widest font-bold text-muted-foreground text-center">Academy Placement</div>
-            <div className="flex items-center justify-center gap-3">
-              <div className="w-10 h-10 rounded-lg flex items-center justify-center text-sm font-black shrink-0"
-                style={{ backgroundColor: academyClub.color + "22", color: academyClub.color, border: `2px solid ${academyClub.color}44` }}>
-                {academyClub.name.slice(0, 2).toUpperCase()}
-              </div>
-              <div>
-                <div className="font-bold text-sm flex items-center gap-1"><FlagImg name={academyClub.country} size={16} />{academyClub.name} Youth</div>
-                <div className="text-[11px] text-muted-foreground">{(() => {
-                  /* Round 1037: the league the club is in the year he joins, or none */
-                  const line = leagueSeasonLine(academyClub, ERAS.find(er => er.value === era)?.startYear ?? 2020);
-                  return line ? `${line} · ` : "";
-                })()}Tier {academyClub.tier}</div>
-              </div>
-            </div>
-          </div>
-        )}
-      </div>
-
-      {/* Stats preview */}
-      {previewStats && (
-        <div className="bg-card border border-border rounded-xl p-4 space-y-3">
-          <div className="flex items-center justify-between">
-            <h2 className="text-base font-bold">Starting Stats</h2>
-            <span className={`text-2xl font-black ${previewOvr >= 55 ? 'text-green-400' : 'text-yellow-400'}`}>{previewOvr}</span>
-          </div>
-          <div className="space-y-2">
-            {getPositionStatBars(position, { ...previewStats, physique, attrShape }).map(s => <StatBarGame key={s.l} label={s.l} value={s.v} color={s.c} top={s.top} />)}
-          </div>
-          {/* Round 79: who your build plays like, live off the actual numbers */}
-          {!isRolling && (() => { const comp = playsLike(previewStats, position); return (
-            <div className="rounded-lg border border-border/60 bg-muted/10 px-3 py-2 text-center">
-              <span className="text-[11px] text-muted-foreground">Scouts say you play like </span>
-              <span className="text-[12px] font-black">{comp.name}</span>
-              {comp.pct > 0 && <span className="text-[11px] text-muted-foreground"> ({comp.pct}% match)</span>}
-            </div>
-          ); })()}
-          {rolledOvr !== null && !isRolling && (
-            <Button variant="outline" className="w-full h-10 text-sm font-bold" onClick={() => setBuildOpen(true)}>
-              🎮 Customize your build
-            </Button>
-          )}
-        </div>
-      )}
-
-      <Button onClick={onBegin} disabled={!isFormValid || saving || rolledOvr === null || !previewStats || isRolling}
-        className="w-full h-12 text-lg font-bold bg-emerald-600 hover:bg-emerald-500 text-black disabled:opacity-40">
-        {saving ? "Creating..." : "⚽ Begin Career"}
-      </Button>
-      {rolledOvr === null && canGenerate && <p className="text-xs text-muted-foreground text-center">Generate your starting potential to begin</p>}
-      {!canGenerate && <p className="text-xs text-muted-foreground text-center">{missingBeginLine}</p>}
-      {!user && <p className="text-xs text-muted-foreground text-center">Your career saves in this browser. No account needed.</p>}
-    </div>
-  );
-}
-
-/* ─── Transfer Window Card ─── */
 function TransferWindowCard({ situation, career, clubs, onCareer, onAcceptOffer, onStay, onSignExtension, onRequestTransfer, onAcceptLoan }: {
   situation: TransferSituation;
   career: CareerState;
