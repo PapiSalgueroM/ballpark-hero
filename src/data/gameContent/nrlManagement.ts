@@ -3,7 +3,7 @@ import type { GameContentMap } from './types';
 export const NRL_MANAGEMENT_CONTENT: GameContentMap = {
   '/nrl-team-manager': {
     intro: [
-      'Choose the 2026 or 2027 NRL season and pick a club. Select your starting 13, decide when to train or recover, and pick a match plan before you face the next side.',
+      'Choose the 2026 or 2027 NRL season and pick a club. Select your starting 13 and six reserves, decide when to train or recover, and pick a match plan before you face the next side.',
       'The 2026 field has 17 clubs. Select 2027 to manage the Perth Bears in their debut season. Both seasons use original fixture lists. Clubs are real, and the game generates squads, ratings and results.',
     ],
     howToPlay: [
@@ -16,7 +16,7 @@ export const NRL_MANAGEMENT_CONTENT: GameContentMap = {
     ],
     rules: [
       'The 2026 regular season spans 27 rounds, with 24 matches and three byes for each club. The game generates its own fixture list for each year.',
-      'Squad selection uses rugby league positions. Use your fullback, halves, forwards and the rest of the starting 13 to build a balanced side.',
+      'Use your fullback, halves, forwards and the rest of the starting 13 to build a balanced side. The quick sim can use up to four of your six named reserves, one per position covered.',
       'A try scores four points. Conversions and penalty goals add two. A field goal scores one, or two from beyond the 40-metre line.',
       'Wins and byes are worth two ladder points, draws are worth one and losses earn none. Points difference is the first ladder tiebreaker.',
       'Club wages count toward the Top 30 base cap. This game reserves minimum wages for open places and promotes academy players if you leave spots empty.',

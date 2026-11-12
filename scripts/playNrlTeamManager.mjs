@@ -62,15 +62,25 @@ try {
   assert.equal(initialCareer.version, 2);
   const started = initialCareer.season;
   assert.equal(started.year, 2026);
+  assert.equal(new Set(started.bench).size, 6);
   await past.getByRole('button', { name: 'Squad', exact: true }).click();
-  assert.equal(await past.getByRole('combobox').count(), 13);
+  assert.equal(await past.getByRole('combobox').count(), 19);
   await past.getByLabel('Fullback', { exact: true }).selectOption({ index: 1 });
   assert.notEqual((await career(past)).season.lineup.Fullback, started.lineup.Fullback);
+  const beforeBench = (await career(past)).season.bench;
+  await past.getByLabel('Reserve 14', { exact: true }).selectOption(beforeBench[1]);
+  const afterBench = (await career(past)).season.bench;
+  assert.equal(afterBench[0], beforeBench[1]);
+  assert.equal(afterBench[1], beforeBench[0]);
+  assert.equal(new Set(afterBench).size, 6);
   await past.getByRole('button', { name: 'Match centre' }).click();
   await past.getByRole('button', { name: 'Attack', exact: true }).click();
   await past.getByRole('button', { name: 'Train', exact: true }).click();
   assert.equal((await career(past)).season.preparation, 'train');
-  await play(past, 1);
+  const firstRound = await play(past, 1);
+  const used = firstRound.results.find(result => result.benchUsed)?.benchUsed;
+  assert(used?.length > 0 && used.length <= 4 && used.every(id => afterBench.includes(id)));
+  await past.getByRole('heading', { name: 'Interchange used' }).waitFor();
   const beforeReload = await save(past);
   await past.reload({ waitUntil: 'domcontentloaded' });
   await advance(past).waitFor();
@@ -101,7 +111,7 @@ try {
   assert.equal(await past.locator('[data-nrl-ladder]').count(), 18);
   assert.deepEqual([...pastErrors, ...sameSave.errors], []);
   await phone.close();
-  console.log('2026 at 320px: 17 clubs, lineup and training, save reload, stale tab guard, 204 matches, nine finals and 2027 rollover.');
+  console.log('2026 at 320px: 17 clubs, starters and interchange, training, save reload, stale tab guard, 204 matches, nine finals and 2027 rollover.');
 
   const largerPhone = await context(390);
   const { page: future, errors: futureErrors } = await open(largerPhone);
