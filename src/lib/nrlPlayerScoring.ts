@@ -143,6 +143,33 @@ export function nrlTryLeaders(leaders: NrlScoringLeader[]): NrlScoringLeader[] {
   return leaders.filter(player => player.tries > 0).sort((a, b) => b.tries - a.tries || pointsOrder(a, b));
 }
 
+export type NrlSquadStatsScope = 'all' | 'regular' | 'finals';
+
+export function nrlSquadSeasonStats({ clubId, results, squad }: Pick<NrlManagerState, 'clubId' | 'results' | 'squad'>,
+  scope: NrlSquadStatsScope) {
+  const players = new Map(squad.map(({ id, name }) => [id, { id, name, starts: 0, bench: 0, tries: 0, points: 0 }]));
+  let played = 0;
+  let tracked = 0;
+  for (const match of results) {
+    if (match.homeId !== clubId && match.awayId !== clubId) continue;
+    if ((scope === 'regular' && match.finalsRound) || (scope === 'finals' && !match.finalsRound)) continue;
+    played++;
+    const report = match.playerScoring;
+    if (!report) continue;
+    tracked++;
+    for (const id of report.starters) players.get(id)!.starts++;
+    for (const id of match.benchUsed ?? []) players.get(id)!.bench++;
+    for (const line of report.lines) {
+      const player = players.get(line.playerId)!;
+      player.tries += line.tries;
+      player.points += nrlScorePoints(line);
+    }
+  }
+  const rows = [...players.values()].map(player => ({ ...player, apps: player.starts + player.bench }))
+    .sort((a, b) => b.apps - a.apps || b.points - a.points || a.name.localeCompare(b.name) || a.id.localeCompare(b.id));
+  return { played, tracked, rows };
+}
+
 export function archiveNrlScoring(state: Pick<NrlManagerState, 'results' | 'squad'>): NrlSeasonScoringTotal[] {
   return nrlScoringLeaders(state).map(({ playerId, name, tries, conversions, penalties, fieldGoals, longFieldGoals }) =>
     [playerId, name, tries, conversions, penalties, fieldGoals, longFieldGoals]);
