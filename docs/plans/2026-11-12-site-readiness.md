@@ -1,10 +1,10 @@
 # DoUKnowBall site readiness and game work
 
-Checkpoint at 19:12 UTC on November 12, 2026. The existing 24-hour task remains active. These are review candidates, not a production release or a NitroPay acceptance claim.
+Checkpoint at 19:35 UTC on November 12, 2026. The existing 24-hour task remains active. These are review candidates, not a production release or a NitroPay acceptance claim.
 
 ## Current integration
 
-The latest qualified combined application is `76a606534`, following `c9879287b`. Full application TypeScript and the ordinary Vite build passed. The build contains 183 rewritten snapshots. Its output is `C:/Users/antho/AppData/Local/Temp/dukb-integrated-20261112/76a606534-dist`. The 919-file manifest SHA-256 is `f55ff41630a1929835f799f189df3de0f73b90fbe902cbf1db14173d906ca5e3`. Previous builds remain retained. The frozen verification checkout is `C:/Users/antho/.codex/worktrees/nov12-combined-76a606534/ballpark-hero`.
+The latest qualified combined application is `79ffb2235`, following `76a606534` and `c9879287b`. Full application TypeScript and the ordinary Vite build passed. The build contains 183 rewritten snapshots. Its output is `C:/Users/antho/AppData/Local/Temp/dukb-integrated-20261112/guest-batch-dist`. Its 919-file manifest SHA-256 is `9bd92c28bc06220429426916083fc653d07a4ce7e243d6e83d67915d73a709f3`. Previous builds remain retained. The frozen verification checkout is `C:/Users/antho/.codex/worktrees/nov12-combined-79ffb2235/ballpark-hero`. The integration branch has later historical Budget Builder, Rarity Round coverage and Fantasy Draft retry candidates whose combined build/native checks are still pending.
 
 Local storage became available again after the earlier disk-full interruption. Existing dependency trees are reused without installing or deleting packages. Production package versions match the lock. The borrowed development tree has `@testing-library/dom` 10.4.1 where the current lock names 10.4.2. Hosted checks from the exact review drafts provide separate installation evidence.
 
@@ -57,8 +57,24 @@ Fresh Lighthouse 13.6.0 checks use the actual compressed c9879287b candidate wit
 
 Maximum mobile CLS is 0.008 and desktop CLS is 0.022. Desktop LCP and lab CLS meet the requested targets in these runs. Mobile LCP does not. TBT is not INP, so the 200ms INP target remains unverified. Next performance work targets startup render work and early hub image discovery, using paired measurements before adopting a change.
 
-All 21 output readers pass again on 76a606534. The game compositions described above are now qualified together. The next isolated candidates are Budget Builder's new-board day refresh, Missing XI's consistent day and finished-save recovery, and one deliberate NRL checkpoint per slot. Their compiled integration checks are pending. Additional Watch replay corrections are held for an honest comparison against historical screen fixtures; stripping fields that existed in those historical saves is not accepted as preservation proof.
+All 21 output readers and all 16 unchanged download caps with 400 isolation probes pass again on `79ffb2235`. Budget Builder's new-board day refresh and Missing XI's consistent day/finished-save recovery pass all ten compiled cases at 320 and 390 pixels. An open Budget Final keeps its original day; a deliberate new board refreshes it. Missing XI recovers malformed finished records with one completion and exact reload bytes.
 
-Two performance probes were not adopted. Three alternating paired hub runs showed image preload median LCP 4.231→4.271 seconds for Soccer and 4.204→4.088 for Basketball, with one image request in every arm. A deferred footer dialog reduced the entry script by 10,992 gzip bytes but total initial JavaScript changed by only -575 bytes on phone Home and increased by 2,539/2,358 bytes on Soccer Career/Club Manager. The probe is retained on local branch `codex/report-dialog-performance-probe-20261112` at `1ff485982`; its product changes are absent from integration. Guest account-SDK startup is the next measured candidate.
+NRL checkpoints pass 66 focused cases and five compiled scenarios at each of 320, 390 and 1440 pixels. Every career slot can hold one deliberate checkpoint, including a real half-time save. Confirmation explains that the current progress becomes a recovery copy and that only three recovery copies are retained. Stale and quota refusals preserve progress. Restoring after a club move or replaying completed seasons does not award those seasons again. Root reviewed the phone confirmation and resumed half-time cards. The existing season engine and raw save format are unchanged.
+
+Watch replay corrections remain a separate candidate. The historical fixture is now restored without removing its saved wins, losses or minutes. The original baseline reproduces all 22 frozen screens; the candidate changes nine NBA screens and leaves all 11 NFL screens and both NBA kickoff screens exact. The actual Orlando save is 51–31 with 9.9 PPG: the previous viewer showed 45–37 and 10.1 PPG. Explicit corrected expectations and compiled review are pending; this is a visible correction, not an unchanged-screen claim.
+
+Two performance probes were not adopted. Three alternating paired hub runs showed image preload median LCP 4.231→4.271 seconds for Soccer and 4.204→4.088 for Basketball, with one image request in every arm. A deferred footer dialog reduced the entry script by 10,992 gzip bytes but total initial JavaScript changed by only -575 bytes on phone Home and increased by 2,539/2,358 bytes on Soccer Career/Club Manager. The probe is retained on local branch `codex/report-dialog-performance-probe-20261112` at `1ff485982`; its product changes are absent from integration.
+
+The guest account-SDK change is retained on `79ffb2235`. At 390 pixels, total initial JavaScript gzip falls by 45,356–45,383 bytes for fresh/saved Soccer Career, Club Manager and NBA My Career; CSS is unchanged. A same-output eager control adds exactly one 45,741-byte SDK chunk, with every other initial response identical by path and SHA-256. Actual account opening preserves the draft and restores focus. Saved accounts, real two-tab adoption and implicit recovery redirect pass. A PKCE-shaped URL keeps the existing implicit-flow refusal behavior, rather than introducing a different auth flow. Both final native transport receipts are empty. Home and unprobed/blocked/full-storage routes keep eager startup.
+
+Eighteen alternating Lighthouse 13.6.0 mobile runs compare ordinary guests with the same artifact forced into eager SDK startup. Values below are medians of three runs per arm, with simulated throttling and third parties blocked. They do not establish field INP or a general LCP improvement.
+
+| Page | Eager LCP | Guest LCP | Eager TBT | Guest TBT |
+| --- | ---: | ---: | ---: | ---: |
+| Soccer Career | 4.630s | 4.676s | 326ms | 389ms |
+| Club Manager | 3.781s | 3.507s | 204ms | 166ms |
+| NBA My Career | 3.870s | 3.871s | 196ms | 178ms |
+
+Maximum CLS in this paired set is 0.000436. Club Manager improves in all three pairs. Soccer Career and NBA My Career show no reliable LCP benefit. The mobile 2.5-second target remains open. The complete download reduction, rather than entry-chunk size alone, is the reason to keep this change.
 
 Automatic approval review blocked replacing the existing local dist shortcut, with only a policy-block reason. It was left intact. The new build is served by its explicit output path and verified in a separate frozen checkout. No user files or old builds were deleted. Existing Edge/SQL changes that require coordinated release remain staged. New feature drafts are not deployed. Nitro application submission, seller IDs, provider activation, age handling and region-specific loading decisions remain outstanding.
