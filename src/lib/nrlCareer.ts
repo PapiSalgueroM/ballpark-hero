@@ -97,6 +97,7 @@ interface NrlPositionCourse { playerId: string; role: NrlRole; startedRound: num
 export interface NrlCareerState {
   version: 2;
   openingYear: NrlYear;
+  openingRoster?: 'matchday-2026';
   season: NrlManagerState;
   players: NrlCareerPlayer[];
   history: NrlCareerHistoryRow[];
@@ -110,6 +111,10 @@ export interface NrlCareerState {
   savedLineup?: NrlSavedLineup;
   positionTraining?: NrlPositionCourse;
 }
+type NrlOpeningMatchdayPlayer = readonly [id: number, name: string, age: number, role: NrlRole];
+export type NrlOpeningMatchdayRoster = Readonly<Record<string, readonly NrlOpeningMatchdayPlayer[]>>;
+export const isNrlOpeningMatchdayPlayer = (id: string): boolean => /^nrl-real-\d+$/.test(id);
+
 export type NrlCareerAction = NrlAction
   | { type: 'setAttackPlan'; attackPlan: NrlAttackPlan; year: number; clubId: string; round: number }
   | { type: 'offerContract'; playerId: string; salary: number; years: number }
@@ -195,17 +200,21 @@ function makePlayer(id: string, role: NrlRole, rating: number, rng: () => number
   return enrichPlayer({ id, role, rating, name: uniqueName(rng, FIRST, LAST, taken), fitness: 100 }, rng, rookie);
 }
 
-function enrichPlayer(player: NrlPlayer, rng: () => number, rookie = false): NrlCareerPlayer {
-  const age = rookie ? 18 + Math.floor(rng() * 4) : 20 + Math.floor(rng() * 14);
+function enrichPlayer(player: NrlPlayer, rng: () => number, rookie = false, openingAge?: number): NrlCareerPlayer {
+  const age = openingAge ?? (rookie ? 18 + Math.floor(rng() * 4) : 20 + Math.floor(rng() * 14));
   const potential = clampi(player.rating + rng() * (age <= 24 ? 12 : 4), player.rating, 98);
   return { ...player, age, potential, contract: null, futureContract: null };
 }
 
-function initialSquad(club: NrlClub, year: number, seed: number, taken: Set<string>, starting: NrlPlayer[] = []): NrlCareerPlayer[] {
+function initialSquad(club: NrlClub, year: number, seed: number, taken: Set<string>, starting: NrlPlayer[] = [],
+  openingTeam?: readonly NrlOpeningMatchdayPlayer[]): NrlCareerPlayer[] {
   const rng = rngFor(seed, `squad|${club.id}|${year}`);
-  const players = starting.map(player => enrichPlayer(player, rng));
+  const players = openingTeam ? openingTeam.map(([id, name, age, role], index) => {
+    const rating = clampi(club.strength + (rng() - 0.5) * 14 - (index >= NRL_ROLES.length ? 5 : 0), 40, 98);
+    return enrichPlayer({ id: `nrl-real-${id}`, name, role, rating, fitness: 100 }, rng, false, age);
+  }) : starting.map(player => enrichPlayer(player, rng));
   for (let index = players.length; index < SQUAD_SIZE; index++) {
-    const role = NRL_ROLES[index % NRL_ROLES.length];
+    const role = openingTeam ? nextRole(players) : NRL_ROLES[index % NRL_ROLES.length];
     const rating = clampi(club.strength + (rng() - 0.5) * 14 - (index >= 13 ? 5 : 0), 40, 98);
     players.push(makePlayer(`nrl-${club.id}-${year}-${index}`, role, rating, rng, taken));
   }
@@ -541,18 +550,26 @@ export function nrlCareerRecord(history: readonly NrlCareerRecordYear[]) {
   };
 }
 
-function careerFrom(season: NrlManagerState, openingYear: NrlYear, legacySeason: boolean): NrlCareerState {
+function careerFrom(season: NrlManagerState, openingYear: NrlYear, legacySeason: boolean,
+  openingRoster?: NrlOpeningMatchdayRoster): NrlCareerState {
   const { year, clubId, squad, seed } = season;
-  const names = new Set(squad.map(player => player.name));
+  const names = new Set(openingRoster ? Object.values(openingRoster).flatMap(team => team.map(([, name]) => name))
+    : squad.map(player => player.name));
   const players = nrlSeasonPlan(year).clubs.flatMap(club =>
-    initialSquad(club, year, seed, names, club.id === clubId ? squad : []));
+    initialSquad(club, year, seed, names, club.id === clubId ? squad : [], openingRoster?.[club.id]));
   const fullSquad = players.filter(player => player.contract?.clubId === clubId).map(playerView);
+  const matchday = openingRoster ? {
+    ...season,
+    lineup: Object.fromEntries(NRL_ROLES.map((role, index) => [role, fullSquad[index].id])) as NrlManagerState['lineup'],
+    bench: fullSquad.slice(NRL_ROLES.length, NRL_ROLES.length + NRL_BENCH_SIZE).map(player => player.id),
+  } : season;
   const finance = bookFrom(OPENING_CASH, season.phase === 'complete' ? season.round + 1 : season.round);
   const state: NrlCareerState = {
     version: 2, openingYear,
+    ...(openingRoster ? { openingRoster: 'matchday-2026' as const } : {}),
     season: {
-      ...season, squad: fullSquad, bench: nrlBench({ ...season, squad: fullSquad }),
-      ...(legacySeason ? {} : { injuryTracking: true as const, kickerId: season.lineup.Halfback }),
+      ...matchday, squad: fullSquad, bench: nrlBench({ ...matchday, squad: fullSquad }),
+      ...(legacySeason ? {} : { injuryTracking: true as const, kickerId: matchday.lineup.Halfback }),
     },
     players: [...players, ...newMarket(seed, year, names)], history: [], finance, legacySeason,
   };
@@ -563,6 +580,16 @@ function careerFrom(season: NrlManagerState, openingYear: NrlYear, legacySeason:
 export function createNrlCareer(clubId: string, seed: number, openingYear: NrlYear = 2026, boardChallenge = false): NrlCareerState {
   const career = careerFrom(createNrlSeason(clubId, seed, openingYear), openingYear, false);
   return boardChallenge ? { ...career, boardChallenge: true } : career;
+}
+
+export function createNrlOpeningMatchdayCareer(clubId: string, seed: number, roster: NrlOpeningMatchdayRoster, boardChallenge = false): NrlCareerState {
+  const career = careerFrom(createNrlSeason(clubId, seed, 2026), 2026, false, roster);
+  return boardChallenge ? { ...career, boardChallenge: true } : career;
+}
+
+export async function loadNrlOpeningMatchdayCareer(clubId: string, seed: number, boardChallenge: boolean): Promise<NrlCareerState> {
+  const { NRL_OPENING_MATCHDAY_2026 } = await import('@/data/nrlOpeningMatchday2026');
+  return createNrlOpeningMatchdayCareer(clubId, seed, NRL_OPENING_MATCHDAY_2026, boardChallenge);
 }
 
 function hasHomeGate(fixture: NrlFixture, clubId: string): boolean {
@@ -1086,7 +1113,11 @@ function validWorld(state: NrlCareerState): boolean {
   const { year, clubId, squad } = state.season;
   if (new Set(state.players.map(player => player.id)).size !== state.players.length) return false;
   if (new Set(state.players.map(player => player.name)).size !== state.players.length) return false;
+  const named = state.players.filter(player => isNrlOpeningMatchdayPlayer(player.id));
+  if (!state.openingRoster && named.length > 0) return false;
   const activeClubs = new Set(nrlSeasonPlan(year).clubs.map(club => club.id));
+  if (state.openingRoster && year === 2026 && (named.length !== activeClubs.size * (NRL_ROLES.length + NRL_BENCH_SIZE)
+    || [...activeClubs].some(id => named.filter(player => player.contract?.clubId === id).length !== NRL_ROLES.length + NRL_BENCH_SIZE))) return false;
   if (state.players.some(player => player.futureContract && !activeClubs.has(player.futureContract.clubId))) return false;
   const own = new Map(squadAt(state.players, clubId, year).map(player => [player.id, player]));
   if (squad.length !== SQUAD_SIZE || !squad.every(player => {
@@ -1237,6 +1268,7 @@ export function isNrlCareerState(value: unknown): value is NrlCareerState {
   if (!record(value) || value.version !== 2 || !isNrlOpeningYear(value.openingYear)
     || !isNrlSeasonProgress(value.season) || value.season.year < value.openingYear
     || typeof value.legacySeason !== 'boolean'
+    || (value.openingRoster !== undefined && (value.openingRoster !== 'matchday-2026' || value.openingYear !== 2026 || value.legacySeason))
     || (value.retired !== undefined && (value.retired !== true || value.season.phase !== 'complete'))
     || (value.boardChallenge !== undefined && (value.boardChallenge !== true || value.legacySeason))
     || (value.developmentFocus !== undefined && (!activeDevelopmentFocus(value.developmentFocus)

@@ -33,9 +33,10 @@ export const nrlCheckpointKey = (key: string) => 'dukb-nrl-checkpoint:' + key;
 const replayKey = (key: string) => 'dukb-nrl-checkpoint-replay:' + key;
 
 function careerId(career: NrlCareerState): string {
-  const { openingYear, season, history } = career;
+  const { openingYear, openingRoster, season, history } = career;
   // Rollover keeps the seed and the first completed club, even when the manager moves.
-  return [openingYear, history[0]?.clubId ?? season.clubId, season.seed].join(':');
+  const id = [openingYear, history[0]?.clubId ?? season.clubId, season.seed].join(':');
+  return openingRoster ? `${id}:${openingRoster}` : id;
 }
 
 export function sameNrlCareer(first: NrlCareerState, second: NrlCareerState): boolean {

@@ -24,12 +24,13 @@ import {
   type NrlAction, type NrlAttackPlan, type NrlCoachRole, type NrlLiveHalf, type NrlManagerState, type NrlMatchResult, type NrlNextRound, type NrlRole, type NrlTactic,
 } from '@/lib/nrlManager';
 import {
-  createNrlCareer, nrlAttackPlanPreview, nrlOppositionReport, nrlPositionTraining, nrlPositionTrainingCandidates, nrlRivalSquad,
+  createNrlCareer, isNrlOpeningMatchdayPlayer, loadNrlOpeningMatchdayCareer, nrlAttackPlanPreview, nrlOppositionReport, nrlPositionTraining, nrlPositionTrainingCandidates, nrlRivalSquad,
   NRL_POSITION_TRAINING_ROUNDS, reduceNrlCareer, type NrlCareerAction, type NrlCareerState,
 } from '@/lib/nrlCareer';
 import { nrlScorePoints, nrlScoringLeaders, nrlSquadSeasonStats, nrlTryLeaders, type NrlSquadStatsScope } from '@/lib/nrlPlayerScoring';
 import { NRL_SAVE_ENTRY, nrlSeasonCanCredit, readNrlReplayCutoff, readNrlSaveSlot, writeNrlSaveSlot } from '@/lib/nrlSaveSlots';
 import { saveFence } from '@/lib/saveFence';
+import { reloadToRetryChunk } from '@/lib/freshBuild';
 import { holdPendingSave } from '@/lib/safeStorage';
 
 const SLUG = 'nrl-team-manager';
@@ -69,11 +70,14 @@ function shortName(year: number, id: string) {
   return nrlSeasonPlan(year).clubs.find(club => club.id === id)?.shortName ?? id;
 }
 
-function ClubChooser({ year, onYear, onStart, disabled }: {
+function ClubChooser({ year, onYear, onStart, disabled, loading, loadFailed }: {
   year: NrlYear; onYear: (year: NrlYear) => void;
-  onStart: (clubId: string, boardChallenge: boolean) => void; disabled: boolean;
+  onStart: (clubId: string, boardChallenge: boolean, openingNames: boolean) => void;
+  disabled: boolean; loading: boolean; loadFailed: boolean;
 }) {
   const [boardChallenge, setBoardChallenge] = useState(false);
+  const [openingNames, setOpeningNames] = useState(false);
+  const [reloadUnavailable, setReloadUnavailable] = useState(false);
   const competition = NRL_SEASONS[year];
   return (
     <section aria-labelledby="nrl-choose-club" className="space-y-5">
@@ -82,12 +86,23 @@ function ClubChooser({ year, onYear, onStart, disabled }: {
         <div className="mt-3 grid grid-cols-2 gap-2" role="group" aria-label="Starting season">
           {YEARS.map(option => (
             <Button key={option} type="button" size="lg" variant={year === option ? 'default' : 'outline'}
-              aria-pressed={year === option} onClick={() => onYear(option)} className="h-auto min-h-12 flex-col gap-0 whitespace-normal px-2 py-2">
+              aria-pressed={year === option} disabled={disabled}
+              onClick={() => { if (year !== option) setOpeningNames(false); onYear(option); }} className="h-auto min-h-12 flex-col gap-0 whitespace-normal px-2 py-2">
               <span className="text-base font-bold">{option}</span>
               <span className="text-xs">{option === 2027 ? 'Perth Bears debut' : '17 clubs'}</span>
             </Button>
           ))}
         </div>
+        {year === 2026 && (
+          <label className="mt-3 flex min-h-11 items-start gap-2 rounded-lg border border-border bg-background p-2 text-sm">
+            <input type="checkbox" checked={openingNames} disabled={disabled} onChange={event => setOpeningNames(event.target.checked)}
+              className="mt-0.5 h-4 w-4 shrink-0 accent-primary" />
+            <span>
+              <span className="block font-semibold">2026 opening matchday names</span>
+              <span className="block text-muted-foreground">Start each club with 19 verified names and opening ages, plus 11 generated players. Ratings, wages and contracts are simulated.</span>
+            </span>
+          </label>
+        )}
         <label className="mt-3 flex min-h-11 items-start gap-2 rounded-lg border border-border bg-background p-2 text-sm">
           <input type="checkbox" checked={boardChallenge} disabled={disabled} onChange={event => setBoardChallenge(event.target.checked)}
             className="mt-0.5 h-4 w-4 shrink-0 accent-primary" />
@@ -101,10 +116,19 @@ function ClubChooser({ year, onYear, onStart, disabled }: {
         <h2 id="nrl-choose-club" className="text-xl font-display font-bold">Choose your club</h2>
         <p className="text-sm text-muted-foreground">{competition.clubs.length} clubs · {competition.draw.length} rounds</p>
       </div>
+      {loading && <p role="status" className="text-sm">Loading the 2026 matchday names...</p>}
+      {loadFailed && year === 2026 && openingNames && (
+        <div role="alert" className="rounded-xl border border-border bg-card p-3 text-sm">
+          Could not load the 2026 matchday names. Clear the option to start with a generated squad.
+          <button type="button" className="ml-2 min-h-11 font-bold underline" disabled={disabled}
+            onClick={() => { if (!reloadToRetryChunk()) setReloadUnavailable(true); }}>Reload to try names again</button>
+          {reloadUnavailable && <p>Reconnect or finish saving in this tab, then try reloading again.</p>}
+        </div>
+      )}
       <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-4">
         {competition.clubs.map(club => (
           <button key={club.id} type="button" disabled={disabled} data-nrl-club={club.id}
-            aria-label={`Manage ${club.name}`} onClick={() => onStart(club.id, boardChallenge)}
+            aria-label={`Manage ${club.name}`} onClick={() => onStart(club.id, boardChallenge, year === 2026 && openingNames)}
             className="group flex min-h-24 min-w-0 flex-col justify-between rounded-xl border border-border bg-card p-3 text-left transition-colors hover:border-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:opacity-50">
             <span className="text-sm font-bold leading-snug sm:text-base">{club.name}</span>
             <span className="mt-2 flex w-full items-center justify-between gap-1 text-xs text-muted-foreground">
@@ -728,10 +752,14 @@ function Squad({ career, onAction, disabled }: {
   const reserves = season.squad.filter(player => !starters.has(player.id) && !injuries.has(player.id));
   const proposal = disabled ? null : nrlFitLineup(season);
   const nameOf = (id: string) => season.squad.find(player => player.id === id)?.name;
+  const squadName = (id: string, name: string) =>
+    career.openingRoster && !isNrlOpeningMatchdayPlayer(id) ? name + ' (generated)' : name;
   return (
     <section className="rounded-xl border border-border bg-card p-4" aria-labelledby="nrl-squad">
       <h2 id="nrl-squad" className="font-display text-lg font-bold">Starting 13</h2>
-      <p className="mt-1 text-sm text-muted-foreground">Players and ratings are fictional. Choose a fit starter for each position.</p>
+      <p className="mt-1 text-sm text-muted-foreground">{career.openingRoster
+        ? 'Side assignments and prop slots are editable game assignments. Choose a fit starter for each position.'
+        : 'Players and ratings are fictional. Choose a fit starter for each position.'}</p>
       {proposal && (
         <details className="group mt-3 rounded-lg border border-border bg-background px-3" data-nrl-fit-lineup>
           <summary className="flex min-h-11 cursor-pointer items-center justify-between gap-2 rounded-md text-sm font-bold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
@@ -791,7 +819,7 @@ function Squad({ career, onAction, disabled }: {
               className="min-h-11 w-full min-w-0 rounded-lg border border-input bg-background px-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:opacity-60"
               onChange={event => onAction({ type: 'selectStarter', role, playerId: event.target.value })}>
               {nrlStarterOptions(season, role).map(player => (
-                <option key={player.id} value={player.id}>{player.name} · {player.rating} OVR · {player.fitness}% fit{player.secondaryRole === role ? ' · Trained cover' : player.role !== role ? ' · Utility cover' : ''}</option>
+                <option key={player.id} value={player.id}>{squadName(player.id, player.name)} · {player.rating} OVR · {player.fitness}% fit{player.secondaryRole === role ? ' · Trained cover' : player.role !== role ? ' · Utility cover' : ''}</option>
               ))}
             </select>
           </div>
@@ -820,7 +848,7 @@ function Squad({ career, onAction, disabled }: {
               <select id={`nrl-reserve-${slot}`} value={bench[slot] ?? ""} disabled={disabled || season.phase === "complete"}
                 className="min-h-11 w-full min-w-0 rounded-lg border border-input bg-background px-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:opacity-60"
                 onChange={event => onAction({ type: "selectBench", slot, playerId: event.target.value })}>
-                {reserves.map(player => <option key={player.id} value={player.id}>{player.name} · {player.role} · {player.fitness}% fit</option>)}
+                {reserves.map(player => <option key={player.id} value={player.id}>{squadName(player.id, player.name)} · {player.role} · {player.fitness}% fit</option>)}
               </select>
             </div>
           ))}
@@ -859,6 +887,7 @@ function Ladder({ career }: { career: NrlCareerState }) {
   const rivals = clubs.filter(club => club.id !== season.clubId);
   const rival = scoutOpen ? rivals.find(club => club.id === scoutClubId) : undefined;
   const rank = rows.findIndex(row => row.clubId === rival?.id && row.played > 0) + 1;
+  const rivalSquad = rival ? nrlRivalSquad(career, rival.id) : [];
   return (
     <section className="rounded-xl border border-border bg-card p-3 sm:p-4" aria-labelledby="nrl-ladder">
       <h2 id="nrl-ladder" className="font-display text-lg font-bold">{season.year} ladder</h2>
@@ -909,17 +938,20 @@ function Ladder({ career }: { career: NrlCareerState }) {
           {rival && (
             <div>
               <h3 className="break-words text-sm font-bold">{rival.name} squad{rank > 0 && ` · Ladder ${rank}`}</h3>
-              <p className="mt-1 text-xs text-muted-foreground">Generated squad for this career.</p>
+              <p className="mt-1 text-xs text-muted-foreground">{career.openingRoster
+                && rivalSquad.some(({ player }) => isNrlOpeningMatchdayPlayer(player.id))
+                ? 'Includes players from the 2026 opening snapshot. Squad development is simulated.'
+                : 'Generated squad for this career.'}</p>
               {career.legacySeason && <p className="mt-1 text-xs text-muted-foreground">This imported season uses its original opponent ratings for matches.</p>}
               <div tabIndex={0} role="region" aria-label={`${rival.name} squad`}
                 className="mt-2 max-h-80 overflow-y-auto rounded-md border border-border px-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
                 <ul className="divide-y divide-border text-sm">
-                  {nrlRivalSquad(career, rival.id).map(({ player, contractEnd, marketYear }) => {
+                  {rivalSquad.map(({ player, contractEnd, marketYear }) => {
                     const future = player.futureContract;
                     const destination = future && clubs.find(club => club.id === future.clubId);
                     return (
                       <li key={player.id} className="break-words py-2">
-                        <p className="font-semibold">{player.name}</p>
+                        <p className="font-semibold">{player.name}{career.openingRoster && !isNrlOpeningMatchdayPlayer(player.id) && ' (generated)'}</p>
                         <p className="text-muted-foreground">{player.role} · Age {player.age} · {player.rating} OVR</p>
                         <p className="text-xs text-muted-foreground">
                           Signed through {contractEnd}
@@ -968,6 +1000,10 @@ function NrlManagerScreen({ entry, showSlots }: { entry: ContinueSave; showSlots
   const [showLiveResult, setShowLiveResult] = useState(false);
   const [saveFailed, setSaveFailed] = useState(false);
   const [changed, setChanged] = useState(false);
+  const [loadingNames, setLoadingNames] = useState(false);
+  const [namesFailed, setNamesFailed] = useState(false);
+  const startRequest = useRef<symbol | null>(null);
+  useEffect(() => () => { startRequest.current = null; }, []);
   const { moved: fenceMoved } = useSaveFenceWatch(entry.saveKey);
   const moved = changed || fenceMoved;
   const complete = season?.phase === 'complete';
@@ -996,12 +1032,32 @@ function NrlManagerScreen({ entry, showSlots }: { entry: ContinueSave; showSlots
 
   function openSlots() {
     if (saveFailed && current.current && persist(current.current) !== 'written') return;
+    startRequest.current = null;
     navigate(entry.path + (entry.path.includes('?') ? '&' : '?') + 'view=saves', { replace: true });
   }
 
-  function start(clubId: string, boardChallenge: boolean) {
-    const next = createNrlCareer(clubId, Math.floor(Math.random() * 0x1_0000_0000), year, boardChallenge);
-    if (persist(next) === 'moved') return;
+  async function start(clubId: string, boardChallenge: boolean, openingNames: boolean) {
+    if (moved || startRequest.current || current.current || committed.current !== null) return;
+    const seed = Math.floor(Math.random() * 0x1_0000_0000);
+    if (openingNames && year === 2026) {
+      const request = Symbol();
+      startRequest.current = request;
+      setLoadingNames(true);
+      setNamesFailed(false);
+      try {
+        const next = await loadNrlOpeningMatchdayCareer(clubId, seed, boardChallenge);
+        if (startRequest.current !== request || current.current || committed.current !== null) return;
+        if (persist(next) === 'moved') return;
+      } catch {
+        if (startRequest.current === request) setNamesFailed(true);
+        return;
+      } finally {
+        if (startRequest.current === request) {
+          startRequest.current = null;
+          setLoadingNames(false);
+        }
+      }
+    } else if (persist(createNrlCareer(clubId, seed, year, boardChallenge)) === 'moved') return;
     setPanel('match');
     setShowLiveResult(false);
   }
@@ -1028,11 +1084,12 @@ function NrlManagerScreen({ entry, showSlots }: { entry: ContinueSave; showSlots
           <div className="min-w-0">
             <h1 ref={arrival} className="font-display text-2xl font-black sm:text-3xl">NRL Team Manager</h1>
             <p className="mt-1 text-sm text-muted-foreground">{season ? `${shortName(season.year, season.clubId)} · ${season.year} season${retired ? ' · Retired' : ''}` : 'Take charge of a rugby league club across seasons.'}</p>
+            {career?.openingRoster && <p className="mt-1 text-xs text-muted-foreground">2026 opening matchday snapshot. Ratings, contracts, wages and later squads are simulated.</p>}
             {!showSlots && <Button type="button" size="lg" variant="ghost" className="mt-1 px-2" onClick={openSlots}>Career saves</Button>}
           </div>
           <RulesGate title="How to play NRL Team Manager" floatingTrigger={false} className="min-h-11 min-w-11">
             <ul className="list-disc space-y-2 pl-5">
-              <li>Choose 2026 or 2027, then pick a club. The Perth Bears enter in 2027. Your players, ratings, draw and results are simulated.</li>
+              <li>Choose 2026 or 2027, then pick a club. The Perth Bears enter in 2027. In 2026 you can choose opening matchday names. Ratings, contracts, fixtures and results are simulated.</li>
               <li>Name 13 starters and six reserves in Squad. Quick sim can use up to four of the reserves. Before a game, choose a tactic and train or recover.</li>
               <li>A match knock can put a player out for up to four rounds. Check Availability in Squad. The countdown includes byes, and an available player fills the vacant spot.</li>
               <li>Buy medical upgrades with club cash in Finances. Upgrades shorten recovery from new knocks.</li>
@@ -1062,7 +1119,8 @@ function NrlManagerScreen({ entry, showSlots }: { entry: ContinueSave; showSlots
         ) : invalid ? (
           <p role="status" className="rounded-xl border border-border p-3 text-sm">This career could not be opened. Use Career saves to choose another slot or delete this save.</p>
         ) : !career || !season ? (
-          <ClubChooser year={year} disabled={moved} onYear={setYear} onStart={start} />
+          <ClubChooser year={year} disabled={moved || loadingNames} loading={loadingNames} loadFailed={namesFailed}
+            onYear={setYear} onStart={start} />
         ) : (
           <>
             <div className="grid grid-cols-4 gap-2" role="group" aria-label="Manager screens">

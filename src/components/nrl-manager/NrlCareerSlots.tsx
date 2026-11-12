@@ -92,6 +92,7 @@ export default function NrlCareerSlots({ onOpen, onBack }: { onOpen: (path: stri
               <p className="mt-1 break-words font-bold">{club ?? (raw !== null ? 'Unreadable career' : available ? 'Empty slot' : 'Storage unavailable')}</p>
               {career && <p className="text-sm text-muted-foreground">
                 Started in {career.openingYear} · {career.season.year} season{career.retired ? ' · Retired' : season.live ? ' · Match at half time' : season.phase === 'complete' ? ' · Season complete' : ''}
+                {career.openingRoster && ' · Opening matchday names'}
               </p>}
               {savedSeason && <p className="mt-2 break-words text-sm text-muted-foreground">
                 Checkpoint · {savedClub} · {savedSeason.year} · Round {savedSeason.round}
