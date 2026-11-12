@@ -18,17 +18,20 @@ it.each([
   const first = await gauntlet.mount();
   const second = await gauntlet.mount().finally(() => vi.useRealTimers());
 
-  const pickLastCard = () => {
-    const choices = cards(second);
+  const pickLastCard = (page: typeof first) => {
+    const choices = cards(page);
     expect(choices).toHaveLength(5);
     return click(choices[choices.length - 1]);
   };
 
   try {
     await gauntlet.enterDaily(first);
+    for (let pick = 0; pick < picks; pick++) await pickLastCard(first);
+    const partial = localStorage.getItem(key);
+    expect(JSON.parse(partial ?? 'null').kept).toHaveLength(picks);
     await gauntlet.enterDaily(second);
-    for (let pick = 0; pick < picks; pick++) await pickLastCard();
-    expect(localStorage.getItem(key)).toBeNull();
+    expect(cards(second).map(card => card.textContent)).toEqual(cards(first).map(card => card.textContent));
+    expect(localStorage.getItem(key)).toBe(partial);
 
     await gauntlet.finish(first);
     let saved = localStorage.getItem(key);
@@ -53,7 +56,13 @@ it.each([
     }
     expect(recordCompletion).toHaveBeenCalledTimes(1);
 
-    await pickLastCard();
+    const writes = vi.spyOn(Storage.prototype, 'setItem');
+    try {
+      await pickLastCard(second);
+      expect(writes.mock.calls.filter(([name]) => name === key)).toHaveLength(0);
+    } finally {
+      writes.mockRestore();
+    }
     expect(localStorage.getItem(key)).toBe(saved);
     expect(recordCompletion).toHaveBeenCalledTimes(1);
     expect(gauntlet.status(second)).toBe('finished');

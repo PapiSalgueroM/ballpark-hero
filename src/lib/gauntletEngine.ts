@@ -429,3 +429,46 @@ export function loadDailyRun<P>(config: GauntletConfig<P>, date: string): Gauntl
 export function saveDailyRun<P>(config: GauntletConfig<P>, date: string, run: GauntletRun): boolean {
   return writeDailyRecord(config.gameId, date, { run });
 }
+
+export interface SavedGauntletDraft {
+  deal: string;
+  kept: string[];
+}
+
+function offerFingerprint<P>(config: GauntletConfig<P>, draft: GauntletDraftResult<P>): string {
+  const offers = JSON.stringify([draft.formation.name, draft.picks.map(({ slot, choices }) => [
+    slot.label, slot.allowed, choices.map(player => [
+      config.nameOf(player), config.ratingOf(player), config.positionOf(player), config.subtitleOf(player),
+    ]),
+  ])]);
+  // Fingerprint the offer text with 64-bit FNV-1a so the save only lists kept players.
+  let fingerprint = 0xcbf29ce484222325n;
+  for (let i = 0; i < offers.length; i += 1) {
+    fingerprint = BigInt.asUintN(64, (fingerprint ^ BigInt(offers.charCodeAt(i))) * 0x100000001b3n);
+  }
+  return fingerprint.toString(16).padStart(16, '0');
+}
+
+export function loadDailyDraft<P>(config: GauntletConfig<P>, date: string): SavedGauntletDraft | null {
+  return readDailyRecord(config.gameId, date, ({ run, deal, kept }) => {
+    if (run !== undefined || typeof deal !== 'string' || !/^[0-9a-f]{16}$/.test(deal)) return null;
+    if (!Array.isArray(kept) || kept.length === 0 || !kept.every(name => typeof name === 'string')) return null;
+    return { deal, kept };
+  });
+}
+
+export function restoreDailyPicks<P>(config: GauntletConfig<P>, draft: GauntletDraftResult<P>, saved: SavedGauntletDraft): P[] | null {
+  if (saved.deal !== offerFingerprint(config, draft) || saved.kept.length >= draft.picks.length) return null;
+  const players: P[] = [];
+  for (const [i, name] of saved.kept.entries()) {
+    const player = draft.picks[i].choices.find(choice => config.nameOf(choice) === name);
+    if (player === undefined) return null;
+    players.push(player);
+  }
+  return players;
+}
+
+export function saveDailyDraft<P>(config: GauntletConfig<P>, date: string, draft: GauntletDraftResult<P>, kept: P[]): void {
+  if (loadDailyRun(config, date)) return;
+  writeDailyRecord(config.gameId, date, { deal: offerFingerprint(config, draft), kept: kept.map(config.nameOf) });
+}
