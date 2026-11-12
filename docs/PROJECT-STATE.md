@@ -1,3 +1,11 @@
+## 2026-11-12 Club Manager severe match injuries draft
+
+A new Club Manager career or the next season of an existing one can draw an ACL tear or Achilles tendon rupture during a simulated match. The existing match-injury draw assigns 2% of injuries to these severe spells. ACL tears last 28 to 36 simulated weeks and Achilles ruptures last 18 to 30. The bands are game estimates based on a 225-day median to match return in the [UEFA ACL cohort](https://pubmed.ncbi.nlm.nih.gov/27034129/) and a 161-day average absence in the [UEFA Achilles cohort](https://pubmed.ncbi.nlm.nih.gov/23770660/).
+
+A severe injury first counts down on a subsequent paid week. A player who remains at the club gets credit for complete summer weeks between the last calendar date and the following kickoff. Treatment shows the simulated diagnosis and remaining weeks, and clears the diagnosis when the spell ends. Existing active seasons, routine and training injuries and daily games keep their original rules.
+
+The compiled 390px replay opened the Help and started a new save, resumed a saved Achilles rupture, and rolled an ACL injury from 36 to 23 weeks across a 13-week summer. The engine replay then counted down to full availability. Three Manager Hot Seat dates matched main byte for byte.
+
 ## 2026-11-12: Dart Draft position penalty draft
 
 Dart Draft now uses its advertised eight-point out-of-position penalty in the squad rating and showdown, just as it already did on the player card. The calculation leaves player values, chemistry and academy or trialist ratings intact.

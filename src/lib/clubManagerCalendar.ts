@@ -998,7 +998,7 @@ export function joinClubNow(career: CareerState): CareerState | null {
       keepLeagueOverrides: true,
       ...(worldRosterView(departed) || worldSeedOf(departed) !== undefined
         ? { rosterCareer: departed, worldSeed: worldSeedOf(departed) } : {}),
-    });
+    }, undefined, { severeMatchInjuries: career.severeMatchInjuries });
   } catch {
     return null;
   }
