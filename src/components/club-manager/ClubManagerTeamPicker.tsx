@@ -20,12 +20,13 @@ type TeamRow = {
 type Props = {
   rows: readonly TeamRow[];
   editing: boolean;
+  wrapNames?: boolean;
   historicalEra?: Pick<CMEra, 'id' | 'label'>;
   onPick: (name: string) => void;
   onCreate?: () => void;
 };
 
-export default function ClubManagerTeamPicker({ rows, editing, historicalEra, onPick, onCreate }: Props) {
+export default function ClubManagerTeamPicker({ rows, editing, wrapNames, historicalEra, onPick, onCreate }: Props) {
   const historicalRosters = historicalEra && eraRostersRaw(historicalEra.id);
   return (
     <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
@@ -42,7 +43,7 @@ export default function ClubManagerTeamPicker({ rows, editing, historicalEra, on
             <span className="w-2.5 h-2.5 rounded-full shrink-0" style={{ backgroundColor: c.color }} />
             {/* Round 106: flags run all the way through the picker now. */}
             <FlagImg name={c.flagName} size={12} />
-            <span className={cn('text-xs font-bold truncate', c.selected ? 'text-primary' : 'text-foreground')}>{c.name}</span>
+            <span className={cn('text-xs font-bold', wrapNames ? 'min-w-0 break-words' : 'truncate', c.selected ? 'text-primary' : 'text-foreground')}>{c.name}</span>
           </div>
           <div className="text-[9px] text-muted-foreground mt-0.5">
             {c.tierEmoji} {c.tierLabel}
