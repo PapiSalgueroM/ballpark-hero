@@ -1,4 +1,4 @@
-import { useState, useEffect, useLayoutEffect, useMemo, useRef, lazy, Suspense, type ReactNode } from 'react';
+import { useState, useEffect, useLayoutEffect, useMemo, useRef, useCallback, useDeferredValue, lazy, Suspense, type ReactNode } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { Link } from 'react-router-dom';
 import { Trophy, Flame, Sparkles, Users, Search, X, Globe, ChevronDown, Pin } from 'lucide-react';
@@ -86,6 +86,7 @@ export default function Index() {
   const accountId = user?.id ?? null;
   const canReadPersonal = !!accountId && profile?.user_id === accountId;
   const [searchQuery, setSearchQuery] = useState('');
+  const deferredQuery = useDeferredValue(searchQuery);
   const searchInputRef = useRef<HTMLInputElement>(null);
   const clearSearch = () => { setSearchQuery(''); searchInputRef.current?.focus({ preventScroll: true }); };
   const [bestScores, setBestScores] = useState<Record<string, number>>({});
@@ -93,14 +94,14 @@ export default function Index() {
   const { paths: gamePicks, toggle: changeGamePick, storageFailed: picksStorageFailed } = useGamePicks();
   const dailyGamesRef = useRef<HTMLDivElement>(null);
   const pickAnchor = useRef<{ node: HTMLElement; top: number } | null>(null);
-  const toggleGamePick = (path: string, node?: HTMLElement) => {
+  const toggleGamePick = useCallback((path: string, node?: HTMLElement) => {
     const changesShelf = gamePicks.length === 0 || (gamePicks.length === 1 && gamePicks[0] === path);
     const box = node?.getBoundingClientRect();
     pickAnchor.current = changesShelf && node && box && box.bottom > 0 && box.top < window.innerHeight
       ? { node, top: box.top }
       : null;
     changeGamePick(path);
-  };
+  }, [changeGamePick, gamePicks]);
   useLayoutEffect(() => {
     const anchor = pickAnchor.current;
     pickAnchor.current = null;
@@ -115,13 +116,13 @@ export default function Index() {
   const [favSport, setFavSport] = useState<SportKey | null>(() => {
     try { return readFavouriteSport(window.localStorage); } catch { return null; }
   });
-  const pickSport = (sport: SportKey | null) => {
+  const pickSport = useCallback((sport: SportKey | null) => {
     setFavSport(sport);
     try {
       if (sport) localStorage.setItem(FAVOURITE_SPORT_KEY, sport);
       else localStorage.removeItem(FAVOURITE_SPORT_KEY);
     } catch { /* storage blocked: the pick lasts for this visit only */ }
-  };
+  }, []);
   const sportSections = useMemo(() => favouriteFirst(VISIBLE_CATEGORIES, favSport), [favSport]);
   const pickableSports = useMemo(() => VISIBLE_CATEGORIES.map(c => CATEGORY_SPORT[c.title]), []);
 
@@ -133,9 +134,10 @@ export default function Index() {
     if (engine || searchFailed) return;
     loadSearchEngine().then(setEngine).catch(() => { setSearchFailed(true); });
   };
+  const hasDeferredQuery = deferredQuery.trim().length > 0;
   const filteredGames = useMemo(
-    () => (isSearching && engine ? engine.searchSite(searchQuery).map(r => r.game) : []),
-    [isSearching, searchQuery, engine]
+    () => (hasDeferredQuery && engine ? engine.searchSite(deferredQuery).map(r => r.game) : []),
+    [hasDeferredQuery, deferredQuery, engine]
   );
 
   // Personal values only load for this visible account. Public popularity
@@ -207,6 +209,168 @@ export default function Index() {
       window.removeEventListener('focus', load);
     };
   }, [accountId, canReadPersonal, playerName]);
+
+  // A search hides the catalogue without rebuilding its cards on each key.
+  const catalogue = useMemo(() => (
+    <div className="space-y-10">
+      <div className="space-y-4">
+        {/* ─── MAIN EVENT ───
+            Round 658: the four flagships on the first screen, Soccer
+            Career on the big stage. It is the first thing on the page
+            to play: a 390 by 844 phone sees it at about y=250, where
+            the Round 283 fence allows 430. */}
+        <FeaturedStage />
+        {/* Round 717: every long form game this browser has a save
+            for, straight under the stage. Nothing at all for a
+            visitor with no saves, so a first visit's screen is
+            unchanged; playHomeFold section 6 plants saves and holds
+            the first tile where it was. */}
+        <ContinueRow />
+        <GamePicksRow paths={gamePicks} onToggle={toggleGamePick} onEmpty={() => dailyGamesRef.current?.querySelector<HTMLAnchorElement>('a')?.focus({ preventScroll: true })} />
+      </div>
+
+      {/* ─── DAILY PUZZLES ───
+          Round 659: every daily on the site in one rail, led by
+          Today's puzzle, which the date picks for everyone. A plain
+          rail, never a checklist: Round 293 put a personal dailies
+          checklist here and Round 297 removed it on the owner's
+          direct instruction in the 2026-08-26 tweaks document ("The
+          your dailies I would say get rid of it"). Nothing on the
+          rail reads a visitor's record, and simHomeFront renders it
+          with and without one to prove it. */}
+      <div ref={dailyGamesRef} className="space-y-4">
+        <DailyRail />
+
+        {/* A line, not a gate. Everything on this site plays signed
+            out, so the account is an upsell and belongs where an
+            upsell goes: after the games, not in front of them. The nav
+            still carries Sign Up for anyone who came here to make one. */}
+        {!user && (
+          <p className="text-xs text-muted-foreground">
+            Every game here plays without an account.{' '}
+            {/* Round 285: py-2 with a matching negative margin.
+                sweepPhone measured this control at 16px tall on a
+                phone, which is half the tap target floor. The padding
+                grows the hit area to 32px; the negative margin keeps
+                the sentence's line spacing exactly where it was. */}
+            <button
+              onClick={() => setAuthOpen(true)}
+              className="text-primary font-medium underline underline-offset-2 hover:opacity-80 py-2 -my-2"
+            >
+              Make a free one
+            </button>{' '}
+            and your streak, points and world rank start counting.
+          </p>
+        )}
+        <StreakReminder />
+      </div>
+
+      {/* Most played stays, per the same 2026-08-26 document, and
+          still counts real people with its curated fallback. Round
+          659 sets Just shipped beside it on a wide screen. */}
+      {/* grid-cols-1 is minmax(0, 1fr), not auto: with an auto track a
+          long real Most Played description (the truncate is nowrap)
+          widened the column to its full text and the whole phone
+          page with it, measured at 915px with live data */}
+      <div className="grid grid-cols-1 gap-10 lg:grid-cols-2 lg:gap-8">
+        <MostPlayedToday />
+        <JustShipped>
+          {games => (
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              {games.map(game => (
+                <GameCard key={game.path} game={game} badgeDate={badgeDate} bestScore={bestScores[game.path.slice(1)]} pinned={gamePicks.includes(game.path)} onTogglePick={toggleGamePick} />
+              ))}
+            </div>
+          )}
+        </JustShipped>
+      </div>
+
+      {/* Round 659: the polls sit under the games now. They invite a
+          click, the tiles get played, and the first screen belongs to
+          the tiles. PollOfTheDay holds its own height while it loads. */}
+      <PollsWhenNear />
+      {/* ROUND 382: the maker's note is gone from here, on the owner's
+          instruction: "it shouldnt pop up there I would rather you put it
+          in one the small like tabs on the bottom like near the privacy
+          policy". It now lives on /about, which is the first link in that
+          small footer row, and it no longer carries his name. Round 346
+          put it here and that was his idea at the time; changing his mind
+          about his own voice on his own site is his call. */}
+
+      {/* Dynasty & Career Sims showcase (2026-08-05): the deep games, front and center */}
+      <section>
+        <h2 className="flex items-center gap-2.5 text-lg font-display font-bold text-foreground mb-1">
+          <span aria-hidden="true" className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-gold/15 text-base ring-1 ring-inset ring-gold/30">👑</span>
+          Dynasty & Career Sims
+          <span className="text-xs font-normal text-muted-foreground ml-1">
+            ({FEATURED_GAMES.length} worlds)
+          </span>
+        </h2>
+        <p className="text-xs text-muted-foreground mb-4 md:pl-[42px]">
+          Not quizzes. Whole universes: run a franchise, live a career, build a dynasty. Every one saves your progress.
+        </p>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
+          {FEATURED_GAMES.map(game => (
+            <GameCard key={game.path} game={game} badgeDate={badgeDate} bestScore={bestScores[game.path.slice(1)]} pinned={gamePicks.includes(game.path)} onTogglePick={toggleGamePick} />
+          ))}
+        </div>
+      </section>
+
+      <section id="browse-sports" tabIndex={-1} aria-labelledby="browse-sports-heading" className="scroll-mt-36 rounded-2xl border border-border bg-surface-1 p-3 sm:scroll-mt-28 sm:p-4">
+        <h2 id="browse-sports-heading" className="font-display text-lg font-bold">Browse sports</h2>
+        <FavouriteSport sports={pickableSports} value={favSport} onPick={pickSport} />
+        <p className="mt-3 flex items-start gap-2 text-xs text-muted-foreground">
+          <Pin aria-hidden="true" className="mt-0.5 h-3.5 w-3.5 shrink-0 text-gold" />
+          Pin a game to keep it in Your picks on Home.
+        </p>
+      </section>
+
+      {sportSections.map(cat => (
+        <section key={cat.title} data-sport={CATEGORY_SPORT[cat.title]}>
+          {/* Round 658: the sport's drawn glyph in its own ink leads
+              every section, so the colour on the cards below always
+              has a shape and a name beside it. */}
+          <h2 className="flex items-center gap-2.5 text-lg font-display font-bold text-foreground mb-4" style={sportStyle(CATEGORY_SPORT[cat.title])}>
+            <span aria-hidden="true" className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-tile/15 text-tile ring-1 ring-inset ring-tile/30">
+              <SportGlyph sport={CATEGORY_SPORT[cat.title]} className="h-[18px] w-[18px]" />
+            </span>
+            {cat.title}
+            <span className="text-xs font-normal text-muted-foreground ml-1">
+              ({cat.games.length} {cat.games.length === 1 ? 'game' : 'games'})
+            </span>
+            {favSport === CATEGORY_SPORT[cat.title] && (
+              <span data-fav-tag="" className="shrink-0 rounded bg-tile/15 px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-foreground ring-1 ring-inset ring-tile/40">
+                Your sport
+              </span>
+            )}
+            {/* Round 198: the College hub existed with real copy and
+                links to every college game, but nothing on the site
+                pointed at it, so no crawler could reach it and no
+                person could find it. One link fixes both.
+                Round 270: five more sports got a hub, so the link is
+                driven off the hub list instead of one hand written
+                case, and a hub added there gets its link here free. */}
+            {hubForCategory(cat.title) && (
+              <Link
+                to={hubForCategory(cat.title)!.route}
+                /* Round 203: this link was 16px tall, which is half
+                   the height a thumb needs. Padded to a real tap
+                   target without changing where it sits. */
+                className="ml-auto inline-flex items-center rounded-lg px-2.5 py-2 text-xs font-normal leading-5 text-primary hover:underline max-sm:min-h-11"
+              >
+                Hub
+              </Link>
+            )}
+          </h2>
+          <div className="grid grid-cols-1 gap-2 min-[360px]:grid-cols-2 sm:gap-3 lg:grid-cols-3 xl:grid-cols-4">
+            {cat.games.map(game => (
+              <GameCard key={game.path} game={game} badgeDate={badgeDate} bestScore={bestScores[game.path.slice(1)]} pinned={gamePicks.includes(game.path)} onTogglePick={toggleGamePick} compact />
+            ))}
+          </div>
+        </section>
+      ))}
+    </div>
+  ), [badgeDate, bestScores, favSport, gamePicks, pickSport, pickableSports, sportSections, toggleGamePick, user]);
 
   return (
     <>
@@ -332,197 +496,37 @@ export default function Index() {
 
           {picksStorageFailed && <div className="mb-4"><GamePicksWarning /></div>}
 
-          {/* Search results replace everything under the title row, so they
-              arrive right under the box with nothing to scroll past. */}
-          {isSearching ? (
-            /* the few milliseconds before the engine lands on a first
-               keystroke: hold the space, and never say "no games found"
-               for a search that has not run yet */
-            searchFailed ? (
-              <HomeSearchUnavailable onBack={clearSearch} />
-            ) : !engine ? (
-              <div aria-busy="true" className="min-h-[120px]" />
-            ) : filteredGames.length > 0 ? (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
-                {filteredGames.map(game => (
-                  <GameCard key={game.path} game={game} badgeDate={badgeDate} bestScore={bestScores[game.path.slice(1)]} pinned={gamePicks.includes(game.path)} onTogglePick={toggleGamePick} />
-                ))}
-              </div>
-            ) : (
-              <div className="rounded-xl border border-dashed border-border bg-card/50 p-8 text-center">
-                <p className="text-sm text-muted-foreground mb-4">
-                  No games found for "{searchQuery}"
-                </p>
-                <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-3">
-                  Try one of these instead
-                </p>
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-left">
-                  {getPopularFallbackGames().map(game => (
-                    <GameCard key={game.path} game={game} badgeDate={badgeDate} bestScore={bestScores[game.path.slice(1)]} pinned={gamePicks.includes(game.path)} onTogglePick={toggleGamePick} />
-                  ))}
-                </div>
-              </div>
-            )
-          ) : (
-            <div className="space-y-10">
-              <div className="space-y-4">
-                {/* ─── MAIN EVENT ───
-                    Round 658: the four flagships on the first screen, Soccer
-                    Career on the big stage. It is the first thing on the page
-                    to play: a 390 by 844 phone sees it at about y=250, where
-                    the Round 283 fence allows 430. */}
-                <FeaturedStage />
-                {/* Round 717: every long form game this browser has a save
-                    for, straight under the stage. Nothing at all for a
-                    visitor with no saves, so a first visit's screen is
-                    unchanged; playHomeFold section 6 plants saves and holds
-                    the first tile where it was. */}
-                <ContinueRow />
-                <GamePicksRow paths={gamePicks} onToggle={toggleGamePick} onEmpty={() => dailyGamesRef.current?.querySelector<HTMLAnchorElement>('a')?.focus({ preventScroll: true })} />
-              </div>
-
-              {/* ─── DAILY PUZZLES ───
-                  Round 659: every daily on the site in one rail, led by
-                  Today's puzzle, which the date picks for everyone. A plain
-                  rail, never a checklist: Round 293 put a personal dailies
-                  checklist here and Round 297 removed it on the owner's
-                  direct instruction in the 2026-08-26 tweaks document ("The
-                  your dailies I would say get rid of it"). Nothing on the
-                  rail reads a visitor's record, and simHomeFront renders it
-                  with and without one to prove it. */}
-              <div ref={dailyGamesRef} className="space-y-4">
-                <DailyRail />
-
-                {/* A line, not a gate. Everything on this site plays signed
-                    out, so the account is an upsell and belongs where an
-                    upsell goes: after the games, not in front of them. The nav
-                    still carries Sign Up for anyone who came here to make one. */}
-                {!user && (
-                  <p className="text-xs text-muted-foreground">
-                    Every game here plays without an account.{' '}
-                    {/* Round 285: py-2 with a matching negative margin.
-                        sweepPhone measured this control at 16px tall on a
-                        phone, which is half the tap target floor. The padding
-                        grows the hit area to 32px; the negative margin keeps
-                        the sentence's line spacing exactly where it was. */}
-                    <button
-                      onClick={() => setAuthOpen(true)}
-                      className="text-primary font-medium underline underline-offset-2 hover:opacity-80 py-2 -my-2"
-                    >
-                      Make a free one
-                    </button>{' '}
-                    and your streak, points and world rank start counting.
-                  </p>
-                )}
-                <StreakReminder />
-              </div>
-
-              {/* Most played stays, per the same 2026-08-26 document, and
-                  still counts real people with its curated fallback. Round
-                  659 sets Just shipped beside it on a wide screen. */}
-              {/* grid-cols-1 is minmax(0, 1fr), not auto: with an auto track a
-                  long real Most Played description (the truncate is nowrap)
-                  widened the column to its full text and the whole phone
-                  page with it, measured at 915px with live data */}
-              <div className="grid grid-cols-1 gap-10 lg:grid-cols-2 lg:gap-8">
-                <MostPlayedToday />
-                <JustShipped>
-                  {games => (
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                      {games.map(game => (
-                        <GameCard key={game.path} game={game} badgeDate={badgeDate} bestScore={bestScores[game.path.slice(1)]} pinned={gamePicks.includes(game.path)} onTogglePick={toggleGamePick} />
-                      ))}
-                    </div>
-                  )}
-                </JustShipped>
-              </div>
-
-              {/* Round 659: the polls sit under the games now. They invite a
-                  click, the tiles get played, and the first screen belongs to
-                  the tiles. PollOfTheDay holds its own height while it loads. */}
-              <PollsWhenNear />
-              {/* ROUND 382: the maker's note is gone from here, on the owner's
-                  instruction: "it shouldnt pop up there I would rather you put it
-                  in one the small like tabs on the bottom like near the privacy
-                  policy". It now lives on /about, which is the first link in that
-                  small footer row, and it no longer carries his name. Round 346
-                  put it here and that was his idea at the time; changing his mind
-                  about his own voice on his own site is his call. */}
-
-              {/* Dynasty & Career Sims showcase (2026-08-05): the deep games, front and center */}
-              <section>
-                <h2 className="flex items-center gap-2.5 text-lg font-display font-bold text-foreground mb-1">
-                  <span aria-hidden="true" className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-gold/15 text-base ring-1 ring-inset ring-gold/30">👑</span>
-                  Dynasty & Career Sims
-                  <span className="text-xs font-normal text-muted-foreground ml-1">
-                    ({FEATURED_GAMES.length} worlds)
-                  </span>
-                </h2>
-                <p className="text-xs text-muted-foreground mb-4 md:pl-[42px]">
-                  Not quizzes. Whole universes: run a franchise, live a career, build a dynasty. Every one saves your progress.
-                </p>
+          {/* Defer ranking and rendering while the search field updates. */}
+          {(isSearching || hasDeferredQuery) && (
+            <div hidden={!isSearching} aria-busy={(isSearching && !searchFailed && searchQuery !== deferredQuery) || undefined}>
+              {searchFailed ? (
+                <HomeSearchUnavailable onBack={clearSearch} />
+              ) : !engine || !hasDeferredQuery ? (
+                <div aria-busy="true" className="min-h-[120px]" />
+              ) : filteredGames.length > 0 ? (
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
-                  {FEATURED_GAMES.map(game => (
+                  {filteredGames.map(game => (
                     <GameCard key={game.path} game={game} badgeDate={badgeDate} bestScore={bestScores[game.path.slice(1)]} pinned={gamePicks.includes(game.path)} onTogglePick={toggleGamePick} />
                   ))}
                 </div>
-              </section>
-
-              <section id="browse-sports" tabIndex={-1} aria-labelledby="browse-sports-heading" className="scroll-mt-36 rounded-2xl border border-border bg-surface-1 p-3 sm:scroll-mt-28 sm:p-4">
-                <h2 id="browse-sports-heading" className="font-display text-lg font-bold">Browse sports</h2>
-                <FavouriteSport sports={pickableSports} value={favSport} onPick={pickSport} />
-                <p className="mt-3 flex items-start gap-2 text-xs text-muted-foreground">
-                  <Pin aria-hidden="true" className="mt-0.5 h-3.5 w-3.5 shrink-0 text-gold" />
-                  Pin a game to keep it in Your picks on Home.
-                </p>
-              </section>
-
-              {sportSections.map(cat => (
-                <section key={cat.title} data-sport={CATEGORY_SPORT[cat.title]}>
-                  {/* Round 658: the sport's drawn glyph in its own ink leads
-                      every section, so the colour on the cards below always
-                      has a shape and a name beside it. */}
-                  <h2 className="flex items-center gap-2.5 text-lg font-display font-bold text-foreground mb-4" style={sportStyle(CATEGORY_SPORT[cat.title])}>
-                    <span aria-hidden="true" className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-tile/15 text-tile ring-1 ring-inset ring-tile/30">
-                      <SportGlyph sport={CATEGORY_SPORT[cat.title]} className="h-[18px] w-[18px]" />
-                    </span>
-                    {cat.title}
-                    <span className="text-xs font-normal text-muted-foreground ml-1">
-                      ({cat.games.length} {cat.games.length === 1 ? 'game' : 'games'})
-                    </span>
-                    {favSport === CATEGORY_SPORT[cat.title] && (
-                      <span data-fav-tag="" className="shrink-0 rounded bg-tile/15 px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-foreground ring-1 ring-inset ring-tile/40">
-                        Your sport
-                      </span>
-                    )}
-                    {/* Round 198: the College hub existed with real copy and
-                        links to every college game, but nothing on the site
-                        pointed at it, so no crawler could reach it and no
-                        person could find it. One link fixes both.
-                        Round 270: five more sports got a hub, so the link is
-                        driven off the hub list instead of one hand written
-                        case, and a hub added there gets its link here free. */}
-                    {hubForCategory(cat.title) && (
-                      <Link
-                        to={hubForCategory(cat.title)!.route}
-                        /* Round 203: this link was 16px tall, which is half
-                           the height a thumb needs. Padded to a real tap
-                           target without changing where it sits. */
-                        className="ml-auto inline-flex items-center rounded-lg px-2.5 py-2 text-xs font-normal leading-5 text-primary hover:underline max-sm:min-h-11"
-                      >
-                        Hub
-                      </Link>
-                    )}
-                  </h2>
-                  <div className="grid grid-cols-1 gap-2 min-[360px]:grid-cols-2 sm:gap-3 lg:grid-cols-3 xl:grid-cols-4">
-                    {cat.games.map(game => (
-                      <GameCard key={game.path} game={game} badgeDate={badgeDate} bestScore={bestScores[game.path.slice(1)]} pinned={gamePicks.includes(game.path)} onTogglePick={toggleGamePick} compact />
+              ) : (
+                <div className="rounded-xl border border-dashed border-border bg-card/50 p-8 text-center">
+                  <p className="text-sm text-muted-foreground mb-4">
+                    No games found for "{deferredQuery}"
+                  </p>
+                  <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-3">
+                    Try one of these instead
+                  </p>
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-left">
+                    {getPopularFallbackGames().map(game => (
+                      <GameCard key={game.path} game={game} badgeDate={badgeDate} bestScore={bestScores[game.path.slice(1)]} pinned={gamePicks.includes(game.path)} onTogglePick={toggleGamePick} />
                     ))}
                   </div>
-                </section>
-              ))}
+                </div>
+              )}
             </div>
           )}
+          <div hidden={isSearching}>{catalogue}</div>
 
           {/* Round 840: the words, below every tile and above the footer, for
               every visitor and outside every condition (a search result list
