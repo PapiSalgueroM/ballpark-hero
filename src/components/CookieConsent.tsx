@@ -10,9 +10,10 @@ import {
 } from '@/lib/consentPreferences';
 import { safeLocalStorage } from '@/lib/safeStorage';
 
-export function CookieConsent({ inline = false }: { inline?: boolean }) {
+export function CookieConsent({ inline = false, compactInitial = false }: { inline?: boolean; compactInitial?: boolean }) {
   const [preferences, setPreferences] = useState(readConsentPreferences);
   const [visible, setVisible] = useState(() => inline && !preferences && safeLocalStorage.getItem('cookie-consent') !== 'essential');
+  const [showDetails, setShowDetails] = useState(false);
   const [helpTarget, setHelpTarget] = useState<HTMLElement | null>(null);
   const [advertising, setAdvertising] = useState(false);
   const [gpc, setGpc] = useState(isGlobalPrivacyControlEnabled);
@@ -84,6 +85,7 @@ export function CookieConsent({ inline = false }: { inline?: boolean }) {
     const onOpen = (event: Event) => {
       const effective = getEffectiveConsent();
       explicitlyOpen.current = true;
+      setShowDetails(true);
       opener.current = (event as CustomEvent<{ opener?: HTMLElement }>).detail?.opener ?? null;
       setAdvertising(effective.advertising);
       setVisible(true);
@@ -144,23 +146,26 @@ export function CookieConsent({ inline = false }: { inline?: boolean }) {
 
   const save = (choice: ConsentPurposes) => {
     explicitlyOpen.current = false;
+    setShowDetails(false);
     setVisible(false);
     saveConsentPreferences(choice);
     if (!pendingRevoked.current.advertising && !pendingRevoked.current.analytics) opener.current?.focus({ preventScroll: !inlineNotice });
   };
   const cancel = () => {
     explicitlyOpen.current = false;
+    setShowDetails(false);
     setVisible(false);
     opener.current?.focus({ preventScroll: !inlineNotice });
   };
   if (!visible) return null;
 
-  const buttonPadding = inlineNotice ? 'px-2 sm:px-4' : 'px-4';
+  const compact = compactInitial && !showDetails && !insideHelp && !pendingReload;
+  const buttonPadding = inlineNotice || compact ? 'px-2 sm:px-4' : 'px-4';
   const region = (
     <div
       ref={el => {
         ref.current = el;
-        if (el && !el.dataset.dukbFocused && (!inlineNotice || explicitlyOpen.current)) {
+        if (el && !compact && !el.dataset.dukbFocused && (!inlineNotice || explicitlyOpen.current)) {
           el.dataset.dukbFocused = '1';
           el.focus();
         }
@@ -174,14 +179,14 @@ export function CookieConsent({ inline = false }: { inline?: boolean }) {
         ? 'pointer-events-auto rounded-xl border border-border p-3 bg-card'
         : inlineNotice
           ? 'border-b border-border bg-card p-3'
-          : 'fixed bottom-0 left-0 right-0 z-[60] pointer-events-auto max-h-[60dvh] overflow-y-auto p-4 bg-card border-t border-border shadow-lg'}
+          : `fixed bottom-0 left-0 right-0 z-[60] pointer-events-auto max-h-[60dvh] overflow-y-auto ${compact ? 'p-3' : 'p-4'} bg-card border-t border-border shadow-lg`}
     >
-      <div className="max-w-3xl mx-auto space-y-3 text-sm text-muted-foreground">
+      <div className={`max-w-3xl mx-auto ${compact ? 'space-y-2' : 'space-y-3'} text-sm text-muted-foreground`}>
         <p>
           Essential storage keeps games working. Advertising is optional. We ask again in 180 days.{' '}
           <Link to="/privacy" className="underline hover:text-foreground font-medium">Learn more</Link>
         </p>
-        <div className="flex flex-wrap gap-x-6 gap-y-2">
+        {!compact && <div className="flex flex-wrap gap-x-6 gap-y-2">
           <label className="inline-flex min-h-11 items-center gap-2 text-foreground">
             <input type="checkbox" checked={advertising && !gpc} disabled={gpc || pendingReload} onChange={event => setAdvertising(event.target.checked)} />
             Advertising
@@ -189,13 +194,15 @@ export function CookieConsent({ inline = false }: { inline?: boolean }) {
           <p data-analytics-paused-status="">
             <strong>Analytics is paused.</strong> Google Analytics is off while we check its privacy settings.
           </p>
-        </div>
+        </div>}
         {gpc && <p>Your browser's Global Privacy Control keeps advertising off.</p>}
         {pendingReload && <p role="status">Advertising is off for this visit. Save your game or allow site storage, then choose Save choices to refresh. Already-loaded vendor code may keep running until then.</p>}
-        <div className={inlineNotice ? 'grid grid-cols-3 gap-2 sm:flex sm:flex-wrap sm:items-center' : 'flex flex-wrap items-center gap-2'}>
+        <div className={inlineNotice || compact ? 'grid grid-cols-3 gap-2 sm:flex sm:flex-wrap sm:items-center' : 'flex flex-wrap items-center gap-2'}>
           <button type="button" onClick={() => save({ advertising: false, analytics: false })} className={`min-h-11 ${buttonPadding} py-2 rounded-lg border border-border text-foreground font-medium hover:bg-muted transition-colors`}>Reject all</button>
           <button type="button" disabled={pendingReload} onClick={() => save({ advertising: true, analytics: false })} className={`min-h-11 ${buttonPadding} py-2 rounded-lg border border-border text-foreground font-medium hover:bg-muted transition-colors`}>Accept all</button>
-          <button type="button" onClick={() => save({ advertising, analytics: false })} className={`min-h-11 ${buttonPadding} py-2 rounded-lg bg-primary text-primary-foreground font-semibold hover:opacity-90 transition-opacity`}>Save choices</button>
+          {compact
+            ? <button type="button" onClick={() => setShowDetails(true)} className={`min-h-11 ${buttonPadding} py-2 rounded-lg border border-border text-foreground font-medium hover:bg-muted transition-colors`}>Manage choices</button>
+            : <button type="button" onClick={() => save({ advertising, analytics: false })} className={`min-h-11 ${buttonPadding} py-2 rounded-lg bg-primary text-primary-foreground font-semibold hover:opacity-90 transition-opacity`}>Save choices</button>}
           {preferences && !pendingReload && <button type="button" onClick={cancel} className={`min-h-11 ${buttonPadding} py-2 underline hover:text-foreground`}>Cancel</button>}
         </div>
       </div>
