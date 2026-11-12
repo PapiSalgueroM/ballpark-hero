@@ -46,15 +46,17 @@ export default function JobHuntCard({ c, onApply, onJoinNow, onJoinSummer }: {
         <div className="text-[10px] text-primary uppercase tracking-wider mb-1.5 font-bold">✅ {open.club} said yes</div>
         <p className="text-sm text-foreground font-bold mb-0.5">The job is yours. When do you start?</p>
         <p className="text-[10px] text-muted-foreground mb-2">
-          Join now and their season so far is simulated under the manager before you, like a takeover, and your record only counts the games you pick a team for. Join in the summer and you see this season out at {c.clubName} first, with your board knowing you are leaving.
+          {c.championshipPlayoffs
+            ? 'The Championship playoff field is set. You can book your new job for the summer.'
+            : <>Join now and their season so far is simulated under the manager before you, like a takeover, and your record only counts the games you pick a team for. Join in the summer and you see this season out at {c.clubName} first, with your board knowing you are leaving.</>}
         </p>
         <div className="flex gap-2">
-          <button
+          {!c.championshipPlayoffs && <button
             onClick={onJoinNow}
             className="flex-1 min-h-[44px] py-2 rounded-lg bg-primary text-primary-foreground text-xs font-bold hover:opacity-90 transition-opacity"
           >
             🧳 Join {open.club} now
-          </button>
+          </button>}
           <button
             onClick={onJoinSummer}
             className="flex-1 min-h-[44px] py-2 rounded-lg border border-border bg-card text-xs font-bold text-foreground hover:border-primary transition-colors"
