@@ -85,10 +85,10 @@ describe('guest game account startup', () => {
     expect(create).toHaveBeenCalledOnce();
     expect(client.calls).toEqual(['listen', 'read session']);
 
-    fireEvent.click(screen.getByRole('button', { name: 'Sign in', exact: true }));
+    fireEvent.click(screen.getByRole('button', { name: 'Sign in' }));
     fireEvent.change(screen.getByLabelText('Email'), { target: { value: 'player@example.invalid' } });
     fireEvent.change(screen.getByLabelText('Password'), { target: { value: 'local-test-password' } });
-    fireEvent.click(screen.getByRole('button', { name: 'Sign In', exact: true }));
+    fireEvent.click(screen.getByRole('button', { name: 'Sign In' }));
     await screen.findByText('player@example.invalid');
     expect(client.signInWithPassword).toHaveBeenCalledExactlyOnceWith({ email: 'player@example.invalid', password: 'local-test-password' });
     expect(name).toHaveValue('Guest Career');
