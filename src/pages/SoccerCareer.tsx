@@ -44,7 +44,7 @@ import {
   acceptRetirementSuggestion, declineRetirementSuggestion, announceFarewellSeason,
   advancePunditSeason, endPunditCareer, punditLegacyPaid, playedSeniorSeason, POST_RETIREMENT_BONUS_CAP,
   advanceOwnerSeason, endOwnerCareer,
-  dismissNewspaper, purchaseSpendingItem, SPENDING_ITEMS,
+  dismissNewspaper, purchaseSpendingItem, SPENDING_ITEMS, dirtyMoneySeasonPlan, DIRTY_BALANCE_HEAT,
   applySocialMediaAction, handleCoverAthleteDecision, dismissSocialMediaPhase,
   applyMoralDilemmaChoice, dismissMoralDilemma, MORAL_DILEMMAS,
   applyRehabChoice,
@@ -3176,6 +3176,8 @@ function FinancialPanel({ career, onCurrencyChange, onAgentChange }: { career: C
       {((career.corruptionHeat ?? 0) > 0 || (career.dirtyMoney ?? 0) > 0) && (() => {
         const h = career.corruptionHeat ?? 0;
         const band = heatLabel(h);
+        const balance = career.dirtyMoney ?? 0;
+        const { washed, remaining } = dirtyMoneySeasonPlan(balance, career.purchasedItems);
         return (
           <div className="rounded-lg border border-red-500/25 bg-red-500/5 p-2.5 space-y-1.5 animate-fade-in">
             <div className="flex items-center justify-between">
@@ -3189,9 +3191,13 @@ function FinancialPanel({ career, onCurrencyChange, onAgentChange }: { career: C
               />
             </div>
             <p className="text-[10px] text-muted-foreground leading-snug">{band.blurb}</p>
-            {(career.dirtyMoney ?? 0) > 0 && (
+            {balance > 0 && (
               <p className="text-[10px] text-red-400 font-bold">
-                💼 {formatNetWorth(career.dirtyMoney ?? 0)} unexplained. Wash it through the Shady aisle or it keeps burning.
+                💼 {formatNetWorth(balance)} unexplained.
+                {!career.retired && (washed > 0
+                  ? ` ${formatNetWorth(washed)} clears when you next play a season.`
+                  : " In My Life, open The other list for items that process it each season you play.")}
+                {!career.retired && remaining > 0 && ` Any balance left can add up to ${DIRTY_BALANCE_HEAT} Heat.`}
               </p>
             )}
           </div>
