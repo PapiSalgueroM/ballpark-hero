@@ -3,10 +3,10 @@ import { ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { nrlSeasonPlan, NRL_LAST_YEAR } from '@/data/nrlManagerSeasons';
 import {
-  nrlCareerCap, nrlCareerFinance, nrlCareerMarket, nrlCareerSquad, nrlContractOffer,
+  nrlAcademyAvailableRoles, nrlAcademyOffer, nrlAcademyReports, nrlCareerCap, nrlCareerFinance, nrlCareerMarket, nrlCareerSquad, nrlContractOffer,
   type NrlCareerAction, type NrlCareerState,
 } from '@/lib/nrlCareer';
-import { NRL_ROLES } from '@/lib/nrlManager';
+import { NRL_ROLES, type NrlRole } from '@/lib/nrlManager';
 
 const currency = new Intl.NumberFormat('en-AU', {
   style: 'currency', currency: 'AUD', maximumFractionDigits: 0,
@@ -14,7 +14,7 @@ const currency = new Intl.NumberFormat('en-AU', {
 const money = (amount: number) => currency.format(amount);
 const labelForClub = (year: number, id: string) => nrlSeasonPlan(year).clubs.find(club => club.id === id)?.shortName ?? id;
 
-type OfficeScreen = 'contracts' | 'recruitment' | 'finances' | 'history';
+type OfficeScreen = 'contracts' | 'recruitment' | 'academy' | 'finances' | 'history';
 type MarketEntry = ReturnType<typeof nrlCareerMarket>[number];
 type CareerPlayer = ReturnType<typeof nrlCareerSquad>[number];
 type Dispatch = (action: NrlCareerAction) => boolean;
@@ -152,6 +152,60 @@ function Recruitment({ career, onAction, disabled }: { career: NrlCareerState; o
   );
 }
 
+function Academy({ career, onAction, disabled }: { career: NrlCareerState; onAction: Dispatch; disabled: boolean }) {
+  const [position, setPosition] = useState<NrlRole>('Fullback');
+  const reports = nrlAcademyReports(career);
+  const available = nrlAcademyAvailableRoles(career);
+  const scouting = reports.find(report => report.status === 'scouting');
+  const role = available.includes(position) ? position : available[0];
+  const year = career.season.year + 1;
+  return (
+    <>
+      <h2 className="font-display text-xl font-bold">Academy</h2>
+      <p className="mt-1 text-sm text-muted-foreground">Scout a position and choose who earns a place in next season’s Top 30.</p>
+      {scouting ? (
+        <p className="mt-3 rounded-lg border border-border bg-background px-3 py-2 text-sm" role="status" data-nrl-scouting>
+          Scouting {scouting.role}. Advance a round for the report. Byes count.
+        </p>
+      ) : role ? (
+        <div className="mt-3 flex flex-wrap items-end gap-2">
+          <label className="min-w-0 flex-1 space-y-1 text-sm font-semibold sm:max-w-xs">
+            <span>Position to scout</span>
+            <select className={control} value={role} disabled={disabled} onChange={event => setPosition(event.target.value as NrlRole)}>
+              {available.map(option => <option key={option}>{option}</option>)}
+            </select>
+          </label>
+          <Button type="button" size="lg" disabled={disabled} onClick={() => onAction({ type: 'scoutAcademy', role })}>Assign scout</Button>
+        </div>
+      ) : <p className="mt-3 text-sm text-muted-foreground">Scouting is closed for this season.</p>}
+      {reports.some(report => report.player) && (
+        <ul className="mt-4 divide-y divide-border" aria-label="Academy reports">
+          {reports.flatMap(report => {
+            const { player } = report;
+            if (!player) return [];
+            const offer = report.status === 'signed' ? null : nrlAcademyOffer(career, player.id);
+            return [(
+              <li key={player.id} className="py-3" data-nrl-academy-report={player.id}>
+                <h3 className="break-words font-semibold">{player.name}</h3>
+                <p className="text-sm text-muted-foreground">{player.role} · age {player.age} · {player.rating} OVR · {player.potential} potential</p>
+                {offer === null ? <p className="mt-1 text-sm font-semibold">Signed for {year}</p>
+                  : offer.ok === false ? <p className="mt-1 text-sm text-muted-foreground">{offer.reason}</p>
+                  : (
+                    <div className="mt-2 flex flex-wrap items-center gap-2">
+                      <Button type="button" variant="outline" size="lg" disabled={disabled} aria-label={`Promote ${player.name}`}
+                        onClick={() => onAction({ type: 'promoteAcademy', playerId: player.id })}>Promote for {year}</Button>
+                      <span className="text-sm text-muted-foreground">1 year · {money(offer.contract.salary)}</span>
+                    </div>
+                  )}
+              </li>
+            )];
+          })}
+        </ul>
+      )}
+    </>
+  );
+}
+
 function MoneyRows({ entries }: { entries: readonly (readonly [string, number])[] }) {
   return (
     <dl className="mt-2 divide-y divide-border text-sm">
@@ -239,6 +293,7 @@ export default function NrlCareerOffice({ career, screen, onAction, disabled }: 
     <section className="rounded-xl border border-border bg-card p-4 sm:p-5" aria-label="Club office">
       {screen === 'contracts' && <Contracts career={career} onAction={onAction} disabled={disabled} />}
       {screen === 'recruitment' && <Recruitment career={career} onAction={onAction} disabled={disabled} />}
+      {screen === 'academy' && <Academy career={career} onAction={onAction} disabled={disabled} />}
       {screen === 'finances' && <Finances career={career} />}
       {screen === 'history' && <History career={career} onAction={onAction} disabled={disabled} />}
     </section>

@@ -31,6 +31,7 @@ type Panel = typeof PANELS[number]['id'];
 const OFFICE_SCREENS = [
   { id: 'contracts', label: 'Contracts' },
   { id: 'recruitment', label: 'Recruitment' },
+  { id: 'academy', label: 'Academy' },
   { id: 'finances', label: 'Finances' },
   { id: 'history', label: 'Season review' },
 ] as const;
@@ -417,6 +418,7 @@ export default function NrlTeamManager() {
               <li>A match knock can put a player out for up to four rounds. Check Availability in Squad. The countdown includes byes, and an available player fills the vacant spot.</li>
               <li>Advance a round to simulate every fixture. A win or bye earns two ladder points, a draw earns one and a loss earns zero.</li>
               <li>The top eight make finals. The top four get a second chance if they lose their qualifying final. The last club standing wins the premiership.</li>
+              <li>Scout a position in the Academy. The report arrives after you advance a round, and a promotion reserves a place next season.</li>
               <li>Review each season, manage contracts and recruit for the next year. The career saves on this browser. Starting over replaces the current save.</li>
             </ul>
           </RulesGate>
@@ -450,9 +452,9 @@ export default function NrlTeamManager() {
             {panel === 'ladder' && <Ladder season={season} />}
             {panel === 'office' && (
               <>
-                <div className="grid grid-cols-2 gap-2 sm:grid-cols-4" role="group" aria-label="Club office screens">
+                <div className="grid grid-cols-2 gap-2 sm:grid-cols-5" role="group" aria-label="Club office screens">
                   {OFFICE_SCREENS.map(({ id, label }) => (
-                    <Button key={id} type="button" size="lg" className="px-2 text-sm" variant={office === id ? 'default' : 'outline'}
+                    <Button key={id} type="button" size="lg" className="px-2 text-sm last:col-span-2 sm:last:col-span-1" variant={office === id ? 'default' : 'outline'}
                       aria-pressed={office === id} onClick={() => setOffice(id)}>{label}</Button>
                   ))}
                 </div>
