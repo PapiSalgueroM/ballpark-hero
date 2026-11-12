@@ -1,3 +1,12 @@
+## 2026-11-12: Two Player Bingo answer reports staged
+
+The World Cup tile recognises the stored Brazilian centre-back Gabriel when the 2026 squad archive has Gabriel Magalhães. Arsenal recorded that he played the full match against Morocco. The alias is specific to the reported year, country and market position and does not enter the 2022 or winner categories. [Arsenal match report](https://www.arsenal.com/news/gabriel-kicks-off-arsenal-world-cup-interest-with-draw-aw8UZ2n3Ox8A)
+
+The sent-off tile accepts Cole Palmer's verified second-yellow dismissal against Tottenham on October 24, 2026. Exact name, nationality, position and age guards identify the player without changing historical season totals. [Chelsea match report](https://www.chelseafc.com/en/news/article/match-report-chelsea-0-2-tottenham-hotspur)
+
+Both criteria failed on the current main fixture and passed with these changes. The remaining name, country, pagination, request failure and point controls passed.
+
+
 ## 2026-11-12: Soccer Gauntlet Daily result recovery staged
 
 If browser storage refuses a Soccer Daily result, the recap stays available in the tab and can be saved again. Before a Daily pick or a save retry, a result already saved by another tab takes precedence. Reviewing a recap leaves a later Unlimited completion available.
