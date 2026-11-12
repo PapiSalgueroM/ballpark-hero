@@ -1,3 +1,12 @@
+## 2026-11-12: Two Player Bingo answer reports staged
+
+The World Cup tile recognises the stored Brazilian centre-back Gabriel when the 2026 squad archive has Gabriel Magalhães. Arsenal recorded that he played the full match against Morocco. The alias is specific to the reported year, country and market position and does not enter the 2022 or winner categories. [Arsenal match report](https://www.arsenal.com/news/gabriel-kicks-off-arsenal-world-cup-interest-with-draw-aw8UZ2n3Ox8A)
+
+The sent-off tile accepts Cole Palmer's verified second-yellow dismissal against Tottenham on October 24, 2026. Exact name, nationality, position and age guards identify the player without changing historical season totals. [Chelsea match report](https://www.chelseafc.com/en/news/article/match-report-chelsea-0-2-tottenham-hotspur)
+
+Both criteria failed on the current main fixture and passed with these changes. The remaining name, country, pagination, request failure and point controls passed.
+
+
 ## 2026-11-07: Club Manager historical roster counts live
 
 [PR #532](https://github.com/PapiSalgueroM/ballpark-hero/pull/532) published from main `c3b5ca4afaf9b4dadcd748f340e8e8e3e4a1a1dd`, App tree `133fcd3d26a4d237178e5c7efee723048da0aef2`, Lovable deployment `510b1df1-2172-42c0-90f9-d9f9c997b840`.

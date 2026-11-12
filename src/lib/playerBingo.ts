@@ -485,6 +485,8 @@ const WORLD_CUP_WINNERS_2010_2026: Record<number, string> = {
   2026: 'Spain',
 };
 
+const GABRIEL_WORLD_CUP_KEY = 'gabriel|brazil|centre-back';
+
 /** Normalized name sets from World Cup squads (2010 and later), paged. */
 async function fetchWorldCupSets(signal: AbortSignal): Promise<{ all: Set<string>; y2022: Set<string>; winners: Set<string> }> {
   const all = new Set<string>();
@@ -509,6 +511,9 @@ async function fetchWorldCupSets(signal: AbortSignal): Promise<{ all: Set<string
         keys.push('andrew robertson');
       }
       const year = Number(r.world_cup_year);
+      if (year === 2026 && key === 'gabriel magalhaes' && normalizeName(r.nationality ?? '') === 'brazil') {
+        all.add(GABRIEL_WORLD_CUP_KEY);
+      }
       for (const nameKey of keys) {
         all.add(nameKey);
         if (year === 2022) y2022.add(nameKey);
@@ -650,6 +655,16 @@ const UCL_WINNER_PAIRS: { keys: string[]; years: number[] }[] = [
 const UCL_WINNER_KEYS: Set<string> = new Set(
   UCL_WINNER_PAIRS.flatMap(p => p.keys.flatMap(k => p.years.map(y => `${k}|${y}`))),
 );
+
+// Verified second-yellow dismissal, 24 October 2026. See the Club report linked in docs/PROJECT-STATE.md.
+// This event does not rewrite the older snapshot's season statistics.
+function hasVerifiedDismissal(p: BingoPlayer): boolean {
+  return normalizeName(p.name) === 'cole palmer' &&
+    primaryNationality(p.nationality) === 'england' &&
+    normalizeName(p.position) === 'attacking midfield' &&
+    Number.isInteger(p.age) && p.age > 0 && Number.isInteger(p.year) && p.year > 0 &&
+    p.year - p.age >= 2002 && p.year - p.age <= 2003;
+}
 
 // Rodri won in 2023. Title and identity sources: docs/audits/player-bingo-rodri-ucl-2026-10-16.md.
 // A separately verified honour does not depend on complete market season rows.
@@ -887,7 +902,12 @@ export function buildCriteria(data: BingoData): BingoCriterion[] {
       group: 'wc',
       label: 'Played at a World Cup',
       icon: '🌍',
-      test: (p, d) => d.worldCupAll.has(normalizeName(p.name)),
+      test: (p, d) => {
+        const name = normalizeName(p.name);
+        return d.worldCupAll.has(name) || (name === 'gabriel' &&
+          primaryNationality(p.nationality) === 'brazil' && normalizeName(p.position) === 'centre-back' &&
+          d.worldCupAll.has(GABRIEL_WORLD_CUP_KEY));
+      },
     }),
   );
   out.push(
@@ -1026,7 +1046,7 @@ export function buildCriteria(data: BingoData): BingoCriterion[] {
       group: 'season-discipline',
       label: 'Sent off in a season',
       icon: '🟥',
-      test: (p, d) => anySeasonMatches(d, p, s => (s.redCards ?? 0) >= 1),
+      test: (p, d) => hasVerifiedDismissal(p) || anySeasonMatches(d, p, s => (s.redCards ?? 0) >= 1),
     }),
   );
   out.push(
