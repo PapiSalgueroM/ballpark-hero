@@ -46,7 +46,7 @@ import { preloadWait } from "./scripts/lib/vitePreloadWait.mjs";
    its own plugin context, so it rides in a closure. */
 const inlineSnapshotAssets = (root: string): Plugin => {
   let outDirName = "dist";
-  let soccerCreatorHints = "";
+  const routeHints = new Map<string, string>();
   return {
   name: "dukb-inline-snapshot-assets",
   apply: "build" as const,
@@ -54,38 +54,47 @@ const inlineSnapshotAssets = (root: string): Plugin => {
     outDirName = c.build.outDir;
   },
   generateBundle(_options, bundle) {
-    // Vite can combine the dynamic entry with shared code in a chunk with no façade.
-    const creator = Object.values(bundle).find(chunk => chunk.type === "chunk" &&
-      chunk.moduleIds.some(id => id.replaceAll("\\", "/").endsWith("/src/pages/SoccerCareerEntry.tsx")));
-    if (!creator) return;
-
-    // Static imports only. The App module has its own script tag.
+    const routes = [
+      { source: "/src/pages/SoccerCareerEntry.tsx", paths: ["soccer-career"] },
+      { source: "/src/pages/SportHub.tsx", paths: ["soccer", "pro-basketball"] },
+    ];
     const deferredModules = [
       "/src/pages/SoccerCareer.tsx",
       "/src/lib/soccerCareerEngine.ts",
       "/src/lib/clubManager.ts",
+      "/src/pages/NbaMyCareer.tsx",
+      "/src/components/us-career/UsCareerBoard.tsx",
       "/src/components/layout/LiveTicker.tsx",
     ];
-    const files = new Set<string>();
-    const collect = (file: string) => {
-      const chunk = bundle[file];
-      if (!chunk || chunk.type !== "chunk" || chunk.isEntry || files.has(file) || !file.startsWith("assets/")) return;
-      const includesDeferredModule = chunk.moduleIds.some(id => {
-        const source = id.replaceAll("\\", "/");
-        return deferredModules.some(deferred => source.endsWith(deferred));
-      });
-      if (includesDeferredModule) throw new Error("The Soccer Career creator preload graph contains gameplay or the live ticker");
-      files.add(file);
-      chunk.imports.forEach(collect);
-    };
-    collect(creator.fileName);
-    soccerCreatorHints = [...files].map(file => `\n    <link rel="modulepreload" crossorigin href="/${file}">`).join("");
+    routeHints.clear();
+    for (const { source, paths } of routes) {
+      // Vite can combine the dynamic entry with shared code in a chunk with no façade.
+      const page = Object.values(bundle).find(chunk => chunk.type === "chunk" &&
+        chunk.moduleIds.some(id => id.replaceAll("\\", "/").endsWith(source)));
+      if (!page) continue;
+
+      // Static imports only. The App module has its own script tag.
+      const files = new Set<string>();
+      const collect = (file: string) => {
+        const chunk = bundle[file];
+        if (!chunk || chunk.type !== "chunk" || chunk.isEntry || files.has(file) || !file.startsWith("assets/")) return;
+        const includesDeferredModule = chunk.moduleIds.some(id => {
+          const module = id.replaceAll("\\", "/");
+          return deferredModules.some(deferred => module.endsWith(deferred));
+        });
+        if (includesDeferredModule) throw new Error(`The preload graph for ${paths.join(", ")} contains gameplay or the live ticker`);
+        files.add(file);
+        chunk.imports.forEach(collect);
+      };
+      collect(page.fileName);
+      const hints = [...files].map(file => `\n    <link rel="modulepreload" crossorigin href="/${file}">`).join("");
+      for (const route of paths) routeHints.set(route, hints);
+    }
   },
   /* closeBundle, not writeBundle: publicDir is copied during the write phase,
      and a snapshot that has not been copied yet cannot be rewritten. */
   closeBundle() {
     const dist = path.resolve(root, outDirName);
-    const soccerSnapshot = path.join(dist, "soccer-career", "index.html");
     let indexHtml: string;
     try {
       indexHtml = fs.readFileSync(path.join(dist, "index.html"), "utf8");
@@ -147,7 +156,7 @@ const inlineSnapshotAssets = (root: string): Plugin => {
         try { html = fs.readFileSync(f, "utf8"); } catch { continue; }
         if (!html.includes("/prerender-boot.js")) { skipped += 1; continue; }
         if (html.includes("/assets/") || !html.includes("</head>")) { skipped += 1; continue; }
-        const preloads = f === soccerSnapshot ? soccerCreatorHints : "";
+        const preloads = routeHints.get(path.relative(dist, path.dirname(f))) ?? "";
         let out = html.replace(oldCalmBoot, "").replace("</head>", `  ${inject}${preloads}\n  </head>`);
         /* Round 448: the cover goes in once, as #root's first child. A snapshot
            the prerenderer already wrote in the new shape carries it and is
