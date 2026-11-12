@@ -34,6 +34,7 @@ type Phase = 'boot' | 'error' | 'setup' | 'drafting' | 'running' | 'done';
 type Mode = 'daily' | 'unlimited';
 type PendingDailyRun = { run: GauntletRun; draft: DraftShape; squad: (Player | null)[]; conflict: boolean };
 const SLUG = 'gauntlet-draft';
+const MIN_POOL_SIZE = 100;
 
 /* The original card frame: colour keyed to the card's rating band. */
 const bandClass = (r: number) =>
@@ -70,12 +71,15 @@ export default function GauntletDraft() {
     fetchSquadPool('current', undefined, () => { usedFallback = true; })
       .then(p => {
         if (cancelled) return;
-        if (p.length < 100) { setPhase('error'); return; }
         setPool(p);
         setUsingFallback(usedFallback);
-        setPhase('setup');
+        setPhase(p.length < MIN_POOL_SIZE ? 'error' : 'setup');
       })
-      .catch(() => { if (!cancelled) setPhase('error'); });
+      .catch(() => {
+        if (cancelled) return;
+        setPool([]);
+        setPhase('error');
+      });
     return () => { cancelled = true; };
   }, [phase]);
 
@@ -110,8 +114,13 @@ export default function GauntletDraft() {
     try {
       d = buildDraft(pool, seed);
     } catch (error) {
-      if (!saved) throw error;
-      unavailable();
+      if (saved) {
+        unavailable();
+        return;
+      }
+      if (!(error instanceof RangeError)) throw error;
+      setPool([]);
+      setPhase('error');
       return;
     }
     const kept = saved ? restoreDailyPicks(d, saved) : [];
@@ -201,7 +210,12 @@ export default function GauntletDraft() {
   useGameCompletion(SLUG, run !== null, run?.score ?? 0, run?.roundsCleared ?? 0);
 
   const pick = draft && phase === 'drafting' ? draft.picks[pickIndex] : null;
-  const dailyDone = phase === 'setup' && (pendingDailyRun !== null || loadDailyRun(todayStr) !== null);
+  const poolUnavailable = phase === 'error' || (phase === 'setup' && pool.length < MIN_POOL_SIZE);
+  const dailyDone = (phase === 'setup' || phase === 'error') && (pendingDailyRun !== null || loadDailyRun(todayStr) !== null);
+  const retryPool = () => {
+    setDailyUnavailable(false);
+    setPhase('boot');
+  };
 
   return (
     <>
@@ -215,16 +229,23 @@ export default function GauntletDraft() {
           <div className="flex justify-center py-16"><Loader2 className="w-8 h-8 animate-spin text-primary" /></div>
         )}
 
-        {phase === 'error' && (
+        {poolUnavailable && (
           <div className="text-center py-12">
             <p className="text-destructive font-semibold mb-3">Couldn't load the player pool right now.</p>
-            <button onClick={() => window.location.reload()} className="px-6 py-2.5 bg-primary text-primary-foreground rounded-full font-semibold">
-              Try again
-            </button>
+            <div className="flex flex-wrap justify-center gap-2">
+              {dailyDone && (
+                <button onClick={restoreDaily} className="px-6 py-2.5 border border-border rounded-full font-semibold">
+                  See today's result
+                </button>
+              )}
+              <button onClick={retryPool} className="px-6 py-2.5 bg-primary text-primary-foreground rounded-full font-semibold">
+                Try again
+              </button>
+            </div>
           </div>
         )}
 
-        {phase === 'setup' && (
+        {phase === 'setup' && !poolUnavailable && (
           <div className="space-y-4 max-w-sm mx-auto">
             <div className="rounded-xl border border-border bg-surface-1 p-4 text-sm text-muted-foreground space-y-1.5">
               <p className="font-bold text-foreground">How to play</p>
@@ -238,7 +259,7 @@ export default function GauntletDraft() {
                 {dailyDone ? "Today's draft is done. See how the cup went" : usingFallback ? 'The player feed is unavailable. Tap to retry or resume a saved draft.' : 'The same five card choices for everyone today'}
               </span>
             </button>
-            {dailyUnavailable && <GauntletResumeNotice />}
+            {dailyUnavailable && <GauntletResumeNotice onRetry={retryPool} />}
             <button onClick={() => start('unlimited')} className="w-full rounded-xl border border-border bg-surface-1 p-4 text-left hover:border-primary/50 hover:bg-primary/5 transition-colors">
               <span className="block font-bold text-foreground">Unlimited</span>
               <span className="block text-xs text-muted-foreground mt-0.5">A fresh draft every run</span>

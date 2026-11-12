@@ -136,13 +136,102 @@ it('uses the first saved Daily read if another tab removes the record during the
   expect(recordCompletion).not.toHaveBeenCalled();
 });
 
-it('keeps a short official feed on the existing pool error screen', async () => {
-  setTableFixture('player_market_values', players.slice(0, 60).map(p => ({
-    player_name: p.name, position: p.position, age: p.age, nationality: p.nationality,
-    club: p.club, market_value_usd: p.marketValue * 1_000_000,
-  })));
+it('retries a short official feed in place and keeps its Daily date at midnight', async () => {
+  vi.setSystemTime(new Date('2026-11-12T04:59:30Z'));
+  setTableFixture('player_market_values', officialRows.slice(0, 60));
   const view = mount();
   expect(await view.findByText("Couldn't load the player pool right now.")).toBeVisible();
   expect(view.queryByRole('button', { name: /^Unlimited/ })).toBeNull();
   expect(view.queryByRole('button', { name: /^Daily gauntlet/ })).toBeNull();
+  expect(view.queryByRole('button', { name: "See today's result" })).toBeNull();
+  let reads = 0;
+  setTableFixture('player_market_values', () => { reads++; return officialRows; });
+  vi.setSystemTime(new Date('2026-11-12T05:00:30Z'));
+  await click(view.getByRole('button', { name: 'Try again' }));
+  expect(reads).toBe(1);
+  expect(localStorage.getItem(key)).toBeNull();
+  await click(await view.findByRole('button', { name: dailyButton }));
+  const official = await fetchSquadPool('current');
+  const first = buildDraft(official, dailyDraftSeed(date)).picks[0].choices[0];
+  await click(view.getByText(first.name, { exact: true }).closest('button')!);
+  expect(loadDailyDraft(date)?.kept).toEqual([first.name]);
+  expect(localStorage.getItem('gauntlet-draft-daily-2026-11-12')).toBeNull();
+  expect(recordCompletion).not.toHaveBeenCalled();
+});
+
+it('retries a changed official deal without losing the original picks at midnight', async () => {
+  vi.setSystemTime(new Date('2026-11-12T04:59:30Z'));
+  setTableFixture('player_market_values', officialRows);
+  const draft = buildDraft(await fetchSquadPool('current'), dailyDraftSeed(date));
+  saveDailyDraft(date, draft, [draft.picks[0].choices[0]]);
+  const before = localStorage.getItem(key);
+  setTableFixture('player_market_values', officialRows.map(row => ({
+    ...row, player_name: 'Changed ' + row.player_name,
+  })));
+  const view = mount();
+  await click(await view.findByRole('button', { name: dailyButton }));
+  let reads = 0;
+  setTableFixture('player_market_values', () => { reads++; return officialRows; });
+  vi.setSystemTime(new Date('2026-11-12T05:00:30Z'));
+  await click(view.getByRole('button', { name: 'Try again' }));
+  expect(reads).toBe(1);
+  await click(await view.findByRole('button', { name: dailyButton }));
+  expect(view.getByText(/^Pick 2 of 11/)).toBeVisible();
+  expect(localStorage.getItem(key)).toBe(before);
+  expect(localStorage.getItem('gauntlet-draft-daily-2026-11-12')).toBeNull();
+  expect(recordCompletion).not.toHaveBeenCalled();
+});
+
+it.each([false, true])('restores a saved recap when the official feed is short (peer removes during read: %s)', async removes => {
+  const before = seedSavedDaily();
+  setTableFixture('player_market_values', officialRows.slice(0, 60));
+  const view = mount();
+  const recap = await view.findByRole('button', { name: "See today's result" });
+  const getItem = Storage.prototype.getItem;
+  const reads = vi.spyOn(Storage.prototype, 'getItem').mockImplementation(function (this: Storage, name: string) {
+    const saved = getItem.call(this, name);
+    if (removes && name === key) this.removeItem(key);
+    return saved;
+  });
+  await click(recap);
+  const back = view.getByRole('button', { name: 'Back to modes' });
+  expect(back).toBeVisible();
+  expect(reads.mock.calls.filter(([name]) => name === key)).toHaveLength(1);
+  reads.mockRestore();
+  expect(localStorage.getItem(key)).toBe(removes ? null : before);
+  expect(recordCompletion).not.toHaveBeenCalled();
+
+  await click(back);
+  expect(view.getByRole('button', { name: 'Try again' })).toBeVisible();
+  expect(view.queryByRole('button', { name: /^Unlimited/ })).toBeNull();
+  expect(localStorage.getItem(key)).toBe(removes ? null : before);
+});
+
+it.each([dailyButton, /^Unlimited/])('offers retry without losing state when the selected mode cannot deal a position (%s)', async mode => {
+  const sparse = officialRows.filter(row => row.position !== 'GK');
+  expect(sparse.length).toBeGreaterThan(100);
+  setTableFixture('player_market_values', sparse);
+  const view = mount();
+  const errors: string[] = [];
+  const capture = (event: ErrorEvent) => {
+    errors.push(event.message);
+    event.preventDefault();
+  };
+  window.addEventListener('error', capture);
+  try {
+    await click(await view.findByRole('button', { name: mode }));
+  } finally {
+    window.removeEventListener('error', capture);
+  }
+  expect(errors).toEqual([]);
+  const retry = view.getByRole('button', { name: 'Try again' });
+  expect(retry).toBeVisible();
+  expect(view.queryByText(/^Pick 1 of 11/)).toBeNull();
+  expect(localStorage.getItem(key)).toBeNull();
+  expect(recordCompletion).not.toHaveBeenCalled();
+  setTableFixture('player_market_values', officialRows);
+  await click(retry);
+  await click(await view.findByRole('button', { name: mode }));
+  expect(view.getByText(/^Pick 1 of 11/)).toBeVisible();
+  expect(localStorage.getItem(key)).toBeNull();
 });
