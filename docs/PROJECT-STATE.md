@@ -1,5 +1,11 @@
 
 
+## 2026-11-12 Soccer Grid validator retry feedback
+
+An HTTP or connection error during answer checking now shows the existing retry message when that guess still belongs to the open square. The failed check spends no guess. It leaves the saved board, timer and scoring alone. Late errors stay quiet after the player changes square, the round expires, or the game is closed.
+
+The change builds on the Soccer Grid settlement and selection ownership drafts. A local phone fixture reproduced a silent HTTP 503. The focused regression also covers a rejected invocation, a newer save, a settings change, and a later selection write failure.
+
 ## 2026-11-07 Soccer Grid pending selection ownership
 
 A submitted guess keeps its original square. If the player selects a different empty square while the answer is pending, the newer square stays selected and its search is available when the earlier answer settles. The one-line Hook change clears the selection only when it still points to the submitted square. The earlier guess keeps its normal result, scoring and allowance behavior.

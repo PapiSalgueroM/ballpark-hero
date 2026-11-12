@@ -31,18 +31,25 @@ type GridAction =
   | { t: 'ok'; cellIndex: number; playerName: string; rarity: number }
   | { t: 'x' };
 
+const RETRY_MESSAGE = "Couldn't verify that answer, please try again.";
+
 export function useSoccerGrid() {
   const [puzzlePool, setPuzzlePool] = useState<SoccerGridPuzzle[]>(soccerGridPuzzles);
   const [isLoadingPool, setIsLoadingPool] = useState(true);
+  const mounted = useRef(false);
 
   useEffect(() => {
     let cancelled = false;
+    mounted.current = true;
     fetchSoccerGridPuzzles().then((pool) => {
       if (cancelled) return;
       if (pool.length > 0) setPuzzlePool(pool);
       setIsLoadingPool(false);
     });
-    return () => { cancelled = true; };
+    return () => {
+      cancelled = true;
+      mounted.current = false;
+    };
   }, []);
 
   // Today's date (ET), stable for the whole session, used as the key for
@@ -126,6 +133,8 @@ export function useSoccerGrid() {
   puzzleKeyRef.current = puzzleKey;
 
   const [activeCell, setActiveCell] = useState<number | null>(null);
+  const activeCellRef = useRef(activeCell);
+  activeCellRef.current = activeCell;
   const [validating, setValidating] = useState(false);
   const [checkingDown, setCheckingDown] = useState(false);
   const [wrongFlash, setWrongFlash] = useState<{ cellIndex: number; playerName: string } | null>(null);
@@ -287,8 +296,9 @@ export function useSoccerGrid() {
       const requestIsOvertime = isOvertime;
       const requestPuzzleKey = puzzleKey;
       const requestSettings = settings;
-      const canSettle = () => {
-        if (takeNewerDailySave()) return false;
+      // Retry feedback can inspect ownership without adopting progress or ending the round.
+      const canSettle = (feedbackOnly = false) => {
+        if (!feedbackOnly && takeNewerDailySave()) return false;
         const progress = getCurrentProgress();
         if (!requestIsOvertime && (progress.gameStatus !== 'playing' || mainRoundComplete.current)) return false;
         if (puzzleKeyRef.current !== requestPuzzleKey ||
@@ -298,10 +308,12 @@ export function useSoccerGrid() {
           const epoch = timerStartedAtRef.current;
           const now = Date.now();
           if (requestSettings.timerMode !== 0 && epoch !== null && now >= epoch + requestSettings.timerMode * 1000) {
-            mainRoundComplete.current = true;
-            saveTimerExpired(todayStr);
-            setTimerExpiredState(true);
-            setNowTick(now);
+            if (!feedbackOnly) {
+              mainRoundComplete.current = true;
+              saveTimerExpired(todayStr);
+              setTimerExpiredState(true);
+              setNowTick(now);
+            }
             return false;
           }
         }
@@ -316,12 +328,15 @@ export function useSoccerGrid() {
 
       setValidating(true);
       const { rowAttr, colAttr } = getRowCol(capturedCell);
+      const requestGuesses = getCurrentProgress().guesses;
+      let validatorResponded = false;
 
       try {
         const { data, error } = await supabase.functions.invoke('soccer-grid-validate', {
           body: { playerName, rowAttribute: rowAttr.label, colAttribute: colAttr.label },
         });
         if (error) throw error;
+        validatorResponded = true;
         const isValid = data?.valid === true;
         const displayName = data?.fullName || playerName;
 
@@ -359,7 +374,7 @@ export function useSoccerGrid() {
             setCheckingDown(true);
             toast.error('Answer checking has used up its allowance for today. This guess was not counted; your board is saved, come back tomorrow.');
           } else {
-            toast.error("Couldn't verify that answer, please try again.");
+            toast.error(RETRY_MESSAGE);
           }
         } else {
           if (!canSettle()) return;
@@ -370,7 +385,10 @@ export function useSoccerGrid() {
           if (!requestIsOvertime) addDailyGuess({ t: 'x' });
         }
       } catch {
-        // Network error, don't count the guess
+        if (!validatorResponded && mounted.current && activeCellRef.current === capturedCell &&
+          getCurrentProgress().guesses === requestGuesses && canSettle(true)) {
+          toast.error(RETRY_MESSAGE);
+        }
       } finally {
         setValidating(false);
         setActiveCell((currentCell) => currentCell === capturedCell ? null : currentCell);
