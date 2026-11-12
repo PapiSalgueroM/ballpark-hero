@@ -1,3 +1,7 @@
+## 2026-11-12: Guess the College Daily result history candidate
+
+Daily wins now include the answer in the attempt count, guess badges and share grid. Exact main showed a first-try win as zero tries and marked the last incorrect guess as correct when the next guess won. The existing win marker supplies the correct answer from the Daily puzzle on play and reload. Points per clue and stored actions are preserved. The Hard button and help now describe the full in-game pool, including mid-majors. A 390px production-build phone check verified the results, both labels and a byte-identical save from exact main. App types, three focused regressions, the damaged-save route check, the college facts harness, all 15 built output readers and all 16 route caps passed.
+
 ## 2026-11-07: Club Manager historical roster counts live
 
 [PR #532](https://github.com/PapiSalgueroM/ballpark-hero/pull/532) published from main `c3b5ca4afaf9b4dadcd748f340e8e8e3e4a1a1dd`, App tree `133fcd3d26a4d237178e5c7efee723048da0aef2`, Lovable deployment `510b1df1-2172-42c0-90f9-d9f9c997b840`.
