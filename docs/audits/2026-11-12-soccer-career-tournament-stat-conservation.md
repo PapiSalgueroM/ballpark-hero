@@ -1,0 +1,11 @@
+# Soccer Career tournament stat conservation
+
+Checked integration `181a0c2189e3131bfd749979bfbf288ee06cf295` against `7317e54fd07223a5fe33469bfba542fd54e612ff`, the first parent of the tournament scoring composition `07ea28f80`. [Draft #229](https://github.com/PapiSalgueroM/ballpark-hero/pull/229) documents the earlier continental knockout overcount.
+
+The replay used the actual tournament functions at both revisions, with the same seeded `Math.random` sequence in each pair. It sampled ST, RW, CAM, CM, CDM, CB, LB and GK at 65, 80, 95 and 100 OVR. For each combination it used 48 seeds from `45103 + i * 10007` with `0 <= i < 48`.
+
+- Club tournaments covered Real Madrid in 1960, 2002 and 2026 and Boca Juniors in 2026. The earlier revision had 757 player goal totals above the team score in 6,144 campaigns. The current revision had zero across 18,954 knockout rows and 27,862 group or league stage rows. All player tournament goal totals matched the sum of their match rows. Team results and the random draw count and next value matched in every pair.
+- With seed 45103, a 65 OVR Real Madrid striker in 1960 previously received two goals in a 0–0 first leg of the quarterfinal. The current row records zero goals. Both campaigns consumed 10 draws and returned 0.1846428168937564 on the next draw. A separate 2026 Real Madrid playoff replay with seed 85131 credited one of two extra-time team goals to a 95 OVR central midfielder.
+- International tournaments covered Brazil in 2002 and 2026 and England, Argentina and Japan in 2024. Across 7,680 campaigns and 40,866 matches, including 17,826 knockout rows and 3,391 shootouts, individual goals plus assists stayed within the team score. The 10,617 assists matched the earlier revision in every match, and the team results and random draw count and next value matched in every pair. The current goal threshold is at or below the legacy threshold for each tested position at every integer OVR from 1 to 100, so the shared rolls leave no more assist attempts than teammate goals.
+
+The existing `src/lib/soccerCareerTournamentGoals.test.ts` suite passed all three tests on the same revision. Both runs used the repository offline transport guard and produced empty transport receipts. The audit changed no gameplay or save data.
