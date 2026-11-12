@@ -4,9 +4,10 @@ import { uniqueName } from '@/lib/foNames';
 import { nrlBoardChallengeStatus } from '@/lib/nrlBoardTarget';
 import { archiveNrlScoring, validNrlScoringArchive, type NrlSeasonScoringTotal } from '@/lib/nrlPlayerScoring';
 import {
-  archiveNrlFinals, createNrlSeason, isNrlManagerState, isNrlSeasonProgress, nrlArchivedFinals, nrlBench, nrlLadder, nrlMatchupEdges, nrlNextRound, nrlRegularRounds,
-  NRL_FINALS_SPOTS, NRL_ROLES, reduceNrlSeason, validNrlLiveScore, type NrlAction, type NrlCoachRole, type NrlFixture, type NrlManagerState, type NrlMatchResult,
-  type NrlFinalsArchive, type NrlPlayer, type NrlRole, type NrlYear,
+  archiveNrlFinals, createNrlSeason, isNrlManagerState, isNrlSeasonProgress, nrlArchivedFinals, nrlBench, nrlLadder, nrlMatchdaySelection,
+  nrlMatchupEdges, nrlNextRound, nrlRegularRounds, nrlSavedLineupPreview, NRL_BENCH_SIZE, NRL_FINALS_SPOTS, NRL_ROLES, reduceNrlSeason, validNrlLiveScore,
+  type NrlAction, type NrlCoachRole, type NrlFinalsArchive, type NrlFixture, type NrlManagerState, type NrlMatchResult,
+  type NrlPlayer, type NrlRole, type NrlSavedLineup, type NrlYear,
 } from '@/lib/nrlManager';
 
 const SQUAD_SIZE = 30;
@@ -102,10 +103,13 @@ export interface NrlCareerState {
   academy?: NrlAcademyAssignment[];
   developmentFocus?: ActiveDevelopmentFocus;
   shortlist?: string[];
+  savedLineup?: NrlSavedLineup;
 }
 export type NrlCareerAction = NrlAction
   | { type: 'offerContract'; playerId: string; salary: number; years: number }
   | { type: 'arrangeTakeover'; year: number; clubId: string; playerId: string; destinationId: string }
+  | { type: 'saveLineup'; year: number; clubId: string }
+  | { type: 'applySavedLineup'; previewKey: string }
   | { type: 'setShortlist'; playerId: string; saved: boolean; year: number }
   | { type: 'scoutAcademy'; role: NrlRole }
   | { type: 'promoteAcademy'; playerId: string }
@@ -773,7 +777,7 @@ function rolloverCareer(state: NrlCareerState, move?: { fromYear: number; clubId
   if (season.phase !== 'complete' || season.year === NRL_LAST_YEAR) return state;
   if (!move && nrlBoardChallengeStatus(state) === 'must-move') return state;
   if (move && (move.fromYear !== season.year || !nrlOffseasonClubs(state).some(club => club.id === move.clubId))) return state;
-  const { developmentFocus, shortlist, ...career } = state;
+  const { developmentFocus, shortlist, savedLineup, ...career } = state;
   const year = season.year + 1;
   const clubId = move?.clubId ?? season.clubId;
   const gains = developmentGains(state);
@@ -865,6 +869,17 @@ export function reduceNrlCareer(state: NrlCareerState, action: NrlCareerAction):
       if (!saved) return withShortlist(state, ids.filter(id => id !== playerId));
       if (ids.length >= NRL_SHORTLIST_LIMIT || !isRecruitmentTarget(state, playerId)) return state;
       return withShortlist(state, [...ids, playerId]);
+    }
+    case 'saveLineup': {
+      const { season } = state;
+      if (state.legacySeason || action.year !== season.year || action.clubId !== season.clubId) return state;
+      const savedLineup = nrlMatchdaySelection(season);
+      return savedLineup && JSON.stringify(savedLineup) !== JSON.stringify(state.savedLineup) ? { ...state, savedLineup } : state;
+    }
+    case 'applySavedLineup': {
+      if (state.legacySeason || !state.savedLineup) return state;
+      const preview = nrlSavedLineupPreview(state.season, state.savedLineup);
+      return preview?.changed && preview.key === action.previewKey ? { ...state, season: preview.next } : state;
     }
     case 'arrangeTakeover': {
       const { year, clubId } = state.season;
@@ -1116,6 +1131,18 @@ function validShortlist(state: NrlCareerState): boolean {
     && new Set(shortlist).size === shortlist.length && shortlist.every(id => typeof id === 'string' && isRecruitmentTarget(state, id)));
 }
 
+function validSavedLineup(value: unknown, season: NrlManagerState): boolean {
+  if (value === undefined) return true;
+  if (!season.kickerId || !record(value) || value.year !== season.year || Object.keys(value).length !== 4) return false;
+  const { lineup, bench, kickerId } = value;
+  if (!record(lineup) || Object.keys(lineup).length !== NRL_ROLES.length || !Array.isArray(bench) || bench.length !== NRL_BENCH_SIZE) return false;
+  const starters = NRL_ROLES.map(role => lineup[role]);
+  const selected = [...starters, ...bench];
+  const squad = new Set(season.squad.map(player => player.id));
+  return starters.includes(kickerId) && new Set(selected).size === selected.length
+    && selected.every(id => typeof id === 'string' && squad.has(id));
+}
+
 export function isNrlCareerState(value: unknown): value is NrlCareerState {
   if (!record(value) || value.version !== 2 || !isNrlOpeningYear(value.openingYear)
     || !isNrlSeasonProgress(value.season) || value.season.year < value.openingYear
@@ -1125,6 +1152,7 @@ export function isNrlCareerState(value: unknown): value is NrlCareerState {
     || (value.developmentFocus !== undefined && (!activeDevelopmentFocus(value.developmentFocus)
       || value.legacySeason || value.season.year === NRL_LAST_YEAR))
     || (value.legacySeason && (value.season.year !== value.openingYear || value.season.kickerId || value.season.injuryTracking || value.season.results.some(match => match.benchUsed !== undefined)))
+    || !validSavedLineup(value.savedLineup, value.season)
     || !Array.isArray(value.players) || value.players.length > 650
     || !Array.isArray(value.history) || !validBook(value.finance, value.season.round + 1)) return false;
   const { year } = value.season;

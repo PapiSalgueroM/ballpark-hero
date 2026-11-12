@@ -18,7 +18,8 @@ import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { useSaveFenceWatch } from '@/hooks/useSaveFenceWatch';
 import { nrlBoardChallengeStatus } from '@/lib/nrlBoardTarget';
 import {
-  nrlBench, nrlFitLineup, nrlHalftimeInterchanges, nrlInjuries, nrlLadder, nrlNextRound, nrlStarterOptions, NRL_BENCH_SIZE, NRL_COACHING_BONUS,
+  nrlBench, nrlFitLineup, nrlHalftimeInterchanges, nrlInjuries, nrlLadder, nrlMatchdaySelection, nrlNextRound,
+  nrlSavedLineupPreview, nrlStarterOptions, NRL_BENCH_SIZE, NRL_COACHING_BONUS,
   NRL_MAX_BENCH_USED, NRL_ROLES,
   type NrlAction, type NrlCoachRole, type NrlLiveHalf, type NrlManagerState, type NrlMatchResult, type NrlNextRound, type NrlTactic,
 } from '@/lib/nrlManager';
@@ -544,9 +545,58 @@ function SquadSeasonStats({ season }: { season: NrlManagerState }) {
   );
 }
 
-function Squad({ season, onAction, disabled }: {
-  season: NrlManagerState; onAction: (action: NrlAction) => void; disabled: boolean;
+function SavedLineup({ career, onAction, disabled }: {
+  career: NrlCareerState; onAction: (action: NrlCareerAction) => boolean; disabled: boolean;
 }) {
+  const summary = useRef<HTMLElement>(null);
+  const { season, savedLineup } = career;
+  const selection = disabled || career.legacySeason ? null : nrlMatchdaySelection(season);
+  if (!selection) return null;
+  const preview = savedLineup ? nrlSavedLineupPreview(season, savedLineup) : null;
+  const nameOf = (id: string) => season.squad.find(player => player.id === id)?.name;
+  const save = () => {
+    if (onAction({ type: 'saveLineup', year: season.year, clubId: season.clubId })) summary.current?.focus();
+  };
+  return (
+    <details className="group mt-3 rounded-lg border border-border bg-background px-3">
+      <summary ref={summary} className="flex min-h-11 cursor-pointer items-center justify-between gap-2 rounded-md text-sm font-bold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
+        Saved lineup<ChevronDown size={16} aria-hidden="true" className="shrink-0 group-open:rotate-180" />
+      </summary>
+      <div className="space-y-3 pb-3 text-sm">
+        <p className="text-muted-foreground">Keep one starting 13, bench order and goal kicker for this season.</p>
+        {preview && (
+          <div className="space-y-2 text-muted-foreground" role="status">
+            {preview.replacements > 0 && <p>Saved picks adjusted for this round: {preview.replacements}.</p>}
+            {preview.changes.length > 0 && (
+              <ul className="divide-y divide-border">
+                {preview.changes.map(({ role, toId }) => <li key={role} className="py-1">
+                  <span className="font-semibold text-foreground">{role}</span> · {nameOf(toId)}
+                </li>)}
+              </ul>
+            )}
+            {preview.benchChanged && <p>Bench order changes to {preview.next.bench!.map(nameOf).join(', ')}.</p>}
+            {preview.kickerChanged && <p>Goal kicker changes to {nameOf(preview.next.kickerId!)}.</p>}
+            {!preview.changed && <p>Your current lineup matches the preview.</p>}
+          </div>
+        )}
+        <div className="flex flex-wrap gap-2">
+          <Button type="button" size="lg" variant="outline" className="px-3"
+            disabled={JSON.stringify(selection) === JSON.stringify(savedLineup)} onClick={save}>
+            {savedLineup ? 'Replace saved lineup' : 'Save this lineup'}
+          </Button>
+          {preview && <Button type="button" size="lg" className="px-3" disabled={!preview.changed} onClick={() => {
+            if (onAction({ type: 'applySavedLineup', previewKey: preview.key })) summary.current?.focus();
+          }}>Apply saved lineup</Button>}
+        </div>
+      </div>
+    </details>
+  );
+}
+
+function Squad({ career, onAction, disabled }: {
+  career: NrlCareerState; onAction: (action: NrlCareerAction) => boolean; disabled: boolean;
+}) {
+  const { season } = career;
   const bench = nrlBench(season);
   const injuries = nrlInjuries(season);
   const starters = new Set(Object.values(season.lineup));
@@ -589,6 +639,7 @@ function Squad({ season, onAction, disabled }: {
           </div>
         </details>
       )}
+      <SavedLineup career={career} onAction={onAction} disabled={disabled} />
       {season.injuryTracking ? (
         <section className="mt-4 rounded-lg border border-border bg-background p-3" aria-labelledby="nrl-availability" data-nrl-availability>
           <h3 id="nrl-availability" className="text-sm font-semibold">Availability</h3>
@@ -905,7 +956,7 @@ function NrlManagerScreen({ entry, showSlots }: { entry: ContinueSave; showSlots
             {live && (panel === 'squad' || panel === 'office') && (
               <p className="rounded-xl border border-border bg-card p-3 text-sm">Finish the live match in Match centre to make changes.</p>
             )}
-            {panel === 'squad' && <Squad season={season} onAction={dispatch} disabled={rosterLocked} />}
+            {panel === 'squad' && <Squad career={career} onAction={dispatch} disabled={rosterLocked} />}
             {panel === 'ladder' && <Ladder career={career} />}
             {panel === 'office' && (
               <>

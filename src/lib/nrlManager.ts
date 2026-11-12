@@ -57,6 +57,12 @@ export interface NrlFinalsArchive {
   seeds: string[];
   scores: [number, number][]; // Home and away scores in the nine-tie preset order.
 }
+export interface NrlSavedLineup {
+  year: number;
+  lineup: Record<NrlRole, string>;
+  bench: string[];
+  kickerId: string;
+}
 export interface NrlLadderRow {
   clubId: string;
   played: number;
@@ -314,13 +320,34 @@ function repairMatchday(state: NrlManagerState, preferFit = false): NrlManagerSt
   return { ...repaired, bench: nrlBench(repaired) };
 }
 
+function lineupChanges(from: NrlManagerState['lineup'], to: NrlManagerState['lineup']) {
+  return NRL_ROLES.flatMap(role => from[role] === to[role] ? [] : [{ role, fromId: from[role], toId: to[role] }]);
+}
+
 export function nrlFitLineup(state: NrlManagerState) {
   if (state.live || state.phase === 'complete' || !nrlNextRound(state).clubMatch) return null;
   const next = repairMatchday(state, true);
-  const changes = NRL_ROLES.flatMap(role => state.lineup[role] === next.lineup[role] ? []
-    : [{ role, fromId: state.lineup[role], toId: next.lineup[role] }]);
+  const changes = lineupChanges(state.lineup, next.lineup);
   const key = JSON.stringify([state.seed, state.clubId, state.year, state.round, state.preparation, state.lineup, state.bench, state.kickerId]);
   return { next, changes, key };
+}
+
+export function nrlMatchdaySelection(state: NrlManagerState): NrlSavedLineup | null {
+  if (!state.kickerId || state.live || state.phase === 'complete' || !nrlNextRound(state).clubMatch) return null;
+  return { year: state.year, lineup: { ...state.lineup }, bench: nrlBench(state), kickerId: state.kickerId };
+}
+
+export function nrlSavedLineupPreview(state: NrlManagerState, saved: NrlSavedLineup) {
+  const current = nrlMatchdaySelection(state);
+  if (!current || saved.year !== state.year) return null;
+  const { lineup, bench, kickerId } = saved;
+  const next = repairMatchday({ ...state, lineup, bench, kickerId });
+  const changes = lineupChanges(current.lineup, next.lineup);
+  const benchChanged = current.bench.some((id, slot) => id !== next.bench![slot]);
+  const kickerChanged = current.kickerId !== next.kickerId;
+  const replacements = lineupChanges(lineup, next.lineup).length + bench.filter(id => !next.bench!.includes(id)).length;
+  const key = JSON.stringify([state.seed, state.clubId, state.round, current, saved, next.lineup, next.bench, next.kickerId]);
+  return { next, changes, benchChanged, kickerChanged, replacements, key, changed: Boolean(changes.length || benchChanged || kickerChanged) };
 }
 
 // Six may be named. Quick sim gives up to four listed reserves a spell in
