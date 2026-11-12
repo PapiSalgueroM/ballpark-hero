@@ -17,7 +17,7 @@
  *               four links in that order with the registry's own labels.
  *   2 savekey   Each Continue key in src/data/homeFront.ts equals the SAVE_KEY
  *               the game really writes (src/pages/SoccerCareer.tsx and
- *               src/lib/clubManager.ts, read from code with comments
+ *               src/lib/clubManagerSaveKeys.ts, read from code with comments
  *               stripped), and a render with that exact key planted shows the
  *               Continue words while a render without it does not. The stage
  *               never parses a save.
@@ -347,7 +347,7 @@ console.log('2) the Continue buttons look for the keys the games really save und
     const m = /const SAVE_KEY\s*=\s*(['"])([^'"]+)\1/.exec(stripComments(read(rel)));
     return m ? m[2] : null;
   };
-  const REAL = { '/soccer-career': saveKeyIn('src/lib/soccerCareerSaveEntry.ts'), '/club-manager': saveKeyIn('src/lib/clubManager.ts') };
+  const REAL = { '/soccer-career': saveKeyIn('src/lib/soccerCareerSaveEntry.ts'), '/club-manager': saveKeyIn('src/lib/clubManagerSaveKeys.ts') };
   for (const [p, key] of Object.entries(REAL)) {
     if (!key) { fail(2, `could not read SAVE_KEY for ${p} from its source, so nothing was compared`); continue; }
     const entry = HOME_STAGE.find(e => e.path === p);
@@ -540,7 +540,7 @@ console.log('7) Continue playing: the right keys, real fields, hostile saves, on
      the shape of what it saves. Typed here, apart from the list it checks. */
   const WHERE = {
     '/soccer-career': ['src/lib/soccerCareerSaveEntry.ts', 'src/pages/SoccerCareer.tsx', 'src/lib/soccerCareerEngine.ts'],
-    '/club-manager': ['src/lib/clubManager.ts'],
+    '/club-manager': ['src/lib/clubManagerSaveKeys.ts', 'src/lib/clubManager.ts'],
     '/stadium-tycoon': ['src/lib/stadiumTycoon.ts'],
     '/wonderkid-factory': ['src/lib/wonderkidFactory.ts'],
     '/rebuild': ['src/lib/rebuildSave.ts'],
@@ -592,6 +592,10 @@ console.log('7) Continue playing: the right keys, real fields, hostile saves, on
      the one place that writes what is held (so a refused write can be tried
      again). All three links have to be there for the key to be the binding's. */
   const boardCode = code(US_CAREER_BOARD);
+  const clubManager = code('src/lib/clubManager.ts');
+  if (!clubManager.includes("import { SAVE_KEY } from '@/lib/clubManagerSaveKeys';") || !clubManager.includes('saveFence.write(SAVE_KEY,')) {
+    fail(7, 'Club Manager does not write using the same shared save key as Continue');
+  }
   const SAVE_CHAIN = [
     'saveValue(JSON.stringify({ c,',
     'pendingSave.current = { key: sport.saveKey, value };',
