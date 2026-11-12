@@ -1,3 +1,11 @@
+## 2026-11-12: NRL Manager board targets
+
+Season review shows a regular-season board target based on the modeled club ratings. From the second year, the previous finish also helps set the target. The board waits until the club plays before showing a ladder place, then settles the target when finals begin. Previous years show the same calculation as a benchmark. Opening the review does not change the saved career.
+
+The 79 NRL tests include the 2026, 2027 and 2028 league fields, tied modeled ratings, an opening bye, finals and imported history. Across 80 paired seasons, 4,960 target reads kept the same save bytes, 17,520 fixture results and 80 rollovers.
+
+The compiled phone run checked the target before play, during finals and after rollover. It also opened a completed v1 save without rewriting it. App types, production build, 15 built-site readers and 16 download caps passed.
+
 ## 2026-11-12 Club Manager Chinese Super League draft
 
 Choose China in a new current Club Manager career to manage any of the 16 Chinese Super League clubs from 2026. Each club plays a 30-match home-and-away season. The draw, dates, stadiums, results, opening squads, ratings and budgets are simulated. The CFA Cup, Super Cup, AFC competitions and promotion and relegation are outside the model. The 2027 competition has its own calendar and will need a verified admission list before it can be represented as a real start.
