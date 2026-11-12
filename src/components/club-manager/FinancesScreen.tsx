@@ -1,5 +1,5 @@
 import { cn } from '@/lib/utils';
-import { TICKET_TIERS, gatePricePerFan, money, moneyIn } from '@/lib/clubManager';
+import { TICKET_TIERS, WAGE_ROOM_STEP, canBuyWageRoom, gatePricePerFan, money, moneyIn, wageCapOf } from '@/lib/clubManager';
 import type { CareerState } from '@/lib/clubManager';
 import {
   CONCESSION_TIERS, booksOf, concessionPerFan, concessionReaction, projectFinances,
@@ -29,6 +29,7 @@ interface FinancesScreenProps {
   career: CareerState;
   onTickets: (tier: 0 | 1 | 2) => void;
   onConcessions: (tier: ConcessionTier) => void;
+  onBuyWageRoom: () => void;
   onSponsor: (offerId: string) => void;
   onPush: (offerId: string) => void;
 }
@@ -72,7 +73,7 @@ function ShirtTotals({ ledger, period, fmt }: { ledger: ShirtSalesLedger; period
   );
 }
 
-export function FinancesScreen({ career: c, onTickets, onConcessions, onSponsor, onPush }: FinancesScreenProps) {
+export function FinancesScreen({ career: c, onTickets, onConcessions, onBuyWageRoom, onSponsor, onPush }: FinancesScreenProps) {
   /* Round 514: the money symbol follows the start option. Shadowing the
      import here is one line instead of a career argument on every call. */
   const money = moneyIn(c);
@@ -142,10 +143,24 @@ export function FinancesScreen({ career: c, onTickets, onConcessions, onSponsor,
           </tbody>
         </table>
         <p className="text-xs text-muted-foreground mt-1.5">
-          Tickets, food, paid net shirt sales, the sponsor, deals, the builders and staff fees move the transfer kitty ({money(c.budget)} now). Wages and travel are the club's running costs: the board covers them and holds you to the wage ceiling on the contracts desk, so they never leave the kitty, and the kitty change adds them back. Not counted above, and they move the kitty too: a ground expansion, the academy, scout trips, promoted prospects, contract renewals, role settlements, loan recalls and broken loans, fines, the board's top ups and the decisions desk. {p.caveat}
+          Tickets, food, paid net shirt sales, the sponsor, deals, the builders, staff fees and extra wage room move the transfer kitty ({money(c.budget)} now). Wages and travel are the club's running costs: the board covers them and holds you to the wage ceiling on the contracts desk, so they never leave the kitty, and the kitty change adds them back. Not counted above, and they move the kitty too: a ground expansion, the academy, scout trips, promoted prospects, contract renewals, role settlements, loan recalls and broken loans, fines, the board's top ups and the decisions desk. {p.caveat}
           {p.possibleBonus > 0 && c.sponsor?.bonusFor ? ` A ${money(p.possibleBonus)} sponsor bonus pays at the summer for ${BONUS_FOR[c.sponsor.bonusFor]}, not counted until it is earned.` : ''}
         </p>
       </div>
+
+      <section aria-labelledby="transfer-wage-room" className="bg-card border border-border rounded-xl p-3 space-y-2">
+        <h3 id="transfer-wage-room" className="text-sm font-bold text-foreground">Transfer budget to wages</h3>
+        <p className="text-xs text-muted-foreground">Move {money(WAGE_ROOM_STEP.cost)} from your transfer budget to raise the wage ceiling by {money(WAGE_ROOM_STEP.weekly / 1000)} a week. The extra room lasts until the end of this season.</p>
+        <p aria-live="polite" className="text-xs text-muted-foreground">{money(c.budget)} in the transfer budget. Wage ceiling of {currencySymbol(c)}{formatNumber(wageCapOf(c))}k a week.</p>
+        <button
+          type="button"
+          disabled={!canBuyWageRoom(c)}
+          onClick={onBuyWageRoom}
+          className="min-h-11 rounded-lg border border-border px-3 text-sm font-bold hover:border-primary disabled:opacity-50"
+        >
+          Move {money(WAGE_ROOM_STEP.cost)} to wages
+        </button>
+      </section>
 
       <div data-shirt-sales className="bg-card border border-border rounded-xl p-3 space-y-1.5">
         <div className="text-xs text-muted-foreground uppercase tracking-wider">Shirt sales</div>

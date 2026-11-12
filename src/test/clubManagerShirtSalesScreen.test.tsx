@@ -30,7 +30,7 @@ describe('the actual Club Manager shirt sales explanation', () => {
     try {
       const { container } = render(<FinancesScreen
         career={state} onTickets={() => {}} onConcessions={() => {}}
-        onSponsor={() => {}} onPush={() => {}}
+        onSponsor={() => {}} onPush={() => {}} onBuyWageRoom={() => {}}
       />);
       expect(container.querySelector('[data-finance-projection] table')).toBeInTheDocument();
       expect(container.querySelector('[data-sponsor-desk]')).toHaveTextContent('Shirt sponsor');
@@ -66,7 +66,7 @@ function financeFixture() {
 
 function renderFinances(state: ReturnType<typeof startCareer>) {
   return render(<FinancesScreen career={state} onTickets={() => {}} onConcessions={() => {}}
-    onSponsor={() => {}} onPush={() => {}} />);
+    onSponsor={() => {}} onPush={() => {}} onBuyWageRoom={() => {}} />);
 }
 
 describe('shirt sales figures on the actual finance desk', () => {
@@ -92,7 +92,7 @@ describe('shirt sales figures on the actual finance desk', () => {
       expect(container.querySelector('[data-projection-line="shirtSales"]')?.querySelectorAll('td')[1]?.textContent).toBe(`${symbol}10k`);
       expect(container.querySelector('[data-shirt-sales]')).toHaveTextContent(`2 weeks earns ${symbol}12,000.00`);
       rerender(<FinancesScreen career={state} onTickets={() => {}} onConcessions={() => {}}
-        onSponsor={() => {}} onPush={() => {}} />);
+        onSponsor={() => {}} onPush={() => {}} onBuyWageRoom={() => {}} />);
       expect(JSON.stringify(state)).toBe(saved);
     } finally { cleanup(); }
   });

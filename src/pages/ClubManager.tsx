@@ -1336,6 +1336,7 @@ const ClubManager = () => {
                   career={c}
                   onTickets={g.setTickets}
                   onConcessions={g.setConcessions}
+                  onBuyWageRoom={g.addWageRoom}
                   onSponsor={g.takeSponsor}
                   onPush={g.pushSponsorOffer}
                 /></ScreenLoading>
