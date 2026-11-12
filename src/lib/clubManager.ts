@@ -611,6 +611,16 @@ function recordActualRosterTransfer(state: CareerState, player: CMPlayer, from: 
 /** Round 1344: one deal closed between two clubs that are not mine. `mp.club` is the seller. */
 export interface AiDeal { mp: MarketPlayer; to: string; fee: number }
 
+/** AI clubs pay at least the listed price when buying from a primary rival. */
+function aiTransferPriceAllowed(mp: MarketPlayer, buyer: ClubDef | undefined, fee: number): boolean {
+  return !!buyer && fee <= buyer.budget && (fee >= mp.price
+    || (RIVALS[mp.club] !== buyer.name && RIVALS[buyer.name] !== mp.club));
+}
+
+function aiBidderClub(career: CareerState, name: string): ClubDef | undefined {
+  return actingClubsByLeague(career).flat().find(club => club.name === name);
+}
+
 /* Round 1344 (the player report of 2026-10-16: a man another club bought vanished from the market and turned up at
    his old club the next season; PR269, the other lane's Round 1367, proved the four writers that never told the
    ledger). The man an AI deal moves, as the ledger records him: his own record's payload when the ledger already
@@ -11550,6 +11560,13 @@ export function makeOffer(career: CareerState, amount: number, extras?: DealExtr
     lastPackage: packageValue,
   };
 
+  // A restored bid can predate the price checks. Continue with the manager's offer if it cannot close.
+  const bidder = next.rivalBidder ? aiBidderClub(career, next.rivalBidder) : undefined;
+  if (next.rivalBidder && next.rivalOffer !== null && !aiTransferPriceAllowed(next.player, bidder, next.rivalOffer)) {
+    next.rivalBidder = null;
+    next.rivalOffer = null;
+  }
+
   // Beat-the-rival check comes first when a war is on. The rival bids cash;
   // your package weighs against it.
   if (next.rivalBidder && next.rivalOffer !== null && packageValue <= next.rivalOffer) {
@@ -11646,20 +11663,26 @@ export function makeOffer(career: CareerState, amount: number, extras?: DealExtr
   // Rival bidder logic.
   if (next.rivalBidder && next.rivalOffer !== null) {
     // I beat their number: they either quit or raise.
-    if (Math.random() < 0.5 || next.rivalOffer >= (next.player.value ?? next.player.price) * 1.6) {
+    const exits = Math.random() < 0.5 || next.rivalOffer >= (next.player.value ?? next.player.price) * 1.6;
+    const raise = exits ? null : Math.round(packageValue * (1.05 + Math.random() * 0.07) * 10) / 10;
+    if (raise === null || !aiTransferPriceAllowed(next.player, bidder, raise)) {
       next.note = `${next.rivalBidder} pulled out. It is your deal to finish.`;
       next.rivalBidder = null;
       next.rivalOffer = null;
     } else {
-      next.rivalOffer = Math.round(packageValue * (1.05 + Math.random() * 0.07) * 10) / 10;
+      next.rivalOffer = raise;
       next.note = `${next.rivalBidder} raised to ${money(next.rivalOffer)}.`;
     }
   } else if (!next.rivalBidder && next.stage >= 1 && Math.random() < 0.22) {
-    const spenders = actingClubsByLeague(career).flatMap(cs => cs.slice(0, 5).map(c => c.name))
-      .filter(n => n !== career.clubName && n !== next.player.club);
-    next.rivalBidder = pick(spenders);
-    next.rivalOffer = Math.round(packageValue * (1.06 + Math.random() * 0.1) * 10) / 10;
-    next.note = `${next.rivalBidder} just entered the race at ${money(next.rivalOffer)}. Bidding war.`;
+    const spenders = actingClubsByLeague(career).flatMap(cs => cs.slice(0, 5))
+      .filter(club => club.name !== career.clubName && club.name !== next.player.club);
+    const buyer = pick(spenders);
+    const fee = Math.round(packageValue * (1.06 + Math.random() * 0.1) * 10) / 10;
+    if (aiTransferPriceAllowed(next.player, buyer, fee)) {
+      next.rivalBidder = buyer.name;
+      next.rivalOffer = fee;
+      next.note = `${buyer.name} just entered the race at ${money(fee)}. Bidding war.`;
+    }
   }
 
   return { ...career, negotiation: next };
@@ -11848,6 +11871,7 @@ export function walkAway(career: CareerState): CareerState {
   if (!neg) return career;
   /* Round 1344 review: the rival takes him only when the ledger records it (the draw comes first, so no draw moves). */
   if (neg.status === 'open' && neg.rivalBidder && neg.rivalOffer !== null && Math.random() < 0.6
+    && aiTransferPriceAllowed(neg.player, aiBidderClub(career, neg.rivalBidder), neg.rivalOffer)
     && !rivalCloseRefused(career, { mp: neg.player, to: neg.rivalBidder, fee: neg.rivalOffer })) {
     const state: CareerState = {
       ...career,
@@ -12525,7 +12549,9 @@ function generateHeadlines(state: CareerState): AiDeal[] {
     const local = affordable.filter(c => myLeagueNames.includes(c.name));
     const pool = (local.length && Math.random() < 0.5) ? local : affordable;
     if (pool.length === 0) continue;   // nobody in the world can afford him
-    const buyer = pick(pool).name;
+    const picked = pick(pool);
+    if (!aiTransferPriceAllowed(mp, picked, fee)) continue;
+    const buyer = picked.name;
     if (working && seen) { const moved = recordAiDeal(working, { mp, to: buyer, fee }, seen); if (moved === working) continue; working = moved; }
     else unrecorded.push({ mp, to: buyer, fee });
     heads.push(`${buyer} sign ${mp.name} from ${mp.club} for ${money(fee)}.`);
