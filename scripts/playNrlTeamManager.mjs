@@ -22,6 +22,7 @@ const career = async page => JSON.parse(await save(page));
 const advance = page => page.locator('[data-nrl-advance]');
 const finishLive = page => page.getByRole('button', { name: 'Play second half' });
 const reloadMoved = page => Promise.all([page.waitForNavigation({ waitUntil: 'domcontentloaded' }), page.getByRole('button', { name: 'Reload your season' }).click()]);
+const development = page => page.getByLabel('Development focus');
 const screenshot = (page, name) => shots && page.screenshot({ path: path.join(shots, name), fullPage: false });
 
 async function context(width) {
@@ -50,6 +51,16 @@ async function fit(page) {
 async function play(page, count) {
   for (let action = 0; action < count; action++) await advance(page).click();
   return (await career(page)).season;
+}
+
+async function setDevelopment(page, focus) {
+  assert.equal(await development(page).inputValue(), 'balanced');
+  await development(page).selectOption(focus);
+  const text = await page.locator('[data-nrl-development-preview]').innerText();
+  assert.match(text, /^(?:\d+ players? will |No returning players)/);
+  const affected = Number(text.match(/^\d+/)?.[0] ?? 0);
+  assert.equal((await career(page)).developmentFocus, focus);
+  return { affected, focus, text };
 }
 
 try {
@@ -148,16 +159,30 @@ try {
   assert(complete2026.championId);
   assert.equal((await career(past)).history.length, 1);
   await past.getByRole('button', { name: 'Review this season' }).click();
+  const youth = await setDevelopment(past, 'youth');
+  const focusBytes = await save(past);
+  await fit(past);
+  await screenshot(past, 'nrl-development-320.png');
+  await past.reload({ waitUntil: 'domcontentloaded' });
+  await past.getByRole('button', { name: 'Review this season' }).click();
+  assert.equal(await save(past), focusBytes);
+  assert.equal(await development(past).inputValue(), 'youth');
+  assert.equal(await past.locator('[data-nrl-development-preview]').innerText(), youth.text);
   await past.getByRole('button', { name: 'Start 2027' }).click();
   const next2027 = await career(past);
   assert.equal(next2027.season.year, 2027);
   assert.equal(next2027.season.clubId, 'storm');
   assert.equal(next2027.history[0].year, 2026);
+  assert.deepEqual(next2027.history[0].development, { focus: youth.focus, affected: youth.affected });
+  await past.getByRole('button', { name: 'Club office', exact: true }).click();
+  await past.getByRole('button', { name: 'Season review', exact: true }).click();
+  assert.equal(await development(past).inputValue(), 'balanced');
+  assert.match(await past.locator('[data-nrl-development-receipt]').innerText(), /^Youth development/);
   await past.getByRole('button', { name: 'Ladder', exact: true }).click();
   assert.equal(await past.locator('[data-nrl-ladder]').count(), 18);
   assert.deepEqual([...pastErrors, ...sameSave.errors], []);
   await phone.close();
-  console.log('2026 at 320px: starters and interchange, live halftime reload, one settlement across two tabs, 204 matches, nine finals and 2027 rollover.');
+  console.log('2026 at 320px: live halftime reload, one settlement across two tabs, 204 matches, nine finals and youth development saved, applied and reviewed.');
 
   const largerPhone = await context(390);
   const { page: future, errors: futureErrors } = await open(largerPhone);
@@ -234,18 +259,21 @@ try {
   const closed = (await career(future)).history[0];
   assert.equal(closed.finance.cash, closed.finance.openingCash + closed.finance.profit);
   await future.getByRole('button', { name: 'Season review', exact: true }).click();
+  const veterans = await setDevelopment(future, 'veterans');
+  await fit(future);
   await future.getByRole('button', { name: 'Start 2028' }).click();
   const next2028 = await career(future);
   assert.equal(next2028.season.year, 2028);
   assert.equal(next2028.season.clubId, 'bears');
   assert.equal(next2028.season.squad.length, 30);
   assert(next2028.season.squad.some(player => player.id === recruitId));
+  assert.deepEqual(next2028.history[0].development, { focus: veterans.focus, affected: veterans.affected });
   await future.getByRole('button', { name: 'Ladder', exact: true }).click();
   assert.equal(await future.locator('[data-nrl-ladder=chiefs]').count(), 1);
   await fit(future);
   assert.deepEqual(futureErrors, []);
   await largerPhone.close();
-  console.log('2027 at 390px: 18 clubs, Perth signing, halftime tactic change, midseason and final reloads, 216 matches, nine finals, finance reconciliation and Chiefs rollover.');
+  console.log('2027 at 390px: Perth signing, halftime tactic change, 216 matches, nine finals, finance reconciliation and veteran development on rollover.');
 
   const fixture = await build({
     stdin: { contents: "export { createNrlSeason, reduceNrlSeason } from './src/lib/nrlManager';", resolveDir: process.cwd() },
@@ -262,6 +290,7 @@ try {
   await restored.getByText('This completed save predates club accounts. Tracking starts next season.').waitFor();
   assert.equal(await save(restored), JSON.stringify(old));
   await restored.getByRole('button', { name: 'Season review', exact: true }).click();
+  assert.equal(await development(restored).count(), 0);
   await restored.getByRole('button', { name: 'Start 2028' }).click();
   assert.equal((await career(restored)).season.year, 2028);
   assert.equal((await career(restored)).history[0].finance, null);

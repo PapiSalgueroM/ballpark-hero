@@ -1,3 +1,13 @@
+## 2026-11-12: NRL Manager development focus
+
+Season review lets you choose Youth development, Veteran conditioning or Balanced. At rollover, Youth can add one rating point within potential for players aged 24 or younger. Veteran conditioning can save one point that would have been lost for players aged 30 or older. Ages are measured next season. Only players already at the club and signed to return qualify. The preview and season receipt count the ratings actually affected, and the next season starts on Balanced.
+
+Default and imported saves matched the previous engine byte for byte across 80 seasons, 17,520 fixtures and 80 rollovers. The default path also matched across 1,194 Play Live finishes using the opening tactic. Five focused development tests and all 53 NRL tests passed.
+
+An 80-season run with a focus every year peaked at 340,198 save characters against the 550,000-character limit. A separate 12-season career that renewed players alternated the two focuses, and each receipt matched its preview.
+
+The 320px touch flow restored the Youth choice and preview exactly, archived the result and reset the new year to Balanced. The 390px Perth flow applied its Veteran preview at rollover alongside an existing recruitment. Full app types, production build, the NRL browser suite, 15 built-site readers and 16 download caps passed.
+
 ## 2026-11-12: NRL Manager Play Live
 
 Play Live opens the first-half scoreboard in Match centre and saves the round at half time. Keep the opening tactic or switch for the second half. Full time settles the round and posts the score, scorers, interchange, injuries and club accounts together. Quick Sim is still one action, and saves without player scoring gain Play Live at their next season.
