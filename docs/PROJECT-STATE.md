@@ -1,3 +1,9 @@
+## 2026-11-12: Contract Chaos Daily deal date draft
+
+A Daily that crosses Eastern midnight keeps its opening date in the saved result and shared recap. The following day's offers remain available. Signing checks the saved Daily receipt before recording a completion, so an open tab cannot replace an already-recorded result for the same or a newer day.
+
+At 390px, the 82-point result and share text kept Nov 11 through midnight. The Nov 12 offers opened, recorded a separate 38-point result and stayed locked after reload. Another tab kept its exact newer receipt, and the stale tab recorded zero extra completions. Four focused tests passed, including the same-day Daily and Free play control. The app type check, production build, Contract Chaos sim, 15 output checks and all 16 route caps passed.
+
 ## 2026-11-07: Club Manager historical roster counts live
 
 [PR #532](https://github.com/PapiSalgueroM/ballpark-hero/pull/532) published from main `c3b5ca4afaf9b4dadcd748f340e8e8e3e4a1a1dd`, App tree `133fcd3d26a4d237178e5c7efee723048da0aef2`, Lovable deployment `510b1df1-2172-42c0-90f9-d9f9c997b840`.
