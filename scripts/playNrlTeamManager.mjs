@@ -114,6 +114,14 @@ try {
   await openFinances(past);
   assert.equal(await save(past), medicalBytes);
   assert.match(await medicalLevel(past).innerText(), /Level 2 of 3/);
+  await past.getByText('Coaching staff', { exact: true }).tap();
+  await past.getByText('$678,000 total commitment', { exact: true }).waitFor();
+  await past.getByRole('button', { name: 'Hire attack assistant', exact: true }).tap();
+  assert.match(await past.locator('[data-nrl-coach-current]').innerText(), /Attack assistant/);
+  assert.deepEqual((await career(past)).finance.coachHire, { role: 'attack', round: 1, paidRounds: 0 });
+  await past.getByText('$1,580,000', { exact: true }).waitFor();
+  await fit(past);
+  await screenshot(past, 'nrl-coaching-320.png');
   await past.getByRole('button', { name: 'Squad', exact: true }).click();
   assert.equal(await past.locator('select[id^=nrl-starter-]').count(), 13);
   assert.equal(await past.locator('select[id^=nrl-reserve-]').count(), 6);
@@ -155,11 +163,13 @@ try {
   assert.equal(await fence(past), beforeFence);
   await opposition(past).tap();
   await past.getByRole('button', { name: 'Attack', exact: true }).click();
-  assert.equal(Math.round(10 * (Number(await attackEdge(past).innerText()) - initialAttack)), 50);
+  await past.getByText(/assistant adds \+2 attack rating/).waitFor();
+  assert.equal(Math.round(10 * (Number(await attackEdge(past).innerText()) - initialAttack)), 70);
   assert.equal(Math.round(10 * (Number(await defenseEdge(past).innerText()) - initialDefense)), -30);
   await past.getByRole('button', { name: 'Train', exact: true }).click();
   assert.equal((await career(past)).season.preparation, 'train');
   const firstRound = await play(past, 1);
+  assert.equal((await career(past)).finance.coachHire.paidRounds, 1);
   const played = firstRound.results.find(result => result.benchUsed);
   const used = played?.benchUsed;
   assert(used?.length > 0 && used.length <= 4 && used.every(id => afterBench.includes(id)));
@@ -218,6 +228,8 @@ try {
   assert.equal(complete2026.phase, 'complete');
   assert.equal(complete2026.results.filter(result => !result.finalsRound).length, 204);
   assert.equal(complete2026.results.filter(result => result.finalsRound).length, 9);
+  assert.equal(complete2026.results.filter(result => !result.finalsRound
+    && (result.homeId === 'storm' || result.awayId === 'storm')).length, 24);
   assert(complete2026.championId);
   assert.equal((await career(past)).history.length, 1);
   await past.getByRole('button', { name: 'Review this season' }).click();
@@ -237,16 +249,19 @@ try {
   assert.equal(next2027.history[0].year, 2026);
   assert.deepEqual(next2027.history[0].development, { focus: youth.focus, affected: youth.affected });
   assert.deepEqual(next2027.history[0].finance.medicalUpgrades, [{ level: 2, round: 1 }]);
+  assert.deepEqual(next2027.history[0].finance.coachHire, { role: 'attack', round: 1, paidRounds: 31 });
+  assert.equal(next2027.finance.coachHire, undefined);
   assert.equal(next2027.finance.openingCash, next2027.history[0].finance.cash);
   await past.getByRole('button', { name: 'Club office', exact: true }).click();
   await past.getByRole('button', { name: 'Season review', exact: true }).click();
   assert.equal(await development(past).inputValue(), 'balanced');
   assert.match(await past.locator('[data-nrl-development-receipt]').innerText(), /^Youth development/);
+  assert.match(await past.locator('[data-nrl-coach-receipt]').innerText(), /Attack assistant.*\$678,000/);
   await past.getByRole('button', { name: 'Ladder', exact: true }).click();
   assert.equal(await past.locator('[data-nrl-ladder]').count(), 18);
   assert.deepEqual([...pastErrors, ...sameSave.errors], []);
   await phone.close();
-  console.log('2026 at 320px: medical charge and affordability, exact reload, one live settlement across two tabs, 204 matches, nine finals and rollover.');
+  console.log('2026 at 320px: medical and assistant costs, matching tactic edge, one live settlement across two tabs, full season payroll and rollover.');
 
   const largerPhone = await context(390);
   const { page: future, errors: futureErrors } = await open(largerPhone);
@@ -320,6 +335,9 @@ try {
   await future.getByRole('button', { name: 'Review this season' }).click();
   await future.getByRole('button', { name: 'Finances', exact: true }).click();
   await future.getByRole('heading', { name: 'Club finances' }).waitFor();
+  await future.getByText('Coaching staff', { exact: true }).tap();
+  assert.equal(await future.getByRole('button', { name: 'Hire defence assistant', exact: true }).isEnabled(), false);
+  await future.getByText('Hiring opens when the next season starts.').waitFor();
   const closed = (await career(future)).history[0];
   assert.equal(closed.finance.cash, closed.finance.openingCash + closed.finance.profit);
   await future.getByRole('button', { name: 'Season review', exact: true }).click();
@@ -447,12 +465,16 @@ try {
   await restored.getByRole('button', { name: 'Finances', exact: true }).click();
   await restored.getByText('This completed save predates club accounts. Tracking starts next season.').waitFor();
   assert.equal(await upgradeMedical(restored, '$800,000').isEnabled(), false);
+  await restored.getByText('Coaching staff', { exact: true }).tap();
+  await restored.getByText('Hiring opens after this imported season.').waitFor();
+  assert.equal(await restored.getByRole('button', { name: 'Hire attack assistant', exact: true }).isEnabled(), false);
   assert.equal(await save(restored), JSON.stringify(old));
   await restored.getByRole('button', { name: 'Season review', exact: true }).click();
   assert.equal(await development(restored).count(), 0);
   await restored.getByRole('button', { name: 'Start 2028' }).click();
   assert.equal((await career(restored)).season.year, 2028);
   assert.equal((await career(restored)).history[0].finance, null);
+  assert.equal((await career(restored)).finance.coachHire, undefined);
   assert.deepEqual(restoredErrors, []);
   await oldContext.close();
   console.log('A completed v1 save reopened without invented accounts and advanced to 2028.');
