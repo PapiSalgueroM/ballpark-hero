@@ -1,3 +1,9 @@
+## 2026-11-12: Soccer Gauntlet Daily result recovery staged
+
+If browser storage refuses a Soccer Daily result, the recap stays available in the tab and can be saved again. Before a Daily pick or a save retry, a result already saved by another tab takes precedence. Reviewing a recap leaves a later Unlimited completion available.
+
+Mounted checks reproduced a stale tab replacing a 48-point result with 16. The fix keeps the first save byte for byte, also reopens legacy finals, and preserves the newer Daily when the prior day finishes after midnight. Focused tests and the Gauntlet harnesses passed. Production build and phone verification are pending.
+
 ## 2026-11-12: Career Ladder Daily midnight saves staged
 
 A Career Ladder tab that starts loading before midnight keeps a newer Daily result when its player pool arrives after midnight. The shared puzzle loader prunes only earlier dates for the same game.

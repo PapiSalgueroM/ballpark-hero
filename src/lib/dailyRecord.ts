@@ -45,9 +45,11 @@ export function readDailyRecord<T>(
   }
 }
 
-export function writeDailyRecord(slug: string, today: string, fields: Record<string, unknown>): void {
+export function writeDailyRecord(slug: string, today: string, fields: Record<string, unknown>): boolean {
+  let saved = false;
   try {
     localStorage.setItem(dailyRecordKey(slug, today), JSON.stringify({ ...fields, v: 1, date: today }));
+    saved = true;
     /* Keep storage bounded by pruning older dates for this game. A tab can
        finish a Daily it started before midnight after a new tab has saved the
        next day, so compare the dates before removing anything. */
@@ -61,6 +63,7 @@ export function writeDailyRecord(slug: string, today: string, fields: Record<str
     }
     for (const k of stale) localStorage.removeItem(k);
   } catch {
-    /* storage full or blocked: the game still plays, it just will not survive a refresh */
+    /* A cleanup refusal does not undo a write that already succeeded. */
   }
+  return saved;
 }
