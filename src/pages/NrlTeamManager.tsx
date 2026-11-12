@@ -19,11 +19,14 @@ import { useSaveFenceWatch } from '@/hooks/useSaveFenceWatch';
 import { nrlBoardChallengeStatus } from '@/lib/nrlBoardTarget';
 import {
   nrlBench, nrlFitLineup, nrlHalftimeInterchanges, nrlInjuries, nrlLadder, nrlMatchdaySelection, nrlNextRound,
-  nrlSavedLineupPreview, nrlStarterOptions, NRL_BENCH_SIZE, NRL_COACHING_BONUS,
+  nrlRegularRounds, nrlRetrainingRoles, nrlSavedLineupPreview, nrlStarterOptions, NRL_BENCH_SIZE, NRL_COACHING_BONUS,
   NRL_MAX_BENCH_USED, NRL_ROLES,
-  type NrlAction, type NrlCoachRole, type NrlLiveHalf, type NrlManagerState, type NrlMatchResult, type NrlNextRound, type NrlTactic,
+  type NrlAction, type NrlCoachRole, type NrlLiveHalf, type NrlManagerState, type NrlMatchResult, type NrlNextRound, type NrlRole, type NrlTactic,
 } from '@/lib/nrlManager';
-import { createNrlCareer, nrlOppositionReport, nrlRivalSquad, reduceNrlCareer, type NrlCareerAction, type NrlCareerState } from '@/lib/nrlCareer';
+import {
+  createNrlCareer, nrlOppositionReport, nrlPositionTraining, nrlPositionTrainingCandidates, nrlRivalSquad,
+  NRL_POSITION_TRAINING_ROUNDS, reduceNrlCareer, type NrlCareerAction, type NrlCareerState,
+} from '@/lib/nrlCareer';
 import { nrlScorePoints, nrlScoringLeaders, nrlSquadSeasonStats, nrlTryLeaders, type NrlSquadStatsScope } from '@/lib/nrlPlayerScoring';
 import { NRL_SAVE_ENTRY, nrlSeasonCanCredit, readNrlReplayCutoff, readNrlSaveSlot, writeNrlSaveSlot } from '@/lib/nrlSaveSlots';
 import { saveFence } from '@/lib/saveFence';
@@ -593,6 +596,76 @@ function SavedLineup({ career, onAction, disabled }: {
   );
 }
 
+function PositionTraining({ career, onAction, disabled }: {
+  career: NrlCareerState; onAction: (action: NrlCareerAction) => boolean; disabled: boolean;
+}) {
+  const summary = useRef<HTMLElement>(null);
+  const [playerId, setPlayerId] = useState('');
+  const [role, setRole] = useState<NrlRole | ''>('');
+  const { season, legacySeason } = career;
+  if (legacySeason) return null;
+  const course = nrlPositionTraining(career);
+  const candidates = nrlPositionTrainingCandidates(career);
+  const player = candidates.find(candidate => candidate.id === playerId);
+  const roles = player ? nrlRetrainingRoles(player.role) : [];
+  const trained = season.squad.filter(player => player.secondaryRole);
+  return (
+    <details className="group mt-3 rounded-lg border border-border bg-background px-3">
+      <summary ref={summary} className="flex min-h-11 cursor-pointer items-center justify-between gap-2 rounded-md text-sm font-bold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
+        Position training<ChevronDown size={16} aria-hidden="true" className="shrink-0 group-open:rotate-180" />
+      </summary>
+      <div className="space-y-3 pb-3 text-sm">
+        <p className="text-muted-foreground">Train one player at a time. In this game a course takes {NRL_POSITION_TRAINING_ROUNDS} rounds, including byes, and adds one position you can select in the starting 13.</p>
+        {course ? (
+          <div className="space-y-2">
+            <p role="status" className="font-semibold">{course.player.name} is learning {course.role}. {course.remaining} {course.remaining === 1 ? 'round' : 'rounds'} left.</p>
+            <Button type="button" size="lg" variant="outline" className="px-3" disabled={disabled} onClick={() => {
+              if (onAction({ type: 'cancelPositionTraining', year: season.year, clubId: season.clubId, playerId: course.playerId, role: course.role, startedRound: course.startedRound })) summary.current?.focus();
+            }}>Cancel training</Button>
+          </div>
+        ) : candidates.length ? (
+          <div className="space-y-2">
+            <label className="block font-semibold">
+              Player to train
+              <select className="mt-1 min-h-11 w-full rounded-lg border border-input bg-background px-2" disabled={disabled}
+                value={player?.id ?? ''} onChange={event => { setPlayerId(event.target.value); setRole(''); }}>
+                <option value="">Choose a player</option>
+                {candidates.map(candidate => <option key={candidate.id} value={candidate.id}>{candidate.name} · {candidate.role}</option>)}
+              </select>
+            </label>
+            {player && <label className="block font-semibold">
+              Position to learn
+              <select className="mt-1 min-h-11 w-full rounded-lg border border-input bg-background px-2" disabled={disabled}
+                value={role} onChange={event => setRole(event.target.value as NrlRole | '')}>
+                <option value="">Choose a position</option>
+                {roles.map(option => <option key={option} value={option}>{option}</option>)}
+              </select>
+            </label>}
+            <Button type="button" size="lg" className="px-3" disabled={disabled || !player || !role} onClick={() => {
+              if (role && onAction({ type: 'startPositionTraining', year: season.year, clubId: season.clubId, round: season.round, playerId, role })) {
+                setPlayerId('');
+                setRole('');
+                summary.current?.focus();
+              }
+            }}>Start position training</Button>
+          </div>
+        ) : <p className="text-muted-foreground">{career.retired ? 'Your learned positions are available to review.'
+          : season.live ? 'Finish the live match before starting training.'
+          : season.phase !== 'regular' || season.round + NRL_POSITION_TRAINING_ROUNDS - 1 > nrlRegularRounds(season.year)
+            ? 'New courses need four regular-season rounds remaining.' : 'No fit player is eligible for a new course.'}</p>}
+        {trained.length > 0 && (
+          <>
+            <h3 className="font-semibold">Learned positions</h3>
+            <ul className="space-y-1 text-muted-foreground">
+              {trained.map(player => <li key={player.id}>{player.name} · {player.secondaryRole}</li>)}
+            </ul>
+          </>
+        )}
+      </div>
+    </details>
+  );
+}
+
 function Squad({ career, onAction, disabled }: {
   career: NrlCareerState; onAction: (action: NrlCareerAction) => boolean; disabled: boolean;
 }) {
@@ -640,6 +713,7 @@ function Squad({ career, onAction, disabled }: {
         </details>
       )}
       <SavedLineup career={career} onAction={onAction} disabled={disabled} />
+      <PositionTraining career={career} onAction={onAction} disabled={disabled} />
       {season.injuryTracking ? (
         <section className="mt-4 rounded-lg border border-border bg-background p-3" aria-labelledby="nrl-availability" data-nrl-availability>
           <h3 id="nrl-availability" className="text-sm font-semibold">Availability</h3>
@@ -668,7 +742,7 @@ function Squad({ career, onAction, disabled }: {
               className="min-h-11 w-full min-w-0 rounded-lg border border-input bg-background px-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:opacity-60"
               onChange={event => onAction({ type: 'selectStarter', role, playerId: event.target.value })}>
               {nrlStarterOptions(season, role).map(player => (
-                <option key={player.id} value={player.id}>{player.name} · {player.rating} OVR · {player.fitness}% fit{player.role !== role ? ' · Utility cover' : ''}</option>
+                <option key={player.id} value={player.id}>{player.name} · {player.rating} OVR · {player.fitness}% fit{player.secondaryRole === role ? ' · Trained cover' : player.role !== role ? ' · Utility cover' : ''}</option>
               ))}
             </select>
           </div>

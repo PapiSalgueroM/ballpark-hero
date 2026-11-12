@@ -31,7 +31,24 @@ export type NrlCoachRole = Exclude<NrlTactic, 'balanced'>;
 export type NrlPreparation = 'train' | 'recover';
 interface NrlRoundOptions { medicalReduction?: number; coachRole?: NrlCoachRole }
 
-export interface NrlPlayer { id: string; name: string; role: NrlRole; rating: number; fitness: number }
+export interface NrlPlayer { id: string; name: string; role: NrlRole; rating: number; fitness: number; secondaryRole?: NrlRole }
+
+const RETRAINING_ROLES: Partial<Record<NrlRole, readonly NrlRole[]>> = {
+  Fullback: ['Left Wing', 'Right Wing'],
+  'Left Wing': ['Fullback', 'Left Centre', 'Right Wing'],
+  'Right Wing': ['Fullback', 'Left Wing', 'Right Centre'],
+  'Left Centre': ['Left Wing'],
+  'Right Centre': ['Right Wing'],
+  'Five-eighth': ['Halfback'],
+  Halfback: ['Five-eighth'],
+  'Prop 8': ['Prop 10'],
+  'Prop 10': ['Prop 8'],
+  'Left Second Row': ['Right Second Row', 'Lock'],
+  'Right Second Row': ['Left Second Row', 'Lock'],
+  Lock: ['Left Second Row', 'Right Second Row'],
+};
+export const nrlRetrainingRoles = (role: NrlRole): readonly NrlRole[] => RETRAINING_ROLES[role] ?? [];
+const nrlCanPlayRole = (player: NrlPlayer, role: NrlRole) => player.role === role || player.secondaryRole === role;
 export interface NrlFixture { homeId: string; awayId: string; round: number; finalsRound?: number; tieId?: string }
 export interface NrlScoring { tries: number; conversions: number; penalties: number; fieldGoals: number; longFieldGoals: number }
 export interface NrlLiveHalf { fixture: NrlFixture; homeScoring: NrlScoring; awayScoring: NrlScoring }
@@ -250,8 +267,10 @@ export function nrlStarterOptions(state: NrlManagerState, role: NrlRole): NrlPla
   const occupied = new Set(Object.values(state.lineup));
   occupied.delete(state.lineup[role]);
   const eligible = state.squad.filter(player => !injuries.has(player.id) && !occupied.has(player.id));
-  const natural = eligible.filter(player => player.role === role);
-  return natural.length || !state.injuryTracking ? natural : eligible;
+  const qualified = eligible.filter(player => nrlCanPlayRole(player, role));
+  if (!state.injuryTracking || eligible.some(player => player.role === role)) return qualified;
+  const current = eligible.find(player => player.id === state.lineup[role]);
+  return qualified.length ? [...qualified, ...(current && !nrlCanPlayRole(current, role) ? [current] : [])] : eligible;
 }
 
 /** Keep eligible selections in order and fill empty places with coverage for different positions. */
@@ -300,11 +319,14 @@ function repairMatchday(state: NrlManagerState, preferFit = false): NrlManagerSt
     return !previous || (best && grade(best) > grade(previous)) ? best : previous;
   };
   const lineup = { ...state.lineup };
-  const selected = new Set<string>();
+  // Retain an explicit trained selection before filling native positions.
+  const trainedStarts = new Set(NRL_ROLES.filter(role => byId.get(lineup[role])?.secondaryRole === role));
+  const selected = new Set([...trainedStarts].map(role => lineup[role]));
   const uncovered: NrlRole[] = [];
   for (const role of NRL_ROLES) {
+    if (trainedStarts.has(role)) continue;
     const previous = byId.get(lineup[role]);
-    const natural = pick(previous?.role === role ? previous : undefined, player => player.role === role);
+    const natural = pick(previous?.role === role ? previous : undefined, player => player.role === role && !selected.has(player.id));
     if (natural) {
       lineup[role] = natural.id;
       selected.add(natural.id);
@@ -328,7 +350,8 @@ export function nrlFitLineup(state: NrlManagerState) {
   if (state.live || state.phase === 'complete' || !nrlNextRound(state).clubMatch) return null;
   const next = repairMatchday(state, true);
   const changes = lineupChanges(state.lineup, next.lineup);
-  const key = JSON.stringify([state.seed, state.clubId, state.year, state.round, state.preparation, state.lineup, state.bench, state.kickerId]);
+  const key = JSON.stringify([state.seed, state.clubId, state.year, state.round, state.preparation, state.lineup, state.bench, state.kickerId,
+    ...(state.squad.some(player => player.secondaryRole) ? [next.lineup, next.bench, next.kickerId] : [])]);
   return { next, changes, key };
 }
 
@@ -404,7 +427,7 @@ function teamRatings(state: NrlManagerState, clubId: string, opponentStrength: R
   const starters = new Map(Object.entries(state.lineup).map(([role, id]) => [id, role]));
   const base = state.squad.filter(player => starters.has(player.id)).reduce((sum, player) => {
     const reserve = rotation.get(player.id);
-    const rating = starters.get(player.id) === player.role ? player.rating : player.rating - UTILITY_RATING_COST;
+    const rating = nrlCanPlayRole(player, starters.get(player.id) as NrlRole) ? player.rating : player.rating - UTILITY_RATING_COST;
     if (!reserve) return sum + rating - fitnessPenalty(player, state.preparation);
     return sum + (rating - fitnessPenalty(player, state.preparation)) * 0.68
       + (reserve.rating - fitnessPenalty(reserve, state.preparation)) * 0.32;
@@ -612,9 +635,12 @@ export function reduceNrlSeason(state: NrlManagerState, action: NrlAction,
       if (previous === action.playerId
         || !nrlStarterOptions(state, action.role).some(player => player.id === action.playerId)) return state;
       const next = withLineup(state, { ...state.lineup, [action.role]: action.playerId });
-      if (!state.bench?.includes(action.playerId)) return next;
-      const bench = state.bench.map(id => id === action.playerId ? previous : id);
-      return { ...next, bench };
+      const bench = state.bench?.includes(action.playerId)
+        ? state.bench.map(id => id === action.playerId ? previous : id) : state.bench;
+      const selected = bench === state.bench ? next : { ...next, bench };
+      // Releasing a trained starter can make their native role eligible for repair.
+      return state.squad.some(player => player.id === previous && player.secondaryRole === action.role)
+        ? repairMatchday(selected) : selected;
     }
     case 'selectBench': {
       if (!state.bench || !integerIn(action.slot, 0, NRL_BENCH_SIZE - 1) || state.bench[action.slot] === action.playerId
@@ -770,7 +796,8 @@ export function isNrlSeasonProgress(value: unknown): value is NrlManagerState {
 
   if (squad.length < NRL_ROLES.length || squad.length > 30 || !squad.every((player: unknown) =>
     record(player) && typeof player.id === 'string' && typeof player.name === 'string'
-      && NRL_ROLES.includes(player.role as NrlRole) && integerIn(player.rating, 40, 98) && integerIn(player.fitness, 0, 100))) return false;
+      && NRL_ROLES.includes(player.role as NrlRole) && integerIn(player.rating, 40, 98) && integerIn(player.fitness, 0, 100)
+      && (player.secondaryRole === undefined || (injuryTracking && kickerId && nrlRetrainingRoles(player.role as NrlRole).includes(player.secondaryRole as NrlRole))))) return false;
   const byId = new Map<string, NrlPlayer>(squad.map(player => [player.id, player]));
   const starters = new Set(NRL_ROLES.map(role => lineup[role]));
   if (byId.size !== squad.length || Object.keys(lineup).length !== NRL_ROLES.length || starters.size !== NRL_ROLES.length
@@ -800,10 +827,11 @@ export function isNrlSeasonProgress(value: unknown): value is NrlManagerState {
     }
   }
   const injuries = nrlInjuries({ round, phase: expectedPhase, results: verified, injuryTracking: injuryTracking === true ? true : undefined });
-  const naturalRoles = new Set(squad.filter(player => !injuries.has(player.id)).map(player => player.role));
+  const trainedStarts = new Set(NRL_ROLES.filter(role => byId.get(lineup[role] as string)?.secondaryRole === role).map(role => lineup[role]));
+  const naturalRoles = new Set([...byId.values()].filter(player => !injuries.has(player.id) && !trainedStarts.has(player.id)).map(player => player.role));
   if (!NRL_ROLES.every(role => {
     const player = byId.get(lineup[role] as string)!;
-    return !injuries.has(player.id) && (player.role === role || (injuryTracking && !naturalRoles.has(role)));
+    return !injuries.has(player.id) && (nrlCanPlayRole(player, role) || (injuryTracking && !naturalRoles.has(role)));
   })) return false;
   if (bench !== undefined && (!Array.isArray(bench) || bench.length !== NRL_BENCH_SIZE
     || new Set(bench).size !== bench.length
