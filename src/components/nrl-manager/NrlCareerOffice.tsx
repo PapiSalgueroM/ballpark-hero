@@ -1,12 +1,12 @@
-import { useMemo, useState } from 'react';
-import { ArrowRight, ChevronDown } from 'lucide-react';
+import { useMemo, useRef, useState } from 'react';
+import { ArrowRight, Bookmark, ChevronDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import NrlBoardChallengeNotice from '@/components/nrl-manager/NrlBoardChallengeNotice';
 import { nrlSeasonPlan, NRL_LAST_YEAR } from '@/data/nrlManagerSeasons';
 import {
   nrlAcademyAvailableRoles, nrlAcademyOffer, nrlAcademyReports, nrlCareerCap, nrlCareerFinance, nrlCareerMarket, nrlCareerRecord, nrlCareerSquad, nrlContractOffer,
   nrlCoachQuote, nrlCoachSpend, nrlDevelopmentPreview, nrlFinanceForecast, nrlMedicalSpend, nrlMedicalUpgradeQuote, nrlOffseasonClubs, type NrlCareerAction, type NrlCareerState,
-  nrlTicketPricingRefusal, NRL_TICKET_GATE_CHANGES, type NrlDevelopmentFocus, type NrlMedicalLevel, type NrlTicketTier,
+  nrlTicketPricingRefusal, NRL_SHORTLIST_LIMIT, NRL_TICKET_GATE_CHANGES, type NrlDevelopmentFocus, type NrlMedicalLevel, type NrlTicketTier,
 } from '@/lib/nrlCareer';
 import { NRL_COACHING_BONUS, NRL_ROLES, type NrlCoachRole, type NrlRole } from '@/lib/nrlManager';
 import { nrlArchivedScoringLeaders, nrlTryLeaders } from '@/lib/nrlPlayerScoring';
@@ -81,13 +81,18 @@ function OfferForm({ career, entry, onAction, onClose, disabled }: {
   );
 }
 
-function PlayerRow({ player, entry, career, onAction, disabled }: {
+function PlayerRow({ player, entry, career, onAction, disabled, onShortlist }: {
   player: CareerPlayer; entry?: MarketEntry; career: NrlCareerState; onAction: Dispatch; disabled: boolean;
+  onShortlist?: (saved: boolean) => void;
 }) {
   const [editing, setEditing] = useState(false);
   const [agreed, setAgreed] = useState(false);
   const { contract, futureContract } = player;
   const action = entry?.kind === 'renewal' ? 'Extend' : 'Make offer';
+  const shortlisted = career.shortlist?.includes(player.id) ?? false;
+  const shortlistFull = (career.shortlist?.length ?? 0) >= NRL_SHORTLIST_LIMIT;
+  const offer = entry && !editing && <Button type="button" size="lg" variant="outline" className="px-3" disabled={disabled}
+    onClick={() => { setAgreed(false); setEditing(true); }} aria-label={`${action} for ${player.name}`}>{action}</Button>;
   return (
     <li className="py-3">
       <div className="flex flex-wrap items-center justify-between gap-2">
@@ -104,8 +109,16 @@ function PlayerRow({ player, entry, career, onAction, disabled }: {
           {futureContract && <p className="text-sm text-primary">Agreed through {futureContract.endYear} at {money(futureContract.salary)} per season</p>}
           {agreed && <p role="status" className="text-sm font-semibold text-primary">Contract agreed</p>}
         </div>
-        {entry && !editing && <Button type="button" size="lg" variant="outline" className="px-3" disabled={disabled}
-          onClick={() => { setAgreed(false); setEditing(true); }} aria-label={`${action} for ${player.name}`}>{action}</Button>}
+        {onShortlist ? (
+          <div className="flex flex-wrap items-center gap-2">
+            <Button type="button" size="lg" variant="outline" className="w-11 px-0"
+              aria-label={`Shortlist ${player.name}`} aria-pressed={shortlisted} disabled={disabled || (shortlistFull && !shortlisted)}
+              onClick={() => onShortlist(!shortlisted)}>
+              <Bookmark size={16} fill={shortlisted ? 'currentColor' : 'none'} aria-hidden="true" />
+            </Button>
+            {offer}
+          </div>
+        ) : offer}
       </div>
       {editing && entry && (
         <OfferForm career={career} entry={entry} onClose={() => setEditing(false)} disabled={disabled}
@@ -138,7 +151,9 @@ function Contracts({ career, onAction, disabled }: { career: NrlCareerState; onA
 
 function Recruitment({ career, onAction, disabled }: { career: NrlCareerState; onAction: Dispatch; disabled: boolean }) {
   const [role, setRole] = useState('');
+  const [shortlistedOnly, setShortlistedOnly] = useState(false);
   const [visible, setVisible] = useState(12);
+  const shortlistFilter = useRef<HTMLButtonElement>(null);
   const selectRole = (position: string) => { setRole(position); setVisible(12); };
   const nextYear = career.season.year + 1;
   const signed = nextYear <= NRL_LAST_YEAR ? nrlCareerSquad(career, nextYear) : [];
@@ -146,7 +161,15 @@ function Recruitment({ career, onAction, disabled }: { career: NrlCareerState; o
     position, count: signed.filter(player => player.role === position).length,
   })).sort((a, b) => a.count - b.count);
   const market = useMemo(() => nrlCareerMarket(career).filter(entry => entry.kind !== 'renewal'), [career]);
-  const filtered = role ? market.filter(entry => entry.player.role === role) : market;
+  const shortlist = career.shortlist ?? [];
+  const filtered = market.filter(({ player }) => (!role || player.role === role) && (!shortlistedOnly || shortlist.includes(player.id)));
+  const act: Dispatch = action => {
+    if (!onAction(action)) return false;
+    if (shortlistedOnly && (action.type === 'offerContract' || (action.type === 'setShortlist' && !action.saved))) {
+      shortlistFilter.current?.focus();
+    }
+    return true;
+  };
   const arrivals = career.players.filter(player => player.futureContract?.clubId === career.season.clubId
     && player.contract?.clubId !== career.season.clubId);
   return (
@@ -190,11 +213,21 @@ function Recruitment({ career, onAction, disabled }: { career: NrlCareerState; o
           {NRL_ROLES.map(position => <option key={position}>{position}</option>)}
         </select>
       </label>
+      {(market.length > 0 || shortlistedOnly) && (
+        <div className="mt-3 flex flex-wrap items-center gap-2">
+          <Button ref={shortlistFilter} type="button" size="lg" variant="outline" className="px-3" aria-pressed={shortlistedOnly}
+            onClick={() => { setShortlistedOnly(value => !value); setVisible(12); }}>Shortlisted only</Button>
+          <p className="text-sm text-muted-foreground">{shortlist.length}/{NRL_SHORTLIST_LIMIT} saved</p>
+        </div>
+      )}
       {filtered.length ? (
         <ul className="mt-3 divide-y divide-border">
-          {filtered.slice(0, visible).map(entry => <PlayerRow key={entry.player.id} player={entry.player} entry={entry} career={career} onAction={onAction} disabled={disabled} />)}
+          {filtered.slice(0, visible).map(entry => <PlayerRow key={entry.player.id} player={entry.player} entry={entry} career={career}
+            onAction={act} disabled={disabled} onShortlist={saved => act({ type: 'setShortlist', playerId: entry.player.id, saved, year: career.season.year })} />)}
         </ul>
-      ) : <p className="mt-3 text-sm text-muted-foreground">No eligible players at this position right now.</p>}
+      ) : <p className="mt-3 text-sm text-muted-foreground">{shortlistedOnly
+        ? (role ? 'No shortlisted players at this position.' : 'Your shortlist is empty.')
+        : 'No eligible players at this position right now.'}</p>}
       {filtered.length > visible && <Button type="button" variant="outline" size="lg" className="mt-3" onClick={() => setVisible(count => count + 12)}>Show more players</Button>}
     </>
   );

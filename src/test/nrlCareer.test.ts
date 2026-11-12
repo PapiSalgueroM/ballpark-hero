@@ -72,6 +72,31 @@ describe('NRL Manager career', () => {
     for (const role of NRL_ROLES) expect(arrived.season.lineup[role]).toBeTruthy();
   });
 
+  it('round-trips a shortlist and clears a target after accepting its offer', () => {
+    const state = createNrlCareer('storm', 17);
+    const raw = JSON.stringify(state);
+    expect(state.shortlist).toBeUndefined();
+    expect(JSON.stringify(readNrlCareerSave(raw))).toBe(raw);
+
+    const entry = nrlCareerMarket(state).find(item => item.kind === 'rival'
+      && nrlContractOffer(state, item.player.id, item.askingSalary, 1).ok)!;
+    const mark = { type: 'setShortlist' as const, playerId: entry.player.id, year: state.season.year, saved: true };
+    const saved = reduceNrlCareer(state, mark);
+    expect(saved.shortlist).toEqual([entry.player.id]);
+    expect(JSON.stringify(readNrlCareerSave(JSON.stringify(saved)))).toBe(JSON.stringify(saved));
+    expect(reduceNrlCareer(saved, mark)).toBe(saved);
+    const remove = { ...mark, saved: false };
+    expect(reduceNrlCareer(state, remove)).toBe(state);
+    expect(JSON.stringify(reduceNrlCareer(saved, remove))).toBe(raw);
+
+    const offer = { type: 'offerContract' as const, playerId: entry.player.id, salary: entry.askingSalary, years: 1 };
+    expect(reduceNrlCareer(saved, { ...offer, salary: 0 })).toBe(saved);
+    const signed = reduceNrlCareer(saved, offer);
+    expect(signed).not.toBe(saved);
+    expect(signed.shortlist).toBeUndefined();
+    expect(JSON.stringify(signed)).toBe(JSON.stringify(reduceNrlCareer(state, offer)));
+  });
+
   it('renews a contracted player without charging the extension to the current year', () => {
     const state = createNrlCareer('bears', 14, 2027);
     const entry = nrlCareerMarket(state).find(item => item.kind === 'renewal' && item.player.contract!.endYear > 2027)!;
