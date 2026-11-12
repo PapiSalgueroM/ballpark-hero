@@ -107,6 +107,7 @@ const ACADEMY = 'src/lib/soccerCareerAcademy.ts';
 const CARD = 'src/components/soccer-career/AcademyReportCard.tsx';
 const ENGINE = 'src/lib/soccerCareerEngine.ts';
 const PAGE = 'src/pages/SoccerCareer.tsx';
+const CREATOR = 'src/components/soccer-career/SoccerCareerCreator.tsx';
 const CONTROLS = {
   alwayswrite: { file: ACADEMY, from: '  if (!focus) return 0;\n  const before = s[focus];', to: '  if (!focus) { s.academyFocusAdded = 0; return 0; }\n  const before = s[focus];' },
   drawinreport: { file: ACADEMY, from: '(h % 4) + lift', to: 'Math.floor(Math.random() * 4) + lift' },
@@ -214,9 +215,9 @@ function pageCode(patches) {
     source and compiled here, so section 7's careers are the ones a player
     really gets and a change to the page shows up in this harness. */
 function pageStatsGenerator(POSITION_OFFSETS) {
-  const src = fs.readFileSync(path.join(ROOT, PAGE), 'utf8').replaceAll('\r\n', '\n');
+  const src = fs.readFileSync(path.join(ROOT, CREATOR), 'utf8').replaceAll('\r\n', '\n');
   const at = src.indexOf('function generateStatsFromOverall(');
-  if (at < 0 || src.indexOf('function generateStatsFromOverall(', at + 1) >= 0) throw new Error(`${PAGE} must define generateStatsFromOverall exactly once`);
+  if (at < 0 || src.indexOf('function generateStatsFromOverall(', at + 1) >= 0) throw new Error(`${CREATOR} must define generateStatsFromOverall exactly once`);
   const end = src.indexOf('\n}\n', at);
   const js = esbuild.transformSync(`type Stats = Record<string, number>;\n${src.slice(at, end + 2)}`, { loader: 'ts' }).code;
   return new Function('POSITION_OFFSETS', `${js}\nreturn generateStatsFromOverall;`)(POSITION_OFFSETS);

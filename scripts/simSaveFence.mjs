@@ -328,31 +328,28 @@ const SOCCER_ALLOWED = [
   { file: 'src/lib/saveKeeper.ts', fn: 'applyPending', reason: 'the keeper applies a staged put back in main.tsx before React mounts; the page\'s mount write right after moves the generation' },
 ];
 const SOCCER_RAW_FILE = 'src/pages/SoccerCareer.tsx';
-const SOCCER_RAW_ANCHOR = '  const handleBeginCareer = () => {\n';
+const SOCCER_RAW_ANCHOR = '  const handleBeginCareer = (draft: SoccerCareerDraft) => {\n';
 const SOCCER_RAW_PLANT = "    try { localStorage.setItem(SAVE_KEY, '{}'); } catch { /* planted */ }\n";
+const SOCCER_ADOPT_FILE = 'src/lib/soccerCareerSaveEntry.ts';
 /* Round 1330 review (mutation M6 survived): the page adopts the generation
    BEFORE it reads the save, so a write another tab lands between the two
    leaves this page stale, never the other one. Read from the code (the AST),
-   never the comments: the restoredSave useState initialiser's first statement
-   is saveFence.adopt(SAVE_KEY), every getItem in it comes after, and the page
-   adopts nowhere else. adoptlate moves the adopt below the read. */
-const SOCCER_ADOPT = '    saveFence.adopt(SAVE_KEY);\n';
-const SOCCER_READ = '    let saved: string | null;\n    try { saved = localStorage.getItem(SAVE_KEY); } catch { return { career: null, invalid: false }; }\n';
+   never the comments: the shared entry helper starts with saveFence.adopt(SAVE_KEY)
+   and every getItem in it comes after. adoptlate moves the adopt below the read. */
+const SOCCER_ADOPT = '  saveFence.adopt(SAVE_KEY);\n';
+const SOCCER_READ = '  try { return localStorage.getItem(SAVE_KEY); } catch { return null; }\n';
 function checkSoccerAdopt(text, rel) {
   tick('source');
-  const sf = ts.createSourceFile(rel, text, ts.ScriptTarget.Latest, true, ts.ScriptKind.TSX);
-  let init = null;
+  const sf = ts.createSourceFile(rel, text, ts.ScriptTarget.Latest, true, ts.ScriptKind.TS);
+  const init = sf.statements.find(n => ts.isFunctionDeclaration(n) && n.name?.text === 'adoptSoccerCareerSave');
   const adopts = [];
   const visit = n => {
-    if (ts.isVariableDeclaration(n) && ts.isArrayBindingPattern(n.name) && n.name.elements.length
-      && !ts.isOmittedExpression(n.name.elements[0]) && n.name.elements[0].name.getText(sf) === 'restoredSave'
-      && n.initializer && ts.isCallExpression(n.initializer) && n.initializer.expression.getText(sf) === 'useState') init = n.initializer.arguments[0] ?? null;
     if (ts.isCallExpression(n) && n.expression.getText(sf) === 'saveFence.adopt') adopts.push(n);
     ts.forEachChild(n, visit);
   };
   visit(sf);
-  if (!init || !(ts.isArrowFunction(init) || ts.isFunctionExpression(init)) || !ts.isBlock(init.body)) {
-    fail('source', `${rel}: no restoredSave useState initialiser with a body, so the adopt before the read cannot be checked`);
+  if (!init?.body) {
+    fail('source', `${rel}: no adoptSoccerCareerSave body, so the adopt before the read cannot be checked`);
     return;
   }
   const first = init.body.statements[0];
@@ -360,11 +357,20 @@ function checkSoccerAdopt(text, rel) {
   const reads = [];
   const findReads = n => { if (ts.isCallExpression(n) && ts.isPropertyAccessExpression(n.expression) && n.expression.name.text === 'getItem') reads.push(n); ts.forEachChild(n, findReads); };
   findReads(init.body);
-  if (firstText !== 'saveFence.adopt(SAVE_KEY);') fail('source', `${rel}: the restoredSave initialiser starts with "${firstText.split('\n')[0].slice(0, 80)}", not saveFence.adopt(SAVE_KEY); (adopt before the read)`);
-  else if (!reads.length) fail('source', `${rel}: the restoredSave initialiser reads no save, so the order cannot be checked`);
-  else if (reads.some(r => r.getStart(sf) < first.getEnd())) fail('source', `${rel}: a getItem in the restoredSave initialiser runs before the adopt`);
-  if (adopts.length !== 1) fail('source', `${rel}: saveFence.adopt is called ${adopts.length} times; the page adopts once, in the restoredSave initialiser`);
-  console.log(`  Soccer Career: the restoredSave initialiser starts with ${firstText}; ${reads.length} read(s) after it; ${adopts.length} adopt call(s) in the page`);
+  if (firstText !== 'saveFence.adopt(SAVE_KEY);') fail('source', `${rel}: expected saveFence.adopt(SAVE_KEY) before reading the save; first statement is "${firstText}"`);
+  else if (!reads.length) fail('source', `${rel}: the entry helper reads no save, so the order cannot be checked`);
+  else if (reads.some(r => r.getStart(sf) < first.getEnd())) fail('source', `${rel}: a getItem in the entry helper runs before the adopt`);
+  if (adopts.length !== 1) fail('source', `${rel}: the entry helper adopts the save ${adopts.length} times; expected one`);
+  console.log(`  Soccer Career: the entry helper starts with ${firstText}; ${reads.length} save read(s), ${adopts.length} adopt call(s)`);
+  const entryFile = 'src/pages/SoccerCareerEntry.tsx';
+  const entry = ts.createSourceFile(entryFile, lf(path.join(ROOT, entryFile)), ts.ScriptTarget.Latest, true, ts.ScriptKind.TSX);
+  let adopters = 0;
+  const findAdopters = n => {
+    if (ts.isCallExpression(n) && n.expression.getText(entry) === 'useState' && n.arguments[0]?.getText(entry) === 'adoptSoccerCareerSave') adopters++;
+    ts.forEachChild(n, findAdopters);
+  };
+  findAdopters(entry);
+  if (adopters !== 1) fail('source', `${entryFile}: expected one useState initialiser that adopts and reads the save`);
 }
 function walkSrc(dir, out = []) {
   for (const e of fs.readdirSync(dir, { withFileTypes: true })) {
@@ -395,18 +401,19 @@ function sectionSource() {
       text = text.replace(SOCCER_RAW_ANCHOR, SOCCER_RAW_ANCHOR + SOCCER_RAW_PLANT);
       fired += 1;
     }
-    if (CONTROL === 'adoptlate' && rel === SOCCER_RAW_FILE) {
+    if (CONTROL === 'adoptlate' && rel === SOCCER_ADOPT_FILE) {
       once(text, SOCCER_ADOPT + SOCCER_READ, rel);
       text = text.replace(SOCCER_ADOPT + SOCCER_READ, SOCCER_READ + SOCCER_ADOPT);
       fired += 1;
     }
-    if (rel === SOCCER_RAW_FILE) checkSoccerAdopt(text, rel);
+    if (rel === SOCCER_ADOPT_FILE) checkSoccerAdopt(text, rel);
     if (!/\.(setItem|removeItem)\(/.test(text)) continue;
     scanned += 1;
     const sf = ts.createSourceFile(file, text, ts.ScriptTarget.Latest, true, rel.endsWith('.tsx') ? ts.ScriptKind.TSX : ts.ScriptKind.TS);
     const cmIds = new Set();
     if (/import\s*\{[^}]*\bSAVE_KEY\b[^}]*\}\s*from\s*'(@\/lib\/clubManager|\.\/clubManager)'/.test(text)) cmIds.add('SAVE_KEY');
     const scIds = new Set();
+    if (/import\s*\{[^}]*\bSAVE_KEY\b[^}]*\}\s*from\s*['"]@\/lib\/soccerCareerSaveEntry['"]/.test(text)) scIds.add('SAVE_KEY');
     const decls = [];
     const collect = n => { if (ts.isVariableDeclaration(n) && ts.isIdentifier(n.name) && n.initializer) decls.push(n); ts.forEachChild(n, collect); };
     collect(sf);
