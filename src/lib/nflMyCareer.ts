@@ -743,7 +743,7 @@ export function nflStatLineFor(x: NflLineInput, rng: () => number): NflStatLine 
     // Tight ends catch fewer, shorter, but score near the goal line.
     line.rec = Math.max(0, Math.round((22 + (form - 62) * 1.9 + rng() * 12) * g));
     line.recYds = Math.min(NFL_TE_YDS_CAP, Math.round((line.rec ?? 0) * (9 + rng() * 3.5)));
-    line.recTd = Math.max(0, Math.round((2 + (form - 62) * 0.3 + rng() * 3) * g));
+    line.recTd = Math.min(line.rec, Math.max(0, Math.round((2 + (form - 62) * 0.3 + rng() * 3) * g)));
   } else if (pos === 'LB') {
     /* Round 144: same treatment the EDGE sack line got in Round 123 (see the
        long note below): the tail of this curve brushed past the harness's
