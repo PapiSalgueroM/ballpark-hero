@@ -138,7 +138,7 @@ export function setAsideSave(entry: ContinueSave, storage: SaveStorage | null, n
  * whatever its stamp says (a clock set back must not prune the save that was
  * just moved). Skipped where the storage cannot list its keys. Never throws.
  */
-function pruneBackups(entry: ContinueSave, storage: SaveStorage | null, keep: string): void {
+export function pruneBackups(entry: ContinueSave, storage: SaveStorage | null, keep: string): void {
   if (!storage || typeof (storage as ListableStorage).key !== 'function') return;
   const others: string[] = [];
   try {

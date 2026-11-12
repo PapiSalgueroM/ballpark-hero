@@ -24,7 +24,7 @@ import {
 } from '@/lib/nrlManager';
 import { createNrlCareer, nrlOppositionReport, nrlRivalSquad, reduceNrlCareer, type NrlCareerAction, type NrlCareerState } from '@/lib/nrlCareer';
 import { nrlScorePoints, nrlScoringLeaders, nrlSquadSeasonStats, nrlTryLeaders, type NrlSquadStatsScope } from '@/lib/nrlPlayerScoring';
-import { NRL_SAVE_ENTRY, readNrlSaveSlot, writeNrlSaveSlot } from '@/lib/nrlSaveSlots';
+import { NRL_SAVE_ENTRY, nrlSeasonCanCredit, readNrlReplayCutoff, readNrlSaveSlot, writeNrlSaveSlot } from '@/lib/nrlSaveSlots';
 import { saveFence } from '@/lib/saveFence';
 import { holdPendingSave } from '@/lib/safeStorage';
 
@@ -797,7 +797,8 @@ function NrlManagerScreen({ entry, showSlots }: { entry: ContinueSave; showSlots
   const moved = changed || fenceMoved;
   const complete = season?.phase === 'complete';
   const live = Boolean(season?.live);
-  useGameCompletion(SLUG, complete, undefined);
+  const [replayed] = useState(() => showSlots ? null : readNrlReplayCutoff(entry.saveKey));
+  useGameCompletion(SLUG, Boolean(complete && career && nrlSeasonCanCredit(career, replayed)), undefined);
 
   const persist = useCallback((next: NrlCareerState) => {
     const raw = JSON.stringify(next);
