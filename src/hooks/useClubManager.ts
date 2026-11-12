@@ -941,10 +941,10 @@ export function useClubManager() {
     });
   }, []);
 
-  const autoPick = useCallback((fresh = false) => {
+  const autoPick = useCallback((fresh = false, cutoff?: number) => {
     setCareer(prev => {
       if (!prev) return prev;
-      return { ...prev, xiIds: autoPickXI(prev.squad, FORMATIONS[prev.formationIndex], fresh) };
+      return { ...prev, xiIds: autoPickXI(prev.squad, FORMATIONS[prev.formationIndex], fresh, cutoff) };
     });
   }, []);
 

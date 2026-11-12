@@ -181,11 +181,41 @@ describe('Club Manager fresh XI', () => {
     f.view.unmount();
   });
 
+  it('uses the chosen fitness cutoff only when Fresh XI is pressed and saves only the lineup', async () => {
+    const { E, c, player } = await fixture();
+    c.squad = c.squad.map(p => p.id === 'starter-rb' ? { ...p, fitness: 75 } : p);
+    c.squad.push(player('very-fresh-rb', 'RB', 80, 90));
+    const mounted = await mountTactics(c, E);
+    const before = copy(mounted.read().career!);
+    const savedBefore = localStorage.getItem(E.SAVE_KEY);
+    const at = draws.length;
+    const cutoff = screen.getByRole('combobox', { name: 'Fresh XI fitness cutoff' });
+    const fresh = screen.getByRole('button', { name: 'Fresh XI' });
+    expect(cutoff).toHaveValue('80');
+
+    fireEvent.change(cutoff, { target: { value: '90' } });
+    expect(localStorage.getItem(E.SAVE_KEY)).toBe(savedBefore);
+    fireEvent.click(fresh);
+    await waitFor(() => expect(mounted.read().career!.xiIds[1]).toBe('very-fresh-rb'));
+    fireEvent.change(cutoff, { target: { value: '70' } });
+    fireEvent.click(fresh);
+    await waitFor(() => expect(mounted.read().career!.xiIds[1]).toBe('starter-rb'));
+    fireEvent.change(cutoff, { target: { value: '80' } });
+    fireEvent.click(fresh);
+    await waitFor(() => expect(mounted.read().career!.xiIds).toEqual(ROTATED));
+    expect(E.loadCareer()!.xiIds).toEqual(ROTATED);
+    expect({ ...mounted.read().career!, xiIds: before.xiIds }).toStrictEqual(before);
+    fireEvent.change(cutoff, { target: { value: '90' } });
+    fireEvent.click(screen.getByRole('button', { name: 'Auto Pick' }));
+    await waitFor(() => expect(mounted.read().career!.xiIds).toEqual(ORDINARY));
+    expect(draws.length - at).toBe(0);
+  });
+
   it('fills a short squad once each and leaves only genuinely empty slots', async () => {
     const { E, player, formation } = await fixture();
     const squad = [player('keeper', 'GK', 70, 79), player('back', 'RB', 70, 79), player('forward', 'ST', 70, 79)];
     const before = JSON.stringify(squad), at = draws.length;
-    const selected = pickFresh(E, squad, formation);
+    const selected = E.autoPickXI(squad, formation, true, 90);
     raw('short-squad', { selected, before, after: JSON.stringify(squad), drawDelta: draws.length - at });
     expect(selected).toEqual(['keeper', 'back', 'forward', null, null, null, null, null, null, null, null]);
     expect(new Set(selected.filter(Boolean)).size).toBe(3);

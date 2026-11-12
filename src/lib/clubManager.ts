@@ -7597,11 +7597,13 @@ export function stopRetraining(career: CareerState, playerId: string): CareerSta
   };
 }
 
-export function autoPickXI(squad: CMPlayer[], formation: Formation, fresh = false): (string | null)[] {
+export const DEFAULT_FRESH_XI_FITNESS = 80;
+
+export function autoPickXI(squad: CMPlayer[], formation: Formation, fresh = false, cutoff = DEFAULT_FRESH_XI_FITNESS): (string | null)[] {
   const used = new Set<string>();
   const xi: (string | null)[] = [];
   const order = (a: CMPlayer, b: CMPlayer) =>
-    (fresh ? Number(b.fitness >= 80) - Number(a.fitness >= 80) : 0) || b.rating - a.rating;
+    (fresh ? Number(b.fitness >= cutoff) - Number(a.fitness >= cutoff) : 0) || b.rating - a.rating;
   for (const slot of formation.slots) {
     /* Round 505: a position he has retrained into is his too. */
     const fits = squad

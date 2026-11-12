@@ -3,7 +3,7 @@ import { cn } from '@/lib/utils';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { ArrowLeft, ChevronDown, Wand2, X } from 'lucide-react';
 import {
-  FORMATIONS, MENTALITIES, resolveXI, isAvailable, xiFitReport, fitGrade, FIT_PENALTY,
+  FORMATIONS, MENTALITIES, resolveXI, isAvailable, xiFitReport, fitGrade, FIT_PENALTY, DEFAULT_FRESH_XI_FITNESS,
   slotPosition, defensiveLineY, lineLabel,
   benchFor, dutyOptions, slotDuty,
   SET_PIECE_KEYS, setPieceCandidates,
@@ -61,7 +61,7 @@ interface TacticsScreenProps {
   theirOpponent?: string | null;
   onSlot: (slotIdx: number, playerId: string | null) => void;
   onSwap: (a: number, b: number) => void;
-  onAutoPick: (fresh?: boolean) => void;
+  onAutoPick: (fresh?: boolean, cutoff?: number) => void;
   /** Round 505: a duty on a slot, null to clear it. */
   onDuty: (slotIdx: number, duty: Duty | null) => void;
   /** Round 505: the armband or a set piece job to a man. */
@@ -125,6 +125,7 @@ export function TacticsScreen({
   onShootoutOrder, openTileRequest, onOpenTileRequestDone, onSaveMatchPlan, onApplyMatchPlan, onDeleteMatchPlan, onCustomShape,
 }: TacticsScreenProps) {
   const [openSlot, setOpenSlot] = useState<number | null>(null);
+  const [freshCutoff, setFreshCutoff] = useState(DEFAULT_FRESH_XI_FITNESS);
   /* Round 1522: the instructions tile, folded until asked for. */
   const [instrOpen, setInstrOpen] = useState(false);
   // A one-shot pitch flourish on top of the shape move, keyed so it replays.
@@ -628,19 +629,25 @@ export function TacticsScreen({
           <div className="text-xs text-muted-foreground uppercase tracking-wider">
             Starting XI · avg <span className="text-primary font-bold" data-cm-xi-avg={fit.rating}>{fit.rating}</span>
           </div>
-          <div className="flex gap-2">
+          <div className="flex flex-wrap items-center gap-2">
             <button type="button" onClick={() => onAutoPick()}
               className="inline-flex min-h-11 items-center gap-1 text-xs font-semibold text-primary hover:opacity-80 transition-opacity">
               <Wand2 className="w-3.5 h-3.5" /> Auto Pick
             </button>
-            <button type="button" onClick={() => onAutoPick(true)}
-              className="min-h-11 rounded-lg border border-primary/50 px-2 text-xs font-semibold text-primary hover:bg-primary/10">
-              Fresh XI
-            </button>
+            <div className="flex items-center gap-1">
+              <select aria-label="Fresh XI fitness cutoff" value={freshCutoff} onChange={event => setFreshCutoff(Number(event.target.value))}
+                className="min-h-11 min-w-11 rounded-lg border border-border bg-background px-2 text-sm text-foreground">
+                {[70, DEFAULT_FRESH_XI_FITNESS, 90].map(cutoff => <option key={cutoff} value={cutoff}>{cutoff}%</option>)}
+              </select>
+              <button type="button" onClick={() => onAutoPick(true, freshCutoff)}
+                className="min-h-11 rounded-lg border border-primary/50 px-2 text-xs font-semibold text-primary hover:bg-primary/10">
+                Fresh XI
+              </button>
+            </div>
           </div>
         </div>
         <p className="text-[10px] text-muted-foreground mb-1.5">
-          Fresh XI prefers 80+ fitness in each position, then rating. Tired players fill gaps.
+          Fresh XI prefers {freshCutoff}+ fitness in each position, then rating. Tired players fill gaps.
         </p>
         {fit.penalty > 0 && (
           <p className="text-[9px] text-amber-400 mb-1" data-cm-fit-adjusted={fit.penalty}>
