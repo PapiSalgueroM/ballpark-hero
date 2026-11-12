@@ -8,13 +8,14 @@
  *                        links the built stylesheets from dist/assets.
  *   page (when mounted)  the real /soccer-career through
  *                        scripts/lib/hostLikeServer.mjs, only once the built
- *                        Soccer Career chunk contains data-squad-tile.
+ *                        build includes the Squad tile.
  *                        REQUIRE_PAGE=1 fails when it does not.
  * Saves are made by the real engine in node and handed to the page through
  * localStorage key soccerCareerSave. Nothing here reaches the network beyond
  * the local server: every page aborts supabase.co first.
  *
- *  1. (page) Lazy: no SquadSheet chunk on a fresh hub, one after the press.
+ *  1. (page) Lazy: the club squad archive starts with the senior hub, then
+ *     the SquadSheet chunk arrives after pressing the tile.
  *  2. The tile says what the lib says: rank, group size and trust percent
  *     equal squadView(save) in node. An academy save shows no tile.
  *  3. The sheet opens with focus inside. First open lands on home with a
@@ -923,9 +924,9 @@ for (const [width, height] of SHORT) {
 }
 
 /* ── page mode ──────────────────────────────────────────────────────────── */
-const mounted = fs.readdirSync(ASSETS).some(f => f.endsWith('.js') && /SoccerCareer/.test(f) && fs.readFileSync(path.join(ASSETS, f), 'utf8').includes('data-squad-tile'));
+const mounted = fs.readdirSync(ASSETS).some(f => f.endsWith('.js') && /^(SoccerCareer|SquadTile)-/.test(f) && fs.readFileSync(path.join(ASSETS, f), 'utf8').includes('data-squad-tile'));
 if (!mounted) {
-  if (process.env.REQUIRE_PAGE === '1') check(false, 'page: the built Soccer Career chunk does not hold the Squad tile, and REQUIRE_PAGE=1 says it must');
+  if (process.env.REQUIRE_PAGE === '1') check(false, 'page: the build does not hold the Squad tile, and REQUIRE_PAGE=1 says it must');
   else console.log('note page mode not run: the tile is not mounted on /soccer-career in this build (sections 1 and 9 are page checks)');
 }
 if (mounted) {
@@ -938,6 +939,24 @@ if (mounted) {
     const sheetChunks = fs.readdirSync(ASSETS).filter(f => f.endsWith('.js') && fs.readFileSync(path.join(ASSETS, f), 'utf8').includes('data-squad-xi'));
     if (!check(sheetChunks.length === 1, `page: the sheet is one chunk of its own (${sheetChunks.join(', ') || 'none'})`)) throw new Error('no single sheet chunk');
     const SHEET_CHUNK = sheetChunks[0];
+    const clubSquadSource = fs.readFileSync(path.join(ROOT, "src/data/clubSquads.ts"), "utf8");
+    const clubSquadProbe = clubSquadSource.match(/export const CLUB_SQUADS[^\n]*\n\s*"[^"]+": "([^"]{60})/)?.[1];
+    if (!clubSquadProbe) throw new Error("Could not find the recorded club squad probe");
+    const clubSquadChunks = fs.readdirSync(ASSETS).filter(f => f.endsWith(".js") && fs.readFileSync(path.join(ASSETS, f), "utf8").includes(clubSquadProbe));
+    if (!check(clubSquadChunks.length === 1, "1. the build holds the recorded squad data once")) throw new Error("No single club squad archive chunk");
+    const clubSquadChunk = clubSquadChunks[0];
+    const fresh = await browser.newContext({ viewport: { width: 390, height: 844 } });
+    try {
+      await fresh.route(url => url.origin !== BASE2, route => route.abort());
+      const page = await fresh.newPage();
+      const requested = [];
+      page.on("request", request => requested.push(new URL(request.url()).pathname.split("/").at(-1)));
+      await page.goto(`${BASE2}/soccer-career`, { waitUntil: "domcontentloaded", timeout: 60000 });
+      await page.getByRole("heading", { name: "Create Your Player" }).waitFor({ timeout: 30000 });
+      check(!requested.includes(clubSquadChunk), "1. a fresh creation screen does not download the recorded club squads");
+    } finally {
+      await fresh.close();
+    }
     let chunkText = fs.readFileSync(path.join(ASSETS, SHEET_CHUNK), 'utf8');
     if (CONTROL === 'label') {
       for (const needle of ['← Back to your career', '\\u2190 Back to your career']) {
@@ -1065,6 +1084,7 @@ if (mounted) {
       const { ctx, page, js } = await openPage(SAVES[k]);
       const v = VIEW[k];
       await page.waitForTimeout(1500);
+      if (k === 'A') check(js.includes(clubSquadChunk), '1. the saved senior hub loads the recorded club squads');
       if (k === 'A') check(!js.includes(SHEET_CHUNK), `1. no sheet chunk on a fresh hub (${js.length} scripts loaded)`);
       const got = await page.evaluate(sel => {
         const t = document.querySelector(sel);
