@@ -138,6 +138,7 @@ export function useBudgetBuilder(): BudgetBuilderState {
   const [loading, setLoading] = useState(true);
   const [eraId, setEraId] = useState<EraDef['id']>('today');
   const [formationName, setFormationName] = useState(FORMATIONS[0].name);
+  const [boardDate, setBoardDate] = useState(getTodayET);
   const [topic, setTopic] = useState<Topic>('all');
   const [squad, setSquad] = useState<Squad>({});
   const [activeSlot, setActiveSlot] = useState<number | null>(null);
@@ -196,11 +197,11 @@ export function useBudgetBuilder(): BudgetBuilderState {
     return Math.round(picked.reduce((s, p) => s + playerRating(p), 0) / picked.length);
   }, [moneyXi]);
 
-  /** Today's board demand, date-seeded; era-safe list. */
+  /** The demand stays with this XI until a new board starts. */
   const criterion = useMemo(() => {
     const eligible = CRITERIA.filter(c => !c.todayOnly || era.id === 'today');
-    return eligible[dailyIndex(getTodayET(), eligible.length)];
-  }, [era.id]);
+    return eligible[dailyIndex(boardDate, eligible.length)];
+  }, [boardDate, era.id]);
 
   const criterionMet = useMemo(() => {
     const picked = Object.values(squad).filter(Boolean) as Player[];
@@ -270,6 +271,7 @@ export function useBudgetBuilder(): BudgetBuilderState {
   }, []);
 
   const reset = useCallback(() => {
+    setBoardDate(getTodayET());
     setSquad({});
     setActiveSlot(null);
     setSearch('');
@@ -280,17 +282,20 @@ export function useBudgetBuilder(): BudgetBuilderState {
   // pools are different players entirely.
   const setFormation = useCallback((name: string) => {
     setFormationName(name);
+    setBoardDate(getTodayET());
     setSquad({});
     setActiveSlot(null);
     setSeries(null);
   }, []);
 
   const setEra = useCallback((id: EraDef['id']) => {
+    if (id === eraId) return;
     setEraId(id);
+    setBoardDate(getTodayET());
     setSquad({});
     setActiveSlot(null);
     setSeries(null);
-  }, []);
+  }, [eraId]);
 
   const shareText = useMemo(() => {
     if (!complete) return '';
