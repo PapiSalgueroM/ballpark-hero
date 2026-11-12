@@ -72,7 +72,7 @@ type GCAction =
   | { t: 'won' }
   | { t: 'give' };
 
-function replayCollegeGame(actions: GCAction[]): {
+function replayCollegeGame(actions: GCAction[], answer?: string): {
   revealedClues: number;
   gameOver: boolean;
   won: boolean;
@@ -87,6 +87,8 @@ function replayCollegeGame(actions: GCAction[]): {
 
   for (const action of actions) {
     if (action.t === 'won') {
+      // The Daily save stores a win marker. Its puzzle supplies the winning school.
+      if (answer) guessHistory.push(answer);
       score = SCORE_MAP[revealedClues] || 0;
       won = true;
       gameOver = true;
@@ -141,7 +143,10 @@ export function useGuessTheCollege() {
     deserializeGuesses: (raw) => raw as GCAction[],
   });
 
-  const dailyGameState = useMemo(() => replayCollegeGame(dailyActions), [dailyActions]);
+  const dailyGameState = useMemo(
+    () => replayCollegeGame(dailyActions, dailyPuzzle?.name),
+    [dailyActions, dailyPuzzle],
+  );
 
   // Unlimited / conference local state (original logic unchanged)
   const [unlimitedCollege, setUnlimitedCollege] = useState<College | null>(null);
