@@ -69,7 +69,7 @@ import type { CareerState, Competition, SponsorOffer } from '@/lib/clubManager';
 import {
   CROWD_BANDS, CROWD_CAP, CUSTOM_CROWD_FLOOR,
   TICKET_TIERS, clubDefFor, eraClubDefFor, fixtureFor, gatePricePerFan, isHistoricEra,
-  money, severanceBill, signSponsorWith, sponsorOffers, wageBill,
+  money, severanceBill, signSponsorWith, sponsorOffers, wageBill, WAGE_ROOM_STEP,
 } from '@/lib/clubManager';
 import { facilityLevel, facilitiesOf, stadiumConcessionMult } from '@/lib/clubManagerFacilities';
 /* Round 471: the four staff posts pay a wage every week and cost fees when
@@ -146,6 +146,7 @@ export interface ClubBooks {
 const clamp = (v: number, lo: number, hi: number): number => Math.max(lo, Math.min(hi, v));
 const round1 = (n: number): number => Math.round(n * 10) / 10;
 const round2 = (n: number): number => Math.round(n * 100) / 100;
+const wageRoomSpend = (state: CareerState): number => round2((state.purchasedWageRoom ?? 0) / WAGE_ROOM_STEP.weekly * WAGE_ROOM_STEP.cost);
 const round3 = (n: number): number => Math.round(n * 1000) / 1000;
 const ERA_MONEY = 0.75;
 
@@ -569,6 +570,8 @@ export function projectFinances(state: CareerState): FinanceProjection {
     { id: 'facilities', label: 'Facilities', actual: round2(facilities), projected: round2(facilities), kitty: true },
     { id: 'staffFees', label: 'Staff fees', actual: staffFees, projected: staffFees, kitty: true, note: 'hires and pay offs' },
   ];
+  const roomSpend = wageRoomSpend(state);
+  if (roomSpend > 0) spend.push({ id: 'wageRoom', label: 'Extra wage room', actual: roomSpend, projected: roomSpend, kitty: true });
   const sum = (lines: ProjectionLine[], k: 'actual' | 'projected') => round2(lines.reduce((n, l) => n + l[k], 0));
   const incomeActual = sum(income, 'actual');
   const incomeProjected = sum(income, 'projected');
@@ -605,7 +608,7 @@ export function closeLedger(state: CareerState): ClosedLedger {
   const staffFees = round2(staffOf(state).seasonSpend);
   const retail = readShirtSales(s.shirts);
   const income = round2(s.tickets + s.concessions + s.sponsor + transferIn + (retail ? retail.paidPence / SHIRT_PENCE_PER_M : 0));
-  const spend = round2(s.playerWages + s.staffWages + s.travel + transferOut + facilities + staffFees);
+  const spend = round2(s.playerWages + s.staffWages + s.travel + transferOut + facilities + staffFees + wageRoomSpend(state));
   return { ...s, shirts: retail, transferIn, transferOut, facilities, staffFees, income, spend, result: round2(income - spend) };
 }
 
