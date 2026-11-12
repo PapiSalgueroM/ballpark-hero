@@ -416,10 +416,10 @@ const WC_PLAYOFF_SLOTS = 2;
 /* ─── Small helpers ──────────────────────────────────────────────────────── */
 
 const rnd = (min: number, max: number) => Math.floor(Math.random() * (max - min + 1)) + min;
-const shuffle = <T,>(arr: T[]): T[] => {
+const shuffle = <T,>(arr: T[], rng: () => number = Math.random): T[] => {
   const a = [...arr];
   for (let i = a.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
+    const j = Math.floor(rng() * (i + 1));
     [a[i], a[j]] = [a[j], a[i]];
   }
   return a;
@@ -428,10 +428,10 @@ export const clamp = (v: number, lo: number, hi: number) => Math.max(lo, Math.mi
 
 /** Knuth's Poisson. Football scores are Poisson shaped, and rolling one gives
     0-0 and 4-1 at roughly the rates real football produces them. */
-function poisson(mean: number): number {
+function poisson(mean: number, rng: () => number = Math.random): number {
   const l = Math.exp(-Math.max(0.05, mean));
   let k = 0, p = 1;
-  do { k++; p *= Math.random(); } while (p > l && k < 12);
+  do { k++; p *= rng(); } while (p > l && k < 12);
   return k - 1;
 }
 
@@ -597,7 +597,7 @@ export function toHistoryEntry(t: IntlTournament, eligible = true): IntlHistoryE
 /** A neutral tournament match between two nations. `bonus` is my own effect on
     my nation's expected goals, and is zero for every match I am not in. */
 function simMatch(
-  strA: number, strB: number, knockout: boolean, bonusA = 0, bonusB = 0,
+  strA: number, strB: number, knockout: boolean, bonusA = 0, bonusB = 0, rng: () => number = Math.random,
 ): { a: number; b: number; pens: boolean; aWins: boolean } {
   // Expected goals scale MULTIPLICATIVELY with the gap, not additively. An
   // even game is 1.35 each; ten points of ranking strength turns that into
@@ -605,8 +605,8 @@ function simMatch(
   // is what a top nation actually does to a minnow. An additive model made
   // every game a coin flip and left Japan missing World Cups.
   const d = (strA - strB) / 10;
-  const a = poisson(Math.max(0.2, 1.35 * Math.exp(0.26 * d) + bonusA));
-  const b = poisson(Math.max(0.2, 1.35 * Math.exp(-0.26 * d) + bonusB));
+  const a = poisson(Math.max(0.2, 1.35 * Math.exp(0.26 * d) + bonusA), rng);
+  const b = poisson(Math.max(0.2, 1.35 * Math.exp(-0.26 * d) + bonusB), rng);
   if (knockout && a === b) {
     /* Knockout football always produces a winner, and level means penalties.
        The stronger side is only slightly favoured, the way a shootout is.
@@ -616,7 +616,7 @@ function simMatch(
        bracket read as if somebody had won it in normal time. The Round 124
        harness caught that on its first run. */
     const diff = (strA - strB) / 100;
-    return { a, b, pens: true, aWins: Math.random() < 0.5 + clamp(diff, -0.25, 0.25) * 0.4 };
+    return { a, b, pens: true, aWins: rng() < 0.5 + clamp(diff, -0.25, 0.25) * 0.4 };
   }
   return { a, b, pens: false, aWins: a > b };
 }
@@ -719,7 +719,7 @@ function finalistsFor(fmt: TournamentFormat, conf: Confederation): number {
     the confederation by strength, cut it into six pots, take one from each.
     My nation goes in and displaces whoever came out of its own pot, so a top
     seed always faces weaker pots and a minnow always faces a giant. */
-function drawQualifyingGroup(nation: string, conf: Confederation): string[] {
+function drawQualifyingGroup(nation: string, conf: Confederation, rng: () => number = Math.random): string[] {
   const pool = nationsIn(conf).filter(n => n !== nation);
   const ranked = [...pool].sort((a, b) => fifaRankOf(a) - fifaRankOf(b));
   const potSize = Math.max(1, Math.ceil(ranked.length / 6));
@@ -731,11 +731,11 @@ function drawQualifyingGroup(nation: string, conf: Confederation): string[] {
     if (pot === myPot) continue;
     const slice = ranked.slice(pot * potSize, (pot + 1) * potSize).filter(n => !group.includes(n));
     if (!slice.length) continue;
-    group.push(slice[Math.floor(Math.random() * slice.length)]);
+    group.push(slice[Math.floor(rng() * slice.length)]);
   }
   // Thin confederations (CONMEBOL has ten members, OFC eleven) can come up
   // short. Fill from whoever is left rather than hand back a small group.
-  const rest = shuffle(pool.filter(n => !group.includes(n)));
+  const rest = shuffle(pool.filter(n => !group.includes(n)), rng);
   while (group.length < 6 && rest.length) group.push(rest.pop() as string);
   return group;
 }
@@ -808,14 +808,14 @@ export function xiMen(xi: StartingEleven): XiMan[] {
 
 /** Pick n nations from a pool, strongly favouring the better ranked ones but
     leaving room for a surprise qualifier, and always keeping `forced` in. */
-function pickField(pool: string[], n: number, forced: string | null): string[] {
+function pickField(pool: string[], n: number, forced: string | null, rng: () => number = Math.random): string[] {
   const out: string[] = [];
   if (forced && pool.includes(forced)) out.push(forced);
   const rest = pool.filter(p => !out.includes(p));
   // Weight is 1/rank, so the top nations nearly always come through and the
   // bottom of the confederation occasionally does.
   const weighted = rest
-    .map(nation => ({ nation, w: (1 / Math.sqrt(fifaRankOf(nation))) * (0.55 + Math.random()) }))
+    .map(nation => ({ nation, w: (1 / Math.sqrt(fifaRankOf(nation))) * (0.55 + rng()) }))
     .sort((a, b) => b.w - a.w);
   for (const w of weighted) {
     if (out.length >= n) break;
@@ -828,7 +828,7 @@ function pickField(pool: string[], n: number, forced: string | null): string[] {
     real slot counts; a continental fills from its own confederation, with the
     Copa América's six CONCACAF guests modelled because that is the real
     format. */
-function buildField(fmt: TournamentFormat, nation: string, qualified: boolean): string[] {
+function buildField(fmt: TournamentFormat, nation: string, qualified: boolean, rng: () => number = Math.random): string[] {
   const forced = qualified ? nation : null;
   if (fmt.kind === 'World Cup') {
     const field: string[] = [];
@@ -838,7 +838,7 @@ function buildField(fmt: TournamentFormat, nation: string, qualified: boolean): 
     const mix = fmt.fieldMix ?? { places: WC_SLOTS, open: WC_PLAYOFF_SLOTS };
     for (const conf of Object.keys(WC_SLOTS) as Confederation[]) {
       const slots = mix.places[conf];
-      const picked = pickField(nationsIn(conf), slots, conf === myConf ? forced : null);
+      const picked = pickField(nationsIn(conf), slots, conf === myConf ? forced : null, rng);
       field.push(...picked);
     }
     // The inter confederation play off places (and an older era's host
@@ -848,7 +848,7 @@ function buildField(fmt: TournamentFormat, nation: string, qualified: boolean): 
       .flatMap(c => nationsIn(c as Confederation))
       .filter(n => !field.includes(n));
     const stillOut = forced && !field.includes(forced) ? forced : null;
-    field.push(...pickField(leftovers, mix.open, stillOut));
+    field.push(...pickField(leftovers, mix.open, stillOut, rng));
     // With no open place left (the eras counted from the real finalists), a
     // qualified nation still out won its play off against the weakest side
     // in the field and takes its place.
@@ -870,11 +870,11 @@ function buildField(fmt: TournamentFormat, nation: string, qualified: boolean): 
     // The ten CONMEBOL sides plus that era's invited guests: six from
     // Concacaf in 2016 and 2024, two in the twelve team editions (from the
     // AFC in 2019). Round 1027 reads both off the format history.
-    const home = pickField(nationsIn('CONMEBOL'), Math.min(10, fmt.teams), forced);
-    const guests = pickField(nationsIn(fmt.guestsFrom ?? 'CONCACAF'), fmt.teams - home.length, null);
+    const home = pickField(nationsIn('CONMEBOL'), Math.min(10, fmt.teams), forced, rng);
+    const guests = pickField(nationsIn(fmt.guestsFrom ?? 'CONCACAF'), fmt.teams - home.length, null, rng);
     return [...home, ...guests];
   }
-  const field = pickField(nationsIn(conf), fmt.teams, forced);
+  const field = pickField(nationsIn(conf), fmt.teams, forced, rng);
   let filler = 1;
   while (field.length < fmt.teams) field.push(`Invitational XI ${filler++}`);
   return field;
@@ -1095,6 +1095,28 @@ export function runManagerSummer(
 }
 
 /** Friendlies and qualifiers in an off year: caps without a tournament. */
+
+/** Explicit-stream entry points for the manager's saved, one-match-at-a-time campaign. */
+export function managerCampaignDraw(nation: string, fmt: TournamentFormat, rng: () => number): {
+  group: string[]; through: number; automatic: boolean;
+} {
+  const conf = confederationOf(nation);
+  const automatic = fmt.kind === 'Continental' && fmt.finalists >= CONFED_MEMBERS[conf];
+  return { group: drawQualifyingGroup(nation, conf, rng),
+    through: automatic ? 6 : throughPerGroup(conf, finalistsFor(fmt, conf)), automatic };
+}
+export function managerCampaignField(nation: string, fmt: TournamentFormat, rng: () => number): string[] {
+  return buildField(fmt, nation, true, rng);
+}
+export function managerCampaignScore(home: number, away: number, knockout: boolean, rng: () => number, qualifying = false): {
+  a: number; b: number; pens: boolean; aWins: boolean;
+} {
+  return simMatch(home + (qualifying ? 3 : 0), away, knockout, 0, 0, rng);
+}
+export function managerCampaignSort(table: IntlTableRow[]): IntlTableRow[] {
+  return sortTable(table);
+}
+
 export function offYearCaps(form: PlayerForm | null): number {
   if (!form) return 0;
   return rnd(5, 9);
