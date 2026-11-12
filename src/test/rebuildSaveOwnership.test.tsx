@@ -90,3 +90,72 @@ it('keeps playing after storage refuses a write and still allows a normal restar
     localStorage.removeItem(REBUILD_SAVE_KEY);
   }
 });
+
+
+it('keeps a newer window when the old tab can write but cannot read the save', async () => {
+  setRebuildFixtures();
+  const active = renderHook(useRebuild);
+  const originalRead = Storage.prototype.getItem;
+  const originalWrite = Storage.prototype.setItem;
+  const originalRemove = Storage.prototype.removeItem;
+  let readsBlocked = false;
+  let writeAttempts = 0;
+  let removeAttempts = 0;
+  const read = vi.spyOn(Storage.prototype, 'getItem').mockImplementation(function (this: Storage, key) {
+    if (readsBlocked && key === REBUILD_SAVE_KEY) throw new DOMException('Storage read blocked', 'SecurityError');
+    return originalRead.call(this, key);
+  });
+  const write = vi.spyOn(Storage.prototype, 'setItem').mockImplementation(function (this: Storage, key, value) {
+    if (readsBlocked && key === REBUILD_SAVE_KEY) writeAttempts++;
+    originalWrite.call(this, key, value);
+  });
+  const remove = vi.spyOn(Storage.prototype, 'removeItem').mockImplementation(function (this: Storage, key) {
+    if (readsBlocked && key === REBUILD_SAVE_KEY) removeAttempts++;
+    originalRemove.call(this, key);
+  });
+  try {
+    await waitFor(() => expect(active.result.current.loading).toBe(false));
+    await act(async () => active.result.current.chooseClub(active.result.current.clubs[0]));
+    await waitFor(() => expect(active.result.current.phase).toBe('envelopes'));
+    const initial = originalRead.call(localStorage, REBUILD_SAVE_KEY);
+    expect(initial).not.toBeNull();
+
+    const stale = renderHook(useRebuild);
+    try {
+      await waitFor(() => expect(stale.result.current.phase).toBe('envelopes'));
+      await act(async () => active.result.current.pickFinance(0));
+      await act(async () => active.result.current.toManager());
+      const saved = originalRead.call(localStorage, REBUILD_SAVE_KEY);
+      expect(saved).not.toBe(initial);
+
+      readsBlocked = true;
+      await act(async () => stale.result.current.pickFinance(1));
+      await act(async () => stale.result.current.toManager());
+      expect(stale.result.current.phase).toBe('manager');
+      expect(stale.result.current.saveConflict).toBe(false);
+      const afterMove = originalRead.call(localStorage, REBUILD_SAVE_KEY);
+      await act(async () => stale.result.current.reset());
+      expect(stale.result.current.phase).toBe('pick-club');
+      expect(writeAttempts).toBe(0);
+      expect(removeAttempts).toBe(0);
+      expect(afterMove).toBe(saved);
+      expect(originalRead.call(localStorage, REBUILD_SAVE_KEY)).toBe(saved);
+
+      await act(async () => stale.result.current.setPreset('u21'));
+      expect(stale.result.current.preset).toBe('u21');
+
+      readsBlocked = false;
+      await act(async () => stale.result.current.chooseClub(stale.result.current.clubs[0]));
+      expect(stale.result.current.saveConflict).toBe(true);
+      expect(originalRead.call(localStorage, REBUILD_SAVE_KEY)).toBe(saved);
+    } finally {
+      stale.unmount();
+    }
+  } finally {
+    read.mockRestore();
+    write.mockRestore();
+    remove.mockRestore();
+    active.unmount();
+    localStorage.removeItem(REBUILD_SAVE_KEY);
+  }
+});

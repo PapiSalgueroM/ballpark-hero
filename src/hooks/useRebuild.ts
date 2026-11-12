@@ -198,58 +198,60 @@ export function useRebuild(): RebuildState {
     : tbl.phase === 'season' ? 'season'
     : run ? run.phase : 'pick-club';
 
-  // A tab may edit the window it read or last saved.
-  const canEditSave = useCallback(() => {
+  // A tab may write the window it read or last saved. Unavailable storage still permits in-memory play.
+  const ownsSave = useCallback((): boolean | undefined => {
     if (!restored || saveConflict) return false;
     const current = readRebuildSaveBytes();
-    if (current === undefined || current === savedBytes.current) return true;
+    if (current === undefined) return undefined;
+    if (current === savedBytes.current) return true;
     setSaveConflict(true);
     return false;
   }, [restored, saveConflict]);
 
   const persist = useCallback((save: RebuildSave | null) => {
-    if (!canEditSave()) return false;
+    const owned = ownsSave();
+    if (owned !== true) return owned === undefined;
     const written = writeRebuildSave(save);
     if (written !== undefined) savedBytes.current = written;
     return true;
-  }, [canEditSave]);
+  }, [ownsSave]);
 
   /** A table move (a club pick, a window opening or shutting): the move lists
    *  ride along untouched, because the save reads those from the seats. */
   const setTable = useCallback((fn: (t: TableState) => TableState) => {
-    if (!canEditSave()) return;
+    if (ownsSave() === false) return;
     setSession(s => {
       const t = fn(s.table);
       return t === s.table ? s : { table: t, moves: s.moves };
     });
-  }, [canEditSave]);
+  }, [ownsSave]);
 
   /** Every action on the open window goes through here: no open window, no
    *  change. A move that changed the run is recorded against the seat that
    *  made it, which is what the save replays. */
   const act = useCallback((move: RebuildMove, fn: (r: RunState) => RunState) => {
-    if (!canEditSave()) return;
+    if (ownsSave() === false) return;
     setSession(s => {
       const t = table.updateRun(s.table, fn);
       if (t === s.table) return s;
       const turn = s.table.turn;
       return { table: t, moves: s.moves.map((list, i) => (i === turn ? [...list, move] : list)) };
     });
-  }, [canEditSave]);
+  }, [ownsSave]);
 
   const clubsPicked = tbl.seats.some(s => s.club);
   const setPreset = useCallback((p: RebuildPreset) => {
     // The restriction is a promise made before the window opens, never changed mid run.
-    if (!clubsPicked && canEditSave()) setPresetState(p);
-  }, [clubsPicked, canEditSave]);
+    if (!clubsPicked && ownsSave() !== false) setPresetState(p);
+  }, [clubsPicked, ownsSave]);
 
   const setSeatKinds = useCallback((kinds: SeatKind[]) => {
-    if (!canEditSave()) return;
+    if (ownsSave() === false) return;
     setSession(s => {
       const t = table.configureSeats(s.table, kinds);
       return t === s.table ? s : { table: t, moves: t.seats.map(() => []) };
     });
-  }, [canEditSave]);
+  }, [ownsSave]);
 
   const chooseClub = useCallback((c: RebuildClub) => {
     setTable(t => table.pickClub(t, c, clubs));
@@ -378,13 +380,13 @@ export function useRebuild(): RebuildState {
 
   const spin = useCallback(() => {
     if (!run || run.phase !== 'spin' || spinning || run.spun !== null || run.deal || run.war) return;
-    if (run.settledCount >= run.order.length || !canEditSave()) return;
+    if (run.settledCount >= run.order.length || ownsSave() === false) return;
     setSpinning(true);
     spinTimer.current = window.setTimeout(() => {
       setSpinning(false);
       act({ k: 'spin' }, loop.spinNext);
     }, 1200);
-  }, [run, spinning, act, canEditSave]);
+  }, [run, spinning, act, ownsSave]);
 
   const keepSpun = useCallback(() => { if (!spinning) act({ k: 'keep' }, loop.keep); }, [act, spinning]);
   const sellSpun = useCallback(() => { if (!spinning) act({ k: 'sell' }, loop.sell); }, [act, spinning]);
@@ -395,14 +397,14 @@ export function useRebuild(): RebuildState {
 
   const raiseWar = useCallback(() => {
     if (!run?.war || run.war.outcome !== 'live' || run.war.leader !== 'rival' || thinking) return;
-    if (!canEditSave()) return;
+    if (ownsSave() === false) return;
     act({ k: 'raise' }, loop.raise);
     setThinking(true);
     warTimer.current = window.setTimeout(() => {
       setThinking(false);
       act({ k: 'reply' }, loop.rivalReply);
     }, 700 + Math.floor(Math.random() * 500));
-  }, [run, thinking, act, canEditSave]);
+  }, [run, thinking, act, ownsSave]);
 
   const walkAway = useCallback(() => {
     if (thinking) return;
