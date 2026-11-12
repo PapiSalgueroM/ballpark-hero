@@ -1,3 +1,9 @@
+## 2026-11-12: Club Manager academy promotion prices staged
+
+New academy graduates and scouted prospects receive the existing age-aware market value before their first wage is calculated. An existing career keeps signed wages, contract terms and legacy values. No extra match or development draws are consumed.
+
+The 17-year-old 76-rated report fixture dropped from a £104k weekly wage to £30k, with an £18.9m market value and £17m sale price. Nine regression cases failed before the change, and all thirteen focused cases passed after it, including actual promotion, summer development and saved contract reload.
+
 ## 2026-11-12: NRL Manager home ticket pricing
 
 Club finances lets you pick Value, Standard or Premium before your first home gate. The tier locks for the rest of that season and resets each year. The table shows the simulated changes for home wins, home losses or draws, and home finals. Away games, byes and the neutral Grand Final earn no home gate.
