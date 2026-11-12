@@ -13,6 +13,7 @@ const MAX_CONTRACT_YEARS = 4;
 const OPENING_CASH = 2_500_000;
 const MARKET_PER_ROLE = 4;
 const RETIREMENT_AGE = 36;
+const MEDICAL_UPGRADE_COST = { 2: 800_000, 3: 2_600_000 } as const;
 const FIRST = ['Arlo', 'Asa', 'Beau', 'Brodie', 'Callum', 'Coby', 'Dane', 'Eli', 'Eru', 'Finn', 'Hemi', 'Isaac', 'Jalen', 'Jesse', 'Keanu', 'Koa', 'Lachlan', 'Levi', 'Luca', 'Malachi', 'Mana', 'Niko', 'Oren', 'Peni', 'Remy', 'Riley', 'Sol', 'Tama', 'Tane', 'Teo', 'Toby', 'Zane'];
 const LAST = ['Arden', 'Ashby', 'Avery', 'Bennett', 'Bishop', 'Cairns', 'Cato', 'Dawson', 'Ellery', 'Forde', 'Frost', 'Grier', 'Hanley', 'Hartley', 'Hewitt', 'Ives', 'Kerr', 'Lennox', 'Linton', 'Marlow', 'Merritt', 'Nairn', 'Palmer', 'Parr', 'Preece', 'Reeve', 'Rourke', 'Rowan', 'Shaw', 'Vale', 'Voss', 'Wilder'];
 
@@ -23,6 +24,9 @@ export interface NrlCareerPlayer extends NrlPlayer {
   contract: NrlContract | null;
   futureContract: NrlContract | null;
 }
+type MedicalUpgradeLevel = keyof typeof MEDICAL_UPGRADE_COST;
+export type NrlMedicalLevel = 1 | MedicalUpgradeLevel;
+interface NrlMedicalUpgrade { level: MedicalUpgradeLevel; round: number }
 export interface NrlCareerBook {
   fromRound: number;
   openingCash: number;
@@ -30,6 +34,7 @@ export interface NrlCareerBook {
   gateReceipts: number;
   wagesPaid: number;
   operatingCosts: number;
+  medicalUpgrades?: NrlMedicalUpgrade[];
 }
 export interface NrlCareerFinance extends NrlCareerBook { cash: number; profit: number }
 export type NrlDevelopmentFocus = 'balanced' | 'youth' | 'veterans';
@@ -72,6 +77,7 @@ export type NrlCareerAction = NrlAction
   | { type: 'scoutAcademy'; role: NrlRole }
   | { type: 'promoteAcademy'; playerId: string }
   | { type: 'setDevelopmentFocus'; focus: NrlDevelopmentFocus }
+  | { type: 'upgradeMedical'; level: MedicalUpgradeLevel }
   | { type: 'startNextSeason' };
 
 export interface NrlCareerCap {
@@ -281,10 +287,40 @@ function bookFrom(openingCash: number, fromRound = 1): NrlCareerBook {
   return { fromRound, openingCash, centralFunding: 0, gateReceipts: 0, wagesPaid: 0, operatingCosts: 0 };
 }
 
+export function nrlMedicalSpend(book: NrlCareerBook): number {
+  return book.medicalUpgrades?.reduce((total, upgrade) => total + MEDICAL_UPGRADE_COST[upgrade.level], 0) ?? 0;
+}
+
 export function nrlCareerFinance(state: Pick<NrlCareerState, 'finance'>): NrlCareerFinance {
   const { openingCash, centralFunding, gateReceipts, wagesPaid, operatingCosts } = state.finance;
-  const profit = centralFunding + gateReceipts - wagesPaid - operatingCosts;
+  const profit = centralFunding + gateReceipts - wagesPaid - operatingCosts - nrlMedicalSpend(state.finance);
   return { ...state.finance, cash: openingCash + profit, profit };
+}
+
+function nrlMedicalLevel(state: NrlCareerState): NrlMedicalLevel {
+  const current = state.finance.medicalUpgrades?.at(-1);
+  if (current) return current.level;
+  for (let index = state.history.length - 1; index >= 0; index--) {
+    const past = state.history[index].finance?.medicalUpgrades?.at(-1);
+    if (past) return past.level;
+  }
+  return 1;
+}
+
+export function nrlMedicalUpgradeQuote(state: NrlCareerState) {
+  const level = nrlMedicalLevel(state);
+  const nextLevel: MedicalUpgradeLevel | null = level === 1 ? 2 : level === 2 ? 3 : null;
+  const cost = nextLevel === null ? null : MEDICAL_UPGRADE_COST[nextLevel];
+  const reason = cost === null ? 'Both upgrades are installed.'
+    : !state.season.injuryTracking ? 'Upgrades open when injury tracking starts next season.'
+      : state.season.phase === 'complete' ? 'Start the next season to buy an upgrade.'
+        : state.season.live ? 'Finish the live match first.'
+          : nrlCareerFinance(state).cash < cost ? 'The club needs more cash for this upgrade.' : null;
+  return { level, nextLevel, cost, reason };
+}
+
+function addMedicalUpgrade(book: NrlCareerBook, upgrade: NrlMedicalUpgrade): NrlCareerBook {
+  return { ...book, medicalUpgrades: [...(book.medicalUpgrades ?? []), upgrade] };
 }
 
 function seasonReceipt(state: NrlCareerState): NrlCareerHistoryRow {
@@ -356,7 +392,7 @@ function advanceCareer(state: NrlCareerState, action: Extract<NrlAction, { type:
   const previous = state.season;
   // An imported v1 season keeps its exact original simulation until the next kickoff.
   const matchday = state.legacySeason ? { ...previous, bench: undefined } : previous;
-  const played = reduceNrlSeason(matchday, action, state.legacySeason ? undefined : opponentStrengths(state));
+  const played = reduceNrlSeason(matchday, action, state.legacySeason ? undefined : opponentStrengths(state), nrlMedicalLevel(state) - 1);
   if (played === matchday) return state;
   const season = state.legacySeason ? { ...played, bench: previous.bench } : played;
   const fitness = new Map(season.squad.map(player => [player.id, player.fitness]));
@@ -479,6 +515,11 @@ export function reduceNrlCareer(state: NrlCareerState, action: NrlCareerAction):
   switch (action.type) {
     case 'startNextSeason':
       return rolloverCareer(state);
+    case 'upgradeMedical': {
+      const { nextLevel, reason } = nrlMedicalUpgradeQuote(state);
+      if (nextLevel === null || action.level !== nextLevel || reason !== null) return state;
+      return { ...state, finance: addMedicalUpgrade(state.finance, { level: nextLevel, round: state.season.round }) };
+    }
     case 'setDevelopmentFocus': {
       if (state.legacySeason || state.season.year === NRL_LAST_YEAR || action.focus === state.developmentFocus) return state;
       if (activeDevelopmentFocus(action.focus)) return { ...state, developmentFocus: action.focus };
@@ -531,11 +572,24 @@ function validPlayer(value: unknown, year: number): value is NrlCareerPlayer {
     : validContract(contract) && futureContract.startYear === contract.endYear + 1;
 }
 
+function validMedicalUpgrades(value: unknown, fromRound: number, roundLimit: number): boolean {
+  if (value === undefined) return true;
+  if (!Array.isArray(value) || value.length < 1 || value.length > 2) return false;
+  let previousRound = fromRound;
+  for (const purchase of value) {
+    if (!record(purchase) || (purchase.level !== 2 && purchase.level !== 3)
+      || !intIn(purchase.round, previousRound, roundLimit)) return false;
+    previousRound = purchase.round;
+  }
+  return true;
+}
+
 function validBook(value: unknown, roundLimit: number): value is NrlCareerBook {
   return record(value) && intIn(value.fromRound, 1, roundLimit)
     && intIn(value.openingCash, -Number.MAX_SAFE_INTEGER, Number.MAX_SAFE_INTEGER)
     && [value.centralFunding, value.gateReceipts, value.wagesPaid, value.operatingCosts]
-      .every(amount => intIn(amount, 0, Number.MAX_SAFE_INTEGER));
+      .every(amount => intIn(amount, 0, Number.MAX_SAFE_INTEGER))
+    && validMedicalUpgrades(value.medicalUpgrades, value.fromRound, roundLimit);
 }
 
 function validReceipt(value: unknown, year: number, clubId: string): value is NrlCareerHistoryRow {
@@ -554,9 +608,13 @@ function validReceipt(value: unknown, year: number, clubId: string): value is Nr
 }
 
 function booksMatch(a: NrlCareerBook, b: NrlCareerBook): boolean {
+  const first = a.medicalUpgrades ?? [];
+  const second = b.medicalUpgrades ?? [];
   return a.fromRound === b.fromRound && a.openingCash === b.openingCash
     && a.centralFunding === b.centralFunding && a.gateReceipts === b.gateReceipts
-    && a.wagesPaid === b.wagesPaid && a.operatingCosts === b.operatingCosts;
+    && a.wagesPaid === b.wagesPaid && a.operatingCosts === b.operatingCosts
+    && first.length === second.length && first.every((purchase, index) =>
+      purchase.round === second[index].round && purchase.level === second[index].level);
 }
 
 function validWorld(state: NrlCareerState): boolean {
@@ -589,6 +647,7 @@ function validCareerBooks(state: NrlCareerState): boolean {
   if (finance.fromRound > played + 1 || (finance.fromRound !== 1 && !legacySeason)) return false;
   if (history.length !== season.year - openingYear + Number(complete)) return false;
   let openingCash = OPENING_CASH;
+  const previousPurchases: NrlMedicalUpgrade[] = [];
   for (const [index, receipt] of history.entries()) {
     const year = openingYear + index;
     if (!validReceipt(receipt, year, season.clubId) || (receipt.finance === null && index !== 0)) return false;
@@ -602,14 +661,26 @@ function validCareerBooks(state: NrlCareerState): boolean {
         || (receipt.finance && expected.finance && !booksMatch(receipt.finance, expected.finance))) return false;
     }
     if (receipt.finance && receipt.finance.openingCash !== openingCash) return false;
-    if (year < season.year && receipt.finance) openingCash = receipt.finance.cash;
+    if (year < season.year && receipt.finance) {
+      openingCash = receipt.finance.cash;
+      previousPurchases.push(...(receipt.finance.medicalUpgrades ?? []));
+    }
   }
   let expected = bookFrom(openingCash, finance.fromRound);
   const cap = nrlCareerCap(state);
-  for (let round = finance.fromRound; round <= played; round++) {
-    expected = tickBooks(expected, season, round, season.results.filter(result => result.round === round), cap);
+  const purchases = finance.medicalUpgrades ?? [];
+  if ((!season.injuryTracking && purchases.length)
+    || ![...previousPurchases, ...purchases].every((purchase, index) => purchase.level === index + 2)) return false;
+  let nextPurchase = 0;
+  for (let round = finance.fromRound; round <= played + Number(!complete); round++) {
+    while (purchases[nextPurchase]?.round === round) {
+      const purchase = purchases[nextPurchase++];
+      if (nrlCareerFinance({ finance: expected }).cash < MEDICAL_UPGRADE_COST[purchase.level]) return false;
+      expected = addMedicalUpgrade(expected, purchase);
+    }
+    if (round <= played) expected = tickBooks(expected, season, round, season.results.filter(result => result.round === round), cap);
   }
-  return booksMatch(expected, finance);
+  return nextPurchase === purchases.length && booksMatch(expected, finance);
 }
 
 function validAcademy(state: NrlCareerState): boolean {

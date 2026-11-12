@@ -1,3 +1,11 @@
+## 2026-11-12: NRL Manager medical facilities
+
+Finances offers a treatment room for A$800,000 and a recovery centre for another A$2.6m. The one-time charges come from club cash and are recorded in the season accounts. New knocks are one or two rounds shorter, with one round out at minimum. An upgrade stays with the club after rollover. Older saves can buy upgrades once injury tracking starts.
+
+The default engine matched 80 previous seasons and 17,520 fixture records exactly. From the same pre-match states, the treatment room kept the same 322 knocks and saved 254 missed rounds. For 88 knocks in states that could afford both upgrades, the recovery centre saved 110 rounds. The seeded injury recipients and match scores matched within each pair.
+
+At 320px, the first purchase reduced cash to A$1.7m, kept the second upgrade unavailable and restored the same saved balance. At 390px, match income funded both upgrades and the same seeded four-round knock became two. The app type gate, production build, 58 NRL tests, browser suite, 15 built-site readers and 16 download caps passed.
+
 ## 2026-11-12: NRL Manager development focus
 
 Season review lets you choose Youth development, Veteran conditioning or Balanced. At rollover, Youth can add one rating point within potential for players aged 24 or younger. Veteran conditioning can save one point that would have been lost for players aged 30 or older. Ages are measured next season. Only players already at the club and signed to return qualify. The preview and season receipt count the ratings actually affected, and the next season starts on Balanced.
