@@ -13,7 +13,7 @@
  * feed gave it. When the feed says nothing about a day, the ticker says
  * nothing about it either.
  *
- * The Supabase client is imported from the one place that knows the live
+ * The public Supabase config is imported from the one place that knows the live
  * project. Never read VITE_SUPABASE_* (see CLAUDE.md).
  */
 import { SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY } from '@/integrations/supabase/config';
