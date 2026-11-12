@@ -162,6 +162,10 @@ New 2010 and 2015 saves now show sourced arrivals in the phone's SportsFeed as t
 
 Next: CM-03 historical roster snapshot count at club selection. Poland's 18-club Ekstraklasa membership and proposed 17 additional identities have source intake; there is no live Polish expansion yet. NBA 2005 and NFL 2006 remain source intake.
 
+## 2026-11-12: Dart Draft World Cup country offers candidate
+
+A World Cup throw into the United Kingdom region could offer Conor Bradley of Northern Ireland alongside Trent Alexander-Arnold of England. Country and position searches now apply World Cup nationality eligibility before ranking, with the existing academy option available when no eligible player fits. The region remains available for England and Scotland. Current Stars can draft from the full region.
+
 ## 2026-11-07: Russian league expansion live
 
 [PR #527](https://github.com/PapiSalgueroM/ballpark-hero/pull/527) published from main `d151e61ee8fa1348e05b2dadd59b1aff2d226ee6`, App tree `3fe5bf9acace9f506c5f469e012be11c1dded94e`, Lovable deployment `e83da178-a548-4af8-ab61-f3e514993136`. This includes the previous K League and phone Squad releases.

@@ -200,7 +200,10 @@ const DartDraft = () => {
       }
       setChoicesLoading(true);
       setPhase('draft');
-      const c = await countryChoices(landed.country, slot, usedNames, { alltime: topic === 'alltime' });
+      const c = await countryChoices(landed.country, slot, usedNames, {
+        alltime: topic === 'alltime',
+        wc2026: topic === 'wc2026',
+      });
       setChoices(c.length ? c : [{ player: oceanTrialist(slot), outOfPosition: false }]);
       setChoicesLoading(false);
     }, 850);

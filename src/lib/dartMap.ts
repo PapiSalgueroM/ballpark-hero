@@ -527,16 +527,18 @@ export async function countryChoices(
   usedNames: Set<string>,
   /* keepBest is how many of the best at the slot are always among the tiles. The page never sets
      it; scripts/simDartDraftPool.mjs passes COUNTRY_TILES to measure the old "best eight" rule. */
-  opts: { alltime?: boolean; keepBest?: number } = {},
+  opts: { alltime?: boolean; keepBest?: number; wc2026?: boolean } = {},
 ): Promise<DraftChoice[]> {
-  const pool = await fetchCountryPool(country);
+  // A map region can cover several football nations, such as the United Kingdom.
+  const eligibleInTopic = (player: Player) => !opts.wc2026 || WC2026_NATIONS.has(player.nationality);
+  const pool = (await fetchCountryPool(country)).filter(eligibleInTopic);
   const used = new Set([...usedNames].map(name => name.toLowerCase()));
   const fresh = pool.filter(p => !used.has(p.name.toLowerCase()));
   const legends = opts.alltime ? countryLegends(country, slot, usedNames) : [];
   let atPos = fresh.filter(p => fitsSlot(p, slot));
   if (atPos.length === 0) {
     const targeted = await fetchCountryAtPosition(country, slot);
-    atPos = targeted.filter(p => !used.has(p.name.toLowerCase()));
+    atPos = targeted.filter(p => eligibleInTopic(p) && !used.has(p.name.toLowerCase()));
   }
   if (legends.length > 0 || atPos.length > 0) {
     /* Release AT: two rounds answered the same report here. Round 1145's rule decides the tiles (the
