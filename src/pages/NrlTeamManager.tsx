@@ -548,6 +548,7 @@ export default function NrlTeamManager() {
               <li>Advance a round to simulate every fixture. A win or bye earns two ladder points, a draw earns one and a loss earns zero.</li>
               <li>The top eight make finals. The top four get a second chance if they lose their qualifying final. The last club standing wins the premiership.</li>
               <li>Scout a position in the Academy. The report arrives after you advance a round, and a promotion reserves a place next season.</li>
+              <li>Set a development focus in Season review. It applies to returning players when you start the next year.</li>
               <li>Review each season, manage contracts and recruit for the next year. The career saves on this browser. Starting over replaces the current save.</li>
             </ul>
           </RulesGate>

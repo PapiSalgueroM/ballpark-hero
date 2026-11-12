@@ -32,6 +32,8 @@ export interface NrlCareerBook {
   operatingCosts: number;
 }
 export interface NrlCareerFinance extends NrlCareerBook { cash: number; profit: number }
+export type NrlDevelopmentFocus = 'balanced' | 'youth' | 'veterans';
+type ActiveDevelopmentFocus = Exclude<NrlDevelopmentFocus, 'balanced'>;
 export interface NrlCareerHistoryRow {
   year: number;
   clubId: string;
@@ -42,6 +44,7 @@ export interface NrlCareerHistoryRow {
   championId: string;
   finance: NrlCareerFinance | null;
   scoring?: NrlSeasonScoringTotal[];
+  development?: { focus: ActiveDevelopmentFocus; affected: number };
 }
 interface NrlAcademyAssignment {
   player: NrlCareerPlayer;
@@ -62,11 +65,13 @@ export interface NrlCareerState {
   finance: NrlCareerBook;
   legacySeason: boolean;
   academy?: NrlAcademyAssignment[];
+  developmentFocus?: ActiveDevelopmentFocus;
 }
 export type NrlCareerAction = NrlAction
   | { type: 'offerContract'; playerId: string; salary: number; years: number }
   | { type: 'scoutAcademy'; role: NrlRole }
   | { type: 'promoteAcademy'; playerId: string }
+  | { type: 'setDevelopmentFocus'; focus: NrlDevelopmentFocus }
   | { type: 'startNextSeason' };
 
 export interface NrlCareerCap {
@@ -94,6 +99,7 @@ const intIn = (value: unknown, min: number, max: number): value is number =>
   typeof value === 'number' && Number.isInteger(value) && value >= min && value <= max;
 const record = (value: unknown): value is Record<string, unknown> => value !== null && typeof value === 'object' && !Array.isArray(value);
 const byRating = (a: NrlCareerPlayer, b: NrlCareerPlayer) => b.rating - a.rating || a.id.localeCompare(b.id);
+const activeDevelopmentFocus = (value: unknown): value is ActiveDevelopmentFocus => value === 'youth' || value === 'veterans';
 
 function contractIn(player: NrlCareerPlayer, year: number): NrlContract | null {
   const current = player.contract;
@@ -363,13 +369,39 @@ function advanceCareer(state: NrlCareerState, action: Extract<NrlAction, { type:
   return season.phase === 'complete' ? { ...next, history: [...next.history, seasonReceipt(next)] } : next;
 }
 
-function advancePlayer(player: NrlCareerPlayer, year: number, seed: number): NrlCareerPlayer {
-  const active = contractIn(player, year);
-  const next = active === player.futureContract ? null : player.futureContract;
+function agedRating(player: NrlCareerPlayer, year: number, seed: number): number {
   const age = player.age + 1;
   const rng = rngFor(seed, `growth|${year}|${player.id}`);
   const growth = age <= 24 ? Math.floor(rng() * 3) : age >= 30 ? -Math.floor(rng() * 3) : 0;
-  return { ...player, age, rating: clampi(player.rating + growth, 40, player.potential), fitness: 100, contract: active, futureContract: next };
+  return clampi(player.rating + growth, 40, player.potential);
+}
+
+function developmentGains(state: NrlCareerState): Set<string> {
+  const gains = new Set<string>();
+  const { developmentFocus, season: { year, clubId, seed } } = state;
+  if (!developmentFocus || state.legacySeason || year >= NRL_LAST_YEAR) return gains;
+  for (const player of nrlCareerSquad(state)) {
+    if (contractIn(player, year + 1)?.clubId !== clubId) continue;
+    const age = player.age + 1;
+    const rating = agedRating(player, year + 1, seed);
+    if (developmentFocus === 'youth' ? age <= 24 && rating < player.potential : age >= 30 && rating < player.rating) {
+      gains.add(player.id);
+    }
+  }
+  return gains;
+}
+
+export function nrlDevelopmentPreview(state: NrlCareerState): number {
+  return developmentGains(state).size;
+}
+
+function advancePlayer(player: NrlCareerPlayer, year: number, seed: number, extraPoint: boolean): NrlCareerPlayer {
+  const active = contractIn(player, year);
+  const next = active === player.futureContract ? null : player.futureContract;
+  return {
+    ...player, age: player.age + 1, rating: agedRating(player, year, seed) + Number(extraPoint),
+    fitness: 100, contract: active, futureContract: next,
+  };
 }
 
 function nextRole(squad: NrlCareerPlayer[]): NrlRole {
@@ -407,8 +439,10 @@ function completeSquads(players: NrlCareerPlayer[], state: NrlCareerState, year:
 function rolloverCareer(state: NrlCareerState): NrlCareerState {
   const { season } = state;
   if (season.phase !== 'complete' || season.year === NRL_LAST_YEAR) return state;
+  const { developmentFocus, ...career } = state;
   const year = season.year + 1;
-  const players = state.players.map(player => advancePlayer(player, year, season.seed))
+  const gains = developmentGains(state);
+  const players = state.players.map(player => advancePlayer(player, year, season.seed, gains.has(player.id)))
     .filter(player => player.contract || player.futureContract || player.age < RETIREMENT_AGE);
   const names = new Set(players.map(player => player.name));
   const priorClubs = new Set(nrlSeasonPlan(season.year).clubs.map(club => club.id));
@@ -432,8 +466,10 @@ function rolloverCareer(state: NrlCareerState): NrlCareerState {
     results: [], squad: squad.map(playerView), lineup, preparation: null, injuryTracking: true,
     kickerId: season.kickerId && Object.values(lineup).includes(season.kickerId) ? season.kickerId : lineup.Halfback,
   };
+  const history = developmentFocus ? state.history.map(row => row.year === season.year
+    ? { ...row, development: { focus: developmentFocus, affected: gains.size } } : row) : state.history;
   return {
-    ...state, players: world, legacySeason: false, academy: undefined, finance: bookFrom(nrlCareerFinance(state).cash),
+    ...career, players: world, history, legacySeason: false, academy: undefined, finance: bookFrom(nrlCareerFinance(state).cash),
     season: { ...nextSeason, bench: nrlBench(nextSeason) },
   };
 }
@@ -443,6 +479,13 @@ export function reduceNrlCareer(state: NrlCareerState, action: NrlCareerAction):
   switch (action.type) {
     case 'startNextSeason':
       return rolloverCareer(state);
+    case 'setDevelopmentFocus': {
+      if (state.legacySeason || state.season.year === NRL_LAST_YEAR || action.focus === state.developmentFocus) return state;
+      if (activeDevelopmentFocus(action.focus)) return { ...state, developmentFocus: action.focus };
+      if (action.focus !== 'balanced' || !state.developmentFocus) return state;
+      const { developmentFocus, ...balanced } = state;
+      return balanced;
+    }
     case 'offerContract': {
       const quote = nrlContractOffer(state, action.playerId, action.salary, action.years);
       if (!quote.ok) return state;
@@ -502,6 +545,8 @@ function validReceipt(value: unknown, year: number, clubId: string): value is Nr
     || !intIn(value.wins, 0, 24) || !intIn(value.draws, 0, 24) || !intIn(value.losses, 0, 24)
     || value.wins + value.draws + value.losses !== 24
     || (value.scoring !== undefined && !validNrlScoringArchive(value.scoring))) return false;
+  if (value.development !== undefined && (!record(value.development) || !activeDevelopmentFocus(value.development.focus)
+    || !intIn(value.development.affected, 0, SQUAD_SIZE))) return false;
   if (value.finance === null) return true;
   if (!record(value.finance) || !validBook(value.finance, lastRound(year))) return false;
   const finance = nrlCareerFinance({ finance: value.finance });
@@ -551,6 +596,7 @@ function validCareerBooks(state: NrlCareerState): boolean {
       const expected = seasonReceipt(state);
       if (receipt.rank !== expected.rank || receipt.wins !== expected.wins || receipt.draws !== expected.draws
         || receipt.losses !== expected.losses || receipt.championId !== expected.championId
+        || receipt.development !== undefined
         || JSON.stringify(receipt.scoring) !== JSON.stringify(expected.scoring)
         || (receipt.finance === null) !== (expected.finance === null)
         || (receipt.finance && expected.finance && !booksMatch(receipt.finance, expected.finance))) return false;
@@ -606,6 +652,8 @@ export function isNrlCareerState(value: unknown): value is NrlCareerState {
     || !isNrlSeasonProgress(value.season) || value.season.year < value.openingYear
     || !nrlSeasonPlan(value.openingYear).clubs.some(club => club.id === (value.season as NrlManagerState).clubId)
     || typeof value.legacySeason !== 'boolean'
+    || (value.developmentFocus !== undefined && (!activeDevelopmentFocus(value.developmentFocus)
+      || value.legacySeason || value.season.year === NRL_LAST_YEAR))
     || (value.legacySeason && (value.season.year !== value.openingYear || value.season.kickerId || value.season.injuryTracking || value.season.results.some(match => match.benchUsed !== undefined)))
     || !Array.isArray(value.players) || value.players.length > 650
     || !Array.isArray(value.history) || !validBook(value.finance, value.season.round + 1)) return false;

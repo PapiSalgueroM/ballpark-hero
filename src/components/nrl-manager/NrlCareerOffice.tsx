@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { nrlSeasonPlan, NRL_LAST_YEAR } from '@/data/nrlManagerSeasons';
 import {
   nrlAcademyAvailableRoles, nrlAcademyOffer, nrlAcademyReports, nrlCareerCap, nrlCareerFinance, nrlCareerMarket, nrlCareerSquad, nrlContractOffer,
-  type NrlCareerAction, type NrlCareerState,
+  nrlDevelopmentPreview, type NrlCareerAction, type NrlCareerState, type NrlDevelopmentFocus,
 } from '@/lib/nrlCareer';
 import { NRL_ROLES, type NrlRole } from '@/lib/nrlManager';
 import { nrlArchivedScoringLeaders, nrlTryLeaders } from '@/lib/nrlPlayerScoring';
@@ -21,6 +21,15 @@ type CareerPlayer = ReturnType<typeof nrlCareerSquad>[number];
 type Dispatch = (action: NrlCareerAction) => boolean;
 
 const control = 'min-h-11 w-full rounded-lg border border-input bg-background px-3 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring';
+const developmentLabels = { balanced: 'Balanced', youth: 'Youth development', veterans: 'Veteran conditioning' };
+
+function developmentSummary(focus: Exclude<NrlDevelopmentFocus, 'balanced'>, affected: number, preview: boolean) {
+  if (!affected) return preview ? 'No returning players would get an extra point.' : 'No ratings changed from this focus.';
+  const players = `${affected} ${affected === 1 ? 'player' : 'players'}`;
+  return focus === 'youth'
+    ? `${players} ${preview ? 'will gain' : 'gained'} 1 extra OVR.`
+    : `${players} ${preview ? 'will keep' : 'kept'} 1 OVR they would have lost.`;
+}
 
 function OfferForm({ career, entry, onAction, onClose, disabled }: {
   career: NrlCareerState; entry: MarketEntry; onAction: Dispatch; onClose: () => void; disabled: boolean;
@@ -258,6 +267,31 @@ function Finances({ career }: { career: NrlCareerState }) {
   );
 }
 
+function DevelopmentFocus({ career, onAction, disabled }: { career: NrlCareerState; onAction: Dispatch; disabled: boolean }) {
+  const focus = career.developmentFocus ?? 'balanced';
+  const effect = focus === 'balanced' ? 'Players develop at their usual age-based rate.'
+    : focus === 'youth' ? 'Players aged 24 or younger next year can gain 1 extra OVR up to their potential.'
+      : 'Players aged 30 or older next year can keep 1 OVR they would otherwise lose.';
+  return (
+    <div className="mt-4 rounded-xl border border-border bg-background p-3">
+      <label htmlFor="nrl-development-focus" className="block text-sm font-bold">Development focus</label>
+      <select id="nrl-development-focus" className={`${control} mt-2 sm:max-w-xs`} value={focus} disabled={disabled}
+        onChange={event => onAction({ type: 'setDevelopmentFocus', focus: event.target.value as NrlDevelopmentFocus })}>
+        <option value="balanced">{developmentLabels.balanced}</option>
+        <option value="youth">{developmentLabels.youth}</option>
+        <option value="veterans">{developmentLabels.veterans}</option>
+      </select>
+      <p className="mt-2 text-sm text-muted-foreground">Applies when next season starts, for current players signed to return.</p>
+      <p className="mt-1 text-sm text-muted-foreground">{effect}</p>
+      {focus !== 'balanced' && (
+        <p className="mt-1 text-sm font-medium" role="status" data-nrl-development-preview>
+          {developmentSummary(focus, nrlDevelopmentPreview(career), true)}
+        </p>
+      )}
+    </div>
+  );
+}
+
 function History({ career, onAction, disabled }: { career: NrlCareerState; onAction: Dispatch; disabled: boolean }) {
   const { year, phase } = career.season;
   const finished = phase === 'complete';
@@ -267,6 +301,7 @@ function History({ career, onAction, disabled }: { career: NrlCareerState; onAct
       <p className="mt-1 text-sm text-muted-foreground">
         {finished ? 'Review the year and settle your squad before the new season.' : 'Completed seasons stay here as your career moves on.'}
       </p>
+      {!career.legacySeason && year < NRL_LAST_YEAR && <DevelopmentFocus career={career} onAction={onAction} disabled={disabled} />}
       {career.history.length > 0 ? (
         <ul className="mt-3 divide-y divide-border">
           {[...career.history].reverse().map(record => {
@@ -280,6 +315,9 @@ function History({ career, onAction, disabled }: { career: NrlCareerState; onAct
                 <p className="text-sm text-muted-foreground">Premiers {labelForClub(record.year, record.championId)}{record.finance ? ` · Profit or loss ${money(record.finance.profit)}` : ''}</p>
                 {points && <p className="text-sm text-muted-foreground" data-nrl-archived-scoring>
                   {tries ? `Try leader ${tries.name} (${tries.tries}) · ` : ''}Points leader {points.name} ({points.points})
+                </p>}
+                {record.development && <p className="text-sm text-muted-foreground" data-nrl-development-receipt>
+                  {developmentLabels[record.development.focus]} · {developmentSummary(record.development.focus, record.development.affected, false)}
                 </p>}
               </li>
             );
