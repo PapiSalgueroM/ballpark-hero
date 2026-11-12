@@ -355,12 +355,17 @@ console.log('7) a full slate GLIDES: the wire moves, every card passes, then han
       const vp = document.querySelector(`${sel} [aria-live="off"]`) || document.querySelector(`${sel} .flex-1.overflow-hidden`);
       if (!vp) return null;
       const s0 = vp.scrollLeft;
-      await new Promise(r => setTimeout(r, 4000));
-      return { s0, s1: vp.scrollLeft };
+      let furthest = s0;
+      // A handoff can reset scrollLeft while the wire is still moving.
+      for (let sample = 0; sample < 10; sample++) {
+        await new Promise(r => setTimeout(r, 400));
+        furthest = Math.max(furthest, vp.scrollLeft);
+      }
+      return { s0, furthest };
     }, BAR);
     say(!!afterTap, 'the strip and its viewport were found on the phone');
     if (afterTap) {
-      say(afterTap.s1 > afterTap.s0 + 50, `a finger tap leaves the wire MOVING (${afterTap.s0.toFixed(0)} to ${afterTap.s1.toFixed(0)}px over 4s)`);
+      say(afterTap.furthest > afterTap.s0 + 50, `a finger tap leaves the wire MOVING (${afterTap.s0.toFixed(0)} to ${afterTap.furthest.toFixed(0)}px over 4s)`);
     }
     /* Round 711 put a feed stamp and a filter button beside the wire. On a
        390px phone the two of them, at their shipped sizes, left the viewport
@@ -397,6 +402,28 @@ console.log('7) a full slate GLIDES: the wire moves, every card passes, then han
     say(Math.abs(mouseParked.s1 - mouseParked.s0) < 2, `a real mouse hover still parks it, so the detector reads both states (${mouseParked.s0.toFixed(0)} to ${mouseParked.s1.toFixed(0)}px over 2.5s)`);
     await c5.close();
   }
+}
+
+if (!CONTROL) {
+  console.log('10) a phone game leaves the hidden wire off until the desktop breakpoint');
+  const game = await browser.newContext({ viewport: { width: 390, height: 844 } });
+  const page = await game.newPage();
+  let requests = 0;
+  await page.route('**://*.supabase.co/**', r => r.abort());
+  await page.route('**/rest/v1/live_scores*', r => {
+    requests += 1;
+    return r.fulfill({ status: 200, json: ROWS });
+  });
+  await page.goto(`${BASE}/footle`, { waitUntil: 'domcontentloaded', timeout: 30000 });
+  await page.locator('#dukb-main').waitFor();
+  say(requests === 0 && await page.locator(BAR).count() === 0, 'the phone game makes no score request and mounts no ticker');
+  await Promise.all([
+    page.waitForRequest('**/rest/v1/live_scores*'),
+    page.setViewportSize({ width: 768, height: 844 }),
+  ]);
+  await page.locator(BAR).waitFor();
+  say(requests === 1 && await page.locator(BAR).isVisible(), 'resizing to desktop shows the ticker with one score request');
+  await game.close();
 }
 
 await browser.close();

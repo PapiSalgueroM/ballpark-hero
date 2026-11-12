@@ -23,7 +23,7 @@ vi.mock('@/integrations/supabase/client', () => ({
   },
 }));
 vi.mock('@/contexts/AuthContext', () => ({ useAuth: () => ({ user: null, profile: null }) }));
-vi.mock('@/hooks/use-toast', () => ({ useToast: () => ({ toast: remote.toast }) }));
+vi.mock('@/hooks/use-toast', () => ({ useToast: () => ({ toast: remote.toast, toasts: [] }) }));
 vi.mock('@/components/game/GameNavbar', () => ({ GameNavbar: () => null }));
 vi.mock('@/components/game/GameHelp', () => ({ GameHelp: () => null }));
 vi.mock('@/components/seo/PageSeo', () => ({ default: () => null }));
