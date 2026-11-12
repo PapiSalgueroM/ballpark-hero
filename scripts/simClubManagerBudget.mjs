@@ -108,13 +108,12 @@ if (CONTROL) {
   // The worktree checks out CRLF, the anchors below are written LF.
   const src = fs.readFileSync(ENGINE, 'utf8').replaceAll('\r\n', '\n');
   const fixed = CONTROL === 'static'
-    ? '  const carried = moving || !Number.isFinite(career.budget) ? 0 : Math.max(0, career.budget);\n'
-      + '  let budget = Math.round((allocation + Math.min(carried, allocation)) * 10) / 10;'
+    ? '  const openingBeforeAdjustments = Math.round((allocation + carried) * 10) / 10;'
     : '  state.wageCap = moving\n'
       + '    ? wageCapFrom(wageBill(state))\n'
       + '    : nextWageCap(career.wageCap ?? wageCapFrom(wageBill(career)), club.expectation, prevPos, seasonTrophyCount);';
   const broken = CONTROL === 'static'
-    ? '  let budget = allocation;'
+    ? '  const openingBeforeAdjustments = allocation;'
     : '  state.wageCap = wageCapFrom(wageBill(state));';
   if (!src.includes(fixed)) {
     console.error(`control cannot run: clubManager.ts is not in the shape CM_BUDGET_CONTROL=${CONTROL} rewrites`);
@@ -220,11 +219,18 @@ for (const club of CLUBS) {
     const seed = (cloneSeed += 7919);
     const openEmpty = rollWith(withBudget(s, 0), seed);
     const openReal = rollWith(withBudget(s, close), seed);
-    const openRich = rollWith(withBudget(s, close * 4 + 500), seed);
+    const richBalance = close * 4 + 500;
+    const openRich = rollWith(withBudget(s, richBalance), seed);
     clones += 1;
-    for (const [label, o] of [['empty', openEmpty], ['real', openReal], ['rich', openRich]]) {
+    for (const [label, o, balance] of [['empty', openEmpty, 0], ['real', openReal, close], ['rich', openRich, richBalance]]) {
       if (!isNum(o.budget)) fail(`${club} s${season}: ${label} clone opened on a non-number budget (${o.budget})`);
       if (o.budget < 10) fail(`${club} s${season}: ${label} clone opened on ${o.budget}, below the 10m floor`);
+      const summary = o.summerBudget;
+      if (!summary || summary.unspent !== Math.max(0, balance) || summary.opening !== o.budget
+        || summary.carried !== Math.min(summary.unspent, summary.allocation)
+        || Math.abs(summary.allocation + summary.carried + summary.adjustments - summary.opening) > 0.051) {
+        fail(`${club} s${season}: ${label} summer budget breakdown does not reconcile with the rollover`);
+      }
     }
     if (openReal.budget < openEmpty.budget) lowered += 1;
     if (openRich.budget < openReal.budget) lowered += 1;

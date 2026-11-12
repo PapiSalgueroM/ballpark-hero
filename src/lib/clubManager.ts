@@ -3176,6 +3176,8 @@ export interface CareerState {
   /* (Round 161's sellOnOwed lives on CMPlayer; see that interface.) */
   /** Round 132: who retired at the most recent summer, for the season screen. */
   retiredLastSummer?: { name: string; age: number; rating: number }[];
+  /** Transfer budget as it opened at the most recent same-club rollover. */
+  summerBudget?: { club: string; unspent: number; allocation: number; carried: number; adjustments: number; opening: number };
   /**
    * Round 135: the microphone. How the papers are treating you, the question
    * sitting on your desk, and anything you have promised out loud. Undefined on
@@ -23512,8 +23514,10 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string, o
   /* A corrupt or pre-Round 436 save can hand us anything here, so a balance
      that is not a real number carries nothing rather than poisoning the new
      season with NaN. */
-  const carried = moving || !Number.isFinite(career.budget) ? 0 : Math.max(0, career.budget);
-  let budget = Math.round((allocation + Math.min(carried, allocation)) * 10) / 10;
+  const unspent = moving || !Number.isFinite(career.budget) ? 0 : Math.max(0, career.budget);
+  const carried = Math.min(unspent, allocation);
+  const openingBeforeAdjustments = Math.round((allocation + carried) * 10) / 10;
+  let budget = openingBeforeAdjustments;
   /* Round 161: the summer the add-ons come due. Each promise rolls once:
      about two thirds trigger (he played, the clauses hit) and the money
      comes off the new budget; the rest lapse quietly. Walking to a new job
@@ -24009,6 +24013,12 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string, o
   /* Round 310: promotion and relegation lead the whole summer, same seat,
      same reason, prepended last so they sit on top of the feed. */
   if (pr.lines.length) state.aiHeadlines = [...pr.lines, ...state.aiHeadlines].slice(0, 8);
+  if (moving) delete state.summerBudget;
+  else state.summerBudget = {
+    club: state.clubName, unspent, allocation, carried,
+    adjustments: Math.round((state.budget - openingBeforeAdjustments) * 100) / 100,
+    opening: state.budget,
+  };
   return snapshotWorldRosterClub(state, state.clubName);
 }
 

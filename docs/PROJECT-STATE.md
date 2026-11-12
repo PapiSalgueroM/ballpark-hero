@@ -1,3 +1,11 @@
+## 2026-11-10: Club Manager summer budget breakdown staged
+
+The new season Overview shows the unspent balance, board allocation, amount carried, any balance above the cap, summer adjustments and the opening budget. It records those amounts at rollover, after loan options, add-ons and sponsor payments. The carryover cap equals the new board allocation. The figures belong to the club where the season ended.
+
+An Arsenal season with £1bn unspent opened on £330m. The board allocated £165m, £165m carried over and £835m was above the cap. The same figures appeared after reload on phone and desktop. A separate replay included a £12.5m sponsor payment and confirmed the old breakdown cleared on a move to Chelsea. The reporter's save was unavailable.
+
+Admin report `7d85f91d` asks for full carryover. The staged change explains the existing cap in the game. Keep the report open through deployment and the public rollover check.
+
 ## 2026-11-11 Build Your XI player selection on WebKit
 
 A native tap on Thibaut Courtois in a Real Madrid 4-4-2 could close the picker before selecting him. WebKit sent a mouse down after touch release, moved focus to the main region and caused the picker to drop the list before the click. The shared picker now cancels the option mouse down default so the click can select the player. Touch and pen still wait for the completed click. The skip link and the outside focus handler stay in place.

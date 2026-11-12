@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react';
 import { ChevronRight, Play } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import type { CareerState } from '@/lib/clubManager';
 import HubTile from '@/components/club-manager/HubTile';
 
 export function EraLoadFailed({ label, noun = 'squads', onRetry, onBack, backLabel = 'Pick another season' }: { label: string; noun?: string; onRetry: () => void; onBack?: () => void; backLabel?: string }) {
@@ -140,13 +141,39 @@ type OverviewMatch = {
   onQuick: () => void; onCentre: (() => void) | null; shootout: { onClick: () => void; label: string } | null;
 };
 
-export function OverviewIntro({ retired, freeRetired, freeLeft, deals, transfer, match, windowAction, seasonAction }: {
+export function OverviewIntro({ summerBudget, retired, freeRetired, freeLeft, deals, transfer, match, windowAction, seasonAction }: {
+  summerBudget: (NonNullable<CareerState['summerBudget']> & { format: (n: number) => string }) | null;
   retired: string | null; freeRetired: string | null; freeLeft: string | null;
   deals: { onClick: () => void; text: string; real: boolean } | null;
   transfer: { onClick: () => void; summer: boolean } | null; match: OverviewMatch | null;
   windowAction: (() => void) | null; seasonAction: (() => void) | null;
 }) {
+  const budgetRows: [string, string][] = [];
+  if (summerBudget) {
+    const { unspent, allocation, carried, adjustments, opening, format } = summerBudget;
+    budgetRows.push(
+      ['Unspent balance', format(unspent)],
+      ['Board allocation', format(allocation)],
+      ['Carried over', format(carried)],
+    );
+    if (unspent > carried) budgetRows.push(['Above carryover cap', format(unspent - carried)]);
+    if (adjustments) budgetRows.push(['Summer adjustments', `${adjustments < 0 ? '-' : '+'}${format(Math.abs(adjustments))}`]);
+    budgetRows.push(['Opening budget', format(opening)]);
+  }
   return <>
+          {budgetRows.length > 0 && (
+            <section data-cm-summer-budget className="rounded-xl border border-border bg-card p-2.5">
+              <h2 className="text-xs font-semibold text-foreground">Summer transfer budget</h2>
+              <dl className="mt-1 space-y-0.5 text-xs">
+                {budgetRows.map(([label, value]) => (
+                  <div key={label} className="flex justify-between gap-3 last:border-t last:border-border last:pt-1 last:font-bold">
+                    <dt>{label}</dt><dd className="tabular-nums">{value}</dd>
+                  </div>
+                ))}
+              </dl>
+              <p className="mt-1 text-xs text-muted-foreground">You can carry over up to your new board allocation.</p>
+            </section>
+          )}
           {/* Round 132: who stopped playing over the summer. It sits at the top
               of the first screen of the new season because losing a thirty
               seven year old you have had since day one is the biggest thing
