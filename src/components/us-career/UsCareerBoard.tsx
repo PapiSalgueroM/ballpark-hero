@@ -149,11 +149,11 @@ const SAVE_TOAST_BUTTON = { height: 44, minWidth: 64, paddingLeft: 14, paddingRi
 export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
   const pendingSave = useRef<{ key: string; value: string | null } | null>(null);
   const savedBytes = useRef<string | null>();
-  const [playSaveMoved, setPlaySaveMoved] = useState(false);
+  const [saveMoved, setSaveMoved] = useState(false);
   const [saveFailure, setSaveFailure] = useState<'write' | 'remove' | null>(null);
   const saveFailed = saveFailure !== null;
   useEffect(() => {
-    if (!saveFailed) return;
+    if (!saveFailed || saveMoved) return;
     /* Round 1144: the toast carries a Retry of its own. With the Week by week
        viewer open the notice that holds Retry save is under the viewer's
        cover, and the toast was telling the player to use a button he could
@@ -167,7 +167,7 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
     const said = toast.error('Your latest changes could not be saved. Stay on this page and use Retry save.', {
       description: 'Retry here does the same thing.',
       duration: SAVE_TOAST_MS,
-      action: { label: 'Retry', onClick: event => { event.preventDefault(); retrySave(); } },
+      action: { label: 'Retry', onClick: event => { event.preventDefault(); retryCurrentSave(); } },
       actionButtonStyle: SAVE_TOAST_BUTTON,
     });
     /* Release AN: the words are taken back the moment they stop being true.
@@ -176,7 +176,7 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
        player to Home and back, where nothing is pending and there is no Retry
        button to use. */
     return () => { toast.dismiss(said); };
-  }, [saveFailed]);
+  }, [saveFailed, saveMoved]);
   const [phase, setPhase] = useState<Phase>('create');
   const [prospect, setProspect] = useState<UsCareerProspect | null>(null);
   const prospectRef = useRef<UsCareerProspect | null>(null);
@@ -451,7 +451,7 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
   useEffect(() => {
     pendingSave.current = null;
     savedBytes.current = undefined;
-    setPlaySaveMoved(false);
+    setSaveMoved(false);
     setSaveFailure(null);
     setDecisionOutcome(null);
     consumedEvent.current = null;
@@ -536,6 +536,17 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
     } catch { /* fresh */ }
   }, [sport]);
 
+  const saveStillCurrent = useCallback(() => {
+    try {
+      if (savedBytes.current !== undefined && localStorage.getItem(sport.saveKey) !== savedBytes.current) {
+        pendingSave.current = null;
+        setSaveMoved(true);
+        return false;
+      }
+    } catch { /* The current tab can still continue through a storage refusal. */ }
+    return true;
+  }, [sport.saveKey]);
+
   const retrySave = useCallback(() => {
     const pending = pendingSave.current;
     if (!pending || pending.key !== sport.saveKey) return;
@@ -549,15 +560,17 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
       setSaveFailure(pending.value === null ? 'remove' : 'write');
     }
   }, [sport.saveKey]);
+  const retryCurrentSave = useCallback(() => {
+    if (saveStillCurrent()) retrySave();
+  }, [saveStillCurrent, retrySave]);
   /* Round 1144: while a save is refused the storage seam knows one is
      waiting here, so a reload the app makes on its own account (a new build,
-     a stale chunk, the Season Center tile's Reload) retries it once first and
-     stays on the page while it is still refused. The retry is the one above,
-     untouched; the answer is whether anything is still waiting after it. */
+     a stale chunk, the Season Center tile's Reload) checks for a newer save
+     before retrying. The page stays open if the current save is still refused. */
   useEffect(() => {
-    if (!saveFailed) return;
-    return holdPendingSave(() => { retrySave(); return pendingSave.current === null; });
-  }, [saveFailed, retrySave]);
+    if (!saveFailed || saveMoved) return;
+    return holdPendingSave(() => { retryCurrentSave(); return pendingSave.current === null; });
+  }, [saveFailed, saveMoved, retryCurrentSave]);
   const saveValue = useCallback((value: string | null) => {
     pendingSave.current = { key: sport.saveKey, value };
     retrySave();
@@ -685,16 +698,6 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
      keep. Null after a press that played no season (a talk, the market, a
      banned year). */
   const playedRef = useRef<CareerState | null>(null);
-
-  const canPlaySeason = () => {
-    try {
-      if (savedBytes.current !== undefined && localStorage.getItem(sport.saveKey) !== savedBytes.current) {
-        setPlaySaveMoved(true);
-        return false;
-      }
-    } catch { /* The current tab can still play through a storage refusal. */ }
-    return true;
-  };
 
   const playSeason = () => {
     playedRef.current = null;
@@ -1021,7 +1024,7 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
      not work, so a refused tap changes nothing and writes nothing. Persisted
      as 'season' because the money app only opens from the hub. */
   const handleMoney = (action: MoneyAction) => {
-    if (!career) return;
+    if (!career || !saveStillCurrent()) return;
     const c: CareerState = JSON.parse(JSON.stringify(career));
     const res = sport.moneyAct(c, action);
     if (!res.ok) return;
@@ -1221,8 +1224,8 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
      back). Not while the rules load, and not for a plaque never built (a key past the bound refuses nothing). */
   const hallRefused = hallWallKeyNow !== null && !hallKept && (wallRefused === hallWallKeyNow || !!saveFailure);
   const withSaveStatus = (content: ReactNode) => <div ref={boardTop}>
-    {playSaveMoved && <Suspense fallback={null}><SaveMovedNotice message="This career moved on in another tab. Reload to carry on." /></Suspense>}
-    {saveFailure && <UsCareerSaveNotice operation={saveFailure} onRetry={retrySave} />}
+    {saveMoved && <Suspense fallback={null}><SaveMovedNotice message="This career moved on in another tab. Reload to carry on." /></Suspense>}
+    {!saveMoved && saveFailure && <UsCareerSaveNotice operation={saveFailure} onRetry={retryCurrentSave} />}
     {startOver && <UsCareerStartOver sport={sport.label} onConfirm={reset} hallCard={hallOnRestart} hallKept={hallKept} />}
     {content}
   </div>;
@@ -1609,7 +1612,14 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
             sport={sport.money}
             incomeLine={`$${career.salary}M a year, ${Math.max(0, career.contractYears)} year${Math.max(0, career.contractYears) === 1 ? '' : 's'} left on the deal`}
             onMoney={handleMoney}
-            shop={<UsShopPanel stock={sport.shopItems} career={career} onBuy={id => { const res = sport.buyItem(career, id); if (!res) return; setCareer(res.state); setFeed(f => [res.log, ...f].slice(0, 8)); persist(res.state, 'season', teamQuality); }} />}
+            shop={<UsShopPanel stock={sport.shopItems} career={career} onBuy={id => {
+              if (!saveStillCurrent()) return;
+              const res = sport.buyItem(career, id);
+              if (!res) return;
+              setCareer(res.state);
+              setFeed(f => [res.log, ...f].slice(0, 8));
+              persist(res.state, 'season', teamQuality);
+            }} />}
           />
         )}
         {/* Round 1500: the dirty money desk. Only in a playing season (the button under the heat meter is drawn
@@ -1922,12 +1932,12 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
           )}
           <button
             ref={careerEntryButton}
-            onClick={() => { if (canPlaySeason()) playSeason(); }}
+            onClick={() => { if (saveStillCurrent()) playSeason(); }}
             className="inline-flex min-h-11 items-center gap-2 rounded-full bg-primary px-8 py-2.5 text-sm font-bold text-primary-foreground hover:opacity-90"
           >
             <Dumbbell className="h-4 w-4" /> Play the {career.year} season
           </button>
-          <UsSeasonCentreEntry sport={sport} career={career} busy={practiceOpen} canPlay={canPlaySeason} onPlay={playSeason} played={() => playedRef.current} />
+          <UsSeasonCentreEntry sport={sport} career={career} busy={practiceOpen} canPlay={saveStillCurrent} onPlay={playSeason} played={() => playedRef.current} />
           <p className="mt-2 text-xs text-muted-foreground">
             Career so far: {sport.careerSoFar(career)}
           </p>
