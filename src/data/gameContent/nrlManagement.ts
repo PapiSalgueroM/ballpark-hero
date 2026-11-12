@@ -4,7 +4,7 @@ export const NRL_MANAGEMENT_CONTENT: GameContentMap = {
   '/nrl-team-manager': {
     intro: [
       'Choose the 2026 or 2027 NRL season and pick a club. Select your starting 13 and six reserves, decide when to train or recover, and pick a match plan before you face the next side.',
-      'The 2026 field has 17 clubs. Select 2027 to manage the Perth Bears in their debut season. Both seasons use simulated fixture lists. Clubs are real, and the game generates squads, ratings and results.',
+      'The 2026 field has 17 clubs. You can start with 19 verified opening-matchday names and ages per club and 11 generated players, or use fully generated squads. Select 2027 to manage the Perth Bears in their debut season with generated squads. Both seasons use simulated ratings, contracts, fixtures and results.',
     ],
     howToPlay: [
       'Choose your season and club, then open Squad. Pick a fit starting 13 and six reserves. Save a lineup for this season and preview any replacements before applying it.',
@@ -37,7 +37,7 @@ export const NRL_MANAGEMENT_CONTENT: GameContentMap = {
     ],
     faqs: [
       { q: 'When can I manage the Perth Bears?', a: 'Start a 2027 career with the Perth Bears, or move there in Season review after finishing 2026.' },
-      { q: 'Does the game use the published NRL fixtures?', a: 'Each season has an original simulated fixture list. The game generates the squad for each real club and simulates all match results.' },
+      { q: 'Does the game use the published NRL fixtures?', a: 'Each season has an original simulated fixture list. The optional 2026 names and ages come from each club’s opening matchday. All match results are simulated.' },
       { q: 'Can I resume my season later?', a: 'Yes. When browser storage is available, use Career saves to keep up to three careers on the same browser and device. Each slot can keep one checkpoint to restore, and 2026 and 2027 careers can sit side by side.' },
     ],
   },
