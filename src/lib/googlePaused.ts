@@ -19,7 +19,7 @@
  * quiet on its own the day Google comes back.
  */
 import { toast } from 'sonner';
-import { supabase } from '@/integrations/supabase/client';
+import { loadSupabase } from '@/integrations/supabase/loadClient';
 
 /** Written to user_metadata when a password is saved on /reset-password, so
  *  the account menu stops offering to set one. */
@@ -48,6 +48,7 @@ export function isGoogleOnlyAccount(user: AccountShape | null | undefined): bool
  *  the sign in modal has always shown. */
 export async function sendPasswordLink(email: string): Promise<boolean> {
   try {
+    const supabase = await loadSupabase();
     const { error } = await supabase.auth.resetPasswordForEmail(email.trim(), {
       redirectTo: `${window.location.origin}/reset-password`,
     });
