@@ -224,6 +224,8 @@ export default function CollegeDynastyBoard<
      final frame instead of replaying every time a line lands above them. */
   const feedSeq = useRef(0);
   const [lastGames, setLastGames] = useState<G[]>([]);
+  const [seasonEntry, setSeasonEntry] = useState(0);
+  const seasonEntryRef = useRevealScroll<HTMLDivElement>(seasonEntry, { enabled: seasonEntry > 0, skipFirst: false });
   // Round 66: the owner's no scroll rule. You press Play at the top and
   // the results render underneath, so the scoreboard pulls itself into view.
   const revealRef = useRevealScroll<HTMLDivElement>(
@@ -327,6 +329,7 @@ export default function CollegeDynastyBoard<
     /* A new dynasty can meet a market or a bid with the same key as the last one's: it starts unacted. */
     marketActed.current = '';
     setSt(state); setPhase('season'); setTab('team'); setSeatOpen(false);
+    setSeasonEntry(entry => entry + 1);
     setFeed(w.welcome(state, id, ctxFor(state)));
     setRecap(null); setWonNow(false);
     persist(state, 'season', null, null);
@@ -470,6 +473,7 @@ export default function CollegeDynastyBoard<
       notes.unshift(...w.depthArrives(state, ctxFor(state)));
     }
     setSt(state); setPhase('season'); setTab('team');
+    setSeasonEntry(entry => entry + 1);
     setRecruits(null); setPortal(null); setRecap(null); setWonNow(false);
     setFeed(notes.slice(0, 5));
     persist(state, 'season', null, null);
@@ -709,7 +713,7 @@ export default function CollegeDynastyBoard<
   const seatCard = seatOpen && seatView && st.seat && holdsSeat(st.seat);
 
   return (
-    <div className="space-y-4">
+    <div ref={seasonEntryRef} className="space-y-4">
       <CelebrationStyles />
       <div className="flex flex-wrap items-center justify-center gap-2 text-xs">
         <span className="rounded-full px-3 py-1 font-bold text-white" style={{ background: school.color }}>{school.name}</span>
