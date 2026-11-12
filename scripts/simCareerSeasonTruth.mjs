@@ -5,11 +5,11 @@
    projection tranche, not relabeled as completed-season fact.
 
    1. The ledger matches the seed, historical fallback and Git evidence.
-   2. The fallback carries the 27 researched tuples and two verified Liverpool
+   2. The fallback carries the 27 researched tuples and four verified career
       replacements. The historical Transfer Path pull retains its 27 spells.
    3. Two exact, fail-closed migrations cover all 77 live seed tuples.
    4. The 27 later researched live tuples remain outside the quarantine.
-   5. Live holds either the original 27 tuples or those 27 plus both replacements.
+   5. Live holds the exact original, Liverpool, or Liverpool plus Barcelona stage.
 
    Set CAREER_SEASON_LOCAL_ONLY=1 to run sections 1 through 4 without reading
    live state. The live section remains mandatory in the normal suite.
@@ -22,6 +22,7 @@
      SIM_CAREER_SEASON_CONTROL=preserve
      SIM_CAREER_SEASON_CONTROL=live
      SIM_CAREER_SEASON_CONTROL=partial
+     SIM_CAREER_SEASON_CONTROL=barcelona-partial
 
    Each control changes an in-memory fixture, then must turn only its own
    section red. All controls work with CAREER_SEASON_LOCAL_ONLY=1.
@@ -37,7 +38,7 @@ import { fileURLToPath } from 'node:url';
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTROL = process.env.SIM_CAREER_SEASON_CONTROL || '';
 const LOCAL_ONLY = process.env.CAREER_SEASON_LOCAL_ONLY === '1';
-const CONTROLS = ['sources', 'evidence', 'fallback', 'migration', 'preserve', 'live', 'partial'];
+const CONTROLS = ['sources', 'evidence', 'fallback', 'migration', 'preserve', 'live', 'partial', 'barcelona-partial'];
 if (CONTROL && !CONTROLS.includes(CONTROL)) {
   console.error('Unknown control "' + CONTROL + '". Expected ' + CONTROLS.join(', '));
   process.exit(1);
@@ -212,7 +213,11 @@ const replacementLedger = JSON.parse(read('scripts/data/careerIsakVanDijkLiverpo
 const replacements = replacementLedger.added;
 if (!Array.isArray(replacements)) abort('The Liverpool replacement ledger has no additions array');
 const originalRows = ledger.preservedResearchedLiveRows;
-const verifiedRows = [...originalRows, ...replacements];
+const liverpoolRows = [...originalRows, ...replacements];
+const barcelonaLedger = JSON.parse(read('scripts/data/careerRashfordLewandowskiBarcelona2025.json'));
+const barcelonaRows = barcelonaLedger.added;
+if (!Array.isArray(barcelonaRows)) abort('The Barcelona replacement ledger has no additions array');
+const verifiedRows = [...liverpoolRows, ...barcelonaRows];
 
 section = 1;
 console.log('1) Ledger provenance matches the seed, fallback snapshot and Git history');
@@ -307,7 +312,7 @@ console.log('1) Ledger provenance matches the seed, fallback snapshot and Git hi
 }
 
 section = 2;
-console.log('2) Current fallback carries the 27 original rows and two verified Liverpool rows');
+console.log('2) Current fallback carries the 27 original rows and four verified career rows');
 {
   const fallbackRows = parseFallback(read('src/data/careerPlayers.ts'));
   if (fallbackRows.length < 1500) abort('fallback parser found only ' + fallbackRows.length + ' season rows');
@@ -369,7 +374,7 @@ console.log('3) Two fail-closed migrations cover all 77 exact live seed tuples')
 }
 
 section = 4;
-console.log('4) The 27 original tuples and two verified replacements stay outside quarantine');
+console.log('4) The 27 original tuples and four verified replacements stay outside quarantine');
 {
   const preserved = clone(ledger.preservedResearchedLiveRows);
   if (CONTROL === 'preserve') {
@@ -405,7 +410,21 @@ console.log('4) The 27 original tuples and two verified replacements stay outsid
     fail('Liverpool replacement ledger must add rows without changing existing tuples');
   }
 
-  for (const row of replacements) {
+  compareSets('Barcelona replacement targets', [
+    'Marcus Rashford|2025-2026|Barcelona|a0000001-0000-0000-0000-000000000024|10',
+    'Robert Lewandowski|2025-2026|Barcelona|a0000001-0000-0000-0000-000000000004|16',
+  ], barcelonaRows.map(replacementKey), key => key);
+  if (!Array.isArray(barcelonaLedger.changed) || barcelonaLedger.changed.length !== 0) {
+    fail('Barcelona replacement ledger must add rows without changing existing tuples');
+  }
+  const barcelonaSql = read('supabase/migrations/20261112123000_career_barcelona_rashford_lewandowski_2025.sql');
+  const insert = barcelonaSql.match(/insert into public\.career_seasons[\s\S]+?values([\s\S]+?);/i)?.[1] ?? '';
+  const inserted = [...insert.matchAll(/\('([^']+)', '([^']+)', '([^']+)', (\d+), null, (\d+), (\d+), (\d+)\)/g)]
+    .map(m => [m[1], m[2], m[3], Number(m[4]), null, Number(m[5]), Number(m[6]), Number(m[7])]);
+  const recorded = barcelonaRows.map(row => [row.playerId, row.season, row.club, row.goals, row.assists, row.appearances, row.marketValue, row.sortOrder]);
+  compareSets('Barcelona SQL inserts', recorded, inserted, row => JSON.stringify(row));
+
+  for (const row of [...replacements, ...barcelonaRows]) {
     const hosts = new Set();
     for (const source of Object.values(row.sources ?? {}).flat()) {
       try {
@@ -418,26 +437,33 @@ console.log('4) The 27 original tuples and two verified replacements stay outsid
     }
     if (hosts.size < 2) fail(row.player + ' needs two independent source hosts');
     const stats = [row.appearances, row.goals, row.assists];
-    if (!stats.every(value => Number.isInteger(value) && value >= 0) || row.appearances === 0 || row.marketValue !== 0) {
-      fail(row.player + ' needs complete match totals and the unknown market value marker');
+    const expectedAssists = row.club === 'Barcelona' ? row.assists === null : Number.isInteger(row.assists) && row.assists >= 0;
+    if (!stats.slice(0, 2).every(value => Number.isInteger(value) && value >= 0)
+        || row.appearances === 0 || !expectedAssists || row.marketValue !== 0) {
+      fail(row.player + ' needs verified match totals and the recorded unknown markers');
     }
     const seed = ledger.liveSeedRows.find(old => transferTupleKey(old) === transferTupleKey(row));
     if (!seed || stats.every((value, index) => value === [seed.appearances, seed.goals, seed.assists][index])) {
       fail(row.player + ' must replace a quarantined spell with verified match totals');
     }
   }
-  console.log('   27 exact July tuples preserved, 77 quarantined tuples excluded, two verified replacement targets checked');
+  console.log('   27 exact July tuples preserved, 77 quarantined tuples excluded, four verified replacement targets checked');
 }
 
 section = 5;
-console.log('5) Live 2025-2026 state is the exact 27-row or 29-row stage');
+console.log('5) Live 2025-2026 state is the exact 27-row, 29-row or 31-row stage');
 {
   let liveRows = null;
   if (CONTROL === 'partial') {
+    liveRows = clone(liverpoolRows);
+    const removed = liveRows.pop();
+    if (liveRows.length !== 28 || removed?.player !== replacements.at(-1)?.player) abort('partial control did not remove one Liverpool replacement');
+    console.log('   NEGATIVE CONTROL ON: removed one Liverpool replacement from the verified live-response fixture');
+  } else if (CONTROL === 'barcelona-partial') {
     liveRows = clone(verifiedRows);
     const removed = liveRows.pop();
-    if (liveRows.length !== 28 || removed?.player !== replacements.at(-1)?.player) abort('partial control did not remove one replacement');
-    console.log('   NEGATIVE CONTROL ON: removed one replacement from the verified live-response fixture');
+    if (liveRows.length !== 30 || removed?.player !== barcelonaRows.at(-1)?.player) abort('partial control did not remove one Barcelona replacement');
+    console.log('   NEGATIVE CONTROL ON: removed one Barcelona replacement from the verified live-response fixture');
   } else if (LOCAL_ONLY && CONTROL !== 'live') {
     console.log('   SKIPPED BY CAREER_SEASON_LOCAL_ONLY=1. Live is not claimed checked.');
   } else if (LOCAL_ONLY && CONTROL === 'live') {
@@ -484,26 +510,23 @@ console.log('5) Live 2025-2026 state is the exact 27-row or 29-row stage');
   }
 
   if (liveRows) {
-    const before = liveRows.length === originalRows.length;
-    const after = liveRows.length === verifiedRows.length;
-    if (!before && !after) fail('live has ' + liveRows.length + ' 2025-2026 rows, expected 27 before or 29 after');
-    compareSets('live preserved state', before ? originalRows : verifiedRows, liveRows, liveTupleKey);
+    const expectedStage = [originalRows, liverpoolRows, verifiedRows].find(rows => rows.length === liveRows.length);
+    if (!expectedStage) fail('live has ' + liveRows.length + ' 2025-2026 rows, expected 27, 29 or 31');
+    compareSets('live preserved state', expectedStage ?? verifiedRows, liveRows, liveTupleKey);
     const seedKeys = new Set(ledger.liveSeedRows.map(liveTupleKey));
     const lingering = liveRows.filter(row => seedKeys.has(liveTupleKey(row)));
     if (lingering.length) fail(lingering.length + ' seed-derived live tuple(s) remain');
-    if (after) {
-      for (const expected of replacements) {
-        const actual = liveRows.find(row => liveTupleKey(row) === liveTupleKey(expected));
-        if (actual && actual.playerId !== expected.playerId) fail(expected.player + ' has the wrong live player identity');
-      }
+    for (const expected of expectedStage ?? []) {
+      const actual = liveRows.find(row => liveTupleKey(row) === liveTupleKey(expected));
+      if (actual && expected.playerId && actual.playerId !== expected.playerId) fail(expected.player + ' has the wrong live player identity');
     }
-    if (failures[section] === 0) console.log('   ' + liveRows.length + ' exact live tuples checked, Liverpool replacements ' + (before ? 'pending' : 'applied'));
+    if (failures[section] === 0) console.log('   ' + liveRows.length + ' exact live tuples checked in the staged career sequence');
   }
 }
 
 const total = Object.values(failures).reduce((sum, count) => sum + count, 0);
 if (CONTROL) {
-  const ownSection = { sources: 1, evidence: 1, fallback: 2, migration: 3, preserve: 4, live: 5, partial: 5 }[CONTROL];
+  const ownSection = { sources: 1, evidence: 1, fallback: 2, migration: 3, preserve: 4, live: 5, partial: 5, 'barcelona-partial': 5 }[CONTROL];
   const otherFailures = Object.entries(failures)
     .filter(([number]) => Number(number) !== ownSection)
     .reduce((sum, [, count]) => sum + count, 0);

@@ -59,6 +59,7 @@ export const CORRECTION_LEDGERS = [
   { file: 'scripts/data/careerLampardNycfc2015.json', migration: 'supabase/migrations/20261110190817_career_lampard_nycfc_2015.sql' },
   { file: 'scripts/data/careerCarvajalMadrid2024.json', migration: 'supabase/migrations/20261110192036_career_carvajal_madrid_2024_2025.sql' },
   { file: 'scripts/data/careerIsakVanDijkLiverpool2025.json', migration: 'supabase/migrations/20261110195000_career_isak_van_dijk_liverpool_2025.sql' },
+  { file: 'scripts/data/careerRashfordLewandowskiBarcelona2025.json', migration: 'supabase/migrations/20261112123000_career_barcelona_rashford_lewandowski_2025.sql' },
 ];
 
 /** Every recorded correction the pool does not carry. Empty when it carries them all. */
@@ -196,7 +197,7 @@ export function renderCareerPlayersModule(players, stamp) {
  * cannot be read. It is a copy of those two tables, read the way
  * src/lib/fetchCareerPlayers.ts reads them: players ordered by name, seasons
  * paged 1,000 at a time ordered by player id then sort_order, and assists left
- * null where the league did not record them (never coerced to 0).
+ * null when no verified total is on file (never coerced to 0).
  *
  * ${players.length} players, ${seasons} season rows, ${nullAssists} of them with null assists.
  * scripts/simCareerFallback.mjs fails when this file differs from a fresh bake.

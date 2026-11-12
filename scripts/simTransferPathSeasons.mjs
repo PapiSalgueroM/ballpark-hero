@@ -424,6 +424,27 @@ console.log('8) the reported Liverpool link between Alexander Isak and Virgil va
   console.log(`   Everyday, Europe Only, Active: ${links.map(link => link ?? 'refused').join(', ')}.`);
 }
 
+console.log('9) the reported Barcelona link between Marcus Rashford and Robert Lewandowski');
+{
+  const pair = ['Marcus Rashford', 'Robert Lewandowski'];
+  const link = (pool, rule) => page.shareClub(page.clubSeasonsOf(page.playersUnderRule(pool, rule)), ...pair);
+  const isBarcelonaSpell = season => season.season === '2025-2026' && season.club === 'Barcelona';
+  for (const rule of ['classic', 'active', 'europe']) {
+    if (link(page.fallbackPlayers, rule) !== 'Barcelona') fail(`${rule}: the verified Barcelona link is refused`);
+    for (const name of pair) {
+      const player = page.fallbackPlayers.find(p => p.name === name);
+      const career = player?.career.filter(season => !isBarcelonaSpell(season));
+      if (!career || career.length !== player.career.length - 1) {
+        fail(`${name}: the control must remove exactly one Barcelona season`);
+        continue;
+      }
+      const before = page.fallbackPlayers.map(p => p === player ? { ...p, career } : p);
+      if (link(before, rule) !== null) fail(`${rule}: a missing Barcelona season still accepts the link`);
+    }
+  }
+  console.log('   All three rules link the pair at Barcelona. Either missing season restores the rejection.');
+}
+
 console.log('');
 if (CONTROL === 'noisak' || CONTROL === 'novandijk') {
   if (failures === 1 && missingLiverpoolLink) {

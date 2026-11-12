@@ -73,6 +73,14 @@ Live UI delivery run42300717290 passed on the first root read: the root and Club
 
 SC-36 and CM-04 remain partial; CM-03 real opening-roster coverage is incomplete. Old unrelated full-fleet reds remain unwaived. Continue the master list with verified team/league and real historical entrant coverage. Russia's proposed 15-club SC bridge remains research only: no new rows, palettes, points or year/continental policy are adopted. Rubin's traditional green/white word gap is now corroborated by Sport.ru and Sport Mail, with dated-season/personnel and shade-equivalence caveats retained; other colour and availability gates remain open.
 
+## 2026-11-12: Transfer Path Barcelona career data staged
+
+The 2025/26 Barcelona season is ready for Marcus Rashford (49 appearances, 14 goals) and Robert Lewandowski (46 appearances, 19 goals). Assist sources disagree, so both assist totals are unknown. Both valuations use the existing unknown marker. UEFA and Newcastle verify the shared match on 18 September 2025. [UEFA lineups](https://www.uefa.com/uefachampionsleague/match/2045920--newcastle-vs-barcelona/lineups/) and [Newcastle match report](https://www.newcastleunited.com/en/matches/mens-team/newcastle-united-v-barcelona-uefa-champions-league-20250918).
+
+The staged SQL applies after Round 784, the verified Active refresh, Carvajal and [PR #549](https://github.com/PapiSalgueroM/ballpark-hero/pull/549). It keeps the exact 885-puzzle order and corrects only the three hints for Mainoo to Yamal (tpa-912), each from four steps to three. The reported Rodri to Lukaku puzzle (tpa-174) keeps its existing minima of 2 Standard, 3 Active and 2 Europe. The checked 885-puzzle Daily order never selected tpa-912 from 26 May through 12 November 2026. A hypothetical four-step result on that puzzle would display 900 under the new minimum, compared with 1000 under the prior minimum. The existing formula uses the stored chain and the displayed minimum. The staged write targets only the two career rows and the three hint pairs.
+
+Five local career and Transfer Path harnesses passed. Either missing Barcelona season restores the rejection in all three modes, and the partial-state control rejects an incomplete pair. The migration remains staged.
+
 ## 2026-11-01 20:55 EDT, Claude session K (games): RELEASE BV IS LIVE (deployment 96c67a3b, main 7bd3e99a1)
 
 LIVE: release-bv-gate 7bd3e99a1 fast forwarded onto main from 19911f815 and published 20:54 EDT as deployment
