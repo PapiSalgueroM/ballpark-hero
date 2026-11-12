@@ -142,9 +142,11 @@ function squadAt(players: NrlCareerPlayer[], clubId: string, year: number): NrlC
   return players.filter(player => contractIn(player, year)?.clubId === clubId);
 }
 
-export function nrlCareerSquad(state: NrlCareerState): NrlCareerPlayer[] {
-  const { year, clubId, squad } = state.season;
-  const players = new Map(squadAt(state.players, clubId, year).map(player => [player.id, player]));
+export function nrlCareerSquad(state: NrlCareerState, year = state.season.year): NrlCareerPlayer[] {
+  const { clubId, squad } = state.season;
+  const signed = squadAt(state.players, clubId, year);
+  if (year !== state.season.year) return signed;
+  const players = new Map(signed.map(player => [player.id, player]));
   return squad.map(player => players.get(player.id)!);
 }
 

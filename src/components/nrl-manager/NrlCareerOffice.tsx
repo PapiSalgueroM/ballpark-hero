@@ -139,6 +139,12 @@ function Contracts({ career, onAction, disabled }: { career: NrlCareerState; onA
 function Recruitment({ career, onAction, disabled }: { career: NrlCareerState; onAction: Dispatch; disabled: boolean }) {
   const [role, setRole] = useState('');
   const [visible, setVisible] = useState(12);
+  const selectRole = (position: string) => { setRole(position); setVisible(12); };
+  const nextYear = career.season.year + 1;
+  const signed = nextYear <= NRL_LAST_YEAR ? nrlCareerSquad(career, nextYear) : [];
+  const depth = NRL_ROLES.map(position => ({
+    position, count: signed.filter(player => player.role === position).length,
+  })).sort((a, b) => a.count - b.count);
   const market = useMemo(() => nrlCareerMarket(career).filter(entry => entry.kind !== 'renewal'), [career]);
   const filtered = role ? market.filter(entry => entry.player.role === role) : market;
   const arrivals = career.players.filter(player => player.futureContract?.clubId === career.season.clubId
@@ -155,9 +161,31 @@ function Recruitment({ career, onAction, disabled }: { career: NrlCareerState; o
           </ul>
         </div>
       )}
+      {nextYear <= NRL_LAST_YEAR && (
+        <details className="group mt-3 rounded-lg border border-border bg-background px-3">
+          <summary className="flex min-h-11 cursor-pointer items-center justify-between gap-2 rounded-md text-sm font-bold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
+            Next season’s position depth<ChevronDown size={16} aria-hidden="true" className="shrink-0 group-open:rotate-180" />
+          </summary>
+          <div className="pb-3 text-sm">
+            <p className="text-muted-foreground">{signed.length} players signed for {nextYear}. The game fills open places at rollover.</p>
+            <p className="mt-1 text-muted-foreground">Choose a position to filter the market.</p>
+            <ul className="mt-2 grid grid-cols-2 gap-2 sm:grid-cols-3">
+              {depth.map(({ position, count }) => (
+                <li key={position} className="min-w-0">
+                  <Button type="button" size="lg" variant={role === position ? 'default' : 'outline'} aria-pressed={role === position}
+                    className="h-auto min-h-11 w-full flex-col items-start gap-0 whitespace-normal px-2 py-1 text-left text-xs"
+                    onClick={() => selectRole(position)}>
+                    <span>{position}</span><span>{count} signed</span>
+                  </Button>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </details>
+      )}
       <label className="mt-3 block max-w-xs space-y-1 text-sm font-semibold">
         <span>Position</span>
-        <select className={control} value={role} onChange={event => { setRole(event.target.value); setVisible(12); }}>
+        <select className={control} value={role} onChange={event => selectRole(event.target.value)}>
           <option value="">All positions</option>
           {NRL_ROLES.map(position => <option key={position}>{position}</option>)}
         </select>
