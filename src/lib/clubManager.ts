@@ -166,7 +166,7 @@ import type { IntlDuty } from '@/lib/clubManagerInternationals';
 /* Round 1021: the late 2020-21 start's summer window. Called inside
    startCareer only, never at module scope: the calendar module imports this
    one, the same loop the internationals module already closes. */
-import { dateOfEntries, entryDatesOf, lateSummerWindowWeeks, seasonPlanOf, worldYearOf } from '@/lib/clubManagerCalendar';
+import { dateOfEntries, daysBetween, entryDatesOf, lateSummerWindowWeeks, seasonKickoff, seasonPlanOf, worldYearOf } from '@/lib/clubManagerCalendar';
 /* Round 478: the Champions League orders a level group table by its own
    rule, not a league one. That module imports nothing but types from here,
    so there is no cycle at all. */
@@ -1242,6 +1242,7 @@ export interface CMPlayer {
   morale: number;
   /** Weeks (calendar entries) remaining out injured. */
   injuryWeeks: number;
+  severeInjury?: SevereMatchInjury;
   /** Matches of ours remaining suspended. */
   suspendedMatches: number;
   isYouth: boolean;
@@ -1885,7 +1886,8 @@ export interface SubLine {
    *  written under a rule with no limit, so a three change match saves what it always did. */
   stop?: true;
 }
-export interface InjuryLine { name: string; minute: number; weeks: number; id?: string; plus?: number; }
+type SevereMatchInjury = 'ACL tear' | 'Achilles tendon rupture';
+export interface InjuryLine { name: string; minute: number; weeks: number; id?: string; plus?: number; severeInjury?: SevereMatchInjury; }
 
 export type PlayKind = 'shot' | 'corner' | 'throwin' | 'foul' | 'var';
 
@@ -2615,7 +2617,7 @@ export function wildernessWeek(career: CareerState, rng: () => number = Math.ran
  * other move uses, which is why this returns whatever startNextSeason makes
  * of it rather than transplanting a manager into a half played table.
  */
-export function acceptWildernessJob(career: CareerState, club: string): CareerState | null {
+export function acceptWildernessJob(career: CareerState, club: string, opts?: SeasonInjuryOptions): CareerState | null {
   const w = career.wilderness;
   if (!w || !w.offers.some(o => o.club === club) || !clubAvailableInCareer(career, club)) return null;
   /* Round 1304: an offer a save from before the fix still holds, from a club
@@ -2625,7 +2627,7 @@ export function acceptWildernessJob(career: CareerState, club: string): CareerSt
   /* Round 783 review: and nothing booked before the sack can outrank it at
      the rollover, even on a path that skipped enterWilderness. */
   const hunt = career.jobHunt ? { jobHunt: dropOnSack(jobHuntOf(career)) } : {};
-  const next = startNextSeason({ ...career, ...hunt, sacked: false }, club);
+  const next = startNextSeason({ ...career, ...hunt, sacked: false }, club, opts);
   return { ...next, sacked: false, wilderness: null };
 }
 
@@ -2908,6 +2910,8 @@ export interface CareerState {
    *  save only carries the field while one is off balanced (setInstructions drops it), so every career that
    *  never touches them saves exactly as before. */
   instructions?: TeamInstructions;
+  /** Enabled at the start of a Club Manager season. Existing seasons keep their original injury rules. */
+  severeMatchInjuries?: true;
   /** Round 119: set only while a match is paused at halftime. */
   live?: LiveMatch | null;
   /** The 20 league clubs in scheduling order (shuffled each season). */
@@ -14178,7 +14182,8 @@ function worldUelField(state: CareerState, tables: { league: Pick<LeagueDef, 'id
  * stripped of worldComps anyway; this skips opening them, which cost a daily start a median of 55 ms a date on a
  * runner (simWorldEuro section 6). Opening draws nothing, so no deal moves either way.
  */
-export interface StartCareerOptions { noWorldComps?: boolean }
+type SeasonInjuryOptions = { severeMatchInjuries?: true };
+export interface StartCareerOptions extends SeasonInjuryOptions { noWorldComps?: boolean }
 /** The options both dailies start a career with. */
 export const DAILY_START: StartCareerOptions = { noWorldComps: true };
 /* The states a start was asked to open nothing on, read by openWorldUclOnStart (a set of objects, never saved). */
@@ -16733,12 +16738,20 @@ function drawSegmentInjury(state: CareerState, onPitch: CMPlayer[], from: number
   const len = (to - from) / 45;
   if (!onPitch.length) return null;
   const perHalf = INJURY_PER_HALF * knock;
-  if (Math.random() >= 1 - Math.pow(1 - perHalf, len)) return null;
+  const chance = 1 - Math.pow(1 - perHalf, len);
+  const roll = Math.random();
+  if (roll >= chance) return null;
   const victim = pick(onPitch);
-  // Round 467: the medical staff read the same draw and write it shorter.
-  const weeks = injurySpell(state, ri(1, 5));
+  const duration = ri(1, 5);
+  // Use the existing hit and duration draws. Severe spells take 2% of match injuries.
+  const severeInjury: SevereMatchInjury | undefined = state.severeMatchInjuries && roll < chance * 0.02
+    ? roll < chance * 0.0175 ? 'ACL tear' : 'Achilles tendon rupture'
+    : undefined;
+  const weeks = severeInjury === 'ACL tear' ? 26 + 2 * duration
+    : severeInjury === 'Achilles tendon rupture' ? 15 + 3 * duration
+    : injurySpell(state, duration);
   /* Round 781: the minute may sit in the board (hi past to). */
-  return { name: victim.name, id: victim.id, minute: ri(from + 1, hi), weeks };
+  return { name: victim.name, id: victim.id, minute: ri(from + 1, hi), weeks, ...(severeInjury ? { severeInjury } : {}) };
 }
 
 /**
@@ -18453,6 +18466,7 @@ function tickWeek(state: CareerState, playedIds: Set<string> | null): void {
     let injuryWeeks = Math.max(0, p.injuryWeeks - 1);
     if (!recovering && knockRisk > 0 && injuryWeeks === 0 && Math.random() < knockRisk) injuryWeeks = injurySpell(state, ri(1, 3));
     const out: CMPlayer = { ...p, fitness, injuryWeeks };
+    if (p.severeInjury && p.injuryWeeks <= 1) delete out.severeInjury;
     const previous = readTrainingExposure(p.trainingExposure);
     if (p.trainingExposure === undefined || previous) {
       const counts = previous && previous.club === state.clubName && previous.season === state.season
@@ -19677,6 +19691,7 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
   for (const inj of injuryLines) {
     const p = inj.id ? state.squad.find(x => x.id === inj.id) : state.squad.find(x => x.name === inj.name);
     if (!p) continue;
+    if (inj.severeInjury) p.severeInjury = inj.severeInjury;
     p.injuryWeeks = inj.weeks;
     events.push(`🩹 ${p.name} limped off, out for ~${p.injuryWeeks} week${p.injuryWeeks > 1 ? 's' : ''}.`);
   }
@@ -19886,6 +19901,14 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
   if (tacticsDay && tacticsDay.stats.legs !== 0) {
     const played = new Set(xi.map(p => p.id));
     state.squad = state.squad.map(p => (played.has(p.id) ? { ...p, fitness: clamp(p.fitness - tacticsDay.stats.legs, 20, 100) } : p));
+  }
+  // The fixture that caused a severe injury is not a recovery week.
+  if (!entry.night) {
+    for (const injury of injuryLines) {
+      if (!injury.severeInjury) continue;
+      const player = state.squad.find(p => p.id === injury.id);
+      if (player) player.injuryWeeks = injury.weeks;
+    }
   }
   /* Round 141: a window no longer slams shut the moment you play a match,
      because real windows run through the early fixtures and because the
@@ -20767,6 +20790,7 @@ export function startCareer(clubName: string, eraId: string = DEFAULT_ERA_ID, cu
   };
   /* Round 1509 (ruling 1l): a daily follows no competition from outside, so its start opens none. */
   if (opts?.noWorldComps) NO_WORLD_COMPS.add(state);
+  if (opts?.severeMatchInjuries) state.severeMatchInjuries = true;
   if (world?.rosterCareer && (worldRosterView(world.rosterCareer) || worldSeedOf(world.rosterCareer) !== undefined)) {
     state.season = world.rosterCareer.season;
     state.startYear = world.rosterCareer.startYear;
@@ -22650,7 +22674,7 @@ export function finishSeason(career: CareerState): { state: CareerState; summary
  * the player's ceiling. Decline is untouched: no amount of coaching keeps a
  * thirty four year old from slowing down.
  */
-function agePlayer(p: CMPlayer, career: CareerState, random?: () => number): CMPlayer {
+function agePlayer(p: CMPlayer, career: CareerState, random?: () => number, summerWeeks?: number): CMPlayer {
   const age = p.age + 1;
   /* Round 132: the same single curve the projected world runs on, so my squad
      and every AI squad in the game age on identical rules. That symmetry is
@@ -22692,7 +22716,7 @@ function agePlayer(p: CMPlayer, career: CareerState, random?: () => number): CMP
     value,
     fitness: 100,
     morale: 70,
-    injuryWeeks: 0,
+    injuryWeeks: p.severeInjury && summerWeeks !== undefined ? Math.max(0, p.injuryWeeks - summerWeeks) : 0,
     suspendedMatches: 0,
     seasonGoals: 0,
     seasonAssists: 0,
@@ -22714,6 +22738,7 @@ function agePlayer(p: CMPlayer, career: CareerState, random?: () => number): CMP
     lastTen: [],
     wantsOut: undefined,
   };
+  if (out.severeInjury && out.injuryWeeks === 0) delete out.severeInjury;
   const h = readTrainingExposure(p.trainingExposure);
   if (h && h.club === career.clubName && h.season === career.season) delete out.trainingExposure;
   return out;
@@ -23000,7 +23025,7 @@ export function toLeague(name: string): string {
  * offer was accepted. Ages the squad, runs the youth intake, resets the
  * competitions and reopens the summer window.
  */
-export function startNextSeason(career: CareerState, acceptOfferClub?: string): CareerState {
+export function startNextSeason(career: CareerState, acceptOfferClub?: string, opts?: SeasonInjuryOptions): CareerState {
   const requestedClub = career.jobHunt?.summerMove?.club ?? acceptOfferClub;
   if (requestedClub && requestedClub !== career.clubName && !clubAvailableInCareer(career, requestedClub)) return career;
   const kLeagueActive = careerHasKLeagueWorld(career);
@@ -23168,7 +23193,11 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
   } else {
     // Round 105: deals run down over the summer and the expired walk for
     // nothing. This is the price of never sitting down with your own players.
-    const aged = [...afterLoans, ...homeFromLoan].map(p => agePlayer(p, career));
+    const returning = [...afterLoans, ...homeFromLoan];
+    // Between seasons, credit only complete weeks on the same calendar the player sees.
+    const finalDay = returning.some(p => p.severeInjury) ? entryDatesOf(career).at(-1) : undefined;
+    const summerWeeks = finalDay ? Math.max(0, Math.floor(daysBetween(finalDay, seasonKickoff(worldYearOf(career) + 1)) / 7)) : 0;
+    const aged = returning.map(p => agePlayer(p, career, undefined, summerWeeks));
     /* Round 132: and some of them stop playing altogether. Before this the
        ONLY way a player ever left on age was the line below, "age < 38 or
        rated 70 plus", which meant a good veteran simply never went: measured
@@ -23444,6 +23473,7 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
     clubName,
     season,
     week: 0,
+    ...(opts?.severeMatchInjuries ? { severeMatchInjuries: true } : {}),
     budget,
     boardConfidence: boardOpening(career, opening),
     sacked: false,

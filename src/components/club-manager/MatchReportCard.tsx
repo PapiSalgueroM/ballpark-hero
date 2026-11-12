@@ -468,7 +468,7 @@ export function MatchReportCard({ report, clubName, onContinue, noSack = false }
             ))}
             {detail.injuries.map((inj, i) => (
               <span key={`i${i}`} style={chipIn()} className="cm-tick-in text-[10px] rounded-full px-2 py-0.5 border bg-secondary border-border text-foreground">
-                🩹 {inj.name} {minuteLabel(inj)} ({inj.weeks}w)
+                🩹 {inj.name} {minuteLabel(inj)} ({inj.severeInjury ? `simulated ${inj.severeInjury}, ` : ''}{inj.weeks}w)
               </span>
             ))}
             {detail.subs.map((s, i) => (
