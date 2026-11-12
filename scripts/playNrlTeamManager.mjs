@@ -388,6 +388,45 @@ try {
   });
   const { createNrlSeason, reduceNrlSeason, createNrlCareer, reduceNrlCareer } =
     await import('data:text/javascript;base64,' + Buffer.from(fixture.outputFiles[0].contents).toString('base64'));
+
+  let tired = createNrlCareer('storm', 17);
+  for (let round = 0; round < 2; round++) tired = reduceNrlCareer(tired, { type: 'advance' });
+  const fitPhone = await context(320);
+  await fitPhone.addInitScript(({ key, raw }) => { if (!localStorage.getItem(key)) localStorage.setItem(key, raw); },
+    { key: SAVE_KEY, raw: JSON.stringify(tired) });
+  const { page: fitness, errors: fitnessErrors } = await open(fitPhone);
+  const { page: staleFit, errors: staleFitErrors } = await open(fitPhone);
+  for (const page of [fitness, staleFit]) {
+    await page.getByRole('button', { name: 'Squad', exact: true }).tap();
+    await page.getByText('Suggest a fit lineup', { exact: true }).tap();
+    await page.getByText('Brodie Vale → Isaac Linton', { exact: true }).waitFor();
+    await page.getByText('Goal kicker changes to Isaac Linton.', { exact: true }).waitFor();
+  }
+  const beforeFit = await save(fitness);
+  assert.equal(beforeFit, JSON.stringify(tired));
+  const fitFence = Number(await fence(fitness));
+  await fit(fitness);
+  await screenshot(fitness, 'nrl-fit-lineup-320.png');
+  await fitness.getByRole('button', { name: 'Apply fit lineup', exact: true }).tap();
+  await fitness.getByText('Your current starters already match the suggestion.', { exact: true }).waitFor();
+  const fitApplied = await career(fitness);
+  assert.equal(fitApplied.season.lineup.Halfback, 'storm-7-1');
+  assert.equal(fitApplied.season.kickerId, 'storm-7-1');
+  assert.deepEqual(fitApplied.season.results, tired.season.results);
+  const active = new Set(Object.values(fitApplied.season.lineup));
+  const keptBench = tired.season.bench.filter(id => !active.has(id));
+  assert.deepEqual(fitApplied.season.bench.slice(0, keptBench.length), keptBench);
+  const appliedBytes = await save(fitness);
+  assert.equal(Number(await fence(fitness)), fitFence + 1);
+  await staleFit.getByRole('button', { name: 'Reload your season' }).waitFor();
+  assert.equal(await staleFit.getByRole('button', { name: 'Apply fit lineup', exact: true }).count(), 0);
+  assert.equal(await save(staleFit), appliedBytes);
+  await reloadMoved(staleFit);
+  assert.equal(await save(staleFit), appliedBytes);
+  assert.deepEqual([...fitnessErrors, ...staleFitErrors], []);
+  await fitPhone.close();
+  console.log('Fit lineup at 320px: preview kept bytes, Apply picked the fitter halfback, kept eligible bench order and disabled stale tab actions.');
+
   let funded = createNrlCareer('storm', 1);
   while (funded.season.round < 9) funded = reduceNrlCareer(funded, { type: 'advance' });
   const beforeCare = reduceNrlCareer(funded, { type: 'advance' }).season.results.find(result => result.round === 9 && result.injury).injury;
