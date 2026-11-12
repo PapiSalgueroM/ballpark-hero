@@ -1,8 +1,8 @@
-## 2026-11-12 NFL Front Office manual trade recovery
+## 2026-11-12 Front Office manual trade recovery
 
-An open negotiation closes if a roster move takes away either player it needs. The manual Trade panel is available again immediately. Returning from the Hub or making an unrelated cut keeps a valid negotiation open.
+In NFL, NBA, MLB and NHL Front Office, an open negotiation closes when a roster move takes away a player it needs. Manual trade choices return immediately. A visit to the Hub or an unrelated roster move keeps a valid negotiation open.
 
-A local phone replay on an Arizona save reproduced the missing panel after a confirmed cut. Mounted checks also cover the incoming player moving in a separate Finder deal, the existing roster floor and an ordinary agreed trade after an unrelated cut.
+A phone replay reproduced the NFL lockout after a confirmed cut. Mounted checks covered NBA and NHL waivers, an MLB DFA, and an NFL Finder trade that moved the wanted player. The checks kept the saved roster moves and existing roster limits, opened new talks without a reload, and completed an agreed NFL trade after an unrelated cut.
 
 ## 2026-11-07: Club Manager historical roster counts live
 
