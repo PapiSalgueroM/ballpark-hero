@@ -1,3 +1,13 @@
+## 2026-11-11 NitroPay mobile startup follow-up
+
+This draft builds on PR #668. Game routes below 768px skip the hidden live-score ticker and its initial request. Home keeps the ticker, and resizing a game to desktop brings it back with one request. The legacy toast UI loads only with Fantasy Draft, its sole caller. Home computes the Eastern date once for the New badges on its game cards.
+
+The shared entry dropped from 222.1 to 205.7 kB gzip. At 390px Home rendered the same 149 game cards with 25 Eastern date formatters instead of 481 on startup, plus six instead of 161 when searching and clearing. The mobile ticker fit full score cards inside its 242px viewport, where the baseline had a 280px card. Full team names are retained in the accessible labels.
+
+Three paired cold, throttled local runs put Soccer Career median LCP at 5.96s versus 6.02s on the audit draft. Mobile is still above the 2.5s target. These runs used loopback, a mocked score feed, 150ms latency, 1.6Mbps throughput and 4x CPU throttling. Field vitals remain unverified.
+
+Passed app types, production build, Fantasy Draft formation tests, 16 offline output checks, snapshot boot, all 16 existing route download budgets and the compiled ticker browser suite.
+
 ## 2026-11-11 NitroPay readiness draft
 
 The shared entry no longer loads the home page, the unused React Query provider or unused prerender boot script on built snapshots. Existing fonts are self-hosted. Images carry dimensions and below-fold flags load lazily. When CSS is delayed, the loading cover remains until it is ready or the fallback runs. No-JS visitors receive the full static page.

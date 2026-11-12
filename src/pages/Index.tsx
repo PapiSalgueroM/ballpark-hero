@@ -70,6 +70,8 @@ function getPopularFallbackGames(): GameDef[] {
 }
 
 export default function Index() {
+  // Pin one Eastern date for all New badges during this Home visit.
+  const [badgeDate] = useState(getTodayET);
   const { user, profile } = useAuth();
   // Owner (2026-08-05): the hero shows a CONSECUTIVE-day streak (not total
   // days visited), games played TODAY (not lifetime), and world rank, and all
@@ -336,7 +338,7 @@ export default function Index() {
             ) : filteredGames.length > 0 ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
                 {filteredGames.map(game => (
-                  <GameCard key={game.path} game={game} bestScore={bestScores[game.path.slice(1)]} pinned={gamePicks.includes(game.path)} onTogglePick={toggleGamePick} />
+                  <GameCard key={game.path} game={game} badgeDate={badgeDate} bestScore={bestScores[game.path.slice(1)]} pinned={gamePicks.includes(game.path)} onTogglePick={toggleGamePick} />
                 ))}
               </div>
             ) : (
@@ -349,7 +351,7 @@ export default function Index() {
                 </p>
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-left">
                   {getPopularFallbackGames().map(game => (
-                    <GameCard key={game.path} game={game} bestScore={bestScores[game.path.slice(1)]} pinned={gamePicks.includes(game.path)} onTogglePick={toggleGamePick} />
+                    <GameCard key={game.path} game={game} badgeDate={badgeDate} bestScore={bestScores[game.path.slice(1)]} pinned={gamePicks.includes(game.path)} onTogglePick={toggleGamePick} />
                   ))}
                 </div>
               </div>
@@ -422,7 +424,7 @@ export default function Index() {
                     <RevealSection>
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                         {games.map((game, i) => (
-                          <GameCard key={game.path} game={game} bestScore={bestScores[game.path.slice(1)]} revealIndex={i} pinned={gamePicks.includes(game.path)} onTogglePick={toggleGamePick} />
+                          <GameCard key={game.path} game={game} badgeDate={badgeDate} bestScore={bestScores[game.path.slice(1)]} revealIndex={i} pinned={gamePicks.includes(game.path)} onTogglePick={toggleGamePick} />
                         ))}
                       </div>
                     </RevealSection>
@@ -458,7 +460,7 @@ export default function Index() {
                 <RevealSection>
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
                     {FEATURED_GAMES.map((game, i) => (
-                      <GameCard key={game.path} game={game} bestScore={bestScores[game.path.slice(1)]} revealIndex={i} pinned={gamePicks.includes(game.path)} onTogglePick={toggleGamePick} />
+                      <GameCard key={game.path} game={game} badgeDate={badgeDate} bestScore={bestScores[game.path.slice(1)]} revealIndex={i} pinned={gamePicks.includes(game.path)} onTogglePick={toggleGamePick} />
                     ))}
                   </div>
                 </RevealSection>
@@ -508,7 +510,7 @@ export default function Index() {
                   <RevealSection>
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
                       {cat.games.map((game, i) => (
-                        <GameCard key={game.path} game={game} bestScore={bestScores[game.path.slice(1)]} revealIndex={i} pinned={gamePicks.includes(game.path)} onTogglePick={toggleGamePick} />
+                        <GameCard key={game.path} game={game} badgeDate={badgeDate} bestScore={bestScores[game.path.slice(1)]} revealIndex={i} pinned={gamePicks.includes(game.path)} onTogglePick={toggleGamePick} />
                       ))}
                     </div>
                   </RevealSection>
@@ -727,18 +729,14 @@ const tileDelay = (i: number) => `${(i % 9) * 0.06}s`;
    thing on the card that tells two games of the same sport apart at a
    glance. The description is clamped to two lines so a grid of cards lines
    up in rows. */
-function GameCard({ game, bestScore, revealIndex, pinned, onTogglePick }: {
+function GameCard({ game, badgeDate, bestScore, revealIndex, pinned, onTogglePick }: {
   game: GameDef;
+  badgeDate: string;
   bestScore?: number;
   revealIndex?: number;
   pinned: boolean;
   onTogglePick: (path: string, node?: HTMLElement) => void;
 }) {
-  /* Round 447: the NEW badge is derived from the day the game shipped, not
-     read from a flag ("u call like everything new": 111 of 131 tiles wore
-     it). The day is pinned once at mount, the same rule every daily game
-     follows, so the tiles cannot disagree with each other across midnight. */
-  const todayStr = useRef(getTodayET()).current;
   const cardRef = useRef<HTMLDivElement>(null);
   const sport = sportOf(game.path);
   return (
@@ -771,7 +769,7 @@ function GameCard({ game, bestScore, revealIndex, pinned, onTogglePick }: {
               Daily
             </span>
           )}
-          {isNewGame(game.addedOn, todayStr) && (
+          {isNewGame(game.addedOn, badgeDate) && (
             <span className="inline-flex items-center gap-0.5 text-[10px] font-semibold uppercase tracking-wider px-1.5 py-0.5 rounded bg-gold/15 text-gold">
               <Sparkles className="w-3 h-3" />
               New

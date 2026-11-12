@@ -211,23 +211,23 @@ function ScoreCard({ row, hub, stale, follow }: { row: LiveScoreRow; hub: string
   const first = row.sport === 'soccer' ? [home, row.home_score] : [away, row.away_score];
   const second = row.sport === 'soccer' ? [away, row.away_score] : [home, row.home_score];
   return (
-    <span data-no-prerender="true" className="inline-flex items-center h-full shrink-0 border-l border-border/60">
+    <span data-no-prerender="true" className="inline-flex items-center h-full max-w-[100cqw] shrink-0 border-l border-border/60 md:max-w-none">
       <Link
         to={hub}
         data-no-prerender="true"
         data-score-card=""
         data-stale={stale ? 'true' : undefined}
-        className="inline-flex items-center gap-1.5 h-full pl-3 pr-1 text-[11px] shrink-0 hover:bg-muted/40 transition-colors"
+        className="inline-flex min-w-0 items-center gap-1.5 h-full pl-3 pr-1 text-[11px] hover:bg-muted/40 transition-colors md:shrink-0"
         aria-label={`${first[0]} ${first[1] ?? ''} ${row.sport === 'soccer' ? 'v' : 'at'} ${second[0]} ${second[1] ?? ''}, ${stale ? `score ${state}, not updating` : state}`}
       >
-        <span className="inline-flex items-baseline gap-1.5">
-          <span className="font-semibold text-foreground whitespace-nowrap">{first[0]}</span>
+        <span className="inline-flex min-w-0 items-baseline gap-1.5">
+          <span className="truncate font-semibold text-foreground">{first[0]}</span>
           {first[1] != null && <span className="tabular-nums font-bold text-foreground">{first[1]}</span>}
           <span className="text-muted-foreground px-0.5" aria-hidden="true">{row.sport === 'soccer' ? 'v' : '@'}</span>
-          <span className="font-semibold text-foreground whitespace-nowrap">{second[0]}</span>
+          <span className="truncate font-semibold text-foreground">{second[0]}</span>
           {second[1] != null && <span className="tabular-nums font-bold text-foreground">{second[1]}</span>}
         </span>
-        <span className={`inline-flex items-center gap-1 text-[9px] font-bold uppercase tracking-wider whitespace-nowrap ${stale ? 'text-[hsl(var(--ticker-late))]' : liveNow ? 'text-destructive' : row.finished ? 'text-muted-foreground' : 'text-primary'}`}>
+        <span className={`inline-flex shrink-0 items-center gap-1 text-[9px] font-bold uppercase tracking-wider whitespace-nowrap ${stale ? 'text-[hsl(var(--ticker-late))]' : liveNow ? 'text-destructive' : row.finished ? 'text-muted-foreground' : 'text-primary'}`}>
           {liveNow && <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse" aria-hidden="true" />}
           {state}
         </span>
@@ -505,7 +505,7 @@ export function TopTicker({ scores = [], status = 'ok', checkedAt = null }: TopT
             <span aria-hidden="true">{userPaused ? '▶' : '⏸'}</span>
           </button>
         )}
-        <div ref={viewportRef} className="flex-1 overflow-hidden h-full" aria-live="off">
+        <div ref={viewportRef} className="flex-1 overflow-hidden h-full [container-type:inline-size] md:[container-type:normal]" aria-live="off">
           <div className="flex items-center h-full w-max">
             {emptyLine && (
               <span data-no-prerender="true" data-empty-line="" className="inline-flex items-center h-full px-3 text-[11px] text-muted-foreground whitespace-nowrap">
