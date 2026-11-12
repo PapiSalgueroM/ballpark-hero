@@ -111,7 +111,13 @@ vi.mock('@/hooks/useDailyPuzzle', async (importOriginal) => {
         if (!pre) throw new Error('R848_PRE_HOOK is not set');
         IMPL.calls.old += 1;
         /* The old hook has no takeNewerSave; a single tab never needs it. */
-        return { takeNewerSave: () => false, ...pre.useDailyPuzzle(options) };
+        const saved: Omit<ReturnType<typeof real.useDailyPuzzle>, 'takeNewerSave' | 'getCurrentProgress'> = pre.useDailyPuzzle(options);
+        /* This progress shim covers the ordinary single-tab comparison only. */
+        return {
+          takeNewerSave: () => false,
+          getCurrentProgress: () => ({ guesses: saved.guesses, gameStatus: saved.gameStatus }),
+          ...saved,
+        };
       }
       IMPL.calls.new += 1;
       return real.useDailyPuzzle(options);

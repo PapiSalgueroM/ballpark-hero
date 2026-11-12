@@ -3280,13 +3280,15 @@
       "rules": [
         "15 guesses total, and correct answers consume guesses too, leaving room for 6 misses.",
         "Timers: Unlimited, 90, 60, or 40 seconds, starting on your first guess.",
+        "Timed rounds keep counting while answers are checked and while you are away. Reloading keeps the same deadline. A late answer does not count. Unlimited has no clock.",
         "Easy grids lean on clubs, leagues, and positions. Hard brings awards plus Champions League and World Cup winners.",
         "Rarity score is the average pick percentage across your correct cells. Lower is better.",
         "If the checker cannot verify an answer, you retry free with no guess burned."
       ],
       "example": [
         "Real Madrid crossed with France makes Karim Benzema the obvious green, at 44 percent. For Barcelona and Brazil you skip Neymar and submit Rivaldo: 6 percent, beautiful.",
-        "The last corner wants a Champions League winner who played in Serie A. One miss, then Kaka clicks in: 9 for 9, rarity 19 percent."
+        "The last corner wants a Champions League winner who played in Serie A. One miss, then Kaka clicks in: 9 for 9, rarity 19 percent.",
+        "Example: if checking finishes after the clock reaches 0, that late answer does not change the ended main round."
       ],
       "tips": [
         "Spend rare picks on the easy cells. Rarity is won where everyone answers.",
