@@ -37,7 +37,7 @@ type PlayMode = 'daily' | 'unlimited';
 /* Round 644: the day Rarity runs started recording the obscurity total. A
    game_score_caps row stamped before it means the switch has not landed. */
 const RARITY_SCORE_SWITCH_DAY = '2026-09-19';
-type Phase = 'boot' | 'error' | 'loading-round' | 'playing' | 'revealed' | 'done';
+type Phase = 'boot' | 'error' | 'round-error' | 'loading-round' | 'playing' | 'revealed' | 'done';
 
 /**
  * Rarity Round: name the most obscure valid answer you can ("Rarity Round"
@@ -53,6 +53,7 @@ const RarityRound = () => {
   const [rarityMode, setRarityMode] = useState<RarityMode>('rarity');
 
   const [phase, setPhase] = useState<Phase>('boot');
+  const [runDate, setRunDate] = useState<string | null>(null);
   const [rounds, setRounds] = useState<RarityCategory[]>([]);
   const [roundIndex, setRoundIndex] = useState(0);
   const [pool, setPool] = useState<PoolEntry[]>([]);
@@ -79,7 +80,9 @@ const RarityRound = () => {
   const startRun = useCallback((nextPlayMode: PlayMode, nextRarityMode: RarityMode) => {
     setPlayMode(nextPlayMode);
     setRarityMode(nextRarityMode);
-    const categories = nextPlayMode === 'daily' ? pickDailyCategories(CATEGORIES) : pickRandomCategories(CATEGORIES);
+    const date = nextPlayMode === 'daily' ? getTodayET() : null;
+    const categories = date ? pickDailyCategories(CATEGORIES, date) : pickRandomCategories(CATEGORIES);
+    setRunDate(date);
     if (!categories || categories.length === 0) {
       setPhase('error');
       return;
@@ -109,14 +112,14 @@ const RarityRound = () => {
       .then(p => {
         if (cancelled) return;
         if (!p || p.length === 0) {
-          setPhase('error');
+          setPhase('round-error');
           return;
         }
         setPool(p);
         setPhase('playing');
       })
       .catch(() => {
-        if (!cancelled) setPhase('error');
+        if (!cancelled) setPhase('round-error');
       });
     return () => {
       cancelled = true;
@@ -429,8 +432,8 @@ const RarityRound = () => {
               ))}
             </div>
 
-            {playMode === 'daily' && (
-              <p className="text-xs text-muted-foreground mt-3">Today's categories, {getTodayET()}. Same 5 for everyone.</p>
+            {runDate && (
+              <p className="text-xs text-muted-foreground mt-3">Today's categories, {runDate}. Same 5 for everyone.</p>
             )}
           </>
         }
@@ -441,11 +444,11 @@ const RarityRound = () => {
           </div>
         )}
 
-        {phase === 'error' && (
+        {(phase === 'error' || phase === 'round-error') && (
           <div className="text-center py-12">
             <p className="text-destructive font-semibold mb-3">Couldn't load Rarity Round right now.</p>
             <button
-              onClick={() => startRun(playMode, rarityMode)}
+              onClick={() => phase === 'round-error' ? setPhase('loading-round') : startRun(playMode, rarityMode)}
               className="px-6 py-2.5 bg-primary text-primary-foreground rounded-full font-semibold"
             >
               Try again
@@ -453,7 +456,7 @@ const RarityRound = () => {
           </div>
         )}
 
-        {phase !== 'boot' && phase !== 'error' && phase !== 'done' && currentCategory && (
+        {currentCategory && (phase === 'loading-round' || phase === 'playing' || phase === 'revealed') && (
           <div className="space-y-5">
             <div className="flex items-center justify-center gap-2 text-xs text-muted-foreground font-semibold uppercase tracking-wider">
               <span>
