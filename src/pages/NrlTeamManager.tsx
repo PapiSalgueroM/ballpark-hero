@@ -20,7 +20,7 @@ import { nrlBoardChallengeStatus } from '@/lib/nrlBoardTarget';
 import {
   nrlBench, nrlFitLineup, nrlHalftimeInterchanges, nrlInjuries, nrlLadder, nrlNextRound, nrlStarterOptions, NRL_BENCH_SIZE, NRL_COACHING_BONUS,
   NRL_MAX_BENCH_USED, NRL_ROLES,
-  type NrlAction, type NrlCoachRole, type NrlLiveHalf, type NrlManagerState, type NrlMatchResult, type NrlTactic,
+  type NrlAction, type NrlCoachRole, type NrlLiveHalf, type NrlManagerState, type NrlMatchResult, type NrlNextRound, type NrlTactic,
 } from '@/lib/nrlManager';
 import { createNrlCareer, nrlOppositionReport, nrlRivalSquad, reduceNrlCareer, type NrlCareerAction, type NrlCareerState } from '@/lib/nrlCareer';
 import { nrlScorePoints, nrlScoringLeaders, nrlSquadSeasonStats, nrlTryLeaders, type NrlSquadStatsScope } from '@/lib/nrlPlayerScoring';
@@ -231,6 +231,72 @@ function OppositionReport({ career }: { career: NrlCareerState }) {
   );
 }
 
+function SeasonFixtures({ season, next }: { season: NrlManagerState; next: NrlNextRound }) {
+  const { year, clubId, results } = season;
+  const { draw, clubs } = nrlSeasonPlan(year);
+  const [view, setView] = useState('');
+  const round = Number(view);
+  const regular = draw[round - 1];
+  const settled = results.filter(match => match.round === round);
+  const upcoming = regular?.map(([homeId, awayId]) => ({ homeId, awayId }))
+    ?? (next.finalsRound !== null && next.round === round ? next.fixtures : []);
+  const matches = settled.length
+    ? settled.map(match => ({ homeId: match.homeId, label: scoreLine(match, year) }))
+    : upcoming.map(match => ({ homeId: match.homeId, label: `${shortName(year, match.homeId)} vs ${shortName(year, match.awayId)}` }));
+  const byes = regular ? clubs.filter(club => !regular.some(pair => pair.includes(club.id))) : [];
+  const finals = new Set(results.filter(match => match.finalsRound !== undefined).map(match => match.round));
+  if (next.finalsRound !== null && next.fixtures.length) finals.add(next.round);
+
+  return (
+    <details className="rounded-xl border border-border bg-card px-4">
+      <summary className="flex min-h-11 cursor-pointer items-center font-bold">Season fixtures</summary>
+      <label className="mb-2 block max-w-xs space-y-1 text-sm font-semibold">
+        <span>Fixtures to show</span>
+        <select value={view} onChange={event => setView(event.target.value)}
+          className="min-h-11 w-full rounded-lg border border-input bg-background px-3 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
+          <option value="">My club</option>
+          <optgroup label="League rounds">
+            {draw.map((_, index) => <option key={index + 1} value={index + 1}>Round {index + 1}</option>)}
+          </optgroup>
+          {finals.size > 0 && (
+            <optgroup label="Finals">
+              {[...finals].map(number => <option key={number} value={number}>
+                {number === draw.length + 4 ? 'Grand final' : `Finals week ${number - draw.length}`}
+              </option>)}
+            </optgroup>
+          )}
+        </select>
+      </label>
+      {view ? (
+        <div className="pb-2 text-sm">
+          <p className="text-xs text-muted-foreground">{settled.length ? 'Results from this career' : 'Upcoming in this career'}</p>
+          <ol aria-label="League round matches" className="divide-y divide-border">
+            {matches.map(match => <li key={match.homeId} className="break-words py-2">
+              {match.label}
+            </li>)}
+          </ol>
+          {byes.length > 0 && <p className="border-t border-border pt-2 text-muted-foreground">
+            {byes.length === 1 ? 'Bye' : 'Byes'} · {byes.map(club => club.shortName).join(', ')}
+          </p>}
+        </div>
+      ) : (
+        <ol aria-label="Club season fixtures" className="divide-y divide-border pb-2 text-sm">
+          {draw.map((round, index) => {
+            const fixture = round.find(([home, away]) => home === clubId || away === clubId);
+            const result = results.find(row => row.round === index + 1 && (row.homeId === clubId || row.awayId === clubId));
+            return (
+              <li key={index} className="flex flex-wrap justify-between gap-x-2 py-2">
+                <span className="text-muted-foreground">Round {index + 1}</span>
+                <span>{result ? scoreLine(result, year) : fixture ? `${shortName(year, fixture[0])} vs ${shortName(year, fixture[1])}` : 'Bye'}</span>
+              </li>
+            );
+          })}
+        </ol>
+      )}
+    </details>
+  );
+}
+
 function MatchCentre({ career, onAction, onReview, disabled, showLiveResult }: {
   career: NrlCareerState; onAction: (action: NrlAction) => void; onReview: () => void; disabled: boolean; showLiveResult: boolean;
 }) {
@@ -409,21 +475,7 @@ function MatchCentre({ career, onAction, onReview, disabled, showLiveResult }: {
         </details>
       )}
 
-      <details className="rounded-xl border border-border bg-card px-4">
-        <summary className="flex min-h-11 cursor-pointer items-center font-bold">Season fixtures</summary>
-        <ol className="divide-y divide-border pb-2 text-sm">
-          {nrlSeasonPlan(year).draw.map((round, index) => {
-            const fixture = round.find(([home, away]) => home === clubId || away === clubId);
-            const result = season.results.find(row => row.round === index + 1 && (row.homeId === clubId || row.awayId === clubId));
-            return (
-              <li key={index} className="flex flex-wrap justify-between gap-x-2 py-2">
-                <span className="text-muted-foreground">Round {index + 1}</span>
-                <span>{result ? scoreLine(result, year) : fixture ? `${shortName(year, fixture[0])} vs ${shortName(year, fixture[1])}` : 'Bye'}</span>
-              </li>
-            );
-          })}
-        </ol>
-      </details>
+      <SeasonFixtures key={year} season={season} next={next} />
 
       {!showLiveResult && report}
     </section>
