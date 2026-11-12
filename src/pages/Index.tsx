@@ -2,7 +2,7 @@ import { useState, useEffect, useLayoutEffect, useMemo, useRef, lazy, Suspense, 
 import { useAuth } from '@/contexts/AuthContext';
 import { Link } from 'react-router-dom';
 import { Trophy, Flame, Sparkles, Users, Search, X, Globe, ChevronDown, Pin } from 'lucide-react';
-import { supabase } from '@/integrations/supabase/client';
+import { loadSupabase } from '@/integrations/supabase/loadClient';
 import PageSeo from '@/components/seo/PageSeo';
 
 import { StreakReminder } from '@/components/game/StreakReminder';
@@ -154,6 +154,8 @@ export default function Index() {
       fetching = true;
       controller = new AbortController();
       try {
+        const supabase = await loadSupabase();
+        if (!active) return;
         const todayUtc = new Date().toISOString().split('T')[0];
         const [rankRes, todayRes, bestRes] = await Promise.all([
           (supabase.rpc as any)('global_rank', {

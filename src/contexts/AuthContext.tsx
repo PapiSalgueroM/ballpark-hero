@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
-import { User, Session } from '@supabase/supabase-js';
-import { supabase } from '@/integrations/supabase/client';
+import type { User, Session } from '@supabase/supabase-js';
+import { loadSupabase } from '@/integrations/supabase/loadClient';
 import { cacheDisplayName } from '@/lib/completions';
 
 /** Mirrors the live `profiles` table exactly (verified against the schema in
@@ -41,6 +41,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true);
 
   const fetchProfile = async (userId: string) => {
+    const supabase = await loadSupabase();
     const { data, error } = await supabase
       .from('profiles')
       .select('*')
@@ -64,14 +65,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   useEffect(() => {
-    // Set up auth state listener FIRST
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (event, session) => {
-        // Password-recovery links can land on any page (if the redirect URL
-        // allowlist ever falls out of sync, Supabase falls back to the site
-        // root). The recovery session is already captured at this point, so
-        // route the player to the set-a-new-password screen no matter where
-        // the link dropped them.
+    let active = true;
+    let unsubscribe: (() => void) | undefined;
+    void loadSupabase().then(async supabase => {
+      if (!active) return;
+      // Subscribe before reading the session so a recovery link cannot be missed.
+      const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+        if (!active) return;
+        // A recovery link can land on any page if its redirect URL is not accepted.
         if (event === 'PASSWORD_RECOVERY' && window.location.pathname !== '/reset-password') {
           window.location.replace('/reset-password');
           return;
@@ -80,34 +81,32 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         setUser(session?.user ?? null);
 
         if (session?.user) {
-          // Use setTimeout to avoid potential race conditions
-          setTimeout(() => fetchProfile(session.user.id), 0);
+          // Leave the auth callback before querying a profile through the same client.
+          setTimeout(() => { if (active) void fetchProfile(session.user.id); }, 0);
         } else {
           setProfile(null);
         }
 
         setLoading(false);
-      }
-    );
+      });
+      unsubscribe = () => subscription.unsubscribe();
 
-    // THEN check for existing session
-    supabase.auth.getSession().then(({ data: { session } }) => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!active) return;
       setSession(session);
       setUser(session?.user ?? null);
-
-      if (session?.user) {
-        fetchProfile(session.user.id);
-      }
-
+      if (session?.user) void fetchProfile(session.user.id);
       setLoading(false);
-    });
+    }).catch(() => { if (active) setLoading(false); });
 
     return () => {
-      subscription.unsubscribe();
+      active = false;
+      unsubscribe?.();
     };
   }, []);
 
   const signUp = async (email: string, password: string) => {
+    const supabase = await loadSupabase();
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
@@ -122,6 +121,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   const signIn = async (email: string, password: string) => {
+    const supabase = await loadSupabase();
     const { error } = await supabase.auth.signInWithPassword({
       email,
       password,
@@ -130,6 +130,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   const signOut = async () => {
+    const supabase = await loadSupabase();
     await supabase.auth.signOut();
     setProfile(null);
     cacheDisplayName(null);
@@ -138,6 +139,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const updateProfile = async (updates: Partial<Profile>) => {
     if (!user) return { error: new Error('Not authenticated') };
 
+    const supabase = await loadSupabase();
     const { error } = await supabase
       .from('profiles')
       .upsert(

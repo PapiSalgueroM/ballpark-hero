@@ -15,7 +15,7 @@ vi.mock('@/lib/completions', () => ({
   getLocalTodayCount: () => mock.localGames,
 }));
 vi.mock('@/lib/streaks', () => ({ getGlobalCurrentStreak: () => mock.streak }));
-vi.mock('@/integrations/supabase/client', () => ({ supabase: { rpc: mock.rpc, from: mock.from } }));
+vi.mock('@/integrations/supabase/loadClient', () => ({ loadSupabase: async () => ({ rpc: mock.rpc, from: mock.from }) }));
 import { useGameNavbarStats } from '@/hooks/useGameNavbarStats';
 
 function deferred() {
@@ -34,7 +34,9 @@ function show(state: DocumentVisibilityState) {
   act(() => { visibility = state; document.dispatchEvent(new Event('visibilitychange')); });
 }
 async function tick(ms: number) { await act(async () => { await vi.advanceTimersByTimeAsync(ms); }); }
+const flush = async () => { await act(async () => {}); };
 async function finish(index: number, points = 50, rank = 7, games = ['one', 'one', 'two']) {
+  await flush();
   await act(async () => {
     requests[index].rank.resolve({ data: [{ total_points: points, rank }] });
     requests[index].played.resolve({ data: games.map(game => ({ game })) });
@@ -89,7 +91,7 @@ describe('navbar remote read eligibility and lifecycle', () => {
     await tick(120_000);
     expect(mock.rpc, 'hidden tabs must never start a remote read').toHaveBeenCalledTimes(0);
     expect(result.current).toMatchObject({ gamesPlayedToday: 3, currentStreak: 9 });
-    show('visible');
+    show('visible'); await flush();
     expect(mock.rpc, 'foreground must request exactly one fresh read').toHaveBeenCalledTimes(1);
     event('focus');
     expect(mock.rpc, 'focus must not duplicate an in-flight foreground read').toHaveBeenCalledTimes(1);
@@ -102,7 +104,7 @@ describe('navbar remote read eligibility and lifecycle', () => {
     await finish(1, 80);
     show('hidden'); await tick(120_000); event('focus');
     expect(mock.rpc).toHaveBeenCalledTimes(2);
-    show('visible');
+    show('visible'); await flush();
     expect(mock.rpc).toHaveBeenCalledTimes(3);
   });
 
@@ -110,17 +112,17 @@ describe('navbar remote read eligibility and lifecycle', () => {
     const { result, rerender } = renderHook(useGameNavbarStats);
     mock.auth = { user: { id: 'account-a' }, profile: null }; rerender(); event('focus');
     expect(mock.rpc).toHaveBeenCalledTimes(0);
-    signedIn(); rerender();
+    signedIn(); rerender(); await flush();
     expect(mock.rpc, 'login must start its visible read').toHaveBeenCalledTimes(1);
     await finish(0, 100, 2);
     mock.auth = { user: { id: 'account-b' }, profile: { user_id: 'account-a', display_name: 'Alpha' } };
     rerender(); event('focus'); await tick(800);
     expect(mock.rpc, 'new account must not use the old profile').toHaveBeenCalledTimes(1);
     expect(result.current).toMatchObject({ totalPointsToday: 0, dailyRank: null });
-    signedIn('account-b', 'Beta'); rerender();
+    signedIn('account-b', 'Beta'); rerender(); await flush();
     expect(mock.rpc).toHaveBeenCalledTimes(2);
     await finish(1, 30, 20);
-    signedIn('account-b', 'Renamed'); rerender();
+    signedIn('account-b', 'Renamed'); rerender(); await flush();
     expect(mock.rpc, 'profile handle changes must refresh').toHaveBeenCalledTimes(3);
     expect(mock.rpc).toHaveBeenLastCalledWith('global_rank', { p_player: 'Renamed', p_period: 'today', p_games: null });
     await finish(2, 31, 19);
@@ -141,8 +143,8 @@ describe('navbar remote read eligibility and lifecycle', () => {
   });
 
   it('5 old-account results cannot replace the new identity, including equal handles', async () => {
-    signedIn(); const { result, rerender } = renderHook(useGameNavbarStats);
-    signedIn('account-b', 'Alpha'); rerender();
+    signedIn(); const { result, rerender } = renderHook(useGameNavbarStats); await flush();
+    signedIn('account-b', 'Alpha'); rerender(); await flush();
     expect(mock.rpc, 'same handle on another account still starts a new generation').toHaveBeenCalledTimes(2);
     await finish(1, 22, 30);
     await finish(0, 999, 1);
@@ -153,15 +155,15 @@ describe('navbar remote read eligibility and lifecycle', () => {
 
   it('6 obsolete failures cannot finish the new request, and current errors keep local truth', async () => {
     const debug = vi.spyOn(console, 'debug').mockImplementation(() => {});
-    signedIn(); const { result, rerender } = renderHook(useGameNavbarStats);
-    signedIn('account-b', 'Beta'); rerender();
+    signedIn(); const { result, rerender } = renderHook(useGameNavbarStats); await flush();
+    signedIn('account-b', 'Beta'); rerender(); await flush();
     await act(async () => { requests[0].rank.reject(new Error('old failure')); requests[0].played.resolve({ data: [] }); });
     expect(result.current.loading, 'obsolete error must not finish the active account read').toBe(true);
     expect(debug).not.toHaveBeenCalled();
     mock.localGames = 7; mock.streak = 11;
     await act(async () => { requests[1].rank.reject(new Error('current failure')); requests[1].played.resolve({ data: [] }); });
     expect(result.current).toMatchObject({ gamesPlayedToday: 7, currentStreak: 11, loading: false });
-    event('focus'); expect(mock.rpc).toHaveBeenCalledTimes(3);
+    event('focus'); await flush(); expect(mock.rpc).toHaveBeenCalledTimes(3);
     await finish(2, 42, 12);
     expect(result.current).toMatchObject({ totalPointsToday: 42, dailyRank: 12 });
   });
