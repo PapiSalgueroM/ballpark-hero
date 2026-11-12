@@ -57,23 +57,33 @@ for (const m of app.matchAll(/<Route\s+path="([^"]+)"\s+element={\s*(<Navigate\b
 const sitemap = new Set([...xml.matchAll(/<loc>https:\/\/douknowball\.com([^<]*)<\/loc>/g)].map(m => m[1] || '/'));
 
 /* Every page file's PageSeo block: path, title, description, noindex. */
-const soccerFrame = 'src/components/soccer-career/SoccerCareerFrame.tsx';
-const soccerFrameSource = read(soccerFrame);
-const soccerPages = new Set(['SoccerCareerEntry.tsx', 'SoccerCareer.tsx']);
-if ([...soccerFrameSource.matchAll(/<PageSeo\b/g)].length !== 1 || [...soccerFrameSource.matchAll(/<GameSeoContent\b/g)].length !== 1) {
-  fail('the shared Soccer Career frame must render one PageSeo and one GameSeoContent');
-}
+const frames = [
+  ['Soccer Career', 'soccer-career', 'SoccerCareer'],
+  ['Club Manager', 'club-manager', 'ClubManager'],
+].map(([label, folder, name]) => {
+  const component = name + 'Frame';
+  const module = '@/components/' + folder + '/' + component;
+  const file = 'src/components/' + folder + '/' + component + '.tsx';
+  const source = read(file);
+  if ([...source.matchAll(/<PageSeo\b/g)].length !== 1 || [...source.matchAll(/<GameSeoContent\b/g)].length !== 1) {
+    fail('the shared ' + label + ' frame must render one PageSeo and one GameSeoContent');
+  }
+  return { component, module, file, source, entry: name + 'Entry.tsx', runtime: name + '.tsx' };
+});
+const pageFrames = new Map(frames.flatMap(frame => [[frame.entry, frame], [frame.runtime, frame]]));
 const pages = [];
 const dir = path.join(ROOT, 'src/pages');
 for (const f of fs.readdirSync(dir)) {
   if (!isPageSource(f)) continue;
   const s = fs.readFileSync(path.join(dir, f), 'utf-8');
-  if (soccerPages.has(f)) {
-    if (!s.includes('from "@/components/soccer-career/SoccerCareerFrame"') || !/<SoccerCareerFrame\b/.test(s)) fail(`${f} does not mount its shared SEO frame`);
-    if (/<(?:PageSeo|GameSeoContent)\b/.test(s)) fail(`${f} renders SEO again outside the shared frame`);
-    if (f === 'SoccerCareer.tsx') continue; // Same route as SoccerCareerEntry.
+  const frame = pageFrames.get(f);
+  if (frame) {
+    const importsFrame = ["'", '"'].some(quote => s.includes('from ' + quote + frame.module + quote));
+    if (!importsFrame || !new RegExp('<' + frame.component + '\\b').test(s)) fail(f + ' does not mount its shared SEO frame');
+    if (/<(?:PageSeo|GameSeoContent)\b/.test(s)) fail(f + ' renders SEO again outside the shared frame');
+    if (f === frame.runtime) continue; // Same route as the entry page.
   }
-  const m = (soccerPages.has(f) ? soccerFrameSource : s).match(/<PageSeo([\s\S]{0,700}?)\/>/);
+  const m = (frame?.source ?? s).match(/<PageSeo([\s\S]{0,700}?)\/>/);
   if (!m) {
     pages.push({ file: f, seo: false, noindex: /name="robots"[^>]*noindex/.test(s) || /content="noindex/.test(s) });
     continue;
@@ -269,7 +279,7 @@ console.log('6) One h1 per page: the SEO block fills in only where a page has no
   for (const f of fs.readdirSync(PAGES_DIR)) {
     if (!isPageSource(f)) continue;
     const fp = path.join(PAGES_DIR, f);
-    const t = soccerPages.has(f) ? soccerFrameSource : readFile(fp);
+    const t = pageFrames.get(f)?.source ?? readFile(fp);
     if (!t.includes('<GameSeoContent')) continue;
     checked += 1;
     const flagged = /<GameSeoContent[\s\S]{0,400}?pageHasOwnH1/.test(t);
@@ -286,7 +296,7 @@ console.log('6) One h1 per page: the SEO block fills in only where a page has no
     for (const e of fs.readdirSync(d, { withFileTypes: true })) {
       const p2 = path.join(d, e.name);
       if (e.isDirectory()) walk(p2);
-      else if (e.name.endsWith('.tsx') && p2 !== path.join(ROOT, soccerFrame) && readFile(p2).includes('<GameSeoContent')) dupes.push(path.relative(ROOT, p2));
+      else if (e.name.endsWith('.tsx') && !frames.some(frame => p2 === path.join(ROOT, frame.file)) && readFile(p2).includes('<GameSeoContent')) dupes.push(path.relative(ROOT, p2));
     }
   };
   walk(path.join(ROOT, 'src/components'));

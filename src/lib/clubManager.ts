@@ -81,6 +81,7 @@ import { CM_REAL_FREE_AGENTS } from '@/data/clubManagerFreeAgents2026';
 import { CM_REAL_FREE_AGENTS_CURVE } from '@/data/clubManagerFreeAgents2026';
 import { CM_AGE_CURVE, ageRead } from '@/lib/cmAgeRead';
 import type { BakedPlayer } from '@/data/clubManagerRosters';
+import { SAVE_KEY } from '@/lib/clubManagerSaveKeys';
 // Round 1035: the modern squads are the baked file joined with the A-League
 // Men's generated one, in one place both engine files read.
 import { CM_WORLD_ROSTERS as CM_ROSTERS, CM_WORLD_PARTIAL as CM_PARTIAL, cmWorldReadsAge, cmWorldTag } from '@/data/clubManagerWorldRosters';
@@ -5526,7 +5527,7 @@ export const UCL_LABELS: Record<UclKoRound, string> = {
   R16: 'Round of 16', QF: 'Quarter-final', SF: 'Semi-final', F: 'Final',
 };
 
-export const SAVE_KEY = 'dukb-club-manager-save';
+export { SAVE_KEY } from '@/lib/clubManagerSaveKeys';
 // v2 (2026-08-05): real leagues replaced the fictional World Super League;
 // old saves carry a 20-club fictional table and must start fresh.
 // v3 (2026-08-13, Round 70): every club in the big five leagues is playable
