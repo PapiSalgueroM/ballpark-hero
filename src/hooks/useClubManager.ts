@@ -331,6 +331,7 @@ export function useClubManager() {
   useEffect(() => { careerRef.current = career; }, [career]);
   const veteranSummary = useRef<CareerState | null>(null);
   const veteranPending = useRef(false);
+  const veteranRevision = useRef(0);
   useLayoutEffect(() => {
     veteranSummary.current = phase === 'seasonEnd' ? career : null;
     return () => { veteranSummary.current = null; };
@@ -463,11 +464,13 @@ export function useClubManager() {
   const reviewVeteran = useCallback(async (id: string): Promise<boolean> => {
     const now = veteranSummary.current;
     const slot = ownSlot.current;
+    const revision = veteranRevision.current;
     if (!now || veteranPending.current || !holdsActiveSlot() || movedOn()) return false;
     veteranPending.current = true;
     try {
       const { applyVeteranRetirement } = await import('@/lib/clubManagerVeteranRetirement');
-      if (veteranSummary.current !== now || ownSlot.current !== slot || !holdsActiveSlot() || movedOn()) return false;
+      if (veteranSummary.current !== now || veteranRevision.current !== revision
+        || ownSlot.current !== slot || !holdsActiveSlot() || movedOn()) return false;
       const next = applyVeteranRetirement(now, id);
       if (!next || !persist(next)) return false;
       veteranSummary.current = next;
@@ -1218,7 +1221,7 @@ export function useClubManager() {
   }, []);
   const updateNationalTeam = useCallback((update: (state: CareerState) => CareerState) => {
     if (!holdsActiveSlot() || movedOn()) return;
-    veteranSummary.current = null;
+    veteranRevision.current += 1;
     setCareer(prev => prev ? update(prev) : prev);
   }, [holdsActiveSlot, movedOn]);
 
@@ -1305,7 +1308,7 @@ export function useClubManager() {
 
   /* ---------- Round 105: contracts ---------- */
   const renew = useCallback((playerId: string) => {
-    veteranSummary.current = null;
+    veteranRevision.current += 1;
     setCareer(prev => (prev ? renewContract(prev, playerId) ?? prev : prev));
   }, []);
 

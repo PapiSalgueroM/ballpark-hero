@@ -233,6 +233,21 @@ describe('Veteran review through the actual career hook and writer', { timeout: 
     expect(JSON.parse(raw())).toEqual(expected);
   });
 
+  it('rejects an in-flight talk during another review action and can retry after a no-op', async () => {
+    await boot();
+    const run = action(), gate = gateImport(), before = raw();
+    await act(async () => {
+      const pending = run(ids[0]);
+      await gate.entered;
+      read().renew('absent-fictional-player');
+      gate.release();
+      expect(await pending).toBe(false);
+    });
+    expect(raw()).toBe(before);
+    await act(async () => { expect(await run(ids[0])).toBe(true); });
+    expect(reviewCount()).toBe(1);
+  });
+
   it('returns false for a real core refusal without writing or publishing a candidate', async () => {
     await boot();
     const before = career(), old = store(), R = await realReview();
