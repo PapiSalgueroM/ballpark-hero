@@ -95,4 +95,7 @@ const b = { club: 'B', pts: 20, gf: 12, ga: 7 };
 const c = { club: 'C', pts: 20, gf: 12, ga: 8 };
 const rule = cm.leagueTiebreak(id);
 assert.deepEqual(cm.sortedTable([a, b, c], { rule, pairs: { 'A|B': [0, 1], 'B|A': [1, 0] } }).map(row => row.club), ['B', 'A', 'C']);
-console.log('simClubManagerJ1: 20 generated squads, isolated jobs and world, verified opener and saved second fixture, 38 played matches and a generated second season.');
+console.log('Opening squads: 20 selectable clubs with generated squads and a 38-game calendar each.');
+console.log('World and jobs: J1 opens in Japan and follows the manager to a new club. The English control keeps its own world.');
+console.log('Fixture replay: Mito opened at Kashiwa and resumed at home against Gamba. All 38 played pairings match the ledger.');
+console.log('simClubManagerJ1: the second season generated 38 fixtures and the tied-club mini-table sorted correctly.');
