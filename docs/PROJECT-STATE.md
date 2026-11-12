@@ -1,3 +1,9 @@
+## 2026-11-12 NitroPay bundled-font CI compatibility
+
+Scripts-only follow-up to PR #676. Home search recovery and Soccer offer review now verify the actual built local font CSS and all ten WOFF2 payloads against source instead of requiring the removed Google Fonts stylesheet. Both browser checks require loaded Inter and Space Grotesk faces that cover each requested weight, including the bundled 400 to 700 variable range. Cached flags, offline transport, source/build holds and existing gameplay checks remain in place.
+
+Sixteen local fixture and negative-control tests pass. A separate built-font browser check covers Home and Soccer Career at 390px and 1440px and deliberately blocks font requests as a control. Actual build and browser qualification are pending. The local type/build chain was stopped before build to avoid concurrent desktop resource contention. Existing unrelated workflow failures and historical source anchors are not waived. No product files, provider settings, applications, merge or deployment changed.
+
 ## 2026-11-11 Soccer Career creation download
 
 This draft builds on PR #675. The fresh creation screen skips the historical club squad archive. Existing club offers, the transfer verdict and the senior Squad tile load the same recorded data when shown. The Squad tile holds its space while loading.

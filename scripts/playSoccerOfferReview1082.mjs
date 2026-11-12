@@ -6,6 +6,7 @@ import { createHash } from 'node:crypto';
 import { createServer } from 'node:net';
 import { spawn } from 'node:child_process';
 import { fileURLToPath, pathToFileURL } from 'node:url';
+import { readBuiltFonts, assertLoadedFonts } from './lib/builtFonts.mjs';
 
 assert(process.env.CI, 'Offer review native verification runs only in remote CI');
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -20,16 +21,16 @@ const writeJSON = (name, value) => fs.writeFileSync(path.join(OUT, name), JSON.s
 fs.mkdirSync(OUT, { recursive: true });
 assert(fs.existsSync(path.join(ROOT, 'dist/index.html')), 'Build the actual application before the native route proof');
 const assets = new Map(JSON.parse(fs.readFileSync(CACHE, 'utf8')).map(entry => {
-  assert(['https://fonts.googleapis.com', 'https://fonts.gstatic.com', 'https://flagcdn.com'].includes(new URL(entry.url).origin));
+  assert.equal(new URL(entry.url).origin, 'https://flagcdn.com');
   assert(/^[a-f0-9]{64}$/.test(entry.file), 'Cache payload stays inside its manifest directory');
   const body = fs.readFileSync(path.join(path.dirname(CACHE), entry.file));
   assert.equal(digest(body), entry.sha256, 'Actual cached asset bytes match their receipt');
   return [entry.url, { body, contentType: entry.contentType }];
 }));
-const fontSheets = [...fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8').matchAll(/<link\s+href="(https:\/\/fonts\.googleapis\.com\/[^\"]+)"\s+rel="stylesheet"/g)].map(row => new URL(row[1]).href);
+const fontReceipt = path.join(path.dirname(CACHE), 'bundled-fonts.json');
+const bundledFonts = readBuiltFonts(ROOT);
+assert.deepEqual(bundledFonts, JSON.parse(fs.readFileSync(fontReceipt, 'utf8')), 'Bundled fonts match the preparation receipt');
 const serviceOrigin = new URL(fs.readFileSync(path.join(ROOT, 'src/integrations/supabase/client.ts'), 'utf8').match(/export const SUPABASE_URL = "([^"]+)";/)[1]).origin;
-assert.equal(fontSheets.length, 1);
-assert(assets.has(fontSheets[0]), 'The actual template font stylesheet is cached');
 function sourceHashes() {
   const result = {};
   function walk(relative) {
@@ -40,7 +41,7 @@ function sourceHashes() {
     }
   }
   walk('src');
-  for (const file of ['index.html', 'package.json', 'package-lock.json', 'scripts/playSoccerOfferReview1082.mjs', 'scripts/lib/hostLikeServer.mjs', 'scripts/lib/playwrightLoader.mjs', 'scripts/lib/offlineTransport.cjs']) result[file] = digest(fs.readFileSync(path.join(ROOT, file)));
+  for (const file of ['index.html', 'package.json', 'package-lock.json', 'scripts/playSoccerOfferReview1082.mjs', 'scripts/lib/builtFonts.mjs', 'scripts/lib/hostLikeServer.mjs', 'scripts/lib/playwrightLoader.mjs', 'scripts/lib/offlineTransport.cjs']) result[file] = digest(fs.readFileSync(path.join(ROOT, file)));
   return result;
 }
 function buildHashes() {
@@ -49,6 +50,7 @@ function buildHashes() {
 }
 const report = { started: new Date().toISOString(), complete: false, scope: 'Actual built /soccer-career, its actual OfferCard and internal handleAcceptOffer, unmodified independent engine oracle', limits: ['Explicitly staged saved transfer windows are not a naturally completed career campaign.', 'One trusted signature per journey plus one actual handler toast; rapid duplicate activation is not exercised.', 'Only the new review dialog is subject to 44px and 12px geometry checks; existing career controls are outside this claim.'], sourceBefore: sourceHashes(), buildBefore: buildHashes(), assetManifestSha256: digest(fs.readFileSync(CACHE)), cases: [], controls: [], forwardedWrites: 0 };
 const save = () => writeJSON('report.json', report);
+report.bundledFontsBefore = bundledFonts;
 save();
 const { build } = await import('esbuild');
 const { chromium } = await import('./lib/playwrightLoader.mjs');
@@ -165,7 +167,7 @@ async function loadedFonts(page) {
     }
     return rows;
   });
-  assert(result.every(row => row.faces.length && row.faces.every(face => face.status === 'loaded' && face.family.replaceAll('"', '') === row.family)), 'All eight actual template font faces loaded');
+  assertLoadedFonts(result);
   return result;
 }
 const snapshot = page => page.evaluate(() => ({ storage: Object.fromEntries(Object.entries(localStorage).filter(([key]) => !key.startsWith('dukb-fence:')).sort(([a], [b]) => a.localeCompare(b))), writes: structuredClone(window.__offerReview.writes), rng: { seed: window.__offerReview.seed, draws: window.__offerReview.draws }, now: Date.now(), scrollY,
@@ -472,6 +474,9 @@ try {
   report.sourceAfter = sourceHashes();
   report.buildAfter = buildHashes();
   try {
+    report.bundledFontsAfter = readBuiltFonts(ROOT);
+    assert.deepEqual(report.bundledFontsAfter, bundledFonts, 'Bundled fonts remain unchanged during the route proof');
+    assert.deepEqual(JSON.parse(fs.readFileSync(fontReceipt, 'utf8')), bundledFonts, 'Bundled font receipt remains unchanged');
     assert.deepEqual(report.sourceAfter, report.sourceBefore, 'Native verification holds every actual product source');
     assert.deepEqual(report.buildAfter, report.buildBefore, 'Native verification serves the unchanged actual build');
     assert.equal(digest(fs.readFileSync(CACHE)), report.assetManifestSha256, 'Cached asset manifest is unchanged');

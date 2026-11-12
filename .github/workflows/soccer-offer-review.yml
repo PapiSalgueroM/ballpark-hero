@@ -16,6 +16,11 @@ on:
       - scripts/qa/soccerOfferAssets1082.mjs
       - scripts/playSoccerOfferReview1082.mjs
       - scripts/playSoccerCareer.mjs
+      - scripts/lib/builtFonts.mjs
+      - scripts/lib/builtFonts.test.mjs
+      - scripts/qa/playBuiltFonts.mjs
+      - src/assets/fonts/**
+      - index.html
 
 permissions:
   contents: read
@@ -89,6 +94,7 @@ jobs:
         run: |
           node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee soccer-offer-review-artifacts/types.log
           npm run build 2>&1 | tee soccer-offer-review-artifacts/build.log
+          node --test scripts/lib/builtFonts.test.mjs 2>&1 | tee soccer-offer-review-artifacts/bundled-font-tests.log
       - name: Actual offer outcomes and copied faults
         if: ${{ !cancelled() && steps.build.outcome == 'success' }}
         run: |
@@ -135,6 +141,7 @@ jobs:
             soccer-offer-review-artifacts/native/
             soccer-offer-review-artifacts/native.log
             soccer-offer-review-artifacts/font-cache/manifest.json
+            soccer-offer-review-artifacts/font-cache/bundled-fonts.json
             soccer-offer-review-artifacts/source-head.txt
             soccer-offer-review-artifacts/source-tree.txt
           retention-days: 3

@@ -13,6 +13,11 @@ on:
       - src/test/homeSearchRecovery.test.tsx
       - scripts/simHomeSearchRecovery.mjs
       - scripts/playHomeSearchRecovery1088.mjs
+      - scripts/lib/builtFonts.mjs
+      - scripts/lib/builtFonts.test.mjs
+      - scripts/qa/playBuiltFonts.mjs
+      - src/assets/fonts/**
+      - index.html
 
 permissions:
   contents: read
@@ -100,10 +105,14 @@ jobs:
         run: |
           node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee home-search-recovery-artifacts/types.log
           npm run build 2>&1 | tee home-search-recovery-artifacts/build.log
-      - name: Cache actual template fonts
+          node --test scripts/lib/builtFonts.test.mjs 2>&1 | tee home-search-recovery-artifacts/bundled-font-tests.log
+      - name: Verify bundled fonts and cache baked poll flags
         id: assets
         if: ${{ !cancelled() && steps.build.outcome == 'success' }}
         run: node scripts/playHomeSearchRecovery1088.mjs --prefetch-assets-only 2>&1 | tee home-search-recovery-artifacts/fonts.log
+      - name: Decode actual local fonts and prove blocked-font controls
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: BUILT_FONT_REPORT="$PWD/home-search-recovery-artifacts/bundled-font-browser.json" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/playBuiltFonts.mjs 2>&1 | tee home-search-recovery-artifacts/bundled-font-browser.log
       - name: Actual outcomes and effective copied faults
         if: ${{ !cancelled() && steps.build.outcome == 'success' && steps.assets.outcome == 'success' }}
         run: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simHomeSearchRecovery.mjs 2>&1 | tee home-search-recovery-artifacts/outcomes.log
