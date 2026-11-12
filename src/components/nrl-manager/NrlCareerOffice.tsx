@@ -10,7 +10,7 @@ import {
   nrlSponsorIncome, nrlSponsorRefusal, nrlTicketPricingRefusal, NRL_SHORTLIST_LIMIT, NRL_SPONSOR_OFFERS, NRL_TICKET_GATE_CHANGES,
   type NrlDevelopmentFocus, type NrlMedicalLevel, type NrlSponsorOffer, type NrlTicketTier,
 } from '@/lib/nrlCareer';
-import { NRL_COACHING_BONUS, NRL_ROLES, type NrlCoachRole, type NrlRole } from '@/lib/nrlManager';
+import { nrlArchivedFinals, NRL_COACHING_BONUS, NRL_FINALS_ROUND_TITLES, NRL_ROLES, type NrlCoachRole, type NrlRole } from '@/lib/nrlManager';
 import { nrlArchivedScoringLeaders, nrlTryLeaders } from '@/lib/nrlPlayerScoring';
 import { nrlBoardBenchmark, nrlBoardChallengeStatus, nrlBoardTarget } from '@/lib/nrlBoardTarget';
 
@@ -617,6 +617,34 @@ function CareerRecord({ history }: { history: NrlCareerState['history'] }) {
   );
 }
 
+function FinalsHistory({ record, season }: { record: NrlCareerState['history'][number]; season: NrlCareerState['season'] }) {
+  const { year, finals } = record;
+  const matches = year === season.year ? season.results.filter(match => match.finalsRound !== undefined)
+    : nrlArchivedFinals(finals, year)?.matches;
+  if (!matches?.length) return <p className="text-sm text-muted-foreground">Finals scores aren’t saved for this season.</p>;
+  return (
+    <details className="group mt-2 rounded-lg border border-border">
+      <summary className="flex min-h-10 cursor-pointer list-none items-center justify-between gap-2 px-3 py-2 text-sm font-semibold">
+        {year} finals results<ChevronDown size={16} aria-hidden="true" className="shrink-0 group-open:rotate-180" />
+      </summary>
+      <div className="grid gap-3 border-t border-border p-3 text-sm sm:grid-cols-2">
+        {NRL_FINALS_ROUND_TITLES.map((title, index) => (
+          <div key={title}>
+            <h4 className="font-semibold">{title}</h4>
+            <ul aria-label={title} className="mt-1 space-y-1 text-muted-foreground">
+              {matches.filter(match => match.finalsRound === index + 1).map(match => (
+                <li key={match.tieId} className="break-words">
+                  {`${labelForClub(year, match.homeId)} ${match.homeScore} - ${match.awayScore} ${labelForClub(year, match.awayId)}`}
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
+    </details>
+  );
+}
+
 function History({ career, onAction, disabled }: { career: NrlCareerState; onAction: Dispatch; disabled: boolean }) {
   const { year, phase, clubId } = career.season;
   const finished = phase === 'complete';
@@ -710,6 +738,7 @@ function History({ career, onAction, disabled }: { career: NrlCareerState; onAct
                 {coach && staffSpend && <p className="text-sm text-muted-foreground" data-nrl-coach-receipt>
                   {coachLabels[coach.role]} · {money(staffSpend.signingFee + staffSpend.wages)} total staff cost
                 </p>}
+                <FinalsHistory record={record} season={career.season} />
               </li>
             );
           })}

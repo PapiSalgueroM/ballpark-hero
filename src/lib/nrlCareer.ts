@@ -4,9 +4,9 @@ import { uniqueName } from '@/lib/foNames';
 import { nrlBoardChallengeStatus } from '@/lib/nrlBoardTarget';
 import { archiveNrlScoring, validNrlScoringArchive, type NrlSeasonScoringTotal } from '@/lib/nrlPlayerScoring';
 import {
-  createNrlSeason, isNrlManagerState, isNrlSeasonProgress, nrlBench, nrlLadder, nrlMatchupEdges, nrlNextRound, nrlRegularRounds,
+  archiveNrlFinals, createNrlSeason, isNrlManagerState, isNrlSeasonProgress, nrlArchivedFinals, nrlBench, nrlLadder, nrlMatchupEdges, nrlNextRound, nrlRegularRounds,
   NRL_FINALS_SPOTS, NRL_ROLES, reduceNrlSeason, validNrlLiveScore, type NrlAction, type NrlCoachRole, type NrlFixture, type NrlManagerState, type NrlMatchResult,
-  type NrlPlayer, type NrlRole, type NrlYear,
+  type NrlFinalsArchive, type NrlPlayer, type NrlRole, type NrlYear,
 } from '@/lib/nrlManager';
 
 const SQUAD_SIZE = 30;
@@ -76,6 +76,7 @@ export interface NrlCareerHistoryRow {
   championId: string;
   finance: NrlCareerFinance | null;
   scoring?: NrlSeasonScoringTotal[];
+  finals?: NrlFinalsArchive;
   development?: { focus: ActiveDevelopmentFocus; affected: number };
 }
 interface NrlAcademyAssignment {
@@ -772,8 +773,10 @@ function rolloverCareer(state: NrlCareerState, move?: { fromYear: number; clubId
     ...(move ? { bench: undefined, tactic: 'balanced' } : {}),
     kickerId: !move && season.kickerId && Object.values(lineup).includes(season.kickerId) ? season.kickerId : lineup.Halfback,
   };
-  const history = developmentFocus ? state.history.map(row => row.year === season.year
-    ? { ...row, development: { focus: developmentFocus, affected: gains.size } } : row) : state.history;
+  const history = state.history.map(row => row.year === season.year ? {
+    ...row, finals: archiveNrlFinals(season),
+    ...(developmentFocus ? { development: { focus: developmentFocus, affected: gains.size } } : {}),
+  } : row);
   const openingCash = move
     ? history.reduce((cash, receipt) => receipt.clubId === clubId && receipt.finance ? receipt.finance.cash : cash, OPENING_CASH)
     : nrlCareerFinance(state).cash;
@@ -920,6 +923,11 @@ function validReceipt(value: unknown, year: number): value is NrlCareerHistoryRo
     || (value.scoring !== undefined && !validNrlScoringArchive(value.scoring))) return false;
   if (value.development !== undefined && (!record(value.development) || !activeDevelopmentFocus(value.development.focus)
     || !intIn(value.development.affected, 0, SQUAD_SIZE))) return false;
+  if (value.finals !== undefined) {
+    const finals = nrlArchivedFinals(value.finals, year);
+    if (!finals || finals.championId !== value.championId
+      || finals.seeds.findIndex(id => id === value.clubId) !== (value.rank <= NRL_FINALS_SPOTS ? value.rank - 1 : -1)) return false;
+  }
   if (value.finance === null) return true;
   if (!record(value.finance) || !validBook(value.finance, lastRound(year))) return false;
   const finance = nrlCareerFinance({ finance: value.finance });
@@ -991,7 +999,7 @@ function validCareerBooks(state: NrlCareerState): boolean {
       const expected = seasonReceipt(state);
       if (receipt.clubId !== expected.clubId || receipt.rank !== expected.rank || receipt.wins !== expected.wins
         || receipt.draws !== expected.draws || receipt.losses !== expected.losses || receipt.championId !== expected.championId
-        || receipt.development !== undefined
+        || receipt.development !== undefined || receipt.finals !== undefined
         || JSON.stringify(receipt.scoring) !== JSON.stringify(expected.scoring)
         || (receipt.finance === null) !== (expected.finance === null)
         || (receipt.finance && expected.finance && !booksMatch(receipt.finance, expected.finance))) return false;

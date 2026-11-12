@@ -53,6 +53,10 @@ export interface NrlMatchResult extends NrlFixture {
   playerScoring?: NrlMatchScoringReport;
   halftimeInterchange?: NrlHalftimeInterchange;
 }
+export interface NrlFinalsArchive {
+  seeds: string[];
+  scores: [number, number][]; // Home and away scores in the nine-tie preset order.
+}
 export interface NrlLadderRow {
   clubId: string;
   played: number;
@@ -200,7 +204,7 @@ export function nrlFinalsEliminated(state: NrlManagerState): Set<string> {
   return eliminated(FINALS, seeds, 8, finalsOutcomes(state.results));
 }
 
-const FINALS_ROUND_TITLES = ['Qualifying and elimination finals', 'Semi-finals', 'Preliminary finals', 'Grand final'];
+export const NRL_FINALS_ROUND_TITLES = ['Qualifying and elimination finals', 'Semi-finals', 'Preliminary finals', 'Grand final'] as const;
 export interface NrlNextRound {
   round: number;
   finalsRound: number | null;
@@ -218,7 +222,7 @@ export function nrlNextRound(state: NrlManagerState): NrlNextRound {
   if (phase === 'complete') return { round, finalsRound, title: 'Season complete', fixtures, clubMatch, clubStatus: 'complete' };
   if (phase === 'regular') return { round, finalsRound, title: `Round ${round}`, fixtures, clubMatch, clubStatus: clubMatch ? 'playing' : 'bye' };
   const clubStatus = clubMatch ? 'playing' : nrlFinalsEliminated(state).has(clubId) ? 'eliminated' : 'bye';
-  return { round, finalsRound, title: FINALS_ROUND_TITLES[finalsRound - 1], fixtures, clubMatch, clubStatus };
+  return { round, finalsRound, title: NRL_FINALS_ROUND_TITLES[finalsRound - 1], fixtures, clubMatch, clubStatus };
 }
 
 type NrlInjuryClock = Pick<NrlManagerState, 'round' | 'phase' | 'results' | 'injuryTracking'>;
@@ -633,6 +637,39 @@ const record = (value: unknown): value is Record<string, unknown> =>
 function validScoring(value: unknown): value is NrlScoring {
   return record(value) && integerIn(value.tries, 0, 21) && integerIn(value.conversions, 0, value.tries)
     && integerIn(value.penalties, 0, 3) && integerIn(value.fieldGoals, 0, 2) && integerIn(value.longFieldGoals, 0, 2);
+}
+
+export function archiveNrlFinals(season: NrlManagerState): NrlFinalsArchive {
+  return {
+    seeds: nrlLadder(season).slice(0, NRL_FINALS_SPOTS).map(row => row.clubId),
+    scores: season.results.filter(match => match.finalsRound !== undefined).map(match => [match.homeScore, match.awayScore]),
+  };
+}
+
+export function nrlArchivedFinals(value: unknown, year: number) {
+  if (!record(value) || !Array.isArray(value.seeds) || !Array.isArray(value.scores)) return null;
+  const { seeds, scores } = value;
+  const { clubs, draw } = nrlSeasonPlan(year);
+  if (seeds.length !== NRL_FINALS_SPOTS || new Set(seeds).size !== seeds.length
+    || !seeds.every((id): id is string => clubs.some(club => club.id === id)) || scores.length !== FINALS.length) return null;
+  // Match the upper bound of a valid saved score, including finals extra time.
+  const maxScore = scoreOf({ tries: 21, conversions: 21, penalties: 3, fieldGoals: 2, longFieldGoals: 2 });
+  const outcomes: Record<string, TieOutcome> = {};
+  const matches: (NrlFixture & Pick<NrlMatchResult, 'homeScore' | 'awayScore'>)[] = [];
+  for (let week = 1; week <= NRL_FINALS_ROUND_TITLES.length; week++) {
+    const pairings = resolveWeek(FINALS, seeds, outcomes, week);
+    if (!pairings) return null;
+    for (const { id, homeId, awayId } of pairings) {
+      const pair = scores[matches.length];
+      if (!Array.isArray(pair) || pair.length !== 2) return null;
+      const [homeScore, awayScore] = pair;
+      if (!integerIn(homeScore, 0, maxScore) || !integerIn(awayScore, 0, maxScore) || homeScore === awayScore) return null;
+      matches.push({ homeId, awayId, round: draw.length + week, finalsRound: week, tieId: id, homeScore, awayScore });
+      outcomes[id] = homeScore > awayScore ? { winner: homeId, loser: awayId } : { winner: awayId, loser: homeId };
+    }
+  }
+  const champion = premierOf(FINALS, outcomes);
+  return champion ? { seeds, matches, championId: champion.winner } : null;
 }
 
 function validLiveHalf(value: unknown, fixture: NrlFixture | undefined): boolean {

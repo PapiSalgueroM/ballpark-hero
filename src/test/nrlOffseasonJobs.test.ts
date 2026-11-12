@@ -122,7 +122,9 @@ describe('NRL Manager offseason club moves', () => {
     expect(imported.history[0].finance).toBeNull();
     const perth = move(imported, 'bears');
     expect(perth.season.clubId).toBe('bears');
-    expect(perth.history).toEqual(imported.history);
+    const { finals, ...receipt } = perth.history[0];
+    expect([receipt]).toEqual(imported.history);
+    expect(finals?.scores).toHaveLength(9);
     expect(perth.legacySeason).toBe(false);
     expect(sameSave(perth)).toBe(true);
     expect(saved({ ...perth, history: [{ ...perth.history[0], clubId: 'bears' }] })).toBeNull();
