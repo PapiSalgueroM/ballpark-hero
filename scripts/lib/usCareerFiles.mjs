@@ -63,13 +63,14 @@ export const stripComments = src =>
 export function wrapperProblems(root, s) {
   const out = [];
   const code = stripComments(readUsSource(root, s.wrapper));
-  if (!/import UsCareerBoard from '@\/components\/us-career\/UsCareerBoard'/.test(code)) {
+  if (!/import UsCareerBoard(?:, \{ type UsCareerStart \})? from '@\/components\/us-career\/UsCareerBoard'/.test(code)) {
     out.push(`${s.wrapper}: does not import the shared board`);
   }
   if (!code.includes(`import { ${s.constName} } from '@/lib/${s.slug}CareerSport'`)) {
     out.push(`${s.wrapper}: does not import its own binding`);
   }
-  if (!code.includes(`<UsCareerBoard sport={${s.constName}} />`)) {
+  const boardOpen = `<UsCareerBoard sport={${s.constName}}`;
+  if (!code.includes(boardOpen + ' />') && !code.includes(boardOpen + ' entry={entry} />')) {
     out.push(`${s.wrapper}: does not render the shared board with its own binding`);
   }
   for (const other of US_CAREER_SPORTS) {

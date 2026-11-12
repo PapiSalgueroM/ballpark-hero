@@ -549,7 +549,7 @@ console.log('7) Continue playing: the right keys, real fields, hostile saves, on
     '/cfb-dynasty': ['src/components/cfb-dynasty/CfbDynastyBoard.tsx', 'src/lib/cfbDynasty.ts'],
     '/cbb-dynasty': ['src/components/cbb-dynasty/CbbDynastyBoard.tsx', 'src/lib/cbbDynasty.ts'],
     '/nba-front-office': ['src/components/nba-front-office/NbaFrontOfficeBoard.tsx', 'src/lib/nbaFrontOffice.ts'],
-    '/nba-my-career': ['src/lib/nbaCareerSport.ts', 'src/lib/nbaMyCareer.ts'],
+    '/nba-my-career': ['src/lib/nbaCareerCreation.ts', 'src/lib/nbaCareerSport.ts', 'src/lib/nbaMyCareer.ts'],
     '/mlb-my-career': ['src/lib/mlbCareerSport.ts', 'src/lib/mlbMyCareer.ts'],
     '/mlb-front-office': ['src/components/mlb-front-office/MlbFrontOfficeBoard.tsx', 'src/lib/mlbFrontOffice.ts'],
     '/nhl-my-career': ['src/lib/nhlCareerSport.ts', 'src/lib/nhlMyCareer.ts'],
@@ -579,6 +579,12 @@ console.log('7) Continue playing: the right keys, real fields, hostile saves, on
   const WRITER = Object.fromEntries(US_CAREER_SPORTS.map(s => [s.route, US_CAREER_BOARD]));
   for (const why of allWrapperProblems(ROOT)) fail(7, why);
   for (const s of US_CAREER_SPORTS) {
+    if (s.slug === 'nba' && !code(s.binding).includes("import { NBA_CAREER_CREATE, NBA_CAREER_SAVE_KEY } from './nbaCareerCreation';")) {
+      fail(7, `${s.binding} does not import the creation save key`);
+    }
+    if (s.slug === 'nba' && !code(s.binding).includes('const SAVE_KEY = NBA_CAREER_SAVE_KEY;')) {
+      fail(7, `${s.binding} does not use the creation save key`);
+    }
     if (!code(s.binding).includes('saveKey: SAVE_KEY,')) fail(7, `${s.binding} does not hand the board the key it declares`);
   }
   /* Round 1084: the board no longer writes in one line. The career goes to
