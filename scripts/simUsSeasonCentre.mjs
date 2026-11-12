@@ -45,6 +45,7 @@
  *   formula  a division rival hosted three times, the bind's
  *            own schedule check off                            -> section 5
  *   conf     a first round loser meets the other conference   -> section 4
+ *   ppg      round new NBA replays to whole points again      -> section 3
  *   hot      the feed's takeover line on any night at or above
  *            his average (the rule before the fix pass)        -> section 3
  *   static   a static import of the viewer planted in a route
@@ -301,6 +302,7 @@ const CONTROLS = {
   window: { section: 5, patches: [WINDOW] },
   formula: { section: 5, patches: [{ file: NBA, from: 'for (let s = 1; s <= d; s += 1) add(s, 2, 2);', to: 'for (let s = 1; s <= d; s += 1) add(s, 3, 1);' }, { file: NBA, from: '  if (ctx.shape) out.push(...nbaDealProblems(ctx, s.games));\n', to: '' }] },
   conf: { section: 4, patches: [{ file: US, from: '      const slot = r === bind.rounds.length - 1 ? other[0] : conf[r];', to: '      const slot = r === n - 1 ? other[0] : conf[r];' }] },
+  ppg: { section: 3, label: 'independent checker', patches: [{ file: NBA, from: 'dp: num(row.mpg) === null ? 0 : 1', to: 'dp: 0' }] },
   hot: { section: 3, patches: [{ file: NBA, from: '  return won && pts >= 20 && pts >= 1.3 * ppg;', to: '  return pts >= ppg;' }] },
   static: { section: 8, patches: [] },
   sum: { section: 3, patches: [
@@ -393,7 +395,7 @@ const CONTROLS = {
 CONTROLS.seam = CONTROLS.lay;
 /* which sport a control needs in the run (its patched file is only bundled with that sport) */
 const CONTROL_SPORT = {
-  stage: 'nba', names: 'nba', window: 'nba', formula: 'nba', hot: 'nba', sum: 'nfl', kick: 'nfl', nflstage: 'nfl', nflformula: 'nfl', days: 'nfl',
+  stage: 'nba', names: 'nba', window: 'nba', formula: 'nba', hot: 'nba', ppg: 'nba', sum: 'nfl', kick: 'nfl', nflstage: 'nfl', nflformula: 'nfl', days: 'nfl',
   poscore: 'nfl', nflheld: 'nfl', lumpy: 'nfl', flat: 'nfl', tdform: 'nfl', minutes: 'nfl', order: 'nfl', points: 'nfl', forty: 'nfl', level: 'nfl', oddtd: 'nfl', bigkick: 'nfl',
   oddsack: 'nfl', short82: 'nba', lawdrift: 'nfl', nbarecord: 'nba',
   mlbstage: 'mlb', mlbformula: 'mlb', series: 'mlb', hits: 'mlb', rbi: 'mlb', allstar: 'mlb', pitcher: 'mlb', club: 'mlb', outside: 'mlb', mlbwho: 'mlb', pathyear: 'mlb', mlblevel: 'mlb',
@@ -654,7 +656,8 @@ function shownIsSavedNba(row, s) {
     }
   }
   const mean = k => on.reduce((a, g) => a + (g.line[k] ?? 0), 0) / Math.max(1, on.length);
-  if (isNum(row.ppg) && Math.round(mean('pts')) !== Math.round(row.ppg)) out.push(`ppg ${mean('pts').toFixed(2)} != ${row.ppg}`);
+  const ptsScale = isNum(row.mpg) ? 10 : 1;
+  if (isNum(row.ppg) && Math.round(mean('pts') * ptsScale + 1e-9) !== Math.round(row.ppg * ptsScale)) out.push(`ppg ${mean('pts').toFixed(2)} != ${row.ppg}`);
   if (isNum(row.rpg) && Math.round(mean('reb') * 10) !== Math.round(row.rpg * 10)) out.push(`rpg ${mean('reb').toFixed(3)} != ${row.rpg}`);
   if (isNum(row.apg) && Math.round(mean('ast') * 10) !== Math.round(row.apg * 10)) out.push(`apg ${mean('ast').toFixed(3)} != ${row.apg}`);
   for (const g of on) {
