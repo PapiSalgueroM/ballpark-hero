@@ -171,15 +171,21 @@ export default function StadiumTycoon() {
           ))}
         </div>
 
-        {g.gearSaveBlocked && <p role="alert" data-no-prerender className="mb-3 rounded-xl border border-destructive/40 bg-destructive/10 p-3 text-xs">Title equipment could not be saved, so no new equipment was added. Your existing pairs are safe. Allow device storage before earning another title.</p>}
-        {g.ticketSaveFailed && (
+        {g.saveMoved && room !== 'academy' && (
+          <div role="alert" data-no-prerender className="mb-3 rounded-xl border border-border bg-card p-3 text-sm">
+            <p>Stadium progress moved on in another tab. Reload to carry on.</p>
+            <button type="button" onClick={() => window.location.reload()} className="mt-2 min-h-11 rounded-full border border-primary px-3 font-bold">Reload</button>
+          </div>
+        )}
+        {!g.saveMoved && g.gearSaveBlocked && <p role="alert" data-no-prerender className="mb-3 rounded-xl border border-destructive/40 bg-destructive/10 p-3 text-xs">Title equipment could not be saved, so no new equipment was added. Your existing pairs are safe. Allow device storage before earning another title.</p>}
+        {!g.saveMoved && g.ticketSaveFailed && (
           <div role="alert" data-tycoon-save-notice data-no-prerender className="mb-3 rounded-xl border border-destructive/40 bg-destructive/10 p-3 text-xs">
             <p>Stadium progress is not saved on this device. Keep this page open and retry.</p>
             <button type="button" onClick={g.retryTicketSave} className="mt-2 min-h-11 min-w-11 rounded-full border border-destructive/50 px-3 font-bold">Retry save</button>
           </div>
         )}
-        <StadiumRoom g={g} visible={room === 'stadium'} onNeedsYou={setStadiumNeedsYou} />
-        <LeagueRoom g={g} visible={room === 'league'} />
+        <StadiumRoom g={g} visible={room === 'stadium' && !g.saveMoved} onNeedsYou={setStadiumNeedsYou} />
+        <LeagueRoom g={g} visible={room === 'league' && !g.saveMoved} />
         {academyOpened && (
           <Suspense fallback={<div className="h-40" />}>
             <AcademyPanel stylesReady visible={room === 'academy'} onStatus={setAcademyStatus} onSnapshot={onAcademySnapshot} />
@@ -408,6 +414,7 @@ function StadiumRoom({ g, visible, onNeedsYou }: { g: ReturnType<typeof useStadi
      rooms of the office are tiles now, one panel open at a time, Upgrades first
      because buying is the loop. */
   const [panel, setPanel] = useState<OfficePanel>('upgrades');
+  const [failedPerk, setFailedPerk] = useState<string | null>(null);
   const [buyAmount, setBuyAmount] = useState<1 | 5>(1);
   const [burst, setBurst] = useState<{ id: number; pieces: { x: number; d: number; c: string; r: number }[] } | null>(null);
   const pitchRef = useRef<HTMLDivElement | null>(null);
@@ -878,12 +885,13 @@ function StadiumRoom({ g, visible, onNeedsYou }: { g: ReturnType<typeof useStadi
                       <span className="font-bold text-foreground">{p.name}</span>
                       <span className="ml-1 text-muted-foreground">Lv {lvl}/{p.costs.length}</span>
                       <span className="block text-muted-foreground leading-snug">{p.blurb}</span>
+                      {failedPerk === p.id && <span role="alert" className="block text-destructive">Could not save this perk. Try again.</span>}
                     </span>
                     {cost === null ? (
                       <span className="shrink-0 text-[9px] font-bold text-gold">MAXED</span>
                     ) : (
                       <button
-                        onClick={() => g.doLegacyPerk(p.id)}
+                        onClick={() => setFailedPerk(g.doLegacyPerk(p.id) ? null : p.id)}
                         aria-label={`Buy ${p.name}, level ${lvl + 1}, ${cost} pt${cost === 1 ? '' : 's'}`}
                         disabled={!ok}
                         className={cn('shrink-0 min-h-[30px] rounded-full px-2.5 py-1 text-[9px] font-bold transition-all active:scale-95',

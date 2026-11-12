@@ -12,8 +12,8 @@ const CONTROL = process.env.GEAR_PAGE_CONTROL || '';
 const hooks = 'src/hooks/useStadiumTycoon.ts';
 const controls = {
   division: [hooks, '1 saves the played division', 'const playedDivision = stateRef.current.league?.division;', 'const playedDivision = (stateRef.current.league?.division ?? 0) + 1;'],
-  order: [hooks, '1 saves the played division', 'try { localStorage.setItem(TYCOON_SAVE_KEY, serializeTycoon(next, Date.now())); } catch { allowGear = false; }', 'try { void next; } catch { allowGear = false; }'],
-  stadium: [hooks, '2 a refused stadium save', 'catch { allowGear = false; }', 'catch { allowGear = true; }'],
+  order: [hooks, '1 saves the played division', 'allowGear = writeState(next);', 'allowGear = true;'],
+  stadium: [hooks, '2 a refused stadium save', 'allowGear = writeState(next);', 'writeState(next); allowGear = true;'],
   notice: [hooks, '3 a refused title ledger', '() => setGearSaveBlocked(true)', '() => setGearSaveBlocked(false)'],
   equip: ['src/hooks/useWonderkidFactory.ts', '4 reassignment saves once', 'if (!equipBoot(next, seniorId, bootId, loadLedger().gearLevel ?? {})) return;', 'if (!equipBoot(next, seniorId, bootId, loadLedger().gearLevel ?? {})) return; Object.assign(stateRef.current!, next);'],
   upgrade: ['src/lib/tycoonRewards.ts', '5 a failed upgrade', 'saveLedger(next, true);\n  return true;', 'void next;\n  return true;'],

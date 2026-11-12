@@ -15,7 +15,7 @@ import {
   offlineEarnings, serializeTycoon, deserializeTycoon, TYCOON_SAVE_KEY,
   activateBoost, hire, payrollPurchase, catchGolden, rollGoldenKind, goldenActive, ACH_BONUS,
   GOLDEN_INFO, fmtMoney, buyPerk, perkById, setClubName, GOLDEN_CATCH_SEC, GOLDEN_MEAN_GAP_SEC, HYPE_MULT,
-  awaySecondsOf, playAwayMatchdays, AWAY_MATCHDAY_SEC, leaguePosition, leagueShape,
+  awaySecondsOf, playAwayMatchdays, AWAY_GRACE_SEC, AWAY_MATCHDAY_SEC, leaguePosition, leagueShape,
   setPieceOffer, beginSetPiece, awardSetPieceGoal,
   setTicketPolicy,
 } from '@/lib/stadiumTycoon';
@@ -75,12 +75,13 @@ export interface AwayTrip {
 export function useStadiumTycoon(getEdge?: () => number) {
   const getEdgeRef = useRef(getEdge);
   getEdgeRef.current = getEdge;
+  const savedBytes = useRef<string | null>(null);
+  const movedRef = useRef(false);
+  const [saveMoved, setSaveMoved] = useState(false);
   const [state, setState] = useState<TycoonState>(() => {
     const now = Date.now();
-    const loaded = deserializeTycoon(
-      typeof localStorage !== 'undefined' ? localStorage.getItem(TYCOON_SAVE_KEY) : null,
-      now,
-    );
+    try { savedBytes.current = localStorage.getItem(TYCOON_SAVE_KEY); } catch { /* Storage unavailable. */ }
+    const loaded = deserializeTycoon(savedBytes.current, now);
     return loaded ?? newTycoon(now);
   });
   const [floaters, setFloaters] = useState<Floater[]>([]);
@@ -116,16 +117,29 @@ export function useStadiumTycoon(getEdge?: () => number) {
     stateRef.current = next;
     setState(next);
   }, []);
-  const saveTicketState = useCallback((next: TycoonState) => {
+  const checkSaveMoved = useCallback(() => {
+    if (movedRef.current) return true;
     try {
-      localStorage.setItem(TYCOON_SAVE_KEY, serializeTycoon(next, Date.now()));
-      setTicketSaveFailed(false);
-      return true;
-    } catch {
-      setTicketSaveFailed(true);
-      return false;
-    }
+      if (localStorage.getItem(TYCOON_SAVE_KEY) === savedBytes.current) return false;
+    } catch { return false; }
+    movedRef.current = true;
+    setSaveMoved(true);
+    return true;
   }, []);
+  const writeState = useCallback((next: TycoonState, now = Date.now()) => {
+    if (checkSaveMoved()) return false;
+    try {
+      const bytes = serializeTycoon(next, now);
+      localStorage.setItem(TYCOON_SAVE_KEY, bytes);
+      savedBytes.current = bytes;
+      return true;
+    } catch { return false; }
+  }, [checkSaveMoved]);
+  const saveTicketState = useCallback((next: TycoonState, now = Date.now()) => {
+    const saved = writeState(next, now);
+    setTicketSaveFailed(!saved);
+    return saved;
+  }, [writeState]);
   const retryTicketSave = useCallback(() => saveTicketState(stateRef.current), [saveTicketState]);
   const goldenRef = useRef(golden);
   goldenRef.current = golden;
@@ -165,6 +179,7 @@ export function useStadiumTycoon(getEdge?: () => number) {
      paid, and the difference gone for good. */
   const paidUntilRef = useRef(state.savedAt);
   const settleAway = useCallback(() => {
+    if (checkSaveMoved()) return;
     const now = Date.now();
     const cur = stateRef.current;
     const trip = { ...cur, savedAt: paidUntilRef.current };
@@ -199,9 +214,9 @@ export function useStadiumTycoon(getEdge?: () => number) {
     const next = away ? away.state : paid;
     stateRef.current = next;
     // Bank it straight away: an unsaved settle would be paid a second time.
-    try { localStorage.setItem(TYCOON_SAVE_KEY, serializeTycoon(next, now)); } catch { /* ignore */ }
+    writeState(next, now);
     setState(next);
-  }, []);
+  }, [checkSaveMoved, writeState]);
 
   // The settlement for the time before this mount, before the loop starts.
   useEffect(() => {
@@ -213,6 +228,7 @@ export function useStadiumTycoon(getEdge?: () => number) {
   useEffect(() => {
     let raf = 0;
     let last = performance.now();
+    let lastWall = Date.now();
     let acc = 0;
     let sinceSave = 0;
     /* Round 1543: milestones and badges take turns on one spot. Each waits in
@@ -237,7 +253,17 @@ export function useStadiumTycoon(getEdge?: () => number) {
       release();
     };
     const step = (t: number) => {
+      if (movedRef.current) return;
       release();
+      const now = Date.now();
+      // Device sleep can stop frames without changing the tab's visibility.
+      if (now - Math.max(lastWall, paidUntilRef.current) >= AWAY_GRACE_SEC * 1000 && document.visibilityState !== 'hidden') {
+        settleAway();
+        last = t;
+        acc = 0;
+        sinceSave = 0;
+      }
+      lastWall = now;
       const dt = Math.min(2, (t - last) / 1000);
       last = t;
       acc += dt;
@@ -250,17 +276,18 @@ export function useStadiumTycoon(getEdge?: () => number) {
         paidUntilRef.current += use * 1000;
         const playedDivision = stateRef.current.league?.division;
         const { state: next, events } = tick(stateRef.current, use, Math.random, getEdgeRef.current?.() ?? 0);
-        stateRef.current = next;
-        for (const e of events) reactToEvent(e);
         /* Round 585: a watched full time earns its gems, once, keyed on the
            career match count. A tick settles at most one full time. */
         const ft = events.find(e => e.kind === 'win' || e.kind === 'draw' || e.kind === 'loss');
+        if (ft && checkSaveMoved()) return;
+        stateRef.current = next;
+        for (const e of events) reactToEvent(e);
         if (ft) {
           const season = events.find(e => (e.kind === 'title' || e.kind === 'seasonEnd') && e.position !== undefined);
           let allowGear = true;
           if (season?.kind === 'title') {
             // The completed stadium match is durable before its title can award gear.
-            try { localStorage.setItem(TYCOON_SAVE_KEY, serializeTycoon(next, Date.now())); } catch { allowGear = false; }
+            allowGear = writeState(next);
             setGearSaveBlocked(!allowGear);
           }
           const gems = recordFullTimes([{
@@ -342,7 +369,12 @@ export function useStadiumTycoon(getEdge?: () => number) {
     };
     raf = requestAnimationFrame(step);
     const saveNow = () => {
-      saveTicketState(stateRef.current);
+      const now = Date.now();
+      // A hidden tab can close before its away time has been settled.
+      const savedAt = document.visibilityState === 'hidden'
+        ? Math.min(now, Math.floor(paidUntilRef.current))
+        : now;
+      saveTicketState(stateRef.current, savedAt);
     };
     /* Round 439: hiding banks the save, coming back settles the hours. The
        frame clock restarts on the way back in so the return frame pays for
@@ -353,15 +385,22 @@ export function useStadiumTycoon(getEdge?: () => number) {
       last = performance.now();
       acc = 0;
     };
+    const onStorage = (event: StorageEvent) => {
+      if (event.key === TYCOON_SAVE_KEY || event.key === null) checkSaveMoved();
+    };
     document.addEventListener('visibilitychange', onVisibility);
     window.addEventListener('pagehide', saveNow);
+    window.addEventListener('storage', onStorage);
+    window.addEventListener('pageshow', checkSaveMoved);
     return () => {
       cancelAnimationFrame(raf);
       document.removeEventListener('visibilitychange', onVisibility);
       window.removeEventListener('pagehide', saveNow);
+      window.removeEventListener('storage', onStorage);
+      window.removeEventListener('pageshow', checkSaveMoved);
       saveNow();
     };
-  }, [pushFloater, settleAway, saveTicketState]);
+  }, [pushFloater, settleAway, saveTicketState, checkSaveMoved, writeState]);
 
   /* Round 195: the idle game counts as playing TODAY. One unscored mark
      per session, on the first meaningful action (a tap, a purchase, a
@@ -370,34 +409,37 @@ export function useStadiumTycoon(getEdge?: () => number) {
      A ref, not state: marking must never re-render the game loop. */
   const sessionMarkedRef = useRef(false);
   const markSessionPlay = useCallback(() => {
-    if (sessionMarkedRef.current) return;
-    sessionMarkedRef.current = true;
-    recordCompletion('/stadium-tycoon');
-  }, []);
+    if (checkSaveMoved()) return false;
+    if (!sessionMarkedRef.current) {
+      sessionMarkedRef.current = true;
+      recordCompletion('/stadium-tycoon');
+    }
+    return true;
+  }, [checkSaveMoved]);
 
   const doSetTicketPolicy = useCallback((policy: TicketPolicy) => {
     const before = stateRef.current;
     const next = setTicketPolicy(stateRef.current, policy);
-    if (next !== before) markSessionPlay();
+    if (next !== before && !markSessionPlay()) return;
     commit(next);
     saveTicketState(next);
   }, [commit, saveTicketState, markSessionPlay]);
 
   const doBuy = useCallback((id: string, amount: 1 | 5 = 1) => {
-    markSessionPlay();
+    if (!markSessionPlay()) return;
     commit(amount === 1 ? buy(stateRef.current, id) : upgradePurchase(stateRef.current, id, amount).state);
-  }, [commit]);
+  }, [commit, markSessionPlay]);
 
   /* Round 162: the payroll. */
   const doHire = useCallback((id: string, amount: 1 | 5 = 1) => {
-    markSessionPlay();
+    if (!markSessionPlay()) return;
     commit(amount === 1 ? hire(stateRef.current, id) : payrollPurchase(stateRef.current, id, amount).state);
-  }, [commit]);
+  }, [commit, markSessionPlay]);
 
   /* Round 162: catching the whistle. The floater says what it was worth. */
   const doCatchGolden = useCallback(() => {
     const g = goldenRef.current;
-    if (!g) return;
+    if (!g || checkSaveMoved()) return;
     setGolden(null);
     const { state: next, amount } = catchGolden(stateRef.current, g.kind);
     if (next === stateRef.current) return;
@@ -408,10 +450,10 @@ export function useStadiumTycoon(getEdge?: () => number) {
     else pushFloater(`🪙 ${info.label}: ${info.blurb}!`, 'win', g.x, g.y);
     setConfetti(c => c + 1);
     commit(next);
-  }, [pushFloater, commit]);
+  }, [pushFloater, commit, checkSaveMoved]);
 
   const doTap = useCallback((xPct: number, yPct: number) => {
-    markSessionPlay();
+    if (!markSessionPlay()) return;
     const before = stateRef.current;
     const after = tap(before);
     /* Round 583: every floater prints the engine's real change through fmtMoney,
@@ -419,9 +461,10 @@ export function useStadiumTycoon(getEdge?: () => number) {
        tap read +$4830000000 beside a balance reading $4.83B. */
     pushFloater(`+${fmtMoney(after.money - before.money)}`, 'tap', xPct, yPct);
     commit(after);
-  }, [pushFloater, commit]);
+  }, [pushFloater, commit, markSessionPlay]);
 
   const doBoost = useCallback(() => {
+    if (checkSaveMoved()) return;
     const before = stateRef.current;
     const after = activateBoost(before);
     if (after !== before) {
@@ -429,74 +472,75 @@ export function useStadiumTycoon(getEdge?: () => number) {
       setConfetti(c => c + 1);
       commit(after);
     }
-  }, [pushFloater, commit]);
+  }, [pushFloater, commit, checkSaveMoved]);
 
   /* Round 581: selling up is the most destructive thing this game does, so it
      is written from the ref and saved before React hears about it. Inside a
      setState updater the save ran whenever React got round to the updater, and
      a pagehide landing first wrote the pre-sale ground back over the sale. */
   const doPrestige = useCallback(() => {
+    if (checkSaveMoved()) return false;
     const now = Date.now();
     const next = prestige(stateRef.current, now);
     if (next === stateRef.current) return false;
-    try { localStorage.setItem(TYCOON_SAVE_KEY, serializeTycoon(next, now)); } catch { return false; }
+    if (!writeState(next, now)) return false;
+    paidUntilRef.current = now;
     stateRef.current = next;
     setState(next);
     return true;
-  }, []);
+  }, [checkSaveMoved, writeState]);
 
   /* Round 196: the boardroom. Spending legacy is a meaningful action too,
      so it marks the session like a tap or a hire does. */
   const doLegacyPerk = useCallback((id: string) => {
-    markSessionPlay();
     const before = stateRef.current;
     const after = buyPerk(before, id);
-    if (after === before) return;
+    if (after === before || !writeState(after)) return false;
+    markSessionPlay();
     const p = perkById(id);
     if (p) pushFloater(`${p.emoji} ${p.name}: locked in forever`, 'win', 24, 30);
     setConfetti(c => c + 1);
-    stateRef.current = after;
-    try { localStorage.setItem(TYCOON_SAVE_KEY, serializeTycoon(after, Date.now())); } catch { /* ignore */ }
-    setState(after);
-  }, [pushFloater]);
+    commit(after);
+    return true;
+  }, [commit, pushFloater, markSessionPlay, writeState]);
 
   /* Round 582: the club name, picked from generated options. Not a session mark:
      naming the club is not playing it. */
   const doSetClubName = useCallback((name: string) => {
+    if (checkSaveMoved()) return;
     const before = stateRef.current;
     const after = setClubName(before, name);
     if (after === before) return;
     commit(after);
-  }, [commit]);
+  }, [commit, checkSaveMoved]);
 
   const doBeginSetPiece = useCallback((offer: SetPieceOffer) => {
-    if (!replaysOnRef.current || document.hidden) return;
+    if (!replaysOnRef.current || document.hidden || checkSaveMoved()) return;
     const next = beginSetPiece(stateRef.current, offer);
     if (next === stateRef.current) return;
-    try { localStorage.setItem(TYCOON_SAVE_KEY, serializeTycoon(next, Date.now())); }
-    catch {
+    if (!writeState(next)) {
       setSetPieceError('This kick could not be saved. Try opening it again.');
       return;
     }
     commit(next);
     setSetPieceError(null);
     setActiveSetPiece(offer);
-  }, [commit]);
+  }, [commit, checkSaveMoved, writeState]);
 
   const doSetPieceResult = useCallback((offer: SetPieceOffer, scored: boolean): 'accepted' | 'expired' | 'save-failed' => {
+    if (checkSaveMoved()) return 'expired';
     const before = stateRef.current;
     if ((before.totalMatches ?? 0) !== offer.match || before.rep !== offer.rep
       || before.minute >= 90 || before.setPieceAttemptedMatch !== offer.match) return 'expired';
     if (!scored || before.setPieceUsedMatch === offer.match) return 'accepted';
     const awarded = awardSetPieceGoal(before, offer);
     if (!awarded) return 'expired';
-    try { localStorage.setItem(TYCOON_SAVE_KEY, serializeTycoon(awarded.state, Date.now())); }
-    catch { return 'save-failed'; }
+    if (!writeState(awarded.state)) return 'save-failed';
     commit(awarded.state);
     pushFloater(`GOAL ${awarded.event.minute}' +${fmtMoney(awarded.event.amount ?? 0)}`, 'goal', 50, 24);
     setConfetti(count => count + 1);
     return 'accepted';
-  }, [commit, pushFloater]);
+  }, [commit, pushFloater, checkSaveMoved, writeState]);
   const closeSetPiece = useCallback(() => { setActiveSetPiece(null); setSetPieceError(null); }, []);
 
   const dismissAway = useCallback(() => { setAwayPay(null); setAwayTrip(null); }, []);
@@ -515,7 +559,7 @@ export function useStadiumTycoon(getEdge?: () => number) {
   }, [pendingSetPiece?.match, pendingSetPiece?.rep]);
 
   return {
-    state, floaters, awayPay, awayTrip, dismissAway, confetti, gearSaveBlocked,
+    state, floaters, awayPay, awayTrip, dismissAway, confetti, gearSaveBlocked, saveMoved,
     doSetTicketPolicy, ticketSaveFailed, retryTicketSave,
     doBuy, doTap, doPrestige, doBoost,
     golden, doCatchGolden, doHire, doLegacyPerk,

@@ -1364,6 +1364,7 @@ export function playMinute(st: TycoonState, roll: () => number, events: TickEven
  *  matchday season right up to its final, which still waits for you (contract
  *  section 22). */
 export const AWAY_MATCHDAY_SEC = 1680;
+export const AWAY_GRACE_SEC = 30;
 
 /** Round 584: a result as the away card prints it, and whether it was the
  *  leftover friendly an older save finishes outside the table. */
@@ -1569,7 +1570,7 @@ export function prestige(s: TycoonState, now: number): TycoonState {
 export function awaySecondsOf(s: TycoonState, now: number): number {
   const elapsed = Math.max(0, (now - s.savedAt) / 1000);
   const capped = Math.min(elapsed, offlineCapHoursOf(s) * 3600);
-  return capped < 30 ? 0 : capped;
+  return capped < AWAY_GRACE_SEC ? 0 : capped;
 }
 
 /** Away pay: half rate, capped at eight hours, both raised by the Away

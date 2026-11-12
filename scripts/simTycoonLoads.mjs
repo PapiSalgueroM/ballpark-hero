@@ -131,13 +131,13 @@ const LEVEL_CLEANING_END = '    s.levels = cleanLevels;\n';
 const REF_FIRST_PRESTIGE = `    const now = Date.now();
     const next = prestige(stateRef.current, now);
     if (next === stateRef.current) return false;
-    try { localStorage.setItem(TYCOON_SAVE_KEY, serializeTycoon(next, now)); } catch { return false; }
+    if (!writeState(next, now)) return false;
     stateRef.current = next;
     setState(next);
     return true;`;
 const UPDATER_PRESTIGE = `    setState(s => {
       const next = prestige(s, Date.now());
-      try { localStorage.setItem(TYCOON_SAVE_KEY, serializeTycoon(next, Date.now())); } catch { /* ignore */ }
+      writeState(next);
       return next;
     });`;
 
