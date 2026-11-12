@@ -1,6 +1,7 @@
 import { useMemo, useRef, useState } from 'react';
 import { ArrowRight, Bookmark, ChevronDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import RetireDoor from '@/components/club-manager/RetireDoor';
 import NrlBoardChallengeNotice from '@/components/nrl-manager/NrlBoardChallengeNotice';
 import { nrlSeasonPlan, NRL_LAST_YEAR } from '@/data/nrlManagerSeasons';
 import {
@@ -619,6 +620,7 @@ function CareerRecord({ history }: { history: NrlCareerState['history'] }) {
 function History({ career, onAction, disabled }: { career: NrlCareerState; onAction: Dispatch; disabled: boolean }) {
   const { year, phase, clubId } = career.season;
   const finished = phase === 'complete';
+  const retired = career.retired === true;
   const target = nrlBoardTarget(career);
   const challengeStatus = nrlBoardChallengeStatus(career);
   const mustMove = challengeStatus === 'must-move';
@@ -630,7 +632,8 @@ function History({ career, onAction, disabled }: { career: NrlCareerState; onAct
     <>
       <h2 className="font-display text-xl font-bold">Season review</h2>
       <p className="mt-1 text-sm text-muted-foreground">
-        {finished ? 'Review the year and settle your squad before the new season.' : 'Completed seasons stay here as your career moves on.'}
+        {retired ? `Retired after the ${year} season.`
+          : finished ? 'Review the year and settle your squad before the new season.' : 'Completed seasons stay here as your career moves on.'}
       </p>
       {target && (
         <section className="mt-4 rounded-xl border border-border bg-background p-3" aria-labelledby="nrl-board-target">
@@ -646,9 +649,9 @@ function History({ career, onAction, disabled }: { career: NrlCareerState; onAct
           </p>
         </section>
       )}
-      {challengeStatus && <div className="mt-3"><NrlBoardChallengeNotice season={career.season} status={challengeStatus} /></div>}
-      {!career.legacySeason && year < NRL_LAST_YEAR && <DevelopmentFocus career={career} onAction={onAction} disabled={disabled} />}
-      {finished && year < NRL_LAST_YEAR && !mustMove && (
+      {!retired && challengeStatus && <div className="mt-3"><NrlBoardChallengeNotice season={career.season} status={challengeStatus} /></div>}
+      {!retired && !career.legacySeason && year < NRL_LAST_YEAR && <DevelopmentFocus career={career} onAction={onAction} disabled={disabled} />}
+      {finished && !retired && year < NRL_LAST_YEAR && !mustMove && (
         <Button type="button" size="lg" className="mt-3 w-full" disabled={disabled} onClick={() => onAction({ type: 'startNextSeason' })}>
           Start {year + 1}<ArrowRight aria-hidden="true" />
         </Button>
@@ -671,6 +674,11 @@ function History({ career, onAction, disabled }: { career: NrlCareerState; onAct
             </Button>}
           </div>
         </details>
+      )}
+      {finished && !retired && !disabled && (
+        <RetireDoor className="mt-3" door="Retire from management" title={`Retire after the ${year} season?`}
+          lines={['Your career record stays in this save slot.']} keep="Keep managing" confirm="Yes, retire"
+          onRetire={() => onAction({ type: 'retireCareer', year, clubId })} />
       )}
       <CareerRecord history={career.history} />
       {career.history.length > 0 ? (

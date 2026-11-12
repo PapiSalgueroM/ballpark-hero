@@ -390,7 +390,7 @@ function MatchCentre({ career, onAction, onReview, disabled, showLiveResult }: {
 
   return (
     <section className="space-y-4" aria-label="Match centre">
-      <NrlBoardChallengeNotice season={season} status={nrlBoardChallengeStatus(career)} />
+      {!career.retired && <NrlBoardChallengeNotice season={season} status={nrlBoardChallengeStatus(career)} />}
       {showLiveResult && report}
       <div className="overflow-hidden rounded-2xl border border-emerald-500/35 bg-emerald-950 p-4 text-emerald-50 sm:p-6">
         <p className="text-xs font-bold uppercase tracking-widest text-emerald-200">{next.title}</p>
@@ -783,13 +783,14 @@ function NrlManagerScreen({ entry, showSlots }: { entry: ContinueSave; showSlots
   });
   const [career, setCareer] = useState(initial?.career ?? null);
   const season = career?.season ?? null;
+  const retired = career?.retired === true;
   const current = useRef(career);
   const committed = useRef(initial?.raw ?? null);
   const [year, setYear] = useState<NrlYear>(initial?.career?.openingYear ?? 2026);
   const invalid = initial?.raw != null && initial.career === null;
   const arrival = useArrivalTop<HTMLHeadingElement>(showSlots ? 'slots' : !season ? 'choose' : `club-${season?.year}`);
-  const [panel, setPanel] = useState<Panel>('match');
-  const [office, setOffice] = useState<OfficeScreen>('contracts');
+  const [panel, setPanel] = useState<Panel>(retired ? 'office' : 'match');
+  const [office, setOffice] = useState<OfficeScreen>(retired ? 'history' : 'contracts');
   const [showLiveResult, setShowLiveResult] = useState(false);
   const [saveFailed, setSaveFailed] = useState(false);
   const [changed, setChanged] = useState(false);
@@ -878,7 +879,7 @@ function NrlManagerScreen({ entry, showSlots }: { entry: ContinueSave; showSlots
           This season changed in another tab. <button type="button" className="min-h-11 font-bold underline" onClick={() => window.location.reload()}>Reload your season</button>
         </div>}
         {!moved && saveFailed && <div className="rounded-xl border border-amber-500/50 bg-card p-3 text-sm" role="status">
-          This browser could not save your progress. You can keep playing in this tab.{' '}
+          This browser could not save your progress. {retired ? 'Retry to save your retirement.' : 'You can keep playing in this tab.'}{' '}
           <button type="button" className="min-h-11 font-bold underline" onClick={() => current.current && persist(current.current)}>Retry save</button>
         </div>}
         {showSlots ? (
@@ -913,7 +914,7 @@ function NrlManagerScreen({ entry, showSlots }: { entry: ContinueSave; showSlots
                       aria-pressed={office === id} onClick={() => setOffice(id)}>{label}</Button>
                   ))}
                 </div>
-                <NrlCareerOffice key={office} career={career} screen={office} disabled={moved || live} onAction={dispatch} />
+                <NrlCareerOffice key={office} career={career} screen={office} disabled={moved || live || retired} onAction={dispatch} />
               </>
             )}
           </>

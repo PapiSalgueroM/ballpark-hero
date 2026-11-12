@@ -97,6 +97,7 @@ export interface NrlCareerState {
   finance: NrlCareerBook;
   legacySeason: boolean;
   boardChallenge?: true;
+  retired?: true;
   academy?: NrlAcademyAssignment[];
   developmentFocus?: ActiveDevelopmentFocus;
   shortlist?: string[];
@@ -111,7 +112,8 @@ export type NrlCareerAction = NrlAction
   | { type: 'hireCoach'; role: NrlCoachRole; year: number; round: number }
   | { type: 'setTicketTier'; tier: NrlTicketTier; year: number; round: number }
   | { type: 'signSponsor'; offer: NrlSponsorOffer; year: number; clubId: string }
-  | { type: 'startNextSeason'; move?: { fromYear: number; clubId: string } };
+  | { type: 'startNextSeason'; move?: { fromYear: number; clubId: string } }
+  | { type: 'retireCareer'; year: number; clubId: string };
 
 export interface NrlCareerCap {
   year: number;
@@ -731,8 +733,8 @@ function completeSquads(players: NrlCareerPlayer[], state: NrlCareerState, year:
   return [...activeById.values()];
 }
 
-export function nrlOffseasonClubs({ season }: Pick<NrlCareerState, 'season'>): readonly NrlClub[] {
-  if (season.phase !== 'complete' || season.year === NRL_LAST_YEAR) return [];
+export function nrlOffseasonClubs({ season, retired }: Pick<NrlCareerState, 'season' | 'retired'>): readonly NrlClub[] {
+  if (retired || season.phase !== 'complete' || season.year === NRL_LAST_YEAR) return [];
   return nrlSeasonPlan(season.year + 1).clubs.filter(club => club.id !== season.clubId);
 }
 
@@ -783,8 +785,13 @@ function rolloverCareer(state: NrlCareerState, move?: { fromYear: number; clubId
 }
 
 export function reduceNrlCareer(state: NrlCareerState, action: NrlCareerAction): NrlCareerState {
-  if (state.season.live && action.type !== 'finishLive') return state;
+  if (state.retired || (state.season.live && action.type !== 'finishLive')) return state;
   switch (action.type) {
+    case 'retireCareer': {
+      const { phase, year, clubId } = state.season;
+      if (phase !== 'complete' || action.year !== year || action.clubId !== clubId) return state;
+      return { ...state, retired: true };
+    }
     case 'startNextSeason':
       return rolloverCareer(state, action.move);
     case 'upgradeMedical': {
@@ -1065,6 +1072,7 @@ export function isNrlCareerState(value: unknown): value is NrlCareerState {
   if (!record(value) || value.version !== 2 || !isNrlOpeningYear(value.openingYear)
     || !isNrlSeasonProgress(value.season) || value.season.year < value.openingYear
     || typeof value.legacySeason !== 'boolean'
+    || (value.retired !== undefined && (value.retired !== true || value.season.phase !== 'complete'))
     || (value.boardChallenge !== undefined && (value.boardChallenge !== true || value.legacySeason))
     || (value.developmentFocus !== undefined && (!activeDevelopmentFocus(value.developmentFocus)
       || value.legacySeason || value.season.year === NRL_LAST_YEAR))
