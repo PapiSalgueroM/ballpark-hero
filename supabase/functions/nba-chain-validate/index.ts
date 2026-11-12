@@ -93,10 +93,12 @@ const NICKNAMES: Record<string, string> = {
 };
 const resolve = (n: string) => NICKNAMES[norm(n)] ?? norm(n);
 
-// The current roster labels and the verified spellings in the stint archive.
+// Verified team and start-season codes for the complete unkeyed archive sets.
+// Source links are in the NBA Chain roster spellings entry in docs/PROJECT-STATE.md.
 const ROSTER_STINT_ALIASES = new Map([
-  ["jr smith", "j r smith"],
-  ["robert williams iii", "robert williams"],
+  ["jr smith", { spelling: "j r smith", unkeyed: ["NOH:2004:2004", "NOK:2005:2005", "DEN:2006:2010",
+    "NYK:2011:2014", "CLE:2014:2018", "LAL:2019:2019"] }],
+  ["robert williams iii", { spelling: "robert williams", unkeyed: ["BOS:2018:2022", "POR:2023:2024"] }],
 ]);
 
 // Join explicit dotted initials for comparison without changing the stored fold.
@@ -118,14 +120,14 @@ function json(body: unknown, corsHeaders: Record<string, string>, status = 200) 
 async function lookup(sb: any, name: string): Promise<Stint[] | null> {
   const target = resolve(name);
   const COLS = "player_name, team, first_season, last_season";
-  const archiveName = ROSTER_STINT_ALIASES.get(target);
+  const alias = ROSTER_STINT_ALIASES.get(target);
   /* The last word of the RESOLVED name, against the folded column. Resolved so
      a nickname is searched as the man it names; folded so an accent cannot hide
      him. */
   const token = target.split(" ").slice(-1)[0] || target;
-  const query = sb.from("nba_player_team_stints").select(COLS);
-  const foldedQuery = archiveName
-    ? query.in("name_folded", [target, archiveName])
+  const query = sb.from("nba_player_team_stints").select(alias ? COLS + ", person_key" : COLS);
+  const foldedQuery = alias
+    ? query.in("name_folded", [target, alias.spelling])
     : query.ilike("name_folded", `%${token}%`);
   let { data, error } = await foldedQuery.limit(LOOKUP_LIMIT);
   if (error) {
@@ -142,10 +144,16 @@ async function lookup(sb: any, name: string): Promise<Stint[] | null> {
   const rows = (data ?? []) as Stint[];
   const exact = rows.filter((r) => resolve(r.player_name) === target);
   if (exact.length > 0) return exact;
-  if (archiveName) {
+  if (alias) {
     if (error || rows.length >= LOOKUP_LIMIT) return null;
-    const stints = rows.filter((row) => norm(row.player_name) === archiveName);
-    return stints.length > 0 ? stints : null;
+    const stints = (rows as KeyedStint[]).filter((row) => norm(row.player_name) === alias.spelling);
+    if (stints.length === 0) return null;
+    if (stints.some((row) => row.person_key !== null)) {
+      const personKey = stints[0].person_key;
+      return personKey?.trim() && stints.every((row) => row.person_key === personKey) ? stints : null;
+    }
+    const actual = new Set(stints.map((row) => [row.team, row.first_season, row.last_season].join(":")));
+    return stints.length === alias.unkeyed.length && alias.unkeyed.every((key) => actual.has(key)) ? stints : null;
   }
   if (!error && rows.length < LOOKUP_LIMIT) {
     const key = initialsKey(name);

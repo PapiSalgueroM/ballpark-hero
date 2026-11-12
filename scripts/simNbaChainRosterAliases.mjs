@@ -114,3 +114,39 @@ assert.equal(truncated.valid, false);
 assert.equal(truncated.unverified, true);
 
 console.log('simNbaChainRosterAliases: missing, failed and capped alias reads defer, with raw exact fallback preserved');
+
+// Same archive spelling, two separate keyed people. Keep the mapped answer retryable.
+const williamsRows = rows.filter(row => row.name_folded === 'robert williams');
+const withWilliams = variants => [...rows.filter(row => row.name_folded !== 'robert williams'), ...variants];
+const rob = stint('Rob Williams', 'rob williams', 'DEN', 1982, 1983);
+const denver = stint('Fixture Denver Teammate', 'fixture denver teammate', 'DEN', 1982, 1983);
+const boston = stint('Fixture Boston Teammate', 'fixture boston teammate', 'BOS', 2020, 2020);
+const normalWilliams = await validate('Jayson Tatum', 'Robert Williams III', [...rows, rob, denver]);
+assert.equal(normalWilliams.valid, true);
+assert.equal((await validate('Fixture Denver Teammate', 'Robert Williams III', [...rows, rob, denver])).valid, false);
+assert.equal((await validate('Fixture Denver Teammate', 'Rob Williams', [...rows, rob, denver])).valid, true);
+
+const keyed = williamsRows.map(row => ({ ...row, person_key: 'fixture-one-person' }));
+assert.equal((await validate('Jayson Tatum', 'Robert Williams III', withWilliams(keyed))).valid, true);
+for (const variants of [
+  [keyed[0], { ...keyed[1], person_key: 'fixture-different-person' }],
+  [keyed[0], williamsRows[1]],
+  [...williamsRows, stint('Robert Williams', 'robert williams', 'DEN', 1982, 1983)],
+  [williamsRows[0]],
+  [...williamsRows, williamsRows[0]],
+  [stint('Robert Williams', 'robert williams', 'BOS', 2020, 2020), williamsRows[1]],
+]) {
+  const answer = await validate('Fixture Boston Teammate', 'Robert Williams III', [...withWilliams(variants), boston]);
+  assert.equal(answer.valid, false);
+  assert.equal(answer.unverified, true);
+}
+const smithRows = rows.filter(row => row.name_folded === 'j r smith');
+const withSmith = variants => [...rows.filter(row => row.name_folded !== 'j r smith'), ...variants];
+const keyedSmith = smithRows.map(row => ({ ...row, person_key: 'fixture-smith' }));
+assert.equal((await validate('LeBron James', 'JR Smith', withSmith(keyedSmith))).valid, true);
+const splitSmith = await validate('LeBron James', 'JR Smith', withSmith([
+  { ...keyedSmith[0], person_key: 'fixture-other-smith' }, ...keyedSmith.slice(1),
+]));
+assert.equal(splitSmith.valid, false);
+assert.equal(splitSmith.unverified, true);
+console.log('NBA Chain alias identity: exact known unkeyed stints, one shared key and a distinct historical Rob Williams held');

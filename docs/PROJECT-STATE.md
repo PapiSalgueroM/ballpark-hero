@@ -14,6 +14,10 @@ The NBA Chain validator can match JR Smith and Robert Williams III to their veri
 
 Both reported links failed on the baseline Edge fixture and passed in both directions after the port. The seven mounted Chain checks and the validator failure scan passed. The Edge change is staged for release review.
 
+The alias fallback requires a shared archive identity key or a complete set of independently verified legacy rows. Mixed keys, missing stints and unexpected unkeyed intervals now defer the answer. The source fixtures verify that the historical Rob Williams still resolves by his exact name. The current archive stops at 2024–25 for Robert Williams III, so his later Portland season remains outside this patch.
+
+Smith’s six legacy intervals use the [Pelicans draft record](https://www.nba.com/pelicans/news/big_easy_buzz_blog__050511.html), [Oklahoma City Hornets box score](https://www.nba.com/game/lac-vs-nok-0020500315/box-score), [Denver media guide](https://cdn.nba.com/teams/uploads/sites/1610612743/2022/11/2022-23-Denver-Nuggets-Media-Guide.pdf), [Knicks media guide](https://ak-static-int.nba.com/wp-content/uploads/sites/3/2017/10/2017-18-Media-Guide-Knicks.pdf), [Cleveland all-time roster](https://cdn.nba.com/teams/uploads/sites/1610612739/2022/10/08-roster.pdf) and [Lakers game book](https://statsdmz.nba.com/pdfs/20200822/20200822_LALPOR.pdf). The [Celtics profile](https://www.nba.com/celtics/player/1629057/robert-williams-iii) and [Portland career summary](https://www.nba.com/blazers/news/portland-trail-blazers-sign-robert-williams-iii-to-multi-year-contract-extension) anchor Williams III’s two intervals. [University of Houston](https://uhcougars.com/news/2014/3/10/former_men_s_basketball_guard_rob_williams_passes_away) records Rob Williams’s separate career.
+
 ## 2026-11-12: Rebuild season retry staged
 
 After the transfer window, Rebuild waits for both rival squads before showing the solo season. If a squad is unavailable, Retry season keeps the finished window and tries again.
