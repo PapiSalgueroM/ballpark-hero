@@ -130,6 +130,7 @@ const PerfectSeasonNfl = () => {
       }
       dailyPicker.current = makeDailyPicker(SPORT_KEY);
     }
+    setIndex([]);
     setPhase('boot');
   };
 
@@ -148,7 +149,11 @@ const PerfectSeasonNfl = () => {
         } else if (decade) {
           // Decade Mode: same wheel, same squads, pool narrowed to the era.
           const pool = filterIndexByDecade(idx, decade);
-          setIndex(pool.length >= 20 ? pool : idx);
+          if (pool.length < 20) {
+            setPhase('error');
+            return;
+          }
+          setIndex(pool);
         } else {
           setIndex(idx);
         }
@@ -365,6 +370,7 @@ const PerfectSeasonNfl = () => {
 
   const dailyTag = mode === 'daily' ? `Daily · ${todayStr}\n` : '';
   const decadeTag = decade && mode !== 'daily' ? ` · ${decade.label} pool` : '';
+  const unavailableDecade = mode !== 'daily' && index.length === 0 ? decade : null;
   const playoffLine = playoffRun
     ? playoffRun.champion
       ? `\n🏆 ${playoffRun.bannerTitle}${playoffRun.mvp ? ` · MVP: ${playoffRun.mvp}` : ''}`
@@ -534,10 +540,19 @@ const PerfectSeasonNfl = () => {
 
         {phase === 'error' && (
           <div className="text-center py-12">
-            <p className="text-destructive font-semibold mb-3">Couldn't reach the football archives.</p>
-            <button onClick={() => window.location.reload()} className="px-6 py-2.5 bg-primary text-primary-foreground rounded-full font-semibold">
-              Try again
-            </button>
+            <p className="text-destructive font-semibold mb-3">
+              {unavailableDecade ? `Couldn't load enough teams for the ${unavailableDecade.label} wheel.` : "Couldn't reach the football archives."}
+            </p>
+            <div className="flex flex-wrap justify-center gap-2">
+              <button onClick={() => unavailableDecade ? setPhase('boot') : window.location.reload()} className="min-h-11 px-6 py-2.5 bg-primary text-primary-foreground rounded-full font-semibold">
+                Try again
+              </button>
+              {unavailableDecade && (
+                <button onClick={backToModes} className="min-h-11 px-6 py-2.5 bg-secondary text-secondary-foreground rounded-full font-semibold">
+                  Back to modes
+                </button>
+              )}
+            </div>
           </div>
         )}
 
