@@ -1,5 +1,6 @@
 import { lazy, Suspense, useRef, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import { useSiteBack } from '@/hooks/useSiteBack';
 import { SiteMenuHost } from '@/components/layout/SiteMenuHost';
 import { Trophy, Star, Medal, Flame, ArrowLeft, UserPlus } from 'lucide-react';
 import { useGameNavbarStats } from '@/hooks/useGameNavbarStats';
@@ -90,7 +91,7 @@ const DailyLegendOverlay = lazy(() => import('./DailyLegendOverlay').then(module
  * overflow.
  */
 export function GameNavbar() {
-  const navigate = useNavigate();
+  const goBack = useSiteBack();
   const { user } = useAuth();
   const [authOpen, setAuthOpen] = useState(false);
   const backRef = useRef<HTMLButtonElement>(null);
@@ -131,7 +132,7 @@ export function GameNavbar() {
               stranded under the stats. */}
           <button
             ref={backRef}
-            onClick={() => navigate(-1)}
+            onClick={goBack}
             aria-label="Go back"
             className="order-2 lg:order-3 shrink-0 inline-flex items-center gap-1.5 rounded-lg border-2 border-primary/60 bg-surface-1 px-3 py-1.5 min-h-11 text-xs sm:text-sm font-semibold text-primary hover:bg-primary hover:text-primary-foreground transition-colors shadow-sm lg:justify-self-end"
           >

@@ -1,3 +1,11 @@
+## 2026-11-12 Home search and sport catalog
+
+Home puts Search and Browse sports together above the featured games. Browse sports moves focus below the sticky header to the sport library, with favourite and pin guidance beside the controls. Phone catalog tiles show the full title and badges, with separate Play and Pin targets. Search results and the desktop catalog show game descriptions.
+
+In compiled native Chrome at 390px, Soccer Career begins at y=291 versus y=351 and the 36-game soccer section measures 1,477px versus 3,867px. At 320px the section measures 2,716px versus 4,276px. The desktop catalog measured 1,281px in both builds. At 320, 390 and 1440px, keyboard Browse and typo search worked without page overflow or page errors. Favourites and pins persisted across reloads and could be cleared.
+
+The type gate, production build and Home front harness passed. The browser search replay passed. The parent commit has a stale generated search index hash and a 40px shared header wrap for guests with a streak. The Browse shortcut clears the taller header.
+
 ## 2026-11-12: NRL Manager Academy
 
 Club office has an Academy for one active position assignment at a time. Generated reports arrive after the next round, including a bye. A promotion signs the prospect for one year at next season’s minimum salary and reserves one place in the Top 30. Unsigned reports clear at rollover.
