@@ -1266,7 +1266,7 @@ export default function SoccerCareer({ entry }: { entry?: SoccerCareerAdmission 
 
   const handleRehabChoice = (choiceIndex: number) => {
     if (!career) return;
-    setCareer(applyRehabChoice(career, choiceIndex));
+    setCareer(applyRehabChoice(career, choiceIndex, clubs));
   };
 
   const handleDismissMoralDilemma = () => {
