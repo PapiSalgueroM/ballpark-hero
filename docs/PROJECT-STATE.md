@@ -16,6 +16,12 @@ Daily guesses settle against the latest saved board, so two tabs can fill differ
 
 The mounted fixture suite reproduced 27 failures on main and passed all 27 with the repair, plus 29 completion, rarity, namesake and engine checks. Production build and phone verification are pending. The NHL reports did not include a player or square, so this verifies a separate Daily save defect in that route.
 
+## 2026-11-12: Gauntlet Daily midnight saves staged
+
+Finishing a Gauntlet Daily from before midnight keeps the newer Daily result in another tab. The shared record writer prunes only earlier dates for the same game and retains the existing keys and JSON.
+
+A mounted replay saved 32 points for Nov 12, then 48 for Nov 11 from its older tab. The original removed Nov 12 and offered the first pick again. The repair kept both records and reopened Nov 12 with the 32-point result and one completion for each run. Both new regressions failed on main, then passed with 13 existing Daily record and Gauntlet reload checks. Production verification is pending.
+
 ## 2026-11-07: Club Manager historical roster counts live
 
 [PR #532](https://github.com/PapiSalgueroM/ballpark-hero/pull/532) published from main `c3b5ca4afaf9b4dadcd748f340e8e8e3e4a1a1dd`, App tree `133fcd3d26a4d237178e5c7efee723048da0aef2`, Lovable deployment `510b1df1-2172-42c0-90f9-d9f9c997b840`.
