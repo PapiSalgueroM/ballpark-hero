@@ -5,7 +5,7 @@ import NrlBoardChallengeNotice from '@/components/nrl-manager/NrlBoardChallengeN
 import { nrlSeasonPlan, NRL_LAST_YEAR } from '@/data/nrlManagerSeasons';
 import {
   nrlAcademyAvailableRoles, nrlAcademyOffer, nrlAcademyReports, nrlCareerCap, nrlCareerFinance, nrlCareerMarket, nrlCareerRecord, nrlCareerSquad, nrlContractOffer,
-  nrlCoachQuote, nrlCoachSpend, nrlDevelopmentPreview, nrlMedicalSpend, nrlMedicalUpgradeQuote, nrlOffseasonClubs, type NrlCareerAction, type NrlCareerState,
+  nrlCoachQuote, nrlCoachSpend, nrlDevelopmentPreview, nrlFinanceForecast, nrlMedicalSpend, nrlMedicalUpgradeQuote, nrlOffseasonClubs, type NrlCareerAction, type NrlCareerState,
   nrlTicketPricingRefusal, NRL_TICKET_GATE_CHANGES, type NrlDevelopmentFocus, type NrlMedicalLevel, type NrlTicketTier,
 } from '@/lib/nrlCareer';
 import { NRL_COACHING_BONUS, NRL_ROLES, type NrlCoachRole, type NrlRole } from '@/lib/nrlManager';
@@ -16,6 +16,7 @@ const currency = new Intl.NumberFormat('en-AU', {
   style: 'currency', currency: 'AUD', maximumFractionDigits: 0,
 });
 const money = (amount: number) => currency.format(amount);
+const moneyRange = (low: number, high: number) => low === high ? money(low) : `${money(low)} to ${money(high)}`;
 const labelForClub = (year: number, id: string) => nrlSeasonPlan(year).clubs.find(club => club.id === id)?.shortName ?? id;
 
 type OfficeScreen = 'contracts' | 'recruitment' | 'academy' | 'finances' | 'history';
@@ -225,12 +226,12 @@ function Academy({ career, onAction, disabled }: { career: NrlCareerState; onAct
   );
 }
 
-function MoneyRows({ entries }: { entries: readonly (readonly [string, number])[] }) {
+function MoneyRows({ entries }: { entries: readonly (readonly [string, number | string])[] }) {
   return (
     <dl className="mt-2 divide-y divide-border text-sm">
       {entries.map(([name, amount]) => (
         <div key={name} className="flex flex-wrap justify-between gap-x-3 py-2">
-          <dt className="text-muted-foreground">{name}</dt><dd className="font-semibold tabular-nums">{money(amount)}</dd>
+          <dt className="text-muted-foreground">{name}</dt><dd className="font-semibold tabular-nums">{typeof amount === 'number' ? money(amount) : amount}</dd>
         </div>
       ))}
     </dl>
@@ -344,6 +345,40 @@ function TicketPricing({ career, onAction, disabled }: { career: NrlCareerState;
   );
 }
 
+function CashForecast({ career, hasAccounts }: { career: NrlCareerState; hasAccounts: boolean }) {
+  const forecast = nrlFinanceForecast(career);
+  return (
+    <details className="group mt-4 rounded-xl border border-border bg-background px-3">
+      <summary className="flex min-h-11 cursor-pointer items-center justify-between gap-2 rounded-md text-sm font-bold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
+        Season cash forecast<ChevronDown size={16} aria-hidden="true" className="shrink-0 group-open:rotate-180" />
+      </summary>
+      <div className="pb-3 text-sm">
+        {forecast ? (
+          <>
+            <p className="text-muted-foreground">
+              Uses simulated amounts at your current ticket tier. Later finals, new hires and facility purchases can change the final balance.
+            </p>
+            {career.finance.fromRound > 1 && (
+              <p className="mt-1 text-muted-foreground">Accounts began in round {career.finance.fromRound}. The estimate uses the cash recorded since then.</p>
+            )}
+            <p className="mt-2 text-xs text-muted-foreground">
+              Accounting rounds left {forecast.roundsLeft} · Scheduled home gates {forecast.homeMatches} · Scheduled trips {forecast.trips}
+            </p>
+            <MoneyRows entries={[
+              ['Cash now', forecast.cashNow], ['Central funding left', forecast.funding], ['Player wages left', forecast.playerWages],
+              ['Assistant wages left', forecast.assistantWages], ['Operations and travel left', forecast.operatingCosts],
+              ['Estimated gate income', moneyRange(forecast.gateLow, forecast.gateHigh)],
+              ['Estimated closing cash', moneyRange(forecast.closingLow, forecast.closingHigh)],
+            ]} />
+          </>
+        ) : (
+          <p className="text-muted-foreground">{hasAccounts ? 'This season’s accounts are final.' : 'Forecast starts next season for this imported save.'}</p>
+        )}
+      </div>
+    </details>
+  );
+}
+
 function Finances({ career, onAction, disabled }: { career: NrlCareerState; onAction: Dispatch; disabled: boolean }) {
   const [nextYear, setNextYear] = useState(false);
   const year = career.season.year;
@@ -384,6 +419,7 @@ function Finances({ career, onAction, disabled }: { career: NrlCareerState; onAc
           ) : <p className="mt-2 text-sm text-muted-foreground">This completed save predates club accounts. Tracking starts next season.</p>}
         </div>
       </div>
+      <CashForecast career={career} hasAccounts={hasAccounts} />
       <TicketPricing career={career} onAction={onAction} disabled={disabled} />
       <MedicalFacilities career={career} onAction={onAction} disabled={disabled} />
       <CoachingStaff career={career} onAction={onAction} disabled={disabled} />
