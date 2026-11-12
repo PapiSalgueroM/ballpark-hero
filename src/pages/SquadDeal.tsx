@@ -143,6 +143,9 @@ const SquadDeal = () => {
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 max-w-2xl mx-auto">
             {TOPICS.map(t => {
               const playable = g.playableTopics === null || g.playableTopics.includes(t.id);
+              const description = t.id === 'wc2026' && g.era === 'legends'
+                ? 'Legends from the 48 World Cup nations'
+                : t.desc;
               return (
                 <button
                   key={t.id}
@@ -159,7 +162,7 @@ const SquadDeal = () => {
                   <div className="text-lg"><FlagFromEmoji emoji={t.emoji} size={18} /></div>
                   <div className={cn('text-xs font-bold mt-0.5', g.topic === t.id && playable ? 'text-primary' : 'text-foreground')}>{t.label}</div>
                   <div className="text-[10px] text-muted-foreground">
-                    {playable ? t.desc : `Not enough for a ${g.formation.name} here`}
+                    {playable ? description : `Not enough for a ${g.formation.name} here`}
                   </div>
                 </button>
               );

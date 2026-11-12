@@ -24,8 +24,8 @@
         eras, with the extras switch on and off.
      3) A topic the game offers can actually fill every slot of every
         formation, so there is nothing left for a fallback to rescue.
-     4) The offer is not empty: enough topics survive in each era for the
-        picker to be worth showing, and All World always survives.
+     4) The offer is not empty: the default Current shape and the Legends
+        diamond each have a choice of topics, including All World.
 
    Negative controls (house rule: prove the check can fail), and they
    reproduce the real defects rather than invented ones:
@@ -207,9 +207,11 @@ console.log('3) a topic the game offers can fill every slot of every formation')
 console.log('4) the picker is still worth showing');
 {
   for (const era of ['current', 'legends']) {
-    const slots = FORMATIONS[0].slots;
-    const ok = TOPICS.filter(t => topicCanFill(pools[era], t.id, slots));
-    console.log(`   ${era}: ${ok.length} of ${TOPICS.length} topics playable on ${FORMATIONS[0].name} (${ok.map(t => t.label).join(', ')})`);
+    // The final World Cup field leaves Legends with two natural left-wing fits.
+    // Its diamond can still offer a themed draft under the three-player slot rule.
+    const formation = era === 'legends' ? FORMATIONS.find(f => f.name === '4-1-2-1-2') : FORMATIONS[0];
+    const ok = TOPICS.filter(t => topicCanFill(pools[era], t.id, formation.slots));
+    console.log(`   ${era}: ${ok.length} of ${TOPICS.length} topics playable on ${formation.name} (${ok.map(t => t.label).join(', ')})`);
     if (!ok.some(t => t.id === 'all')) fail(`${era}: All World is not playable, which means the pool itself is broken`);
     if (ok.length < 2) fail(`${era}: only ${ok.length} topic(s) playable, so the picker has nothing to pick between`);
   }

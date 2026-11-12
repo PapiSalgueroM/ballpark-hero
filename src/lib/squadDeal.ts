@@ -1,6 +1,7 @@
 import { supabase } from '@/integrations/supabase/client';
 import { Player, Position, League } from '@/types/game';
 import { players as fallbackPlayers } from '@/data/players';
+import { WC2026_GROUPS } from '@/data/wc2026Results';
 import { getEnrichment } from '@/data/footleEnrichment';
 import { normalizePosition, ratingFor } from '@/lib/squadShape';
 import type { FormationSlot, Era } from '@/lib/squadShape';
@@ -205,14 +206,30 @@ export type Topic = 'all' | 'wc2026' | 'premier' | 'laliga' | 'seriea' | 'southa
 
 export const TOPICS: { id: Topic; label: string; emoji: string; desc: string }[] = [
   { id: 'all', label: 'All World', emoji: '🌍', desc: 'Every top player' },
-  { id: 'wc2026', label: 'World Cup 2026', emoji: '🏆', desc: 'Nations at the 2026 World Cup' },
+  { id: 'wc2026', label: 'World Cup 2026', emoji: '🏆', desc: 'Current players from the 48 World Cup nations' },
   { id: 'premier', label: 'Premier League', emoji: '🏴', desc: 'PL players only' },
   { id: 'laliga', label: 'La Liga', emoji: '🇪🇸', desc: 'La Liga players only' },
   { id: 'seriea', label: 'Serie A', emoji: '🇮🇹', desc: 'Serie A players only' },
   { id: 'southamerica', label: 'South America', emoji: '🌎', desc: 'CONMEBOL nations only' },
 ];
 
-export const WC2026_NATIONS = new Set(['United States','Mexico','Canada','Argentina','France','Spain','England','Brazil','Portugal','Netherlands','Belgium','Croatia','Morocco','Germany','Italy','Uruguay','Colombia','Ecuador','Japan','South Korea','Korea, South','Australia','Iran','Saudi Arabia','Qatar','Senegal','Ghana','Cameroon','Nigeria','Egypt','Algeria','Ivory Coast',"Cote d'Ivoire",'Tunisia','Switzerland','Austria','Poland','Denmark','Sweden','Norway','Scotland','Wales','Serbia','Turkey','Türkiye','Ukraine','Greece','Czechia','Czech Republic','Paraguay','Panama','Costa Rica','Jordan','Uzbekistan','New Zealand','Bolivia','Haiti','Curacao','Cape Verde','South Africa','Bosnia-Herzegovina','Bosnia & Herzegovina','Iraq','DR Congo']);
+const WC2026_NATION_ALIASES: Record<string, string[]> = {
+  USA: ['United States'],
+  'Cape Verde': ['Cabo Verde'],
+  'DR Congo': ['Congo DR', 'Democratic Republic of Congo'],
+  Iran: ['IR Iran'],
+  'South Korea': ['Korea, South', 'Korea Republic'],
+  'Ivory Coast': ["Cote d'Ivoire", "Côte d'Ivoire", 'Côte d’Ivoire'],
+  Turkey: ['Türkiye'],
+  'Czech Republic': ['Czechia'],
+  'Curaçao': ['Curacao'],
+  'Bosnia & Herzegovina': ['Bosnia-Herzegovina', 'Bosnia and Herzegovina'],
+};
+
+// Use the tournament field for eligibility, with the spellings used by the player pool and map.
+export const WC2026_NATIONS = new Set(
+  WC2026_GROUPS.flatMap(({ teams }) => teams.flatMap(team => [team, ...(WC2026_NATION_ALIASES[team] ?? [])])),
+);
 const CONMEBOL = new Set(['Argentina','Brazil','Uruguay','Colombia','Chile','Ecuador','Paraguay','Peru','Bolivia','Venezuela']);
 
 /**
