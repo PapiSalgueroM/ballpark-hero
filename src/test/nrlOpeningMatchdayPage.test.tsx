@@ -5,7 +5,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { createNrlCareer, createNrlOpeningMatchdayCareer, readNrlCareerSave, type NrlCareerState } from '@/lib/nrlCareer';
 import { NRL_OPENING_MATCHDAY_2026 } from '@/data/nrlOpeningMatchday2026';
 import { NRL_SAVE_KEY } from '@/lib/nrlManager';
-import { saveFence } from '@/lib/saveFence';
+import { createSaveFence, fenceKeyOf, saveFence } from '@/lib/saveFence';
 import NrlTeamManager from '@/pages/NrlTeamManager';
 
 const chunks = vi.hoisted(() => ({ load: vi.fn(), reload: vi.fn(() => false) }));
@@ -102,6 +102,46 @@ describe('NRL opening matchday chooser', () => {
     const payload = createNrlOpeningMatchdayCareer('broncos', 16, NRL_OPENING_MATCHDAY_2026);
     await act(async () => { ready(payload); });
     expect(raw()).toBeNull();
+  });
+
+  it('discards an outstanding roster request after leaving and reopening the route', async () => {
+    let ready: (value: NrlCareerState) => void;
+    chunks.load.mockImplementation(() => new Promise(resolve => { ready = resolve; }));
+    const first = page();
+    fireEvent.click(toggle());
+    fireEvent.click(manage());
+    await screen.findByText('Loading the 2026 matchday names...');
+    first.unmount();
+    page();
+    expect(toggle()).not.toBeChecked();
+    const payload = createNrlOpeningMatchdayCareer('broncos', 16, NRL_OPENING_MATCHDAY_2026);
+    await act(async () => { ready(payload); });
+    expect(raw()).toBeNull();
+    expect(manage()).toBeEnabled();
+  });
+
+  it('refuses a late named start when another tab has opened and cleared the empty slot', async () => {
+    let ready: (value: NrlCareerState) => void;
+    chunks.load.mockImplementation(() => new Promise(resolve => { ready = resolve; }));
+    page();
+    fireEvent.click(toggle());
+    fireEvent.click(manage());
+    await screen.findByText('Loading the 2026 matchday names...');
+    const other = createSaveFence(localStorage);
+    other.adopt(NRL_SAVE_KEY);
+    expect(other.write(NRL_SAVE_KEY, () => {
+      localStorage.setItem(NRL_SAVE_KEY, JSON.stringify(createNrlCareer('storm', 17)));
+      return true;
+    })).toBe('written');
+    expect(other.write(NRL_SAVE_KEY, () => {
+      localStorage.removeItem(NRL_SAVE_KEY);
+      return true;
+    })).toBe('written');
+    const payload = createNrlOpeningMatchdayCareer('broncos', 16, NRL_OPENING_MATCHDAY_2026);
+    await act(async () => { ready(payload); });
+    expect(raw()).toBeNull();
+    expect(localStorage.getItem(fenceKeyOf(NRL_SAVE_KEY))).toBe('2');
+    expect(screen.getByRole('button', { name: 'Reload your season' })).toBeVisible();
   });
 
   it('leaves the slot untouched after a chunk failure and can start generated or request a reload', async () => {
