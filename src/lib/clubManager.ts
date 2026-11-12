@@ -1,4 +1,5 @@
 import { foldSpecialLatin } from '@/lib/nameFold';
+import { protectedVeteranIds } from '@/lib/clubManagerVeteranLedger';
 import { nameModerationError } from '@/lib/nameModeration';
 import { realLeagueFixtureKeyForStart, realLeagueFixturePairs, realLeagueFixtureCoverage } from '@/lib/clubManagerFixtures';
 import { noteHighestScoring } from '@/lib/clubManagerRecords';
@@ -3108,6 +3109,8 @@ export interface CareerState {
   startOptions?: import('@/lib/clubManagerStart').StartOptions;
   /** Set by finishSeason so a reload mid-review can resume the summary. */
   pendingSummary: SeasonSummary | null;
+  /** A career-local record of optional veteran talks. */
+  veteranReviews?: unknown;
   /** Round 70: the board's demands for this season. */
   boardObjectives?: BoardObjective[];
   /** Round 474: which shape of specific ask this save's objectives were built
@@ -23681,6 +23684,7 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string, o
     const finalDay = returning.some(p => p.severeInjury) ? entryDatesOf(career).at(-1) : undefined;
     const summerWeeks = finalDay ? Math.max(0, Math.floor(daysBetween(finalDay, seasonKickoff(worldYearOf(career) + 1)) / 7)) : 0;
     const aged = returning.map(p => agePlayer(p, career, undefined, summerWeeks));
+    const protectedVeterans = career.veteranReviews === undefined ? null : protectedVeteranIds(career, worldYear(career));
     /* Round 132: and some of them stop playing altogether. Before this the
        ONLY way a player ever left on age was the line below, "age < 38 or
        rated 70 plus", which meant a good veteran simply never went: measured
@@ -23691,7 +23695,7 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string, o
        keepers last and wingers do not. */
     const stillPlaying: CMPlayer[] = [];
     for (const p of aged) {
-      if (Math.random() < retireChance(p.age, p.rating, p.position)) {
+      if (Math.random() < retireChance(p.age, p.rating, p.position) && !protectedVeterans?.has(p.id)) {
         retiredNow.push({ name: p.name, age: p.age, rating: p.rating });
         rosterExits.push({ player: p, kind: 'retire' });
       } else {

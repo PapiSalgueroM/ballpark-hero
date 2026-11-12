@@ -329,6 +329,12 @@ export function useClubManager() {
    */
   const careerRef = useRef<CareerState | null>(null);
   useEffect(() => { careerRef.current = career; }, [career]);
+  const veteranSummary = useRef<CareerState | null>(null);
+  const veteranPending = useRef(false);
+  useLayoutEffect(() => {
+    veteranSummary.current = phase === 'seasonEnd' ? career : null;
+    return () => { veteranSummary.current = null; };
+  }, [career, phase]);
   const recruitmentCurrent = useRef<CareerState | null>(null);
   useLayoutEffect(() => {
     recruitmentCurrent.current = phase === 'hub' ? career : null;
@@ -446,12 +452,34 @@ export function useClubManager() {
     const next = make(now);
     if (next && !next.retired) return false;
     if (!next || !persist(next)) return false;
+    veteranSummary.current = null;
     careerRef.current = next;
     setCareer(next);
     setPhase('retired');
     setActiveTab('overview');
     return true;
   }, [holdsActiveSlot, persist]);
+
+  const reviewVeteran = useCallback(async (id: string): Promise<boolean> => {
+    const now = veteranSummary.current;
+    const slot = ownSlot.current;
+    if (!now || veteranPending.current || !holdsActiveSlot() || movedOn()) return false;
+    veteranPending.current = true;
+    try {
+      const { applyVeteranRetirement } = await import('@/lib/clubManagerVeteranRetirement');
+      if (veteranSummary.current !== now || ownSlot.current !== slot || !holdsActiveSlot() || movedOn()) return false;
+      const next = applyVeteranRetirement(now, id);
+      if (!next || !persist(next)) return false;
+      veteranSummary.current = next;
+      careerRef.current = next;
+      setCareer(next);
+      return true;
+    } catch {
+      return false;
+    } finally {
+      veteranPending.current = false;
+    }
+  }, [holdsActiveSlot, movedOn, persist]);
 
   /* ---------- Round 928: the manager slots ---------- */
 
@@ -473,6 +501,7 @@ export function useClubManager() {
       return false;
     }
     ownSlot.current = slot;
+    veteranSummary.current = null;
     /* Round 1515: the kept aside card asks its offer again, for this slot (the slot marks key is the event's name). */
     dispatchEvent(new Event(SET_ASIDE_SLOT_KEY));
     setSlotNote(null);
@@ -583,6 +612,7 @@ export function useClubManager() {
   /** Delete one slot's career for good (the screen asks first). */
   const removeSlot = useCallback((slot: number) => {
     if (slot === activeSlot()) {
+      veteranSummary.current = null;
       clearCareer();
       ownSlot.current = slot;
       careerRef.current = null;
@@ -603,6 +633,7 @@ export function useClubManager() {
   /** Back to the slots screen from inside a career, or from an era whose
    *  squads would not load (review: that screen had no way back). */
   const showSlots = useCallback(() => {
+    veteranSummary.current = null;
     if (careerRef.current && holdsActiveSlot() && !saveCareer(careerRef.current)) movedOn();
     letGoIfStale();
     setBootError(null);
@@ -1033,9 +1064,11 @@ export function useClubManager() {
   }, [career]);
 
   const nextSeason = useCallback((acceptOfferClub?: string) => {
-    if (!career) return;
-    const s = startNextSeason(career, acceptOfferClub, CAREER_SEASON_RULES);
-    if (s === career) return;
+    const now = veteranSummary.current ?? career;
+    if (!now) return;
+    const s = startNextSeason(now, acceptOfferClub, CAREER_SEASON_RULES);
+    if (s === now) return;
+    veteranSummary.current = null;
     setCareer(s);
     setSummary(null);
     setReport(null);
@@ -1185,6 +1218,7 @@ export function useClubManager() {
   }, []);
   const updateNationalTeam = useCallback((update: (state: CareerState) => CareerState) => {
     if (!holdsActiveSlot() || movedOn()) return;
+    veteranSummary.current = null;
     setCareer(prev => prev ? update(prev) : prev);
   }, [holdsActiveSlot, movedOn]);
 
@@ -1271,6 +1305,7 @@ export function useClubManager() {
 
   /* ---------- Round 105: contracts ---------- */
   const renew = useCallback((playerId: string) => {
+    veteranSummary.current = null;
     setCareer(prev => (prev ? renewContract(prev, playerId) ?? prev : prev));
   }, []);
 
@@ -1461,7 +1496,7 @@ export function useClubManager() {
     pointsSlot: (): number | null => (holdsActiveSlot() ? ownSlot.current : null),
     phase, career, report, summary, activeTab, setActiveTab, pendingClub,
     market, nextFx, tableRows, myPosition, facts,
-    resume, startNew, retire, chooseClub, confirmClub, confirmCustomClub,
+    resume, startNew, retire, reviewVeteran, chooseClub, confirmClub, confirmCustomClub,
     setCustomShape, setFormationIndex, setMentality, setTeamInstructions, setXiSlot, swapXiSlots, autoPick,
     saveMatchPlan, applyMatchPlan, deleteMatchPlan,
     setSlotDuty, assignSetPiece, autoPickSetPieces, setShootoutOrder: setShootoutOrderIds, retrain, stopRetrain,
