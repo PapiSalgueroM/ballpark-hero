@@ -1,3 +1,9 @@
+## 2026-11-12: NRL Manager Board challenge
+
+Choose Board challenge when starting a career to put your job on the line. The first missed ladder target warns you. Two consecutive completed misses at the same club require an offseason move. A premiership clears the warning even when the regular-season target was missed. The next club uses its own squad, contracts, cash and medical facilities.
+
+The challenge leaves standard careers on their existing path. An exact-parent comparison matched 17,934 fixtures, 80 completed seasons, 13 voluntary moves, 240 reloads and 1,480,376 random draws per arm. Focused checks also covered a two-miss move, a return to the old club, a target met after warning and a premiership won from sixth.
+
 ## 2026-11-12 Club Manager Championship playoffs prototype
 
 New current-era English careers use the six-team Championship playoffs for the third Premier League place. Fifth and sixth host the eliminators, then third and fourth host the return legs of reseeded semifinals. The neutral final decides promotion. Dates and results are simulated. The game uses the standard home order and the existing regular-season standings.
