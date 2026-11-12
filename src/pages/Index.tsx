@@ -236,7 +236,7 @@ export default function Index() {
       />
       <HomeTileStyles />
       {/* Round 215: the skip link in App.tsx points here. */}
-      <div id="dukb-main" className="min-h-screen bg-background text-foreground">
+      <main id="dukb-main" tabIndex={-1} className="min-h-screen bg-background text-foreground">
         <div className="max-w-6xl mx-auto px-4 pb-12">
 
           {/* ─── TITLE ROW ───
@@ -545,7 +545,7 @@ export default function Index() {
 
           <AuthModal isOpen={authOpen} onClose={() => setAuthOpen(false)} defaultTab="signup" />
         </div>
-      </div>
+      </main>
     </>
   );
 }

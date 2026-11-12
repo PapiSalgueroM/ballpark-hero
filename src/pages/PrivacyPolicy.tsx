@@ -8,7 +8,7 @@ const PrivacyPolicy = () => {
   const goBack = useSiteBack();
 
   return (
-    <div id="dukb-main" tabIndex={-1} className="min-h-screen bg-background text-foreground px-4 py-12 max-w-3xl mx-auto">
+    <main id="dukb-main" tabIndex={-1} className="min-h-screen bg-background text-foreground px-4 py-12 max-w-3xl mx-auto">
       <PageSeo title="Privacy Policy - DoUKnowBall" description="Privacy policy for DoUKnowBall sports trivia games." path="/privacy" />
       <button
         onClick={goBack}
@@ -134,7 +134,7 @@ const PrivacyPolicy = () => {
           <p>DoUKnowBall is operated by Anthony Salguero, an individual. If you have any questions about this privacy policy, want to request access to or deletion of your data, or have a general concern, please contact us at <a href="mailto:douknowball1@gmail.com" className="underline hover:text-foreground transition-colors">douknowball1@gmail.com</a>. For issues with a specific question or answer in a game, you can also use the "Report" button on that game.</p>
         </div>
       </section>
-    </div>
+    </main>
   );
 };
 

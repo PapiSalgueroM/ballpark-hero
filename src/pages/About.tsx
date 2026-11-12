@@ -4,7 +4,7 @@ import PageSeo from '@/components/seo/PageSeo';
 
 const About = () => {
   return (
-    <div id="dukb-main" tabIndex={-1} className="min-h-screen bg-background text-foreground px-4 py-12 max-w-3xl mx-auto">
+    <main id="dukb-main" tabIndex={-1} className="min-h-screen bg-background text-foreground px-4 py-12 max-w-3xl mx-auto">
       <PageSeo
         title="About DoUKnowBall | Free Daily Sports Trivia Games"
         description="The story behind DoUKnowBall: over 100 free sports trivia games, daily puzzles, and deep career sims built by one sports fan who wanted trivia that actually goes deep."
@@ -112,7 +112,7 @@ const About = () => {
           <Link to="/terms" className="underline hover:text-foreground transition-colors">Terms of Service</Link>
         </div>
       </div>
-    </div>
+    </main>
   );
 };
 

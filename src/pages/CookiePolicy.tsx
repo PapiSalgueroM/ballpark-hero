@@ -4,7 +4,7 @@ import PageSeo from '@/components/seo/PageSeo';
 
 const CookiePolicy = () => {
   return (
-    <div id="dukb-main" tabIndex={-1} className="min-h-screen bg-background text-foreground px-4 py-12 max-w-3xl mx-auto">
+    <main id="dukb-main" tabIndex={-1} className="min-h-screen bg-background text-foreground px-4 py-12 max-w-3xl mx-auto">
       <PageSeo
         title="Cookie Policy - DoUKnowBall"
         description="How DoUKnowBall uses cookies and browser storage, how Advertising choices work, why Analytics is paused, and how to change or withdraw consent."
@@ -50,7 +50,7 @@ const CookiePolicy = () => {
           <p className="mt-2">For privacy or deletion requests, use the contact details and rights process in the <Link to="/privacy" className="underline hover:text-foreground transition-colors">Privacy Policy</Link>.</p>
         </div>
       </section>
-    </div>
+    </main>
   );
 };
 
