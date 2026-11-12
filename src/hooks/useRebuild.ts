@@ -139,6 +139,8 @@ export interface RebuildState {
   rivals: RivalResult[] | null;
   rivalsLoading: boolean;
   season: SeasonResult | null;
+  seasonFailed: boolean;
+  retrySeason: () => void;
 }
 
 interface LoadedData { key: string; value: TableData }
@@ -161,9 +163,10 @@ export function useRebuild(): RebuildState {
   const [rivals, setRivals] = useState<RivalResult[] | null>(null);
   const [rivalsLoading, setRivalsLoading] = useState(false);
   const [season, setSeason] = useState<SeasonResult | null>(null);
+  const [seasonFailed, setSeasonFailed] = useState(false);
+  const [seasonAttempt, setSeasonAttempt] = useState(0);
   const spinTimer = useRef<number | null>(null);
   const warTimer = useRef<number | null>(null);
-  const seasonFor = useRef<RunState | null>(null);
 
   useEffect(() => () => {
     if (warTimer.current) window.clearTimeout(warTimer.current);
@@ -443,15 +446,17 @@ export function useRebuild(): RebuildState {
   const vetoCard = useCallback((i: number) => act({ k: 'veto', i }, r => loop.vetoCard(r, i)), [act]);
   const acceptVerdict = useCallback(() => act({ k: 'accept' }, loop.acceptVerdict), [act]);
 
+  const retrySeason = useCallback(() => setSeasonAttempt(attempt => attempt + 1), []);
+
   /* Rivals post their windows after yours closes, then the season kicks off.
-     Runs once per reckoning, off the post reckoning XI, manager lift included.
+     Uses the post reckoning XI, manager lift included.
      One seat tables only: at a fuller table the other seats are the rivals
      and the shared season runs when the last window shuts. */
   useEffect(() => {
-    if (!solo || !run || run.phase !== 'done' || !run.reckoning || seasonFor.current === run) return;
-    seasonFor.current = run;
+    if (!solo || !run || run.phase !== 'done' || !run.reckoning) return;
     let cancelled = false;
     (async () => {
+      setSeasonFailed(false);
       setRivalsLoading(true);
       try {
         const plans = run.rivalPlans.length === 2 ? run.rivalPlans : [];
@@ -460,6 +465,8 @@ export function useRebuild(): RebuildState {
         for (let i = 0; i < plans.length; i++) {
           const plan = plans[i];
           const rivalSquad = await fetchClubSquad(plan.club.club);
+          if (cancelled) return;
+          if (rivalSquad.length === 0) throw new Error('Rival squad unavailable');
           const wonInWars = Object.entries(run.lost).filter(([, idx]) => idx === i).map(([n]) => n);
           results.push(simulateRival(plan, rivalSquad, run.market, humanSigned, run.seed, wonInWars));
         }
@@ -474,13 +481,17 @@ export function useRebuild(): RebuildState {
         const fillers = anyPool.length ? [...anyPool.slice(off), ...anyPool.slice(0, off)].slice(0, 3) : [];
         setSeason(simulateSeason({ clubName: run.club.club, rating: postRating, xi: postXiPlayers }, results, fillers, run.seed));
       } catch {
-        if (!cancelled) { setRivals(null); setSeason(null); }
+        if (!cancelled) {
+          setRivals(null);
+          setSeason(null);
+          setSeasonFailed(true);
+        }
       } finally {
         if (!cancelled) setRivalsLoading(false);
       }
     })();
     return () => { cancelled = true; };
-  }, [solo, run, clubs]);
+  }, [solo, run, clubs, seasonAttempt]);
 
   const reset = useCallback(() => {
     if (!persist(null)) return;
@@ -493,7 +504,8 @@ export function useRebuild(): RebuildState {
     setThinking(false);
     setRivals(null);
     setSeason(null);
-    seasonFor.current = null;
+    setSeasonFailed(false);
+    setRivalsLoading(false);
     if (warTimer.current) window.clearTimeout(warTimer.current);
     if (spinTimer.current) window.clearTimeout(spinTimer.current);
   }, [persist]);
@@ -571,6 +583,6 @@ export function useRebuild(): RebuildState {
     pickFinance, toManager, hireManager, keepManager: KEEP_MANAGER, setFormation,
     spinning, spin, keepSpun, sellSpun, takeReplacement, promoteBench, takeForty, redealSpun,
     thinking, raiseWar, walkAway,
-    finish, rivals, rivalsLoading, season,
+    finish, rivals, rivalsLoading, season, seasonFailed, retrySeason,
   };
 }

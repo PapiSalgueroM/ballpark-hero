@@ -1,3 +1,9 @@
+## 2026-11-12: Rebuild season retry staged
+
+After the transfer window, Rebuild waits for both rival squads before showing the solo season. If a squad is unavailable, Retry season keeps the finished window and tries again.
+
+A controlled squad outage produced a season table with an incomplete rival on the original at both phone widths. Both rival failure and retry paths now pass in mounted tests. The saved window and the healthy season and rival outcomes matched their original bytes.
+
 ## 2026-11-12: Rebuild shared save ownership staged
 
 Rebuild keeps the latest transfer window when an older tab tries a move or finishes loading. The older tab offers to reload the saved window. This keeps the existing save format, normal restart and the retry for unavailable club data.
