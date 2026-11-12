@@ -1,7 +1,7 @@
 import { useState, useMemo, useCallback, useRef, useEffect } from 'react';
 import { makeFirstDraw } from '@/lib/firstDraw';
 import { UfcFighter, UfcGuessResult } from '@/types/ufc';
-import { uniqueUfcFighters } from '@/data/ufcFighters';
+import { dailyUfcFighters, uniqueUfcFighters } from '@/data/ufcFighters';
 import { compareUfcGuess } from '@/lib/ufcGameLogic';
 import { ensureAnswerInList } from '@/lib/ensureAnswerInOptions';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
@@ -42,7 +42,7 @@ export function useUfcGame() {
   } = useDailyPuzzle<UfcFighter, UfcGuessResult>({
     gameSlug: 'ufc',
     storageSlug: 'ufc-game',
-    puzzles: uniqueUfcFighters,
+    puzzles: dailyUfcFighters,
     maxGuesses: MAX_GUESSES,
     isWon: (g) => g.length > 0 && g[g.length - 1].isCorrect,
     deserializeGuesses: (raw) => raw as UfcGuessResult[],

@@ -1,6 +1,6 @@
 import { UfcFighter } from '@/types/ufc';
 
-/* Round 660: every row was checked on 2026-09-19 against ufc.com (official),
+/* Round 660: the original rows were checked on 2026-09-19 against ufc.com (official),
    Sherdog and ESPN, and ships only where two of them agree, except where the
    record's noOfficial note says why not: a fighter whose latest bout was
    outside the UFC (Jailton Almeida, rechecked 2026-09-28 after ACA 207) stands
@@ -112,6 +112,9 @@ export const ufcFighters: UfcFighter[] = [
   { name: 'Movsar Evloev', nationality: 'Russia', weightClass: 'Featherweight', yearsActive: '2019-2026', yearsActiveStart: 2019, yearsActiveEnd: 2026, record: '20-0-0', wins: 20, losses: 0, draws: 0, birthDate: '1994-02-11', koTko: 3, submissions: 4 },
   { name: 'Diego Lopes', nationality: 'Brazil', weightClass: 'Featherweight', yearsActive: '2023-2026', yearsActiveStart: 2023, yearsActiveEnd: 2026, record: '28-8-0', wins: 28, losses: 8, draws: 0, birthDate: '1994-12-30', koTko: 12, submissions: 12 },
   { name: 'Alexandre Pantoja', nationality: 'Brazil', weightClass: 'Flyweight', yearsActive: '2017-2026', yearsActiveStart: 2017, yearsActiveEnd: 2026, record: '30-7-0', wins: 30, losses: 7, draws: 0, birthDate: '1990-04-16', koTko: 8, submissions: 12 },
+  { name: 'Jack Della Maddalena', nationality: 'Australia', weightClass: 'Welterweight', yearsActive: '2022-2026', yearsActiveStart: 2022, yearsActiveEnd: 2026, record: '18-4-0', wins: 18, losses: 4, draws: 0, birthDate: '1996-09-10', koTko: 12, submissions: 2 },
+  { name: 'Steve Erceg', nationality: 'Australia', weightClass: 'Flyweight', yearsActive: '2023-2026', yearsActiveStart: 2023, yearsActiveEnd: 2026, record: '14-5-0', wins: 14, losses: 5, draws: 0, birthDate: '1995-07-27', koTko: 2, submissions: 6 },
+  { name: 'Quillan Salkilld', nationality: 'Australia', weightClass: 'Lightweight', yearsActive: '2025-2026', yearsActiveStart: 2025, yearsActiveEnd: 2026, record: '13-1-0', wins: 13, losses: 1, draws: 0, birthDate: '1999-12-28', koTko: 5, submissions: 5 },
 ];
 
 // Remove any duplicate entries
@@ -121,3 +124,6 @@ export const uniqueUfcFighters = ufcFighters.filter(f => {
   seen.add(f.name);
   return true;
 });
+
+// Keep the published Daily sequence and saved puzzle indices stable as the search and Unlimited pool grows.
+export const dailyUfcFighters = uniqueUfcFighters.slice(0, 90);
