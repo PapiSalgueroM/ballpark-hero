@@ -50,7 +50,7 @@ import { fileURLToPath } from 'node:url';
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTROL = process.env.RECORDS_CONTROL || '';
 if (CONTROL && CONTROL !== 'nofallthrough' && CONTROL !== 'silent') { console.error(`RECORDS_CONTROL=${CONTROL} is not a control this harness knows (nofallthrough, silent)`); process.exit(1); }
-const c = fs.readFileSync(path.join(ROOT, 'src', 'integrations', 'supabase', 'client.ts'), 'utf8');
+const c = fs.readFileSync(path.join(ROOT, 'src', 'integrations', 'supabase', 'config.ts'), 'utf8');
 const U = c.match(/SUPABASE_URL\s*=\s*["']([^"']+)["']/)[1];
 const K = c.match(/SUPABASE_PUBLISHABLE_KEY\s*=\s*["']([^"']+)["']/)[1];
 const H = { apikey: K, Authorization: `Bearer ${K}`, 'Content-Type': 'application/json' };

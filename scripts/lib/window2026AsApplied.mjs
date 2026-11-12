@@ -41,10 +41,10 @@ const served = { positional: 0, wide: 0, counted: 0, passedLive: 0 };
 let mode = 'unknown';
 
 function auth() {
-  const client = fs.readFileSync(path.join(ROOT, 'src', 'integrations', 'supabase', 'client.ts'), 'utf8');
+  const client = fs.readFileSync(path.join(ROOT, 'src', 'integrations', 'supabase', 'config.ts'), 'utf8');
   const url = client.match(/SUPABASE_URL\s*=\s*["']([^"']+)["']/)?.[1];
   const key = client.match(/SUPABASE_PUBLISHABLE_KEY\s*=\s*["']([^"']+)["']/)?.[1];
-  if (!url || !key) throw new Error('window2026AsApplied: could not read the Supabase URL and key from client.ts');
+  if (!url || !key) throw new Error('window2026AsApplied: could not read the Supabase URL and key from config.ts');
   return { url, headers: { apikey: key, Authorization: `Bearer ${key}` } };
 }
 

@@ -135,9 +135,9 @@ are made directly in the repo.
 
 Lovable's build injects `VITE_SUPABASE_*` env vars that point at a **deleted** project
 (`pzzadswiradjnvvfybol`). **Never read those env vars.**
-`src/integrations/supabase/client.ts` hardcodes the live project URL and public anon key on
-purpose and exports them. Any code that talks to Supabase, including every edge function fetch,
-must import `SUPABASE_URL` and `SUPABASE_PUBLISHABLE_KEY` from `@/integrations/supabase/client`.
+`src/integrations/supabase/config.ts` pins the live project URL and public anon key.
+Browser HTTP callers can import the two constants from that module. The SDK client
+reads the same constants and also re-exports them for its existing callers.
 
 This caused a full outage in July 2026. It is the single easiest way to break the whole site.
 
@@ -187,7 +187,7 @@ What this means in practice:
 - `src/components/game/` shared UI: GameNav, GameNavbar (Home + Back), Footer, ShareButtons.
 - `src/components/seo/GameSeoContent.tsx` bottom-of-page SEO block, title and description only.
 - `src/hooks/`, `src/lib/`, `src/types/` game logic, helpers, shared types.
-- `src/integrations/supabase/client.ts` see the env var trap above.
+- `src/integrations/supabase/client.ts` initializes the SDK from `config.ts`. See the env var trap above.
 - `scripts/` the headless sim harnesses (roughly 52 as of August 2026, count it rather than
   quoting that) plus the browser sweeps. See the verification section.
 - `supabase/functions/` edge function source. The **deployed** version is the source of truth;

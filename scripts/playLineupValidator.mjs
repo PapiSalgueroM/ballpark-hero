@@ -60,7 +60,7 @@ if (!fs.existsSync(path.join(distDir, 'index.html'))) {
   process.exit(1);
 }
 
-const clientTs = fs.readFileSync(path.join(ROOT, 'src', 'integrations', 'supabase', 'client.ts'), 'utf8');
+const clientTs = fs.readFileSync(path.join(ROOT, 'src', 'integrations', 'supabase', 'config.ts'), 'utf8');
 const SUPA_HOST = new URL(clientTs.match(/SUPABASE_URL\s*=\s*["']([^"']+)["']/)[1]).host;
 const waitSource = fs.readFileSync(path.join(ROOT, 'src', 'lib', 'validatorClient.ts'), 'utf8').match(/VALIDATOR_WAIT_MS\s*=\s*(\d+)/);
 if (!waitSource) {

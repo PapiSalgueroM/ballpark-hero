@@ -121,7 +121,7 @@ const assets = new Map(JSON.parse(fs.readFileSync(path.join(CACHE, 'manifest.jso
   assert(/^[a-f0-9]{64}$/.test(row.file)); const body = fs.readFileSync(path.join(CACHE, row.file));
   assert.equal(sha(body), row.sha256); assert.equal(body.length, row.bytes); return [row.url, { ...row, body }];
 }));
-const serviceOrigin = new URL(fs.readFileSync(path.join(ROOT, 'src/integrations/supabase/client.ts'), 'utf8').match(/export const SUPABASE_URL = "([^"]+)";/)[1]).origin;
+const serviceOrigin = new URL(fs.readFileSync(path.join(ROOT, 'src/integrations/supabase/config.ts'), 'utf8').match(/export const SUPABASE_URL = "([^"]+)";/)[1]).origin;
 const report = { complete: false, sourceHead: execFileSync('git', ['rev-parse', 'HEAD'], { cwd: ROOT, encoding: 'utf8' }).trim(), sourceTree: execFileSync('git', ['rev-parse', 'HEAD^{tree}'], { cwd: ROOT, encoding: 'utf8' }).trim(), sourceBefore, buildBefore: hashes(['dist']), cacheBefore: hashes(['soccer-hub-grid-artifacts/asset-cache']), cases: [], comparisons: [], limits: ['Chromium emulation at 390 and 1280, reduced motion, two generated season states and one Continue transition; not a full career or physical-device audit.', 'Only panel ownership, responsive placement and the continued summary reveal are measured. Existing small text and floating controls are outside scope.', 'Old nesting is a separately built copied page; normal source, engine, saved schema and historical fixtures remain unchanged.'] };
 const persist = () => json('native/report.json', report);
 persist();

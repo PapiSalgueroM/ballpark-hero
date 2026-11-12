@@ -78,7 +78,7 @@ let sourceBefore = [], installedBefore = [], toolsBefore = [], normalDistBefore 
 let fontBefore, fixtureBefore, cache, fonts, server, browser, normalDist, walkedDist;
 const pendingAssets = [], loadedAssets = new Map();
 const CORS = { 'access-control-allow-origin': '*', 'access-control-allow-methods': 'GET,POST,OPTIONS', 'access-control-allow-headers': '*' };
-const SUPA_HOST = new URL(fs.readFileSync(path.join(ROOT, 'src/integrations/supabase/client.ts'), 'utf8').match(/SUPABASE_URL\s*=\s*['"]([^'"]+)['"]/)[1]).host;
+const SUPA_HOST = new URL(fs.readFileSync(path.join(ROOT, 'src/integrations/supabase/config.ts'), 'utf8').match(/SUPABASE_URL\s*=\s*['"]([^'"]+)['"]/)[1]).host;
 
 function sideBuild() {
   const original = fs.readFileSync(path.join(ROOT, COMPONENT), 'utf8').replaceAll('\r\n', '\n');

@@ -54,7 +54,7 @@ const CLS_CEILING = 0.05;
 const DATA_DELAY_MS = 1500;
 
 /* The database host comes from the client file, same as every fetch fence. */
-const clientTs = fs.readFileSync(path.join(ROOT, 'src', 'integrations', 'supabase', 'client.ts'), 'utf8');
+const clientTs = fs.readFileSync(path.join(ROOT, 'src', 'integrations', 'supabase', 'config.ts'), 'utf8');
 const SUPA_HOST = new URL(clientTs.match(/SUPABASE_URL\s*=\s*["']([^"']+)["']/)[1]).host;
 
 let failures = 0;

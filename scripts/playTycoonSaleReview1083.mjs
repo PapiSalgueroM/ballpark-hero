@@ -104,7 +104,7 @@ const fixtures = [
 for (const fixture of fixtures) { fixture.bytes = T.serializeTycoon(fixture.state, START); fixture.loaded = T.deserializeTycoon(fixture.bytes, START); assert(fixture.loaded && T.canPrestige(fixture.loaded)); }
 write('fixtures.json', { fixtures, academyBytes, ledgerBytes, fixtureSteps, fixtureDraws: draws });
 report.baseline = { engineSha256: hash(built.outputFiles[0].contents), inputPaths: Object.keys(built.metafile.inputs), clockStart: START, seed: SEED };
-const configured = fs.readFileSync(path.join(ROOT, 'src/integrations/supabase/client.ts'), 'utf8').match(/^export const SUPABASE_URL = "([^"]+)";/m);
+const configured = fs.readFileSync(path.join(ROOT, 'src/integrations/supabase/config.ts'), 'utf8').match(/^export const SUPABASE_URL = "([^"]+)";/m);
 assert(configured); const serviceOrigin = new URL(configured[1]).origin;
 const port = await new Promise((resolve, reject) => { const probe = createServer(); probe.once('error', reject); probe.listen(0, '127.0.0.1', () => { const value = probe.address().port; probe.close(error => error ? reject(error) : resolve(value)); }); });
 const BASE = `http://127.0.0.1:${port}`;

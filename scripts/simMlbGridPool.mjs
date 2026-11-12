@@ -99,7 +99,7 @@ const read = rel => fs.readFileSync(path.join(ROOT, ...rel.split('/')), 'utf8');
    satisfy the check for the config. */
 const code = s => s.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '');
 
-const client = read('src/integrations/supabase/client.ts');
+const client = read('src/integrations/supabase/config.ts');
 const URL_ = client.match(/SUPABASE_URL\s*=\s*["']([^"']+)["']/)[1];
 const KEY = client.match(/SUPABASE_PUBLISHABLE_KEY\s*=\s*["']([^"']+)["']/)[1];
 const HEADERS = { apikey: KEY, authorization: `Bearer ${KEY}` };

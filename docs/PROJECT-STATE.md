@@ -1,3 +1,7 @@
+## 2026-11-12: Public ticker configuration split
+
+The score ticker reads the pinned public Supabase URL and key from a dependency-free config module. The SDK client reads and re-exports the same values. Script readers were updated to the new path and their parsing expressions returned the original values.
+
 ## 2026-11-12: NBA Starting 5 former-franchise picks staged
 
 NBA Starting 5 search and scoring now use the same franchise records. Players with a verified earlier stint can appear for that team, even when their roster card lists another team. The lookup still requires exact franchise codes and a unique roster identity.

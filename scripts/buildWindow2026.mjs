@@ -57,7 +57,7 @@
    rewrite it, and new rows need a new migration in a later round.
 
    Reads the database read only through the public REST endpoint with the URL
-   and key in src/integrations/supabase/client.ts. Unreachable means it stops
+   and key in src/integrations/supabase/config.ts. Unreachable means it stops
    with nothing written.
 
    Run:   node scripts/buildWindow2026.mjs            (writes both outputs)
@@ -121,10 +121,10 @@ export function readBakeLists() {
 /* The database, read only                                            */
 /* ------------------------------------------------------------------ */
 function restAuth() {
-  const client = fs.readFileSync(path.join(ROOT, 'src', 'integrations', 'supabase', 'client.ts'), 'utf8');
+  const client = fs.readFileSync(path.join(ROOT, 'src', 'integrations', 'supabase', 'config.ts'), 'utf8');
   const url = client.match(/SUPABASE_URL\s*=\s*["']([^"']+)["']/)?.[1];
   const key = client.match(/SUPABASE_PUBLISHABLE_KEY\s*=\s*["']([^"']+)["']/)?.[1];
-  if (!url || !key) throw new Error('buildWindow2026: could not read the Supabase URL and key from client.ts');
+  if (!url || !key) throw new Error('buildWindow2026: could not read the Supabase URL and key from config.ts');
   return { url, headers: { apikey: key, Authorization: `Bearer ${key}` } };
 }
 

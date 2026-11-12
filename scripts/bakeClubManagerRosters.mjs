@@ -36,11 +36,11 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 /* ------------------------------------------------------------------ */
 /* Supabase client from the app's own hardcoded values                */
 /* ------------------------------------------------------------------ */
-const clientTs = fs.readFileSync(path.join(ROOT, 'src/integrations/supabase/client.ts'), 'utf8');
+const clientTs = fs.readFileSync(path.join(ROOT, 'src/integrations/supabase/config.ts'), 'utf8');
 const urlMatch = clientTs.match(/https:\/\/[a-z0-9]+\.supabase\.co/);
 const keyMatch = clientTs.match(/eyJ[A-Za-z0-9_.-]+/);
 if (!urlMatch || !keyMatch) {
-  console.error('FATAL: could not extract Supabase URL/key from client.ts');
+  console.error('FATAL: could not extract Supabase URL/key from config.ts');
   process.exit(1);
 }
 const supabase = createClient(urlMatch[0], keyMatch[0], { auth: { persistSession: false } });

@@ -67,7 +67,7 @@ const abort = m => { console.error(m); process.exit(1); };
 
 const gen = await import(pathToFileURL(path.join(ROOT, 'scripts', 'genNflGridData.mjs')).href);
 const codesLib = await import(pathToFileURL(path.join(ROOT, 'scripts', 'lib', 'nflFranchiseCodes.mjs')).href);
-const client = fs.readFileSync(path.join(ROOT, 'src', 'integrations', 'supabase', 'client.ts'), 'utf8');
+const client = fs.readFileSync(path.join(ROOT, 'src', 'integrations', 'supabase', 'config.ts'), 'utf8');
 const URL_ = client.match(/SUPABASE_URL\s*=\s*["']([^"']+)["']/)[1];
 const KEY = client.match(/SUPABASE_PUBLISHABLE_KEY\s*=\s*["']([^"']+)["']/)[1];
 const HEADERS = { apikey: KEY, authorization: `Bearer ${KEY}` };

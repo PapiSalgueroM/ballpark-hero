@@ -158,7 +158,7 @@ console.log('3) NBA Chain reads the status line and the coverage flag');
 
 console.log('4) the deferral is really reachable, against the deployed function');
 {
-  const client = readFileSync(path.join(ROOT, 'src', 'integrations', 'supabase', 'client.ts'), 'utf8');
+  const client = readFileSync(path.join(ROOT, 'src', 'integrations', 'supabase', 'config.ts'), 'utf8');
   const URL_ = client.match(/SUPABASE_URL\s*=\s*["']([^"']+)["']/)[1];
   const KEY = client.match(/SUPABASE_PUBLISHABLE_KEY\s*=\s*["']([^"']+)["']/)[1];
   const r = await fetch(`${URL_}/functions/v1/nba-chain-validate`, {

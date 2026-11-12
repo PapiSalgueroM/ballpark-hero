@@ -108,7 +108,7 @@ for (const w of WIDTHS) {
   if (!VIEWPORTS[w]) { console.error(`RACE_WIDTHS: ${w} is not a width this harness walks (390, 1280)`); process.exit(1); }
 }
 
-const clientTs = fs.readFileSync(path.join(ROOT, 'src', 'integrations', 'supabase', 'client.ts'), 'utf8');
+const clientTs = fs.readFileSync(path.join(ROOT, 'src', 'integrations', 'supabase', 'config.ts'), 'utf8');
 const SUPA_HOST = new URL(clientTs.match(/SUPABASE_URL\s*=\s*["']([^"']+)["']/)[1]).host;
 const PORT = 4238;
 const BASE = `http://127.0.0.1:${PORT}`;
