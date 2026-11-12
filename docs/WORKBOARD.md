@@ -17916,3 +17916,9 @@ Continue CM-03 historical roster snapshot counts. Ekstraklasa, NBA 2005 and NFL 
 Qualification `42349735958`: normal build, all 20 output checks and 16 size caps, three phone contexts and four photos passed. [Public verification](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/42350742966) matched all seven compiled files, passed the Club Manager live SEO check and submitted only that URL to IndexNow.
 
 Continue the Ekstraklasa 17-club Soccer Career intake and dated load design. No new Polish clubs are live yet.
+
+## 2026-11-12 18:00 UTC: site readiness and popular-game integration
+
+The existing 24-hour task remains active. Local storage is available again. Combined application c9879287b passes full app TypeScript and ordinary Vite, with 183 rewritten snapshots, 105 successful route openings, 64 phone consent checks, 174 indexed text pages and the latest native career/Daily/Stadium fixes. The original compiled output remains retained. This candidate has not been deployed.
+
+Current scope, exact limits and next checks are in [the site readiness checkpoint](plans/2026-11-12-site-readiness.md). The 156 active admin reports have no new submissions since the earlier check and no production status changes. Save Keeper's static named-variable check and a stale temporary cap fixture are being resolved before final qualification. Mobile LCP and field INP remain open. NRL's complete Soccer feature parity, Nitro seller records, provider activation and the pending production release remain incomplete.

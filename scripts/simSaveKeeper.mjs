@@ -97,6 +97,7 @@
  *   partgamelog   the NFL front office's gameLog row is left out       (1)
  *   partballon    the generatedBallonPool row is left out              (1)
  *   partplayoffs  the NFL front office's playoffs row is left out      (1)
+ *   stadiumserializer  Stadium's saved bytes use the wrong serializer   (0)
  * A control that fired exits 1 and its last line says FIRED. One that did not
  * fire, or could not run, exits 2 and says so. A green run exits 0. The ten
  * part controls must also fire on their OWN sentence (the failure that names
@@ -187,7 +188,7 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTROL = process.env.SIM_SAVE_KEEPER_CONTROL || '';
 const CONTROLS = ['dropkey', 'versiontable', 'norow', 'onebyte', 'bootwrite', 'noaside', 'journalfirst', 'pileup',
   'nocopycheck', 'hidebehind', 'twins', 'numberonly', 'nomaincall', 'assign', 'partrow', 'partrowus',
-  'partbrief', 'partagent', 'partreturn', 'partfarewell', 'partpress', 'partgamelog', 'partballon', 'partplayoffs'];
+  'partbrief', 'partagent', 'partreturn', 'partfarewell', 'partpress', 'partgamelog', 'partballon', 'partplayoffs', 'stadiumserializer'];
 if (CONTROL && !CONTROLS.includes(CONTROL)) { console.error(`SIM_SAVE_KEEPER_CONTROL=${CONTROL} is not a control this harness knows`); process.exit(2); }
 const SEEDS = [0, 1, 2, 3];
 const TMP = fs.mkdtempSync(path.join(os.tmpdir(), 'simSaveKeeper-'));
@@ -207,6 +208,7 @@ const readLF = rel => fs.readFileSync(path.join(ROOT, rel), 'utf8').replace(/\r\
 const KEEPER = 'src/lib/saveKeeper.ts';
 const RECOVERY = 'src/lib/brokenSaveRecovery.ts';
 const MAIN = 'src/main.tsx';
+const STADIUM = 'src/hooks/useStadiumTycoon.ts';
 const SWAPS = {
   versiontable: ["'/club-manager': { at: ['saveVersion'], current: 3, oldest: 3, other: 'refuses' },", "'/club-manager': { at: ['saveVersion'], current: 4, oldest: 4, other: 'refuses' },"],
   norow: ["  '/stadium-tycoon': { at: ['v'], current: 1, oldest: 1, other: 'refuses' },\n", ''],
@@ -219,14 +221,15 @@ const SWAPS = {
   numberonly: ['      if (versionIn(raw, row.at) === row.current) continue;\n', '      const heldNumber = versionIn(raw, row.at);\n      if (heldNumber === null || heldNumber === row.current) continue;\n'],
   assign: ['  window.location.replace(path);\n', '  window.location.assign(path);\n'],
 };
-/* The same, for the two controls that rewrite another file. */
+/* Controls that rewrite another file. */
 const SWAPS_ELSEWHERE = {
   hidebehind: [RECOVERY, '      if (playing !== null && storage.getItem(k) === playing) continue;\n', '      if (playing !== null && storage.getItem(k) === playing) return null;\n'],
   twins: [RECOVERY, '      if (kept !== null && storage.getItem(k) === kept) storage.removeItem(k);\n      else others.push(k);\n', '      others.push(k);\n'],
   nomaincall: [MAIN, 'runSaveKeeper();\n', ''],
+  stadiumserializer: [STADIUM, 'const bytes = serializeTycoon(next, now);', 'const bytes = JSON.stringify(next);'],
 };
 /* Every source file a section reads or the bundle loads, as the control left it. */
-const sources = { [KEEPER]: readLF(KEEPER), [RECOVERY]: readLF(RECOVERY), [MAIN]: readLF(MAIN) };
+const sources = { [KEEPER]: readLF(KEEPER), [RECOVERY]: readLF(RECOVERY), [MAIN]: readLF(MAIN), [STADIUM]: readLF(STADIUM) };
 if (CONTROL in SWAPS || CONTROL in SWAPS_ELSEWHERE) {
   const [file, from, to] = CONTROL in SWAPS ? [KEEPER, ...SWAPS[CONTROL]] : SWAPS_ELSEWHERE[CONTROL];
   if (!sources[file].includes(from)) { console.error(`simSaveKeeper control ${CONTROL}: CANNOT RUN. The text it rewrites is not in ${file}, so the control would change nothing.`); process.exit(2); }
@@ -347,7 +350,7 @@ const topKeys = raw => { const o = JSON.parse(raw); return o && typeof o === 'ob
    game's key (a string, or a constant that resolves to it in that file or in
    the module it is imported from). Read on the TypeScript tree, so a comment
    or a string that merely mentions the key finds nothing. */
-const parse = rel => ts.createSourceFile(rel, readLF(rel), ts.ScriptTarget.Latest, true, rel.endsWith('x') ? ts.ScriptKind.TSX : ts.ScriptKind.TS);
+const parse = rel => ts.createSourceFile(rel, sources[rel] ?? readLF(rel), ts.ScriptTarget.Latest, true, rel.endsWith('x') ? ts.ScriptKind.TSX : ts.ScriptKind.TS);
 const walkTree = (node, visit) => { visit(node); ts.forEachChild(node, c => walkTree(c, visit)); };
 const unwrap = n => { let c = n; while (c && (ts.isParenthesizedExpression(c) || ts.isAsExpression(c) || ts.isSatisfiesExpression(c) || ts.isNonNullExpression(c))) c = c.expression; return c; };
 const constsOf = sf => {
@@ -364,6 +367,22 @@ const resolveModule = (fromRel, spec) => {
   for (const ext of ['.ts', '.tsx', '/index.ts']) { const p = (base + ext).replace(/\\/g, '/'); if (fs.existsSync(path.join(ROOT, p))) return p; }
   return null;
 };
+/** The direct serializer call, or the earlier const in this writer's own block. */
+function writerSerializer(arg) {
+  let value = unwrap(arg);
+  if (ts.isIdentifier(value)) {
+    let statement = value;
+    while (statement.parent && !ts.isBlock(statement.parent) && !ts.isSourceFile(statement.parent)) statement = statement.parent;
+    for (const prior of statement.parent?.statements ?? []) {
+      if (prior === statement) break;
+      if (!ts.isVariableStatement(prior) || !(prior.declarationList.flags & ts.NodeFlags.Const)) continue;
+      const match = prior.declarationList.declarations.find(d => ts.isIdentifier(d.name) && d.name.text === value.text);
+      if (match?.initializer) { value = unwrap(match.initializer); break; }
+    }
+  }
+  if (ts.isBinaryExpression(value) && value.operatorToken.kind === ts.SyntaxKind.EqualsToken) value = unwrap(value.right);
+  return ts.isCallExpression(value) && ts.isIdentifier(value.expression) ? value.expression.text : undefined;
+}
 /** Every string a .setItem( first argument resolves to in this file, with the call's second argument. */
 function setItemKeys(rel) {
   const sf = parse(rel);
@@ -384,7 +403,7 @@ function setItemKeys(rel) {
     if (!ts.isCallExpression(n) || !ts.isPropertyAccessExpression(n.expression) || n.expression.name.text !== 'setItem' || n.arguments.length < 2) return;
     const a = unwrap(n.arguments[0]);
     const key = ts.isStringLiteralLike(a) ? a.text : ts.isIdentifier(a) ? (local.get(a.text) ?? imported.get(a.text)) : undefined;
-    if (key !== undefined) out.push({ key, value: n.arguments[1].getText(sf) });
+    if (key !== undefined) out.push({ key, value: n.arguments[1].getText(sf), serializer: writerSerializer(n.arguments[1]) });
   });
   return out;
 }
@@ -420,7 +439,7 @@ function stringifiedLiterals(rel) {
   const scan = dir => { for (const f of fs.readdirSync(path.join(ROOT, dir), { withFileTypes: true })) { const rel = `${dir}/${f.name}`; if (f.isDirectory()) scan(rel); else if (/\.tsx?$/.test(f.name) && !/\.test\.tsx?$/.test(f.name) && !rel.startsWith('src/test/') && stripComments(readLF(rel)).includes('.setItem(')) srcFiles.push(rel); } };
   scan('src');
   const writersByKey = new Map();
-  for (const rel of srcFiles) for (const w of setItemKeys(rel)) { if (!writersByKey.has(w.key)) writersByKey.set(w.key, []); writersByKey.get(w.key).push({ rel, value: w.value }); }
+  for (const rel of srcFiles) for (const w of setItemKeys(rel)) { if (!writersByKey.has(w.key)) writersByKey.set(w.key, []); writersByKey.get(w.key).push({ rel, ...w }); }
   let held = 0;
   for (const e of ENTRIES) {
     const row = WRITERS[e.path];
@@ -435,7 +454,7 @@ function stringifiedLiterals(rel) {
       fail(`${e.path}: no .setItem( in ${row.file} names the key ${e.saveKey} (writers found for that key: ${found.map(w => w.rel).join(', ') || 'none anywhere in src'})`);
       continue;
     }
-    if (row.kind === 'serializer' && !here.some(w => w.value.includes(`${row.fn}(`))) { fail(`${e.path}: ${row.file} writes ${e.saveKey} but not with ${row.fn}(...), so the fixture is not the writer's own output`); continue; }
+    if (row.kind === 'serializer' && !here.some(w => w.serializer === row.fn)) { fail(`${e.path}: ${row.file} writes ${e.saveKey} but not with ${row.fn}(...), so the fixture is not the writer's own output`); continue; }
     if (row.kind === 'whole' && !row.indirect && !here.some(w => /^JSON\.stringify\(\s*[A-Za-z_$][\w$]*\s*\)$/.test(w.value))) { fail(`${e.path}: ${row.file} no longer writes ${e.saveKey} as JSON.stringify of one state object`); continue; }
     if (e.path === '/nrl-team-manager' && !stripComments(readLF('src/lib/nrlSaveSlots.ts')).includes('localStorage.setItem(key, next)')) {
       fail('NRL no longer writes the whole save at the selected slot key');
@@ -924,7 +943,7 @@ console.log('\n6. the wiring: the boot call, and the load that leaves no way bac
 const red = [...failed].sort();
 console.log('');
 const OWN = { dropkey: '0', versiontable: '1', norow: '1', onebyte: '2', bootwrite: '2', noaside: '3', journalfirst: '3', pileup: '4',
-  nocopycheck: '3', hidebehind: '3', twins: '3', numberonly: '4', nomaincall: '6', assign: '6', partrow: '1', partrowus: '1', partbrief: '1', partagent: '1', partreturn: '1', partfarewell: '1', partpress: '1', partgamelog: '1', partballon: '1', partplayoffs: '1' };
+  nocopycheck: '3', hidebehind: '3', twins: '3', numberonly: '4', nomaincall: '6', assign: '6', partrow: '1', partrowus: '1', partbrief: '1', partagent: '1', partreturn: '1', partfarewell: '1', partpress: '1', partgamelog: '1', partballon: '1', partplayoffs: '1', stadiumserializer: '0' };
 /* A lie in the table or a write on every boot is also seen by the sections that boot the keeper. A card that hides
    behind the save being played is also seen where the quiet copy sits in front of older backups. */
 const ALSO = { versiontable: ['2', '3', '4', '5'], bootwrite: ['3', '4', '5'], norow: ['4'], hidebehind: ['4'] };
@@ -933,6 +952,10 @@ if (CONTROL) {
   /* Release AW closing pass: a part control must fire on its OWN sentence, the one that names the part it left
      out, and on no other part. A red section alone would also be what a broken fixture gives. */
   const ownPart = PART_CONTROLS[CONTROL]?.[1];
+  if (CONTROL === 'stadiumserializer' && !failLines.some(line => line.startsWith('/stadium-tycoon:') && line.includes('but not with serializeTycoon(...)'))) {
+    console.log('simSaveKeeper control stadiumserializer: DID NOT FIRE on the Stadium writer.');
+    process.exit(2);
+  }
   const ownLine = ownPart ? failLines.find(line => line.includes(`(${ownPart}=`) && line.includes('has a row for it')) : null;
   if (ownPart && !ownLine) {
     console.log(`simSaveKeeper control ${CONTROL}: DID NOT FIRE on its own sentence. No failure names ${ownPart} as a version number without a row. Failures: ${failLines.join(' | ') || 'none'}`);
