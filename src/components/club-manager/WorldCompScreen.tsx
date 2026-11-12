@@ -373,7 +373,7 @@ function headerLines(career: CareerState, view: WorldCompView): string[] {
     : `${career.clubName} are not in it this season, so you are following it from outside.`);
   /* fix-1509 (advice 21): a season one club whose real fifth place the game does not play says why it is in neither. */
   const fifth = view.mode === 'watching' ? realFifthNation(career) : null;
-  if (fifth) lines.push(`${career.clubName} finished fifth in 2025-26. In the real 2026-27 that was a Champions League place, a one year bonus place ${fifth} earned (a European Performance Spot), which the game does not play: here ${fifth} has four places, fifth goes to the Europa League, and your own Europa League nights are not in the game yet.`);
+  if (fifth) lines.push(`${career.clubName} finished fifth in 2025-26. In the real 2026-27 that was a Champions League place, a one year bonus place ${fifth} earned (a European Performance Spot), which the game does not play: here ${fifth} has four places, fifth goes to the Europa League. Your first season starts after those places were assigned, so you follow it from outside.`);
   if (modern && view.mode === 'watching') lines.push('This is the real format. In a season your club qualifies, it plays the game\'s stand in instead: eight groups of four into the quarter-finals.');
   if (modern && view.mode === 'in') lines.push('Your club plays the game\'s stand in: eight groups of four into the quarter-finals. In a season you are not in it, the one you follow from outside plays the real 36 club format.');
   if (view.holder) lines.push(`Holders: ${view.holder}, top of pot one in the draw.`);
@@ -738,6 +738,7 @@ export function CupsPanel({ career, onClubClick, cupTitle, cupValue, cupSub, cup
   } else {
     body = (
       <div className="space-y-2" data-cm-cups-view="tiles">
+        <p className="text-xs text-muted-foreground">Open a European cup, then choose Table or Groups for standings. Domestic cups use a knockout bracket.</p>
         {noEurope && (
           <div className="bg-card border border-border rounded-xl p-3 text-xs text-muted-foreground">No European football this season{euro ? '. Reach the Champions League places to change that' : ' in this league'}.</div>
         )}
