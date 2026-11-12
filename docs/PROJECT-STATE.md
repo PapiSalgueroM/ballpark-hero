@@ -1,3 +1,11 @@
+## 2026-11-12: NRL Manager player scoring
+
+Squad lets you name a starting goal kicker. The Match centre credits tries, conversions, penalty goals and field goals to players who took part. The halfback takes over if the chosen kicker leaves the starting lineup. Squad shows season leaders, and Season review keeps compact player totals after rollover.
+
+A paired check across 64 seasons kept team results, injuries, fitness and finances identical over 1,984 rounds and 14,016 fixtures. Saves without scoring receipts continue their season and begin tracking after rollover. An 80-season save reached 328,173 characters against the 550,000-character reader limit.
+
+Compiled 390px touch play kept the match scorer receipt on reload, switched the next kicker to the halfback after an injury and retained the leaders after rollover. At 320px a used reserve scored, and an older save kept its match results and fitness. App types, production build, 43 focused tests, the NRL browser suite, all 15 built-site readers and all 16 download caps passed.
+
 ## 2026-11-12 Soccer Career first visit
 
 This draft builds on PR #676. The real creation form opens before the simulation downloads. Generate Starting Potential loads the bundled clubs and simulation on the first roll. Saved careers open directly, and in-game restart uses the same creator. Editing the position while the simulation downloads cancels the previous roll without replacing the form.

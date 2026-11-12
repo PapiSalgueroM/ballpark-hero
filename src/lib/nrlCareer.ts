@@ -1,6 +1,7 @@
 import { isNrlOpeningYear, nrlSeasonPlan, NRL_LAST_YEAR, type NrlClub } from '@/data/nrlManagerSeasons';
 import { clampi, hashLabel, rngFrom } from '@/lib/careerEngine';
 import { uniqueName } from '@/lib/foNames';
+import { archiveNrlScoring, validNrlScoringArchive, type NrlSeasonScoringTotal } from '@/lib/nrlPlayerScoring';
 import {
   createNrlSeason, isNrlManagerState, isNrlSeasonProgress, nrlBench, nrlLadder, nrlRegularRounds,
   NRL_ROLES, reduceNrlSeason, type NrlAction, type NrlManagerState, type NrlMatchResult,
@@ -40,6 +41,7 @@ export interface NrlCareerHistoryRow {
   losses: number;
   championId: string;
   finance: NrlCareerFinance | null;
+  scoring?: NrlSeasonScoringTotal[];
 }
 interface NrlAcademyAssignment {
   player: NrlCareerPlayer;
@@ -285,7 +287,10 @@ function seasonReceipt(state: NrlCareerState): NrlCareerHistoryRow {
   const rank = ladder.findIndex(row => row.clubId === season.clubId) + 1;
   const { wins, draws, losses } = ladder[rank - 1];
   const finance = state.finance.fromRound > lastRound(season.year) ? null : nrlCareerFinance(state);
-  return { year: season.year, clubId: season.clubId, rank, wins, draws, losses, championId: season.championId!, finance };
+  return {
+    year: season.year, clubId: season.clubId, rank, wins, draws, losses, championId: season.championId!, finance,
+    ...(season.kickerId ? { scoring: archiveNrlScoring(season) } : {}),
+  };
 }
 
 function careerFrom(season: NrlManagerState, openingYear: NrlYear, legacySeason: boolean): NrlCareerState {
@@ -299,7 +304,7 @@ function careerFrom(season: NrlManagerState, openingYear: NrlYear, legacySeason:
     version: 2, openingYear,
     season: {
       ...season, squad: fullSquad, bench: nrlBench({ ...season, squad: fullSquad }),
-      ...(legacySeason ? {} : { injuryTracking: true as const }),
+      ...(legacySeason ? {} : { injuryTracking: true as const, kickerId: season.lineup.Halfback }),
     },
     players: [...players, ...newMarket(seed, year, names)], history: [], finance, legacySeason,
   };
@@ -425,6 +430,7 @@ function rolloverCareer(state: NrlCareerState): NrlCareerState {
   const nextSeason: NrlManagerState = {
     ...season, year, round: 1, phase: 'regular', championId: null,
     results: [], squad: squad.map(playerView), lineup, preparation: null, injuryTracking: true,
+    kickerId: season.kickerId && Object.values(lineup).includes(season.kickerId) ? season.kickerId : lineup.Halfback,
   };
   return {
     ...state, players: world, legacySeason: false, academy: undefined, finance: bookFrom(nrlCareerFinance(state).cash),
@@ -491,7 +497,8 @@ function validReceipt(value: unknown, year: number, clubId: string): value is Nr
   const { clubs } = nrlSeasonPlan(year);
   if (!intIn(value.rank, 1, clubs.length) || !clubs.some(club => club.id === value.championId)
     || !intIn(value.wins, 0, 24) || !intIn(value.draws, 0, 24) || !intIn(value.losses, 0, 24)
-    || value.wins + value.draws + value.losses !== 24) return false;
+    || value.wins + value.draws + value.losses !== 24
+    || (value.scoring !== undefined && !validNrlScoringArchive(value.scoring))) return false;
   if (value.finance === null) return true;
   if (!record(value.finance) || !validBook(value.finance, lastRound(year))) return false;
   const finance = nrlCareerFinance({ finance: value.finance });
@@ -541,6 +548,7 @@ function validCareerBooks(state: NrlCareerState): boolean {
       const expected = seasonReceipt(state);
       if (receipt.rank !== expected.rank || receipt.wins !== expected.wins || receipt.draws !== expected.draws
         || receipt.losses !== expected.losses || receipt.championId !== expected.championId
+        || JSON.stringify(receipt.scoring) !== JSON.stringify(expected.scoring)
         || (receipt.finance === null) !== (expected.finance === null)
         || (receipt.finance && expected.finance && !booksMatch(receipt.finance, expected.finance))) return false;
     }
@@ -595,7 +603,7 @@ export function isNrlCareerState(value: unknown): value is NrlCareerState {
     || !isNrlSeasonProgress(value.season) || value.season.year < value.openingYear
     || !nrlSeasonPlan(value.openingYear).clubs.some(club => club.id === (value.season as NrlManagerState).clubId)
     || typeof value.legacySeason !== 'boolean'
-    || (value.legacySeason && (value.season.year !== value.openingYear || value.season.injuryTracking || value.season.results.some(match => match.benchUsed !== undefined)))
+    || (value.legacySeason && (value.season.year !== value.openingYear || value.season.kickerId || value.season.injuryTracking || value.season.results.some(match => match.benchUsed !== undefined)))
     || !Array.isArray(value.players) || value.players.length > 650
     || !Array.isArray(value.history) || !validBook(value.finance, value.season.round + 1)) return false;
   const { year } = value.season;

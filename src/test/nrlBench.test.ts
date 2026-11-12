@@ -107,10 +107,11 @@ describe('NRL Manager interchange', () => {
   });
 
   it('fills an old v2 bench without changing historical results and rebuilds a legal 19 at rollover', () => {
-    const state = advance(fresh());
-    const { bench, ...withoutBench } = state.season;
-    const results = withoutBench.results.map(({ benchUsed, ...match }) => match);
-    const raw = JSON.stringify({ ...state, season: { ...withoutBench, results } });
+    const initial = fresh();
+    const { bench, injuryTracking, kickerId, ...oldSeason } = initial.season;
+    const state = advance({ ...initial, season: oldSeason });
+    const { results } = state.season;
+    const raw = JSON.stringify(state);
     let migrated = readNrlCareerSave(raw)!;
     expect(migrated.season.results).toEqual(results);
     expect(nrlBench(migrated.season)).toEqual(nrlBench(readNrlCareerSave(raw)!.season));

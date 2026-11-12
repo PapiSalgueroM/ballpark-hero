@@ -7,6 +7,7 @@ import {
   type NrlCareerAction, type NrlCareerState,
 } from '@/lib/nrlCareer';
 import { NRL_ROLES, type NrlRole } from '@/lib/nrlManager';
+import { nrlArchivedScoringLeaders, nrlTryLeaders } from '@/lib/nrlPlayerScoring';
 
 const currency = new Intl.NumberFormat('en-AU', {
   style: 'currency', currency: 'AUD', maximumFractionDigits: 0,
@@ -268,13 +269,21 @@ function History({ career, onAction, disabled }: { career: NrlCareerState; onAct
       </p>
       {career.history.length > 0 ? (
         <ul className="mt-3 divide-y divide-border">
-          {[...career.history].reverse().map(record => (
-            <li key={record.year} className="space-y-1 py-3">
-              <p className="font-bold">{record.year} {labelForClub(record.year, record.clubId)}</p>
-              <p className="text-sm text-muted-foreground">Ladder place {record.rank} · {record.wins} wins · {record.draws} draws · {record.losses} losses</p>
-              <p className="text-sm text-muted-foreground">Premiers {labelForClub(record.year, record.championId)}{record.finance ? ` · Profit or loss ${money(record.finance.profit)}` : ''}</p>
-            </li>
-          ))}
+          {[...career.history].reverse().map(record => {
+            const leaders = nrlArchivedScoringLeaders(record.scoring);
+            const tries = nrlTryLeaders(leaders)[0];
+            const points = leaders[0];
+            return (
+              <li key={record.year} className="space-y-1 py-3">
+                <p className="font-bold">{record.year} {labelForClub(record.year, record.clubId)}</p>
+                <p className="text-sm text-muted-foreground">Ladder place {record.rank} · {record.wins} wins · {record.draws} draws · {record.losses} losses</p>
+                <p className="text-sm text-muted-foreground">Premiers {labelForClub(record.year, record.championId)}{record.finance ? ` · Profit or loss ${money(record.finance.profit)}` : ''}</p>
+                {points && <p className="text-sm text-muted-foreground" data-nrl-archived-scoring>
+                  {tries ? `Try leader ${tries.name} (${tries.tries}) · ` : ''}Points leader {points.name} ({points.points})
+                </p>}
+              </li>
+            );
+          })}
         </ul>
       ) : <p className="mt-3 text-sm text-muted-foreground">Your first season is in progress.</p>}
       {finished && year < NRL_LAST_YEAR && (
