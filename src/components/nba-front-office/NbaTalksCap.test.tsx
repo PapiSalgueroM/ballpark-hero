@@ -28,7 +28,7 @@ function startTrade(partner: string, player: string) {
   localStorage.setItem(key, JSON.stringify(save));
   render(<NbaFrontOfficeBoard />);
   fireEvent.click(screen.getByText('Trades'));
-  fireEvent.click(screen.getByRole('button', { name: partner, exact: true }));
+  fireEvent.click(screen.getByRole('button', { name: new RegExp('^' + partner + '$') }));
   const sends = document.querySelector<HTMLElement>('[data-trade-send-list]')!;
   fireEvent.click(within(sends).getByRole('button', { name: new RegExp(player) }));
   const mine = league.teams[club];
