@@ -1,3 +1,9 @@
+## 2026-11-12 Club Manager saved opening layout
+
+The three saved-start loading panels reserve one small viewport of height on phones, where the manager slots stack vertically. That keeps the live guide below the fold until the slot cards arrive. The desktop loaders keep their prior geometry.
+
+With the engine, historical squads and slots file held separately, the #727 phone control exposed the guide at y=385, y=385 and y=361, then recorded a 0.361 shift when the cards arrived. All four 320px and 390px combinations of essential consent and unset consent kept the guide below the fold and recorded zero guide shifts. The same opening save bytes and normalized slot bytes matched at each stage.
+
 ## 2026-11-12: NRL Manager offseason club changes
 
 After finals, Season review lets you stay or choose a club in the following year's league. Perth opens for 2027 and the Chiefs for 2028. The new club starts with its settled squad and contracts. On a return, the club reopens its last tracked cash and medical facilities. Season results, development and costs stay with the club they came from.

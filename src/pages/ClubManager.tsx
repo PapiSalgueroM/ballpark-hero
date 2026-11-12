@@ -33,7 +33,7 @@ import { eraHonestyLine, eraRostersLoaded, ensureEraRosters } from '@/lib/clubMa
 import { reloadToRetryChunk } from '@/lib/freshBuild';
 import { FlagImg } from '@/components/FlagImg';
 import { ClubManagerClubList } from '@/components/club-manager/ClubManagerClubList';
-import { ClubManagerFrame } from '@/components/club-manager/ClubManagerFrame';
+import { ClubManagerFrame, ClubManagerStartup } from '@/components/club-manager/ClubManagerFrame';
 import { ClubManagerEraPicker, ClubManagerPickerHeading } from '@/components/club-manager/ClubManagerEraPicker';
 import { CURRENCIES, STRICTNESS_DEFAULT, STRICTNESS_INFO, levelFrom, noSackFrom, startOptionsOf } from '@/lib/clubManagerStart';
 import { DIFFICULTY_INFO } from '@/lib/managerDifficulty';
@@ -363,14 +363,14 @@ const ClubManager = ({ initialEra }: { initialEra?: string | null }) => {
         </div>,
       );
     }
-    return shell(<div className="text-center py-24 text-muted-foreground animate-pulse">Loading…</div>);
+    return shell(<ClubManagerStartup className="py-24 animate-pulse">Loading…</ClubManagerStartup>);
   }
 
   /* ================= MANAGER SLOTS (Round 928, where the resume prompt was) ================= */
   if (g.phase === 'resume') {
     const c = g.career;
     return shell(
-      <ScreenLoading>
+      <Suspense fallback={<ClubManagerStartup className="min-h-48 py-12 text-sm">Loading screen...</ClubManagerStartup>}>
         <ManagerSlotsScreen
           slots={g.slots}
           activeDetail={c && !c.retired ? `Week ${Math.min(tickingWeeksDone(c.calendar, c.week) + 1, tickingWeeksIn(c.calendar))} of ${tickingWeeksIn(c.calendar)} · Board ${Math.round(c.boardConfidence)}/100` : null}
@@ -379,7 +379,7 @@ const ClubManager = ({ initialEra }: { initialEra?: string | null }) => {
           onNew={g.newInSlot}
           onDelete={g.removeSlot}
         />
-      </ScreenLoading>
+      </Suspense>
     );
   }
 
