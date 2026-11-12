@@ -1101,6 +1101,7 @@ export const SOCCER_CONTENT_2: GameContentMap = {
     intro: [
       "Build Your XI hands you a formation, then a slot machine assigns a random club or country to every position. Your job is naming a player from that exact team who fits each slot. That is Mixed, the default clubs and countries mode.",
       "In Mixed, when the eleventh name lands, an AI referee grades the lineup and writes a short scouting report, then a season report plays a full year out with your XI: league finish, points, trophies and a top scorer. No two teams ever come out alike.",
+      "Mixed can draw from 60 clubs and 25 national teams. Flamengo and Palmeiras are in the club pool.",
       "Club year draft uses 11 different clubs, not nations, and records from one year you choose. It uses your selected values and ages for a fictional season, and missing either leaves the completed XI unrated.",
     ],
     headings: {
