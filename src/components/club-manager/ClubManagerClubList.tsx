@@ -19,7 +19,7 @@ export function ClubManagerClubList() {
   return (
     <div className="mt-10 text-left text-sm text-muted-foreground leading-relaxed space-y-3">
       <h2 className="text-base font-semibold text-foreground">Every league and club in Club Manager</h2>
-      <p>{`Existing 27-league roster snapshots: ${CM_ROSTER_META.asOf}; ${generatedLeagueDateClauses().join('; ')}. K League 1 and J1 League use generated opening squads.`}</p>
+      <p>{`Existing 27-league roster snapshots: ${CM_ROSTER_META.asOf}; ${generatedLeagueDateClauses().join('; ')}. K League 1, J1 League and the Chinese Super League use generated opening squads.`}</p>
       <p>Partial data means the market data covers only part of that squad, or none of it, and the rest is filled with youth players.</p>
       {CLUB_MANAGER_START_LEAGUES.map(l => (
         <div key={l.id}>

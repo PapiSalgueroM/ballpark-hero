@@ -74,7 +74,8 @@ import { players as RAW_POOL } from '@/data/players';
 // imports nothing but types, so reading it at module scope is safe.
 import { CM_ROSTER_META } from '@/data/clubManagerRosters';
 import { K_LEAGUE_2026, kLeagueMember } from '@/data/kLeague2026';
-import { J1_LEAGUE_2026, isJ1Club } from '@/data/j1League2026';
+import { J1_LEAGUE_2026 } from '@/data/j1League2026';
+import { CSL_LEAGUE_2026, CSL_OPENING_POINTS } from '@/data/cslLeague2026';
 import { CM_REAL_FREE_AGENTS } from '@/data/clubManagerFreeAgents2026';
 // Round 1600: on its own line, so scripts/simFreeAgents.mjs can still serve the list above from its own copy.
 import { CM_REAL_FREE_AGENTS_CURVE } from '@/data/clubManagerFreeAgents2026';
@@ -2374,7 +2375,7 @@ export function nationOfferFor(career: CareerState): NationOffer | null {
   /* Round 965: a homeland is stored in the league spelling, so United States
      is looked up as the engine's USA. */
   const own = career.manager?.nationality ? homelandEngineName(career.manager.nationality) : undefined;
-  const custom = career.customClub?.name === career.clubName && (!!kLeagueMember(career.clubName) || isJ1Club(career.clubName));
+  const custom = career.customClub?.name === career.clubName && (!!kLeagueMember(career.clubName) || isScopedStarterClub(career.clubName));
   const league = custom ? careerLeagueOf(career) : leagueOf(career.clubName);
   const nationDef = league ? CLUB_MANAGER_START_NATIONS.find(n => n.leagueIds.includes(league.id)) : null;
   const nation = (own && NATION_CONFED[own]) ? own : (nationDef?.name ?? null);
@@ -2534,7 +2535,7 @@ function agreedJobOffer(career: CareerState, club: string): MarketJobOffer {
   const league = (eraHist && eraLeagueOf(club, career.eraId)) || leagueOf(club);
   return {
     club,
-    country: allOfferClubs(careerHasJ1World(career)).find(c => c.name === club)?.country ?? '',
+    country: allOfferClubs(careerScopedLeagueId(career)).find(c => c.name === club)?.country ?? '',
     tier: def.tier as ClubTier,
     league: league.name,
     brief: 'Start in the summer, the way you agreed.',
@@ -2575,7 +2576,7 @@ export function wildernessWeek(career: CareerState, rng: () => number = Math.ran
      can still hold such an offer: it is dropped here, the next time he
      waits, and acceptWildernessJob will not take it. */
   const eraPool = eraOfferClubs(career);
-  const pool = eraPool ?? allOfferClubs(careerHasJ1World(career)).filter(club => club.league !== K_LEAGUE_2026.label || careerHasKLeagueWorld(career));
+  const pool = eraPool ?? allOfferClubs(careerScopedLeagueId(career)).filter(club => club.league !== K_LEAGUE_2026.label || careerHasKLeagueWorld(career));
   let offers: MarketJobOffer[] = eraPool ? w.offers.filter(o => eraPool.some(c => c.name === o.club)) : [...w.offers];
   const fresh: MarketJobOffer[] = realJobOffers(profile, rng, exclude, pool);
   /* One call a week at most: a flood of offers would make waiting free. */
@@ -3650,6 +3651,7 @@ export interface LeagueRules {
   /** 'playoffs' ladder: below the playoff rung, the target sits this many
    *  places from the bottom. */
   floorFromBottom?: number;
+  boardTopHalf?: boolean;
   /** A continental prize outside UEFA, asked of clubs ranked this high. */
   continental?: { label: string; rankUpTo: number; target: number };
   /** The real league's calendar. The engine plays every league on one
@@ -4222,6 +4224,8 @@ export const LEAGUE_RULES: Record<string, LeagueRules> = {
     simplified: 'K League 1 uses a simplified double round robin with generated simulation squads. The real split, promotion and relegation, Korea Cup and AFC competitions are not played.' },
   j1: { nationId: 'japan', flag: 'Japan', cup: null, europe: null, drop: 0, ladder: 'top', season: 'autumnSpring', tiebreak: 'gdGfH2h',
     simplified: 'J1 has generated opening squads and a simulated calendar. The Emperor\'s Cup, J.League Cup, AFC competitions and J2 promotion and relegation are outside this league model.' },
+  csl: { nationId: 'china', flag: 'China', cup: null, europe: null, drop: 0, ladder: 'top', season: 'calendarYear', tiebreak: 'h2h', boardTopHalf: true,
+    simplified: 'Chinese Super League uses generated squads and fixtures. The CFA Cup, Super Cup, AFC competitions and promotion and relegation are outside this league model.' },
 };
 
 /** What an id with no row reads as: a cupless top flight outside Europe that
@@ -4473,10 +4477,20 @@ export const REAL_LEAGUES: LeagueDef[] = [
   { id: K_LEAGUE_2026.id, name: K_LEAGUE_2026.label, clubs: K_LEAGUE_2026.clubs.map(club => club.name) },
 ].map(leagueFromRow);
 
-const J1_LEAGUE = leagueFromRow({ id: J1_LEAGUE_2026.id, name: J1_LEAGUE_2026.label, clubs: [...J1_LEAGUE_2026.clubs] });
+const SCOPED_START_LEAGUES = [J1_LEAGUE_2026, CSL_LEAGUE_2026].map(league =>
+  leagueFromRow({ id: league.id, name: league.label, clubs: [...league.clubs] }));
 
-/** The normal Club Manager picker includes J1, which opens only in new Japanese starts. */
-export const CLUB_MANAGER_START_LEAGUES = [...REAL_LEAGUES, J1_LEAGUE];
+/** The picker offers leagues that belong only to careers started there. */
+export const CLUB_MANAGER_START_LEAGUES = [...REAL_LEAGUES, ...SCOPED_START_LEAGUES];
+
+const scopedLeagueForClub = (club: string) => SCOPED_START_LEAGUES.find(league => league.clubs.includes(club));
+export const isScopedStarterClub = (club: string) => !!scopedLeagueForClub(club);
+export const isScopedStartLeague = (id: string) => SCOPED_START_LEAGUES.some(league => league.id === id);
+
+export function startLeaguesFor(scopedLeagueId?: string): LeagueDef[] {
+  const scoped = SCOPED_START_LEAGUES.find(league => league.id === scopedLeagueId);
+  return scoped ? [...REAL_LEAGUES, scoped] : REAL_LEAGUES;
+}
 
 /**
  * Round 310: which divisions trade clubs at the summer rollover. Only the
@@ -4621,7 +4635,8 @@ const STRENGTH_PRIORS: Record<string, number> = {
 export function leagueOf(clubName: string): LeagueDef {
   const real = REAL_LEAGUES.find(l => effectiveClubsOf(l.id, l.clubs).includes(clubName));
   if (real) return effectiveLeague(real);
-  if (isJ1Club(clubName)) return J1_LEAGUE;
+  const scoped = scopedLeagueForClub(clubName);
+  if (scoped) return scoped;
   // Round 146: clubs that only exist in a historic era (Blackpool, Hercules,
   // Zaragoza...) resolve to their era league. REAL_LEAGUES wins for clubs in
   // both worlds; a historic save reads its own league through eraLeagueOf
@@ -4851,19 +4866,21 @@ export function careerHasKLeagueWorld(career: CareerWorldContext): boolean {
   return own || !!career.world && Object.prototype.hasOwnProperty.call(career.world, K_LEAGUE_2026.id);
 }
 
-export function careerHasJ1World(career: CareerWorldContext): boolean {
-  if (career.eraId && isHistoricEra(career.eraId)) return false;
-  const isOwnCustom = !!career.customClub && career.customClub.name === career.clubName;
-  return (!isOwnCustom && isJ1Club(career.clubName ?? ''))
-    || !!career.world && Object.prototype.hasOwnProperty.call(career.world, J1_LEAGUE_2026.id);
+export function careerScopedLeagueId(career: CareerWorldContext): string | undefined {
+  if (career.eraId && isHistoricEra(career.eraId)) return undefined;
+  const club = career.clubName;
+  const own = club && career.customClub?.name !== club ? scopedLeagueForClub(club) : undefined;
+  const world = career.world;
+  return own?.id ?? (world ? SCOPED_START_LEAGUES.find(league => Object.prototype.hasOwnProperty.call(world, league.id))?.id : undefined);
 }
 
 /** A legacy custom stays its own entity; new jobs stay in this save's world. */
 export function clubAvailableInCareer(career: CareerWorldContext, name: string): boolean {
   if (career.customClub?.name === career.clubName && name === career.clubName) return true;
+  const scoped = scopedLeagueForClub(name);
   return ordinaryClubAllowed(name)
     && (!kLeagueMember(name) || careerHasKLeagueWorld(career))
-    && (!isJ1Club(name) || careerHasJ1World(career));
+    && (!scoped || scoped.id === careerScopedLeagueId(career));
 }
 
 /** Round 1035: does this club enter its league's cup? False only for a club
@@ -5178,6 +5195,7 @@ export const NATIONS: NationDef[] = [
 export const CLUB_MANAGER_START_NATIONS: NationDef[] = [
   ...NATIONS,
   { id: 'japan', name: J1_LEAGUE_2026.country, flag: '🇯🇵', leagueIds: [J1_LEAGUE_2026.id] },
+  { id: 'china', name: CSL_LEAGUE_2026.country, flag: '🇨🇳', leagueIds: [CSL_LEAGUE_2026.id] },
 ];
 
 /** Primary kit colors for the club dot in the UI (approximate, decorative). */
@@ -5395,7 +5413,7 @@ const CLUB_COLORS: Record<string, string> = {
 };
 
 export function usesGeneratedOpeningSquad(clubName: string): boolean {
-  return isJ1Club(clubName) || (K_LEAGUE_2026.modelOnlyRoster && !!kLeagueMember(clubName));
+  return isScopedStarterClub(clubName) || (K_LEAGUE_2026.modelOnlyRoster && !!kLeagueMember(clubName));
 }
 
 /** Round 72: mark youth-padded clubs and clubs that use fully generated opening squads. */
@@ -5461,7 +5479,7 @@ function clubDefMap(): Map<string, ClubDef> {
         tier,
         color: CLUB_COLORS[entry.name] ?? '#8899aa',
         budget,
-        expectation: league.id === J1_LEAGUE_2026.id ? Math.ceil(ranked.length / 2) : i + 1,
+        expectation: isScopedStartLeague(league.id) ? Math.ceil(ranked.length / 2) : i + 1,
       });
     });
   }
@@ -5488,7 +5506,7 @@ export function clubDefFor(name: string, career?: CareerWorldContext): ClubDef {
   if (ACTIVE_CUSTOM && ACTIVE_CUSTOM.def.name === name) return ACTIVE_CUSTOM.def;
   /* A legacy custom keeps the old repair defaults when its name becomes real. */
   const legacyCustom = !!career && career.clubName === name && career.customClub?.name === name
-    && ((!!kLeagueMember(name) && !careerHasKLeagueWorld(career)) || (isJ1Club(name) && !careerHasJ1World(career)));
+    && ((!!kLeagueMember(name) && !careerHasKLeagueWorld(career)) || (isScopedStarterClub(name) && !careerScopedLeagueId(career)));
   return (!legacyCustom ? clubDefMap().get(name) ?? CLUBS.find(c => c.name === name) : undefined)
     ?? { name, tier: 4, color: '#8899aa', budget: 20, expectation: 10 };
 }
@@ -7469,6 +7487,11 @@ export function xiAverageRating(career: CareerState): number {
 
 function emptyRow(club: string): TableRow {
   return { club, w: 0, d: 0, l: 0, gf: 0, ga: 0, pts: 0 };
+}
+
+function openingLeagueTable(clubs: string[], leagueId: string, year?: number): TableRow[] {
+  if (leagueId !== CSL_LEAGUE_2026.id || year !== CSL_LEAGUE_2026.year) return clubs.map(emptyRow);
+  return clubs.map(club => ({ ...emptyRow(club), pts: CSL_OPENING_POINTS[club] ?? 0 }));
 }
 
 /* ---------- Round 462: level points split the way each league says ---------- */
@@ -12372,7 +12395,7 @@ function generateHeadlines(state: CareerState): AiDeal[] {
  * average of the value-derived ratings), so the data drives the sim. The
  * old priors only back up anything outside the bake.
  */
-function genClubStrengths(myLeague: LeagueDef, yearsOnNow = 0, eraId: string = 'now', career?: CareerState, myClub?: string, kLeagueActive = true, j1Active = false): Record<string, number> {
+function genClubStrengths(myLeague: LeagueDef, yearsOnNow = 0, eraId: string = 'now', career?: CareerState, myClub?: string, kLeagueActive = true, scopedLeagueId?: string): Record<string, number> {
   const out: Record<string, number> = {};
   // Round 132: from the PROJECTED roster for this world year, not from the
   // frozen 2026 bake. Before this, every AI club in the game was recomputed
@@ -12405,7 +12428,7 @@ function genClubStrengths(myLeague: LeagueDef, yearsOnNow = 0, eraId: string = '
   }
   // Round 310: through the effective memberships, so a strength exists for
   // every club where this save's world actually has it playing.
-  for (const league of (j1Active ? CLUB_MANAGER_START_LEAGUES : REAL_LEAGUES).map(effectiveLeague)) {
+  for (const league of startLeaguesFor(scopedLeagueId).map(effectiveLeague)) {
     if (!kLeagueActive && league.id === K_LEAGUE_2026.id) continue;
     for (const name of league.clubs) {
       if (out[name] !== undefined) continue;
@@ -12661,19 +12684,20 @@ export function leagueRounds(size: number): number {
 export function worldLeagueDefs(state: CareerWorldContext): LeagueDef[] {
   const historic = !!state.eraId && isHistoricEra(state.eraId);
   if (historic) return ERA_LEAGUES[state.eraId!] ?? [];
-  const leagues = (careerHasJ1World(state) ? CLUB_MANAGER_START_LEAGUES : REAL_LEAGUES).map(effectiveLeague);
+  const leagues = startLeaguesFor(careerScopedLeagueId(state)).map(effectiveLeague);
   return state.clubName && !careerHasKLeagueWorld(state)
     ? leagues.filter(league => league.id !== K_LEAGUE_2026.id) : leagues;
 }
 
 /** Blank standings for every league except my own. Round 146: a historic
  *  save's world is its era's other league, not the 2026 league set. */
-function initWorld(myClub: string, eraId?: string, myLeagueId?: string, kLeagueActive = true, j1Active = false): Record<string, WorldLeague> {
+function initWorld(myClub: string, eraId?: string, myLeagueId?: string, kLeagueActive = true, scopedLeagueId?: string, seasonYear?: number): Record<string, WorldLeague> {
   const historic = !!eraId && isHistoricEra(eraId);
   // Round 310: the modern world is built from the effective memberships, so
   // a promoted club's old division fields its replacement, not the club.
   const leagues = worldLeagueDefs({ eraId }).filter(league => kLeagueActive || league.id !== K_LEAGUE_2026.id);
-  if (!historic && j1Active) leagues.push(J1_LEAGUE);
+  const scoped = SCOPED_START_LEAGUES.find(league => league.id === scopedLeagueId);
+  if (!historic && scoped) leagues.push(scoped);
   /* Round 154: callers that know my league pass it, because a custom club is
      in no league def and the leagueOf fallback would exclude the WRONG league
      from the world, running my real division twice. */
@@ -12681,7 +12705,7 @@ function initWorld(myClub: string, eraId?: string, myLeagueId?: string, kLeagueA
   const world: Record<string, WorldLeague> = {};
   for (const lg of leagues) {
     if (lg.id === mine) continue;
-    world[lg.id] = { round: 0, table: lg.clubs.map(emptyRow) };
+    world[lg.id] = { round: 0, table: openingLeagueTable(lg.clubs, lg.id, seasonYear) };
   }
   return world;
 }
@@ -12708,7 +12732,7 @@ function myRoundsPlayed(state: CareerState, upto: number): number {
  * Mutates state.
  */
 function syncWorld(state: CareerState, myPlayed: number): void {
-  if (!state.world) state.world = initWorld(state.clubName, state.eraId, careerLeagueOf(state).id, careerHasKLeagueWorld(state), careerHasJ1World(state));
+  if (!state.world) state.world = initWorld(state.clubName, state.eraId, careerLeagueOf(state).id, careerHasKLeagueWorld(state), careerScopedLeagueId(state), worldYearOf(state));
   const myTotal = leagueRounds(careerLeagueOf(state).clubs.length);
   const frac = myTotal > 0 ? Math.min(1, myPlayed / myTotal) : 0;
   // Round 310: fixtures come off the effective membership, or a relegated
@@ -15575,6 +15599,8 @@ function leagueDemand(rank: number, tier: number, size: number, league: LeagueDe
      off the league's LEAGUE_RULES row; no league id is named below. */
   const rules = leagueRulesOf(league.id);
   const drop = rules.drop;
+
+  if (rules.boardTopHalf) return { target: half, label: 'Finish in the top half' };
 
   // The second divisions are their own world: the prize is going UP.
   // (The Championship, and since Round 142 the 2. Bundesliga, whose third
@@ -20587,7 +20613,7 @@ export interface SeasonWorld {
   worldSeed?: number;
   rosterCareer?: CareerState;
   kLeagueActive?: boolean;
-  j1Active?: boolean;
+  scopedLeagueId?: string;
 }
 
 /* Round 964: `edit` is a world editor edit (src/lib/clubManagerWorldEdit.ts),
@@ -20600,10 +20626,12 @@ export interface SeasonWorld {
 export function startCareer(clubName: string, eraId: string = DEFAULT_ERA_ID, custom?: CustomClubSpec, manager?: ManagerSpec, world?: SeasonWorld, edit?: Record<string, string[]> | null, opts?: StartCareerOptions): CareerState {
   const kLeagueActive = world ? world.kLeagueActive ?? (world.rosterCareer ? careerHasKLeagueWorld(world.rosterCareer) : false)
     : !(custom && kLeagueMember(custom.name));
-  const j1Active = world ? world.j1Active ?? (world.rosterCareer ? careerHasJ1World(world.rosterCareer) : false)
-    : !custom && eraId === DEFAULT_ERA_ID && isJ1Club(clubName);
+  const requestedScope = scopedLeagueForClub(clubName)?.id;
+  const scopedLeagueId = world ? world.scopedLeagueId ?? (world.rosterCareer && careerScopedLeagueId(world.rosterCareer))
+    : !custom && eraId === DEFAULT_ERA_ID ? requestedScope : undefined;
   if (!ordinaryClubAllowed(clubName, custom) || (!custom && kLeagueMember(clubName) && (isHistoricEra(eraId) || !kLeagueActive))) throw new Error('CM_CLUB_ACCESS_HELD');
-  if (custom?.leagueId === J1_LEAGUE_2026.id || (!custom && isJ1Club(clubName) && (!j1Active || eraId !== DEFAULT_ERA_ID || edit))) {
+  if ((custom && isScopedStartLeague(custom.leagueId))
+    || (!custom && requestedScope && (requestedScope !== scopedLeagueId || eraId !== DEFAULT_ERA_ID || edit))) {
     throw new Error('CM_CLUB_ACCESS_HELD');
   }
   /* Round 132: the era decides what year season one is, and the year decides
@@ -20695,10 +20723,10 @@ export function startCareer(clubName: string, eraId: string = DEFAULT_ERA_ID, cu
     mentality: 'balanced',
     leagueClubs,
     balancedFixtures: true,
-    table: leagueClubs.map(emptyRow),
+    table: openingLeagueTable(leagueClubs, league.id, CM_BASE_YEAR + startYearsOn),
     form: [],
     calendar: buildCalendar(league.clubs.length, eraUclHasR16(era.id), uclLegsFor(era.id, 'QF') === 2, league.cupName !== null),
-    clubStrengths: genClubStrengths(custom ? { ...league, clubs: leagueClubs } : league, startYearsOn, era.id, world?.rosterCareer, club.name, kLeagueActive, j1Active),
+    clubStrengths: genClubStrengths(custom ? { ...league, clubs: leagueClubs } : league, startYearsOn, era.id, world?.rosterCareer, club.name, kLeagueActive, scopedLeagueId),
     transferWindow: 'summer',
     windowWeeksLeft: 4,
     aiHeadlines: [],
@@ -20718,7 +20746,7 @@ export function startCareer(clubName: string, eraId: string = DEFAULT_ERA_ID, cu
     uclDraw: {},
     uclBracket: undefined,
     cupBracket: undefined,
-    world: initWorld(club.name, era.id, league.id, kLeagueActive, j1Active),
+    world: initWorld(club.name, era.id, league.id, kLeagueActive, scopedLeagueId, CM_BASE_YEAR + startYearsOn),
     trophies: [],
     history: [],
     careerStats: { played: 0, wins: 0, draws: 0, losses: 0, clubsManaged: [club.name] },
@@ -21882,6 +21910,12 @@ export function ensureHandover(state: CareerState): SeasonHandover | null {
   return held;
 }
 
+/** The manager's match points exclude a club's opening deduction. */
+export function seasonScoreLeaguePoints(career: CareerState, row?: TableRow): number {
+  if (!row) return 0;
+  return careerLeagueOf(career).id === CSL_LEAGUE_2026.id ? 3 * row.w + row.d : row.pts;
+}
+
 /**
  * Round 633: everything the season score reads, gathered in one place so the
  * mid season reading and the rollover reading cannot drift apart.
@@ -21902,7 +21936,7 @@ export function seasonLedgerInputOf(career: CareerState): SeasonLedgerInput {
   const legacyStart = !stamped && career.season === 1 ? (career.midSeasonStart ?? null) : null;
   return {
     inTable: !!row,
-    leaguePts: row ? row.pts : 0,
+    leaguePts: seasonScoreLeaguePoints(career, row),
     leaguePlayed: row ? row.w + row.d + row.l : 0,
     /* The engine's own fixture count, the objectiveStatuses expression. Never
        career.calendar.length, which carries cup weeks, European group weeks,
@@ -22969,7 +23003,7 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
   const requestedClub = career.jobHunt?.summerMove?.club ?? acceptOfferClub;
   if (requestedClub && requestedClub !== career.clubName && !clubAvailableInCareer(career, requestedClub)) return career;
   const kLeagueActive = careerHasKLeagueWorld(career);
-  const j1Active = careerHasJ1World(career);
+  const scopedLeagueId = careerScopedLeagueId(career);
   /* Round 1508: a career with no world seed joins the living world here, at its first summer on this engine, before
      the summer's first deal is made (adoptLivingWorld, above worldSeedOf's neighbours). Its own hunk, one line. */
   career = adoptLivingWorld(career);
@@ -23419,7 +23453,7 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
     table: leagueClubs.map(emptyRow),
     form: [],
     calendar: buildCalendar(league.clubs.length, eraUclHasR16(eraId), uclLegsFor(eraId, 'QF') === 2, league.cupName !== null),
-    clubStrengths: genClubStrengths(nextCustom ? { ...league, clubs: leagueClubs } : league, nextYearsOn, eraId, rosterCareer, clubName, kLeagueActive, j1Active),
+    clubStrengths: genClubStrengths(nextCustom ? { ...league, clubs: leagueClubs } : league, nextYearsOn, eraId, rosterCareer, clubName, kLeagueActive, scopedLeagueId),
     transferWindow: 'summer',
     windowWeeksLeft: 4,
     aiHeadlines: [],
@@ -23434,7 +23468,7 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
     uclDraw: {},
     uclBracket: undefined,
     cupBracket: undefined,
-    world: initWorld(clubName, eraId, league.id, kLeagueActive, j1Active),
+    world: initWorld(clubName, eraId, league.id, kLeagueActive, scopedLeagueId),
     pendingSummary: null,
     cupExit: null,
     uclExit: null,
