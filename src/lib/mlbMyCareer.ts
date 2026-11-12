@@ -799,6 +799,11 @@ export function mlbLineOnSlate(full: MlbSeasonLine, work: number): MlbSeasonLine
       if (v !== undefined) line[k] = cut(v);
     }
   }
+  // Fit the saved starter record after any rounding. Relief lines carry saves.
+  if (line.saves === undefined && line.wins !== undefined && line.lossesP !== undefined && line.wins + line.lossesP > line.games) {
+    line.wins = Math.min(line.wins, line.games);
+    line.lossesP = line.games - line.wins;
+  }
   return line;
 }
 
