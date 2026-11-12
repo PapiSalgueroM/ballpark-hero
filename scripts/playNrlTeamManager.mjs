@@ -3,6 +3,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { spawn } from 'node:child_process';
 import { once } from 'node:events';
+import { build } from 'esbuild';
 import pw from './lib/playwrightLoader.mjs';
 
 const PORT = Number(process.env.PORT ?? 4573);
@@ -179,6 +180,28 @@ try {
   assert.deepEqual(futureErrors, []);
   await largerPhone.close();
   console.log('2027 at 390px: 18 clubs, Perth selection, midseason and final reloads, 216 matches, nine finals, restart cancellation, finance reconciliation and Chiefs rollover.');
+
+  const fixture = await build({
+    stdin: { contents: "export { createNrlSeason, reduceNrlSeason } from './src/lib/nrlManager';", resolveDir: process.cwd() },
+    alias: { '@': path.resolve('src') }, bundle: true, format: 'esm', platform: 'node', write: false, logLevel: 'error',
+  });
+  const { createNrlSeason, reduceNrlSeason } = await import('data:text/javascript;base64,' + Buffer.from(fixture.outputFiles[0].contents).toString('base64'));
+  let old = createNrlSeason('bears', 717, 2027);
+  for (let action = 0; action < 31; action++) old = reduceNrlSeason(old, { type: 'advance' });
+  const oldContext = await context(390);
+  await oldContext.addInitScript(({ key, raw }) => { if (!localStorage.getItem(key)) localStorage.setItem(key, raw); }, { key: SAVE_KEY, raw: JSON.stringify(old) });
+  const { page: restored, errors: restoredErrors } = await open(oldContext);
+  await restored.getByRole('button', { name: 'Review this season' }).click();
+  await restored.getByRole('button', { name: 'Finances', exact: true }).click();
+  await restored.getByText('This completed save predates club accounts. Tracking starts next season.').waitFor();
+  assert.equal(await save(restored), JSON.stringify(old));
+  await restored.getByRole('button', { name: 'Season review', exact: true }).click();
+  await restored.getByRole('button', { name: 'Start 2028' }).click();
+  assert.equal((await career(restored)).season.year, 2028);
+  assert.equal((await career(restored)).history[0].finance, null);
+  assert.deepEqual(restoredErrors, []);
+  await oldContext.close();
+  console.log('A completed v1 save reopened without invented accounts and advanced to 2028.');
 
   const desktop = await context(1440);
   const { page, errors } = await open(desktop);

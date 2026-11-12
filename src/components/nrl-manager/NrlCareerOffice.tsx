@@ -170,6 +170,7 @@ function Finances({ career }: { career: NrlCareerState }) {
   const capYear = nextYear && year < NRL_LAST_YEAR ? year + 1 : year;
   const cap = nrlCareerCap(career, capYear);
   const cash = nrlCareerFinance(career);
+  const hasAccounts = cash.fromRound <= nrlSeasonPlan(year).draw.length + 4;
   return (
     <>
       <h2 className="font-display text-xl font-bold">Club finances</h2>
@@ -186,12 +187,16 @@ function Finances({ career }: { career: NrlCareerState }) {
         </div>
         <div>
           <h3 className="font-bold">{year} club accounts</h3>
-          {cash.fromRound > 1 && <p className="mt-2 text-sm text-muted-foreground">This save began tracking finances in round {cash.fromRound}.</p>}
-          <MoneyRows entries={[
-            ['Opening cash', cash.openingCash], ['Central funding', cash.centralFunding],
-            ['Gate receipts', cash.gateReceipts], ['Wages paid', cash.wagesPaid],
-            ['Operating costs', cash.operatingCosts], ['Profit or loss', cash.profit], ['Cash balance', cash.cash],
-          ]} />
+          {hasAccounts ? (
+            <>
+              {cash.fromRound > 1 && <p className="mt-2 text-sm text-muted-foreground">This save began tracking finances in round {cash.fromRound}.</p>}
+              <MoneyRows entries={[
+                ['Opening cash', cash.openingCash], ['Central funding', cash.centralFunding],
+                ['Gate receipts', cash.gateReceipts], ['Wages paid', cash.wagesPaid],
+                ['Operating costs', cash.operatingCosts], ['Profit or loss', cash.profit], ['Cash balance', cash.cash],
+              ]} />
+            </>
+          ) : <p className="mt-2 text-sm text-muted-foreground">This completed save predates club accounts. Tracking starts next season.</p>}
         </div>
       </div>
     </>
