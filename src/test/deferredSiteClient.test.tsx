@@ -3,6 +3,7 @@ import type { AuthChangeEvent, Session } from '@supabase/supabase-js';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { AuthProvider, useAuth } from '@/contexts/AuthContext';
 import { recordActivity, recordCompletion } from '@/lib/completions';
+import { probeStorageWrites } from '@/lib/safeStorage';
 
 const loader = vi.hoisted(() => vi.fn());
 vi.mock('@/integrations/supabase/loadClient', () => ({ loadSupabase: loader }));
@@ -70,6 +71,25 @@ describe('deferred site client', () => {
     expect(signInWithPassword).toHaveBeenCalledWith({ email: 'player@example.invalid', password: 'local-test-password' });
     view.unmount();
     expect(unsubscribe).toHaveBeenCalledOnce();
+  });
+
+  it('lets a guest game act before requesting the account client', () => {
+    const previous = window.location.href;
+    window.history.replaceState(null, '', '/soccer-career');
+    try {
+      expect(probeStorageWrites()).toBeNull();
+      deferred();
+      const play = vi.fn();
+      render(<AuthProvider><AuthProbe /><button type="button" onClick={play}>Continue game</button></AuthProvider>);
+      expect(screen.getByText('Guest player')).toBeVisible();
+      fireEvent.click(screen.getByRole('button', { name: 'Continue game' }));
+      expect(play).toHaveBeenCalledOnce();
+      expect(loader).not.toHaveBeenCalled();
+      fireEvent.click(screen.getByRole('button', { name: 'Sign in' }));
+      expect(loader).toHaveBeenCalledOnce();
+    } finally {
+      window.history.replaceState(null, '', previous);
+    }
   });
 
   it('keeps the activity insert separate and saves one authenticated completion after the client arrives', async () => {

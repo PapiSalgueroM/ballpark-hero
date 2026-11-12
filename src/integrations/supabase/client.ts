@@ -2,6 +2,7 @@
 import { createClient } from '@supabase/supabase-js';
 import type { Database } from './types';
 import { safeLocalStorage } from '@/lib/safeStorage';
+import { AUTH_STORAGE_KEY, publishSupabaseClient } from './clientReady';
 
 // Hardcoded on purpose. The Lovable build injects VITE_ env vars that point at a
 // DELETED Supabase project (pzzadswiradjnvvfybol), which made every request fail
@@ -17,7 +18,9 @@ export const SUPABASE_PUBLISHABLE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.ey
 export const supabase = createClient<Database>(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {
   auth: {
     storage: safeLocalStorage,
+    storageKey: AUTH_STORAGE_KEY,
     persistSession: true,
     autoRefreshToken: true,
   }
 });
+publishSupabaseClient(supabase);
