@@ -1,3 +1,9 @@
+## 2026-11-12: NRL Manager home ticket pricing
+
+Club finances lets you pick Value, Standard or Premium before your first home gate. The tier locks for the rest of that season and resets each year. The table shows the simulated changes for home wins, home losses or draws, and home finals. Away games, byes and the neutral Grand Final earn no home gate.
+
+Priced seasons keep the gate total and tier in their finance receipt. An exact-parent Standard comparison matched 17,934 fixture results, 80 seasons, 13 moves, 240 reloads and 1,480,376 random draws per arm. Focused checks cover the finance table, live settlement, archived receipts and cash on a return to the club.
+
 ## 2026-11-12: NRL Manager career saves
 
 Career saves keeps up to three careers in the same browser. An existing career opens in slot 1. Each slot can start in 2026 or 2027, and a saved live match resumes in the slot that played it. Starting another career uses an empty slot. Deleting a career asks for confirmation.

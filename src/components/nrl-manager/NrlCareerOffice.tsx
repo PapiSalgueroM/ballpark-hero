@@ -6,7 +6,7 @@ import { nrlSeasonPlan, NRL_LAST_YEAR } from '@/data/nrlManagerSeasons';
 import {
   nrlAcademyAvailableRoles, nrlAcademyOffer, nrlAcademyReports, nrlCareerCap, nrlCareerFinance, nrlCareerMarket, nrlCareerRecord, nrlCareerSquad, nrlContractOffer,
   nrlCoachQuote, nrlCoachSpend, nrlDevelopmentPreview, nrlMedicalSpend, nrlMedicalUpgradeQuote, nrlOffseasonClubs, type NrlCareerAction, type NrlCareerState,
-  type NrlDevelopmentFocus, type NrlMedicalLevel,
+  nrlTicketPricingRefusal, NRL_TICKET_GATE_CHANGES, type NrlDevelopmentFocus, type NrlMedicalLevel, type NrlTicketTier,
 } from '@/lib/nrlCareer';
 import { NRL_COACHING_BONUS, NRL_ROLES, type NrlCoachRole, type NrlRole } from '@/lib/nrlManager';
 import { nrlArchivedScoringLeaders, nrlTryLeaders } from '@/lib/nrlPlayerScoring';
@@ -27,6 +27,8 @@ const control = 'min-h-11 w-full rounded-lg border border-input bg-background px
 const developmentLabels = { balanced: 'Balanced', youth: 'Youth development', veterans: 'Veteran conditioning' };
 const medicalLabels = { 1: 'Standard care', 2: 'Treatment room', 3: 'Recovery centre' };
 const coachLabels = { attack: 'Attack assistant', defense: 'Defence assistant' };
+const ticketLabels = { value: 'Value', standard: 'Standard', premium: 'Premium' };
+const ticketTiers = ['value', 'standard', 'premium'] as const;
 const coachEffect = (role: NrlCoachRole) => role === 'attack' ? `+${NRL_COACHING_BONUS} attack rating with the Attack tactic.`
   : `+${NRL_COACHING_BONUS} defence rating with the Defence tactic.`;
 
@@ -301,6 +303,47 @@ function CoachingStaff({ career, onAction, disabled }: { career: NrlCareerState;
   );
 }
 
+function TicketPricing({ career, onAction, disabled }: { career: NrlCareerState; onAction: Dispatch; disabled: boolean }) {
+  const { year, round } = career.season;
+  const tier = career.finance.ticketTier ?? 'standard';
+  const reason = nrlTicketPricingRefusal(career);
+  const gateTypes = [
+    ['Regular home loss or draw', 'regularNonWin'], ['Regular home win', 'regularWin'], ['Home final', 'homeFinal'],
+  ] as const;
+  return (
+    <section className="mt-4 rounded-xl border border-border bg-background p-3">
+      <label htmlFor="nrl-ticket-pricing" className="block text-sm font-bold">Home ticket pricing</label>
+      <p className="mt-1 text-sm text-muted-foreground" id="nrl-ticket-pricing-status">
+        {reason ?? 'Set before your first home game. Your choice then stays in place until next season.'}
+      </p>
+      <select id="nrl-ticket-pricing" aria-describedby="nrl-ticket-pricing-status" className={control + ' mt-2 sm:max-w-xs'}
+        value={tier} disabled={disabled || reason !== null}
+        onChange={event => onAction({ type: 'setTicketTier', tier: event.target.value as NrlTicketTier, year, round })}>
+        {ticketTiers.map(choice => <option key={choice} value={choice}>{ticketLabels[choice]}</option>)}
+      </select>
+      <table className="mt-3 w-full text-left text-xs">
+        <caption className="text-left text-muted-foreground">Changes to simulated gate receipts</caption>
+        <thead>
+          <tr>
+            <th scope="col" className="py-1.5">Home match</th>
+            {ticketTiers.map(choice => <th key={choice} scope="col" className="py-1.5 text-right">{ticketLabels[choice]}</th>)}
+          </tr>
+        </thead>
+        <tbody>
+          {gateTypes.map(([label, gate]) => <tr key={gate} className="border-t border-border">
+            <th scope="row" className="py-1.5 pr-1 font-normal">{label}</th>
+            {ticketTiers.map(choice => {
+              const change = NRL_TICKET_GATE_CHANGES[choice][gate];
+              return <td key={choice} className="whitespace-nowrap py-1.5 text-right">{(change > 0 ? '+' : '') + money(change)}</td>;
+            })}
+          </tr>)}
+        </tbody>
+      </table>
+      <p className="mt-1 text-xs text-muted-foreground">Away games, byes and the neutral Grand Final earn no home gate.</p>
+    </section>
+  );
+}
+
 function Finances({ career, onAction, disabled }: { career: NrlCareerState; onAction: Dispatch; disabled: boolean }) {
   const [nextYear, setNextYear] = useState(false);
   const year = career.season.year;
@@ -341,6 +384,7 @@ function Finances({ career, onAction, disabled }: { career: NrlCareerState; onAc
           ) : <p className="mt-2 text-sm text-muted-foreground">This completed save predates club accounts. Tracking starts next season.</p>}
         </div>
       </div>
+      <TicketPricing career={career} onAction={onAction} disabled={disabled} />
       <MedicalFacilities career={career} onAction={onAction} disabled={disabled} />
       <CoachingStaff career={career} onAction={onAction} disabled={disabled} />
     </>
@@ -491,6 +535,7 @@ function History({ career, onAction, disabled }: { career: NrlCareerState; onAct
                 <p className="font-bold">{record.year} {labelForClub(record.year, record.clubId)}</p>
                 <p className="text-sm text-muted-foreground">Ladder place {record.rank} · {record.wins} wins · {record.draws} draws · {record.losses} losses</p>
                 <p className="text-sm text-muted-foreground">Premiers {labelForClub(record.year, record.championId)}{record.finance ? ` · Profit or loss ${money(record.finance.profit)}` : ''}</p>
+                {record.finance?.ticketTier && <p className="text-sm text-muted-foreground">Home ticket pricing {ticketLabels[record.finance.ticketTier]}</p>}
                 {benchmark && <p className="text-sm text-muted-foreground" data-nrl-board-benchmark>
                   Board benchmark · {benchmark.label} · {record.rank <= benchmark.targetRank ? 'Met' : 'Missed'}
                 </p>}
