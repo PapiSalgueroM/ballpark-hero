@@ -8,6 +8,14 @@ Select a historical club to see how many players are recorded in its roster snap
 
 Next league work: the Ekstraklasa intake verifies all 18 current clubs, including held Legia Warsaw. The proposed 17 additions still need the dated pool integration, load timing and measured size check. Historical player population and NBA/NFL draft intake remain open.
 
+## 2026-11-12: Squad Deal World Cup 2026 eligibility candidate
+
+Squad Deal's World Cup topic now takes its field from the 48 verified group-stage nations. The selector identifies Current players and Legends by nationality. The existing formation check offers the 4-1-2-1-2 diamond in Legends, where only two eligible left-wing options remain. All nine formations qualify on the baked Current pool. The shared list also feeds Budget Builder Today and Dart Draft's normal topic pool and map gate.
+
+Exact main displayed Italian and Danish players on a World Cup Legends keeper board. Eligibility was checked against the [FIFA tournament field](https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026/articles/fifa-world-cup-2026-hosts-cities-dates-usa-mexico-canada), [FOX tournament group standings](https://www.foxsports.com/soccer/fifa-world-cup/standings), and [UEFA's final qualified list](https://www.uefa.com/european-qualifiers/news/029f-1f318027c4dd-8e9bab478b48-1000--world-cup-2026-which-european-teams-have-qualified/).
+
+Compiled 390px touch checks passed in Squad Deal, Budget Builder Today and Dart Draft using local Current player fixtures. Four focused tests, both topic controls, app types, the build, 17 output and World Cup checks and 16 route caps passed. Dry merges with the Dart Draft rating fix and the historical Budget Builder market fix held their product changes.
+
 ## 2026-11-07: Soccer Career historical arrivals from 2010 and 2015 live
 
 [PR #529](https://github.com/PapiSalgueroM/ballpark-hero/pull/529) published from main `cef43e538e2266974cc4d2e96eb5996a6e2bdce9`, App tree `5f6ef45062b696e0eea44006093f5824bd02ff7b`, Lovable deployment `d1268cef-456a-487f-80e2-9d1edba677bb`.
