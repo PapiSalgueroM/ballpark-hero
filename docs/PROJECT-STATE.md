@@ -1,8 +1,20 @@
+## 2026-11-12: NRL named opening rosters and combined qualification
+
+The optional 2026 opening-matchday roster covers 323 verified names and opening ages across all 17 clubs. Eleven extra players per club, ratings, wages, contracts and later seasons are simulated. Default 2026 and new 2027 starts remain generated. Four compiled phone/desktop journeys pass, and the full NRL suite passes 198 tests across 37 files. Two older rollover test expectations now include exact archived finals seeds and scores; both prior failures were reproduced on the preceding source. See the [source audit](audits/nrl-2026-opening-matchday-rosters.md).
+
+The combined d8c7c6426 build passes full application types, ordinary Vite, all 22 readers, all 16 original download caps and 400 isolation probes, 105 route openings and 64 phone consent checks. Current source cf093b690 adds only the two NRL test corrections. The older full-suite run and release coordination remain pending. All changes remain local. The [readiness record](plans/2026-11-12-site-readiness.md) distinguishes current qualification, prior checkpoints and unresolved NitroPay requirements.
+
+## 2026-11-12: Player Bingo verified birth-year correction staged
+
+A matching squad birth date now corrects the market-age estimate when its identity and year agree. Missing, conflicting or ambiguous dates keep the fallback. The live Tchouameni input confirms the reported wrong band: 2026 minus age 26 minus one gave 1999, while two squad records give 27 January 2000. No database mutation or extra request was needed.
+
+All 97 focused tests, 20 loader checks and 16 compiled phone cases pass. The corrected tile locks without a strike and the adjacent older band refuses the same January 27 player. Fallback cases, board labels and scoring stay covered. Corrected support sets can intentionally change the generated deal. [Real Madrid profile](https://www.realmadrid.com/en-US/football/first-team/players/aurelien-tchouameni) and [French federation profile](https://www.fff.fr/equipe-nationale/joueur/9440-tchouameni-aurelien/fiche.html) confirm the date.
+
 ## 2026-11-12: Conquest first-result card containment staged
 
 The existing saved-preview fix stays in place. The result card keeps its 700 ms entrance inside a horizontal clip, with the keyboard-operable Skip button outside it.
 
-The frozen 4314 Soccer Conquest build reproduced document widths of 328 and 398 pixels during the first prediction result at 320 and 390 pixels. A browser-only response overlay kept all 73 sampled entrance frames within the viewport while retaining the translation. Both arms held the exact one-prediction save and recap through reload. The source simulator passed all 1,364 renders after its new wrapper check failed on the original in all five sports. Source-built phone verification is pending. The separate first-match blocker remains unreproduced.
+The frozen 4314 Soccer Conquest build reproduced document widths of 328 and 398 pixels during the first prediction result at 320 and 390 pixels. A browser-only response overlay kept all 73 sampled entrance frames within the viewport while retaining the translation. The source-built d8 follow-up also holds all 72 active frames at the correct phone widths. Both arms retain the exact one-prediction save and recap through reload and keyboard Skip. The source simulator passed all 1,364 renders after its new wrapper check failed on the original in all five sports. The separate first-match blocker remains unreproduced.
 
 ## 2026-11-12: Public ticker configuration split
 
@@ -12,7 +24,7 @@ The score ticker reads the pinned public Supabase URL and key from a dependency-
 
 NBA Starting 5 search and scoring now use the same franchise records. Players with a verified earlier stint can appear for that team, even when their roster card lists another team. The lookup still requires exact franchise codes and a unique roster identity.
 
-The former-team harness exposed six misses on the combined baseline and passed all 13 sections after the port. Existing stat, position, duplicate and score rules passed. Compiled mobile qualification is pending.
+The former-team harness exposed six misses on the combined baseline and passed all 13 sections after the port. Existing stat, position, duplicate and score rules passed. Compiled 320/390 journeys on 45fe accept the verified former Washington player after recovery and reject the inexact XWAS code, with the next team's prewarm accounted for separately.
 
 ## 2026-11-12: NBA Chain roster spellings staged
 
