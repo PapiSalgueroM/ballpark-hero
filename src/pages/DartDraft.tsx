@@ -234,12 +234,16 @@ const DartDraft = () => {
   }, [phase, stage, lockedX, box, resolveLanding, stopSweep]);
 
   useEffect(() => {
+    if (phase !== 'aim' || stage === 'landed') return;
+
     const onKey = (e: KeyboardEvent) => {
-      if (e.code === 'Space') { e.preventDefault(); lockIn(); }
+      if (e.code !== 'Space' || e.defaultPrevented || e.target !== document.body) return;
+      e.preventDefault();
+      if (!e.repeat) lockIn();
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, [lockIn]);
+  }, [phase, stage, lockIn]);
 
   const pickPlayer = (choice: DraftChoice) => {
     if (slotIdx === null) return;
