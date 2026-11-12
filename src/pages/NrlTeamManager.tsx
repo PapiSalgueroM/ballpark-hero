@@ -23,7 +23,7 @@ import {
   type NrlAction, type NrlCoachRole, type NrlLiveHalf, type NrlManagerState, type NrlMatchResult, type NrlTactic,
 } from '@/lib/nrlManager';
 import { createNrlCareer, nrlOppositionReport, reduceNrlCareer, type NrlCareerAction, type NrlCareerState } from '@/lib/nrlCareer';
-import { nrlScorePoints, nrlScoringLeaders, nrlTryLeaders } from '@/lib/nrlPlayerScoring';
+import { nrlScorePoints, nrlScoringLeaders, nrlSquadSeasonStats, nrlTryLeaders, type NrlSquadStatsScope } from '@/lib/nrlPlayerScoring';
 import { NRL_SAVE_ENTRY, readNrlSaveSlot, writeNrlSaveSlot } from '@/lib/nrlSaveSlots';
 import { saveFence } from '@/lib/saveFence';
 import { holdPendingSave } from '@/lib/safeStorage';
@@ -430,6 +430,68 @@ function MatchCentre({ career, onAction, onReview, disabled, showLiveResult }: {
   );
 }
 
+function SquadSeasonStats({ season }: { season: NrlManagerState }) {
+  const [scope, setScope] = useState<NrlSquadStatsScope>('all');
+  const hasFinals = season.results.some(match => match.finalsRound && match.playerScoring);
+  const { rows, tracked, played } = nrlSquadSeasonStats(season, hasFinals ? scope : 'all');
+  return (
+    <details className="group mt-5 rounded-lg border border-border bg-background px-3">
+      <summary className="flex min-h-11 cursor-pointer items-center justify-between gap-2 rounded-md text-sm font-bold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
+        Season player stats<ChevronDown size={16} aria-hidden="true" className="shrink-0 group-open:rotate-180" />
+      </summary>
+      <div className="pb-3">
+        {hasFinals && (
+          <label className="mb-2 block text-sm font-semibold">
+            Match scope
+            <select value={scope} onChange={event => setScope(event.target.value as NrlSquadStatsScope)}
+              className="mt-1 min-h-11 w-full rounded-lg border border-input bg-background px-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring sm:max-w-xs">
+              <option value="all">All matches</option>
+              <option value="regular">Regular season</option>
+              <option value="finals">Finals</option>
+            </select>
+          </label>
+        )}
+        {tracked === 0 ? (
+          <p className="text-sm text-muted-foreground">{season.kickerId
+            ? 'Player stats appear after your first match.'
+            : 'Player match records are unavailable for this saved season. Tracking starts next season.'}</p>
+        ) : (
+          <>
+            <p className="mb-2 text-xs text-muted-foreground">
+              Player records cover {tracked} of {played} matches. Apps include starts and games played off the bench.
+            </p>
+            <table className="w-full text-left text-xs">
+              <caption className="sr-only">{season.year} squad stats</caption>
+              <thead>
+                <tr>
+                  <th scope="col" className="py-1">Player</th>
+                  <th scope="col" aria-label="Appearances" className="px-1 text-right">Apps</th>
+                  <th scope="col" className="px-1 text-right">Starts</th>
+                  <th scope="col" aria-label="Bench appearances" className="px-1 text-right">Bench</th>
+                  <th scope="col" className="px-1 text-right">Tries</th>
+                  <th scope="col" aria-label="Points" className="text-right">Pts</th>
+                </tr>
+              </thead>
+              <tbody>
+                {rows.map(player => (
+                  <tr key={player.id} className="border-t border-border tabular-nums">
+                    <th scope="row" className="break-words py-1.5 pr-1 font-medium">{player.name}</th>
+                    <td className="px-1 text-right">{player.apps}</td>
+                    <td className="px-1 text-right">{player.starts}</td>
+                    <td className="px-1 text-right">{player.bench}</td>
+                    <td className="px-1 text-right">{player.tries}</td>
+                    <td className="text-right">{player.points}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </>
+        )}
+      </div>
+    </details>
+  );
+}
+
 function Squad({ season, onAction, disabled }: {
   season: NrlManagerState; onAction: (action: NrlAction) => void; disabled: boolean;
 }) {
@@ -494,6 +556,7 @@ function Squad({ season, onAction, disabled }: {
           )}
         </section>
       ) : <p className="mt-2 text-sm text-muted-foreground">Availability tracking starts next season for this save.</p>}
+      <SquadSeasonStats season={season} />
       <div className="mt-4 grid gap-x-4 gap-y-3 sm:grid-cols-2">
         {NRL_ROLES.map((role, index) => (
           <div key={role} className="min-w-0">
