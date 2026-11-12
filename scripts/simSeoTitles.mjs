@@ -127,6 +127,7 @@ const SPORT_WORDS = {
   'Tennis': ['tennis', 'ATP', 'WTA'],
   'Golf': ['golf'],
   'Aussie Rules': ['AFL', 'Aussie rules', 'footy'],
+  'Rugby League': ['NRL', 'rugby league'],
   'NASCAR': ['NASCAR'],
   'Combat Sports': ['boxing', 'UFC', 'MMA'],
 };

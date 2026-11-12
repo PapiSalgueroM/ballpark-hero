@@ -2,7 +2,7 @@
    edit this folder: edit src/data/seoMeta.ts. Every vite build rewrites what
    has fallen behind, and simSeoTitles section 6 fails if the committed copy
    is not what the source makes. */
-/* Part 6 of 32: 5 entries. */
+/* Part 6 of 32: 6 entries. */
 import type { SeoMeta } from '../seoMeta';
 
 export const SEO_META_PART: Record<string, SeoMeta> = {
@@ -25,5 +25,9 @@ export const SEO_META_PART: Record<string, SeoMeta> = {
   "/mlb-grid": {
     title: "MLB Franchise Grid: Daily Baseball Trivia",
     description: "Nine cells, nine legends. Fill the 3x3 MLB grid with players whose careers match both the row and the column. Daily board plus unlimited. Free baseball.",
+  },
+  "/nrl-team-manager": {
+    title: "NRL Team Manager: Rugby League Sim",
+    description: "Choose a 2026 or 2027 NRL club, pick your starting 13 and manage tactics, training and recovery in a free rugby league sim. Includes Perth in 2027.",
   },
 };

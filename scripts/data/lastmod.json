@@ -1,7 +1,7 @@
 {
   "__version": 3,
   "/": {
-    "hash": "795476039ca94aa9",
+    "hash": "73e33a64d227e96c",
     "date": "2026-11-12"
   },
   "/about": {
@@ -21,8 +21,8 @@
     "date": "2026-09-30"
   },
   "/aussie-rules-manager": {
-    "hash": "e6d4a5eddd52b7e9",
-    "date": "2026-10-31"
+    "hash": "6c2d75dc79ab16be",
+    "date": "2026-11-12"
   },
   "/ball-iq": {
     "hash": "6f8a7e00e1863905",
@@ -451,6 +451,10 @@
   "/nhl-playoff-format-history": {
     "hash": "f53f338375aff255",
     "date": "2026-09-19"
+  },
+  "/nrl-team-manager": {
+    "hash": "73b65eebad2a548b",
+    "date": "2026-11-12"
   },
   "/olympics": {
     "hash": "489cdabc0c8fcccb",
