@@ -300,6 +300,10 @@ function initialFaPool(rng: () => number, taken: Set<string>): NbaGmPlayer[] {
 export function nbaCapUsed(t: NbaGmTeam): number {
   return payrollWithDeadCap(t.players, t);
 }
+/** Projected payroll uses the same $0.1M units as payroll and the apron lines. */
+export function nbaPayrollAfterTrade(t: NbaGmTeam, outgoingSalary: number, incomingSalary: number): number {
+  return Math.round((nbaCapUsed(t) - outgoingSalary + incomingSalary) * 10) / 10;
+}
 /**
  * Room under the cap, less the tax cheque ownership wrote at the last season
  * close (Round 722): the bill comes out of this season's spending, so a club
@@ -521,7 +525,7 @@ export function nbaTradeValue(p: NbaGmPlayer): number {
  * and not yet calibrated, there is no apron this season.
  */
 export function nbaSalaryFits(receiver: NbaGmTeam, outgoing: NbaGmPlayer, incoming: NbaGmPlayer, cap: number, taxScale?: number): boolean {
-  const after = nbaCapUsed(receiver) - outgoing.salary + incoming.salary;
+  const after = nbaPayrollAfterTrade(receiver, outgoing.salary, incoming.salary);
   if (taxScale != null && after > nbaFirstApron(cap, taxScale)) return incoming.salary <= outgoing.salary;
   return nbaCapRoom(receiver, cap) + outgoing.salary >= incoming.salary || incoming.salary <= outgoing.salary * 1.5 + 5;
 }
