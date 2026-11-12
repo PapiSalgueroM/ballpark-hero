@@ -22036,6 +22036,43 @@ export function quickLegsMinutes(state: CareerState, live: LiveMatch): number[] 
   return QUICK_LEGS_WINDOWS.map(([lo, hi], i) => lo + Math.floor(keyedRng(`${key}|${i}`)() * (hi - lo + 1)));
 }
 
+/** Cover one defensive vacancy at the break by sacrificing an active attacker. */
+function coverQuickDefence(state: CareerState): CareerState {
+  const live = state.live!;
+  if ((live.minute ?? 0) > 46 || live.formChanges?.some(change => change.minute >= 46)) return state;
+  const reds = (live.h1Cards ?? []).filter(card => card.kind === 'red');
+  if (reds.length !== 1 || !reds[0].id) return state;
+  const formationIndex = live.formationIndex ?? state.formationIndex;
+  const formation = liveFormationOf(state, live);
+  const vacancy = live.onPitch.indexOf(reds[0].id);
+  const slot = formation.slots[vacancy];
+  if (!slot || pitchLineOf(slot) !== 'defence') return state;
+
+  const gone = liveGoneIds(live, 46);
+  const active = livePairs(state, live).filter(({ p }) => !gone.has(p.id));
+  if (active.length !== 10) return state;
+  const attackers = active.filter(({ slot }) => slot && pitchLineOf(slot) === 'attack');
+  if (attackers.length < 2) return state;
+  const defender = benchFor(state, undefined, vacancy).find(p => fitGrade(p, slot) === 'natural');
+  if (!defender) return state;
+  const outgoing = attackers.sort((a, b) => a.p.fitness - b.p.fitness || a.p.rating - b.p.rating)[0].p.id;
+  const sub = changeLive(state, 46, { kind: 'sub', outId: outgoing, inId: defender.id });
+  if (!sub) return state;
+
+  const next = sub.live!;
+  const attackSlot = live.onPitch.indexOf(outgoing);
+  const order = [...next.onPitch];
+  // The dismissed player remains in the match record and stays excluded from play.
+  [order[vacancy], order[attackSlot]] = [order[attackSlot], order[vacancy]];
+  const duties = formation.slots.map((_, index) => liveDutyAt(state, live, index));
+  const customShape = live.positionRules === 1 ? readCustomShape(live.customShape, formationIndex, formation.slots) : null;
+  const shape = { formationIndex, duties, ...(customShape ? { customShape: copyCustomShape(customShape) } : {}) };
+  if (!next.kickoffShape && !next.formChanges?.length) next.kickoffShape = shape;
+  next.onPitch = order;
+  next.formChanges = [...(next.formChanges ?? []), { minute: 46, order: [...order], ...shape }];
+  return sub;
+}
+
 /** Quick sim coaching uses the real clock and changes, without settling the match. */
 export function coachQuickMatch(career: CareerState): CareerState {
   if (!career.live || !livePositionsValid(career.live)) return career;
@@ -22127,6 +22164,7 @@ export function coachQuickMatch(career: CareerState): CareerState {
   if (!state.live!.h2Drawn) {
     // Keep one change for a later injury rather than spending all three at the break.
     const atBreak = state.live!.subsUsed;
+    if (atBreak < rule.subs - 1) state = coverQuickDefence(state);
     for (const out of tiringAtHalftime(state)) {
       if (state.live!.subsUsed >= rule.subs - 1 || (rule.stops !== null && state.live!.subsUsed - atBreak >= 2)) break;
       if (liveGoneIds(state.live!, 46).has(out.id)) continue;
