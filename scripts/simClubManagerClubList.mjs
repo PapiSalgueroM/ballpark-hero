@@ -29,7 +29,7 @@
  *      Never the clock.
  *   5. NO OTHER ERA. No club that exists only in a past season's world
  *      (ERA_LEAGUES) appears anywhere in the block.
- *   6. WIRING. ClubManager.tsx passes the list into GameSeoContent (read from
+ *   6. WIRING. The entry and frame pass the list into GameSeoContent (read from
  *      the code with comments stripped), GameSeoContent draws it inside its
  *      section and above the related games, and the list carries no
  *      data-no-prerender, which would strip it from the saved page.
@@ -79,7 +79,8 @@ const PAGE = process.env.CM_CLUBLIST_PAGE
   ? path.resolve(ROOT, process.env.CM_CLUBLIST_PAGE)
   : path.join(ROOT, 'public', 'club-manager', 'index.html');
 const PAGE_LABEL = path.relative(ROOT, PAGE).replaceAll('\\', '/');
-const PAGE_SRC = path.join(ROOT, 'src/pages/ClubManager.tsx');
+const PAGE_SRC = path.join(ROOT, 'src/pages/ClubManagerEntry.tsx');
+const FRAME_SRC = path.join(ROOT, 'src/components/club-manager/ClubManagerFrame.tsx');
 const LIST_SRC = path.join(ROOT, 'src/components/club-manager/ClubManagerClubList.tsx');
 
 const HEADING = 'Every league and club in Club Manager';
@@ -270,11 +271,11 @@ if (CONTROL === 'eraclub') {
 }
 if (CONTROL === 'unwired') {
   const anchor = '<ClubManagerClubList />';
-  if (!pageSrc.includes(anchor)) abort('control unwired: ClubManager.tsx does not pass <ClubManagerClubList /> in the shape it removes');
+  if (!pageSrc.includes(anchor)) abort('control unwired: ClubManagerEntry.tsx does not pass <ClubManagerClubList /> in the shape it removes');
   const next = pageSrc.replace(anchor, '');
   if (next === pageSrc) abort('control unwired changed nothing');
   pageSrc = next;
-  console.log('CONTROL unwired: ClubManager.tsx no longer passes the list into GameSeoContent; section 6 must go red');
+  console.log('CONTROL unwired: the Club Manager entry no longer passes the list into the frame; section 6 must go red');
 }
 if (saved !== null) docs.push({ label: `saved page ${PAGE_LABEL}`, html: saved });
 
@@ -360,14 +361,17 @@ notes[5] = `${eraOnly.length} clubs only a past season holds, looked for in the 
     .replace(/\/\*[\s\S]*?\*\//g, '')
     .replace(/(^|[^:'"`\\])\/\/.*$/gm, '$1');
   const page = code(pageSrc);
-  if (!/import\s*\{\s*ClubManagerClubList\s*\}\s*from\s*'@\/components\/club-manager\/ClubManagerClubList'/.test(page)) {
-    findings[6].push('ClubManager.tsx does not import ClubManagerClubList');
+  if (!/lazy\(\(\) => import\('@\/components\/club-manager\/ClubManagerClubList'\)/.test(page)
+    || !/<ClubManagerFrame\s+catalogue=\{[\s\S]*?<ClubManagerClubList\s*\/>/.test(page)) {
+    findings[6].push('ClubManagerEntry.tsx must pass the canonical lazy list into ClubManagerFrame');
   }
-  const open = page.indexOf('<GameSeoContent');
-  const close = page.indexOf('</GameSeoContent>', open);
-  if (open < 0 || close < 0) findings[6].push('ClubManager.tsx has no <GameSeoContent> element with children');
-  else if (!/<ClubManagerClubList\s*\/>/.test(page.slice(open, close))) findings[6].push('ClubManager.tsx does not pass <ClubManagerClubList /> into GameSeoContent');
-  if (page.split('<GameSeoContent').length !== 2) findings[6].push('ClubManager.tsx draws GameSeoContent more than once, so which block carries the list is unclear');
+  const frame = code(lf(fs.readFileSync(FRAME_SRC, 'utf8')));
+  const open = frame.indexOf('<GameSeoContent');
+  const close = frame.indexOf('</GameSeoContent>', open);
+  if (open < 0 || close < 0 || !frame.slice(open, close).includes('{catalogue}')) {
+    findings[6].push('ClubManagerFrame.tsx must put its catalogue inside GameSeoContent');
+  }
+  if (frame.split('<GameSeoContent').length !== 2) findings[6].push('ClubManagerFrame.tsx draws GameSeoContent more than once');
 
   const list = code(lf(fs.readFileSync(LIST_SRC, 'utf8')));
   if (/data-no-prerender/.test(list)) findings[6].push('ClubManagerClubList carries data-no-prerender, so the prerenderer strips it from the saved page');
@@ -378,7 +382,7 @@ notes[5] = `${eraOnly.length} clubs only a past season holds, looked for in the 
   const related = renderHtml.search(/<h2\b[^>]*>More games to play<\/h2>/);
   if (sec < 0 || at < sec || at > secEnd) findings[6].push('render: GameSeoContent does not draw the list inside its section');
   else if (related >= 0 && at > related) findings[6].push('render: the list sits below the related games instead of below the guide');
-  notes[6] = 'ClubManager.tsx and ClubManagerClubList.tsx read as code, the render read for where the block draws it';
+  notes[6] = 'entry, frame and list read as code, the render read for where the block draws it';
 }
 
 /* ---------- the report ---------- */

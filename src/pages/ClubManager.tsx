@@ -1,5 +1,4 @@
-import { Link } from 'react-router-dom';
-import { lazy, Suspense, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { lazy, Suspense, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import type { MutableRefObject, ReactNode } from 'react';
 import { cn } from '@/lib/utils';
 import type { MidSeasonEntry } from '@/lib/clubManagerCalendar';
@@ -13,7 +12,7 @@ import {
   playableClubs, objectiveStatuses, CM_ROSTER_META, isPartialClub, ordinaryClubAllowed, usesGeneratedOpeningSquad, isScopedStartLeague,
   isHistoricEra, eraLeaguesFor, eraPlayableClubs, boardWantLabel,
   developingPlayers, INTENSITY_INFO, FOCUS_INFO,
-  brokenPromises, CM_ERAS, DEFAULT_ERA_ID, eraById, projectedXIAvg, CM_BASE_YEAR,
+  brokenPromises, DEFAULT_ERA_ID, eraById, projectedXIAvg, CM_BASE_YEAR,
   worldSeasonLabel, pressOf, pressHeadline, preMatchRead,
   nationOfferFor, SHOOTOUT_MAX_ORDER, shootoutOrderOf, cupSatOutBy, leagueStarted,
 } from '@/lib/clubManager';
@@ -30,16 +29,12 @@ import { BOARD_EDGE, boardMeter } from '@/lib/clubManagerMeters';
 import { STAFF_POST_IDS, STAFF_POST_INFO, staffOf } from '@/lib/clubManagerStaff';
 import { deskOf } from '@/lib/clubManagerDecisions';
 import type { NationDef, CupRound, CustomClubSpec, ManagerSpec } from '@/lib/clubManager';
-import { eraRealShareLabel, eraHonestyLine, eraRostersLoaded, ensureEraRosters } from '@/lib/clubManagerEras';
+import { eraHonestyLine, eraRostersLoaded, ensureEraRosters } from '@/lib/clubManagerEras';
 import { reloadToRetryChunk } from '@/lib/freshBuild';
 import { FlagImg } from '@/components/FlagImg';
-import { GameNav } from '@/components/game/GameNav';
-import { GameShell } from '@/components/game/GameShell';
-import { HowToPlayPopover } from '@/components/game/HowToPlayPopover';
-import AdBanner from '@/components/ads/AdBanner';
-import PageSeo from '@/components/seo/PageSeo';
-import GameSeoContent from '@/components/seo/GameSeoContent';
 import { ClubManagerClubList } from '@/components/club-manager/ClubManagerClubList';
+import { ClubManagerFrame } from '@/components/club-manager/ClubManagerFrame';
+import { ClubManagerEraPicker, ClubManagerPickerHeading } from '@/components/club-manager/ClubManagerEraPicker';
 import { CURRENCIES, STRICTNESS_DEFAULT, STRICTNESS_INFO, levelFrom, noSackFrom, startOptionsOf } from '@/lib/clubManagerStart';
 import { DIFFICULTY_INFO } from '@/lib/managerDifficulty';
 import { POINTS_CAP, readPointsIndex } from '@/lib/cmSavePointsStore';
@@ -69,7 +64,6 @@ const ClubManagerTreatmentPanel = lazy(() => import('@/components/club-manager/C
 const ClubManagerBoardPanel = lazy(() => import('@/components/club-manager/ClubManagerBoardPanel'));
 const ClubManagerCareerPanel = lazy(() => import('@/components/club-manager/ClubManagerCareerPanel'));
 const ConfettiBurst = lazy(() => import('@/components/club-manager/Celebration').then(m => ({ default: m.ConfettiBurst })));
-const ClubManagerHelp = lazy(() => import('@/components/club-manager/ClubManagerHelp'));
 const ManagerSlotsScreen = lazy(() => import('@/components/club-manager/ManagerSlotsScreen'));
 /* Round 1323 review: lazy, for this page's weight (593.6K against its 593K row
    once Release BB joined). Fetched only once another tab has moved the career
@@ -162,7 +156,7 @@ function EraLoadFailed({ label, noun = 'squads', onRetry, onBack, backLabel = 'P
 
 type HubPanel = 'board' | 'inbox' | 'calendar' | 'manager' | 'treatment' | 'cups' | 'trophies' | 'academy' | 'training' | 'roles' | 'press' | 'matchCentre' | 'stats' | 'finance' | 'facilities' | 'staff' | 'xp' | 'options' | 'points';
 
-const ClubManager = () => {
+const ClubManager = ({ initialEra }: { initialEra?: string | null }) => {
   const g = useClubManager();
   // Round 65: the owner's no scroll rule. Full time and season end screens are
   // what you were waiting for after pressing Play, so they pull themselves into
@@ -226,6 +220,18 @@ const ClubManager = () => {
       },
     );
   }, []);
+  const pickEraAndContinue = useCallback((id: string) => {
+    setPickEra(id);
+    setPickStep('nation');
+    loadPickedEra(id);
+  }, [loadPickedEra]);
+  const pendingInitialEra = useRef(initialEra);
+  useLayoutEffect(() => {
+    const id = pendingInitialEra.current;
+    if (!id || g.phase === 'boot') return;
+    pendingInitialEra.current = null;
+    if (g.phase === 'clubSelect') pickEraAndContinue(id);
+  }, [g.phase, pickEraAndContinue]);
   const pickRef = useRevealScroll<HTMLDivElement>(`pick:${pickStep}:${pickEra}:${pickNation?.id ?? ''}:${pickLeagueId ?? ''}`, { skipFirst: true });
   const era = eraById(pickEra);
   const eraYearsOn = Math.max(0, era.startYear - CM_BASE_YEAR);
@@ -300,68 +306,33 @@ const ClubManager = () => {
 
   const shell = (inner: ReactNode) => (
     <>
-      <PageSeo
-        title="Club Manager: Football Management Sim | DoUKnowBall"
-        description="Pick a real club, set your tactics, work the transfer market and survive the sack race across league seasons and the competitions each league plays."
-        path="/club-manager"
-      />
-      <GameShell
-        help="none"
-        width="wide"
-        showReportQuestion
-        reportGameType="club-manager"
-      >
-        <div className="relative">
-          {/* Round 1328: the "?" is 44 by 44 now, pulled 8px further into the
-              corner so it covers no more of the screen than the old 36px one. */}
-          <HowToPlayPopover title="How to Play Club Manager" triggerSide="right" className="-mr-2 -mt-2 inline-flex min-h-[44px] min-w-[44px] items-center justify-center">
-            <ScreenLoading><ClubManagerHelp /></ScreenLoading>
-          </HowToPlayPopover>
-          {/* Round 634: the save was refused and the player is told, in plain
-              words, once per phase screen and only while it stays refused.
-              Before this a full or blocked browser store dropped the career
-              silently, which is the first live report of 2026-09-13. */}
-          {g.saveFailed && (
-            <div role="alert" data-testid="cm-save-failed" className="mb-4 rounded-xl border border-destructive/60 bg-destructive/10 px-4 py-3 text-sm text-foreground">
-              <div className="font-bold">Your career is not being saved right now.</div>
-              <div className="mt-1 text-muted-foreground">
-                This browser has no storage left for douknowball.com, or is blocking it (private browsing does that).
-                Whatever you do here will be gone when you leave the page. To fix it, free up space in your browser's
-                site settings or open the game in a normal window, then play a week and this notice will go away.
-              </div>
-            </div>
-          )}
-          {/* Round 1522 review: this career's tactics did not load (a dropped connection, or a deploy since the
-              page opened), so no match of it can be played until the page loads them again. */}
-          {g.tacticsFailed && (
-            <div role="alert" data-testid="cm-tactics-failed" className="mb-4 rounded-xl border border-destructive/60 bg-destructive/10 px-4 py-3 text-sm text-foreground">
-              Your tactics did not load, so the next match cannot start yet.{' '}
-              <button type="button" onClick={g.retryTactics} className="font-bold underline">Reload the page</button> to carry on.
-            </div>
-          )}
-          {/* Round 1323: another tab has played this career on, so this one
-              writes nothing more and covers itself until it is reloaded. */}
-          {g.saveMoved && <Suspense fallback={null}><SaveMovedNotice message="This career moved on in another tab. Reload to carry on." /></Suspense>}
-          {g.positionNotice && <div role="alert" data-testid="cm-position-blocked" className="mb-4 rounded-xl border border-destructive/60 bg-destructive/10 px-4 py-3 text-sm text-foreground">{g.positionNotice}</div>}
-          {inner}
+      {/* Round 634: the save was refused and the player is told, in plain
+          words, once per phase screen and only while it stays refused.
+          Before this a full or blocked browser store dropped the career
+          silently, which is the first live report of 2026-09-13. */}
+      {g.saveFailed && (
+        <div role="alert" data-testid="cm-save-failed" className="mb-4 rounded-xl border border-destructive/60 bg-destructive/10 px-4 py-3 text-sm text-foreground">
+          <div className="font-bold">Your career is not being saved right now.</div>
+          <div className="mt-1 text-muted-foreground">
+            This browser has no storage left for douknowball.com, or is blocking it (private browsing does that).
+            Whatever you do here will be gone when you leave the page. To fix it, free up space in your browser's
+            site settings or open the game in a normal window, then play a week and this notice will go away.
+          </div>
         </div>
-        <AdBanner slot="7540487748" format="horizontal" className="mt-8" />
-        <GameSeoContent
-          pageHasOwnH1
-          title="Club Manager: Football Management Sim"
-          description="Manage a current football club or start in one of four past seasons. J1 League, K League 1 and the Chinese Super League open with generated squads. J1 can use verified opponents and home sides in 2026/27, with simulated dates, stadiums and results. Pick your tactics, sign players and keep the board happy."
-          howToPlay={[
-            'Choose your season, nation, league and club. Pick Japan for the 2026/27 J1 start or China for the 2026 Chinese Super League start.',
-            'Set your formation and starting eleven. Choose Play Live or Quick Sim. Open the Calendar to play ahead.',
-            'Sign players, renew contracts and check the board screen for your targets.',
-            'Review your results at the end of the season. Tap Managers to switch between your saved careers.',
-          ]}
-        >
-          {/* Round 655: every league and club as readable text, below the guide. */}
-          <ClubManagerClubList />
-        </GameSeoContent>
-        <GameNav />
-      </GameShell>
+      )}
+      {/* Round 1522 review: this career's tactics did not load (a dropped connection, or a deploy since the
+          page opened), so no match of it can be played until the page loads them again. */}
+      {g.tacticsFailed && (
+        <div role="alert" data-testid="cm-tactics-failed" className="mb-4 rounded-xl border border-destructive/60 bg-destructive/10 px-4 py-3 text-sm text-foreground">
+          Your tactics did not load, so the next match cannot start yet.{' '}
+          <button type="button" onClick={g.retryTactics} className="font-bold underline">Reload the page</button> to carry on.
+        </div>
+      )}
+      {/* Round 1323: another tab has played this career on, so this one
+          writes nothing more and covers itself until it is reloaded. */}
+      {g.saveMoved && <Suspense fallback={null}><SaveMovedNotice message="This career moved on in another tab. Reload to carry on." /></Suspense>}
+      {g.positionNotice && <div role="alert" data-testid="cm-position-blocked" className="mb-4 rounded-xl border border-destructive/60 bg-destructive/10 px-4 py-3 text-sm text-foreground">{g.positionNotice}</div>}
+      {inner}
     </>
   );
 
@@ -457,90 +428,12 @@ const ClubManager = () => {
 
     return shell(
       <div ref={pickRef}>
-        <header className="text-center mb-6">
-          <h1 className="text-4xl md:text-6xl font-bold tracking-[0.1em] text-primary font-display mb-1">CLUB MANAGER</h1>
-          <p className="text-muted-foreground text-sm md:text-base max-w-xl mx-auto">
-            {REAL_LEAGUES.length} selectable leagues and {REAL_LEAGUES.reduce((s, l) => s + l.clubs.length, 0)} member clubs today. The existing 27 leagues use roster snapshots from {CM_ROSTER_META.asOf}{generatedLeagueMonthClause() ? ` (${generatedLeagueMonthClause()})` : ''}. K League 1, J1 League and the Chinese Super League use generated opening squads. Four real past seasons stay separate: 2020-21, 2015-16, 2010-11 and 2005-06.
-          </p>
-        </header>
+        <ClubManagerPickerHeading step={pickStep}>
+          {pickStep !== 'era' && <>{REAL_LEAGUES.length} selectable leagues and {REAL_LEAGUES.reduce((s, l) => s + l.clubs.length, 0)} member clubs today. The existing 27 leagues use roster snapshots from {CM_ROSTER_META.asOf}{generatedLeagueMonthClause() ? ` (${generatedLeagueMonthClause()})` : ''}. K League 1, J1 League and the Chinese Super League use generated opening squads. Four real past seasons stay separate: 2020-21, 2015-16, 2010-11 and 2005-06.</>}
+        </ClubManagerPickerHeading>
 
-        {/* Step breadcrumb */}
-        <div className="flex items-center justify-center gap-1.5 mb-5 text-[10px] font-bold flex-wrap">
-          {(['era', 'nation', 'league', 'team', 'manager'] as const).map((s, i) => (
-            <span key={s} className="inline-flex items-center gap-1.5">
-              {i > 0 && <ChevronRight className="w-3 h-3 text-muted-foreground/50" />}
-              <span className={cn(
-                'px-2.5 py-1 rounded-full border',
-                pickStep === s ? 'bg-primary/10 border-primary text-primary' : 'bg-card border-border text-muted-foreground',
-              )}>
-                {i + 1}. {s === 'era' ? 'When' : s === 'nation' ? 'Nation' : s === 'league' ? 'League' : s === 'team' ? 'Team' : 'Dugout'}
-              </span>
-            </span>
-          ))}
-        </div>
-
-        {/* -------- Step 0 (Round 132): when do you start -------- */}
-        {pickStep === 'era' && (
-          <div className="max-w-2xl mx-auto">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-              {CM_ERAS.map(e => (
-                <button
-                  key={e.id}
-                  onClick={() => { setPickEra(e.id); setPickStep('nation'); loadPickedEra(e.id); }}
-                  className="rounded-xl border bg-card border-border hover:border-primary px-4 py-3 text-left transition-all"
-                >
-                  <div className="flex items-center gap-2.5">
-                    <span className="text-xl leading-none">{e.emoji}</span>
-                    <div className="min-w-0">
-                      <div className="text-base font-bold font-display text-foreground">{e.label}</div>
-                      <div className="text-[10px] text-muted-foreground">{e.id === DEFAULT_ERA_ID ? 'Current clubs; K League squads are generated.' : e.blurb}</div>
-                    </div>
-                    <ChevronRight className="w-4 h-4 text-muted-foreground ml-auto shrink-0" />
-                  </div>
-                  {/* Kept to one line on purpose: at 390x844 all four tiles
-                      have to sit above the fold, and the full measured wording
-                      is one tap away on the team step. */}
-                  {/* Round 146: the past is REAL DATA too, because it comes off
-                      its own bake. Only a future would be a projection, and we
-                      do not offer futures. */}
-                  <div className={cn(
-                    'mt-1.5 inline-block text-[9px] font-bold px-1.5 py-0.5 rounded border',
-                    /* Round 347: token inks so light mode can answer them; the
-                       tinted borders and fills read fine on both themes. */
-                    e.startYear <= CM_BASE_YEAR
-                      ? 'text-[hsl(var(--wc-green-ink))] border-emerald-500/50 bg-emerald-500/10'
-                      : 'text-gold border-yellow-500/50 bg-yellow-500/10',
-                  )}>
-                    {e.id === DEFAULT_ERA_ID ? 'REAL CLUBS · SQUAD COVERAGE VARIES' : <>{e.startYear <= CM_BASE_YEAR ? 'REAL DATA' : 'PROJECTION'} · {eraRealShareLabel(e)}</>}
-                  </div>
-                </button>
-              ))}
-            </div>
-            {/* The honest note about what is NOT here, which matters more than
-                what is. Round 139 removed the future starts on the owner's call
-                (nobody knows the future). Round 146 delivered the first real
-                past season from real historical records. */}
-            <p className="text-[9px] text-muted-foreground text-center mt-2.5 leading-snug max-w-lg mx-auto">
-              No future eras, ever: nobody knows the future and we will not pretend to. The 2020-21, 2015-16, 2010-11 and
-              2005-06 seasons are built from real market data records, real squads with their real ages and values from those
-              years, not recreations. 2005-06 is as far back as the records honestly reach, so there is no 2000 era and
-              there will not be an invented one. No made up name ever appears on a teamsheet unmarked.
-            </p>
-            {/* Round 520: the competition's real format, season by season, one tap
-                from the era you are about to pick. */}
-            <p className="text-[10px] text-center mt-1">
-              <Link to="/champions-league-format-history" className="inline-flex items-center min-h-[32px] px-2 text-primary hover:underline">How the real Champions League format changed, and what each era here plays</Link>
-            </p>
-            {/* Round 928: a way back to the other managers from a new one's picker. */}
-            {g.slots.some(v => v.summary && !v.active) && (
-              <p className="text-[11px] text-center mt-1">
-                <button onClick={g.showSlots} className="inline-flex items-center min-h-[32px] px-2 text-muted-foreground hover:text-primary hover:underline">
-                  <ChevronLeft className="w-3.5 h-3.5" /> Back to your managers
-                </button>
-              </p>
-            )}
-          </div>
-        )}
+        {pickStep === 'era' && <ClubManagerEraPicker onPick={pickEraAndContinue}
+          onBackToManagers={g.slots.some(v => v.summary && !v.active) ? g.showSlots : undefined} />}
 
         {/* -------- Step 1: nation -------- */}
         {pickStep === 'nation' && (
@@ -1473,6 +1366,10 @@ const ClubManager = () => {
 };
 
 /* Round 1601: the page always mounts the stack of cards, so the two page tests that import this get it too. */
-const ClubManagerWithCards = () => <CmCardsProvider><ClubManager /></CmCardsProvider>;
+export function ClubManagerContents({ initialEra }: { initialEra?: string | null }) {
+  return <CmCardsProvider><ClubManager initialEra={initialEra} /></CmCardsProvider>;
+}
 
-export default ClubManagerWithCards;
+export default function ClubManagerWithCards() {
+  return <ClubManagerFrame catalogue={<ClubManagerClubList />}><ClubManagerContents /></ClubManagerFrame>;
+}
