@@ -426,6 +426,6 @@ export function loadDailyRun<P>(config: GauntletConfig<P>, date: string): Gauntl
   return readDailyRecord(config.gameId, date, fields => validateDailyRun(config, fields));
 }
 
-export function saveDailyRun<P>(config: GauntletConfig<P>, date: string, run: GauntletRun): void {
-  writeDailyRecord(config.gameId, date, { run });
+export function saveDailyRun<P>(config: GauntletConfig<P>, date: string, run: GauntletRun): boolean {
+  return writeDailyRecord(config.gameId, date, { run });
 }

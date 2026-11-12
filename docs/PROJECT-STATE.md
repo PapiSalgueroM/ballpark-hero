@@ -1,3 +1,9 @@
+## 2026-11-12: Soccer Gauntlet Daily result recovery staged
+
+If browser storage refuses a Soccer Daily result, the recap stays available in the tab and can be saved again. Before a Daily pick or a save retry, a result already saved by another tab takes precedence. Reviewing a recap leaves a later Unlimited completion available.
+
+Mounted checks reproduced a stale tab replacing a 48-point result with 16. The fix keeps the first save byte for byte, also reopens legacy finals, and preserves the newer Daily when the prior day finishes after midnight. Focused tests and the Gauntlet harnesses passed. Production build and phone verification are pending.
+
 ## 2026-11-12: Club Manager retains the summer transfer bank
 
 When a manager stays at the club, the summer carries the full unused transfer balance. The board can add its usual allocation, reducing the top-up as needed to reach twice the usual allocation. If the existing bank already reaches that amount, no new board money is added. Loan options, add-ons and sponsors still settle in order. New receipts show the actual top-up, and earlier receipts keep the cap that applied to them.

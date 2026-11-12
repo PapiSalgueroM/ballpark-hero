@@ -1151,7 +1151,7 @@ function section9(sports) {
       console.log('NEGATIVE CONTROL ON: the shared board prints a label for the decider only, read in memory, and the section 9 screens check must go red');
     }
     if (CONTROL === 'pageline' && file.endsWith('GauntletDraft.tsx')) {
-      const from = "  const dailyDone = phase === 'setup' && loadDailyRun(todayStr) !== null;\n";
+      const from = "  const isDone = phase === 'done';\n";
       const to = from + "  const matchLine = (m: GauntletRun['matches'][number]) => `${m.round.name}: ${m.yourGoals}-${m.theirGoals} v ${m.round.opp}`;\n";
       if (src.split(from).length - 1 !== 1) { console.error('control run: the pageline needle is not in GauntletDraft.tsx exactly once, refusing to run a dead control'); process.exit(1); }
       src = src.replace(from, to);

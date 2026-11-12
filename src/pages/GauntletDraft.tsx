@@ -55,6 +55,7 @@ export default function GauntletDraft() {
   const [pickIndex, setPickIndex] = useState(0);
   const [squad, setSquad] = useState<(Player | null)[]>([]);
   const [run, setRun] = useState<GauntletRun | null>(null);
+  const [pendingDailyRun, setPendingDailyRun] = useState<GauntletRun | null>(null);
   const [shownMatches, setShownMatches] = useState(0);
 
   useEffect(() => {
@@ -70,23 +71,22 @@ export default function GauntletDraft() {
     return () => { cancelled = true; };
   }, []);
 
+  const restoreDaily = useCallback(() => {
+    const stored = loadDailyRun(todayStr);
+    const result = stored ?? pendingDailyRun;
+    if (!result) return false;
+    if (stored) setPendingDailyRun(null);
+    markRestoredFinish(SLUG);
+    setMode('daily');
+    setDraft(null);
+    setRun(result);
+    setShownMatches(result.matches.length);
+    setPhase('done');
+    return true;
+  }, [pendingDailyRun, todayStr]);
+
   const start = useCallback((m: Mode) => {
-    if (m === 'daily') {
-      /* Round 428: a run already in the books comes back as it was, instead
-         of the same draft being dealt again with the cup known. This restore
-         runs in a click handler after mount, exactly the false to true
-         transition useGameCompletion records, so it says what it is first. */
-      const saved = loadDailyRun(todayStr);
-      if (saved) {
-        markRestoredFinish(SLUG);
-        setMode('daily');
-        setDraft(null);
-        setRun(saved);
-        setShownMatches(saved.matches.length);
-        setPhase('done');
-        return;
-      }
-    }
+    if (m === 'daily' && restoreDaily()) return;
     const seed = m === 'daily' ? dailyDraftSeed(todayStr) : Math.floor(Math.random() * 2147483645) + 1;
     const d = buildDraft(pool, seed);
     setMode(m);
@@ -96,16 +96,25 @@ export default function GauntletDraft() {
     setRun(null);
     setShownMatches(0);
     setPhase('drafting');
-  }, [pool]);
+  }, [pool, restoreDaily, todayStr]);
+
+  const retryDailySave = () => {
+    if (!pendingDailyRun) return;
+    const stored = loadDailyRun(todayStr);
+    if (stored) setRun(stored);
+    else if (!saveDailyRun(todayStr, pendingDailyRun)) return;
+    setPendingDailyRun(null);
+  };
 
   const keep = (p: Player) => {
     if (!draft || phase !== 'drafting') return;
+    if (mode === 'daily' && restoreDaily()) return;
     const next = [...squad];
     next[pickIndex] = p;
     setSquad(next);
     if (pickIndex + 1 >= draft.picks.length) {
       const result = runGauntlet(next);
-      if (mode === 'daily') saveDailyRun(todayStr, result);
+      if (mode === 'daily' && !saveDailyRun(todayStr, result)) setPendingDailyRun(result);
       setRun(result);
       setPhase('running');
       return;
@@ -135,7 +144,7 @@ export default function GauntletDraft() {
   useGameCompletion(SLUG, run !== null, run?.score ?? 0, run?.roundsCleared ?? 0);
 
   const pick = draft && phase === 'drafting' ? draft.picks[pickIndex] : null;
-  const dailyDone = phase === 'setup' && loadDailyRun(todayStr) !== null;
+  const dailyDone = phase === 'setup' && (pendingDailyRun !== null || loadDailyRun(todayStr) !== null);
 
   return (
     <>
@@ -247,13 +256,24 @@ export default function GauntletDraft() {
             statRow={[{ label: 'Score', value: run.score }]}
             emojiGrid={[`⚔️ Gauntlet Draft: ${run.score} pts`, ...run.matches.map(m => `${m.won ? '🟩' : '🟥'} ${matchLine(m)}`)].join('\n')}
             share={{ score: String(run.score), gameName: 'Gauntlet Draft', gamePath: '/gauntlet-draft' }}
-            onPlayAgain={() => setPhase('setup')}
+            onPlayAgain={() => {
+              setRun(null);
+              setPhase('setup');
+            }}
             playAgainLabel={mode === 'daily' ? 'Back to modes' : 'New draft'}
-            playNext={mode === 'daily' ? <p className="text-sm text-muted-foreground">Come back tomorrow for a new draft.</p> : undefined}
+            playNext={mode === 'daily' && !pendingDailyRun ? <p className="text-sm text-muted-foreground">Come back tomorrow for a new draft.</p> : undefined}
           >
             <div className="text-left text-sm text-muted-foreground space-y-1 my-4 py-3 px-4 rounded-xl bg-surface-2 border border-border/60">
               {run.matches.map((m, i) => <p key={i}>{matchLine(m)}</p>)}
             </div>
+            {mode === 'daily' && pendingDailyRun && (
+              <div className="my-4 space-y-2">
+                <p className="text-sm text-muted-foreground">This result could not be saved on this device. Retry before closing or reloading.</p>
+                <button onClick={retryDailySave} className="min-h-11 rounded-xl border border-border px-4 text-sm font-semibold text-foreground">
+                  Retry save
+                </button>
+              </div>
+            )}
           </ResultScreen>
         )}
 
