@@ -163,6 +163,33 @@ describe('MLB playoff replay from the real season viewer', { timeout: 90000 }, (
     expect(onClose).toHaveBeenCalledTimes(1);
   });
 
+  it('keeps forward and backward keyboard focus inside the replay and its help', async () => {
+    const { view, onClose } = await review(hitter('keyboard'));
+    await enterReplay(view);
+    const replay = view.getByRole('dialog', { name: 'Playoff replay' });
+    const first = within(replay).getByRole('button', { name: 'How the playoff replay works' });
+    const last = within(replay).getByRole('button', { name: 'Back to regular season' });
+
+    replay.focus();
+    fireEvent.keyDown(replay, { key: 'Tab', shiftKey: true });
+    expect(document.activeElement).toBe(last);
+    expect(fireEvent.keyDown(last, { key: 'Tab' })).toBe(false);
+    expect(document.activeElement).toBe(first);
+    expect(fireEvent.keyDown(first, { key: 'Tab', shiftKey: true })).toBe(false);
+    expect(document.activeElement).toBe(last);
+
+    fireEvent.click(first);
+    const help = view.getByRole('dialog', { name: 'How the playoff replay works' });
+    const gotIt = within(help).getByRole('button', { name: 'Got it' });
+    fireEvent.keyDown(help, { key: 'Tab', shiftKey: true });
+    expect(document.activeElement).toBe(gotIt);
+    expect(fireEvent.keyDown(gotIt, { key: 'Tab' })).toBe(false);
+    expect(document.activeElement).toBe(gotIt);
+    fireEvent.keyDown(gotIt, { key: 'Escape' });
+    expect(document.activeElement).toBe(first);
+    expect(onClose).not.toHaveBeenCalled();
+  });
+
   it('keeps unsupported playoff counts and pre-format seasons on their honest regular review', async () => {
     for (const [id, overrides] of [
       ['missing', { poGames: undefined }], ['fraction', { poGames: 6.5 }],

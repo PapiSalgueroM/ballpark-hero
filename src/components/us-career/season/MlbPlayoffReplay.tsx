@@ -1,7 +1,7 @@
-import { useCallback, useRef, useState } from 'react';
+import { useRef, useState, type KeyboardEvent } from 'react';
 import { SeasonCentreHelp, useHelpOnce, type HelpWords } from '@/components/season-centre/SeasonCentreHelp';
 import { useBodyLock } from '@/components/season-centre/useBodyLock';
-import { escapeCloses, focusDialogOnMount } from '@/lib/dialogA11y';
+import { focusDialogOnMount } from '@/lib/dialogA11y';
 import type { MlbPlayoffReplayData } from '@/lib/season/mlbPlayoffReplay';
 
 const HELP: HelpWords = {
@@ -26,9 +26,25 @@ export default function MlbPlayoffReplay({ replay, club, year, onBack, onClose }
   const [index, setIndex] = useState(0);
   const [revealed, setRevealed] = useState(false);
   const [helpOpen, setHelpOpen] = useHelpOnce('seasonCentre:help:mlb-playoffs');
-  const dialog = useRef<HTMLDivElement | null>(null);
-  const setDialog = useCallback((element: HTMLDivElement | null) => { dialog.current = element; focusDialogOnMount(element); }, []);
-  const closeHelp = () => { setHelpOpen(false); dialog.current?.focus(); };
+  const helpOpener = useRef<HTMLButtonElement>(null);
+  const closeHelp = () => { setHelpOpen(false); helpOpener.current?.focus(); };
+  const handleKeys = (event: KeyboardEvent<HTMLDivElement>) => {
+    if (event.key === 'Escape') {
+      onClose();
+      return;
+    }
+    if (event.key !== 'Tab') return;
+    const scope = helpOpen ? event.currentTarget.querySelector<HTMLElement>('[data-season-help]') : event.currentTarget;
+    const buttons = scope?.querySelectorAll<HTMLButtonElement>('button:not(:disabled)');
+    if (!buttons?.length) return;
+    const first = buttons[0];
+    const last = buttons[buttons.length - 1];
+    const active = document.activeElement;
+    if (active === scope || active === (event.shiftKey ? first : last)) {
+      event.preventDefault();
+      (event.shiftKey ? last : first).focus();
+    }
+  };
   useBodyLock();
   const game = replay.games[index];
   const last = index === replay.games.length - 1;
@@ -42,11 +58,11 @@ export default function MlbPlayoffReplay({ replay, club, year, onBack, onClose }
   const button = 'min-h-11 rounded-lg border border-border px-3 py-2 text-xs font-bold';
   return (
     <div className="fixed inset-0 z-50 flex items-stretch justify-center bg-background/80 md:items-center md:p-4" data-mlb-playoff-replay>
-      <div role="dialog" aria-modal="true" aria-label="Playoff replay" tabIndex={-1} ref={setDialog} onKeyDown={escapeCloses(onClose)}
+      <div role="dialog" aria-modal="true" aria-label="Playoff replay" tabIndex={-1} ref={focusDialogOnMount} onKeyDown={handleKeys}
         className="relative flex h-full w-full max-w-2xl flex-col overflow-hidden bg-background outline-none md:h-[min(760px,calc(100vh-2rem))] md:rounded-2xl md:border md:border-border">
         <header className="flex flex-wrap items-center gap-2 border-b border-border p-3">
           <h2 className="min-w-0 flex-1 text-sm font-black">Playoff replay</h2>
-          <button type="button" className={`${button} min-w-11`} onClick={() => setHelpOpen(true)} aria-label={HELP.title}>?</button>
+          <button type="button" ref={helpOpener} className={`${button} min-w-11`} onClick={() => setHelpOpen(true)} aria-label={HELP.title}>?</button>
           <button type="button" className={button} onClick={onClose}>Back to your season</button>
           <p className="w-full break-words text-xs text-muted-foreground">{club} · {year}</p>
         </header>
