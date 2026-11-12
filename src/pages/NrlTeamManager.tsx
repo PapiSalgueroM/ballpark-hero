@@ -627,7 +627,7 @@ function Squad({ season, onAction, disabled }: {
         <div className="mt-5 border-t border-border pt-4">
           <label htmlFor="nrl-goal-kicker" className="block text-sm font-semibold">Goal kicker</label>
           <select id="nrl-goal-kicker" value={season.kickerId} disabled={disabled || season.phase === 'complete'}
-            className="mt-1 min-h-11 w-full rounded-lg border border-input bg-background px-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring sm:max-w-xs"
+            className="mt-1 min-h-11 w-full rounded-lg border border-input bg-background px-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:opacity-60 sm:max-w-xs"
             onChange={event => onAction({ type: 'setKicker', playerId: event.target.value })}>
             {season.squad.filter(player => starters.has(player.id)).map(player => (
               <option key={player.id} value={player.id}>{player.name}</option>
@@ -798,6 +798,7 @@ function NrlManagerScreen({ entry, showSlots }: { entry: ContinueSave; showSlots
   const moved = changed || fenceMoved;
   const complete = season?.phase === 'complete';
   const live = Boolean(season?.live);
+  const rosterLocked = moved || live || retired;
   const [replayed] = useState(() => showSlots ? null : readNrlReplayCutoff(entry.saveKey));
   useGameCompletion(SLUG, Boolean(complete && career && nrlSeasonCanCredit(career, replayed)), undefined);
 
@@ -852,7 +853,7 @@ function NrlManagerScreen({ entry, showSlots }: { entry: ContinueSave; showSlots
         <header className="flex items-start justify-between gap-3">
           <div className="min-w-0">
             <h1 ref={arrival} className="font-display text-2xl font-black sm:text-3xl">NRL Team Manager</h1>
-            <p className="mt-1 text-sm text-muted-foreground">{season ? `${shortName(season.year, season.clubId)} · ${season.year} season` : 'Take charge of a rugby league club across seasons.'}</p>
+            <p className="mt-1 text-sm text-muted-foreground">{season ? `${shortName(season.year, season.clubId)} · ${season.year} season${retired ? ' · Retired' : ''}` : 'Take charge of a rugby league club across seasons.'}</p>
             {!showSlots && <Button type="button" size="lg" variant="ghost" className="mt-1 px-2" onClick={openSlots}>Career saves</Button>}
           </div>
           <RulesGate title="How to play NRL Team Manager" floatingTrigger={false} className="min-h-11 min-w-11">
@@ -899,12 +900,12 @@ function NrlManagerScreen({ entry, showSlots }: { entry: ContinueSave; showSlots
                 </Button>
               ))}
             </div>
-            {panel === 'match' && <MatchCentre career={career} onAction={dispatch} disabled={moved} showLiveResult={showLiveResult}
+            {panel === 'match' && <MatchCentre career={career} onAction={dispatch} disabled={moved || retired} showLiveResult={showLiveResult}
               onReview={() => { setOffice('history'); setPanel('office'); }} />}
             {live && (panel === 'squad' || panel === 'office') && (
               <p className="rounded-xl border border-border bg-card p-3 text-sm">Finish the live match in Match centre to make changes.</p>
             )}
-            {panel === 'squad' && <Squad season={season} onAction={dispatch} disabled={moved || live} />}
+            {panel === 'squad' && <Squad season={season} onAction={dispatch} disabled={rosterLocked} />}
             {panel === 'ladder' && <Ladder career={career} />}
             {panel === 'office' && (
               <>
@@ -914,7 +915,7 @@ function NrlManagerScreen({ entry, showSlots }: { entry: ContinueSave; showSlots
                       aria-pressed={office === id} onClick={() => setOffice(id)}>{label}</Button>
                   ))}
                 </div>
-                <NrlCareerOffice key={office} career={career} screen={office} disabled={moved || live || retired} onAction={dispatch} />
+                <NrlCareerOffice key={office} career={career} screen={office} disabled={rosterLocked} onAction={dispatch} />
               </>
             )}
           </>

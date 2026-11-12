@@ -150,6 +150,46 @@ describe('NRL voluntary manager retirement', () => {
     expect(recordCompletion).not.toHaveBeenCalled();
   });
 
+  it('locks every retired squad and match action while preserving stats and round browsing', () => {
+    const started = createNrlCareer('storm', 4);
+    put(first, bytes(started));
+    const active = open();
+    click('Squad');
+    const reserve = screen.getByLabelText('Reserve 14');
+    expect(reserve).toBeEnabled();
+    expect(screen.getByText('Suggest a fit lineup')).toBeVisible();
+    const replacement = started.season.bench![1];
+    fireEvent.change(reserve, { target: { value: replacement } });
+    const changed = readNrlCareerSave(raw())!;
+    expect(changed.season.bench![0]).toBe(replacement);
+    active.unmount();
+
+    const retired = retire(advance(beforeFinal(changed)));
+    const finished = bytes(retired);
+    put(first, finished);
+    const view = open();
+    click('Squad');
+    const lineup = view.container.querySelectorAll('select[id^="nrl-starter-"]');
+    const bench = view.container.querySelectorAll('select[id^="nrl-reserve-"]');
+    expect(lineup).toHaveLength(13);
+    expect(bench).toHaveLength(6);
+    [...lineup, ...bench, screen.getByLabelText('Goal kicker')].forEach(control => expect(control).toBeDisabled());
+    expect(screen.queryByText('Suggest a fit lineup')).not.toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: 'Apply fit lineup' })).not.toBeInTheDocument();
+    fireEvent.click(screen.getByText('Season player stats'));
+    expect(screen.getByLabelText('Match scope')).toBeEnabled();
+    expect(screen.getByText('Storm · 2026 season · Retired')).toBeVisible();
+
+    click('Match centre');
+    expect(screen.queryByRole('group', { name: 'Round preparation' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('group', { name: 'Match tactic' })).not.toBeInTheDocument();
+    expect(view.container.querySelector('[data-nrl-advance]')).toBeNull();
+    fireEvent.click(screen.getByText('Season fixtures'));
+    fireEvent.change(screen.getByLabelText('Fixtures to show'), { target: { value: '1' } });
+    expect(screen.getByRole('list', { name: 'League round matches' })).toBeVisible();
+    expect(raw()).toBe(finished);
+  });
+
   it('keeps a completed v1 save exact until retirement is explicitly confirmed', () => {
     let legacy = createNrlSeason('storm', 4);
     for (let tick = 0; tick < 40 && legacy.phase !== 'complete'; tick++) legacy = reduceNrlSeason(legacy, { type: 'advance' });
