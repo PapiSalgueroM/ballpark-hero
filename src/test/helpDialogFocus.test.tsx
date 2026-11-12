@@ -14,6 +14,7 @@ describe('help dialog focus return', () => {
       fireEvent.click(trigger);
       const dialog = await view.findByRole('dialog');
       expect(dialog).toHaveTextContent('Fixture instructions.');
+      expect(dialog).not.toHaveAttribute('aria-describedby');
       if (close === 'Escape') fireEvent.keyDown(dialog, { key: 'Escape' });
       else fireEvent.click(view.getByRole('button', { name: close }));
       await waitFor(() => expect(view.queryByRole('dialog')).not.toBeInTheDocument());

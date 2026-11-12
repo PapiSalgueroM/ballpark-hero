@@ -54,6 +54,7 @@ describe('RulesGate shares one pending cookie region and restores its help contr
       expect(consent.load).toHaveBeenCalledTimes(choice === 'Accept all' ? 1 : 0);
       expect(screen.getByRole('dialog')).toBe(dialog);
       expect(dialog).toHaveTextContent('Fixture instructions.Fixture worked example.');
+      expect(dialog).not.toHaveAttribute('aria-describedby');
       expect(localStorage.getItem('rules-gate-seen:/face-off')).toBe('1');
     });
   }
