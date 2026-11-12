@@ -14,7 +14,7 @@ import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { useSaveFenceWatch } from '@/hooks/useSaveFenceWatch';
 import {
   nrlBench, nrlInjuries, nrlLadder, nrlNextRound, nrlStarterOptions, NRL_BENCH_SIZE, NRL_MAX_BENCH_USED, NRL_ROLES, NRL_SAVE_KEY,
-  type NrlAction, type NrlManagerState, type NrlMatchResult, type NrlTactic,
+  type NrlAction, type NrlLiveHalf, type NrlManagerState, type NrlMatchResult, type NrlTactic,
 } from '@/lib/nrlManager';
 import { createNrlCareer, readNrlCareerSave, reduceNrlCareer, type NrlCareerAction, type NrlCareerState } from '@/lib/nrlCareer';
 import { nrlScorePoints, nrlScoringLeaders, nrlTryLeaders } from '@/lib/nrlPlayerScoring';
@@ -107,13 +107,63 @@ function scoreLine(result: NrlMatchResult, year: number) {
   return `${shortName(year, result.homeId)} ${result.homeScore}–${result.awayScore} ${shortName(year, result.awayId)}`;
 }
 
-function MatchCentre({ season, onAction, onReview, disabled }: {
-  season: NrlManagerState; onAction: (action: NrlAction) => void; onReview: () => void; disabled: boolean;
+function LiveHalftime({ live, year, title, openingTactic, onAction, disabled }: {
+  live: NrlLiveHalf; year: number; title: string; openingTactic: NrlTactic;
+  onAction: (action: NrlAction) => void; disabled: boolean;
+}) {
+  const [tactic, setTactic] = useState(openingTactic);
+  const { fixture, homeScoring, awayScoring } = live;
+  const sides = [[fixture.homeId, homeScoring], [fixture.awayId, awayScoring]] as const;
+  return (
+    <section className="space-y-4" aria-labelledby="nrl-halftime">
+      <div className="rounded-2xl border border-emerald-500/35 bg-emerald-950 p-4 text-emerald-50 sm:p-6">
+        <p className="text-xs font-bold uppercase tracking-widest text-emerald-200">{title}</p>
+        <h2 id="nrl-halftime" className="mt-2 font-display text-2xl font-black">Half time</h2>
+        <ul className="mt-3 grid grid-cols-2 gap-3" aria-label="First-half score" data-nrl-halftime>
+          {sides.map(([id, scoring]) => (
+            <li key={id} className="min-w-0 rounded-xl bg-black/20 p-3">
+              <p className="break-words text-sm font-semibold">{shortName(year, id)}</p>
+              <strong className="block font-display text-3xl tabular-nums">{nrlScorePoints(scoring)}</strong>
+              <p className="mt-1 text-xs text-emerald-100">
+                {scoring.tries} {scoring.tries === 1 ? 'try' : 'tries'} · {scoring.conversions} {scoring.conversions === 1 ? 'conversion' : 'conversions'}
+                {scoring.penalties > 0 && ' · 1 penalty goal'}
+              </p>
+            </li>
+          ))}
+        </ul>
+      </div>
+      <div className="rounded-xl border border-border bg-card p-4">
+        <h3 className="font-bold">Second-half tactic</h3>
+        <div className="mt-2 flex flex-wrap gap-2" role="group" aria-label="Second-half tactic">
+          {tactics.map(option => (
+            <Button key={option.id} type="button" size="lg" className="px-3"
+              variant={tactic === option.id ? 'default' : 'outline'} disabled={disabled}
+              aria-pressed={tactic === option.id} onClick={() => setTactic(option.id)}>
+              {option.id === openingTactic ? `Keep ${option.label.toLowerCase()}` : option.label}
+            </Button>
+          ))}
+        </div>
+        <p className="mt-2 text-sm text-muted-foreground">{tactics.find(option => option.id === tactic)?.description}</p>
+      </div>
+      <Button type="button" size="lg" className="w-full" disabled={disabled}
+        onClick={() => onAction({ type: 'finishLive', year, round: fixture.round, tactic })}>
+        Play second half <ArrowRight aria-hidden="true" />
+      </Button>
+    </section>
+  );
+}
+
+function MatchCentre({ season, onAction, onReview, disabled, showLiveResult }: {
+  season: NrlManagerState; onAction: (action: NrlAction) => void; onReview: () => void; disabled: boolean; showLiveResult: boolean;
 }) {
   const next = nrlNextRound(season);
   const { clubId, year, phase, championId } = season;
+  if (season.live) {
+    return <LiveHalftime live={season.live} year={year} title={next.title} openingTactic={season.tactic} onAction={onAction} disabled={disabled} />;
+  }
   const club = shortName(year, clubId);
   const match = next.clubMatch;
+  const canPlayLive = Boolean(match && season.kickerId && season.bench);
   const opponent = match ? shortName(year, match.homeId === clubId ? match.awayId : match.homeId) : null;
   const latestRound = season.results.at(-1)?.round;
   const latest = latestRound === undefined ? [] : season.results.filter(result => result.round === latestRound);
@@ -128,8 +178,60 @@ function MatchCentre({ season, onAction, onReview, disabled }: {
     ? championId === clubId ? 'You won the premiership!' : `${championId ? shortName(year, championId) : 'Season'} champions`
     : opponent ? `${club} vs ${opponent}` : next.clubStatus === 'eliminated' ? `${club} are out` : `${club} have a bye`;
 
+  const ReportHeading = showLiveResult ? 'h2' : 'h3';
+  const report = latest.length > 0 && (
+    <section className="rounded-xl border border-border bg-card p-4" aria-labelledby="nrl-results">
+      <ReportHeading id="nrl-results" className="font-bold">{showLiveResult ? 'Full time' : latest[0].tieId === 'GF' ? 'Grand Final result' : latest[0].finalsRound ? 'Latest finals results' : `Round ${latestRound} results`}</ReportHeading>
+      <p className="mt-1 text-sm text-muted-foreground" role="status" data-nrl-result>
+        {lastMatch ? `${scoreLine(lastMatch, year)}${lastMatch.extraTime ? ' after extra time' : ''}` : 'Your club did not play this round.'}
+      </p>
+      {usedReserves.length > 0 && <div className="mt-3 text-sm" data-nrl-interchange>
+        <h4 className="font-semibold">Interchange used</h4>
+        <p className="text-muted-foreground">{usedReserves.join(", ")}</p>
+      </div>}
+      {latestScorers.length > 0 && (
+        <div className="mt-3 text-sm" data-nrl-scorers>
+          <h4 className="font-semibold">Your scorers</h4>
+          <ul className="mt-1 space-y-1 text-muted-foreground">
+            {latestScorers.map(line => {
+              const goals = line.conversions + line.penalties;
+              const fieldGoals = line.fieldGoals + line.longFieldGoals;
+              const detail = [
+                `${nrlScorePoints(line)} pts`,
+                line.tries > 0 && `${line.tries} ${line.tries === 1 ? 'try' : 'tries'}`,
+                goals > 0 && `${goals} ${goals === 1 ? 'goal' : 'goals'}`,
+                fieldGoals > 0 && `${fieldGoals} ${fieldGoals === 1 ? 'field goal' : 'field goals'}`,
+              ].filter(Boolean).join(' · ');
+              return (
+                <li key={line.playerId} className="flex flex-wrap justify-between gap-x-3">
+                  <span>{season.squad.find(player => player.id === line.playerId)?.name}</span>
+                  <span>{detail}</span>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+      )}
+      {latestInjury && injuredName && (
+        <p className="mt-3 text-sm text-muted-foreground" data-nrl-match-injury>
+          {injuredName} picked up a knock and will miss {latestInjury.rounds} {latestInjury.rounds === 1 ? 'round' : 'rounds'}.
+        </p>
+      )}
+      <ul className="mt-2 divide-y divide-border text-sm">
+        {latest.map(result => (
+          <li key={`${result.homeId}-${result.awayId}`} className="grid grid-cols-[1fr_auto_1fr] items-center gap-2 py-2">
+            <span className="min-w-0 break-words">{shortName(year, result.homeId)}</span>
+            <strong className="tabular-nums">{result.homeScore}–{result.awayScore}</strong>
+            <span className="min-w-0 break-words text-right">{shortName(year, result.awayId)}</span>
+          </li>
+        ))}
+      </ul>
+    </section>
+  );
+
   return (
     <section className="space-y-4" aria-label="Match centre">
+      {showLiveResult && report}
       <div className="overflow-hidden rounded-2xl border border-emerald-500/35 bg-emerald-950 p-4 text-emerald-50 sm:p-6">
         <p className="text-xs font-bold uppercase tracking-widest text-emerald-200">{next.title}</p>
         <h2 className="mt-2 break-words font-display text-2xl font-black leading-tight sm:text-3xl">{title}</h2>
@@ -179,9 +281,16 @@ function MatchCentre({ season, onAction, onReview, disabled }: {
       )}
 
       {phase !== 'complete' && (
-        <Button type="button" size="lg" className="w-full" disabled={disabled} onClick={() => onAction({ type: 'advance' })} data-nrl-advance>
-          {match ? 'Play match' : phase === 'regular' ? 'Simulate bye round' : `Simulate ${next.title.toLowerCase()}`}<ArrowRight aria-hidden="true" />
-        </Button>
+        <div className={canPlayLive ? 'grid grid-cols-2 gap-2' : undefined}>
+          {canPlayLive && <Button type="button" size="lg" disabled={disabled} onClick={() => onAction({ type: 'startLive' })}>
+            Play Live <ArrowRight aria-hidden="true" />
+          </Button>}
+          <Button type="button" size="lg" className="w-full" variant={canPlayLive ? 'outline' : 'default'}
+            disabled={disabled} onClick={() => onAction({ type: 'advance' })} data-nrl-advance>
+            {match ? 'Quick Sim' : phase === 'regular' ? 'Simulate bye round' : `Simulate ${next.title.toLowerCase()}`}
+            {!canPlayLive && <ArrowRight aria-hidden="true" />}
+          </Button>
+        </div>
       )}
 
       {phase !== 'regular' && (
@@ -220,55 +329,7 @@ function MatchCentre({ season, onAction, onReview, disabled }: {
         </ol>
       </details>
 
-      {latest.length > 0 && (
-        <section className="rounded-xl border border-border bg-card p-4" aria-labelledby="nrl-results">
-          <h3 id="nrl-results" className="font-bold">{latest[0].tieId === 'GF' ? 'Grand Final result' : latest[0].finalsRound ? 'Latest finals results' : `Round ${latestRound} results`}</h3>
-          <p className="mt-1 text-sm text-muted-foreground" role="status" data-nrl-result>
-            {lastMatch ? `${scoreLine(lastMatch, year)}${lastMatch.extraTime ? ' after extra time' : ''}` : 'Your club did not play this round.'}
-          </p>
-          {usedReserves.length > 0 && <div className="mt-3 text-sm" data-nrl-interchange>
-            <h4 className="font-semibold">Interchange used</h4>
-            <p className="text-muted-foreground">{usedReserves.join(", ")}</p>
-          </div>}
-          {latestScorers.length > 0 && (
-            <div className="mt-3 text-sm" data-nrl-scorers>
-              <h4 className="font-semibold">Your scorers</h4>
-              <ul className="mt-1 space-y-1 text-muted-foreground">
-                {latestScorers.map(line => {
-                  const goals = line.conversions + line.penalties;
-                  const fieldGoals = line.fieldGoals + line.longFieldGoals;
-                  const detail = [
-                    `${nrlScorePoints(line)} pts`,
-                    line.tries > 0 && `${line.tries} ${line.tries === 1 ? 'try' : 'tries'}`,
-                    goals > 0 && `${goals} ${goals === 1 ? 'goal' : 'goals'}`,
-                    fieldGoals > 0 && `${fieldGoals} ${fieldGoals === 1 ? 'field goal' : 'field goals'}`,
-                  ].filter(Boolean).join(' · ');
-                  return (
-                    <li key={line.playerId} className="flex flex-wrap justify-between gap-x-3">
-                      <span>{season.squad.find(player => player.id === line.playerId)?.name}</span>
-                      <span>{detail}</span>
-                    </li>
-                  );
-                })}
-              </ul>
-            </div>
-          )}
-          {latestInjury && injuredName && (
-            <p className="mt-3 text-sm text-muted-foreground" data-nrl-match-injury>
-              {injuredName} picked up a knock and will miss {latestInjury.rounds} {latestInjury.rounds === 1 ? 'round' : 'rounds'}.
-            </p>
-          )}
-          <ul className="mt-2 divide-y divide-border text-sm">
-            {latest.map(result => (
-              <li key={`${result.homeId}-${result.awayId}`} className="grid grid-cols-[1fr_auto_1fr] items-center gap-2 py-2">
-                <span className="min-w-0 break-words">{shortName(year, result.homeId)}</span>
-                <strong className="tabular-nums">{result.homeScore}–{result.awayScore}</strong>
-                <span className="min-w-0 break-words text-right">{shortName(year, result.awayId)}</span>
-              </li>
-            ))}
-          </ul>
-        </section>
-      )}
+      {!showLiveResult && report}
     </section>
   );
 }
@@ -423,9 +484,11 @@ export default function NrlTeamManager() {
   const [confirm, setConfirm] = useState(false);
   const [panel, setPanel] = useState<Panel>('match');
   const [office, setOffice] = useState<OfficeScreen>('contracts');
+  const [showLiveResult, setShowLiveResult] = useState(false);
   const [saveFailed, setSaveFailed] = useState(false);
   const { moved, check } = useSaveFenceWatch(NRL_SAVE_KEY);
   const complete = season?.phase === 'complete';
+  const live = Boolean(season?.live);
   useGameCompletion(SLUG, complete, undefined);
 
   function persist(next: NrlCareerState) {
@@ -448,6 +511,7 @@ export default function NrlTeamManager() {
     if (!persist(next)) return;
     setChoosing(false);
     setPanel('match');
+    setShowLiveResult(false);
   }
 
   function dispatch(action: NrlCareerAction) {
@@ -455,6 +519,9 @@ export default function NrlTeamManager() {
     if (!before) return false;
     const next = reduceNrlCareer(before, action);
     if (next === before || !persist(next)) return false;
+    if (action.type === 'startLive') setConfirm(false);
+    if (action.type === 'finishLive') setShowLiveResult(true);
+    if (action.type === 'advance' || action.type === 'startNextSeason') setShowLiveResult(false);
     if (action.type === 'startNextSeason') setPanel('match');
     return true;
   }
@@ -477,6 +544,7 @@ export default function NrlTeamManager() {
               <li>Name 13 starters and six reserves in Squad. Quick sim can use up to four of the reserves. Before a game, choose a tactic and train or recover.</li>
               <li>A match knock can put a player out for up to four rounds. Check Availability in Squad. The countdown includes byes, and an available player fills the vacant spot.</li>
               <li>Choose your goal kicker in Squad to credit conversions and penalty goals. Match centre shows your scorers.</li>
+              <li>Play Live shows the first half and lets you change the tactic for the second. Quick Sim settles the whole round in one action.</li>
               <li>Advance a round to simulate every fixture. A win or bye earns two ladder points, a draw earns one and a loss earns zero.</li>
               <li>The top eight make finals. The top four get a second chance if they lose their qualifying final. The last club standing wins the premiership.</li>
               <li>Scout a position in the Academy. The report arrives after you advance a round, and a promotion reserves a place next season.</li>
@@ -507,9 +575,12 @@ export default function NrlTeamManager() {
                 </Button>
               ))}
             </div>
-            {panel === 'match' && <MatchCentre season={season} onAction={dispatch} disabled={moved}
+            {panel === 'match' && <MatchCentre season={season} onAction={dispatch} disabled={moved} showLiveResult={showLiveResult}
               onReview={() => { setOffice('history'); setPanel('office'); }} />}
-            {panel === 'squad' && <Squad season={season} onAction={dispatch} disabled={moved} />}
+            {live && (panel === 'squad' || panel === 'office') && (
+              <p className="rounded-xl border border-border bg-card p-3 text-sm">Finish the live match in Match centre to make changes.</p>
+            )}
+            {panel === 'squad' && <Squad season={season} onAction={dispatch} disabled={moved || live} />}
             {panel === 'ladder' && <Ladder season={season} />}
             {panel === 'office' && (
               <>
@@ -519,10 +590,10 @@ export default function NrlTeamManager() {
                       aria-pressed={office === id} onClick={() => setOffice(id)}>{label}</Button>
                   ))}
                 </div>
-                <NrlCareerOffice key={office} career={career} screen={office} disabled={moved} onAction={dispatch} />
+                <NrlCareerOffice key={office} career={career} screen={office} disabled={moved || live} onAction={dispatch} />
               </>
             )}
-            {confirm ? (
+            {!live && (confirm ? (
               <div className="space-y-2 rounded-xl border border-border bg-card p-3 text-sm">
                 <p>Starting a new career replaces this save.</p>
                 <div className="flex flex-wrap gap-2">
@@ -530,7 +601,7 @@ export default function NrlTeamManager() {
                   <Button type="button" size="lg" className="px-3" onClick={() => { setConfirm(false); setYear(career.openingYear); setChoosing(true); }}>Choose a new career</Button>
                 </div>
               </div>
-            ) : <Button type="button" size="lg" variant="ghost" className="px-3" onClick={() => setConfirm(true)}>Start over</Button>}
+            ) : <Button type="button" size="lg" variant="ghost" className="px-3" onClick={() => setConfirm(true)}>Start over</Button>)}
           </>
         )}
 
