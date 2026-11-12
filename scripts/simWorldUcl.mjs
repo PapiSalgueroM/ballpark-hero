@@ -1104,8 +1104,15 @@ async function customExitProbe() {
  */
 async function holderSection() {
   if (!hasE5()) { console.log('  5 the holder: not in this tree (step E5 not built)'); return; }
-  const head = await engineOf(ROOT, 'holder', { edits: careerEdits() }, cannot);
-  const ref = await engineOf(ROOT, 'holder-off', { edits: [HOLDER_EDIT] }, cannot);
+  /* This section isolates the holder route into next season. Both arms use the
+     original award read; the watched final award has its own played-season test. */
+  const awardBeforeRollover = {
+    file: CM,
+    from: '    const uclWinner = uclHolderOf(state);',
+    to: "    const uclWinner = state.uclBracket?.find(t => t.round === 'F')?.winner ?? null;",
+  };
+  const head = await engineOf(ROOT, 'holder', { edits: [...careerEdits(), awardBeforeRollover] }, cannot);
+  const ref = await engineOf(ROOT, 'holder-off', { edits: [HOLDER_EDIT, awardBeforeRollover] }, cannot);
   if (careerEdits().length) changed = true;
   const fleet = pickFleet(await head.fresh(), 'watchers', cannot).filter(f => f.era === 'now');
   let rollovers = 0, withWinner = 0, moved = 0, already = 0, reordered = 0, compared = 0, skipped = 0;
