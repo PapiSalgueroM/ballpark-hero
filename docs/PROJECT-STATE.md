@@ -1,3 +1,11 @@
+## 2026-11-12: NRL Manager fit lineup preview
+
+Before a club match, Squad can suggest healthy starters using the same fitness adjustment as the match engine. Players cover their own positions first. Apply keeps eligible reserves in order and keeps the selected goal kicker if they still start.
+
+The preview reads the current matchday choices. Apply checks the preview again so a decision made for an older round or lineup cannot override the current picks. Focused tests cover fitness, ties, injuries, utility cover, the bench, goal kicker and unavailable match phases.
+
+Across 80 seasons, 2,442 previews left all 17,724 fixture results, save bytes and random draws exact against the prior engine. Another run applied 666 suggestions, with 236 applied while players were injured, 222 exact reloads and 127 matching Quick Sim and Live results.
+
 ## 2026-11-12: NRL Manager career record
 
 Season review rolls up the completed seasons into regular-season results and win rate, finals trips, minor premierships, premierships and the best ladder finish. The club breakdown puts returning spells under the same club. A tied best finish shows the earliest year it happened.

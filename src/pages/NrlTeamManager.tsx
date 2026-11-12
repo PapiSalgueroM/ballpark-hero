@@ -13,7 +13,7 @@ import { useArrivalTop } from '@/hooks/useArrivalTop';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { useSaveFenceWatch } from '@/hooks/useSaveFenceWatch';
 import {
-  nrlBench, nrlHalftimeInterchanges, nrlInjuries, nrlLadder, nrlNextRound, nrlStarterOptions, NRL_BENCH_SIZE, NRL_COACHING_BONUS,
+  nrlBench, nrlFitLineup, nrlHalftimeInterchanges, nrlInjuries, nrlLadder, nrlNextRound, nrlStarterOptions, NRL_BENCH_SIZE, NRL_COACHING_BONUS,
   NRL_MAX_BENCH_USED, NRL_ROLES, NRL_SAVE_KEY,
   type NrlAction, type NrlCoachRole, type NrlLiveHalf, type NrlManagerState, type NrlMatchResult, type NrlTactic,
 } from '@/lib/nrlManager';
@@ -439,10 +439,41 @@ function Squad({ season, onAction, disabled }: {
   const tryLeaders = nrlTryLeaders(leaders);
   const unavailable = season.squad.filter(player => injuries.has(player.id));
   const reserves = season.squad.filter(player => !starters.has(player.id) && !injuries.has(player.id));
+  const proposal = disabled ? null : nrlFitLineup(season);
+  const nameOf = (id: string) => season.squad.find(player => player.id === id)?.name;
   return (
     <section className="rounded-xl border border-border bg-card p-4" aria-labelledby="nrl-squad">
       <h2 id="nrl-squad" className="font-display text-lg font-bold">Starting 13</h2>
       <p className="mt-1 text-sm text-muted-foreground">Players and ratings are fictional. Choose a fit starter for each position.</p>
+      {proposal && (
+        <details className="group mt-3 rounded-lg border border-border bg-background px-3" data-nrl-fit-lineup>
+          <summary className="flex min-h-11 cursor-pointer items-center justify-between gap-2 rounded-md text-sm font-bold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
+            Suggest a fit lineup<ChevronDown size={16} aria-hidden="true" className="shrink-0 group-open:rotate-180" />
+          </summary>
+          <div className="pb-3 text-sm">
+            {proposal.changes.length > 0 ? (
+              <>
+                <p className="text-muted-foreground">Picks use each player’s position, rating and match fitness.</p>
+                <ul className="mt-2 divide-y divide-border">
+                  {proposal.changes.map(({ role, fromId, toId }) => (
+                    <li key={role} className="py-1">
+                      <p className="font-semibold">{role}</p>
+                      <p className="text-muted-foreground">{nameOf(fromId)} → {nameOf(toId)}</p>
+                    </li>
+                  ))}
+                </ul>
+                {proposal.next.kickerId && proposal.next.kickerId !== season.kickerId && (
+                  <p className="mt-2 text-muted-foreground">Goal kicker changes to {nameOf(proposal.next.kickerId)}.</p>
+                )}
+                <Button type="button" size="lg" variant="outline" className="mt-2 w-full px-3"
+                  onClick={() => onAction({ type: 'applyFitLineup', previewKey: proposal.key })}>
+                  Apply fit lineup
+                </Button>
+              </>
+            ) : <p className="text-muted-foreground">Your current starters already match the suggestion.</p>}
+          </div>
+        </details>
+      )}
       {season.injuryTracking ? (
         <section className="mt-4 rounded-lg border border-border bg-background p-3" aria-labelledby="nrl-availability" data-nrl-availability>
           <h3 id="nrl-availability" className="text-sm font-semibold">Availability</h3>
