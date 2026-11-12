@@ -6,7 +6,7 @@ import { ResultScreen } from '@/components/game/ResultScreen';
 import { HowToPlayPopover } from '@/components/game/HowToPlayPopover';
 import { GameNav } from '@/components/game/GameNav';
 import PlayerAutocomplete from '@/components/game/PlayerAutocomplete';
-import { normalizeName, type PlayerEntity } from '@/lib/playerSearch';
+import { normalizeName, SOCCER_MARKET_VALUE_SOURCE, type PlayerEntity } from '@/lib/playerSearch';
 import AdBanner from '@/components/ads/AdBanner';
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
@@ -355,8 +355,9 @@ const RarityRound = () => {
                   {modeEmoji} You're in {modeLabel}. {objectiveLine(rarityMode)}
                 </p>
                 <p className="text-muted-foreground">
-                  Each round shows a category, like "Name a Ballon d'Or winner." Pick any real, valid
-                  answer using the search box. You cannot submit a name that doesn't fit the category.
+                  Each round shows a category, like "Name a Ballon d'Or winner." Choose an answer from
+                  the search results. Club, nationality and position rounds use our market-value archive,
+                  which is missing some historical players.
                 </p>
               </section>
               {/* The two ends of this example were checked against the live
@@ -512,6 +513,9 @@ const RarityRound = () => {
                   onSelect={handleSelect}
                   searchOptions={{ source: currentCategory.sourceConfig, minChars: 2, limit: 8 }}
                   placeholder="Search for a player..."
+                  emptyText={currentCategory.sourceConfig.table === SOCCER_MARKET_VALUE_SOURCE.table
+                    ? 'No players found in this archive. Some historical players are missing.'
+                    : undefined}
                   validateOnly
                   autoFocus
                 />
