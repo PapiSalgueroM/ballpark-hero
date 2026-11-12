@@ -1,3 +1,9 @@
+## 2026-11-12 NFL My Career tight end scoring
+
+New tight end seasons limit receiving touchdowns to catches. The paired compiled 390px Chicago replay saved 17 games, zero catches and zero receiving yards in both builds. The original saved one receiving touchdown and Week by week refused the season. The candidate saved zero and opened kickoff. The 26 random calls and all other save bytes matched, including 12 previous seasons and cold reload. Archived lines retain their saved stats.
+
+The focused coverage includes the 16-game schedule, a backup and an ordinary 47-catch, 523-yard, eight-touchdown control. The draft is based on main 56d8708c7.
+
 ## 2026-11-07: Club Manager historical roster counts live
 
 [PR #532](https://github.com/PapiSalgueroM/ballpark-hero/pull/532) published from main `c3b5ca4afaf9b4dadcd748f340e8e8e3e4a1a1dd`, App tree `133fcd3d26a4d237178e5c7efee723048da0aef2`, Lovable deployment `510b1df1-2172-42c0-90f9-d9f9c997b840`.
