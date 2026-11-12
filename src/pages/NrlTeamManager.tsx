@@ -23,6 +23,7 @@ import { saveFence } from '@/lib/saveFence';
 
 const SLUG = 'nrl-team-manager';
 const YEARS = [2026, 2027] as const;
+const goldenPointMethods = { tries: 'a try', penalties: 'a penalty goal', longFieldGoals: 'a two-point field goal', fieldGoals: 'a field goal' };
 const PANELS = [
   { id: 'match', label: 'Match centre', Icon: Radio },
   { id: 'squad', label: 'Squad', Icon: ClipboardList },
@@ -247,6 +248,7 @@ function MatchCentre({ career, onAction, onReview, disabled, showLiveResult }: {
   const latestRound = season.results.at(-1)?.round;
   const latest = latestRound === undefined ? [] : season.results.filter(result => result.round === latestRound);
   const lastMatch = latest.find(result => result.homeId === clubId || result.awayId === clubId);
+  const goldenPoint = lastMatch?.goldenPoint;
   const usedReserves = lastMatch?.benchUsed?.map(id => season.squad.find(player => player.id === id)?.name).filter(Boolean) ?? [];
   const latestScorers = lastMatch?.playerScoring?.lines ?? [];
   const latestInjury = lastMatch?.injury;
@@ -267,6 +269,12 @@ function MatchCentre({ career, onAction, onReview, disabled, showLiveResult }: {
       <p className="mt-1 text-sm text-muted-foreground" role="status" data-nrl-result>
         {lastMatch ? `${scoreLine(lastMatch, year)}${lastMatch.extraTime ? ' after extra time' : ''}` : 'Your club did not play this round.'}
       </p>
+      {goldenPoint && (
+        <p className="mt-2 text-sm text-muted-foreground" data-nrl-golden-point>
+          {goldenPoint === 'draw' ? 'Golden point ended scoreless after two five-minute periods.'
+            : `${shortName(year, lastMatch.homeScore > lastMatch.awayScore ? lastMatch.homeId : lastMatch.awayId)} won with ${goldenPointMethods[goldenPoint.score]} in the ${goldenPoint.period === 1 ? 'first' : 'second'} five-minute period of golden point.`}
+        </p>
+      )}
       {usedReserves.length > 0 && <div className="mt-3 text-sm" data-nrl-interchange>
         <h4 className="font-semibold">Interchange used</h4>
         <p className="text-muted-foreground">{usedReserves.join(", ")}</p>
