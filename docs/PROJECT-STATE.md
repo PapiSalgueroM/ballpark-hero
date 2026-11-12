@@ -1,3 +1,9 @@
+## 2026-11-11 Wonderkid Factory Showcase Day save draft
+
+Showcase Day now saves its 25-second boost and 150-second cooldown before starting or counting a session. A refused save leaves Showcase ready and shows the existing academy retry notice. The same path serves Wonderkid Factory and Stadium Tycoon's Academy. This draft builds on PR #647.
+
+Both original 390px views counted a completion and displayed x3 training even though the refused save still had zero boost. Both fixed views kept the old bytes and recorded nothing until retry. A successful retry recorded one completion and the other view restored the same 1,128 bytes as an uninterrupted start.
+
 ## 2026-11-11 Wonderkid Factory facility purchase saves
 
 Coaching, Scouting, Dorms and Agent upgrades now save the new level and cash together in Wonderkid Factory and Stadium Tycoon's Academy. If storage refuses the write, the original price and balance remain and a notice beside the upgrade explains how to retry.

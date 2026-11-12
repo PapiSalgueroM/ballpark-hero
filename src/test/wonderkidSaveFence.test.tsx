@@ -1,4 +1,4 @@
-import './dailyReload/mocks';
+import { recordCompletion } from './dailyReload/mocks';
 import { act, cleanup, fireEvent, render, within } from '@testing-library/react';
 import { afterEach, beforeEach, expect, it, vi } from 'vitest';
 import { HelmetProvider } from 'react-helmet-async';
@@ -9,7 +9,7 @@ import { fenceKeyOf } from '@/lib/saveFence';
 import { BOOTS } from '@/lib/soccerCareerAppearance';
 import { newTycoon, serializeTycoon, TYCOON_SAVE_KEY } from '@/lib/stadiumTycoon';
 import { creditFullTimes, newLedger, REWARDS_KEY } from '@/lib/tycoonRewards';
-import { deserialize, makeProspectInBand, newFactory, PACKS, salePrice, SAVE_KEY, serialize } from '@/lib/wonderkidFactory';
+import { deserialize, makeProspectInBand, newFactory, PACKS, salePrice, SAVE_KEY, serialize, startShowcase } from '@/lib/wonderkidFactory';
 import StadiumTycoon from '@/pages/StadiumTycoon';
 import WonderkidFactory from '@/pages/WonderkidFactory';
 
@@ -211,4 +211,40 @@ it.each([false, true])('keeps a facility purchase pending until the academy can 
   expect(await restoredAcademy.findByText('Level 1', {}, { timeout: 5_000 })).toBeVisible();
   expect(restoredAcademy.getByText('$55')).toBeVisible();
   expect(save()).toBe(committed);
+}, 25_000);
+
+it.each([false, true])('starts Showcase only after storage accepts it (Stadium: %s)', async stadium => {
+  recordCompletion.mockClear();
+  const view = await openDoor(stadium);
+  const academy = within(view.container);
+  const ready = academy.getByRole('button', { name: /SHOWCASE DAY READY/ });
+  const before = save();
+  const expected = deserialize(before, now)!;
+  const nativeWrite = Storage.prototype.setItem;
+  const fault = vi.spyOn(Storage.prototype, 'setItem').mockImplementation(function (this: Storage, key, value) {
+    if (key === SAVE_KEY) throw new DOMException('Controlled academy save refusal', 'QuotaExceededError');
+    nativeWrite.call(this, key, value);
+  });
+
+  fireEvent.click(ready);
+  expect(ready).toBeEnabled();
+  expect(ready).toHaveAccessibleName(/SHOWCASE DAY READY/);
+  expect(academy.getByText(/The academy could not save that change/)).toBeVisible();
+  expect(save()).toBe(before);
+  expect(recordCompletion).not.toHaveBeenCalled();
+
+  fault.mockRestore();
+  fireEvent.click(ready);
+  expect(ready).toBeDisabled();
+  expect(ready).toHaveAccessibleName(/SHOWCASE DAY: training x3 \(25s\)/);
+  expect(academy.queryByText(/The academy could not save that change/)).toBeNull();
+  expect(startShowcase(expected)).toBe(true);
+  expect(save()).toBe(serialize(expected));
+  expect(recordCompletion).toHaveBeenCalledExactlyOnceWith('/wonderkid-factory');
+
+  view.unmount();
+  const restored = await openDoor(!stadium);
+  expect(within(restored.container).getByRole('button', { name: /SHOWCASE DAY: training x3 \(25s\)/ })).toBeDisabled();
+  expect(save()).toBe(serialize(expected));
+  expect(recordCompletion).toHaveBeenCalledTimes(1);
 }, 25_000);

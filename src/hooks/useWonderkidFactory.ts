@@ -197,12 +197,12 @@ export function useWonderkidFactory() {
 
   const doShowcase = useCallback(() => {
     if (checkMoved()) return;
-    markSessionPlay();
-    if (startShowcase(stateRef.current!)) {
+    const next = { ...stateRef.current! };
+    if (startShowcase(next) && commitAcademy(next)) {
+      markSessionPlay();
       pushFloater('🎪 showcase day: training x3', 'win');
-      bump();
     }
-  }, [bump, checkMoved, markSessionPlay, pushFloater]);
+  }, [checkMoved, commitAcademy, markSessionPlay, pushFloater]);
 
   const doMoveUp = useCallback(() => {
     if (checkMoved()) return;
