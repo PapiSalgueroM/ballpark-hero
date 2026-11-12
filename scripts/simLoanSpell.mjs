@@ -22,7 +22,7 @@
  *     rots on the bench. A ends up better AND with far more football played.
  *  5. OLD SAVES. A state with neither loan field runs exactly as before:
  *     repairCareer maps absent to null and a full season advances clean.
- *  6. THE WIRING. All five window entries go through enterTransferWindow,
+ *  6. THE WIRING. All six window entries go through enterTransferWindow,
  *     and the screen carries the loan copy it claims to.
  *
  * NEGATIVE CONTROL: LOAN_CONTROL=shut closes the loan market in a copy of the
@@ -405,8 +405,9 @@ console.log("5) a save from before this round runs exactly as before");
 console.log("6) the wiring and the words");
 {
   const eng = fs.readFileSync(path.join(ROOT, "src/lib/soccerCareerEngine.ts"), "utf8");
-  const entries = eng.split("enterTransferWindow(s, clubs);").length - 1;
-  if (entries !== 5) fail(`expected all five window entries through enterTransferWindow, found ${entries}`);
+  const code = eng.replace(/\/\*[\s\S]*?\*\/|\/\/[^\r\n]*/g, "");
+  const entries = code.match(/^[ \t]*enterTransferWindow\(s, clubs\);\r?$/gm)?.length ?? 0;
+  if (entries !== 6) fail(`expected all six window entries through enterTransferWindow, found ${entries}`);
   const page = fs.readFileSync(path.join(ROOT, "src/pages/SoccerCareer.tsx"), "utf8");
   if (!page.includes("The loan window is open")) fail("the loan window copy is missing from the screen");
   if (!page.includes("Go on loan")) fail("no loan button on the screen");
@@ -416,7 +417,7 @@ console.log("6) the wiring and the words");
     const txt = fs.readFileSync(path.join(ROOT, f), "utf8");
     if (/[–—]/.test(txt)) fail(`${f} carries an em or en dash`);
   }
-  console.log("   five entries, the copy, the button, the record tag and the shared table all present");
+  console.log("   six entries, the copy, the button, the record tag and the shared table all present");
 }
 
 console.log("");

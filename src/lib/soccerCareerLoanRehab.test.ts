@@ -58,7 +58,7 @@ it('returns the injured loanee to the parent before the next season', () => {
     .toEqual(['Arsenal', 'England', 1, 'Premier League', '#EF0107']);
   expect(back.seasons).toEqual(injury.seasons);
   expect([back.age, back.weeklyWage, back.contractYearsLeft, back.pace, back.physical, back.netWorth])
-    .toEqual([injury.age, injury.weeklyWage, injury.contractYearsLeft, injury.pace - 2, injury.physical - 1, injury.netWorth]);
+    .toEqual([injury.age, injury.weeklyWage, injury.contractYearsLeft - 1, injury.pace - 2, injury.physical - 1, injury.netWorth]);
   expect(back.seriousInjuries?.at(-1)).toMatchObject({ year: 2025, path: 'plan', setback: false });
   expect(back.events.filter(line => line.includes('Loan over. Back at Arsenal'))).toHaveLength(1);
   expect(rehabDraws).not.toHaveBeenCalled();
@@ -106,7 +106,25 @@ it('leaves a home-club rehab at home with its original recovery', () => {
   expect([back.phase, back.currentClub, back.loan]).toEqual(['playing', 'Arsenal', null]);
   expect(back.seasons.at(-1)).toMatchObject({ year: 2025, club: 'Arsenal', apps: 6, injurySevere: true });
   expect([back.age, back.weeklyWage, back.contractYearsLeft, back.pace, back.physical, back.morale])
-    .toEqual([injury.age, injury.weeklyWage, injury.contractYearsLeft, injury.pace - 2, injury.physical - 1, injury.morale]);
+    .toEqual([injury.age, injury.weeklyWage, injury.contractYearsLeft - 1, injury.pace - 2, injury.physical - 1, injury.morale]);
   expect(back.events.some(line => line.includes('Loan over'))).toBe(false);
   expect(draws).not.toHaveBeenCalled();
+});
+
+it.each(['current', 'legacy'] as const)('opens the market when rehab ends a final contract year from a %s save', shape => {
+  const home = { ...stayAtClub(firstWindow()), contractYearsLeft: 1 };
+  seed(6);
+  const injury = advanceProSeason(home, clubs);
+  expect(injury.phase).toBe('rehab_choice');
+  expect(injury.contractYearsLeft).toBe(1);
+  const saved = shape === 'current' ? injury : { ...home, age: injury.age, phase: injury.phase, pendingRehab: injury.pendingRehab };
+  seed(123);
+  const back = applyRehabChoice(JSON.parse(JSON.stringify(saved)), 1, clubs);
+
+  expect(back.contractYearsLeft).toBe(0);
+  expect(back.phase).toBe('transfer_window');
+  expect(back.transferSituation).not.toBeNull();
+  expect(back.seasons.filter(row => row.year === 2025)).toHaveLength(1);
+  expect(back.seasons.at(-1)).toMatchObject({ year: 2025, club: 'Arsenal', apps: shape === 'current' ? 6 : 0, injurySevere: true });
+  expect(applyRehabChoice(back, 1, clubs)).toBe(back);
 });
