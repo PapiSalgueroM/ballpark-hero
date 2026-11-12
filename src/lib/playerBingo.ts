@@ -142,6 +142,7 @@ export interface BingoPlayer {
   value: number; // market value in USD from the most recent row
   age: number; // age on the most recent row
   year: number; // year of the row we kept
+  birthYear?: number; // exact squad date when it agrees with the market row
 }
 
 export interface BingoData {
@@ -487,17 +488,43 @@ const WORLD_CUP_WINNERS_2010_2026: Record<number, string> = {
 
 const GABRIEL_WORLD_CUP_KEY = 'gabriel|brazil|centre-back';
 
-/** Normalized name sets from World Cup squads (2010 and later), paged. */
-async function fetchWorldCupSets(signal: AbortSignal): Promise<{ all: Set<string>; y2022: Set<string>; winners: Set<string> }> {
+function bingoBirthKey(name: string, country: string): string {
+  return name && country ? name + '\0' + country : '';
+}
+
+function isCalendarDate(value: unknown): value is string {
+  if (typeof value !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(value)) return false;
+  const time = Date.parse(value + 'T00:00:00Z');
+  return Number.isFinite(time) && new Date(time).toISOString().slice(0, 10) === value;
+}
+
+function applyBingoBirthYears(pool: BingoPlayer[], birthDates: Map<string, string | null>): void {
+  const players = new Map<string, BingoPlayer | null>();
+  for (const player of pool) {
+    const key = bingoBirthKey(normalizeName(player.name), primaryNationality(player.nationality));
+    if (key) players.set(key, players.has(key) ? null : player);
+  }
+  for (const [key, player] of players) {
+    const date = birthDates.get(key);
+    if (!player || !date || !Number.isInteger(player.age) || !Number.isInteger(player.year) || player.year <= 0) continue;
+    const year = Number(date.slice(0, 4));
+    const rowYearMinusAge = player.year - player.age;
+    if (year === rowYearMinusAge - 1 || year === rowYearMinusAge) player.birthYear = year;
+  }
+}
+
+/** Normalized name sets and exact birth dates from World Cup squads (2010 and later), paged. */
+async function fetchWorldCupSets(signal: AbortSignal): Promise<{ all: Set<string>; y2022: Set<string>; winners: Set<string>; birthDates: Map<string, string | null> }> {
   const all = new Set<string>();
   const y2022 = new Set<string>();
   const winners = new Set<string>();
+  const birthDates = new Map<string, string | null>();
   let from = 0;
   for (let page = 0; page < WC_MAX_PAGES; page++) {
     checkBingoLoad(signal);
     const { data, error } = await supabase
       .from('world_cup_players')
-      .select('player_name, world_cup_year, nationality')
+      .select('player_name, world_cup_year, nationality, date_of_birth')
       .gte('world_cup_year', WC_MIN_YEAR)
       .order('id', { ascending: true })
       .range(from, from + WC_PAGE - 1)
@@ -506,6 +533,13 @@ async function fetchWorldCupSets(signal: AbortSignal): Promise<{ all: Set<string
     for (const r of data ?? []) {
       const key = normalizeName(r.player_name ?? '');
       if (!key) continue;
+      const birthKey = bingoBirthKey(key, normalizeName(r.nationality ?? ''));
+      const date = r.date_of_birth;
+      if (birthKey && isCalendarDate(date)) {
+        const previous = birthDates.get(birthKey);
+        // Conflicting dates stay ambiguous even when only one fits the market row.
+        if (previous !== date) birthDates.set(birthKey, previous === undefined ? date : null);
+      }
       const keys = [key];
       if (key === 'andy robertson' && normalizeName(r.nationality ?? '') === 'scotland') {
         keys.push('andrew robertson');
@@ -525,7 +559,7 @@ async function fetchWorldCupSets(signal: AbortSignal): Promise<{ all: Set<string
     if (!data || data.length < WC_PAGE) break;
     from += WC_PAGE;
   }
-  return { all, y2022, winners };
+  return { all, y2022, winners, birthDates };
 }
 
 /** Normalized names of men's Ballon d'Or winners (rank 1 rows, or unranked winner rows). */
@@ -562,6 +596,7 @@ export async function fetchBingoData(signal?: AbortSignal): Promise<BingoData | 
     checkBingoLoad(controller.signal);
     const { clubHistory, clubYears, seasonStats } = await fetchClubHistoryAndStats(pool, controller);
     checkBingoLoad(controller.signal);
+    applyBingoBirthYears(pool, wc.birthDates);
     // Every player at least carries their current club, even if a history page fell short.
     for (const p of pool) {
       const key = clubKey(p.club);
@@ -756,13 +791,11 @@ function withSupport(data: BingoData, raw: RawCriterion): BingoCriterion {
   return { ...raw, support };
 }
 
-/** True if any season row for this player satisfies the given stat predicate. */
-/* Release BS fix: the table's age is his age on 1 January of the row's year and is never moved on,
-   so an age band goes stale as birthdays pass (Haaland read 25 in October 2026). The age tiles band
-   on birth year instead, the 1 January rule the UCL check uses: born in year - age - 1. */
+/* Keep the market row's January 1 estimate when a squad birth date cannot confirm the year. */
 function bornYear(p: BingoPlayer): number {
-  return p.age > 0 && p.year > 0 ? p.year - p.age - 1 : NaN;
+  return p.birthYear ?? (p.age > 0 && p.year > 0 ? p.year - p.age - 1 : NaN);
 }
+/** True if any season row for this player satisfies the given stat predicate. */
 function anySeasonMatches(data: BingoData, p: BingoPlayer, pred: (s: SeasonStat) => boolean): boolean {
   const stats = data.seasonStats.get(p.name);
   if (!stats) return false;

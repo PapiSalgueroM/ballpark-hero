@@ -175,8 +175,8 @@ describe('Player Bingo Gabriel World Cup identity', () => {
     expect(data.worldCupAll.size).toBe(1001);
     const queries = transport.queries.filter(query => query.table === 'world_cup_players');
     expect(queries.map(query => query.calls.filter(([method]) => method !== 'abortSignal'))).toEqual([
-      [['select', ['player_name, world_cup_year, nationality']], ['gte', ['world_cup_year', 2010]], ['order', ['id', { ascending: true }]], ['range', [0, 999]]],
-      [['select', ['player_name, world_cup_year, nationality']], ['gte', ['world_cup_year', 2010]], ['order', ['id', { ascending: true }]], ['range', [1000, 1999]]],
+      [['select', ['player_name, world_cup_year, nationality, date_of_birth']], ['gte', ['world_cup_year', 2010]], ['order', ['id', { ascending: true }]], ['range', [0, 999]]],
+      [['select', ['player_name, world_cup_year, nationality, date_of_birth']], ['gte', ['world_cup_year', 2010]], ['order', ['id', { ascending: true }]], ['range', [1000, 1999]]],
     ]);
     expect(queries.every(query => query.signal instanceof AbortSignal && !query.signal.aborted)).toBe(true);
   });
