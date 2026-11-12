@@ -128,7 +128,9 @@ try {
     await turn();
   });
 
-  console.log(JSON.stringify({ snapshots: checked, boot, rows, removed, styles, translated, classes, detachedScans, lateScans }));
+  console.log('Snapshot watchers match the template in ' + checked + ' saved pages.');
+  console.log('Startup and live-row scan counts', JSON.stringify({ boot, rows, removed }));
+  console.log('Other mutation scan counts', JSON.stringify({ styles, translated, classes, detachedScans, lateScans }));
   assert.equal(rows.whole, 0, 'Replacing 120 live rows never scans the full document');
   assert.equal(boot.whole, 2, 'DOMContentLoaded and load keep their document sweeps');
   assert.deepEqual(rows, { whole: 0, subtree: 120, single: 120 });
@@ -136,6 +138,7 @@ try {
   assert.deepEqual(classes, { whole: 0, subtree: 0, single: 120 });
   assert.deepEqual(lateScans, { whole: 0, subtree: 0, single: 3 });
   assert(late.every(element => !element.isConnected), 'Late id, class and href markers are removed');
+  console.log('Inserted and late-marked badges were removed. Ordinary and detached nodes stayed in place.');
   console.log('simEditorBadge: targeted mutations, exact editor badge policy, and snapshot copies green.');
 } finally {
   window.close();
