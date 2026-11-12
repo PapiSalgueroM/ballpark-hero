@@ -56,14 +56,19 @@ const inlineSnapshotAssets = (root: string): Plugin => {
   generateBundle(_options, bundle) {
     const routes = [
       { source: "/src/pages/SoccerCareerEntry.tsx", paths: ["soccer-career"] },
+      { source: "/src/pages/ClubManagerEntry.tsx", paths: ["club-manager"] },
+      { source: "/src/pages/NbaMyCareer.tsx", paths: ["nba-my-career"] },
       { source: "/src/pages/SportHub.tsx", paths: ["soccer", "pro-basketball"] },
     ];
     const deferredModules = [
       "/src/pages/SoccerCareer.tsx",
       "/src/lib/soccerCareerEngine.ts",
       "/src/lib/clubManager.ts",
+      "/src/pages/ClubManager.tsx",
       "/src/pages/NbaMyCareer.tsx",
+      "/src/components/nba-my-career/NbaMyCareerBoard.tsx",
       "/src/components/us-career/UsCareerBoard.tsx",
+      "/src/integrations/supabase/client.ts",
       "/src/components/layout/LiveTicker.tsx",
     ];
     routeHints.clear();
@@ -80,7 +85,7 @@ const inlineSnapshotAssets = (root: string): Plugin => {
         if (!chunk || chunk.type !== "chunk" || chunk.isEntry || files.has(file) || !file.startsWith("assets/")) return;
         const includesDeferredModule = chunk.moduleIds.some(id => {
           const module = id.replaceAll("\\", "/");
-          return deferredModules.some(deferred => module.endsWith(deferred));
+          return deferredModules.some(deferred => deferred !== source && module.endsWith(deferred));
         });
         if (includesDeferredModule) throw new Error(`The preload graph for ${paths.join(", ")} contains gameplay or the live ticker`);
         files.add(file);
