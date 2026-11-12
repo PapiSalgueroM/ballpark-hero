@@ -1,3 +1,9 @@
+## 2026-11-12 Footle Daily give up and shared saves
+
+Give up now checks the current Daily save before recording a loss. If another tab has finished or saved further, Footle takes that progress and keeps the existing guesses. An ordinary give up still records one loss and preserves the same save format.
+
+Mounted checks reproduced a two-guess win changing to an empty loss both before another tab received the storage event and while it was processing that event. The repair keeps both wins, preserves a guess made just before giving up, and passes the legacy Footle save comparison.
+
 ## 2026-11-07: Club Manager historical roster counts live
 
 [PR #532](https://github.com/PapiSalgueroM/ballpark-hero/pull/532) published from main `c3b5ca4afaf9b4dadcd748f340e8e8e3e4a1a1dd`, App tree `133fcd3d26a4d237178e5c7efee723048da0aef2`, Lovable deployment `510b1df1-2172-42c0-90f9-d9f9c997b840`.
