@@ -54,6 +54,15 @@ function writeSave(s: CcSave) {
   try { localStorage.setItem(SAVE_KEY, JSON.stringify(s)); } catch { /* private mode */ }
 }
 
+function latestSave(save: CcSave): CcSave {
+  const stored = loadSave();
+  const latest = stored.played >= save.played ? stored : save;
+  const daily = stored.daily && (!save.daily || stored.daily.date >= save.daily.date)
+    ? stored.daily
+    : save.daily;
+  return { ...latest, daily };
+}
+
 export function useContractChaos() {
   const [save, setSave] = useState<CcSave>(loadSave);
   const [mode, setMode] = useState<Mode>('daily');
@@ -70,6 +79,13 @@ export function useContractChaos() {
 
   const start = useCallback((m: Mode) => {
     const date = m === 'daily' ? getTodayET() : null;
+    if (date) {
+      const latest = latestSave(save);
+      if (latest.daily?.date === date) {
+        setSave(latest);
+        return;
+      }
+    }
     setMode(m);
     setDealDate(date);
     setDeal(buildDeal(date ? dailySeed(date) : freeSeed(Math.random())));
@@ -78,7 +94,7 @@ export function useContractChaos() {
     setOutcomes([]);
     setRevealed(0);
     setPhase('deal');
-  }, []);
+  }, [save]);
 
   const open = useCallback((i: number) => { setFocus(i); setPhase('offer'); }, []);
   const back = useCallback(() => setPhase('deal'), []);
@@ -92,14 +108,11 @@ export function useContractChaos() {
 
   const sign = useCallback((i: number) => {
     if (!deal || deal.offers[i]?.fa.gone) return;
-    const stored = loadSave();
-    const latest = stored.played >= save.played ? stored : save;
-    const daily = stored.daily && (!save.daily || stored.daily.date >= save.daily.date)
-      ? stored.daily
-      : save.daily;
+    const latest = latestSave(save);
+    const { daily } = latest;
     // Another tab may have signed while these offers were open.
     if (dealDate && daily && daily.date >= dealDate) {
-      setSave({ ...latest, daily });
+      setSave(latest);
       setPhase('menu');
       return;
     }
