@@ -380,6 +380,64 @@ try {
   await medical.close();
   console.log('Match centre at 390px: three saved form rows, and funded treatment turned the same four-round knock into two.');
 
+  const interchangeKickoff = createNrlCareer('broncos', 76);
+  const paused = reduceNrlCareer(interchangeKickoff, { type: 'startLive' });
+  const interchangeContext = await context(390);
+  await interchangeContext.addInitScript(({ key, raw }) => { if (!localStorage.getItem(key)) localStorage.setItem(key, raw); },
+    { key: SAVE_KEY, raw: JSON.stringify(paused) });
+  const { page: interchange, errors: interchangeErrors } = await open(interchangeContext);
+  const reserveId = 'nrl-broncos-2026-28';
+  const starterId = 'broncos-3-0';
+  const reserved = interchange.getByLabel('Reserve to finish the match');
+  assert.equal(await reserved.isVisible(), false);
+  await interchange.getByText('Keep a reserve on', { exact: true }).tap();
+  assert.equal(await reserved.inputValue(), '');
+  const halftimeScore = await interchange.locator('[data-nrl-halftime]').innerText();
+  const savedHalf = await save(interchange);
+  await reserved.selectOption(reserveId);
+  assert.match(await interchange.locator('[data-nrl-halftime-choice]').innerText(), /finishes the match.*stays off/);
+  assert.equal(await interchange.locator('[data-nrl-halftime]').innerText(), halftimeScore);
+  assert.equal(await save(interchange), savedHalf);
+  await fit(interchange);
+  await screenshot(interchange, 'nrl-halftime-keep-390.png');
+  await finishLive(interchange).tap();
+  const finished = await career(interchange);
+  assert.equal(finished.season.round, 2);
+  const keptOn = finished.season.results.find(match => match.halftimeInterchange);
+  assert.deepEqual(keptOn.halftimeInterchange, { starterId, reserveId });
+  assert(keptOn.homeScore > 0 && !keptOn.playerScoring.lines.some(line => line.playerId === starterId));
+  assert.match(await interchange.locator('[data-nrl-halftime-interchange]').innerText(), /about 53 minutes.*about 27 minutes/);
+  const finishedBytes = await save(interchange);
+  await interchange.reload({ waitUntil: 'domcontentloaded' });
+  await interchange.locator('[data-nrl-halftime-interchange]').waitFor();
+  assert.equal(await save(interchange), finishedBytes);
+  assert.deepEqual(interchangeErrors, []);
+  await interchangeContext.close();
+  console.log('Halftime at 390px: kept the named reserve on, credited no second-half score to the outgoing starter, and restored the full-time receipt.');
+
+  const halfbackBench = new Set(interchangeKickoff.season.bench);
+  const coverHalfback = player => halfbackBench.has(player.id) ? { ...player, role: 'Halfback' } : player;
+  const specialty = {
+    ...interchangeKickoff, players: interchangeKickoff.players.map(coverHalfback),
+    season: { ...interchangeKickoff.season, squad: interchangeKickoff.season.squad.map(coverHalfback) },
+  };
+  const blockedInterchange = await context(320);
+  await blockedInterchange.addInitScript(({ key, raw }) => { if (!localStorage.getItem(key)) localStorage.setItem(key, raw); },
+    { key: SAVE_KEY, raw: JSON.stringify(specialty) });
+  const { page: protection, errors: protectionErrors } = await open(blockedInterchange);
+  await protection.getByRole('button', { name: 'Play Live', exact: true }).tap();
+  await protection.getByText('The only rotating reserve covers the goal kicker’s position.', { exact: false }).waitFor();
+  assert.equal(await protection.getByLabel('Reserve to finish the match').count(), 0);
+  await fit(protection);
+  await screenshot(protection, 'nrl-halftime-no-eligible-320.png');
+  await finishLive(protection).tap();
+  const automatic = await career(protection);
+  assert.equal(automatic.season.round, 2);
+  assert(automatic.season.results.every(match => !match.halftimeInterchange));
+  assert.deepEqual(protectionErrors, []);
+  await blockedInterchange.close();
+  console.log('Halftime at 320px: explained the protected kicker, then finished with automatic rotation.');
+
   let old = createNrlSeason('bears', 717, 2027);
   for (let action = 0; action < 31; action++) old = reduceNrlSeason(old, { type: 'advance' });
   const oldContext = await context(390);

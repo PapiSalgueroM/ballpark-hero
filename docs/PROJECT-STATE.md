@@ -1,3 +1,13 @@
+## 2026-11-12: NRL Manager halftime interchange
+
+At half time, keep one same-position reserve already in the rotation on for the finish. The starter stays off, and the club uses the same bench participants. The designated kicker stays eligible. Full time records the pair with approximate regulation minutes. The closing lineup changes second-half scoring chances and shifts five fitness points of match load from the starter to the reserve.
+
+Quick Sim and automatic Live matched the previous engine across 80 seasons, 17,520 fixtures and 1,194 Keep-live comparisons. Across 240 named choices, the outgoing starter kept exactly their first-half scoring, including 36 positive credits. All 67 NRL tests passed.
+
+A career with 1,922 manual choices over 80 seasons, including finals, peaked at 331,621 save characters against the 550,000-character limit and restored exactly at eight checkpoints.
+
+The 390px touch flow preserved the halftime score, applied the named choice once and restored the receipt after reload. At 320px, the default Finish action stayed in view and a bench with only the kicker’s position showed why automatic rotation applied. App types, production build, the NRL browser suite, 15 built-site readers and 16 download caps passed.
+
 ## 2026-11-12 Club Manager severe match injuries draft
 
 A new Club Manager career or the next season of an existing one can draw an ACL tear or Achilles tendon rupture during a simulated match. The existing match-injury draw assigns 2% of injuries to these severe spells. ACL tears last 28 to 36 simulated weeks and Achilles ruptures last 18 to 30. The bands are game estimates based on a 225-day median to match return in the [UEFA ACL cohort](https://pubmed.ncbi.nlm.nih.gov/27034129/) and a 161-day average absence in the [UEFA Achilles cohort](https://pubmed.ncbi.nlm.nih.gov/23770660/).

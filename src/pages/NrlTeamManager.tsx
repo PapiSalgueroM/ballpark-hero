@@ -13,7 +13,7 @@ import { useArrivalTop } from '@/hooks/useArrivalTop';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { useSaveFenceWatch } from '@/hooks/useSaveFenceWatch';
 import {
-  nrlBench, nrlInjuries, nrlLadder, nrlNextRound, nrlStarterOptions, NRL_BENCH_SIZE, NRL_MAX_BENCH_USED, NRL_ROLES, NRL_SAVE_KEY,
+  nrlBench, nrlHalftimeInterchanges, nrlInjuries, nrlLadder, nrlNextRound, nrlStarterOptions, NRL_BENCH_SIZE, NRL_MAX_BENCH_USED, NRL_ROLES, NRL_SAVE_KEY,
   type NrlAction, type NrlLiveHalf, type NrlManagerState, type NrlMatchResult, type NrlTactic,
 } from '@/lib/nrlManager';
 import { createNrlCareer, nrlOppositionReport, readNrlCareerSave, reduceNrlCareer, type NrlCareerAction, type NrlCareerState } from '@/lib/nrlCareer';
@@ -107,13 +107,18 @@ function scoreLine(result: NrlMatchResult, year: number) {
   return `${shortName(year, result.homeId)} ${result.homeScore}–${result.awayScore} ${shortName(year, result.awayId)}`;
 }
 
-function LiveHalftime({ live, year, title, openingTactic, onAction, disabled }: {
-  live: NrlLiveHalf; year: number; title: string; openingTactic: NrlTactic;
+function LiveHalftime({ live, season, title, onAction, disabled }: {
+  live: NrlLiveHalf; season: NrlManagerState; title: string;
   onAction: (action: NrlAction) => void; disabled: boolean;
 }) {
+  const { year, tactic: openingTactic, squad } = season;
   const [tactic, setTactic] = useState(openingTactic);
+  const [reserveId, setReserveId] = useState('');
   const { fixture, homeScoring, awayScoring } = live;
   const sides = [[fixture.homeId, homeScoring], [fixture.awayId, awayScoring]] as const;
+  const options = nrlHalftimeInterchanges(season);
+  const chosen = options.find(option => option.reserveId === reserveId);
+  const name = (id: string) => squad.find(player => player.id === id)?.name;
   return (
     <section className="space-y-4" aria-labelledby="nrl-halftime">
       <div className="rounded-2xl border border-emerald-500/35 bg-emerald-950 p-4 text-emerald-50 sm:p-6">
@@ -145,8 +150,31 @@ function LiveHalftime({ live, year, title, openingTactic, onAction, disabled }: 
         </div>
         <p className="mt-2 text-sm text-muted-foreground">{tactics.find(option => option.id === tactic)?.description}</p>
       </div>
+      {options.length > 0 ? (
+        <details className="group rounded-xl border border-border bg-card px-4">
+          <summary className="flex min-h-11 cursor-pointer items-center justify-between gap-2 rounded-md font-bold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
+            <span>{chosen ? `${name(chosen.reserveId)} stays on` : 'Keep a reserve on'}</span>
+            <ChevronDown size={16} aria-hidden="true" className="shrink-0 group-open:rotate-180" />
+          </summary>
+          <div className="pb-4">
+            <label htmlFor="nrl-half-reserve" className="sr-only">Reserve to finish the match</label>
+            <select id="nrl-half-reserve" className="mt-2 min-h-11 w-full rounded-lg border border-input bg-background px-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              value={reserveId} disabled={disabled} onChange={event => setReserveId(event.target.value)}>
+              <option value="">Automatic rotation</option>
+              {options.map(option => <option key={option.reserveId} value={option.reserveId}>{name(option.reserveId)} · {option.role}</option>)}
+            </select>
+            <p className="mt-2 text-sm text-muted-foreground">Choose a reserve already in the rotation to finish the match. Their starter stays off.</p>
+            {chosen && <p className="mt-1 text-sm" data-nrl-halftime-choice>{name(chosen.reserveId)} finishes the match. {name(chosen.starterId)} stays off.</p>}
+          </div>
+        </details>
+      ) : (
+        <p className="rounded-xl border border-border bg-card p-3 text-sm text-muted-foreground">
+          The only rotating reserve covers the goal kicker’s position. Automatic rotation keeps the kicker available for the finish.
+        </p>
+      )}
       <Button type="button" size="lg" className="w-full" disabled={disabled}
-        onClick={() => onAction({ type: 'finishLive', year, round: fixture.round, tactic })}>
+        onClick={() => onAction({ type: 'finishLive', year, round: fixture.round, tactic,
+          interchange: chosen && { starterId: chosen.starterId, reserveId: chosen.reserveId } })}>
         Play second half <ArrowRight aria-hidden="true" />
       </Button>
     </section>
@@ -206,7 +234,7 @@ function MatchCentre({ career, onAction, onReview, disabled, showLiveResult }: {
   const next = nrlNextRound(season);
   const { clubId, year, phase, championId } = season;
   if (season.live) {
-    return <LiveHalftime live={season.live} year={year} title={next.title} openingTactic={season.tactic} onAction={onAction} disabled={disabled} />;
+    return <LiveHalftime live={season.live} season={season} title={next.title} onAction={onAction} disabled={disabled} />;
   }
   const club = shortName(year, clubId);
   const match = next.clubMatch;
@@ -219,6 +247,9 @@ function MatchCentre({ career, onAction, onReview, disabled, showLiveResult }: {
   const latestScorers = lastMatch?.playerScoring?.lines ?? [];
   const latestInjury = lastMatch?.injury;
   const injuredName = latestInjury && season.squad.find(player => player.id === latestInjury.playerId)?.name;
+  const interchange = lastMatch?.halftimeInterchange;
+  const finishingReserve = interchange && season.squad.find(player => player.id === interchange.reserveId)?.name;
+  const restedStarter = interchange && season.squad.find(player => player.id === interchange.starterId)?.name;
   const starterIds = new Set(Object.values(season.lineup));
   const fitness = Math.round(season.squad.reduce((sum, player) => sum + (starterIds.has(player.id) ? player.fitness : 0), 0) / NRL_ROLES.length);
   const title = phase === 'complete'
@@ -235,6 +266,9 @@ function MatchCentre({ career, onAction, onReview, disabled, showLiveResult }: {
       {usedReserves.length > 0 && <div className="mt-3 text-sm" data-nrl-interchange>
         <h4 className="font-semibold">Interchange used</h4>
         <p className="text-muted-foreground">{usedReserves.join(", ")}</p>
+        {finishingReserve && restedStarter && <p className="mt-1 text-muted-foreground" data-nrl-halftime-interchange>
+          {finishingReserve} finished the match. In regulation, they played about 53 minutes. {restedStarter} stayed off after half time and played about 27 minutes.
+        </p>}
       </div>}
       {latestScorers.length > 0 && (
         <div className="mt-3 text-sm" data-nrl-scorers>
@@ -594,7 +628,7 @@ export default function NrlTeamManager() {
               <li>A match knock can put a player out for up to four rounds. Check Availability in Squad. The countdown includes byes, and an available player fills the vacant spot.</li>
               <li>Buy medical upgrades with club cash in Finances. Upgrades shorten recovery from new knocks.</li>
               <li>Choose your goal kicker in Squad to credit conversions and penalty goals. Match centre shows your scorers.</li>
-              <li>Play Live shows the first half and lets you change the tactic for the second. Quick Sim settles the whole round in one action.</li>
+              <li>Play Live shows the first half. At half time, change tactics or keep a rotating reserve on to finish the match. Quick Sim settles the round in one action.</li>
               <li>Advance a round to simulate every fixture. A win or bye earns two ladder points, a draw earns one and a loss earns zero.</li>
               <li>The top eight make finals. The top four get a second chance if they lose their qualifying final. The last club standing wins the premiership.</li>
               <li>Scout a position in the Academy. The report arrives after you advance a round, and a promotion reserves a place next season.</li>
