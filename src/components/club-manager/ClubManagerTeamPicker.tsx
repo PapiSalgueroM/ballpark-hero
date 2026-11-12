@@ -22,7 +22,7 @@ type Props = {
   editing: boolean;
   historicalEra?: Pick<CMEra, 'id' | 'label'>;
   onPick: (name: string) => void;
-  onCreate: () => void;
+  onCreate?: () => void;
 };
 
 export default function ClubManagerTeamPicker({ rows, editing, historicalEra, onPick, onCreate }: Props) {
@@ -87,7 +87,7 @@ export default function ClubManagerTeamPicker({ rows, editing, historicalEra, on
         <div className="rounded-xl border border-dashed border-border p-3 text-[10px] text-muted-foreground">
           Creating your own club starts in the real world. Reset the world editor to found one.
         </div>
-      ) : (
+      ) : onCreate && (
       <button
         onClick={onCreate}
         className="rounded-xl border border-dashed border-primary/50 p-3 text-left transition-all bg-card hover:border-primary hover:bg-primary/5"

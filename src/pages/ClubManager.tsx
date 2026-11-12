@@ -8,7 +8,8 @@ import type { HubTab } from '@/hooks/useClubManager';
 import {
   TIER_INFO, clubDefFor, clubPreviewRating, careerLeagueOf, money,
   isAvailable, xiAverageRating, sortedTable,
-  NATIONS, REAL_LEAGUES, playableClubs, objectiveStatuses, CM_ROSTER_META, isPartialClub, ordinaryClubAllowed,
+  CLUB_MANAGER_START_NATIONS as NATIONS, CLUB_MANAGER_START_LEAGUES as REAL_LEAGUES,
+  playableClubs, objectiveStatuses, CM_ROSTER_META, isPartialClub, ordinaryClubAllowed, usesGeneratedOpeningSquad,
   isHistoricEra, eraLeaguesFor, eraPlayableClubs, boardWantLabel,
   developingPlayers, INTENSITY_INFO, FOCUS_INFO,
   brokenPromises, DEFAULT_ERA_ID, eraById, projectedXIAvg, CM_BASE_YEAR,
@@ -18,6 +19,7 @@ import {
 // Round 1035: the A-League Men's squads come from their own generated file.
 import { generatedLeagueCountClauses, generatedLeagueMonthClause } from '@/data/clubManagerWorldRosters';
 import { K_LEAGUE_2026, kLeagueMember } from '@/data/kLeague2026';
+import { J1_LEAGUE_2026 } from '@/data/j1League2026';
 import { FACILITY_IDS, facilitiesOf } from '@/lib/clubManagerFacilities';
 import { projectFinances } from '@/lib/clubManagerFinances';
 import { expiringDealsLine, inboxTile, kittyChange, leagueTileValue, recordLine } from '@/lib/clubManagerHubLines';
@@ -488,7 +490,9 @@ const ClubManager = ({ initialEra }: { initialEra?: string | null }) => {
         )}
         {pickStep === 'nation' && (
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 max-w-2xl mx-auto">
-            {NATIONS.filter(n => !historicPick || eraLeaguesFor(pickEra, n).length > 0).map(n => {
+            {NATIONS.filter(n => n.leagueIds.includes(J1_LEAGUE_2026.id)
+              ? pickEra === DEFAULT_ERA_ID && !editing
+              : !historicPick || eraLeaguesFor(pickEra, n).length > 0).map(n => {
               /* Round 146: in a historic era a nation offers its era leagues,
                  so 2010 England is the 20 club Premier League and the other
                  ten nations are simply not on the board. */
@@ -565,7 +569,7 @@ const ClubManager = ({ initialEra }: { initialEra?: string | null }) => {
                     <ChevronRight className="w-4 h-4 text-muted-foreground ml-auto shrink-0" />
                   </div>
                   <div className="text-[10px] text-muted-foreground mt-2 truncate">
-                    {lg.id === K_LEAGUE_2026.id ? 'Club options' : 'Strongest sides'}: {lgTeams.slice(0, 4).map(c => c.name).join(' · ')}
+                    {lg.id === K_LEAGUE_2026.id || lg.id === J1_LEAGUE_2026.id ? 'Club options' : 'Strongest sides'}: {lgTeams.slice(0, 4).map(c => c.name).join(' · ')}
                   </div>
                 </button>
               );
@@ -583,6 +587,7 @@ const ClubManager = ({ initialEra }: { initialEra?: string | null }) => {
               <ChevronLeft className="w-3.5 h-3.5" /> <FlagImg name={pickNation.name} size={14} /> {league.name}
             </button>
             {league.id === K_LEAGUE_2026.id && <p data-cm-kleague-access className="text-xs text-muted-foreground mb-3">The current K League 1 catalogue has {K_LEAGUE_2026.clubs.length} members; your world offers {teams.length} ordinary jobs here. {K_LEAGUE_2026.clubs.filter(c => !ordinaryClubAllowed(c.name)).map(c => c.name).join(', ')} remains in the league world as an opponent. Managing or joining the real club is not supported here yet.</p>}
+            {league.id === J1_LEAGUE_2026.id && <p data-cm-j1-access className="text-xs text-muted-foreground mb-3">Choose from all {teams.length} J1 clubs. Opening squads are generated and ratings and budgets are game estimates. The first season can use the verified 2026/27 fixture order on Club Manager's simulated calendar.</p>}
             {(() => {
               const rows = teams.map(c => {
                 const sel = g.pendingClub === c.name;
@@ -595,7 +600,7 @@ const ClubManager = ({ initialEra }: { initialEra?: string | null }) => {
                   tierEmoji: TIER_INFO[c.tier].emoji,
                   tierLabel: TIER_INFO[c.tier].label,
                   partial,
-                  ...(!historicPick && K_LEAGUE_2026.modelOnlyRoster && kLeagueMember(c.name) ? { modelOnlyRoster: true } : {}),
+                  ...(!historicPick && usesGeneratedOpeningSquad(c.name) ? { modelOnlyRoster: true } : {}),
                   rating: Math.round(projectedXIAvg(c.name, eraYearsOn, pickEra) ?? clubPreviewRating(c.name)),
                   budgetLabel: money(c.budget),
                   boardTitle: teamWants.get(c.name) ?? '',
@@ -608,11 +613,11 @@ const ClubManager = ({ initialEra }: { initialEra?: string | null }) => {
                   editing={editing}
                   historicalEra={historicPick ? era : undefined}
                   onPick={name => g.chooseClub(name, pickEra)}
-                  onCreate={() => { g.chooseClub(''); setPickStep('custom'); }}
+                  onCreate={league.id === J1_LEAGUE_2026.id ? undefined : () => { g.chooseClub(''); setPickStep('custom'); }}
                 /></ScreenLoading>
               );
             })()}
-            <p className="text-[9px] text-muted-foreground text-center mt-3">
+            {league.id !== J1_LEAGUE_2026.id && <p className="text-[9px] text-muted-foreground text-center mt-3">
               {historicPick ? (
                 <>{eraHonestyLine(era)}</>
               ) : (
@@ -621,7 +626,7 @@ const ClubManager = ({ initialEra }: { initialEra?: string | null }) => {
               {eraYearsOn > 0 && (
                 <> Starting {era.label}, so those squads have been aged {eraYearsOn} years: {eraHonestyLine(era)}</>
               )}
-            </p>
+            </p>}
 
             {/* Round 70: no scrolling to confirm. The confirm bar pins to the
                 bottom of the screen the moment a club is picked. */}
@@ -839,6 +844,7 @@ const ClubManager = ({ initialEra }: { initialEra?: string | null }) => {
   const cupAlive = cupName !== null && c.cupRound !== 'out' && c.cupRound !== 'won';
   const uclAlive = (c.uclGroup !== null && c.uclKoRound === null) || (!!c.uclKoRound && c.uclKoRound !== 'out' && c.uclKoRound !== 'won');
   const kLeagueModel = careerLeagueOf(c).id === K_LEAGUE_2026.id;
+  const j1Model = careerLeagueOf(c).id === J1_LEAGUE_2026.id;
 
   /* ---- Round 74: the rival viewer takes over the whole screen ---- */
   if (card) {
@@ -896,6 +902,7 @@ const ClubManager = ({ initialEra }: { initialEra?: string | null }) => {
         <div className={cn('flow-root', boardMeter(c).value > 0 && boardMeter(c).value < BOARD_EDGE ? 'min-h-[60px]' : 'min-h-[52px]')}><ScreenLoading compact><MetersStrip career={c} /></ScreenLoading></div>
       </header>
       {kLeagueModel && <p data-cm-kleague-model className="text-xs text-muted-foreground mb-4">K League 1 plays 22 simulated league games on the shared August to May calendar. The real 2026 league used 33 games, then 5 split games. The split, Korea Cup, AFC competitions and promotion/relegation are not played here.</p>}
+      {j1Model && <p data-cm-j1-model className="text-xs text-muted-foreground mb-4">J1 plays {c.calendar.filter(entry => entry.type === 'league').length} league games with generated opening squads and simulated dates and results. The Emperor's Cup, J.League Cup, AFC competitions and J2 promotion and relegation are outside this league model.</p>}
 
       <ScreenLoading><Tabs value={g.activeTab} onValueChange={(v) => g.setActiveTab(v as HubTab)}>
         <TabsList className="grid grid-cols-5 w-full mb-4">
@@ -1223,8 +1230,8 @@ const ClubManager = ({ initialEra }: { initialEra?: string | null }) => {
                   career={c}
                   onClubClick={setClubView}
                   cupTitle={kLeagueModel ? 'Korea Cup' : 'Domestic cup'}
-                  cupValue={kLeagueModel ? 'Not played' : cupName ?? cupSatOut ?? 'No domestic cup'}
-                  cupSub={kLeagueModel ? 'League-only model' : cupName === null ? (cupSatOut ? 'Not entered' : undefined) : cupAlive ? `Still alive. Next up: ${c.cupDraw[c.cupRound as CupRound] ?? 'to be drawn'}` : c.cupRound === 'won' ? 'Cup winners' : 'Knocked out'}
+                  cupValue={kLeagueModel || j1Model ? 'Not played' : cupName ?? cupSatOut ?? 'No domestic cup'}
+                  cupSub={kLeagueModel || j1Model ? 'League-only model' : cupName === null ? (cupSatOut ? 'Not entered' : undefined) : cupAlive ? `Still alive. Next up: ${c.cupDraw[c.cupRound as CupRound] ?? 'to be drawn'}` : c.cupRound === 'won' ? 'Cup winners' : 'Knocked out'}
                   cupLine={kLeagueModel ? <p data-cm-kleague-cup className="bg-card border border-border rounded-xl p-3 text-xs text-muted-foreground">The Korea Cup is not played here. This K League 1 season is a 22-game league simulation on the shared calendar. Its real 2026 split, AFC competitions and promotion/relegation are not played either.</p> : undefined}
                   /* Round 102 built this bracket; Round 312 mounted it. */
                   cupBracket={cupName === null ? undefined : <CupBracketCard career={c} onClubClick={setClubView} />}

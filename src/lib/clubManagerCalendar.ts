@@ -30,7 +30,7 @@ import {
   cupProgressRank, uclProgressRank, objectiveStatuses, openObjectives,
   /* Round 783: the mid season takeover an accepted application walks into. */
   startCareer, interimManagerName, refreshWorldRoster, worldSeedOf, livingWorldOf, customExitUclField, SAVE_CAPS,
-  clubAvailableInCareer, careerHasKLeagueWorld,
+  clubAvailableInCareer, careerHasKLeagueWorld, careerHasJ1World,
   /* Round 1335: the old season rules' switch, read by both handovers. */
   legacySeason,
   /* Round 1502: the watched Champions League across a move, and where its nights sit. */
@@ -993,6 +993,7 @@ export function joinClubNow(career: CareerState): CareerState | null {
     fresh = startCareer(club, eraId, undefined, career.manager, {
       yearsOn,
       kLeagueActive: careerHasKLeagueWorld(career),
+      j1Active: careerHasJ1World(career),
       uclField: career.uclField ? customExitUclField(career, career.uclField) : null,
       keepLeagueOverrides: true,
       ...(worldRosterView(departed) || worldSeedOf(departed) !== undefined
