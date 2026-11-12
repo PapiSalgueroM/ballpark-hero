@@ -278,7 +278,7 @@ export const CATEGORIES: GameCategory[] = [
     title: 'Rugby League',
     emoji: '🏉',
     games: [
-      { path: '/nrl-team-manager', label: 'NRL Team Manager', emoji: '🏉', description: 'Manage an NRL club across seasons. Pick your starting 13, recruit players and stay under the salary cap', addedOn: '2026-11-11', featured: true },
+      { path: '/nrl-team-manager', label: 'NRL Team Manager', emoji: '🏉', description: 'Manage an NRL club across seasons of Australian rugby league. Pick your starting 13, recruit players and stay under the salary cap', addedOn: '2026-11-11', featured: true },
     ],
   },
   {

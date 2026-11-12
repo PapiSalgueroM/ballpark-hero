@@ -11,11 +11,12 @@ afterEach(() => {
   vi.restoreAllMocks();
 });
 
-const ORIGINAL_LINKS = [
+const NAVIGATION_LINKS = [
   ['Home', '/'], ['Search Games', '/search'], ['Record Books', '/records'],
   ['Leaderboard', '/leaderboard'], ["What's New", '/whats-new'],
   ['Soccer', '/soccer'], ['NBA', '/pro-basketball'], ['NHL', '/hockey'],
   ['NFL', '/pro-football'], ['MLB', '/baseball'], ['College', '/college'],
+  ['Rugby League NRL Team Manager', '/nrl-team-manager'],
   ['About', '/about'], ['Contact', '/contact'], ['Privacy Policy', '/privacy'],
   ['Cookie Policy', '/cookie-policy'], ['Terms of Service', '/terms'],
   ['Accessibility', '/accessibility'],
@@ -75,8 +76,8 @@ function routeSnapshot() {
 function expectOriginalNavigation(dialog: HTMLElement) {
   const nav = within(dialog).getByRole('navigation', { name: 'Site navigation' });
   const links = within(nav).getAllByRole('link');
-  expect(links, 'MENU_FINDER_ORIGINAL_SEVENTEEN_LINKS').toHaveLength(17);
-  for (const [name, href] of ORIGINAL_LINKS) {
+  expect(links, 'MENU_FINDER_NAVIGATION_LINKS').toHaveLength(NAVIGATION_LINKS.length);
+  for (const [name, href] of NAVIGATION_LINKS) {
     const link = within(nav).getByRole('link', { name });
     expect(link, 'MENU_FINDER_ORIGINAL_HREF_' + href).toHaveAttribute('href', href);
     expect(link, 'MENU_FINDER_ORIGINAL_VISIBLE_' + href).toBeVisible();
@@ -133,6 +134,19 @@ describe('Menu game finder', () => {
     expectOriginalNavigation(dialog);
     expect(menu.queryByRole('region', { name: 'Game results' })?.querySelectorAll('a').length ?? 0,
       'MENU_FINDER_WHITESPACE_IS_BROWSE').toBe(0);
+  });
+
+  it('finds NRL Team Manager for Australian rugby league queries', async () => {
+    await menuHost();
+    const { dialog, field } = await openFinder();
+    for (const query of ['Australian rugby league', 'Australian rugby', 'rugby league', 'nrl']) {
+      fireEvent.change(field, { target: { value: query } });
+      expect(resultLinks(dialog, query).map(link => link.getAttribute('href')), query)
+        .toEqual(['/nrl-team-manager']);
+    }
+    fireEvent.change(field, { target: { value: 'aussie rules manager' } });
+    expect(resultLinks(dialog, 'aussie rules manager').map(link => link.getAttribute('href')))
+      .toEqual(['/aussie-rules-manager']);
   });
 
   it('ranks actual catalog games and updates results as query changes', async () => {
