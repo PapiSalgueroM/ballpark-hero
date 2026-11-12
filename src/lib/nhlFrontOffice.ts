@@ -359,6 +359,7 @@ export function simNhlRound(league: NhlLeague, myTeam: string, rng: () => number
   const abbrs = Object.keys(league.teams);
   const notes: string[] = [];
   let myW = 0, myL = 0, myOtl = 0;
+  for (const p of league.freeAgents) if (p.out > 0) p.out -= 1;
   for (const t of Object.values(league.teams)) {
     for (const p of t.players) {
       if (p.out > 0) p.out -= 1;
@@ -623,6 +624,7 @@ export function nhlOffseason(league: NhlLeague, rng: () => number, userTeam?: st
   const notes: string[] = [];
   /* Round 1559: read at the top, so the cut block reads it wherever the summer's steps sit (simNhlCpuRosters earlyAge moves it). */
   const noUserClub = opts?.noUserClub === true;
+  for (const p of league.freeAgents) p.out = 0;
   /* Round 211: one name book for the whole offseason. */
   const taken = leagueNames(league);
   for (const t of Object.values(league.teams)) {

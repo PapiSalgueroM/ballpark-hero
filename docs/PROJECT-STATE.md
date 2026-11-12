@@ -1,3 +1,7 @@
+## 2026-11-11: NHL Front Office waiver recovery
+
+Existing injuries count down each simulated round in free agency and clear at the offseason. A 390px replay waived a player with three rounds left, played the final two rounds, completed the draft and re-signed him. The countdown was 3, 2, 1 and then 0 at rollover. He stayed healthy after reload. The same-season waiver restriction still blocked the signing.
+
 ## 2026-11-07: Club Manager historical roster counts live
 
 [PR #532](https://github.com/PapiSalgueroM/ballpark-hero/pull/532) published from main `c3b5ca4afaf9b4dadcd748f340e8e8e3e4a1a1dd`, App tree `133fcd3d26a4d237178e5c7efee723048da0aef2`, Lovable deployment `510b1df1-2172-42c0-90f9-d9f9c997b840`.
