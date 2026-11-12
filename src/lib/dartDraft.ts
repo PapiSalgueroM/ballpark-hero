@@ -255,10 +255,15 @@ export function machineDraft(current: Player[], legends: Player[], formation: Fo
 }
 
 /* ---------------- Squad rating + chemistry ---------------- */
-export function squadRating(players: (Player | null)[]): number {
+export function dartPlayerRating(player: Player, outOfPosition = false): number {
+  return player.fixedOverall ?? Math.max(35, playerRating(player) - (outOfPosition ? 8 : 0));
+}
+
+export function squadRating(players: (Player | null)[], outOfPosition?: readonly boolean[]): number {
   const real = players.filter((p): p is Player => p !== null);
   if (real.length === 0) return 0;
-  const avg = real.reduce((s, p) => s + (p.fixedOverall ?? playerRating(p)), 0) / real.length;
+  const total = players.reduce((sum, player, index) => player ? sum + dartPlayerRating(player, outOfPosition?.[index]) : sum, 0);
+  const avg = total / real.length;
   // chemistry: reward league/nation clusters (max +4). Generated fillers
   // (fixedOverall set) never count toward chemistry.
   const chemPool = real.filter(p => p.fixedOverall === undefined);
@@ -319,8 +324,8 @@ function poissonish(expected: number): number {
   return g;
 }
 
-export function simulateSeries(user: (Player | null)[], ai: (Player | null)[]): SeriesResult {
-  const ru = squadRating(user);
+export function simulateSeries(user: (Player | null)[], ai: (Player | null)[], userOutOfPosition?: readonly boolean[]): SeriesResult {
+  const ru = squadRating(user, userOutOfPosition);
   const ra = squadRating(ai);
   const diff = ru - ra;
   const legs: LegResult[] = [];

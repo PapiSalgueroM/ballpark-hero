@@ -1,3 +1,9 @@
+## 2026-11-12: Dart Draft position penalty draft
+
+Dart Draft now uses its advertised eight-point out-of-position penalty in the squad rating and showdown, just as it already did on the player card. The calculation leaves player values, chemistry and academy or trialist ratings intact.
+
+At 390px, a Brazilian winger drafted as goalkeeper showed 54 on his card and moved from 62 to 54 in the XI. With ten 40-rated trialists, the final XI moved from 42 to 41 and the completion from 97 to 96. Both replays kept 55 accuracy, the 0-3 series and one completion. Drafting the same winger in his own position kept XI 42 and 97 points. All 33 scoped tests, app types, production build, both game sims, 15 output checks and 16 route caps passed.
+
 ## 2026-11-07: Club Manager historical roster counts live
 
 [PR #532](https://github.com/PapiSalgueroM/ballpark-hero/pull/532) published from main `c3b5ca4afaf9b4dadcd748f340e8e8e3e4a1a1dd`, App tree `133fcd3d26a4d237178e5c7efee723048da0aef2`, Lovable deployment `510b1df1-2172-42c0-90f9-d9f9c997b840`.

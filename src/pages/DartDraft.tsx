@@ -10,7 +10,7 @@ import { Crosshair, Loader2, RotateCcw, Trophy, LifeBuoy, Target } from 'lucide-
 import { cn } from '@/lib/utils';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import {
-  fetchDartDraftPool, finalScore, simulateSeries, squadGrade, squadRating,
+  dartPlayerRating, fetchDartDraftPool, finalScore, simulateSeries, squadGrade, squadRating,
   type SeriesResult,
 } from '@/lib/dartDraft';
 import { GEO_COUNTRIES, WORLD_H, WORLD_W, type GeoCountry } from '@/data/worldMapGeo';
@@ -21,7 +21,7 @@ import {
   rollZones, stormChoices, viewBoxOf, wildcardChoices, wonderkidChoices,
   type DraftChoice, type MapHit, type MapTopic, type Zone,
 } from '@/lib/dartMap';
-import { LEGENDS, WC2026_NATIONS, playerRating } from '@/lib/squadDeal';
+import { LEGENDS, WC2026_NATIONS } from '@/lib/squadDeal';
 import type { Player } from '@/types/game';
 import { useRevealScroll } from '@/hooks/useRevealScroll';
 
@@ -31,15 +31,6 @@ type AimStage = 'x' | 'y' | 'landed';
 const XI_SIZE = DART_SLOTS.length;
 
 const money = (m: number) => (m >= 1000 ? `£${(m / 1000).toFixed(1)}B` : `£${m}M`);
-
-/** Adjust out-of-position picks before rating and simulating. */
-function adjustedXi(xi: (Player | null)[], oop: boolean[]): (Player | null)[] {
-  return xi.map((p, i) => (p && oop[i] ? { ...p, marketValue: Math.max(1, Math.round(p.marketValue / 3)) } : p));
-}
-
-/** One rating everywhere: fillers keep their pinned overall, everyone else the shared card curve minus the OOP tax. */
-const shownRating = (p: Player, isOop: boolean) =>
-  p.fixedOverall ?? Math.max(35, playerRating(p) - (isOop ? 8 : 0));
 
 const DartDraft = () => {
   const [phase, setPhase] = useState<Phase>('intro');
@@ -96,7 +87,7 @@ const DartDraft = () => {
     return pool;
   }, [pool, topic]);
 
-  const userRating = useMemo(() => squadRating(adjustedXi(xi, oop)), [xi, oop]);
+  const userRating = useMemo(() => squadRating(xi, oop), [xi, oop]);
   const total = useMemo(
     () => (series ? finalScore(points, userRating, series.outcome) : 0),
     [series, points, userRating],
@@ -273,7 +264,7 @@ const DartDraft = () => {
     if (nextXi.filter(Boolean).length >= XI_SIZE) {
       const machine = machineMapDraft(topicPool.length >= XI_SIZE ? topicPool : pool);
       setMachineXi(machine);
-      setSeries(simulateSeries(adjustedXi(nextXi, nextOop), machine));
+      setSeries(simulateSeries(nextXi, machine, nextOop));
       setPhase('done');
     } else {
       setPhase('squad');
@@ -337,7 +328,7 @@ const DartDraft = () => {
             <div className="flex items-center justify-center gap-1 text-[9px] text-muted-foreground">
               <FlagImg name={p.nationality} size={12} />
               <span className={cn('font-bold', oop[i] ? 'text-orange-400' : p.fixedOverall ? 'text-muted-foreground' : 'text-gold')}>
-                {shownRating(p, oop[i])}
+                {dartPlayerRating(p, oop[i])}
               </span>
             </div>
           </>
@@ -538,7 +529,7 @@ const DartDraft = () => {
                               </div>
                               <div className="text-right shrink-0">
                                 <div className={cn('text-lg font-black', outOfPosition ? 'text-orange-400' : p.fixedOverall ? 'text-muted-foreground' : 'text-gold')}>
-                                  {shownRating(p, outOfPosition)}
+                                  {dartPlayerRating(p, outOfPosition)}
                                 </div>
                                 {outOfPosition && <div className="text-[9px] font-bold text-orange-400">OUT OF POSITION</div>}
                                 {p.fixedOverall !== undefined && <div className="text-[9px] font-bold text-muted-foreground">FILLER</div>}
@@ -601,7 +592,7 @@ const DartDraft = () => {
                               <FlagImg name={p.nationality} size={14} />{p.name}
                             </span>
                             <span className={cn('text-sm font-black', oop[i] ? 'text-orange-400' : p.fixedOverall ? 'text-muted-foreground' : 'text-gold')}>
-                              {shownRating(p, oop[i])}
+                              {dartPlayerRating(p, oop[i])}
                             </span>
                           </>
                         ) : (
