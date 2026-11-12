@@ -29,6 +29,7 @@ const upgradeMedical = (page, cost) => page.getByRole('button', { name: `Upgrade
 const opposition = page => page.getByText('Opposition report', { exact: true });
 const attackEdge = page => page.locator('[data-nrl-attack-edge]');
 const defenseEdge = page => page.locator('[data-nrl-defense-edge]');
+const boardStatus = page => page.locator('[data-nrl-board-status]');
 const screenshot = (page, name) => shots && page.screenshot({ path: path.join(shots, name), fullPage: false });
 
 async function context(width) {
@@ -122,6 +123,16 @@ try {
   await past.getByText('$1,580,000', { exact: true }).waitFor();
   await fit(past);
   await screenshot(past, 'nrl-coaching-320.png');
+  const beforeBoard = await save(past);
+  const beforeBoardFence = await fence(past);
+  await past.getByRole('button', { name: 'Season review', exact: true }).click();
+  await past.getByRole('heading', { name: 'Board target', exact: true }).waitFor();
+  await past.getByText('Finish in the top four', { exact: true }).waitFor();
+  assert.equal(await boardStatus(past).innerText(), 'Your ladder place appears after your first match.');
+  assert.equal(await save(past), beforeBoard);
+  assert.equal(await fence(past), beforeBoardFence);
+  await fit(past);
+  await screenshot(past, 'nrl-board-320.png');
   await past.getByRole('button', { name: 'Squad', exact: true }).click();
   assert.equal(await past.locator('select[id^=nrl-starter-]').count(), 13);
   assert.equal(await past.locator('select[id^=nrl-reserve-]').count(), 6);
@@ -224,7 +235,16 @@ try {
   await past.getByRole('heading', { level: 1, name: 'NRL Team Manager' }).waitFor();
   await advance(past).waitFor();
   assert.equal(await save(past), settledBytes);
-  const complete2026 = await play(past, 29);
+  const beforeFinals = await play(past, 25);
+  assert.equal(beforeFinals.phase, 'finals');
+  const boardFinalsBytes = await save(past);
+  await past.getByRole('button', { name: 'Club office', exact: true }).click();
+  await past.getByRole('button', { name: 'Season review', exact: true }).click();
+  const finalTarget = await boardStatus(past).innerText();
+  assert.match(finalTarget, /^Target (?:met|missed) · Final ladder place \d+$/);
+  assert.equal(await save(past), boardFinalsBytes);
+  await past.getByRole('button', { name: 'Match centre', exact: true }).click();
+  const complete2026 = await play(past, 4);
   assert.equal(complete2026.phase, 'complete');
   assert.equal(complete2026.results.filter(result => !result.finalsRound).length, 204);
   assert.equal(complete2026.results.filter(result => result.finalsRound).length, 9);
@@ -233,6 +253,7 @@ try {
   assert(complete2026.championId);
   assert.equal((await career(past)).history.length, 1);
   await past.getByRole('button', { name: 'Review this season' }).click();
+  assert.equal(await boardStatus(past).innerText(), finalTarget);
   const youth = await setDevelopment(past, 'youth');
   const focusBytes = await save(past);
   await fit(past);
@@ -257,11 +278,12 @@ try {
   assert.equal(await development(past).inputValue(), 'balanced');
   assert.match(await past.locator('[data-nrl-development-receipt]').innerText(), /^Youth development/);
   assert.match(await past.locator('[data-nrl-coach-receipt]').innerText(), /Attack assistant.*\$678,000/);
+  assert.match(await past.locator('[data-nrl-board-benchmark]').innerText(), /^Board benchmark.*(?:Met|Missed)$/);
   await past.getByRole('button', { name: 'Ladder', exact: true }).click();
   assert.equal(await past.locator('[data-nrl-ladder]').count(), 18);
   assert.deepEqual([...pastErrors, ...sameSave.errors], []);
   await phone.close();
-  console.log('2026 at 320px: medical and assistant costs, matching tactic edge, one live settlement across two tabs, full season payroll and rollover.');
+  console.log('2026 at 320px: board target before play and during finals, exact read-only bytes, full season payroll and rollover.');
 
   const largerPhone = await context(390);
   const { page: future, errors: futureErrors } = await open(largerPhone);
@@ -462,6 +484,8 @@ try {
   await oldContext.addInitScript(({ key, raw }) => { if (!localStorage.getItem(key)) localStorage.setItem(key, raw); }, { key: SAVE_KEY, raw: JSON.stringify(old) });
   const { page: restored, errors: restoredErrors } = await open(oldContext);
   await restored.getByRole('button', { name: 'Review this season' }).click();
+  assert.match(await boardStatus(restored).innerText(), /^Target (?:met|missed) · Final ladder place \d+$/);
+  assert.equal(await save(restored), JSON.stringify(old));
   await restored.getByRole('button', { name: 'Finances', exact: true }).click();
   await restored.getByText('This completed save predates club accounts. Tracking starts next season.').waitFor();
   assert.equal(await upgradeMedical(restored, '$800,000').isEnabled(), false);

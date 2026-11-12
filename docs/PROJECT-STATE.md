@@ -1,3 +1,11 @@
+## 2026-11-12: NRL Manager board targets
+
+Season review shows a regular-season board target based on the modeled club ratings. From the second year, the previous finish also helps set the target. The board waits until the club plays before showing a ladder place, then settles the target when finals begin. Previous years show the same calculation as a benchmark. Opening the review does not change the saved career.
+
+The 79 NRL tests include the 2026, 2027 and 2028 league fields, tied modeled ratings, an opening bye, finals and imported history. Across 80 paired seasons, 4,960 target reads kept the same save bytes, 17,520 fixture results and 80 rollovers.
+
+The compiled phone run checked the target before play, during finals and after rollover. It also opened a completed v1 save without rewriting it. App types, production build, 15 built-site readers and 16 download caps passed.
+
 ## 2026-11-12: NRL Manager assistant coaching
 
 Finances offers one fictional Attack or Defence assistant through the end of the season. The signing fee is A$120,000 and wages are A$18,000 per settled round, including byes and finals. Club cash must cover the full commitment before signing, and the remaining wages count against medical spending. The chosen assistant adds two rating points only when the matching tactic is active. Opposition report and the pre-match and halftime tactic cards show the effect. The contract and expense go into the annual accounts, and the next season opens a new shortlist.

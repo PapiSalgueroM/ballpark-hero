@@ -9,6 +9,7 @@ import {
 } from '@/lib/nrlCareer';
 import { NRL_COACHING_BONUS, NRL_ROLES, type NrlCoachRole, type NrlRole } from '@/lib/nrlManager';
 import { nrlArchivedScoringLeaders, nrlTryLeaders } from '@/lib/nrlPlayerScoring';
+import { nrlBoardBenchmark, nrlBoardTarget } from '@/lib/nrlBoardTarget';
 
 const currency = new Intl.NumberFormat('en-AU', {
   style: 'currency', currency: 'AUD', maximumFractionDigits: 0,
@@ -373,12 +374,28 @@ function DevelopmentFocus({ career, onAction, disabled }: { career: NrlCareerSta
 function History({ career, onAction, disabled }: { career: NrlCareerState; onAction: Dispatch; disabled: boolean }) {
   const { year, phase } = career.season;
   const finished = phase === 'complete';
+  const target = nrlBoardTarget(career);
+  const pastPlaces = new Map(career.history.map(record => [record.year, record.rank]));
   return (
     <>
       <h2 className="font-display text-xl font-bold">Season review</h2>
       <p className="mt-1 text-sm text-muted-foreground">
         {finished ? 'Review the year and settle your squad before the new season.' : 'Completed seasons stay here as your career moves on.'}
       </p>
+      {target && (
+        <section className="mt-4 rounded-xl border border-border bg-background p-3" aria-labelledby="nrl-board-target">
+          <h3 id="nrl-board-target" className="text-sm font-bold">Board target</h3>
+          <p className="mt-1 text-sm font-semibold">{target.label}</p>
+          <p className="mt-1 text-sm text-muted-foreground" data-nrl-board-status>
+            {target.place === null ? 'Your ladder place appears after your first match.'
+              : target.result === null ? `Current ladder place ${target.place}`
+                : `Target ${target.result} · Final ladder place ${target.place}`}
+          </p>
+          <p className="mt-1 text-xs text-muted-foreground">
+            Based on the club’s modeled rating{pastPlaces.has(year - 1) ? ' and last season’s finish.' : '.'}
+          </p>
+        </section>
+      )}
       {!career.legacySeason && year < NRL_LAST_YEAR && <DevelopmentFocus career={career} onAction={onAction} disabled={disabled} />}
       {career.history.length > 0 ? (
         <ul className="mt-3 divide-y divide-border">
@@ -388,11 +405,15 @@ function History({ career, onAction, disabled }: { career: NrlCareerState; onAct
             const points = leaders[0];
             const coach = record.finance?.coachHire;
             const staffSpend = record.finance ? nrlCoachSpend(record.finance) : null;
+            const benchmark = record.year === year ? null : nrlBoardBenchmark(record.year, record.clubId, pastPlaces.get(record.year - 1));
             return (
               <li key={record.year} className="space-y-1 py-3">
                 <p className="font-bold">{record.year} {labelForClub(record.year, record.clubId)}</p>
                 <p className="text-sm text-muted-foreground">Ladder place {record.rank} · {record.wins} wins · {record.draws} draws · {record.losses} losses</p>
                 <p className="text-sm text-muted-foreground">Premiers {labelForClub(record.year, record.championId)}{record.finance ? ` · Profit or loss ${money(record.finance.profit)}` : ''}</p>
+                {benchmark && <p className="text-sm text-muted-foreground" data-nrl-board-benchmark>
+                  Board benchmark · {benchmark.label} · {record.rank <= benchmark.targetRank ? 'Met' : 'Missed'}
+                </p>}
                 {points && <p className="text-sm text-muted-foreground" data-nrl-archived-scoring>
                   {tries ? `Try leader ${tries.name} (${tries.tries}) · ` : ''}Points leader {points.name} ({points.points})
                 </p>}
