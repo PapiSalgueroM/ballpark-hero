@@ -29,7 +29,7 @@
  * Without R848_PRE_HOOK the rows compare the hook in src with itself, which
  * proves nothing, so they are skipped and say so.
  */
-import type { ComponentType } from 'react';
+import { useState, type ComponentType } from 'react';
 import { act, cleanup, fireEvent, render, renderHook } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { MemoryRouter } from 'react-router-dom';
@@ -107,11 +107,25 @@ vi.mock('@/hooks/useDailyPuzzle', async (importOriginal) => {
   return {
     ...real,
     useDailyPuzzle: ((options: Parameters<typeof real.useDailyPuzzle>[0]) => {
+      const [forfeited, setForfeited] = useState(false);
       if (IMPL.which === 'old') {
         if (!pre) throw new Error('R848_PRE_HOOK is not set');
         IMPL.calls.old += 1;
-        /* The old hook has no takeNewerSave; a single tab never needs it. */
-        return { takeNewerSave: () => false, ...pre.useDailyPuzzle(options) };
+        const old = pre.useDailyPuzzle(options);
+        return {
+          ...old,
+          /* The old hook has no takeNewerSave; a single tab never needs it. */
+          takeNewerSave: () => false,
+          /* This was written by Footle itself before the shared forfeit action. */
+          forfeit: () => {
+            localStorage.setItem(`${options.gameSlug}-daily-${old.todayStr}`, JSON.stringify({
+              v: 1, date: old.todayStr, puzzleIndex: old.puzzleIndex, guesses: old.guesses, gameStatus: 'lost',
+            }));
+            setForfeited(true);
+          },
+          gameStatus: forfeited ? 'lost' : old.gameStatus,
+          reset: () => { setForfeited(false); old.reset(); },
+        };
       }
       IMPL.calls.new += 1;
       return real.useDailyPuzzle(options);

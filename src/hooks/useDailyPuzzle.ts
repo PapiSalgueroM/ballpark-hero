@@ -191,6 +191,9 @@ export interface DailyPuzzleReturn<T, G> {
    * a reset button to users.
    */
   reset: () => void;
+
+  /** Finish without adding a guess, using the existing index-based Give up save. */
+  forfeit: () => void;
 }
 
 // ---------------------------------------------------------------------------
@@ -572,6 +575,13 @@ export function useDailyPuzzle<T, G>(
     [puzzle, puzzleIndex, isWon, isLost, maxGuesses, storageKey, todayStr],
   );
 
+  const forfeit = useCallback(() => {
+    if (puzzle == null || statusRef.current !== 'playing' || droppingTurn.current || takeNewerSave()) return;
+    statusRef.current = 'lost';
+    setGameStatus('lost');
+    writePersistedState(storageKey, todayStr, puzzleIndex, undefined, guessesRef.current, 'lost');
+  }, [puzzle, puzzleIndex, storageKey, takeNewerSave, todayStr]);
+
   const reset = useCallback(() => {
     try {
       localStorage.removeItem(storageKey);
@@ -594,5 +604,6 @@ export function useDailyPuzzle<T, G>(
     todayStr,
     puzzleIndex,
     reset,
+    forfeit,
   };
 }
