@@ -2888,6 +2888,8 @@ export function repairCareer<T extends CareerState>(state: T): T {
      This is the only place that runs on load, so it is where they come back. */
   if (s.phase === "season_summary" && !s.pendingSummary) s.phase = "playing";
   reconcileRetirement(s);
+  // No rehab card can render without the saved choice. Use the same fallback as dismissing it.
+  if (s.phase === "rehab_choice" && s.pendingRehab == null) s.phase = applyRehabChoice(s, 1).phase;
   if (!s.primeType) s.primeType = rollPrimeType();
   if (s.loyaltyContracts !== undefined) {
     const fixed = repairLoyalty(s);
