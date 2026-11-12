@@ -109,9 +109,23 @@ export function CookieConsent({ inline = false, compactInitial = false }: { inli
   // Keep one region inside an open rules dialog's existing focus scope.
   useEffect(() => {
     if (!visible) return;
-    const syncTarget = () => setHelpTarget(document.querySelector<HTMLElement>('[data-dukb-help-cookie-choices]'));
+    const selector = '[data-dukb-help-cookie-choices]';
+    let target: HTMLElement | null = null;
+    const syncTarget = () => {
+      target = document.querySelector<HTMLElement>(selector);
+      setHelpTarget(target);
+    };
     syncTarget();
-    const observer = new MutationObserver(syncTarget);
+    const observer = new MutationObserver(records => {
+      if (target && !target.isConnected) { syncTarget(); return; }
+      // Ordinary score and card updates cannot move the rules dialog's host.
+      for (const record of records) for (const node of record.addedNodes) {
+        if (node instanceof Element && (node.matches(selector) || node.querySelector(selector))) {
+          syncTarget();
+          return;
+        }
+      }
+    });
     observer.observe(document.body, { childList: true, subtree: true });
     return () => observer.disconnect();
   }, [visible]);
