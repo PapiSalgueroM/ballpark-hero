@@ -405,7 +405,7 @@ export const NFL_PAPER: SeasonPaper<HeadlineLine> = {
   title: 'WON THE SUPER BOWL',
   runnerUp: 'Lost the Super Bowl',
   titleLine: (team, name) => `${team} win the Super Bowl. ${name} has a ring`,
-  runnerUpLine: team => `${team} fall one game short of the Super Bowl`,
+  runnerUpLine: team => `${team} lose the Super Bowl`,
   suspendedResult: 'SUSPENDED',
   suspendedLine: name => `${name} sits out the year on the suspended list`,
   awards: [
