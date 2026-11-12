@@ -39,7 +39,7 @@ export interface ContinueSave {
   /** The save's own name for what you are running: a club, a team, a fighter. */
   name?: SavePath;
   /** A whole number and how to say it. An array here counts its entries. */
-  count?: { at: SavePath; say: string; one?: string };
+  count?: { at: SavePath; previousAt?: SavePath; say: string; one?: string };
   /** A field that is exactly true once the save has ended, and the word for it. */
   ended?: { at: SavePath; say: string };
 }
@@ -61,7 +61,7 @@ export const CONTINUE_SAVES: readonly ContinueSave[] = [
   { path: '/nhl-my-career', saveKey: 'nhl-my-career-save-v1', name: ['c', 'team'], count: { at: ['c', 'year'], say: '{n} season' }, ended: { at: ['c', 'retired'], say: 'retired' } },
   { path: '/nhl-front-office', saveKey: 'nhl-front-office-save-v1', name: ['myTeam'], count: { at: ['league', 'season'], say: '{n} season' }, ended: { at: ['fired'], say: 'fired' } },
   { path: '/aussie-rules-manager', saveKey: 'aussie-rules-manager-save-v2', name: ['clubName'], count: { at: ['season'], say: 'season {n}' } },
-  { path: '/nrl-team-manager', saveKey: 'nrl-manager-save-v1', count: { at: ['year'], say: '{n} season' } },
+  { path: '/nrl-team-manager', saveKey: 'nrl-manager-save-v1', count: { at: ['season', 'year'], previousAt: ['year'], say: '{n} season' } },
   { path: '/fight-career', saveKey: 'fight-career-save-v1', name: ['st', 'fighter', 'name'], count: { at: ['st', 'fightNo'], say: '{n} fights', one: '1 fight' }, ended: { at: ['st', 'retired'], say: 'retired' } },
   { path: '/fight-promoter', saveKey: 'fight-promoter-save-v1', name: ['st', 'name'], count: { at: ['st', 'show'], say: 'show {n}' }, ended: { at: ['st', 'closed'], say: 'closed' } },
   { path: '/fight-gym', saveKey: 'fight-gym-save-v1', name: ['g', 'name'], count: { at: ['g', 'week'], say: 'week {n}' }, ended: { at: ['g', 'closed'], say: 'closed' } },
@@ -139,7 +139,8 @@ export function describeSave(entry: ContinueSave, raw: string | null): string | 
   if (entry.ended && walk(save, entry.ended.at) === true) {
     parts.push(entry.ended.say);
   } else if (entry.count) {
-    const n = cleanCount(walk(save, entry.count.at));
+    const n = cleanCount(walk(save, entry.count.at))
+      ?? (entry.count.previousAt ? cleanCount(walk(save, entry.count.previousAt)) : null);
     if (n !== null) parts.push(n === 1 && entry.count.one ? entry.count.one : entry.count.say.replace('{n}', String(n)));
   }
   return parts.length ? parts.join(', ') : null;

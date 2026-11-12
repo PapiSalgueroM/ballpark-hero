@@ -147,7 +147,7 @@ export const SAVE_VERSIONS: Readonly<Record<string, SaveVersionRow>> = {
   '/wonderkid-factory': { at: ['v'], current: 1, oldest: 1, other: 'refuses' },
   '/hall-of-champions': { at: ['v'], current: 1, oldest: 1, other: 'refuses' },
   '/aussie-rules-manager': { at: ['version'], current: 2, oldest: 2, other: 'refuses' },
-  '/nrl-team-manager': { at: ['version'], current: 1, oldest: 1, other: 'refuses' },
+  '/nrl-team-manager': { at: ['version'], current: 2, oldest: 1, other: 'migrates' },
   '/idle-arena': { at: ['v'], current: 1, oldest: 1, other: 'ignores' },
   '/fight-career': { at: ['st', 'version'], current: 1, oldest: 1, other: 'ignores' },
   '/fight-gym': { at: ['g', 'version'], current: 1, oldest: 1, other: 'ignores' },

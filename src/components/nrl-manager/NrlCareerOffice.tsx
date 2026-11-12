@@ -1,0 +1,241 @@
+import { useMemo, useState } from 'react';
+import { ArrowRight } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { nrlSeasonPlan, NRL_LAST_YEAR } from '@/data/nrlManagerSeasons';
+import {
+  nrlCareerCap, nrlCareerFinance, nrlCareerMarket, nrlCareerSquad, nrlContractOffer,
+  type NrlCareerAction, type NrlCareerState,
+} from '@/lib/nrlCareer';
+import { NRL_ROLES } from '@/lib/nrlManager';
+
+const currency = new Intl.NumberFormat('en-AU', {
+  style: 'currency', currency: 'AUD', maximumFractionDigits: 0,
+});
+const money = (amount: number) => currency.format(amount);
+const labelForClub = (year: number, id: string) => nrlSeasonPlan(year).clubs.find(club => club.id === id)?.shortName ?? id;
+
+type OfficeScreen = 'contracts' | 'recruitment' | 'finances' | 'history';
+type MarketEntry = ReturnType<typeof nrlCareerMarket>[number];
+type CareerPlayer = ReturnType<typeof nrlCareerSquad>[number];
+type Dispatch = (action: NrlCareerAction) => boolean;
+
+const control = 'min-h-11 w-full rounded-lg border border-input bg-background px-3 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring';
+
+function OfferForm({ career, entry, onAction, onClose, disabled }: {
+  career: NrlCareerState; entry: MarketEntry; onAction: Dispatch; onClose: () => void; disabled: boolean;
+}) {
+  const [salary, setSalary] = useState(String(entry.askingSalary));
+  const [years, setYears] = useState(2);
+  const preview = nrlContractOffer(career, entry.player.id, Number(salary), years);
+  return (
+    <form className="mt-3 rounded-xl border border-border bg-background p-3" onSubmit={event => {
+      event.preventDefault();
+      if (preview.ok && !disabled) onAction({ type: 'offerContract', playerId: entry.player.id, salary: Number(salary), years });
+    }}>
+      <h3 className="font-bold">Offer {entry.player.name} a contract</h3>
+      <p className="mt-1 text-sm text-muted-foreground">Asking {money(entry.askingSalary)} per season · Starts {entry.startYear}</p>
+      <div className="mt-3 grid grid-cols-[minmax(0,1fr)_7rem] gap-2">
+        <label className="min-w-0 space-y-1 text-sm font-semibold">
+          <span>Annual salary (AUD)</span>
+          <input className={control} type="number" inputMode="numeric" min={0} step={1} required value={salary}
+            onChange={event => setSalary(event.target.value)} disabled={disabled} />
+        </label>
+        <label className="space-y-1 text-sm font-semibold">
+          <span>Term</span>
+          <select className={control} value={years} disabled={disabled} onChange={event => setYears(Number(event.target.value))}>
+            <option value={1}>1 season</option>
+            <option value={2}>2 seasons</option>
+            <option value={3}>3 seasons</option>
+            <option value={4}>4 seasons</option>
+          </select>
+        </label>
+      </div>
+      <p className="mt-2 text-sm text-muted-foreground" role="status">
+        {preview.ok === true ? `${money(preview.contract.salary)} per season through ${preview.contract.endYear}.` : preview.reason}
+      </p>
+      <div className="mt-3 flex flex-wrap gap-2">
+        <Button type="button" size="lg" variant="outline" className="px-4" onClick={onClose}>Cancel</Button>
+        <Button type="submit" size="lg" className="px-4" disabled={!preview.ok || disabled}>Agree contract</Button>
+      </div>
+    </form>
+  );
+}
+
+function PlayerRow({ player, entry, career, onAction, disabled }: {
+  player: CareerPlayer; entry?: MarketEntry; career: NrlCareerState; onAction: Dispatch; disabled: boolean;
+}) {
+  const [editing, setEditing] = useState(false);
+  const [agreed, setAgreed] = useState(false);
+  const { contract, futureContract } = player;
+  const action = entry?.kind === 'renewal' ? 'Extend' : 'Make offer';
+  return (
+    <li className="py-3">
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        <div className="min-w-0">
+          <p className="font-bold">{player.name}</p>
+          <p className="text-sm text-muted-foreground">{player.role} · Age {player.age} · {player.rating} OVR · {player.potential} potential</p>
+          {contract && (
+            <p className="text-sm text-muted-foreground">
+              {entry?.kind === 'rival' ? `${labelForClub(career.season.year, contract.clubId)} · ` : ''}
+              {money(contract.salary)} per season through {contract.endYear}
+            </p>
+          )}
+          {entry && entry.kind !== 'renewal' && <p className="text-sm text-muted-foreground">Asks {money(entry.askingSalary)} · Available {entry.startYear}</p>}
+          {futureContract && <p className="text-sm text-primary">Agreed through {futureContract.endYear} at {money(futureContract.salary)} per season</p>}
+          {agreed && <p role="status" className="text-sm font-semibold text-primary">Contract agreed</p>}
+        </div>
+        {entry && !editing && <Button type="button" size="lg" variant="outline" className="px-3" disabled={disabled}
+          onClick={() => { setAgreed(false); setEditing(true); }} aria-label={`${action} for ${player.name}`}>{action}</Button>}
+      </div>
+      {editing && entry && (
+        <OfferForm career={career} entry={entry} onClose={() => setEditing(false)} disabled={disabled}
+          onAction={action => {
+            if (!onAction(action)) return false;
+            setEditing(false);
+            setAgreed(true);
+            return true;
+          }} />
+      )}
+    </li>
+  );
+}
+
+function Contracts({ career, onAction, disabled }: { career: NrlCareerState; onAction: Dispatch; disabled: boolean }) {
+  const squad = nrlCareerSquad(career);
+  const offers = new Map(nrlCareerMarket(career).filter(entry => entry.kind === 'renewal').map(entry => [entry.player.id, entry]));
+  const year = career.season.year;
+  const expiring = squad.filter(player => player.contract?.endYear === year && !player.futureContract).length;
+  return (
+    <>
+      <h2 className="font-display text-xl font-bold">Squad contracts</h2>
+      <p className="mt-1 text-sm text-muted-foreground">{squad.length} players · {expiring} deals expire this season</p>
+      <ul className="mt-3 divide-y divide-border">
+        {squad.map(player => <PlayerRow key={player.id} player={player} entry={offers.get(player.id)} career={career} onAction={onAction} disabled={disabled} />)}
+      </ul>
+    </>
+  );
+}
+
+function Recruitment({ career, onAction, disabled }: { career: NrlCareerState; onAction: Dispatch; disabled: boolean }) {
+  const [role, setRole] = useState('');
+  const [visible, setVisible] = useState(12);
+  const market = useMemo(() => nrlCareerMarket(career).filter(entry => entry.kind !== 'renewal'), [career]);
+  const filtered = role ? market.filter(entry => entry.player.role === role) : market;
+  const arrivals = career.players.filter(player => player.futureContract?.clubId === career.season.clubId
+    && player.contract?.clubId !== career.season.clubId);
+  return (
+    <>
+      <h2 className="font-display text-xl font-bold">Recruitment</h2>
+      <p className="mt-1 text-sm text-muted-foreground">Agree future deals with eligible players. Check next season’s cap before filling the squad.</p>
+      {arrivals.length > 0 && (
+        <div className="mt-3 rounded-lg border border-border bg-background px-3 py-2">
+          <h3 className="font-bold">Agreed arrivals</h3>
+          <ul className="mt-1 space-y-1 text-sm text-muted-foreground">
+            {arrivals.map(player => <li key={player.id}>{player.name} · {player.role} · joins {player.futureContract?.startYear}</li>)}
+          </ul>
+        </div>
+      )}
+      <label className="mt-3 block max-w-xs space-y-1 text-sm font-semibold">
+        <span>Position</span>
+        <select className={control} value={role} onChange={event => { setRole(event.target.value); setVisible(12); }}>
+          <option value="">All positions</option>
+          {NRL_ROLES.map(position => <option key={position}>{position}</option>)}
+        </select>
+      </label>
+      {filtered.length ? (
+        <ul className="mt-3 divide-y divide-border">
+          {filtered.slice(0, visible).map(entry => <PlayerRow key={entry.player.id} player={entry.player} entry={entry} career={career} onAction={onAction} disabled={disabled} />)}
+        </ul>
+      ) : <p className="mt-3 text-sm text-muted-foreground">No eligible players at this position right now.</p>}
+      {filtered.length > visible && <Button type="button" variant="outline" size="lg" className="mt-3" onClick={() => setVisible(count => count + 12)}>Show more players</Button>}
+    </>
+  );
+}
+
+function MoneyRows({ entries }: { entries: readonly (readonly [string, number])[] }) {
+  return (
+    <dl className="mt-2 divide-y divide-border text-sm">
+      {entries.map(([name, amount]) => (
+        <div key={name} className="flex flex-wrap justify-between gap-x-3 py-2">
+          <dt className="text-muted-foreground">{name}</dt><dd className="font-semibold tabular-nums">{money(amount)}</dd>
+        </div>
+      ))}
+    </dl>
+  );
+}
+
+function Finances({ career }: { career: NrlCareerState }) {
+  const [nextYear, setNextYear] = useState(false);
+  const year = career.season.year;
+  const capYear = nextYear && year < NRL_LAST_YEAR ? year + 1 : year;
+  const cap = nrlCareerCap(career, capYear);
+  const cash = nrlCareerFinance(career);
+  return (
+    <>
+      <h2 className="font-display text-xl font-bold">Club finances</h2>
+      <div className="mt-4 grid gap-5 md:grid-cols-2">
+        <div>
+          <h3 className="font-bold">Salary cap</h3>
+          <div className="mt-2 flex flex-wrap gap-2" role="group" aria-label="Cap year">
+            <Button type="button" size="lg" variant={nextYear ? 'outline' : 'default'} className="px-3" aria-pressed={!nextYear} onClick={() => setNextYear(false)}>{year}</Button>
+            {year < NRL_LAST_YEAR && <Button type="button" size="lg" variant={nextYear ? 'default' : 'outline'} className="px-3" aria-pressed={nextYear} onClick={() => setNextYear(true)}>{year + 1}</Button>}
+          </div>
+          <p className="mt-2 text-sm text-muted-foreground">{cap.slots} signed · {cap.openSlots} open slots</p>
+          {nrlSeasonPlan(capYear).projected && <p className="mt-1 text-xs text-muted-foreground">Projected season rules</p>}
+          <MoneyRows entries={[['Cap limit', cap.cap], ['Contracted wages', cap.committed], ['Reserved for open slots', cap.holds], ['Available to spend', cap.available]]} />
+        </div>
+        <div>
+          <h3 className="font-bold">{year} club accounts</h3>
+          {cash.fromRound > 1 && <p className="mt-2 text-sm text-muted-foreground">This save began tracking finances in round {cash.fromRound}.</p>}
+          <MoneyRows entries={[
+            ['Opening cash', cash.openingCash], ['Central funding', cash.centralFunding],
+            ['Gate receipts', cash.gateReceipts], ['Wages paid', cash.wagesPaid],
+            ['Operating costs', cash.operatingCosts], ['Profit or loss', cash.profit], ['Cash balance', cash.cash],
+          ]} />
+        </div>
+      </div>
+    </>
+  );
+}
+
+function History({ career, onAction, disabled }: { career: NrlCareerState; onAction: Dispatch; disabled: boolean }) {
+  const { year, phase } = career.season;
+  const finished = phase === 'complete';
+  return (
+    <>
+      <h2 className="font-display text-xl font-bold">Season review</h2>
+      <p className="mt-1 text-sm text-muted-foreground">
+        {finished ? 'Review the year and settle your squad before the new season.' : 'Completed seasons stay here as your career moves on.'}
+      </p>
+      {career.history.length > 0 ? (
+        <ul className="mt-3 divide-y divide-border">
+          {[...career.history].reverse().map(record => (
+            <li key={record.year} className="space-y-1 py-3">
+              <p className="font-bold">{record.year} {labelForClub(record.year, record.clubId)}</p>
+              <p className="text-sm text-muted-foreground">Ladder place {record.rank} · {record.wins} wins · {record.draws} draws · {record.losses} losses</p>
+              <p className="text-sm text-muted-foreground">Premiers {labelForClub(record.year, record.championId)}{record.finance ? ` · Profit or loss ${money(record.finance.profit)}` : ''}</p>
+            </li>
+          ))}
+        </ul>
+      ) : <p className="mt-3 text-sm text-muted-foreground">Your first season is in progress.</p>}
+      {finished && year < NRL_LAST_YEAR && (
+        <Button type="button" size="lg" className="mt-3 w-full" disabled={disabled} onClick={() => onAction({ type: 'startNextSeason' })}>
+          Start {year + 1}<ArrowRight aria-hidden="true" />
+        </Button>
+      )}
+    </>
+  );
+}
+
+export default function NrlCareerOffice({ career, screen, onAction, disabled }: {
+  career: NrlCareerState; screen: OfficeScreen; onAction: Dispatch; disabled: boolean;
+}) {
+  return (
+    <section className="rounded-xl border border-border bg-card p-4 sm:p-5" aria-label="Club office">
+      {screen === 'contracts' && <Contracts career={career} onAction={onAction} disabled={disabled} />}
+      {screen === 'recruitment' && <Recruitment career={career} onAction={onAction} disabled={disabled} />}
+      {screen === 'finances' && <Finances career={career} />}
+      {screen === 'history' && <History career={career} onAction={onAction} disabled={disabled} />}
+    </section>
+  );
+}

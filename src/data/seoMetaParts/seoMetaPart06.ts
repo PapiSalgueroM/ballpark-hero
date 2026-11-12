@@ -28,6 +28,6 @@ export const SEO_META_PART: Record<string, SeoMeta> = {
   },
   "/nrl-team-manager": {
     title: "NRL Team Manager: Rugby League Sim",
-    description: "Choose a 2026 or 2027 NRL club, pick your starting 13 and manage tactics, training and recovery in a free rugby league sim. Includes Perth in 2027.",
+    description: "Start in 2026 or 2027, pick your starting 13 and manage contracts, recruitment and club finances across seasons. Manage Perth from its 2027 debut.",
   },
 };

@@ -11,13 +11,16 @@ export const NRL_MANAGEMENT_CONTENT: GameContentMap = {
       'Check the next opponent and pick a tactic. Use training to prepare or give a tired squad a chance to recover.',
       'Play the round and check the result against the ladder. A bye is a break in the fixture list, so check who you play after it.',
       'Finish in the top eight to reach the finals. Follow the bracket and try to win the Grand Final.',
+      'Open the club office to extend contracts and approach eligible recruits. Check how much cap room you have in the season the deal starts.',
+      'Review your final ladder, premiership result and finances, then advance to the next season with the players you kept or recruited.',
     ],
     rules: [
       'The 2026 regular season spans 27 rounds, with 24 matches and three byes for each club. The game generates its own fixture list for each year.',
       'Squad selection uses rugby league positions. Use your fullback, halves, forwards and the rest of the starting 13 to build a balanced side.',
       'A try scores four points. Conversions and penalty goals add two. A field goal scores one, or two from beyond the 40-metre line.',
       'Wins and byes are worth two ladder points, draws are worth one and losses earn none. Points difference is the first ladder tiebreaker.',
-      'Progress is saved in the current browser when storage is available. You can return on the same device and browser without an account.',
+      'Club wages count toward the Top 30 base cap. This game reserves minimum wages for open places and promotes academy players if you leave spots empty.',
+      'After 2027, the game uses projected financial rules and original fixtures. The PNG Chiefs join from 2028. Your career saves on this browser without an account.',
     ],
     example: [
       'Your side scores three tries, kicks two conversions and lands a penalty goal. That is 18 match points. If the other club scores 17, you win the match and earn two ladder points.',
@@ -26,7 +29,7 @@ export const NRL_MANAGEMENT_CONTENT: GameContentMap = {
     tips: [
       'Check condition as well as rating before locking in your starting 13.',
       'Look at the fixture list before deciding whether to train. A recovery week can matter more before a hard run of matches.',
-      'Use the ladder to see what is still at stake as the regular season winds down.',
+      'Check next season’s cap before you make an offer. A player who has agreed to join still plays for his current club until rollover.',
     ],
     faqs: [
       { q: 'When can I manage the Perth Bears?', a: 'Pick the 2027 season to manage the Perth Bears. The 2026 season uses the 17 clubs in that year’s competition.' },
