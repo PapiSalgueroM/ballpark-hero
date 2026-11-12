@@ -1,6 +1,6 @@
 import { useState, useCallback, useMemo, useEffect, useRef } from 'react';
 import { localEvaluateSoccerXI } from '@/lib/localLineupEval';
-import { getRandomTeamAssignments, clubs as ALL_CLUBS, nations as ALL_NATIONS, CLUB_TABLE_NAMES, clubYearClubs } from '@/data/lineupTeams';
+import { getRandomTeamAssignments, mixedClubs as MIXED_CLUBS, nations as ALL_NATIONS, CLUB_TABLE_NAMES, clubYearClubs } from '@/data/lineupTeams';
 import { askValidator, type ValidatorAnswer } from '@/lib/validatorClient';
 import { SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY } from '@/integrations/supabase/client';
 import type { Formation, FilledSlot, GamePhase, AIVerdict, PickMeta, TeamAssignment, DraftChoice } from '@/types/lineupBuilder';
@@ -198,7 +198,7 @@ export function useLineupBuilder() {
       const all = draftChoice.mode === 'club-year'
         ? clubYearClubs.map((name) => ({ name, isNation: false }))
         : [
-        ...ALL_CLUBS.map((name) => ({ name, isNation: false })),
+        ...MIXED_CLUBS.map((name) => ({ name, isNation: false })),
         ...ALL_NATIONS.map((name) => ({ name, isNation: true })),
       ];
       const available = all.filter((t) => !usedNames.has(t.name)
