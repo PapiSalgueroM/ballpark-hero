@@ -1,3 +1,9 @@
+## 2026-11-12: Club Manager academy promotion prices staged
+
+New academy graduates and scouted prospects receive the existing age-aware market value before their first wage is calculated. An existing career keeps signed wages, contract terms and legacy values. No extra match or development draws are consumed.
+
+The 17-year-old 76-rated report fixture dropped from a £104k weekly wage to £30k, with an £18.9m market value and £17m sale price. Nine regression cases failed before the change, and all thirteen focused cases passed after it, including actual promotion, summer development and saved contract reload.
+
 ## 2026-11-07: Club Manager historical roster counts live
 
 [PR #532](https://github.com/PapiSalgueroM/ballpark-hero/pull/532) published from main `c3b5ca4afaf9b4dadcd748f340e8e8e3e4a1a1dd`, App tree `133fcd3d26a4d237178e5c7efee723048da0aef2`, Lovable deployment `510b1df1-2172-42c0-90f9-d9f9c997b840`.
