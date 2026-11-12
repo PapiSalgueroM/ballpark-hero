@@ -26,7 +26,7 @@ import {
  * country or a club until the reveal at the end.
  */
 
-type Phase = 'setup' | 'loading' | 'error' | 'buying' | 'rolling' | 'stepping' | 'done';
+type Phase = 'setup' | 'loading' | 'error' | 'buying' | 'rolling' | 'history-error' | 'stepping' | 'done';
 type Mode = 'daily' | 'unlimited';
 const SLUG = 'player-stock-market';
 
@@ -86,7 +86,7 @@ export default function PlayerStockMarket() {
     setPhase('rolling');
     const names = bought.map(card => c.identities[card.id]).filter(Boolean);
     const rows = await fetchHoldingHistories(names, c.startYear, c.finalYear);
-    if (!rows) { setError("Couldn't fetch the seasons after your buys. The year by year values need a connection."); setPhase('error'); return; }
+    if (!rows) { setPhase('history-error'); return; }
     const built = buildHoldings(c, bought, rows);
     setHoldings(built);
     setSteps(yearSteps(built, c.startYear, c.finalYear));
@@ -173,9 +173,16 @@ export default function PlayerStockMarket() {
           </div>
         )}
 
-        {phase === 'error' && (
+        {(phase === 'error' || phase === 'history-error') && (
           <div className="text-center py-12">
-            <p className="text-destructive font-semibold mb-3">{error}</p>
+            <p role="alert" className="text-destructive font-semibold mb-3">
+              {phase === 'history-error' ? "Couldn't fetch the seasons after your buys. Your XI is ready to retry." : error}
+            </p>
+            {phase === 'history-error' && campaign && (
+              <button onClick={() => void roll(campaign, picks)} className="mr-2 px-6 py-2.5 bg-primary text-primary-foreground rounded-full font-semibold">
+                Retry
+              </button>
+            )}
             <button onClick={() => setPhase('setup')} className="px-6 py-2.5 bg-primary text-primary-foreground rounded-full font-semibold">
               Back
             </button>
