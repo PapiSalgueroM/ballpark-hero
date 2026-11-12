@@ -162,6 +162,12 @@ const SOCCER_TRAINING_LOCATION = {
   after: 'Open the training ground (the dumbbell button, above your player on phones or bottom right on desktop)',
 };
 function reviewedGuideSentences(route, part, sentences) {
+  if (route === '/guess-the-college' && part === 'howToPlay') {
+    const before = 'Pick Daily, Unlimited with a streak counter, or Conference mode, and set Easy (Power 4) or Hard (all of Division 1).';
+    const after = 'Pick Daily, Unlimited with a streak counter, or Conference. For Unlimited and Conference, Easy uses the Power 4 schools in the game and Hard uses the full school pool.';
+    if (sentences.filter(line => line === before || line === after).length !== 1) abort('Reviewed College difficulty requires exactly one original or refreshed instruction');
+    return sentences.map(line => line === before ? after : line);
+  }
   if (route !== '/soccer-career' || part !== 'howToPlay') return sentences;
   const instructions = sentences.filter(line => line.startsWith(`${SOCCER_TRAINING_LOCATION.before} once a season.`)
     || line.startsWith(`${SOCCER_TRAINING_LOCATION.after} once a season.`));
