@@ -3,9 +3,9 @@
 
    A press first asks the host around the board to get the viewer ready (its
    chunks in memory), THEN presses the board's own Play (the same call,
-   untouched) and asks the host to open the season THAT PRESS SAVED, read
-   back from the save's own bytes, so the season shown is the season on the
-   save by construction and the board needs no second touch. Ready comes
+   untouched) and asks the host to open the season that press played.
+   The board supplies the resulting career. A caller that only supplies
+   Play reads its result from a save that changed during the press. Ready comes
    first because a chunk that fails to load reloads the page (a tab left
    open across a release), and a season played before that would be lost
    from the screen: this way a failed load costs nothing. A press that opened
@@ -13,12 +13,9 @@
    host around the board (a test mounting the bare board) it is exactly the
    Play button.
 
-   Release AN: when the save does not hold that season (the browser's storage
-   is full and refused the write, which the board plays through), the board
-   hands over the career it just played, the object it asked the save to
-   keep, and the viewer opens on that. Before, that press played the season
-   and opened nothing, without a word. It is still never another tab's line:
-   the season must be the one this press played, for the year he pressed.
+   The board's handoff is the career it asked storage to keep, even when
+   storage refuses the write and another tab has saved a season for the
+   same year. A handoff with no played season leaves the viewer closed.
 
    It renders ONE root, so taking that root away gives back the old hub
    markup exactly (src/test/usBoardFixture.test.tsx projects it out). It
@@ -29,11 +26,18 @@ import { useContext, useEffect, useRef, useState, type MouseEvent } from 'react'
 import type { UsCareerCore, UsCareerSeason, UsCareerSport } from '@/lib/usCareerSport';
 import { UsSeasonCentreOpen } from '@/components/us-career/season/UsSeasonCentreHost';
 
-/** The career on the save, or null when storage is refused, empty or unreadable. */
-function readSavedCareer(saveKey: string): UsCareerCore | null {
+/** Distinguish an empty key from storage that could not be read. */
+function readSavedBytes(saveKey: string): string | null | undefined {
+  try { return localStorage.getItem(saveKey); } catch { return undefined; }
+}
+
+/** The career written during Play for a caller that supplies no handoff. */
+function readSavedCareer(saveKey: string, previous: string | null | undefined): UsCareerCore | null {
+  if (previous === undefined) return null;
+  const raw = readSavedBytes(saveKey);
+  if (!raw || raw === previous) return null;
   try {
-    const raw = localStorage.getItem(saveKey);
-    const c = raw ? (JSON.parse(raw) as { c?: unknown }).c : null;
+    const c = (JSON.parse(raw) as { c?: unknown }).c;
     return c && typeof c === 'object' ? (c as UsCareerCore) : null;
   } catch { return null; }
 }
@@ -54,8 +58,7 @@ export function UsSeasonCentreEntry({ sport, career, busy, canPlay, onPlay, play
   canPlay?: () => boolean;
   /** The board's own playSeason. */
   onPlay: () => void;
-  /** The career the board's last Play left a played season on, or null when
-   *  that press played none. Asked only when the save does not hold the season. */
+  /** The career produced by this press of Play, or null when no season was played. */
   played?: () => UsCareerCore | null;
 }) {
   const centre = useContext(UsSeasonCentreOpen);
@@ -86,16 +89,12 @@ export function UsSeasonCentreEntry({ sport, career, busy, canPlay, onPlay, play
     const at = now.current;
     if (at.canPlay?.() === false) return;
     if (at.busy || at.career.seasons.length !== before || at.career.year !== year) return;
+    const previous = centre && !at.played ? readSavedBytes(sport.saveKey) : undefined;
     at.onPlay();
     if (!centre) return;
-    const saved = readSavedCareer(sport.saveKey);
-    const row = saved && Array.isArray(saved.seasons) && saved.seasons.length === before + 1 ? saved.seasons[before] : null;
-    if (saved && playable(row) && row.year === year) { centre.open({ career: saved, row, from }); return; }
-    /* the save does not hold the season (storage refused the write): the career the board just played,
-       through the same JSON round trip a save and a read would have given it */
-    const mine = copyOf(at.played?.());
-    const own = mine && Array.isArray(mine.seasons) && mine.seasons.length === before + 1 ? mine.seasons[before] : null;
-    if (mine && playable(own) && own.year === year) centre.open({ career: mine, row: own, from });
+    const result = at.played ? copyOf(at.played()) : readSavedCareer(sport.saveKey, previous);
+    const row = result && Array.isArray(result.seasons) && result.seasons.length === before + 1 ? result.seasons[before] : null;
+    if (result && playable(row) && row.year === year) centre.open({ career: result, row, from });
   };
   /* a season he already played (he answered a contract talk with "play it out", or just wants it again) */
   const last = career.seasons.length ? career.seasons[career.seasons.length - 1] : null;
