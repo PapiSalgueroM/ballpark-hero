@@ -1,3 +1,9 @@
+## 2026-11-12 Front Office manual trade recovery
+
+In NFL, NBA, MLB and NHL Front Office, an open negotiation closes when a roster move takes away a player it needs. Manual trade choices return immediately. A visit to the Hub or an unrelated roster move keeps a valid negotiation open.
+
+A phone replay reproduced the NFL lockout after a confirmed cut. Mounted checks covered NBA and NHL waivers, an MLB DFA, and an NFL Finder trade that moved the wanted player. The checks kept the saved roster moves and existing roster limits, opened new talks without a reload, and completed an agreed NFL trade after an unrelated cut.
+
 ## 2026-11-07: Club Manager historical roster counts live
 
 [PR #532](https://github.com/PapiSalgueroM/ballpark-hero/pull/532) published from main `c3b5ca4afaf9b4dadcd748f340e8e8e3e4a1a1dd`, App tree `133fcd3d26a4d237178e5c7efee723048da0aef2`, Lovable deployment `510b1df1-2172-42c0-90f9-d9f9c997b840`.

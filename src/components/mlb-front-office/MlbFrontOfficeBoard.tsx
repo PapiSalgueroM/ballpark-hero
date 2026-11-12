@@ -548,6 +548,7 @@ export default function MlbFrontOfficeBoard() {
     if (!league) return null;
     const mySide = league.teams[myTeam];
     const their = league.teams[partner];
+    if (!mySide || !their) return null;
     const mine = mySide.players.find(p => p.id === myPieceId);
     const want = their.players.find(p => p.id === wantId);
     if (!mine || !want) return null;
@@ -559,6 +560,16 @@ export default function MlbFrontOfficeBoard() {
       openPremium: 1.07,
     };
   };
+  const talkArgs = talks ? talksArgsFor(talks.partner, talks.myPieceId, talks.wantId) : null;
+  const offeredPlayerId = talks?.state.pkg?.theirPlayerId;
+  const currentTalkArgs = talkArgs && (!offeredPlayerId || talkArgs.theirRoster.some(p => p.id === offeredPlayerId)) ? talkArgs : null;
+  const hasCurrentTalk = currentTalkArgs !== null;
+  const hasTradePiece = my?.players.some(p => p.id === myTradePiece) === true;
+  useEffect(() => {
+    if (talks && !hasCurrentTalk) setTalks(null);
+    if (myTradePiece && !hasTradePiece) setMyTradePiece('');
+  }, [talks, hasCurrentTalk, myTradePiece, hasTradePiece]);
+
   /* Round 1020: with the desk on, every trade path asks the deadline first. */
   const deadlineBlock = (): boolean => {
     const why = gm && league ? mlbDeadlineRefusal(league) : null;
@@ -576,13 +587,11 @@ export default function MlbFrontOfficeBoard() {
     setTalks({ state: openTalks(args), partner: tradePartner, myPieceId: myTradePiece, wantId: theirPid });
   };
   const standFirmTalks = () => {
-    if (!talks) return;
-    const args = talksArgsFor(talks.partner, talks.myPieceId, talks.wantId);
-    if (!args) return;
-    setTalks({ ...talks, state: standFirm(talks.state, args, Math.random) });
+    if (!talks || !currentTalkArgs) return;
+    setTalks({ ...talks, state: standFirm(talks.state, currentTalkArgs, Math.random) });
   };
   const acceptTalks = () => {
-    if (!league || !talks || !talks.state.pkg) return;
+    if (!league || !talks || !currentTalkArgs || !talks.state.pkg) return;
     if (deadlineBlock()) { setTalks(null); return; }
     const pkg = talks.state.pkg;
     if (gm && pkg.addPick) { setFeed(f => [`❌ ${MLB_NO_PICK_TRADES}`, ...f].slice(0, 6)); setTalks(null); return; }
@@ -1149,20 +1158,17 @@ export default function MlbFrontOfficeBoard() {
             ))}
           </div>
           {/* Round 190: an open call takes over the desk until it ends. */}
-          {talks && (() => {
-            const minePiece = my.players.find(p => p.id === talks.myPieceId);
-            return minePiece ? (
-              <TradeTalksCard
-                talks={talks.state}
-                partnerLabel={label(talks.partner)}
-                mine={minePiece}
-                onAccept={acceptTalks}
-                onStandFirm={standFirmTalks}
-                onWalkAway={() => setTalks(null)}
-              />
-            ) : null;
-          })()}
-          {tradePartner && !talks && (
+          {talks && currentTalkArgs && (
+            <TradeTalksCard
+              talks={talks.state}
+              partnerLabel={label(talks.partner)}
+              mine={currentTalkArgs.mine}
+              onAccept={acceptTalks}
+              onStandFirm={standFirmTalks}
+              onWalkAway={() => setTalks(null)}
+            />
+          )}
+          {tradePartner && !hasCurrentTalk && (
             <>
               <p className="text-center text-[10px] text-muted-foreground">1. Pick who YOU send. 2. Tap who you want back and open talks. The other GM counters like a person: {gm ? 'a lesser man instead, or the dial tone. In MLB only Competitive Balance picks can be traded, and this game awards none, so none goes in.' : 'a pick to close the gap, a lesser man instead, or the dial tone.'}{gm ? ` Deals shut once round ${mlbTradeWindow(league).deadlineAfter + 1} is played.` : ''}</p>
               <div className="grid grid-cols-2 gap-2">
@@ -1191,7 +1197,7 @@ export default function MlbFrontOfficeBoard() {
                         <span className={cn(tradeRosterStyles.name, 'block text-foreground')}>{p.name} ({p.pos}) <b className="text-primary">{p.ovr}</b></span>
                         {back && <span className="block text-[9px] text-destructive">{back}</span>}
                       </span>
-                      <button data-mlb-trade-choice={p.id} onKeyDown={e => { if (e.repeat && (e.key === 'Enter' || e.key === ' ')) e.preventDefault(); }} onClick={() => openTradeTalks(p.id)} disabled={!myTradePiece || !!back} title={back ?? undefined} className={cn(tradeRosterStyles.action, 'shrink-0 rounded-full bg-primary px-2.5 py-0.5 text-[9px] font-bold text-primary-foreground disabled:opacity-40')}>Open talks</button>
+                      <button data-mlb-trade-choice={p.id} onKeyDown={e => { if (e.repeat && (e.key === 'Enter' || e.key === ' ')) e.preventDefault(); }} onClick={() => openTradeTalks(p.id)} disabled={!hasTradePiece || !!back} title={back ?? undefined} className={cn(tradeRosterStyles.action, 'shrink-0 rounded-full bg-primary px-2.5 py-0.5 text-[9px] font-bold text-primary-foreground disabled:opacity-40')}>Open talks</button>
                     </div>
                     );
                   })}

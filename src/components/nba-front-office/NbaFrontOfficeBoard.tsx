@@ -744,6 +744,7 @@ export default function NbaFrontOfficeBoard() {
     if (!league) return null;
     const mySide = league.teams[myTeam];
     const their = league.teams[partner];
+    if (!mySide || !their) return null;
     const mine = mySide.players.find(p => p.id === myPieceId);
     const want = their.players.find(p => p.id === wantId);
     if (!mine || !want) return null;
@@ -754,6 +755,16 @@ export default function NbaFrontOfficeBoard() {
       openPremium: 1.07,
     };
   };
+  const talkArgs = talks ? talksArgsFor(talks.partner, talks.myPieceId, talks.wantId) : null;
+  const offeredPlayerId = talks?.state.pkg?.theirPlayerId;
+  const currentTalkArgs = talkArgs && (!offeredPlayerId || talkArgs.theirRoster.some(p => p.id === offeredPlayerId)) ? talkArgs : null;
+  const hasCurrentTalk = currentTalkArgs !== null;
+  const hasTradePiece = my?.players.some(p => p.id === myTradePiece) === true;
+  useEffect(() => {
+    if (talks && !hasCurrentTalk) setTalks(null);
+    if (myTradePiece && !hasTradePiece) setMyTradePiece('');
+  }, [talks, hasCurrentTalk, myTradePiece, hasTradePiece]);
+
   /* Round 1018: with the desk on, every trade path asks the deadline first. */
   const deadlineBlock = (): boolean => {
     const why = gm && league ? nbaDeadlineRefusal(league) : null;
@@ -792,13 +803,11 @@ export default function NbaFrontOfficeBoard() {
     setTalks({ state: openTalks(args), partner: tradePartner, myPieceId: myTradePiece, wantId: theirPid });
   };
   const standFirmTalks = () => {
-    if (!talks) return;
-    const args = talksArgsFor(talks.partner, talks.myPieceId, talks.wantId);
-    if (!args) return;
-    setTalks({ ...talks, state: standFirm(talks.state, args, Math.random) });
+    if (!talks || !currentTalkArgs) return;
+    setTalks({ ...talks, state: standFirm(talks.state, currentTalkArgs, Math.random) });
   };
   const acceptTalks = () => {
-    if (!league || !talks || !talks.state.pkg) return;
+    if (!league || !talks || !currentTalkArgs || !talks.state.pkg) return;
     if (deadlineBlock()) { setTalks(null); return; }
     if (pickRuleBlock(league, talks.partner, talks.state.pkg.addPick)) { setTalks(null); return; }
     const pkg = talks.state.pkg;
@@ -1431,20 +1440,17 @@ export default function NbaFrontOfficeBoard() {
             ))}
           </div>
           {/* Round 190: an open call takes over the desk until it ends. */}
-          {talks && (() => {
-            const minePiece = my.players.find(p => p.id === talks.myPieceId);
-            return minePiece ? (
-              <TradeTalksCard
-                talks={talks.state}
-                partnerLabel={label(talks.partner)}
-                mine={minePiece}
-                onAccept={acceptTalks}
-                onStandFirm={standFirmTalks}
-                onWalkAway={() => setTalks(null)}
-              />
-            ) : null;
-          })()}
-          {tradePartner && !talks && (
+          {talks && currentTalkArgs && (
+            <TradeTalksCard
+              talks={talks.state}
+              partnerLabel={label(talks.partner)}
+              mine={currentTalkArgs.mine}
+              onAccept={acceptTalks}
+              onStandFirm={standFirmTalks}
+              onWalkAway={() => setTalks(null)}
+            />
+          )}
+          {tradePartner && !hasCurrentTalk && (
             <>
               <p className="text-center text-[10px] text-muted-foreground">1. Pick who YOU send. 2. Tap who you want back and open talks. The other GM counters like a person: a pick to close the gap, a lesser man instead, or the dial tone.</p>
               <div className="grid grid-cols-2 gap-2">
@@ -1468,7 +1474,7 @@ export default function NbaFrontOfficeBoard() {
                         {ratingNote(p)}
                         {back && <span className="block text-[9px] text-destructive">{back}</span>}
                       </span>
-                      <button onClick={() => openTradeTalks(p.id)} disabled={!myTradePiece || !!back} title={back ?? undefined} className="shrink-0 rounded-full bg-primary px-2.5 py-0.5 text-[9px] font-bold text-primary-foreground disabled:opacity-40">Open talks</button>
+                      <button onClick={() => openTradeTalks(p.id)} disabled={!hasTradePiece || !!back} title={back ?? undefined} className="shrink-0 rounded-full bg-primary px-2.5 py-0.5 text-[9px] font-bold text-primary-foreground disabled:opacity-40">Open talks</button>
                     </div>
                     );
                   })}
