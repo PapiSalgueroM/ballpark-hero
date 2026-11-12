@@ -31,6 +31,10 @@ Next: CM-03 historical roster snapshot count at club selection. Poland's 18-club
 
 Next master-list work: extend verified future entrants in Soccer Career to 2010 and 2015 starts, then show the available historical roster count in Club Manager. NBA 2005 and NFL 2006 are still source review, with no player or save changes live.
 
+## 2026-11-11: NFL My Career Super Bowl headlines
+
+News now reports a Super Bowl loss when the career reaches the game and loses. In a compiled 390px Chicago replay, the new headline agreed with the four-game postseason on the reveal and survived a cold reload. The conference-loss and championship controls kept their exact saves. Existing saved headlines remain as written.
+
 ## 2026-11-06: K League expansion and phone Squad names live
 
 Current live App source is `51e4ba9e100aa22dbe047999311c725baccae09d`, tree `b1f5ac6efe4d97a1645580c6b473d03616e471b7`. PR509 delivered the K slice as `15652350` / tree `4debc`, product `25193`; PR522 then delivered the one-component Squad layout from `2005`. Each App release was published once: K deployment `979de67b-e1bd-46d0-9115-e28f9939171a`, then UI deployment `7a36d673-a773-4196-9e2d-51f82b2ad3de`. The later documentation commit needs no publication.

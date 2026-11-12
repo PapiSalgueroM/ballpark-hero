@@ -23,6 +23,7 @@ import { nflSeasonScore } from '@/lib/careerAwards';
 import { nflBadgeFacts, nflHeadlinesFor } from '@/lib/nflCareerLoop';
 import { nflAwardPaceLine, nflSeasonLength, simSeason, type CareerState, type SeasonLine } from '@/lib/nflMyCareer';
 import { NFL_CAREER_SPORT } from '@/lib/nflCareerSport';
+import { keyedRng } from '@/lib/keyedRng';
 import { keyedStream } from './helpers/usCareerDrive';
 
 const NAME = 'Rule Probe';
@@ -36,6 +37,27 @@ function career(pos: string, eraId: string, over: Partial<CareerState> = {}): Ca
 }
 const plain = (c: CareerState, year: number, games: number, over: Partial<SeasonLine> = {}): SeasonLine => ({
   year, team: c.team, age: 25, ovr: 80, games, awards: [], teamResult: 'Missed the playoffs', salary: 1, ...over,
+});
+
+describe('the NFL playoff result in the paper', () => {
+  it.each([
+    [111, 'Lost the Super Bowl', 4, ['Chicago Bears lose the Super Bowl']],
+    [1, 'Lost the Conference Championship', 3, []],
+    [11, 'WON THE SUPER BOWL', 4, ['Chicago Bears win the Super Bowl. Ryder Replay has a ring']],
+  ] as const)('reports the simulated result for season seed %i', (seed, result, games, expected) => {
+    const sport = NFL_CAREER_SPORT;
+    const entry = keyedRng('nfl-paper-start');
+    const c = sport.startCareer('Ryder Replay', 'QB', sport.create.archetypes.QB[0], entry, null as never, 'now');
+    const quality = sport.rollTeamQuality(null, entry);
+    sport.assignRole(c, quality, entry);
+    const rng = keyedRng(`nfl-paper-season-${seed}`);
+    sport.campBattle(c, quality, rng);
+    const { line } = sport.simSeason(c, quality, rng);
+
+    expect(line.teamResult).toBe(result);
+    expect(line.poGames).toBe(games);
+    expect(nflHeadlinesFor(c, line).filter(headline => headline.includes('Super Bowl'))).toEqual(expected);
+  });
 });
 
 describe('Round 1104: the loop reads the length of the season it is looking at', () => {
