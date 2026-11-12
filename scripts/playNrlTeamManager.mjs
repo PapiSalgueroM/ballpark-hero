@@ -23,6 +23,8 @@ const advance = page => page.locator('[data-nrl-advance]');
 const finishLive = page => page.getByRole('button', { name: 'Play second half' });
 const reloadMoved = page => Promise.all([page.waitForNavigation({ waitUntil: 'domcontentloaded' }), page.getByRole('button', { name: 'Reload your season' }).click()]);
 const development = page => page.getByLabel('Development focus');
+const medicalLevel = page => page.locator('[data-nrl-medical-level]');
+const upgradeMedical = (page, cost) => page.getByRole('button', { name: `Upgrade for ${cost}`, exact: true });
 const screenshot = (page, name) => shots && page.screenshot({ path: path.join(shots, name), fullPage: false });
 
 async function context(width) {
@@ -63,6 +65,11 @@ async function setDevelopment(page, focus) {
   return { affected, focus, text };
 }
 
+async function openFinances(page) {
+  await page.getByRole('button', { name: 'Club office', exact: true }).click();
+  await page.getByRole('button', { name: 'Finances', exact: true }).click();
+}
+
 try {
   if (host) await Promise.race([once(host.stdout, 'data'), once(host, 'exit').then(([code]) => { throw new Error(`Host exited ${code}`); })]);
   browser = await pw.chromium.launch();
@@ -77,6 +84,21 @@ try {
   const started = initialCareer.season;
   assert.equal(started.year, 2026);
   assert.equal(new Set(started.bench).size, 6);
+  await openFinances(past);
+  assert.match(await medicalLevel(past).innerText(), /Level 1 of 3/);
+  await upgradeMedical(past, '$800,000').tap();
+  assert.match(await medicalLevel(past).innerText(), /Level 2 of 3/);
+  assert.equal(await upgradeMedical(past, '$2,600,000').isEnabled(), false);
+  assert.match(await past.locator('[data-nrl-medical-reason]').innerText(), /more cash/);
+  await past.getByText('$1,700,000', { exact: true }).waitFor();
+  assert.deepEqual((await career(past)).finance.medicalUpgrades, [{ level: 2, round: 1 }]);
+  const medicalBytes = await save(past);
+  await fit(past);
+  await screenshot(past, 'nrl-medical-320.png');
+  await past.reload({ waitUntil: 'domcontentloaded' });
+  await openFinances(past);
+  assert.equal(await save(past), medicalBytes);
+  assert.match(await medicalLevel(past).innerText(), /Level 2 of 3/);
   await past.getByRole('button', { name: 'Squad', exact: true }).click();
   assert.equal(await past.locator('select[id^=nrl-starter-]').count(), 13);
   assert.equal(await past.locator('select[id^=nrl-reserve-]').count(), 6);
@@ -174,6 +196,8 @@ try {
   assert.equal(next2027.season.clubId, 'storm');
   assert.equal(next2027.history[0].year, 2026);
   assert.deepEqual(next2027.history[0].development, { focus: youth.focus, affected: youth.affected });
+  assert.deepEqual(next2027.history[0].finance.medicalUpgrades, [{ level: 2, round: 1 }]);
+  assert.equal(next2027.finance.openingCash, next2027.history[0].finance.cash);
   await past.getByRole('button', { name: 'Club office', exact: true }).click();
   await past.getByRole('button', { name: 'Season review', exact: true }).click();
   assert.equal(await development(past).inputValue(), 'balanced');
@@ -182,7 +206,7 @@ try {
   assert.equal(await past.locator('[data-nrl-ladder]').count(), 18);
   assert.deepEqual([...pastErrors, ...sameSave.errors], []);
   await phone.close();
-  console.log('2026 at 320px: live halftime reload, one settlement across two tabs, 204 matches, nine finals and youth development saved, applied and reviewed.');
+  console.log('2026 at 320px: medical charge and affordability, exact reload, one live settlement across two tabs, 204 matches, nine finals and rollover.');
 
   const largerPhone = await context(390);
   const { page: future, errors: futureErrors } = await open(largerPhone);
@@ -276,10 +300,37 @@ try {
   console.log('2027 at 390px: Perth signing, halftime tactic change, 216 matches, nine finals, finance reconciliation and veteran development on rollover.');
 
   const fixture = await build({
-    stdin: { contents: "export { createNrlSeason, reduceNrlSeason } from './src/lib/nrlManager';", resolveDir: process.cwd() },
+    stdin: {
+      contents: "export { createNrlSeason, reduceNrlSeason } from './src/lib/nrlManager'; export { createNrlCareer, reduceNrlCareer } from './src/lib/nrlCareer';",
+      resolveDir: process.cwd(),
+    },
     alias: { '@': path.resolve('src') }, bundle: true, format: 'esm', platform: 'node', write: false, logLevel: 'error',
   });
-  const { createNrlSeason, reduceNrlSeason } = await import('data:text/javascript;base64,' + Buffer.from(fixture.outputFiles[0].contents).toString('base64'));
+  const { createNrlSeason, reduceNrlSeason, createNrlCareer, reduceNrlCareer } =
+    await import('data:text/javascript;base64,' + Buffer.from(fixture.outputFiles[0].contents).toString('base64'));
+  let funded = createNrlCareer('storm', 1);
+  while (funded.season.round < 9) funded = reduceNrlCareer(funded, { type: 'advance' });
+  const beforeCare = reduceNrlCareer(funded, { type: 'advance' }).season.results.find(result => result.round === 9 && result.injury).injury;
+  assert.equal(beforeCare.rounds, 4);
+  const medical = await context(390);
+  await medical.addInitScript(({ key, raw }) => { if (!localStorage.getItem(key)) localStorage.setItem(key, raw); }, { key: SAVE_KEY, raw: JSON.stringify(funded) });
+  const { page: clinic, errors: clinicErrors } = await open(medical);
+  await openFinances(clinic);
+  await upgradeMedical(clinic, '$800,000').tap();
+  assert.equal(await upgradeMedical(clinic, '$2,600,000').isEnabled(), true);
+  await upgradeMedical(clinic, '$2,600,000').tap();
+  assert.match(await medicalLevel(clinic).innerText(), /Level 3 of 3/);
+  assert.equal(await upgradeMedical(clinic, '$2,600,000').count(), 0);
+  await fit(clinic);
+  await screenshot(clinic, 'nrl-medical-390.png');
+  await clinic.getByRole('button', { name: 'Match centre', exact: true }).click();
+  const afterCare = await play(clinic, 1);
+  assert.deepEqual(afterCare.results.find(result => result.round === 9 && result.injury).injury, { ...beforeCare, rounds: 2 });
+  assert.match(await clinic.locator('[data-nrl-match-injury]').innerText(), /miss 2 rounds/);
+  assert.deepEqual(clinicErrors, []);
+  await medical.close();
+  console.log('Medical at 390px: earned cash funded both upgrades and the same seeded four-round knock became two.');
+
   let old = createNrlSeason('bears', 717, 2027);
   for (let action = 0; action < 31; action++) old = reduceNrlSeason(old, { type: 'advance' });
   const oldContext = await context(390);
@@ -288,6 +339,7 @@ try {
   await restored.getByRole('button', { name: 'Review this season' }).click();
   await restored.getByRole('button', { name: 'Finances', exact: true }).click();
   await restored.getByText('This completed save predates club accounts. Tracking starts next season.').waitFor();
+  assert.equal(await upgradeMedical(restored, '$800,000').isEnabled(), false);
   assert.equal(await save(restored), JSON.stringify(old));
   await restored.getByRole('button', { name: 'Season review', exact: true }).click();
   assert.equal(await development(restored).count(), 0);
