@@ -8,7 +8,7 @@ Six priority pages have 176 to 197 original words and matching static and runtim
 
 Empty reserved ad sizes fit 320px, 390px and 1440px layouts. First-visit game consent is in the page flow and allows gameplay while the choice is pending. Exact phone replays kept typed input through help and consent changes and confirmed GPC. No game engine or regional ad-loading rule changed.
 
-The shared JavaScript fell from approximately 244 to 222 KiB gzip. Compressed local Lighthouse on the final build measured desktop LCP at 1.86s home and 1.85s Soccer Career, with CLS 0.002 and 0. Mobile LCP measured 5.28s home and 7.63s Soccer Career. PageSpeed Insights API returned HTTP 429 for both devices. Field INP and live post-release vitals are unverified.
+The shared JavaScript fell from approximately 244 to 222 kB gzip. Compressed local Lighthouse on the final build measured desktop LCP at 1.86s home and 1.85s Soccer Career, with CLS 0.002 and 0. Mobile LCP measured 5.28s home and 7.63s Soccer Career. PageSpeed Insights API returned HTTP 429 for both devices. Field INP and live post-release vitals are unverified.
 
 Passed app types, 252 scoped tests, production build, 20 offline harnesses, standalone snapshot boot, 16 route-size caps and compiled desktop/mobile checks. The targeted prerender captured ten routes without errors.
 
