@@ -108,7 +108,7 @@ export function buildUsModel(sport: UsCareerSport, bind: UsSeasonBind, career: U
     helpKey: `seasonCentre:help:${bind.slug}`,
     groups: named ? [{ label: view.groupWords?.[0] ?? 'Division', slots: range(ctx.divSlots) }, { label: view.groupWords?.[1] ?? 'Conference', slots: range(ctx.confSlots) }] : undefined,
     /* the worked example names a team of THIS season that is not his (his first division rival), or nobody */
-    help: view.help(named, named ? ctx.names[1] : undefined),
+    help: view.help(named, named ? ctx.names[1] : undefined, s.target.kind === 'record' && s.target.saved === true),
     momentKey: `centre|${key}`,
   };
 }
