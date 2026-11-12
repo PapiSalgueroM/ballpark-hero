@@ -1,3 +1,11 @@
+## 2026-11-12: NRL Manager career record
+
+Season review rolls up the completed seasons into regular-season results and win rate, finals trips, minor premierships, premierships and the best ladder finish. The club breakdown puts returning spells under the same club. A tied best finish shows the earliest year it happened.
+
+The record reads the existing season history. Tests count a completed year once across rollover, check club grouping and honours, and verify that an imported v1 career can show its record with the original save intact. An exact-parent comparison matched 20,566 fixture results and save bytes through 90 completed seasons, 60 club moves and 2,964 record reads.
+
+The compiled phone checks grouped two Storm seasons around a Perth season at 320px and displayed a completed v1 save at 390px. Opening the record preserved the save and its write generation. All 95 NRL tests, app types, production build, 15 built-site readers and 16 download caps passed.
+
 ## 2026-11-12: Soccer Career Heat card explains owned items
 
 The Heat card now points to My Life and The other list when there is no owned processing capacity. It shows what the owned items can clear in the next playing season and warns about leftover Heat only when a balance remains. A 390px original replay confirmed that the old instruction was identical with no purchases and with all three items already owned.

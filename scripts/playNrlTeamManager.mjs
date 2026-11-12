@@ -528,6 +528,10 @@ try {
   const { page: restored, errors: restoredErrors } = await open(oldContext);
   await restored.getByRole('button', { name: 'Review this season' }).click();
   assert.match(await boardStatus(restored).innerText(), /^Target (?:met|missed) · Final ladder place \d+$/);
+  const importedRecord = restored.locator('[data-nrl-career-record]');
+  await importedRecord.locator('summary').tap();
+  assert.equal(await importedRecord.locator('dd').first().innerText(), '1');
+  assert.match(await importedRecord.innerText(), /Best ladder finish\s+#\d+ · Bears 2027/);
   assert.equal(await save(restored), JSON.stringify(old));
   await restored.getByRole('button', { name: 'Finances', exact: true }).click();
   await restored.getByText('This completed save predates club accounts. Tracking starts next season.').waitFor();
@@ -603,6 +607,38 @@ try {
   assert.deepEqual([...chosenErrors, ...staleErrors], []);
   await jobs.close();
   console.log('Offseason jobs at 320px: Perth opens in 2027, each club keeps its books, and a stale competing move cannot overwrite the save.');
+
+  let managedClubs = createNrlCareer('storm', 19);
+  for (const clubId of ['bears', 'storm', null]) {
+    while (managedClubs.season.phase !== 'complete') managedClubs = reduceNrlCareer(managedClubs, { type: 'advance' });
+    if (clubId) managedClubs = reduceNrlCareer(managedClubs, { type: 'startNextSeason', move: { fromYear: managedClubs.season.year, clubId } });
+  }
+  assert.deepEqual(managedClubs.history.map(row => row.clubId), ['storm', 'bears', 'storm']);
+  const recordPhone = await context(320);
+  await recordPhone.addInitScript(({ key, raw }) => { if (!localStorage.getItem(key)) localStorage.setItem(key, raw); },
+    { key: SAVE_KEY, raw: JSON.stringify(managedClubs) });
+  const { page: records, errors: recordErrors } = await open(recordPhone);
+  await records.getByRole('button', { name: 'Review this season' }).tap();
+  const careerRecord = records.locator('[data-nrl-career-record]');
+  const clubRecords = careerRecord.getByRole('list', { name: 'Record by club' });
+  assert.equal(await clubRecords.isVisible(), false);
+  const recordFence = await fence(records);
+  await careerRecord.locator('summary').tap();
+  assert.equal(await careerRecord.locator('dd').first().innerText(), '3');
+  assert.equal(await clubRecords.getByRole('listitem').count(), 2);
+  const stormRows = managedClubs.history.filter(row => row.clubId === 'storm');
+  const wins = stormRows.reduce((total, row) => total + row.wins, 0);
+  const draws = stormRows.reduce((total, row) => total + row.draws, 0);
+  const losses = stormRows.reduce((total, row) => total + row.losses, 0);
+  assert((await clubRecords.getByRole('listitem').filter({ hasText: 'Storm' }).innerText()).includes(`2 seasons · ${wins}W ${draws}D ${losses}L`));
+  assert.match(await clubRecords.getByRole('listitem').filter({ hasText: 'Bears' }).innerText(), /1 season/);
+  assert.equal(await save(records), JSON.stringify(managedClubs));
+  assert.equal(await fence(records), recordFence);
+  await fit(records);
+  await screenshot(records, 'nrl-career-record-320.png');
+  assert.deepEqual(recordErrors, []);
+  await recordPhone.close();
+  console.log('Career record at 320px: three finished seasons counted once, return spells grouped under Storm, and exact save bytes held.');
 
   const desktop = await context(1440);
   const { page, errors } = await open(desktop);
