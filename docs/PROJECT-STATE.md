@@ -1,3 +1,10 @@
+## 2026-11-12: Wall practice keeper proportions staged
+
+The keeper's body now follows the rendered contact point when the gloves animate toward a saved ball. The arms stay in proportion across low, high and straight catches. The shot simulator, collision coordinates, scoring, saves and timing stay as before.
+
+Three geometry cases failed on main and all 68 focused geometry, match, input and drill checks passed after the change.
+
+
 ## 2026-11-12: Two Player Bingo answer reports staged
 
 The World Cup tile recognises the stored Brazilian centre-back Gabriel when the 2026 squad archive has Gabriel Magalhães. Arsenal recorded that he played the full match against Morocco. The alias is specific to the reported year, country and market position and does not enter the 2022 or winner categories. [Arsenal match report](https://www.arsenal.com/news/gabriel-kicks-off-arsenal-world-cup-interest-with-draw-aw8UZ2n3Ox8A)
