@@ -286,10 +286,11 @@ console.log(`  ${Object.keys(table).length} engine rows, ${Object.keys(fileRows)
 
 /* ─── 2. PICKER ─── */
 head('2', 'PICKER: every nation on the creation screen, the award only on a verified row');
-const pageSrc = stripComments(fs.readFileSync(path.join(ROOT, 'src/pages/SoccerCareer.tsx'), 'utf8').replaceAll('\r\n', '\n'));
+const creator = 'src/components/soccer-career/SoccerCareerCreator.tsx';
+const pageSrc = stripComments(fs.readFileSync(path.join(ROOT, creator), 'utf8').replaceAll('\r\n', '\n'));
 const listMatch = pageSrc.match(/const NATIONALITIES = \[([\s\S]*?)\];/);
 const picker = listMatch ? [...listMatch[1].matchAll(/"([^"]+)"/g)].map(m => m[1]) : [];
-ok(picker.length >= 100, `read only ${picker.length} nations off NATIONALITIES in src/pages/SoccerCareer.tsx`);
+ok(picker.length >= 100, `read only ${picker.length} nations off NATIONALITIES in ${creator}`);
 const award = E.awardAllTimeTopScorer;
 ok(typeof award === 'function', 'the engine exports no awardAllTimeTopScorer');
 const probe = (nation, goals, intl = true) => {

@@ -77,7 +77,7 @@ const SoccerGrid = lazy(() => import("./pages/SoccerGrid"));
 const FantasyDraft = lazy(() => import("./pages/FantasyDraft"));
 const Conquest = lazy(() => import("./pages/Conquest"));
 const WorldCupPredictor = lazy(() => import("./pages/WorldCupPredictor"));
-const SoccerCareer = lazy(() => import("./pages/SoccerCareer"));
+const SoccerCareer = lazy(() => import("./pages/SoccerCareerEntry"));
 const ShirtNumber = lazy(() => import("./pages/ShirtNumber"));
 const HofOrBust = lazy(() => import("./pages/HofOrBust"));
 const ScorePredictor = lazy(() => import("./pages/ScorePredictor"));
