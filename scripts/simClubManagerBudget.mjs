@@ -30,10 +30,10 @@
         seeded stream so the squads come out identical and the ONLY
         difference is the money. More banked must never open lower, and
         banking real money must open higher.
-     2) the bound the rules screen promises. The four-times clone must not
-        open four times higher: the carry stops at one more allocation, so
-        the ceiling is exactly double what an empty balance opens on. The
-        copy in src/components/club-manager/ClubManagerHelp.tsx is read and has to say so.
+     2) the rules screen promises full carry and a tapered new cheque.
+        A board can add up to its usual allocation. It adds nothing once
+        the bank holds at least twice that allocation. The richer clone
+        keeps its earned funds above that threshold.
      3) a hoarder and a spender across consecutive summers of real careers,
         which is the outcome a player actually feels.
      4) the ceiling is no longer a mirror: how often next summer's cap comes
@@ -108,12 +108,15 @@ if (CONTROL) {
   // The worktree checks out CRLF, the anchors below are written LF.
   const src = fs.readFileSync(ENGINE, 'utf8').replaceAll('\r\n', '\n');
   const fixed = CONTROL === 'static'
-    ? '  const openingBeforeAdjustments = Math.round((allocation + carried) * 10) / 10;'
+    ? '  const carried = retainsBank ? unspent : Math.min(unspent, usualAllocation);\n'
+      + '  const allocation = retainsBank\n'
+      + '    ? roundBalance(Math.min(usualAllocation, Math.max(0, 2 * usualAllocation - unspent)))\n'
+      + '    : usualAllocation;'
     : '  state.wageCap = moving\n'
-      + '    ? wageCapFrom(wageBill(state))\n'
-      + '    : nextWageCap(career.wageCap ?? wageCapFrom(wageBill(career)), club.expectation, prevPos, seasonTrophyCount);';
+      + '    ? wageRoomFor(career, wageCapFrom(wageBill(state)))\n'
+      + '    : nextWageCap(Math.max(60, (career.wageCap ?? wageCapFrom(wageBill(career))) - (career.founderWageRoom ?? 0)), club.expectation, prevPos, seasonTrophyCount) + roomNow;';
   const broken = CONTROL === 'static'
-    ? '  const openingBeforeAdjustments = allocation;'
+    ? '  const carried = 0;\n  const allocation = usualAllocation;'
     : '  state.wageCap = wageCapFrom(wageBill(state));';
   if (!src.includes(fixed)) {
     console.error(`control cannot run: clubManager.ts is not in the shape CM_BUDGET_CONTROL=${CONTROL} rewrites`);
@@ -203,10 +206,9 @@ function playSeason(start, policy) {
 
 const CLUBS = ['Real Madrid', 'Arsenal', 'Napoli', 'Wolves', 'Ajax', 'Roma', 'Newcastle', 'Inter Miami'];
 
-/* ---------- 1 and 2. the carry is an input, and it is bounded ---------- */
-console.log('1) The carried balance is an input to the summer, and it is bounded');
-let clones = 0, raised = 0, lowered = 0, realBalances = 0;
-const doubleMultiples = [];
+/* ---------- 1 and 2. keep the bank and taper the new cheque ---------- */
+console.log('1) The bank carries in full and the board top-up tapers');
+let clones = 0, raised = 0, lowered = 0, realBalances = 0, richAboveThreshold = 0;
 let cloneSeed = 0;
 for (const club of CLUBS) {
   let s = startCareer(club);
@@ -221,14 +223,19 @@ for (const club of CLUBS) {
     const openReal = rollWith(withBudget(s, close), seed);
     const richBalance = close * 4 + 500;
     const openRich = rollWith(withBudget(s, richBalance), seed);
+    const usual = openEmpty.summerBudget?.allocation;
+    if (!isNum(usual)) fail(`${club} s${season}: the empty bank did not receive a usual allocation`);
+    if (richBalance >= 2 * usual) richAboveThreshold += 1;
     clones += 1;
     for (const [label, o, balance] of [['empty', openEmpty, 0], ['real', openReal, close], ['rich', openRich, richBalance]]) {
       if (!isNum(o.budget)) fail(`${club} s${season}: ${label} clone opened on a non-number budget (${o.budget})`);
       if (o.budget < 10) fail(`${club} s${season}: ${label} clone opened on ${o.budget}, below the 10m floor`);
       const summary = o.summerBudget;
-      if (!summary || summary.unspent !== Math.max(0, balance) || summary.opening !== o.budget
-        || summary.carried !== Math.min(summary.unspent, summary.allocation)
-        || Math.abs(summary.allocation + summary.carried + summary.adjustments - summary.opening) > 0.051) {
+      const bank = Math.max(0, balance);
+      const grant = Math.round(Math.min(usual, Math.max(0, 2 * usual - bank)) * 100) / 100;
+      if (!summary || summary.unspent !== bank || summary.carried !== bank
+        || summary.usualAllocation !== usual || summary.allocation !== grant || summary.opening !== o.budget
+        || Math.abs(summary.allocation + summary.carried + summary.adjustments - summary.opening) > 0.011) {
         fail(`${club} s${season}: ${label} summer budget breakdown does not reconcile with the rollover`);
       }
     }
@@ -239,31 +246,26 @@ for (const club of CLUBS) {
       if (openReal.budget > openEmpty.budget) raised += 1;
       else fail(`${club} s${season}: closed on ${close}m banked and still opened on ${openReal.budget}, the same as a manager who banked nothing (${openEmpty.budget})`);
     }
-    if (openEmpty.budget > 0) doubleMultiples.push(openRich.budget / openEmpty.budget);
     s = openReal;
   }
 }
 if (clones < 12) fail(`only ${clones} summers cloned, the sample is too thin to mean anything`);
 if (realBalances < 10) fail(`only ${realBalances} of ${clones} summers closed with a real balance to carry`);
 if (lowered > 0) fail(`${lowered} clone pairs opened LOWER on more money banked`);
-const richMult = median(doubleMultiples);
-const richMax = Math.max(...doubleMultiples);
 console.log(`   ${clones} summers cloned three ways, ${realBalances} with a real balance banked; banking raised the opening kitty in ${raised}/${realBalances}`);
-console.log(`   a balance of four times the close plus 500m opens on ${richMult.toFixed(2)}x what an empty balance opens on (highest ${richMax.toFixed(2)}x)`);
+console.log(`   ${richAboveThreshold} large banks above the funding threshold checked for full carry and zero top-up`);
 if (raised < realBalances) fail(`banking money raised next summer's kitty in only ${raised} of ${realBalances} summers`);
-if (!(richMult >= 1.95 && richMax <= 2.05)) {
-  fail(`the carry is not bounded at one extra allocation: an absurd balance opens on ${richMult.toFixed(2)}x (max ${richMax.toFixed(2)}x), expected 2.00x`);
-}
+if (!richAboveThreshold) fail('no cloned bank tested the zero top-up rule');
 
-console.log('2) The rules screen states the bound the engine enforces');
+console.log('2) The rules screen explains the full carry and board top-up');
 {
   const page = fs.readFileSync(path.join(ROOT, 'src', 'components', 'club-manager', 'ClubManagerHelp.tsx'), 'utf8');
   // Read the copy the player is shown, not the comments around it.
   const copy = page.replace(/\/\*[\s\S]*?\*\//g, ' ').replace(/^\s*\/\/.*$/gm, ' ');
   const claims = [
-    ['carries the balance', /whatever you did not spend (?:comes|rolls)/i],
-    ['names the cap on the carry', /one more (?:season'?s|summer'?s) worth|double the board'?s/i],
-    ['says the balance stays with the club', /leave (?:the club|and the balance)|stays behind with the club|belongs to the club/i],
+    ['carries the full balance', /all unused transfer funds roll/i],
+    ['names the threshold for the new cheque', /twice its usual allocation/i],
+    ['says the balance stays with the club', /old club'?s balance[^.]*stay behind/i],
   ];
   for (const [what, re] of claims) {
     if (!re.test(copy)) fail(`the How to Play copy never ${what} (${re})`);
@@ -271,7 +273,7 @@ console.log('2) The rules screen states the bound the engine enforces');
   if (!/ceiling.*(club'?s season|not (?:on )?your (?:own )?(?:wage )?bill)|moves with the club/i.test(copy)) {
     fail('the How to Play copy never says what moves the wage ceiling');
   }
-  console.log('   How to Play states the carry, its one-allocation cap, that it stays with the club, and what moves the ceiling');
+  console.log('   How to Play explains full carry, the board top-up, club moves and what moves the wage ceiling');
 }
 
 /* ---------- 3. hoarder against spender, real careers ---------- */
