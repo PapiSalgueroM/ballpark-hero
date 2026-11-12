@@ -11645,6 +11645,19 @@ export function walkAway(career: CareerState): CareerState {
 
 /* ---------- Round 71: AI clubs bid for MY players ---------- */
 
+function resaleProceeds(player: CMPlayer, fee: number): { netFee: number; sellOnNews?: string } {
+  const clause = player.sellOnOwed;
+  const pct = clause?.pct ?? 0;
+  const cut = pct > 0 ? Math.round(fee * (pct / 100) * 10) / 10 : 0;
+  const netFee = Math.round((fee - cut) * 10) / 10;
+  return {
+    netFee,
+    sellOnNews: cut > 0 && clause
+      ? `${clause.club} collect ${money(cut)} from the ${player.name} sale: the sell-on clause they took when you signed him.`
+      : undefined,
+  };
+}
+
 /** Accept an incoming bid: the player leaves at the bid price. */
 export function acceptBid(career: CareerState, playerId: string): CareerState | null {
   const bids = career.incomingBids ?? [];
@@ -11662,9 +11675,7 @@ export function acceptBid(career: CareerState, playerId: string): CareerState | 
   }
   /* Round 161: the sell-on his old club took when you signed him comes off
      the top of the fee, exactly as promised at that table. */
-  const cutPct = p.sellOnOwed?.pct ?? 0;
-  const cut = cutPct > 0 ? Math.round(bid.offer * (cutPct / 100) * 10) / 10 : 0;
-  const netFee = Math.round((bid.offer - cut) * 10) / 10;
+  const { netFee, sellOnNews } = resaleProceeds(p, bid.offer);
   const state: CareerState = {
     ...career,
     budget: Math.round((career.budget + netFee) * 10) / 10,
@@ -11685,12 +11696,7 @@ export function acceptBid(career: CareerState, playerId: string): CareerState | 
     transferLog: [...(career.transferLog ?? [])],
   };
   pushNews(state, { name: p.name, from: career.clubName, to: bid.club, fee: bid.offer });
-  if (cut > 0 && p.sellOnOwed) {
-    state.aiHeadlines = [
-      `${p.sellOnOwed.club} collect ${money(cut)} from the ${p.name} sale: the sell-on clause they took when you signed him.`,
-      ...state.aiHeadlines,
-    ].slice(0, 8);
-  }
+  if (sellOnNews) state.aiHeadlines = [sellOnNews, ...state.aiHeadlines].slice(0, 8);
   trackDealExtremes(state, 'out', p.name, netFee);
   return recordActualRosterTransfer(state, p, career.clubName, bid.club, 'permanent');
 }
@@ -23308,10 +23314,15 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
      carries none of it, the same rule the balance and the sponsor already
      follow: he was the old club's player and it is the old club's money. */
   const loanOptionNews: string[] = [];
+  const loanSellOnNews: string[] = [];
+  const loanOptionSales: TransferRecord[] = [];
   if (!moving) {
     for (const sale of loanReturn.bought) {
-      budget = Math.round((budget + sale.fee) * 10) / 10;
+      const { netFee, sellOnNews } = resaleProceeds(sale.player, sale.fee);
+      budget = Math.round((budget + netFee) * 10) / 10;
+      loanOptionSales.push({ dir: 'out', name: sale.name, fee: netFee });
       loanOptionNews.push(`\u{1F4B0} ${sale.club} took up their option on ${sale.name}, ${money(sale.fee)}.`);
+      if (sellOnNews) loanSellOnNews.push(sellOnNews);
     }
   }
   const addOnNews: string[] = [];
@@ -23376,7 +23387,7 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
     aiHeadlines: [],
     // Round 132: anybody the club had to go and get is off the market now.
     goneNames: [...freeAgentsIn],
-    seasonSignings: [],
+    seasonSignings: loanOptionSales,
     cupRound: league.cupName !== null ? 'R16' : 'out',
     cupDraw: {},
     uclField: nextUclField.length ? nextUclField : undefined,
@@ -23752,13 +23763,7 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
   /* Round 1597 closing check: and the made up men who left these leagues off the list (leavesTheLeagues), the same way. */
   if (poolSummer.left.length) state.freeAgentsLeft = poolSummer.left;
   else delete state.freeAgentsLeft;
-  /* Round 508: an exercised option is a TRANSFER, so it goes in the transfer
-     log rather than only into the headline feed. The feed is capped at eight
-     and two more prepends follow this line, so a summer with promotion news and
-     a manager merry-go-round pushes the sale straight off the end: the first
-     version of this recorded it only as a headline and a harness checking for
-     it was red on a working engine. The log is where a player would look for it
-     anyway, beside every other deal. */
+  /* The transfer log shows what the buyer paid. Season signings carry the net receipt. */
   if (!moving) {
     for (const sale of loanReturn.bought) {
       pushNews(state, { name: sale.name, from: state.clubName, to: sale.club, fee: sale.fee });
@@ -23786,9 +23791,9 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
   /* Round 308: the merry-go-round's news, same seat as the add-ons and for
      the same reason. */
   if (managerNews.length) state.aiHeadlines = [...managerNews, ...state.aiHeadlines].slice(0, 8);
-  /* Round 310: promotion and relegation lead the whole summer, same seat,
-     same reason, prepended last so they sit on top of the feed. */
+  /* Round 310: promotion and relegation lead the league news. */
   if (pr.lines.length) state.aiHeadlines = [...pr.lines, ...state.aiHeadlines].slice(0, 8);
+  if (loanSellOnNews.length) state.aiHeadlines = [...loanSellOnNews, ...state.aiHeadlines].slice(0, 8);
   return snapshotWorldRosterClub(state, state.clubName);
 }
 
