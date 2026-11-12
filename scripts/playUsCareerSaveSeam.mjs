@@ -33,9 +33,8 @@
  *           the store and the notice goes
  *  toast    and the toast that said the save had failed is gone with it
  *           (Release AN fix: it used to stay up for the rest of its seconds)
- *  banner   (Round 1144) this is a first visit, so the cookie banner is up
- *           under all of it: the save toast is on the screen, on top, and
- *           does not overlap the banner
+ *  banner   a first visit offers cookie choices in the page. The save toast
+ *           stays visible on top and clear of the in-flow choices.
  *  line     (Round 1144) after the Retry that worked, the line at the top
  *           that said the storage is full leaves, on the same page (no
  *           load), and the game under it has not moved up by more than that
@@ -284,7 +283,8 @@ const read = (page, key) => page.evaluate(([k, words]) => {
   const game = document.getElementById('dukb-main') ?? document.querySelector('main');
   return {
     toast: rect(saveToast), toastSeen,
-    banner: banner && getComputedStyle(banner).position === 'fixed' ? rect(banner) : null,
+    banner: rect(banner),
+    bannerInFlow: !!banner && banner.hasAttribute('data-game-consent-inline') && getComputedStyle(banner).position !== 'fixed',
     gameTop: game ? Math.round(game.getBoundingClientRect().top + window.scrollY) : null,
     stayed: window.__seamStayed === 1,
     notice: notice ? { op: notice.getAttribute('data-save-operation'), box: box(notice), seen } : null,
@@ -377,10 +377,10 @@ async function journey(sport, arm) {
       check('stuck', st.ok, `${tag}: scrolled to ${st.scrolled} (the notice starts at ${st.natural}), the Retry notice sticks at ${st.top} under the site's bar (bottom ${st.barBottom}) and its first line is on top (${st.at})`);
       check('full', s.saveToasts === 1, `${tag}: the refused save is said in exactly one toast (${s.saveToasts} of ${s.toasts} on screen)`);
       check('full', !!s.notice && !!s.line && (s.notice.box.t >= s.line.box.b || s.line.box.t >= s.notice.box.b), `${tag}: the line and the Retry notice do not overlap (${say(s)})`);
-      /* Round 1144: a first visit, so the cookie banner is up under the toast */
+      /* A first visit still offers consent while the save error is visible. */
       const over = s.toast && s.banner ? Math.min(Math.min(s.toast.b, s.banner.b) - Math.max(s.toast.t, s.banner.t), Math.min(s.toast.r, s.banner.r) - Math.max(s.toast.l, s.banner.l)) : null;
       const boxes = `toast ${s.toast ? `${s.toast.t}..${s.toast.b}` : 'none'}${s.toastSeen ? ' seen' : ' NOT SEEN'}, banner ${s.banner ? `${s.banner.t}..${s.banner.b}` : 'none'}, shared ${over === null ? 'n/a' : `${Math.max(0, over)} px`}`;
-      check('banner', !!s.toast && !!s.banner && s.toastSeen && over !== null && over <= 0, `${tag}: the save toast is on the screen, on top, and clear of the cookie banner (${boxes})`);
+      check('banner', !!s.toast && !!s.banner && s.bannerInFlow && s.toastSeen && over !== null && over <= 0, `${tag}: the save toast is on the screen, on top, and clear of the in-flow cookie choices (${boxes})`);
       /* the browser takes writes again (the stale control: all but the seam's own probe key) */
       await page.evaluate(([stale, probe]) => {
         window.__seamStayed = 1;
