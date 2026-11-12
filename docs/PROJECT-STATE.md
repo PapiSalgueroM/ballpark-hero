@@ -1,3 +1,9 @@
+## 2026-11-12: Club Manager retains the summer transfer bank
+
+When a manager stays at the club, the summer carries the full unused transfer balance. The board can add its usual allocation, reducing the top-up as needed to reach twice the usual allocation. If the existing bank already reaches that amount, no new board money is added. Loan options, add-ons and sponsors still settle in order. New receipts show the actual top-up, and earlier receipts keep the cap that applied to them.
+
+A seeded Arsenal rollover with a £179m usual allocation kept £1bn with no top-up, where the original opened on £358m. With £100.04m unspent it opened on £279.04m, retaining £40k the old £0.1m rounding lost. The earned-balance policy applies to ordinary same-club rollovers. The same fixture retained legacy rules and destination budgets on a move.
+
 ## 2026-11-12: NRL Manager season player stats
 
 Open Season player stats in Squad to see each player’s appearances, starts, games played off the bench, tries and points. Once the club has played a final, filter the table by regular season or finals. Imported seasons without player match records show when tracking begins.

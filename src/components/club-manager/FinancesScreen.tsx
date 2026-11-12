@@ -335,7 +335,7 @@ export function FinancesScreen({ career: c, onTickets, onConcessions, onBuyWageR
             <div className="text-xs text-muted-foreground">Last home gate</div>
           </div>
         </div>
-        <p className="text-xs text-muted-foreground mt-1.5">Every home crowd pays the kitty: attendance times about £{gatePricePerFan(c)} a head, tickets plus food and drink at your prices. Scouts, the academy, the facilities and the staff desk spend from the same kitty in their own tabs. What you have left in August rolls into next season on top of the board's new cheque, up to one more season's worth of it.</p>
+        <p className="text-xs text-muted-foreground mt-1.5">Every home crowd pays the kitty: attendance times about £{gatePricePerFan(c)} a head, tickets plus food and drink at your prices. Scouts, the academy, the facilities and the staff desk spend from the same kitty in their own tabs. If you stay at the club, all unused transfer funds roll into next season. The board's top-up may be smaller when you already have money in the bank.</p>
       </div>
     </div>
   );

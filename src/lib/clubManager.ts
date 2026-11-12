@@ -3195,7 +3195,11 @@ export interface CareerState {
   /** Round 132: who retired at the most recent summer, for the season screen. */
   retiredLastSummer?: { name: string; age: number; rating: number }[];
   /** Transfer budget as it opened at the most recent same-club rollover. */
-  summerBudget?: { club: string; unspent: number; allocation: number; carried: number; adjustments: number; opening: number };
+  summerBudget?: {
+    club: string; unspent: number; allocation: number; carried: number; adjustments: number; opening: number;
+    /** The board's usual allocation before the top-up was reduced. Absent on earlier capped receipts. */
+    usualAllocation?: number;
+  };
   /**
    * Round 135: the microphone. How the papers are treating you, the question
    * sitting on your desk, and anything you have promised out loud. Undefined on
@@ -23703,16 +23707,13 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string, o
      says the opposite ("it is all one kitty"), and a whole season of not
      buying was deleted every August.
 
-     The carry is capped at one more allocation, so hoarding is worth real
-     money (up to double the board's cheque) without compounding into a war
-     chest nothing in the game can balance against. Walking to a new job
-     carries nothing, the same rule the sponsor deal and the ground
-     expansions already follow: the balance belonged to the club. */
-  /* Round 1335: a stay's cheque is that same flat formula, never past KITTY_TOP_SHARE of the club's usual
-     budget or 10m (kittyAllocation), so a small club's good year pays a bonus its size can carry; the
-     carry below is unchanged, and it is capped by the cheque, so it shrinks with it. */
-  /* Round 1501: the level's cheque on every arm (the identity on Normal); the carry rule below is untouched. */
-  const allocation = moving
+     Walking to a new job carries nothing, the same rule the sponsor and
+     ground expansions follow: the balance belonged to the club. */
+  /* Round 1335: a stay's usual cheque follows kittyAllocation, then Round 1501
+     applies the difficulty level. An ordinary same-club summer keeps the
+     full balance. The board reduces its cheque if the new money would put
+     the bank above twice its usual allocation. */
+  const usualAllocation = moving
     ? boardCheque(career, Math.round(club.budget * 1.1))
     : legacy ? boardCheque(career, Math.max(10, Math.round(club.budget + (club.expectation - prevPos) * 2 + seasonTrophyCount * 12)))
     : boardCheque(career, kittyAllocation({ budget: club.budget, expectation: club.expectation, finish: prevPos, trophies: seasonTrophyCount }));
@@ -23720,8 +23721,14 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string, o
      that is not a real number carries nothing rather than poisoning the new
      season with NaN. */
   const unspent = moving || !Number.isFinite(career.budget) ? 0 : Math.max(0, career.budget);
-  const carried = Math.min(unspent, allocation);
-  const openingBeforeAdjustments = Math.round((allocation + carried) * 10) / 10;
+  const retainsBank = !moving && !legacy;
+  const precision = retainsBank ? 100 : 10;
+  const roundBalance = (value: number) => Math.round(value * precision) / precision;
+  const carried = retainsBank ? unspent : Math.min(unspent, usualAllocation);
+  const allocation = retainsBank
+    ? roundBalance(Math.min(usualAllocation, Math.max(0, 2 * usualAllocation - unspent)))
+    : usualAllocation;
+  const openingBeforeAdjustments = roundBalance(allocation + carried);
   let budget = openingBeforeAdjustments;
   /* Round 161: the summer the add-ons come due. Each promise rolls once:
      about two thirds trigger (he played, the clauses hit) and the money
@@ -23736,7 +23743,7 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string, o
   const loanOptionNews: string[] = [];
   if (!moving) {
     for (const sale of loanReturn.bought) {
-      budget = Math.round((budget + sale.fee) * 10) / 10;
+      budget = roundBalance(budget + sale.fee);
       loanOptionNews.push(`\u{1F4B0} ${sale.club} took up their option on ${sale.name}, ${money(sale.fee)}.`);
     }
   }
@@ -23746,7 +23753,7 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string, o
     if (Math.random() < 0.65) {
       const paid = Math.min(budget - 5, due.amount);
       if (paid > 0) {
-        budget = Math.round((budget - paid) * 10) / 10;
+        budget = roundBalance(budget - paid);
         addOnNews.push(`💸 The ${due.name} add-ons came due: ${money(paid)} to ${due.to}.`);
       }
     }
@@ -24223,6 +24230,7 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string, o
   if (moving) delete state.summerBudget;
   else state.summerBudget = {
     club: state.clubName, unspent, allocation, carried,
+    ...(retainsBank ? { usualAllocation } : {}),
     adjustments: Math.round((state.budget - openingBeforeAdjustments) * 100) / 100,
     opening: state.budget,
   };
