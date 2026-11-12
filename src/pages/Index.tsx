@@ -426,13 +426,11 @@ export default function Index() {
                 <MostPlayedToday />
                 <JustShipped>
                   {games => (
-                    <RevealSection>
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                        {games.map((game, i) => (
-                          <GameCard key={game.path} game={game} badgeDate={badgeDate} bestScore={bestScores[game.path.slice(1)]} revealIndex={i} pinned={gamePicks.includes(game.path)} onTogglePick={toggleGamePick} />
-                        ))}
-                      </div>
-                    </RevealSection>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      {games.map(game => (
+                        <GameCard key={game.path} game={game} badgeDate={badgeDate} bestScore={bestScores[game.path.slice(1)]} pinned={gamePicks.includes(game.path)} onTogglePick={toggleGamePick} />
+                      ))}
+                    </div>
                   )}
                 </JustShipped>
               </div>
@@ -461,14 +459,11 @@ export default function Index() {
                 <p className="text-xs text-muted-foreground mb-4 md:pl-[42px]">
                   Not quizzes. Whole universes: run a franchise, live a career, build a dynasty. Every one saves your progress.
                 </p>
-                {/* Round 188: the tile curtain, once per section on scroll. */}
-                <RevealSection>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
-                    {FEATURED_GAMES.map((game, i) => (
-                      <GameCard key={game.path} game={game} badgeDate={badgeDate} bestScore={bestScores[game.path.slice(1)]} revealIndex={i} pinned={gamePicks.includes(game.path)} onTogglePick={toggleGamePick} />
-                    ))}
-                  </div>
-                </RevealSection>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
+                  {FEATURED_GAMES.map(game => (
+                    <GameCard key={game.path} game={game} badgeDate={badgeDate} bestScore={bestScores[game.path.slice(1)]} pinned={gamePicks.includes(game.path)} onTogglePick={toggleGamePick} />
+                  ))}
+                </div>
               </section>
 
               <section id="browse-sports" tabIndex={-1} aria-labelledby="browse-sports-heading" className="scroll-mt-36 rounded-2xl border border-border bg-surface-1 p-3 sm:scroll-mt-28 sm:p-4">
@@ -517,13 +512,11 @@ export default function Index() {
                       </Link>
                     )}
                   </h2>
-                  <RevealSection>
-                    <div className="grid grid-cols-1 gap-2 min-[360px]:grid-cols-2 sm:gap-3 lg:grid-cols-3 xl:grid-cols-4">
-                      {cat.games.map((game, i) => (
-                        <GameCard key={game.path} game={game} badgeDate={badgeDate} bestScore={bestScores[game.path.slice(1)]} revealIndex={i} pinned={gamePicks.includes(game.path)} onTogglePick={toggleGamePick} compact />
-                      ))}
-                    </div>
-                  </RevealSection>
+                  <div className="grid grid-cols-1 gap-2 min-[360px]:grid-cols-2 sm:gap-3 lg:grid-cols-3 xl:grid-cols-4">
+                    {cat.games.map(game => (
+                      <GameCard key={game.path} game={game} badgeDate={badgeDate} bestScore={bestScores[game.path.slice(1)]} pinned={gamePicks.includes(game.path)} onTogglePick={toggleGamePick} compact />
+                    ))}
+                  </div>
                 </section>
               ))}
             </div>
@@ -686,23 +679,9 @@ function MostPlayedToday() {
   );
 }
 
-/* ─── Round 188: the tile curtain (S-3's home page pass) ───
-   Each game section reveals once as it scrolls into view: tiles rise in a
-   short stagger, capped by a modulo so a 20-tile grid does not take five
-   seconds to settle. Rules of the house: transforms and opacity only (no
-   layout shift), the animation is emphasis on entrance and never hides
-   anything from a user who prefers reduced motion (the media query kills
-   it dead and shows everything instantly), and search results get NO
-   curtain because search must feel instant. The observer disconnects
-   after firing, so a section only ever performs its entrance once. */
 function HomeTileStyles() {
   return (
     <style>{`
-      [data-tile-reveal="out"] .home-tile { opacity: 0; }
-      [data-tile-reveal="out"] [data-home-game-card] > [data-game-pick] { opacity: 0; }
-      @keyframes homeTileIn { 0% { opacity: 0; transform: translateY(10px); } 100% { opacity: 1; transform: none; } }
-      [data-tile-reveal="in"] .home-tile { animation: homeTileIn 0.45s ease-out both; }
-      [data-tile-reveal="in"] [data-home-game-card] > [data-game-pick] { animation: homeTileIn 0.45s ease-out both; animation-delay: inherit; }
       @media (max-width: 639px) {
         [data-catalog-card] {
           display: grid;
@@ -729,33 +708,9 @@ function HomeTileStyles() {
         [data-catalog-card] h3 { width: 100%; font-size: .875rem; line-height: 1.2; overflow-wrap: anywhere; }
         [data-catalog-card] > [data-game-pick] { position: static; }
       }
-      @media (prefers-reduced-motion: reduce) {
-        [data-tile-reveal="out"] .home-tile, [data-tile-reveal="in"] .home-tile { animation: none; opacity: 1; transform: none; }
-        [data-tile-reveal] [data-home-game-card] > [data-game-pick] { animation: none; opacity: 1; transform: none; }
-      }
     `}</style>
   );
 }
-
-function RevealSection({ children }: { children: ReactNode }) {
-  const ref = useRef<HTMLDivElement>(null);
-  const [inView, setInView] = useState(false);
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    /* No observer, no theatre: everything simply shows. */
-    if (typeof IntersectionObserver === 'undefined') { setInView(true); return; }
-    const io = new IntersectionObserver(entries => {
-      if (entries.some(e => e.isIntersecting)) { setInView(true); io.disconnect(); }
-    }, { rootMargin: '0px 0px -8% 0px' });
-    io.observe(el);
-    return () => io.disconnect();
-  }, []);
-  return <div ref={ref} data-tile-reveal={inView ? 'in' : 'out'}>{children}</div>;
-}
-
-/** Stagger inside a section, capped so deep grids settle fast. */
-const tileDelay = (i: number) => `${(i % 9) * 0.06}s`;
 
 /* ─── GAME CARD ───
    Round 658: every card wears its sport. A 3px rule and a tinted icon tile
@@ -765,11 +720,10 @@ const tileDelay = (i: number) => `${(i % 9) * 0.06}s`;
    thing on the card that tells two games of the same sport apart at a
    glance. The description is clamped to two lines so a grid of cards lines
    up in rows. */
-function GameCard({ game, badgeDate, bestScore, revealIndex, pinned, onTogglePick, compact = false }: {
+function GameCard({ game, badgeDate, bestScore, pinned, onTogglePick, compact = false }: {
   game: GameDef;
   badgeDate: string;
   bestScore?: number;
-  revealIndex?: number;
   pinned: boolean;
   onTogglePick: (path: string, node?: HTMLElement) => void;
   compact?: boolean;
@@ -777,12 +731,12 @@ function GameCard({ game, badgeDate, bestScore, revealIndex, pinned, onTogglePic
   const cardRef = useRef<HTMLDivElement>(null);
   const sport = sportOf(game.path);
   return (
-    <div ref={cardRef} data-home-game-card="" data-catalog-card={compact ? '' : undefined} className="relative h-full" style={revealIndex != null ? { animationDelay: tileDelay(revealIndex) } : undefined}>
+    <div ref={cardRef} data-home-game-card="" data-catalog-card={compact ? '' : undefined} className="relative h-full">
     <Link
       to={game.path}
       data-sport={sport}
       className="home-tile group relative flex h-full items-start gap-3 overflow-hidden rounded-xl border border-border/80 bg-surface-1 p-4 pr-16 pt-[18px] hover:border-tile/50 hover:bg-surface-2 hover:-translate-y-0.5 transition-all duration-200"
-      style={{ ...sportStyle(sport), ...(revealIndex != null ? { animationDelay: tileDelay(revealIndex) } : {}) }}
+      style={sportStyle(sport)}
     >
       <span aria-hidden="true" className="home-tile-accent absolute inset-x-0 top-0 h-[3px] bg-tile" />
       <SportGlyph sport={sport} className="home-tile-watermark pointer-events-none absolute -bottom-4 -right-4 h-20 w-20 text-tile opacity-[0.07] transition-opacity duration-200 group-hover:opacity-[0.13]" />
