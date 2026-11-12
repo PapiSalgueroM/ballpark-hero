@@ -161,11 +161,11 @@ describe('Soccer Career actual save recovery', () => {
     expect(next.morale).toBe(expected.morale); expect(next.netWorth).toBe(expected.netWorth);
     expect(next.events).toEqual(expected.events);
   });
-  it('restores an older World Cup result without requiring a new tournament field', () => {
+  it('restores an older World Cup result without requiring a new tournament field', async () => {
     const saved: Saved = copy(nativeCareer()); saved.phase = 'world_cup'; delete saved.pendingTournament;
     saved.pendingWorldCup = { year: 2022, nation: 'England', matches: [], playerApps: 3, playerGoals: 1, playerAssists: 2, playerAvgRating: 7.3, result: 'Group Stage', bestPlayer: false };
     const { view } = mount(JSON.stringify(saved));
-    assertPlayable(view); expect(view.getByText('World Cup 2022')).toBeVisible();
+    assertPlayable(view); expect(await view.findByText('World Cup 2022')).toBeVisible();
     expect(read().pendingWorldCup).toEqual(saved.pendingWorldCup);
     fireEvent.click(view.getByRole('button', { name: /Continue/ }));
     expect(read().phase).not.toBe('world_cup');

@@ -644,6 +644,14 @@ export function positionGroup(pos: string): 'GK' | 'DEF' | 'MID' | 'ATT' {
   return 'DEF';
 }
 
+/** A player's chance of scoring each of his team's goals in a cup match. */
+export function tournamentGoalShare(position: string, overall: number): number {
+  const group = positionGroup(position);
+  const role = position === 'ST' ? 0.44 : group === 'ATT' ? 0.34
+    : group === 'MID' ? 0.19 : group === 'DEF' ? 0.10 : 0;
+  return role * (0.35 + 0.65 * clamp((overall - 65) / 35, 0, 1));
+}
+
 /* A 26 player squad, which is what the last two World Cups have used, split
    the way a manager actually splits one: three keepers, then defenders,
    midfielders and forwards. */
@@ -655,13 +663,18 @@ export const SQUAD_PLACES: Record<'GK' | 'DEF' | 'MID' | 'ATT', number> = {
 function playerMatchStats(form: PlayerForm, teamGoals: number): { goals: number; assists: number; rating: number } {
   const grp = positionGroup(form.position);
   const quality = clamp((form.overall - 68) / 28, 0, 1.2);
-  // A striker cannot score goals his team did not score.
-  const share = grp === 'ATT' ? 0.55 : grp === 'MID' ? 0.25 : grp === 'DEF' ? 0.12 : 0;
-  let goals = 0;
-  for (let i = 0; i < teamGoals; i++) if (Math.random() < share * (0.6 + quality * 0.6)) goals++;
+  const share = tournamentGoalShare(form.position, form.overall);
+  const legacyShare = (grp === 'ATT' ? 0.55 : grp === 'MID' ? 0.25 : grp === 'DEF' ? 0.12 : 0) * (0.6 + quality * 0.6);
+  let goals = 0, legacyGoals = 0;
+  for (let i = 0; i < teamGoals; i++) {
+    const roll = Math.random();
+    if (roll < share) goals++;
+    if (roll < legacyShare) legacyGoals++;
+  }
+  // Keep the assist draws in place so the next team score uses the same RNG.
   let assists = 0;
   const aShare = grp === 'ATT' ? 0.2 : grp === 'MID' ? 0.3 : grp === 'DEF' ? 0.12 : 0.02;
-  for (let i = 0; i < teamGoals - goals; i++) if (Math.random() < aShare * (0.6 + quality * 0.6)) assists++;
+  for (let i = 0; i < teamGoals - legacyGoals; i++) if (Math.random() < aShare * (0.6 + quality * 0.6)) assists++;
   const rating = clamp(
     6.2 + quality * 0.9 + goals * 0.55 + assists * 0.3 + (Math.random() - 0.45) * 1.1,
     4.0, 10.0,

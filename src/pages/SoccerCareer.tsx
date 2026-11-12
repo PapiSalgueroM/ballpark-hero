@@ -19,7 +19,7 @@ import { AgentReviewCard } from "@/components/soccer-career/AgentReviewCard";
 import { agentReviewEligibility, changeCareerAgent } from "@/lib/soccerAgentReview";
 import {
   type CareerState, type SeasonRecord, type ClubData, type ContractOffer, type TransferSituation,
-  type RandomEvent, type EventChoice, type WorldCupResult, type WCMatch,
+  type RandomEvent, type EventChoice, type WCMatch,
   type RivalPlayer, type RivalryEvent, type RivalrySummary,
   type LifestyleLevel, type FamilyStatus, type BallonDorResult, type BallonDorNominee,
   type UCLResult, type UCLKnockoutMatch, type Award,
@@ -31,7 +31,7 @@ import {
   initCareer, advanceYouthYear, acceptOffer, advanceProSeason,
   dismissSummary, stayAtClub, signExtension, requestTransferDecision, applyEventChoice,
   dismissDebut, dismissWorldCup, retireFromInternational, dismissRivalryEvent,
-  dismissBallonDor, giveBdorSpeech, bdorSpeechOpen, type BdorSpeechChoice, SOCCER_BALLON_DOR, SOCCER_BDOR_SPEECHES, SOCCER_WORLD_CUP_SPEECHES,
+  dismissBallonDor, giveBdorSpeech, bdorSpeechOpen, type BdorSpeechChoice, SOCCER_BALLON_DOR, SOCCER_BDOR_SPEECHES,
   giveWorldCupSpeech, type WorldCupSpeechChoice, manualRetire, choosePostRetirement, advanceManagerSeason, acceptManagerOffer, endManagerCareer, loadManagerMarket,
   acceptRetirementSuggestion, declineRetirementSuggestion, announceFarewellSeason,
   advancePunditSeason, endPunditCareer, punditLegacyPaid, playedSeniorSeason, POST_RETIREMENT_BONUS_CAP,
@@ -106,8 +106,8 @@ import {
 import { seasonFamilySummary, type SeasonFamilyContext } from "@/lib/seasonFamilySummary";
 import PlayerAvatar from "@/components/soccer-career/PlayerAvatar";
 import { Confetti } from "@/components/soccer-career/CareerFx";
-import { AwardsNightCard, SpeechChoices, SpokenSpeech } from "@/components/career/AwardsNightCard";
-import { availableSpeeches, givenSpeechOf } from "@/lib/careerAwardsNight";
+import { AwardsNightCard } from "@/components/career/AwardsNightCard";
+import { availableSpeeches } from "@/lib/careerAwardsNight";
 import { CelebrationStyles, revealDelay } from "@/components/club-manager/Celebration";
 import { SignedSlip } from "@/components/soccer-career/SignedSlip";
 const loadOfferCards = () => import("@/components/soccer-career/SoccerOfferCards");
@@ -176,6 +176,7 @@ const SoccerCareerProgramme = lazy(() => import("@/components/soccer-career/Socc
 /* Round 1047: the training ground (its drills and its boards) loads when it
    is opened, not with the page; the page's budget came down by what it weighed. */
 const TrainingPanel = lazy(() => import("@/components/soccer-career/TrainingPanel"));
+const WorldCupResultCard = lazy(() => import("@/components/soccer-career/WorldCupResultCard"));
 /* ─── Constants ─── */
 // Round 76: 131 nations (was 49), every one with a real flag in FlagImg,
 // sorted alphabetically so yours is findable in the scroll.
@@ -1996,83 +1997,6 @@ export function InternationalDebutCard({ career, onDismiss }: { career: CareerSt
   );
 }
 
-/* ─── World Cup Result Screen ─── */
-function WorldCupResultCard({ wc, career, onDismiss, onSpeech }: { wc: WorldCupResult; career: CareerState; onDismiss: () => void; onSpeech: (choice: WorldCupSpeechChoice) => void }) {
-  const isWinner = wc.result === "Winner";
-  const given = givenSpeechOf(wc);
-  const didNotQualify = wc.result === "Did Not Qualify";
-  const borderColor = isWinner ? "border-amber-400/60" : didNotQualify ? "border-red-500/40" : "border-blue-500/40";
-  const bgGrad = isWinner ? "from-amber-500/15 to-transparent" : didNotQualify ? "from-red-500/10 to-transparent" : "from-blue-500/10 to-transparent";
-  return (
-    <div className={`relative rounded-xl border-2 ${borderColor} bg-gradient-to-b ${bgGrad} p-5 space-y-4 animate-in fade-in zoom-in-95 duration-500`}>
-      {isWinner && <Confetti pieces={70} gold />}
-      <div className="text-center space-y-2">
-        <div className="text-4xl">{isWinner ? "🏆" : didNotQualify ? "😞" : "🌍"}</div>
-        <h3 className="text-xl font-black">{isWinner ? "WORLD CUP WINNER!" : didNotQualify ? "World Cup Qualifiers" : `World Cup ${wc.year}`}</h3>
-        <p className="text-sm font-bold flex items-center justify-center gap-1"><FlagImg name={wc.nation} />{wc.nation}: {wc.result}</p>
-        {didNotQualify && (
-          <p className="text-xs text-muted-foreground">Your nation failed to qualify for the tournament this time.</p>
-        )}
-      </div>
-      {!didNotQualify && (
-        <>
-          {/* Match results */}
-          <div className="space-y-1.5 max-h-[200px] overflow-y-auto">
-            {wc.matches.map((m, i) => (
-              <div key={i} className="flex items-center justify-between text-xs bg-muted/20 rounded-lg px-3 py-1.5">
-                <span className="text-[10px] text-muted-foreground w-12">{m.round}</span>
-                <span className={`font-semibold ${m.teamA === wc.nation ? "text-foreground" : "text-muted-foreground"}`}>
-                  <FlagImg name={m.teamA} size={16} />{m.teamA}
-                </span>
-                <span className="font-black text-sm mx-2">{m.scoreA} - {m.scoreB}</span>
-                <span className={`font-semibold ${m.teamB === wc.nation ? "text-foreground" : "text-muted-foreground"}`}>
-                  {m.teamB} <FlagImg name={m.teamB} size={16} />
-                </span>
-              </div>
-            ))}
-          </div>
-          {/* Player stats */}
-          <div className="grid grid-cols-4 gap-2">
-            {[
-              { l: "Apps", v: wc.playerApps },
-              { l: "Goals", v: wc.playerGoals },
-              { l: "Assists", v: wc.playerAssists },
-              { l: "Avg Rating", v: wc.playerAvgRating.toFixed(1) },
-            ].map(s => (
-              <div key={s.l} className="text-center bg-muted/20 rounded-lg p-2">
-                <div className="text-lg font-black">{s.v}</div>
-                <div className="text-[9px] text-muted-foreground">{s.l}</div>
-              </div>
-            ))}
-          </div>
-          {wc.bestPlayer && (
-            <div className="bg-amber-500/10 border border-amber-500/20 rounded-lg p-2 text-center">
-              <span className="text-sm font-bold">🌟 Named Best Player of the Tournament!</span>
-            </div>
-          )}
-          {isWinner && (
-            <div className="bg-amber-500/15 border border-amber-400/30 rounded-lg p-3 text-center">
-              <span className="text-sm font-bold text-amber-300">🏆 WORLD CUP CHAMPION! Legacy cemented forever.</span>
-            </div>
-          )}
-        </>
-      )}
-      {/* Round 1023: once given, the speech stays on the card with what it
-          really moved, and Continue moves on. */}
-      {isWinner && given && <SpokenSpeech speech={given} />}
-      {isWinner && !given ? (
-        /* Round 834: the buttons come from the shared speech options, the
-           same list the tournament card draws. */
-        <SpeechChoices prompt="The microphone is yours. The speech:" fadeIn roomy options={SOCCER_WORLD_CUP_SPEECHES} onChoose={onSpeech} />
-      ) : (
-        <Button onClick={onDismiss} className={`w-full h-10 text-sm font-bold text-black ${isWinner ? "bg-amber-600 hover:bg-amber-500" : "bg-emerald-600 hover:bg-emerald-500"}`}>
-          Continue →
-        </Button>
-      )}
-    </div>
-  );
-}
-
 /* ─── International Stats Panel ─── */
 function InternationalStatsPanel({ career, onRetire, onReturn }: { career: CareerState; onRetire: () => void; onReturn: () => void }) {
   const is = career.intStats;
@@ -3504,7 +3428,9 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
             <TournamentCard t={career.pendingTournament} onDismiss={onDismissWorldCup} onSpeech={onWorldCupSpeech} />
           )}
           {career.phase === "world_cup" && !career.pendingTournament && career.pendingWorldCup && (
-            <WorldCupResultCard wc={career.pendingWorldCup} career={career} onDismiss={onDismissWorldCup} onSpeech={onWorldCupSpeech} />
+            <Suspense fallback={<p role="status" className="text-sm">Loading World Cup result...</p>}>
+              <WorldCupResultCard wc={career.pendingWorldCup} onDismiss={onDismissWorldCup} onSpeech={onWorldCupSpeech} />
+            </Suspense>
           )}
 
           {/* OVERLAY: Rivalry Event */}
