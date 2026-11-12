@@ -2,7 +2,7 @@ import { isNrlOpeningYear, nrlSeasonPlan, NRL_LAST_YEAR, type NrlClub } from '@/
 import { clampi, hashLabel, rngFrom } from '@/lib/careerEngine';
 import { uniqueName } from '@/lib/foNames';
 import {
-  createNrlSeason, isNrlManagerState, isNrlSeasonProgress, nrlLadder, nrlRegularRounds,
+  createNrlSeason, isNrlManagerState, isNrlSeasonProgress, nrlBench, nrlLadder, nrlRegularRounds,
   NRL_ROLES, reduceNrlSeason, type NrlAction, type NrlManagerState, type NrlMatchResult,
   type NrlPlayer, type NrlRole, type NrlYear,
 } from '@/lib/nrlManager';
@@ -235,7 +235,7 @@ function careerFrom(season: NrlManagerState, openingYear: NrlYear, legacySeason:
   const fullSquad = players.filter(player => player.contract?.clubId === clubId).map(playerView);
   const finance = bookFrom(OPENING_CASH, season.phase === 'complete' ? season.round + 1 : season.round);
   const state: NrlCareerState = {
-    version: 2, openingYear, season: { ...season, squad: fullSquad },
+    version: 2, openingYear, season: { ...season, squad: fullSquad, bench: nrlBench({ ...season, squad: fullSquad }) },
     players: [...players, ...newMarket(seed, year, names)], history: [], finance, legacySeason,
   };
   if (season.phase === 'complete') state.history.push(seasonReceipt(state));
@@ -278,8 +278,11 @@ function opponentStrengths(state: NrlCareerState): Map<string, number> {
 
 function advanceCareer(state: NrlCareerState): NrlCareerState {
   const previous = state.season;
-  const season = reduceNrlSeason(previous, { type: 'advance' }, state.legacySeason ? undefined : opponentStrengths(state));
-  if (season === previous) return state;
+  // An imported v1 season keeps its exact original simulation until the next kickoff.
+  const matchday = state.legacySeason ? { ...previous, bench: undefined } : previous;
+  const played = reduceNrlSeason(matchday, { type: 'advance' }, state.legacySeason ? undefined : opponentStrengths(state));
+  if (played === matchday) return state;
+  const season = state.legacySeason ? { ...played, bench: previous.bench } : played;
   const fitness = new Map(season.squad.map(player => [player.id, player.fitness]));
   const players = state.players.map(player => {
     const nextFitness = fitness.get(player.id);
@@ -352,11 +355,12 @@ function rolloverCareer(state: NrlCareerState): NrlCareerState {
   for (const role of NRL_ROLES) {
     if (!squad.some(player => player.id === lineup[role])) lineup[role] = squad.find(player => player.role === role)!.id;
   }
+  const matchday = { squad: squad.map(playerView), lineup, bench: season.bench };
   return {
     ...state, players: world, legacySeason: false, finance: bookFrom(nrlCareerFinance(state).cash),
     season: {
-      ...season, year, round: 1, phase: 'regular', championId: null,
-      results: [], squad: squad.map(playerView), lineup, preparation: null,
+      ...season, ...matchday, year, round: 1, phase: 'regular', championId: null,
+      results: [], preparation: null, bench: nrlBench(matchday),
     },
   };
 }
@@ -480,7 +484,8 @@ export function isNrlCareerState(value: unknown): value is NrlCareerState {
   if (!record(value) || value.version !== 2 || !isNrlOpeningYear(value.openingYear)
     || !isNrlSeasonProgress(value.season) || value.season.year < value.openingYear
     || !nrlSeasonPlan(value.openingYear).clubs.some(club => club.id === (value.season as NrlManagerState).clubId)
-    || typeof value.legacySeason !== 'boolean' || (value.legacySeason && value.season.year !== value.openingYear)
+    || typeof value.legacySeason !== 'boolean'
+    || (value.legacySeason && (value.season.year !== value.openingYear || value.season.results.some(match => match.benchUsed !== undefined)))
     || !Array.isArray(value.players) || value.players.length > 650
     || !Array.isArray(value.history) || !validBook(value.finance, value.season.round + 1)) return false;
   const { year } = value.season;
@@ -493,7 +498,9 @@ export function readNrlCareerSave(raw: string | null): NrlCareerState | null {
   if (!raw || raw.length > 550_000) return null;
   try {
     const value: unknown = JSON.parse(raw);
-    if (isNrlCareerState(value)) return value;
+    if (isNrlCareerState(value)) {
+      return value.season.bench ? value : { ...value, season: { ...value.season, bench: nrlBench(value.season) } };
+    }
     return isNrlManagerState(value) && isNrlOpeningYear(value.year) ? careerFrom(value, value.year, true) : null;
   } catch {
     return null;
