@@ -1,13 +1,16 @@
-import { useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { ArrowRight, BedDouble, BriefcaseBusiness, ChevronDown, ClipboardList, Radio, Table2, Trophy, Zap } from 'lucide-react';
 import { GameNav } from '@/components/game/GameNav';
 import { GameNavbar } from '@/components/game/GameNavbar';
 import { RulesGate } from '@/components/game/RulesGate';
 import NrlBoardChallengeNotice from '@/components/nrl-manager/NrlBoardChallengeNotice';
 import NrlCareerOffice from '@/components/nrl-manager/NrlCareerOffice';
+import NrlCareerSlots from '@/components/nrl-manager/NrlCareerSlots';
 import GameSeoContent from '@/components/seo/GameSeoContent';
 import PageSeo from '@/components/seo/PageSeo';
 import { Button } from '@/components/ui/button';
+import { resolveContinueSave, type ContinueSave } from '@/data/continueSaves';
 import { NRL_SEASONS, type NrlYear } from '@/data/nrlManager2026';
 import { nrlSeasonPlan } from '@/data/nrlManagerSeasons';
 import { useArrivalTop } from '@/hooks/useArrivalTop';
@@ -16,12 +19,14 @@ import { useSaveFenceWatch } from '@/hooks/useSaveFenceWatch';
 import { nrlBoardChallengeStatus } from '@/lib/nrlBoardTarget';
 import {
   nrlBench, nrlFitLineup, nrlHalftimeInterchanges, nrlInjuries, nrlLadder, nrlNextRound, nrlStarterOptions, NRL_BENCH_SIZE, NRL_COACHING_BONUS,
-  NRL_MAX_BENCH_USED, NRL_ROLES, NRL_SAVE_KEY,
+  NRL_MAX_BENCH_USED, NRL_ROLES,
   type NrlAction, type NrlCoachRole, type NrlLiveHalf, type NrlManagerState, type NrlMatchResult, type NrlTactic,
 } from '@/lib/nrlManager';
-import { createNrlCareer, nrlOppositionReport, readNrlCareerSave, reduceNrlCareer, type NrlCareerAction, type NrlCareerState } from '@/lib/nrlCareer';
+import { createNrlCareer, nrlOppositionReport, reduceNrlCareer, type NrlCareerAction, type NrlCareerState } from '@/lib/nrlCareer';
 import { nrlScorePoints, nrlScoringLeaders, nrlTryLeaders } from '@/lib/nrlPlayerScoring';
+import { NRL_SAVE_ENTRY, readNrlSaveSlot, writeNrlSaveSlot } from '@/lib/nrlSaveSlots';
 import { saveFence } from '@/lib/saveFence';
+import { holdPendingSave } from '@/lib/safeStorage';
 
 const SLUG = 'nrl-team-manager';
 const YEARS = [2026, 2027] as const;
@@ -54,20 +59,9 @@ function shortName(year: number, id: string) {
   return nrlSeasonPlan(year).clubs.find(club => club.id === id)?.shortName ?? id;
 }
 
-function initialSave() {
-  saveFence.adopt(NRL_SAVE_KEY);
-  try {
-    const raw = localStorage.getItem(NRL_SAVE_KEY);
-    const career = readNrlCareerSave(raw);
-    return { career, invalid: raw !== null && career === null };
-  } catch {
-    return { career: null, invalid: false };
-  }
-}
-
-function ClubChooser({ year, season, onYear, onStart, onReturn, disabled }: {
-  year: NrlYear; season: NrlManagerState | null; onYear: (year: NrlYear) => void;
-  onStart: (clubId: string, boardChallenge: boolean) => void; onReturn: () => void; disabled: boolean;
+function ClubChooser({ year, onYear, onStart, disabled }: {
+  year: NrlYear; onYear: (year: NrlYear) => void;
+  onStart: (clubId: string, boardChallenge: boolean) => void; disabled: boolean;
 }) {
   const [boardChallenge, setBoardChallenge] = useState(false);
   const competition = NRL_SEASONS[year];
@@ -92,11 +86,6 @@ function ClubChooser({ year, season, onYear, onStart, onReturn, disabled }: {
             <span className="block text-muted-foreground">Miss two targets in a row at one club and you must move after finals. A premiership clears the warning.</span>
           </span>
         </label>
-        {season && (
-          <Button type="button" size="lg" variant="ghost" className="mt-3 whitespace-normal px-2 text-left" onClick={onReturn}>
-            Back to {shortName(season.year, season.clubId)} {season.year}
-          </Button>
-        )}
       </div>
       <div className="flex flex-wrap items-baseline justify-between gap-1">
         <h2 id="nrl-choose-club" className="text-xl font-display font-bold">Choose your club</h2>
@@ -612,42 +601,64 @@ function Ladder({ season }: { season: NrlManagerState }) {
 }
 
 export default function NrlTeamManager() {
-  const [initial] = useState(initialSave);
-  const [career, setCareer] = useState(initial.career);
+  const { search } = useLocation();
+  const entry = resolveContinueSave(NRL_SAVE_ENTRY, search);
+  if (!entry) return <Navigate to={NRL_SAVE_ENTRY.path} replace />;
+  const showSlots = new URLSearchParams(search).get('view') === 'saves';
+  return <NrlManagerScreen key={showSlots ? 'slots' : entry.saveKey} entry={entry} showSlots={showSlots} />;
+}
+
+function NrlManagerScreen({ entry, showSlots }: { entry: ContinueSave; showSlots: boolean }) {
+  const navigate = useNavigate();
+  const [initial] = useState(() => {
+    if (showSlots) return null;
+    saveFence.adopt(entry.saveKey);
+    return readNrlSaveSlot(entry.saveKey);
+  });
+  const [career, setCareer] = useState(initial?.career ?? null);
   const season = career?.season ?? null;
   const current = useRef(career);
-  const [year, setYear] = useState<NrlYear>(initial.career?.openingYear ?? 2026);
-  const [choosing, setChoosing] = useState(!season);
-  const arrival = useArrivalTop<HTMLHeadingElement>(choosing ? 'choose' : `club-${season?.year}`);
-  const [confirm, setConfirm] = useState(false);
+  const committed = useRef(initial?.raw ?? null);
+  const [year, setYear] = useState<NrlYear>(initial?.career?.openingYear ?? 2026);
+  const invalid = initial?.raw != null && initial.career === null;
+  const arrival = useArrivalTop<HTMLHeadingElement>(showSlots ? 'slots' : !season ? 'choose' : `club-${season?.year}`);
   const [panel, setPanel] = useState<Panel>('match');
   const [office, setOffice] = useState<OfficeScreen>('contracts');
   const [showLiveResult, setShowLiveResult] = useState(false);
   const [saveFailed, setSaveFailed] = useState(false);
-  const { moved, check } = useSaveFenceWatch(NRL_SAVE_KEY);
+  const [changed, setChanged] = useState(false);
+  const { moved: fenceMoved } = useSaveFenceWatch(entry.saveKey);
+  const moved = changed || fenceMoved;
   const complete = season?.phase === 'complete';
   const live = Boolean(season?.live);
   useGameCompletion(SLUG, complete, undefined);
 
-  function persist(next: NrlCareerState) {
-    const outcome = saveFence.write(NRL_SAVE_KEY, () => {
-      localStorage.setItem(NRL_SAVE_KEY, JSON.stringify(next));
-      return true;
-    });
+  const persist = useCallback((next: NrlCareerState) => {
+    const raw = JSON.stringify(next);
+    const outcome = writeNrlSaveSlot(entry.saveKey, committed.current, raw);
     if (outcome === 'moved') {
-      check();
-      return false;
+      setChanged(true);
+      return outcome;
     }
+    if (outcome === 'written') committed.current = raw;
     setSaveFailed(outcome === 'failed');
     current.current = next;
     setCareer(next);
-    return true;
+    return outcome;
+  }, [entry.saveKey]);
+
+  useEffect(() => {
+    if (saveFailed) return holdPendingSave(() => current.current !== null && persist(current.current) === 'written');
+  }, [persist, saveFailed]);
+
+  function openSlots() {
+    if (saveFailed && current.current && persist(current.current) !== 'written') return;
+    navigate(entry.path + (entry.path.includes('?') ? '&' : '?') + 'view=saves', { replace: true });
   }
 
   function start(clubId: string, boardChallenge: boolean) {
     const next = createNrlCareer(clubId, Math.floor(Math.random() * 0x1_0000_0000), year, boardChallenge);
-    if (!persist(next)) return;
-    setChoosing(false);
+    if (persist(next) === 'moved') return;
     setPanel('match');
     setShowLiveResult(false);
   }
@@ -656,8 +667,7 @@ export default function NrlTeamManager() {
     const before = current.current;
     if (!before) return false;
     const next = reduceNrlCareer(before, action);
-    if (next === before || !persist(next)) return false;
-    if (action.type === 'startLive') setConfirm(false);
+    if (next === before || persist(next) === 'moved') return false;
     if (action.type === 'finishLive') setShowLiveResult(true);
     if (action.type === 'advance' || action.type === 'startNextSeason') setShowLiveResult(false);
     if (action.type === 'startNextSeason') setPanel('match');
@@ -674,7 +684,8 @@ export default function NrlTeamManager() {
         <header className="flex items-start justify-between gap-3">
           <div className="min-w-0">
             <h1 ref={arrival} className="font-display text-2xl font-black sm:text-3xl">NRL Team Manager</h1>
-            <p className="mt-1 text-sm text-muted-foreground">{season && !choosing ? `${shortName(season.year, season.clubId)} · ${season.year} season` : 'Take charge of a rugby league club across seasons.'}</p>
+            <p className="mt-1 text-sm text-muted-foreground">{season ? `${shortName(season.year, season.clubId)} · ${season.year} season` : 'Take charge of a rugby league club across seasons.'}</p>
+            {!showSlots && <Button type="button" size="lg" variant="ghost" className="mt-1 px-2" onClick={openSlots}>Career saves</Button>}
           </div>
           <RulesGate title="How to play NRL Team Manager" floatingTrigger={false} className="min-h-11 min-w-11">
             <ul className="list-disc space-y-2 pl-5">
@@ -691,22 +702,24 @@ export default function NrlTeamManager() {
               <li>Set a development focus in Season review. It applies to returning players when you start the next year.</li>
               <li>Check your regular-season board target in Season review.</li>
               <li>Change clubs between seasons from Season review.</li>
-              <li>Review each season, manage contracts and recruit for the next year. The career saves on this browser. Starting over replaces the current save.</li>
+              <li>Review each season, manage contracts and recruit for the next year. Career saves lets you keep up to three careers in this browser.</li>
             </ul>
           </RulesGate>
         </header>
 
-        {moved && <div className="rounded-xl border border-amber-500/50 bg-card p-3 text-sm" role="status">
+        {!showSlots && moved && <div className="rounded-xl border border-amber-500/50 bg-card p-3 text-sm" role="status">
           This season changed in another tab. <button type="button" className="min-h-11 font-bold underline" onClick={() => window.location.reload()}>Reload your season</button>
         </div>}
         {!moved && saveFailed && <div className="rounded-xl border border-amber-500/50 bg-card p-3 text-sm" role="status">
           This browser could not save your progress. You can keep playing in this tab.{' '}
           <button type="button" className="min-h-11 font-bold underline" onClick={() => current.current && persist(current.current)}>Retry save</button>
         </div>}
-        {initial.invalid && !season && <p role="status" className="rounded-xl border border-border p-3 text-sm">The previous save could not be opened. Starting a season replaces it.</p>}
-
-        {choosing || !career || !season ? (
-          <ClubChooser year={year} season={season} disabled={moved} onYear={setYear} onStart={start} onReturn={() => setChoosing(false)} />
+        {showSlots ? (
+          <NrlCareerSlots onOpen={path => navigate(path, { replace: true })} onBack={() => navigate(entry.path, { replace: true })} />
+        ) : invalid ? (
+          <p role="status" className="rounded-xl border border-border p-3 text-sm">This career could not be opened. Use Career saves to choose another slot or delete this save.</p>
+        ) : !career || !season ? (
+          <ClubChooser year={year} disabled={moved} onYear={setYear} onStart={start} />
         ) : (
           <>
             <div className="grid grid-cols-4 gap-2" role="group" aria-label="Manager screens">
@@ -736,15 +749,6 @@ export default function NrlTeamManager() {
                 <NrlCareerOffice key={office} career={career} screen={office} disabled={moved || live} onAction={dispatch} />
               </>
             )}
-            {!live && (confirm ? (
-              <div className="space-y-2 rounded-xl border border-border bg-card p-3 text-sm">
-                <p>Starting a new career replaces this save.</p>
-                <div className="flex flex-wrap gap-2">
-                  <Button type="button" size="lg" variant="outline" className="px-3" onClick={() => setConfirm(false)}>Keep this season</Button>
-                  <Button type="button" size="lg" className="px-3" onClick={() => { setConfirm(false); setYear(career.openingYear); setChoosing(true); }}>Choose a new career</Button>
-                </div>
-              </div>
-            ) : <Button type="button" size="lg" variant="ghost" className="px-3" onClick={() => setConfirm(true)}>Start over</Button>)}
           </>
         )}
 

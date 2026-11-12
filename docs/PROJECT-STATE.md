@@ -1,3 +1,9 @@
+## 2026-11-12: NRL Manager career saves
+
+Career saves keeps up to three careers in the same browser. An existing career opens in slot 1. Each slot can start in 2026 or 2027, and a saved live match resumes in the slot that played it. Starting another career uses an empty slot. Deleting a career asks for confirmation.
+
+Home Continue opens a saved slot even if slot 1 is empty. Each slot has its own write generation and recovery key. Switching keeps the other saves in place, and a failed write is retried before leaving for the slots screen.
+
 ## 2026-11-12: NRL Manager Board challenge
 
 Choose Board challenge when starting a career to put your job on the line. The first missed ladder target warns you. Two consecutive completed misses at the same club require an offseason move. A premiership clears the warning even when the regular-season target was missed. The next club uses its own squad, contracts, cash and medical facilities.
