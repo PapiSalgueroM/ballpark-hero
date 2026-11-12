@@ -1,3 +1,11 @@
+## 2026-11-11 Soccer Career creation download
+
+This draft builds on PR #675. The fresh creation screen skips the historical club squad archive. Existing club offers, the transfer verdict and the senior Squad tile load the same recorded data when shown. The Squad tile holds its space while loading.
+
+In three paired cold 390px runs, JavaScript downloads through creation settled at 769.6 kB gzip versus 827.3 kB for PR #675. Median local LCP was 7.53s versus 8.17s with 150ms latency, 1.6Mbps and 4x CPU throttling. These are local lab timings. The 2.5s target and field vitals remain open.
+
+The compiled phone comparison checked recorded squad rank, contract review and signing against the parent build, including cold reload and exact save bytes. The reserved Squad tile eliminated the layout shift seen when the tile first loaded without reserved space. App types, production build, 51 focused tests, 16 offline output checks, snapshot boot and all 16 download caps passed.
+
 ## 2026-11-11 NitroPay mobile startup follow-up
 
 This draft builds on PR #668. Game routes below 768px skip the hidden live-score ticker and its initial request. Home keeps the ticker, and resizing a game to desktop brings it back with one request. The legacy toast UI loads only with Fantasy Draft, its sole caller. Home computes the Eastern date once for the New badges on its game cards.
