@@ -1,3 +1,11 @@
+## 2026-11-12: NRL Manager offseason club changes
+
+After finals, Season review lets you stay or choose a club in the following year's league. Perth opens for 2027 and the Chiefs for 2028. The new club starts with its settled squad and contracts. On a return, the club reopens its last tracked cash and medical facilities. Season results, development and costs stay with the club they came from.
+
+The save format remains v2. An exact engine comparison against the board-target draft matched 80 ordinary rollovers, 17,724 fixture results and 238 reloads across current and older saves. Another 80 moves included 32 returns and 160 exact reloads, with unchanged league player ageing and recruitment. Tests reject forged club books and membership.
+
+At 320px, a second tab submitted its own club choice after Perth took over. The write was refused and reload restored the winning save. App types, production build, compiled phone and desktop checks, 15 built-site readers, site search and 16 download caps passed. The optional cross-game SaveFence fleet stopped when its temporary bundle ran out of disk space.
+
 ## 2026-11-12: NRL Manager board targets
 
 Season review shows a regular-season board target based on the modeled club ratings. From the second year, the previous finish also helps set the target. The board waits until the club plays before showing a ladder place, then settles the target when finals begin. Previous years show the same calculation as a benchmark. Opening the review does not change the saved career.

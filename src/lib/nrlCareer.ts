@@ -86,7 +86,7 @@ export type NrlCareerAction = NrlAction
   | { type: 'setDevelopmentFocus'; focus: NrlDevelopmentFocus }
   | { type: 'upgradeMedical'; level: MedicalUpgradeLevel }
   | { type: 'hireCoach'; role: NrlCoachRole; year: number; round: number }
-  | { type: 'startNextSeason' };
+  | { type: 'startNextSeason'; move?: { fromYear: number; clubId: string } };
 
 export interface NrlCareerCap {
   year: number;
@@ -347,7 +347,9 @@ function nrlMedicalLevel(state: NrlCareerState): NrlMedicalLevel {
   const current = state.finance.medicalUpgrades?.at(-1);
   if (current) return current.level;
   for (let index = state.history.length - 1; index >= 0; index--) {
-    const past = state.history[index].finance?.medicalUpgrades?.at(-1);
+    const receipt = state.history[index];
+    if (receipt.clubId !== state.season.clubId) continue;
+    const past = receipt.finance?.medicalUpgrades?.at(-1);
     if (past) return past.level;
   }
   return 1;
@@ -560,11 +562,18 @@ function completeSquads(players: NrlCareerPlayer[], state: NrlCareerState, year:
   return [...activeById.values()];
 }
 
-function rolloverCareer(state: NrlCareerState): NrlCareerState {
+export function nrlOffseasonClubs({ season }: Pick<NrlCareerState, 'season'>): readonly NrlClub[] {
+  if (season.phase !== 'complete' || season.year === NRL_LAST_YEAR) return [];
+  return nrlSeasonPlan(season.year + 1).clubs.filter(club => club.id !== season.clubId);
+}
+
+function rolloverCareer(state: NrlCareerState, move?: { fromYear: number; clubId: string }): NrlCareerState {
   const { season } = state;
   if (season.phase !== 'complete' || season.year === NRL_LAST_YEAR) return state;
+  if (move && (move.fromYear !== season.year || !nrlOffseasonClubs(state).some(club => club.id === move.clubId))) return state;
   const { developmentFocus, ...career } = state;
   const year = season.year + 1;
+  const clubId = move?.clubId ?? season.clubId;
   const gains = developmentGains(state);
   const players = state.players.map(player => advancePlayer(player, year, season.seed, gains.has(player.id)))
     .filter(player => player.contract || player.futureContract || player.age < RETIREMENT_AGE);
@@ -578,22 +587,26 @@ function rolloverCareer(state: NrlCareerState): NrlCareerState {
   const freeAgents = settled.filter(player => !player.contract && !player.futureContract).sort(byRating);
   const pool = NRL_ROLES.flatMap(role => freeAgents.filter(player => player.role === role).slice(0, MARKET_PER_ROLE));
   const world = [...settled.filter(player => player.contract || player.futureContract), ...pool];
-  const squad = squadAt(world, season.clubId, year).sort(byRating);
+  const squad = squadAt(world, clubId, year).sort(byRating);
   const lineup = { ...season.lineup };
   for (const role of NRL_ROLES) {
-    if (!squad.some(player => player.id === lineup[role] && player.role === role)) {
+    if (move || !squad.some(player => player.id === lineup[role] && player.role === role)) {
       lineup[role] = squad.find(player => player.role === role)!.id;
     }
   }
   const nextSeason: NrlManagerState = {
-    ...season, year, round: 1, phase: 'regular', championId: null,
+    ...season, clubId, year, round: 1, phase: 'regular', championId: null,
     results: [], squad: squad.map(playerView), lineup, preparation: null, injuryTracking: true,
-    kickerId: season.kickerId && Object.values(lineup).includes(season.kickerId) ? season.kickerId : lineup.Halfback,
+    ...(move ? { bench: undefined, tactic: 'balanced' } : {}),
+    kickerId: !move && season.kickerId && Object.values(lineup).includes(season.kickerId) ? season.kickerId : lineup.Halfback,
   };
   const history = developmentFocus ? state.history.map(row => row.year === season.year
     ? { ...row, development: { focus: developmentFocus, affected: gains.size } } : row) : state.history;
+  const openingCash = move
+    ? history.reduce((cash, receipt) => receipt.clubId === clubId && receipt.finance ? receipt.finance.cash : cash, OPENING_CASH)
+    : nrlCareerFinance(state).cash;
   return {
-    ...career, players: world, history, legacySeason: false, academy: undefined, finance: bookFrom(nrlCareerFinance(state).cash),
+    ...career, players: world, history, legacySeason: false, academy: undefined, finance: bookFrom(openingCash),
     season: { ...nextSeason, bench: nrlBench(nextSeason) },
   };
 }
@@ -602,7 +615,7 @@ export function reduceNrlCareer(state: NrlCareerState, action: NrlCareerAction):
   if (state.season.live && action.type !== 'finishLive') return state;
   switch (action.type) {
     case 'startNextSeason':
-      return rolloverCareer(state);
+      return rolloverCareer(state, action.move);
     case 'upgradeMedical': {
       const { nextLevel, reason } = nrlMedicalUpgradeQuote(state);
       if (nextLevel === null || action.level !== nextLevel || reason !== null) return state;
@@ -689,10 +702,11 @@ function validBook(value: unknown, roundLimit: number): value is NrlCareerBook {
       && intIn(value.coachHire.paidRounds, 0, roundLimit - value.coachHire.round + 1)));
 }
 
-function validReceipt(value: unknown, year: number, clubId: string): value is NrlCareerHistoryRow {
-  if (!record(value) || value.year !== year || value.clubId !== clubId) return false;
+function validReceipt(value: unknown, year: number): value is NrlCareerHistoryRow {
+  if (!record(value) || value.year !== year) return false;
   const { clubs } = nrlSeasonPlan(year);
-  if (!intIn(value.rank, 1, clubs.length) || !clubs.some(club => club.id === value.championId)
+  if (!clubs.some(club => club.id === value.clubId)
+    || !intIn(value.rank, 1, clubs.length) || !clubs.some(club => club.id === value.championId)
     || !intIn(value.wins, 0, 24) || !intIn(value.draws, 0, 24) || !intIn(value.losses, 0, 24)
     || value.wins + value.draws + value.losses !== 24
     || (value.scoring !== undefined && !validNrlScoringArchive(value.scoring))) return false;
@@ -754,31 +768,33 @@ function validCareerBooks(state: NrlCareerState): boolean {
     }).clubStatus === 'eliminated') return false;
   }
   if (history.length !== season.year - openingYear + Number(complete)) return false;
-  let openingCash = OPENING_CASH;
-  const previousPurchases: NrlMedicalUpgrade[] = [];
+  const firstBook = { cash: OPENING_CASH, medicalLevel: 1 };
+  const clubs = new Map<string, typeof firstBook>();
   for (const [index, receipt] of history.entries()) {
     const year = openingYear + index;
-    if (!validReceipt(receipt, year, season.clubId) || (receipt.finance === null && index !== 0)) return false;
+    if (!validReceipt(receipt, year) || (receipt.finance === null && index !== 0)) return false;
+    const previous = clubs.get(receipt.clubId) ?? firstBook;
+    if (receipt.finance && receipt.finance.openingCash !== previous.cash) return false;
     if (year === season.year) {
       const expected = seasonReceipt(state);
-      if (receipt.rank !== expected.rank || receipt.wins !== expected.wins || receipt.draws !== expected.draws
-        || receipt.losses !== expected.losses || receipt.championId !== expected.championId
+      if (receipt.clubId !== expected.clubId || receipt.rank !== expected.rank || receipt.wins !== expected.wins
+        || receipt.draws !== expected.draws || receipt.losses !== expected.losses || receipt.championId !== expected.championId
         || receipt.development !== undefined
         || JSON.stringify(receipt.scoring) !== JSON.stringify(expected.scoring)
         || (receipt.finance === null) !== (expected.finance === null)
         || (receipt.finance && expected.finance && !booksMatch(receipt.finance, expected.finance))) return false;
-    }
-    if (receipt.finance && receipt.finance.openingCash !== openingCash) return false;
-    if (year < season.year && receipt.finance) {
-      openingCash = receipt.finance.cash;
-      previousPurchases.push(...(receipt.finance.medicalUpgrades ?? []));
+    } else if (receipt.finance) {
+      const upgrades = receipt.finance.medicalUpgrades ?? [];
+      if (!upgrades.every((purchase, index) => purchase.level === previous.medicalLevel + index + 1)) return false;
+      clubs.set(receipt.clubId, { cash: receipt.finance.cash, medicalLevel: upgrades.at(-1)?.level ?? previous.medicalLevel });
     }
   }
-  let expected = bookFrom(openingCash, finance.fromRound);
+  const currentClub = clubs.get(season.clubId) ?? firstBook;
+  let expected = bookFrom(currentClub.cash, finance.fromRound);
   const cap = nrlCareerCap(state);
   const purchases = finance.medicalUpgrades ?? [];
   if ((!season.injuryTracking && purchases.length)
-    || ![...previousPurchases, ...purchases].every((purchase, index) => purchase.level === index + 2)) return false;
+    || !purchases.every((purchase, index) => purchase.level === currentClub.medicalLevel + index + 1)) return false;
   let nextPurchase = 0;
   for (let round = finance.fromRound; round <= played + Number(!complete); round++) {
     // A hire and a medical purchase in the same round reserve the same total cash in either order.
@@ -835,7 +851,6 @@ function validAcademy(state: NrlCareerState): boolean {
 export function isNrlCareerState(value: unknown): value is NrlCareerState {
   if (!record(value) || value.version !== 2 || !isNrlOpeningYear(value.openingYear)
     || !isNrlSeasonProgress(value.season) || value.season.year < value.openingYear
-    || !nrlSeasonPlan(value.openingYear).clubs.some(club => club.id === (value.season as NrlManagerState).clubId)
     || typeof value.legacySeason !== 'boolean'
     || (value.developmentFocus !== undefined && (!activeDevelopmentFocus(value.developmentFocus)
       || value.legacySeason || value.season.year === NRL_LAST_YEAR))
