@@ -91,7 +91,7 @@ const SoccerGrid = () => {
                 <ul className="list-disc list-inside space-y-1 text-muted-foreground">
                   <li>Each cell needs a player who matches both the row and column attribute</li>
                   <li>Tap a cell, type a player name, and submit</li>
-                  <li>Correct answers turn green and show a rarity percentage</li>
+                  <li>Correct answers turn green. Rarity appears when crowd counts are available.</li>
                   <li>Wrong answers cost a guess</li>
                   <li>You have 15 guesses to complete the grid</li>
                 </ul>
