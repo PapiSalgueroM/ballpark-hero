@@ -132,7 +132,7 @@ const GuessTheCollege = () => {
               onClick={() => setDifficulty('hard')}
               className={cn("text-xs", difficulty === 'hard' && "bg-red-600 hover:bg-red-700")}
             >
-              Hard (All D1)
+              Hard (Full Pool)
             </Button>
           </div>
 
