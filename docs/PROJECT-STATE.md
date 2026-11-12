@@ -31,6 +31,12 @@ Next: CM-03 historical roster snapshot count at club selection. Poland's 18-club
 
 Next master-list work: extend verified future entrants in Soccer Career to 2010 and 2015 starts, then show the available historical roster count in Club Manager. NBA 2005 and NFL 2006 are still source review, with no player or save changes live.
 
+## 2026-11-12: Player Bingo Son World Cup candidate
+
+Player Bingo uses Heung-min Son in its market pool and Son Heung-min in South Korea's 2014, 2018, 2022 and 2026 World Cup records. The loader now recognises the market name when it reads that exact South Korea identity. FIFA and Tottenham independently confirm his appearance against Portugal in 2022. [FIFA match report](https://www.fifa.com/en/articles/korea-republic-portugal-world-cup-qatar-2022-group-h-match-report) and [Tottenham match report](https://www.tottenhamhotspur.com/news/991149/internationals-sonny-in-tears-as-korea-progress-in-world-cup-but-its-despair-for-rodrigo).
+
+A 390px phone baseline spent one strike on the 2022 tile. The loader and criterion checks reproduce the rejection in both participation tiles and pass with the country-bound alias. All 77 focused tests passed, including the unchanged player pool, other tile support, 2022 and winner rules, and a copied source control that catches a missing country guard.
+
 ## 2026-11-06: K League expansion and phone Squad names live
 
 Current live App source is `51e4ba9e100aa22dbe047999311c725baccae09d`, tree `b1f5ac6efe4d97a1645580c6b473d03616e471b7`. PR509 delivered the K slice as `15652350` / tree `4debc`, product `25193`; PR522 then delivered the one-component Squad layout from `2005`. Each App release was published once: K deployment `979de67b-e1bd-46d0-9115-e28f9939171a`, then UI deployment `7a36d673-a773-4196-9e2d-51f82b2ad3de`. The later documentation commit needs no publication.
