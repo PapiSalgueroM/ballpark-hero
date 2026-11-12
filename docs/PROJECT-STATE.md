@@ -1,3 +1,11 @@
+## 2026-11-12 Club Manager J1 League draft
+
+Choose Japan in a new 2026/27 Club Manager career to manage any of the 20 J1 clubs. The first season uses the matchday, home and away designations agreed by the J.League Data Site and PHONBALL on 12 November 2026. All 380 matches were checked through the fixture generator. Dates, stadiums, scores and opening squads are simulated. Later seasons use generated fixtures. The Emperor's Cup, J.League Cup, AFC competitions and J2 promotion and relegation are outside this league model.
+
+The J1 world and jobs open with a Japanese start. Four exact-main comparisons covered a current English career, K League 1, 2010 Barcelona and an English custom club named Mito Hollyhock. Their initial and resumed states, save bytes, random draws and job market results matched. The J1 engine replay kept its verified opponent after reloading and played all 38 fixtures before generating season two.
+
+The compiled 390px replay listed all 20 clubs. Mito opened away at Kashiwa, saved a completed match and resumed at home against Gamba. The Calendar named both sources. With the rich guide held, the short guide and club catalogue remained available, and the full guide rendered once its file arrived.
+
 ## 2026-11-07: Club Manager historical roster counts live
 
 [PR #532](https://github.com/PapiSalgueroM/ballpark-hero/pull/532) published from main `c3b5ca4afaf9b4dadcd748f340e8e8e3e4a1a1dd`, App tree `133fcd3d26a4d237178e5c7efee723048da0aef2`, Lovable deployment `510b1df1-2172-42c0-90f9-d9f9c997b840`.
