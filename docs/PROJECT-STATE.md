@@ -1,3 +1,11 @@
+## 2026-11-12: NRL Manager golden-point match report
+
+The latest regular-season match report names the decisive score and five-minute period when a managed match goes to golden point. A draw explains that neither club scored in either period. The receipt uses the same resolution roll as the existing simulation.
+
+Against the previous engine, 17,724 results, 80 rollovers and 1,463,262 random draws per arm matched exactly after removing only the new receipt. That included 339 Live finishes, 86 named interchanges, 40 finals that reached extra time and 1,374 exact legacy state checks.
+
+At 320px, Quick Sim showed a second-period field goal. At 390px, Play Live showed a scoreless golden-point draw. Both receipts survived reload, and an imported tie kept its exact bytes. All 92 NRL tests, app types, production build, 15 built-site readers and 16 download caps passed.
+
 ## 2026-11-12: NRL Manager offseason club changes
 
 After finals, Season review lets you stay or choose a club in the following year's league. Perth opens for 2027 and the Chiefs for 2028. The new club starts with its settled squad and contracts. On a return, the club reopens its last tracked cash and medical facilities. Season results, development and costs stay with the club they came from.
