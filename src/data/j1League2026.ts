@@ -10,7 +10,3 @@ export const J1_LEAGUE_2026 = {
     'Vissel Kobe', 'Fagiano Okayama', 'Sanfrecce Hiroshima', 'Avispa Fukuoka', 'V-Varen Nagasaki',
   ] as readonly string[],
 };
-
-export function isJ1Club(name: string): boolean {
-  return J1_LEAGUE_2026.clubs.includes(name);
-}

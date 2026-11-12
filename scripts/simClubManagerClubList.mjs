@@ -136,7 +136,7 @@ const {
    last read day) and not from the component's helper, so the two are held to each other. The
    A-League's clause must still be the Round 1035 one, from its own META. */
 if (CM_GENERATED_LEAGUES[0]?.label !== 'A-League Men' || CM_GENERATED_LEAGUES[0].read !== CM_ALEAGUE_META.read) { console.error('simClubManagerClubList: the first generated league is not the A-League Men on its own read date'); process.exit(1); }
-const DATE_LINE = `Existing 27-league roster snapshots: ${CM_ROSTER_META.asOf}; ${CM_GENERATED_LEAGUES.map(g => `${g.label} squads as of ${g.read === g.readTo ? g.read : `between ${g.read} and ${g.readTo}`}`).join('; ')}. K League 1 and J1 League use generated opening squads.`;
+const DATE_LINE = `Existing 27-league roster snapshots: ${CM_ROSTER_META.asOf}; ${CM_GENERATED_LEAGUES.map(g => `${g.label} squads as of ${g.read === g.readTo ? g.read : `between ${g.read} and ${g.readTo}`}`).join('; ')}. K League 1, J1 League and the Chinese Super League use generated opening squads.`;
 const renderHtml = (() => {
   const error = console.error;
   console.error = (...a) => { if (!String(a[0]).includes('useLayoutEffect does nothing on the server')) error(...a); };
