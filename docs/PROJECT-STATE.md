@@ -1,3 +1,9 @@
+## 2026-11-12 NFL Grid pending answer settlement
+
+An answer waiting for rarity now checks the latest Daily board before adding a crowd selection and again before saving the result. If another tab has filled that square or used that player, the older answer drops without spending a guess. A different player in an empty square can still finish the board after the newer save arrives.
+
+An offline two-tab phone replay reproduced a 900-point completion request with eight visible squares. The local regression also covers delayed save delivery, a selection request already in flight, and the existing rarity fallback when a current selection write fails.
+
 ## 2026-11-10 Club Manager summer squad retention
 
 Returning loans can put a saved squad over 30. The previous summer trim could then send a player who still had contract years left to free agency. Same-club rollover now keeps those contracts. Ordinary expiries, retirements, loan options and emergency squad coverage still use their existing rules. The save format and the handling of older free-agent rows marked as trimmed are preserved.
