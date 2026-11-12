@@ -50,17 +50,18 @@ export default function PlayerStockMarket() {
   const [stepIndex, setStepIndex] = useState(0);
   const [error, setError] = useState('');
 
+  const restoreDaily = useCallback((saved: StockFinish) => {
+    setMode('daily');
+    if (finish === null) markRestoredFinish(SLUG);
+    setDailyResult(saved);
+    setFinish(saved);
+    setPhase('done');
+  }, [finish]);
+
   const start = useCallback(async (m: Mode, chosenYear?: number) => {
-    if (m === 'daily' && dailyResult) {
-      /* Today's market is closed: the result reopens, the cards do not.
-         Round 643: when an Unlimited start has cleared the result first (an
-         error, then Back, then Daily), this reopening is a restored finish
-         arriving after mount, so it says so first or the completion hook
-         records the day again. */
-      setMode('daily');
-      if (finish === null) markRestoredFinish(SLUG);
-      setFinish(dailyResult);
-      setPhase('done');
+    const saved = m === 'daily' ? loadDailyResult(todayStr) ?? dailyResult : null;
+    if (saved) {
+      restoreDaily(saved);
       return;
     }
     setMode(m);
@@ -75,7 +76,7 @@ export default function PlayerStockMarket() {
     setSlotIndex(0);
     setPicks([]);
     setPhase('buying');
-  }, [dailyResult, todayStr, finish]);
+  }, [dailyResult, todayStr, restoreDaily]);
 
   const remaining = STOCK_BUDGET - picks.reduce((s, c) => s + c.price, 0);
   const current = campaign && phase === 'buying' ? campaign.slots[slotIndex] : null;
@@ -105,6 +106,13 @@ export default function PlayerStockMarket() {
   const advance = () => {
     if (!campaign) return;
     if (stepIndex + 1 < steps.length) { setStepIndex(i => i + 1); return; }
+    if (mode === 'daily') {
+      const saved = loadDailyResult(todayStr);
+      if (saved) {
+        restoreDaily(saved);
+        return;
+      }
+    }
     const done = finishCampaign(campaign, picks, holdings);
     if (mode === 'daily') {
       saveDailyResult(todayStr, done);
