@@ -1,3 +1,11 @@
+## 2026-11-12: Club Manager opponent formations draft
+
+Report 23a9b4ae describes opponents being forced into 4-4-2. New kickoffs now choose the highest-rated available eleven that fits one of the existing formations, with the previous fallback when the roster cannot fill a shape. The 390px Chelsea versus Fulham replay changed Fulham from 4-4-2 with six compatible positions to 4-3-3 with eleven, and both runs finished 2-1.
+
+In 104 paired matches, 59 opponent formations changed and 92 elevens gained compatible positions. The user's lineup, opening match rates, first-half random draw counts and final scores matched. Four matches had different later draw counts and match statistics because the existing second-yellow check depends on which opponent had already been booked.
+
+Four focused tests, app types, the production build, three match sims, 15 output checks and all 16 route download caps passed. Club Manager measured 647.9 KiB against a 648 KiB cap.
+
 ## 2026-11-12 Club Manager J1 League draft
 
 Choose Japan in a new 2026/27 Club Manager career to manage any of the 20 J1 clubs. The first season uses the matchday, home and away designations agreed by the J.League Data Site and PHONBALL on 12 November 2026. All 380 matches were checked through the fixture generator. Dates, stadiums, scores and opening squads are simulated. Later seasons use generated fixtures. The Emperor's Cup, J.League Cup, AFC competitions and J2 promotion and relegation are outside this league model.
