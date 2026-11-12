@@ -31,7 +31,7 @@ function resultCard(m: MountedPage): Element | null {
   return m.container.querySelector('[role="status"]');
 }
 
-function cards(m: MountedPage): HTMLButtonElement[] {
+export function cards(m: MountedPage): HTMLButtonElement[] {
   return Array.from(m.container.querySelectorAll('button')).filter(b => CARD.test((b.textContent ?? '').trim()));
 }
 

@@ -1,3 +1,15 @@
+## 2026-11-12: Career Ladder Daily midnight saves staged
+
+A Career Ladder tab that starts loading before midnight keeps a newer Daily result when its player pool arrives after midnight. The shared puzzle loader prunes only earlier dates for the same game.
+
+The mounted replay finished Nov 12, then released the delayed Nov 11 player pool. The original deleted the current result without a guess. The repair restores the older tab's clue, keeps Nov 12 complete on reload and records one completion. Focused checks cover older and same-day records, other game keys and the Footle give up flow.
+
+## 2026-11-12: Gauntlet Daily midnight saves staged
+
+Finishing a Gauntlet Daily from before midnight keeps the newer Daily result in another tab. The shared record writer prunes only earlier dates for the same game and retains the existing keys and JSON.
+
+A mounted replay saved 32 points for Nov 12, then 48 for Nov 11 from its older tab. The original removed Nov 12 and offered the first pick again. The repair kept both records and reopened Nov 12 with the 32-point result and one completion for each run. Both new regressions failed on main, then passed with 13 existing Daily record and Gauntlet reload checks. Production verification is pending.
+
 ## 2026-11-11 Build Your XI Mixed rerolls
 
 The draft fixes a Mixed reroll that could spin and give back the same assignment. Both modes now exclude the current team along with the other teams already assigned. The recorded year and consumed lineup slots stay in place when the next team changes.

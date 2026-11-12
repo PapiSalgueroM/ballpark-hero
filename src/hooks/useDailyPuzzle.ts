@@ -326,9 +326,10 @@ function cleanupOldEntries(gameSlug: string, currentKey: string): void {
     // Collect first, modifying localStorage while iterating is unsafe
     for (let i = 0; i < localStorage.length; i++) {
       const key = localStorage.key(i);
-      if (key && key.startsWith(prefix) && key !== currentKey) {
-        toRemove.push(key);
-      }
+      if (!key?.startsWith(prefix)) continue;
+      const date = key.slice(prefix.length);
+      // A delayed load can still be restoring yesterday's pinned puzzle.
+      if (/^\d{4}-\d{2}-\d{2}$/.test(date) && key < currentKey) toRemove.push(key);
     }
     toRemove.forEach((k) => localStorage.removeItem(k));
   } catch {

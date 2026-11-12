@@ -79,6 +79,28 @@ describe('dailyRecord', () => {
     expect(readDailyRecord(SLUG, TODAY, validate)).toEqual({ score: 42, guesses: ['x', 'y'] });
   });
 
+  it('prunes only older dates for this game, keeping a newer record and other games', () => {
+    const newer = dailyRecordKey(SLUG, '2026-09-05');
+    const older = dailyRecordKey(SLUG, YESTERDAY);
+    const current = dailyRecordKey(SLUG, TODAY);
+    const otherGame = dailyRecordKey(`${SLUG}-daily-1900`, YESTERDAY);
+    writeDailyRecord(SLUG, '2026-09-05', { score: 10, guesses: ['newer'] });
+    const newerBytes = localStorage.getItem(newer);
+    expect(newerBytes).not.toBeNull();
+    localStorage.setItem(older, 'older record');
+    localStorage.setItem(otherGame, 'other game');
+
+    writeDailyRecord(SLUG, TODAY, { score: 20, guesses: ['current'] });
+    writeDailyRecord(SLUG, TODAY, { score: 21, guesses: ['updated'] });
+
+    expect(localStorage.getItem(older)).toBeNull();
+    expect(localStorage.getItem(otherGame)).toBe('other game');
+    expect(localStorage.getItem(newer)).toBe(newerBytes);
+    expect(localStorage.getItem(current)).toBe(JSON.stringify({
+      score: 21, guesses: ['updated'], v: 1, date: TODAY,
+    }));
+  });
+
   it('cannot be talked into another version or date by the caller', () => {
     writeDailyRecord(SLUG, TODAY, { v: 999, date: YESTERDAY, score: 1, guesses: [] });
     const raw = JSON.parse(localStorage.getItem(dailyRecordKey(SLUG, TODAY))!);
