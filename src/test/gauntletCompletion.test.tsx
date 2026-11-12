@@ -5,6 +5,10 @@ import gauntlet from './dailyReload/gauntlet-draft.driver';
 import { button, click } from './dailyReload/harness';
 import { recordCompletion, resetMocks } from './dailyReload/mocks';
 
+function isResultWrite(name: string, value: string, key: string): boolean {
+  return name === key && JSON.parse(value).run !== undefined;
+}
+
 async function mountOnTestDay() {
   vi.useFakeTimers({ toFake: ['Date'] });
   vi.setSystemTime(Date.UTC(2026, 10, 11, 17));
@@ -18,7 +22,7 @@ it('keeps an unsaved Daily recap through modes, then saves the exact run on retr
   const write = Storage.prototype.setItem;
   const attempted: string[] = [];
   const refused = vi.spyOn(Storage.prototype, 'setItem').mockImplementation(function (this: Storage, name, value) {
-    if (name === key) {
+    if (isResultWrite(name, value, key)) {
       attempted.push(value);
       if (attempted.length < 3) throw new DOMException('Fixture quota refusal', 'QuotaExceededError');
     }
@@ -30,7 +34,8 @@ it('keeps an unsaved Daily recap through modes, then saves the exact run on retr
     await gauntlet.finish(page);
     const recap = gauntlet.fingerprint(page);
     expect(attempted).toHaveLength(1);
-    expect(localStorage.getItem(key)).toBeNull();
+    const partial = localStorage.getItem(key);
+    expect(JSON.parse(partial ?? 'null').kept).toHaveLength(10);
     expect(recordCompletion).toHaveBeenCalledTimes(1);
 
     await click(button(page.container, /^Back to modes$/));
@@ -40,7 +45,7 @@ it('keeps an unsaved Daily recap through modes, then saves the exact run on retr
     expect(recordCompletion).toHaveBeenCalledTimes(1);
 
     await click(button(page.container, /^Retry save$/));
-    expect(localStorage.getItem(key)).toBeNull();
+    expect(localStorage.getItem(key)).toBe(partial);
     await click(button(page.container, /^Retry save$/));
     expect(attempted).toEqual(Array(3).fill(attempted[0]));
     expect(localStorage.getItem(key)).toBe(attempted[0]);
@@ -68,7 +73,7 @@ it('opens a peer Daily save without overwriting it when retrying a refused save'
   localStorage.removeItem(key);
   const write = Storage.prototype.setItem;
   const refused = vi.spyOn(Storage.prototype, 'setItem').mockImplementation(function (this: Storage, name, value) {
-    if (name === key) throw new DOMException('Fixture quota refusal', 'QuotaExceededError');
+    if (isResultWrite(name, value, key)) throw new DOMException('Fixture quota refusal', 'QuotaExceededError');
     write.call(this, name, value);
   });
   const page = await mountOnTestDay();
@@ -76,7 +81,7 @@ it('opens a peer Daily save without overwriting it when retrying a refused save'
     await gauntlet.enterDaily(page);
     await gauntlet.finish(page);
     const retry = button(page.container, /^Retry save$/);
-    const pendingBytes = refused.mock.calls.find(([name]) => name === key)?.[1];
+    const pendingBytes = refused.mock.calls.find(([name, value]) => isResultWrite(name, value, key))?.[1];
     expect(pendingBytes).toBeDefined();
     const peer = JSON.parse(pendingBytes!);
     peer.run.rating = peer.run.rating - 1;
@@ -84,7 +89,7 @@ it('opens a peer Daily save without overwriting it when retrying a refused save'
     write.call(localStorage, key, peerBytes);
     await click(retry);
     expect(localStorage.getItem(key)).toBe(peerBytes);
-    expect(refused.mock.calls.filter(([name]) => name === key)).toHaveLength(1);
+    expect(refused.mock.calls.filter(([name, value]) => isResultWrite(name, value, key))).toHaveLength(1);
     expect(gauntlet.fingerprint(page)).toContain(`with a ${peer.run.rating} rated XI`);
     expect(page.container.textContent).not.toContain('Retry save');
     expect(recordCompletion).toHaveBeenCalledTimes(1);

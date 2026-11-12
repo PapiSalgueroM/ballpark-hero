@@ -6,6 +6,11 @@ The sent-off tile accepts Cole Palmer's verified second-yellow dismissal against
 
 Both criteria failed on the current main fixture and passed with these changes. The remaining name, country, pagination, request failure and point controls passed.
 
+## 2026-11-12: Gauntlet Daily draft resume staged
+
+Soccer, NBA, NFL, NHL and MLB Gauntlets resume a Daily with the same kept picks and the same next offer. A tab checks for saved progress before accepting a pick. If the player pool changes, the original picks stay saved and can be reopened once the same deal is available. A result retry also keeps a different draft saved by another tab while showing the original recap.
+
+Mounted tests compare all five resumed final records byte for byte with uninterrupted drafts, check stale tabs and live Soccer pool recovery, and cover legacy finals, refused saves, Unlimited and Eastern midnight. Production build and phone verification are pending.
 
 ## 2026-11-12: Soccer Gauntlet Daily result recovery staged
 
