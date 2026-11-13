@@ -53,12 +53,16 @@ export interface BoardClub { club: string; gf: number; place: number; keeperOnRe
  *  input below, are read only by teamOfSeason: what the team of the season picks and splits its lines on. */
 export interface BoardMine { id: string; name: string; pos: Position; rating: number; apps: number; goals: number; assists: number; gen?: boolean }
 
+export interface BoardDeparted extends BoardMine { club: string; sheets: number }
+
 export interface BoardInput {
   book: LeagueBook;
   /** The rival clubs of the league, mine left out. */
   clubs: readonly BoardClub[];
   /** My whole squad. */
   mine: readonly BoardMine[];
+  /** Managed stints from this league and the same book period. */
+  departed?: readonly BoardDeparted[];
   myClub: string;
   myPlace: number;
   /** A rival's rating off the save's own roster, 0 when it does not know him. */
@@ -69,7 +73,7 @@ export interface BoardInput {
 
 export type BoardKind = 'goals' | 'assists' | 'sheets';
 /** One row of a board: the man, his club, and the board's own number. */
-export interface BoardMan { name: string; club: string; pos: Position; n: number; mine?: true; gen?: true }
+export interface BoardMan { name: string; club: string; pos: Position; n: number; mine?: true; gen?: true; departed?: true }
 
 /** Is this a book of the whole season? A late book carries the round it started at. */
 export function bookIsWhole(book: LeagueBook): boolean {
@@ -102,7 +106,7 @@ export function keepersOnRecord(clubs: readonly Pick<BoardClub, 'keeperOnRecord'
 }
 
 /** A man as the boards rank him: both of his counts (each board breaks its ties on the other), his place. */
-interface Ranked { name: string; club: string; pos: Position; goals: number; assists: number; sheets: number; place: number; mine: boolean; gen: boolean }
+interface Ranked { name: string; club: string; pos: Position; goals: number; assists: number; sheets: number; place: number; mine: boolean; gen: boolean; departed?: BoardDeparted }
 
 const text = (a: string, b: string): number => (a < b ? -1 : a > b ? 1 : 0);
 
@@ -117,12 +121,16 @@ function ranked(input: BoardInput): Ranked[] {
     out.push({ name: row.name, club: row.club, pos: row.pos, goals: row.goals, assists: row.assists, sheets: row.cleanSheets, place: placeOf.get(row.club) ?? 0, mine: false, gen: row.gen });
   }
   const base = new Map((book.b ?? []).map(t => [t[0], t]));
-  for (const p of input.mine) {
+  const managed: (BoardMine | BoardDeparted)[] = [...input.mine, ...(input.departed ?? [])];
+  for (const p of managed) {
     const b = base.get(p.id);
+    const departed = 'club' in p ? p : undefined;
+    const club = departed?.club ?? input.myClub;
     out.push({
-      name: p.name, club: input.myClub, pos: p.pos,
+      name: p.name, club, pos: p.pos,
       goals: Math.max(0, p.goals - (b ? b[1] : 0)), assists: Math.max(0, p.assists - (b ? b[2] : 0)),
-      sheets: mineSheets(book, p.id), place: input.myPlace, mine: true, gen: p.gen === true,
+      sheets: departed?.sheets ?? mineSheets(book, p.id), place: club === input.myClub ? input.myPlace : placeOf.get(club) ?? 0,
+      mine: !departed, gen: p.gen === true, ...(departed ? { departed } : {}),
     });
   }
   return out;
@@ -146,7 +154,8 @@ function ordered(input: BoardInput, kind: BoardKind): Ranked[] {
 
 const numberOf = (m: Ranked, kind: BoardKind): number => (kind === 'sheets' ? m.sheets : kind === 'assists' ? m.assists : m.goals);
 const boardMan = (m: Ranked, kind: BoardKind): BoardMan => ({
-  name: m.name, club: m.club, pos: m.pos, n: numberOf(m, kind), ...(m.mine ? { mine: true as const } : {}), ...(m.gen ? { gen: true as const } : {}),
+  name: m.name, club: m.club, pos: m.pos, n: numberOf(m, kind),
+  ...(m.mine ? { mine: true as const } : {}), ...(m.gen ? { gen: true as const } : {}), ...(m.departed ? { departed: true as const } : {}),
 });
 
 /** The top of one board. */
@@ -197,8 +206,9 @@ export const TEAMS_KEPT = 5;
 export function teamOfSeason(input: BoardInput): TeamMan[] | null {
   const men = ranked(input);
   const myIds = new Map(input.mine.map(p => [p.name, p]));
-  const pool = men.filter(m => !m.mine || (myIds.get(m.name)?.apps ?? 0) > 0)
-    .map(m => ({ ...m, line: input.lineOf(m.pos), rating: m.mine ? (myIds.get(m.name)?.rating ?? 0) : input.ratingOf(m.club, m.name, m.pos) }));
+  const managedLine = (m: Ranked) => m.departed ?? (m.mine ? myIds.get(m.name) : undefined);
+  const pool = men.filter(m => (!m.mine && !m.departed) || (managedLine(m)?.apps ?? 0) > 0)
+    .map(m => ({ ...m, line: input.lineOf(m.pos), rating: managedLine(m)?.rating ?? input.ratingOf(m.club, m.name, m.pos) }));
   const clubSheets = new Map<string, number>();
   for (const club of new Set(pool.map(m => m.club))) {
     const of = pool.filter(m => m.club === club);

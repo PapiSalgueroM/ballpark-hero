@@ -61,6 +61,12 @@ Live UI delivery run42300717290 passed on the first root read: the root and Club
 
 SC-36 and CM-04 remain partial; CM-03 real opening-roster coverage is incomplete. Old unrelated full-fleet reds remain unwaived. Continue the master list with verified team/league and real historical entrant coverage. Russia's proposed 15-club SC bridge remains research only: no new rows, palettes, points or year/continental policy are adopted. Rubin's traditional green/white word gap is now corroborated by Sport.ru and Sport Mail, with dated-season/personnel and shade-equivalence caveats retained; other colour and availability gates remain open.
 
+## 2026-11-12: Club Manager keeps league stats after a departure
+
+An accepted January sale removed the player from both the league leaders and the Golden Boot race. The regular transfer-list flow reproduced it for Viktor Gyökeres after 12 Arsenal league goals and Alexander Isak after 13 for Liverpool. Both sales still updated ownership and left the clubs' team totals intact.
+
+The current season now keeps the league line earned before a sale, release, outgoing loan, early loan return or part exchange. Each line stays with its original club and league, and a recall restores the player's running line once. The book uses only its covered rounds. The old scorer race can read the complete retained line. The rival book has no stable player ID for linking every historical row, so ambiguous stints stay labelled by club. Older saves carry no new row until a future departure, and rollover clears the active snapshots after the season awards are settled.
+
 ## 2026-11-01 20:55 EDT, Claude session K (games): RELEASE BV IS LIVE (deployment 96c67a3b, main 7bd3e99a1)
 
 LIVE: release-bv-gate 7bd3e99a1 fast forwarded onto main from 19911f815 and published 20:54 EDT as deployment
