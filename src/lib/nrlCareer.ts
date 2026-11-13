@@ -104,6 +104,7 @@ export interface NrlCareerHistoryRow {
   coachDevelopment?: string[];
   reserveGrade?: { playerId: string; playerName: string; rounds: number; ratingGain: 0 | 1 };
   appointment?: NrlOffseasonAppointment;
+  summerApplication?: NrlSummerApplicationReceipt;
 }
 interface NrlAcademyAssignment {
   player: NrlCareerPlayer;
@@ -136,6 +137,7 @@ export interface NrlCareerState {
   origin?: NrlOriginSeries;
   worldCup?: NrlWorldCupRun;
   offseasonApplication?: string;
+  summerApplication?: NrlSummerApplication;
 }
 type NrlOpeningMatchdayPlayer = readonly [id: number, name: string, age: number, role: NrlRole];
 export type NrlOpeningMatchdayRoster = Readonly<Record<string, readonly NrlOpeningMatchdayPlayer[]>>;
@@ -177,6 +179,7 @@ export type NrlCareerAction = NrlAction
   | { type: 'acceptBoardPathways'; year: number; clubId: string }
   | { type: 'startNextSeason'; move?: { fromYear: number; clubId: string } }
   | { type: 'applyForOffseasonJob' | 'acceptOffseasonJob'; year: number; clubId: string; destinationId: string }
+  | { type: 'applyForSummerJob'; year: number; clubId: string; round: number; destinationId: string }
   | { type: 'retireCareer'; year: number; clubId: string };
 
 export interface NrlCareerCap {
@@ -933,7 +936,12 @@ function advanceCareer(state: NrlCareerState, action: Extract<NrlAction, { type:
       player.id === playerId ? { ...player, rating: player.rating + 1 } : player;
     next = { ...next, players: next.players.map(develop), season: { ...next.season, squad: next.season.squad.map(develop) } };
   }
-  return season.phase === 'complete' ? { ...next, history: [...next.history, seasonReceipt(next)] } : next;
+  if (season.phase !== 'complete') return next;
+  const receipt = seasonReceipt(next);
+  const { summerApplication, ...finished } = next;
+  if (!summerApplication) return { ...next, history: [...next.history, receipt] };
+  const application = settleSummerApplication(next, summerApplication);
+  return { ...finished, history: [...finished.history, { ...receipt, summerApplication: application }] };
 }
 
 function agedRating(player: NrlCareerPlayer, year: number, seed: number): number {
@@ -1022,25 +1030,33 @@ type NrlOffseasonOpportunity = { clubId: string; nextTarget: string } & (
   { reason: 'expansion' } | { reason: 'missed'; rank: number; missedBy: number }
 );
 type NrlOffseasonAppointment = Pick<NrlOffseasonOpportunity, 'clubId' | 'reason'>;
+type NrlSummerApplication = { clubId: string; round: number };
+type NrlSummerApplicationReceipt = NrlSummerApplication & { response: 'offered' | 'declined' | 'vacancy-closed' };
+export const NRL_SUMMER_FIRST_ROUND = 14;
+export const nrlSummerLastRound = (year: number) => nrlRegularRounds(year) - 5;
 
 export function nrlOffseasonOpportunities(state: NrlCareerState): NrlOffseasonOpportunity[] {
-  const { season, history } = state;
+  const { season } = state;
   const clubs = nrlOffseasonClubs(state);
   if (!clubs.length) return [];
   const { year, results } = season;
-  const { clubs: current, draw } = nrlSeasonPlan(year);
-  const available = new Set(clubs.map(club => club.id));
-  const openings: NrlOffseasonOpportunity[] = clubs.filter(club => !current.some(known => known.id === club.id)).map(club => ({
-    clubId: club.id, reason: 'expansion', nextTarget: nrlBoardBenchmark(year + 1, club.id)!.label,
-  }));
-
+  const { draw } = nrlSeasonPlan(year);
   let matchIndex = 0;
   const fullDraw = draw.every((round, index) => round.every(([homeId, awayId]) => {
     const result = results[matchIndex++];
     return result?.round === index + 1 && result.homeId === homeId && result.awayId === awayId;
   }));
-  if (!fullDraw) return openings;
+  return nrlJobOpenings(state, clubs, fullDraw);
+}
 
+function nrlJobOpenings({ season, history }: Pick<NrlCareerState, 'season' | 'history'>, clubs: readonly NrlClub[], includeRivals: boolean): NrlOffseasonOpportunity[] {
+  const { year } = season;
+  const current = nrlSeasonPlan(year).clubs;
+  const available = new Set(clubs.map(club => club.id));
+  const openings: NrlOffseasonOpportunity[] = clubs.filter(club => !current.some(known => known.id === club.id)).map(club => ({
+    clubId: club.id, reason: 'expansion', nextTarget: nrlBoardBenchmark(year + 1, club.id)!.label,
+  }));
+  if (!includeRivals) return openings;
   const misses = nrlLadder(season).flatMap(({ clubId }, index) => {
     if (!available.has(clubId) || clubId === season.championId) return [];
     const previousPlace = history.find(row => row.year === year - 1 && row.clubId === clubId)?.rank;
@@ -1052,12 +1068,49 @@ export function nrlOffseasonOpportunities(state: NrlCareerState): NrlOffseasonOp
   }))];
 }
 
+export function nrlProjectedSummerOpenings({ season, history, retired, legacySeason }: NrlCareerState): NrlOffseasonOpportunity[] {
+  if (retired || legacySeason || !season.kickerId || season.year === NRL_LAST_YEAR || season.phase !== 'regular'
+    || season.round < NRL_SUMMER_FIRST_ROUND || season.round > nrlSummerLastRound(season.year)) return [];
+  const clubs = nrlSeasonPlan(season.year + 1).clubs.filter(club => club.id !== season.clubId);
+  return nrlJobOpenings({ season, history }, clubs, true);
+}
+
+function offseasonOffer(state: NrlCareerState, reason: NrlOffseasonOpportunity['reason']): boolean {
+  return reason === 'expansion' || state.season.championId === state.season.clubId || nrlBoardTarget(state)?.result === 'met';
+}
+
+function settleSummerApplication(state: NrlCareerState, application: NrlSummerApplication): NrlSummerApplicationReceipt {
+  const vacancy = nrlOffseasonOpportunities({ ...state, retired: undefined }).find(job => job.clubId === application.clubId);
+  return { ...application, response: vacancy ? offseasonOffer(state, vacancy.reason) ? 'offered' : 'declined' : 'vacancy-closed' };
+}
+
+export function nrlSummerApplication(state: NrlCareerState) {
+  if (state.summerApplication) return { ...state.summerApplication, response: 'pending' as const };
+  const receipt = state.history.at(-1);
+  if (receipt?.year !== state.season.year || !receipt.summerApplication) return null;
+  const application = receipt.summerApplication;
+  const reason = nrlSeasonPlan(receipt.year).clubs.some(club => club.id === application.clubId) ? 'missed' as const : 'expansion' as const;
+  return { ...application, reason };
+}
+
+function validSummerApplication(value: unknown, year: number, clubId: string): value is NrlSummerApplication {
+  return year < NRL_LAST_YEAR && record(value)
+    && intIn(value.round, NRL_SUMMER_FIRST_ROUND, nrlSummerLastRound(year))
+    && value.clubId !== clubId && nrlSeasonPlan(year + 1).clubs.some(club => club.id === value.clubId);
+}
+
+function wasSummerOpening(state: NrlCareerState, { clubId, round }: NrlSummerApplication): boolean {
+  const season: NrlManagerState = { ...state.season, round, phase: 'regular', championId: null,
+    results: state.season.results.filter(match => match.round < round) };
+  return nrlProjectedSummerOpenings({ ...state, season, retired: undefined }).some(job => job.clubId === clubId);
+}
+
 export function nrlOffseasonApplication(state: NrlCareerState) {
-  const { offseasonApplication, season } = state;
+  const { offseasonApplication } = state;
   if (!offseasonApplication || state.legacySeason) return null;
   const opening = nrlOffseasonOpportunities(state).find(job => job.clubId === offseasonApplication);
   if (!opening) return null;
-  const offered = opening.reason === 'expansion' || season.championId === season.clubId || nrlBoardTarget(state)?.result === 'met';
+  const offered = offseasonOffer(state, opening.reason);
   return { ...opening, response: offered ? 'offered' as const : 'declined' as const };
 }
 
@@ -1186,15 +1239,21 @@ export function reduceNrlCareer(state: NrlCareerState, action: NrlCareerAction):
     }
     case 'applyForOffseasonJob': {
       const { season, legacySeason, offseasonApplication } = state;
-      if (legacySeason || offseasonApplication || action.year !== season.year || action.clubId !== season.clubId
+      if (legacySeason || offseasonApplication || nrlSummerApplication(state) || action.year !== season.year || action.clubId !== season.clubId
         || !nrlOffseasonOpportunities(state).some(job => job.clubId === action.destinationId)) return state;
       return { ...state, offseasonApplication: action.destinationId };
     }
+    case 'applyForSummerJob': {
+      const { season } = state;
+      if (state.summerApplication || action.year !== season.year || action.clubId !== season.clubId || action.round !== season.round
+        || !nrlProjectedSummerOpenings(state).some(job => job.clubId === action.destinationId)) return state;
+      return { ...state, summerApplication: { clubId: action.destinationId, round: action.round } };
+    }
     case 'acceptOffseasonJob': {
       const { year, clubId } = state.season;
-      if (action.year !== year || action.clubId !== clubId || action.destinationId !== state.offseasonApplication) return state;
-      const job = nrlOffseasonApplication(state);
-      return job?.response === 'offered'
+      if (action.year !== year || action.clubId !== clubId) return state;
+      const job = nrlOffseasonApplication(state) ?? nrlSummerApplication(state);
+      return job?.response === 'offered' && action.destinationId === job.clubId
         ? rolloverCareer(state, { fromYear: year, clubId: job.clubId }, { clubId: job.clubId, reason: job.reason })
         : state;
     }
@@ -1412,6 +1471,12 @@ function validReceipt(value: unknown, year: number): value is NrlCareerHistoryRo
       || year === NRL_LAST_YEAR || !nrlSeasonPlan(year + 1).clubs.some(club => club.id === job.clubId)
       || job.clubId === value.clubId || job.reason !== (clubs.some(club => club.id === job.clubId) ? 'missed' : 'expansion')) return false;
   }
+  if (value.summerApplication !== undefined) {
+    const application = value.summerApplication;
+    if (!validSummerApplication(application, year, value.clubId) || Object.keys(application).length !== 3
+      || value.finance === null || value.scoring === undefined
+      || !['offered', 'declined', 'vacancy-closed'].includes((application as NrlSummerApplicationReceipt).response)) return false;
+  }
   if (value.finals !== undefined) {
     const finals = nrlArchivedFinals(value.finals, year);
     if (!finals || finals.championId !== value.championId
@@ -1522,12 +1587,24 @@ function validCareerBooks(state: NrlCareerState): boolean {
     if (!validReceipt(receipt, year) || (receipt.finance === null && index !== 0)) return false;
     const previous = clubs.get(receipt.clubId) ?? firstBook;
     if (receipt.finance && receipt.finance.openingCash !== previous.cash) return false;
-    if (receipt.appointment) {
-      const nextClubId = history[index + 1]?.clubId ?? season.clubId;
+    if (receipt.appointment || receipt.summerApplication) {
       const previousPlace = history[index - 1]?.clubId === receipt.clubId ? history[index - 1].rank : undefined;
       const target = nrlBoardBenchmark(year, receipt.clubId, previousPlace);
-      if (year === season.year || receipt.appointment.clubId !== nextClubId
-        || (receipt.appointment.reason === 'missed' && receipt.championId !== receipt.clubId && (!target || receipt.rank > target.targetRank))) return false;
+      const met = receipt.championId === receipt.clubId || Boolean(target && receipt.rank <= target.targetRank);
+      const application = receipt.summerApplication;
+      if (application) {
+        const expansion = !nrlSeasonPlan(year).clubs.some(club => club.id === application.clubId);
+        if ((expansion && application.response !== 'offered')
+          || (!expansion && application.response !== 'vacancy-closed' && (application.response === 'offered') !== met)) return false;
+        if (year === season.year && (!wasSummerOpening(state, application)
+          || settleSummerApplication(state, application).response !== application.response)) return false;
+      }
+      if (receipt.appointment) {
+        const nextClubId = history[index + 1]?.clubId ?? season.clubId;
+        if (year === season.year || receipt.appointment.clubId !== nextClubId
+          || (receipt.appointment.reason === 'missed' && !met)
+          || (application && (application.clubId !== nextClubId || application.response !== 'offered'))) return false;
+      }
     }
     const academyPurchased = receipt.finance?.academyUpgradeRound !== undefined;
     if (academyPurchased && previous.academyInstalled) return false;
@@ -1693,8 +1770,11 @@ export function isNrlCareerState(value: unknown): value is NrlCareerState {
       if (nomination.clubId !== state.season.clubId || !state.season.squad.some(player => player.id === nomination.playerId)) return false;
     } else if (state.history.find(receipt => receipt.year === originYear)?.clubId !== nomination.clubId) return false;
   }
+  if (value.summerApplication !== undefined && (state.legacySeason || state.retired || state.season.phase === 'complete'
+    || !validSummerApplication(value.summerApplication, year, state.season.clubId) || Object.keys(value.summerApplication).length !== 2
+    || value.summerApplication.round > state.season.round || !wasSummerOpening(state, value.summerApplication))) return false;
   if (value.offseasonApplication !== undefined
-    && (typeof value.offseasonApplication !== 'string' || !nrlOffseasonApplication(state))) return false;
+    && (typeof value.offseasonApplication !== 'string' || nrlSummerApplication(state) || !nrlOffseasonApplication(state))) return false;
   if (!state.season.live && !state.season.attackPlan) return true;
   const { opponentStrength, planRatings } = careerMatchday(state);
   return (!state.season.attackPlan || Boolean(planRatings))

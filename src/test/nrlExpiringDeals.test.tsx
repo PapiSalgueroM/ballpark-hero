@@ -9,6 +9,7 @@ import {
   createNrlCareer, nrlCareerMarket, nrlCareerSquad, nrlContractOffer, readNrlCareerSave, reduceNrlCareer, type NrlCareerState,
 } from '@/lib/nrlCareer';
 import { createNrlSeason, NRL_SAVE_KEY, reduceNrlSeason } from '@/lib/nrlManager';
+import { NRL_SAVE_ENTRY, nrlCheckpointKey, restoreNrlCheckpoint, saveNrlCheckpoint } from '@/lib/nrlSaveSlots';
 import { fenceKeyOf, saveFence } from '@/lib/saveFence';
 import NrlTeamManager from '@/pages/NrlTeamManager';
 
@@ -69,6 +70,53 @@ afterEach(() => {
 });
 
 describe('NRL season review for expiring deals', () => {
+  it('saves a mid-season application, reloads its pending state and accepts the settled summer offer', () => {
+    let career = createNrlCareer('storm', 4);
+    while (career.season.round < 14) career = advance(career);
+    const view = open(career);
+    const desk = screen.getByText('Summer job applications').closest('details')!;
+    fireEvent.click(within(desk).getByText('Summer job applications'));
+    expect(within(desk).getByText(/An opening can disappear/)).toBeVisible();
+    fireEvent.click(within(desk).getByRole('button', { name: 'Apply to Perth Bears for 2027' }));
+    expect(within(desk).getByText(/Application sent to Perth Bears/)).toBeVisible();
+    expect(within(desk).getByText('Summer job applications')).toHaveFocus();
+    const pending = raw()!;
+    expect(JSON.parse(pending).summerApplication).toEqual({ clubId: 'bears', round: 14 });
+    expect(JSON.parse(pending).season).toEqual(career.season);
+    expect(saveNrlCheckpoint(NRL_SAVE_KEY, pending, null)).toBe('written');
+    expect(localStorage.getItem(nrlCheckpointKey(NRL_SAVE_KEY))).toBe(pending);
+    view.unmount();
+    const resumed = open(pending);
+    const panel = screen.getByText('Summer job applications').closest('details')!;
+    fireEvent.click(within(panel).getByText('Summer job applications'));
+    expect(within(panel).getByText(/Application sent to Perth Bears/)).toBeVisible();
+    expect(within(panel).queryByRole('button', { name: /Apply to/ })).toBeNull();
+    expect(raw()).toBe(pending);
+    resumed.unmount();
+    const finished = finish(readNrlCareerSave(pending)!);
+    open(finished);
+    expect(screen.getByText(/Bears offered you the job/)).toBeVisible();
+    click('Accept offer and start 2027');
+    const moved = readNrlCareerSave(raw());
+    expect(moved?.season).toMatchObject({ year: 2027, clubId: 'bears' });
+    expect(moved?.history[0].appointment).toEqual({ clubId: 'bears', reason: 'expansion' });
+    expect(restoreNrlCheckpoint(NRL_SAVE_ENTRY, raw()!, pending)).toBe('written');
+    expect(raw()).toBe(pending);
+  });
+
+  it('leaves newer career bytes in place when a projected application is submitted from an old tab', () => {
+    let career = createNrlCareer('storm', 4);
+    while (career.season.round < 14) career = advance(career);
+    open(career);
+    fireEvent.click(screen.getByText('Summer job applications'));
+    const newer = JSON.stringify(advance(career));
+    localStorage.setItem(NRL_SAVE_KEY, newer);
+    click('Apply to Perth Bears for 2027');
+    expect(raw()).toBe(newer);
+    expect(button('Reload your season')).toBeVisible();
+    expect(button('Apply to Perth Bears for 2027')).toBeDisabled();
+  });
+
   it('previews and cancels suggested openings without writing before the existing club move', () => {
     const view = open(completed);
     const prior = raw();

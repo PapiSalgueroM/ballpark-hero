@@ -12,6 +12,7 @@ import {
   nrlContractCounteroffer, nrlContractOffer,
   nrlCoachQuote, nrlCoachSpend, nrlDevelopmentAssistantProgress, nrlDevelopmentPreview, nrlFinanceForecast,
   nrlMedicalSpend, nrlMedicalUpgradeQuote, nrlOffseasonApplication, nrlOffseasonClubs, nrlOffseasonOpportunities,
+  nrlProjectedSummerOpenings, nrlSummerApplication, nrlSummerLastRound,
   type NrlCareerAction, type NrlCareerState,
   nrlSponsorIncome, nrlSponsorRefusal, nrlTakeoverOffers, nrlTakeoverPlayers, nrlTicketPricingRefusal,
   NRL_DEVELOPMENT_ASSISTANT, NRL_SHORTLIST_LIMIT, NRL_SPONSOR_OFFERS, NRL_TICKET_GATE_CHANGES,
@@ -1012,6 +1013,47 @@ function BoardPathways({ career, onAction, disabled }: { career: NrlCareerState;
   );
 }
 
+function SummerApplications({ career, onAction, disabled }: { career: NrlCareerState; onAction: Dispatch; disabled: boolean }) {
+  const { year, clubId, round } = career.season;
+  const summary = useRef<HTMLElement>(null);
+  const application = nrlSummerApplication(career);
+  const pending = application?.response === 'pending' ? application : null;
+  const openings = pending ? [] : nrlProjectedSummerOpenings(career);
+  if (!pending && !openings.length) return null;
+  const clubs = nrlSeasonPlan(year + 1).clubs;
+  return (
+    <details className="group mt-3 rounded-xl border border-border bg-background px-3">
+      <summary ref={summary} className="flex min-h-11 cursor-pointer items-center justify-between gap-2 rounded-md text-sm font-bold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
+        Summer job applications<ChevronDown size={16} aria-hidden="true" className="shrink-0 group-open:rotate-180" />
+      </summary>
+      <div className="space-y-2 pb-3 text-sm">
+        {pending ? <p role="status" className="text-muted-foreground">
+          Application sent to {clubs.find(club => club.id === pending.clubId)?.name} in Round {pending.round}. You’ll get an answer after the Grand Final.
+        </p> : <>
+          <p className="text-muted-foreground">Apply for one simulated opening for {year + 1} by Round {nrlSummerLastRound(year)}. An opening can disappear before the season ends. Keep coaching your club while you wait for an answer after the Grand Final.</p>
+          <ul className="divide-y divide-border">
+            {openings.map(opening => {
+              const destinationId = opening.clubId;
+              const club = clubs.find(candidate => candidate.id === destinationId)!;
+              return <li key={destinationId} className="flex flex-wrap items-center justify-between gap-2 py-2">
+                <div>
+                  <p className="font-semibold">{club.name}</p>
+                  <p className="text-muted-foreground">{opening.reason === 'expansion' ? `Joins the league in ${year + 1}` : `Projected opening · Current ladder place ${opening.rank}`}</p>
+                </div>
+                <Button type="button" size="lg" variant="outline" className="px-3" disabled={disabled}
+                  aria-label={`Apply to ${club.name} for ${year + 1}`}
+                  onClick={() => {
+                    if (onAction({ type: 'applyForSummerJob', year, clubId, round, destinationId })) summary.current?.focus();
+                  }}>Apply</Button>
+              </li>;
+            })}
+          </ul>
+        </>}
+      </div>
+    </details>
+  );
+}
+
 function History({ career, onAction, disabled }: { career: NrlCareerState; onAction: Dispatch; disabled: boolean }) {
   const { year, phase, clubId } = career.season;
   const finished = phase === 'complete';
@@ -1025,7 +1067,22 @@ function History({ career, onAction, disabled }: { career: NrlCareerState; onAct
   const clubs = nrlOffseasonClubs(career);
   const nextClub = clubs.find(club => club.id === nextClubId);
   const openings = nrlOffseasonOpportunities(career);
-  const application = nrlOffseasonApplication(career);
+  const summer = nrlSummerApplication(career);
+  const application = nrlOffseasonApplication(career) ?? (summer?.response !== 'pending' ? summer : null);
+  const applicationCard = application && (
+    <div className="rounded-lg border border-border p-2">
+      <p className="text-sm font-semibold" role="status">
+        {labelForClub(year + 1, application.clubId)} {application.response === 'offered' ? 'offered you the job.'
+          : application.response === 'vacancy-closed' ? 'no longer has an opening.' : 'declined your application.'}
+      </p>
+      {application.response === 'offered' && (
+        <Button type="button" size="lg" className="mt-2 w-full px-2 sm:w-auto" disabled={disabled}
+          onClick={() => onAction({ type: 'acceptOffseasonJob', year, clubId, destinationId: application.clubId })}>
+          Accept offer and start {year + 1}
+        </Button>
+      )}
+    </div>
+  );
   return (
     <>
       <h2 className="font-display text-xl font-bold">Season review</h2>
@@ -1048,6 +1105,8 @@ function History({ career, onAction, disabled }: { career: NrlCareerState; onAct
         </section>
       )}
       {!retired && challengeStatus && <div className="mt-3"><NrlBoardChallengeNotice season={career.season} status={challengeStatus} /></div>}
+      {!finished && !retired && <SummerApplications career={career} onAction={onAction} disabled={disabled} />}
+      {summer && finished && !retired && <div className="mt-3">{applicationCard}</div>}
       {!retired && <BoardPathways career={career} onAction={onAction} disabled={disabled} />}
       {!retired && !career.legacySeason && year < NRL_LAST_YEAR && <DevelopmentFocus career={career} onAction={onAction} disabled={disabled} />}
       {finished && !retired && year < NRL_LAST_YEAR && <ExpiringDeals career={career} onAction={onAction} disabled={disabled} />}
@@ -1068,7 +1127,7 @@ function History({ career, onAction, disabled }: { career: NrlCareerState; onAct
               <p className="text-muted-foreground">
                 Simulated suggestions based on expansion and this career’s results. The club picker below is available for a direct move.
               </p>
-              {!career.legacySeason && (
+              {!career.legacySeason && !summer && (
                 <p className="mt-1 text-muted-foreground">
                   Apply once this offseason. Expansion clubs make an offer. Existing clubs offer if you met your board target or won the premiership.
                 </p>
@@ -1097,20 +1156,8 @@ function History({ career, onAction, disabled }: { career: NrlCareerState; onAct
                   </li>;
                 })}
               </ul>
-              {application && (
-                <div className="mt-2 border-t border-border pt-2">
-                  <p className="font-semibold" role="status">
-                    {labelForClub(year + 1, application.clubId)} {application.response === 'offered' ? 'offered you the job.' : 'declined your application.'}
-                  </p>
-                  {application.response === 'offered' && (
-                    <Button type="button" size="lg" className="mt-2 w-full px-2 sm:w-auto" disabled={disabled}
-                      onClick={() => onAction({ type: 'acceptOffseasonJob', year, clubId, destinationId: application.clubId })}>
-                      Accept offer and start {year + 1}
-                    </Button>
-                  )}
-                </div>
-              )}
             </section>}
+            {!summer && applicationCard}
             <label className="block font-semibold" htmlFor="nrl-next-club">Club to manage</label>
             <select ref={clubSelect} id="nrl-next-club" className={control} value={nextClubId} disabled={disabled} onChange={event => setNextClubId(event.target.value)}>
               <option value="">Choose a club</option>
@@ -1146,6 +1193,13 @@ function History({ career, onAction, disabled }: { career: NrlCareerState; onAct
                 <p className="text-sm text-muted-foreground">Ladder place {record.rank} · {record.wins} wins · {record.draws} draws · {record.losses} losses</p>
                 {record.appointment && (
                   <p className="text-sm text-muted-foreground">Accepted the {labelForClub(record.year + 1, record.appointment.clubId)} job for {record.year + 1}</p>
+                )}
+                {record.summerApplication && !record.appointment && (record.year !== year || retired) && (
+                  <p className="text-sm text-muted-foreground">
+                    Applied to {labelForClub(record.year + 1, record.summerApplication.clubId)} in Round {record.summerApplication.round} · {
+                      record.summerApplication.response === 'offered' ? 'Offer passed over'
+                        : record.summerApplication.response === 'vacancy-closed' ? 'Opening closed' : 'Application declined'}
+                  </p>
                 )}
                 <p className="text-sm text-muted-foreground">Premiers {labelForClub(record.year, record.championId)}{record.finance ? ` · Profit or loss ${money(record.finance.profit)}` : ''}</p>
                 {record.finance?.ticketTier && <p className="text-sm text-muted-foreground">Home ticket pricing {ticketLabels[record.finance.ticketTier]}</p>}
