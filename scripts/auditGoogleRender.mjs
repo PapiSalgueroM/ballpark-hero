@@ -36,7 +36,7 @@ const PAGES = [
   '/nba-stat-line', '/records', '/whats-new', '/about', '/leaderboard', '/nba-grid/archive',
 ];
 
-const clientTs = fs.readFileSync(path.join(ROOT, 'src', 'integrations', 'supabase', 'client.ts'), 'utf8');
+const clientTs = fs.readFileSync(path.join(ROOT, 'src', 'integrations', 'supabase', 'config.ts'), 'utf8');
 const DB_HOST = new URL(clientTs.match(/SUPABASE_URL\s*=\s*["']([^"']+)["']/)[1]).host;
 
 const words = t => t.replace(/\s+/g, ' ').trim().split(' ').filter(Boolean).length;

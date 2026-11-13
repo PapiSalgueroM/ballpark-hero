@@ -209,7 +209,7 @@ console.log('0) the overlay, both function maps and the migration list are one l
 /* ONE paged scan of the whole table, every column but id in the row, feeding
    sections 1 to 3. A failed page refuses the run rather than reporting a
    moved table against a short read. */
-const client = read('src/integrations/supabase/client.ts');
+const client = read('src/integrations/supabase/config.ts');
 const URL_ = client.match(/SUPABASE_URL\s*=\s*["']([^"']+)["']/)[1];
 const KEY = client.match(/SUPABASE_PUBLISHABLE_KEY\s*=\s*["']([^"']+)["']/)[1];
 const HEAD = { apikey: KEY, Authorization: `Bearer ${KEY}` };

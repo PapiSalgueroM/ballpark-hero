@@ -7,7 +7,7 @@ import {
   DialogTitle,
   DialogDescription,
 } from '@/components/ui/dialog';
-import { supabase } from '@/integrations/supabase/client';
+import { loadSupabase } from '@/integrations/supabase/loadClient';
 import { cn } from '@/lib/utils';
 import { buildReportContext } from '@/lib/reportContext';
 import { REPORT_KINDS_QUESTION } from '@/components/game/reportKinds';
@@ -38,6 +38,7 @@ const ReportQuestion = ({ gameType, gameContext = {}, kinds = REPORT_REASONS }: 
     const submission = beginSubmission();
     if (!submission) return;
     try {
+      const supabase = await loadSupabase();
       const description = [reason, text].filter(Boolean).join(': ');
       const context = buildReportContext(gameContext);
       // Preferred path: the report-relay edge function stores the report AND

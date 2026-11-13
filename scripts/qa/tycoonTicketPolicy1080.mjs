@@ -51,7 +51,7 @@ const { chromium } = await import('../lib/playwrightLoader.mjs');
 const { build } = await import('esbuild');
 const bundled = await build({ absWorkingDir: ROOT, stdin: { contents: "export * from './src/lib/stadiumTycoon';", resolveDir: ROOT }, bundle: true, write: false, format: 'esm', platform: 'node', alias: { '@': path.join(ROOT, 'src') }, logLevel: 'silent' });
 const engine = await import('data:text/javascript;base64,' + Buffer.from(bundled.outputFiles[0].text).toString('base64'));
-const clientSource = fs.readFileSync(path.join(ROOT, 'src/integrations/supabase/client.ts'), 'utf8');
+const clientSource = fs.readFileSync(path.join(ROOT, 'src/integrations/supabase/config.ts'), 'utf8');
 const configuredOrigins = [...clientSource.matchAll(/^export const SUPABASE_URL = "(https:\/\/[^"\s]+)";/gm)];
 assert.equal(configuredOrigins.length, 1, 'Bind locally intercepted completion attempts to the actual configured service');
 const completionOrigin = new URL(configuredOrigins[0][1]).origin;

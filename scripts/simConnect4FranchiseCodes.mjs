@@ -388,12 +388,12 @@ if (!LIVE) {
   liveNote = 'skipped: live sections turned off by CONNECT4_CODES_LIVE=off';
   note(liveNote);
 } else {
-  const client = read(path.join(ROOT, 'src', 'integrations', 'supabase', 'client.ts'));
+  const client = read(path.join(ROOT, 'src', 'integrations', 'supabase', 'config.ts'));
   const U = client.match(/SUPABASE_URL\s*=\s*["']([^"']+)["']/)?.[1];
   const K = client.match(/SUPABASE_PUBLISHABLE_KEY\s*=\s*["']([^"']+)["']/)?.[1];
   const H = { apikey: K, Authorization: `Bearer ${K}` };
   const probe = async () => {
-    if (!U || !K) return { ok: false, why: 'no URL or key in src/integrations/supabase/client.ts' };
+    if (!U || !K) return { ok: false, why: 'no URL or key in src/integrations/supabase/config.ts' };
     try {
       const res = await fetch(`${U}/rest/v1/`, { headers: H, signal: AbortSignal.timeout(8000) });
       const body = await res.text().catch(() => '');

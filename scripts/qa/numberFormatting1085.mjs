@@ -51,7 +51,7 @@ const assets = new Map(entries.map(entry => {
 }));
 assert(assets.has(sheets[0]));
 const payloadHashes = () => Object.fromEntries(entries.map(entry => [entry.file, digest(fs.readFileSync(path.join(path.dirname(CACHE), entry.file)))]));
-const serviceOrigin = new URL(fs.readFileSync(path.join(ROOT, 'src/integrations/supabase/client.ts'), 'utf8').match(/export const SUPABASE_URL = "([^"]+)";/)[1]).origin;
+const serviceOrigin = new URL(fs.readFileSync(path.join(ROOT, 'src/integrations/supabase/config.ts'), 'utf8').match(/export const SUPABASE_URL = "([^"]+)";/)[1]).origin;
 function hashes(directories, extras = []) {
   const result = {};
   const walk = relative => { for (const entry of fs.readdirSync(path.join(ROOT, relative), { withFileTypes: true })) {

@@ -2,7 +2,7 @@ import { useState, useEffect, useLayoutEffect, useMemo, useRef, useCallback, use
 import { useAuth } from '@/contexts/AuthContext';
 import { Link } from 'react-router-dom';
 import { Trophy, Flame, Sparkles, Users, Search, X, Globe, ChevronDown, Pin } from 'lucide-react';
-import { supabase } from '@/integrations/supabase/client';
+import { loadSupabase } from '@/integrations/supabase/loadClient';
 import PageSeo from '@/components/seo/PageSeo';
 
 import { StreakReminder } from '@/components/game/StreakReminder';
@@ -156,6 +156,8 @@ export default function Index() {
       fetching = true;
       controller = new AbortController();
       try {
+        const supabase = await loadSupabase();
+        if (!active) return;
         const todayUtc = new Date().toISOString().split('T')[0];
         const [rankRes, todayRes, bestRes] = await Promise.all([
           (supabase.rpc as any)('global_rank', {
@@ -552,11 +554,9 @@ export default function Index() {
   );
 }
 
-/* Round 659: the polls sit below the games now, so their code (the poll
-   card, the flags, the fixture pool) loads when the section comes within
-   600px of the screen rather than with the page. Until then, and while it
-   loads, the placeholder holds the section's exact box, and because the
-   swap happens well below what anyone is reading, nothing they see moves. */
+/* The polls sit below the games, so their code (the poll card, the flags,
+   the fixture pool) loads when the section enters the viewport. The
+   placeholder holds the section's space until the polls are ready. */
 const LazyPolls = lazy(() => import('@/components/home/PollOfTheDay').then(m => ({ default: m.PollOfTheDay })));
 
 /* Round 840: the About copy, its own chunk. Mounted unconditionally above,
@@ -573,7 +573,7 @@ function PollsWhenNear() {
     if (typeof IntersectionObserver === 'undefined') { setNear(true); return; }
     const io = new IntersectionObserver(entries => {
       if (entries.some(e => e.isIntersecting)) { setNear(true); io.disconnect(); }
-    }, { rootMargin: '600px 0px' });
+    });
     io.observe(el);
     return () => io.disconnect();
   }, []);
@@ -611,7 +611,18 @@ function StatChip({ icon, label, value, unit }: { icon: ReactNode; label: string
  * this section never renders empty or looks broken.
  */
 function MostPlayedToday() {
-  const { entries, loading } = useMostPlayed();
+  const section = useRef<HTMLElement>(null);
+  const [near, setNear] = useState(false);
+  const { entries, loading } = useMostPlayed(near);
+  useEffect(() => {
+    if (!section.current) return;
+    if (typeof IntersectionObserver === 'undefined') { setNear(true); return; }
+    const observer = new IntersectionObserver(entries => {
+      if (entries.some(entry => entry.isIntersecting)) { setNear(true); observer.disconnect(); }
+    });
+    observer.observe(section.current);
+    return () => observer.disconnect();
+  }, []);
 
   /* Round 659: an h2 now, still the section's first heading, which is how
      playHomeFold section 3 finds it. */
@@ -626,7 +637,7 @@ function MostPlayedToday() {
 
   if (loading && entries.length === 0) {
     return (
-      <section>
+      <section ref={section}>
         {heading}
         <div className="grid gap-2">
           {[1, 2, 3].map(i => (
@@ -640,7 +651,7 @@ function MostPlayedToday() {
   if (entries.length === 0) return null;
 
   return (
-    <section>
+    <section ref={section}>
       {heading}
       <ol className="grid grid-cols-1 gap-2">
         {entries.map(({ game, isFallback }, rank) => {

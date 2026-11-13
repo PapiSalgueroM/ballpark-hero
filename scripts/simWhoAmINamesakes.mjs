@@ -412,7 +412,7 @@ globalThis.fetch = async (input, init) => {
 const { w, ps, ca, cl } = await import(pathToFileURL(LIB).href);
 const ref = await import(pathToFileURL(REF).href);
 
-const client = readLf('src/integrations/supabase/client.ts');
+const client = readLf('src/integrations/supabase/config.ts');
 const DB_URL = client.match(/SUPABASE_URL\s*=\s*["']([^"']+)["']/)[1];
 const DB_KEY = client.match(/SUPABASE_PUBLISHABLE_KEY\s*=\s*["']([^"']+)["']/)[1];
 async function rest(query, extraHeaders = {}) {

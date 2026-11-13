@@ -175,10 +175,10 @@ export function leagueUnion() {
 export const ROW_SELECT = 'id,player_name,position,age,nationality,club,market_value_usd,goals,assists';
 
 function restAuth() {
-  const client = fs.readFileSync(path.join(ROOT, 'src', 'integrations', 'supabase', 'client.ts'), 'utf8');
+  const client = fs.readFileSync(path.join(ROOT, 'src', 'integrations', 'supabase', 'config.ts'), 'utf8');
   const url = client.match(/SUPABASE_URL\s*=\s*["']([^"']+)["']/)?.[1];
   const key = client.match(/SUPABASE_PUBLISHABLE_KEY\s*=\s*["']([^"']+)["']/)?.[1];
-  if (!url || !key) throw new Error('bakePlayers: could not read the Supabase URL and key from client.ts');
+  if (!url || !key) throw new Error('bakePlayers: could not read the Supabase URL and key from config.ts');
   return { url, headers: { apikey: key, Authorization: `Bearer ${key}` } };
 }
 

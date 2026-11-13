@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { TOTAL_GAMES } from '@/data/gameRegistry';
-import { supabase } from '@/integrations/supabase/client';
+import { loadSupabase } from '@/integrations/supabase/loadClient';
 import { useAuth } from '@/contexts/AuthContext';
 import { getCurrentPlayerName, getLocalTodayCount } from '@/lib/completions';
 import { getGlobalCurrentStreak } from '@/lib/streaks';
@@ -68,6 +68,8 @@ export function useGameNavbarStats(): GameNavbarStats & { totalGames: number } {
       fetching = true;
 
       try {
+        const supabase = await loadSupabase();
+        if (!active) return;
         const todayUtc = new Date().toISOString().split('T')[0];
 
         const [rankRes, playedRes] = await Promise.all([

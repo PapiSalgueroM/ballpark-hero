@@ -44,7 +44,7 @@ const abortUnavailable = m => {
   process.exit(1);
 };
 
-const client = fs.readFileSync(path.join(ROOT, 'src', 'integrations', 'supabase', 'client.ts'), 'utf8');
+const client = fs.readFileSync(path.join(ROOT, 'src', 'integrations', 'supabase', 'config.ts'), 'utf8');
 const URL_ = client.match(/SUPABASE_URL\s*=\s*["']([^"']+)["']/)[1];
 const KEY = client.match(/SUPABASE_PUBLISHABLE_KEY\s*=\s*["']([^"']+)["']/)[1];
 let refusalFailed = false;

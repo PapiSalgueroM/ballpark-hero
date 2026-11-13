@@ -50,7 +50,7 @@ const CHUNK = `/assets/${chunks[0]}`;
 const freshSource = fs.readFileSync(path.join(ROOT, 'src/lib/freshBuild.ts'), 'utf8');
 const staleKeys = [...freshSource.matchAll(/const STALE_KEY = '([^']+)';/g)]; assert.equal(staleKeys.length, 1);
 const STALE_KEY = staleKeys[0][1];
-const serviceOrigin = new URL(fs.readFileSync(path.join(ROOT, 'src/integrations/supabase/client.ts'), 'utf8').match(/export const SUPABASE_URL = "([^"]+)";/)[1]).origin;
+const serviceOrigin = new URL(fs.readFileSync(path.join(ROOT, 'src/integrations/supabase/config.ts'), 'utf8').match(/export const SUPABASE_URL = "([^"]+)";/)[1]).origin;
 const entries = JSON.parse(fs.readFileSync(CACHE, 'utf8'));
 const assets = new Map(entries.map(entry => {
   assert(['https://fonts.googleapis.com', 'https://fonts.gstatic.com', 'https://flagcdn.com'].includes(new URL(entry.url).origin));

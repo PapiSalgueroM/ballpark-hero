@@ -27,7 +27,7 @@ const assets = new Map(JSON.parse(fs.readFileSync(CACHE, 'utf8')).map(entry => {
   return [entry.url, { body, contentType: entry.contentType }];
 }));
 const fontSheets = [...fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8').matchAll(/<link\s+href="(https:\/\/fonts\.googleapis\.com\/[^\"]+)"\s+rel="stylesheet"/g)].map(row => new URL(row[1]).href);
-const serviceOrigin = new URL(fs.readFileSync(path.join(ROOT, 'src/integrations/supabase/client.ts'), 'utf8').match(/export const SUPABASE_URL = "([^"]+)";/)[1]).origin;
+const serviceOrigin = new URL(fs.readFileSync(path.join(ROOT, 'src/integrations/supabase/config.ts'), 'utf8').match(/export const SUPABASE_URL = "([^"]+)";/)[1]).origin;
 assert.equal(fontSheets.length, 1);
 assert(assets.has(fontSheets[0]), 'The actual template font stylesheet is cached');
 function sourceHashes() {

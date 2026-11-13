@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { supabase } from '@/integrations/supabase/client';
+import { loadSupabase } from '@/integrations/supabase/loadClient';
 import { ALL_GAMES, type GameDef } from '@/data/gameRegistry';
 import { gameForCompletionSlug } from '@/data/completionSlugs';
 
@@ -49,11 +49,12 @@ function buildFallback(): MostPlayedEntry[] {
  * Falls back to a curated flagship trio whenever fewer than 3 games clear
  * the threshold, so the section never renders empty or looks broken.
  */
-export function useMostPlayed(): { entries: MostPlayedEntry[]; loading: boolean } {
+export function useMostPlayed(enabled = true): { entries: MostPlayedEntry[]; loading: boolean } {
   const [entries, setEntries] = useState<MostPlayedEntry[]>(buildFallback());
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    if (!enabled) return;
     let cancelled = false;
 
     const load = async () => {
@@ -73,6 +74,8 @@ export function useMostPlayed(): { entries: MostPlayedEntry[]; loading: boolean 
            truncated and it stops shipping a day of completions to a phone in
            order to count them. The function joins game_score_caps, which is
            Round 360's allowlist, so an invented game key cannot trend either. */
+        const supabase = await loadSupabase();
+        if (cancelled) return;
         const { data, error } = await (supabase.rpc as any)('most_played_today', {
           p_min: MIN_PLAYERS_TO_QUALIFY,
           p_limit: TOP_N,
@@ -113,7 +116,7 @@ export function useMostPlayed(): { entries: MostPlayedEntry[]; loading: boolean 
 
     load();
     return () => { cancelled = true; };
-  }, []);
+  }, [enabled]);
 
   return { entries, loading };
 }

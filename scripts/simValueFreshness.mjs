@@ -37,7 +37,7 @@ const CONTROL = process.env.VALUE_CONTROL || '';
 const KNOWN_CONTROLS = ['phantom', 'refusal'];
 if (CONTROL && !KNOWN_CONTROLS.includes(CONTROL)) { console.error(`VALUE_CONTROL=${CONTROL} is not a control this harness knows`); process.exit(1); }
 
-const client = fs.readFileSync(path.join(ROOT, 'src/integrations/supabase/client.ts'), 'utf8');
+const client = fs.readFileSync(path.join(ROOT, 'src/integrations/supabase/config.ts'), 'utf8');
 const URL_ = client.match(/SUPABASE_URL\s*=\s*["']([^"']+)["']/)[1];
 const KEY = client.match(/SUPABASE_PUBLISHABLE_KEY\s*=\s*["']([^"']+)["']/)[1];
 

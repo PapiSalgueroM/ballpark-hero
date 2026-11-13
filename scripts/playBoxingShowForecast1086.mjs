@@ -17,7 +17,7 @@ const CACHE = path.join(ROOT, 'boxing-show-forecast-artifacts/fonts');
 const hash = value => createHash('sha256').update(value).digest('hex');
 const clone = value => JSON.parse(JSON.stringify(value));
 const KEY = 'fight-promoter-save-v1';
-const configured = fs.readFileSync(path.join(ROOT, 'src/integrations/supabase/client.ts'), 'utf8').match(/^export const SUPABASE_URL = "([^"]+)";/m);
+const configured = fs.readFileSync(path.join(ROOT, 'src/integrations/supabase/config.ts'), 'utf8').match(/^export const SUPABASE_URL = "([^"]+)";/m);
 assert(configured); const serviceOrigin = new URL(configured[1]).origin;
 const sheets = [...fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8').matchAll(/<link\s+href="(https:\/\/fonts\.googleapis\.com\/[^\"]+)"\s+rel="stylesheet"/g)].map(row => new URL(row[1]).href);
 assert.equal(sheets.length, 1);
