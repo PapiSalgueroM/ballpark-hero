@@ -486,6 +486,7 @@ const WORLD_CUP_WINNERS_2010_2026: Record<number, string> = {
   2026: 'Spain',
 };
 
+// The market row uses Gabriel, while the 2026 Brazil squad uses Gabriel Magalhães.
 const GABRIEL_WORLD_CUP_KEY = 'gabriel|brazil|centre-back';
 
 function bingoBirthKey(name: string, country: string): string {
@@ -693,7 +694,7 @@ const UCL_WINNER_KEYS: Set<string> = new Set(
   UCL_WINNER_PAIRS.flatMap(p => p.keys.flatMap(k => p.years.map(y => `${k}|${y}`))),
 );
 
-// Verified second-yellow dismissal, 24 October 2026. See the Club report linked in docs/PROJECT-STATE.md.
+// Chelsea recorded Palmer's second-yellow dismissal against Tottenham on 24 October 2026.
 // This event does not rewrite the older snapshot's season statistics.
 function hasVerifiedDismissal(p: BingoPlayer): boolean {
   return normalizeName(p.name) === 'cole palmer' &&
