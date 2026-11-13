@@ -12,6 +12,7 @@ import {
   nrlCareerCap, nrlCareerFinance, nrlCareerMarket, nrlCareerRecord, nrlCareerSquad,
   nrlContractApproach, nrlContractApproachCandidates, nrlContractApproachLastRound, nrlContractCounteroffer, nrlContractOffer,
   nrlCoachCourseQuote, nrlCoachCourseSpend, nrlCoachQuote, nrlCoachRetentionQuote, nrlCoachSpend, nrlCoachTactics,
+  nrlConcessionsQuote, nrlConcessionsSpend,
   nrlDevelopmentAssistantProgress, nrlDevelopmentPreview, nrlFinanceForecast,
   nrlMedicalSpend, nrlMedicalUpgradeQuote, nrlOffseasonApplication, nrlOffseasonClubs, nrlOffseasonOpportunities,
   nrlLeagueRecruitmentPreview,
@@ -853,6 +854,52 @@ function SeasonSponsor({ career, onAction, disabled }: { career: NrlCareerState;
   );
 }
 
+function Concessions({ career, onAction, disabled }: { career: NrlCareerState; onAction: Dispatch; disabled: boolean }) {
+  const [preview, setPreview] = useState(false);
+  const heading = useRef<HTMLHeadingElement>(null);
+  const { year, clubId, round } = career.season;
+  const quote = nrlConcessionsQuote(career);
+  const changePreview = (open: boolean) => {
+    setPreview(open);
+    heading.current?.focus();
+  };
+  return (
+    <section className="mt-4 space-y-2 rounded-xl border border-border bg-background p-3 text-sm" aria-labelledby="nrl-concessions">
+      <h3 id="nrl-concessions" ref={heading} tabIndex={-1} className="font-bold outline-none">Home-ground concessions</h3>
+      <p className="text-muted-foreground">
+        Earn {money(quote.perHomeMatch)} net at each paid home match from the next round. Neutral Grand Finals are excluded. The upgrade stays with this club.
+      </p>
+      {quote.installed ? (
+        <p role="status" className="font-semibold">
+          {quote.active ? `Upgrade operating · ${money(quote.income)} earned since purchase` : 'Paid. Opens next round.'}
+        </p>
+      ) : <p className="font-semibold">{money(quote.cost)} from club cash · {quote.matchesToPayBack} home matches to break even</p>}
+      {(quote.installed || !quote.reason) && (
+        <p className="text-muted-foreground">
+          {quote.remainingHomeMatches} eligible home {quote.remainingHomeMatches === 1 ? 'match' : 'matches'} on the known schedule
+          {' · '}{money(quote.projectedIncome)} projected.
+          {quote.matchesToPayBack === 0 ? ' Break-even reached.'
+            : quote.paybackRound ? ` Scheduled payback by round ${quote.paybackRound}.`
+              : ` ${quote.matchesToPayBack} home matches needed for payback, beyond the known schedule.`}
+        </p>
+      )}
+      {!quote.installed && (quote.reason ? <p className="text-muted-foreground">{quote.reason}</p> : preview ? (
+        <div className="flex flex-wrap gap-2">
+          <Button type="button" size="lg" variant="outline" onClick={() => changePreview(false)}>Cancel</Button>
+          <Button type="button" size="lg" disabled={disabled}
+            onClick={() => { if (onAction({ type: 'upgradeConcessions', year, clubId, round })) changePreview(false); }}>
+            Confirm {money(quote.cost)} upgrade
+          </Button>
+        </div>
+      ) : (
+        <Button type="button" size="lg" variant="outline" disabled={disabled} onClick={() => changePreview(true)}>
+          Review concessions upgrade
+        </Button>
+      ))}
+    </section>
+  );
+}
+
 function CashForecast({ career, hasAccounts }: { career: NrlCareerState; hasAccounts: boolean }) {
   const forecast = nrlFinanceForecast(career);
   return (
@@ -879,6 +926,7 @@ function CashForecast({ career, hasAccounts }: { career: NrlCareerState; hasAcco
               ['Cash now', forecast.cashNow], ['Central funding left', forecast.funding], ['Player wages left', forecast.playerWages],
               ['Assistant wages left', forecast.assistantWages], ['Operations and travel left', forecast.operatingCosts],
               ['Estimated gate income', moneyRange(forecast.gateLow, forecast.gateHigh)],
+              ...(forecast.projectedConcessions ? [['Estimated concessions income', forecast.projectedConcessions] as const] : []),
               ['Estimated closing cash', moneyRange(forecast.closingLow, forecast.closingHigh)],
             ]} />
           </>
@@ -898,6 +946,7 @@ function Finances({ career, onAction, disabled }: { career: NrlCareerState; onAc
   const cash = nrlCareerFinance(career);
   const medicalSpend = nrlMedicalSpend(cash);
   const academySpend = nrlAcademyFacilitySpend(cash);
+  const concessionsSpend = nrlConcessionsSpend(cash);
   const pathwaysIncome = nrlBoardPathwaysIncome(cash);
   const coachSpend = nrlCoachSpend(cash);
   const courseSpend = nrlCoachCourseSpend(cash);
@@ -924,12 +973,14 @@ function Finances({ career, onAction, disabled }: { career: NrlCareerState; onAc
               <MoneyRows entries={[
                 ['Opening cash', cash.openingCash], ['Central funding', cash.centralFunding],
                 ['Gate receipts', cash.gateReceipts],
+                ...(cash.concessionReceipts ? [['Concessions income', cash.concessionReceipts] as const] : []),
                 ...(cash.sponsor ? [['Sponsor income', nrlSponsorIncome(cash)] as const] : []),
                 ...(pathwaysIncome ? [['Board pathways bonus', pathwaysIncome] as const] : []),
                 ['Wages paid', cash.wagesPaid],
                 ['Operating costs', cash.operatingCosts],
                 ...(medicalSpend ? [['Medical upgrades', medicalSpend] as [string, number]] : []),
                 ...(academySpend ? [['Academy facilities', academySpend] as const] : []),
+                ...(concessionsSpend ? [['Concessions upgrade', concessionsSpend] as const] : []),
                 ...(cash.mutualRelease ? [['Contract settlement', nrlMutualReleaseSpend(cash)] as const] : []),
                 ...(cash.coachHire ? [['Coach signing fee', coachSpend.signingFee], ['Coach wages paid', coachSpend.wages]] as [string, number][] : []),
                 ...(courseSpend ? [['Assistant coaching course', courseSpend] as const] : []),
@@ -942,6 +993,7 @@ function Finances({ career, onAction, disabled }: { career: NrlCareerState; onAc
       <CashForecast career={career} hasAccounts={hasAccounts} />
       <SeasonSponsor career={career} onAction={onAction} disabled={disabled} />
       <TicketPricing career={career} onAction={onAction} disabled={disabled} />
+      <Concessions key={`${year}/${career.season.clubId}/${career.season.round}`} career={career} onAction={onAction} disabled={disabled} />
       <MedicalFacilities career={career} onAction={onAction} disabled={disabled} />
       <CoachingStaff career={career} onAction={onAction} disabled={disabled} />
     </>
