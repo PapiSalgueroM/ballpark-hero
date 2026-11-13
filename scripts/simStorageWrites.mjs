@@ -537,6 +537,8 @@ console.log('6. "full" is taken back in one place, the recheck, and never while 
 const NAMED = [
   { file: 'src/components/us-career/UsCareerBoard.tsx', keys: ['state:saveFailure'],
     why: 'the effect under retrySave holds the save while saveFailed (saveFailure !== null) is true, Round 1144' },
+  { file: 'src/components/nrl-manager/NrlWorldCup.tsx', keys: ['state:saveFailed', 'keeps:safeSetItem'],
+    why: 'the effect holds refused World Cup progress and retries the current run before reload or returning to the club screen' },
 ];
 const NOTHING_HELD = [
   /* the seam and the pieces around it: none of them is a game's progress */

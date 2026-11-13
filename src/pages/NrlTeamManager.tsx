@@ -38,6 +38,7 @@ import { reloadToRetryChunk } from '@/lib/freshBuild';
 import { holdPendingSave } from '@/lib/safeStorage';
 
 const SLUG = 'nrl-team-manager';
+const loadWorldCup = () => import('@/components/nrl-manager/NrlWorldCup');
 const YEARS = [2026, 2027] as const;
 const goldenPointMethods = { tries: 'a try', penalties: 'a penalty goal', longFieldGoals: 'a two-point field goal', fieldGoals: 'a field goal' };
 const PANELS = [
@@ -1091,6 +1092,12 @@ function NrlManagerScreen({ entry, showSlots, rules }: {
   const arrival = useArrivalTop<HTMLHeadingElement>(showSlots ? 'slots' : !season ? 'choose' : `club-${season?.year}`);
   const [panel, setPanel] = useState<Panel>(retired ? 'office' : 'match');
   const [office, setOffice] = useState<OfficeScreen>(retired ? 'history' : 'contracts');
+  const [WorldCup, setWorldCup] = useState<Awaited<ReturnType<typeof loadWorldCup>>['default'] | null>(null);
+  const [cupOpen, setCupOpen] = useState(false);
+  const [cupLoading, setCupLoading] = useState(false);
+  const [cupLoadFailed, setCupLoadFailed] = useState(false);
+  const cupLaunch = useRef<HTMLButtonElement>(null);
+  useEffect(() => { if (!cupOpen && WorldCup) cupLaunch.current?.focus(); }, [cupOpen, WorldCup]);
   const [showLiveResult, setShowLiveResult] = useState(false);
   const [saveFailed, setSaveFailed] = useState(false);
   const [saveTooLarge, setSaveTooLarge] = useState(false);
@@ -1134,6 +1141,24 @@ function NrlManagerScreen({ entry, showSlots, rules }: {
     if (saveFailed && current.current && persist(current.current) !== 'written') return;
     startRequest.current = null;
     navigate(entry.path + (entry.path.includes('?') ? '&' : '?') + 'view=saves', { replace: true });
+  }
+
+  async function openWorldCup() {
+    if (WorldCup) {
+      setCupOpen(true);
+      return;
+    }
+    setCupLoading(true);
+    setCupLoadFailed(false);
+    try {
+      const { default: loaded } = await loadWorldCup();
+      setWorldCup(() => loaded);
+      setCupOpen(true);
+    } catch {
+      setCupLoadFailed(true);
+    } finally {
+      setCupLoading(false);
+    }
   }
 
   async function start(clubId: string, boardChallenge: boolean, openingNames: boolean) {
@@ -1187,7 +1212,11 @@ function NrlManagerScreen({ entry, showSlots, rules }: {
             <h1 ref={arrival} className="font-display text-2xl font-black sm:text-3xl">NRL Team Manager</h1>
             <p className="mt-1 text-sm text-muted-foreground">{season ? `${shortName(season.year, season.clubId)} · ${season.year} season${retired ? ' · Retired' : ''}` : 'Take charge of a rugby league club across seasons.'}</p>
             {career?.openingRoster && <p className="mt-1 text-xs text-muted-foreground">2026 opening matchday snapshot. Ratings, contracts, wages and later squads are simulated.</p>}
-            {!showSlots && <Button type="button" size="lg" variant="ghost" className="mt-1 px-2" onClick={openSlots}>Career saves</Button>}
+            {!showSlots && !cupOpen && <div className="mt-1 flex flex-wrap gap-x-2">
+              <Button type="button" size="lg" variant="ghost" className="px-2" onClick={openSlots}>Career saves</Button>
+              <Button ref={cupLaunch} type="button" size="lg" variant="ghost" className="max-w-full whitespace-normal px-2" onClick={openWorldCup}
+                disabled={cupLoading || loadingNames}>{cupLoading ? 'Loading World Cup…' : 'Rugby League World Cup'}</Button>
+            </div>}
           </div>
           <RulesGate title="How to play NRL Team Manager" floatingTrigger={false} className="min-h-11 min-w-11" state={rules}>
             <ul className="list-disc space-y-2 pl-5">
@@ -1205,11 +1234,17 @@ function NrlManagerScreen({ entry, showSlots, rules }: {
               <li>Check your regular-season board target in Season review.</li>
               <li>Change clubs between seasons from Season review.</li>
               <li>Open State of Origin in the Club office to coach New South Wales or Queensland through three games alongside your club career.</li>
+              <li>Choose Rugby League World Cup beside Career saves to coach a national team through a separate 2026 tournament.</li>
               <li>Review each season, manage contracts and recruit for the next year. Career saves lets you keep up to three careers in this browser.</li>
             </ul>
           </RulesGate>
         </header>
 
+        {cupLoadFailed && <p role="status" className="rounded-xl border border-border bg-card p-3 text-sm">
+          The World Cup could not load. <button type="button" className="min-h-11 font-bold underline" onClick={() => reloadToRetryChunk()}>Refresh to try again</button>
+        </p>}
+        {cupOpen && WorldCup && <WorldCup onBack={() => setCupOpen(false)} />}
+        <div hidden={cupOpen} className="space-y-5">
         {!showSlots && moved && <div className="rounded-xl border border-amber-500/50 bg-card p-3 text-sm" role="status">
           This season changed in another tab. <button type="button" className="min-h-11 font-bold underline" onClick={() => window.location.reload()}>Reload your season</button>
         </div>}
@@ -1259,6 +1294,7 @@ function NrlManagerScreen({ entry, showSlots, rules }: {
             )}
           </>
         )}
+        </div>
 
         <GameSeoContent pageHasOwnH1 title="Build an NRL club across seasons"
           description="Choose a club, coach every round, and build your next squad with contracts and recruitment under the salary cap."
