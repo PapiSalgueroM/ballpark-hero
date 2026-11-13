@@ -2,7 +2,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { CookieConsent } from "@/components/CookieConsent";
 import { StorageNotice, isGameRoute } from "@/components/StorageNotice";
 import { GameAdInventory } from "@/components/ads/GameAdInventory";
-import { lazy, Suspense, useEffect, useRef, useState } from "react";
+import { lazy, Suspense, useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { BrowserRouter, Routes, Route, Navigate, useLocation, useNavigationType } from "react-router-dom";
 import RouteErrorBoundary from "@/components/RouteErrorBoundary";
 import BrokenSaveRestore from "@/components/BrokenSaveRestore";
@@ -10,11 +10,11 @@ import { AuthProvider } from "@/contexts/AuthContext";
 import { Header } from "@/components/layout/Header";
 import { SiteMenu } from "@/components/layout/SiteMenu";
 import { SiteMenuProvider } from "@/components/layout/SiteMenuHost";
-import { LiveTicker } from "@/components/layout/LiveTicker";
 import { UpdateNudge } from "@/components/layout/UpdateNudge";
 import { Footer } from "@/components/game/Footer";
 import { normalizeRoutePath } from "@/lib/routePath";
-import Index from "./pages/Index";
+const LiveTicker = lazy(() => import("@/components/layout/LiveTicker").catch(() => ({ default: () => null })));
+const Index = lazy(() => import("./pages/Index"));
 const Footle = lazy(() => import("./pages/Footle"));
 const FreeKick = lazy(() => import("./pages/FreeKick"));
 const BuzzerBeater = lazy(() => import("./pages/BuzzerBeater"));
@@ -346,6 +346,23 @@ const RouteLoader = () => (
   </div>
 );
 
+// The ticker is visible on Home and at the same desktop breakpoint as its rail.
+const tickerDesktop = typeof window === "undefined" ? undefined : window.matchMedia?.("(min-width: 768px)");
+function subscribeTickerDesktop(onChange: () => void) {
+  tickerDesktop?.addEventListener("change", onChange);
+  return () => tickerDesktop?.removeEventListener("change", onChange);
+}
+const readTickerDesktop = () => tickerDesktop?.matches ?? false;
+
+function LiveTickerRail({ home }: { home: boolean }) {
+  const desktop = useSyncExternalStore(subscribeTickerDesktop, readTickerDesktop);
+  return (
+    <div data-site-chrome="" className={`sticky top-0 z-50 ${home ? 'h-8' : 'hidden h-8 md:block'}`}>
+      {(home || desktop) && <Suspense fallback={null}><LiveTicker /></Suspense>}
+    </div>
+  );
+}
+
 const AppContent = () => {
   const { pathname, search } = useLocation();
   const gameRoute = isGameRoute(pathname);
@@ -361,9 +378,7 @@ const AppContent = () => {
       {!gameRoute && pathname !== "/" && <CookieConsent />}
       {/* Round 167: the site's own wire across the top of every screen. */}
       <SiteMenu />
-      <div data-site-chrome="" className={`sticky top-0 z-50 ${pathname === '/' ? 'h-8' : 'hidden h-8 md:block'}`}>
-        <LiveTicker />
-      </div>
+      <LiveTickerRail home={pathname === "/"} />
       {shouldShowHeader(pathname) && <Header />}
       {pathname === "/" && <CookieConsent inline compactInitial />}
       {/* Round 1142: one line, game routes only, and only in a browser that

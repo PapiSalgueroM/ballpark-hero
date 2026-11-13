@@ -399,6 +399,28 @@ console.log('7) a full slate GLIDES: the wire moves, every card passes, then han
   }
 }
 
+if (!CONTROL) {
+  console.log('10) a phone game leaves the hidden wire off until the desktop breakpoint');
+  const game = await browser.newContext({ viewport: { width: 390, height: 844 } });
+  const page = await game.newPage();
+  let requests = 0;
+  await page.route('**://*.supabase.co/**', r => r.abort());
+  await page.route('**/rest/v1/live_scores*', r => {
+    requests += 1;
+    return r.fulfill({ status: 200, json: ROWS });
+  });
+  await page.goto(`${BASE}/footle`, { waitUntil: 'domcontentloaded', timeout: 30000 });
+  await page.locator('#dukb-main').waitFor();
+  say(requests === 0 && await page.locator(BAR).count() === 0, 'the phone game makes no score request and mounts no ticker');
+  await Promise.all([
+    page.waitForRequest('**/rest/v1/live_scores*'),
+    page.setViewportSize({ width: 768, height: 844 }),
+  ]);
+  await page.locator(BAR).waitFor();
+  say(requests === 1 && await page.locator(BAR).isVisible(), 'resizing to desktop shows the ticker with one score request');
+  await game.close();
+}
+
 await browser.close();
 console.log('');
 if (CONTROL === 'dim') {
