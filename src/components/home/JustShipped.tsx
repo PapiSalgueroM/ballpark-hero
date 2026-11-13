@@ -30,9 +30,9 @@ export function JustShipped({ children }: { children: (games: GameDef[]) => Reac
           </span>
           Just shipped
         </h2>
-        <Link to="/whats-new" className="inline-flex min-h-11 shrink-0 items-center gap-1 rounded-lg px-2 py-2 text-xs font-semibold text-primary hover:underline">
+        <Link to="/whats-new" className="inline-flex min-h-11 min-w-0 max-w-full items-center gap-1 rounded-lg px-2 py-2 text-xs font-semibold text-primary hover:underline">
           Everything that changed
-          <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
+          <ArrowRight className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
         </Link>
       </div>
       {children(games)}
