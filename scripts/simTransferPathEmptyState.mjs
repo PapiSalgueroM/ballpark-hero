@@ -72,7 +72,7 @@ const CONTROLS = {
   },
   lowercase: {
     file: BOARD,
-    swaps: [['new Set([...chain, puzzle.playerB].map(normalizeName))', 'new Set([...chain, puzzle.playerB].map(n => n.toLowerCase()))']],
+    swaps: [['new Set(excludedPlayers.map(normalizeName))', 'new Set(excludedPlayers.map(n => n.toLowerCase()))']],
     red: [/×.*accented chain name typed plain/],
     bake: [],
   },

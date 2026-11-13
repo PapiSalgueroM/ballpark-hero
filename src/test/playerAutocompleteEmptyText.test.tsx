@@ -21,7 +21,7 @@ vi.mock('@/lib/playerSearch', async importOriginal => {
   const real = await importOriginal<typeof import('@/lib/playerSearch')>();
   return {
     ...real,
-    searchPlayers: vi.fn(async ({ query, signal }: SearchPlayersOptions) => {
+    searchPlayers: vi.fn(async ({ query, signal, exclude }: SearchPlayersOptions) => {
       const key = real.normalizeName(query);
       calls.push(key);
       if (holds.has(key)) await new Promise<void>(resolve => releases.set(key, resolve));
@@ -29,7 +29,7 @@ vi.mock('@/lib/playerSearch', async importOriginal => {
       if (signal?.aborted) return { results: [], error: null };
       const reply = replies.get(key) ?? { results: [], error: null };
       if (reply === 'reject') throw new Error('fixture network down');
-      return reply;
+      return { ...reply, results: reply.results.filter(entity => !exclude?.has(real.normalizeName(entity.name))) };
     }),
   };
 });
@@ -173,6 +173,18 @@ describe('Transfer Path board: the empty list says why', () => {
 
   it("names the target by surname: the chain or target text, not 'not in the pool'", async () => {
     expect((await typeIntoBoard('oyarzabal')).textContent).toBe(CHAIN_TEXT);
+  });
+
+  it('offers a target when the optimal path is a direct link', async () => {
+    board.optimal = 1;
+    try {
+      replies.set('oyarzabal', { results: [entity('Mikel Oyarzabal')], error: null });
+      render(<TransferPathBoard />);
+      fireEvent.change(screen.getByRole('combobox'), { target: { value: 'oyarzabal' } });
+      expect(await screen.findByRole('option', { name: 'Mikel Oyarzabal' })).toBeTruthy();
+    } finally {
+      board.optimal = 3;
+    }
   });
 
   it('an accented chain name typed plain is left out of the list and gets the same text', async () => {
