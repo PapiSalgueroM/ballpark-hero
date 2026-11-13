@@ -5498,8 +5498,7 @@ export { SAVE_KEY } from '@/lib/clubManagerSaveKeys';
 // so they must start fresh.
 const SAVE_VERSION = 3;
 
-/** The most players you are allowed on the books. Signings have always checked
- *  this; Round 132 makes the summer rollover respect it too. */
+/** Active-squad limit for new signings. Existing contracts can carry over it. */
 export const SQUAD_LIMIT = 30;
 
 /**
@@ -23086,13 +23085,11 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
 
   let squad: CMPlayer[];
   const freeAgentNews: string[] = [];
-  const releasedNews: string[] = [];
   const freeAgentsIn: string[] = [];
   let emergencyFrom = new Map<string, string>();
   const retiredNow: { name: string; age: number; rating: number }[] = [];
   /* Round 619: men whose deals ran out this summer, collected here and
-     written into the new season's free agent pool below. Round 1597: and the
-     men the summer trim lets go. */
+     written into the new season's free agent pool below. */
   const walkedFree619: FreeAgent[] = [];
   // Round 71: loan players go back to their parent clubs at season's end.
   const afterLoans = career.squad.filter(p => !p.onLoan);
@@ -23174,40 +23171,6 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
     freeAgentsIn.push(...emergency.signed);
     emergencyFrom = emergency.from;
     squad = ensureSquadCoverage(squad);
-    /* Round 132: and the books get balanced. Keeping veterans alive (see
-       renewalTerms) plus a bigger intake pushed a well managed squad to 41
-       players over twelve seasons, well past the thirty you are allowed to
-       sign up to, so the club releases its surplus fringe players the way a
-       real one does. Youth padding goes first, then the lowest rated, and it
-       never touches a squad that is inside the limit. */
-    if (squad.length > SQUAD_LIMIT) {
-      /* Only ever the genuinely surplus: youth padding first, then finished
-         players with no growth left in them. A kid out of your own academy is
-         NEVER released, whatever he is rated today, and neither is anybody
-         still carrying headroom. The first version of this sorted purely on
-         rating and quietly binned the academy graduates, which simAcademy
-         caught immediately: an engaged manager finished six seasons with 0.8
-         graduates in the squad instead of four or five, because a seventeen
-         year old you have just promoted IS the lowest rated senior on the
-         books. If there is nothing surplus to release, the squad simply runs
-         one or two over, which is what it did before this round. */
-      const spare = squad.filter(p =>
-        !p.academyGrad && (p.isYouth || (p.potential ?? p.rating) <= p.rating));
-      spare.sort((a, b) => (a.isYouth ? 0 : 1) - (b.isYouth ? 0 : 1) || a.rating - b.rating);
-      const cut = new Set(spare.slice(0, squad.length - SQUAD_LIMIT).map(p => p.id));
-      for (const p of squad) if (cut.has(p.id)) { releasedNews.push(p.name); rosterExits.push({ player: p, kind: 'release' }); }
-      /* Round 1597: and they go onto the free agent list like everyone else who leaves, where until now they were
-         never written and so were gone the same summer. As men who left my club (fromMyClub: the season away, as
-         for a deal that ran out, and none of a stranger's rules), marked trimmed and never onto releasedNames: the
-         club trimmed him, I did not release him, so releasedByYou does not bar him and he may sign for me again
-         on the usual rules. */
-      walkedFree619.push(...squad.filter(p => cut.has(p.id)).map(p => ({
-        name: p.name, position: p.position, age: p.age, rating: p.rating,
-        value: p.value, generated: madeUp(p) || undefined, ...(p.nation ? { nation: p.nation } : {}), since: season,
-        founderSaleRatio: p.founderSaleRatio, reason: 'released' as const, fromMyClub: true as const, trimmed: true as const,
-      })));
-      squad = squad.filter(p => !cut.has(p.id));
-    }
   }
 
   rosterCareer = { ...rosterCareer, season, clubName, squad };
@@ -23572,12 +23535,6 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
     const names = retiredNow.map(r => `${r.name} (${r.age})`);
     state.aiHeadlines = [
       `\u{1F45F} ${names.slice(0, 3).join(', ')}${names.length > 3 ? ` and ${names.length - 3} more` : ''} ${retiredNow.length === 1 ? 'has' : 'have'} retired.`,
-      ...state.aiHeadlines,
-    ].slice(0, 8);
-  }
-  if (releasedNews.length) {
-    state.aiHeadlines = [
-      `\u{1F4CB} ${clubName} trimmed the squad back to ${SQUAD_LIMIT}: ${releasedNews.slice(0, 4).join(', ')} released.`,
       ...state.aiHeadlines,
     ].slice(0, 8);
   }
