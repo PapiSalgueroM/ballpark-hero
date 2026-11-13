@@ -42,7 +42,7 @@ vi.mock('@/integrations/supabase/client', () => {
           },
           ilike: (column: string, pattern: string) => {
             daily.searches.push(pattern);
-            rows = rows.filter(row => String(row[column]).toLowerCase().includes(pattern.replaceAll('%', '').toLowerCase()));
+            rows = rows.filter(row => String(row[column]).toLowerCase().includes(pattern.replace(/%/g, '').toLowerCase()));
             return builder;
           },
           then: (resolve: (value: { data: typeof rows; error: null }) => unknown) => resolve({ data: rows, error: null }),
