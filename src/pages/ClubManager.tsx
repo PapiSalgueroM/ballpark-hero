@@ -48,12 +48,12 @@ const Tabs = lazy(() => import('@/components/ui/tabs').then(m => ({ default: m.T
 const TabsContent = lazy(() => import('@/components/ui/tabs').then(m => ({ default: m.TabsContent })));
 const TabsList = lazy(() => import('@/components/ui/tabs').then(m => ({ default: m.TabsList })));
 const TabsTrigger = lazy(() => import('@/components/ui/tabs').then(m => ({ default: m.TabsTrigger })));
-const EraLoadFailedView = lazy(() => import('@/components/club-manager/ClubManagerDeferredViews').then(m => ({ default: m.EraLoadFailed })));
-const WorldEditorTile = lazy(() => import('@/components/club-manager/ClubManagerDeferredViews').then(m => ({ default: m.WorldEditorTile })));
-const ClubHeading = lazy(() => import('@/components/club-manager/ClubManagerDeferredViews').then(m => ({ default: m.ClubHeading })));
-const ClubStatus = lazy(() => import('@/components/club-manager/ClubManagerDeferredViews').then(m => ({ default: m.ClubStatus })));
-const OverviewIntro = lazy(() => import('@/components/club-manager/ClubManagerDeferredViews').then(m => ({ default: m.OverviewIntro })));
-const HubTiles = lazy(() => import('@/components/club-manager/ClubManagerDeferredViews').then(m => ({ default: m.HubTiles })));
+const loadDeferredViews = () => import('@/components/club-manager/ClubManagerDeferredViews');
+const EraLoadFailedView = lazy(() => loadDeferredViews().then(m => ({ default: m.EraLoadFailed })));
+const ClubHeading = lazy(() => loadDeferredViews().then(m => ({ default: m.ClubHeading })));
+const ClubStatus = lazy(() => loadDeferredViews().then(m => ({ default: m.ClubStatus })));
+const OverviewIntro = lazy(() => loadDeferredViews().then(m => ({ default: m.OverviewIntro })));
+const HubTiles = lazy(() => loadDeferredViews().then(m => ({ default: m.HubTiles })));
 
 const ClubManagerTreatmentPanel = lazy(() => import('@/components/club-manager/ClubManagerTreatmentPanel'));
 const ClubManagerBoardPanel = lazy(() => import('@/components/club-manager/ClubManagerBoardPanel'));
@@ -112,6 +112,30 @@ const SavePointsScreen = lazy(() => import('@/components/club-manager/SavePoints
 const PressScreen = lazy(() => import('@/components/club-manager/PressScreen').then(m => ({ default: m.PressScreen })));
 const MatchCentre = lazy(() => import('@/components/club-manager/MatchCentre').then(m => ({ default: m.MatchCentre })));
 const LiveSimScreen = lazy(() => import('@/components/club-manager/LiveSimScreen').then(m => ({ default: m.LiveSimScreen })));
+
+function WorldEditorTile({ movedCount, onOpen }: { movedCount: number; onOpen: () => void }) {
+  return (
+    <button
+      onClick={onOpen}
+      data-testid="cm-world-editor-tile"
+      className={cn(
+        'w-full rounded-xl border p-3 text-left transition-all hover:border-primary',
+        movedCount ? 'bg-primary/10 border-primary' : 'bg-card border-dashed border-primary/50',
+      )}
+    >
+      <div className="flex items-center gap-2.5">
+        <span className="text-xl leading-none">🌍</span>
+        <div className="min-w-0">
+          <div className="text-sm font-bold text-foreground">World editor{movedCount ? `: ${movedCount} clubs moved` : ''}</div>
+          <div className="text-[10px] text-muted-foreground">
+            {movedCount ? 'Your world is edited. Tap to change it or put it back.' : 'Optional. Move any club to any league first: Celtic in the Premier League, your own super league.'}
+          </div>
+        </div>
+        <ChevronRight className="w-4 h-4 text-muted-foreground ml-auto shrink-0" />
+      </div>
+    </button>
+  );
+}
 
 function ScreenLoading({ children, compact = false }: { children: ReactNode; compact?: boolean }) {
   return (
@@ -223,6 +247,8 @@ const ClubManager = ({ initialEra }: { initialEra?: string | null }) => {
     setPickEra(id);
     setPickStep('nation');
     loadPickedEra(id);
+    // The current-world tile used to warm this chunk for the career hub.
+    if (!isHistoricEra(id)) void loadDeferredViews().catch(() => {});
   }, [loadPickedEra]);
   const pendingInitialEra = useRef(initialEra);
   useLayoutEffect(() => {
@@ -449,7 +475,7 @@ const ClubManager = ({ initialEra }: { initialEra?: string | null }) => {
             edit it holds rides into every later step and into the career. */}
         {pickStep === 'nation' && !historicPick && (
           <div className="max-w-2xl mx-auto mb-2.5">
-            <ScreenLoading compact><WorldEditorTile movedCount={movedCount} onOpen={() => setPickStep('world')} /></ScreenLoading>
+            <WorldEditorTile movedCount={movedCount} onOpen={() => setPickStep('world')} />
           </div>
         )}
         {pickStep === 'world' && !historicPick && (

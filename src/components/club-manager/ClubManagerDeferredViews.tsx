@@ -29,30 +29,6 @@ export function EraLoadFailed({ label, noun = 'squads', onRetry, onBack, backLab
   );
 }
 
-export function WorldEditorTile({ movedCount, onOpen }: { movedCount: number; onOpen: () => void }) {
-  return (
-            <button
-              onClick={onOpen}
-              data-testid="cm-world-editor-tile"
-              className={cn(
-                'w-full rounded-xl border p-3 text-left transition-all hover:border-primary',
-                movedCount ? 'bg-primary/10 border-primary' : 'bg-card border-dashed border-primary/50',
-              )}
-            >
-              <div className="flex items-center gap-2.5">
-                <span className="text-xl leading-none">🌍</span>
-                <div className="min-w-0">
-                  <div className="text-sm font-bold text-foreground">World editor{movedCount ? `: ${movedCount} clubs moved` : ''}</div>
-                  <div className="text-[10px] text-muted-foreground">
-                    {movedCount ? 'Your world is edited. Tap to change it or put it back.' : 'Optional. Move any club to any league first: Celtic in the Premier League, your own super league.'}
-                  </div>
-                </div>
-                <ChevronRight className="w-4 h-4 text-muted-foreground ml-auto shrink-0" />
-              </div>
-            </button>
-  );
-}
-
 export function ClubHeading({ crest, clubName, seasonLabel, season, difficulty, noSack, midSeason }: {
   crest: ReactNode; clubName: string; seasonLabel: string; season: number;
   difficulty: { id: string; label: string } | null; noSack: boolean; midSeason: boolean;
