@@ -32,7 +32,7 @@ import { isNewGame } from '@/lib/newBadge';
 type SearchEngine = typeof import('@/lib/siteSearch');
 let enginePromise: Promise<SearchEngine> | null = null;
 const loadSearchEngine = () => (enginePromise ??= import('@/lib/siteSearch'));
-import { getTodayET } from '@/lib/dateUtils';
+import { getEasternDayRange, getTodayET } from '@/lib/dateUtils';
 import { HUB_NAV } from '@/lib/sportHubNav';
 
 /** Round 270: the hub that gathers this category, or null when it has none.
@@ -146,19 +146,32 @@ export default function Index() {
     let active = true;
     let fetching = false;
     let loaded = false;
+    let day = getTodayET();
     let controller: AbortController | undefined;
     setGamesToday(getLocalTodayCount());
     setWorldRank(null);
     setBestScores({});
 
+    const syncDay = () => {
+      const currentDay = getTodayET();
+      if (currentDay !== day) {
+        day = currentDay;
+        loaded = false;
+        setGamesToday(getLocalTodayCount());
+      }
+      return currentDay;
+    };
+
     const load = async () => {
-      if (!active || !canReadPersonal || document.visibilityState !== 'visible' || fetching || loaded) return;
+      if (!active || !canReadPersonal || document.visibilityState !== 'visible') return;
+      const requestDay = syncDay();
+      if (fetching || loaded) return;
       fetching = true;
       controller = new AbortController();
       try {
         const supabase = await loadSupabase();
-        if (!active) return;
-        const todayUtc = new Date().toISOString().split('T')[0];
+        if (!active || requestDay !== getTodayET()) return;
+        const { start, end } = getEasternDayRange(requestDay);
         const [rankRes, todayRes, bestRes] = await Promise.all([
           (supabase.rpc as any)('global_rank', {
             p_player: playerName,
@@ -168,7 +181,10 @@ export default function Index() {
           (supabase.from as any)('game_completions')
             .select('game')
             .eq('player_name', playerName)
-            .eq('completed_on', todayUtc).abortSignal(controller.signal),
+            .gte('completed_on', start.slice(0, 10))
+            .lte('completed_on', end.slice(0, 10))
+            .gte('created_at', start)
+            .lt('created_at', end).abortSignal(controller.signal),
           supabase.from('user_best_scores')
             .select('game_type, best_score')
             .eq('user_id', accountId).abortSignal(controller.signal).then(bestRes => {
@@ -181,9 +197,10 @@ export default function Index() {
             }),
         ]);
         if (!active) return;
-        loaded = !rankRes?.error && !todayRes?.error && !bestRes?.error;
+        const sameDay = requestDay === syncDay();
+        loaded = sameDay && !rankRes?.error && !todayRes?.error && !bestRes?.error;
 
-        if (todayRes?.data) {
+        if (sameDay && todayRes?.data) {
           const distinctToday = new Set(
             (todayRes.data as Array<{ game: string }>).map(r => r.game)
           ).size;
@@ -196,7 +213,10 @@ export default function Index() {
           setWorldRank(rank > 0 ? rank : null);
         }
       } catch { /* silent: keep local values until a later foreground retry */ }
-      finally { fetching = false; }
+      finally {
+        fetching = false;
+        if (active && requestDay !== syncDay()) void load();
+      }
     };
     load();
     const onVisible = () => { if (document.visibilityState === 'visible') load(); };
