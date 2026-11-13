@@ -3,6 +3,9 @@ import { describe, expect, it } from 'vitest';
 import { initCfb, simCfbRound, type CfbState } from '@/lib/cfbDynasty';
 
 const SEED = 539004;
+const CUTOFF = 0.0175;
+const BELOW = CUTOFF - 2 ** -58;
+const DIAGNOSTIC = 0.03;
 const REST_OF_ROUND = Array.from({ length: 21 }, () => [0, 0.625, 0.32]).flat();
 
 type Side = 'away' | 'home';
@@ -70,7 +73,7 @@ function retain(key: string, observations: Observation[]) {
   const file = process.env.CFB_DYNASTY_SCORE_BOUNDARY_RAW;
   if (file) {
     writeFileSync(file, JSON.stringify({
-      schema: 1, report: 'R0004', seed: SEED, cases,
+      schema: 1, report: 'R0004', seed: SEED, cutoff: CUTOFF, below: BELOW, diagnostic: DIAGNOSTIC, cases,
     }) + '\n');
   }
 }
@@ -99,21 +102,70 @@ function checkRound(row: Observation, spec: Spec) {
   }]);
 }
 
-const LOSER_CASES: Spec[] = [
-  { key: 'valid-zero', loserDraw: 0.03, loserOC: 45, winnerDC: 70 },
-  { key: 'correct-one', loserDraw: 0.03, loserOC: 60, winnerDC: 70 },
-  { key: 'valid-two', loserDraw: 0.03, loserOC: 65, winnerDC: 70 },
-  { key: 'valid-three', loserDraw: 0.03, loserOC: 70, winnerDC: 70 },
-  { key: 'valid-five', loserDraw: 0.1, loserOC: 70, winnerDC: 70 },
-  { key: 'clamped-margin', loserDraw: 0.99, loserOC: 70, winnerDC: 70 },
+const CUTOFF_CASES: Spec[] = [
+  { key: 'below-adjusted', loserDraw: BELOW, loserOC: 60, winnerDC: 70 },
+  { key: 'below-neutral', loserDraw: BELOW, loserOC: 70, winnerDC: 70 },
+  { key: 'at-adjusted', loserDraw: CUTOFF, loserOC: 60, winnerDC: 70 },
+  { key: 'at-neutral', loserDraw: CUTOFF, loserOC: 70, winnerDC: 70 },
+  { key: 'held-diagnostic', loserDraw: DIAGNOSTIC, loserOC: 60, winnerDC: 70 },
 ];
 
+function cutoffTest(side: Side, key: string, marker: string) {
+  const before = kickoff();
+  const rows = CUTOFF_CASES.map(spec => play(before, side, spec));
+  retain(key, rows);
+  rows.forEach((row, i) => checkRound(row, CUTOFF_CASES[i]));
+  expect(BELOW).toBeLessThan(CUTOFF);
+  expect(rows.map(loserScore), marker).toEqual([0, 0, 2, 3, 2]);
+}
+
+function checkCap(scores: number[], order: 'up' | 'down') {
+  const [low, neutral, high] = scores;
+  expect(Math.abs(low - neutral)).toBeLessThanOrEqual(1);
+  expect(Math.abs(high - neutral)).toBeLessThanOrEqual(1);
+  if (order === 'up') {
+    expect(low).toBeLessThanOrEqual(neutral);
+    expect(neutral).toBeLessThanOrEqual(high);
+  } else {
+    expect(low).toBeGreaterThanOrEqual(neutral);
+    expect(neutral).toBeGreaterThanOrEqual(high);
+  }
+}
+
 describe('CFB Dynasty low-score boundaries', () => {
-  it.each(['away', 'home'] as const)('corrects only one-point %s losses after the margin clamp', side => {
+  it('uses the strict shutout cutoff for the away loser', () => {
+    cutoffTest('away', 'awayCutoff', 'CFB_DYNASTY_AWAY_LOSER_SCORE_CUTOFF');
+  });
+
+  it('uses the strict shutout cutoff for the home loser', () => {
+    cutoffTest('home', 'homeCutoff', 'CFB_DYNASTY_HOME_LOSER_SCORE_CUTOFF');
+  });
+
+  it('keeps staff caps and monotonic scores through the low-score floor', () => {
     const before = kickoff();
-    const rows = LOSER_CASES.map(spec => play(before, side, spec));
-    retain(side, rows);
-    rows.forEach((row, i) => checkRound(row, LOSER_CASES[i]));
-    expect(rows.map(loserScore), 'CFB_DYNASTY_ONLY_ONE_POINT').toEqual([0, 2, 2, 3, 5, 21]);
+    const levels = [65, 70, 75];
+    const specs: Spec[] = [
+      ...levels.map(loserOC => ({ key: 'collision-' + loserOC, loserDraw: DIAGNOSTIC, loserOC, winnerDC: 81 })),
+      ...levels.map(loserOC => ({ key: 'offense-' + loserOC, loserDraw: DIAGNOSTIC, loserOC, winnerDC: 70 })),
+      ...levels.map(winnerDC => ({ key: 'defense-' + winnerDC, loserDraw: DIAGNOSTIC, loserOC: 70, winnerDC })),
+    ];
+    const sides: Side[] = ['away', 'home'];
+    const rows = sides.flatMap(side => specs.map(spec => play(before, side, spec)));
+    retain('staffFloor', rows);
+    rows.forEach((row, i) => checkRound(row, specs[i % specs.length]));
+
+    const collisions = sides.map((_, i) => {
+      const offset = i * specs.length;
+      const collision = rows.slice(offset, offset + 3).map(loserScore);
+      const offense = rows.slice(offset + 3, offset + 6).map(loserScore);
+      const defense = rows.slice(offset + 6, offset + 9).map(loserScore);
+      checkCap(collision, 'up');
+      checkCap(offense, 'up');
+      checkCap(defense, 'down');
+      expect(offense).toEqual([2, 3, 4]);
+      expect(defense).toEqual([4, 3, 2]);
+      return collision;
+    });
+    expect(collisions, 'CFB_DYNASTY_LOW_SCORE_STAFF_CAP_FLOOR').toEqual([[2, 2, 2], [2, 2, 2]]);
   });
 });

@@ -446,8 +446,17 @@ export function cfbWinProb(a: CfbTeam, b: CfbTeam): number {
 
 export interface CfbGame { home: string; away: string; hs: number; as: number; winner: string; conference: boolean; rivalry?: boolean }
 
-function scoreFor(win: boolean, rng: () => number): number {
-  return win ? 24 + Math.floor(rng() * 32) : 3 + Math.floor(rng() * 25);
+const CFB_SHUTOUT_RATE = 0.0175;
+
+function scoreFor(win: boolean, roll: number): number {
+  return win ? 24 + Math.floor(roll * 32) : 3 + Math.floor(roll * 25);
+}
+
+function scoreWithStaff(win: boolean, edge: number, rng: () => number): number {
+  const roll = rng();
+  // Keep the same shutout draws across staff ratings so the score cap still holds.
+  if (!win && roll < CFB_SHUTOUT_RATE) return 0;
+  return Math.max(2, Math.round(scoreFor(win, roll) + CFB_POINTS_PER_EDGE * edge));
 }
 
 /**
@@ -465,19 +474,16 @@ function scoreFor(win: boolean, rng: () => number): number {
  */
 function resolveScores(st: CfbState, home: CfbTeam, away: CfbTeam, homeWins: boolean, rng: () => number): [number, number] {
   if (!st.depth) {
-    let hs = scoreFor(homeWins, rng);
-    const as = scoreFor(!homeWins, rng);
+    let hs = scoreFor(homeWins, rng());
+    const as = scoreFor(!homeWins, rng());
     if (hs === as) hs += 3;
     return [hs, as];
   }
   const h = staffEdges(home.staff);
   const a = staffEdges(away.staff);
-  const hs = Math.max(0, Math.round(scoreFor(homeWins, rng) + CFB_POINTS_PER_EDGE * (h.off - a.def)));
-  const as = Math.max(0, Math.round(scoreFor(!homeWins, rng) + CFB_POINTS_PER_EDGE * (a.off - h.def)));
-  const winner = homeWins ? hs : as;
-  let loser = Math.max(0, Math.min(homeWins ? as : hs, winner - 3));
-  if (loser === 1) loser = winner >= 5 ? 2 : 0;
-  return homeWins ? [winner, loser] : [loser, winner];
+  const hs = scoreWithStaff(homeWins, h.off - a.def, rng);
+  const as = scoreWithStaff(!homeWins, a.off - h.def, rng);
+  return homeWins ? [hs, Math.max(0, Math.min(as, hs - 3))] : [Math.max(0, Math.min(hs, as - 3)), as];
 }
 
 function playCfbGame(st: CfbState, homeId: string, awayId: string, rng: () => number): { hs: number; as: number; winner: string } {
