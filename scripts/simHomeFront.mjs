@@ -300,6 +300,13 @@ await build({
 const store = new Map();
 /** every key a render asks storage for, so section 6 can prove the rail asks for none */
 const reads = [];
+function withWindow(render) {
+  const hadWindow = 'window' in globalThis;
+  const previous = globalThis.window;
+  globalThis.window = { localStorage: globalThis.localStorage };
+  try { return render(); }
+  finally { if (hadWindow) globalThis.window = previous; else delete globalThis.window; }
+}
 globalThis.localStorage = {
   getItem: k => { reads.push(k); return store.has(k) ? store.get(k) : null; },
   setItem: (k, v) => { store.set(k, String(v)); },
@@ -355,9 +362,9 @@ console.log('2) the Continue buttons look for the keys the games really save und
     if (entry.saveKey !== key) fail(2, `${p} looks for ${JSON.stringify(entry.saveKey)} and the game saves under ${JSON.stringify(key)}`);
     /* and the render agrees: planted under the REAL key, Continue shows */
     store.clear();
-    const cold = decode(front.renderStage());
+    const cold = decode(withWindow(() => front.renderStage()));
     store.set(key, '{}');
-    const warm = decode(front.renderStage());
+    const warm = decode(withWindow(() => front.renderStage()));
     store.clear();
     if (cold.includes(entry.continueCta)) fail(2, `${p} says ${JSON.stringify(entry.continueCta)} with no save in the browser`);
     if (!warm.includes(entry.continueCta)) fail(2, `${p} does not say ${JSON.stringify(entry.continueCta)} with a save under its real key ${JSON.stringify(key)}`);
@@ -732,12 +739,6 @@ console.log('7) Continue playing: the right keys, real fields, hostile saves, on
   }
 
   /* g: the rendered row */
-  const withWindow = fn => {
-    const had = 'window' in globalThis;
-    const old = globalThis.window;
-    globalThis.window = { localStorage: globalThis.localStorage };
-    try { return fn(); } finally { if (had) globalThis.window = old; else delete globalThis.window; }
-  };
   const cards = html => [...html.matchAll(/<a ([^>]*)>([\s\S]*?)<\/a>/g)]
     .filter(m => /\bdata-continue-card="/.test(m[1]))
     .map(m => ({ href: (/\bhref="([^"]+)"/.exec(m[1]) || [])[1] || '', inner: decode(m[2].replace(/<[^>]+>/g, ' ')).replace(/\s+/g, ' ').trim() }));

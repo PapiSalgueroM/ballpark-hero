@@ -129,7 +129,7 @@ const PuckDetective = () => {
   const dailyMysteryRef = useRef<PuckDetectivePlayer | null>(null);
   const dailyMystery = useMemo(() => {
     if (!pool) return null;
-    return pickDailyMystery(pool);
+    return pickDailyMystery(pool, todayStr);
   }, [pool, todayStr]);
 
   useEffect(() => {

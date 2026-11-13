@@ -1,10 +1,11 @@
-import { lazy, Suspense, useMemo, useState } from 'react';
+import { lazy, Suspense, useCallback, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { ALL_GAMES, type GameDef } from '@/data/gameRegistry';
 import { CATEGORY_SPORT, HOME_STAGE, sportOf, type StageEntry } from '@/data/homeFront';
 import { HUB_NAV } from '@/lib/sportHubNav';
+import { homeSaveStorage, useHomeSaveRefresh } from './homeSaveRefresh';
 import { SportGlyph, sportStyle } from './SportGlyph';
 import styles from './HomeLaunchDeck.module.css';
 
@@ -13,10 +14,13 @@ import styles from './HomeLaunchDeck.module.css';
 const HomeArt = lazy(() => import('./art/HomeArt'));
 
 /** Save existence changes the invitation, never opens or rewrites a save. */
-function hasSave(key: string | undefined): boolean {
-  if (!key) return false;
-  try { return localStorage.getItem(key) !== null; }
-  catch { return false; }
+const stageSaveKeys = new Set(HOME_STAGE.flatMap(entry => entry.saveKey ? [entry.saveKey] : []));
+
+function stageSaves(storage: Storage | null): string[] {
+  return [...stageSaveKeys].filter(key => {
+    try { return !!storage && storage.getItem(key) !== null; }
+    catch { return false; }
+  });
 }
 
 interface Card { entry: StageEntry; game: GameDef }
@@ -26,6 +30,12 @@ export function FeaturedStage() {
     const game = ALL_GAMES.find(g => g.path === entry.path);
     return game ? [{ entry, game }] : [];
   }), []);
+  const [saved, setSaved] = useState(() => stageSaves(homeSaveStorage()));
+  const refresh = useCallback((storage: Storage | null) => {
+    const next = stageSaves(storage);
+    setSaved(previous => previous.length === next.length && previous.every((key, i) => key === next[i]) ? previous : next);
+  }, []);
+  useHomeSaveRefresh(stageSaveKeys, refresh);
   if (cards.length === 0) return null;
 
   return (
@@ -47,16 +57,16 @@ export function FeaturedStage() {
         })}
       </nav>
       <div className={styles.games}>
-        {cards.map((card, index) => <StageCard key={card.game.path} card={card} lead={index === 0} />)}
+        {cards.map((card, index) => <StageCard key={card.game.path} card={card} lead={index === 0}
+          saved={!!card.entry.saveKey && saved.includes(card.entry.saveKey)} />)}
       </div>
     </section>
   );
 }
 
-function StageCard({ card, lead }: { card: Card; lead: boolean }) {
+function StageCard({ card, lead, saved }: { card: Card; lead: boolean; saved: boolean }) {
   const { entry, game } = card;
   const sport = sportOf(game.path);
-  const [saved] = useState(() => hasSave(entry.saveKey));
   const resuming = saved && !!entry.continueCta;
   const cta = resuming ? entry.continueCta : entry.cta;
 

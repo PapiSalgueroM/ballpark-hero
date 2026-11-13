@@ -22,7 +22,8 @@ import { useRulesGateState } from '@/hooks/useRulesGateState';
 import { useSaveFenceWatch } from '@/hooks/useSaveFenceWatch';
 import { nrlBoardChallengeStatus } from '@/lib/nrlBoardTarget';
 import {
-  nrlBench, nrlFitLineup, nrlHalftimeInterchanges, nrlHoldableReserves, nrlLadder, nrlMatchdaySelection, nrlNextRound,
+  nrlBench, nrlFitLineup, nrlHalftimeInterchanges, nrlHoldableReserves, nrlIndividualRecoveryOptions, nrlIndividualRecoveryPreview,
+  nrlLadder, nrlMatchdaySelection, nrlNextRound,
   nrlRegularRounds, nrlReserveGradeRemaining, nrlRetrainingRoles, nrlSavedLineupPreview, nrlStarterOptions, nrlUnavailable,
   NRL_BENCH_SIZE, NRL_HALFTIME_TALKS, NRL_MAX_BENCH_USED, NRL_RESERVE_GRADE_ROUNDS, NRL_ROLES,
   type NrlAction, type NrlAttackPlan, type NrlCoachRole, type NrlHalftimeTalk, type NrlLiveHalf, type NrlManagerState, type NrlMatchResult, type NrlNextRound, type NrlRole, type NrlTactic,
@@ -584,6 +585,7 @@ function MatchCentre({ career, onAction, onRun, onReview, onContracts, disabled,
   const latestScorers = lastMatch?.playerScoring?.lines ?? [];
   const latestInjury = lastMatch?.injury;
   const injuredName = latestInjury && season.squad.find(player => player.id === latestInjury.playerId)?.name;
+  const recoveredName = lastMatch?.individualRecoveryId && season.squad.find(player => player.id === lastMatch.individualRecoveryId)?.name;
   const interchanges = [lastMatch?.halftimeInterchange, lastMatch?.secondHalftimeInterchange];
   const starterIds = new Set(Object.values(season.lineup));
   const fitness = Math.round(season.squad.reduce((sum, player) => sum + (starterIds.has(player.id) ? player.fitness : 0), 0) / NRL_ROLES.length);
@@ -603,6 +605,9 @@ function MatchCentre({ career, onAction, onRun, onReview, onContracts, disabled,
       </p>}
       {lastMatch?.minute60Tactic && <p className="mt-2 text-sm text-muted-foreground" data-nrl-minute60-tactic>
         60-minute tactic change: {tactics.find(option => option.id === lastMatch.minute60Tactic)?.label}.
+      </p>}
+      {recoveredName && <p className="mt-2 text-sm text-muted-foreground" data-nrl-individual-recovery-result>
+        {recoveredName} took individual recovery before this match.
       </p>}
       {goldenPoint && (
         <p className="mt-2 text-sm text-muted-foreground" data-nrl-golden-point>
@@ -735,6 +740,7 @@ function MatchCentre({ career, onAction, onRun, onReview, onContracts, disabled,
                 Clear preparation
               </Button>
             )}
+            {!career.legacySeason && season.kickerId && <IndividualRecovery season={season} onAction={onAction} disabled={disabled} />}
           </div>
         </div>
       )}
@@ -795,6 +801,39 @@ function MatchCentre({ career, onAction, onRun, onReview, onContracts, disabled,
 
       {!showLiveResult && report}
     </section>
+  );
+}
+
+function IndividualRecovery({ season, onAction, disabled }: {
+  season: NrlManagerState; onAction: (action: NrlCareerAction) => boolean; disabled: boolean;
+}) {
+  const { year, clubId, round, preparation, individualRecoveryId } = season;
+  const players = nrlIndividualRecoveryOptions(season);
+  const selected = players.find(player => player.id === individualRecoveryId);
+  const preview = selected && nrlIndividualRecoveryPreview(selected, preparation);
+  const usualPreparation = preparation === 'train' ? 'team training' : preparation === 'defensiveDrills' ? 'defensive drills' : 'normal preparation';
+  return (
+    <details className="group mt-2 border-t border-border">
+      <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between gap-2 rounded-md text-sm font-semibold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
+        <span className="min-w-0 truncate">Individual recovery{selected && ` · ${selected.name}`}</span>
+        <ChevronDown size={16} aria-hidden="true" className="shrink-0 group-open:rotate-180" />
+      </summary>
+      {preparation === 'recover' ? <p className="text-sm text-muted-foreground">The whole squad is already recovering.</p> : (
+        <div className="space-y-2 pb-1">
+          <p className="text-sm text-muted-foreground">Give one available player lighter training before this match. The rest of the squad keeps its plan.</p>
+          <label htmlFor="nrl-recovery-player" className="block text-sm font-semibold">Player on lighter training</label>
+          <select id="nrl-recovery-player" value={individualRecoveryId ?? ''} disabled={disabled}
+            className="min-h-11 w-full min-w-0 rounded-lg border border-input bg-background px-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            onChange={event => onAction({ type: 'setIndividualRecovery', year, clubId, round, playerId: event.target.value || null })}>
+            <option value="">Follow team preparation</option>
+            {players.map(player => <option key={player.id} value={player.id}>{player.name} · {player.role} · {player.fitness}% fit</option>)}
+          </select>
+          {preview && <p className="text-sm text-muted-foreground" role="status">
+            Kickoff fitness is {preview.normal}% with {usualPreparation}, {preview.recovery}% with individual recovery.
+          </p>}
+        </div>
+      )}
+    </details>
   );
 }
 

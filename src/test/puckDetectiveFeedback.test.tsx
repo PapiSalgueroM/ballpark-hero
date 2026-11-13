@@ -5,7 +5,7 @@ import { HelmetProvider } from 'react-helmet-async';
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import PuckDetective from '@/pages/PuckDetective';
-import { buildPuckPool, buildShareGrid, evaluateGuess, pickDailyMystery, type PuckDetectivePlayer } from '@/lib/puckDetective';
+import { buildPuckPool, buildShareGrid, evaluateGuess, fetchPuckDetectivePool, pickDailyMystery, type PuckDetectivePlayer } from '@/lib/puckDetective';
 import { normalizeName, type PlayerEntity, type SearchPlayersOptions } from '@/lib/playerSearch';
 import { recordCompletion } from '@/lib/completions';
 import { getStreakState } from '@/lib/streaks';
@@ -13,10 +13,12 @@ import { consumeRestoredFinish } from '@/lib/restoredFinish';
 import styles from '@/pages/PuckDetective.module.css';
 
 const sink = vi.hoisted(() => ({ rows: [] as unknown[], session: vi.fn(async () => ({ data: { session: null } })) }));
-vi.mock('@/integrations/supabase/client', () => ({ supabase: {
+const fixtureClient = vi.hoisted(() => () => ({
   from: () => ({ insert: (row: unknown) => { sink.rows.push(row); return Promise.resolve({ error: null }); } }),
   auth: { getSession: sink.session },
-} }));
+}));
+vi.mock('@/integrations/supabase/client', () => ({ supabase: fixtureClient() }));
+vi.mock('@/integrations/supabase/loadClient', () => ({ loadSupabase: async () => fixtureClient() }));
 vi.mock('@/contexts/AuthContext', () => ({ useAuth: () => ({ user: null, profile: null, refreshProfile: () => {} }) }));
 vi.mock('@/lib/badges', () => ({ getNewlyEarnedBadges: async () => [] }));
 vi.mock('@/lib/puckDetective', async original => ({ ...await original<typeof import('@/lib/puckDetective')>(), fetchPuckDetectivePool: vi.fn(async () => pool) }));
@@ -82,6 +84,21 @@ beforeEach(() => {
 afterEach(() => { cleanup(); vi.restoreAllMocks(); vi.useRealTimers(); });
 
 describe('Puck Detective committed guess feedback', () => {
+  it('keeps the puzzle date from opening the page when the roster loads after Eastern midnight', async () => {
+    vi.setSystemTime(new Date('2026-10-02T03:59:59Z'));
+    const beforeMidnight = pickDailyMystery(pool);
+    let releasePool!: (players: PuckDetectivePlayer[]) => void;
+    vi.mocked(fetchPuckDetectivePool).mockImplementationOnce(() => new Promise(resolve => { releasePool = resolve; }));
+    const view = render(element());
+    vi.setSystemTime(new Date('2026-10-02T04:00:01Z'));
+    expect(pickDailyMystery(pool).playerId).not.toBe(beforeMidnight.playerId);
+    await act(async () => { releasePool(pool); });
+    await guess(view, beforeMidnight);
+    expect(view.getByRole('heading', { name: 'Case closed!' })).toBeVisible();
+    expect(JSON.parse(localStorage.getItem(saveKey)!)).toMatchObject({ date: '2026-10-01', gameStatus: 'won' });
+    expect(localStorage.getItem('puck-detective-daily-2026-10-02')).toBeNull();
+  });
+
   it('preserves real helper tiers, numeric directions, pool filtering and untouched boot outcomes', async () => {
     const view = await start();
     expect(evaluateGuess(misses[0], secret)).toEqual({ team: 'none', position: 'close', country: 'none', ageDirection: 'higher', jerseyDirection: 'lower' });
