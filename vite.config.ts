@@ -92,15 +92,14 @@ const inlineSnapshotAssets = (root: string) => {
        it to every snapshot without rewriting the committed files. */
     /* Round 448: the dim was not enough, he filmed it again coming back from
        Google sign in. The boot now shows the mark on a full cover (#dukb-boot)
-       placed inside #root so React's mount removes it; the snapshot text stays
-       under it, capped, and the noscript rule hides the cover and lifts the
-       cap. Old committed snapshots still carry the Round 314 pair, so it is
-       stripped here before the new one goes in, and the cover is spliced in
-       right after #root opens. */
+       placed inside #root so React's mount removes it. Keep the covered
+       snapshot out of layout so loading the stylesheet cannot move its text.
+       The noscript rule restores the full document. Strip the older Round
+       314 pair and insert the cover after #root opens when it is absent. */
     const oldCalmBoot = /<style>#dukb-snapshot\{max-height:100vh;overflow:hidden;opacity:\.45\}<\/style>\s*<noscript><style>#dukb-snapshot\{max-height:none;overflow:visible;opacity:1\}<\/style><\/noscript>\s*/g;
     const calmBoot =
-      `<style>#dukb-boot{position:fixed;inset:0;z-index:2147483000;display:flex;align-items:center;justify-content:center;background:#0a0a0b}#dukb-boot img{width:72px;height:72px}#dukb-snapshot{max-height:100vh;overflow:hidden}</style>` +
-      `<noscript><style>#dukb-boot{display:none}#dukb-snapshot{max-height:none;overflow:visible}</style></noscript>`;
+      `<style>#dukb-boot{position:fixed;inset:0;z-index:2147483000;display:flex;align-items:center;justify-content:center;background:#0a0a0b}#dukb-boot img{width:72px;height:72px}#dukb-snapshot{display:none}</style>` +
+      `<noscript><style>#dukb-boot{display:none}#dukb-snapshot{display:block;max-height:none;overflow:visible}</style></noscript>`;
     const bootCover = `<div id="dukb-boot" aria-hidden="true"><img src="/logo-mark.svg" alt="" width="72" height="72" decoding="async"></div>`;
     const inject =
       calmBoot + "\n    " +
