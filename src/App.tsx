@@ -636,7 +636,7 @@ const AppContent = () => {
           fold where a mount costs nothing. */}
       </RouteErrorBoundary>
       {opensCareerRules && <CookieConsent inline />}
-      <Footer />
+      {normalizeRoutePath(pathname) === "/soccer-career" ? <Footer soccerControls /> : <Footer />}
       {gameRoute && <GameAdInventory />}
       </Suspense>
     </SiteMenuProvider>
