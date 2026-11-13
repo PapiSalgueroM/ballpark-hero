@@ -448,17 +448,17 @@ export function useStadiumTycoon(getEdge?: () => number) {
   /* Round 196: the boardroom. Spending legacy is a meaningful action too,
      so it marks the session like a tap or a hire does. */
   const doLegacyPerk = useCallback((id: string) => {
-    markSessionPlay();
     const before = stateRef.current;
     const after = buyPerk(before, id);
-    if (after === before) return;
+    if (after === before) return false;
+    try { localStorage.setItem(TYCOON_SAVE_KEY, serializeTycoon(after, Date.now())); } catch { return false; }
+    markSessionPlay();
     const p = perkById(id);
     if (p) pushFloater(`${p.emoji} ${p.name}: locked in forever`, 'win', 24, 30);
     setConfetti(c => c + 1);
-    stateRef.current = after;
-    try { localStorage.setItem(TYCOON_SAVE_KEY, serializeTycoon(after, Date.now())); } catch { /* ignore */ }
-    setState(after);
-  }, [pushFloater]);
+    commit(after);
+    return true;
+  }, [commit, markSessionPlay, pushFloater]);
 
   /* Round 582: the club name, picked from generated options. Not a session mark:
      naming the club is not playing it. */

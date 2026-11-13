@@ -408,6 +408,7 @@ function StadiumRoom({ g, visible, onNeedsYou }: { g: ReturnType<typeof useStadi
      rooms of the office are tiles now, one panel open at a time, Upgrades first
      because buying is the loop. */
   const [panel, setPanel] = useState<OfficePanel>('upgrades');
+  const [failedPerk, setFailedPerk] = useState<string | null>(null);
   const [buyAmount, setBuyAmount] = useState<1 | 5>(1);
   const [burst, setBurst] = useState<{ id: number; pieces: { x: number; d: number; c: string; r: number }[] } | null>(null);
   const pitchRef = useRef<HTMLDivElement | null>(null);
@@ -878,12 +879,13 @@ function StadiumRoom({ g, visible, onNeedsYou }: { g: ReturnType<typeof useStadi
                       <span className="font-bold text-foreground">{p.name}</span>
                       <span className="ml-1 text-muted-foreground">Lv {lvl}/{p.costs.length}</span>
                       <span className="block text-muted-foreground leading-snug">{p.blurb}</span>
+                      {failedPerk === p.id && <span role="alert" className="block text-destructive">Could not save this perk. Try again.</span>}
                     </span>
                     {cost === null ? (
                       <span className="shrink-0 text-[9px] font-bold text-gold">MAXED</span>
                     ) : (
                       <button
-                        onClick={() => g.doLegacyPerk(p.id)}
+                        onClick={() => setFailedPerk(g.doLegacyPerk(p.id) ? null : p.id)}
                         aria-label={`Buy ${p.name}, level ${lvl + 1}, ${cost} pt${cost === 1 ? '' : 's'}`}
                         disabled={!ok}
                         className={cn('shrink-0 min-h-[30px] rounded-full px-2.5 py-1 text-[9px] font-bold transition-all active:scale-95',
