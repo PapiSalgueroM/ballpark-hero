@@ -541,6 +541,8 @@ const NAMED = [
     why: 'the page retries the latest fenced career save before an app refresh while the save warning is active' },
   { file: 'src/components/front-office/FrontOfficeBoard.tsx', keys: ['state:saveWriteFailed'],
     why: 'the active board retries its most recent serialized save before an app refresh while the save warning is active' },
+  { file: 'src/components/nrl-manager/NrlWorldCup.tsx', keys: ['state:saveFailed', 'keeps:safeSetItem'],
+    why: 'the effect holds refused World Cup progress and retries the current run before reload or returning to the club screen' },
 ];
 const NOTHING_HELD = [
   /* the seam and the pieces around it: none of them is a game's progress */
