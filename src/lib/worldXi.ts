@@ -41,6 +41,8 @@ export interface WxPlayer {
   value: number; // market value in USD from the row we kept
   /** Age from the same market-value row; feeds the age-aware card rating. */
   age?: number;
+  /** Snapshot year shown on picks added by the optional archive. */
+  archiveYear?: number;
   /** Round 345: secondary positions this player has verifiably played, from
    *  the curated player_verified_positions table (human-verified, two sources
    *  per claim). Never derived from the market-value rows themselves: the
@@ -78,6 +80,8 @@ const CURRENT_PAGES = 8; // 8000-row capacity for the current-year snapshot
 const PREV_STARS = 1000;
 const MIN_POOL = 800; // sanity floor before we trust the pool
 const MIN_COUNTRIES = 12;
+const POOL_COLUMNS = 'player_name, nationality, position, club, market_value_usd, year, age';
+export const PARAGUAY = 'Paraguay';
 
 /* ---------------- Eligibility thresholds (SQL-verified) ---------------- */
 const GK_MIN = 2; // goalkeepers are the scarce resource
@@ -173,6 +177,43 @@ interface PoolRow {
   club: string | null;
   market_value_usd: number | null;
   year: number | null;
+  age?: number | null;
+}
+
+function playerFromPoolRow(row: PoolRow): WxPlayer | null {
+  const name = (row.player_name ?? '').trim();
+  const country = primaryCountry(row.nationality ?? '');
+  const position = normalizePosition((row.position ?? '').trim());
+  const value = Number(row.market_value_usd) || 0;
+  if (!name || !country || !position || value <= 0) return null;
+  return { name, country, position, value, club: (row.club ?? '').trim(), age: Number(row.age) || undefined };
+}
+
+/** Optional 2025 suggestions for Paraguay, whose older players miss the global value cap. */
+export async function fetchParaguayArchive(): Promise<WxPlayer[] | null> {
+  try {
+    const { data, error } = await supabase
+      .from('player_market_values')
+      .select(POOL_COLUMNS)
+      .eq('year', PREV_YEAR)
+      .eq('nationality', PARAGUAY)
+      .gt('market_value_usd', 0)
+      .order('id', { ascending: true });
+    if (error || !data) return null;
+
+    const players = new Map<string, WxPlayer>();
+    for (const row of data) {
+      const player = playerFromPoolRow(row);
+      if (!player || player.country !== PARAGUAY) continue;
+      const key = `${player.name}|${player.club}`;
+      if (player.value > (players.get(key)?.value ?? 0)) {
+        players.set(key, { ...player, archiveYear: PREV_YEAR });
+      }
+    }
+    return [...players.values()];
+  } catch {
+    return null;
+  }
 }
 
 /**
@@ -181,11 +222,10 @@ interface PoolRow {
  */
 export async function fetchWorldXiPool(): Promise<WorldXiData | null> {
   try {
-    const cols = 'player_name, nationality, position, club, market_value_usd, year, age';
     const pageRequests = Array.from({ length: CURRENT_PAGES }, (_, i) =>
       supabase
         .from('player_market_values')
-        .select(cols)
+        .select(POOL_COLUMNS)
         .eq('year', CURRENT_YEAR)
         .gt('market_value_usd', 0)
         .order('id', { ascending: true })
@@ -193,7 +233,7 @@ export async function fetchWorldXiPool(): Promise<WorldXiData | null> {
     );
     const prevRequest = supabase
       .from('player_market_values')
-      .select(cols)
+      .select(POOL_COLUMNS)
       .eq('year', PREV_YEAR)
       .gt('market_value_usd', 0)
       .order('market_value_usd', { ascending: false })
@@ -240,13 +280,10 @@ export async function fetchWorldXiPool(): Promise<WorldXiData | null> {
        one career, exactly as before. */
     const byName = new Map<string, { year: number; byClub: Map<string, WxPlayer> }>();
     for (const r of rows) {
-      const name = (r.player_name ?? '').trim();
-      const country = primaryCountry(r.nationality ?? '');
-      const position = normalizePosition((r.position ?? '').trim());
-      const value = Number(r.market_value_usd) || 0;
+      const rowPlayer = playerFromPoolRow(r);
+      if (!rowPlayer) continue;
+      const { name, position, value, club } = rowPlayer;
       const year = Number(r.year) || 0;
-      const club = (r.club ?? '').trim();
-      if (!name || !country || !position || value <= 0) continue;
       const prev = byName.get(name);
       const sameClub = prev && year === prev.year ? prev.byClub.get(club) : undefined;
       if (!prev || year > prev.year || (year === prev.year && (!sameClub || value > sameClub.value))) {
@@ -260,12 +297,7 @@ export async function fetchWorldXiPool(): Promise<WorldXiData | null> {
           ? playedRaw.secs.filter(p => (position === 'GK') === (p === 'GK'))
           : undefined;
         const player: WxPlayer = {
-          name,
-          country,
-          position,
-          club,
-          value,
-          age: Number((r as { age?: number | null }).age) || undefined,
+          ...rowPlayer,
           ...(played && played.some(p => p !== position) ? { positionsPlayed: played } : {}),
         };
         if (prev && year === prev.year) prev.byClub.set(club, player);
