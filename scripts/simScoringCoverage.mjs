@@ -15,6 +15,8 @@
 
    Negative control: SIM_SCORING_CONTROL=unwire deletes the completion
    imports from WorldCupPredictor's in-memory copy and the run must fail.
+   unwire-soccer and unwire-manager check the lazy startup routes, while
+   unwire-result checks the shared result screen's explicit opt-in callers.
 
    Negative control: SIM_SCORING_CONTROL=nosave (Round 569) makes the stub's
    local session come back empty, so a signed in play is never handed to the
@@ -29,11 +31,18 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
+import ts from 'typescript';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 let failures = 0;
 const fail = m => { failures += 1; console.error('  FAIL: ' + m); };
-const CONTROL = process.env.SIM_SCORING_CONTROL === 'unwire';
+const CONTROL_TARGET = {
+  unwire: 'pages/WorldCupPredictor',
+  'unwire-soccer': 'pages/SoccerCareer',
+  'unwire-manager': 'hooks/useClubManager',
+  'unwire-result': 'components/game/ResultScreen',
+}[process.env.SIM_SCORING_CONTROL];
+const CONTROL = Boolean(CONTROL_TARGET);
 const NOSAVE = process.env.SIM_SCORING_CONTROL === 'nosave';
 let controlBit = false;
 
@@ -48,7 +57,7 @@ const read = p => {
          there. Checked against the committed version before this round, which
          was dead too, so it predates the save change it was found beside. The
          same trap was fixed in simEarlyReturnScope. */
-      if (CONTROL && (p + e).replaceAll('\\', '/').endsWith('pages/WorldCupPredictor.tsx')) {
+      if (CONTROL && ['.ts', '.tsx'].some(extension => (p + e).replaceAll('\\', '/').endsWith(CONTROL_TARGET + extension))) {
         const before = s;
         /* Sever the call names AND the import specifier: the walk follows
            imports into the completions module, whose own source contains
@@ -85,7 +94,9 @@ console.log('1) every registry game reaches the scoring pipeline from its routed
     if (!file) { fail(`${gp} routes to ${r[2]}, which is not a lazy page import; route it the standard way or teach this harness the new shape`); continue; }
     const seen = new Set();
     let hit = false;
-    const walk = (f, d) => {
+    const walk = (f, d, resultOptIn = false) => {
+      // A display-only result card does not record a completion.
+      if (f.replaceAll('\\', '/').endsWith('/components/game/ResultScreen') && !resultOptIn) return;
       if (hit || d > 3 || seen.has(f)) return;
       seen.add(f);
       /* The definition files always contain the names; a hit must be a CALL
@@ -102,15 +113,35 @@ console.log('1) every registry game reaches the scoring pipeline from its routed
       if (/lib\/completions$|hooks\/useGameCompletion$/.test(f.replaceAll('\\', '/'))) return;
       const s = read(f);
       if (!s) return;
-      /* Round 569: the CALL is matched in the code with comments stripped.
-         src/data/completionSlugs.ts has no call at all, only a doc comment
-         reading "each game's own `useGameCompletion(...)` call", and shared
-         chrome imports it (DailyChecklist, useDailyLegend, useMostPlayed), so
-         that sentence alone was counting pages as wired. The lookbehind keeps
-         a URL's double slash from being read as a comment. */
-      const code = s.replace(/\/\*[\s\S]*?\*\//g, ' ').replace(/(?<!:)\/\/[^\n]*/g, ' ');
-      if (/\b(recordCompletion|useGameCompletion)\s*\(/.test(code)) { hit = true; return; }
-      for (const m of s.matchAll(/from ['"]@\/([^'"]+)['"]/g)) walk(path.join(ROOT, 'src', m[1]), d + 1);
+      // Parse calls and import edges so comments and regex literals cannot
+      // impersonate code. Entry shells also reach their page through import().
+      const imports = [], resultNames = new Set(), optedIn = new Set();
+      const visit = node => {
+        if (ts.isCallExpression(node)) {
+          if (ts.isIdentifier(node.expression) && ['recordCompletion', 'useGameCompletion'].includes(node.expression.text)) hit = true;
+          if (node.expression.kind === ts.SyntaxKind.ImportKeyword && ts.isStringLiteral(node.arguments[0])) imports.push(node.arguments[0].text);
+        }
+        if (ts.isImportDeclaration(node) && !node.importClause?.isTypeOnly && ts.isStringLiteral(node.moduleSpecifier)) {
+          imports.push(node.moduleSpecifier.text);
+          if (node.moduleSpecifier.text === '@/components/game/ResultScreen' && ts.isNamedImports(node.importClause?.namedBindings)) {
+            for (const binding of node.importClause.namedBindings.elements) {
+              if ((binding.propertyName ?? binding.name).text === 'ResultScreen') resultNames.add(binding.name.text);
+            }
+          }
+        }
+        if ((ts.isJsxOpeningElement(node) || ts.isJsxSelfClosingElement(node)) && ts.isIdentifier(node.tagName)
+          && node.attributes.properties.some(attribute => ts.isJsxAttribute(attribute) && attribute.name.text === 'recordCompletionOnMount'
+            && (!attribute.initializer || (ts.isJsxExpression(attribute.initializer) && attribute.initializer.expression?.kind === ts.SyntaxKind.TrueKeyword)))) optedIn.add(node.tagName.text);
+        ts.forEachChild(node, visit);
+      };
+      const kind = f.endsWith('.tsx') || fs.existsSync(f + '.tsx') ? ts.ScriptKind.TSX : ts.ScriptKind.TS;
+      visit(ts.createSourceFile(f, s, ts.ScriptTarget.Latest, true, kind));
+      if (hit) return;
+      for (const specifier of imports) {
+        const recordsOnMount = specifier === '@/components/game/ResultScreen' && [...resultNames].some(name => optedIn.has(name));
+        if (specifier.startsWith('@/')) walk(path.join(ROOT, 'src', specifier.slice(2)), d + 1, recordsOnMount);
+        else if (specifier.startsWith('./') || specifier.startsWith('../')) walk(path.resolve(path.dirname(f), specifier), d + 1);
+      }
     };
     walk(file, 0);
     if (hit) covered += 1;
@@ -277,7 +308,7 @@ if (NOSAVE) {
 if (CONTROL) {
   if (!controlBit) { console.error('\ncontrol run: nothing was unwired, the control is dead'); process.exit(1); }
   if (failures > 0) { console.log(`\ncontrol run: ${failures} failure(s) fired as expected`); process.exit(0); }
-  console.error('\ncontrol run: unwiring the bracket changed NOTHING, the walk is dead');
+  console.error(`\ncontrol run: unwiring ${CONTROL_TARGET} changed NOTHING, the walk is dead`);
   process.exit(1);
 }
 console.log('   teeth: four hop import walk, redirects derived from App.tsx, floors on both reads');
