@@ -243,6 +243,11 @@ describe.each(SPORTS)('%s: the retirement talk on the board', (_slug, getSport) 
     expect(terms().every(y => y === '1'), `offer lengths after a push ${terms().join(',')}`).toBe(true);
     vi.spyOn(Math, 'random').mockImplementation(mulberry32(47));
     fireEvent.click(button('Sign')!);
+    if (sport.slug === 'nba' || sport.slug === 'nfl') {
+      expect(read(sport).c.contractYears).toBe(0);
+      await waitFor(() => expect(button('Confirm signing')).toBeTruthy());
+      fireEvent.click(button('Confirm signing')!);
+    }
     expect(read(sport).c.contractYears).toBe(1);
     fireEvent.click(button(`Play the ${c.year} season`)!);
     const after = read(sport);
