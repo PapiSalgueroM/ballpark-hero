@@ -1198,7 +1198,7 @@ export function nrlOppositionReport(state: NrlCareerState): NrlOppositionReport 
   }) };
 }
 
-function advanceCareer(state: NrlCareerState, action: Extract<NrlAction, { type: 'advance' | 'finishLive' }>): NrlCareerState {
+function advanceCareer(state: NrlCareerState, action: Extract<NrlAction, { type: 'advance' | 'finishLive' | 'finishMinute60' }>): NrlCareerState {
   const previous = state.season;
   if (judiciaryNeedsResponse(previous) && nrlNextRound(previous).clubMatch) return state;
   const { matchday, opponentStrength, planRatings } = careerMatchday(state);
@@ -1573,7 +1573,7 @@ export function nrlWorldCupAppointmentAvailable({ retired, legacySeason, worldCu
 }
 
 export function reduceNrlCareer(state: NrlCareerState, action: NrlCareerAction): NrlCareerState {
-  if (state.retired || (state.season.live && action.type !== 'finishLive')) return state;
+  if (state.retired || (state.season.live && action.type !== 'finishLive' && action.type !== 'reachMinute60' && action.type !== 'finishMinute60')) return state;
   switch (action.type) {
     case 'resolveJudiciary': {
       const { season } = state;
@@ -1854,10 +1854,11 @@ export function reduceNrlCareer(state: NrlCareerState, action: NrlCareerAction):
     }
     case 'advance':
     case 'finishLive':
+    case 'finishMinute60':
       return advanceCareer(state, action);
     default: {
       if (action.type === 'startLive' && judiciaryNeedsResponse(state.season)) return state;
-      const match = action.type === 'startLive' && state.season.kickerId ? careerMatchday(state) : null;
+      const match = (action.type === 'startLive' || action.type === 'reachMinute60') && state.season.kickerId ? careerMatchday(state) : null;
       const season = reduceNrlSeason(state.season, action, match?.opponentStrength, {
         ...nrlCoachTactics(state.finance), planRivalRatings: match?.planRatings,
       });
