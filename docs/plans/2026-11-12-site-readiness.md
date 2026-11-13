@@ -1,6 +1,12 @@
 # DoUKnowBall site readiness and game work
 
-Checkpoint at 12:12 UTC on November 13, 2026. The broad update remains draft [PR #770](https://github.com/PapiSalgueroM/ballpark-hero/pull/770). The work continued after the 24-hour report below.
+Checkpoint at 12:16 UTC on November 13, 2026. The broad update remains draft [PR #770](https://github.com/PapiSalgueroM/ballpark-hero/pull/770). The work continued after the 24-hour report below.
+
+State of Origin now lets an NRL manager nominate one eligible player contracted to their club, then select the player for the matchday 19. The option applies to both starts. All 298 NRL tests and 168 unchanged checkpoints pass. Eight published browser runs exercised generated and verified named players, the default 2027 squad and stale-save protection. All 173 sitemap URLs passed and IndexNow accepted the guide. The standalone scoped renderer needed a fresh loopback port and a longer settle time to capture the revised guide. [PR #817](https://github.com/PapiSalgueroM/ballpark-hero/pull/817).
+
+
+
+The fresh raw trust-page audit found all 173 sitemap pages linking to /privacy, the published self-canonical Privacy Policy. It found no references to the probed /privacy-policy alias. The alias reaches the existing noindexed 404 after hydration. All ten intentional noindex routes return distinct raw noindex HTML, including both admin pages. Five more live browser checks verified that rejecting and canceling preserve the selected cookie state and that Soccer Career inputs work with the prompt open. No alias or consent code changed.
 
 Home now has its own entry chunk, and the desktop score rail loads only where visible. Phones retain it on Home. The shared entry fell by 36,464 gzip bytes. The exact mobile pairs measured Home LCP at 984 to 920 ms and Soccer Career at 5.312 to 5.260 seconds, with results moving in both directions for Soccer Career. Home's complete initial JavaScript rose by 9,747 bytes as work moved into route chunks. Soccer Career's fell by 21,677 bytes. All six published cases and 173 sitemap URLs passed. PageSpeed Insights returned 429 again. Field INP and the mobile 2.5-second target remain open. [PR #816](https://github.com/PapiSalgueroM/ballpark-hero/pull/816).
 
