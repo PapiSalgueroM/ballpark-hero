@@ -3,13 +3,7 @@
   pointer-events: none;
 }
 
-.slots {
-  display: grid;
-  justify-content: center;
-  justify-items: center;
-  align-items: start;
-}
-
+.slots,
 .leaderboard,
 .rectangle,
 .tower,
@@ -39,8 +33,11 @@
 
 @container (min-width: 300px) {
   .slots {
-    /* Match the clearance that keeps AdBanner away from game controls. */
-    padding-block: 150px;
+    display: grid;
+    justify-content: center;
+    justify-items: center;
+    align-items: start;
+    padding-top: 150px;
   }
 
   .rectangle {
@@ -48,7 +45,7 @@
   }
 }
 
-@container (320px <= width < 375px) {
+@container (320px <= width < 768px) {
   .rectangle {
     display: none;
   }
@@ -71,5 +68,16 @@
 
   .tower {
     display: block;
+  }
+}
+
+@container (min-width: 1360px) {
+  .slots {
+    grid-template-columns: 728px 300px 300px;
+    column-gap: 16px;
+  }
+
+  .leaderboard {
+    grid-column: auto;
   }
 }

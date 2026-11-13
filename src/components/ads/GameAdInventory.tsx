@@ -1,6 +1,6 @@
 import styles from './GameAdInventory.module.css';
 
-/** Empty inventory after the game and its guide. No ad loader is attached here. */
+/** Empty inventory below the footer, outside the game's controls and links. */
 export function GameAdInventory() {
   return (
     <div className={styles.inventory} data-game-ad-inventory="" data-no-prerender="" aria-hidden="true">

@@ -630,8 +630,8 @@ const AppContent = () => {
       {/* The My Career guide opens after its text arrives. Moving consent into it
           from below the game keeps the play area in place. */}
       {opensCareerRules && <CookieConsent inline />}
-      {gameRoute && <GameAdInventory />}
       <Footer />
+      {gameRoute && <GameAdInventory />}
       </Suspense>
     </SiteMenuProvider>
   );
