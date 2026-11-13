@@ -22,6 +22,7 @@ export const NRL_MANAGEMENT_CONTENT: GameContentMap = {
       'Offer an eligible player less than the asking salary to request a simulated three-season counteroffer. Review the salary and dates before accepting.',
       'In Contracts, arrange an offseason move for an eligible player. They stay this season, and the receiving club pays their salary for the remaining term.',
       'Set Standard, Value or Premium ticket prices in Finance before your first paid home match. That choice applies to home gates for the rest of the season.',
+      'Hire a development assistant in Finances to help up to three young players who are signed to return. Each needs eight regular-season appearances from the hire onward to gain a rating point next season.',
       'Open Season review for your final ladder, finances, recorded scoring and finals scores. Stay with your club, move to a new club, or retire and keep your career record.',
       'Before playing Round 1, accept the optional Board pathways objective in Season review. Give three players aged 23 or under four regular-season appearances each to earn a club cash bonus.',
       'Open Change clubs in Season review to see simulated openings based on expansion and the season’s ladder, with a board target for each suggested club.',

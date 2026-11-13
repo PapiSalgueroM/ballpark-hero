@@ -10,13 +10,14 @@ import {
   nrlBoardPathwaysIncome, nrlBoardPathwaysQuote,
   nrlCareerCap, nrlCareerFinance, nrlCareerMarket, nrlCareerRecord, nrlCareerSquad,
   nrlContractCounteroffer, nrlContractOffer,
-  nrlCoachQuote, nrlCoachSpend, nrlDevelopmentPreview, nrlFinanceForecast, nrlMedicalSpend, nrlMedicalUpgradeQuote, nrlOffseasonClubs, nrlOffseasonOpportunities,
+  nrlCoachQuote, nrlCoachSpend, nrlDevelopmentAssistantProgress, nrlDevelopmentPreview, nrlFinanceForecast,
+  nrlMedicalSpend, nrlMedicalUpgradeQuote, nrlOffseasonClubs, nrlOffseasonOpportunities,
   type NrlCareerAction, type NrlCareerState,
   nrlSponsorIncome, nrlSponsorRefusal, nrlTakeoverOffers, nrlTakeoverPlayers, nrlTicketPricingRefusal,
-  NRL_SHORTLIST_LIMIT, NRL_SPONSOR_OFFERS, NRL_TICKET_GATE_CHANGES,
-  type NrlDevelopmentFocus, type NrlMedicalLevel, type NrlSponsorOffer, type NrlTicketTier,
+  NRL_DEVELOPMENT_ASSISTANT, NRL_SHORTLIST_LIMIT, NRL_SPONSOR_OFFERS, NRL_TICKET_GATE_CHANGES,
+  type NrlDevelopmentFocus, type NrlMedicalLevel, type NrlSponsorOffer, type NrlStaffRole, type NrlTicketTier,
 } from '@/lib/nrlCareer';
-import { nrlArchivedFinals, NRL_COACHING_BONUS, NRL_FINALS_ROUND_TITLES, NRL_ROLES, type NrlCoachRole, type NrlRole } from '@/lib/nrlManager';
+import { nrlArchivedFinals, NRL_COACHING_BONUS, NRL_FINALS_ROUND_TITLES, NRL_ROLES, type NrlRole } from '@/lib/nrlManager';
 import {
   archiveNrlPlayerSeasons, archiveNrlScoring, nrlArchivedPlayerSeason, nrlArchivedScoringLeaders,
   nrlScorePoints, nrlTryLeaders, type NrlScoringLeader,
@@ -38,11 +39,14 @@ type Dispatch = (action: NrlCareerAction) => boolean;
 const control = 'min-h-11 w-full rounded-lg border border-input bg-background px-3 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring';
 const developmentLabels = { balanced: 'Balanced', youth: 'Youth development', veterans: 'Veteran conditioning' };
 const medicalLabels = { 1: 'Standard care', 2: 'Treatment room', 3: 'Recovery centre' };
-const coachLabels = { attack: 'Attack assistant', defense: 'Defence assistant' };
+const coachLabels = { attack: 'Attack assistant', defense: 'Defence assistant', development: 'Development assistant' };
 const ticketLabels = { value: 'Value', standard: 'Standard', premium: 'Premium' };
 const ticketTiers = ['value', 'standard', 'premium'] as const;
-const coachEffect = (role: NrlCoachRole) => role === 'attack' ? `+${NRL_COACHING_BONUS} attack rating with the Attack tactic.`
-  : `+${NRL_COACHING_BONUS} defence rating with the Defence tactic.`;
+const coachEffects: Record<NrlStaffRole, string> = {
+  attack: `+${NRL_COACHING_BONUS} attack rating with the Attack tactic.`,
+  defense: `+${NRL_COACHING_BONUS} defence rating with the Defence tactic.`,
+  development: `Up to ${NRL_DEVELOPMENT_ASSISTANT.players} returning players aged ${NRL_DEVELOPMENT_ASSISTANT.nextAge} or under next season can gain 1 OVR, up to their potential. Each needs ${NRL_DEVELOPMENT_ASSISTANT.appearances} regular-season appearances from the hire onward. A player can gain one extra point in total from this and Youth development.`,
+};
 
 function developmentSummary(focus: Exclude<NrlDevelopmentFocus, 'balanced'>, affected: number, preview: boolean) {
   if (!affected) return preview ? 'No returning players would get an extra point.' : 'No ratings changed from this focus.';
@@ -467,8 +471,9 @@ function MedicalFacilities({ career, onAction, disabled }: { career: NrlCareerSt
 }
 
 function CoachingStaff({ career, onAction, disabled }: { career: NrlCareerState; onAction: Dispatch; disabled: boolean }) {
-  const { year, round } = career.season;
-  const { candidates, current, fee, wagePerRound, remainingWages, reason } = nrlCoachQuote(career);
+  const { year, clubId, round } = career.season;
+  const { candidates, current, fee, wagePerRound, remainingWages, reason, developmentReason } = nrlCoachQuote(career);
+  const progress = nrlDevelopmentAssistantProgress(career);
   return (
     <details className="group mt-5 rounded-xl border border-border bg-background px-3">
       <summary className="flex min-h-11 cursor-pointer items-center justify-between gap-2 rounded-md font-bold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
@@ -478,8 +483,24 @@ function CoachingStaff({ career, onAction, disabled }: { career: NrlCareerState;
         {current ? (
           <>
             <p className="font-semibold" data-nrl-coach-current>{current.name} · {coachLabels[current.role]}</p>
-            <p className="mt-1 text-muted-foreground">{coachEffect(current.role)}</p>
+            <p className="mt-1 text-muted-foreground">{coachEffects[current.role]}</p>
             <p className="mt-2 text-muted-foreground">Signed through this season. Remaining wages {money(remainingWages)}.</p>
+            {current.role === 'development' && (
+              <>
+                <h3 className="mt-3 font-semibold">Development appearances</h3>
+                <p className="mt-1 text-muted-foreground">Returning players with room to grow, ordered by appearances since the hire. Starts and reserves who take the field count.</p>
+                {progress.length ? (
+                  <ul aria-label="Development appearances" className="mt-1 divide-y divide-border">
+                    {progress.map(player => (
+                      <li key={player.id} className="flex flex-wrap justify-between gap-x-3 py-1.5">
+                        <span>{player.name}</span>
+                        <span>{player.apps} {player.apps === 1 ? 'appearance' : 'appearances'}</span>
+                      </li>
+                    ))}
+                  </ul>
+                ) : <p className="mt-1 text-muted-foreground">No eligible players are signed to return yet.</p>}
+              </>
+            )}
           </>
         ) : (
           <>
@@ -491,11 +512,15 @@ function CoachingStaff({ career, onAction, disabled }: { career: NrlCareerState;
                 <li key={candidate.role} className="min-w-0 rounded-lg border border-border p-2">
                   <p className="break-words font-semibold">{candidate.name}</p>
                   <p className="text-muted-foreground">{coachLabels[candidate.role]}</p>
-                  <p className="mt-1 text-muted-foreground">{coachEffect(candidate.role)}</p>
-                  <Button type="button" size="lg" variant="outline" className="mt-2 w-full px-3" disabled={disabled || reason !== null}
-                    onClick={() => onAction({ type: 'hireCoach', role: candidate.role, year, round })}>
+                  <p className="mt-1 text-muted-foreground">{coachEffects[candidate.role]}</p>
+                  <Button type="button" size="lg" variant="outline" className="mt-2 w-full px-3"
+                    disabled={disabled || reason !== null || (candidate.role === 'development' && developmentReason !== null)}
+                    onClick={() => onAction(candidate.role === 'development'
+                      ? { type: 'hireCoach', role: candidate.role, year, clubId, round }
+                      : { type: 'hireCoach', role: candidate.role, year, round })}>
                     Hire {coachLabels[candidate.role].toLowerCase()}
                   </Button>
+                  {!reason && candidate.role === 'development' && developmentReason && <p className="mt-1 text-muted-foreground">{developmentReason}</p>}
                 </li>
               ))}
             </ul>
@@ -1118,6 +1143,12 @@ function History({ career, onAction, disabled }: { career: NrlCareerState; onAct
                 {coach && staffSpend && <p className="text-sm text-muted-foreground" data-nrl-coach-receipt>
                   {coachLabels[coach.role]} · {money(staffSpend.signingFee + staffSpend.wages)} total staff cost
                 </p>}
+                {record.coachDevelopment && (
+                  <p className="text-sm text-muted-foreground">
+                    {record.coachDevelopment.length === 0 ? 'Development assistant · No additional ratings gained'
+                      : `Development assistant · ${record.coachDevelopment.length} ${record.coachDevelopment.length === 1 ? 'player gained' : 'players gained'} 1 OVR`}
+                  </p>
+                )}
                 <FinalsHistory record={record} season={career.season} />
               </li>
             );
