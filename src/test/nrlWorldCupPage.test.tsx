@@ -210,7 +210,14 @@ describe('Rugby League World Cup screen', () => {
     const checkpoint = localStorage.getItem(slot.saveKey)!;
     expect(saveNrlCheckpoint(slot.saveKey, checkpoint, null)).toBe('written');
     expect(localStorage.getItem(nrlCheckpointKey(slot.saveKey))).toBe(checkpoint);
+    blocked = true;
     click('Play pool round 1');
+    expect(button('Play pool round 2')).toBeVisible();
+    expect(localStorage.getItem(slot.saveKey)).toBe(checkpoint);
+    expect(button('Retry World Cup save')).toBeVisible();
+    blocked = false;
+    click('Retry World Cup save');
+    await waitFor(() => expect(hasPendingSaves()).toBe(false));
     const progressed = localStorage.getItem(slot.saveKey)!;
     expect(JSON.parse(progressed).worldCup.tactics).toEqual(['balanced']);
     expect(restoreNrlCheckpoint(slot, progressed, checkpoint)).toBe('written');
