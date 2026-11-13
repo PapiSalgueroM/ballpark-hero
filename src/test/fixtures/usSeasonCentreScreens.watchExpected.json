@@ -1,0 +1,38 @@
+{
+ "nba|desktop|help": {
+  "sha1": "e4fbb69847d5d7a21134374907ad25234fe73539",
+  "length": 39202
+ },
+ "nba|desktop|game": {
+  "sha1": "f49a3348cec2a1f75691d3cc07c8ba02876ba51f",
+  "length": 38833
+ },
+ "nba|desktop|poster": {
+  "sha1": "48d055d78991e96b6300026af5db72f524ec04e9",
+  "length": 56393
+ },
+ "nba|desktop|review": {
+  "sha1": "63cad5bb469907b00a516b30674ad2f0277e96bf",
+  "length": 77523
+ },
+ "nba|phone|help": {
+  "sha1": "261c14a893227aee5ac92f8ac0fc2d950ac333cf",
+  "length": 39120
+ },
+ "nba|phone|game": {
+  "sha1": "e3458d730930c5c7d59eb227a3f6e14462cf0ed3",
+  "length": 38437
+ },
+ "nba|phone|log": {
+  "sha1": "f8a346eac6c32ce0876e2f939c35cdc9ed6bc155",
+  "length": 38218
+ },
+ "nba|phone|poster": {
+  "sha1": "c21e7b3b98c5b6175a12fd76042a316358d49fd6",
+  "length": 55073
+ },
+ "nba|phone|review": {
+  "sha1": "a4a829a7477ad5c29a84d4cefa32d83c2af38fdc",
+  "length": 76193
+ }
+}

@@ -17,6 +17,8 @@ const SCHEMA_VERSION = 1 as const;
 // Internal types
 // ---------------------------------------------------------------------------
 
+type DailyStatus = 'playing' | 'won' | 'lost';
+
 interface PersistedDailyState<G> {
   /** Schema version, see SCHEMA_VERSION above. */
   v: typeof SCHEMA_VERSION;
@@ -36,7 +38,7 @@ interface PersistedDailyState<G> {
   /** Full guess history. */
   guesses: G[];
   /** Game outcome at the time of last save. */
-  gameStatus: 'playing' | 'won' | 'lost';
+  gameStatus: DailyStatus;
 }
 
 // ---------------------------------------------------------------------------
@@ -131,9 +133,10 @@ export interface DailyPuzzleOptions<T, G> {
    * the next write replaces the bad bytes. Use it for item fields the page
    * reads without a guard, and for a log that can never be longer than a
    * fixed size (never tie that to maxGuesses: Football Grid lifts it at
-   * runtime). Default: no extra check.
+   * runtime). The saved status is available to games whose actions
+   * independently determine the outcome. Default: no extra check.
    */
-  isValidGuesses?: (guesses: G[]) => boolean;
+  isValidGuesses?: (guesses: G[], gameStatus: DailyStatus) => boolean;
 }
 
 export interface DailyPuzzleReturn<T, G> {
@@ -159,6 +162,12 @@ export interface DailyPuzzleReturn<T, G> {
    * answer that is never counted. False when this tab is current.
    */
   takeNewerSave: () => boolean;
+
+  /** Read progress already adopted by this hook before React renders it. */
+  getCurrentProgress: () => {
+    readonly guesses: readonly G[];
+    readonly gameStatus: 'playing' | 'won' | 'lost';
+  };
 
   /** Current game outcome. Persisted to localStorage. */
   gameStatus: 'playing' | 'won' | 'lost';
@@ -191,6 +200,9 @@ export interface DailyPuzzleReturn<T, G> {
    * a reset button to users.
    */
   reset: () => void;
+
+  /** Finish without adding a guess, using the existing index-based Give up save. */
+  forfeit: () => void;
 }
 
 // ---------------------------------------------------------------------------
@@ -251,7 +263,7 @@ function readPersistedState<G>(
   puzzleIndex: number,
   puzzleId: string | undefined,
   deserializeGuesses: (raw: unknown) => G[],
-  isValidGuesses?: (guesses: G[]) => boolean,
+  isValidGuesses?: (guesses: G[], gameStatus: DailyStatus) => boolean,
 ): { guesses: G[]; gameStatus: 'playing' | 'won' | 'lost' } | null {
   try {
     const raw = localStorage.getItem(storageKey);
@@ -275,7 +287,7 @@ function readPersistedState<G>(
       // Round 848: a malformed log is no save at all. Today starts fresh and
       // the next write replaces these bytes.
       if (!isGuessLog(guesses) || !GAME_STATUSES.includes(saved.gameStatus)) return null;
-      if (isValidGuesses && !isValidGuesses(guesses)) return null;
+      if (isValidGuesses && !isValidGuesses(guesses, saved.gameStatus)) return null;
       return {
         guesses,
         gameStatus: saved.gameStatus,
@@ -317,9 +329,10 @@ function cleanupOldEntries(gameSlug: string, currentKey: string): void {
     // Collect first, modifying localStorage while iterating is unsafe
     for (let i = 0; i < localStorage.length; i++) {
       const key = localStorage.key(i);
-      if (key && key.startsWith(prefix) && key !== currentKey) {
-        toRemove.push(key);
-      }
+      if (!key?.startsWith(prefix)) continue;
+      const date = key.slice(prefix.length);
+      // A delayed load can still be restoring yesterday's pinned puzzle.
+      if (/^\d{4}-\d{2}-\d{2}$/.test(date) && key < currentKey) toRemove.push(key);
     }
     toRemove.forEach((k) => localStorage.removeItem(k));
   } catch {
@@ -524,6 +537,11 @@ export function useDailyPuzzle<T, G>(
     return true;
   }, []);
 
+  const getCurrentProgress = useCallback(() => ({
+    guesses: guessesRef.current,
+    gameStatus: statusRef.current,
+  }), []);
+
   /* Round 848: and an open tab follows the other one live. The browser fires
      storage in every other tab of this site when one writes, so a second tab
      moves to the saved round before the player can answer the old one. */
@@ -572,6 +590,13 @@ export function useDailyPuzzle<T, G>(
     [puzzle, puzzleIndex, isWon, isLost, maxGuesses, storageKey, todayStr],
   );
 
+  const forfeit = useCallback(() => {
+    if (puzzle == null || statusRef.current !== 'playing' || droppingTurn.current || takeNewerSave()) return;
+    statusRef.current = 'lost';
+    setGameStatus('lost');
+    writePersistedState(storageKey, todayStr, puzzleIndex, undefined, guessesRef.current, 'lost');
+  }, [puzzle, puzzleIndex, storageKey, takeNewerSave, todayStr]);
+
   const reset = useCallback(() => {
     try {
       localStorage.removeItem(storageKey);
@@ -589,10 +614,12 @@ export function useDailyPuzzle<T, G>(
     guesses,
     addGuess,
     takeNewerSave,
+    getCurrentProgress,
     gameStatus,
     isLoading,
     todayStr,
     puzzleIndex,
     reset,
+    forfeit,
   };
 }

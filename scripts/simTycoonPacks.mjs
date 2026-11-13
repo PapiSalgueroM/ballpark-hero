@@ -53,7 +53,7 @@
  * sameseed, forgetful, wall, rawkid, unsaveddelivery, unsaveddismiss, unsaveddebit. The review before this round shipped found the
  * shared seed, the kid lost to "Welcome him in" and the missing controls; S12, S13,
  * S15 and the last eight controls are its cases. Control copies go to
- * dist/.tycoon-packs-control-<name>/.
+ * per-run directories under .sim-control/.
  *
  * Run: node scripts/simTycoonPacks.mjs
  */
@@ -427,7 +427,7 @@ function runSuite(env) {
   if (!fs.existsSync(out)) { console.error(text.slice(-3000)); return null; }
   const rep = JSON.parse(fs.readFileSync(out, 'utf8'));
   const rows = [];
-  rows.loadError = /Failed to load|Cannot find module|Failed to resolve import|SyntaxError|Transform failed/.test(text) ? text.slice(-1500) : null;
+  rows.loadError = text.split(/\r?\n/).find(line => /Failed to load|Cannot find module|Failed to resolve import|SyntaxError|Transform failed/.test(line)) ?? null;
   rows.notes = [...text.matchAll(/PACKS\| (.+)/g)].map(m => m[1].trim());
   for (const file of rep.testResults || []) for (const a of file.assertionResults || []) rows.push({ title: a.title || '', status: a.status, messages: (a.failureMessages || []).join('\n') });
   return rows;
@@ -461,9 +461,10 @@ if (live.length < TEST_COUNT) fail(`only ${live.length} of the ${TEST_COUNT} pag
 for (const note of live.notes) console.log(`     ${note}`);
 
 async function libControl(name, file, text) {
-  const dir = path.join(ROOT, 'dist', `.tycoon-packs-control-${name}`);
+  const parent = path.join(ROOT, '.sim-control');
+  fs.mkdirSync(parent, { recursive: true });
+  const dir = fs.mkdtempSync(path.join(parent, `tycoon-packs-${name}-`));
   controlDirs.push(dir);
-  fs.mkdirSync(dir, { recursive: true });
   const target = path.join(dir, path.basename(file));
   fs.writeFileSync(target, text);
   if (file === ACADEMY_LIB) {
@@ -503,7 +504,7 @@ const CONTROLS = [
   { name: 'tiercard', why: 'the card always calls the kid Grassroots', red: [], vRed: [3], vitest: 'TYCOON_PACKS_PANEL',
     panelFile: t => mustReplace(t, '<p data-tier-label className="mt-1 font-display text-lg font-black text-gold">{pendingTier.label}</p>', '<p data-tier-label className="mt-1 font-display text-lg font-black text-gold">{TIERS[0].label}</p>', 'PacksPanel.tsx') },
   { name: 'gemtap', why: 'a tap credits a win to the ledger', red: ['S10'], vRed: [5], vitest: 'TYCOON_LOADS_STADIUM_HOOK',
-    hookFile: t => mustReplace(t, '    markSessionPlay();\n    const before = stateRef.current;\n    const after = tap(before);', "    markSessionPlay();\n    const before = stateRef.current;\n    recordFullTimes([{ totalMatches: Date.now(), result: 'win', away: false }]);\n    const after = tap(before);", 'useStadiumTycoon.ts') },
+    hookFile: t => mustReplace(t, '    const before = stateRef.current;\n    const after = tap(before);', "    const before = stateRef.current;\n    recordFullTimes([{ totalMatches: Date.now(), result: 'win', away: false }]);\n    const after = tap(before);", 'useStadiumTycoon.ts') },
   { name: 'wavedaway', why: 'the card offers Welcome him in before he has a bed', red: [], vRed: [6, 10], vitest: 'TYCOON_PACKS_PANEL',
     panelFile: t => mustReplace(t, '          {delivered ? (', '          {true || delivered ? (', 'PacksPanel.tsx') },
   { name: 'seqreuse', why: 'a pack ignores the packs the academy already delivered', red: ['S13'], vRed: [7],
@@ -531,9 +532,9 @@ const CONTROLS = [
   { name: 'rawkid', why: 'the reveal receives unvalidated kid fields from storage', red: [], vRed: [9], vitest: 'TYCOON_PACKS_REWARDS',
     lib: () => [REWARDS_LIB, mustReplace(read(REWARDS_LIB), '    const kid = cleanPackKid(p.kid, p.tier);', '    const kid = p.kid;', 'tycoonRewards.ts')] },
   { name: 'unsaveddelivery', why: 'an academy write refusal still counts the kid as delivered', red: [], vRed: [10], vitest: 'TYCOON_LOADS_ACADEMY_HOOK',
-    lib: () => [ACADEMY_HOOK, mustReplace(read(ACADEMY_HOOK), '      setPackSaveBlocked(true);\n      return false;', '      setPackSaveBlocked(true);', 'useWonderkidFactory.ts')] },
+    lib: () => [ACADEMY_HOOK, mustReplace(read(ACADEMY_HOOK), "    if (result !== 'written') {\n      if (result === 'failed') setPackSaveBlocked(true);\n      return false;\n    }", "    if (result === 'moved') return false;\n    if (result === 'failed') setPackSaveBlocked(true);", 'useWonderkidFactory.ts')] },
   { name: 'unsaveddismiss', why: 'dismissal clears the pending draw despite a refused academy save', red: [], vRed: [11], vitest: 'TYCOON_LOADS_ACADEMY_HOOK',
-    lib: () => [ACADEMY_HOOK, mustReplace(read(ACADEMY_HOOK), '    try { localStorage.setItem(SAVE_KEY, serialize(s)); } catch {\n      setPackSaveBlocked(true);\n      return;\n    }', '    try { localStorage.setItem(SAVE_KEY, serialize(s)); } catch {\n      setPackSaveBlocked(true);\n    }', 'useWonderkidFactory.ts')] },
+    lib: () => [ACADEMY_HOOK, mustReplace(read(ACADEMY_HOOK), "    if (result !== 'written') {\n      if (result === 'failed') setPackSaveBlocked(true);\n      return;\n    }", "    if (result === 'moved') return;\n    if (result === 'failed') setPackSaveBlocked(true);", 'useWonderkidFactory.ts')] },
   { name: 'unsaveddebit', why: 'opening accepts a ledger write refusal and delivers a kid without a durable debit', red: [], vRed: [12], vitest: 'TYCOON_PACKS_REWARDS',
     lib: () => [REWARDS_LIB, mustReplace(read(REWARDS_LIB), '  saveLedger(next, true);\n  return next.pending;', '  saveLedger(next);\n  return next.pending;', 'tycoonRewards.ts (commitOpenPack)')] },
 ];

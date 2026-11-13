@@ -99,6 +99,8 @@ export function useFootballGrid() {
     puzzle: dailyPuzzle,
     guesses: dailyActions,
     addGuess: addDailyGuess,
+    takeNewerSave,
+    getCurrentProgress,
     gameStatus: rawDailyStatus,
     isLoading: dailyLoading,
   } = useDailyPuzzle<DailyBoard, GridAction>({
@@ -199,8 +201,17 @@ export function useFootballGrid() {
         return;
       }
 
-      setValidating(true);
       const capturedCell = activeCell;
+      const canSettle = () => {
+        if (takeNewerSave()) return false;
+        const progress = getCurrentProgress();
+        return progress.gameStatus === 'playing' && !progress.guesses.some(guess =>
+          guess.t === 'ok' && (guess.cellIndex === capturedCell || selectionKey(guess.playerName) === playerKey),
+        );
+      };
+      if (!canSettle()) return;
+
+      setValidating(true);
       const fits = playerMatchesCell(player, engineCell);
 
       try {
@@ -209,11 +220,13 @@ export function useFootballGrid() {
              formula adds the player's own row itself; inserting first counted
              it twice (a first pick read 100 instead of the unicorn 101). */
           const rarity = await fetchRarity(puzzle.id, capturedCell, playerKey);
+          if (!canSettle()) return;
           await supabase.from('football_grid_selections').insert({
             puzzle_id: puzzle.id,
             cell_index: capturedCell,
             player_name: playerKey,
           });
+          if (!canSettle()) return;
           addDailyGuess({ t: 'ok', cellIndex: capturedCell, playerName: player.name, rarity });
         } else {
           setWrongFlash({ cellIndex: capturedCell, playerName: player.name });
@@ -223,13 +236,13 @@ export function useFootballGrid() {
       } catch {
         /* The verdict is already in hand; only the rarity write can fail,
            and a correct pick still counts without its crowd number. */
-        if (fits) addDailyGuess({ t: 'ok', cellIndex: capturedCell, playerName: player.name, rarity: 50 });
+        if (fits && canSettle()) addDailyGuess({ t: 'ok', cellIndex: capturedCell, playerName: player.name, rarity: 50 });
       } finally {
         setValidating(false);
         setActiveCell(null);
       }
     },
-    [activeCell, gameStatus, validating, gridData, cells, puzzle, getRowCol, fetchRarity, addDailyGuess],
+    [activeCell, gameStatus, validating, gridData, cells, puzzle, getRowCol, fetchRarity, addDailyGuess, takeNewerSave, getCurrentProgress],
   );
 
   useGameCompletion('football-grid', rawDailyStatus !== 'playing', correctCount * 100);

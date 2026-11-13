@@ -276,6 +276,9 @@ const REAL_PEOPLE = [
   /* Detroit Tigers pitcher, born 2000-02-21: MLB's Stats API record of the
      2026-09-27 roster and ESPN's Detroit roster (read 2026-10-01) agree. */
   { name: 'Ty Madden', files: ['scripts/data/mlbRosters2026.json', 'scripts/data/mlbStats2026.json', 'src/data/mlbFoRosters2026.ts', 'scripts/data/mlbOpeningRatingInputs2026.json', 'src/data/mlbOpeningRatings2026.ts'] },
+  // Wests Tigers' official profile and final Round 2 list agree with the
+  // independent final team sheet cited in the NRL opening-matchday audit.
+  { name: 'Jock Madden', files: ['src/data/nrlOpeningMatchday2026.ts'] },
   /* College of Charleston men's basketball record book, career statistics p. 82,
      and the Sports Reference 1991-92 Charleston roster identify the forward.
      https://cofcsports.com/documents/download/2026/5/27/Charleston_MBB_Thru_2025-26.pdf */

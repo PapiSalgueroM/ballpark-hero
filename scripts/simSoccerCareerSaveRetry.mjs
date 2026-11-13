@@ -15,7 +15,7 @@ const cases = {
   latest: 'retries the latest earned season after more than one failed career change without rerunning its engine',
   automatic: 'clears a failed save on the next successful automatic save and alerts again on a later refusal',
   reset: 'clears the old failure after explicit reset and saves the replacement career without old progress',
-  retirement: 'persists the finished retirement on retry without recording its completion a second time',
+  retirement: 'records retirement only after the successful retry and does not credit a reload',
   independent: 'retains an independent valid restore and earned engine baseline without mounting the page',
 };
 const controls = {

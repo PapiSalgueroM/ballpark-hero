@@ -1,10 +1,10 @@
-import { useEffect, useRef, useState } from 'react';
+import { lazy, Suspense, useEffect, useRef, useState } from 'react';
 import { ChevronLeft, Trophy } from 'lucide-react';
 import { ResultScreen } from '@/components/game/ResultScreen';
 import { revealDelay } from '@/components/club-manager/Celebration';
 import { cn } from '@/lib/utils';
 import { dealAnswers, ExpiringDealsCheckpoint } from '@/components/club-manager/ExpiringDealsCheckpoint';
-import { bookAwardsState, evalWorldUcl, expiringDeals, money } from '@/lib/clubManager';
+import { bookAwardsState, evalWorldUcl, expiringDeals, money, nationalSummerAvailable, nationalSummerPending } from '@/lib/clubManager';
 import { BOOK_FULL_SHARE, type AwardMan } from '@/lib/clubManagerLeagueBoards';
 import { MadeUpTag } from '@/components/club-manager/SquadScreen';
 import { TeamLines } from '@/components/club-manager/SeasonHonoursCard';
@@ -12,6 +12,9 @@ import type { CareerState, SeasonSummary } from '@/lib/clubManager';
 import type { SeasonFate } from '@/lib/clubManagerBoardVerdict';
 import type { useClubManager } from '@/hooks/useClubManager';
 import { SavePointsDoor } from '@/components/club-manager/SavePointsDoor';
+import { VeteranRetirementCard } from '@/components/club-manager/VeteranRetirementCard';
+
+const ClubManagerNationalPanel = lazy(() => import('@/components/club-manager/ClubManagerNationalPanel'));
 
 /* Round 633: the five terms, in the order they are worth. Kept beside the
    screen that prints them rather than in the engine, because the wording is
@@ -35,7 +38,7 @@ const FATE_WORD: Record<SeasonFate, string> = { up: 'promoted', down: 'relegated
 export default function ClubManagerSeasonSummary({ sm, c, g }: {
   sm: SeasonSummary;
   c: CareerState;
-  g: Pick<ReturnType<typeof useClubManager>, 'nextSeason' | 'startNew'> & Partial<Pick<ReturnType<typeof useClubManager>, 'pointsSlot' | 'renew'>>;
+  g: Pick<ReturnType<typeof useClubManager>, 'nextSeason' | 'startNew'> & Partial<Pick<ReturnType<typeof useClubManager>, 'pointsSlot' | 'renew' | 'updateNationalTeam' | 'reviewVeteran'>>;
 }) {
   const trophyLine = sm.trophies.length ? sm.trophies.map(() => '🏆').join('') : '-';
   /* Optional: a summary stored before Round 633 carries no breakdown, and the
@@ -62,6 +65,9 @@ export default function ClubManagerSeasonSummary({ sm, c, g }: {
   const awards = sm.awards;
   const awardsBy = awards ? null : bookAwardsState(c);
   const [teamOpen, setTeamOpen] = useState(false);
+  const nationalPending = nationalSummerPending(c);
+  const nationalAvailable = !!g.updateNationalTeam && nationalSummerAvailable(c);
+  const [nationalOpen, setNationalOpen] = useState(nationalPending);
   /* Round 1335: an offer asks before it moves the career. The question opens in place of the list, in the
      same panel, and only "Take the job" moves anything. Keyed on the season, so the next review opens on the
      list. Focus follows: to the question's button when it opens, back to the card that was tapped. */
@@ -89,6 +95,11 @@ export default function ClubManagerSeasonSummary({ sm, c, g }: {
   const winner = (m: AwardMan) => (
     <><span className={cn('font-bold', (m[3] & 2) !== 0 && 'text-primary')}>{m[0]}</span>{(m[3] & 1) !== 0 && <MadeUpTag className="ml-1" />} ({m[1]}, {m[2]})</>
   );
+  if (nationalOpen && nationalAvailable && g.updateNationalTeam) return (
+    <Suspense fallback={<p role="status" className="min-h-11">Loading national team...</p>}>
+      <ClubManagerNationalPanel career={c} updateCareer={g.updateNationalTeam} onBack={() => setNationalOpen(false)} />
+    </Suspense>
+  );
   return (
 <ResultScreen
           won={sm.verdictGrade === 'A' || sm.verdictGrade === 'B' ? true : sm.verdictGrade === 'C' ? undefined : false}
@@ -108,11 +119,17 @@ export default function ClubManagerSeasonSummary({ sm, c, g }: {
             gamePath: '/club-manager',
           }}
           onPlayAgain={() => g.nextSeason()}
-          playAgainDisabled={openDeals > 0}
-          playAgainLabel={openDeals > 0 ? `Answer ${openDeals} deal${openDeals === 1 ? '' : 's'} first`
+          playAgainDisabled={openDeals > 0 || nationalPending}
+          playAgainLabel={nationalPending ? 'Finish the national tournament first' : openDeals > 0 ? `Answer ${openDeals} deal${openDeals === 1 ? '' : 's'} first`
             : summerMove ? `Start Season ${sm.season + 1} at ${summerMove.club}` : `Continue to Season ${sm.season + 1}`}
           playNext={
             <div className="space-y-3">
+              {nationalAvailable && (
+                <button type="button" onClick={() => setNationalOpen(true)}
+                  className="min-h-11 w-full rounded-lg border border-border px-4 text-sm font-bold">
+                  {nationalPending ? 'Return to national team' : c.nationJob?.campaign ? 'View national results' : 'Manage national team'}
+                </button>
+              )}
               {summerMove && (
                 <div data-summer-move className="text-left bg-surface-2 border border-gold/40 rounded-xl p-3">
                   <div className="text-[10px] text-muted-foreground uppercase tracking-wider mb-1">🧳 Agreed during the season</div>
@@ -133,6 +150,7 @@ export default function ClubManagerSeasonSummary({ sm, c, g }: {
                           ref={takeRef}
                           data-cm-offer-take
                           onClick={() => g.nextSeason(askingOffer.club)}
+                          disabled={nationalPending}
                           className="min-h-[44px] flex-1 rounded-lg bg-primary px-3 text-sm font-bold text-primary-foreground hover:bg-primary/90 transition-colors"
                         >
                           Take the job
@@ -182,6 +200,7 @@ export default function ClubManagerSeasonSummary({ sm, c, g }: {
               cm-gold-glow both set the animation shorthand and would cancel
               each other on one element, which would leave the trophy line at
               opacity 0 for good. */}
+          {g.reviewVeteran && !summerMove && <div className="mb-3"><VeteranRetirementCard career={c} onReview={g.reviewVeteran} /></div>}
           <div key={sm.season} data-season-lines className="text-left space-y-1.5 mb-2">
             <p className="cm-tick-in text-sm text-foreground flex items-start gap-2" style={tickIn()}>
               <Trophy className="w-3.5 h-3.5 text-primary mt-0.5 shrink-0" />

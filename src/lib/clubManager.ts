@@ -1,4 +1,5 @@
 import { foldSpecialLatin } from '@/lib/nameFold';
+import { protectedVeteranIds } from '@/lib/clubManagerVeteranLedger';
 import { nameModerationError } from '@/lib/nameModeration';
 import { realLeagueFixtureKeyForStart, realLeagueFixturePairs, realLeagueFixtureCoverage } from '@/lib/clubManagerFixtures';
 import { noteHighestScoring } from '@/lib/clubManagerRecords';
@@ -13,7 +14,8 @@ import { settleGoalReviews, penaltyReviews, awardReviewedPenalties, cmVarCovers,
 import { realJobOffers, allOfferClubs, invalidateOfferClubCache } from '@/lib/managerJobMarket';
 /* Round 202: the national team job runs on the international engine Soccer
    Career has used since Round 124, rather than a second thinner one. */
-import { runManagerSummer, NATION_CONFED } from '@/lib/soccerInternational';
+import { runManagerSummer, NATION_CONFED, tournamentForYear } from '@/lib/soccerInternational';
+import type { NationalCampaign, NationalFixture } from '@/lib/clubManagerNationalCampaign';
 /* Round 965: the manager's face reads Soccer Career's look tables, never a
    copy of them. That module imports nothing from here. */
 import { SKIN_TONES, HAIRSTYLES, HAIR_COLORS, FACIAL_HAIR } from '@/lib/soccerCareerAppearance';
@@ -60,12 +62,12 @@ import { goalWeight, assistWeight, ASSIST_SHARE } from '@/lib/clubManagerGoalWei
 /* Round 1229: the league book, pure. It imports the keyed generator, the own goal rule and the weight table. */
 import {
   bookFits, bookSalt, creditAssist, creditCleanSheet, creditDeal, creditGoal, creditMine, creditOwnGoal, dealAssist, dealGoals,
-  liveBook, openBook, openLateBook, partialEleven, readBook, type BookMan, type BookRules, type LeagueBook,
+  liveBook, mineSheets, openBook, openLateBook, partialEleven, readBook, type BookMan, type BookRules, type LeagueBook,
 } from '@/lib/clubManagerLeagueBook';
 /* Round 1601: the season archive, pure and import free. */
 import { archiveCareerSeason } from '@/lib/clubManagerCareerLines';
 /* Round 1311: the league book's pure reader (the boards). It imports the book module and one type, never this file. */
-import { TEAMS_KEPT, bookDecides, bookShare, keepersOnRecord, leaders, seasonAwards, type BoardClub, type BoardInput, type SeasonAwards } from '@/lib/clubManagerLeagueBoards';
+import { TEAMS_KEPT, bookDecides, bookShare, keepersOnRecord, leaders, seasonAwards, type BoardClub, type BoardDeparted, type BoardInput, type BoardMine, type SeasonAwards } from '@/lib/clubManagerLeagueBoards';
 import { bornNear, compactWorldRoster, nearAges, plainCopy, recordWorldRosterTransfer, snapshotWorldRosterClub, worldRosterClub, worldRosterOwner, worldRosterView } from '@/lib/clubManagerWorldRoster';
 import type { WorldRosterState } from '@/lib/clubManagerWorldRoster';
 import { players as RAW_POOL } from '@/data/players';
@@ -74,6 +76,8 @@ import { players as RAW_POOL } from '@/data/players';
 // imports nothing but types, so reading it at module scope is safe.
 import { CM_ROSTER_META } from '@/data/clubManagerRosters';
 import { K_LEAGUE_2026, kLeagueMember } from '@/data/kLeague2026';
+import { J1_LEAGUE_2026 } from '@/data/j1League2026';
+import { CSL_LEAGUE_2026, CSL_OPENING_POINTS } from '@/data/cslLeague2026';
 import { CM_REAL_FREE_AGENTS } from '@/data/clubManagerFreeAgents2026';
 // Round 1600: on its own line, so scripts/simFreeAgents.mjs can still serve the list above from its own copy.
 import { CM_REAL_FREE_AGENTS_CURVE } from '@/data/clubManagerFreeAgents2026';
@@ -164,12 +168,16 @@ import type { IntlDuty } from '@/lib/clubManagerInternationals';
 /* Round 1021: the late 2020-21 start's summer window. Called inside
    startCareer only, never at module scope: the calendar module imports this
    one, the same loop the internationals module already closes. */
-import { dateOfEntries, entryDatesOf, lateSummerWindowWeeks, seasonPlanOf, worldYearOf } from '@/lib/clubManagerCalendar';
+import { dateOfEntries, daysBetween, entryDatesOf, lateSummerWindowWeeks, seasonKickoff, seasonPlanOf, worldYearOf } from '@/lib/clubManagerCalendar';
 /* Round 478: the Champions League orders a level group table by its own
    rule, not a league one. That module imports nothing but types from here,
    so there is no cycle at all. */
 import { UCL_GROUP_LEDGER, countWaitingLevelRuns, noteUclGroupResult, sortedUclGroupTable, uclGroupFootnote } from '@/lib/clubManagerUclGroups';
 import type { UclGroupRule } from '@/lib/clubManagerUclGroups';
+import {
+  PLAYOFF_LABELS, PLAYOFF_STAGES, drawNextPlayoffRound, openChampionshipPlayoffs,
+  promotionTieAt, promotionWinner, recordPromotionResult, type ChampionshipPlayoffs,
+} from '@/lib/clubManagerChampionshipPlayoffs';
 /* Round 670 review: how a Champions League tie is read, shared with Soccer
    Career. The module imports nothing. */
 import { uclTieOutcome } from '@/lib/uclTieRule';
@@ -192,7 +200,10 @@ import {
   euroFieldFromTables, SEASON_ONE_CUP_WINNERS, SEASON_ONE_UECL_HOLDER, UEL_FINAL_MARK, UEL_LEGS,
   type EuroRoute, type EuroTable,
 } from '@/lib/euroAccess';
-import { UCL_LEAGUE, drawUclLeaguePhase } from '@/lib/uclLeaguePhase';
+import {
+  UCL_LEAGUE, drawUclKnockout, drawUclLeaguePhase, leaguePhaseFootnote, leaguePhaseZone,
+  nextRoundTie, slateFixtureOf, slateFixtures, slateOpponents, sortedLeaguePhaseTable, type UclLeagueSlate,
+} from '@/lib/uclLeaguePhase';
 /* Round 781: the match clock with the board in it. The module imports nothing. */
 import { clockOrder, playedBy } from '@/lib/clubManagerClock';
 /* Round 1522: team instructions. The engine carries only the small core (clubManagerTacticsCore.ts): the types,
@@ -224,7 +235,7 @@ export type Mentality = 'defensive' | 'balanced' | 'attacking';
 export type FormResult = 'W' | 'D' | 'L';
 /** Round 1510: 'oneOff' is a one match cup a participant plays on a night of its own (the domestic super cup,
  *  CareerState.worldComps.dsc). Round 1593: 'uel' is a Europa League night of a participant (worldComps.uel.me).*/
-export type Competition = 'league' | 'cup' | 'uclGroup' | 'uclKo' | 'oneOff' | 'uel';
+export type Competition = 'league' | 'cup' | 'uclGroup' | 'uclKo' | 'oneOff' | 'uel' | 'promotion';
 
 /** Round 164: how the stats centre buckets football. The two UCL phases are
  *  one competition to a fan, so they share a bucket. Round 1510: 'other' holds
@@ -244,7 +255,7 @@ export interface CompStatLine {
 export function compBucketOf(c: Competition): CompBucket {
   /* Round 1510: before the fall through, or a one match cup's goals would land in the Champions League column. */
   /* Round 1593: and the Europa League its own column, or its nights would land in the Champions League's. */
-  return c === 'league' ? 'league' : c === 'cup' ? 'cup' : c === 'oneOff' ? 'other' : c === 'uel' ? 'uel' : 'ucl';
+  return c === 'league' ? 'league' : c === 'cup' ? 'cup' : (c === 'oneOff' || c === 'promotion') ? 'other' : c === 'uel' ? 'uel' : 'ucl';
 }
 
 export interface TeamCompLine {
@@ -804,6 +815,34 @@ export function leagueBookOf(state: CareerState): LeagueBook | null {
   return readBook(state.leagueBook, bookStampOf(state, careerLeagueOf(state).id));
 }
 
+interface DepartedLeagueLine extends BoardDeparted {
+  leagueId: string;
+  /** Null for a full book. Absent when no readable book was open. */
+  bookRound?: number | null;
+}
+
+function leagueLineOf(p: CMPlayer): BoardMine {
+  return {
+    id: p.id, name: p.name, pos: p.position, rating: p.rating, apps: p.comp?.league?.apps ?? 0,
+    goals: p.comp?.league?.goals ?? 0, assists: p.comp?.league?.assists ?? 0, ...(p.generated ? { gen: true } : {}),
+  };
+}
+
+function departedLeagueLines(state: CareerState): DepartedLeagueLine[] {
+  return Array.isArray(state.departedLeagueLines) ? state.departedLeagueLines : [];
+}
+
+function recordLeagueDeparture(state: CareerState, player: CMPlayer): DepartedLeagueLine[] | undefined {
+  const book = leagueBookOf(state);
+  const line = leagueLineOf(player);
+  const sheets = book ? mineSheets(book, player.id) : 0;
+  if (!line.apps && !line.goals && !line.assists && !sheets) return state.departedLeagueLines;
+  const club = state.clubName;
+  const leagueId = careerLeagueOf(state).id;
+  const remaining = departedLeagueLines(state).filter(p => p.id !== player.id || p.club !== club || p.leagueId !== leagueId);
+  return [...remaining, { ...line, club, leagueId, sheets, bookRound: book ? book.r0 ?? null : undefined }];
+}
+
 /** What the league leaders card and the awards read: the reader's input, how much of the league is on
  *  record, the round a late book counts from (null for a whole book) and the keepers on record. */
 export interface LeagueBoards {
@@ -840,13 +879,13 @@ export function leagueBoardsOf(state: CareerState): LeagueBoards | null {
     club, gf: goalsFor.get(club) ?? 0, place: place(club), keeperOnRecord: rosterOf(club).some(p => p.p === 'GK'),
   }));
   if (!bookFits(book, clubs)) return null;
+  const leagueId = careerLeagueOf(state).id;
+  const departed = departedLeagueLines(state).filter(p => p.leagueId === leagueId && p.bookRound === (book.r0 ?? null));
   const input: BoardInput = {
     book,
     clubs,
-    mine: state.squad.map(p => ({
-      id: p.id, name: p.name, pos: p.position, rating: p.rating, apps: p.comp?.league?.apps ?? 0,
-      goals: p.comp?.league?.goals ?? 0, assists: p.comp?.league?.assists ?? 0, ...(p.generated ? { gen: true } : {}),
-    })),
+    mine: state.squad.map(leagueLineOf),
+    ...(departed.length ? { departed } : {}),
     myClub: state.clubName,
     myPlace: place(state.clubName),
     ratingOf: (club, name, pos) => rosterOf(club).find(p => p.n === name && p.p === pos)?.r ?? 0,
@@ -1034,6 +1073,10 @@ export function goldenBootTable(state: CareerState, limit = 12, boards: LeagueBo
     const lg = p.comp?.league?.goals ?? 0;
     if (lg > 0) rows.push({ name: p.name, club: state.clubName, goals: lg, mine: true, gen: p.generated ? true : undefined });
   }
+  const leagueId = careerLeagueOf(state).id;
+  for (const p of departedLeagueLines(state)) {
+    if (p.leagueId === leagueId && p.goals > 0) rows.push({ name: p.name, club: p.club, goals: p.goals, gen: p.gen });
+  }
   return rows
     .sort((a, b) => b.goals - a.goals || a.name.localeCompare(b.name))
     .slice(0, limit);
@@ -1128,7 +1171,7 @@ export type CupState = CupRound | 'out' | 'won';
    first ... edition to feature a new format with a 16-team knockout round
    instead of a second group stage"). Only an era save plays it, see
    eraUclHasR16; the modern save keeps the shape it has today. */
-export type UclKoRound = 'R16' | 'QF' | 'SF' | 'F';
+export type UclKoRound = 'PO' | 'R16' | 'QF' | 'SF' | 'F';
 export type UclKoState = UclKoRound | 'out' | 'won' | null;
 
 /* ---------- Round 505: Club Manager's own formation list ---------- */
@@ -1250,14 +1293,15 @@ export interface CMPlayer {
   morale: number;
   /** Weeks (calendar entries) remaining out injured. */
   injuryWeeks: number;
+  severeInjury?: SevereMatchInjury;
   /** Matches of ours remaining suspended. */
   suspendedMatches: number;
   isYouth: boolean;
   seasonGoals: number;
   seasonAssists: number;
   /** Real market value in £m (Round 70, baked data). Youth pads carry a
-      teenager's value since Round 632 (youthPadValue); academy graduates have
-      none and are priced off the curve. */
+      teenager's value since Round 632 (youthPadValue). New academy graduates
+      use the same age-aware market scale as created players. */
   value?: number;
   /** Round 640: a founder of a club founded above what its money buys, only.
       His value in the squad the tier's money could have bought (see
@@ -1895,7 +1939,8 @@ export interface SubLine {
    *  written under a rule with no limit, so a three change match saves what it always did. */
   stop?: true;
 }
-export interface InjuryLine { name: string; minute: number; weeks: number; id?: string; plus?: number; }
+type SevereMatchInjury = 'ACL tear' | 'Achilles tendon rupture';
+export interface InjuryLine { name: string; minute: number; weeks: number; id?: string; plus?: number; severeInjury?: SevereMatchInjury; }
 
 export type PlayKind = 'shot' | 'corner' | 'throwin' | 'foul' | 'var';
 
@@ -2163,11 +2208,11 @@ export interface CalendarEntry {
 }
 
 export interface UclGroupState {
-  /** The 3 other clubs in my group. */
   opponents: string[];
   table: TableRow[];
-  /** Group matchdays already played (0-6). */
   matchday: number;
+  /** The saved draw for an ordinary modern league phase. Old group saves omit it. */
+  leaguePhase?: UclLeagueSlate;
 }
 
 /**
@@ -2332,6 +2377,7 @@ export const TICKET_TIERS = [
    tournament your nation should have reached costs you the job. */
 
 export interface NationJob {
+  campaign?: NationalCampaign;
   nation: string;
   /** Season the job started, for the tile and the cabinet. */
   since: number;
@@ -2386,9 +2432,9 @@ export function nationOfferFor(career: CareerState): NationOffer | null {
   /* Round 965: a homeland is stored in the league spelling, so United States
      is looked up as the engine's USA. */
   const own = career.manager?.nationality ? homelandEngineName(career.manager.nationality) : undefined;
-  const custom = career.customClub?.name === career.clubName && !!kLeagueMember(career.clubName);
+  const custom = career.customClub?.name === career.clubName && (!!kLeagueMember(career.clubName) || isScopedStarterClub(career.clubName));
   const league = custom ? careerLeagueOf(career) : leagueOf(career.clubName);
-  const nationDef = league ? NATIONS.find(n => n.leagueIds.includes(league.id)) : null;
+  const nationDef = league ? CLUB_MANAGER_START_NATIONS.find(n => n.leagueIds.includes(league.id)) : null;
   const nation = (own && NATION_CONFED[own]) ? own : (nationDef?.name ?? null);
   /* And only a country the international engine actually knows how to run a
      tournament for: it carries the confederations and the slot counts. */
@@ -2411,6 +2457,73 @@ export function takeNationJob(career: CareerState): CareerState {
       ...career.aiHeadlines,
     ].slice(0, 8),
   };
+}
+
+
+export function nationalSummerAvailable(career: CareerState): boolean {
+  const job = career.nationJob;
+  const year = worldYear(career);
+  return !!job && year >= 2026 && !career.retired && !career.sacked && !career.wilderness && !career.live
+    && (career.eraId ?? 'now') === 'now' && career.pendingSummary?.season === career.season
+    && career.week >= career.calendar.length && !!tournamentForYear(job.nation, year)
+    && (job.lastYear !== year || job.campaign !== undefined);
+}
+
+function validCampaign(value: unknown, nation: string, formationCount: number): value is NationalCampaign {
+  if (!value || typeof value !== 'object') return false;
+  const c = value as NationalCampaign;
+  const strings = (a: unknown, max: number): a is string[] => Array.isArray(a) && a.length <= max && a.every(x => typeof x === 'string') && new Set(a).size === a.length;
+  const finite = (n: unknown): n is number => typeof n === 'number' && Number.isFinite(n);
+  const fixture = (x: NationalFixture): boolean => !!x && typeof x.id === 'string' && typeof x.home === 'string'
+    && typeof x.away === 'string' && typeof x.round === 'string' && typeof x.pens === 'boolean'
+    && (x.homeGoals === null || Number.isInteger(x.homeGoals) && x.homeGoals >= 0)
+    && (x.awayGoals === null || Number.isInteger(x.awayGoals) && x.awayGoals >= 0)
+    && (x.winner === null || x.winner === x.home || x.winner === x.away);
+  return c.version === 1 && c.nation === nation && Number.isInteger(c.year) && c.year >= 2026
+    && c.eraId === 'now' && Number.isSafeInteger(c.revision) && c.revision >= 0
+    && strings(c.squadKeys, 23) && Array.isArray(c.xiKeys) && (c.xiKeys.length === 0 || c.xiKeys.length === 11)
+    && c.xiKeys.every(key => typeof key === 'string' && (!key || c.squadKeys.includes(key)))
+    && new Set(c.xiKeys.filter(Boolean)).size === c.xiKeys.filter(Boolean).length
+    && Array.isArray(c.selected) && c.selected.length === c.squadKeys.length
+    && c.selected.every((p, i) => !!p && c.squadKeys[i] === p.key && p.nation === nation && typeof p.name === 'string'
+      && ALL_POSITIONS.includes(p.position) && finite(p.rating) && finite(p.age)
+      && (p.secondaryPositions === undefined || Array.isArray(p.secondaryPositions) && p.secondaryPositions.every(pos => ALL_POSITIONS.includes(pos))))
+    && Number.isInteger(c.formationIndex) && c.formationIndex >= 0 && c.formationIndex < formationCount
+    && !!c.format && JSON.stringify(c.format) === JSON.stringify(tournamentForYear(nation, c.year))
+    && ['qualifying', 'groups', 'knockout', 'complete'].includes(c.stage)
+    && Array.isArray(c.groups) && c.groups.length <= 12 && c.groups.every(g => strings(g, 6))
+    && Array.isArray(c.tables) && c.tables.length === c.groups.length && c.tables.every((table, i) =>
+      Array.isArray(table) && table.length === c.groups[i].length && table.every(row => !!row && c.groups[i].includes(row.nation)
+        && [row.played, row.won, row.drawn, row.lost, row.gf, row.ga, row.points].every(n => Number.isInteger(n) && n >= 0)))
+    && Number.isInteger(c.through) && c.through >= 0 && c.through <= 6 && typeof c.automatic === 'boolean'
+    && Array.isArray(c.schedule) && c.schedule.length <= 104 && c.schedule.every(fixture)
+    && c.schedule.every(f => f.home !== f.away && (c.stage === 'knockout' || c.stage === 'complete'
+      ? c.groups.some(group => group.includes(f.home)) && c.groups.some(group => group.includes(f.away))
+      : c.groups.some(group => group.includes(f.home) && group.includes(f.away))))
+    && Number.isInteger(c.cursor) && c.cursor >= 0 && c.cursor <= c.schedule.length
+    && strings(c.knockout, 32) && Number.isInteger(c.knockoutRound) && c.knockoutRound >= 0 && c.knockoutRound < 5
+    && (c.next === null || fixture(c.next) && c.next.id === c.schedule[c.cursor]?.id
+      && c.next.home === c.schedule[c.cursor]?.home && c.next.away === c.schedule[c.cursor]?.away
+      && c.next.round === c.schedule[c.cursor]?.round && c.next.homeGoals === null && c.next.awayGoals === null
+      && c.schedule[c.cursor]?.homeGoals === null && c.schedule[c.cursor]?.awayGoals === null
+      && c.next.winner === null && !c.next.pens && (c.next.home === nation || c.next.away === nation))
+    && Array.isArray(c.results) && c.results.length <= 20 && c.results.every(r => fixture(r) && finite(r.xiStrength))
+    && new Set(c.results.map(r => r.id)).size === c.results.length
+    && typeof c.complete === 'boolean' && typeof c.settled === 'boolean'
+    && (c.result === null || typeof c.result === 'string')
+    && (c.complete ? c.stage === 'complete' && c.next === null && c.result !== null && c.settled : c.next !== null && c.result === null && !c.settled)
+    && Number.isInteger(c.rngState) && c.rngState >= 0 && c.rngState <= 0xffffffff;
+}
+
+export function nationalCampaignThisSummer(career: CareerState): NationalCampaign | null {
+  const job = career.nationJob;
+  return job && validCampaign(job.campaign, job.nation, FORMATIONS.length) && job.campaign.year === worldYear(career)
+    ? job.campaign : null;
+}
+
+export function nationalSummerPending(career: CareerState): boolean {
+  const campaign = nationalSummerAvailable(career) ? nationalCampaignThisSummer(career) : null;
+  return !!campaign && !campaign.complete;
 }
 
 /** Walk away from the country, keeping the club. */
@@ -2546,7 +2659,7 @@ function agreedJobOffer(career: CareerState, club: string): MarketJobOffer {
   const league = (eraHist && eraLeagueOf(club, career.eraId)) || leagueOf(club);
   return {
     club,
-    country: allOfferClubs().find(c => c.name === club)?.country ?? '',
+    country: allOfferClubs(careerScopedLeagueId(career)).find(c => c.name === club)?.country ?? '',
     tier: def.tier as ClubTier,
     league: league.name,
     brief: 'Start in the summer, the way you agreed.',
@@ -2587,7 +2700,7 @@ export function wildernessWeek(career: CareerState, rng: () => number = Math.ran
      can still hold such an offer: it is dropped here, the next time he
      waits, and acceptWildernessJob will not take it. */
   const eraPool = eraOfferClubs(career);
-  const pool = eraPool ?? allOfferClubs().filter(club => club.league !== K_LEAGUE_2026.label || careerHasKLeagueWorld(career));
+  const pool = eraPool ?? allOfferClubs(careerScopedLeagueId(career)).filter(club => club.league !== K_LEAGUE_2026.label || careerHasKLeagueWorld(career));
   let offers: MarketJobOffer[] = eraPool ? w.offers.filter(o => eraPool.some(c => c.name === o.club)) : [...w.offers];
   const fresh: MarketJobOffer[] = realJobOffers(profile, rng, exclude, pool);
   /* One call a week at most: a flood of offers would make waiting free. */
@@ -2625,7 +2738,7 @@ export function wildernessWeek(career: CareerState, rng: () => number = Math.ran
  * other move uses, which is why this returns whatever startNextSeason makes
  * of it rather than transplanting a manager into a half played table.
  */
-export function acceptWildernessJob(career: CareerState, club: string): CareerState | null {
+export function acceptWildernessJob(career: CareerState, club: string, opts?: SeasonStartOptions): CareerState | null {
   const w = career.wilderness;
   if (!w || !w.offers.some(o => o.club === club) || !clubAvailableInCareer(career, club)) return null;
   /* Round 1304: an offer a save from before the fix still holds, from a club
@@ -2635,7 +2748,12 @@ export function acceptWildernessJob(career: CareerState, club: string): CareerSt
   /* Round 783 review: and nothing booked before the sack can outrank it at
      the rollover, even on a path that skipped enterWilderness. */
   const hunt = career.jobHunt ? { jobHunt: dropOnSack(jobHuntOf(career)) } : {};
-  const next = startNextSeason({ ...career, ...hunt, sacked: false }, club);
+  const withoutManager = { ...career, ...hunt, sacked: false };
+  if (career.championshipPlayoffs && !promotionWinner(career.championshipPlayoffs)) {
+    withoutManager.championshipPlayoffs = plainCopy(career.championshipPlayoffs);
+    for (let round = 0; round < PLAYOFF_STAGES.length; round++) advanceChampionshipPlayoffs(withoutManager, round);
+  }
+  const next = startNextSeason(withoutManager, club, opts);
   return { ...next, sacked: false, wilderness: null };
 }
 
@@ -2918,6 +3036,10 @@ export interface CareerState {
    *  save only carries the field while one is off balanced (setInstructions drops it), so every career that
    *  never touches them saves exactly as before. */
   instructions?: TeamInstructions;
+  /** Enabled at the start of a Club Manager season. Existing seasons keep their original injury rules. */
+  severeMatchInjuries?: true;
+  championshipPlayoffRules?: true;
+  championshipPlayoffs?: ChampionshipPlayoffs;
   /** Round 119: set only while a match is paused at halftime. */
   live?: LiveMatch | null;
   /** The 20 league clubs in scheduling order (shuffled each season). */
@@ -2964,6 +3086,8 @@ export interface CareerState {
   cupRound: CupState;
   cupDraw: Partial<Record<CupRound, string>>;
   uclGroup: UclGroupState | null;
+  /** The season's rules survive a job move, even if the first club was outside Europe. */
+  uclFormat?: 'league36';
   uclKoRound: UclKoState;
   uclDraw: Partial<Record<UclKoRound, string>>;
   trophies: Trophy[];
@@ -2985,6 +3109,8 @@ export interface CareerState {
   startOptions?: import('@/lib/clubManagerStart').StartOptions;
   /** Set by finishSeason so a reload mid-review can resume the summary. */
   pendingSummary: SeasonSummary | null;
+  /** A career-local record of optional veteran talks. */
+  veteranReviews?: unknown;
   /** Round 70: the board's demands for this season. */
   boardObjectives?: BoardObjective[];
   /** Round 474: which shape of specific ask this save's objectives were built
@@ -3083,6 +3209,8 @@ export interface CareerState {
   cupByes?: string[];
   /** Round 105: the weekly wage bill the board will tolerate, in thousands. */
   wageCap?: number;
+  /** Extra weekly wage room bought from this season's transfer kitty, in thousands. */
+  purchasedWageRoom?: number;
   /** Round 71: sellers who walked away from me this window. */
   coldNames?: string[];
   /** Round 71: the Latest Transfers feed, newest last, capped at 80. */
@@ -3105,6 +3233,7 @@ export interface CareerState {
    *  which reads a damaged or stale book as none. Nothing reads it for a screen yet: the old race
    *  (scorerRace) is still what the board and the awards show. */
   leagueBook?: LeagueBook;
+  departedLeagueLines?: DepartedLeagueLine[];
   /** Round 73: player messages, newest first, capped at 8. */
   inbox?: PlayerMessage[];
   /** Round 979: the decisions desk (red card appeals and situations), newest
@@ -3147,6 +3276,12 @@ export interface CareerState {
   /* (Round 161's sellOnOwed lives on CMPlayer; see that interface.) */
   /** Round 132: who retired at the most recent summer, for the season screen. */
   retiredLastSummer?: { name: string; age: number; rating: number }[];
+  /** Transfer budget as it opened at the most recent same-club rollover. */
+  summerBudget?: {
+    club: string; unspent: number; allocation: number; carried: number; adjustments: number; opening: number;
+    /** The board's usual allocation before the top-up was reduced. Absent on earlier capped receipts. */
+    usualAllocation?: number;
+  };
   /**
    * Round 135: the microphone. How the papers are treating you, the question
    * sitting on your desk, and anything you have promised out loud. Undefined on
@@ -3662,6 +3797,7 @@ export interface LeagueRules {
   /** 'playoffs' ladder: below the playoff rung, the target sits this many
    *  places from the bottom. */
   floorFromBottom?: number;
+  boardTopHalf?: boolean;
   /** A continental prize outside UEFA, asked of clubs ranked this high. */
   continental?: { label: string; rankUpTo: number; target: number };
   /** The real league's calendar. The engine plays every league on one
@@ -4232,6 +4368,10 @@ export const LEAGUE_RULES: Record<string, LeagueRules> = {
   },
   kleague1: { nationId: 'southkorea', flag: 'South Korea', cup: null, europe: null, drop: 0, ladder: 'top', season: 'calendarYear',
     simplified: 'K League 1 uses a simplified double round robin with generated simulation squads. The real split, promotion and relegation, Korea Cup and AFC competitions are not played.' },
+  j1: { nationId: 'japan', flag: 'Japan', cup: null, europe: null, drop: 0, ladder: 'top', season: 'autumnSpring', tiebreak: 'gdGfH2h',
+    simplified: 'J1 has generated opening squads and a simulated calendar. The Emperor\'s Cup, J.League Cup, AFC competitions and J2 promotion and relegation are outside this league model.' },
+  csl: { nationId: 'china', flag: 'China', cup: null, europe: null, drop: 0, ladder: 'top', season: 'calendarYear', tiebreak: 'h2h', boardTopHalf: true,
+    simplified: 'Chinese Super League uses generated squads and fixtures. The CFA Cup, Super Cup, AFC competitions and promotion and relegation are outside this league model.' },
 };
 
 /** What an id with no row reads as: a cupless top flight outside Europe that
@@ -4483,6 +4623,21 @@ export const REAL_LEAGUES: LeagueDef[] = [
   { id: K_LEAGUE_2026.id, name: K_LEAGUE_2026.label, clubs: K_LEAGUE_2026.clubs.map(club => club.name) },
 ].map(leagueFromRow);
 
+const SCOPED_START_LEAGUES = [J1_LEAGUE_2026, CSL_LEAGUE_2026].map(league =>
+  leagueFromRow({ id: league.id, name: league.label, clubs: [...league.clubs] }));
+
+/** The picker offers leagues that belong only to careers started there. */
+export const CLUB_MANAGER_START_LEAGUES = [...REAL_LEAGUES, ...SCOPED_START_LEAGUES];
+
+const scopedLeagueForClub = (club: string) => SCOPED_START_LEAGUES.find(league => league.clubs.includes(club));
+export const isScopedStarterClub = (club: string) => !!scopedLeagueForClub(club);
+export const isScopedStartLeague = (id: string) => SCOPED_START_LEAGUES.some(league => league.id === id);
+
+export function startLeaguesFor(scopedLeagueId?: string): LeagueDef[] {
+  const scoped = SCOPED_START_LEAGUES.find(league => league.id === scopedLeagueId);
+  return scoped ? [...REAL_LEAGUES, scoped] : REAL_LEAGUES;
+}
+
 /**
  * Round 310: which divisions trade clubs at the summer rollover. Only the
  * pairs listed here move; every other league keeps its static membership
@@ -4626,6 +4781,8 @@ const STRENGTH_PRIORS: Record<string, number> = {
 export function leagueOf(clubName: string): LeagueDef {
   const real = REAL_LEAGUES.find(l => effectiveClubsOf(l.id, l.clubs).includes(clubName));
   if (real) return effectiveLeague(real);
+  const scoped = scopedLeagueForClub(clubName);
+  if (scoped) return scoped;
   // Round 146: clubs that only exist in a historic era (Blackpool, Hercules,
   // Zaragoza...) resolve to their era league. REAL_LEAGUES wins for clubs in
   // both worlds; a historic save reads its own league through eraLeagueOf
@@ -4855,10 +5012,21 @@ export function careerHasKLeagueWorld(career: CareerWorldContext): boolean {
   return own || !!career.world && Object.prototype.hasOwnProperty.call(career.world, K_LEAGUE_2026.id);
 }
 
+export function careerScopedLeagueId(career: CareerWorldContext): string | undefined {
+  if (career.eraId && isHistoricEra(career.eraId)) return undefined;
+  const club = career.clubName;
+  const own = club && career.customClub?.name !== club ? scopedLeagueForClub(club) : undefined;
+  const world = career.world;
+  return own?.id ?? (world ? SCOPED_START_LEAGUES.find(league => Object.prototype.hasOwnProperty.call(world, league.id))?.id : undefined);
+}
+
 /** A legacy custom stays its own entity; new jobs stay in this save's world. */
 export function clubAvailableInCareer(career: CareerWorldContext, name: string): boolean {
   if (career.customClub?.name === career.clubName && name === career.clubName) return true;
-  return ordinaryClubAllowed(name) && (!kLeagueMember(name) || careerHasKLeagueWorld(career));
+  const scoped = scopedLeagueForClub(name);
+  return ordinaryClubAllowed(name)
+    && (!kLeagueMember(name) || careerHasKLeagueWorld(career))
+    && (!scoped || scoped.id === careerScopedLeagueId(career));
 }
 
 /** Round 1035: does this club enter its league's cup? False only for a club
@@ -4917,7 +5085,8 @@ const CLUB_PLACES = new Map<string, NationPlace | null>();
 function clubPlace(club: string, eraId: string | undefined): NationPlace | null {
   const world = isHistoricEra(eraId) ? eraId! : 'now', key = `${world}|${club}`;
   if (!CLUB_PLACES.has(key)) {
-    const lg = (world === 'now' ? undefined : ERA_LEAGUES[world]?.find(l => l.clubs.includes(club))) ?? REAL_LEAGUES.find(l => l.clubs.includes(club));
+    const lg = world === 'now' ? CLUB_MANAGER_START_LEAGUES.find(l => l.clubs.includes(club))
+      : ERA_LEAGUES[world]?.find(l => l.clubs.includes(club)) ?? REAL_LEAGUES.find(l => l.clubs.includes(club));
     CLUB_PLACES.set(key, lg ? placeIn(lg.id, club) : null);
   }
   return CLUB_PLACES.get(key)!;
@@ -5169,6 +5338,12 @@ export const NATIONS: NationDef[] = [
   { id: 'southkorea', name: K_LEAGUE_2026.country, flag: '🇰🇷' },
 ].map(n => ({ ...n, leagueIds: REAL_LEAGUES.filter(l => leagueRulesOf(l.id).nationId === n.id).map(l => l.id) }));
 
+export const CLUB_MANAGER_START_NATIONS: NationDef[] = [
+  ...NATIONS,
+  { id: 'japan', name: J1_LEAGUE_2026.country, flag: '🇯🇵', leagueIds: [J1_LEAGUE_2026.id] },
+  { id: 'china', name: CSL_LEAGUE_2026.country, flag: '🇨🇳', leagueIds: [CSL_LEAGUE_2026.id] },
+];
+
 /** Primary kit colors for the club dot in the UI (approximate, decorative). */
 const CLUB_COLORS: Record<string, string> = {
   // Premier League
@@ -5383,17 +5558,18 @@ const CLUB_COLORS: Record<string, string> = {
   ...Object.fromEntries(K_LEAGUE_2026.clubs.map(club => [club.name, club.color])),
 };
 
-/**
- * Round 72: clubs where the market value dataset runs thin get youth-padded
- * squads; the picker labels them honestly instead of pretending.
- */
+export function usesGeneratedOpeningSquad(clubName: string): boolean {
+  return isScopedStarterClub(clubName) || (K_LEAGUE_2026.modelOnlyRoster && !!kLeagueMember(clubName));
+}
+
+/** Round 72: mark youth-padded clubs and clubs that use fully generated opening squads. */
 export function isPartialClub(clubName: string, eraId?: string): boolean {
   // Round 146: each era carries its own thin list. 2010 Blackpool is thin in
   // the 2010 data; 2026 Blackpool does not exist at all.
   if (eraId && isHistoricEra(eraId)) {
     return (HISTORIC_PARTIAL[eraId] ?? []).includes(clubName);
   }
-  return (K_LEAGUE_2026.modelOnlyRoster && !!kLeagueMember(clubName) && activeCustomClub()?.name !== clubName) || CM_PARTIAL.includes(clubName);
+  return (usesGeneratedOpeningSquad(clubName) && activeCustomClub()?.name !== clubName) || CM_PARTIAL.includes(clubName);
 }
 
 /**
@@ -5435,7 +5611,7 @@ function clubDefMap(): Map<string, ClubDef> {
      expectation is its rank among this save's top flight, not its old
      division's. The cache stays valid for exactly one registration:
      registerLeagueOverrides nulls it, so no signature machinery is needed. */
-  for (const league of REAL_LEAGUES.map(effectiveLeague)) {
+  for (const league of CLUB_MANAGER_START_LEAGUES.map(effectiveLeague)) {
     const ranked = league.clubs
       .map(name => ({ name, xi: bakedXIAvg(name) ?? STRENGTH_PRIORS[name] ?? 65 }))
       .sort((a, b) => b.xi - a.xi);
@@ -5449,7 +5625,7 @@ function clubDefMap(): Map<string, ClubDef> {
         tier,
         color: CLUB_COLORS[entry.name] ?? '#8899aa',
         budget,
-        expectation: i + 1,
+        expectation: isScopedStartLeague(league.id) ? Math.ceil(ranked.length / 2) : i + 1,
       });
     });
   }
@@ -5460,7 +5636,7 @@ function clubDefMap(): Map<string, ClubDef> {
 /** Every playable club (all five real leagues), strongest first. */
 export function playableClubs(leagueId: string): ClubDef[] {
   // Round 310: the effective league, so a save's promotions show through.
-  const league = effectiveLeague(REAL_LEAGUES.find(l => l.id === leagueId) ?? REAL_LEAGUES[0]);
+  const league = effectiveLeague(CLUB_MANAGER_START_LEAGUES.find(l => l.id === leagueId) ?? REAL_LEAGUES[0]);
   return league.clubs
     .map(name => clubDefMap().get(name))
     .filter((c): c is ClubDef => !!c)
@@ -5476,7 +5652,7 @@ export function clubDefFor(name: string, career?: CareerWorldContext): ClubDef {
   if (ACTIVE_CUSTOM && ACTIVE_CUSTOM.def.name === name) return ACTIVE_CUSTOM.def;
   /* A legacy custom keeps the old repair defaults when its name becomes real. */
   const legacyCustom = !!career && career.clubName === name && career.customClub?.name === name
-    && !!kLeagueMember(name) && !careerHasKLeagueWorld(career);
+    && ((!!kLeagueMember(name) && !careerHasKLeagueWorld(career)) || (isScopedStarterClub(name) && !careerScopedLeagueId(career)));
   return (!legacyCustom ? clubDefMap().get(name) ?? CLUBS.find(c => c.name === name) : undefined)
     ?? { name, tier: 4, color: '#8899aa', budget: 20, expectation: 10 };
 }
@@ -5485,8 +5661,9 @@ const CUP_ORDER: CupRound[] = ['R16', 'QF', 'SF', 'F'];
 export const CUP_LABELS: Record<CupRound, string> = {
   R16: 'Round of 16', QF: 'Quarter-final', SF: 'Semi-final', F: 'Final',
 };
-const UCL_ORDER: UclKoRound[] = ['R16', 'QF', 'SF', 'F'];
+const UCL_ORDER: UclKoRound[] = ['PO', 'R16', 'QF', 'SF', 'F'];
 export const UCL_LABELS: Record<UclKoRound, string> = {
+  PO: 'Knockout playoff',
   R16: 'Round of 16', QF: 'Quarter-final', SF: 'Semi-final', F: 'Final',
 };
 
@@ -5562,7 +5739,6 @@ function slug(name: string): string {
 function freeSquadId(squad: readonly { id: string }[], base: string): string {
   const taken = new Set(squad.map(p => p.id));
   if (!taken.has(base)) return base;
-  /* Bounded by the squad, which the engine caps at 30. */
   for (let n = 2; n <= taken.size + 2; n++) {
     const candidate = `${base}-${n}`;
     if (!taken.has(candidate)) return candidate;
@@ -5764,7 +5940,7 @@ export function clubByName(name: string): ClubDef | null {
 
 /** Average rating of the club's best XI (baked rosters first, then pool). */
 export function clubPreviewRating(clubName: string): number {
-  if (K_LEAGUE_2026.modelOnlyRoster && kLeagueMember(clubName) && activeCustomClub()?.name !== clubName) return 66;
+  if (usesGeneratedOpeningSquad(clubName) && activeCustomClub()?.name !== clubName) return 66;
   const baked = bakedXIAvg(clubName);
   if (baked !== null) return Math.round(baked);
   const ratings = getPool()
@@ -7110,7 +7286,7 @@ function buildSquad(clubName: string, yearsOnNow = 0, eraId: string = 'now', car
   // in the current era gets exactly the squad it always got. Round 146: the
   // era picks the bake, so a 2010 save is handed the real 2010 squad.
   const baked = projectedRoster(clubName, yearsOnNow, eraId, career ? worldSeedOf(career) : undefined);
-  const modelOnly = !isHistoricEra(eraId) && K_LEAGUE_2026.modelOnlyRoster && !!kLeagueMember(clubName);
+  const modelOnly = !isHistoricEra(eraId) && usesGeneratedOpeningSquad(clubName);
   const real = modelOnly ? [] : baked.length
     ? baked.slice(0, 26).map(bakedToCMPlayer)
     : getPool().filter(p => p.club === clubName).map(toCMPlayer);
@@ -7416,11 +7592,13 @@ export function stopRetraining(career: CareerState, playerId: string): CareerSta
   };
 }
 
-export function autoPickXI(squad: CMPlayer[], formation: Formation, fresh = false): (string | null)[] {
+export const DEFAULT_FRESH_XI_FITNESS = 80;
+
+export function autoPickXI(squad: CMPlayer[], formation: Formation, fresh = false, cutoff = DEFAULT_FRESH_XI_FITNESS): (string | null)[] {
   const used = new Set<string>();
   const xi: (string | null)[] = [];
   const order = (a: CMPlayer, b: CMPlayer) =>
-    (fresh ? Number(b.fitness >= 80) - Number(a.fitness >= 80) : 0) || b.rating - a.rating;
+    (fresh ? Number(b.fitness >= cutoff) - Number(a.fitness >= cutoff) : 0) || b.rating - a.rating;
   for (const slot of formation.slots) {
     /* Round 505: a position he has retrained into is his too. */
     const fits = squad
@@ -7456,6 +7634,11 @@ export function xiAverageRating(career: CareerState): number {
 
 function emptyRow(club: string): TableRow {
   return { club, w: 0, d: 0, l: 0, gf: 0, ga: 0, pts: 0 };
+}
+
+function openingLeagueTable(clubs: string[], leagueId: string, year?: number): TableRow[] {
+  if (leagueId !== CSL_LEAGUE_2026.id || year !== CSL_LEAGUE_2026.year) return clubs.map(emptyRow);
+  return clubs.map(club => ({ ...emptyRow(club), pts: CSL_OPENING_POINTS[club] ?? 0 }));
 }
 
 /* ---------- Round 462: level points split the way each league says ---------- */
@@ -7525,7 +7708,7 @@ function emptyRow(club: string): TableRow {
  * game between them, and are read only when all of those games have been
  * played.
  */
-export type TiebreakRule = 'h2h' | 'gdGf' | 'gdGfAgg' | 'gdH2h' | 'gdGfOnly';
+export type TiebreakRule = 'h2h' | 'gdGf' | 'gdGfAgg' | 'gdH2h' | 'gdGfOnly' | 'gdGfH2h';
 /* Round 832 review: read off each league's LEAGUE_RULES row (tiebreak), so a
    new league's order is one field on its row like every other rule. */
 const LEAGUE_TIEBREAKS: Record<string, TiebreakRule> = Object.fromEntries(
@@ -7545,13 +7728,25 @@ export interface TableSortContext {
 
 /** Order one set of clubs level on points by the league's rule. */
 function orderLevel(level: TableRow[], rule: TiebreakRule, pairs: Record<string, [number, number]>): TableRow[] {
+  if (rule === 'gdGfH2h') {
+    // J1's mini-table includes only the clubs still tied on overall goal difference and goals.
+    const groups = new Map<string, TableRow[]>();
+    for (const row of orderLevel(level, 'gdGfOnly', {})) {
+      const key = `${row.gf - row.ga}|${row.gf}`;
+      const group = groups.get(key);
+      if (group) group.push(row);
+      else groups.set(key, [row]);
+    }
+    if (groups.size > 1) return [...groups.values()].flatMap(group => group.length === 1 ? group : orderLevel(group, rule, pairs));
+  }
   const names = level.map(r => r.club);
-  const h2h = new Map<string, { pts: number; gd: number }>();
+  const h2h = new Map<string, { pts: number; gd: number; gf: number }>();
   let complete = rule !== 'gdGfOnly';
   if (complete) {
     for (const r of level) {
       let pts = 0;
       let gd = 0;
+      let gf = 0;
       for (const o of names) {
         if (o === r.club) continue;
         const home = pairs[`${r.club}|${o}`];
@@ -7560,19 +7755,21 @@ function orderLevel(level: TableRow[], rule: TiebreakRule, pairs: Record<string,
         pts += home[0] > home[1] ? 3 : home[0] === home[1] ? 1 : 0;
         pts += away[1] > away[0] ? 3 : away[0] === away[1] ? 1 : 0;
         gd += (home[0] - home[1]) + (away[1] - away[0]);
+        gf += home[0] + away[1];
       }
       if (!complete) break;
-      h2h.set(r.club, { pts, gd });
+      h2h.set(r.club, { pts, gd, gf });
     }
   }
   const key = (r: TableRow): number[] => {
     const gd = r.gf - r.ga;
-    const h = complete ? h2h.get(r.club) ?? { pts: 0, gd: 0 } : { pts: 0, gd: 0 };
+    const h = complete ? h2h.get(r.club) ?? { pts: 0, gd: 0, gf: 0 } : { pts: 0, gd: 0, gf: 0 };
     switch (rule) {
       case 'h2h': return [h.pts, h.gd, gd, r.gf];
       case 'gdGf': return [gd, r.gf, h.pts];
       case 'gdGfAgg': return [gd, r.gf, h.gd];
       case 'gdH2h': return [gd, h.pts, h.gd, r.gf, r.w];
+      case 'gdGfH2h': return [gd, r.gf, h.pts, h.gd, h.gf];
       default: return [gd, r.gf];
     }
   };
@@ -7662,6 +7859,8 @@ export function tiebreakFootnote(rule: TiebreakRule, rows: TableRow[], pairs?: R
       return 'Level on points splits on goal difference, then goals scored, then the aggregate of the two games between the clubs once both have been played.';
     case 'gdH2h':
       return `Level on points splits on goal difference, then head to head (points, then goal difference, between the clubs) once every game between them has been played, then goals scored, then wins.${pending}`;
+    case 'gdGfH2h':
+      return 'Level on points splits on goal difference, then goals scored. Clubs still tied use head-to-head points, goal difference and goals scored once their matches are complete. The simulation orders otherwise identical records by club name.';
     default:
       return 'Level on points splits on goal difference, then goals scored.';
   }
@@ -7908,12 +8107,11 @@ export function squadScaledValue(squad: CMPlayer[], rating: number, age: number)
    his new level (a 60 who reaches 76 is about 9m), while the floor would have
    left him under 4m.
 
-   What this deliberately does NOT touch. An academy graduate or a scouted boy
-   (promoteProspect) keeps no stored value and is priced off the curve, as
-   simAcademy has always required, because he is the product the club paid for
-   with its academy and its scouts. Nor a pad's wage: makeYouth fixes it off
-   the curve before the value is stored, exactly the number ensureContracts
-   always gave him, so no wage bill and no cap moves. */
+   This pad repair leaves existing academy graduates and their signed wages
+   alone. New graduates receive their age-aware market value at promotion.
+   A pad's wage also stays as signed: makeYouth fixes it off the curve before
+   the value is stored, exactly the number ensureContracts always gave him,
+   so no pad wage bill or cap moves. */
 export const YOUTH_PAD_SCALE = 0.03;
 
 /** Round 632: a youth pad's value, a real teenager's price for his rating and age. */
@@ -8320,6 +8518,7 @@ export function releasePlayer(career: CareerState, playerId: string): CareerStat
   const next: CareerState = {
     ...career,
     squad: remaining.map(x => ({ ...x, morale: clamp(x.morale - sting, 5, 99) })),
+    departedLeagueLines: recordLeagueDeparture(career, p),
     /* He leaves the way every other exit leaves (acceptBid, loanOutPlayer):
        out of the XI, off every set piece job, and every bid for him is gone.
        The first build left his bids behind, so a met release clause for a man
@@ -8517,9 +8716,9 @@ export function freeAgentBlock(career: CareerState, fa: FreeAgent): FreeAgentBlo
   if (fa.fromMyClub && fa.since === career.season && !(fa.reason === 'expired' && canonical)) return 'justLeft';
   if (!freeAgentInterest(career, fa)) return 'notInterested';
   if (career.squad.length >= 30) return 'squadFull';
-  const cap = career.wageCap ?? wageCapFrom(wageBill(career));
+  const bill = wageBill(career);
   const terms = freeAgentTerms(fa, career);
-  if (wageBill(career) + terms.wage > cap) return 'overCap';
+  if (bill + terms.wage > wageCapOf(career, bill)) return 'overCap';
   if (terms.fee > career.budget) return 'cantAfford';
   return null;
 }
@@ -8601,6 +8800,26 @@ export function signFreeAgent(career: CareerState, name: string): CareerState | 
  */
 export function wageCapFrom(bill: number): number {
   return Math.max(60, Math.round(bill * 1.15));
+}
+
+export function wageCapOf(career: CareerState, bill = wageBill(career)): number {
+  return (career.wageCap ?? wageCapFrom(bill)) + (career.purchasedWageRoom ?? 0);
+}
+
+export const WAGE_ROOM_STEP = { cost: 0.52, weekly: 10 };
+
+export function canBuyWageRoom(career: CareerState): boolean {
+  return !career.sacked && !career.wilderness && !career.live && !career.pendingSummary
+    && career.week < career.calendar.length && career.budget >= WAGE_ROOM_STEP.cost;
+}
+
+export function buyWageRoom(career: CareerState): CareerState | null {
+  if (!canBuyWageRoom(career)) return null;
+  return {
+    ...career,
+    budget: Math.round((career.budget - WAGE_ROOM_STEP.cost) * 100) / 100,
+    purchasedWageRoom: (career.purchasedWageRoom ?? 0) + WAGE_ROOM_STEP.weekly,
+  };
 }
 
 /**
@@ -10556,6 +10775,7 @@ export function breakLoan(career: CareerState, playerId: string): CareerState | 
     ...career,
     budget: Math.round((career.budget - fee) * 10) / 10,
     squad: career.squad.filter(x => x.id !== playerId),
+    departedLeagueLines: recordLeagueDeparture(career, p),
     xiIds: career.xiIds.map(id => (id === playerId ? null : id)),
     setPieces: setPiecesWithout(career.setPieces, playerId),
     transferLog: [...(career.transferLog ?? [])],
@@ -11614,6 +11834,7 @@ function settleAgreedDeal(career: CareerState, neg: Negotiation, terms: Personal
     }
   }
   if (swap) {
+    signed.departedLeagueLines = recordLeagueDeparture(signed, swap);
     signed.squad = signed.squad.filter(p => p.id !== swap.id);
     signed.xiIds = signed.xiIds.map(id => (id === swap.id ? null : id));
     signed.setPieces = setPiecesWithout(signed.setPieces, swap.id);
@@ -11695,6 +11916,7 @@ export function acceptBid(career: CareerState, playerId: string): CareerState | 
     ...career,
     budget: Math.round((career.budget + netFee) * 10) / 10,
     squad: career.squad.filter(x => x.id !== playerId),
+    departedLeagueLines: recordLeagueDeparture(career, p),
     xiIds: career.xiIds.map(id => (id === playerId ? null : id)),
     /* Round 505: the armband and the set pieces never travel. */
     setPieces: setPiecesWithout(career.setPieces, playerId),
@@ -11927,6 +12149,7 @@ export function loanOutPlayer(
     ...career,
     budget: Math.round((career.budget + fee) * 10) / 10,
     squad: career.squad.filter(x => x.id !== playerId),
+    departedLeagueLines: recordLeagueDeparture(career, p),
     xiIds: career.xiIds.map(id => (id === playerId ? null : id)),
     /* Round 505: the armband and the set pieces never travel. */
     setPieces: setPiecesWithout(career.setPieces, playerId),
@@ -12035,6 +12258,7 @@ export function recallLoanedPlayer(career: CareerState, playerId: string): Caree
     ...career,
     budget: Math.round((career.budget - entry.recallFee) * 10) / 10,
     squad: [...career.squad, back],
+    departedLeagueLines: career.departedLeagueLines && departedLeagueLines(career).filter(p => p.id !== playerId || p.club !== career.clubName),
     loanedOut: list.filter(l => l.player.id !== playerId),
     transferLog: [...(career.transferLog ?? [])],
   };
@@ -12361,7 +12585,7 @@ function generateHeadlines(state: CareerState): AiDeal[] {
  * average of the value-derived ratings), so the data drives the sim. The
  * old priors only back up anything outside the bake.
  */
-function genClubStrengths(myLeague: LeagueDef, yearsOnNow = 0, eraId: string = 'now', career?: CareerState, myClub?: string, kLeagueActive = true): Record<string, number> {
+function genClubStrengths(myLeague: LeagueDef, yearsOnNow = 0, eraId: string = 'now', career?: CareerState, myClub?: string, kLeagueActive = true, scopedLeagueId?: string): Record<string, number> {
   const out: Record<string, number> = {};
   // Round 132: from the PROJECTED roster for this world year, not from the
   // frozen 2026 bake. Before this, every AI club in the game was recomputed
@@ -12394,7 +12618,7 @@ function genClubStrengths(myLeague: LeagueDef, yearsOnNow = 0, eraId: string = '
   }
   // Round 310: through the effective memberships, so a strength exists for
   // every club where this save's world actually has it playing.
-  for (const league of REAL_LEAGUES.map(effectiveLeague)) {
+  for (const league of startLeaguesFor(scopedLeagueId).map(effectiveLeague)) {
     if (!kLeagueActive && league.id === K_LEAGUE_2026.id) continue;
     for (const name of league.clubs) {
       if (out[name] !== undefined) continue;
@@ -12508,7 +12732,7 @@ const UCL_SECOND_LEG_GAP = 0.035;
    its rules row): its season carries no cup week at all. Every league before
    this round has one, and for them the calendar is the one it always was.
    Round 1510: exported so the night placer's unit file builds every league size on the engine's own calendar. */
-export function buildCalendar(leagueSize: number, r16 = false, twoLegKo = false, cup = true): CalendarEntry[] {
+export function buildCalendar(leagueSize: number, r16 = false, twoLegKo = false, cup = true, leaguePhase = false): CalendarEntry[] {
   // Odd-sized leagues carry a BYE ghost, so the schedule runs 2*n rounds.
   const effSize = leagueSize % 2 === 0 ? leagueSize : leagueSize + 1;
   const rounds = 2 * (effSize - 1);
@@ -12516,11 +12740,15 @@ export function buildCalendar(leagueSize: number, r16 = false, twoLegKo = false,
   /* Round 507: a second leg lands at least one league round after its first,
      so the two never collapse into the same week at a small league size. */
   const after = (f: number): number => Math.max(at(f) + 1, at(f + UCL_SECOND_LEG_GAP));
+  const r16Mark = leaguePhase ? 0.60 : UCL_R16_MARK;
+  const qfMark = leaguePhase ? 0.69 : 0.58;
+  const sfMark = leaguePhase ? 0.80 : 0.76;
   const marks = {
-    ucl: [at(0.05), at(0.13), at(0.21), at(0.27), at(0.32), at(0.39)],
-    cupR16: at(0.16), cupQF: at(0.37), window: at(0.47), uclR16: at(UCL_R16_MARK),
-    uclQF: at(0.58), cupSF: at(0.68), uclSF: at(0.76), cupF: at(0.87), uclF: at(0.92),
-    uclR16b: after(UCL_R16_MARK), uclQFb: after(0.58), uclSFb: after(0.76),
+    ucl: (leaguePhase ? [0.05, 0.13, 0.21, 0.27, 0.32, 0.39, 0.44, 0.49] : [0.05, 0.13, 0.21, 0.27, 0.32, 0.39]).map(at),
+    cupR16: at(0.16), cupQF: at(0.37), window: at(0.47), uclR16: at(r16Mark),
+    uclQF: at(qfMark), cupSF: at(0.68), uclSF: at(sfMark), cupF: at(0.87),
+    uclR16b: after(r16Mark), uclQFb: after(qfMark), uclSFb: after(sfMark),
+    playoff: at(0.53), playoffSecondLeg: after(0.53),
   };
   const pushKo = (list: CalendarEntry[], round: UclKoRound, leg: 1 | 2): void => {
     list.push({ type: 'uclKo', round: 0, uclRound: round, ...(twoLegKo ? { uclLeg: leg } : {}) });
@@ -12529,7 +12757,7 @@ export function buildCalendar(leagueSize: number, r16 = false, twoLegKo = false,
   let md = 0;
   for (let r = 0; r < rounds; r++) {
     cal.push({ type: 'league', round: r });
-    while (md < 6 && marks.ucl[md] === r) {
+    while (md < marks.ucl.length && marks.ucl[md] === r) {
       cal.push({ type: 'uclGroup', round: md });
       md += 1;
     }
@@ -12537,8 +12765,10 @@ export function buildCalendar(leagueSize: number, r16 = false, twoLegKo = false,
     if (cup && r === marks.cupQF) cal.push({ type: 'cup', round: 0, cupRound: 'QF' });
     if (r === marks.window) cal.push({ type: 'window', round: 0 });
     // Round 462: only an era whose real format had one plays a round of 16.
-    if (r16 && r === marks.uclR16) pushKo(cal, 'R16', 1);
-    if (r16 && twoLegKo && r === marks.uclR16b) pushKo(cal, 'R16', 2);
+    if (leaguePhase && r === marks.playoff) pushKo(cal, 'PO', 1);
+    if (leaguePhase && r === marks.playoffSecondLeg) pushKo(cal, 'PO', 2);
+    if ((r16 || leaguePhase) && r === marks.uclR16) pushKo(cal, 'R16', 1);
+    if ((r16 || leaguePhase) && twoLegKo && r === marks.uclR16b) pushKo(cal, 'R16', 2);
     if (r === marks.uclQF) pushKo(cal, 'QF', 1);
     if (twoLegKo && r === marks.uclQFb) pushKo(cal, 'QF', 2);
     if (cup && r === marks.cupSF) cal.push({ type: 'cup', round: 0, cupRound: 'SF' });
@@ -12547,7 +12777,7 @@ export function buildCalendar(leagueSize: number, r16 = false, twoLegKo = false,
     if (cup && r === marks.cupF) cal.push({ type: 'cup', round: 0, cupRound: 'F' });
     /* The final is one match at a neutral venue in every era on offer, so it
        never gets a second leg however twoLegKo is set. */
-    if (r === marks.uclF) cal.push({ type: 'uclKo', round: 0, uclRound: 'F' });
+    if (r === rounds - 1) cal.push({ type: 'uclKo', round: 0, uclRound: 'F' });
   }
   return cal;
 }
@@ -12616,7 +12846,7 @@ export function ensureUclCalendar(state: CareerState): void {
  */
 export function ensureUclLegs(state: CareerState): void {
   if (!Array.isArray(state.calendar)) return;
-  const rounds: UclKoRound[] = ['R16', 'QF', 'SF', 'F'];
+  const rounds: UclKoRound[] = UCL_ORDER;
   for (const round of rounds) {
     if (uclLegsFor(state.eraId, round) !== 2) continue;
     const weeks = state.calendar
@@ -12650,18 +12880,20 @@ export function leagueRounds(size: number): number {
 export function worldLeagueDefs(state: CareerWorldContext): LeagueDef[] {
   const historic = !!state.eraId && isHistoricEra(state.eraId);
   if (historic) return ERA_LEAGUES[state.eraId!] ?? [];
-  const leagues = REAL_LEAGUES.map(effectiveLeague);
+  const leagues = startLeaguesFor(careerScopedLeagueId(state)).map(effectiveLeague);
   return state.clubName && !careerHasKLeagueWorld(state)
     ? leagues.filter(league => league.id !== K_LEAGUE_2026.id) : leagues;
 }
 
 /** Blank standings for every league except my own. Round 146: a historic
  *  save's world is its era's other league, not the 2026 league set. */
-function initWorld(myClub: string, eraId?: string, myLeagueId?: string, kLeagueActive = true): Record<string, WorldLeague> {
+function initWorld(myClub: string, eraId?: string, myLeagueId?: string, kLeagueActive = true, scopedLeagueId?: string, seasonYear?: number): Record<string, WorldLeague> {
   const historic = !!eraId && isHistoricEra(eraId);
   // Round 310: the modern world is built from the effective memberships, so
   // a promoted club's old division fields its replacement, not the club.
   const leagues = worldLeagueDefs({ eraId }).filter(league => kLeagueActive || league.id !== K_LEAGUE_2026.id);
+  const scoped = SCOPED_START_LEAGUES.find(league => league.id === scopedLeagueId);
+  if (!historic && scoped) leagues.push(scoped);
   /* Round 154: callers that know my league pass it, because a custom club is
      in no league def and the leagueOf fallback would exclude the WRONG league
      from the world, running my real division twice. */
@@ -12669,7 +12901,7 @@ function initWorld(myClub: string, eraId?: string, myLeagueId?: string, kLeagueA
   const world: Record<string, WorldLeague> = {};
   for (const lg of leagues) {
     if (lg.id === mine) continue;
-    world[lg.id] = { round: 0, table: lg.clubs.map(emptyRow) };
+    world[lg.id] = { round: 0, table: openingLeagueTable(lg.clubs, lg.id, seasonYear) };
   }
   return world;
 }
@@ -12696,7 +12928,7 @@ function myRoundsPlayed(state: CareerState, upto: number): number {
  * Mutates state.
  */
 function syncWorld(state: CareerState, myPlayed: number): void {
-  if (!state.world) state.world = initWorld(state.clubName, state.eraId, careerLeagueOf(state).id, careerHasKLeagueWorld(state));
+  if (!state.world) state.world = initWorld(state.clubName, state.eraId, careerLeagueOf(state).id, careerHasKLeagueWorld(state), careerScopedLeagueId(state), worldYearOf(state));
   const myTotal = leagueRounds(careerLeagueOf(state).clubs.length);
   const frac = myTotal > 0 ? Math.min(1, myPlayed / myTotal) : 0;
   // Round 310: fixtures come off the effective membership, or a relegated
@@ -13197,6 +13429,7 @@ function playsExtraTime(state: CareerState, entry: CalendarEntry): boolean {
   if (entry.type === 'oneOff') return oneOffPlaysExtraTime(state, entry);
   /* Round 1593: a Europa League night that settles a tie (a second leg, the final). */
   if (entry.type === 'uel') return !!uelMyNight(state, entry)?.settles;
+  if (entry.type === 'promotion') return entry.round !== 1;
   if (entry.type !== 'uclKo' || !entry.uclRound) return false;
   /* A legacy week carries no uclLeg and is the whole tie (Round 507). */
   const twoLegs = uclLegsFor(state.eraId, entry.uclRound) === 2 && !!entry.uclLeg;
@@ -13233,9 +13466,9 @@ export interface SecondLegContext {
 }
 export function secondLegContext(career: CareerState, week: number, mine: number, theirs: number): SecondLegContext | null {
   const entry = career.calendar[week];
-  if (!entry || !secondLegTonight(career, entry) || (!entry.uclRound && entry.type !== 'uel')) return null;
+  if (!entry || !secondLegTonight(career, entry)) return null;
   /* Round 1593: a Europa League second leg reads its first leg from the slice's record. */
-  const first = entry.type === 'uel' ? uelFirstLegMine(career, entry) : firstLegMine(career, entry.uclRound!);
+  const first = firstLegForEntry(career, entry);
   if (!first) return null;
   return {
     leg1Mine: first.mine,
@@ -13243,7 +13476,7 @@ export function secondLegContext(career: CareerState, week: number, mine: number
     leg1Home: first.home,
     aggMine: first.mine + mine,
     aggTheirs: first.theirs + theirs,
-    awayGoalsRule: uclAwayGoalsApply(career.eraId),
+    awayGoalsRule: entry.type === 'promotion' ? false : uclAwayGoalsApply(career.eraId),
   };
 }
 
@@ -13309,18 +13542,20 @@ export function uclGroupRule(state: Pick<CareerState, 'eraId'>): UclGroupRule {
   return eraById(state.eraId!).startYear >= 2015 ? 'h2hFull' : 'h2hAway';
 }
 
-type UclGroupSortState = Pick<CareerState, 'eraId' | 'pairResults'>;
+type UclGroupSortState = Pick<CareerState, 'eraId' | 'pairResults'> & Partial<Pick<CareerState, 'uclGroup'>>;
 
 /** One group table, in that competition's order. EVERY read of a group's
  *  standing goes through this, my own group and the seven the engine plays
  *  beside it, so the table on screen and the field the round of 16 is seeded
  *  from can never be two different orders. */
 export function sortedUclGroup(state: UclGroupSortState, rows: TableRow[]): TableRow[] {
+  if (state.uclGroup?.leaguePhase) return sortedLeaguePhaseTable(rows, state.pairResults?.[UCL_GROUP_LEDGER]);
   return sortedUclGroupTable(rows, uclGroupRule(state), state.pairResults?.[UCL_GROUP_LEDGER]);
 }
 
 /** The line under a group table saying how level points were split. */
 export function uclGroupTiebreakFootnote(state: UclGroupSortState, rows: TableRow[]): string {
+  if (state.uclGroup?.leaguePhase) return leaguePhaseFootnote();
   return uclGroupFootnote(rows, uclGroupRule(state), state.pairResults?.[UCL_GROUP_LEDGER]);
 }
 
@@ -13529,6 +13764,18 @@ function advanceUclBracket(state: CareerState, round: UclKoRound): void {
     settleTie(t, { legs, awayGoals: uclAwayGoalsApply(state.eraId), deciderScale: ET_DEFLATOR, etScale: ET_DEFLATOR * ET_MINUTES / 90 },
       (home, away, scale) => simAiMatch(state, home, away, scale), () => Math.random());
   }
+  if (round === 'PO' && state.uclGroup?.leaguePhase) {
+    if (bracket.some(tie => tie.round === 'R16')) return;
+    const ties = bracket.filter(tie => tie.round === 'PO').sort((a, b) => a.slot - b.slot);
+    const seeds = playedUclKnockoutDraw(state)?.seeds;
+    if (!seeds || ties.length !== seeds.length || ties.some(tie => !tie.winner)) return;
+    for (const [slot, tie] of ties.entries()) {
+      bracket.push(makePlayedUclTie(state, 'R16', slot, tie.winner!, seeds[slot]));
+    }
+    const opponent = myUclOpponent(state, 'R16');
+    if (opponent) state.uclDraw.R16 = opponent;
+    return;
+  }
   const next: UclKoRound | null = round === 'R16' ? 'QF' : round === 'QF' ? 'SF' : round === 'SF' ? 'F' : null;
   if (!next) return;
   if (bracket.some(t => t.round === next)) return;
@@ -13539,8 +13786,8 @@ function advanceUclBracket(state: CareerState, round: UclKoRound): void {
   const winners = thisRound.map(t => t.winner).filter((w): w is string => !!w);
   if (winners.length < 2) return;
   for (let i = 0; i * 2 + 1 < winners.length; i++) {
-    const home = winners[i * 2];
-    const away = winners[i * 2 + 1];
+    const { home, away } = state.uclGroup?.leaguePhase
+      ? nextRoundTie(winners, i) : { home: winners[i * 2], away: winners[i * 2 + 1] };
     bracket.push({
       round: next, slot: i, home, away,
       homeGoals: null, awayGoals: null, winner: null,
@@ -13678,11 +13925,11 @@ function initUclGroup(qualified: boolean, myClub: string, eraId?: string, field?
  * orders, so this and season one cannot drift into two versions of it. This
  * function's job is only to read the save's final tables in world order.
  */
-export function uclQualifiersFrom(career: CareerState): string[] {
+export function uclQualifiersFrom(career: CareerState, size?: number): string[] {
   const tables = uclFinalTables(career);
   if (!tables) return [];
   /* Round 1509 (ruling 1k): and the Europa League's winner, row Q4. */
-  return uclFieldFromTables(tables, uclHolderOf(career), undefined, undefined, uelHolderOf(career));
+  return uclFieldFromTables(tables, uclHolderOf(career), size, undefined, uelHolderOf(career));
 }
 
 /**
@@ -13909,7 +14156,7 @@ const GROUP_LETTERS = ['B', 'C', 'D', 'E', 'F', 'G', 'H'];
  */
 export function initUclWorld(state: CareerState): UclAiGroup[] | undefined {
   const group = state.uclGroup;
-  if (!group) return undefined;
+  if (!group || group.leaguePhase) return undefined;
   const taken = new Set<string>([state.clubName, ...group.opponents]);
   const historic = !!state.eraId && isHistoricEra(state.eraId);
   let pool: string[];
@@ -14055,6 +14302,7 @@ type TaggedField = string[] & { via?: Record<string, EuroRoute>; earned?: EuroRo
 /** The clubs of the Champions League this season really plays (the critic's 2(b)): my group and the AI groups
  *  with my club when it is in, else the one the save follows. */
 export function uclEntrantsOf(state: Pick<CareerState, 'clubName' | 'uclGroup' | 'uclWorld' | 'worldComps'>): string[] {
+  if (state.uclGroup?.leaguePhase) return [...state.uclGroup.leaguePhase.clubs];
   if (state.uclGroup) return [state.clubName, ...state.uclGroup.opponents, ...(state.uclWorld ?? []).flatMap(g => g.clubs)];
   return [...(state.worldComps?.ucl?.clubs ?? [])];
 }
@@ -14141,7 +14389,8 @@ function worldUelField(state: CareerState, tables: { league: Pick<LeagueDef, 'id
  * stripped of worldComps anyway; this skips opening them, which cost a daily start a median of 55 ms a date on a
  * runner (simWorldEuro section 6). Opening draws nothing, so no deal moves either way.
  */
-export interface StartCareerOptions { noWorldComps?: boolean }
+type SeasonStartOptions = { severeMatchInjuries?: true; playedUclLeaguePhase?: true };
+export interface StartCareerOptions extends SeasonStartOptions { noWorldComps?: boolean; championshipPlayoffs?: true }
 /** The options both dailies start a career with. */
 export const DAILY_START: StartCareerOptions = { noWorldComps: true };
 /* The states a start was asked to open nothing on, read by openWorldUclOnStart (a set of objects, never saved). */
@@ -14213,6 +14462,40 @@ function worldCompSeed(state: CareerState, comp: WorldCompKey | OneOffKey): numb
 
 /** One decimal, the strength every watched match reads (the snapshot). */
 const worldUclStrength = (state: CareerState, club: string): number => Math.round(strengthOf(state, club) * 10) / 10;
+
+/** The participant uses the same simulated draw and saved slate as the watched format. */
+function openPlayedUcl(state: CareerState, league: LeagueDef, qualified: boolean, holder?: string | null): void {
+  if (!qualified) return;
+  const field = state.uclField ?? [];
+  const slate = field.includes(state.clubName) ? drawUclLeaguePhase({
+    field, holder: holder ?? null, seed: worldCompSeed(state, 'ucl'),
+    strengthOf: club => worldUclStrength(state, club), assocOf: club => uclClubCountry(state, club),
+  }) : null;
+  if (!slate) {
+    state.uclGroup = initUclGroup(true, state.clubName, state.eraId, field);
+    return;
+  }
+  state.uclGroup = {
+    opponents: slateOpponents(slate, state.clubName),
+    table: slate.clubs.map(emptyRow),
+    matchday: 0,
+    leaguePhase: slate,
+  };
+  state.calendar = buildCalendar(league.clubs.length, true, true, league.cupName !== null, true);
+}
+
+function playedUclKnockoutDraw(state: CareerState) {
+  const group = state.uclGroup;
+  if (!group?.leaguePhase) return null;
+  return drawUclKnockout(sortedUclGroup(state, group.table).map(row => row.club), group.leaguePhase.seed);
+}
+
+function makePlayedUclTie(state: CareerState, round: UclKoRound, slot: number, home: string, away: string): UclTie {
+  return {
+    round, slot, home, away, homeGoals: null, awayGoals: null, winner: null,
+    mine: home === state.clubName || away === state.clubName,
+  };
+}
 
 /**
  * Open this season's watched competition on `state` from `field`: the
@@ -14453,7 +14736,8 @@ export function carryWorldComp(career: CareerState, joined: CareerState, comp: W
     /* Round 1593: the guard stands down only for the move the critic's correction 3b named, a participant's slice
        carried to a club that is one of its entrants; a move from it anywhere else keeps fix-1509's rule. */
     const toEntrant = !!held && !!held.me && names.some(c => held.clubs.includes(c));
-    const slice = comp === 'uel' && held && !toEntrant && uclEntrantsOf(joined).some(c => held.clubs.includes(c)) ? undefined : held;
+    const mayCarryOverlap = toEntrant && !joined.uclGroup?.leaguePhase;
+    const slice = comp === 'uel' && held && !mayCarryOverlap && uclEntrantsOf(joined).some(c => held.clubs.includes(c)) ? undefined : held;
     /* Round 1593 (the critic's correction 3b): a slice my old club PLAYED is carried even when the new club is one of
        its entrants: the new club is then an entrant like any other, played from the streams, and my old club's nights
        still to come are drawn the same way, so the season still crowns a winner. */
@@ -14661,8 +14945,24 @@ function uelSecondLegOutcome(state: CareerState, entry: CalendarEntry, myGoals: 
 }
 
 /** Round 1593: my second leg tonight read with tonight's goals, in either European competition. */
+function firstLegForEntry(state: CareerState, entry: CalendarEntry): { mine: number; theirs: number; home: boolean } | null {
+  if (entry.type === 'uel') return uelFirstLegMine(state, entry);
+  if (entry.type !== 'promotion') return firstLegMine(state, entry.uclRound!);
+  const tie = promotionTieAt(state.championshipPlayoffs, entry.round, state.clubName);
+  if (!tie?.leg1) return null;
+  return tie.home === state.clubName
+    ? { mine: tie.leg1.homeGoals, theirs: tie.leg1.awayGoals, home: true }
+    : { mine: tie.leg1.awayGoals, theirs: tie.leg1.homeGoals, home: false };
+}
+
 function secondLegOutcomeTonight(state: CareerState, entry: CalendarEntry, myGoals: number, oppGoals: number): { iAmHome: boolean; out: ReturnType<typeof uclTieOutcome> } {
   if (entry.type === 'uel') return uelSecondLegOutcome(state, entry, myGoals, oppGoals);
+  if (entry.type === 'promotion') {
+    const tie = promotionTieAt(state.championshipPlayoffs, entry.round, state.clubName)!;
+    const iAmHome = tie.home === state.clubName;
+    const leg2 = { homeGoals: iAmHome ? myGoals : oppGoals, awayGoals: iAmHome ? oppGoals : myGoals };
+    return { iAmHome, out: uclTieOutcome({ leg1: tie.leg1, leg2 }, false) };
+  }
   return mySecondLegOutcome(state, entry.uclRound!, myGoals, oppGoals);
 }
 
@@ -15265,6 +15565,7 @@ export function entryInvolvesMe(state: CareerState, entry: CalendarEntry): boole
     case 'oneOff': return oneOffMyFixture(state, entry) !== null;
     /* Round 1593: a Europa League night with a match of mine still to play. */
     case 'uel': return uelMyNight(state, entry) !== null;
+    case 'promotion': return !!promotionTieAt(state.championshipPlayoffs, entry.round, state.clubName);
     default: return false;
   }
 }
@@ -15280,7 +15581,7 @@ const CUP_STAGE_RANK: Record<CupRound, number> = { R16: 0, QF: 1, SF: 2, F: 3 };
    and those targets are already written into every saved objective, so the
    first knockout round of whichever format the save plays has to be rank 1
    and the semi-finals rank 2, exactly as before. */
-const UCL_STAGE_RANK: Record<UclKoRound, number> = { R16: 1, QF: 1, SF: 2, F: 3 };
+const UCL_STAGE_RANK: Record<UclKoRound, number> = { PO: 1, R16: 1, QF: 1, SF: 2, F: 3 };
 
 /** How far we got in the cup: 0 = still/exit at R16 ... 4 = won it. */
 export function cupProgressRank(state: CareerState): { rank: number; alive: boolean } {
@@ -15563,6 +15864,8 @@ function leagueDemand(rank: number, tier: number, size: number, league: LeagueDe
      off the league's LEAGUE_RULES row; no league id is named below. */
   const rules = leagueRulesOf(league.id);
   const drop = rules.drop;
+
+  if (rules.boardTopHalf) return { target: half, label: 'Finish in the top half' };
 
   // The second divisions are their own world: the prize is going UP.
   // (The Championship, and since Round 142 the 2. Bundesliga, whose third
@@ -16083,6 +16386,51 @@ function simAiMatch(state: CareerState, home: string, away: string, scale = 1): 
   return simScore(strengthOf(state, home), strengthOf(state, away), 0.2, -0.08, scale);
 }
 
+function advanceChampionshipPlayoffs(state: CareerState, round: number): void {
+  const playoff = state.championshipPlayoffs;
+  if (!playoff) return;
+  for (const tie of playoff.ties) {
+    if (tie.stage !== PLAYOFF_STAGES[round] || tie.winner || (round === 1 && tie.leg1)) continue;
+    const seed = `${worldCompSeed(state, 'ucl')}|championship-playoffs|${tie.stage}|${tie.home}|${tie.away}`;
+    const sim = (home: string, away: string, scale: number, rng: () => number): [number, number] =>
+      simScore(strengthOf(state, home), strengthOf(state, away), round === 3 ? 0 : 0.2, round === 3 ? 0 : -0.08, scale, rng);
+    if (round === 1) {
+      const [homeGoals, awayGoals] = sim(tie.home, tie.away, 1, keyedRng(seed + '|first'));
+      tie.legs = 2;
+      tie.leg1 = { homeGoals, awayGoals };
+    } else {
+      const rng = keyedRng(seed + '|decide');
+      settleTie(tie, { legs: round === 2 ? 2 : 1, awayGoals: false, deciderScale: ET_DEFLATOR, etScale: ET_DEFLATOR * ET_MINUTES / 90 },
+        (home, away, scale) => round === 2 && home === tie.home && tie.leg1
+          ? [tie.leg1.homeGoals, tie.leg1.awayGoals] : sim(home, away, scale, rng), rng);
+    }
+  }
+  drawNextPlayoffRound(playoff, round);
+}
+
+function prepareChampionshipPlayoffs(state: CareerState): void {
+  if (!state.championshipPlayoffRules || state.championshipPlayoffs) return;
+  const league = careerLeagueOf(state).id;
+  const world = state.world?.championship;
+  const own = league === 'championship';
+  const rows = own ? sortedLeagueTable(state) : world ? sortedWorldTable(state, 'championship', world.table) : [];
+  const clubs = own ? state.leagueClubs : effectiveLeague(REAL_LEAGUES.find(item => item.id === 'championship')!).clubs;
+  const rounds = leagueRounds(clubs.length);
+  if (rows.length !== clubs.length || new Set(rows.map(row => row.club)).size !== clubs.length
+    || rows.some(row => !clubs.includes(row.club) || row.w + row.d + row.l !== rounds)) return;
+
+  const seeds = rows.slice(2, 8).map(row => row.club);
+  state.championshipPlayoffs = openChampionshipPlayoffs(state.season, seeds);
+  const seed = own && !state.sacked ? seeds.indexOf(state.clubName) : -1;
+  if (seed < 0) {
+    for (let round = 0; round < PLAYOFF_STAGES.length; round++) advanceChampionshipPlayoffs(state, round);
+  } else {
+    const start = seed < 2 ? 1 : 0;
+    if (start) advanceChampionshipPlayoffs(state, 0);
+    for (let round = start; round < PLAYOFF_STAGES.length; round++) state.calendar.push({ type: 'promotion', round });
+  }
+}
+
 /**
  * The XI that actually takes the field: the picked XI with unavailable or
  * missing players auto-replaced by the best available fit for that slot.
@@ -16404,7 +16752,7 @@ function generateOppScorers(opp: string, goals: number, firstHalfGoals: number, 
      roster, and this fallback used to hand a 2010 report a 2026 scorer. In an
      era that club gets the shirt number line below instead. One draw either
      way (pick and ri), so the seeded stream is the same. */
-  const oppPool = isHistoricEra(eraId) || (K_LEAGUE_2026.modelOnlyRoster && !!kLeagueMember(opp)) ? [] : getPool().filter(p =>
+  const oppPool = isHistoricEra(eraId) || usesGeneratedOpeningSquad(opp) ? [] : getPool().filter(p =>
     p.club === opp && (groupOf(p.position) === 'ATT' || groupOf(p.position) === 'MID'));
   const lines: ScorerLine[] = [];
   for (let g = 0; g < goals; g++) {
@@ -16529,6 +16877,29 @@ function intoSlots(xi: OppXiLine[], formation: Formation): OppXiLine[] {
 }
 
 /**
+ * Try the higher-rated players first. A later player can take a compatible
+ * slot by moving its occupant to another compatible slot.
+ */
+function fittingOppXi(roster: ProjectedPlayer[], formation: Formation): ProjectedPlayer[] | null {
+  const xi = new Array<ProjectedPlayer>(formation.slots.length);
+  const place = (player: ProjectedPlayer, visited: Set<number>): boolean => formation.slots.some((slot, index) => {
+    if (visited.has(index) || !slot.allowed.includes(player.p)) return false;
+    visited.add(index);
+    if (xi[index] && !place(xi[index], visited)) return false;
+    xi[index] = player;
+    return true;
+  });
+
+  const selected = new Set<string>();
+  for (const player of roster) {
+    if (selected.has(player.n) || !place(player, new Set())) continue;
+    selected.add(player.n);
+    if (selected.size === formation.slots.length) return xi;
+  }
+  return null;
+}
+
+/**
  * The opposition's eleven and bench for today, from the same era roster
  * their scorers have always been drawn from. A named eleven with a keeper or
  * nothing: a thin club (CM_PARTIAL) whose roster cannot field one gets no
@@ -16548,21 +16919,41 @@ function pickOppSquad(roster: ProjectedPlayer[]): { xi: OppXiLine[]; bench: OppX
       count -= 1;
     }
   };
-  const xi: OppXiLine[] = [];
-  take(xi, p => p.p === 'GK', 1, 11);
-  take(xi, p => groupOf(p.p) === 'DEF', 4, 11);
-  take(xi, p => groupOf(p.p) === 'MID', 4, 11);
-  take(xi, p => groupOf(p.p) === 'ATT', 2, 11);
-  take(xi, p => p.p !== 'GK', 11, 11);
-  if (xi.length !== 11 || !xi.some(p => p.p === 'GK')) return null;
+  let best: { xi: ProjectedPlayer[]; formationIndex: number; rating: number } | null = null;
+  for (const [formationIndex, formation] of FORMATIONS.entries()) {
+    const xi = fittingOppXi(byR, formation);
+    if (!xi) continue;
+    const rating = xi.reduce((sum, player) => sum + player.r, 0);
+    if (!best || rating > best.rating || (rating === best.rating && formation.name === '4-4-2')) {
+      best = { xi, formationIndex, rating };
+    }
+  }
+
+  let xi: OppXiLine[];
+  let formationIndex: number;
+  if (best) {
+    xi = best.xi.map(line);
+    formationIndex = best.formationIndex;
+    xi.forEach(player => taken.add(player.n));
+  } else {
+    // Keep the existing fallback when the available positions cannot fill a shape.
+    xi = [];
+    take(xi, p => p.p === 'GK', 1, 11);
+    take(xi, p => groupOf(p.p) === 'DEF', 4, 11);
+    take(xi, p => groupOf(p.p) === 'MID', 4, 11);
+    take(xi, p => groupOf(p.p) === 'ATT', 2, 11);
+    take(xi, p => p.p !== 'GK', 11, 11);
+    if (xi.length !== 11 || !xi.some(p => p.p === 'GK')) return null;
+    formationIndex = bestFormationFor(xi);
+    xi = intoSlots(xi, FORMATIONS[formationIndex] ?? FORMATIONS[1]);
+  }
   const bench: OppXiLine[] = [];
   take(bench, p => p.p === 'GK', 1, 7);
   take(bench, p => groupOf(p.p) === 'DEF', 2, 7);
   take(bench, p => groupOf(p.p) === 'MID', 2, 7);
   take(bench, p => groupOf(p.p) === 'ATT', 2, 7);
   take(bench, p => p.p !== 'GK', 7, 7);
-  const formationIndex = bestFormationFor(xi);
-  return { xi: intoSlots(xi, FORMATIONS[formationIndex] ?? FORMATIONS[1]), bench, formationIndex };
+  return { xi, bench, formationIndex };
 }
 
 /** Opposition scorers from the men actually on their pitch, weighted like ours. */
@@ -16694,12 +17085,20 @@ function drawSegmentInjury(state: CareerState, onPitch: CMPlayer[], from: number
   const len = (to - from) / 45;
   if (!onPitch.length) return null;
   const perHalf = INJURY_PER_HALF * knock;
-  if (Math.random() >= 1 - Math.pow(1 - perHalf, len)) return null;
+  const chance = 1 - Math.pow(1 - perHalf, len);
+  const roll = Math.random();
+  if (roll >= chance) return null;
   const victim = pick(onPitch);
-  // Round 467: the medical staff read the same draw and write it shorter.
-  const weeks = injurySpell(state, ri(1, 5));
+  const duration = ri(1, 5);
+  // Use the existing hit and duration draws. Severe spells take 2% of match injuries.
+  const severeInjury: SevereMatchInjury | undefined = state.severeMatchInjuries && roll < chance * 0.02
+    ? roll < chance * 0.0175 ? 'ACL tear' : 'Achilles tendon rupture'
+    : undefined;
+  const weeks = severeInjury === 'ACL tear' ? 26 + 2 * duration
+    : severeInjury === 'Achilles tendon rupture' ? 15 + 3 * duration
+    : injurySpell(state, duration);
   /* Round 781: the minute may sit in the board (hi past to). */
-  return { name: victim.name, id: victim.id, minute: ri(from + 1, hi), weeks };
+  return { name: victim.name, id: victim.id, minute: ri(from + 1, hi), weeks, ...(severeInjury ? { severeInjury } : {}) };
 }
 
 /**
@@ -18007,6 +18406,7 @@ function extraTimeDue(state: CareerState, entry: CalendarEntry, live: LiveMatch)
 /** Round 670: tonight is the second leg of a two legged tie, so the tie is read on the aggregate. */
 function secondLegTonight(state: CareerState, entry: CalendarEntry): boolean {
   if (entry.type === 'uel') return uelLegTonight(state, entry) === 2;
+  if (entry.type === 'promotion') return entry.round === 2;
   return !!entry.uclRound && entry.uclLeg === 2 && uclLegsFor(state.eraId, entry.uclRound) === 2;
 }
 
@@ -18414,6 +18814,7 @@ function tickWeek(state: CareerState, playedIds: Set<string> | null): void {
     let injuryWeeks = Math.max(0, p.injuryWeeks - 1);
     if (!recovering && knockRisk > 0 && injuryWeeks === 0 && Math.random() < knockRisk) injuryWeeks = injurySpell(state, ri(1, 3));
     const out: CMPlayer = { ...p, fitness, injuryWeeks };
+    if (p.severeInjury && p.injuryWeeks <= 1) delete out.severeInjury;
     const previous = readTrainingExposure(p.trainingExposure);
     if (p.trainingExposure === undefined || previous) {
       const counts = previous && previous.club === state.clubName && previous.season === state.season
@@ -18549,6 +18950,10 @@ export function fixtureFor(state: CareerState, entry: CalendarEntry): MyFixture 
     };
   }
   if (entry.type === 'uclGroup' && state.uclGroup) {
+    if (state.uclGroup.leaguePhase) {
+      const match = slateFixtureOf(state.uclGroup.leaguePhase, state.clubName, entry.round);
+      return match ? { competition: 'uclGroup', compLabel: `Champions League · League MD${entry.round + 1}`, ...match } : null;
+    }
     const idx = entry.round % 3;
     const opponent = state.uclGroup.opponents[idx];
     if (!opponent) return null;
@@ -18587,6 +18992,17 @@ export function fixtureFor(state: CareerState, entry: CalendarEntry): MyFixture 
       opponent,
       home: atHome,
       ...(playsExtraTime(state, entry) ? { extraTime: true } : {}),
+    };
+  }
+  if (entry.type === 'promotion') {
+    const tie = promotionTieAt(state.championshipPlayoffs, entry.round, state.clubName);
+    if (!tie) return null;
+    const mineHome = tie.home === state.clubName;
+    return {
+      competition: 'promotion', compLabel: PLAYOFF_LABELS[entry.round],
+      opponent: mineHome ? tie.away : tie.home,
+      home: entry.round === 3 ? null : entry.round === 2 ? !mineHome : mineHome,
+      ...(entry.round !== 1 ? { extraTime: true } : {}),
     };
   }
   /* Round 1593: a Europa League night, my match of it (the final on a neutral ground). */
@@ -19008,10 +19424,11 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
     : null;
   /* Round 1593: tonight's leg of a two legged Europa League tie (0 for the league phase and the final). */
   const uelLeg = fx.competition === 'uel' ? uelLegTonight(state, entry) : 0;
-  const firstLegTonight = (!!uclLeg && uclLeg.twoLegs && uclLeg.leg === 1) || uelLeg === 1;
+  const promotionLeg = entry.type === 'promotion' ? entry.round : -1;
+  const firstLegTonight = (!!uclLeg && uclLeg.twoLegs && uclLeg.leg === 1) || uelLeg === 1 || promotionLeg === 1;
   /* Round 1510: a one match cup's night settles the cup or its semi final, so a draw goes to the shootout.
      Round 1593: and a Europa League night that settles a tie (never a league phase night). */
-  const isKnockout = (fx.competition === 'cup' || fx.competition === 'uclKo' || fx.competition === 'oneOff' || (fx.competition === 'uel' && playsExtraTime(state, entry))) && !firstLegTonight;
+  const isKnockout = (fx.competition === 'cup' || fx.competition === 'uclKo' || fx.competition === 'oneOff' || fx.competition === 'promotion' || (fx.competition === 'uel' && playsExtraTime(state, entry))) && !firstLegTonight;
 
   const suspendedNow = state.squad.filter(p => p.suspendedMatches > 0).map(p => p.id);
   /* Round 127: who could actually have played today, taken before the match
@@ -19103,11 +19520,11 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
      semi finals, and the report should say both of those things.
      Round 670: tonight includes any extra time, so the tie is read after it,
      with away goals in extra time counting in the eras that counted them. */
-  if ((uclLeg && uclLeg.twoLegs && uclLeg.leg === 2) || uelLeg === 2) {
+  if ((uclLeg && uclLeg.twoLegs && uclLeg.leg === 2) || uelLeg === 2 || promotionLeg === 2) {
     const { iAmHome, out } = secondLegOutcomeTonight(state, entry, myGoals, oppGoals);
     /* Round 781: the first leg in my orientation, so the report can print it
        beside the aggregate. Leg one was played at tie.home's ground. */
-    const first = uelLeg === 2 ? uelFirstLegMine(state, entry) : firstLegMine(state, (uclLeg as { round: UclKoRound }).round);
+    const first = firstLegForEntry(state, entry);
     tieLine = {
       leg: 2,
       aggMine: iAmHome ? out.homeAgg : out.awayAgg,
@@ -19248,8 +19665,43 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
     confDelta += clamp((club.expectation - pos) * 0.25, -2, 2);
   }
 
-  if (fx.competition === 'uclGroup' && state.uclGroup) {
-    const group = state.uclGroup;
+  const group = state.uclGroup;
+  if (fx.competition === 'uclGroup' && group?.leaguePhase) {
+    for (const [home, away] of slateFixtures(group.leaguePhase, entry.round)) {
+      const mine = home === state.clubName || away === state.clubName;
+      const [hg, ag] = mine
+        ? (home === state.clubName ? [myGoals, oppGoals] : [oppGoals, myGoals])
+        : simAiMatch(state, home, away);
+      applyResult(group.table, home, away, hg, ag);
+      noteUclPair(state, home, away, hg, ag);
+      if (!mine) {
+        noteForm(state, home, away, hg, ag);
+        otherResults.push({ home, away, hg, ag });
+      }
+    }
+    group.matchday += 1;
+    if (group.matchday === UCL_LEAGUE.games) {
+      const draw = playedUclKnockoutDraw(state)!;
+      state.uclBracket = draw.playoffs.map(({ home, away }, slot) => makePlayedUclTie(state, 'PO', slot, home, away));
+      const rank = sortedUclGroup(state, group.table).findIndex(row => row.club === state.clubName) + 1;
+      const zone = leaguePhaseZone(rank);
+      if (zone === 'r16') {
+        state.uclKoRound = 'R16';
+        events.push('⭐ Top eight in the Champions League. Straight into the round of 16.');
+        confDelta += 3;
+      } else if (zone === 'playoff') {
+        state.uclKoRound = 'PO';
+        state.uclDraw.PO = myUclOpponent(state, 'PO')!;
+        events.push(`⭐ Into the Champions League knockout playoff against ${state.uclDraw.PO}.`);
+        confDelta += 1;
+      } else {
+        state.uclKoRound = 'out';
+        state.uclExit = 'group';
+        events.push('💤 Out of the Champions League after the league phase.');
+        confDelta -= 4;
+      }
+    }
+  } else if (fx.competition === 'uclGroup' && group) {
     const idx = entry.round % 3;
     const myHome = fx.home === true;
     const gHome = myHome ? state.clubName : fx.opponent;
@@ -19374,6 +19826,17 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
       events.push(`❌ Champions League run ends at the ${UCL_LABELS[koRound].toLowerCase()}.`);
       confDelta -= 4;
     }
+  }
+
+  if (fx.competition === 'promotion') {
+    const tie = promotionTieAt(state.championshipPlayoffs, entry.round, state.clubName)!;
+    recordPromotionResult(tie, entry.round, state.clubName, myGoals, oppGoals, advanced, etPlayed, decidedBy === 'pens');
+    advanceChampionshipPlayoffs(state, entry.round);
+    if (!advanced && entry.round !== 1) {
+      for (let round = entry.round + 1; round < PLAYOFF_STAGES.length; round++) advanceChampionshipPlayoffs(state, round);
+      state.calendar = state.calendar.filter((week, index) => index <= state.week || week.type !== 'promotion');
+    }
+    if (entry.round === 3 && advanced) events.push('🏆 You won the Championship playoff final and earned promotion.');
   }
 
   /* Round 1510: a super cup night writes my result into its slice (the other semi final and a final I am not in
@@ -19638,6 +20101,7 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
   for (const inj of injuryLines) {
     const p = inj.id ? state.squad.find(x => x.id === inj.id) : state.squad.find(x => x.name === inj.name);
     if (!p) continue;
+    if (inj.severeInjury) p.severeInjury = inj.severeInjury;
     p.injuryWeeks = inj.weeks;
     events.push(`🩹 ${p.name} limped off, out for ~${p.injuryWeeks} week${p.injuryWeeks > 1 ? 's' : ''}.`);
   }
@@ -19745,7 +20209,7 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
   // Round 105: an overspent wage bill is a slow drip on the board's patience,
   // which is what stops you hoarding a squad of superstars you cannot pay.
   const bill = wageBill(state);
-  const cap = state.wageCap ?? wageCapFrom(bill);
+  const cap = wageCapOf(state, bill);
   if (bill > cap) {
     const over = (bill - cap) / cap;
     // A drip, not a guillotine. There are around fifty matches in a season,
@@ -19847,6 +20311,14 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
   if (tacticsDay && tacticsDay.stats.legs !== 0) {
     const played = new Set(xi.map(p => p.id));
     state.squad = state.squad.map(p => (played.has(p.id) ? { ...p, fitness: clamp(p.fitness - tacticsDay.stats.legs, 20, 100) } : p));
+  }
+  // The fixture that caused a severe injury is not a recovery week.
+  if (!entry.night) {
+    for (const injury of injuryLines) {
+      if (!injury.severeInjury) continue;
+      const player = state.squad.find(p => p.id === injury.id);
+      if (player) player.injuryWeeks = injury.weeks;
+    }
   }
   /* Round 141: a window no longer slams shut the moment you play a match,
      because real windows run through the early fixtures and because the
@@ -20397,6 +20869,7 @@ export function promoteProspect(career: CareerState, prospectId: string): Career
     suspendedMatches: 0,
     isYouth: false,
     academyGrad: true,
+    value: customFounderValue(pr.rating, next.eraId, pr.age),
     potential: pr.potential,
     seasonGoals: 0,
     seasonAssists: 0,
@@ -20571,10 +21044,13 @@ export function developingPlayers(career: CareerState): CMPlayer[] {
 export interface SeasonWorld {
   yearsOn: number;
   uclField: string[] | null;
+  uclHolder?: string | null;
+  championshipPlayoffRules?: true;
   keepLeagueOverrides: boolean;
   worldSeed?: number;
   rosterCareer?: CareerState;
   kLeagueActive?: boolean;
+  scopedLeagueId?: string;
 }
 
 /* Round 964: `edit` is a world editor edit (src/lib/clubManagerWorldEdit.ts),
@@ -20587,7 +21063,14 @@ export interface SeasonWorld {
 export function startCareer(clubName: string, eraId: string = DEFAULT_ERA_ID, custom?: CustomClubSpec, manager?: ManagerSpec, world?: SeasonWorld, edit?: Record<string, string[]> | null, opts?: StartCareerOptions): CareerState {
   const kLeagueActive = world ? world.kLeagueActive ?? (world.rosterCareer ? careerHasKLeagueWorld(world.rosterCareer) : false)
     : !(custom && kLeagueMember(custom.name));
+  const requestedScope = scopedLeagueForClub(clubName)?.id;
+  const scopedLeagueId = world ? world.scopedLeagueId ?? (world.rosterCareer && careerScopedLeagueId(world.rosterCareer))
+    : !custom && eraId === DEFAULT_ERA_ID ? requestedScope : undefined;
   if (!ordinaryClubAllowed(clubName, custom) || (!custom && kLeagueMember(clubName) && (isHistoricEra(eraId) || !kLeagueActive))) throw new Error('CM_CLUB_ACCESS_HELD');
+  if ((custom && isScopedStartLeague(custom.leagueId))
+    || (!custom && requestedScope && (requestedScope !== scopedLeagueId || eraId !== DEFAULT_ERA_ID || edit))) {
+    throw new Error('CM_CLUB_ACCESS_HELD');
+  }
   /* Round 132: the era decides what year season one is, and the year decides
      everything else: the squad you are handed, how good every other club is,
      and who is on the market. The default era is the current one and its
@@ -20646,7 +21129,9 @@ export function startCareer(clubName: string, eraId: string = DEFAULT_ERA_ID, cu
   /* Round 783: inside a running save the field is the save's own, derived at
      its last rollover, and the club is in Europe exactly when that field
      names it. */
-  const seasonOneField = custom ? null : world ? world.uclField : seasonOneUclField(era.id);
+  const playedLeaguePhase = opts?.playedUclLeaguePhase && !opts.noWorldComps && worldUclFormatOf({ eraId: era.id }) === 'l36'
+    && !scopedLeagueId && league.id !== K_LEAGUE_2026.id;
+  const seasonOneField = custom ? null : world ? world.uclField : seasonOneUclField(era.id, playedLeaguePhase ? UCL_LEAGUE.clubs : undefined);
   /* Round 964: on an edited world season one's Europe is still who really
      qualified, wherever they play now. seasonOneUclField already hands the
      AI field the real qualifiers whatever league the edit put them in, so my
@@ -20677,10 +21162,10 @@ export function startCareer(clubName: string, eraId: string = DEFAULT_ERA_ID, cu
     mentality: 'balanced',
     leagueClubs,
     balancedFixtures: true,
-    table: leagueClubs.map(emptyRow),
+    table: openingLeagueTable(leagueClubs, league.id, CM_BASE_YEAR + startYearsOn),
     form: [],
     calendar: buildCalendar(league.clubs.length, eraUclHasR16(era.id), uclLegsFor(era.id, 'QF') === 2, league.cupName !== null),
-    clubStrengths: genClubStrengths(custom ? { ...league, clubs: leagueClubs } : league, startYearsOn, era.id, world?.rosterCareer, club.name, kLeagueActive),
+    clubStrengths: genClubStrengths(custom ? { ...league, clubs: leagueClubs } : league, startYearsOn, era.id, world?.rosterCareer, club.name, kLeagueActive, scopedLeagueId),
     transferWindow: 'summer',
     windowWeeksLeft: 4,
     aiHeadlines: [],
@@ -20695,12 +21180,13 @@ export function startCareer(clubName: string, eraId: string = DEFAULT_ERA_ID, cu
     // money says, because it has not qualified for anything yet.
     // Round 612: the field and the qualification are the ones read above.
     uclField: seasonOneField ?? undefined,
-    uclGroup: custom ? null : initUclGroup(qualifiedSeasonOne, club.name, era.id, seasonOneField ?? undefined),
+    ...(playedLeaguePhase ? { uclFormat: 'league36' as const } : {}),
+    uclGroup: custom || playedLeaguePhase ? null : initUclGroup(qualifiedSeasonOne, club.name, era.id, seasonOneField ?? undefined),
     uclKoRound: null,
     uclDraw: {},
     uclBracket: undefined,
     cupBracket: undefined,
-    world: initWorld(club.name, era.id, league.id, kLeagueActive),
+    world: initWorld(club.name, era.id, league.id, kLeagueActive, scopedLeagueId, CM_BASE_YEAR + startYearsOn),
     trophies: [],
     history: [],
     careerStats: { played: 0, wins: 0, draws: 0, losses: 0, clubsManaged: [club.name] },
@@ -20720,6 +21206,12 @@ export function startCareer(clubName: string, eraId: string = DEFAULT_ERA_ID, cu
   };
   /* Round 1509 (ruling 1l): a daily follows no competition from outside, so its start opens none. */
   if (opts?.noWorldComps) NO_WORLD_COMPS.add(state);
+  if (opts?.severeMatchInjuries) state.severeMatchInjuries = true;
+  if (world ? world.championshipPlayoffRules
+    : opts?.championshipPlayoffs && !opts.noWorldComps && !historic && era.startYear >= 2026
+      && (league.id === 'premier' || league.id === 'championship')) {
+    state.championshipPlayoffRules = true;
+  }
   if (world?.rosterCareer && (worldRosterView(world.rosterCareer) || worldSeedOf(world.rosterCareer) !== undefined)) {
     state.season = world.rosterCareer.season;
     state.startYear = world.rosterCareer.startYear;
@@ -20786,6 +21278,7 @@ export function startCareer(clubName: string, eraId: string = DEFAULT_ERA_ID, cu
   if (custom) state.wageCap = Math.max(state.wageCap, realCapForBudget(club.budget) + (state.founderWageRoom ?? 0));
   /* Round 1520: every made up man on day one gets his country, before the board's asks count them. */
   ensureMadeUpNations(state);
+  if (playedLeaguePhase) openPlayedUcl(state, league, !custom && qualifiedSeasonOne, world ? world.uclHolder : CM_FINAL_TABLES_2025_26.holders);
   state.boardObjectives = buildBoardObjectives(club.name, state.uclGroup !== null, league.clubs.length, era.id, custom ? leagueClubs : undefined);
   /* Round 474: and the two specific asks, read off the squad you have just
      been handed and the market this world really has. */
@@ -20954,6 +21447,7 @@ export function playNextEntry(career: CareerState, opts?: { skipHalftime?: boole
           noteBookResult(state, myLeagueId, entry.round, h, a, hg, ag);
         }
         syncWorld(state, myRoundsPlayed(state, state.week + 1));
+        if (entry.round === leagueRounds(state.leagueClubs.length) - 1) prepareChampionshipPlayoffs(state);
       }
       // Round 95: the Champions League runs whether or not I am still in it.
       if (entry.type === 'uclKo' && entry.uclRound && state.uclBracket) {
@@ -20979,9 +21473,10 @@ export function playNextEntry(career: CareerState, opts?: { skipHalftime?: boole
       if (entry.type === 'cup' && entry.cupRound && state.cupBracket) {
         advanceCupBracket(state, entry.cupRound);
       }
+      if (entry.type === 'promotion') advanceChampionshipPlayoffs(state, entry.round);
       state.week += 1;
       /* Round 1510 (ruling 2a): a night I do not play (a semi final lost, a stub) moves the week on and ticks nothing. */
-      if (!entry.night) tickWeek(state, null);
+      if (!entry.night && entry.type !== 'promotion') tickWeek(state, null);
       continue;
     }
     // Round 95: the rest of the football world plays its round too.
@@ -21047,7 +21542,7 @@ function kickOff(state: CareerState, entry: CalendarEntry, varReviews: CmVarAsk 
   const squad = pickOppSquad(oppRosterFor(state, fx.opponent));
   const live: LiveMatch = {
     /* Round 1218: and only where the competition uses reviews in real life (scripts/data/cmVarCompetitions.json). */
-    ...(varReviews && worldYear(state) >= 2026 && !isHistoricEra(state.eraId ?? DEFAULT_ERA_ID) && varKinds.length > 0
+    ...(entry.type !== 'promotion' && varReviews && worldYear(state) >= 2026 && !isHistoricEra(state.eraId ?? DEFAULT_ERA_ID) && varKinds.length > 0
       /* Round 1510: a night keys its own competition (`oneOff:<row>` for a super cup), which no coverage row holds. */
       && cmVarCovers(entry.night ? nightVarKey(state, entry.night) : entry.type === 'league' ? `league:${careerLeagueOf(state).id}` : entry.type === 'cup' ? `cup:${careerLeagueOf(state).cupName}` : 'ucl',
         entry.type === 'cup' ? entry.cupRound : entry.type === 'uclGroup' ? 'group' : entry.uclRound) ? { varReviews: true as const, ...(varReviews === true ? {} : { varKinds }) } : {}),
@@ -21541,6 +22036,43 @@ export function quickLegsMinutes(state: CareerState, live: LiveMatch): number[] 
   return QUICK_LEGS_WINDOWS.map(([lo, hi], i) => lo + Math.floor(keyedRng(`${key}|${i}`)() * (hi - lo + 1)));
 }
 
+/** Cover one defensive vacancy at the break by sacrificing an active attacker. */
+function coverQuickDefence(state: CareerState): CareerState {
+  const live = state.live!;
+  if ((live.minute ?? 0) > 46 || live.formChanges?.some(change => change.minute >= 46)) return state;
+  const reds = (live.h1Cards ?? []).filter(card => card.kind === 'red');
+  if (reds.length !== 1 || !reds[0].id) return state;
+  const formationIndex = live.formationIndex ?? state.formationIndex;
+  const formation = liveFormationOf(state, live);
+  const vacancy = live.onPitch.indexOf(reds[0].id);
+  const slot = formation.slots[vacancy];
+  if (!slot || pitchLineOf(slot) !== 'defence') return state;
+
+  const gone = liveGoneIds(live, 46);
+  const active = livePairs(state, live).filter(({ p }) => !gone.has(p.id));
+  if (active.length !== 10) return state;
+  const attackers = active.filter(({ slot }) => slot && pitchLineOf(slot) === 'attack');
+  if (attackers.length < 2) return state;
+  const defender = benchFor(state, undefined, vacancy).find(p => fitGrade(p, slot) === 'natural');
+  if (!defender) return state;
+  const outgoing = attackers.sort((a, b) => a.p.fitness - b.p.fitness || a.p.rating - b.p.rating)[0].p.id;
+  const sub = changeLive(state, 46, { kind: 'sub', outId: outgoing, inId: defender.id });
+  if (!sub) return state;
+
+  const next = sub.live!;
+  const attackSlot = live.onPitch.indexOf(outgoing);
+  const order = [...next.onPitch];
+  // The dismissed player remains in the match record and stays excluded from play.
+  [order[vacancy], order[attackSlot]] = [order[attackSlot], order[vacancy]];
+  const duties = formation.slots.map((_, index) => liveDutyAt(state, live, index));
+  const customShape = live.positionRules === 1 ? readCustomShape(live.customShape, formationIndex, formation.slots) : null;
+  const shape = { formationIndex, duties, ...(customShape ? { customShape: copyCustomShape(customShape) } : {}) };
+  if (!next.kickoffShape && !next.formChanges?.length) next.kickoffShape = shape;
+  next.onPitch = order;
+  next.formChanges = [...(next.formChanges ?? []), { minute: 46, order: [...order], ...shape }];
+  return sub;
+}
+
 /** Quick sim coaching uses the real clock and changes, without settling the match. */
 export function coachQuickMatch(career: CareerState): CareerState {
   if (!career.live || !livePositionsValid(career.live)) return career;
@@ -21632,6 +22164,7 @@ export function coachQuickMatch(career: CareerState): CareerState {
   if (!state.live!.h2Drawn) {
     // Keep one change for a later injury rather than spending all three at the break.
     const atBreak = state.live!.subsUsed;
+    if (atBreak < rule.subs - 1) state = coverQuickDefence(state);
     for (const out of tiringAtHalftime(state)) {
       if (state.live!.subsUsed >= rule.subs - 1 || (rule.stops !== null && state.live!.subsUsed - atBreak >= 2)) break;
       if (liveGoneIds(state.live!, 46).has(out.id)) continue;
@@ -21664,6 +22197,12 @@ export function resumeMatch(career: CareerState): PlayResult {
   state.live = null;
   const report = playMyMatch(state, entry, live);
   state.week = live.week + 1;
+  if (entry.type === 'league' && entry.round === leagueRounds(state.leagueClubs.length) - 1) {
+    prepareChampionshipPlayoffs(state);
+    if (state.calendar.some(week => week.type === 'promotion')) {
+      report.events.push('You qualified for the Championship playoffs. The fixtures are on your calendar.');
+    }
+  }
   /* Round 978: same hook as the quick sim's, see playNextEntry. */
   runIntlBreaks(state);
   return { state, kind: 'match', report };
@@ -21864,6 +22403,12 @@ export function ensureHandover(state: CareerState): SeasonHandover | null {
   return held;
 }
 
+/** The manager's match points exclude a club's opening deduction. */
+export function seasonScoreLeaguePoints(career: CareerState, row?: TableRow): number {
+  if (!row) return 0;
+  return careerLeagueOf(career).id === CSL_LEAGUE_2026.id ? 3 * row.w + row.d : row.pts;
+}
+
 /**
  * Round 633: everything the season score reads, gathered in one place so the
  * mid season reading and the rollover reading cannot drift apart.
@@ -21884,7 +22429,7 @@ export function seasonLedgerInputOf(career: CareerState): SeasonLedgerInput {
   const legacyStart = !stamped && career.season === 1 ? (career.midSeasonStart ?? null) : null;
   return {
     inTable: !!row,
-    leaguePts: row ? row.pts : 0,
+    leaguePts: seasonScoreLeaguePoints(career, row),
     leaguePlayed: row ? row.w + row.d + row.l : 0,
     /* The engine's own fixture count, the objectiveStatuses expression. Never
        career.calendar.length, which carries cup weeks, European group weeks,
@@ -22341,6 +22886,10 @@ export function joinClubInSummer(career: CareerState): CareerState | null {
  * reload mid-review resumes cleanly. Does not mutate the input.
  */
 export function finishSeason(career: CareerState): { state: CareerState; summary: SeasonSummary } {
+  if (career.championshipPlayoffRules && (career.week < career.calendar.length
+    || (career.championshipPlayoffs && !promotionWinner(career.championshipPlayoffs)))) {
+    throw new Error('The season has fixtures still to play.');
+  }
   const state: CareerState = JSON.parse(JSON.stringify(career));
   // Round 146: a historic save grades against its era's stature ladder.
   const club = state.eraId && isHistoricEra(state.eraId)
@@ -22517,7 +23066,7 @@ export function finishSeason(career: CareerState): { state: CareerState; summary
     };
     // Round 742: another club's star is read minus the men in my squad, so a
     // man I signed mid season is never the case for the club he left.
-    const uclWinner = state.uclBracket?.find(t => t.round === 'F')?.winner ?? null;
+    const uclWinner = uclHolderOf(state);
     if (uclWinner) {
       const star = uclWinner === state.clubName
         ? [...state.squad].sort((a, b) => b.rating - a.rating)[0]?.name
@@ -22597,7 +23146,7 @@ export function finishSeason(career: CareerState): { state: CareerState; summary
  * the player's ceiling. Decline is untouched: no amount of coaching keeps a
  * thirty four year old from slowing down.
  */
-function agePlayer(p: CMPlayer, career: CareerState, random?: () => number): CMPlayer {
+function agePlayer(p: CMPlayer, career: CareerState, random?: () => number, summerWeeks?: number): CMPlayer {
   const age = p.age + 1;
   /* Round 132: the same single curve the projected world runs on, so my squad
      and every AI squad in the game age on identical rules. That symmetry is
@@ -22639,7 +23188,7 @@ function agePlayer(p: CMPlayer, career: CareerState, random?: () => number): CMP
     value,
     fitness: 100,
     morale: 70,
-    injuryWeeks: 0,
+    injuryWeeks: p.severeInjury && summerWeeks !== undefined ? Math.max(0, p.injuryWeeks - summerWeeks) : 0,
     suspendedMatches: 0,
     seasonGoals: 0,
     seasonAssists: 0,
@@ -22661,6 +23210,7 @@ function agePlayer(p: CMPlayer, career: CareerState, random?: () => number): CMP
     lastTen: [],
     wantsOut: undefined,
   };
+  if (out.severeInjury && out.injuryWeeks === 0) delete out.severeInjury;
   const h = readTrainingExposure(p.trainingExposure);
   if (h && h.club === career.clubName && h.season === career.season) delete out.trainingExposure;
   return out;
@@ -22805,6 +23355,14 @@ function fillSquadGaps(
  * overrides are registered, leagueOf simply answers with the new division,
  * so no downstream code special-cases the drop or the climb.
  */
+function promotionClubs(state: CareerState, pair: typeof PYRAMIDS[number], ordered: TableRow[]): string[] {
+  if (!state.championshipPlayoffRules || pair.second !== 'championship') return ordered.slice(0, pair.count).map(row => row.club);
+  const winner = promotionWinner(state.championshipPlayoffs);
+  const club = winner === state.customClub?.name ? state.customClub?.replacedClub : winner;
+  if (!club || state.championshipPlayoffs?.season !== state.season || !ordered.slice(2, 8).some(row => row.club === club)) return [];
+  return [...ordered.slice(0, 2).map(row => row.club), club];
+}
+
 function runPromotionRelegation(prev: CareerState): { overrides: Record<string, string[]> | null; lines: string[] } {
   const carried = prev.leagueOverrides ?? null;
   /* The finished season resolves under ITS OWN memberships, whatever a
@@ -22853,7 +23411,7 @@ function runPromotionRelegation(prev: CareerState): { overrides: Record<string, 
     const topSet = new Set(topClubs);
     const secondSet = new Set(secondClubs);
     const down = topTable.filter(r => topSet.has(r.club)).slice(-pyr.count).map(r => r.club);
-    const up = secondTable.filter(r => secondSet.has(r.club)).slice(0, pyr.count).map(r => r.club);
+    const up = promotionClubs(prev, pyr, secondTable.filter(r => secondSet.has(r.club)));
     /* Sizes are preserved by construction: the exchange only runs when both
        sides move exactly `count`, so neither division can grow or shrink. */
     if (down.length !== pyr.count || up.length !== pyr.count) continue;
@@ -22913,7 +23471,7 @@ function fateRead(prev: CareerState): { fate: SeasonFate; league: string } | nul
     const secondSet = new Set(secondClubs);
     const topRows = topTable.filter(r => topSet.has(r.club));
     const down = topRows.slice(-pyr.count).map(r => r.club);
-    const up = secondTable.filter(r => secondSet.has(r.club)).slice(0, pyr.count).map(r => r.club);
+    const up = promotionClubs(prev, pyr, secondTable.filter(r => secondSet.has(r.club)));
     if (down.length !== pyr.count || up.length !== pyr.count) { if (mine) return null; continue; }
     if (mine) {
       if (myLeagueId === pyr.second) return up.includes(mySlot) ? { fate: 'up', league: toLeague(topDef.name) } : null;
@@ -22947,10 +23505,13 @@ export function toLeague(name: string): string {
  * offer was accepted. Ages the squad, runs the youth intake, resets the
  * competitions and reopens the summer window.
  */
-export function startNextSeason(career: CareerState, acceptOfferClub?: string): CareerState {
+export function startNextSeason(career: CareerState, acceptOfferClub?: string, opts?: SeasonStartOptions): CareerState {
+  if (career.championshipPlayoffs && !promotionWinner(career.championshipPlayoffs)) return career;
+  if (nationalSummerPending(career)) return career;
   const requestedClub = career.jobHunt?.summerMove?.club ?? acceptOfferClub;
   if (requestedClub && requestedClub !== career.clubName && !clubAvailableInCareer(career, requestedClub)) return career;
   const kLeagueActive = careerHasKLeagueWorld(career);
+  const scopedLeagueId = careerScopedLeagueId(career);
   /* Round 1508: a career with no world seed joins the living world here, at its first summer on this engine, before
      the summer's first deal is made (adoptLivingWorld, above worldSeedOf's neighbours). Its own hunk, one line. */
   career = adoptLivingWorld(career);
@@ -23014,7 +23575,10 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
      promoted into the Premier League handed the Championship's top four the
      Premier League's places, and one just relegated out of it left the
      Premier League sending nobody. */
-  let nextUclField = uclQualifiersFrom(career);
+  const playedLeaguePhase = (opts?.playedUclLeaguePhase || career.uclFormat === 'league36')
+    && worldUclFormatOf(career) === 'l36' && !scopedLeagueId
+    && !kLeagueMember(career.clubName) && !kLeagueMember(requestedClub ?? '');
+  let nextUclField = uclQualifiersFrom(career, playedLeaguePhase ? UCL_LEAGUE.clubs : undefined);
   /* Round 1502: the watched Champions League reads the very same final tables, here for the same reason, and
      the season's winner as the holder the participant's field is handed. */
   const watchTables = uclFinalTables(career);
@@ -23112,7 +23676,12 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
   } else {
     // Round 105: deals run down over the summer and the expired walk for
     // nothing. This is the price of never sitting down with your own players.
-    const aged = [...afterLoans, ...homeFromLoan].map(p => agePlayer(p, career));
+    const returning = [...afterLoans, ...homeFromLoan];
+    // Between seasons, credit only complete weeks on the same calendar the player sees.
+    const finalDay = returning.some(p => p.severeInjury) ? entryDatesOf(career).at(-1) : undefined;
+    const summerWeeks = finalDay ? Math.max(0, Math.floor(daysBetween(finalDay, seasonKickoff(worldYearOf(career) + 1)) / 7)) : 0;
+    const aged = returning.map(p => agePlayer(p, career, undefined, summerWeeks));
+    const protectedVeterans = career.veteranReviews === undefined ? null : protectedVeteranIds(career, worldYear(career));
     /* Round 132: and some of them stop playing altogether. Before this the
        ONLY way a player ever left on age was the line below, "age < 38 or
        rated 70 plus", which meant a good veteran simply never went: measured
@@ -23123,7 +23692,7 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
        keepers last and wingers do not. */
     const stillPlaying: CMPlayer[] = [];
     for (const p of aged) {
-      if (Math.random() < retireChance(p.age, p.rating, p.position)) {
+      if (Math.random() < retireChance(p.age, p.rating, p.position) && !protectedVeterans?.has(p.id)) {
         retiredNow.push({ name: p.name, age: p.age, rating: p.rating });
         rosterExits.push({ player: p, kind: 'retire' });
       } else {
@@ -23249,7 +23818,7 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
     : career.uclExit === 'F' ? 4
     : career.uclExit === 'SF' ? 3
     : career.uclExit === 'QF' ? 2
-    : career.uclExit === 'R16' ? 1
+    : career.uclExit === 'R16' || career.uclExit === 'PO' ? 1
     : 0;
   const seasonIn = career.seasonSignings.filter(t => t.dir === 'in').reduce((n, t) => n + t.fee + (t.bonus ?? 0), 0);
   const seasonOut = career.seasonSignings.filter(t => t.dir === 'out').reduce((n, t) => n + t.fee, 0);
@@ -23273,24 +23842,29 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
      says the opposite ("it is all one kitty"), and a whole season of not
      buying was deleted every August.
 
-     The carry is capped at one more allocation, so hoarding is worth real
-     money (up to double the board's cheque) without compounding into a war
-     chest nothing in the game can balance against. Walking to a new job
-     carries nothing, the same rule the sponsor deal and the ground
-     expansions already follow: the balance belonged to the club. */
-  /* Round 1335: a stay's cheque is that same flat formula, never past KITTY_TOP_SHARE of the club's usual
-     budget or 10m (kittyAllocation), so a small club's good year pays a bonus its size can carry; the
-     carry below is unchanged, and it is capped by the cheque, so it shrinks with it. */
-  /* Round 1501: the level's cheque on every arm (the identity on Normal); the carry rule below is untouched. */
-  const allocation = moving
+     Walking to a new job carries nothing, the same rule the sponsor and
+     ground expansions follow: the balance belonged to the club. */
+  /* Round 1335: a stay's usual cheque follows kittyAllocation, then Round 1501
+     applies the difficulty level. An ordinary same-club summer keeps the
+     full balance. The board reduces its cheque if the new money would put
+     the bank above twice its usual allocation. */
+  const usualAllocation = moving
     ? boardCheque(career, Math.round(club.budget * 1.1))
     : legacy ? boardCheque(career, Math.max(10, Math.round(club.budget + (club.expectation - prevPos) * 2 + seasonTrophyCount * 12)))
     : boardCheque(career, kittyAllocation({ budget: club.budget, expectation: club.expectation, finish: prevPos, trophies: seasonTrophyCount }));
   /* A corrupt or pre-Round 436 save can hand us anything here, so a balance
      that is not a real number carries nothing rather than poisoning the new
      season with NaN. */
-  const carried = moving || !Number.isFinite(career.budget) ? 0 : Math.max(0, career.budget);
-  let budget = Math.round((allocation + Math.min(carried, allocation)) * 10) / 10;
+  const unspent = moving || !Number.isFinite(career.budget) ? 0 : Math.max(0, career.budget);
+  const retainsBank = !moving && !legacy;
+  const precision = retainsBank ? 100 : 10;
+  const roundBalance = (value: number) => Math.round(value * precision) / precision;
+  const carried = retainsBank ? unspent : Math.min(unspent, usualAllocation);
+  const allocation = retainsBank
+    ? roundBalance(Math.min(usualAllocation, Math.max(0, 2 * usualAllocation - unspent)))
+    : usualAllocation;
+  const openingBeforeAdjustments = roundBalance(allocation + carried);
+  let budget = openingBeforeAdjustments;
   /* Round 161: the summer the add-ons come due. Each promise rolls once:
      about two thirds trigger (he played, the clauses hit) and the money
      comes off the new budget; the rest lapse quietly. Walking to a new job
@@ -23304,7 +23878,7 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
   const loanOptionNews: string[] = [];
   if (!moving) {
     for (const sale of loanReturn.bought) {
-      budget = Math.round((budget + sale.fee) * 10) / 10;
+      budget = roundBalance(budget + sale.fee);
       loanOptionNews.push(`\u{1F4B0} ${sale.club} took up their option on ${sale.name}, ${money(sale.fee)}.`);
     }
   }
@@ -23314,7 +23888,7 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
     if (Math.random() < 0.65) {
       const paid = Math.min(budget - 5, due.amount);
       if (paid > 0) {
-        budget = Math.round((budget - paid) * 10) / 10;
+        budget = roundBalance(budget - paid);
         addOnNews.push(`💸 The ${due.name} add-ons came due: ${money(paid)} to ${due.to}.`);
       }
     }
@@ -23354,6 +23928,7 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
     clubName,
     season,
     week: 0,
+    ...(opts?.severeMatchInjuries ? { severeMatchInjuries: true } : {}),
     budget,
     boardConfidence: boardOpening(career, opening),
     sacked: false,
@@ -23364,22 +23939,24 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
     table: leagueClubs.map(emptyRow),
     form: [],
     calendar: buildCalendar(league.clubs.length, eraUclHasR16(eraId), uclLegsFor(eraId, 'QF') === 2, league.cupName !== null),
-    clubStrengths: genClubStrengths(nextCustom ? { ...league, clubs: leagueClubs } : league, nextYearsOn, eraId, rosterCareer, clubName, kLeagueActive),
+    clubStrengths: genClubStrengths(nextCustom ? { ...league, clubs: leagueClubs } : league, nextYearsOn, eraId, rosterCareer, clubName, kLeagueActive, scopedLeagueId),
     transferWindow: 'summer',
     windowWeeksLeft: 4,
     aiHeadlines: [],
     // Round 132: anybody the club had to go and get is off the market now.
     goneNames: [...freeAgentsIn],
     seasonSignings: [],
+    departedLeagueLines: undefined,
     cupRound: league.cupName !== null ? 'R16' : 'out',
     cupDraw: {},
     uclField: nextUclField.length ? nextUclField : undefined,
-    uclGroup: initUclGroup(qualifiedUcl, clubName, eraId, nextUclField),
+    ...(playedLeaguePhase ? { uclFormat: 'league36' as const } : {}),
+    uclGroup: playedLeaguePhase ? null : initUclGroup(qualifiedUcl, clubName, eraId, nextUclField),
     uclKoRound: null,
     uclDraw: {},
     uclBracket: undefined,
     cupBracket: undefined,
-    world: initWorld(clubName, eraId, league.id, kLeagueActive),
+    world: initWorld(clubName, eraId, league.id, kLeagueActive, scopedLeagueId),
     pendingSummary: null,
     cupExit: null,
     uclExit: null,
@@ -23523,6 +24100,7 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
     ? wageRoomFor(career, wageCapFrom(wageBill(state)))
     : nextWageCap(Math.max(60, (career.wageCap ?? wageCapFrom(wageBill(career))) - (career.founderWageRoom ?? 0)), club.expectation, prevPos, seasonTrophyCount) + roomNow;
   state.founderWageRoom = roomNow || undefined;
+  delete state.purchasedWageRoom;
   for (const name of freeAgentNews) {
     pushNews(state, { name, from: career.clubName, to: 'a free transfer', fee: 0 });
   }
@@ -23560,6 +24138,13 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
     const liveXI = squadXIAvg(state.squad);
     state.clubStrengths[nextCustom.name] = clamp(Math.round(liveXI) + ri(-2, 2), 52, 95);
     registerCustomClub(nextCustom, eraId, liveXI);
+  }
+  if (state.championshipPlayoffs) delete state.championshipPlayoffs;
+  if (!playedLeaguePhase && state.uclFormat) delete state.uclFormat;
+  if (playedLeaguePhase) {
+    const direct = watchTables ? uclDirectQualifiersFromTables(watchTables, watchHolder, undefined, watchUelHolder) : null;
+    const qualified = direct ? (moving ? customExitUclField(career, direct) : direct).includes(clubName) : qualifiedUcl;
+    openPlayedUcl(state, league, qualified, watchHolder);
   }
   state.boardObjectives = buildBoardObjectives(clubName, state.uclGroup !== null, league.clubs.length, eraId, nextCustom ? leagueClubs : undefined);
   // Round 163: a fresh Champions League draw for the new season.
@@ -23662,7 +24247,11 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
      goes in the cabinet, and missing a tournament your nation should have
      reached costs you the job. A manager who changes club keeps the
      country: federations do not care who pays your club wages. */
-  if (career.nationJob) {
+  const manualSummer = nationalCampaignThisSummer(career);
+  if (career.nationJob && (manualSummer?.settled || career.nationJob.lastYear === worldYear(career))) {
+    const { campaign: _campaign, ...settledJob } = career.nationJob;
+    state.nationJob = settledJob.lastResult === 'Did Not Qualify' ? null : settledJob;
+  } else if (career.nationJob) {
     const job = career.nationJob;
     const t = runManagerSummer(job.nation, state.season, nationLift(career));
     if (t) {
@@ -23777,6 +24366,13 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
   /* Round 310: promotion and relegation lead the whole summer, same seat,
      same reason, prepended last so they sit on top of the feed. */
   if (pr.lines.length) state.aiHeadlines = [...pr.lines, ...state.aiHeadlines].slice(0, 8);
+  if (moving) delete state.summerBudget;
+  else state.summerBudget = {
+    club: state.clubName, unspent, allocation, carried,
+    ...(retainsBank ? { usualAllocation } : {}),
+    adjustments: Math.round((state.budget - openingBeforeAdjustments) * 100) / 100,
+    opening: state.budget,
+  };
   return snapshotWorldRosterClub(state, state.clubName);
 }
 
@@ -23952,6 +24548,10 @@ export function loadCareer(): CareerState | null {
        been given a rung yet and the fallback has to guess. Found by loading a
        real half played save built on the committed pre Round 127 engine into a
        browser, which is the only way anybody would ever have seen it. */
+    if (parsed.nationJob && typeof parsed.nationJob === 'object' && parsed.nationJob.campaign !== undefined
+      && !validCampaign(parsed.nationJob.campaign, parsed.nationJob.nation, FORMATIONS.length)) {
+      delete parsed.nationJob.campaign;
+    }
     ensureRoles(parsed);
     /* Round 567: FIRST, because every repair below and every screen above reads
        the squad by id, and a career carrying two men under one id has been

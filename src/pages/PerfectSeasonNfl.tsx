@@ -91,7 +91,6 @@ const PerfectSeasonNfl = () => {
   const simTimer = useRef<ReturnType<typeof setInterval> | null>(null);
   const countdownTimer = useRef<ReturnType<typeof setInterval> | null>(null);
   const dailyPicker = useRef<((len: number) => number) | null>(null);
-  const dailySaved = useRef(false);
 
   const openSlots = useMemo(
     () => NFL_SLOTS.filter(s => !picks[s.key]).map(s => s.key),
@@ -128,7 +127,7 @@ const PerfectSeasonNfl = () => {
         setPhase('daily-locked');
         return;
       }
-      dailyPicker.current = makeDailyPicker(SPORT_KEY);
+      dailyPicker.current = makeDailyPicker(SPORT_KEY, todayStr);
     }
     setPhase('boot');
   };
@@ -265,35 +264,33 @@ const PerfectSeasonNfl = () => {
     return () => { if (simTimer.current) clearInterval(simTimer.current); };
   }, [phase, sim, revealed >= NFL_GAMES]);
 
-  // Lock in the daily attempt exactly once, right when the result lands.
-  // The stored `overall` is the raw drafted value, matching what the results
-  // screen shows and what the locked recap's playoff replay expects.
-  useEffect(() => {
-    if (mode !== 'daily' || phase !== 'done' || !sim || dailySaved.current) return;
-    dailySaved.current = true;
-    saveDailyAttempt(SPORT_KEY, {
-      date: todayStr,
-      sim,
-      overall: Math.round(overall),
-      spins,
-      teamNames,
-      themeId: dailyTheme?.id,
-    });
-  }, [mode, phase, sim, overall, spins, teamNames, dailyTheme]);
-
-  // Round 299, the scoring audit: finishing a season never recorded a play,
-  // so a run earned no streak day, no played-today credit and no points.
-  // The season landing on the final record is the completion moment. One
-  // row per run (the ref, reset by restart), score is the win count the
-  // result screen leads with.
+  // Save and record the completed Daily as soon as the reveal starts.
+  // Players can reload during the reveal and recover the same attempt.
   const completionSaved = useRef(false);
+  const readyToRecord = phase === 'done' || (mode === 'daily' && phase === 'sim');
   useEffect(() => {
-    if (phase !== 'done' || !sim || completionSaved.current) return;
+    if (!readyToRecord || !sim || completionSaved.current) return;
     completionSaved.current = true;
+    if (mode === 'daily') {
+      const existing = loadDailyAttempt(SPORT_KEY, todayStr);
+      if (existing) {
+        setLockedAttempt(existing);
+        setPhase('daily-locked');
+        return;
+      }
+      saveDailyAttempt(SPORT_KEY, {
+        date: todayStr,
+        sim,
+        overall: Math.round(overall),
+        spins,
+        teamNames,
+        themeId: dailyTheme?.id,
+      });
+    }
     recordCompletion('/perfect-season-nfl', sim.wins, getCurrentPlayerName());
     // Round 820: every finished run, in any mode, is weighed against the best.
     recordBest({ wins: sim.wins, losses: sim.losses, overall: Math.round(overall), date: todayStr, mode });
-  }, [phase, sim, overall, mode, todayStr, recordBest]);
+  }, [readyToRecord, sim, overall, mode, todayStr, spins, teamNames, dailyTheme, recordBest]);
 
   const skipSim = () => setRevealed(NFL_GAMES);
 
@@ -314,7 +311,6 @@ const PerfectSeasonNfl = () => {
   };
 
   const backToModes = () => {
-    dailySaved.current = false;
     setLockedAttempt(null);
     setDailyTheme(null);
     restart();

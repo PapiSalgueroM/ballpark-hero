@@ -75,7 +75,6 @@ import { afterAll, afterEach, beforeEach, describe, expect, it, vi } from 'vites
 import type { ComponentType } from 'react';
 import { MemoryRouter } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { loadGameContent, peekGameContent, PATH_BUNDLE } from '@/data/gameContent/loader';
 import { loadSeoMeta } from '@/components/seo/PageSeo';
@@ -247,14 +246,11 @@ const normalise = (html: string) => html.replace(/:r[0-9a-z]+:/g, ':r:').replace
 
 async function mount(row: Row) {
   const Page = (await row.page()).default;
-  const client = new QueryClient({ defaultOptions: { queries: { retry: false } } });
   const view = render(
     <HelmetProvider>
-      <QueryClientProvider client={client}>
-        <TooltipProvider>
-          <MemoryRouter initialEntries={[row.route]}><Page /></MemoryRouter>
-        </TooltipProvider>
-      </QueryClientProvider>
+      <TooltipProvider>
+        <MemoryRouter initialEntries={[row.route]}><Page /></MemoryRouter>
+      </TooltipProvider>
     </HelmetProvider>,
   );
   await settle();

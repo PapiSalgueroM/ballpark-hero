@@ -132,7 +132,7 @@ const GuessTheCollege = () => {
               onClick={() => setDifficulty('hard')}
               className={cn("text-xs", difficulty === 'hard' && "bg-red-600 hover:bg-red-700")}
             >
-              Hard (All D1)
+              Hard (Full Pool)
             </Button>
           </div>
 
@@ -368,7 +368,7 @@ const GuessTheCollege = () => {
           <GameSeoContent
           pageHasOwnH1
             title="Guess The College: D1 Trivia | DoUKnowBall"
-            description="Guess the Division 1 college from progressive clues about their conference, mascot, location, and athletic history. Covers all Power 4 and Group of 5 schools."
+            description="Guess the college from clues about its conference, mascot, location and sports history. The pool includes Power 4 and selected Group of 5 schools."
             howToPlay={[
               "Read each clue about the mystery college: region, school size, conference and championship history.",
               "Type your guess at any time. Fewer clues used means a higher score.",

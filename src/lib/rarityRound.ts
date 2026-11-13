@@ -392,13 +392,16 @@ function fetchPositionPool(position: string) {
   };
 }
 
+const ELITE_100M = 100_000_000;
+const ELITE_50M = 50_000_000;
+
 /** Category 6: players ever worth $100M+. Verified pool size: exactly 50 players peaked at or above $100,000,000. */
 async function fetchElitePool(): Promise<PoolEntry[]> {
   const { data, error } = await fetchAllRows<{ player_name: string; peak_value_usd: number }>(
     (from, to) => supabase
       .from('player_peak_values' as never)
       .select('player_name, peak_value_usd')
-      .gte('peak_value_usd', 100_000_000)
+      .gte('peak_value_usd', ELITE_100M)
       .order('peak_value_usd', { ascending: false })
       .order('player_name', { ascending: true })
       .range(from, to),
@@ -414,7 +417,7 @@ async function fetchFiftyMillionPool(): Promise<PoolEntry[]> {
     (from, to) => supabase
       .from('player_peak_values' as never)
       .select('player_name, peak_value_usd')
-      .gte('peak_value_usd', 50_000_000)
+      .gte('peak_value_usd', ELITE_50M)
       .order('peak_value_usd', { ascending: false })
       .order('player_name', { ascending: true })
       .range(from, to),
@@ -523,24 +526,20 @@ export const CATEGORIES: RarityCategory[] = [
     prompt: 'Name a player who has been worth $100M or more',
     hint: 'Peak market value, any year.',
     fetchPool: cachedPool('elite-100m', fetchElitePool),
-    // No exact-match filter exists for "gte" in PlayerSourceFilter (only eq
-    // and ilike), so this category's autocomplete searches the full soccer
-    // pool. Validation still enforces the $100M threshold: the pool from
-    // fetchPool above is the single source of truth for whether a submitted
-    // pick actually counts, same as every other category, so RarityRound.tsx's
-    // submitGuess (which only scores a pick found in this pool) rejects a
-    // sub-$100M player even if the dropdown offered it as a suggestion.
-    sourceConfig: SOCCER_MARKET_VALUE_SOURCE,
+    sourceConfig: {
+      ...SOCCER_MARKET_VALUE_SOURCE,
+      filters: [{ column: 'market_value_usd', op: 'gte', value: ELITE_100M }],
+    },
   },
   {
     id: 'elite-50m',
     prompt: 'Name a player who has been worth $50M or more',
     hint: 'Peak market value, any year. A wider net than the $100M category.',
     fetchPool: cachedPool('elite-50m', fetchFiftyMillionPool),
-    // Same reasoning as elite-100m above: no "gte" PlayerSourceFilter exists,
-    // so the autocomplete searches the full soccer pool and fetchPool's
-    // pool remains the single source of truth for scoring.
-    sourceConfig: SOCCER_MARKET_VALUE_SOURCE,
+    sourceConfig: {
+      ...SOCCER_MARKET_VALUE_SOURCE,
+      filters: [{ column: 'market_value_usd', op: 'gte', value: ELITE_50M }],
+    },
   },
   {
     id: 'club-chelsea',
@@ -834,11 +833,11 @@ function seededShuffle<T>(arr: T[], seed: number): T[] {
  * convention in src/lib/dateUtils.ts. When categories.length <= ROUNDS_PER_RUN
  * every category is used (shuffled for order only).
  */
-export function pickDailyCategories(categories: RarityCategory[] = CATEGORIES): RarityCategory[] {
+export function pickDailyCategories(categories: RarityCategory[] = CATEGORIES, date = getTodayET()): RarityCategory[] {
   /* Round 212: the HASHED date, not the raw one. A raw date seed makes a
      Lehmer generator's first draw a straight line in the date, which froze
      this puzzle for months at a time. See dailyPrngSeed in dateUtils. */
-  const seed = dailyPrngSeed(getTodayET());
+  const seed = dailyPrngSeed(date);
   const shuffled = seededShuffle(categories, seed);
   return shuffled.slice(0, Math.min(ROUNDS_PER_RUN, shuffled.length));
 }

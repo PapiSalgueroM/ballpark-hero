@@ -9,6 +9,7 @@ import { createHash } from 'node:crypto';
 import { fileURLToPath } from 'node:url';
 import { build } from 'esbuild';
 import { chromium } from '../lib/playwrightLoader.mjs';
+import { readBuiltFonts, loadActualFonts } from '../lib/builtFonts.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 const OUT = path.resolve(process.env.MMA_PROMOTION_NATIVE_ARTIFACTS || path.join(ROOT, 'mma-promotion-artifacts/native'));
@@ -20,8 +21,9 @@ await build({ stdin: { contents: "export * as mma from './src/lib/mmaPromotion.t
 const requireEngine = createRequire(import.meta.url);
 const { mma, boxing } = requireEngine(bundle);
 const MMA_KEY = 'dukb-mma-promoter-v1', BOXING_KEY = 'fight-promoter-save-v1';
-const fontLinks = [...fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8').matchAll(/<link\s+href="(https:\/\/fonts\.googleapis\.com\/[^\"]+)"\s+rel="stylesheet"/g)].map(match => new URL(match[1]).href);
-assert.equal(fontLinks.length, 1, 'Native fonts bind the actual template stylesheet');
+const bundledFonts = readBuiltFonts(ROOT);
+const fontPaths = new Set(Object.keys(bundledFonts.files)
+  .filter(file => file.startsWith('dist/') && file.endsWith('.woff2')).map(file => file.slice('dist'.length)));
 const profiles = [
   { width: 320, height: 780, input: 'touch', theme: 'dark', reduced: true },
   { width: 390, height: 844, input: 'touch', theme: 'light', reduced: false },
@@ -29,7 +31,7 @@ const profiles = [
   { width: 1280, height: 720, input: 'keyboard', theme: 'light', reduced: true },
 ];
 const sourceHashes = () => Object.fromEntries(['src/lib/mmaPromotion.ts', 'src/hooks/useMmaPromotion.ts', 'src/lib/fightPromoter.ts'].map(file => [file, createHash('sha256').update(fs.readFileSync(path.join(ROOT, file))).digest('hex')]));
-const report = { started: new Date().toISOString(), cases: [], controls: [], recapControls: [], forwardedScoreWrites: 0, sourceBefore: sourceHashes() };
+const report = { bundledFonts, started: new Date().toISOString(), cases: [], controls: [], recapControls: [], forwardedScoreWrites: 0, sourceBefore: sourceHashes() };
 const saveReport = () => fs.writeFileSync(path.join(OUT, 'report.json'), JSON.stringify(report, null, 2));
 const port = await new Promise((resolve, reject) => {
   const probe = createServer(); probe.once('error', reject);
@@ -51,15 +53,6 @@ async function settle(page) {
       if (++frames >= 100 || stable >= 10) resolve(); else requestAnimationFrame(frame); }
     requestAnimationFrame(frame);
   }));
-}
-async function fonts(page) {
-  const faces = await page.evaluate(async () => { await document.fonts.ready; const rows = [];
-    for (const family of ['Inter', 'Space Grotesk']) for (const weight of [400, 500, 600, 700]) {
-      const loaded = await document.fonts.load(`${weight} 16px "${family}"`, 'MMA promotion');
-      rows.push({ family, weight, count: loaded.length, loaded: loaded.length > 0 && loaded.every(face => face.status === 'loaded') });
-    } return rows;
-  });
-  assert(faces.every(face => face.loaded), 'Actual site fonts load before native geometry'); return faces;
 }
 const visibleRect = (r, viewport) => r && r.top >= -2 && r.bottom <= viewport.height + 2 && r.left >= -2 && r.right <= viewport.width + 2;
 async function measure(page) {
@@ -145,8 +138,8 @@ try {
   await ready; browser = await chromium.launch({ headless: true });
   for (const profile of profiles) {
     const id = `${profile.width}-${profile.input}-${profile.theme}${profile.reduced ? '-reduced' : ''}`;
-    const row = { id, steps: [], screenshots: [], recaps: [], pageErrors: [], consoleErrors: [], localFailures: [], fontFailures: [], outboundWrites: [] };
-    report.cases.push(row); const assets = new Set();
+    const row = { id, steps: [], fontRequests: [], screenshots: [], recaps: [], pageErrors: [], consoleErrors: [], localFailures: [], fontFailures: [], outboundWrites: [] };
+    report.cases.push(row);
     const context = await browser.newContext({ viewport: { width: profile.width, height: profile.height }, hasTouch: profile.input === 'touch', isMobile: profile.input === 'touch',
       reducedMotion: profile.reduced ? 'reduce' : 'no-preference', colorScheme: profile.theme, serviceWorkers: 'block',
       storageState: { cookies: [], origins: [{ origin: BASE, localStorage: [
@@ -154,17 +147,16 @@ try {
         { name: 'rules-gate-seen:/fight-promoter', value: '1' }, { name: 'mma-unrelated-save', value: '{"keep":"exact bytes"}' },
       ] }] } });
     await context.route('**/*', async route => {
-      const request = route.request(), url = new URL(request.url()); if (url.origin === BASE) return route.continue();
-      if (!['GET', 'HEAD', 'OPTIONS'].includes(request.method())) row.outboundWrites.push({ method: request.method(), path: url.pathname });
-      const stylesheet = request.method() === 'GET' && fontLinks.includes(url.href);
-      if (stylesheet || (request.method() === 'GET' && request.resourceType() === 'font' && assets.has(url.href))) {
-        try { const response = await route.fetch({ maxRedirects: 0 }); assert(response.status() >= 200 && response.status() < 300, 'Actual font request succeeds');
-          if (stylesheet) { const css = await response.text(); const urls = [...css.replace(/\/\*[\s\S]*?\*\//g, '').matchAll(/url\(\s*(['"]?)(https:\/\/[^)'"\s]+)\1\s*\)/g)].map(match => new URL(match[2]));
-            assert(urls.length > 0, 'Actual stylesheet declares fonts'); for (const asset of urls) { assert.equal(asset.origin, 'https://fonts.gstatic.com'); assets.add(asset.href); }
-            return route.fulfill({ response, body: css }); } return route.fulfill({ response });
-        } catch (error) { row.fontFailures.push(String(error)); return route.abort('blockedbyclient'); }
+      const request = route.request(), url = new URL(request.url());
+      if (request.resourceType() === 'font') {
+        row.fontRequests.push(url.href);
+        if (request.method() !== 'GET' || url.origin !== BASE || !fontPaths.has(url.pathname)) {
+          row.fontFailures.push('Font URL is not declared by the built stylesheet: ' + url.href);
+          return route.abort('blockedbyclient');
+        }
       }
-      if (request.resourceType() === 'font') { row.fontFailures.push(`Undeclared font ${url.href}`); return route.abort('blockedbyclient'); }
+      if (url.origin === BASE) return route.continue();
+      if (!['GET', 'HEAD', 'OPTIONS'].includes(request.method())) row.outboundWrites.push({ method: request.method(), path: url.pathname });
       return route.fulfill({ status: 200, contentType: request.resourceType() === 'stylesheet' ? 'text/css' : 'application/json', body: request.resourceType() === 'stylesheet' ? '' : '[]' });
     });
     await context.routeWebSocket('**/*', socket => socket.close());
@@ -184,7 +176,7 @@ try {
     page.on('requestfailed', request => { if (request.url().startsWith(BASE)) row.localFailures.push(`${request.url()}: ${request.failure()?.errorText}`); });
     page.on('response', response => { if (response.url().startsWith(BASE) && response.status() >= 400) row.localFailures.push(`${response.status()} ${response.url()}`); });
     const button = name => page.getByRole('button', { name, exact: true });
-    const inspect = async stage => { const loaded = await fonts(page); await settle(page); const m = await measure(page); geometry(m, profile, stage);
+    const inspect = async stage => { const loaded = await loadActualFonts(page, 'MMA promotion'); await settle(page); const m = await measure(page); geometry(m, profile, stage);
       const file = `${id}-${stage}.png`; await page.screenshot({ path: path.join(OUT, file), animations: 'disabled' }); row.screenshots.push(file); row.steps.push({ stage, ...m, fonts: loaded }); return m; };
     const readSave = () => page.evaluate(key => localStorage.getItem(key), MMA_KEY);
     const readRecap = async (event, boutIndex, stage, reload = false) => {
@@ -379,6 +371,7 @@ try {
       assert.deepEqual(oldSaved.st, expectedBox.state, 'The old boxing save plays through the unchanged engine');
       assert.equal(await readSave(), heldMma, 'Playing boxing leaves the MMA world unchanged');
       assert.equal(await page.evaluate(() => localStorage.getItem('mma-unrelated-save')), '{"keep":"exact bytes"}');
+      assert(row.fontRequests.length > 0, 'Native geometry uses loopback requests for actual bundled fonts');
       assert.deepEqual(row.pageErrors, []); assert.deepEqual(row.consoleErrors, []); assert.deepEqual(row.localFailures, []); assert.deepEqual(row.fontFailures, []);
       assert.deepEqual(row.outboundWrites, [], 'One event is not a finished promotion and sends no completion'); row.passed = true;
     } catch (error) { row.error = String(error?.stack || error); await page.screenshot({ path: path.join(OUT, `${id}-failure.png`), animations: 'disabled' }).catch(() => {}); }

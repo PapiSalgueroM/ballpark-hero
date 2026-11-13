@@ -103,18 +103,39 @@
           }
           return false;
         };
-        var sweep = function () {
+        var selector = '[id*="lovable" i], [class*="lovable" i], a[href*="lovable.dev"], a[href*="gptengineer"], [id*="gpt-engineer" i]';
+        var sweep = function (root) {
           try {
-            var all = document.querySelectorAll('[id*="lovable" i], [class*="lovable" i], a[href*="lovable.dev"], a[href*="gptengineer"], [id*="gpt-engineer" i]');
+            var all = root.querySelectorAll(selector);
             for (var i = 0; i < all.length; i++) {
               var el = all[i];
               if (isBadge(el)) el.remove();
             }
           } catch (e) { /* never break the page over badge cleanup */ }
         };
-        new MutationObserver(sweep).observe(document.documentElement, { childList: true, subtree: true });
-        document.addEventListener('DOMContentLoaded', sweep);
-        window.addEventListener('load', sweep);
+        var inspect = function (node, includeChildren) {
+          if (node.nodeType !== 1 || !node.isConnected) return;
+          if (node.matches(selector) && isBadge(node)) node.remove();
+          if (includeChildren && node.firstElementChild) sweep(node);
+        };
+        new MutationObserver(function (records) {
+          try {
+            for (var i = 0; i < records.length; i++) {
+              var record = records[i];
+              if (record.type === 'attributes') {
+                inspect(record.target, false);
+              } else {
+                var added = record.addedNodes;
+                for (var j = 0; j < added.length; j++) inspect(added[j], true);
+              }
+            }
+          } catch (e) { /* never break the page over badge cleanup */ }
+        }).observe(document.documentElement, {
+          childList: true, subtree: true, attributes: true, attributeFilter: ['id', 'class', 'href'],
+        });
+        var sweepDocument = function () { sweep(document); };
+        document.addEventListener('DOMContentLoaded', sweepDocument);
+        window.addEventListener('load', sweepDocument);
       })();
     </script>
     <script data-dukb-consent-bootstrap="">
@@ -235,9 +256,12 @@
 <p>The running log of what changed around here, newest first. We ship a lot. If something looks off after an update, hit the Report a problem button in the footer and we will get on it.</p>
 <h2>November 2026</h2>
 <li>NRL Team Manager. Start a rugby league career in 2026 or 2027, including the Perth Bears from 2027. Pick your side, manage contracts and play through to the finals. The 2026 start offers verified opening-matchday names and ages alongside generated squad depth. Ratings, fixtures and results are simulated. <a href="/nrl-team-manager">Play NRL Team Manager</a>.</li>
+<li>Soccer Perfect Season. Take one real player from each of 11 randomly drawn clubs, with two rerolls for the whole draft. See which clubs are coming, fill your XI and try to win all 38 matches. <a href="/soccer-perfect-season">Play Daily or Unlimited</a>.</li>
+<li>Club Manager: manage in China. Start a new <a href="/club-manager">Club Manager</a> career in the 2026 Chinese Super League. All 16 clubs play 30 matches with a generated draw, simulated dates and results, and generated opening squads. The 2026 starting points include the real deductions.</li>
+<li>Club Manager: manage in Japan. Choose Japan in a new current <a href="/club-manager">Club Manager</a> career. All 20 J1 League clubs are available. Your first season can use the verified 2026/27 home and away list over 38 matchdays. Squads, calendar dates and results are simulated, and later seasons generate their own fixtures.</li>
 <li>Club Manager: veterans are rated for how good they still are. You told us Modric, Messi and Ronaldo were rated way too low for players who are still very good. A rating in <a href="/club-manager">Club Manager</a> came straight off a player's market value, and an older player's price drops every birthday even when his football does not. Ratings now read age the way the market does: from 30 a player gets points back for what his price takes off for his birthday, one at 30 rising to eight at 38, and a player under 24 gives a point back for every year under 24 (six at most, less near the very top), because part of a young player's price is his future. So in a new 2026-27 career Messi and Ronaldo are 86 and Modric 80, and the top young players sit a little lower until they grow into it. The past seasons work the same way on their own scale, and nobody goes past the best of his day: 2020-21 Ronaldo is 92 and 2015-16 Modric 92. Values and wages stay the market's, how big a club is has not changed, and ages now count to 1 August 2026 instead of 1 January (exact for every player we hold a birth date for, otherwise moved on a year, so a player with a birthday late in the year can show one year older than he is). A career you already have keeps your own squad's numbers, while the other clubs and the market use the new ones. Manager Hot Seat and Deadline Day keep the old numbers on days that were already dealt, and on new days Deadline Day only deals targets of 29 and under, because an older player already asks less than he is worth.</li>
 <li>Club Manager: your club plays the Europa League. Finish in a Europa League place, win your cup, or have its place passed down to you, and next season in <a href="/club-manager">Club Manager</a> you play it in its real format: eight league phase nights, four at home (every one a Thursday on your calendar), then a two legged play-off or straight into the round of 16, two legged ties and a one match final, with extra time and penalties. The board sets you a target, the trophy goes in your cabinet, and the winner plays next season's Champions League. The Conference League and the qualifying rounds come in later updates.</li>
-<li>Club Manager: going through counts as going through. Lose a Champions League second leg in <a href="/club-manager">Club Manager</a> but win the tie, on aggregate or on penalties, and the report now says THROUGH, with the night's score right under it. The board, the dressing room and the fans react to the tie too, so a semi final reached on penalties is no longer treated like a defeat, and winning the night but going out is no longer free. The score and the W, D or L in your record still show what happened on the night. And a player who scores four or five in a match gets the right count instead of a hat-trick.</li>
+<li>Club Manager: going through counts as going through. Lose a Champions League or Europa League second leg in <a href="/club-manager">Club Manager</a> but win the tie, on aggregate or on penalties, and the report now says THROUGH, with the night's score right under it. The board, the dressing room and the fans react to the tie too, so a semi final reached on penalties is no longer treated like a defeat, and winning the night but going out is no longer free. The score and the W, D or L in your record still show what happened on the night. And a player who scores four or five in a match gets the right count instead of a hat-trick.</li>
 <h2>October 2026</h2>
 <li>Arsenal de Sarandí players no longer count as Arsenal. 56 players from Arsenal de Sarandí, a club in Argentina, were filed under plain Arsenal in our player data. That put them in <a href="/rarity-round">Rarity Round</a>'s Arsenal category, and our own records in Soccer Grid, Soccer Connect 4 and Build Your XI could back them as Arsenal answers. We checked all 74 players who could have been mixed up, each against two sources: the 56 now sit under Arsenal de Sarandí, so Rarity Round stops counting them for Arsenal and our records stop backing them there, and the 18 who really played in London stay at Arsenal. Club Manager and Soccer Career squads still have a few of them at Arsenal for now, and an answer our records can't settle is still judged the usual way.</li>
 <li>Baseball, NFL and NHL Connections: fewer players who could pass for two groups. Some of the first 60 <a href="/baseball-connections">Baseball Connections</a> boards had a man who could honestly go either way (Frank Robinson played nearly 30 percent of his games in left field, on a board with Hall of Fame left and right fielders), so those spots got players with no doubt about them. And the team groups on those boards, and on the first four boards of <a href="/nfl-connections">NFL</a> and <a href="/nhl-connections">NHL Connections</a>, now say "as of" a season, so a trade later on can't sneak in a second right answer. The newer boards are next.</li>

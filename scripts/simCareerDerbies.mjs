@@ -499,15 +499,23 @@ console.log('2) Club Manager reads exactly what it read before the lift');
      names Krasnodar, Krasnodar names Spartak Moscow, CSKA Moscow still
      names Dynamo Moscow). The same two snapshots again: the round out of
      the world is c37dbeb1ca09 over 438 clubs, the tree adds exactly 16
-     and changes and drops none of the 438. */
+     and changes and drops none of the 438.
+     The 2026 K League launch adds twelve boards. The existing 454 still
+     match the Russia-era receipt exactly, so hold the new league separately. */
   const RIVALS_HASH = '565e14623c2fe3607eec8864303d001fce77c4308c1a408c6c49114ea9b679d6';
   const BOARD_HASH = '8093c57e74818a8fae9742121e2d4e6e2d650e400f9680cbdc2735360e7595bf';
   const h = sha(sortedJson(data.PRIMARY_RIVAL));
   const snap = boardSnapshot();
-  const b = sha(sortedJson(snap));
-  console.log(`   rivals ${h.slice(0, 12)} (${Object.keys(data.PRIMARY_RIVAL).length} keys), board ${b.slice(0, 12)} (${Object.keys(snap).length} clubs)`);
+  const kLeagueClubs = new Set(cm.REAL_LEAGUES.find(league => league.id === 'kleague1')?.clubs);
+  const boards = Object.entries(snap);
+  const existing = boards.filter(([club]) => !kLeagueClubs.has(club));
+  const kLeague = boards.filter(([club]) => kLeagueClubs.has(club));
+  const b = sha(sortedJson(Object.fromEntries(existing)));
+  const k = sha(sortedJson(Object.fromEntries(kLeague)));
+  console.log(`   rivals ${h.slice(0, 12)} (${Object.keys(data.PRIMARY_RIVAL).length} keys), prior boards ${b.slice(0, 12)} (${existing.length} clubs), K League ${k.slice(0, 12)} (${kLeague.length} clubs)`);
   if (h !== RIVALS_HASH) fail('the lifted rivals table is not the one Club Manager had');
   if (b !== BOARD_HASH) fail('a Club Manager board now names a different rival');
+  if (k !== '66480a4f38d777cda58d247b8b672aeb45ee9193251835e0276a03792ccbbdd3') fail('a K League board now names a different rival');
 }
 
 /* The pool: careers starting in 2020 from the academies that feed the eight

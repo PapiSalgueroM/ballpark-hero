@@ -13,8 +13,8 @@
    keeps a render error inside the overlay; the host wraps the lazy mount in
    a second one, because a boundary inside this chunk cannot catch the chunk
    failing to load. */
-import { Component, useEffect, useMemo, useState, type ReactNode } from 'react';
-import type { UsCareerCore, UsCareerSeason, UsCareerSport } from '@/lib/usCareerSport';
+import { Component, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
+import type { UsCareerCore, UsCareerSeason, UsCareerSport, UsSeasonCentreBind } from '@/lib/usCareerSport';
 import { deriveSeason, type DerivedGame, type DerivedSeason } from '@/lib/season/core';
 import { buildUsSeason, usPlayoffPath, type UsPlayoffPath, type UsRow, type UsSeasonBind, type UsSeasonCtx } from '@/lib/season/us';
 import { SeasonCentre, type CentreModel } from '@/components/season-centre/SeasonCentre';
@@ -108,7 +108,7 @@ export function buildUsModel(sport: UsCareerSport, bind: UsSeasonBind, career: U
     helpKey: `seasonCentre:help:${bind.slug}`,
     groups: named ? [{ label: view.groupWords?.[0] ?? 'Division', slots: range(ctx.divSlots) }, { label: view.groupWords?.[1] ?? 'Conference', slots: range(ctx.confSlots) }] : undefined,
     /* the worked example names a team of THIS season that is not his (his first division rival), or nobody */
-    help: view.help(named, named ? ctx.names[1] : undefined),
+    help: view.help(named, named ? ctx.names[1] : undefined, s.target.kind === 'record' && s.target.saved === true),
     momentKey: `centre|${key}`,
   };
 }
@@ -131,9 +131,11 @@ class CentreBoundary extends Component<{ onClose: () => void; children: ReactNod
 }
 
 function CentreBody({ sport, career, row, onClose }: UsSeasonCentreProps) {
-  const [bind, setBind] = useState<UsSeasonBind | null>(null);
+  const [bind, setBind] = useState<UsSeasonCentreBind | null>(null);
   const [failed, setFailed] = useState(false);
   const [tries, setTries] = useState(0);
+  const [part, setPart] = useState<'regular' | 'playoffs'>('regular');
+  const replayOpener = useRef<HTMLButtonElement | null>(null);
   useEffect(() => {
     let live = true;
     setFailed(false);
@@ -148,6 +150,8 @@ function CentreBody({ sport, career, row, onClose }: UsSeasonCentreProps) {
     () => (bind && built && built.ok === true && season ? buildUsModel(sport, bind, career, row as UsRow, built.ctx, season, built.key) : null),
     [bind, built, season, sport, career, row],
   );
+  const replay = useMemo(() => (bind?.buildPlayoffReplay && built && built.ok === true
+    ? bind.buildPlayoffReplay(row as UsRow, built.ctx, built.key) : null), [bind, built, row]);
   if (failed) return <CentreTile title={TITLE} text="The season could not be loaded. Your career is safe." exitLabel={EXIT} onClose={onClose} onRetry={() => setTries(n => n + 1)} />;
   if (!bind || !built) {
     return (
@@ -161,7 +165,20 @@ function CentreBody({ sport, career, row, onClose }: UsSeasonCentreProps) {
   }
   if (built.ok === false) return <CentreTile title={TITLE} text={built.why === 'held' ? built.line : CANNOT} exitLabel={EXIT} onClose={onClose} />;
   if (!model) return <CentreTile title={TITLE} text={CANNOT} exitLabel={EXIT} onClose={onClose} />;
-  return <SeasonCentre model={model} exitLabel={EXIT} onClose={onClose} />;
+  const backToRegular = () => {
+    setPart('regular');
+    requestAnimationFrame(() => replayOpener.current?.focus({ preventScroll: true }));
+  };
+  return (
+    <>
+      <SeasonCentre model={model} exitLabel={EXIT} onClose={onClose} active={part === 'regular'} navigation={replay ? (
+        <div className="border-b border-border px-3 py-2">
+          <button type="button" ref={replayOpener} onClick={() => setPart('playoffs')} className="min-h-11 rounded-lg border border-border px-3 py-2 text-xs font-bold">Replay playoffs</button>
+        </div>
+      ) : undefined} />
+      {part === 'playoffs' && replay?.({ club: model.header.club, year: row.year, onBack: backToRegular, onClose })}
+    </>
+  );
 }
 
 export default function UsSeasonCentre(props: UsSeasonCentreProps) {

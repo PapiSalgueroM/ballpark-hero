@@ -16,8 +16,10 @@ import * as tff from './tff.mjs';
 import * as walfoot from './walfoot.mjs';
 import * as hessenschau from './hessenschau.mjs';
 import * as espnByDate from './espnByDate.mjs';
+import * as jLeague from './jLeague.mjs';
+import * as phonball from './phonball.mjs';
 
-export const PARSERS = { feedJson, maxifoot, tuttomercatoweb, dflPdf, tff, walfoot, hessenschau, espnByDate };
+export const PARSERS = { feedJson, maxifoot, tuttomercatoweb, dflPdf, tff, walfoot, hessenschau, espnByDate, jLeague, phonball };
 
 export const COVERAGE = 'Real league opponent order and home/away venues only. Calendar dates and match results are simulated.';
 export const DIGEST_FIELDS = ['key', 'leagueId', 'seasonStartYear', 'clubs', 'rounds'];

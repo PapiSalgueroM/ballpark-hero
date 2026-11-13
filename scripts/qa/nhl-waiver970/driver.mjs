@@ -4,11 +4,20 @@ import path from 'node:path';
 import { createRequire } from 'node:module';
 import { createHash } from 'node:crypto';
 import { fileURLToPath } from 'node:url';
+import { readSourceFonts, loadActualFonts } from '../../lib/builtFonts.mjs';
 
 const dir = path.dirname(fileURLToPath(import.meta.url));
 const receipt = JSON.parse(fs.readFileSync(path.join(dir, 'build-receipt.json'), 'utf8'));
 const require = createRequire(path.join(receipt.root, 'package.json')), { chromium } = require('playwright');
 const origin = 'http://127.0.0.1:4995';
+const bundledFonts = readSourceFonts(receipt.gate);
+const fontAssets = new Map(Object.entries(bundledFonts.files).map(([file, proof]) => {
+  const stylesheet = file === 'src/assets/fonts/fonts.css';
+  return ['/' + file.slice('src/'.length), {
+    path: path.join(receipt.gate, file), type: stylesheet ? 'stylesheet' : 'font',
+    contentType: stylesheet ? 'text/css' : 'font/woff2', ...proof,
+  }];
+}));
 const run = path.join(dir, 'run-' + Date.now()); fs.mkdirSync(run);
 const sha = file => createHash('sha256').update(fs.readFileSync(file)).digest('hex');
 const canonical = value => JSON.parse(JSON.stringify(value, (key, item) => key === 'id' ? undefined : item));
@@ -22,7 +31,7 @@ const held = () => {
     equal(fs.existsSync(item.file) ? sha(item.file) : null, item.sha256, 'Raw input/output hold: ' + item.file);
   }
 };
-const result = { task: 970, receipt, paths: [], failed: null,
+const result = { task: 970, receipt, bundledFonts, paths: [], failed: null,
   scope: 'Actual isolated Board and engine, fresh compiled gate CSS, actual968-derived simulated overage fixture with969 owner argument. Native keyboard/touch waiver receipts and one played round. No full season, full app, live site or financial balance claim.',
   transport: 'Synthetic loopback origin fulfilled entirely by Playwright routes. No host process is started.',
   saveScope: 'Exact existing engine league outcome and native save byte preservation on passive actions/reload. First-write optional-field normalization is not an independent whole-save baseline proof; the separate actual Board outcome driver owns that proof.' };
@@ -36,12 +45,23 @@ try {
   ];
   for (const layout of layouts) {
     const context = await browser.newContext({ viewport: { width: layout.width, height: layout.height }, hasTouch: layout.touch, isMobile: layout.touch, reducedMotion: layout.reduced ? 'reduce' : 'no-preference', serviceWorkers: 'block' });
-    const outside = [], errors = [], actions = [], geometries = [], scales = [], motion = [], scroll = [], focus = [], immediateReceipts = [], callbackProbes = [], dismissals = [];
+    const outside = [], errors = [], fontRequests = [], actions = [], geometries = [], scales = [], motion = [], scroll = [], focus = [], immediateReceipts = [], callbackProbes = [], dismissals = [];
     let page;
     try {
       await context.route('**/*', async route => {
-        const url = new URL(route.request().url());
+        const request = route.request(), url = new URL(request.url());
         if (url.origin !== origin) { outside.push(url.href); return route.abort(); }
+        const font = fontAssets.get(url.pathname);
+        if (font) {
+          if (request.method() !== 'GET' || request.resourceType() !== font.type || url.search) {
+            errors.push('Unexpected local font request ' + request.method() + ' ' + url.href);
+            return route.abort();
+          }
+          const body = fs.readFileSync(font.path);
+          equal(createHash('sha256').update(body).digest('hex'), font.sha256, 'Exact gate font bytes: ' + url.pathname);
+          fontRequests.push({ path: url.pathname, sha256: font.sha256, bytes: body.length });
+          return route.fulfill({ body, contentType: font.contentType });
+        }
         const files = { '/': ['index.html', 'text/html'], '/app.js': ['app.js', 'text/javascript'], '/app.css': ['app.css', 'text/css'], '/base.css': ['base.css', 'text/css'], '/favicon.ico': [null, null] };
         const file = files[url.pathname];
         if (!file) { errors.push('Unexpected local request ' + url.pathname); return route.abort(); }
@@ -165,6 +185,7 @@ try {
       };
 
       await page.goto(origin); await page.getByText('Roster', { exact: true }).waitFor();
+      const fonts = { initial: await loadActualFonts(page, 'NHL waiver receipt') };
       let state = await read();
       equal(state.save.league.teams[state.save.myTeam].players.length, 17, 'Actual trade/draft/offseason fixture has17');
       equal({ trades: state.meta.trades, drafted: state.meta.drafted, offseasons: state.meta.actualOffseasons }, { trades: 2, drafted: 4, offseasons: 1 }, 'Reused engine-generated968 fixture');
@@ -249,6 +270,7 @@ try {
         dismissals.push({ waiver: n + 1, focus: dismissFocus, insertions: dismissVisual.insertions.length });
       }
       const beforeReload = await read(); await page.reload(); await page.getByText('Roster', { exact: true }).waitFor(); state = await read();
+      fonts.reloaded = await loadActualFonts(page, 'NHL waiver receipt');
       equal(state.raw, beforeReload.raw, 'Refresh restores exact save bytes'); equal(state.writes.length, 0, 'Refresh performs no action write'); await quiet('refresh after waiver'); await image('refresh-quiet');
       equal(state.save.league.teams[state.save.myTeam].players.length, 15, 'Two native waivers recover limit');
       const expectedRound = await page.evaluate(() => window.__native970.expectedNextRound());
@@ -256,8 +278,10 @@ try {
       const beforePlay = await read(); await activate(play, 'play-after-recovery'); const afterPlay = await read();
       equal(canonical(afterPlay.save.league), canonical(expectedRound.league), 'Native round matches exact existing engine and AI outcome apart from generated IDs'); equal(afterPlay.draws, expectedRound.draws, 'Native round retains exact RNG tape');
       equal(afterPlay.save.league.round, 2, 'One native round advances once'); equal(afterPlay.writes.length, beforePlay.writes.length + 1, 'One native round writes once'); await quiet('ordinary play after refresh'); await image('round2-quiet');
+      check(fontRequests.some(row => row.path.endsWith('/fonts.css')) && fontRequests.some(row => row.path.endsWith('.woff2')),
+        'Native geometry uses the gate stylesheet and bundled font binaries');
       equal(outside, [], 'Zero outside transport attempts'); equal(errors, [], 'Zero browser or console errors');
-      result.paths.push({ layout, actions, callbackProbes, geometries, scales, motion, scroll, focus, immediateReceipts, dismissals, outside, errors, finalRoster: 15, finalRound: 2,
+      result.paths.push({ layout, actions, callbackProbes, geometries, scales, motion, scroll, focus, immediateReceipts, dismissals, outside, errors, fontRequests, fonts, finalRoster: 15, finalRound: 2,
         inputScope: 'Only waiver and panel actions and accepted play are native tap or actual Tab/Enter. Geometry screenshots use programmatic inspection scrolling. Disabled-play refusal is a separately labeled direct React callback probe.' });
       fs.writeFileSync(path.join(run, 'checkpoint.json'), JSON.stringify({ ...result, checks }, null, 2));
       console.log('970 native ' + layout.name + ': native waivers, actual values, finite/static motion, passive return, refresh, RNG and layout passed.');

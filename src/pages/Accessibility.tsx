@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom';
+import { useSiteBack } from '@/hooks/useSiteBack';
 import { ArrowLeft } from 'lucide-react';
 import PageSeo from '@/components/seo/PageSeo';
 
@@ -13,7 +13,7 @@ import PageSeo from '@/components/seo/PageSeo';
  * skip link, so it is not allowed to be a page where the skip link fails.
  */
 const Accessibility = () => {
-  const navigate = useNavigate();
+  const goBack = useSiteBack();
   return (
     <main id="dukb-main" tabIndex={-1} className="min-h-screen bg-background text-foreground px-4 py-12 max-w-3xl mx-auto">
       <PageSeo
@@ -22,7 +22,7 @@ const Accessibility = () => {
         path="/accessibility"
       />
       <button
-        onClick={() => navigate(-1)}
+        onClick={goBack}
         className="mb-6 inline-flex items-center gap-2 rounded-full px-3 py-2 text-sm text-muted-foreground transition-colors hover:text-foreground"
       >
         <ArrowLeft className="w-4 h-4" />

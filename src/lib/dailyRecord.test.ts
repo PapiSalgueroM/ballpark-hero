@@ -10,7 +10,7 @@
  * validate rejects all read back as null; a good record round trips with
  * the version and the date stamped on it.
  */
-import { describe, it, expect, beforeEach } from 'vitest';
+import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { dailyRecordKey, readDailyRecord, writeDailyRecord } from './dailyRecord';
 
 const SLUG = 'probe-game';
@@ -77,6 +77,58 @@ describe('dailyRecord', () => {
     expect(raw.v).toBe(1);
     expect(raw.date).toBe(TODAY);
     expect(readDailyRecord(SLUG, TODAY, validate)).toEqual({ score: 42, guesses: ['x', 'y'] });
+  });
+
+  it('prunes only older dates for this game, keeping a newer record and other games', () => {
+    const newer = dailyRecordKey(SLUG, '2026-09-05');
+    const older = dailyRecordKey(SLUG, YESTERDAY);
+    const current = dailyRecordKey(SLUG, TODAY);
+    const otherGame = dailyRecordKey(`${SLUG}-daily-1900`, YESTERDAY);
+    writeDailyRecord(SLUG, '2026-09-05', { score: 10, guesses: ['newer'] });
+    const newerBytes = localStorage.getItem(newer);
+    expect(newerBytes).not.toBeNull();
+    localStorage.setItem(older, 'older record');
+    localStorage.setItem(otherGame, 'other game');
+
+    writeDailyRecord(SLUG, TODAY, { score: 20, guesses: ['current'] });
+    writeDailyRecord(SLUG, TODAY, { score: 21, guesses: ['updated'] });
+
+    expect(localStorage.getItem(older)).toBeNull();
+    expect(localStorage.getItem(otherGame)).toBe('other game');
+    expect(localStorage.getItem(newer)).toBe(newerBytes);
+    expect(localStorage.getItem(current)).toBe(JSON.stringify({
+      score: 21, guesses: ['updated'], v: 1, date: TODAY,
+    }));
+  });
+
+  it('reports the write result independently of chronological cleanup', () => {
+    const older = dailyRecordKey(SLUG, YESTERDAY);
+    const current = dailyRecordKey(SLUG, TODAY);
+    const newer = dailyRecordKey(SLUG, '2026-09-05');
+    const fields = { score: 20, guesses: ['current'] };
+    localStorage.setItem(older, 'older record');
+    localStorage.setItem(newer, 'newer record');
+    const write = vi.spyOn(Storage.prototype, 'setItem').mockImplementationOnce(() => {
+      throw new DOMException('Fixture write refusal', 'QuotaExceededError');
+    });
+    try {
+      expect(writeDailyRecord(SLUG, TODAY, fields)).toBe(false);
+      expect(localStorage.getItem(current)).toBeNull();
+      expect(localStorage.getItem(older)).toBe('older record');
+    } finally {
+      write.mockRestore();
+    }
+    const cleanup = vi.spyOn(Storage.prototype, 'removeItem').mockImplementationOnce(() => {
+      throw new DOMException('Fixture cleanup refusal', 'SecurityError');
+    });
+    try {
+      expect(writeDailyRecord(SLUG, TODAY, fields)).toBe(true);
+      expect(cleanup.mock.calls).toEqual([[older]]);
+      expect(readDailyRecord(SLUG, TODAY, validate)).toEqual(fields);
+      expect(localStorage.getItem(newer)).toBe('newer record');
+    } finally {
+      cleanup.mockRestore();
+    }
   });
 
   it('cannot be talked into another version or date by the caller', () => {

@@ -714,15 +714,6 @@ function MostPlayedToday() {
   );
 }
 
-/* ─── Round 188: the tile curtain (S-3's home page pass) ───
-   Each game section reveals once as it scrolls into view: tiles rise in a
-   short stagger, capped by a modulo so a 20-tile grid does not take five
-   seconds to settle. Rules of the house: transforms and opacity only (no
-   layout shift), the animation is emphasis on entrance and never hides
-   anything from a user who prefers reduced motion (the media query kills
-   it dead and shows everything instantly), and search results get NO
-   curtain because search must feel instant. The observer disconnects
-   after firing, so a section only ever performs its entrance once. */
 function HomeTileStyles() {
   return (
     <style>{`

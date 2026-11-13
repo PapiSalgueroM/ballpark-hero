@@ -50,6 +50,7 @@ const MARGIN_SEC = 0.5;
 const EPOCH = 1767225600000;
 
 let vnow = 0;
+let wallJump = 0;
 let frameCb: FrameRequestCallback | null = null;
 let latest: ReturnType<typeof useStadiumTycoon> | null = null;
 
@@ -120,10 +121,11 @@ function seededRandom(seed: number) {
 
 beforeEach(() => {
   vnow = 0;
+  wallJump = 0;
   frameCb = null;
   latest = null;
   localStorage.clear();
-  vi.spyOn(Date, 'now').mockImplementation(() => EPOCH + Math.round(vnow));
+  vi.spyOn(Date, 'now').mockImplementation(() => EPOCH + Math.round(vnow) + wallJump);
   vi.spyOn(performance, 'now').mockImplementation(() => vnow);
   vi.spyOn(Math, 'random').mockImplementation(seededRandom(20260904));
   vi.stubGlobal('requestAnimationFrame', (cb: FrameRequestCallback) => { frameCb = cb; return 1; });
@@ -312,5 +314,39 @@ describe('Stadium Tycoon away earnings', () => {
     const closed = (g().state.totalMatches ?? 0) - (before.totalMatches ?? 0);
     expect(hidden, `three hours hidden played ${hidden} matchdays and three hours closed played ${closed}`).toBe(closed);
     measured(`3h hidden played ${hidden} away matchdays, 3h closed played ${closed}`);
+  });
+
+  it.each(['wall', 'both'])('9 a visible tab settles a suspended frame gap with %s clock advance', clock => {
+    mount();
+    warmUp();
+    const before = g().state;
+    const seconds = 45 * 60;
+    if (clock === 'wall') wallJump += seconds * 1000;
+    else vnow += seconds * 1000;
+
+    frames(1);
+
+    const paid = g().awayPay;
+    expect(paid, 'a visible tab waking after 45 minutes should settle away pay').not.toBeNull();
+    const credited = awaySeconds(paid as number, before);
+    expect(Math.abs(credited - seconds)).toBeLessThan(MARGIN_SEC);
+    expect(g().awayTrip?.results).toHaveLength(1);
+    const committed = g().state;
+    expect(committed.totalMatches).toBe((before.totalMatches ?? 0) + 1);
+    expect(JSON.parse(localStorage.getItem(TYCOON_SAVE_KEY)!).totalMatches).toBe(committed.totalMatches);
+
+    frames(1);
+    expect(g().state.money).toBe(committed.money);
+    expect(g().state.totalMatches).toBe(committed.totalMatches);
+    measured(`45min visible wake, ${clock} clock advanced: ${credited.toFixed(3)}s away and one saved matchday`);
+  });
+
+  it('10 a short visible frame gap does not pay as an absence', () => {
+    mount();
+    warmUp();
+    wallJump += 20_000;
+    frames(1);
+    expect(g().awayPay).toBeNull();
+    measured('20s visible gap paid no away earnings');
   });
 });

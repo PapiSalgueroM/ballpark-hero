@@ -56,7 +56,7 @@
          KEEP THIS IN STEP WITH SITE_JSON_LD in src/lib/pageSchema.ts.
          scripts/simSchema.mjs parses this block and compares it against that
          export, so the two cannot drift apart quietly. -->
-    <script type="application/ld+json">[{"@context":"https://schema.org","@type":"WebSite","@id":"https://douknowball.com/#website","name":"DoUKnowBall","alternateName":"Do U Know Ball","url":"https://douknowball.com/","inLanguage":"en","publisher":{"@id":"https://douknowball.com/#org"}},{"@context":"https://schema.org","@type":"Organization","@id":"https://douknowball.com/#org","name":"DoUKnowBall","url":"https://douknowball.com/","logo":"https://douknowball.com/icon-512.png"},{"@context":"https://schema.org","@type":"WebApplication","@id":"https://douknowball.com/#webapp","name":"DoUKnowBall","url":"https://douknowball.com/","applicationCategory":"GameApplication","operatingSystem":"Web Browser","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"publisher":{"@id":"https://douknowball.com/#org"}}]</script><script type="application/ld+json" data-rh="true">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"DoUKnowBall","item":"https://douknowball.com"},{"@type":"ListItem","position":2,"name":"NFL Football Games","item":"https://douknowball.com/pro-football"},{"@type":"ListItem","position":3,"name":"Gauntlet Draft: NFL","item":"https://douknowball.com/nfl-gauntlet-draft"}]}</script><script type="application/ld+json" data-rh="true">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Is the daily draft the same for everyone?","acceptedAnswer":{"@type":"Answer","text":"Yes. One shared set of five card choices per Eastern Time date, so daily scores compare fairly."}},{"@type":"Question","name":"Are the opponents real teams?","acceptedAnswer":{"@type":"Answer","text":"No, and that is deliberate: every gauntlet opponent is an invented club, so no real logo or name is borrowed. The players you draft are real, off the same roster data NFL Front Office plays."}},{"@type":"Question","name":"Why seven slots instead of eleven?","acceptedAnswer":{"@type":"Answer","text":"The real position data behind this game groups linemen and defenders more broadly than it splits out quarterbacks, running backs, receivers and tight ends, so those four skill positions are where every pick is a genuinely graded choice. A full eleven man lineup is possible future scope; this round scoped it to what the data actually supports."}},{"@type":"Question","name":"Is this the same game as the soccer Gauntlet Draft?","acceptedAnswer":{"@type":"Answer","text":"Same engine, NFL's own pool and positions. Seven picks instead of eleven, and the ladder is tuned to this pool's own, much wider rating spread."}},{"@type":"Question","name":"Is Gauntlet Draft: NFL free to play?","acceptedAnswer":{"@type":"Answer","text":"Yes. Gauntlet Draft: NFL is free to play on DoUKnowBall, right in your browser. No download and no signup needed."}}]}</script><script type="application/ld+json" data-rh="true">{"@context":"https://schema.org","@type":"Game","name":"Gauntlet Draft: NFL Offense Draft Challenge | DoUKnowBall","description":"Draft a seven man NFL offense, one slot at a time from five real players, then survive a five round knockout cup. Free daily football draft game.","url":"https://douknowball.com/nfl-gauntlet-draft","isAccessibleForFree":true,"gamePlatform":"Web Browser","publisher":{"@id":"https://douknowball.com/#org"}}</script>
+    <script type="application/ld+json">[{"@context":"https://schema.org","@type":"WebSite","@id":"https://douknowball.com/#website","name":"DoUKnowBall","alternateName":"Do U Know Ball","url":"https://douknowball.com/","inLanguage":"en","publisher":{"@id":"https://douknowball.com/#org"}},{"@context":"https://schema.org","@type":"Organization","@id":"https://douknowball.com/#org","name":"DoUKnowBall","url":"https://douknowball.com/","logo":"https://douknowball.com/icon-512.png"},{"@context":"https://schema.org","@type":"WebApplication","@id":"https://douknowball.com/#webapp","name":"DoUKnowBall","url":"https://douknowball.com/","applicationCategory":"GameApplication","operatingSystem":"Web Browser","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"publisher":{"@id":"https://douknowball.com/#org"}}]</script><script type="application/ld+json" data-rh="true">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"DoUKnowBall","item":"https://douknowball.com"},{"@type":"ListItem","position":2,"name":"NFL Football Games","item":"https://douknowball.com/pro-football"},{"@type":"ListItem","position":3,"name":"Gauntlet Draft: NFL","item":"https://douknowball.com/nfl-gauntlet-draft"}]}</script><script type="application/ld+json" data-rh="true">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Can I move a wide receiver to tight end?","acceptedAnswer":{"@type":"Answer","text":"Each of the seven deals is locked to its listed position. Save the tight end spot for the five cards that appear when you get there."}},{"@type":"Question","name":"Does a higher offense rating guarantee the win?","acceptedAnswer":{"@type":"Answer","text":"A bigger rating helps, but the simulator can produce an upset. The final is rated 97, so even a lineup full of the best cards can lose."}},{"@type":"Question","name":"Will the same seven players get a different result next time?","acceptedAnswer":{"@type":"Answer","text":"The same lineup produces the same playoff run. Try another set of cards in Unlimited to see how a different offense gets on."}},{"@type":"Question","name":"Is Gauntlet Draft: NFL free to play?","acceptedAnswer":{"@type":"Answer","text":"Yes. Gauntlet Draft: NFL is free to play on DoUKnowBall, right in your browser. No download and no signup needed."}}]}</script><script type="application/ld+json" data-rh="true">{"@context":"https://schema.org","@type":"Game","name":"Gauntlet Draft: NFL Offense Draft Challenge | DoUKnowBall","description":"Draft a seven man NFL offense, one slot at a time from five real players, then survive a five round knockout cup. Free daily football draft game.","url":"https://douknowball.com/nfl-gauntlet-draft","isAccessibleForFree":true,"gamePlatform":"Web Browser","publisher":{"@id":"https://douknowball.com/#org"}}</script>
     
     
     <!-- Round 286: the site's own social image, on its own domain. The old
@@ -103,18 +103,39 @@
           }
           return false;
         };
-        var sweep = function () {
+        var selector = '[id*="lovable" i], [class*="lovable" i], a[href*="lovable.dev"], a[href*="gptengineer"], [id*="gpt-engineer" i]';
+        var sweep = function (root) {
           try {
-            var all = document.querySelectorAll('[id*="lovable" i], [class*="lovable" i], a[href*="lovable.dev"], a[href*="gptengineer"], [id*="gpt-engineer" i]');
+            var all = root.querySelectorAll(selector);
             for (var i = 0; i < all.length; i++) {
               var el = all[i];
               if (isBadge(el)) el.remove();
             }
           } catch (e) { /* never break the page over badge cleanup */ }
         };
-        new MutationObserver(sweep).observe(document.documentElement, { childList: true, subtree: true });
-        document.addEventListener('DOMContentLoaded', sweep);
-        window.addEventListener('load', sweep);
+        var inspect = function (node, includeChildren) {
+          if (node.nodeType !== 1 || !node.isConnected) return;
+          if (node.matches(selector) && isBadge(node)) node.remove();
+          if (includeChildren && node.firstElementChild) sweep(node);
+        };
+        new MutationObserver(function (records) {
+          try {
+            for (var i = 0; i < records.length; i++) {
+              var record = records[i];
+              if (record.type === 'attributes') {
+                inspect(record.target, false);
+              } else {
+                var added = record.addedNodes;
+                for (var j = 0; j < added.length; j++) inspect(added[j], true);
+              }
+            }
+          } catch (e) { /* never break the page over badge cleanup */ }
+        }).observe(document.documentElement, {
+          childList: true, subtree: true, attributes: true, attributeFilter: ['id', 'class', 'href'],
+        });
+        var sweepDocument = function () { sweep(document); };
+        document.addEventListener('DOMContentLoaded', sweepDocument);
+        window.addEventListener('load', sweepDocument);
       })();
     </script>
     <script data-dukb-consent-bootstrap="">
@@ -231,6 +252,8 @@
 <div id="dukb-boot" aria-hidden="true"><img src="/logo-mark.svg" alt="" width="72" height="72" decoding="async"></div>
 <div id="dukb-snapshot">
 <div data-site-chrome>
+<p>Essential storage keeps games working. Advertising is optional. We ask again in 180 days. <a href="/privacy">Learn more</a></p>
+<p>Analytics is paused. Google Analytics is off while we check its privacy settings.</p>
 <a href="/">DOUKNOWBALL</a>
 </div>
 <h1>⚔️Gauntlet Draft: NFL</h1>
@@ -240,53 +263,47 @@
 <p>Then your offense runs the gauntlet: five knockout rounds against opposition rated 79 up to 97. A level game goes to overtime, and another if it is still level.</p>
 <p>The run is decided by the offense you drafted: the same offense always runs the same gauntlet. 16 points a round survived, the trophy lands exactly 100.</p>
 <h2>Gauntlet Draft: NFL Offense Draft Challenge</h2>
-<p>The NFL draft mode: each of the seven starting offense slots deals five real players from a star to a bargain, you keep one per slot, and the finished offense runs a five round knockout against ever stronger invented opposition. One shared daily draft, unlimited redrafts, and a fully deterministic cup run so the draft is the game.</p>
-<p>The draft mode, NFL style: seven picks, one per starting offense slot, five real players a pick from a genuine star to a bargain, and you keep exactly one.</p>
-<p>Then the cup begins. Your finished offense runs five knockout rounds against ever stronger invented opposition, rated 79 up to 97, and overtime when the game is level.</p>
-<p>The run is decided entirely by the offense you drafted: the same seven always runs the same gauntlet, so every pick is the game.</p>
+<p>Build a seven-player offense around one quarterback, two backs, three receivers and a tight end. Take it through five rounds of playoff football in the daily or unlimited draft.</p>
+<p>Draft a quarterback, then build his backfield and receiving group. You leave the board with one QB, two running backs, three wide receivers and a tight end.</p>
+<p>The ratings on the cards are the ratings this game uses. A familiar name at quarterback is tempting, but the simulator takes the average of all seven picks. Check the number on the card before you start building around a favorite.</p>
+<p>Your offense opens against a 79-rated opponent. If you keep winning, the final asks it to get past a 97. There is no play-calling between rounds, so the draft is where you make your decisions.</p>
 <h2>How to play Gauntlet Draft: NFL, a free online NFL card draft game</h2>
-<h3>Choosing the daily or unlimited draft</h3>
-<li>Pick the daily gauntlet (the same five card choices for everyone today) or unlimited for a fresh draft.</li>
-<h3>Drafting each of your seven slots</h3>
-<li>For each of the seven slots (QB, two RB, three WR, TE) read the five cards, star to bargain, and tap the one you keep.</li>
-<h3>Watching the knockout begin on its own</h3>
-<li>After the seventh pick the knockout starts on its own: five rounds, one match each, revealed one at a time.</li>
-<h3>Scoring survival points and the trophy</h3>
-<li>Survive a round for 16 points; lift the trophy for exactly 100.</li>
-<h2>Gauntlet Draft: NFL rules: cards, positions and the knockout</h2>
-<h3>Real players against invented opponents</h3>
-<li>Every card is a real player off the same 2026 roster data NFL Front Office plays; every opponent club is invented on purpose.</li>
-<h3>Why the draft covers four skill positions</h3>
-<li>The draft is scoped to the four skill positions (QB, RB, WR, TE) on purpose: their ratings are built from real production, the way the position data's own generator describes it, and every slot deals a genuine star-to-bargain spread. Offensive linemen and defenders are rated on thinner evidence (playing time, draft position and limited defensive measures, most of it marked e in NFL Front Office), so they stay out of the draft rather than padding it with picks that are not a real choice.</li>
-<h3>A star to bargain spread in every slot</h3>
-<li>The five cards per slot are spread across the pool's rating range, so a top-tier card and a bargain are always both on the table.</li>
-<h4>Never dealt the same player twice</h4>
-<li>No player is dealt twice in one draft.</li>
-<h3>A knockout that replays the same way</h3>
-<li>The knockout is deterministic in your offense: scoring comes from the rating gap, level games go to overtime, and replaying the same seven replays the same cup.</li>
-<h3>Opposition ratings climbing round by round</h3>
-<li>Opposition ratings climb 79, 83, 88, 92, 97. A bargain offense usually falls in the first round, an elite one reaches the final as a slight underdog, and even a perfect draft lifts the trophy roughly one run in nine.</li>
-<h2>Gauntlet Draft: NFL walkthrough: a quarterback pick and a title run</h2>
-<h3>Five cards at the quarterback slot</h3>
-<p>The quarterback slot deals a 93 next to an 88, an 82, a 76 and a 71. There is no cost to any of them, so the 93 is the pick unless you are chasing a specific team on the card.</p>
-<h3>Two rounds survived and one regret</h3>
-<p>Your finished offense rates 90. The Qualifier wins big, the Last Sixteen is tight, the Quarter Final needs overtime, and the Semi Final ends the run. Two rounds survived, 32 points, and the card you would redo is the 76 you took at the third receiver spot.</p>
-<h2>Gauntlet Draft: NFL tips for building a title winning offense</h2>
-<h3>Why the quarterback card carries the most weight</h3>
-<li>The quarterback card carries the most weight of any single pick: a weak one drags the whole rating.</li>
-<h3>Bargain cards for flavor, not for winning</h3>
-<li>The bargain cards exist for flavor runs, not for winning. If the score is the goal, draft the biggest number that fits.</li>
-<h3>Watching your running rating climb</h3>
-<li>Champions need an offense in the mid nineties. Check your running rating under the cards as you go.</li>
+<h3>Choose a shared board or a fresh draw</h3>
+<li>Daily gives everyone the same offers for the Eastern Time date. Use Unlimited when you want to see a different mix of quarterbacks, backs and pass catchers.</li>
+<h3>Fill the backfield and receiving group</h3>
+<li>Each slot shows five candidates from its own position. Choose one and the board advances. A second running back goes into RB2, and the three wide receiver slots each take their own pick.</li>
+<h3>Follow the offense from the qualifier</h3>
+<li>Once you choose a tight end, watch the playoff results. The next game appears if you win the current one. A loss ends the run, even if your roster rating was higher.</li>
+<h3>Read your score at the end</h3>
+<li>Four wins and a loss in the final earn 64 points. A fifth win adds another 16, and the trophy adds 20 more for a score of 100.</li>
+<h2>Gauntlet Draft: NFL rules for skill players and overtime</h2>
+<h3>NFL player cards and fictional opponents</h3>
+<li>The skill players come from the roster data used by NFL Front Office. The teams you face in the playoffs are fictional, and the scores come from the game.</li>
+<h3>Why the board stops at seven slots</h3>
+<li>The roster data has more detailed production for quarterbacks, running backs, wide receivers and tight ends. The draft uses those four positions, where each card can be graded on that evidence.</li>
+<h3>Five options and no repeats</h3>
+<li>Each deal draws from different parts of the position's rating range.</li>
+<h4>Why the receiver options change</h4>
+<li>A player who has already appeared in your draft will not be dealt again, so each receiver slot gives you new choices.</li>
+<h3>Five opponents and an overtime decider</h3>
+<li>The playoff ladder is rated 79, 83, 88, 92 and 97. A tie goes to overtime. The game uses the same simulation for the same seven picks, so you need a different offense to see a different run.</li>
+<h2>Gauntlet Draft: NFL walkthrough from the quarterback pick to the playoffs</h2>
+<h3>A twelve point gap at running back</h3>
+<p>Say the second running back deal has a 90 and a 78, and you prefer the 78 because he played for your favorite team. That costs 12 points across seven cards, so it lowers the offense average by about 1.7 before rounding. Giving up the same 12 points at quarterback would have exactly the same effect.</p>
+<h3>A tight end can tip a close matchup</h3>
+<p>Imagine your first six picks add up to 540, an average of 90. Take a tight end rated 90 and your finished offense stays at 90. Take an 83 and it drops to 89. Either can beat the 92-rated semifinal opponent, but the stronger card gives your offense the better matchup.</p>
+<h2>Gauntlet Draft: NFL tips for grading your offense</h2>
+<h3>Spread the strength across the offense</h3>
+<li>Three receiver picks give you three chances to raise the average. Take those deals as seriously as the opening QB slot. A two-point gain on each receiver adds six rating points across the seven picks.</li>
+<h3>Use Unlimited for a team theme</h3>
+<li>If you want to pick by favorite franchise or build around a particular player, try it on a fresh draft. On the daily board, compare the ratings at every spot if your aim is the highest possible score.</li>
 <h2>Gauntlet Draft: NFL FAQ: daily drafts, positions and opponents</h2>
-<h3>Is the daily draft the same for everyone?</h3>
-<p>Yes. One shared set of five card choices per Eastern Time date, so daily scores compare fairly.</p>
-<h3>Are the opponents real teams?</h3>
-<p>No, and that is deliberate: every gauntlet opponent is an invented club, so no real logo or name is borrowed. The players you draft are real, off the same roster data NFL Front Office plays.</p>
-<h3>Why seven slots instead of eleven?</h3>
-<p>The real position data behind this game groups linemen and defenders more broadly than it splits out quarterbacks, running backs, receivers and tight ends, so those four skill positions are where every pick is a genuinely graded choice. A full eleven man lineup is possible future scope; this round scoped it to what the data actually supports.</p>
-<h3>Is this the same game as the soccer Gauntlet Draft?</h3>
-<p>Same engine, NFL's own pool and positions. Seven picks instead of eleven, and the ladder is tuned to this pool's own, much wider rating spread.</p>
+<h3>Can I move a wide receiver to tight end?</h3>
+<p>Each of the seven deals is locked to its listed position. Save the tight end spot for the five cards that appear when you get there.</p>
+<h3>Does a higher offense rating guarantee the win?</h3>
+<p>A bigger rating helps, but the simulator can produce an upset. The final is rated 97, so even a lineup full of the best cards can lose.</p>
+<h3>Will the same seven players get a different result next time?</h3>
+<p>The same lineup produces the same playoff run. Try another set of cards in Unlimited to see how a different offense gets on.</p>
 <h3>Is Gauntlet Draft: NFL free to play?</h3>
 <p>Yes. Gauntlet Draft: NFL is free to play on DoUKnowBall, right in your browser. No download and no signup needed.</p>
 <h2>More games to play</h2>
@@ -314,8 +331,6 @@
 <a href="/cookie-policy">Cookie Policy</a>
 <a href="/terms">Terms of Service</a>
 <a href="/accessibility">Accessibility</a>
-<p>Essential storage keeps games working. Advertising is optional. We ask again in 180 days. <a href="/privacy">Learn more</a></p>
-<p>Analytics is paused. Google Analytics is off while we check its privacy settings.</p>
 </div>
 </div>
 </div>

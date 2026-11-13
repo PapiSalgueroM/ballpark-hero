@@ -1,4 +1,4 @@
-import { defineConfig } from "vite";
+import { defineConfig, type Plugin } from "vite";
 import react from "@vitejs/plugin-react-swc";
 import path from "path";
 import fs from "fs";
@@ -32,12 +32,9 @@ import { preloadWait } from "./scripts/lib/vitePreloadWait.mjs";
  * are correct by construction because they are read out of the same build that
  * produced them.
  *
- * The fallback is automatic and was already written. prerender-boot.js begins
- * with "nothing to do if a build ever does inject them here" and returns early
- * when it finds a module script pointing at /assets/. So if this plugin is
- * removed, fails, or finds nothing, every page behaves exactly as it did
- * before. That is why the boot script is deliberately LEFT in the snapshot
- * rather than stripped out.
+ * The source snapshot keeps prerender-boot.js for any build where this step
+ * cannot inject current assets. A successful rewrite removes that extra request
+ * from the output, since the current asset tags already start the app.
  *
  * Guarded by scripts/simSnapshotAssets.mjs.
  */
@@ -47,13 +44,57 @@ import { preloadWait } from "./scripts/lib/vitePreloadWait.mjs";
    same way. Normal builds still resolve to dist and behave exactly as
    before. The hook cannot read it off `this` because Rollup binds hooks to
    its own plugin context, so it rides in a closure. */
-const inlineSnapshotAssets = (root: string) => {
+const inlineSnapshotAssets = (root: string): Plugin => {
   let outDirName = "dist";
+  const routeHints = new Map<string, string>();
   return {
   name: "dukb-inline-snapshot-assets",
   apply: "build" as const,
   configResolved(c: { build: { outDir: string } }) {
     outDirName = c.build.outDir;
+  },
+  generateBundle(_options, bundle) {
+    const routes = [
+      { source: "/src/pages/SoccerCareerEntry.tsx", paths: ["soccer-career"] },
+      { source: "/src/pages/ClubManagerEntry.tsx", paths: ["club-manager"] },
+      { source: "/src/pages/NbaMyCareer.tsx", paths: ["nba-my-career"] },
+      { source: "/src/pages/SportHub.tsx", paths: ["soccer", "pro-basketball"] },
+    ];
+    const deferredModules = [
+      "/src/pages/SoccerCareer.tsx",
+      "/src/lib/soccerCareerEngine.ts",
+      "/src/lib/clubManager.ts",
+      "/src/pages/ClubManager.tsx",
+      "/src/pages/NbaMyCareer.tsx",
+      "/src/components/nba-my-career/NbaMyCareerBoard.tsx",
+      "/src/components/us-career/UsCareerBoard.tsx",
+      "/src/integrations/supabase/client.ts",
+      "/src/components/layout/LiveTicker.tsx",
+    ];
+    routeHints.clear();
+    for (const { source, paths } of routes) {
+      // Vite can combine the dynamic entry with shared code in a chunk with no façade.
+      const page = Object.values(bundle).find(chunk => chunk.type === "chunk" &&
+        chunk.moduleIds.some(id => id.replace(/\\/g, "/").endsWith(source)));
+      if (!page) continue;
+
+      // Static imports only. The App module has its own script tag.
+      const files = new Set<string>();
+      const collect = (file: string) => {
+        const chunk = bundle[file];
+        if (!chunk || chunk.type !== "chunk" || chunk.isEntry || files.has(file) || !file.startsWith("assets/")) return;
+        const includesDeferredModule = chunk.moduleIds.some(id => {
+          const module = id.replace(/\\/g, "/");
+          return deferredModules.some(deferred => deferred !== source && module.endsWith(deferred));
+        });
+        if (includesDeferredModule) throw new Error(`The preload graph for ${paths.join(", ")} contains gameplay or the live ticker`);
+        files.add(file);
+        chunk.imports.forEach(collect);
+      };
+      collect(page.fileName);
+      const hints = [...files].map(file => `\n    <link rel="modulepreload" crossorigin href="/${file}">`).join("");
+      for (const route of paths) routeHints.set(route, hints);
+    }
   },
   /* closeBundle, not writeBundle: publicDir is copied during the write phase,
      and a snapshot that has not been copied yet cannot be rewritten. */
@@ -93,10 +134,11 @@ const inlineSnapshotAssets = (root: string) => {
        it to every snapshot without rewriting the committed files. */
     /* Round 448: the dim was not enough, he filmed it again coming back from
        Google sign in. The boot now shows the mark on a full cover (#dukb-boot)
-       placed inside #root so React's mount removes it. Keep the covered
-       snapshot out of layout so loading the stylesheet cannot move its text.
-       The noscript rule restores the full document. Strip the older Round
-       314 pair and insert the cover after #root opens when it is absent. */
+       placed inside #root so React's mount removes it; the snapshot text stays
+       out of layout so loading CSS cannot shift it. The noscript rule hides
+       the cover and shows the full copy. Old committed snapshots still carry the Round 314 pair, so it is
+       stripped here before the new one goes in, and the cover is spliced in
+       right after #root opens. */
     const oldCalmBoot = /<style>#dukb-snapshot\{max-height:100vh;overflow:hidden;opacity:\.45\}<\/style>\s*<noscript><style>#dukb-snapshot\{max-height:none;overflow:visible;opacity:1\}<\/style><\/noscript>\s*/g;
     const calmBoot =
       `<style>#dukb-boot{position:fixed;inset:0;z-index:2147483000;display:flex;align-items:center;justify-content:center;background:#0a0a0b}#dukb-boot img{width:72px;height:72px}#dukb-snapshot{display:none}</style>` +
@@ -104,7 +146,7 @@ const inlineSnapshotAssets = (root: string) => {
     const bootCover = `<div id="dukb-boot" aria-hidden="true"><img src="/logo-mark.svg" alt="" width="72" height="72" decoding="async"></div>`;
     const inject =
       calmBoot + "\n    " +
-      styles.map(h => `<link rel="stylesheet" crossorigin href="${h}" media="print" onload="this.media='all'">`).join("\n    ") +
+      styles.map(h => `<link rel="stylesheet" crossorigin href="${h}" media="print" data-dukb-app-style fetchpriority="high" onload="this.media='all'" onerror="this.media='all'">`).join("\n    ") +
       (styles.length ? `\n    <noscript>${styles.map(h => `<link rel="stylesheet" href="${h}">`).join("")}</noscript>\n    ` : "") +
       modules.map(sr => `<script type="module" crossorigin src="${sr}"></script>`).join("\n    ");
 
@@ -125,17 +167,20 @@ const inlineSnapshotAssets = (root: string) => {
           "<p>Analytics is paused. Google Analytics is off while we check its privacy settings.</p>",
           "<p>Google Analytics is paused. Lovable still measures basic visits.</p>",
         );
-        if (entry.name !== "index.html" || !html.includes("/prerender-boot.js") || html.includes("/assets/")) {
+        if (entry.name !== "index.html" || !html.includes("/prerender-boot.js") || html.includes("/assets/") || !html.includes("</head>")) {
           if (out !== html) fs.writeFileSync(f, out);
           if (entry.name === "index.html") skipped += 1;
           continue;
         }
-        out = out.replace(oldCalmBoot, "").replace("</head>", `  ${inject}\n  </head>`);
+        const preloads = routeHints.get(path.relative(dist, path.dirname(f))) ?? "";
+        out = out.replace(oldCalmBoot, "").replace("</head>", `  ${inject}${preloads}\n  </head>`);
         /* Round 448: the cover goes in once, as #root's first child. A snapshot
            the prerenderer already wrote in the new shape carries it and is
            left alone. */
         if (!out.includes('id="dukb-boot"')) out = out.replace('<div id="root">', `<div id="root">\n${bootCover}`);
         if (out === html) { skipped += 1; continue; }
+        out = out.replace(/<link[^>]+href="https:\/\/fonts\.(?:googleapis\.com(?:\/css2\?family=Space\+Grotesk[^"]*)?|gstatic\.com)"[^>]*>\s*/g, "");
+        out = out.replace(/<script src="\/prerender-boot\.js"(?: defer)?><\/script>\s*/, "");
         fs.writeFileSync(f, out);
         touched += 1;
       }

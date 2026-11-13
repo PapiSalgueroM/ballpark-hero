@@ -15,6 +15,7 @@ import { PlayerAutocomplete } from '@/components/game/PlayerAutocomplete';
 import { normalizeName, type PlayerEntity } from '@/lib/playerSearch';
 import { dateSeed, getTodayET } from '@/lib/dateUtils';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
+import { useFranchiseGridDailyBoard, type FilledCell } from '@/hooks/useFranchiseGridDailyBoard';
 import {
   CellStatus,
   GridDifficulty,
@@ -41,10 +42,6 @@ type Phase = 'boot' | 'error' | 'playing';
 type Mode = 'daily' | 'unlimited';
 
 const GUESS_LIMIT = 9;
-
-interface FilledCell {
-  playerName: string;
-}
 
 function normalize(name: string): string {
   return normalizeName(name);
@@ -89,39 +86,17 @@ const MlbGrid = () => {
   const puzzle = mode === 'daily' ? dailyPuzzle : unlimitedPuzzle;
 
   // --- Per-mode board state: persisted for daily (localStorage), local-only for unlimited ---
-  const dailyStorageKey = `mlb-grid-daily-${todayStr}`;
-
-  const [dailyCells, setDailyCells] = useState<Record<number, FilledCell>>(() => {
-    try {
-      const raw = localStorage.getItem(dailyStorageKey);
-      if (!raw) return {};
-      const saved = JSON.parse(raw) as { date: string; cells: Record<number, FilledCell>; wrong?: number };
-      return saved.date === todayStr ? saved.cells : {};
-    } catch { return {}; }
-  });
-  // Round 52: the wrong-guess count persists with the board. Reloading
-  // mid-daily used to hand back a full guess budget with the cells intact.
-  const [dailyWrongCount, setDailyWrongCount] = useState(() => {
-    try {
-      const raw = localStorage.getItem(dailyStorageKey);
-      if (!raw) return 0;
-      const saved = JSON.parse(raw) as { date: string; wrong?: number };
-      return saved.date === todayStr ? (saved.wrong ?? 0) : 0;
-    } catch { return 0; }
-  });
+  const {
+    board: { cells: dailyCells, wrong: dailyWrongCount },
+    readLatest: syncDailyBoard,
+    settleGuess: settleDailyGuess,
+  } = useFranchiseGridDailyBoard('mlb-grid', todayStr, GUESS_LIMIT);
 
   const [unlimitedCells, setUnlimitedCells] = useState<Record<number, FilledCell>>({});
   const [unlimitedWrongCount, setUnlimitedWrongCount] = useState(0);
 
   const cells = mode === 'daily' ? dailyCells : unlimitedCells;
   const wrongCount = mode === 'daily' ? dailyWrongCount : unlimitedWrongCount;
-
-  useEffect(() => {
-    if (mode !== 'daily') return;
-    try {
-      localStorage.setItem(dailyStorageKey, JSON.stringify({ date: todayStr, cells: dailyCells, wrong: dailyWrongCount }));
-    } catch { /* private mode / quota */ }
-  }, [dailyCells, dailyWrongCount, dailyStorageKey, todayStr, mode]);
 
   const [activeCell, setActiveCell] = useState<number | null>(null);
   const [query, setQuery] = useState('');
@@ -134,8 +109,9 @@ const MlbGrid = () => {
     setMode(m);
     setActiveCell(null);
     setQuery('');
-    if (m === 'unlimited' && !unlimitedPuzzle) newUnlimitedPuzzle();
-  }, [unlimitedPuzzle, newUnlimitedPuzzle]);
+    if (m === 'daily') syncDailyBoard();
+    else if (!unlimitedPuzzle) newUnlimitedPuzzle();
+  }, [syncDailyBoard, unlimitedPuzzle, newUnlimitedPuzzle]);
 
   const resetUnlimited = useCallback(() => {
     setUnlimitedCells({});
@@ -175,29 +151,24 @@ const MlbGrid = () => {
        cell is the one judged, so a name two players share is right when
        either of them is. The same line in all four grid pages. */
     const indexed = pickNamesake(gridData.byNormalizedName.get(key), (p) => playerMatchesCell(p, cell));
-    if (!indexed) {
-      setWrongFlash(activeCell);
-      setTimeout(() => setWrongFlash(null), 1200);
-      if (mode === 'daily') setDailyWrongCount((c) => c + 1); else setUnlimitedWrongCount((c) => c + 1);
-      setActiveCell(null);
-      setQuery('');
-      return;
-    }
+    const playerName = indexed && playerMatchesCell(indexed, cell) ? indexed.name : null;
 
-    const valid = playerMatchesCell(indexed, cell) && !guessedNames.has(key);
-
-    if (valid) {
-      const filled: FilledCell = { playerName: indexed.name };
-      if (mode === 'daily') setDailyCells((c) => ({ ...c, [activeCell]: filled }));
-      else setUnlimitedCells((c) => ({ ...c, [activeCell]: filled }));
+    let wrong = false;
+    if (mode === 'daily') {
+      wrong = settleDailyGuess(activeCell, key, playerName) === 'wrong';
+    } else if (playerName !== null && !guessedNames.has(key)) {
+      setUnlimitedCells((filled) => ({ ...filled, [activeCell]: { playerName } }));
     } else {
+      setUnlimitedWrongCount((count) => count + 1);
+      wrong = true;
+    }
+    if (wrong) {
       setWrongFlash(activeCell);
       setTimeout(() => setWrongFlash(null), 1200);
-      if (mode === 'daily') setDailyWrongCount((c) => c + 1); else setUnlimitedWrongCount((c) => c + 1);
     }
     setActiveCell(null);
     setQuery('');
-  }, [activeCell, puzzle, gridData, gameOver, mode, guessedNames]);
+  }, [activeCell, puzzle, gridData, gameOver, mode, guessedNames, settleDailyGuess]);
 
   /* Round 643: the daily board alone, in either mode (the MissingXi shape).
      Gated on the mode, a trip to Unlimited and back went false then true
@@ -367,7 +338,7 @@ const MlbGrid = () => {
               </div>
             </div>
 
-            {activeCell !== null && !gameOver && (
+            {activeCell !== null && !cells[activeCell] && !gameOver && (
               <div className="mt-6 max-w-md mx-auto">
                 <p className="text-center text-xs text-muted-foreground mb-2">
                   Find a player who is <span className="text-primary font-semibold">{puzzle.rows[Math.floor(activeCell / 3)].label}</span>{' '}

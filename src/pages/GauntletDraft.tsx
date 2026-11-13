@@ -3,6 +3,7 @@ import { Loader2, Swords } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { GameShell } from '@/components/game/GameShell';
 import { ResultScreen } from '@/components/game/ResultScreen';
+import GauntletResumeNotice from '@/components/gauntlet/GauntletResumeNotice';
 import { GameNav } from '@/components/game/GameNav';
 import AdBanner from '@/components/ads/AdBanner';
 import ReportQuestion from '@/components/game/ReportQuestion';
@@ -16,7 +17,8 @@ import { FlagImg } from '@/components/FlagImg';
 import { Player } from '@/types/game';
 import {
   GAUNTLET_ROUNDS, GauntletDraft as DraftShape, GauntletRun,
-  buildDraft, dailyDraftSeed, loadDailyRun, matchLine, matchNote, runGauntlet, saveDailyRun, squadRatingOf,
+  buildDraft, dailyDraftSeed, loadDailyDraft, loadDailyRun, matchLine, matchNote,
+  restoreDailyPicks, runGauntlet, saveDailyDraft, saveDailyRun, squadRatingOf,
 } from '@/lib/gauntletDraft';
 
 /**
@@ -30,7 +32,9 @@ import {
 
 type Phase = 'boot' | 'error' | 'setup' | 'drafting' | 'running' | 'done';
 type Mode = 'daily' | 'unlimited';
+type PendingDailyRun = { run: GauntletRun; draft: DraftShape; squad: (Player | null)[]; conflict: boolean };
 const SLUG = 'gauntlet-draft';
+const MIN_POOL_SIZE = 100;
 
 /* The original card frame: colour keyed to the card's rating band. */
 const bandClass = (r: number) =>
@@ -50,66 +54,137 @@ export default function GauntletDraft() {
   const todayStr = useRef(getTodayET()).current;
   const [phase, setPhase] = useState<Phase>('boot');
   const [pool, setPool] = useState<Player[]>([]);
+  const [usingFallback, setUsingFallback] = useState(false);
   const [mode, setMode] = useState<Mode>('daily');
   const [draft, setDraft] = useState<DraftShape | null>(null);
   const [pickIndex, setPickIndex] = useState(0);
   const [squad, setSquad] = useState<(Player | null)[]>([]);
   const [run, setRun] = useState<GauntletRun | null>(null);
+  const [pendingDailyRun, setPendingDailyRun] = useState<PendingDailyRun | null>(null);
+  const [dailyUnavailable, setDailyUnavailable] = useState(false);
   const [shownMatches, setShownMatches] = useState(0);
 
   useEffect(() => {
+    if (phase !== 'boot') return;
     let cancelled = false;
-    fetchSquadPool('current')
+    let usedFallback = false;
+    fetchSquadPool('current', undefined, () => { usedFallback = true; })
       .then(p => {
         if (cancelled) return;
-        if (p.length < 100) { setPhase('error'); return; }
         setPool(p);
-        setPhase('setup');
+        setUsingFallback(usedFallback);
+        setPhase(p.length < MIN_POOL_SIZE ? 'error' : 'setup');
       })
-      .catch(() => { if (!cancelled) setPhase('error'); });
+      .catch(() => {
+        if (cancelled) return;
+        setPool([]);
+        setPhase('error');
+      });
     return () => { cancelled = true; };
-  }, []);
+  }, [phase]);
+
+  const restoreDaily = useCallback(() => {
+    const stored = loadDailyRun(todayStr);
+    const result = stored ?? pendingDailyRun?.run;
+    if (!result) return false;
+    if (stored) setPendingDailyRun(null);
+    markRestoredFinish(SLUG);
+    setMode('daily');
+    setDraft(null);
+    setRun(result);
+    setShownMatches(result.matches.length);
+    setPhase('done');
+    return true;
+  }, [pendingDailyRun, todayStr]);
 
   const start = useCallback((m: Mode) => {
-    if (m === 'daily') {
-      /* Round 428: a run already in the books comes back as it was, instead
-         of the same draft being dealt again with the cup known. This restore
-         runs in a click handler after mount, exactly the false to true
-         transition useGameCompletion records, so it says what it is first. */
-      const saved = loadDailyRun(todayStr);
+    setDailyUnavailable(false);
+    if (m === 'daily' && restoreDaily()) return;
+    const saved = m === 'daily' ? loadDailyDraft(todayStr) : null;
+    if (m === 'daily' && usingFallback && !saved) {
+      setPhase('boot');
+      return;
+    }
+    const unavailable = () => {
+      if (usingFallback) setPhase('boot');
+      else setDailyUnavailable(true);
+    };
+    const seed = m === 'daily' ? dailyDraftSeed(todayStr) : Math.floor(Math.random() * 2147483645) + 1;
+    let d: DraftShape;
+    try {
+      d = buildDraft(pool, seed);
+    } catch (error) {
       if (saved) {
-        markRestoredFinish(SLUG);
-        setMode('daily');
-        setDraft(null);
-        setRun(saved);
-        setShownMatches(saved.matches.length);
-        setPhase('done');
+        unavailable();
         return;
       }
+      if (!(error instanceof RangeError)) throw error;
+      setPool([]);
+      setPhase('error');
+      return;
     }
-    const seed = m === 'daily' ? dailyDraftSeed(todayStr) : Math.floor(Math.random() * 2147483645) + 1;
-    const d = buildDraft(pool, seed);
+    const kept = saved ? restoreDailyPicks(d, saved) : [];
+    if (!kept) {
+      unavailable();
+      return;
+    }
     setMode(m);
     setDraft(d);
-    setPickIndex(0);
-    setSquad(new Array<Player | null>(d.formation.slots.length).fill(null));
+    setPickIndex(kept.length);
+    setSquad(d.formation.slots.map((_, i) => kept[i] ?? null));
     setRun(null);
     setShownMatches(0);
     setPhase('drafting');
-  }, [pool]);
+  }, [pool, restoreDaily, todayStr, usingFallback]);
+
+  const retryDailySave = () => {
+    if (!pendingDailyRun) return;
+    const stored = loadDailyRun(todayStr);
+    if (stored) {
+      setRun(stored);
+      setPendingDailyRun(null);
+      return;
+    }
+    const saved = loadDailyDraft(todayStr);
+    const kept = saved ? restoreDailyPicks(pendingDailyRun.draft, saved) : [];
+    const conflict = !kept || kept.some((player, i) => player !== pendingDailyRun.squad[i]);
+    if (!conflict && saveDailyRun(todayStr, pendingDailyRun.run)) {
+      setPendingDailyRun(null);
+    } else if (conflict !== pendingDailyRun.conflict) {
+      setPendingDailyRun({ ...pendingDailyRun, conflict });
+    }
+  };
 
   const keep = (p: Player) => {
     if (!draft || phase !== 'drafting') return;
+    if (mode === 'daily') {
+      if (restoreDaily()) return;
+      const saved = loadDailyDraft(todayStr);
+      const kept = saved ? restoreDailyPicks(draft, saved) : [];
+      if (!kept) {
+        setDailyUnavailable(true);
+        setPhase('setup');
+        return;
+      }
+      if (kept.some((player, i) => player !== squad[i])) {
+        setPickIndex(kept.length);
+        setSquad(draft.formation.slots.map((_, i) => kept[i] ?? null));
+        return;
+      }
+    }
     const next = [...squad];
     next[pickIndex] = p;
     setSquad(next);
     if (pickIndex + 1 >= draft.picks.length) {
       const result = runGauntlet(next);
-      if (mode === 'daily') saveDailyRun(todayStr, result);
+      if (mode === 'daily' && !saveDailyRun(todayStr, result)) {
+        setPendingDailyRun({ run: result, draft, squad: next, conflict: false });
+      }
       setRun(result);
       setPhase('running');
       return;
     }
+    if (mode === 'daily') saveDailyDraft(todayStr, draft, next.slice(0, pickIndex + 1) as Player[]);
     setPickIndex(i => i + 1);
   };
 
@@ -135,7 +210,12 @@ export default function GauntletDraft() {
   useGameCompletion(SLUG, run !== null, run?.score ?? 0, run?.roundsCleared ?? 0);
 
   const pick = draft && phase === 'drafting' ? draft.picks[pickIndex] : null;
-  const dailyDone = phase === 'setup' && loadDailyRun(todayStr) !== null;
+  const poolUnavailable = phase === 'error' || (phase === 'setup' && pool.length < MIN_POOL_SIZE);
+  const dailyDone = (phase === 'setup' || phase === 'error') && (pendingDailyRun !== null || loadDailyRun(todayStr) !== null);
+  const retryPool = () => {
+    setDailyUnavailable(false);
+    setPhase('boot');
+  };
 
   return (
     <>
@@ -149,16 +229,23 @@ export default function GauntletDraft() {
           <div className="flex justify-center py-16"><Loader2 className="w-8 h-8 animate-spin text-primary" /></div>
         )}
 
-        {phase === 'error' && (
+        {poolUnavailable && (
           <div className="text-center py-12">
             <p className="text-destructive font-semibold mb-3">Couldn't load the player pool right now.</p>
-            <button onClick={() => window.location.reload()} className="px-6 py-2.5 bg-primary text-primary-foreground rounded-full font-semibold">
-              Try again
-            </button>
+            <div className="flex flex-wrap justify-center gap-2">
+              {dailyDone && (
+                <button onClick={restoreDaily} className="px-6 py-2.5 border border-border rounded-full font-semibold">
+                  See today's result
+                </button>
+              )}
+              <button onClick={retryPool} className="px-6 py-2.5 bg-primary text-primary-foreground rounded-full font-semibold">
+                Try again
+              </button>
+            </div>
           </div>
         )}
 
-        {phase === 'setup' && (
+        {phase === 'setup' && !poolUnavailable && (
           <div className="space-y-4 max-w-sm mx-auto">
             <div className="rounded-xl border border-border bg-surface-1 p-4 text-sm text-muted-foreground space-y-1.5">
               <p className="font-bold text-foreground">How to play</p>
@@ -168,8 +255,11 @@ export default function GauntletDraft() {
             </div>
             <button onClick={() => start('daily')} className="w-full rounded-xl border border-border bg-surface-1 p-4 text-left hover:border-primary/50 hover:bg-primary/5 transition-colors">
               <span className="block font-bold text-foreground">Daily gauntlet</span>
-              <span className="block text-xs text-muted-foreground mt-0.5">{dailyDone ? "Today's draft is done. See how the cup went" : 'The same five card choices for everyone today'}</span>
+              <span className="block text-xs text-muted-foreground mt-0.5">
+                {dailyDone ? "Today's draft is done. See how the cup went" : usingFallback ? 'The player feed is unavailable. Tap to retry or resume a saved draft.' : 'The same five card choices for everyone today'}
+              </span>
             </button>
+            {dailyUnavailable && <GauntletResumeNotice onRetry={retryPool} />}
             <button onClick={() => start('unlimited')} className="w-full rounded-xl border border-border bg-surface-1 p-4 text-left hover:border-primary/50 hover:bg-primary/5 transition-colors">
               <span className="block font-bold text-foreground">Unlimited</span>
               <span className="block text-xs text-muted-foreground mt-0.5">A fresh draft every run</span>
@@ -247,13 +337,28 @@ export default function GauntletDraft() {
             statRow={[{ label: 'Score', value: run.score }]}
             emojiGrid={[`⚔️ Gauntlet Draft: ${run.score} pts`, ...run.matches.map(m => `${m.won ? '🟩' : '🟥'} ${matchLine(m)}`)].join('\n')}
             share={{ score: String(run.score), gameName: 'Gauntlet Draft', gamePath: '/gauntlet-draft' }}
-            onPlayAgain={() => setPhase('setup')}
+            onPlayAgain={() => {
+              setRun(null);
+              setPhase('setup');
+            }}
             playAgainLabel={mode === 'daily' ? 'Back to modes' : 'New draft'}
-            playNext={mode === 'daily' ? <p className="text-sm text-muted-foreground">Come back tomorrow for a new draft.</p> : undefined}
+            playNext={mode === 'daily' && !pendingDailyRun ? <p className="text-sm text-muted-foreground">Come back tomorrow for a new draft.</p> : undefined}
           >
             <div className="text-left text-sm text-muted-foreground space-y-1 my-4 py-3 px-4 rounded-xl bg-surface-2 border border-border/60">
               {run.matches.map((m, i) => <p key={i}>{matchLine(m)}</p>)}
             </div>
+            {mode === 'daily' && pendingDailyRun && (
+              <div className="my-4 space-y-2">
+                <p role="status" className="text-sm text-muted-foreground">
+                  {pendingDailyRun.conflict
+                    ? 'Another tab saved a different Daily draft. Your result is still open here.'
+                    : 'This result could not be saved on this device. Retry before closing or reloading.'}
+                </p>
+                <button onClick={retryDailySave} className="min-h-11 rounded-xl border border-border px-4 text-sm font-semibold text-foreground">
+                  Retry save
+                </button>
+              </div>
+            )}
           </ResultScreen>
         )}
 

@@ -169,7 +169,7 @@ import { applyAcademyFocus } from "./soccerCareerAcademy";
    nothing, so this is a one way edge too. */
 import { readSeasonMoments, type SeasonMomentsSave } from "./season/momentsSave";
 import {
-  tournamentForYear, offYearCaps, toHistoryEntry,
+  tournamentForYear, offYearCaps, toHistoryEntry, tournamentGoalShare,
   nationStrength as intlNationStrength, confederationOf,
 } from "./soccerInternational";
 import type {
@@ -1858,13 +1858,18 @@ function yearOutRow(s: CareerState, reason: string | null): SeasonRecord {
  * Every road records the injury in the career's history, so a comeback is
  * something the save remembers rather than a line that scrolls away.
  */
-export function applyRehabChoice(prev: CareerState, choiceIndex: number): CareerState {
-  if (readSoccerFarewell(prev) && !prev.pendingRehab && (prev.retired || farewellSeasonComplete(prev))) return prev;
-  const s = { ...prev };
-  const r = s.pendingRehab;
-  s.pendingRehab = null;
-  s.phase = "playing";
-  if (!r) return s;
+export function applyRehabChoice(prev: CareerState, choiceIndex: number, clubs = FALLBACK_CLUBS): CareerState {
+  const r = prev.pendingRehab;
+  if (!r) {
+    return prev.phase === "rehab_choice" && !prev.retired && !farewellSeasonComplete(prev)
+      ? { ...prev, phase: "playing" }
+      : prev;
+  }
+  // Resolve the injury year's contract once, including saves already waiting on this choice.
+  const s: CareerState = {
+    ...prev, pendingRehab: null, phase: "playing",
+    contractYearsLeft: Math.max(0, prev.contractYearsLeft - 1),
+  };
   /* Round 850: a save written before this round can be sitting here with the
      injury year unrecorded, because the season used to be thrown away at this
      stop. Its games are gone, so the year goes on as a zero appearance
@@ -1924,9 +1929,12 @@ export function applyRehabChoice(prev: CareerState, choiceIndex: number): Career
   if (history.length >= 2) {
     s.events.push(`⭐ That is ${history.length} serious injuries you have come back from.`);
   }
+  returnFromLoan(s, clubs, r.year);
   if (farewellSeasonComplete(s)) {
     s.pendingSummary = s.seasons[s.seasons.length - 1];
     s.phase = "season_summary";
+  } else if (s.contractYearsLeft === 0) {
+    enterTransferWindow(s, clubs);
   }
   return s;
 }
@@ -4349,10 +4357,10 @@ function generateSeasonStats(state: CareerState, clubs: ClubData[]): SeasonRecor
      after the derbies had been drawn from the unheld number, so a row could
      carry a derby he played in a league game its own count has no room for
      (14 of 2854 derby seasons, replayed from their rows, drew another
-     answer). The same hold comes first now, so the row and its derbies are
-     one season. Outside a saved world nothing changes. */
+     answer). Every season holds league appearances to total appearances
+     before drawing derbies or settling contract terms. */
   const worldField = state.leagueWorld?.year === seasonYear ? state.leagueWorld.leagues[state.currentLeague] : undefined;
-  const leagueGames = worldField ? Math.min(leagueApps, apps, 2 * (worldField.length - 1)) : leagueApps;
+  const leagueGames = Math.min(leagueApps, apps, worldField ? 2 * (worldField.length - 1) : Infinity);
   const derbies = resolveSeasonDerbies({
     club: state.currentClub, league: state.currentLeague, year: seasonYear, clubs, elite: ELITE_CLUBS,
     position, apps, leagueApps: leagueGames, goals, leagueTitle: winLeague && !(injured && injurySevere),
@@ -4619,6 +4627,27 @@ export function acceptLoan(prev: CareerState, offer: ContractOffer): CareerState
   // be earned back, it is never kept warm.
   endClubCaptaincy(s, "loan");
   return clearLoyaltyChoice(s);
+}
+
+/** Close a completed one-season loan and restore the parent club. */
+function returnFromLoan(s: CareerState, clubs: ClubData[], year: number): void {
+  const back = s.loan;
+  if (!back) return;
+  cancelReducedRole(s);
+  s.currentClub = back.parentClub; s.currentClubTier = back.parentTier;
+  s.currentLeague = back.parentLeague; s.currentClubCountry = back.parentCountry;
+  s.currentClubColor = back.parentColor;
+  s.loan = null;
+  Object.assign(s, endCareerMentorForMove(s, s.currentClub));
+  prepareLeagueWorld(s, clubs, year + 1);
+  const backSeasons = s.seasons.filter(ss => ss.club === back.parentClub && ss.type === "playing").length;
+  const nextHere = projectLeagueApps(s.overall, s.currentClubTier, back.parentClub, backSeasons, { league: s.currentLeague, year: year + 1 });
+  if (nextHere.min >= 20) {
+    s.morale = clamp(s.morale + 5, 0, 100);
+    s.events.push(`🔙 Loan over. Back at ${back.parentClub}, and this time they are planning around you: about ${nextHere.min} to ${nextHere.max} league games on the table.`);
+  } else {
+    s.events.push(`🔙 Loan over. Back at ${back.parentClub}, and the pecking order has not moved much: about ${nextHere.min} to ${nextHere.max} league games unless something changes.`);
+  }
 }
 
 /** Complete a new club listing using its existing offer, then show the move once. */
@@ -5352,6 +5381,17 @@ function endClubCaptaincy(s: CareerState, reason: "transfer" | "loan" | "handove
   else s.events.push(n >= 1 ? `©️ Retires as a club captain: ${n} season${n === 1 ? "" : "s"} with the ${club} armband` : "©️ Hands back the armband on the way out");
 }
 
+export const DIRTY_BALANCE_HEAT = 6;
+
+export function dirtyMoneySeasonPlan(balance: number, purchasedItems: readonly string[]): { washed: number; remaining: number } {
+  let capacity = 0;
+  if (purchasedItems.includes("shady_shell_carwash")) capacity += 2;
+  if (purchasedItems.includes("shady_nightclub")) capacity += 4;
+  if (purchasedItems.includes("shady_crypto_mixer")) capacity += 1.5;
+  const washed = Math.min(balance, capacity);
+  return { washed, remaining: washed > 0 ? Math.round((balance - washed) * 100) / 100 : balance };
+}
+
 export function advanceProSeason(prev: CareerState, clubs: ClubData[]): CareerState {
   if (readSoccerFarewell(prev) && (prev.retired || farewellSeasonComplete(prev))) return prev;
   const s = repairCareer({ ...prev }); s.age += 1; s.story = archiveSeasonStory(s); s.events = [];
@@ -5427,18 +5467,14 @@ export function advanceProSeason(prev: CareerState, clubs: ClubData[]): CareerSt
   // wants cooling, and investigators want promotions. ──
   const dirtyNow = s.dirtyMoney ?? 0;
   if (dirtyNow > 0) {
-    let washCapacity = 0;
-    if (s.purchasedItems.includes("shady_shell_carwash")) washCapacity += 2;
-    if (s.purchasedItems.includes("shady_nightclub")) washCapacity += 4;
-    if (s.purchasedItems.includes("shady_crypto_mixer")) washCapacity += 1.5;
-    if (washCapacity > 0) {
-      const washed = Math.min(dirtyNow, washCapacity);
-      s.dirtyMoney = Math.round((dirtyNow - washed) * 100) / 100;
+    const { washed, remaining } = dirtyMoneySeasonPlan(dirtyNow, s.purchasedItems);
+    if (washed > 0) {
+      s.dirtyMoney = remaining;
       s.netWorth = Math.round((s.netWorth + washed) * 100) / 100;
       s.events.push(`🧼 The businesses had a "great year": €${washed.toFixed(1)}M of quiet money is now clean.`);
     }
     if ((s.dirtyMoney ?? 0) > 0) {
-      s.corruptionHeat = clamp((s.corruptionHeat ?? 0) + 6, 0, 100);
+      s.corruptionHeat = clamp((s.corruptionHeat ?? 0) + DIRTY_BALANCE_HEAT, 0, 100);
       s.events.push(`💼 €${(s.dirtyMoney ?? 0).toFixed(1)}M still sits in the duffel bags. Money that loud attracts ears.`);
     }
   } else if ((s.corruptionHeat ?? 0) > 0) {
@@ -6111,24 +6147,7 @@ function playPendingProSeason(s: CareerState, clubs: ClubData[]): CareerState {
      season, so the screen can promise nothing the simulation will not keep. */
   const programmeLoanClub = s.loan ? worldClubs.find(club => club.name === s.currentClub) : undefined;
   if (programmeLoanClub) completeProgrammeLoanBuy(s, programmeLoanClub);
-  if (s.loan) {
-    const back = s.loan;
-    cancelReducedRole(s);
-    s.currentClub = back.parentClub; s.currentClubTier = back.parentTier;
-    s.currentLeague = back.parentLeague; s.currentClubCountry = back.parentCountry;
-    s.currentClubColor = back.parentColor;
-    s.loan = null;
-    Object.assign(s, endCareerMentorForMove(s, s.currentClub));
-    prepareLeagueWorld(s, clubs, season.year + 1);
-    const backSeasons = s.seasons.filter(ss => ss.club === back.parentClub && ss.type === "playing").length;
-    const nextHere = projectLeagueApps(s.overall, s.currentClubTier, back.parentClub, backSeasons, { league: s.currentLeague, year: season.year + 1 });
-    if (nextHere.min >= 20) {
-      s.morale = clamp(s.morale + 5, 0, 100);
-      s.events.push(`🔙 Loan over. Back at ${back.parentClub}, and this time they are planning around you: about ${nextHere.min} to ${nextHere.max} league games on the table.`);
-    } else {
-      s.events.push(`🔙 Loan over. Back at ${back.parentClub}, and the pecking order has not moved much: about ${nextHere.min} to ${nextHere.max} league games unless something changes.`);
-    }
-  }
+  returnFromLoan(s, clubs, season.year);
   prepareLeagueWorld(s, clubs, season.year + 1);
   return s;
 }
@@ -7072,11 +7091,8 @@ export function generateRandomEvents(state: CareerState): RandomEvent[] {
  *
  * BALANCE DELIBERATELY HELD. The goal model is built from the SAME inputs the
  * old win chance used (overall, the elite bonus, the round difficulty), scaled
- * so a tie comes out at roughly the old per-round advance rate, and the player's
- * goal chance is halved per leg so a two legged tie yields what the old single
- * match yielded. scripts/simSoccerCareerUcl.mjs measures both and fails if the
- * advance rate or the tournament goal total has moved, because a fix to a
- * mechanism must not quietly rebalance a career.
+ * so a tie comes out at roughly the old per-round advance rate.
+ * Player scoring uses a share of the resulting team goals.
  */
 
 /* The inverse normal CDF (uclProbit), the goal expectation of a level match
@@ -7131,7 +7147,8 @@ export function simulateUCL(state: CareerState, season: SeasonRecord): UCLResult
   const hasFirstStage = shape !== null && shape.kind !== "none";
   const passTarget = hasFirstStage ? firstStageTarget(targetAt(0), reachKnockout) : 1;
   const qualChance = reachKnockout / passTarget;
-  if (Math.random() > qualChance) return notIn;
+  const qualificationRoll = Math.random();
+  if (qualificationRoll > qualChance) return notIn;
 
   /* The ladder the competition really ran that season. Round 546 read it off
      uclFormatHistory; since Round 972 soccerCareerContinental.ts derives it
@@ -7151,23 +7168,36 @@ export function simulateUCL(state: CareerState, season: SeasonRecord): UCLResult
     : continentalOpponents(FALLBACK_CLUBS, cupFor.confederation, uclYear, state.currentClub);
   const matches: UCLKnockoutMatch[] = [];
   let totalPlayerGoals = 0;
+  let legacyPlayerGoals = 0;
   const usedOpponents = new Set<string>([state.currentClub]);
   const isAttacker = ["ST", "CAM", "LW", "RW"].includes(state.position);
+  const playerShare = tournamentGoalShare(state.position, state.overall);
 
-  /* The player's goals per LEG are half the old per-match chance, so a two
-     legged tie yields what the old single match yielded and the top scorer
-     threshold below still means what it meant. */
-  const legPlayerGoals = (legs: number) => {
-    const share = legs === 2 ? 0.5 : 1;
+  // Draw the binomial share of the actual goals with the original match roll.
+  const playerGoalsFromScore = (goalsFor: number, roll: number) => {
+    let probability = (1 - playerShare) ** goalsFor;
+    let goals = 0;
+    while (goals < goalsFor && roll >= probability) {
+      roll -= probability;
+      probability *= (goalsFor - goals) * playerShare / ((goals + 1) * (1 - playerShare));
+      goals++;
+    }
+    return goals;
+  };
+  let playerRoll = 0;
+  const legPlayerGoals = (legs: number, goalsFor: number, firstStage = false) => {
     if (state.position === "GK") return 0;
-    if (isAttacker) return Math.random() < 0.4 * share ? rand(1, 2) : 0;
-    return Math.random() < 0.1 * share ? 1 : 0;
+    const share = legs === 2 ? 0.5 : 1;
+    playerRoll = Math.random();
+    // Consume the same draws as before so team scores and later career rolls stay fixed.
+    const legacy = isAttacker ? (playerRoll < 0.4 * share ? rand(1, 2) : 0) : Number(playerRoll < 0.1 * share);
+    legacyPlayerGoals += firstStage ? Math.min(legacy, goalsFor) : legacy;
+    return playerGoalsFromScore(goalsFor, playerRoll);
   };
 
   /* Round 972: the first stage. Its opponents come from the same era pool as
      the knockout's and are not met again in it; the club's strength is solved
-     from the measured pass curve so it gets through at passTarget; a group
-     night is one match, so the player's chance per night is a leg's. */
+     from the measured pass curve so it gets through at passTarget. */
   let firstStage: FirstStageResult | undefined;
   let stageGames = 0;
   if (hasFirstStage && shape) {
@@ -7179,7 +7209,7 @@ export function simulateUCL(state: CareerState, season: SeasonRecord): UCLResult
       named.push(o);
     }
     const strength = solveStageStrength(shape.curve!, passTarget, targetAt(0));
-    firstStage = playFirstStage(shape, state.currentClub, strength, named, Math.random, () => legPlayerGoals(2));
+    firstStage = playFirstStage(shape, state.currentClub, strength, named, Math.random, goals => legPlayerGoals(2, goals, true));
     for (const st of firstStage.stages) {
       for (const g of st.games) { totalPlayerGoals += g.playerGoals; stageGames += 1; }
     }
@@ -7228,7 +7258,7 @@ export function simulateUCL(state: CareerState, season: SeasonRecord): UCLResult
       const ga = uclLegGoals(clamp(UCL_BASE_LAMBDA - edge - venue, 0.25, 3.4));
       aggFor += gf;
       aggAgainst += ga;
-      const pg = legPlayerGoals(legs);
+      const pg = legPlayerGoals(legs, gf);
       totalPlayerGoals += pg;
       legRows.push({ opponent, round, leg, home, goalsFor: gf, goalsAgainst: ga, playerGoals: pg, won: false });
     }
@@ -7263,6 +7293,11 @@ export function simulateUCL(state: CareerState, season: SeasonRecord): UCLResult
       const etAgainst = uclLegGoals(clamp(0.34 - edge * 0.25, 0.05, 1.1));
       decider.goalsFor += etFor;
       decider.goalsAgainst += etAgainst;
+      if (etFor) {
+        const playerGoals = playerGoalsFromScore(decider.goalsFor, playerRoll);
+        totalPlayerGoals += playerGoals - decider.playerGoals;
+        decider.playerGoals = playerGoals;
+      }
       decider.afterExtraTime = true;
       decider.etFor = etFor;
       decider.etAgainst = etAgainst;
@@ -7300,17 +7335,11 @@ export function simulateUCL(state: CareerState, season: SeasonRecord): UCLResult
                  last.round === "QF" ? "Quarter-final" :
                  last.round === "PO" ? "Play-off" : "R16";
 
-  /* Top scorer at 6+ goals, as it always was when the knockout was the whole
-     campaign. Round 972 puts the first stage's nights in front of it, so the
-     bar rises with them (TOP_SCORER_BAR_PER_STAGE_GAME). The bar is whole
-     goals, and the nearest bar that never makes the award more common than
-     it was makes it RARER: measured 2026-10-03 (simSoccerCareerUcl section
-     8) at 0.25%, 0.21% and 0.12% of knockout runs at Real Madrid, Ajax and
-     Sevilla against main's 0.43%, 0.31% and 0.22%, so about 55 to 70 percent
-     as common as before. One goal lower (0.3 a night) overshoots, at 0.67%,
-     0.56% and 0.33%. */
+  /* The scorer bar rises with the extra nights in a group or league stage. */
   const topScorerBar = 6 + Math.ceil(stageGames * TOP_SCORER_BAR_PER_STAGE_GAME);
-  const isTopScorer = totalPlayerGoals >= topScorerBar && Math.random() < 0.5;
+  // Reuse the normalized qualification roll if the original run drew no award coin.
+  const awardRoll = legacyPlayerGoals >= topScorerBar ? Math.random() : qualificationRoll / qualChance;
+  const isTopScorer = totalPlayerGoals >= topScorerBar && awardRoll < 0.5;
 
   return {
     qualified: true, matches, result, playerGoals: totalPlayerGoals, isTopScorer, competition, cup: cupFor.cup,
@@ -7319,17 +7348,7 @@ export function simulateUCL(state: CareerState, season: SeasonRecord): UCLResult
   };
 }
 
-/** Round 972: how far each first stage night lifts the top scorer bar. An
- *  attacker averages about 0.22 goals a first stage night (a leg's chance,
- *  capped at what the team scored), but a mean lift leaves the tail fatter,
- *  so the bar was read off the measured distribution instead. Per campaign
- *  that reached the knockouts, measured 2026-10-03 over 154,596 of them: six
- *  knockout goals had been reached 0.63% of the time with no first stage;
- *  after six group nights 8 total goals is reached 1.05% and 9 is 0.39%;
- *  after eight league nights 9 is 1.09% and 10 is 0.48%; after twelve
- *  nights (1999 to 2002) 11 is 0.60% and 12 is 0.23%. 0.4 a night, rounded
- *  up, gives 9, 10 and 11: the nearest bar in each case that does not make
- *  the award more common than it was. */
+/** Round 972: lift the six-goal scorer bar for a longer first stage. */
 const TOP_SCORER_BAR_PER_STAGE_GAME = 0.4;
 
 /* ─── Round 834: the awards night, bound for Soccer ───

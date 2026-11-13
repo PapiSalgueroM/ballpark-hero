@@ -6,7 +6,7 @@ import {
   FORMATIONS, startCareer, playNextEntry, finishSeason, startNextSeason,
   marketForScreen, buyPlayer, autoPickXI, nextFixture, sortedLeagueTable,
   leaguePosition, currentSeasonScore, saveCareer, loadCareer, clearCareer, savedCareerEraId, savedCareerFixtureKey, leagueOf,
-  startNegotiation, makeOffer, offerTerms, exerciseLoanOption, breakLoan, recallLoanedPlayer, walkAway, respondApproach, expandGround,
+  startNegotiation, makeOffer, offerTerms, exerciseLoanOption, breakLoan, recallLoanedPlayer, walkAway, respondApproach, expandGround, buyWageRoom,
   enterWilderness, wildernessWeek, acceptWildernessJob, takeNationJob, leaveNationJob, payClause, loanIn, acceptBid, rejectBid,
   answerMessage, setTransferStatus, loanOutPlayer, renewContract, renewContractWithClause,
   upgradeAcademy, hireScout, recallScout, promoteProspect, releaseProspect, setTrainingPlan,
@@ -16,7 +16,7 @@ import {
   changeLive, startSecondHalf, startExtraTime, markLiveMinute, setInstructions,
   setDuty, setSetPiece, autoSetPieces, startRetraining, stopRetraining,
   setShootoutOrder,
-  DEFAULT_ERA_ID, ordinaryClubAllowed,
+  DEFAULT_ERA_ID, ordinaryClubAllowed, isScopedStarterClub,
   releasePlayer, signFreeAgent,
   doorRefusal, loanOutRefusal,
   applyForJob, joinClubInSummer,
@@ -65,6 +65,8 @@ export function phaseFor(c: CareerState): CMPhase {
   return c.retired ? 'retired' : c.sacked ? 'sacked' : c.pendingSummary ? 'seasonEnd' : 'hub';
 }
 export type HubTab = 'overview' | 'squad' | 'tactics' | 'table' | 'transfers';
+
+const CAREER_SEASON_RULES = { severeMatchInjuries: true, playedUclLeaguePhase: true, championshipPlayoffs: true } as const;
 
 /**
  * Round 505: a new shape keeps the eleven you picked. Until this round a
@@ -327,6 +329,13 @@ export function useClubManager() {
    */
   const careerRef = useRef<CareerState | null>(null);
   useEffect(() => { careerRef.current = career; }, [career]);
+  const veteranSummary = useRef<CareerState | null>(null);
+  const veteranPending = useRef(false);
+  const veteranRevision = useRef(0);
+  useLayoutEffect(() => {
+    veteranSummary.current = phase === 'seasonEnd' ? career : null;
+    return () => { veteranSummary.current = null; };
+  }, [career, phase]);
   const recruitmentCurrent = useRef<CareerState | null>(null);
   useLayoutEffect(() => {
     recruitmentCurrent.current = phase === 'hub' ? career : null;
@@ -444,12 +453,36 @@ export function useClubManager() {
     const next = make(now);
     if (next && !next.retired) return false;
     if (!next || !persist(next)) return false;
+    veteranSummary.current = null;
     careerRef.current = next;
     setCareer(next);
     setPhase('retired');
     setActiveTab('overview');
     return true;
   }, [holdsActiveSlot, persist]);
+
+  const reviewVeteran = useCallback(async (id: string): Promise<boolean> => {
+    const now = veteranSummary.current;
+    const slot = ownSlot.current;
+    const revision = veteranRevision.current;
+    if (!now || veteranPending.current || !holdsActiveSlot() || movedOn()) return false;
+    veteranPending.current = true;
+    try {
+      const { applyVeteranRetirement } = await import('@/lib/clubManagerVeteranRetirement');
+      if (veteranSummary.current !== now || veteranRevision.current !== revision
+        || ownSlot.current !== slot || !holdsActiveSlot() || movedOn()) return false;
+      const next = applyVeteranRetirement(now, id);
+      if (!next || !persist(next)) return false;
+      veteranSummary.current = next;
+      careerRef.current = next;
+      setCareer(next);
+      return true;
+    } catch {
+      return false;
+    } finally {
+      veteranPending.current = false;
+    }
+  }, [holdsActiveSlot, movedOn, persist]);
 
   /* ---------- Round 928: the manager slots ---------- */
 
@@ -471,6 +504,7 @@ export function useClubManager() {
       return false;
     }
     ownSlot.current = slot;
+    veteranSummary.current = null;
     /* Round 1515: the kept aside card asks its offer again, for this slot (the slot marks key is the event's name). */
     dispatchEvent(new Event(SET_ASIDE_SLOT_KEY));
     setSlotNote(null);
@@ -581,6 +615,7 @@ export function useClubManager() {
   /** Delete one slot's career for good (the screen asks first). */
   const removeSlot = useCallback((slot: number) => {
     if (slot === activeSlot()) {
+      veteranSummary.current = null;
       clearCareer();
       ownSlot.current = slot;
       careerRef.current = null;
@@ -601,6 +636,7 @@ export function useClubManager() {
   /** Back to the slots screen from inside a career, or from an era whose
    *  squads would not load (review: that screen had no way back). */
   const showSlots = useCallback(() => {
+    veteranSummary.current = null;
     if (careerRef.current && holdsActiveSlot() && !saveCareer(careerRef.current)) movedOn();
     letGoIfStale();
     setBootError(null);
@@ -652,6 +688,7 @@ export function useClubManager() {
   useEffect(() => () => { dropStartHold(); }, [dropStartHold]);
   const chooseClub = useCallback((clubName: string, eraId?: string) => {
     if (clubName && (!ordinaryClubAllowed(clubName) || (eraId && isHistoricEra(eraId) && kLeagueMember(clubName)))) return;
+    if (eraId && eraId !== DEFAULT_ERA_ID && isScopedStarterClub(clubName)) return;
     setPendingClub(clubName);
     const key = clubName && eraId ? startFixtureKey(clubName, eraId) : null;
     fixtureFetch.current = key && !realLeagueFixturesLoaded(key) ? { key, done: ensureRealLeagueFixtures(key).catch(() => undefined) } : null;
@@ -671,8 +708,9 @@ export function useClubManager() {
     if (!pendingClub) return;
     const club = pendingClub, era = eraId ?? DEFAULT_ERA_ID, edit = validWorldEdit(worldEdit ?? null);
     if (!ordinaryClubAllowed(club) || (isHistoricEra(era) && kLeagueMember(club))) return;
+    if (isScopedStarterClub(club) && (era !== DEFAULT_ERA_ID || edit)) return;
     const begin = () => {
-      const fresh = startCareer(club, era, undefined, manager, undefined, edit);
+      const fresh = startCareer(club, era, undefined, manager, undefined, edit, CAREER_SEASON_RULES);
       /* Round 549: a mid season takeover plays the run-in first, under the
          manager before you, and hands the club over where it stands. */
       const s = setUpCareer(entry ? startMidSeason(fresh, entry) : fresh, setup, rebuildBoardAsks);
@@ -745,7 +783,7 @@ export function useClubManager() {
   /* Round 154: founding your own club skips the pending-club dance, because
      the create form is its own confirmation. */
   const confirmCustomClub = useCallback((eraId: string | undefined, spec: CustomClubSpec, manager?: ManagerSpec, entry?: MidSeasonEntry, setup?: CareerSetup) => {
-    const fresh = startCareer(spec.name, eraId ?? DEFAULT_ERA_ID, spec, manager);
+    const fresh = startCareer(spec.name, eraId ?? DEFAULT_ERA_ID, spec, manager, undefined, undefined, CAREER_SEASON_RULES);
     const s = setUpCareer(entry ? startMidSeason(fresh, entry) : fresh, setup, rebuildBoardAsks);
     clearSlotPoints(activeSlot());
     setCareer(s);
@@ -903,10 +941,10 @@ export function useClubManager() {
     });
   }, []);
 
-  const autoPick = useCallback((fresh = false) => {
+  const autoPick = useCallback((fresh = false, cutoff?: number) => {
     setCareer(prev => {
       if (!prev) return prev;
-      return { ...prev, xiIds: autoPickXI(prev.squad, FORMATIONS[prev.formationIndex], fresh) };
+      return { ...prev, xiIds: autoPickXI(prev.squad, FORMATIONS[prev.formationIndex], fresh, cutoff) };
     });
   }, []);
 
@@ -1029,8 +1067,11 @@ export function useClubManager() {
   }, [career]);
 
   const nextSeason = useCallback((acceptOfferClub?: string) => {
-    if (!career) return;
-    const s = startNextSeason(career, acceptOfferClub);
+    const now = veteranSummary.current ?? career;
+    if (!now) return;
+    const s = startNextSeason(now, acceptOfferClub, CAREER_SEASON_RULES);
+    if (s === now) return;
+    veteranSummary.current = null;
     setCareer(s);
     setSummary(null);
     setReport(null);
@@ -1103,6 +1144,9 @@ export function useClubManager() {
 
   /* Round 171: the finance desk. Round 467: a price change carries the fans'
      and the board's reaction with it, and food has a price of its own. */
+  const addWageRoom = useCallback(() => {
+    setCareer(prev => (prev ? buyWageRoom(prev) ?? prev : prev));
+  }, []);
   const setTickets = useCallback((tier: 0 | 1 | 2) => {
     setCareer(prev => (prev ? setTicketPolicy(prev, tier) : prev));
   }, []);
@@ -1175,6 +1219,11 @@ export function useClubManager() {
   const resignNation = useCallback(() => {
     setCareer(prev => (prev ? leaveNationJob(prev) : prev));
   }, []);
+  const updateNationalTeam = useCallback((update: (state: CareerState) => CareerState) => {
+    if (!holdsActiveSlot() || movedOn()) return;
+    veteranRevision.current += 1;
+    setCareer(prev => prev ? update(prev) : prev);
+  }, [holdsActiveSlot, movedOn]);
 
   /* Round 201: out of work. Waiting is a move, and taking a job is the
      ordinary season rollover with a different club at the end of it. */
@@ -1184,7 +1233,7 @@ export function useClubManager() {
   const takeJob = useCallback((club: string) => {
     setCareer(prev => {
       if (!prev) return prev;
-      const next = acceptWildernessJob(prev, club);
+      const next = acceptWildernessJob(prev, club, CAREER_SEASON_RULES);
       if (!next) return prev;
       setPhase('hub');
       return next;
@@ -1259,6 +1308,7 @@ export function useClubManager() {
 
   /* ---------- Round 105: contracts ---------- */
   const renew = useCallback((playerId: string) => {
+    veteranRevision.current += 1;
     setCareer(prev => (prev ? renewContract(prev, playerId) ?? prev : prev));
   }, []);
 
@@ -1449,13 +1499,13 @@ export function useClubManager() {
     pointsSlot: (): number | null => (holdsActiveSlot() ? ownSlot.current : null),
     phase, career, report, summary, activeTab, setActiveTab, pendingClub,
     market, nextFx, tableRows, myPosition, facts,
-    resume, startNew, retire, chooseClub, confirmClub, confirmCustomClub,
+    resume, startNew, retire, reviewVeteran, chooseClub, confirmClub, confirmCustomClub,
     setCustomShape, setFormationIndex, setMentality, setTeamInstructions, setXiSlot, swapXiSlots, autoPick,
     saveMatchPlan, applyMatchPlan, deleteMatchPlan,
     setSlotDuty, assignSetPiece, autoPickSetPieces, setShootoutOrder: setShootoutOrderIds, retrain, stopRetrain,
     play, quickPlay, continueFromReport, nextSeason,
     buy,
-    negotiate, offer, walk, proposeTerms, buyLoanee, endLoanEarly, recallLoanee, answerApproach, setTickets, setConcessions, expandStadium, takeSponsor, pushSponsorOffer, buyFacility, waitAWeek, takeJob, acceptNation, resignNation, dismissNegotiation, clause, loan,
+    negotiate, offer, walk, proposeTerms, buyLoanee, endLoanEarly, recallLoanee, answerApproach, setTickets, setConcessions, addWageRoom, expandStadium, takeSponsor, pushSponsorOffer, buyFacility, waitAWeek, takeJob, acceptNation, resignNation, updateNationalTeam, dismissNegotiation, clause, loan,
     appointStaff, payOffStaff, matchStaff, letStaffGo, spendPoint, updateManager,
     setCurrency, setNationJobs, setStrictness, turnOnNoSack, setDifficulty,
     acceptIncomingBid, rejectIncomingBid,

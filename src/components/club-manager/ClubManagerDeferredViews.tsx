@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react';
 import { ChevronRight, Play } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import type { CareerState } from '@/lib/clubManager';
 import HubTile from '@/components/club-manager/HubTile';
 
 export function EraLoadFailed({ label, noun = 'squads', onRetry, onBack, backLabel = 'Pick another season' }: { label: string; noun?: string; onRetry: () => void; onBack?: () => void; backLabel?: string }) {
@@ -96,9 +97,23 @@ export function ClubHeading({ crest, clubName, seasonLabel, season, difficulty, 
   );
 }
 
-export function ClubStatus({ positionLabel, stadium, budgetLabel, noMatches, formDots, trophyCount }: {
+export function LeagueSeasonNotice({ league, leagueGames }: { league: 'k' | 'csl' | 'j1'; leagueGames: number }) {
+  if (league === 'k') return <p data-cm-kleague-model className="text-xs text-muted-foreground mb-4">K League 1 plays 22 simulated league games on the shared August to May calendar. The real 2026 league used 33 games, then 5 split games. The split, Korea Cup, AFC competitions and promotion/relegation are not played here.</p>;
+  if (league === 'csl') return <p data-cm-csl-model className="text-xs text-muted-foreground mb-4">Chinese Super League plays 30 games on Club Manager's simulated calendar. The 2026 start includes real opening point deductions. The CFA Cup, Super Cup, AFC competitions and promotion and relegation are outside this league model.</p>;
+  return <p data-cm-j1-model className="text-xs text-muted-foreground mb-4">J1 plays {leagueGames} league games with generated opening squads and simulated dates and results. The Emperor's Cup, J.League Cup, AFC competitions and J2 promotion and relegation are outside this league model.</p>;
+}
+
+export function KLeagueCupNotice() {
+  return <p data-cm-kleague-cup className="bg-card border border-border rounded-xl p-3 text-xs text-muted-foreground">The Korea Cup is not played here. This K League 1 season is a 22-game league simulation on the shared calendar. Its real 2026 split, AFC competitions and promotion/relegation are not played either.</p>;
+}
+
+const FORM_TONE: Record<'W' | 'D' | 'L', string> = {
+  W: 'bg-emerald-500', D: 'bg-yellow-500', L: 'bg-red-500',
+};
+
+export function ClubStatus({ positionLabel, stadium, budgetLabel, form, trophyCount }: {
   positionLabel: string; stadium: { name: ReactNode; capacity: number | null } | null;
-  budgetLabel: ReactNode; noMatches: boolean; formDots: ReactNode; trophyCount: number;
+  budgetLabel: ReactNode; form: readonly ('W' | 'D' | 'L')[]; trophyCount: number;
 }) {
   return <>
           {/* Round 99: found by playing it. Before a ball is kicked every
@@ -113,8 +128,8 @@ export function ClubStatus({ positionLabel, stadium, budgetLabel, noMatches, for
           )}
           <span className="text-gold font-semibold">{budgetLabel}</span>
           <span className="inline-flex items-center gap-1">
-            {noMatches && <span>No matches yet</span>}
-            {formDots}
+            {form.length === 0 && <span>No matches yet</span>}
+            {form.map((f, i) => <span key={i} className={cn('w-2 h-2 rounded-full', FORM_TONE[f])} />)}
           </span>
           {trophyCount > 0 && <span>🏆×{trophyCount}</span>}
   </>;
@@ -126,13 +141,46 @@ type OverviewMatch = {
   onQuick: () => void; onCentre: (() => void) | null; shootout: { onClick: () => void; label: string } | null;
 };
 
-export function OverviewIntro({ retired, freeRetired, freeLeft, deals, transfer, match, windowAction, seasonAction }: {
+export function OverviewIntro({ summerBudget, retired, freeRetired, freeLeft, deals, transfer, match, windowAction, seasonAction }: {
+  summerBudget: (NonNullable<CareerState['summerBudget']> & { format: (n: number) => string }) | null;
   retired: string | null; freeRetired: string | null; freeLeft: string | null;
   deals: { onClick: () => void; text: string; real: boolean } | null;
   transfer: { onClick: () => void; summer: boolean } | null; match: OverviewMatch | null;
   windowAction: (() => void) | null; seasonAction: (() => void) | null;
 }) {
+  const budgetRows: [string, string][] = [];
+  if (summerBudget) {
+    const { unspent, allocation, usualAllocation, carried, adjustments, opening, format } = summerBudget;
+    budgetRows.push(['Unspent balance', format(unspent)]);
+    if (usualAllocation !== undefined && usualAllocation !== allocation) {
+      budgetRows.push(['Usual board allocation', format(usualAllocation)]);
+    }
+    budgetRows.push(
+      [usualAllocation === undefined ? 'Board allocation' : 'Board top-up', format(allocation)],
+      ['Carried over', format(carried)],
+    );
+    if (unspent > carried) budgetRows.push(['Above carryover cap', format(unspent - carried)]);
+    if (adjustments) budgetRows.push(['Summer adjustments', `${adjustments < 0 ? '-' : '+'}${format(Math.abs(adjustments))}`]);
+    budgetRows.push(['Opening budget', format(opening)]);
+  }
   return <>
+          {budgetRows.length > 0 && (
+            <section data-cm-summer-budget className="rounded-xl border border-border bg-card p-2.5">
+              <h2 className="text-xs font-semibold text-foreground">Summer transfer budget</h2>
+              <dl className="mt-1 space-y-0.5 text-xs">
+                {budgetRows.map(([label, value]) => (
+                  <div key={label} className="flex justify-between gap-3 last:border-t last:border-border last:pt-1 last:font-bold">
+                    <dt>{label}</dt><dd className="tabular-nums">{value}</dd>
+                  </div>
+                ))}
+              </dl>
+              <p className="mt-1 text-xs text-muted-foreground">
+                {summerBudget?.usualAllocation === undefined
+                  ? 'This summer carried over up to the board allocation.'
+                  : 'You kept all unused transfer funds. The board can reduce its payment when you have money left in the bank.'}
+              </p>
+            </section>
+          )}
           {/* Round 132: who stopped playing over the summer. It sits at the top
               of the first screen of the new season because losing a thirty
               seven year old you have had since day one is the biggest thing

@@ -269,6 +269,32 @@ export const CM_FIXTURE_LEAGUES = [
     ],
     names: [CHAMPIONSHIP_NAMES, CHAMPIONSHIP_NAMES],
   },
+  {
+    leagueId: 'j1', exportName: 'J1_FIXTURES_2026', file: 'clubManagerJ1Fixtures2026', orderSource: 0,
+    sources: [
+      {
+        id: 'jleague', kind: 'league', label: 'J.League Data Site', ext: 'html', parser: 'jLeague',
+        url: 'https://data.j-league.or.jp/SFMS01/search?competition_ids=725&competition_years=2026',
+      },
+      {
+        id: 'phonball', kind: 'compiled feed', label: 'PHONBALL', ext: 'html', parser: 'phonball',
+        url: 'https://phonball.com/league/98/j1-league?lang=en',
+      },
+    ],
+    names: [
+      {
+        鹿島: 'Kashima Antlers', 水戸: 'Mito Hollyhock', 浦和: 'Urawa Red Diamonds', 千葉: 'JEF United Chiba',
+        柏: 'Kashiwa Reysol', FC東京: 'FC Tokyo', 東京V: 'Tokyo Verdy', 町田: 'FC Machida Zelvia',
+        川崎F: 'Kawasaki Frontale', 横浜FM: 'Yokohama F. Marinos', 清水: 'Shimizu S-Pulse', 名古屋: 'Nagoya Grampus',
+        京都: 'Kyoto Sanga', G大阪: 'Gamba Osaka', C大阪: 'Cerezo Osaka', 神戸: 'Vissel Kobe',
+        岡山: 'Fagiano Okayama', 広島: 'Sanfrecce Hiroshima', 福岡: 'Avispa Fukuoka', 長崎: 'V-Varen Nagasaki',
+      },
+      {
+        Kashima: 'Kashima Antlers', Urawa: 'Urawa Red Diamonds', 'Machida Zelvia': 'FC Machida Zelvia',
+        'Shimizu S-pulse': 'Shimizu S-Pulse', 'V-varen Nagasaki': 'V-Varen Nagasaki',
+      },
+    ],
+  },
 ];
 
 export const cmFixtureLeague = id => CM_FIXTURE_LEAGUES.find(l => l.leagueId === id) ?? null;

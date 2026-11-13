@@ -15,7 +15,7 @@
 
    Screens: "menu", "drill" (the open drill is `drill`), "result", or the id
    of an extra, so an extra may not be called any of those three. */
-import { Fragment, useEffect, useRef, useState, type ReactNode } from 'react';
+import { Fragment, useCallback, useEffect, useLayoutEffect, useRef, useState, type ReactNode } from 'react';
 import { usePracticeClock } from '@/hooks/usePracticeClock';
 import { focusDialogOnMount, escapeCloses } from '@/lib/dialogA11y';
 import { trainingScore, trainingTier, type TrainingSport } from '@/lib/careerTraining';
@@ -57,6 +57,17 @@ export default function TrainingGround<Id extends string>({ sport, available, on
     return practiceRandom.current / 4294967296;
   };
   const [showRules, setShowRules] = useState(false);
+  const dialogRef = useRef<HTMLDivElement | null>(null);
+  const restoreResultFocus = useRef(false);
+  const setDialog = useCallback((dialog: HTMLDivElement | null) => {
+    dialogRef.current = dialog;
+    focusDialogOnMount(dialog);
+  }, []);
+  useLayoutEffect(() => {
+    if (screen === 'result' && restoreResultFocus.current && document.activeElement === document.body) {
+      dialogRef.current?.focus({ preventScroll: true });
+    }
+  }, [screen]);
 
   const skin = sport.drills.find(d => d.id === drill) ?? sport.drills[0];
   const playing = screen === "drill";
@@ -67,6 +78,7 @@ export default function TrainingGround<Id extends string>({ sport, available, on
 
   const finish = (d: Id, sc: number) => {
     if (attempt !== attemptRef.current || !playing || clock.isPaused()) return;
+    restoreResultFocus.current = dialogRef.current?.contains(document.activeElement) ?? false;
     clock.clearAll();
     setDrill(d);
     setScore(trainingScore(sc));
@@ -102,7 +114,7 @@ export default function TrainingGround<Id extends string>({ sport, available, on
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-3 bg-black/70 backdrop-blur-sm animate-fade-in" onClick={close}>
-      <div role="dialog" aria-modal="true" aria-label={sport.label} data-practice-screen={screen} data-practice-paused={clock.paused} tabIndex={-1} ref={focusDialogOnMount} onKeyDown={e => {
+      <div role="dialog" aria-modal="true" aria-label={sport.label} data-practice-screen={screen} data-practice-paused={clock.paused} tabIndex={-1} ref={setDialog} onKeyDown={e => {
         escapeCloses(close)(e);
         if (!instructions || e.key !== 'Tab') return;
         const buttons = Array.from(e.currentTarget.querySelectorAll<HTMLButtonElement>('button:not(:disabled)'));

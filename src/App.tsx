@@ -43,7 +43,7 @@ const PerfectLineupF1 = lazy(() => import("./pages/PerfectLineupF1"));
 const PerfectLineupNhl = lazy(() => import("./pages/PerfectLineupNhl"));
 const Olympics = lazy(() => import("./pages/Olympics"));
 const GuessTheCollege = lazy(() => import("./pages/GuessTheCollege"));
-import NotFound from "./pages/NotFound";
+const NotFound = lazy(() => import("./pages/NotFound"));
 const PrivacyPolicy = lazy(() => import("./pages/PrivacyPolicy"));
 const CookiePolicy = lazy(() => import("./pages/CookiePolicy"));
 const TermsOfService = lazy(() => import("./pages/TermsOfService"));
@@ -106,6 +106,7 @@ const PerfectSeasonNhl = lazy(() => import("./pages/PerfectSeasonNhl"));
 const CareerLadder = lazy(() => import("./pages/CareerLadder"));
 const PerfectSeasonNba = lazy(() => import("./pages/PerfectSeasonNba"));
 const PerfectSeasonNfl = lazy(() => import("./pages/PerfectSeasonNfl"));
+const SoccerPerfectSeason = lazy(() => import("./pages/SoccerPerfectSeason"));
 const WhoAmI = lazy(() => import("./pages/WhoAmI"));
 const WorldXi = lazy(() => import("./pages/WorldXi"));
 const PlayerBingo = lazy(() => import("./pages/PlayerBingo"));
@@ -272,8 +273,8 @@ const ScrollToTop = () => {
       if (initial && window.location.hash === "#browse-sports") {
         const navigation = performance.getEntriesByType("navigation")[0] as PerformanceNavigationTiming | undefined;
         if (navigation?.type === "navigate" || (y <= 0 && navigation?.type !== "back_forward")) {
-          // Home may mount after this effect. Its heading carries the
-          // sticky header scroll margin for each viewport.
+          // The Home route loads after this effect. Its heading already has
+          // the right scroll margin for the sticky header at each width.
           const root = document.getElementById("root")!;
           const pending = new AbortController();
           const reveal = () => {
@@ -375,17 +376,16 @@ const AppContent = () => {
           focused, styled in index.css. */}
       <a href="#dukb-main" className="dukb-skip-link">Skip to main content</a>
       <ScrollToTop />
-      {!gameRoute && pathname !== "/" && <CookieConsent />}
       {/* Round 167: the site's own wire across the top of every screen. */}
       <SiteMenu />
       <LiveTickerRail home={pathname === "/"} />
       {shouldShowHeader(pathname) && <Header />}
-      {pathname === "/" && <CookieConsent inline compactInitial />}
+      {!gameRoute && <CookieConsent inline={pathname === "/"} compactInitial={pathname === "/"} />}
       {/* Round 1142: one line, game routes only, and only in a browser that
           will not keep anything. Renders nothing for everybody else. */}
       <StorageNotice />
-      {gameRoute && !opensCareerRules && !nrlOwnsConsent && <CookieConsent inline />}
       <Suspense fallback={<RouteLoader />}>
+      {gameRoute && !opensCareerRules && !nrlOwnsConsent && <CookieConsent inline />}
       {/* Round 544: around the routes, inside Suspense. A render throw in one
           game now costs that game and nothing else: the header above and the
           global footer below both survive, and the footer is where the report a
@@ -461,6 +461,7 @@ const AppContent = () => {
         <Route path="/transfer-path" element={<TransferPath />} />
         <Route path="/guess-transfer-value" element={<Navigate to="/" replace />} />
         <Route path="/perfect-lineup" element={<Navigate to="/" replace />} />
+        <Route path="/soccer-perfect-season" element={<SoccerPerfectSeason />} />
         {/* Round 270: one component, six sport hubs. The route string is the
             key into SPORT_HUBS in src/lib/sportHub.ts, and scripts/simHubs.mjs
             checks that these two lists say the same thing. */}
@@ -632,6 +633,8 @@ const AppContent = () => {
           the content whose height it depends on, and then mounts below the
           fold where a mount costs nothing. */}
       </RouteErrorBoundary>
+      {/* The My Career guide opens after its text arrives. Moving consent into it
+          from below the game keeps the play area in place. */}
       {opensCareerRules && <CookieConsent inline />}
       <Footer />
       {gameRoute && <GameAdInventory />}

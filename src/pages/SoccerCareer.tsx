@@ -19,7 +19,7 @@ import { AgentReviewCard } from "@/components/soccer-career/AgentReviewCard";
 import { agentReviewEligibility, changeCareerAgent } from "@/lib/soccerAgentReview";
 import {
   type CareerState, type SeasonRecord, type ClubData, type ContractOffer, type TransferSituation,
-  type RandomEvent, type EventChoice, type WorldCupResult, type WCMatch,
+  type RandomEvent, type EventChoice, type WCMatch,
   type RivalPlayer, type RivalryEvent, type RivalrySummary,
   type LifestyleLevel, type FamilyStatus, type BallonDorResult, type BallonDorNominee,
   type UCLResult, type UCLKnockoutMatch, type Award,
@@ -31,12 +31,12 @@ import {
   initCareer, advanceYouthYear, acceptOffer, advanceProSeason,
   dismissSummary, stayAtClub, signExtension, requestTransferDecision, applyEventChoice,
   dismissDebut, dismissWorldCup, retireFromInternational, dismissRivalryEvent,
-  dismissBallonDor, giveBdorSpeech, bdorSpeechOpen, type BdorSpeechChoice, SOCCER_BALLON_DOR, SOCCER_BDOR_SPEECHES, SOCCER_WORLD_CUP_SPEECHES,
+  dismissBallonDor, giveBdorSpeech, bdorSpeechOpen, type BdorSpeechChoice, SOCCER_BALLON_DOR, SOCCER_BDOR_SPEECHES,
   giveWorldCupSpeech, type WorldCupSpeechChoice, manualRetire, choosePostRetirement, advanceManagerSeason, acceptManagerOffer, endManagerCareer, loadManagerMarket,
   acceptRetirementSuggestion, declineRetirementSuggestion, announceFarewellSeason,
   advancePunditSeason, endPunditCareer, punditLegacyPaid, playedSeniorSeason, POST_RETIREMENT_BONUS_CAP,
   advanceOwnerSeason, endOwnerCareer,
-  dismissNewspaper, purchaseSpendingItem, SPENDING_ITEMS,
+  dismissNewspaper, purchaseSpendingItem, SPENDING_ITEMS, dirtyMoneySeasonPlan, DIRTY_BALANCE_HEAT,
   applySocialMediaAction, handleCoverAthleteDecision, dismissSocialMediaPhase,
   applyMoralDilemmaChoice, dismissMoralDilemma, MORAL_DILEMMAS,
   applyRehabChoice,
@@ -70,10 +70,7 @@ import { readTransferBrief, transferBriefResult } from '@/lib/soccerCareerTransf
    transfer fee all follow the same chosen currency. Display only: every
    number in the save stays in euros. */
 import { localizeMoney as money, localizeMoneyGrouped as moneyLine, CURRENCIES, getCurrency, setCurrency, rateNote } from "@/lib/soccerCurrency";
-/* Round 262: the squad you are actually in. Display only, and it renders
-   nothing at all when we have no honest answer for that club and season. */
-import { depthChart, GROUP_LABEL } from "@/lib/soccerClubSquad";
-import { SquadTile } from "@/components/soccer-career/SquadTile";
+const SquadTile = lazy(() => import("@/components/soccer-career/SquadTile").then(m => ({ default: m.SquadTile })));
 import { ReducedRolePlanNote, ReducedRoleSeasonNote } from "@/components/soccer-career/ReducedRoleNote";
 import { personalGoalMilestone } from "@/lib/soccerCareerMilestone";
 import PressRoomTile from "@/components/soccer-career/PressRoomTile";
@@ -109,12 +106,13 @@ import {
 import { seasonFamilySummary, type SeasonFamilyContext } from "@/lib/seasonFamilySummary";
 import PlayerAvatar from "@/components/soccer-career/PlayerAvatar";
 import { Confetti } from "@/components/soccer-career/CareerFx";
-import { AwardsNightCard, SpeechChoices, SpokenSpeech } from "@/components/career/AwardsNightCard";
-import { availableSpeeches, givenSpeechOf } from "@/lib/careerAwardsNight";
+import { AwardsNightCard } from "@/components/career/AwardsNightCard";
+import { availableSpeeches } from "@/lib/careerAwardsNight";
 import { CelebrationStyles, revealDelay } from "@/components/club-manager/Celebration";
 import { SignedSlip } from "@/components/soccer-career/SignedSlip";
-const SoccerOfferReview = lazy(() => import("@/components/soccer-career/SoccerOfferReview").then(m => ({ default: m.SoccerOfferReview })));
-import { buildSoccerOfferReview } from "@/lib/soccerOfferReview";
+const loadOfferCards = () => import("@/components/soccer-career/SoccerOfferCards");
+const LoadedOfferCard = lazy(() => loadOfferCards().then(m => ({ default: m.OfferCard })));
+const FrozenOutDepthLine = lazy(() => loadOfferCards().then(m => ({ default: m.FrozenOutDepthLine })));
 import type { SignedNote } from "@/components/soccer-career/SignedSlip";
 import { AcademyFocusPicker, AcademyReportCard } from "@/components/soccer-career/AcademyReportCard";
 import { InternationalReturnCard } from "@/components/soccer-career/InternationalReturnCard";
@@ -179,6 +177,7 @@ const SoccerCareerProgramme = lazy(() => import("@/components/soccer-career/Socc
 /* Round 1047: the training ground (its drills and its boards) loads when it
    is opened, not with the page; the page's budget came down by what it weighed. */
 const TrainingPanel = lazy(() => import("@/components/soccer-career/TrainingPanel"));
+const WorldCupResultCard = lazy(() => import("@/components/soccer-career/WorldCupResultCard"));
 /* ─── Constants ─── */
 // Round 76: 131 nations (was 49), every one with a real flag in FlagImg,
 // sorted alphabetically so yours is findable in the scroll.
@@ -404,27 +403,6 @@ function TimelineEntry({ season, position, isCurrent, isLast }: { season: Season
 }
 
 /* ─── Contract Offer Card ─── */
-/* Round 267: an offer is not just money and a badge, it is a queue you are
-   joining. Where the real squad for that club and season exists, the card says
-   where you would slot into it and who would be in front of you, which is the
-   difference between "Arsenal want me" and "Arsenal want me as a fourth
-   choice". Display only, same as the squad card: it reads the same baked data
-   and changes nothing about the offer or the simulation. No data for that club
-   or year means no line, never a guess. */
-function OfferFitLine({ offer, career }: { offer: ContractOffer; career: CareerState }) {
-  const year = (career.seasons[career.seasons.length - 1]?.year ?? 0) + 1;
-  const chart = depthChart(offer.club.name, year, career.position, career.overall, career.playerName);
-  if (!chart) return null;
-  const label = GROUP_LABEL[chart.group];
-  return (
-    <div data-offer-fit className="text-[11px] text-muted-foreground border-t border-border/50 pt-2">
-      {chart.ahead === 0
-        ? `👑 You would be their best of the ${label} on day one.`
-        : `📋 You would be ${ordinalPlace(chart.ahead + 1)} of ${chart.men.length} ${label} there${chart.aheadOfMe ? `, behind ${chart.aheadOfMe.name}` : ""}.`}
-    </div>
-  );
-}
-
 /** Round 1037: the club card's league, for the season the card is labelled
  *  with: the ledgers' before 2026-27 (nothing when they place the club in
  *  no league that year), the saved label from then on. */
@@ -441,37 +419,10 @@ function loanLeagueLine(club: ClubData, career: CareerState): string {
 }
 
 function OfferCard({ offer, onAccept, career }: { offer: ContractOffer; onAccept: () => void; career: CareerState }) {
-  /* Round 1037: the league the club is in the season this contract starts */
-  const leagueLine = leagueSeasonLine(offer.club, nextSeasonYear(career));
-  const review = buildSoccerOfferReview(career, offer);
   return (
-    <div className="bg-card border border-border rounded-xl p-4 space-y-3">
-      <div className="flex items-center gap-3">
-        <div className="w-10 h-10 rounded-lg flex items-center justify-center text-sm font-black shrink-0"
-          style={{ backgroundColor: offer.club.color + "22", color: offer.club.color, border: `2px solid ${offer.club.color}44` }}>
-          {offer.club.name.slice(0, 2).toUpperCase()}
-        </div>
-        <div className="flex-1 min-w-0">
-          <div className="font-bold text-sm truncate flex items-center gap-1"><FlagImg name={offer.club.country} size={16} />{offer.club.name}</div>
-          {leagueLine && <div className="text-[11px] text-muted-foreground">{leagueLine}</div>}
-        </div>
-        {offer.isDreamClub && <span className="text-[10px] px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-400 font-bold">⭐ Dream Club</span>}
-      </div>
-      <div className="flex items-center gap-3 text-xs text-muted-foreground flex-wrap">
-        <span>📋 {offer.contractYears}yr</span>
-        <span>💰 {formatWage(review.signedWage)}</span>
-        {offer.transferFee > 0 && <span>🏷️ {money(`€${offer.transferFee.toFixed(1)}M`)} fee</span>}
-        {offer.transferFee === 0 && offer.contractYears > 0 && <span className="text-emerald-400 font-semibold">Free transfer</span>}
-        <span className="text-[10px] px-1.5 py-0.5 rounded bg-muted/40">Tier {offer.club.tier}</span>
-      </div>
-      {review.wageDelta !== null && review.wageDelta < 0 && <div className="text-xs text-amber-400">Lower weekly wage than your current deal</div>}
-      {review.loyaltyQuote && <p data-loyalty-offer className="text-xs text-emerald-400">Loyalty deal: {moneyLine('€' + review.loyaltyQuote.bonusEuros.toLocaleString('en-US'))} after {review.loyaltyQuote.years} recorded contract seasons. Leaving early forfeits it.</p>}
-      {review.loyaltyForfeitEuros && <p data-loyalty-forfeit className="text-xs text-amber-400">A permanent move here forfeits {moneyLine('€' + review.loyaltyForfeitEuros.toLocaleString('en-US'))} of unpaid loyalty pay.</p>}
-      {career && <OfferFitLine offer={offer} career={career} />}
-      <Suspense fallback={<div role="status" data-offer-review-loading className="flex h-11 items-center justify-center rounded-lg border border-border text-sm text-muted-foreground">Opening contract review...</div>}>
-        <SoccerOfferReview club={offer.club.name} review={review} onAccept={onAccept} />
-      </Suspense>
-    </div>
+    <Suspense fallback={<div role="status" data-offer-review-loading className="flex min-h-24 items-center justify-center rounded-xl border border-border text-sm text-muted-foreground">Opening contract review...</div>}>
+      <LoadedOfferCard offer={offer} onAccept={onAccept} career={career} />
+    </Suspense>
   );
 }
 
@@ -843,7 +794,10 @@ export default function SoccerCareer({ entry }: { entry?: SoccerCareerAdmission 
      from 55. scripts/simScoreShown.mjs holds both halves. */
   const isRetired = career?.retired === true && career?.phase === "retired";
   const legacyScore = isRetired && career?.legacy ? career.legacy.score : 0;
-  useGameCompletion('soccer-career', isRetired, legacyScore);
+  // A restored finish starts complete. A new finish waits for the save acknowledgement
+  // that produces the archive outcome, even when the optional archive write fails.
+  const retirementSaved = isRetired && (career === restoredSave.career || recordOutcome !== null);
+  useGameCompletion('soccer-career', retirementSaved, legacyScore);
 
   // Club roster comes from the bundled FALLBACK_CLUBS list, deliberately.
   //
@@ -1321,7 +1275,7 @@ export default function SoccerCareer({ entry }: { entry?: SoccerCareerAdmission 
 
   const handleRehabChoice = (choiceIndex: number) => {
     if (!career) return;
-    setCareer(applyRehabChoice(career, choiceIndex));
+    setCareer(applyRehabChoice(career, choiceIndex, clubs));
   };
 
   const handleDismissMoralDilemma = () => {
@@ -1817,27 +1771,9 @@ function TransferWindowCard({ situation, career, clubs, onCareer, onAcceptOffer,
                   <span>{r}</span>
                 </div>
               ))}
-              {/* Round 263: the squad line, when we have the real squad for
-                  that club and season. DISPLAY ONLY and deliberately kept out
-                  of seasonStrikes, because that list decides the verdict and
-                  a fourth entry in it would move the trigger rate that Round
-                  257 measured and tuned. This just puts a name to the wall he
-                  was up against. */}
-              {(() => {
-                const year = career.seasons[career.seasons.length - 1]?.year;
-                if (!year) return null;
-                const chart = depthChart(career.currentClub, year, career.position, career.overall, career.playerName);
-                if (!chart || chart.ahead === 0) return null;
-                return (
-                  <div className="text-[11px] flex gap-1.5">
-                    <span className="text-red-400 shrink-0">▪</span>
-                    <span>
-                      You were {ordinalPlace(chart.ahead + 1)} of {chart.men.length} {GROUP_LABEL[chart.group]} at {chart.club}
-                      {chart.aheadOfMe ? `, behind ${chart.aheadOfMe.name}` : ""}
-                    </span>
-                  </div>
-                );
-              })()}
+              <Suspense fallback={null}>
+                <FrozenOutDepthLine career={career} />
+              </Suspense>
             </div>
           </div>
 
@@ -2070,83 +2006,6 @@ export function InternationalDebutCard({ career, onDismiss }: { career: CareerSt
   );
 }
 
-/* ─── World Cup Result Screen ─── */
-function WorldCupResultCard({ wc, career, onDismiss, onSpeech }: { wc: WorldCupResult; career: CareerState; onDismiss: () => void; onSpeech: (choice: WorldCupSpeechChoice) => void }) {
-  const isWinner = wc.result === "Winner";
-  const given = givenSpeechOf(wc);
-  const didNotQualify = wc.result === "Did Not Qualify";
-  const borderColor = isWinner ? "border-amber-400/60" : didNotQualify ? "border-red-500/40" : "border-blue-500/40";
-  const bgGrad = isWinner ? "from-amber-500/15 to-transparent" : didNotQualify ? "from-red-500/10 to-transparent" : "from-blue-500/10 to-transparent";
-  return (
-    <div className={`relative rounded-xl border-2 ${borderColor} bg-gradient-to-b ${bgGrad} p-5 space-y-4 animate-in fade-in zoom-in-95 duration-500`}>
-      {isWinner && <Confetti pieces={70} gold />}
-      <div className="text-center space-y-2">
-        <div className="text-4xl">{isWinner ? "🏆" : didNotQualify ? "😞" : "🌍"}</div>
-        <h3 className="text-xl font-black">{isWinner ? "WORLD CUP WINNER!" : didNotQualify ? "World Cup Qualifiers" : `World Cup ${wc.year}`}</h3>
-        <p className="text-sm font-bold flex items-center justify-center gap-1"><FlagImg name={wc.nation} />{wc.nation}: {wc.result}</p>
-        {didNotQualify && (
-          <p className="text-xs text-muted-foreground">Your nation failed to qualify for the tournament this time.</p>
-        )}
-      </div>
-      {!didNotQualify && (
-        <>
-          {/* Match results */}
-          <div className="space-y-1.5 max-h-[200px] overflow-y-auto">
-            {wc.matches.map((m, i) => (
-              <div key={i} className="flex items-center justify-between text-xs bg-muted/20 rounded-lg px-3 py-1.5">
-                <span className="text-[10px] text-muted-foreground w-12">{m.round}</span>
-                <span className={`font-semibold ${m.teamA === wc.nation ? "text-foreground" : "text-muted-foreground"}`}>
-                  <FlagImg name={m.teamA} size={16} />{m.teamA}
-                </span>
-                <span className="font-black text-sm mx-2">{m.scoreA} - {m.scoreB}</span>
-                <span className={`font-semibold ${m.teamB === wc.nation ? "text-foreground" : "text-muted-foreground"}`}>
-                  {m.teamB} <FlagImg name={m.teamB} size={16} />
-                </span>
-              </div>
-            ))}
-          </div>
-          {/* Player stats */}
-          <div className="grid grid-cols-4 gap-2">
-            {[
-              { l: "Apps", v: wc.playerApps },
-              { l: "Goals", v: wc.playerGoals },
-              { l: "Assists", v: wc.playerAssists },
-              { l: "Avg Rating", v: wc.playerAvgRating.toFixed(1) },
-            ].map(s => (
-              <div key={s.l} className="text-center bg-muted/20 rounded-lg p-2">
-                <div className="text-lg font-black">{s.v}</div>
-                <div className="text-[9px] text-muted-foreground">{s.l}</div>
-              </div>
-            ))}
-          </div>
-          {wc.bestPlayer && (
-            <div className="bg-amber-500/10 border border-amber-500/20 rounded-lg p-2 text-center">
-              <span className="text-sm font-bold">🌟 Named Best Player of the Tournament!</span>
-            </div>
-          )}
-          {isWinner && (
-            <div className="bg-amber-500/15 border border-amber-400/30 rounded-lg p-3 text-center">
-              <span className="text-sm font-bold text-amber-300">🏆 WORLD CUP CHAMPION! Legacy cemented forever.</span>
-            </div>
-          )}
-        </>
-      )}
-      {/* Round 1023: once given, the speech stays on the card with what it
-          really moved, and Continue moves on. */}
-      {isWinner && given && <SpokenSpeech speech={given} />}
-      {isWinner && !given ? (
-        /* Round 834: the buttons come from the shared speech options, the
-           same list the tournament card draws. */
-        <SpeechChoices prompt="The microphone is yours. The speech:" fadeIn roomy options={SOCCER_WORLD_CUP_SPEECHES} onChoose={onSpeech} />
-      ) : (
-        <Button onClick={onDismiss} className={`w-full h-10 text-sm font-bold text-black ${isWinner ? "bg-amber-600 hover:bg-amber-500" : "bg-emerald-600 hover:bg-emerald-500"}`}>
-          Continue →
-        </Button>
-      )}
-    </div>
-  );
-}
-
 /* ─── International Stats Panel ─── */
 function InternationalStatsPanel({ career, onRetire, onReturn }: { career: CareerState; onRetire: () => void; onReturn: () => void }) {
   const is = career.intStats;
@@ -2329,22 +2188,6 @@ export function RivalrySummaryCard({ summary, career }: { summary: RivalrySummar
 }
 
 /* ─── Financial & Lifestyle Panel ─── */
-/* ─── Round 262: your place in the squad ───
-   Sign for Arsenal and the question that decides your whole season is who is
-   ahead of you. The game used to answer it with a projected number of games
-   and no names. Round 262 answered it with a card on this page, for the real
-   squads only. Since Round 1115 the answer is the Squad tile
-   (src/components/soccer-career/SquadTile.tsx): every club and every year,
-   and it always says whether the squad is real, shown by role, or invented.
-   The offer line and the verdict line on this page still read the real squads only,
-   so they print nothing where there is no checked squad. */
-/** 1st, 2nd, 3rd, 11th. Used by the verdict screen's squad line. */
-function ordinalPlace(n: number): string {
-  const teen = n % 100 >= 11 && n % 100 <= 13;
-  const suf = teen ? "th" : n % 10 === 1 ? "st" : n % 10 === 2 ? "nd" : n % 10 === 3 ? "rd" : "th";
-  return `${n}${suf}`;
-}
-
 function FinancialPanel({ career, onCurrencyChange, onAgentChange }: { career: CareerState; onCurrencyChange?: () => void; onAgentChange?: (agentId: string) => void }) {
   const lifestyleEmoji: Record<string, string> = {
     "Humble": "🏚️", "Comfortable": "🏡", "Wealthy": "🏰", "Superstar": "✨", "Untouchable": "👑",
@@ -2493,6 +2336,8 @@ function FinancialPanel({ career, onCurrencyChange, onAgentChange }: { career: C
       {((career.corruptionHeat ?? 0) > 0 || (career.dirtyMoney ?? 0) > 0) && (() => {
         const h = career.corruptionHeat ?? 0;
         const band = heatLabel(h);
+        const balance = career.dirtyMoney ?? 0;
+        const { washed, remaining } = dirtyMoneySeasonPlan(balance, career.purchasedItems);
         return (
           <div className="rounded-lg border border-red-500/25 bg-red-500/5 p-2.5 space-y-1.5 animate-fade-in">
             <div className="flex items-center justify-between">
@@ -2506,9 +2351,13 @@ function FinancialPanel({ career, onCurrencyChange, onAgentChange }: { career: C
               />
             </div>
             <p className="text-[10px] text-muted-foreground leading-snug">{band.blurb}</p>
-            {(career.dirtyMoney ?? 0) > 0 && (
+            {balance > 0 && (
               <p className="text-[10px] text-red-400 font-bold">
-                💼 {formatNetWorth(career.dirtyMoney ?? 0)} unexplained. Wash it through the Shady aisle or it keeps burning.
+                💼 {formatNetWorth(balance)} unexplained.
+                {!career.retired && (washed > 0
+                  ? ` ${formatNetWorth(washed)} clears when you next play a season.`
+                  : " In My Life, open The other list for items that process it each season you play.")}
+                {!career.retired && remaining > 0 && ` Any balance left can add up to ${DIRTY_BALANCE_HEAT} Heat.`}
               </p>
             )}
           </div>
@@ -3594,7 +3443,9 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
             <TournamentCard t={career.pendingTournament} onDismiss={onDismissWorldCup} onSpeech={onWorldCupSpeech} />
           )}
           {career.phase === "world_cup" && !career.pendingTournament && career.pendingWorldCup && (
-            <WorldCupResultCard wc={career.pendingWorldCup} career={career} onDismiss={onDismissWorldCup} onSpeech={onWorldCupSpeech} />
+            <Suspense fallback={<p role="status" className="text-sm">Loading World Cup result...</p>}>
+              <WorldCupResultCard wc={career.pendingWorldCup} onDismiss={onDismissWorldCup} onSpeech={onWorldCupSpeech} />
+            </Suspense>
           )}
 
           {/* OVERLAY: Rivalry Event */}
@@ -3844,7 +3695,9 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
               given season it matters more. Renders only while you are actually
               at a club. Round 1115: the Squad tile, every club and every
               year, and it says whether the squad is real, by role or invented. */}
-          {career.phase === "playing" && <SquadTile career={career} />}
+          {career.phase === "playing" && (
+            <Suspense fallback={<div aria-hidden="true" className="h-[87px] rounded-xl border border-border bg-card" />}><SquadTile career={career} /></Suspense>
+          )}
           {career.phase === "playing" && onCareerPatch && <SeasonAmbitionTile career={career} onCareer={onCareerPatch} />}
           {career.phase === "playing" && onCareerPatch && <PreseasonPlanTile career={career} onCareer={onCareerPatch} />}
           {(career.phase === "playing" || career.phase === "retired") && <CareerMentorTile career={career} />}

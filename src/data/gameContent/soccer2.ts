@@ -1101,6 +1101,7 @@ export const SOCCER_CONTENT_2: GameContentMap = {
     intro: [
       "Build Your XI hands you a formation, then a slot machine assigns a random club or country to every position. Your job is naming a player from that exact team who fits each slot. That is Mixed, the default clubs and countries mode.",
       "In Mixed, when the eleventh name lands, an AI referee grades the lineup and writes a short scouting report, then a season report plays a full year out with your XI: league finish, points, trophies and a top scorer. No two teams ever come out alike.",
+      "Mixed can draw from 60 clubs and 25 national teams. Flamengo and Palmeiras are in the club pool.",
       "Club year draft uses 11 different clubs, not nations, and records from one year you choose. It uses your selected values and ages for a fictional season, and missing either leaves the completed XI unrated.",
     ],
     headings: {
@@ -1423,6 +1424,7 @@ export const SOCCER_CONTENT_2: GameContentMap = {
         heading: "Choosing a timer from unlimited to forty seconds",
         items: [
           "Timers: Unlimited, 90, 60, or 40 seconds, starting on your first guess.",
+          "Timed rounds keep counting while answers are checked and while you are away. Reloading keeps the same deadline. A late answer does not count. Unlimited has no clock.",
         ],
       },
       {
@@ -1450,6 +1452,12 @@ export const SOCCER_CONTENT_2: GameContentMap = {
         heading: "Kaka finishes a nine for nine grid",
         paragraphs: [
           "The last corner wants a Champions League winner who played in Serie A. One miss, then Kaka clicks in: 9 for 9, rarity 19 percent.",
+        ],
+      },
+      {
+        heading: "A late answer after the clock reaches zero",
+        paragraphs: [
+          "Example: if checking finishes after the clock reaches 0, that late answer does not change the ended main round.",
         ],
       },
     ],
@@ -1776,14 +1784,14 @@ export const SOCCER_CONTENT_2: GameContentMap = {
       {
         heading: "Creating your player and building your look",
         items: [
-          "Create your player: name, one of 50 nationalities, one of 10 positions, and a starting era from the 1990s to the 2020s.",
+          "Enter your name, pick from the listed nationalities, choose one of 10 positions and set a starting era from the 1990s to the 2020s.",
           "Build your look in the appearance editor: 12 skin tones, 29 hairstyles, 16 hair colours, 18 beard styles, 16 accessories, 18 boot lines, and 19 signature celebrations, or hit Surprise me.",
         ],
       },
       {
         heading: "Rolling potential and customizing your build",
         items: [
-          "Roll your starting potential, somewhere in the mid 50s to high 60s, and reroll as many times as you like. Rerolls are free and there is no limit on them.",
+          "Choose Generate Starting Potential to roll your starting overall and scout ceiling. You can reroll both for free as often as you like.",
           "Open Customize your build to set your starting overall anywhere from 40 to 99, move points between the six attribute families, shape the specifics under each family, and set your height and weight.",
         ],
       },
@@ -1937,7 +1945,7 @@ export const SOCCER_CONTENT_2: GameContentMap = {
       {
         heading: "Rerolling your potential before you start",
         items: [
-          "Reroll your potential to 62 or better. The gap between a Promising start and a Gifted one echoes for a decade.",
+          "A Gifted start begins at 62 overall. Check your scout ceiling separately.",
         ],
       },
       {

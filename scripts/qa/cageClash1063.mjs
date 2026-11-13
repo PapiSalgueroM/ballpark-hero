@@ -7,6 +7,7 @@ import { spawn } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import { fileURLToPath } from 'node:url';
 import { chromium } from '../lib/playwrightLoader.mjs';
+import { readBuiltFonts, loadActualFonts } from '../lib/builtFonts.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 const OUT = path.resolve(process.env.CAGE_CLASH_NATIVE_ARTIFACTS || path.join(ROOT, 'cage-clash-artifacts/native'));
@@ -14,15 +15,16 @@ fs.mkdirSync(OUT, { recursive: true }); assert(fs.existsSync(path.join(ROOT, 'di
 const sourceBytes = ['src/lib/cageClash.ts', 'src/lib/cagePractice.ts', 'src/lib/cageCircuit.ts', 'src/hooks/useCageClash.ts',
   'src/components/cage-clash/CageClashBoard.tsx', 'src/components/cage-clash/CageClashCanvas.tsx', 'src/components/cage-clash/CagePracticeFeedback.tsx']
   .map(file => ({ file, bytes: fs.readFileSync(path.join(ROOT, file)) }));
-const fontLinks = [...fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8').matchAll(/<link\s+href="(https:\/\/fonts\.googleapis\.com\/[^\"]+)"\s+rel="stylesheet"/g)].map(m => new URL(m[1]).href);
-assert.equal(fontLinks.length, 1, 'Fonts use the actual template stylesheet');
+const bundledFonts = readBuiltFonts(ROOT);
+const fontPaths = new Set(Object.keys(bundledFonts.files)
+  .filter(file => file.startsWith('dist/') && file.endsWith('.woff2')).map(file => file.slice('dist'.length)));
 const profiles = [
   { width: 1280, height: 720, input: 'keyboard', theme: 'light', reduced: true },
   { width: 320, height: 780, input: 'touch', theme: 'dark', reduced: true },
   { width: 390, height: 844, input: 'touch', theme: 'light', reduced: false },
   { width: 1280, height: 720, input: 'mouse', theme: 'dark', reduced: false },
 ];
-const report = { cases: [], controls: [], coverage: [], forwardedWrites: 0 };
+const report = { bundledFonts, cases: [], controls: [], coverage: [], forwardedWrites: 0 };
 const save = () => {
   report.sources = sourceBytes.map(({ file, bytes }) => { const after = fs.readFileSync(path.join(ROOT, file)); return {
     file, before: createHash('sha256').update(bytes).digest('hex'), after: createHash('sha256').update(after).digest('hex'), held: bytes.equals(after),
@@ -43,11 +45,11 @@ const keys = { left: 'ArrowLeft', right: 'ArrowRight', guard: 'Space', jab: 'j',
 const fightStats = [['hits', 'Shots landed'], ['damageDealt', 'Damage dealt'], ['blocked', 'Blocks'], ['takedowns', 'Takedowns'], ['controlTicks', 'Top control']];
 const practiceObjectives = { striking: 'Land 3 shots, then recover to 90 gas.', takedown: 'Clinch, then take your partner down.', submission: 'Build submission pressure to a finish.', escape: 'Regain guard, then return to your feet.' };
 const root = page => page.locator('[data-cage-screen]');
-async function useNativeFocus(page) {
+async function setFocusEmulation(page, enabled) {
   assert.equal(typeof page._connection?.toImpl, 'function', 'Native focus requires the in-process browser connection');
   const client = page._connection.toImpl(page)?.delegate?._mainFrameSession?._client;
   assert.equal(typeof client?.send, 'function', 'Native focus requires the original Chromium page session');
-  await client.send('Emulation.setFocusEmulationEnabled', { enabled: false });
+  await client.send('Emulation.setFocusEmulationEnabled', { enabled });
 }
 async function waitNativeFocus(page, expected) {
   for (let attempt = 0; attempt < 60; attempt++) {
@@ -150,13 +152,20 @@ try {
   await ready; browser = await chromium.launch({ headless: false });
   for (const profile of profiles) {
     const id = `${profile.width}-${profile.input}-${profile.theme}${profile.reduced ? '-reduced' : ''}`;
-    const row = { id, steps: [], screenshots: [], errors: [], assetErrors: [], blockedWrites: [], blockedDatabase: [], fonts: [], inputs: 0, fightStats: [], strikeAnimations: [], groundAnimation: null, practiceFeedback: [] };
-    report.cases.push(row); const fontAssets = new Set();
+    const row = { id, steps: [], fontRequests: [], screenshots: [], errors: [], assetErrors: [], blockedWrites: [], blockedDatabase: [], fonts: [], inputs: 0, fightStats: [], strikeAnimations: [], groundAnimation: null, practiceFeedback: [] };
+    report.cases.push(row);
     const context = await browser.newContext({ viewport: { width: profile.width, height: profile.height }, hasTouch: profile.input === 'touch', isMobile: profile.input === 'touch',
       colorScheme: profile.theme, reducedMotion: profile.reduced ? 'reduce' : 'no-preference', serviceWorkers: 'block',
       storageState: { cookies: [], origins: [{ origin: BASE, localStorage: [{ name: 'dukb-theme', value: profile.theme }, { name: 'cookie-consent', value: 'essential' }, { name: 'rules-gate-seen:/cage-clash', value: '1' }, { name: 'cage-unrelated', value: 'untouched' }] }] } });
     await context.route('**/*', async route => {
       const request = route.request(), url = new URL(request.url());
+      if (request.resourceType() === 'font') {
+        row.fontRequests.push(url.href);
+        if (request.method() !== 'GET' || url.origin !== BASE || !fontPaths.has(url.pathname)) {
+          row.assetErrors.push('Font URL is not declared by the built stylesheet: ' + url.href);
+          return route.abort('blockedbyclient');
+        }
+      }
       if (url.origin === BASE) { assert(['GET', 'HEAD'].includes(request.method()), 'No local write transport'); return route.continue(); }
       if (!['GET', 'HEAD', 'OPTIONS'].includes(request.method())) {
         const write = { method: request.method(), path: url.pathname };
@@ -166,16 +175,6 @@ try {
         row.blockedWrites.push(write);
       }
       if (/supabase|\/rest\/|\/functions\//.test(url.hostname + url.pathname)) row.blockedDatabase.push({ method: request.method(), path: url.pathname });
-      const sheet = request.method() === 'GET' && fontLinks.includes(url.href);
-      if (sheet || (request.method() === 'GET' && request.resourceType() === 'font' && fontAssets.has(url.href))) {
-        try {
-          const response = await route.fetch({ maxRedirects: 0 }); assert(response.ok(), 'Actual font response succeeds');
-          if (sheet) { const body = await response.text(); const urls = [...body.replace(/\/\*[\s\S]*?\*\//g, '').matchAll(/url\(\s*(['"]?)(https:\/\/[^)'"\s]+)\1\s*\)/g)].map(m => new URL(m[2]));
-            assert(urls.length > 0); for (const asset of urls) { assert.equal(asset.origin, 'https://fonts.gstatic.com'); fontAssets.add(asset.href); }
-            return route.fulfill({ response, body }); } return route.fulfill({ response });
-        } catch (error) { row.assetErrors.push(String(error)); return route.abort(); }
-      }
-      if (request.resourceType() === 'font') { row.assetErrors.push(`Undeclared font ${url.href}`); return route.abort('blockedbyclient'); }
       return route.fulfill({ status: 200, contentType: request.resourceType() === 'stylesheet' ? 'text/css' : 'application/json', body: request.resourceType() === 'stylesheet' ? '' : '[]' });
     });
     await context.routeWebSocket('**/*', socket => socket.close());
@@ -492,19 +491,8 @@ try {
     try {
       await page.clock.install();
       await page.goto(`${BASE}/cage-clash`, { waitUntil: 'domcontentloaded' }); await root(page).waitFor();
-      if (profile.input === 'keyboard') {
-        await useNativeFocus(page);
-        await page.bringToFront();
-      }
-      row.fonts = await page.evaluate(async () => {
-        await document.fonts.ready; const faces = [];
-        for (const family of ['Inter', 'Space Grotesk']) for (const weight of [400, 500, 600, 700]) {
-          const loaded = await document.fonts.load(`${weight} 16px "${family}"`, 'Cage Clash');
-          faces.push({ family, weight, count: loaded.length, loaded: loaded.length > 0 && loaded.every(face => face.status === 'loaded') });
-        }
-        return faces;
-      });
-      assert.equal(row.fonts.length, 8); assert(row.fonts.every(face => face.loaded), 'All eight actual site font faces load before native geometry');
+      row.fonts = await loadActualFonts(page, 'Cage Clash');
+      assert(row.fontRequests.length > 0, 'Native geometry uses loopback requests for actual bundled fonts');
       assert.equal(await page.locator('html').evaluate(el => el.classList.contains('light')), profile.theme === 'light');
       assert.equal(await page.evaluate(() => matchMedia('(prefers-reduced-motion: reduce)').matches), profile.reduced);
       await page.clock.pauseAt(await page.evaluate(() => Date.now() + 1000));
@@ -706,11 +694,14 @@ try {
         assert.deepEqual(await glove(), [99, 139, 255, 255], 'Actual guard input visibly raises the player glove');
         await inspect('keyboard-guard'); await page.keyboard.up('Space'); await page.clock.runFor(112);
         assert.notDeepEqual(await glove(), [99, 139, 255, 255], 'Release returns the actual pixel pose to idle');
+        // Real OS focus matters for this two-tab control. Keep Playwright's
+        // normal focus emulation for the other keyboard and gameplay checks.
+        await setFocusEmulation(page, false); await page.bringToFront(); await waitNativeFocus(page, true);
         await page.keyboard.down('ArrowLeft'); await page.clock.runFor(150);
         assert(await page.evaluate(() => document.hasFocus()), 'The arena begins with actual browser focus');
         const other = await context.newPage();
         try {
-          await useNativeFocus(other);
+          await setFocusEmulation(other, false);
           await other.bringToFront();
           await waitNativeFocus(other, true);
           await waitNativeFocus(page, false);
@@ -727,6 +718,7 @@ try {
         await activate(button('Resume fight'), profile); const x = (await hud(page)).player.x; await page.clock.runFor(180);
         assert.equal((await hud(page)).player.x, x, 'Blur clears the held key before resume');
         assert((await hud(page)).tick > returned.tick, 'Explicit resume advances real combat after focus returns');
+        await setFocusEmulation(page, true);
       }
       const writesBeforeQuit = row.blockedWrites.length;
       await activate(button('Pause'), profile); await inspect('paused'); await activate(button('Leave fight'), profile);

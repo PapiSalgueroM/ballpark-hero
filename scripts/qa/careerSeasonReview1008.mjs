@@ -8,18 +8,15 @@ import { createRequire } from 'node:module';
 import { fileURLToPath } from 'node:url';
 import { build } from 'esbuild';
 import { chromium } from '../lib/playwrightLoader.mjs';
+import { readBuiltFonts, loadActualFonts } from '../lib/builtFonts.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
-const fontLinks = [...fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8').matchAll(/<link\s+href="(https:\/\/fonts\.googleapis\.com\/[^\"]+)"\s+rel="stylesheet"/g)].map(match => new URL(match[1]).href);
-assert.equal(fontLinks.length, 1, 'Native fonts bind the actual template stylesheet');
-const isFontStylesheet = request => request.method() === 'GET' && fontLinks.includes(new URL(request.url()).href);
-const isFontRead = (request, assets) => {
-  const url = new URL(request.url());
-  return isFontStylesheet(request) || (request.method() === 'GET' && request.resourceType() === 'font' && assets.has(url.href));
-};
 const OUT = path.resolve(process.env.CAREER_SEASON_REVIEW_NATIVE_ARTIFACTS || path.join(ROOT, 'career-season-review-artifacts/native'));
 fs.mkdirSync(OUT, { recursive: true });
 assert(fs.existsSync(path.join(ROOT, 'dist/index.html')), 'Build dist before the native review walk');
+const bundledFonts = readBuiltFonts(ROOT);
+const fontPaths = new Set(Object.keys(bundledFonts.files)
+  .filter(file => file.startsWith('dist/') && file.endsWith('.woff2')).map(file => file.slice('dist'.length)));
 const bundle = path.join(OUT, 'fixtures.cjs');
 await build({
   entryPoints: [path.join(ROOT, 'src/test/fixtures/careerSeasonReview1008.ts')], outfile: bundle,
@@ -37,7 +34,7 @@ const profiles = [
   { width: 1280, height: 720, input: 'mouse', theme: 'dark', reduced: false, positions: ['PG', 'QB', 'RP', 'C'] },
   { width: 1280, height: 720, input: 'keyboard', theme: 'light', reduced: true, positions: ['PG', 'EDGE', 'SP', 'G'] },
 ];
-const report = { started: new Date().toISOString(), cases: [], controls: [] };
+const report = { started: new Date().toISOString(), bundledFonts, cases: [], controls: [] };
 const saveReport = () => fs.writeFileSync(path.join(OUT, 'report.json'), JSON.stringify(report, null, 2));
 const port = await new Promise((resolve, reject) => {
   const probe = createServer(); probe.once('error', reject);
@@ -61,19 +58,6 @@ async function settle(page) {
       if (++frames >= 100 || stable >= 10) resolve(); else requestAnimationFrame(next); };
     requestAnimationFrame(next);
   }));
-}
-async function loadedFonts(page) {
-  const loaded = await page.evaluate(async () => {
-    await document.fonts.ready;
-    const faces = [];
-    for (const family of ['Inter', 'Space Grotesk']) for (const weight of [400, 500, 600, 700]) {
-      const matches = await document.fonts.load(`${weight} 16px "${family}"`, 'Career season');
-      faces.push({ family, weight, faces: matches.length, loaded: matches.length > 0 && matches.every(face => face.status === 'loaded') });
-    }
-    return faces;
-  });
-  assert(loaded.every(font => font.loaded), 'Actual Inter and Space Grotesk faces load before native geometry');
-  return loaded;
 }
 async function activate(locator, input, minimum = 44) {
   await locator.waitFor({ state: 'visible' });
@@ -150,10 +134,13 @@ try {
   for (const profile of profiles) for (const [sportIndex, slug] of ['nba', 'nfl', 'mlb', 'nhl'].entries()) {
     const fixture = reviewFixtures.find(f => f.slug === slug && f.pos === profile.positions[sportIndex]);
     const sport = reviewSports[slug], career = makeReviewCareer(fixture), bytes = reviewSave(career);
+    // Number presentation groups the NFL QB's saved yardage. Keep the saved fixture numeric.
+    const regularDisplay = slug === 'nfl' && fixture.pos === 'QB'
+      ? { ...fixture.regular, 'Passing yards': '4,123' }
+      : fixture.regular;
     const id = `${slug}-${fixture.pos}-${profile.width}-${profile.input}-${profile.theme}${profile.reduced ? '-reduced' : ''}`;
     const result = { id, route: `/${sport.gameSlug}`, viewport: { width: profile.width, height: profile.height }, steps: [], screenshots: [], pageErrors: [], consoleErrors: [], localFailures: [], fontFailures: [], fontRequests: [], scoreWrites: [], eventSetupWrites: [], outbound: [] };
     let playingEventSeason = false;
-    const fontAssets = new Set();
     report.cases.push(result);
     const context = await browser.newContext({ viewport: result.viewport, isMobile: profile.input === 'touch', hasTouch: profile.input === 'touch', deviceScaleFactor: 1,
       reducedMotion: profile.reduced ? 'reduce' : 'no-preference', colorScheme: profile.theme, serviceWorkers: 'block',
@@ -173,39 +160,20 @@ try {
     });
     await context.route('**/*', async route => {
       const request = route.request(), url = new URL(request.url());
+      const type = request.resourceType();
+      if (type === 'font') {
+        result.fontRequests.push(url.href);
+        if (request.method() !== 'GET' || url.origin !== BASE || !fontPaths.has(url.pathname)) {
+          result.fontFailures.push('Font URL is not declared by the built stylesheet: ' + url.href);
+          return route.abort('blockedbyclient');
+        }
+      }
       if (url.origin === BASE) return route.continue();
       result.outbound.push({ method: request.method(), path: url.pathname });
       if (!['GET', 'HEAD', 'OPTIONS'].includes(request.method()) && /completions|user_game_scores|user_best_scores|record_auth_completion/.test(url.pathname)) {
         const write = { method: request.method(), path: url.pathname };
         if (playingEventSeason) result.eventSetupWrites.push({ ...write, body: request.postDataJSON() });
         else result.scoreWrites.push(write);
-      }
-      if (isFontRead(request, fontAssets)) {
-        result.fontRequests.push(request.url());
-        try {
-          const response = await route.fetch({ maxRedirects: 0 });
-          assert(response.status() >= 200 && response.status() < 300, 'Actual font requests must succeed without redirects');
-          if (isFontStylesheet(request)) {
-            const css = await response.text();
-            const declared = [...css.replace(/\/\*[\s\S]*?\*\//g, '').matchAll(/url\(\s*(['"]?)(https:\/\/[^)'"\s]+)\1\s*\)/g)].map(match => new URL(match[2]));
-            assert(declared.length > 0, 'The actual template stylesheet declares font assets');
-            for (const asset of declared) {
-              assert.equal(asset.origin, 'https://fonts.gstatic.com', 'Only the actual stylesheet font host is allowed');
-              fontAssets.add(asset.href);
-            }
-            result.fontAssets = [...fontAssets];
-            return route.fulfill({ response, body: css });
-          }
-          return route.fulfill({ response });
-        } catch (error) {
-          result.fontFailures.push(`${request.url()}: ${error.message}`);
-          return route.abort('blockedbyclient');
-        }
-      }
-      const type = request.resourceType();
-      if (type === 'font') {
-        result.fontFailures.push(`Font URL is not declared by the actual template stylesheet: ${request.url()}`);
-        return route.abort('blockedbyclient');
       }
       return route.fulfill({ status: 200, contentType: type === 'stylesheet' ? 'text/css' : 'application/json', body: type === 'stylesheet' ? '' : '[]' });
     });
@@ -215,14 +183,14 @@ try {
     page.on('console', message => { if (message.type() === 'error') result.consoleErrors.push(message.text()); });
     page.on('requestfailed', request => {
       if (request.url().startsWith(BASE)) result.localFailures.push(`${request.url()}: ${request.failure()?.errorText}`);
-      if (request.resourceType() === 'font' || isFontStylesheet(request)) result.fontFailures.push(`${request.url()}: ${request.failure()?.errorText}`);
+      if (request.resourceType() === 'font') result.fontFailures.push(`${request.url()}: ${request.failure()?.errorText}`);
     });
     page.on('response', response => {
       if (response.url().startsWith(BASE) && response.status() >= 400) result.localFailures.push(`${response.status()} ${response.url()}`);
-      if ((response.request().resourceType() === 'font' || isFontStylesheet(response.request())) && response.status() >= 400) result.fontFailures.push(`${response.status()} ${response.url()}`);
+      if (response.request().resourceType() === 'font' && response.status() >= 400) result.fontFailures.push(`${response.status()} ${response.url()}`);
     });
     const inspect = async stage => {
-      const fonts = await loadedFonts(page);
+      const fonts = await loadActualFonts(page, 'Career season');
       await settle(page);
       const m = await measure(page); result.steps.push({ stage, ...m, fonts });
       const file = `${id}-${stage}.png`; await page.screenshot({ path: path.join(OUT, file), animations: 'disabled' }); result.screenshots.push(file);
@@ -240,7 +208,8 @@ try {
     try {
       await page.goto(`${BASE}${result.route}`, { waitUntil: 'domcontentloaded' });
       const opener = page.getByRole('button', { name: /Career Log/ }); await opener.waitFor();
-      result.fonts = await loadedFonts(page); await settle(page);
+      result.fonts = await loadActualFonts(page, 'Career season'); await settle(page);
+      assert(result.fontRequests.length > 0, 'Native geometry uses loopback requests for actual bundled fonts');
       assert.deepEqual(result.fontFailures, []);
       assert(await page.evaluate(() => Array.isArray(window.__reviewWrites) && Number.isInteger(window.__reviewDraws)), 'Storage and RNG instrumentation installed before app boot');
       assert.equal(await page.locator('html').evaluate(el => el.classList.contains('light')), profile.theme === 'light', 'The saved theme is active');
@@ -278,7 +247,7 @@ try {
       const compareRegular = await inspect('compare-regular');
       assert(Math.abs(compareRegular.scrollY - compareOverview.scrollY) <= 2, 'Comparison tab changes do not jump the page');
       const preciseZero = { 'Batting average': '0.000', 'On base percentage': '0.000', ERA: '0.00', 'Save percentage': '0.000' };
-      const expectedRegular = Object.fromEntries(Object.entries(fixture.regular).map(([label, value]) => [label, [value, value, preciseZero[label] || '0']]));
+      const expectedRegular = Object.fromEntries(Object.entries(regularDisplay).map(([label, value]) => [label, [value, value, preciseZero[label] || '0']]));
       assert.deepEqual(await comparisonStats(page), expectedRegular);
       await chooseSeason(firstSeason, '0', profile.input);
       assert.deepEqual(await optionValues(secondSeason), ['1', '2']);
@@ -337,7 +306,7 @@ try {
       const highGames = await inspect('highs-games');
       assert(Math.abs(highGames.scrollY - highOverview.scrollY) <= 2, 'Changing the high metric does not jump the page');
       await activate(highs.locator(`[data-season-highs-stat="${positionHigh}"]`), profile.input);
-      assert.equal(await highs.locator('[data-season-highs-value]').textContent(), fixture.regular[positionHigh]);
+      assert.equal(await highs.locator('[data-season-highs-value]').textContent(), regularDisplay[positionHigh]);
       assert.equal(await highs.locator(`[data-season-highs-stat="${positionHigh}"]`).getAttribute('aria-pressed'), 'true');
       assert.deepEqual(await highSeason.locator('option').evaluateAll(options => options.map(option => ({ value: option.value, text: option.textContent }))), [
         { value: '2', text: '2033 (#3)' }, { value: '1', text: '2032 (#2)' }, { value: '0', text: '2030 (#1)' },
@@ -390,7 +359,7 @@ try {
         await page.keyboard.press('Tab');
         assert.equal(await page.evaluate(() => document.activeElement?.getAttribute('data-season-tab')), 'Regular season');
         await page.keyboard.press('Enter'); await inspect('keyboard-regular');
-        assert.deepEqual(await stats(page), fixture.regular);
+        assert.deepEqual(await stats(page), regularDisplay);
         await page.keyboard.press('Tab');
         assert.equal(await page.evaluate(() => document.activeElement?.getAttribute('data-season-tab')), 'Postseason');
         await page.keyboard.press('Shift+Tab');
@@ -416,7 +385,7 @@ try {
         checkGeometry(await measure(page), result.viewport, 'overflow-restored');
         report.controls.push({ name: 'horizontal-overflow', changed: overflow.scrollWidth, restored: (await measure(page)).scrollWidth });
       }
-      for (const [tab, expected] of [['Regular season', fixture.regular], ['Postseason', fixture.postseason]]) {
+      for (const [tab, expected] of [['Regular season', regularDisplay], ['Postseason', fixture.postseason]]) {
         await activate(button(tab), profile.input); await inspect(tab === 'Postseason' ? 'postseason' : 'regular');
         assert.deepEqual(await stats(page), expected);
         assert.equal(await button(tab).getAttribute('aria-pressed'), 'true');
@@ -451,6 +420,9 @@ try {
         const eventCareer = JSON.parse(JSON.stringify(career));
         eventCareer.age = 27;
         delete eventCareer.rival;
+        // The 2035 national-team call precedes the ordinary summer card. Use the
+        // same answered rest as the mounted pending-choice test to reach that card.
+        eventCareer.intl = { v: 1, summers: [{ year: 2035, edition: 'wc-2035', went: false }] };
         await page.evaluate(({ key, value }) => localStorage.setItem(key, value), { key: sport.saveKey, value: reviewSave(eventCareer) });
         await page.reload({ waitUntil: 'domcontentloaded' }); await opener.waitFor(); await settle(page);
         const activity = page.waitForRequest(request => new URL(request.url()).pathname === '/rest/v1/game_completions' && request.method() === 'POST');

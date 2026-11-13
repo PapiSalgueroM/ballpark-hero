@@ -103,18 +103,39 @@
           }
           return false;
         };
-        var sweep = function () {
+        var selector = '[id*="lovable" i], [class*="lovable" i], a[href*="lovable.dev"], a[href*="gptengineer"], [id*="gpt-engineer" i]';
+        var sweep = function (root) {
           try {
-            var all = document.querySelectorAll('[id*="lovable" i], [class*="lovable" i], a[href*="lovable.dev"], a[href*="gptengineer"], [id*="gpt-engineer" i]');
+            var all = root.querySelectorAll(selector);
             for (var i = 0; i < all.length; i++) {
               var el = all[i];
               if (isBadge(el)) el.remove();
             }
           } catch (e) { /* never break the page over badge cleanup */ }
         };
-        new MutationObserver(sweep).observe(document.documentElement, { childList: true, subtree: true });
-        document.addEventListener('DOMContentLoaded', sweep);
-        window.addEventListener('load', sweep);
+        var inspect = function (node, includeChildren) {
+          if (node.nodeType !== 1 || !node.isConnected) return;
+          if (node.matches(selector) && isBadge(node)) node.remove();
+          if (includeChildren && node.firstElementChild) sweep(node);
+        };
+        new MutationObserver(function (records) {
+          try {
+            for (var i = 0; i < records.length; i++) {
+              var record = records[i];
+              if (record.type === 'attributes') {
+                inspect(record.target, false);
+              } else {
+                var added = record.addedNodes;
+                for (var j = 0; j < added.length; j++) inspect(added[j], true);
+              }
+            }
+          } catch (e) { /* never break the page over badge cleanup */ }
+        }).observe(document.documentElement, {
+          childList: true, subtree: true, attributes: true, attributeFilter: ['id', 'class', 'href'],
+        });
+        var sweepDocument = function () { sweep(document); };
+        document.addEventListener('DOMContentLoaded', sweepDocument);
+        window.addEventListener('load', sweepDocument);
       })();
     </script>
     <script data-dukb-consent-bootstrap="">
@@ -241,12 +262,12 @@
 <a href="/college">College</a>
 <h1>Soccer Games</h1>
 <p>Your next chapter starts on the pitch.</p>
-<p>All 36 of them in one place. Every one is free with no sign-up.</p>
+<p>All 37 of them in one place. Every one is free with no sign-up.</p>
 <a href="/club-manager">Play Club Manager</a>
 <h2>What are you playing?</h2>
 <p>Real-player puzzles, transfer games and career sims. Test your football knowledge or build a career story of your own.</p>
 <p>Pin a game to keep it on Home.</p>
-<p>36 games</p>
+<p>37 games</p>
 <h2>⏳ Soccer career and club manager sims</h2>
 <p>Sims you come back to. Soccer Career takes one player from a boyhood club to retirement and then into the dugout. Club Manager puts you in charge of a real club, today or in a past season, and lets the board decide how long you last.</p>
 <h3><a href="/club-manager">Club Manager</a></h3>
@@ -255,6 +276,8 @@
 <p>Create your look, sign for your boyhood club, get rich, get shady, retire a legend.</p>
 <h2>⏱️ Five minute soccer trivia and puzzle games</h2>
 <p>Grids, guessers, transfer trivia and squad builders. Short enough for a queue, and the daily ones give everybody the same board so you can argue about it afterwards.</p>
+<h3><a href="/soccer-perfect-season">Soccer Perfect Season</a></h3>
+<p>Draft a real XI</p>
 <h3><a href="/manager-hot-seat">Manager Hot Seat</a></h3>
 <p>Take over a real club on a bad run. Five league games to hit the board's target or you are sacked</p>
 <h3><a href="/deadline-day">Deadline Day</a></h3>

@@ -66,7 +66,7 @@ const FIXTURE = path.join(ROOT, 'scripts/data/guideHeadingsFrozen.json');
 const SEO = path.join(ROOT, 'src/components/seo/GameSeoContent.tsx');
 
 /* Raise this in the round that converts another guide. */
-const CONVERTED_FLOOR = 131;
+const CONVERTED_FLOOR = 132;
 
 /* Round 1031 adds these verified instructions without rewriting the frozen
    pre-conversion record. Only these exact parts on these four routes extend it. */
@@ -161,8 +161,32 @@ const SOCCER_TRAINING_LOCATION = {
   before: 'Open the training ground (the dumbbell button, bottom right)',
   after: 'Open the training ground (the dumbbell button, above your player on phones or bottom right on desktop)',
 };
+// Review #563: match the current Soccer Career creator's nationality and rating controls.
+const SOCCER_CREATOR_COPY = {
+  howToPlay: [
+    ['Create your player: name, one of 50 nationalities, one of 10 positions, and a starting era from the 1990s to the 2020s.',
+      'Enter your name, pick from the listed nationalities, choose one of 10 positions and set a starting era from the 1990s to the 2020s.'],
+    ['Roll your starting potential, somewhere in the mid 50s to high 60s, and reroll as many times as you like. Rerolls are free and there is no limit on them.',
+      'Choose Generate Starting Potential to roll your starting overall and scout ceiling. You can reroll both for free as often as you like.'],
+  ],
+  tips: [
+    ['Reroll your potential to 62 or better. The gap between a Promising start and a Gifted one echoes for a decade.',
+      'A Gifted start begins at 62 overall. Check your scout ceiling separately.'],
+  ],
+};
 function reviewedGuideSentences(route, part, sentences) {
-  if (route !== '/soccer-career' || part !== 'howToPlay') return sentences;
+  if (route === '/guess-the-college' && part === 'howToPlay') {
+    const before = 'Pick Daily, Unlimited with a streak counter, or Conference mode, and set Easy (Power 4) or Hard (all of Division 1).';
+    const after = 'Pick Daily, Unlimited with a streak counter, or Conference. For Unlimited and Conference, Easy uses the Power 4 schools in the game and Hard uses the full school pool.';
+    if (sentences.filter(line => line === before || line === after).length !== 1) abort('Reviewed College difficulty requires exactly one original or refreshed instruction');
+    return sentences.map(line => line === before ? after : line);
+  }
+  if (route !== '/soccer-career') return sentences;
+  for (const [before, after] of SOCCER_CREATOR_COPY[part] ?? []) {
+    if (sentences.filter(line => line === before || line === after).length !== 1) abort('Reviewed Soccer Career creator copy requires exactly one original or refreshed instruction');
+    sentences = sentences.map(line => line === before ? after : line);
+  }
+  if (part !== 'howToPlay') return sentences;
   const instructions = sentences.filter(line => line.startsWith(`${SOCCER_TRAINING_LOCATION.before} once a season.`)
     || line.startsWith(`${SOCCER_TRAINING_LOCATION.after} once a season.`));
   if (instructions.length !== 1) abort('Reviewed training location requires exactly one original or refreshed instruction');

@@ -61,6 +61,10 @@
  * WHETHER ITS TEXT CAN REACH THE ANCHOR. The fence follows the text a short
  * way, and when in doubt it says yes:
  *   - passed straight to JSON.parse: no, it is not text any more
+ *   - passed as the only argument to a proven node:crypto digest helper: no,
+ *     the result is a digest, not the source text
+ *   - stored as a const Buffer for a raw receipt: follow each use, including
+ *     the Buffer's own toString().replaceAll(...) chain
  *   - returned by an arrow handed to a library call, such as a TypeScript
  *     host or an esbuild plugin: no, the library keeps it
  *   - consumed on the spot by .match, .includes, .indexOf, .split and the
@@ -79,6 +83,8 @@
  *   - in a wrapper function whose body normalises, lf(fs.readFileSync(...))
  *   - in a later reassignment, s = s.replace(/\r\n/g, '\n') or s = lf(s)
  *   - at every call site of a helper that returns the read
+ *   - after decoding a const Buffer, when every other use is a digest or
+ *     another normalised decode
  *
  * STILL OUT OF REACH, said plainly so nobody reads a green run as full
  * coverage:
@@ -115,6 +121,8 @@
  *   ANCHOR_CONTROL=oneread  simSiteSearch loses it on the read its catalogdump
  *                           control searches, and keeps it on its other read
  *   ANCHOR_CONTROL=helper   simFightGym's readSrc helper loses it
+ *   ANCHOR_CONTROL=buffer   simAcademyEconomics keeps its byte receipt, but
+ *                           the decoded source loses its normalisation
  *   ANCHOR_CONTROL=comment  simFightCareer loses it and mentions it in comments
  *   ANCHOR_CONTROL=lf       strip, analysed against LF copies of scripts and
  *                           src written to disk, the way a fresh clone stores
@@ -502,14 +510,61 @@ function harnessModel(text) {
     });
   }
 
+  /* A local digest helper keeps raw bytes for hashing without sending them on
+     as source text. Require the Node import and the whole simple arrow body. */
+  const digestFns = new Set();
+  const importsCreateHash = toks.some((token, k) => token.type === 'id' && token.v === 'import'
+    && isP(k + 1, '{') && isId(k + 2, 'createHash') && isP(k + 3, '}')
+    && isId(k + 4, 'from') && literalOf(toks[k + 5]) === 'node:crypto');
+  if (importsCreateHash && !valuesOf('createHash').length && !fnDefs.has('createHash')) {
+    for (const [name, defs] of fnDefs) {
+      if (defs.length !== 1 || valuesOf(name).length !== 1) continue;
+      const { a, b, at } = defs[0];
+      if (parent[at] !== -1 || !isId(at - 1, 'const')) continue;
+      const scope = scopes.find(sc => sc.a === a);
+      if (b !== a + 13 || scope?.params.size !== 1 || !isId(a + 7) || !scope.params.has(toks[a + 7].v)) continue;
+      if (isId(a, 'createHash') && !isParamAt(a, 'createHash')
+        && isP(a + 1, '(') && typeof literalOf(toks[a + 2]) === 'string' && isP(a + 3, ')')
+        && isP(a + 4, '.') && isId(a + 5, 'update') && isP(a + 6, '(') && isP(a + 8, ')')
+        && isP(a + 9, '.') && isId(a + 10, 'digest') && isP(a + 11, '(')
+        && literalOf(toks[a + 12]) === 'hex' && isP(a + 13, ')')) digestFns.add(name);
+    }
+  }
+  const isDigestCall = k => isId(k) && !afterDot(k) && !isParamAt(k, toks[k].v) && digestFns.has(toks[k].v);
+
+  function bufferConstFate(decl, end) {
+    const name = toks[decl].v;
+    const values = valuesOf(name);
+    if (values.length !== 1 || values[0].at !== decl || values[0].b !== end) return null;
+    const scope = declScope(values[0]);
+    let normalised = false;
+    let digested = false;
+    for (let k = decl + 1; k <= scope.b; k += 1) {
+      if (!isId(k, name) || afterDot(k) || isParamAt(k, name)) continue;
+      if (isP(k - 1, '(') && isP(k + 1, ')') && isDigestCall(k - 2)) {
+        digested = true;
+        continue;
+      }
+      if (!isP(k + 1, '.') || !isId(k + 2, 'toString') || !isP(k + 3, '(')) return null;
+      const close = match[k + 3];
+      const encoding = literalOf(toks[k + 4]);
+      const utf8 = close === k + 4 || (close === k + 5 && (encoding === 'utf8' || encoding === 'utf-8'));
+      if (!utf8 || normCallEnd(close + 1) < 0) return null;
+      normalised = true;
+    }
+    return normalised ? { kind: 'normalised' } : digested ? { kind: 'digest' } : null;
+  }
+
   /**
    * What happens to the text a read call [s..e] gives back. Answers one of
-   * normalised, json, handed, consumed (with the consuming call's argument
+   * normalised, json, digest, handed, consumed (with the consuming call's argument
    * range), block (with the block range), calls (the fates at every call of
    * the helper that returns it) or raw. `pathArg` is the read's own path
    * argument, which a block scan leaves out.
    */
   function fateOf(s, e, depth, pathArg) {
+    const first = s;
+    const last = e;
     for (let guard = 0; guard < 40; guard += 1) {
       let j = e + 1;
       while (j < N) {
@@ -536,6 +591,7 @@ function harnessModel(text) {
       if (isId(callee) && !CONTROL_WORDS.has(toks[callee].v)) {
         if (!afterDot(callee) && normFns.has(toks[callee].v)) return { kind: 'normalised' };
         if (toks[callee].v === 'parse' && isP(callee - 1, '.') && isId(callee - 2, 'JSON')) return { kind: 'json' };
+        if (soleArg && s === first && e === last && isDigestCall(callee)) return { kind: 'digest' };
         s = memberStart(callee);
         e = match[o];
         continue;
@@ -640,7 +696,7 @@ function harnessModel(text) {
   /* Does the text a read gives back reach one of the anchor tokens */
   function fateReaches(fate, anchorAt) {
     switch (fate.kind) {
-      case 'normalised': case 'json': case 'handed': return false;
+      case 'normalised': case 'json': case 'digest': case 'handed': return false;
       case 'consumed': return usesAnchor(fate.a, fate.b, anchorAt);
       /* the read's own path argument is plumbing, not a place the text goes */
       case 'block': return usesAnchor(fate.a, fate.b, anchorAt, fate.path);
@@ -761,7 +817,10 @@ function harnessModel(text) {
     const e = match[k + 1];
     let argEnd = e - 1;
     for (let q = k + 2; q < e; q += 1) if (isP(q, ',') && parent[q] === k + 1) { argEnd = q - 1; break; }
-    reads.push({ line: lineOf(k), pieces: pathPieces(k + 2, argEnd, 0, new Set()), fate: fateOf(s, e, 0, { a: k + 2, b: argEnd }) });
+    const bufferFate = argEnd === e - 1 && isP(s - 1, '=') && isId(s - 2) && isId(s - 3, 'const')
+      ? bufferConstFate(s - 2, e) : null;
+    const fate = bufferFate ?? fateOf(s, e, 0, { a: k + 2, b: argEnd });
+    reads.push({ line: lineOf(k), pieces: pathPieces(k + 2, argEnd, 0, new Set()), fate });
   }
 
   /* every literal the harness names, for tying an unresolvable read to a file */
@@ -1006,6 +1065,14 @@ const CONTROLS = {
     victim: 'simFightGym.mjs',
     edit: s => s.split("const readSrc = p => deAlias(fs.readFileSync(path.join(ROOT, p), 'utf8').replaceAll('\\r\\n', '\\n'));")
       .join("const readSrc = p => deAlias(fs.readFileSync(path.join(ROOT, p), 'utf8'));"),
+  },
+  buffer: {
+    victim: 'simAcademyEconomics.mjs',
+    edit: s => {
+      const decoded = "original.toString('utf8')";
+      const parts = s.split(decoded + ".replaceAll('\\r\\n', '\\n')");
+      return parts.length === 2 ? parts.join(decoded) : s;
+    },
   },
   comment: {
     victim: 'simFightCareer.mjs',

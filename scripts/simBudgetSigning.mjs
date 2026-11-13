@@ -53,8 +53,8 @@ try {
     assert.doesNotMatch(output, /Failed to resolve import|Cannot find module|No test files found|Test timed out/);
     console.log(`simBudgetSigning ${control}: the asserted copy rejects its intended outcome while the independent preview/cancel case passes.`);
   } else {
-    assert.equal(run.status, 0, output.slice(-6000)); assert.match(output, /9 passed/);
-    console.log('simBudgetSigning: nine actual Board/real-hook checks pass for original-player identity, exact refund/budget/rating, no-op/cancel, top60, connected/fallback focus, finite cues and paired completed XI/score/share.');
+    assert.equal(run.status, 0, output.slice(-6000)); assert.match(output, /13 passed/);
+    console.log('simBudgetSigning: thirteen Board/real-hook checks pass, including Eastern demand rollover, active market selection, exact signing and refund values, focus and completed XI/score/share.');
   }
   assert.equal(await readFile(source, 'utf8'), original, 'Production source must stay unchanged');
   console.log('simBudgetSigning: copied controls preserve the existing hook, pool, economy, criteria and recorded outcomes.');

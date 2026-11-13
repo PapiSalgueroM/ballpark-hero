@@ -291,7 +291,7 @@ const SHOTS = process.env.RC_OUT || '';
    state is reached. The Soccer Career hub is a career made in node by the engine's own initCareer and checked by the
    game's own save reader before any page opens. The states do not run under PLAYFIRST_CONTROL (its controls judge
    dialogs only). */
-const CM_TO_TEAMS = [{ text: 'Today\\.' }, { text: '^\\s*England' }, { text: 'Strongest sides' }];
+const CM_TO_TEAMS = [{ text: 'Current clubs;' }, { text: '^\\s*England' }, { text: 'Strongest sides' }];
 const STATES = [
   { key: '/club-manager#club-picked', route: '/club-manager', steps: [...CM_TO_TEAMS, { text: 'Create your own club', sibling: true }], want: [{ sel: 'button', text: 'Take the job' }] },
   { key: '/club-manager#custom-club', route: '/club-manager', steps: [...CM_TO_TEAMS, { text: 'Create your own club' }], want: [{ sel: 'button', text: 'Found the club' }] },
@@ -352,6 +352,40 @@ function barsInPage({ BANNER, control, want }) {
     const r = b.getBoundingClientRect(); const s = getComputedStyle(b);
     return r.width >= 2 && r.height >= 2 && s.display !== 'none' && s.visibility !== 'hidden';
   }) || null;
+  if (banner?.hasAttribute('data-game-consent-inline')) {
+    if (!control) {
+      const bb = banner.getBoundingClientRect();
+      const main = document.querySelector('#root main');
+      const inlineProblems = [];
+      if (getComputedStyle(banner).position !== 'static' || document.body.dataset.consentPending != null) {
+        inlineProblems.push('the game consent region participates in a fixed overlay');
+      }
+      if (main && (!(banner.compareDocumentPosition(main) & Node.DOCUMENT_POSITION_FOLLOWING) || bb.bottom > main.getBoundingClientRect().top + 1)) {
+        inlineProblems.push('the game consent region is not in flow above the game');
+      }
+      const offenders = [];
+      let inlineControls = 0;
+      for (const el of document.querySelectorAll('#root button, #root a[href], #root input, #root select, #root textarea, #root [role="button"]')) {
+        if (banner.contains(el) || el.matches(':disabled')) continue;
+        const r = el.getBoundingClientRect(), s = getComputedStyle(el);
+        if (r.width < 2 || r.height < 2 || r.bottom <= 0 || r.top >= H || r.right <= 0 || r.left >= W || s.visibility === 'hidden') continue;
+        inlineControls += 1;
+        const left = Math.max(0, bb.left, r.left), right = Math.min(W, bb.right, r.right);
+        const top = Math.max(0, bb.top, r.top), bottom = Math.min(H, bb.bottom, r.bottom);
+        if (right - left <= 1 || bottom - top <= 1) continue;
+        if (banner.contains(document.elementFromPoint((left + right) / 2, (top + bottom) / 2))) {
+          const label = el.getAttribute('aria-label') || el.textContent.trim() || el.getAttribute('name') || el.tagName;
+          offenders.push({ label, host: 'inline consent', top: Math.round(r.top), bottom: Math.round(r.bottom), meets: Math.round(bottom - top), side: 'under the banner' });
+        }
+      }
+      return { pending: true, banner: { top: Math.round(bb.top), bottom: Math.round(bb.bottom) }, inlineControls, inlineProblems, fixedControls: 0, offenders, lift: [] };
+    }
+    // Keep the earlier fixed-bar fault controls exercising their original layout.
+    banner.dataset.playfirstForcedFixed = '1';
+    Object.assign(banner.style, { position: 'fixed', inset: 'auto 0 0', zIndex: '60', maxHeight: '60dvh', overflowY: 'auto', pointerEvents: 'auto' });
+    document.body.dataset.consentPending = '1';
+    document.body.style.setProperty('--dukb-consent-height', `${banner.getBoundingClientRect().height}px`);
+  }
   if (!banner || getComputedStyle(banner).position !== 'fixed' || document.body.dataset.consentPending == null) return { pending: false };
   let stripped = 0;
   /* transitions off first: a lifted control with transition-all (the bracket's Auto Fill) would otherwise still be
@@ -508,6 +542,10 @@ function answerInPage({ BANNER, freeze }) {
   const pick = banner ? [...banner.querySelectorAll('button')].find(b => /^\s*reject all\s*$/i.test(b.textContent || '')) : null;
   if (!pick) return { frozen, clicked: false };
   pick.click();
+  if (banner?.dataset.playfirstForcedFixed) {
+    delete document.body.dataset.consentPending;
+    document.body.style.removeProperty('--dukb-consent-height');
+  }
   return { frozen, clicked: true };
 }
 
@@ -914,7 +952,7 @@ console.log(`${results.length} route widths walked over ${routes.length} routes$
 console.log('');
 console.log('THE BOTTOM BAR NET (Round 1605): fixed buttons and links against the pending banner');
 const barFailures = [], barNoBanner = [], barLines = [];
-let barPassed = 0, barControls = 0, barClosest = null, barDropped = 0;
+let barPassed = 0, barControls = 0, barInlineControls = 0, barClosest = null, barDropped = 0;
 for (const r of [...results, ...stateResults]) {
   const where = `${r.scripted ?? r.scene ?? r.route} ${r.width}x${r.height}`;
   const reads = [r.barsLoad, r.barsAfter, r.barsBottom, r.barsPre].filter(Boolean);
@@ -927,6 +965,8 @@ for (const r of [...results, ...stateResults]) {
     .map(x => ({ ...x, at: 'the top' }))
     .concat((r.barsBottom?.pending ? r.barsBottom.offscreen || [] : []).map(x => ({ ...x, at: 'the page end' })));
   const drops = dropBarsOf(r);
+  const inline = pending.find(b => b.inlineControls !== undefined);
+  const inlineProblems = [...new Set(pending.flatMap(b => b.inlineProblems ?? []))];
   const dropped = r.drop?.answered && !drops.length ? r.barsPre.lift.length : 0;
   const line = { r, where, offenders, inflow, offscreen, drops, frozen: r.drop?.frozen || 0, acted: reads.reduce((s, b) => s + (b.acted || 0), 0), stripped: reads.reduce((s, b) => s + (b.stripped || 0), 0) };
   barLines.push(line);
@@ -937,12 +977,12 @@ for (const r of [...results, ...stateResults]) {
   else if (r.scripted && r.missed) { state = 'FAIL'; why = `the script did not reach its state: ${r.missed}`; }
   else if (r.scripted && r.missing.length) { state = 'FAIL'; why = `the state is reached but ${r.missing.join(', ')} is not on screen`; }
   else if (!pending.length) { state = 'NOBANNER'; why = 'the banner was never pending on this line, so it measured nothing'; barNoBanner.push(where); }
-  else if (offenders.length || inflow.length || offscreen.length || drops.length) {
+  else if (offenders.length || inflow.length || offscreen.length || drops.length || inlineProblems.length) {
     state = 'FAIL';
-    const said = [];
+    const said = [...inlineProblems];
     if (offenders.length) {
-      said.push(`${offenders.length} fixed control${offenders.length === 1 ? '' : 's'} meet${offenders.length === 1 ? 's' : ''} the banner ${banner.top} to ${banner.bottom}: `
-        + offenders.map(o => `${o.site ? 'SITE ' : ''}"${o.label}" ${o.top} to ${o.bottom}, ${o.meets} px ${o.side}, in ${o.host} (z ${o.z})`).join('; '));
+      said.push(`${offenders.length} ${inline ? 'game' : 'fixed'} control${offenders.length === 1 ? '' : 's'} meet${offenders.length === 1 ? 's' : ''} the banner ${banner.top} to ${banner.bottom}: `
+        + offenders.map(o => `${o.site ? 'SITE ' : ''}"${o.label}" ${o.top} to ${o.bottom}, ${o.meets} px ${o.side}, in ${o.host}${o.z === undefined ? '' : ` (z ${o.z})`}`).join('; '));
     }
     if (inflow.length) said.push(`a lift on an element that is not fixed shoves it through the page: ${inflow.map(x => `"${x.label}" (${x.position}, ${x.utility}) ${x.top} to ${x.bottom}`).join('; ')}`);
     if (offscreen.length) said.push(`not wholly on screen below the site bar: ${offscreen.map(x => `${x.why} "${x.label}" ${x.top} to ${x.bottom} at ${x.at} (bar ends ${x.chrome}, window ${r.height})`).join('; ')}`);
@@ -952,9 +992,11 @@ for (const r of [...results, ...stateResults]) {
     state = 'PASS';
     const n = Math.max(...pending.map(b => b.fixedControls));
     barControls += n;
+    barInlineControls += Math.max(...pending.map(b => b.inlineControls ?? 0));
     barDropped += dropped;
     if (closest && (barClosest === null || closest.gap < barClosest.gap)) barClosest = { ...closest, where };
-    why = `${n} fixed control${n === 1 ? '' : 's'}, none meets the banner ${banner.top} to ${banner.bottom}${closest ? `; the closest, "${closest.label}", ${closest.gap} px above it` : ''}`
+    why = inline ? `${inline.inlineControls} visible controls checked against consent in flow above the game`
+      : `${n} fixed control${n === 1 ? '' : 's'}, none meets the banner ${banner.top} to ${banner.bottom}${closest ? `; the closest, "${closest.label}", ${closest.gap} px above it` : ''}`
       + (dropped ? `; answered, ${dropped} lifted control${dropped === 1 ? '' : 's'} dropped by the banner's ${r.barsPre.banner.bottom - r.barsPre.banner.top} px` : '');
   }
   if (r.scripted && r.dismissed.length) why +=` (closed first: ${r.dismissed.join(', ')})`;
@@ -963,7 +1005,7 @@ for (const r of [...results, ...stateResults]) {
   if (state === 'PASS') barPassed += 1;
   if (state !== 'PASS' || r.scripted || dropped) console.log(`  BARS ${state.padEnd(8)} ${where}: ${why}`);
 }
-console.log(`${barLines.length} bar lines (${stateResults.length} of them scripted states): ${barPassed} green over ${barControls} fixed controls, ${barFailures.length} red, ${barNoBanner.length} with no pending banner${barClosest ? `; the closest green control sat ${barClosest.gap} px above the banner ("${barClosest.label}", ${barClosest.where})` : ''}; answered, ${barDropped} lifted controls dropped back by the banner's height`);
+console.log(`${barLines.length} bar lines (${stateResults.length} of them scripted states): ${barPassed} green over ${barControls} fixed controls and ${barInlineControls} controls with inline consent, ${barFailures.length} red, ${barNoBanner.length} with no pending banner${barClosest ? `; the closest green control sat ${barClosest.gap} px above the banner ("${barClosest.label}", ${barClosest.where})` : ''}; answered, ${barDropped} lifted controls dropped back by the banner's height`);
 /* Round 1605 review: CONSENT_BAR_CONTROL=always pins every lift where the pending banner put it, so every line it
    pinned something on must read red for the answered half, the Soccer Career hub among them */
 if (BAR_CONTROL === 'always') {

@@ -161,11 +161,11 @@ describe('Soccer Career actual save recovery', () => {
     expect(next.morale).toBe(expected.morale); expect(next.netWorth).toBe(expected.netWorth);
     expect(next.events).toEqual(expected.events);
   });
-  it('restores an older World Cup result without requiring a new tournament field', () => {
+  it('restores an older World Cup result without requiring a new tournament field', async () => {
     const saved: Saved = copy(nativeCareer()); saved.phase = 'world_cup'; delete saved.pendingTournament;
     saved.pendingWorldCup = { year: 2022, nation: 'England', matches: [], playerApps: 3, playerGoals: 1, playerAssists: 2, playerAvgRating: 7.3, result: 'Group Stage', bestPlayer: false };
     const { view } = mount(JSON.stringify(saved));
-    assertPlayable(view); expect(view.getByText('World Cup 2022')).toBeVisible();
+    assertPlayable(view); expect(await view.findByText('World Cup 2022')).toBeVisible();
     expect(read().pendingWorldCup).toEqual(saved.pendingWorldCup);
     fireEvent.click(view.getByRole('button', { name: /Continue/ }));
     expect(read().phase).not.toBe('world_cup');
@@ -271,3 +271,40 @@ describe('Soccer Career actual save recovery', () => {
 function readSaveCompletion() {
   return vi.mocked(recordCompletion).mock.calls.filter(call => call[0] === '/soccer-career').map(call => call[1]);
 }
+
+describe('Soccer Career Heat guidance', () => {
+  const carWash = 'shady_shell_carwash';
+  const nightclub = 'shady_nightclub';
+  const tumbler = 'shady_crypto_mixer';
+
+  it.each([
+    { items: [], balance: 10, processed: 0, left: 10 },
+    { items: [carWash], balance: 10, processed: 2, left: 8 },
+    { items: [carWash, nightclub, tumbler], balance: 10, processed: 7.5, left: 2.5 },
+    { items: [carWash], balance: 1, processed: 1, left: 0 },
+  ])('matches the next playing season with $items and a €$balance million balance', ({ items, balance, processed, left }) => {
+    const club = E.FALLBACK_CLUBS.find(c => c.name === 'Arsenal')!;
+    const fixture: E.CareerState = {
+      ...nativeCareer(), phase: 'playing', age: 26, currentClub: club.name, currentClubCountry: club.country,
+      currentClubTier: club.tier, currentClubColor: club.color, currentLeague: club.league,
+      netWorth: 20, dirtyMoney: balance, corruptionHeat: 20, contractYearsLeft: 3, weeklyWage: 120000,
+    };
+    const career = items.reduce((state, id) => E.purchaseSpendingItem(state, id), fixture);
+    expect(career.purchasedItems).toEqual(items);
+    const { view } = mount(JSON.stringify(career));
+    const notice = view.getByText(/unexplained\./);
+    if (processed > 0) {
+      expect(notice).toHaveTextContent(E.formatNetWorth(processed) + ' clears when you next play a season.');
+    } else {
+      expect(notice).toHaveTextContent('In My Life, open The other list');
+    }
+    if (left > 0) expect(notice).toHaveTextContent('Any balance left can add up to 6 Heat.');
+    else expect(notice).not.toHaveTextContent('Any balance left');
+    expect(read().dirtyMoney).toBe(balance);
+    expect(read().corruptionHeat).toBe(career.corruptionHeat);
+
+    const next = E.advanceProSeason(career, E.FALLBACK_CLUBS);
+    expect(next.dirtyMoney).toBe(left);
+    expect(next.corruptionHeat).toBe((career.corruptionHeat ?? 0) + (left > 0 ? 6 : 0));
+  });
+});

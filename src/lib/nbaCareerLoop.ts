@@ -7,7 +7,7 @@
    totals; the engine never imports it, so there is no cycle. */
 
 import type { NbaCareerState, NbaSeasonLine } from './nbaMyCareer';
-import { nbaCareerTotals, nbaLegacyOf, nbaTeamLabelOf } from './nbaMyCareer';
+import { nbaCareerTotals, nbaLegacyOf, nbaSeasonGames, nbaTeamLabelOf } from './nbaMyCareer';
 import { NBA_BADGES, earnedBadges, intlBadgeFactsOf } from './careerBadges';
 import type { BadgeDef, NbaBadgeFacts } from './careerBadges';
 import { conductOnRecord, fanComments, followersFromFanbase, fmtFollowers, nbaSeasonHeadlines } from './careerSocial';
@@ -71,10 +71,9 @@ export function nbaHeadlinesFor(c: NbaCareerState, line: NbaSeasonLine): string[
     team: nbaTeamLabelOf(line.team, c.eraId),
     pos: c.pos,
     line,
-    /* A rotation player's games are 78 to 82 when he is fit, so the gap is
-       the injury. A second unit season is a role, not a knock (Round 182),
-       so its gap says nothing about his health and is not reported as one. */
-    missed: line.teamResult === 'SUSPENDED' || c.role === 'backup' ? 0 : Math.max(0, 82 - line.games),
+    /* Use the played season's schedule, including shortened years. A second
+       unit season does not get an injury headline (Round 182). */
+    missed: line.teamResult === 'SUSPENDED' || c.role === 'backup' ? 0 : Math.max(0, nbaSeasonGames(line.year) - line.games),
     role: c.role,
   });
 }

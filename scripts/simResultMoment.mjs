@@ -167,6 +167,7 @@ const OWN_SURFACE = {
   '/perfect-lineup-f1': 'its own grade card in GenericLineupBoard, grade, rating and chemistry',
   '/minefield': 'its own done panel in the page, the banked score and rounds won',
   '/aussie-rules-manager': 'its own season over panel in AussieRulesLeagueBoard, with VictoryMoment for a premiership and the Grand Final score',
+  '/nrl-team-manager': 'its own match centre champion panel and finals bracket with the Grand Final score',
 };
 
 /* ---------- 1. wiring, from the AST ---------- */

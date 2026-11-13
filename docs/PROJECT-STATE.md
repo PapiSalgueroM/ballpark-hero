@@ -1,16 +1,487 @@
-## 2026-11-12 Puck Detective roster clue wording
+## 2026-11-13: Home consent flow and current verification
+
+## November 13, 04:29 UTC: 24-hour checkpoint and Home fragment fix
+
+Broad source6f3141c13 includes the final direct Home Browse fragment repair. It differs from qualified9e397f522 only in two docs. All14 targeted native cases, Home26 assertions, full app types, ordinary build,23 readers, boot and16 caps/400 probes pass. Artifact922 files/24,747,124bytes, SHA35e305fc5325cc872c2a65c7ecf0a909075779b0fbd95029c09481341d960985, retained in nov13-home-browse-hash/ballpark-hero/dist on4818. Source remains draft #770; three independent targeted fixes (#566,#771,#772) are live. Mobile LCP, current field INP, broad release failures and full NRL parity remain open. Latest admin poll04:26 unchanged159. See the readiness report for the concrete remaining work and exact publication/data receipts.
+
+
+## November 13, 04:20 UTC: Football Grid correction published
+
+PR #772 is merged as 2f231c83a and published with deployment 45f0ca9e-7001-4930-ada4-342905200333. Compatibility shipped before the exact guarded Peterson DML at 04:07 UTC. Public data now includes NO/SEA/TEN and 2007-2021. The other 22,007 full rows and Bears namesake held; 12 pinned public-code phone cases passed with captured public player rows, and all 172 live routes passed. Draft #550 is superseded and closed. No other SQL, Edge function, admin status or reporter message changed; the migration ledger was not modified.
+
+Broad integration 8caaf042267009eedd571056f5e32f6cd422c0da preserves Football Grid ownership controls: 13 focused cases and full app types pass; fresh frozen build and 23 readers pass. Final combined output passes separate boot, all 16 caps/400 probes, four Home consent and six Football Grid native cases. Its 922-file manifest is 98083db78010bfe755d2c00e3aa6ea0707ea517e3f521778d20039dacbfd85aa. QA-only badges scanner now resolves actual immutable slug constants; NRL completion and All Rounder behavior already work and remain unchanged. The older 845 offline audit is terminal (585 pass,210 fail,33 skip,17 empty), not a current all-suite result. Broad #770 remains draft. See docs/plans/2026-11-12-site-readiness.md for exact limits, receipts and the prior qualified artifact.
+
+
+The b94dd2a43 review source has the same complete build inputs as compiled 918fdab2f; their only file difference is this state record. Actual application types, the ordinary build, all 23 page readers, separate snapshot boots and redirects, all 16 download caps and 400 isolation probes pass. Home cookie choices now occupy document flow after the header, leaving Daily links unobscured. Thirty-seven consent tests and four phone/desktop journeys pass. Game consent behavior and ad rules are unchanged.
+
+The 494dedb hosted batch has 15 successes, 32 failures, one timed-out cancellation and one active run at 03:33 UTC. Career save recovery now passes all 33 normal cases and 23 copied faults locally; Academy/Stadium loads pass all 13 normal cases, eight copied controls and three corpus controls. Only their stale test hooks changed. The older 845-harness audit still waits for its Summer balance children. See the [readiness record](plans/2026-11-12-site-readiness.md) for exact artifacts, live releases and unresolved work.
+
+## 2026-11-13: Puck Detective roster clue wording published
 
 Puck Detective now explains in the game, Help and guide that its team and jersey clues use a stored roster snapshot. The Hockey hub describes the same source. This release keeps the existing roster rows, Daily draw, scoring and save format.
 
 The normal grid archive refresh preserved all 348 published boards through November 11 Eastern byte for byte. A scoped SEO build refreshed only Hockey and Puck Detective and their sitemap dates. App types, 13 focused tests, 17 output checks, the browser boot check, and all 16 existing route-size caps passed. Six paired 320px and 390px browser checks against the prior main build kept both archive clue cards and exact active and finished save bytes across reload. The new note fit on both screens, with no page errors or score writes.
 
-Awaiting hosted qualification and publication.
+Both hosted workflows passed. Merge `84e670759` was confirmed in Lovable before deployment `53d22eb9-1d2d-40ef-b27a-a7d4b1c7fb0a`. The published copy and metadata, 348 unchanged archive boards, six paired phone checks with pinned live JavaScript and all 172 public routes pass. IndexNow accepted both changed URLs. This publishes the explanation; the original report's separate dated-roster refresh remains open, and its admin status is unchanged.
+
+## 2026-11-13: NRL halftime reserve and roster-copy verification
+
+The d99c031af combined build passes application TypeScript, Vite, 23 static readers, native snapshot boot and redirects, and all 16 download caps with 400 isolation probes. NRL's optional held reserve passes 209 tests and three final browser journeys with exact reload and stale-tab checks. Its default modes retain 1,149 baseline states. Puck Detective's stored-roster explanation passes 13 tests and six paired phone journeys, preserving clues and saved games. See the [readiness record](plans/2026-11-12-site-readiness.md) for exact artifacts and remaining limits.
+
+The latest read-only admin poll has 159 active reports and preserves every prior status. The new narrow-phone Build Your XI report predates the published input fix; its exact layout passes the pinned published WebKit check and the no-guard control reproduces the miss. A separate Puck explanation release is in preparation. No new backend or admin write has occurred. A confirmed cross-sport generated-name collision is held because the simple name exclusion changes Club Manager's saved identity and later simulation.
+
+## 2026-11-13 02:09 UTC: WebKit input fix published and combined review updated
+
+The latest `b93bb7d8f` compiled product passes application TypeScript, Vite, all 22 static readers, native snapshot boot and redirects, all 16 unchanged download caps with 400 isolation probes, 105 route entries and 64 phone consent checks. NRL expiring-deal review, Footle first-clue visibility, post-bank Practice focus, verified Transfer Path memberships and MLB-only playoff replay loading retain their affected compiled journeys. Fantasy Draft's fresh crawler capture now excludes the temporary waiting status while preserving live loading. The [readiness record](plans/2026-11-12-site-readiness.md) identifies exact artifacts, retained baselines and limits.
+
+Draft [PR #770](https://github.com/PapiSalgueroM/ballpark-hero/pull/770) now has hosted proof of locked installation, application types and production build. Its original 47 workflows ended with three successes, 43 failures and one cancellation. Current repairs cover actual bundled-font checks, lazy-route scoring discovery, normalized Buffer recognition and affected game issues; historical source holds remain intact. The independent older full-suite run is still active. Mobile LCP and complete NRL/Soccer Manager parity remain unfinished.
+
+The new Missing XI phone complaint reproduces the compatibility mouse-event failure fixed in [PR #566](https://github.com/PapiSalgueroM/ballpark-hero/pull/566). After hosted CI passed, merge `79e16c5cc` was confirmed in Lovable and published as deployment `9435171a-f25c-429f-851d-6d2b256ab806`. Live files contain the guard and all 348 exact archived boards. Four WebKit checks with pinned published JavaScript and local dynamic fixtures pass Missing XI selection/score/reload and Build Your XI phone/tablet selection. All 172 live sitemap routes pass the crawler audit; IndexNow accepted six changed URLs. Physical report devices remain unverified. No admin report was closed, reporter contacted, SQL migration applied, Edge function deployed or ad network activated. The broad update remains a draft.
+
+## 2026-11-12: NRL named opening rosters and combined qualification
+
+The optional 2026 opening-matchday roster covers 323 verified names and opening ages across all 17 clubs. Eleven extra players per club, ratings, wages, contracts and later seasons are simulated. Default 2026 and new 2027 starts remain generated. Four compiled phone/desktop journeys pass, and the full NRL suite passes 198 tests across 37 files. Two older rollover test expectations now include exact archived finals seeds and scores; both prior failures were reproduced on the preceding source. See the [source audit](audits/nrl-2026-opening-matchday-rosters.md).
+
+At this checkpoint, the combined d8c7c6426 build passed full application types, ordinary Vite, all 22 readers, all 16 original download caps and 400 isolation probes, 105 route openings and 64 phone consent checks. Source cf093b690 added only the two NRL test corrections. The older full-suite run and release coordination remained pending. The newer review and release status is recorded above.
+
+## 2026-11-12: Player Bingo verified birth-year correction staged
+
+A matching squad birth date now corrects the market-age estimate when its identity and year agree. Missing, conflicting or ambiguous dates keep the fallback. The live Tchouameni input confirms the reported wrong band: 2026 minus age 26 minus one gave 1999, while two squad records give 27 January 2000. No database mutation or extra request was needed.
+
+All 97 focused tests, 20 loader checks and 16 compiled phone cases pass. The corrected tile locks without a strike and the adjacent older band refuses the same January 27 player. Fallback cases, board labels and scoring stay covered. Corrected support sets can intentionally change the generated deal. [Real Madrid profile](https://www.realmadrid.com/en-US/football/first-team/players/aurelien-tchouameni) and [French federation profile](https://www.fff.fr/equipe-nationale/joueur/9440-tchouameni-aurelien/fiche.html) confirm the date.
+
+## 2026-11-12: Conquest first-result card containment staged
+
+The existing saved-preview fix stays in place. The result card keeps its 700 ms entrance inside a horizontal clip, with the keyboard-operable Skip button outside it.
+
+The frozen 4314 Soccer Conquest build reproduced document widths of 328 and 398 pixels during the first prediction result at 320 and 390 pixels. A browser-only response overlay kept all 73 sampled entrance frames within the viewport while retaining the translation. The source-built d8 follow-up also holds all 72 active frames at the correct phone widths. Both arms retain the exact one-prediction save and recap through reload and keyboard Skip. The source simulator passed all 1,364 renders after its new wrapper check failed on the original in all five sports. The separate first-match blocker remains unreproduced.
+
+## 2026-11-12: Public ticker configuration split
+
+The score ticker reads the pinned public Supabase URL and key from a dependency-free config module. The SDK client reads and re-exports the same values. Script readers were updated to the new path and their parsing expressions returned the original values.
+
+## 2026-11-12: NBA Starting 5 former-franchise picks staged
+
+NBA Starting 5 search and scoring now use the same franchise records. Players with a verified earlier stint can appear for that team, even when their roster card lists another team. The lookup still requires exact franchise codes and a unique roster identity.
+
+The former-team harness exposed six misses on the combined baseline and passed all 13 sections after the port. Existing stat, position, duplicate and score rules passed. Compiled 320/390 journeys on 45fe accept the verified former Washington player after recovery and reject the inexact XWAS code, with the next team's prewarm accounted for separately.
+
+## 2026-11-12: NBA Chain roster spellings staged
+
+The NBA Chain validator can match JR Smith and Robert Williams III to their verified archive spellings. The stored team and season overlap still decides each link. Missing or incomplete alias data offers a retry, and exact spellings take precedence. [Cleveland game book](https://statsdmz.nba.com/pdfs/20160619/20160619_CLEGSW.pdf) · [Boston game book](https://statsdmz.nba.com/pdfs/20220602/20220602_BOSGSW_book.pdf) · [Williams career record](https://www.basketball-reference.com/players/w/williro04.html)
+
+Both reported links failed on the baseline Edge fixture and passed in both directions after the port. The seven mounted Chain checks and the validator failure scan passed. The Edge change is staged for release review.
+
+The alias fallback requires a shared archive identity key or a complete set of independently verified legacy rows. Mixed keys, missing stints and unexpected unkeyed intervals now defer the answer. The source fixtures verify that the historical Rob Williams still resolves by his exact name. The current archive stops at 2024–25 for Robert Williams III, so his later Portland season remains outside this patch.
+
+Smith’s six legacy intervals use the [Pelicans draft record](https://www.nba.com/pelicans/news/big_easy_buzz_blog__050511.html), [Oklahoma City Hornets box score](https://www.nba.com/game/lac-vs-nok-0020500315/box-score), [Denver media guide](https://cdn.nba.com/teams/uploads/sites/1610612743/2022/11/2022-23-Denver-Nuggets-Media-Guide.pdf), [Knicks media guide](https://ak-static-int.nba.com/wp-content/uploads/sites/3/2017/10/2017-18-Media-Guide-Knicks.pdf), [Cleveland all-time roster](https://cdn.nba.com/teams/uploads/sites/1610612739/2022/10/08-roster.pdf) and [Lakers game book](https://statsdmz.nba.com/pdfs/20200822/20200822_LALPOR.pdf). The [Celtics profile](https://www.nba.com/celtics/player/1629057/robert-williams-iii) and [Portland career summary](https://www.nba.com/blazers/news/portland-trail-blazers-sign-robert-williams-iii-to-multi-year-contract-extension) anchor Williams III’s two intervals. [University of Houston](https://uhcougars.com/news/2014/3/10/former_men_s_basketball_guard_rob_williams_passes_away) records Rob Williams’s separate career.
+
+## 2026-11-12: Rebuild season retry staged
+
+After the transfer window, Rebuild waits for both rival squads before showing the solo season. If a squad is unavailable, Retry season keeps the finished window and tries again.
+
+A controlled squad outage produced a season table with an incomplete rival on the original at both phone widths. Both rival failure and retry paths now pass in mounted tests. The saved window and the healthy season and rival outcomes matched their original bytes.
+
+## 2026-11-12: Rebuild shared save ownership staged
+
+Rebuild keeps the latest transfer window when an older tab tries a move or finishes loading. The older tab offers to reload the saved window. This keeps the existing save format, normal restart and the retry for unavailable club data.
+
+The original replaced a manager-stage save with a stale envelope choice at both phone widths. A delayed restore also deleted newer bytes in a mounted case. The guarded writer kept both newer saves byte for byte, with 16 focused ownership, restore and power-up cases passing.
+
+## 2026-11-12: Wonderkid Academy sale and shared save recovery
+
+A prospect stays on the Academy screen until the sale reaches browser storage. If storage refuses the write, the prospect and money stay in place and the sale can be retried. An older Wonderkid Factory or Stadium Tycoon Academy tab must reload before writing over the shared academy.
+
+Eleven mounted cases reproduced the original failures and passed after the repair. The broader 62-test Academy suite passed with packs, boots, away training and saved ground controls. The existing academy save format and sale values still apply.
+
+## 2026-11-12: World XI phone scroll anchoring staged
+
+The World XI page holds its scroll position when the draw or final pick changes the screen. On the combined baseline, 320px and 390px phone journeys jumped 129px and 283px at the draw, then 1,041px and 721px at the last pick. Applying the original one-line style to the same compiled page kept the draw and all 11 picks at zero delta. The 34 focused World XI tests passed on the source port.
+
+## 2026-11-12: Wall practice keeper proportions staged
+
+The keeper's body now follows the rendered contact point when the gloves animate toward a saved ball. The arms stay in proportion across low, high and straight catches. The shot simulator, collision coordinates, scoring, saves and timing stay as before.
+
+Three geometry cases failed on main and all 68 focused geometry, match, input and drill checks passed after the change.
+
+
+## 2026-11-12: Two Player Bingo answer reports staged
+
+The World Cup tile recognises the stored Brazilian centre-back Gabriel when the 2026 squad archive has Gabriel Magalhães. Arsenal recorded that he played the full match against Morocco. The alias is specific to the reported year, country and market position and does not enter the 2022 or winner categories. [Arsenal match report](https://www.arsenal.com/news/gabriel-kicks-off-arsenal-world-cup-interest-with-draw-aw8UZ2n3Ox8A)
+
+The sent-off tile accepts Cole Palmer's verified second-yellow dismissal against Tottenham on October 24, 2026. Exact name, nationality, position and age guards identify the player without changing historical season totals. [Chelsea match report](https://www.chelseafc.com/en/news/article/match-report-chelsea-0-2-tottenham-hotspur)
+
+Both criteria failed on the current main fixture and passed with these changes. The remaining name, country, pagination, request failure and point controls passed.
+
+## 2026-11-12: Gauntlet Daily draft resume staged
+
+Soccer, NBA, NFL, NHL and MLB Gauntlets resume a Daily with the same kept picks and the same next offer. A tab checks for saved progress before accepting a pick. If the player pool changes, the original picks stay saved and can be reopened once the same deal is available. A result retry also keeps a different draft saved by another tab while showing the original recap.
+
+Mounted tests compare all five resumed final records byte for byte with uninterrupted drafts, check stale tabs and live Soccer pool recovery, and cover legacy finals, refused saves, Unlimited and Eastern midnight. Production build and phone verification are pending.
+
+## 2026-11-12: Soccer Gauntlet Daily result recovery staged
+
+If browser storage refuses a Soccer Daily result, the recap stays available in the tab and can be saved again. Before a Daily pick or a save retry, a result already saved by another tab takes precedence. Reviewing a recap leaves a later Unlimited completion available.
+
+Mounted checks reproduced a stale tab replacing a 48-point result with 16. The fix keeps the first save byte for byte, also reopens legacy finals, and preserves the newer Daily when the prior day finishes after midnight. Focused tests and the Gauntlet harnesses passed. Production build and phone verification are pending.
+
+## 2026-11-12: Club Manager retains the summer transfer bank
+
+When a manager stays at the club, the summer carries the full unused transfer balance. The board can add its usual allocation, reducing the top-up as needed to reach twice the usual allocation. If the existing bank already reaches that amount, no new board money is added. Loan options, add-ons and sponsors still settle in order. New receipts show the actual top-up, and earlier receipts keep the cap that applied to them.
+
+A seeded Arsenal rollover with a £179m usual allocation kept £1bn with no top-up, where the original opened on £358m. With £100.04m unspent it opened on £279.04m, retaining £40k the old £0.1m rounding lost. The earned-balance policy applies to ordinary same-club rollovers. The same fixture retained legacy rules and destination budgets on a move.
+
+## 2026-11-12: NRL Manager season player stats
+
+Open Season player stats in Squad to see each player’s appearances, starts, games played off the bench, tries and points. Once the club has played a final, filter the table by regular season or finals. Imported seasons without player match records show when tracking begins.
+
+The table reads current-season match receipts. An exact-parent comparison reconciled 8,970 reads and matched 17,934 fixture results, 80 seasons, 359 live finishes, 125 named interchanges, 240 reloads and 1,480,376 random draws per arm.
+
+## 2026-11-12: Club Manager academy promotion prices staged
+
+New academy graduates and scouted prospects receive the existing age-aware market value before their first wage is calculated. An existing career keeps signed wages, contract terms and legacy values. No extra match or development draws are consumed.
+
+The 17-year-old 76-rated report fixture dropped from a £104k weekly wage to £30k, with an £18.9m market value and £17m sale price. Nine regression cases failed before the change, and all thirteen focused cases passed after it, including actual promotion, summer development and saved contract reload.
+
+## 2026-11-12: NRL Manager home ticket pricing
+
+Club finances lets you pick Value, Standard or Premium before your first home gate. The tier locks for the rest of that season and resets each year. The table shows the simulated changes for home wins, home losses or draws, and home finals. Away games, byes and the neutral Grand Final earn no home gate.
+
+Priced seasons keep the gate total and tier in their finance receipt. An exact-parent Standard comparison matched 17,934 fixture results, 80 seasons, 13 moves, 240 reloads and 1,480,376 random draws per arm. Focused checks cover the finance table, live settlement, archived receipts and cash on a return to the club.
+
+## 2026-11-12: Career Ladder Daily midnight saves staged
+
+A Career Ladder tab that starts loading before midnight keeps a newer Daily result when its player pool arrives after midnight. The shared puzzle loader prunes only earlier dates for the same game.
+
+The mounted replay finished Nov 12, then released the delayed Nov 11 player pool. The original deleted the current result without a guess. The repair restores the older tab's clue, keeps Nov 12 complete on reload and records one completion. Focused checks cover older and same-day records, other game keys and the Footle give up flow.
+
+## 2026-11-12: Gauntlet Daily midnight saves staged
+
+Finishing a Gauntlet Daily from before midnight keeps the newer Daily result in another tab. The shared record writer prunes only earlier dates for the same game and retains the existing keys and JSON.
+
+A mounted replay saved 32 points for Nov 12, then 48 for Nov 11 from its older tab. The original removed Nov 12 and offered the first pick again. The repair kept both records and reopened Nov 12 with the 32-point result and one completion for each run. Both new regressions failed on main, then passed with 13 existing Daily record and Gauntlet reload checks. Production verification is pending.
+
+## 2026-11-11 Build Your XI Mixed rerolls
+
+The draft fixes a Mixed reroll that could spin and give back the same assignment. Both modes now exclude the current team along with the other teams already assigned. The recorded year and consumed lineup slots stay in place when the next team changes.
+
+A controlled draw repeated Real Madrid on main and picked Inter Milan on the draft build. A later draw kept the filled goalkeeper and reached Cameroon. The same Club year draw kept 2010 and switched Real Madrid to Borussia Dortmund on both builds. The real hook regression, type gate, production build, 15 output checks and all 16 route caps passed. Published release pending.
+
+## 2026-11-12: Build Your XI Mixed club pool
+
+Mixed adds 30 clubs, including Flamengo and Palmeiras, while keeping its 25 countries. The draw, reroll and reel use the expanded pool. Club year still uses its 29 qualified clubs and the chosen recorded year.
+
+The short labels use the previously audited exact stored names. All 35 original aliases are retained. The validator's matching alias source is staged for the release. [Club identity and record checks](audits/BUILD-XI-MIXED-CLUBS-2026-10-29.md)
+
+## 2026-11-12 Footle Daily give up and shared saves
+
+Give up now checks the current Daily save before recording a loss. If another tab has finished or saved further, Footle takes that progress and keeps the existing guesses. An ordinary give up still records one loss and preserves the same save format.
+
+Mounted checks reproduced a two-guess win changing to an empty loss both before another tab received the storage event and while it was processing that event. The repair keeps both wins, preserves a guess made just before giving up, and passes the legacy Footle save comparison.
+
+## 2026-11-12: NBA, MLB and Hockey Grid Daily saves staged
+
+Daily guesses settle against the latest saved board, so two tabs can fill different squares without losing either answer. An already filled square keeps its first answer, and a finished Daily cannot be replayed or paid again by a stale tab. Entering Daily from Unlimited and receiving another tab's save are read-only. Existing save keys, optional legacy wrong counts, Eastern dates, board generation and scoring are preserved.
+
+The mounted fixture suite reproduced 27 failures on main and passed all 27 with the repair, plus 29 completion, rarity, namesake and engine checks. Production build and phone verification are pending. The NHL reports did not include a player or square, so this verifies a separate Daily save defect in that route.
+
+## 2026-11-12: NRL Manager career saves
+
+Career saves keeps up to three careers in the same browser. An existing career opens in slot 1. Each slot can start in 2026 or 2027, and a saved live match resumes in the slot that played it. Starting another career uses an empty slot. Deleting a career asks for confirmation.
+
+Home Continue opens a saved slot even if slot 1 is empty. Each slot has its own write generation and recovery key. Switching keeps the other saves in place, and a failed write is retried before leaving for the slots screen.
+
+## 2026-11-12 Front Office manual trade recovery
+
+In NFL, NBA, MLB and NHL Front Office, an open negotiation closes when a roster move takes away a player it needs. Manual trade choices return immediately. A visit to the Hub or an unrelated roster move keeps a valid negotiation open.
+
+A phone replay reproduced the NFL lockout after a confirmed cut. Mounted checks covered NBA and NHL waivers, an MLB DFA, and an NFL Finder trade that moved the wanted player. The checks kept the saved roster moves and existing roster limits, opened new talks without a reload, and completed an agreed NFL trade after an unrelated cut.
+
+## 2026-11-12: NRL Manager Board challenge
+
+Choose Board challenge when starting a career to put your job on the line. The first missed ladder target warns you. Two consecutive completed misses at the same club require an offseason move. A premiership clears the warning even when the regular-season target was missed. The next club uses its own squad, contracts, cash and medical facilities.
+
+The challenge leaves standard careers on their existing path. An exact-parent comparison matched 17,934 fixtures, 80 completed seasons, 13 voluntary moves, 240 reloads and 1,480,376 random draws per arm. Focused checks also covered a two-miss move, a return to the old club, a target met after warning and a premiership won from sixth.
+
+## 2026-11-12 Club Manager Championship playoffs prototype
+
+New current-era English careers use the six-team Championship playoffs for the third Premier League place. Fifth and sixth host the eliminators, then third and fourth host the return legs of reseeded semifinals. The neutral final decides promotion. Dates and results are simulated. The game uses the standard home order and the existing regular-season standings.
+
+The prototype keeps the bracket and match scores in the career save. It opens a qualified manager's playoff fixtures after the existing league and cup calendar, and settles the same bracket through AI for other clubs. Season review and the summer exchange read one winner. Old saves and Manager Hot Seat keep their existing promotion rules.
+
+On exact parent a887cce20, the old engine sent the third-place Burnley fixture directly up. The prototype kept it in the Championship after a semifinal shootout win and a final loss, and sent an eighth-place fixture up after four match-engine fixtures and the final win. The 98 distinct focused checks covered rank and venue, the regular-final Continue callback, fast forward, saved halftime, three-place exchange and late job handling. Three Daily start-and-match pairs and four fixtures each at legacy Burnley, Arsenal and Real Madrid held exact serialized state and observed draws against the parent. The league tables used for these replays are test fixtures. App types, Vite, two focused readers and 16 caps passed at local 3a6e3ea00. Six phone journeys passed at 320 and 390px, including semifinal reload, promotion and relegation. The integration build is pending.
+
+Rules: [2026/27 EFL play-off rules](https://images.gc.eflservices.co.uk/659e3bb0-7b8d-11f1-b366-6527b2d4899f.pdf), [2026/27 EFL regulations](https://images.gc.eflservices.co.uk/8374c4e0-c95f-11f1-bbd2-73c36057a203.pdf), [Premier League format explainer](https://www.premierleague.com/en/news/4611805).
+
+## 2026-11-12 Club Manager played Champions League prototype
+
+New ordinary current-season careers can play the 36-club Champions League league phase. Qualified clubs play eight simulated fixtures before the two-leg knockout playoffs and the single final. The saved draw and results feed the Cups table, matchday view and calendar. Existing group seasons finish in groups, with the modern option activated at ordinary rollover. Historic, Asian start and Daily paths keep their existing rules.
+
+On local integration base 2348a72f9, the 116 focused tests passed. Arsenal recorded 144 league-phase results and completed the full bracket. Matchday four reloaded the exact draw, scores and visible table. Tested finishes were seventh, ninth and thirty-first, with an earned home and away round of 16 tie counted before its opponent was drawn. An Everton-to-Arsenal job preserved the season's rules. The source-only format reader and its watched-format control passed. App types, the production build, both refreshed crawler pages and six phone journeys passed at local integration 54567675b. A played matchday saved all 18 scores. Existing group-stage saves loaded and kept their bytes.
+
+## 2026-11-12: NRL Manager fit lineup preview
+
+Before a club match, Squad can suggest healthy starters using the same fitness adjustment as the match engine. Players cover their own positions first. Apply keeps eligible reserves in order and keeps the selected goal kicker if they still start.
+
+The preview reads the current matchday choices. Apply checks the preview again so a decision made for an older round or lineup cannot override the current picks. Focused tests cover fitness, ties, injuries, utility cover, the bench, goal kicker and unavailable match phases.
+
+Across 80 seasons, 2,442 previews left all 17,724 fixture results, save bytes and random draws exact against the prior engine. Another run applied 666 suggestions, with 236 applied while players were injured, 222 exact reloads and 127 matching Quick Sim and Live results.
+
+## 2026-11-10: Football Grid Adrian Peterson correction staged
+
+The November 5 Titans and Seahawks cell rejected Adrian Peterson, the 2007 draft pick. The answer key missed both 2021 teams because the Tennessee stint is absent from the roster snapshot and Seattle lists him as development squad. Official game records confirm three Tennessee appearances and one Seattle appearance. The generator and guarded migration add those two teams to GSIS `00-0025394` and update the displayed career span to `2007-2021`. [NFL career stats](https://www.nfl.com/players/adrian-peterson/stats/career) · [Titans roster report](https://www.tennesseetitans.com/news/titans-make-13-roster-moves-on-the-active-roster-practice-squad-and-injured-rese) · [Seahawks game recap](https://www.seahawks.com/news/instant-lookback-adrian-peterson-gets-first-start-first-touchdown-for-seattle)
+
+The 2002 Chicago namesake remains separate. The corrected label and old saves share the same rarity and duplicate-check key. The phone browser accepted the corrected answer and restored it after a cold reload. Chicago and a single-stint removal both reproduced the refusal. An old September 22 save kept its exact bytes and refused a second pick of the same player under the corrected label.
+
+Full regeneration matched the 22,008-row key. The migration rehearsal changed the four expected fields on one row, replayed exactly and rejected eight drift cases. Publish the compatibility change before applying the answer-key migration. Keep admin report `bddda70d` open until the public answer key passes.
+
+## 2026-11-12 NFL Grid pending answer settlement
+
+An answer waiting for rarity now checks the latest Daily board before adding a crowd selection and again before saving the result. If another tab has filled that square or used that player, the older answer drops without spending a guess. A different player in an empty square can still finish the board after the newer save arrives.
+
+An offline two-tab phone replay reproduced a 900-point completion request with eight visible squares. The local regression also covers delayed save delivery, a selection request already in flight, and the existing rarity fallback when a current selection write fails.
+
+## 2026-11-10 Club Manager summer squad retention
+
+Returning loans can put a saved squad over 30. The previous summer trim could then send a player who still had contract years left to free agency. Same-club rollover now keeps those contracts. Ordinary expiries, retirements, loan options and emergency squad coverage still use their existing rules. The save format and the handling of older free-agent rows marked as trimmed are preserved.
+
+For new acquisitions, the 30-player limit now counts the active squad plus players the club owns who are out on loan. Market talks and agreed deals use the same check, including part exchanges. Free-agent signings, academy promotions and board recruitment asks also use that count. An early recall still uses the active squad limit because it brings back a player the club already owns.
+
+The fixture starts with 30 active players and three owned loans out. The original lost a contracted player when the loans came back. The correction keeps all 31 eligible players through rollover and save/reload while letting one incoming loan and one expired contract leave. The new checks also verify that buying, free-agent signing and academy promotion are blocked at 29 active plus one owned loan out and can proceed when there is room.
+
+The full free-agent fleet passed all eight sections. Across four oversized rollovers the original cut 12 contracted players and the correction kept all 130 eligible players. Older trimmed rows still pass their original eligibility check. App types, production build, 15 required output checks, 16 route budgets and the Club Manager metadata comparison passed. Offline browser checks on phone and desktop verified the Market and Academy warnings at 29 active plus one owned loan out and cleared both warnings at 29 active with nobody out. Publication is pending.
+
+## 2026-11-10: Club Manager summer budget breakdown staged
+
+The new season Overview shows the unspent balance, board allocation, amount carried, any balance above the cap, summer adjustments and the opening budget. It records those amounts at rollover, after loan options, add-ons and sponsor payments. The carryover cap equals the new board allocation. The figures belong to the club where the season ended.
+
+An Arsenal season with £1bn unspent opened on £330m. The board allocated £165m, £165m carried over and £835m was above the cap. The same figures appeared after reload on phone and desktop. A separate replay included a £12.5m sponsor payment and confirmed the old breakdown cleared on a move to Chelsea. The reporter's save was unavailable.
+
+Admin report `7d85f91d` asks for full carryover. The staged change explains the existing cap in the game. Keep the report open through deployment and the public rollover check.
 
 ## 2026-11-11 Build Your XI player selection on WebKit
 
 A native tap on Thibaut Courtois in a Real Madrid 4-4-2 could close the picker before selecting him. WebKit sent a mouse down after touch release, moved focus to the main region and caused the picker to drop the list before the click. The shared picker now cancels the option mouse down default so the click can select the player. Touch and pen still wait for the completed click. The skip link and the outside focus handler stay in place.
 
 The captured public Madrid rows reproduced the failed tap on the published build and main. The draft accepted exactly one selection on Windows WebKit 26.4 and 26.6. A trusted Chromium drag scrolled the list 105 pixels without a selection, and touch cancel, mouse, keyboard and outside dismissal controls passed. The type gate, production build, 15 output checks and all 16 route caps passed. Published release pending.
+
+## 2026-11-12: NRL Manager career record
+
+Season review rolls up the completed seasons into regular-season results and win rate, finals trips, minor premierships, premierships and the best ladder finish. The club breakdown puts returning spells under the same club. A tied best finish shows the earliest year it happened.
+
+The record reads the existing season history. Tests count a completed year once across rollover, check club grouping and honours, and verify that an imported v1 career can show its record with the original save intact. An exact-parent comparison matched 20,566 fixture results and save bytes through 90 completed seasons, 60 club moves and 2,964 record reads.
+
+The compiled phone checks grouped two Storm seasons around a Perth season at 320px and displayed a completed v1 save at 390px. Opening the record preserved the save and its write generation. All 95 NRL tests, app types, production build, 15 built-site readers and 16 download caps passed.
+
+## 2026-11-12: Soccer Career Heat card explains owned items
+
+The Heat card now points to My Life and The other list when there is no owned processing capacity. It shows what the owned items can clear in the next playing season and warns about leftover Heat only when a balance remains. A 390px original replay confirmed that the old instruction was identical with no purchases and with all three items already owned.
+
+The four mounted regressions cover no items, partial capacity, full capacity and a cleared balance. Both save suites passed 66 cases. In 72 paired season simulations the full next save and all 44,959 random draws matched, including cooling, a penalty and seasons missed through a ban or prison.
+
+## 2026-11-12: NRL Manager golden-point match report
+
+The latest regular-season match report names the decisive score and five-minute period when a managed match goes to golden point. A draw explains that neither club scored in either period. The receipt uses the same resolution roll as the existing simulation.
+
+Against the previous engine, 17,724 results, 80 rollovers and 1,463,262 random draws per arm matched exactly after removing only the new receipt. That included 339 Live finishes, 86 named interchanges, 40 finals that reached extra time and 1,374 exact legacy state checks.
+
+At 320px, Quick Sim showed a second-period field goal. At 390px, Play Live showed a scoreless golden-point draw. Both receipts survived reload, and an imported tie kept its exact bytes. All 92 NRL tests, app types, production build, 15 built-site readers and 16 download caps passed.
+
+## 2026-11-12 Club Manager saved opening layout
+
+The three saved-start loading panels reserve one small viewport of height on phones, where the manager slots stack vertically. That keeps the live guide below the fold until the slot cards arrive. The desktop loaders keep their prior geometry.
+
+With the engine, historical squads and slots file held separately, the #727 phone control exposed the guide at y=385, y=385 and y=361, then recorded a 0.361 shift when the cards arrived. All four 320px and 390px combinations of essential consent and unset consent kept the guide below the fold and recorded zero guide shifts. The same opening save bytes and normalized slot bytes matched at each stage.
+
+## 2026-11-12: NRL Manager offseason club changes
+
+After finals, Season review lets you stay or choose a club in the following year's league. Perth opens for 2027 and the Chiefs for 2028. The new club starts with its settled squad and contracts. On a return, the club reopens its last tracked cash and medical facilities. Season results, development and costs stay with the club they came from.
+
+The save format remains v2. An exact engine comparison against the board-target draft matched 80 ordinary rollovers, 17,724 fixture results and 238 reloads across current and older saves. Another 80 moves included 32 returns and 160 exact reloads, with unchanged league player ageing and recruitment. Tests reject forged club books and membership.
+
+At 320px, a second tab submitted its own club choice after Perth took over. The write was refused and reload restored the winning save. App types, production build, compiled phone and desktop checks, 15 built-site readers, site search and 16 download caps passed. The optional cross-game SaveFence fleet stopped when its temporary bundle ran out of disk space.
+
+## 2026-11-12 Club Manager opening performance prototype
+
+The five season buttons share the existing era catalogue and appear before the match engine for empty stores. The original career boot still handles active, parked and damaged data and Hot Seat handoffs. A choice made while the engine loads gives way to a save created in another tab. The roster catalogue remains in the prerendered guide and can be opened before a career from the guide's club list control.
+
+On the #721 parent and this prototype, three alternating 390px mobile pairs at 150ms RTT, 1.64 Mbps and 4x CPU slowdown put the first usable era at 5.825s and 3.251s median. All three fresh pairs improved. Initial route weight fell from 648.3 to 269.5 KiB gzipped. Saved Arsenal's Resume button was 5.997s and 5.727s median, with one slower pair, and the median tap to hub was 646ms and 573ms. Browser LCP in this run was the prerender disclaimer. Saved CLS stayed around 0.38 on both standalone builds, so the exact combined build needs its own timing.
+
+## 2026-11-12: NRL Manager board targets
+
+Season review shows a regular-season board target based on the modeled club ratings. From the second year, the previous finish also helps set the target. The board waits until the club plays before showing a ladder place, then settles the target when finals begin. Previous years show the same calculation as a benchmark. Opening the review does not change the saved career.
+
+The 79 NRL tests include the 2026, 2027 and 2028 league fields, tied modeled ratings, an opening bye, finals and imported history. Across 80 paired seasons, 4,960 target reads kept the same save bytes, 17,520 fixture results and 80 rollovers.
+
+The compiled phone run checked the target before play, during finals and after rollover. It also opened a completed v1 save without rewriting it. App types, production build, 15 built-site readers and 16 download caps passed.
+
+## 2026-11-12 Club Manager Chinese Super League draft
+
+Choose China in a new current Club Manager career to manage any of the 16 Chinese Super League clubs from 2026. Each club plays a 30-match home-and-away season. The draw, dates, stadiums, results, opening squads, ratings and budgets are simulated. The CFA Cup, Super Cup, AFC competitions and promotion and relegation are outside the model. The 2027 competition has its own calendar and will need a verified admission list before it can be represented as a real start.
+
+The nine verified point deductions apply once in the 2026 table, including a same-season midseason job change, and future seasons start with zero points. The manager's performance score counts only match-earned points. China belongs to the worlds of CSL starts and remains available for those managers after they move. [CFL admissions](https://www.cfl-china.cn/zh/content/announcements/bRVz.html), [CFL competition format](https://www.cfl-china.cn/zh/content/news/fVRn.html), [CFA decision](https://www.thecfa.cn/cftz/20260129/37309.html), [independent final standings](https://343.info/standings/csl).
+
+The focused replay completed all 30 fixtures and checked save and resume, midseason jobs, and rollover. In exact comparisons against the J1 draft, English, Korean, Japanese, historical and custom careers preserved save bytes and random draws. Hot Seat and Deadline Day retained their opening states across three dates. The 320px and 390px replays showed all club names, top-half board targets and the points-ordered opening table. Shanghai Shenhua moved from -10 to -7 after a win and resumed at the next fixture. The existing route cap passed at 648.3 KiB before rounding.
+
+## 2026-11-12: NRL Manager assistant coaching
+
+Finances offers one fictional Attack or Defence assistant through the end of the season. The signing fee is A$120,000 and wages are A$18,000 per settled round, including byes and finals. Club cash must cover the full commitment before signing, and the remaining wages count against medical spending. The chosen assistant adds two rating points only when the matching tactic is active. Opposition report and the pre-match and halftime tactic cards show the effect. The contract and expense go into the annual accounts, and the next season opens a new shortlist.
+
+The no-hire path matched the previous engine across 80 seasons and 17,520 fixtures. In another 80 seasons with a hire every year, 1,949 Live finishes with the opening tactic matched Quick Sim, including 29 finals. The largest save was 334,093 characters against the 550,000 limit. The 73 NRL tests include a Grand Final one-round contract, exact pending reload, and both orders of a same-round medical purchase and hire.
+
+At 320px, the signing fee and full payroll appeared in the accounts, the matching tactic showed its rating bonus, and the post reopened after rollover. At 390px, an imported season kept its exact save and the hiring action remained unavailable. App types, production build, the NRL browser suite, 15 built-site readers and 16 download caps passed.
+
+## 2026-11-12: NRL Manager halftime interchange
+
+At half time, keep one same-position reserve already in the rotation on for the finish. The starter stays off, and the club uses the same bench participants. The designated kicker stays eligible. Full time records the pair with approximate regulation minutes. The closing lineup changes second-half scoring chances and shifts five fitness points of match load from the starter to the reserve.
+
+Quick Sim and automatic Live matched the previous engine across 80 seasons, 17,520 fixtures and 1,194 Keep-live comparisons. Across 240 named choices, the outgoing starter kept exactly their first-half scoring, including 36 positive credits. All 67 NRL tests passed.
+
+A career with 1,922 manual choices over 80 seasons, including finals, peaked at 331,621 save characters against the 550,000-character limit and restored exactly at eight checkpoints.
+
+The 390px touch flow preserved the halftime score, applied the named choice once and restored the receipt after reload. At 320px, the default Finish action stayed in view and a bench with only the kicker’s position showed why automatic rotation applied. App types, production build, the NRL browser suite, 15 built-site readers and 16 download caps passed.
+
+## 2026-11-12 Club Manager severe match injuries draft
+
+A new Club Manager career or the next season of an existing one can draw an ACL tear or Achilles tendon rupture during a simulated match. The existing match-injury draw assigns 2% of injuries to these severe spells. ACL tears last 28 to 36 simulated weeks and Achilles ruptures last 18 to 30. The bands are game estimates based on a 225-day median to match return in the [UEFA ACL cohort](https://pubmed.ncbi.nlm.nih.gov/27034129/) and a 161-day average absence in the [UEFA Achilles cohort](https://pubmed.ncbi.nlm.nih.gov/23770660/).
+
+A severe injury first counts down on a subsequent paid week. A player who remains at the club gets credit for complete summer weeks between the last calendar date and the following kickoff. Treatment shows the simulated diagnosis and remaining weeks, and clears the diagnosis when the spell ends. Existing active seasons, routine and training injuries and daily games keep their original rules.
+
+The compiled 390px replay opened the Help and started a new save, resumed a saved Achilles rupture, and rolled an ACL injury from 36 to 23 weeks across a 13-week summer. The engine replay then counted down to full availability. Three Manager Hot Seat dates matched main byte for byte.
+
+## 2026-11-12: Dart Draft position penalty draft
+
+Dart Draft now uses its advertised eight-point out-of-position penalty in the squad rating and showdown, just as it already did on the player card. The calculation leaves player values, chemistry and academy or trialist ratings intact.
+
+At 390px, a Brazilian winger drafted as goalkeeper showed 54 on his card and moved from 62 to 54 in the XI. With ten 40-rated trialists, the final XI moved from 42 to 41 and the completion from 97 to 96. Both replays kept 55 accuracy, the 0-3 series and one completion. Drafting the same winger in his own position kept XI 42 and 97 points. All 33 scoped tests, app types, production build, both game sims, 15 output checks and 16 route caps passed.
+
+## 2026-11-12: NRL Manager opposition report
+
+Open Opposition report in Match centre to see the next rival’s ladder place and up to three played results, with scores shown from their side. The model’s attack and defence edges use the selected squad, preparation, tactic and venue. Positive edges favour your club. The report reads the current save without advancing a match.
+
+The report was read through 80 seasons and 17,520 fixtures, with exact prior results, saves and rollovers. The 63 NRL tests include saved form orientation, changes from tactics and lawful lineup selections, home and away legacy inputs and a check that opening the read model takes no random draws.
+
+At 320px, the report met text contrast checks, showed keyboard focus, opened with Enter and touch, and left the save and fence unchanged when closed. At 390px, a played-season fixture showed three results. App types, production build, the NRL browser suite, 15 built-site readers and 16 download caps passed.
+
+## 2026-11-12: Club Manager opponent formations draft
+
+Report 23a9b4ae describes opponents being forced into 4-4-2. New kickoffs now choose the highest-rated available eleven that fits one of the existing formations, with the previous fallback when the roster cannot fill a shape. The 390px Chelsea versus Fulham replay changed Fulham from 4-4-2 with six compatible positions to 4-3-3 with eleven, and both runs finished 2-1.
+
+In 104 paired matches, 59 opponent formations changed and 92 elevens gained compatible positions. The user's lineup, opening match rates, first-half random draw counts and final scores matched. Four matches had different later draw counts and match statistics because the existing second-yellow check depends on which opponent had already been booked.
+
+Four focused tests, app types, the production build, three match sims, 15 output checks and all 16 route download caps passed. Club Manager measured 647.9 KiB against a 648 KiB cap.
+
+## 2026-11-12 Club Manager J1 League draft
+
+Choose Japan in a new 2026/27 Club Manager career to manage any of the 20 J1 clubs. The first season uses the matchday, home and away designations agreed by the J.League Data Site and PHONBALL on 12 November 2026. All 380 matches were checked through the fixture generator. Dates, stadiums, scores and opening squads are simulated. Later seasons use generated fixtures. The Emperor's Cup, J.League Cup, AFC competitions and J2 promotion and relegation are outside this league model.
+
+The J1 world and jobs open with a Japanese start. Four exact-main comparisons covered a current English career, K League 1, 2010 Barcelona and an English custom club named Mito Hollyhock. Their initial and resumed states, save bytes, random draws and job market results matched. The J1 engine replay kept its verified opponent after reloading and played all 38 fixtures before generating season two.
+
+The compiled 390px replay listed all 20 clubs. Mito opened away at Kashiwa, saved a completed match and resumed at home against Gamba. The Calendar named both sources. With the rich guide held, the short guide and club catalogue remained available, and the full guide rendered once its file arrived.
+
+## 2026-11-12: NRL Manager medical facilities
+
+Finances offers a treatment room for A$800,000 and a recovery centre for another A$2.6m. The one-time charges come from club cash and are recorded in the season accounts. New knocks are one or two rounds shorter, with one round out at minimum. An upgrade stays with the club after rollover. Older saves can buy upgrades once injury tracking starts.
+
+The default engine matched 80 previous seasons and 17,520 fixture records exactly. From the same pre-match states, the treatment room kept the same 322 knocks and saved 254 missed rounds. For 88 knocks in states that could afford both upgrades, the recovery centre saved 110 rounds. The seeded injury recipients and match scores matched within each pair.
+
+At 320px, the first purchase reduced cash to A$1.7m, kept the second upgrade unavailable and restored the same saved balance. At 390px, match income funded both upgrades and the same seeded four-round knock became two. The app type gate, production build, 58 NRL tests, browser suite, 15 built-site readers and 16 download caps passed.
+
+## 2026-11-12: NRL Manager development focus
+
+Season review lets you choose Youth development, Veteran conditioning or Balanced. At rollover, Youth can add one rating point within potential for players aged 24 or younger. Veteran conditioning can save one point that would have been lost for players aged 30 or older. Ages are measured next season. Only players already at the club and signed to return qualify. The preview and season receipt count the ratings actually affected, and the next season starts on Balanced.
+
+Default and imported saves matched the previous engine byte for byte across 80 seasons, 17,520 fixtures and 80 rollovers. The default path also matched across 1,194 Play Live finishes using the opening tactic. Five focused development tests and all 53 NRL tests passed.
+
+An 80-season run with a focus every year peaked at 340,198 save characters against the 550,000-character limit. A separate 12-season career that renewed players alternated the two focuses, and each receipt matched its preview.
+
+The 320px touch flow restored the Youth choice and preview exactly, archived the result and reset the new year to Balanced. The 390px Perth flow applied its Veteran preview at rollover alongside an existing recruitment. Full app types, production build, the NRL browser suite, 15 built-site readers and 16 download caps passed.
+
+## 2026-11-12: NRL Manager Play Live
+
+Play Live opens the first-half scoreboard in Match centre and saves the round at half time. Keep the opening tactic or switch for the second half. Full time settles the round and posts the score, scorers, interchange, injuries and club accounts together. Quick Sim is still one action, and saves without player scoring gain Play Live at their next season.
+
+Across 80 seasons and 17,520 fixtures, Quick Sim produced the same saved state as the previous engine. Keeping the opening tactic also matched Quick Sim in 1,194 live matches, including 42 finals and one finals extra-time match. A changed tactic affected the score in 135 of 250 sampled matches.
+
+At 320px, a halftime reload kept the exact score and a second tab could not finish the round twice. At 390px, Perth switched to Attack for the second half and retained Balanced for its next match. The app type gate, production build, 48 focused tests, NRL browser suite, 15 built-site readers and 16 download caps passed.
+
+## 2026-11-12 Soccer Career snapshot preload
+
+This draft builds on PR #697. The build preloads the creator's emitted static dependencies after the App script in the Soccer Career snapshot. The build comparison found 33 links in that one snapshot and byte-identical copies of the other 895 output files. Public snapshots stay hash free.
+
+In three paired 390px runs at 150ms latency, 1.6Mbps download and 4x CPU throttling, median fresh LCP was 3.80s versus 6.07s. The name field was visible at 5.56s versus 7.37s. The largest element was a different line of the same consent banner. In three saved-career pairs the hub was visible at 7.73s versus 8.48s. Both paths fetched the same JavaScript bytes as #697. These are local lab timings.
+
+## 2026-11-12: NRL Manager player scoring
+
+Squad lets you name a starting goal kicker. The Match centre credits tries, conversions, penalty goals and field goals to players who took part. The halfback takes over if the chosen kicker leaves the starting lineup. Squad shows season leaders, and Season review keeps compact player totals after rollover.
+
+A paired check across 64 seasons kept team results, injuries, fitness and finances identical over 1,984 rounds and 14,016 fixtures. Saves without scoring receipts continue their season and begin tracking after rollover. An 80-season save reached 328,173 characters against the 550,000-character reader limit.
+
+Compiled 390px touch play kept the match scorer receipt on reload, switched the next kicker to the halfback after an injury and retained the leaders after rollover. At 320px a used reserve scored, and an older save kept its match results and fitness. App types, production build, 43 focused tests, the NRL browser suite, all 15 built-site readers and all 16 download caps passed.
+
+## 2026-11-12 Soccer Career first visit
+
+This draft builds on PR #676. The real creation form opens before the simulation downloads. Generate Starting Potential loads the bundled clubs and simulation on the first roll. Saved careers open directly, and in-game restart uses the same creator. Editing the position while the simulation downloads cancels the previous roll without replacing the form.
+
+Three paired 390px cold runs at 150ms latency, 1.6Mbps download and 4x CPU throttling measured median local LCP at 6.47s versus 8.74s on #676. The name field was visible at 6.81s versus 9.96s. Cold JavaScript fell from 751.6 to 305.1 KiB gzip. The first roll brings it to 756.4 KiB under the existing 840 KiB ceiling. Field vitals remain unmeasured and local LCP remains above 2.5s.
+
+The compiled phone replays matched the academy placement, random draws, first save bytes, restored save normalization and restart result. Source and compiled guards keep the engine off the cold path. The route budget checks verify that the pools load on the first roll. Public snapshots are byte-identical.
+
+## 2026-11-12 Home search and sport catalog
+
+Home puts Search and Browse sports together above the featured games. Browse sports moves focus below the sticky header to the sport library, with favourite and pin guidance beside the controls. Phone catalog tiles show the full title and badges, with separate Play and Pin targets. Search results and the desktop catalog show game descriptions.
+
+In compiled native Chrome at 390px, Soccer Career begins at y=291 versus y=351 and the 36-game soccer section measures 1,477px versus 3,867px. At 320px the section measures 2,716px versus 4,276px. The desktop catalog measured 1,281px in both builds. At 320, 390 and 1440px, keyboard Browse and typo search worked without page overflow or page errors. Favourites and pins persisted across reloads and could be cleared.
+
+The type gate, production build and Home front harness passed. The browser search replay passed. The parent commit has a stale generated search index hash and a 40px shared header wrap for guests with a streak. The Browse shortcut clears the taller header.
+
+## 2026-11-12: NRL Manager Academy
+
+Club office has an Academy for one active position assignment at a time. Generated reports arrive after the next round, including a bye. A promotion signs the prospect for one year at next season’s minimum salary and reserves one place in the Top 30. Unsigned reports clear at rollover.
+
+On a 390px touch viewport, the Eels’ Hooker report resumed from exact saved bytes, opened after the bye and brought the promoted player into the 2027 squad. At 320px a full future squad showed the existing contract refusal. The role-coverage regression holds the final place for a missing position.
+
+App types, production build and 37 focused tests passed. Paired runs across 32 existing careers kept exact saved bytes through 992 round actions, 7,008 fixture results and 32 rollovers when scouting was unused.
+
+## 2026-11-12: NRL Manager squad availability
+
+New NRL careers record simulated match knocks for the players who took part. The Squad screen shows one to four rounds out, including byes. Fit players cover vacated starting and interchange places. Natural replacements take priority, and utility cover plays below its normal rating until a natural player is available.
+
+The 390px Bulldogs fixture kept a four-round injury and the replacement through an exact save reload, then counted three rounds remaining after a bye. The 320px utility fixture kept 19 eligible selections. Paired runs across 96 existing v1 and v2 seasons held the same career state over 2,976 round actions and 21,024 results. Existing saves pick up availability on rollover.
+
+App types, production build, 31 focused tests, the NRL browser suite, all 15 built-site readers and all 16 download caps passed.
+
+## 2026-11-11 Soccer Career creation download
+
+This draft builds on PR #675. The fresh creation screen skips the historical club squad archive. Existing club offers, the transfer verdict and the senior Squad tile load the same recorded data when shown. The Squad tile holds its space while loading.
+
+In three paired cold 390px runs, JavaScript downloads through creation settled at 769.6 kB gzip versus 827.3 kB for PR #675. Median local LCP was 7.53s versus 8.17s with 150ms latency, 1.6Mbps and 4x CPU throttling. These are local lab timings. The 2.5s target and field vitals remain open.
+
+The compiled phone comparison checked recorded squad rank, contract review and signing against the parent build, including cold reload and exact save bytes. The reserved Squad tile eliminated the layout shift seen when the tile first loaded without reserved space. App types, production build, 51 focused tests, 16 offline output checks, snapshot boot and all 16 download caps passed.
+
+## 2026-11-11 NitroPay mobile startup follow-up
+
+This draft builds on PR #668. Game routes below 768px skip the hidden live-score ticker and its initial request. Home keeps the ticker, and resizing a game to desktop brings it back with one request. The legacy toast UI loads only with Fantasy Draft, its sole caller. Home computes the Eastern date once for the New badges on its game cards.
+
+The shared entry dropped from 222.1 to 205.7 kB gzip. At 390px Home rendered the same 149 game cards with 25 Eastern date formatters instead of 481 on startup, plus six instead of 161 when searching and clearing. The mobile ticker fit full score cards inside its 242px viewport, where the baseline had a 280px card. Full team names are retained in the accessible labels.
+
+Three paired cold, throttled local runs put Soccer Career median LCP at 5.96s versus 6.02s on the audit draft. Mobile is still above the 2.5s target. These runs used loopback, a mocked score feed, 150ms latency, 1.6Mbps throughput and 4x CPU throttling. Field vitals remain unverified.
+
+Passed app types, production build, Fantasy Draft formation tests, 16 offline output checks, snapshot boot, all 16 existing route download budgets and the compiled ticker browser suite.
+
+## 2026-11-11 NitroPay readiness draft
+
+The shared entry no longer loads the home page, the unused React Query provider or unused prerender boot script on built snapshots. Existing fonts are self-hosted. Images carry dimensions and below-fold flags load lazily. When CSS is delayed, the loading cover remains until it is ready or the fallback runs. No-JS visitors receive the full static page.
+
+The four trust links remain in the shared footer. Contact uses the published mailbox. Privacy and Cookie Policy describe current advertising, cookie choices, GDPR and California requests, and browser GPC. The ads.txt placeholder preserves the existing seller. The live robots and sitemap endpoints answered with the expected types. NitroPay seller records and provider activation are pending.
+
+Six priority pages have 176 to 197 original words and matching static and runtime metadata. Audit covered 172 indexable pages and 21 existing exclusions. Rewriting the NFL Gauntlet guide reduced the only near-duplicate pair's measured overlap from 32.3% to 5.0%. The sitemap retains 172 URLs.
+
+Empty reserved ad sizes fit 320px, 390px and 1440px layouts. First-visit game consent is in the page flow and allows gameplay while the choice is pending. Exact phone replays kept typed input through help and consent changes and confirmed GPC. No game engine or regional ad-loading rule changed.
+
+The shared JavaScript fell from approximately 244 to 222 kB gzip. Compressed local Lighthouse on the final build measured desktop LCP at 1.86s home and 1.85s Soccer Career, with CLS 0.002 and 0. Mobile LCP measured 5.28s home and 7.63s Soccer Career. PageSpeed Insights API returned HTTP 429 for both devices. Field INP and live post-release vitals are unverified.
+
+Passed app types, 252 scoped tests, production build, 20 offline harnesses, standalone snapshot boot, 16 route-size caps and compiled desktop/mobile checks. The targeted prerender captured ten routes without errors.
 
 ## 2026-11-07: Club Manager historical roster counts live
 
@@ -21,6 +492,14 @@ Select a historical club to see how many players are recorded in its roster snap
 [Qualification](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/42349735958) passed proper types, one build, 20 output checks, all 16 existing size caps, three phone contexts and four photos. Phone checks held the complete save state through club selection. [Public verification](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/42350742966) matched all seven compiled files, passed the Club Manager live SEO check and submitted only that URL to IndexNow.
 
 Next league work: the Ekstraklasa intake verifies all 18 current clubs, including held Legia Warsaw. The proposed 17 additions still need the dated pool integration, load timing and measured size check. Historical player population and NBA/NFL draft intake remain open.
+
+## 2026-11-12: Squad Deal World Cup 2026 eligibility candidate
+
+Squad Deal's World Cup topic now takes its field from the 48 verified group-stage nations. The selector identifies Current players and Legends by nationality. The existing formation check offers the 4-1-2-1-2 diamond in Legends, where only two eligible left-wing options remain. All nine formations qualify on the baked Current pool. The shared list also feeds Budget Builder Today and Dart Draft's normal topic pool and map gate.
+
+Exact main displayed Italian and Danish players on a World Cup Legends keeper board. Eligibility was checked against the [FIFA tournament field](https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026/articles/fifa-world-cup-2026-hosts-cities-dates-usa-mexico-canada), [FOX tournament group standings](https://www.foxsports.com/soccer/fifa-world-cup/standings), and [UEFA's final qualified list](https://www.uefa.com/european-qualifiers/news/029f-1f318027c4dd-8e9bab478b48-1000--world-cup-2026-which-european-teams-have-qualified/).
+
+Compiled 390px touch checks passed in Squad Deal, Budget Builder Today and Dart Draft using local Current player fixtures. Four focused tests, both topic controls, app types, the build, 17 output and World Cup checks and 16 route caps passed. Dry merges with the Dart Draft rating fix and the historical Budget Builder market fix held their product changes.
 
 ## 2026-11-07: Soccer Career historical arrivals from 2010 and 2015 live
 
@@ -34,6 +513,10 @@ New 2010 and 2015 saves now show sourced arrivals in the phone's SportsFeed as t
 
 Next: CM-03 historical roster snapshot count at club selection. Poland's 18-club Ekstraklasa membership and proposed 17 additional identities have source intake; there is no live Polish expansion yet. NBA 2005 and NFL 2006 remain source intake.
 
+## 2026-11-12: Dart Draft World Cup country offers candidate
+
+A World Cup throw into the United Kingdom region could offer Conor Bradley of Northern Ireland alongside Trent Alexander-Arnold of England. Country and position searches now apply World Cup nationality eligibility before ranking, with the existing academy option available when no eligible player fits. The region remains available for England and Scotland. Current Stars can draft from the full region.
+
 ## 2026-11-07: Russian league expansion live
 
 [PR #527](https://github.com/PapiSalgueroM/ballpark-hero/pull/527) published from main `d151e61ee8fa1348e05b2dadd59b1aff2d226ee6`, App tree `3fe5bf9acace9f506c5f469e012be11c1dded94e`, Lovable deployment `e83da178-a548-4af8-ab61-f3e514993136`. This includes the previous K League and phone Squad releases.
@@ -44,6 +527,12 @@ Next: CM-03 historical roster snapshot count at club selection. Poland's 18-club
 - [Public verification](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/42345338581) matched 73 assets to the tested build, passed raw page SEO on both routes, and got IndexNow HTTP 200 for those two URLs. This is a submission receipt, not proof of indexing.
 
 Next master-list work: extend verified future entrants in Soccer Career to 2010 and 2015 starts, then show the available historical roster count in Club Manager. NBA 2005 and NFL 2006 are still source review, with no player or save changes live.
+
+## 2026-11-12: Player Bingo Son World Cup candidate
+
+Player Bingo uses Heung-min Son in its market pool and Son Heung-min in South Korea's 2014, 2018, 2022 and 2026 World Cup records. The loader now recognises the market name when it reads that exact South Korea identity. FIFA and Tottenham independently confirm his appearance against Portugal in 2022. [FIFA match report](https://www.fifa.com/en/articles/korea-republic-portugal-world-cup-qatar-2022-group-h-match-report) and [Tottenham match report](https://www.tottenhamhotspur.com/news/991149/internationals-sonny-in-tears-as-korea-progress-in-world-cup-but-its-despair-for-rodrigo).
+
+A 390px phone baseline spent one strike on the 2022 tile. The loader and criterion checks reproduce the rejection in both participation tiles and pass with the country-bound alias. All 77 focused tests passed, including the unchanged player pool, other tile support, 2022 and winner rules, and a copied source control that catches a missing country guard.
 
 ## 2026-11-06: K League expansion and phone Squad names live
 
@@ -60,6 +549,18 @@ Squad follow-up: names wrap above a separate wrapping badge row on phones; deskt
 Live UI delivery run42300717290 passed on the first root read: the root and Club Manager declarations carry the new deployment and all five complete compiled bodies match the accepted 852-file output, digest `1a6b3715525f1082bc461f3a2d615e85472934b42aad5e6da94fbcf9819487cf`. This is delivered-byte evidence, not a new gameplay/protocol run.
 
 SC-36 and CM-04 remain partial; CM-03 real opening-roster coverage is incomplete. Old unrelated full-fleet reds remain unwaived. Continue the master list with verified team/league and real historical entrant coverage. Russia's proposed 15-club SC bridge remains research only: no new rows, palettes, points or year/continental policy are adopted. Rubin's traditional green/white word gap is now corroborated by Sport.ru and Sport Mail, with dated-season/personnel and shade-equivalence caveats retained; other colour and availability gates remain open.
+
+## 2026-11-12: Real-club Soccer Perfect Season candidate
+
+Soccer Perfect Season draws 11 real clubs from the pinned October 2026 pool of 557 players and 146 clubs. Draft a 4-3-3 with two rerolls, then play all 38 simulated matches. Daily and Unlimited have separate browser saves. The strongest available XI guarantees 38 wins. A 37-win season with one draw is unbeaten and scores 98.
+
+The 32 paired outcome checks agreed with an independent slot assignment and measured 50.19 points between the strongest and weakest drafts. The flattened odds control dropped that gap to zero and failed. Eight focused tests, app types, both builds, three scoped snapshots, 18 offline readers and all 16 existing size caps passed. The 320px and 390px phone checks covered both verdicts, rerolls, saved draft and match progress, and two local completion payloads. The source migration stages the 100-point leaderboard cap for the release lane and has not been applied.
+
+## 2026-11-12: Club Manager keeps league stats after a departure
+
+An accepted January sale removed the player from both the league leaders and the Golden Boot race. The regular transfer-list flow reproduced it for Viktor Gyökeres after 12 Arsenal league goals and Alexander Isak after 13 for Liverpool. Both sales still updated ownership and left the clubs' team totals intact.
+
+The current season now keeps the league line earned before a sale, release, outgoing loan, early loan return or part exchange. Each line stays with its original club and league, and a recall restores the player's running line once. The book uses only its covered rounds. The old scorer race can read the complete retained line. The rival book has no stable player ID for linking every historical row, so ambiguous stints stay labelled by club. Older saves carry no new row until a future departure, and rollover clears the active snapshots after the season awards are settled.
 
 ## 2026-11-01 20:55 EDT, Claude session K (games): RELEASE BV IS LIVE (deployment 96c67a3b, main 7bd3e99a1)
 
@@ -20335,3 +20836,25 @@ Actual independent seven-arm proof is7eadbca71e1e351741802f8f9e8b9ac1852e4b957ec
 Native admission: 69f420492bd29d81667ad18b3ed98209473e49f77e33a7e8f3eb6788e0acebe5. Deployment: 2d231ee7-24b2-4940-af8d-5908d26371e6. Public admission: 147361f50c8e3db9c6583009a045a7d79c22c8a680d2fadb171826ff3d3b6c89. Full source, provenance, artifact identities and the exact nine-path nonruntime bridge are in [the dated plan](plans/2026-11-05-soccer-four-first-team-entries.md).
 
 SC-36 remains partial. This does not add leagues, rosters or a complete evolving population. Next owner priority is more Soccer Career/Club Manager teams and leagues, preceded by a measured Team-picker UI cut if needed for the unchanged CM cap. CM47, LeagueSeasons582, measured NFL37/NBA25 golden differences and the separately triaged PR502 reds remain unwaived. The first SC4 build stopped at reader18; it is not relabelled green.
+
+## 2026-11-11 Soccer Career tournament scoring
+
+The reported World Cup and Champions League scoring gap came from two different player-goal models. Cups now credit a share of actual team goals based on position and overall. Club extra-time goals are eligible, while shootout penalties stay separate. Both engines retain their original draw counts for team play and subsequent rolls. The 2002 and modern scoring records informed the calibration. [FIFA World Cup top scorers](https://www.fifa.com/en/articles/fontaine-mbappe-ronaldo-and-more-every-world-cup-top-scorer) and [UEFA Champions League top scorers by season](https://www.uefa.com/uefachampionsleague/history/rankings/players/season_goals_scored/).
+
+Over 400 paired 2002 campaigns at each rating, the 80 OVR Brazil and Real Madrid winger went from 0.885 to 0.381 World Cup goals per appearance and from 0.238 to 0.390 club goals per appearance. At 95 OVR those rates moved from 1.486 to 0.688 and from 0.257 to 0.622. The elite winger's international Golden Boots went from 278 to 79. Across 24 scenario cells, the original and candidate team scores, winners, qualifying results, draw counts and immediate next rolls matched. The candidate recorded zero player goal totals above team scores.
+
+Another 800 paired club campaigns covered Libertadores, CONCACAF, AFC and CAF formats. Their team results and draw counts matched, and player goals stayed within the actual score.
+
+Compiled 390 by 844 replays preserved all 14 club and seven international scorelines through normal 2002 progression and exact cold reload. Prior modern results loaded byte for byte. The deferred legacy World Cup card rendered the same seven match rows and continued with byte-identical saved history. The final route measured 840.1 KiB inside the existing rounded cap.
+
+All 67 scoped cases, app types, production build, three tournament sims, 15 output checks and 16 route caps passed. The separate World Truth harness stopped at the same missing soccerPhone.ts marker on the baseline and candidate. The scoring implementation overlaps PR229's knockout goal cap and should be reviewed with that draft at integration.
+
+## 2026-11-10: Club Manager listed transfer offer budgets
+
+Prepared for review for report `d941859e`. A new bid for a transfer-listed player uses a club from the save's existing era and league pool that can afford the quoted fee. A contested bid needs two eligible clubs. When the higher quote has fewer than two buyers, the ordinary quote can still draw a bid. A listed counteroffer checks the higher price for the buyer and any rival, including after unlisting and reloading the save. Older open offers can still be accepted at their saved terms.
+
+The original generator produced a £153m offer from Incheon United on an £8m in-game budget. The earlier counteroffer path raised a £191.3m Real Madrid bid to £220m. Both controls failed before their corresponding fixes. Local qualification passed app types, the production build, 27 focused and adjacent tests, 15 built-output checks, the transfer and release-clause simulations, and all 16 existing route size caps. Club Manager measured 647.9 KiB against its 648 KiB cap. Publication is pending.
+
+## 2026-11-12: Active site readiness and popular-game work
+
+The ongoing 24-hour work is coordinated in docs/plans/2026-11-12-site-readiness.md. At 21:34 UTC, application 1f323c2bb passes full app types/ordinary build, all 22 output readers, all 16 download caps, 105 route openings and 64 phone consent checks. NRL Saved lineup, Quick Sim defensive cover, Eastern daily counters, Rarity reveal ownership and Soccer Career selector labels pass their affected compiled journeys. Earlier qualified fixes, cleaner Home, required policy/contact pages and raw guide content remain composed. NRL complete Soccer Manager parity, mobile LCP below 2.5 seconds, field INP, Nitro activation and production release remain open. All 157 active reports have private evidence classifications; no live report has been marked fixed. Smart and Drummond's guarded data corrections are staged only. An isolated 845-harness offline run is underway, with no all-suite pass claimed. Preserve the dated earlier release records; current artifact hashes and scoped results are in the linked readiness checkpoint.

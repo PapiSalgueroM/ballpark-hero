@@ -58,7 +58,7 @@ const controls = {
   numeric: { file: logic, anchor: 'if (guessVal === null || targetVal === null)', replacement: 'if (false)', failed: [titles.numeric] },
   mapper: { group: 'fetch', file: 'src/lib/fetchFootlePlayerPool.ts', anchor: 'goals: row.goals,', replacement: 'goals: row.goals ?? 0,', count: 2, failed: [mapper] },
   assists: { group: 'fetch', file: 'src/lib/fetchFootlePlayerPool.ts', anchor: 'assists: row.assists,', replacement: 'assists: row.assists ?? 0,', count: 2, failed: [mapper] },
-  completion: { group: 'mounted', file: hook, anchor: "useGameCompletion('footle', effectiveDailyStatus !== 'playing', dailyScore);", replacement: "useGameCompletion('footle', gameStatus !== 'playing', dailyScore);", failed: [mounted.complete, mounted.unlimited] },
+  completion: { group: 'mounted', file: hook, anchor: "useGameCompletion('footle', dailyStatus !== 'playing', dailyScore);", replacement: "useGameCompletion('footle', gameStatus !== 'playing', dailyScore);", failed: [mounted.complete, mounted.unlimited] },
   receipt: { group: 'mounted', file: page, anchor: 'total + round.guesses.length, 0)', replacement: 'total + round.guesses.length + 1, 0)', failed: [mounted.complete] },
   saving: { group: 'mounted', file: hook, anchor: 'setPracticeSaveFailed(true);', replacement: 'setPracticeSaveFailed(false);', failed: [mounted.save] },
   focus: { group: 'mounted', file: page, anchor: 'practicePanel.current?.focus({ preventScroll: true });', replacement: 'void 0;', failed: [mounted.complete, mounted.entry] },

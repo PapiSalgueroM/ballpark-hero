@@ -369,7 +369,10 @@ console.log('5b) analytics stays off in the template and every saved head');
       const blocks = [...html.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/gi)];
       const saved = blocks.filter(match => /\bdata-dukb-consent-bootstrap(?:\s|=|$)/.test(match[1]));
       if (html.includes("getItem('cookie-consent')")) fail(`${file} retains a legacy bundled consent bootstrap`);
-      if (saved.length && (saved.length !== 1 || saved[0][2] !== script)) fail(`${file} has a different consent bootstrap`);
+      // Git may check out identical HTML with LF or CRLF on Windows.
+      if (saved.length && (saved.length !== 1 || saved[0][2].replace(/\r\n/g, '\n') !== script.replace(/\r\n/g, '\n'))) {
+        fail(`${file} has a different consent bootstrap`);
+      }
       if (html.includes('googletagmanager.com/gtag/js') && saved.length !== 1) fail(`${file} has an unmarked analytics loader`);
     }
   }

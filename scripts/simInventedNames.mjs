@@ -49,6 +49,10 @@ const GENERATORS = [
   { file: 'src/lib/aussieRulesManager.ts', first: 'FIRST', last: 'LAST', what: 'fictional Aussie rules seniors' },
   /* Round 1014: the full season's own 60 x 60 banks, for its 648 players and every draft class. */
   { file: 'src/lib/aussieRulesLeague.ts', first: 'FIRST', last: 'LAST', what: 'fictional Aussie rules full season players and draftees' },
+  { file: 'src/lib/nrlManager.ts', first: 'FIRST_NAMES', last: 'LAST_NAMES', what: 'fictional NRL opening squad players' },
+  { file: 'src/lib/nrlCareer.ts', first: 'FIRST', last: 'LAST', what: 'fictional NRL career players' },
+  // Only two assistants are drawn per club-season, with a fresh uniqueness set.
+  { file: 'src/lib/nrlCareer.ts', first: 'COACH_FIRST', last: 'COACH_LAST', what: 'fictional NRL assistants', minNames: 36 },
   { file: 'src/lib/frontOffice.ts', first: 'FIRST', last: 'LAST', what: 'GM game draft classes' },
   { file: 'src/lib/careerRival.ts', first: 'FIRST', last: 'LAST', what: 'career rivals' },
   { file: 'src/lib/clubManager.ts', first: 'YOUTH_FIRST', last: 'YOUTH_LAST', what: 'academy kids' },
@@ -95,6 +99,7 @@ const bankOf = (src, name) => {
 /* ---------- 1. The real-name universe ---------- */
 console.log('1) Harvesting every real player name the site ships');
 const real = new Set();
+const nrlOpeningNames = new Set();
 {
   const walk = d => {
     for (const e of fs.readdirSync(d, { withFileTypes: true })) {
@@ -178,15 +183,20 @@ export { NATIONALITY_BY_WORLD } from '${ROOT.replaceAll('\\', '/')}/src/data/nat
 export { allIntlNames } from '${ROOT.replaceAll('\\', '/')}/src/lib/intlNames.ts';
 export { CM_DUGOUTS } from '${ROOT.replaceAll('\\', '/')}/src/data/clubManagerDugouts.ts';
 export { realDugoutNames } from '${ROOT.replaceAll('\\', '/')}/src/lib/realDugouts.ts';
+export { NRL_OPENING_MATCHDAY_2026 } from '${ROOT.replaceAll('\\', '/')}/src/data/nrlOpeningMatchday2026.ts';
 `);
   execSync(`"${ROOT}/node_modules/.bin/esbuild" "${ENTRY}" --bundle --format=esm --platform=node --outfile="${BUNDLE}" --log-level=error`, { stdio: 'inherit' });
-  const { NATIONALITY_BY_WORLD, allIntlNames, CM_DUGOUTS, realDugoutNames } = await import(pathToFileURL(BUNDLE).href);
+  const { NATIONALITY_BY_WORLD, allIntlNames, CM_DUGOUTS, realDugoutNames, NRL_OPENING_MATCHDAY_2026 } = await import(pathToFileURL(BUNDLE).href);
   for (const world of Object.values(NATIONALITY_BY_WORLD)) for (const n of Object.keys(world)) real.add(n);
   /* Round 1606: Club Manager's real opening day managers are real people too, whatever shape their rows take,
      so no generator anywhere may build one of their names. Read through the module, not a source regex. */
   const dugoutNames = realDugoutNames(CM_DUGOUTS);
   for (const n of dugoutNames) real.add(n);
   console.log(`   ${dugoutNames.length} real managers from the Club Manager dugout table`);
+  // The opening NRL roster stores factual names in tuples, not named properties.
+  for (const squad of Object.values(NRL_OPENING_MATCHDAY_2026)) {
+    for (const [, name] of squad) nrlOpeningNames.add(name);
+  }
   globalThis.__intl = allIntlNames();
   if (real.size < 8000) fail(`only ${real.size} real names harvested, the check is not checking much`);
   /* Round 971: every sealed world feeds the guard, the 2020-21 one included
@@ -216,13 +226,16 @@ console.log('2) Every combination of every generator, against all of them');
     const combos = [];
     for (const a of firsts) for (const b of lasts) combos.push(`${a} ${b}`);
     total += combos.length;
-    const hits = combos.filter(n => real.has(n));
+    const nrlBank = g.file === 'src/lib/nrlManager.ts' || g.file === 'src/lib/nrlCareer.ts';
+    const hits = combos.filter(n => real.has(n) || (nrlBank && nrlOpeningNames.has(n)));
     if (hits.length) {
       fail(`${g.what} (${g.file}) can be named after real players: ${hits.slice(0, 6).join(' | ')}`);
     }
     /* The free agent banks are ten by ten on purpose: a handful of names
        per offseason, not a population. A hundred is the floor. */
-    if (combos.length < 100) fail(`${g.what}: only ${combos.length} possible names, repeats would be constant`);
+    const possible = new Set(combos).size;
+    const minNames = g.minNames ?? 100;
+    if (possible < minNames) fail(`${g.what}: only ${possible} distinct possible names, expected at least ${minNames}`);
   }
   /* And the Round 197 pools, so one harness owns the whole rule. */
   const intl = globalThis.__intl ?? [];

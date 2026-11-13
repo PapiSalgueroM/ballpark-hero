@@ -50,6 +50,7 @@ vi.mock('@/components/ui/select', () => ({
 import * as E from '@/lib/soccerCareerEngine';
 import { settlePendingSaves } from '@/lib/safeStorage';
 import { isSoccerCareerSave } from '@/lib/soccerCareerSave';
+import { SC_CAREER_RECORDS_KEY } from '@/lib/soccerCareerCompletedRecords';
 import { recordCompletion, recordActivity, recordStreakDay } from '@/lib/completions';
 import { toast } from 'sonner';
 import SoccerCareer from '@/pages/SoccerCareer';
@@ -206,14 +207,29 @@ describe('Soccer Career failed write recovery', () => {
     expect(warning(m.view)).toBeNull(); expect(read().playerName).toBe('Replacement Tester'); expect(read().seasons).toHaveLength(1);
     expect(localStorage.getItem(OTHER)).toBe('untouched progress'); expect(recordCompletion).not.toHaveBeenCalled();
   });
-  it('persists the finished retirement on retry without recording its completion a second time', async () => {
+  it('records retirement only after the successful retry and does not credit a reload', async () => {
     const ceremony = E.manualRetire(nativeCareer()), m = mount(ceremony), oldBytes = localStorage.getItem(KEY);
+    const savedAtCompletion: (string | null)[] = [];
+    vi.mocked(recordCompletion).mockImplementationOnce(() => { savedAtCompletion.push(localStorage.getItem(KEY)); });
     m.refuse(true); fireEvent.click(m.view.getByRole('button', { name: /Retire and Enjoy Life/ }));
     await act(async () => { await Promise.resolve(); }); assertWarning(m.view);
-    expect(localStorage.getItem(KEY)).toBe(oldBytes); expect(recordCompletion).toHaveBeenCalledTimes(1);
+    expect(localStorage.getItem(KEY)).toBe(oldBytes); expect(recordCompletion).not.toHaveBeenCalled();
+    expect(localStorage.getItem(SC_CAREER_RECORDS_KEY)).toBeNull();
     const earned = JSON.parse(m.attempts[m.attempts.length - 1]); expect(earned.phase).toBe('retired'); expect(earned.legacy.score).toBe(ceremony.legacy!.score);
+    retry(m.view); assertWarning(m.view);
+    expect(localStorage.getItem(KEY)).toBe(oldBytes); expect(recordCompletion).not.toHaveBeenCalled();
+    expect(localStorage.getItem(SC_CAREER_RECORDS_KEY)).toBeNull();
     clearReplayCounts(); m.refuse(false); retry(m.view); await act(async () => { await Promise.resolve(); });
-    expect(read()).toEqual(earned); expect(recordCompletion).toHaveBeenCalledTimes(1); noReplay(); expect(warning(m.view)).toBeNull();
+    const saved = localStorage.getItem(KEY), archive = localStorage.getItem(SC_CAREER_RECORDS_KEY);
+    expect(saved).toBe(m.attempts[m.attempts.length - 1]); expect(read()).toEqual(earned);
+    expect(recordCompletion).toHaveBeenCalledExactlyOnceWith('/soccer-career', earned.legacy.score, 'Save Tester', 0);
+    expect(savedAtCompletion).toEqual([saved]); expect(archive).not.toBeNull();
+    noReplay(); expect(warning(m.view)).toBeNull();
+    m.view.unmount(); m.writes.mockRestore(); m.removes.mockRestore();
+    const restored = mount(read());
+    await act(async () => { await Promise.resolve(); });
+    expect(localStorage.getItem(KEY)).toBe(saved); expect(localStorage.getItem(SC_CAREER_RECORDS_KEY)).toBe(archive);
+    expect(recordCompletion).toHaveBeenCalledTimes(1); expect(warning(restored.view)).toBeNull();
   });
   it('retains an independent valid restore and earned engine baseline without mounting the page', () => {
     const saved = copy(nativeCareer()), raw = JSON.stringify(saved); expect(isSoccerCareerSave(saved)).toBe(true);

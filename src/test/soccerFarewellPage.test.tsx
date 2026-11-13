@@ -289,7 +289,7 @@ describe('Soccer farewell real page actions', () => {
     const raw = localStorage.getItem(KEY); view.unmount(); mount(read());
     expect(localStorage.getItem(KEY)).toBe(raw); expect(actualDraws).toEqual([]);
   });
-  it('shows a queued saved tournament before retirement and consumes its result without another year', () => {
+  it('shows a queued saved tournament before retirement and consumes its result without another year', async () => {
     const saved = finalSummary();
     // Fictional saved outcome for the phase boundary, with no real match claim.
     saved.pendingWorldCup = { year: 2027, nation: 'England', matches: [], playerApps: 0,
@@ -300,6 +300,8 @@ describe('Soccer farewell real page actions', () => {
     const actualDraws = tape(); fireEvent.click(view.getByRole('button', { name: 'Continue →' }));
     expect(read()).toEqual(expectedTournament); expect(actualDraws).toEqual(expectedDraws);
     expect(read().pendingWorldCup).toEqual(saved.pendingWorldCup); expect(read().seasons).toEqual(before.seasons);
+    await act(async () => { await import('@/components/soccer-career/WorldCupResultCard'); });
+    expect(view.getByText('World Cup 2027')).toBeVisible();
     const nextExpectedDraws = tape(), expectedRetirement = copy(E.dismissWorldCup(copy(read()), E.FALLBACK_CLUBS));
     const nextActualDraws = tape(); fireEvent.click(view.getByRole('button', { name: 'Continue →' }));
     expect(read()).toEqual(expectedRetirement); expect(nextActualDraws).toEqual(nextExpectedDraws);

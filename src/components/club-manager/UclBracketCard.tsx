@@ -5,6 +5,7 @@ import { CelebrationStyles } from '@/components/club-manager/Celebration';
 import { BracketSide, tieKey, tieMoment, trophyGlow, useBracketMoment } from '@/components/club-manager/CupBracketCard';
 
 const UCL_ROUNDS: UclKoRound[] = ['R16', 'QF', 'SF', 'F'];
+const LEAGUE_PHASE_ROUNDS: UclKoRound[] = ['PO', ...UCL_ROUNDS];
 
 interface UclBracketCardProps {
   career: CareerState;
@@ -12,6 +13,7 @@ interface UclBracketCardProps {
 }
 
 const ROUND_LABEL: Record<UclKoRound, string> = {
+  PO: 'Knockout playoffs',
   R16: 'Round of 16',
   QF: 'Quarter-finals',
   SF: 'Semi-finals',
@@ -29,11 +31,12 @@ const ROUND_LABEL: Record<UclKoRound, string> = {
 export function UclBracketCard({ career, onClubClick }: UclBracketCardProps) {
   const bracket = career.uclBracket;
   // Round 983: above the empty bracket return, hooks never follow one.
-  const moment = useBracketMoment(career, 'ucl', bracket, UCL_ROUNDS);
+  const availableRounds = career.uclGroup?.leaguePhase ? LEAGUE_PHASE_ROUNDS : UCL_ROUNDS;
+  const moment = useBracketMoment(career, 'ucl', bracket, availableRounds);
   if (!bracket || bracket.length === 0) return null;
 
   // Round 462: an era bracket opens with the round of 16 it really had.
-  const rounds: UclKoRound[] = bracket.some(t => t.round === 'R16') ? UCL_ROUNDS : ['QF', 'SF', 'F'];
+  const rounds = bracket.some(t => t.round === 'PO' || t.round === 'R16') ? availableRounds : ['QF', 'SF', 'F'] as const;
   const champion = bracket.find(t => t.round === 'F')?.winner ?? null;
 
   return (

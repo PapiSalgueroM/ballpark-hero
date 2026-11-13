@@ -65,6 +65,7 @@ export function HowToPlayPopover({
 
       <Dialog open={isOpen} onOpenChange={setOpen}>
         <DialogContent
+          aria-describedby={undefined}
           className="max-w-md bg-card border-border text-foreground max-h-[85vh] overflow-y-auto"
           onCloseAutoFocus={event => {
             event.preventDefault();

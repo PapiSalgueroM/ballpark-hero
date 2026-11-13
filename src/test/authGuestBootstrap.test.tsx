@@ -42,7 +42,7 @@ async function mount(path = '/soccer-career', { storageNotice = true, creator = 
   const { HelmetProvider } = await import('react-helmet-async');
   const { AuthProvider, useAuth } = await import('@/contexts/AuthContext');
   const { StorageNotice } = await import('@/components/StorageNotice');
-  const Creator = creator ? (await import('@/pages/SoccerCareer')).default : null;
+  const Creator = creator ? (await import('@/pages/SoccerCareerEntry')).default : null;
   function State() {
     const { loading, user } = useAuth();
     return <span>{loading ? 'Opening account' : user?.email ?? 'Guest ready'}</span>;
@@ -95,7 +95,7 @@ describe('guest game account startup', () => {
     expect(client.onAuthStateChange).toHaveBeenCalledOnce();
     view.unmount();
     expect(client.unsubscribe).toHaveBeenCalledOnce();
-  }, 15_000);
+  });
 
   it('attaches to an already imported client when the provider mounts', async () => {
     const client = fixture(player);
@@ -191,10 +191,13 @@ describe('guest Home account startup', () => {
     fixture();
     const set = vi.spyOn(Storage.prototype, 'setItem');
     const remove = vi.spyOn(Storage.prototype, 'removeItem');
+    const { hasVerifiedLocalStorageWrites } = await import('@/lib/safeStorage');
+    expect(hasVerifiedLocalStorageWrites()).toBe(false);
 
     const view = await mount('/');
     expect(screen.getByText('Guest ready')).toBeVisible();
     expect(create).not.toHaveBeenCalled();
+    expect(hasVerifiedLocalStorageWrites()).toBe(true);
     view.unmount();
     await mount('/');
     expect(set.mock.calls.filter(([key]) => key === probeKey)).toEqual([[probeKey, '1']]);

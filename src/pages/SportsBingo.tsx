@@ -13,6 +13,7 @@ import { BingoHandOver } from '@/components/sports-bingo/BingoHandOver';
 import { BingoPackList } from '@/components/sports-bingo/BingoPackList';
 import { PassDeviceSetup } from '@/components/sports-bingo/PassDeviceSetup';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
+import { markRestoredFinish } from '@/lib/restoredFinish';
 import { getTodayET } from '@/lib/dateUtils';
 import { fetchSquadPool } from '@/lib/squadDeal';
 import { Player } from '@/types/game';
@@ -115,10 +116,12 @@ export default function SportsBingo() {
   }, []);
 
   const start = useCallback((m: Mode, level: CpuLevel) => {
-    if (m === 'daily' && dailyDone) {
+    const saved = m === 'daily' ? loadDailyBingo(todayStr) ?? dailyDone : null;
+    if (saved) {
       /* Today's card is in the books: reopen the result, never redeal it. */
       setMode('daily');
-      setMarked(dailyDone.marked);
+      setDailyDone(saved);
+      setMarked(saved.marked);
       setPhase('done');
       return;
     }
@@ -134,7 +137,7 @@ export default function SportsBingo() {
     setMarked(new Array(CARD_SIZE).fill(false));
     setCpuMarked(new Array(CARD_SIZE).fill(false));
     setPhase('playing');
-  }, [pool, dailyDone]);
+  }, [pool, dailyDone, todayStr]);
 
   const advancePack = useCallback(() => {
     if (!game) return;
@@ -197,7 +200,7 @@ export default function SportsBingo() {
       });
     }, 1000);
     return () => clearInterval(t);
-  }, [ticking]);
+  }, [ticking, packIndex]);
 
   useEffect(() => {
     if (secondsLeft !== 0) return;
@@ -238,28 +241,34 @@ export default function SportsBingo() {
   const finalScore = scoreGame(marked);
   const won = mode === 'cpu' ? mySquares > cpuSquares : mySquares >= 12;
   const isDone = phase === 'done';
-  /* A daily already in the books is not a finish: a reloaded or reopened
-     result never records, and the fresh one records once, in the same
-     commit that then books it below. */
+  // A reloaded or reopened Daily already has a recorded finish.
   const bookedDaily = mode === 'daily' && dailyDone !== null;
   /* Round 727: a finished table records the first human seat's card, the
      way Rebuild records the first human's run at a fuller table. */
   const tableDone = phase === 'table' && table?.phase === 'done';
   const firstHuman = table?.seats.find(s => s.kind === 'human') ?? null;
   const tableScore = firstHuman ? scoreGame(firstHuman.marked) : 0;
+  // Settle the Daily before the completion hook observes this render.
+  useEffect(() => {
+    if (!isDone || mode !== 'daily' || dailyDone) return;
+    const saved = loadDailyBingo(todayStr);
+    if (saved) {
+      markRestoredFinish(SLUG);
+      setMarked(saved.marked);
+      setDailyDone(saved);
+      return;
+    }
+    const rec = { date: todayStr, marked };
+    saveDailyBingo(rec);
+    setDailyDone(rec);
+  }, [isDone, mode, dailyDone, marked, todayStr]);
+
   useGameCompletion(
     SLUG,
     (isDone && !bookedDaily) || tableDone,
     tableDone ? tableScore : finalScore,
     tableDone ? (firstHuman ? squaresOf(firstHuman.marked) : 0) : mySquares,
   );
-
-  useEffect(() => {
-    if (!isDone || mode !== 'daily' || dailyDone) return;
-    const rec = { date: todayStr, marked };
-    saveDailyBingo(rec);
-    setDailyDone(rec);
-  }, [isDone, mode, dailyDone, marked]);
   const doneSquares = dailyDone ? squaresOf(dailyDone.marked) : 0;
 
   const boardGrid = (board: boolean[]) => {

@@ -355,12 +355,17 @@ console.log('7) a full slate GLIDES: the wire moves, every card passes, then han
       const vp = document.querySelector(`${sel} [aria-live="off"]`) || document.querySelector(`${sel} .flex-1.overflow-hidden`);
       if (!vp) return null;
       const s0 = vp.scrollLeft;
-      await new Promise(r => setTimeout(r, 4000));
-      return { s0, s1: vp.scrollLeft };
+      let furthest = s0;
+      // A handoff can reset scrollLeft while the wire is still moving.
+      for (let sample = 0; sample < 10; sample++) {
+        await new Promise(r => setTimeout(r, 400));
+        furthest = Math.max(furthest, vp.scrollLeft);
+      }
+      return { s0, furthest };
     }, BAR);
     say(!!afterTap, 'the strip and its viewport were found on the phone');
     if (afterTap) {
-      say(afterTap.s1 > afterTap.s0 + 50, `a finger tap leaves the wire MOVING (${afterTap.s0.toFixed(0)} to ${afterTap.s1.toFixed(0)}px over 4s)`);
+      say(afterTap.furthest > afterTap.s0 + 50, `a finger tap leaves the wire MOVING (${afterTap.s0.toFixed(0)} to ${afterTap.furthest.toFixed(0)}px over 4s)`);
     }
     /* Round 711 put a feed stamp and a filter button beside the wire. On a
        390px phone the two of them, at their shipped sizes, left the viewport

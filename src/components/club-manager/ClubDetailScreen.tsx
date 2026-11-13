@@ -12,6 +12,7 @@ import type { CareerState } from '@/lib/clubManager';
 import { ratingTint, MadeUpTag } from '@/components/club-manager/SquadScreen';
 import { realDugoutSince, DUGOUT_MADE_UP_TITLE, DUGOUT_PARTIAL_TITLE } from '@/lib/realDugouts';
 import { K_LEAGUE_2026, kLeagueMember } from '@/data/kLeague2026';
+import { CSL_LEAGUE_2026 } from '@/data/cslLeague2026';
 
 interface ClubDetailScreenProps {
   clubName: string;
@@ -44,7 +45,9 @@ export function ClubDetailScreen({ clubName, career, onBack }: ClubDetailScreenP
   /* Round 154: a club you founded has no projected world entry, its squad IS
      the save's squad, so the viewer reads that directly. */
   const isMyCustom = !!career.customClub && clubName === career.customClub.name;
-  const modelOnlyRoster = careerHasKLeagueWorld(career) && !isHistoricEra(career.eraId) && !isMyCustom && K_LEAGUE_2026.modelOnlyRoster && !!kLeagueMember(clubName);
+  const cslModel = league.id === CSL_LEAGUE_2026.id;
+  const modelOnlyRoster = !isHistoricEra(career.eraId) && !isMyCustom
+    && (cslModel || (careerHasKLeagueWorld(career) && K_LEAGUE_2026.modelOnlyRoster && !!kLeagueMember(clubName)));
   /* The club you manage always reads the squad in this save. Rival clubs
      keep their current world roster, including recorded transfers. */
   const fromMySquad = isMyCustom || clubName === career.clubName;
@@ -212,7 +215,7 @@ export function ClubDetailScreen({ clubName, career, onBack }: ClubDetailScreenP
         {roster.length === 0 && (
           <p className="text-xs text-muted-foreground text-center py-4">No scouted data on this squad yet.</p>
         )}
-        {modelOnlyRoster && <p data-cm-kleague-roster className="text-[9px] text-yellow-500/80 pt-2">No verified opening roster is held for this club. Its starting players are generated; players signed later belong to this save. Ratings and values are game estimates.</p>}
+        {modelOnlyRoster && <p data-cm-kleague-roster={cslModel ? undefined : true} data-cm-csl-roster={cslModel || undefined} className="text-[9px] text-yellow-500/80 pt-2">No verified opening roster is held for this club. Its starting players are generated; players signed later belong to this save. Ratings and values are game estimates.</p>}
         {!modelOnlyRoster && isPartialClub(clubName, career.eraId) && roster.length > 0 && (
           <p className="text-[9px] text-yellow-500/80 pt-2">The market data covers only part of this squad.</p>
         )}

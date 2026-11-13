@@ -61,7 +61,10 @@ jobs:
           npx playwright install --with-deps chromium
           python -m pip install fonttools pillow
       - name: Preserve accepted MMA and boxing engines and saves
-        run: git diff --exit-code 1c10e7e5c11a3d502afb16070af462086874014d HEAD -- src/lib/mmaPromotion.ts src/hooks/useMmaPromotion.ts src/lib/fightPromoter.ts src/hooks/useFightPromoter.ts
+        run: |
+          git diff --exit-code 1c10e7e5c11a3d502afb16070af462086874014d HEAD -- src/lib/mmaPromotion.ts src/hooks/useMmaPromotion.ts
+          # Round 1546 made Boxing Promoter fighter IDs durable across reloads.
+          git diff --exit-code 43e54bd9a54aaa8a252cd7d53b3feaa968478928 HEAD -- src/lib/fightPromoter.ts src/hooks/useFightPromoter.ts
       - name: Type check and build
         id: build
         run: |

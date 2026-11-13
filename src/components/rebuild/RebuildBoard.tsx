@@ -47,7 +47,7 @@ const SEAT_COUNTS = Array.from({ length: MAX_SEATS }, (_, i) => i + 1);
 
 export function RebuildBoard() {
   const {
-    phase, loading, clubs, club, preset, setPreset, chooseClub, reset,
+    phase, loading, loadFailed, saveConflict, retryLoading, clubs, club, preset, setPreset, chooseClub, reset,
     run,
     seats, seat, solo, setSeatKinds, takeSeat, passOn, scoreboard, sharedSeason,
     startingXi, startRating, currentRating, target, budget, spendCeiling, finalFunds, objectives, grade, shareText,
@@ -56,13 +56,13 @@ export function RebuildBoard() {
     pickFinance, toManager, hireManager, keepManager, setFormation,
     spinning, spin, keepSpun, sellSpun, takeReplacement, promoteBench, takeForty, redealSpun,
     thinking, raiseWar, walkAway,
-    finish, rivals, rivalsLoading, season,
+    finish, rivals, rivalsLoading, season, seasonFailed, retrySeason,
   } = useRebuild();
   // Round 61: the owner's no scroll rule. Every phase change (envelopes, spin,
   // results) pulls the new screen into view instead of leaving the player
   // looking at the old one. Round 461: a hand over is a phase change too, and
   // so is the next seat's window, so the key carries the seat.
-  const revealRef = useRevealScroll<HTMLDivElement>(`${phase}|${seat?.index ?? 0}`);
+  const revealRef = useRevealScroll<HTMLDivElement>(saveConflict ? 'save-conflict' : `${phase}|${seat?.index ?? 0}`);
   const [copied, setCopied] = useState(false);
 
   // Round 333: while the wheel spins, the highlight cycles the unresolved
@@ -86,6 +86,19 @@ export function RebuildBoard() {
       setTimeout(() => setCopied(false), 2000);
     } catch { /* clipboard blocked */ }
   };
+
+  if (saveConflict || loadFailed) {
+    return (
+      <div ref={saveConflict ? revealRef : undefined} data-no-prerender role="alert" className="mx-auto max-w-2xl px-4 py-16 text-center">
+        <p className="font-semibold text-foreground">
+          {saveConflict ? 'Your saved window changed in another tab.' : 'Rebuild could not load its club data.'}
+        </p>
+        <button type="button" onClick={saveConflict ? () => window.location.reload() : retryLoading} className="mt-4 min-h-11 rounded-full bg-primary px-6 text-sm font-bold text-primary-foreground">
+          {saveConflict ? 'Reload saved window' : 'Retry loading'}
+        </button>
+      </div>
+    );
+  }
 
   if (loading && phase === 'pick-club') {
     return (
@@ -687,7 +700,15 @@ export function RebuildBoard() {
                   ))}
               </div>
             )}
-            {!rivalsLoading && (!rivals || rivals.length === 0) && (
+            {seasonFailed && (
+              <div className="mt-2 space-y-1">
+                <p role="alert" className="text-xs text-muted-foreground">The season couldn’t load. Try again.</p>
+                <button type="button" onClick={retrySeason} className="min-h-11 rounded-lg border border-border px-3 text-xs font-bold">
+                  Retry season
+                </button>
+              </div>
+            )}
+            {!seasonFailed && !rivalsLoading && (!rivals || rivals.length === 0) && (
               <p className="mt-2 text-xs text-muted-foreground">The rivals sat this window out.</p>
             )}
           </div>

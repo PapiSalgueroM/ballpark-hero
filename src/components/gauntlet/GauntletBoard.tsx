@@ -5,9 +5,11 @@ import { ResultScreen } from '@/components/game/ResultScreen';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { getTodayET } from '@/lib/dateUtils';
 import { markRestoredFinish } from '@/lib/restoredFinish';
+import GauntletResumeNotice from './GauntletResumeNotice';
 import {
   buildDraft, dailySeedFor, decidedNote, displayScore, matchLine, GauntletConfig, GauntletDraftResult,
-  GauntletRun, loadDailyRun, runGauntlet, saveDailyRun, squadRatingOf,
+  GauntletRun, loadDailyDraft, loadDailyRun, restoreDailyPicks, runGauntlet,
+  saveDailyDraft, saveDailyRun, squadRatingOf,
 } from '@/lib/gauntletEngine';
 
 /**
@@ -52,6 +54,7 @@ export default function GauntletBoard<P>({ config, children }: Props<P>) {
   const [squad, setSquad] = useState<(P | null)[]>([]);
   const [run, setRun] = useState<GauntletRun | null>(null);
   const [shownMatches, setShownMatches] = useState(0);
+  const [dailyUnavailable, setDailyUnavailable] = useState(false);
 
   const slots = config.formations[0].slots.length;
   const noun = config.squadNoun;
@@ -62,33 +65,55 @@ export default function GauntletBoard<P>({ config, children }: Props<P>) {
     : r >= config.tierFloors[2] ? 'from-sky-400/25 to-sky-600/10 border-sky-400/50'
     : 'from-zinc-400/20 to-zinc-600/10 border-zinc-500/50';
 
+  const restoreDaily = useCallback(() => {
+    const saved = loadDailyRun(config, todayStr);
+    if (!saved) return false;
+    markRestoredFinish(config.gameId);
+    setMode('daily');
+    setDraft(null);
+    setRun(saved);
+    setShownMatches(saved.matches.length);
+    setPhase('done');
+    return true;
+  }, [config, todayStr]);
+
   const start = useCallback((m: Mode) => {
-    if (m === 'daily') {
-      const saved = loadDailyRun(config, todayStr);
-      if (saved) {
-        markRestoredFinish(config.gameId);
-        setMode('daily');
-        setDraft(null);
-        setRun(saved);
-        setShownMatches(saved.matches.length);
-        setPhase('done');
-        return;
-      }
-    }
+    setDailyUnavailable(false);
+    if (m === 'daily' && restoreDaily()) return;
     const seed = m === 'daily' ? dailySeedFor(config, todayStr) : Math.floor(Math.random() * 2147483645) + 1;
     const d = buildDraft(config, seed);
+    const saved = m === 'daily' ? loadDailyDraft(config, todayStr) : null;
+    const kept = saved ? restoreDailyPicks(config, d, saved) : [];
+    if (!kept) {
+      setDailyUnavailable(true);
+      return;
+    }
     setMode(m);
     setDraft(d);
-    setPickIndex(0);
-    setSquad(new Array<P | null>(d.formation.slots.length).fill(null));
+    setPickIndex(kept.length);
+    setSquad(d.formation.slots.map((_, i) => kept[i] ?? null));
     setRun(null);
     setShownMatches(0);
     setPhase('drafting');
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [config, todayStr]);
+  }, [config, restoreDaily, todayStr]);
 
   const keep = (p: P) => {
     if (!draft || phase !== 'drafting') return;
+    if (mode === 'daily') {
+      if (restoreDaily()) return;
+      const saved = loadDailyDraft(config, todayStr);
+      const kept = saved ? restoreDailyPicks(config, draft, saved) : [];
+      if (!kept) {
+        setDailyUnavailable(true);
+        setPhase('setup');
+        return;
+      }
+      if (kept.some((player, i) => player !== squad[i])) {
+        setPickIndex(kept.length);
+        setSquad(draft.formation.slots.map((_, i) => kept[i] ?? null));
+        return;
+      }
+    }
     const next = [...squad];
     next[pickIndex] = p;
     setSquad(next);
@@ -99,6 +124,7 @@ export default function GauntletBoard<P>({ config, children }: Props<P>) {
       setPhase('running');
       return;
     }
+    if (mode === 'daily') saveDailyDraft(config, todayStr, draft, next.slice(0, pickIndex + 1) as P[]);
     setPickIndex(i => i + 1);
   };
 
@@ -135,6 +161,7 @@ export default function GauntletBoard<P>({ config, children }: Props<P>) {
             <span className="block font-bold text-foreground">Daily gauntlet</span>
             <span className="block text-xs text-muted-foreground mt-0.5">{dailyDone ? "Today's draft is done. See how the cup went" : 'The same five card choices for everyone today'}</span>
           </button>
+          {dailyUnavailable && <GauntletResumeNotice />}
           <button onClick={() => start('unlimited')} className="w-full rounded-xl border border-border bg-surface-1 p-4 text-left hover:border-primary/50 hover:bg-primary/5 transition-colors">
             <span className="block font-bold text-foreground">Unlimited</span>
             <span className="block text-xs text-muted-foreground mt-0.5">A fresh draft every run</span>
@@ -214,7 +241,10 @@ export default function GauntletBoard<P>({ config, children }: Props<P>) {
           statRow={[{ label: 'Score', value: run.score }]}
           emojiGrid={[`${config.emoji} ${config.gameName}: ${run.score} pts`, ...run.matches.map(m => `${m.won ? '🟩' : '🟥'} ${matchLine(config, m)}`)].join('\n')}
           share={{ score: String(run.score), gameName: config.gameName, gamePath: config.gamePath }}
-          onPlayAgain={() => setPhase('setup')}
+          onPlayAgain={() => {
+            setRun(null);
+            setPhase('setup');
+          }}
           playAgainLabel={mode === 'daily' ? 'Back to modes' : 'New draft'}
           playNext={mode === 'daily' ? <p className="text-sm text-muted-foreground">Come back tomorrow for a new draft.</p> : undefined}
         >

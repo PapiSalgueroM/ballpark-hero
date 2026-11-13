@@ -55,7 +55,10 @@ vi.mock('sonner', () => ({ toast: {
 } }));
 /* The control's switch: the real entry, its press followed by one extra draw when the switch is on. */
 interface ToastOptions { duration?: number; action?: { label: string; onClick: (event: { preventDefault: () => void }) => void }; actionButtonStyle?: { height?: number; minWidth?: number } }
-const ctl = vi.hoisted(() => ({ extraDraw: false, playFirst: false, noHandOver: false, opens: [] as { year: number; seasons: number }[], toasts: [] as string[], dismissed: [] as number[], options: [] as ToastOptions[] }));
+const ctl = vi.hoisted(() => ({
+  extraDraw: false, playFirst: false, noHandOver: false, opens: [] as { year: number; seasons: number }[],
+  openedCareers: [] as UsCareerCore[], toasts: [] as string[], dismissed: [] as number[], options: [] as ToastOptions[],
+}));
 vi.mock('@/components/us-career/season/UsSeasonCentreEntry', async importOriginal => {
   const original = await importOriginal<typeof import('@/components/us-career/season/UsSeasonCentreEntry')>();
   const host = await import('@/components/us-career/season/UsSeasonCentreHost');
@@ -67,11 +70,16 @@ vi.mock('@/components/us-career/season/UsSeasonCentreEntry', async importOrigina
     /* the load first control: the OLD order, the season played before the viewer is asked for */
     const first = ctl.playFirst && centre ? { ...centre, ready: (from?: HTMLElement | null) => { props.onPlay(); return centre.ready(from); } } : centre;
     /* every season the host is asked to show is written down: its year and how many seasons its career holds */
-    const api = first ? { ...first, open: (r: UsSeasonCentreRequest) => { ctl.opens.push({ year: r.row.year, seasons: r.career.seasons.length }); first.open(r); } } : first;
+    const api = first ? { ...first, open: (r: UsSeasonCentreRequest) => {
+      ctl.opens.push({ year: r.row.year, seasons: r.career.seasons.length });
+      ctl.openedCareers.push(r.career);
+      first.open(r);
+    } } : first;
     return (
       <host.UsSeasonCentreOpen.Provider value={api}>
-        {/* the hand over control: the board before Release AN, which gave the entry nothing but its Play */}
-        <Entry {...props} played={ctl.noHandOver ? undefined : props.played} onPlay={() => { props.onPlay(); if (ctl.extraDraw) Math.random(); }} />
+        {/* The Play-only control supplies neither the board's handoff nor its current-save check. */}
+        <Entry {...props} played={ctl.noHandOver ? undefined : props.played} canPlay={ctl.noHandOver ? undefined : props.canPlay}
+          onPlay={() => { props.onPlay(); if (ctl.extraDraw) Math.random(); }} />
       </host.UsSeasonCentreOpen.Provider>
     );
   };
@@ -116,6 +124,19 @@ function seedSave(sport: UsCareerSport, pos: string, seed: string, eraId = 'now'
   localStorage.setItem(sport.saveKey, JSON.stringify({ c, phase: 'season', teamQuality: tq }));
 }
 const savedCareer = (sport: UsCareerSport): UsCareerCore => JSON.parse(localStorage.getItem(sport.saveKey)!).c;
+
+function otherTabsSameYearSave(sport: UsCareerSport): string {
+  const other = JSON.parse(localStorage.getItem(sport.saveKey)!) as { c: UsCareerCore; teamQuality: number };
+  const year = other.c.year;
+  other.c.ovr -= 15;
+  const rng = keyedRng(`same-year|other|${sport.slug}`);
+  sport.campBattle(other.c as never, other.teamQuality, rng);
+  sport.simSeason(other.c as never, other.teamQuality, rng);
+  expect(other.c.seasons).toHaveLength(1);
+  expect(other.c.seasons[0].year).toBe(year);
+  expect(other.c.seasons[0].games).toBeGreaterThan(0);
+  return JSON.stringify(other);
+}
 
 function mulberry32(a: number) {
   return () => {
@@ -194,6 +215,7 @@ beforeEach(() => {
   ctl.playFirst = false;
   ctl.noHandOver = false;
   ctl.opens.length = 0;
+  ctl.openedCareers.length = 0;
   ctl.toasts.length = 0;
   ctl.dismissed.length = 0;
   ctl.options.length = 0;
@@ -419,11 +441,14 @@ describe.each(BOUND)('$name My Career: watching changes nothing', ({ Board, spor
     expect(q('[data-season-centre]')).toBeNull();
   }, 60000);
 
-  /** From here on the browser refuses every write of this career's save, as a full storage does. */
-  function refuseTheSave() {
+  /** A competing save, when supplied, lands after Play starts but before its write is refused. */
+  function refuseTheSave(competingSave?: string) {
     const real = Storage.prototype.setItem;
     return vi.spyOn(Storage.prototype, 'setItem').mockImplementation(function (this: Storage, k: string, v: string) {
-      if (k === sport.saveKey) throw new Error('QuotaExceededError');
+      if (k === sport.saveKey) {
+        if (competingSave !== undefined) real.call(this, k, competingSave);
+        throw new Error('QuotaExceededError');
+      }
       real.call(this, k, v);
     });
   }
@@ -528,8 +553,8 @@ describe.each(BOUND)('$name My Career: watching changes nothing', ({ Board, spor
   it('CONTROL: without the board handing its career over, the same press plays the season and opens nothing', async () => {
     /* the needle: the entry asks the board for the played career exactly once, after its one call of Play */
     const src = fs.readFileSync(path.resolve(process.cwd(), 'src/components/us-career/season/UsSeasonCentreEntry.tsx'), 'utf8').replace(/\/\*[\s\S]*?\*\//g, '');
-    expect(src.split('at.played?.()')).toHaveLength(2);
-    expect(src.indexOf('onPlay();')).toBeLessThan(src.indexOf('at.played?.()'));
+    expect(src.split('at.played()')).toHaveLength(2);
+    expect(src.indexOf('onPlay();')).toBeLessThan(src.indexOf('at.played()'));
     ctl.noHandOver = true;
     seedSave(sport, pos, `full|${sport.slug}`);
     render(<MemoryRouter><Board /></MemoryRouter>);
@@ -548,7 +573,7 @@ describe.each(BOUND)('$name My Career: watching changes nothing', ({ Board, spor
     seedSave(sport, pos, `tab|${sport.slug}`);
     render(<MemoryRouter><Board /></MemoryRouter>);
     await flush();
-    /* another tab has saved this career one season on, in a different year, and this tab's own write is refused */
+    /* The other tab saves a different year while this Play is in progress. */
     const other = JSON.parse(localStorage.getItem(sport.saveKey)!) as { c: UsCareerCore; teamQuality: number };
     const year = other.c.year;
     other.c.year = year + 3;
@@ -558,9 +583,8 @@ describe.each(BOUND)('$name My Career: watching changes nothing', ({ Board, spor
     expect(other.c.seasons).toHaveLength(1);
     expect(other.c.seasons[0].year).toBe(year + 3);
     expect(other.c.seasons[0].games).toBeGreaterThan(0);
-    localStorage.setItem(sport.saveKey, JSON.stringify(other));
-    const stored = localStorage.getItem(sport.saveKey);
-    refuseTheSave();
+    const stored = JSON.stringify(other);
+    refuseTheSave(stored);
     await pressWatch();
     /* this tab played its own season in memory (the curtain is up under the viewer) and the stored line is
        still the other tab's. Since Release AN the viewer opens, on this tab's own season: the one line the
@@ -578,6 +602,66 @@ describe.each(BOUND)('$name My Career: watching changes nothing', ({ Board, spor
     expect(ctl.dismissed).toEqual([1]);
   }, 30000);
 
+  it('opens this tab’s season when the same player and year have a different result on disk', async () => {
+    seedSave(sport, pos, `same-year|${sport.slug}`, 'now', c => { c.summerSalt = '4a394b27'; });
+    render(<MemoryRouter><Board /></MemoryRouter>);
+    await flush();
+    const initial = savedCareer(sport);
+    const stored = otherTabsSameYearSave(sport);
+    const other = (JSON.parse(stored) as { c: UsCareerCore }).c;
+    expect(other.name).toBe(initial.name);
+    expect(initial.summerSalt).toBe('4a394b27');
+    expect(other.summerSalt).toBe(initial.summerSalt);
+    localStorage.setItem('unrelated-save', 'held');
+    const refusing = refuseTheSave(stored);
+
+    await pressWatch();
+    expect(localStorage.getItem(sport.saveKey)).toBe(stored);
+    expect(refusedNotice()).not.toBeNull();
+    const refusedBytes = refusing.mock.calls.find(([key]) => key === sport.saveKey)?.[1];
+    expect(refusedBytes).toBeDefined();
+    const played = (JSON.parse(refusedBytes!) as { c: UsCareerCore }).c;
+    expect(played.seasons[0]).not.toEqual(other.seasons[0]);
+    expect(ctl.opens).toEqual([{ year: initial.year, seasons: 1 }]);
+    expect(ctl.openedCareers).toEqual([played]);
+    await waitFor(() => expect(q('[data-season-centre]')).not.toBeNull(), { timeout: 4000 });
+    await click(q('[data-centre-exit]'));
+    expect(q('[data-season-reveal]')).not.toBeNull();
+    refusing.mockRestore();
+    await click([...refusedNotice()!.querySelectorAll('button')].find(b => squash(b.textContent ?? '') === 'Retry save'));
+    await waitFor(() => expect(q('[data-testid="save-moved-notice"]')).not.toBeNull());
+    expect(localStorage.getItem(sport.saveKey)).toBe(stored);
+    expect(localStorage.getItem('unrelated-save')).toBe('held');
+    expect(refusedNotice()).toBeNull();
+  }, 30000);
+
+  it.each([false, true])('keeps the contract talk open without watching a peer’s same-year save (Play-only: %s)', async diskOnly => {
+    ctl.noHandOver = diskOnly;
+    seedSave(sport, pos, `same-year-extension|${sport.slug}`, 'now', c => { c.contractYears = 1; });
+    render(<MemoryRouter><Board /></MemoryRouter>);
+    await flush();
+    const stored = otherTabsSameYearSave(sport);
+    if (diskOnly) localStorage.setItem(sport.saveKey, stored);
+    refuseTheSave(diskOnly ? undefined : stored);
+
+    await pressWatch();
+    expect(q('[data-extension-talk]')).not.toBeNull();
+    expect(q('[data-us-centre-cover]')).toBeNull();
+    expect(ctl.opens).toEqual([]);
+    expect(localStorage.getItem(sport.saveKey)).toBe(stored);
+  }, 30000);
+
+  it('opens the saved season for a caller that only supplies Play', async () => {
+    ctl.noHandOver = true;
+    seedSave(sport, pos, `disk-only|${sport.slug}`);
+    render(<MemoryRouter><Board /></MemoryRouter>);
+    await flush();
+
+    await pressWatch();
+    expect(ctl.openedCareers).toEqual([savedCareer(sport)]);
+    expect(savedCareer(sport).seasons).toHaveLength(1);
+  }, 30000);
+
   it('CONTROL: before the hand over, that press with another tab\'s line on the save opened nothing at all', async () => {
     ctl.noHandOver = true;
     seedSave(sport, pos, `tab|${sport.slug}`);
@@ -588,8 +672,7 @@ describe.each(BOUND)('$name My Career: watching changes nothing', ({ Board, spor
     const rng = keyedRng(`tab|other|${sport.slug}`);
     sport.campBattle(other.c as never, other.teamQuality, rng);
     sport.simSeason(other.c as never, other.teamQuality, rng);
-    localStorage.setItem(sport.saveKey, JSON.stringify(other));
-    refuseTheSave();
+    refuseTheSave(JSON.stringify(other));
     await pressWatch();
     ctl.noHandOver = false;
     /* the read back alone turns the other tab's line away (its year is not the year he pressed for) */
@@ -758,6 +841,19 @@ describe('a held year, a banned year, and the sports with no Season Center', () 
     expect(MLB_CAREER_SPORT.seasonCentreHeld).toBeTypeOf('function');
     expect(NHL_CAREER_SPORT.loadSeasonCentre).toBeUndefined();
     expect(UNBOUND.map(x => x[0])).toEqual(['NHL']);
+  });
+
+  it('keeps the NHL board unbound when another tab holds its same-year save', async () => {
+    const sport = NHL_CAREER_SPORT as UsCareerSport;
+    seedSave(sport, sport.create.defaultPos, 'same-year|nhl');
+    render(<MemoryRouter><NhlMyCareerBoard /></MemoryRouter>);
+    await flush();
+    const stored = otherTabsSameYearSave(sport);
+    localStorage.setItem(sport.saveKey, stored);
+    expect(playButton()).toBeDefined();
+    expect(q('[data-season-centre-entry]')).toBeNull();
+    expect(ctl.opens).toEqual([]);
+    expect(localStorage.getItem(sport.saveKey)).toBe(stored);
   });
   /* Round 1212, baseball's own holds, each sentence typed here whole: a pitcher, a club a game short in the real
      2026 season, a club outside the league, the 60 game season, and the Watch again link asking about the club

@@ -56,13 +56,14 @@ afterEach(() => { cleanup(); });
 
 describe('the US Season Center, mounted by itself', () => {
   it('walks an NBA season from the tip off card to the review and closes', async () => {
-    const career = playNba('centre-a', 2);
+    const career = playNba('centre-b', 2);
     const saved = JSON.stringify(career);
     const { row, onClose } = mount(WITH_LOADER, career);
     expect(document.querySelector('[data-season-centre-loading]')).not.toBeNull();
     await waitFor(() => expect(document.querySelector('[data-season-help]')).not.toBeNull());
     expect(document.querySelector('[data-us-season-centre]')).not.toBeNull();
     expect(document.querySelector('[data-season-help]')!.textContent).toContain('How the Season Center works');
+    expect(document.querySelector('[data-season-help]')!.textContent).toContain("add up to your team's saved record");
     press('Got it');
     const kick = document.querySelector('[data-kickoff]')!;
     expect(kick.textContent).toContain(NBA_CAREER_SPORT.teamLabelOf(row.team, career.eraId));
@@ -78,6 +79,9 @@ describe('the US Season Center, mounted by itself', () => {
     expect(document.querySelector('[data-record-panel]')).not.toBeNull();
     press('Sim the rest');
     const review = document.querySelector('[data-review]')!;
+    const record = `${(row as UsRow).clubWins}-${(row as UsRow).clubLosses}`;
+    expect(document.querySelector('[data-record-panel]')!.getAttribute('data-record')).toBe(record);
+    expect(review.querySelector('[data-review-finish]')!.textContent).toContain(record);
     expect(review.querySelector('[data-review-finish]')!.textContent).toContain(row.teamResult);
     expect(review.querySelector('[data-review-tile="Games"]')!.textContent).toContain(String(row.games));
     expect(review.querySelector('[data-review-tile="PPG"]')!.textContent).toContain(String((row as unknown as { ppg: number }).ppg));
@@ -86,6 +90,34 @@ describe('the US Season Center, mounted by itself', () => {
     /* nothing but the help flag was written, and the career in memory is untouched */
     expect(JSON.stringify(career)).toBe(saved);
     expect(Object.keys(localStorage)).toEqual(['seasonCentre:help:nba']);
+  });
+
+  it('matches the saved scoring average after watching the final NBA game', async () => {
+    const career = playNba('centre-b', 2);
+    const saved = JSON.stringify(career);
+    const { row } = mount(WITH_LOADER, career);
+    const ppg = (row as UsRow).ppg as number;
+    expect(ppg % 1).not.toBe(0);
+
+    await waitFor(() => expect(document.querySelector('[data-season-help]')).not.toBeNull());
+    press('Got it');
+    press('Tip off');
+    press('Results');
+    await waitFor(() => expect(document.querySelector('[data-full-time]')).not.toBeNull());
+    press('To the next big game');
+    press('Game 42');
+    await waitFor(() => expect(document.querySelector('[data-full-time]')).not.toBeNull());
+    press('To the next big game');
+    press('Game 82');
+    await waitFor(() => expect(document.querySelector('[data-full-time]')).not.toBeNull());
+
+    const averages = document.querySelector('[data-so-far]')!;
+    expect(averages.children[0].textContent).toBe(row.games + 'Played');
+    expect(averages.children[1].textContent).toBe(ppg.toFixed(1) + 'PPG');
+
+    press('Season review');
+    expect(document.querySelector('[data-review-tile="PPG"]')!.textContent).toBe(ppg + 'PPG');
+    expect(JSON.stringify(career)).toBe(saved);
   });
 
   it('shows one honest tile for a year whose real length is not the one the career plays', async () => {

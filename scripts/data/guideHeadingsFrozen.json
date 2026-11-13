@@ -429,7 +429,7 @@
         "On top of those, every board makes two specific asks a season, and they are the ones you go out and buy: get one more player from the club's own country into the squad, keep one more aged 30 or over, sign somebody in the thinnest line of your squad, sign somebody 21 or under at a rating floor, or spend a set fee or more on one signing. Which two you get is fixed for your club and your season, and every threshold is read off the market and the money you really have, so the pair can always be met and never costs more than the pot. Countries come from the same per-era map the market screen puts a flag next to his name with, so anyone it has no country for counts for nobody.",
         "Your inbox is not just the dressing room. The board chase an ask you have not met and you can take their money, give them your word or tell them no; an agent writes about a player of yours with a year left; your assistant argues about the training plan when it is wrong for the squad; the supporters trust write when the tickets are on premium; and a reporter wants a line on whether the squad is good enough. Each answer moves something with a screen behind it: the kitty, the board meter, a contract, the plan, the ticket price or the press mood. A word given to the board settles in the summer, three points of next season's opening confidence either way.",
         "League length and competition coverage follow the rules stated here: 38 rounds in the Premier League, 46 in the Championship, 34 in the Bundesliga, with the domestic cup from a round of 16 to the final and a full Champions League on top for qualified clubs.",
-        "Open the Cups panel to follow the whole Champions League, even when your club is not in it: table or groups, matchdays, knockouts and final. Tap a club to read its run. These are your game's simulated results.",
+        "In the current era, qualified clubs play eight Champions League matches in a 36-club league phase. The top eight go straight to the round of 16 and ninth to 24th play a two-leg playoff. Open Cups to follow the simulated draw, fixtures and results, even in seasons your club sits out.",
         "In England every season opens with the FA Community Shield, the league champions against the FA Cup winners (the league runners up when one club wins both): you play it from your second summer in charge if your club earns a place, and follow it from the Cups panel if not. Germany's Supercup and France's Trophée des Champions open the season the same way, Italy's Supercoppa is in for 2026-27, and the UEFA Super Cup has its own tile in Cups from the start (a new career follows the 2026 one, PSG against Aston Villa): win the Champions League or the Europa League and you play it.",
         "Serie B (20 clubs), Ligue 2 (18) and the Segunda División (20) sit under Serie A, Ligue 1 and La Liga, so the bottom three of Serie A and La Liga and the bottom two of Ligue 1 really go down and swap with the top of the division below every summer. The Segunda plays 20 of its real 22 clubs: Real Sociedad B and Celta Fortuna are reserve sides that don't play the Copa del Rey, so they're left out. The promotion playoffs, Serie B's playout and the French barrages aren't played, so it's a straight swap. Most second division squads are thin in the game's data (only Pisa and Verona in Serie B, Nantes, Saint-Étienne and Reims in Ligue 2, and Girona and Mallorca in the Segunda have eight or more real players), so the rest get topped up with made up youth players, marked as made up. These squads are last season's players that each club's 2026-27 squad list still names, so summer signings at these clubs aren't in yet.",
         "Brazil's Serie A is 20 clubs over 38 rounds with four going down and the Copa do Brasil as its cup. Three simplifications: it plays on the game's August to May calendar like MLS does rather than Brazil's own January to December one, the Copa Libertadores is not modelled, so a Brazilian club's season is the league and the cup, and clubs level on points are split by goal difference then goals scored, where the real table looks at wins first.",
@@ -437,6 +437,8 @@
         "The A-League Men is 12 clubs and nobody goes down, since Australia has no relegation. The real season is 26 games each (home and away plus four third meetings), and last season's finals series took the top six. Here it's a 22 round double round robin and the finals aren't played, so whoever tops the table wins it, and the board asks a contender to make the top six. The Australia Cup is for Australian clubs only from 2026, so Auckland FC and Wellington Phoenix play no cup at all, and with ten clubs in the draw six of them go straight to the quarter-finals. The squads are the twelve real 2026-27 squads, read in October 2026, and a player with no market value starts at the bottom of the rating scale rather than at a made up number. No Asian competition is modelled.",
         "The Russian Premier League is 16 clubs and 30 games. The bottom two go straight down; the real playoffs for the two places above them (13th and 14th against the fourth and third of the division below) aren't played. Russian clubs are suspended from UEFA's competitions, so the table hands out no European places. The Russian Cup really opens with groups for the top flight clubs; here it's a straight knockout with all sixteen in the draw. Clubs level on points are split by goal difference, then goals scored, where the real table looks at their games against each other first. Example: take Fakel Voronezh, finish 15th or 16th, and that goes on your record as a relegation, though the league keeps its sixteen clubs because the division below isn't in the game. The squads are the sixteen real 2026-27 squads, read in October 2026, every player found on at least two squad lists of his club, so a man on one list only isn't in. Eighteen players who still sit in another club's squad in the game (their old club) are left out for now rather than shown twice, and so are seven who share a name with a player the game already has.",
         "K League 1 keeps its 12 real 2026 members; 11 are ordinary jobs, while Gimcheon Sangmu remains an opponent without supported player or manager entry. All 12 opening squads are generated with no verified current roster here, so ratings, values and budgets are game estimates. It plays 22 league matches on the shared August to May calendar. The real 2026 league had 33 matches then five split matches, 38 in total. The split, Korea Cup, AFC competitions and promotion/relegation are not played. Points are 3 for a win, 1 for a draw and 0 for a loss; clubs level on points use the game's sorting rule, not a verified full K League ranking policy.",
+        "The 2026 Chinese Super League has 16 playable clubs and 30 matches per club. Squads, ratings, budgets, fixtures, dates and results are simulated. The first season starts with the real 2026 point deductions. The CFA Cup, Super Cup, AFC competitions and promotion and relegation are outside this league model.",
+        "J1 League has 20 playable clubs and 38 matches per club. The verified 2026/27 fixture list sets the first season's opponent and home or away designation. Dates, stadiums, results, squads, ratings and budgets are simulated. Later seasons use generated fixtures. The Emperor's Cup, J.League Cup, AFC competitions and J2 promotion and relegation are outside this league model.",
         "Each past era is a sealed world: real players and values from its own year, thin squads topped up with marked youth, no Conference League because it did not exist back then, and no 2026 player can leak into your market. Each era's giants rate like the legends they were, above anyone today: Messi and Ronaldo in 2015-16 and 2010-11, Ronaldinho and Henry in 2005-06. Money in 2020-21 was close to today's, so its stars rate about where they would now, Mbappé level with the best of 2026. Leicester still start 2015-16 at their honest pre-title level and 2005-06 boards still call the second European prize the UEFA Cup.",
         "A club you create starts with 24 generated players, honestly marked as made up. Every real player stays real, and the transfer market is where you sign them. Budgets run 15, 40 or 90 million pounds, and your backing sets your wage room. Start with a better squad than the money buys and it plays that well, but your made up players sell on at that money's squad prices, still rising as they improve. Every real player carries his real nationality, filterable by nation with real flags, resolved per era so a 2010 name never wears a 2026 flag.",
         "Two meters sit under the club name on every tab, words by default and the number out of 100 on tap. The board meter is the sack race itself: new Club Manager careers open at 69 for each new job, then from 35 to 82 after a season you stay for (an A or B opens at 69 or more, a D or F below 60). It swings with results, cup runs, promises to the press and position against expectation. Safe is 60 and above, Under pressure is 10 to 59, under 10 reads One bad week from the sack, and at zero you are sacked. With No sacking on, a result that would fire you leaves the board on 1 instead, and under 10 the meter reads Lost the board. Only a result can sack you: a press answer or a handshake with another club can take the board to its last point, never to zero. The fan meter is read off this season's results (recent ones count most), your position against the club's expectation, the ticket policy and the trophies lifted this season: Singing at 65 and above, Grumbling from 40 to 64, Turning under 40, Hopeful before a ball is kicked.",
@@ -1949,7 +1951,7 @@
         "The lineup card is real: a bench season is about half the games, a spot starter gets a dozen turns, springs have memory both ways, and signing with a stacked contender can cost a mid player the everyday job.",
         "The press reads your actual season: a ring puts you on the podium, missing October badly puts you in the scrum, a bench year brings the role question. Three answers each time, safe, honest or fiery, and fiery gambles your fanbase for real.",
         "Players grow toward their potential through age 26 and decline from 32 on, faster after 37.",
-        "Retirement hits at 42, after 21 seasons, or when your rating collapses. Before that, from 32, slipping 8 points off your best (or down to 68) brings the talk: retire now, one more year, or a farewell season. You can walk away after season 6.",
+        "Retirement hits at 42, after 21 seasons, or when your rating collapses. Before that, from 32, slipping 8 points off your best (or down to 68) brings the talk: retire now, one more year, or a farewell season. You can retire between seasons after finishing your first MLB season. Choose Hang them up now, then confirm to keep your record.",
         "Hall of Fame voters weigh the hardware first (rings, the major awards, All-Star years), then your seasons and your numbers, and a career total near the top of this game's books in a stat your position really piles up (home runs, RBI, steals, wins or strikeouts, though a reliever gets none) earns a push of its own, up to 390 legacy points.",
         "Example: take a center fielder with ordinary numbers and one with the same hardware and more steals than 99 of 100 center fielders this game has seen. The second scores at least 300 legacy points more, which can be the whole gap between a long wait and the Hall. A career you already retired keeps the ballot it was told.",
         "Money has rules of its own. There is a 1% fee on both sides of every trade and a $100k floor in the account that cannot be invested away; a season that leaves you under the floor is covered out of savings first, then by a forced sale of holdings at whatever the price is that day. Cards win 42% of hands and a win pays 1.15x the stake, the most you can stake is $50k or 4% of your cash, and once you are $500k down for your career the guys stop dealing you in for good. Keep sitting in while you are losing and somebody at home notices, which costs morale and fanbase.",
@@ -2408,27 +2410,25 @@
     },
     "/nfl-gauntlet-draft": {
       "howToPlay": [
-        "Pick the daily gauntlet (the same five card choices for everyone today) or unlimited for a fresh draft.",
-        "For each of the seven slots (QB, two RB, three WR, TE) read the five cards, star to bargain, and tap the one you keep.",
-        "After the seventh pick the knockout starts on its own: five rounds, one match each, revealed one at a time.",
-        "Survive a round for 16 points; lift the trophy for exactly 100."
+        "Daily gives everyone the same offers for the Eastern Time date. Use Unlimited when you want to see a different mix of quarterbacks, backs and pass catchers.",
+        "Each slot shows five candidates from its own position. Choose one and the board advances. A second running back goes into RB2, and the three wide receiver slots each take their own pick.",
+        "Once you choose a tight end, watch the playoff results. The next game appears if you win the current one. A loss ends the run, even if your roster rating was higher.",
+        "Four wins and a loss in the final earn 64 points. A fifth win adds another 16, and the trophy adds 20 more for a score of 100."
       ],
       "rules": [
-        "Every card is a real player off the same 2026 roster data NFL Front Office plays; every opponent club is invented on purpose.",
-        "The draft is scoped to the four skill positions (QB, RB, WR, TE) on purpose: their ratings are built from real production, the way the position data's own generator describes it, and every slot deals a genuine star-to-bargain spread. Offensive linemen and defenders are rated on thinner evidence (playing time, draft position and limited defensive measures, most of it marked e in NFL Front Office), so they stay out of the draft rather than padding it with picks that are not a real choice.",
-        "The five cards per slot are spread across the pool's rating range, so a top-tier card and a bargain are always both on the table.",
-        "No player is dealt twice in one draft.",
-        "The knockout is deterministic in your offense: scoring comes from the rating gap, level games go to overtime, and replaying the same seven replays the same cup.",
-        "Opposition ratings climb 79, 83, 88, 92, 97. A bargain offense usually falls in the first round, an elite one reaches the final as a slight underdog, and even a perfect draft lifts the trophy roughly one run in nine."
+        "The skill players come from the roster data used by NFL Front Office. The teams you face in the playoffs are fictional, and the scores come from the game.",
+        "The roster data has more detailed production for quarterbacks, running backs, wide receivers and tight ends. The draft uses those four positions, where each card can be graded on that evidence.",
+        "Each deal draws from different parts of the position's rating range.",
+        "A player who has already appeared in your draft will not be dealt again, so each receiver slot gives you new choices.",
+        "The playoff ladder is rated 79, 83, 88, 92 and 97. A tie goes to overtime. The game uses the same simulation for the same seven picks, so you need a different offense to see a different run."
       ],
       "example": [
-        "The quarterback slot deals a 93 next to an 88, an 82, a 76 and a 71. There is no cost to any of them, so the 93 is the pick unless you are chasing a specific team on the card.",
-        "Your finished offense rates 90. The Qualifier wins big, the Last Sixteen is tight, the Quarter Final needs overtime, and the Semi Final ends the run. Two rounds survived, 32 points, and the card you would redo is the 76 you took at the third receiver spot."
+        "Say the second running back deal has a 90 and a 78, and you prefer the 78 because he played for your favorite team. That costs 12 points across seven cards, so it lowers the offense average by about 1.7 before rounding. Giving up the same 12 points at quarterback would have exactly the same effect.",
+        "Imagine your first six picks add up to 540, an average of 90. Take a tight end rated 90 and your finished offense stays at 90. Take an 83 and it drops to 89. Either can beat the 92-rated semifinal opponent, but the stronger card gives your offense the better matchup."
       ],
       "tips": [
-        "The quarterback card carries the most weight of any single pick: a weak one drags the whole rating.",
-        "The bargain cards exist for flavor runs, not for winning. If the score is the goal, draft the biggest number that fits.",
-        "Champions need an offense in the mid nineties. Check your running rating under the cards as you go."
+        "Three receiver picks give you three chances to raise the average. Take those deals as seriously as the opening QB slot. A two-point gain on each receiver adds six rating points across the seven picks.",
+        "If you want to pick by favorite franchise or build around a particular player, try it on a fresh draft. On the daily board, compare the ratings at every spot if your aim is the highest possible score."
       ]
     },
     "/nfl-higher-lower": {
@@ -3280,19 +3280,42 @@
       "rules": [
         "15 guesses total, and correct answers consume guesses too, leaving room for 6 misses.",
         "Timers: Unlimited, 90, 60, or 40 seconds, starting on your first guess.",
+        "Timed rounds keep counting while answers are checked and while you are away. Reloading keeps the same deadline. A late answer does not count. Unlimited has no clock.",
         "Easy grids lean on clubs, leagues, and positions. Hard brings awards plus Champions League and World Cup winners.",
         "Rarity score is the average pick percentage across your correct cells. Lower is better.",
         "If the checker cannot verify an answer, you retry free with no guess burned."
       ],
       "example": [
         "Real Madrid crossed with France makes Karim Benzema the obvious green, at 44 percent. For Barcelona and Brazil you skip Neymar and submit Rivaldo: 6 percent, beautiful.",
-        "The last corner wants a Champions League winner who played in Serie A. One miss, then Kaka clicks in: 9 for 9, rarity 19 percent."
+        "The last corner wants a Champions League winner who played in Serie A. One miss, then Kaka clicks in: 9 for 9, rarity 19 percent.",
+        "Example: if checking finishes after the clock reaches 0, that late answer does not change the ended main round."
       ],
       "tips": [
         "Spend rare picks on the easy cells. Rarity is won where everyone answers.",
         "Journeymen who hopped leagues and countries cover the weird crossings.",
         "On a timer, plan all nine cells before your first submission starts the clock.",
         "Overtime lets you keep filling leftover cells with no effect on your recorded score."
+      ]
+    },
+    "/soccer-perfect-season": {
+      "howToPlay": [
+        "Choose Daily for the same club draw everyone gets that Eastern date, or Unlimited for a fresh draw.",
+        "Pick one player from the club on screen. Place them in a slot the game offers. You can open Upcoming clubs to see which players and ratings are coming.",
+        "Reroll up to twice in the draft. It replaces only the current club and keeps the others in order.",
+        "Once the XI is full, reveal results one at a time with Next match or finish all 38 in one go."
+      ],
+      "rules": [
+        "A win earns three league points. A draw earns one and ends the chance of perfection. Win all 38 for 114 points and a site score of 100.",
+        "Goalkeeper and striker ratings count twice. The game compares your XI with the strongest possible XI from the same final set of clubs to work out your odds.",
+        "Every offered slot keeps a route to a full XI. The strongest available XI guarantees all 38 wins."
+      ],
+      "example": [
+        "Say you have one open striker slot and one open winger slot. The final club has only a striker in the pool, so the current club must supply the winger. You can reroll the current club to look for a stronger winger if you still have a reroll.",
+        "If that XI wins 37 and draws one, it gets 112 points and a site score of 98. The team went unbeaten, and the draw ended its shot at a perfect season."
+      ],
+      "tips": [
+        "Check which upcoming clubs have a goalkeeper. When two picks can cover the same positions, compare their ratings before deciding who should take the slot with double weight.",
+        "Save a reroll for a pick where the other clubs have already narrowed your options. The rest of the draw stays in the same order."
       ]
     },
     "/sports-bingo": {
@@ -3717,15 +3740,19 @@
     },
     "/world-xi": {
       "howToPlay": [
-        "Pick one of 9 formations, a timer (none, 90 seconds or 60 seconds for the whole XI), and your respin budget.",
+        "Choose Expanded, Classic or 2026 Nations, then pick one of 9 formations, a timer (none, 90 seconds or 60 seconds for the whole XI), and your respin budget.",
         "Hit draw and the reel reveals your nations in random slot order.",
         "Type 2 or more letters and pick a player of that nationality who covers the slot.",
+        "The pool uses 2026 and 2025 records. Club, age and value come from each player's latest stored record, so some entries show an older club or age.",
         "Wrong position picks bounce off harmlessly with an explanation. Confirmed picks lock for good.",
         "Fill all 11 to win, then check squad value and chemistry, and simulate a season if you are curious. The report has a month by month tab, a player stats tab and a share card with your finish, top scorer and player of the season."
       ],
       "rules": [
-        "Every slot gets a different nation, and only countries with depth make the draw: at least 2 goalkeepers, 2 centre backs, 3 defenders, 3 midfielders and 2 strikers in the database.",
+        "Expanded uses more nations from the existing player pool, including countries that only cover a few positions. Every drawn nation still needs a player who fits its assigned slot, and all eleven nations are different.",
+        "Classic keeps the original depth rule: at least 2 goalkeepers, 2 centre backs, 3 defenders, 3 midfielders and 2 strikers in the database.",
+        "2026 Nations uses countries from the tournament that are available in the game. Players come from the existing game pool. The optional season simulation is still a 38-game club league.",
         "Respins reroll a nation you cannot solve, shared across all slots. You choose your budget before the draw: none, 3, 5 or 10, with 3 as the default.",
+        "The count below the nation shows unused player names that fit this slot. If it reaches zero, Replace empty nation (free) changes only this slot to a nation with an unused fitting name, if one is available. Your picks, timer and paid respins stay as they are.",
         "Position families count: wingers cover both flanks, central midfielders cover holding and attacking slots, strikers and centre forwards swap freely, full backs cover wing back slots. Front line winger slots take wingers and wide midfielders only, never wing backs.",
         "The timer covers the whole run, and zero on the clock ends it. The season sim rates your XI out of 100 across a 38 game, 20 team league.",
         "The season report runs month by month with a standout each month, gives every player his appearances, goals, assists, average rating and, for the keeper and back line, the clean sheets in the games he played (goals and assists add up to the team totals), hands out player, young player and goal of the season, and names the one shape or respin the sim says would have moved the finish most, as arithmetic on the same rolls and never a promise. Nobody real is quoted in it."
@@ -3736,7 +3763,7 @@
       ],
       "tips": [
         "Bank time on the easy slots. In timed modes the clock is the real opponent.",
-        "Spend respins on goalkeepers and centre backs, where thin footballing nations truly have nobody famous.",
+        "Save respins for nations and positions you find hardest. Try Classic if you want deeper player pools while learning the game.",
         "Suggestions only show players from the drawn country, so an empty list means wrong spelling or wrong idea."
       ]
     }

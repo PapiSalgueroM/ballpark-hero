@@ -2,7 +2,8 @@ import { act, cleanup, fireEvent, render, renderHook, waitFor, within } from '@t
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { BudgetBuilderBoard } from '@/components/budget-builder/BudgetBuilderBoard';
 import { FORMATIONS, playerRating } from '@/lib/squadDeal';
-import type { BudgetBuilderState } from '@/hooks/useBudgetBuilder';
+import { CRITERIA, type BudgetBuilderState } from '@/hooks/useBudgetBuilder';
+import { dailyIndex } from '@/lib/dateUtils';
 import type { Player } from '@/types/game';
 import { recordCompletion } from '@/lib/completions';
 import styles from '@/components/budget-builder/BudgetBuilderBoard.module.css';
@@ -64,7 +65,91 @@ const confirm = (view: ReturnType<typeof render>) => {
 const field = (view: ReturnType<typeof render>, label: string) => within(view.container.querySelector<HTMLElement>('[data-budget-preview]')!).getByText(label).nextElementSibling;
 const sign = (view: ReturnType<typeof render>, value: Player, index = 0) => { open(view, index); preview(view, value); confirm(view); };
 
+describe('Budget Builder Eastern board date', () => {
+  const beforeMidnight = new Date('2026-11-12T04:59:30Z');
+  const afterMidnight = new Date('2026-11-12T05:00:30Z');
+  const demand = (date: string, today = true) => {
+    const eligible = CRITERIA.filter(c => today || !c.todayOnly);
+    return eligible[dailyIndex(date, eligible.length)];
+  };
+
+  it.each(['reset', 'formation'] as const)('uses the new demand when a fresh XI starts by %s', async action => {
+    vi.setSystemTime(beforeMidnight);
+    const view = await start();
+    const oldDemand = demand('2026-11-11');
+    const newDemand = demand('2026-11-12');
+    expect(oldDemand).not.toBe(newDemand);
+    expect(boundary.state!.criterion).toBe(oldDemand);
+    fireEvent.click(view.getByRole('button', { name: 'Reset' }));
+    expect(boundary.state!.criterion).toBe(oldDemand);
+    sign(view, xi[0]);
+
+    vi.setSystemTime(afterMidnight);
+    if (action === 'reset') fireEvent.click(view.getByRole('button', { name: 'Reset' }));
+    else fireEvent.change(view.getByRole('combobox', { name: 'Choose formation' }), { target: { value: FORMATIONS[1].name } });
+    expect(boundary.state!.filled).toBe(0);
+    expect(boundary.state!.criterion.id).toBe(newDemand.id);
+    expect(view.getByText(`${newDemand.emoji} ${newDemand.label}`)).toBeVisible();
+    expect(recordCompletion).not.toHaveBeenCalled();
+  });
+
+  it('keeps an open Final and its demand until changing to a different market', async () => {
+    vi.setSystemTime(beforeMidnight);
+    const view = await start();
+    xi.forEach((player, index) => sign(view, player, index));
+    fireEvent.click(view.getByRole('button', { name: /Play the Final vs the Money XI/ }));
+    const final = boundary.state!;
+    expect(final.series).not.toBeNull();
+    expect(final.criterion).toBe(demand('2026-11-11'));
+    expect(recordCompletion).toHaveBeenCalledTimes(1);
+
+    vi.setSystemTime(afterMidnight);
+    view.rerender(<BudgetBuilderBoard />);
+    fireEvent.click(view.getByRole('button', { name: /Today The 2026 market/ }));
+    expect(boundary.state!.squad).toBe(final.squad);
+    expect(boundary.state!.series).toBe(final.series);
+    expect(boundary.state!.criterion).toBe(final.criterion);
+    expect(boundary.state!.finalScore).toBe(final.finalScore);
+    expect(boundary.state!.shareText).toBe(final.shareText);
+
+    fireEvent.click(view.getByRole('button', { name: /2015 Prime Messi vs prime Ronaldo money/ }));
+    await view.findByRole('button', { name: 'GK slot 1: empty' });
+    expect(boundary.state!.criterion).toBe(demand('2026-11-12', false));
+    expect(boundary.state!.series).toBeNull();
+    expect(recordCompletion).toHaveBeenCalledTimes(1);
+  });
+});
+
 describe('Budget Builder signing decisions', () => {
+  it('keeps signings and the Final when selecting the current market again', async () => {
+    const view = await start();
+    xi.forEach((player, index) => sign(view, player, index));
+    fireEvent.click(view.getByRole('button', { name: /Play the Final vs the Money XI/ }));
+    const final = boundary.state!;
+    expect(final.series).not.toBeNull();
+    expect(recordCompletion).toHaveBeenCalledTimes(1);
+
+    fireEvent.click(view.getByRole('button', { name: /Today The 2026 market/ }));
+    expect(boundary.state!.squad).toBe(final.squad);
+    expect(boundary.state!.remaining).toBe(final.remaining);
+    expect(boundary.state!.series).toBe(final.series);
+    expect(view.getByText(`Score: ${final.finalScore}`)).toBeVisible();
+
+    const historical = /2015 Prime Messi vs prime Ronaldo money/;
+    fireEvent.click(view.getByRole('button', { name: historical }));
+    await view.findByRole('button', { name: 'GK slot 1: empty' });
+    expect(boundary.state!.era.id).toBe('y2015');
+    expect(boundary.state!.filled).toBe(0);
+    expect(boundary.state!.series).toBeNull();
+
+    sign(view, xi[0]);
+    const historicalSquad = boundary.state!.squad;
+    fireEvent.click(view.getByRole('button', { name: historical }));
+    expect(boundary.state!.squad).toBe(historicalSquad);
+    expect(boundary.state!.filled).toBe(1);
+    expect(recordCompletion).toHaveBeenCalledTimes(1);
+  });
+
   it('previews exact existing values without spending and cancels back to the original candidate', async () => {
     const view = await start(); open(view);
     expect(view.getByRole('textbox')).toHaveFocus();

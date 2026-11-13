@@ -73,7 +73,7 @@ export interface TableZone { from: number; to: number; fixed: [key: string, insi
 
 export type TeamTarget =
   | { kind: 'finish'; finish: number; title: boolean; champion: 'mine' | 'other' | { key: string }; zone?: TableZone }
-  | { kind: 'record'; winsMin: number; winsMax: number }
+  | { kind: 'record'; winsMin: number; winsMax: number; saved?: true }
   | { kind: 'band'; ppgMin: number; ppgMax: number }
   | { kind: 'none' };
 
@@ -555,8 +555,8 @@ function bounds(L: Locks, r: number, k: number, homeSide: boolean): [number, num
 }
 
 /** One goal moved so that `slot` gains (dir 1) or loses (dir -1) points, or false. */
-function nudge(board: Board, L: Locks, slot: number, dir: 1 | -1, rng: Rng): boolean {
-  const opts: [number, number, number, number][] = []; // r, k, index in tuple (2 or 3), delta
+function nudge(board: Board, L: Locks, slot: number, dir: 1 | -1, rng: Rng, keepMargin: boolean): boolean {
+  const opts: [number, number, number, number, number?][] = []; // round, game, side, delta, opposite delta
   board.forEach((pairs, r) => pairs.forEach((g, k) => {
     if (g[0] !== slot && g[1] !== slot) return;
     const home = g[0] === slot;
@@ -565,6 +565,11 @@ function nudge(board: Board, L: Locks, slot: number, dir: 1 | -1, rng: Rng): boo
     if (!sb || !ob) return;
     const s = g[si]; const o = g[oi];
     if (L.wide) {
+      // An exact saved record can need several flips. Keep the original score margin when both sides can take it.
+      if (keepMargin && (dir === 1 ? s < o : s > o) && o >= sb[0] && o <= sb[1] && s >= ob[0] && s <= ob[1]) {
+        opts.push([r, k, si, o - s, s - o]);
+        return;
+      }
       /* a record sport: a lost or drawn game becomes a one point win, a won or drawn one a one point loss */
       if (dir === 1 && s <= o && o + 1 <= sb[1]) opts.push([r, k, si, o + 1 - s]);
       if (dir === -1 && s >= o && s + 1 <= ob[1]) opts.push([r, k, oi, s + 1 - o]);
@@ -580,8 +585,9 @@ function nudge(board: Board, L: Locks, slot: number, dir: 1 | -1, rng: Rng): boo
     }
   }));
   if (opts.length === 0) return false;
-  const [r, k, idx, d] = opts[Math.floor(rng() * opts.length)];
+  const [r, k, idx, d, oppositeDelta] = opts[Math.floor(rng() * opts.length)];
   board[r][k][idx] += d;
+  if (oppositeDelta !== undefined) board[r][k][idx === 2 ? 3 : 2] += oppositeDelta;
   return true;
 }
 
@@ -669,13 +675,15 @@ function playAttempt<R, C>(sport: SeasonSport<R, C>, frame: Frame, rounds: [numb
     }
     return m.home ? [h, a, us, them] : [h, a, them, us];
   }));
+  const keepMargin = target.kind === 'record' && target.saved === true;
   for (let n = 0; n <= REPAIRS; n += 1) {
     const v = violation(board, frame, target, slotOf);
     if (!v) return { board, repairs: n };
     if (n === REPAIRS) break;
     const first = v.alt && rng() < 0.5 ? v.alt : v;
     const second = first === v ? v.alt : v;
-    if (!nudge(board, L, first.slot, first.dir, rng) && !(second && nudge(board, L, second.slot, second.dir, rng))) break;
+    if (!nudge(board, L, first.slot, first.dir, rng, keepMargin)
+      && !(second && nudge(board, L, second.slot, second.dir, rng, keepMargin))) break;
   }
   return null;
 }

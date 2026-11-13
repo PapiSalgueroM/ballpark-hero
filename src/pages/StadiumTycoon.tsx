@@ -171,15 +171,21 @@ export default function StadiumTycoon() {
           ))}
         </div>
 
-        {g.gearSaveBlocked && <p role="alert" data-no-prerender className="mb-3 rounded-xl border border-destructive/40 bg-destructive/10 p-3 text-xs">Title equipment could not be saved, so no new equipment was added. Your existing pairs are safe. Allow device storage before earning another title.</p>}
-        {g.ticketSaveFailed && (
+        {g.saveMoved && room !== 'academy' && (
+          <div role="alert" data-no-prerender className="mb-3 rounded-xl border border-border bg-card p-3 text-sm">
+            <p>Stadium progress moved on in another tab. Reload to carry on.</p>
+            <button type="button" onClick={() => window.location.reload()} className="mt-2 min-h-11 rounded-full border border-primary px-3 font-bold">Reload</button>
+          </div>
+        )}
+        {!g.saveMoved && g.gearSaveBlocked && <p role="alert" data-no-prerender className="mb-3 rounded-xl border border-destructive/40 bg-destructive/10 p-3 text-xs">Title equipment could not be saved, so no new equipment was added. Your existing pairs are safe. Allow device storage before earning another title.</p>}
+        {!g.saveMoved && g.ticketSaveFailed && (
           <div role="alert" data-tycoon-save-notice data-no-prerender className="mb-3 rounded-xl border border-destructive/40 bg-destructive/10 p-3 text-xs">
             <p>Stadium progress is not saved on this device. Keep this page open and retry.</p>
             <button type="button" onClick={g.retryTicketSave} className="mt-2 min-h-11 min-w-11 rounded-full border border-destructive/50 px-3 font-bold">Retry save</button>
           </div>
         )}
-        <StadiumRoom g={g} visible={room === 'stadium'} onNeedsYou={setStadiumNeedsYou} />
-        <LeagueRoom g={g} visible={room === 'league'} />
+        <StadiumRoom g={g} visible={room === 'stadium' && !g.saveMoved} onNeedsYou={setStadiumNeedsYou} />
+        <LeagueRoom g={g} visible={room === 'league' && !g.saveMoved} />
         {academyOpened && (
           <Suspense fallback={<div className="h-40" />}>
             <AcademyPanel stylesReady visible={room === 'academy'} onStatus={setAcademyStatus} onSnapshot={onAcademySnapshot} />

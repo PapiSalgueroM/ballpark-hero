@@ -2,6 +2,76 @@ import type { GameContentMap } from './types';
 
 // Soccer game guides, batch 1. Casual human tone, no em dashes anywhere.
 export const SOCCER_CONTENT_1: GameContentMap = {
+  '/soccer-perfect-season': {
+    intro: [
+      "In Soccer Perfect Season, 11 real clubs come up in a random order and you take one player from each. Fit them into a 4-3-3, then see if your XI can win every match in a 38-game season.",
+      "The big name in front of you is only half the pick. Look at the clubs still to come before using your last centre-back slot, and save a reroll for a club whose available players leave you with a tough decision.",
+    ],
+    headings: {
+      howToPlay: "How to play Soccer Perfect Season and draft your starting XI",
+      rules: "Soccer Perfect Season rules for rerolls and scoring",
+      example: "Soccer Perfect Season example with 37 wins and a draw",
+      tips: "Soccer Perfect Season tips for placing your players",
+      faq: "Soccer Perfect Season questions about Daily and Unlimited",
+    },
+    howToPlaySections: [
+      {
+        heading: "Choose Daily or Unlimited",
+        items: ["Choose Daily for the same club draw everyone gets that Eastern date, or Unlimited for a fresh draw."],
+      },
+      {
+        heading: "Fit the players into your XI",
+        items: ["Pick one player from the club on screen. Place them in a slot the game offers. You can open Upcoming clubs to see which players and ratings are coming."],
+        subsections: [
+          {
+            heading: "When to reroll a club",
+            items: ["Reroll up to twice in the draft. It replaces only the current club and keeps the others in order."],
+          },
+        ],
+      },
+      {
+        heading: "Play all 38 matches",
+        items: ["Once the XI is full, reveal results one at a time with Next match or finish all 38 in one go."],
+      },
+    ],
+    ruleSections: [
+      {
+        heading: "What counts as a perfect season",
+        items: ["A win earns three league points. A draw earns one and ends the chance of perfection. Win all 38 for 114 points and a site score of 100."],
+      },
+      {
+        heading: "How the game sets match odds",
+        items: [
+          "Goalkeeper and striker ratings count twice. The game compares your XI with the strongest possible XI from the same final set of clubs to work out your odds.",
+          "Every offered slot keeps a route to a full XI. The strongest available XI guarantees all 38 wins.",
+        ],
+      },
+    ],
+    exampleSections: [
+      {
+        heading: "Finding the last winger",
+        paragraphs: ["Say you have one open striker slot and one open winger slot. The final club has only a striker in the pool, so the current club must supply the winger. You can reroll the current club to look for a stronger winger if you still have a reroll."],
+      },
+      {
+        heading: "Finishing just short of 38 wins",
+        paragraphs: ["If that XI wins 37 and draws one, it gets 112 points and a site score of 98. The team went unbeaten, and the draw ended its shot at a perfect season."],
+      },
+    ],
+    tipSections: [
+      {
+        heading: "Keep an eye on the last few clubs",
+        items: [
+          "Check which upcoming clubs have a goalkeeper. When two picks can cover the same positions, compare their ratings before deciding who should take the slot with double weight.",
+          "Save a reroll for a pick where the other clubs have already narrowed your options. The rest of the draw stays in the same order.",
+        ],
+      },
+    ],
+    faqs: [
+      { q: "Can I continue a season later?", a: "Yes. Daily and Unlimited save separately in this browser. Starting a fresh Unlimited run replaces only its Unlimited save." },
+      { q: "Where do the players come from?", a: "The draft uses real player names and clubs from the site's October 2026 player pool. Strength ratings and season results are generated for the game." },
+      { q: "Will a reroll change tomorrow's Daily?", a: "No. Each Eastern date has its own draw. A reroll only changes your current club in the run you are playing." },
+    ],
+  },
       '/budget-builder': {
     intro: [
       "Budget Builder gives you a huge pot of transfer money and one job: sign the best eleven the market allows. Prices are real market values, so every superstar you grab starves another position.",
@@ -699,9 +769,9 @@ export const SOCCER_CONTENT_1: GameContentMap = {
     },
     howToPlaySections: [
       {
-        heading: "Picking a formation, a timer and a respin budget",
+        heading: "Picking a nation pool, formation, timer and respin budget",
         items: [
-          "Pick one of 9 formations, a timer (none, 90 seconds or 60 seconds for the whole XI), and your respin budget.",
+          "Choose Expanded, Classic or 2026 Nations, then pick one of 9 formations, a timer (none, 90 seconds or 60 seconds for the whole XI), and your respin budget.",
         ],
       },
       {
@@ -714,6 +784,7 @@ export const SOCCER_CONTENT_1: GameContentMap = {
         heading: "Typing a player who covers the nation and slot",
         items: [
           "Type 2 or more letters and pick a player of that nationality who covers the slot.",
+          "The pool uses 2026 and 2025 records. Club, age and value come from each player's latest stored record, so some entries show an older club or age.",
         ],
         subsections: [
           {
@@ -733,15 +804,18 @@ export const SOCCER_CONTENT_1: GameContentMap = {
     ],
     ruleSections: [
       {
-        heading: "Drafting only nations with real squad depth",
+        heading: "Choosing nations that can cover each slot",
         items: [
-          "Every slot gets a different nation, and only countries with depth make the draw: at least 2 goalkeepers, 2 centre backs, 3 defenders, 3 midfielders and 2 strikers in the database.",
+          "Expanded uses more nations from the existing player pool, including countries that only cover a few positions. Every drawn nation still needs a player who fits its assigned slot, and all eleven nations are different.",
+          "Classic keeps the original depth rule: at least 2 goalkeepers, 2 centre backs, 3 defenders, 3 midfielders and 2 strikers in the database.",
+          "2026 Nations uses countries from the tournament that are available in the game. Players come from the existing game pool. The optional season simulation is still a 38-game club league.",
         ],
       },
       {
         heading: "Spending a shared respin budget on tough nations",
         items: [
           "Respins reroll a nation you cannot solve, shared across all slots. You choose your budget before the draw: none, 3, 5 or 10, with 3 as the default.",
+          "The count below the nation shows unused player names that fit this slot. If it reaches zero, Replace empty nation (free) changes only this slot to a nation with an unused fitting name, if one is available. Your picks, timer and paid respins stay as they are.",
         ],
       },
       {
@@ -777,7 +851,7 @@ export const SOCCER_CONTENT_1: GameContentMap = {
       {
         heading: "Spending respins on the thinnest nations",
         items: [
-          "Spend respins on goalkeepers and centre backs, where thin footballing nations truly have nobody famous.",
+          "Save respins for nations and positions you find hardest. Try Classic if you want deeper player pools while learning the game.",
         ],
       },
       {
@@ -788,6 +862,10 @@ export const SOCCER_CONTENT_1: GameContentMap = {
       },
     ],
     faqs: [
+      {
+        q: "What does 2026 Nations change?",
+        a: "It changes the country draw to nations from the 2026 tournament that have players in the existing game pool. The count on setup shows how many are available. Draws and respins still check positions and keep eleven different nations.",
+      },
       {
         q: "What is the chemistry bonus?",
         a: "Extra points for pairs of picked players who share a club or a league. Bragging rights on top of the finish, not a requirement.",

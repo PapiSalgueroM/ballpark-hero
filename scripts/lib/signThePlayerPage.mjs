@@ -60,7 +60,6 @@ export * as ReactDom from '${root}/node_modules/react-dom/client.js';
 export * as TL from '${root}/node_modules/@testing-library/react/dist/index.js';
 export { AuthProvider } from '${root}/src/contexts/AuthContext.tsx';
 export { MemoryRouter } from '${root}/node_modules/react-router-dom/dist/index.js';
-export { QueryClient, QueryClientProvider } from '${root}/node_modules/@tanstack/react-query/build/modern/index.js';
 export { HelmetProvider } from '${root}/node_modules/react-helmet-async/lib/index.esm.js';
 `);
   execSync(`"${root}/node_modules/.bin/esbuild" "${ENTRY}" --bundle --format=cjs --platform=browser --jsx=automatic --alias:@=${root}/src --outfile="${BUNDLE}" --log-level=error --define:process.env.NODE_ENV='"development"' --define:global=globalThis`,
@@ -107,7 +106,7 @@ export { HelmetProvider } from '${root}/node_modules/react-helmet-async/lib/inde
   win.clearTimeout = id => cancelled.add(id);
 
   const mod = require2(BUNDLE);
-  const { Page, React, ReactDom, TL, AuthProvider, MemoryRouter, QueryClient, QueryClientProvider, HelmetProvider } = mod;
+  const { Page, React, ReactDom, TL, AuthProvider, MemoryRouter, HelmetProvider } = mod;
   const { act } = TL;
 
   const settle = async () => {
@@ -123,12 +122,10 @@ export { HelmetProvider } from '${root}/node_modules/react-helmet-async/lib/inde
     const policy = POLICIES[n % POLICIES.length];
     const host = win.document.createElement('div');
     win.document.body.appendChild(host);
-    const qc = new QueryClient({ defaultOptions: { queries: { retry: false } } });
     const tree = React.createElement(HelmetProvider, null,
-      React.createElement(QueryClientProvider, { client: qc },
-        React.createElement(AuthProvider, null,
-          React.createElement(MemoryRouter, { initialEntries: ['/sign-the-player'] },
-            React.createElement(Page)))));
+      React.createElement(AuthProvider, null,
+        React.createElement(MemoryRouter, { initialEntries: ['/sign-the-player'] },
+          React.createElement(Page))));
     const reactRoot = ReactDom.createRoot(host);
     await act(async () => { reactRoot.render(tree); });
     await settle();

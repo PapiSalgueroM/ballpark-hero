@@ -16,6 +16,7 @@ export function BudgetBuilderBoard() {
     spent, remaining, filled, complete, teamRating,
     criterion, criterionMet, moneyRating, series, playFinal, finalScore,
     sign, release, reset, shareText,
+    marketUnavailable, retryMarket,
   } = useBudgetBuilder();
   // Round 66: the owner's no scroll rule. Filling the last slot completes the
   // squad, and the verdict card appears at the bottom, so it pulls itself into
@@ -99,11 +100,43 @@ export function BudgetBuilderBoard() {
     } catch { /* clipboard blocked */ }
   };
 
-  if (loading) {
+  const marketPicker = (
+    <div className="mb-3 grid grid-cols-3 gap-2">
+      {BB_ERAS.map(e => (
+        <button
+          key={e.id}
+          onClick={() => setEra(e.id)}
+          className={`rounded-xl border px-2 py-2 text-center transition-colors ${
+            era.id === e.id ? 'border-primary bg-primary/10' : 'border-border bg-card hover:border-primary/40'
+          }`}
+        >
+          <div className="text-lg">{e.emoji}</div>
+          <div className="text-xs font-bold text-foreground">{e.label}</div>
+          <div className="text-[9px] text-muted-foreground">{e.blurb}</div>
+        </button>
+      ))}
+    </div>
+  );
+
+  if (loading || marketUnavailable) {
     return (
-      <div className="mx-auto max-w-3xl px-4 py-16 text-center">
-        <div className="mx-auto h-6 w-40 animate-pulse rounded bg-muted" />
-        <p data-no-prerender className="mt-4 text-sm text-muted-foreground">Loading the market…</p>
+      <div className={`${styles.board} mx-auto max-w-3xl px-4 py-6`}>
+        {marketPicker}
+        <div data-no-prerender className="py-10 text-center">
+          {loading ? (
+            <>
+              <div className="mx-auto h-6 w-40 animate-pulse rounded bg-muted" />
+              <p className="mt-4 text-sm text-muted-foreground" role="status">Loading the market…</p>
+            </>
+          ) : (
+            <>
+              <p className="text-sm text-muted-foreground" role="status">{`Couldn't load the ${era.label} market.`}</p>
+              <button onClick={retryMarket} className="mt-3 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground">
+                Try again
+              </button>
+            </>
+          )}
+        </div>
       </div>
     );
   }
@@ -119,21 +152,7 @@ export function BudgetBuilderBoard() {
   return (
     <div className={`${styles.board} mx-auto max-w-3xl px-4 py-6`} data-budget-builder>
       {/* Era picker (owner task 49: eras) */}
-      <div className="mb-3 grid grid-cols-3 gap-2">
-        {BB_ERAS.map(e => (
-          <button
-            key={e.id}
-            onClick={() => setEra(e.id)}
-            className={`rounded-xl border px-2 py-2 text-center transition-colors ${
-              era.id === e.id ? 'border-primary bg-primary/10' : 'border-border bg-card hover:border-primary/40'
-            }`}
-          >
-            <div className="text-lg">{e.emoji}</div>
-            <div className="text-xs font-bold text-foreground">{e.label}</div>
-            <div className="text-[9px] text-muted-foreground">{e.blurb}</div>
-          </button>
-        ))}
-      </div>
+      {marketPicker}
 
       {/* Budget bar */}
       <div className="rounded-2xl border border-border bg-card p-4">

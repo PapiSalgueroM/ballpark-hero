@@ -46,6 +46,7 @@ import { keyedRng } from '@/lib/keyedRng';
 import type { UsCareerCore, UsCareerSport } from '@/lib/usCareerSport';
 
 const FIXTURE = path.resolve(process.cwd(), 'src/test/fixtures/usSeasonCentreScreens.recorded.json');
+const WATCH_EXPECTED = path.resolve(process.cwd(), 'src/test/fixtures/usSeasonCentreScreens.watchExpected.json');
 const BASE_PATHS = ['src/components/season-centre', 'src/components/us-career/season', 'src/lib/season'];
 const BASE_REF = process.env.RECORD_US_CENTRE_SCREENS_BASE || '60188732845f1ba27a9a2801d9b8c05133eaad22';
 
@@ -155,6 +156,22 @@ function screensOf(model: CentreModel, sport: string): Record<string, Shot> {
   return out;
 }
 
+/* Watch now uses the record and PPG already present in the original save.
+   That Orlando row holds 51–31 and 9.9 PPG. The nine reviewed NBA screens
+   get explicit expectations. NFL and both NBA kickoff screens still use
+   their Round 1212 hashes. */
+function expectedScreens(): Record<string, Shot> {
+  const recorded: Record<string, Shot> = JSON.parse(fs.readFileSync(FIXTURE, 'utf8'));
+  const watch: Record<string, Shot> = JSON.parse(fs.readFileSync(WATCH_EXPECTED, 'utf8'));
+  expect(Object.keys(watch)).toHaveLength(9);
+  for (const [key, expected] of Object.entries(watch)) {
+    expect(key).toMatch(/^nba\|(desktop|phone)\|(help|game|log|poster|review)$/);
+    expect(recorded[key]).toBeDefined();
+    expect(expected).not.toEqual(recorded[key]);
+  }
+  return { ...recorded, ...watch };
+}
+
 function allNow(): Record<string, Shot> {
   const out: Record<string, Shot> = {};
   for (const [sport, make] of Object.entries(MODELS)) Object.assign(out, screensOf(make(), sport));
@@ -164,8 +181,8 @@ function allNow(): Record<string, Shot> {
 beforeEach(() => { localStorage.clear(); resetCareerMomentsForTest(); });
 afterEach(() => { cleanup(); });
 
-describe('the NBA and NFL Season Center screens, recorded on the base of Round 1212', () => {
-  it('draws every screen exactly as the base did', () => {
+describe('the NBA and NFL Season Center screens', () => {
+  it('draws the recorded screens with the reviewed NBA Watch changes', () => {
     const now = allNow();
     /* two sports, five screens at the desktop and six on a phone */
     expect(Object.keys(now)).toHaveLength(22);
@@ -175,9 +192,9 @@ describe('the NBA and NFL Season Center screens, recorded on the base of Round 1
       const out = process.env.RECORD_US_CENTRE_SCREENS_OUT || FIXTURE;
       fs.mkdirSync(path.dirname(out), { recursive: true });
       fs.writeFileSync(out, `${JSON.stringify(now, null, 1)}\n`);
-      if (out !== FIXTURE) return;
+      return;
     }
-    const recorded: Record<string, Shot> = JSON.parse(fs.readFileSync(FIXTURE, 'utf8'));
+    const recorded = expectedScreens();
     expect(Object.keys(now).sort()).toEqual(Object.keys(recorded).sort());
     const moved = Object.keys(recorded).filter(k => now[k].sha1 !== recorded[k].sha1 || now[k].length !== recorded[k].length);
     expect(moved, 'screens whose NBA or NFL markup moved').toEqual([]);
@@ -194,7 +211,7 @@ describe('the NBA and NFL Season Center screens, recorded on the base of Round 1
   for (const [what, change, screens] of CONTROLS) {
     it(`control: ${what} changed moves a recorded screen`, () => {
       if (process.env.RECORD_US_CENTRE_SCREENS === '1' && process.env.RECORD_US_CENTRE_SCREENS_OUT) return;
-      const recorded: Record<string, Shot> = JSON.parse(fs.readFileSync(FIXTURE, 'utf8'));
+      const recorded = expectedScreens();
       for (const sport of Object.keys(MODELS)) {
         const model = MODELS[sport]();
         change(model);

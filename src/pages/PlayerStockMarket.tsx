@@ -26,7 +26,7 @@ import {
  * country or a club until the reveal at the end.
  */
 
-type Phase = 'setup' | 'loading' | 'error' | 'buying' | 'rolling' | 'stepping' | 'done';
+type Phase = 'setup' | 'loading' | 'error' | 'buying' | 'rolling' | 'history-error' | 'stepping' | 'done';
 type Mode = 'daily' | 'unlimited';
 const SLUG = 'player-stock-market';
 
@@ -50,17 +50,18 @@ export default function PlayerStockMarket() {
   const [stepIndex, setStepIndex] = useState(0);
   const [error, setError] = useState('');
 
+  const restoreDaily = useCallback((saved: StockFinish) => {
+    setMode('daily');
+    if (finish === null) markRestoredFinish(SLUG);
+    setDailyResult(saved);
+    setFinish(saved);
+    setPhase('done');
+  }, [finish]);
+
   const start = useCallback(async (m: Mode, chosenYear?: number) => {
-    if (m === 'daily' && dailyResult) {
-      /* Today's market is closed: the result reopens, the cards do not.
-         Round 643: when an Unlimited start has cleared the result first (an
-         error, then Back, then Daily), this reopening is a restored finish
-         arriving after mount, so it says so first or the completion hook
-         records the day again. */
-      setMode('daily');
-      if (finish === null) markRestoredFinish(SLUG);
-      setFinish(dailyResult);
-      setPhase('done');
+    const saved = m === 'daily' ? loadDailyResult(todayStr) ?? dailyResult : null;
+    if (saved) {
+      restoreDaily(saved);
       return;
     }
     setMode(m);
@@ -75,7 +76,7 @@ export default function PlayerStockMarket() {
     setSlotIndex(0);
     setPicks([]);
     setPhase('buying');
-  }, [dailyResult, todayStr, finish]);
+  }, [dailyResult, todayStr, restoreDaily]);
 
   const remaining = STOCK_BUDGET - picks.reduce((s, c) => s + c.price, 0);
   const current = campaign && phase === 'buying' ? campaign.slots[slotIndex] : null;
@@ -86,7 +87,7 @@ export default function PlayerStockMarket() {
     setPhase('rolling');
     const names = bought.map(card => c.identities[card.id]).filter(Boolean);
     const rows = await fetchHoldingHistories(names, c.startYear, c.finalYear);
-    if (!rows) { setError("Couldn't fetch the seasons after your buys. The year by year values need a connection."); setPhase('error'); return; }
+    if (!rows) { setPhase('history-error'); return; }
     const built = buildHoldings(c, bought, rows);
     setHoldings(built);
     setSteps(yearSteps(built, c.startYear, c.finalYear));
@@ -105,6 +106,13 @@ export default function PlayerStockMarket() {
   const advance = () => {
     if (!campaign) return;
     if (stepIndex + 1 < steps.length) { setStepIndex(i => i + 1); return; }
+    if (mode === 'daily') {
+      const saved = loadDailyResult(todayStr);
+      if (saved) {
+        restoreDaily(saved);
+        return;
+      }
+    }
     const done = finishCampaign(campaign, picks, holdings);
     if (mode === 'daily') {
       saveDailyResult(todayStr, done);
@@ -173,9 +181,16 @@ export default function PlayerStockMarket() {
           </div>
         )}
 
-        {phase === 'error' && (
+        {(phase === 'error' || phase === 'history-error') && (
           <div className="text-center py-12">
-            <p className="text-destructive font-semibold mb-3">{error}</p>
+            <p role="alert" className="text-destructive font-semibold mb-3">
+              {phase === 'history-error' ? "Couldn't fetch the seasons after your buys. Your XI is ready to retry." : error}
+            </p>
+            {phase === 'history-error' && campaign && (
+              <button onClick={() => void roll(campaign, picks)} className="mr-2 px-6 py-2.5 bg-primary text-primary-foreground rounded-full font-semibold">
+                Retry
+              </button>
+            )}
             <button onClick={() => setPhase('setup')} className="px-6 py-2.5 bg-primary text-primary-foreground rounded-full font-semibold">
               Back
             </button>

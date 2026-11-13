@@ -186,7 +186,7 @@ export const HOME_COPY: HomeCopy = {
     {
       heading: 'Every sport we cover, from soccer to F1, tennis, golf and UFC',
       blocks: [
-        p('Soccer is the deepest section by a distance, with more than thirty games of its own, and the other twelve sections below all carry their own puzzles rather than a reskin of the soccer ones. Where a sport has a hub page it is linked here; where it does not, the game itself is.'),
+        p('Soccer is the biggest section, with more than thirty games. The other sections have their own quizzes and sims. Follow a sport hub or open one of the games below.'),
         list(
           [a('/soccer', 'Soccer'), ', grids, transfer chains, career and management sims'],
           [a('/pro-football', 'Pro football'), ' and ', a('/college', 'college sports'), ', rarity scored grids, a GM job and two dynasty sims'],

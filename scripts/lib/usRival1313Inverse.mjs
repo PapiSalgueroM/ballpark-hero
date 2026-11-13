@@ -129,12 +129,41 @@ function unlift1538(rel, text) {
   return out;
 }
 
+/* The historical Press/Market oracle predates both goalie corrections. Restore
+   their original leaves before the whole-file receipt, while the native
+   oracle continues to run the current goalie workload and playoff rules. */
+const NHL_GOALIE_EDITS = [
+  ["import { NHL_PLAYOFF_FORMAT } from '@/data/usSeasonLedgerNhl';\n", ''],
+  [
+    [
+      '      const series = NHL_PLAYOFF_FORMAT.series;',
+      '      const priorWins = series.slice(0, poDepth).reduce((wins, [need]) => wins + need, 0);',
+      '      const lostRound = series[poDepth];',
+      '      // The team lost the clinching number of games and finished short of winning the series.',
+      '      const maxWins = lostRound ? Math.min(poG - lostRound[0], priorWins + lostRound[0] - 1) : priorWins;',
+      '      line.poWins = Math.max(0, Math.min(maxWins, Math.round(poG * (0.45 + (poForm - 64) * 0.006))));',
+    ].join('\n'),
+    '      line.poWins = Math.max(0, Math.min(16, Math.round(poG * (0.45 + (poForm - 64) * 0.006))));',
+  ],
+  ["${line.poWins} win${line.poWins === 1 ? '' : 's'},", '${line.poWins} wins,'],
+  ['const NHL_GOALIE_MIN_STARTS = 58;\n\n', ''],
+  ["  const comebackWorkload = c.pos === 'G' ? NHL_GOALIE_MIN_STARTS : 70;\n  if (prevSeason && prevEq <= 35 && fullGames >= comebackWorkload &&", '  if (prevSeason && prevEq <= 35 && fullGames >= 70 &&'],
+  ["return pos === 'G' ? NHL_GOALIE_MIN_STARTS + Math.floor(rng() * 10)", "return pos === 'G' ? 58 + Math.floor(rng() * 10)"],
+];
+
 const show = (commit, rel) => execFileSync('git', ['show', commit + ':' + rel], { maxBuffer: 64 * 1024 * 1024 }).toString('utf8').replaceAll('\r\n', '\n');
 
 /* contents: the file as read from disk (any line endings). rows: receives rel once per file inverted. */
 export function inverseUsRival1313(rel, contents, rows) {
   if (!US_RIVAL_1313_FILES.includes(rel)) return contents;
-  assert.equal(unlift1523(rel, unlift1534(rel, unlift1538(rel, contents.replaceAll('\r\n', '\n')))), show(US_RIVAL_1313_HEAD, rel), 'Release BB: ' + rel + ' is no longer as Round 1313 closed it (' + US_RIVAL_1313_HEAD + '); decide its inverse again in scripts/lib/usRival1313Inverse.mjs');
+  let source = contents.replaceAll('\r\n', '\n');
+  if (rel === 'src/lib/nhlMyCareer.ts') {
+    for (const [from, to] of NHL_GOALIE_EDITS) {
+      assert.equal(source.split(from).length, 2, 'NHL goalie correction must appear exactly once: ' + from.slice(0, 60));
+      source = source.replace(from, () => to);
+    }
+  }
+  assert.equal(unlift1523(rel, unlift1534(rel, unlift1538(rel, source))), show(US_RIVAL_1313_HEAD, rel), 'Release BB: ' + rel + ' is no longer as Round 1313 closed it (' + US_RIVAL_1313_HEAD + '); decide its inverse again in scripts/lib/usRival1313Inverse.mjs');
   assert.notEqual(rel, 'src/lib/careerFactBeats.ts', 'Release BB: careerFactBeats.ts is new in Round 1313 and only its own files import it; something else loaded it, so the inverse of 1313 is no longer whole');
   rows.push(rel);
   return show(US_RIVAL_1313_BASE, rel);

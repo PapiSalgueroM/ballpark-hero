@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useMemo } from 'react';
+import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { Loader2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { GameShell } from '@/components/game/GameShell';
@@ -37,7 +37,7 @@ type PlayMode = 'daily' | 'unlimited';
 /* Round 644: the day Rarity runs started recording the obscurity total. A
    game_score_caps row stamped before it means the switch has not landed. */
 const RARITY_SCORE_SWITCH_DAY = '2026-09-19';
-type Phase = 'boot' | 'error' | 'loading-round' | 'playing' | 'revealed' | 'done';
+type Phase = 'boot' | 'error' | 'round-error' | 'loading-round' | 'playing' | 'revealed' | 'done';
 
 /**
  * Rarity Round: name the most obscure valid answer you can ("Rarity Round"
@@ -53,6 +53,7 @@ const RarityRound = () => {
   const [rarityMode, setRarityMode] = useState<RarityMode>('rarity');
 
   const [phase, setPhase] = useState<Phase>('boot');
+  const [runDate, setRunDate] = useState<string | null>(null);
   const [rounds, setRounds] = useState<RarityCategory[]>([]);
   const [roundIndex, setRoundIndex] = useState(0);
   const [pool, setPool] = useState<PoolEntry[]>([]);
@@ -67,6 +68,7 @@ const RarityRound = () => {
   // most said answers, real crowd data), and end the run with your rank
   // among everyone who played today.
   const [crowdPicks, setCrowdPicks] = useState<{ answer: string; n: number }[] | null>(null);
+  const crowdRevealRef = useRef<symbol | null>(null);
   const [todayStanding, setTodayStanding] = useState<{ rank: number; total: number } | null>(null);
 
   const currentCategory = rounds[roundIndex];
@@ -77,9 +79,12 @@ const RarityRound = () => {
   // return). The loading/error UI is decided entirely in the JSX below.
 
   const startRun = useCallback((nextPlayMode: PlayMode, nextRarityMode: RarityMode) => {
+    crowdRevealRef.current = null;
     setPlayMode(nextPlayMode);
     setRarityMode(nextRarityMode);
-    const categories = nextPlayMode === 'daily' ? pickDailyCategories(CATEGORIES) : pickRandomCategories(CATEGORIES);
+    const date = nextPlayMode === 'daily' ? getTodayET() : null;
+    const categories = date ? pickDailyCategories(CATEGORIES, date) : pickRandomCategories(CATEGORIES);
+    setRunDate(date);
     if (!categories || categories.length === 0) {
       setPhase('error');
       return;
@@ -109,14 +114,14 @@ const RarityRound = () => {
       .then(p => {
         if (cancelled) return;
         if (!p || p.length === 0) {
-          setPhase('error');
+          setPhase('round-error');
           return;
         }
         setPool(p);
         setPhase('playing');
       })
       .catch(() => {
-        if (!cancelled) setPhase('error');
+        if (!cancelled) setPhase('round-error');
       });
     return () => {
       cancelled = true;
@@ -147,13 +152,7 @@ const RarityRound = () => {
     const key = normalizeName(selectedEntity.name);
     const match = pool.find(p => p.key === key);
     if (!match) {
-      // Structurally this should be rare: PlayerAutocomplete's dropdown is
-      // already filtered to the category (validateOnly=true, sourceConfig
-      // scoped per category), so a pick that isn't in the scoring pool means
-      // either the elite-100m category's broader autocomplete (documented in
-      // rarityRound.ts) surfaced a sub-threshold player, or the two sources
-      // disagree for some other data reason. Either way, reject it here
-      // rather than letting an invalid answer score.
+      // Keep the scoring pool authoritative if the dropdown and pool data disagree.
       setErrorMsg("That player doesn't count for this category. Try another.");
       return;
     }
@@ -172,6 +171,8 @@ const RarityRound = () => {
 
     // Log the pick (fire and forget) then pull the crowd's most-said answers
     // for this category so the reveal can show them.
+    const crowdReveal = Symbol();
+    crowdRevealRef.current = crowdReveal;
     setCrowdPicks(null);
     try {
       (supabase.from as any)('rarity_round_guesses')
@@ -183,7 +184,7 @@ const RarityRound = () => {
             .order('created_at', { ascending: false })
             .limit(400)
             .then(({ data }: { data: { answer: string }[] | null }) => {
-              if (!data || data.length === 0) return;
+              if (crowdRevealRef.current !== crowdReveal || !data || data.length === 0) return;
               /* ROUND 361: only count answers that are really in this
                  category's pool. rarity_round_guesses takes anonymous inserts
                  and answer is free text, and this panel is headed "What
@@ -216,6 +217,7 @@ const RarityRound = () => {
   };
 
   const nextRound = () => {
+    crowdRevealRef.current = null;
     const nextIndex = roundIndex + 1;
     if (nextIndex >= rounds.length) {
       setPhase('done');
@@ -435,8 +437,8 @@ const RarityRound = () => {
               ))}
             </div>
 
-            {playMode === 'daily' && (
-              <p className="text-xs text-muted-foreground mt-3">Today's categories, {getTodayET()}. Same 5 for everyone.</p>
+            {runDate && (
+              <p className="text-xs text-muted-foreground mt-3">Today's categories, {runDate}. Same 5 for everyone.</p>
             )}
           </>
         }
@@ -447,11 +449,11 @@ const RarityRound = () => {
           </div>
         )}
 
-        {phase === 'error' && (
+        {(phase === 'error' || phase === 'round-error') && (
           <div className="text-center py-12">
             <p className="text-destructive font-semibold mb-3">Couldn't load Rarity Round right now.</p>
             <button
-              onClick={() => startRun(playMode, rarityMode)}
+              onClick={() => phase === 'round-error' ? setPhase('loading-round') : startRun(playMode, rarityMode)}
               className="px-6 py-2.5 bg-primary text-primary-foreground rounded-full font-semibold"
             >
               Try again
@@ -459,7 +461,7 @@ const RarityRound = () => {
           </div>
         )}
 
-        {phase !== 'boot' && phase !== 'error' && phase !== 'done' && currentCategory && (
+        {currentCategory && (phase === 'loading-round' || phase === 'playing' || phase === 'revealed') && (
           <div className="space-y-5">
             <div className="flex items-center justify-center gap-2 text-xs text-muted-foreground font-semibold uppercase tracking-wider">
               <span>

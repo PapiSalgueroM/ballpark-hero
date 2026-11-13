@@ -145,7 +145,7 @@ console.log('1) every club string the map names exists in the table');
     if (!got || got.length === 0) { fail(`the map names "${s}" and the table has no such club`); missing++; }
   }
   const labels = Object.keys(CLUB_STRINGS).length;
-  if (labels !== 30) fail(`the game offers 30 clubs and the map covers ${labels}`);
+  if (labels !== 60) fail(`the Mixed catalogue offers 60 clubs and the map covers ${labels}`);
   console.log(`   ${all.length} club strings across ${labels} clubs, ${all.length - missing} found in the table`);
 }
 
@@ -317,7 +317,7 @@ console.log('6) the armband is a column, not part of the name');
 }
 
 /* ---------------------------------------------------------------- 7 */
-console.log('7) the dropdown and the validator name the same thirty clubs');
+console.log('7) the dropdown and the validator name the same Mixed clubs');
 {
   /* The list lives twice because an edge function cannot import from src, and
      two copies of a fact drift. This is the same guard simSchema keeps over

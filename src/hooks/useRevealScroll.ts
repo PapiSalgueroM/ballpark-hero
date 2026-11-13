@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, type RefObject } from 'react';
 
 /* ─── useRevealScroll (Round 61, rebuilt Round 128) ───
    Owner's standing UX rule, in his words: "after you click something, the next
@@ -176,7 +176,7 @@ export function bottomInset(): number {
 
 export function useRevealScroll<T extends HTMLElement = HTMLDivElement>(
   key: unknown,
-  options?: { enabled?: boolean; block?: ScrollLogicalPosition; skipFirst?: boolean },
+  options?: { enabled?: boolean; block?: ScrollLogicalPosition; skipFirst?: boolean; visibleThrough?: RefObject<HTMLElement> },
 ) {
   const ref = useRef<T>(null);
   const firstRun = useRef(true);
@@ -187,6 +187,7 @@ export function useRevealScroll<T extends HTMLElement = HTMLDivElement>(
      fits on the screen. */
   const block = options?.block;
   const skipFirst = options?.skipFirst ?? true;
+  const visibleThrough = options?.visibleThrough;
 
   useEffect(() => {
     if (!enabled) return;
@@ -221,7 +222,9 @@ export function useRevealScroll<T extends HTMLElement = HTMLDivElement>(
            for subpixel layout, so a card that lands at 0.4px does not trigger a
            pointless half pixel scroll. */
         const visible = Math.max(0, Math.min(rect.bottom, readBottom) - Math.max(rect.top, readTop));
-        const needed = Math.min(rect.height, MIN_LEAD);
+        const end = visibleThrough?.current;
+        const lead = end && node.contains(end) ? end.getBoundingClientRect().bottom - rect.top : MIN_LEAD;
+        const needed = Math.min(rect.height, Math.max(MIN_LEAD, lead));
         if (rect.top >= readTop - 2 && visible >= needed) return;
 
         const behavior = prefersReducedMotion() ? 'auto' : 'smooth';
@@ -242,7 +245,7 @@ export function useRevealScroll<T extends HTMLElement = HTMLDivElement>(
       cancelAnimationFrame(raf1);
       if (raf2) cancelAnimationFrame(raf2);
     };
-  }, [key, enabled, block, skipFirst]);
+  }, [key, enabled, block, skipFirst, visibleThrough]);
 
   return ref;
 }

@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import type { TeamAssignment } from '@/types/lineupBuilder';
+import { mixedClubs, nations } from '@/data/lineupTeams';
 
 interface TeamSpinnerProps {
   teams: TeamAssignment[];
@@ -28,17 +29,10 @@ function getFlagUrl(nationName: string): string {
   return `https://flagcdn.com/w80/${code.toLowerCase()}.png`;
 }
 
-const allDisplayTeams = [
-  'Real Madrid', 'Barcelona', 'Man City', 'Liverpool', 'Bayern',
-  'PSG', 'Chelsea', 'Arsenal', 'Man Utd', 'Juventus',
-  'Argentina', 'France', 'Brazil', 'England', 'Spain',
-  'Germany', 'Portugal', 'Netherlands', 'Italy', 'Belgium',
-  'AC Milan', 'Inter', 'Dortmund', 'Napoli', 'Atlético',
-  'Morocco', 'Uruguay', 'Croatia', 'Colombia', 'Senegal',
-];
+const mixedDisplayTeams = [...mixedClubs, ...nations];
 
 const TeamSpinner = ({ teams, targetIndex, isSpinning, onFinish, recordedYear }: TeamSpinnerProps) => {
-  const displayTeams = recordedYear === undefined ? allDisplayTeams : teams.map(team => team.name);
+  const displayTeams = recordedYear === undefined ? mixedDisplayTeams : teams.map(team => team.name);
   const [displayIndex, setDisplayIndex] = useState(0);
   const [speed, setSpeed] = useState(60);
   const [settled, setSettled] = useState(!isSpinning);
@@ -99,6 +93,9 @@ const TeamSpinner = ({ teams, targetIndex, isSpinning, onFinish, recordedYear }:
             <img
               src={logoUrl}
               alt={displayName || ''}
+              width={40}
+              height={40}
+              decoding="async"
               className="w-10 h-10 object-contain"
               onError={(e) => {
                 (e.target as HTMLImageElement).style.display = 'none';

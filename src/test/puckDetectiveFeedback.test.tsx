@@ -156,6 +156,7 @@ describe('Puck Detective committed guess feedback', () => {
     expect(card(view, secret)).toHaveAttribute('data-puck-cue', 'correct');
     expect(view.getByRole('heading', { name: 'Case closed!' })).toBeVisible();
     expect(recordCompletion).toHaveBeenCalledExactlyOnceWith('/puck-detective', 60, 'FixtureBaller', 0);
+    await vi.dynamicImportSettled();
     expect(sink.rows).toEqual([{ game: 'puck-detective', score: 60, player_name: 'FixtureBaller' }]);
     expect(getStreakState()).toMatchObject({ totalPlays: 1, totalPoints: 60 });
     const grid = buildShareGrid([misses[0], misses[1], secret].map(player => ({ player, feedback: evaluateGuess(player, secret), isCorrect: player.playerId === secret.playerId })));

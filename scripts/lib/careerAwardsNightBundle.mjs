@@ -27,6 +27,7 @@ import { createRequire } from 'node:module';
 export async function bundleAwardsNight(root, { patches = [], extra = {} } = {}) {
   const R = root.replaceAll('\\', '/');
   const require = createRequire(path.join(root, 'package.json'));
+  const ts = require('typescript');
   let esbuild;
   try { esbuild = require('esbuild'); } catch { throw new Error(`esbuild not found in any node_modules above ${root}`); }
   const reactPkg = require.resolve('react/package.json');
@@ -79,6 +80,35 @@ export const cards = {
           applied.add(p);
         }
         if (key === pageKey) {
+          // SSR needs the actual card, not React.lazy's unresolved wrapper.
+          // Resolve only this real page binding inside the in-memory QA bundle.
+          const syntax = ts.createSourceFile(args.path, src, ts.ScriptTarget.Latest, true, ts.ScriptKind.TSX);
+          const statement = syntax.statements.find(node => ts.isVariableStatement(node)
+            && node.declarationList.declarations.some(decl => ts.isIdentifier(decl.name) && decl.name.text === 'WorldCupResultCard'));
+          if (statement) {
+            const reactLazy = syntax.statements.some(node => ts.isImportDeclaration(node)
+              && ts.isStringLiteral(node.moduleSpecifier) && node.moduleSpecifier.text === 'react'
+              && !node.importClause?.isTypeOnly && node.importClause?.namedBindings
+              && ts.isNamedImports(node.importClause.namedBindings)
+              && node.importClause.namedBindings.elements.some(binding => !binding.isTypeOnly
+                && binding.name.text === 'lazy' && !binding.propertyName));
+            const declarations = statement.declarationList.declarations;
+            const lazy = declarations[0].initializer;
+            const arrow = lazy && ts.isCallExpression(lazy) ? lazy.arguments[0] : undefined;
+            const load = arrow && ts.isArrowFunction(arrow) ? arrow.body : undefined;
+            if (!reactLazy || declarations.length !== 1 || !lazy || !ts.isCallExpression(lazy)
+              || !ts.isIdentifier(lazy.expression) || lazy.expression.text !== 'lazy' || lazy.arguments.length !== 1
+              || !load || !ts.isCallExpression(load) || load.expression.kind !== ts.SyntaxKind.ImportKeyword
+              || load.arguments.length !== 1 || !ts.isStringLiteral(load.arguments[0])) {
+              throw new Error('Awards QA cannot resolve the actual WorldCupResultCard binding');
+            }
+            src = src.slice(0, statement.getStart(syntax))
+              + `import WorldCupResultCard from ${JSON.stringify(load.arguments[0].text)};`
+              + src.slice(statement.end);
+          } else if (!syntax.statements.some(node => ts.isFunctionDeclaration(node)
+            && node.name?.text === 'WorldCupResultCard' && node.body)) {
+            throw new Error('Awards QA cannot find the actual WorldCupResultCard function');
+          }
           src += '\nexport { BallonDorCeremonyCard as __BdorCard, WorldCupResultCard as __WcCard };\n';
         }
         return { contents: src, loader: args.path.endsWith('.tsx') ? 'tsx' : 'ts' };

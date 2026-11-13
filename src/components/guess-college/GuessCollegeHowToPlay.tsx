@@ -77,7 +77,7 @@ const GuessCollegeHowToPlay = () => {
             <h3 className="font-semibold text-foreground mb-1">💡 Difficulty</h3>
             <ul className="space-y-0.5 list-disc list-inside">
               <li><strong>Easy:</strong> Power 4 schools only (SEC, Big Ten, ACC, Big 12)</li>
-              <li><strong>Hard:</strong> All 350+ D1 schools including mid-majors</li>
+              <li><strong>Hard:</strong> The full school pool, including mid-majors</li>
             </ul>
           </div>
         </div>

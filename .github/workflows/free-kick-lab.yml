@@ -59,7 +59,10 @@ jobs:
           python -m pip install fonttools pillow
           node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only 2>&1 | tee free-kick-lab-artifacts/fonts.log
       - name: Preserve the accepted physics and record engines
-        run: git diff --exit-code 1c10e7e5c11a3d502afb16070af462086874014d HEAD -- src/lib/freeKick.ts src/lib/arcade.ts src/lib/arcadeRecord.ts src/hooks/useArcadeFlight.ts
+        run: |
+          # Round 1091 moved the three short walled setups outside the penalty area.
+          git diff --exit-code b5022509784dfe97a141fff559da16c08cc78c44 HEAD -- src/lib/freeKick.ts
+          git diff --exit-code 1c10e7e5c11a3d502afb16070af462086874014d HEAD -- src/lib/arcade.ts src/lib/arcadeRecord.ts src/hooks/useArcadeFlight.ts
       - name: Harness source and mutation anchors
         run: ONLY=simHarnessAnchors node scripts/runAllSims.mjs 2>&1 | tee free-kick-lab-artifacts/anchors.log
       - name: Type check and build

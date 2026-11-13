@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { cn } from '@/lib/utils';
-import { money, moneyIn, wageBill, wageCapFrom, renewalTerms, renewalTermsWithClause, renewContract, renewContractWithClause, expiringPlayers, sellValue, severanceFor, severanceBill, releaseBlock, releasePlayer, signFreeAgent } from '@/lib/clubManager';
+import { money, moneyIn, wageBill, wageCapFrom, wageCapOf, renewalTerms, renewalTermsWithClause, renewContract, renewContractWithClause, expiringPlayers, sellValue, severanceFor, severanceBill, releaseBlock, releasePlayer, signFreeAgent } from '@/lib/clubManager';
 import type { CareerState, CMPlayer, ReleaseBlock } from '@/lib/clubManager';
 import { ratingTint, isRealPlayer } from '@/components/club-manager/SquadScreen';
 import { CelebrationStyles } from '@/components/club-manager/Celebration';
@@ -130,7 +130,7 @@ export function ContractsCard({ career, onRenew, onRenewWithClause, onRelease, o
     };
   };
   const bill = wageBill(career);
-  const cap = career.wageCap ?? wageCapFrom(bill);
+  const cap = wageCapOf(career, bill);
   const pct = Math.round((bill / Math.max(1, cap)) * 100);
   const over = bill > cap;
   /* Round 1597 fix: a man out on loan from me in his last year is listed too (expiringDeals), so the man the hub
@@ -149,7 +149,7 @@ export function ContractsCard({ career, onRenew, onRenewWithClause, onRelease, o
 
   const forecast = (p: CMPlayer, kind: 'plain' | 'clause' | 'remove', terms: ReturnType<typeof renewalTerms> & { clause?: number }, next: CareerState | null) => {
     const nextBill = next ? wageBill(next) : bill;
-    const nextCap = next?.wageCap ?? wageCapFrom(nextBill);
+    const nextCap = next ? wageCapOf(next, nextBill) : wageCapFrom(nextBill);
     return (
       <div data-contract-preview={kind} data-contract-player-id={p.id} className="mt-1 rounded-lg border border-border/40 bg-secondary/30 p-2 text-[10px] leading-relaxed text-muted-foreground break-words">
         <p className="font-bold text-foreground">{terms.years} years at {terms.wage}k a week. {money(terms.fee)} to sign.</p>

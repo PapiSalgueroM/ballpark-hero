@@ -14,7 +14,6 @@ import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { useDailyPuzzle } from '@/hooks/useDailyPuzzle';
-import { getTodayET } from '@/lib/dateUtils';
 import { flagForClub } from '@/lib/careerLadder';
 import { FlagFromEmoji } from '@/components/FlagImg';
 import {
@@ -51,6 +50,10 @@ function isXiAction(a: unknown): a is XiAction {
   return t === 'won' || t === 'give' || (t === 'miss' && typeof (a as { name?: unknown }).name === 'string');
 }
 
+const hasXiWin = (actions: XiAction[]) => actions.some(a => a.t === 'won');
+const hasXiLoss = (actions: XiAction[]) =>
+  actions.filter(a => a.t === 'miss').length >= MAX_GUESSES || actions.some(a => a.t === 'give');
+
 /**
  * Missing XI: a famous, real starting lineup is shown on a simple pitch with
  * ONE player blanked out. The player names the missing man in up to 3
@@ -69,7 +72,6 @@ function isXiAction(a: unknown): a is XiAction {
 const MissingXi = () => {
   const [playMode, setPlayMode] = useState<PlayMode>('daily');
 
-  const dailyPuzzle = useMemo<ActivePuzzle>(() => pickDailyPuzzle(), []);
   // Drawn only inside startRun('unlimited'): a random draw in a useState
   // initialiser is the race simPrerender section 16 refuses.
   const [unlimitedPuzzle, setUnlimitedPuzzle] = useState<ActivePuzzle | null>(null);
@@ -79,14 +81,21 @@ const MissingXi = () => {
     addGuess: addDailyAction,
     gameStatus: rawDailyStatus,
     isLoading,
+    todayStr,
   } = useDailyPuzzle<{ id: string }, XiAction>({
     gameSlug: 'missing-xi',
     puzzles: SENTINEL,
     maxGuesses: 999,
-    isWon: g => g.some(a => a.t === 'won'),
-    isLost: g => g.filter(a => a.t === 'miss').length >= MAX_GUESSES || g.some(a => a.t === 'give'),
+    isWon: hasXiWin,
+    isLost: hasXiLoss,
     deserializeGuesses: raw => (Array.isArray(raw) ? raw.filter(isXiAction) : []),
+    isValidGuesses: (actions, status) => {
+      if (status === 'playing') return true;
+      if (hasXiWin(actions)) return status === 'won';
+      return status === 'lost' && hasXiLoss(actions);
+    },
   });
+  const dailyPuzzle = useMemo(() => pickDailyPuzzle(undefined, todayStr), [todayStr]);
 
   const [unlimitedActions, setUnlimitedActions] = useState<XiAction[]>([]);
 
@@ -258,7 +267,7 @@ const MissingXi = () => {
             </div>
 
             {playMode === 'daily' && (
-              <p className="text-xs text-muted-foreground mt-3">Today's lineup, {getTodayET()}. Same puzzle for everyone.</p>
+              <p className="text-xs text-muted-foreground mt-3">Daily lineup for {todayStr}. Same puzzle for everyone.</p>
             )}
           </>
         }

@@ -122,6 +122,7 @@ export const PATH_BUNDLE: Record<string, ContentBundle> = {
   '/player-bingo': 'soccer1',
   '/rarity-round': 'soccer1',
   '/rebuild': 'soccer1',
+  '/soccer-perfect-season': 'soccer1',
   '/sports-bingo': 'soccer1',
   '/who-am-i': 'soccer1',
   '/world-xi': 'soccer1',
@@ -172,7 +173,7 @@ export const PATH_BUNDLE: Record<string, ContentBundle> = {
   '/teammates': 'world',
 };
 
-/** Sport guides share chunks; the three management games each load only their own guide. */
+/** Sport guides share chunks. Management games load their own guides. */
 const LOADERS: Record<ContentBundle, () => Promise<Record<string, GameContentMap>>> = {
   aussieRulesManagement: () => import('./aussieRulesManagement'),
   nrlManagement: () => import('./nrlManagement'),

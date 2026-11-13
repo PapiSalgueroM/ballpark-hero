@@ -10,6 +10,7 @@ import { formatNumber } from './formatNumber';
  */
 
 import { NHL_TEAMS } from '@/data/conquestDataNhl';
+import { NHL_PLAYOFF_FORMAT } from '@/data/usSeasonLedgerNhl';
 import { seasonSwing, swingNote, playoffDepthOf, playoffGames, clutchSwing, clutchNote } from './careerVariance';
 import { nhlSeasonScore, wonAward } from './careerAwards';
 import { US_ENGINE_SEASON, seasonLength, toSlate, fullSeasonOf } from './usSeasonShape';
@@ -429,6 +430,8 @@ export function nhlWorkSlate(pos: string, slate: number): number {
   return pos === 'G' ? Math.min(slate, US_ENGINE_SEASON.nhl) : slate;
 }
 
+const NHL_GOALIE_MIN_STARTS = 58;
+
 /* The season's workload on the engine's OWN season: 58 to 67 starts, or all
    but zero to three of the games. simNhlSeason carries it, and every count
    drawn from it, to the season the ledger says his club played that year. */
@@ -530,9 +533,14 @@ export function simNhlSeason(
     const poForm = form + clutch - 1.2;   // playoff hockey is tighter
     line.poGames = poG;
     if (c.pos === 'G') {
-      line.poWins = Math.max(0, Math.min(16, Math.round(poG * (0.45 + (poForm - 64) * 0.006))));
+      const series = NHL_PLAYOFF_FORMAT.series;
+      const priorWins = series.slice(0, poDepth).reduce((wins, [need]) => wins + need, 0);
+      const lostRound = series[poDepth];
+      // The team lost the clinching number of games and finished short of winning the series.
+      const maxWins = lostRound ? Math.min(poG - lostRound[0], priorWins + lostRound[0] - 1) : priorWins;
+      line.poWins = Math.max(0, Math.min(maxWins, Math.round(poG * (0.45 + (poForm - 64) * 0.006))));
       line.poSvpct = Math.min(0.96, Math.max(0.86, Math.round((0.903 + (poForm - 64) * 0.0012 + rng() * 0.006) * 1000) / 1000));
-      notes.push(`📊 Playoffs: ${poG} games, ${line.poWins} wins, ${line.poSvpct.toFixed(3)} SV%.`);
+      notes.push(`📊 Playoffs: ${poG} games, ${line.poWins} win${line.poWins === 1 ? '' : 's'}, ${line.poSvpct.toFixed(3)} SV%.`);
     } else {
       const pg = poG / US_ENGINE_SEASON.nhl;
       const off = (NHL_POS_PROFILE[c.pos] ?? NHL_POS_PROFILE.C).offense;
@@ -598,7 +606,8 @@ export function simNhlSeason(
   // (48 of 48 in 2012-13 was no lost year).
   const prevSeason = c.seasons[c.seasons.length - 1];
   const prevEq = prevSeason ? fullSeasonOf('nhl', prevSeason.games, nhlWorkSlate(c.pos, prevSeason.slate ?? US_ENGINE_SEASON.nhl)) : 0;
-  if (prevSeason && prevEq <= 35 && fullGames >= 70 && wonAward(rng, 'nhl', 'nhlComeback', c.pos, statScore)) {
+  const comebackWorkload = c.pos === 'G' ? NHL_GOALIE_MIN_STARTS : 70;
+  if (prevSeason && prevEq <= 35 && fullGames >= comebackWorkload && wonAward(rng, 'nhl', 'nhlComeback', c.pos, statScore)) {
     line.awards.push('Comeback Player of the Year'); notes.push('🔁 Comeback Player of the Year.');
   }
 
@@ -672,7 +681,7 @@ export function nhlStatLineFor(x: NhlLineInput, rng: () => number): NhlStatLine 
 /** The healthy workload on the engine's own season, as gamesFor draws it: 58 to 67 starts, or all but zero to
  *  three of the games. Draws: 1. */
 export function nhlFullWorkload(pos: string, rng: () => number): number {
-  return pos === 'G' ? 58 + Math.floor(rng() * 10) : US_ENGINE_SEASON.nhl - 3 + Math.floor(rng() * 4);
+  return pos === 'G' ? NHL_GOALIE_MIN_STARTS + Math.floor(rng() * 10) : US_ENGINE_SEASON.nhl - 3 + Math.floor(rng() * 4);
 }
 
 /** The season line that is saved, out of the season on the engine's own length and the games his position

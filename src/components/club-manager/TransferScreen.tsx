@@ -22,7 +22,7 @@ import {
   termsVerdict, valuationLine, wageRoom, wageRoomLine,
 } from '@/lib/clubManagerDeals';
 import type { PersonalTerms } from '@/lib/clubManagerDeals';
-import { ROLE_INFO, ROLE_LADDER, wageBill, wageCapFrom } from '@/lib/clubManager';
+import { ROLE_INFO, ROLE_LADDER, wageBill, wageCapOf } from '@/lib/clubManager';
 import type { SquadRole } from '@/lib/clubManager';
 import type { Position } from '@/types/game';
 import { ratingTint, MadeUpTag } from '@/components/club-manager/SquadScreen';
@@ -352,7 +352,7 @@ export function TransferScreen({
      and every wage read as over the ceiling. Every other reader in the repo
      falls back to wageCapFrom(bill), and so does this one now. */
   const bill = Math.round(wageBill(career));
-  const room = terms ? wageRoom(bill, career.wageCap ?? wageCapFrom(bill), terms.wage) : null;
+  const room = terms ? wageRoom(bill, wageCapOf(career, bill), terms.wage) : null;
   const roomLine = room ? wageRoomLine(room) : '';
 
   const offerBtn = (label: string, amount: number, tone: 'safe' | 'risky' | 'close' = 'safe') => (
