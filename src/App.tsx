@@ -270,7 +270,8 @@ const ScrollToTop = () => {
       } catch {
         y = 0;
       }
-      if (initial && window.location.hash === "#browse-sports") {
+      const homeAnchor = window.location.hash.slice(1);
+      if (initial && (homeAnchor === "browse-sports" || /^sport-[a-z0-9]+$/.test(homeAnchor))) {
         const navigation = performance.getEntriesByType("navigation")[0] as PerformanceNavigationTiming | undefined;
         if (navigation?.type === "navigate" || (y <= 0 && navigation?.type !== "back_forward")) {
           // Home may mount after this effect. Its heading carries the
@@ -278,7 +279,7 @@ const ScrollToTop = () => {
           const root = document.getElementById("root")!;
           const pending = new AbortController();
           const reveal = () => {
-            const target = document.getElementById("browse-sports");
+            const target = document.getElementById(homeAnchor);
             if (!target) return;
             target.scrollIntoView({ block: "start", behavior: "instant" });
             stop();

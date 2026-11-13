@@ -17,7 +17,7 @@
  *               four links in that order with the registry's own labels.
  *   2 savekey   Each Continue key in src/data/homeFront.ts equals the SAVE_KEY
  *               the game really writes (src/lib/soccerCareerSaveEntry.ts and
- *               src/lib/clubManager.ts, read from code with comments
+ *               src/lib/clubManagerSaveKeys.ts, read from code with comments
  *               stripped), and a render with that exact key planted shows the
  *               Continue words while a render without it does not. The stage
  *               never parses a save.
@@ -347,7 +347,7 @@ console.log('2) the Continue buttons look for the keys the games really save und
     const m = /const SAVE_KEY\s*=\s*(['"])([^'"]+)\1/.exec(stripComments(read(rel)));
     return m ? m[2] : null;
   };
-  const REAL = { '/soccer-career': saveKeyIn('src/lib/soccerCareerSaveEntry.ts'), '/club-manager': saveKeyIn('src/lib/clubManager.ts') };
+  const REAL = { '/soccer-career': saveKeyIn('src/lib/soccerCareerSaveEntry.ts'), '/club-manager': saveKeyIn('src/lib/clubManagerSaveKeys.ts') };
   for (const [p, key] of Object.entries(REAL)) {
     if (!key) { fail(2, `could not read SAVE_KEY for ${p} from its source, so nothing was compared`); continue; }
     const entry = HOME_STAGE.find(e => e.path === p);
@@ -540,7 +540,7 @@ console.log('7) Continue playing: the right keys, real fields, hostile saves, on
      the shape of what it saves. Typed here, apart from the list it checks. */
   const WHERE = {
     '/soccer-career': ['src/lib/soccerCareerSaveEntry.ts', 'src/pages/SoccerCareer.tsx', 'src/lib/soccerCareerEngine.ts'],
-    '/club-manager': ['src/lib/clubManager.ts'],
+    '/club-manager': ['src/lib/clubManagerSaveKeys.ts', 'src/lib/clubManager.ts'],
     '/stadium-tycoon': ['src/lib/stadiumTycoon.ts'],
     '/wonderkid-factory': ['src/lib/wonderkidFactory.ts'],
     '/rebuild': ['src/lib/rebuildSave.ts'],
@@ -549,7 +549,7 @@ console.log('7) Continue playing: the right keys, real fields, hostile saves, on
     '/cfb-dynasty': ['src/components/cfb-dynasty/CfbDynastyBoard.tsx', 'src/lib/cfbDynasty.ts'],
     '/cbb-dynasty': ['src/components/cbb-dynasty/CbbDynastyBoard.tsx', 'src/lib/cbbDynasty.ts'],
     '/nba-front-office': ['src/components/nba-front-office/NbaFrontOfficeBoard.tsx', 'src/lib/nbaFrontOffice.ts'],
-    '/nba-my-career': ['src/lib/nbaCareerSport.ts', 'src/lib/nbaMyCareer.ts'],
+    '/nba-my-career': ['src/lib/nbaCareerCreation.ts', 'src/lib/nbaCareerSport.ts', 'src/lib/nbaMyCareer.ts'],
     '/mlb-my-career': ['src/lib/mlbCareerSport.ts', 'src/lib/mlbMyCareer.ts'],
     '/mlb-front-office': ['src/components/mlb-front-office/MlbFrontOfficeBoard.tsx', 'src/lib/mlbFrontOffice.ts'],
     '/nhl-my-career': ['src/lib/nhlCareerSport.ts', 'src/lib/nhlMyCareer.ts'],
@@ -564,6 +564,7 @@ console.log('7) Continue playing: the right keys, real fields, hostile saves, on
   };
   /* A save key in src that is deliberately NOT a card, and why. */
   const EXCUSED = {
+    'nrl-world-cup-save-v1': 'the five-stage World Cup resumes from Rugby League World Cup beside Career saves; the home Continue card opens the club career slots',
     'rank-em-legends-circuit-v1': 'Rank Em opens on Daily; its saved three-puzzle side mode is reopened with Legends circuit, not the long-form Continue row',
     'dukb-face-off-v1': 'Face Off is a daily quiz; its save is a match record, not a run to go back to',
     'dukb-contract-chaos-v1': 'Contract Chaos plays its five seasons in one sitting; its save is a play record (played, best, total, the daily), not a run to go back to',
@@ -579,6 +580,12 @@ console.log('7) Continue playing: the right keys, real fields, hostile saves, on
   const WRITER = Object.fromEntries(US_CAREER_SPORTS.map(s => [s.route, US_CAREER_BOARD]));
   for (const why of allWrapperProblems(ROOT)) fail(7, why);
   for (const s of US_CAREER_SPORTS) {
+    if (s.slug === 'nba' && !code(s.binding).includes("import { NBA_CAREER_CREATE, NBA_CAREER_SAVE_KEY } from './nbaCareerCreation';")) {
+      fail(7, `${s.binding} does not import the creation save key`);
+    }
+    if (s.slug === 'nba' && !code(s.binding).includes('const SAVE_KEY = NBA_CAREER_SAVE_KEY;')) {
+      fail(7, `${s.binding} does not use the creation save key`);
+    }
     if (!code(s.binding).includes('saveKey: SAVE_KEY,')) fail(7, `${s.binding} does not hand the board the key it declares`);
   }
   /* Round 1084: the board no longer writes in one line. The career goes to
@@ -586,6 +593,10 @@ console.log('7) Continue playing: the right keys, real fields, hostile saves, on
      the one place that writes what is held (so a refused write can be tried
      again). All three links have to be there for the key to be the binding's. */
   const boardCode = code(US_CAREER_BOARD);
+  const clubManager = code('src/lib/clubManager.ts');
+  if (!clubManager.includes("import { SAVE_KEY } from '@/lib/clubManagerSaveKeys';") || !clubManager.includes('saveFence.write(SAVE_KEY,')) {
+    fail(7, 'Club Manager does not write using the same shared save key as Continue');
+  }
   const SAVE_CHAIN = [
     'saveValue(JSON.stringify({ c,',
     'pendingSave.current = { key: sport.saveKey, value };',
@@ -808,10 +819,13 @@ console.log('8) the favourite sport moves its own section first and nothing else
   if (readFavouriteSport({ getItem: () => { throw new Error('blocked'); } }) !== null) fail(8, 'blocked storage does not read as no pick');
   if (readFavouriteSport(null) !== null) fail(8, 'no storage does not read as no pick');
   const html = front.renderFav(sports, 'hockey');
+  const jumps = [...html.matchAll(/<a href="#sport-([^"]+)"/g)].map(match => match[1]);
   const buttons = [...html.matchAll(/<button ([^>]*)>/g)].map(m => m[1]);
   const pressed = buttons.filter(a => /aria-pressed="true"/.test(a));
+  if (JSON.stringify(jumps) !== JSON.stringify(sports)) fail(8, 'the catalogue does not link to each sport in index order');
   if (buttons.length !== sports.length) fail(8, `${buttons.length} chips for ${sports.length} sports`);
   if (buttons.some(a => !/type="button"/.test(a))) fail(8, 'a chip is not a plain button');
+  if (buttons.some(a => !/aria-label="Show [^"]+ first"/.test(a))) fail(8, 'a star is missing its accessible label');
   if (pressed.length !== 1 || !/data-fav-sport="hockey"/.test(pressed[0])) fail(8, `with hockey picked ${pressed.length} chip(s) read pressed`);
   if (/aria-pressed="true"/.test(front.renderFav(sports, null))) fail(8, 'a chip reads pressed with no pick');
   if (!failedSections.has(8)) console.log(`   ${sports.length} sports, each moves only its own section first, 8 bad stored values read as no pick, one pressed chip`);
