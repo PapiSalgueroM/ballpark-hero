@@ -523,7 +523,7 @@ try {
       ...(arm==='current'?['scripts/qa/managerWorldRosterDigest.cjs']:[])]) {
       const bytes = fs.readFileSync(path.join(directory,relative)); sourceManifest[relative]=sha(bytes);
     }
-    if (arm==='current') assert.equal(sourceManifest['scripts/qa/managerWorldRosterDigest.cjs'], sha(fs.readFileSync(digestHelper)),
+    if (arm==='current') assert.equal(sourceManifest['scripts/qa/managerWorldRosterDigest.cjs'], sha(fs.readFileSync(digestHelper, 'utf8').replaceAll('\r\n', '\n')),
       'The actual imported current decoder matches the held independent observer decoder');
     for (const name of arm==='control-input'?['simClubManagerSlots.mjs']:['simClubManagerSaveSize.mjs','simClubManagerSlots.mjs']) {
       const evidence = path.join(OUT,arm,name);fs.mkdirSync(evidence,{recursive:true});
