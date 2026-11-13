@@ -1,6 +1,8 @@
 # DoUKnowBall site readiness and game work
 
-Checkpoint at 11:20 UTC on November 13, 2026. The broad update remains draft [PR #770](https://github.com/PapiSalgueroM/ballpark-hero/pull/770). The work continued after the 24-hour report below.
+Checkpoint at 11:28 UTC on November 13, 2026. The broad update remains draft [PR #770](https://github.com/PapiSalgueroM/ballpark-hero/pull/770). The work continued after the 24-hour report below.
+
+Fantasy Draft now brings in its notification code on first visit and retains an open toast across navigation. Initial app JavaScript fell by 6,031 compressed bytes in the exact local pair. Four published cases covered the full draft, simulated error, in-app navigation and dismissal, and 173 sitemap URLs passed. The broad branch removed its separate route-local notification host to retain one accessible notification region. [PR #811](https://github.com/PapiSalgueroM/ballpark-hero/pull/811).
 
 Stadium Tycoon now confirms a Legacy perk purchase only after the existing save accepts it. A refused write keeps the level and points available for retry. The exact prior build reproduced false success. All 114 focused tests, 12 artifact readers, 16 budgets and four published browser checks passed. WebKit and Chromium retained four points after a controlled refusal, then saved one level and one remaining point after a single retry. [PR #810](https://github.com/PapiSalgueroM/ballpark-hero/pull/810).
 
