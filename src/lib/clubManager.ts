@@ -7416,6 +7416,13 @@ export function stopRetraining(career: CareerState, playerId: string): CareerSta
   };
 }
 
+function compareFullbackFit(a: CMPlayer, b: CMPlayer, slot: FormationSlot): number {
+  const side: Position[] = slot.label === 'RB' ? ['RB', 'RWB'] : slot.label === 'LB' ? ['LB', 'LWB'] : [];
+  if (!side.length) return 0;
+  const holdsSide = (p: CMPlayer) => heldPositions(p).some(pos => side.includes(pos));
+  return Number(holdsSide(b)) - Number(holdsSide(a));
+}
+
 export function autoPickXI(squad: CMPlayer[], formation: Formation, fresh = false): (string | null)[] {
   const used = new Set<string>();
   const xi: (string | null)[] = [];
@@ -7425,7 +7432,8 @@ export function autoPickXI(squad: CMPlayer[], formation: Formation, fresh = fals
     /* Round 505: a position he has retrained into is his too. */
     const fits = squad
       .filter(p => isAvailable(p) && !used.has(p.id) && heldPositions(p).some(pos => slot.allowed.includes(pos)))
-      .sort(order);
+      // A centre-back can cover either side when a specialist is unavailable.
+      .sort((a, b) => compareFullbackFit(a, b, slot) || order(a, b));
     let chosen: CMPlayer | null = fits[0] ?? null;
     if (!chosen) {
       const any = squad
@@ -16107,7 +16115,7 @@ export function effectiveXIWithSlots(state: CareerState): XiSlot[] {
          position he has retrained into counts as natural. */
       const worth = (x: CMPlayer) => x.rating - fitPenalty(x, slot);
       const best = (pool: CMPlayer[]) => pool
-        .sort((a, b) => worth(b) - worth(a) || b.rating - a.rating)[0];
+        .sort((a, b) => compareFullbackFit(a, b, slot) || worth(b) - worth(a) || b.rating - a.rating)[0];
       const open = state.squad.filter(x => isAvailable(x) && !used.has(x.id));
       p = best(open.filter(x => !resting.has(x.id))) ?? best(open);
     }
