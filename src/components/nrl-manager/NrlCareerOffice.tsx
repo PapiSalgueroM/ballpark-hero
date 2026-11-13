@@ -10,7 +10,8 @@ import {
   nrlBoardPathwaysIncome, nrlBoardPathwaysQuote,
   nrlCareerCap, nrlCareerFinance, nrlCareerMarket, nrlCareerRecord, nrlCareerSquad,
   nrlContractCounteroffer, nrlContractOffer,
-  nrlCoachQuote, nrlCoachRetentionQuote, nrlCoachSpend, nrlDevelopmentAssistantProgress, nrlDevelopmentPreview, nrlFinanceForecast,
+  nrlCoachCourseQuote, nrlCoachCourseSpend, nrlCoachQuote, nrlCoachRetentionQuote, nrlCoachSpend, nrlCoachTactics,
+  nrlDevelopmentAssistantProgress, nrlDevelopmentPreview, nrlFinanceForecast,
   nrlMedicalSpend, nrlMedicalUpgradeQuote, nrlOffseasonApplication, nrlOffseasonClubs, nrlOffseasonOpportunities,
   nrlLeagueRecruitmentPreview,
   nrlRecruitmentBrief,
@@ -21,7 +22,7 @@ import {
   NRL_DEVELOPMENT_ASSISTANT, NRL_SHORTLIST_LIMIT, NRL_SPONSOR_OFFERS, NRL_TICKET_GATE_CHANGES,
   type NrlDevelopmentFocus, type NrlMedicalLevel, type NrlSponsorOffer, type NrlStaffRole, type NrlTicketTier,
 } from '@/lib/nrlCareer';
-import { nrlArchivedFinals, NRL_COACHING_BONUS, NRL_FINALS_ROUND_TITLES, NRL_ROLES, type NrlRole } from '@/lib/nrlManager';
+import { nrlArchivedFinals, NRL_COACHING_BONUS, NRL_FINALS_ROUND_TITLES, NRL_QUALIFIED_COACHING_BONUS, NRL_ROLES, type NrlRole } from '@/lib/nrlManager';
 import {
   archiveNrlPlayerSeasons, archiveNrlScoring, nrlArchivedPlayerSeason, nrlArchivedScoringLeaders,
   nrlScorePoints, nrlTryLeaders, type NrlScoringLeader,
@@ -46,11 +47,10 @@ const medicalLabels = { 1: 'Standard care', 2: 'Treatment room', 3: 'Recovery ce
 const coachLabels = { attack: 'Attack assistant', defense: 'Defence assistant', development: 'Development assistant' };
 const ticketLabels = { value: 'Value', standard: 'Standard', premium: 'Premium' };
 const ticketTiers = ['value', 'standard', 'premium'] as const;
-const coachEffects: Record<NrlStaffRole, string> = {
-  attack: `+${NRL_COACHING_BONUS} attack rating with the Attack tactic.`,
-  defense: `+${NRL_COACHING_BONUS} defence rating with the Defence tactic.`,
-  development: `Up to ${NRL_DEVELOPMENT_ASSISTANT.players} returning players aged ${NRL_DEVELOPMENT_ASSISTANT.nextAge} or under next season can gain 1 OVR, up to their potential. Each needs ${NRL_DEVELOPMENT_ASSISTANT.appearances} regular-season appearances from the hire onward. A player can gain one extra point in total from this and Youth development.`,
-};
+function coachEffect(role: NrlStaffRole, bonus = NRL_COACHING_BONUS) {
+  if (role === 'development') return `Up to ${NRL_DEVELOPMENT_ASSISTANT.players} returning players aged ${NRL_DEVELOPMENT_ASSISTANT.nextAge} or under next season can gain 1 OVR, up to their potential. Each needs ${NRL_DEVELOPMENT_ASSISTANT.appearances} regular-season appearances from the hire onward. A player can gain one extra point in total from this and Youth development.`;
+  return role === 'attack' ? `+${bonus} attack rating with the Attack tactic.` : `+${bonus} defence rating with the Defence tactic.`;
+}
 
 function developmentSummary(focus: Exclude<NrlDevelopmentFocus, 'balanced'>, affected: number, preview: boolean) {
   if (!affected) return preview ? 'No returning players would get an extra point.' : 'No ratings changed from this focus.';
@@ -594,6 +594,39 @@ function AssistantExtension({ career, onAction, disabled }: { career: NrlCareerS
   );
 }
 
+function AssistantCourse({ career, role, onAction, disabled }: {
+  career: NrlCareerState; role: Exclude<NrlStaffRole, 'development'>; onAction: Dispatch; disabled: boolean;
+}) {
+  const [preview, setPreview] = useState(false);
+  const title = useRef<HTMLHeadingElement>(null);
+  if (career.retired) return null;
+  const { year, clubId, round } = career.season;
+  const { fee, remaining, reason } = nrlCoachCourseQuote(career);
+  const enrolled = career.finance.coachCourseRound !== undefined;
+  const showPreview = (value: boolean) => {
+    setPreview(value);
+    title.current?.focus();
+  };
+  return (
+    <section className="mt-3 space-y-2 rounded-lg border border-border bg-background p-3 text-sm">
+      <h3 ref={title} tabIndex={-1} className="font-bold outline-none">Assistant coaching course</h3>
+      {enrolled ? <p role="status" className="text-muted-foreground">{remaining
+        ? `Course in progress. ${remaining} regular ${remaining === 1 ? 'round' : 'rounds'} left.`
+        : 'Qualification earned. The bonus applies next season if you retain the assistant and stay at this club.'}</p>
+      : reason ? <p className="text-muted-foreground">{reason}</p> : preview ? <>
+        <p className="text-muted-foreground">Pay {money(fee)} from club cash today for four regular rounds of training, including byes. The current season’s tactics stay the same.</p>
+        <p className="text-muted-foreground">If you retain the assistant and stay at this club, the qualification takes effect next season. {coachEffect(role, NRL_QUALIFIED_COACHING_BONUS)} The usual bonus is +{NRL_COACHING_BONUS}.</p>
+        <div className="flex flex-wrap gap-2">
+          <Button type="button" size="lg" variant="outline" onClick={() => showPreview(false)}>Cancel course preview</Button>
+          <Button type="button" size="lg" disabled={disabled} onClick={() => {
+            if (onAction({ type: 'startCoachCourse', year, clubId, round })) showPreview(false);
+          }}>Confirm coaching course</Button>
+        </div>
+      </> : <Button type="button" size="lg" variant="outline" disabled={disabled} onClick={() => showPreview(true)}>Review coaching course</Button>}
+    </section>
+  );
+}
+
 function CoachingStaff({ career, onAction, disabled }: { career: NrlCareerState; onAction: Dispatch; disabled: boolean }) {
   const { year, clubId, round } = career.season;
   const { candidates, current, fee, wagePerRound, remainingWages, reason, developmentReason } = nrlCoachQuote(career);
@@ -607,7 +640,7 @@ function CoachingStaff({ career, onAction, disabled }: { career: NrlCareerState;
         {current ? (
           <>
             <p className="font-semibold" data-nrl-coach-current>{current.name} · {coachLabels[current.role]}</p>
-            <p className="mt-1 text-muted-foreground">{coachEffects[current.role]}</p>
+            <p className="mt-1 text-muted-foreground">{coachEffect(current.role, nrlCoachTactics(career.finance).coachBonus)}</p>
             <p className="mt-2 text-muted-foreground">Signed through this season. Remaining wages {money(remainingWages)}.</p>
             {career.finance.coachHire?.retained && <p className="mt-1 text-muted-foreground">Retained from {year - 1}. No new signing fee.</p>}
             {current.role === 'development' && (
@@ -626,6 +659,7 @@ function CoachingStaff({ career, onAction, disabled }: { career: NrlCareerState;
                 ) : <p className="mt-1 text-muted-foreground">No eligible players are signed to return yet.</p>}
               </>
             )}
+            {current.role !== 'development' && <AssistantCourse career={career} role={current.role} onAction={onAction} disabled={disabled} />}
             <AssistantExtension career={career} onAction={onAction} disabled={disabled} />
           </>
         ) : (
@@ -638,7 +672,7 @@ function CoachingStaff({ career, onAction, disabled }: { career: NrlCareerState;
                 <li key={candidate.role} className="min-w-0 rounded-lg border border-border p-2">
                   <p className="break-words font-semibold">{candidate.name}</p>
                   <p className="text-muted-foreground">{coachLabels[candidate.role]}</p>
-                  <p className="mt-1 text-muted-foreground">{coachEffects[candidate.role]}</p>
+                  <p className="mt-1 text-muted-foreground">{coachEffect(candidate.role)}</p>
                   <Button type="button" size="lg" variant="outline" className="mt-2 w-full px-3"
                     disabled={disabled || reason !== null || (candidate.role === 'development' && developmentReason !== null)}
                     onClick={() => onAction(candidate.role === 'development'
@@ -795,6 +829,7 @@ function Finances({ career, onAction, disabled }: { career: NrlCareerState; onAc
   const academySpend = nrlAcademyFacilitySpend(cash);
   const pathwaysIncome = nrlBoardPathwaysIncome(cash);
   const coachSpend = nrlCoachSpend(cash);
+  const courseSpend = nrlCoachCourseSpend(cash);
   const hasAccounts = cash.fromRound <= nrlSeasonPlan(year).draw.length + 4;
   return (
     <>
@@ -826,6 +861,7 @@ function Finances({ career, onAction, disabled }: { career: NrlCareerState; onAc
                 ...(academySpend ? [['Academy facilities', academySpend] as const] : []),
                 ...(cash.mutualRelease ? [['Contract settlement', nrlMutualReleaseSpend(cash)] as const] : []),
                 ...(cash.coachHire ? [['Coach signing fee', coachSpend.signingFee], ['Coach wages paid', coachSpend.wages]] as [string, number][] : []),
+                ...(courseSpend ? [['Assistant coaching course', courseSpend] as const] : []),
                 ['Profit or loss', cash.profit], ['Cash balance', cash.cash],
               ]} />
             </>
@@ -1414,6 +1450,9 @@ function History({ career, onAction, disabled }: { career: NrlCareerState; onAct
                   {coachLabels[coach.role]} · {money(staffSpend.signingFee + staffSpend.wages)} total staff cost
                 </p>}
                 {record.coachRetained && <p className="text-sm text-muted-foreground">Assistant retained for {record.year + 1}.</p>}
+                {record.finance?.coachCourseRound !== undefined && <p className="text-sm text-muted-foreground">
+                  Assistant coaching course completed · {money(nrlCoachCourseSpend(record.finance))}
+                </p>}
                 {record.coachDevelopment && (
                   <p className="text-sm text-muted-foreground">
                     {record.coachDevelopment.length === 0 ? 'Development assistant · No additional ratings gained'
