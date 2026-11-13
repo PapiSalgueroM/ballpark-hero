@@ -181,12 +181,15 @@ function LiveHalftime({ live, season, title, onAction, disabled, coachRole, coac
   const { year, tactic: openingTactic, squad } = season;
   const [tactic, setTactic] = useState(openingTactic);
   const [reserveId, setReserveId] = useState('');
+  const [secondReserveId, setSecondReserveId] = useState('');
   const [talk, setTalk] = useState<NrlHalftimeTalk>();
   const talkEffect = talk && NRL_HALFTIME_TALKS[talk];
   const { fixture, homeScoring, awayScoring } = live;
   const sides = [[fixture.homeId, homeScoring], [fixture.awayId, awayScoring]] as const;
   const options = nrlHalftimeInterchanges(season);
   const chosen = options.find(option => option.reserveId === reserveId);
+  const secondOptions = chosen ? options.filter(option => option.starterId !== chosen.starterId) : [];
+  const second = secondOptions.find(option => option.reserveId === secondReserveId);
   const heldName = live.heldReserveId && squad.find(player => player.id === live.heldReserveId)?.name;
   const name = (id: string) => squad.find(player => player.id === id)?.name;
   return (
@@ -231,16 +234,30 @@ function LiveHalftime({ live, season, title, onAction, disabled, coachRole, coac
           <div className="pb-4">
             <label htmlFor="nrl-half-reserve" className="sr-only">Reserve to finish the match</label>
             <select id="nrl-half-reserve" className="mt-2 min-h-11 w-full rounded-lg border border-input bg-background px-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-              value={reserveId} disabled={disabled} onChange={event => setReserveId(event.target.value)}>
+              value={reserveId} disabled={disabled} onChange={event => {
+                const id = event.target.value;
+                setReserveId(id);
+                if (!id || id === secondReserveId) setSecondReserveId('');
+              }}>
               <option value="">{heldName ? 'Leave held reserve unused' : 'Automatic rotation'}</option>
               {options.map(option => <option key={option.reserveId} value={option.reserveId}>{option.enteredAtHalf && 'Bring on '}{name(option.reserveId)} · {option.role}</option>)}
             </select>
             <p className="mt-2 text-sm text-muted-foreground">{heldName
-              ? `${heldName} sat out the first half. Bring them on now or keep a rotating reserve on.`
-              : 'Choose a reserve already in the rotation to finish the match. Their starter stays off.'}</p>
-            {chosen && <p className="mt-1 text-sm" data-nrl-halftime-choice>
-              {name(chosen.reserveId)} {chosen.enteredAtHalf ? 'comes on for the second half.' : 'finishes the match.'} {name(chosen.starterId)} stays off.
-            </p>}
+              ? `${heldName} sat out the first half. Bring them on now, keep a rotating reserve on, or do both at different positions.`
+              : 'Choose up to two reserves already in the rotation to finish. Their starters stay off.'}</p>
+            {secondOptions.length > 0 && (
+              <label className="mt-3 block text-sm font-semibold" htmlFor="nrl-half-second-reserve">
+                Second reserve to finish the match
+                <select id="nrl-half-second-reserve" className="mt-1 block min-h-11 w-full rounded-lg border border-input bg-background px-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                  value={secondReserveId} disabled={disabled} onChange={event => setSecondReserveId(event.target.value)}>
+                  <option value="">No second change</option>
+                  {secondOptions.map(option => <option key={option.reserveId} value={option.reserveId}>{option.enteredAtHalf && 'Bring on '}{name(option.reserveId)} · {option.role}</option>)}
+                </select>
+              </label>
+            )}
+            {[chosen, second].map(change => change && <p key={change.reserveId} className="mt-1 text-sm" data-nrl-halftime-choice>
+              {name(change.reserveId)} {change.enteredAtHalf ? 'comes on for the second half.' : 'finishes the match.'} {name(change.starterId)} stays off.
+            </p>)}
           </div>
         </details>
       ) : (
@@ -265,7 +282,8 @@ function LiveHalftime({ live, season, title, onAction, disabled, coachRole, coac
       </fieldset>
       <Button type="button" size="lg" className="w-full" disabled={disabled}
         onClick={() => onAction({ type: 'finishLive', year, round: fixture.round, tactic, talk,
-          interchange: chosen && { starterId: chosen.starterId, reserveId: chosen.reserveId } })}>
+          interchange: chosen && { starterId: chosen.starterId, reserveId: chosen.reserveId },
+          secondInterchange: second && { starterId: second.starterId, reserveId: second.reserveId } })}>
         Play second half <ArrowRight aria-hidden="true" />
       </Button>
     </section>
@@ -518,9 +536,7 @@ function MatchCentre({ career, onAction, onRun, onReview, onContracts, disabled,
   const latestScorers = lastMatch?.playerScoring?.lines ?? [];
   const latestInjury = lastMatch?.injury;
   const injuredName = latestInjury && season.squad.find(player => player.id === latestInjury.playerId)?.name;
-  const interchange = lastMatch?.halftimeInterchange;
-  const finishingReserve = interchange && season.squad.find(player => player.id === interchange.reserveId)?.name;
-  const restedStarter = interchange && season.squad.find(player => player.id === interchange.starterId)?.name;
+  const interchanges = [lastMatch?.halftimeInterchange, lastMatch?.secondHalftimeInterchange];
   const starterIds = new Set(Object.values(season.lineup));
   const fitness = Math.round(season.squad.reduce((sum, player) => sum + (starterIds.has(player.id) ? player.fitness : 0), 0) / NRL_ROLES.length);
   const title = phase === 'complete'
@@ -546,11 +562,16 @@ function MatchCentre({ career, onAction, onRun, onReview, onContracts, disabled,
       {usedReserves.length > 0 && <div className="mt-3 text-sm" data-nrl-interchange>
         <h4 className="font-semibold">Interchange used</h4>
         <p className="text-muted-foreground">{usedReserves.join(", ")}</p>
-        {finishingReserve && restedStarter && <p className="mt-1 text-muted-foreground" data-nrl-halftime-interchange>
-          {interchange?.enteredAtHalf
-            ? `${finishingReserve} came on for ${restedStarter} at half time. Each played about 40 minutes in regulation.`
-            : `${finishingReserve} finished the match. In regulation, they played about 53 minutes. ${restedStarter} stayed off after half time and played about 27 minutes.`}
-        </p>}
+        {interchanges.map(change => {
+          if (!change) return null;
+          const reserve = season.squad.find(player => player.id === change.reserveId)?.name;
+          const starter = season.squad.find(player => player.id === change.starterId)?.name;
+          return reserve && starter && <p key={change.reserveId} className="mt-1 text-muted-foreground" data-nrl-halftime-interchange>
+            {change.enteredAtHalf
+              ? `${reserve} came on for ${starter} at half time. Each played about 40 minutes in regulation.`
+              : `${reserve} finished the match. In regulation, they played about 53 minutes. ${starter} stayed off after half time and played about 27 minutes.`}
+          </p>;
+        })}
       </div>}
       {latestScorers.length > 0 && (
         <div className="mt-3 text-sm" data-nrl-scorers>
