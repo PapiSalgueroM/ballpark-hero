@@ -20,6 +20,7 @@ import {
   createNrlOriginSeries, isNrlOriginSeries, nrlOriginComplete, nrlOriginEligibility, playNrlOriginMatch, selectNrlOriginReserve, selectNrlOriginStarter,
   setNrlOriginTactic, type NrlOriginSeries, type NrlOriginSide,
 } from '@/lib/nrlOrigin';
+import { createNrlWorldCup, isNrlWorldCupNation, isNrlWorldCupRun, type NrlWorldCupNation, type NrlWorldCupRun } from '@/lib/nrlWorldCupSave';
 
 const SQUAD_SIZE = 30;
 export const NRL_SAVE_MAX_CHARS = 1_000_000;
@@ -133,6 +134,7 @@ export interface NrlCareerState {
   savedLineup?: NrlSavedLineup;
   positionTraining?: NrlPositionCourse;
   origin?: NrlOriginSeries;
+  worldCup?: NrlWorldCupRun;
   offseasonApplication?: string;
 }
 type NrlOpeningMatchdayPlayer = readonly [id: number, name: string, age: number, role: NrlRole];
@@ -151,6 +153,8 @@ type OriginMatchAction = { year: number; side: NrlOriginSide; game: number } & (
 export type NrlCareerAction = NrlAction
   | { type: 'startOrigin'; year: number; side: NrlOriginSide; nominationId?: string }
   | OriginMatchAction
+  | { type: 'startWorldCupAppointment'; nation: NrlWorldCupNation }
+  | { type: 'playWorldCupAppointment'; previous: NrlWorldCupRun; next: NrlWorldCupRun }
   | { type: 'setAttackPlan'; attackPlan: NrlAttackPlan; year: number; clubId: string; round: number }
   | { type: 'offerContract'; playerId: string; salary: number; years: number }
   | { type: 'acceptCounteroffer'; playerId: string; year: number; offeredSalary: number; contract: NrlContract }
@@ -1115,9 +1119,30 @@ function rolloverCareer(state: NrlCareerState, move?: { fromYear: number; clubId
   return move || !shortlist ? next : withShortlist(next, shortlist.filter(id => isRecruitmentTarget(next, id)));
 }
 
+const worldCupAppointmentSeed = (seed: number) => hashLabel(`nrl-world-cup-appointment-v1|${seed}`);
+
+export function nrlWorldCupAppointmentAvailable({ retired, legacySeason, worldCup, season }: NrlCareerState): boolean {
+  return !retired && !legacySeason && !worldCup && season.year === 2026 && season.phase === 'complete';
+}
+
 export function reduceNrlCareer(state: NrlCareerState, action: NrlCareerAction): NrlCareerState {
   if (state.retired || (state.season.live && action.type !== 'finishLive')) return state;
   switch (action.type) {
+    case 'startWorldCupAppointment': {
+      if (!nrlWorldCupAppointmentAvailable(state) || !isNrlWorldCupNation(action.nation)) return state;
+      return { ...state, worldCup: createNrlWorldCup(worldCupAppointmentSeed(state.season.seed), action.nation) };
+    }
+    case 'playWorldCupAppointment': {
+      const { previous, next } = action;
+      if (!state.worldCup || state.worldCup !== previous || !isNrlWorldCupRun(next)
+        || next.seed !== previous.seed || next.nation !== previous.nation
+        || next.tactics.length !== previous.tactics.length + 1
+        || !previous.tactics.every((tactic, index) => {
+          const before = previous.lineups?.[index + 1], after = next.lineups?.[index + 1];
+          return tactic === next.tactics[index] && before?.swap === after?.swap && before?.firstReserve === after?.firstReserve;
+        })) return state;
+      return { ...state, worldCup: next };
+    }
     case 'startOrigin': {
       const { origin, season } = state;
       if (action.year !== season.year || (origin && (origin.year >= action.year || !nrlOriginComplete(origin)))) return state;
@@ -1659,6 +1684,9 @@ export function isNrlCareerState(value: unknown): value is NrlCareerState {
       && training.startedRound + NRL_POSITION_TRAINING_ROUNDS > spell.startedRound) return false;
   }
   if (!validWorld(state) || !validCareerBooks(state) || !validAcademy(state) || !validShortlist(state)) return false;
+  if (state.worldCup !== undefined && (!isNrlWorldCupRun(state.worldCup) || state.openingYear !== 2026 || state.legacySeason
+    || state.worldCup.seed !== worldCupAppointmentSeed(state.season.seed)
+    || (year === 2026 ? state.season.phase !== 'complete' : !state.history.some(receipt => receipt.year === 2026)))) return false;
   if (state.origin?.nomination) {
     const { year: originYear, nomination } = state.origin;
     if (originYear === year) {

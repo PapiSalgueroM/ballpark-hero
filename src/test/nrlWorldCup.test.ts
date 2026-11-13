@@ -4,7 +4,7 @@ import {
   NRL_WORLD_CUP_2026_FORMAT, NRL_WORLD_CUP_2026_KNOCKOUT_VENUES, NRL_WORLD_CUP_2026_OPENER,
   NRL_WORLD_CUP_2026_OPENING_SQUADS, NRL_WORLD_CUP_2026_POOL_FIXTURES, NRL_WORLD_CUP_2026_POOLS,
 } from '@/data/nrlWorldCup2026';
-import { createNrlCareer, reduceNrlCareer } from '@/lib/nrlCareer';
+import { createNrlCareer, readNrlCareerSave, reduceNrlCareer, type NrlCareerState } from '@/lib/nrlCareer';
 import { NRL_ROLES } from '@/lib/nrlManager';
 import {
   advanceNrlWorldCup, createNrlWorldCup, nrlWorldCupCanPickLineup, nrlWorldCupMatchday, nrlWorldCupResults, nrlWorldCupRotation,
@@ -101,6 +101,60 @@ describe('2026 men’s Rugby League World Cup opener', () => {
     expect(JSON.stringify(origin)).toBe(bytes);
     expect(reduceNrlCareer(origin, { type: 'advance' })).toEqual(nextClub);
     expect(playOrigin()).toEqual(nextOrigin);
+  });
+});
+
+describe('World Cup club appointment', () => {
+  const advance = (state: NrlCareerState) => reduceNrlCareer(state, { type: 'advance' });
+  const stripCup = ({ worldCup: _, ...state }: NrlCareerState) => state;
+  const appoint = (state: NrlCareerState) => reduceNrlCareer(state, { type: 'startWorldCupAppointment', nation: 'australia' });
+
+  it('accepts one appointment after finishing 2026 and saves only the active career run', () => {
+    const initial = createNrlCareer('broncos', 16);
+    expect(appoint(initial)).toBe(initial);
+    const initial2027 = createNrlCareer('bears', 16, 2027);
+    let completed2027 = initial2027;
+    while (completed2027.season.phase !== 'complete') completed2027 = advance(completed2027);
+    expect(appoint(completed2027)).toBe(completed2027);
+
+    let complete = initial;
+    while (complete.season.phase !== 'complete') complete = advance(complete);
+    const appointed = appoint(complete);
+    expect(appointed.worldCup).toMatchObject({ year: 2026, nation: 'australia', tactics: [] });
+    expect(appointed.worldCup?.seed).not.toBe(initial.season.seed);
+    expect(stripCup(appointed)).toEqual(complete);
+    expect(appoint(appointed)).toBe(appointed);
+    expect(appoint(reduceNrlCareer(complete, { type: 'retireCareer', year: 2026, clubId: 'broncos' }))).not.toHaveProperty('worldCup');
+    expect(readNrlCareerSave(JSON.stringify({ ...initial, worldCup: appointed.worldCup }))).toBeNull();
+    expect(readNrlCareerSave(JSON.stringify({ ...complete, worldCup: { ...appointed.worldCup, seed: 16 } }))).toBeNull();
+
+    const previous = appointed.worldCup!;
+    const next = advanceNrlWorldCup(previous, 1, 'balanced', { swap: 0, firstReserve: 3 });
+    const started = reduceNrlCareer(appointed, { type: 'playWorldCupAppointment', previous, next });
+    expect(started.worldCup).toEqual(next);
+    expect(stripCup(started)).toEqual(complete);
+    expect(reduceNrlCareer(started, { type: 'playWorldCupAppointment', previous, next })).toBe(started);
+    const tampered = { ...advanceNrlWorldCup(next, 2, 'attack'), lineups: { 1: { swap: 0 } } };
+    expect(reduceNrlCareer(started, { type: 'playWorldCupAppointment', previous: next, next: tampered })).toBe(started);
+    expect(readNrlCareerSave(JSON.stringify({ ...started, worldCup: { ...next, lineups: { 2: { firstReserve: 3 } } } }))).toBeNull();
+    const move = { type: 'startNextSeason', move: { fromYear: 2026, clubId: 'bears' } } as const;
+    let current = reduceNrlCareer(started, move);
+    const ordinary = reduceNrlCareer(complete, move);
+    expect(stripCup(current)).toEqual(ordinary);
+    expect(current.worldCup).toEqual(next);
+    expect(appoint(ordinary)).toBe(ordinary);
+    const live = reduceNrlCareer(current, { type: 'startLive' });
+    expect(live.season.live).toBeDefined();
+    expect(reduceNrlCareer(live, { type: 'playWorldCupAppointment', previous: next, next: advanceNrlWorldCup(next, 2, 'attack') })).toBe(live);
+    for (let stage = 2; stage <= 5; stage++) {
+      const previous = current.worldCup!;
+      current = reduceNrlCareer(current, { type: 'playWorldCupAppointment', previous,
+        next: advanceNrlWorldCup(previous, stage, 'balanced') });
+      expect(JSON.stringify(readNrlCareerSave(JSON.stringify(current)))).toBe(JSON.stringify(current));
+      expect(stripCup(current)).toEqual(ordinary);
+    }
+    expect(nrlWorldCupResults(current.worldCup!).champion).toBeDefined();
+    expect(current.worldCup?.tactics).toHaveLength(5);
   });
 });
 
