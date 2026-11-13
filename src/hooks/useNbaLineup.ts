@@ -8,7 +8,7 @@ import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { NBA_PLAYER_SOURCE, normalizeName, type PlayerEntity, type PlayerSourceConfig } from '@/lib/playerSearch';
 import {
   NBA_FIVE_FRANCHISE_CODES, NBA_FIVE_HIT_SCORE, buildTeamPool, challengeByStat, findPoolEntry, isPositionEligibleForSlot,
-  nbaFiveNameCounts, nbaFiveNameKey, nbaFivePoints, refusalText, scoreFive, valueFor,
+  nbaFiveNameCounts, nbaFiveNameKey, nbaFivePoints, recordTeamCodes, refusalText, rosterName, scoreFive, valueFor,
   type NbaFiveRecordRow, type NbaFiveRosterRow, type NbaFiveScore, type NbaFiveTeamPool, type NbaFiveValue,
 } from '@/lib/nbaStartingFiveScore';
 
@@ -56,7 +56,9 @@ import {
 export function buildTeamFilteredNbaSource(teamName: string): PlayerSourceConfig {
   return {
     ...NBA_PLAYER_SOURCE,
+    // PlayerAutocomplete keys requests on the serialized options, not the loader function.
     filters: [{ column: 'team', op: 'eq', value: teamName }],
+    local: async () => (await loadTeamPool(teamName)).searchRows,
   };
 }
 
@@ -65,15 +67,15 @@ export function buildTeamFilteredNbaSource(teamName: string): PlayerSourceConfig
 export { isPositionEligibleForSlot };
 
 /**
- * Round 1555: what one dealt team allows, read from the record. The roster is
- * the search source's own rows for the team (so the pool is exactly what the
- * box can offer), the numbers are nba_player_stats career rows listing the
- * franchise. Read once per team per visit; a failed read is dropped from the
- * cache so the next pick tries again. Both reads page like the grid engine,
- * since PostgREST caps a select at 1000 rows.
+ * A dealt team's search and scoring both use the same roster and career
+ * records. The roster's single team is not the player's full career history.
+ * Read once per team per visit, and drop failed reads so a later search or
+ * pick can retry. Both reads page because PostgREST caps selects at 1000 rows.
  */
+type NbaFiveSearchRow = NbaFiveRosterRow & { player_id: number | null; team: string | null };
+type NbaFiveSearchPool = NbaFiveTeamPool & { searchRows: Record<string, unknown>[] };
 const POOL_PAGE = 1000;
-const poolCache = new Map<string, Promise<NbaFiveTeamPool>>();
+const poolCache = new Map<string, Promise<NbaFiveSearchPool>>();
 
 async function readPages<T>(page: (from: number) => PromiseLike<{ data: unknown; error: unknown }>): Promise<T[]> {
   const rows: T[] = [];
@@ -90,43 +92,49 @@ async function readPages<T>(page: (from: number) => PromiseLike<{ data: unknown;
    men one career. Every name in the search table is counted once per visit
    and buildTeamPool holds any name counted twice. A failed read is dropped
    so the next pick tries again, like a pool. */
-let censusLoad: Promise<Map<string, number>> | null = null;
+let rosterLoad: Promise<{ rows: NbaFiveSearchRow[]; census: Map<string, number> }> | null = null;
 
-function loadNameCensus(): Promise<Map<string, number>> {
-  if (censusLoad) return censusLoad;
-  const load = readPages<NbaFiveRosterRow>(from => supabase
+function loadRoster() {
+  if (rosterLoad) return rosterLoad;
+  const load = readPages<NbaFiveSearchRow>(from => supabase
     .from('nba_players_extended_v2')
-    .select('first_name, last_name, position')
+    .select('player_id, first_name, last_name, position, team')
     .order('player_id', { ascending: true })
-    .range(from, from + POOL_PAGE - 1)).then(nbaFiveNameCounts);
-  censusLoad = load;
-  load.catch(() => { if (censusLoad === load) censusLoad = null; });
+    .range(from, from + POOL_PAGE - 1)).then(rows => ({ rows, census: nbaFiveNameCounts(rows) }));
+  rosterLoad = load;
+  load.catch(() => { if (rosterLoad === load) rosterLoad = null; });
   return load;
 }
 
-export function loadTeamPool(team: string): Promise<NbaFiveTeamPool> {
+export function loadTeamPool(team: string): Promise<NbaFiveSearchPool> {
   const cached = poolCache.get(team);
   if (cached) return cached;
   const codes = NBA_FIVE_FRANCHISE_CODES[team] ?? [];
   const load = (async () => {
     if (codes.length === 0) throw new Error(`no franchise codes for ${team}`);
-    const [roster, records, census] = await Promise.all([
-      readPages<NbaFiveRosterRow>(from => supabase
-        .from('nba_players_extended_v2')
-        .select('first_name, last_name, position')
-        .eq('team', team)
-        .order('player_id', { ascending: true })
-        .range(from, from + POOL_PAGE - 1)),
+    const [{ rows, census }, records] = await Promise.all([
+      loadRoster(),
       readPages<NbaFiveRecordRow>(from => supabase
         .from('nba_player_stats')
         .select('player_name, teams, year_from, year_to, games, points, trb, ast, stl, blk, three_p')
         .or(codes.map(c => `teams.ilike.%${c}%`).join(','))
         .order('id', { ascending: true })
         .range(from, from + POOL_PAGE - 1)),
-      loadNameCensus(),
     ]);
+    const careerNames = new Set(records
+      .filter(row => recordTeamCodes(row).some(code => codes.includes(code)))
+      .map(row => nbaFiveNameKey(row.player_name)));
+    const roster = rows.filter(row => {
+      if (row.team === team) return true;
+      const key = nbaFiveNameKey(rosterName(row));
+      return census.get(key) === 1 && careerNames.has(key);
+    });
     if (roster.length === 0 || records.length === 0 || census.size === 0) throw new Error(`empty record for ${team}`);
-    return buildTeamPool(team, roster, records, census);
+    const pool = buildTeamPool(team, roster, records, census);
+    const scoredNames = new Set(pool.entries.filter(entry => entry.record).map(entry => entry.key));
+    const searchRows = roster.filter(row => row.team === team || scoredNames.has(nbaFiveNameKey(rosterName(row))))
+      .map(row => ({ ...row, team }));
+    return { ...pool, searchRows };
   })();
   poolCache.set(team, load);
   load.catch(() => { if (poolCache.get(team) === load) poolCache.delete(team); });
@@ -209,6 +217,12 @@ export function useNbaLineup() {
     [currentTeam]
   );
 
+  useEffect(() => {
+    if (phase === 'building' && isTeamSpinning && currentTeam) {
+      void loadTeamPool(currentTeam.name).catch(() => {});
+    }
+  }, [phase, isTeamSpinning, currentTeam]);
+
   const startGame = useCallback(() => {
     const newChallenge = getRandomStatChallenge();
     setChallenge(newChallenge);
@@ -263,13 +277,9 @@ export function useNbaLineup() {
 
   /**
    * Fills the currently selected slot with a player the user picked from the
-   * autocomplete dropdown (a PlayerEntity backed by an actual
-   * nba_players_extended_v2 row for the currently assigned team). Because
-   * the entity's team membership was already enforced by the search filter
-   * and its position eligibility is checked deterministically below (both
-   * against the same row), there is no second, independent AI judgment call
-   * that can disagree with the first. That double-judgment gap is what was
-   * producing false negatives on genuinely valid lineups.
+   * autocomplete dropdown (a PlayerEntity backed by the dealt team's pool).
+   * That pool enforces team membership and the position check below uses
+   * the same roster row. No separate model decides whether the pick fits.
    *
    * Round 1555: his number for the challenge comes from the team's pool (the
    * record, see loadTeamPool), the same rows the score compares against. A
