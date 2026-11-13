@@ -19,7 +19,7 @@ const PrivacyPolicy = () => {
       </button>
       <h1 className="text-3xl font-bold mb-8">Privacy Policy</h1>
 
-      <p className="text-sm text-muted-foreground mb-6">Last updated: November 11, 2026</p>
+      <p className="text-sm text-muted-foreground mb-6">Last updated: November 13, 2026</p>
 
       <section className="space-y-6 text-sm leading-relaxed text-muted-foreground">
         <div>
@@ -37,8 +37,8 @@ const PrivacyPolicy = () => {
         <div>
           <h2 className="text-lg font-semibold text-foreground mb-2">2. Cookies &amp; Local Storage</h2>
           <p>This site uses browser local storage to save your game progress, best scores, preferences, and UI state, and to remember your optional cookie choices. Local storage data stays on your device and is not transmitted to our servers except as described in Section 1.</p>
-          <p className="mt-2">Advertising and Analytics are separate optional purposes, and both start off. Analytics is currently paused, and the banner explains why. <strong>Accept all</strong> enables the optional purposes currently available, <strong>Reject all</strong> keeps them off, and <strong>Save choices</strong> applies your available selections. If your browser exposes a <strong>Global Privacy Control</strong> signal to the site, Advertising stays off even if you previously enabled it. You can play the games with optional purposes off. We ask you to choose again after 180 days.</p>
-          <p className="mt-2">The <strong>Cookie choices</strong> link in the footer opens your current settings. You can turn Advertising off and choose <strong>Save choices</strong>. Analytics stays off while it is paused. Saving a withdrawal clears the relevant optional cookies our code can access on this site. We normally reload to stop scripts that are already loaded. If your choice cannot be saved or a game has unsaved progress, optional loading stays paused and a notice asks you to refresh when it is safe. This does not erase information already received by a provider or remove cookies controlled by another site or inaccessible to our code. You can also manage cookies and clear stored site data in your browser settings. For requests concerning data already collected, see Section 6.</p>
+          <p className="mt-2">Advertising starts off. <strong>Accept all</strong> turns it on, <strong>Reject all</strong> keeps it off, and <strong>Save choices</strong> applies your selection. Google Analytics 4 stays paused. Lovable's basic visitor analytics continues under either choice, as described in Section 10. If your browser exposes a <strong>Global Privacy Control</strong> signal to the site, Advertising stays off even if you previously enabled it. You can play the games with Advertising off. We ask you to choose again after 180 days.</p>
+          <p className="mt-2">The <strong>Cookie choices</strong> link in the footer opens your current settings. You can turn Advertising off and choose <strong>Save choices</strong>. Saving a withdrawal clears the relevant optional cookies our code can access on this site. We normally reload to stop scripts that are already loaded. If your choice cannot be saved or a game has unsaved progress, optional loading stays paused and a notice asks you to refresh when it is safe. This does not erase information already received by a provider or remove cookies controlled by another site or inaccessible to our code. You can also manage cookies and clear stored site data in your browser settings. For requests concerning data already collected, see Section 6.</p>
           <p className="mt-2">Read our <Link to="/cookie-policy" className="underline hover:text-foreground transition-colors">Cookie Policy</Link> for a focused guide to browser storage and changing your choices.</p>
           <p className="mt-2">Third-party services (such as Google AdSense) use cookies and similar technologies to serve ads. If ads are served on this site, we request non-personalized ads. Those cookies are governed by the third party's own privacy policy, and Section 5 explains what they do.</p>
         </div>
@@ -89,7 +89,7 @@ const PrivacyPolicy = () => {
             <li>Other third party vendors and ad networks may also serve ads on this site. You can opt out of some of these vendors' use of cookies for personalized advertising by visiting <a href="https://www.aboutads.info/choices" className="underline hover:text-foreground transition-colors" target="_blank" rel="noopener noreferrer">www.aboutads.info/choices</a>, and in the European Union at <a href="https://www.youronlinechoices.eu" className="underline hover:text-foreground transition-colors" target="_blank" rel="noopener noreferrer">www.youronlinechoices.eu</a>.</li>
             <li>Google explains how it uses information from sites that use its services at <a href="https://policies.google.com/technologies/partner-sites" className="underline hover:text-foreground transition-colors" target="_blank" rel="noopener noreferrer">policies.google.com/technologies/partner-sites</a>.</li>
           </ul>
-          <p className="mt-2">When Advertising is off, this site does not load Google's advertising code. Analytics is currently paused. Advertising also stays off when your browser exposes Global Privacy Control to the site. Non-personalized ad requests can still use cookies and identifiers as described above. You can change your Advertising setting through Cookie choices in the footer.</p>
+          <p className="mt-2">When Advertising is off, this site does not load Google's advertising code. Google Analytics 4 is paused. Advertising also stays off when your browser exposes Global Privacy Control to the site. Non-personalized ad requests can still use cookies and identifiers as described above. You can change your Advertising setting through Cookie choices in the footer.</p>
         </div>
 
         <div>
@@ -121,7 +121,7 @@ const PrivacyPolicy = () => {
         <div>
           <h2 className="text-lg font-semibold text-foreground mb-2">10. Server Logs and Analytics</h2>
           <p>Like any website, our host receives standard technical data with every request: your IP address, browser type, the page you asked for and the time. It is used to deliver the pages and to keep the Site working, and it is kept for as long as our host keeps its ordinary server logs.</p>
-          <p className="mt-2">We also use aggregate hosting-provider usage information to understand traffic and game popularity. This is separate from Google Analytics 4, which is currently paused and whose tag we do not load, even when Advertising is on.</p>
+          <p className="mt-2">Lovable provides visitor analytics on douknowball.com. It measures visits, pages viewed, traffic sources, approximate country, device and browser type, engagement time, page performance, and browser errors. It continues to measure these basics after Reject all. We send Lovable a consent setting that keeps click tracking and optional app events off. Lovable says its visitor analytics uses no cookies or browser storage, keeps detailed visit data for 90 days, and keeps visit summaries and daily page-view totals for one year. Google Analytics 4 stays paused even when Advertising is on.</p>
         </div>
 
         <div>

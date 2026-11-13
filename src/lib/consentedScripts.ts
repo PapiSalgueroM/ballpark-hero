@@ -9,6 +9,7 @@ declare global {
     dataLayer?: unknown[];
     gtag?: (...args: unknown[]) => void;
     __DUKB_CONSENT_DEFAULTED__?: boolean;
+    __DUKB_HOST_ANALYTICS_DEFAULT__?: unknown;
   }
 }
 
@@ -77,7 +78,10 @@ function clearPurposeCookies(purposes: ConsentPurposes): void {
 }
 
 export function stopRevokedServices(revoked: ConsentPurposes, next = getEffectiveConsent()): void {
-  const hadGoogle = !!window.gtag || !!window.dataLayer;
+  const queue = window.dataLayer;
+  const hostDefault = window.__DUKB_HOST_ANALYTICS_DEFAULT__;
+  const hostOnly = hostDefault && queue?.length === 1 && queue[0] === hostDefault;
+  const hadGoogle = !!window.gtag || (!!queue && !hostOnly);
   if (revoked.analytics) {
     if (hadGoogle || document.querySelector('script[src*="googletagmanager.com/gtag/js"]')) {
       Reflect.set(window, `ga-disable-${GA_MEASUREMENT_ID}`, true);

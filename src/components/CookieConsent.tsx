@@ -214,7 +214,7 @@ export function CookieConsent({ inline = false, compactInitial = false, waitForR
             Advertising
           </label>
           <p data-analytics-paused-status="">
-            <strong>Analytics is paused.</strong> Google Analytics is off while we check its privacy settings.
+            <strong>Google Analytics is paused.</strong> Lovable still measures basic visits.
           </p>
         </div>}
         {gpc && <p>Your browser's Global Privacy Control keeps advertising off.</p>}
