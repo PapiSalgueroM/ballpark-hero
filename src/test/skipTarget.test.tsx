@@ -121,6 +121,7 @@ describe('skip to main content', () => {
       cleanup();
       expect(found, `${address} has exactly one #${TARGET}`).toBe(1);
       expect(mains, `${address} draws at most one main`).toBeLessThanOrEqual(1);
+      if (address === '/stadium-tycoon') expect(mains, 'Stadium Tycoon draws its main content landmark').toBe(1);
       if (mains === 1) expect(tag, `${address}: where the page has a main, #${TARGET} is it`).toBe('MAIN');
       expect(holdsContent, `${address}: #${TARGET} holds the page's content (its controls, or at least its words), so the link lands there`).toBe(true);
       expect(focusable, `${address}: #${TARGET} takes focus from the link`).toBe(true);
