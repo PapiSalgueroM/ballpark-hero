@@ -37,9 +37,8 @@ import UsCareerStartOver from '@/components/us-career/UsCareerStartOver';
 import { noOfferWhy, seasonAheadIsLast } from '@/lib/usCareerNoOffer';
 import UsCareerSaveNotice from '@/components/us-career/UsCareerSaveNotice';
 import { CelebrationStyles, revealDelay } from '@/components/club-manager/Celebration';
-import { type PlayerAppearance, defaultAppearance } from '@/lib/soccerCareerAppearance';
 import PlayerAvatar from '@/components/soccer-career/PlayerAvatar';
-import AppearanceBuilder from '@/components/soccer-career/AppearanceBuilder';
+import UsCareerCreator, { emptyUsCareerDraft, type UsCareerDraft } from '@/components/us-career/UsCareerCreator';
 import { Confetti } from '@/components/soccer-career/CareerFx';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { markRestoredFinish } from '@/lib/restoredFinish';
@@ -145,7 +144,12 @@ const SAVE_TOAST_MS = 10_000;
  *  career from a phone, so it gets a thumb's room, the same 44 px the notice's Retry save has. */
 const SAVE_TOAST_BUTTON = { height: 44, minWidth: 64, paddingLeft: 14, paddingRight: 14, fontSize: 13 } as const;
 
-export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
+export interface UsCareerStart {
+  draft: UsCareerDraft;
+  mode: 'prospect' | 'draft';
+}
+
+export default function UsCareerBoard({ sport, entry }: { sport: UsCareerSport; entry?: UsCareerStart }) {
   const pendingSave = useRef<{ key: string; value: string | null } | null>(null);
   const [saveFailure, setSaveFailure] = useState<'write' | 'remove' | null>(null);
   const saveFailed = saveFailure !== null;
@@ -180,8 +184,6 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
   const [prospectNotice, setProspectNotice] = useState('');
   const focusCareerEntry = useRef(false);
   const careerEntryButton = useRef<HTMLButtonElement>(null);
-  // Round 56: build your player's face before the draft
-  const [appearance, setAppearance] = useState<PlayerAppearance>(() => defaultAppearance());
   // Round 85: the tile rule. The season hub is boxes; each opens its own screen.
   const [panel, setPanel] = useState<'none' | 'bank' | 'stats' | 'log' | 'trophies' | 'news' | 'inbox' | 'dirty'>('none');
   const [draftClassOpen, setDraftClassOpen] = useState(false);
@@ -236,11 +238,9 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
   const practiceBankedRef = useRef(false);
   const practiceButtonRef = useRef<HTMLButtonElement>(null);
   const [teamQuality, setTeamQuality] = useState<number | null>(null);
-  const [nameInput, setNameInput] = useState('');
-  /* Round 172: which league you are drafted into. */
-  const [eraId, setEraId] = useState<string>('now');
-  const [pos, setPos] = useState<string>(sport.create.defaultPos);
-  const [archetypeId, setArchetypeId] = useState(sport.create.archetypes[sport.create.defaultPos][0].id);
+  const [draft, setDraft] = useState(() => entry?.draft ?? emptyUsCareerDraft(sport.create));
+  const consumedEntry = useRef(false);
+  const { nameInput, eraId, pos, archetypeId, appearance } = draft;
   const [feed, setFeed] = useState<string[]>([]);
   const [pendingEvent, setPendingEvent] = useState<CareerEvent | null>(null);
   const [decisionOutcome, setDecisionOutcome] = useState<CareerDecisionOutcomeData | null>(null);
@@ -451,9 +451,17 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
     setDecisionOutcome(null);
     consumedEvent.current = null;
     decisionReturn.current = false;
+    let raw: string | null = null;
+    try { raw = localStorage.getItem(sport.saveKey); } catch { /* The game can still play without saving. */ }
+    if (!raw) {
+      if (entry && !consumedEntry.current) {
+        consumedEntry.current = true;
+        if (entry.mode === 'prospect') beginProspect();
+        else create();
+      }
+      return;
+    }
     try {
-      const raw = localStorage.getItem(sport.saveKey);
-      if (!raw) return;
       const s = JSON.parse(raw) as SaveShape;
       if (!s.c) {
         if (s.phase === 'prospect') {
@@ -528,7 +536,7 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
       }
       setPhase(restoredPhase);
     } catch { /* fresh */ }
-  }, [sport]);
+  }, [sport, entry]);
 
   const retrySave = useCallback(() => {
     const pending = pendingSave.current;
@@ -1209,8 +1217,7 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
   if (phase === 'prospect' && prospect) {
     return withSaveStatus(<ProspectJourney sport={sport} prospect={prospect} onChange={advanceProspect} onJoin={joinCareer} onBack={() => {
       if (prospect.state) return;
-      setNameInput(prospect.name); setPos(prospect.pos); setArchetypeId(prospect.archetypeId);
-      setEraId(prospect.eraId); setAppearance(prospect.appearance);
+      setDraft({ nameInput: prospect.name, pos: prospect.pos, archetypeId: prospect.archetypeId, eraId: prospect.eraId, appearance: prospect.appearance });
       prospectRef.current = null; setProspect(null); setPhase('create');
       saveValue(null);
     }} />);
@@ -1237,93 +1244,24 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
   /* ------------------------------ create ------------------------------ */
   if (phase === 'create' || !career) {
     return withSaveStatus(
-      <div className="space-y-4">
-        <div className="rounded-2xl border border-border bg-card p-4 text-center">
-          <p className="font-display text-lg font-bold text-foreground">Create your player</p>
-          <p className="mt-1 text-xs text-muted-foreground">
-            You are a fictional prospect entering the real league. Position and archetype shape your
-            whole career: growth, injuries, money, legacy. Saves automatically.
-          </p>
-        </div>
-        <div className="mx-auto max-w-md space-y-3">
-          <input
-            value={nameInput}
-            onChange={e => setNameInput(e.target.value)}
-            placeholder="Your player's name"
-            aria-label="Your player name"
-            maxLength={24}
-            className="w-full rounded-xl border border-border bg-secondary px-4 py-3 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/40"
-          />
-          {/* Round 172: pick WHEN, before you pick what. Same pattern as Club
-              Manager's era picker: the default is today, the throwback is a
-              sealed 2005 league with 2005 franchises and 2005 money. */}
-          <div className="grid grid-cols-2 gap-1.5">
-            {sport.create.eras.map(e => (
-              <button
-                key={e.id}
-                onClick={() => setEraId(e.id)}
-                className={cn(
-                  'rounded-xl border-2 px-3 py-2 text-left',
-                  eraId === e.id ? 'border-gold bg-gold/10' : 'border-border bg-card hover:border-primary/50',
-                )}
-              >
-                <span className="block text-sm font-bold text-foreground">{e.id === 'now' ? `${sport.create.eraEmoji} ` : '⏪ '}{e.label}</span>
-                <span className="block text-[10px] text-muted-foreground">{e.blurb}</span>
-              </button>
-            ))}
-          </div>
-          {/* Round 56: eight positions, each with its own stat line and money curve */}
-          <div className={sport.create.positionGridClass}>
-            {sport.create.positions.map(p => (
-              <button
-                key={p}
-                onClick={() => { setPos(p); setArchetypeId(sport.create.archetypes[p][0].id); }}
-                className={cn(sport.create.positionButtonClass, pos === p ? 'bg-background text-foreground shadow-sm' : 'text-muted-foreground hover:text-foreground')}
-              >
-                {p}
-              </button>
-            ))}
-          </div>
-          <AppearanceBuilder appearance={appearance} onChange={setAppearance} clubColor={sport.create.clubColor} sport={sport.slug} />
-
-          <div className="grid gap-1.5">
-            {sport.create.archetypes[pos].map(a => (
-              <button
-                key={a.id}
-                onClick={() => setArchetypeId(a.id)}
-                className={cn(
-                  'rounded-xl border-2 px-3 py-2 text-left',
-                  archetypeId === a.id ? 'border-gold bg-gold/10' : 'border-border bg-card hover:border-primary/50',
-                )}
-              >
-                <span className="block text-sm font-bold text-foreground">{a.label}</span>
-                <span className="block text-[11px] text-muted-foreground">{a.desc}</span>
-              </button>
-            ))}
-          </div>
-          <section data-career-prospect-entry className="rounded-2xl border border-blue-300/50 bg-blue-950 p-4 text-white">
-            <p className="font-display text-xl font-black">Road to the Draft</p>
-            <p className="mt-1 text-xs leading-relaxed text-blue-100">Start before the spotlight. Choose your route, earn your stock, and make draft day yours.</p>
-            {prospectNotice && <p className="mt-2 text-xs" role="status">{prospectNotice}</p>}
-            <button onClick={beginProspect} className="mt-3 min-h-11 w-full rounded-xl bg-white px-4 py-3 text-sm font-bold text-blue-950">Play your road to the draft</button>
-            <p className="mt-3 text-center text-xs text-blue-100">Or quick start below with an instant draft result.</p>
-          </section>
-          <button
-            onClick={create}
-            className="w-full rounded-full bg-primary px-8 py-3 text-sm font-bold text-primary-foreground hover:opacity-90"
-          >
-            Enter the draft
+      <UsCareerCreator
+        sport={sport.slug}
+        create={sport.create}
+        draft={draft}
+        setDraft={setDraft}
+        onBeginProspect={beginProspect}
+        onEnterDraft={create}
+        prospectNotice={prospectNotice}
+      >
+        {/* Round 1570: below the last control on purpose. The wall is read after mount, so this row arrives
+            one paint late, and below everything it moves nothing a player is reading. */}
+        {sport.hall && wall && wall.entries.length > 0 && (
+          <button ref={createWallButton} type="button" data-career-hall-wall-opener="create" onClick={() => setWallView({ from: 'create', plaque: null })}
+            className="min-h-11 w-full rounded-xl border border-primary/40 bg-primary/10 px-3 py-3 text-sm font-semibold text-foreground">
+            🏛️ Hall wall ({wall.entries.length})
           </button>
-          {/* Round 1570: below the last control on purpose. The wall is read after mount, so this row arrives
-              one paint late, and below everything it moves nothing a player is reading. */}
-          {sport.hall && wall && wall.entries.length > 0 && (
-            <button ref={createWallButton} type="button" data-career-hall-wall-opener="create" onClick={() => setWallView({ from: 'create', plaque: null })}
-              className="min-h-11 w-full rounded-xl border border-primary/40 bg-primary/10 px-3 py-3 text-sm font-semibold text-foreground">
-              🏛️ Hall wall ({wall.entries.length})
-            </button>
-          )}
-        </div>
-      </div>
+        )}
+      </UsCareerCreator>
     );
   }
 
