@@ -1,6 +1,8 @@
 # DoUKnowBall site readiness and game work
 
-Checkpoint at 10:49 UTC on November 13, 2026. The broad update remains draft [PR #770](https://github.com/PapiSalgueroM/ballpark-hero/pull/770). The work continued after the 24-hour report below.
+Checkpoint at 10:52 UTC on November 13, 2026. The broad update remains draft [PR #770](https://github.com/PapiSalgueroM/ballpark-hero/pull/770). The work continued after the 24-hour report below.
+
+The NRL Development assistant is live for the 2026 and 2027 starts. Up to three returning players aged 24 or under can gain one rating point, capped by their potential, after eight regular-season appearances from the hire. A reserve must take the field to count. The assistant uses the same staff slot and cost, gives no match-day boost and shares the existing youth-development limit. All 287 focused tests and six published browser cases passed. The updated guide was accepted by IndexNow. [PR #806](https://github.com/PapiSalgueroM/ballpark-hero/pull/806).
 
 Soccer Career now opens the creator before the simulation. Existing saves open the full game, and the saved loading frame reserves a viewport. Thirty-four published browser cases passed. Fresh and saved visits recorded zero CLS at all five tested widths. Two 412px lab runs reduced initial encoded JavaScript from 812,567 to 297,560 bytes, and the same heading painted at 5.804 and 5.148 seconds, down from 10.152 and 8.164. The mobile target remains open and PageSpeed Insights returned HTTP 429. All 173 live sitemap URLs passed. [PR #805](https://github.com/PapiSalgueroM/ballpark-hero/pull/805).
 
