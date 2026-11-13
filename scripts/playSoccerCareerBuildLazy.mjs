@@ -136,7 +136,7 @@ const customize = page => page.getByRole('button', { name: /Customize your build
 async function generate(walk, row) {
   row.stage = 'generate';
   await walk.page.getByLabel('Player Name', { exact: true }).fill('Build Proof');
-  for (const [placeholder, name] of [['Choose nationality', /^England(?:\s|$)/], ['Choose position', 'Striker (ST)'], ['Choose era', 'Current era (2025 start)']]) {
+  for (const [placeholder, name] of [['Choose nationality', /^England(?:\s|$)/], ['Choose position', 'Striker (ST)'], ['Choose era', /^Current era \(/]]) {
     await walk.activate(walk.page.getByRole('combobox').filter({ hasText: placeholder }));
     const option = walk.page.getByRole('option', { name, exact: typeof name === 'string' });
     setup(await option.count() === 1, `${row.id}: actual creator option is not unique: ${placeholder}`);
@@ -148,7 +148,7 @@ async function generate(walk, row) {
   const academy = walk.page.getByText('Academy Placement', { exact: true }).locator('..').locator('div.font-bold.text-sm');
   await academy.waitFor();
   const academyText = (await academy.innerText()).trim();
-  const errorNoticeCount = await walk.page.getByText('Couldn\'t reach the live club database, so we loaded a backup roster. Everything still works.', { exact: true }).count();
+  const errorNoticeCount = await walk.page.getByText(/^Couldn't (?:reach the live club database|load the clubs\.)/).count();
   check(academyText.endsWith(' Youth') && academyText.length > ' Youth'.length, `${row.id}: actual bundled-roster generation has no academy preview.`, row);
   check(errorNoticeCount === 0, `${row.id}: direct bundled-roster loading incorrectly shows a live-club failure warning.`, row);
   row.roster.push({ provider: 'direct-bundled-FALLBACK_CLUBS', academyText, errorNoticeCount });
@@ -298,13 +298,19 @@ async function recovery(base) {
 try {
   const markerSources = [...files(path.join(ROOT, 'src/pages')), ...files(path.join(ROOT, 'src/components'))].filter(file => /\.tsx?$/.test(file) && fs.readFileSync(file, 'utf8').includes(MARKER));
   setup(markerSources.length === 1, 'The real build-editor UI marker must have exactly one source owner.');
-  const sourceFiles = ['src/pages/SoccerCareer.tsx', 'src/lib/soccerCareerEngine.ts', 'src/lib/soccerCareerAttributes.ts', 'src/lib/careerEras.ts',
+  const coldEntry = 'src/pages/SoccerCareerEntry.tsx';
+  const coldSplit = fs.existsSync(path.join(ROOT, coldEntry));
+  const sourceFiles = ['src/pages/SoccerCareer.tsx',
+    ...(coldSplit ? [coldEntry, 'src/components/soccer-career/SoccerCareerCreator.tsx'] : []),
+    'src/lib/soccerCareerEngine.ts', 'src/lib/soccerCareerAttributes.ts', 'src/lib/careerEras.ts',
     'src/lib/soccerCareerLife.ts', 'src/lib/soccerCareerRoutineEvents.ts', 'src/lib/soccerCareerSave.ts', 'src/lib/freshBuild.ts', 'src/integrations/supabase/client.ts',
     'src/hooks/useRevealScroll.ts', 'src/components/RouteErrorBoundary.tsx', 'scripts/playSoccerCareerBuildLazy.mjs', 'scripts/lib/hostLikeServer.mjs', 'scripts/lib/playwrightLoader.mjs',
     'scripts/lib/offlineTransport.cjs', 'package.json', 'package-lock.json'];
   sourceBefore = [...new Set([...sourceFiles.map(file => path.join(ROOT, file)), ...markerSources])].sort().map(receipt); report.sourceHashes = sourceBefore;
   const pageCode = fs.readFileSync(path.join(ROOT, 'src/pages/SoccerCareer.tsx'), 'utf8').replace(/\/\*[\s\S]*?\*\//g, '').replace(/^[\t ]*\/\/.*$/gm, '');
-  const loader = /^[\t ]*useEffect\(\(\) => \{\s*setClubs\(FALLBACK_CLUBS\);\s*setClubsError\(false\);\s*setClubsLoading\(false\);\s*\}, \[\]\);/gm;
+  const loader = coldSplit
+    ? /export function getCreationSupport\(\): CareerCreationSupport \{\s*return \{\s*clubs: FALLBACK_CLUBS,/g
+    : /^[\t ]*useEffect\(\(\) => \{\s*setClubs\(FALLBACK_CLUBS\);\s*setClubsError\(false\);\s*setClubsLoading\(false\);\s*\}, \[\]\);/gm;
   const loaderMatches = [...pageCode.matchAll(loader)].length;
   setup(loaderMatches === 1, 'Exactly one actual direct bundled-roster loader must be held; comments do not establish its behavior.');
   report.rosterProvenance = { provider: 'FALLBACK_CLUBS', loaderMatches, source: 'src/pages/SoccerCareer.tsx', sourceSha256: sha(path.join(ROOT, 'src/pages/SoccerCareer.tsx')), warningExpected: false };

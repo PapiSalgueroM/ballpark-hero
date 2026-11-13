@@ -17,8 +17,8 @@ describe('NRL assistant coaching', () => {
     expect(nrlNextRound(initial.season).clubStatus).toBe('bye');
     const quote = nrlCoachQuote?.(initial);
     expect(quote).toMatchObject({ fee: 120_000, wagePerRound: 18_000, remainingWages: 558_000, reason: null });
-    expect(quote?.candidates.map(candidate => candidate.role)).toEqual(['attack', 'defense']);
-    expect(new Set(quote!.candidates.map(candidate => candidate.name)).size).toBe(2);
+    expect(quote?.candidates.slice(0, 2).map(candidate => candidate.role)).toEqual(['attack', 'defense']);
+    expect(new Set(quote!.candidates.slice(0, 2).map(candidate => candidate.name)).size).toBe(2);
     expect(nrlCoachQuote(readNrlCareerSave(raw(initial))!)).toStrictEqual(quote);
     const hired = hire(initial, 'attack');
     expect(hired.finance.coachHire).toEqual({ role: 'attack', round: 1, paidRounds: 0 });

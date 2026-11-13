@@ -392,9 +392,9 @@ for (const [name, conf] of Object.entries(M.DISPLAY_CONFED)) {
   if (name in M.NATION_CONFED && M.NATION_CONFED[name] !== conf) fail(`${name} sits in ${M.NATION_CONFED[name]} for qualifying and ${conf} for display, two confederations for one nation`);
 }
 
-const sc = stripComments(read('src/pages/SoccerCareer.tsx'));
+const sc = stripComments(read('src/components/soccer-career/SoccerCareerCreator.tsx'));
 const pStart = sc.indexOf('const NATIONALITIES = [');
-if (pStart < 0) refuse('SoccerCareer.tsx no longer declares NATIONALITIES where this harness reads it');
+if (pStart < 0) refuse('SoccerCareerCreator.tsx no longer declares NATIONALITIES where this harness reads it');
 const picker = [...sc.slice(pStart, sc.indexOf('];', pStart)).matchAll(/"([^"]+)"/g)].map(m => m[1]);
 if (picker.length < 100) refuse(`only ${picker.length} names read from the Soccer Career picker, the parse is off`);
 
@@ -481,11 +481,11 @@ const marketGroups = checkGrouping('market nationalities', market);
 const counts = groups => groups.map(g => `${g.conf} ${g.items.length}`).join(', ');
 console.log(`   groups as placed: picker ${counts(pickerGroups)}; market ${counts(marketGroups)}`);
 
-if (!/groupByConfederation\(NATIONALITIES/.test(sc) || !/<SelectGroup\b/.test(sc)) fail('SoccerCareer.tsx no longer renders the picker in confederation groups');
+if (!/groupByConfederation\(NATIONALITIES/.test(sc) || !/<SelectGroup\b/.test(sc)) fail('SoccerCareerCreator.tsx no longer renders the picker in confederation groups');
 const ts = stripComments(read('src/components/club-manager/TransferScreen.tsx'));
 if (!/groupByConfederation\(marketNations/.test(ts) || !/<optgroup\b/.test(ts)) fail('TransferScreen.tsx no longer renders the nationality filter in confederation groups');
 
-const section3Clean = !messages.some(m => /^(?:Soccer Career picker|market nationalities|the picker has no nation|SoccerCareer\.tsx no longer renders|TransferScreen\.tsx no longer renders)/.test(m) || / two confederations for one nation$/.test(m));
+const section3Clean = !messages.some(m => /^(?:Soccer Career picker|market nationalities|the picker has no nation|SoccerCareerCreator\.tsx no longer renders|TransferScreen\.tsx no longer renders)/.test(m) || / two confederations for one nation$/.test(m));
 if (section3Clean) console.log(`3. Confederations: ${picker.length} picker nations and ${market.length} market nationalities each in exactly one of six groups (picker: ${pickerGroups.map(g => `${g.conf} ${g.items.length}`).join(', ')}); the market is today's world, ${ERA_NAT_FILES.length} past worlds and ${leagueMaps.length} gathered league maps nationalityOf reads (${leagueMaps.map(m => `${m.id} ${m.rows} rows`).join(', ')}); grouped in SoccerCareer's picker and TransferScreen's filter`);
 
 /* ─── Verdict ─────────────────────────────────────────────────────────────── */

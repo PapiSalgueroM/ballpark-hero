@@ -46,6 +46,19 @@ const fail = m => { failures += 1; console.error('  FAIL: ' + m); };
    the same name so every call below reads as it always did. */
 const staticClosure = (entryRel, override = {}) => libStaticClosure(ROOT, entryRel, override);
 
+console.log('0) first-time creation uses the real form before the career runtime');
+const coldEntry = 'src/pages/SoccerCareerEntry.tsx';
+const coldFile = path.join(ROOT, coldEntry);
+const coldSource = readFileSync(coldFile, 'utf8');
+const savedFallback = coldSource.match(/<main[^>]+role="status"[^>]+className="([^"]+)"[^>]*>Opening your career/);
+if (!savedFallback?.[1].split(/\s+/).includes('min-h-svh')) fail('saved startup shows the footer before the career is ready');
+const forceRuntime = process.env.FLAGSHIP_LAZY_CONTROL === 'coldruntime';
+if (forceRuntime && !coldSource.includes('import("./SoccerCareer")')) throw new Error('coldruntime: dynamic career import missing');
+const cold = staticClosure(coldEntry, forceRuntime ? { [coldFile]: `import "./SoccerCareer";\n${coldSource}` } : {});
+if (!cold.has('src/components/soccer-career/SoccerCareerCreator.tsx')) fail('the cold entry does not load the actual creator');
+if (cold.has('src/pages/SoccerCareer.tsx') || cold.has('src/lib/soccerCareerEngine.ts')) fail('first-time creation statically pulls in the career runtime or engine');
+console.log(`   ${cold.size} source modules at creation, with the actual form and a deferred runtime`);
+
 console.log('1) the flagship carries no other game');
 const flagship = staticClosure('src/pages/SoccerCareer.tsx');
 /* Each of these is another game's code, and each one was genuinely being
@@ -196,29 +209,44 @@ if (!existsSync(ASSETS)) {
   };
   const entry = files.find(f => /^index-.*\.js$/.test(f));
   const route = files.find(f => /^SoccerCareer-.*\.js$/.test(f));
-  if (!entry || !route) {
-    fail('cannot find the entry chunk or the SoccerCareer chunk in dist/assets, the build layout changed');
+  const coldRoute = files.find(f => /^SoccerCareerEntry-.*\.js$/.test(f));
+  if (!entry || !route || !coldRoute) {
+    fail('cannot find the entry, creation or SoccerCareer runtime chunk in dist/assets');
   } else {
-    const seen = new Set();
-    const queue = [entry, route];
-    while (queue.length) {
-      const f = queue.pop();
-      if (!f || seen.has(f) || !files.includes(f)) continue;
-      seen.add(f);
-      for (const d of depsOf(f)) queue.push(d);
-    }
+    const closureOf = (queue) => {
+      const found = new Set();
+      while (queue.length) {
+        const f = queue.pop();
+        if (!f || found.has(f) || !files.includes(f)) continue;
+        found.add(f);
+        queue.push(...depsOf(f));
+      }
+      return found;
+    };
+    const coldSeen = closureOf([entry, coldRoute, ...(forceRuntime ? [route] : [])]);
+    const seen = closureOf([entry, route]);
+    const chunksWith = words => files.filter(f => readFileSync(path.join(ASSETS, f), 'utf8').includes(words));
+    const creators = chunksWith('Create Your Player');
+    const engines = chunksWith('Professional contract offers received!');
+    if (!creators.some(f => coldSeen.has(f))) fail('compiled first-time creation has no real form');
+    if (!engines.some(f => seen.has(f))) fail('compiled career runtime is missing the simulation engine');
+    if (coldSeen.has(route) || engines.some(f => coldSeen.has(f))) fail('compiled first-time creation loads the career runtime or engine');
+    console.log(`   ${coldSeen.size} built chunks in the creation closure`);
     /* Absence is only half the proof. A chunk that is missing because the
        feature broke would also be absent, and the flagship would look lighter
        for the worst possible reason. So the Club Manager chunk has to be in
        the flagship's LAZY dependency list: present, wired, and deferred.
        Vite writes that list into a __vite__mapDeps array at the top of the
        chunk, which is a different thing from the static imports counted above. */
-    const routeText = readFileSync(path.join(ASSETS, route), 'utf8').slice(0, 4000);
-    const mapDeps = routeText.match(/__vite__mapDeps[^\[]*\[([^\]]*)\]/);
-    const lazy = mapDeps ? [...mapDeps[1].matchAll(/assets\/([^"']+)/g)].map(m => m[1]) : [];
+    const lazy = [...new Set([...seen].flatMap(file => {
+      const text = readFileSync(path.join(ASSETS, file), 'utf8');
+      const mapDeps = text.match(/__vite__mapDeps[^\[]*\[([^\]]*)\]/);
+      return mapDeps ? [...mapDeps[1].matchAll(/assets\/([^"']+)/g)].map(m => m[1]) : [];
+    }))];
     if (!lazy.some(f => /^clubManager-/.test(f))) {
-      fail('the SoccerCareer chunk does not list a clubManager chunk among its lazy dependencies, so the job market is not deferred, it is gone');
+      fail('the Soccer Career runtime graph does not list a lazy Club Manager chunk for the job market');
     }
+    if ([...seen].some(f => /^clubManager-/.test(f))) fail('the Club Manager chunk is statically loaded by the Soccer Career runtime');
     /* NOT asserted: that a lazy dependency is never also a static one. That
        was written and immediately removed, because it fires on correct output.
        Vite's mapDeps is the full preload set for the dynamic import, so shared

@@ -28,7 +28,7 @@ import {
 } from '@/lib/nrlManager';
 import {
   createNrlCareer, isNrlOpeningMatchdayPlayer, loadNrlOpeningMatchdayCareer, nrlAttackPlanPreview, nrlOppositionReport, nrlPositionTraining,
-  nrlPositionTrainingCandidates, nrlReserveGradeCandidates, nrlRivalSquad,
+  nrlPositionTrainingCandidates, nrlReserveGradeCandidates, nrlRivalSquad, nrlTacticalAssistant,
   NRL_POSITION_TRAINING_ROUNDS, NRL_SAVE_MAX_CHARS, reduceNrlCareer, type NrlCareerAction, type NrlCareerState,
 } from '@/lib/nrlCareer';
 import { nrlScorePoints, nrlScoringLeaders, nrlSquadSeasonStats, nrlTryLeaders, type NrlSquadStatsScope } from '@/lib/nrlPlayerScoring';
@@ -390,7 +390,7 @@ function MatchCentre({ career, onAction, onReview, disabled, showLiveResult }: {
   const { season } = career;
   const next = nrlNextRound(season);
   const { clubId, year, phase, championId } = season;
-  const coachRole = career.finance.coachHire?.role;
+  const coachRole = nrlTacticalAssistant(career.finance);
   const [hold, setHold] = useState<{ year: number; round: number; reserveId: string }>();
   if (season.live) {
     return <LiveHalftime live={season.live} season={season} title={next.title} onAction={onAction} disabled={disabled} coachRole={coachRole} />;
@@ -1241,7 +1241,7 @@ function NrlManagerScreen({ entry, showSlots, rules }: {
               <li>Name 13 starters and six reserves in Squad. Quick sim can use up to four of the reserves. Before a game, choose a tactic and train or recover.</li>
               <li>A match knock can put a player out for up to four rounds. Check Availability in Squad. The countdown includes byes, and an available player fills the vacant spot.</li>
               <li>Buy medical upgrades with club cash in Finances. Upgrades shorten recovery from new knocks.</li>
-              <li>Sign one fictional assistant in Finances. Their rating bonus applies when you use their tactic.</li>
+              <li>Sign one fictional assistant in Finances. Tactical assistants help when you use their tactic. A development assistant helps eligible young players improve next season.</li>
               <li>Choose your goal kicker in Squad to credit conversions and penalty goals. Match centre shows your scorers.</li>
               <li>Play Live shows the first half. At half time, change tactics, bring on a reserve you held back, or keep a rotating reserve on. Quick Sim settles the round in one action.</li>
               <li>Advance a round to simulate every fixture. A win or bye earns two ladder points, a draw earns one and a loss earns zero.</li>
