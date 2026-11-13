@@ -115,7 +115,7 @@ if (CONTROL === 'page' || CONTROL === 'pageshare') {
 const ENTRY = path.join(os.tmpdir(), 'tps-entry.mjs'), BUNDLE = path.join(os.tmpdir(), 'tps-bundle.mjs');
 const p = f => f.replaceAll('\\', '/');
 globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };
-fs.writeFileSync(ENTRY, `export { buildSeasonIndex, clubSeasonsOf, linkedFrom, shareClub, verifiedClassicStint } from '${p(graphTsPath)}';\nexport { isEuropeanClub, playersUnderRule } from '${p(ROOT)}/src/lib/transferPathModes.ts';\nexport { careerPlayers as fallbackPlayers } from '${p(ROOT)}/src/data/careerPlayers.ts';\nexport { default as fallbackPuzzles } from '${p(ROOT)}/src/data/transferPathPuzzles.ts';\n`);
+fs.writeFileSync(ENTRY, `export { buildSeasonIndex, clubSeasonsOf, linkedFrom, shareClub, verifiedTransferPathStints } from '${p(graphTsPath)}';\nexport { isEuropeanClub, playersUnderRule } from '${p(ROOT)}/src/lib/transferPathModes.ts';\nexport { careerPlayers as fallbackPlayers } from '${p(ROOT)}/src/data/careerPlayers.ts';\nexport { default as fallbackPuzzles } from '${p(ROOT)}/src/data/transferPathPuzzles.ts';\n`);
 await build({ entryPoints: [ENTRY], bundle: true, format: 'esm', platform: 'node', outfile: BUNDLE, logLevel: 'error', alias: { '@': path.join(ROOT, 'src') } });
 const page = await import(pathToFileURL(BUNDLE).href);
 
@@ -353,7 +353,9 @@ if (!CONTROL) {
   console.log('6) the verified 2015 New York City FC graph stint and retained puzzle minimums');
   const pool = page.fallbackPlayers;
   const beforeKeys = page.clubSeasonsOf(pool);
-  const afterKeys = page.clubSeasonsOf(pool, true);
+  const afterKeys = page.clubSeasonsOf(pool, 'classic');
+  // Compare the original Lampard control with the Liverpool additions held fixed.
+  for (const name of ['Alexander Isak', 'Virgil van Dijk']) beforeKeys.set(name, afterKeys.get(name));
   const beforeIndex = page.buildSeasonIndex(beforeKeys);
   const afterIndex = page.buildSeasonIndex(afterKeys);
   const lampard = 'Frank Lampard';
@@ -367,7 +369,7 @@ if (!CONTROL) {
     || page.shareClub(afterKeys, villa, messi) !== 'Barcelona') fail('the reported two-link path and Pirlo companion edge must come from the verified stint');
 
   for (const rule of ['active', 'europe']) {
-    const keys = page.clubSeasonsOf(page.playersUnderRule(pool, rule));
+    const keys = page.clubSeasonsOf(page.playersUnderRule(pool, rule), rule);
     if (page.shareClub(keys, lampard, villa) !== null) fail(`the added link must stay outside ${rule}`);
   }
 
@@ -387,8 +389,8 @@ if (!CONTROL) {
   const companion = parseTransferPathCompanionMigration(read(path.join(ROOT,
     'supabase/migrations/20260907173202_quarantine_unreachable_transfer_path_puzzles_and_refresh_hints.sql')));
   const puzzles = [...companion.desired, ...page.fallbackPuzzles];
-  const generated = buildGraph(players, page.verifiedClassicStint(pool, players));
-  const fallback = buildGraph(pool, page.verifiedClassicStint(pool));
+  const generated = buildGraph(players, page.verifiedTransferPathStints(pool, 'classic', players));
+  const fallback = buildGraph(pool, page.verifiedTransferPathStints(pool, 'classic'));
   const changed = [];
   for (const [index, start] of fallback.names.entries()) {
     const prior = shortest(beforeKeys, beforeIndex, start);
@@ -405,16 +407,37 @@ if (!CONTROL) {
     'David Villa to Frank Lampard', 'David Villa to Michael Ballack',
   ];
   if (changed.join('|') !== expected.join('|')) fail(`the verified stint changes unexpected shortest pairs: ${changed.join('; ')}`);
-  for (const { id, playerA, playerB, minSteps, hint } of companion.desired) {
-    const errors = hintProblems(generated, playerA, playerB, minSteps, hint);
-    if (errors.length) fail(`${id} held applied minimum or hint is invalid: ${errors.join('; ')}`);
-  }
-  for (const { id, playerA, playerB, minSteps, hint } of page.fallbackPuzzles) {
-    const errors = hintProblems(fallback, playerA, playerB, minSteps, hint);
+  const checked = [
+    [generated, companion.desired],
+    [fallback, page.fallbackPuzzles],
+  ];
+  for (const [graph, puzzles] of checked) for (const { id, playerA, playerB, minSteps, hint } of puzzles) {
+    const errors = hintProblems(graph, playerA, playerB, minSteps, hint);
     if (errors.length) fail(`${id} held minimum or hint is invalid: ${errors.join('; ')}`);
   }
   const totalPairs = fallback.names.length * (fallback.names.length - 1) / 2;
   console.log(`   All ${totalPairs} Classic distances agree between corrected game and generator; ${changed.length} shorter pairs, all ${puzzles.length} stored minimum/hint entries hold.`);
+
+  console.log('7) Liverpool membership joins the reported chain in Everyday and Europe');
+  const isak = 'Alexander Isak', vanDijk = 'Virgil van Dijk';
+  for (const rule of ['classic', 'europe', 'active']) {
+    const scoped = page.playersUnderRule(pool, rule);
+    const keys = page.clubSeasonsOf(scoped, rule);
+    const index = page.buildSeasonIndex(keys);
+    const generator = buildGraph(scoped, page.verifiedTransferPathStints(scoped, rule));
+    const expected = rule === 'active' ? null : 'Liverpool';
+    if (page.shareClub(keys, isak, vanDijk) !== expected || sharedClub(generator, isak, vanDijk) !== expected) {
+      fail(`the Isak to Van Dijk link disagrees under ${rule}`);
+    }
+    for (const [i, start] of generator.names.entries()) {
+      const pageDistances = shortest(keys, index, start);
+      const generatorDistances = distances(generator, start);
+      for (const end of generator.names.slice(i + 1)) {
+        if (pageDistances.get(end) !== generatorDistances.get(end)) fail(`${rule} distance differs for ${start} to ${end}`);
+      }
+    }
+  }
+  console.log('   Same shortest distances between the two implementations across all three rules. Active keeps its existing link graph.');
 }
 
 console.log('');

@@ -133,7 +133,7 @@ generatedFile(careerPullPath, annotatedLines.join('\n') + '\n');
 /* The page's own rule filters and fallback pools are bundled after the active
    identities exist. The fallback puzzle file is rewritten at the end. */
 const ENTRY = path.join(os.tmpdir(), 'gen-tph-entry.mjs'), BUNDLE = path.join(os.tmpdir(), 'gen-tph-bundle.mjs');
-fs.writeFileSync(ENTRY, `export { default as fallbackPuzzles } from '${SRC}/data/transferPathPuzzles.ts';\nexport { careerPlayers as fallbackPlayers } from '${SRC}/data/careerPlayers.ts';\nexport { playersUnderRule, ACTIVE_YEAR } from '${SRC}/lib/transferPathModes.ts';\nexport { verifiedClassicStint } from '${SRC}/lib/transferPathGraph.ts';\n`);
+fs.writeFileSync(ENTRY, `export { default as fallbackPuzzles } from '${SRC}/data/transferPathPuzzles.ts';\nexport { careerPlayers as fallbackPlayers } from '${SRC}/data/careerPlayers.ts';\nexport { playersUnderRule, ACTIVE_YEAR } from '${SRC}/lib/transferPathModes.ts';\nexport { verifiedTransferPathStints } from '${SRC}/lib/transferPathGraph.ts';\n`);
 await build({ entryPoints: [ENTRY], bundle: true, format: 'esm', platform: 'node', outfile: BUNDLE, logLevel: 'error', alias: { '@': path.join(ROOT, 'src') } });
 const site = await import(pathToFileURL(BUNDLE).href + `?v=${Date.now()}`);
 
@@ -142,7 +142,11 @@ const puzzles = fs.readFileSync(path.join(PULL, 'puzzles.txt'), 'utf8').replaceA
   const [id, a, b, min] = l.split('|');
   return { id, a, b, oldMin: Number(min) };
 });
-const graph = buildGraph(players, site.verifiedClassicStint(site.fallbackPlayers, players));
+function graphForRule(players, rule) {
+  const pool = site.playersUnderRule(players, rule);
+  return buildGraph(pool, site.verifiedTransferPathStints(site.fallbackPlayers, rule, pool));
+}
+const graph = graphForRule(players, 'classic');
 const companion = fs.readFileSync(COMPANION_OUT, 'utf8').replaceAll('\r\n', '\n');
 const appliedClassic = new Map(parseTransferPathCompanionMigration(companion).desired.map(row => [row.id, row]));
 console.log(`${players.length} players, ${graph.names.length} in the graph, ${puzzles.length} puzzles`);
@@ -179,7 +183,7 @@ for (const id of ['tp-19', 'tp-20', 'tp-3', 'tpa-29', 'tpa-944']) {
 
 /* Derive every pair under each special rule. The applied Round 460 migration
    stays immutable. Current active rows go only to the new restore migration. */
-const ruleGraphs = Object.fromEntries(MODE_RULES.map(rule => [rule, buildGraph(site.playersUnderRule(players, rule))]));
+const ruleGraphs = Object.fromEntries(MODE_RULES.map(rule => [rule, graphForRule(players, rule)]));
 if (ruleGraphs.active.names.length !== EXPECTED_ACTIVE_IDENTITIES) {
   console.error(`the annotated pull activates ${ruleGraphs.active.names.length} players, expected the ${EXPECTED_ACTIVE_IDENTITIES} verified identities`);
   process.exit(1);
@@ -212,8 +216,18 @@ console.log(`derived current special-rule truth for ${puzzles.length} puzzles: $
     : 'null::smallint, null::text';
   const rows = puzzles.map(p => {
     const classic = classicById.get(p.id);
-    const modes = modesById.get(p.id);
-    return `      (${q(p.id)}, ${q(p.a)}, ${q(p.b)}, ${classic.minSteps}, ${q(classic.hint)}, ${ruleCells(null)}, ${ruleCells(modes.europe)})`;
+    const retained = appliedClassic.get(p.id);
+    let europe = modesById.get(p.id).europe;
+    if (retained?.playerA === p.a && retained.playerB === p.b) {
+      const held = retained.europeMinSteps === null ? null : { minSteps: retained.europeMinSteps, hint: retained.europeHint };
+      const problems = ruleProblems(ruleGraphs.europe, p.a, p.b, held);
+      if (problems.length) {
+        console.error(`  applied Europe ${p.id}: ${problems.join('; ')}; create a new migration instead of rewriting the companion`);
+        process.exit(1);
+      }
+      europe = held;
+    }
+    return `      (${q(p.id)}, ${q(p.a)}, ${q(p.b)}, ${classic.minSteps}, ${q(classic.hint)}, ${ruleCells(null)}, ${ruleCells(europe)})`;
   });
   const desired = companion.indexOf('  for desired in');
   const startMarker = '    from (values\n';
@@ -353,8 +367,8 @@ console.log(`derived current special-rule truth for ${puzzles.length} puzzles: $
    no classic path there are dropped from the fallback, never guessed; a
    puzzle with no path under a special rule carries null for that rule. */
 {
-  const fg = buildGraph(site.fallbackPlayers, site.verifiedClassicStint(site.fallbackPlayers));
-  const fRule = Object.fromEntries(MODE_RULES.map(rule => [rule, buildGraph(site.playersUnderRule(site.fallbackPlayers, rule))]));
+  const fg = graphForRule(site.fallbackPlayers, 'classic');
+  const fRule = Object.fromEntries(MODE_RULES.map(rule => [rule, graphForRule(site.fallbackPlayers, rule)]));
   const kept = [], dropped = [];
   for (const p of site.fallbackPuzzles) {
     const d = deriveHint(fg, p.playerA, p.playerB);
