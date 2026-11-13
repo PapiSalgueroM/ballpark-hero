@@ -539,6 +539,8 @@ const NAMED = [
     why: 'the effect under retrySave holds the save while saveFailed (saveFailure !== null) is true, Round 1144' },
   { file: 'src/pages/SoccerCareer.tsx', keys: ['state:saveFailed'],
     why: 'the page retries the latest fenced career save before an app refresh while the save warning is active' },
+  { file: 'src/components/front-office/FrontOfficeBoard.tsx', keys: ['state:saveWriteFailed'],
+    why: 'the active board retries its most recent serialized save before an app refresh while the save warning is active' },
 ];
 const NOTHING_HELD = [
   /* the seam and the pieces around it: none of them is a game's progress */
