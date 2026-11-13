@@ -149,6 +149,7 @@ const LEFT = {
    follow up round. Each line says what the game draws today, read from its
    page or board; when one is wired it must leave this list or the fence fails. */
 const OWN_SURFACE = {
+  '/nrl-team-manager': 'its own match centre champion panel and finals bracket with the Grand Final score',
   '/dart-draft': 'its own done panel in the page, the squad grade, the series score and the XI',
   '/who-am-i': 'its own won or lost panel in the page, the secret player and the guess rows',
   '/world-xi': 'its own won or lost panel in the page, with a season sim report on a win',
