@@ -30,7 +30,7 @@ import {
 } from '@/lib/nrlManager';
 import {
   createNrlCareer, isNrlNamedPlayer, loadNrlOpeningMatchdayCareer, loadNrlPerthSigningsCareer,
-  nrlAttackPlanPreview, nrlOppositionReport, nrlPositionTraining,
+  nrlAttackPlanPreview, nrlCounterPlanPreview, nrlOppositionReport, nrlPositionTraining,
   nrlBoardPathwaysQuote, nrlCoachTactics, nrlContractApproach, nrlPositionTrainingCandidates, nrlReserveGradeCandidates, nrlRivalSquad,
   nrlSponsorRefusal, nrlTicketPricingRefusal, nrlWorldCupAppointmentAvailable,
   NRL_FAST_FORWARD_ROUNDS, NRL_POSITION_TRAINING_ROUNDS, NRL_SAVE_MAX_CHARS, reduceNrlCareer, runNrlFastForward,
@@ -78,8 +78,12 @@ const attackPlanChoices: readonly { id: NrlAttackPlan; label: string }[] = [
   { id: 'standard', label: 'Standard' },
   { id: 'middle', label: 'Through the middle' },
   { id: 'wide', label: 'Shift wide' },
+  { id: 'counter', label: 'Counter opponent' },
 ];
 const attackPlanLabel = (plan: NrlAttackPlan) => attackPlanChoices.find(choice => choice.id === plan)?.label ?? 'Standard';
+const opponentStyleLabel = { middle: 'Pressures the middle', edges: 'Plays to the edges' };
+const counterPlanLabel = { middle: 'Shift wide to avoid middle pressure.', edges: 'Protect the edges and commit less to attack.' };
+const counterPlanResult = { middle: 'Shifted wide against middle pressure.', edges: 'Protected the edges against wide play.' };
 const coachTacticNote = (role: NrlCoachRole | undefined, bonus: number, tactic: NrlTactic) => role === tactic
   ? ` Your assistant adds +${bonus} ${role === 'attack' ? 'attack' : 'defence'} rating.` : '';
 
@@ -298,8 +302,8 @@ function LiveHalftime({ live, season, title, onAction, disabled, coachRole, coac
   );
 }
 
-function LiveMinute60({ live, year, onAction, disabled }: {
-  live: NrlLiveHalf; year: number; onAction: (action: NrlAction) => void; disabled: boolean;
+function LiveMinute60({ live, year, counter, onAction, disabled }: {
+  live: NrlLiveHalf; year: number; counter: boolean; onAction: (action: NrlAction) => void; disabled: boolean;
 }) {
   const stage = live.minute60!;
   const [tactic, setTactic] = useState(stage.tactic);
@@ -321,6 +325,7 @@ function LiveMinute60({ live, year, onAction, disabled }: {
       <fieldset className="min-w-0 rounded-xl border border-border bg-card px-4 pb-4">
         <legend className="px-1 font-bold">Closing tactic</legend>
         <p className="mt-2 text-sm text-muted-foreground">Keep your plan or change it for the final 20 minutes and any extra time.</p>
+        {counter && <p className="mt-2 text-sm">Attack plan: Counter opponent. Locked for this match.</p>}
         <div className="mt-2 flex flex-wrap gap-2">
           {tactics.map(option => (
             <Button key={option.id} type="button" size="lg" className="px-3" disabled={disabled}
@@ -347,18 +352,21 @@ function AttackPlan({ career, onAction, disabled }: {
   const { season, legacySeason } = career;
   const { year, clubId, round, attackPlan } = season;
   const preview = expanded ? nrlAttackPlanPreview(career) : null;
+  const counter = expanded ? nrlCounterPlanPreview(career) : null;
   return (
     <details className="group mt-3 border-t border-border" onToggle={event => setExpanded(event.currentTarget.open)}>
       <summary className="flex min-h-11 cursor-pointer items-center justify-between gap-2 rounded-md text-sm font-bold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
         <span>Attack plan{attackPlan && `: ${attackPlanLabel(attackPlan)}`}</span>
         <ChevronDown size={16} aria-hidden="true" className="shrink-0 group-open:rotate-180" />
       </summary>
-      {expanded && (preview ? (
+      {expanded && (preview || counter ? (
         <>
-          <p className="text-xs text-muted-foreground">Compare projected ratings for this match. The middle uses props, hooker and lock. Wide uses wings and centres. Either specialist plan leaves more room for the opposition.</p>
+          {preview && <p className="text-xs text-muted-foreground">Compare projected ratings for this match. The middle uses props, hooker and lock. Wide uses wings and centres. Either specialist plan leaves more room for the opposition.</p>}
+          {counter && <p className="mt-2 text-xs text-muted-foreground">Simulated opponent style: {opponentStyleLabel[counter.style]}. {counterPlanLabel[counter.style]}</p>}
           <div className="mt-2 grid gap-2" role="group" aria-label="Match attack plan">
             {attackPlanChoices.map(({ id, label }) => {
-              const adjustment = id === 'standard' ? null : preview[id];
+              const adjustment = id === 'standard' ? null : id === 'counter' ? counter : preview?.[id];
+              if (id !== 'standard' && !adjustment) return null;
               return (
                 <Button key={id} type="button" size="lg" variant={(attackPlan ?? 'standard') === id ? 'default' : 'outline'}
                   className="h-auto min-h-11 flex-wrap justify-start gap-x-2 gap-y-0.5 whitespace-normal px-3 py-2 text-left"
@@ -395,6 +403,7 @@ function OppositionReport({ career }: { career: NrlCareerState }) {
           <p className="text-sm font-semibold">
             {shortName(year, report.opponentId)}{report.ladderRank === null ? '' : ` · Ladder place ${report.ladderRank}`}
           </p>
+          {report.style && <p className="mt-1 text-xs text-muted-foreground">Simulated opponent style: {opponentStyleLabel[report.style]}.</p>}
           <dl className="mt-3 grid grid-cols-2 gap-2">
             <div className="rounded-lg border border-border p-2">
               <dt className="text-xs text-muted-foreground">Your attack edge</dt>
@@ -566,7 +575,7 @@ function MatchCentre({ career, onAction, onRun, onReview, onContracts, disabled,
   const [hold, setHold] = useState<{ year: number; round: number; reserveId: string }>();
   if (season.live) {
     return season.live.minute60
-      ? <LiveMinute60 live={season.live} year={year} onAction={onAction} disabled={disabled} />
+      ? <LiveMinute60 live={season.live} year={year} counter={season.attackPlan === 'counter'} onAction={onAction} disabled={disabled} />
       : <LiveHalftime live={season.live} season={season} title={next.title} onAction={onAction} disabled={disabled} coachRole={coachRole} coachBonus={coachBonus} />;
   }
   const club = shortName(year, clubId);
@@ -605,6 +614,9 @@ function MatchCentre({ career, onAction, onRun, onReview, onContracts, disabled,
       </p>}
       {lastMatch?.minute60Tactic && <p className="mt-2 text-sm text-muted-foreground" data-nrl-minute60-tactic>
         60-minute tactic change: {tactics.find(option => option.id === lastMatch.minute60Tactic)?.label}.
+      </p>}
+      {lastMatch?.counterStyle && <p className="mt-2 text-sm text-muted-foreground" data-nrl-counter-plan>
+        Counter plan: {counterPlanResult[lastMatch.counterStyle]}
       </p>}
       {recoveredName && <p className="mt-2 text-sm text-muted-foreground" data-nrl-individual-recovery-result>
         {recoveredName} took individual recovery before this match.

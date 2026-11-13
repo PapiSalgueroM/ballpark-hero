@@ -63,6 +63,33 @@ it('shows both signed tradeoffs, persists a match choice and locks it during a r
   expect(readNrlCareerSave(raw())!.season).not.toHaveProperty('attackPlan');
 });
 
+it('shows the simulated read, locks a counter plan at both live pauses and records it at full time', () => {
+  const baseline = JSON.stringify(createNrlCareer('broncos', 1));
+  localStorage.setItem(NRL_SAVE_KEY, baseline);
+  localStorage.setItem(fence, '6');
+  const first = page();
+  const choices = openPlans();
+  expect(choices.getByText(/Simulated opponent style: Plays to the edges/)).toBeVisible();
+  const counter = choices.getByRole('button', { name: /Counter opponent/ });
+  expect(counter).toHaveTextContent('Attack -2');
+  expect(counter).toHaveTextContent('Defence +3');
+  expect(raw()).toBe(baseline);
+  fireEvent.click(counter);
+  expect(readNrlCareerSave(raw())!.season.attackPlan).toBe('counter');
+  click('Play Live');
+  expect(screen.getByText('Attack plan: Counter opponent. Locked for this match.')).toBeVisible();
+  click('Play to 60 minutes');
+  expect(screen.getByText('Attack plan: Counter opponent. Locked for this match.')).toBeVisible();
+  const saved = raw();
+  first.unmount();
+  page();
+  expect(raw()).toBe(saved);
+  expect(screen.getByText('Attack plan: Counter opponent. Locked for this match.')).toBeVisible();
+  click('Play final 20 minutes');
+  expect(screen.getByText(/Counter plan: Protected the edges/)).toBeVisible();
+  expect(readNrlCareerSave(raw())!.season.attackPlan).toBeUndefined();
+});
+
 it('holds a reserve only on Play Live, restores halftime and makes a stale tab refuse settlement', () => {
   const kickoff = createNrlCareer('broncos', 76);
   const baseline = JSON.stringify(kickoff);
