@@ -11,15 +11,15 @@ const TEMP = fs.mkdtempSync(path.join(os.tmpdir(), 'navbar-stats-'));
 const CONTROL = process.env.NAVBAR_STATS_CONTROL || '';
 const controls = {
   guest: ['1 guests', '!canReadRemote || ', '', 'guests must never read remote stats'],
-  hidden: ['2 hidden', "document.visibilityState !== 'visible' || ", '', 'hidden tabs must never start a remote read'],
+  hidden: ['2 hidden', " || document.visibilityState !== 'visible'", '', 'hidden tabs must never start a remote read'],
   foreground: ['2 hidden', "if (document.visibilityState === 'visible') fetchStats();", "if (document.visibilityState === 'visible') void 0;", 'foreground must request exactly one fresh read'],
   poll: ['2 hidden', 'setInterval(fetchStats, 60_000)', 'setInterval(fetchStats, 600_000)', 'visible fallback must still poll'],
   profile: ['3 login', 'profile?.user_id === accountId', '!!profile', 'new account must not use the old profile'],
   completion: ['4 completion', 'setTimeout(fetchStats, 800)', 'setTimeout(fetchStats, 8_000)', 'completion must refresh at the existing 800ms delay'],
-  local: ['4 completion', 'const handleGameComplete = () => {\n      setStats(', 'const handleGameComplete = () => {\n      if (false) setStats(', 'completion must update local facts before network'],
+  local: ['4 completion', 'syncDay();\n      setStats(', 'syncDay();\n      if (false) setStats(', 'completion must update local facts before network'],
   identity: ['5 old-account', '[accountId, canReadRemote, playerName]', '[canReadRemote, playerName]', 'same handle on another account still starts a new generation'],
-  stale: ['5 old-account', 'if (!active) return;\n        const rankRow', 'if (false) return;\n        const rankRow', 'obsolete success must not replace the current account'],
-  error: ['6 obsolete', 'if (!active) return;\n        console.debug', 'if (false) return;\n        console.debug', 'obsolete error must not finish the active account read'],
+  stale: ['5 old-account', 'if (!active || requestDay !== getTodayET()) return;\n        const rankRow', 'if (requestDay !== getTodayET()) return;\n        const rankRow', 'obsolete success must not replace the current account'],
+  error: ['6 obsolete', 'if (!active || requestDay !== getTodayET()) return;\n        console.debug', 'if (requestDay !== getTodayET()) return;\n        console.debug', 'obsolete error must not finish the active account read'],
   timer: ['7 unmount', 'active = false;\n      clearTimeout(completionTimer);', 'active = false;', 'cleanup must cancel the completion delay and poll'],
   listener: ['7 unmount', "window.removeEventListener('game-completion-saved', handleGameComplete);", 'void handleGameComplete;', 'cleanup must remove completion and foreground listeners'],
 };

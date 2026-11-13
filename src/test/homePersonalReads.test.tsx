@@ -1,5 +1,5 @@
 // Real homepage and popularity hook, with inert deferred account reads only.
-import { act, cleanup, render } from '@testing-library/react';
+import { act, cleanup, render, renderHook } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
@@ -16,6 +16,7 @@ vi.mock('@/components/game/StreakReminder', () => ({ StreakReminder: () => null 
 vi.mock('@/components/seo/PageSeo', () => ({ default: () => null }));
 vi.mock('@/components/home/PollOfTheDay', () => ({ PollOfTheDay: () => <div>Polls are mounted</div> }));
 import Index from '@/pages/Index';
+import { useGameNavbarStats } from '@/hooks/useGameNavbarStats';
 
 const nearObservers = new Map<Element, { callback: IntersectionObserverCallback; rootMargin?: string }>();
 function showIntersection(node: Element, intersecting: boolean) {
@@ -36,10 +37,11 @@ function revealPopularity(view: ReturnType<typeof render>) {
 
 function deferred() {
   let resolve!: (value: any) => void;
-  const promise = new Promise<any>(yes => { resolve = yes; });
-  return { promise, resolve };
+  let reject!: (error: Error) => void;
+  const promise = new Promise<any>((yes, no) => { resolve = yes; reject = no; });
+  return { promise, resolve, reject };
 }
-type Request = { table: string; args?: Record<string, unknown>; filters: [string, unknown][]; columns?: string; signal?: AbortSignal; reply: ReturnType<typeof deferred> };
+type Request = { table: string; args?: Record<string, unknown>; filters: [string, unknown, ('gte' | 'lte' | 'lt')?][]; columns?: string; signal?: AbortSignal; reply: ReturnType<typeof deferred> };
 const requests: Request[] = [];
 let visibility: DocumentVisibilityState;
 function builder(table: string, args?: Record<string, unknown>) {
@@ -47,6 +49,9 @@ function builder(table: string, args?: Record<string, unknown>) {
   const query = {
     select: (columns: string) => { request.columns = columns; return query; },
     eq: (key: string, value: unknown) => { request.filters.push([key, value]); return query; },
+    gte: (key: string, value: string) => { request.filters.push([key, value, 'gte']); return query; },
+    lte: (key: string, value: string) => { request.filters.push([key, value, 'lte']); return query; },
+    lt: (key: string, value: string) => { request.filters.push([key, value, 'lt']); return query; },
     abortSignal: (signal: AbortSignal) => { request.signal = signal; return query; },
     then: (yes: (value: any) => unknown, no?: (error: unknown) => unknown) => request.reply.promise.then(yes, no),
   };
@@ -64,10 +69,25 @@ const flush = async () => { await act(async () => { await Promise.resolve(); });
 async function finish(batch = personal(), rank = 7, games = ['footle', 'footle', 'ball-iq'], best = 72, error = false) {
   await act(async () => {
     for (const request of batch) request.reply.resolve(error ? { data: null, error: { message: 'Fixture unavailable' } } : {
-      data: request.table === 'global_rank' ? [{ rank }]
+      data: request.table === 'global_rank' ? [{ rank, total_points: 95 }]
         : request.table === 'user_best_scores' ? [{ game_type: 'nba-stat-line', best_score: best }]
         : games.map(game => ({ game })), count: 0, error: null,
     });
+  });
+}
+type CompletionRow = { player_name: string; completed_on: string; created_at: string; game: string };
+async function finishPlayed(rows: CompletionRow[]) {
+  await act(async () => {
+    for (const request of personal().filter(r => r.table === 'game_completions')) {
+      const data = rows.filter(row => request.filters.every(([key, value, operator]) => {
+        const cell = row[key as keyof CompletionRow];
+        if (operator === 'gte') return Date.parse(cell) >= Date.parse(String(value));
+        if (operator === 'lte') return Date.parse(cell) <= Date.parse(String(value));
+        if (operator === 'lt') return Date.parse(cell) < Date.parse(String(value));
+        return cell === value;
+      })).map(({ game }) => ({ game }));
+      request.reply.resolve({ data, error: null });
+    }
   });
 }
 function stats(view: View, rank: number, games: number, best = 72) {
@@ -236,6 +256,89 @@ describe('homepage personal read ownership', () => {
   it('does not query unused traffic counts or unbounded lifetime history', async () => {
     signed(); mount(); await flush(); expect(hero()).toHaveLength(2);
     expect(requests.some(r => r.table === 'daily_completions')).toBe(false);
-    expect(requests.filter(r => r.table === 'game_completions').map(r => r.filters)).toEqual([[['player_name', 'Alpha'], ['completed_on', '2026-10-02']]]);
+    expect(requests.filter(r => r.table === 'game_completions').map(r => r.filters)).toEqual([[
+      ['player_name', 'Alpha'], ['completed_on', '2026-10-02', 'gte'], ['completed_on', '2026-10-03', 'lte'],
+      ['created_at', '2026-10-02T04:00:00.000Z', 'gte'], ['created_at', '2026-10-03T04:00:00.000Z', 'lt'],
+    ]]);
+  });
+});
+
+describe('Eastern daily counts', () => {
+  it('counts distinct games across UTC midnight for both Home and the game header', async () => {
+    vi.setSystemTime(new Date('2026-11-13T01:30:00Z'));
+    signed();
+    const view = mount();
+    const header = renderHook(useGameNavbarStats);
+    await flush();
+    const completion = (created_at: string, game: string, player_name = 'Alpha') => ({
+      created_at, completed_on: created_at.slice(0, 10), game, player_name,
+    });
+    await finishPlayed([
+      completion('2026-11-12T04:59:59.999Z', 'previous-day'),
+      completion('2026-11-12T05:00:00.000Z', 'footle'),
+      completion('2026-11-12T20:00:00.000Z', 'ball-iq'),
+      completion('2026-11-13T00:01:00.000Z', 'soccer-grid'),
+      completion('2026-11-13T00:30:00.000Z', 'soccer-grid'),
+      completion('2026-11-13T00:35:00.000Z', 'other-account', 'Beta'),
+    ]);
+    await finish();
+    expect.soft(view.getByText('Played today:').parentElement).toHaveTextContent('Played today: 3');
+    expect.soft(header.result.current).toMatchObject({ gamesPlayedToday: 3, totalPointsToday: 95, dailyRank: 7 });
+    expect(personal().filter(r => r.table === 'global_rank').map(r => r.args?.p_period)).toEqual(['alltime', 'today']);
+  });
+
+  it('resets a loaded Home count on foreground rollover and keeps lifetime stats on a failed read', async () => {
+    vi.setSystemTime(new Date('2026-11-13T04:59:59Z'));
+    signed(); mock.localGames = 4;
+    const view = mount(); await flush(); await finish(); stats(view, 7, 4);
+
+    vi.setSystemTime(new Date('2026-11-13T05:00:00Z'));
+    mock.localGames = 1;
+    event('focus'); await flush();
+    stats(view, 7, 1);
+    const fresh = personal().slice(3);
+    expect(fresh).toHaveLength(3);
+    await finish(fresh, 99, [], 12, true);
+    stats(view, 7, 1);
+    expect(personal()).toHaveLength(6);
+  });
+
+  it('reissues an old Home daily response once even without a foreground event', async () => {
+    vi.setSystemTime(new Date('2026-11-13T04:59:59Z'));
+    signed(); mock.localGames = 4;
+    const view = mount(); await flush(); const old = personal();
+    vi.setSystemTime(new Date('2026-11-13T05:00:00Z'));
+    mock.localGames = 0;
+    await finish(old, 7, ['footle', 'ball-iq', 'soccer-grid']);
+    stats(view, 7, 0);
+    const fresh = personal().slice(3);
+    expect(fresh).toHaveLength(3);
+    await finish(fresh, 7, ['footle']);
+    stats(view, 7, 1);
+  });
+
+  it('clears header daily stats on completion after midnight and rejects an in-flight old day', async () => {
+    vi.setSystemTime(new Date('2026-11-13T04:59:58Z'));
+    signed(); mock.localGames = 4;
+    const { result } = renderHook(useGameNavbarStats);
+    await flush(); await finish();
+    expect(result.current).toMatchObject({ gamesPlayedToday: 4, dailyRank: 7, totalPointsToday: 95 });
+    event('focus'); await flush(); const old = personal().slice(2);
+    expect(old).toHaveLength(2);
+
+    vi.setSystemTime(new Date('2026-11-13T05:00:00Z'));
+    mock.localGames = 1;
+    event('game-completion-saved');
+    expect(result.current).toMatchObject({ gamesPlayedToday: 1, dailyRank: null, totalPointsToday: 0, loading: false });
+    await finish(old, 99, ['footle', 'ball-iq', 'soccer-grid']);
+    expect(result.current).toMatchObject({ gamesPlayedToday: 1, dailyRank: null, totalPointsToday: 0 });
+    const fresh = personal().slice(4);
+    expect(fresh).toHaveLength(2);
+    await act(async () => {
+      fresh[0].reply.reject(new Error('Fixture unavailable'));
+      fresh[1].reply.resolve({ data: null });
+    });
+    expect(result.current).toMatchObject({ gamesPlayedToday: 1, dailyRank: null, totalPointsToday: 0, loading: false });
+    expect(personal()).toHaveLength(6);
   });
 });

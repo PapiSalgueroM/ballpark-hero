@@ -3,6 +3,7 @@ import { TOTAL_GAMES } from '@/data/gameRegistry';
 import { loadSupabase } from '@/integrations/supabase/loadClient';
 import { useAuth } from '@/contexts/AuthContext';
 import { getCurrentPlayerName, getLocalTodayCount } from '@/lib/completions';
+import { getEasternDayRange, getTodayET } from '@/lib/dateUtils';
 import { getGlobalCurrentStreak } from '@/lib/streaks';
 
 interface GameNavbarStats {
@@ -53,24 +54,37 @@ export function useGameNavbarStats(): GameNavbarStats & { totalGames: number } {
   useEffect(() => {
     let active = true;
     let fetching = false;
+    let day = getTodayET();
     let completionTimer: ReturnType<typeof setTimeout> | undefined;
     // A new account/handle starts with local facts, never the prior rank.
-    setStats({
+    const resetStats = (loading: boolean) => setStats({
       gamesPlayedToday: getLocalTodayCount(),
       totalPointsToday: 0,
       dailyRank: null,
       currentStreak: getGlobalCurrentStreak(),
-      loading: canReadRemote && document.visibilityState === 'visible',
+      loading,
     });
+    resetStats(canReadRemote && document.visibilityState === 'visible');
+
+    const syncDay = () => {
+      const currentDay = getTodayET();
+      if (currentDay !== day) {
+        day = currentDay;
+        resetStats(false);
+      }
+      return currentDay;
+    };
 
     const fetchStats = async () => {
-      if (!active || !canReadRemote || document.visibilityState !== 'visible' || fetching) return;
+      if (!active || document.visibilityState !== 'visible') return;
+      const requestDay = syncDay();
+      if (!canReadRemote || fetching) return;
       fetching = true;
 
       try {
         const supabase = await loadSupabase();
-        if (!active) return;
-        const todayUtc = new Date().toISOString().split('T')[0];
+        if (!active || requestDay !== getTodayET()) return;
+        const { start, end } = getEasternDayRange(requestDay);
 
         const [rankRes, playedRes] = await Promise.all([
           (supabase.rpc as any)('global_rank', {
@@ -81,10 +95,13 @@ export function useGameNavbarStats(): GameNavbarStats & { totalGames: number } {
           (supabase.from as any)('game_completions')
             .select('game')
             .eq('player_name', playerName)
-            .eq('completed_on', todayUtc),
+            .gte('completed_on', start.slice(0, 10))
+            .lte('completed_on', end.slice(0, 10))
+            .gte('created_at', start)
+            .lt('created_at', end),
         ]);
 
-        if (!active) return;
+        if (!active || requestDay !== getTodayET()) return;
         const rankRow = Array.isArray(rankRes?.data) ? rankRes.data[0] : rankRes?.data ?? null;
         const totalPointsToday = rankRow ? Number(rankRow.total_points) || 0 : 0;
         const dailyRank = rankRow && Number(rankRow.rank) > 0 ? Number(rankRow.rank) : null;
@@ -107,7 +124,7 @@ export function useGameNavbarStats(): GameNavbarStats & { totalGames: number } {
           loading: false,
         });
       } catch (error) {
-        if (!active) return;
+        if (!active || requestDay !== getTodayET()) return;
         console.debug('[NavbarStats] fetch failed:', error);
         // Even offline, show local truths rather than dashes.
         setStats((prev) => ({
@@ -118,6 +135,7 @@ export function useGameNavbarStats(): GameNavbarStats & { totalGames: number } {
         }));
       } finally {
         fetching = false;
+        if (active && requestDay !== syncDay()) void fetchStats();
       }
     };
 
@@ -134,6 +152,7 @@ export function useGameNavbarStats(): GameNavbarStats & { totalGames: number } {
 
     // Instant refresh after a game finishes (small delay for the DB write).
     const handleGameComplete = () => {
+      syncDay();
       setStats((prev) => ({
         ...prev,
         gamesPlayedToday: Math.max(prev.gamesPlayedToday, getLocalTodayCount()),
