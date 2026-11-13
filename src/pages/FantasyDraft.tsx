@@ -71,6 +71,7 @@ const FantasyDraft = () => {
   const [loadingCriteria, setLoadingCriteria] = useState(true);
   const [players, setPlayers] = useState<DraftPlayer[]>([]);
   const [loadingPlayers, setLoadingPlayers] = useState(false);
+  const [playersError, setPlayersError] = useState(false);
 
   // Draft state
   const [userFirst, setUserFirst] = useState(true);
@@ -133,7 +134,7 @@ const FantasyDraft = () => {
   useEffect(() => {
     const fetchCriteria = async () => {
       try {
-        const { data, error } = await supabase.functions.invoke('fantasy-draft-daily');
+        const { data, error } = await supabase.functions.invoke('fantasy-draft-daily', { timeout: 10_000 });
         if (!error && data?.criteria) setCriteria(data.criteria);
       } catch { /* silent */ }
       finally { setLoadingCriteria(false); }
@@ -141,21 +142,29 @@ const FantasyDraft = () => {
     fetchCriteria();
   }, []);
 
-  // Fetch players when draft starts
-  useEffect(() => {
-    if (!started) return;
-    const fetchPlayers = async () => {
-      setLoadingPlayers(true);
-      const { data } = await supabase
+  // The initial load and a retry use the same player read.
+  const fetchPlayers = useCallback(async () => {
+    setLoadingPlayers(true);
+    setPlayersError(false);
+    try {
+      const { data, error } = await supabase
         .from('fantasy_draft_players')
         .select('id, name, position, nationality, market_value_millions, dominant_foot, age' as any)
         .order('name');
-      if (data) setPlayers(data as unknown as DraftPlayer[]);
+      if (error || !data?.length) setPlayersError(true);
+      else setPlayers(data as unknown as DraftPlayer[]);
+    } catch {
+      setPlayersError(true);
+    } finally {
       setLoadingPlayers(false);
-    };
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!started) return;
     setUserFirst(Math.random() < 0.5);
     fetchPlayers();
-  }, [started]);
+  }, [started, fetchPlayers]);
 
   const draftPlayer = useCallback((player: DraftPlayer, side: 'user' | 'ai') => {
     if (side === 'user') setUserTeam((prev) => [...prev, player]);
@@ -310,7 +319,7 @@ const FantasyDraft = () => {
                     <h2 className="text-sm font-bold uppercase tracking-widest text-primary">Today's Criteria</h2>
                   </div>
                   {loadingCriteria ? (
-                    <Loader2 className="w-5 h-5 animate-spin text-muted-foreground mx-auto" />
+                    <p role="status" data-no-prerender className="text-sm text-muted-foreground">Loading today's criteria…</p>
                   ) : criteria ? (
                     <p className="text-base sm:text-lg font-semibold text-foreground leading-snug">{criteria}</p>
                   ) : (
@@ -319,6 +328,7 @@ const FantasyDraft = () => {
                 </div>
                 <Button
                   size="lg"
+                  disabled={loadingCriteria}
                   onClick={() => setStarted(true)}
                   className="text-lg px-10 py-6 rounded-xl shadow-lg shadow-primary/20 hover:shadow-primary/40 transition-all duration-300 hover:scale-105"
                 >
@@ -384,6 +394,13 @@ const FantasyDraft = () => {
                 {loadingPlayers ? (
                   <div className="flex items-center justify-center py-12">
                     <Loader2 className="w-8 h-8 animate-spin text-primary" />
+                  </div>
+                ) : playersError ? (
+                  <div role="alert" className="space-y-3 py-6 text-center">
+                    <p className="text-sm text-muted-foreground">Couldn't load the players.</p>
+                    <Button onClick={fetchPlayers} className="min-h-[44px]">
+                      Retry players
+                    </Button>
                   </div>
                 ) : (
                   <>
