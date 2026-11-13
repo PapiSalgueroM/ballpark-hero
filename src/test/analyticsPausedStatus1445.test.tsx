@@ -41,7 +41,7 @@ describe('Analytics paused status1445', () => {
     fireEvent.click(within(region).getByRole('button', { name: 'Manage choices' }));
     expect(region).toHaveFocus();
     expect(within(region).getByRole('checkbox', { name: 'Advertising' })).not.toBeChecked();
-    expect(within(region).getByText('Analytics is paused.', { exact: true })).toBeVisible();
+    expect(within(region).getByText('Google Analytics is paused.', { exact: true })).toBeVisible();
     fireEvent.click(within(region).getByRole('button', { name: 'Reject all' }));
     expect(getEffectiveConsent()).toEqual({ advertising: false, analytics: false });
     const opener = screen.getByRole('button', { name: 'Open cookie choices' });
