@@ -48,6 +48,8 @@ setInterval(() => {
   }
 }, 300_000);
 
+const SAFE_ATTR = /^[\p{L}\p{N} .,'\u2019&()+\/#%:!?-]{1,120}$/u;
+
 serve(async (req) => {
   const corsHeaders = getCorsHeaders(req);
 
@@ -77,7 +79,8 @@ serve(async (req) => {
     // Validate columnAttribute and rowAttribute to prevent prompt injection
     if (
       !columnAttribute || typeof columnAttribute !== "string" || columnAttribute.length > 200 ||
-      !rowAttribute || typeof rowAttribute !== "string" || rowAttribute.length > 200
+      !rowAttribute || typeof rowAttribute !== "string" || rowAttribute.length > 200 ||
+      !SAFE_ATTR.test(columnAttribute) || !SAFE_ATTR.test(rowAttribute)
     ) {
       return new Response(JSON.stringify({ suggestions: [] }), {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
