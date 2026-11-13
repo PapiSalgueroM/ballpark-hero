@@ -91,7 +91,7 @@ const NbaGauntletDraft = lazy(() => import("./pages/NbaGauntletDraft"));
 const MlbGauntletDraft = lazy(() => import("./pages/MlbGauntletDraft"));
 const NflGauntletDraft = lazy(() => import("./pages/NflGauntletDraft"));
 const NhlGauntletDraft = lazy(() => import("./pages/NhlGauntletDraft"));
-const ClubManager = lazy(() => import("./pages/ClubManager"));
+const ClubManager = lazy(() => import("./pages/ClubManagerEntry"));
 const ManagerHotSeat = lazy(() => import("./pages/ManagerHotSeat"));
 const DeadlineDay = lazy(() => import("./pages/DeadlineDay"));
 const StadiumTycoon = lazy(() => import("./pages/StadiumTycoon"));
