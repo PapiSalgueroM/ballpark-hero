@@ -61,6 +61,7 @@ import { getCurrentPlayerName, getLocalTodayCount } from '@/lib/completions';
 
 /** Shown in the "no results" state so a dead-end search still has a next step. */
 const POPULAR_FALLBACK_PATHS = ['/soccer-grid', '/footle', '/squad-deal'];
+const EMPTY_BEST_SCORES: Readonly<Record<string, number>> = {};
 
 function getPopularFallbackGames(): GameDef[] {
   const all = VISIBLE_CATEGORIES.flatMap(c => c.games);
@@ -89,7 +90,7 @@ export default function Index() {
   const deferredQuery = useDeferredValue(searchQuery);
   const searchInputRef = useRef<HTMLInputElement>(null);
   const clearSearch = () => { setSearchQuery(''); searchInputRef.current?.focus({ preventScroll: true }); };
-  const [bestScores, setBestScores] = useState<Record<string, number>>({});
+  const [bestScores, setBestScores] = useState(EMPTY_BEST_SCORES);
   const isSearching = searchQuery.trim().length > 0;
   const { paths: gamePicks, toggle: changeGamePick, storageFailed: picksStorageFailed } = useGamePicks();
   const dailyGamesRef = useRef<HTMLDivElement>(null);
@@ -150,7 +151,7 @@ export default function Index() {
     let controller: AbortController | undefined;
     setGamesToday(getLocalTodayCount());
     setWorldRank(null);
-    setBestScores({});
+    setBestScores(EMPTY_BEST_SCORES);
 
     const syncDay = () => {
       const currentDay = getTodayET();
