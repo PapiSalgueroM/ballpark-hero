@@ -12,6 +12,7 @@ import {
   nrlContractCounteroffer, nrlContractOffer,
   nrlCoachQuote, nrlCoachSpend, nrlDevelopmentAssistantProgress, nrlDevelopmentPreview, nrlFinanceForecast,
   nrlMedicalSpend, nrlMedicalUpgradeQuote, nrlOffseasonApplication, nrlOffseasonClubs, nrlOffseasonOpportunities,
+  nrlMutualReleaseQuote, nrlMutualReleaseSpend,
   nrlProjectedSummerOpenings, nrlSummerApplication, nrlSummerLastRound,
   type NrlCareerAction, type NrlCareerState,
   nrlSponsorIncome, nrlSponsorRefusal, nrlTakeoverOffers, nrlTakeoverPlayers, nrlTicketPricingRefusal,
@@ -140,6 +141,9 @@ function PlayerRow({ player, entry, career, onAction, disabled, onShortlist, exp
             </p>
           )}
           {entry && entry.kind !== 'renewal' && <p className="text-sm text-muted-foreground">Asks {money(entry.askingSalary)} · Available {entry.startYear}</p>}
+          {career.finance.mutualRelease?.playerId === player.id && (
+            <p className="text-sm text-muted-foreground">Mutual release agreed for {career.season.year + 1}</p>
+          )}
           {futureContract && <p className="text-sm text-primary">{leaving ? <>
             <span>Moving to {labelForClub(futureContract.startYear, futureContract.clubId)} in {futureContract.startYear}</span>
             <span className="block text-muted-foreground">{money(futureContract.salary)} per season through {futureContract.endYear}</span>
@@ -234,16 +238,65 @@ function ContractTakeover({ career, onAction, disabled }: { career: NrlCareerSta
   );
 }
 
+function MutualRelease({ career, onAction, disabled }: { career: NrlCareerState; onAction: Dispatch; disabled: boolean }) {
+  const [playerId, setPlayerId] = useState('');
+  const summary = useRef<HTMLElement>(null);
+  const { year, clubId, phase } = career.season;
+  if (phase !== 'complete' || career.legacySeason || !career.season.kickerId || career.retired || year === NRL_LAST_YEAR) return null;
+  const agreed = career.finance.mutualRelease;
+  const players = agreed ? [] : nrlCareerSquad(career).filter(player => player.contract?.endYear === year + 1 && !player.futureContract);
+  const player = players.find(candidate => candidate.id === playerId);
+  const quote = player ? nrlMutualReleaseQuote(career, player.id) : null;
+  const reset = () => {
+    setPlayerId('');
+    summary.current?.focus();
+  };
+  return (
+    <details className="group mt-3 rounded-lg border border-border">
+      <summary ref={summary} className="flex min-h-11 cursor-pointer list-none items-center justify-between gap-2 px-3 py-2 text-sm font-semibold">
+        Negotiate an offseason release<ChevronDown size={16} aria-hidden="true" className="shrink-0 group-open:rotate-180" />
+      </summary>
+      <div className="space-y-3 border-t border-border p-3 text-sm">
+        {agreed ? <p role="status">Release agreed with {agreed.playerName}. {money(nrlMutualReleaseSpend(career.finance))} paid from club cash.</p>
+          : players.length ? <>
+            <p className="text-muted-foreground">Your club can agree one simulated mutual release this offseason. Keep another player signed at that position for next year.</p>
+            <label className="block space-y-1 font-semibold">
+              <span>Player to release</span>
+              <select className={control} value={playerId} disabled={disabled} onChange={event => setPlayerId(event.target.value)}>
+                <option value="">Choose a player</option>
+                {players.map(candidate => <option key={candidate.id} value={candidate.id}>{candidate.name} · {candidate.role}</option>)}
+              </select>
+            </label>
+            {player && quote && (quote.ok === true ? <>
+              <div className="space-y-1 text-muted-foreground" role="status">
+                <p>{player.name} leaves when {year + 1} starts.</p>
+                <p>One-time settlement of {money(quote.settlement)} from club cash, half his remaining salary in this game.</p>
+                <p>{money(quote.capGain)} more room under the {year + 1} cap after reserving a squad place.</p>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                <Button type="button" size="lg" variant="outline" onClick={reset}>Cancel release</Button>
+                <Button type="button" size="lg" disabled={disabled} onClick={() => {
+                  if (onAction({ type: 'agreeMutualRelease', year, clubId, playerId: player.id })) reset();
+                }}>Confirm mutual release</Button>
+              </div>
+            </> : <p className="text-muted-foreground" role="status">{quote.reason}</p>)}
+          </> : <p className="text-muted-foreground">No player has one season left on a deal available for release.</p>}
+      </div>
+    </details>
+  );
+}
+
 function Contracts({ career, onAction, disabled }: { career: NrlCareerState; onAction: Dispatch; disabled: boolean }) {
   const squad = nrlCareerSquad(career);
   const offers = new Map(nrlCareerMarket(career).filter(entry => entry.kind === 'renewal').map(entry => [entry.player.id, entry]));
   const year = career.season.year;
-  const expiring = squad.filter(player => player.contract?.endYear === year && !player.futureContract).length;
+  const expiring = squad.filter(player => player.contract?.endYear === year && !player.futureContract && player.id !== career.finance.mutualRelease?.playerId).length;
   return (
     <>
       <h2 className="font-display text-xl font-bold">Squad contracts</h2>
       <p className="mt-1 text-sm text-muted-foreground">{squad.length} players · {expiring} deals expire this season</p>
       <ContractTakeover career={career} onAction={onAction} disabled={disabled} />
+      <MutualRelease career={career} onAction={onAction} disabled={disabled} />
       <ul className="mt-3 divide-y divide-border">
         {squad.map(player => <PlayerRow key={player.id} player={player} entry={offers.get(player.id)} career={career} onAction={onAction} disabled={disabled} />)}
       </ul>
@@ -253,7 +306,7 @@ function Contracts({ career, onAction, disabled }: { career: NrlCareerState; onA
 
 function ExpiringDeals({ career, onAction, disabled }: { career: NrlCareerState; onAction: Dispatch; disabled: boolean }) {
   const { year, clubId } = career.season;
-  const expiring = nrlCareerSquad(career).filter(player => player.contract?.endYear === year);
+  const expiring = nrlCareerSquad(career).filter(player => player.contract?.endYear === year && player.id !== career.finance.mutualRelease?.playerId);
   if (expiring.length === 0) return null;
   const unsigned = expiring.filter(player => !player.futureContract).length;
   const offers = new Map(nrlCareerMarket(career).filter(entry => entry.kind === 'renewal' && entry.startYear === year + 1)
@@ -699,6 +752,7 @@ function Finances({ career, onAction, disabled }: { career: NrlCareerState; onAc
                 ['Operating costs', cash.operatingCosts],
                 ...(medicalSpend ? [['Medical upgrades', medicalSpend] as [string, number]] : []),
                 ...(academySpend ? [['Academy facilities', academySpend] as const] : []),
+                ...(cash.mutualRelease ? [['Contract settlement', nrlMutualReleaseSpend(cash)] as const] : []),
                 ...(cash.coachHire ? [['Coach signing fee', coachSpend.signingFee], ['Coach wages paid', coachSpend.wages]] as [string, number][] : []),
                 ['Profit or loss', cash.profit], ['Cash balance', cash.cash],
               ]} />
@@ -1210,6 +1264,11 @@ function History({ career, onAction, disabled }: { career: NrlCareerState; onAct
                   </p>
                 )}
                 {record.finance?.academyUpgradeRound && <p className="text-sm text-muted-foreground">Academy facilities {money(nrlAcademyFacilitySpend(record.finance))}</p>}
+                {record.finance?.mutualRelease && (
+                  <p className="text-sm text-muted-foreground">
+                    Mutual release · {record.finance.mutualRelease.playerName} · {money(nrlMutualReleaseSpend(record.finance))} settlement
+                  </p>
+                )}
                 {benchmark && <p className="text-sm text-muted-foreground" data-nrl-board-benchmark>
                   Board benchmark · {benchmark.label} · {record.rank <= benchmark.targetRank ? 'Met' : 'Missed'}
                 </p>}

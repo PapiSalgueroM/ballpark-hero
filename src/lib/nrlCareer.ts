@@ -69,6 +69,7 @@ type MedicalUpgradeLevel = keyof typeof MEDICAL_UPGRADE_COST;
 export type NrlMedicalLevel = 1 | MedicalUpgradeLevel;
 interface NrlMedicalUpgrade { level: MedicalUpgradeLevel; round: number }
 interface NrlCoachHire { role: NrlStaffRole; round: number; paidRounds: number }
+interface NrlMutualRelease { playerId: string; playerName: string; annualSalary: number }
 export type NrlTicketTier = keyof typeof NRL_TICKET_GATE_CHANGES;
 type ActiveTicketTier = Exclude<NrlTicketTier, 'standard'>;
 export interface NrlCareerBook {
@@ -81,6 +82,7 @@ export interface NrlCareerBook {
   medicalUpgrades?: NrlMedicalUpgrade[];
   academyUpgradeRound?: number;
   coachHire?: NrlCoachHire;
+  mutualRelease?: NrlMutualRelease;
   ticketTier?: ActiveTicketTier;
   sponsor?: { offer: NrlSponsorOffer; bonusPaid?: true };
   pathways?: { earnedBy?: string[] };
@@ -161,6 +163,7 @@ export type NrlCareerAction = NrlAction
   | { type: 'offerContract'; playerId: string; salary: number; years: number }
   | { type: 'acceptCounteroffer'; playerId: string; year: number; offeredSalary: number; contract: NrlContract }
   | { type: 'arrangeTakeover'; year: number; clubId: string; playerId: string; destinationId: string }
+  | { type: 'agreeMutualRelease'; year: number; clubId: string; playerId: string }
   | { type: 'saveLineup'; year: number; clubId: string }
   | { type: 'applySavedLineup'; previewKey: string }
   | { type: 'startPositionTraining'; year: number; clubId: string; round: number; playerId: string; role: NrlRole }
@@ -307,6 +310,7 @@ function marketStartYear(state: NrlCareerState, player: NrlCareerPlayer): number
 }
 
 function marketEntry(state: NrlCareerState, player: NrlCareerPlayer): NrlCareerMarketEntry | null {
+  if (state.finance.mutualRelease?.playerId === player.id) return null;
   const startYear = marketStartYear(state, player);
   if (startYear === null) return null;
   const { contract } = player;
@@ -408,6 +412,9 @@ export function nrlTakeoverOffers(state: NrlCareerState, playerId: string): NrlC
   const { clubId, year } = state.season;
   const player = nrlTakeoverPlayers(state).find(candidate => candidate.id === playerId);
   if (!player?.contract) return [];
+  const release = state.finance.mutualRelease;
+  if (release && state.players.find(candidate => candidate.id === release.playerId)?.role === player.role
+    && !nrlCareerSquad(state, year + 1).some(teammate => teammate.id !== playerId && teammate.role === player.role)) return [];
   const { salary, endYear } = player.contract;
   const startYear = year + 1;
   // Expansion clubs get their initial 30-player squad when they join the league.
@@ -418,6 +425,29 @@ export function nrlTakeoverOffers(state: NrlCareerState, playerId: string): NrlC
     const contract = { clubId: club.id, startYear, endYear, salary };
     return contractCapacityRefusal(state.players, player, contract) ? [] : [contract];
   });
+}
+
+export function nrlMutualReleaseSpend(book: NrlCareerBook): number {
+  return book.mutualRelease ? Math.ceil(book.mutualRelease.annualSalary / 2) : 0;
+}
+
+export function nrlMutualReleaseQuote(state: NrlCareerState, playerId: string):
+  { ok: true; settlement: number; capGain: number } | { ok: false; reason: string } {
+  const { year, clubId, phase } = state.season;
+  const player = state.players.find(candidate => candidate.id === playerId);
+  const contract = player?.contract;
+  if (phase !== 'complete' || state.retired || state.legacySeason || !state.season.kickerId || year === NRL_LAST_YEAR) {
+    return { ok: false, reason: 'Mutual releases are agreed in the offseason.' };
+  }
+  if (state.finance.mutualRelease) return { ok: false, reason: 'This club has already agreed a release this offseason.' };
+  if (!player || contract?.clubId !== clubId || contract.endYear !== year + 1
+    || player.futureContract || player.age + 1 >= RETIREMENT_AGE) return { ok: false, reason: 'The player needs one season left on his deal.' };
+  if (!nrlCareerSquad(state, year + 1).some(teammate => teammate.id !== playerId && teammate.role === player.role)) {
+    return { ok: false, reason: 'Keep another player signed at this position for next season.' };
+  }
+  const settlement = Math.ceil(contract.salary / 2);
+  if (nrlCareerFinance(state).cash < settlement) return { ok: false, reason: 'The club cannot cover this settlement.' };
+  return { ok: true, settlement, capGain: contract.salary - nrlCareerCap(state, year + 1).minimumSalary };
 }
 
 const academyPrefix = ({ clubId, year }: NrlManagerState) => `nrl-prospect-${clubId}-${year}-`;
@@ -539,7 +569,8 @@ export function nrlCareerFinance(state: Pick<NrlCareerState, 'finance'>): NrlCar
   const { openingCash, centralFunding, gateReceipts, wagesPaid, operatingCosts } = state.finance;
   const { signingFee, wages } = nrlCoachSpend(state.finance);
   const profit = centralFunding + gateReceipts + nrlSponsorIncome(state.finance) + nrlBoardPathwaysIncome(state.finance)
-    - wagesPaid - operatingCosts - nrlMedicalSpend(state.finance) - nrlAcademyFacilitySpend(state.finance) - signingFee - wages;
+    - wagesPaid - operatingCosts - nrlMedicalSpend(state.finance) - nrlAcademyFacilitySpend(state.finance)
+    - nrlMutualReleaseSpend(state.finance) - signingFee - wages;
   return { ...state.finance, cash: openingCash + profit, profit };
 }
 
@@ -1138,7 +1169,13 @@ function rolloverCareer(state: NrlCareerState, move?: { fromYear: number; clubId
   players.push(...newMarket(season.seed, year, names));
   const settled = completeSquads(players, state, year, names);
   const freeAgents = settled.filter(player => !player.contract && !player.futureContract).sort(byRating);
-  const pool = NRL_ROLES.flatMap(role => freeAgents.filter(player => player.role === role).slice(0, MARKET_PER_ROLE));
+  const releasedId = state.finance.mutualRelease?.playerId;
+  const pool = NRL_ROLES.flatMap(role => {
+    const available = freeAgents.filter(player => player.role === role);
+    const top = available.slice(0, MARKET_PER_ROLE);
+    const released = releasedId && available.find(player => player.id === releasedId);
+    return released && !top.includes(released) ? [...top.slice(0, MARKET_PER_ROLE - 1), released] : top;
+  });
   const world = [...settled.filter(player => player.contract || player.futureContract), ...pool];
   const squad = squadAt(world, clubId, year).sort(byRating);
   const lineup = { ...season.lineup };
@@ -1358,6 +1395,18 @@ export function reduceNrlCareer(state: NrlCareerState, action: NrlCareerAction):
         ? { ...player, contract: { ...player.contract!, endYear: year }, futureContract }
         : player) };
     }
+    case 'agreeMutualRelease': {
+      const { year, clubId } = state.season;
+      if (action.year !== year || action.clubId !== clubId || !nrlMutualReleaseQuote(state, action.playerId).ok) return state;
+      const player = state.players.find(candidate => candidate.id === action.playerId)!;
+      const mutualRelease = { playerId: player.id, playerName: player.name, annualSalary: player.contract!.salary };
+      const finance = { ...state.finance, mutualRelease };
+      return { ...state, finance,
+        players: state.players.map(candidate => candidate === player
+          ? { ...player, contract: { ...player.contract!, endYear: year } } : candidate),
+        history: state.history.map(row => row.year === year ? { ...row, finance: nrlCareerFinance({ finance }) } : row),
+      };
+    }
     case 'offerContract':
     case 'acceptCounteroffer': {
       const quote = action.type === 'offerContract'
@@ -1433,6 +1482,10 @@ function validBook(value: unknown, roundLimit: number): value is NrlCareerBook {
     && [value.centralFunding, value.gateReceipts, value.wagesPaid, value.operatingCosts]
       .every(amount => intIn(amount, 0, Number.MAX_SAFE_INTEGER))
     && validMedicalUpgrades(value.medicalUpgrades, value.fromRound, roundLimit)
+    && (value.mutualRelease === undefined || (record(value.mutualRelease) && Object.keys(value.mutualRelease).length === 3
+      && typeof value.mutualRelease.playerId === 'string' && Boolean(value.mutualRelease.playerId)
+      && typeof value.mutualRelease.playerName === 'string' && Boolean(value.mutualRelease.playerName)
+      && intIn(value.mutualRelease.annualSalary, 1, Number.MAX_SAFE_INTEGER)))
     && (value.academyUpgradeRound === undefined || (value.fromRound === 1 && intIn(value.academyUpgradeRound, 1, roundLimit)))
     && (value.pathways === undefined || (value.fromRound === 1 && record(value.pathways)
       && Object.keys(value.pathways).length === (value.pathways.earnedBy === undefined ? 0 : 1)
@@ -1504,6 +1557,8 @@ function validReceipt(value: unknown, year: number): value is NrlCareerHistoryRo
         && row[3] + row[4] >= NRL_DEVELOPMENT_ASSISTANT.appearances))) return false;
   }
   if (finance.academyUpgradeRound !== undefined && (year === NRL_LAST_YEAR || value.scoring === undefined)) return false;
+  if (finance.mutualRelease && (year === NRL_LAST_YEAR || value.scoring === undefined || finance.cash < 0
+    || !intIn(finance.mutualRelease.annualSalary, nrlSeasonPlan(year + 1).minimumSalary, nrlSeasonPlan(year + 1).cap))) return false;
   if (finance.pathways && value.scoring === undefined) return false;
   if (finance.pathways && value.finals !== undefined) {
     const playerSeasons = value.playerSeasons as NrlSeasonPlayerArchive | undefined;
@@ -1524,6 +1579,8 @@ function booksMatch(a: NrlCareerBook, b: NrlCareerBook): boolean {
     && a.academyUpgradeRound === b.academyUpgradeRound
     && a.coachHire?.role === b.coachHire?.role && a.coachHire?.round === b.coachHire?.round
     && a.coachHire?.paidRounds === b.coachHire?.paidRounds
+    && a.mutualRelease?.playerId === b.mutualRelease?.playerId && a.mutualRelease?.playerName === b.mutualRelease?.playerName
+    && a.mutualRelease?.annualSalary === b.mutualRelease?.annualSalary
     && a.ticketTier === b.ticketTier
     && a.sponsor?.offer === b.sponsor?.offer && a.sponsor?.bonusPaid === b.sponsor?.bonusPaid
     && JSON.stringify(a.pathways) === JSON.stringify(b.pathways)
@@ -1572,6 +1629,14 @@ function validCareerBooks(state: NrlCareerState): boolean {
   if (finance.fromRound > played + 1 || (finance.fromRound !== 1 && !legacySeason)
     || (legacySeason && (finance.ticketTier !== undefined || finance.sponsor !== undefined))) return false;
   const coach = finance.coachHire;
+  const release = finance.mutualRelease;
+  if (release) {
+    const player = state.players.find(candidate => candidate.id === release.playerId);
+    if (legacySeason || !complete || !season.kickerId || season.year === NRL_LAST_YEAR || !player
+      || player.name !== release.playerName || player.contract?.clubId !== season.clubId || player.contract.endYear !== season.year
+      || player.contract.salary !== release.annualSalary || player.futureContract || player.age + 1 >= RETIREMENT_AGE
+      || !nrlCareerSquad(state, season.year + 1).some(teammate => teammate.role === player.role)) return false;
+  }
   if (coach) {
     if (legacySeason) return false;
     if (coach.role === 'development' && (!season.kickerId || !canHireDevelopmentAssistant(season.year, season.clubId, coach.round))) return false;
@@ -1662,6 +1727,10 @@ function validCareerBooks(state: NrlCareerState): boolean {
       expected = tickBooks(expected, season, round, season.results.filter(result => result.round === round), cap);
       expected = settlePathways(expected, season, round, state.players);
     }
+  }
+  if (release) {
+    if (nrlCareerFinance({ finance: expected }).cash < nrlMutualReleaseSpend(finance)) return false;
+    expected = { ...expected, mutualRelease: release };
   }
   return nextPurchase === purchases.length && booksMatch(expected, finance);
 }

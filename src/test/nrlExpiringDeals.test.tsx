@@ -6,7 +6,7 @@ import NrlCareerOffice from '@/components/nrl-manager/NrlCareerOffice';
 import { NRL_LAST_YEAR } from '@/data/nrlManagerSeasons';
 import { nrlBoardChallengeStatus } from '@/lib/nrlBoardTarget';
 import {
-  createNrlCareer, nrlCareerMarket, nrlCareerSquad, nrlContractOffer, readNrlCareerSave, reduceNrlCareer, type NrlCareerState,
+  createNrlCareer, nrlCareerMarket, nrlCareerSquad, nrlContractOffer, nrlMutualReleaseQuote, readNrlCareerSave, reduceNrlCareer, type NrlCareerState,
 } from '@/lib/nrlCareer';
 import { createNrlSeason, NRL_SAVE_KEY, reduceNrlSeason } from '@/lib/nrlManager';
 import { NRL_SAVE_ENTRY, nrlCheckpointKey, restoreNrlCheckpoint, saveNrlCheckpoint } from '@/lib/nrlSaveSlots';
@@ -70,6 +70,33 @@ afterEach(() => {
 });
 
 describe('NRL season review for expiring deals', () => {
+  it('previews and confirms one simulated release from Contracts without writing on cancel', () => {
+    const player = nrlCareerSquad(completed).find(row => nrlMutualReleaseQuote(completed, row.id).ok)!;
+    const view = open(completed);
+    click('Contracts');
+    const panel = screen.getByText('Negotiate an offseason release').closest('details')!;
+    fireEvent.click(within(panel).getByText('Negotiate an offseason release'));
+    const choose = () => fireEvent.change(within(panel).getByLabelText('Player to release'), { target: { value: player.id } });
+    const before = raw();
+    choose();
+    expect(within(panel).getByText(/One-time settlement/)).toBeVisible();
+    expect(within(panel).getByText(/after reserving a squad place/)).toBeVisible();
+    expect(raw()).toBe(before);
+    fireEvent.click(within(panel).getByRole('button', { name: 'Cancel release' }));
+    expect(raw()).toBe(before);
+    choose();
+    fireEvent.click(within(panel).getByRole('button', { name: 'Confirm mutual release' }));
+    expect(within(panel).getByText(/Release agreed/)).toHaveTextContent(player.name);
+    expect(within(panel).getByText('Negotiate an offseason release')).toHaveFocus();
+    const after = raw()!;
+    expect(readNrlCareerSave(after)?.finance.mutualRelease?.playerId).toBe(player.id);
+    view.unmount();
+    open(after);
+    click('Finances');
+    expect(screen.getByText('Contract settlement')).toBeVisible();
+    expect(raw()).toBe(after);
+  });
+
   it('saves a mid-season application, reloads its pending state and accepts the settled summer offer', () => {
     let career = createNrlCareer('storm', 4);
     while (career.season.round < 14) career = advance(career);
