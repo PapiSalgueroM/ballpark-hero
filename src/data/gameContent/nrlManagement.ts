@@ -18,6 +18,7 @@ export const NRL_MANAGEMENT_CONTENT: GameContentMap = {
       'In Contracts, arrange an offseason move for an eligible player. They stay this season, and the receiving club pays their salary for the remaining term.',
       'Set Standard, Value or Premium ticket prices in Finance before your first paid home match. That choice applies to home gates for the rest of the season.',
       'Open Season review for your final ladder, finances, recorded scoring and finals scores. Stay with your club, move to a new club, or retire and keep your career record.',
+      'Open Change clubs in Season review to see simulated openings based on expansion and the season’s ladder, with a board target for each suggested club.',
       'In Season review, open Player history and choose a player to see recorded regular-season and finals appearances, scoring and rating changes.',
     ],
     rules: [

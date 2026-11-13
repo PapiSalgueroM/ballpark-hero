@@ -1,7 +1,7 @@
 import { isNrlOpeningYear, nrlSeasonPlan, NRL_LAST_YEAR, type NrlClub } from '@/data/nrlManagerSeasons';
 import { clampi, hashLabel, rngFrom } from '@/lib/careerEngine';
 import { uniqueName } from '@/lib/foNames';
-import { nrlBoardChallengeStatus } from '@/lib/nrlBoardTarget';
+import { nrlBoardBenchmark, nrlBoardChallengeStatus } from '@/lib/nrlBoardTarget';
 import {
   archiveNrlPlayerSeasons, archiveNrlScoring, validNrlPlayerSeasonArchive, validNrlScoringArchive,
   type NrlSeasonPlayerArchive, type NrlSeasonScoringTotal,
@@ -871,6 +871,39 @@ function completeSquads(players: NrlCareerPlayer[], state: NrlCareerState, year:
 export function nrlOffseasonClubs({ season, retired }: Pick<NrlCareerState, 'season' | 'retired'>): readonly NrlClub[] {
   if (retired || season.phase !== 'complete' || season.year === NRL_LAST_YEAR) return [];
   return nrlSeasonPlan(season.year + 1).clubs.filter(club => club.id !== season.clubId);
+}
+
+type NrlOffseasonOpportunity = { clubId: string; nextTarget: string } & (
+  { reason: 'expansion' } | { reason: 'missed'; rank: number; missedBy: number }
+);
+
+export function nrlOffseasonOpportunities(state: NrlCareerState): NrlOffseasonOpportunity[] {
+  const { season, history } = state;
+  const clubs = nrlOffseasonClubs(state);
+  if (!clubs.length) return [];
+  const { year, results } = season;
+  const { clubs: current, draw } = nrlSeasonPlan(year);
+  const available = new Set(clubs.map(club => club.id));
+  const openings: NrlOffseasonOpportunity[] = clubs.filter(club => !current.some(known => known.id === club.id)).map(club => ({
+    clubId: club.id, reason: 'expansion', nextTarget: nrlBoardBenchmark(year + 1, club.id)!.label,
+  }));
+
+  let matchIndex = 0;
+  const fullDraw = draw.every((round, index) => round.every(([homeId, awayId]) => {
+    const result = results[matchIndex++];
+    return result?.round === index + 1 && result.homeId === homeId && result.awayId === awayId;
+  }));
+  if (!fullDraw) return openings;
+
+  const misses = nrlLadder(season).flatMap(({ clubId }, index) => {
+    if (!available.has(clubId) || clubId === season.championId) return [];
+    const previousPlace = history.find(row => row.year === year - 1 && row.clubId === clubId)?.rank;
+    const missedBy = index + 1 - nrlBoardBenchmark(year, clubId, previousPlace)!.targetRank;
+    return missedBy > 0 ? [{ clubId, rank: index + 1, missedBy }] : [];
+  });
+  return [...openings, ...misses.sort((a, b) => b.missedBy - a.missedBy || a.rank - b.rank).slice(0, 2).map(row => ({
+    ...row, reason: 'missed' as const, nextTarget: nrlBoardBenchmark(year + 1, row.clubId)!.label,
+  }))];
 }
 
 function rolloverCareer(state: NrlCareerState, move?: { fromYear: number; clubId: string }): NrlCareerState {
