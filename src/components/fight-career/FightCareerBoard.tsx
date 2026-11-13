@@ -535,17 +535,20 @@ export default function FightCareerBoard() {
           </p>
           <p className="mb-3 text-xs text-muted-foreground">
             You have {CAMP_WEEKS - campTotal} week{CAMP_WEEKS - campTotal === 1 ? '' : 's'} left to place.
-            Spreading them keeps you ready everywhere. Piling them on one thing makes you sharp there and short of gas.
+            Each fight gives you six training weeks, already assigned. Use minus to free a week and plus to move it.
+            Training can raise your attributes. Your trainer and camp upgrades can improve the gains from those weeks.
           </p>
           <div className="space-y-2">
             {rows.map(r => (
               <div key={r.k} className="flex items-center gap-2">
                 <span className="w-24 shrink-0 text-sm">{r.label}</span>
                 <button
+                  aria-label={`Remove week from ${r.label}`}
                   onClick={() => setCamp(c => ({ ...c, [r.k]: Math.max(0, c[r.k] - 1) }))}
                   className="h-9 w-9 rounded-md border text-lg leading-none">-</button>
                 <span className="w-6 text-center text-sm tabular-nums">{camp[r.k]}</span>
                 <button
+                  aria-label={`Add week to ${r.label}`}
                   disabled={campTotal >= CAMP_WEEKS}
                   onClick={() => setCamp(c => ({ ...c, [r.k]: c[r.k] + 1 }))}
                   className="h-9 w-9 rounded-md border text-lg leading-none disabled:opacity-40">+</button>
