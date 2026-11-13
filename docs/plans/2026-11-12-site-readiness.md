@@ -1,6 +1,12 @@
 # DoUKnowBall site readiness and game work
 
-Checkpoint at 12:02 UTC on November 13, 2026. The broad update remains draft [PR #770](https://github.com/PapiSalgueroM/ballpark-hero/pull/770). The work continued after the 24-hour report below.
+Checkpoint at 12:12 UTC on November 13, 2026. The broad update remains draft [PR #770](https://github.com/PapiSalgueroM/ballpark-hero/pull/770). The work continued after the 24-hour report below.
+
+Home now has its own entry chunk, and the desktop score rail loads only where visible. Phones retain it on Home. The shared entry fell by 36,464 gzip bytes. The exact mobile pairs measured Home LCP at 984 to 920 ms and Soccer Career at 5.312 to 5.260 seconds, with results moving in both directions for Soccer Career. Home's complete initial JavaScript rose by 9,747 bytes as work moved into route chunks. Soccer Career's fell by 21,677 bytes. All six published cases and 173 sitemap URLs passed. PageSpeed Insights returned 429 again. Field INP and the mobile 2.5-second target remain open. [PR #816](https://github.com/PapiSalgueroM/ballpark-hero/pull/816).
+
+
+
+The exact broad tree through #816 passed application types, 23 output readers, snapshot boot, all 16 route budgets, 400 isolation probes, 105 browser openings and 64 mobile consent checks. All 93 ranked entries loaded their own game with zero foreign game entries. The measured artifact contains 924 files and 24,844,525 bytes, manifest SHA-256 18f66c1d3ad0530db27f5061c06d6649668a909670eaf359ec9a0be8d77596e4. The first cap runner used an older budget table and flagged a stale Club Manager ceiling. The exact tracked runner applies the existing 273 KiB ceiling and passed at 183.2 KiB. These results apply to 36d9b0034a156613e3fef353dde4cb632f889b50.
 
 Club Manager keeps contracted players when summer loan returns take the active squad over 30. Genuine contract expiries, incoming loan returns, signing limits and early-recall limits still apply. Thirty focused tests, six paired local browser cases, the full eight-section historical fleet and six pinned production checks passed. The compiled fixture keeps all 31 players after reload. The original report detailing 30 active players and returning loans was marked Fixed. A second report lacked a save or player names and stays open. Previously released players require separate recovery. The queue has 146 active reports: 17 new, 22 confirmed and 107 investigating. [PR #815](https://github.com/PapiSalgueroM/ballpark-hero/pull/815).
 
