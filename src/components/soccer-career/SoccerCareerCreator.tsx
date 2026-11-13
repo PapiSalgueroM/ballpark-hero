@@ -490,7 +490,7 @@ export function SoccerCareerCreator({ onBegin, initialSupport, loadSupport }: {
             onClick={doRoll}
             disabled={!canGenerate}
             aria-disabled={isRolling || clubsLoading || undefined}
-            className={`flex-1 h-11 text-sm font-bold text-black aria-disabled:pointer-events-none aria-disabled:opacity-50 ${rolledOvr !== null ? "bg-muted/40 hover:bg-muted/60 text-foreground" : "bg-emerald-600 hover:bg-emerald-500"}`}
+            className={`h-auto min-h-11 min-w-0 flex-1 whitespace-normal text-sm font-bold text-black aria-disabled:pointer-events-none aria-disabled:opacity-50 ${rolledOvr !== null ? "bg-muted/40 hover:bg-muted/60 text-foreground" : "bg-emerald-600 hover:bg-emerald-500"}`}
             variant={rolledOvr !== null ? "outline" : "default"}
           >
             {clubsLoading && canGenerate ? "Loading..." : isRolling ? "🎰 Rolling..." : rolledOvr !== null ? "🎲 Roll again" : "🎲 Generate Starting Potential"}
