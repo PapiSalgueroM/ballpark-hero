@@ -1103,7 +1103,7 @@ function NrlManagerScreen({ entry, showSlots }: { entry: ContinueSave; showSlots
   return (
     <>
       <PageSeo title="NRL Team Manager: Rugby League Sim | DoUKnowBall"
-        description="Start in 2026 or 2027, pick your starting 13 and manage contracts, recruitment and club finances across seasons. Manage Perth from its 2027 debut."
+        description="Free rugby league manager. Start in 2026 or 2027, pick your starting 13 and manage contracts and club finances. Manage Perth from its 2027 debut."
         path="/nrl-team-manager" />
       <GameNavbar />
       <main id="dukb-main" className="container mx-auto max-w-5xl space-y-5 px-3 pb-20 pt-5 sm:px-6">
