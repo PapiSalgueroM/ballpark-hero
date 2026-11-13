@@ -86,6 +86,31 @@ describe('Rugby League World Cup screen', () => {
     expect(localStorage.getItem(fenceKeyOf(NRL_SAVE_KEY))).toBeNull();
   });
 
+  it('previews a simulated matchday change and saves it only when the stage is played', async () => {
+    const view = open();
+    await openCup();
+    click('Start World Cup');
+    const before = localStorage.getItem(cupKey);
+    fireEvent.click(screen.getByText('Set matchday lineup'));
+    fireEvent.change(screen.getByRole('combobox', { name: 'Starter and reserve swap' }), { target: { value: '0' } });
+    fireEvent.change(screen.getByRole('combobox', { name: 'First interchange priority' }), { target: { value: '3' } });
+    expect(screen.getByText(/Tom Dearden starts at Halfback/)).toBeVisible();
+    expect(screen.getByText(/Planned rotation: Keaon Koloamatangi/)).toBeVisible();
+    expect(localStorage.getItem(cupKey)).toBe(before);
+    click('Play pool round 1');
+    expect(cup()?.lineups).toEqual({ 1: { swap: 0, firstReserve: 3 } });
+    expect(screen.getByText(/Tom Dearden starts at Halfback/)).toBeVisible();
+    const after = localStorage.getItem(cupKey);
+    view.unmount();
+    open();
+    await openCup();
+    expect(localStorage.getItem(cupKey)).toBe(after);
+    expect(screen.getByText(/Tom Dearden starts at Halfback/)).toBeVisible();
+    click('Play pool round 2');
+    expect(cup()?.lineups).toEqual({ 1: { swap: 0, firstReserve: 3 } });
+    expect(localStorage.getItem(NRL_SAVE_KEY)).toBeNull();
+  });
+
   it('keeps a refused tournament save until retry and allows leaving only after it is stored', async () => {
     const initial = JSON.stringify(createNrlWorldCup(16, 'tonga'));
     localStorage.setItem(cupKey, initial);

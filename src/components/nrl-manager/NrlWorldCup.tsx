@@ -6,7 +6,10 @@ import {
 } from '@/data/nrlWorldCup2026';
 import { useSaveFenceWatch } from '@/hooks/useSaveFenceWatch';
 import { NRL_TACTICS, type NrlTactic } from '@/lib/nrlManager';
-import { advanceNrlWorldCup, createNrlWorldCup, nrlWorldCupResults, readNrlWorldCupSave, type NrlWorldCupRun } from '@/lib/nrlWorldCup';
+import {
+  advanceNrlWorldCup, createNrlWorldCup, nrlWorldCupCanPickLineup, nrlWorldCupMatchday, nrlWorldCupResults, nrlWorldCupRotation, readNrlWorldCupSave,
+  type NrlWorldCupLineup, type NrlWorldCupRun,
+} from '@/lib/nrlWorldCup';
 import { holdPendingSave, safeSetItem } from '@/lib/safeStorage';
 import { saveFence } from '@/lib/saveFence';
 
@@ -98,12 +101,65 @@ function stageSummary(run: NrlWorldCupRun, report: Report) {
   return 'Ready for pool round 1.';
 }
 
+function lineupSummary(nation: NrlWorldCupNation, choice: NrlWorldCupLineup) {
+  const { swaps, bench } = nrlWorldCupMatchday(nation, choice);
+  const change = swaps.find(option => option.index === choice.swap);
+  return [
+    change && `${change.reserve.name} starts at ${change.starter.role} and ${change.starter.name} moves to the bench.`,
+    choice.firstReserve !== undefined && `${bench[0].name} has first interchange priority.`,
+  ].filter(Boolean).join(' ');
+}
+
+function MatchdayLineup({ nation, choice, disabled, onChange }: {
+  nation: NrlWorldCupNation; choice: NrlWorldCupLineup; disabled: boolean; onChange: (choice: NrlWorldCupLineup) => void;
+}) {
+  const { swaps, bench } = nrlWorldCupMatchday(nation, { swap: choice.swap });
+  const summary = lineupSummary(nation, choice);
+  const rotation = nrlWorldCupRotation(nation, choice);
+  const rotationNames = rotation.map(player => player.name).join(', ');
+  return (
+    <details className="rounded-md border border-border px-3">
+      <summary className="min-h-11 cursor-pointer py-2.5 font-semibold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
+        Set matchday lineup
+      </summary>
+      <div className="space-y-2 pb-3">
+        <p className="text-sm text-muted-foreground">Change one starter or give a reserve first priority in the rotation. Changes apply to this match.</p>
+        <div className="grid gap-2 sm:grid-cols-2">
+          <label className="min-w-0 space-y-1 text-sm font-semibold">
+            <span>Starter and reserve swap</span>
+            <select className={selectClass} value={choice.swap ?? ''} disabled={disabled} onChange={event => onChange({
+              swap: event.target.value ? Number(event.target.value) : undefined,
+            })}>
+              <option value="">Keep opening starters</option>
+              {swaps.map(({ index, reserve, starter }) => <option key={reserve.id} value={index}>
+                {reserve.name} for {starter.name} · {starter.role}
+              </option>)}
+            </select>
+          </label>
+          <label className="min-w-0 space-y-1 text-sm font-semibold">
+            <span>First interchange priority</span>
+            <select className={selectClass} value={choice.firstReserve ?? ''} disabled={disabled} onChange={event => onChange({
+              ...choice, firstReserve: event.target.value ? Number(event.target.value) : undefined,
+            })}>
+              <option value="">Keep current bench order</option>
+              {bench.slice(1).map(({ id, name, role }, index) => <option key={id} value={index + 1}>{name} · {role}</option>)}
+            </select>
+          </label>
+        </div>
+        {summary && <p className="text-sm" aria-live="polite">{summary}</p>}
+        <p className="text-sm text-muted-foreground">Planned rotation: {rotationNames}.</p>
+      </div>
+    </details>
+  );
+}
+
 export default function NrlWorldCup({ onBack }: { onBack: () => void }) {
   const [initial] = useState(readSave);
   const [run, setRun] = useState(initial.run);
   const [unreadable, setUnreadable] = useState(initial.raw !== null && initial.run === null);
   const [nation, setNation] = useState<NrlWorldCupNation>(initial.run?.nation ?? 'australia');
   const [tactic, setTactic] = useState<NrlTactic>('balanced');
+  const [lineup, setLineup] = useState<NrlWorldCupLineup>({});
   const [saveFailed, setSaveFailed] = useState(false);
   const [changed, setChanged] = useState(false);
   const [restart, setRestart] = useState(false);
@@ -115,6 +171,7 @@ export default function NrlWorldCup({ onBack }: { onBack: () => void }) {
   const stale = changed || moved;
   const report = run ? nrlWorldCupResults(run) : null;
   const step = run?.tactics.length ?? 0;
+  const canPickLineup = Boolean(run && report && nrlWorldCupCanPickLineup(run, step + 1, report));
 
   useEffect(() => {
     saveFence.adopt(SAVE_KEY);
@@ -158,12 +215,16 @@ export default function NrlWorldCup({ onBack }: { onBack: () => void }) {
     setUnreadable(false);
     setRestart(false);
     setTactic('balanced');
+    setLineup({});
   }
 
   function play() {
     if (!current.current) return;
-    const next = advanceNrlWorldCup(current.current, step + 1, tactic);
-    if (next !== current.current && save(next) !== 'moved' && step === stages.length - 1) status.current?.focus();
+    const choice = lineup.swap !== undefined || lineup.firstReserve !== undefined ? lineup : undefined;
+    const next = advanceNrlWorldCup(current.current, step + 1, tactic, choice);
+    if (next === current.current || save(next) === 'moved') return;
+    setLineup({});
+    if (step === stages.length - 1) status.current?.focus();
   }
 
   return (
@@ -172,7 +233,7 @@ export default function NrlWorldCup({ onBack }: { onBack: () => void }) {
         <h2 id="nrl-world-cup-title" ref={heading} tabIndex={-1} className="font-display text-xl font-bold outline-none sm:text-2xl">2026 Rugby League World Cup</h2>
         <Button type="button" size="lg" variant="outline" className="px-3" onClick={leave}>Back to club manager</Button>
       </div>
-      <p className="text-sm text-muted-foreground">Coach one of ten men’s national teams through the published 2026 fixtures. The game uses the opening matchday selections throughout, with simulated ratings and results.</p>
+      <p className="text-sm text-muted-foreground">Coach one of ten men’s national teams through the published 2026 fixtures. The game uses each nation’s opening squad, with optional matchday changes and simulated ratings and results.</p>
       {stale && <p className="rounded-md border border-border p-2 text-sm" role="status">The World Cup changed in another tab. Go back and open it again to load the newer run.</p>}
       {saveFailed && !stale && <div className="rounded-md border border-border p-2 text-sm" role="status">
         <p>Progress is still in this tab. Retry before leaving.</p>
@@ -192,6 +253,7 @@ export default function NrlWorldCup({ onBack }: { onBack: () => void }) {
       {run && report && !restart && <div className="space-y-3">
         <p className="font-semibold">Coaching {nationNames[run.nation]}</p>
         <p ref={status} tabIndex={-1} aria-live="polite" className="text-sm font-semibold" role={stale || saveFailed ? undefined : 'status'}>{stageSummary(run, report)}</p>
+        {canPickLineup && <MatchdayLineup key={step} nation={run.nation} choice={lineup} disabled={stale} onChange={setLineup} />}
         {step < stages.length ? (
           <div className="grid items-end gap-2 sm:grid-cols-[minmax(0,1fr)_auto]">
             <label className="min-w-0 space-y-1 text-sm font-semibold">
@@ -203,6 +265,11 @@ export default function NrlWorldCup({ onBack }: { onBack: () => void }) {
             <Button type="button" size="lg" disabled={stale} onClick={play}>Play {stages[step]}</Button>
           </div>
         ) : <Button type="button" size="lg" variant="outline" disabled={stale || saveFailed} onClick={() => setRestart(true)}>New World Cup</Button>}
+        {run.lineups && <ul className="space-y-1 text-sm" aria-label="Saved matchday changes">
+          {Object.entries(run.lineups).map(([stage, change]) => change && <li key={stage} className="break-words">
+            <span className="font-semibold">{stages[Number(stage) - 1]} </span>{lineupSummary(run.nation, change)}
+          </li>)}
+        </ul>}
         <details className="rounded-md border border-border px-3">
           <summary className="min-h-11 cursor-pointer py-2.5 font-semibold">{nationNames[run.nation]} opening squad</summary>
           <ol className="grid gap-x-4 gap-y-1 pb-3 text-sm sm:grid-cols-2">
