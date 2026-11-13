@@ -310,9 +310,9 @@ export async function fetchPuckDetectivePool(): Promise<PuckDetectivePlayer[] | 
 // ---------------------------------------------------------------------------
 
 /** Date-seeded daily pick, stable across all users on the same ET date. */
-export function pickDailyMystery(pool: PuckDetectivePlayer[]): PuckDetectivePlayer {
+export function pickDailyMystery(pool: PuckDetectivePlayer[], date = getTodayET()): PuckDetectivePlayer {
   const sorted = [...pool].sort((a, b) => a.playerId - b.playerId);
-  return sorted[dailyIndex(getTodayET(), sorted.length)];
+  return sorted[dailyIndex(date, sorted.length)];
 }
 
 /** Random pick for unlimited mode, optionally avoiding the immediately-previous mystery. */
