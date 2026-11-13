@@ -14,6 +14,10 @@ import {
   type NrlAction, type NrlAttackPlan, type NrlCoachRole, type NrlFinalsArchive, type NrlFixture, type NrlManagerState, type NrlMatchResult,
   type NrlPlayer, type NrlRole, type NrlSavedLineup, type NrlYear,
 } from '@/lib/nrlManager';
+import {
+  createNrlOriginSeries, isNrlOriginSeries, nrlOriginComplete, playNrlOriginMatch, selectNrlOriginReserve, selectNrlOriginStarter,
+  setNrlOriginTactic, type NrlOriginSeries, type NrlOriginSide,
+} from '@/lib/nrlOrigin';
 
 const SQUAD_SIZE = 30;
 export const NRL_SAVE_MAX_CHARS = 1_000_000;
@@ -118,12 +122,22 @@ export interface NrlCareerState {
   shortlist?: string[];
   savedLineup?: NrlSavedLineup;
   positionTraining?: NrlPositionCourse;
+  origin?: NrlOriginSeries;
 }
 type NrlOpeningMatchdayPlayer = readonly [id: number, name: string, age: number, role: NrlRole];
 export type NrlOpeningMatchdayRoster = Readonly<Record<string, readonly NrlOpeningMatchdayPlayer[]>>;
 export const isNrlOpeningMatchdayPlayer = (id: string): boolean => /^nrl-real-\d+$/.test(id);
 
+type OriginMatchAction = { year: number; side: NrlOriginSide; game: number } & (
+  | { type: 'selectOriginStarter'; role: NrlRole; playerId: string }
+  | { type: 'selectOriginReserve'; slot: number; playerId: string }
+  | { type: 'setOriginTactic'; tactic: NrlOriginSeries['tactic'] }
+  | { type: 'playOriginMatch' }
+);
+
 export type NrlCareerAction = NrlAction
+  | { type: 'startOrigin'; year: number; side: NrlOriginSide }
+  | OriginMatchAction
   | { type: 'setAttackPlan'; attackPlan: NrlAttackPlan; year: number; clubId: string; round: number }
   | { type: 'offerContract'; playerId: string; salary: number; years: number }
   | { type: 'acceptCounteroffer'; playerId: string; year: number; offeredSalary: number; contract: NrlContract }
@@ -986,6 +1000,25 @@ function rolloverCareer(state: NrlCareerState, move?: { fromYear: number; clubId
 export function reduceNrlCareer(state: NrlCareerState, action: NrlCareerAction): NrlCareerState {
   if (state.retired || (state.season.live && action.type !== 'finishLive')) return state;
   switch (action.type) {
+    case 'startOrigin': {
+      const { origin, season } = state;
+      if (action.year !== season.year || (origin && (origin.year >= action.year || !nrlOriginComplete(origin)))) return state;
+      const players = state.players.filter(player => contractIn(player, season.year));
+      const next = createNrlOriginSeries(players, season.year, action.side);
+      return next ? { ...state, origin: next } : state;
+    }
+    case 'selectOriginStarter':
+    case 'selectOriginReserve':
+    case 'setOriginTactic':
+    case 'playOriginMatch': {
+      const { origin } = state;
+      if (!origin || action.year !== origin.year || action.side !== origin.side || action.game !== origin.matches.length + 1) return state;
+      const next = action.type === 'selectOriginStarter' ? selectNrlOriginStarter(origin, action.role, action.playerId)
+        : action.type === 'selectOriginReserve' ? selectNrlOriginReserve(origin, action.slot, action.playerId)
+        : action.type === 'setOriginTactic' ? setNrlOriginTactic(origin, action.tactic)
+        : playNrlOriginMatch(origin, state.season.seed, action.game);
+      return next === origin ? state : { ...state, origin: next };
+    }
     case 'setAttackPlan': {
       const { season } = state;
       if (action.year !== season.year || action.clubId !== season.clubId || action.round !== season.round) return state;
@@ -1400,6 +1433,9 @@ export function isNrlCareerState(value: unknown): value is NrlCareerState {
   const { year } = value.season;
   if (!value.players.every(player => validPlayer(player, year) && (!value.legacySeason || !player.secondaryRole))) return false;
   const state = value as unknown as NrlCareerState;
+  if (state.origin !== undefined && (!isNrlOriginSeries(state.origin, state.season.seed)
+    || state.origin.year < state.openingYear || state.origin.year > year
+    || (!state.openingRoster && Object.values(state.origin.pools).some(pool => pool.some(player => isNrlOpeningMatchdayPlayer(player.id)))))) return false;
   const spell = state.season.reserveGrade;
   if (spell) {
     const player = state.players.find(candidate => candidate.id === spell.playerId);

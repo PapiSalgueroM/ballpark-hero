@@ -7,6 +7,7 @@ import { GameNavbar } from '@/components/game/GameNavbar';
 import { RulesGate } from '@/components/game/RulesGate';
 import NrlBoardChallengeNotice from '@/components/nrl-manager/NrlBoardChallengeNotice';
 import NrlCareerOffice from '@/components/nrl-manager/NrlCareerOffice';
+import NrlOriginOffice from '@/components/nrl-manager/NrlOriginOffice';
 import NrlCareerSlots from '@/components/nrl-manager/NrlCareerSlots';
 import GameSeoContent from '@/components/seo/GameSeoContent';
 import PageSeo from '@/components/seo/PageSeo';
@@ -1203,6 +1204,7 @@ function NrlManagerScreen({ entry, showSlots, rules }: {
               <li>Set a development focus in Season review. It applies to returning players when you start the next year.</li>
               <li>Check your regular-season board target in Season review.</li>
               <li>Change clubs between seasons from Season review.</li>
+              <li>Open State of Origin in the Club office to coach New South Wales or Queensland through three games alongside your club career.</li>
               <li>Review each season, manage contracts and recruit for the next year. Career saves lets you keep up to three careers in this browser.</li>
             </ul>
           </RulesGate>
@@ -1251,6 +1253,7 @@ function NrlManagerScreen({ entry, showSlots, rules }: {
                       aria-pressed={office === id} onClick={() => setOffice(id)}>{label}</Button>
                   ))}
                 </div>
+                <NrlOriginOffice career={career} disabled={rosterLocked} onAction={dispatch} />
                 <NrlCareerOffice key={office} career={career} screen={office} disabled={rosterLocked} onAction={dispatch} />
               </>
             )}
