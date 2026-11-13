@@ -1,4 +1,4 @@
-import { supabase } from '@/integrations/supabase/client';
+import { gameQueryClient as supabase } from '@/lib/gameQueryClient';
 import { flagFor } from '@/lib/dealPlayers';
 import { clubKey, isSameMan, normalizeName, positionGroup, primaryNationality } from '@/lib/whoAmI';
 import type { PositionGroup } from '@/lib/whoAmI';
