@@ -9,6 +9,7 @@ import { SOCCER_CONTENT_2 } from './soccer2';
 import { FOOTBALL_CONTENT } from './football';
 import { COLLEGE_CONTENT } from './college';
 import { BASKETBALL_CONTENT } from './basketball';
+import { NBA_MY_CAREER_CONTENT } from './nbaMyCareer';
 import { BASEBALL_CONTENT } from './baseball';
 import { HOCKEY_CONTENT } from './hockey';
 import { MORE_SPORTS_CONTENT } from './moreSports';
@@ -28,6 +29,7 @@ export const GAME_CONTENT: GameContentMap = {
   ...FOOTBALL_CONTENT,
   ...COLLEGE_CONTENT,
   ...BASKETBALL_CONTENT,
+  ...NBA_MY_CAREER_CONTENT,
   ...BASEBALL_CONTENT,
   ...HOCKEY_CONTENT,
   ...MORE_SPORTS_CONTENT,
