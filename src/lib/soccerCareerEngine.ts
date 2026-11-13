@@ -169,7 +169,7 @@ import { applyAcademyFocus } from "./soccerCareerAcademy";
    nothing, so this is a one way edge too. */
 import { readSeasonMoments, type SeasonMomentsSave } from "./season/momentsSave";
 import {
-  tournamentForYear, offYearCaps, toHistoryEntry,
+  tournamentForYear, offYearCaps, toHistoryEntry, tournamentGoalShare,
   nationStrength as intlNationStrength, confederationOf,
 } from "./soccerInternational";
 import type {
@@ -7072,11 +7072,8 @@ export function generateRandomEvents(state: CareerState): RandomEvent[] {
  *
  * BALANCE DELIBERATELY HELD. The goal model is built from the SAME inputs the
  * old win chance used (overall, the elite bonus, the round difficulty), scaled
- * so a tie comes out at roughly the old per-round advance rate, and the player's
- * goal chance is halved per leg so a two legged tie yields what the old single
- * match yielded. scripts/simSoccerCareerUcl.mjs measures both and fails if the
- * advance rate or the tournament goal total has moved, because a fix to a
- * mechanism must not quietly rebalance a career.
+ * so a tie comes out at roughly the old per-round advance rate.
+ * Player scoring uses a share of the resulting team goals.
  */
 
 /* The inverse normal CDF (uclProbit), the goal expectation of a level match
@@ -7131,7 +7128,8 @@ export function simulateUCL(state: CareerState, season: SeasonRecord): UCLResult
   const hasFirstStage = shape !== null && shape.kind !== "none";
   const passTarget = hasFirstStage ? firstStageTarget(targetAt(0), reachKnockout) : 1;
   const qualChance = reachKnockout / passTarget;
-  if (Math.random() > qualChance) return notIn;
+  const qualificationRoll = Math.random();
+  if (qualificationRoll > qualChance) return notIn;
 
   /* The ladder the competition really ran that season. Round 546 read it off
      uclFormatHistory; since Round 972 soccerCareerContinental.ts derives it
@@ -7151,23 +7149,36 @@ export function simulateUCL(state: CareerState, season: SeasonRecord): UCLResult
     : continentalOpponents(FALLBACK_CLUBS, cupFor.confederation, uclYear, state.currentClub);
   const matches: UCLKnockoutMatch[] = [];
   let totalPlayerGoals = 0;
+  let legacyPlayerGoals = 0;
   const usedOpponents = new Set<string>([state.currentClub]);
   const isAttacker = ["ST", "CAM", "LW", "RW"].includes(state.position);
+  const playerShare = tournamentGoalShare(state.position, state.overall);
 
-  /* The player's goals per LEG are half the old per-match chance, so a two
-     legged tie yields what the old single match yielded and the top scorer
-     threshold below still means what it meant. */
-  const legPlayerGoals = (legs: number) => {
-    const share = legs === 2 ? 0.5 : 1;
+  // Draw the binomial share of the actual goals with the original match roll.
+  const playerGoalsFromScore = (goalsFor: number, roll: number) => {
+    let probability = (1 - playerShare) ** goalsFor;
+    let goals = 0;
+    while (goals < goalsFor && roll >= probability) {
+      roll -= probability;
+      probability *= (goalsFor - goals) * playerShare / ((goals + 1) * (1 - playerShare));
+      goals++;
+    }
+    return goals;
+  };
+  let playerRoll = 0;
+  const legPlayerGoals = (legs: number, goalsFor: number, firstStage = false) => {
     if (state.position === "GK") return 0;
-    if (isAttacker) return Math.random() < 0.4 * share ? rand(1, 2) : 0;
-    return Math.random() < 0.1 * share ? 1 : 0;
+    const share = legs === 2 ? 0.5 : 1;
+    playerRoll = Math.random();
+    // Consume the same draws as before so team scores and later career rolls stay fixed.
+    const legacy = isAttacker ? (playerRoll < 0.4 * share ? rand(1, 2) : 0) : Number(playerRoll < 0.1 * share);
+    legacyPlayerGoals += firstStage ? Math.min(legacy, goalsFor) : legacy;
+    return playerGoalsFromScore(goalsFor, playerRoll);
   };
 
   /* Round 972: the first stage. Its opponents come from the same era pool as
      the knockout's and are not met again in it; the club's strength is solved
-     from the measured pass curve so it gets through at passTarget; a group
-     night is one match, so the player's chance per night is a leg's. */
+     from the measured pass curve so it gets through at passTarget. */
   let firstStage: FirstStageResult | undefined;
   let stageGames = 0;
   if (hasFirstStage && shape) {
@@ -7179,7 +7190,7 @@ export function simulateUCL(state: CareerState, season: SeasonRecord): UCLResult
       named.push(o);
     }
     const strength = solveStageStrength(shape.curve!, passTarget, targetAt(0));
-    firstStage = playFirstStage(shape, state.currentClub, strength, named, Math.random, () => legPlayerGoals(2));
+    firstStage = playFirstStage(shape, state.currentClub, strength, named, Math.random, goals => legPlayerGoals(2, goals, true));
     for (const st of firstStage.stages) {
       for (const g of st.games) { totalPlayerGoals += g.playerGoals; stageGames += 1; }
     }
@@ -7228,7 +7239,7 @@ export function simulateUCL(state: CareerState, season: SeasonRecord): UCLResult
       const ga = uclLegGoals(clamp(UCL_BASE_LAMBDA - edge - venue, 0.25, 3.4));
       aggFor += gf;
       aggAgainst += ga;
-      const pg = legPlayerGoals(legs);
+      const pg = legPlayerGoals(legs, gf);
       totalPlayerGoals += pg;
       legRows.push({ opponent, round, leg, home, goalsFor: gf, goalsAgainst: ga, playerGoals: pg, won: false });
     }
@@ -7263,6 +7274,11 @@ export function simulateUCL(state: CareerState, season: SeasonRecord): UCLResult
       const etAgainst = uclLegGoals(clamp(0.34 - edge * 0.25, 0.05, 1.1));
       decider.goalsFor += etFor;
       decider.goalsAgainst += etAgainst;
+      if (etFor) {
+        const playerGoals = playerGoalsFromScore(decider.goalsFor, playerRoll);
+        totalPlayerGoals += playerGoals - decider.playerGoals;
+        decider.playerGoals = playerGoals;
+      }
       decider.afterExtraTime = true;
       decider.etFor = etFor;
       decider.etAgainst = etAgainst;
@@ -7300,17 +7316,12 @@ export function simulateUCL(state: CareerState, season: SeasonRecord): UCLResult
                  last.round === "QF" ? "Quarter-final" :
                  last.round === "PO" ? "Play-off" : "R16";
 
-  /* Top scorer at 6+ goals, as it always was when the knockout was the whole
-     campaign. Round 972 puts the first stage's nights in front of it, so the
-     bar rises with them (TOP_SCORER_BAR_PER_STAGE_GAME). The bar is whole
-     goals, and the nearest bar that never makes the award more common than
-     it was makes it RARER: measured 2026-10-03 (simSoccerCareerUcl section
-     8) at 0.25%, 0.21% and 0.12% of knockout runs at Real Madrid, Ajax and
-     Sevilla against main's 0.43%, 0.31% and 0.22%, so about 55 to 70 percent
-     as common as before. One goal lower (0.3 a night) overshoots, at 0.67%,
-     0.56% and 0.33%. */
+  /* The scorer bar rises with the extra nights in a group or league stage. */
   const topScorerBar = 6 + Math.ceil(stageGames * TOP_SCORER_BAR_PER_STAGE_GAME);
-  const isTopScorer = totalPlayerGoals >= topScorerBar && Math.random() < 0.5;
+  // Reuse the normalized qualification roll if the original run drew no award coin.
+  const awardRoll = legacyPlayerGoals >= topScorerBar ? Math.random() : qualificationRoll / qualChance;
+  // More runs now clear the bar. Keep the award rare across the existing club and rating mix.
+  const isTopScorer = totalPlayerGoals >= topScorerBar && awardRoll < 0.25;
 
   return {
     qualified: true, matches, result, playerGoals: totalPlayerGoals, isTopScorer, competition, cup: cupFor.cup,
@@ -7319,17 +7330,7 @@ export function simulateUCL(state: CareerState, season: SeasonRecord): UCLResult
   };
 }
 
-/** Round 972: how far each first stage night lifts the top scorer bar. An
- *  attacker averages about 0.22 goals a first stage night (a leg's chance,
- *  capped at what the team scored), but a mean lift leaves the tail fatter,
- *  so the bar was read off the measured distribution instead. Per campaign
- *  that reached the knockouts, measured 2026-10-03 over 154,596 of them: six
- *  knockout goals had been reached 0.63% of the time with no first stage;
- *  after six group nights 8 total goals is reached 1.05% and 9 is 0.39%;
- *  after eight league nights 9 is 1.09% and 10 is 0.48%; after twelve
- *  nights (1999 to 2002) 11 is 0.60% and 12 is 0.23%. 0.4 a night, rounded
- *  up, gives 9, 10 and 11: the nearest bar in each case that does not make
- *  the award more common than it was. */
+/** Round 972: lift the six-goal scorer bar for a longer first stage. */
 const TOP_SCORER_BAR_PER_STAGE_GAME = 0.4;
 
 /* ─── Round 834: the awards night, bound for Soccer ───
