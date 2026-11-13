@@ -16,6 +16,7 @@ export const NRL_ROLES = [
 export const NRL_TACTICS = ['balanced', 'attack', 'defense'] as const;
 export const NRL_SPECIALIST_PLANS = ['middle', 'wide'] as const;
 export const NRL_BENCH_SIZE = 6;
+export const NRL_RESERVE_GRADE_ROUNDS = 4;
 export const NRL_MAX_BENCH_USED = 4;
 export const NRL_FINALS_SPOTS = 8;
 export const NRL_COACHING_BONUS = 2;
@@ -39,6 +40,7 @@ interface NrlRoundOptions {
 }
 
 export interface NrlPlayer { id: string; name: string; role: NrlRole; rating: number; fitness: number; secondaryRole?: NrlRole }
+interface NrlReserveGradeSpell { playerId: string; startedRound: number; startingRating: number; recalledRound?: number }
 
 const RETRAINING_ROLES: Partial<Record<NrlRole, readonly NrlRole[]>> = {
   Fullback: ['Left Wing', 'Right Wing'],
@@ -118,6 +120,7 @@ export interface NrlManagerState {
   results: NrlMatchResult[];
   championId: string | null;
   live?: NrlLiveHalf;
+  reserveGrade?: NrlReserveGradeSpell;
 }
 export type NrlAction =
   | { type: 'selectStarter'; role: NrlRole; playerId: string }
@@ -271,11 +274,25 @@ export function nrlInjuries(state: NrlInjuryClock): Map<string, number> {
   return injuries;
 }
 
+type NrlAvailability = NrlInjuryClock & Pick<NrlManagerState, 'reserveGrade'>;
+
+export function nrlReserveGradeRemaining({ reserveGrade, round }: Pick<NrlManagerState, 'reserveGrade' | 'round'>): number {
+  return reserveGrade && reserveGrade.recalledRound === undefined
+    ? Math.max(0, reserveGrade.startedRound + NRL_RESERVE_GRADE_ROUNDS - round) : 0;
+}
+
+export function nrlUnavailable(state: NrlAvailability): Map<string, number> {
+  const unavailable = nrlInjuries(state);
+  const remaining = nrlReserveGradeRemaining(state);
+  if (remaining && state.reserveGrade) unavailable.set(state.reserveGrade.playerId, remaining);
+  return unavailable;
+}
+
 export function nrlStarterOptions(state: NrlManagerState, role: NrlRole): NrlPlayer[] {
-  const injuries = nrlInjuries(state);
+  const unavailable = nrlUnavailable(state);
   const occupied = new Set(Object.values(state.lineup));
   occupied.delete(state.lineup[role]);
-  const eligible = state.squad.filter(player => !injuries.has(player.id) && !occupied.has(player.id));
+  const eligible = state.squad.filter(player => !unavailable.has(player.id) && !occupied.has(player.id));
   const qualified = eligible.filter(player => nrlCanPlayRole(player, role));
   if (!state.injuryTracking || eligible.some(player => player.role === role)) return qualified;
   const current = eligible.find(player => player.id === state.lineup[role]);
@@ -283,10 +300,10 @@ export function nrlStarterOptions(state: NrlManagerState, role: NrlRole): NrlPla
 }
 
 /** Keep eligible selections in order and fill empty places with coverage for different positions. */
-export function nrlBench(state: NrlInjuryClock & Pick<NrlManagerState, 'squad' | 'lineup' | 'bench'>): string[] {
+export function nrlBench(state: NrlAvailability & Pick<NrlManagerState, 'squad' | 'lineup' | 'bench'>): string[] {
   const starters = new Set(Object.values(state.lineup));
-  const injuries = nrlInjuries(state);
-  const reserves = state.squad.filter(player => !starters.has(player.id) && !injuries.has(player.id));
+  const unavailable = nrlUnavailable(state);
+  const reserves = state.squad.filter(player => !starters.has(player.id) && !unavailable.has(player.id));
   const byId = new Map(reserves.map(player => [player.id, player]));
   const bench = [...new Set((state.bench ?? []).filter(id => byId.has(id)))].slice(0, NRL_BENCH_SIZE);
   if (bench.length === NRL_BENCH_SIZE) return bench;
@@ -311,9 +328,9 @@ function withLineup(state: NrlManagerState, lineup: NrlManagerState['lineup']): 
     : { ...state, lineup };
 }
 
-function repairMatchday(state: NrlManagerState, preferFit = false): NrlManagerState {
-  const injuries = nrlInjuries(state);
-  const healthy = state.squad.filter(player => !injuries.has(player.id));
+export function repairMatchday(state: NrlManagerState, preferFit = false): NrlManagerState {
+  const unavailable = nrlUnavailable(state);
+  const healthy = state.squad.filter(player => !unavailable.has(player.id));
   const byId = new Map(healthy.map(player => [player.id, player]));
   const grade = (player: NrlPlayer) => player.rating - fitnessPenalty(player, state.preparation);
   if (preferFit) healthy.sort((a, b) => grade(b) - grade(a) || a.id.localeCompare(b.id));
@@ -400,10 +417,10 @@ function benchRotation(state: NrlManagerState, heldReserveId?: string): Map<stri
 
 export function nrlHoldableReserves(state: NrlManagerState): NrlPlayer[] {
   if (!state.kickerId || !state.bench) return [];
-  const injured = nrlInjuries(state);
+  const unavailable = nrlUnavailable(state);
   return state.bench.flatMap(id => {
     const reserve = state.squad.find(player => player.id === id);
-    return reserve && state.lineup[reserve.role] !== state.kickerId && !injured.has(id) ? [reserve] : [];
+    return reserve && state.lineup[reserve.role] !== state.kickerId && !unavailable.has(id) ? [reserve] : [];
   });
 }
 
@@ -708,7 +725,7 @@ export function reduceNrlSeason(state: NrlManagerState, action: NrlAction,
     }
     case 'selectBench': {
       if (!state.bench || !integerIn(action.slot, 0, NRL_BENCH_SIZE - 1) || state.bench[action.slot] === action.playerId
-        || Object.values(state.lineup).includes(action.playerId) || nrlInjuries(state).has(action.playerId)
+        || Object.values(state.lineup).includes(action.playerId) || nrlUnavailable(state).has(action.playerId)
         || !state.squad.some(player => player.id === action.playerId)) return state;
       const bench = state.bench.slice();
       const previousSlot = bench.indexOf(action.playerId);
@@ -857,7 +874,7 @@ export function isNrlSeasonProgress(value: unknown): value is NrlManagerState {
     || (value.injuryTracking !== undefined && value.injuryTracking !== true)
     || (value.kickerId !== undefined && typeof value.kickerId !== 'string')
     || !Array.isArray(value.squad) || !record(value.lineup) || !Array.isArray(value.results)) return false;
-  const { year, round, phase, preparation, squad, lineup, bench, results, injuryTracking, kickerId } = value;
+  const { year, round, phase, preparation, squad, lineup, bench, results, injuryTracking, kickerId, reserveGrade } = value;
   const regularRounds = nrlRegularRounds(year);
   const expectedPhase = phase === 'complete' && round === lastRound(year) ? 'complete'
     : round > regularRounds ? 'finals' : 'regular';
@@ -870,6 +887,7 @@ export function isNrlSeasonProgress(value: unknown): value is NrlManagerState {
       && NRL_ROLES.includes(player.role as NrlRole) && integerIn(player.rating, 40, 98) && integerIn(player.fitness, 0, 100)
       && (player.secondaryRole === undefined || (injuryTracking && kickerId && nrlRetrainingRoles(player.role as NrlRole).includes(player.secondaryRole as NrlRole))))) return false;
   const byId = new Map<string, NrlPlayer>(squad.map(player => [player.id, player]));
+  if (!validReserveGrade(reserveGrade, round, regularRounds, byId, Boolean(injuryTracking && kickerId))) return false;
   const starters = new Set(NRL_ROLES.map(role => lineup[role]));
   if (byId.size !== squad.length || Object.keys(lineup).length !== NRL_ROLES.length || starters.size !== NRL_ROLES.length
     || (kickerId !== undefined && !starters.has(kickerId))
@@ -878,7 +896,9 @@ export function isNrlSeasonProgress(value: unknown): value is NrlManagerState {
   const completed = phase === 'complete' ? round : round - 1;
   const verified: NrlMatchResult[] = [];
   const injuredThrough = new Map<string, number>();
+  const spellEnd = reserveGrade && (reserveGrade.recalledRound ?? reserveGrade.startedRound + NRL_RESERVE_GRADE_ROUNDS);
   for (let playedRound = 1; playedRound <= completed; playedRound++) {
+    if (reserveGrade?.startedRound === playedRound && (injuredThrough.get(reserveGrade.playerId) ?? 0) >= playedRound) return false;
     const fixtures = nrlRoundFixtures({
       year, round: playedRound, phase: playedRound <= regularRounds ? 'regular' : 'finals', results: verified,
     });
@@ -889,6 +909,8 @@ export function isNrlSeasonProgress(value: unknown): value is NrlManagerState {
       if (Boolean(match.playerScoring) !== Boolean(kickerId && managed)) return false;
       const participants = [...(match.playerScoring?.starters ?? []), ...(match.benchUsed ?? [])];
       if (participants.some(id => (injuredThrough.get(id) ?? 0) >= playedRound)) return false;
+      if (reserveGrade && spellEnd && playedRound >= reserveGrade.startedRound && playedRound < spellEnd
+        && (participants.includes(reserveGrade.playerId) || match.injury?.playerId === reserveGrade.playerId)) return false;
       if (match.injury) {
         const { playerId, rounds } = match.injury;
         if (!injuryTracking || (injuredThrough.get(playerId) ?? 0) >= playedRound) return false;
@@ -897,16 +919,18 @@ export function isNrlSeasonProgress(value: unknown): value is NrlManagerState {
       verified.push(match);
     }
   }
-  const injuries = nrlInjuries({ round, phase: expectedPhase, results: verified, injuryTracking: injuryTracking === true ? true : undefined });
+  if (reserveGrade?.startedRound === round && (injuredThrough.get(reserveGrade.playerId) ?? 0) >= round) return false;
+  const unavailable = nrlUnavailable({ round, phase: expectedPhase, results: verified,
+    injuryTracking: injuryTracking === true ? true : undefined, reserveGrade });
   const trainedStarts = new Set(NRL_ROLES.filter(role => byId.get(lineup[role] as string)?.secondaryRole === role).map(role => lineup[role]));
-  const naturalRoles = new Set([...byId.values()].filter(player => !injuries.has(player.id) && !trainedStarts.has(player.id)).map(player => player.role));
+  const naturalRoles = new Set([...byId.values()].filter(player => !unavailable.has(player.id) && !trainedStarts.has(player.id)).map(player => player.role));
   if (!NRL_ROLES.every(role => {
     const player = byId.get(lineup[role] as string)!;
-    return !injuries.has(player.id) && (nrlCanPlayRole(player, role) || (injuryTracking && !naturalRoles.has(role)));
+    return !unavailable.has(player.id) && (nrlCanPlayRole(player, role) || (injuryTracking && !naturalRoles.has(role)));
   })) return false;
   if (bench !== undefined && (!Array.isArray(bench) || bench.length !== NRL_BENCH_SIZE
     || new Set(bench).size !== bench.length
-    || !bench.every(id => typeof id === 'string' && byId.has(id) && !starters.has(id) && !injuries.has(id)))) return false;
+    || !bench.every(id => typeof id === 'string' && byId.has(id) && !starters.has(id) && !unavailable.has(id)))) return false;
   if (value.live !== undefined || value.attackPlan !== undefined) {
     if (!kickerId || !bench) return false;
     const fixture = nrlRoundFixtures({ year, round, phase: expectedPhase, results: verified }).find(match =>
@@ -916,6 +940,19 @@ export function isNrlSeasonProgress(value: unknown): value is NrlManagerState {
     if (heldReserveId !== undefined && !nrlHoldableReserves(value as unknown as NrlManagerState).some(player => player.id === heldReserveId)) return false;
   }
   return verified.length === results.length && value.championId === (premierOf(FINALS, finalsOutcomes(verified))?.winner ?? null);
+}
+
+function validReserveGrade(value: unknown, round: number, regularRounds: number, players: Map<string, NrlPlayer>,
+  enabled: boolean): value is NrlReserveGradeSpell | undefined {
+  if (value === undefined) return true;
+  if (!enabled || !record(value) || typeof value.playerId !== 'string'
+    || !integerIn(value.startedRound, 1, Math.min(round, regularRounds - NRL_RESERVE_GRADE_ROUNDS + 1))
+    || !integerIn(value.startingRating, 40, 97)) return false;
+  const { playerId, startedRound, startingRating, recalledRound } = value;
+  if (recalledRound !== undefined && !integerIn(recalledRound, startedRound, Math.min(round, startedRound + NRL_RESERVE_GRADE_ROUNDS - 1))) return false;
+  const gained = recalledRound === undefined && round >= startedRound + NRL_RESERVE_GRADE_ROUNDS;
+  return Object.keys(value).length === (recalledRound === undefined ? 3 : 4)
+    && players.get(playerId)?.rating === startingRating + Number(gained);
 }
 
 export function isNrlManagerState(value: unknown): value is NrlManagerState {
