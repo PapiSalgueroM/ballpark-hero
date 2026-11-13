@@ -37,6 +37,9 @@ export function CalendarCard({ career, onQuickSim }: { career: CareerState; onQu
           label: `⭐ UCL ${entry.uclRound === 'F' ? 'Final' : entry.uclRound}`,
           detail: career.uclDraw[entry.uclRound] ?? 'Draw to come',
         });
+      } else if (entry.type === 'promotion') {
+        const match = fixtureFor(career, entry);
+        if (match) out.push({ label: match.compLabel.replace('Championship playoff ', 'Playoff '), detail: match.opponent });
       } else if (entry.type === 'uel') {
         /* Round 1593: my Europa League night, once its opponent is known (a knockout night after its draw). */
         const fx = fixtureFor(career, entry);

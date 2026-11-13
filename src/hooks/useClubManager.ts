@@ -66,6 +66,8 @@ export function phaseFor(c: CareerState): CMPhase {
 }
 export type HubTab = 'overview' | 'squad' | 'tactics' | 'table' | 'transfers';
 
+const CHAMPIONSHIP_PLAYOFFS = { championshipPlayoffs: true } as const;
+
 /**
  * Round 505: a new shape keeps the eleven you picked. Until this round a
  * formation change threw the whole XI away and auto picked a fresh one, so a
@@ -674,7 +676,7 @@ export function useClubManager() {
     if (!ordinaryClubAllowed(club) || (isHistoricEra(era) && kLeagueMember(club))) return;
     if (isScopedStarterClub(club) && (era !== DEFAULT_ERA_ID || edit)) return;
     const begin = () => {
-      const fresh = startCareer(club, era, undefined, manager, undefined, edit);
+      const fresh = startCareer(club, era, undefined, manager, undefined, edit, CHAMPIONSHIP_PLAYOFFS);
       /* Round 549: a mid season takeover plays the run-in first, under the
          manager before you, and hands the club over where it stands. */
       const s = setUpCareer(entry ? startMidSeason(fresh, entry) : fresh, setup, rebuildBoardAsks);
@@ -747,7 +749,7 @@ export function useClubManager() {
   /* Round 154: founding your own club skips the pending-club dance, because
      the create form is its own confirmation. */
   const confirmCustomClub = useCallback((eraId: string | undefined, spec: CustomClubSpec, manager?: ManagerSpec, entry?: MidSeasonEntry, setup?: CareerSetup) => {
-    const fresh = startCareer(spec.name, eraId ?? DEFAULT_ERA_ID, spec, manager);
+    const fresh = startCareer(spec.name, eraId ?? DEFAULT_ERA_ID, spec, manager, undefined, undefined, CHAMPIONSHIP_PLAYOFFS);
     const s = setUpCareer(entry ? startMidSeason(fresh, entry) : fresh, setup, rebuildBoardAsks);
     clearSlotPoints(activeSlot());
     setCareer(s);
@@ -1033,6 +1035,7 @@ export function useClubManager() {
   const nextSeason = useCallback((acceptOfferClub?: string) => {
     if (!career) return;
     const s = startNextSeason(career, acceptOfferClub);
+    if (s === career) return;
     setCareer(s);
     setSummary(null);
     setReport(null);

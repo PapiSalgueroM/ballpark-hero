@@ -956,7 +956,7 @@ const ClubManager = ({ initialEra }: { initialEra?: string | null }) => {
               resume: !!(c.live && c.live.week === c.week),
               onQuick: () => { setWatchMode(false); g.quickPlay(); },
               onCentre: g.facts ? () => setHubPanel('matchCentre') : null,
-              shootout: (fx.competition === 'cup' || fx.competition === 'uclKo' || fx.competition === 'oneOff' || (fx.competition === 'uel' && !fx.compLabel.includes('League phase'))) ? {
+              shootout: (fx.competition === 'cup' || fx.competition === 'uclKo' || fx.competition === 'oneOff' || fx.competition === 'promotion' || (fx.competition === 'uel' && !fx.compLabel.includes('League phase'))) ? {
                 onClick: () => { setTacticsTile('shootout'); g.setActiveTab('tactics'); },
                 label: (() => { const n = shootoutOrderOf(c)?.length ?? 0; return n ? `${n} of ${SHOOTOUT_MAX_ORDER} listed` : 'not set, tap to pick your takers'; })(),
               } : null,
