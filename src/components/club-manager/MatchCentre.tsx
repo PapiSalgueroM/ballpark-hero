@@ -78,7 +78,7 @@ export function MatchCentre({
     </div>
   );
   /* Round 1606: who is in their dugout, the display slot's fact: a real opening day manager by name only, a made
-     up one marked so. Nothing about him is said or rated here; the style above is the club's, the sim's pick. */
+     up one marked so. A real manager's display name is separate from the simulated club style. */
   const oppDugout = dugoutOf(career, f.opponent);
   const oppBlock = (
     <div className={cn('flex-1 min-w-0', mineFirst ? 'text-left' : 'text-right')} data-cm-mc-side="opp">
