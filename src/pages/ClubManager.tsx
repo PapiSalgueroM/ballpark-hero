@@ -865,7 +865,9 @@ const ClubManager = ({ initialEra }: { initialEra?: string | null }) => {
             of the club name and the pills, and the row centred. */}
         <ClubHeading
           crest={c.customClub && c.customClub.name === c.clubName
-            ? <ScreenLoading compact><CrestBadge crest={c.customClub.crest} size={22} /></ScreenLoading>
+            ? <Suspense fallback={<span aria-hidden="true" className="inline-block leading-none" style={{ width: 22, height: 26 }} />}>
+                <CrestBadge crest={c.customClub.crest} size={22} />
+              </Suspense>
             : <span className="w-3 h-3 rounded-full" style={{ backgroundColor: club.color }} />}
           clubName={c.clubName}
           seasonLabel={cslModel && c.season === 1 ? '2026 start' : worldSeasonLabel(c)}
