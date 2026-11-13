@@ -34,6 +34,7 @@ import { reloadToRetryChunk } from '@/lib/freshBuild';
 import { FlagImg } from '@/components/FlagImg';
 import { ClubManagerClubList } from '@/components/club-manager/ClubManagerClubList';
 import { ClubManagerFrame, ClubManagerStartup } from '@/components/club-manager/ClubManagerFrame';
+import { ClubHeading, ClubStatus, LeagueSeasonNotice } from '@/components/club-manager/ClubManagerHubHeader';
 import { ClubManagerEraPicker, ClubManagerPickerHeading } from '@/components/club-manager/ClubManagerEraPicker';
 import { CURRENCIES, STRICTNESS_DEFAULT, STRICTNESS_INFO, levelFrom, noSackFrom, startOptionsOf } from '@/lib/clubManagerStart';
 import { DIFFICULTY_INFO } from '@/lib/managerDifficulty';
@@ -53,10 +54,7 @@ const TabsList = lazy(() => import('@/components/ui/tabs').then(m => ({ default:
 const TabsTrigger = lazy(() => import('@/components/ui/tabs').then(m => ({ default: m.TabsTrigger })));
 const loadDeferredViews = () => import('@/components/club-manager/ClubManagerDeferredViews');
 const EraLoadFailedView = lazy(() => loadDeferredViews().then(m => ({ default: m.EraLoadFailed })));
-const ClubHeading = lazy(() => loadDeferredViews().then(m => ({ default: m.ClubHeading })));
-const LeagueSeasonNotice = lazy(() => loadDeferredViews().then(m => ({ default: m.LeagueSeasonNotice })));
 const KLeagueCupNotice = lazy(() => loadDeferredViews().then(m => ({ default: m.KLeagueCupNotice })));
-const ClubStatus = lazy(() => loadDeferredViews().then(m => ({ default: m.ClubStatus })));
 const OverviewIntro = lazy(() => loadDeferredViews().then(m => ({ default: m.OverviewIntro })));
 const HubTiles = lazy(() => loadDeferredViews().then(m => ({ default: m.HubTiles })));
 
@@ -142,9 +140,9 @@ function WorldEditorTile({ movedCount, onOpen }: { movedCount: number; onOpen: (
   );
 }
 
-function ScreenLoading({ children, compact = false, setup = false }: { children: ReactNode; compact?: boolean; setup?: boolean }) {
+function ScreenLoading({ children, compact = false, setup = false, hub = false }: { children: ReactNode; compact?: boolean; setup?: boolean; hub?: boolean }) {
   return (
-    <Suspense fallback={compact ? <span role="status" className="text-xs text-muted-foreground">Loading...</span> : <div role="status" className={cn("min-h-48 py-12 text-center text-sm text-muted-foreground", setup && "max-sm:min-h-[max(12rem,65svh)]")}>Loading screen...</div>}>
+    <Suspense fallback={compact ? <span role="status" className="text-xs text-muted-foreground">Loading...</span> : <div role="status" data-cm-hub-loading={hub || undefined} className={cn("min-h-48 py-12 text-center text-sm text-muted-foreground", setup && "max-sm:min-h-[max(12rem,65svh)]")}>Loading screen...</div>}>
       {children}
     </Suspense>
   );
@@ -860,12 +858,12 @@ const ClubManager = ({ initialEra }: { initialEra?: string | null }) => {
   }
 
   return shell(
-    <div ref={hubTopRef} data-cm-hub>
+    <div ref={hubTopRef} data-cm-hub className="has-[[data-cm-hub-loading]]:min-h-svh">
       {/* Header */}
       <header className="mb-4">
         {/* Round 1328: px-12 on both sides keeps the help button's corner clear
             of the club name and the pills, and the row centred. */}
-        <ScreenLoading compact><ClubHeading
+        <ClubHeading
           crest={c.customClub && c.customClub.name === c.clubName
             ? <ScreenLoading compact><CrestBadge crest={c.customClub.crest} size={22} /></ScreenLoading>
             : <span className="w-3 h-3 rounded-full" style={{ backgroundColor: club.color }} />}
@@ -875,15 +873,15 @@ const ClubManager = ({ initialEra }: { initialEra?: string | null }) => {
           difficulty={levelFrom(c) !== 'normal' ? { id: levelFrom(c), label: DIFFICULTY_INFO[levelFrom(c)].label } : null}
           noSack={noSackFrom(c) !== null}
           midSeason={!!(c.midSeasonStart && c.season === 1)}
-        /></ScreenLoading>
+        />
         <div className="flex items-center justify-center gap-4 text-xs text-muted-foreground flex-wrap">
-          <ScreenLoading compact><ClubStatus
+          <ClubStatus
             positionLabel={!leagueStarted(c) ? 'Season not started' : `#${g.myPosition || '-'} in league`}
             stadium={c.customClub && c.customClub.name === c.clubName ? { name: c.customClub.stadium, capacity: c.customClub.capacity ? Math.round(c.customClub.capacity / 1000) : null } : null}
             budgetLabel={money(c.budget, c)}
             form={c.form}
             trophyCount={c.trophies.length > 0 ? c.trophies.length : 0}
-          /></ScreenLoading>
+          />
           {/* Round 928: back to the three manager slots, this career saved first. */}
           <button onClick={g.showSlots} data-testid="cm-show-slots" className="inline-flex min-h-[44px] items-center underline underline-offset-2 hover:text-primary transition-colors">
             Managers
@@ -900,12 +898,12 @@ const ClubManager = ({ initialEra }: { initialEra?: string | null }) => {
             strip 60px, so the slot holds 60 then. */}
         <div className={cn('flow-root', boardMeter(c).value > 0 && boardMeter(c).value < BOARD_EDGE ? 'min-h-[60px]' : 'min-h-[52px]')}><ScreenLoading compact><MetersStrip career={c} /></ScreenLoading></div>
       </header>
-      {(kLeagueModel || cslModel || j1Model) && <Suspense fallback={null}><LeagueSeasonNotice
+      {(kLeagueModel || cslModel || j1Model) && <LeagueSeasonNotice
         league={kLeagueModel ? 'k' : cslModel ? 'csl' : 'j1'}
         leagueGames={c.calendar.filter(entry => entry.type === 'league').length}
-      /></Suspense>}
+      />}
 
-      <ScreenLoading><Tabs value={g.activeTab} onValueChange={(v) => g.setActiveTab(v as HubTab)}>
+      <ScreenLoading hub><Tabs value={g.activeTab} onValueChange={(v) => g.setActiveTab(v as HubTab)}>
         <TabsList className="grid grid-cols-5 w-full mb-4">
           <TabsTrigger value="overview" className="text-[10px] md:text-xs">Home</TabsTrigger>
           <TabsTrigger value="squad" className="text-[10px] md:text-xs">Squad</TabsTrigger>
@@ -936,7 +934,7 @@ const ClubManager = ({ initialEra }: { initialEra?: string | null }) => {
             </div>
           ) : (
           <>
-          <ScreenLoading><OverviewIntro
+          <ScreenLoading hub><OverviewIntro
             summerBudget={!leagueStarted(c) && c.summerBudget?.club === c.clubName ? { ...c.summerBudget, format: n => money(n, c) } : null}
             retired={!leagueStarted(c) && (c.retiredLastSummer ?? []).length > 0 ? (c.retiredLastSummer ?? []).map(r => `${r.name} (${r.age}, rated ${r.rating})`).join(' · ') : null}
             freeRetired={!leagueStarted(c) && (c.freeAgentsRetired ?? []).length > 0 ? (c.freeAgentsRetired ?? []).map(r => `${r.name} (${r.age}, rated ${r.rating})`).join(' · ') : null}
@@ -969,7 +967,7 @@ const ClubManager = ({ initialEra }: { initialEra?: string | null }) => {
               (his words: "make it smaller and with boxes and when they open
               it takes u to see something different"). */}
           {hubPanel === null && (
-            <ScreenLoading><HubTiles rows={[
+            <ScreenLoading hub><HubTiles rows={[
               {
                 accent: objBehind > 0,
                 value: objBehind > 0 ? `${objBehind} behind` : `${objDone}/${objStatuses.length} done`,
