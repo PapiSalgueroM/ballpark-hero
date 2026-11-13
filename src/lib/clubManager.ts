@@ -13,7 +13,8 @@ import { settleGoalReviews, penaltyReviews, awardReviewedPenalties, cmVarCovers,
 import { realJobOffers, allOfferClubs, invalidateOfferClubCache } from '@/lib/managerJobMarket';
 /* Round 202: the national team job runs on the international engine Soccer
    Career has used since Round 124, rather than a second thinner one. */
-import { runManagerSummer, NATION_CONFED } from '@/lib/soccerInternational';
+import { runManagerSummer, NATION_CONFED, tournamentForYear } from '@/lib/soccerInternational';
+import type { NationalCampaign, NationalFixture } from '@/lib/clubManagerNationalCampaign';
 /* Round 965: the manager's face reads Soccer Career's look tables, never a
    copy of them. That module imports nothing from here. */
 import { SKIN_TONES, HAIRSTYLES, HAIR_COLORS, FACIAL_HAIR } from '@/lib/soccerCareerAppearance';
@@ -2319,6 +2320,7 @@ export const TICKET_TIERS = [
    tournament your nation should have reached costs you the job. */
 
 export interface NationJob {
+  campaign?: NationalCampaign;
   nation: string;
   /** Season the job started, for the tile and the cabinet. */
   since: number;
@@ -2398,6 +2400,73 @@ export function takeNationJob(career: CareerState): CareerState {
       ...career.aiHeadlines,
     ].slice(0, 8),
   };
+}
+
+
+export function nationalSummerAvailable(career: CareerState): boolean {
+  const job = career.nationJob;
+  const year = worldYear(career);
+  return !!job && year >= 2026 && !career.retired && !career.sacked && !career.wilderness && !career.live
+    && (career.eraId ?? 'now') === 'now' && career.pendingSummary?.season === career.season
+    && career.week >= career.calendar.length && !!tournamentForYear(job.nation, year)
+    && (job.lastYear !== year || job.campaign !== undefined);
+}
+
+function validCampaign(value: unknown, nation: string, formationCount: number): value is NationalCampaign {
+  if (!value || typeof value !== 'object') return false;
+  const c = value as NationalCampaign;
+  const strings = (a: unknown, max: number): a is string[] => Array.isArray(a) && a.length <= max && a.every(x => typeof x === 'string') && new Set(a).size === a.length;
+  const finite = (n: unknown): n is number => typeof n === 'number' && Number.isFinite(n);
+  const fixture = (x: NationalFixture): boolean => !!x && typeof x.id === 'string' && typeof x.home === 'string'
+    && typeof x.away === 'string' && typeof x.round === 'string' && typeof x.pens === 'boolean'
+    && (x.homeGoals === null || Number.isInteger(x.homeGoals) && x.homeGoals >= 0)
+    && (x.awayGoals === null || Number.isInteger(x.awayGoals) && x.awayGoals >= 0)
+    && (x.winner === null || x.winner === x.home || x.winner === x.away);
+  return c.version === 1 && c.nation === nation && Number.isInteger(c.year) && c.year >= 2026
+    && c.eraId === 'now' && Number.isSafeInteger(c.revision) && c.revision >= 0
+    && strings(c.squadKeys, 23) && Array.isArray(c.xiKeys) && (c.xiKeys.length === 0 || c.xiKeys.length === 11)
+    && c.xiKeys.every(key => typeof key === 'string' && (!key || c.squadKeys.includes(key)))
+    && new Set(c.xiKeys.filter(Boolean)).size === c.xiKeys.filter(Boolean).length
+    && Array.isArray(c.selected) && c.selected.length === c.squadKeys.length
+    && c.selected.every((p, i) => !!p && c.squadKeys[i] === p.key && p.nation === nation && typeof p.name === 'string'
+      && ALL_POSITIONS.includes(p.position) && finite(p.rating) && finite(p.age)
+      && (p.secondaryPositions === undefined || Array.isArray(p.secondaryPositions) && p.secondaryPositions.every(pos => ALL_POSITIONS.includes(pos))))
+    && Number.isInteger(c.formationIndex) && c.formationIndex >= 0 && c.formationIndex < formationCount
+    && !!c.format && JSON.stringify(c.format) === JSON.stringify(tournamentForYear(nation, c.year))
+    && ['qualifying', 'groups', 'knockout', 'complete'].includes(c.stage)
+    && Array.isArray(c.groups) && c.groups.length <= 12 && c.groups.every(g => strings(g, 6))
+    && Array.isArray(c.tables) && c.tables.length === c.groups.length && c.tables.every((table, i) =>
+      Array.isArray(table) && table.length === c.groups[i].length && table.every(row => !!row && c.groups[i].includes(row.nation)
+        && [row.played, row.won, row.drawn, row.lost, row.gf, row.ga, row.points].every(n => Number.isInteger(n) && n >= 0)))
+    && Number.isInteger(c.through) && c.through >= 0 && c.through <= 6 && typeof c.automatic === 'boolean'
+    && Array.isArray(c.schedule) && c.schedule.length <= 104 && c.schedule.every(fixture)
+    && c.schedule.every(f => f.home !== f.away && (c.stage === 'knockout' || c.stage === 'complete'
+      ? c.groups.some(group => group.includes(f.home)) && c.groups.some(group => group.includes(f.away))
+      : c.groups.some(group => group.includes(f.home) && group.includes(f.away))))
+    && Number.isInteger(c.cursor) && c.cursor >= 0 && c.cursor <= c.schedule.length
+    && strings(c.knockout, 32) && Number.isInteger(c.knockoutRound) && c.knockoutRound >= 0 && c.knockoutRound < 5
+    && (c.next === null || fixture(c.next) && c.next.id === c.schedule[c.cursor]?.id
+      && c.next.home === c.schedule[c.cursor]?.home && c.next.away === c.schedule[c.cursor]?.away
+      && c.next.round === c.schedule[c.cursor]?.round && c.next.homeGoals === null && c.next.awayGoals === null
+      && c.schedule[c.cursor]?.homeGoals === null && c.schedule[c.cursor]?.awayGoals === null
+      && c.next.winner === null && !c.next.pens && (c.next.home === nation || c.next.away === nation))
+    && Array.isArray(c.results) && c.results.length <= 20 && c.results.every(r => fixture(r) && finite(r.xiStrength))
+    && new Set(c.results.map(r => r.id)).size === c.results.length
+    && typeof c.complete === 'boolean' && typeof c.settled === 'boolean'
+    && (c.result === null || typeof c.result === 'string')
+    && (c.complete ? c.stage === 'complete' && c.next === null && c.result !== null && c.settled : c.next !== null && c.result === null && !c.settled)
+    && Number.isInteger(c.rngState) && c.rngState >= 0 && c.rngState <= 0xffffffff;
+}
+
+export function nationalCampaignThisSummer(career: CareerState): NationalCampaign | null {
+  const job = career.nationJob;
+  return job && validCampaign(job.campaign, job.nation, FORMATIONS.length) && job.campaign.year === worldYear(career)
+    ? job.campaign : null;
+}
+
+export function nationalSummerPending(career: CareerState): boolean {
+  const campaign = nationalSummerAvailable(career) ? nationalCampaignThisSummer(career) : null;
+  return !!campaign && !campaign.complete;
 }
 
 /** Walk away from the country, keeping the club. */
@@ -22918,6 +22987,7 @@ export function toLeague(name: string): string {
  * competitions and reopens the summer window.
  */
 export function startNextSeason(career: CareerState, acceptOfferClub?: string): CareerState {
+  if (nationalSummerPending(career)) return career;
   const requestedClub = career.jobHunt?.summerMove?.club ?? acceptOfferClub;
   if (requestedClub && requestedClub !== career.clubName && !clubAvailableInCareer(career, requestedClub)) return career;
   const kLeagueActive = careerHasKLeagueWorld(career);
@@ -23674,7 +23744,11 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
      goes in the cabinet, and missing a tournament your nation should have
      reached costs you the job. A manager who changes club keeps the
      country: federations do not care who pays your club wages. */
-  if (career.nationJob) {
+  const manualSummer = nationalCampaignThisSummer(career);
+  if (career.nationJob && (manualSummer?.settled || career.nationJob.lastYear === worldYear(career))) {
+    const { campaign: _campaign, ...settledJob } = career.nationJob;
+    state.nationJob = settledJob.lastResult === 'Did Not Qualify' ? null : settledJob;
+  } else if (career.nationJob) {
     const job = career.nationJob;
     const t = runManagerSummer(job.nation, state.season, nationLift(career));
     if (t) {
@@ -23964,6 +24038,10 @@ export function loadCareer(): CareerState | null {
        been given a rung yet and the fallback has to guess. Found by loading a
        real half played save built on the committed pre Round 127 engine into a
        browser, which is the only way anybody would ever have seen it. */
+    if (parsed.nationJob && typeof parsed.nationJob === 'object' && parsed.nationJob.campaign !== undefined
+      && !validCampaign(parsed.nationJob.campaign, parsed.nationJob.nation, FORMATIONS.length)) {
+      delete parsed.nationJob.campaign;
+    }
     ensureRoles(parsed);
     /* Round 567: FIRST, because every repair below and every screen above reads
        the squad by id, and a career carrying two men under one id has been

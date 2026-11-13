@@ -1175,6 +1175,10 @@ export function useClubManager() {
   const resignNation = useCallback(() => {
     setCareer(prev => (prev ? leaveNationJob(prev) : prev));
   }, []);
+  const updateNationalTeam = useCallback((update: (state: CareerState) => CareerState) => {
+    if (!holdsActiveSlot() || movedOn()) return;
+    setCareer(prev => prev ? update(prev) : prev);
+  }, [holdsActiveSlot, movedOn]);
 
   /* Round 201: out of work. Waiting is a move, and taking a job is the
      ordinary season rollover with a different club at the end of it. */
@@ -1455,7 +1459,7 @@ export function useClubManager() {
     setSlotDuty, assignSetPiece, autoPickSetPieces, setShootoutOrder: setShootoutOrderIds, retrain, stopRetrain,
     play, quickPlay, continueFromReport, nextSeason,
     buy,
-    negotiate, offer, walk, proposeTerms, buyLoanee, endLoanEarly, recallLoanee, answerApproach, setTickets, setConcessions, expandStadium, takeSponsor, pushSponsorOffer, buyFacility, waitAWeek, takeJob, acceptNation, resignNation, dismissNegotiation, clause, loan,
+    negotiate, offer, walk, proposeTerms, buyLoanee, endLoanEarly, recallLoanee, answerApproach, setTickets, setConcessions, expandStadium, takeSponsor, pushSponsorOffer, buyFacility, waitAWeek, takeJob, acceptNation, resignNation, updateNationalTeam, dismissNegotiation, clause, loan,
     appointStaff, payOffStaff, matchStaff, letStaffGo, spendPoint, updateManager,
     setCurrency, setNationJobs, setStrictness, turnOnNoSack, setDifficulty,
     acceptIncomingBid, rejectIncomingBid,
