@@ -132,14 +132,14 @@ export default function StadiumTycoon() {
   ];
 
   return (
-    <div id="dukb-main" tabIndex={-1} className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background">
       <GameNavbar />
       <PageSeo
         title="Stadium Tycoon: Free Idle Soccer Club Game | DoUKnowBall"
         description="Grow a tiny football club into an empire. Live toy matches, ten divisions, a staff payroll, golden whistles, 47 badges, reputation stars and a legacy boardroom of permanent perks. Free idle game, no sign-up."
         path="/stadium-tycoon"
       />
-      <div className="max-w-2xl mx-auto px-4 py-4 md:py-8">
+      <main id="dukb-main" tabIndex={-1} className="max-w-2xl mx-auto px-4 py-4 md:py-8">
         <CelebrationStyles />
         <header className="text-center mb-2">
           <h1 className="text-3xl md:text-5xl font-bold tracking-[0.08em] text-primary font-display">STADIUM TYCOON</h1>
@@ -191,7 +191,7 @@ export default function StadiumTycoon() {
           title="Stadium Tycoon"
           description="Grow a tiny football club into an empire: live toy matches, ten divisions to climb, a staff payroll, golden whistles, 47 badges, reputation stars and a legacy boardroom of permanent perks."
         />
-      </div>
+      </main>
 
       {/* local animation keyframes */}
       <style>{`
