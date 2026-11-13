@@ -18,7 +18,35 @@ async function groups(C,retain=false){const results=[];const run=(name,fn)=>{try
   return results;}
 const healthy=await groups(B,true);report.groups=healthy;assert(healthy.every(v=>v.ok),JSON.stringify(healthy.filter(v=>!v.ok)));
 const recorded=JSON.parse(fs.readFileSync('scripts/data/careerLeagueWorldSaves1100.json','utf8')).saves.filter(v=>v.kind==='player');
-for(const fixture of recorded)for(const seed of [101,102,103]){const input=copy(fixture.state);delete input.pressRoom;const originalState=seeded(seed,()=>A.engine.advanceProSeason(copy(input),A.engine.FALLBACK_CLUBS)),current=seeded(seed,()=>B.engine.advanceProSeason(copy(input),B.engine.FALLBACK_CLUBS));assert.deepEqual(current,originalState,'No active Press retains entire original season and RNG');const file=writeEvidence('neutral-soccer-'+fixture.id+'-'+seed+'.json',{input,original:originalState,current});report.neutral.push({file,sport:'soccer',drawCount:current.draws.length});}
+// The 2029 Nantes save predates the player Ligue 2 catalogue (43f611ff12). That update supplied
+// a player league size and more Cup opponents. Keep its frozen league and club inputs only in
+// this neutral comparison. The active feature controls and native oracle use the current game.
+const nantesFixture=recorded.filter(fixture=>fixture.id==='nan');
+assert.equal(nantesFixture.length,1);
+assert.equal(nantesFixture[0].state.currentClub,'Nantes');
+assert.equal(nantesFixture[0].state.seasons.at(-1).year,2028);
+const nantesComparator=await bundlePressMarket({patches:[{
+  id:'frozen-nantes-ligue-2-size',file:'src/lib/soccerCareerLeague.ts',
+  from:'  "Ligue 2": [{ from: 2026, size: 18 }],\n',to:'',
+}]});
+report.nantesComparator={catalogueCommit:'43f611ff12d30901f089e234001bb3b54649b0ef',faults:nantesComparator.faults,clubInput:'Frozen base FALLBACK_CLUBS'};
+for(const fixture of recorded)for(const seed of [101,102,103]){
+  const input=copy(fixture.state);delete input.pressRoom;
+  const originalState=seeded(seed,()=>A.engine.advanceProSeason(copy(input),A.engine.FALLBACK_CLUBS));
+  const unadjusted=seeded(seed,()=>B.engine.advanceProSeason(copy(input),B.engine.FALLBACK_CLUBS));
+  const nantes=fixture.id==='nan';
+  const current=nantes
+    ? seeded(seed,()=>nantesComparator.value.engine.advanceProSeason(copy(input),A.engine.FALLBACK_CLUBS))
+    : unadjusted;
+  if(nantes){
+    assert.deepEqual(unadjusted.draws,originalState.draws,'Current Nantes catalogue retains the original RNG stream');
+    assert.notEqual(unadjusted.value.seasons.at(-1).leagueFinish,originalState.value.seasons.at(-1).leagueFinish,'The current Ligue 2 size changes the frozen finish');
+    assert.notDeepEqual(unadjusted.value.seasons.at(-1).cupRun,originalState.value.seasons.at(-1).cupRun,'The current club list changes the frozen Cup draw');
+  }
+  assert.deepEqual(current,originalState,'No active Press retains entire original season and RNG');
+  const file=writeEvidence('neutral-soccer-'+fixture.id+'-'+seed+'.json',{input,original:originalState,current,...(nantes?{unadjusted}: {})});
+  report.neutral.push({file,sport:'soccer',drawCount:current.draws.length});
+}
 for(let i=0;i<4;i++)for(const seed of [101,102,103]){const oldSport=sportList(A)[i],sport=sportList(B)[i];const run=(C,s)=>seeded(seed,()=>{const c=s.startCareer('Neutral Market',s.create.defaultPos,s.create.archetypes[s.create.defaultPos][0],Math.random,C.defaultAppearance(),s.create.eras[0].id),tq=s.rollTeamQuality(null,Math.random);s.assignRole(c,tq,Math.random);const camp=s.campBattle(c,tq,Math.random),season=s.simSeason(c,tq,Math.random);s.progress(c,Math.random);return{c,tq,camp,season};});const a=run(A,oldSport),b=run(B,sport);assert.deepEqual(b,a,'No active Market retains the entire original sport state and RNG');const file=writeEvidence('neutral-'+sport.slug+'-'+seed+'.json',{original:a,current:b});report.neutral.push({file,sport:sport.slug,drawCount:b.draws.length});}
 assert.equal(report.neutral.length,27);assert(report.neutral.every(v=>v.drawCount>0));
 const controls=[
