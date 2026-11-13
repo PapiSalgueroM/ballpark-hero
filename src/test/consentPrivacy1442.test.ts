@@ -13,7 +13,7 @@ beforeEach(() => {
   localStorage.clear();
   document.head.innerHTML = '';
   document.body.innerHTML = '';
-  for (const name of ['adsbygoogle', 'dataLayer', 'gtag', '__DUKB_CONSENT_DEFAULTED__', 'ga-disable-G-KZQK2G68YC']) Reflect.deleteProperty(window, name);
+  for (const name of ['adsbygoogle', 'dataLayer', 'gtag', '__DUKB_CONSENT_DEFAULTED__', '__DUKB_HOST_ANALYTICS_DEFAULT__', 'ga-disable-G-KZQK2G68YC']) Reflect.deleteProperty(window, name);
   history.replaceState({}, '', '/footle');
   Object.defineProperty(navigator, 'globalPrivacyControl', { configurable: true, value: false });
 });
@@ -22,7 +22,7 @@ afterEach(() => {
   localStorage.clear();
   document.head.innerHTML = '';
   document.body.innerHTML = '';
-  for (const name of ['adsbygoogle', 'dataLayer', 'gtag', '__DUKB_CONSENT_DEFAULTED__', 'ga-disable-G-KZQK2G68YC']) Reflect.deleteProperty(window, name);
+  for (const name of ['adsbygoogle', 'dataLayer', 'gtag', '__DUKB_CONSENT_DEFAULTED__', '__DUKB_HOST_ANALYTICS_DEFAULT__', 'ga-disable-G-KZQK2G68YC']) Reflect.deleteProperty(window, name);
   for (const name of ['_ga', '__gads', 'fixture-essential']) document.cookie = `${name}=; Max-Age=0; path=/`;
   history.replaceState({}, '', originalPath);
   if (gpcDescriptor) Object.defineProperty(navigator, 'globalPrivacyControl', gpcDescriptor);
@@ -30,6 +30,28 @@ afterEach(() => {
 });
 
 describe('the privacy-safe paused analytics release', () => {
+  it('leaves the host-only consent queue alone until an advertising slot actually loads', () => {
+    const hostDefault = ['consent', 'default', { analytics_storage: 'denied' }];
+    Reflect.set(window, '__DUKB_HOST_ANALYTICS_DEFAULT__', hostDefault);
+    window.dataLayer = [hostDefault];
+    stopRevokedServices({ advertising: false, analytics: true });
+    expect(window.dataLayer).toEqual([hostDefault]);
+    expect(window.gtag).toBeUndefined();
+    expect(document.querySelectorAll('script')).toHaveLength(0);
+
+    grantBoth();
+    const wrapper = document.createElement('div');
+    wrapper.setAttribute('data-dukb-manual-ad', '');
+    wrapper.innerHTML = '<ins class="adsbygoogle" data-ad-slot="fixture"></ins>';
+    document.body.appendChild(wrapper);
+    expect(loadAdSense()).toBe(true);
+    expect(Array.from(window.dataLayer!.at(-1) as ArrayLike<unknown>)).toEqual(['consent', 'update', {
+      ad_storage: 'granted', analytics_storage: 'denied', ad_user_data: 'denied', ad_personalization: 'denied',
+    }]);
+    expect(document.querySelectorAll('script[src*="adsbygoogle.js"]')).toHaveLength(1);
+    expect(document.querySelectorAll('script[src*="gtag/js"]')).toHaveLength(0);
+  });
+
   // Break caught: a durable old grant overrides Global Privacy Control.
   it('refuses advertising under GPC even when the saved record grants both purposes', () => {
     grantBoth();
