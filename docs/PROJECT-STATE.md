@@ -1,3 +1,11 @@
+## 2026-11-12 Puck Detective roster clue wording
+
+Puck Detective now explains in the game, Help and guide that its team and jersey clues use a stored roster snapshot. The Hockey hub describes the same source. This release keeps the existing roster rows, Daily draw, scoring and save format.
+
+The normal grid archive refresh preserved all 348 published boards through November 11 Eastern byte for byte. A scoped SEO build refreshed only Hockey and Puck Detective and their sitemap dates. App types, 13 focused tests, 17 output checks, the browser boot check, and all 16 existing route-size caps passed. Six paired 320px and 390px browser checks against the prior main build kept both archive clue cards and exact active and finished save bytes across reload. The new note fit on both screens, with no page errors or score writes.
+
+Awaiting hosted qualification and publication.
+
 ## 2026-11-11 Build Your XI player selection on WebKit
 
 A native tap on Thibaut Courtois in a Real Madrid 4-4-2 could close the picker before selecting him. WebKit sent a mouse down after touch release, moved focus to the main region and caused the picker to drop the list before the click. The shared picker now cancels the option mouse down default so the click can select the player. Touch and pen still wait for the completed click. The skip link and the outside focus handler stay in place.
