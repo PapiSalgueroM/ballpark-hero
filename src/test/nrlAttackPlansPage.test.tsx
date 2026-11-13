@@ -62,3 +62,50 @@ it('shows both signed tradeoffs, persists a match choice and locks it during a r
   click('Play second half');
   expect(readNrlCareerSave(raw())!.season).not.toHaveProperty('attackPlan');
 });
+
+it('holds a reserve only on Play Live, restores halftime and makes a stale tab refuse settlement', () => {
+  const kickoff = createNrlCareer('broncos', 76);
+  const baseline = JSON.stringify(kickoff);
+  localStorage.setItem(NRL_SAVE_KEY, baseline);
+  localStorage.setItem(fence, '6');
+  const first = page();
+  const summary = screen.getByText('Hold one reserve for halftime');
+  const desk = summary.closest('details')!;
+  expect(desk.open).toBe(false);
+  desk.open = true;
+  const picker = within(desk).getByLabelText('Opening rotation');
+  const id = 'nrl-broncos-2026-28';
+  fireEvent.change(picker, { target: { value: id } });
+  expect(raw()).toBe(baseline);
+  fireEvent.change(picker, { target: { value: '' } });
+  expect(raw()).toBe(baseline);
+  expect(localStorage.getItem(fence)).toBe('6');
+  fireEvent.change(picker, { target: { value: id } });
+  click('Play Live');
+  const pending = raw()!;
+  expect(readNrlCareerSave(pending)!.season.live?.heldReserveId).toBe(id);
+  first.unmount();
+  const second = page();
+  expect(raw()).toBe(pending);
+  const halftime = screen.getByText('Halftime interchange').closest('details')!;
+  halftime.open = true;
+  const choice = within(halftime).getByLabelText('Reserve to finish the match');
+  expect(within(halftime).getByText(/sat out the first half/)).toBeVisible();
+  fireEvent.change(choice, { target: { value: id } });
+  expect(raw()).toBe(pending);
+  click('Play second half');
+  const settled = raw();
+  expect(readNrlCareerSave(settled)!.season.results.find(result => result.homeId === 'broncos')!.halftimeInterchange).toEqual({
+    reserveId: id, starterId: kickoff.season.lineup['Left Centre'], enteredAtHalf: true,
+  });
+  expect(screen.getByText(/Each played about 40 minutes/)).toBeVisible();
+  second.unmount();
+
+  localStorage.setItem(NRL_SAVE_KEY, pending);
+  page();
+  localStorage.setItem(NRL_SAVE_KEY, settled!);
+  localStorage.setItem(fence, String(Number(localStorage.getItem(fence)) + 1));
+  click('Play second half');
+  expect(raw()).toBe(settled);
+  expect(screen.getByText(/This season changed in another tab/i)).toBeVisible();
+});

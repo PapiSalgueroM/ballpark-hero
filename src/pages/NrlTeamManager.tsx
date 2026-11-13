@@ -18,7 +18,7 @@ import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { useSaveFenceWatch } from '@/hooks/useSaveFenceWatch';
 import { nrlBoardChallengeStatus } from '@/lib/nrlBoardTarget';
 import {
-  nrlBench, nrlFitLineup, nrlHalftimeInterchanges, nrlInjuries, nrlLadder, nrlMatchdaySelection, nrlNextRound,
+  nrlBench, nrlFitLineup, nrlHalftimeInterchanges, nrlHoldableReserves, nrlInjuries, nrlLadder, nrlMatchdaySelection, nrlNextRound,
   nrlRegularRounds, nrlRetrainingRoles, nrlSavedLineupPreview, nrlStarterOptions, NRL_BENCH_SIZE, NRL_COACHING_BONUS,
   NRL_MAX_BENCH_USED, NRL_ROLES,
   type NrlAction, type NrlAttackPlan, type NrlCoachRole, type NrlLiveHalf, type NrlManagerState, type NrlMatchResult, type NrlNextRound, type NrlRole, type NrlTactic,
@@ -156,6 +156,7 @@ function LiveHalftime({ live, season, title, onAction, disabled, coachRole }: {
   const sides = [[fixture.homeId, homeScoring], [fixture.awayId, awayScoring]] as const;
   const options = nrlHalftimeInterchanges(season);
   const chosen = options.find(option => option.reserveId === reserveId);
+  const heldName = live.heldReserveId && squad.find(player => player.id === live.heldReserveId)?.name;
   const name = (id: string) => squad.find(player => player.id === id)?.name;
   return (
     <section className="space-y-4" aria-labelledby="nrl-halftime">
@@ -192,18 +193,22 @@ function LiveHalftime({ live, season, title, onAction, disabled, coachRole }: {
       {options.length > 0 ? (
         <details className="group rounded-xl border border-border bg-card px-4">
           <summary className="flex min-h-11 cursor-pointer items-center justify-between gap-2 rounded-md font-bold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
-            <span>{chosen ? `${name(chosen.reserveId)} stays on` : 'Keep a reserve on'}</span>
+            <span>{chosen ? `${name(chosen.reserveId)} ${chosen.enteredAtHalf ? 'comes on' : 'stays on'}` : heldName ? 'Halftime interchange' : 'Keep a reserve on'}</span>
             <ChevronDown size={16} aria-hidden="true" className="shrink-0 group-open:rotate-180" />
           </summary>
           <div className="pb-4">
             <label htmlFor="nrl-half-reserve" className="sr-only">Reserve to finish the match</label>
             <select id="nrl-half-reserve" className="mt-2 min-h-11 w-full rounded-lg border border-input bg-background px-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
               value={reserveId} disabled={disabled} onChange={event => setReserveId(event.target.value)}>
-              <option value="">Automatic rotation</option>
-              {options.map(option => <option key={option.reserveId} value={option.reserveId}>{name(option.reserveId)} · {option.role}</option>)}
+              <option value="">{heldName ? 'Leave held reserve unused' : 'Automatic rotation'}</option>
+              {options.map(option => <option key={option.reserveId} value={option.reserveId}>{option.enteredAtHalf && 'Bring on '}{name(option.reserveId)} · {option.role}</option>)}
             </select>
-            <p className="mt-2 text-sm text-muted-foreground">Choose a reserve already in the rotation to finish the match. Their starter stays off.</p>
-            {chosen && <p className="mt-1 text-sm" data-nrl-halftime-choice>{name(chosen.reserveId)} finishes the match. {name(chosen.starterId)} stays off.</p>}
+            <p className="mt-2 text-sm text-muted-foreground">{heldName
+              ? `${heldName} sat out the first half. Bring them on now or keep a rotating reserve on.`
+              : 'Choose a reserve already in the rotation to finish the match. Their starter stays off.'}</p>
+            {chosen && <p className="mt-1 text-sm" data-nrl-halftime-choice>
+              {name(chosen.reserveId)} {chosen.enteredAtHalf ? 'comes on for the second half.' : 'finishes the match.'} {name(chosen.starterId)} stays off.
+            </p>}
           </div>
         </details>
       ) : (
@@ -380,12 +385,15 @@ function MatchCentre({ career, onAction, onReview, disabled, showLiveResult }: {
   const next = nrlNextRound(season);
   const { clubId, year, phase, championId } = season;
   const coachRole = career.finance.coachHire?.role;
+  const [hold, setHold] = useState<{ year: number; round: number; reserveId: string }>();
   if (season.live) {
     return <LiveHalftime live={season.live} season={season} title={next.title} onAction={onAction} disabled={disabled} coachRole={coachRole} />;
   }
   const club = shortName(year, clubId);
   const match = next.clubMatch;
   const canPlayLive = Boolean(match && season.kickerId && season.bench);
+  const holdable = canPlayLive ? nrlHoldableReserves(season) : [];
+  const selectedHold = hold?.year === year && hold.round === season.round && holdable.some(player => player.id === hold.reserveId) ? hold : undefined;
   const opponent = match ? shortName(year, match.homeId === clubId ? match.awayId : match.homeId) : null;
   const latestRound = season.results.at(-1)?.round;
   const latest = latestRound === undefined ? [] : season.results.filter(result => result.round === latestRound);
@@ -421,7 +429,9 @@ function MatchCentre({ career, onAction, onReview, disabled, showLiveResult }: {
         <h4 className="font-semibold">Interchange used</h4>
         <p className="text-muted-foreground">{usedReserves.join(", ")}</p>
         {finishingReserve && restedStarter && <p className="mt-1 text-muted-foreground" data-nrl-halftime-interchange>
-          {finishingReserve} finished the match. In regulation, they played about 53 minutes. {restedStarter} stayed off after half time and played about 27 minutes.
+          {interchange?.enteredAtHalf
+            ? `${finishingReserve} came on for ${restedStarter} at half time. Each played about 40 minutes in regulation.`
+            : `${finishingReserve} finished the match. In regulation, they played about 53 minutes. ${restedStarter} stayed off after half time and played about 27 minutes.`}
         </p>}
       </div>}
       {latestScorers.length > 0 && (
@@ -519,9 +529,26 @@ function MatchCentre({ career, onAction, onReview, disabled, showLiveResult }: {
         </div>
       )}
 
+      {holdable.length > 0 && (
+        <details className="group rounded-xl border border-border bg-card px-4">
+          <summary className="flex min-h-11 cursor-pointer items-center justify-between gap-2 rounded-md font-bold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
+            <span>Hold one reserve for halftime</span><ChevronDown size={16} aria-hidden="true" className="shrink-0 group-open:rotate-180" />
+          </summary>
+          <div className="pb-4">
+            <label htmlFor="nrl-hold-reserve" className="text-sm font-semibold">Opening rotation</label>
+            <select id="nrl-hold-reserve" value={selectedHold?.reserveId ?? ''} disabled={disabled}
+              className="mt-1 min-h-11 w-full rounded-lg border border-input bg-background px-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              onChange={event => setHold(event.target.value ? { year, round: season.round, reserveId: event.target.value } : undefined)}>
+              <option value="">Automatic rotation</option>
+              {holdable.map(player => <option key={player.id} value={player.id}>{player.name} · {player.role}</option>)}
+            </select>
+            <p className="mt-2 text-sm text-muted-foreground">Play Live uses at most three reserves in the first half and keeps this position free for a halftime change. Quick Sim uses the usual rotation.</p>
+          </div>
+        </details>
+      )}
       {phase !== 'complete' && (
         <div className={canPlayLive ? 'grid grid-cols-2 gap-2' : undefined}>
-          {canPlayLive && <Button type="button" size="lg" disabled={disabled} onClick={() => onAction({ type: 'startLive' })}>
+          {canPlayLive && <Button type="button" size="lg" disabled={disabled} onClick={() => onAction({ type: 'startLive', hold: selectedHold })}>
             Play Live <ArrowRight aria-hidden="true" />
           </Button>}
           <Button type="button" size="lg" className="w-full" variant={canPlayLive ? 'outline' : 'default'}
@@ -1095,7 +1122,7 @@ function NrlManagerScreen({ entry, showSlots }: { entry: ContinueSave; showSlots
               <li>Buy medical upgrades with club cash in Finances. Upgrades shorten recovery from new knocks.</li>
               <li>Sign one fictional assistant in Finances. Their rating bonus applies when you use their tactic.</li>
               <li>Choose your goal kicker in Squad to credit conversions and penalty goals. Match centre shows your scorers.</li>
-              <li>Play Live shows the first half. At half time, change tactics or keep a rotating reserve on to finish the match. Quick Sim settles the round in one action.</li>
+              <li>Play Live shows the first half. At half time, change tactics, bring on a reserve you held back, or keep a rotating reserve on. Quick Sim settles the round in one action.</li>
               <li>Advance a round to simulate every fixture. A win or bye earns two ladder points, a draw earns one and a loss earns zero.</li>
               <li>The top eight make finals. The top four get a second chance if they lose their qualifying final. The last club standing wins the premiership.</li>
               <li>Scout a position in the Academy. The report arrives after you advance a round, and a promotion reserves a place next season.</li>

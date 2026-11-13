@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { createNrlCareer, readNrlCareerSave, reduceNrlCareer, type NrlCareerState } from '@/lib/nrlCareer';
-import { nrlHalftimeInterchanges, type NrlHalftimeInterchange, type NrlPlayer } from '@/lib/nrlManager';
+import { nrlHalftimeInterchanges, nrlHoldableReserves, nrlNextRound, type NrlHalftimeInterchange, type NrlPlayer } from '@/lib/nrlManager';
 import { nrlScorePoints } from '@/lib/nrlPlayerScoring';
 
 const start = (career: NrlCareerState) => reduceNrlCareer(career, { type: 'startLive' });
@@ -10,6 +10,114 @@ const finish = (career: NrlCareerState, interchange?: NrlHalftimeInterchange) =>
   type: 'finishLive', year: career.season.year, round: career.season.round, tactic: career.season.tactic, interchange,
 });
 const choice = { starterId: 'broncos-3-0', reserveId: 'nrl-broncos-2026-28' };
+const hold = { year: 2026, round: 1, reserveId: choice.reserveId };
+
+describe('NRL reserve held for halftime', () => {
+  it('restores the exact halftime and only counts the held reserve if brought on', () => {
+    const kickoff = createNrlCareer('broncos', 76);
+    const action = { type: 'startLive', hold } as const;
+    const pending = reduceNrlCareer(kickoff, action);
+    expect(pending.season.live?.heldReserveId).toBe(choice.reserveId);
+    const restored = readNrlCareerSave(raw(pending))!;
+    expect(raw(restored)).toBe(raw(pending));
+
+    const stayedOff = finish(restored);
+    const opening = result(stayedOff).benchUsed ?? [];
+    expect(result(finish(start(kickoff))).benchUsed).toHaveLength(4);
+    expect(opening).toHaveLength(3);
+    expect(opening).not.toContain(choice.reserveId);
+    expect(result(stayedOff).playerScoring?.lines.some(line => line.playerId === choice.reserveId)).toBe(false);
+    const played = finish(restored, choice);
+    const match = result(played);
+    expect(match.benchUsed).toEqual([...opening, choice.reserveId]);
+    expect(match.halftimeInterchange).toEqual({ ...choice, enteredAtHalf: true });
+    expect(match.playerScoring?.lines.reduce((sum, line) => sum + nrlScorePoints(line), 0)).toBe(match.homeScore);
+    expect(match.homeScore).toBeGreaterThanOrEqual(nrlScorePoints(pending.season.live!.homeScoring));
+    expect(match.awayScore).toBeGreaterThanOrEqual(nrlScorePoints(pending.season.live!.awayScoring));
+    expect(raw(readNrlCareerSave(raw(played))!)).toBe(raw(played));
+    expect(finish(played, choice)).toBe(played);
+    const fitness = (state: NrlCareerState, id: string) => state.season.squad.find(player => player.id === id)!.fitness;
+    expect(fitness(played, choice.starterId)).toBe(fitness(stayedOff, choice.starterId) + 7);
+    expect(fitness(played, choice.reserveId)).toBe(fitness(stayedOff, choice.reserveId) - 8);
+  });
+
+  it('credits first-half scores to the starting player and second-half scores to the entrant', () => {
+    const firstOnly = { starterId: 'broncos-2-0', reserveId: 'nrl-broncos-2026-27' };
+    const firstHalf = reduceNrlCareer(createNrlCareer('broncos', 20), { type: 'startLive', hold: { ...hold, reserveId: firstOnly.reserveId } });
+    expect(firstHalf.season.live!.homeScoring.tries).toBe(2);
+    const firstResult = result(finish(firstHalf, firstOnly));
+    expect(firstResult.homeScoring.tries).toBe(2);
+    expect(firstResult.playerScoring?.lines.find(line => line.playerId === firstOnly.starterId)?.tries).toBe(1);
+    expect(firstResult.playerScoring?.lines.some(line => line.playerId === firstOnly.reserveId)).toBe(false);
+
+    const secondHalf = reduceNrlCareer(createNrlCareer('broncos', 76), { type: 'startLive', hold });
+    expect(secondHalf.season.live!.homeScoring.tries).toBe(0);
+    const secondResult = result(finish(secondHalf, choice));
+    expect(secondResult.playerScoring?.lines.find(line => line.playerId === choice.reserveId)?.tries).toBe(1);
+    expect(secondResult.playerScoring?.lines.some(line => line.playerId === choice.starterId)).toBe(false);
+  });
+
+  it('keeps an opening reserve eligible to stay on and includes an entrant in injury exposure', () => {
+    const pending = reduceNrlCareer(createNrlCareer('broncos', 76), { type: 'startLive', hold });
+    const rotating = nrlHalftimeInterchanges(pending.season).find(option => !option.enteredAtHalf)!;
+    const rotatingResult = result(finish(pending, rotating));
+    expect(rotatingResult.halftimeInterchange).toEqual({ starterId: rotating.starterId, reserveId: rotating.reserveId });
+    expect(rotatingResult.benchUsed).toEqual(result(finish(pending)).benchUsed);
+    expect(rotatingResult.benchUsed).not.toContain(choice.reserveId);
+
+    const injuryChoice = { ...choice, reserveId: 'broncos-3-1' };
+    const injuryHalf = reduceNrlCareer(createNrlCareer('broncos', 39), { type: 'startLive', hold: { ...hold, reserveId: injuryChoice.reserveId } });
+    expect(result(finish(injuryHalf)).injury?.playerId).toBe('broncos-4-0');
+    const injured = finish(injuryHalf, injuryChoice);
+    expect(result(injured).injury).toEqual({ playerId: injuryChoice.reserveId, rounds: 2 });
+    expect(readNrlCareerSave(raw(injured))).toEqual(injured);
+  });
+
+  it('keeps a real finals matchup reloadable and does not allow a held reserve for a bye', () => {
+    let career = createNrlCareer('storm', 4);
+    let sawBye = false;
+    for (let step = 0; step < 31; step++) {
+      const { season } = career;
+      const reserve = nrlHoldableReserves(season)[0];
+      expect(reserve).toBeDefined();
+      const action = { type: 'startLive', hold: { year: season.year, round: season.round, reserveId: reserve.id } } as const;
+      const fixture = nrlNextRound(season).clubMatch;
+      if (!fixture) {
+        expect(reduceNrlCareer(career, action)).toBe(career);
+        sawBye = true;
+      } else if (fixture.finalsRound) {
+        const pending = reduceNrlCareer(career, action);
+        const restored = readNrlCareerSave(raw(pending))!;
+        expect(raw(restored)).toBe(raw(pending));
+        const after = finish(restored, { starterId: season.lineup[reserve.role], reserveId: reserve.id });
+        const settled = after.season.results.find(match => match.tieId === fixture.tieId)!;
+        expect(settled.halftimeInterchange?.enteredAtHalf).toBe(true);
+        expect(settled.benchUsed?.at(-1)).toBe(reserve.id);
+        expect(raw(readNrlCareerSave(raw(after))!)).toBe(raw(after));
+        expect(sawBye).toBe(true);
+        return;
+      }
+      career = reduceNrlCareer(career, { type: 'advance' });
+    }
+    throw new Error('The seeded Storm career never reached a managed final.');
+  });
+
+  it('rejects a non-reserve at kickoff and a reserve other than the held one for first entry', () => {
+    const kickoff = createNrlCareer('broncos', 76);
+    const pending = reduceNrlCareer(kickoff, { type: 'startLive', hold });
+    expect(reduceNrlCareer(kickoff, { type: 'startLive', hold: { ...hold, reserveId: choice.starterId } })).toBe(kickoff);
+    expect(reduceNrlCareer(kickoff, { type: 'startLive', hold: { ...hold, round: 2 } })).toBe(kickoff);
+    expect(finish(pending, { ...choice, reserveId: 'unknown' })).toBe(pending);
+    const changedKicker = reduceNrlCareer(kickoff, { type: 'setKicker', playerId: choice.starterId });
+    expect(reduceNrlCareer(changedKicker, { type: 'startLive', hold })).toBe(changedKicker);
+    const { live } = pending.season;
+    const savedWith = (change: Partial<NonNullable<typeof live>>) => readNrlCareerSave(raw({ ...pending,
+      season: { ...pending.season, live: { ...live!, ...change } },
+    }));
+    expect(savedWith({ heldReserveId: kickoff.season.kickerId })).toBeNull();
+    expect(savedWith({ homeScoring: { ...live!.homeScoring, tries: 1 } })).toBeNull();
+  });
+});
 
 describe('NRL halftime interchange', () => {
   it('keeps an already rotating reserve on, settles once and cannot credit the outgoing starter for second-half scores', () => {
