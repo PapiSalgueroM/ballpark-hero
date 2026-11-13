@@ -16,7 +16,7 @@
 import { Component, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import type { UsCareerCore, UsCareerSeason, UsCareerSport } from '@/lib/usCareerSport';
 import { deriveSeason, type DerivedGame, type DerivedSeason } from '@/lib/season/core';
-import { buildUsSeason, usPlayoffPath, type UsPlayoffPath, type UsRow, type UsSeasonBind, type UsSeasonCtx } from '@/lib/season/us';
+import { buildUsSeason, usPlayoffPath, usSeasonKey, type UsPlayoffPath, type UsRow, type UsSeasonBind, type UsSeasonCtx } from '@/lib/season/us';
 import { SeasonCentre, type CentreModel } from '@/components/season-centre/SeasonCentre';
 import { CentreTile } from '@/components/season-centre/CentreTile';
 import { MiniBasketballCourt } from '@/components/us-career/season/MiniBasketballCourt';
@@ -152,7 +152,12 @@ function CentreBody({ sport, career, row, onClose }: UsSeasonCentreProps) {
     () => (bind && built && built.ok === true && season ? buildUsModel(sport, bind, career, row as UsRow, built.ctx, season, built.key) : null),
     [bind, built, season, sport, career, row],
   );
-  const replay = useMemo(() => (bind && built && built.ok === true ? buildMlbPlayoffReplay(bind, row as UsRow, built.ctx, built.key) : null), [bind, built, row]);
+  const replay = useMemo(() => {
+    if (!bind || !built) return null;
+    if (built.ok === true) return buildMlbPlayoffReplay(bind, row as UsRow, built.ctx, built.key);
+    if (built.why !== 'held' || row.games <= 0 || !sport.canReplayHeldPlayoffs?.(career, row)) return null;
+    return buildMlbPlayoffReplay(bind, row as UsRow, null, usSeasonKey(bind, career, row as UsRow));
+  }, [bind, built, row, career, sport]);
   if (failed) return <CentreTile title={TITLE} text="The season could not be loaded. Your career is safe." exitLabel={EXIT} onClose={onClose} onRetry={() => setTries(n => n + 1)} />;
   if (!bind || !built) {
     return (
@@ -164,7 +169,9 @@ function CentreBody({ sport, career, row, onClose }: UsSeasonCentreProps) {
       </div>
     );
   }
-  if (built.ok === false) return <CentreTile title={TITLE} text={built.why === 'held' ? built.line : CANNOT} exitLabel={EXIT} onClose={onClose} />;
+  if (built.ok === false) return replay
+    ? <MlbPlayoffReplay replay={replay} club={sport.teamLabelOf(row.team, career.eraId)} year={row.year} onClose={onClose} />
+    : <CentreTile title={TITLE} text={built.why === 'held' ? built.line : CANNOT} exitLabel={EXIT} onClose={onClose} />;
   if (!model) return <CentreTile title={TITLE} text={CANNOT} exitLabel={EXIT} onClose={onClose} />;
   const backToRegular = () => {
     setPart('regular');

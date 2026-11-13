@@ -19,7 +19,7 @@ export interface MlbPlayoffReplayData {
 }
 
 /** A W/L replay of the saved finish and team game count, never saved game scores. */
-export function buildMlbPlayoffReplay(bind: UsSeasonBind, row: UsRow, ctx: UsSeasonCtx, key: string): MlbPlayoffReplayData | null {
+export function buildMlbPlayoffReplay(bind: UsSeasonBind, row: UsRow, ctx: UsSeasonCtx | null, key: string): MlbPlayoffReplayData | null {
   if (bind.slug !== 'mlb') return null;
   const lay = usPlayoffLay(bind, row, ctx, key);
   if (!lay || lay.series.some(series => series.games === null)) return null;

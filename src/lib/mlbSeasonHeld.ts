@@ -26,9 +26,9 @@
 
    No React, no Math.random, nothing evaluated at module scope from an
    import. */
-import { MLB_FORMULAS, MLB_OUTSIDE_CLUBS, MLB_SEASONS } from '@/data/usSeasonLedgerMlb';
+import { MLB_FORMULAS, MLB_OUTSIDE_CLUBS, MLB_PLAYOFF_FORMAT, MLB_SEASONS } from '@/data/usSeasonLedgerMlb';
 import { seasonLengthRow } from './usSeasonShape';
-import { MLB_PITCHERS, mlbEraTeamIds } from './mlbMyCareer';
+import { MLB_PITCHERS, mlbEraTeamIds, mlbPlayoffResults, type MlbSeasonLine } from './mlbMyCareer';
 
 /** The season the game by game view is built for: the schedule formula's own length. */
 export function mlbViewGames(): number {
@@ -77,4 +77,17 @@ export function mlbHeldLine(year: number, team: string | undefined, eraId?: stri
 /** The hub's line for the coming season (or the last one, for Watch again): the position first, then the season. */
 export function mlbSeasonHeld(year: number, eraId: string | undefined, who?: { pos: string; team: string }): string | null {
   return mlbHeldPos(who?.pos) ?? mlbHeldLine(year, who?.team, eraId);
+}
+
+/** A saved team playoff replay can cover pitchers without laying out their regular-season decisions. */
+export function canReplayMlbPitcherPlayoffs(pos: string, eraId: string | undefined, row: Pick<MlbSeasonLine, 'year' | 'team' | 'teamResult' | 'poGames'>): boolean {
+  const { year, team, teamResult, poGames } = row;
+  if (!(MLB_PITCHERS as readonly string[]).includes(pos) || year < MLB_PLAYOFF_FORMAT.from || !mlbClubInLeague(team, eraId)
+    || typeof poGames !== 'number' || !Number.isInteger(poGames)) return false;
+  const finish = mlbPlayoffResults(year).indexOf(teamResult);
+  if (finish < 0) return false;
+  const series = MLB_PLAYOFF_FORMAT.series.slice(0, finish + 1);
+  const minimum = series.reduce((sum, [wins]) => sum + wins, 0);
+  const maximum = series.reduce((sum, [, games]) => sum + games, 0);
+  return poGames >= minimum && poGames <= maximum;
 }

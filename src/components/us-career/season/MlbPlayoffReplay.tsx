@@ -20,7 +20,7 @@ export default function MlbPlayoffReplay({ replay, club, year, onBack, onClose }
   replay: MlbPlayoffReplayData;
   club: string;
   year: number;
-  onBack: () => void;
+  onBack?: () => void;
   onClose: () => void;
 }) {
   const [index, setIndex] = useState(0);
@@ -91,7 +91,7 @@ export default function MlbPlayoffReplay({ replay, club, year, onBack, onClose }
             onClick={!revealed ? () => setRevealed(true) : !last ? next : () => { setIndex(0); setRevealed(false); }}>
             {!revealed ? 'Show game result' : !last ? 'Next playoff game' : 'Replay again'}
           </button>
-          <button type="button" className={button} onClick={onBack}>Back to regular season</button>
+          {onBack && <button type="button" className={button} onClick={onBack}>Back to regular season</button>}
         </footer>
         {helpOpen && <SeasonCentreHelp words={HELP} onClose={closeHelp} />}
       </div>

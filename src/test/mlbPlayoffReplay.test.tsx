@@ -2,6 +2,8 @@ import { MemoryRouter } from 'react-router-dom';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { cleanup, fireEvent, render, waitFor, within } from '@testing-library/react';
 import UsSeasonCentre from '@/components/us-career/season/UsSeasonCentre';
+import { UsSeasonCentreEntry } from '@/components/us-career/season/UsSeasonCentreEntry';
+import { UsSeasonCentreHost } from '@/components/us-career/season/UsSeasonCentreHost';
 import { MLB_CAREER_SPORT } from '@/lib/mlbCareerSport';
 import { MLB_SEASON } from '@/lib/season/mlb';
 import { NBA_CAREER_SPORT } from '@/lib/nbaCareerSport';
@@ -47,6 +49,15 @@ function hitter(id: string, overrides: Record<string, unknown> = {}): UsCareerCo
   const career = fixtures.get(id);
   if (!career) throw new Error(`No actual regular-season layout for fixture ${id}`);
   return JSON.parse(JSON.stringify(career));
+}
+
+function savedPitcher(pos: 'SP' | 'RP') {
+  for (let attempt = 0; attempt < 80; attempt += 1) {
+    const career = played(MLB_CAREER_SPORT, pos, `mlb-pitcher-playoff|${pos}|${attempt}`);
+    const row = career.seasons.at(-1) as UsRow;
+    if (typeof row.poGames === 'number' && row.poGames > 0 && row.games > 0) return { career, row };
+  }
+  throw new Error(`No real saved MLB postseason for ${pos}`);
 }
 
 async function review(career: UsCareerCore, sport = mlbViewerSport()) {
@@ -227,11 +238,11 @@ describe('MLB playoff replay from the real season viewer', { timeout: 90000 }, (
   });
 
   it('preserves the current pitcher, short-season and outside-league held views', async () => {
-    const pitcher = played(MLB_CAREER_SPORT, 'SP', 'mlb-playoff-viewer|pitcher-held');
+    const pitcher = savedPitcher('SP').career;
     const hitterCareer = hitter('held-context');
     const last = hitterCareer.seasons[hitterCareer.seasons.length - 1];
     const cases = [
-      { career: pitcher, row: pitcher.seasons[pitcher.seasons.length - 1], note: 'for pitchers yet' },
+      { career: pitcher, row: { ...pitcher.seasons[pitcher.seasons.length - 1], poGames: undefined }, note: 'for pitchers yet' },
       { career: hitterCareer, row: { ...last, year: 2020, team: 'BOS' }, note: 'the real 2020 season had 60 games' },
       { career: hitterCareer, row: { ...last, team: 'Yomiuri Giants' }, note: 'your club plays outside Major League Baseball' },
     ];
@@ -242,5 +253,36 @@ describe('MLB playoff replay from the real season viewer', { timeout: 90000 }, (
       expect(view.queryByRole('button', { name: 'Replay playoffs' })).toBeNull();
       cleanup();
     }
+  });
+
+  it.each(['SP', 'RP'] as const)('opens team-only playoffs from a genuinely played %s save while holding regular games', async pos => {
+    const { career, row } = savedPitcher(pos);
+    const saved = JSON.stringify({ c: career, phase: 'season', teamQuality: 80, coach: null });
+    localStorage.setItem(MLB_CAREER_SPORT.saveKey, saved);
+    const random = vi.spyOn(Math, 'random');
+    const onPlay = vi.fn();
+    const sport = mlbViewerSport();
+    const view = render(<MemoryRouter><UsSeasonCentreHost sport={sport}>
+      <UsSeasonCentreEntry sport={sport} career={career} busy={false} onPlay={onPlay} />
+    </UsSeasonCentreHost></MemoryRouter>);
+    expect(view.getByText(/No week by week for pitchers yet/)).toBeInTheDocument();
+    expect(view.queryByRole('button', { name: /watch .* game by game/i })).toBeNull();
+    const opener = view.getByRole('button', { name: /Replay \d+ team playoffs/ });
+    fireEvent.click(opener);
+    const replay = await view.findByRole('dialog', { name: 'Playoff replay' });
+    fireEvent.click(within(replay).getByRole('button', { name: 'Got it' }));
+    expect(within(replay).queryByRole('button', { name: 'Back to regular season' })).toBeNull();
+    for (let i = 0; i < Number(row.poGames); i += 1) {
+      reveal(replay);
+      if (i + 1 < Number(row.poGames)) fireEvent.click(within(replay).getByRole('button', { name: 'Next playoff game' }));
+    }
+    expect(within(replay).getByText(row.teamResult)).toBeInTheDocument();
+    expect(within(replay).getByText(String(row.poLine))).toBeInTheDocument();
+    fireEvent.click(within(replay).getByRole('button', { name: 'Back to your season' }));
+    await waitFor(() => expect(document.activeElement).toBe(opener));
+    expect(view.queryByRole('dialog', { name: 'Playoff replay' })).toBeNull();
+    expect(localStorage.getItem(MLB_CAREER_SPORT.saveKey)).toBe(saved);
+    expect(onPlay).not.toHaveBeenCalled();
+    expect(random).not.toHaveBeenCalled();
   });
 });

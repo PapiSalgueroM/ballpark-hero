@@ -347,7 +347,7 @@ export function usPlayoffDepth(bind: UsSeasonBind, teamResult: string): { rounds
  *  out of it is made here, in the same order, so the path is what it was. null:
  *  no postseason, an unknown result, or playoff numbers on the save that
  *  disagree with the result (then nothing is drawn). */
-export function usPlayoffLay(given: UsSeasonBind, row: UsRow, ctx: UsSeasonCtx, key: string): UsPlayoffLay | null {
+export function usPlayoffLay(given: UsSeasonBind, row: UsRow, ctx: UsSeasonCtx | null, key: string): UsPlayoffLay | null {
   /* Round 1212: the bind as it stands for that season (the same object for a sport with one format) */
   const bind = usBindOf(given, row.year);
   if (bind.pathFrom !== undefined && row.year < bind.pathFrom) return null;
@@ -360,7 +360,7 @@ export function usPlayoffLay(given: UsSeasonBind, row: UsRow, ctx: UsSeasonCtx, 
   /* opponents: the last round of the bracket is the other conference's team, every earlier round his own */
   const unnamed = bind.view.words.unnamed;
   let slots: (number | null)[] = Array.from({ length: n }, () => null);
-  if (ctx.shape && ctx.order.length > 1 && bind.pathNamed !== false) {
+  if (ctx?.shape && ctx.order.length > 1 && bind.pathNamed !== false) {
     const conf = shuffled(Array.from({ length: ctx.confSlots }, (_, i) => i + 1), rng);
     const other = shuffled(Array.from({ length: ctx.order.length - 1 - ctx.confSlots }, (_, i) => ctx.confSlots + 1 + i), rng);
     slots = Array.from({ length: n }, (_, r) => {
@@ -392,7 +392,7 @@ export function usPlayoffLay(given: UsSeasonBind, row: UsRow, ctx: UsSeasonCtx, 
     series: Array.from({ length: n }, (_, r) => {
       const pair = bind.series ? bind.series[r] : ([1, 1] as const);
       const slot = slots[r];
-      return { round: bind.rounds[r], opp: slot === null ? unnamed : ctx.names[slot], slot, won: wonAt(r), need: pair ? pair[0] : 0, most: pair ? pair[1] : 0, games: games[r] };
+      return { round: bind.rounds[r], opp: slot === null ? unnamed : ctx?.names[slot] ?? unnamed, slot, won: wonAt(r), need: pair ? pair[0] : 0, most: pair ? pair[1] : 0, games: games[r] };
     }),
   };
 }
