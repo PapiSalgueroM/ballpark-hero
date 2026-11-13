@@ -97,7 +97,7 @@ export function UsSeasonCentreEntry({ sport, career, busy, onPlay, played }: {
   /* a season he already played (he answered a contract talk with "play it out", or just wants it again) */
   const last = career.seasons.length ? career.seasons[career.seasons.length - 1] : null;
   const lastHeld = last && sport.seasonCentreHeld?.(last.year, career.eraId, { pos: career.pos, team: last.team });
-  const heldReplay = !!(last && lastHeld && sport.canReplayHeldPlayoffs?.(career, last));
+  const heldReplay = !!(last && lastHeld && sport.canReplayPlayoffs?.(career, last));
   const watchLast = centre && playable(last) && (!lastHeld || heldReplay) ? last : null;
   const watch = async (e: MouseEvent<HTMLButtonElement>) => {
     if (busy || loading || !centre || !watchLast) return;
@@ -106,7 +106,7 @@ export function UsSeasonCentreEntry({ sport, career, busy, onPlay, played }: {
     const ready = await centre.ready(from);
     if (!alive.current) return;
     setLoading(null);
-    if (ready) centre.open({ career, row: watchLast, from });
+    if (ready) centre.open({ career, row: watchLast, playoffsOnly: heldReplay, from });
   };
   return (
     <span data-season-centre-entry className="mt-2 block sm:ml-2 sm:mt-0 sm:inline-block">

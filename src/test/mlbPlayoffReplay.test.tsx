@@ -2,6 +2,7 @@ import { MemoryRouter } from 'react-router-dom';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { cleanup, fireEvent, render, waitFor, within } from '@testing-library/react';
 import UsSeasonCentre from '@/components/us-career/season/UsSeasonCentre';
+import CareerSeasonReview from '@/components/us-career/CareerSeasonReview';
 import { UsSeasonCentreEntry } from '@/components/us-career/season/UsSeasonCentreEntry';
 import { UsSeasonCentreHost } from '@/components/us-career/season/UsSeasonCentreHost';
 import { MLB_CAREER_SPORT } from '@/lib/mlbCareerSport';
@@ -284,5 +285,33 @@ describe('MLB playoff replay from the real season viewer', { timeout: 90000 }, (
     expect(localStorage.getItem(MLB_CAREER_SPORT.saveKey)).toBe(saved);
     expect(onPlay).not.toHaveBeenCalled();
     expect(random).not.toHaveBeenCalled();
+  });
+
+  it('replays a prior saved postseason from the selected Career Log year after retirement', async () => {
+    const { career, row } = savedPitcher('SP');
+    career.retired = true;
+    career.seasons.push({ ...row, year: row.year + 1, teamResult: 'Missed October' });
+    const saved = JSON.stringify({ c: career, phase: 'retired', teamQuality: 80, coach: null });
+    localStorage.setItem(MLB_CAREER_SPORT.saveKey, saved);
+    const sport = mlbViewerSport();
+    const view = render(<MemoryRouter><UsSeasonCentreHost sport={sport}>
+      <CareerSeasonReview sport={sport} career={career} onBack={vi.fn()} backLabel="Back to retirement" />
+    </UsSeasonCentreHost></MemoryRouter>);
+    fireEvent.click(view.getByRole('button', { name: `Review ${row.year + 1} season` }));
+    fireEvent.click(view.getByRole('button', { name: /^Postseason$/ }));
+    expect(view.queryByRole('button', { name: 'Replay team playoffs' })).toBeNull();
+    fireEvent.click(view.getByRole('button', { name: 'Back to seasons' }));
+    fireEvent.click(view.getByRole('button', { name: `Review ${row.year} season` }));
+    fireEvent.click(view.getByRole('button', { name: /^Postseason$/ }));
+    const opener = view.getByRole('button', { name: 'Replay team playoffs' });
+    fireEvent.click(opener);
+    const replay = await view.findByRole('dialog', { name: 'Playoff replay' });
+    expect(within(replay).getByText(`Playoff game 1 of ${row.poGames}`)).toBeInTheDocument();
+    fireEvent.click(within(replay).getByRole('button', { name: 'Got it' }));
+    fireEvent.click(within(replay).getByRole('button', { name: 'Back to your season' }));
+    await waitFor(() => expect(document.activeElement).toBe(opener));
+    expect(view.getByRole('heading', { name: `${row.year} season` })).toBeInTheDocument();
+    expect(view.getByRole('button', { name: /^Postseason$/ })).toHaveAttribute('aria-pressed', 'true');
+    expect(localStorage.getItem(MLB_CAREER_SPORT.saveKey)).toBe(saved);
   });
 });

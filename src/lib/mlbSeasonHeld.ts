@@ -79,10 +79,10 @@ export function mlbSeasonHeld(year: number, eraId: string | undefined, who?: { p
   return mlbHeldPos(who?.pos) ?? mlbHeldLine(year, who?.team, eraId);
 }
 
-/** A saved team playoff replay can cover pitchers without laying out their regular-season decisions. */
-export function canReplayMlbPitcherPlayoffs(pos: string, eraId: string | undefined, row: Pick<MlbSeasonLine, 'year' | 'team' | 'teamResult' | 'poGames'>): boolean {
-  const { year, team, teamResult, poGames } = row;
-  if (!(MLB_PITCHERS as readonly string[]).includes(pos) || year < MLB_PLAYOFF_FORMAT.from || !mlbClubInLeague(team, eraId)
+/** A team playoff replay needs only the saved finish and a game count that fits the format. */
+export function canReplayMlbPlayoffs(eraId: string | undefined, row: Pick<MlbSeasonLine, 'year' | 'team' | 'teamResult' | 'games' | 'poGames'>): boolean {
+  const { year, team, teamResult, games, poGames } = row;
+  if (!(games > 0) || year < MLB_PLAYOFF_FORMAT.from || !mlbClubInLeague(team, eraId)
     || typeof poGames !== 'number' || !Number.isInteger(poGames)) return false;
   const finish = mlbPlayoffResults(year).indexOf(teamResult);
   if (finish < 0) return false;

@@ -28,6 +28,7 @@ export interface UsSeasonCentreProps {
   sport: UsCareerSport;
   career: UsCareerCore;
   row: UsCareerSeason;
+  playoffsOnly?: boolean;
   onClose: () => void;
 }
 
@@ -132,7 +133,7 @@ class CentreBoundary extends Component<{ onClose: () => void; children: ReactNod
   }
 }
 
-function CentreBody({ sport, career, row, onClose }: UsSeasonCentreProps) {
+function CentreBody({ sport, career, row, playoffsOnly, onClose }: UsSeasonCentreProps) {
   const [bind, setBind] = useState<UsSeasonBind | null>(null);
   const [failed, setFailed] = useState(false);
   const [tries, setTries] = useState(0);
@@ -146,20 +147,20 @@ function CentreBody({ sport, career, row, onClose }: UsSeasonCentreProps) {
     load().then(b => { if (live) setBind(b); }).catch(() => { if (live) setFailed(true); });
     return () => { live = false; };
   }, [sport, tries]);
-  const built = useMemo(() => (bind ? buildUsSeason(bind, career, row as UsRow, sport.teamLabelOf) : null), [bind, career, row, sport]);
+  const built = useMemo(() => (bind && !playoffsOnly ? buildUsSeason(bind, career, row as UsRow, sport.teamLabelOf) : null), [bind, career, row, sport, playoffsOnly]);
   const season = useMemo(() => (built && built.ok === true ? deriveSeason(built.sport, row as UsRow, built.ctx) : null), [built, row]);
   const model = useMemo(
     () => (bind && built && built.ok === true && season ? buildUsModel(sport, bind, career, row as UsRow, built.ctx, season, built.key) : null),
     [bind, built, season, sport, career, row],
   );
   const replay = useMemo(() => {
-    if (!bind || !built) return null;
-    if (built.ok === true) return buildMlbPlayoffReplay(bind, row as UsRow, built.ctx, built.key);
-    if (built.why !== 'held' || row.games <= 0 || !sport.canReplayHeldPlayoffs?.(career, row)) return null;
+    if (!bind) return null;
+    if (built?.ok === true) return buildMlbPlayoffReplay(bind, row as UsRow, built.ctx, built.key);
+    if (!playoffsOnly || !sport.canReplayPlayoffs?.(career, row)) return null;
     return buildMlbPlayoffReplay(bind, row as UsRow, null, usSeasonKey(bind, career, row as UsRow));
-  }, [bind, built, row, career, sport]);
+  }, [bind, built, row, career, sport, playoffsOnly]);
   if (failed) return <CentreTile title={TITLE} text="The season could not be loaded. Your career is safe." exitLabel={EXIT} onClose={onClose} onRetry={() => setTries(n => n + 1)} />;
-  if (!bind || !built) {
+  if (!bind) {
     return (
       <div className="fixed inset-0 z-50 flex items-center justify-center bg-background p-4" data-season-centre-loading>
         <div className="space-y-3 rounded-2xl border border-border bg-card px-4 py-3 text-center">
@@ -169,9 +170,10 @@ function CentreBody({ sport, career, row, onClose }: UsSeasonCentreProps) {
       </div>
     );
   }
-  if (built.ok === false) return replay
+  if (playoffsOnly) return replay
     ? <MlbPlayoffReplay replay={replay} club={sport.teamLabelOf(row.team, career.eraId)} year={row.year} onClose={onClose} />
-    : <CentreTile title={TITLE} text={built.why === 'held' ? built.line : CANNOT} exitLabel={EXIT} onClose={onClose} />;
+    : <CentreTile title={TITLE} text="The saved team playoffs cannot be replayed." exitLabel={EXIT} onClose={onClose} />;
+  if (!built || built.ok === false) return <CentreTile title={TITLE} text={built?.ok === false && built.why === 'held' ? built.line : CANNOT} exitLabel={EXIT} onClose={onClose} />;
   if (!model) return <CentreTile title={TITLE} text={CANNOT} exitLabel={EXIT} onClose={onClose} />;
   const backToRegular = () => {
     setPart('regular');

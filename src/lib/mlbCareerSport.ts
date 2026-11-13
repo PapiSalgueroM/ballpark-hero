@@ -30,7 +30,7 @@ import { bindUsProgrammeSeason } from '@/lib/usCareerProgramme';
 import { repairBankOnLoad, withBankFloor } from '@/lib/usCareerBank';
 import { MLB_CAREER_HALL } from '@/lib/mlbCareerHall';
 import { mlbSeasonReview } from '@/lib/usCareerSeasonReview';
-import { canReplayMlbPitcherPlayoffs, mlbSeasonHeld } from '@/lib/mlbSeasonHeld';
+import { canReplayMlbPlayoffs, mlbSeasonHeld } from '@/lib/mlbSeasonHeld';
 
 /* Release AV: the planning panel's games and counting targets follow the season this engine plays (the
    ProgrammeSeasonShape of src/lib/usCareerProgramme.ts): the same reader of the ledger and the same
@@ -154,5 +154,5 @@ export const MLB_CAREER_SPORT: UsCareerSport<MlbCareerState, MlbSeasonLine> = wi
      game by game view before he presses. */
   loadSeasonCentre: () => import('@/lib/season/mlb').then(m => m.MLB_SEASON),
   seasonCentreHeld: (year, eraId, who) => mlbSeasonHeld(year, eraId, who),
-  canReplayHeldPlayoffs: (career, row) => canReplayMlbPitcherPlayoffs(career.pos, career.eraId, row),
+  canReplayPlayoffs: (career, row) => canReplayMlbPlayoffs(career.eraId, row),
 });
