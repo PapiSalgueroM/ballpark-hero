@@ -112,7 +112,8 @@ export function GameNavbar() {
             played is off centered"). Below lg nothing changes: the wrapping
             flex layout that fixed the Round 129 overlap stays exactly as it
             was, and simMobileChrome still measures every width. */}
-        <div className="flex flex-wrap items-center justify-between gap-x-2 gap-y-1.5 px-3 py-2 lg:grid lg:grid-cols-[1fr_auto_1fr]">
+        {/* The fallback wordmark and Back fit on one row at 320px without a fixed column gap. */}
+        <div className="flex flex-wrap items-center justify-between gap-y-1.5 px-3 py-2 min-[360px]:gap-x-2 lg:grid lg:grid-cols-[1fr_auto_1fr]">
           {/* Logo, left, bigger + stretched */}
           <div className="order-1 flex shrink-0 items-center gap-2 lg:justify-self-start">
             <SiteMenuHost />
