@@ -12,6 +12,7 @@ import {
   nrlContractCounteroffer, nrlContractOffer,
   nrlCoachQuote, nrlCoachSpend, nrlDevelopmentAssistantProgress, nrlDevelopmentPreview, nrlFinanceForecast,
   nrlMedicalSpend, nrlMedicalUpgradeQuote, nrlOffseasonApplication, nrlOffseasonClubs, nrlOffseasonOpportunities,
+  nrlRecruitmentBrief,
   nrlMutualReleaseQuote, nrlMutualReleaseSpend,
   nrlProjectedSummerOpenings, nrlSummerApplication, nrlSummerLastRound,
   type NrlCareerAction, type NrlCareerState,
@@ -329,11 +330,11 @@ function ExpiringDeals({ career, onAction, disabled }: { career: NrlCareerState;
 }
 
 function Recruitment({ career, onAction, disabled }: { career: NrlCareerState; onAction: Dispatch; disabled: boolean }) {
-  const [role, setRole] = useState('');
+  const [role, setRole] = useState<NrlRole | ''>('');
   const [shortlistedOnly, setShortlistedOnly] = useState(false);
   const [visible, setVisible] = useState(12);
   const shortlistFilter = useRef<HTMLButtonElement>(null);
-  const selectRole = (position: string) => { setRole(position); setVisible(12); };
+  const selectRole = (position: NrlRole | '') => { setRole(position); setVisible(12); };
   const nextYear = career.season.year + 1;
   const signed = nextYear <= NRL_LAST_YEAR ? nrlCareerSquad(career, nextYear) : [];
   const depth = NRL_ROLES.map(position => ({
@@ -341,6 +342,7 @@ function Recruitment({ career, onAction, disabled }: { career: NrlCareerState; o
   })).sort((a, b) => a.count - b.count);
   const market = useMemo(() => nrlCareerMarket(career).filter(entry => entry.kind !== 'renewal'), [career]);
   const shortlist = career.shortlist ?? [];
+  const brief = useMemo(() => role && nrlRecruitmentBrief(career, role), [career, role]);
   const filtered = market.filter(({ player }) => (!role || player.role === role) && (!shortlistedOnly || shortlist.includes(player.id)));
   const act: Dispatch = action => {
     if (!onAction(action)) return false;
@@ -388,11 +390,46 @@ function Recruitment({ career, onAction, disabled }: { career: NrlCareerState; o
       )}
       <label className="mt-3 block max-w-xs space-y-1 text-sm font-semibold">
         <span>Position</span>
-        <select className={control} value={role} onChange={event => selectRole(event.target.value)}>
+        <select className={control} value={role} onChange={event => selectRole(event.target.value as NrlRole | '')}>
           <option value="">All positions</option>
           {NRL_ROLES.map(position => <option key={position}>{position}</option>)}
         </select>
       </label>
+      {brief && !shortlistedOnly && (
+        <section className="mt-3 space-y-2 rounded-lg border border-border bg-background p-3 text-sm" aria-labelledby="nrl-recruitment-brief">
+          <h3 id="nrl-recruitment-brief" className="font-bold">{role} recruitment brief</h3>
+          <p className="text-muted-foreground">{brief.signed.length ? `${brief.signed.length} signed for ${brief.year}. ${brief.signed.map(player => player.name).join(', ')}.`
+            : `No player is signed at this position for ${brief.year}.`}</p>
+          {brief.academy && (
+            <p className="text-muted-foreground"><span className="font-semibold text-foreground">Academy option</span>{' '}
+              {brief.academy.player.name} · {brief.academy.player.rating} OVR · {brief.academy.player.potential} potential.{' '}
+              {brief.academy.quote.ok === true ? `One season at ${money(brief.academy.quote.contract.salary)}.` : brief.academy.quote.reason}
+            </p>
+          )}
+          {brief.targets.length ? <>
+            <p className="text-muted-foreground">Simulated ratings. Each cap check uses a one-season offer at the asking salary.</p>
+            <ul aria-label="External targets" className="divide-y divide-border">
+              {brief.targets.map(({ entry, quote }) => {
+                const { player, askingSalary, kind } = entry;
+                const saved = shortlist.includes(player.id);
+                const club = player.contract && kind === 'rival' ? labelForClub(career.season.year, player.contract.clubId) : 'Free agent';
+                return <li key={player.id} className="flex flex-wrap items-center justify-between gap-2 py-2">
+                  <div className="min-w-0">
+                    <p className="break-words font-semibold">{player.name} <span className="font-normal text-muted-foreground">· {club}</span></p>
+                    <p className="text-muted-foreground">{player.rating} OVR · {player.potential} potential · {money(askingSalary)}</p>
+                    <p>{quote.ok === true ? `Fits the ${brief.year} cap and squad` : quote.reason}</p>
+                  </div>
+                  <Button type="button" size="lg" variant="outline" className="px-2" aria-label={`Shortlist ${player.name} from the brief`}
+                    aria-pressed={saved} disabled={disabled || (!saved && shortlist.length >= NRL_SHORTLIST_LIMIT)}
+                    onClick={() => act({ type: 'setShortlist', playerId: player.id, year: career.season.year, saved: !saved })}>
+                    {saved ? 'Shortlisted' : 'Shortlist'}
+                  </Button>
+                </li>;
+              })}
+            </ul>
+          </> : <p className="text-muted-foreground">No eligible external players for {brief.year}.</p>}
+        </section>
+      )}
       {(market.length > 0 || shortlistedOnly) && (
         <div className="mt-3 flex flex-wrap items-center gap-2">
           <Button ref={shortlistFilter} type="button" size="lg" variant="outline" className="px-3" aria-pressed={shortlistedOnly}
