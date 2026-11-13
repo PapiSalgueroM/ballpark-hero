@@ -7,6 +7,7 @@ import { fetchTransferPathPuzzles } from '@/lib/fetchTransferPathPuzzles';
 import { fetchCareerPlayers } from '@/lib/fetchCareerPlayers';
 import {
   buildSeasonIndex,
+  clubOfKey,
   clubSeasonsOf,
   doorsFrom,
   linkedFrom,
@@ -215,23 +216,16 @@ export function useTransferPath(): TransferPathState {
   // requires the SAME club in the SAME season, not just the same club ever.
   const rulePlayers = useMemo(() => playersUnderRule(playerPool, activeRule), [playerPool, activeRule]);
 
-  const playerToClubs = useMemo(() => {
-    const map = new Map<string, Set<string>>();
-    for (const p of playerPool) {
-      map.set(p.name, new Set(p.career.map(s => s.club)));
-    }
-    return map;
-  }, [playerPool]);
-
   /* The everyday graph, kept beside the rule graph so a refusal can say why:
      a name the rule removed, or a link the rule does not allow. */
-  const everydayClubSeasons = useMemo(() => clubSeasonsOf(playerPool), [playerPool]);
+  const everydayClubSeasons = useMemo(() => clubSeasonsOf(playerPool, true), [playerPool]);
   const activeNames = useMemo(
     () => new Set(playerPool.filter(isActivePlayer).map(p => p.name)),
     [playerPool],
   );
 
-  const playerToClubSeasons = useMemo(() => clubSeasonsOf(rulePlayers), [rulePlayers]);
+  const playerToClubSeasons = useMemo(() => activeRule === 'classic' ? everydayClubSeasons : clubSeasonsOf(rulePlayers),
+    [activeRule, everydayClubSeasons, rulePlayers]);
 
   const playersShareClub = useMemo(
     () => (a: string, b: string): string | null => shareClub(playerToClubSeasons, a, b),
@@ -277,7 +271,7 @@ export function useTransferPath(): TransferPathState {
     [playerToClubSeasons, seasonIndex],
   );
 
-  // Helpers returned to board, closures over playerPool / playerToClubs
+  // Helpers returned to board.
   const getAllPlayerNames = useMemo(
     () => () => playerPool.map(p => p.name),
     [playerPool],
@@ -287,8 +281,8 @@ export function useTransferPath(): TransferPathState {
     [playerPool],
   );
   const getPlayerClubs = useMemo(
-    () => (name: string): Set<string> => playerToClubs.get(name) ?? new Set(),
-    [playerToClubs],
+    () => (name: string): Set<string> => new Set(Array.from(everydayClubSeasons.get(name)?.exact ?? [], clubOfKey)),
+    [everydayClubSeasons],
   );
 
   // ── Unlimited, direct useState ────────────────────────────────────────────

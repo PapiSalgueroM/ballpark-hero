@@ -59,11 +59,20 @@ function addSpell(keys: ClubSeasonKeys, club: string, season: string): void {
 }
 
 /** name -> the keys the link rule is judged on */
-export function clubSeasonsOf(players: CareerPlayer[]): Map<string, ClubSeasonKeys> {
+export function clubSeasonsOf(players: CareerPlayer[], includeVerifiedStints = false): Map<string, ClubSeasonKeys> {
   const map = new Map<string, ClubSeasonKeys>();
+  const lampardRows = includeVerifiedStints ? players.filter(player => player.name === 'Frank Lampard') : [];
+  const lampard = lampardRows.length === 1 ? lampardRows[0] : undefined;
+  // Both club match reports verify the 2015 teammates. This is a Transfer Path
+  // edge only, so career-clue rows and the saved reveal counts stay intact.
+  // https://www.newyorkcityfc.com/news/new-york-city-fc-dc-united-recap
+  // https://www.dcunited.com/news/dc-united-clinches-berth-audi-2015-mls-cup-playoffs
+  const verifiedLampard = lampard?.nationality === 'England' && lampard.position === 'CM'
+    && lampard.career.some(stint => stint.club === 'Chelsea' && stint.season === '2013-2014') ? lampard : undefined;
   for (const p of players) {
     const keys: ClubSeasonKeys = { exact: new Set(), calendar: new Set(), span: new Set() };
     for (const s of p.career) addSpell(keys, s.club, s.season);
+    if (p === verifiedLampard) addSpell(keys, 'New York City FC', '2015');
     map.set(p.name, keys);
   }
   return map;

@@ -115,7 +115,7 @@ if (CONTROL === 'page' || CONTROL === 'pageshare') {
 const ENTRY = path.join(os.tmpdir(), 'tps-entry.mjs'), BUNDLE = path.join(os.tmpdir(), 'tps-bundle.mjs');
 const p = f => f.replaceAll('\\', '/');
 globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };
-fs.writeFileSync(ENTRY, `export { buildSeasonIndex, clubSeasonsOf, linkedFrom, shareClub } from '${p(graphTsPath)}';\nexport { isEuropeanClub, playersUnderRule } from '${p(ROOT)}/src/lib/transferPathModes.ts';\n`);
+fs.writeFileSync(ENTRY, `export { buildSeasonIndex, clubSeasonsOf, linkedFrom, shareClub } from '${p(graphTsPath)}';\nexport { isEuropeanClub, playersUnderRule } from '${p(ROOT)}/src/lib/transferPathModes.ts';\nexport { careerPlayers as fallbackPlayers } from '${p(ROOT)}/src/data/careerPlayers.ts';\nexport { default as fallbackPuzzles } from '${p(ROOT)}/src/data/transferPathPuzzles.ts';\n`);
 await build({ entryPoints: [ENTRY], bundle: true, format: 'esm', platform: 'node', outfile: BUNDLE, logLevel: 'error', alias: { '@': path.join(ROOT, 'src') } });
 const page = await import(pathToFileURL(BUNDLE).href);
 
@@ -347,6 +347,53 @@ console.log('5) the chain from the report: Julián Álvarez, Enzo Fernández, Mo
   }
   const oldRow = before.adj.get('Julián Álvarez')?.get('Enzo Fernández');
   if (oldRow) fail('the old rule already linked Julián Álvarez and Enzo Fernández, so this harness is not measuring the reported defect');
+}
+
+if (!CONTROL) {
+  console.log('6) the verified 2015 New York City FC graph stint and retained puzzle minimums');
+  const pool = page.fallbackPlayers;
+  const beforeKeys = page.clubSeasonsOf(pool);
+  const afterKeys = page.clubSeasonsOf(pool, true);
+  const beforeIndex = page.buildSeasonIndex(beforeKeys);
+  const afterIndex = page.buildSeasonIndex(afterKeys);
+  const lampard = 'Frank Lampard';
+  const villa = 'David Villa';
+  const messi = 'Lionel Messi';
+  const oldNeighbours = new Set([...page.linkedFrom(beforeIndex, beforeKeys.get(lampard))].map(step => step.name));
+  const gained = [...new Set([...page.linkedFrom(afterIndex, afterKeys.get(lampard))].map(step => step.name))]
+    .filter(name => !oldNeighbours.has(name)).sort();
+  if (gained.join('|') !== 'Andrea Pirlo|David Villa'
+    || page.shareClub(afterKeys, lampard, villa) !== 'New York City FC'
+    || page.shareClub(afterKeys, villa, messi) !== 'Barcelona') fail('the reported two-link path and Pirlo companion edge must come from the verified stint');
+
+  for (const rule of ['active', 'europe']) {
+    const keys = page.clubSeasonsOf(page.playersUnderRule(pool, rule));
+    if (page.shareClub(keys, lampard, villa) !== null) fail(`the added link must stay outside ${rule}`);
+  }
+
+  const shortest = (keys, index, start) => {
+    const result = new Map([[start, 0]]);
+    const queue = [start];
+    for (let i = 0; i < queue.length; i++) {
+      const current = queue[i];
+      for (const { name } of page.linkedFrom(index, keys.get(current))) {
+        if (result.has(name)) continue;
+        result.set(name, result.get(current) + 1);
+        queue.push(name);
+      }
+    }
+    return result;
+  };
+  const pulled = read(path.join(ROOT, 'scripts/data/transferPathPull/puzzles.txt')).trim().split('\n')
+    .map(line => { const [id, playerA, playerB] = line.split('|'); return { id, playerA, playerB }; });
+  const puzzles = [...new Map([...pulled, ...page.fallbackPuzzles].map(puzzle => [puzzle.id, puzzle])).values()];
+  for (const { id, playerA, playerB } of puzzles) {
+    if (!beforeKeys.has(playerA) || !afterKeys.has(playerA)) { fail(`${id} start is absent from the career pool`); continue; }
+    const prior = shortest(beforeKeys, beforeIndex, playerA).get(playerB);
+    const next = shortest(afterKeys, afterIndex, playerA).get(playerB);
+    if (prior !== next) fail(`${id} shortest length changed from ${prior} to ${next}`);
+  }
+  console.log(`   ${puzzles.length} retained and fallback shortest lengths match; Everyday gains the two verified links.`);
 }
 
 console.log('');
