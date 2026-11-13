@@ -5677,13 +5677,8 @@ export { SAVE_KEY } from '@/lib/clubManagerSaveKeys';
 // so they must start fresh.
 const SAVE_VERSION = 3;
 
-/** Limit for new signings and promotions. A returning loanee is already yours. */
+/** Active-squad limit for new signings. Existing contracts can carry over it. */
 export const SQUAD_LIMIT = 30;
-
-/** Owned players out on loan still count toward room for a new player. */
-export function squadRegistrationCount(career: Pick<CareerState, 'squad' | 'loanedOut'>): number {
-  return (career.squad?.length ?? 0) + (career.loanedOut?.length ?? 0);
-}
 
 /**
  * How far the club will top its own squad up to over the summer, out of the
@@ -8720,7 +8715,7 @@ export function freeAgentBlock(career: CareerState, fa: FreeAgent): FreeAgentBlo
     || (career.retiredNames ?? []).includes(fa.name)) return 'notInPool';
   if (fa.fromMyClub && fa.since === career.season && !(fa.reason === 'expired' && canonical)) return 'justLeft';
   if (!freeAgentInterest(career, fa)) return 'notInterested';
-  if (squadRegistrationCount(career) >= SQUAD_LIMIT) return 'squadFull';
+  if (career.squad.length >= 30) return 'squadFull';
   const bill = wageBill(career);
   const terms = freeAgentTerms(fa, career);
   if (bill + terms.wage > wageCapOf(career, bill)) return 'overCap';
@@ -10542,7 +10537,7 @@ function trackDealExtremes(state: CareerState, dir: 'in' | 'out', name: string, 
 export function signingRefusal(career: CareerState, mp: MarketPlayer, fee: number): string | null {
   if (career.transferWindow === null) return 'The transfer window is shut.';
   if (fee > career.budget) return `That costs ${money(fee, career)} and you have ${money(career.budget, career)}.`;
-  if (squadRegistrationCount(career) >= SQUAD_LIMIT) return 'Your squad is full at 30. Somebody has to leave first.';
+  if (career.squad.length >= 30) return 'Your squad is full at 30. Somebody has to leave first.';
   if (career.squad.some(p => p.name === mp.name)) return `${mp.name} is already in your squad.`;
   /* Round 619 review: a man you released does not come back through a deal
      either, whatever screen the deal started on. */
@@ -10579,7 +10574,7 @@ export function doorRefusal(career: CareerState, mp: MarketPlayer, door: MarketD
   }
   if (career.transferWindow === null) return 'The transfer window is shut.';
   if (career.negotiation && career.negotiation.status === 'open') return 'You are already in talks for somebody. Finish that deal or walk away first.';
-  if (squadRegistrationCount(career) >= SQUAD_LIMIT) return 'Your squad is full at 30. Somebody has to leave first.';
+  if (career.squad.length >= 30) return 'Your squad is full at 30. Somebody has to leave first.';
   if (career.squad.some(p => p.name === mp.name)) return `${mp.name} is already in your squad.`;
   if ((career.coldNames ?? []).includes(mp.name)) return `${mp.club} walked away from you this window. They will not talk about ${mp.name} again until it shuts.`;
   /* Round 634 review: refused at the door, with the real reason. Before this
@@ -11745,7 +11740,7 @@ export function offerTerms(career: CareerState, offer: PersonalTerms): CareerSta
     if (!signed) {
       const swapId = neg.agreedExtras?.swapId;
       const swapMan = swapId ? career.squad.find(p => p.id === swapId) : undefined;
-      const why = squadRegistrationCount(career) >= SQUAD_LIMIT
+      const why = career.squad.length >= 30
         ? 'The squad is full at 30. Someone has to leave before he can sign.'
         : (swapId && !swapMan)
           ? 'The player you put in the deal is no longer here, so the fee no longer stands.'
@@ -20858,7 +20853,7 @@ export function promoteProspect(career: CareerState, prospectId: string): Career
   const idx = a.prospects.findIndex(p => p.id === prospectId);
   if (idx < 0) return null;
   const pr = a.prospects[idx];
-  if (squadRegistrationCount(next) >= SQUAD_LIMIT) return null;
+  if (next.squad.length >= 30) return null;
   if (pr.fee > next.budget) return null;
   a.prospects.splice(idx, 1);
   next.budget = Math.round((next.budget - pr.fee) * 10) / 10;

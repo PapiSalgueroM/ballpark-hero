@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import {
-  buyPlayer, doorRefusal, freeAgentBlock, loadCareer, promoteProspect,
+  buyPlayer, doorRefusal, freeAgentBlock, loadCareer, promoteProspect, releasedByYou,
   recallLoanedPlayer, SAVE_KEY, saveCareer, signFreeAgent, startCareer, startNextSeason,
   type CareerState, type CMPlayer, type FreeAgent, type MarketPlayer, type Prospect,
 } from '@/lib/clubManager';
@@ -66,24 +66,37 @@ describe('Club Manager squad capacity with loans', () => {
     ['transfer', (career: CareerState) => buyPlayer(career, market)],
     ['free agent', (career: CareerState) => signFreeAgent(career, freeAgent.name)],
     ['academy', (career: CareerState) => promoteProspect(career, prospect.id)],
-  ] as const)('reserves a place for an owned loan through the %s path', (_label, add) => {
+  ] as const)('keeps the active-squad limit for the %s path', (_label, add) => {
     const career = fixture();
-    career.squad = career.squad.slice(0, 29);
     career.loanedOut = career.loanedOut!.slice(0, 1);
     const before = JSON.stringify(career);
     expect(add(career) === null).toBe(true);
     expect(JSON.stringify(career) === before).toBe(true);
-    expect(add({ ...career, squad: career.squad.slice(0, 28) })?.squad).toHaveLength(29);
+    expect(add({ ...career, squad: career.squad.slice(0, 29) })?.squad).toHaveLength(30);
+    const next = startNextSeason(career);
+    expect(next.squad).toHaveLength(31);
+    expect(add(next)).toBeNull();
   });
 
-  it('blocks new talks at the limit and can still recall a player already counted', () => {
+  it('blocks new talks at the active limit and can still recall a player into the 30th place', () => {
     const career = fixture();
-    career.squad = career.squad.slice(0, 29);
     career.loanedOut = career.loanedOut!.slice(0, 1);
     expect(doorRefusal(career, market, 'talk')).toBe('Your squad is full at 30. Somebody has to leave first.');
     expect(freeAgentBlock(career, freeAgent)).toBe('squadFull');
-    const recalled = recallLoanedPlayer(career, career.loanedOut[0].player.id);
+    const recalled = recallLoanedPlayer({ ...career, squad: career.squad.slice(0, 29) }, career.loanedOut[0].player.id);
     expect(recalled?.squad).toHaveLength(30);
     expect(recalled?.loanedOut).toEqual([]);
+  });
+
+  it('loads legacy free agents from the old summer trim without a permanent release ban', () => {
+    const career = fixture();
+    career.squad = career.squad.slice(0, 29);
+    career.freeAgents = [{ ...freeAgent, reason: 'released', fromMyClub: true, trimmed: true }];
+    expect(saveCareer(career)).toBe(true);
+    const loaded = loadCareer()!;
+    const legacy = loaded.freeAgents?.find(player => player.name === freeAgent.name);
+    expect(legacy?.trimmed).toBe(true);
+    expect(releasedByYou(legacy!)).toBe(false);
+    expect(freeAgentBlock(loaded, legacy!)).toBe('justLeft');
   });
 });

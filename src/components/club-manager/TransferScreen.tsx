@@ -22,7 +22,7 @@ import {
   termsVerdict, valuationLine, wageRoom, wageRoomLine,
 } from '@/lib/clubManagerDeals';
 import type { PersonalTerms } from '@/lib/clubManagerDeals';
-import { ROLE_INFO, ROLE_LADDER, SQUAD_LIMIT, squadRegistrationCount, wageBill, wageCapOf } from '@/lib/clubManager';
+import { ROLE_INFO, ROLE_LADDER, wageBill, wageCapOf } from '@/lib/clubManager';
 import type { SquadRole } from '@/lib/clubManager';
 import type { Position } from '@/types/game';
 import { ratingTint, MadeUpTag } from '@/components/club-manager/SquadScreen';
@@ -1028,8 +1028,8 @@ export function TransferScreen({
               <p className="text-xs text-muted-foreground text-center py-4">No players match your search.</p>
             )}
           </div>
-          {squadRegistrationCount(career) >= SQUAD_LIMIT && (
-            <p className="text-[10px] text-yellow-400">Squad is full. Players out on loan count toward the {SQUAD_LIMIT}-player limit.</p>
+          {career.squad.length >= 30 && (
+            <p className="text-[10px] text-yellow-400">Squad is full (30). Sell before you buy.</p>
           )}
         </div>
       ) : (

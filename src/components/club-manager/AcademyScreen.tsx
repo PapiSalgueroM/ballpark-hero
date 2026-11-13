@@ -3,7 +3,7 @@ import { cn } from '@/lib/utils';
 import { GraduationCap, Search, ArrowUpCircle } from 'lucide-react';
 import {
   SCOUT_REGIONS, SCOUT_TRIPS, MAX_SCOUTS, MAX_PROSPECTS,
-  academyUpgradeCost, tripCost, money, moneyIn, SQUAD_LIMIT, squadRegistrationCount,
+  academyUpgradeCost, tripCost, money, moneyIn,
 } from '@/lib/clubManager';
 import { FACILITY_INFO } from '@/lib/clubManagerUiInfo';
 import type { CareerState, FacilityKind, Prospect, Scout } from '@/lib/clubManager';
@@ -150,7 +150,7 @@ export function AcademyScreen({ career, onUpgrade, onHire, onRecall, onPromote, 
   }
 
   const cand = a.candidates.find(c => c.id === picking) ?? null;
-  const squadFull = squadRegistrationCount(career) >= SQUAD_LIMIT;
+  const squadFull = career.squad.length >= 30;
   const positions = [...new Set(a.prospects.map(p => p.position))].sort();
   const ages = [...new Set(a.prospects.map(p => p.age))].sort((x, y) => x - y);
   const prospects = a.prospects
@@ -314,7 +314,7 @@ export function AcademyScreen({ career, onUpgrade, onHire, onRecall, onPromote, 
           <p className="text-[10px] text-muted-foreground">No prospects match those filters. Try another position or age, or reset filters.</p>
         )}
         {squadFull && prospects.length > 0 && (
-          <p className="text-[10px] text-yellow-400 mb-1">The squad is full, including players out on loan. Sell or release someone before you sign another kid.</p>
+          <p className="text-[10px] text-yellow-400 mb-1">Your squad is full. Sell or release someone before you sign another kid.</p>
         )}
         {prospects.map(p => (
           <ProspectRow
