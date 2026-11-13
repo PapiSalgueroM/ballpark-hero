@@ -58,11 +58,74 @@ function finish(career: NrlCareerState) {
 
 afterEach(() => {
   cleanup();
+  vi.restoreAllMocks();
   saveFence.release(NRL_SAVE_KEY);
   localStorage.clear();
 });
 
 describe('NRL league round fixtures', () => {
+  it('previews several regular rounds and saves once when an academy report stops the run', () => {
+    const initial = reduceNrlCareer(createNrlCareer('panthers', 16), { type: 'scoutAcademy', role: 'Halfback' });
+    const bytes = JSON.stringify(initial);
+    open(bytes);
+    const initialFence = Number(localStorage.getItem(fenceKey));
+    const summary = screen.getByText('Fast-forward rounds', { exact: true });
+    fireEvent.click(summary);
+    const drawer = within(summary.closest('details')!);
+    expect(drawer.getByText(/Round 1 · Bye/)).toBeVisible();
+    fireEvent.change(drawer.getByLabelText('Simulate through'), { target: { value: '4' } });
+    expect(raw()).toBe(bytes);
+    fireEvent.click(drawer.getByRole('button', { name: 'Simulate through Round 4' }));
+    expect(drawer.getByRole('status')).toHaveTextContent('Simulated 1 round');
+    expect(drawer.getByRole('status')).toHaveTextContent('An academy report is ready');
+    expect(drawer.getByRole('status')).toHaveFocus();
+    expect(raw()).toBe(JSON.stringify(advance(initial)));
+    expect(Number(localStorage.getItem(fenceKey))).toBe(initialFence + 1);
+  });
+
+  it('retries a refused four-round save without replaying the batch or double-advancing', () => {
+    const initial = createNrlCareer('bears', 1, 2027);
+    const bytes = JSON.stringify(initial);
+    open(bytes);
+    const initialFence = Number(localStorage.getItem(fenceKey));
+    const summary = screen.getByText('Fast-forward rounds', { exact: true });
+    fireEvent.click(summary);
+    const drawer = within(summary.closest('details')!);
+    fireEvent.change(drawer.getByLabelText('Simulate through'), { target: { value: '4' } });
+    fireEvent(summary.closest('details')!, new Event('toggle'));
+    expect(drawer.getByText(/season sponsor, board pathways objective/)).toBeVisible();
+    const write = Storage.prototype.setItem;
+    const spy = vi.spyOn(Storage.prototype, 'setItem').mockImplementation(function (this: Storage, key, value) {
+      if (key === NRL_SAVE_KEY) throw new DOMException('Quota full', 'QuotaExceededError');
+      write.call(this, key, value);
+    });
+    fireEvent.click(drawer.getByRole('button', { name: 'Simulate through Round 4' }));
+    expect(drawer.getByRole('status')).toHaveTextContent('Simulated 4 rounds');
+    expect(raw()).toBe(bytes);
+    spy.mockRestore();
+    fireEvent.click(screen.getByRole('button', { name: 'Retry save' }));
+    let expected = initial;
+    for (let i = 0; i < 4; i++) expected = advance(expected);
+    expect(raw()).toBe(JSON.stringify(expected));
+    expect(Number(localStorage.getItem(fenceKey))).toBe(initialFence + 1);
+  });
+
+  it('leaves a newer tab’s save in place and publishes no simulated receipt', () => {
+    const initial = createNrlCareer('bears', 1, 2027);
+    open(JSON.stringify(initial));
+    const initialFence = localStorage.getItem(fenceKey);
+    const summary = screen.getByText('Fast-forward rounds', { exact: true });
+    fireEvent.click(summary);
+    const drawer = within(summary.closest('details')!);
+    const competing = JSON.stringify(advance(initial));
+    localStorage.setItem(NRL_SAVE_KEY, competing);
+    fireEvent.click(drawer.getByRole('button', { name: 'Simulate through Round 2' }));
+    expect(raw()).toBe(competing);
+    expect(localStorage.getItem(fenceKey)).toBe(initialFence);
+    expect(drawer.queryByRole('status')).not.toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Reload your season' })).toBeVisible();
+  });
+
   it('keeps the club calendar default and shows actual round scores and byes', () => {
     const career = createNrlCareer('storm', 17);
     const bytes = JSON.stringify(career);

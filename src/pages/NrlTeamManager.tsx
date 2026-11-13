@@ -28,8 +28,10 @@ import {
 } from '@/lib/nrlManager';
 import {
   createNrlCareer, isNrlNamedPlayer, loadNrlOpeningMatchdayCareer, loadNrlPerthSigningsCareer, nrlAttackPlanPreview, nrlOppositionReport, nrlPositionTraining,
-  nrlCoachTactics, nrlPositionTrainingCandidates, nrlReserveGradeCandidates, nrlRivalSquad, nrlWorldCupAppointmentAvailable,
-  NRL_POSITION_TRAINING_ROUNDS, NRL_SAVE_MAX_CHARS, reduceNrlCareer, type NrlCareerAction, type NrlCareerState,
+  nrlBoardPathwaysQuote, nrlCoachTactics, nrlPositionTrainingCandidates, nrlReserveGradeCandidates, nrlRivalSquad,
+  nrlSponsorRefusal, nrlTicketPricingRefusal, nrlWorldCupAppointmentAvailable,
+  NRL_FAST_FORWARD_ROUNDS, NRL_POSITION_TRAINING_ROUNDS, NRL_SAVE_MAX_CHARS, reduceNrlCareer, runNrlFastForward,
+  type NrlCareerAction, type NrlCareerState, type NrlFastForwardRequest, type NrlFastForwardStop,
 } from '@/lib/nrlCareer';
 import { nrlScorePoints, nrlScoringLeaders, nrlSquadSeasonStats, nrlTryLeaders, type NrlSquadStatsScope } from '@/lib/nrlPlayerScoring';
 import { NRL_SAVE_ENTRY, nrlSeasonCanCredit, readNrlReplayCutoff, readNrlSaveSlot, writeNrlSaveSlot } from '@/lib/nrlSaveSlots';
@@ -386,8 +388,72 @@ function SeasonFixtures({ season, next }: { season: NrlManagerState; next: NrlNe
   );
 }
 
-function MatchCentre({ career, onAction, onReview, disabled, showLiveResult }: {
-  career: NrlCareerState; onAction: (action: NrlCareerAction) => void; onReview: () => void; disabled: boolean; showLiveResult: boolean;
+const fastForwardStops: Record<NrlFastForwardStop, string> = {
+  injury: 'A player picked up a new injury. Check your squad.',
+  lineup: 'Check your matchday lineup before playing.',
+  academy: 'An academy report is ready in the Club office.',
+  development: 'A training or development plan finished.',
+  applications: 'Check summer job applications in Season review before advancing.',
+  finals: 'The regular season is complete. Play the finals one round at a time.',
+};
+type FastForwardResult = { rounds: number; stop: NrlFastForwardStop | null };
+
+function FastForward({ career, onRun, disabled }: {
+  career: NrlCareerState; onRun: (request: NrlFastForwardRequest) => FastForwardResult | null; disabled: boolean;
+}) {
+  const { year, round, clubId, phase } = career.season;
+  const [expanded, setExpanded] = useState(false);
+  const [target, setTarget] = useState<{ round: number; through: number }>();
+  const [receipt, setReceipt] = useState<(FastForwardResult & { round: number }) | null>(null);
+  const status = useRef<HTMLParagraphElement>(null);
+  const fixtures = phase === 'regular' ? nrlSeasonPlan(year).draw.slice(round - 1, round - 1 + NRL_FAST_FORWARD_ROUNDS) : [];
+  const through = target?.round === round ? target.through : round + 1;
+  const latest = receipt?.round === round ? receipt : null;
+  useEffect(() => { if (latest) status.current?.focus(); }, [latest]);
+  if (fixtures.length < 2 && !latest) return null;
+  const closingChoices = expanded ? [
+    ...(!nrlSponsorRefusal(career) ? ['season sponsor'] : []),
+    ...(!nrlBoardPathwaysQuote(career).reason ? ['board pathways objective'] : []),
+    ...(!nrlTicketPricingRefusal(career) && fixtures.slice(0, through - round + 1).some(roundFixtures =>
+      roundFixtures.some(([home]) => home === clubId)) ? ['ticket prices'] : []),
+  ] : [];
+  return (
+    <details className="rounded-xl border border-border bg-card px-4" onToggle={event => setExpanded(event.currentTarget.open)}>
+      <summary className="flex min-h-11 cursor-pointer items-center font-bold">Fast-forward rounds</summary>
+      <div className="space-y-2 pb-3 text-sm">
+        {latest && <p ref={status} tabIndex={-1} role="status" className="rounded-lg border border-border p-2">
+          {latest.rounds ? `Simulated ${latest.rounds} ${latest.rounds === 1 ? 'round' : 'rounds'}. ` : 'No rounds simulated. '}
+          {latest.stop && fastForwardStops[latest.stop]}
+        </p>}
+        {fixtures.length >= 2 && <>
+          <p className="text-muted-foreground">Simulate up to four regular rounds with your current tactic. The run can stop early for a club decision.</p>
+          <ol className="space-y-1" aria-label="Upcoming club fixtures">
+            {fixtures.map((fixturesInRound, offset) => {
+              const match = fixturesInRound.find(pair => pair.includes(clubId));
+              return <li key={round + offset}>Round {round + offset} · {match ? `${shortName(year, match[0])} vs ${shortName(year, match[1])}` : 'Bye'}</li>;
+            })}
+          </ol>
+          <label className="block space-y-1 font-semibold">
+            <span>Simulate through</span>
+            <select value={through} disabled={disabled} onChange={event => setTarget({ round, through: Number(event.target.value) })}
+              className="min-h-11 w-full rounded-lg border border-input bg-background px-3 sm:max-w-xs">
+              {fixtures.slice(1).map((_, offset) => <option key={round + offset + 1} value={round + offset + 1}>Round {round + offset + 1}</option>)}
+            </select>
+          </label>
+          {closingChoices.length > 0 && <p className="text-muted-foreground">Set these in the Club office first if you want to use them this season: {closingChoices.join(', ')}.</p>}
+          <Button type="button" size="lg" disabled={disabled} className="w-full sm:w-auto" onClick={() => {
+            const result = onRun({ year, clubId, round, through });
+            if (result) setReceipt({ ...result, round: round + result.rounds });
+          }}>Simulate through Round {through}</Button>
+        </>}
+      </div>
+    </details>
+  );
+}
+
+function MatchCentre({ career, onAction, onRun, onReview, disabled, showLiveResult }: {
+  career: NrlCareerState; onAction: (action: NrlCareerAction) => void; onRun: (request: NrlFastForwardRequest) => FastForwardResult | null;
+  onReview: () => void; disabled: boolean; showLiveResult: boolean;
 }) {
   const { season } = career;
   const next = nrlNextRound(season);
@@ -581,6 +647,8 @@ function MatchCentre({ career, onAction, onReview, disabled, showLiveResult }: {
           </Button>
         </div>
       )}
+
+      <FastForward key={`fast-forward-${year}`} career={career} onRun={onRun} disabled={disabled} />
 
       {phase !== 'regular' && (
         <details className="rounded-xl border border-border bg-card px-4">
@@ -1233,6 +1301,18 @@ function NrlManagerScreen({ entry, showSlots, rules }: {
     return true;
   }
 
+  function fastForward(request: NrlFastForwardRequest): FastForwardResult | null {
+    const before = current.current;
+    if (!before || moved) return null;
+    const { state, stop } = runNrlFastForward(before, request);
+    if (state !== before) {
+      const result = persist(state);
+      if (result === 'moved' || result === 'too-large') return null;
+      setShowLiveResult(false);
+    }
+    return stop || state !== before ? { stop, rounds: state.season.round - before.season.round } : null;
+  }
+
   return (
     <>
       <PageSeo title="NRL Team Manager: Rugby League Sim | DoUKnowBall"
@@ -1313,7 +1393,7 @@ function NrlManagerScreen({ entry, showSlots, rules }: {
                 </Button>
               ))}
             </div>
-            {panel === 'match' && <MatchCentre career={career} onAction={dispatch} disabled={moved || retired} showLiveResult={showLiveResult}
+            {panel === 'match' && <MatchCentre career={career} onAction={dispatch} onRun={fastForward} disabled={moved || retired} showLiveResult={showLiveResult}
               onReview={() => { setOffice('history'); setPanel('office'); }} />}
             {live && (panel === 'squad' || panel === 'office') && (
               <p className="rounded-xl border border-border bg-card p-3 text-sm">Finish the live match in Match centre to make changes.</p>
