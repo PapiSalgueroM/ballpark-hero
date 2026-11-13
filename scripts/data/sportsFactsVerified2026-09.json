@@ -5816,6 +5816,183 @@
     ],
     "on": "2026-09-28"
    }
+  },
+  "Jack Della Maddalena": {
+   "record": {
+    "v": "18-4-0",
+    "src": [
+     "https://www.ufc.com/athlete/jack-della-maddalena",
+     "https://www.sherdog.com/fighter/Jack-Della-Maddalena-208155"
+    ],
+    "on": "2026-11-12"
+   },
+   "birthDate": {
+    "v": "1996-09-10",
+    "src": [
+     "https://www.sherdog.com/fighter/Jack-Della-Maddalena-208155",
+     "https://www.fightmatrix.com/fighter-profile/Jack%20Della%20Maddalena/151951/"
+    ],
+    "on": "2026-11-12",
+    "noOfficial": "ufc.com lists an age but does not publish the full birth date on the fighter profile"
+   },
+   "nationality": {
+    "v": "Australia",
+    "src": [
+     "https://www.ufc.com/event/ufc-fight-night-may-02-2026",
+     "https://www.sherdog.com/fighter/Jack-Della-Maddalena-208155"
+    ],
+    "on": "2026-11-12"
+   },
+   "weightClass": {
+    "v": "Welterweight",
+    "src": [
+     "https://www.ufc.com/event/ufc-fight-night-may-02-2026",
+     "https://www.sherdog.com/fighter/Jack-Della-Maddalena-208155"
+    ],
+    "on": "2026-11-12"
+   },
+   "yearsActive": {
+    "v": "2022-2026",
+    "src": [
+     "https://www.ufc.com/athlete/jack-della-maddalena",
+     "https://www.sherdog.com/fighter/Jack-Della-Maddalena-208155"
+    ],
+    "on": "2026-11-12"
+   },
+   "koTko": {
+    "v": 12,
+    "src": [
+     "https://www.ufc.com/athlete/jack-della-maddalena",
+     "https://www.sherdog.com/fighter/Jack-Della-Maddalena-208155"
+    ],
+    "on": "2026-11-12"
+   },
+   "submissions": {
+    "v": 2,
+    "src": [
+     "https://www.ufc.com/athlete/jack-della-maddalena",
+     "https://www.sherdog.com/fighter/Jack-Della-Maddalena-208155"
+    ],
+    "on": "2026-11-12"
+   }
+  },
+  "Steve Erceg": {
+   "record": {
+    "v": "14-5-0",
+    "src": [
+     "https://www.ufc.com/athlete/steve-erceg",
+     "https://champinon.info/mma/steve-erceg/"
+    ],
+    "on": "2026-11-12"
+   },
+   "birthDate": {
+    "v": "1995-07-27",
+    "src": [
+     "https://champinon.info/mma/steve-erceg/",
+     "https://www.rotowire.com/mma/player/steve-erceg-2412"
+    ],
+    "on": "2026-11-12",
+    "noOfficial": "ufc.com lists an age but does not publish the full birth date on the fighter profile"
+   },
+   "nationality": {
+    "v": "Australia",
+    "src": [
+     "https://www.ufc.com/event/ufc-fight-night-july-25-2026",
+     "https://champinon.info/mma/steve-erceg/"
+    ],
+    "on": "2026-11-12"
+   },
+   "weightClass": {
+    "v": "Flyweight",
+    "src": [
+     "https://www.ufc.com/event/ufc-fight-night-july-25-2026",
+     "https://champinon.info/mma/steve-erceg/"
+    ],
+    "on": "2026-11-12"
+   },
+   "yearsActive": {
+    "v": "2023-2026",
+    "src": [
+     "https://www.ufc.com/athlete/steve-erceg",
+     "https://fightiq.net/fighter/steve-erceg"
+    ],
+    "on": "2026-11-12"
+   },
+   "koTko": {
+    "v": 2,
+    "src": [
+     "https://www.ufc.com/athlete/steve-erceg",
+     "https://champinon.info/mma/steve-erceg/"
+    ],
+    "on": "2026-11-12"
+   },
+   "submissions": {
+    "v": 6,
+    "src": [
+     "https://www.ufc.com/athlete/steve-erceg",
+     "https://champinon.info/mma/steve-erceg/"
+    ],
+    "on": "2026-11-12"
+   }
+  },
+  "Quillan Salkilld": {
+   "record": {
+    "v": "13-1-0",
+    "src": [
+     "https://www.ufc.com/athlete/quillan-salkilld?page=1",
+     "https://www.sherdog.com/fighter/Quillan-Salkilld-300317"
+    ],
+    "on": "2026-11-12"
+   },
+   "birthDate": {
+    "v": "1999-12-28",
+    "src": [
+     "https://www.sherdog.com/fighter/Quillan-Salkilld-300317",
+     "https://www.fightmatrix.com/fighter-profile/Quillan%20Salkilld/197493/"
+    ],
+    "on": "2026-11-12",
+    "noOfficial": "ufc.com lists an age but does not publish the full birth date on the fighter profile"
+   },
+   "nationality": {
+    "v": "Australia",
+    "src": [
+     "https://www.ufc.com/event/ufc-fight-night-august-08-2026",
+     "https://www.sherdog.com/fighter/Quillan-Salkilld-300317"
+    ],
+    "on": "2026-11-12"
+   },
+   "weightClass": {
+    "v": "Lightweight",
+    "src": [
+     "https://www.ufc.com/event/ufc-fight-night-august-08-2026",
+     "https://www.sherdog.com/fighter/Quillan-Salkilld-300317"
+    ],
+    "on": "2026-11-12"
+   },
+   "yearsActive": {
+    "v": "2025-2026",
+    "src": [
+     "https://www.ufc.com/athlete/quillan-salkilld?page=1",
+     "https://www.sherdog.com/fighter/Quillan-Salkilld-300317"
+    ],
+    "on": "2026-11-12"
+   },
+   "koTko": {
+    "v": 5,
+    "src": [
+     "https://www.ufc.com/athlete/quillan-salkilld?page=1",
+     "https://www.sherdog.com/fighter/Quillan-Salkilld-300317"
+    ],
+    "on": "2026-11-12"
+   },
+   "submissions": {
+    "v": 5,
+    "src": [
+     "https://www.ufc.com/athlete/quillan-salkilld?page=1",
+     "https://www.sherdog.com/fighter/Quillan-Salkilld-300317"
+    ],
+    "on": "2026-11-12"
+   }
   }
  },
  "ufcChain": {
