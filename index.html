@@ -233,7 +233,9 @@
     @media (prefers-color-scheme:light){#dukb-boot{background:hsl(210 20% 98%)}}
     @media (prefers-reduced-motion:reduce){#dukb-boot img{animation:none}}
     #dukb-home-copy{max-height:100vh;overflow:hidden}
+    .dukb-js #dukb-home-copy,.dukb-js #dukb-home-copy :is(h1,h2){font-family:system-ui,sans-serif}
   </style>
+  <script>document.documentElement.classList.add('dukb-js')</script>
   <noscript><style>#dukb-boot{display:none}#dukb-home-copy{max-height:none;overflow:visible}</style></noscript>
 </head>
   <body>
