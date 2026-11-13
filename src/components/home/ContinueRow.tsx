@@ -1,8 +1,9 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, History } from 'lucide-react';
-import { describeSave, savedGames, type SavedGame } from '@/data/continueSaves';
+import { CONTINUE_SAVES, describeSave, savedGames, type SavedGame } from '@/data/continueSaves';
 import { sportOf } from '@/data/homeFront';
+import { homeSaveStorage, useHomeSaveRefresh } from './homeSaveRefresh';
 import { SportGlyph, sportStyle } from './SportGlyph';
 import styles from './HomeLaunchDeck.module.css';
 
@@ -10,13 +11,7 @@ import styles from './HomeLaunchDeck.module.css';
     has nothing on it that reads cleanly. */
 export const SAVED_FALLBACK = 'Saved in this browser';
 
-function browserStorage(): Storage | null {
-  try {
-    return typeof window !== 'undefined' ? window.localStorage : null;
-  } catch {
-    return null;
-  }
-}
+const continueKeys = new Set(CONTINUE_SAVES.flatMap(entry => [entry.saveKey, ...(entry.alternateSaveKeys ?? [])]));
 
 /**
  * Round 717: Continue playing, under the Main Event band.
@@ -25,35 +20,28 @@ function browserStorage(): Storage | null {
  * straight back into it. A visitor with no saves gets nothing at all, not an
  * empty box, so the first screen of a new visitor is exactly what it was.
  *
- * Which cards show is decided on the first render from whether each key
- * exists, so the row's size never changes after it appears. What each card
- * says (a club and a season, a fighter and his fight count) comes from the
- * save itself, opened after the page has drawn, and lands inside a line that
- * already holds its height. src/data/continueSaves.ts holds the list and the
- * reading rules; scripts/simHomeFront.mjs section 7 checks both.
+ * The first render reads only which saves exist. After mount, a change to
+ * one of those keys or a return to the page refreshes the links and labels.
+ * The label fits a line that already holds its height.
  */
 export function ContinueRow() {
-  const [saved] = useState<SavedGame[]>(() => savedGames(browserStorage()));
-  const [lines, setLines] = useState<Record<string, string>>({});
-
-  useEffect(() => {
-    if (saved.length === 0) return;
-    const refresh = () => {
-      const storage = browserStorage();
-      const next: Record<string, string> = {};
-      for (const { entry } of saved) {
-        let raw: string | null = null;
-        try { raw = storage ? storage.getItem(entry.saveKey) : null; } catch { raw = null; }
-        const line = describeSave(entry, raw);
-        if (line) next[entry.path] = line;
-      }
-      setLines(next);
-    };
-    refresh();
-    window.addEventListener('storage', refresh);
-    window.addEventListener('focus', refresh);
-    return () => { window.removeEventListener('storage', refresh); window.removeEventListener('focus', refresh); };
-  }, [saved]);
+  const [{ saved, lines }, setResume] = useState<{ saved: SavedGame[]; lines: Record<string, string> }>(
+    () => ({ saved: savedGames(homeSaveStorage()), lines: {} }),
+  );
+  const refresh = useCallback((storage: Storage | null) => {
+    const current = savedGames(storage);
+    const descriptions: Record<string, string> = {};
+    for (const { entry } of current) {
+      let raw: string | null = null;
+      try { raw = storage?.getItem(entry.saveKey) ?? null; } catch { /* show the browser fallback */ }
+      const line = describeSave(entry, raw);
+      if (line) descriptions[entry.path] = line;
+    }
+    setResume(previous => previous.saved.length === current.length && current.every(({ entry }, i) =>
+      previous.saved[i].entry.path === entry.path && previous.lines[entry.path] === descriptions[entry.path])
+      ? previous : { saved: current, lines: descriptions });
+  }, []);
+  useHomeSaveRefresh(continueKeys, refresh);
 
   if (saved.length === 0) return null;
 
