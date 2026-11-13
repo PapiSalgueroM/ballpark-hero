@@ -61,6 +61,13 @@ const SLOT_BP_LAST = " *   healthy total and 43,489 under the control's, the mar
 const SLOT_BP_BUDGET = "const BUDGET = 562_500; // Release BP, main's growth since Round 1311 and Round 1520's made up countries: measured healthy 534,872 to 537,624; duplicated career control 605,989 (was 532,500 from Round 1311: healthy 504,692 to 507,107, control 570,310; before that 495,000 from Round 1052: healthy 466,396 to 470,019, control 528,801)\n";
 const harnessSource = (ref, name) => execFileSync('git', ['show', `${ref}:scripts/${name}`],
   { cwd: ROOT, encoding: 'utf8', maxBuffer: 64 * 1024 * 1024 }).replaceAll('\r\n', '\n');
+// These releases changed budget constants and their measurement notes only.
+// The observer runs the current source with its own budgets. Only the historical
+// source comparison uses the previous revision, and only for exact known bytes.
+const BUDGET_REVISIONS = {
+  'simClubManagerSaveSize.mjs': ['a4f66b7edd2b397fd01247ae626dfd933643af87', '54100f6e98ba827873f28cb7cd21dbf0cd7f4bf9'],
+  'simClubManagerSlots.mjs': ['d3292128c6dbe0062035172ac77223fcee436277', '7b55242f763e5e8935c43c277e92fb90bbc07988'],
+};
 /* Release AZ fix (reviewer 2's MAJOR 2, reviewer 4's minor 5): SaveSize section 5 made its namesake pair
    deterministic again with ONE addition (its third season carries on as a save from before Round 1250). This
    contract still holds the whole harness: that one block, a single comment and one statement, is cut and the
@@ -118,13 +125,16 @@ const SAVESIZE_1344_EDITS = [
 function historicalHarnessContract(name, source) {
   const historical = harnessSource(BASE, name);
   let restored = source, representationAdapter = false, sectionFiveHandover = false, ownClubFollow = false, round1311Budget = false, round1344Budget = false;
-  if (source !== historical && name === 'simClubManagerSaveSize.mjs') {
-    assert.equal(source.split(SAVESIZE_FIRST).length - 1, 1, 'One exact section 5 handover comment');
-    assert.equal(source.split(SAVESIZE_LAST).length - 1, 1, 'One exact section 5 handover statement');
-    const start = source.indexOf(SAVESIZE_FIRST), end = source.indexOf(SAVESIZE_LAST) + SAVESIZE_LAST.length;
-    const block = source.slice(start, end), comment = block.slice(0, block.length - SAVESIZE_LAST.length);
+  const [budgetRef, previousBudgetRef] = BUDGET_REVISIONS[name];
+  const budgetRevision = source === harnessSource(budgetRef, name) ? budgetRef : null;
+  if (budgetRevision) restored = harnessSource(previousBudgetRef, name);
+  if (restored !== historical && name === 'simClubManagerSaveSize.mjs') {
+    assert.equal(restored.split(SAVESIZE_FIRST).length - 1, 1, 'One exact section 5 handover comment');
+    assert.equal(restored.split(SAVESIZE_LAST).length - 1, 1, 'One exact section 5 handover statement');
+    const start = restored.indexOf(SAVESIZE_FIRST), end = restored.indexOf(SAVESIZE_LAST) + SAVESIZE_LAST.length;
+    const block = restored.slice(start, end), comment = block.slice(0, block.length - SAVESIZE_LAST.length);
     assert(start < end && comment.trimEnd().endsWith('*/') && comment.split('*/').length === 2 && block.split('\n').length <= 8, 'The section 5 addition is one comment and one statement');
-    restored = source.slice(0, start) + source.slice(end);
+    restored = restored.slice(0, start) + restored.slice(end);
     sectionFiveHandover = true;
     if (restored.includes(SAVESIZE_1344_FIRST)) {
       assert.equal(restored.split(SAVESIZE_1344_FIRST).length - 1, 1, 'One exact Round 1344 header paragraph start');
@@ -144,12 +154,12 @@ function historicalHarnessContract(name, source) {
       restored = restored.replace(now, () => then);
     }
     ownClubFollow = true;
-  } else if (source !== historical) {
+  } else if (restored !== historical) {
     assert.equal(name, 'simClubManagerSlots.mjs', 'SaveSize remains the exact historical Git source');
-    assert.equal(source.split(SLOT_IMPORT).length - 1, 1, 'One exact independent decoder import');
-    assert.equal(source.split(SLOT_ADAPTER).length - 1, 1, 'One exact representation initializer');
-    assert.equal(source.split(SLOT_INITIALIZER).length - 1, 0, 'The original initializer is replaced once');
-    restored = source.replace(SLOT_IMPORT, '').replace(SLOT_ADAPTER, SLOT_INITIALIZER);
+    assert.equal(restored.split(SLOT_IMPORT).length - 1, 1, 'One exact independent decoder import');
+    assert.equal(restored.split(SLOT_ADAPTER).length - 1, 1, 'One exact representation initializer');
+    assert.equal(restored.split(SLOT_INITIALIZER).length - 1, 0, 'The original initializer is replaced once');
+    restored = restored.replace(SLOT_IMPORT, '').replace(SLOT_ADAPTER, SLOT_INITIALIZER);
     representationAdapter = true;
     if (restored.includes(SLOT_BP_BUDGET)) {
       assert.equal(restored.split(SLOT_BP_BUDGET).length - 1, 1, 'One exact Release BP budget line');
@@ -176,7 +186,8 @@ function historicalHarnessContract(name, source) {
     }
   }
   assert.equal(restored, historical, 'Removing only the exact two additions restores the entire historical source');
-  return { representationAdapter, sectionFiveHandover, ownClubFollow, round1311Budget, round1344Budget, measuredSha256: sha(source), restoredHistoricalSha256: sha(restored) };
+  return { representationAdapter, sectionFiveHandover, ownClubFollow, round1311Budget, round1344Budget, budgetRevision,
+    measuredSha256: sha(source), restoredHistoricalSha256: sha(restored) };
 }
 const harnessBlobs = Object.fromEntries(['simClubManagerSaveSize.mjs','simClubManagerSlots.mjs'].map(name => {
   const original = git(['rev-parse', `${BASE}:scripts/${name}`]), current = git(['rev-parse', `${HEAD}:scripts/${name}`]);
