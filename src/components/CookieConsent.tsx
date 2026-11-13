@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { createPortal } from 'react-dom';
+import { createPortal, flushSync } from 'react-dom';
 import { Link } from 'react-router-dom';
 import { loadConsentedScripts, stopRevokedServices } from '@/lib/consentedScripts';
 import {
@@ -110,12 +110,16 @@ export function CookieConsent({ inline = false, compactInitial = false }: { inli
   useEffect(() => {
     if (!visible) return;
     const selector = '[data-dukb-help-cookie-choices]';
-    let target: HTMLElement | null = null;
+    let target = document.querySelector<HTMLElement>(selector);
+    setHelpTarget(target);
     const syncTarget = () => {
-      target = document.querySelector<HTMLElement>(selector);
-      setHelpTarget(target);
+      const next = document.querySelector<HTMLElement>(selector);
+      if (next === target) return;
+      target = next;
+      // Fill the new host in this mutation delivery, before the dialog can paint empty.
+      if (next) flushSync(() => setHelpTarget(next));
+      else setHelpTarget(null);
     };
-    syncTarget();
     const observer = new MutationObserver(records => {
       if (target && !target.isConnected) { syncTarget(); return; }
       // Ordinary score and card updates cannot move the rules dialog's host.
