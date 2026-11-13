@@ -1,9 +1,8 @@
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { CookieConsent } from "@/components/CookieConsent";
-import { StorageNotice } from "@/components/StorageNotice";
+import { StorageNotice, isGameRoute } from "@/components/StorageNotice";
 import { lazy, Suspense, useEffect, useRef } from "react";
 import { BrowserRouter, Routes, Route, Navigate, useLocation, useNavigationType } from "react-router-dom";
 import RouteErrorBoundary from "@/components/RouteErrorBoundary";
@@ -184,8 +183,6 @@ const About = lazy(() => import("./pages/About"));
 const Contact = lazy(() => import("./pages/Contact"));
 const WhatsNew = lazy(() => import("./pages/WhatsNew"));
 
-const queryClient = new QueryClient();
-
 const HEADER_PATHS = ['/', '/leaderboard', '/profile'];
 
 const shouldShowHeader = (pathname: string) =>
@@ -314,6 +311,8 @@ const RouteLoader = () => (
 
 const AppContent = () => {
   const { pathname } = useLocation();
+  const gameRoute = isGameRoute(pathname);
+  const opensCareerRules = /^\/(?:nba|nfl|mlb|nhl)-my-career\/?$/.test(pathname);
   return (
     <SiteMenuProvider>
       {/* Round 215: the first tab stop on every page jumps a keyboard player
@@ -321,16 +320,18 @@ const AppContent = () => {
           focused, styled in index.css. */}
       <a href="#dukb-main" className="dukb-skip-link">Skip to main content</a>
       <ScrollToTop />
-      <CookieConsent />
+      {!gameRoute && pathname !== "/" && <CookieConsent />}
       {/* Round 167: the site's own wire across the top of every screen. */}
       <SiteMenu />
       <div data-site-chrome="" className={`sticky top-0 z-50 ${pathname === '/' ? 'h-8' : 'hidden h-8 md:block'}`}>
         <LiveTicker />
       </div>
       {shouldShowHeader(pathname) && <Header />}
+      {pathname === "/" && <CookieConsent inline compactInitial />}
       {/* Round 1142: one line, game routes only, and only in a browser that
           will not keep anything. Renders nothing for everybody else. */}
       <StorageNotice />
+      {gameRoute && !opensCareerRules && <CookieConsent inline />}
       <Suspense fallback={<RouteLoader />}>
       {/* Round 544: around the routes, inside Suspense. A render throw in one
           game now costs that game and nothing else: the header above and the
@@ -577,6 +578,7 @@ const AppContent = () => {
           the content whose height it depends on, and then mounts below the
           fold where a mount costs nothing. */}
       </RouteErrorBoundary>
+      {opensCareerRules && <CookieConsent inline />}
       <Footer />
       </Suspense>
     </SiteMenuProvider>
@@ -584,18 +586,16 @@ const AppContent = () => {
 };
 
 const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <AuthProvider>
-      <TooltipProvider>
-        <Toaster />
-        <Sonner />
-        <UpdateNudge />
-        <BrowserRouter>
-          <AppContent />
-        </BrowserRouter>
-      </TooltipProvider>
-    </AuthProvider>
-  </QueryClientProvider>
+  <AuthProvider>
+    <TooltipProvider>
+      <Toaster />
+      <Sonner />
+      <UpdateNudge />
+      <BrowserRouter>
+        <AppContent />
+      </BrowserRouter>
+    </TooltipProvider>
+  </AuthProvider>
 );
 
 export default App;
