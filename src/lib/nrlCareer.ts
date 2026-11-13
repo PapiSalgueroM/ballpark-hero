@@ -1181,6 +1181,48 @@ export function nrlProjectedSummerOpenings({ season, history, retired, legacySea
   return nrlJobOpenings({ season, history }, clubs, true);
 }
 
+export const NRL_FAST_FORWARD_ROUNDS = 4;
+export type NrlFastForwardRequest = { year: number; clubId: string; round: number; through: number };
+export type NrlFastForwardStop = 'injury' | 'lineup' | 'academy' | 'development' | 'applications' | 'finals';
+
+export function runNrlFastForward(initial: NrlCareerState, request: NrlFastForwardRequest): {
+  state: NrlCareerState; stop: NrlFastForwardStop | null;
+} {
+  const { year, clubId, round, phase, live } = initial.season;
+  if (initial.retired || live || phase !== 'regular' || request.year !== year || request.clubId !== clubId
+    || request.round !== round || !intIn(request.through, round + 1, Math.min(round + NRL_FAST_FORWARD_ROUNDS - 1, nrlRegularRounds(year)))) {
+    return { state: initial, stop: null };
+  }
+  let state = initial;
+  while (state.season.round <= request.through) {
+    const { season } = state;
+    if (!state.summerApplication && (season.round === nrlSummerLastRound(year)
+      || (state !== initial && season.round === NRL_SUMMER_FIRST_ROUND)) && nrlProjectedSummerOpenings(state).length) {
+      return { state, stop: 'applications' };
+    }
+    if (nrlNextRound(season).clubMatch) {
+      const unavailable = nrlUnavailable(season);
+      const named = [...Object.values(season.lineup), ...nrlBench(season)];
+      if (new Set(named).size !== NRL_ROLES.length + NRL_BENCH_SIZE || named.some(id => unavailable.has(id))) {
+        return { state, stop: 'lineup' };
+      }
+    }
+    const next = advanceCareer(state, { type: 'advance' });
+    if (next.season.results.slice(season.results.length).some(result => result.injury)) return { state: next, stop: 'injury' };
+    if (state.academy?.some(report => !reportReady(season, report) && reportReady(next.season, report))) {
+      return { state: next, stop: 'academy' };
+    }
+    if ((state.positionTraining && !next.positionTraining)
+      || (nrlReserveGradeRemaining(season) === 1)
+      || (state.finance.coachCourseRound !== undefined && nrlCoachCourseQuote(state).remaining === 1)) {
+      return { state: next, stop: 'development' };
+    }
+    if (next.season.phase !== 'regular') return { state: next, stop: 'finals' };
+    state = next;
+  }
+  return { state, stop: null };
+}
+
 function offseasonOffer(state: NrlCareerState, reason: NrlOffseasonOpportunity['reason']): boolean {
   return reason === 'expansion' || state.season.championId === state.season.clubId || nrlBoardTarget(state)?.result === 'met';
 }
