@@ -27,6 +27,7 @@ export const NRL_MANAGEMENT_CONTENT: GameContentMap = {
       'Open Season review for your final ladder, finances, recorded scoring and finals scores. Stay with your club, move to a new club, or retire and keep your career record.',
       'Before playing Round 1, accept the optional Board pathways objective in Season review. Give three players aged 23 or under four regular-season appearances each to earn a club cash bonus.',
       'Open Change clubs in Season review to see simulated openings and their board targets. You can apply to one club after the season or use the club picker for a direct move.',
+      'From Round 14, check Summer job applications in Season review to apply early for a projected opening. The window closes for the last five regular-season rounds. Keep coaching your club while you wait for an answer after the Grand Final.',
       'In Season review, open Player history and choose a player to see recorded regular-season and finals appearances, scoring and rating changes.',
     ],
     rules: [
