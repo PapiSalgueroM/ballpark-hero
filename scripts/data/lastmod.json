@@ -1,7 +1,7 @@
 {
   "__version": 3,
   "/": {
-    "hash": "5250d13e5e86550d",
+    "hash": "7151efc1d0d9335a",
     "date": "2026-11-13"
   },
   "/about": {
@@ -93,8 +93,8 @@
     "date": "2026-10-17"
   },
   "/club-manager": {
-    "hash": "451b2842fba2b751",
-    "date": "2026-11-06"
+    "hash": "636eb1cc65f72fc2",
+    "date": "2026-11-13"
   },
   "/clue-auction": {
     "hash": "eb595f5de269d4aa",
@@ -385,8 +385,8 @@
     "date": "2026-10-23"
   },
   "/nba-my-career": {
-    "hash": "f418d038f0d33a2c",
-    "date": "2026-10-29"
+    "hash": "82208ddff3da8aba",
+    "date": "2026-11-13"
   },
   "/nba-playoff-format-history": {
     "hash": "e9ebd68869371222",
@@ -501,8 +501,8 @@
     "date": "2026-11-13"
   },
   "/pro-basketball": {
-    "hash": "741bd73f7ce63d86",
-    "date": "2026-10-22"
+    "hash": "aae02180933906c5",
+    "date": "2026-11-13"
   },
   "/pro-football": {
     "hash": "ee3ab6fd96b6e650",
@@ -601,12 +601,12 @@
     "date": "2026-09-19"
   },
   "/soccer": {
-    "hash": "a67f8350d311e21a",
-    "date": "2026-11-06"
+    "hash": "0a7bb18d8a834a75",
+    "date": "2026-11-13"
   },
   "/soccer-career": {
-    "hash": "01444adb38650606",
-    "date": "2026-11-06"
+    "hash": "4bde37d368b99265",
+    "date": "2026-11-13"
   },
   "/soccer-conquest": {
     "hash": "c2c02b2757b166c2",
