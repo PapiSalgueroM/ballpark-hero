@@ -11,7 +11,7 @@ import {
   nrlCareerCap, nrlCareerFinance, nrlCareerMarket, nrlCareerRecord, nrlCareerSquad,
   nrlContractCounteroffer, nrlContractOffer,
   nrlCoachQuote, nrlCoachSpend, nrlDevelopmentAssistantProgress, nrlDevelopmentPreview, nrlFinanceForecast,
-  nrlMedicalSpend, nrlMedicalUpgradeQuote, nrlOffseasonClubs, nrlOffseasonOpportunities,
+  nrlMedicalSpend, nrlMedicalUpgradeQuote, nrlOffseasonApplication, nrlOffseasonClubs, nrlOffseasonOpportunities,
   type NrlCareerAction, type NrlCareerState,
   nrlSponsorIncome, nrlSponsorRefusal, nrlTakeoverOffers, nrlTakeoverPlayers, nrlTicketPricingRefusal,
   NRL_DEVELOPMENT_ASSISTANT, NRL_SHORTLIST_LIMIT, NRL_SPONSOR_OFFERS, NRL_TICKET_GATE_CHANGES,
@@ -1025,6 +1025,7 @@ function History({ career, onAction, disabled }: { career: NrlCareerState; onAct
   const clubs = nrlOffseasonClubs(career);
   const nextClub = clubs.find(club => club.id === nextClubId);
   const openings = nrlOffseasonOpportunities(career);
+  const application = nrlOffseasonApplication(career);
   return (
     <>
       <h2 className="font-display text-xl font-bold">Season review</h2>
@@ -1064,7 +1065,14 @@ function History({ career, onAction, disabled }: { career: NrlCareerState; onAct
             <p className="text-muted-foreground">Take over the new club’s squad and contracts. If you return to a club, you resume its last balance and medical facilities.</p>
             {openings.length > 0 && <section className="rounded-lg border border-border p-2" aria-labelledby="nrl-openings-title">
               <h3 id="nrl-openings-title" className="font-bold">Suggested openings</h3>
-              <p className="text-muted-foreground">Simulated suggestions based on expansion and this career’s results. You can choose any club in the list.</p>
+              <p className="text-muted-foreground">
+                Simulated suggestions based on expansion and this career’s results. The club picker below is available for a direct move.
+              </p>
+              {!career.legacySeason && (
+                <p className="mt-1 text-muted-foreground">
+                  Apply once this offseason. Expansion clubs make an offer. Existing clubs offer if you met your board target or won the premiership.
+                </p>
+              )}
               <ul className="divide-y divide-border">
                 {openings.map(opening => {
                   const club = clubs.find(candidate => candidate.id === opening.clubId)!;
@@ -1075,13 +1083,33 @@ function History({ career, onAction, disabled }: { career: NrlCareerState; onAct
                         : `Ladder place ${opening.rank}. Missed its modeled target by ${opening.missedBy} ${opening.missedBy === 1 ? 'place' : 'places'}.`}</p>
                       <p className="text-muted-foreground">{year + 1} board target · {opening.nextTarget}</p>
                     </div>
-                    <Button type="button" size="lg" variant="outline" className="px-3" disabled={disabled} aria-label={`Consider ${club.name}`} onClick={() => {
-                      setNextClubId(club.id);
-                      clubSelect.current?.focus();
-                    }}>Consider</Button>
+                    <div className="flex flex-wrap gap-2">
+                      <Button type="button" size="lg" variant="outline" className="px-3" disabled={disabled} aria-label={`Consider ${club.name}`} onClick={() => {
+                        setNextClubId(club.id);
+                        clubSelect.current?.focus();
+                      }}>Consider</Button>
+                      {!career.legacySeason && !application && (
+                        <Button type="button" size="lg" variant="outline" className="px-3" disabled={disabled}
+                          aria-label={`Apply to ${club.name}`}
+                          onClick={() => onAction({ type: 'applyForOffseasonJob', year, clubId, destinationId: club.id })}>Apply</Button>
+                      )}
+                    </div>
                   </li>;
                 })}
               </ul>
+              {application && (
+                <div className="mt-2 border-t border-border pt-2">
+                  <p className="font-semibold" role="status">
+                    {labelForClub(year + 1, application.clubId)} {application.response === 'offered' ? 'offered you the job.' : 'declined your application.'}
+                  </p>
+                  {application.response === 'offered' && (
+                    <Button type="button" size="lg" className="mt-2 w-full px-2 sm:w-auto" disabled={disabled}
+                      onClick={() => onAction({ type: 'acceptOffseasonJob', year, clubId, destinationId: application.clubId })}>
+                      Accept offer and start {year + 1}
+                    </Button>
+                  )}
+                </div>
+              )}
             </section>}
             <label className="block font-semibold" htmlFor="nrl-next-club">Club to manage</label>
             <select ref={clubSelect} id="nrl-next-club" className={control} value={nextClubId} disabled={disabled} onChange={event => setNextClubId(event.target.value)}>
@@ -1116,6 +1144,9 @@ function History({ career, onAction, disabled }: { career: NrlCareerState; onAct
               <li key={record.year} className="space-y-1 py-3">
                 <p className="font-bold">{record.year} {labelForClub(record.year, record.clubId)}</p>
                 <p className="text-sm text-muted-foreground">Ladder place {record.rank} · {record.wins} wins · {record.draws} draws · {record.losses} losses</p>
+                {record.appointment && (
+                  <p className="text-sm text-muted-foreground">Accepted the {labelForClub(record.year + 1, record.appointment.clubId)} job for {record.year + 1}</p>
+                )}
                 <p className="text-sm text-muted-foreground">Premiers {labelForClub(record.year, record.championId)}{record.finance ? ` · Profit or loss ${money(record.finance.profit)}` : ''}</p>
                 {record.finance?.ticketTier && <p className="text-sm text-muted-foreground">Home ticket pricing {ticketLabels[record.finance.ticketTier]}</p>}
                 {record.finance?.sponsor && <p className="text-sm text-muted-foreground">Sponsor income {money(nrlSponsorIncome(record.finance))}</p>}
