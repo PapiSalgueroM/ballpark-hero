@@ -382,7 +382,7 @@ export default function Index() {
               </Link>
             )}
           </h2>
-          <div className="grid grid-cols-1 gap-2 min-[360px]:grid-cols-2 sm:gap-3 lg:grid-cols-3 xl:grid-cols-4">
+          <div className="grid grid-cols-1 gap-2 min-[480px]:grid-cols-2 sm:gap-3 lg:grid-cols-3 xl:grid-cols-4" data-home-catalogue="">
             {cat.games.map(game => (
               <GameCard key={game.path} game={game} badgeDate={badgeDate} bestScore={bestScores[game.path.slice(1)]} pinned={gamePicks.includes(game.path)} onTogglePick={toggleGamePick} compact />
             ))}
@@ -714,15 +714,8 @@ function MostPlayedToday() {
   );
 }
 
-/* ─── Round 188: the tile curtain (S-3's home page pass) ───
-   Each game section reveals once as it scrolls into view: tiles rise in a
-   short stagger, capped by a modulo so a 20-tile grid does not take five
-   seconds to settle. Rules of the house: transforms and opacity only (no
-   layout shift), the animation is emphasis on entrance and never hides
-   anything from a user who prefers reduced motion (the media query kills
-   it dead and shows everything instantly), and search results get NO
-   curtain because search must feel instant. The observer disconnects
-   after firing, so a section only ever performs its entrance once. */
+/* The phone catalogue uses compact cards, with one continuous list where
+   two cards would leave too little room for a title and its pin button. */
 function HomeTileStyles() {
   return (
     <style>{`
@@ -751,6 +744,31 @@ function HomeTileStyles() {
         [data-catalog-card] .home-tile-icon { width: 24px; height: 24px; margin-top: 0; border-radius: 8px; font-size: 1rem; }
         [data-catalog-card] h3 { width: 100%; font-size: .875rem; line-height: 1.2; overflow-wrap: anywhere; }
         [data-catalog-card] > [data-game-pick] { position: static; }
+      }
+      @media (max-width: 479px) {
+        [data-home-catalogue] {
+          gap: 0;
+          border: 1px solid hsl(var(--border) / .8);
+          border-radius: var(--radius);
+          background: hsl(var(--surface-1));
+        }
+        [data-catalog-card] {
+          border: 0;
+          border-radius: 0;
+          background: transparent;
+        }
+        [data-catalog-card] + [data-catalog-card] { border-top: 1px solid hsl(var(--border) / .65); }
+        [data-catalog-card] .home-tile {
+          min-height: 48px;
+          gap: 10px;
+          padding: 6px 10px;
+          border-radius: 0;
+          transition: background-color 150ms;
+        }
+        [data-catalog-card]:first-child .home-tile { border-top-left-radius: var(--radius); }
+        [data-catalog-card]:last-child .home-tile { border-bottom-left-radius: var(--radius); }
+        [data-catalog-card] h3 { width: auto; }
+        [data-catalog-card] .home-tile-icon { background: transparent; box-shadow: none; }
       }
     `}</style>
   );
