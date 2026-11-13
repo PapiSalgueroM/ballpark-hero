@@ -474,7 +474,10 @@ function resolveScores(st: CfbState, home: CfbTeam, away: CfbTeam, homeWins: boo
   const a = staffEdges(away.staff);
   const hs = Math.max(0, Math.round(scoreFor(homeWins, rng) + CFB_POINTS_PER_EDGE * (h.off - a.def)));
   const as = Math.max(0, Math.round(scoreFor(!homeWins, rng) + CFB_POINTS_PER_EDGE * (a.off - h.def)));
-  return homeWins ? [hs, Math.max(0, Math.min(as, hs - 3))] : [Math.max(0, Math.min(hs, as - 3)), as];
+  const winner = homeWins ? hs : as;
+  let loser = Math.max(0, Math.min(homeWins ? as : hs, winner - 3));
+  if (loser === 1) loser = winner >= 5 ? 2 : 0;
+  return homeWins ? [winner, loser] : [loser, winner];
 }
 
 function playCfbGame(st: CfbState, homeId: string, awayId: string, rng: () => number): { hs: number; as: number; winner: string } {
