@@ -2,7 +2,7 @@ import { isNrlOpeningYear, nrlSeasonPlan, NRL_LAST_YEAR, type NrlClub } from '@/
 import { clampi, hashLabel, rngFrom } from '@/lib/careerEngine';
 import { uniqueName } from '@/lib/foNames';
 import {
-  NRL_BOARD_PATHWAYS, nrlBoardBenchmark, nrlBoardChallengeStatus, nrlBoardPathwaysEligible, nrlBoardPathwaysProgress,
+  NRL_BOARD_PATHWAYS, nrlBoardBenchmark, nrlBoardChallengeStatus, nrlBoardPathwaysEligible, nrlBoardPathwaysProgress, nrlBoardTarget,
 } from '@/lib/nrlBoardTarget';
 import {
   archiveNrlPlayerSeasons, archiveNrlScoring, nrlSquadSeasonStats, validNrlPlayerSeasonArchive, validNrlScoringArchive,
@@ -102,6 +102,7 @@ export interface NrlCareerHistoryRow {
   development?: { focus: ActiveDevelopmentFocus; affected: number };
   coachDevelopment?: string[];
   reserveGrade?: { playerId: string; playerName: string; rounds: number; ratingGain: 0 | 1 };
+  appointment?: NrlOffseasonAppointment;
 }
 interface NrlAcademyAssignment {
   player: NrlCareerPlayer;
@@ -132,6 +133,7 @@ export interface NrlCareerState {
   savedLineup?: NrlSavedLineup;
   positionTraining?: NrlPositionCourse;
   origin?: NrlOriginSeries;
+  offseasonApplication?: string;
 }
 type NrlOpeningMatchdayPlayer = readonly [id: number, name: string, age: number, role: NrlRole];
 export type NrlOpeningMatchdayRoster = Readonly<Record<string, readonly NrlOpeningMatchdayPlayer[]>>;
@@ -168,6 +170,7 @@ export type NrlCareerAction = NrlAction
   | { type: 'signSponsor'; offer: NrlSponsorOffer; year: number; clubId: string }
   | { type: 'acceptBoardPathways'; year: number; clubId: string }
   | { type: 'startNextSeason'; move?: { fromYear: number; clubId: string } }
+  | { type: 'applyForOffseasonJob' | 'acceptOffseasonJob'; year: number; clubId: string; destinationId: string }
   | { type: 'retireCareer'; year: number; clubId: string };
 
 export interface NrlCareerCap {
@@ -1004,6 +1007,7 @@ export function nrlOffseasonClubs({ season, retired }: Pick<NrlCareerState, 'sea
 type NrlOffseasonOpportunity = { clubId: string; nextTarget: string } & (
   { reason: 'expansion' } | { reason: 'missed'; rank: number; missedBy: number }
 );
+type NrlOffseasonAppointment = Pick<NrlOffseasonOpportunity, 'clubId' | 'reason'>;
 
 export function nrlOffseasonOpportunities(state: NrlCareerState): NrlOffseasonOpportunity[] {
   const { season, history } = state;
@@ -1034,12 +1038,21 @@ export function nrlOffseasonOpportunities(state: NrlCareerState): NrlOffseasonOp
   }))];
 }
 
-function rolloverCareer(state: NrlCareerState, move?: { fromYear: number; clubId: string }): NrlCareerState {
+export function nrlOffseasonApplication(state: NrlCareerState) {
+  const { offseasonApplication, season } = state;
+  if (!offseasonApplication || state.legacySeason) return null;
+  const opening = nrlOffseasonOpportunities(state).find(job => job.clubId === offseasonApplication);
+  if (!opening) return null;
+  const offered = opening.reason === 'expansion' || season.championId === season.clubId || nrlBoardTarget(state)?.result === 'met';
+  return { ...opening, response: offered ? 'offered' as const : 'declined' as const };
+}
+
+function rolloverCareer(state: NrlCareerState, move?: { fromYear: number; clubId: string }, appointment?: NrlOffseasonAppointment): NrlCareerState {
   const { season } = state;
   if (season.phase !== 'complete' || season.year === NRL_LAST_YEAR) return state;
   if (!move && nrlBoardChallengeStatus(state) === 'must-move') return state;
   if (move && (move.fromYear !== season.year || !nrlOffseasonClubs(state).some(club => club.id === move.clubId))) return state;
-  const { developmentFocus, shortlist, savedLineup, positionTraining, ...career } = state;
+  const { developmentFocus, shortlist, savedLineup, positionTraining, offseasonApplication, ...career } = state;
   const year = season.year + 1;
   const clubId = move?.clubId ?? season.clubId;
   const focusGains = developmentGains(state);
@@ -1080,6 +1093,7 @@ function rolloverCareer(state: NrlCareerState, move?: { fromYear: number; clubId
     ...(playerSeasons && { playerSeasons }),
     ...(developmentFocus ? { development: { focus: developmentFocus, affected: focusGains.size } } : {}),
     ...(coachDevelopment ? { coachDevelopment } : {}),
+    ...(appointment ? { appointment } : {}),
   } : row);
   const openingCash = move
     ? history.reduce((cash, receipt) => receipt.clubId === clubId && receipt.finance ? receipt.finance.cash : cash, OPENING_CASH)
@@ -1128,7 +1142,22 @@ export function reduceNrlCareer(state: NrlCareerState, action: NrlCareerAction):
     case 'retireCareer': {
       const { phase, year, clubId } = state.season;
       if (phase !== 'complete' || action.year !== year || action.clubId !== clubId) return state;
-      return { ...state, retired: true };
+      const { offseasonApplication, ...career } = state;
+      return { ...career, retired: true };
+    }
+    case 'applyForOffseasonJob': {
+      const { season, legacySeason, offseasonApplication } = state;
+      if (legacySeason || offseasonApplication || action.year !== season.year || action.clubId !== season.clubId
+        || !nrlOffseasonOpportunities(state).some(job => job.clubId === action.destinationId)) return state;
+      return { ...state, offseasonApplication: action.destinationId };
+    }
+    case 'acceptOffseasonJob': {
+      const { year, clubId } = state.season;
+      if (action.year !== year || action.clubId !== clubId || action.destinationId !== state.offseasonApplication) return state;
+      const job = nrlOffseasonApplication(state);
+      return job?.response === 'offered'
+        ? rolloverCareer(state, { fromYear: year, clubId: job.clubId }, { clubId: job.clubId, reason: job.reason })
+        : state;
     }
     case 'startNextSeason':
       return rolloverCareer(state, action.move);
@@ -1338,6 +1367,12 @@ function validReceipt(value: unknown, year: number): value is NrlCareerHistoryRo
   }
   if (value.development !== undefined && (!record(value.development) || !activeDevelopmentFocus(value.development.focus)
     || !intIn(value.development.affected, 0, SQUAD_SIZE))) return false;
+  if (value.appointment !== undefined) {
+    const job = value.appointment;
+    if (!record(job) || Object.keys(job).length !== 2 || value.finance === null || value.scoring === undefined
+      || year === NRL_LAST_YEAR || !nrlSeasonPlan(year + 1).clubs.some(club => club.id === job.clubId)
+      || job.clubId === value.clubId || job.reason !== (clubs.some(club => club.id === job.clubId) ? 'missed' : 'expansion')) return false;
+  }
   if (value.finals !== undefined) {
     const finals = nrlArchivedFinals(value.finals, year);
     if (!finals || finals.championId !== value.championId
@@ -1444,6 +1479,13 @@ function validCareerBooks(state: NrlCareerState): boolean {
     if (!validReceipt(receipt, year) || (receipt.finance === null && index !== 0)) return false;
     const previous = clubs.get(receipt.clubId) ?? firstBook;
     if (receipt.finance && receipt.finance.openingCash !== previous.cash) return false;
+    if (receipt.appointment) {
+      const nextClubId = history[index + 1]?.clubId ?? season.clubId;
+      const previousPlace = history[index - 1]?.clubId === receipt.clubId ? history[index - 1].rank : undefined;
+      const target = nrlBoardBenchmark(year, receipt.clubId, previousPlace);
+      if (year === season.year || receipt.appointment.clubId !== nextClubId
+        || (receipt.appointment.reason === 'missed' && receipt.championId !== receipt.clubId && (!target || receipt.rank > target.targetRank))) return false;
+    }
     const academyPurchased = receipt.finance?.academyUpgradeRound !== undefined;
     if (academyPurchased && previous.academyInstalled) return false;
     if (year === season.year) {
@@ -1599,6 +1641,8 @@ export function isNrlCareerState(value: unknown): value is NrlCareerState {
       && training.startedRound + NRL_POSITION_TRAINING_ROUNDS > spell.startedRound) return false;
   }
   if (!validWorld(state) || !validCareerBooks(state) || !validAcademy(state) || !validShortlist(state)) return false;
+  if (value.offseasonApplication !== undefined
+    && (typeof value.offseasonApplication !== 'string' || !nrlOffseasonApplication(state))) return false;
   if (!state.season.live && !state.season.attackPlan) return true;
   const { opponentStrength, planRatings } = careerMatchday(state);
   return (!state.season.attackPlan || Boolean(planRatings))

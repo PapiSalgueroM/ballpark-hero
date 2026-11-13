@@ -1211,8 +1211,9 @@ function NrlManagerScreen({ entry, showSlots, rules }: {
     const result = persist(next);
     if (result === 'moved' || result === 'too-large') return false;
     if (action.type === 'finishLive') setShowLiveResult(true);
-    if (action.type === 'advance' || action.type === 'startNextSeason') setShowLiveResult(false);
-    if (action.type === 'startNextSeason') setPanel('match');
+    const newSeason = next.season.year !== before.season.year;
+    if (action.type === 'advance' || newSeason) setShowLiveResult(false);
+    if (newSeason) setPanel('match');
     return true;
   }
 
