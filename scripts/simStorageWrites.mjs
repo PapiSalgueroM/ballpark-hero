@@ -537,6 +537,10 @@ console.log('6. "full" is taken back in one place, the recheck, and never while 
 const NAMED = [
   { file: 'src/components/us-career/UsCareerBoard.tsx', keys: ['state:saveFailure'],
     why: 'the effect under retrySave holds the save while saveFailed (saveFailure !== null) is true, Round 1144' },
+  { file: 'src/pages/SoccerCareer.tsx', keys: ['state:saveFailed'],
+    why: 'the page retries the latest fenced career save before an app refresh while the save warning is active' },
+  { file: 'src/components/front-office/FrontOfficeBoard.tsx', keys: ['state:saveWriteFailed'],
+    why: 'the active board retries its most recent serialized save before an app refresh while the save warning is active' },
 ];
 const NOTHING_HELD = [
   /* the seam and the pieces around it: none of them is a game's progress */
@@ -574,7 +578,7 @@ const NOTHING_HELD = [
     why: 'answers false and holds nothing itself; RankEm.tsx keeps the answer and is listed' },
   /* Round 1330: the soccer save's write runs inside saveFence.write */
   { file: 'src/pages/SoccerCareer.tsx', keys: ['write:saveCareer'],
-    why: 'answers false and holds nothing itself; saveFence.write hands the answer back to saveCurrentCareer, which keeps it as state:saveFailed, listed under OWED' },
+    why: 'answers false and holds nothing itself; saveFence.write hands the answer back to saveCurrentCareer, which keeps it as state:saveFailed, listed under NAMED' },
   { file: 'src/lib/squadDeal.ts', keys: ['write:saveScore'],
     why: 'a refused leaderboard row is dropped and the stored board is answered; nothing waits for a retry' },
   { file: 'src/hooks/useHofOrBust.ts', keys: ['keeps:safeSetItem'],
@@ -607,8 +611,6 @@ const NOTHING_HELD = [
     why: 'a refused switch of manager leaves the active career where it was (switchSlot rolled it back)' },
 ];
 const OWED = [
-  { file: 'src/pages/SoccerCareer.tsx', keys: ['state:saveFailed'], owner: 'the other lane', listed: '2026-10-10',
-    why: 'a refused save sets saveFailed and offers Retry save; a reload the app makes loses the progress since the last good write' },
   { file: 'src/hooks/useGame.ts', keys: ['state:practiceSaveFailed', 'state:unlimitedSaveFailed'], owner: 'the other lane', listed: '2026-10-10',
     why: 'the Footle practice run and the unlimited session play on in the page ("reloading may lose your progress")' },
   { file: 'src/pages/RankEm.tsx', keys: ['state:saveFailed', 'keeps:saveCircuit'], owner: 'the other lane', listed: '2026-10-10',

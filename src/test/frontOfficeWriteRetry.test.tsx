@@ -1,9 +1,10 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { cleanup, fireEvent, render } from '@testing-library/react';
+import { act, cleanup, fireEvent, render } from '@testing-library/react';
 import { mkdirSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import FrontOfficeBoard from '@/components/front-office/FrontOfficeBoard';
 import { capUsed, initLeague, type GmPlayer } from '@/lib/frontOffice';
+import { hasPendingSaves, settlePendingSaves } from '@/lib/safeStorage';
 
 vi.mock('@/hooks/useGameCompletion', () => ({ useGameCompletion: () => undefined }));
 vi.mock('@/lib/completions', () => ({ recordActivity: () => undefined }));
@@ -91,6 +92,28 @@ beforeEach(() => {
 afterEach(() => { cleanup(); vi.restoreAllMocks(); });
 
 describe('NFL Front Office refused save recovery', () => {
+  it('holds a reload while writes are refused and settles the latest exact snapshot once storage recovers', () => {
+    const f = fixture(8, true);
+    cut(7);
+    cut(6);
+    const [first, latest] = f.attempts;
+    expect(noticeCount()).toBe(1);
+    expect(hasPendingSaves()).toBe(true);
+    act(() => expect(settlePendingSaves()).toBe(false));
+    expect(f.attempts).toEqual([first, latest, latest]);
+    expect(localStorage.getItem(KEY)).toBe(f.raw);
+    expect(noticeCount()).toBe(1);
+
+    f.allowWrites();
+    act(() => expect(settlePendingSaves()).toBe(true));
+    expect(f.attempts).toEqual([first, latest, latest, latest]);
+    expect(localStorage.getItem(KEY)).toBe(latest);
+    expect(noticeCount()).toBe(0);
+    expect(hasPendingSaves()).toBe(false);
+    expect(localStorage.getItem(OTHER)).toBe('held');
+    expect(f.removals.mock.calls).toEqual([]);
+  });
+
   it('a real Cut reports its refused write and retries the exact pending snapshot until storage accepts it', () => {
     const f = fixture(7, true);
     const otherClubs = JSON.stringify(Object.fromEntries(Object.entries(f.league.teams).filter(([abbr]) => abbr !== 'KC')));

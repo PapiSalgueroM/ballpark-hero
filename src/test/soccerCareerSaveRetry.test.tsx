@@ -48,6 +48,7 @@ vi.mock('@/components/ui/select', () => ({
 }));
 
 import * as E from '@/lib/soccerCareerEngine';
+import { settlePendingSaves } from '@/lib/safeStorage';
 import { isSoccerCareerSave } from '@/lib/soccerCareerSave';
 import { recordCompletion, recordActivity, recordStreakDay } from '@/lib/completions';
 import { toast } from 'sonner';
@@ -161,6 +162,29 @@ describe('Soccer Career failed write recovery', () => {
     clearReplayCounts(); m.refuse(false); retry(m.view); noReplay(); expect(read()).toEqual(expected);
     expect(warning(m.view)).toBeNull(); expect(recordCompletion).not.toHaveBeenCalled();
   }, 20000);
+  it('blocks an app refresh until the latest unsaved career can be written', () => {
+    const m = mount(), oldBytes = localStorage.getItem(KEY), oldFence = localStorage.getItem(FENCE);
+    m.refuse(true);
+    pressNext(m.view);
+    assertWarning(m.view);
+    const latestBytes = m.attempts.at(-1);
+    expect(latestBytes).toBeDefined();
+    expect(latestBytes).not.toBe(oldBytes);
+    clearReplayCounts();
+    act(() => { expect(settlePendingSaves()).toBe(false); });
+    expect(localStorage.getItem(KEY)).toBe(oldBytes);
+    expect(localStorage.getItem(FENCE)).toBe(oldFence);
+    assertWarning(m.view);
+    m.refuse(false);
+    act(() => { expect(settlePendingSaves()).toBe(true); });
+    expect(localStorage.getItem(KEY)).toBe(latestBytes);
+    expect(localStorage.getItem(FENCE)).not.toBe(oldFence);
+    expect(warning(m.view)).toBeNull();
+    noReplay();
+    m.view.unmount();
+    expect(settlePendingSaves()).toBe(true);
+  });
+
   it('clears a failed save on the next successful automatic save and alerts again on a later refusal', async () => {
     const m = mount(nativeCareer(), true); assertWarning(m.view); m.refuse(false); await bankSprint(m.view);
     expect(warning(m.view)).toBeNull(); expect(read().statBoostNextSeason.pace).toBe(2); const saved = localStorage.getItem(KEY);
