@@ -485,7 +485,7 @@ const OWN_TIEBREAK_LINE = "Level on points splits on goal difference, then goals
 /** One group of four. Club 0 is mine; strengths are in the same units. */
 function playGroup(
   names: string[], strengths: number[], shape: FirstStageShape, rng: Rng,
-  playerGoals: () => number, label: string,
+  playerGoals: (goalsFor: number) => number, label: string,
 ): FirstStageStage {
   const rows = names.map(emptyRow);
   const pairs: Record<string, [number, number]> = {};
@@ -500,7 +500,7 @@ function playGroup(
         const goalsFor = home ? hg : ag;
         games.push({
           matchday: md + 1, opponent: names[home ? a : h], home, goalsFor,
-          goalsAgainst: home ? ag : hg, playerGoals: Math.min(playerGoals(), goalsFor),
+          goalsAgainst: home ? ag : hg, playerGoals: Math.min(playerGoals(goalsFor), goalsFor),
         });
       }
     }
@@ -544,7 +544,7 @@ function bestRunnerUp(mine: StageRow, shape: FirstStageShape, rng: Rng): boolean
  *  four at home and four away, for every club at once. */
 function playLeaguePhase(
   myName: string, oppNames: string[], myStrength: number, shape: FirstStageShape,
-  rng: Rng, playerGoals: () => number,
+  rng: Rng, playerGoals: (goalsFor: number) => number,
 ): FirstStageStage {
   const n = LEAGUE_PHASE.clubs;
   const strengths = [myStrength];
@@ -585,7 +585,7 @@ function playLeaguePhase(
       const goalsFor = home ? hg : ag;
       games.push({
         matchday: games.length + 1, opponent: names[opp], home, goalsFor,
-        goalsAgainst: home ? ag : hg, playerGoals: Math.min(playerGoals(), goalsFor),
+        goalsAgainst: home ? ag : hg, playerGoals: Math.min(playerGoals(goalsFor), goalsFor),
       });
     }
   }
@@ -606,7 +606,7 @@ function playLeaguePhase(
  */
 export function playFirstStage(
   shape: FirstStageShape, myName: string, myStrength: number, oppNames: string[],
-  rng: Rng, playerGoals: () => number = () => 0,
+  rng: Rng, playerGoals: (goalsFor: number) => number = () => 0,
 ): FirstStageResult {
   if (shape.kind === 'leaguePhase') {
     const stage = playLeaguePhase(myName, oppNames, myStrength, shape, rng, playerGoals);
