@@ -39,10 +39,9 @@
  *      "playing" it), and never calls recordCompletion at all;
  *   2. the scored legacy path (useGameCompletion) survives untouched in
  *      all eight boards;
- *   3. the tycoon's mark is once-per-session by ref, called first in
- *      doBuy, doHire and doTap (and doLegacyPerk since Round 196), and
- *      since Round 1080 on a ticket offer change that really changed
- *      the offer;
+ *   3. the tycoon's mark checks save ownership before its once-per-session
+ *      ref latch. It gates buys, hires, taps and changed ticket offers, and
+ *      follows an acknowledged legacy perk purchase;
  *   4. the marked paths are real routes in App.tsx, so the header's
  *      per-slug attribution can never dangle;
  *   5. the Round 157/159 marks still stand, in their Round 392 shape: a
@@ -147,38 +146,47 @@ console.log('3) Stadium Tycoon marks once per session, on the first real action'
     fail('tycoon: expected exactly one unscored mark');
   }
   if (t.includes("recordCompletion('/stadium-tycoon',")) fail('tycoon: the idle game must never send a score');
-  /* the once-per-session shape: guard, latch, mark, in that order */
-  const shape = ['const sessionMarkedRef = useRef(false);',
-    'if (sessionMarkedRef.current) return;',
-    'sessionMarkedRef.current = true;',
-    "recordCompletion('/stadium-tycoon');"];
-  let at = 0, ok = true;
-  for (const line of shape) {
-    const i = t.indexOf(line, at);
-    if (i < 0) { ok = false; break; }
-    at = i;
+  const tycoon = stripComments(t);
+  const actionBody = name => tycoon.match(new RegExp(
+    String.raw`  const ${name} = useCallback\([^\n]* => \{\n([\s\S]*?)\n  \},`,
+  ))?.[1];
+  const mark = actionBody('markSessionPlay');
+  const onceOwned = [
+    '    if (checkSaveMoved()) return false;',
+    '    if (!sessionMarkedRef.current) {',
+    '      sessionMarkedRef.current = true;',
+    "      recordCompletion('/stadium-tycoon');",
+    '    }',
+    '    return true;',
+  ].join('\n');
+  if (!tycoon.includes('const sessionMarkedRef = useRef(false);') || mark !== onceOwned) {
+    fail('tycoon: the session mark must check save ownership before its once-per-session latch');
   }
-  if (!ok) fail('tycoon: the sessionMarkedRef guard shape is broken (guard, latch, mark, in order)');
-  /* first line of each meaningful action. Round 196 added the boardroom:
-     spending legacy points is playing too, so doLegacyPerk marks as well. */
-  for (const action of ['doBuy', 'doHire', 'doTap', 'doLegacyPerk']) {
-    const i = t.indexOf(`const ${action} = useCallback(`);
-    if (i < 0) { fail(`tycoon: ${action} not found`); continue; }
-    const head = t.slice(i, i + 200);
-    if (!head.includes('markSessionPlay();')) fail(`tycoon: ${action} does not mark the session first`);
-  }
-  /* Round 1080 added the ticket office: switching the offer is a choice the
-     player makes, so it marks as well, but only when the offer really
-     changed. Picking the offer you already have is not playing, so this one
-     mark sits behind that test and is not the first line. */
-  {
-    const i = t.indexOf('const doSetTicketPolicy = useCallback(');
-    if (i < 0) fail('tycoon: doSetTicketPolicy not found');
-    else if (!t.slice(i, i + 260).includes('if (next !== before) markSessionPlay();')) {
-      fail('tycoon: doSetTicketPolicy does not mark the session on a real offer change, and only on one');
+  for (const action of ['doBuy', 'doHire', 'doTap']) {
+    if (!actionBody(action)?.startsWith('    if (!markSessionPlay()) return;\n')) {
+      fail(`tycoon: ${action} must stop before acting when the mark refuses save ownership`);
     }
   }
-  const invocations = t.split('markSessionPlay();').length - 1;
+  const ticket = actionBody('doSetTicketPolicy');
+  if (!ticket?.startsWith([
+    '    const before = stateRef.current;',
+    '    const next = setTicketPolicy(stateRef.current, policy);',
+    '    if (next !== before && !markSessionPlay()) return;',
+    '    commit(next);',
+    '    saveTicketState(next);',
+  ].join('\n'))) {
+    fail('tycoon: only a real ticket offer change may mark the session, and lost ownership must stop the change');
+  }
+  const legacy = actionBody('doLegacyPerk');
+  if (!legacy?.startsWith([
+    '    const before = stateRef.current;',
+    '    const after = buyPerk(before, id);',
+    '    if (after === before || !writeState(after)) return false;',
+    '    markSessionPlay();',
+  ].join('\n') + '\n')) {
+    fail('tycoon: a changed legacy perk must be saved successfully before marking the session');
+  }
+  const invocations = [...tycoon.matchAll(/\bmarkSessionPlay\s*\(/g)].length;
   if (invocations !== 5) fail(`tycoon: markSessionPlay() invoked ${invocations} times, expected exactly doBuy + doHire + doTap + doLegacyPerk + a real ticket offer change`);
 }
 
