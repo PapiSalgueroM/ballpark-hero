@@ -12,6 +12,7 @@ import {
   nrlContractCounteroffer, nrlContractOffer,
   nrlCoachQuote, nrlCoachSpend, nrlDevelopmentAssistantProgress, nrlDevelopmentPreview, nrlFinanceForecast,
   nrlMedicalSpend, nrlMedicalUpgradeQuote, nrlOffseasonApplication, nrlOffseasonClubs, nrlOffseasonOpportunities,
+  nrlLeagueRecruitmentPreview,
   nrlRecruitmentBrief,
   nrlMutualReleaseQuote, nrlMutualReleaseSpend,
   nrlProjectedSummerOpenings, nrlSummerApplication, nrlSummerLastRound,
@@ -1145,6 +1146,42 @@ function SummerApplications({ career, onAction, disabled }: { career: NrlCareerS
   );
 }
 
+function LeagueRecruitment({ career, onAction, disabled, nextClubId }: {
+  career: NrlCareerState; onAction: Dispatch; disabled: boolean; nextClubId?: string;
+}) {
+  const [open, setOpen] = useState(false);
+  const { year, clubId, phase, kickerId } = career.season;
+  const deals = useMemo(() => open ? nrlLeagueRecruitmentPreview(career, nextClubId) : null, [career, nextClubId, open]);
+  if (phase !== 'complete' || career.legacySeason || career.retired || !kickerId || year + 2 > NRL_LAST_YEAR) return null;
+  return (
+    <details className="group mt-3 rounded-xl border border-border bg-background px-3" onToggle={event => setOpen(event.currentTarget.open)}>
+      <summary className="flex min-h-11 cursor-pointer items-center justify-between gap-2 rounded-md text-sm font-bold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
+        League recruitment<ChevronDown size={16} aria-hidden="true" className="shrink-0 group-open:rotate-180" />
+      </summary>
+      <div className="space-y-2 pb-3 text-sm">
+        <p className="text-muted-foreground">Let each rival give one planned free-agent signing a second season when their cap and squad have room. These simulated deals do not change next season’s squads or wages. Your current club and any club you join are excluded.</p>
+        <label className="flex min-h-11 items-center gap-2 font-semibold">
+          <input type="checkbox" className="h-5 w-5 shrink-0 accent-primary" disabled={disabled || (!deals?.length && !career.leagueRecruitment)}
+            checked={Boolean(career.leagueRecruitment)}
+            onChange={event => onAction({ type: 'setLeagueRecruitment', year, clubId, enabled: event.target.checked })} />
+          Allow two-year deals at rival clubs
+        </label>
+        {deals && (deals.length ? <>
+          <p className="text-muted-foreground">{nextClubId
+            ? `Projected deals if you join ${labelForClub(year + 1, nextClubId)}.`
+            : 'Projected deals if you stay. Taking another job excludes that club.'}</p>
+          <ul aria-label="Projected rival deals" className="divide-y divide-border">
+            {deals.map(deal => <li key={deal.clubId} className="break-words py-1.5">
+              <span className="font-semibold">{labelForClub(year + 1, deal.clubId)} · {deal.playerName}</span>
+              <span className="block text-muted-foreground">{year + 1}–{year + 2} · {money(deal.annualSalary)} per season</span>
+            </li>)}
+          </ul>
+        </> : <p className="text-muted-foreground">No rival has room for a second year.</p>)}
+      </div>
+    </details>
+  );
+}
+
 function History({ career, onAction, disabled }: { career: NrlCareerState; onAction: Dispatch; disabled: boolean }) {
   const { year, phase, clubId } = career.season;
   const finished = phase === 'complete';
@@ -1201,6 +1238,8 @@ function History({ career, onAction, disabled }: { career: NrlCareerState; onAct
       {!retired && <BoardPathways career={career} onAction={onAction} disabled={disabled} />}
       {!retired && !career.legacySeason && year < NRL_LAST_YEAR && <DevelopmentFocus career={career} onAction={onAction} disabled={disabled} />}
       {finished && !retired && year < NRL_LAST_YEAR && <ExpiringDeals career={career} onAction={onAction} disabled={disabled} />}
+      <LeagueRecruitment career={career} onAction={onAction} disabled={disabled}
+        nextClubId={nextClub?.id ?? (application?.response === 'offered' ? application.clubId : undefined)} />
       {finished && !retired && year < NRL_LAST_YEAR && !mustMove && (
         <Button type="button" size="lg" className="mt-3 w-full" disabled={disabled} onClick={() => onAction({ type: 'startNextSeason' })}>
           Start {year + 1}<ArrowRight aria-hidden="true" />
@@ -1291,6 +1330,16 @@ function History({ career, onAction, disabled }: { career: NrlCareerState; onAct
                       record.summerApplication.response === 'offered' ? 'Offer passed over'
                         : record.summerApplication.response === 'vacancy-closed' ? 'Opening closed' : 'Application declined'}
                   </p>
+                )}
+                {record.leagueRecruitment && (
+                  <details>
+                    <summary className="min-h-11 cursor-pointer py-2 text-sm font-semibold">Rival recruitment · {record.leagueRecruitment.length} two-year deals</summary>
+                    <ul aria-label="Recorded rival deals" className="pb-2 text-sm text-muted-foreground">
+                      {record.leagueRecruitment.map(deal => <li key={deal.clubId} className="break-words py-1">
+                        {labelForClub(record.year + 1, deal.clubId)} · {deal.playerName} · {money(deal.annualSalary)} per season through {record.year + 2}
+                      </li>)}
+                    </ul>
+                  </details>
                 )}
                 <p className="text-sm text-muted-foreground">Premiers {labelForClub(record.year, record.championId)}{record.finance ? ` · Profit or loss ${money(record.finance.profit)}` : ''}</p>
                 {record.finance?.ticketTier && <p className="text-sm text-muted-foreground">Home ticket pricing {ticketLabels[record.finance.ticketTier]}</p>}
