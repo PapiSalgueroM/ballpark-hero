@@ -3,6 +3,17 @@
 <head>
 
     
+    <script data-dukb-host-analytics-default="">
+      // Lovable reads Consent Mode before the app mounts. Queue its default without loading a tag.
+      (function () {
+        window.dataLayer = window.dataLayer || [];
+        function gtag() {
+          window.__DUKB_HOST_ANALYTICS_DEFAULT__ = arguments;
+          window.dataLayer.push(arguments);
+        }
+        gtag('consent', 'default', { analytics_storage: 'denied' });
+      })();
+    </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Round 90: index.html must never be cached. The hashed asset files
          under /assets are immutable and still cache normally; only this
@@ -253,6 +264,7 @@
 <li>Finish in the top eight to reach the finals. Follow the bracket and try to win the Grand Final.</li>
 <li>Open the club office to extend contracts and approach eligible recruits. Check how much cap room you have in the season the deal starts.</li>
 <li>Open State of Origin in the club office to coach New South Wales or Queensland through three games. Pick your 13 starters, six reserves and tactic. The 2026 series uses the official dates and venues. Later schedules and all results are simulated.</li>
+<li>Choose Rugby League World Cup beside Career saves to coach one of ten men’s national teams through the 2026 pools, semifinals and final. The fixtures and opening selections are sourced. The game uses those opening squads throughout, with simulated ratings, lineups after the first round and results. Your tournament saves separately.</li>
 <li>Offer an eligible player less than the asking salary to request a simulated three-season counteroffer. Review the salary and dates before accepting.</li>
 <li>In Contracts, arrange an offseason move for an eligible player. They stay this season, and the receiving club pays their salary for the remaining term.</li>
 <li>Set Standard, Value or Premium ticket prices in Finance before your first paid home match. That choice applies to home gates for the rest of the season.</li>
