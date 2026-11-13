@@ -7,7 +7,8 @@ import {
 import { createNrlCareer, reduceNrlCareer } from '@/lib/nrlCareer';
 import { NRL_ROLES } from '@/lib/nrlManager';
 import {
-  advanceNrlWorldCup, createNrlWorldCup, nrlWorldCupResults, rankNrlWorldCupPools, readNrlWorldCupSave, simulateNrlWorldCupOpener,
+  advanceNrlWorldCup, createNrlWorldCup, nrlWorldCupCanPickLineup, nrlWorldCupMatchday, nrlWorldCupResults, nrlWorldCupRotation,
+  rankNrlWorldCupPools, readNrlWorldCupSave, simulateNrlWorldCupOpener,
 } from '@/lib/nrlWorldCup';
 
 describe('2026 men’s Rugby League World Cup opener', () => {
@@ -226,6 +227,71 @@ describe('2026 men’s Rugby League World Cup simulation', () => {
     expect(readNrlWorldCupSave(JSON.stringify({ ...start, tactics: ['press'] }))).toBeNull();
     expect(readNrlWorldCupSave(JSON.stringify({ ...start, matches: [] }))).toBeNull();
     expect(nrlWorldCupResults(start)).toMatchObject({ poolMatches: [], semifinals: [], final: null, champion: null });
+  });
+
+  it('plays a qualified swap and ordered bench only for your next fixture', () => {
+    const nation = 'australia';
+    const swap = 0;
+    const matchday = nrlWorldCupMatchday(nation, { swap, firstReserve: 3 });
+    expect(matchday.starters.find(player => player.role === 'Halfback')?.name).toBe('Tom Dearden');
+    expect(matchday.bench[0].name).toBe('Keaon Koloamatangi');
+    expect(matchday.bench.some(player => player.name === 'Mitchell Moses')).toBe(true);
+    expect(new Set([...matchday.starters, ...matchday.bench].map(player => player.id)).size).toBe(19);
+    expect(NRL_WORLD_CUP_2026_OPENING_SQUADS[nation][6].name).toBe('Mitchell Moses');
+    let swappedImpact = false;
+    for (let seed = 0; seed < 240; seed++) {
+      const run = createNrlWorldCup(seed, nation);
+      const normal = advanceNrlWorldCup(run, 1, 'balanced');
+      const changed = advanceNrlWorldCup(run, 1, 'balanced', { swap });
+      const base = nrlWorldCupResults(normal).poolMatches;
+      const swaps = nrlWorldCupResults(changed).poolMatches;
+      expect(swaps.slice(1)).toEqual(base.slice(1));
+      if (JSON.stringify(swaps[0]) !== JSON.stringify(base[0])) swappedImpact = true;
+      expect(readNrlWorldCupSave(JSON.stringify(changed))).toEqual(changed);
+      if (swappedImpact) break;
+    }
+    expect(swappedImpact).toBe(true);
+    const first = nrlWorldCupRotation(nation, { firstReserve: 5 });
+    expect(first[0].name).toBe('Bradman Best');
+    expect(first.map(player => player.name)).not.toEqual(nrlWorldCupRotation(nation, {}).map(player => player.name));
+    expect(first).toHaveLength(4);
+
+    const run = createNrlWorldCup(6, nation);
+    const changed = advanceNrlWorldCup(run, 1, 'balanced', { swap: 1 });
+    const reordered = advanceNrlWorldCup(run, 1, 'balanced', { swap: 1, firstReserve: 2 });
+    expect(nrlWorldCupResults(changed).poolMatches[0]).toMatchObject({ homeScore: 28, awayScore: 14 });
+    expect(nrlWorldCupResults(reordered).poolMatches[0]).toMatchObject({ homeScore: 28, awayScore: 20 });
+    expect(nrlWorldCupResults(reordered).poolMatches.slice(1)).toEqual(nrlWorldCupResults(changed).poolMatches.slice(1));
+  });
+
+  it('rejects forged, stale and eliminated-team lineup choices', () => {
+    const opening = createNrlWorldCup(42, 'cook-islands');
+    expect(nrlWorldCupCanPickLineup(opening)).toBe(true);
+    expect(advanceNrlWorldCup(opening, 1, 'balanced', { swap: 6 })).toBe(opening);
+    expect(advanceNrlWorldCup(opening, 1, 'balanced', { firstReserve: 0 })).toBe(opening);
+    expect(advanceNrlWorldCup(opening, 2, 'balanced', { firstReserve: 5 })).toBe(opening);
+    let run = opening;
+    for (let step = 1; step <= 3; step++) run = advanceNrlWorldCup(run, step, 'balanced');
+    expect(nrlWorldCupCanPickLineup(run)).toBe(false);
+    expect(advanceNrlWorldCup(run, 4, 'balanced', { firstReserve: 5 })).toBe(run);
+    const semifinals = advanceNrlWorldCup(run, 4, 'balanced');
+    expect(readNrlWorldCupSave(JSON.stringify({ ...semifinals, lineups: { 4: { firstReserve: 5 } } }))).toBeNull();
+    expect(readNrlWorldCupSave(JSON.stringify({ ...semifinals, lineups: { 5: { firstReserve: 5 } } }))).toBeNull();
+    expect(readNrlWorldCupSave(JSON.stringify({ ...semifinals, lineups: { '01': { firstReserve: 5 } } }))).toBeNull();
+    expect(readNrlWorldCupSave(JSON.stringify({ ...semifinals, lineups: {} }))).toBeNull();
+  });
+
+  it('persists valid independent changes in all three pool games and both knockout games', () => {
+    let run = createNrlWorldCup(42, 'australia');
+    for (let step = 1; step <= 5; step++) {
+      expect(nrlWorldCupCanPickLineup(run)).toBe(true);
+      run = advanceNrlWorldCup(run, step, 'balanced', { swap: 0, firstReserve: 3 });
+      expect(run.tactics).toHaveLength(step);
+      expect(readNrlWorldCupSave(JSON.stringify(run))).toEqual(run);
+    }
+    expect(nrlWorldCupCanPickLineup(run)).toBe(false);
+    expect(Object.keys(run.lineups!)).toEqual(['1', '2', '3', '4', '5']);
+    expect(JSON.stringify(run).length).toBeLessThan(512);
   });
 
   it('finishes every nation’s run with a four-nation knockout even when the chosen team is eliminated', () => {
