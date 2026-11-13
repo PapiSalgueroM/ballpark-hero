@@ -30,7 +30,7 @@ import {
   cupProgressRank, uclProgressRank, objectiveStatuses, openObjectives, seasonScoreLeaguePoints,
   /* Round 783: the mid season takeover an accepted application walks into. */
   startCareer, interimManagerName, refreshWorldRoster, worldSeedOf, livingWorldOf, customExitUclField, SAVE_CAPS,
-  clubAvailableInCareer, careerHasKLeagueWorld, careerScopedLeagueId,
+  clubAvailableInCareer, careerHasKLeagueWorld, careerScopedLeagueId, promotionAppointmentHeld, promotionEntryLabel,
   /* Round 1335: the old season rules' switch, read by both handovers. */
   legacySeason,
   /* Round 1502: the watched Champions League across a move, and where its nights sit. */
@@ -41,7 +41,6 @@ import {
   freeAgencyCarry,
 } from '@/lib/clubManager';
 import type { WorldCompKey } from '@/lib/worldCompetition';
-import { PLAYOFF_LABELS } from '@/lib/clubManagerChampionshipPlayoffs';
 import type { CareerState, CalendarEntry, Competition, FormResult, MatchWeekReport, PlayerMessage } from '@/lib/clubManager';
 import { BOARD_FRESH, LEGACY_BOARD_START, LEGACY_NEW_JOB_BOARD } from '@/lib/clubManagerBoardVerdict';
 import { applyNewJobDials } from '@/lib/clubManagerDifficulty';
@@ -512,7 +511,7 @@ function pendingLabel(state: CareerState, entry: CalendarEntry): string {
   if (entry.type === 'oneOff') return oneOffEntryLabel(state, entry) ?? 'Super cup';
   /* Round 1593: a Europa League night whose match is not known yet. */
   if (entry.type === 'uel') return 'Europa League';
-  if (entry.type === 'promotion') return PLAYOFF_LABELS[entry.round];
+  if (entry.type === 'promotion') return promotionEntryLabel(state, entry.round);
   const league = careerLeagueOf(state);
   if (entry.type === 'cup' && entry.cupRound) return `${league.cupName} · ${CUP_LABELS[entry.cupRound]}`;
   if (entry.type === 'uclKo' && entry.uclRound) return `Champions League · ${UCL_LABELS[entry.uclRound]}`;
@@ -988,7 +987,7 @@ function seededJoinCarry(career: CareerState, s: CareerState, moved: ReadonlySet
  */
 export function joinClubNow(career: CareerState): CareerState | null {
   // A mid-season appointment replays earlier fixtures. Keep the sealed promotion field until summer.
-  if (career.championshipPlayoffs) return null;
+  if (promotionAppointmentHeld(career)) return null;
   const hunt = jobHuntOf(career);
   const open = hunt.open;
   if (!open || open.status !== 'accepted' || career.sacked) return null;
@@ -1008,6 +1007,7 @@ export function joinClubNow(career: CareerState): CareerState | null {
       scopedLeagueId: careerScopedLeagueId(career),
       uclField: career.uclField ? customExitUclField(career, career.uclField) : null,
       championshipPlayoffRules: career.championshipPlayoffRules,
+      bundesligaPlayoffRules: career.bundesligaPlayoffRules,
       keepLeagueOverrides: true,
       ...(worldRosterView(departed) || worldSeedOf(departed) !== undefined
         ? { rosterCareer: departed, worldSeed: worldSeedOf(departed) } : {}),

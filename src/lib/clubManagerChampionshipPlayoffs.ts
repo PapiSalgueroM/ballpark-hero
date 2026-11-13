@@ -56,7 +56,7 @@ export function drawNextPlayoffRound(playoffs: ChampionshipPlayoffs, round: numb
   }
 }
 
-export function recordPromotionResult(tie: PromotionTie, round: number, myClub: string, myGoals: number, oppGoals: number,
+export function recordPromotionResult(tie: SettleableTie, round: number, myClub: string, myGoals: number, oppGoals: number,
   advanced: boolean, extraTime: boolean, penalties: boolean): void {
   const mineHome = tie.home === myClub;
   const score = { homeGoals: mineHome ? myGoals : oppGoals, awayGoals: mineHome ? oppGoals : myGoals };

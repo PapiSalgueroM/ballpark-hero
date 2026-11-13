@@ -1,5 +1,6 @@
 import { cn } from '@/lib/utils';
 import { MessageSquare } from 'lucide-react';
+import { promotionAppointmentHeld } from '@/lib/clubManager';
 import type { CareerState } from '@/lib/clubManager';
 import { deskOf } from '@/lib/clubManagerDecisions';
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
@@ -212,7 +213,7 @@ export function InboxCard({ career, onAnswer }: InboxCardProps) {
             </p>
             {!m.resolved && m.options.length > 0 && (
               <div className="flex flex-wrap gap-1.5 mt-2">
-                {m.options.map((o, i) => (career.championshipPlayoffs && o.effect === 'joinNow' ? null : (
+                {m.options.map((o, i) => (promotionAppointmentHeld(career) && o.effect === 'joinNow' ? null : (
                   <button
                     key={i}
                     onClick={() => { setAnswerRequest(m.id); onAnswer(m.id, i); }}
