@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { nrlSeasonPlan } from '@/data/nrlManagerSeasons';
 import { NRL_OPENING_MATCHDAY_2026 } from '@/data/nrlOpeningMatchday2026';
-import { createNrlCareer, createNrlOpeningMatchdayCareer, readNrlCareerSave, reduceNrlCareer, type NrlCareerState } from '@/lib/nrlCareer';
+import { createNrlCareer, createNrlOpeningMatchdayCareer, loadNrlPerthSigningsCareer, readNrlCareerSave, reduceNrlCareer, type NrlCareerState } from '@/lib/nrlCareer';
 import { createNrlSeason, nrlCanPlayRole, NRL_ROLES } from '@/lib/nrlManager';
 import {
   createNrlOriginSeries, isNrlOriginSeries, nrlOriginEligibility, nrlOriginFixtures, nrlOriginResult, playNrlOriginMatch,
@@ -198,5 +198,62 @@ describe('Origin career saves', () => {
     expect(live.season.live).toBeDefined();
     expect(play(live, 1)).toBe(live);
     expect(JSON.stringify(readNrlCareerSave(JSON.stringify(live)))).toBe(JSON.stringify(live));
+  });
+
+  it('lets a club coach add one eligible omitted player to the Origin pool and field them', () => {
+    const initial = createNrlCareer('broncos', 16);
+    const base = start(initial);
+    const pool = base.origin!.pools.qld;
+    const own = activePlayers(initial).filter(player => player.contract?.clubId === initial.season.clubId);
+    const candidate = own.find(player => nrlOriginEligibility(player.id) === 'qld' && !pool.some(p => p.id === player.id))!;
+    expect(candidate).toBeDefined();
+    const nominate = (id: string) => reduceNrlCareer(initial, { type: 'startOrigin', side: 'qld', year: 2026, nominationId: id });
+    expect(nominate(own.find(player => nrlOriginEligibility(player.id) === 'nsw')!.id)).toBe(initial);
+    expect(nominate(activePlayers(initial).find(player => nrlOriginEligibility(player.id) === 'qld'
+      && player.contract?.clubId !== initial.season.clubId)!.id)).toBe(initial);
+    const nominated = nominate(candidate.id);
+    expect(nominated.origin?.nomination).toEqual({ clubId: 'broncos', playerId: candidate.id });
+    expect(nominated.origin?.pools.qld).toHaveLength(pool.length);
+    expect(nominated.origin?.pools.qld.some(player => player.id === candidate.id)).toBe(true);
+    expect(nominated.origin?.pools.nsw).toEqual(base.origin?.pools.nsw);
+    expect(nominated.origin?.selection).toEqual(base.origin?.selection);
+    expect(withoutOrigin(nominated)).toEqual(initial);
+    const chosen = reduceNrlCareer(nominated, { type: 'selectOriginReserve', game: 1, year: 2026, side: 'qld', slot: 0, playerId: candidate.id });
+    const played = play(chosen, 1);
+    expect(played.origin?.matches[0].selection.bench[0]).toBe(candidate.id);
+    expect(withoutOrigin(advance(played))).toEqual(advance(initial));
+    const raw = JSON.stringify(played);
+    expect(JSON.stringify(readNrlCareerSave(raw))).toBe(raw);
+    const forged = { ...played, origin: { ...played.origin, nomination: { clubId: 'raiders', playerId: candidate.id } } };
+    expect(readNrlCareerSave(JSON.stringify(forged))).toBeNull();
+    let completedClub = played;
+    while (completedClub.season.phase !== 'complete') completedClub = advance(completedClub);
+    const moved = reduceNrlCareer(completedClub, { type: 'startNextSeason', move: { fromYear: 2026, clubId: 'bears' } });
+    expect(moved.season).toMatchObject({ clubId: 'bears', year: 2027 });
+    expect(moved.origin?.nomination).toEqual({ clubId: 'broncos', playerId: candidate.id });
+    expect(JSON.stringify(readNrlCareerSave(JSON.stringify(moved)))).toBe(JSON.stringify(moved));
+  });
+
+  it('retains all verified players and the current default selections on a named career', () => {
+    const initial = createNrlOpeningMatchdayCareer('broncos', 16, NRL_OPENING_MATCHDAY_2026);
+    const base = start(initial);
+    const reece = 'nrl-real-510216';
+    const named = reduceNrlCareer(initial, { type: 'startOrigin', side: 'qld', year: 2026, nominationId: reece });
+    expect(named.origin).toEqual({ ...base.origin, nomination: { clubId: 'broncos', playerId: reece } });
+    expect(play(named, 1).origin?.matches).toEqual(play(base, 1).origin?.matches);
+    expect(JSON.stringify(readNrlCareerSave(JSON.stringify(named)))).toBe(JSON.stringify(named));
+    const candidate = activePlayers(initial).find(player => player.contract?.clubId === 'broncos'
+      && !nrlOriginEligibility(player.id) && player.id.startsWith('nrl-real-'))!;
+    expect(reduceNrlCareer(initial, { type: 'startOrigin', side: 'qld', year: 2026, nominationId: candidate.id })).toBe(initial);
+  });
+
+  it('uses verified eligibility for named 2027 Perth signings', async () => {
+    const perth = await loadNrlPerthSigningsCareer(16, false);
+    const qld = { type: 'startOrigin', side: 'qld', year: 2027 } as const;
+    expect(reduceNrlCareer(perth, { ...qld, nominationId: 'nrl-real-perth-toby-sexton' })).toBe(perth);
+    const nominated = reduceNrlCareer(perth, { ...qld, nominationId: 'nrl-real-504371' });
+    expect(nominated.origin?.nomination).toEqual({ clubId: 'bears', playerId: 'nrl-real-504371' });
+    expect(nominated.origin?.pools.qld.some(player => player.name === 'Gehamat Shibasaki')).toBe(true);
+    expect(JSON.stringify(readNrlCareerSave(JSON.stringify(nominated)))).toBe(JSON.stringify(nominated));
   });
 });
