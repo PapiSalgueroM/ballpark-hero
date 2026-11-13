@@ -479,7 +479,6 @@ import { spawnSync } from 'node:child_process';
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import fs from 'node:fs';
-import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createRequire } from 'node:module';
@@ -494,7 +493,10 @@ const CONTROL = process.env.US_BOARD_PARITY_CONTROL || '';
 /* Resolved the way node resolves it, so a worktree that borrows the main tree's node_modules works too. */
 const VITEST = path.join(path.dirname(createRequire(path.join(ROOT, 'package.json')).resolve('vitest/package.json')), 'vitest.mjs');
 
-const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'usboard-'));
+// The historical TSX copies import packages from this checkout.
+const controlRoot = path.join(ROOT, '.sim-control');
+fs.mkdirSync(controlRoot, { recursive: true });
+const tmp = fs.mkdtempSync(path.join(controlRoot, 'usboard-'));
 const litter = [];
 process.on('exit', () => {
   for (const f of litter) { try { fs.rmSync(f, { force: true }); } catch { /* best effort */ } }
@@ -657,7 +659,11 @@ function replay(env) {
   );
   const text = (r.stdout || '') + (r.stderr || '');
   if (!fs.existsSync(out)) return { exit: r.status, passed: [], failed: SPORTS, problems: ['Vitest wrote no report: ' + text.slice(-800)] };
-  const rows = (JSON.parse(fs.readFileSync(out, 'utf8')).testResults || []).flatMap(f => f.assertionResults || []);
+  const suites = JSON.parse(fs.readFileSync(out, 'utf8')).testResults || [];
+  const rows = suites.flatMap(f => f.assertionResults || []);
+  if (r.status !== 0 && !rows.length) {
+    return { exit: r.status, passed: [], failed: SPORTS, problems: suites.map(suite => suite.message).filter(Boolean) };
+  }
   const titled = status => rows.filter(a => a.status === status).map(a => a.title);
   return { exit: r.status, passed: titled('passed'), failed: titled('failed'), problems: read(report).split('\n').filter(Boolean) };
 }

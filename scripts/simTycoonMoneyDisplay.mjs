@@ -155,7 +155,8 @@ it('Actual prospect and senior sales', async () => {
     const drawStart = draws;
     await act(async () => { if (senior) hook.result.current.doSellSenior(player.id); else hook.result.current.doSell(player.id); }); await flush();
     const immediate = localStorage.getItem(E.SAVE_KEY), bytes = O.serialize(expected);
-    check('sale-' + senior, { state: clone(hook.result.current.state), immediate, draws: draws - drawStart, now: Date.now(), errors }, { state: expected, immediate: senior ? bytes : O.serialize(input), draws: 0, now: NOW, errors: [] }, { price, before: loaded, requests: clone(requests) });
+    // Both sale paths now persist before confirming, with no duplicate pagehide write.
+    check('sale-' + senior, { state: clone(hook.result.current.state), immediate, draws: draws - drawStart, now: Date.now(), errors }, { state: expected, immediate: bytes, draws: 0, now: NOW, errors: [] }, { price, before: loaded, requests: clone(requests) });
     const beforeHideWrites = writes.filter(row => row.key === E.SAVE_KEY).length;
     act(() => window.dispatchEvent(new Event('pagehide')));
     const expectedStorage = clone(completionStorage); expectedStorage.local[E.SAVE_KEY] = bytes;
