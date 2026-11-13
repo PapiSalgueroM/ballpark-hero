@@ -148,7 +148,7 @@ console.log('3) era league keys match FALLBACK_CLUBS labels byte for byte');
 
 console.log('4) the creation picker reaches every window');
 {
-  const page = fs.readFileSync(`${ROOT}/src/pages/SoccerCareer.tsx`, 'utf8');
+  const page = fs.readFileSync(`${ROOT}/src/components/soccer-career/SoccerCareerCreator.tsx`, 'utf8');
   const rows = [...page.matchAll(/\{ value: "([^"]+)", label: "([^"]+)", startYear: (\d+) \}/g)]
     .map(m => ({ value: m[1], label: m[2], startYear: Number(m[3]) }));
   if (rows.length !== 9) fail(`picker has ${rows.length} era rows, expected 9`);

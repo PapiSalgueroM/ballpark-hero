@@ -42,6 +42,7 @@ import { attrTreeFor, defaultPhysique } from '@/lib/soccerCareerAttributes';
 import { adjustClubsForYear } from '@/lib/careerEras';
 import { isSoccerCareerSave, parseSoccerCareerSave } from '@/lib/soccerCareerSave';
 import SoccerCareer from '@/pages/SoccerCareer';
+import { SoccerCareerCreator } from '@/components/soccer-career/SoccerCareerCreator';
 
 const KEY = 'soccerCareerSave', OTHER = 'creation-unrelated-save';
 const raw: Record<string, unknown> = {};
@@ -115,6 +116,23 @@ beforeEach(() => {
 afterEach(() => { cleanup(); vi.clearAllTimers(); vi.useRealTimers(); vi.restoreAllMocks(); vi.unstubAllGlobals(); });
 
 describe('Soccer Career creation roll belongs to its selected position', () => {
+  it('keeps the keyboard target and ignores repeats while creation support loads', () => {
+    const loadSupport = vi.fn(() => new Promise<never>(() => {}));
+    const view = render(<MemoryRouter><SoccerCareerCreator onBegin={vi.fn()} loadSupport={loadSupport} /></MemoryRouter>);
+    fireEvent.change(view.getByPlaceholderText('Enter your player name...'), { target: { value: 'Roll Tester' } });
+    const selects = view.container.querySelectorAll('select');
+    for (const [index, value] of ['England', 'ST', '2020-24'].entries()) fireEvent.change(selects[index], { target: { value } });
+    const generate = view.getByRole('button', { name: /Generate Starting Potential/ });
+    generate.focus();
+    fireEvent.click(generate);
+    expect(generate).toHaveFocus();
+    expect(generate).toHaveAttribute('aria-disabled', 'true');
+    expect(generate).not.toBeDisabled();
+    expect(view.getByRole('status')).toHaveTextContent('Loading clubs');
+    fireEvent.click(generate);
+    expect(loadSupport).toHaveBeenCalledTimes(1);
+  });
+
   it('creation roll preservation: a fresh settled roll starts and saves the displayed player', () => {
     const view = prepare(); roll(view); settle(); const shown = preview(view, 'ST');
     expect(shown).not.toBeNull(); expect(begin(view)).toBeEnabled();
