@@ -18,7 +18,8 @@ import type { CareerState, LiveChange, LiveMatch, MatchDetail, MyFixture, XiSlot
 export type Setting = -1 | 0 | 1;
 export type InstructionKey = 'press' | 'tempo' | 'width' | 'line';
 export interface TeamInstructions { press: Setting; tempo: Setting; width: Setting; line: Setting; }
-export type AiStyleId = 'gegenpress' | 'possession' | 'patient' | 'wingplay' | 'direct' | 'counter' | 'lowblock' | 'balanced';
+export const AI_STYLE_IDS = ['gegenpress', 'possession', 'patient', 'wingplay', 'direct', 'counter', 'lowblock', 'balanced'] as const;
+export type AiStyleId = typeof AI_STYLE_IDS[number];
 
 /** One entry of a match's instruction log: from the minute after `minute`, these were in force. Kick off is minute 0. */
 export interface InstructionStep { minute: number; plus?: number; instructions: TeamInstructions; }
@@ -61,7 +62,7 @@ export const logEverSet = (log: InstructionStep[] | undefined): boolean => (log 
 /** What the engine asks of the tactics module. Every call is made only off balanced. */
 export interface TacticsImpl {
   /** The goal rate boosts my instructions are worth in a half against the other side's style. */
-  edge(state: CareerState, fx: MyFixture, xi: XiSlot[], instr: TeamInstructions, half: 1 | 2): { atk: number; def: number };
+  edge(state: CareerState, fx: MyFixture, xi: XiSlot[], instr: TeamInstructions, half: 1 | 2, oppStyle?: AiStyleId): { atk: number; def: number };
   /** A stretch's knock factor and shots per expected goal. */
   segment(instr: TeamInstructions): { knock: number; shots: number };
   /** The points of the ball the log was worth over a half. */

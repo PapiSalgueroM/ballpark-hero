@@ -22,9 +22,9 @@
  *             high line with nobody pressing the ball, or a press in front of a deep line, leaves a gap)
  * The table and its measured effects are in scripts/simCmTactics.mjs's header.
  *
- * THE OTHER DUGOUT. Every AI club plays a style (AI_STYLES), drawn from a stream keyed to the club's name and
- * read against its strength, never from the game's own stream: a strong side presses and keeps the ball more,
- * a weak one sits in and goes direct. Their style only matters through yours: with you on balanced it changes
+ * THE OTHER DUGOUT. A fictional manager brings a keyed style. Otherwise the club has a style drawn from its
+ * name and strength: a strong side presses and keeps the ball more, a weak one sits in and goes direct.
+ * Neither uses the game's own stream. Their style only matters through yours: with you on balanced it changes
  * nothing, because the whole league was tuned against balanced football.
  *
  * LOADING: the engine never imports this file. It carries clubManagerTacticsCore.ts (the types, balanced, a saved
@@ -33,12 +33,12 @@
  * styles. This module imports the engine at run time, which is safe: the engine is already loaded by then and
  * does not import this back. Nothing here draws from Math.random.
  */
-import { FORMATIONS, dutyOptions, liveDutyAt, liveInstructions, strengthOf, worldYear } from '@/lib/clubManager';
+import { FORMATIONS, dutyOptions, generatedOpponentStyle, liveDutyAt, liveInstructions, strengthOf, worldYear } from '@/lib/clubManager';
 import type { CareerState, Duty, LiveChange, LiveMatch, MyFixture, XiSlot } from '@/lib/clubManager';
 import { carryShape } from '@/lib/clubManagerCarry';
 import { keyedRng } from '@/lib/keyedRng';
 import {
-  BALANCED, INSTRUCTION_KEYS, isBalanced, readInstructions, setTacticsImpl,
+  AI_STYLE_IDS, BALANCED, INSTRUCTION_KEYS, isBalanced, readInstructions, setTacticsImpl,
   type AiStyleId, type InstructionKey, type InstructionStep, type Setting, type TacticStats, type TeamInstructions,
 } from '@/lib/clubManagerTacticsCore';
 
@@ -118,7 +118,7 @@ export const AI_STYLES: Record<AiStyleId, AiStyle> = {
   balanced: { label: 'Balanced', emoji: '⚖️', blurb: 'No extremes. They play what the afternoon asks for.', read: 'Nothing special to exploit. Play your own game.', instructions: { ...BALANCED }, base: 0.18, slope: 0 },
 };
 
-export const AI_STYLE_IDS = Object.keys(AI_STYLES) as AiStyleId[];
+export { AI_STYLE_IDS } from '@/lib/clubManagerTacticsCore';
 
 /** A club's strength read as -1 (weak) to 1 (strong), the scale the style weights lean on. */
 export const styleStrengthRead = (strength: number): number => Math.max(-1, Math.min(1, (strength - 72) / 10));
@@ -338,9 +338,14 @@ export function tacticStatsOf(a: {
 
 /* ---------- the engine's side of it: what clubManagerTacticsCore's slot holds ---------- */
 
-/** The style a club plays, off its own strength (never the level's edge, which is about you). Keyed, no draw. */
+function matchOpponentStyle(state: CareerState, club: string, style?: AiStyleId): AiStyleId {
+  return style && AI_STYLE_IDS.includes(style) ? style : aiStyleFor(club, strengthOf(state, club));
+}
+
+/** An in-progress match uses its kickoff style, or the club style for an older save. */
 export function opponentStyle(state: CareerState, club: string): AiStyleId {
-  return aiStyleFor(club, strengthOf(state, club));
+  const style = state.live?.opponent === club ? state.live.oppStyle : generatedOpponentStyle(state, club);
+  return matchOpponentStyle(state, club, style);
 }
 
 /** The points of the ball the log was worth over a half (half two runs on through extra time), each minute under
@@ -395,14 +400,14 @@ function change(state: CareerState, live: LiveMatch, ch: LiveChange, m: number, 
 }
 
 setTacticsImpl({
-  edge: (state, fx: MyFixture, xi: XiSlot[], instr, half) => tacticBoost({
-    mine: instr, theirs: AI_STYLES[opponentStyle(state, fx.opponent)].instructions, half,
+  edge: (state, fx: MyFixture, xi: XiSlot[], instr, half, oppStyle) => tacticBoost({
+    mine: instr, theirs: AI_STYLES[matchOpponentStyle(state, fx.opponent, oppStyle)].instructions, half,
     fit: xi.length ? xi.reduce((s, x) => s + x.p.fitness, 0) / xi.length : 80, duties: xi.map(x => x.duty),
   }),
   segment: instr => ({ knock: injuryMult(instr), shots: shotMult(instr) }),
   possShift,
   day: (state, fx, live, pairs, lastMinute) => {
-    const theirStyle = opponentStyle(state, fx.opponent);
+    const theirStyle = matchOpponentStyle(state, fx.opponent, live.oppStyle);
     const goals = (a?: GoalMark[], b?: GoalMark[]): GoalMark[] => [...(a ?? []), ...(b ?? [])];
     return {
       log: live.instrLog ?? [], theirStyle,

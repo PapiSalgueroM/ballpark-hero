@@ -202,7 +202,7 @@ import { clockOrder, playedBy } from '@/lib/clubManagerClock';
    (it adds zero or multiplies by one), and with the slot empty plays balanced, so a career that never sets one
    plays as it always did. */
 import {
-  BALANCED, isBalanced, logEverSet, readInstructions, tacticsImpl,
+  AI_STYLE_IDS, BALANCED, isBalanced, logEverSet, readInstructions, tacticsImpl,
   type AiStyleId, type InstructionStep, type TacticStats, type TeamInstructions,
 } from '@/lib/clubManagerTacticsCore';
 
@@ -3383,6 +3383,8 @@ export interface LiveMatch {
   oppXi?: OppXiLine[];
   oppBench?: OppXiLine[];
   oppFormationIndex?: number;
+  /** The fictional manager's style at kick off. Older matches keep the original club style. */
+  oppStyle?: AiStyleId;
   /** The first half's play, cards, injury and share of the ball, decided at kick off. */
   h1Play?: PlayEvent[];
   h1Cards?: CardLine[];
@@ -9494,6 +9496,15 @@ function realManagerNames(): Set<string> {
  *  real man is a display fact only: no sentence the engine writes may carry his name. */
 function isRealChair(entry: { name: string; real?: 1 } | undefined | null): boolean {
   return !!entry && (entry.real === 1 || realManagerNames().has(entry.name));
+}
+
+/** A fictional manager keeps his style when he moves clubs. Real names are display facts. */
+export function generatedOpponentStyle(state: CareerState, club: string): AiStyleId | undefined {
+  const manager = state.managers?.[club];
+  const name = typeof manager?.name === 'string' ? manager.name.trim() : '';
+  if (!name || isRealChair(manager)) return undefined;
+  const pick = keyedRng(`cm-manager-style|${state.eraId ?? DEFAULT_ERA_ID}|${name.toLowerCase()}`)();
+  return AI_STYLE_IDS[Math.floor(pick * AI_STYLE_IDS.length)];
 }
 
 /* Round 1606: the real man in a club's chair on the opening day of the season the table describes, or null. Only
@@ -16612,13 +16623,46 @@ function intoSlots(xi: OppXiLine[], formation: Formation): OppXiLine[] {
 }
 
 /**
+ * Try the higher-rated players first. A later player can take a compatible
+ * slot by moving its occupant to another compatible slot.
+ */
+function fittingOppXi(roster: ProjectedPlayer[], formation: Formation): ProjectedPlayer[] | null {
+  const xi = new Array<ProjectedPlayer>(formation.slots.length);
+  const place = (player: ProjectedPlayer, visited: Set<number>): boolean => formation.slots.some((slot, index) => {
+    if (visited.has(index) || !slot.allowed.includes(player.p)) return false;
+    visited.add(index);
+    if (xi[index] && !place(xi[index], visited)) return false;
+    xi[index] = player;
+    return true;
+  });
+
+  const selected = new Set<string>();
+  for (const player of roster) {
+    if (selected.has(player.n) || !place(player, new Set())) continue;
+    selected.add(player.n);
+    if (selected.size === formation.slots.length) return xi;
+  }
+  return null;
+}
+
+const OPP_PREFERRED_FORMATIONS: Partial<Record<AiStyleId, readonly string[]>> = {
+  gegenpress: ['4-3-3', '4-2-3-1'],
+  possession: ['4-3-3 holding', '4-3-3', '4-2-3-1'],
+  patient: ['4-2-3-1', '4-1-4-1', '4-1-2-1-2'],
+  wingplay: ['3-4-3', '3-5-2 high wing backs', '4-2-3-1 wide'],
+  direct: ['4-4-2', '4-2-2-2', '3-5-2'],
+  counter: ['4-2-3-1', '5-3-2', '3-4-2-1'],
+  lowblock: ['5-4-1', '5-3-2', '4-5-1'],
+};
+
+/**
  * The opposition's eleven and bench for today, from the same era roster
  * their scorers have always been drawn from. A named eleven with a keeper or
  * nothing: a thin club (CM_PARTIAL) whose roster cannot field one gets no
  * invented sheet, exactly the rule the Round 178 ratings sheet already
  * follows, and the viewer then shows unlabelled dots for them.
  */
-function pickOppSquad(roster: ProjectedPlayer[]): { xi: OppXiLine[]; bench: OppXiLine[]; formationIndex: number } | null {
+function pickOppSquad(roster: ProjectedPlayer[], match?: { style?: AiStyleId }): { xi: OppXiLine[]; bench: OppXiLine[]; formationIndex: number } | null {
   const byR = [...roster].sort((a, b) => b.r - a.r);
   const line = (pl: ProjectedPlayer): OppXiLine => ({ n: pl.n, p: pl.p, r: pl.r, ...(pl.g ? { g: true } : {}) });
   const taken = new Set<string>();
@@ -16631,21 +16675,44 @@ function pickOppSquad(roster: ProjectedPlayer[]): { xi: OppXiLine[]; bench: OppX
       count -= 1;
     }
   };
-  const xi: OppXiLine[] = [];
-  take(xi, p => p.p === 'GK', 1, 11);
-  take(xi, p => groupOf(p.p) === 'DEF', 4, 11);
-  take(xi, p => groupOf(p.p) === 'MID', 4, 11);
-  take(xi, p => groupOf(p.p) === 'ATT', 2, 11);
-  take(xi, p => p.p !== 'GK', 11, 11);
-  if (xi.length !== 11 || !xi.some(p => p.p === 'GK')) return null;
+  let best: { xi: ProjectedPlayer[]; index: number; score: number } | null = null;
+  if (match) {
+    const preferred = match.style ? OPP_PREFERRED_FORMATIONS[match.style] : undefined;
+    for (const [index, formation] of FORMATIONS.entries()) {
+      const xi = fittingOppXi(byR, formation);
+      if (!xi) continue;
+      // Five rating points across the whole XI let style decide a close call.
+      const score = xi.reduce((sum, player) => sum + player.r, 0) + (preferred?.includes(formation.name) ? 5 : 0);
+      if (!best || score > best.score || (score === best.score && formation.name === '4-4-2')) {
+        best = { xi, index, score };
+      }
+    }
+  }
+  let xi: OppXiLine[];
+  let formationIndex: number;
+  if (best) {
+    xi = best.xi.map(line);
+    formationIndex = best.index;
+    xi.forEach(player => taken.add(player.n));
+  } else {
+    // Thin squads and the background book keep the original selection.
+    xi = [];
+    take(xi, p => p.p === 'GK', 1, 11);
+    take(xi, p => groupOf(p.p) === 'DEF', 4, 11);
+    take(xi, p => groupOf(p.p) === 'MID', 4, 11);
+    take(xi, p => groupOf(p.p) === 'ATT', 2, 11);
+    take(xi, p => p.p !== 'GK', 11, 11);
+    if (xi.length !== 11 || !xi.some(p => p.p === 'GK')) return null;
+    formationIndex = bestFormationFor(xi);
+    xi = intoSlots(xi, FORMATIONS[formationIndex] ?? FORMATIONS[1]);
+  }
   const bench: OppXiLine[] = [];
   take(bench, p => p.p === 'GK', 1, 7);
   take(bench, p => groupOf(p.p) === 'DEF', 2, 7);
   take(bench, p => groupOf(p.p) === 'MID', 2, 7);
   take(bench, p => groupOf(p.p) === 'ATT', 2, 7);
   take(bench, p => p.p !== 'GK', 7, 7);
-  const formationIndex = bestFormationFor(xi);
-  return { xi: intoSlots(xi, FORMATIONS[formationIndex] ?? FORMATIONS[1]), bench, formationIndex };
+  return { xi, bench, formationIndex };
 }
 
 /** Opposition scorers from the men actually on their pitch, weighted like ours. */
@@ -17524,8 +17591,8 @@ export function instructionsOf(career: CareerState): TeamInstructions {
 
 /** Round 1522: what my instructions are worth to a half's goal rates (clubManagerTactics.ts), or null on balanced
  *  and before that module has loaded (the early return). */
-function tacticEdge(state: CareerState, fx: MyFixture, xi: XiSlot[], instr: TeamInstructions, half: 1 | 2): { atk: number; def: number } | null {
-  return isBalanced(instr) ? null : tacticsImpl()?.edge(state, fx, xi, instr, half) ?? null;
+function tacticEdge(state: CareerState, fx: MyFixture, xi: XiSlot[], instr: TeamInstructions, half: 1 | 2, oppStyle?: AiStyleId): { atk: number; def: number } | null {
+  return isBalanced(instr) ? null : tacticsImpl()?.edge(state, fx, xi, instr, half, oppStyle) ?? null;
 }
 
 type PositionSnapshot = { formationIndex: number; customShape?: unknown };
@@ -17589,7 +17656,7 @@ function positionEdge(xi: XiSlot[], mentality: Mentality, snapshot: PositionSnap
 /** The first half's lambdas, the kick off formula: the talk, the press, the shape, the venue. Round 1522 review:
  *  `instr` has no default, so a caller that forgets the instructions in force fails the type gate rather than
  *  playing balanced football while the log says otherwise. */
-function firstHalfLambdas(state: CareerState, fx: MyFixture, xi: XiSlot[], mentality: Mentality, instr: TeamInstructions, snapshot: PositionSnapshot | null): { lamMine: number; lamOpp: number; mine: number; oppS: number } {
+function firstHalfLambdas(state: CareerState, fx: MyFixture, xi: XiSlot[], mentality: Mentality, instr: TeamInstructions, snapshot: PositionSnapshot | null, oppStyle?: AiStyleId): { lamMine: number; lamOpp: number; mine: number; oppS: number } {
   const talk = talkEdgeFor(state, xi, fx, state.teamTalk ?? null);
   const press = state.press;
   const mine = myMatchStrength(state, xi) + talk + (press?.nextSharpen ?? 0);
@@ -17600,7 +17667,7 @@ function firstHalfLambdas(state: CareerState, fx: MyFixture, xi: XiSlot[], menta
   /* Round 505: the duties, wherever the mentality is. */
   const duty = dutyBoost(xi, state);
   /* Round 1522: and the instructions; on balanced they add exactly zero. */
-  const tac = tacticEdge(state, fx, xi, instr, 1);
+  const tac = tacticEdge(state, fx, xi, instr, 1, oppStyle);
   const geometry = positionEdge(xi, mentality, snapshot);
   const [lamMine, lamOpp] = geometry
     ? halfLambdas(mine, oppS, ment.atk + homeAtk + duty.atk + (tac ? tac.atk : 0) + geometry.atk, ment.def + oppAtk + duty.def + (tac ? tac.def : 0) + geometry.conceded)
@@ -17642,7 +17709,7 @@ function secondHalfLambdas(
   /* Round 505: the duties, the same way the first half adds them. */
   const duty = dutyBoost(xi, state);
   /* Round 1522: the instructions in force now, half two's costs included; on balanced they add exactly zero. */
-  const tac = tacticEdge(state, fx, xi, liveInstructions(live), 2);
+  const tac = tacticEdge(state, fx, xi, liveInstructions(live), 2, live.oppStyle);
   const geometry = positionEdge(xi, live.mentality, livePositionSnapshot(live));
   const [lamMine, lamOpp] = geometry
     ? halfLambdas(mine, oppS + fire, ment2.atk + homeAtk + opp2.def + duty.atk + (tac ? tac.atk : 0) + geometry.atk, ment2.def + oppAtk + opp2.atk + duty.def + (tac ? tac.def : 0) + geometry.conceded)
@@ -18175,7 +18242,7 @@ function ensureFirstHalf(state: CareerState, entry: CalendarEntry, live: LiveMat
   const started = men(startedSlots);
   const dutyOf = dutyLookup(startedSlots);
   if (live.lamMine === undefined || live.lamOpp === undefined) {
-    const { lamMine, lamOpp } = firstHalfLambdas(state, fx, startedSlots, live.mentality, liveInstructions(live), live.positionRules === 1 ? live.kickoffShape ?? null : null);
+    const { lamMine, lamOpp } = firstHalfLambdas(state, fx, startedSlots, live.mentality, liveInstructions(live), live.positionRules === 1 ? live.kickoffShape ?? null : null, live.oppStyle);
     if (live.lamMine === undefined) live.lamMine = lamMine;
     if (live.lamOpp === undefined) live.lamOpp = lamOpp;
   }
@@ -18230,7 +18297,7 @@ function recutFirstHalf(state: CareerState, entry: CalendarEntry, live: LiveMatc
   live.h1Injuries = keepUpTo(live.h1Injuries, minute);
   const off = offPitchIds(live);
   const xi = livePairs(state, live).filter(x => !off.has(x.p.id));
-  const { lamMine, lamOpp, mine, oppS } = firstHalfLambdas(state, fx, xi, live.mentality, liveInstructions(live), livePositionSnapshot(live));
+  const { lamMine, lamOpp, mine, oppS } = firstHalfLambdas(state, fx, xi, live.mentality, liveInstructions(live), livePositionSnapshot(live), live.oppStyle);
   const share = (45 - minute) / 45;
   live.h1Segs = recutSegments(live.h1Segs, { from: 0, to: 45, lamMine: live.lamMine ?? lamMine, lamOpp: live.lamOpp ?? lamOpp }, minute, 45, lamMine, lamOpp);
   ({ lamMine: live.lamMine, lamOpp: live.lamOpp } = effectiveLambdas(live.h1Segs));
@@ -18319,7 +18386,7 @@ function recutBoard(state: CareerState, entry: CalendarEntry, live: LiveMatch, p
   }
   const off = offPitchIds(live);
   const xi = livePairs(state, live).filter(x => !off.has(x.p.id));
-  const first = period === 'h1' ? firstHalfLambdas(state, fx, xi, live.mentality, liveInstructions(live), livePositionSnapshot(live)) : null;
+  const first = period === 'h1' ? firstHalfLambdas(state, fx, xi, live.mentality, liveInstructions(live), livePositionSnapshot(live), live.oppStyle) : null;
   const { lamMine, lamOpp } = first
     ?? secondHalfLambdas(state, fx, live, xi, live.myGoals + (live.h2My ?? []).length, live.oppGoals + (live.h2Opp ?? []).length);
   /* A minute of the board counts `weight` times an ordinary one (see BOARD). */
@@ -21091,7 +21158,7 @@ export function playNextEntry(career: CareerState, opts?: { skipHalftime?: boole
        fixture on the same seed could end 2-1 one way and 0-0 the other and
        the game had two engines wearing one name. Everything kicks off here
        now; quick sims use the same legal changes to look after the team. */
-    const live = kickOff(state, entry, opts?.varReviews);
+    const live = kickOff(state, entry, opts?.varReviews, !opts?.noBook);
     if (!opts?.skipHalftime) {
       state.live = live;
       return { state, kind: 'halftime', live };
@@ -21111,7 +21178,7 @@ export function playNextEntry(career: CareerState, opts?: { skipHalftime?: boole
  * point where the manager gets to manage: a real half, a real score, and a
  * dressing room where changing something changes what happens next.
  */
-function kickOff(state: CareerState, entry: CalendarEntry, varReviews: CmVarAsk = false): LiveMatch {
+function kickOff(state: CareerState, entry: CalendarEntry, varReviews: CmVarAsk = false, careerMatch = false): LiveMatch {
   /* Round 1303: the kinds of review the caller asked for (the game asks with the ledger's list, CM_VAR_KINDS). */
   const varKinds = cmVarKindsAsked(varReviews);
   const fx = fixtureFor(state, entry)!;
@@ -21128,7 +21195,8 @@ function kickOff(state: CareerState, entry: CalendarEntry, varReviews: CmVarAsk 
      microphone this week, is on the pitch with them for the first half.
      Round 157: keep the half's lambdas on the live match, so the full time
      xG line is read off the exact process that produced these goals. */
-  const { lamMine, lamOpp, mine, oppS } = firstHalfLambdas(state, fx, xi, state.mentality, instructionsOf(state), positionSnapshot);
+  const oppStyle = careerMatch ? generatedOpponentStyle(state, fx.opponent) : undefined;
+  const { lamMine, lamOpp, mine, oppS } = firstHalfLambdas(state, fx, xi, state.mentality, instructionsOf(state), positionSnapshot, oppStyle);
   const ids = xi.map(x => x.p.id);
   /* Round 504: the other eleven, picked before anyone scores, so their
      scorers are men who are on the pitch and the report rates the same
@@ -21136,7 +21204,7 @@ function kickOff(state: CareerState, entry: CalendarEntry, varReviews: CmVarAsk 
      come from the roster the way they always did. Round 742: the roster is
      read minus the men in my squad, so a man I signed off them is not on
      their teamsheet against me. */
-  const squad = pickOppSquad(oppRosterFor(state, fx.opponent));
+  const squad = pickOppSquad(oppRosterFor(state, fx.opponent), careerMatch ? { style: oppStyle } : undefined);
   const live: LiveMatch = {
     /* Round 1218: and only where the competition uses reviews in real life (scripts/data/cmVarCompetitions.json). */
     ...(varReviews && worldYear(state) >= 2026 && !isHistoricEra(state.eraId ?? DEFAULT_ERA_ID) && varKinds.length > 0
@@ -21160,6 +21228,7 @@ function kickOff(state: CareerState, entry: CalendarEntry, varReviews: CmVarAsk 
     h1My: [],
     h1Opp: [],
     ...(squad ? { oppXi: squad.xi, oppBench: squad.bench, oppFormationIndex: squad.formationIndex } : {}),
+    ...(oppStyle ? { oppStyle } : {}),
     h1Play: [],
     h1Cards: [],
     h1OppCards: [],
@@ -21845,8 +21914,10 @@ export function matchFacts(career: CareerState): MatchFacts | null {
     const k = etScale(fx);
     /* Round 1522: and the instructions against their style, the two halves' boosts averaged (a press pays in
        the second); balanced adds exactly zero. */
-    const t1 = tacticEdge(career, fx, xi, instructionsOf(career), 1);
-    const t2 = tacticEdge(career, fx, xi, instructionsOf(career), 2);
+    const instructions = instructionsOf(career);
+    const oppStyle = isBalanced(instructions) ? undefined : generatedOpponentStyle(career, fx.opponent);
+    const t1 = tacticEdge(career, fx, xi, instructions, 1, oppStyle);
+    const t2 = tacticEdge(career, fx, xi, instructions, 2, oppStyle);
     const { atk = 0, conceded = 0 } = positionEdge(xi, career.mentality, career) ?? {};
     const lamMe = clamp(1.25 + (mine - oppS) * 0.055 + ment.atk + homeAtk + duty.atk + (t1 && t2 ? (t1.atk + t2.atk) / 2 : 0) + atk, 0.12, 4.2) * k;
     const lamOpp = clamp(1.25 + (oppS - mine) * 0.055 + ment.def + oppAtk + duty.def + (t1 && t2 ? (t1.def + t2.def) / 2 : 0) + conceded, 0.12, 4.2) * k;
