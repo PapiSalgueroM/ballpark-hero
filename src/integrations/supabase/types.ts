@@ -10,94 +10,28 @@ export type Database = {
   // Allows to automatically instantiate createClient with right options
   // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
   __InternalSupabase: {
-    PostgrestVersion: "14.5"
+    PostgrestVersion: "14.17"
   }
   public: {
     Tables: {
-      ai_validation_cache: {
+      baseball_career_players: {
         Row: {
-          cache_key: string
           created_at: string
-          game: string
-          verdict: Json
+          data: Json
+          id: string
+          sort_order: number
         }
         Insert: {
-          cache_key: string
           created_at?: string
-          game: string
-          verdict: Json
+          data: Json
+          id: string
+          sort_order: number
         }
         Update: {
-          cache_key?: string
           created_at?: string
-          game?: string
-          verdict?: Json
-        }
-        Relationships: []
-      }
-      all_star_selections: {
-        Row: {
-          id: number
-          league: string | null
-          player_name: string
-          position: string | null
-          selection_type: string | null
-          sport: string
-          team: string | null
-          year: number
-        }
-        Insert: {
-          id?: number
-          league?: string | null
-          player_name: string
-          position?: string | null
-          selection_type?: string | null
-          sport: string
-          team?: string | null
-          year: number
-        }
-        Update: {
-          id?: number
-          league?: string | null
-          player_name?: string
-          position?: string | null
-          selection_type?: string | null
-          sport?: string
-          team?: string | null
-          year?: number
-        }
-        Relationships: []
-      }
-      ballon_dor: {
-        Row: {
-          award_type: string | null
-          club: string | null
-          id: number
-          nationality: string | null
-          player_name: string
-          points: number | null
-          rank: number
-          year: number
-        }
-        Insert: {
-          award_type?: string | null
-          club?: string | null
-          id?: number
-          nationality?: string | null
-          player_name: string
-          points?: number | null
-          rank: number
-          year: number
-        }
-        Update: {
-          award_type?: string | null
-          club?: string | null
-          id?: number
-          nationality?: string | null
-          player_name?: string
-          points?: number | null
-          rank?: number
-          year?: number
+          data?: Json
+          id?: string
+          sort_order?: number
         }
         Relationships: []
       }
@@ -125,585 +59,6 @@ export type Database = {
         }
         Relationships: []
       }
-      bootroom_club_season: {
-        Row: {
-          club: string
-          mean_value_usd: number | null
-          playable: boolean | null
-          player_count: number | null
-          positions_covered: number | null
-          tier: string | null
-          top_player_value: number | null
-          total_value_usd: number | null
-          year: number
-        }
-        Insert: {
-          club: string
-          mean_value_usd?: number | null
-          playable?: boolean | null
-          player_count?: number | null
-          positions_covered?: number | null
-          tier?: string | null
-          top_player_value?: number | null
-          total_value_usd?: number | null
-          year: number
-        }
-        Update: {
-          club?: string
-          mean_value_usd?: number | null
-          playable?: boolean | null
-          player_count?: number | null
-          positions_covered?: number | null
-          tier?: string | null
-          top_player_value?: number | null
-          total_value_usd?: number | null
-          year?: number
-        }
-        Relationships: []
-      }
-      bootroom_event_log: {
-        Row: {
-          choice_taken: string | null
-          event_id: string | null
-          event_log_id: string
-          save_id: string | null
-          week: number | null
-          year: number | null
-        }
-        Insert: {
-          choice_taken?: string | null
-          event_id?: string | null
-          event_log_id?: string
-          save_id?: string | null
-          week?: number | null
-          year?: number | null
-        }
-        Update: {
-          choice_taken?: string | null
-          event_id?: string | null
-          event_log_id?: string
-          save_id?: string | null
-          week?: number | null
-          year?: number | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "bootroom_event_log_save_id_fkey"
-            columns: ["save_id"]
-            isOneToOne: false
-            referencedRelation: "bootroom_save"
-            referencedColumns: ["save_id"]
-          },
-        ]
-      }
-      bootroom_facilities: {
-        Row: {
-          commercial_level: number | null
-          medical_level: number | null
-          save_id: string
-          scout_depth: number | null
-          scout_infra_level: number | null
-          scout_reach: number | null
-          scout_speed: number | null
-          training_level: number | null
-          upgrade_completes_year: number | null
-          upgrade_in_progress: string | null
-        }
-        Insert: {
-          commercial_level?: number | null
-          medical_level?: number | null
-          save_id: string
-          scout_depth?: number | null
-          scout_infra_level?: number | null
-          scout_reach?: number | null
-          scout_speed?: number | null
-          training_level?: number | null
-          upgrade_completes_year?: number | null
-          upgrade_in_progress?: string | null
-        }
-        Update: {
-          commercial_level?: number | null
-          medical_level?: number | null
-          save_id?: string
-          scout_depth?: number | null
-          scout_infra_level?: number | null
-          scout_reach?: number | null
-          scout_speed?: number | null
-          training_level?: number | null
-          upgrade_completes_year?: number | null
-          upgrade_in_progress?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "bootroom_facilities_save_id_fkey"
-            columns: ["save_id"]
-            isOneToOne: true
-            referencedRelation: "bootroom_save"
-            referencedColumns: ["save_id"]
-          },
-        ]
-      }
-      bootroom_formation_quota: {
-        Row: {
-          formation: string
-          position: string
-          quota: number
-          starters: number
-        }
-        Insert: {
-          formation: string
-          position: string
-          quota: number
-          starters: number
-        }
-        Update: {
-          formation?: string
-          position?: string
-          quota?: number
-          starters?: number
-        }
-        Relationships: []
-      }
-      bootroom_match: {
-        Row: {
-          assists: Json | null
-          goals_against: number | null
-          goals_for: number | null
-          is_home: boolean | null
-          match_id: string
-          opponent: string | null
-          save_id: string | null
-          scorers: Json | null
-          week: number | null
-          year: number | null
-        }
-        Insert: {
-          assists?: Json | null
-          goals_against?: number | null
-          goals_for?: number | null
-          is_home?: boolean | null
-          match_id?: string
-          opponent?: string | null
-          save_id?: string | null
-          scorers?: Json | null
-          week?: number | null
-          year?: number | null
-        }
-        Update: {
-          assists?: Json | null
-          goals_against?: number | null
-          goals_for?: number | null
-          is_home?: boolean | null
-          match_id?: string
-          opponent?: string | null
-          save_id?: string | null
-          scorers?: Json | null
-          week?: number | null
-          year?: number | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "bootroom_match_save_id_fkey"
-            columns: ["save_id"]
-            isOneToOne: false
-            referencedRelation: "bootroom_save"
-            referencedColumns: ["save_id"]
-          },
-        ]
-      }
-      bootroom_player_trajectory: {
-        Row: {
-          age: number | null
-          career_first_year: number | null
-          career_last_year: number | null
-          club: string | null
-          delta_y1_pct: number | null
-          delta_y3_pct: number | null
-          market_value_usd: number | null
-          nationality: string | null
-          peak_value: number | null
-          peak_year: number | null
-          player_name: string
-          position: string
-          reappears_after_y3: boolean | null
-          trajectory_class: string | null
-          value_y1: number | null
-          value_y2: number | null
-          value_y3: number | null
-          year: number
-        }
-        Insert: {
-          age?: number | null
-          career_first_year?: number | null
-          career_last_year?: number | null
-          club?: string | null
-          delta_y1_pct?: number | null
-          delta_y3_pct?: number | null
-          market_value_usd?: number | null
-          nationality?: string | null
-          peak_value?: number | null
-          peak_year?: number | null
-          player_name: string
-          position: string
-          reappears_after_y3?: boolean | null
-          trajectory_class?: string | null
-          value_y1?: number | null
-          value_y2?: number | null
-          value_y3?: number | null
-          year: number
-        }
-        Update: {
-          age?: number | null
-          career_first_year?: number | null
-          career_last_year?: number | null
-          club?: string | null
-          delta_y1_pct?: number | null
-          delta_y3_pct?: number | null
-          market_value_usd?: number | null
-          nationality?: string | null
-          peak_value?: number | null
-          peak_year?: number | null
-          player_name?: string
-          position?: string
-          reappears_after_y3?: boolean | null
-          trajectory_class?: string | null
-          value_y1?: number | null
-          value_y2?: number | null
-          value_y3?: number | null
-          year?: number
-        }
-        Relationships: []
-      }
-      bootroom_position_year_pool: {
-        Row: {
-          age: number | null
-          club: string | null
-          market_value_usd: number | null
-          nationality: string | null
-          player_name: string
-          position: string
-          value_band: string | null
-          year: number
-        }
-        Insert: {
-          age?: number | null
-          club?: string | null
-          market_value_usd?: number | null
-          nationality?: string | null
-          player_name: string
-          position: string
-          value_band?: string | null
-          year: number
-        }
-        Update: {
-          age?: number | null
-          club?: string | null
-          market_value_usd?: number | null
-          nationality?: string | null
-          player_name?: string
-          position?: string
-          value_band?: string | null
-          year?: number
-        }
-        Relationships: []
-      }
-      bootroom_save: {
-        Row: {
-          board_standing: number | null
-          cash_usd: number | null
-          club: string
-          created_at: string | null
-          current_week: number
-          current_year: number
-          heat: number | null
-          integrity_flags: number | null
-          market_rep: number | null
-          player_trust: number | null
-          save_id: string
-          seed: number
-          start_year: number
-          status: string | null
-          updated_at: string | null
-          user_id: string | null
-        }
-        Insert: {
-          board_standing?: number | null
-          cash_usd?: number | null
-          club: string
-          created_at?: string | null
-          current_week?: number
-          current_year: number
-          heat?: number | null
-          integrity_flags?: number | null
-          market_rep?: number | null
-          player_trust?: number | null
-          save_id?: string
-          seed: number
-          start_year: number
-          status?: string | null
-          updated_at?: string | null
-          user_id?: string | null
-        }
-        Update: {
-          board_standing?: number | null
-          cash_usd?: number | null
-          club?: string
-          created_at?: string | null
-          current_week?: number
-          current_year?: number
-          heat?: number | null
-          integrity_flags?: number | null
-          market_rep?: number | null
-          player_trust?: number | null
-          save_id?: string
-          seed?: number
-          start_year?: number
-          status?: string | null
-          updated_at?: string | null
-          user_id?: string | null
-        }
-        Relationships: []
-      }
-      bootroom_save_player: {
-        Row: {
-          acquired_fee_usd: number | null
-          acquired_year: number | null
-          age: number | null
-          current_value_usd: number | null
-          fitness: number | null
-          form: number | null
-          injured_until_week: number | null
-          is_anchor: boolean | null
-          is_starter: boolean | null
-          morale: number | null
-          nationality: string | null
-          player_name: string
-          position: string | null
-          save_id: string
-          squad_number: number | null
-          wage_usd: number | null
-        }
-        Insert: {
-          acquired_fee_usd?: number | null
-          acquired_year?: number | null
-          age?: number | null
-          current_value_usd?: number | null
-          fitness?: number | null
-          form?: number | null
-          injured_until_week?: number | null
-          is_anchor?: boolean | null
-          is_starter?: boolean | null
-          morale?: number | null
-          nationality?: string | null
-          player_name: string
-          position?: string | null
-          save_id: string
-          squad_number?: number | null
-          wage_usd?: number | null
-        }
-        Update: {
-          acquired_fee_usd?: number | null
-          acquired_year?: number | null
-          age?: number | null
-          current_value_usd?: number | null
-          fitness?: number | null
-          form?: number | null
-          injured_until_week?: number | null
-          is_anchor?: boolean | null
-          is_starter?: boolean | null
-          morale?: number | null
-          nationality?: string | null
-          player_name?: string
-          position?: string | null
-          save_id?: string
-          squad_number?: number | null
-          wage_usd?: number | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "bootroom_save_player_save_id_fkey"
-            columns: ["save_id"]
-            isOneToOne: false
-            referencedRelation: "bootroom_save"
-            referencedColumns: ["save_id"]
-          },
-        ]
-      }
-      bootroom_scout_report: {
-        Row: {
-          ambiguous: boolean | null
-          band_high: number | null
-          band_low: number | null
-          created_at: string | null
-          created_week: number | null
-          noise_seed: number | null
-          player_name: string | null
-          projected_delta: number | null
-          report_id: string
-          save_id: string | null
-          scout_depth: number | null
-          scouted_year: number | null
-          verdict_text: string | null
-        }
-        Insert: {
-          ambiguous?: boolean | null
-          band_high?: number | null
-          band_low?: number | null
-          created_at?: string | null
-          created_week?: number | null
-          noise_seed?: number | null
-          player_name?: string | null
-          projected_delta?: number | null
-          report_id?: string
-          save_id?: string | null
-          scout_depth?: number | null
-          scouted_year?: number | null
-          verdict_text?: string | null
-        }
-        Update: {
-          ambiguous?: boolean | null
-          band_high?: number | null
-          band_low?: number | null
-          created_at?: string | null
-          created_week?: number | null
-          noise_seed?: number | null
-          player_name?: string | null
-          projected_delta?: number | null
-          report_id?: string
-          save_id?: string | null
-          scout_depth?: number | null
-          scouted_year?: number | null
-          verdict_text?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "bootroom_scout_report_save_id_fkey"
-            columns: ["save_id"]
-            isOneToOne: false
-            referencedRelation: "bootroom_save"
-            referencedColumns: ["save_id"]
-          },
-        ]
-      }
-      bootroom_tier_bands: {
-        Row: {
-          tier: string
-          value_band: string
-          weight: number
-        }
-        Insert: {
-          tier: string
-          value_band: string
-          weight: number
-        }
-        Update: {
-          tier?: string
-          value_band?: string
-          weight?: number
-        }
-        Relationships: []
-      }
-      bootroom_trajectory_v2_candidate: {
-        Row: {
-          age: number | null
-          cell_n: number | null
-          class_v1: string | null
-          class_v2: string | null
-          club: string | null
-          delta_y3_pct: number | null
-          market_value_usd: number | null
-          nationality: string | null
-          player_name: string | null
-          position: string | null
-          pr: number | null
-          v_millions: number | null
-          value_band: string | null
-          year: number | null
-        }
-        Insert: {
-          age?: number | null
-          cell_n?: number | null
-          class_v1?: string | null
-          class_v2?: string | null
-          club?: string | null
-          delta_y3_pct?: number | null
-          market_value_usd?: number | null
-          nationality?: string | null
-          player_name?: string | null
-          position?: string | null
-          pr?: number | null
-          v_millions?: number | null
-          value_band?: string | null
-          year?: number | null
-        }
-        Update: {
-          age?: number | null
-          cell_n?: number | null
-          class_v1?: string | null
-          class_v2?: string | null
-          club?: string | null
-          delta_y3_pct?: number | null
-          market_value_usd?: number | null
-          nationality?: string | null
-          player_name?: string | null
-          position?: string | null
-          pr?: number | null
-          v_millions?: number | null
-          value_band?: string | null
-          year?: number | null
-        }
-        Relationships: []
-      }
-      bootroom_transfer_log: {
-        Row: {
-          created_at: string | null
-          direction: string | null
-          fee_usd: number | null
-          had_scout_report: boolean | null
-          player_age: number | null
-          player_name: string | null
-          save_id: string | null
-          scout_verdict: string | null
-          transfer_id: string
-          value_at_time: number | null
-          year: number | null
-        }
-        Insert: {
-          created_at?: string | null
-          direction?: string | null
-          fee_usd?: number | null
-          had_scout_report?: boolean | null
-          player_age?: number | null
-          player_name?: string | null
-          save_id?: string | null
-          scout_verdict?: string | null
-          transfer_id?: string
-          value_at_time?: number | null
-          year?: number | null
-        }
-        Update: {
-          created_at?: string | null
-          direction?: string | null
-          fee_usd?: number | null
-          had_scout_report?: boolean | null
-          player_age?: number | null
-          player_name?: string | null
-          save_id?: string | null
-          scout_verdict?: string | null
-          transfer_id?: string
-          value_at_time?: number | null
-          year?: number | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "bootroom_transfer_log_save_id_fkey"
-            columns: ["save_id"]
-            isOneToOne: false
-            referencedRelation: "bootroom_save"
-            referencedColumns: ["save_id"]
-          },
-        ]
-      }
       boxing_career_records: {
         Row: {
           boxer: string | null
@@ -723,7 +78,7 @@ export type Database = {
           division?: string | null
           draws?: number | null
           height?: string | null
-          id?: number
+          id: number
           ko_pct?: number | null
           kos?: number | null
           losses?: number | null
@@ -748,28 +103,28 @@ export type Database = {
       }
       boxing_champions: {
         Row: {
-          champion_name: string
+          champion_name: string | null
           id: number
           reign_end: string | null
           reign_start: string | null
           sanctioning_body: string | null
-          weight_class: string
+          weight_class: string | null
         }
         Insert: {
-          champion_name: string
-          id?: number
+          champion_name?: string | null
+          id: number
           reign_end?: string | null
           reign_start?: string | null
           sanctioning_body?: string | null
-          weight_class: string
+          weight_class?: string | null
         }
         Update: {
-          champion_name?: string
+          champion_name?: string | null
           id?: number
           reign_end?: string | null
           reign_start?: string | null
           sanctioning_body?: string | null
-          weight_class?: string
+          weight_class?: string | null
         }
         Relationships: []
       }
@@ -787,7 +142,7 @@ export type Database = {
         Insert: {
           champion?: string | null
           country?: string | null
-          id?: number
+          id: number
           notes?: string | null
           organization?: string | null
           reign_end?: string | null
@@ -821,7 +176,7 @@ export type Database = {
         Insert: {
           date?: string | null
           fight_name?: string | null
-          id?: number
+          id: number
           loser?: string | null
           method?: string | null
           round?: number | null
@@ -845,8 +200,8 @@ export type Database = {
       boxing_title_fights: {
         Row: {
           fight_date: string | null
-          fighter_1: string
-          fighter_2: string
+          fighter_1: string | null
+          fighter_2: string | null
           id: number
           method: string | null
           round: number | null
@@ -857,9 +212,9 @@ export type Database = {
         }
         Insert: {
           fight_date?: string | null
-          fighter_1: string
-          fighter_2: string
-          id?: number
+          fighter_1?: string | null
+          fighter_2?: string | null
+          id: number
           method?: string | null
           round?: number | null
           sanctioning_body?: string | null
@@ -869,8 +224,8 @@ export type Database = {
         }
         Update: {
           fight_date?: string | null
-          fighter_1?: string
-          fighter_2?: string
+          fighter_1?: string | null
+          fighter_2?: string | null
           id?: number
           method?: string | null
           round?: number | null
@@ -898,7 +253,6 @@ export type Database = {
           id: number
           minutes: number | null
           orb: number | null
-          person_key: string | null
           pf: number | null
           player_name: string | null
           position: string | null
@@ -925,10 +279,9 @@ export type Database = {
           fta?: number | null
           games?: number | null
           games_started?: number | null
-          id?: number
+          id: number
           minutes?: number | null
           orb?: number | null
-          person_key?: string | null
           pf?: number | null
           player_name?: string | null
           position?: string | null
@@ -958,7 +311,6 @@ export type Database = {
           id?: number
           minutes?: number | null
           orb?: number | null
-          person_key?: string | null
           pf?: number | null
           player_name?: string | null
           position?: string | null
@@ -1003,30 +355,30 @@ export type Database = {
           era_notes: string | null
           id: number
           league: string | null
-          player_name: string
+          player_name: string | null
           rank: number | null
-          sport: string
-          stat_category: string
+          sport: string | null
+          stat_category: string | null
           stat_value: string | null
         }
         Insert: {
           era_notes?: string | null
-          id?: number
+          id: number
           league?: string | null
-          player_name: string
+          player_name?: string | null
           rank?: number | null
-          sport: string
-          stat_category: string
+          sport?: string | null
+          stat_category?: string | null
           stat_value?: string | null
         }
         Update: {
           era_notes?: string | null
           id?: number
           league?: string | null
-          player_name?: string
+          player_name?: string | null
           rank?: number | null
-          sport?: string
-          stat_category?: string
+          sport?: string | null
+          stat_category?: string | null
           stat_value?: string | null
         }
         Relationships: []
@@ -1034,7 +386,7 @@ export type Database = {
       career_seasons: {
         Row: {
           appearances: number
-          assists: number | null
+          assists: number
           club: string
           created_at: string
           goals: number
@@ -1045,20 +397,20 @@ export type Database = {
           sort_order: number
         }
         Insert: {
-          appearances?: number
-          assists?: number | null
+          appearances: number
+          assists: number
           club: string
           created_at?: string
-          goals?: number
+          goals: number
           id?: string
-          market_value?: number
+          market_value: number
           player_id: string
           season: string
           sort_order: number
         }
         Update: {
           appearances?: number
-          assists?: number | null
+          assists?: number
           club?: string
           created_at?: string
           goals?: number
@@ -1080,31 +432,31 @@ export type Database = {
       }
       cbb_awards: {
         Row: {
-          award_name: string
+          award_name: string | null
           division: string | null
           id: number
-          player_name: string
+          player_name: string | null
           position: string | null
           team: string | null
-          year: number
+          year: number | null
         }
         Insert: {
-          award_name: string
+          award_name?: string | null
           division?: string | null
-          id?: number
-          player_name: string
+          id: number
+          player_name?: string | null
           position?: string | null
           team?: string | null
-          year: number
+          year?: number | null
         }
         Update: {
-          award_name?: string
+          award_name?: string | null
           division?: string | null
           id?: number
-          player_name?: string
+          player_name?: string | null
           position?: string | null
           team?: string | null
-          year?: number
+          year?: number | null
         }
         Relationships: []
       }
@@ -1121,7 +473,7 @@ export type Database = {
         Insert: {
           champion?: string | null
           conference?: string | null
-          id?: number
+          id: number
           mvp?: string | null
           runner_up?: string | null
           score?: string | null
@@ -1141,23 +493,34 @@ export type Database = {
       cbb_daily: {
         Row: {
           created_at: string
+          difficulty: string
           id: string
-          program_id: string | null
+          program_id: string
           puzzle_date: string
         }
         Insert: {
           created_at?: string
+          difficulty?: string
           id?: string
-          program_id?: string | null
+          program_id: string
           puzzle_date: string
         }
         Update: {
           created_at?: string
+          difficulty?: string
           id?: string
-          program_id?: string | null
+          program_id?: string
           puzzle_date?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "cbb_daily_program_id_fkey"
+            columns: ["program_id"]
+            isOneToOne: false
+            referencedRelation: "cbb_programs"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       cbb_naismith_winners: {
         Row: {
@@ -1169,7 +532,7 @@ export type Database = {
         }
         Insert: {
           gender?: string | null
-          id?: number
+          id: number
           school?: string | null
           winner?: string | null
           year?: number | null
@@ -1227,31 +590,31 @@ export type Database = {
       }
       cbb_scores: {
         Row: {
-          clues_used: number | null
+          clues_used: number
           created_at: string
-          guessed: boolean | null
+          guessed: boolean
           id: string
-          mode: string | null
-          puzzle_date: string | null
-          score: number | null
+          mode: string
+          puzzle_date: string
+          score: number
         }
         Insert: {
-          clues_used?: number | null
+          clues_used: number
           created_at?: string
-          guessed?: boolean | null
+          guessed?: boolean
           id?: string
-          mode?: string | null
-          puzzle_date?: string | null
-          score?: number | null
+          mode?: string
+          puzzle_date: string
+          score: number
         }
         Update: {
-          clues_used?: number | null
+          clues_used?: number
           created_at?: string
-          guessed?: boolean | null
+          guessed?: boolean
           id?: string
-          mode?: string | null
-          puzzle_date?: string | null
-          score?: number | null
+          mode?: string
+          puzzle_date?: string
+          score?: number
         }
         Relationships: []
       }
@@ -1265,7 +628,7 @@ export type Database = {
         }
         Insert: {
           gender?: string | null
-          id?: number
+          id: number
           school?: string | null
           winner?: string | null
           year?: number | null
@@ -1282,27 +645,27 @@ export type Database = {
       cfb_all_americans: {
         Row: {
           id: number
-          player_name: string
+          player_name: string | null
           position: string | null
           school: string | null
           team_level: string | null
-          year: number
+          year: number | null
         }
         Insert: {
-          id?: number
-          player_name: string
+          id: number
+          player_name?: string | null
           position?: string | null
           school?: string | null
           team_level?: string | null
-          year: number
+          year?: number | null
         }
         Update: {
           id?: number
-          player_name?: string
+          player_name?: string | null
           position?: string | null
           school?: string | null
           team_level?: string | null
-          year?: number
+          year?: number | null
         }
         Relationships: []
       }
@@ -1315,7 +678,7 @@ export type Database = {
           year: number | null
         }
         Insert: {
-          id?: number
+          id: number
           rank?: number | null
           record?: string | null
           team?: string | null
@@ -1332,73 +695,73 @@ export type Database = {
       }
       cfb_awards: {
         Row: {
-          award_name: string
+          award_name: string | null
           id: number
           notes: string | null
-          player_name: string
+          player_name: string | null
           points: number | null
           position: string | null
           rank: number | null
           team: string | null
-          year: number
+          year: number | null
         }
         Insert: {
-          award_name: string
-          id?: number
+          award_name?: string | null
+          id: number
           notes?: string | null
-          player_name: string
+          player_name?: string | null
           points?: number | null
           position?: string | null
           rank?: number | null
           team?: string | null
-          year: number
+          year?: number | null
         }
         Update: {
-          award_name?: string
+          award_name?: string | null
           id?: number
           notes?: string | null
-          player_name?: string
+          player_name?: string | null
           points?: number | null
           position?: string | null
           rank?: number | null
           team?: string | null
-          year?: number
+          year?: number | null
         }
         Relationships: []
       }
       cfb_bowl_games: {
         Row: {
-          bowl_name: string
+          bowl_name: string | null
           id: number
           loser: string | null
           loser_score: number | null
           mvp: string | null
           venue: string | null
-          winner: string
+          winner: string | null
           winner_score: number | null
-          year: number
+          year: number | null
         }
         Insert: {
-          bowl_name: string
-          id?: number
+          bowl_name?: string | null
+          id: number
           loser?: string | null
           loser_score?: number | null
           mvp?: string | null
           venue?: string | null
-          winner: string
+          winner?: string | null
           winner_score?: number | null
-          year: number
+          year?: number | null
         }
         Update: {
-          bowl_name?: string
+          bowl_name?: string | null
           id?: number
           loser?: string | null
           loser_score?: number | null
           mvp?: string | null
           venue?: string | null
-          winner?: string
+          winner?: string | null
           winner_score?: number | null
-          year?: number
+          year?: number | null
         }
         Relationships: []
       }
@@ -1415,7 +778,7 @@ export type Database = {
         }
         Insert: {
           bowl_name?: string | null
-          id?: number
+          id: number
           loser?: string | null
           loser_score?: number | null
           mvp?: string | null
@@ -1447,7 +810,7 @@ export type Database = {
         Insert: {
           champion?: string | null
           coach?: string | null
-          id?: number
+          id: number
           record?: string | null
           selector?: string | null
           year?: number | null
@@ -1462,57 +825,30 @@ export type Database = {
         }
         Relationships: []
       }
-      cfb_heisman_winners: {
-        Row: {
-          class: string | null
-          id: number
-          position: string | null
-          school: string | null
-          winner: string | null
-          year: number | null
-        }
-        Insert: {
-          class?: string | null
-          id?: number
-          position?: string | null
-          school?: string | null
-          winner?: string | null
-          year?: number | null
-        }
-        Update: {
-          class?: string | null
-          id?: number
-          position?: string | null
-          school?: string | null
-          winner?: string | null
-          year?: number | null
-        }
-        Relationships: []
-      }
       cfb_national_champions: {
         Row: {
-          champion: string
+          champion: string | null
           coach: string | null
           id: number
           record: string | null
           selector: string | null
-          year: number
+          year: number | null
         }
         Insert: {
-          champion: string
+          champion?: string | null
           coach?: string | null
-          id?: number
+          id: number
           record?: string | null
           selector?: string | null
-          year: number
+          year?: number | null
         }
         Update: {
-          champion?: string
+          champion?: string | null
           coach?: string | null
           id?: number
           record?: string | null
           selector?: string | null
-          year?: number
+          year?: number | null
         }
         Relationships: []
       }
@@ -1533,7 +869,7 @@ export type Database = {
           pass_yds_per_att: number | null
           pass_yds_per_cmp: number | null
           pass_yds_per_g: number | null
-          player_name: string
+          player_name: string | null
           player_slug: string | null
           pos: string | null
           rk: number
@@ -1557,7 +893,7 @@ export type Database = {
           pass_yds_per_att?: number | null
           pass_yds_per_cmp?: number | null
           pass_yds_per_g?: number | null
-          player_name: string
+          player_name?: string | null
           player_slug?: string | null
           pos?: string | null
           rk: number
@@ -1581,7 +917,7 @@ export type Database = {
           pass_yds_per_att?: number | null
           pass_yds_per_cmp?: number | null
           pass_yds_per_g?: number | null
-          player_name?: string
+          player_name?: string | null
           player_slug?: string | null
           pos?: string | null
           rk?: number
@@ -1596,38 +932,38 @@ export type Database = {
           conference: string | null
           id: number
           is_final: boolean | null
-          poll_name: string
-          rank: number
+          poll_name: string | null
+          rank: number | null
           record: string | null
-          team: string
-          year: number
+          team: string | null
+          year: number | null
         }
         Insert: {
           conference?: string | null
-          id?: number
+          id: number
           is_final?: boolean | null
-          poll_name: string
-          rank: number
+          poll_name?: string | null
+          rank?: number | null
           record?: string | null
-          team: string
-          year: number
+          team?: string | null
+          year?: number | null
         }
         Update: {
           conference?: string | null
           id?: number
           is_final?: boolean | null
-          poll_name?: string
-          rank?: number
+          poll_name?: string | null
+          rank?: number | null
           record?: string | null
-          team?: string
-          year?: number
+          team?: string | null
+          year?: number | null
         }
         Relationships: []
       }
       cfb_rb_stats: {
         Row: {
           games: number | null
-          player_name: string
+          player_name: string | null
           player_slug: string | null
           pos: string | null
           rk: number
@@ -1642,7 +978,7 @@ export type Database = {
         }
         Insert: {
           games?: number | null
-          player_name: string
+          player_name?: string | null
           player_slug?: string | null
           pos?: string | null
           rk: number
@@ -1657,7 +993,7 @@ export type Database = {
         }
         Update: {
           games?: number | null
-          player_name?: string
+          player_name?: string | null
           player_slug?: string | null
           pos?: string | null
           rk?: number
@@ -1709,7 +1045,7 @@ export type Database = {
           full_university_name?: string | null
           head_basketball_coach?: string | null
           head_football_coach?: string | null
-          id?: number
+          id: number
           mascot?: string | null
           national_championships?: string | null
           nickname?: string | null
@@ -1744,6 +1080,27 @@ export type Database = {
         }
         Relationships: []
       }
+      college_grid_puzzles: {
+        Row: {
+          created_at: string
+          data: Json
+          id: string
+          sort_order: number
+        }
+        Insert: {
+          created_at?: string
+          data: Json
+          id: string
+          sort_order: number
+        }
+        Update: {
+          created_at?: string
+          data?: Json
+          id?: string
+          sort_order?: number
+        }
+        Relationships: []
+      }
       college_grid_selections: {
         Row: {
           cell_index: number
@@ -1768,36 +1125,87 @@ export type Database = {
         }
         Relationships: []
       }
+      college_guess_scores: {
+        Row: {
+          clues_used: number
+          created_at: string
+          guessed: boolean
+          id: string
+          mode: string
+          puzzle_date: string
+          score: number
+        }
+        Insert: {
+          clues_used: number
+          created_at?: string
+          guessed?: boolean
+          id?: string
+          mode?: string
+          puzzle_date: string
+          score: number
+        }
+        Update: {
+          clues_used?: number
+          created_at?: string
+          guessed?: boolean
+          id?: string
+          mode?: string
+          puzzle_date?: string
+          score?: number
+        }
+        Relationships: []
+      }
+      colleges_pool: {
+        Row: {
+          created_at: string
+          data: Json
+          id: string
+          sort_order: number
+        }
+        Insert: {
+          created_at?: string
+          data: Json
+          id: string
+          sort_order: number
+        }
+        Update: {
+          created_at?: string
+          data?: Json
+          id?: string
+          sort_order?: number
+        }
+        Relationships: []
+      }
       conference_championships: {
         Row: {
-          conference: string
+          conference: string | null
           id: number
           loser: string | null
           mvp: string | null
           score: string | null
-          sport: string
-          winner: string
-          year: number
+          sport: string | null
+          winner: string | null
+          year: number | null
         }
         Insert: {
-          conference: string
-          id?: number
+          conference?: string | null
+          id: number
           loser?: string | null
           mvp?: string | null
           score?: string | null
-          sport: string
-          winner: string
-          year: number
+          sport?: string | null
+          winner?: string | null
+          year?: number | null
         }
         Update: {
-          conference?: string
+          conference?: string | null
           id?: number
           loser?: string | null
           mvp?: string | null
           score?: string | null
-          sport?: string
-          winner?: string
-          year?: number
+          sport?: string | null
+          winner?: string | null
+          year?: number | null
         }
         Relationships: []
       }
@@ -1825,27 +1233,45 @@ export type Database = {
         }
         Relationships: []
       }
-      connections_puzzles_auto_backup: {
+      conquest_free_agents: {
         Row: {
-          created_at: string | null
-          groups_json: Json | null
-          id: string | null
-          puzzle_id: string | null
-          sort_order: number | null
+          created_at: string
+          data: Json
+          id: string
+          sort_order: number
         }
         Insert: {
-          created_at?: string | null
-          groups_json?: Json | null
-          id?: string | null
-          puzzle_id?: string | null
-          sort_order?: number | null
+          created_at?: string
+          data: Json
+          id: string
+          sort_order: number
         }
         Update: {
-          created_at?: string | null
-          groups_json?: Json | null
-          id?: string | null
-          puzzle_id?: string | null
-          sort_order?: number | null
+          created_at?: string
+          data?: Json
+          id?: string
+          sort_order?: number
+        }
+        Relationships: []
+      }
+      conquest_nfl_teams: {
+        Row: {
+          created_at: string
+          data: Json
+          id: string
+          sort_order: number
+        }
+        Insert: {
+          created_at?: string
+          data: Json
+          id: string
+          sort_order: number
+        }
+        Update: {
+          created_at?: string
+          data?: Json
+          id?: string
+          sort_order?: number
         }
         Relationships: []
       }
@@ -1862,7 +1288,7 @@ export type Database = {
         Insert: {
           competition?: string | null
           host?: string | null
-          id?: number
+          id: number
           player_of_tournament?: string | null
           runner_up?: string | null
           winner?: string | null
@@ -1889,7 +1315,7 @@ export type Database = {
         }
         Insert: {
           created_at?: string
-          date: string
+          date?: string
           id?: string
           streak_days?: number
           user_id: string
@@ -1905,21 +1331,21 @@ export type Database = {
       }
       daily_completions: {
         Row: {
-          created_at: string
+          completed_at: string
           date: string
           game_slug: string
           id: string
           user_id: string
         }
         Insert: {
-          created_at?: string
-          date: string
+          completed_at?: string
+          date?: string
           game_slug: string
           id?: string
           user_id: string
         }
         Update: {
-          created_at?: string
+          completed_at?: string
           date?: string
           game_slug?: string
           id?: string
@@ -1927,65 +1353,23 @@ export type Database = {
         }
         Relationships: []
       }
-      daily_polls: {
+      draft_guesser_puzzles: {
         Row: {
           created_at: string
-          id: number
-          option_a: string
-          option_a_emoji: string
-          option_a_flag: string | null
-          option_b: string
-          option_b_emoji: string
-          option_b_flag: string | null
-          option_c: string | null
-          option_c_emoji: string | null
-          option_c_flag: string | null
-          option_d: string | null
-          option_d_emoji: string | null
-          option_d_flag: string | null
-          poll_date: string
-          poll_key: string
-          question: string
+          data: Json
+          id: string
           sort_order: number
         }
         Insert: {
           created_at?: string
-          id?: never
-          option_a: string
-          option_a_emoji?: string
-          option_a_flag?: string | null
-          option_b: string
-          option_b_emoji?: string
-          option_b_flag?: string | null
-          option_c?: string | null
-          option_c_emoji?: string | null
-          option_c_flag?: string | null
-          option_d?: string | null
-          option_d_emoji?: string | null
-          option_d_flag?: string | null
-          poll_date: string
-          poll_key: string
-          question: string
-          sort_order?: number
+          data: Json
+          id: string
+          sort_order: number
         }
         Update: {
           created_at?: string
-          id?: never
-          option_a?: string
-          option_a_emoji?: string
-          option_a_flag?: string | null
-          option_b?: string
-          option_b_emoji?: string
-          option_b_flag?: string | null
-          option_c?: string | null
-          option_c_emoji?: string | null
-          option_c_flag?: string | null
-          option_d?: string | null
-          option_d_emoji?: string | null
-          option_d_flag?: string | null
-          poll_date?: string
-          poll_key?: string
-          question?: string
+          data?: Json
+          id?: string
           sort_order?: number
         }
         Relationships: []
@@ -2006,7 +1390,7 @@ export type Database = {
           country?: string | null
           event?: string | null
           game?: string | null
-          id?: number
+          id: number
           prize_pool?: string | null
           runner_up?: string | null
           year?: number | null
@@ -2023,9 +1407,30 @@ export type Database = {
         }
         Relationships: []
       }
+      f1_constructor_puzzles: {
+        Row: {
+          created_at: string
+          data: Json
+          id: string
+          sort_order: number
+        }
+        Insert: {
+          created_at?: string
+          data: Json
+          id: string
+          sort_order: number
+        }
+        Update: {
+          created_at?: string
+          data?: Json
+          id?: string
+          sort_order?: number
+        }
+        Relationships: []
+      }
       f1_constructors: {
         Row: {
-          constructor_name: string
+          constructor_name: string | null
           id: number
           nationality: string | null
           podiums: number | null
@@ -2038,8 +1443,8 @@ export type Database = {
           wins: number | null
         }
         Insert: {
-          constructor_name: string
-          id?: number
+          constructor_name?: string | null
+          id: number
           nationality?: string | null
           podiums?: number | null
           points?: number | null
@@ -2051,7 +1456,7 @@ export type Database = {
           wins?: number | null
         }
         Update: {
-          constructor_name?: string
+          constructor_name?: string | null
           id?: number
           nationality?: string | null
           podiums?: number | null
@@ -2075,7 +1480,7 @@ export type Database = {
         }
         Insert: {
           constructor_id?: string | null
-          id?: number
+          id: number
           name?: string | null
           nationality?: string | null
           url?: string | null
@@ -2086,6 +1491,27 @@ export type Database = {
           name?: string | null
           nationality?: string | null
           url?: string | null
+        }
+        Relationships: []
+      }
+      f1_driver_puzzles: {
+        Row: {
+          created_at: string
+          data: Json
+          id: string
+          sort_order: number
+        }
+        Insert: {
+          created_at?: string
+          data: Json
+          id: string
+          sort_order: number
+        }
+        Update: {
+          created_at?: string
+          data?: Json
+          id?: string
+          sort_order?: number
         }
         Relationships: []
       }
@@ -2106,7 +1532,7 @@ export type Database = {
           constructor_name?: string | null
           driver_id?: string | null
           driver_name?: string | null
-          id?: number
+          id: number
           points?: number | null
           position?: number | null
           season?: number | null
@@ -2128,7 +1554,7 @@ export type Database = {
       f1_drivers: {
         Row: {
           current_team: string | null
-          driver_name: string
+          driver_name: string | null
           id: number
           nationality: string | null
           podiums: number | null
@@ -2141,8 +1567,8 @@ export type Database = {
         }
         Insert: {
           current_team?: string | null
-          driver_name: string
-          id?: number
+          driver_name?: string | null
+          id: number
           nationality?: string | null
           podiums?: number | null
           points?: number | null
@@ -2154,7 +1580,7 @@ export type Database = {
         }
         Update: {
           current_team?: string | null
-          driver_name?: string
+          driver_name?: string | null
           id?: number
           nationality?: string | null
           podiums?: number | null
@@ -2185,7 +1611,7 @@ export type Database = {
           driver_id?: string | null
           family_name?: string | null
           given_name?: string | null
-          id?: number
+          id: number
           nationality?: string | null
           number?: number | null
           url?: string | null
@@ -2200,6 +1626,27 @@ export type Database = {
           nationality?: string | null
           number?: number | null
           url?: string | null
+        }
+        Relationships: []
+      }
+      f1_perfect_lineup_pool: {
+        Row: {
+          created_at: string
+          data: Json
+          id: string
+          sort_order: number
+        }
+        Insert: {
+          created_at?: string
+          data: Json
+          id: string
+          sort_order: number
+        }
+        Update: {
+          created_at?: string
+          data?: Json
+          id?: string
+          sort_order?: number
         }
         Relationships: []
       }
@@ -2231,23 +1678,25 @@ export type Database = {
         Row: {
           created_at: string
           criteria: string
+          id: string
           puzzle_date: string
         }
         Insert: {
           created_at?: string
           criteria: string
+          id?: string
           puzzle_date: string
         }
         Update: {
           created_at?: string
           criteria?: string
+          id?: string
           puzzle_date?: string
         }
         Relationships: []
       }
       fantasy_draft_players: {
         Row: {
-          age: number | null
           created_at: string
           dominant_foot: string
           id: string
@@ -2257,7 +1706,6 @@ export type Database = {
           position: string
         }
         Insert: {
-          age?: number | null
           created_at?: string
           dominant_foot: string
           id?: string
@@ -2267,7 +1715,6 @@ export type Database = {
           position: string
         }
         Update: {
-          age?: number | null
           created_at?: string
           dominant_foot?: string
           id?: string
@@ -2282,20 +1729,44 @@ export type Database = {
         Row: {
           created_at: string
           id: string
-          user_id: string
+          puzzle_date: string
+          user_id: string | null
           voted_team: string
         }
         Insert: {
           created_at?: string
           id?: string
-          user_id: string
+          puzzle_date?: string
+          user_id?: string | null
           voted_team: string
         }
         Update: {
           created_at?: string
           id?: string
-          user_id?: string
+          puzzle_date?: string
+          user_id?: string | null
           voted_team?: string
+        }
+        Relationships: []
+      }
+      football_grid_puzzles: {
+        Row: {
+          created_at: string
+          data: Json
+          id: string
+          sort_order: number
+        }
+        Insert: {
+          created_at?: string
+          data: Json
+          id: string
+          sort_order: number
+        }
+        Update: {
+          created_at?: string
+          data?: Json
+          id?: string
+          sort_order?: number
         }
         Relationships: []
       }
@@ -2323,57 +1794,30 @@ export type Database = {
         }
         Relationships: []
       }
-      game_completions: {
-        Row: {
-          completed_on: string
-          created_at: string
-          game: string
-          id: number
-          player_name: string | null
-          score: number | null
-        }
-        Insert: {
-          completed_on?: string
-          created_at?: string
-          game: string
-          id?: never
-          player_name?: string | null
-          score?: number | null
-        }
-        Update: {
-          completed_on?: string
-          created_at?: string
-          game?: string
-          id?: never
-          player_name?: string | null
-          score?: number | null
-        }
-        Relationships: []
-      }
       golf_awards: {
         Row: {
-          award_name: string
+          award_name: string | null
           id: number
           nationality: string | null
           tour: string | null
-          winner_name: string
-          year: number
+          winner_name: string | null
+          year: number | null
         }
         Insert: {
-          award_name: string
-          id?: number
+          award_name?: string | null
+          id: number
           nationality?: string | null
           tour?: string | null
-          winner_name: string
-          year: number
+          winner_name?: string | null
+          year?: number | null
         }
         Update: {
-          award_name?: string
+          award_name?: string | null
           id?: number
           nationality?: string | null
           tour?: string | null
-          winner_name?: string
-          year?: number
+          winner_name?: string | null
+          year?: number | null
         }
         Relationships: []
       }
@@ -2390,7 +1834,7 @@ export type Database = {
         }
         Insert: {
           country?: string | null
-          id?: number
+          id: number
           runner_up?: string | null
           score?: string | null
           tournament?: string | null
@@ -2414,42 +1858,6 @@ export type Database = {
         Row: {
           id: number
           nationality: string | null
-          player_name: string
-          rank: number | null
-          score: string | null
-          tour: string | null
-          tournament: string
-          venue: string | null
-          year: number
-        }
-        Insert: {
-          id?: number
-          nationality?: string | null
-          player_name: string
-          rank?: number | null
-          score?: string | null
-          tour?: string | null
-          tournament: string
-          venue?: string | null
-          year: number
-        }
-        Update: {
-          id?: number
-          nationality?: string | null
-          player_name?: string
-          rank?: number | null
-          score?: string | null
-          tour?: string | null
-          tournament?: string
-          venue?: string | null
-          year?: number
-        }
-        Relationships: []
-      }
-      golf_majors_bak_20260715: {
-        Row: {
-          id: number | null
-          nationality: string | null
           player_name: string | null
           rank: number | null
           score: string | null
@@ -2459,7 +1867,7 @@ export type Database = {
           year: number | null
         }
         Insert: {
-          id?: number | null
+          id: number
           nationality?: string | null
           player_name?: string | null
           rank?: number | null
@@ -2470,7 +1878,7 @@ export type Database = {
           year?: number | null
         }
         Update: {
-          id?: number | null
+          id?: number
           nationality?: string | null
           player_name?: string | null
           rank?: number | null
@@ -2484,31 +1892,31 @@ export type Database = {
       }
       golf_team_events: {
         Row: {
-          event_name: string
+          event_name: string | null
           id: number
           loser: string | null
           score: string | null
           venue: string | null
-          winner: string
-          year: number
+          winner: string | null
+          year: number | null
         }
         Insert: {
-          event_name: string
-          id?: number
+          event_name?: string | null
+          id: number
           loser?: string | null
           score?: string | null
           venue?: string | null
-          winner: string
-          year: number
+          winner?: string | null
+          year?: number | null
         }
         Update: {
-          event_name?: string
+          event_name?: string | null
           id?: number
           loser?: string | null
           score?: string | null
           venue?: string | null
-          winner?: string
-          year?: number
+          winner?: string | null
+          year?: number | null
         }
         Relationships: []
       }
@@ -2643,6 +2051,27 @@ export type Database = {
         }
         Relationships: []
       }
+      guess_the_year_puzzles: {
+        Row: {
+          created_at: string
+          data: Json
+          id: string
+          sort_order: number
+        }
+        Insert: {
+          created_at?: string
+          data: Json
+          id: string
+          sort_order: number
+        }
+        Update: {
+          created_at?: string
+          data?: Json
+          id?: string
+          sort_order?: number
+        }
+        Relationships: []
+      }
       hall_of_fame: {
         Row: {
           id: number
@@ -2653,7 +2082,7 @@ export type Database = {
           year_inducted: number | null
         }
         Insert: {
-          id?: number
+          id: number
           inductee?: string | null
           position_or_role?: string | null
           primary_team?: string | null
@@ -2670,33 +2099,66 @@ export type Database = {
         }
         Relationships: []
       }
-      halls_of_fame: {
+      higher_lower_players: {
         Row: {
-          category: string | null
-          hof_name: string
-          id: number
-          inductee_name: string
-          position_or_role: string | null
-          primary_team: string | null
-          year_inducted: number
+          created_at: string
+          data: Json
+          id: string
+          sort_order: number
         }
         Insert: {
-          category?: string | null
-          hof_name: string
-          id?: number
-          inductee_name: string
-          position_or_role?: string | null
-          primary_team?: string | null
-          year_inducted: number
+          created_at?: string
+          data: Json
+          id: string
+          sort_order: number
         }
         Update: {
-          category?: string | null
-          hof_name?: string
-          id?: number
-          inductee_name?: string
-          position_or_role?: string | null
-          primary_team?: string | null
-          year_inducted?: number
+          created_at?: string
+          data?: Json
+          id?: string
+          sort_order?: number
+        }
+        Relationships: []
+      }
+      hockey_career_players: {
+        Row: {
+          created_at: string
+          data: Json
+          id: string
+          sort_order: number
+        }
+        Insert: {
+          created_at?: string
+          data: Json
+          id: string
+          sort_order: number
+        }
+        Update: {
+          created_at?: string
+          data?: Json
+          id?: string
+          sort_order?: number
+        }
+        Relationships: []
+      }
+      hockey_hl_players: {
+        Row: {
+          created_at: string
+          data: Json
+          id: string
+          sort_order: number
+        }
+        Insert: {
+          created_at?: string
+          data: Json
+          id: string
+          sort_order: number
+        }
+        Update: {
+          created_at?: string
+          data?: Json
+          id?: string
+          sort_order?: number
         }
         Relationships: []
       }
@@ -2721,69 +2183,6 @@ export type Database = {
         }
         Relationships: []
       }
-      href_nhl_player_seasons: {
-        Row: {
-          age: number | null
-          assists: number | null
-          games: number | null
-          goals: number | null
-          gwg: number | null
-          id: number
-          person_key: string | null
-          pim: number | null
-          player_name: string | null
-          plus_minus: number | null
-          points: number | null
-          position: string | null
-          ppg: number | null
-          season: string | null
-          shg: number | null
-          shot_pct: number | null
-          shots: number | null
-          team: string | null
-        }
-        Insert: {
-          age?: number | null
-          assists?: number | null
-          games?: number | null
-          goals?: number | null
-          gwg?: number | null
-          id?: number
-          person_key?: string | null
-          pim?: number | null
-          player_name?: string | null
-          plus_minus?: number | null
-          points?: number | null
-          position?: string | null
-          ppg?: number | null
-          season?: string | null
-          shg?: number | null
-          shot_pct?: number | null
-          shots?: number | null
-          team?: string | null
-        }
-        Update: {
-          age?: number | null
-          assists?: number | null
-          games?: number | null
-          goals?: number | null
-          gwg?: number | null
-          id?: number
-          person_key?: string | null
-          pim?: number | null
-          player_name?: string | null
-          plus_minus?: number | null
-          points?: number | null
-          position?: string | null
-          ppg?: number | null
-          season?: string | null
-          shg?: number | null
-          shot_pct?: number | null
-          shots?: number | null
-          team?: string | null
-        }
-        Relationships: []
-      }
       individual_awards_v2: {
         Row: {
           award_name: string | null
@@ -2796,7 +2195,7 @@ export type Database = {
         }
         Insert: {
           award_name?: string | null
-          id?: number
+          id: number
           position?: string | null
           sport?: string | null
           team?: string | null
@@ -2830,7 +2229,7 @@ export type Database = {
           gameid?: string | null
           gamenum?: number | null
           gp?: number | null
-          id?: number
+          id: number
           lgid?: string | null
           playerid?: string | null
           startingpos?: number | null
@@ -2893,7 +2292,7 @@ export type Database = {
           g_rf?: number | null
           g_ss?: number | null
           gs?: number | null
-          id?: number
+          id: number
           lgid?: string | null
           playerid?: string | null
           teamid?: string | null
@@ -2937,7 +2336,7 @@ export type Database = {
         }
         Insert: {
           awardid?: string | null
-          id?: number
+          id: number
           lgid?: string | null
           notes?: string | null
           playerid?: string | null
@@ -2967,7 +2366,7 @@ export type Database = {
         }
         Insert: {
           awardid?: string | null
-          id?: number
+          id: number
           lgid?: string | null
           notes?: string | null
           playerid?: string | null
@@ -2998,7 +2397,7 @@ export type Database = {
         }
         Insert: {
           awardid?: string | null
-          id?: number
+          id: number
           lgid?: string | null
           playerid?: string | null
           pointsmax?: number | null
@@ -3031,7 +2430,7 @@ export type Database = {
         }
         Insert: {
           awardid?: string | null
-          id?: number
+          id: number
           lgid?: string | null
           playerid?: string | null
           pointsmax?: number | null
@@ -3088,7 +2487,7 @@ export type Database = {
           hbp?: number | null
           hr?: number | null
           ibb?: number | null
-          id?: number
+          id: number
           lgid?: string | null
           playerid?: string | null
           r?: number | null
@@ -3166,7 +2565,7 @@ export type Database = {
           hbp?: number | null
           hr?: number | null
           ibb?: number | null
-          id?: number
+          id: number
           lgid?: string | null
           playerid?: string | null
           r?: number | null
@@ -3215,7 +2614,7 @@ export type Database = {
           yearid: number | null
         }
         Insert: {
-          id?: number
+          id: number
           playerid?: string | null
           schoolid?: string | null
           yearid?: number | null
@@ -3257,7 +2656,7 @@ export type Database = {
           e?: number | null
           g?: number | null
           gs?: number | null
-          id?: number
+          id: number
           innouts?: number | null
           lgid?: string | null
           pb?: number | null
@@ -3308,7 +2707,7 @@ export type Database = {
           gcf?: number | null
           glf?: number | null
           grf?: number | null
-          id?: number
+          id: number
           playerid?: string | null
           stint?: number | null
           yearid?: number | null
@@ -3353,7 +2752,7 @@ export type Database = {
           e?: number | null
           g?: number | null
           gs?: number | null
-          id?: number
+          id: number
           innouts?: number | null
           lgid?: string | null
           pb?: number | null
@@ -3418,7 +2817,7 @@ export type Database = {
           e?: number | null
           g?: number | null
           gs?: number | null
-          id?: number
+          id: number
           innouts?: number | null
           lgid?: string | null
           pb?: number | null
@@ -3469,7 +2868,7 @@ export type Database = {
         Insert: {
           ballots?: number | null
           category?: string | null
-          id?: number
+          id: number
           inducted?: string | null
           needed?: number | null
           needed_note?: string | null
@@ -3508,7 +2907,7 @@ export type Database = {
         Insert: {
           attendance?: number | null
           games?: number | null
-          id?: number
+          id: number
           league_key?: string | null
           openings?: number | null
           park_key?: string | null
@@ -3547,7 +2946,7 @@ export type Database = {
         }
         Insert: {
           g?: number | null
-          id?: number
+          id: number
           inseason?: number | null
           l?: number | null
           lgid?: string | null
@@ -3590,7 +2989,7 @@ export type Database = {
         Insert: {
           g?: number | null
           half?: number | null
-          id?: number
+          id: number
           inseason?: number | null
           l?: number | null
           lgid?: string | null
@@ -3628,7 +3027,7 @@ export type Database = {
         Insert: {
           city?: string | null
           country?: string | null
-          id?: number
+          id: number
           park_alias?: string | null
           park_key?: string | null
           park_name?: string | null
@@ -3691,7 +3090,7 @@ export type Database = {
           debut?: string | null
           finalgame?: string | null
           height?: number | null
-          id?: number
+          id: number
           namefirst?: string | null
           namegiven?: string | null
           namelast?: string | null
@@ -3779,7 +3178,7 @@ export type Database = {
           hbp?: number | null
           hr?: number | null
           ibb?: number | null
-          id?: number
+          id: number
           ipouts?: number | null
           l?: number | null
           lgid?: string | null
@@ -3881,7 +3280,7 @@ export type Database = {
           hbp?: number | null
           hr?: number | null
           ibb?: number | null
-          id?: number
+          id: number
           ipouts?: number | null
           l?: number | null
           lgid?: string | null
@@ -3943,7 +3342,7 @@ export type Database = {
           yearid: number | null
         }
         Insert: {
-          id?: number
+          id: number
           lgid?: string | null
           playerid?: string | null
           salary?: number | null
@@ -3972,7 +3371,7 @@ export type Database = {
         Insert: {
           city?: string | null
           country?: string | null
-          id?: number
+          id: number
           name_full?: string | null
           schoolid?: string | null
           state?: string | null
@@ -4001,7 +3400,7 @@ export type Database = {
           yearid: number | null
         }
         Insert: {
-          id?: number
+          id: number
           lgidloser?: string | null
           lgidwinner?: string | null
           losses?: number | null
@@ -4038,7 +3437,7 @@ export type Database = {
           active?: string | null
           franchid?: string | null
           franchname?: string | null
-          id?: number
+          id: number
           naassoc?: string | null
         }
         Update: {
@@ -4126,7 +3525,7 @@ export type Database = {
           hbp?: number | null
           hr?: number | null
           hra?: number | null
-          id?: number
+          id: number
           ipouts?: number | null
           l?: number | null
           lgid?: string | null
@@ -4225,7 +3624,7 @@ export type Database = {
           divwin?: string | null
           g?: number | null
           half?: number | null
-          id?: number
+          id: number
           l?: number | null
           lgid?: string | null
           rank?: number | null
@@ -4250,115 +3649,61 @@ export type Database = {
       }
       league_champions: {
         Row: {
-          champion: string
+          champion: string | null
           country: string | null
           id: number
-          league: string
+          league: string | null
           runner_up: string | null
-          sport: string
+          sport: string | null
           top_scorer: string | null
-          year: number
+          year: number | null
         }
         Insert: {
-          champion: string
+          champion?: string | null
           country?: string | null
-          id?: number
-          league: string
+          id: number
+          league?: string | null
           runner_up?: string | null
-          sport: string
+          sport?: string | null
           top_scorer?: string | null
-          year: number
+          year?: number | null
         }
         Update: {
-          champion?: string
+          champion?: string | null
           country?: string | null
           id?: number
-          league?: string
+          league?: string | null
           runner_up?: string | null
-          sport?: string
+          sport?: string | null
           top_scorer?: string | null
-          year?: number
+          year?: number | null
         }
         Relationships: []
       }
       medal_games_scores: {
         Row: {
-          clues_used: number | null
+          clues_used: number
           created_at: string
-          guessed: boolean | null
+          guessed: boolean
           id: string
-          puzzle_date: string | null
-          score: number | null
+          puzzle_date: string
+          score: number
         }
         Insert: {
-          clues_used?: number | null
+          clues_used: number
           created_at?: string
-          guessed?: boolean | null
+          guessed?: boolean
           id?: string
-          puzzle_date?: string | null
-          score?: number | null
+          puzzle_date: string
+          score: number
         }
         Update: {
-          clues_used?: number | null
+          clues_used?: number
           created_at?: string
-          guessed?: boolean | null
+          guessed?: boolean
           id?: string
-          puzzle_date?: string | null
-          score?: number | null
-        }
-        Relationships: []
-      }
-      missing_xi_puzzles: {
-        Row: {
-          blank_candidates: Json
-          competition: string
-          created_at: string
-          date_label: string
-          formation_label: string
-          id: string
-          match_date: string
-          opponent: string
-          puzzle_id: string
-          score_line: string
-          slots: Json
-          sort_order: number
-          source: string
-          team: string
-          venue: string
-        }
-        Insert: {
-          blank_candidates: Json
-          competition: string
-          created_at?: string
-          date_label: string
-          formation_label: string
-          id?: string
-          match_date: string
-          opponent: string
-          puzzle_id: string
-          score_line: string
-          slots: Json
-          sort_order: number
-          source: string
-          team: string
-          venue: string
-        }
-        Update: {
-          blank_candidates?: Json
-          competition?: string
-          created_at?: string
-          date_label?: string
-          formation_label?: string
-          id?: string
-          match_date?: string
-          opponent?: string
-          puzzle_id?: string
-          score_line?: string
-          slots?: Json
-          sort_order?: number
-          source?: string
-          team?: string
-          venue?: string
+          puzzle_date?: string
+          score?: number
         }
         Relationships: []
       }
@@ -4378,8 +3723,7 @@ export type Database = {
           ops: number | null
           ops_plus: number | null
           pa: number | null
-          person_key: string | null
-          player_name: string
+          player_name: string | null
           position: string | null
           rbi: number | null
           runs: number | null
@@ -4402,13 +3746,12 @@ export type Database = {
           games?: number | null
           hits?: number | null
           hr?: number | null
-          id?: number
+          id: number
           obp?: number | null
           ops?: number | null
           ops_plus?: number | null
           pa?: number | null
-          person_key?: string | null
-          player_name: string
+          player_name?: string | null
           position?: string | null
           rbi?: number | null
           runs?: number | null
@@ -4436,8 +3779,7 @@ export type Database = {
           ops?: number | null
           ops_plus?: number | null
           pa?: number | null
-          person_key?: string | null
-          player_name?: string
+          player_name?: string | null
           position?: string | null
           rbi?: number | null
           runs?: number | null
@@ -4456,32 +3798,32 @@ export type Database = {
         Row: {
           id: number
           pick: number | null
-          player_name: string
+          player_name: string | null
           position: string | null
           round: number | null
           school: string | null
           team: string | null
-          year: number
+          year: number | null
         }
         Insert: {
-          id?: number
+          id: number
           pick?: number | null
-          player_name: string
+          player_name?: string | null
           position?: string | null
           round?: number | null
           school?: string | null
           team?: string | null
-          year: number
+          year?: number | null
         }
         Update: {
           id?: number
           pick?: number | null
-          player_name?: string
+          player_name?: string | null
           position?: string | null
           round?: number | null
           school?: string | null
           team?: string | null
-          year?: number
+          year?: number | null
         }
         Relationships: []
       }
@@ -4510,8 +3852,7 @@ export type Database = {
           id: number
           ip: number | null
           losses: number | null
-          person_key: string | null
-          player_name: string
+          player_name: string | null
           position: string | null
           runs: number | null
           sho: number | null
@@ -4548,11 +3889,10 @@ export type Database = {
           hr?: number | null
           hr9?: number | null
           ibb?: number | null
-          id?: number
+          id: number
           ip?: number | null
           losses?: number | null
-          person_key?: string | null
-          player_name: string
+          player_name?: string | null
           position?: string | null
           runs?: number | null
           sho?: number | null
@@ -4592,8 +3932,7 @@ export type Database = {
           id?: number
           ip?: number | null
           losses?: number | null
-          person_key?: string | null
-          player_name?: string
+          player_name?: string | null
           position?: string | null
           runs?: number | null
           sho?: number | null
@@ -4632,7 +3971,7 @@ export type Database = {
           birth_date?: string | null
           full_name?: string | null
           height?: string | null
-          id?: number
+          id: number
           jersey_number?: string | null
           player_id?: number | null
           position?: string | null
@@ -4681,7 +4020,7 @@ export type Database = {
           draws?: number | null
           fighter?: string | null
           height?: string | null
-          id?: number
+          id: number
           ko_wins?: number | null
           losses?: number | null
           nationality?: string | null
@@ -4715,24 +4054,27 @@ export type Database = {
           chain_length: number
           created_at: string
           id: string
-          mode: string | null
+          mode: string
           nickname: string
+          puzzle_date: string
           score: number
         }
         Insert: {
-          chain_length?: number
+          chain_length: number
           created_at?: string
           id?: string
-          mode?: string | null
+          mode?: string
           nickname: string
-          score?: number
+          puzzle_date?: string
+          score: number
         }
         Update: {
           chain_length?: number
           created_at?: string
           id?: string
-          mode?: string | null
+          mode?: string
           nickname?: string
+          puzzle_date?: string
           score?: number
         }
         Relationships: []
@@ -4780,7 +4122,7 @@ export type Database = {
         }
         Insert: {
           date?: string | null
-          id?: number
+          id: number
           laps?: number | null
           pole_winner?: string | null
           race_name?: string | null
@@ -4809,23 +4151,34 @@ export type Database = {
       nascar_daily: {
         Row: {
           created_at: string
-          driver_id: string | null
+          difficulty: string
+          driver_id: string
           id: string
           puzzle_date: string
         }
         Insert: {
           created_at?: string
-          driver_id?: string | null
+          difficulty?: string
+          driver_id: string
           id?: string
           puzzle_date: string
         }
         Update: {
           created_at?: string
-          driver_id?: string | null
+          difficulty?: string
+          driver_id?: string
           id?: string
           puzzle_date?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "nascar_daily_driver_id_fkey"
+            columns: ["driver_id"]
+            isOneToOne: false
+            referencedRelation: "nascar_drivers"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       nascar_driver_careers: {
         Row: {
@@ -4847,7 +4200,7 @@ export type Database = {
           cup_championships?: number | null
           daytona_500_wins?: number | null
           driver?: string | null
-          id?: number
+          id: number
           retired?: string | null
           top_10?: number | null
           top_5?: number | null
@@ -4871,52 +4224,43 @@ export type Database = {
       }
       nascar_drivers: {
         Row: {
-          career_earnings_usd: number | null
-          championships: number | null
-          country: string | null
-          driver_name: string | null
-          first_year: number | null
-          last_year: number | null
-          primary_manufacturer: string | null
-          rank: number | null
-          total_poles: number | null
-          total_starts: number | null
-          total_top10: number | null
-          total_top5: number | null
-          total_wins: number | null
-          years_active: string | null
+          car_number_hint: string
+          championship_hint: string
+          common_names: string[]
+          created_at: string
+          difficulty: string
+          driver_name: string
+          era_hint: string
+          famous_moment_hint: string
+          id: string
+          vibe_word: string
+          wins_hint: string
         }
         Insert: {
-          career_earnings_usd?: number | null
-          championships?: number | null
-          country?: string | null
-          driver_name?: string | null
-          first_year?: number | null
-          last_year?: number | null
-          primary_manufacturer?: string | null
-          rank?: number | null
-          total_poles?: number | null
-          total_starts?: number | null
-          total_top10?: number | null
-          total_top5?: number | null
-          total_wins?: number | null
-          years_active?: string | null
+          car_number_hint: string
+          championship_hint: string
+          common_names?: string[]
+          created_at?: string
+          difficulty?: string
+          driver_name: string
+          era_hint: string
+          famous_moment_hint: string
+          id?: string
+          vibe_word: string
+          wins_hint: string
         }
         Update: {
-          career_earnings_usd?: number | null
-          championships?: number | null
-          country?: string | null
-          driver_name?: string | null
-          first_year?: number | null
-          last_year?: number | null
-          primary_manufacturer?: string | null
-          rank?: number | null
-          total_poles?: number | null
-          total_starts?: number | null
-          total_top10?: number | null
-          total_top5?: number | null
-          total_wins?: number | null
-          years_active?: string | null
+          car_number_hint?: string
+          championship_hint?: string
+          common_names?: string[]
+          created_at?: string
+          difficulty?: string
+          driver_name?: string
+          era_hint?: string
+          famous_moment_hint?: string
+          id?: string
+          vibe_word?: string
+          wins_hint?: string
         }
         Relationships: []
       }
@@ -4940,31 +4284,31 @@ export type Database = {
       }
       nascar_scores: {
         Row: {
-          clues_used: number | null
+          clues_used: number
           created_at: string
-          guessed: boolean | null
+          guessed: boolean
           id: string
-          mode: string | null
-          puzzle_date: string | null
-          score: number | null
+          mode: string
+          puzzle_date: string
+          score: number
         }
         Insert: {
-          clues_used?: number | null
+          clues_used: number
           created_at?: string
-          guessed?: boolean | null
+          guessed?: boolean
           id?: string
-          mode?: string | null
-          puzzle_date?: string | null
-          score?: number | null
+          mode?: string
+          puzzle_date: string
+          score: number
         }
         Update: {
-          clues_used?: number | null
+          clues_used?: number
           created_at?: string
-          guessed?: boolean | null
+          guessed?: boolean
           id?: string
-          mode?: string | null
-          puzzle_date?: string | null
-          score?: number | null
+          mode?: string
+          puzzle_date?: string
+          score?: number
         }
         Relationships: []
       }
@@ -4984,7 +4328,7 @@ export type Database = {
           current_drivers?: string | null
           founded?: number | null
           headquarters?: string | null
-          id?: number
+          id: number
           owner?: string | null
           team_name?: string | null
           total_wins?: number | null
@@ -5004,33 +4348,33 @@ export type Database = {
       national_team_squads: {
         Row: {
           club: string | null
-          competition: string
-          country: string
+          competition: string | null
+          country: string | null
           id: number
           jersey_number: number | null
-          player_name: string
+          player_name: string | null
           position: string | null
-          year: number
+          year: number | null
         }
         Insert: {
           club?: string | null
-          competition: string
-          country: string
-          id?: number
+          competition?: string | null
+          country?: string | null
+          id: number
           jersey_number?: number | null
-          player_name: string
+          player_name?: string | null
           position?: string | null
-          year: number
+          year?: number | null
         }
         Update: {
           club?: string | null
-          competition?: string
-          country?: string
+          competition?: string | null
+          country?: string | null
           id?: number
           jersey_number?: number | null
-          player_name?: string
+          player_name?: string | null
           position?: string | null
-          year?: number
+          year?: number | null
         }
         Relationships: []
       }
@@ -5047,7 +4391,7 @@ export type Database = {
         }
         Insert: {
           conference?: string | null
-          id?: number
+          id: number
           mvp?: boolean | null
           player?: string | null
           position?: string | null
@@ -5067,60 +4411,36 @@ export type Database = {
         }
         Relationships: []
       }
-      nba_connections_puzzles: {
-        Row: {
-          created_at: string
-          groups_json: Json
-          id: number
-          puzzle_id: string
-          sort_order: number
-        }
-        Insert: {
-          created_at?: string
-          groups_json: Json
-          id?: never
-          puzzle_id: string
-          sort_order?: number
-        }
-        Update: {
-          created_at?: string
-          groups_json?: Json
-          id?: never
-          puzzle_id?: string
-          sort_order?: number
-        }
-        Relationships: []
-      }
       nba_draft_picks: {
         Row: {
           college_or_country: string | null
           id: number
           nationality: string | null
           pick: number | null
-          player_name: string
+          player_name: string | null
           round: number | null
           team: string | null
-          year: number
+          year: number | null
         }
         Insert: {
           college_or_country?: string | null
-          id?: number
+          id: number
           nationality?: string | null
           pick?: number | null
-          player_name: string
+          player_name?: string | null
           round?: number | null
           team?: string | null
-          year: number
+          year?: number | null
         }
         Update: {
           college_or_country?: string | null
           id?: number
           nationality?: string | null
           pick?: number | null
-          player_name?: string
+          player_name?: string | null
           round?: number | null
           team?: string | null
-          year?: number
+          year?: number | null
         }
         Relationships: []
       }
@@ -5130,43 +4450,13 @@ export type Database = {
           id: number
           loser: string | null
           series_result: string | null
-          winner: string
-          winning_coach: string | null
-          year: number
-        }
-        Insert: {
-          finals_mvp?: string | null
-          id?: number
-          loser?: string | null
-          series_result?: string | null
-          winner: string
-          winning_coach?: string | null
-          year: number
-        }
-        Update: {
-          finals_mvp?: string | null
-          id?: number
-          loser?: string | null
-          series_result?: string | null
-          winner?: string
-          winning_coach?: string | null
-          year?: number
-        }
-        Relationships: []
-      }
-      nba_finals_bak_20260715: {
-        Row: {
-          finals_mvp: string | null
-          id: number | null
-          loser: string | null
-          series_result: string | null
           winner: string | null
           winning_coach: string | null
           year: number | null
         }
         Insert: {
           finals_mvp?: string | null
-          id?: number | null
+          id: number
           loser?: string | null
           series_result?: string | null
           winner?: string | null
@@ -5175,12 +4465,33 @@ export type Database = {
         }
         Update: {
           finals_mvp?: string | null
-          id?: number | null
+          id?: number
           loser?: string | null
           series_result?: string | null
           winner?: string | null
           winning_coach?: string | null
           year?: number | null
+        }
+        Relationships: []
+      }
+      nba_perfect_lineup_pool: {
+        Row: {
+          created_at: string
+          data: Json
+          id: string
+          sort_order: number
+        }
+        Insert: {
+          created_at?: string
+          data: Json
+          id: string
+          sort_order: number
+        }
+        Update: {
+          created_at?: string
+          data?: Json
+          id?: string
+          sort_order?: number
         }
         Relationships: []
       }
@@ -5202,109 +4513,6 @@ export type Database = {
           id: number
           minutes: number | null
           orb: number | null
-          person_key: string | null
-          pf: number | null
-          player_name: string
-          points: number | null
-          position: string | null
-          stl: number | null
-          teams: string | null
-          three_p: number | null
-          three_pa: number | null
-          three_pct: number | null
-          tov: number | null
-          trb: number | null
-          ts_pct: number | null
-          year_from: string | null
-          year_to: string | null
-        }
-        Insert: {
-          age_range?: string | null
-          ast?: number | null
-          blk?: number | null
-          created_at?: string | null
-          drb?: number | null
-          fg?: number | null
-          fg_pct?: number | null
-          fga?: number | null
-          ft?: number | null
-          ft_pct?: number | null
-          fta?: number | null
-          games?: number | null
-          games_started?: number | null
-          id?: number
-          minutes?: number | null
-          orb?: number | null
-          person_key?: string | null
-          pf?: number | null
-          player_name: string
-          points?: number | null
-          position?: string | null
-          stl?: number | null
-          teams?: string | null
-          three_p?: number | null
-          three_pa?: number | null
-          three_pct?: number | null
-          tov?: number | null
-          trb?: number | null
-          ts_pct?: number | null
-          year_from?: string | null
-          year_to?: string | null
-        }
-        Update: {
-          age_range?: string | null
-          ast?: number | null
-          blk?: number | null
-          created_at?: string | null
-          drb?: number | null
-          fg?: number | null
-          fg_pct?: number | null
-          fga?: number | null
-          ft?: number | null
-          ft_pct?: number | null
-          fta?: number | null
-          games?: number | null
-          games_started?: number | null
-          id?: number
-          minutes?: number | null
-          orb?: number | null
-          person_key?: string | null
-          pf?: number | null
-          player_name?: string
-          points?: number | null
-          position?: string | null
-          stl?: number | null
-          teams?: string | null
-          three_p?: number | null
-          three_pa?: number | null
-          three_pct?: number | null
-          tov?: number | null
-          trb?: number | null
-          ts_pct?: number | null
-          year_from?: string | null
-          year_to?: string | null
-        }
-        Relationships: []
-      }
-      nba_player_stats_bak_20260722: {
-        Row: {
-          age_range: string | null
-          ast: number | null
-          blk: number | null
-          created_at: string | null
-          drb: number | null
-          fg: number | null
-          fg_pct: number | null
-          fga: number | null
-          ft: number | null
-          ft_pct: number | null
-          fta: number | null
-          games: number | null
-          games_started: number | null
-          id: number | null
-          minutes: number | null
-          orb: number | null
-          person_key: string | null
           pf: number | null
           player_name: string | null
           points: number | null
@@ -5334,10 +4542,9 @@ export type Database = {
           fta?: number | null
           games?: number | null
           games_started?: number | null
-          id?: number | null
+          id: number
           minutes?: number | null
           orb?: number | null
-          person_key?: string | null
           pf?: number | null
           player_name?: string | null
           points?: number | null
@@ -5367,10 +4574,9 @@ export type Database = {
           fta?: number | null
           games?: number | null
           games_started?: number | null
-          id?: number | null
+          id?: number
           minutes?: number | null
           orb?: number | null
-          person_key?: string | null
           pf?: number | null
           player_name?: string | null
           points?: number | null
@@ -5385,87 +4591,6 @@ export type Database = {
           ts_pct?: number | null
           year_from?: string | null
           year_to?: string | null
-        }
-        Relationships: []
-      }
-      nba_player_team_seasons: {
-        Row: {
-          assists: number | null
-          games_played: number | null
-          id: number
-          minutes: number | null
-          person_key: string | null
-          player_id: number | null
-          player_name: string | null
-          points: number | null
-          rebounds: number | null
-          season: string | null
-          team_abbreviation: string | null
-          team_id: number | null
-          team_name: string | null
-        }
-        Insert: {
-          assists?: number | null
-          games_played?: number | null
-          id?: number
-          minutes?: number | null
-          person_key?: string | null
-          player_id?: number | null
-          player_name?: string | null
-          points?: number | null
-          rebounds?: number | null
-          season?: string | null
-          team_abbreviation?: string | null
-          team_id?: number | null
-          team_name?: string | null
-        }
-        Update: {
-          assists?: number | null
-          games_played?: number | null
-          id?: number
-          minutes?: number | null
-          person_key?: string | null
-          player_id?: number | null
-          player_name?: string | null
-          points?: number | null
-          rebounds?: number | null
-          season?: string | null
-          team_abbreviation?: string | null
-          team_id?: number | null
-          team_name?: string | null
-        }
-        Relationships: []
-      }
-      nba_player_team_stints: {
-        Row: {
-          first_season: number | null
-          id: number
-          last_season: number | null
-          person_key: string | null
-          player_name: string | null
-          position: string | null
-          seasons: number | null
-          team: string | null
-        }
-        Insert: {
-          first_season?: number | null
-          id?: number
-          last_season?: number | null
-          person_key?: string | null
-          player_name?: string | null
-          position?: string | null
-          seasons?: number | null
-          team?: string | null
-        }
-        Update: {
-          first_season?: number | null
-          id?: number
-          last_season?: number | null
-          person_key?: string | null
-          player_name?: string | null
-          position?: string | null
-          seasons?: number | null
-          team?: string | null
         }
         Relationships: []
       }
@@ -5494,7 +4619,7 @@ export type Database = {
           draft_year?: number | null
           first_name?: string | null
           height?: string | null
-          id?: number
+          id: number
           jersey_number?: string | null
           last_name?: string | null
           player_id?: number | null
@@ -5546,7 +4671,7 @@ export type Database = {
           draft_year?: number | null
           first_name?: string | null
           height?: string | null
-          id?: number
+          id: number
           jersey_number?: string | null
           last_name?: string | null
           player_id?: number | null
@@ -5574,21 +4699,24 @@ export type Database = {
         }
         Relationships: []
       }
-      nba_team_codes: {
+      nba_teams_pool: {
         Row: {
-          franchise: string | null
-          team_code: string
-          team_name: string
+          created_at: string
+          data: Json
+          id: string
+          sort_order: number
         }
         Insert: {
-          franchise?: string | null
-          team_code: string
-          team_name: string
+          created_at?: string
+          data: Json
+          id: string
+          sort_order: number
         }
         Update: {
-          franchise?: string | null
-          team_code?: string
-          team_name?: string
+          created_at?: string
+          data?: Json
+          id?: string
+          sort_order?: number
         }
         Relationships: []
       }
@@ -5607,7 +4735,7 @@ export type Database = {
           champion?: string | null
           coach?: string | null
           division?: string | null
-          id?: number
+          id: number
           most_outstanding_player?: string | null
           runner_up?: string | null
           score?: string | null
@@ -5618,39 +4746,6 @@ export type Database = {
           coach?: string | null
           division?: string | null
           id?: number
-          most_outstanding_player?: string | null
-          runner_up?: string | null
-          score?: string | null
-          year?: number | null
-        }
-        Relationships: []
-      }
-      ncaa_basketball_champions_bak_20260715: {
-        Row: {
-          champion: string | null
-          coach: string | null
-          division: string | null
-          id: number | null
-          most_outstanding_player: string | null
-          runner_up: string | null
-          score: string | null
-          year: number | null
-        }
-        Insert: {
-          champion?: string | null
-          coach?: string | null
-          division?: string | null
-          id?: number | null
-          most_outstanding_player?: string | null
-          runner_up?: string | null
-          score?: string | null
-          year?: number | null
-        }
-        Update: {
-          champion?: string | null
-          coach?: string | null
-          division?: string | null
-          id?: number | null
           most_outstanding_player?: string | null
           runner_up?: string | null
           score?: string | null
@@ -5677,7 +4772,7 @@ export type Database = {
           minutes: number | null
           orb: number | null
           pf: number | null
-          player_name: string
+          player_name: string | null
           player_slug: string | null
           points: number | null
           position: string | null
@@ -5710,11 +4805,11 @@ export type Database = {
           fta?: number | null
           games?: number | null
           games_started?: number | null
-          id?: number
+          id: number
           minutes?: number | null
           orb?: number | null
           pf?: number | null
-          player_name: string
+          player_name?: string | null
           player_slug?: string | null
           points?: number | null
           position?: string | null
@@ -5751,7 +4846,7 @@ export type Database = {
           minutes?: number | null
           orb?: number | null
           pf?: number | null
-          player_name?: string
+          player_name?: string | null
           player_slug?: string | null
           points?: number | null
           position?: string | null
@@ -5782,7 +4877,7 @@ export type Database = {
           year: number | null
         }
         Insert: {
-          id?: number
+          id: number
           loser?: string | null
           round?: string | null
           score?: string | null
@@ -5809,85 +4904,49 @@ export type Database = {
           score: string | null
           winner: string | null
           winner_seed: number | null
-          year: number
-        }
-        Insert: {
-          division?: string | null
-          id?: number
-          loser?: string | null
-          loser_seed?: number | null
-          round?: string | null
-          score?: string | null
-          winner?: string | null
-          winner_seed?: number | null
-          year: number
-        }
-        Update: {
-          division?: string | null
-          id?: number
-          loser?: string | null
-          loser_seed?: number | null
-          round?: string | null
-          score?: string | null
-          winner?: string | null
-          winner_seed?: number | null
-          year?: number
-        }
-        Relationships: []
-      }
-      ncaa_womens_basketball_champions: {
-        Row: {
-          champion: string | null
-          coach: string | null
-          division: string | null
-          id: number | null
-          most_outstanding_player: string | null
-          runner_up: string | null
-          score: string | null
           year: number | null
         }
         Insert: {
-          champion?: string | null
-          coach?: string | null
           division?: string | null
-          id?: number | null
-          most_outstanding_player?: string | null
-          runner_up?: string | null
+          id: number
+          loser?: string | null
+          loser_seed?: number | null
+          round?: string | null
           score?: string | null
+          winner?: string | null
+          winner_seed?: number | null
           year?: number | null
         }
         Update: {
-          champion?: string | null
-          coach?: string | null
           division?: string | null
-          id?: number | null
-          most_outstanding_player?: string | null
-          runner_up?: string | null
+          id?: number
+          loser?: string | null
+          loser_seed?: number | null
+          round?: string | null
           score?: string | null
+          winner?: string | null
+          winner_seed?: number | null
           year?: number | null
         }
         Relationships: []
       }
-      nfl_connections_puzzles: {
+      nfl_career_players: {
         Row: {
           created_at: string
-          groups_json: Json
-          id: number
-          puzzle_id: string
+          data: Json
+          id: string
           sort_order: number
         }
         Insert: {
           created_at?: string
-          groups_json: Json
-          id?: never
-          puzzle_id: string
-          sort_order?: number
+          data: Json
+          id: string
+          sort_order: number
         }
         Update: {
           created_at?: string
-          groups_json?: Json
-          id?: never
-          puzzle_id?: string
+          data?: Json
+          id?: string
           sort_order?: number
         }
         Relationships: []
@@ -5899,8 +4958,7 @@ export type Database = {
           games: number | null
           games_started: number | null
           id: number
-          person_key: string | null
-          player_name: string
+          player_name: string | null
           position: string | null
           teams: string | null
           year_from: number | null
@@ -5911,9 +4969,8 @@ export type Database = {
           created_at?: string | null
           games?: number | null
           games_started?: number | null
-          id?: number
-          person_key?: string | null
-          player_name: string
+          id: number
+          player_name?: string | null
           position?: string | null
           teams?: string | null
           year_from?: number | null
@@ -5925,8 +4982,7 @@ export type Database = {
           games?: number | null
           games_started?: number | null
           id?: number
-          person_key?: string | null
-          player_name?: string
+          player_name?: string | null
           position?: string | null
           teams?: string | null
           year_from?: number | null
@@ -5939,126 +4995,132 @@ export type Database = {
           college: string | null
           id: number
           pick: number | null
-          player_name: string
+          player_name: string | null
           position: string | null
           round: number | null
           team: string | null
-          year: number
+          year: number | null
         }
         Insert: {
           college?: string | null
-          id?: number
+          id: number
           pick?: number | null
-          player_name: string
+          player_name?: string | null
           position?: string | null
           round?: number | null
           team?: string | null
-          year: number
+          year?: number | null
         }
         Update: {
           college?: string | null
           id?: number
           pick?: number | null
-          player_name?: string
+          player_name?: string | null
           position?: string | null
           round?: number | null
           team?: string | null
-          year?: number
+          year?: number | null
         }
         Relationships: []
       }
-      nfl_player_team_stints: {
+      nfl_players: {
         Row: {
+          awards: string[]
+          career_stats_summary: string | null
           college: string | null
-          debut_age: number | null
-          debut_season: number | null
-          first_season: number | null
-          id: number
-          last_season: number | null
-          person_key: string | null
-          player_name: string | null
-          position: string | null
-          seasons: number | null
-          team: string | null
+          common_nicknames: string[]
+          created_at: string
+          draft_round: number | null
+          draft_year: number | null
+          full_name: string
+          hall_of_fame: boolean
+          hof_year: number | null
+          id: string
+          is_active: boolean
+          position: string
+          teams: Json
         }
         Insert: {
+          awards?: string[]
+          career_stats_summary?: string | null
           college?: string | null
-          debut_age?: number | null
-          debut_season?: number | null
-          first_season?: number | null
-          id?: number
-          last_season?: number | null
-          person_key?: string | null
-          player_name?: string | null
-          position?: string | null
-          seasons?: number | null
-          team?: string | null
+          common_nicknames?: string[]
+          created_at?: string
+          draft_round?: number | null
+          draft_year?: number | null
+          full_name: string
+          hall_of_fame?: boolean
+          hof_year?: number | null
+          id?: string
+          is_active?: boolean
+          position: string
+          teams?: Json
         }
         Update: {
+          awards?: string[]
+          career_stats_summary?: string | null
           college?: string | null
-          debut_age?: number | null
-          debut_season?: number | null
-          first_season?: number | null
-          id?: number
-          last_season?: number | null
-          person_key?: string | null
-          player_name?: string | null
-          position?: string | null
-          seasons?: number | null
-          team?: string | null
+          common_nicknames?: string[]
+          created_at?: string
+          draft_round?: number | null
+          draft_year?: number | null
+          full_name?: string
+          hall_of_fame?: boolean
+          hof_year?: number | null
+          id?: string
+          is_active?: boolean
+          position?: string
+          teams?: Json
         }
         Relationships: []
       }
       nfl_qb_passing_leaders: {
         Row: {
           age_range: string | null
-          from_year: number
+          from_year: number | null
           games: number | null
           games_started: number | null
           interceptions: number | null
           losses: number | null
-          passing_tds: number
+          passing_tds: number | null
           passing_yards: number | null
-          person_key: string | null
-          player_name: string
+          player_name: string | null
           rank: number
           teams: string | null
           ties: number | null
-          to_year: number
+          to_year: number | null
           wins: number | null
         }
         Insert: {
           age_range?: string | null
-          from_year: number
+          from_year?: number | null
           games?: number | null
           games_started?: number | null
           interceptions?: number | null
           losses?: number | null
-          passing_tds: number
+          passing_tds?: number | null
           passing_yards?: number | null
-          person_key?: string | null
-          player_name: string
+          player_name?: string | null
           rank: number
           teams?: string | null
           ties?: number | null
-          to_year: number
+          to_year?: number | null
           wins?: number | null
         }
         Update: {
           age_range?: string | null
-          from_year?: number
+          from_year?: number | null
           games?: number | null
           games_started?: number | null
           interceptions?: number | null
           losses?: number | null
-          passing_tds?: number
+          passing_tds?: number | null
           passing_yards?: number | null
-          person_key?: string | null
-          player_name?: string
+          player_name?: string | null
           rank?: number
           teams?: string | null
           ties?: number | null
-          to_year?: number
+          to_year?: number | null
           wins?: number | null
         }
         Relationships: []
@@ -6071,8 +5133,7 @@ export type Database = {
           games: number | null
           games_started: number | null
           id: number
-          person_key: string | null
-          player_name: string
+          player_name: string | null
           position: string | null
           rushing_yards: number | null
           rushing_yards2: number | null
@@ -6089,9 +5150,8 @@ export type Database = {
           created_at?: string | null
           games?: number | null
           games_started?: number | null
-          id?: number
-          person_key?: string | null
-          player_name: string
+          id: number
+          player_name?: string | null
           position?: string | null
           rushing_yards?: number | null
           rushing_yards2?: number | null
@@ -6109,8 +5169,7 @@ export type Database = {
           games?: number | null
           games_started?: number | null
           id?: number
-          person_key?: string | null
-          player_name?: string
+          player_name?: string | null
           position?: string | null
           rushing_yards?: number | null
           rushing_yards2?: number | null
@@ -6136,7 +5195,7 @@ export type Database = {
           abbr?: string | null
           achievement_type?: string | null
           detail?: string | null
-          id?: number
+          id: number
           team_name?: string | null
           year?: number | null
         }
@@ -6147,60 +5206,6 @@ export type Database = {
           id?: number
           team_name?: string | null
           year?: number | null
-        }
-        Relationships: []
-      }
-      nfl_team_codes: {
-        Row: {
-          franchise: string
-          team_code: string
-          team_name: string
-        }
-        Insert: {
-          franchise: string
-          team_code: string
-          team_name: string
-        }
-        Update: {
-          franchise?: string
-          team_code?: string
-          team_name?: string
-        }
-        Relationships: []
-      }
-      nfl_team_defense: {
-        Row: {
-          abbr: string
-          def_rank: number
-          games: number
-          ints: number
-          rating: number
-          sacks: number
-          tdpg: number
-          year: number
-          ypg: number
-        }
-        Insert: {
-          abbr: string
-          def_rank: number
-          games: number
-          ints: number
-          rating: number
-          sacks: number
-          tdpg: number
-          year: number
-          ypg: number
-        }
-        Update: {
-          abbr?: string
-          def_rank?: number
-          games?: number
-          ints?: number
-          rating?: number
-          sacks?: number
-          tdpg?: number
-          year?: number
-          ypg?: number
         }
         Relationships: []
       }
@@ -6225,7 +5230,7 @@ export type Database = {
           conference?: string | null
           division?: string | null
           founded?: number | null
-          id?: number
+          id: number
           latitude?: number | null
           longitude?: number | null
           primary_color?: string | null
@@ -6249,6 +5254,27 @@ export type Database = {
         }
         Relationships: []
       }
+      nfl_team_puzzles: {
+        Row: {
+          created_at: string
+          data: Json
+          id: string
+          sort_order: number
+        }
+        Insert: {
+          created_at?: string
+          data: Json
+          id: string
+          sort_order: number
+        }
+        Update: {
+          created_at?: string
+          data?: Json
+          id?: string
+          sort_order?: number
+        }
+        Relationships: []
+      }
       nfl_team_seasons: {
         Row: {
           abbr: string | null
@@ -6266,7 +5292,7 @@ export type Database = {
           abbr?: string | null
           division_finish?: string | null
           head_coach?: string | null
-          id?: number
+          id: number
           losses?: number | null
           playoff_result?: string | null
           team_name?: string | null
@@ -6295,8 +5321,7 @@ export type Database = {
           games: number | null
           games_started: number | null
           id: number
-          person_key: string | null
-          player_name: string
+          player_name: string | null
           position: string | null
           receiving_yards: number | null
           receptions: number | null
@@ -6313,9 +5338,8 @@ export type Database = {
           created_at?: string | null
           games?: number | null
           games_started?: number | null
-          id?: number
-          person_key?: string | null
-          player_name: string
+          id: number
+          player_name?: string | null
           position?: string | null
           receiving_yards?: number | null
           receptions?: number | null
@@ -6333,8 +5357,7 @@ export type Database = {
           games?: number | null
           games_started?: number | null
           id?: number
-          person_key?: string | null
-          player_name?: string
+          player_name?: string | null
           position?: string | null
           receiving_yards?: number | null
           receptions?: number | null
@@ -6369,7 +5392,6 @@ export type Database = {
           passing_tds: string | null
           passing_yards: string | null
           passing_yards_after_catch: string | null
-          person_key: string | null
           player_display_name: string | null
           player_id: string | null
           player_name: string | null
@@ -6415,7 +5437,7 @@ export type Database = {
           fantasy_points?: string | null
           fantasy_points_ppr?: string | null
           headshot_url?: string | null
-          id?: number
+          id: number
           interceptions?: string | null
           opponent_team?: string | null
           pacr?: string | null
@@ -6426,7 +5448,6 @@ export type Database = {
           passing_tds?: string | null
           passing_yards?: string | null
           passing_yards_after_catch?: string | null
-          person_key?: string | null
           player_display_name?: string | null
           player_id?: string | null
           player_name?: string | null
@@ -6483,7 +5504,6 @@ export type Database = {
           passing_tds?: string | null
           passing_yards?: string | null
           passing_yards_after_catch?: string | null
-          person_key?: string | null
           player_display_name?: string | null
           player_id?: string | null
           player_name?: string | null
@@ -6545,7 +5565,6 @@ export type Database = {
           jersey_number: string | null
           last_name: string | null
           ngs_position: string | null
-          person_key: string | null
           pff_id: string | null
           pfr_id: string | null
           position: string | null
@@ -6581,11 +5600,10 @@ export type Database = {
           gsis_it_id?: string | null
           headshot_url?: string | null
           height?: string | null
-          id?: number
+          id: number
           jersey_number?: string | null
           last_name?: string | null
           ngs_position?: string | null
-          person_key?: string | null
           pff_id?: string | null
           pfr_id?: string | null
           position?: string | null
@@ -6625,7 +5643,6 @@ export type Database = {
           jersey_number?: string | null
           last_name?: string | null
           ngs_position?: string | null
-          person_key?: string | null
           pff_id?: string | null
           pfr_id?: string | null
           position?: string | null
@@ -6804,7 +5821,7 @@ export type Database = {
           gwfg_distance_list?: string | null
           gwfg_made?: string | null
           gwfg_missed?: string | null
-          id?: number
+          id: number
           kickoff_return_yards?: string | null
           kickoff_returns?: string | null
           misc_yards?: string | null
@@ -6960,30 +5977,6 @@ export type Database = {
         }
         Relationships: []
       }
-      nhl_connections_puzzles: {
-        Row: {
-          created_at: string
-          groups_json: Json
-          id: number
-          puzzle_id: string
-          sort_order: number
-        }
-        Insert: {
-          created_at?: string
-          groups_json: Json
-          id?: never
-          puzzle_id: string
-          sort_order?: number
-        }
-        Update: {
-          created_at?: string
-          groups_json?: Json
-          id?: never
-          puzzle_id?: string
-          sort_order?: number
-        }
-        Relationships: []
-      }
       nhl_draft: {
         Row: {
           amateur_team: string | null
@@ -6998,7 +5991,7 @@ export type Database = {
         }
         Insert: {
           amateur_team?: string | null
-          id?: number
+          id: number
           nationality?: string | null
           pick?: number | null
           player?: string | null
@@ -7025,34 +6018,55 @@ export type Database = {
           id: number
           nationality: string | null
           pick: number | null
-          player_name: string
+          player_name: string | null
           position: string | null
           prior_team: string | null
           round: number | null
           team: string | null
-          year: number
+          year: number | null
         }
         Insert: {
-          id?: number
+          id: number
           nationality?: string | null
           pick?: number | null
-          player_name: string
+          player_name?: string | null
           position?: string | null
           prior_team?: string | null
           round?: number | null
           team?: string | null
-          year: number
+          year?: number | null
         }
         Update: {
           id?: number
           nationality?: string | null
           pick?: number | null
-          player_name?: string
+          player_name?: string | null
           position?: string | null
           prior_team?: string | null
           round?: number | null
           team?: string | null
-          year?: number
+          year?: number | null
+        }
+        Relationships: []
+      }
+      nhl_perfect_lineup_pool: {
+        Row: {
+          created_at: string
+          data: Json
+          id: string
+          sort_order: number
+        }
+        Insert: {
+          created_at?: string
+          data: Json
+          id: string
+          sort_order: number
+        }
+        Update: {
+          created_at?: string
+          data?: Json
+          id?: string
+          sort_order?: number
         }
         Relationships: []
       }
@@ -7071,9 +6085,8 @@ export type Database = {
           gwg: number | null
           hits: number | null
           id: number
-          person_key: string | null
           pim: number | null
-          player_name: string
+          player_name: string | null
           plus_minus: number | null
           points: number | null
           position: string | null
@@ -7099,10 +6112,9 @@ export type Database = {
           goals?: number | null
           gwg?: number | null
           hits?: number | null
-          id?: number
-          person_key?: string | null
+          id: number
           pim?: number | null
-          player_name: string
+          player_name?: string | null
           plus_minus?: number | null
           points?: number | null
           position?: string | null
@@ -7129,9 +6141,8 @@ export type Database = {
           gwg?: number | null
           hits?: number | null
           id?: number
-          person_key?: string | null
           pim?: number | null
-          player_name?: string
+          player_name?: string | null
           plus_minus?: number | null
           points?: number | null
           position?: string | null
@@ -7165,7 +6176,7 @@ export type Database = {
           birth_date?: string | null
           full_name?: string | null
           height?: string | null
-          id?: number
+          id: number
           jersey_number?: number | null
           player_id?: number | null
           position?: string | null
@@ -7188,42 +6199,6 @@ export type Database = {
         }
         Relationships: []
       }
-      olympic_medalists: {
-        Row: {
-          athlete_name: string | null
-          country: string | null
-          event_name: string | null
-          host_city: string | null
-          id: number
-          medal: string
-          season: string
-          sport: string | null
-          year: number
-        }
-        Insert: {
-          athlete_name?: string | null
-          country?: string | null
-          event_name?: string | null
-          host_city?: string | null
-          id?: number
-          medal: string
-          season: string
-          sport?: string | null
-          year: number
-        }
-        Update: {
-          athlete_name?: string | null
-          country?: string | null
-          event_name?: string | null
-          host_city?: string | null
-          id?: number
-          medal?: string
-          season?: string
-          sport?: string | null
-          year?: number
-        }
-        Relationships: []
-      }
       olympic_medals: {
         Row: {
           athlete: string | null
@@ -7241,7 +6216,7 @@ export type Database = {
           country?: string | null
           event?: string | null
           games?: string | null
-          id?: number
+          id: number
           medal?: string | null
           season?: string | null
           sport?: string | null
@@ -7260,30 +6235,24 @@ export type Database = {
         }
         Relationships: []
       }
-      overrated_votes: {
+      olympics_athletes: {
         Row: {
           created_at: string
+          data: Json
           id: string
-          player_name: string
-          user_id: string | null
-          vote: string
-          year: number
+          sort_order: number
         }
         Insert: {
           created_at?: string
-          id?: string
-          player_name: string
-          user_id?: string | null
-          vote: string
-          year: number
+          data: Json
+          id: string
+          sort_order: number
         }
         Update: {
           created_at?: string
+          data?: Json
           id?: string
-          player_name?: string
-          user_id?: string | null
-          vote?: string
-          year?: number
+          sort_order?: number
         }
         Relationships: []
       }
@@ -7296,9 +6265,7 @@ export type Database = {
           id: number
           market_value_usd: number | null
           matches: number | null
-          name_folded: string | null
           nationality: string | null
-          person_key: string | null
           player_name: string | null
           position: string | null
           rank: number | null
@@ -7311,11 +6278,10 @@ export type Database = {
           assists?: number | null
           club?: string | null
           goals?: number | null
-          id?: number
+          id: number
           market_value_usd?: number | null
           matches?: number | null
           nationality?: string | null
-          person_key?: string | null
           player_name?: string | null
           position?: string | null
           rank?: number | null
@@ -7332,7 +6298,6 @@ export type Database = {
           market_value_usd?: number | null
           matches?: number | null
           nationality?: string | null
-          person_key?: string | null
           player_name?: string | null
           position?: string | null
           rank?: number | null
@@ -7342,54 +6307,51 @@ export type Database = {
         }
         Relationships: []
       }
-      poll_votes: {
-        Row: {
-          choice: string
-          created_at: string
-          id: number
-          poll_key: string
-        }
-        Insert: {
-          choice: string
-          created_at?: string
-          id?: never
-          poll_key: string
-        }
-        Update: {
-          choice?: string
-          created_at?: string
-          id?: never
-          poll_key?: string
-        }
-        Relationships: []
-      }
       profiles: {
         Row: {
+          all_time_score: number
           avatar_url: string | null
           created_at: string
+          current_streak: number
           display_name: string | null
           id: string
-          streak_state: Json
+          last_played_date: string | null
+          longest_streak: number
+          streak_freezes: number
+          total_correct_answers: number
+          total_games_played: number
           updated_at: string
           user_id: string
           username: string | null
         }
         Insert: {
+          all_time_score?: number
           avatar_url?: string | null
           created_at?: string
+          current_streak?: number
           display_name?: string | null
           id?: string
-          streak_state?: Json
+          last_played_date?: string | null
+          longest_streak?: number
+          streak_freezes?: number
+          total_correct_answers?: number
+          total_games_played?: number
           updated_at?: string
           user_id: string
           username?: string | null
         }
         Update: {
+          all_time_score?: number
           avatar_url?: string | null
           created_at?: string
+          current_streak?: number
           display_name?: string | null
           id?: string
-          streak_state?: Json
+          last_played_date?: string | null
+          longest_streak?: number
+          streak_freezes?: number
+          total_correct_answers?: number
+          total_games_played?: number
           updated_at?: string
           user_id?: string
           username?: string | null
@@ -7426,30 +6388,6 @@ export type Database = {
         }
         Relationships: []
       }
-      rarity_round_guesses: {
-        Row: {
-          answer: string
-          category_key: string
-          created_at: string
-          id: number
-          picked_on: string
-        }
-        Insert: {
-          answer: string
-          category_key: string
-          created_at?: string
-          id?: never
-          picked_on?: string
-        }
-        Update: {
-          answer?: string
-          category_key?: string
-          created_at?: string
-          id?: never
-          picked_on?: string
-        }
-        Relationships: []
-      }
       rugby_championships: {
         Row: {
           competition: string | null
@@ -7462,7 +6400,7 @@ export type Database = {
         Insert: {
           competition?: string | null
           host?: string | null
-          id?: number
+          id: number
           runner_up?: string | null
           winner?: string | null
           year?: number | null
@@ -7485,7 +6423,7 @@ export type Database = {
           user_id: string
         }
         Insert: {
-          bracket_data: Json
+          bracket_data?: Json
           created_at?: string
           id: string
           user_id: string
@@ -7533,34 +6471,166 @@ export type Database = {
       }
       soccer_awards: {
         Row: {
-          award_name: string
+          award_name: string | null
           club_or_team: string | null
           competition_or_league: string | null
           id: number
           nationality: string | null
           notes: string | null
-          winner_name: string
-          year: number
+          winner_name: string | null
+          year: number | null
         }
         Insert: {
-          award_name: string
+          award_name?: string | null
           club_or_team?: string | null
           competition_or_league?: string | null
-          id?: number
+          id: number
           nationality?: string | null
           notes?: string | null
-          winner_name: string
-          year: number
+          winner_name?: string | null
+          year?: number | null
         }
         Update: {
-          award_name?: string
+          award_name?: string | null
           club_or_team?: string | null
           competition_or_league?: string | null
           id?: number
           nationality?: string | null
           notes?: string | null
-          winner_name?: string
-          year?: number
+          winner_name?: string | null
+          year?: number | null
+        }
+        Relationships: []
+      }
+      soccer_career_clubs: {
+        Row: {
+          color: string
+          country: string
+          created_at: string
+          id: string
+          league: string
+          name: string
+          tier: number
+        }
+        Insert: {
+          color?: string
+          country: string
+          created_at?: string
+          id?: string
+          league?: string
+          name: string
+          tier: number
+        }
+        Update: {
+          color?: string
+          country?: string
+          created_at?: string
+          id?: string
+          league?: string
+          name?: string
+          tier?: number
+        }
+        Relationships: []
+      }
+      soccer_careers: {
+        Row: {
+          age: number
+          career_history: Json
+          created_at: string
+          current_club: string | null
+          defending: number
+          dribbling: number
+          id: string
+          is_active: boolean
+          nationality: string
+          overall_rating: number
+          pace: number
+          passing: number
+          physical: number
+          player_name: string
+          position: string
+          reflexes: number
+          season_year: number
+          shooting: number
+          starting_era: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          age?: number
+          career_history?: Json
+          created_at?: string
+          current_club?: string | null
+          defending?: number
+          dribbling?: number
+          id?: string
+          is_active?: boolean
+          nationality: string
+          overall_rating?: number
+          pace?: number
+          passing?: number
+          physical?: number
+          player_name: string
+          position: string
+          reflexes?: number
+          season_year: number
+          shooting?: number
+          starting_era: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          age?: number
+          career_history?: Json
+          created_at?: string
+          current_club?: string | null
+          defending?: number
+          dribbling?: number
+          id?: string
+          is_active?: boolean
+          nationality?: string
+          overall_rating?: number
+          pace?: number
+          passing?: number
+          physical?: number
+          player_name?: string
+          position?: string
+          reflexes?: number
+          season_year?: number
+          shooting?: number
+          starting_era?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      soccer_club_guess_scores: {
+        Row: {
+          clues_used: number
+          created_at: string
+          guessed: boolean
+          id: string
+          mode: string
+          puzzle_date: string
+          score: number
+        }
+        Insert: {
+          clues_used: number
+          created_at?: string
+          guessed?: boolean
+          id?: string
+          mode?: string
+          puzzle_date: string
+          score: number
+        }
+        Update: {
+          clues_used?: number
+          created_at?: string
+          guessed?: boolean
+          id?: string
+          mode?: string
+          puzzle_date?: string
+          score?: number
         }
         Relationships: []
       }
@@ -7614,64 +6684,64 @@ export type Database = {
       }
       soccer_continental_finals: {
         Row: {
-          competition: string
+          competition: string | null
           id: number
           loser: string | null
           motm: string | null
           score: string | null
           venue: string | null
-          winner: string
-          year: number
+          winner: string | null
+          year: number | null
         }
         Insert: {
-          competition: string
-          id?: number
+          competition?: string | null
+          id: number
           loser?: string | null
           motm?: string | null
           score?: string | null
           venue?: string | null
-          winner: string
-          year: number
+          winner?: string | null
+          year?: number | null
         }
         Update: {
-          competition?: string
+          competition?: string | null
           id?: number
           loser?: string | null
           motm?: string | null
           score?: string | null
           venue?: string | null
-          winner?: string
-          year?: number
+          winner?: string | null
+          year?: number | null
         }
         Relationships: []
       }
       soccer_domestic_cup_finals: {
         Row: {
-          competition: string
+          competition: string | null
           country: string | null
           id: number
           loser: string | null
           score: string | null
-          winner: string
-          year: number
+          winner: string | null
+          year: number | null
         }
         Insert: {
-          competition: string
+          competition?: string | null
           country?: string | null
-          id?: number
+          id: number
           loser?: string | null
           score?: string | null
-          winner: string
-          year: number
+          winner?: string | null
+          year?: number | null
         }
         Update: {
-          competition?: string
+          competition?: string | null
           country?: string | null
           id?: number
           loser?: string | null
           score?: string | null
-          winner?: string
-          year?: number
+          winner?: string | null
+          year?: number | null
         }
         Relationships: []
       }
@@ -7737,7 +6807,7 @@ export type Database = {
         }
         Insert: {
           champion?: string | null
-          id?: number
+          id: number
           league?: string | null
           runner_up?: string | null
           top_scorer?: string | null
@@ -7765,7 +6835,7 @@ export type Database = {
         Insert: {
           club?: string | null
           goals?: number | null
-          id?: number
+          id: number
           league?: string | null
           player?: string | null
           season?: string | null
@@ -7787,7 +6857,6 @@ export type Database = {
           goals: number | null
           id: number
           nationality: string | null
-          person_key: string | null
           player_name: string | null
           position: string | null
           wiki_url: string | null
@@ -7798,9 +6867,8 @@ export type Database = {
           appearances?: number | null
           club?: string | null
           goals?: number | null
-          id?: number
+          id: number
           nationality?: string | null
-          person_key?: string | null
           player_name?: string | null
           position?: string | null
           wiki_url?: string | null
@@ -7813,7 +6881,6 @@ export type Database = {
           goals?: number | null
           id?: number
           nationality?: string | null
-          person_key?: string | null
           player_name?: string | null
           position?: string | null
           wiki_url?: string | null
@@ -7834,7 +6901,6 @@ export type Database = {
           international_caps: number | null
           international_goals: number | null
           nationality: string | null
-          person_key: string | null
           player_name: string | null
           position: string | null
           wiki_url: string | null
@@ -7846,11 +6912,10 @@ export type Database = {
           current_club?: string | null
           date_of_birth?: string | null
           height?: string | null
-          id?: number
+          id: number
           international_caps?: number | null
           international_goals?: number | null
           nationality?: string | null
-          person_key?: string | null
           player_name?: string | null
           position?: string | null
           wiki_url?: string | null
@@ -7866,52 +6931,9 @@ export type Database = {
           international_caps?: number | null
           international_goals?: number | null
           nationality?: string | null
-          person_key?: string | null
           player_name?: string | null
           position?: string | null
           wiki_url?: string | null
-        }
-        Relationships: []
-      }
-      soccer_player_club_stints: {
-        Row: {
-          club: string | null
-          debut_age: number | null
-          debut_year: number | null
-          first_year: number | null
-          id: number
-          last_year: number | null
-          nationality: string | null
-          person_key: string | null
-          player_name: string | null
-          position: string | null
-          seasons: number | null
-        }
-        Insert: {
-          club?: string | null
-          debut_age?: number | null
-          debut_year?: number | null
-          first_year?: number | null
-          id?: number
-          last_year?: number | null
-          nationality?: string | null
-          person_key?: string | null
-          player_name?: string | null
-          position?: string | null
-          seasons?: number | null
-        }
-        Update: {
-          club?: string | null
-          debut_age?: number | null
-          debut_year?: number | null
-          first_year?: number | null
-          id?: number
-          last_year?: number | null
-          nationality?: string | null
-          person_key?: string | null
-          player_name?: string | null
-          position?: string | null
-          seasons?: number | null
         }
         Relationships: []
       }
@@ -7937,7 +6959,7 @@ export type Database = {
           date_of_birth?: string | null
           full_name?: string | null
           height?: string | null
-          id?: number
+          id: number
           international_caps?: number | null
           international_goals?: number | null
           international_team?: string | null
@@ -7968,67 +6990,37 @@ export type Database = {
       }
       sports_awards: {
         Row: {
-          award_name: string
+          award_name: string | null
           id: number
           league: string | null
           notes: string | null
           position: string | null
-          sport: string
+          sport: string | null
           team: string | null
-          winner_name: string
-          year: number
+          winner_name: string | null
+          year: number | null
         }
         Insert: {
-          award_name: string
-          id?: number
-          league?: string | null
-          notes?: string | null
-          position?: string | null
-          sport: string
-          team?: string | null
-          winner_name: string
-          year: number
-        }
-        Update: {
-          award_name?: string
-          id?: number
-          league?: string | null
-          notes?: string | null
-          position?: string | null
-          sport?: string
-          team?: string | null
-          winner_name?: string
-          year?: number
-        }
-        Relationships: []
-      }
-      stanley_cup_finals: {
-        Row: {
-          conn_smythe: string | null
+          award_name?: string | null
           id: number
-          loser: string | null
-          series_result: string | null
-          winner: string
-          winning_coach: string | null
-          year: number
-        }
-        Insert: {
-          conn_smythe?: string | null
-          id?: number
-          loser?: string | null
-          series_result?: string | null
-          winner: string
-          winning_coach?: string | null
-          year: number
+          league?: string | null
+          notes?: string | null
+          position?: string | null
+          sport?: string | null
+          team?: string | null
+          winner_name?: string | null
+          year?: number | null
         }
         Update: {
-          conn_smythe?: string | null
+          award_name?: string | null
           id?: number
-          loser?: string | null
-          series_result?: string | null
-          winner?: string
-          winning_coach?: string | null
-          year?: number
+          league?: string | null
+          notes?: string | null
+          position?: string | null
+          sport?: string | null
+          team?: string | null
+          winner_name?: string | null
+          year?: number | null
         }
         Relationships: []
       }
@@ -8043,79 +7035,19 @@ export type Database = {
         }
         Insert: {
           conn_smythe_winner?: string | null
-          id?: number
-          loser?: string | null
-          series_result?: string | null
-          winner?: string | null
-          year?: number | null
-        }
-        Update: {
-          conn_smythe_winner?: string | null
-          id?: number
-          loser?: string | null
-          series_result?: string | null
-          winner?: string | null
-          year?: number | null
-        }
-        Relationships: []
-      }
-      stanley_cup_finals_v2_bak_20260715: {
-        Row: {
-          conn_smythe_winner: string | null
-          id: number | null
-          loser: string | null
-          series_result: string | null
-          winner: string | null
-          year: number | null
-        }
-        Insert: {
-          conn_smythe_winner?: string | null
-          id?: number | null
-          loser?: string | null
-          series_result?: string | null
-          winner?: string | null
-          year?: number | null
-        }
-        Update: {
-          conn_smythe_winner?: string | null
-          id?: number | null
-          loser?: string | null
-          series_result?: string | null
-          winner?: string | null
-          year?: number | null
-        }
-        Relationships: []
-      }
-      stat_leaders: {
-        Row: {
           id: number
-          league: string | null
-          player_name: string
-          sport: string
-          stat_category: string
-          stat_value: string | null
-          team: string | null
-          year: number
-        }
-        Insert: {
-          id?: number
-          league?: string | null
-          player_name: string
-          sport: string
-          stat_category: string
-          stat_value?: string | null
-          team?: string | null
-          year: number
+          loser?: string | null
+          series_result?: string | null
+          winner?: string | null
+          year?: number | null
         }
         Update: {
+          conn_smythe_winner?: string | null
           id?: number
-          league?: string | null
-          player_name?: string
-          sport?: string
-          stat_category?: string
-          stat_value?: string | null
-          team?: string | null
-          year?: number
+          loser?: string | null
+          series_result?: string | null
+          winner?: string | null
+          year?: number | null
         }
         Relationships: []
       }
@@ -8123,45 +7055,6 @@ export type Database = {
         Row: {
           city: string | null
           id: number
-          loser: string | null
-          loser_score: number | null
-          mvp: string | null
-          sb_number: string
-          venue: string | null
-          winner: string
-          winner_score: number | null
-          year: number
-        }
-        Insert: {
-          city?: string | null
-          id?: number
-          loser?: string | null
-          loser_score?: number | null
-          mvp?: string | null
-          sb_number: string
-          venue?: string | null
-          winner: string
-          winner_score?: number | null
-          year: number
-        }
-        Update: {
-          city?: string | null
-          id?: number
-          loser?: string | null
-          loser_score?: number | null
-          mvp?: string | null
-          sb_number?: string
-          venue?: string | null
-          winner?: string
-          winner_score?: number | null
-          year?: number
-        }
-        Relationships: []
-      }
-      super_bowls_bak_20260715: {
-        Row: {
-          city: string | null
-          id: number | null
           loser: string | null
           loser_score: number | null
           mvp: string | null
@@ -8173,7 +7066,7 @@ export type Database = {
         }
         Insert: {
           city?: string | null
-          id?: number | null
+          id: number
           loser?: string | null
           loser_score?: number | null
           mvp?: string | null
@@ -8185,7 +7078,7 @@ export type Database = {
         }
         Update: {
           city?: string | null
-          id?: number | null
+          id?: number
           loser?: string | null
           loser_score?: number | null
           mvp?: string | null
@@ -8194,6 +7087,27 @@ export type Database = {
           winner?: string | null
           winner_score?: number | null
           year?: number | null
+        }
+        Relationships: []
+      }
+      teammates_pairs: {
+        Row: {
+          created_at: string
+          data: Json
+          id: string
+          sort_order: number
+        }
+        Insert: {
+          created_at?: string
+          data: Json
+          id: string
+          sort_order: number
+        }
+        Update: {
+          created_at?: string
+          data?: Json
+          id?: string
+          sort_order?: number
         }
         Relationships: []
       }
@@ -8208,7 +7122,7 @@ export type Database = {
         }
         Insert: {
           grand_slam_titles?: number | null
-          id?: number
+          id: number
           player?: string | null
           total_titles?: number | null
           tour?: string | null
@@ -8229,24 +7143,27 @@ export type Database = {
           chain_length: number
           created_at: string
           id: string
-          mode: string | null
+          mode: string
           nickname: string
+          puzzle_date: string
           score: number
         }
         Insert: {
-          chain_length?: number
+          chain_length: number
           created_at?: string
           id?: string
-          mode?: string | null
+          mode?: string
           nickname: string
-          score?: number
+          puzzle_date?: string
+          score: number
         }
         Update: {
           chain_length?: number
           created_at?: string
           id?: string
-          mode?: string | null
+          mode?: string
           nickname?: string
+          puzzle_date?: string
           score?: number
         }
         Relationships: []
@@ -8273,15 +7190,7 @@ export type Database = {
           player_id?: string
           puzzle_date?: string
         }
-        Relationships: [
-          {
-            foreignKeyName: "tennis_daily_player_id_fkey"
-            columns: ["player_id"]
-            isOneToOne: false
-            referencedRelation: "tennis_players"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
       }
       tennis_grand_slam_winners: {
         Row: {
@@ -8296,7 +7205,7 @@ export type Database = {
         Insert: {
           category?: string | null
           champion?: string | null
-          id?: number
+          id: number
           runner_up?: string | null
           score?: string | null
           tournament?: string | null
@@ -8306,36 +7215,6 @@ export type Database = {
           category?: string | null
           champion?: string | null
           id?: number
-          runner_up?: string | null
-          score?: string | null
-          tournament?: string | null
-          year?: number | null
-        }
-        Relationships: []
-      }
-      tennis_grand_slam_winners_bak_20260715: {
-        Row: {
-          category: string | null
-          champion: string | null
-          id: number | null
-          runner_up: string | null
-          score: string | null
-          tournament: string | null
-          year: number | null
-        }
-        Insert: {
-          category?: string | null
-          champion?: string | null
-          id?: number | null
-          runner_up?: string | null
-          score?: string | null
-          tournament?: string | null
-          year?: number | null
-        }
-        Update: {
-          category?: string | null
-          champion?: string | null
-          id?: number | null
           runner_up?: string | null
           score?: string | null
           tournament?: string | null
@@ -8382,9 +7261,9 @@ export type Database = {
           vibe_word: string
         }
         Insert: {
-          common_names?: string[]
+          common_names: string[]
           created_at?: string
-          difficulty?: string
+          difficulty: string
           famous_moment_hint: string
           id?: string
           nationality_era_hint: string
@@ -8406,48 +7285,6 @@ export type Database = {
           slam_detail_hint?: string
           tour_hint?: string
           vibe_word?: string
-        }
-        Relationships: []
-      }
-      tennis_players_bak_20260708: {
-        Row: {
-          common_names: string[] | null
-          created_at: string | null
-          difficulty: string | null
-          famous_moment_hint: string | null
-          id: string | null
-          nationality_era_hint: string | null
-          player_name: string | null
-          slam_count_hint: string | null
-          slam_detail_hint: string | null
-          tour_hint: string | null
-          vibe_word: string | null
-        }
-        Insert: {
-          common_names?: string[] | null
-          created_at?: string | null
-          difficulty?: string | null
-          famous_moment_hint?: string | null
-          id?: string | null
-          nationality_era_hint?: string | null
-          player_name?: string | null
-          slam_count_hint?: string | null
-          slam_detail_hint?: string | null
-          tour_hint?: string | null
-          vibe_word?: string | null
-        }
-        Update: {
-          common_names?: string[] | null
-          created_at?: string | null
-          difficulty?: string | null
-          famous_moment_hint?: string | null
-          id?: string | null
-          nationality_era_hint?: string | null
-          player_name?: string | null
-          slam_count_hint?: string | null
-          slam_detail_hint?: string | null
-          tour_hint?: string | null
-          vibe_word?: string | null
         }
         Relationships: []
       }
@@ -8488,21 +7325,21 @@ export type Database = {
           id: number
           runner_up: string | null
           surface: string | null
-          tour: string
-          tournament: string
-          winner: string
-          year: number
+          tour: string | null
+          tournament: string | null
+          winner: string | null
+          year: number | null
         }
         Insert: {
           category?: string | null
           division?: string | null
-          id?: number
+          id: number
           runner_up?: string | null
           surface?: string | null
-          tour: string
-          tournament: string
-          winner: string
-          year: number
+          tour?: string | null
+          tournament?: string | null
+          winner?: string | null
+          year?: number | null
         }
         Update: {
           category?: string | null
@@ -8510,10 +7347,10 @@ export type Database = {
           id?: number
           runner_up?: string | null
           surface?: string | null
-          tour?: string
-          tournament?: string
-          winner?: string
-          year?: number
+          tour?: string | null
+          tournament?: string | null
+          winner?: string | null
+          year?: number | null
         }
         Relationships: []
       }
@@ -8526,7 +7363,7 @@ export type Database = {
           year: number | null
         }
         Insert: {
-          id?: number
+          id: number
           nationality?: string | null
           player?: string | null
           tour?: string | null
@@ -8545,96 +7382,56 @@ export type Database = {
         Row: {
           id: number
           nationality: string | null
-          player_name: string
+          player_name: string | null
           points: number | null
-          rank: number
-          tour: string
-          year: number
+          rank: number | null
+          tour: string | null
+          year: number | null
         }
         Insert: {
-          id?: number
+          id: number
           nationality?: string | null
-          player_name: string
+          player_name?: string | null
           points?: number | null
-          rank: number
-          tour: string
-          year: number
+          rank?: number | null
+          tour?: string | null
+          year?: number | null
         }
         Update: {
           id?: number
           nationality?: string | null
-          player_name?: string
+          player_name?: string | null
           points?: number | null
-          rank?: number
-          tour?: string
-          year?: number
+          rank?: number | null
+          tour?: string | null
+          year?: number | null
         }
         Relationships: []
       }
-      tier_list_votes: {
+      timeline_puzzles: {
         Row: {
           created_at: string
+          data: Json
           id: string
-          player_name: string
-          tier: string
-          user_id: string | null
-          year: number
+          sort_order: number
         }
         Insert: {
           created_at?: string
-          id?: string
-          player_name: string
-          tier: string
-          user_id?: string | null
-          year: number
-        }
-        Update: {
-          created_at?: string
-          id?: string
-          player_name?: string
-          tier?: string
-          user_id?: string | null
-          year?: number
-        }
-        Relationships: []
-      }
-      transfer_grade_votes: {
-        Row: {
-          created_at: string
-          grade: string
+          data: Json
           id: string
-          move_year: number
-          player_name: string
-          to_club: string
-          user_id: string | null
-        }
-        Insert: {
-          created_at?: string
-          grade: string
-          id?: string
-          move_year: number
-          player_name: string
-          to_club: string
-          user_id?: string | null
+          sort_order: number
         }
         Update: {
           created_at?: string
-          grade?: string
+          data?: Json
           id?: string
-          move_year?: number
-          player_name?: string
-          to_club?: string
-          user_id?: string | null
+          sort_order?: number
         }
         Relationships: []
       }
       transfer_path_puzzles: {
         Row: {
-          active_hint: string | null
-          active_min_steps: number | null
           created_at: string
-          europe_hint: string | null
-          europe_min_steps: number | null
           hint: string
           id: string
           min_steps: number
@@ -8644,11 +7441,7 @@ export type Database = {
           sort_order: number
         }
         Insert: {
-          active_hint?: string | null
-          active_min_steps?: number | null
           created_at?: string
-          europe_hint?: string | null
-          europe_min_steps?: number | null
           hint: string
           id?: string
           min_steps: number
@@ -8658,11 +7451,7 @@ export type Database = {
           sort_order: number
         }
         Update: {
-          active_hint?: string | null
-          active_min_steps?: number | null
           created_at?: string
-          europe_hint?: string | null
-          europe_min_steps?: number | null
           hint?: string
           id?: string
           min_steps?: number
@@ -8673,63 +7462,30 @@ export type Database = {
         }
         Relationships: []
       }
-      transfer_path_puzzles_backup_20260710: {
-        Row: {
-          created_at: string | null
-          hint: string | null
-          id: string | null
-          min_steps: number | null
-          player_a: string | null
-          player_b: string | null
-          puzzle_id: string | null
-          sort_order: number | null
-        }
-        Insert: {
-          created_at?: string | null
-          hint?: string | null
-          id?: string | null
-          min_steps?: number | null
-          player_a?: string | null
-          player_b?: string | null
-          puzzle_id?: string | null
-          sort_order?: number | null
-        }
-        Update: {
-          created_at?: string | null
-          hint?: string | null
-          id?: string | null
-          min_steps?: number | null
-          player_a?: string | null
-          player_b?: string | null
-          puzzle_id?: string | null
-          sort_order?: number | null
-        }
-        Relationships: []
-      }
       trophy_winners: {
         Row: {
           id: number
-          result: string
-          team_name: string
-          team_type: string
-          trophy_name: string
-          year: number
+          result: string | null
+          team_name: string | null
+          team_type: string | null
+          trophy_name: string | null
+          year: number | null
         }
         Insert: {
-          id?: number
-          result: string
-          team_name: string
-          team_type: string
-          trophy_name: string
-          year: number
+          id: number
+          result?: string | null
+          team_name?: string | null
+          team_type?: string | null
+          trophy_name?: string | null
+          year?: number | null
         }
         Update: {
           id?: number
-          result?: string
-          team_name?: string
-          team_type?: string
-          trophy_name?: string
-          year?: number
+          result?: string | null
+          team_name?: string | null
+          team_type?: string | null
+          trophy_name?: string | null
+          year?: number | null
         }
         Relationships: []
       }
@@ -8744,7 +7500,7 @@ export type Database = {
         Insert: {
           club?: string | null
           goals?: number | null
-          id?: number
+          id: number
           player?: string | null
           season?: string | null
         }
@@ -8757,102 +7513,105 @@ export type Database = {
         }
         Relationships: []
       }
+      ufc_chain_fighters: {
+        Row: {
+          created_at: string
+          data: Json
+          id: string
+          sort_order: number
+        }
+        Insert: {
+          created_at?: string
+          data: Json
+          id: string
+          sort_order: number
+        }
+        Update: {
+          created_at?: string
+          data?: Json
+          id?: string
+          sort_order?: number
+        }
+        Relationships: []
+      }
       ufc_chain_scores: {
         Row: {
           chain_length: number
           created_at: string
           id: string
-          mode: string | null
+          mode: string
           nickname: string
+          puzzle_date: string
           score: number
         }
         Insert: {
-          chain_length?: number
+          chain_length: number
           created_at?: string
           id?: string
-          mode?: string | null
+          mode?: string
           nickname: string
-          score?: number
+          puzzle_date?: string
+          score: number
         }
         Update: {
           chain_length?: number
           created_at?: string
           id?: string
-          mode?: string | null
+          mode?: string
           nickname?: string
+          puzzle_date?: string
           score?: number
         }
         Relationships: []
       }
       ufc_champions: {
         Row: {
-          champion_name: string
+          champion_name: string | null
           id: number
           reign_end: string | null
           reign_number: number | null
           reign_start: string | null
           title_defenses: number | null
-          weight_class: string
+          weight_class: string | null
         }
         Insert: {
-          champion_name: string
-          id?: number
+          champion_name?: string | null
+          id: number
           reign_end?: string | null
           reign_number?: number | null
           reign_start?: string | null
           title_defenses?: number | null
-          weight_class: string
+          weight_class?: string | null
         }
         Update: {
-          champion_name?: string
+          champion_name?: string | null
           id?: number
           reign_end?: string | null
           reign_number?: number | null
           reign_start?: string | null
           title_defenses?: number | null
-          weight_class?: string
+          weight_class?: string | null
         }
         Relationships: []
       }
-      ufc_fights: {
+      ufc_fighters_pool: {
         Row: {
-          event_date: string | null
-          event_name: string | null
-          fighter_1: string
-          fighter_2: string
-          id: number
-          is_title_fight: boolean | null
-          method: string | null
-          round: number | null
-          time_in_round: string | null
-          weight_class: string | null
-          winner: string | null
+          created_at: string
+          data: Json
+          id: string
+          sort_order: number
         }
         Insert: {
-          event_date?: string | null
-          event_name?: string | null
-          fighter_1: string
-          fighter_2: string
-          id?: number
-          is_title_fight?: boolean | null
-          method?: string | null
-          round?: number | null
-          time_in_round?: string | null
-          weight_class?: string | null
-          winner?: string | null
+          created_at?: string
+          data: Json
+          id: string
+          sort_order: number
         }
         Update: {
-          event_date?: string | null
-          event_name?: string | null
-          fighter_1?: string
-          fighter_2?: string
-          id?: number
-          is_title_fight?: boolean | null
-          method?: string | null
-          round?: number | null
-          time_in_round?: string | null
-          weight_class?: string | null
-          winner?: string | null
+          created_at?: string
+          data?: Json
+          id?: string
+          sort_order?: number
         }
         Relationships: []
       }
@@ -8872,7 +7631,7 @@ export type Database = {
         Insert: {
           event_date?: string | null
           event_name?: string | null
-          id?: number
+          id: number
           loser?: string | null
           method?: string | null
           notes?: string | null
@@ -8899,7 +7658,6 @@ export type Database = {
         Row: {
           achieved_at: string
           best_score: number
-          created_at: string
           game_type: string
           id: string
           user_id: string
@@ -8907,7 +7665,6 @@ export type Database = {
         Insert: {
           achieved_at?: string
           best_score?: number
-          created_at?: string
           game_type: string
           id?: string
           user_id: string
@@ -8915,7 +7672,6 @@ export type Database = {
         Update: {
           achieved_at?: string
           best_score?: number
-          created_at?: string
           game_type?: string
           id?: string
           user_id?: string
@@ -8925,28 +7681,28 @@ export type Database = {
       user_game_scores: {
         Row: {
           correct_answers: number
-          created_at: string
           game_type: string
           id: string
-          puzzle_date: string | null
+          played_at: string
+          puzzle_date: string
           score: number
           user_id: string
         }
         Insert: {
           correct_answers?: number
-          created_at?: string
           game_type: string
           id?: string
-          puzzle_date?: string | null
+          played_at?: string
+          puzzle_date?: string
           score?: number
           user_id: string
         }
         Update: {
           correct_answers?: number
-          created_at?: string
           game_type?: string
           id?: string
-          puzzle_date?: string | null
+          played_at?: string
+          puzzle_date?: string
           score?: number
           user_id?: string
         }
@@ -9005,33 +7761,30 @@ export type Database = {
       }
       user_scores: {
         Row: {
-          created_at: string
           current_streak: number
           games_played_today: number
           id: string
-          last_played_at: string | null
+          last_played_at: string
           longest_streak: number
           total_points: number
           updated_at: string
           user_id: string
         }
         Insert: {
-          created_at?: string
           current_streak?: number
           games_played_today?: number
           id?: string
-          last_played_at?: string | null
+          last_played_at?: string
           longest_streak?: number
           total_points?: number
           updated_at?: string
           user_id: string
         }
         Update: {
-          created_at?: string
           current_streak?: number
           games_played_today?: number
           id?: string
-          last_played_at?: string | null
+          last_played_at?: string
           longest_streak?: number
           total_points?: number
           updated_at?: string
@@ -9044,28 +7797,28 @@ export type Database = {
           college_or_country: string | null
           id: number
           pick: number | null
-          player_name: string
+          player_name: string | null
           round: number | null
           team: string | null
-          year: number
+          year: number | null
         }
         Insert: {
           college_or_country?: string | null
-          id?: number
+          id: number
           pick?: number | null
-          player_name: string
+          player_name?: string | null
           round?: number | null
           team?: string | null
-          year: number
+          year?: number | null
         }
         Update: {
           college_or_country?: string | null
           id?: number
           pick?: number | null
-          player_name?: string
+          player_name?: string | null
           round?: number | null
           team?: string | null
-          year?: number
+          year?: number | null
         }
         Relationships: []
       }
@@ -9075,39 +7828,12 @@ export type Database = {
           id: number
           loser: string | null
           series_result: string | null
-          winner: string
-          year: number
-        }
-        Insert: {
-          finals_mvp?: string | null
-          id?: number
-          loser?: string | null
-          series_result?: string | null
-          winner: string
-          year: number
-        }
-        Update: {
-          finals_mvp?: string | null
-          id?: number
-          loser?: string | null
-          series_result?: string | null
-          winner?: string
-          year?: number
-        }
-        Relationships: []
-      }
-      wnba_finals_bak_20260715: {
-        Row: {
-          finals_mvp: string | null
-          id: number | null
-          loser: string | null
-          series_result: string | null
           winner: string | null
           year: number | null
         }
         Insert: {
           finals_mvp?: string | null
-          id?: number | null
+          id: number
           loser?: string | null
           series_result?: string | null
           winner?: string | null
@@ -9115,7 +7841,7 @@ export type Database = {
         }
         Update: {
           finals_mvp?: string | null
-          id?: number | null
+          id?: number
           loser?: string | null
           series_result?: string | null
           winner?: string | null
@@ -9126,162 +7852,102 @@ export type Database = {
       world_cup_matches: {
         Row: {
           away_score: number | null
-          away_team: string
-          competition: string
+          away_team: string | null
+          competition: string | null
           home_score: number | null
-          home_team: string
+          home_team: string | null
           id: number
           match_date: string | null
           notes: string | null
           round: string | null
           venue: string | null
-          year: number
+          year: number | null
         }
         Insert: {
           away_score?: number | null
-          away_team: string
-          competition: string
+          away_team?: string | null
+          competition?: string | null
           home_score?: number | null
-          home_team: string
-          id?: number
-          match_date?: string | null
-          notes?: string | null
-          round?: string | null
-          venue?: string | null
-          year: number
-        }
-        Update: {
-          away_score?: number | null
-          away_team?: string
-          competition?: string
-          home_score?: number | null
-          home_team?: string
-          id?: number
-          match_date?: string | null
-          notes?: string | null
-          round?: string | null
-          venue?: string | null
-          year?: number
-        }
-        Relationships: []
-      }
-      world_cup_player_stats: {
-        Row: {
-          appearances: number
-          assists: number | null
-          goals: number
+          home_team?: string | null
           id: number
-          minutes_played: number | null
-          nationality: string
-          own_goals: number
-          player_name: string
-          red_cards: number
-          world_cup_year: number
-          yellow_cards: number
-        }
-        Insert: {
-          appearances?: number
-          assists?: number | null
-          goals?: number
-          id?: number
-          minutes_played?: number | null
-          nationality: string
-          own_goals?: number
-          player_name: string
-          red_cards?: number
-          world_cup_year: number
-          yellow_cards?: number
+          match_date?: string | null
+          notes?: string | null
+          round?: string | null
+          venue?: string | null
+          year?: number | null
         }
         Update: {
-          appearances?: number
-          assists?: number | null
-          goals?: number
+          away_score?: number | null
+          away_team?: string | null
+          competition?: string | null
+          home_score?: number | null
+          home_team?: string | null
           id?: number
-          minutes_played?: number | null
-          nationality?: string
-          own_goals?: number
-          player_name?: string
-          red_cards?: number
-          world_cup_year?: number
-          yellow_cards?: number
+          match_date?: string | null
+          notes?: string | null
+          round?: string | null
+          venue?: string | null
+          year?: number | null
         }
         Relationships: []
       }
       world_cup_players: {
         Row: {
-          caps: number
-          club: string
-          date_of_birth: string
-          goals: number
+          caps: number | null
+          club: string | null
+          date_of_birth: string | null
+          goals: number | null
           id: number
-          nationality: string
-          player_name: string
-          position: string
-          squad_number: number
-          world_cup_year: number
+          nationality: string | null
+          player_name: string | null
+          position: string | null
+          squad_number: number | null
+          world_cup_year: number | null
         }
         Insert: {
-          caps: number
-          club: string
-          date_of_birth: string
-          goals: number
-          id?: number
-          nationality: string
-          player_name: string
-          position: string
-          squad_number: number
-          world_cup_year: number
+          caps?: number | null
+          club?: string | null
+          date_of_birth?: string | null
+          goals?: number | null
+          id: number
+          nationality?: string | null
+          player_name?: string | null
+          position?: string | null
+          squad_number?: number | null
+          world_cup_year?: number | null
         }
         Update: {
-          caps?: number
-          club?: string
-          date_of_birth?: string
-          goals?: number
+          caps?: number | null
+          club?: string | null
+          date_of_birth?: string | null
+          goals?: number | null
           id?: number
-          nationality?: string
-          player_name?: string
-          position?: string
-          squad_number?: number
-          world_cup_year?: number
+          nationality?: string | null
+          player_name?: string | null
+          position?: string | null
+          squad_number?: number | null
+          world_cup_year?: number | null
         }
         Relationships: []
       }
-      world_records: {
+      world_cup_puzzles: {
         Row: {
-          athlete_name: string
-          date_set: string | null
-          discipline: string | null
-          event: string
-          id: number
-          is_current: boolean | null
-          nationality: string | null
-          record_value: string | null
-          sport: string
-          venue: string | null
+          created_at: string
+          data: Json
+          id: string
+          sort_order: number
         }
         Insert: {
-          athlete_name: string
-          date_set?: string | null
-          discipline?: string | null
-          event: string
-          id?: number
-          is_current?: boolean | null
-          nationality?: string | null
-          record_value?: string | null
-          sport: string
-          venue?: string | null
+          created_at?: string
+          data: Json
+          id: string
+          sort_order: number
         }
         Update: {
-          athlete_name?: string
-          date_set?: string | null
-          discipline?: string | null
-          event?: string
-          id?: number
-          is_current?: boolean | null
-          nationality?: string | null
-          record_value?: string | null
-          sport?: string
-          venue?: string | null
+          created_at?: string
+          data?: Json
+          id?: string
+          sort_order?: number
         }
         Relationships: []
       }
@@ -9290,28 +7956,28 @@ export type Database = {
           id: number
           loser: string | null
           series_result: string | null
-          winner: string
+          winner: string | null
           winning_manager: string | null
           ws_mvp: string | null
-          year: number
+          year: number | null
         }
         Insert: {
-          id?: number
+          id: number
           loser?: string | null
           series_result?: string | null
-          winner: string
+          winner?: string | null
           winning_manager?: string | null
           ws_mvp?: string | null
-          year: number
+          year?: number | null
         }
         Update: {
           id?: number
           loser?: string | null
           series_result?: string | null
-          winner?: string
+          winner?: string | null
           winning_manager?: string | null
           ws_mvp?: string | null
-          year?: number
+          year?: number | null
         }
         Relationships: []
       }
@@ -9325,7 +7991,7 @@ export type Database = {
           year: number | null
         }
         Insert: {
-          id?: number
+          id: number
           loser?: string | null
           mvp?: string | null
           series_result?: string | null
@@ -9334,33 +8000,6 @@ export type Database = {
         }
         Update: {
           id?: number
-          loser?: string | null
-          mvp?: string | null
-          series_result?: string | null
-          winner?: string | null
-          year?: number | null
-        }
-        Relationships: []
-      }
-      world_series_v2_bak_20260715: {
-        Row: {
-          id: number | null
-          loser: string | null
-          mvp: string | null
-          series_result: string | null
-          winner: string | null
-          year: number | null
-        }
-        Insert: {
-          id?: number | null
-          loser?: string | null
-          mvp?: string | null
-          series_result?: string | null
-          winner?: string | null
-          year?: number | null
-        }
-        Update: {
-          id?: number | null
           loser?: string | null
           mvp?: string | null
           series_result?: string | null
@@ -9371,218 +8010,9 @@ export type Database = {
       }
     }
     Views: {
-      eligible_nba_players: {
-        Row: {
-          college: string | null
-          country: string | null
-          draft_year: number | null
-          latest_team: string | null
-          player_id: number | null
-          player_name: string | null
-          position: string | null
-        }
-        Relationships: []
-      }
-      eligible_nfl_players: {
-        Row: {
-          college: string | null
-          gsis_id: string | null
-          latest_team: string | null
-          player_name: string | null
-          position: string | null
-          rookie_year: string | null
-          years_exp: string | null
-        }
-        Relationships: []
-      }
-      eligible_nhl_players: {
-        Row: {
-          games: number | null
-          player_name: string | null
-          points: number | null
-          position: string | null
-          teams: string | null
-          year_from: string | null
-          year_to: string | null
-        }
-        Relationships: []
-      }
-      eligible_soccer_players: {
-        Row: {
-          latest_club: string | null
-          nationality: string | null
-          peak_market_value_usd: number | null
-          peak_value_year: number | null
-          player_name: string | null
-          position: string | null
-        }
-        Relationships: []
-      }
-      game_player_pool: {
-        Row: {
-          age: number | null
-          assists: number | null
-          club: string | null
-          goals: number | null
-          market_value_usd: number | null
-          matches: number | null
-          nationality: string | null
-          player_name: string | null
-          position: string | null
-          value_band: string | null
-          value_millions: number | null
-          year: number | null
-        }
-        Insert: {
-          age?: number | null
-          assists?: number | null
-          club?: string | null
-          goals?: number | null
-          market_value_usd?: number | null
-          matches?: number | null
-          nationality?: string | null
-          player_name?: string | null
-          position?: string | null
-          value_band?: never
-          value_millions?: never
-          year?: number | null
-        }
-        Update: {
-          age?: number | null
-          assists?: number | null
-          club?: string | null
-          goals?: number | null
-          market_value_usd?: number | null
-          matches?: number | null
-          nationality?: string | null
-          player_name?: string | null
-          position?: string | null
-          value_band?: never
-          value_millions?: never
-          year?: number | null
-        }
-        Relationships: []
-      }
-      jeopardy_clues: {
-        Row: {
-          answer: string | null
-          category: string | null
-          clue: string | null
-          clue_id: string | null
-          event_year: number | null
-          value: number | null
-        }
-        Relationships: []
-      }
-      mlb_grid_players: {
-        Row: {
-          first_year: number | null
-          franchises: string | null
-          games: number | null
-          hits: number | null
-          hrs: number | null
-          last_year: number | null
-          player_name: string | null
-          playerid: string | null
-        }
-        Relationships: []
-      }
-      player_market_tracked: {
-        Row: {
-          age: number | null
-          assists: number | null
-          club: string | null
-          final_value_usd: number | null
-          final_year: number | null
-          goals: number | null
-          id: number | null
-          market_value_usd: number | null
-          matches: number | null
-          nationality: string | null
-          player_name: string | null
-          position: string | null
-          rank: number | null
-          red_cards: number | null
-          year: number | null
-          yellow_cards: number | null
-        }
-        Relationships: []
-      }
-      player_market_values_dedup: {
-        Row: {
-          age: number | null
-          assists: number | null
-          club: string | null
-          goals: number | null
-          id: number | null
-          market_value_usd: number | null
-          matches: number | null
-          nationality: string | null
-          player_name: string | null
-          position: string | null
-          rank: number | null
-          red_cards: number | null
-          year: number | null
-          yellow_cards: number | null
-        }
-        Relationships: []
-      }
-      rebuild_clubs: {
-        Row: {
-          club: string | null
-          squad_size: number | null
-          squad_value_m: number | null
-          tier: string | null
-        }
-        Relationships: []
-      }
-      transfer_grade_pool: {
-        Row: {
-          actual_grade: string | null
-          from_club: string | null
-          move_year: number | null
-          nationality: string | null
-          pct_change: number | null
-          player_name: string | null
-          position: string | null
-          to_club: string | null
-          value_after: number | null
-          value_at_move: number | null
-          value_band: string | null
-        }
-        Relationships: []
-      }
+      [_ in never]: never
     }
     Functions: {
-      assign_rarity_tier: { Args: { percentile_rank: number }; Returns: string }
-      audit_name_columns: {
-        Args: never
-        Returns: {
-          bad_rows: number
-          column_name: string
-          pct_bad: number
-          sample_bad: string
-          table_name: string
-          total_rows: number
-        }[]
-      }
-      global_leaderboard: {
-        Args: { p_games?: string[]; p_period?: string }
-        Returns: {
-          games_played: number
-          player_name: string
-          rank: number
-          total_points: number
-        }[]
-      }
-      global_rank: {
-        Args: { p_games?: string[]; p_period?: string; p_player: string }
-        Returns: {
-          rank: number
-          total_players: number
-          total_points: number
-        }[]
-      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
@@ -9590,9 +8020,6 @@ export type Database = {
         }
         Returns: boolean
       }
-      show_limit: { Args: never; Returns: number }
-      show_trgm: { Args: { "": string }; Returns: string[] }
-      unaccent: { Args: { "": string }; Returns: string }
     }
     Enums: {
       app_role: "admin" | "user"
@@ -9611,12 +8038,12 @@ export type Tables<
   DefaultSchemaTableNameOrOptions extends
     | keyof (DefaultSchema["Tables"] & DefaultSchema["Views"])
     | { schema: keyof DatabaseWithoutInternals },
-  TableName extends DefaultSchemaTableNameOrOptions extends {
+  TableName extends (DefaultSchemaTableNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals
   }
     ? keyof (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
         DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Views"])
-    : never = never,
+    : never) = never,
 > = DefaultSchemaTableNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals
 }
@@ -9640,11 +8067,11 @@ export type TablesInsert<
   DefaultSchemaTableNameOrOptions extends
     | keyof DefaultSchema["Tables"]
     | { schema: keyof DatabaseWithoutInternals },
-  TableName extends DefaultSchemaTableNameOrOptions extends {
+  TableName extends (DefaultSchemaTableNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals
   }
     ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
-    : never = never,
+    : never) = never,
 > = DefaultSchemaTableNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals
 }
@@ -9665,11 +8092,11 @@ export type TablesUpdate<
   DefaultSchemaTableNameOrOptions extends
     | keyof DefaultSchema["Tables"]
     | { schema: keyof DatabaseWithoutInternals },
-  TableName extends DefaultSchemaTableNameOrOptions extends {
+  TableName extends (DefaultSchemaTableNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals
   }
     ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
-    : never = never,
+    : never) = never,
 > = DefaultSchemaTableNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals
 }
@@ -9690,11 +8117,11 @@ export type Enums<
   DefaultSchemaEnumNameOrOptions extends
     | keyof DefaultSchema["Enums"]
     | { schema: keyof DatabaseWithoutInternals },
-  EnumName extends DefaultSchemaEnumNameOrOptions extends {
+  EnumName extends (DefaultSchemaEnumNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals
   }
     ? keyof DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"]
-    : never = never,
+    : never) = never,
 > = DefaultSchemaEnumNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals
 }
@@ -9707,11 +8134,11 @@ export type CompositeTypes<
   PublicCompositeTypeNameOrOptions extends
     | keyof DefaultSchema["CompositeTypes"]
     | { schema: keyof DatabaseWithoutInternals },
-  CompositeTypeName extends PublicCompositeTypeNameOrOptions extends {
+  CompositeTypeName extends (PublicCompositeTypeNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals
   }
     ? keyof DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"]
-    : never = never,
+    : never) = never,
 > = PublicCompositeTypeNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals
 }
