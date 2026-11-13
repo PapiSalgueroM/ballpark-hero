@@ -601,7 +601,7 @@
     "date": "2026-09-19"
   },
   "/soccer": {
-    "hash": "0a7bb18d8a834a75",
+    "hash": "ccaf60fea1dcd241",
     "date": "2026-11-13"
   },
   "/soccer-career": {
@@ -615,6 +615,10 @@
   "/soccer-grid": {
     "hash": "e7a7b846f7e42bf7",
     "date": "2026-09-30"
+  },
+  "/soccer-perfect-season": {
+    "hash": "085eedbd93e6470a",
+    "date": "2026-11-13"
   },
   "/sports-bingo": {
     "hash": "5211190d16cb4919",
@@ -665,7 +669,7 @@
     "date": "2026-10-06"
   },
   "/whats-new": {
-    "hash": "c4a0d5afe468974a",
+    "hash": "d11619c0bfdd1f28",
     "date": "2026-11-13"
   },
   "/who-am-i": {
