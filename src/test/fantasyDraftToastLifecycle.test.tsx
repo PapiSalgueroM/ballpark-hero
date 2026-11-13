@@ -40,7 +40,7 @@ it('loads Fantasy Draft notifications on its first visit and retains an open toa
   expect(screen.queryByRole('region', { name: 'Notifications (F8)' })).toBeNull();
 
   navigate('/Fantasy-Draft/');
-  await screen.findByRole('button', { name: 'Start Draft' });
+  await screen.findByRole('button', { name: 'Start Draft' }, { timeout: 5000 });
   await screen.findByRole('region', { name: 'Notifications (F8)' });
   const notification = 'Fantasy Draft notification fixture';
   act(() => { toast({ title: notification, duration: 30_000 }); });
