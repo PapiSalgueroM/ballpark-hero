@@ -279,6 +279,10 @@ const REAL_PEOPLE = [
   // Wests Tigers' official profile and final Round 2 list agree with the
   // independent final team sheet cited in the NRL opening-matchday audit.
   { name: 'Jock Madden', files: ['src/data/nrlOpeningMatchday2026.ts'] },
+  /* College of Charleston men's basketball record book, career statistics p. 82,
+     and the Sports Reference 1991-92 Charleston roster identify the forward.
+     https://cofcsports.com/documents/download/2026/5/27/Charleston_MBB_Thru_2025-26.pdf */
+  { name: 'Kevin Madden', files: ['src/data/gridArchive.json', 'public/cbb-grid/archive/index.html'] },
 ];
 const PERSON_CONTROL = process.env.SIM_RIVAL_CONTROL === 'person';
 
