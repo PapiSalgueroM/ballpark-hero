@@ -7,8 +7,8 @@ import type { SeoMeta } from '../seoMeta';
 
 export const SEO_META_PART: Record<string, SeoMeta> = {
   "/nba-my-career": {
-    title: "NBA My Career: Basketball Career Simulator",
-    description: "Create a prospect, land on a real NBA team and live a whole career: stat lines, contracts, trade demands, rings and a legacy verdict. Free basketball sim.",
+    title: "NBA My Career: A Basketball Player Simulator",
+    description: "Build a prospect in this free NBA career sim. Fight for a starting spot, weigh trades and contracts, and play from draft night to retirement.",
   },
   "/conquest-nhl": {
     title: "NHL Conquest: Hockey Imperialism Map Game",

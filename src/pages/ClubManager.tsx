@@ -300,8 +300,8 @@ const ClubManager = () => {
   const shell = (inner: ReactNode) => (
     <>
       <PageSeo
-        title="Club Manager: Football Management Sim | DoUKnowBall"
-        description="Pick a real club, set your tactics, work the transfer market and survive the sack race across league seasons and the competitions each league plays."
+        title="Club Manager: Football Tactics and Transfers | DoUKnowBall"
+        description="Take over a real club in a current or historical season. Set tactics, negotiate transfers and meet the board’s targets in a free football management sim."
         path="/club-manager"
       />
       <GameShell
