@@ -52,7 +52,7 @@ const AppearanceBuilder = ({ appearance, onChange, clubColor = "#10B981", sport 
 
   return (
     <div data-career-appearance={sport === "soccer" ? undefined : sport} className="bg-card border border-border rounded-xl p-4 sm:p-5 space-y-4">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-wrap items-center justify-between gap-2">
         <h2 className="text-base font-bold">Create Your Look</h2>
         <Button
           onClick={() => onChange(randomAppearance())}
@@ -64,7 +64,7 @@ const AppearanceBuilder = ({ appearance, onChange, clubColor = "#10B981", sport 
       </div>
 
       {/* Live preview */}
-      <div className="flex items-center gap-4 rounded-xl border border-border bg-muted/10 p-4">
+      <div className="flex flex-wrap items-center gap-4 rounded-xl border border-border bg-muted/10 p-4">
         <div className="shrink-0 rounded-xl overflow-hidden bg-background/40 border border-border">
           <PlayerAvatar appearance={appearance} clubColor={clubColor} size={104} animate />
         </div>
