@@ -1,4 +1,4 @@
-/* Actual built-app inputs only. Font preparation is a separate dependency download. */
+/* Actual built-app inputs only. Font preparation records the bundled source bytes. */
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
@@ -6,46 +6,23 @@ import { createHash } from 'node:crypto';
 import { createServer } from 'node:net';
 import { spawn } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
+import { prepareBundledFonts, verifyBundledFonts, loadActualFonts } from '../lib/builtFonts.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 const OUT = path.join(ROOT, 'free-kick-lab-artifacts/native');
 const CACHE = path.resolve(process.env.FREE_KICK_FONT_CACHE || path.join(ROOT, 'free-kick-lab-artifacts/font-cache'));
-const sheetURL = [...fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8').matchAll(/<link\s+href="(https:\/\/fonts\.googleapis\.com\/[^\"]+)"\s+rel="stylesheet"/g)].map(match => new URL(match[1]).href);
-assert.equal(sheetURL.length, 1, 'Read the actual template font stylesheet');
 if (process.argv.includes('--prefetch-fonts-only')) {
-  assert(process.env.CI, 'Font dependency downloads are remote CI only');
-  fs.mkdirSync(CACHE, { recursive: true });
-  const manifest = [];
-  const download = async url => {
-    assert(['https://fonts.googleapis.com', 'https://fonts.gstatic.com'].includes(new URL(url).origin));
-    const response = await fetch(url, { redirect: 'error', signal: AbortSignal.timeout(20000), headers: { 'User-Agent': 'Mozilla/5.0 Chrome/131.0.0.0 Safari/537.36' } });
-    assert(response.ok, 'Font dependency response succeeds');
-    const body = Buffer.from(await response.arrayBuffer()), file = createHash('sha256').update(url).digest('hex');
-    fs.writeFileSync(path.join(CACHE, file), body);
-    manifest.push({ url, file, contentType: response.headers.get('content-type'), sha256: createHash('sha256').update(body).digest('hex') });
-    return body.toString('utf8');
-  };
-  const css = await download(sheetURL[0]);
-  const urls = [...new Set([...css.matchAll(/url\(\s*['"]?(https:\/\/[^)'"\s]+)/g)].map(match => match[1]))];
-  assert(urls.length > 0);
-  for (const url of urls) { assert.equal(new URL(url).origin, 'https://fonts.gstatic.com'); await download(url); }
-  fs.writeFileSync(path.join(CACHE, 'manifest.json'), JSON.stringify(manifest, null, 2));
-  console.log(`Prepared ${manifest.length} declared font dependencies for local fulfillment.`);
+  const receipt = prepareBundledFonts(ROOT, CACHE);
+  fs.writeFileSync(path.join(CACHE, 'manifest.json'), '[]');
+  console.log(`Recorded ${receipt.faces.length} bundled font faces without external downloads.`);
   process.exit(0);
 }
-const fontCache = new Map(JSON.parse(fs.readFileSync(path.join(CACHE, 'manifest.json'), 'utf8')).map(entry => {
-  assert(['https://fonts.googleapis.com', 'https://fonts.gstatic.com'].includes(new URL(entry.url).origin));
-  assert(/^[a-f0-9]{64}$/.test(entry.file));
-  const body = fs.readFileSync(path.join(CACHE, entry.file));
-  assert.equal(createHash('sha256').update(body).digest('hex'), entry.sha256);
-  return [entry.url, { body, contentType: entry.contentType }];
-}));
-assert(fontCache.has(sheetURL[0]), 'Prepare current template fonts before guarded native run');
+const bundledFonts = verifyBundledFonts(ROOT, CACHE);
 const { chromium } = await import('../lib/playwrightLoader.mjs');
 const DATE = '2026-10-06', DAILY = `free-kick-daily-${DATE}`;
 const dailyBytes = JSON.stringify({ score: 173, goals: 4, v: 1, date: DATE });
 const protectedKeys = [DAILY, 'dukb-local-completions', 'dukb-streaks-v1', 'dukb-play-diary-v1'];
-const sourceFiles = ['src/components/free-kick', 'src/lib/freeKick.ts', 'scripts/qa/freeKickLab1070.mjs'];
+const sourceFiles = ['src/components/free-kick', 'src/lib/freeKick.ts', 'scripts/qa/freeKickLab1070.mjs', 'scripts/lib/builtFonts.mjs'];
 const sourceDigest = () => {
   const hash = createHash('sha256');
   for (const file of sourceFiles) {
@@ -58,7 +35,7 @@ const sourceDigest = () => {
 const originalSource = sourceDigest();
 fs.mkdirSync(OUT, { recursive: true });
 assert(fs.existsSync(path.join(ROOT, 'dist/index.html')), 'Build dist before native verification');
-const report = { cases: [], controls: [], controlEvidence: [], forwardedRequests: 0, sourceBefore: originalSource };
+const report = { cases: [], controls: [], controlEvidence: [], forwardedRequests: 0, sourceBefore: originalSource, bundledFonts };
 const save = () => fs.writeFileSync(path.join(OUT, 'report.json'), JSON.stringify(report, null, 2));
 const port = await new Promise((resolve, reject) => {
   const probe = createServer(); probe.once('error', reject);
@@ -128,7 +105,6 @@ try {
       if (url.origin === BASE) { assert(['GET', 'HEAD'].includes(request.method()), 'No loopback writes'); return route.continue(); }
       row.intercepted.push({ method: request.method(), origin: url.origin, path: url.pathname });
       if (!['GET', 'HEAD', 'OPTIONS'].includes(request.method())) row.writes.push({ method: request.method(), path: url.pathname });
-      if (request.method() === 'GET' && fontCache.has(url.href)) return route.fulfill({ status: 200, ...fontCache.get(url.href) });
       if (request.resourceType() === 'font') { row.assetErrors.push(`Uncached font: ${url.href}`); return route.abort(); }
       return route.fulfill({ status: 200, contentType: request.resourceType() === 'stylesheet' ? 'text/css' : 'application/json', body: request.resourceType() === 'stylesheet' ? '' : '[]' });
     });
@@ -188,12 +164,7 @@ try {
     try {
       await page.goto(BASE + '/free-kick', { waitUntil: 'domcontentloaded' });
       const entry = page.getByRole('button', { name: 'Shot lab', exact: true }); await entry.waitFor();
-      row.fonts = await page.evaluate(async () => {
-        const result = []; for (const family of ['Inter', 'Space Grotesk']) for (const weight of [400, 500, 600, 700]) {
-          const faces = await document.fonts.load(`${weight} 16px "${family}"`, 'Free Kick'); result.push({ family, weight, loaded: faces.length > 0 && faces.every(face => face.status === 'loaded') });
-        } await document.fonts.ready; return result;
-      });
-      assert(row.fonts.length === 8 && row.fonts.every(face => face.loaded), 'Eight actual font faces loaded');
+      row.fonts = await loadActualFonts(page, 'Free Kick');
       const before = await protectedState(page);
       await activate(entry); const dialog = page.getByRole('dialog', { name: 'Shot lab rules', exact: true }); await dialogReady(dialog);
       assert(/example/i.test(await dialog.innerText()), 'Worked example appears before play');
