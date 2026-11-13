@@ -2,10 +2,11 @@ import { describe, expect, it } from 'vitest';
 import { nrlSeasonPlan } from '@/data/nrlManagerSeasons';
 import { NRL_OPENING_MATCHDAY_2026 } from '@/data/nrlOpeningMatchday2026';
 import {
-  createNrlCareer, createNrlOpeningMatchdayCareer, nrlCareerCap, nrlCareerSquad, readNrlCareerSave, reduceNrlCareer,
+  createNrlCareer, createNrlOpeningMatchdayCareer, loadNrlPerthSigningsCareer, nrlCareerCap, nrlCareerSquad, readNrlCareerSave, reduceNrlCareer,
   type NrlCareerState,
 } from '@/lib/nrlCareer';
 import { createNrlSeason, nrlNextRound, NRL_ROLES } from '@/lib/nrlManager';
+import { nrlOriginEligibility } from '@/lib/nrlOrigin';
 import { sameNrlCareer } from '@/lib/nrlSaveSlots';
 
 const bytes = JSON.stringify;
@@ -87,5 +88,49 @@ describe('NRL 2026 opening matchday names', () => {
     }
     const { openingRoster, ...withoutMarker } = named;
     expect(readNrlCareerSave(bytes(withoutMarker))).toBeNull();
+  });
+});
+
+describe('NRL 2027 Perth confirmed signings', () => {
+  it('starts Perth with the sourced names and roles, generated depth and legal caps', async () => {
+    const career = await loadNrlPerthSigningsCareer(16, true);
+    expect(career).toMatchObject({ openingYear: 2027, openingRoster: 'perth-signings-2027', boardChallenge: true });
+    const squad = nrlCareerSquad(career);
+    expect(squad).toHaveLength(30);
+    const named = career.players.filter(player => player.id.startsWith('nrl-real-'));
+    expect(named).toHaveLength(27);
+    expect(named.every(player => player.contract?.clubId === 'bears')).toBe(true);
+    expect(new Set(career.players.map(player => player.name)).size).toBe(career.players.length);
+    expect(new Set(career.players.map(player => player.id)).size).toBe(career.players.length);
+    expect(squad).toEqual(expect.arrayContaining([
+      expect.objectContaining({ name: 'Toby Sexton', role: 'Halfback' }),
+      expect.objectContaining({ name: 'Mikolaj Oledzki', role: 'Prop 10' }),
+      expect.objectContaining({ name: 'Nick Meaney', id: real(505537), role: 'Fullback' }),
+      expect.objectContaining({ name: 'Gehamat Shibasaki', id: real(504371), role: 'Left Wing' }),
+    ]));
+    const sexton = squad.find(player => player.name === 'Toby Sexton')!;
+    expect(nrlOriginEligibility(sexton.id)).toBeNull();
+    expect(nrlOriginEligibility(real(504371))).toBe('qld');
+    for (const role of NRL_ROLES) {
+      expect(squad.find(player => player.id === career.season.lineup[role])?.role).toBe(role);
+    }
+    const selected = [...Object.values(career.season.lineup), ...career.season.bench!];
+    expect(new Set(selected).size).toBe(19);
+    expect(nrlCareerCap(career)).toMatchObject({ slots: 30, openSlots: 0 });
+    expect(nrlCareerCap(career).available).toBeGreaterThan(0);
+    expect(bytes(readNrlCareerSave(bytes(career)))).toBe(bytes(career));
+    expect(bytes(readNrlCareerSave(bytes(advance(career))))).toBe(bytes(advance(career)));
+
+    const generated = createNrlCareer('bears', 16, 2027, true);
+    expect(sameNrlCareer(career, generated)).toBe(false);
+    expect(readNrlCareerSave(bytes({ ...generated, openingRoster: 'perth-signings-2027' }))).toBeNull();
+    expect(readNrlCareerSave(bytes({ ...career, openingRoster: undefined }))).toBeNull();
+    let current = career;
+    while (current.season.phase !== 'complete') current = advance(current);
+    const moved = reduceNrlCareer(current, { type: 'startNextSeason', move: { fromYear: 2027, clubId: 'chiefs' } });
+    expect(moved.season).toMatchObject({ year: 2028, clubId: 'chiefs' });
+    expect(moved.openingRoster).toBe('perth-signings-2027');
+    expect(sameNrlCareer(career, moved)).toBe(true);
+    expect(bytes(readNrlCareerSave(bytes(moved)))).toBe(bytes(moved));
   });
 });
