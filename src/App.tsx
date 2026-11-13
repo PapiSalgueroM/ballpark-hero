@@ -3,6 +3,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { CookieConsent } from "@/components/CookieConsent";
 import { StorageNotice, isGameRoute } from "@/components/StorageNotice";
+import { GameAdInventory } from "@/components/ads/GameAdInventory";
 import { lazy, Suspense, useEffect, useRef } from "react";
 import { BrowserRouter, Routes, Route, Navigate, useLocation, useNavigationType } from "react-router-dom";
 import RouteErrorBoundary from "@/components/RouteErrorBoundary";
@@ -582,6 +583,7 @@ const AppContent = () => {
       </RouteErrorBoundary>
       {opensCareerRules && <CookieConsent inline />}
       <Footer />
+      {gameRoute && <GameAdInventory />}
       </Suspense>
     </SiteMenuProvider>
   );
