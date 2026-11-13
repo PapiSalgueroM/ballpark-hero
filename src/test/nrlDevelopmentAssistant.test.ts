@@ -29,6 +29,21 @@ function ownResults(career: NrlCareerState) {
 }
 
 describe('NRL development assistant', () => {
+  it('retains the same development assistant with a fresh appearance count and the existing potential ceiling', () => {
+    const completed = finish(hire(createNrlCareer('storm', 5)));
+    const pending = reduceNrlCareer(completed, { type: 'setCoachRetention', enabled: true, year: 2026, clubId: 'storm' });
+    const retained = next(read(pending)!);
+    expect(nrlCoachQuote(retained).current).toEqual(nrlCoachQuote(completed).current);
+    expect(retained.history[0].coachDevelopment).toEqual(next(completed).history[0].coachDevelopment);
+    expect(progress(retained).length).toBeGreaterThan(0);
+    expect(progress(retained).every(row => row.apps === 0)).toBe(true);
+    const second = finish(retained);
+    const third = next(second);
+    expect(third.history[1].coachDevelopment?.length).toBeLessThanOrEqual(3);
+    expect(third.players.every(player => player.rating <= player.potential)).toBe(true);
+    expect(read(third)).toEqual(third);
+  });
+
   it.each([[2026, 'storm'], [2027, 'bears']] as const)('uses the existing season hire and salary reserve in %s', (year, clubId) => {
     const initial = createNrlCareer(clubId, 39, year);
     const quote = nrlCoachQuote(initial);

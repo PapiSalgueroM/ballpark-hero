@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import {
   createNrlCareer, nrlCareerCap, nrlCareerFinance, nrlCoachQuote, nrlMedicalUpgradeQuote, nrlOppositionReport, readNrlCareerSave,
-  reduceNrlCareer, type NrlCareerState,
+  nrlCoachRetentionQuote, nrlCoachSpend, nrlMutualReleaseQuote, nrlCareerSquad, reduceNrlCareer, type NrlCareerState,
 } from '@/lib/nrlCareer';
 import { createNrlSeason, nrlNextRound, type NrlCoachRole } from '@/lib/nrlManager';
 
@@ -10,8 +10,86 @@ const advance = (career: NrlCareerState) => reduceNrlCareer(career, { type: 'adv
 const hire = (career: NrlCareerState, role: NrlCoachRole) => reduceNrlCareer(career, {
   type: 'hireCoach', role, year: career.season.year, round: career.season.round,
 });
+const retain = (career: NrlCareerState, enabled = true) => reduceNrlCareer(career, {
+  type: 'setCoachRetention', enabled, year: career.season.year, clubId: career.season.clubId,
+});
+function finish(career: NrlCareerState) {
+  while (career.season.phase !== 'complete') career = advance(career);
+  return career;
+}
 
 describe('NRL assistant coaching', () => {
+  it.each([[2026, 'storm'], [2027, 'bears']] as const)(
+    'keeps the %i assistant for one extra year without a fresh hire fee',
+    (year, club) => {
+      const hired = hire(createNrlCareer(club, 4, year), 'defense');
+      expect(retain(hired)).toBe(hired);
+      const complete = finish(hired);
+      const original = nrlCoachQuote(complete).current;
+      expect(nrlCoachRetentionQuote(complete)).toEqual({ reason: null, reservedWages: 558_000 });
+      const pending = retain(complete);
+      expect(pending.coachRetention).toBe(true);
+      expect(pending.finance).toBe(complete.finance);
+      expect(pending.season).toBe(complete.season);
+      expect(raw(retain(pending, false))).toBe(raw(complete));
+      expect(readNrlCareerSave(raw(pending))).toEqual(pending);
+      const plain = reduceNrlCareer(complete, { type: 'startNextSeason' });
+      const extended = reduceNrlCareer(pending, { type: 'startNextSeason' });
+      expect(extended.coachRetention).toBeUndefined();
+      expect(extended.history.at(-1)?.coachRetained).toBe(true);
+      expect(extended.finance.coachHire).toEqual({ role: 'defense', round: 1, paidRounds: 0, retained: true });
+      expect(nrlCoachQuote(extended).current).toEqual(original);
+      expect(nrlCoachSpend(extended.finance)).toEqual({ signingFee: 0, wages: 0 });
+      expect(extended.season).toEqual(plain.season);
+      expect(nrlCareerFinance(extended).cash).toBe(nrlCareerFinance(plain).cash);
+      const played = advance(extended);
+      expect(nrlCoachSpend(played.finance)).toEqual({ signingFee: 0, wages: 18_000 });
+      expect(raw(readNrlCareerSave(raw(played))!)).toBe(raw(played));
+      const finished = finish(played);
+      expect(nrlCoachRetentionQuote(finished).reason).toMatch(/already extended/);
+      expect(retain(finished)).toBe(finished);
+      const dropped = reduceNrlCareer(finished, { type: 'startNextSeason' });
+      expect(dropped.finance.coachHire).toBeUndefined();
+      expect(readNrlCareerSave(raw(dropped))).toEqual(dropped);
+      const forged = { ...extended, history: plain.history };
+      expect(readNrlCareerSave(raw(forged))).toBeNull();
+    },
+  );
+
+  it('clears a pending retention on a move or retirement without charging another club', () => {
+    const complete = finish(hire(createNrlCareer('storm', 4), 'attack'));
+    const pending = retain(complete);
+    const move = { type: 'startNextSeason', move: { fromYear: 2026, clubId: 'bears' } } as const;
+    expect(raw(reduceNrlCareer(pending, move))).toBe(raw(reduceNrlCareer(complete, move)));
+    const retire = { type: 'retireCareer', year: 2026, clubId: 'storm' } as const;
+    expect(raw(reduceNrlCareer(pending, retire))).toBe(raw(reduceNrlCareer(complete, retire)));
+    expect(reduceNrlCareer(pending, { type: 'setCoachRetention', enabled: false, year: 2027, clubId: 'storm' })).toBe(pending);
+  });
+
+  it('honours the wage reservation and the player settlement in either order', () => {
+    const complete = finish(hire(createNrlCareer('storm', 4), 'attack'));
+    const player = nrlCareerSquad(complete).find(candidate => nrlMutualReleaseQuote(complete, candidate.id).ok)!;
+    const quote = nrlMutualReleaseQuote(complete, player.id);
+    const release = { type: 'agreeMutualRelease', year: 2026, clubId: 'storm', playerId: player.id } as const;
+    expect(quote.ok).toBe(true);
+    const both = reduceNrlCareer(retain(complete), release);
+    expect(both.coachRetention).toBe(true);
+    expect(both.finance.mutualRelease?.playerId).toBe(player.id);
+    expect(raw(retain(reduceNrlCareer(complete, release)))).toBe(raw(both));
+    expect(readNrlCareerSave(raw(both))).toEqual(both);
+    const short = { ...complete, finance: { ...complete.finance,
+      openingCash: complete.finance.openingCash + 558_000 - nrlCareerFinance(complete).cash,
+    } };
+    const held = retain(short);
+    expect(held.coachRetention).toBe(true);
+    expect(nrlMutualReleaseQuote(held, player.id)).toMatchObject({ ok: false, reason: /assistant.*wages/ });
+    expect(reduceNrlCareer(held, release)).toBe(held);
+    const released = reduceNrlCareer(short, release);
+    expect(released.finance.mutualRelease).toBeDefined();
+    expect(nrlCoachRetentionQuote(released).reason).toMatch(/enough cash/);
+    expect(retain(released)).toBe(released);
+  });
+
   it('quotes stable fictional choices, charges a fee once and pays one wage per settled round', () => {
     const initial = createNrlCareer('panthers', 1);
     expect(nrlNextRound(initial.season).clubStatus).toBe('bye');
