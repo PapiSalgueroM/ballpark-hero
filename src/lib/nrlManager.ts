@@ -35,6 +35,11 @@ type NrlSpecialistPlan = typeof NRL_SPECIALIST_PLANS[number];
 export type NrlAttackPlan = 'standard' | NrlSpecialistPlan;
 export type NrlCoachRole = Exclude<NrlTactic, 'balanced'>;
 export type NrlPreparation = 'train' | 'recover' | 'defensiveDrills';
+export const NRL_HALFTIME_TALKS = {
+  reinforceBasics: { attack: -1, defense: 3 },
+  liftTempo: { attack: 3, defense: -1 },
+} as const;
+export type NrlHalftimeTalk = keyof typeof NRL_HALFTIME_TALKS;
 type NrlPreparationAction =
   | { type: 'prepare'; choice: 'train' | 'recover' }
   | { type: 'prepare'; choice: 'defensiveDrills' | null; year: number; clubId: string; round: number };
@@ -71,7 +76,7 @@ export interface NrlLiveHalf { fixture: NrlFixture; homeScoring: NrlScoring; awa
 export interface NrlHalftimeInterchange { starterId: string; reserveId: string }
 interface NrlHalftimeReceipt extends NrlHalftimeInterchange { enteredAtHalf?: true }
 interface NrlHalftimeOption extends NrlHalftimeReceipt { role: NrlRole }
-interface NrlHalftimeDecision { live: NrlLiveHalf; tactic: NrlTactic; interchange?: NrlHalftimeOption }
+interface NrlHalftimeDecision { live: NrlLiveHalf; tactic: NrlTactic; interchange?: NrlHalftimeOption; talk?: NrlHalftimeTalk }
 export interface NrlInjury { playerId: string; rounds: number }
 type NrlGoldenScore = keyof typeof GOLDEN_POINT_VALUES;
 type NrlGoldenPoint = 'draw' | { period: 1 | 2; score: NrlGoldenScore };
@@ -86,6 +91,7 @@ export interface NrlMatchResult extends NrlFixture {
   injury?: NrlInjury;
   playerScoring?: NrlMatchScoringReport;
   halftimeInterchange?: NrlHalftimeReceipt;
+  halftimeTalk?: NrlHalftimeTalk;
 }
 export interface NrlFinalsArchive {
   seeds: string[];
@@ -138,7 +144,7 @@ export type NrlAction =
   | { type: 'setTactic'; tactic: NrlTactic }
   | NrlPreparationAction
   | { type: 'startLive'; hold?: { year: number; round: number; reserveId: string } }
-  | { type: 'finishLive'; year: number; round: number; tactic: NrlTactic; interchange?: NrlHalftimeInterchange }
+  | { type: 'finishLive'; year: number; round: number; tactic: NrlTactic; interchange?: NrlHalftimeInterchange; talk?: NrlHalftimeTalk }
   | { type: 'advance' };
 
 const lastRound = (year: number) => nrlRegularRounds(year) + 4;
@@ -625,20 +631,23 @@ export function validNrlLiveScore(state: NrlManagerState, opponentStrength?: Rea
 
 function playFixture(state: NrlManagerState, fixture: NrlFixture, opponentStrength: ReadonlyMap<string, number> | undefined,
   rotation: ReadonlyMap<string, NrlPlayer>,
-  closing: { state: NrlManagerState; rotation: ReadonlyMap<string, NrlPlayer> } | undefined, options: NrlRoundOptions): NrlMatchResult {
+  closing: { state: NrlManagerState; rotation: ReadonlyMap<string, NrlPlayer>; talk?: NrlHalftimeTalk } | undefined,
+  options: NrlRoundOptions): NrlMatchResult {
   const { homeId, awayId, finalsRound } = fixture;
   const managed = homeId === state.clubId || awayId === state.clubId;
   const rng = fixtureRng(state, fixture);
   const opening = fixtureEdges(state, fixture, opponentStrength, rotation, options);
   const { homeEdge, awayEdge } = closing ? fixtureEdges(closing.state, fixture, opponentStrength, closing.rotation, options) : opening;
+  const talk = closing?.talk && NRL_HALFTIME_TALKS[closing.talk];
+  const managedAtHome = homeId === state.clubId;
   const regulation = (openingEdge: number, closingEdge: number) => {
     if (openingEdge === closingEdge) return scoringChances(rng, openingEdge, 18);
     const { first, second } = regulationHalves(rng, openingEdge, closingEdge);
     addScoring(first, second);
     return first;
   };
-  const homeScoring = regulation(opening.homeEdge, homeEdge);
-  const awayScoring = regulation(opening.awayEdge, awayEdge);
+  const homeScoring = regulation(opening.homeEdge, talk ? homeEdge + (managedAtHome ? talk.attack : -talk.defense) : homeEdge);
+  const awayScoring = regulation(opening.awayEdge, talk ? awayEdge + (managedAtHome ? -talk.defense : talk.attack) : awayEdge);
   const gap = scoreOf(homeScoring) - scoreOf(awayScoring);
   const homeKick = rng();
   const awayKick = rng();
@@ -674,6 +683,7 @@ function playFixture(state: NrlManagerState, fixture: NrlFixture, opponentStreng
   const result = {
     ...fixture, homeScoring, awayScoring, homeScore: scoreOf(homeScoring), awayScore: scoreOf(awayScoring), extraTime,
     ...(goldenPoint ? { goldenPoint } : {}),
+    ...(closing?.talk ? { halftimeTalk: closing.talk } : {}),
   };
   return rotation.size && managed
     ? { ...result, benchUsed: [...rotation.values()].map(player => player.id) }
@@ -691,14 +701,14 @@ function advanceRound(state: NrlManagerState, opponentStrength: ReadonlyMap<stri
   const interchange = halftime?.interchange;
   const entering = interchange?.enteredAtHalf ? interchange : undefined;
   if (entering) used.add(entering.reserveId);
-  const closingState = halftime && (interchange || halftime.tactic !== state.tactic) ? {
+  const closingState = halftime && (interchange || halftime.talk || halftime.tactic !== state.tactic) ? {
     ...state,
     tactic: halftime.tactic,
     lineup: interchange ? { ...state.lineup, [interchange.role]: interchange.reserveId } : state.lineup,
   } : undefined;
   const closingRotation = interchange ? new Map(rotation) : rotation;
   if (interchange) closingRotation.delete(interchange.starterId);
-  const closing = closingState && { state: closingState, rotation: closingRotation };
+  const closing = closingState && { state: closingState, rotation: closingRotation, talk: halftime?.talk };
   const squad = state.squad.map(player => {
     const before = readyFitness(player.fitness, state.preparation, played);
     const starterFatigue = played && starters.has(player.id) ? 15 : 0;
@@ -796,11 +806,12 @@ export function reduceNrlSeason(state: NrlManagerState, action: NrlAction,
     case 'finishLive': {
       const { live, ...matchday } = state;
       if (!live || action.year !== state.year || action.round !== state.round || !NRL_TACTICS.includes(action.tactic)) return state;
+      if (action.talk !== undefined && !isNrlHalftimeTalk(action.talk)) return state;
       const requested = action.interchange;
       const interchange = requested && nrlHalftimeInterchanges(state).find(option =>
         option.starterId === requested.starterId && option.reserveId === requested.reserveId);
       if (requested !== undefined && !interchange) return state;
-      return advanceRound(matchday, opponentStrength, options, { live, tactic: action.tactic, interchange });
+      return advanceRound(matchday, opponentStrength, options, { live, tactic: action.tactic, interchange, talk: action.talk });
     }
     case 'advance':
       return advanceRound(state, opponentStrength, options);
@@ -811,6 +822,8 @@ const integerIn = (value: unknown, low: number, high: number): value is number =
   typeof value === 'number' && Number.isInteger(value) && value >= low && value <= high;
 const record = (value: unknown): value is Record<string, unknown> =>
   value !== null && typeof value === 'object' && !Array.isArray(value);
+const isNrlHalftimeTalk = (value: unknown): value is NrlHalftimeTalk =>
+  value === 'reinforceBasics' || value === 'liftTempo';
 function validScoring(value: unknown): value is NrlScoring {
   return record(value) && integerIn(value.tries, 0, 21) && integerIn(value.conversions, 0, value.tries)
     && integerIn(value.penalties, 0, 3) && integerIn(value.fieldGoals, 0, 2) && integerIn(value.longFieldGoals, 0, 2);
@@ -895,6 +908,7 @@ function validResult(value: unknown, expected: NrlFixture, clubId: string, byId:
     && (value.goldenPoint === undefined || (managed && !expected.finalsRound && value.extraTime
       && value.playerScoring !== undefined && validGoldenPoint(value.goldenPoint, value.homeScoring, value.awayScoring)))
     && validBenchUse(value.benchUsed, managed, byId)
+    && (value.halftimeTalk === undefined || (managed && isNrlHalftimeTalk(value.halftimeTalk) && value.playerScoring !== undefined))
     && (value.injury === undefined || (managed && record(value.injury)
       && typeof value.injury.playerId === 'string' && byId.has(value.injury.playerId)
       && integerIn(value.injury.rounds, 1, MAX_INJURY_ROUNDS)))
