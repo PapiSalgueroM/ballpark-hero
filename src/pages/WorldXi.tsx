@@ -34,6 +34,7 @@ import {
   SeasonReport,
   ordinal,
 } from '@/lib/worldXi';
+import { selectWorldXiNationPool, type WorldXiNationMode } from '@/lib/worldXiNationPools';
 import { computeChemistry } from '@/lib/chemistry';
 import { recordCompletion, getCurrentPlayerName } from '@/lib/completions';
 import { SlotReel } from '@/components/world-xi/SlotReel';
@@ -48,9 +49,16 @@ type ParaguayArchive = { status: 'loading' | 'unavailable' } | { status: 'loaded
 const SPIN_MS = 1500;
 const SPIN_MS_TIMED = 1000;
 
+const NATION_MODES: { key: WorldXiNationMode; label: string; hint: string }[] = [
+  { key: 'expanded', label: 'Expanded', hint: 'More nations from the player pool. Each draw still checks the position.' },
+  { key: 'classic', label: 'Classic', hint: 'The original draw, using nations with deeper player pools.' },
+  { key: '2026', label: '2026 Nations', hint: "Tournament nations, using players from the game's existing pool." },
+];
+
 const WorldXi = () => {
   const [phase, setPhase] = useState<Phase>('boot');
   const [data, setData] = useState<WorldXiData | null>(null);
+  const [nationMode, setNationMode] = useState<WorldXiNationMode>('classic');
   const [formation, setFormation] = useState<Formation>(FORMATIONS[0]);
   const [timerMode, setTimerMode] = useState<TimerMode>(TIMER_MODES[0]);
   const [countries, setCountries] = useState<string[]>([]); // country per slot index
@@ -78,6 +86,12 @@ const WorldXi = () => {
       ? window.matchMedia('(prefers-reduced-motion: reduce)').matches
       : false,
   );
+
+  const selectedData = useMemo(
+    () => data ? selectWorldXiNationPool(data, nationMode) : null,
+    [data, nationMode],
+  );
+  const selectedMode = NATION_MODES.find(mode => mode.key === nationMode)!;
 
   const boot = useCallback(async () => {
     setPhase('boot');
@@ -108,10 +122,14 @@ const WorldXi = () => {
   }, [hasParaguay, paraguayArchive]);
 
   const start = useCallback(() => {
-    if (!data) return;
-    const drawn = drawCountries(formation, data);
+    if (!selectedData) return;
+    if (selectedData.countries.length < formation.slots.length) {
+      setFeedback('This pool has fewer than 11 nations available. Choose another nation pool.');
+      return;
+    }
+    const drawn = drawCountries(formation, selectedData);
     if (!drawn) {
-      setFeedback('Could not build a fair draw for that formation. Try another one.');
+      setFeedback('Could not build a fair draw for that formation. Try another formation or nation pool.');
       return;
     }
     setCountries(drawn);
@@ -124,7 +142,7 @@ const WorldXi = () => {
     setRespinsLeft(respinBudget);
     prevStepRef.current = -1; // so the first slot of a replay spins too
     setPhase('playing');
-  }, [data, formation, timerMode, respinBudget]);
+  }, [selectedData, formation, timerMode, respinBudget]);
 
   // Countdown tick (only in timed modes while playing).
   useEffect(() => {
@@ -140,7 +158,7 @@ const WorldXi = () => {
 
   // Keep the input focused as slots advance.
   useEffect(() => {
-    if (phase === 'playing') inputRef.current?.focus();
+    if (phase === 'playing') inputRef.current?.focus({ preventScroll: true });
   }, [phase, step]);
 
   // Slot-machine reveal: whenever a new slot comes up during play, run the
@@ -173,19 +191,25 @@ const WorldXi = () => {
   );
   const archivedPlayers = paraguayArchive?.status === 'loaded' ? paraguayArchive.players : undefined;
   const suggestionData = useMemo(() => {
-    if (!data || !archivedPlayers?.length) return data;
+    if (!selectedData || !archivedPlayers?.length) return selectedData;
     // The extra choices never feed the draw or respin eligibility.
-    const current = data.byCountry.get(PARAGUAY) ?? [];
+    const current = selectedData.byCountry.get(PARAGUAY) ?? [];
     const currentNames = new Set(current.map(player => player.name));
-    const byCountry = new Map(data.byCountry);
+    const byCountry = new Map(selectedData.byCountry);
     byCountry.set(PARAGUAY, [...current, ...archivedPlayers.filter(player => !currentNames.has(player.name))]
       .sort((a, b) => b.value - a.value));
-    return { ...data, byCountry };
-  }, [data, archivedPlayers]);
+    return { ...selectedData, byCountry };
+  }, [selectedData, archivedPlayers]);
+  const unusedFittingCount = useMemo(() => {
+    if (!suggestionData || !slot) return 0;
+    const names = new Set<string>();
+    for (const player of suggestionData.byCountry.get(country) ?? []) {
+      if (!usedNames.has(player.name) && fitsSlot(player, slot)) names.add(player.name);
+    }
+    return names.size;
+  }, [suggestionData, slot, country, usedNames]);
   const suggestions = useMemo(
-    () => (suggestionData && slot && country
-      ? suggestCountryPlayers(suggestionData, country, query, usedNames)
-      : []),
+    () => (suggestionData && slot && country ? suggestCountryPlayers(suggestionData, country, query, usedNames) : []),
     [suggestionData, slot, country, query, usedNames],
   );
   const searchingArchive = country === PARAGUAY && paraguayArchive?.status === 'loading';
@@ -251,11 +275,30 @@ const WorldXi = () => {
   // slots), so a bad draw costs a decision instead of being reroll-until-easy.
   // Every respin runs the same slot-machine reel as the initial reveal.
   const respin = () => {
-    if (phase !== 'playing' || !data || slotIndex < 0 || spinning) return;
+    if (phase !== 'playing' || !selectedData || slotIndex < 0 || spinning) return;
     if (respinsLeft <= 0) return;
     setRespinsLeft(n => n - 1);
-    const next = respinSlotCountry(formation, data, slotIndex, countries);
+    const next = respinSlotCountry(formation, selectedData, slotIndex, countries);
     if (next === countries[slotIndex]) return;
+    const updated = [...countries];
+    updated[slotIndex] = next;
+    setCountries(updated);
+    setQuery('');
+    setFeedback(null);
+    if (reducedMotionRef.current) return;
+    setSpinning(true);
+    setSpinKey(k => k + 1);
+  };
+
+  const replaceEmptyNation = () => {
+    if (phase !== 'playing' || !selectedData || !slot || slotIndex < 0 || spinning || unusedFittingCount !== 0 || searchingArchive) return;
+    const available = selectedData.countries.filter(c => (selectedData.byCountry.get(c) ?? [])
+      .some(player => !usedNames.has(player.name) && fitsSlot(player, slot)));
+    const next = respinSlotCountry(formation, { ...selectedData, countries: available }, slotIndex, countries);
+    if (next === country) {
+      setFeedback('No unused nation has a fitting player left. Your squad stays as it is.');
+      return;
+    }
     const updated = [...countries];
     updated[slotIndex] = next;
     setCountries(updated);
@@ -291,6 +334,7 @@ const WorldXi = () => {
   const flagRow = countries.map(c => flagFor(c)).join('');
   const emojiGrid = [
     `🌍 World XI ${formation.name}${timerMode.seconds > 0 ? ' ⏱️ ' + timerMode.label : ''}`,
+    `${selectedMode.label} pool`,
     flagRow,
     `${filledCount}/11 nations covered`,
   ].join('\n');
@@ -372,8 +416,29 @@ const WorldXi = () => {
           </div>
         )}
 
-        {phase === 'setup' && data && (
+        {phase === 'setup' && selectedData && (
           <div className="bg-card border border-border rounded-2xl p-5 md:p-6">
+            <h2 id="world-xi-nation-pool" className="text-sm font-bold uppercase tracking-wider text-muted-foreground mb-2">Nation pool</h2>
+            <div role="group" aria-labelledby="world-xi-nation-pool" className="grid grid-cols-3 gap-2 mb-2">
+              {NATION_MODES.map(mode => (
+                <button
+                  key={mode.key}
+                  type="button"
+                  aria-pressed={nationMode === mode.key}
+                  onClick={() => { setNationMode(mode.key); setFeedback(null); }}
+                  className={cn(
+                    'min-h-11 px-2 py-2 rounded-xl border font-bold text-xs sm:text-sm transition-all',
+                    nationMode === mode.key
+                      ? 'bg-primary text-primary-foreground border-primary'
+                      : 'bg-secondary/40 text-foreground border-border hover:border-primary/40',
+                  )}
+                >
+                  {mode.label}
+                </button>
+              ))}
+            </div>
+            <p className="text-xs text-muted-foreground mb-5">{selectedMode.hint}</p>
+
             <h2 className="text-sm font-bold uppercase tracking-wider text-muted-foreground mb-2">Formation</h2>
             <div className="grid grid-cols-3 gap-2 mb-5">
               {FORMATIONS.map(f => (
@@ -432,7 +497,7 @@ const WorldXi = () => {
             </div>
 
             <p className="text-xs text-muted-foreground text-center mb-4">
-              {data.countries.length} nations are in the draw. Each of your 11 slots gets a different one.
+              {selectedData.countries.length} nations are in the draw. Each of your 11 slots gets a different one.
             </p>
             {feedback && <p className="text-destructive text-sm text-center mb-3">{feedback}</p>}
             <button
@@ -446,6 +511,7 @@ const WorldXi = () => {
 
         {phase === 'playing' && slot && country && (
           <>
+            <p className="text-xs font-semibold text-primary mb-2">{selectedMode.label} pool</p>
             <div className="flex items-center justify-between mb-3 text-sm">
               <span className="text-muted-foreground">
                 Filled <span className="text-primary font-bold">{filledCount}</span>/11
@@ -474,7 +540,7 @@ const WorldXi = () => {
               <SlotReel
                 spinKey={spinKey}
                 target={country}
-                pool={data?.countries ?? []}
+                pool={selectedData?.countries ?? []}
                 rowHeight={40}
                 durationMs={timerMode.seconds > 0 ? SPIN_MS_TIMED : SPIN_MS}
                 instant={reducedMotionRef.current}
@@ -493,6 +559,19 @@ const WorldXi = () => {
                   : `Name a player from ${displayCountry(country)} who can play ${slot.label}. Accepts ${allowedLabel(slot)}.`}
               </p>
 
+              <p className="text-xs text-muted-foreground mb-3" aria-live="polite">
+                {unusedFittingCount === 1 ? '1 unused player name fits this slot.' : `${unusedFittingCount} unused player names fit this slot.`}
+              </p>
+              {unusedFittingCount === 0 && !searchingArchive && (
+                <button
+                  type="button"
+                  onClick={replaceEmptyNation}
+                  disabled={spinning}
+                  className="mb-3 mr-2 inline-flex min-h-11 items-center gap-1.5 px-3 py-1.5 rounded-full border border-primary/40 bg-primary/10 text-xs font-semibold text-foreground hover:bg-accent transition-all disabled:opacity-50"
+                >
+                  Replace empty nation (free)
+                </button>
+              )}
               <button
                 type="button"
                 onClick={respin}
@@ -574,6 +653,7 @@ const WorldXi = () => {
                 {phase === 'won' && <Trophy className="w-6 h-6" />}
                 {phase === 'won' ? 'World XI complete!' : timedOut ? 'Full time!' : 'Squad abandoned'}
               </h2>
+              <p className="text-xs font-semibold text-primary mb-2">{selectedMode.label} pool</p>
               <p className="text-sm text-muted-foreground">
                 {phase === 'won'
                   ? `All 11 nations covered in a ${formation.name}. Squad value ${fmtCompactUsd(squadValue)}.`
@@ -750,13 +830,13 @@ const WorldXi = () => {
           title="World XI: The Build-a-XI Football Trivia Game"
           description="A formation, 11 random nations, and your football knowledge. For every country drawn you must name a real player of that nationality who fits the position, from goalkeepers to strikers. Fill all 11 slots to complete your World XI, with optional 90 and 60 second timer modes."
           howToPlay={[
-            'Pick a formation, an optional timer, and how many respins you want (none up to ten, three is the default).',
+            'Choose Expanded, Classic or 2026 Nations, then a formation, optional timer and respin budget (none up to ten, three is the default).',
             'Eleven countries are drawn at random, one per slot, revealed in random order.',
             'For each country, type and select a real player of that nationality who can play the slot.',
             'Wrong position or wrong country picks are rejected. A respin rerolls the current slot\'s nation. Fill all 11 to win.',
           ]}
           examples={[
-            'Brazil in goal? Alisson, Ederson and 29 other Brazilian keepers count.',
+            'A nation lands in goal? Choose a goalkeeper from that country. An outfield player will be rejected.',
             'Wingers count on both flanks: Raphinha fits a right-wing or a left-wing slot.',
           ]}
         />
