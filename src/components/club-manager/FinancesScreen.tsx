@@ -1,5 +1,5 @@
 import { cn } from '@/lib/utils';
-import { TICKET_TIERS, gatePricePerFan, money, moneyIn } from '@/lib/clubManager';
+import { TICKET_TIERS, gatePricePerFan, legacySeason, money, moneyIn } from '@/lib/clubManager';
 import type { CareerState } from '@/lib/clubManager';
 import {
   CONCESSION_TIERS, booksOf, concessionPerFan, concessionReaction, projectFinances,
@@ -320,7 +320,9 @@ export function FinancesScreen({ career: c, onTickets, onConcessions, onSponsor,
             <div className="text-xs text-muted-foreground">Last home gate</div>
           </div>
         </div>
-        <p className="text-xs text-muted-foreground mt-1.5">Every home crowd pays the kitty: attendance times about £{gatePricePerFan(c)} a head, tickets plus food and drink at your prices. Scouts, the academy, the facilities and the staff desk spend from the same kitty in their own tabs. What you have left in August rolls into next season on top of the board's new cheque, up to one more season's worth of it.</p>
+        <p className="text-xs text-muted-foreground mt-1.5">Every home crowd pays the kitty: attendance times about £{gatePricePerFan(c)} a head, tickets plus food and drink at your prices. Scouts, the academy, the facilities and the staff desk spend from the same kitty in their own tabs. {legacySeason(c)
+          ? 'If you stay at the club, unused transfer funds carry over up to one board allocation.'
+          : 'If you stay at the club, all unused transfer funds roll into next season. The board can reduce its top-up when you already have money in the bank.'}</p>
       </div>
     </div>
   );
