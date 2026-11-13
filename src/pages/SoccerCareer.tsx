@@ -3714,6 +3714,16 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
             />
           )}
 
+          {career.phase === "transfer_window" && career.transferSituation == null && (
+            <div className="bg-card border border-border rounded-xl p-4 space-y-3">
+              <h2 className="font-bold">Transfer details unavailable</h2>
+              <p className="text-sm text-muted-foreground">This save is missing the transfer details. You can continue with your current club.</p>
+              <Button type="button" onClick={onStay} className="min-h-11 h-auto whitespace-normal text-left">
+                {career.contractYearsLeft <= 0 ? "Renew at current club" : "Stay at current club"}
+              </Button>
+            </div>
+          )}
+
           {/* Club card */}
           {(career.phase === "youth" || career.phase === "playing" || career.phase === "retired") && (
             <div className="bg-card border border-border rounded-xl p-4 flex items-center gap-4">

@@ -59,6 +59,11 @@ function nativeCareer() {
   const stats = { pace: 70, shooting: 70, passing: 70, dribbling: 70, defending: 70, physical: 70, reflexes: 70 };
   return E.initCareer('Save Tester', 'England', 'CM', '2020-24', stats, 70, 2020, E.FALLBACK_CLUBS, null, 88);
 }
+function transferCareer(): E.CareerState {
+  const offered = E.advanceYouthYear(nativeCareer(), E.FALLBACK_CLUBS);
+  const signed = E.acceptOffer(offered, offered.pendingOffers[0]);
+  return { ...signed, phase: 'transfer_window', transferSituation: { type: 'no_interest' } };
+}
 class Boundary extends Component<{ children: ReactNode }, { failed: boolean }> {
   state = { failed: false };
   static getDerivedStateFromError() { return { failed: true }; }
@@ -128,6 +133,50 @@ describe('Soccer Career actual save recovery', () => {
     assertPlayable(view); expect(read().phase).toBe('playing');
     expect(view.container.querySelector('[data-career-action-bar] button')).toBeEnabled();
     expect(read().seasons).toEqual(saved.seasons);
+  });
+  it.each<[null | undefined, number, string]>([
+    [null, 3, 'Stay at current club'],
+    [undefined, 3, 'Stay at current club'],
+    [null, 0, 'Renew at current club'],
+    [undefined, 0, 'Renew at current club'],
+  ])('offers a recovery choice for missing window details (%s, %s contract years)', (details, years, action) => {
+    const saved = { ...transferCareer(), transferSituation: details, contractYearsLeft: years };
+    const raw = JSON.stringify(saved);
+    const { view } = mount(raw);
+    assertPlayable(view);
+    expect(localStorage.getItem(KEY)).toBe(raw);
+    expect(view.queryByRole('button', { name: 'Next Season' })).toBeNull();
+    expect(view.queryByRole('button', { name: /Request Transfer/i })).toBeNull();
+    fireEvent.click(view.getByRole('button', { name: action }));
+
+    const recovered = read();
+    expect(recovered).toMatchObject({
+      phase: 'playing', age: saved.age, currentClub: saved.currentClub, seasons: saved.seasons,
+      transferSituation: null, pendingOffers: [], pendingLoanOffers: null,
+    });
+    if (years > 0) {
+      expect(recovered.contractYearsLeft).toBe(years);
+      expect(recovered.weeklyWage).toBe(saved.weeklyWage);
+    } else {
+      expect(recovered.contractYearsLeft).toBeGreaterThan(0);
+    }
+    view.unmount();
+    const reopened = mount(localStorage.getItem(KEY));
+    expect(read()).toEqual(recovered);
+    expect(reopened.view.queryByRole('button', { name: action })).toBeNull();
+    fireEvent.click(reopened.view.getByRole('button', { name: 'Next Season' }));
+    expect(read().seasons).toHaveLength(saved.seasons.length + 1);
+    expect(read().age).toBe(saved.age + 1);
+  });
+  it('retains the healthy saved transfer window and its normal actions', () => {
+    const raw = JSON.stringify(transferCareer());
+    const { view } = mount(raw);
+    assertPlayable(view);
+    expect(localStorage.getItem(KEY)).toBe(raw);
+    expect(view.getByText('No clubs have made an offer. Your club wants to keep you.')).toBeVisible();
+    expect(view.getByRole('button', { name: /Stay and fight for place/ })).toBeEnabled();
+    expect(view.getByRole('button', { name: /Request transfer/ })).toBeEnabled();
+    expect(view.queryByText('Transfer details unavailable')).toBeNull();
   });
   it('restores a decided moral dilemma and keeps its consequence after Continue', () => {
     const saved = copy(nativeCareer()); saved.phase = 'moral_dilemma'; saved.pendingMoralDilemma = null;
