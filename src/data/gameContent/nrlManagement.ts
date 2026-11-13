@@ -15,6 +15,7 @@ export const NRL_MANAGEMENT_CONTENT: GameContentMap = {
       'Before Play Live, you can hold one named reserve for halftime. Bring them on then, keep a rotating reserve on, or leave the held reserve unused.',
       'Play the round and check the result against the ladder. A bye is a break in the fixture list, so check who you play after it.',
       'Open Fast-forward rounds in Match centre to simulate up to four regular rounds with your current tactic. The run can stop for a new injury, a club decision or the start of finals.',
+      'Enable Judiciary challenge when you start a generated-squad career. If a fictional player is charged after a club match, take a one-match early plea or contest the charge at a simulated hearing. Byes do not count toward a ban.',
       'Finish in the top eight to reach the finals. Follow the bracket and try to win the Grand Final.',
       'Open the club office to extend contracts and approach eligible recruits. Check how much cap room you have in the season the deal starts.',
       'In Recruitment, choose a position to see who is signed for next year, any ready academy prospect and up to three external targets. The brief checks whether a one-season offer at each player’s asking salary fits your squad and cap.',
