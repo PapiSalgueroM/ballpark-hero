@@ -346,6 +346,7 @@ export function parseActiveRefreshMigration(sql) {
 
 const RULE_ENTRY_REFRESH_ROW_RE = /^\s*\('((?:[^']|'')*)', '((?:[^']|'')*)', '((?:[^']|'')*)', '(classic|europe)', (\d+), '((?:[^']|'')*)', (\d+), '((?:[^']|'')*)'\),?$/gm;
 export const ROUND_784_MIGRATION = 'supabase/migrations/20261001120000_career_first_clubs.sql';
+export const CARVAJAL_MIGRATION = 'supabase/migrations/20261110192036_career_carvajal_madrid_2024_2025.sql';
 
 /** Round 784: the rule entries a career migration rewrites in the same
  *  transaction as the careers, each beside the value it replaces:

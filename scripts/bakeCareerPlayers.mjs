@@ -56,6 +56,7 @@ const SEASON_FLOOR = 3640;
    recorded correction, because the bake would silently undo it. */
 export const CORRECTION_LEDGERS = [
   { file: 'scripts/data/careerFirstClubs.json', migration: 'supabase/migrations/20261001120000_career_first_clubs.sql' },
+  { file: 'scripts/data/careerCarvajalMadrid2024.json', migration: 'supabase/migrations/20261110192036_career_carvajal_madrid_2024_2025.sql' },
 ];
 
 /** Every recorded correction the pool does not carry. Empty when it carries them all. */

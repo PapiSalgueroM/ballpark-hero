@@ -1,0 +1,29 @@
+{
+  "checked": "2026-11-10",
+  "report": "Transfer Path Everyday puzzle tpa-781 refused Dani Carvajal after Endrick.",
+  "scope": "Senior club competitions only: eight LaLiga, two UEFA Champions League, one UEFA Super Cup and one July 2025 FIFA Club World Cup appearance. Market value 0 means no verified valuation.",
+  "sources": {
+    "sharedStartingLineup": "https://www.uefa.com/uefachampionsleague/news/0291-1bfaa3d190d6-a0ce42ffc5b4-1000--champions-league-matchday-2-starting-lineups/",
+    "clubSeasonTotals": "https://www.maxifoot.fr/joueur/daniel-carvajal-38524.htm",
+    "independentAppearances": "https://as.com/futbol/primera/cuatro-decisiones-pendientes-n/",
+    "competitionTotals": "https://theanalyst.com/players/1639/dani-carvajal/career",
+    "sharedMatchAndAssist": "https://www.bundesliga.com/en/bundesliga/news/real-madrid-stuttgart-live-champions-league-blog-preview-report-mbappe-bellingham-28883",
+    "independentAssist": "https://optaplayerstats.statsperform.com/en_GB/soccer/ligue-des-champions-2024-2025/bam3j6qs1v79osuz7nwgy4rh0/match/real-madrid-vs-stuttgart/5r3d726yodbuakw43v43ooxzo/opta-points",
+    "superCup": "https://www.uefa.com/newsfiles/SuperCup/2024/2040798_SPS.pdf",
+    "clubWorldCup": "https://www.realmadrid.com/en-US/news/football/first-team/latest-news/el-regreso-de-carvajal-09-07-2025"
+  },
+  "added": [
+    {
+      "player": "Dani Carvajal",
+      "playerId": "a0000001-0000-0000-0000-000000000074",
+      "season": "2024-2025",
+      "club": "Real Madrid",
+      "appearances": 12,
+      "goals": 1,
+      "assists": 1,
+      "marketValue": 0,
+      "sortOrder": 12
+    }
+  ],
+  "changed": []
+}
