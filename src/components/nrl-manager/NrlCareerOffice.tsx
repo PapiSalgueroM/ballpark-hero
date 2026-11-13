@@ -8,7 +8,8 @@ import {
   isNrlOpeningMatchdayPlayer,
   nrlAcademyAvailableRoles, nrlAcademyOffer, nrlAcademyReports, nrlCareerCap, nrlCareerFinance, nrlCareerMarket, nrlCareerRecord, nrlCareerSquad,
   nrlContractCounteroffer, nrlContractOffer,
-  nrlCoachQuote, nrlCoachSpend, nrlDevelopmentPreview, nrlFinanceForecast, nrlMedicalSpend, nrlMedicalUpgradeQuote, nrlOffseasonClubs, type NrlCareerAction, type NrlCareerState,
+  nrlCoachQuote, nrlCoachSpend, nrlDevelopmentPreview, nrlFinanceForecast, nrlMedicalSpend, nrlMedicalUpgradeQuote, nrlOffseasonClubs, nrlOffseasonOpportunities,
+  type NrlCareerAction, type NrlCareerState,
   nrlSponsorIncome, nrlSponsorRefusal, nrlTakeoverOffers, nrlTakeoverPlayers, nrlTicketPricingRefusal,
   NRL_SHORTLIST_LIMIT, NRL_SPONSOR_OFFERS, NRL_TICKET_GATE_CHANGES,
   type NrlDevelopmentFocus, type NrlMedicalLevel, type NrlSponsorOffer, type NrlTicketTier,
@@ -922,8 +923,10 @@ function History({ career, onAction, disabled }: { career: NrlCareerState; onAct
   const mustMove = challengeStatus === 'must-move';
   const pastPlaces = new Map(career.history.map(record => [`${record.clubId}:${record.year}`, record.rank]));
   const [nextClubId, setNextClubId] = useState('');
+  const clubSelect = useRef<HTMLSelectElement>(null);
   const clubs = nrlOffseasonClubs(career);
   const nextClub = clubs.find(club => club.id === nextClubId);
+  const openings = nrlOffseasonOpportunities(career);
   return (
     <>
       <h2 className="font-display text-xl font-bold">Season review</h2>
@@ -960,8 +963,29 @@ function History({ career, onAction, disabled }: { career: NrlCareerState; onAct
           </summary>
           <div className="space-y-2 pb-3 text-sm">
             <p className="text-muted-foreground">Take over the new club’s squad and contracts. If you return to a club, you resume its last balance and medical facilities.</p>
+            {openings.length > 0 && <section className="rounded-lg border border-border p-2" aria-labelledby="nrl-openings-title">
+              <h3 id="nrl-openings-title" className="font-bold">Suggested openings</h3>
+              <p className="text-muted-foreground">Simulated suggestions based on expansion and this career’s results. You can choose any club in the list.</p>
+              <ul className="divide-y divide-border">
+                {openings.map(opening => {
+                  const club = clubs.find(candidate => candidate.id === opening.clubId)!;
+                  return <li key={club.id} className="flex flex-wrap items-center justify-between gap-2 py-2">
+                    <div>
+                      <p className="font-semibold">{club.name}</p>
+                      <p className="text-muted-foreground">{opening.reason === 'expansion' ? `Enters the league in ${year + 1}`
+                        : `Ladder place ${opening.rank}. Missed its modeled target by ${opening.missedBy} ${opening.missedBy === 1 ? 'place' : 'places'}.`}</p>
+                      <p className="text-muted-foreground">{year + 1} board target · {opening.nextTarget}</p>
+                    </div>
+                    <Button type="button" size="lg" variant="outline" className="px-3" disabled={disabled} aria-label={`Consider ${club.name}`} onClick={() => {
+                      setNextClubId(club.id);
+                      clubSelect.current?.focus();
+                    }}>Consider</Button>
+                  </li>;
+                })}
+              </ul>
+            </section>}
             <label className="block font-semibold" htmlFor="nrl-next-club">Club to manage</label>
-            <select id="nrl-next-club" className={control} value={nextClubId} disabled={disabled} onChange={event => setNextClubId(event.target.value)}>
+            <select ref={clubSelect} id="nrl-next-club" className={control} value={nextClubId} disabled={disabled} onChange={event => setNextClubId(event.target.value)}>
               <option value="">Choose a club</option>
               {clubs.map(club => <option key={club.id} value={club.id}>{club.name}</option>)}
             </select>
