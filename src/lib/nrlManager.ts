@@ -32,7 +32,10 @@ export type NrlTactic = typeof NRL_TACTICS[number];
 type NrlSpecialistPlan = typeof NRL_SPECIALIST_PLANS[number];
 export type NrlAttackPlan = 'standard' | NrlSpecialistPlan;
 export type NrlCoachRole = Exclude<NrlTactic, 'balanced'>;
-export type NrlPreparation = 'train' | 'recover';
+export type NrlPreparation = 'train' | 'recover' | 'defensiveDrills';
+type NrlPreparationAction =
+  | { type: 'prepare'; choice: 'train' | 'recover' }
+  | { type: 'prepare'; choice: 'defensiveDrills' | null; year: number; clubId: string; round: number };
 interface NrlRoundOptions {
   medicalReduction?: number;
   coachRole?: NrlCoachRole;
@@ -129,7 +132,7 @@ export type NrlAction =
   | { type: 'setKicker'; playerId: string }
   | { type: 'applyFitLineup'; previewKey: string }
   | { type: 'setTactic'; tactic: NrlTactic }
-  | { type: 'prepare'; choice: NrlPreparation }
+  | NrlPreparationAction
   | { type: 'startLive'; hold?: { year: number; round: number; reserveId: string } }
   | { type: 'finishLive'; year: number; round: number; tactic: NrlTactic; interchange?: NrlHalftimeInterchange }
   | { type: 'advance' };
@@ -442,7 +445,8 @@ const TACTIC_EFFECT: Record<NrlTactic, { attack: number; defense: number }> = {
   attack: { attack: 5, defense: -3 },
   defense: { attack: -2, defense: 5 },
 };
-const PREPARATION_FITNESS = { train: -4, recover: 10, normal: 0 };
+const PREPARATION_FITNESS = { train: -4, defensiveDrills: -4, recover: 10, normal: 0 };
+const isTraining = (preparation: NrlPreparation | null) => preparation === 'train' || preparation === 'defensiveDrills';
 function readyFitness(fitness: number, preparation: NrlPreparation | null, playing: boolean): number {
   const routineRecovery = Math.ceil((100 - fitness) * 0.45);
   return clamp(fitness + routineRecovery + PREPARATION_FITNESS[preparation ?? 'normal'] + (playing ? 0 : 12), 0, 100);
@@ -456,7 +460,7 @@ function matchInjury(state: NrlManagerState, used: Set<string>, medicalReduction
   const starters = new Set(Object.values(state.lineup));
   const played = state.squad.filter(player => starters.has(player.id) || used.has(player.id));
   const ready = played.reduce((total, player) => total + readyFitness(player.fitness, state.preparation, true), 0) / played.length;
-  const risk = 0.12 + (100 - ready) / 260 + (state.preparation === 'train' ? 0.04 : 0);
+  const risk = 0.12 + (100 - ready) / 260 + (isTraining(state.preparation) ? 0.04 : 0);
   const rng = rngFrom(hashLabel(`${state.seed}|${state.year}|${state.round}|${state.clubId}|injury`));
   if (rng() >= risk) return undefined;
   return { playerId: played[Math.floor(rng() * played.length)].id, rounds: Math.max(1, 1 + Math.floor(rng() * MAX_INJURY_ROUNDS) - medicalReduction) };
@@ -511,7 +515,7 @@ function teamRatings(state: NrlManagerState, clubId: string, opponentStrength: R
   const defenseCoaching = coachRole === 'defense' && state.tactic === 'defense' ? NRL_COACHING_BONUS : 0;
   const ordinary = {
     attack: base + attack + (state.preparation === 'train' ? 7 : 0) + attackCoaching,
-    defense: base + defense + defenseCoaching,
+    defense: base + defense + (state.preparation === 'defensiveDrills' ? 7 : 0) + defenseCoaching,
   };
   if (!state.attackPlan || !planRivalRatings) return ordinary;
   const specialist = planAdjustment(state, rotation, base, state.attackPlan, planRivalRatings);
@@ -765,9 +769,13 @@ export function reduceNrlSeason(state: NrlManagerState, action: NrlAction,
     }
     case 'setTactic':
       return NRL_TACTICS.includes(action.tactic) && state.tactic !== action.tactic ? { ...state, tactic: action.tactic } : state;
-    case 'prepare':
-      return (action.choice === 'train' || action.choice === 'recover') && state.preparation !== action.choice
-        ? { ...state, preparation: action.choice } : state;
+    case 'prepare': {
+      const { choice } = action;
+      if (state.preparation === choice) return state;
+      if (choice === 'train' || choice === 'recover') return { ...state, preparation: choice };
+      return (choice === 'defensiveDrills' || choice === null) && 'year' in action && state.year === action.year && state.clubId === action.clubId
+        && state.round === action.round && state.kickerId && nrlNextRound(state).clubMatch ? { ...state, preparation: choice } : state;
+    }
     case 'startLive': {
       if (!state.kickerId || !state.bench) return state;
       const { clubMatch } = nrlNextRound(state);
@@ -893,7 +901,7 @@ export function isNrlSeasonProgress(value: unknown): value is NrlManagerState {
     || typeof value.clubId !== 'string' || !clubFor(value.year, value.clubId)
     || !integerIn(value.seed, 0, 0xffffffff) || !integerIn(value.round, 1, lastRound(value.year))
     || !NRL_TACTICS.includes(value.tactic as NrlTactic)
-    || (value.preparation !== null && value.preparation !== 'train' && value.preparation !== 'recover')
+    || (value.preparation !== null && value.preparation !== 'train' && value.preparation !== 'recover' && value.preparation !== 'defensiveDrills')
     || (value.injuryTracking !== undefined && value.injuryTracking !== true)
     || (value.kickerId !== undefined && typeof value.kickerId !== 'string')
     || !Array.isArray(value.squad) || !record(value.lineup) || !Array.isArray(value.results)) return false;
@@ -954,7 +962,7 @@ export function isNrlSeasonProgress(value: unknown): value is NrlManagerState {
   if (bench !== undefined && (!Array.isArray(bench) || bench.length !== NRL_BENCH_SIZE
     || new Set(bench).size !== bench.length
     || !bench.every(id => typeof id === 'string' && byId.has(id) && !starters.has(id) && !unavailable.has(id)))) return false;
-  if (value.live !== undefined || value.attackPlan !== undefined) {
+  if (value.live !== undefined || value.attackPlan !== undefined || preparation === 'defensiveDrills') {
     if (!kickerId || !bench) return false;
     const fixture = nrlRoundFixtures({ year, round, phase: expectedPhase, results: verified }).find(match =>
       match.homeId === value.clubId || match.awayId === value.clubId);

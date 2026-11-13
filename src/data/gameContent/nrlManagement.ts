@@ -11,7 +11,7 @@ export const NRL_MANAGEMENT_CONTENT: GameContentMap = {
       'Open Position training in Squad to teach one fit player a second role. In this game, a course takes four regular-season rounds, including byes. Assign the learned role in your starting 13 when you want to use it.',
       'Try Reserve-grade development in Squad to give an eligible young player four rounds away from the first team for one rating point. He keeps his contract and cap place, and you can recall him early without the gain.',
       'Courses cover the back three, wing and centre on the same side, the halves, the two props, and the second rows and lock. A player can learn one extra role.',
-      'Check the next opponent and pick a tactic. Open Attack plan to compare projected attack and defence changes for playing through the middle or shifting wide. A plan lasts one match, including both halves in Play Live. Use training to prepare or give a tired squad a chance to recover.',
+      'Check the next opponent and pick a tactic. Open Attack plan to compare projected attack and defence changes for playing through the middle or shifting wide. A plan lasts one match, including both halves in Play Live. In Preparation, Train boosts attack, Defensive drills boosts defence at the same workload, and Recover helps tired players. Clear preparation to return to normal before kickoff.',
       'Before Play Live, you can hold one named reserve for halftime. Bring them on then, keep a rotating reserve on, or leave the held reserve unused.',
       'Play the round and check the result against the ladder. A bye is a break in the fixture list, so check who you play after it.',
       'Finish in the top eight to reach the finals. Follow the bracket and try to win the Grand Final.',
