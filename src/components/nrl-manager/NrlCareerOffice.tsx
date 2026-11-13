@@ -6,7 +6,8 @@ import NrlBoardChallengeNotice from '@/components/nrl-manager/NrlBoardChallengeN
 import { nrlSeasonPlan, NRL_LAST_YEAR } from '@/data/nrlManagerSeasons';
 import {
   isNrlOpeningMatchdayPlayer,
-  nrlAcademyAvailableRoles, nrlAcademyOffer, nrlAcademyReports, nrlCareerCap, nrlCareerFinance, nrlCareerMarket, nrlCareerRecord, nrlCareerSquad,
+  nrlAcademyAvailableRoles, nrlAcademyFacilityQuote, nrlAcademyFacilitySpend, nrlAcademyOffer, nrlAcademyReports,
+  nrlCareerCap, nrlCareerFinance, nrlCareerMarket, nrlCareerRecord, nrlCareerSquad,
   nrlContractCounteroffer, nrlContractOffer,
   nrlCoachQuote, nrlCoachSpend, nrlDevelopmentPreview, nrlFinanceForecast, nrlMedicalSpend, nrlMedicalUpgradeQuote, nrlOffseasonClubs, nrlOffseasonOpportunities,
   type NrlCareerAction, type NrlCareerState,
@@ -359,7 +360,8 @@ function Academy({ career, onAction, disabled }: { career: NrlCareerState; onAct
   const available = nrlAcademyAvailableRoles(career);
   const scouting = reports.find(report => report.status === 'scouting');
   const role = available.includes(position) ? position : available[0];
-  const year = career.season.year + 1;
+  const { year, clubId, round } = career.season;
+  const facilities = nrlAcademyFacilityQuote(career);
   return (
     <>
       <h2 className="font-display text-xl font-bold">Academy</h2>
@@ -389,12 +391,12 @@ function Academy({ career, onAction, disabled }: { career: NrlCareerState; onAct
               <li key={player.id} className="py-3" data-nrl-academy-report={player.id}>
                 <h3 className="break-words font-semibold">{player.name}</h3>
                 <p className="text-sm text-muted-foreground">{player.role} · age {player.age} · {player.rating} OVR · {player.potential} potential</p>
-                {offer === null ? <p className="mt-1 text-sm font-semibold">Signed for {year}</p>
+                {offer === null ? <p className="mt-1 text-sm font-semibold">Signed for {year + 1}</p>
                   : offer.ok === false ? <p className="mt-1 text-sm text-muted-foreground">{offer.reason}</p>
                   : (
                     <div className="mt-2 flex flex-wrap items-center gap-2">
                       <Button type="button" variant="outline" size="lg" disabled={disabled} aria-label={`Promote ${player.name}`}
-                        onClick={() => onAction({ type: 'promoteAcademy', playerId: player.id })}>Promote for {year}</Button>
+                        onClick={() => onAction({ type: 'promoteAcademy', playerId: player.id })}>Promote for {year + 1}</Button>
                       <span className="text-sm text-muted-foreground">1 year · {money(offer.contract.salary)}</span>
                     </div>
                   )}
@@ -403,6 +405,25 @@ function Academy({ career, onAction, disabled }: { career: NrlCareerState; onAct
           })}
         </ul>
       )}
+      <section className="mt-5 rounded-xl border border-border bg-background p-3" aria-labelledby="nrl-academy-facilities">
+        <h3 id="nrl-academy-facilities" className="font-bold">Academy facilities</h3>
+        <p className="mt-1 text-sm text-muted-foreground">
+          New fictional prospects can gain up to {facilities.potentialBonus} potential, capped at 90. The upgrade stays with the club.
+        </p>
+        {facilities.installed ? (
+          <p className="mt-2 text-sm font-semibold" role="status">
+            {facilities.active ? 'Active for new reports.' : 'Purchased. Applies to reports assigned after this round.'}
+          </p>
+        ) : (
+          <>
+            <Button type="button" size="lg" className="mt-2 w-full px-3 sm:w-auto" disabled={disabled || facilities.reason !== null}
+              onClick={() => onAction({ type: 'upgradeAcademy', year, clubId, round })}>
+              Upgrade academy for {money(facilities.cost)}
+            </Button>
+            <p className="mt-1 text-sm text-muted-foreground">{facilities.reason ?? 'One-time charge from club cash. The upgrade starts next round.'}</p>
+          </>
+        )}
+      </section>
     </>
   );
 }
@@ -619,6 +640,7 @@ function Finances({ career, onAction, disabled }: { career: NrlCareerState; onAc
   const cap = nrlCareerCap(career, capYear);
   const cash = nrlCareerFinance(career);
   const medicalSpend = nrlMedicalSpend(cash);
+  const academySpend = nrlAcademyFacilitySpend(cash);
   const coachSpend = nrlCoachSpend(cash);
   const hasAccounts = cash.fromRound <= nrlSeasonPlan(year).draw.length + 4;
   return (
@@ -647,6 +669,7 @@ function Finances({ career, onAction, disabled }: { career: NrlCareerState; onAc
                 ['Wages paid', cash.wagesPaid],
                 ['Operating costs', cash.operatingCosts],
                 ...(medicalSpend ? [['Medical upgrades', medicalSpend] as [string, number]] : []),
+                ...(academySpend ? [['Academy facilities', academySpend] as const] : []),
                 ...(cash.coachHire ? [['Coach signing fee', coachSpend.signingFee], ['Coach wages paid', coachSpend.wages]] as [string, number][] : []),
                 ['Profit or loss', cash.profit], ['Cash balance', cash.cash],
               ]} />
@@ -1020,6 +1043,7 @@ function History({ career, onAction, disabled }: { career: NrlCareerState; onAct
                 <p className="text-sm text-muted-foreground">Premiers {labelForClub(record.year, record.championId)}{record.finance ? ` · Profit or loss ${money(record.finance.profit)}` : ''}</p>
                 {record.finance?.ticketTier && <p className="text-sm text-muted-foreground">Home ticket pricing {ticketLabels[record.finance.ticketTier]}</p>}
                 {record.finance?.sponsor && <p className="text-sm text-muted-foreground">Sponsor income {money(nrlSponsorIncome(record.finance))}</p>}
+                {record.finance?.academyUpgradeRound && <p className="text-sm text-muted-foreground">Academy facilities {money(nrlAcademyFacilitySpend(record.finance))}</p>}
                 {benchmark && <p className="text-sm text-muted-foreground" data-nrl-board-benchmark>
                   Board benchmark · {benchmark.label} · {record.rank <= benchmark.targetRank ? 'Met' : 'Missed'}
                 </p>}
