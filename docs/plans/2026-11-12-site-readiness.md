@@ -1,6 +1,12 @@
 # DoUKnowBall site readiness and game work
 
-Checkpoint at 10:08 UTC on November 13, 2026. The broad update remains draft [PR #770](https://github.com/PapiSalgueroM/ballpark-hero/pull/770). The work continued after the 24-hour report below.
+Checkpoint at 10:34 UTC on November 13, 2026. The broad update remains draft [PR #770](https://github.com/PapiSalgueroM/ballpark-hero/pull/770). The work continued after the 24-hour report below.
+
+Rarity Round now explains the limits of its market-value archive when showing the prompt or an empty player search. The Dutch market-value pool still excludes both spellings of Johan Cruyff, while Ballon d’Or accepts him in both modes. The published build passed 16 browser replays and all 173 sitemap URLs. IndexNow accepted the guide. The eligibility report stays open. Hockey Grid accepted a known valid answer by mouse and keyboard. Removing the published touch guard reproduced a lost tap, while the reported desktop Safari path passed with and without the guard. That report stays open. There are 150 active reports and no new arrival since the preceding poll. [PR #803](https://github.com/PapiSalgueroM/ballpark-hero/pull/803).
+
+Club Manager’s two current size checks passed with their existing budgets. The diagnostic now recognizes the two recorded budget revisions and verifies exact raw archive bytes before normalizing Windows line endings. Both original and current runs retained 45 save-size seasons and 65 slot frames. The historical control still fails only its original storage cap. Replaying its recorded input compares 20 of 20 decoded pairs, 5 with the decoder removed, and 20 after restoration. These local results are separate from the open hosted continuity checks.
+
+Lovable reports 33,569 visits and 68,442 page views for November 6–13 UTC, led by Soccer Career, Home and Club Manager. That aggregate is insufficient to determine Nitro’s invalid-traffic rate. Review single-page visits with zero engagement alongside game starts, completions, and edge requests, grouped by landing route, source, device, geography and hour. [Lovable Analytics](https://docs.lovable.dev/features/analytics) and [Nitro publisher guidelines](https://nitropay.com/guidelines/).
 
 NRL Team Manager's Defensive drills and Clear preparation are live. The optional drills improve defence for one match with the same fatigue cost and injury risk as Train. Both season starts passed the published halftime reload and Quick Sim parity checks. All 281 tests, 1,051 held ordinary and legacy preparation frames, 16 route budgets, six pinned production cases and all 173 live URLs passed. IndexNow accepted the updated guide. [PR #802](https://github.com/PapiSalgueroM/ballpark-hero/pull/802).
 
