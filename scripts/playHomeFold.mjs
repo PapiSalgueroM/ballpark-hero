@@ -529,6 +529,36 @@ for (const width of [320, 390, 1440]) {
   }
 }
 
+console.log('8) the sport index jumps to a heading without changing the favourite');
+for (const width of [320, 390, 1440]) {
+  const ctx = await browser.newContext({ viewport: { width, height: 844 }, reducedMotion: 'reduce' });
+  try {
+    const page = await ctx.newPage();
+    await page.route('**/*', r => new URL(r.request().url()).origin === new URL(BASE).origin ? r.continue() : r.abort());
+    await page.addInitScript(() => localStorage.setItem('cookie-consent', 'essential'));
+    await page.goto(BASE + '/#browse-sports', { waitUntil: 'domcontentloaded' });
+    const index = page.getByRole('navigation', { name: 'Browse sports' });
+    const link = index.getByRole('link', { name: 'Rugby League', exact: true });
+    await link.focus();
+    await link.press('Enter');
+    const target = page.locator('#sport-rugby');
+    const land = () => page.waitForFunction(() => {
+      const heading = document.getElementById('sport-rugby');
+      return heading && Math.abs(heading.getBoundingClientRect().top - parseFloat(getComputedStyle(heading).scrollMarginTop)) <= 3;
+    }, null, { timeout: 5000 }).then(() => true, () => false);
+    const landed = await land();
+    const focused = await target.evaluate(heading => document.activeElement === heading);
+    const changed = await page.evaluate(() => localStorage.getItem('dukb-fav-sport'));
+    const first = await page.locator('section[data-sport]').first().getAttribute('data-sport');
+    say(landed && focused && first === 'soccer' && changed === null, `${width}px keyboard jump lands and focuses Rugby League with the original sport order`);
+    await page.goto(BASE + '/#sport-rugby', { waitUntil: 'domcontentloaded' });
+    await page.reload({ waitUntil: 'domcontentloaded' });
+    say(await land(), `${width}px a direct Rugby League link remains reachable on reload`);
+  } finally {
+    await ctx.close();
+  }
+}
+
 await browser.close();
 
 console.log('');

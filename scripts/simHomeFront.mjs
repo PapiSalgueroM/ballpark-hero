@@ -808,10 +808,13 @@ console.log('8) the favourite sport moves its own section first and nothing else
   if (readFavouriteSport({ getItem: () => { throw new Error('blocked'); } }) !== null) fail(8, 'blocked storage does not read as no pick');
   if (readFavouriteSport(null) !== null) fail(8, 'no storage does not read as no pick');
   const html = front.renderFav(sports, 'hockey');
+  const jumps = [...html.matchAll(/<a href="#sport-([^"]+)"/g)].map(match => match[1]);
   const buttons = [...html.matchAll(/<button ([^>]*)>/g)].map(m => m[1]);
   const pressed = buttons.filter(a => /aria-pressed="true"/.test(a));
+  if (JSON.stringify(jumps) !== JSON.stringify(sports)) fail(8, 'the catalogue does not link to each sport in index order');
   if (buttons.length !== sports.length) fail(8, `${buttons.length} chips for ${sports.length} sports`);
   if (buttons.some(a => !/type="button"/.test(a))) fail(8, 'a chip is not a plain button');
+  if (buttons.some(a => !/aria-label="Show [^"]+ first"/.test(a))) fail(8, 'a star is missing its accessible label');
   if (pressed.length !== 1 || !/data-fav-sport="hockey"/.test(pressed[0])) fail(8, `with hockey picked ${pressed.length} chip(s) read pressed`);
   if (/aria-pressed="true"/.test(front.renderFav(sports, null))) fail(8, 'a chip reads pressed with no pick');
   if (!failedSections.has(8)) console.log(`   ${sports.length} sports, each moves only its own section first, 8 bad stored values read as no pick, one pressed chip`);
