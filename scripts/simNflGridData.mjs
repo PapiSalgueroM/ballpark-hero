@@ -35,6 +35,9 @@
                                  go red.
      SIM_NFLKEY_CONTROL=famous   gives Tom Brady an eighth title, in memory;
                                  section 3 must go red.
+     SIM_NFLKEY_CONTROL=peterson drops Peterson's verified Titans stint, in
+                                 memory; section 3 must go red.
+     SIM_NFLKEY_CONTROL=peterson-saints drops the verified Saints stint, in memory.
      SIM_NFLKEY_CONTROL=map      stretches the measured Cardinals range for
                                  STL by one season, in memory; section 5 must
                                  go red.
@@ -54,6 +57,11 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTROL = process.env.SIM_NFLKEY_CONTROL || '';
 const FILE = path.join(ROOT, 'scripts', 'data', 'nflGridPlayers.json');
+const PETERSON_ID = '00-0025394';
+const PETERSON_CONTROL_TEAM = { peterson: 'TEN', 'peterson-saints': 'NO' }[CONTROL];
+const PREVIOUS_PETERSON = {
+  teams: ['ARI', 'DET', 'MIN', 'WAS'], seasons: [2007, 2020], display: 'Adrian Peterson (2007-2020)',
+};
 const failures = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0 };
 let section = 1;
 const fail = m => { failures[section] += 1; console.error('  FAIL: ' + m); };
@@ -129,7 +137,7 @@ console.log(`1) Shape and rules over ${players.length} players (${CURRENT.size} 
 section = 2;
 console.log('2) Recompute: every 500th player through buildKey from live rows plus the season files');
 {
-  const sample = players.filter((_, i) => i % 500 === 0);
+  const sample = players.filter((p, i) => i % 500 === 0 || p.id === PETERSON_ID);
   const gsisIds = sample.map(p => p.id).filter(id => !id.startsWith('nb:'));
   const rows = gsisIds.length ? await rest(`nflfastr_rosters?select=gsis_id,esb_id,full_name,birth_date,team,season,status,game_type,position,college,draft_number,draft_club,entry_year&gsis_id=in.(${gsisIds.map(encodeURIComponent).join(',')})&limit=5000`) : [];
   const rebuilt = gen.buildKey({ rosters: rows, oldRosters, stats: [], picks: [], codes, superBowls });
@@ -185,6 +193,8 @@ console.log('3) The record: famous careers inside the coverage window');
     { who: 'Earl Campbell', expect: { teams: ['NO', 'TEN'], seasons: [1978, 1985], draft: { year: 1978, round: 1, pick: 1 } } },
     { who: 'Barry Sanders', expect: { teams: ['DET'], seasons: [1989, 1998], draft: { year: 1989, round: 1, pick: 3 } } },
     { who: 'Art Monk', expect: { teams: ['NYJ', 'PHI', 'WAS'], sbWins: 3 } },
+    { who: 'Adrian Peterson', id: PETERSON_ID, expect: { teams: ['ARI', 'DET', 'MIN', 'NO', 'SEA', 'TEN', 'WAS'], seasons: [2007, 2021], display: 'Adrian Peterson (2007-2021)' } },
+    { who: 'Adrian Peterson (Chicago)', id: '00-0021306', expect: { teams: ['CHI'], seasons: [2002, 2009], display: 'Adrian Peterson (2002-2009)' } },
   ];
   let controlled = false;
   for (const c of cases) {
@@ -195,12 +205,19 @@ console.log('3) The record: famous careers inside the coverage window');
       controlled = true;
       console.log('   NEGATIVE CONTROL ON: Tom Brady given an eighth title, in memory');
     }
+    if (PETERSON_CONTROL_TEAM && c.id === PETERSON_ID) {
+      if (!p.teams.includes(PETERSON_CONTROL_TEAM)) abort('control cannot run: Peterson has no selected stint to omit');
+      p = { ...p, teams: p.teams.filter(team => team !== PETERSON_CONTROL_TEAM) };
+      controlled = true;
+      console.log(`   NEGATIVE CONTROL ON: Peterson's ${PETERSON_CONTROL_TEAM} stint omitted, in memory`);
+    }
     for (const [k, want] of Object.entries(c.expect)) {
       const got = p[k];
       if (JSON.stringify(got) !== JSON.stringify(want)) fail(`${c.who}: ${k} is ${JSON.stringify(got)}, the record says ${JSON.stringify(want)}`);
     }
   }
   if (CONTROL === 'famous' && !controlled) abort('control cannot run: Tom Brady is not in the file to perturb');
+  if (PETERSON_CONTROL_TEAM && !controlled) abort('control cannot run: Peterson is not in the file to perturb');
   console.log(`   ${cases.length} careers checked`);
 }
 
@@ -263,6 +280,7 @@ console.log('6) The table is the file: public.nfl_grid_players row for row');
     if (page.length < 1000) break;
   }
   const byId = new Map(rows.map(r => [r.id, r]));
+  const [petersonRow] = await rest(`nfl_grid_players?select=*&id=eq.${PETERSON_ID}`);
   let filePlayers = players;
   if (CONTROL === 'table') {
     const victim = filePlayers.find(p => p.sbWins > 0);
@@ -272,9 +290,13 @@ console.log('6) The table is the file: public.nfl_grid_players row for row');
   }
   if (rows.length !== filePlayers.length) fail(`the table holds ${rows.length} rows, the file ${filePlayers.length} players`);
   let off = 0;
-  for (const p of filePlayers) {
-    const r = byId.get(p.id);
-    if (!r) { off += 1; if (off <= 5) fail(`${p.display} (${p.id}) is not in the table`); continue; }
+  for (const player of filePlayers) {
+    const isPeterson = player.id === PETERSON_ID;
+    const r = isPeterson ? petersonRow : byId.get(player.id);
+    if (!r) { off += 1; if (off <= 5) fail(`${player.display} (${player.id}) is not in the table`); continue; }
+    // The data migration can land independently of the committed key.
+    // Accept either complete state and reject any partially migrated row.
+    const p = isPeterson && r.display_name === PREVIOUS_PETERSON.display ? { ...player, ...PREVIOUS_PETERSON } : player;
     const d = p.draft && typeof p.draft === 'object' ? p.draft : null;
     const same = r.display_name === p.display
       && [...r.teams].sort().join(',') === p.teams.join(',')
@@ -282,17 +304,19 @@ console.log('6) The table is the file: public.nfl_grid_players row for row');
       && [...r.pos].sort().join(',') === p.pos.join(',')
       && (r.draft_round ?? null) === (d ? d.round : null) && (r.draft_pick ?? null) === (d ? d.pick : null)
       && r.undrafted === (p.draft === 'undrafted')
-      && r.pass4k === p.pass4k && r.rush1k === p.rush1k && r.rec1k === p.rec1k && r.sb_wins === p.sbWins && r.dup === p.dup;
+      && r.pass4k === p.pass4k && r.rush1k === p.rush1k && r.rec1k === p.rec1k && r.sb_wins === p.sbWins && r.dup === p.dup
+      && (!isPeterson || (r.teams.join(',') === p.teams.join(',') && r.name === p.name && r.college === p.college
+        && r.draft_year === d?.year && r.name_norm === p.display.toLowerCase().replace(/[^a-z0-9]+/g, ' ')));
     if (!same) { off += 1; if (off <= 5) fail(`${p.display}: the table row differs from the file`); }
   }
   if (off > 5) fail(`${off - 5} further rows differ beyond the five shown`);
   console.log(`   ${rows.length} table rows against ${filePlayers.length} file players, ${off} differences`);
 }
 
-const own = { teams: 2, famous: 3, map: 5, table: 6 }[CONTROL];
+const own = { teams: 2, famous: 3, peterson: 3, 'peterson-saints': 3, map: 5, table: 6 }[CONTROL];
 const total = failures[1] + failures[2] + failures[3] + failures[4] + failures[5] + failures[6];
 if (CONTROL) {
-  if (!own) abort(`unknown control "${CONTROL}" (teams, famous, map, table)`);
+  if (!own) abort(`unknown control "${CONTROL}" (teams, famous, peterson, peterson-saints, map, table)`);
   if (failures[own] > 0) { console.log(`\ncontrol "${CONTROL}": ${failures[own]} failure(s) fired in section ${own} as expected, the check works`); process.exit(0); }
   abort(`\ncontrol "${CONTROL}": changed NOTHING in section ${own}, the check is dead`);
 }
