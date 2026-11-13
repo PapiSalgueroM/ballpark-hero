@@ -186,6 +186,7 @@ export const HOME_COPY: HomeCopy = {
           ['Tennis: ', a('/guess-tennis-player', 'Guess the Player'), ', ', a('/tennis-chain', 'Tennis Chain'), ' and ', a('/tennis-higher-lower', 'Higher or Lower')],
           ['Golf: ', a('/guess-the-golfer', 'Guess the Golfer'), ' and ', a('/golf-higher-lower', 'Higher or Lower')],
           ['Aussie rules: ', a('/aussie-rules-manager', 'Aussie Rules Manager'), ', an AFL club season with made up players, and ', a('/afl-higher-lower', 'AFL Higher or Lower')],
+          ['Rugby league: ', a('/nrl-team-manager', 'NRL Team Manager'), ', choose a season and coach an NRL club'],
           ['NASCAR: ', a('/guess-nascar-driver', 'Guess the Driver'), ' and ', a('/nascar-chain', 'NASCAR Chain')],
           ['Combat sports: ', a('/ufc', 'UFC quiz'), ' and ', a('/ufc-chain', 'UFC Chain')],
           ['World and Olympic games: ', a('/olympics', 'Olympics'), ', ', a('/world-cup-bracket', 'World Cup Bracket'), ' and ', a('/guess-the-nation', 'Guess the Nation')],

@@ -29,6 +29,7 @@ export type SportKey =
   | 'tennis'
   | 'golf'
   | 'aussie'
+  | 'rugby'
   | 'nascar'
   | 'combat'
   | 'world';
@@ -48,6 +49,7 @@ export const CATEGORY_SPORT: Record<CategoryTitle, SportKey> = {
   'Tennis': 'tennis',
   'Golf': 'golf',
   'Aussie Rules': 'aussie',
+  'Rugby League': 'rugby',
   'NASCAR': 'nascar',
   'Combat Sports': 'combat',
   'World & Olympic Games': 'world',
@@ -200,6 +202,7 @@ export const SPORT_NAME: Record<SportKey, string> = {
   tennis: 'Tennis',
   golf: 'Golf',
   aussie: 'AFL',
+  rugby: 'Rugby League',
   nascar: 'NASCAR',
   combat: 'Combat',
   world: 'All sports',

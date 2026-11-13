@@ -1,4 +1,4 @@
-import { CONTINUE_SAVES, type ContinueSave } from '@/data/continueSaves';
+import { CONTINUE_SAVES, resolveContinueSave, type ContinueSave } from '@/data/continueSaves';
 
 /**
  * Round 958: a broken save never traps a game.
@@ -59,8 +59,11 @@ function routeOf(pathname: string): string {
 
 /** The registered long game on this route, or null. */
 export function routeSaveEntry(pathname: string): ContinueSave | null {
-  const route = routeOf(pathname);
-  return CONTINUE_SAVES.find(e => e.path === route) ?? null;
+  const entry = CONTINUE_SAVES.find(e => e.path === routeOf(pathname));
+  if (!entry) return null;
+  const address = pathname.split('#')[0];
+  const queryAt = address.indexOf('?');
+  return resolveContinueSave(entry, queryAt < 0 ? '' : address.slice(queryAt));
 }
 
 /**
@@ -81,7 +84,7 @@ export function heldSaveEntry(pathname: string, storage: SaveStorage | null): Co
 /** heldSaveEntry for the page the browser is on right now. Never throws. */
 export function heldSaveHere(): ContinueSave | null {
   try {
-    return heldSaveEntry(window.location.pathname, browserStorage());
+    return heldSaveEntry(window.location.pathname + (window.location.search || ''), browserStorage());
   } catch {
     return null;
   }
@@ -135,7 +138,7 @@ export function setAsideSave(entry: ContinueSave, storage: SaveStorage | null, n
  * whatever its stamp says (a clock set back must not prune the save that was
  * just moved). Skipped where the storage cannot list its keys. Never throws.
  */
-function pruneBackups(entry: ContinueSave, storage: SaveStorage | null, keep: string): void {
+export function pruneBackups(entry: ContinueSave, storage: SaveStorage | null, keep: string): void {
   if (!storage || typeof (storage as ListableStorage).key !== 'function') return;
   const others: string[] = [];
   try {

@@ -59,6 +59,10 @@ export const WRITERS = {
   '/nhl-my-career': { kind: 'literal', file: 'src/components/us-career/UsCareerBoard.tsx', indirect: ['saveValue(JSON.stringify(', 'localStorage.setItem(pending.key, pending.value)'] },
   '/nhl-front-office': { kind: 'literal', file: 'src/components/nhl-front-office/NhlFrontOfficeBoard.tsx' },
   '/aussie-rules-manager': { kind: 'whole', file: 'src/hooks/useAussieRulesLeague.ts' },
+  '/nrl-team-manager': { kind: 'whole', file: 'src/pages/NrlTeamManager.tsx', indirect: [
+    'resolveContinueSave(NRL_SAVE_ENTRY, search)', 'const raw = JSON.stringify(next);',
+    'writeNrlSaveSlot(entry.saveKey, committed.current, raw)',
+  ] },
   '/fight-career': { kind: 'literal', file: 'src/components/fight-career/FightCareerBoard.tsx', unset: { offerId: 'only set while a camp is being run for one fight (SaveShape, Round 916)' } },
   '/fight-promoter': { kind: 'literal', file: 'src/components/fight-promoter/FightPromoterBoard.tsx' },
   '/fight-gym': { kind: 'literal', file: 'src/components/fight-gym/FightGymBoard.tsx' },
@@ -67,7 +71,7 @@ export const WRITERS = {
 };
 
 /* The games whose engine exports a pure check of a stored save. */
-export const PURE_LOADERS = ['/soccer-career', '/stadium-tycoon', '/wonderkid-factory', '/rebuild', '/front-office', '/nhl-front-office', '/aussie-rules-manager', '/hall-of-champions', '/idle-arena', '/club-manager'];
+export const PURE_LOADERS = ['/soccer-career', '/stadium-tycoon', '/wonderkid-factory', '/rebuild', '/front-office', '/nhl-front-office', '/aussie-rules-manager', '/nrl-team-manager', '/hall-of-champions', '/idle-arena', '/club-manager'];
 
 const ENTRY = `
 import * as SOC from './src/lib/soccerCareerEngine';
@@ -105,6 +109,10 @@ import * as BRK from './src/lib/gmBracket';
 import * as CFB from './src/lib/cfbDynasty';
 import * as CBB from './src/lib/cbbDynasty';
 import * as ARL from './src/lib/aussieRulesLeague';
+import { NRL_SEASONS } from './src/data/nrlManager2026';
+import * as NRL from './src/lib/nrlCareer';
+import { createNrlSeason } from './src/lib/nrlManager';
+export const nrlLegacySave = () => JSON.stringify(createNrlSeason('bears', 717, 2027));
 import * as FC from './src/lib/fightCareer';
 import * as FG from './src/lib/fightGym';
 import * as FP from './src/lib/fightPromoter';
@@ -353,6 +361,10 @@ export function makeSaves(seed, rebuildClubs) {
   const league = ARL.createLeague(seed + 7, 'club-00');
   if (!league) throw new Error('createLeague refused club-00');
   out['/aussie-rules-manager'] = JSON.stringify(league);
+  const nrlYear = seed % 2 ? 2027 : 2026;
+  const nrlClubId = nrlYear === 2027 ? 'bears' : NRL_SEASONS[2026].clubs[seed % NRL_SEASONS[2026].clubs.length].id;
+  const nrl = NRL.createNrlCareer(nrlClubId, seed + 7, nrlYear);
+  out['/nrl-team-manager'] = JSON.stringify(seed % 2 ? NRL.reduceNrlCareer(nrl, { type: 'advance' }) : nrl);
   out['/fight-career'] = JSON.stringify({ st: FC.newFightCareer('Real Save ' + seed, 'welter', 'slugger', 'real' + seed), phase: 'hub' });
   out['/fight-promoter'] = JSON.stringify({ st: FP.newPromoter('Real Shows ' + seed, 'real' + seed) });
   out['/fight-gym'] = JSON.stringify({ g: FG.newGym('Real Gym ' + seed, 'real' + seed) });
@@ -370,6 +382,7 @@ export const accepts = {
   '/front-office': raw => { try { return isFrontOfficeSave(JSON.parse(raw), 'NFL', FO.REGULAR_WEEKS) === true; } catch { return false; } },
   '/nhl-front-office': raw => { try { return isFrontOfficeSave(JSON.parse(raw), 'NHL', NHLFO.NHL_FO_ROUNDS) === true; } catch { return false; } },
   '/aussie-rules-manager': raw => ARL.readLeagueSave(raw) !== null,
+  '/nrl-team-manager': raw => NRL.readNrlCareerSave(raw) !== null,
   '/hall-of-champions': raw => HC.loadSave(raw) !== null,
   '/idle-arena': raw => IA.loadSave(raw, NOW + 60000) !== null,
   /* Club Manager's loader reads storage itself, so it is handed the save through the stub. */
@@ -599,5 +612,5 @@ export async function buildRealSaves({ root, tmpDir, seeds = [0, 1, 2, 3] }) {
     const one = mod.makeSaves(seed, rebuildClubs);
     for (const [route, raw] of Object.entries(one)) (fleet[route] ??= []).push(raw);
   }
-  return { fleet, accepts: mod.accepts, partReads: mod.partReads, partAbsent: mod.partAbsent, partPreserved: mod.partPreserved };
+  return { fleet, accepts: mod.accepts, partReads: mod.partReads, partAbsent: mod.partAbsent, partPreserved: mod.partPreserved, nrlLegacySave: mod.nrlLegacySave };
 }

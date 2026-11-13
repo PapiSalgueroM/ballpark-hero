@@ -70,7 +70,7 @@ export function ContinueRow() {
             return (
               <li key={game.path}>
                 <Link
-                  to={game.path}
+                  to={entry.path}
                   style={sportStyle(sport)}
                   data-continue-card={game.path}
                   className={styles.continueCard}

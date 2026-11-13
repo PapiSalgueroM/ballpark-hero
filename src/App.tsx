@@ -163,6 +163,7 @@ const NhlConnect4 = lazy(() => import("./pages/NhlConnect4"));
 const GolfHigherLower = lazy(() => import("./pages/GolfHigherLower"));
 const AflHigherLower = lazy(() => import("./pages/AflHigherLower"));
 const AussieRulesManager = lazy(() => import("./pages/AussieRulesManager"));
+const NrlTeamManager = lazy(() => import("./pages/NrlTeamManager"));
 const ChampOrNot = lazy(() => import("./pages/ChampOrNot"));
 const Records = lazy(() => import("./pages/Records"));
 const RecordPage = lazy(() => import("./pages/RecordPage"));
@@ -310,7 +311,7 @@ const RouteLoader = () => (
 );
 
 const AppContent = () => {
-  const { pathname } = useLocation();
+  const { pathname, search } = useLocation();
   const gameRoute = isGameRoute(pathname);
   const opensCareerRules = /^\/(?:nba|nfl|mlb|nhl)-my-career\/?$/.test(pathname);
   return (
@@ -522,6 +523,7 @@ const AppContent = () => {
         <Route path="/golf-higher-lower" element={<GolfHigherLower />} />
         <Route path="/afl-higher-lower" element={<AflHigherLower />} />
         <Route path="/aussie-rules-manager" element={<AussieRulesManager />} />
+        <Route path="/nrl-team-manager" element={<NrlTeamManager />} />
         <Route path="/champ-or-not" element={<ChampOrNot />} />
         <Route path="/records" element={<Records />} />
         {/* Round 649: one page per Record Books competition, all drawn by RecordPage. The slugs
@@ -560,7 +562,7 @@ const AppContent = () => {
       {/* Round 958: the way back from a fresh start. On a long game's page,
           while a save it set aside exists, offers to put it back. Inside the
           boundary, so a throw here costs the page and not the site. */}
-      <BrokenSaveRestore pathname={pathname} />
+      <BrokenSaveRestore pathname={/^\/nrl-team-manager\/*$/.test(pathname) ? pathname + search : pathname} />
       {/* Round 49: one global footer on every page (legal disclaimer, About/Contact/
           What's New links, and the Report a bug button), instead of 33 pages
           importing their own copy and 95 pages having none.

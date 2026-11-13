@@ -280,6 +280,9 @@ const REAL_PEOPLE = [
      and the Sports Reference 1991-92 Charleston roster identify the forward.
      https://cofcsports.com/documents/download/2026/5/27/Charleston_MBB_Thru_2025-26.pdf */
   { name: 'Kevin Madden', files: ['src/data/gridArchive.json', 'public/cbb-grid/archive/index.html'] },
+  // Wests Tigers' official profile and final Round 2 list agree with the
+  // independent final team sheet cited in the NRL opening-matchday audit.
+  { name: 'Jock Madden', files: ['src/data/nrlOpeningMatchday2026.ts'] },
 ];
 const PERSON_CONTROL = process.env.SIM_RIVAL_CONTROL === 'person';
 
@@ -351,7 +354,7 @@ for (const entry of SCAN) {
 }
 
 const findings = [];
-/* SIM_RIVAL_CONTROL=person: five other spellings of the one banned word that
+/* SIM_RIVAL_CONTROL=person: other spellings of the one banned word that
    rides on a real name. Each must still be a finding in every file the person
    is allowed in. */
 const CONTROL_PROBES = [
@@ -360,6 +363,8 @@ const CONTROL_PROBES = [
   '{"name":"Ty  Madden"}',
   '// ratings borrowed from Madden 26',
   '{"name":"Tyler Madden"}',
+  '{"name":"jock madden"}',
+  '{"name":"Jock  Madden"}',
 ];
 const controlProblems = [];
 
@@ -375,8 +380,8 @@ for (const file of files) {
   const relFwd = rel.split(path.sep).join('/');
   const people = REAL_PEOPLE.filter(p => p.files.includes(relFwd)).map(p => p.name);
   /* The control: in each file a person is allowed in, the person must be there
-     (or the allowance is dead weight), and the product name written five
-     other ways, appended to that file's text here and nowhere on disk, must
+     (or the allowance is dead weight), and the other spellings of the product
+     name, appended to that file's text here and nowhere on disk, must
      each still fail. */
   if (PERSON_CONTROL && people.length) {
     for (const name of people) if (!text.includes(name)) controlProblems.push(`${relFwd} no longer holds ${name}, so the allowance there is dead weight`);
