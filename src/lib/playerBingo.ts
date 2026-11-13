@@ -544,6 +544,8 @@ async function fetchWorldCupSets(signal: AbortSignal): Promise<{ all: Set<string
       const keys = [key];
       if (key === 'andy robertson' && normalizeName(r.nationality ?? '') === 'scotland') {
         keys.push('andrew robertson');
+      } else if (key === 'son heung-min' && normalizeName(r.nationality ?? '') === 'south korea') {
+        keys.push('heung-min son');
       }
       const year = Number(r.world_cup_year);
       if (year === 2026 && key === 'gabriel magalhaes' && normalizeName(r.nationality ?? '') === 'brazil') {
