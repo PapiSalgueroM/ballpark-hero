@@ -1,6 +1,10 @@
 # DoUKnowBall site readiness and game work
 
-Checkpoint at 12:39 UTC on November 13, 2026. The broad update remains draft [PR #770](https://github.com/PapiSalgueroM/ballpark-hero/pull/770). The work continued after the 24-hour report below.
+Checkpoint at 12:51 UTC on November 13, 2026. The broad update remains draft [PR #770](https://github.com/PapiSalgueroM/ballpark-hero/pull/770). The work continued after the 24-hour report below.
+
+NBA Starting 5 now uses its franchise archive in autocomplete. It accepts LeBron James for Cleveland, Paul George for Indiana and Alonzo Mourning for Charlotte while retaining the existing position and duplicate rules. The exact local pair passed 36 browser cases and the published capture/replay passed 24. During an archive outage search reports the error earlier and a new query can retry; the older build showed current names but could not accept one without the archive. The first spin now starts the existing paged roster census with player ID and team columns. All 173 public routes passed. The exact report was marked Fixed. The queue has 144 active reports, with 17 new, 20 confirmed and 107 investigating. [PR #819](https://github.com/PapiSalgueroM/ballpark-hero/pull/819).
+
+The hosted Footle workflow succeeded on broad head 5c420bf78. Manager World Save Size Diagnostic is pending and the rest of that hosted batch was queued in the 12:42 UTC check. [Footle run](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/43424607079).
 
 Home and the shared site header fit the menu, wordmark, three-digit streak and account actions on one row at narrow widths. The exact prior build wrapped eight of 12 Home and Leaderboard cases. The candidate wrapped none of 12 and raised phone account controls to 44px. At 320px Home's header is 57px instead of 97px. Ten published cases verified Chrome and WebKit, login and dismissal, and zero overflow. The mobile WebKit driver used the visible Close control after the first synthetic Escape did not dismiss. All 173 public routes passed. [PR #820](https://github.com/PapiSalgueroM/ballpark-hero/pull/820).
 
