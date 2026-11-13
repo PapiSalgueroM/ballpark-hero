@@ -41,7 +41,7 @@ import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { build } from 'esbuild';
-import { MODE_RULES, buildGraph, deriveHint, expandCompactCareers, hintProblems, parseActiveRestoreMigration, ruleProblems } from './lib/transferPathHints.mjs';
+import { MODE_RULES, buildGraph, deriveHint, expandCompactCareers, hintProblems, parseActiveRestoreMigration, parseTransferPathCompanionMigration, ruleProblems, sharedClub } from './lib/transferPathHints.mjs';
 import { deriveVerifiedActiveIdentities, parseWorldCupIdentities, verifiedActiveModule } from './lib/transferPathActiveIdentities.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -50,6 +50,19 @@ const COMPANION_OUT = path.join(ROOT, 'supabase/migrations/20260907173202_quaran
 const APPLIED_RESTORE = path.join(ROOT, 'supabase/migrations/20260907190000_restore_verified_active_transfer_path_hints.sql');
 const ACTIVE_RESTORE_OUT = path.join(ROOT, 'supabase/migrations/20260911190000_refresh_verified_active_transfer_path_hints.sql');
 const ACTIVE_OUT = path.join(ROOT, 'src/data/transferPathVerifiedActive.ts');
+const CHECK_ONLY = process.argv.includes('--check');
+
+function generatedFile(file, body) {
+  if (!CHECK_ONLY) {
+    fs.writeFileSync(file, body);
+    return;
+  }
+  const current = fs.readFileSync(file, 'utf8').replaceAll('\r\n', '\n');
+  if (current !== body) {
+    console.error(`generated ${path.relative(ROOT, file)} differs in check mode`);
+    process.exit(1);
+  }
+}
 
 /* Round 531 tripwires, see the header: 90 identities over the 253 player pool
    (12 up from the 78 of 2026-09-07, Emiliano Martinez refused by the namesake
@@ -93,8 +106,8 @@ if (activeIdentities.length !== EXPECTED_ACTIVE_IDENTITIES) {
   console.error(`verified active identity count changed from ${EXPECTED_ACTIVE_IDENTITIES} to ${activeIdentities.length}; review the evidence matches before regenerating`);
   process.exit(1);
 }
-fs.writeFileSync(ACTIVE_OUT, verifiedActiveModule(activeIdentities));
-console.log(`wrote ${path.relative(ROOT, ACTIVE_OUT)}: ${activeIdentities.length} normalized name plus nationality identities`);
+generatedFile(ACTIVE_OUT, verifiedActiveModule(activeIdentities));
+console.log(`${CHECK_ONLY ? 'verified' : 'wrote'} ${path.relative(ROOT, ACTIVE_OUT)}: ${activeIdentities.length} normalized name plus nationality identities`);
 
 /* careers.txt carries nationality only for identities in the generated active
    set. Every other line stays in its older two-field form, which is deliberate:
@@ -115,12 +128,12 @@ const annotatedLines = compactLines.map(line => {
   const matches = activeByName.get(normalizedName) ?? [];
   return matches.length === 1 ? `${name}|${matches[0].nationality}|${career}` : `${name}|${career}`;
 });
-fs.writeFileSync(careerPullPath, annotatedLines.join('\n') + '\n');
+generatedFile(careerPullPath, annotatedLines.join('\n') + '\n');
 
 /* The page's own rule filters and fallback pools are bundled after the active
    identities exist. The fallback puzzle file is rewritten at the end. */
 const ENTRY = path.join(os.tmpdir(), 'gen-tph-entry.mjs'), BUNDLE = path.join(os.tmpdir(), 'gen-tph-bundle.mjs');
-fs.writeFileSync(ENTRY, `export { default as fallbackPuzzles } from '${SRC}/data/transferPathPuzzles.ts';\nexport { careerPlayers as fallbackPlayers } from '${SRC}/data/careerPlayers.ts';\nexport { playersUnderRule, ACTIVE_YEAR } from '${SRC}/lib/transferPathModes.ts';\n`);
+fs.writeFileSync(ENTRY, `export { default as fallbackPuzzles } from '${SRC}/data/transferPathPuzzles.ts';\nexport { careerPlayers as fallbackPlayers } from '${SRC}/data/careerPlayers.ts';\nexport { playersUnderRule, ACTIVE_YEAR } from '${SRC}/lib/transferPathModes.ts';\nexport { verifiedClassicStint } from '${SRC}/lib/transferPathGraph.ts';\n`);
 await build({ entryPoints: [ENTRY], bundle: true, format: 'esm', platform: 'node', outfile: BUNDLE, logLevel: 'error', alias: { '@': path.join(ROOT, 'src') } });
 const site = await import(pathToFileURL(BUNDLE).href + `?v=${Date.now()}`);
 
@@ -129,7 +142,9 @@ const puzzles = fs.readFileSync(path.join(PULL, 'puzzles.txt'), 'utf8').replaceA
   const [id, a, b, min] = l.split('|');
   return { id, a, b, oldMin: Number(min) };
 });
-const graph = buildGraph(players);
+const graph = buildGraph(players, site.verifiedClassicStint(site.fallbackPlayers, players));
+const companion = fs.readFileSync(COMPANION_OUT, 'utf8').replaceAll('\r\n', '\n');
+const appliedClassic = new Map(parseTransferPathCompanionMigration(companion).desired.map(row => [row.id, row]));
 console.log(`${players.length} players, ${graph.names.length} in the graph, ${puzzles.length} puzzles`);
 
 const q = s => `'${String(s).replace(/'/g, "''")}'`;
@@ -143,7 +158,17 @@ for (const p of puzzles) {
   if (/[\u2013\u2014]/.test(d.hint)) { console.error(`  long dash in ${p.id}`); process.exit(1); }
   if (d.minSteps !== p.oldMin) minChanged += 1;
   byMin[d.minSteps] = (byMin[d.minSteps] ?? 0) + 1;
-  classicById.set(p.id, d);
+  const retained = appliedClassic.get(p.id);
+  if (retained && retained.playerA === p.a && retained.playerB === p.b) {
+    const oldProblems = hintProblems(graph, p.a, p.b, retained.minSteps, retained.hint);
+    if (oldProblems.length) {
+      console.error(`  applied ${p.id}: ${oldProblems.join('; ')}; create a new migration instead of rewriting the companion`);
+      process.exit(1);
+    }
+    classicById.set(p.id, retained);
+  } else {
+    classicById.set(p.id, d);
+  }
 }
 if (unreachable) { console.error(`${unreachable} puzzle(s) have no path; current truth was not accepted`); process.exit(1); }
 console.log(`derived current classic truth: ${puzzles.length} rows, minimum changed on ${minChanged}, by minimum ${JSON.stringify(byMin)}`);
@@ -190,7 +215,6 @@ console.log(`derived current special-rule truth for ${puzzles.length} puzzles: $
     const modes = modesById.get(p.id);
     return `      (${q(p.id)}, ${q(p.a)}, ${q(p.b)}, ${classic.minSteps}, ${q(classic.hint)}, ${ruleCells(null)}, ${ruleCells(modes.europe)})`;
   });
-  let companion = fs.readFileSync(COMPANION_OUT, 'utf8').replaceAll('\r\n', '\n');
   const desired = companion.indexOf('  for desired in');
   const startMarker = '    from (values\n';
   const start = companion.indexOf(startMarker, desired);
@@ -317,7 +341,7 @@ console.log(`derived current special-rule truth for ${puzzles.length} puzzles: $
     }
     console.log(`verified immutable ${path.relative(ROOT, ACTIVE_RESTORE_OUT)}: ${rows.length} exact verified-active refresh rows`);
   } else {
-    fs.writeFileSync(ACTIVE_RESTORE_OUT, restore);
+    generatedFile(ACTIVE_RESTORE_OUT, restore);
     console.log(`wrote new ${path.relative(ROOT, ACTIVE_RESTORE_OUT)}: ${rows.length} exact verified-active refresh rows, ${unchanged} unchanged from the applied restore, ${applied.size} replaced, ${rows.length - applied.size} new`);
   }
 }
@@ -329,7 +353,7 @@ console.log(`derived current special-rule truth for ${puzzles.length} puzzles: $
    no classic path there are dropped from the fallback, never guessed; a
    puzzle with no path under a special rule carries null for that rule. */
 {
-  const fg = buildGraph(site.fallbackPlayers);
+  const fg = buildGraph(site.fallbackPlayers, site.verifiedClassicStint(site.fallbackPlayers));
   const fRule = Object.fromEntries(MODE_RULES.map(rule => [rule, buildGraph(site.playersUnderRule(site.fallbackPlayers, rule))]));
   const kept = [], dropped = [];
   for (const p of site.fallbackPuzzles) {
@@ -337,7 +361,12 @@ console.log(`derived current special-rule truth for ${puzzles.length} puzzles: $
     if (!d) { dropped.push(p.id); continue; }
     const problems = hintProblems(fg, p.playerA, p.playerB, d.minSteps, d.hint);
     if (problems.length) { console.error(`  fallback ${p.id}: ${problems.join('; ')}`); process.exit(1); }
-    const entry = { id: p.id, playerA: p.playerA, playerB: p.playerB, minSteps: d.minSteps, oneOptimalPath: d.path, hint: d.hint };
+    const heldPath = p.oneOptimalPath;
+    const keepClassic = !hintProblems(fg, p.playerA, p.playerB, p.minSteps, p.hint).length
+      && heldPath?.length === p.minSteps + 1 && heldPath[0] === p.playerA && heldPath.at(-1) === p.playerB
+      && heldPath.slice(1).every((next, index) => sharedClub(fg, heldPath[index], next));
+    const entry = { id: p.id, playerA: p.playerA, playerB: p.playerB, minSteps: d.minSteps,
+      oneOptimalPath: keepClassic ? heldPath : d.path, hint: keepClassic ? p.hint : d.hint };
     for (const rule of MODE_RULES) {
       const r = deriveHint(fRule[rule], p.playerA, p.playerB);
       entry[rule] = r ? { minSteps: r.minSteps, oneOptimalPath: r.path, hint: r.hint } : null;
@@ -388,7 +417,7 @@ ${body}
 
 export default transferPathPuzzles;
 `;
-  fs.writeFileSync(path.join(ROOT, 'src/data/transferPathPuzzles.ts'), file);
+  generatedFile(path.join(ROOT, 'src/data/transferPathPuzzles.ts'), file);
   const fStats = MODE_RULES.map(rule => `${rule} ${kept.filter(p => p[rule]).length}`).join(', ');
-  console.log(`rewrote src/data/transferPathPuzzles.ts: ${kept.length} fallback puzzles kept (with a path under ${fStats})${dropped.length ? `, dropped (no path on the fallback pool): ${dropped.join(', ')}` : ''}`);
+  console.log(`${CHECK_ONLY ? 'verified' : 'rewrote'} src/data/transferPathPuzzles.ts: ${kept.length} fallback puzzles kept (with a path under ${fStats})${dropped.length ? `, dropped (no path on the fallback pool): ${dropped.join(', ')}` : ''}`);
 }

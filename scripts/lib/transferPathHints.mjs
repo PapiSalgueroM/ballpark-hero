@@ -40,13 +40,16 @@ function addSpell(keys, club, season) {
 }
 
 /** name -> { exact, calendar, span }, exactly the hook's playerToClubSeasons */
-export function buildGraph(players) {
+export function buildGraph(players, verifiedStint) {
   const keys = new Map();
   for (const p of players) {
     if (!p || typeof p.name !== 'string' || !Array.isArray(p.career)) continue;
     const k = keys.get(p.name) ?? { exact: new Set(), calendar: new Set(), span: new Set() };
     for (const s of p.career) if (s && s.club && s.season) addSpell(k, s.club, s.season);
     keys.set(p.name, k);
+  }
+  if (verifiedStint && keys.has(verifiedStint.player)) {
+    addSpell(keys.get(verifiedStint.player), verifiedStint.club, verifiedStint.season);
   }
   /* key -> players who hold it, one index per bucket, then neighbours with the
      clubs they shared (earliest shared season first, so the club named in a
