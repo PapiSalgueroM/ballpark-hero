@@ -1,6 +1,8 @@
 # DoUKnowBall site readiness and game work
 
-Checkpoint at 12:22 UTC on November 13, 2026. The broad update remains draft [PR #770](https://github.com/PapiSalgueroM/ballpark-hero/pull/770). The work continued after the 24-hour report below.
+Checkpoint at 12:39 UTC on November 13, 2026. The broad update remains draft [PR #770](https://github.com/PapiSalgueroM/ballpark-hero/pull/770). The work continued after the 24-hour report below.
+
+Home and the shared site header fit the menu, wordmark, three-digit streak and account actions on one row at narrow widths. The exact prior build wrapped eight of 12 Home and Leaderboard cases. The candidate wrapped none of 12 and raised phone account controls to 44px. At 320px Home's header is 57px instead of 97px. Ten published cases verified Chrome and WebKit, login and dismissal, and zero overflow. The mobile WebKit driver used the visible Close control after the first synthetic Escape did not dismiss. All 173 public routes passed. [PR #820](https://github.com/PapiSalgueroM/ballpark-hero/pull/820).
 
 New Club Manager offers for transfer-listed players now use a buyer who can afford the fee. If rejecting the offer would produce a counter that exceeds the buyer's budget, the offer closes. The published 12-case replay verified a valid £154.1m offer, an unaffordable £221.5m counter and exact reload. The comparison held 222 ordinary offer and decline outcomes, 12 loan settlements and their random draws across 120 pairs. Older saves can still use the previous counter rule if a player was already unlisted and the save lacks the origin. Forty-two focused cases and all 173 published URLs passed. The exact report was marked Fixed. The active queue is 145, with 17 new, 21 confirmed and 107 investigating. [PR #818](https://github.com/PapiSalgueroM/ballpark-hero/pull/818).
 
