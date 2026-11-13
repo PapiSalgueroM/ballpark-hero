@@ -24,7 +24,7 @@ export const NRL_MANAGEMENT_CONTENT: GameContentMap = {
       'Set Standard, Value or Premium ticket prices in Finance before your first paid home match. That choice applies to home gates for the rest of the season.',
       'Open Season review for your final ladder, finances, recorded scoring and finals scores. Stay with your club, move to a new club, or retire and keep your career record.',
       'Before playing Round 1, accept the optional Board pathways objective in Season review. Give three players aged 23 or under four regular-season appearances each to earn a club cash bonus.',
-      'Open Change clubs in Season review to see simulated openings based on expansion and the season’s ladder, with a board target for each suggested club.',
+      'Open Change clubs in Season review to see simulated openings and their board targets. You can apply to one club after the season or use the club picker for a direct move.',
       'In Season review, open Player history and choose a player to see recorded regular-season and finals appearances, scoring and rating changes.',
     ],
     rules: [
