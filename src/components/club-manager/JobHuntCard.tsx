@@ -48,7 +48,7 @@ export default function JobHuntCard({ c, onApply, onJoinNow, onJoinSummer }: {
         <p className="text-sm text-foreground font-bold mb-0.5">The job is yours. When do you start?</p>
         <p className="text-[10px] text-muted-foreground mb-2">
           {held
-            ? `The ${c.bundesligaPlayoff ? 'Bundesliga' : 'Championship'} playoff field is set. You can book your new job for the summer.`
+            ? `The ${c.frenchPlayoffs ? 'French promotion' : c.bundesligaPlayoff ? 'Bundesliga' : 'Championship'} playoff field is set. You can book your new job for the summer.`
             : <>Join now and their season so far is simulated under the manager before you, like a takeover, and your record only counts the games you pick a team for. Join in the summer and you see this season out at {c.clubName} first, with your board knowing you are leaving.</>}
         </p>
         <div className="flex gap-2">

@@ -9,10 +9,10 @@ import {
   type NrlSeasonPlayerArchive, type NrlSeasonScoringTotal,
 } from '@/lib/nrlPlayerScoring';
 import {
-  archiveNrlFinals, createNrlSeason, isNrlManagerState, isNrlSeasonProgress, nrlArchivedFinals, nrlBench, nrlLadder, nrlMatchdaySelection,
+  archiveNrlFinals, createNrlSeason, isNrlManagerState, isNrlSeasonProgress, nrlArchivedFinals, nrlBench, nrlCounterPlan, nrlLadder, nrlMatchdaySelection,
   nrlInjuries, nrlMatchupEdges, nrlNextRound, nrlRegularRounds, nrlRetrainingRoles, nrlSavedLineupPreview, NRL_BENCH_SIZE,
   nrlPlanAdjustments, nrlReserveGradeRemaining, nrlUnavailable, NRL_FINALS_SPOTS, NRL_RESERVE_GRADE_ROUNDS, NRL_ROLES,
-  NRL_COACHING_BONUS, NRL_QUALIFIED_COACHING_BONUS, NRL_SPECIALIST_PLANS, reduceNrlSeason, repairMatchday, validNrlLiveScore,
+  NRL_ATTACK_PLANS, NRL_COACHING_BONUS, NRL_QUALIFIED_COACHING_BONUS, reduceNrlSeason, repairMatchday, validNrlLiveScore,
   type NrlAction, type NrlAttackPlan, type NrlCoachRole, type NrlFinalsArchive, type NrlFixture, type NrlManagerState, type NrlMatchResult,
   type NrlPlayer, type NrlRole, type NrlSavedLineup, type NrlYear,
 } from '@/lib/nrlManager';
@@ -1155,7 +1155,7 @@ function careerMatchday(state: NrlCareerState) {
   return {
     matchday: state.season,
     opponentStrength,
-    planRatings: state.season.attackPlan ? planRivalRatings(state.season, ratings) : undefined,
+    planRatings: state.season.attackPlan && state.season.attackPlan !== 'counter' ? planRivalRatings(state.season, ratings) : undefined,
   };
 }
 
@@ -1165,12 +1165,19 @@ export function nrlAttackPlanPreview(state: NrlCareerState) {
   return rival ? nrlPlanAdjustments(state.season, rival) : null;
 }
 
+export function nrlCounterPlanPreview({ season, legacySeason, retired }: NrlCareerState) {
+  if (legacySeason || retired || season.live || !season.kickerId || !season.bench) return null;
+  const { clubMatch } = nrlNextRound(season);
+  return clubMatch ? nrlCounterPlan(season, clubMatch) : null;
+}
+
 export interface NrlOppositionReport {
   opponentId: string;
   ladderRank: number | null;
   recent: { round: number; rivalId: string; scored: number; conceded: number; outcome: 'W' | 'D' | 'L' }[];
   attackEdge: number;
   defenseEdge: number;
+  style?: ReturnType<typeof nrlCounterPlan>['style'];
 }
 
 export function nrlOppositionReport(state: NrlCareerState): NrlOppositionReport | null {
@@ -1193,7 +1200,8 @@ export function nrlOppositionReport(state: NrlCareerState): NrlOppositionReport 
       };
     });
   const { matchday, opponentStrength, planRatings } = careerMatchday(state);
-  return { opponentId, ladderRank, recent, ...nrlMatchupEdges(matchday, clubMatch, opponentStrength, {
+  const style = nrlCounterPlanPreview(state)?.style;
+  return { opponentId, ladderRank, recent, ...(style && { style }), ...nrlMatchupEdges(matchday, clubMatch, opponentStrength, {
     ...nrlCoachTactics(state.finance), planRivalRatings: planRatings,
   }) };
 }
@@ -1631,8 +1639,8 @@ export function reduceNrlCareer(state: NrlCareerState, action: NrlCareerAction):
         const { attackPlan, ...standard } = season;
         return { ...state, season: standard };
       }
-      if (action.attackPlan === season.attackPlan || !NRL_SPECIALIST_PLANS.includes(action.attackPlan)
-        || state.legacySeason || !planRivalRatings(season, opponentRatings(state))) return state;
+      if (action.attackPlan === season.attackPlan || !NRL_ATTACK_PLANS.includes(action.attackPlan) || state.legacySeason) return state;
+      if (action.attackPlan === 'counter' ? !nrlCounterPlanPreview(state) : !planRivalRatings(season, opponentRatings(state))) return state;
       return { ...state, season: { ...season, attackPlan: action.attackPlan } };
     }
     case 'retireCareer': {
@@ -2451,7 +2459,7 @@ export function isNrlCareerState(value: unknown): value is NrlCareerState {
     && (typeof value.offseasonApplication !== 'string' || nrlSummerApplication(state) || !nrlOffseasonApplication(state))) return false;
   if (!state.season.live && !state.season.attackPlan) return true;
   const { opponentStrength, planRatings } = careerMatchday(state);
-  return (!state.season.attackPlan || Boolean(planRatings))
+  return (!state.season.attackPlan || (state.season.attackPlan === 'counter' ? !state.legacySeason : Boolean(planRatings)))
     && validNrlLiveScore(state.season, opponentStrength, { ...nrlCoachTactics(state.finance), planRivalRatings: planRatings });
 }
 

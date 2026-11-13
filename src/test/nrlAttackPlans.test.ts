@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from 'vitest';
 import * as random from '@/lib/careerEngine';
 import {
-  createNrlCareer, nrlAttackPlanPreview, nrlOppositionReport, readNrlCareerSave, reduceNrlCareer, type NrlCareerState,
+  createNrlCareer, nrlAttackPlanPreview, nrlCounterPlanPreview, nrlOppositionReport, readNrlCareerSave, reduceNrlCareer, type NrlCareerState,
 } from '@/lib/nrlCareer';
 import { createNrlSeason, nrlNextRound, type NrlAttackPlan } from '@/lib/nrlManager';
 
@@ -19,6 +19,55 @@ const managed = (state: NrlCareerState) => {
 };
 
 describe('NRL match attack plans', () => {
+  it.each([
+    [2026, 'broncos', 1, 'edges', -2, 3, [22, 8], [16, 8]],
+    [2027, 'bears', 3, 'middle', 3, -2, [24, 28], [30, 28]],
+  ] as const)('counters a simulated style from the %s fixture without drawing on preview', (year, club, seed, style, attack, defense, ordinaryScore, counterScore) => {
+    const initial = createNrlCareer(club, seed, year);
+    const original = bytes(initial);
+    const draws = vi.spyOn(random, 'rngFrom');
+    try {
+      expect(nrlCounterPlanPreview(initial)).toEqual({ style, attack, defense });
+      expect(draws).not.toHaveBeenCalled();
+    } finally {
+      draws.mockRestore();
+    }
+    const pending = plan(initial, 'counter');
+    expect(pending.season.attackPlan).toBe('counter');
+    expect(nrlOppositionReport(initial)?.style).toBe(style);
+    expect(nrlOppositionReport(pending)!.attackEdge - nrlOppositionReport(initial)!.attackEdge).toBeCloseTo(attack);
+    expect(nrlOppositionReport(pending)!.defenseEdge - nrlOppositionReport(initial)!.defenseEdge).toBeCloseTo(defense);
+    expect(bytes(plan(pending, 'standard'))).toBe(original);
+    expect(bytes(readNrlCareerSave(bytes(pending)))).toBe(bytes(pending));
+    expect(bytes(initial)).toBe(original);
+    expect(plan(initial, 'counter', 2)).toBe(initial);
+
+    const half = startLive(pending);
+    const choices = { year, round: 1, tactic: 'balanced' } as const;
+    expect(plan(half, 'standard')).toBe(half);
+    const stage = reduceNrlCareer(readNrlCareerSave(bytes(half))!, { ...choices, type: 'reachMinute60' });
+    expect(stage.season.live?.minute60).toBeDefined();
+    expect(plan(stage, 'middle')).toBe(stage);
+    expect(bytes(readNrlCareerSave(bytes(stage)))).toBe(bytes(stage));
+    const taken = reduceNrlCareer(readNrlCareerSave(bytes(stage))!, { ...choices, type: 'finishMinute60' });
+    const direct = advance(pending);
+    const control = advance(initial);
+    expect(bytes(taken)).toBe(bytes(direct));
+    expect(direct.season.attackPlan).toBeUndefined();
+    expect(managed(direct).counterStyle).toBe(style);
+    expect([managed(control).homeScore, managed(control).awayScore]).toEqual(ordinaryScore);
+    expect([managed(direct).homeScore, managed(direct).awayScore]).toEqual(counterScore);
+    expect(bytes(readNrlCareerSave(bytes(direct)))).toBe(bytes(direct));
+    const foreign = direct.season.results.find(match => match.homeId !== club && match.awayId !== club)!;
+    expect(foreign.counterStyle).toBeUndefined();
+    expect(foreign).toEqual(control.season.results.find(match => match.homeId === foreign.homeId && match.awayId === foreign.awayId));
+    for (const result of [managed(direct), foreign]) {
+      const forged = { ...direct, season: { ...direct.season, results: direct.season.results.map(match =>
+        match === result ? { ...match, counterStyle: style === 'middle' ? 'edges' : 'middle' } : match) } };
+      expect(readNrlCareerSave(bytes(forged))).toBeNull();
+    }
+  });
+
   it('keeps a selected plan until the match settles and Standard restores the original bytes', () => {
     const standard = open();
     const middle = plan(standard, 'middle');
@@ -76,11 +125,16 @@ describe('NRL match attack plans', () => {
     const bye = createNrlCareer('panthers', 16);
     expect(nrlNextRound(bye.season).clubStatus).toBe('bye');
     expect(plan(bye, 'wide')).toBe(bye);
+    expect(plan(bye, 'counter')).toBe(bye);
     expect(nrlAttackPlanPreview(bye)).toBeNull();
+    expect(nrlCounterPlanPreview(bye)).toBeNull();
     const legacy = readNrlCareerSave(bytes(createNrlSeason('broncos', 16)))!;
     expect(nrlAttackPlanPreview(legacy)).toBeNull();
     expect(plan(legacy, 'middle')).toBe(legacy);
-    for (const [state, attackPlan] of [[original, 'standard'], [original, 'unknown'], [bye, 'middle'], [legacy, 'wide']] as const) {
+    expect(plan(legacy, 'counter')).toBe(legacy);
+    expect(nrlCounterPlanPreview(legacy)).toBeNull();
+    for (const [state, attackPlan] of [[original, 'standard'], [original, 'unknown'], [bye, 'middle'], [legacy, 'wide'],
+      [bye, 'counter'], [legacy, 'counter']] as const) {
       expect(readNrlCareerSave(bytes({ ...state, season: { ...state.season, attackPlan } }))).toBeNull();
     }
   });
@@ -139,8 +193,8 @@ describe('NRL match attack plans', () => {
     while (state.season.phase === 'regular') state = advance(state);
     while (state.season.phase === 'finals' && !nrlNextRound(state.season).clubMatch) state = advance(state);
     expect(state.season.phase).toBe('finals');
-    const planned = plan(state, 'wide');
-    expect(planned.season.attackPlan).toBe('wide');
+    const planned = plan(state, 'counter');
+    expect(planned.season.attackPlan).toBe('counter');
     const pending = startLive(planned);
     expect(pending.season.live?.fixture.finalsRound).toBeDefined();
     const liveBytes = bytes(pending);

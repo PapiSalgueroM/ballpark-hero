@@ -66,7 +66,7 @@ export function phaseFor(c: CareerState): CMPhase {
 }
 export type HubTab = 'overview' | 'squad' | 'tactics' | 'table' | 'transfers';
 
-const PROMOTION_PLAYOFFS = { championshipPlayoffs: true, bundesligaPlayoff: true } as const;
+const PROMOTION_PLAYOFFS = { championshipPlayoffs: true, bundesligaPlayoff: true, frenchPlayoffs: true } as const;
 
 /**
  * Round 505: a new shape keeps the eleven you picked. Until this round a
