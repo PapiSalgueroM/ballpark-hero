@@ -207,7 +207,7 @@ async function accountControl(page, row) {
   assert.equal(await page.locator('[data-home-account-control]').count(), 0); assert.deepEqual(restored, before, 'Account control restores exact prompt and first-tile geometry'); checkAsks(restored);
   control.proved = true; save();
 }
-async function results(page) { return observe('evaluate actual ranked results', () => page.locator('[data-home-game-card] > a').evaluateAll(nodes => nodes.map(n => ({ href: n.getAttribute('href'), label: n.querySelector('h3')?.textContent.trim() })))); }
+async function results(page) { return observe('evaluate actual ranked results', () => page.locator('[data-home-game-card] > a').evaluateAll(nodes => nodes.filter(n => !n.closest('[hidden]')).map(n => ({ href: n.getAttribute('href'), label: n.querySelector('h3')?.textContent.trim() })))); }
 async function act(page, locator, touch) { if (touch) await locator.tap(); else { await locator.focus(); await page.keyboard.press('Enter'); } }
 async function input(page, text, touch) { const field = page.getByRole('textbox', { name: 'Search games', exact: true }); if (touch) await field.tap(); else await field.focus(); await page.keyboard.type(text); }
 async function domControls(page, row) {
@@ -304,7 +304,7 @@ try {
       await observe('account prompt control', () => accountControl(page, row));
       assert.equal(row.chunkRequests.length, 0, 'Search stays lazy before interaction');
       const healthyBefore = await snap('healthy-before'); await shot('healthy-home'); await input(page, QUERY, width < 1000);
-      await page.waitForFunction(count => document.querySelectorAll('[data-home-game-card] > a').length === count, expected.length); await finite(page);
+      await page.waitForFunction(count => [...document.querySelectorAll('[data-home-game-card] > a')].filter(node => !node.closest('[hidden]')).length === count, expected.length); await finite(page);
       row.healthy.results = await results(page); assert.deepEqual(row.healthy.results, expected, 'Healthy built ranking equals unchanged source engine');
       const healthyAfter = await snap('healthy-search'); held(healthyBefore, healthyAfter); await shot('healthy-results');
       row.inputs.push(...await page.evaluate(() => window.__homeSearchAudit.input));
@@ -352,7 +352,7 @@ try {
       await page.locator('[data-home-stage]').waitFor(); row.recovery.reloadFonts = await fonts(page); await finite(page); const reloaded = await snap('reloaded');
       assert.notEqual(reloaded.doc, savedBeforeReload.doc, 'Trusted explicit reload creates a new document'); assert.equal(row.documents.length, docsBefore + 1); assert.equal(reloaded.input, ''); assert.deepEqual(reloaded.local, savedBeforeReload.local); assert.deepEqual(reloaded.session, savedBeforeReload.session); assert.deepEqual(savedBeforeReload.writes, before.writes); assert.deepEqual(reloaded.writes, before.writes); assert.equal(reloaded.draws, before.draws); assert.equal(reloaded.now, before.now);
       assert.equal(await page.locator('[data-home-search-unavailable]').count(), 0); await input(page, QUERY, width < 1000);
-      await page.waitForFunction(count => document.querySelectorAll('[data-home-game-card] > a').length === count, expected.length); await finite(page);
+      await page.waitForFunction(count => [...document.querySelectorAll('[data-home-game-card] > a')].filter(node => !node.closest('[hidden]')).length === count, expected.length); await finite(page);
       row.recovery.resultsAfterReload = await results(page); assert.deepEqual(row.recovery.resultsAfterReload, expected); held(reloaded, await snap('reload-search')); await shot('reload-search');
       row.inputs.push(...await page.evaluate(() => window.__homeSearchAudit.input));
       assert.equal(row.inputs.filter(e => e.type === 'click' && e.text === 'Reload page' && e.trusted).length, 2, 'Actual offline and online reload actions are trusted');

@@ -193,6 +193,7 @@ const ScrollToTop = () => {
   const { pathname } = useLocation();
   const navigationType = useNavigationType();
   const previousNavigation = useRef([pathname, navigationType]);
+  const firstNavigation = useRef(true);
 
   // The browser's own scroll restoration ("auto") can silently re-scroll the
   // page to wherever it was on a previous visit to this history entry, and it
@@ -241,6 +242,8 @@ const ScrollToTop = () => {
   }, [pathname]);
 
   useEffect(() => {
+    const initial = firstNavigation.current;
+    firstNavigation.current = false;
     const previous = previousNavigation.current;
     previousNavigation.current = [pathname, navigationType];
     if (previous[0] === pathname && previous[1] !== navigationType) return;
@@ -261,6 +264,35 @@ const ScrollToTop = () => {
         y = Number(sessionStorage.getItem('home-scroll-y')) || 0;
       } catch {
         y = 0;
+      }
+      if (initial && window.location.hash === "#browse-sports") {
+        const navigation = performance.getEntriesByType("navigation")[0] as PerformanceNavigationTiming | undefined;
+        if (navigation?.type === "navigate" || (y <= 0 && navigation?.type !== "back_forward")) {
+          // Home may mount after this effect. Its heading carries the
+          // sticky header scroll margin for each viewport.
+          const root = document.getElementById("root")!;
+          const pending = new AbortController();
+          const reveal = () => {
+            const target = document.getElementById("browse-sports");
+            if (!target) return;
+            target.scrollIntoView({ block: "start", behavior: "instant" });
+            stop();
+          };
+          const observer = new MutationObserver(reveal);
+          const stop = () => {
+            observer.disconnect();
+            pending.abort();
+          };
+          observer.observe(root, { childList: true, subtree: true });
+          const options = { passive: true, signal: pending.signal };
+          window.addEventListener("pointerdown", stop, options);
+          window.addEventListener("wheel", stop, options);
+          window.addEventListener("touchstart", stop, options);
+          window.addEventListener("keydown", stop, options);
+          window.addEventListener("hashchange", stop, options);
+          reveal();
+          return stop;
+        }
       }
       window.scrollTo(0, y);
       if (y <= 0) return;
