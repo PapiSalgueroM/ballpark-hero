@@ -1258,8 +1258,8 @@ export interface CMPlayer {
   seasonGoals: number;
   seasonAssists: number;
   /** Real market value in £m (Round 70, baked data). Youth pads carry a
-      teenager's value since Round 632 (youthPadValue); academy graduates have
-      none and are priced off the curve. */
+      teenager's value (youthPadValue). New academy graduates use the same
+      age-aware market scale as created players. */
   value?: number;
   /** Round 640: a founder of a club founded above what its money buys, only.
       His value in the squad the tier's money could have bought (see
@@ -7986,12 +7986,9 @@ export function squadScaledValue(squad: CMPlayer[], rating: number, age: number)
    his new level (a 60 who reaches 76 is about 9m), while the floor would have
    left him under 4m.
 
-   What this deliberately does NOT touch. An academy graduate or a scouted boy
-   (promoteProspect) keeps no stored value and is priced off the curve, as
-   simAcademy has always required, because he is the product the club paid for
-   with its academy and its scouts. Nor a pad's wage: makeYouth fixes it off
-   the curve before the value is stored, exactly the number ensureContracts
-   always gave him, so no wage bill and no cap moves. */
+   New graduates and scouted prospects use the age-aware market scale at
+   promotion. Existing graduates keep their signed wages. makeYouth still
+   sets a pad's wage off the curve before the value is stored. */
 export const YOUTH_PAD_SCALE = 0.03;
 
 /** Round 632: a youth pad's value, a real teenager's price for his rating and age. */
@@ -20483,6 +20480,7 @@ export function promoteProspect(career: CareerState, prospectId: string): Career
     suspendedMatches: 0,
     isYouth: false,
     academyGrad: true,
+    value: customFounderValue(pr.rating, next.eraId, pr.age),
     potential: pr.potential,
     seasonGoals: 0,
     seasonAssists: 0,
