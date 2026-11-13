@@ -70,6 +70,25 @@ afterEach(() => {
 });
 
 describe('NRL season review for expiring deals', () => {
+  it('shows a read-only external position brief and uses the existing shortlist', () => {
+    const career = createNrlCareer('storm', 17);
+    open(career);
+    click('Recruitment');
+    const before = raw();
+    expect(screen.queryByRole('heading', { name: 'Fullback recruitment brief' })).toBeNull();
+    fireEvent.change(screen.getByLabelText('Position'), { target: { value: 'Fullback' } });
+    const brief = screen.getByRole('region', { name: 'Fullback recruitment brief' });
+    expect(within(brief).getByText(/one-season offer at the asking salary/)).toBeVisible();
+    const targets = within(brief).getByRole('list', { name: 'External targets' });
+    expect(within(targets).getAllByRole('listitem')).toHaveLength(3);
+    expect(raw()).toBe(before);
+    const mark = within(targets).getAllByRole('button', { name: /Shortlist/ })[0];
+    fireEvent.click(mark);
+    expect(mark).toHaveAttribute('aria-pressed', 'true');
+    expect(readNrlCareerSave(raw())?.shortlist).toHaveLength(1);
+    expect(JSON.parse(raw()!).season).toEqual(career.season);
+  });
+
   it('previews and confirms one simulated release from Contracts without writing on cancel', () => {
     const player = nrlCareerSquad(completed).find(row => nrlMutualReleaseQuote(completed, row.id).ok)!;
     const view = open(completed);
