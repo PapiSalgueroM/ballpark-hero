@@ -25,6 +25,7 @@ export interface NrlOriginSeries {
   selection: OriginSelection;
   tactic: NrlTactic;
   matches: OriginMatch[];
+  nomination?: { clubId: string; playerId: string };
 }
 interface OriginFixture {
   game: number;
@@ -152,13 +153,26 @@ function originPool(players: readonly NrlPlayer[], side: NrlOriginSide): OriginP
   }));
 }
 
-export function createNrlOriginSeries(players: readonly NrlPlayer[], year: number, side: NrlOriginSide): NrlOriginSeries | null {
+export function createNrlOriginSeries(players: readonly NrlPlayer[], year: number, side: NrlOriginSide,
+  nomination?: NrlOriginSeries['nomination']): NrlOriginSeries | null {
   if (!isYear(year) || !isSide(side)) return null;
   const pools = { nsw: originPool(players, 'nsw'), qld: originPool(players, 'qld') };
   if (!pools.nsw.length || !pools.qld.length) return null;
   const selection = originSelection(pools[side]);
   if (!selection) return null;
-  return { version: 1, year, side, pools, selection, tactic: 'balanced', matches: [] };
+  if (nomination && !pools[side].some(player => player.id === nomination.playerId)) {
+    const player = players.find(candidate => candidate.id === nomination.playerId && nrlOriginEligibility(candidate.id) === side);
+    if (!player) return null;
+    const selected = new Set([...Object.values(selection.starters), ...selection.bench]);
+    if (pools[side].length === MAX_POOL) {
+      const replaced = [...pools[side]].reverse().find(candidate => !selected.has(candidate.id) && !candidate.id.startsWith('nrl-real-'));
+      if (!replaced) return null;
+      pools[side].splice(pools[side].indexOf(replaced), 1);
+    }
+    const { id, name, role, rating, secondaryRole } = player;
+    pools[side].push({ id, name, role, rating, ...(secondaryRole ? { secondaryRole } : {}) });
+  }
+  return { version: 1, year, side, pools, selection, tactic: 'balanced', matches: [], ...(nomination ? { nomination } : {}) };
 }
 
 const SERIES_GAMES = ORIGIN_FIXTURES_2026.length;
@@ -263,11 +277,16 @@ function isOriginPool(value: unknown, side: NrlOriginSide): value is OriginPlaye
 export function isNrlOriginSeries(value: unknown, seed: number): value is NrlOriginSeries {
   if (!value || typeof value !== 'object' || Array.isArray(value)) return false;
   const series = value as NrlOriginSeries;
-  if (Object.keys(series).length !== 7 || series.version !== 1 || !isYear(series.year) || !isSide(series.side)
+  if (Object.keys(series).length !== (series.nomination === undefined ? 7 : 8)
+    || series.version !== 1 || !isYear(series.year) || !isSide(series.side)
     || !series.pools || typeof series.pools !== 'object' || Object.keys(series.pools).length !== 2
     || !isOriginPool(series.pools.nsw, 'nsw') || !isOriginPool(series.pools.qld, 'qld')
     || !NRL_TACTICS.includes(series.tactic) || !isOriginSelection(series.selection, series.pools[series.side])
     || !Array.isArray(series.matches) || series.matches.length > SERIES_GAMES) return false;
+  const { nomination } = series;
+  if (nomination !== undefined && (!nomination || typeof nomination !== 'object' || Object.keys(nomination).length !== 2
+    || !nrlSeasonPlan(series.year).clubs.some(club => club.id === nomination.clubId)
+    || !series.pools[series.side].some(player => player.id === nomination.playerId))) return false;
   const fixtures = nrlOriginFixtures(series.year);
   const final = series.matches[SERIES_GAMES - 1];
   if (final && (final.tactic !== series.tactic || NRL_ROLES.some(role => final.selection?.starters?.[role] !== series.selection.starters[role])
