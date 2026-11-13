@@ -166,6 +166,7 @@ describe('MLB playoff replay from the real season viewer', { timeout: 90000 }, (
     const first = trace();
     fireEvent.click(within(replay).getByRole('button', { name: 'Back to regular season' }));
     replay = await enterReplay(view);
+    expect(within(replay).getByText('The order of wins and losses is recreated from your saved playoff finish and team game count.')).toBeVisible();
     expect(trace()).toEqual(first);
     fireEvent.click(within(replay).getByRole('button', { name: 'How the playoff replay works' }));
     expect(replay.querySelector('[data-season-help]')).not.toBeNull();

@@ -11,7 +11,7 @@ const HELP: HelpWords = {
     'The order of wins and losses is recreated. It always fits the same rounds and ending.',
     'Game scores and individual game stats were not saved.',
   ],
-  controls: 'Show game result reveals one win or loss. Next playoff game moves on. Back to regular season returns to where you left it. Use ? to open these rules again.',
+  controls: 'Show game result reveals one win or loss. Next playoff game moves on. Back to your season closes the replay. Use ? to open these rules again.',
   examples: [{ head: 'First to two', body: 'Win, loss, win makes it 2-1. That series ends on the third game, then the next round begins.' }],
   footnote: 'This replay changes no result, stat, award or saved career data.',
 };
@@ -67,7 +67,7 @@ export default function MlbPlayoffReplay({ replay, club, year, onBack, onClose }
           <p className="w-full break-words text-xs text-muted-foreground">{club} · {year}</p>
         </header>
         <main className="min-h-0 flex-1 space-y-3 overflow-y-auto p-3 sm:p-4">
-          <p className="text-xs leading-relaxed text-muted-foreground">A W/L replay built from your saved finish and team playoff game count.</p>
+          <p className="text-xs leading-relaxed text-muted-foreground">The order of wins and losses is recreated from your saved playoff finish and team game count.</p>
           <section className="space-y-3 rounded-xl border border-border bg-card p-4 text-center" data-mlb-playoff-game={index + 1}>
             <p className="text-xs text-muted-foreground">Playoff game {index + 1} of {replay.games.length}</p>
             <h3 className="text-base font-black">{game.round} · Game {game.no}</h3>
