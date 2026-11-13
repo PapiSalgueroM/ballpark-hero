@@ -24,8 +24,8 @@ import { nrlBoardChallengeStatus } from '@/lib/nrlBoardTarget';
 import {
   nrlBench, nrlFitLineup, nrlHalftimeInterchanges, nrlHoldableReserves, nrlLadder, nrlMatchdaySelection, nrlNextRound,
   nrlRegularRounds, nrlReserveGradeRemaining, nrlRetrainingRoles, nrlSavedLineupPreview, nrlStarterOptions, nrlUnavailable,
-  NRL_BENCH_SIZE, NRL_MAX_BENCH_USED, NRL_RESERVE_GRADE_ROUNDS, NRL_ROLES,
-  type NrlAction, type NrlAttackPlan, type NrlCoachRole, type NrlLiveHalf, type NrlManagerState, type NrlMatchResult, type NrlNextRound, type NrlRole, type NrlTactic,
+  NRL_BENCH_SIZE, NRL_HALFTIME_TALKS, NRL_MAX_BENCH_USED, NRL_RESERVE_GRADE_ROUNDS, NRL_ROLES,
+  type NrlAction, type NrlAttackPlan, type NrlCoachRole, type NrlHalftimeTalk, type NrlLiveHalf, type NrlManagerState, type NrlMatchResult, type NrlNextRound, type NrlRole, type NrlTactic,
 } from '@/lib/nrlManager';
 import {
   createNrlCareer, isNrlNamedPlayer, loadNrlOpeningMatchdayCareer, loadNrlPerthSigningsCareer,
@@ -68,6 +68,11 @@ const tactics: { id: NrlTactic; label: string; description: string }[] = [
   { id: 'attack', label: 'Attack', description: 'Chase tries and risk leaving gaps.' },
   { id: 'defense', label: 'Defence', description: 'Protect your line and create fewer chances.' },
 ];
+const halftimeTalkLabels: Record<NrlHalftimeTalk, string> = {
+  reinforceBasics: 'Reinforce the basics',
+  liftTempo: 'Lift the tempo',
+};
+const halftimeTalkChoices = ['reinforceBasics', 'liftTempo'] as const;
 const attackPlanChoices: readonly { id: NrlAttackPlan; label: string }[] = [
   { id: 'standard', label: 'Standard' },
   { id: 'middle', label: 'Through the middle' },
@@ -176,6 +181,8 @@ function LiveHalftime({ live, season, title, onAction, disabled, coachRole, coac
   const { year, tactic: openingTactic, squad } = season;
   const [tactic, setTactic] = useState(openingTactic);
   const [reserveId, setReserveId] = useState('');
+  const [talk, setTalk] = useState<NrlHalftimeTalk>();
+  const talkEffect = talk && NRL_HALFTIME_TALKS[talk];
   const { fixture, homeScoring, awayScoring } = live;
   const sides = [[fixture.homeId, homeScoring], [fixture.awayId, awayScoring]] as const;
   const options = nrlHalftimeInterchanges(season);
@@ -241,8 +248,23 @@ function LiveHalftime({ live, season, title, onAction, disabled, coachRole, coac
           The only rotating reserve covers the goal kicker’s position. Automatic rotation keeps the kicker available for the finish.
         </p>
       )}
+      <fieldset className="min-w-0 rounded-xl border border-border bg-card px-4 pb-4" aria-describedby="nrl-halftime-talk-effect">
+        <legend className="px-1 font-bold">Half-time team talk</legend>
+        <div className="mt-2 flex flex-wrap gap-2">
+          <Button type="button" size="lg" variant={talk === undefined ? 'default' : 'outline'} disabled={disabled}
+            aria-pressed={talk === undefined} onClick={() => setTalk(undefined)}>No team talk</Button>
+          {halftimeTalkChoices.map(choice => (
+            <Button key={choice} type="button" size="lg" variant={talk === choice ? 'default' : 'outline'} disabled={disabled}
+              aria-pressed={talk === choice} onClick={() => setTalk(choice)}>{halftimeTalkLabels[choice]}</Button>
+          ))}
+        </div>
+        <p id="nrl-halftime-talk-effect" className="mt-2 text-sm text-muted-foreground" aria-live="polite">
+          {talkEffect ? `Second-half regulation: ${talkEffect.attack > 0 ? '+' : ''}${talkEffect.attack} attack, ${talkEffect.defense > 0 ? '+' : ''}${talkEffect.defense} defence.`
+            : 'Keep your current ratings or choose a small second-half trade-off.'}
+        </p>
+      </fieldset>
       <Button type="button" size="lg" className="w-full" disabled={disabled}
-        onClick={() => onAction({ type: 'finishLive', year, round: fixture.round, tactic,
+        onClick={() => onAction({ type: 'finishLive', year, round: fixture.round, tactic, talk,
           interchange: chosen && { starterId: chosen.starterId, reserveId: chosen.reserveId } })}>
         Play second half <ArrowRight aria-hidden="true" />
       </Button>
@@ -512,6 +534,9 @@ function MatchCentre({ career, onAction, onRun, onReview, onContracts, disabled,
       <p className="mt-1 text-sm text-muted-foreground" role="status" data-nrl-result>
         {lastMatch ? `${scoreLine(lastMatch, year)}${lastMatch.extraTime ? ' after extra time' : ''}` : 'Your club did not play this round.'}
       </p>
+      {lastMatch?.halftimeTalk && <p className="mt-2 text-sm text-muted-foreground" data-nrl-halftime-talk>
+        Half-time talk: {halftimeTalkLabels[lastMatch.halftimeTalk]}.
+      </p>}
       {goldenPoint && (
         <p className="mt-2 text-sm text-muted-foreground" data-nrl-golden-point>
           {goldenPoint === 'draw' ? 'Golden point ended scoreless after two five-minute periods.'
