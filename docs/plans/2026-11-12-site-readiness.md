@@ -1,6 +1,18 @@
 # DoUKnowBall site readiness and game work
 
-Checkpoint at 11:40 UTC on November 13, 2026. The broad update remains draft [PR #770](https://github.com/PapiSalgueroM/ballpark-hero/pull/770). The work continued after the 24-hour report below.
+Checkpoint at 12:02 UTC on November 13, 2026. The broad update remains draft [PR #770](https://github.com/PapiSalgueroM/ballpark-hero/pull/770). The work continued after the 24-hour report below.
+
+Club Manager keeps contracted players when summer loan returns take the active squad over 30. Genuine contract expiries, incoming loan returns, signing limits and early-recall limits still apply. Thirty focused tests, six paired local browser cases, the full eight-section historical fleet and six pinned production checks passed. The compiled fixture keeps all 31 players after reload. The original report detailing 30 active players and returning loans was marked Fixed. A second report lacked a save or player names and stays open. Previously released players require separate recovery. The queue has 146 active reports: 17 new, 22 confirmed and 107 investigating. [PR #815](https://github.com/PapiSalgueroM/ballpark-hero/pull/815).
+
+Fantasy Draft waits for the Daily rule and offers a retry when its player list is empty, unavailable or interrupted. A retry keeps the opening turn. The previous build reproduced all three failures on Chromium and mobile WebKit. All 12 focused tests, 12 published-browser cases, 16 route budgets, 400 isolation probes and 173 live sitemap URLs passed. The separate Fantasy Draft report remains open because it gives no failed action or saved state. The first published harness ran every case but stalled on teardown. A second run completed with 39 captured GET resources and zero offline misses. [PR #814](https://github.com/PapiSalgueroM/ballpark-hero/pull/814).
+
+
+
+For Nitro's application, use Publisher (Website Owner), DoUKnowBall, https://douknowball.com and the 100K–250K monthly pageviews bracket. The site lists Anthony Salguero as the individual operator and douknowball1@gmail.com as the contact. The publisher must confirm the company entry, country, any current ad partner and how they heard about Nitro. The application has not been submitted from this workspace. Nitro reviews traffic volume, geography and content. [Publisher application](https://nitropay.com/publishers/) and [Approval FAQ](https://nitropay.com/docs/).
+
+
+
+For bot triage, compare bursts of one-page, zero-engagement visits with game starts, completions and edge request counts in the same route, referrer, device, country and hour. Preserve verified search and ad crawlers. Start with narrow rate limits for repeatedly abused endpoints if the edge configuration supports them, and review challenged or throttled requests before widening scope. The analytics aggregate cannot measure Nitro's 1% invalid-traffic limit. [Cloudflare WAF controls](https://developers.cloudflare.com/waf/feature-interoperability/) and [Nitro guidelines](https://nitropay.com/guidelines/).
 
 Player Bingo now accepts Gabriel Magalhães for the World Cup square and Cole Palmer for the sent-off square. Both exact reported cases failed on the previous build and passed with zero strikes in twelve published Chrome and WebKit cases. All 94 focused Player Bingo cases and 173 public sitemap URLs passed. The two exact admin reports were marked Fixed. The queue has 147 open reports. [PR #813](https://github.com/PapiSalgueroM/ballpark-hero/pull/813), [FIFA match report](https://fdp.fifa.org/assetspublic/ce281/r12465/pdf/FullTimeMatchReport-English.pdf), and [Chelsea match report](https://www.chelseafc.com/en/news/article/match-report-chelsea-0-2-tottenham-hotspur).
 
