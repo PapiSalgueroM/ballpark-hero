@@ -16109,14 +16109,14 @@ export function effectiveXIWithSlots(state: CareerState): XiSlot[] {
     const id = state.xiIds[i];
     let p = id ? state.squad.find(x => x.id === id) : undefined;
     if (!p || !isAvailable(p) || used.has(p.id)) {
-      /* Round 505: the best available man for the slot as the match will
-         read him, his rating less the price he pays there (a natural fit
-         pays nothing, so he still comes first at equal rating), and a
-         position he has retrained into counts as natural. */
+      /* Use the match's fit-adjusted rating after preferring a fullback
+         specialist. Keep later manual assignments when covering a fullback. */
+      const fullback = slot.label === 'RB' || slot.label === 'LB';
+      const assigned = fullback ? new Set(state.xiIds.slice(i + 1, formation.slots.length)) : null;
       const worth = (x: CMPlayer) => x.rating - fitPenalty(x, slot);
       const best = (pool: CMPlayer[]) => pool
         .sort((a, b) => compareFullbackFit(a, b, slot) || worth(b) - worth(a) || b.rating - a.rating)[0];
-      const open = state.squad.filter(x => isAvailable(x) && !used.has(x.id));
+      const open = state.squad.filter(x => isAvailable(x) && !used.has(x.id) && !assigned?.has(x.id));
       p = best(open.filter(x => !resting.has(x.id))) ?? best(open);
     }
     if (p) {
