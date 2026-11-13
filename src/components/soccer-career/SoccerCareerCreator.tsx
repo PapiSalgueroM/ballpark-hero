@@ -195,6 +195,7 @@ export function SoccerCareerCreator({ onBegin, initialSupport, loadSupport }: {
   const { user } = useAuth();
   const [playerName, setPlayerName] = useState("");
   const [nationality, setNationality] = useState("");
+  const [nationalityOpen, setNationalityOpen] = useState(false);
   const [position, setPosition] = useState("");
   const [era, setEra] = useState("");
   const [previewStats, setPreviewStats] = useState<Stats | null>(null);
@@ -403,17 +404,16 @@ export function SoccerCareerCreator({ onBegin, initialSupport, loadSupport }: {
               its own scroll, fixing his bug where the item-aligned popup shot
               off the top of the screen and cut off the first nations. Flag
               sits to the RIGHT of the name, exactly as he asked. */}
-          <Select value={nationality} onValueChange={setNationality}>
+          <Select value={nationality} onValueChange={setNationality} open={nationalityOpen} onOpenChange={setNationalityOpen}>
             <SelectTrigger id="soccer-career-nationality" className="bg-muted/30"><SelectValue placeholder={<span>Choose nationality</span>} /></SelectTrigger>
             <SelectContent position="popper" className="max-h-72">
-              {/* Round 453: over a hundred nations is a long scroll, so they
-                  sit under their confederation, the way qualifying groups them. */}
+              {/* Keep the closed options for Radix typeahead and only draw flags in the open list or selected value. */}
               {groupByConfederation(NATIONALITIES, n => n).map(g => (
                 <SelectGroup key={g.conf}>
                   <SelectLabel className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">{g.label}</SelectLabel>
                   {g.items.map(n => (
                     <SelectItem key={n} value={n}>
-                      <span className="flex items-center gap-2">{n}<FlagImg name={n} size={18} /></span>
+                      <span className="flex items-center gap-2">{n}{(nationalityOpen || nationality === n) && <FlagImg name={n} size={18} />}</span>
                     </SelectItem>
                   ))}
                 </SelectGroup>
