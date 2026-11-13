@@ -324,6 +324,8 @@ export function SoccerCareerCreator({ onBegin, initialSupport, loadSupport }: {
   };
 
   const tier = rolledOvr !== null ? getOverallTier(rolledOvr) : (isRolling ? getOverallTier(displayOvr) : null);
+  const rollPending = clubsLoading || isRolling;
+  const reserveRollResults = rollPending || rolledOvr !== null;
 
   const handleBuildConfirm = (stats: Stats, calcOvr: number) => {
     setRolledOvr(calcOvr);
@@ -399,13 +401,13 @@ export function SoccerCareerCreator({ onBegin, initialSupport, loadSupport }: {
           <Input id="pname" placeholder="Enter your player name..." value={playerName} onChange={e => setPlayerName(e.target.value)} maxLength={40} className="bg-muted/30" />
         </div>
         <div className="space-y-1.5">
-          <Label>Nationality</Label>
+          <Label htmlFor="soccer-career-nationality">Nationality</Label>
           {/* Round 76: position="popper" pins the list BELOW the trigger with
               its own scroll, fixing his bug where the item-aligned popup shot
               off the top of the screen and cut off the first nations. Flag
               sits to the RIGHT of the name, exactly as he asked. */}
           <Select value={nationality} onValueChange={setNationality} open={nationalityOpen} onOpenChange={setNationalityOpen}>
-            <SelectTrigger className="bg-muted/30"><SelectValue placeholder={<span>Choose nationality</span>} /></SelectTrigger>
+            <SelectTrigger id="soccer-career-nationality" className="bg-muted/30"><SelectValue placeholder={<span>Choose nationality</span>} /></SelectTrigger>
             <SelectContent position="popper" className="max-h-72">
               {/* Keep the closed options for Radix typeahead and only draw flags in the open list or selected value. */}
               {groupByConfederation(NATIONALITIES, n => n).map(g => (
@@ -422,16 +424,16 @@ export function SoccerCareerCreator({ onBegin, initialSupport, loadSupport }: {
           </Select>
         </div>
         <div className="space-y-1.5">
-          <Label>Position</Label>
+          <Label htmlFor="soccer-career-position">Position</Label>
           <Select value={position} onValueChange={handlePositionChange}>
-            <SelectTrigger className="bg-muted/30"><SelectValue placeholder={<span>Choose position</span>} /></SelectTrigger>
+            <SelectTrigger id="soccer-career-position" className="bg-muted/30"><SelectValue placeholder={<span>Choose position</span>} /></SelectTrigger>
             <SelectContent>{POSITIONS.map(p => <SelectItem key={p.value} value={p.value}><span>{p.label}</span></SelectItem>)}</SelectContent>
           </Select>
         </div>
         <div className="space-y-1.5">
-          <Label>Starting Era</Label>
+          <Label htmlFor="soccer-career-era">Starting Era</Label>
           <Select value={era} onValueChange={setEra}>
-            <SelectTrigger className="bg-muted/30"><SelectValue placeholder={<span>Choose era</span>} /></SelectTrigger>
+            <SelectTrigger id="soccer-career-era" className="bg-muted/30"><SelectValue placeholder={<span>Choose era</span>} /></SelectTrigger>
             <SelectContent>{ERAS.map(e => <SelectItem key={e.value} value={e.value}><span>{e.label}</span></SelectItem>)}</SelectContent>
           </Select>
         </div>
@@ -446,13 +448,13 @@ export function SoccerCareerCreator({ onBegin, initialSupport, loadSupport }: {
 
       {/* Generate Starting Potential. Round 1604: on the page before the form
           is complete too, its button off and one line saying what is missing. */}
-      <div className="bg-card border border-border rounded-xl p-4 sm:p-5 space-y-4">
+      <div className={`bg-card border border-border rounded-xl p-4 sm:p-5 space-y-4 ${reserveRollResults ? "min-h-[490px]" : ""}`}>
         <h2 className="text-base font-bold text-center">Starting Potential</h2>
 
         {/* Only a complete form waits on the clubs, so an empty one never
             flashes a loading box on its first frame. */}
         {clubsLoading && canGenerate && (
-          <div role="status" className="rounded-xl border border-border bg-muted/10 p-4 text-center text-sm text-muted-foreground animate-pulse">
+          <div role="status" className="min-h-[180px] rounded-xl border border-border bg-muted/10 p-4 text-center text-sm text-muted-foreground animate-pulse">
             Loading clubs...
           </div>
         )}
@@ -463,7 +465,7 @@ export function SoccerCareerCreator({ onBegin, initialSupport, loadSupport }: {
         )}
 
         {(rolledOvr !== null || isRolling) && (
-          <div className={`rounded-xl border p-5 text-center space-y-2 transition-all ${tier ? tier.bgColor : "bg-muted/20 border-border"}`}>
+          <div className={`min-h-[180px] rounded-xl border p-5 text-center space-y-2 transition-all ${tier ? tier.bgColor : "bg-muted/20 border-border"}`}>
             <div className={`text-6xl font-black tabular-nums transition-all ${isRolling ? "animate-pulse" : "animate-scale-in"} ${tier ? tier.color : "text-foreground"}`}>
               {isRolling ? displayOvr : rolledOvr}
             </div>
@@ -525,8 +527,8 @@ export function SoccerCareerCreator({ onBegin, initialSupport, loadSupport }: {
       </div>
 
       {/* Stats preview */}
-      {previewStats && (
-        <div className="bg-card border border-border rounded-xl p-4 space-y-3">
+      {previewStats ? (
+        <div className="min-h-[420px] bg-card border border-border rounded-xl p-4 space-y-3">
           <div className="flex items-center justify-between">
             <h2 className="text-base font-bold">Starting Stats</h2>
             <span className={`text-2xl font-black ${(rolledOvr ?? 0) >= 55 ? 'text-green-400' : 'text-yellow-400'}`}>{(rolledOvr ?? 0)}</span>
@@ -548,7 +550,7 @@ export function SoccerCareerCreator({ onBegin, initialSupport, loadSupport }: {
             </Button>
           )}
         </div>
-      )}
+      ) : rollPending ? <div aria-hidden="true" className="min-h-[420px]" /> : null}
 
       <Button onClick={beginCareer} disabled={!canGenerate || rolledOvr === null || !previewStats || isRolling || !support}
         className="w-full h-12 text-lg font-bold bg-emerald-600 hover:bg-emerald-500 text-black disabled:opacity-40">
