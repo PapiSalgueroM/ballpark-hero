@@ -15,6 +15,7 @@ export const NRL_MANAGEMENT_CONTENT: GameContentMap = {
       'Play the round and check the result against the ladder. A bye is a break in the fixture list, so check who you play after it.',
       'Finish in the top eight to reach the finals. Follow the bracket and try to win the Grand Final.',
       'Open the club office to extend contracts and approach eligible recruits. Check how much cap room you have in the season the deal starts.',
+      'Offer an eligible player less than the asking salary to request a simulated three-season counteroffer. Review the salary and dates before accepting.',
       'In Contracts, arrange an offseason move for an eligible player. They stay this season, and the receiving club pays their salary for the remaining term.',
       'Set Standard, Value or Premium ticket prices in Finance before your first paid home match. That choice applies to home gates for the rest of the season.',
       'Open Season review for your final ladder, finances, recorded scoring and finals scores. Stay with your club, move to a new club, or retire and keep your career record.',
