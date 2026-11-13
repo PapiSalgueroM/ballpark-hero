@@ -27,7 +27,7 @@ import {
   type NrlAction, type NrlAttackPlan, type NrlCoachRole, type NrlLiveHalf, type NrlManagerState, type NrlMatchResult, type NrlNextRound, type NrlRole, type NrlTactic,
 } from '@/lib/nrlManager';
 import {
-  createNrlCareer, isNrlOpeningMatchdayPlayer, loadNrlOpeningMatchdayCareer, nrlAttackPlanPreview, nrlOppositionReport, nrlPositionTraining,
+  createNrlCareer, isNrlNamedPlayer, loadNrlOpeningMatchdayCareer, loadNrlPerthSigningsCareer, nrlAttackPlanPreview, nrlOppositionReport, nrlPositionTraining,
   nrlPositionTrainingCandidates, nrlReserveGradeCandidates, nrlRivalSquad, nrlTacticalAssistant,
   NRL_POSITION_TRAINING_ROUNDS, NRL_SAVE_MAX_CHARS, reduceNrlCareer, type NrlCareerAction, type NrlCareerState,
 } from '@/lib/nrlCareer';
@@ -84,6 +84,7 @@ function ClubChooser({ year, onYear, onStart, disabled, loading, loadFailed }: {
   const [openingNames, setOpeningNames] = useState(false);
   const [reloadUnavailable, setReloadUnavailable] = useState(false);
   const competition = NRL_SEASONS[year];
+  const rosterLabel = year === 2026 ? '2026 matchday names' : 'Perth Bears signings';
   return (
     <section aria-labelledby="nrl-choose-club" className="space-y-5">
       <div className="rounded-2xl border border-border bg-card p-4 sm:p-6">
@@ -98,16 +99,16 @@ function ClubChooser({ year, onYear, onStart, disabled, loading, loadFailed }: {
             </Button>
           ))}
         </div>
-        {year === 2026 && (
-          <label className="mt-3 flex min-h-11 items-start gap-2 rounded-lg border border-border bg-background p-2 text-sm">
-            <input type="checkbox" checked={openingNames} disabled={disabled} onChange={event => setOpeningNames(event.target.checked)}
-              className="mt-0.5 h-4 w-4 shrink-0 accent-primary" />
-            <span>
-              <span className="block font-semibold">2026 opening matchday names</span>
-              <span className="block text-muted-foreground">Start each club with 19 verified names and opening ages, plus 11 generated players. Ratings, wages and contracts are simulated.</span>
-            </span>
-          </label>
-        )}
+        <label className="mt-3 flex min-h-11 items-start gap-2 rounded-lg border border-border bg-background p-2 text-sm">
+          <input type="checkbox" checked={openingNames} disabled={disabled} onChange={event => setOpeningNames(event.target.checked)}
+            className="mt-0.5 h-4 w-4 shrink-0 accent-primary" />
+          <span>
+            <span className="block font-semibold">{year === 2026 ? '2026 opening matchday names' : 'Perth Bears confirmed signings'}</span>
+            <span className="block text-muted-foreground">{year === 2026
+              ? 'Start each club with 19 verified names and opening ages, plus 11 generated players. Ratings, wages and contracts are simulated.'
+              : 'Start as Perth with 27 confirmed signings and three generated players. Ages, ratings, contracts and the draw are simulated. Other clubs use generated squads.'}</span>
+          </span>
+        </label>
         <label className="mt-3 flex min-h-11 items-start gap-2 rounded-lg border border-border bg-background p-2 text-sm">
           <input type="checkbox" checked={boardChallenge} disabled={disabled} onChange={event => setBoardChallenge(event.target.checked)}
             className="mt-0.5 h-4 w-4 shrink-0 accent-primary" />
@@ -121,10 +122,10 @@ function ClubChooser({ year, onYear, onStart, disabled, loading, loadFailed }: {
         <h2 id="nrl-choose-club" className="text-xl font-display font-bold">Choose your club</h2>
         <p className="text-sm text-muted-foreground">{competition.clubs.length} clubs · {competition.draw.length} rounds</p>
       </div>
-      {loading && <p role="status" className="text-sm">Loading the 2026 matchday names...</p>}
-      {loadFailed && year === 2026 && openingNames && (
+      {loading && <p role="status" className="text-sm">Loading the {rosterLabel}...</p>}
+      {loadFailed && openingNames && (
         <div role="alert" className="rounded-xl border border-border bg-card p-3 text-sm">
-          Could not load the 2026 matchday names. Clear the option to start with a generated squad.
+          Could not load the {rosterLabel}. Clear the option to start with a generated squad.
           <button type="button" className="ml-2 min-h-11 font-bold underline" disabled={disabled}
             onClick={() => { if (!reloadToRetryChunk()) setReloadUnavailable(true); }}>Reload to try names again</button>
           {reloadUnavailable && <p>Reconnect or finish saving in this tab, then try reloading again.</p>}
@@ -133,7 +134,7 @@ function ClubChooser({ year, onYear, onStart, disabled, loading, loadFailed }: {
       <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-4">
         {competition.clubs.map(club => (
           <button key={club.id} type="button" disabled={disabled} data-nrl-club={club.id}
-            aria-label={`Manage ${club.name}`} onClick={() => onStart(club.id, boardChallenge, year === 2026 && openingNames)}
+            aria-label={`Manage ${club.name}`} onClick={() => onStart(club.id, boardChallenge, openingNames && (year === 2026 || club.id === 'bears'))}
             className="group flex min-h-24 min-w-0 flex-col justify-between rounded-xl border border-border bg-card p-3 text-left transition-colors hover:border-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:opacity-50">
             <span className="text-sm font-bold leading-snug sm:text-base">{club.name}</span>
             <span className="mt-2 flex w-full items-center justify-between gap-1 text-xs text-muted-foreground">
@@ -852,7 +853,7 @@ function Squad({ career, onAction, disabled }: {
   const proposal = disabled ? null : nrlFitLineup(season);
   const nameOf = (id: string) => season.squad.find(player => player.id === id)?.name;
   const squadName = (id: string, name: string) =>
-    career.openingRoster && !isNrlOpeningMatchdayPlayer(id) ? name + ' (generated)' : name;
+    career.openingRoster && !isNrlNamedPlayer(id) ? name + ' (generated)' : name;
   return (
     <section className="rounded-xl border border-border bg-card p-4" aria-labelledby="nrl-squad">
       <h2 id="nrl-squad" className="font-display text-lg font-bold">Starting 13</h2>
@@ -1040,8 +1041,8 @@ function Ladder({ career }: { career: NrlCareerState }) {
             <div>
               <h3 className="break-words text-sm font-bold">{rival.name} squad{rank > 0 && ` · Ladder ${rank}`}</h3>
               <p className="mt-1 text-xs text-muted-foreground">{career.openingRoster
-                && rivalSquad.some(({ player }) => isNrlOpeningMatchdayPlayer(player.id))
-                ? 'Includes players from the 2026 opening snapshot. Squad development is simulated.'
+                && rivalSquad.some(({ player }) => isNrlNamedPlayer(player.id))
+                ? `Includes players from the ${career.openingRoster === 'matchday-2026' ? '2026 opening' : '2027 Perth signings'} snapshot. Squad development is simulated.`
                 : 'Generated squad for this career.'}</p>
               {career.legacySeason && <p className="mt-1 text-xs text-muted-foreground">This imported season uses its original opponent ratings for matches.</p>}
               <div tabIndex={0} role="region" aria-label={`${rival.name} squad`}
@@ -1052,7 +1053,7 @@ function Ladder({ career }: { career: NrlCareerState }) {
                     const destination = future && clubs.find(club => club.id === future.clubId);
                     return (
                       <li key={player.id} className="break-words py-2">
-                        <p className="font-semibold">{player.name}{career.openingRoster && !isNrlOpeningMatchdayPlayer(player.id) && ' (generated)'}</p>
+                        <p className="font-semibold">{player.name}{career.openingRoster && !isNrlNamedPlayer(player.id) && ' (generated)'}</p>
                         <p className="text-muted-foreground">{player.role} · Age {player.age} · {player.rating} OVR</p>
                         <p className="text-xs text-muted-foreground">
                           Signed through {contractEnd}
@@ -1180,13 +1181,14 @@ function NrlManagerScreen({ entry, showSlots, rules }: {
   async function start(clubId: string, boardChallenge: boolean, openingNames: boolean) {
     if (moved || startRequest.current || current.current || committed.current !== null) return;
     const seed = Math.floor(Math.random() * 0x1_0000_0000);
-    if (openingNames && year === 2026) {
+    if (openingNames) {
       const request = Symbol();
       startRequest.current = request;
       setLoadingNames(true);
       setNamesFailed(false);
       try {
-        const next = await loadNrlOpeningMatchdayCareer(clubId, seed, boardChallenge);
+        const next = year === 2026 ? await loadNrlOpeningMatchdayCareer(clubId, seed, boardChallenge)
+          : await loadNrlPerthSigningsCareer(seed, boardChallenge);
         if (startRequest.current !== request || current.current || committed.current !== null) return;
         if (persist(next) === 'moved') return;
       } catch {
@@ -1228,7 +1230,8 @@ function NrlManagerScreen({ entry, showSlots, rules }: {
           <div className="min-w-0">
             <h1 ref={arrival} className="font-display text-2xl font-black sm:text-3xl">NRL Team Manager</h1>
             <p className="mt-1 text-sm text-muted-foreground">{season ? `${shortName(season.year, season.clubId)} · ${season.year} season${retired ? ' · Retired' : ''}` : 'Take charge of a rugby league club across seasons.'}</p>
-            {career?.openingRoster && <p className="mt-1 text-xs text-muted-foreground">2026 opening matchday snapshot. Ratings, contracts, wages and later squads are simulated.</p>}
+            {career?.openingRoster === 'matchday-2026' && <p className="mt-1 text-xs text-muted-foreground">2026 opening matchday snapshot. Ratings, contracts, wages and later squads are simulated.</p>}
+            {career?.openingRoster === 'perth-signings-2027' && <p className="mt-1 text-xs text-muted-foreground">2027 Perth Bears signings snapshot. The lineup, ages, ratings, contracts and later squads are simulated.</p>}
             {!showSlots && !cupOpen && <div className="mt-1 flex flex-wrap gap-x-2">
               <Button type="button" size="lg" variant="ghost" className="px-2" onClick={openSlots}>Career saves</Button>
               <Button ref={cupLaunch} type="button" size="lg" variant="ghost" className="max-w-full whitespace-normal px-2" onClick={openWorldCup}
@@ -1237,7 +1240,7 @@ function NrlManagerScreen({ entry, showSlots, rules }: {
           </div>
           <RulesGate title="How to play NRL Team Manager" floatingTrigger={false} className="min-h-11 min-w-11" state={rules}>
             <ul className="list-disc space-y-2 pl-5">
-              <li>Choose 2026 or 2027, then pick a club. The Perth Bears enter in 2027. In 2026 you can choose opening matchday names. Ratings, contracts, fixtures and results are simulated.</li>
+              <li>Choose 2026 or 2027, then pick a club. You can use opening matchday names in 2026 or confirmed Perth Bears signings when starting with Perth in 2027. Ratings, contracts, fixtures and results are simulated.</li>
               <li>Name 13 starters and six reserves in Squad. Quick sim can use up to four of the reserves. Before a game, choose a tactic and train or recover.</li>
               <li>A match knock can put a player out for up to four rounds. Check Availability in Squad. The countdown includes byes, and an available player fills the vacant spot.</li>
               <li>Buy medical upgrades with club cash in Finances. Upgrades shorten recovery from new knocks.</li>

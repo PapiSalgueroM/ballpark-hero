@@ -5,7 +5,7 @@ import RetireDoor from '@/components/club-manager/RetireDoor';
 import NrlBoardChallengeNotice from '@/components/nrl-manager/NrlBoardChallengeNotice';
 import { nrlSeasonPlan, NRL_LAST_YEAR } from '@/data/nrlManagerSeasons';
 import {
-  isNrlOpeningMatchdayPlayer,
+  isNrlNamedPlayer,
   nrlAcademyAvailableRoles, nrlAcademyFacilityQuote, nrlAcademyFacilitySpend, nrlAcademyOffer, nrlAcademyReports,
   nrlBoardPathwaysIncome, nrlBoardPathwaysQuote,
   nrlCareerCap, nrlCareerFinance, nrlCareerMarket, nrlCareerRecord, nrlCareerSquad,
@@ -129,7 +129,7 @@ function PlayerRow({ player, entry, career, onAction, disabled, onShortlist, exp
     <li className="py-3">
       <div className="flex flex-wrap items-center justify-between gap-2">
         <div className="min-w-0">
-          <p className="font-bold">{player.name}{career.openingRoster && !isNrlOpeningMatchdayPlayer(player.id) && ' (generated)'}</p>
+          <p className="font-bold">{player.name}{career.openingRoster && !isNrlNamedPlayer(player.id) && ' (generated)'}</p>
           {expiryStatus && <p className="text-sm font-semibold">{expiryStatus}</p>}
           <p className="text-sm text-muted-foreground">{player.role} · Age {player.age} · {player.rating} OVR · {player.potential} potential</p>
           {contract && (

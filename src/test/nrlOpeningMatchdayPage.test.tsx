@@ -1,4 +1,4 @@
-import { act, cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { act, cleanup, fireEvent, render, screen, waitFor, within } from '@testing-library/react';
 import type { ReactNode } from 'react';
 import { MemoryRouter } from 'react-router-dom';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
@@ -72,6 +72,35 @@ describe('NRL opening matchday chooser', () => {
     expect(readNrlCareerSave(raw())?.season.clubId).toBe('bears');
     expect(readNrlCareerSave(raw())).not.toHaveProperty('openingRoster');
     expect(chunks.load).not.toHaveBeenCalled();
+  });
+
+  it('offers confirmed Perth signings only for a new 2027 Perth career and resumes the saved selection', async () => {
+    const first = page();
+    expect(screen.queryByRole('checkbox', { name: /Perth Bears confirmed signings/i })).toBeNull();
+    click(/2027 Perth Bears/);
+    const signings = screen.getByRole('checkbox', { name: /Perth Bears confirmed signings/i });
+    expect(signings).not.toBeChecked();
+    fireEvent.click(signings);
+    click('Manage Perth Bears');
+    await waitFor(() => expect(readNrlCareerSave(raw())?.openingRoster).toBe('perth-signings-2027'));
+    expect(screen.getByText(/2027 Perth Bears signings snapshot/)).toBeVisible();
+    click('Squad');
+    expect(within(screen.getByLabelText('Halfback')).getByRole('option', { name: /Toby Sexton/ })).toBeInTheDocument();
+    const saved = raw();
+    first.unmount();
+    page();
+    expect(screen.getByText(/2027 Perth Bears signings snapshot/)).toBeVisible();
+    expect(raw()).toBe(saved);
+    expect(chunks.load).not.toHaveBeenCalled();
+  });
+
+  it('keeps a different 2027 club generated even with the Perth option selected', () => {
+    page();
+    click(/2027 Perth Bears/);
+    fireEvent.click(screen.getByRole('checkbox', { name: /Perth Bears confirmed signings/i }));
+    fireEvent.click(manage());
+    expect(readNrlCareerSave(raw())).toEqual(expect.objectContaining({ openingYear: 2027 }));
+    expect(readNrlCareerSave(raw())).not.toHaveProperty('openingRoster');
   });
 
   it('cannot replace a career which another tab writes while the named chunk is loading', async () => {
