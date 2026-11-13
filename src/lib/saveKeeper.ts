@@ -3,6 +3,8 @@ import {
   BACKUPS_KEPT, BROKEN_SAVE_MARK, backupKeysOf, browserStorage, copyAside, dismissBackup, routeSaveEntry, type ListableStorage,
 } from '@/lib/brokenSaveRecovery';
 import { getStorageTrouble, settlePendingSaves } from '@/lib/safeStorage';
+import { SAVE_KEY as CLUB_MANAGER_SAVE_KEY } from '@/lib/clubManagerSaveKeys';
+import { createSaveFence } from '@/lib/saveFence';
 
 /**
  * Round 1219: a put back that survives, and a copy before a game refuses or
@@ -30,7 +32,8 @@ import { getStorageTrouble, settlePendingSaves } from '@/lib/safeStorage';
  *   - The game's key is never emptied. The old save is COPIED aside
  *     (copyAside), the copy is read back, and only then is the key written
  *     over. If the copy cannot be written the key is left exactly as it was
- *     and the card says so.
+ *     and the card says so. Club Manager also needs a new save generation
+ *     before replacement so other open tabs cannot write back their old career.
  *   - Nothing is deleted to make room, and the backup a put back came from is
  *     NOT removed: with the same game open in a second tab, that tab's own
  *     timer can write over the key after the swap, and the backup is then the
@@ -306,7 +309,17 @@ export function applyPending(storage: ListableStorage | null, now: Date = new Da
   }
   try {
     /* Written OVER the old save: the key is never removed, so it is never empty. */
-    storage.setItem(entry.saveKey, incoming);
+    if (entry.saveKey === CLUB_MANAGER_SAVE_KEY) {
+      // A fresh claim stales other tabs without adopting their generation.
+      const claim = createSaveFence(storage);
+      if (claim.write(entry.saveKey, () => {
+        storage.setItem(entry.saveKey, incoming);
+        return true;
+      }, true) !== 'written') throw new Error('put back could not claim the career');
+    } else {
+      storage.setItem(entry.saveKey, incoming);
+    }
+    // A lost readback must not rewind a generation if the replacement landed.
     if (storage.getItem(entry.saveKey) !== incoming) throw new Error('put back did not read back');
   } catch {
     /* A write that throws leaves the old save at the key. Only when it is
