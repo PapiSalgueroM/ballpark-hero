@@ -54,6 +54,8 @@ const TabsTrigger = lazy(() => import('@/components/ui/tabs').then(m => ({ defau
 const loadDeferredViews = () => import('@/components/club-manager/ClubManagerDeferredViews');
 const EraLoadFailedView = lazy(() => loadDeferredViews().then(m => ({ default: m.EraLoadFailed })));
 const ClubHeading = lazy(() => loadDeferredViews().then(m => ({ default: m.ClubHeading })));
+const LeagueSeasonNotice = lazy(() => loadDeferredViews().then(m => ({ default: m.LeagueSeasonNotice })));
+const KLeagueCupNotice = lazy(() => loadDeferredViews().then(m => ({ default: m.KLeagueCupNotice })));
 const ClubStatus = lazy(() => loadDeferredViews().then(m => ({ default: m.ClubStatus })));
 const OverviewIntro = lazy(() => loadDeferredViews().then(m => ({ default: m.OverviewIntro })));
 const HubTiles = lazy(() => loadDeferredViews().then(m => ({ default: m.HubTiles })));
@@ -453,7 +455,7 @@ const ClubManager = ({ initialEra }: { initialEra?: string | null }) => {
     return shell(
       <div ref={pickRef}>
         <ClubManagerPickerHeading step={pickStep}>
-          {REAL_LEAGUES.length} league tables and {REAL_LEAGUES.reduce((s, l) => s + l.clubs.length, 0)} member clubs today. The existing 27 leagues use roster snapshots from {CM_ROSTER_META.asOf}{generatedLeagueMonthClause() ? ` (${generatedLeagueMonthClause()})` : ''}; K League 1 uses generated opening squads. Start a new current career for K League 1. Four real past seasons stay separate: 2020-21, 2015-16, 2010-11 and 2005-06.
+          {REAL_LEAGUES.length} league tables and {REAL_LEAGUES.reduce((s, l) => s + l.clubs.length, 0)} member clubs today. The existing 27 leagues use roster snapshots from {CM_ROSTER_META.asOf}{generatedLeagueMonthClause() ? ` (${generatedLeagueMonthClause()})` : ''}. K League 1, J1 League and the Chinese Super League use generated opening squads. Four historical starts remain available.
         </ClubManagerPickerHeading>
 
         {pickStep === 'era' && <ClubManagerEraPicker onPick={pickEraAndContinue}
