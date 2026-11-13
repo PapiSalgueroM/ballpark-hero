@@ -452,7 +452,7 @@ export function SoccerCareerCreator({ onBegin, initialSupport, loadSupport }: {
         {/* Only a complete form waits on the clubs, so an empty one never
             flashes a loading box on its first frame. */}
         {clubsLoading && canGenerate && (
-          <div className="rounded-xl border border-border bg-muted/10 p-4 text-center text-sm text-muted-foreground animate-pulse">
+          <div role="status" className="rounded-xl border border-border bg-muted/10 p-4 text-center text-sm text-muted-foreground animate-pulse">
             Loading clubs...
           </div>
         )}
@@ -486,8 +486,9 @@ export function SoccerCareerCreator({ onBegin, initialSupport, loadSupport }: {
         <div className="flex gap-2">
           <Button
             onClick={doRoll}
-            disabled={!canGenerate || isRolling || clubsLoading}
-            className={`flex-1 h-11 text-sm font-bold text-black ${rolledOvr !== null ? "bg-muted/40 hover:bg-muted/60 text-foreground" : "bg-emerald-600 hover:bg-emerald-500"}`}
+            disabled={!canGenerate}
+            aria-disabled={isRolling || clubsLoading || undefined}
+            className={`flex-1 h-11 text-sm font-bold text-black aria-disabled:pointer-events-none aria-disabled:opacity-50 ${rolledOvr !== null ? "bg-muted/40 hover:bg-muted/60 text-foreground" : "bg-emerald-600 hover:bg-emerald-500"}`}
             variant={rolledOvr !== null ? "outline" : "default"}
           >
             {clubsLoading && canGenerate ? "Loading..." : isRolling ? "🎰 Rolling..." : rolledOvr !== null ? "🎲 Roll again" : "🎲 Generate Starting Potential"}

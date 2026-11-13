@@ -16,7 +16,7 @@
  *               each a live registry game, and the rendered band shows those
  *               four links in that order with the registry's own labels.
  *   2 savekey   Each Continue key in src/data/homeFront.ts equals the SAVE_KEY
- *               the game really writes (src/pages/SoccerCareer.tsx and
+ *               the game really writes (src/lib/soccerCareerSaveEntry.ts and
  *               src/lib/clubManagerSaveKeys.ts, read from code with comments
  *               stripped), and a render with that exact key planted shows the
  *               Continue words while a render without it does not. The stage

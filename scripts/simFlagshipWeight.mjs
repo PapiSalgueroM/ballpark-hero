@@ -50,6 +50,8 @@ console.log('0) first-time creation uses the real form before the career runtime
 const coldEntry = 'src/pages/SoccerCareerEntry.tsx';
 const coldFile = path.join(ROOT, coldEntry);
 const coldSource = readFileSync(coldFile, 'utf8');
+const savedFallback = coldSource.match(/<main[^>]+role="status"[^>]+className="([^"]+)"[^>]*>Opening your career/);
+if (!savedFallback?.[1].split(/\s+/).includes('min-h-svh')) fail('saved startup shows the footer before the career is ready');
 const forceRuntime = process.env.FLAGSHIP_LAZY_CONTROL === 'coldruntime';
 if (forceRuntime && !coldSource.includes('import("./SoccerCareer")')) throw new Error('coldruntime: dynamic career import missing');
 const cold = staticClosure(coldEntry, forceRuntime ? { [coldFile]: `import "./SoccerCareer";\n${coldSource}` } : {});
