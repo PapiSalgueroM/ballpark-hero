@@ -55,11 +55,13 @@ function raw(name: string, value: unknown) {
   mkdirSync(process.env.US_FREE_PRACTICE_RAW, { recursive: true });
   writeFileSync(join(process.env.US_FREE_PRACTICE_RAW, name + '.json'), JSON.stringify(value, null, 2) + '\n');
 }
-function finishBurst(dialog: HTMLElement, taps = 25) {
+function finishBurst(dialog: HTMLElement, taps = 25, focus?: HTMLElement) {
   vi.useFakeTimers();
   fireEvent.click(within(dialog).getByRole('button', { name: /Tap to start/ }));
   const floor = within(dialog).getByRole('button', { name: /GO GO GO/ });
+  floor.focus();
   for (let i = 0; i < taps; i++) fireEvent.click(floor);
+  focus?.focus();
   act(() => { vi.advanceTimersByTime(5000); });
   vi.useRealTimers();
   expect(dialog.querySelector('[data-training-score]')).toHaveTextContent(String(Math.round(taps * 3.2)));
@@ -106,6 +108,31 @@ beforeEach(() => {
 afterEach(() => { cleanup(); vi.useRealTimers(); vi.restoreAllMocks(); vi.unstubAllGlobals(); });
 
 describe('US free practice after banking', () => {
+  it('keeps Escape working after the timed drill replaces the focused keyboard control', async () => {
+    const row = OPEN[0];
+    seed(row, true);
+    const bytes = localStorage.getItem(row.sport.saveKey);
+    const view = mount(row);
+    const dialog = await open(view, true);
+    playBurst(dialog, row);
+    expect(dialog).toHaveFocus();
+    fireEvent.keyDown(document.activeElement!, { key: 'Escape' });
+    expect(view.queryByRole('dialog')).toBeNull();
+    expect(view.getByRole('button', { name: 'View practice' })).toHaveFocus();
+    expect(localStorage.getItem(row.sport.saveKey)).toBe(bytes);
+  });
+
+  it('keeps focus on a dialog control that survives the timed result', async () => {
+    const row = OPEN[0];
+    seed(row, true);
+    const view = mount(row);
+    const dialog = await open(view, true);
+    const close = within(dialog).getByRole('button', { name: 'Close' });
+    fireEvent.click(within(dialog).getByRole('button', { name: new RegExp(row.burst) }));
+    finishBurst(dialog, 25, close);
+    expect(close).toHaveFocus();
+  });
+
   for (const row of OPEN) it(row.label + ' repeats a banked drill without another reward or save', async () => {
     const before = seed(row), view = mount(row), dialog = await open(view, false);
     const banks = vi.spyOn(training, 'bankTrainingRating');
