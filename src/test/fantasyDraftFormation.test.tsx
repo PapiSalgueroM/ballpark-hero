@@ -2,28 +2,30 @@ import { act, cleanup, fireEvent, render, within, type RenderResult } from '@tes
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import FantasyDraft from '@/pages/FantasyDraft';
 import type { DraftPlayer } from '@/components/fantasy-draft/PlayerPool';
+import { supabase } from '@/integrations/supabase/client';
 import { settleSeason, type SdSeason } from '@/lib/searchDiscard';
 import { recordCompletion } from '@/lib/completions';
 
 const remote = vi.hoisted(() => ({
   players: [] as DraftPlayer[],
-  criteria: null as string | null,
+  criteria: null as string | null | Promise<string | null>,
+  readPool: vi.fn(),
   toast: vi.fn(),
 }));
 vi.mock('@/integrations/supabase/client', () => ({
   supabase: {
     functions: { invoke: vi.fn(async (name: string) => {
       if (name !== 'fantasy-draft-daily') throw new Error('Unexpected fixture function: ' + name);
-      return { data: { criteria: remote.criteria }, error: null };
+      return { data: { criteria: await remote.criteria }, error: null };
     }) },
     from: vi.fn((table: string) => {
       if (table !== 'fantasy_draft_players') throw new Error('Unexpected fixture table: ' + table);
-      return { select: () => ({ order: async () => ({ data: remote.players, error: null }) }) };
+      return { select: () => ({ order: remote.readPool }) };
     }),
   },
 }));
 vi.mock('@/contexts/AuthContext', () => ({ useAuth: () => ({ user: null, profile: null }) }));
-vi.mock('@/hooks/use-toast', () => ({ useToast: () => ({ toast: remote.toast }) }));
+vi.mock('@/hooks/use-toast', () => ({ useToast: () => ({ toast: remote.toast, toasts: [] }) }));
 vi.mock('@/components/game/GameNavbar', () => ({ GameNavbar: () => null }));
 vi.mock('@/components/game/GameHelp', () => ({ GameHelp: () => null }));
 vi.mock('@/components/seo/PageSeo', () => ({ default: () => null }));
@@ -103,6 +105,8 @@ beforeEach(() => {
   vi.spyOn(Math, 'random').mockReturnValue(0);
   remote.players = fixture();
   remote.criteria = null;
+  remote.readPool.mockReset();
+  remote.readPool.mockImplementation(async () => ({ data: remote.players, error: null }));
 });
 afterEach(() => {
   cleanup();
@@ -110,6 +114,95 @@ afterEach(() => {
   vi.useRealTimers();
   vi.restoreAllMocks();
   localStorage.clear();
+});
+
+describe('Fantasy Draft player pool recovery', () => {
+  it.each(['resolved', 'failed'] as const)('waits for the pending rule before allowing a first pick (%s)', async outcome => {
+    const rule = 'Under 25s: Every player must be 25 or younger';
+    let reply!: (value: string) => void;
+    let fail!: (reason: Error) => void;
+    remote.criteria = new Promise<string>((resolve, reject) => { reply = resolve; fail = reject; });
+    remote.players = remote.players.map(p => p.id === 'fixture-FWD-0' ? { ...p, age: 31 } : p);
+    const view = render(<FantasyDraft />);
+    const start = view.getByRole('button', { name: 'Start Draft' });
+    expect(start).toBeDisabled();
+    fireEvent.click(start);
+    expect(remote.readPool).not.toHaveBeenCalled();
+    expect(view.queryByRole('heading', { name: 'Player Pool' })).toBeNull();
+
+    await act(async () => {
+      if (outcome === 'resolved') reply(rule);
+      else fail(new Error('Fixture criteria unavailable'));
+    });
+    expect(view.getByText(outcome === 'resolved' ? rule : "Could not load today's criteria.")).toBeVisible();
+    expect(start).toBeEnabled();
+    await act(async () => { fireEvent.click(start); });
+    const olderPlayer = searchPlayer(view, remote.players.find(p => p.id === 'fixture-FWD-0')!);
+    if (outcome === 'resolved') {
+      expect(olderPlayer).toBeDisabled();
+      await pickPosition(view, 'GK');
+      expect(roster(view, 'Your XI')).toMatchObject([{ position: 'GK', age: 24 }]);
+    } else {
+      expect(olderPlayer).toBeEnabled();
+      fireEvent.click(olderPlayer);
+      expect(roster(view, 'Your XI')).toMatchObject([{ position: 'FWD', age: 31 }]);
+    }
+    expect(supabase.functions.invoke).toHaveBeenCalledExactlyOnceWith('fantasy-draft-daily', { timeout: 10_000 });
+    expect(remote.readPool).toHaveBeenCalledTimes(1);
+    expect(recordCompletion).not.toHaveBeenCalled();
+  });
+
+  const failures = {
+    empty: async () => ({ data: [], error: null }),
+    error: async () => ({ data: null, error: { message: 'Fixture request failed' } }),
+    thrown: async () => { throw new Error('Fixture transport disconnected'); },
+  };
+
+  it.each([
+    ['empty', 'user'], ['empty', 'ai'],
+    ['error', 'user'], ['error', 'ai'],
+    ['thrown', 'user'], ['thrown', 'ai'],
+  ] as const)('recovers from %s with the %s-first draft intact', async (cause, seat) => {
+    const criteria = 'Under 25s: Every player must be 25 or younger';
+    remote.criteria = criteria;
+    remote.readPool.mockImplementationOnce(failures[cause]);
+    let resolveRetry!: (reply: { data: DraftPlayer[]; error: null }) => void;
+    const pending = new Promise<{ data: DraftPlayer[]; error: null }>(resolve => { resolveRetry = resolve; });
+    remote.readPool.mockImplementationOnce(() => pending);
+    const random = vi.mocked(Math.random);
+    random.mockReturnValue(seat === 'user' ? 0.1 : 0.9);
+    const turn = seat === 'user' ? 'Your Pick' : 'AI is picking...';
+    const view = render(<FantasyDraft />);
+    await act(async () => {});
+    expect(view.getByText(criteria)).toBeVisible();
+    random.mockClear();
+
+    await act(async () => { fireEvent.click(view.getByRole('button', { name: 'Start Draft' })); });
+    expect(view.getByRole('alert')).toHaveTextContent("Couldn't load the players.");
+    expect(view.queryByRole('heading', { name: 'Player Pool' })).toBeNull();
+    expect(view.getByText(turn, { exact: true })).toBeVisible();
+    expect(view.getByText('Round 1 • Pick 1/22', { exact: true })).toBeVisible();
+    expect(view.getByText(criteria)).toBeVisible();
+    expect(random).toHaveBeenCalledTimes(1);
+
+    fireEvent.click(view.getByRole('button', { name: 'Retry players' }));
+    expect(view.queryByRole('button', { name: 'Retry players' })).toBeNull();
+    expect(view.queryByRole('heading', { name: 'Player Pool' })).toBeNull();
+    expect(remote.readPool.mock.calls).toEqual([['name'], ['name']]);
+    await act(async () => { resolveRetry({ data: remote.players, error: null }); });
+
+    expect(view.getByRole('heading', { name: 'Player Pool' })).toBeVisible();
+    expect(view.getByText(turn, { exact: true })).toBeVisible();
+    expect(view.getByText('Round 1 • Pick 1/22', { exact: true })).toBeVisible();
+    expect(view.getByText(criteria)).toBeVisible();
+    expect(random).toHaveBeenCalledTimes(1);
+    expect(supabase.functions.invoke).toHaveBeenCalledExactlyOnceWith('fantasy-draft-daily', { timeout: 10_000 });
+    await pickPosition(view, 'GK');
+    expect(roster(view, 'Your XI')).toMatchObject([{ position: 'GK', age: 24 }]);
+    expect(roster(view, 'AI XI')).toHaveLength(seat === 'ai' ? 1 : 0);
+    expect(remote.readPool).toHaveBeenCalledTimes(2);
+    expect(recordCompletion).not.toHaveBeenCalled();
+  });
 });
 
 describe('Fantasy Draft forms both starting XIs before settlement', () => {
