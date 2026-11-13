@@ -399,13 +399,13 @@ export function SoccerCareerCreator({ onBegin, initialSupport, loadSupport }: {
           <Input id="pname" placeholder="Enter your player name..." value={playerName} onChange={e => setPlayerName(e.target.value)} maxLength={40} className="bg-muted/30" />
         </div>
         <div className="space-y-1.5">
-          <Label>Nationality</Label>
+          <Label htmlFor="soccer-career-nationality">Nationality</Label>
           {/* Round 76: position="popper" pins the list BELOW the trigger with
               its own scroll, fixing his bug where the item-aligned popup shot
               off the top of the screen and cut off the first nations. Flag
               sits to the RIGHT of the name, exactly as he asked. */}
           <Select value={nationality} onValueChange={setNationality} open={nationalityOpen} onOpenChange={setNationalityOpen}>
-            <SelectTrigger className="bg-muted/30"><SelectValue placeholder={<span>Choose nationality</span>} /></SelectTrigger>
+            <SelectTrigger id="soccer-career-nationality" className="bg-muted/30"><SelectValue placeholder={<span>Choose nationality</span>} /></SelectTrigger>
             <SelectContent position="popper" className="max-h-72">
               {/* Keep the closed options for Radix typeahead and only draw flags in the open list or selected value. */}
               {groupByConfederation(NATIONALITIES, n => n).map(g => (
@@ -422,16 +422,16 @@ export function SoccerCareerCreator({ onBegin, initialSupport, loadSupport }: {
           </Select>
         </div>
         <div className="space-y-1.5">
-          <Label>Position</Label>
+          <Label htmlFor="soccer-career-position">Position</Label>
           <Select value={position} onValueChange={handlePositionChange}>
-            <SelectTrigger className="bg-muted/30"><SelectValue placeholder={<span>Choose position</span>} /></SelectTrigger>
+            <SelectTrigger id="soccer-career-position" className="bg-muted/30"><SelectValue placeholder={<span>Choose position</span>} /></SelectTrigger>
             <SelectContent>{POSITIONS.map(p => <SelectItem key={p.value} value={p.value}><span>{p.label}</span></SelectItem>)}</SelectContent>
           </Select>
         </div>
         <div className="space-y-1.5">
-          <Label>Starting Era</Label>
+          <Label htmlFor="soccer-career-era">Starting Era</Label>
           <Select value={era} onValueChange={setEra}>
-            <SelectTrigger className="bg-muted/30"><SelectValue placeholder={<span>Choose era</span>} /></SelectTrigger>
+            <SelectTrigger id="soccer-career-era" className="bg-muted/30"><SelectValue placeholder={<span>Choose era</span>} /></SelectTrigger>
             <SelectContent>{ERAS.map(e => <SelectItem key={e.value} value={e.value}><span>{e.label}</span></SelectItem>)}</SelectContent>
           </Select>
         </div>
