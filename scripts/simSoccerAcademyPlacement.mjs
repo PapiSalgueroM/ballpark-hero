@@ -9,7 +9,7 @@
    runs exactly as before.
 
    The grid is the page's own: every nationality and every era read out of
-   src/pages/SoccerCareer.tsx (NATIONALITIES and ERAS), five overall bands (35,
+   SoccerCareerCreator.tsx (NATIONALITIES and ERAS), five overall bands (35,
    45, 60, 70, 80, one in each branch of getYouthAcademyClub), SEEDS seeds.
 
    Sections
@@ -104,10 +104,10 @@ function finish() {
 
 /* The page's own lists, read from source so a nation or era added later is
    in the grid without anybody remembering this file. */
-const page = fs.readFileSync(path.join(ROOT, 'src/pages/SoccerCareer.tsx'), 'utf8').replaceAll('\r\n', '\n');
+const page = fs.readFileSync(path.join(ROOT, 'src/components/soccer-career/SoccerCareerCreator.tsx'), 'utf8').replaceAll('\r\n', '\n');
 const natBlock = page.match(/\nconst NATIONALITIES = \[([\s\S]*?)\];/);
 const eraBlock = page.match(/\nconst ERAS = \[([\s\S]*?)\];/);
-if (!natBlock || !eraBlock) { console.error('NATIONALITIES or ERAS not found in SoccerCareer.tsx'); process.exit(2); }
+if (!natBlock || !eraBlock) { console.error('NATIONALITIES or ERAS not found in SoccerCareerCreator.tsx'); process.exit(2); }
 const NATIONS = [...natBlock[1].matchAll(/"([^"]+)"/g)].map(m => m[1]);
 const ERAS = [...eraBlock[1].matchAll(/value: "([^"]+)", label: "[^"]*", startYear: (\d+)/g)].map(m => ({ value: m[1], startYear: Number(m[2]) }));
 if (NATIONS.length < 50 || ERAS.length < 4) { console.error(`grid too small: ${NATIONS.length} nations, ${ERAS.length} eras`); process.exit(2); }
