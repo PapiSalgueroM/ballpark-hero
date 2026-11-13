@@ -99,7 +99,7 @@ export function GameNavbar() {
 
   return (
     <>
-      <nav data-site-chrome="" className="w-full bg-background/95 border-b border-border/40">
+      <nav aria-label="Game navigation" data-site-chrome="" className="w-full bg-background/95 border-b border-border/40">
         {/* Round 129: flex-wrap, not grid. See the note above. The order swap is
             what puts the stats between the wordmark and Back on a desktop while
             keeping them on their own line on a phone: on the wrapped layout the
@@ -115,13 +115,13 @@ export function GameNavbar() {
         {/* The fallback wordmark and Back fit on one row at 320px without a fixed column gap. */}
         <div className="flex flex-wrap items-center justify-between gap-y-1.5 px-3 py-2 min-[360px]:gap-x-2 lg:grid lg:grid-cols-[1fr_auto_1fr]">
           {/* Logo, left, bigger + stretched */}
-          <div className="order-1 flex shrink-0 items-center gap-2 lg:justify-self-start">
+          <div className="order-1 flex min-w-0 max-w-full shrink-0 items-center gap-2 lg:justify-self-start">
             <SiteMenuHost />
             <Link
               to="/"
-              className="shrink-0 font-display font-black text-primary hover:opacity-80 transition-opacity"
+              className="inline-flex min-h-11 min-w-0 items-center font-display font-black text-primary transition-opacity hover:opacity-80"
             >
-              <span className="text-base sm:text-2xl tracking-[0.18em] sm:tracking-[0.22em] uppercase">
+              <span className="text-base uppercase tracking-[0.18em] [overflow-wrap:anywhere] sm:text-2xl sm:tracking-[0.22em]">
                 DoUKnowBall
               </span>
             </Link>
@@ -151,7 +151,7 @@ export function GameNavbar() {
               /* Guest: one honest chip instead of zeroed stats */
               <button
                 onClick={() => setAuthOpen(true)}
-                className="inline-flex items-center gap-1.5 rounded-lg bg-surface-2 border border-border px-3 py-1.5 text-xs sm:text-sm font-semibold text-muted-foreground hover:text-foreground hover:border-gold/50 transition-colors"
+                className="inline-flex min-h-11 items-center gap-1.5 rounded-lg border border-border bg-surface-2 px-3 py-1.5 text-xs font-semibold text-muted-foreground transition-colors hover:border-gold/50 hover:text-foreground sm:text-sm"
               >
                 <UserPlus className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-gold" />
                 <span className="hidden sm:inline">Sign up to track your stats</span>
