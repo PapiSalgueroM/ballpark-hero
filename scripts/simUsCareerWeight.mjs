@@ -70,6 +70,7 @@ const board = readUsSource(ROOT, US_CAREER_BOARD);
    one (it sits in the season folder the rule now reads), so it may import no
    sport's number file. Always on. */
 const SEASON_HOST = `${US_CAREER_SEASON_DIR}/UsSeasonCentreHost.tsx`;
+const SEASON_VIEWER = `${US_CAREER_SEASON_DIR}/UsSeasonCentre.tsx`;
 ok(files.some(f => f.file === SEASON_HOST && f.own === null), `${SEASON_HOST} is not among the shared files the weight rule reads`);
 const desc = readUsSource(ROOT, US_CAREER_DESCRIPTOR);
 const nfl = US_CAREER_SPORTS.find(s => s.slug === 'nfl');
@@ -82,6 +83,7 @@ const PLANTS = [
   { what: 'the descriptor imports NHL content by a suffix name', file: US_CAREER_DESCRIPTOR, code: desc, own: null, line: "import { X } from './conquestDataNhl';", names: 'conquestDataNhl' },
   { what: 'the NFL binding imports an NHL module', file: nfl.binding, code: nflBinding, own: 'nfl', line: "import { NHL_ERAS } from '@/lib/nhlMyCareer';", names: 'nhlMyCareer' },
   { what: 'the Season Center host imports the NBA number file', file: SEASON_HOST, code: readUsSource(ROOT, SEASON_HOST), own: null, line: "import { NBA_SEASON } from '@/lib/season/nba';", names: 'season/nba' },
+  { what: 'the Season Center viewer imports the MLB replay', file: SEASON_VIEWER, code: readUsSource(ROOT, SEASON_VIEWER), own: null, line: "import { buildMlbPlayoffReplay } from '@/lib/season/mlbPlayoffReplay';", names: 'mlbPlayoffReplay' },
 ];
 for (const p of PLANTS) {
   const clean = weightProblemsIn(p.file, p.code, p.own);
@@ -117,7 +119,7 @@ const writeWrappers = () => {
 };
 const MUTATIONS = [
   { what: 'the NBA wrapper stops importing the shared board', slug: 'nba',
-    from: "import UsCareerBoard from '@/components/us-career/UsCareerBoard';", to: "import UsCareerBoard from './OldBoard';", names: 'does not import the shared board' },
+    from: "import UsCareerBoard, { type UsCareerStart } from '@/components/us-career/UsCareerBoard';", to: "import UsCareerBoard, { type UsCareerStart } from './OldBoard';", names: 'does not import the shared board' },
   { what: 'the MLB wrapper renders the board with the NBA binding', slug: 'mlb',
     from: '<UsCareerBoard sport={MLB_CAREER_SPORT} />', to: '<UsCareerBoard sport={NBA_CAREER_SPORT} />', names: 'does not render the shared board with its own binding' },
   { what: 'the NHL wrapper imports NFL code', slug: 'nhl',

@@ -152,6 +152,6 @@ export const MLB_CAREER_SPORT: UsCareerSport<MlbCareerState, MlbSeasonLine> = wi
      season; the held line is small and eager (src/lib/mlbSeasonHeld.ts), so the
      hub can say a pitcher, a short season or a club outside the league has no
      game by game view before he presses. */
-  loadSeasonCentre: () => import('@/lib/season/mlb').then(m => m.MLB_SEASON),
+  loadSeasonCentre: () => import('@/components/mlb-my-career/MlbPlayoffReplay').then(m => m.loadMlbSeasonCentre()),
   seasonCentreHeld: (year, eraId, who) => mlbSeasonHeld(year, eraId, who),
 });

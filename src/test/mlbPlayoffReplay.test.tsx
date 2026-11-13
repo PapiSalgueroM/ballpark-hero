@@ -15,10 +15,6 @@ import type { UsCareerCore, UsCareerSport } from '@/lib/usCareerSport';
 const POST_LINE = '9 for 28 (.321), 2 HR';
 const fixtures = new Map<string, UsCareerCore>();
 
-function mlbViewerSport(): UsCareerSport {
-  return { ...MLB_CAREER_SPORT, loadSeasonCentre: () => Promise.resolve(MLB_SEASON) };
-}
-
 function played(sport: UsCareerSport, pos: string, seed: string): UsCareerCore {
   const rng = keyedRng(seed);
   const career = sport.startCareer('Replay Prospect', pos, sport.create.archetypes[pos][0], rng, null as never, 'now');
@@ -49,7 +45,7 @@ function hitter(id: string, overrides: Record<string, unknown> = {}): UsCareerCo
   return JSON.parse(JSON.stringify(career));
 }
 
-async function review(career: UsCareerCore, sport = mlbViewerSport()) {
+async function review(career: UsCareerCore, sport: UsCareerSport = MLB_CAREER_SPORT) {
   const onClose = vi.fn();
   localStorage.setItem(`seasonCentre:help:${sport.slug}`, '1');
   const row = career.seasons[career.seasons.length - 1];
@@ -236,7 +232,7 @@ describe('MLB playoff replay from the real season viewer', { timeout: 90000 }, (
       { career: hitterCareer, row: { ...last, team: 'Yomiuri Giants' }, note: 'your club plays outside Major League Baseball' },
     ];
     for (const { career, row, note } of cases) {
-      const view = render(<MemoryRouter><UsSeasonCentre sport={mlbViewerSport()} career={career} row={row} onClose={vi.fn()} /></MemoryRouter>);
+      const view = render(<MemoryRouter><UsSeasonCentre sport={MLB_CAREER_SPORT} career={career} row={row} onClose={vi.fn()} /></MemoryRouter>);
       await waitFor(() => expect(view.container.querySelector('[data-centre-tile]')).not.toBeNull());
       expect(view.container.querySelector('[data-centre-tile]')!.textContent).toContain(note);
       expect(view.queryByRole('button', { name: 'Replay playoffs' })).toBeNull();

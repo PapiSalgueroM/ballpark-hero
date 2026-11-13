@@ -18,7 +18,7 @@
  * they were, and scripts/simUsBoardParity.mjs replays a fixture recorded from
  * the four old boards to hold that.
  */
-import type { ComponentType } from 'react';
+import type { ComponentType, ReactNode } from 'react';
 import type { CareerDraftEntry, PreDraftDescriptor, PreDraftState } from '@/lib/careerPreDraft';
 import type { PlayerAppearance } from '@/lib/soccerCareerAppearance';
 import type { CareerRival } from '@/lib/careerRival';
@@ -34,7 +34,7 @@ import type { TrainingBank, TrainingSport } from '@/lib/careerTraining';
 import type { CareerReviewStats } from '@/lib/usCareerSeasonReview';
 import type { RetirementBlock } from '@/lib/careerRetirement';
 import type { HallCalibration, HallSpeechBlock, LegacyRead, NumberRetiredBy, UsHallSport } from '@/lib/careerHallOfFame';
-import type { UsSeasonBind } from '@/lib/season/us';
+import type { UsRow, UsSeasonBind, UsSeasonCtx } from '@/lib/season/us';
 import type { CareerIntlBlock, IntlCall, IntlSummerEntry, IntlTournament } from '@/lib/careerIntl';
 
 export interface UsCareerPracticeResult extends TrainingBank {
@@ -43,6 +43,15 @@ export interface UsCareerPracticeResult extends TrainingBank {
   score: number;
   before: number;
 }
+
+export type UsSeasonCentreBind = UsSeasonBind & {
+  buildPlayoffReplay?: (row: UsRow, ctx: UsSeasonCtx, key: string) => ((props: {
+    club: string;
+    year: number;
+    onBack: () => void;
+    onClose: () => void;
+  }) => ReactNode) | null;
+};
 
 /** The part of a season line every sport writes. Each sport adds its own stats. */
 export interface UsCareerSeason {
@@ -388,7 +397,7 @@ export interface UsCareerSport<C extends UsCareerCore = any, L extends UsCareerS
   /** Round 1048: the Season Center's numbers for this sport (src/lib/season/us.ts), loaded when he first
    *  watches a season. Optional: a binding without it shows no button, which is the NHL today (baseball
    *  was bound in Round 1212). */
-  loadSeasonCentre?: () => Promise<UsSeasonBind>;
+  loadSeasonCentre?: () => Promise<UsSeasonCentreBind>;
   /** Round 1048: why the coming season has no game by game view (its real length is not the one this
    *  career plays), or null. Tiny and eager, from src/data/usSeasonLengths.ts. Absent: never held.
    *  Round 1212: handed who is asking as well (his position and his club of that season), for a position

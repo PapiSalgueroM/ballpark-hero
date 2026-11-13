@@ -2,7 +2,19 @@ import { useRef, useState, type KeyboardEvent } from 'react';
 import { SeasonCentreHelp, useHelpOnce, type HelpWords } from '@/components/season-centre/SeasonCentreHelp';
 import { useBodyLock } from '@/components/season-centre/useBodyLock';
 import { focusDialogOnMount } from '@/lib/dialogA11y';
-import type { MlbPlayoffReplayData } from '@/lib/season/mlbPlayoffReplay';
+import { buildMlbPlayoffReplay, type MlbPlayoffReplayData } from '@/lib/season/mlbPlayoffReplay';
+import { MLB_SEASON } from '@/lib/season/mlb';
+import type { UsSeasonCentreBind } from '@/lib/usCareerSport';
+
+export function loadMlbSeasonCentre(): UsSeasonCentreBind {
+  return {
+    ...MLB_SEASON,
+    buildPlayoffReplay: (row, ctx, key) => {
+      const replay = buildMlbPlayoffReplay(MLB_SEASON, row, ctx, key);
+      return replay ? props => <MlbPlayoffReplay {...props} replay={replay} /> : null;
+    },
+  };
+}
 
 const HELP: HelpWords = {
   title: 'How the playoff replay works',
@@ -16,7 +28,7 @@ const HELP: HelpWords = {
   footnote: 'This replay changes no result, stat, award or saved career data.',
 };
 
-export default function MlbPlayoffReplay({ replay, club, year, onBack, onClose }: {
+function MlbPlayoffReplay({ replay, club, year, onBack, onClose }: {
   replay: MlbPlayoffReplayData;
   club: string;
   year: number;
