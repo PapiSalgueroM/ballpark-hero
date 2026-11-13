@@ -48,6 +48,7 @@ const SENTINEL_PUZZLES = [{ id: 'puck-detective-daily' }];
 type StoredGuess = { playerId: number };
 
 const BEST_KEY = 'puck-detective-best-v1';
+const ROSTER_NOTE = "Team and jersey clues use the game's roster snapshot. Players may have since moved or become free agents.";
 
 function loadBestStreak(): number {
   try { return Number(localStorage.getItem(BEST_KEY)) || 0; } catch { return 0; }
@@ -353,6 +354,7 @@ const PuckDetective = () => {
                 <ul className="list-disc list-inside space-y-1 text-muted-foreground">
                   <li>Type a player name and pick them from the list</li>
                   <li>Each guess shows how close you are on 5 attributes</li>
+                  <li>{ROSTER_NOTE}</li>
                   <li>You have 8 guesses to find the mystery player</li>
                 </ul>
               </section>
@@ -443,6 +445,7 @@ const PuckDetective = () => {
               <span className="text-xs text-muted-foreground">
                 Guesses <span className="text-primary font-bold">{guesses.length}</span>/{GUESS_LIMIT}
               </span>
+              <p data-puck-roster-note className="mt-2 text-xs text-muted-foreground">{ROSTER_NOTE}</p>
             </div>
 
             {gameStatus === 'playing' && (
@@ -554,6 +557,7 @@ const PuckDetective = () => {
           howToPlay={[
             'Type a player name and pick them from the suggestions.',
             'Each guess shows feedback on team, position, nationality, age and jersey number.',
+            ROSTER_NOTE,
             'Green means an exact match, yellow means close, gray means no match.',
             'Arrows on age and jersey number point toward the mystery player\'s value.',
             'Solve it within 8 guesses.',

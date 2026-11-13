@@ -17,8 +17,8 @@ import { dailyIndex, getTodayET } from '@/lib/dateUtils';
  * building its pool so the mystery player and the guess pool never contain
  * an accidental phantom duplicate.
  *
- * nhl_players is a current-roster snapshot (birth_date range 1985-03-09 to
- * 2007-09-05, i.e. active-era players only), which is why this game's
+ * nhl_players is a stored roster snapshot (birth_date range 1985-03-09 to
+ * 2007-09-05 at that check). Team and jersey clues use that snapshot, and the game's
  * attributes are team / position / nationality / age / jersey number and NOT
  * career points: nhl_player_stats (the career-totals table) only exact-name
  * matches 1412 of nhl_players' 1752 raw rows, an unreliable join for a
