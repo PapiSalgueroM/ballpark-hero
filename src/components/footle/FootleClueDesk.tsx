@@ -17,9 +17,14 @@ export default function FootleClueDesk({ guesses, playing, helpOpen, onReturn, r
   const selected = selection?.count === guesses.length ? selection.index : guesses.length - 1;
   const guess = guesses[selected];
   const heading = useRef<HTMLHeadingElement>(null);
+  const firstClue = useRef<HTMLElement>(null);
   const previousCount = useRef(guesses.length);
   const initialReview = useRef(reviewing);
-  const reveal = useRevealScroll<HTMLElement>(guesses.length, { enabled: (playing || reviewing) && (guesses.length > 0 || reviewing), skipFirst: false });
+  const reveal = useRevealScroll<HTMLElement>(guesses.length, {
+    enabled: (playing || reviewing) && (guesses.length > 0 || reviewing),
+    skipFirst: false,
+    visibleThrough: reviewing ? firstClue : undefined,
+  });
   useEffect(() => {
     if (!helpOpen && ((playing && guesses.length > previousCount.current) || initialReview.current)) heading.current?.focus({ preventScroll: true });
     initialReview.current = false;
@@ -54,7 +59,7 @@ export default function FootleClueDesk({ guesses, playing, helpOpen, onReturn, r
         const direction = cell.arrow === 'up' ? 'Answer is higher' : 'Answer is lower';
         return <div key={key} className={styles.clue} data-clue={key} data-status={cell.status}>
           <dt><span>{label}</span><span aria-hidden="true">{number}</span></dt>
-          <dd className={styles.value}>{cell.value}</dd>
+          <dd ref={reviewing && key === 'nationality' ? firstClue : undefined} className={styles.value}>{cell.value}</dd>
           <dd className={styles.verdict}>{verdict[cell.status]}</dd>
           {cell.arrow && cell.status !== 'unknown' && <dd className={styles.direction}><span aria-hidden="true">{cell.arrow === 'up' ? '↑' : '↓'} </span>{direction}</dd>}
         </div>;
