@@ -1,6 +1,8 @@
 # DoUKnowBall site readiness and game work
 
-Checkpoint at 11:16 UTC on November 13, 2026. The broad update remains draft [PR #770](https://github.com/PapiSalgueroM/ballpark-hero/pull/770). The work continued after the 24-hour report below.
+Checkpoint at 11:20 UTC on November 13, 2026. The broad update remains draft [PR #770](https://github.com/PapiSalgueroM/ballpark-hero/pull/770). The work continued after the 24-hour report below.
+
+Stadium Tycoon now confirms a Legacy perk purchase only after the existing save accepts it. A refused write keeps the level and points available for retry. The exact prior build reproduced false success. All 114 focused tests, 12 artifact readers, 16 budgets and four published browser checks passed. WebKit and Chromium retained four points after a controlled refusal, then saved one level and one remaining point after a single retry. [PR #810](https://github.com/PapiSalgueroM/ballpark-hero/pull/810).
 
 Squad Deal and Soccer Higher or Lower flag images have explicit dimensions and keep the same rendered size and lazy loading. Stadium Tycoon's keyboard skip link now lands in the main game content. The full 105-opening and 31-entry graph checks passed locally. Twenty-four published browser checks and all 173 sitemap URLs passed. The Lovable mirror redirected to the verified custom-domain bytes. [PR #809](https://github.com/PapiSalgueroM/ballpark-hero/pull/809).
 
