@@ -1767,7 +1767,7 @@ export const SOCCER_CONTENT_2: GameContentMap = {
       "There is a dirty side too. Bent officials, betting syndicates, kickbacks, offshore accounts and laundering fronts all sit there waiting, each one heating up a hidden investigation meter. Take enough envelopes and the dawn raid comes, then the trial, then a season inside and a comeback from nothing.",
       "Your first pro offer sets the next few seasons up. If you want to be playing every week, compare the role and the club before you sign. When Set transfer priority is available, choose minutes, club level or home country, then save the brief and request the move. You can set that priority without hiring an agent.",
       "Open the training drill for your position. A central midfielder works on threading a pass before the runner goes offside, while a keeper reads the shot and moves the glove to make a save. Use practice to get the timing down. The scored set banks progress once, so you can try again in practice without changing what your player earned.",
-      "Try the week by week view when you want to see where a season turned. It shows the table and your match ratings along the way. Look for the target icon on the fixture list. A Your Call hands you a match moment to play, while a Recreate lets you earn training stars from an event that already happened.",
+      "Try the week by week view when you want to see where a season turned. It shows your match ratings and, where available, the league table. When the fixture list offers a target icon, a Your Call hands you a match moment to play. A Recreate lets you earn training stars from an event that already happened.",
     ],
     introLinks: [
       { paragraph: 0, text: 'Wonderkid Factory', to: '/wonderkid-factory' },

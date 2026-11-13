@@ -146,7 +146,7 @@ export const SPORT_HUBS: SportHub[] = [
       'Want something that lasts: Soccer Career and Club Manager both run for as many seasons as you can survive.',
       'Every game explains itself before you play, and the "?" button reopens the rules and a worked example at any point.',
       "In Missing XI, start with the empty player's position and the names on either side. If the gap is in midfield, think about who played that role for that team in that match. You have three guesses, and the hints add clues after a miss. A strong first guess is worth more than listing every player you remember from that season.",
-      "In Transfer Path, think about the target's teammates before you type. If one of them also shared a club season with your starting player, the link can close in one move. A club badge in common is only a lead. The two careers have to cross there at the same time, so check the seasons when an obvious link keeps getting rejected.",
+      "In Transfer Path, think about the target's teammates before you type. If one of them also shared a club season with your starting player, that teammate can connect both ends. A club badge in common is only a lead. The two careers have to cross there at the same time, so check the seasons when an obvious link keeps getting rejected.",
       'In Soccer Grid, work the hardest crossing first. A player who represented a country and spent time with a particular club might be the only name you know for that square. Keep him for that crossing. Once you have a valid answer in mind, you can decide whether to chase a rarer pick or bank the safe one.',
     ],
   },
