@@ -1,5 +1,5 @@
 import type { CareerPlayer } from '@/types/career';
-import { seasonSpan, type TransferPathRule } from '@/lib/transferPathModes';
+import { isActivePlayer, seasonSpan, type TransferPathRule } from '@/lib/transferPathModes';
 
 /* Round 475: the link rule, in one place the page can be read from.
    -------------------------------------------------------------------------
@@ -75,22 +75,33 @@ function playerWithAnchor<T extends StintPlayer>(players: readonly T[], name: st
 // Isak and Van Dijk both started the 2025-26 match against Atletico Madrid.
 // https://www.liverpoolfc.com/news/confirmed-liverpool-line-v-atletico-madrid-1
 // https://www.uefa.com/newsfiles/UCL/2026/2045911_FR.pdf
+// Trent assisted Mbappé at Athletic Club; Rashford assisted Lewandowski at Celta.
+// https://www.laliga.com/en-GB/match/temporada-2025-2026-laliga-ea-sports-athletic-club-real-madrid-19
+// https://www.realmadrid.com/en-US/news/football/first-team/reports/athletic-club-real-madrid-03-12-2025
+// https://www.laliga.com/en-GB/match/temporada-2025-2026-laliga-ea-sports-rc-celta-fc-barcelona-12
+// https://www.fcbarcelona.com/en/football/first-team/news/4399570/lewandowski-a-killer-inside-the-box
 const verifiedSpells = [
   { name: 'Frank Lampard', nationality: 'England', position: 'CM', anchor: ['Chelsea', '2013-2014'], club: 'New York City FC', season: '2015' },
   { name: 'Alexander Isak', nationality: 'Sweden', position: 'ST', anchor: ['Newcastle', '2024-2025'], club: 'Liverpool', season: '2025-2026' },
   { name: 'Virgil van Dijk', nationality: 'Netherlands', position: 'CB', anchor: ['Liverpool', '2024-2025'], club: 'Liverpool', season: '2025-2026' },
+  { name: 'Trent Alexander-Arnold', nationality: 'England', position: 'RB', anchor: ['Liverpool', '2024-2025'], club: 'Real Madrid', season: '2025-2026' },
+  { name: 'Kylian Mbappé', nationality: 'France', position: 'ST', anchor: ['Real Madrid', '2024-2025'], club: 'Real Madrid', season: '2025-2026' },
+  { name: 'Marcus Rashford', nationality: 'England', position: 'LW', anchor: ['Aston Villa', '2024-2025'], club: 'Barcelona', season: '2025-2026', active: true },
+  { name: 'Robert Lewandowski', nationality: 'Poland', position: 'ST', anchor: ['Barcelona', '2024-2025'], club: 'Barcelona', season: '2025-2026', active: true },
 ] as const;
 
 export function verifiedTransferPathStints(
   identities: readonly CareerPlayer[], rule: TransferPathRule, pool: readonly StintPlayer[] = identities,
 ) {
-  // Liverpool's Active minima need a coordinated update before adding these links to that mode.
-  if (rule === 'active') return [];
-  return verifiedSpells.flatMap(({ name, nationality, position, anchor, club, season }) => {
+  return verifiedSpells.flatMap(spell => {
+    const { name, nationality, position, anchor, club, season } = spell;
+    // Active opt-ins also need to be present in the verified Active player pool.
+    if (rule === 'active' && !('active' in spell && spell.active)) return [];
     if (rule === 'europe' && club === 'New York City FC') return [];
     const [priorClub, priorSeason] = anchor;
     const identity = playerWithAnchor(identities, name, priorClub, priorSeason);
     if (identity?.nationality !== nationality || identity.position !== position) return [];
+    if (rule === 'active' && !isActivePlayer(identity)) return [];
     if (pool !== identities && !playerWithAnchor(pool, name, priorClub, priorSeason)) return [];
     return [{ player: name, club, season }];
   });
