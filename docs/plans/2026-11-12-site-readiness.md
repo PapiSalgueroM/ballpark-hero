@@ -1,6 +1,10 @@
 # DoUKnowBall site readiness and game work
 
-Checkpoint at 10:00 UTC on November 13, 2026. The broad update remains draft [PR #770](https://github.com/PapiSalgueroM/ballpark-hero/pull/770). The work continued after the 24-hour report below.
+Checkpoint at 10:08 UTC on November 13, 2026. The broad update remains draft [PR #770](https://github.com/PapiSalgueroM/ballpark-hero/pull/770). The work continued after the 24-hour report below.
+
+NRL Team Manager's Defensive drills and Clear preparation are live. The optional drills improve defence for one match with the same fatigue cost and injury risk as Train. Both season starts passed the published halftime reload and Quick Sim parity checks. All 281 tests, 1,051 held ordinary and legacy preparation frames, 16 route budgets, six pinned production cases and all 173 live URLs passed. IndexNow accepted the updated guide. [PR #802](https://github.com/PapiSalgueroM/ballpark-hero/pull/802).
+
+The exact broad product tree `4f4ed3bd92778e1d4c187ebd6367e524887d9564` now includes #802 and passed TypeScript, the ordinary build, 23 output readers, native snapshot boot, 16 download budgets and 400 isolation probes. The 105-route-opening check again saw 93 ranked game entries with zero unrelated ranked entries, unsized images, overflow or browser errors. The 923 files total 24,906,390 bytes. Manifest SHA-256 is `0408e17a257b756a57dd0aed8b515de14ab0c75839a14d222edb77d7b453c823`. A fresh mobile PageSpeed Insights request still returned 429. No field INP result was available.
 
 Club Manager's light era picker is live. The full simulation loads after an era choice or when opening a saved career. The keyboard-selected era retains focus while loading, and the three saved-career stages reserve equal height. Cold transfer fell from 599.2 to 222.3 KiB in the route check. Controlled saved-career phone CLS fell from 0.35–0.38 to under 0.001 across three widths, and all tested 768px and desktop cases stayed under 0.1. The 16 published browser cases passed against the exact deployed assets, and all 173 URLs passed the live audit. The raw guide and league coverage stayed the same. The inherited catalogue check still has the same three count/date differences as the baseline. [PR #799](https://github.com/PapiSalgueroM/ballpark-hero/pull/799).
 
