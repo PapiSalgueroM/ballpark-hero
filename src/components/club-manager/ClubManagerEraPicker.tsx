@@ -32,9 +32,10 @@ export function ClubManagerPickerHeading({ step, children }: { step: string; chi
   );
 }
 
-export function ClubManagerEraPicker({ onPick, pendingEra = null, onBackToManagers }: {
-  onPick: (id: string) => void;
+export function ClubManagerEraPicker({ onPick, pendingEra = null, preserveFocus = false, onBackToManagers }: {
+  onPick: (id: string, wasFocused: boolean) => void;
   pendingEra?: string | null;
+  preserveFocus?: boolean;
   onBackToManagers?: () => void;
 }) {
   return (
@@ -45,7 +46,12 @@ export function ClubManagerEraPicker({ onPick, pendingEra = null, onBackToManage
             key={e.id}
             type="button"
             aria-disabled={pendingEra !== null || undefined}
-            onClick={() => { if (pendingEra === null) onPick(e.id); }}
+            ref={preserveFocus && pendingEra === e.id ? button => {
+              if (button && document.activeElement === document.body) button.focus({ preventScroll: true });
+            } : undefined}
+            onClick={event => {
+              if (pendingEra === null) onPick(e.id, document.activeElement === event.currentTarget);
+            }}
             className="rounded-xl border bg-card border-border hover:border-primary px-4 py-3 text-left transition-all"
           >
             <div className="flex items-center gap-2.5">
