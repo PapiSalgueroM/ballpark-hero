@@ -34,6 +34,7 @@ import { openTalks, standFirm, type TalksState } from '@/lib/foTradeTalks';
 import { TradeTalksCard } from '@/components/front-office-shared/TradeTalksCard';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { recordActivity } from '@/lib/completions';
+import { holdPendingSave } from '@/lib/safeStorage';
 import { cn } from '@/lib/utils';
 import { useRevealScroll } from '@/hooks/useRevealScroll';
 // Round 180: the owner upstairs, shared engine and card.
@@ -509,7 +510,7 @@ export default function FrontOfficeBoard() {
     } catch { setSaveWriteFailed(true); }
   }, [phase, titles, seasonsPlayed, draftClass, picksLeft, draftBatchesLeft, mandate, trust, fired, pressTilt, seasonTradeLine, champion, playoffRounds, gradeLine]);
 
-  const retrySave = () => {
+  const retrySave = useCallback(() => {
     const bytes = pendingSave.current;
     if (bytes === null) return;
     try {
@@ -517,7 +518,15 @@ export default function FrontOfficeBoard() {
       pendingSave.current = null;
       setSaveWriteFailed(false);
     } catch { setSaveWriteFailed(true); }
-  };
+  }, []);
+
+  useEffect(() => {
+    if (!saveWriteFailed || pendingSave.current === null) return;
+    return holdPendingSave(() => {
+      retrySave();
+      return pendingSave.current === null;
+    });
+  }, [saveWriteFailed, retrySave]);
 
   /* Round 828: a new league carries every club's whole roster and practice
      squad. That data is its own chunk, fetched here on the tap rather than
