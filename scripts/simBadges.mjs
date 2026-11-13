@@ -63,6 +63,7 @@ import os from 'node:os';
 import path from 'node:path';
 import { pathToFileURL, fileURLToPath } from 'node:url';
 import { build } from 'esbuild';
+import ts from 'typescript';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const BADGES = 'src/lib/badges.ts';
@@ -238,17 +239,59 @@ const PAST = '2025-06-01';
 /** Every recorded completion slug in src: what game_completions.game holds. */
 function recordedSlugs() {
   const out = new Set();
+  const files = [];
   const walkDir = dir => {
     for (const ent of fs.readdirSync(dir, { withFileTypes: true })) {
       const p = path.join(dir, ent.name);
       if (ent.isDirectory()) { if (ent.name !== 'test') walkDir(p); continue; }
       if (!/\.(ts|tsx)$/.test(ent.name) || /\.test\.tsx?$/.test(ent.name)) continue;
-      const code = stripComments(fs.readFileSync(p, 'utf8'));
-      for (const m of code.matchAll(/useGameCompletion\(\s*['"]([a-z0-9-]+)['"]/g)) out.add(m[1]);
-      for (const m of code.matchAll(/recordCompletion\(\s*['"]\/([a-z0-9-]+)['"]/g)) out.add(m[1]);
+      if (/\b(?:useGameCompletion|recordCompletion)\b/.test(sourceOf(path.relative(ROOT, p).replaceAll('\\', '/')))) files.push(p);
     }
   };
   walkDir(path.join(ROOT, 'src'));
+  const options = { noLib: true, noResolve: true };
+  const host = ts.createCompilerHost(options);
+  host.readFile = file => sourceOf(path.relative(ROOT, file).replaceAll('\\', '/'));
+  const program = ts.createProgram(files, options, host);
+  const checker = program.getTypeChecker();
+  for (const file of program.getSourceFiles()) {
+    // The binder can keep the first declaration of an illegal duplicate as its own symbol.
+    const duplicateBindings = file.bindDiagnostics?.filter(d => d.code === 2300 || d.code === 2451) ?? [];
+    const declarationOf = node => {
+      const declarations = checker.getSymbolAtLocation(node)?.declarations;
+      if (declarations?.length !== 1) return undefined;
+      const binding = declarations[0];
+      return duplicateBindings.some(d => d.start >= binding.getStart(file) && d.start < binding.end) ? undefined : binding;
+    };
+    function visit(node) {
+      if (ts.isCallExpression(node) && ts.isIdentifier(node.expression) && node.arguments.length) {
+        const binding = declarationOf(node.expression);
+        if (binding && ts.isImportSpecifier(binding) && !binding.isTypeOnly && !binding.parent.parent.isTypeOnly) {
+          const module = binding.parent.parent.parent.moduleSpecifier.text;
+          const name = (binding.propertyName ?? binding.name).text;
+          const hook = name === 'useGameCompletion' && module === '@/hooks/useGameCompletion';
+          const recorder = name === 'recordCompletion' && module === '@/lib/completions';
+          if (hook || recorder) {
+            let value = node.arguments[0];
+            if (ts.isIdentifier(value)) {
+              const binding = declarationOf(value);
+              // Follow only this file's top-level, immutable literal binding.
+              if (binding && ts.isVariableDeclaration(binding) && ts.isVariableDeclarationList(binding.parent)
+                  && (binding.parent.flags & ts.NodeFlags.Const) && binding.parent.parent.parent === file) {
+                value = binding.initializer;
+              }
+            }
+            if (value && ts.isStringLiteral(value)) {
+              const match = value.text.match(hook ? /^([a-z0-9-]+)$/ : /^\/([a-z0-9-]+)$/);
+              if (match) out.add(match[1]);
+            }
+          }
+        }
+      }
+      ts.forEachChild(node, visit);
+    }
+    visit(file);
+  }
   return [...out].sort();
 }
 const SLUGS = recordedSlugs();
