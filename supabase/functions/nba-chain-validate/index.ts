@@ -17,6 +17,16 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
  * when BOTH players are still active at the 2024 edge we defer rather than
  * wrongly reject. Everything else is decided from data.
  *
+ * ROUND 500: that deferral was being nullified at the client. It answers
+ * {valid:false, coverageGap:true} on purpose, and NOTHING in src read the flag
+ * (grep: 0 hits), so the deferral ended the run and filed the score. Measured
+ * 2026-09-07 over the live table: 569 players sit at the 2024 edge and 148,608
+ * of their 161,596 pairs (92 percent) land on this branch. Alperen Sengun and
+ * Kevin Durant are real Houston teammates in 2025-26, so answering that
+ * correctly ended your game. The same round marks every INFRASTRUCTURE refusal
+ * below with unverified: true. Sport verdicts deliberately do NOT carry it:
+ * flagging a real "were never teammates" would hand out free retries forever.
+ *
  * ROUND 486: THE LOOKUP WAS ACCENT BLIND, SO THE BIGGEST NAMES IN THE MODERN
  * GAME COULD NOT BE ANSWERED AT ALL.
  *
@@ -93,26 +103,37 @@ const NICKNAMES: Record<string, string> = {
 };
 const resolve = (n: string) => NICKNAMES[norm(n)] ?? norm(n);
 
+// Verified team and start-season codes for the complete unkeyed archive sets.
+// NBA game books: 2016 Finals Game 5 (CLE), 2022 East Finals Game 2 (BOS).
+const ROSTER_STINT_ALIASES = new Map([
+  ["jr smith", { spelling: "j r smith", unkeyed: ["NOH:2004:2004", "NOK:2005:2005", "DEN:2006:2010",
+    "NYK:2011:2014", "CLE:2014:2018", "LAL:2019:2019"] }],
+  ["robert williams iii", { spelling: "robert williams", unkeyed: ["BOS:2018:2022", "POR:2023:2024"] }],
+]);
+
 const DATA_LAST_SEASON = 2024; // bref_nba_player_seasons ends here
+const LOOKUP_LIMIT = 400;
 
 interface Stint { player_name: string; team: string; first_season: number; last_season: number; }
+type KeyedStint = Stint & { person_key: string | null };
 
 function json(body: unknown, corsHeaders: Record<string, string>, status = 200) {
   return new Response(JSON.stringify(body), { status, headers: { ...corsHeaders, "Content-Type": "application/json" } });
 }
 
-async function lookup(sb: any, name: string): Promise<Stint[]> {
+async function lookup(sb: any, name: string): Promise<Stint[] | null> {
   const target = resolve(name);
   const COLS = "player_name, team, first_season, last_season";
+  const alias = ROSTER_STINT_ALIASES.get(target);
   /* The last word of the RESOLVED name, against the folded column. Resolved so
      a nickname is searched as the man it names; folded so an accent cannot hide
      him. */
   const token = target.split(" ").slice(-1)[0] || target;
-  let { data, error } = await sb
-    .from("nba_player_team_stints")
-    .select(COLS)
-    .ilike("name_folded", `%${token}%`)
-    .limit(400);
+  const query = sb.from("nba_player_team_stints").select(alias ? COLS + ", person_key" : COLS);
+  const foldedQuery = alias
+    ? query.in("name_folded", [target, alias.spelling])
+    : query.ilike("name_folded", `%${token}%`);
+  let { data, error } = await foldedQuery.limit(LOOKUP_LIMIT);
   if (error) {
     /* The folded column is filled by migration. If it is ever missing, fall
        back to the old raw search rather than answering "no such player" for
@@ -122,11 +143,22 @@ async function lookup(sb: any, name: string): Promise<Stint[]> {
       .from("nba_player_team_stints")
       .select(COLS)
       .ilike("player_name", `%${name.trim().split(/\s+/).slice(-1)[0]}%`)
-      .limit(400));
+      .limit(LOOKUP_LIMIT));
   }
   const rows = (data ?? []) as Stint[];
   const exact = rows.filter((r) => resolve(r.player_name) === target);
   if (exact.length > 0) return exact;
+  if (alias) {
+    if (error || rows.length >= LOOKUP_LIMIT) return null;
+    const stints = (rows as KeyedStint[]).filter((row) => norm(row.player_name) === alias.spelling);
+    if (stints.length === 0) return null;
+    if (stints.some((row) => row.person_key !== null)) {
+      const personKey = stints[0].person_key;
+      return personKey?.trim() && stints.every((row) => row.person_key === personKey) ? stints : null;
+    }
+    const actual = new Set(stints.map((row) => [row.team, row.first_season, row.last_season].join(":")));
+    return stints.length === alias.unkeyed.length && alias.unkeyed.every((key) => actual.has(key)) ? stints : null;
+  }
   // unique-surname fallback
   const bySurname = rows.filter((r) => {
     const parts = resolve(r.player_name).split(" ");
@@ -162,6 +194,9 @@ serve(async (req) => {
     }
 
     const [prevStints, newStints] = await Promise.all([lookup(sb, previousPlayer), lookup(sb, newPlayer)]);
+    if (prevStints === null || newStints === null) {
+      return json({ valid: false, unverified: true, reason: "We couldn't confirm that player's identity. Try another spelling." }, corsHeaders);
+    }
     const properNew = newStints[0]?.player_name ?? newPlayer;
 
     if (newStints.length === 0) {
@@ -175,6 +210,10 @@ serve(async (req) => {
         { valid: false, reason: `We have no NBA record for ${previousPlayer}, so this link cannot be verified.`, fullName: properNew },
         corsHeaders,
       );
+    }
+
+    if (resolve(prevStints[0].player_name) === resolve(properNew)) {
+      return json({ valid: false, reason: "That is the same player." }, corsHeaders);
     }
 
     // Teammates: same team code with overlapping seasons.
