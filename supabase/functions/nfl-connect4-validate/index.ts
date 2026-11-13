@@ -186,7 +186,7 @@ setInterval(() => {
   }
 }, 300_000);
 
-const SAFE_ATTR = /^[\p{L}\p{N} .,'\u2019&()+\/#%:!?-]{1,120}$/u;
+const SAFE_ATTR = /^[\p{Sc}\p{L}\p{N} .,'\u2019&()+\/#%:!?-]{1,120}$/u;
 
 serve(async (req) => {
   const corsHeaders = getCorsHeaders(req);
