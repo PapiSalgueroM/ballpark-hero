@@ -8,7 +8,7 @@ vi.mock('@/contexts/AuthContext', () => ({
   AuthProvider: ({ children }: { children: React.ReactNode }) => children,
   useAuth: () => ({ user: null, profile: null, loading: false }),
 }));
-vi.mock('@/components/layout/LiveTicker', () => ({ LiveTicker: () => null }));
+vi.mock('@/components/layout/LiveTicker', () => ({ default: () => null }));
 vi.mock('@/components/layout/Header', () => ({ Header: () => null }));
 vi.mock('@/components/layout/SiteMenu', () => ({ SiteMenu: () => null }));
 vi.mock('@/components/layout/UpdateNudge', () => ({ UpdateNudge: () => null }));
