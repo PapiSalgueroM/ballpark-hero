@@ -169,7 +169,7 @@ console.log('4) Nobody the overlay already carries, nobody twice');
 /* ------------------------------------------------------------------ */
 /* The database: read only, through the public REST endpoint.         */
 /* ------------------------------------------------------------------ */
-const client = fs.readFileSync(path.join(ROOT, 'src', 'integrations', 'supabase', 'client.ts'), 'utf8');
+const client = fs.readFileSync(path.join(ROOT, 'src', 'integrations', 'supabase', 'config.ts'), 'utf8');
 const URL_ = client.match(/SUPABASE_URL\s*=\s*["']([^"']+)["']/)[1];
 const KEY = client.match(/SUPABASE_PUBLISHABLE_KEY\s*=\s*["']([^"']+)["']/)[1];
 const HEADERS = { apikey: KEY, authorization: `Bearer ${KEY}` };

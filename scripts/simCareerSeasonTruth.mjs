@@ -410,7 +410,7 @@ console.log('5) Live 2025-2026 state equals the 27 preserved researched tuples')
     if (liveRows.length !== before + 1) abort('live control changed nothing');
     console.log('   NEGATIVE CONTROL ON: injected one seed tuple into the local live-response fixture');
   } else {
-    const client = read('src/integrations/supabase/client.ts');
+    const client = read('src/integrations/supabase/config.ts');
     const url = client.match(/SUPABASE_URL\s*=\s*["']([^"']+)["']/)?.[1];
     const key = client.match(/SUPABASE_PUBLISHABLE_KEY\s*=\s*["']([^"']+)["']/)?.[1];
     if (!url || !key) abort('Could not read the pinned Supabase URL and public key');

@@ -8,7 +8,7 @@ import {
   DialogTitle,
   DialogDescription,
 } from '@/components/ui/dialog';
-import { supabase } from '@/integrations/supabase/client';
+import { loadSupabase } from '@/integrations/supabase/loadClient';
 import { cn } from '@/lib/utils';
 import { buildReportContext } from '@/lib/reportContext';
 import { useReportDraftLifecycle } from '@/hooks/useReportDraftLifecycle';
@@ -47,6 +47,7 @@ export function ReportSiteIssue() {
     const description = [kind, text].filter(Boolean).join(': ');
     const context = buildReportContext({}, 'footer-report-button');
     try {
+      const supabase = await loadSupabase();
       let delivered = false;
       try {
         const { data, error: fnError } = await supabase.functions.invoke('report-relay', {

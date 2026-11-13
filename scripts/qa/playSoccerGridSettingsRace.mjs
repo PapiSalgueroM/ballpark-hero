@@ -43,7 +43,7 @@ for (const [file, expected] of Object.entries(PINS)) assert.equal(beforeSource[f
 const head = execFileSync('git', ['-C', SOURCE, 'rev-parse', 'HEAD'], { encoding: 'utf8' }).trim(); assert.equal(head, process.env.GITHUB_SHA);
 for (const file of sourceNames) assert(fs.readFileSync(path.join(SOURCE, file)).equals(execFileSync('git', ['-C', SOURCE, 'show', head + ':' + file], { maxBuffer: 8 * 1024 * 1024 })), 'Actual committed source: ' + file);
 write('source-before.json', beforeSource); write('dist-before.json', beforeDist);
-const projectMatch = fs.readFileSync(path.join(SOURCE, 'src/integrations/supabase/client.ts'), 'utf8').match(/export const SUPABASE_URL = ["']([^"']+)["']/); assert(projectMatch);
+const projectMatch = fs.readFileSync(path.join(SOURCE, 'src/integrations/supabase/config.ts'), 'utf8').match(/export const SUPABASE_URL = ["']([^"']+)["']/); assert(projectMatch);
 const API = new URL(projectMatch[1]).origin;
 const fonts = new Map(JSON.parse(fs.readFileSync(path.join(CACHE, 'manifest.json'))).map(item => {
   assert(['fonts.googleapis.com', 'fonts.gstatic.com'].includes(new URL(item.url).hostname)); assert(/^[a-f0-9]{64}$/.test(item.file));

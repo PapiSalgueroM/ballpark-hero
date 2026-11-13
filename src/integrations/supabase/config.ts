@@ -1,0 +1,7 @@
+// Hardcoded on purpose. The Lovable build injects VITE_ env vars that point at a
+// DELETED Supabase project (pzzadswiradjnvvfybol), which made every request fail
+// with "Failed to fetch". Live data is in flawuiqbvjobmkfkauhw, so we pin it in this module
+// and ignore env vars entirely. This is safe to ship in the client bundle: the anon
+// key is public by design and every table is protected by row-level security.
+export const SUPABASE_URL = "https://flawuiqbvjobmkfkauhw.supabase.co";
+export const SUPABASE_PUBLISHABLE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZsYXd1aXFidmpvYm1rZmthdWh3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU4NTUwNzYsImV4cCI6MjA5MTQzMTA3Nn0.L8xWIXikPIaXC0XOL-FLOuPQb6idws2NdliARxBgk_Y";

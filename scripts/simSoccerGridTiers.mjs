@@ -56,7 +56,7 @@ execSync(`"${path.join(ROOT, 'node_modules', '.bin', 'esbuild')}" "${ENTRY}" --b
 const { classifyPuzzleDifficulty, puzzleNarrownessScore, filterPoolByDifficulty, dateSeed } = await import(pathToFileURL(BUNDLE).href);
 
 /* The live pool, read the way every fetch fence here reads it. */
-const client = fs.readFileSync(path.join(ROOT, 'src', 'integrations', 'supabase', 'client.ts'), 'utf8');
+const client = fs.readFileSync(path.join(ROOT, 'src', 'integrations', 'supabase', 'config.ts'), 'utf8');
 const URL_ = client.match(/SUPABASE_URL\s*=\s*["']([^"']+)["']/)[1];
 const KEY = client.match(/SUPABASE_PUBLISHABLE_KEY\s*=\s*["']([^"']+)["']/)[1];
 const headers = { apikey: KEY, authorization: `Bearer ${KEY}` };

@@ -1,4 +1,4 @@
-import { supabase } from '@/integrations/supabase/client';
+import { loadSupabase } from '@/integrations/supabase/loadClient';
 import { getStreakState, readDiary } from '@/lib/streaks';
 import { getCurrentPlayerName } from '@/lib/completions';
 import { CATEGORIES } from '@/data/gameRegistry';
@@ -279,6 +279,7 @@ async function fetchOwnCompletions(playerName: string): Promise<OwnCompletionRow
   try {
     // Dynamic .from() access: game_completions predates generated types,
     // same pattern as src/lib/completions.ts.
+    const supabase = await loadSupabase();
     const { data, error } = await (supabase.from as any)('game_completions')
       .select('game, completed_on')
       .eq('player_name', playerName)
