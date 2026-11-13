@@ -903,6 +903,7 @@ const ClubManager = ({ initialEra }: { initialEra?: string | null }) => {
           ) : (
           <>
           <ScreenLoading><OverviewIntro
+            summerBudget={!leagueStarted(c) && c.summerBudget?.club === c.clubName ? { ...c.summerBudget, format: n => money(n, c) } : null}
             retired={!leagueStarted(c) && (c.retiredLastSummer ?? []).length > 0 ? (c.retiredLastSummer ?? []).map(r => `${r.name} (${r.age}, rated ${r.rating})`).join(' · ') : null}
             freeRetired={!leagueStarted(c) && (c.freeAgentsRetired ?? []).length > 0 ? (c.freeAgentsRetired ?? []).map(r => `${r.name} (${r.age}, rated ${r.rating})`).join(' · ') : null}
             freeLeft={!leagueStarted(c) && (c.freeAgentsLeft ?? []).length > 0 ? (c.freeAgentsLeft ?? []).map(r => `${r.name} (${r.age}, rated ${r.rating})`).join(' · ') : null}
