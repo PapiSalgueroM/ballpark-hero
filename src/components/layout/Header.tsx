@@ -79,7 +79,7 @@ export function Header() {
               The mark returns when it can fit beside a three-digit streak. */}
           <div className="flex shrink-0 items-center gap-1 min-[416px]:gap-2">
             <SiteMenuHost />
-            <Link to="/" className="flex min-w-0 items-center gap-2 py-1.5">
+            <Link to="/" className={`flex min-w-0 items-center gap-2 py-1.5 ${isHome ? 'min-[380px]:max-[479px]:min-h-11' : ''}`}>
               <LogoMark size={28} className="shrink-0 hidden min-[416px]:block sm:hidden" />
               <LogoMark size={32} className="shrink-0 hidden sm:block" />
               <span className="font-display font-black text-sm min-[360px]:text-base min-[416px]:text-lg min-[520px]:text-2xl sm:text-3xl sm:leading-10 tracking-normal min-[520px]:tracking-wide text-primary truncate">DoUKnowBall</span>
@@ -87,7 +87,7 @@ export function Header() {
           </div>
 
           {/* Account controls keep their tap areas at the narrowest widths. */}
-          <div className="ml-auto flex shrink-0 items-center gap-0.5 min-[360px]:gap-1 min-[416px]:gap-2 lg:gap-3">
+          <div className={`ml-auto flex shrink-0 items-center gap-0.5 min-[360px]:gap-1 min-[416px]:gap-2 lg:gap-3 ${isHome ? 'min-[380px]:max-[479px]:[&>button]:min-h-11 min-[380px]:max-[479px]:[&>button]:min-w-11' : ''}`}>
             {/* Round 347: sm and up only. The worst guest row already measures
                 347px at 360 (Round 320), so phones get the footer toggle. */}
             <ThemeToggle variant="header" />

@@ -27,6 +27,7 @@ try {
     const href = await first.getAttribute('href');
     await first.click();
     await page.waitForURL(url => url.pathname === href);
+    await page.waitForLoadState('networkidle');
     assert.deepEqual(errors, []);
     await context.close();
     console.log(reducedMotion + ': visible catalog and pin controls, game link opens ' + href);
