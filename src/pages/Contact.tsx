@@ -4,7 +4,7 @@ import PageSeo from '@/components/seo/PageSeo';
 
 const Contact = () => {
   return (
-    <div id="dukb-main" tabIndex={-1} className="min-h-screen bg-background text-foreground px-4 py-12 max-w-3xl mx-auto">
+    <main id="dukb-main" tabIndex={-1} className="min-h-screen bg-background text-foreground px-4 py-12 max-w-3xl mx-auto">
       <PageSeo
         title="Contact DoUKnowBall"
         description="Get in touch with DoUKnowBall: report a bug, flag a wrong answer, pitch a game idea, or reach out about anything else."
@@ -23,11 +23,11 @@ const Contact = () => {
         <div>
           <h2 className="text-lg font-semibold text-foreground mb-2">Email us</h2>
           <p>
-            The inbox for everything is{' '}
+            For game feedback, privacy requests or business inquiries, email{' '}
             <a href="mailto:douknowball1@gmail.com" className="underline hover:text-foreground transition-colors">
               douknowball1@gmail.com
             </a>
-            . Bug reports, wrong stats, game ideas, feedback, business inquiries, all of it. It is a small operation, so a real person reads every message.
+            . The independent site operator reads this inbox.
           </p>
         </div>
 
@@ -62,7 +62,7 @@ const Contact = () => {
           <Link to="/terms" className="underline hover:text-foreground transition-colors">Terms of Service</Link>
         </div>
       </div>
-    </div>
+    </main>
   );
 };
 

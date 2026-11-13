@@ -4,7 +4,7 @@ import PageSeo from '@/components/seo/PageSeo';
 
 const CookiePolicy = () => {
   return (
-    <div id="dukb-main" tabIndex={-1} className="min-h-screen bg-background text-foreground px-4 py-12 max-w-3xl mx-auto">
+    <main id="dukb-main" tabIndex={-1} className="min-h-screen bg-background text-foreground px-4 py-12 max-w-3xl mx-auto">
       <PageSeo
         title="Cookie Policy - DoUKnowBall"
         description="How DoUKnowBall uses cookies and browser storage, how Advertising choices work, why Analytics is paused, and how to change or withdraw consent."
@@ -16,7 +16,7 @@ const CookiePolicy = () => {
       </Link>
       <h1 className="text-3xl font-bold mb-8">Cookie Policy</h1>
 
-      <p className="text-sm text-muted-foreground mb-6">Last updated: October 22, 2026</p>
+      <p className="text-sm text-muted-foreground mb-6">Last updated: November 11, 2026</p>
 
       <section className="space-y-6 text-sm leading-relaxed text-muted-foreground">
         <div>
@@ -26,7 +26,7 @@ const CookiePolicy = () => {
 
         <div>
           <h2 className="text-lg font-semibold text-foreground mb-2">Your choices</h2>
-          <p>Advertising and Analytics are separate optional purposes. Both start off. Analytics is paused while we check its collection settings, so Accept all does not turn it on. Advertising stays off if your browser sends Global Privacy Control.</p>
+          <p>Advertising and Analytics are separate optional purposes. Both start off. Analytics is paused while we check its collection settings, so Accept all does not turn it on. Advertising stays off if your browser exposes Global Privacy Control to the site, even if you previously turned Advertising on.</p>
           <p className="mt-2">Reject all keeps optional purposes off. Accept all turns on the optional purposes currently available. Save choices applies your available selections. We ask again after 180 days. That period applies to your cookie choice, not a promise to delete game saves or provider records after 180 days.</p>
           <p className="mt-2">Open Cookie choices in the footer whenever you want to change your selection.</p>
         </div>
@@ -50,7 +50,7 @@ const CookiePolicy = () => {
           <p className="mt-2">For privacy or deletion requests, use the contact details and rights process in the <Link to="/privacy" className="underline hover:text-foreground transition-colors">Privacy Policy</Link>.</p>
         </div>
       </section>
-    </div>
+    </main>
   );
 };
 
