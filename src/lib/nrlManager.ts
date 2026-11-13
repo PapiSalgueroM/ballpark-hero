@@ -57,7 +57,8 @@ const RETRAINING_ROLES: Partial<Record<NrlRole, readonly NrlRole[]>> = {
   Lock: ['Left Second Row', 'Right Second Row'],
 };
 export const nrlRetrainingRoles = (role: NrlRole): readonly NrlRole[] => RETRAINING_ROLES[role] ?? [];
-const nrlCanPlayRole = (player: NrlPlayer, role: NrlRole) => player.role === role || player.secondaryRole === role;
+export const nrlCanPlayRole = (player: Pick<NrlPlayer, 'role' | 'secondaryRole'>, role: NrlRole) =>
+  player.role === role || player.secondaryRole === role;
 export interface NrlFixture { homeId: string; awayId: string; round: number; finalsRound?: number; tieId?: string }
 export interface NrlScoring { tries: number; conversions: number; penalties: number; fieldGoals: number; longFieldGoals: number }
 export interface NrlLiveHalf { fixture: NrlFixture; homeScoring: NrlScoring; awayScoring: NrlScoring; heldReserveId?: string }
@@ -402,7 +403,9 @@ export function nrlSavedLineupPreview(state: NrlManagerState, saved: NrlSavedLin
 // Six may be named. Quick sim gives up to four listed reserves a spell in
 // their position and lets the starter return, representing up to eight changes.
 // https://www.nrl.com/news/2026/02/04/strategic-element-new-rules-to-create-exciting-new-role-for-young-stars/
-function benchRotation(state: NrlManagerState, heldReserveId?: string): Map<string, NrlPlayer> {
+type NrlSelectedSquad = Pick<NrlManagerState, 'squad' | 'lineup' | 'bench' | 'preparation'>;
+
+function benchRotation(state: NrlSelectedSquad, heldReserveId?: string): Map<string, NrlPlayer> {
   const rotation = new Map<string, NrlPlayer>();
   const heldRole = heldReserveId && state.squad.find(player => player.id === heldReserveId)?.role;
   const limit = NRL_MAX_BENCH_USED - Number(Boolean(heldRole));
@@ -472,7 +475,7 @@ function addMatchdayRating(sum: number, player: NrlPlayer, role: NrlRole, prepar
     + (reserve.rating - fitnessPenalty(reserve, preparation)) * 0.32;
 }
 
-function matchdayBase(state: NrlManagerState, rotation: ReadonlyMap<string, NrlPlayer>): number {
+function matchdayBase(state: NrlSelectedSquad, rotation: ReadonlyMap<string, NrlPlayer>): number {
   const starters = new Map(Object.entries(state.lineup).map(([role, id]) => [id, role]));
   return state.squad.filter(player => starters.has(player.id)).reduce((sum, player) =>
     addMatchdayRating(sum, player, starters.get(player.id) as NrlRole, state.preparation, rotation.get(player.id)), 0) / NRL_ROLES.length;
@@ -532,6 +535,26 @@ function scoringChances(rng: () => number, edge: number, chances: number): NrlSc
   const scoring = tryChances(rng, edge, chances);
   if (rng() < (chances === 18 ? 0.21 : 0.04)) scoring.penalties++;
   return scoring;
+}
+
+// Saved Origin results replay this calculation, including the order of its RNG draws.
+export function scoreNrlRepresentativeMatch(home: NrlSelectedSquad & { tactic: NrlTactic },
+  away: NrlSelectedSquad & { tactic: NrlTactic }, rng: () => number, neutral: boolean) {
+  const homeBase = matchdayBase(home, benchRotation(home));
+  const awayBase = matchdayBase(away, benchRotation(away));
+  const homeTactic = TACTIC_EFFECT[home.tactic];
+  const awayTactic = TACTIC_EFFECT[away.tactic];
+  const venue = neutral ? 0 : 2;
+  const homeEdge = homeBase + homeTactic.attack - awayBase - awayTactic.defense + venue;
+  const awayEdge = awayBase + awayTactic.attack - homeBase - homeTactic.defense - venue;
+  const homeScoring = scoringChances(rng, homeEdge, 18);
+  const awayScoring = scoringChances(rng, awayEdge, 18);
+  const goldenPoint = scoreOf(homeScoring) === scoreOf(awayScoring);
+  if (goldenPoint) {
+    const winner = rng() < clamp(0.5 + (homeEdge - awayEdge) / 140, 0.25, 0.75) ? homeScoring : awayScoring;
+    winner.fieldGoals++;
+  }
+  return { homeScore: scoreOf(homeScoring), awayScore: scoreOf(awayScoring), goldenPoint };
 }
 
 function regulationHalves(rng: () => number, openingEdge: number, closingEdge: number) {
