@@ -296,6 +296,7 @@
     position: fixed;
     top: -100px;
     left: 8px;
+    max-width: calc(100vw - 16px);
     z-index: 100;
     padding: 10px 16px;
     border-radius: 8px;
