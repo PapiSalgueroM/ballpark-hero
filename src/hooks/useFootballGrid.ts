@@ -196,7 +196,7 @@ export function useFootballGrid() {
         return;
       }
       const playerKey = selectionKey(player.name);
-      if (correctActions.some((action) => selectionKey(action.playerName) === playerKey)) {
+      if (cells.some((cell) => cell.status === 'correct' && cell.playerName != null && selectionKey(cell.playerName) === playerKey)) {
         toast.error(`${player.name} is already on your board.`);
         return;
       }
@@ -242,7 +242,7 @@ export function useFootballGrid() {
         setActiveCell(null);
       }
     },
-    [activeCell, gameStatus, validating, gridData, cells, correctActions, puzzle, getRowCol, fetchRarity, addDailyGuess, takeNewerSave, getCurrentProgress],
+    [activeCell, gameStatus, validating, gridData, cells, puzzle, getRowCol, fetchRarity, addDailyGuess, takeNewerSave, getCurrentProgress],
   );
 
   useGameCompletion('football-grid', rawDailyStatus !== 'playing', correctCount * 100);

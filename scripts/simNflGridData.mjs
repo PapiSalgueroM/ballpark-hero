@@ -37,6 +37,7 @@
                                  section 3 must go red.
      SIM_NFLKEY_CONTROL=peterson drops Peterson's verified Titans stint, in
                                  memory; section 3 must go red.
+     SIM_NFLKEY_CONTROL=peterson-saints drops the verified Saints stint, in memory.
      SIM_NFLKEY_CONTROL=map      stretches the measured Cardinals range for
                                  STL by one season, in memory; section 5 must
                                  go red.
@@ -57,6 +58,7 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTROL = process.env.SIM_NFLKEY_CONTROL || '';
 const FILE = path.join(ROOT, 'scripts', 'data', 'nflGridPlayers.json');
 const PETERSON_ID = '00-0025394';
+const PETERSON_CONTROL_TEAM = { peterson: 'TEN', 'peterson-saints': 'NO' }[CONTROL];
 const PREVIOUS_PETERSON = {
   teams: ['ARI', 'DET', 'MIN', 'WAS'], seasons: [2007, 2020], display: 'Adrian Peterson (2007-2020)',
 };
@@ -191,7 +193,7 @@ console.log('3) The record: famous careers inside the coverage window');
     { who: 'Earl Campbell', expect: { teams: ['NO', 'TEN'], seasons: [1978, 1985], draft: { year: 1978, round: 1, pick: 1 } } },
     { who: 'Barry Sanders', expect: { teams: ['DET'], seasons: [1989, 1998], draft: { year: 1989, round: 1, pick: 3 } } },
     { who: 'Art Monk', expect: { teams: ['NYJ', 'PHI', 'WAS'], sbWins: 3 } },
-    { who: 'Adrian Peterson', id: PETERSON_ID, expect: { teams: ['ARI', 'DET', 'MIN', 'SEA', 'TEN', 'WAS'], seasons: [2007, 2021], display: 'Adrian Peterson (2007-2021)' } },
+    { who: 'Adrian Peterson', id: PETERSON_ID, expect: { teams: ['ARI', 'DET', 'MIN', 'NO', 'SEA', 'TEN', 'WAS'], seasons: [2007, 2021], display: 'Adrian Peterson (2007-2021)' } },
     { who: 'Adrian Peterson (Chicago)', id: '00-0021306', expect: { teams: ['CHI'], seasons: [2002, 2009], display: 'Adrian Peterson (2002-2009)' } },
   ];
   let controlled = false;
@@ -203,11 +205,11 @@ console.log('3) The record: famous careers inside the coverage window');
       controlled = true;
       console.log('   NEGATIVE CONTROL ON: Tom Brady given an eighth title, in memory');
     }
-    if (CONTROL === 'peterson' && c.id === PETERSON_ID) {
-      if (!p.teams.includes('TEN')) abort('control cannot run: Peterson has no Titans stint to omit');
-      p = { ...p, teams: p.teams.filter(team => team !== 'TEN') };
+    if (PETERSON_CONTROL_TEAM && c.id === PETERSON_ID) {
+      if (!p.teams.includes(PETERSON_CONTROL_TEAM)) abort('control cannot run: Peterson has no selected stint to omit');
+      p = { ...p, teams: p.teams.filter(team => team !== PETERSON_CONTROL_TEAM) };
       controlled = true;
-      console.log('   NEGATIVE CONTROL ON: Peterson’s Titans stint omitted, in memory');
+      console.log(`   NEGATIVE CONTROL ON: Peterson's ${PETERSON_CONTROL_TEAM} stint omitted, in memory`);
     }
     for (const [k, want] of Object.entries(c.expect)) {
       const got = p[k];
@@ -215,7 +217,7 @@ console.log('3) The record: famous careers inside the coverage window');
     }
   }
   if (CONTROL === 'famous' && !controlled) abort('control cannot run: Tom Brady is not in the file to perturb');
-  if (CONTROL === 'peterson' && !controlled) abort('control cannot run: Peterson is not in the file to perturb');
+  if (PETERSON_CONTROL_TEAM && !controlled) abort('control cannot run: Peterson is not in the file to perturb');
   console.log(`   ${cases.length} careers checked`);
 }
 
@@ -311,10 +313,10 @@ console.log('6) The table is the file: public.nfl_grid_players row for row');
   console.log(`   ${rows.length} table rows against ${filePlayers.length} file players, ${off} differences`);
 }
 
-const own = { teams: 2, famous: 3, peterson: 3, map: 5, table: 6 }[CONTROL];
+const own = { teams: 2, famous: 3, peterson: 3, 'peterson-saints': 3, map: 5, table: 6 }[CONTROL];
 const total = failures[1] + failures[2] + failures[3] + failures[4] + failures[5] + failures[6];
 if (CONTROL) {
-  if (!own) abort(`unknown control "${CONTROL}" (teams, famous, peterson, map, table)`);
+  if (!own) abort(`unknown control "${CONTROL}" (teams, famous, peterson, peterson-saints, map, table)`);
   if (failures[own] > 0) { console.log(`\ncontrol "${CONTROL}": ${failures[own]} failure(s) fired in section ${own} as expected, the check works`); process.exit(0); }
   abort(`\ncontrol "${CONTROL}": changed NOTHING in section ${own}, the check is dead`);
 }

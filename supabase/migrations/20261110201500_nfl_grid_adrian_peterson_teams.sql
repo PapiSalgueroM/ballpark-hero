@@ -1,10 +1,12 @@
--- Adrian Peterson (2007 draft, pick 7) played for Tennessee and Seattle in 2021.
+-- Adrian Peterson (2007 draft, pick 7) played for New Orleans in 2017 and Tennessee and Seattle in 2021.
+-- https://www.nfl.com/players/adrian-peterson/stats/career
+-- https://www.neworleanssaints.com/news/john-deshazier-coach-sean-payton-calls-adrian-peterson-trade-a-win-win-19549661
 -- The other Adrian Peterson (2002 draft, pick 199) is a separate Bears player.
 do $migration$
 declare
   target_id constant text := '00-0025394';
   old_teams constant text[] := array['ARI', 'DET', 'MIN', 'WAS'];
-  new_teams constant text[] := array['ARI', 'DET', 'MIN', 'SEA', 'TEN', 'WAS'];
+  new_teams constant text[] := array['ARI', 'DET', 'MIN', 'NO', 'SEA', 'TEN', 'WAS'];
   old_display constant text := 'Adrian Peterson (2007-2020)';
   new_display constant text := 'Adrian Peterson (2007-2021)';
   old_norm constant text := regexp_replace(lower(old_display), '[^a-z0-9]+', ' ', 'g');

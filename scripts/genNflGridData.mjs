@@ -80,12 +80,15 @@ export const OLD_ROSTER_STATUSES = ['ACT', 'RES', 'INA', 'PUP'];
 export const OLD_SEASONS = { from: 1970, to: 2001 };
 export const DRAFT_TABLE_COMPLETE_FROM = 1990;
 
-/* Report bddda70d: the 2021 roster snapshot omits TEN and only shows SEA as
-   DEV. Actual games for both are recorded under this GSIS id in the weekly
-   stats and confirmed by the NFL and Vikings.
+/* The roster key omits Adrian Peterson's 2017 Saints and 2021 Titans stints,
+   and lists Seattle as DEV despite a 2021 appearance. The league and teams
+   confirm all three under the 2007 draft pick's GSIS identity.
    https://www.nfl.com/players/adrian-peterson/stats/career
-   https://www.vikings.com/news/adrian-peterson-ring-of-honor-inductee-2026 */
+   https://www.neworleanssaints.com/news/john-deshazier-coach-sean-payton-calls-adrian-peterson-trade-a-win-win-19549661
+   https://www.tennesseetitans.com/news/titans-make-13-roster-moves-on-the-active-roster-practice-squad-and-injured-rese
+   https://www.seahawks.com/news/instant-lookback-adrian-peterson-gets-first-start-first-touchdown-for-seattle */
 const VERIFIED_ROSTER_APPEARANCES = [
+  { id: '00-0025394', season: 2017, teams: ['NO'] },
   { id: '00-0025394', season: 2021, teams: ['SEA', 'TEN'] },
 ];
 
