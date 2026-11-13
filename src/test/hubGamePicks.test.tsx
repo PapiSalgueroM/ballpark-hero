@@ -60,6 +60,18 @@ beforeEach(() => {
 afterEach(() => { cleanup(); expect(network.recordCompletion).not.toHaveBeenCalled(); expect(globalThis.fetch).not.toHaveBeenCalled(); vi.restoreAllMocks(); vi.unstubAllGlobals(); });
 
 describe('Sport hub picks and Home', () => {
+  it('offers Soccer a smaller phone image while retaining the original arena fallback', async () => {
+    const view = await mount('/soccer');
+    const arena = view.getByRole('heading', { name: /^Soccer Games$/ }).closest('header')!;
+    const source = arena.querySelector('picture source');
+    expect(source).toHaveAttribute('media', '(max-width: 640px) and (max-resolution: 2dppx)');
+    expect(source).toHaveAttribute('srcset', '/arenas/soccer-1280.webp');
+    const fallback = arena.querySelector('picture img');
+    expect(fallback).toHaveAttribute('src', '/arenas/soccer.webp');
+    expect(fallback).toHaveAttribute('width', '1672');
+    expect(fallback).toHaveAttribute('height', '941');
+  });
+
   for (const f of fixtures) it('pins from ' + f.route + ' and restores the exact Home destination', async () => {
     const url = f.route + '?filter=sim&q=Career&from=pin-test', view = await mount(url), before = bytes();
     const button = view.queryByRole('button', { name: 'Pin ' + f.label });
