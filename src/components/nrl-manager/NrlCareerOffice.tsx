@@ -6,8 +6,10 @@ import NrlBoardChallengeNotice from '@/components/nrl-manager/NrlBoardChallengeN
 import { nrlSeasonPlan, NRL_LAST_YEAR } from '@/data/nrlManagerSeasons';
 import {
   isNrlOpeningMatchdayPlayer,
-  nrlAcademyAvailableRoles, nrlAcademyOffer, nrlAcademyReports, nrlCareerCap, nrlCareerFinance, nrlCareerMarket, nrlCareerRecord, nrlCareerSquad, nrlContractOffer,
-  nrlCoachQuote, nrlCoachSpend, nrlDevelopmentPreview, nrlFinanceForecast, nrlMedicalSpend, nrlMedicalUpgradeQuote, nrlOffseasonClubs, type NrlCareerAction, type NrlCareerState,
+  nrlAcademyAvailableRoles, nrlAcademyOffer, nrlAcademyReports, nrlCareerCap, nrlCareerFinance, nrlCareerMarket, nrlCareerRecord, nrlCareerSquad,
+  nrlContractCounteroffer, nrlContractOffer,
+  nrlCoachQuote, nrlCoachSpend, nrlDevelopmentPreview, nrlFinanceForecast, nrlMedicalSpend, nrlMedicalUpgradeQuote, nrlOffseasonClubs, nrlOffseasonOpportunities,
+  type NrlCareerAction, type NrlCareerState,
   nrlSponsorIncome, nrlSponsorRefusal, nrlTakeoverOffers, nrlTakeoverPlayers, nrlTicketPricingRefusal,
   NRL_SHORTLIST_LIMIT, NRL_SPONSOR_OFFERS, NRL_TICKET_GATE_CHANGES,
   type NrlDevelopmentFocus, type NrlMedicalLevel, type NrlSponsorOffer, type NrlTicketTier,
@@ -53,11 +55,16 @@ function OfferForm({ career, entry, onAction, onClose, disabled }: {
 }) {
   const [salary, setSalary] = useState(String(entry.askingSalary));
   const [years, setYears] = useState(2);
-  const preview = nrlContractOffer(career, entry.player.id, Number(salary), years);
+  const [requested, setRequested] = useState(false);
+  const annualSalary = Number(salary);
+  const preview = nrlContractOffer(career, entry.player.id, annualSalary, years);
+  const canRequest = !career.legacySeason && Number.isSafeInteger(annualSalary)
+    && annualSalary >= nrlSeasonPlan(entry.startYear).minimumSalary && annualSalary < entry.askingSalary;
+  const counter = requested ? nrlContractCounteroffer(career, entry.player.id, annualSalary) : null;
   return (
     <form className="mt-3 rounded-xl border border-border bg-background p-3" onSubmit={event => {
       event.preventDefault();
-      if (preview.ok && !disabled) onAction({ type: 'offerContract', playerId: entry.player.id, salary: Number(salary), years });
+      if (preview.ok && !disabled) onAction({ type: 'offerContract', playerId: entry.player.id, salary: annualSalary, years });
     }}>
       <h3 className="font-bold">Offer {entry.player.name} a contract</h3>
       <p className="mt-1 text-sm text-muted-foreground">Asking {money(entry.askingSalary)} per season · Starts {entry.startYear}</p>
@@ -65,11 +72,11 @@ function OfferForm({ career, entry, onAction, onClose, disabled }: {
         <label className="min-w-0 space-y-1 text-sm font-semibold">
           <span>Annual salary (AUD)</span>
           <input className={control} type="number" inputMode="numeric" min={0} step={1} required value={salary}
-            onChange={event => setSalary(event.target.value)} disabled={disabled} />
+            onChange={event => { setSalary(event.target.value); setRequested(false); }} disabled={disabled} />
         </label>
         <label className="space-y-1 text-sm font-semibold">
           <span>Term</span>
-          <select className={control} value={years} disabled={disabled} onChange={event => setYears(Number(event.target.value))}>
+          <select className={control} value={years} disabled={disabled} onChange={event => { setYears(Number(event.target.value)); setRequested(false); }}>
             <option value={1}>1 season</option>
             <option value={2}>2 seasons</option>
             <option value={3}>3 seasons</option>
@@ -78,10 +85,20 @@ function OfferForm({ career, entry, onAction, onClose, disabled }: {
         </label>
       </div>
       <p className="mt-2 text-sm text-muted-foreground" role="status">
-        {preview.ok === true ? `${money(preview.contract.salary)} per season through ${preview.contract.endYear}.` : preview.reason}
+        {counter?.ok === true ? <>
+          <span className="block font-semibold text-foreground">{money(counter.contract.salary)} per season from {counter.contract.startYear} through {counter.contract.endYear}.</span>
+          <span>Lower annual salary in exchange for three seasons. These are simulated contract terms.</span>
+        </> : counter?.ok === false ? counter.reason
+          : canRequest ? 'Request a simulated three-season deal or raise your offer to the asking salary.'
+          : preview.ok === true ? `${money(preview.contract.salary)} per season through ${preview.contract.endYear}.` : preview.reason}
       </p>
       <div className="mt-3 flex flex-wrap gap-2">
         <Button type="button" size="lg" variant="outline" className="px-4" onClick={onClose}>Cancel</Button>
+        {canRequest && <Button type="button" size="lg" variant="outline" className="px-4" disabled={disabled}
+          onClick={() => setRequested(!requested)}>{requested ? 'Decline counteroffer' : 'Request counteroffer'}</Button>}
+        {counter?.ok === true && <Button type="button" size="lg" className="px-4" disabled={disabled} onClick={() => onAction({
+          type: 'acceptCounteroffer', playerId: entry.player.id, year: career.season.year, offeredSalary: annualSalary, contract: counter.contract,
+        })}>Accept counteroffer</Button>}
         <Button type="submit" size="lg" className="px-4" disabled={!preview.ok || disabled}>Agree contract</Button>
       </div>
     </form>
@@ -267,7 +284,8 @@ function Recruitment({ career, onAction, disabled }: { career: NrlCareerState; o
   const filtered = market.filter(({ player }) => (!role || player.role === role) && (!shortlistedOnly || shortlist.includes(player.id)));
   const act: Dispatch = action => {
     if (!onAction(action)) return false;
-    if (shortlistedOnly && (action.type === 'offerContract' || (action.type === 'setShortlist' && !action.saved))) {
+    if (shortlistedOnly && (action.type === 'offerContract' || action.type === 'acceptCounteroffer'
+      || (action.type === 'setShortlist' && !action.saved))) {
       shortlistFilter.current?.focus();
     }
     return true;
@@ -905,8 +923,10 @@ function History({ career, onAction, disabled }: { career: NrlCareerState; onAct
   const mustMove = challengeStatus === 'must-move';
   const pastPlaces = new Map(career.history.map(record => [`${record.clubId}:${record.year}`, record.rank]));
   const [nextClubId, setNextClubId] = useState('');
+  const clubSelect = useRef<HTMLSelectElement>(null);
   const clubs = nrlOffseasonClubs(career);
   const nextClub = clubs.find(club => club.id === nextClubId);
+  const openings = nrlOffseasonOpportunities(career);
   return (
     <>
       <h2 className="font-display text-xl font-bold">Season review</h2>
@@ -943,8 +963,29 @@ function History({ career, onAction, disabled }: { career: NrlCareerState; onAct
           </summary>
           <div className="space-y-2 pb-3 text-sm">
             <p className="text-muted-foreground">Take over the new club’s squad and contracts. If you return to a club, you resume its last balance and medical facilities.</p>
+            {openings.length > 0 && <section className="rounded-lg border border-border p-2" aria-labelledby="nrl-openings-title">
+              <h3 id="nrl-openings-title" className="font-bold">Suggested openings</h3>
+              <p className="text-muted-foreground">Simulated suggestions based on expansion and this career’s results. You can choose any club in the list.</p>
+              <ul className="divide-y divide-border">
+                {openings.map(opening => {
+                  const club = clubs.find(candidate => candidate.id === opening.clubId)!;
+                  return <li key={club.id} className="flex flex-wrap items-center justify-between gap-2 py-2">
+                    <div>
+                      <p className="font-semibold">{club.name}</p>
+                      <p className="text-muted-foreground">{opening.reason === 'expansion' ? `Enters the league in ${year + 1}`
+                        : `Ladder place ${opening.rank}. Missed its modeled target by ${opening.missedBy} ${opening.missedBy === 1 ? 'place' : 'places'}.`}</p>
+                      <p className="text-muted-foreground">{year + 1} board target · {opening.nextTarget}</p>
+                    </div>
+                    <Button type="button" size="lg" variant="outline" className="px-3" disabled={disabled} aria-label={`Consider ${club.name}`} onClick={() => {
+                      setNextClubId(club.id);
+                      clubSelect.current?.focus();
+                    }}>Consider</Button>
+                  </li>;
+                })}
+              </ul>
+            </section>}
             <label className="block font-semibold" htmlFor="nrl-next-club">Club to manage</label>
-            <select id="nrl-next-club" className={control} value={nextClubId} disabled={disabled} onChange={event => setNextClubId(event.target.value)}>
+            <select ref={clubSelect} id="nrl-next-club" className={control} value={nextClubId} disabled={disabled} onChange={event => setNextClubId(event.target.value)}>
               <option value="">Choose a club</option>
               {clubs.map(club => <option key={club.id} value={club.id}>{club.name}</option>)}
             </select>

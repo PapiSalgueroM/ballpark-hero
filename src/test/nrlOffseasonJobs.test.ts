@@ -2,9 +2,10 @@ import { describe, expect, it } from 'vitest';
 import { nrlBoardBenchmark, nrlBoardTarget } from '@/lib/nrlBoardTarget';
 import {
   createNrlCareer, nrlAcademyReports, nrlCareerCap, nrlCareerFinance, nrlCareerSquad, nrlMedicalUpgradeQuote, nrlOffseasonClubs,
-  readNrlCareerSave, reduceNrlCareer, type NrlCareerState,
+  nrlOffseasonOpportunities, readNrlCareerSave, reduceNrlCareer, type NrlCareerState,
 } from '@/lib/nrlCareer';
-import { createNrlSeason, NRL_ROLES, reduceNrlSeason } from '@/lib/nrlManager';
+import { NRL_LAST_YEAR } from '@/data/nrlManagerSeasons';
+import { createNrlSeason, nrlLadder, NRL_ROLES, reduceNrlSeason } from '@/lib/nrlManager';
 
 const advance = (state: NrlCareerState) => reduceNrlCareer(state, { type: 'advance' });
 const stay = (state: NrlCareerState) => reduceNrlCareer(state, { type: 'startNextSeason' });
@@ -20,6 +21,58 @@ function finish(state: NrlCareerState) {
 }
 
 describe('NRL Manager offseason club moves', () => {
+  it('uses the finished simulated draw to suggest only the largest misses and the actual expansion opening', () => {
+    const season2026 = finish(createNrlCareer('storm', 4));
+    const raw = JSON.stringify(season2026);
+    expect(nrlOffseasonOpportunities(season2026)).toEqual([
+      { clubId: 'bears', nextTarget: 'Finish in the top twelve', reason: 'expansion' },
+      { clubId: 'roosters', nextTarget: 'Reach the finals', reason: 'missed', rank: 8, missedBy: 4 },
+      { clubId: 'dolphins', nextTarget: 'Finish in the top four', reason: 'missed', rank: 10, missedBy: 2 },
+    ]);
+    expect(nrlOffseasonOpportunities(readNrlCareerSave(raw)!)).toEqual(nrlOffseasonOpportunities(season2026));
+    expect(JSON.stringify(season2026)).toBe(raw);
+    const ordinaryMove = move(season2026, 'bulldogs');
+    expect(ordinaryMove.season.clubId).toBe('bulldogs');
+    expect(stay(season2026).season.clubId).toBe('storm');
+    for (const opportunity of nrlOffseasonOpportunities(season2026)) {
+      expect(nrlBoardTarget(move(season2026, opportunity.clubId))?.label).toBe(opportunity.nextTarget);
+    }
+
+    const season2027 = finish(createNrlCareer('bears', 14, 2027));
+    expect(nrlOffseasonOpportunities(season2027)).toEqual([
+      { clubId: 'chiefs', nextTarget: 'Finish above the bottom two', reason: 'expansion' },
+      { clubId: 'dragons', nextTarget: 'Finish above the bottom two', reason: 'missed', rank: 18, missedBy: 2 },
+      { clubId: 'sharks', nextTarget: 'Finish in the top four', reason: 'missed', rank: 5, missedBy: 1 },
+    ]);
+    expect(nrlOffseasonOpportunities(finish(stay(season2027))).some(row => row.reason === 'expansion')).toBe(false);
+  });
+
+  it('does not treat a champion, partial draw, retired career or terminal year as an available opening', () => {
+    const started = createNrlCareer('storm', 5);
+    expect(nrlOffseasonOpportunities(started)).toEqual([]);
+    const finished = finish(started);
+    expect(finished.season.championId).toBe('raiders');
+    expect(nrlOffseasonOpportunities(finished).map(row => row.clubId)).toEqual(['bears', 'knights', 'dragons']);
+    expect(nrlOffseasonOpportunities({ ...finished, retired: true })).toEqual([]);
+    expect(nrlOffseasonOpportunities({ ...finished, season: { ...finished.season, year: NRL_LAST_YEAR } })).toEqual([]);
+    const partial = { ...finished, season: { ...finished.season, results: finished.season.results.slice(1) } };
+    expect(nrlOffseasonOpportunities(partial)).toEqual([{ clubId: 'bears', nextTarget: 'Finish in the top twelve', reason: 'expansion' }]);
+  });
+
+  it('uses verified legacy fixtures without inventing financial or staffing history', () => {
+    let legacy = createNrlSeason('storm', 18);
+    while (legacy.phase !== 'complete') legacy = reduceNrlSeason(legacy, { type: 'advance' });
+    const imported = readNrlCareerSave(JSON.stringify(legacy))!;
+    const raw = JSON.stringify(imported);
+    const ladder = nrlLadder(legacy);
+    const opportunities = nrlOffseasonOpportunities(imported);
+    expect(opportunities[0]).toMatchObject({ clubId: 'bears', reason: 'expansion' });
+    expect(opportunities.length).toBeGreaterThan(1);
+    for (const row of opportunities.filter(row => row.reason === 'missed')) expect(ladder[row.rank - 1].clubId).toBe(row.clubId);
+    expect(imported.history[0].finance).toBeNull();
+    expect(JSON.stringify(imported)).toBe(raw);
+  });
+
   it('takes over Perth in 2027 with its settled squad and leaves the outgoing club receipts and contracts intact', () => {
     const first = upgrade(createNrlCareer('storm', 1), 2);
     const hired = reduceNrlCareer(first, { type: 'hireCoach', role: 'attack', year: 2026, round: 1 });
