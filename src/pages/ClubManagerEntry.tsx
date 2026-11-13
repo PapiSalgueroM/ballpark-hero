@@ -11,12 +11,16 @@ export default function ClubManagerEntry() {
     const prerender = typeof window !== 'undefined' && (window as Window & { __DUKB_PRERENDER__?: boolean }).__DUKB_PRERENDER__;
     return prerender || hasClubManagerBootData();
   });
-  const [pickedEra, setPickedEra] = useState<string | null>(null);
+  const [pickedEra, setPickedEra] = useState<{ id: string; wasFocused: boolean } | null>(null);
   const [readCatalogue, setReadCatalogue] = useState(false);
   const openCareer = direct || pickedEra !== null;
   const picker = <>
     <ClubManagerPickerHeading step="era" />
-    <ClubManagerEraPicker onPick={setPickedEra} pendingEra={pickedEra} />
+    <ClubManagerEraPicker
+      onPick={(id, wasFocused) => setPickedEra({ id, wasFocused })}
+      pendingEra={pickedEra?.id}
+      preserveFocus={pickedEra?.wasFocused}
+    />
   </>;
 
   return (
@@ -31,9 +35,9 @@ export default function ClubManagerEntry() {
     )}>
       {openCareer ? (
         <Suspense fallback={direct
-          ? <ClubManagerStartup className="py-24">Loading Club Manager...</ClubManagerStartup>
+          ? <ClubManagerStartup>Loading Club Manager...</ClubManagerStartup>
           : picker}>
-          <ClubManagerContents initialEra={pickedEra} />
+          <ClubManagerContents initialEra={pickedEra?.id} />
         </Suspense>
       ) : picker}
     </ClubManagerFrame>

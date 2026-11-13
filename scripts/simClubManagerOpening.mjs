@@ -84,6 +84,10 @@ const runtime = fs.readFileSync(path.join(root, 'src/pages/ClubManager.tsx'), 'u
 assert.match(entrySource, /fallback=\{direct\s*\? <ClubManagerStartup\b[^>]*>Loading Club Manager/);
 assert.match(runtime, /return shell\(<ClubManagerStartup\b[^>]*>Loading…<\/ClubManagerStartup>\);/);
 assert.match(runtime, /<Suspense fallback=\{<ClubManagerStartup\b[^>]*>Loading screen\.\.\.<\/ClubManagerStartup>\}>\s*<ManagerSlotsScreen\b/);
+assert(startupClass?.includes('min-h-48 py-12 text-sm'), 'the shared startup owns the tablet and desktop height');
+assert.match(entrySource, /<ClubManagerStartup>Loading Club Manager/);
+assert.match(runtime, /<ClubManagerStartup className="animate-pulse">Loading…/);
+assert.match(runtime, /<ClubManagerStartup>Loading screen/);
 assert.equal([...entrySource.matchAll(/<ClubManagerStartup\b/g)].length, 1);
 assert.equal([...runtime.matchAll(/<ClubManagerStartup\b/g)].length, 2);
 console.log('Startup layout: only direct entry, generic boot and manager-slot loading reserve the mobile viewport.');
