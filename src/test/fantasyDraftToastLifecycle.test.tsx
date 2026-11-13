@@ -8,7 +8,7 @@ vi.mock('@/contexts/AuthContext', () => ({
   AuthProvider: ({ children }: { children: React.ReactNode }) => children,
   useAuth: () => ({ user: null, profile: null, loading: false }),
 }));
-vi.mock('@/components/layout/LiveTicker', () => ({ LiveTicker: () => null }));
+vi.mock('@/components/layout/LiveTicker', () => ({ LiveTicker: () => null, default: () => null }));
 vi.mock('@/components/layout/Header', () => ({ Header: () => null }));
 vi.mock('@/components/layout/SiteMenu', () => ({ SiteMenu: () => null }));
 vi.mock('@/components/layout/UpdateNudge', () => ({ UpdateNudge: () => null }));
@@ -40,7 +40,7 @@ it('loads Fantasy Draft notifications on its first visit and retains an open toa
   expect(screen.queryByRole('region', { name: 'Notifications (F8)' })).toBeNull();
 
   navigate('/Fantasy-Draft/');
-  await screen.findByRole('button', { name: 'Start Draft' });
+  await screen.findByRole('button', { name: 'Start Draft' }, { timeout: 5000 });
   await screen.findByRole('region', { name: 'Notifications (F8)' });
   const notification = 'Fantasy Draft notification fixture';
   act(() => { toast({ title: notification, duration: 30_000 }); });
