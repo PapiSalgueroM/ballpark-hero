@@ -3,6 +3,7 @@ import { ArrowRight, Bookmark, ChevronDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import RetireDoor from '@/components/club-manager/RetireDoor';
 import NrlBoardChallengeNotice from '@/components/nrl-manager/NrlBoardChallengeNotice';
+import NrlJudiciaryReview from '@/components/nrl-manager/NrlJudiciaryReview';
 import { nrlSeasonPlan, NRL_LAST_YEAR } from '@/data/nrlManagerSeasons';
 import {
   isNrlNamedPlayer,
@@ -22,6 +23,7 @@ import {
   NRL_DEVELOPMENT_ASSISTANT, NRL_SHORTLIST_LIMIT, NRL_SPONSOR_OFFERS, NRL_TICKET_GATE_CHANGES,
   type NrlDevelopmentFocus, type NrlMedicalLevel, type NrlSponsorOffer, type NrlStaffRole, type NrlTicketTier,
 } from '@/lib/nrlCareer';
+import { judiciaryNeedsResponse, nrlJudiciaryBans, nrlJudiciaryPenalty } from '@/lib/nrlJudiciary';
 import { nrlArchivedFinals, NRL_COACHING_BONUS, NRL_FINALS_ROUND_TITLES, NRL_QUALIFIED_COACHING_BONUS, NRL_ROLES, type NrlRole } from '@/lib/nrlManager';
 import {
   archiveNrlPlayerSeasons, archiveNrlScoring, nrlArchivedPlayerSeason, nrlArchivedScoringLeaders,
@@ -1256,6 +1258,8 @@ function History({ career, onAction, disabled }: { career: NrlCareerState; onAct
   const { year, phase, clubId } = career.season;
   const finished = phase === 'complete';
   const retired = career.retired === true;
+  const needsJudiciary = judiciaryNeedsResponse(career.season);
+  const outstandingJudiciary = finished && career.season.judiciary && nrlJudiciaryBans(career.season).size > 0;
   const target = nrlBoardTarget(career);
   const challengeStatus = nrlBoardChallengeStatus(career);
   const mustMove = challengeStatus === 'must-move';
@@ -1276,7 +1280,7 @@ function History({ career, onAction, disabled }: { career: NrlCareerState; onAct
       {application.response === 'offered' && (
         <>
           {career.coachRetention && <p className="text-sm text-muted-foreground">Accepting this job cancels the assistant extension.</p>}
-          <Button type="button" size="lg" className="mt-2 w-full px-2 sm:w-auto" disabled={disabled}
+          <Button type="button" size="lg" className="mt-2 w-full px-2 sm:w-auto" disabled={disabled || needsJudiciary}
             onClick={() => onAction({ type: 'acceptOffseasonJob', year, clubId, destinationId: application.clubId })}>
             Accept offer and start {year + 1}
           </Button>
@@ -1291,6 +1295,12 @@ function History({ career, onAction, disabled }: { career: NrlCareerState; onAct
         {retired ? `Retired after the ${year} season.`
           : finished ? 'Review the year and settle your squad before the new season.' : 'Completed seasons stay here as your career moves on.'}
       </p>
+      {finished && career.season.judiciary?.case && <div className="mt-3">
+        <NrlJudiciaryReview season={career.season} onAction={onAction} disabled={disabled} />
+      </div>}
+      {outstandingJudiciary && !retired && year < NRL_LAST_YEAR && <p className="mt-2 text-sm text-muted-foreground">
+        A remaining suspension carries into the next season if you stay and the player is still signed to this club.
+      </p>}
       {target && (
         <section className="mt-4 rounded-xl border border-border bg-background p-3" aria-labelledby="nrl-board-target">
           <h3 id="nrl-board-target" className="text-sm font-bold">Board target</h3>
@@ -1315,7 +1325,7 @@ function History({ career, onAction, disabled }: { career: NrlCareerState; onAct
       <LeagueRecruitment career={career} onAction={onAction} disabled={disabled}
         nextClubId={nextClub?.id ?? (application?.response === 'offered' ? application.clubId : undefined)} />
       {finished && !retired && year < NRL_LAST_YEAR && !mustMove && (
-        <Button type="button" size="lg" className="mt-3 w-full" disabled={disabled} onClick={() => onAction({ type: 'startNextSeason' })}>
+        <Button type="button" size="lg" className="mt-3 w-full" disabled={disabled || needsJudiciary} onClick={() => onAction({ type: 'startNextSeason' })}>
           Start {year + 1}<ArrowRight aria-hidden="true" />
         </Button>
       )}
@@ -1368,14 +1378,14 @@ function History({ career, onAction, disabled }: { career: NrlCareerState; onAct
               <option value="">Choose a club</option>
               {clubs.map(club => <option key={club.id} value={club.id}>{club.name}</option>)}
             </select>
-            {nextClub && <Button type="button" size="lg" variant="outline" className="w-full px-2" disabled={disabled}
+            {nextClub && <Button type="button" size="lg" variant="outline" className="w-full px-2" disabled={disabled || needsJudiciary}
               onClick={() => onAction({ type: 'startNextSeason', move: { fromYear: year, clubId: nextClub.id } })}>
               Start {year + 1} with {nextClub.shortName}
             </Button>}
           </div>
         </details>
       )}
-      {finished && !retired && !disabled && (
+      {finished && !retired && !disabled && !needsJudiciary && (
         <RetireDoor className="mt-3" door="Retire from management" title={`Retire after the ${year} season?`}
           lines={['Your career record stays in this save slot.', ...(career.coachRetention ? ['Retiring cancels the assistant extension.'] : [])]}
           keep="Keep managing" confirm="Yes, retire"
@@ -1391,6 +1401,8 @@ function History({ career, onAction, disabled }: { career: NrlCareerState; onAct
             const points = leaders[0];
             const coach = record.finance?.coachHire;
             const staffSpend = record.finance ? nrlCoachSpend(record.finance) : null;
+            const judgement = record.judiciary?.case;
+            const sanction = judgement && nrlJudiciaryPenalty({ ...career.season, year: record.year, clubId: record.clubId }, judgement);
             const benchmark = record.year === year ? null
               : nrlBoardBenchmark(record.year, record.clubId, pastPlaces.get(`${record.clubId}:${record.year - 1}`));
             return (
@@ -1450,6 +1462,10 @@ function History({ career, onAction, disabled }: { career: NrlCareerState; onAct
                   {coachLabels[coach.role]} · {money(staffSpend.signingFee + staffSpend.wages)} total staff cost
                 </p>}
                 {record.coachRetained && <p className="text-sm text-muted-foreground">Assistant retained for {record.year + 1}.</p>}
+                {judgement && <p className="text-sm text-muted-foreground">
+                  Judiciary · {judgement.decision === 'plea' ? 'Early plea' : sanction ? 'Hearing suspension' : 'Cleared at hearing'}
+                  {sanction ? ` · ${sanction} ${sanction === 1 ? 'match' : 'matches'}` : ''}
+                </p>}
                 {record.finance?.coachCourseRound !== undefined && <p className="text-sm text-muted-foreground">
                   Assistant coaching course completed · {money(nrlCoachCourseSpend(record.finance))}
                 </p>}

@@ -8,6 +8,7 @@ import { RulesGate } from '@/components/game/RulesGate';
 import NrlBoardChallengeNotice from '@/components/nrl-manager/NrlBoardChallengeNotice';
 import NrlCareerOffice from '@/components/nrl-manager/NrlCareerOffice';
 import NrlOriginOffice from '@/components/nrl-manager/NrlOriginOffice';
+import NrlJudiciaryReview from '@/components/nrl-manager/NrlJudiciaryReview';
 import NrlCareerSlots from '@/components/nrl-manager/NrlCareerSlots';
 import GameSeoContent from '@/components/seo/GameSeoContent';
 import PageSeo from '@/components/seo/PageSeo';
@@ -27,12 +28,14 @@ import {
   type NrlAction, type NrlAttackPlan, type NrlCoachRole, type NrlLiveHalf, type NrlManagerState, type NrlMatchResult, type NrlNextRound, type NrlRole, type NrlTactic,
 } from '@/lib/nrlManager';
 import {
-  createNrlCareer, isNrlNamedPlayer, loadNrlOpeningMatchdayCareer, loadNrlPerthSigningsCareer, nrlAttackPlanPreview, nrlOppositionReport, nrlPositionTraining,
+  createNrlCareer, isNrlNamedPlayer, loadNrlOpeningMatchdayCareer, loadNrlPerthSigningsCareer,
+  nrlAttackPlanPreview, nrlOppositionReport, nrlPositionTraining,
   nrlBoardPathwaysQuote, nrlCoachTactics, nrlPositionTrainingCandidates, nrlReserveGradeCandidates, nrlRivalSquad,
   nrlSponsorRefusal, nrlTicketPricingRefusal, nrlWorldCupAppointmentAvailable,
   NRL_FAST_FORWARD_ROUNDS, NRL_POSITION_TRAINING_ROUNDS, NRL_SAVE_MAX_CHARS, reduceNrlCareer, runNrlFastForward,
   type NrlCareerAction, type NrlCareerState, type NrlFastForwardRequest, type NrlFastForwardStop,
 } from '@/lib/nrlCareer';
+import { judiciaryNeedsResponse, nrlJudiciaryBans } from '@/lib/nrlJudiciary';
 import { nrlScorePoints, nrlScoringLeaders, nrlSquadSeasonStats, nrlTryLeaders, type NrlSquadStatsScope } from '@/lib/nrlPlayerScoring';
 import { NRL_SAVE_ENTRY, nrlSeasonCanCredit, readNrlReplayCutoff, readNrlSaveSlot, writeNrlSaveSlot } from '@/lib/nrlSaveSlots';
 import { saveFence } from '@/lib/saveFence';
@@ -80,11 +83,12 @@ function shortName(year: number, id: string) {
 
 function ClubChooser({ year, onYear, onStart, disabled, loading, loadFailed }: {
   year: NrlYear; onYear: (year: NrlYear) => void;
-  onStart: (clubId: string, boardChallenge: boolean, openingNames: boolean) => void;
+  onStart: (clubId: string, boardChallenge: boolean, openingNames: boolean, judiciary: boolean) => void;
   disabled: boolean; loading: boolean; loadFailed: boolean;
 }) {
   const [boardChallenge, setBoardChallenge] = useState(false);
   const [openingNames, setOpeningNames] = useState(false);
+  const [judiciary, setJudiciary] = useState(false);
   const [reloadUnavailable, setReloadUnavailable] = useState(false);
   const competition = NRL_SEASONS[year];
   const rosterLabel = year === 2026 ? '2026 matchday names' : 'Perth Bears signings';
@@ -103,13 +107,24 @@ function ClubChooser({ year, onYear, onStart, disabled, loading, loadFailed }: {
           ))}
         </div>
         <label className="mt-3 flex min-h-11 items-start gap-2 rounded-lg border border-border bg-background p-2 text-sm">
-          <input type="checkbox" checked={openingNames} disabled={disabled} onChange={event => setOpeningNames(event.target.checked)}
+          <input type="checkbox" checked={openingNames} disabled={disabled} onChange={event => {
+            setOpeningNames(event.target.checked);
+            if (event.target.checked) setJudiciary(false);
+          }}
             className="mt-0.5 h-4 w-4 shrink-0 accent-primary" />
           <span>
             <span className="block font-semibold">{year === 2026 ? '2026 opening matchday names' : 'Perth Bears confirmed signings'}</span>
             <span className="block text-muted-foreground">{year === 2026
               ? 'Start each club with 19 verified names and opening ages, plus 11 generated players. Ratings, wages and contracts are simulated.'
               : 'Start as Perth with 27 confirmed signings and three generated players. Ages, ratings, contracts and the draw are simulated. Other clubs use generated squads.'}</span>
+          </span>
+        </label>
+        <label className="mt-3 flex min-h-11 items-start gap-2 rounded-lg border border-border bg-background p-2 text-sm">
+          <input type="checkbox" checked={judiciary} disabled={disabled || openingNames} onChange={event => setJudiciary(event.target.checked)}
+            className="mt-0.5 h-4 w-4 shrink-0 accent-primary" />
+          <span>
+            <span className="block font-semibold">Judiciary challenge</span>
+            <span className="block text-muted-foreground">Generated squads only. Choose an early plea or hearing if a fictional club player is charged after a match.</span>
           </span>
         </label>
         <label className="mt-3 flex min-h-11 items-start gap-2 rounded-lg border border-border bg-background p-2 text-sm">
@@ -137,7 +152,7 @@ function ClubChooser({ year, onYear, onStart, disabled, loading, loadFailed }: {
       <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-4">
         {competition.clubs.map(club => (
           <button key={club.id} type="button" disabled={disabled} data-nrl-club={club.id}
-            aria-label={`Manage ${club.name}`} onClick={() => onStart(club.id, boardChallenge, openingNames && (year === 2026 || club.id === 'bears'))}
+            aria-label={`Manage ${club.name}`} onClick={() => onStart(club.id, boardChallenge, openingNames && (year === 2026 || club.id === 'bears'), judiciary)}
             className="group flex min-h-24 min-w-0 flex-col justify-between rounded-xl border border-border bg-card p-3 text-left transition-colors hover:border-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:opacity-50">
             <span className="text-sm font-bold leading-snug sm:text-base">{club.name}</span>
             <span className="mt-2 flex w-full items-center justify-between gap-1 text-xs text-muted-foreground">
@@ -395,6 +410,7 @@ const fastForwardStops: Record<NrlFastForwardStop, string> = {
   development: 'A training or development plan finished.',
   applications: 'Check summer job applications in Season review before advancing.',
   finals: 'The regular season is complete. Play the finals one round at a time.',
+  judiciary: 'A Judiciary review needs a response in Match centre.',
 };
 type FastForwardResult = { rounds: number; stop: NrlFastForwardStop | null };
 
@@ -452,7 +468,7 @@ function FastForward({ career, onRun, disabled }: {
 }
 
 function MatchCentre({ career, onAction, onRun, onReview, disabled, showLiveResult }: {
-  career: NrlCareerState; onAction: (action: NrlCareerAction) => void; onRun: (request: NrlFastForwardRequest) => FastForwardResult | null;
+  career: NrlCareerState; onAction: (action: NrlCareerAction) => boolean; onRun: (request: NrlFastForwardRequest) => FastForwardResult | null;
   onReview: () => void; disabled: boolean; showLiveResult: boolean;
 }) {
   const { season } = career;
@@ -465,6 +481,7 @@ function MatchCentre({ career, onAction, onRun, onReview, disabled, showLiveResu
   }
   const club = shortName(year, clubId);
   const match = next.clubMatch;
+  const needsJudiciary = judiciaryNeedsResponse(season);
   const canPlayLive = Boolean(match && season.kickerId && season.bench);
   const holdable = canPlayLive ? nrlHoldableReserves(season) : [];
   const selectedHold = hold?.year === year && hold.round === season.round && holdable.some(player => player.id === hold.reserveId) ? hold : undefined;
@@ -552,6 +569,7 @@ function MatchCentre({ career, onAction, onRun, onReview, disabled, showLiveResu
     <section className="space-y-4" aria-label="Match centre">
       {!career.retired && <NrlBoardChallengeNotice season={season} status={nrlBoardChallengeStatus(career)} />}
       {showLiveResult && report}
+      <NrlJudiciaryReview season={season} onAction={onAction} disabled={disabled} />
       <div className="overflow-hidden rounded-2xl border border-emerald-500/35 bg-emerald-950 p-4 text-emerald-50 sm:p-6">
         <p className="text-xs font-bold uppercase tracking-widest text-emerald-200">{next.title}</p>
         <h2 className="mt-2 break-words font-display text-2xl font-black leading-tight sm:text-3xl">{title}</h2>
@@ -637,11 +655,11 @@ function MatchCentre({ career, onAction, onRun, onReview, disabled, showLiveResu
       )}
       {phase !== 'complete' && (
         <div className={canPlayLive ? 'grid grid-cols-2 gap-2' : undefined}>
-          {canPlayLive && <Button type="button" size="lg" disabled={disabled} onClick={() => onAction({ type: 'startLive', hold: selectedHold })}>
+          {canPlayLive && <Button type="button" size="lg" disabled={disabled || needsJudiciary} onClick={() => onAction({ type: 'startLive', hold: selectedHold })}>
             Play Live <ArrowRight aria-hidden="true" />
           </Button>}
           <Button type="button" size="lg" className="w-full" variant={canPlayLive ? 'outline' : 'default'}
-            disabled={disabled} onClick={() => onAction({ type: 'advance' })} data-nrl-advance>
+            disabled={disabled || (needsJudiciary && Boolean(match))} onClick={() => onAction({ type: 'advance' })} data-nrl-advance>
             {match ? 'Quick Sim' : phase === 'regular' ? 'Simulate bye round' : `Simulate ${next.title.toLowerCase()}`}
             {!canPlayLive && <ArrowRight aria-hidden="true" />}
           </Button>
@@ -914,6 +932,7 @@ function Squad({ career, onAction, disabled }: {
   const bench = nrlBench(season);
   const starters = new Set(Object.values(season.lineup));
   const availability = nrlUnavailable(season);
+  const bans = season.judiciary && nrlJudiciaryBans(season);
   const reserveGradeId = nrlReserveGradeRemaining(season) ? season.reserveGrade?.playerId : undefined;
   const leaders = nrlScoringLeaders(season);
   const tryLeaders = nrlTryLeaders(leaders);
@@ -969,9 +988,11 @@ function Squad({ career, onAction, disabled }: {
               <ul className="mt-1 divide-y divide-border text-sm">
                 {unavailable.map(player => {
                   const remaining = availability.get(player.id)!;
+                  const ban = bans?.get(player.id);
                   return <li key={player.id} className="flex flex-wrap justify-between gap-x-3 py-1">
                     <span>{player.name} · {player.role}</span>
                     <span className="text-muted-foreground">{player.id === reserveGradeId ? 'On reserve-grade development'
+                      : ban ? `Suspended for ${ban} club ${ban === 1 ? 'match' : 'matches'}`
                       : `Out for ${remaining} ${remaining === 1 ? 'round' : 'rounds'}`}</span>
                   </li>;
                 })}
@@ -1260,7 +1281,7 @@ function NrlManagerScreen({ entry, showSlots, rules }: {
     setCupMode(null);
   }
 
-  async function start(clubId: string, boardChallenge: boolean, openingNames: boolean) {
+  async function start(clubId: string, boardChallenge: boolean, openingNames: boolean, judiciary: boolean) {
     if (moved || startRequest.current || current.current || committed.current !== null) return;
     const seed = Math.floor(Math.random() * 0x1_0000_0000);
     if (openingNames) {
@@ -1282,7 +1303,7 @@ function NrlManagerScreen({ entry, showSlots, rules }: {
           setLoadingNames(false);
         }
       }
-    } else if (persist(createNrlCareer(clubId, seed, year, boardChallenge)) === 'moved') return;
+    } else if (persist(createNrlCareer(clubId, seed, year, boardChallenge, judiciary)) === 'moved') return;
     setPanel('match');
     setShowLiveResult(false);
   }
