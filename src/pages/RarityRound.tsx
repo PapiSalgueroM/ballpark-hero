@@ -517,7 +517,7 @@ const RarityRound = () => {
                   onSelect={handleSelect}
                   searchOptions={{ source: currentCategory.sourceConfig, minChars: 2, limit: 8 }}
                   placeholder="Search for a player..."
-                  emptyText={usesMarketValues ? 'No matches in this category’s market-value data.' : undefined}
+                  emptyText={usesMarketValues ? 'No matches in this market-value archive. Try a different name.' : undefined}
                   validateOnly
                   autoFocus
                 />

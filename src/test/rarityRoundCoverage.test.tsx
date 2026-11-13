@@ -97,11 +97,11 @@ describe('Rarity Round pool coverage', () => {
     expect(screen.getByText(/The Ballon d'Or round uses the winners list/)).toBeVisible();
     type(input, 'Johan Cryuff');
     await waitFor(() => expect(daily.searches).toContain('%johan cryuff%'));
-    expect(await screen.findByText('No matches in this category’s market-value data.')).toBeVisible();
+    expect(await screen.findByText('No matches in this market-value archive. Try a different name.')).toBeVisible();
     expect(lock()).toBeDisabled();
     type(input, 'Johan Cruyff');
     await waitFor(() => expect(daily.searches).toContain('%johan cruyff%'));
-    expect(await screen.findByText('No matches in this category’s market-value data.')).toBeVisible();
+    expect(await screen.findByText('No matches in this market-value archive. Try a different name.')).toBeVisible();
     expect(lock()).toBeDisabled();
 
     type(input, 'Virgil van Dijk');

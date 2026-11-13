@@ -181,6 +181,8 @@ export default function Index() {
           (supabase.from as any)('game_completions')
             .select('game')
             .eq('player_name', playerName)
+            .gte('completed_on', start.slice(0, 10))
+            .lte('completed_on', end.slice(0, 10))
             .gte('created_at', start)
             .lt('created_at', end).abortSignal(controller.signal),
           supabase.from('user_best_scores')

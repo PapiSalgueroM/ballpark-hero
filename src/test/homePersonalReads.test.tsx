@@ -41,7 +41,7 @@ function deferred() {
   const promise = new Promise<any>((yes, no) => { resolve = yes; reject = no; });
   return { promise, resolve, reject };
 }
-type Request = { table: string; args?: Record<string, unknown>; filters: [string, unknown, ('gte' | 'lt')?][]; columns?: string; signal?: AbortSignal; reply: ReturnType<typeof deferred> };
+type Request = { table: string; args?: Record<string, unknown>; filters: [string, unknown, ('gte' | 'lte' | 'lt')?][]; columns?: string; signal?: AbortSignal; reply: ReturnType<typeof deferred> };
 const requests: Request[] = [];
 let visibility: DocumentVisibilityState;
 function builder(table: string, args?: Record<string, unknown>) {
@@ -50,6 +50,7 @@ function builder(table: string, args?: Record<string, unknown>) {
     select: (columns: string) => { request.columns = columns; return query; },
     eq: (key: string, value: unknown) => { request.filters.push([key, value]); return query; },
     gte: (key: string, value: string) => { request.filters.push([key, value, 'gte']); return query; },
+    lte: (key: string, value: string) => { request.filters.push([key, value, 'lte']); return query; },
     lt: (key: string, value: string) => { request.filters.push([key, value, 'lt']); return query; },
     abortSignal: (signal: AbortSignal) => { request.signal = signal; return query; },
     then: (yes: (value: any) => unknown, no?: (error: unknown) => unknown) => request.reply.promise.then(yes, no),
@@ -81,6 +82,7 @@ async function finishPlayed(rows: CompletionRow[]) {
       const data = rows.filter(row => request.filters.every(([key, value, operator]) => {
         const cell = row[key as keyof CompletionRow];
         if (operator === 'gte') return Date.parse(cell) >= Date.parse(String(value));
+        if (operator === 'lte') return Date.parse(cell) <= Date.parse(String(value));
         if (operator === 'lt') return Date.parse(cell) < Date.parse(String(value));
         return cell === value;
       })).map(({ game }) => ({ game }));
@@ -255,7 +257,8 @@ describe('homepage personal read ownership', () => {
     signed(); mount(); await flush(); expect(hero()).toHaveLength(2);
     expect(requests.some(r => r.table === 'daily_completions')).toBe(false);
     expect(requests.filter(r => r.table === 'game_completions').map(r => r.filters)).toEqual([[
-      ['player_name', 'Alpha'], ['created_at', '2026-10-02T04:00:00.000Z', 'gte'], ['created_at', '2026-10-03T04:00:00.000Z', 'lt'],
+      ['player_name', 'Alpha'], ['completed_on', '2026-10-02', 'gte'], ['completed_on', '2026-10-03', 'lte'],
+      ['created_at', '2026-10-02T04:00:00.000Z', 'gte'], ['created_at', '2026-10-03T04:00:00.000Z', 'lt'],
     ]]);
   });
 });

@@ -24,7 +24,7 @@ function deferred() {
   const promise = new Promise<any>((yes, no) => { resolve = yes; reject = no; });
   return { promise, resolve, reject };
 }
-type Filter = [string, string, ('gte' | 'lt')?];
+type Filter = [string, string, ('gte' | 'lte' | 'lt')?];
 const requests: { rank: ReturnType<typeof deferred>; played: ReturnType<typeof deferred>; filters: Filter[] }[] = [];
 let visibility: DocumentVisibilityState;
 function signedIn(id = 'account-a', name = 'Alpha') {
@@ -70,6 +70,10 @@ beforeEach(() => {
         request.filters.push([key, value, 'gte']);
         return builder;
       },
+      lte: (key: string, value: string) => {
+        request.filters.push([key, value, 'lte']);
+        return builder;
+      },
       lt: (key: string, value: string) => {
         request.filters.push([key, value, 'lt']);
         return request.played.promise;
@@ -106,7 +110,8 @@ describe('navbar remote read eligibility and lifecycle', () => {
     expect(mock.rpc, 'focus must not duplicate an in-flight foreground read').toHaveBeenCalledTimes(1);
     expect(mock.rpc).toHaveBeenLastCalledWith('global_rank', { p_player: 'Alpha', p_period: 'today', p_games: null });
     expect(requests[0].filters).toEqual([
-      ['player_name', 'Alpha'], ['created_at', '2026-09-15T04:00:00.000Z', 'gte'], ['created_at', '2026-09-16T04:00:00.000Z', 'lt'],
+      ['player_name', 'Alpha'], ['completed_on', '2026-09-15', 'gte'], ['completed_on', '2026-09-16', 'lte'],
+      ['created_at', '2026-09-15T04:00:00.000Z', 'gte'], ['created_at', '2026-09-16T04:00:00.000Z', 'lt'],
     ]);
     await finish(0);
     expect(result.current).toMatchObject({ totalPointsToday: 50, dailyRank: 7, gamesPlayedToday: 3, loading: false });

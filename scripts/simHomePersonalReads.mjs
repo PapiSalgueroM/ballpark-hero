@@ -15,9 +15,9 @@ const controls = {
   eligibility: ['!canReadPersonal', 'false', 'guests make zero personal reads through focus visibility and idle time'],
   visibility: ["document.visibilityState !== 'visible'", 'false', 'hidden eligible accounts defer reads until one foreground batch'],
   flight: ['if (fetching || loaded) return;', 'if (loaded) return;', 'coalesces in flight events and does not poll completed reads'],
-  ownership: ['if (!active) return;', 'if (false) return;', 'late prior account responses cannot overwrite the new visible identity'],
+  ownership: ['if (!active) return;\n        const sameDay', 'if (false) return;\n        const sameDay', 'late prior account responses cannot overwrite the new visible identity'],
   cancel: ['controller?.abort();', 'void controller;', 'unmount aborts owned requests and removes foreground listeners'],
-  history: [".gte('created_at', start)\n            .lt('created_at', end).abortSignal(controller.signal),", '.abortSignal(controller.signal),', 'does not query unused traffic counts or unbounded lifetime history'],
+  history: [".gte('completed_on', start.slice(0, 10))\n            .lte('completed_on', end.slice(0, 10))\n            .gte('created_at', start)\n            .lt('created_at', end).abortSignal(controller.signal),", '.abortSignal(controller.signal),', 'does not query unused traffic counts or unbounded lifetime history'],
   count: ['return bestRes;\n            }),', "return bestRes;\n            }),\n          supabase.from('daily_completions').select('user_id', { count: 'exact', head: true }),", 'does not query unused traffic counts or unbounded lifetime history'],
   bestTiming: [bestTimingAnchor, bestTimingReplacement, 'healthy tile bests appear while rank remains pending'],
 };
