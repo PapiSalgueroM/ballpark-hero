@@ -1008,6 +1008,7 @@ export function joinClubNow(career: CareerState): CareerState | null {
       uclField: career.uclField ? customExitUclField(career, career.uclField) : null,
       championshipPlayoffRules: career.championshipPlayoffRules,
       bundesligaPlayoffRules: career.bundesligaPlayoffRules,
+      frenchPlayoffRules: career.frenchPlayoffRules,
       keepLeagueOverrides: true,
       ...(worldRosterView(departed) || worldSeedOf(departed) !== undefined
         ? { rosterCareer: departed, worldSeed: worldSeedOf(departed) } : {}),

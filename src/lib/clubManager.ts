@@ -176,6 +176,9 @@ import {
   PLAYOFF_LABELS, PLAYOFF_STAGES, drawNextPlayoffRound, openChampionshipPlayoffs,
   promotionTieAt, promotionWinner, recordPromotionResult, type ChampionshipPlayoffs,
 } from '@/lib/clubManagerChampionshipPlayoffs';
+import {
+  FRENCH_PLAYOFF_ROUNDS, frenchPlayoffLabel, frenchPlayoffTie, frenchTie, type FrenchPlayoffs,
+} from '@/lib/clubManagerFrenchPlayoffs';
 /* Round 670 review: how a Champions League tie is read, shared with Soccer
    Career. The module imports nothing. */
 import { uclTieOutcome } from '@/lib/uclTieRule';
@@ -2651,6 +2654,10 @@ export function acceptWildernessJob(career: CareerState, club: string): CareerSt
     withoutManager.bundesligaPlayoff = { ...career.bundesligaPlayoff, tie };
     settleBundesligaPlayoff(withoutManager, tie);
   }
+  if (career.frenchPlayoffs && !career.frenchPlayoffs.barrage?.winner) {
+    withoutManager.frenchPlayoffs = plainCopy(career.frenchPlayoffs);
+    advanceFrenchPlayoffs(withoutManager, true);
+  }
   const next = startNextSeason(withoutManager, club);
   return { ...next, sacked: false, wilderness: null };
 }
@@ -2938,6 +2945,8 @@ export interface CareerState {
   championshipPlayoffs?: ChampionshipPlayoffs;
   bundesligaPlayoffRules?: true;
   bundesligaPlayoff?: { season: number; tie: SettleableTie };
+  frenchPlayoffRules?: true;
+  frenchPlayoffs?: FrenchPlayoffs;
   /** Round 119: set only while a match is paused at halftime. */
   live?: LiveMatch | null;
   /** The 20 league clubs in scheduling order (shuffled each season). */
@@ -3787,7 +3796,7 @@ export const LEAGUE_RULES: Record<string, LeagueRules> = {
      one publisher, on the same shape as the season before. */
   ligue1: {
     nationId: 'france', flag: 'France', cup: 'Coupe de France', europe: { ucl: 3, uel: 4, uecl: 5 }, drop: 2, tiebreak: 'gdH2h', secondTier: 'ligue2', ladder: 'top', season: 'autumnSpring',
-    simplified: 'The real relegation barrage (sixteenth against the winner of Ligue 2\'s playoffs) is not played: two go straight down and two straight up.',
+    simplified: 'Two go straight down. In new modern French careers, sixteenth plays the winner of the Ligue 2 playoffs for the final Ligue 1 place.',
   },
   eredivisie: { nationId: 'netherlands', flag: 'Netherlands', cup: 'KNVB Cup', europe: { ucl: 2, uel: 3, uecl: 4 }, drop: 2, ladder: 'top', season: 'autumnSpring' },
   saudi: {
@@ -3982,7 +3991,7 @@ export const LEAGUE_RULES: Record<string, LeagueRules> = {
   ligue2: {
     nationId: 'france', flag: 'France', cup: 'Coupe de France', europe: null, drop: 2, ladder: 'promotion',
     playoff: { rankUpTo: 7, target: 5, label: 'Make the promotion playoffs' }, season: 'autumnSpring',
-    simplified: 'The promotion playoffs, the barrage against Ligue 1\'s sixteenth and the relegation barrage are not played: two go straight up and Ligue 1\'s bottom two come down in a straight swap.',
+    simplified: 'Two go straight up. In new modern French careers, third through fifth play for a place in the barrage against Ligue 1’s sixteenth. Ligue 3 is outside this career model.',
   },
   /* Round 1040: the Segunda División 2026-27 (LALIGA HYPERMOTION), La Liga's
      modelled second tier, so La Liga's bottom three go down and the
@@ -13303,7 +13312,7 @@ function playsExtraTime(state: CareerState, entry: CalendarEntry): boolean {
   if (entry.type === 'oneOff') return oneOffPlaysExtraTime(state, entry);
   /* Round 1593: a Europa League night that settles a tie (a second leg, the final). */
   if (entry.type === 'uel') return !!uelMyNight(state, entry)?.settles;
-  if (entry.type === 'promotion') return entry.round !== 1;
+  if (entry.type === 'promotion') return state.frenchPlayoffs ? entry.round === 2 : entry.round !== 1;
   if (entry.type !== 'uclKo' || !entry.uclRound) return false;
   /* A legacy week carries no uclLeg and is the whole tie (Round 507). */
   const twoLegs = uclLegsFor(state.eraId, entry.uclRound) === 2 && !!entry.uclLeg;
@@ -14248,7 +14257,7 @@ function worldUelField(state: CareerState, tables: { league: Pick<LeagueDef, 'id
  * stripped of worldComps anyway; this skips opening them, which cost a daily start a median of 55 ms a date on a
  * runner (simWorldEuro section 6). Opening draws nothing, so no deal moves either way.
  */
-export interface StartCareerOptions { noWorldComps?: boolean; championshipPlayoffs?: true; bundesligaPlayoff?: true }
+export interface StartCareerOptions { noWorldComps?: boolean; championshipPlayoffs?: true; bundesligaPlayoff?: true; frenchPlayoffs?: true }
 /** The options both dailies start a career with. */
 export const DAILY_START: StartCareerOptions = { noWorldComps: true };
 /* The states a start was asked to open nothing on, read by openWorldUclOnStart (a set of objects, never saved). */
@@ -14768,6 +14777,10 @@ function uelSecondLegOutcome(state: CareerState, entry: CalendarEntry, myGoals: 
 }
 
 function promotionTieForEntry(state: CareerState, entry: CalendarEntry): SettleableTie | undefined {
+  if (state.frenchPlayoffs) {
+    const tie = frenchPlayoffTie(state.frenchPlayoffs, entry.round);
+    return tie && (tie.home === state.clubName || tie.away === state.clubName) ? tie : undefined;
+  }
   const german = state.bundesligaPlayoff?.tie;
   if (german && (entry.round === 1 || entry.round === 2)
     && (german.home === state.clubName || german.away === state.clubName)) return german;
@@ -14775,13 +14788,14 @@ function promotionTieForEntry(state: CareerState, entry: CalendarEntry): Settlea
 }
 
 export function promotionEntryLabel(state: CareerState, round: number): string {
+  if (state.frenchPlayoffs) return frenchPlayoffLabel(round);
   return state.bundesligaPlayoff && (round === 1 || round === 2)
     ? `Bundesliga playoff · ${round === 1 ? 'first leg' : 'second leg'}`
     : PLAYOFF_LABELS[round];
 }
 
 export function promotionAppointmentHeld(state: CareerState): boolean {
-  return !!(state.championshipPlayoffs || state.bundesligaPlayoff);
+  return !!(state.championshipPlayoffs || state.bundesligaPlayoff || state.frenchPlayoffs);
 }
 
 /** Round 1593: my second leg tonight read with tonight's goals, in either European competition. */
@@ -16278,18 +16292,19 @@ function settleBundesligaPlayoff(state: CareerState, tie: SettleableTie): void {
     first, undefined, (home, away, scale) => simScore(strengthOf(state, home), strengthOf(state, away), 0.2, -0.08, scale, rng), rng);
 }
 
+function completePromotionTable(state: CareerState, id: string): TableRow[] | null {
+  const mine = careerLeagueOf(state).id;
+  const membership = id === mine ? state.leagueClubs : effectiveLeague(REAL_LEAGUES.find(league => league.id === id)!).clubs;
+  const table = id === mine ? sortedLeagueTable(state) : sortedWorldTable(state, id, state.world?.[id]?.table ?? []);
+  if (membership.length !== 18 || table.length !== 18 || new Set(table.map(row => row.club)).size !== 18
+    || table.some(row => !membership.includes(row.club) || row.w + row.d + row.l !== 34)) return null;
+  return table;
+}
+
 function prepareBundesligaPlayoff(state: CareerState): void {
   if (!state.bundesligaPlayoffRules || state.bundesligaPlayoff) return;
-  const mine = careerLeagueOf(state).id;
-  const qualifier = (id: 'bundesliga' | 'bundesliga2', position: number) => {
-    const membership = id === mine ? state.leagueClubs : effectiveLeague(REAL_LEAGUES.find(league => league.id === id)!).clubs;
-    const table = id === mine ? sortedLeagueTable(state) : sortedWorldTable(state, id, state.world?.[id]?.table ?? []);
-    if (membership.length !== 18 || table.length !== 18 || new Set(table.map(row => row.club)).size !== 18
-      || table.some(row => !membership.includes(row.club) || row.w + row.d + row.l !== 34)) return null;
-    return table[position - 1].club;
-  };
-  const home = qualifier('bundesliga', 16);
-  const away = qualifier('bundesliga2', 3);
+  const home = completePromotionTable(state, 'bundesliga')?.[15].club;
+  const away = completePromotionTable(state, 'bundesliga2')?.[2].club;
   if (!home || !away) return;
   // In 2026/27 the Bundesliga finishes a day earlier, so its club hosts first.
   // Later simulated seasons keep that venue order.
@@ -16300,6 +16315,38 @@ function prepareBundesligaPlayoff(state: CareerState): void {
   } else {
     settleBundesligaPlayoff(state, tie);
   }
+}
+
+function advanceFrenchPlayoffs(state: CareerState, aiOnly = false): void {
+  const playoff = state.frenchPlayoffs;
+  if (!playoff) return;
+  for (const round of FRENCH_PLAYOFF_ROUNDS.slice(0, 3)) {
+    if (round === 5) playoff.second ??= frenchTie(playoff.third, playoff.first.winner!);
+    if (round === 1) playoff.barrage ??= frenchTie(playoff.second!.winner!, playoff.topFlight);
+    const tie = frenchPlayoffTie(playoff, round)!;
+    if (tie.winner) continue;
+    if (!aiOnly && (tie.home === state.clubName || tie.away === state.clubName)) return;
+    // The AI settles a barrage in one call, reusing the first leg if it was played.
+    const rng = keyedRng(`${worldCompSeed(state, 'ucl')}|french-playoff|${round}|${tie.home}|${tie.away}`);
+    const first = tie.leg1 && { h: tie.leg1.homeGoals, a: tie.leg1.awayGoals };
+    settleRecordedTie(tie, { legs: round === 1 ? 2 : 1, awayGoals: false, extraTime: round === 1,
+      deciderScale: round === 1 ? ET_DEFLATOR : 1, etScale: ET_DEFLATOR * ET_MINUTES / 90 },
+    first, undefined, (home, away, scale) => simScore(strengthOf(state, home), strengthOf(state, away), 0.2, -0.08, scale, rng), rng);
+  }
+}
+
+function prepareFrenchPlayoffs(state: CareerState): void {
+  if (!state.frenchPlayoffRules || state.frenchPlayoffs) return;
+  const top = completePromotionTable(state, 'ligue1');
+  const second = completePromotionTable(state, 'ligue2');
+  if (!top || !second) return;
+  const topFlight = top[15].club;
+  const [third, fourth, fifth] = second.slice(2, 5).map(row => row.club);
+  state.frenchPlayoffs = { season: state.season, third, topFlight, first: frenchTie(fourth, fifth) };
+  const start = state.clubName === topFlight ? 2 : state.clubName === third ? 1 : 0;
+  const plays = !state.sacked && [topFlight, third, fourth, fifth].includes(state.clubName);
+  advanceFrenchPlayoffs(state, !plays);
+  if (plays) for (const round of FRENCH_PLAYOFF_ROUNDS.slice(start)) state.calendar.push({ type: 'promotion', round });
 }
 
 /**
@@ -18877,7 +18924,7 @@ export function fixtureFor(state: CareerState, entry: CalendarEntry): MyFixture 
       competition: 'promotion', compLabel: promotionEntryLabel(state, entry.round),
       opponent: mineHome ? tie.away : tie.home,
       home: entry.round === 3 ? null : entry.round === 2 ? !mineHome : mineHome,
-      ...(entry.round !== 1 ? { extraTime: true } : {}),
+      ...(playsExtraTime(state, entry) ? { extraTime: true } : {}),
     };
   }
   /* Round 1593: a Europa League night, my match of it (the final on a neutral ground). */
@@ -19671,7 +19718,16 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
   if (fx.competition === 'promotion') {
     const tie = promotionTieForEntry(state, entry)!;
     recordPromotionResult(tie, entry.round, state.clubName, myGoals, oppGoals, advanced, etPlayed, decidedBy === 'pens');
-    if (state.bundesligaPlayoff) {
+    if (state.frenchPlayoffs) {
+      advanceFrenchPlayoffs(state);
+      if (!advanced && (entry.round === 4 || entry.round === 5)) {
+        state.calendar = state.calendar.filter((week, index) => index <= state.week || week.type !== 'promotion');
+      }
+      if (entry.round === 2) {
+        const division = advanced ? 'Ligue 1' : 'Ligue 2';
+        events.push(`You ${advanced ? 'won' : 'lost'} the barrage and will play in ${division} next season.`);
+      }
+    } else if (state.bundesligaPlayoff) {
       if (entry.round === 2) {
         const isTop = tie.home === state.clubName;
         events.push(isTop
@@ -20886,6 +20942,7 @@ export interface SeasonWorld {
   uclField: string[] | null;
   championshipPlayoffRules?: true;
   bundesligaPlayoffRules?: true;
+  frenchPlayoffRules?: true;
   keepLeagueOverrides: boolean;
   worldSeed?: number;
   rosterCareer?: CareerState;
@@ -21052,6 +21109,11 @@ export function startCareer(clubName: string, eraId: string = DEFAULT_ERA_ID, cu
     : opts?.bundesligaPlayoff && !opts.noWorldComps && !historic && era.startYear >= 2026
       && (league.id === 'bundesliga' || league.id === 'bundesliga2')) {
     state.bundesligaPlayoffRules = true;
+  }
+  if (world ? world.frenchPlayoffRules
+    : opts?.frenchPlayoffs && !opts.noWorldComps && !historic && era.startYear >= 2026
+      && (league.id === 'ligue1' || league.id === 'ligue2')) {
+    state.frenchPlayoffRules = true;
   }
   if (world?.rosterCareer && (worldRosterView(world.rosterCareer) || worldSeedOf(world.rosterCareer) !== undefined)) {
     state.season = world.rosterCareer.season;
@@ -21290,6 +21352,7 @@ export function playNextEntry(career: CareerState, opts?: { skipHalftime?: boole
         if (entry.round === leagueRounds(state.leagueClubs.length) - 1) {
           prepareChampionshipPlayoffs(state);
           prepareBundesligaPlayoff(state);
+          prepareFrenchPlayoffs(state);
         }
       }
       // Round 95: the Champions League runs whether or not I am still in it.
@@ -22007,10 +22070,11 @@ export function resumeMatch(career: CareerState): PlayResult {
   if (entry.type === 'league' && entry.round === leagueRounds(state.leagueClubs.length) - 1) {
     prepareChampionshipPlayoffs(state);
     prepareBundesligaPlayoff(state);
+    prepareFrenchPlayoffs(state);
     if (state.calendar.some(week => week.type === 'promotion')) {
-      report.events.push(state.bundesligaPlayoff
-        ? 'You qualified for the Bundesliga playoff. The fixtures are on your calendar.'
-        : 'You qualified for the Championship playoffs. The fixtures are on your calendar.');
+      const competition = state.frenchPlayoffs ? 'French promotion playoffs'
+        : state.bundesligaPlayoff ? 'Bundesliga playoff' : 'Championship playoffs';
+      report.events.push(`You qualified for the ${competition}. The fixtures are on your calendar.`);
     }
   }
   /* Round 978: same hook as the quick sim's, see playNextEntry. */
@@ -22698,9 +22762,10 @@ export function joinClubInSummer(career: CareerState): CareerState | null {
  * reload mid-review resumes cleanly. Does not mutate the input.
  */
 export function finishSeason(career: CareerState): { state: CareerState; summary: SeasonSummary } {
-  if ((career.championshipPlayoffRules || career.bundesligaPlayoffRules) && (career.week < career.calendar.length
+  if ((career.championshipPlayoffRules || career.bundesligaPlayoffRules || career.frenchPlayoffRules) && (career.week < career.calendar.length
     || (career.championshipPlayoffs && !promotionWinner(career.championshipPlayoffs))
-    || (career.bundesligaPlayoff && !career.bundesligaPlayoff.tie.winner))) {
+    || (career.bundesligaPlayoff && !career.bundesligaPlayoff.tie.winner)
+    || (career.frenchPlayoffs && !career.frenchPlayoffs.barrage?.winner))) {
     throw new Error('The season has fixtures still to play.');
   }
   const state: CareerState = JSON.parse(JSON.stringify(career));
@@ -23179,13 +23244,21 @@ function promotionExchange(state: CareerState, pair: typeof PYRAMIDS[number], to
   const down = top.slice(-pair.count).map(row => row.club);
   const up = promotionClubs(state, pair, second);
   if (down.length !== pair.count || up.length !== pair.count) return null;
+  const slot = (name: string) => name === state.customClub?.name ? state.customClub.replacedClub : name;
   const playoff = state.bundesligaPlayoff;
   if (pair.top === 'bundesliga' && playoff?.season === state.season && playoff.tie.winner === playoff.tie.away) {
-    const slot = (name: string) => name === state.customClub?.name ? state.customClub.replacedClub : name;
     if (top[15]?.club === slot(playoff.tie.home) && second[2]?.club === slot(playoff.tie.away)) {
       down.push(top[15].club);
       up.push(second[2].club);
     }
+  }
+  const french = state.frenchPlayoffs;
+  const barrage = french?.barrage;
+  if (pair.top === 'ligue1' && french?.season === state.season && barrage && barrage.winner === barrage.home
+    && top[15]?.club === slot(barrage.away)
+    && second.slice(2, 5).some(row => row.club === slot(barrage.home))) {
+    down.push(top[15].club);
+    up.push(slot(barrage.home));
   }
   return { down, up };
 }
@@ -23333,6 +23406,7 @@ export function toLeague(name: string): string {
 export function startNextSeason(career: CareerState, acceptOfferClub?: string): CareerState {
   if (career.championshipPlayoffs && !promotionWinner(career.championshipPlayoffs)) return career;
   if (career.bundesligaPlayoff && !career.bundesligaPlayoff.tie.winner) return career;
+  if (career.frenchPlayoffs && !career.frenchPlayoffs.barrage?.winner) return career;
   const requestedClub = career.jobHunt?.summerMove?.club ?? acceptOfferClub;
   if (requestedClub && requestedClub !== career.clubName && !clubAvailableInCareer(career, requestedClub)) return career;
   const kLeagueActive = careerHasKLeagueWorld(career);
@@ -23953,6 +24027,7 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
   }
   if (state.championshipPlayoffs) delete state.championshipPlayoffs;
   if (state.bundesligaPlayoff) delete state.bundesligaPlayoff;
+  if (state.frenchPlayoffs) delete state.frenchPlayoffs;
   state.boardObjectives = buildBoardObjectives(clubName, state.uclGroup !== null, league.clubs.length, eraId, nextCustom ? leagueClubs : undefined);
   // Round 163: a fresh Champions League draw for the new season.
   state.uclWorld = initUclWorld(state);
