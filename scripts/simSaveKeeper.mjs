@@ -213,10 +213,10 @@ const SWAPS = {
   bootwrite: ['    const outcome = applyPending(storage);\n', "    try { storage.setItem('dukb-control-marker', '1'); } catch { /* control */ }\n    const outcome = applyPending(storage);\n"],
   noaside: ["      const copied = copyAside(entry, storage, now);\n      if (!copied.ok) return done(false, { why: 'no-room' });\n      made = copied.backupKey;", '      const copied = { ok: true, backupKey: null as string | null };\n      made = copied.backupKey;'],
   journalfirst: ['  try {\n    /* Written OVER the old save', '  forget(storage);\n  try {\n    /* Written OVER the old save'],
-  pileup: ['    if (heldAside(entry, storage, raw)) continue;\n', ''],
+  pileup: ['      if (heldAside(entry, storage, raw)) continue;\n', ''],
   /* Round 1219 review. */
   nocopycheck: ["      if (!copied.ok) return done(false, { why: 'no-room' });\n", '      if (!copied.ok) { /* control: carry on without the copy */ }\n'],
-  numberonly: ['    if (versionIn(raw, row.at) === row.current) continue;\n', '    const heldNumber = versionIn(raw, row.at);\n    if (heldNumber === null || heldNumber === row.current) continue;\n'],
+  numberonly: ['      if (versionIn(raw, row.at) === row.current) continue;\n', '      const heldNumber = versionIn(raw, row.at);\n      if (heldNumber === null || heldNumber === row.current) continue;\n'],
   assign: ['  window.location.replace(path);\n', '  window.location.assign(path);\n'],
 };
 /* The same, for the two controls that rewrite another file. */
@@ -436,7 +436,11 @@ function stringifiedLiterals(rel) {
       continue;
     }
     if (row.kind === 'serializer' && !here.some(w => w.value.includes(`${row.fn}(`))) { fail(`${e.path}: ${row.file} writes ${e.saveKey} but not with ${row.fn}(...), so the fixture is not the writer's own output`); continue; }
-    if (row.kind === 'whole' && !here.some(w => /^JSON\.stringify\(\s*[A-Za-z_$][\w$]*\s*\)$/.test(w.value))) { fail(`${e.path}: ${row.file} no longer writes ${e.saveKey} as JSON.stringify of one state object`); continue; }
+    if (row.kind === 'whole' && !row.indirect && !here.some(w => /^JSON\.stringify\(\s*[A-Za-z_$][\w$]*\s*\)$/.test(w.value))) { fail(`${e.path}: ${row.file} no longer writes ${e.saveKey} as JSON.stringify of one state object`); continue; }
+    if (e.path === '/nrl-team-manager' && !stripComments(readLF('src/lib/nrlSaveSlots.ts')).includes('localStorage.setItem(key, next)')) {
+      fail('NRL no longer writes the whole save at the selected slot key');
+      continue;
+    }
     if (row.kind === 'literal') {
       const lits = stringifiedLiterals(row.file);
       const unset = Object.keys(row.unset ?? {});
@@ -625,7 +629,7 @@ const withVersion = (raw, at, n) => {
     const load = accepts[r];
     if (!load) { console.log(`         ${r}: no pure loader is exported, so "${row.other}" is held by reading its engine only`); continue; }
     const same = load(withVersion(fleet[r][0], row.at, row.current));
-    const down = load(withVersion(fleet[r][0], row.at, row.current - 1));
+    const down = load(r === '/nrl-team-manager' ? real.nrlLegacySave() : withVersion(fleet[r][0], row.at, row.current - 1));
     const up = load(withVersion(fleet[r][0], row.at, row.current + 1));
     const wantDown = row.other === 'ignores' || (row.other === 'migrates' && row.current - 1 >= row.oldest);
     const wantUp = row.other === 'ignores';
@@ -658,7 +662,7 @@ const acting = ENTRIES.filter(e => V[e.path] && V[e.path].other !== 'ignores');
   check(page.sets === 0 && page.removes === 0, `zero writes and zero removes in ${page.calls} storage calls`, `the boot wrote or removed: ${page.wrote.join(', ')}`);
   check(changed.length === 0 && extra.length === 0, `all ${before.size} stored values are byte equal before and after (one fixture of every game; sha256 of the whole store ${sha([...page.m].sort().join('\u0000'))})`,
     `not byte equal after a boot. Changed: ${changed.join(', ') || 'none'}. New keys: ${extra.join(', ') || 'none'}`);
-  const want = [PENDING, ...acting.map(e => e.saveKey)].sort();
+  const want = [PENDING, ...acting.flatMap(e => [e.saveKey, ...(e.alternateSaveKeys ?? [])])].sort();
   const got = [...page.read].sort();
   check(JSON.stringify(got) === JSON.stringify(want), `the keys read are exactly the journal and the ${acting.length} games that act on a version (${got.length} keys)`, `read ${got.join(', ')}; expected exactly ${want.join(', ')}`);
 }
@@ -803,7 +807,7 @@ console.log('\n4. the copy before a version step, on real saves one version down
   let held = 0;
   for (const e of acting) {
     const row = V[e.path];
-    const lowered = withVersion(fleet[e.path][0], row.at, row.current - 1);
+    const lowered = e.path === '/nrl-team-manager' ? real.nrlLegacySave() : withVersion(fleet[e.path][0], row.at, row.current - 1);
     const three = [['2025-09-01T09-00-00', fleet[e.path][1]], ['2025-09-02T09-00-00', fleet[e.path][2]], ['2025-09-03T09-00-00', fleet[e.path][3]]].map(([s, v]) => [`${e.saveKey}${MARK}${s}`, v]);
     page.m = new Map([[e.saveKey, lowered], ...three]);
     page.reset();

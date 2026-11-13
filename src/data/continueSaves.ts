@@ -33,13 +33,15 @@ export interface ContinueSave {
   path: string;
   /** The localStorage key the game itself saves under. */
   saveKey: string;
+  /** More permanent keys for a game whose careers can be open independently. */
+  alternateSaveKeys?: readonly string[];
   /** Round 1515: the key of the game's slot index ({ active: n }), for a game whose careers take turns at one
    *  save key (Club Manager, Round 928). A copy kept aside is marked with its slot (brokenSaveRecovery.ts). */
   slots?: string;
   /** The save's own name for what you are running: a club, a team, a fighter. */
   name?: SavePath;
   /** A whole number and how to say it. An array here counts its entries. */
-  count?: { at: SavePath; say: string; one?: string };
+  count?: { at: SavePath; previousAt?: SavePath; say: string; one?: string };
   /** A field that is exactly true once the save has ended, and the word for it. */
   ended?: { at: SavePath; say: string };
 }
@@ -61,12 +63,28 @@ export const CONTINUE_SAVES: readonly ContinueSave[] = [
   { path: '/nhl-my-career', saveKey: 'nhl-my-career-save-v1', name: ['c', 'team'], count: { at: ['c', 'year'], say: '{n} season' }, ended: { at: ['c', 'retired'], say: 'retired' } },
   { path: '/nhl-front-office', saveKey: 'nhl-front-office-save-v1', name: ['myTeam'], count: { at: ['league', 'season'], say: '{n} season' }, ended: { at: ['fired'], say: 'fired' } },
   { path: '/aussie-rules-manager', saveKey: 'aussie-rules-manager-save-v2', name: ['clubName'], count: { at: ['season'], say: 'season {n}' } },
+  { path: '/nrl-team-manager', saveKey: 'nrl-manager-save-v1', alternateSaveKeys: ['nrl-manager-save-v1-slot-2', 'nrl-manager-save-v1-slot-3'], count: { at: ['season', 'year'], previousAt: ['year'], say: '{n} season' }, ended: { at: ['retired'], say: 'retired' } },
   { path: '/fight-career', saveKey: 'fight-career-save-v1', name: ['st', 'fighter', 'name'], count: { at: ['st', 'fightNo'], say: '{n} fights', one: '1 fight' }, ended: { at: ['st', 'retired'], say: 'retired' } },
   { path: '/fight-promoter', saveKey: 'fight-promoter-save-v1', name: ['st', 'name'], count: { at: ['st', 'show'], say: 'show {n}' }, ended: { at: ['st', 'closed'], say: 'closed' } },
   { path: '/fight-gym', saveKey: 'fight-gym-save-v1', name: ['g', 'name'], count: { at: ['g', 'week'], say: 'week {n}' }, ended: { at: ['g', 'closed'], say: 'closed' } },
   { path: '/hall-of-champions', saveKey: 'hallOfChampionsV1', count: { at: ['openWings'], say: '{n} wings open', one: '1 wing open' } },
   { path: '/idle-arena', saveKey: 'dukb-idle-arena-v1', count: { at: ['trophies'], say: '{n} trophies', one: '1 trophy' } },
 ];
+
+/** Resolves a slot only from the keys registered for this game. */
+export function resolveContinueSave(entry: ContinueSave, search: string): ContinueSave | null {
+  if (!entry.alternateSaveKeys) return entry;
+  const slots = new URLSearchParams(search).getAll('slot');
+  if (slots.length === 0 || (slots.length === 1 && slots[0] === '1')) return entry;
+  if (slots.length !== 1) return null;
+  const { alternateSaveKeys, ...game } = entry;
+  const index = alternateSaveKeys.findIndex((_, i) => String(i + 2) === slots[0]);
+  return index < 0 ? null : { ...game, path: entry.path + '?slot=' + slots[0], saveKey: alternateSaveKeys[index] };
+}
+
+export function continueSaveEntries(entry: ContinueSave): ContinueSave[] {
+  return [entry, ...(entry.alternateSaveKeys ?? []).map((_, index) => resolveContinueSave(entry, 'slot=' + (index + 2))!)];
+}
 
 /** The longest name a card prints. A save can hold any string at all. */
 export const SAVE_NAME_MAX = 28;
@@ -87,11 +105,12 @@ export function savedGames(storage: Pick<Storage, 'getItem'> | null | undefined)
   if (!storage) return [];
   const out: SavedGame[] = [];
   for (const entry of CONTINUE_SAVES) {
-    let held = false;
-    try { held = storage.getItem(entry.saveKey) !== null; } catch { held = false; }
+    const held = continueSaveEntries(entry).find(save => {
+      try { return storage.getItem(save.saveKey) !== null; } catch { return false; }
+    });
     if (!held) continue;
     const game = ALL_GAMES.find(g => g.path === entry.path);
-    if (game) out.push({ entry, game });
+    if (game) out.push({ entry: held, game });
   }
   return out;
 }
@@ -138,7 +157,8 @@ export function describeSave(entry: ContinueSave, raw: string | null): string | 
   if (entry.ended && walk(save, entry.ended.at) === true) {
     parts.push(entry.ended.say);
   } else if (entry.count) {
-    const n = cleanCount(walk(save, entry.count.at));
+    const n = cleanCount(walk(save, entry.count.at))
+      ?? (entry.count.previousAt ? cleanCount(walk(save, entry.count.previousAt)) : null);
     if (n !== null) parts.push(n === 1 && entry.count.one ? entry.count.one : entry.count.say.replace('{n}', String(n)));
   }
   return parts.length ? parts.join(', ') : null;

@@ -219,6 +219,18 @@ await build({
       import * as CBB from './src/lib/cbbDynasty';
       import * as AR from './src/lib/aussieRulesManager';
       import * as ARL from './src/lib/aussieRulesLeague';
+      import { NRL_SEASONS } from './src/data/nrlManager2026';
+      import { createNrlSeason, reduceNrlSeason } from './src/lib/nrlManager';
+      import { createNrlCareer, reduceNrlCareer, readNrlCareerSave } from './src/lib/nrlCareer';
+      export const nrlResumeSave = (year, version) => {
+        const clubId = year === 2027 ? 'bears' : NRL_SEASONS[2026].clubs[0].id;
+        const state = version === 1
+          ? reduceNrlSeason(createNrlSeason(clubId, 717, year), { type: 'advance' })
+          : reduceNrlCareer(createNrlCareer(clubId, 717, year), { type: 'advance' });
+        const raw = JSON.stringify(state);
+        const restored = readNrlCareerSave(raw);
+        return restored?.season.round === 2 && restored?.season.year === year ? raw : null;
+      };
       export { SAVE_KEY as AUSSIE_SAVE_KEY } from './src/lib/aussieRulesManager';
       export const restoreAussie = AR.readManagerSave;
       export const aussieResumeSaves = () => {
@@ -543,6 +555,7 @@ console.log('7) Continue playing: the right keys, real fields, hostile saves, on
     '/nhl-my-career': ['src/lib/nhlCareerSport.ts', 'src/lib/nhlMyCareer.ts'],
     '/nhl-front-office': ['src/components/nhl-front-office/NhlFrontOfficeBoard.tsx', 'src/lib/nhlFrontOffice.ts'],
     '/aussie-rules-manager': ['src/lib/aussieRulesLeague.ts', 'src/lib/aussieRulesManager.ts'],
+    '/nrl-team-manager': ['src/lib/nrlManager.ts', 'src/lib/nrlCareer.ts'],
     '/fight-career': ['src/components/fight-career/FightCareerBoard.tsx', 'src/lib/fightCareer.ts'],
     '/fight-promoter': ['src/components/fight-promoter/FightPromoterBoard.tsx', 'src/lib/fightPromoter.ts'],
     '/fight-gym': ['src/components/fight-gym/FightGymBoard.tsx', 'src/lib/fightGym.ts'],
@@ -583,10 +596,11 @@ console.log('7) Continue playing: the right keys, real fields, hostile saves, on
   /* a: live games, one card each */
   const paths = CONTINUE_SAVES.map(e => e.path);
   const keys = CONTINUE_SAVES.map(e => e.saveKey);
+  const allKeys = CONTINUE_SAVES.flatMap(e => [e.saveKey, ...(e.alternateSaveKeys ?? [])]);
   if (CONTINUE_SAVES.length < 15) fail(7, `the list holds only ${CONTINUE_SAVES.length} games, so this measured almost nothing`);
   for (const p of paths) if (!gameByPath.has(p)) fail(7, `${p} is on the Continue list and is not a live registry game`);
   if (new Set(paths).size !== paths.length) fail(7, 'a game is on the Continue list twice');
-  if (new Set(keys).size !== keys.length) fail(7, 'two Continue entries share a save key');
+  if (new Set(allKeys).size !== allKeys.length) fail(7, 'two Continue entries share a save key');
 
   /* b: each key is the one its game declares */
   for (const e of CONTINUE_SAVES) {
@@ -625,7 +639,7 @@ console.log('7) Continue playing: the right keys, real fields, hostile saves, on
     const files = WHERE[e.path];
     if (!files) continue;
     const src = files.map(code).join('\n');
-    const at = [e.name, e.count && e.count.at, e.ended && e.ended.at].filter(Boolean);
+    const at = [e.name, e.count?.at, e.count?.previousAt, e.ended?.at].filter(Boolean);
     for (const fieldPath of at) {
       fieldPath.forEach((seg, i) => {
         if (/^\d+$/.test(seg)) return;
@@ -721,7 +735,7 @@ console.log('7) Continue playing: the right keys, real fields, hostile saves, on
   const cold = withWindow(() => front.renderContinue());
   if (cold !== '') fail(7, `with no save in the browser the row renders ${cold.length} characters instead of nothing`);
   if (savedGames(globalThis.localStorage).length !== 0) fail(7, 'savedGames finds a save in an empty browser');
-  if (reads.some(k => !keys.includes(k))) fail(7, `the row asks storage for ${reads.filter(k => !keys.includes(k)).join(', ')}, which is not a save key`);
+  if (reads.some(k => !allKeys.includes(k))) fail(7, `the row asks storage for ${reads.filter(k => !allKeys.includes(k)).join(', ')}, which is not a save key`);
   for (const e of CONTINUE_SAVES) {
     store.clear();
     store.set(e.saveKey, '{}');
@@ -749,6 +763,18 @@ console.log('7) Continue playing: the right keys, real fields, hostile saves, on
   for (const unrelated of [null, 'aussie-rules-manager-save-v9']) {
     store.clear(); if (unrelated) store.set(unrelated, aussieSaves[1].raw);
     if (savedGames(globalThis.localStorage).length !== 0 || cards(withWindow(() => front.renderContinue())).length !== 0) fail(7, 'an absent Aussie key or another save version must not create a Continue card');
+  }
+  const nrl = CONTINUE_SAVES.find(entry => entry.path === '/nrl-team-manager');
+  for (const [year, version] of [[2026, 1], [2026, 2], [2027, 1], [2027, 2]]) {
+    const nrlRaw = front.nrlResumeSave(year, version);
+    if (!nrl || !nrlRaw) { fail(7, `the ${year} NRL fixture must reach round 2 and reopen under its Continue key`); continue; }
+    store.clear();
+    store.set(nrl.saveKey, nrlRaw);
+    const got = cards(withWindow(() => front.renderContinue()));
+    if (got.length !== 1 || got[0].href !== nrl.path) fail(7, `the ${year} NRL save must render one Continue card, got ${JSON.stringify(got)}`);
+    const line = describeSave(nrl, nrlRaw);
+    if (line !== `${year} season`) fail(7, `the ${year} NRL Continue card must read its saved season, got ${JSON.stringify(line)}`);
+    if (store.get(nrl.saveKey) !== nrlRaw) fail(7, 'Continue changed the serialized NRL save bytes');
   }
   store.clear();
   for (const e of CONTINUE_SAVES) store.set(e.saveKey, '{}');

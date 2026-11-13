@@ -449,6 +449,10 @@ export const SEO_META: Record<string, SeoMeta> = {
     title: 'Aussie Rules Manager: Free Footy Season Game',
     description: 'Run an AFL club through 23 rounds, the finals and the draft. Pick your 23, call the quarters, chase a flag. Free footy manager.',
   },
+  '/nrl-team-manager': {
+    title: 'NRL Team Manager: Rugby League Sim',
+    description: 'Free rugby league manager. Start in 2026 or 2027, pick your starting 13 and manage contracts and club finances. Manage Perth from its 2027 debut.',
+  },
   '/guess-nascar-driver': {
     title: 'Guess The Driver: NASCAR Cup Series Quiz',
     description: 'A mystery NASCAR Cup Series driver hides behind six clues, from winning years and titles to three real race wins. Free daily stock car racing trivia.',

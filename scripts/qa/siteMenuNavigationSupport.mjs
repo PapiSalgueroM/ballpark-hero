@@ -9,7 +9,8 @@ export const BACKEND = 'https://flawuiqbvjobmkfkauhw.supabase.co';
 export const LINKS = [['/', 'Home'], ['/search', 'Search Games'], ['/records', 'Record Books'],
   ['/leaderboard', 'Leaderboard'], ['/whats-new', "What's New"], ['/soccer', 'Soccer'],
   ['/pro-basketball', 'NBA'], ['/hockey', 'NHL'], ['/pro-football', 'NFL'], ['/baseball', 'MLB'],
-  ['/college', 'College'], ['/about', 'About'], ['/contact', 'Contact'], ['/privacy', 'Privacy Policy'],
+  ['/college', 'College'], ['/nrl-team-manager', 'Rugby League NRL Team Manager'],
+  ['/about', 'About'], ['/contact', 'Contact'], ['/privacy', 'Privacy Policy'],
   ['/cookie-policy', 'Cookie Policy'], ['/terms', 'Terms of Service'], ['/accessibility', 'Accessibility']];
 export function inventory(directory, relative = '') {
   const rows = [];
@@ -122,7 +123,7 @@ export function checkFonts(value) {
 }
 export function checkMenu(sample) {
   assert(sample.menu, 'MENU_OPEN: actual open dialog');
-  assert.deepEqual(sample.menu.links.map(row => [row.href, row.text]), LINKS, 'MENU_LINKS: exact seventeen actual destinations');
+  assert.deepEqual(sample.menu.links.map(row => [row.href, row.text]), LINKS, 'MENU_LINKS: exact eighteen actual destinations');
   const targets = [...sample.menu.links, ...sample.menu.close, sample.trigger];
   assert.equal(sample.menu.close.length, 1, 'MENU_TARGETS: one actual Close');
   assert(targets.every(row => row.rect.width >= 44 && row.rect.height >= 44), 'MENU_TARGETS: whole owner hitboxes at least44');

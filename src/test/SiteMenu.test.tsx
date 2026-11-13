@@ -49,7 +49,7 @@ async function expectClosed(marker: string) {
 }
 
 describe('global top-left SiteMenu with the actual Sheet and router', () => {
-  it('opens a named dialog with the real site links and all six lightweight sports hubs', async () => {
+  it('opens a named dialog with the site links, six sports hubs and Rugby League', async () => {
     await menuHost();
     const trigger = screen.getByRole('button', { name: 'Open site menu' });
     expect(trigger, 'SITE_MENU_VISIBLE_TRIGGER').toHaveTextContent('Menu');
@@ -62,6 +62,7 @@ describe('global top-left SiteMenu with the actual Sheet and router', () => {
       [/^Leaderboard$/, '/leaderboard'], [/^What's New$/, '/whats-new'],
       [/^Soccer$/, '/soccer'], [/^NBA$/, '/pro-basketball'], [/^NHL$/, '/hockey'],
       [/^NFL$/, '/pro-football'], [/^MLB$/, '/baseball'], [/^College$/, '/college'],
+      [/^Rugby League NRL Team Manager$/, '/nrl-team-manager'],
       [/^About$/, '/about'], [/^Contact$/, '/contact'], [/^Privacy Policy$/, '/privacy'],
       [/^Cookie Policy$/, '/cookie-policy'], [/^Terms of Service$/, '/terms'],
       [/^Accessibility$/, '/accessibility'],
@@ -71,7 +72,7 @@ describe('global top-left SiteMenu with the actual Sheet and router', () => {
       expect(link.getAttribute('href'), 'SITE_MENU_ACTUAL_HREF_' + href).toBe(href);
       expect(link, 'SITE_MENU_VISIBLE_LINK_' + href).toBeVisible();
     }
-    expect(menu.getAllByRole('link'), 'SITE_MENU_BOUNDED_LINK_SET').toHaveLength(17);
+    expect(menu.getAllByRole('link'), 'SITE_MENU_BOUNDED_LINK_SET').toHaveLength(18);
     expect(menu.getByRole('button', { name: 'Close' }), 'SITE_MENU_REAL_CLOSE_CONTROL').toBeVisible();
   });
 
@@ -91,6 +92,14 @@ describe('global top-left SiteMenu with the actual Sheet and router', () => {
     await expectClosed('SITE_MENU_SELECTED_LINK_CLOSED');
     expect(screen.getByTestId('actual-router-location'), 'SITE_MENU_REAL_LINK_NAVIGATION')
       .toHaveTextContent(/^\/records$/);
+  });
+
+  it('takes a Rugby League visitor straight to NRL Team Manager and closes', async () => {
+    await menuHost('/');
+    const { menu } = await openMenu();
+    fireEvent.click(menu.getByRole('link', { name: 'Rugby League NRL Team Manager' }));
+    await expectClosed('SITE_MENU_RUGBY_LINK_CLOSED');
+    expect(screen.getByTestId('actual-router-location')).toHaveTextContent(/^\/nrl-team-manager$/);
   });
 
   it('marks only the normalized current route and closes when that current link is selected', async () => {
