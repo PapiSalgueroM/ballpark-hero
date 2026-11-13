@@ -1,6 +1,8 @@
 # DoUKnowBall site readiness and game work
 
-Checkpoint at 09:48 UTC on November 13, 2026. The broad update remains draft [PR #770](https://github.com/PapiSalgueroM/ballpark-hero/pull/770). The work continued after the 24-hour report below.
+Checkpoint at 09:55 UTC on November 13, 2026. The broad update remains draft [PR #770](https://github.com/PapiSalgueroM/ballpark-hero/pull/770). The work continued after the 24-hour report below.
+
+Fight Career now explains that each camp starts with all six weeks assigned, that minus frees a week for a different attribute, and that finishing camp improves attributes. The controls gained accessible names. Four published Chromium and WebKit cases preserved the exact saved camp and the same attribute gain. The corresponding report was marked Fixed. The admin queue now holds 150 open reports, with 17 new, 26 confirmed and 107 investigating. The Soccer Career Golden Boot report remains open. The scoring prototype preserves all team outcomes and random draws in 16,800 paired simulations, but some elite careers still earn the award too often. [Fight Career PR #801](https://github.com/PapiSalgueroM/ballpark-hero/pull/801).
 
 The optional Board Pathways objective is live in NRL Team Manager. Before Round 1, managers can agree to give three players aged 23 or under at least four regular-season appearances each. A reserve must play to count. Meeting the target pays A$200,000 in simulated club cash once after the regular season. All 276 focused NRL tests, 672 current and legacy comparisons, 16 route budgets and six pinned production browser cases passed. IndexNow accepted the updated guide. [PR #800](https://github.com/PapiSalgueroM/ballpark-hero/pull/800).
 
