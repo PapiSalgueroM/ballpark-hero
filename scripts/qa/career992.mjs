@@ -102,6 +102,21 @@ async function activate(button, touch) {
   if (touch) await button.tap();
   else { await button.focus(); await button.press('Enter'); }
 }
+async function playBurst(dialog, touch) {
+  await activate(dialog.getByRole('button', { name: /Tap to start/ }), touch);
+  const floor = dialog.getByRole('button', { name: /GO GO GO/ });
+  const began = Date.now();
+  if (!touch) await floor.focus();
+  for (let i = 0; i < 25; i++) {
+    if (touch) await floor.tap();
+    else await floor.press('Space');
+  }
+  const inputMs = Date.now() - began;
+  const score = dialog.locator('[data-training-score]');
+  await score.waitFor({ state: 'visible' });
+  assert.equal(await score.innerText(), '80', 'The 25 native inputs did not produce an 80-point session');
+  return inputMs;
+}
 async function nextFrames(page) {
   return page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(() => resolve(window.scrollY)))));
 }
@@ -191,18 +206,7 @@ try {
       assert.equal(await dialog.getAttribute('data-practice-paused'), 'false', 'Explicit resume did not release the practice pause');
       const startDrill = dialog.getByRole('button', { name: /Tap to start/ });
       await tapSize(startDrill); await layout(page, dialog); await shot('drill');
-      await activate(startDrill, touch);
-      const floor = dialog.getByRole('button', { name: /GO GO GO/ });
-      const began = Date.now();
-      if (!touch) await floor.focus();
-      for (let i = 0; i < 25; i++) {
-        if (touch) await floor.tap();
-        else await floor.press('Space');
-      }
-      result.inputMs = Date.now() - began;
-      const score = dialog.locator('[data-training-score]');
-      await score.waitFor({ state: 'visible' });
-      assert.equal(await score.innerText(), '80', 'The 25 native inputs did not produce an 80-point session');
+      result.inputMs = await playBurst(dialog, touch);
       assert.equal(await readSave(page, game.key), original, 'The drill paid out before banking');
       if (reduced) {
         assert(await page.evaluate(() => matchMedia('(prefers-reduced-motion: reduce)').matches));
@@ -231,17 +235,29 @@ try {
       await layout(page); await shot('restored');
       await activate(view, touch);
       dialog = page.getByRole('dialog');
-      await dialog.getByText('Already trained this season', { exact: true }).waitFor();
-      assert.equal(await dialog.getByRole('button', { name: new RegExp(burst[game.slug].name) }).count(), 0, 'Reload reopened the spent session');
+      const replay = dialog.getByRole('button', { name: new RegExp(burst[game.slug].name) });
+      const freePractice = game.slug === 'nba' || game.slug === 'nfl';
+      if (freePractice) {
+        const freeNote = dialog.getByRole('status').filter({ hasText: 'Practice only. No career boost.' });
+        await freeNote.waitFor();
+        await tapSize(replay);
+        await activate(replay, touch);
+        result.freePracticeInputMs = await playBurst(dialog, touch);
+        await freeNote.waitFor();
+        assert.equal(await readSave(page, game.key), banked, 'Free practice changed the banked career');
+      } else {
+        await dialog.getByText('Already trained this season', { exact: true }).waitFor();
+        assert.equal(await replay.count(), 0, 'Reload reopened the spent session');
+      }
       assert.equal(await dialog.getByRole('button', { name: 'Bank the session', exact: true }).count(), 0);
-      await layout(page, dialog); await shot('locked');
+      await layout(page, dialog); await shot(freePractice ? 'free-practice' : 'locked');
       await closeAndCheck(page, dialog, view, touch);
       assert.equal(await readSave(page, game.key), banked, 'Viewing a spent session paid again');
       for (const other of fixtures.filter(f => f.slug !== game.slug)) assert.equal(await readSave(page, other.key), JSON.stringify(other.save), `${other.label} save was changed by ${game.label} practice`);
       assert.deepEqual(result.pageErrors, [], 'Browser raised an uncaught app error');
       assert.deepEqual(result.localFailures, [], 'A local app asset failed to load');
       result.passed = true;
-      console.log(`${id}: score 80, OVR 70 to 72, reload locked, layout and focus passed`);
+      console.log(`${id}: score 80, OVR 70 to 72, ${freePractice ? 'free practice after reload changed no save' : 'reload locked'}, layout and focus passed`);
     } catch (error) {
       result.passed = false; result.error = error.stack || String(error);
       console.error(`${id}: ${result.error}`);
