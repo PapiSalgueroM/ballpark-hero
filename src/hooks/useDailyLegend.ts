@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { supabase } from '@/integrations/supabase/client';
+import { loadSupabase } from '@/integrations/supabase/loadClient';
 import { useAuth } from '@/contexts/AuthContext';
 import { ALL_GAMES } from '@/data/gameRegistry';
 import { completionSlugForPath } from '@/data/completionSlugs';
@@ -37,7 +37,7 @@ export function useDailyLegend() {
   const [streakDays, setStreakDays] = useState(1);
   const [alreadyAwarded, setAlreadyAwarded] = useState(false);
 
-  const checkAndAward = useCallback(async () => {
+  const checkAndAward = useCallback(async (supabase: Awaited<ReturnType<typeof loadSupabase>>) => {
     if (!user || alreadyAwarded) return;
 
     const today = new Date().toISOString().split('T')[0];
@@ -115,27 +115,30 @@ export function useDailyLegend() {
   useEffect(() => {
     if (!user) return;
 
-    const channel = supabase
-      .channel('daily-legend-check')
-      .on(
-        'postgres_changes',
-        {
-          event: 'INSERT',
-          schema: 'public',
-          table: 'daily_completions',
-          filter: `user_id=eq.${user.id}`,
-        },
-        () => {
-          checkAndAward();
-        }
-      )
-      .subscribe();
-
-    // Also check on mount
-    checkAndAward();
+    let active = true;
+    let unsubscribe: (() => void) | undefined;
+    void loadSupabase().then(supabase => {
+      if (!active) return;
+      const channel = supabase
+        .channel('daily-legend-check')
+        .on(
+          'postgres_changes',
+          {
+            event: 'INSERT',
+            schema: 'public',
+            table: 'daily_completions',
+            filter: `user_id=eq.${user.id}`,
+          },
+          () => { if (active) void checkAndAward(supabase); },
+        )
+        .subscribe();
+      unsubscribe = () => { void supabase.removeChannel(channel); };
+      void checkAndAward(supabase);
+    }).catch(() => { /* Optional badge data is unavailable offline. */ });
 
     return () => {
-      supabase.removeChannel(channel);
+      active = false;
+      unsubscribe?.();
     };
   }, [user, checkAndAward]);
 

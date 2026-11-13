@@ -203,7 +203,8 @@ export function CookieConsent({ inline = false, compactInitial = false, waitForR
           : `fixed bottom-0 left-0 right-0 z-[60] pointer-events-auto max-h-[60dvh] overflow-y-auto ${compact ? 'p-3' : 'p-4'} bg-card border-t border-border shadow-lg`}
     >
       <div className={`max-w-3xl mx-auto ${compact ? 'space-y-2' : 'space-y-3'} text-sm text-muted-foreground`}>
-        <p>
+        {/* Reserve the narrow inline layout's extra text line before Inter arrives. */}
+        <p className={inlineNotice ? 'max-[369px]:min-h-[3.75rem]' : undefined}>
           Essential storage keeps games working. Advertising is optional. We ask again in 180 days.{' '}
           <Link to="/privacy" className="underline hover:text-foreground font-medium">Learn more</Link>
         </p>
@@ -213,12 +214,14 @@ export function CookieConsent({ inline = false, compactInitial = false, waitForR
             Advertising
           </label>
           <p data-analytics-paused-status="">
-            <strong>Analytics is paused.</strong> Google Analytics is off while we check its privacy settings.
+            <strong>Google Analytics is paused.</strong> Lovable still measures basic visits.
           </p>
         </div>}
         {gpc && <p>Your browser's Global Privacy Control keeps advertising off.</p>}
         {pendingReload && <p role="status">Advertising is off for this visit. Save your game or allow site storage, then choose Save choices to refresh. Already-loaded vendor code may keep running until then.</p>}
-        <div className={inlineNotice || compact ? 'grid grid-cols-3 gap-2 sm:flex sm:flex-wrap sm:items-center' : 'flex flex-wrap items-center gap-2'}>
+        <div className={inlineNotice || compact
+          ? `grid grid-cols-3 gap-2 sm:flex sm:flex-wrap sm:items-center ${inlineNotice ? 'max-[358px]:min-h-[3.5rem] [&>button]:break-words' : ''}`
+          : 'flex flex-wrap items-center gap-2'}>
           <button type="button" onClick={() => save({ advertising: false, analytics: false })} className={`min-h-11 ${buttonPadding} py-2 rounded-lg border border-border text-foreground font-medium hover:bg-muted transition-colors`}>Reject all</button>
           <button type="button" disabled={pendingReload} onClick={() => save({ advertising: true, analytics: false })} className={`min-h-11 ${buttonPadding} py-2 rounded-lg border border-border text-foreground font-medium hover:bg-muted transition-colors`}>Accept all</button>
           {compact

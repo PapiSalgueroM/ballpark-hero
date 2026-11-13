@@ -66,6 +66,7 @@ const inlineSnapshotAssets = (root: string) => {
       console.log("[dukb] no dist/index.html, snapshots stay on the boot script");
       return;
     }
+    const hostAnalyticsDefault = indexHtml.match(/<script data-dukb-host-analytics-default>[\s\S]*?<\/script>/)?.[0];
     const styles = [...indexHtml.matchAll(/<link[^>]+rel="stylesheet"[^>]+href="(\/assets\/[^"]+)"[^>]*>/g)].map(m => m[1]);
     const modules = [...indexHtml.matchAll(/<script[^>]+type="module"[^>]+src="(\/assets\/[^"]+)"[^>]*>/g)].map(m => m[1]);
     if (!modules.length) {
@@ -113,13 +114,23 @@ const inlineSnapshotAssets = (root: string) => {
       for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
         const f = path.join(dir, entry.name);
         if (entry.isDirectory()) { walk(f); continue; }
-        if (entry.name !== "index.html") continue;
-        if (path.dirname(f) === dist) continue;
+        if (!entry.name.endsWith(".html") || f === path.join(dist, "index.html")) continue;
         let html: string;
         try { html = fs.readFileSync(f, "utf8"); } catch { continue; }
-        if (!html.includes("/prerender-boot.js")) { skipped += 1; continue; }
-        if (html.includes("/assets/")) { skipped += 1; continue; }
-        let out = html.replace(oldCalmBoot, "").replace("</head>", `  ${inject}\n  </head>`);
+        let out = hostAnalyticsDefault && !html.includes("data-dukb-host-analytics-default")
+          ? html.replace(/<head\b[^>]*>/i, head => `${head}\n    ${hostAnalyticsDefault}`)
+          : html;
+        // Previously saved snapshots still carry the old expanded cookie banner copy.
+        out = out.replace(
+          "<p>Analytics is paused. Google Analytics is off while we check its privacy settings.</p>",
+          "<p>Google Analytics is paused. Lovable still measures basic visits.</p>",
+        );
+        if (entry.name !== "index.html" || !html.includes("/prerender-boot.js") || html.includes("/assets/")) {
+          if (out !== html) fs.writeFileSync(f, out);
+          if (entry.name === "index.html") skipped += 1;
+          continue;
+        }
+        out = out.replace(oldCalmBoot, "").replace("</head>", `  ${inject}\n  </head>`);
         /* Round 448: the cover goes in once, as #root's first child. A snapshot
            the prerenderer already wrote in the new shape carries it and is
            left alone. */

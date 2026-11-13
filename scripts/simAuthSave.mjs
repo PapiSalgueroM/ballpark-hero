@@ -187,11 +187,11 @@ console.log('4) live: the deployed function refuses an anonymous caller');
 if (CONTROL) {
   console.log('   skipped under a control, which is judged on its own section only');
 } else {
-  const client = fs.readFileSync(path.join(ROOT, 'src/integrations/supabase/client.ts'), 'utf8');
+  const client = fs.readFileSync(path.join(ROOT, 'src/integrations/supabase/config.ts'), 'utf8');
   const url = (client.match(/https:\/\/[a-z0-9]+\.supabase\.co/) || [])[0];
   const key = (client.match(/eyJ[A-Za-z0-9_.-]+/) || [])[0];
   if (!url || !key) {
-    fail(4, 'could not read the Supabase URL and public key from client.ts');
+    fail(4, 'could not read the Supabase URL and public key from config.ts');
   } else {
     let status = 0, body = '';
     try {

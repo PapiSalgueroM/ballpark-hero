@@ -123,7 +123,7 @@ try {
   fs.mkdirSync(path.join(mini, 'scripts/lib'), { recursive: true });
   fs.mkdirSync(path.join(mini, 'src/integrations/supabase'), { recursive: true });
   fs.writeFileSync(path.join(mini, 'scripts/lib/offlineTransport.cjs'), helperSource);
-  fs.writeFileSync(path.join(mini, 'src/integrations/supabase/client.ts'), `const SUPABASE_URL = '${local}'; const SUPABASE_PUBLISHABLE_KEY = 'local-fixture';`);
+  fs.writeFileSync(path.join(mini, 'src/integrations/supabase/config.ts'), `const SUPABASE_URL = '${local}'; const SUPABASE_PUBLISHABLE_KEY = 'local-fixture';`);
   const fixtureRunner = path.join(mini, 'scripts/runAllSims.mjs');
   fs.writeFileSync(fixtureRunner, runnerSource);
   const four = "console.log('one useful outcome');console.log('two useful outcomes');console.log('three useful outcomes');console.log('four useful outcomes');";

@@ -86,10 +86,10 @@ const EN_DASH = String.fromCharCode(0x2013);
 const EM_DASH = String.fromCharCode(0x2014);
 
 function readClient() {
-  const client = fs.readFileSync(path.join(ROOT, 'src', 'integrations', 'supabase', 'client.ts'), 'utf8');
+  const client = fs.readFileSync(path.join(ROOT, 'src', 'integrations', 'supabase', 'config.ts'), 'utf8');
   const url = client.match(/SUPABASE_URL\s*=\s*["']([^"']+)["']/);
   const key = client.match(/SUPABASE_PUBLISHABLE_KEY\s*=\s*["']([^"']+)["']/);
-  if (!url || !key) abort('cannot read the Supabase URL and key from client.ts. NOTHING WAS CHECKED.');
+  if (!url || !key) abort('cannot read the Supabase URL and key from config.ts. NOTHING WAS CHECKED.');
   return { url: url[1], headers: { apikey: key[1], authorization: `Bearer ${key[1]}` } };
 }
 

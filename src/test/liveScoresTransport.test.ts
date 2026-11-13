@@ -1,7 +1,7 @@
 import { afterEach, expect, it, vi } from 'vitest';
 import { fetchLiveBoard } from '@/lib/liveScores';
 
-vi.mock('@/integrations/supabase/client', () => ({ SUPABASE_URL: 'https://fixture.invalid', SUPABASE_PUBLISHABLE_KEY: 'fixture-public' }));
+vi.mock('@/integrations/supabase/config', () => ({ SUPABASE_URL: 'https://fixture.invalid', SUPABASE_PUBLISHABLE_KEY: 'fixture-public' }));
 afterEach(() => { vi.unstubAllGlobals(); });
 
 it('forwards the owned cancellation signal to the actual score fetch', async () => {

@@ -57,13 +57,9 @@ export function StorageNotice() {
   const { pathname } = useLocation();
   const prerender = typeof window !== 'undefined' && !!(window as Window & { __DUKB_PRERENDER__?: boolean }).__DUKB_PRERENDER__;
   const game = !prerender && isGameRoute(pathname);
-  /* Asked here and nowhere earlier: whether this browser takes a write can
-     only be learned by writing, and the seam does not write as it loads. The
-     seam remembers the answer, so this is one write and one remove a visit,
-     on the first game page, and nothing at all on the home page or a hub.
-     It is asked while rendering, before the seam is read below, so the line
-     is there on the first paint and the game never jumps down a line after
-     it. */
+  /* The seam remembers the answer from this game notice or Home's guest auth
+     check, so the probe writes and removes one key per visit. Ask before
+     reading the seam so a direct game visit can show the line on first paint. */
   if (game) probeStorageWrites();
   const trouble = useSyncExternalStore(subscribeStorageTrouble, getStorageTrouble, getStorageTrouble);
   /* the page the line was last on, and what it said there */

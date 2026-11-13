@@ -294,11 +294,11 @@ async function databaseReachable() {
   if (forced === 'unreachable') return { ok: false, why: 'DB_PROBE=unreachable forced it' };
   let url; let key;
   try {
-    const client = readFileSync(path.join(ROOT, 'src/integrations/supabase/client.ts'), 'utf8');
+    const client = readFileSync(path.join(ROOT, 'src/integrations/supabase/config.ts'), 'utf8');
     url = client.match(/SUPABASE_URL\s*=\s*["']([^"']+)["']/)?.[1];
     key = client.match(/SUPABASE_PUBLISHABLE_KEY\s*=\s*["']([^"']+)["']/)?.[1];
-  } catch { /* the client file is the source of truth and it is not there */ }
-  if (!url || !key) return { ok: false, why: 'no database URL or key in src/integrations/supabase/client.ts' };
+  } catch { /* the config file is the source of truth and it is not there */ }
+  if (!url || !key) return { ok: false, why: 'no database URL or key in src/integrations/supabase/config.ts' };
   try {
     const res = await fetch(`${url}/rest/v1/`, {
       headers: { apikey: key, authorization: `Bearer ${key}` },

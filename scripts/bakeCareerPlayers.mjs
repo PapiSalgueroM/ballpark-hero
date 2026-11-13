@@ -78,10 +78,10 @@ export function correctionProblems(players, ledger) {
 /* Supabase client from the app's own hardcoded values                */
 /* ------------------------------------------------------------------ */
 export function supabaseFromClientTs(root = ROOT) {
-  const clientTs = fs.readFileSync(path.join(root, 'src/integrations/supabase/client.ts'), 'utf8');
+  const clientTs = fs.readFileSync(path.join(root, 'src/integrations/supabase/config.ts'), 'utf8');
   const urlMatch = clientTs.match(/https:\/\/[a-z0-9]+\.supabase\.co/);
   const keyMatch = clientTs.match(/eyJ[A-Za-z0-9_.-]+/);
-  if (!urlMatch || !keyMatch) throw new Error('could not extract the Supabase URL and public key from client.ts');
+  if (!urlMatch || !keyMatch) throw new Error('could not extract the Supabase URL and public key from config.ts');
   return createClient(urlMatch[0], keyMatch[0], { auth: { persistSession: false } });
 }
 

@@ -72,7 +72,7 @@ const fail = m => { failures += 1; console.error('  FAIL: ' + m); };
 const refuse = m => { console.error(`control ${CONTROL}: ${m}, refusing to run a dead control`); process.exit(1); };
 
 /* ---------- the database, read the way the site reads it ---------- */
-const client = fs.readFileSync(`${ROOT}/src/integrations/supabase/client.ts`, 'utf8');
+const client = fs.readFileSync(`${ROOT}/src/integrations/supabase/config.ts`, 'utf8');
 const URL_ = client.match(/SUPABASE_URL\s*=\s*["']([^"']+)["']/)[1];
 const KEY = client.match(/SUPABASE_PUBLISHABLE_KEY\s*=\s*["']([^"']+)["']/)[1];
 const HEAD = { apikey: KEY, Authorization: `Bearer ${KEY}` };

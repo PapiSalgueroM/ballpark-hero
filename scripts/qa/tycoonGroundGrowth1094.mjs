@@ -169,7 +169,7 @@ const copy=value=>JSON.parse(JSON.stringify(value)); export function useStadiumT
     const inputs=bundleReceipt(result,arm),abs=Object.keys(inputs).map(file=>path.resolve(ROOT,file));assert(abs.includes(pageFile)&&abs.includes(observer)&&abs.includes(path.join(ROOT,HOOK)));assert(!abs.includes(path.join(ROOT,PAGE)));for(const [other]of arms)if(other!==arm)assert(!abs.includes(path.join(copyDir,`${other}.tsx`)));assert(inputs['src/lib/stadiumTycoon.ts']);
     compiled[arm]=new Map(result.outputFiles.map(file=>[`/${path.basename(file.path)}`,{body:Buffer.from(file.contents),type:file.path.endsWith('.css')?'text/css':'text/javascript'}]));
   }
-  const service=new URL(/const SUPABASE_URL\s*=\s*["']([^"']+)/.exec(read(path.join(ROOT,'src/integrations/supabase/client.ts')))[1]).origin;
+  const service=new URL(/const SUPABASE_URL\s*=\s*["']([^"']+)/.exec(read(path.join(ROOT,'src/integrations/supabase/config.ts')))[1]).origin;
   const css=fs.readdirSync(path.join(ROOT,'dist/assets')).filter(file=>file.endsWith('.css')).sort();assert(css.length);
   const assets=new Map(JSON.parse(fs.readFileSync(path.join(CACHE,'manifest.json'),'utf8')).map(asset=>{const body=fs.readFileSync(path.join(CACHE,asset.file));assert.equal(sha(body),asset.sha256);assert.equal(body.length,asset.bytes);return[asset.url,{...asset,body}];}));
   server=createServer((_req,res)=>{res.writeHead(500);res.end('Undeclared request');});await new Promise(resolve=>server.listen(0,'127.0.0.1',resolve));const base=`http://127.0.0.1:${server.address().port}`;

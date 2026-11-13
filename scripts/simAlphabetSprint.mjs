@@ -57,7 +57,7 @@ const fail = m => { failures += 1; console.error('  FAIL: ' + m); };
 const read = p => fs.readFileSync(path.join(ROOT, p), 'utf8').replace(/\r\n/g, '\n');
 
 /* The client file carries the live url and anon key on purpose (CLAUDE.md). */
-const client = read('src/integrations/supabase/client.ts');
+const client = read('src/integrations/supabase/config.ts');
 const URL_ = /const SUPABASE_URL = ['"]([^'"]+)['"]/.exec(client)?.[1];
 const KEY = /const SUPABASE_PUBLISHABLE_KEY = ['"]([^'"]+)['"]/.exec(client)?.[1];
 

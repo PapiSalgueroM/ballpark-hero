@@ -9,7 +9,7 @@ import path from 'node:path';
 import { fetchWithTransportRetry } from './fetchWithTransportRetry.mjs';
 
 export async function fetchLiveCareerPool(root) {
-  const client = fs.readFileSync(path.join(root, 'src', 'integrations', 'supabase', 'client.ts'), 'utf8');
+  const client = fs.readFileSync(path.join(root, 'src', 'integrations', 'supabase', 'config.ts'), 'utf8');
   const url = client.match(/SUPABASE_URL\s*=\s*["']([^"']+)["']/)?.[1];
   const key = client.match(/SUPABASE_PUBLISHABLE_KEY\s*=\s*["']([^"']+)["']/)?.[1];
   if (!url || !key) throw new Error('could not read the project URL and public key from the supabase client');

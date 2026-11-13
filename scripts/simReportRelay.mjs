@@ -183,8 +183,8 @@ console.log('3) the admin screen prints the delivery answer, unknown included');
 section = 4;
 console.log('4) the live table carries the column');
 {
-  const url = /const SUPABASE_URL = ['"]([^'"]+)['"]/.exec(read('src/integrations/supabase/client.ts'));
-  const key = /const SUPABASE_PUBLISHABLE_KEY = ['"]([^'"]+)['"]/.exec(read('src/integrations/supabase/client.ts'));
+  const url = /const SUPABASE_URL = ['"]([^'"]+)['"]/.exec(read('src/integrations/supabase/config.ts'));
+  const key = /const SUPABASE_PUBLISHABLE_KEY = ['"]([^'"]+)['"]/.exec(read('src/integrations/supabase/config.ts'));
   if (!url || !key) {
     fail('could not read the Supabase url and key from the client, so the live check ran nothing');
   } else {

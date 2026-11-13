@@ -37,7 +37,7 @@ if (CONTROL && CONTROL !== 'accept-on-error') {
   process.exit(1);
 }
 
-const clientTs = fs.readFileSync(path.join(ROOT, 'src', 'integrations', 'supabase', 'client.ts'), 'utf8');
+const clientTs = fs.readFileSync(path.join(ROOT, 'src', 'integrations', 'supabase', 'config.ts'), 'utf8');
 const SUPA_HOST = new URL(clientTs.match(/SUPABASE_URL\s*=\s*["']([^"']+)["']/)[1]).host;
 const PORT = 4194;
 const BASE = `http://127.0.0.1:${PORT}`;
