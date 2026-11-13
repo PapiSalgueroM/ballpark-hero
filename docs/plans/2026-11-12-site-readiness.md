@@ -1,6 +1,8 @@
 # DoUKnowBall site readiness and game work
 
-Checkpoint at 09:37 UTC on November 13, 2026. The broad update remains draft [PR #770](https://github.com/PapiSalgueroM/ballpark-hero/pull/770). The work continued after the 24-hour report below.
+Checkpoint at 09:48 UTC on November 13, 2026. The broad update remains draft [PR #770](https://github.com/PapiSalgueroM/ballpark-hero/pull/770). The work continued after the 24-hour report below.
+
+The optional Board Pathways objective is live in NRL Team Manager. Before Round 1, managers can agree to give three players aged 23 or under at least four regular-season appearances each. A reserve must play to count. Meeting the target pays A$200,000 in simulated club cash once after the regular season. All 276 focused NRL tests, 672 current and legacy comparisons, 16 route budgets and six pinned production browser cases passed. IndexNow accepted the updated guide. [PR #800](https://github.com/PapiSalgueroM/ballpark-hero/pull/800).
 
 The optional Academy facilities upgrade is live for both NRL starting seasons. A$600,000 in simulated club cash buys up to three extra potential points for newly scouted fictional prospects, capped at 90. It starts the next round and stays with the club. All 271 NRL tests, 924 unchanged-state comparisons, 16 route budgets and six published browser journeys passed. All 173 live routes passed and IndexNow accepted the updated guide. [PR #797](https://github.com/PapiSalgueroM/ballpark-hero/pull/797).
 
