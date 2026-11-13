@@ -27,8 +27,8 @@ it('resumes the 60-minute score unchanged and records only a confirmed late tact
   localStorage.setItem(fence, '4');
   const show = () => render(<MemoryRouter initialEntries={['/nrl-team-manager']}><NrlTeamManager /></MemoryRouter>);
   const initial = show();
-  const click = (name: string) => fireEvent.click(screen.getByRole('button', { name, exact: true }));
-  click('Play to 60 minutes');
+  const click = (name: RegExp) => fireEvent.click(screen.getByRole('button', { name }));
+  click(/^Play to 60 minutes$/);
   const mid = reduceNrlCareer(half, { type: 'reachMinute60', year: 2026, round: 1, tactic: 'balanced' });
   expect(localStorage.getItem(NRL_SAVE_KEY)).toBe(JSON.stringify(mid));
   expect(localStorage.getItem(fence)).toBe('5');
@@ -36,10 +36,10 @@ it('resumes the 60-minute score unchanged and records only a confirmed late tact
   initial.unmount();
   show();
   expect(screen.getByRole('list', { name: 'Score after 60 minutes' }).textContent).toBe(score);
-  click('Defence');
+  click(/^Defence$/);
   expect(localStorage.getItem(NRL_SAVE_KEY)).toBe(JSON.stringify(mid));
   expect(screen.getByRole('list', { name: 'Score after 60 minutes' }).textContent).toBe(score);
-  click('Play final 20 minutes');
+  click(/^Play final 20 minutes$/);
   const full = reduceNrlCareer(mid, { type: 'finishMinute60', year: 2026, round: 1, tactic: 'defense' });
   expect(localStorage.getItem(NRL_SAVE_KEY)).toBe(JSON.stringify(full));
   expect(localStorage.getItem(fence)).toBe('6');
