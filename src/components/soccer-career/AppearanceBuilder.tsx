@@ -57,7 +57,7 @@ const AppearanceBuilder = ({ appearance, onChange, clubColor = "#10B981", sport 
         <Button
           onClick={() => onChange(randomAppearance())}
           variant="outline"
-          className="h-8 px-3 text-xs font-bold"
+          className="h-auto min-h-8 min-w-0 max-w-full whitespace-normal break-words px-3 text-xs font-bold"
         >
           🎲 Surprise me
         </Button>
@@ -68,7 +68,7 @@ const AppearanceBuilder = ({ appearance, onChange, clubColor = "#10B981", sport 
         <div className="shrink-0 rounded-xl overflow-hidden bg-background/40 border border-border">
           <PlayerAvatar appearance={appearance} clubColor={clubColor} size={104} animate />
         </div>
-        <div className="min-w-0 space-y-1.5 text-xs">
+        <div className="min-w-0 basis-32 grow space-y-1.5 text-xs">
           <div className="flex items-center gap-2">
             <span className="w-4 h-4 rounded-full border border-border shrink-0" style={{ backgroundColor: boots.color }} />
             <span className="font-bold truncate">{boots.label}</span>
