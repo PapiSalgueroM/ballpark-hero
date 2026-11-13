@@ -1,8 +1,16 @@
+## 2026-11-13: Combined review, hosted findings and phone input release preparation
+
+The latest `fb63ea27e` compiled product passes application TypeScript, Vite, all 22 static readers, native snapshot boot and redirects, and all 16 unchanged download caps with 400 isolation probes. The preceding `9aba53de9` also passed 105 route entries and 64 phone consent checks. NRL expiring-deal review, Footle first-clue visibility, post-bank Practice focus, verified Transfer Path memberships and MLB-only playoff replay loading have their affected compiled journeys. The [readiness record](plans/2026-11-12-site-readiness.md) identifies exact artifacts, retained baselines and limits.
+
+Draft [PR #770](https://github.com/PapiSalgueroM/ballpark-hero/pull/770) now has hosted proof of locked installation, application types and production build. Its original 47 workflows ended with three successes, 43 failures and one cancellation. Current repairs cover actual bundled-font checks, lazy-route scoring discovery, normalized Buffer recognition and affected game issues; historical source holds remain intact. The independent older full-suite run is still active. Mobile LCP and complete NRL/Soccer Manager parity remain unfinished.
+
+The new Missing XI phone complaint reproduces the compatibility mouse-event failure already addressed by the four-line shared autocomplete fix in [PR #566](https://github.com/PapiSalgueroM/ballpark-hero/pull/566). Exact current-main release preparation passes trusted selection, score and reload in WebKit at 352 and 390 pixels, with a failing no-guard control. The normal grid archive refresh preserves all old boards and adds the missing dates. This narrow release is not yet published. No admin report was closed, reporter contacted, SQL migration applied, Edge function deployed or ad network activated.
+
 ## 2026-11-12: NRL named opening rosters and combined qualification
 
 The optional 2026 opening-matchday roster covers 323 verified names and opening ages across all 17 clubs. Eleven extra players per club, ratings, wages, contracts and later seasons are simulated. Default 2026 and new 2027 starts remain generated. Four compiled phone/desktop journeys pass, and the full NRL suite passes 198 tests across 37 files. Two older rollover test expectations now include exact archived finals seeds and scores; both prior failures were reproduced on the preceding source. See the [source audit](audits/nrl-2026-opening-matchday-rosters.md).
 
-The combined d8c7c6426 build passes full application types, ordinary Vite, all 22 readers, all 16 original download caps and 400 isolation probes, 105 route openings and 64 phone consent checks. Current source cf093b690 adds only the two NRL test corrections. The older full-suite run and release coordination remain pending. All changes remain local. The [readiness record](plans/2026-11-12-site-readiness.md) distinguishes current qualification, prior checkpoints and unresolved NitroPay requirements.
+At this checkpoint, the combined d8c7c6426 build passed full application types, ordinary Vite, all 22 readers, all 16 original download caps and 400 isolation probes, 105 route openings and 64 phone consent checks. Source cf093b690 added only the two NRL test corrections. The older full-suite run and release coordination remained pending. The newer review and release status is recorded above.
 
 ## 2026-11-12: Player Bingo verified birth-year correction staged
 
