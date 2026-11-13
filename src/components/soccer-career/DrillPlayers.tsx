@@ -49,9 +49,9 @@ export function DrillKeeper({ origin, glove, contact, catching = false }: {
   const direction = distance > 0.01 ? { x: dx / distance, y: dy / distance } : { x: 0, y: -1 };
   const extension = Math.min(1, distance / 45);
   const reach = 14 + extension * 8;
-  const chest = { x: glove.x - direction.x * reach, y: glove.y - direction.y * reach };
-  const angle = (Math.atan2(direction.y, direction.x) * 180) / Math.PI + 90;
   const hands = contact ?? glove;
+  const chest = { x: hands.x - direction.x * reach, y: hands.y - direction.y * reach };
+  const angle = (Math.atan2(direction.y, direction.x) * 180) / Math.PI + 90;
   const across = { x: -direction.y, y: direction.x };
   return (
     <g data-drill-keeper data-catching={catching} data-glove-x={glove.x.toFixed(3)} data-glove-y={glove.y.toFixed(3)} pointerEvents="none">
