@@ -151,7 +151,7 @@ if (!CONTROL) {
 const PATCH = {
   staleclimb: ['src/data/gameContent/soccer2.ts', 'Opposition ratings climb 70, 76, 81, 85, 89', 'Opposition ratings climb 70, 76, 81, 85, 90'],
   stalerange: ['src/data/gameContent/hockey.ts', 'rated 77 up to 98', 'rated 77 up to 99'],
-  ghostcard: ['src/data/gameContent/football.ts', 'The quarterback slot deals a', 'The quarterback slot deals a 99 rated card, a'],
+  ghostcard: ['src/data/gameContent/football.ts', 'The running back slot deals a', 'The running back slot deals a 99 rated card, a'],
 };
 const [file, anchor, replacement] = PATCH[CONTROL];
 const patched = patchOnce(stripComments(plainText(file)), anchor, replacement, CONTROL);
