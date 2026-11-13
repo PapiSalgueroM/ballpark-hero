@@ -6,55 +6,32 @@ import { createHash } from 'node:crypto';
 import { createServer } from 'node:net';
 import { spawn } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
+import { prepareBundledFonts, verifyBundledFonts, loadActualFonts } from '../lib/builtFonts.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 const OUT = path.join(ROOT, 'buzzer-contest-recap-artifacts/native');
 const CACHE = path.resolve(process.env.BUZZER_CONTEST_FONT_CACHE || path.join(ROOT, 'buzzer-contest-recap-artifacts/font-cache'));
-const sheets = [...fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8').matchAll(/<link\s+href="(https:\/\/fonts\.googleapis\.com\/[^\"]+)"\s+rel="stylesheet"/g)].map(match => new URL(match[1]).href);
-assert.equal(sheets.length, 1, 'Read the actual template font stylesheet');
 const digest = bytes => createHash('sha256').update(bytes).digest('hex');
 if (process.argv.includes('--prefetch-fonts-only')) {
-  assert(process.env.CI, 'Font downloads run only in remote CI');
-  fs.mkdirSync(CACHE, { recursive: true });
-  const manifest = [];
-  const download = async url => {
-    assert(['https://fonts.googleapis.com', 'https://fonts.gstatic.com'].includes(new URL(url).origin));
-    const response = await fetch(url, { redirect: 'error', signal: AbortSignal.timeout(20000), headers: { 'User-Agent': 'Mozilla/5.0 Chrome/131.0.0.0 Safari/537.36' } });
-    assert(response.ok, 'Font dependency response succeeds');
-    const body = Buffer.from(await response.arrayBuffer()), file = digest(url);
-    fs.writeFileSync(path.join(CACHE, file), body);
-    manifest.push({ url, file, contentType: response.headers.get('content-type'), sha256: digest(body) });
-    return body.toString('utf8');
-  };
-  const css = await download(sheets[0]);
-  const urls = [...new Set([...css.matchAll(/url\(\s*['"]?(https:\/\/[^)'"\s]+)/g)].map(match => match[1]))];
-  assert(urls.length > 0, 'Actual stylesheet declares font files');
-  for (const url of urls) { assert.equal(new URL(url).origin, 'https://fonts.gstatic.com'); await download(url); }
-  fs.writeFileSync(path.join(CACHE, 'manifest.json'), JSON.stringify(manifest, null, 2));
-  console.log(`Prepared ${manifest.length} font dependencies for local fulfillment.`);
+  const receipt = prepareBundledFonts(ROOT, CACHE);
+  fs.writeFileSync(path.join(CACHE, 'manifest.json'), '[]');
+  console.log(`Recorded ${receipt.faces.length} bundled font faces without external downloads.`);
   process.exit(0);
 }
-const fonts = new Map(JSON.parse(fs.readFileSync(path.join(CACHE, 'manifest.json'), 'utf8')).map(entry => {
-  assert(['https://fonts.googleapis.com', 'https://fonts.gstatic.com'].includes(new URL(entry.url).origin));
-  assert(/^[a-f0-9]{64}$/.test(entry.file));
-  const body = fs.readFileSync(path.join(CACHE, entry.file));
-  assert.equal(digest(body), entry.sha256);
-  return [entry.url, { body, contentType: entry.contentType }];
-}));
-assert(fonts.has(sheets[0]), 'Prefetch current template fonts before guarded native run');
+const bundledFonts = verifyBundledFonts(ROOT, CACHE);
 const { chromium } = await import('../lib/playwrightLoader.mjs');
 const { build } = await import('esbuild');
 const sourceFiles = [
   'src/components/buzzer-beater/BuzzerBeaterBoard.tsx',
   'src/components/buzzer-beater/ContestScorecard.tsx',
   'src/lib/buzzerBeater.ts', 'src/lib/threePointContest.ts', 'src/lib/arcade.ts',
-  'src/hooks/useArcadeFlight.ts', 'scripts/qa/buzzerContestRecap1074.mjs',
+  'src/hooks/useArcadeFlight.ts', 'scripts/qa/buzzerContestRecap1074.mjs', 'scripts/lib/builtFonts.mjs',
 ];
 const sourceHashes = () => Object.fromEntries(sourceFiles.map(file => [file, digest(fs.readFileSync(path.join(ROOT, file)))]));
 const beforeSources = sourceHashes();
 fs.mkdirSync(OUT, { recursive: true });
 assert(fs.existsSync(path.join(ROOT, 'dist/index.html')), 'Build dist before native verification');
-const report = { started: new Date().toISOString(), cases: [], controls: [], forwardedWrites: 0, sourceBefore: beforeSources };
+const report = { started: new Date().toISOString(), cases: [], controls: [], forwardedWrites: 0, sourceBefore: beforeSources, bundledFonts };
 const save = () => fs.writeFileSync(path.join(OUT, 'report.json'), JSON.stringify(report, null, 2));
 
 // The browser is never injected with these results. This independent Node call
@@ -211,21 +188,21 @@ try {
     { width: 1280, height: 720, touch: false, reduced: false, theme: 'light' },
   ]) {
     const id = `${profile.width}-${profile.touch ? 'touch' : 'keyboard'}-${profile.theme}${profile.reduced ? '-reduced' : ''}`;
-    const row = { id, ...profile, shots: [], releases: [], geometry: [], screenshots: [], driverNavigation: [], errors: [], assetErrors: [], externalRequests: [], fontResponses: [], blockedWrites: [], storageWrites: [] };
+    const row = { id, ...profile, shots: [], releases: [], geometry: [], screenshots: [], driverNavigation: [], errors: [], assetErrors: [], externalRequests: [], localFontRequests: [], blockedWrites: [], storageWrites: [] };
     report.cases.push(row);
     const context = await browser.newContext({ viewport: { width: profile.width, height: profile.height }, isMobile: profile.touch, hasTouch: profile.touch, deviceScaleFactor: 1, colorScheme: profile.theme, reducedMotion: profile.reduced ? 'reduce' : 'no-preference', serviceWorkers: 'block',
       storageState: { cookies: [], origins: [{ origin: BASE, localStorage: [{ name: 'cookie-consent', value: 'essential' }, { name: DAILY, value: dailyBytes }, { name: 'dukb-theme', value: profile.theme }] }] } });
     await context.route('**/*', route => {
       const request = route.request(), url = new URL(request.url());
-      if (url.origin === BASE) { assert(['GET', 'HEAD'].includes(request.method()), 'No local write transport'); return route.continue(); }
+      if (url.origin === BASE) {
+        assert(['GET', 'HEAD'].includes(request.method()), 'No local write transport');
+        if (request.resourceType() === 'font') row.localFontRequests.push(request.url());
+        return route.continue();
+      }
       row.externalRequests.push({ method: request.method(), origin: url.origin, path: url.pathname });
       if (!['GET', 'HEAD', 'OPTIONS'].includes(request.method())) row.blockedWrites.push({ method: request.method(), path: url.pathname });
-      if (fonts.has(url.href)) {
-        const cached = fonts.get(url.href);
-        row.fontResponses.push({ url: url.href, sha256: digest(cached.body), bytes: cached.body.length, contentType: cached.contentType });
-        return route.fulfill({ status: 200, ...cached });
-      }
       const resource = request.resourceType();
+      if (resource === 'font') { row.assetErrors.push(`External font: ${url.href}`); return route.abort(); }
       return route.fulfill({ status: 200, contentType: resource === 'stylesheet' ? 'text/css' : resource === 'script' ? 'application/javascript' : 'application/json', body: ['stylesheet', 'script'].includes(resource) ? '' : '[]' });
     });
     const page = await context.newPage(); page.setDefaultTimeout(10000);
@@ -263,19 +240,7 @@ try {
     try {
       await page.goto(BASE + '/buzzer-beater', { waitUntil: 'domcontentloaded' });
       const entry = page.getByRole('button', { name: 'Three-point contest', exact: true }); await entry.waitFor();
-      await page.evaluate(() => document.fonts.ready);
-      row.loadedFonts = await page.evaluate(async () => {
-        const faces = [];
-        for (const family of ['Inter', 'Space Grotesk']) {
-          for (const weight of [400, 500, 600, 700]) {
-            const loaded = await document.fonts.load(`${weight} 16px "${family}"`, 'Buzzer Beater');
-            faces.push({ family, weight, faces: loaded.map(face => ({ family: face.family, weight: face.weight, status: face.status })) });
-          }
-        }
-        return faces;
-      });
-      assert.equal(row.loadedFonts.length, 8, 'All eight requested font faces are inspected');
-      for (const requested of row.loadedFonts) assert(requested.faces.length > 0 && requested.faces.every(face => face.status === 'loaded' && face.family.replace(/['"]/g, '') === requested.family), 'Requested font family has actual nonempty loaded faces');
+      row.loadedFonts = await loadActualFonts(page, 'Buzzer Beater');
       await page.clock.pauseAt(await page.evaluate(() => Date.now() + 1000));
       const before = await protectedState(page);
       assert((await state(page).innerText()).includes('three regular makes and a made money ball'), 'Actual worked example appears before entering contest');
@@ -463,8 +428,8 @@ try {
   }
   assert.equal(report.cases.filter(row => row.passed).length, 3);
   assert.deepEqual(report.controls.map(control => control.name), ['value', 'font', 'clipping', 'glyph', 'vertical']);
-  report.sourceAfter = sourceHashes(); assert.deepEqual(report.sourceAfter, beforeSources, 'All seven relevant sources are held');
+  report.sourceAfter = sourceHashes(); assert.deepEqual(report.sourceAfter, beforeSources, 'All relevant sources are held');
   report.passed = true;
-  console.log('buzzerContestRecap1074: three native profiles, 75 actual mixed shots, five earned rack recaps per profile, no premature flight reveal, Help/Pause/retry/mode exits, five effective restored DOM controls and seven held sources passed. Zero forwarded writes.');
+  console.log(`buzzerContestRecap1074: three native profiles, 75 actual mixed shots, five earned rack recaps per profile, no premature flight reveal, Help/Pause/retry/mode exits, five effective restored DOM controls and ${sourceFiles.length} held sources passed. Zero forwarded writes.`);
 } catch (error) { report.failure = String(error.stack || error); throw error; }
 finally { report.sourceAfter = sourceHashes(); save(); await browser?.close(); server.kill(); }
