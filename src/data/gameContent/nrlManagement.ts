@@ -25,6 +25,7 @@ export const NRL_MANAGEMENT_CONTENT: GameContentMap = {
       'After finishing a 2026 club season, take a national appointment in the Club office before starting 2027. Your World Cup progress saves with your club career, so you can return to it after switching clubs.',
       'Offer an eligible player less than the asking salary to request a simulated three-season counteroffer. Review the salary and dates before accepting.',
       'In Contracts, arrange an offseason move for an eligible player. They stay this season, and the receiving club pays their salary for the remaining term.',
+      'In Contracts, invite rival approaches for one player each season with simulated written permission from both the player and club. Review any reply after the round and accept or decline before the deadline. An accepted move starts next season.',
       'After the Grand Final, open Contracts to negotiate one simulated mutual release. A player with one season left can leave if you have another player signed in that position. Check the settlement and next season’s cap room before confirming.',
       'Set Standard, Value or Premium ticket prices in Finance before your first paid home match. That choice applies to home gates for the rest of the season.',
       'Hire a development assistant in Finances to help up to three young players who are signed to return. Each needs eight regular-season appearances from the hire onward to gain a rating point next season.',

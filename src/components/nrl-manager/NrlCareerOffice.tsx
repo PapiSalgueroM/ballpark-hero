@@ -10,7 +10,7 @@ import {
   nrlAcademyAvailableRoles, nrlAcademyFacilityQuote, nrlAcademyFacilitySpend, nrlAcademyOffer, nrlAcademyReports,
   nrlBoardPathwaysIncome, nrlBoardPathwaysQuote,
   nrlCareerCap, nrlCareerFinance, nrlCareerMarket, nrlCareerRecord, nrlCareerSquad,
-  nrlContractCounteroffer, nrlContractOffer,
+  nrlContractApproach, nrlContractApproachCandidates, nrlContractApproachLastRound, nrlContractCounteroffer, nrlContractOffer,
   nrlCoachCourseQuote, nrlCoachCourseSpend, nrlCoachQuote, nrlCoachRetentionQuote, nrlCoachSpend, nrlCoachTactics,
   nrlDevelopmentAssistantProgress, nrlDevelopmentPreview, nrlFinanceForecast,
   nrlMedicalSpend, nrlMedicalUpgradeQuote, nrlOffseasonApplication, nrlOffseasonClubs, nrlOffseasonOpportunities,
@@ -290,6 +290,74 @@ function MutualRelease({ career, onAction, disabled }: { career: NrlCareerState;
   );
 }
 
+function ContractApproaches({ career, onAction, disabled }: { career: NrlCareerState; onAction: Dispatch; disabled: boolean }) {
+  const { year, clubId, round, phase } = career.season;
+  const [playerId, setPlayerId] = useState('');
+  const [permission, setPermission] = useState(false);
+  const summary = useRef<HTMLElement>(null);
+  const reply = nrlContractApproach(career);
+  if (career.legacySeason || career.retired || year === NRL_LAST_YEAR) return null;
+  const lastRound = nrlContractApproachLastRound(year);
+  const candidates = nrlContractApproachCandidates(career);
+  const answer = (decision: 'accept' | 'decline') => {
+    if (reply?.destinationId && onAction({ type: 'answerContractApproach', year, clubId, playerId: reply.playerId,
+      listedRound: reply.listedRound, destinationId: reply.destinationId, decision })) summary.current?.focus();
+  };
+  const buyer = reply?.destinationId && labelForClub(year + 1, reply.destinationId);
+  const terms = reply?.contract;
+  return (
+    <details className="group mt-3 rounded-lg border border-border" open={reply ? true : undefined}>
+      <summary ref={summary} className="flex min-h-11 cursor-pointer list-none items-center justify-between gap-2 px-3 py-2 text-sm font-semibold">
+        Invite rival approaches<ChevronDown size={16} aria-hidden="true" className="shrink-0 group-open:rotate-180" />
+      </summary>
+      <div className="space-y-3 border-t border-border p-3 text-sm">
+        {reply ? reply.status === 'offered' ? (
+          <section aria-label="Rival contract offer" className="space-y-2">
+            <p className="font-semibold">{buyer} offered to take over {reply.player?.name}’s contract.</p>
+            <p className="text-muted-foreground">Reply by the end of Round {reply.deadline}.</p>
+            {terms ? <div className="space-y-1 text-muted-foreground">
+              <p>{reply.player?.name} stays with your club this season at the same salary.</p>
+              <p>{buyer} would pay {money(terms.salary)} a season from {terms.startYear} through {terms.endYear}.</p>
+              <p>Your {terms.startYear} cap room would increase by {money(terms.salary - nrlCareerCap(career, terms.startYear).minimumSalary)} after reserving a roster place.</p>
+            </div> : <p className="text-muted-foreground">{reply.reason}</p>}
+            <div className="flex flex-wrap gap-2">
+              <Button type="button" size="lg" disabled={disabled || !terms} onClick={() => answer('accept')}>Accept offseason move</Button>
+              <Button type="button" size="lg" variant="outline" disabled={disabled} onClick={() => answer('decline')}>Decline offer</Button>
+            </div>
+          </section>
+        ) : <p role="status" className="text-muted-foreground">{reply.player?.name} · {reply.status === 'waiting' ? 'A reply is due after this round.'
+          : reply.status === 'accepted' ? `Rival offer accepted. The player joins ${buyer} next season.`
+            : reply.status === 'declined' ? 'Rival offer declined.' : reply.status === 'expired' ? 'The rival offer expired.'
+              : 'No rival could take over this deal.'}</p>
+        : <>
+          <p className="text-muted-foreground">Invite approaches for one player per season. A rival can respond after the next settled round. The player stays through this season.</p>
+          {candidates.length > 0 ? <>
+            <label className="block space-y-1 font-semibold">
+              <span>Player to invite approaches for</span>
+              <select className={control} value={playerId} disabled={disabled} onChange={event => { setPlayerId(event.target.value); setPermission(false); }}>
+                <option value="">Choose a player</option>
+                {candidates.map(player => <option key={player.id} value={player.id}>{player.name} · {player.role}</option>)}
+              </select>
+            </label>
+            {playerId && <>
+              <label className="flex min-h-11 items-start gap-2">
+                <input type="checkbox" className="mt-1 accent-primary" checked={permission} disabled={disabled}
+                  onChange={event => setPermission(event.target.checked)} />
+                <span>The player and club agree to simulated written permission to speak to rival clubs.</span>
+              </label>
+              <Button type="button" size="lg" disabled={disabled || !permission} onClick={() => {
+                if (onAction({ type: 'inviteContractApproach', year, clubId, round, playerId, permission })) summary.current?.focus();
+              }}>Confirm permission</Button>
+            </>}
+          </> : <p className="text-muted-foreground">{career.season.live ? 'Finish the live match before inviting approaches.'
+            : phase !== 'regular' || round > lastRound ? `This season’s invitation window closed after Round ${lastRound}.`
+              : 'No player has a remaining deal available for approaches.'}</p>}
+        </>}
+      </div>
+    </details>
+  );
+}
+
 function Contracts({ career, onAction, disabled }: { career: NrlCareerState; onAction: Dispatch; disabled: boolean }) {
   const squad = nrlCareerSquad(career);
   const offers = new Map(nrlCareerMarket(career).filter(entry => entry.kind === 'renewal').map(entry => [entry.player.id, entry]));
@@ -299,6 +367,7 @@ function Contracts({ career, onAction, disabled }: { career: NrlCareerState; onA
     <>
       <h2 className="font-display text-xl font-bold">Squad contracts</h2>
       <p className="mt-1 text-sm text-muted-foreground">{squad.length} players · {expiring} deals expire this season</p>
+      <ContractApproaches career={career} onAction={onAction} disabled={disabled} />
       <ContractTakeover career={career} onAction={onAction} disabled={disabled} />
       <MutualRelease career={career} onAction={onAction} disabled={disabled} />
       <ul className="mt-3 divide-y divide-border">
