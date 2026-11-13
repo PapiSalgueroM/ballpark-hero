@@ -416,6 +416,9 @@ async function draw(sample, route, url) {
       for (const el of Array.from(document.querySelectorAll('[data-no-prerender]'))) el.remove();
       const esc = t => String(t)
         .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+      const anchor = (href, text) => `<a href="${esc(href).replace(/"/g, '&quot;')}">${esc(text)}</a>`;
+      const snapshotLink = href => href.startsWith('/') || href.startsWith('http') ||
+        /^mailto:[A-Za-z0-9.!#$&'*+\/=_^`{|}~-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/.test(href);
       const seen = new Set();
       const parts = [];
       const visible = el => {
@@ -471,8 +474,8 @@ async function draw(sample, route, url) {
             if (child.tagName === 'A') {
               const href = child.getAttribute('href') || '';
               const t = (child.innerText || '').trim().replace(/\s+/g, ' ');
-              if (t && (href.startsWith('/') || href.startsWith('http'))) {
-                out += `<a href="${esc(href)}">${esc(t)}</a>`;
+              if (t && snapshotLink(href)) {
+                out += anchor(href, t);
                 consumed.add(child);
                 continue;
               }
@@ -504,12 +507,12 @@ async function draw(sample, route, url) {
         if (consumed.has(el)) continue;
         if (tag === 'a') {
           const href = el.getAttribute('href') || '';
-          if (!href.startsWith('/') && !href.startsWith('http')) continue;
+          if (!snapshotLink(href)) continue;
           if (text.length > LEAF_CAP) continue;
           const key = 'a|' + href + '|' + text;
           if (seen.has(key)) continue;
           seen.add(key);
-          parts.push({ s: `<a href="${esc(href)}">${esc(text)}</a>`, chrome });
+          parts.push({ s: anchor(href, text), chrome });
           continue;
         }
         if (tag === 'table') {

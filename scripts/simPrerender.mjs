@@ -334,6 +334,16 @@ console.log('9) no link is written into a snapshot twice');
   console.log(`   the consumed-anchor guard is in place; ${adjacent} block-then-same-link adjacencies (reported, not asserted on: honest repeat linking looks identical)`);
 }
 
+{
+  const address = 'douknowball1@gmail.com';
+  const link = `<a href="mailto:${address}">${address}</a>`;
+  for (const route of ['/about', '/accessibility', '/contact', '/privacy', '/terms']) {
+    const html = docs.get(route) ?? '';
+    const snapshot = html.slice(html.indexOf('id="dukb-snapshot"'));
+    if (!snapshot.includes(link)) fail(`${route} does not have a usable email link in its snapshot`);
+  }
+}
+
 console.log('10) the snapshot styling does not outlive the snapshot');
 /* ROUND 271, AND THIS ONE WAS LIVE FOR THIRTEEN ROUNDS. Every snapshot carries
    a small <style> in its head so the readable text looks like the site for the
