@@ -72,6 +72,7 @@ export const CATEGORIES: GameCategory[] = [
       { path: '/rebuild', label: 'Rebuild Challenge', emoji: '🔧', description: 'Inherit a real club. Open the envelopes, spin for a shirt, keep him or sell him, answer to the board', addedOn: '2026-07-21' },
       // deleted 2026-08-05 per owner review: "dosent even load and it's just like their tier list game... please delete it".
       // { path: '/grade-transfer', label: 'Grade the Transfer', emoji: '📋', description: 'Grade five real moves A to F, then see how they aged', daily: true, isNew: true },
+      { path: '/soccer-perfect-season', label: 'Soccer Perfect Season', emoji: '🏆', description: 'Draft a real XI', daily: true, addedOn: '2026-11-12' },
       { path: '/dart-draft', label: 'Dart Draft', emoji: '🎯', description: 'Throw timed darts at a real world map: hit a country, draft its players', addedOn: '2026-07-10' },
       { path: '/career-ladder', label: 'Career Ladder', emoji: '🪜', description: 'Guess the player, one career stop at a time', addedOn: '2026-07-01' },
       { path: '/who-am-i', label: 'Who Am I?', emoji: '🕵️', description: 'Hunt the secret player with similarity scores', addedOn: '2026-07-02' },
