@@ -30,7 +30,7 @@ import {
 import {
   createNrlCareer, isNrlNamedPlayer, loadNrlOpeningMatchdayCareer, loadNrlPerthSigningsCareer,
   nrlAttackPlanPreview, nrlOppositionReport, nrlPositionTraining,
-  nrlBoardPathwaysQuote, nrlCoachTactics, nrlPositionTrainingCandidates, nrlReserveGradeCandidates, nrlRivalSquad,
+  nrlBoardPathwaysQuote, nrlCoachTactics, nrlContractApproach, nrlPositionTrainingCandidates, nrlReserveGradeCandidates, nrlRivalSquad,
   nrlSponsorRefusal, nrlTicketPricingRefusal, nrlWorldCupAppointmentAvailable,
   NRL_FAST_FORWARD_ROUNDS, NRL_POSITION_TRAINING_ROUNDS, NRL_SAVE_MAX_CHARS, reduceNrlCareer, runNrlFastForward,
   type NrlCareerAction, type NrlCareerState, type NrlFastForwardRequest, type NrlFastForwardStop,
@@ -411,6 +411,7 @@ const fastForwardStops: Record<NrlFastForwardStop, string> = {
   applications: 'Check summer job applications in Season review before advancing.',
   finals: 'The regular season is complete. Play the finals one round at a time.',
   judiciary: 'A Judiciary review needs a response in Match centre.',
+  'contract-approach': 'A rival contract offer is ready in Contracts.',
 };
 type FastForwardResult = { rounds: number; stop: NrlFastForwardStop | null };
 
@@ -467,9 +468,9 @@ function FastForward({ career, onRun, disabled }: {
   );
 }
 
-function MatchCentre({ career, onAction, onRun, onReview, disabled, showLiveResult }: {
+function MatchCentre({ career, onAction, onRun, onReview, onContracts, disabled, showLiveResult }: {
   career: NrlCareerState; onAction: (action: NrlCareerAction) => boolean; onRun: (request: NrlFastForwardRequest) => FastForwardResult | null;
-  onReview: () => void; disabled: boolean; showLiveResult: boolean;
+  onReview: () => void; onContracts: () => void; disabled: boolean; showLiveResult: boolean;
 }) {
   const { season } = career;
   const next = nrlNextRound(season);
@@ -482,6 +483,7 @@ function MatchCentre({ career, onAction, onRun, onReview, disabled, showLiveResu
   const club = shortName(year, clubId);
   const match = next.clubMatch;
   const needsJudiciary = judiciaryNeedsResponse(season);
+  const approach = nrlContractApproach(career);
   const canPlayLive = Boolean(match && season.kickerId && season.bench);
   const holdable = canPlayLive ? nrlHoldableReserves(season) : [];
   const selectedHold = hold?.year === year && hold.round === season.round && holdable.some(player => player.id === hold.reserveId) ? hold : undefined;
@@ -570,6 +572,10 @@ function MatchCentre({ career, onAction, onRun, onReview, disabled, showLiveResu
       {!career.retired && <NrlBoardChallengeNotice season={season} status={nrlBoardChallengeStatus(career)} />}
       {showLiveResult && report}
       <NrlJudiciaryReview season={season} onAction={onAction} disabled={disabled} />
+      {approach?.status === 'offered' && <div className="rounded-xl border border-border bg-card p-3 text-sm">
+        <p>A rival wants to take over {approach.player?.name}’s contract. Reply by the end of Round {approach.deadline}.</p>
+        <Button type="button" size="lg" variant="outline" className="mt-2" onClick={onContracts}>Review rival offer</Button>
+      </div>}
       <div className="overflow-hidden rounded-2xl border border-emerald-500/35 bg-emerald-950 p-4 text-emerald-50 sm:p-6">
         <p className="text-xs font-bold uppercase tracking-widest text-emerald-200">{next.title}</p>
         <h2 className="mt-2 break-words font-display text-2xl font-black leading-tight sm:text-3xl">{title}</h2>
@@ -1415,7 +1421,7 @@ function NrlManagerScreen({ entry, showSlots, rules }: {
               ))}
             </div>
             {panel === 'match' && <MatchCentre career={career} onAction={dispatch} onRun={fastForward} disabled={moved || retired} showLiveResult={showLiveResult}
-              onReview={() => { setOffice('history'); setPanel('office'); }} />}
+              onReview={() => { setOffice('history'); setPanel('office'); }} onContracts={() => { setOffice('contracts'); setPanel('office'); }} />}
             {live && (panel === 'squad' || panel === 'office') && (
               <p className="rounded-xl border border-border bg-card p-3 text-sm">Finish the live match in Match centre to make changes.</p>
             )}

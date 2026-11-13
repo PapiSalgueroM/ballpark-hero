@@ -57,6 +57,78 @@ afterEach(() => {
 });
 
 describe('NRL offseason contract takeover', () => {
+  it('requires mutual permission, announces the reply in Match centre and retries one accepted save', () => {
+    const playerId = 'storm-3-1';
+    const start = makeCareer();
+    const view = open(bytes(start));
+    const summary = screen.getByText('Invite rival approaches', { exact: true });
+    fireEvent.click(summary);
+    const desk = within(summary.closest('details')!);
+    fireEvent.change(desk.getByLabelText('Player to invite approaches for'), { target: { value: playerId } });
+    const invite = desk.getByRole('button', { name: 'Confirm permission' });
+    expect(invite).toBeDisabled();
+    expect(raw()).toBe(bytes(start));
+    fireEvent.click(desk.getByRole('checkbox', { name: /player and club agree/ }));
+    fireEvent.click(invite);
+    expect(desk.getByText(/A reply is due after this round/)).toBeVisible();
+    expect(readNrlCareerSave(raw())?.contractApproach).toMatchObject({ playerId, listedRound: 1 });
+    fireEvent.click(screen.getByRole('button', { name: 'Match centre' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Quick Sim' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Review rival offer' }));
+    const response = screen.getByRole('region', { name: 'Rival contract offer' });
+    expect(within(response).getByText(/Reply by the end of Round 3/)).toBeVisible();
+    const before = raw()!;
+    const write = Storage.prototype.setItem;
+    const quota = vi.spyOn(Storage.prototype, 'setItem').mockImplementation(function (this: Storage, key, value) {
+      if (key === NRL_SAVE_KEY) throw new DOMException('Quota full', 'QuotaExceededError');
+      write.call(this, key, value);
+    });
+    fireEvent.click(within(response).getByRole('button', { name: 'Accept offseason move' }));
+    expect(raw()).toBe(before);
+    expect(screen.getByText(/Rival offer accepted/)).toBeVisible();
+    quota.mockRestore();
+    fireEvent.click(screen.getByRole('button', { name: 'Retry save' }));
+    const accepted = raw()!;
+    expect(readNrlCareerSave(accepted)?.contractApproach?.outcome).toBe('accepted');
+    view.unmount();
+    open(accepted);
+    expect(screen.getByText(/Rival offer accepted/)).toBeVisible();
+  });
+
+  it('cannot accept a rival reply from a tab whose saved choice has changed', () => {
+    const playerId = 'storm-3-1';
+    const start = makeCareer();
+    const listed = reduceNrlCareer(start, { type: 'inviteContractApproach', year, clubId, round: 1, playerId, permission: true });
+    const replied = advance(listed);
+    open(bytes(replied));
+    const reply = replied.contractApproach!;
+    const newer = reduceNrlCareer(replied, {
+      type: 'answerContractApproach', year, clubId, listedRound: reply.listedRound, playerId, destinationId: reply.destinationId!, decision: 'decline',
+    });
+    localStorage.setItem(NRL_SAVE_KEY, bytes(newer));
+    fireEvent.click(screen.getByRole('button', { name: 'Accept offseason move' }));
+    expect(raw()).toBe(bytes(newer));
+    expect(localStorage.getItem(fence)).toBe('4');
+    expect(screen.getByRole('button', { name: 'Reload your season' })).toBeVisible();
+  });
+
+  it('explains the missing next-year cover and refuses acceptance when other players are moved', () => {
+    const start = makeCareer();
+    const subject = 'storm-3-1';
+    const listed = reduceNrlCareer(start, { type: 'inviteContractApproach', year, clubId, round: 1, playerId: subject, permission: true });
+    let changed = advance(listed);
+    for (const cover of ['storm-3-0', 'nrl-storm-2026-28']) {
+      const offer = nrlTakeoverOffers(changed, cover)[0];
+      changed = reduceNrlCareer(changed, { type: 'arrangeTakeover', year, clubId, playerId: cover, destinationId: offer.clubId });
+    }
+    expect(readNrlCareerSave(bytes(changed))).toEqual(changed);
+    open(bytes(changed));
+    expect(screen.getByText('Keep another Left Centre signed for 2027 before accepting.')).toBeVisible();
+    expect(screen.getByRole('button', { name: 'Accept offseason move' })).toBeDisabled();
+    expect(screen.getByRole('button', { name: 'Decline offer' })).toBeEnabled();
+    expect(raw()).toBe(bytes(changed));
+  });
+
   it('keeps the current season exact and transfers both guaranteed years to the rival at rollover', () => {
     const start = makeCareer();
     const original = playerAt(start).contract!;
