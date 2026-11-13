@@ -133,6 +133,16 @@ describe('Club Manager fresh XI', () => {
     expect(effective.find(row => row.slot === formation.slots[2])?.p.id).toBe('fresh-rb');
   });
 
+  it('keeps the on-pitch slots contiguous if every available player is already assigned', async () => {
+    const { E, c, formation } = await fixture();
+    c.squad[1].injuryWeeks = 1;
+    c.squad = c.squad.filter(p => c.xiIds.includes(p.id));
+
+    const effective = E.effectiveXIWithSlots(c);
+    expect(effective.map(row => row.slot)).toEqual(formation.slots.slice(0, 10));
+    expect(new Set(effective.map(row => row.p.id)).size).toBe(10);
+  });
+
   it('prioritizes eighty-fit eligible players without crossing availability or position rules', async () => {
     const { E, player, formation } = await fixture();
     const one = { ...formation, slots: [formation.slots[1]] };

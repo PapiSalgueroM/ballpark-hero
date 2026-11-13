@@ -16114,10 +16114,14 @@ export function effectiveXIWithSlots(state: CareerState): XiSlot[] {
       const fullback = slot.label === 'RB' || slot.label === 'LB';
       const assigned = fullback ? new Set(state.xiIds.slice(i + 1, formation.slots.length)) : null;
       const worth = (x: CMPlayer) => x.rating - fitPenalty(x, slot);
-      const best = (pool: CMPlayer[]) => pool
-        .sort((a, b) => compareFullbackFit(a, b, slot) || worth(b) - worth(a) || b.rating - a.rating)[0];
-      const open = state.squad.filter(x => isAvailable(x) && !used.has(x.id) && !assigned?.has(x.id));
-      p = best(open.filter(x => !resting.has(x.id))) ?? best(open);
+      const open = state.squad.filter(x => isAvailable(x) && !used.has(x.id));
+      const free = assigned ? open.filter(x => !assigned.has(x.id)) : open;
+      // With no bench cover, keep the established short-XI slot order.
+      const hasFreeCover = free.length > 0;
+      const pool = hasFreeCover ? free : open;
+      const best = (candidates: CMPlayer[]) => candidates
+        .sort((a, b) => (hasFreeCover ? compareFullbackFit(a, b, slot) : 0) || worth(b) - worth(a) || b.rating - a.rating)[0];
+      p = best(pool.filter(x => !resting.has(x.id))) ?? best(pool);
     }
     if (p) {
       used.add(p.id);
