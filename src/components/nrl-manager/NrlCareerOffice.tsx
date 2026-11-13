@@ -8,7 +8,7 @@ import { nrlSeasonPlan, NRL_LAST_YEAR } from '@/data/nrlManagerSeasons';
 import {
   isNrlNamedPlayer,
   nrlAcademyAvailableRoles, nrlAcademyFacilityQuote, nrlAcademyFacilitySpend, nrlAcademyOffer, nrlAcademyReports,
-  nrlBoardPathwaysIncome, nrlBoardPathwaysQuote,
+  nrlBoardPathwaysIncome, nrlBoardPathwaysQuote, nrlBoardRecruitmentIncome, nrlBoardRecruitmentQuote,
   nrlCareerCap, nrlCareerFinance, nrlCareerMarket, nrlCareerRecord, nrlCareerSquad,
   nrlContractApproach, nrlContractApproachCandidates, nrlContractApproachLastRound, nrlContractCounteroffer, nrlContractOffer,
   nrlCoachCourseQuote, nrlCoachCourseSpend, nrlCoachQuote, nrlCoachRetentionQuote, nrlCoachSpend, nrlCoachTactics,
@@ -402,6 +402,40 @@ function ExpiringDeals({ career, onAction, disabled }: { career: NrlCareerState;
   );
 }
 
+function BoardRecruitment({ career, onAction, disabled, onFilter }: {
+  career: NrlCareerState; onAction: Dispatch; disabled: boolean; onFilter: (role: NrlRole) => void;
+}) {
+  const { year, clubId } = career.season;
+  const { role, targets, objective, closed, reason, bonus } = useMemo(() => nrlBoardRecruitmentQuote(career), [career]);
+  if (!objective && career.season.round !== 1) return null;
+  return (
+    <section className="mt-3 space-y-2 rounded-lg border border-border bg-background p-3 text-sm" aria-labelledby="nrl-board-recruitment">
+      <h3 id="nrl-board-recruitment" className="font-bold">Board recruitment brief</h3>
+      {role ? <p>Sign an external {role} for {year + 1} by the end of the regular season. Reward {money(bonus)} in club cash.</p>
+        : <p className="text-muted-foreground">{reason}</p>}
+      {objective && (
+        <p role="status" className="text-muted-foreground">{objective.paid ? `Target met. ${money(bonus)} paid to the club.`
+          : closed ? 'Target missed.'
+            : objective.signed ? `${objective.signed.name} signed. The bonus pays at the end of the regular season.`
+              : 'Objective accepted. Sign a player from another club or the free-agent pool.'}</p>
+      )}
+      {role && !closed && !objective?.signed && (
+        <>
+          <p className="text-muted-foreground">
+            {targets.length ? `${targets.length} ${targets.length === 1 ? 'player fits' : 'players fit'} your cap and squad today.`
+              : 'No affordable external players at this position right now.'}
+          </p>
+          <div className="flex flex-wrap gap-2">
+            <Button type="button" size="lg" variant="outline" className="max-w-full px-3" onClick={() => onFilter(role)}>View {role} market</Button>
+            {!objective && !reason && <Button type="button" size="lg" className="max-w-full px-3" disabled={disabled}
+              onClick={() => onAction({ type: 'acceptBoardRecruitment', year, clubId, role })}>Accept recruitment objective</Button>}
+          </div>
+        </>
+      )}
+    </section>
+  );
+}
+
 function Recruitment({ career, onAction, disabled }: { career: NrlCareerState; onAction: Dispatch; disabled: boolean }) {
   const [role, setRole] = useState<NrlRole | ''>('');
   const [shortlistedOnly, setShortlistedOnly] = useState(false);
@@ -431,6 +465,10 @@ function Recruitment({ career, onAction, disabled }: { career: NrlCareerState; o
     <>
       <h2 className="font-display text-xl font-bold">Recruitment</h2>
       <p className="mt-1 text-sm text-muted-foreground">Agree future deals with eligible players. Check next season’s cap before filling the squad.</p>
+      <BoardRecruitment career={career} onAction={onAction} disabled={disabled} onFilter={position => {
+        selectRole(position);
+        setShortlistedOnly(false);
+      }} />
       {arrivals.length > 0 && (
         <div className="mt-3 rounded-lg border border-border bg-background px-3 py-2">
           <h3 className="font-bold">Agreed arrivals</h3>
@@ -916,6 +954,9 @@ function CashForecast({ career, hasAccounts }: { career: NrlCareerState; hasAcco
             {career.season.phase === 'regular' && career.finance.sponsor?.offer === 'finals' && (
               <p className="mt-1 text-muted-foreground">This estimate excludes the possible {money(NRL_SPONSOR_OFFERS.finals.bonus)} sponsor bonus.</p>
             )}
+            {career.season.phase === 'regular' && career.finance.boardRecruitment && (
+              <p className="mt-1 text-muted-foreground">The estimate includes the recruitment bonus once it is paid.</p>
+            )}
             {career.finance.fromRound > 1 && (
               <p className="mt-1 text-muted-foreground">Accounts began in round {career.finance.fromRound}. The estimate uses the cash recorded since then.</p>
             )}
@@ -976,6 +1017,7 @@ function Finances({ career, onAction, disabled }: { career: NrlCareerState; onAc
                 ...(cash.concessionReceipts ? [['Concessions income', cash.concessionReceipts] as const] : []),
                 ...(cash.sponsor ? [['Sponsor income', nrlSponsorIncome(cash)] as const] : []),
                 ...(pathwaysIncome ? [['Board pathways bonus', pathwaysIncome] as const] : []),
+                ...(cash.boardRecruitment?.paid ? [['Board recruitment bonus', nrlBoardRecruitmentIncome(cash)] as const] : []),
                 ['Wages paid', cash.wagesPaid],
                 ['Operating costs', cash.operatingCosts],
                 ...(medicalSpend ? [['Medical upgrades', medicalSpend] as [string, number]] : []),
@@ -1556,6 +1598,13 @@ function History({ career, onAction, disabled }: { career: NrlCareerState; onAct
                 {(record.year !== year || retired) && record.finance?.pathways && (
                   <p className="text-sm text-muted-foreground">
                     Board pathways · {record.finance.pathways.earnedBy ? `Target met · ${money(nrlBoardPathwaysIncome(record.finance))} bonus` : 'Target missed'}
+                  </p>
+                )}
+                {record.finance?.boardRecruitment && (
+                  <p className="text-sm text-muted-foreground">
+                    Board recruitment · {record.finance.boardRecruitment.role} · {record.finance.boardRecruitment.paid
+                      ? `${record.finance.boardRecruitment.signed?.name} signed · ${money(nrlBoardRecruitmentIncome(record.finance))} bonus`
+                      : 'Target missed'}
                   </p>
                 )}
                 {record.finance?.academyUpgradeRound && <p className="text-sm text-muted-foreground">Academy facilities {money(nrlAcademyFacilitySpend(record.finance))}</p>}
