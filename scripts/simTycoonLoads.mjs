@@ -132,12 +132,15 @@ const REF_FIRST_PRESTIGE = `    const now = Date.now();
     const next = prestige(stateRef.current, now);
     if (next === stateRef.current) return false;
     if (!writeState(next, now)) return false;
+    paidUntilRef.current = now;
     stateRef.current = next;
     setState(next);
     return true;`;
 const UPDATER_PRESTIGE = `    setState(s => {
-      const next = prestige(s, Date.now());
-      writeState(next);
+      const now = Date.now();
+      const next = prestige(s, now);
+      writeState(next, now);
+      paidUntilRef.current = now;
       return next;
     });`;
 
