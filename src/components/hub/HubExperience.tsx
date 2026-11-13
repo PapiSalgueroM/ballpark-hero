@@ -79,6 +79,7 @@ export default function HubExperience({ hub, games }: { hub: SportHub; games: Ga
   const continuations = useMemo(() => readContinuations(games), [games, saveRevision]);
   const picks = useGamePicks();
   const arena = arenas[hub.route as keyof typeof arenas] ?? arenas['/soccer'];
+  const arenaImage = <img src={arena.image} width="1672" height="941" alt="" className={styles.arenaImage} fetchPriority="high" />;
   const visible = filterHubGames(games, filter, query, Object.keys(continuations));
   const deep = visible.filter(game => game.featured);
   const quick = visible.filter(game => !game.featured).sort((a, b) => Number(!!b.daily) - Number(!!a.daily));
@@ -118,7 +119,12 @@ export default function HubExperience({ hub, games }: { hub: SportHub; games: Ga
       </nav>
 
       <header className={styles.arena}>
-        <img src={arena.image} width="1672" height="941" alt="" className={styles.arenaImage} fetchPriority="high" />
+        {hub.route === '/soccer' ? (
+          <picture>
+            <source media="(max-width: 640px) and (max-resolution: 2dppx)" srcSet="/arenas/soccer-1280.webp" />
+            {arenaImage}
+          </picture>
+        ) : arenaImage}
         <div className={styles.arenaCopy}>
           <h1 className="font-display">{hub.h1}</h1>
           <p className={styles.tagline}>{arena.line}</p>
