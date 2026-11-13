@@ -1,8 +1,9 @@
 import { useEffect } from 'react';
-import { afterEach, describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import { act, cleanup, fireEvent, render, screen, waitFor, within } from '@testing-library/react';
 import { MemoryRouter, useLocation, useNavigate, type NavigateFunction } from 'react-router-dom';
 import { SiteMenu } from '@/components/layout/SiteMenu';
+import { SiteMenuHost, SiteMenuProvider } from '@/components/layout/SiteMenuHost';
 import { useRoutePath } from '@/hooks/useRoutePath';
 
 afterEach(cleanup);
@@ -49,10 +50,34 @@ async function expectClosed(marker: string) {
 }
 
 describe('global top-left SiteMenu with the actual Sheet and router', () => {
+  it.each(['/nrl-team-manager', '/nrl-team-manager/?slot=2'])('keeps the loading menu above the NRL board on %s', async path => {
+    function chrome(ready: boolean) {
+      return <MemoryRouter initialEntries={[path]}><SiteMenuProvider>
+        <SiteMenu />
+        {ready && <nav aria-label="Game navigation"><SiteMenuHost /></nav>}
+      </SiteMenuProvider></MemoryRouter>;
+    }
+    const { rerender } = render(chrome(false));
+    const trigger = screen.getByRole('button', { name: 'Open site menu' });
+    expect(trigger.parentElement).toHaveClass('absolute', 'top-0', 'md:top-8', 'h-11');
+    expect(trigger.tabIndex).toBe(0);
+    trigger.focus();
+    fireEvent.click(trigger);
+    const dialog = await screen.findByRole('dialog', { name: 'Menu' });
+    rerender(chrome(true));
+    expect(dialog).toBeVisible();
+    fireEvent.keyDown(dialog, { key: 'Escape', code: 'Escape' });
+    await expectClosed('NRL_SITE_MENU_ESCAPE_CLOSED');
+    const hosted = within(screen.getByRole('navigation', { name: 'Game navigation' })).getByRole('button', { name: 'Open site menu' });
+    expect(screen.getAllByRole('button', { name: 'Open site menu' })).toEqual([hosted]);
+    await waitFor(() => expect(hosted).toHaveFocus());
+  });
+
   it('opens a named dialog with the site links, six sports hubs and Rugby League', async () => {
     await menuHost();
     const trigger = screen.getByRole('button', { name: 'Open site menu' });
     expect(trigger, 'SITE_MENU_VISIBLE_TRIGGER').toHaveTextContent('Menu');
+    expect(trigger.parentElement).not.toHaveClass('absolute');
     expect(screen.queryByRole('dialog', { name: 'Menu' })).not.toBeInTheDocument();
     const { dialog, menu } = await openMenu();
     expect(dialog, 'SITE_MENU_NAMED_DIALOG').toBeVisible();
