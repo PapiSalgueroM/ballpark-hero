@@ -133,6 +133,32 @@ describe('Soccer Career creation roll belongs to its selected position', () => {
     expect(loadSupport).toHaveBeenCalledTimes(1);
   });
 
+  it('reserves the result areas only after a roll, and releases them on a load failure', async () => {
+    let failSupport!: (error: Error) => void;
+    const loadSupport = () => new Promise<never>((_resolve, reject) => { failSupport = reject; });
+    const view = render(<MemoryRouter><SoccerCareerCreator onBegin={vi.fn()} loadSupport={loadSupport} /></MemoryRouter>);
+    fireEvent.change(view.getByPlaceholderText('Enter your player name...'), { target: { value: 'Roll Tester' } });
+    for (const [index, value] of ['England', 'ST', '2020-24'].entries()) {
+      fireEvent.change(view.container.querySelectorAll('select')[index], { target: { value } });
+    }
+    const card = view.getByRole('heading', { name: 'Starting Potential' }).parentElement!;
+    expect(card).not.toHaveClass('min-h-[490px]');
+    const generate = view.getByRole('button', { name: /Generate Starting Potential/ });
+    generate.focus();
+    fireEvent.click(generate);
+    expect(card).toHaveClass('min-h-[490px]');
+    expect(card.nextElementSibling).toHaveClass('min-h-[420px]');
+    expect(card.nextElementSibling).toHaveAttribute('aria-hidden', 'true');
+    expect(generate).toHaveFocus();
+
+    await act(async () => { failSupport(new Error('Blocked for the fixture')); });
+    expect(card).not.toHaveClass('min-h-[490px]');
+    expect(card.nextElementSibling).not.toHaveClass('min-h-[420px]');
+    expect(view.getByText("Couldn't load the clubs. Try generating again.")).toBeVisible();
+    expect(generate).toHaveFocus();
+    expect(begin(view)).toBeDisabled();
+  });
+
   it('creation roll preservation: a fresh settled roll starts and saves the displayed player', () => {
     const view = prepare(); roll(view); settle(); const shown = preview(view, 'ST');
     expect(shown).not.toBeNull(); expect(begin(view)).toBeEnabled();
