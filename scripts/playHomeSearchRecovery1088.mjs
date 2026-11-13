@@ -311,7 +311,7 @@ try {
       // A fresh document clears the browser module cache while preserving the exact storage fixture.
       blockChunk = true; rejectChunk = true; await observe('navigation fresh failed-chunk document', () => page.reload({ waitUntil: 'load' })); await page.locator('[data-home-stage]').waitFor(); row.recovery.fonts = await fonts(page); await finite(page);
       const before = await snap('failure-document-before'), docsBefore = row.documents.length; await input(page, QUERY, width < 1000);
-      await page.locator('#dukb-main div[aria-busy="true"]').waitFor(); row.recovery.pending = await snap('pending');
+      await page.locator('#dukb-main div[aria-busy="true"]:empty').waitFor(); row.recovery.pending = await snap('pending');
       assert.equal(await page.locator('[data-home-search-unavailable]').count(), 0); assert.equal(await page.getByText(/^No games found/).count(), 0, 'Pending is never false empty results');
       assert(releaseChunk, 'Actual lazy chunk request is held'); releaseChunk();
       await page.getByRole('heading', { name: 'Search could not load', exact: true }).waitFor(); await finite(page);
