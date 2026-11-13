@@ -28,7 +28,7 @@ import {
 } from '@/lib/nrlManager';
 import {
   createNrlCareer, isNrlNamedPlayer, loadNrlOpeningMatchdayCareer, loadNrlPerthSigningsCareer, nrlAttackPlanPreview, nrlOppositionReport, nrlPositionTraining,
-  nrlPositionTrainingCandidates, nrlReserveGradeCandidates, nrlRivalSquad, nrlTacticalAssistant,
+  nrlPositionTrainingCandidates, nrlReserveGradeCandidates, nrlRivalSquad, nrlTacticalAssistant, nrlWorldCupAppointmentAvailable,
   NRL_POSITION_TRAINING_ROUNDS, NRL_SAVE_MAX_CHARS, reduceNrlCareer, type NrlCareerAction, type NrlCareerState,
 } from '@/lib/nrlCareer';
 import { nrlScorePoints, nrlScoringLeaders, nrlSquadSeasonStats, nrlTryLeaders, type NrlSquadStatsScope } from '@/lib/nrlPlayerScoring';
@@ -36,6 +36,7 @@ import { NRL_SAVE_ENTRY, nrlSeasonCanCredit, readNrlReplayCutoff, readNrlSaveSlo
 import { saveFence } from '@/lib/saveFence';
 import { reloadToRetryChunk } from '@/lib/freshBuild';
 import { holdPendingSave } from '@/lib/safeStorage';
+import { NRL_WORLD_CUP_STAGES } from '@/lib/nrlWorldCupSave';
 
 const SLUG = 'nrl-team-manager';
 const loadWorldCup = () => import('@/components/nrl-manager/NrlWorldCup');
@@ -1110,11 +1111,18 @@ function NrlManagerScreen({ entry, showSlots, rules }: {
   const [panel, setPanel] = useState<Panel>(retired ? 'office' : 'match');
   const [office, setOffice] = useState<OfficeScreen>(retired ? 'history' : 'contracts');
   const [WorldCup, setWorldCup] = useState<Awaited<ReturnType<typeof loadWorldCup>>['default'] | null>(null);
-  const [cupOpen, setCupOpen] = useState(false);
+  const [cupMode, setCupMode] = useState<'standalone' | 'appointment' | null>(null);
+  const cupOpen = cupMode !== null;
   const [cupLoading, setCupLoading] = useState(false);
   const [cupLoadFailed, setCupLoadFailed] = useState(false);
   const cupLaunch = useRef<HTMLButtonElement>(null);
-  useEffect(() => { if (!cupOpen && WorldCup) cupLaunch.current?.focus(); }, [cupOpen, WorldCup]);
+  const appointmentLaunch = useRef<HTMLButtonElement>(null);
+  const returnFromCup = useRef<'standalone' | 'appointment' | null>(null);
+  useEffect(() => {
+    if (cupOpen || !returnFromCup.current) return;
+    (returnFromCup.current === 'appointment' ? appointmentLaunch : cupLaunch).current?.focus();
+    returnFromCup.current = null;
+  }, [cupOpen]);
   const [showLiveResult, setShowLiveResult] = useState(false);
   const [saveFailed, setSaveFailed] = useState(false);
   const [saveTooLarge, setSaveTooLarge] = useState(false);
@@ -1160,9 +1168,9 @@ function NrlManagerScreen({ entry, showSlots, rules }: {
     navigate(entry.path + (entry.path.includes('?') ? '&' : '?') + 'view=saves', { replace: true });
   }
 
-  async function openWorldCup() {
+  async function openWorldCup(mode: 'standalone' | 'appointment') {
     if (WorldCup) {
-      setCupOpen(true);
+      setCupMode(mode);
       return;
     }
     setCupLoading(true);
@@ -1170,12 +1178,18 @@ function NrlManagerScreen({ entry, showSlots, rules }: {
     try {
       const { default: loaded } = await loadWorldCup();
       setWorldCup(() => loaded);
-      setCupOpen(true);
+      setCupMode(mode);
     } catch {
       setCupLoadFailed(true);
     } finally {
       setCupLoading(false);
     }
+  }
+
+  function closeWorldCup() {
+    if (cupMode === 'appointment' && saveFailed && !moved && current.current && persist(current.current) !== 'written') return;
+    returnFromCup.current = cupMode;
+    setCupMode(null);
   }
 
   async function start(clubId: string, boardChallenge: boolean, openingNames: boolean) {
@@ -1234,7 +1248,7 @@ function NrlManagerScreen({ entry, showSlots, rules }: {
             {career?.openingRoster === 'perth-signings-2027' && <p className="mt-1 text-xs text-muted-foreground">2027 Perth Bears signings snapshot. The lineup, ages, ratings, contracts and later squads are simulated.</p>}
             {!showSlots && !cupOpen && <div className="mt-1 flex flex-wrap gap-x-2">
               <Button type="button" size="lg" variant="ghost" className="px-2" onClick={openSlots}>Career saves</Button>
-              <Button ref={cupLaunch} type="button" size="lg" variant="ghost" className="max-w-full whitespace-normal px-2" onClick={openWorldCup}
+              <Button ref={cupLaunch} type="button" size="lg" variant="ghost" className="max-w-full whitespace-normal px-2" onClick={() => openWorldCup('standalone')}
                 disabled={cupLoading || loadingNames}>{cupLoading ? 'Loading World Cup…' : 'Rugby League World Cup'}</Button>
             </div>}
           </div>
@@ -1255,6 +1269,7 @@ function NrlManagerScreen({ entry, showSlots, rules }: {
               <li>Change clubs between seasons from Season review.</li>
               <li>Open State of Origin in the Club office to coach New South Wales or Queensland through three games alongside your club career.</li>
               <li>Choose Rugby League World Cup beside Career saves to coach a national team through a separate 2026 tournament.</li>
+              <li>After finishing a 2026 club season, take a national appointment from the Club office before starting 2027. It saves inside your career.</li>
               <li>Review each season, manage contracts and recruit for the next year. Career saves lets you keep up to three careers in this browser.</li>
             </ul>
           </RulesGate>
@@ -1263,7 +1278,12 @@ function NrlManagerScreen({ entry, showSlots, rules }: {
         {cupLoadFailed && <p role="status" className="rounded-xl border border-border bg-card p-3 text-sm">
           The World Cup could not load. <button type="button" className="min-h-11 font-bold underline" onClick={() => reloadToRetryChunk()}>Refresh to try again</button>
         </p>}
-        {cupOpen && WorldCup && <WorldCup onBack={() => setCupOpen(false)} />}
+        {cupOpen && WorldCup && <WorldCup onBack={closeWorldCup} appointment={cupMode === 'appointment' && career ? {
+          run: career.worldCup ?? null, stale: moved, locked: live || retired, saveFailed, saveTooLarge,
+          onStart: nation => dispatch({ type: 'startWorldCupAppointment', nation }),
+          onPlay: (previous, next) => dispatch({ type: 'playWorldCupAppointment', previous, next }),
+          onRetry: () => { if (current.current) persist(current.current); },
+        } : undefined} />}
         <div hidden={cupOpen} className="space-y-5">
         {!showSlots && moved && <div className="rounded-xl border border-amber-500/50 bg-card p-3 text-sm" role="status">
           This season changed in another tab. <button type="button" className="min-h-11 font-bold underline" onClick={() => window.location.reload()}>Reload your season</button>
@@ -1309,6 +1329,17 @@ function NrlManagerScreen({ entry, showSlots, rules }: {
                   ))}
                 </div>
                 <NrlOriginOffice career={career} disabled={rosterLocked} onAction={dispatch} />
+                {(career.worldCup || nrlWorldCupAppointmentAvailable(career)) && <div className="space-y-2 rounded-xl border border-border bg-card p-3">
+                  <h2 className="font-display text-lg font-bold">National appointment</h2>
+                  <p className="text-sm text-muted-foreground">{career.worldCup
+                    ? `${career.worldCup.tactics.length} of ${NRL_WORLD_CUP_STAGES} World Cup stages played.`
+                    : 'Coach a nation in the 2026 World Cup. Accept before starting 2027 or retiring.'}</p>
+                  <Button ref={appointmentLaunch} type="button" size="lg" variant="outline" className="h-auto min-h-11 max-w-full whitespace-normal px-3 py-2"
+                    disabled={moved || cupLoading} onClick={() => openWorldCup('appointment')}>
+                    {career.worldCup?.tactics.length === NRL_WORLD_CUP_STAGES ? 'View 2026 World Cup results'
+                      : career.worldCup ? 'Resume 2026 World Cup appointment' : 'Take 2026 World Cup appointment'}
+                  </Button>
+                </div>}
                 <NrlCareerOffice key={office} career={career} screen={office} disabled={rosterLocked} onAction={dispatch} />
               </>
             )}
